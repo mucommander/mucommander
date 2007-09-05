@@ -82,8 +82,9 @@ public class XmlWriter {
      * </p>
      * @param  file                  where to write XML output to.
      * @throws FileNotFoundException if <code>file</code> could not be found.
+     * @throws IOException           if an I/O error occurs.
      */
-    public XmlWriter(File file) throws FileNotFoundException {this(new FileOutputStream(file));}
+    public XmlWriter(File file) throws IOException, FileNotFoundException {this(new FileOutputStream(file));}
 
     /**
      * Creates an <code>XmlWriter</code> that will write to the specified file using the specified encoding.
@@ -95,8 +96,9 @@ public class XmlWriter {
      * @param  encoding                     encoding to use when writing the XML content.
      * @throws FileNotFoundException        if <code>file</code> could not be found.
      * @throws UnsupportedEncodingException if <code>encoding</code> is not supported.
+     * @throws IOException                  if an I/O error occurs.
      */
-    public XmlWriter(File file, String encoding) throws FileNotFoundException, UnsupportedEncodingException {this(new FileOutputStream(file), encoding);}
+    public XmlWriter(File file, String encoding) throws IOException, FileNotFoundException, UnsupportedEncodingException {this(new FileOutputStream(file), encoding);}
 
     /**
      * Creates an <code>XmlWriter</code> that will write to the specified output stream.
@@ -104,9 +106,10 @@ public class XmlWriter {
      * This is a convenience constructor and is strictly equivalent to
      * <code>{@link #XmlWriter(OutputStream,String) XmlWriter}(stream, {@link #DEFAULT_ENCODING})</code>.
      * </p>
-     * @param stream where to write XML output to.
+     * @param  stream      where to write XML output to.
+     * @throws IOException if an I/O error occurs.
      */
-    public XmlWriter(OutputStream stream) {
+    public XmlWriter(OutputStream stream) throws IOException {
         try {init(new OutputStreamWriter(stream, DEFAULT_ENCODING), DEFAULT_ENCODING);}
         // UTF-8 is guaranteed to be supported by the Java specifications,
         // we can safely ignore this exception.
@@ -118,14 +121,17 @@ public class XmlWriter {
      * @param  stream                       where to write XML output to.
      * @param  encoding                     encoding to use when writing the XML content.
      * @throws UnsupportedEncodingException if <code>encoding</code> is not supported.
+     * @throws IOException                  if an I/O error occurs.
      */
-    public XmlWriter(OutputStream stream, String encoding) throws UnsupportedEncodingException {init(new OutputStreamWriter(stream, encoding), encoding);}
+    public XmlWriter(OutputStream stream, String encoding) throws UnsupportedEncodingException, IOException {init(new OutputStreamWriter(stream, encoding), encoding);}
 
-    private void init(Writer writer, String encoding) {
+    private void init(Writer writer, String encoding) throws IOException {
         out = new PrintWriter(writer, true);
         out.print("<?xml version=\"1.0\" encoding=\"");
         out.print(encoding);
         out.println("\"?>");
+        if(out.checkError())
+            throw new IOException();
     }
 
 
@@ -142,13 +148,14 @@ public class XmlWriter {
      * Both <code>description</code> and <code>url</code> can be set to <code>null</code>.
      * If so, they will just be ignored.
      * </p>
-     * @param topElement   label of the top element in the XML file.
-     * @param availability availability of the document (expected to be either {@link #AVAILABILITY_PUBLIC}
-     *                     or {@link #AVAILABILITY_SYSTEM}, but this is not enforced).
-     * @param description  description of the file (see DOCTYPE specifications for more information).
-     * @param url          URL at which the DTD of the XML file can be downloaded.
+     * @param  topElement   label of the top element in the XML file.
+     * @param  availability availability of the document (expected to be either {@link #AVAILABILITY_PUBLIC}
+     *                      or {@link #AVAILABILITY_SYSTEM}, but this is not enforced).
+     * @param  description  description of the file (see DOCTYPE specifications for more information).
+     * @param  url          URL at which the DTD of the XML file can be downloaded.
+     * @throws IOException  if an I/O error occurs.
      */
-    public void writeDocType(String topElement, String availability, String description, String url) {
+    public void writeDocType(String topElement, String availability, String description, String url) throws IOException {
         // Writes the compulsory bits.
         out.print("<!DOCTYPE ");
         out.print(topElement);
@@ -171,6 +178,8 @@ public class XmlWriter {
             out.print('\"');
         }
         out.println('>');
+        if(out.checkError())
+            throw new IOException();
     }
 
     /**
@@ -179,12 +188,13 @@ public class XmlWriter {
      * This is a convenience method and is strictly equivalent to calling
      * <code>{@link #startElement(String,boolean) startElement}(name, false)</code>.
      * </p>
-     * @param name name of the element to open.
-     * @see        #startElement(String,XmlAttributes)
-     * @see        #writeStandAloneElement(String)
-     * @see        #writeStandAloneElement(String,XmlAttributes)
+     * @param  name        name of the element to open.
+     * @throws IOException if an I/O error occurs.
+     * @see                #startElement(String,XmlAttributes)
+     * @see                #writeStandAloneElement(String)
+     * @see                #writeStandAloneElement(String,XmlAttributes)
      */
-    public void startElement(String name) {startElement(name, false, null, false);}
+    public void startElement(String name) throws IOException {startElement(name, false, null, false);}
 
     /**
      * Writes an element opening sequence.
@@ -192,13 +202,14 @@ public class XmlWriter {
      * Elements opened using this method will not have any attribute, and will
      * need to be closed using an {@link #endElement(String) endElement} call.
      * </p>
-     * @param name      name of the element to open.
-     * @param lineBreak if <code>true</code>, a line break will be printed after the element declaration.
-     * @see             #startElement(String,XmlAttributes)
-     * @see             #writeStandAloneElement(String)
-     * @see             #writeStandAloneElement(String,XmlAttributes)
+     * @param  name        name of the element to open.
+     * @param  lineBreak   if <code>true</code>, a line break will be printed after the element declaration.
+     * @throws IOException if an I/O error occurs.
+     * @see                #startElement(String,XmlAttributes)
+     * @see                #writeStandAloneElement(String)
+     * @see                #writeStandAloneElement(String,XmlAttributes)
      */
-    public void startElement(String name, boolean lineBreak) {startElement(name, false, null, lineBreak);}
+    public void startElement(String name, boolean lineBreak) throws IOException {startElement(name, false, null, lineBreak);}
 
     /**
      * Writes a stand-alone element.
@@ -209,12 +220,13 @@ public class XmlWriter {
      * <p>
      * A line break will always be printed after a stand-alone element.
      * </p>
-     * @param name name of the element to write.
-     * @see        #startElement(String,XmlAttributes)
-     * @see        #startElement(String)
-     * @see        #writeStandAloneElement(String)
+     * @param  name        name of the element to write.
+     * @throws IOException if an I/O error occurs.
+     * @see                #startElement(String,XmlAttributes)
+     * @see                #startElement(String)
+     * @see                #writeStandAloneElement(String)
      */
-    public void writeStandAloneElement(String name) {startElement(name, true, null, true);}
+    public void writeStandAloneElement(String name) throws IOException {startElement(name, true, null, true);}
 
     /**
      * Writes an element opening sequence.
@@ -222,27 +234,29 @@ public class XmlWriter {
      * This is a covenience method and is stricly equivalent to calling
      * <code>{@link #startElement(String,XmlAttributes,boolean) startElement}(name, attributes, false)</code>.
      * </p>
-     * @param name       name of the element to open.
-     * @param attributes attributes that this element will have.
-     * @see              #startElement(String)
-     * @see              #writeStandAloneElement(String)
-     * @see              #writeStandAloneElement(String,XmlAttributes)
+     * @param  name        name of the element to open.
+     * @throws IOException if an I/O error occurs.
+     * @param  attributes  attributes that this element will have.
+     * @see                #startElement(String)
+     * @see                #writeStandAloneElement(String)
+     * @see                #writeStandAloneElement(String,XmlAttributes)
      */
-    public void startElement(String name, XmlAttributes attributes) {startElement(name, false, attributes, false);}
+    public void startElement(String name, XmlAttributes attributes) throws IOException {startElement(name, false, attributes, false);}
 
     /**
      * Writes an element opening sequence.
      * <p>
      * Elements opened using this method will need to be closed using an {@link #endElement(String) endElement} call.
      * </p>
-     * @param name       name of the element to open.
-     * @param attributes attributes that this element will have.
-     * @param lineBreak  if <code>true</code>, a line break will be printed after the element declaration.
-     * @see              #startElement(String)
-     * @see              #writeStandAloneElement(String)
-     * @see              #writeStandAloneElement(String,XmlAttributes)
+     * @param name         name of the element to open.
+     * @param  attributes  attributes that this element will have.
+     * @param  lineBreak   if <code>true</code>, a line break will be printed after the element declaration.
+     * @throws IOException if an I/O error occurs.
+     * @see                #startElement(String)
+     * @see                #writeStandAloneElement(String)
+     * @see                #writeStandAloneElement(String,XmlAttributes)
      */
-    public void startElement(String name, XmlAttributes attributes, boolean lineBreak) {startElement(name, false, attributes, lineBreak);}
+    public void startElement(String name, XmlAttributes attributes, boolean lineBreak) throws IOException {startElement(name, false, attributes, lineBreak);}
 
     /**
      * Writes a stand-alone element.
@@ -252,21 +266,23 @@ public class XmlWriter {
      * <p>
      * A line break will always be printed after a stand-alone element.
      * </p>
-     * @param name       name of the element to write.
-     * @param attributes attributes that this element will be closed immediately.
-     * @see              #startElement(String)
-     * @see              #startElement(String,XmlAttributes)
-     * @see              #writeStandAloneElement(String)
+     * @param name         name of the element to write.
+     * @param attributes   attributes that this element will be closed immediately.
+     * @throws IOException if an I/O error occurs.
+     * @see                #startElement(String)
+     * @see                #startElement(String,XmlAttributes)
+     * @see                #writeStandAloneElement(String)
      */
-    public void writeStandAloneElement(String name, XmlAttributes attributes) {startElement(name, true, attributes, true);}
+    public void writeStandAloneElement(String name, XmlAttributes attributes) throws IOException {startElement(name, true, attributes, true);}
 
     /**
      * Writes an element opening sequence.
      * @param name         name of the element to open.
-     * @param isStandAlone whether or not this element should be closed immediately.
-     * @param attributes   XML attributes for this element.
+     * @param  isStandAlone whether or not this element should be closed immediately.
+     * @param  attributes   XML attributes for this element.
+     * @throws IOException  if an I/O error occurs.
      */
-    private void startElement(String name, boolean isStandAlone, XmlAttributes attributes, boolean lineBreak) {
+    private void startElement(String name, boolean isStandAlone, XmlAttributes attributes, boolean lineBreak) throws IOException {
         // Prints indentation if necessary.
         indent();
 
@@ -302,13 +318,17 @@ public class XmlWriter {
         // Stand-alone elements are followed by a line break.
         if(lineBreak)
             println();
+
+        if(out.checkError())
+            throw new IOException();
     }
 
     /**
      * Writes an element closing sequence.
-     * @param name name of the element to close.
+     * @param  name        name of the element to close.
+     * @throws IOException if an I/O error occurs.
      */
-    public void endElement(String name) {
+    public void endElement(String name) throws IOException {
         // Updates the indentation, and prints it if necessary.
         offset -= OFFSET_INCREMENT;
         indent();
@@ -318,6 +338,9 @@ public class XmlWriter {
         out.print(name);
         out.print('>');
         println();
+
+        if(out.checkError())
+            throw new IOException();
     }
 
 
@@ -326,19 +349,23 @@ public class XmlWriter {
     // -------------------------------------------------------------------
     /**
      * Writes the specified CDATA to the XML stream.
-     * @param cdata content to write to the XML stream.
+     * @param  cdata       content to write to the XML stream.
+     * @throws IOException if an I/O error occurs.
      */
-    public void writeCData(String cdata) {
+    public void writeCData(String cdata) throws IOException {
         indent();
         out.print(escape(cdata));
+        if(out.checkError())
+            throw new IOException();
     }
 
     /**
      * Escapes XML content, replacing special characters by their proper value.
-     * @param  data data to escape.
-     * @return the escaped content.
+     * @param   data       data to escape.
+     * @return             the escaped content.
+     * @throws IOException if an I/O error occurs.
      */
-    private String escape(String data) {
+    private String escape(String data) throws IOException {
         int position;
 
         for(int i = 0; i < ENTITIES.length; i++) {
@@ -359,21 +386,27 @@ public class XmlWriter {
     // -------------------------------------------------------------------
     /**
      * Prints a line break.
+     * @throws IOException if an I/O error occurs.
      */
-    public void println() {
+    public void println() throws IOException {
         out.println();
         printIndentation = true;
+        if(out.checkError())
+            throw new IOException();
     }
 
     /**
      * If necessary, prints indentation.
+     * @throws IOException if an I/O error occurs.
      */
-    private void indent() {
+    private void indent() throws IOException {
         if(printIndentation) {
             for(int i = 0; i < offset; i++)
                 out.print(' ');
             printIndentation = false;
         }
+        if(out.checkError())
+            throw new IOException();
     }
 
 
@@ -382,6 +415,7 @@ public class XmlWriter {
     // -------------------------------------------------------------------
     /**
      * Closes the XML stream.
+     * @throws IOException if an I/O error occurs.
      */
     public void close() throws IOException {out.close();}
 }
