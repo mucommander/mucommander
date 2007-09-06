@@ -301,4 +301,8 @@
   <!-- Action  : Open the internal file viewer on selected file.                 -->
   <!-- Default : shift F3                                                        -->
   <action class="com.mucommander.ui.action.InternalViewAction"          keystroke="shift F3"/>
+
+  <!-- Action  : Toggle hidden files display on and off.                         -->
+  <!-- Default : shift alt H                                                     -->
+  <action class="com.mucommander.ui.action.ToggleHiddenFilesAction"     keystroke="shift alt H"/>
 </keymap>
