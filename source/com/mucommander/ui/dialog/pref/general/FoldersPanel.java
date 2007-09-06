@@ -29,6 +29,7 @@ import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.WindowManager;
 
 import javax.swing.*;
+import java.util.Iterator;
 import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
@@ -207,13 +208,16 @@ class FoldersPanel extends PreferencesPanel implements ItemListener, KeyListener
         }
 
         if(refreshFolders) {
-            MainFrame mainFrame;
+            MainFrame frame;
+            Iterator  frames;
 
-            mainFrame = WindowManager.getCurrentMainFrame();
-
+            frames = WindowManager.getMainFrames().iterator();
             // Refresh folder panels in a separate thread to show/hide new files
-            mainFrame.getFolderPanel1().tryRefreshCurrentFolder();
-            mainFrame.getFolderPanel2().tryRefreshCurrentFolder();
+            while(frames.hasNext()) {
+                frame = (MainFrame)frames.next();
+                frame.getFolderPanel1().tryRefreshCurrentFolder();
+                frame.getFolderPanel2().tryRefreshCurrentFolder();
+            }
         }
     }
 
