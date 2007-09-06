@@ -185,6 +185,42 @@ public class MuConfiguration {
     public static final String  CD_FOLLOWS_SYMLINKS               = FILE_TABLE_SECTION + '.' + "cd_follows_symlinks";
     /** Default value for 'Follow symlinks when changing directory' option */
     public static final boolean DEFAULT_CD_FOLLOWS_SYMLINKS       = false;
+    /** Section describing the left table's configuration. */
+    public static final String  LEFT_FILE_TABLE_SECTION            = FILE_TABLE_SECTION + '.' + "left";
+    /** Section describing the right table's configuration. */
+    public static final String  RIGHT_FILE_TABLE_SECTION           = FILE_TABLE_SECTION + '.' + "right";
+    /** Name of the 'show extension' variable. */
+    public static final String  SHOW_EXTENSION                     = "show_extension";
+    /** Name of the 'show size' variable. */
+    public static final String  SHOW_SIZE                          = "show_size";
+    /** Name of the 'show date' variable. */
+    public static final String  SHOW_DATE                          = "show_date";
+    /** Name of the 'show permissions' variable. */
+    public static final String  SHOW_PERMISSIONS                   = "show_permissions";
+    /** Default value for the 'show extensions' variable. */
+    public static final boolean DEFAULT_SHOW_EXTENSION             = true;
+    /** Default value for the 'show size' variable. */
+    public static final boolean DEFAULT_SHOW_SIZE                  = true;
+    /** Default value for the 'show date' variable. */
+    public static final boolean DEFAULT_SHOW_DATE                  = true;
+    /** Default value for the 'show permissions' variable. */
+    public static final boolean DEFAULT_SHOW_PERMISSIONS           = true;
+    /** Controls whether the extension column is visible in the left table. */
+    public static final String  SHOW_LEFT_EXTENSION                = LEFT_FILE_TABLE_SECTION + '.' + SHOW_EXTENSION;
+    /** Controls whether the size column is visible in the left table. */
+    public static final String  SHOW_LEFT_SIZE                     = LEFT_FILE_TABLE_SECTION + '.' + SHOW_SIZE;
+    /** Controls whether the date column is visible in the left table. */
+    public static final String  SHOW_LEFT_DATE                     = LEFT_FILE_TABLE_SECTION + '.' + SHOW_DATE;
+    /** Controls whether the permissions column is visible in the left table. */
+    public static final String  SHOW_LEFT_PERMISSIONS              = LEFT_FILE_TABLE_SECTION + '.' + SHOW_PERMISSIONS;
+    /** Controls whether the extension column is visible in the right table. */
+    public static final String  SHOW_RIGHT_EXTENSION               = RIGHT_FILE_TABLE_SECTION + '.' + SHOW_EXTENSION;
+    /** Controls whether the size column is visible in the right table. */
+    public static final String  SHOW_RIGHT_SIZE                    = RIGHT_FILE_TABLE_SECTION + '.' + SHOW_SIZE;
+    /** Controls whether the date column is visible in the right table. */
+    public static final String  SHOW_RIGHT_DATE                    = RIGHT_FILE_TABLE_SECTION + '.' + SHOW_DATE;
+    /** Controls whether the permissions column is visible in the right table. */
+    public static final String  SHOW_RIGHT_PERMISSIONS             = RIGHT_FILE_TABLE_SECTION + '.' + SHOW_PERMISSIONS;
 
 
 
