@@ -50,9 +50,9 @@ public class WindowManager implements WindowListener, ConfigurationListener {
     // in the configuration file.
 
     /** Configuration identifier for the left folder frame. */
-    private static final int LEFT_FRAME  = 0;
+    static final int LEFT_FRAME  = 0;
     /** Configuration identifier for the right folder frame. */
-    private static final int RIGHT_FRAME = 1;
+    static final int RIGHT_FRAME = 1;
 
 
 
