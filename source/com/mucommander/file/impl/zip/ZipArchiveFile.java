@@ -197,7 +197,7 @@ public class ZipArchiveFile extends AbstractRWArchiveFile {
     }
 
     public void deleteEntry(ArchiveEntry entry) throws IOException {
-        // Most of the time, the given ArchiveEntry will be a Zip entry. However, in some rare cases, it can be a
+        // Most of the time, the given ArchiveEntry will be a ZipEntry. However, in some rare cases, it can be a
         // SimpleArchiveEntry for directory entries that have been created in the entries tree but don't exist in the
         // Zip file. That is the case when a file entry exists in the Zip file but has no directory entry for the parent.
         if(entry instanceof ZipEntry) {

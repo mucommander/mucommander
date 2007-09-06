@@ -148,7 +148,7 @@ public abstract class AbstractArchiveFile extends ProxyFile {
      * Removes the given {@link ArchiveEntry} from the entries tree. This method will create the tree if it doesn't
      * already exist, or re-create it if the archive file has changed since it was last created.
      *
-     * @param entry the ArchiveEntry to add to the tree
+     * @param entry the ArchiveEntry to remove from the tree
      * @throws IOException if an error occurred while creating the entries tree
      */
     protected void removeFromEntriesTree(ArchiveEntry entry) throws IOException {

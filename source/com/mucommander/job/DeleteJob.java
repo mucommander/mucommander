@@ -179,7 +179,7 @@ public class DeleteJob extends FileJob {
                 } while(true);
             }
         }
-        
+        // Return now if the job was interrupted, so that we do not attempt to delete this folder
         if(getState()==INTERRUPTED)
             return false;
 
