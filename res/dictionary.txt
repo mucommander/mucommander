@@ -3139,6 +3139,22 @@ com.mucommander.ui.action.ToggleCommandBarAction.hide:pt_BR:Esconder barra de co
 com.mucommander.ui.action.ToggleCommandBarAction.hide:NL:Commandoregel verbergen
 com.mucommander.ui.action.ToggleCommandBarAction.hide:SK:Skryť panel s príkazmi
 
+com.mucommander.ui.action.ToggleHiddenFilesAction.show:EN:$[prefs_dialog.show_hidden_files]
+
+com.mucommander.ui.action.ToggleHiddenFilesAction.hide:EN:Hide hidden files
+com.mucommander.ui.action.ToggleHiddenFilesAction.hide:FR:Cacher les fichiers caché
+com.mucommander.ui.action.ToggleHiddenFilesAction.hide:DE:Versteckte Dateien nicht anzeigen
+com.mucommander.ui.action.ToggleHiddenFilesAction.hide:pt_BR:Esconder arquivos ocultos
+com.mucommander.ui.action.ToggleHiddenFilesAction.hide:NL:Verborgen bestanden verbergen
+com.mucommander.ui.action.ToggleHiddenFilesAction.hide:SI:Skrij skrite datoteke
+com.mucommander.ui.action.ToggleHiddenFilesAction.hide:CS:Skrýt skryté soubory
+com.mucommander.ui.action.ToggleHiddenFilesAction.hide:RO:Nu arăta fișierele ascunse
+# Translation missing
+
+
+
+
+
 com.mucommander.ui.action.ToggleToolBarAction.show:EN:Show toolbar
 com.mucommander.ui.action.ToggleToolBarAction.show:FR:Afficher la barre d'outils
 com.mucommander.ui.action.ToggleToolBarAction.show:DE:Toolbar anzeigen
