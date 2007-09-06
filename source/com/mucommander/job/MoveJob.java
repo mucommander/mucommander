@@ -286,7 +286,11 @@ public class MoveJob extends TransferFileJob {
                 try {
                     AbstractFile subFiles[] = file.ls();
                     boolean isFolderEmpty = true;
-                    for(int i=0; i<subFiles.length && getState()!=INTERRUPTED; i++) {
+                    for(int i=0; i<subFiles.length; i++) {
+                        // Return now if the job was interrupted, so that we do not attempt to delete this folder
+                        if(getState()==INTERRUPTED)
+                            return false;
+
                         // Notify job that we're starting to process this file (needed for recursive calls to processFile)
                         nextFile(subFiles[i]);
                         if(!processFile(subFiles[i], destFile))
@@ -296,8 +300,7 @@ public class MoveJob extends TransferFileJob {
                     // Only when finished with folder, set destination folder's date to match the original folder one
                     destFile.changeDate(file.getDate());
 
-                    // If one file could returned failure, return failure as well since this
-                    // folder could not be moved totally
+                    // If one file failed to be moved, return false (failure) since this folder could not be moved totally
                     if(!isFolderEmpty)
                         return false;
                 }
@@ -314,8 +317,11 @@ public class MoveJob extends TransferFileJob {
                 break;
             } while(true);
 
-			
-            // and finally deletes the empty folder
+            // Return now if the job was interrupted, so that we do not attempt to delete this folder
+            if(getState()==INTERRUPTED)
+                return false;
+
+            // finally, delete the empty folder
             do {		// Loop for retry
                 try  {
                     file.delete();
