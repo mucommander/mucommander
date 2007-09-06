@@ -19,6 +19,7 @@
 package com.mucommander.ui.action;
 
 import com.mucommander.text.Translator;
+import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.table.Columns;
 import com.mucommander.ui.main.table.FileTable;
@@ -39,7 +40,11 @@ public class ToggleExtensionColumnAction extends MuAction {
     }
 
     public void performAction() {
-        FileTable activeTable = mainFrame.getActiveTable();
-        activeTable.setColumnVisible(Columns.EXTENSION, !activeTable.isColumnVisible(Columns.EXTENSION));
+        if(mainFrame.getActiveTable() == mainFrame.getLeftTable())
+            MuConfiguration.setVariable(MuConfiguration.SHOW_LEFT_EXTENSION, !MuConfiguration.getVariable(MuConfiguration.SHOW_LEFT_EXTENSION,
+                                                                                                          MuConfiguration.DEFAULT_SHOW_EXTENSION));
+        else
+            MuConfiguration.setVariable(MuConfiguration.SHOW_RIGHT_EXTENSION, !MuConfiguration.getVariable(MuConfiguration.SHOW_RIGHT_EXTENSION,
+                                                                                                          MuConfiguration.DEFAULT_SHOW_EXTENSION));
     }
 }
