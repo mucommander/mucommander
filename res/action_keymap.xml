@@ -74,8 +74,9 @@
                                                                         alt_keystroke="LEFT"/>
 
   <!-- Action  : Go to the current folder's root folder                          -->
-  <!-- Default : shift BACK_SPACE                                                -->
-  <action class="com.mucommander.ui.action.GoToRootAction"              keystroke="shift BACK_SPACE"/>
+  <!-- Default : shift BACK_SPACE, control BACK_SLASH                            -->
+  <action class="com.mucommander.ui.action.GoToRootAction"              keystroke="shift BACK_SPACE"
+                                                                        alt_keystroke="control BACK_SLASH"/>
 
   <!-- Action  : Invert current selection (ignoring folders).                    -->
   <!-- Default : MULTIPLY                                                        -->
@@ -298,6 +299,6 @@
   <action class="com.mucommander.ui.action.ViewAction"                  keystroke="F3"/>
 
   <!-- Action  : Open the internal file viewer on selected file.                 -->
-  <!-- Default : shift F3                                                              -->
+  <!-- Default : shift F3                                                        -->
   <action class="com.mucommander.ui.action.InternalViewAction"          keystroke="shift F3"/>
 </keymap>
