@@ -183,6 +183,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- ${tools.jar.cmp}.                                       -->
   <target name="compress-obfuscated-tools" if="7za.available" unless="tools.up-to-date">
     <echo>Compressing Ant tool...</echo>
+    <!-- Makes sure the compressed files gets deleted before   -->
+    <!-- being created again, as this can sometimes cause heap -->
+    <!-- issues (no, I haven't been able to figure out why).   -->
+    <delete file="${tools.jar.cmp}"/>
     <delete dir="${tools.classes.obf}"/>
     <unjar src="${tools.jar.obf}" dest="${tools.classes.obf}"/>
     <exec executable="${7za.executable}" dir="${tools.classes.obf}">
