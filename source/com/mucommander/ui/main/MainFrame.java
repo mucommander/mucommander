@@ -20,6 +20,8 @@ package com.mucommander.ui.main;
 
 import com.mucommander.Debug;
 import com.mucommander.conf.impl.MuConfiguration;
+import com.mucommander.conf.ConfigurationListener;
+import com.mucommander.conf.ConfigurationEvent;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.ui.action.ActionKeymap;
 import com.mucommander.ui.event.ActivePanelListener;
@@ -30,6 +32,7 @@ import com.mucommander.ui.layout.ProportionalSplitPane;
 import com.mucommander.ui.layout.YBoxPanel;
 import com.mucommander.ui.main.menu.MainMenuBar;
 import com.mucommander.ui.main.table.FileTable;
+import com.mucommander.ui.main.table.Columns;
 
 import javax.swing.*;
 import java.awt.*;
@@ -42,7 +45,7 @@ import java.util.WeakHashMap;
  * 
  * @author Maxence Bernard
  */
-public class MainFrame extends JFrame implements LocationListener {
+public class MainFrame extends JFrame implements LocationListener, ConfigurationListener {
 	
     private ProportionalSplitPane splitPane;
 
@@ -76,13 +79,31 @@ public class MainFrame extends JFrame implements LocationListener {
     /** Split pane orientation */
     private final static String SPLIT_ORIENTATION = MuConfiguration.SPLIT_ORIENTATION;
 
+    private static void initialiseColumns(int frame, FileTable table) {
+        table.setColumnVisible(Columns.EXTENSION,   MuConfiguration.getVariable(frame == WindowManager.LEFT_FRAME ?
+                                                                                MuConfiguration.SHOW_LEFT_EXTENSION : MuConfiguration.SHOW_RIGHT_EXTENSION,
+                                                                                MuConfiguration.DEFAULT_SHOW_EXTENSION));
+        table.setColumnVisible(Columns.NAME,        true);
+        table.setColumnVisible(Columns.SIZE,        MuConfiguration.getVariable(frame == WindowManager.LEFT_FRAME ?
+                                                                                MuConfiguration.SHOW_LEFT_SIZE : MuConfiguration.SHOW_RIGHT_SIZE,
+                                                                                MuConfiguration.DEFAULT_SHOW_SIZE));
+        table.setColumnVisible(Columns.DATE,        MuConfiguration.getVariable(frame == WindowManager.LEFT_FRAME ?
+                                                                                MuConfiguration.SHOW_LEFT_DATE : MuConfiguration.SHOW_RIGHT_DATE,
+                                                                                MuConfiguration.DEFAULT_SHOW_DATE));
+        table.setColumnVisible(Columns.PERMISSIONS, MuConfiguration.getVariable(frame == WindowManager.LEFT_FRAME ?
+                                                                                MuConfiguration.SHOW_LEFT_PERMISSIONS : MuConfiguration.SHOW_RIGHT_PERMISSIONS,
+                                                                                MuConfiguration.DEFAULT_SHOW_PERMISSIONS));
+    }
+
 
     /**
      * Creates a new main frame, set to the given initial folders.
      */
     public MainFrame(AbstractFile initialFolder1, AbstractFile initialFolder2) {
         super();
-	
+
+        MuConfiguration.addConfigurationListener(this);
+
         // Set frame icon fetched in an image inside the JAR file
         setIconImage(IconManager.getIcon("/icon16.gif").getImage());
 
@@ -104,6 +125,10 @@ public class MainFrame extends JFrame implements LocationListener {
 
         this.table1 = folderPanel1.getFileTable();
         this.table2 = folderPanel2.getFileTable();
+
+        // Initialises the columns.
+        initialiseColumns(WindowManager.LEFT_FRAME, table1);
+        initialiseColumns(WindowManager.RIGHT_FRAME, table2);
 
         // Left table is the first to be active
         this.activeTable = table1;
@@ -287,6 +312,9 @@ public class MainFrame extends JFrame implements LocationListener {
         return activeTable;
     }
 
+    public FileTable getLeftTable() {return table1;}
+    public FileTable getRightTable() {return table2;}
+
     /**
      * Sets currently active FileTable (called by FolderPanel).
      */
@@ -368,7 +396,6 @@ public class MainFrame extends JFrame implements LocationListener {
         MuConfiguration.setVariable(SPLIT_ORIENTATION, splitPane.getOrientation()==JSplitPane.HORIZONTAL_SPLIT?MuConfiguration.VERTICAL_SPLIT_ORIENTATION:MuConfiguration.HORIZONTAL_SPLIT_ORIENTATION);
     }
 
-
     /**
      * Swaps the two FolderPanel instances: after a call to this method, folderPanel1 will be folderPanels2 and vice-versa.
      */
@@ -383,6 +410,24 @@ public class MainFrame extends JFrame implements LocationListener {
         FileTable tempTable = table1;
         table1 = table2;
         table2 = tempTable;
+
+        // Swaps the two tables' column visibility.
+        boolean buffer;
+        buffer = table1.isColumnVisible(Columns.EXTENSION);
+        table1.setColumnVisible(Columns.EXTENSION, table2.isColumnVisible(Columns.EXTENSION), false);
+        table2.setColumnVisible(Columns.EXTENSION, buffer, false);
+        buffer = table1.isColumnVisible(Columns.NAME);
+        table1.setColumnVisible(Columns.NAME, table2.isColumnVisible(Columns.NAME), false);
+        table2.setColumnVisible(Columns.NAME, buffer, false);
+        buffer = table1.isColumnVisible(Columns.SIZE);
+        table1.setColumnVisible(Columns.SIZE, table2.isColumnVisible(Columns.SIZE), false);
+        table2.setColumnVisible(Columns.SIZE, buffer, false);
+        buffer = table1.isColumnVisible(Columns.DATE);
+        table1.setColumnVisible(Columns.DATE, table2.isColumnVisible(Columns.DATE), false);
+        table2.setColumnVisible(Columns.DATE, buffer, false);
+        buffer = table1.isColumnVisible(Columns.PERMISSIONS);
+        table1.setColumnVisible(Columns.PERMISSIONS, table2.isColumnVisible(Columns.PERMISSIONS));
+        table2.setColumnVisible(Columns.PERMISSIONS, buffer);
 
         splitPane.setLeftComponent(folderPanel1);
         splitPane.setRightComponent(folderPanel2);
@@ -513,6 +558,34 @@ public class MainFrame extends JFrame implements LocationListener {
 
         super.toFront();
     }
+
+
+
+    /////////////////////////////
+    // Configuration listening //
+    /////////////////////////////
+    /**
+     * Updates the frame's file tables' columns visibility status if necessary.
+     */
+    public void configurationChanged(ConfigurationEvent event) {
+        if(event.getVariable().equals(MuConfiguration.SHOW_LEFT_EXTENSION))
+            table1.setColumnVisible(Columns.EXTENSION, event.getBooleanValue());
+        else if(event.getVariable().equals(MuConfiguration.SHOW_LEFT_SIZE))
+            table1.setColumnVisible(Columns.SIZE, event.getBooleanValue());
+        else if(event.getVariable().equals(MuConfiguration.SHOW_LEFT_DATE))
+            table1.setColumnVisible(Columns.DATE, event.getBooleanValue());
+        else if(event.getVariable().equals(MuConfiguration.SHOW_LEFT_PERMISSIONS))
+            table1.setColumnVisible(Columns.PERMISSIONS, event.getBooleanValue());
+        else if(event.getVariable().equals(MuConfiguration.SHOW_RIGHT_EXTENSION))
+            table2.setColumnVisible(Columns.EXTENSION, event.getBooleanValue());
+        else if(event.getVariable().equals(MuConfiguration.SHOW_RIGHT_SIZE))
+            table2.setColumnVisible(Columns.SIZE, event.getBooleanValue());
+        else if(event.getVariable().equals(MuConfiguration.SHOW_RIGHT_DATE))
+            table2.setColumnVisible(Columns.DATE, event.getBooleanValue());
+        else if(event.getVariable().equals(MuConfiguration.SHOW_RIGHT_PERMISSIONS))
+            table2.setColumnVisible(Columns.PERMISSIONS, event.getBooleanValue());
+    }
+
 
 
     ///////////////////
