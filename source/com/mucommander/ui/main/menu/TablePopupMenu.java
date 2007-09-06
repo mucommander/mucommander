@@ -47,6 +47,8 @@ import java.awt.event.KeyEvent;
  * Unmark all
  * Mark / Unmark
  * ----
+ * Delete
+ * ----
  * Properties
  * 
  * @author Maxence Bernard, Nicolas Rinaudo
@@ -101,6 +103,9 @@ public class TablePopupMenu extends JPopupMenu {
         addAction(com.mucommander.ui.action.MarkAllAction.class);
         addAction(com.mucommander.ui.action.UnmarkAllAction.class);
         addAction(com.mucommander.ui.action.MarkSelectedFileAction.class);
+
+        add(new JSeparator());
+        addAction(com.mucommander.ui.action.DeleteAction.class);
 
         add(new JSeparator());
         addAction(com.mucommander.ui.action.ShowFilePropertiesAction.class);
