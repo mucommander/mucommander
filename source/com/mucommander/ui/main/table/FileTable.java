@@ -836,18 +836,27 @@ public class FileTable extends JTable implements Columns, MouseListener, MouseMo
     }
 
     /**
+     * Shows / hides the specified column.
+     * @param colNum  identifier of the column who should be shown or hidden.
+     * @param visible whether the column should be shown or hidden.
+     * @param refresh whether to refresh the table if this call actually modified the column's state.
+     */
+    public void setColumnVisible(int colNum, boolean visible, boolean refresh) {
+        if(columnVisible[colNum]!=visible) {
+            columnVisible[colNum] = visible;
+            if(refresh)
+                resizeAndRepaint();
+        }
+    }
+
+    /**
      * Shows/hides the column corresponding to the given column index. The table will be repainted to reflect the new
      * column visible state.
      *
      * @param colNum column index (see {@link Columns} for possible values)
      * @param visible true to show, false to hide
      */
-    public void setColumnVisible(int colNum, boolean visible) {
-        if(columnVisible[colNum]!=visible) {
-            columnVisible[colNum] = visible;
-            resizeAndRepaint();
-        }
-    }
+    public void setColumnVisible(int colNum, boolean visible) {setColumnVisible(colNum, visible, true);}
 
 
     /**
