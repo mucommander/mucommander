@@ -84,13 +84,6 @@ public class ToggleHiddenFilesAction extends MuAction implements ConfigurationLi
 
         MuConfiguration.setVariable(MuConfiguration.SHOW_HIDDEN_FILES,
                                     !MuConfiguration.getVariable(MuConfiguration.SHOW_HIDDEN_FILES, MuConfiguration.DEFAULT_SHOW_HIDDEN_FILES));
-
-        // Refresh folder panels in a separate thread to show/hide new files
-        frames = WindowManager.getMainFrames().iterator();
-        while(frames.hasNext()) {
-            frame = (MainFrame)frames.next();
-            frame.getFolderPanel1().tryRefreshCurrentFolder();
-            frame.getFolderPanel2().tryRefreshCurrentFolder();
-        }
+        WindowManager.tryRefreshCurrentFolders();
     }
 }

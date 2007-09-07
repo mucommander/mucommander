@@ -207,18 +207,8 @@ class FoldersPanel extends PreferencesPanel implements ItemListener, KeyListener
             refreshFolders |= MuConfiguration.setVariable(MuConfiguration.SHOW_SYSTEM_FOLDERS, showSystemFoldersCheckBox.isSelected());
         }
 
-        if(refreshFolders) {
-            MainFrame frame;
-            Iterator  frames;
-
-            frames = WindowManager.getMainFrames().iterator();
-            // Refresh folder panels in a separate thread to show/hide new files
-            while(frames.hasNext()) {
-                frame = (MainFrame)frames.next();
-                frame.getFolderPanel1().tryRefreshCurrentFolder();
-                frame.getFolderPanel2().tryRefreshCurrentFolder();
-            }
-        }
+        if(refreshFolders)
+            WindowManager.tryRefreshCurrentFolders();
     }
 
 
