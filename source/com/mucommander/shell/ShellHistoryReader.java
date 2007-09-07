@@ -80,7 +80,7 @@ class ShellHistoryReader extends DefaultHandler implements ShellHistoryConstants
      */
     public void characters(char[] ch, int start, int length) {
         if(status == STATUS_COMMAND)
-            command.append(new String(ch, start, length));
+            command.append(ch, start, length);
     }
 
     /**
