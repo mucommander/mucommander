@@ -35,6 +35,7 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
 import java.util.Vector;
+import java.util.Iterator;
 
 /**
  * Window Manager is responsible for creating, disposing, switching,
@@ -233,6 +234,23 @@ public class WindowManager implements WindowListener, ConfigurationListener {
      */
     public static Vector getMainFrames() {
         return mainFrames;
+    }
+
+    /**
+     * Refreshes all panels in all frames in an asynchronous manner.
+     */
+    public static void tryRefreshCurrentFolders() {
+        Iterator  frames;
+        MainFrame frame;
+
+        // Starts with the main frame to make sure that results are immediately
+        // visible to the user.
+        currentMainFrame.tryRefreshCurrentFolders();
+        // Iterates through all available mainframes and refreshes them, using 
+        frames = mainFrames.iterator();
+        while(frames.hasNext())
+            if((frame = (MainFrame)frames.next()) != currentMainFrame)
+                frame.tryRefreshCurrentFolders();
     }
 
     /**
