@@ -676,6 +676,7 @@ encoding:HU:Kódolás
 
 
 license:EN:License
+license:en_GB:Licence
 license:FR:License
 license:HU:Licenc
 license:NL:Licentie
@@ -5351,7 +5352,7 @@ file_selection_dialog.unmark:pt_BR:Desmarcar
 file_selection_dialog.unmark:NL:Demarkeer
 file_selection_dialog.unmark:SK:Odznačiť
 
-file_selection_dialog.mark_description:EN:Mark files which filename
+file_selection_dialog.mark_description:EN:Mark files whose filename
 file_selection_dialog.mark_description:FR:Marquer les fichiers dont le nom
 file_selection_dialog.mark_description:DE:Markiere Dateien deren Name
 file_selection_dialog.mark_description:ES:Marcar ficheros cuyo nombre
@@ -5369,7 +5370,7 @@ file_selection_dialog.mark_description:pt_BR:Marcar arquivos com o nome
 file_selection_dialog.mark_description:NL:Markeer bestanen met de naam
 file_selection_dialog.mark_description:SK:Označiť súbory s názvom
 
-file_selection_dialog.unmark_description:EN:Unmark files which filename
+file_selection_dialog.unmark_description:EN:Unmark files whose filename
 file_selection_dialog.unmark_description:FR:Dé-marquer les fichiers dont le nom
 file_selection_dialog.unmark_description:DE:Demarkiere Dateien deren Name
 file_selection_dialog.unmark_description:ES:Desmarcar ficheros cuyo nombre
