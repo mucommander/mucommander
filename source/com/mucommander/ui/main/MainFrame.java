@@ -462,6 +462,14 @@ public class MainFrame extends JFrame implements LocationListener, Configuration
         this.foregroundActive = foregroundActive;
     }
 
+    /**
+     * Forces a refrehs of the frame's folder panel.
+     */
+    public void tryRefreshCurrentFolders() {
+        folderPanel1.tryRefreshCurrentFolder();
+        folderPanel2.tryRefreshCurrentFolder();
+    }
+
 
     /**
      * Returns <code>true</code> if this MainFrame is active, or is an ancestor of a Window that is currently active.
