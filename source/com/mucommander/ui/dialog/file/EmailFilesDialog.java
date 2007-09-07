@@ -79,7 +79,7 @@ public class EmailFilesDialog extends FocusDialog implements ActionListener, Ite
         if(!SendMailJob.mailPreferencesSet()) {
             JOptionPane.showMessageDialog(mainFrame, Translator.get("email_dialog.prefs_not_set"), Translator.get("email_dialog.prefs_not_set_title"), JOptionPane.INFORMATION_MESSAGE);
 	
-            GeneralPreferencesDialog preferencesDialog = new GeneralPreferencesDialog(mainFrame);
+            GeneralPreferencesDialog preferencesDialog = GeneralPreferencesDialog.getDialog();
             preferencesDialog.setActiveTab(GeneralPreferencesDialog.MAIL_TAB);
             preferencesDialog.showDialog();
 			

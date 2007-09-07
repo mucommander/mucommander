@@ -34,7 +34,5 @@ public class ShowPreferencesAction extends MuAction implements InvokesDialog {
         super(mainFrame, properties);
     }
 
-    public void performAction() {
-        new GeneralPreferencesDialog(mainFrame).showDialog();
-    }
+    public void performAction() {GeneralPreferencesDialog.getDialog().showDialog();}
 }
