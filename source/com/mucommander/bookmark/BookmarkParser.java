@@ -22,7 +22,6 @@ import com.mucommander.auth.Credentials;
 import com.mucommander.auth.CredentialsManager;
 import com.mucommander.auth.MappedCredentials;
 import com.mucommander.file.FileURL;
-import com.mucommander.io.BackupInputStream;
 
 import org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.SAXException;
@@ -43,34 +42,28 @@ import java.util.Hashtable;
  * @author Maxence Bernard
  */
 class BookmarkParser extends DefaultHandler implements BookmarkConstants {
-	
     /** Variable used for XML parsing */
     private String bookmarkName;
     /** Variable used for XML parsing */
     private String bookmarkLocation;
     /** Variable used for XML parsing */
-    private String characters;
+    private StringBuffer characters;
+    /** Receives bookmarks events. */
+    private BookmarkBuilder builder;
 
 
     /**
      * Creates a new BookmarkParser instance.
      */
-    BookmarkParser() {}
+    public BookmarkParser() {}
 
     /**
      * Parses the given XML bookmarks file. Should only be called by BookmarkManager.
      */
-    void parse(File file) throws Exception {
-        InputStream in;
-
-        in = null;
-        try {SAXParserFactory.newInstance().newSAXParser().parse(in = new BackupInputStream(file), this);}
-        finally {
-            if(in != null) {
-                try {in.close();}
-                catch(Exception e) {}
-            }
-        }
+    void parse(InputStream in, BookmarkBuilder builder) throws Exception {
+        this.builder = builder;
+        characters   = new StringBuffer();
+        SAXParserFactory.newInstance().newSAXParser().parse(in, this);
     }
 
 
@@ -78,21 +71,26 @@ class BookmarkParser extends DefaultHandler implements BookmarkConstants {
     /*  ContentHandler methods  */
     /* ------------------------ */
 
+    public void startDocument() throws SAXException {
+        try {builder.startBookmarks();}
+        catch(BookmarkException e) {throw new SAXException(e);}
+    }
+
+    public void endDocument() throws SAXException {
+        try {builder.endBookmarks();}
+        catch(BookmarkException e) {throw new SAXException(e);}
+    }
+
     /**
      * Method called when some PCDATA has been found in an XML node.
      */
-    public void characters(char[] ch, int start, int length) {
-        if(characters == null)
-            characters = new String(ch, start, length);
-        else
-            characters += new String(ch, start, length);
-    }
+    public void characters(char[] ch, int start, int length) {characters.append(ch, start, length);}
 
     /**
      * Notifies the parser that a new XML node has been found.
      */
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
-        this.characters = null;
+        characters.setLength(0);
 
         if(qName.equals(ELEMENT_BOOKMARK)) {
             // Reset parsing variables
@@ -111,14 +109,14 @@ class BookmarkParser extends DefaultHandler implements BookmarkConstants {
                 return;
             }
 
-            // Add the new boomark to BookmarkManager's bookmark list
-            BookmarkManager.addBookmark(new Bookmark(bookmarkName, bookmarkLocation));
+            try {builder.addBookmark(bookmarkName, bookmarkLocation);}
+            catch(BookmarkException e) {throw new SAXException(e);}
         }
         else if(qName.equals(ELEMENT_NAME)) {
-            bookmarkName = characters.trim();
+            bookmarkName = characters.toString().trim();
         }
         else if(qName.equals(ELEMENT_LOCATION)) {
-            bookmarkLocation = characters.trim();
+            bookmarkLocation = characters.toString().trim();
         }
         // Note: url element has been deprecated in 0.8 beta3 but is still checked against for upward compatibility.
         else if(qName.equals(ELEMENT_URL)) {
@@ -126,7 +124,7 @@ class BookmarkParser extends DefaultHandler implements BookmarkConstants {
             // Now bookmark locations are free of credentials, these are stored in a dedicated credentials file where
             // the password is encrypted.
             try {
-                FileURL url = new FileURL(characters.trim());
+                FileURL url = new FileURL(characters.toString().trim());
                 Credentials credentials = url.getCredentials();
 
                 // If the URL contains credentials, import them into CredentialsManager and remove credentials
@@ -136,11 +134,11 @@ class BookmarkParser extends DefaultHandler implements BookmarkConstants {
                     bookmarkLocation = url.toString(false);
                 }
                 else {
-                    bookmarkLocation = characters.trim();
+                    bookmarkLocation = characters.toString().trim();
                 }
             }
             catch(MalformedURLException e) {
-                bookmarkLocation = characters.trim();
+                bookmarkLocation = characters.toString().trim();
             }
         }
     }
