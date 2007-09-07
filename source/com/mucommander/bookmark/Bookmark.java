@@ -22,17 +22,15 @@ package com.mucommander.bookmark;
 /**
  * This class represents a bookmark, which is a simple name/location pair:
  * <ul>
- * <li>The name is a String describing the bookmark
+ * <li>The name is a String describing the bookmark.</li>
  * <li>The location should designate a path or file URL. The designated location may not exist or may not even be
- * a valid path or URL, so it is up to classes that call {@link #getLocation()} to deal with it appropriately.
+ * a valid path or URL, so it is up to classes that call {@link #getLocation()} to deal with it appropriately.</li>
  * </ul>
- * 
  * @author Maxence Bernard
  */
 public class Bookmark implements Cloneable {
-
     private String name;
-	private String location;
+    private String location;
 
 
     /**
@@ -114,5 +112,14 @@ public class Bookmark implements Cloneable {
      */
     public String toString() {
         return name;
+    }
+
+    public boolean equals(Object object) {
+        if(!(object instanceof Bookmark))
+            return false;
+
+        Bookmark bookmark;
+        bookmark = (Bookmark)object;
+        return bookmark.getName().equals(name);
     }
 }
