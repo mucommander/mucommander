@@ -3145,10 +3145,11 @@ com.mucommander.ui.action.ToggleHiddenFilesAction.hide:EN:Hide hidden files
 com.mucommander.ui.action.ToggleHiddenFilesAction.hide:FR:Cacher les fichiers caché
 com.mucommander.ui.action.ToggleHiddenFilesAction.hide:DE:Versteckte Dateien nicht anzeigen
 com.mucommander.ui.action.ToggleHiddenFilesAction.hide:pt_BR:Esconder arquivos ocultos
-com.mucommander.ui.action.ToggleHiddenFilesAction.hide:NL:Verborgen bestanden verbergen
+com.mucommander.ui.action.ToggleHiddenFilesAction.hide:NL:verborgen bestanden niet tonen
 com.mucommander.ui.action.ToggleHiddenFilesAction.hide:SI:Skrij skrite datoteke
 com.mucommander.ui.action.ToggleHiddenFilesAction.hide:CS:Skrýt skryté soubory
 com.mucommander.ui.action.ToggleHiddenFilesAction.hide:RO:Nu arăta fișierele ascunse
+com.mucommander.ui.action.ToggleHiddenFilesAction.hide:zh_TW:不顯示隱藏檔案
 # Translation missing
 
 
