@@ -50,7 +50,7 @@ class CredentialsParser extends DefaultHandler implements CredentialsConstants {
     private Hashtable urlProperties;
     private String login;
     private String password;
-    private String characters;
+    private StringBuffer characters;
 
     /** Contains the encryption method used to encrypt/decrypt passwords */
     private String encryptionMethod;
@@ -70,6 +70,7 @@ class CredentialsParser extends DefaultHandler implements CredentialsConstants {
         InputStream in;
 
         in = null;
+        characters = new StringBuffer();
         try {SAXParserFactory.newInstance().newSAXParser().parse(in = new BackupInputStream(file), this);}
         finally {
             if(in != null) {
@@ -85,7 +86,7 @@ class CredentialsParser extends DefaultHandler implements CredentialsConstants {
     ///////////////////////////////////
 
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
-        this.characters = null;
+        characters.setLength(0);
 
         if(qName.equals(ELEMENT_CREDENTIALS)) {
             // Reset parsing variables
@@ -134,14 +135,14 @@ class CredentialsParser extends DefaultHandler implements CredentialsConstants {
             CredentialsManager.getPersistentCredentials().add(new MappedCredentials(login, password, url, true));
         }
         else if(qName.equals(ELEMENT_URL)) {
-            try {url = new FileURL(characters.trim());}
+            try {url = new FileURL(characters.toString().trim());}
             catch(MalformedURLException e) {if(Debug.ON) Debug.trace("Malformed URL: "+characters+", location will be ignored");}
         }
         else if(qName.equals(ELEMENT_LOGIN))
-            login = characters.trim();
+            login = characters.toString().trim();
         else if(qName.equals(ELEMENT_PASSWORD))
-            password = characters.trim();
+            password = characters.toString().trim();
     }
 
-    public void characters(char[] ch, int offset, int length) {this.characters = new String(ch, offset, length);}
+    public void characters(char[] ch, int offset, int length) {characters.append(ch, offset, length);}
 }
