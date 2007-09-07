@@ -28,53 +28,51 @@ import java.util.Iterator;
 /**
  * This class provides a method to write bookmarks to an XML file.
  *
- * @author Maxence Bernard
+ * @author Maxence Bernard, Nicolas Rinaudo
  */
-public class BookmarkWriter implements BookmarkConstants {
+class BookmarkWriter implements BookmarkConstants, BookmarkBuilder {
+    private XmlWriter out;
 
-    /**
-     * Writes the bookmarks XML file in the user's preferences folder.
-     * This method should only be called by {@link BookmarkManager}.
-     */
-    static void write(OutputStream stream) throws IOException {
-        XmlWriter out;
-        Iterator  bookmarks;
-        Bookmark  bookmark;
+    public BookmarkWriter(OutputStream stream) throws IOException {out = new XmlWriter(stream);}
 
-        out = new XmlWriter(stream);
-
+    public void startBookmarks() throws BookmarkException {
         // Root element
-        out.startElement(ELEMENT_ROOT);
-        out.println();
-        
-        // Add muCommander version
-        out.startElement(ELEMENT_VERSION);
-        out.writeCData(com.mucommander.RuntimeConstants.VERSION);
-        out.endElement(ELEMENT_VERSION);
+        try {
+            out.startElement(ELEMENT_ROOT);
+            out.println();
 
-        bookmarks = BookmarkManager.getBookmarks().iterator();
-        while(bookmarks.hasNext()) {
-            bookmark = (Bookmark)bookmarks.next();
+            // Add muCommander version
+            out.startElement(ELEMENT_VERSION);
+            out.writeCData(com.mucommander.RuntimeConstants.VERSION);
+            out.endElement(ELEMENT_VERSION);
+        }
+        catch(IOException e) {throw new BookmarkException(e);}
+    }
 
+    public void endBookmarks() throws BookmarkException {
+        try {out.endElement(ELEMENT_ROOT);}
+        catch(IOException e) {throw new BookmarkException(e);}
+    }
+
+    public void addBookmark(String name, String location) throws BookmarkException {
+        try {
             // Start bookmark element
             out.startElement(ELEMENT_BOOKMARK);
             out.println();
 
             // Write the bookmark's name
             out.startElement(ELEMENT_NAME);
-            out.writeCData(bookmark.getName());
+            out.writeCData(name);
             out.endElement(ELEMENT_NAME);
 
             // Write the bookmark's location
             out.startElement(ELEMENT_LOCATION);
-            out.writeCData(bookmark.getLocation());
+            out.writeCData(location);
             out.endElement(ELEMENT_LOCATION);
 
             // End bookmark element
             out.endElement(ELEMENT_BOOKMARK);
         }
-
-        // End root element
-        out.endElement(ELEMENT_ROOT);
+        catch(IOException e) {throw new BookmarkException(e);}
     }
 }
