@@ -53,26 +53,23 @@ public class TarArchiveFile extends AbstractROArchiveFile {
     private TarInputStream createTarStream() throws IOException {
         InputStream inputStream = file.getInputStream();
 
-        String ext = getExtension();
-        if(ext!=null) {
-            ext = ext.toLowerCase();
+        String name = getName().toLowerCase();
             // Gzip-compressed file
-            if(ext.equals("tgz") || ext.equals("gz")) {
+        if(name.endsWith("tgz") || name.endsWith("tar.gz"))
                 // Note: this will fail for gz/tgz entries inside a tar file (IOException: Not in GZIP format),
                 // why is a complete mystery: the gz/tgz entry can be extracted and then properly browsed
-                inputStream = new GZIPInputStream(inputStream);
-            }
-            // Bzip2-compressed file
-            else if(ext.equals("tbz2") || ext.equals("bz2")) {
-                try { inputStream = new CBZip2InputStream(inputStream); }
-                catch(Exception e) {
-                    // CBZip2InputStream is known to throw NullPointerException if file is not properly Bzip2-encoded
-                    // so we need to catch those and throw them as IOException
-                    if(com.mucommander.Debug.ON)
-                        com.mucommander.Debug.trace("Exception caught while creating CBZip2InputStream: "+e+", throwing IOException");
+            inputStream = new GZIPInputStream(inputStream);
 
-                    throw new IOException();
-                }
+        // Bzip2-compressed file
+        else if(name.endsWith("tbz2") || name.endsWith("tar.bz2")) {
+            try { inputStream = new CBZip2InputStream(inputStream); }
+            catch(Exception e) {
+                // CBZip2InputStream is known to throw NullPointerException if file is not properly Bzip2-encoded
+                // so we need to catch those and throw them as IOException
+                if(com.mucommander.Debug.ON)
+                    com.mucommander.Debug.trace("Exception caught while creating CBZip2InputStream: "+e+", throwing IOException");
+
+                throw new IOException();
             }
         }
 
