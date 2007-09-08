@@ -154,5 +154,8 @@ public class GeneralPreferencesDialog extends PreferencesDialog {
     /**
      * Releases the singleton.
      */
-    public void finalize() {synchronized(singletonLock) {singleton = null;}}
+    public void dispose() {
+        synchronized(singletonLock) {singleton = null;}
+        super.dispose();
+    }
 }
