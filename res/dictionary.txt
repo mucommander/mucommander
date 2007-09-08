@@ -3152,6 +3152,7 @@ com.mucommander.ui.action.ToggleHiddenFilesAction.hide:CS:Skrýt skryté soubory
 com.mucommander.ui.action.ToggleHiddenFilesAction.hide:RO:Nu arăta fișierele ascunse
 com.mucommander.ui.action.ToggleHiddenFilesAction.hide:zh_TW:不顯示隱藏檔案
 com.mucommander.ui.action.ToggleHiddenFilesAction.hide:HU:Rejtett fájlok elrejtése
+com.mucommander.ui.action.ToggleHiddenFilesAction.hide:ES:Ocultar ficheros ocultos
 # Translation missing
 
 
