@@ -39,7 +39,7 @@ public class MkdirJob extends FileJob {
 	
     private AbstractFile destFolder;
     private String filename;
-	private boolean mkfileMode;
+    private boolean mkfileMode;
 
 
     /**
@@ -96,10 +96,9 @@ public class MkdirJob extends FileJob {
                 }
 
                 // Create file
-                if(mkfileMode) {
-                    OutputStream out = newFile.getOutputStream(false);
-                    out.close();
-                }
+                if(mkfileMode)
+                    newFile.mkfile();
+
                 // Create directory
                 else {
                     newFile.mkdir();
