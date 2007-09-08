@@ -635,6 +635,16 @@ public abstract class AbstractFile implements FilePermissions {
         return destFile.getTopAncestor().getClass().equals(getTopAncestor().getClass())?SHOULD_HINT:SHOULD_NOT_HINT;
     }
 
+    private final AbstractFile getChildFile(String name) throws IOException {
+        FileURL childURL = (FileURL)getURL().clone();
+        String path = childURL.getPath();
+        String pathSeparator = childURL.getPathSeparator();
+
+        path += (path.endsWith(pathSeparator)?"":pathSeparator)+name;
+        childURL.setPath(path);
+
+        return FileFactory.getFile(childURL, true);
+    }
 
     /**
      * Convenience method that creates a directory with the given name as a child of this directory.
@@ -643,15 +653,28 @@ public abstract class AbstractFile implements FilePermissions {
      * @param name the directory to create
      * @throws IOException if this operation is not possible.
      */
-    public final void mkdir(String name) throws IOException {
-        FileURL childURL = (FileURL)getURL().clone();
-        String path = childURL.getPath();
-        String pathSeparator = childURL.getPathSeparator();
+    public final void mkdir(String name) throws IOException {getChildFile(name).mkdir();}
 
-        path += (path.endsWith(pathSeparator)?"":pathSeparator)+name;
-        childURL.setPath(path);
+    /**
+     * Convenience method that creates a file with the given name as a child of this directory.
+     * This method will fail if this file is not a directory.
+     *
+     * @param name the file to create
+     * @throws IOException if this operation is not possible.
+     */
+    public final void mkfile(String name) throws IOException {getChildFile(name).mkfile();}
 
-        FileFactory.getFile(childURL, true).mkdir();
+    /**
+     * Creates this file as a normal file. This method will fail if this file already exists.
+     *
+     * @throws IOException if this operation is not possible.
+     */
+    public void mkfile() throws IOException {
+        // We don't want to overwrite files.
+        if(exists())
+            throw new IOException();
+
+        getOutputStream(false).close();
     }
 
 
