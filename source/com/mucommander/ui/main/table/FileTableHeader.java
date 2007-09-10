@@ -51,6 +51,8 @@ public class FileTableHeader extends JTableHeader implements Columns, MouseListe
 
         int colNum = table.convertColumnIndexToModel(getColumnModel().getColumnIndexAtX(e.getX()));
 
+        table.requestFocus();
+
         // One of the table headers was left-clicked, sort the table by the clicked column's criterion
         if(PlatformManager.isLeftMouseButton(e)) {
             // If the table was already sorted by this criteria, reverse order
@@ -99,4 +101,6 @@ public class FileTableHeader extends JTableHeader implements Columns, MouseListe
 
     public void mouseExited(MouseEvent e) {
     }
+
+    public boolean getReorderingAllowed() {return true;}
 }
