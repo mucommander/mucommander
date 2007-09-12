@@ -916,6 +916,7 @@ preview:EN:Preview
 preview:FR:Apperçu
 preview:HU:Előnézet
 preview:zh_CN:预览
+preview:NL:Voorbeeld
 # Translation missing
 
 
@@ -3594,6 +3595,7 @@ com.mucommander.ui.action.OpenTrashAction.label:EN:Open Trash
 com.mucommander.ui.action.OpenTrashAction.label:FR:Ouvrir la Corbeille
 com.mucommander.ui.action.OpenTrashAction.label:HU:Lomtár megnyitása
 com.mucommander.ui.action.OpenTrashAction.label:zh_CN:打开垃圾桶
+com.mucommander.ui.action.OpenTrashAction.label:NL:Open prullebak
 # Translation missing
 
 
@@ -3608,6 +3610,7 @@ com.mucommander.ui.action.EmptyTrashAction.label:EN:Empty Trash
 com.mucommander.ui.action.EmptyTrashAction.label:FR:Vider la Corbeille
 com.mucommander.ui.action.EmptyTrashAction.label:HU:Lomtár ürítése
 com.mucommander.ui.action.EmptyTrashAction.label:zh_CN:清空垃圾桶
+com.mucommander.ui.action.EmptyTrashAction.label:NL:Prullebak leeg maken
 # Translation missing
 
 
@@ -4563,6 +4566,7 @@ optimizing_archive:en_GB:Optimising archive %1
 optimizing_archive:FR:Optimisation de l'archive %1
 optimizing_archive:HU:Archívum optimalizálás %1
 optimizing_archive:zh_CN:优化压缩包 %1
+optimizing_archive:NL:Optimalizeren van archief %1
 # Translation missing
 
 
@@ -4581,6 +4585,7 @@ error_while_optimizing_archive:en_GB:Error while optimising archive %1
 error_while_optimizing_archive:FR:Erreur pendant l'optimisation de %1
 error_while_optimizing_archive:HU:Hiba az archívum optimalizálásakor %1
 error_while_optimizing_archive:zh_CN:优化压缩包 %1 时出错
+error_while_optimizing_archive:NL:Fout bij het optimalizeren van archief %1
 # Translation missing
 
 
@@ -5187,9 +5192,9 @@ email_dialog.sending:zh_CN:发送文件
 email_dialog.sending:SI:Pošiljam datoteke
 email_dialog.sending:RO:Fișiere în curs de trimitere
 email_dialog.sending:IT:Inviando file
-email_dialog.sending:pt_BR:Enviando %1
+email_dialog.sending:pt_BR:Enviando arquivos
 email_dialog.sending:NL:Verzenden bestanden
-email_dialog.sending:SK:Odosielam %1
+email_dialog.sending:SK:Odosielam súbory
 # Translation missing (KR)
 
 
@@ -5212,12 +5217,9 @@ email.sending_file:SI:Pošiljam %1
 email.sending_file:RO:În curs de trimitere %1
 email.sending_file:IT:Inviando %1
 email.sending_file:NL:Versturen %1
-email_dialog.sending:KR:파일 보내는중 %1
-email_dialog.sending:CS:Odesílám soubory
-email_dialog.sending:pt_BR:Enviando %1
-email_dialog.sending:NL:Verzenden bestanden
-email_dialog.sending:SK:Odosielam %1
-email_dialog.sending:HU:Fájlok küldése
+email.sending_file:KR:파일 보내는중 %1
+email.sending_file:pt_BR:Enviando %1
+email.sending_file:SK:Odosielam %1
 
 email.connecting_to_server:EN:Connecting to %1
 email.connecting_to_server:FR:Connexion à %1
@@ -5270,7 +5272,7 @@ email.connection_closed:RO:Conexiunea întreruptă de server, email-ul nu a fost
 email.connection_closed:IT:Connessione chiusa dal server, mail non inviata.
 email.connection_closed:KR:서버에서 접속이 종료되었습니다. 메일이 발송되지 않았습니다
 email.connection_closed:pt_BR:Conexão encerrada pelo servidor, email não enviado.
-email.connection_closed:NL:Verbinding door server onderbroken, email niet verzonden
+email.connection_closed:NL:Verbinding door server verbroken, email niet verzonden
 email.connection_closed:SK:Server zatvoril pripojenie, pošta nebola odoslaná.
 
 email.goodbye_failed:EN:Error while closing connection, mail may not have been sent.
@@ -5365,7 +5367,7 @@ file_selection_dialog.mark_description:RO:Selectează fișierele ale căror nume
 file_selection_dialog.mark_description:IT:Selezione file il cui nome
 file_selection_dialog.mark_description:KR:파일 이름으로 선택
 file_selection_dialog.mark_description:pt_BR:Marcar arquivos com o nome
-file_selection_dialog.mark_description:NL:Markeer bestanen met de naam
+file_selection_dialog.mark_description:NL:Markeer bestanden met de naam
 file_selection_dialog.mark_description:SK:Označiť súbory s názvom
 
 file_selection_dialog.unmark_description:EN:Unmark files which filename
@@ -5436,7 +5438,7 @@ file_selection_dialog.ends_with:SI:Konča z
 file_selection_dialog.ends_with:RO:Se termină cu
 file_selection_dialog.ends_with:IT:Termina con
 file_selection_dialog.ends_with:pt_BR:Terminam com
-file_selection_dialog.ends_with:NL:Einigt met
+file_selection_dialog.ends_with:NL:Eindigt met
 file_selection_dialog.ends_with:SK:Končí na
 # Translation missing (KR)
 
@@ -6338,7 +6340,7 @@ bonjour.bonjour_disabled:ES:Bonjour deshabilitado
 bonjour.bonjour_disabled:PL:Powitanie nieaaktywne
 bonjour.bonjour_disabled:KR:Bonjour 사용불가
 bonjour.bonjour_disabled:pt_BR:Bonjour desabilitado
-bonjour.bonjour_disabled:NL:Bonjout uitgeschakeld
+bonjour.bonjour_disabled:NL:Bonjour uitgeschakeld
 bonjour.bonjour_disabled:SK:Služba Bonjour nepovolená
 bonjour.bonjour_disabled:HU:Bonjour letiltva
 
@@ -7155,7 +7157,7 @@ shortcuts_dialog.windows:SK:Okná
 theme_editor.title:EN:Theme editor
 theme_editor.title:FR:Editeur de thèmes
 theme_editor.title:HU:Témaszerkesztő
-theme_editor.title:NL:Thema bewerken
+theme_editor.title:NL:Themabewerker
 theme_editor.title:zh_CN:主题编辑器
 # Translation missing
 
@@ -7471,7 +7473,7 @@ theme_editor.normal_unfocused:zh_CN:正常(无焦点)
 theme_editor.selected:EN:Selected
 theme_editor.selected:FR:Sélectionné
 theme_editor.selected:HU:Kiválasztott
-theme_editor.selected:NL:Geselecteerd
+theme_editor.selected:NL:Gemarkeerd
 theme_editor.selected:zh_CN:选中的
 # Translation missing
 
@@ -7988,7 +7990,7 @@ prefs_dialog.startup_folders:RO:Director inițial
 prefs_dialog.startup_folders:IT:Cartelle iniziali
 prefs_dialog.startup_folders:KR:시작 폴더
 prefs_dialog.startup_folders:pt_BR:Diretórios de início
-prefs_dialog.startup_folders:NL:Opstartdirectories
+prefs_dialog.startup_folders:NL:Opstartmappen
 prefs_dialog.startup_folders:SK:Priečinky pri štarte
 
 prefs_dialog.left_folder:EN:Left folder
@@ -8388,7 +8390,7 @@ prefs_dialog.error_in_import:zh_CN:导入主题 %1 时出错.
 prefs_dialog.cannot_read_theme:EN:Cannot load theme from file %1
 prefs_dialog.cannot_read_theme:FR:Erreur lors de la lecture du fichier %1
 prefs_dialog.cannot_read_theme:HU:Nem lehet betölteni a témát a fájlból %1
-prefs_dialog.cannot_read_theme:NL:Kan bestand niet importeren uit bestand %1
+prefs_dialog.cannot_read_theme:NL:Kan thema niet importeren uit bestand %1
 prefs_dialog.cannot_read_theme:zh_CN:不能从文件 %1 中载入主题
 # Translation missing
 
@@ -8464,7 +8466,7 @@ prefs_dialog.delete_theme:zh_CN:永久删除主题 %1 ?
 prefs_dialog.rename_failed:EN:Failed to rename theme %1
 prefs_dialog.rename_failed:Fr:Impossible de renommer le thème %1
 prefs_dialog.rename_failed:HU:Hiba a téma átnevezéskor %1
-prefs_dialog.rename_failed:NL:Kan niet hernoemen thema %1
+prefs_dialog.rename_failed:NL:Fout bij hernoemen thema %1
 prefs_dialog.rename_failed:zh_CN:未能重命名主题 %1
 # Translation missing
 
@@ -8540,7 +8542,7 @@ prefs_dialog.mail_name:RO:Numele dumneavoastră
 prefs_dialog.mail_name:IT:Il Vostro Nome
 prefs_dialog.mail_name:KR:이름
 prefs_dialog.mail_name:pt_BR:Seu nome
-prefs_dialog.mail_name:NL:Naam
+prefs_dialog.mail_name:NL:Uw naam
 prefs_dialog.mail_name:SK:Vaše meno
 
 prefs_dialog.mail_address:EN:Your email address
@@ -9184,6 +9186,7 @@ font_chooser.font_size:SI:Velikost
 font_chooser.font_size:RO:Dimensiune
 font_chooser.font_size:IT:Dimensione
 font_chooser.font_size:KR:크기
+font_chooser.font_size:NL:Grootte
 # Translation missing (SK, pt_BR)
 
 
@@ -9371,6 +9374,7 @@ color_chooser.alpha:EN:Alpha transparency
 color_chooser.alpha:FR:Transparence alpha
 color_chooser.alpha:HU:Alfa átlátszóság
 color_chooser.alpha:zh_CN:Alpha 透明度
+color_chooser.alpha:NL:Alpha transparantie
 # Translation missing
 
 
