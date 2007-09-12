@@ -106,6 +106,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         <exclude name="osx-eawt-stubs.jar"/>
         <exclude name="osx-cocoa.jar"/>
         <exclude name="servlet-api.jar"/>
+        <exclude name="junit.jar"/>
     </fileset>
     </unjar>
 
