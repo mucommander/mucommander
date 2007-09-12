@@ -21,6 +21,7 @@ package com.mucommander.text;
 import com.mucommander.Debug;
 import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.file.util.ResourceLoader;
+import com.mucommander.io.bom.BOMReader;
 
 import java.io.*;
 import java.util.Hashtable;
@@ -126,7 +127,7 @@ public class Translator {
         availableLanguages = new Vector();
         dictionary         = new Hashtable();
 
-        BufferedReader br = new BufferedReader(new InputStreamReader(ResourceLoader.getResourceAsStream(filePath), "UTF-8"));
+        BufferedReader br = new BufferedReader(new BOMReader(ResourceLoader.getResourceAsStream(filePath)));
         String line;
         String key;
         String lang;
@@ -467,8 +468,8 @@ public class Translator {
      */
     private static void addLanguageToDictionary(String originalFile, String newLanguageFile, String resultingFile, String newLanguage) throws IOException {
         // Initialize streams
-        BufferedReader originalFileReader = new BufferedReader(new InputStreamReader(new FileInputStream(new File(originalFile)), "UTF-8"));
-        BufferedReader newLanguageFileReader = new BufferedReader(new InputStreamReader(new FileInputStream(new File(newLanguageFile)), "UTF-8"));
+        BufferedReader originalFileReader = new BufferedReader(new BOMReader(new FileInputStream(originalFile)));
+        BufferedReader newLanguageFileReader = new BufferedReader(new BOMReader(new FileInputStream(newLanguageFile)));
         PrintWriter pw = new PrintWriter(new OutputStreamWriter(new FileOutputStream(resultingFile), "UTF-8"));
 
         // Parse new language's entries
@@ -536,7 +537,9 @@ public class Translator {
                 }
 
                 if(lang.equalsIgnoreCase(newLanguage)) {
-                    String existingNewLanguageValue = st.nextToken();
+                    // Delimiter is now line break
+                    String existingNewLanguageValue = st.nextToken("\n");
+                    existingNewLanguageValue = existingNewLanguageValue.substring(1, existingNewLanguageValue.length());
                     String newLanguageValue = (String)newLanguageEntries.get(currentKey);
 
                     if(newLanguageValue!=null) {
