@@ -71,7 +71,7 @@ language.fr:EN:Français
 language.es:EN:Español
 language.de:EN:Deutsch
 language.cs:EN:Čeština
-language.zh_CN:EN:簡體中文
+language.zh_CN:EN:简体中文
 language.zh_TW:EN:繁體中文
 language.pl:EN:Polski
 language.hu:EN:Magyar
@@ -171,7 +171,7 @@ edit:ES:Editar
 edit:CS:Editovat
 edit:zh_TW:編輯
 edit:PL:Edycja
-edit:HU:Szerkesztés
+edit:HU:Szerkeszt
 edit:RU:Редактировать
 edit:zh_CN:编辑
 edit:SI:Uredi
@@ -205,7 +205,7 @@ reset:EN:Reset
 reset:FR:Réinitialiser
 reset:HU:Alaphelyzet
 reset:NL:Resetten
-reset:CS:Resetovat
+reset:zh_CN:复位
 # Translation missing
 
 
@@ -335,7 +335,7 @@ delete:zh_TW:刪除
 delete:PL:Usuń
 delete:HU:Törlés
 delete:RU:Удаление
-delete:zh_CN:刪除
+delete:zh_CN:删除
 delete:SI:Izbriši
 delete:RO:Șterge
 delete:IT:Elimina
@@ -666,6 +666,7 @@ encoding:pt_BR:Codificação
 encoding:NL:Tekenset
 encoding:SK:Kódovanie
 encoding:HU:Kódolás
+encoding:zh_CN:编码
 # Translation missing
 
 
@@ -677,11 +678,10 @@ encoding:HU:Kódolás
 
 
 license:EN:License
-license:en_GB:Licence
 license:FR:License
 license:HU:Licenc
 license:NL:Licentie
-license:CS:Licence
+license:zh_CN:许可证
 # Translation missing
 
 
@@ -884,6 +884,7 @@ go_to:pt_BR:Ir para
 go_to:NL:Ga naar
 go_to:SK:Ísť na
 go_to:HU:Ugrás
+go_to:zh_CN:转到
 # Translation missing
 
 
@@ -914,7 +915,7 @@ example:SK:Príklad
 preview:EN:Preview
 preview:FR:Apperçu
 preview:HU:Előnézet
-preview:CS:Náhled
+preview:zh_CN:预览
 # Translation missing
 
 
@@ -931,7 +932,7 @@ sample_text:EN:Sample text
 sample_text:FR:Texte d'exemple
 sample_text:HU:Példa szöveg
 sample_text:NL:Voorbeeldtekst
-sample_text:CS:Ukázkový text
+sample_text:zh_CN:示例文本
 # Translation missing
 
 
@@ -1029,7 +1030,7 @@ this_folder_does_not_exist:SK:Tento priečinok neexistuje, alebo nie je k dispoz
 this_file_does_not_exist:EN:This file doesn't exist or is not available: %1
 this_file_does_not_exist:FR:Ce fichier n'existe pas ou n'est pas disponible: %1
 this_file_does_not_exist:NL:Dit bestand bestaat niet of is niet beschikbaar: %1
-this_file_does_not_exist:CS:Tento soubor neexistuje nebo není dostupný: %1
+this_file_does_not_exist:zh_CN:文件不存在或无法使用: %1
 # Translation missing
 
 
@@ -1302,7 +1303,7 @@ read_error:EN:Read error
 read_error:FR:Erreur de lecture
 read_error:HU:Olvasási hiba
 read_error:NL:Leesfout
-read_error:CS:Chyba při čtení
+read_error:zh_CN:读取错误
 # Translation missing
 
 
@@ -2169,7 +2170,7 @@ com.mucommander.ui.action.GoBackAction.label:ES:Volver
 com.mucommander.ui.action.GoBackAction.label:CS:Zpět
 com.mucommander.ui.action.GoBackAction.label:zh_TW:退回
 com.mucommander.ui.action.GoBackAction.label:PL:Wstecz
-com.mucommander.ui.action.GoBackAction.label:HU:Ugrás vissza
+com.mucommander.ui.action.GoBackAction.label:HU:Vissza
 com.mucommander.ui.action.GoBackAction.label:RU:Назад
 com.mucommander.ui.action.GoBackAction.label:zh_CN:退回
 com.mucommander.ui.action.GoBackAction.label:SI:Nazaj
@@ -2328,7 +2329,7 @@ com.mucommander.ui.action.SortByDateAction.label:EN:Sort by Date
 com.mucommander.ui.action.SortByDateAction.label:FR:Trier par Date
 com.mucommander.ui.action.SortByDateAction.label:DE:Nach Datum sortieren
 com.mucommander.ui.action.SortByDateAction.label:ES:Ordenar por Fecha
-com.mucommander.ui.action.SortByDateAction.label:CS:Řadit dle datumu
+com.mucommander.ui.action.SortByDateAction.label:CS:Řadit dle data
 com.mucommander.ui.action.SortByDateAction.label:zh_TW:依日期排序
 com.mucommander.ui.action.SortByDateAction.label:PL:Sortuj po dacie
 com.mucommander.ui.action.SortByDateAction.label:HU:Dátum szerint rendez
@@ -2556,7 +2557,7 @@ com.mucommander.ui.action.MarkPageDownAction.label:KR:페이지 아래로 선택
 com.mucommander.ui.action.MarkPageDownAction.label:pt_BR:Marcar página abaixo
 com.mucommander.ui.action.MarkPageDownAction.label:NL:Markeer bestanden tot volgende bladzijde
 com.mucommander.ui.action.MarkPageDownAction.label:SK:Označiť po nasledujúcu stránku
-com.mucommander.ui.action.MarkPageDownAction.label:HU:Következő lap kijelölése
+com.mucommander.ui.action.MarkPageDownAction.label:HU:Kijelöl következő lap
 
 com.mucommander.ui.action.MarkPageUpAction.label:EN:Mark page up
 com.mucommander.ui.action.MarkPageUpAction.label:FR:Marquer les fichiers jusqu'à la page précédente
@@ -2573,7 +2574,7 @@ com.mucommander.ui.action.MarkPageUpAction.label:KR:페이지 위로 선택
 com.mucommander.ui.action.MarkPageUpAction.label:pt_BR:Marcar página acima
 com.mucommander.ui.action.MarkPageUpAction.label:NL:Markeer bestanden tot vorige pagina
 com.mucommander.ui.action.MarkPageUpAction.label:SK:Označiť po predchádzajúcu stránku
-com.mucommander.ui.action.MarkPageUpAction.label:HU:Előző lap kijelölése
+com.mucommander.ui.action.MarkPageUpAction.label:HU:Kijelöl előző lap
 # Translation missing (IT)
 
 
@@ -3084,7 +3085,7 @@ com.mucommander.ui.action.ToggleAutoSizeAction.label:zh_CN:自动设置栏宽
 com.mucommander.ui.action.ToggleAutoSizeAction.label:SI:Samodejna širina stolpcev
 com.mucommander.ui.action.ToggleAutoSizeAction.label:RO:Dimensiune automată la coloane
 com.mucommander.ui.action.ToggleAutoSizeAction.label:IT:Auto-dimensiona colonne
-com.mucommander.ui.action.ToggleAutoSizeAction.label:CS:Automatická šířka sloupců
+com.mucommander.ui.action.ToggleAutoSizeAction.label:CS:Automatická velikost sloupců
 com.mucommander.ui.action.ToggleAutoSizeAction.label:DE:Spaltengröße automatisch bestimmen
 com.mucommander.ui.action.ToggleAutoSizeAction.label:KR:컬럼 자동 크기 조정
 com.mucommander.ui.action.ToggleAutoSizeAction.label:pt_BR:Dimensionar colunas automaticamente
@@ -3145,25 +3146,6 @@ com.mucommander.ui.action.ToggleCommandBarAction.hide:KR:커맨드바 숨기기
 com.mucommander.ui.action.ToggleCommandBarAction.hide:pt_BR:Esconder barra de comandos
 com.mucommander.ui.action.ToggleCommandBarAction.hide:NL:Commandoregel verbergen
 com.mucommander.ui.action.ToggleCommandBarAction.hide:SK:Skryť panel s príkazmi
-
-com.mucommander.ui.action.ToggleHiddenFilesAction.show:EN:$[prefs_dialog.show_hidden_files]
-
-com.mucommander.ui.action.ToggleHiddenFilesAction.hide:EN:Hide hidden files
-com.mucommander.ui.action.ToggleHiddenFilesAction.hide:FR:Cacher les fichiers caché
-com.mucommander.ui.action.ToggleHiddenFilesAction.hide:DE:Versteckte Dateien nicht anzeigen
-com.mucommander.ui.action.ToggleHiddenFilesAction.hide:pt_BR:Esconder arquivos ocultos
-com.mucommander.ui.action.ToggleHiddenFilesAction.hide:NL:verborgen bestanden niet tonen
-com.mucommander.ui.action.ToggleHiddenFilesAction.hide:SI:Skrij skrite datoteke
-com.mucommander.ui.action.ToggleHiddenFilesAction.hide:CS:Skrýt skryté soubory
-com.mucommander.ui.action.ToggleHiddenFilesAction.hide:RO:Nu arăta fișierele ascunse
-com.mucommander.ui.action.ToggleHiddenFilesAction.hide:zh_TW:不顯示隱藏檔案
-com.mucommander.ui.action.ToggleHiddenFilesAction.hide:HU:Rejtett fájlok elrejtése
-com.mucommander.ui.action.ToggleHiddenFilesAction.hide:ES:Ocultar ficheros ocultos
-# Translation missing
-
-
-
-
 
 com.mucommander.ui.action.ToggleToolBarAction.show:EN:Show toolbar
 com.mucommander.ui.action.ToggleToolBarAction.show:FR:Afficher la barre d'outils
@@ -3244,6 +3226,7 @@ com.mucommander.ui.action.ToggleShowFoldersFirstAction.label:CS:Zobrazit nejdř�
 com.mucommander.ui.action.ToggleShowFoldersFirstAction.label:NL:Toon mappen eerst
 com.mucommander.ui.action.ToggleShowFoldersFirstAction.label:SK:Zobraziť priečinky ako prvé
 com.mucommander.ui.action.ToggleShowFoldersFirstAction.label:HU:Mappákat a listában előre
+com.mucommander.ui.action.ToggleShowFoldersFirstAction.label:zh_CN:先显示文件夹
 # Translation missing
 
 
@@ -3299,7 +3282,7 @@ com.mucommander.ui.action.RecallPreviousWindowAction.label:ES:Cambiar a la venta
 com.mucommander.ui.action.RecallPreviousWindowAction.label:CS:Přepnout do předchozího okna
 com.mucommander.ui.action.RecallPreviousWindowAction.label:zh_TW:切換至前一個視窗
 com.mucommander.ui.action.RecallPreviousWindowAction.label:PL:Przełącz do poprzedniego okna
-com.mucommander.ui.action.RecallPreviousWindowAction.label:HU:Váltás az előző ablakra
+com.mucommander.ui.action.RecallPreviousWindowAction.label:HU:Válts az előző ablakra
 com.mucommander.ui.action.RecallPreviousWindowAction.label:RU:Переключиться в предыдущее окно
 com.mucommander.ui.action.RecallPreviousWindowAction.label:zh_CN:切换到前一个窗口
 com.mucommander.ui.action.RecallPreviousWindowAction.label:SI:Preklopi na prejšnje okno
@@ -3317,7 +3300,7 @@ com.mucommander.ui.action.RecallNextWindowAction.label:ES:Cambiar a la siguiente
 com.mucommander.ui.action.RecallNextWindowAction.label:CS:Přepnout do následujícího okna
 com.mucommander.ui.action.RecallNextWindowAction.label:zh_TW:切換至後一個視窗
 com.mucommander.ui.action.RecallNextWindowAction.label:PL:Przełącz do następnego okna
-com.mucommander.ui.action.RecallNextWindowAction.label:HU:Váltás a következő ablakra
+com.mucommander.ui.action.RecallNextWindowAction.label:HU:Válts a következő ablakra
 com.mucommander.ui.action.RecallNextWindowAction.label:RU:Переключиться в следующее окно
 com.mucommander.ui.action.RecallNextWindowAction.label:zh_CN:切换到后一个窗口
 com.mucommander.ui.action.RecallNextWindowAction.label:SI:Preklopi na naslednje okno
@@ -3375,7 +3358,7 @@ com.mucommander.ui.action.BringAllToFrontAction.label:FR:Tout ramener au premier
 com.mucommander.ui.action.BringAllToFrontAction.label:NL:Alles naar voren halen
 com.mucommander.ui.action.BringAllToFrontAction.label:SK:Okná dopredu
 com.mucommander.ui.action.BringAllToFrontAction.label:HU:Minden ablakot előre
-com.mucommander.ui.action.BringAllToFrontAction.label:CS:Přenést vše do popředí
+com.mucommander.ui.action.BringAllToFrontAction.label:zh_CN:所有都到前面
 # Translation missing
 
 
@@ -3610,7 +3593,7 @@ com.mucommander.ui.action.ShowAboutAction.label:SK:O aplikácii muCommander
 com.mucommander.ui.action.OpenTrashAction.label:EN:Open Trash
 com.mucommander.ui.action.OpenTrashAction.label:FR:Ouvrir la Corbeille
 com.mucommander.ui.action.OpenTrashAction.label:HU:Lomtár megnyitása
-com.mucommander.ui.action.OpenTrashAction.label:CS:Otevřít Koš
+com.mucommander.ui.action.OpenTrashAction.label:zh_CN:打开垃圾桶
 # Translation missing
 
 
@@ -3624,7 +3607,7 @@ com.mucommander.ui.action.OpenTrashAction.label:CS:Otevřít Koš
 com.mucommander.ui.action.EmptyTrashAction.label:EN:Empty Trash
 com.mucommander.ui.action.EmptyTrashAction.label:FR:Vider la Corbeille
 com.mucommander.ui.action.EmptyTrashAction.label:HU:Lomtár ürítése
-com.mucommander.ui.action.EmptyTrashAction.label:CS:Vyprázdnit Koš
+com.mucommander.ui.action.EmptyTrashAction.label:zh_CN:清空垃圾桶
 # Translation missing
 
 
@@ -3885,7 +3868,7 @@ status_bar.connecting_to_folder:zh_CN:正在连接文件夹，按ESCAPE键取消
 status_bar.connecting_to_folder:SI:Povezovanje z mapo, pritisni ESCAPE za preklic.
 status_bar.connecting_to_folder:RO:În curs de conectare la un director, apasă ESCAPE pentru a anula.
 status_bar.connecting_to_folder:IT:Connessione in corso, premere ESC per annullare
-status_bar.connecting_to_folder:CS:Připojuji se, stiskem ESCAPE akci zrušíte.
+status_bar.connecting_to_folder:CS:Připojuji se ke složce, stiskem ESCAPE akci zrušíte.
 status_bar.connecting_to_folder:DE:Verbindungsaufbau zu Ordner, drücke ESC um Abzubrechen.
 status_bar.connecting_to_folder:KR:폴더 접속중, 취소하려면 ESCAPE를 눌러주세요.
 status_bar.connecting_to_folder:pt_BR:Conectando ao diretório, tecle ESC para cancelar.
@@ -3958,7 +3941,7 @@ table.folder_access_error_title:EN:Folder access error
 table.folder_access_error_title:FR:Folder access error
 table.folder_access_error_title:DE:Fehler beim Ordnerzugriff
 table.folder_access_error_title:ES:Error al acceder al directorio
-table.folder_access_error_title:CS:Chyba při přístupu k složce
+table.folder_access_error_title:CS:Chyba přístupu k složce
 table.folder_access_error_title:zh_TW:資料夾存取錯誤
 table.folder_access_error_title:PL:Błąd dostępu do katalogu
 table.folder_access_error_title:HU:Könyvtár hozzáférési hiba
@@ -4579,7 +4562,7 @@ optimizing_archive:EN:Optimizing archive %1
 optimizing_archive:en_GB:Optimising archive %1
 optimizing_archive:FR:Optimisation de l'archive %1
 optimizing_archive:HU:Archívum optimalizálás %1
-optimizing_archive:CS:Optimalizuji archív %1
+optimizing_archive:zh_CN:优化压缩包 %1
 # Translation missing
 
 
@@ -4592,14 +4575,13 @@ optimizing_archive:CS:Optimalizuji archív %1
 
 
 
- 
+
 error_while_optimizing_archive:EN:Error while optimizing archive %1
 error_while_optimizing_archive:en_GB:Error while optimising archive %1
 error_while_optimizing_archive:FR:Erreur pendant l'optimisation de %1
 error_while_optimizing_archive:HU:Hiba az archívum optimalizálásakor %1
-error_while_optimizing_archive:CS:Chyba při optimalizaci archívu %1
-
-
+error_while_optimizing_archive:zh_CN:优化压缩包 %1 时出错
+# Translation missing
 
 
 
@@ -4653,7 +4635,7 @@ move_dialog.error_title:EN:Move error
 move_dialog.error_title:FR:Erreur de déplacement
 move_dialog.error_title:DE:Fehler beim Verschieben
 move_dialog.error_title:ES:Error de movimiento
-move_dialog.error_title:CS:Chyba při přesouvání
+move_dialog.error_title:CS:Chyba přesouvání
 move_dialog.error_title:zh_TW:搬移錯誤
 move_dialog.error_title:PL:Błąd przenoszenia
 move_dialog.error_title:HU:Áthelyezési hiba
@@ -4732,7 +4714,7 @@ download_dialog.error_title:EN:Download error
 download_dialog.error_title:FR:Erreur de téléchargement
 download_dialog.error_title:DE:Fehler beim Download
 download_dialog.error_title:ES:Error de descarga
-download_dialog.error_title:CS:Chyba při stahování
+download_dialog.error_title:CS:Chyba stahování
 download_dialog.error_title:zh_TW:下載錯誤
 download_dialog.error_title:PL:Błąd pobierania
 download_dialog.error_title:HU:Letöltési hiba
@@ -4807,8 +4789,7 @@ delete_dialog.permanently_delete.confirmation:SK:Natrvalo odstrániť vybraný s
 
 delete_dialog.permanently_delete.confirmation_details:EN:This operation cannot be undone.
 delete_dialog.permanently_delete.confirmation_details:FR:Cette opération ne peut pas être annulée.
-delete_dialog.permanently_delete.confirmation_details:HU:A művelet nem vonható vissza.
-delete_dialog.permanently_delete.confirmation_details:CS:Tato operace je nevratná.
+delete_dialog.permanently_delete.confirmation_details:zh_CN:此操作不能还原.
 # Translation missing
 
 
@@ -4828,7 +4809,7 @@ delete_dialog.move_to_trash.confirmation:EN:Delete selected file(s) ?
 delete_dialog.move_to_trash.confirmation:FR:Supprimer les fichiers sélectionnés ?
 delete_dialog.move_to_trash.confirmation:HU:Törli a kijelölt fájl(oka)t?
 delete_dialog.move_to_trash.confirmation:NL:Wis gemarkeerd(e) bestand(en) ?
-delete_dialog.move_to_trash.confirmation:CS:Chcete smazat vybrané soubory ?
+delete_dialog.move_to_trash.confirmation:zh_CN:删除所选文件?
 # Translation missing
 
 
@@ -4848,7 +4829,7 @@ delete_dialog.move_to_trash.confirmation_details:EN:Files will be moved to the t
 delete_dialog.move_to_trash.confirmation_details:FR:Les fichiers seront déplacés dans la corbeille.
 delete_dialog.move_to_trash.confirmation_details:HU:A fájlok a lomtárba lesznek áthelyezve.
 delete_dialog.move_to_trash.confirmation_details:NL:Bestanden worden naar de prullebak verplaatst.
-delete_dialog.move_to_trash.confirmation_details:CS:Soubory budou přesunuty do Koše.
+delete_dialog.move_to_trash.confirmation_details:zh_CN:文件将被移动到垃圾桶.
 # Translation missing
 
 
@@ -4867,7 +4848,7 @@ delete_dialog.move_to_trash.option:EN:Move to trash
 delete_dialog.move_to_trash.option:FR:Déplacer dans la corbeille
 delete_dialog.move_to_trash.option:HU:Áthelyezés a lomtárba
 delete_dialog.move_to_trash.option:NL:Verplaats naar prullebak
-delete_dialog.move_to_trash.option:CS:Přesunout do Koše
+delete_dialog.move_to_trash.option:zh_CN:移动到垃圾桶
 # Translation missing
 
 
@@ -4904,7 +4885,7 @@ delete_dialog.error_title:EN:Delete error
 delete_dialog.error_title:FR:Erreur de suppression
 delete_dialog.error_title:DE:Fehler beim Löschen
 delete_dialog.error_title:ES:Error al eliminar
-delete_dialog.error_title:CS:Chyba při mazání
+delete_dialog.error_title:CS:Chyba mazání
 delete_dialog.error_title:zh_TW:刪除錯誤
 delete_dialog.error_title:PL:Błąd usuwania
 delete_dialog.error_title:HU:Törlési hiba
@@ -5035,7 +5016,7 @@ email_dialog.prefs_not_set_title:EN:Mail not configured
 email_dialog.prefs_not_set_title:FR:Paramètres absents
 email_dialog.prefs_not_set_title:DE:eMail nicht konfiguriert
 email_dialog.prefs_not_set_title:ES:Correo no configurado
-email_dialog.prefs_not_set_title:CS:Chybějící nastavení elektronické pošty
+email_dialog.prefs_not_set_title:CS:Elektronická pošta není nastavena
 email_dialog.prefs_not_set_title:zh_TW:郵件尚未設定
 email_dialog.prefs_not_set_title:PL:Poczta nie skonfigurowana
 email_dialog.prefs_not_set_title:HU:A levelező nincs konfigurálva
@@ -5053,7 +5034,7 @@ email_dialog.prefs_not_set:EN:You need to set your mail parameters first.
 email_dialog.prefs_not_set:FR:Vous devez d'abord configurer vos paramètres email.
 email_dialog.prefs_not_set:DE:Nehmen sie erst die eMail Einstellungen vor.
 email_dialog.prefs_not_set:ES:Debes ajustar los parámatros de correo primero.
-email_dialog.prefs_not_set:CS:Nejprve nastavte parametry pro odesílání elektronickou poštou.
+email_dialog.prefs_not_set:CS:Nejprve nastavte parametry elektronické pošty.
 email_dialog.prefs_not_set:zh_TW:你必須要先設定郵件參數
 email_dialog.prefs_not_set:PL:Musisz ustwaić najpierw parametry poczty.
 email_dialog.prefs_not_set:HU:Önnek be kell állítania a levelező paramétereit.
@@ -5143,7 +5124,7 @@ email_dialog.error_title:EN:Email files error
 email_dialog.error_title:FR:Erreur d'envoi
 email_dialog.error_title:DE:Fehler beim Senden der Dateien
 email_dialog.error_title:ES:Error de envío
-email_dialog.error_title:CS:Chyba při odesílání
+email_dialog.error_title:CS:Chyba odesílání
 email_dialog.error_title:zh_TW:郵寄檔案錯誤
 email_dialog.error_title:PL:Błąd wysyłania plików
 email_dialog.error_title:HU:E-mail fájl hiba
@@ -5179,7 +5160,7 @@ email_dialog.nb_files:EN:%1 file(s)
 email_dialog.nb_files:FR:%1 fichier(s)
 email_dialog.nb_files:DE:%1 Datei(en)
 email_dialog.nb_files:ES:%1 fichero(s)
-email_dialog.nb_files:CS:%1x soubor
+email_dialog.nb_files:CS:%1 soubor(y)
 email_dialog.nb_files:zh_TW:%1 檔案
 email_dialog.nb_files:PL:%1 plik(i)
 email_dialog.nb_files:HU:%1 fájl
@@ -5369,7 +5350,7 @@ file_selection_dialog.unmark:pt_BR:Desmarcar
 file_selection_dialog.unmark:NL:Demarkeer
 file_selection_dialog.unmark:SK:Odznačiť
 
-file_selection_dialog.mark_description:EN:Mark files whose filename
+file_selection_dialog.mark_description:EN:Mark files which filename
 file_selection_dialog.mark_description:FR:Marquer les fichiers dont le nom
 file_selection_dialog.mark_description:DE:Markiere Dateien deren Name
 file_selection_dialog.mark_description:ES:Marcar ficheros cuyo nombre
@@ -5387,7 +5368,7 @@ file_selection_dialog.mark_description:pt_BR:Marcar arquivos com o nome
 file_selection_dialog.mark_description:NL:Markeer bestanen met de naam
 file_selection_dialog.mark_description:SK:Označiť súbory s názvom
 
-file_selection_dialog.unmark_description:EN:Unmark files whose filename
+file_selection_dialog.unmark_description:EN:Unmark files which filename
 file_selection_dialog.unmark_description:FR:Dé-marquer les fichiers dont le nom
 file_selection_dialog.unmark_description:DE:Demarkiere Dateien deren Name
 file_selection_dialog.unmark_description:ES:Desmarcar ficheros cuyo nombre
@@ -5549,7 +5530,7 @@ progress_dialog.transferred:EN:Transferred %1 at %2
 progress_dialog.transferred:FR:%1 transférés à %2
 progress_dialog.transferred:DE:Transferiert %1 von %2
 progress_dialog.transferred:ES:%1 transferidos a %2
-progress_dialog.transferred:CS:Přeneseno %1 při rychlosti %2
+progress_dialog.transferred:CS:Přeneseno %1 při %2
 progress_dialog.transferred:zh_TW:已傳送 %1 速度 %2
 progress_dialog.transferred:PL:Przesłano %1 z %2
 progress_dialog.transferred:HU:%1 átvitel %2 alatt megtörtént
@@ -5714,6 +5695,7 @@ progress_dialog.job_error:pt_BR:Erro
 progress_dialog.job_error:NL:Fout bij uitvoeren taak
 progress_dialog.job_error:SK:Chyba
 progress_dialog.job_error:HU:Hiba a feladatban
+progress_dialog.job_error:zh_CN:工作出错
 # Translation missing
 
 
@@ -5771,7 +5753,7 @@ properties_dialog.nb_files:EN:%1 file(s)
 properties_dialog.nb_files:FR:%1 fichier(s)
 properties_dialog.nb_files:DE:%1 Datei(en)
 properties_dialog.nb_files:ES:%1 fichero(s)
-properties_dialog.nb_files:CS:%1x soubor
+properties_dialog.nb_files:CS:%1 soubor(y)
 properties_dialog.nb_files:zh_TW:%1 檔案
 properties_dialog.nb_files:PL:%1 plik(i)
 properties_dialog.nb_files:HU:%1 fájl
@@ -5789,7 +5771,7 @@ properties_dialog.nb_folders:EN:%1 folder(s)
 properties_dialog.nb_folders:FR:%1 dossier(s)
 properties_dialog.nb_folders:DE:%1 Ordner
 properties_dialog.nb_folders:ES:%1 directorio(s)
-properties_dialog.nb_folders:CS:%1x složka
+properties_dialog.nb_folders:CS:%1 složka(y)
 properties_dialog.nb_folders:zh_TW:%1 資料夾
 properties_dialog.nb_folders:PL:%1 katalog(i)
 properties_dialog.nb_folders:HU:%1 könyvtár
@@ -6006,6 +5988,7 @@ server_connect_dialog.share:CS:Sdílet
 server_connect_dialog.share:NL:Delen
 server_connect_dialog.share:SK:Zdieľať
 server_connect_dialog.share:HU:Megoszt
+server_connect_dialog.share:zh_CN:共享
 # Translation missing
 
 
@@ -6024,7 +6007,7 @@ server_connect_dialog.username:EN:Username
 server_connect_dialog.username:FR:Nom d'utilisateur
 server_connect_dialog.username:DE:Benutzername
 server_connect_dialog.username:ES:Nombre de usuario
-server_connect_dialog.username:CS:Přihlašovací jméno
+server_connect_dialog.username:CS:Uživatelské jméno
 server_connect_dialog.username:zh_TW:帳號
 server_connect_dialog.username:PL:Nazwa użytkownika
 server_connect_dialog.username:HU:Felhasználónév
@@ -6133,7 +6116,8 @@ server_connect_dialog.protocol:FR:Protocole
 server_connect_dialog.protocol:CS:Protokol
 server_connect_dialog.protocol:NL:Protocol
 server_connect_dialog.protocol:SK:Protokol
-server_connect_dialog.protocol:HU:Protokoll
+server_connect_dialog.protocol:HU:Prot
+server_connect_dialog.protocol:zh_CN:协议
 # Translation missing
 
 
@@ -6152,6 +6136,7 @@ server_connect_dialog.nfs_version:CS:Verze NFS
 server_connect_dialog.nfs_version:NL:NFS versie
 server_connect_dialog.nfs_version:SK:Verzia NFS
 server_connect_dialog.nfs_version:HU:NFS verzió
+server_connect_dialog.nfs_version:zh_CN:NFS版本
 # Translation missing
 
 
@@ -6384,7 +6369,7 @@ auth_dialog.desc:EN:Please enter a login and password
 auth_dialog.desc:FR:Veuillez entrer un identifiant et un mot de passe
 auth_dialog.desc:DE:Bitte Login und Passwort eingeben
 auth_dialog.desc:ES:Por favor, introduzca un nombre y una contraseña
-auth_dialog.desc:CS:Zadejte prosím přihlašovací jméno a heslo
+auth_dialog.desc:CS:Zadejte prosím uživatelské jméno a heslo
 auth_dialog.desc:zh_TW:請輸入帳號及密碼
 auth_dialog.desc:PL:Proszę wprowadzić nazwę użytkownika i hasło
 auth_dialog.desc:HU:Írja be a felhasználónevet és a jelszót
@@ -6439,7 +6424,7 @@ auth_dialog.store_credentials:EN:Store login and password (weak encryption)
 auth_dialog.store_credentials:FR:Sauver les identifiants (encryption faible)
 auth_dialog.store_credentials:SI:Shrani uporabniško ime in geslo (nizka enkripcija)
 auth_dialog.store_credentials:IT:Memorizza login e password (weak encryption)
-auth_dialog.store_credentials:CS:Uložit přihlašovací jméno a heslo (slabé šifrování)
+auth_dialog.store_credentials:CS:Uložit uživatelské jméno a heslo (slabé šifrování)
 auth_dialog.store_credentials:zh_TW:儲存登入帳號及密碼(僅作簡易加密)
 auth_dialog.store_credentials:DE:Speichere Login und Passwort (schwach verschlüsselt)
 auth_dialog.store_credentials:RO:Salvează numele de utilizator și parola (protecție redusă)
@@ -6637,7 +6622,7 @@ file_viewer.large_file_warning:EN:This file may be too large for this operation.
 file_viewer.large_file_warning:FR:Ce fichier est peut-être trop large pour cette operation.
 file_viewer.large_file_warning:DE:Diese Datei könnte für diese Operation zu groß sein.
 file_viewer.large_file_warning:ES:Este fichero puede que sea demasiado largo para llevar a cabo la operación.
-file_viewer.large_file_warning:CS:Vybraný soubor může být příliš velký pro tuto operaci.
+file_viewer.large_file_warning:CS:Tento soubor může být příliš velký pro tuto operaci.
 file_viewer.large_file_warning:zh_TW:檔案可能太大而無法進行此操作
 file_viewer.large_file_warning:PL:Wybrany plik może być zbyt duży dla tej operacji.
 file_viewer.large_file_warning:HU:Ez a fájl túl nagy lehet ehhez a művelethez.
@@ -6796,7 +6781,7 @@ file_editor.edit_error_title:EN:Edit error
 file_editor.edit_error_title:FR:Erreur d'édition
 file_editor.edit_error_title:DE:Fehler beim Bearbeiten
 file_editor.edit_error_title:ES:Error al editar
-file_editor.edit_error_title:CS:Chyba při editaci
+file_editor.edit_error_title:CS:Chyba editace
 file_editor.edit_error_title:zh_TW:編輯錯誤
 file_editor.edit_error_title:PL:Błąd edycji
 file_editor.edit_error_title:HU:Módosítási hiba
@@ -7059,7 +7044,7 @@ shortcuts_dialog.quick_search.cancel_search:FR:Annuler la recherche rapide
 shortcuts_dialog.quick_search.cancel_search:RO:Anulează căutarea rapidă
 shortcuts_dialog.quick_search.cancel_search:SI:Prekliči hitro iskanje
 shortcuts_dialog.quick_search.cancel_search:IT:Annullare ricerca rapida
-shortcuts_dialog.quick_search.cancel_search:CS:Ukončit rychlé hledání
+shortcuts_dialog.quick_search.cancel_search:CS:Přerušit rychlé hledání
 shortcuts_dialog.quick_search.cancel_search:zh_TW:取消快速搜尋
 shortcuts_dialog.quick_search.cancel_search:DE:Schnellsuche abbrechen
 shortcuts_dialog.quick_search.cancel_search:zh_CN:取消快速搜索
@@ -7171,7 +7156,7 @@ theme_editor.title:EN:Theme editor
 theme_editor.title:FR:Editeur de thèmes
 theme_editor.title:HU:Témaszerkesztő
 theme_editor.title:NL:Thema bewerken
-theme_editor.title:CS:Editor témat
+theme_editor.title:zh_CN:主题编辑器
 # Translation missing
 
 
@@ -7182,7 +7167,7 @@ theme_editor.folder_tab:EN:Folder pane
 theme_editor.folder_tab:FR:Panneau de dossier
 theme_editor.folder_tab:HU:Könyvtár tábla
 theme_editor.folder_tab:NL:Bestandsvenster
-theme_editor.folder_tab:CS:Panely souborů
+theme_editor.folder_tab:zh_CN:文件夹面板
 # Translation missing
 
 
@@ -7192,9 +7177,9 @@ theme_editor.folder_tab:CS:Panely souborů
 
 theme_editor.shell_tab:EN:Shell
 theme_editor.shell_tab:FR:Shell
-theme_editor.shell_tab:HU:Végrehajtás
+theme_editor.shell_tab:HU:Héjazat
 theme_editor.shell_tab:NL:Shell
-theme_editor.shell_tab:CS:Shell
+theme_editor.shell_tab:zh_CN:Shell
 # Translation missing
 
 
@@ -7205,7 +7190,7 @@ theme_editor.statusbar_tab:EN:Status bar
 theme_editor.statusbar_tab:FR:Barre de status
 theme_editor.statusbar_tab:HU:Állapotsor
 theme_editor.statusbar_tab:NL:Statusbalk
-theme_editor.statusbar_tab:CS:Stavový řádek
+theme_editor.statusbar_tab:zh_CN:状态栏
 # Translation missing
 
 
@@ -7215,7 +7200,7 @@ theme_editor.free_space:EN:Free space (%1)
 theme_editor.free_space:FR:Espace libre (%1)
 theme_editor.free_space:HU:Szabad hely (%1)
 theme_editor.free_space:NL:(ruimte) Vrij (%1)
-theme_editor.free_space:CS:Volné místo (%1)
+theme_editor.free_space:EN:剩余空间 (%1)
 # Translation missing
 
 
@@ -7226,7 +7211,7 @@ theme_editor.free_space.ok:EN:OK
 theme_editor.free_space.ok:FR:OK
 theme_editor.free_space.ok:HU:OK
 theme_editor.free_space.ok:NL:OK
-theme_editor.free_space.ok:CS:OK
+theme_editor.free_space.ok:zh_CN:OK
 # Translation missing
 
 
@@ -7237,7 +7222,7 @@ theme_editor.free_space.warning:EN:Warning
 theme_editor.free_space.warning:FR:Avertissement
 theme_editor.free_space.warning:HU:Figyelem
 theme_editor.free_space.warning:NL:Waarschuwing
-theme_editor.free_space.warning:CS:Upozornění
+theme_editor.free_space.warning:zh_CN:告警
 # Translation missing
 
 
@@ -7248,7 +7233,7 @@ theme_editor.free_space.critical:EN:Critical
 theme_editor.free_space.critical:FR:Critique
 theme_editor.free_space.critical:HU:Kritikus
 theme_editor.free_space.critical:NL:Kritiek
-theme_editor.free_space.critical:CS:Kritické
+theme_editor.free_space.critical:zh_CN:紧急
 # Translation missing
 
 
@@ -7260,7 +7245,7 @@ theme_editor.locationbar_tab:EN:Location bar
 theme_editor.locationbar_tab:FR:Barre d'emplacement
 theme_editor.locationbar_tab:HU:Helyzetsor
 theme_editor.locationbar_tab:NL:Locatiebalk
-theme_editor.locationbar_tab:CS:Adresní řádek
+theme_editor.locationbar_tab:zh_CN:位置栏
 # Translation missing
 
 
@@ -7270,7 +7255,7 @@ theme_editor.editor_tab:EN:File editor
 theme_editor.editor_tab:FR:Editeur de fichiers
 theme_editor.editor_tab:HU:Fájlszerkesztő
 theme_editor.editor_tab:NL:Bestandsbewerker
-theme_editor.editor_tab:CS:Editor souborů
+theme_editor.editor_tab:zh_CN:文件编辑器
 # Translation missing
 
 
@@ -7297,9 +7282,9 @@ theme_editor.font:SK:Písmo
 
 theme_editor.shell_font:EN:Shell font
 theme_editor.shell_font:FR:Fonte du shell
-theme_editor.shell_font:HU:Végrehajtás betűtípus
+theme_editor.shell_font:HU:Héjazat betűtípus
 theme_editor.shell_font:NL:Shell font
-theme_editor.shell_font:CS:Písmo shellu
+theme_editor.shell_font:zh_CN:Shell字体
 # Translation missing
 
 
@@ -7311,7 +7296,7 @@ theme_editor.history_font:EN:History font
 theme_editor.history_font:FR:Fonte de l'historique
 theme_editor.history_font:HU:Előzmények betűtípus
 theme_editor.history_font:NL:Font van Geschiedenis
-theme_editor.history_font:CS:Písmo historie
+theme_editor.history_font:zh_CN:历史字体
 # Translation missing
 
 
@@ -7328,7 +7313,7 @@ theme_editor.theme_warning:EN:This will overwrite the custom theme. Do you wish 
 theme_editor.theme_warning:FR:Cette opération va modifier le thème personnalisé. Voulez-vous continuer?
 theme_editor.theme_warning:SI:To bo prepisalo običajno temo. Želite nadaljevati?
 theme_editor.theme_warning:IT:Questa operazione sovrascrive il tema utente. Procedere ?
-theme_editor.theme_warning:CS:Operace přepíše vlastní téma uživatele. Opravdu chcete pokračovat?
+theme_editor.theme_warning:CS:Operace přepíše uživatelské téma. Opravdu chcete pokračovat?
 theme_editor.theme_warning:zh_TW:這將會覆蓋自訂的佈景主題. 確定要繼續?
 theme_editor.theme_warning:DE:Dies überschreibt ein angepasstes Thema. Wollen Sie fortfahren?
 theme_editor.theme_warning:RO:Această operație va suprascrie o temă personalizată. Doriți să continuați?
@@ -7348,7 +7333,7 @@ theme_editor.could_not_save_theme:EN:Unable to write theme %1
 theme_editor.could_not_save_theme:FR:Erreur lors de l'écriture du thème %1
 theme_editor.could_not_save_theme:HU:Nem lehet írni a témát %1
 theme_editor.could_not_save_theme:NL:Problemen bij opslaan van thema %1
-theme_editor.could_not_save_theme:CS:Nelze uložit téma %1
+theme_editor.could_not_save_theme:zh_CN:无法写入主题 %1
 # Translation missing
 
 
@@ -7360,7 +7345,7 @@ theme_editor.border:EN:Border
 theme_editor.border:FR:Bordure
 theme_editor.border:HU:Keret
 theme_editor.border:NL:Rand
-theme_editor.border:CS:Ohraničení
+theme_editor.border:zh_CN:边框
 # Translation missing
 
 
@@ -7393,7 +7378,7 @@ theme_editor.unfocused_background:EN:Background (without focus)
 theme_editor.unfocused_background:FR:Fond (sans focus)
 theme_editor.unfocused_background:HU:Háttér (kijelölve)
 theme_editor.unfocused_background:NL:Achtergrond (zonder focus)
-theme_editor.unfocused_background:CS:Pozadí (bez fokusu)
+theme_editor.unfocused_background:zh_CN:背景(无焦点)
 # Translation missing
 
 
@@ -7411,7 +7396,7 @@ theme_editor.quick_search.unmatched_file:EN:Unmatched file
 theme_editor.quick_search.unmatched_file:FR:Fichier ne correspondant pas
 theme_editor.quick_search.unmatched_file:HU:Kívülálló fájlok
 theme_editor.quick_search.unmatched_file:NL:Bestanden zijn niet hetzelfde
-theme_editor.quick_search.unmatched_file:CS:Nevyhovující soubor
+theme_editor.quick_search.unmatched_file:zh_CN:未匹配的文件
 # Translation missing
 
 
@@ -7429,7 +7414,7 @@ theme_editor.text:EN:Text
 theme_editor.text:FR:Texte
 theme_editor.text:HU:Szöveg
 theme_editor.text:NL:Tekst
-theme_editor.text:CS:Text
+theme_editor.text:zh_CN:文本
 # Translation missing
 
 
@@ -7442,7 +7427,7 @@ theme_editor.progress:EN:Progress
 theme_editor.progress:FR:Progression
 theme_editor.progress:HU:Folyamat
 theme_editor.progress:NL:Voortgang
-theme_editor.progress:CS:Průběh
+theme_editor.progress:zh_CN:进度
 # Translation missing
 
 
@@ -7457,7 +7442,7 @@ theme_editor.normal:EN:Normal
 theme_edit/r.normal:FR:Normal
 theme_editor.normal:HU:Normál
 theme_editor.normal:NL:Normaal
-theme_editor.normal:CS:Normální
+theme_editor.normal:zh_CN:正常
 # Translation missing
 
 
@@ -7472,7 +7457,7 @@ theme_editor.normal_unfocused:EN:Normal (without focus)
 theme_editor.normal_unfocused:FR:Normal (sans focus)
 theme_editor.normal_unfocused:HU:Normál (kijelöletlen)
 theme_editor.normal_unfocused:NL:Normaal (zonder focus)
-theme_editor.normal_unfocused:CS:Normální (bez fokusu)
+theme_editor.normal_unfocused:zh_CN:正常(无焦点)
 # Translation missing
 
 
@@ -7487,7 +7472,7 @@ theme_editor.selected:EN:Selected
 theme_editor.selected:FR:Sélectionné
 theme_editor.selected:HU:Kiválasztott
 theme_editor.selected:NL:Geselecteerd
-theme_editor.selected:CS:Vybraný
+theme_editor.selected:zh_CN:选中的
 # Translation missing
 
 
@@ -7501,7 +7486,7 @@ theme_editor.selected_unfocused:EN:Selected (without focus)
 theme_editor.selected_unfocused:FR:Sélectionné (without focus)
 theme_editor.selected_unfocused:HU:Kiválasztott (kijelöletlen)
 theme_editor.selected_unfocused:NL:Geselecteerd (zonder focus)
-theme_editor.selected_unfocused:CS:Vybraný (bez fokusu)
+theme_editor.selected_unfocused:zh_CN:选中的(无焦点)
 # Translation missing
 
 
@@ -7516,7 +7501,7 @@ theme_editor.color:en_GB:Colour
 theme_editor.color:FR:Couleur
 theme_editor.color:HU:Szín
 theme_editor.color:NL:Kleur
-theme_editor.color:CS:Barva
+theme_editor.color:zh_CN:颜色
 # Translation missing
 
 
@@ -7534,7 +7519,7 @@ theme_editor.colors:en_GB:Colours
 theme_editor.colors:FR:Couleurs
 theme_editor.colors:HU:Színek
 theme_editor.colors:NL:Kleuren
-theme_editor.colors:CS:Barvy
+theme_editor.colors:zh_CN:颜色
 # Translation missing
 
 
@@ -7564,14 +7549,13 @@ theme_editor.shell_colors:KR:쉘 색상
 theme_editor.shell_colors:pt_BR:Cor do prompt de comandos (terminal)
 theme_editor.shell_colors:NL:Kleuren van de shell
 theme_editor.shell_colors:SK:Farba terminálu (shell)
-theme_editor.shell_colors:HU:Végrehajtás színek
 
 theme_editor.history_colors:EN:History colors
 theme_editor.history_colors:en_GB:History colours
 theme_editor.history_colors:FR:Couleurs de l'historique
 theme_editor.history_colors:HU:Előzmények színei
 theme_editor.history_colors:NL:Kleuren van geschiedenis
-theme_editor.history_colors:CS:Barvy historie
+theme_editor.history_colors:zh_CN:历史颜色
 # Translation missing
 
 
@@ -7919,6 +7903,7 @@ prefs_dialog.show_seconds:pt_BR:Exibir segundos
 prefs_dialog.show_seconds:NL:Toon seconden
 prefs_dialog.show_seconds:SK:Zobraziť sekundy
 prefs_dialog.show_seconds:HU:Másodpercek megjelenítése
+prefs_dialog.show_seconds:zh_CN:显示秒
 # Translation missing
 
 
@@ -7938,6 +7923,7 @@ prefs_dialog.show_century:pt_BR:Exibir centésimos
 prefs_dialog.show_century:NL:Toon eeuw
 prefs_dialog.show_century:SK:Zobraziť storočie
 prefs_dialog.show_century:HU:Évszázad megjelenítése
+prefs_dialog.show_century:zh_CN:显示世纪
 # Translation missing
 
 
@@ -8156,6 +8142,7 @@ prefs_dialog.follow_symlinks_when_cd:CS:Následovat symbolické odkazy při změ
 prefs_dialog.follow_symlinks_when_cd:NL:Volg symbolische koppelingen bij wijzigen huidige directory
 prefs_dialog.follow_symlinks_when_cd:SK:Nasladovať symbolické odkazy pri zmenách aktuálneho priečinku
 prefs_dialog.follow_symlinks_when_cd:HU:Könyvtár váltáskor ugrás a parancsikon hivatkozásához
+prefs_dialog.follow_symlinks_when_cd:zh_CN:改变当前目录时跟随符号连接
 # Translation missing
 
 
@@ -8194,7 +8181,7 @@ prefs_dialog.look_and_feel:ES:Look & Feel
 prefs_dialog.look_and_feel:CS:Vzhled & chování
 prefs_dialog.look_and_feel:zh_TW:Look & Feel
 prefs_dialog.look_and_feel:PL:Look & Feel
-prefs_dialog.look_and_feel:HU:Kinézet & Hatások
+prefs_dialog.look_and_feel:HU:Kinézet & Hangulat
 prefs_dialog.look_and_feel:RU:Настройки отображения
 prefs_dialog.look_and_feel:zh_CN:外观
 prefs_dialog.look_and_feel:SI:Shema
@@ -8285,6 +8272,7 @@ prefs_dialog.use_system_file_icons:pt_BR:Utilisar arquivos de ícones do sistema
 prefs_dialog.use_system_file_icons:NL:Gebruik systeemeigen bestandsiconen
 prefs_dialog.use_system_file_icons:SK:Použiť systémové ikony
 prefs_dialog.use_system_file_icons:HU:Rendszerikonok használata
+prefs_dialog.use_system_file_icons:zh_CN:使用系统文件图标
 # Translation missing
 
 
@@ -8303,6 +8291,7 @@ prefs_dialog.use_system_file_icons.always:pt_BR:Sempre
 prefs_dialog.use_system_file_icons.always:NL:Altijd
 prefs_dialog.use_system_file_icons.always:SK:Vždy
 prefs_dialog.use_system_file_icons.always:HU:Mindig
+prefs_dialog.use_system_file_icons.always:zh_CN:总是
 # Translation missing
 
 
@@ -8321,6 +8310,7 @@ prefs_dialog.use_system_file_icons.never:pt_BR:Nunca
 prefs_dialog.use_system_file_icons.never:NL:Nooit
 prefs_dialog.use_system_file_icons.never:SK:Nikdy
 prefs_dialog.use_system_file_icons.never:HU:Soha
+prefs_dialog.use_system_file_icons.never:zh_CN:从不
 # Translation missing
 
 
@@ -8339,6 +8329,7 @@ prefs_dialog.use_system_file_icons.applications:pt_BR:Somente para aplicações
 prefs_dialog.use_system_file_icons.applications:NL:Alleen voor toepassingen
 prefs_dialog.use_system_file_icons.applications:SK:Iba pre aplikácie
 prefs_dialog.use_system_file_icons.applications:HU:Csak alkalmazásokhoz
+prefs_dialog.use_system_file_icons.applications:zh_CN:只对应用程序
 # Translation missing
 
 
@@ -8370,7 +8361,7 @@ prefs_dialog.themes:HU:Témák
 prefs_dialog.import_theme:EN:Import theme
 prefs_dialog.import_theme:FR:Importer un thème
 prefs_dialog.import_theme:HU:Téma importálás
-prefs_dialog.import_theme:CS:Importovat téma
+prefs_dialog.import_theme:zh_CN:导入主题
 # Translation missing
 
 
@@ -8384,7 +8375,7 @@ prefs_dialog.error_in_import:EN:Error while importing theme %1.
 prefs_dialog.error_in_import:FR:Une erreur est survenue lors de l'import du thème %1.
 prefs_dialog.error_in_import:HU:Hiba a téma importálásakor %1
 prefs_dialog.error_in_import:NL:Fout bij importeren van thema
-prefs_dialog.error_in_import:CS:Chyba při importu tématu %1.
+prefs_dialog.error_in_import:zh_CN:导入主题 %1 时出错.
 # Translation missing
 
 
@@ -8398,7 +8389,7 @@ prefs_dialog.cannot_read_theme:EN:Cannot load theme from file %1
 prefs_dialog.cannot_read_theme:FR:Erreur lors de la lecture du fichier %1
 prefs_dialog.cannot_read_theme:HU:Nem lehet betölteni a témát a fájlból %1
 prefs_dialog.cannot_read_theme:NL:Kan bestand niet importeren uit bestand %1
-prefs_dialog.cannot_read_theme:CS:Nelze načíst téma ze souboru %1
+prefs_dialog.cannot_read_theme:zh_CN:不能从文件 %1 中载入主题
 # Translation missing
 
 
@@ -8413,7 +8404,7 @@ prefs_dialog.export_theme:EN:Export %1
 prefs_dialog.export_theme:FR:Exporter %1
 prefs_dialog.export_theme:HU:Exportálás %1
 prefs_dialog.export_theme:NL:Exporteer %1
-prefs_dialog.export_theme:CS:Exportovat %1
+prefs_dialog.export_theme:zh_CN:导出 %1
 # Translation missing
 
 
@@ -8425,7 +8416,7 @@ prefs_dialog.import:EN:Import
 prefs_dialog.import:FR:Importer
 prefs_dialog.import:HU:Importálás
 prefs_dialog.import:NL:Importeer
-prefs_dialog.import:CS:Importovat
+prefs_dialog.import:zh_CN:导入
 # Translation missing
 
 
@@ -8437,7 +8428,7 @@ prefs_dialog.export:EN:Export
 prefs_dialog.export:FR:Exporter
 prefs_dialog.export:HU:Exportálás
 prefs_dialog.export:NL:Exporteer
-prefs_dialog.export:CS:Exportovat
+prefs_dialog.export:zh_CN:导出
 # Translation missing
 
 
@@ -8450,7 +8441,7 @@ prefs_dialog.theme_type:EN:Type: %1
 prefs_dialog.theme_type:FR:Type: %1
 prefs_dialog.theme_type:HU:Típus: %1
 prefs_dialog.theme_type:NL:Type: %1
-prefs_dialog.theme_type:CS:Typ: %1
+prefs_dialog.theme_type:zh_CN:类型: %1
 # Translation missing
 
 
@@ -8462,7 +8453,7 @@ prefs_dialog.theme_type:CS:Typ: %1
 prefs_dialog.delete_theme:EN:Permanently delete theme %1 ?
 prefs_dialog.delete_theme:Fr:Supprimer définitivement le thème %1 ?
 prefs_dialog.delete_theme:HU:Folyamatosan törli a %1 témát?
-prefs_dialog.delete_theme:CS:Chcete trvale smazat téma %1 ?
+prefs_dialog.delete_theme:zh_CN:永久删除主题 %1 ?
 # Translation missing
 
 
@@ -8474,7 +8465,7 @@ prefs_dialog.rename_failed:EN:Failed to rename theme %1
 prefs_dialog.rename_failed:Fr:Impossible de renommer le thème %1
 prefs_dialog.rename_failed:HU:Hiba a téma átnevezéskor %1
 prefs_dialog.rename_failed:NL:Kan niet hernoemen thema %1
-prefs_dialog.rename_failed:CS:Nepodařilo se přejmenovat téma %1
+prefs_dialog.rename_failed:zh_CN:未能重命名主题 %1
 # Translation missing
 
 
@@ -8488,7 +8479,7 @@ prefs_dialog.xml_file:EN:XML file
 prefs_dialog.xml_file:FR:Fichier XML
 prefs_dialog.xml_file:HU:XML fájl
 prefs_dialog.xml_file:NL:XML bestand
-prefs_dialog.xml_file:CS:Soubor XML
+prefs_dialog.xml_file:zh_CN:XML 文件
 # Translation missing
 
 
@@ -8665,14 +8656,14 @@ prefs_dialog.default_shell:KR:기본 시스템 쉘을 사용합니다
 prefs_dialog.default_shell:pt_BR:Usar prompt de comando padrão do sistema
 prefs_dialog.default_shell:NL:Gebruik voorkeursshell van het systeem
 prefs_dialog.default_shell:SK:Použiť preddefinovaný systémový shell
-prefs_dialog.default_shell:HU:Az alapértelmezett végrehajtás használata
+prefs_dialog.default_shell:HU:Az alapértelmezett Rendszerhéj használata
 
 prefs_dialog.custom_shell:EN:Use custom shell
 prefs_dialog.custom_shell:FR:Utiliser un shell spécifique
 prefs_dialog.custom_shell:RO:Folosește un shell anume
 prefs_dialog.custom_shell:SI:Uporabi izvajanje ukazov po meri
 prefs_dialog.custom_shell:IT:Usa il terminale utente
-prefs_dialog.custom_shell:CS:Použít vlastní shell
+prefs_dialog.custom_shell:CS:Použít jiný shell
 prefs_dialog.custom_shell:zh_TW:使用自訂 shell
 prefs_dialog.custom_shell:DE:Benutze angepasste Eingabeaufforderung
 prefs_dialog.custom_shell:zh_CN:使用定制 shell
@@ -8683,7 +8674,7 @@ prefs_dialog.custom_shell:KR:사용자 정의 쉘을 사용합니다
 prefs_dialog.custom_shell:pt_BR:Usar prompt de comando personalizado
 prefs_dialog.custom_shell:NL:Gebruik zelfgekozen shell
 prefs_dialog.custom_shell:SK:Použiť vlastný shell
-prefs_dialog.custom_shell:HU:Egyedi végrehajtás használata
+prefs_dialog.custom_shell:HU:Egyedi rendszerhéj használata
 
 # Bonjour is a service discovery protocol : http://en.wikipedia.org/wiki/Bonjour_%28software%29
 prefs_dialog.enable_bonjour_discovery:EN:Enable Bonjour services discovery
@@ -8710,7 +8701,7 @@ prefs_dialog.enable_system_notifications:FR:Activer les notifications système
 prefs_dialog.enable_system_notifications:NL:Schakel systeemnotificaties in
 prefs_dialog.enable_system_notifications:SK:Povoliť systémové oznámenia (v system tray)
 prefs_dialog.enable_system_notifications:HU:Rendszerértesítések engedélyezése
-prefs_dialog.enable_system_notifications:CS:Zobrazovat oznámení systému
+prefs_dialog.enable_system_notifications:zh_CN:打开系统通告
 # Translation missing
 
 
@@ -8730,7 +8721,7 @@ unit.byte:EN:byte
 unit.byte:FR:octet
 unit.byte:DE:Byte
 unit.byte:ES:byte
-unit.byte:CS: bajt
+unit.byte:CS:bajt
 unit.byte:zh_TW:byte
 unit.byte:PL:bajt
 unit.byte:HU:bájt
@@ -8748,7 +8739,7 @@ unit.bytes:EN:bytes
 unit.bytes:FR:octets
 unit.bytes:DE:Bytes
 unit.bytes:ES:bytes
-unit.bytes:CS: bajtů
+unit.bytes:CS:bajtů
 unit.bytes:zh_TW:bytes
 unit.bytes:PL:bajty
 unit.bytes:HU:bájt
@@ -8766,7 +8757,7 @@ unit.bytes_short:EN:b
 unit.bytes_short:FR:o
 unit.bytes_short:DE:B
 unit.bytes_short:ES:b
-unit.bytes_short:CS: b
+unit.bytes_short:CS:b
 unit.bytes_short:zh_TW:b
 unit.bytes_short:PL:b
 unit.bytes_short:HU:b
@@ -8784,7 +8775,7 @@ unit.kb:EN:KB
 unit.kb:FR:Ko
 unit.kb:DE:KB
 unit.kb:ES:KB
-unit.kb:CS: KB
+unit.kb:CS:KB
 unit.kb:zh_TW:KB
 unit.kb:PL:KB
 unit.kb:HU:KB
@@ -8802,7 +8793,7 @@ unit.mb:EN:MB
 unit.mb:FR:Mo
 unit.mb:DE:MB
 unit.mb:ES:MB
-unit.mb:CS: MB
+unit.mb:CS:MB
 unit.mb:zh_TW:MB
 unit.mb:PL:MB
 unit.mb:HU:MB
@@ -8820,7 +8811,7 @@ unit.gb:EN:GB
 unit.gb:FR:Go
 unit.gb:DE:GB
 unit.gb:ES:GB
-unit.gb:CS: GB
+unit.gb:CS:GB
 unit.gb:zh_TW:GB
 unit.gb:PL:GB
 unit.gb:HU:GB
@@ -8838,7 +8829,7 @@ unit.tb:EN:TB
 unit.tb:FR:To
 unit.tb:DE:TB
 unit.tb:ES:TB
-unit.tb:CS: TB
+unit.tb:CS:TB
 unit.tb:zh_TW:TB
 unit.tb:PL:TB
 unit.tb:HU:TB
@@ -8879,7 +8870,7 @@ duration.seconds:EN:%1s
 duration.seconds:FR:%1s
 duration.seconds:SI:%1s
 duration.seconds:IT:%1s
-duration.seconds:CS:%1 sek
+duration.seconds:CS:%1s
 duration.seconds:zh_TW:%1s
 duration.seconds:DE:%1Sek
 duration.seconds:RO:%1s
@@ -8897,7 +8888,7 @@ duration.minutes:EN:%1m
 duration.minutes:FR:%1m
 duration.minutes:SI:%1min
 duration.minutes:IT:%1m
-duration.minutes:CS:%1 min
+duration.minutes:CS:%1m
 duration.minutes:zh_TW:%1m
 duration.minutes:DE:%1M
 duration.minutes:RO:%1m
@@ -8915,7 +8906,7 @@ duration.hours:EN:%1h
 duration.hours:FR:%1h
 duration.hours:SI:%1h
 duration.hours:IT:%1h
-duration.hours:CS:%1 hod
+duration.hours:CS:%1h
 duration.hours:zh_TW:%1h
 duration.hours:DE:%1S
 duration.hours:RO:%1h
@@ -8933,7 +8924,7 @@ duration.days:EN:%1d
 duration.days:FR:%1j
 duration.days:SI:%1d
 duration.days:IT:%1g
-duration.days:CS:%1 d
+duration.days:CS:%1d
 duration.days:zh_TW:%1d
 duration.days:DE:%1T
 duration.days:RO:%1z
@@ -8951,7 +8942,7 @@ duration.months:EN:%1mo
 duration.months:FR:%1mo
 duration.months:SI:%1m
 duration.months:IT:%1me
-duration.months:CS:%1 měs
+duration.months:CS:%1měs.
 duration.months:zh_TW:%1mo
 duration.months:DE:%1M
 duration.months:RO:%1l
@@ -8969,7 +8960,7 @@ duration.years:EN:%1y
 duration.years:FR:%1a
 duration.years:SI:%1l
 duration.years:IT:%1a
-duration.years:CS:%1 let
+duration.years:CS:%1let
 duration.years:zh_TW:%1y
 duration.years:DE:%1J
 duration.years:RO:%1a
@@ -8998,7 +8989,7 @@ theme.custom_theme:zh_TW:自訂佈景主題
 theme.custom_theme:DE:Angepasstes Thema
 theme.custom_theme:RO:Temă personalizată
 theme.custom_theme:IT:Tema utente
-theme.custom_theme:CS:Vlastní téma
+theme.custom_theme:CS:Uživatelské téma
 theme.custom_theme:zh_CN:定制的主题
 theme.custom_theme:ES:Tema personalizado
 theme.custom_theme:PL:Temat użytkownika
@@ -9020,7 +9011,7 @@ theme.custom:en_GB:Customised
 theme.custom:FR:Personnalisé
 theme.custom:HU:Módosított
 theme.custom:NL:Aangepast
-theme.custom:CS:Vlastní
+theme.custom:zh_CN:定制的
 # Translation missing
 
 
@@ -9035,7 +9026,7 @@ theme.built_in:EN:Built-in
 theme.built_in:FR:Pré-installé
 theme.built_in:HU:Beépített
 theme.built_in:NL:Ingebouwd
-theme.built_in:CS:Vestavěné
+theme.built_in:zh_CN:内置的
 # Translation missing
 
 
@@ -9050,7 +9041,7 @@ theme.add_on:EN:Add-on
 theme.add_on:FR:Ajouté
 theme.add_on:HU:Bővítmény
 theme.add_on:NL:Toegevoegd
-theme.add_on:CS:Doplněk
+theme.add_on:zh_CN:附加
 # Translation missing
 
 
@@ -9065,7 +9056,7 @@ theme.current:EN:current
 theme.current:FR:courant
 theme.current:HU:jelenlegi
 theme.current:NL:huidig
-theme.current:CS:stávající
+theme.current:zh_CN:当前
 # Translation missing
 
 
@@ -9136,7 +9127,7 @@ setup.intro:KR:muCommander가 작동하는 방식을 선택하세요
 setup.intro:pt_BR:Por favor, selecione como o muCommander deve se comportar.
 setup.intro:NL:Kiest u a.u.b. de manier waarop muCommander zich moet gedragen.
 setup.intro:SK:Prosím, zvoľte vlastné nastavenie aplikácie muCommander.
-setup.intro:HU:Válassza ki a muCommander működési módját
+setup.intro:HU:Válassza ki a muCommander működési módját.
 
 setup.look_and_feel:EN:Select your Look & feel
 setup.look_and_feel:FR:Selectionnez votre Look & Feel
@@ -9251,7 +9242,7 @@ color_chooser.red:EN:Red
 color_chooser.red:FR:Rouge
 color_chooser.red:HU:Piros
 color_chooser.red:NL:Rood
-color_chooser.red:CS:Červená
+color_chooser.red:zh_CN:红色
 # Translation missing
 
 
@@ -9263,7 +9254,7 @@ color_chooser.green:EN:Green
 color_chooser.green:FR:Vert
 color_chooser.green:HU:Zöld
 color_chooser.green:NL:Groen
-color_chooser.green:CS:Zelená
+color_chooser.green:zh_CN:绿色
 # Translation missing
 
 
@@ -9276,7 +9267,7 @@ color_chooser.blue:EN:Blue
 color_chooser.blue:FR:Bleu
 color_chooser.blue:HU:Kék
 color_chooser.blue:NL:Blauw
-color_chooser.blue:CS:Modrá
+color_chooser.blue:zh_CN:蓝色
 # Translation missing
 
 
@@ -9289,7 +9280,7 @@ color_chooser.hue:EN:Hue
 color_chooser.hue:FR:Tonalité
 color_chooser.hue:HU:Színárnyalat
 color_chooser.hue:NL:Tint
-color_chooser.hue:CS:Odstín
+color_chooser.hue:zh_CN:色调
 # Translation missing
 
 
@@ -9302,7 +9293,7 @@ color_chooser.brightness:EN:Brightness
 color_chooser.brightness:FR:Luminosité
 color_chooser.brightness:HU:Világosság
 color_chooser.brightness:NL:Helderheid
-color_chooser.brightness:CS:Jas
+color_chooser.brightness:zh_CN:亮度
 # Translation missing
 
 
@@ -9312,9 +9303,9 @@ color_chooser.brightness:CS:Jas
 
 color_chooser.swatches:EN:Swatches
 color_chooser.swatches:FR:Echantillons
-color_chooser.swatches:HU:Minta
+color_chooser.swatches:HU:Foltok
 color_chooser.swatches:NL:Actieve kleuren
-color_chooser.swatches:CS:Barevný mixér
+color_chooser.swatches:zh_CN:采样
 # Translation missing
 
 
@@ -9326,7 +9317,7 @@ color_chooser.saturation:EN:Saturation
 color_chooser.saturation:FR:Saturation
 color_chooser.saturation:HU:Telítettség
 color_chooser.saturation:NL:Verzadiging
-color_chooser.saturation:CS:Sytost
+color_chooser.saturation:zh_CN:饱和度
 # Translation missing
 
 
@@ -9339,7 +9330,7 @@ color_chooser.rgb:EN:RGB
 color_chooser.rgb:FR:RVB
 color_chooser.rgb:HU:RGB
 color_chooser.rgb:NL:RGB
-color_chooser.rgb:CS:RGB
+color_chooser.rgb:zh_CN:RGB
 # Translation missing
 
 
@@ -9353,7 +9344,7 @@ color_chooser.hsb:EN:HSB
 color_chooser.hsb:FR:TSL
 color_chooser.hsb:HU:HSB
 color_chooser.hsb:NL:HSB
-color_chooser.hsb:CS:HSB
+color_chooser.hsb:zh_CN:HSB
 # Translation missing
 
 
@@ -9366,7 +9357,7 @@ color_chooser.recent:EN:Recent
 color_chooser.recent:FR:Récentes
 color_chooser.recent:HU:Legutóbbi
 color_chooser.recent:NL:Recent
-color_chooser.recent:CS:Poslední použité
+color_chooser.recent:zh_CN:最近的
 # Translation missing
 
 
@@ -9379,7 +9370,7 @@ color_chooser.recent:CS:Poslední použité
 color_chooser.alpha:EN:Alpha transparency
 color_chooser.alpha:FR:Transparence alpha
 color_chooser.alpha:HU:Alfa átlátszóság
-color_chooser.alpha:CS:Průhlednost alfa
+color_chooser.alpha:zh_CN:Alpha 透明度
 # Translation missing
 
 
