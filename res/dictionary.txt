@@ -209,6 +209,7 @@ reset:zh_CN:复位
 reset:zh_TW:重置
 reset:RO:Reinițializează
 reset:ES:Reiniciar
+reset:pt_BR:Reiniciar
 # Translation missing
 
 
@@ -691,6 +692,7 @@ license:zh_CN:许可证
 license:zh_TW:版權
 license:RO:Licență
 license:ES:Licencia
+license:pt_BR:Licença
 # Translation missing
 
 
@@ -932,6 +934,7 @@ preview:NL:Voorbeeld
 preview:zh_TW:預覽
 preview:RO:Previzualizare
 preview:ES:Previsualizar
+preview:pt_BR:Visualizar
 # Translation missing
 
 
@@ -952,6 +955,7 @@ sample_text:zh_CN:示例文本
 sample_text:zh_TW:範例文字
 sample_text:RO:Text exemplu
 sample_text:ES:Texto de ejemplo
+sample_text:pt_BR:Texto de exemplo
 # Translation missing
 
 
@@ -1053,6 +1057,7 @@ this_file_does_not_exist:zh_CN:文件不存在或无法使用: %1
 this_file_does_not_exist:zh_TW:此檔案不存在或是無法使用: %1
 this_file_does_not_exist:RO:Acest fișier nu există sau nu este disponibil: %1
 this_file_does_not_exist:ES:Este fichero no existe o no está disponible: %1
+this_file_does_not_exist:pt_BR:Este arquivo não existe ou não está disponível: %1
 # Translation missing
 
 
@@ -1329,6 +1334,7 @@ read_error:zh_CN:读取错误
 read_error:zh_TW:讀取錯誤
 read_error:RO:Eroare la citire
 read_error:ES:Error de lectura
+read_error:pt_BR:Erro de leitura
 # Translation missing
 
 
@@ -3255,6 +3261,7 @@ com.mucommander.ui.action.ToggleShowFoldersFirstAction.label:zh_CN:先显示文�
 com.mucommander.ui.action.ToggleShowFoldersFirstAction.label:zh_TW:優先顯示資料夾
 com.mucommander.ui.action.ToggleShowFoldersFirstAction.label:RO:Arată directoarele la început
 com.mucommander.ui.action.ToggleShowFoldersFirstAction.label:ES:Mostrar directorios primero
+com.mucommander.ui.action.ToggleShowFoldersFirstAction.label:pt_BR:Exibir diretórios primeiro
 # Translation missing
 
 
@@ -3380,6 +3387,7 @@ com.mucommander.ui.action.BringAllToFrontAction.label:zh_CN:所有都到前面
 com.mucommander.ui.action.BringAllToFrontAction.label:zh_TW:顯示全部視窗至最前面
 com.mucommander.ui.action.BringAllToFrontAction.label:RO:Toate ferestrele în prim plan
 com.mucommander.ui.action.BringAllToFrontAction.label:ES:Traer todo al frente
+com.mucommander.ui.action.BringAllToFrontAction.label:pt_BR:Trazer tudo para frete
 # Translation missing
 
 
@@ -3619,6 +3627,7 @@ com.mucommander.ui.action.OpenTrashAction.label:NL:Open prullebak
 com.mucommander.ui.action.OpenTrashAction.label:zh_TW:開啟資源回收桶
 com.mucommander.ui.action.OpenTrashAction.label:RO:Deschide coșul de gunoi
 com.mucommander.ui.action.OpenTrashAction.label:ES:Abrir papelera
+com.mucommander.ui.action.OpenTrashAction.label:pt_BR:Abrir lixeira
 # Translation missing
 
 
@@ -3637,6 +3646,7 @@ com.mucommander.ui.action.EmptyTrashAction.label:NL:Prullebak leeg maken
 com.mucommander.ui.action.EmptyTrashAction.label:zh_TW:清空資源回收桶
 com.mucommander.ui.action.EmptyTrashAction.label:RO:Golește coșul de gunoi
 com.mucommander.ui.action.EmptyTrashAction.label:ES:Vaciar papelera
+com.mucommander.ui.action.EmptyTrashAction.label:pt_BR:Esvaziar lixeira
 # Translation missing
 
 
@@ -4596,6 +4606,7 @@ optimizing_archive:NL:Optimalizeren van archief %1
 optimizing_archive:zh_TW:最佳化備份檔 %1
 optimizing_archive:RO:Optimizez arhiva %1
 optimizing_archive:ES:Optimizando fichero %1
+optimizing_archive:pt_BR:Otimizando arquivo %1
 # Translation missing
 
 
@@ -4827,6 +4838,7 @@ delete_dialog.permanently_delete.confirmation_details:zh_CN:此操作不能还�
 delete_dialog.permanently_delete.confirmation_details:zh_TW:此操作無法回復
 delete_dialog.permanently_delete.confirmation_details:RO:Această operațiune este definitivă și irevocabilă.
 delete_dialog.permanently_delete.confirmation_details:ES:Esta operación no puede ser deshecha.
+delete_dialog.permanently_delete.confirmation_details:pt_BR:Esta operação não poderá ser desfeita
 # Translation missing
 
 
@@ -4850,6 +4862,7 @@ delete_dialog.move_to_trash.confirmation:zh_CN:删除所选文件?
 delete_dialog.move_to_trash.confirmation:zh_TW:刪除所選檔案 ?
 delete_dialog.move_to_trash.confirmation:RO:Șterge fișierele selectate ?
 delete_dialog.move_to_trash.confirmation:ES:¿Eliminar fichero(s) seleccionados?
+delete_dialog.move_to_trash.confirmation:pt_BR:Remover o(s) arquivo(s) selecionado(s) ?
 # Translation missing
 
 
@@ -4873,6 +4886,7 @@ delete_dialog.move_to_trash.confirmation_details:zh_CN:文件将被移动到垃�
 delete_dialog.move_to_trash.confirmation_details:zh_TW:檔案將被移至資源回收桶
 delete_dialog.move_to_trash.confirmation_details:RO:Fișierele selectate vor fi aruncate la gunoi.
 delete_dialog.move_to_trash.confirmation_details:ES:Los ficheros serán movidos a la papelera.
+delete_dialog.move_to_trash.confirmation_details:pt_BR:Arquivos serão movidos para a lixeira.
 # Translation missing
 
 
@@ -4895,6 +4909,7 @@ delete_dialog.move_to_trash.option:zh_CN:移动到垃圾桶
 delete_dialog.move_to_trash.option:zh_TW:移至資源回收桶
 delete_dialog.move_to_trash.option:RO:Aruncă la gunoi
 delete_dialog.move_to_trash.option:ES:Mover a la papelera
+delete_dialog.move_to_trash.option:pt_BR:Mover para lixeira
 # Translation missing
 
 
@@ -5233,7 +5248,7 @@ email_dialog.sending:zh_CN:发送文件
 email_dialog.sending:SI:Pošiljam datoteke
 email_dialog.sending:RO:Fișiere în curs de trimitere
 email_dialog.sending:IT:Inviando file
-email_dialog.sending:pt_BR:Enviando arquivos
+email_dialog.sending:pt_BR:Enviando %1
 email_dialog.sending:NL:Verzenden bestanden
 email_dialog.sending:SK:Odosielam súbory
 # Translation missing (KR)
@@ -6038,6 +6053,7 @@ server_connect_dialog.share:zh_CN:共享
 server_connect_dialog.share:zh_TW:共用
 server_connect_dialog.share:RO:Partajează
 server_connect_dialog.share:ES:Compartir
+server_connect_dialog.share:pt_BR:Compartilhar
 # Translation missing
 
 
@@ -6170,6 +6186,7 @@ server_connect_dialog.protocol:zh_CN:协议
 server_connect_dialog.protocol:zh_TW:協議
 server_connect_dialog.protocol:RO:Protocol
 server_connect_dialog.protocol:ES:Protocolo
+server_connect_dialog.protocol:pt_BR:Protocolo
 # Translation missing
 
 
@@ -6192,6 +6209,7 @@ server_connect_dialog.nfs_version:zh_CN:NFS版本
 server_connect_dialog.nfs_version:zh_TW:NFS 版本
 server_connect_dialog.nfs_version:RO:Versiunea de NFS
 server_connect_dialog.nfs_version:ES:Versión de NFS
+server_connect_dialog.nfs_version:pt_BR:Versão NFS
 # Translation missing
 
 
@@ -7216,6 +7234,7 @@ theme_editor.title:zh_CN:主题编辑器
 theme_editor.title:zh_TW:佈景主題編輯器
 theme_editor.title:RO:Editor temă vizuală
 theme_editor.title:ES:Editor de tema
+theme_editor.title:pt_BR:Editor de tema
 # Translation missing
 
 
@@ -7230,6 +7249,7 @@ theme_editor.folder_tab:zh_CN:文件夹面板
 theme_editor.folder_tab:zh_TW:Folder pane
 theme_editor.folder_tab:RO:Panoul cu directoare
 theme_editor.folder_tab:ES:Panel de directorio
+theme_editor.folder_tab:pt_BR:Painel de diretório
 # Translation missing
 
 
@@ -7245,6 +7265,7 @@ theme_editor.shell_tab:zh_CN:Shell
 theme_editor.shell_tab:zh_TW:Shell
 theme_editor.shell_tab:RO:Linie de comandă
 theme_editor.shell_tab:ES:Consola
+theme_editor.shell_tab:pt_BR:Shell
 # Translation missing
 
 
@@ -7259,6 +7280,7 @@ theme_editor.statusbar_tab:zh_CN:状态栏
 theme_editor.statusbar_tab:zh_TW:狀態列
 theme_editor.statusbar_tab:RO:Bara de stare
 theme_editor.statusbar_tab:ES:Barra de estado
+theme_editor.statusbar_tab:pt_BR:Barra de status
 # Translation missing
 
 
@@ -7272,6 +7294,7 @@ theme_editor.free_space:EN:剩余空间 (%1)
 theme_editor.free_space:zh_TW:剩餘空間 (%1)
 theme_editor.free_space:RO:Spațiu liber (%1)
 theme_editor.free_space:ES:Espacio libre (%1)
+theme_editor.free_space:pt_BR:Espaço livre (%1)
 # Translation missing
 
 
@@ -7286,6 +7309,7 @@ theme_editor.free_space.ok:zh_CN:OK
 theme_editor.free_space.ok:zh_TW:OK
 theme_editor.free_space.ok:RO:OK
 theme_editor.free_space.ok:ES:OK
+theme_editor.free_space.ok:pt_BR:OK
 # Translation missing
 
 
@@ -7300,6 +7324,7 @@ theme_editor.free_space.warning:zh_CN:告警
 theme_editor.free_space.warning:zh_TW:警告
 theme_editor.free_space.warning:RO:Atenție
 theme_editor.free_space.warning:ES:Aviso
+theme_editor.free_space.warning:pt_BR:Alerta
 # Translation missing
 
 
@@ -7314,6 +7339,7 @@ theme_editor.free_space.critical:zh_CN:紧急
 theme_editor.free_space.critical:zh_TW:嚴重
 theme_editor.free_space.critical:RO:Situație critică
 theme_editor.free_space.critical:ES:Crítico
+theme_editor.free_space.critical:pt_BR:Crítico
 # Translation missing
 
 
@@ -7329,6 +7355,7 @@ theme_editor.locationbar_tab:zh_CN:位置栏
 theme_editor.locationbar_tab:zh_TW:位址列
 theme_editor.locationbar_tab:RO:Bara de locație
 theme_editor.locationbar_tab:ES:Barra de localización
+theme_editor.locationbar_tab:pt_BR:Barra de endereço
 # Translation missing
 
 
@@ -7342,6 +7369,7 @@ theme_editor.editor_tab:zh_CN:文件编辑器
 theme_editor.editor_tab:zh_TW:檔案編輯器
 theme_editor.editor_tab:RO:Editorul de fișiere
 theme_editor.editor_tab:ES:Editor de ficheros
+theme_editor.editor_tab:pt_BR:Editor de arquivos
 # Translation missing
 
 
@@ -7374,6 +7402,7 @@ theme_editor.shell_font:zh_CN:Shell字体
 theme_editor.shell_font:zh_TW:Shell 字型
 theme_editor.shell_font:RO:Font linie de comandă
 theme_editor.shell_font:ES:Fuente de consola
+theme_editor.shell_font:pt_BR:Fonte do shell
 # Translation missing
 
 
@@ -7389,6 +7418,7 @@ theme_editor.history_font:zh_CN:历史字体
 theme_editor.history_font:zh_TW:歷史記錄字型
 theme_editor.history_font:RO:Font pentru istorie
 theme_editor.history_font:ES:Fuente de historial
+theme_editor.history_font:pt_BR:Fonte do histórico
 # Translation missing
 
 
@@ -7429,6 +7459,7 @@ theme_editor.could_not_save_theme:zh_CN:无法写入主题 %1
 theme_editor.could_not_save_theme:zh_TW:無法寫入佈景主題 %1
 theme_editor.could_not_save_theme:RO:Nu am reușit să salvez tema %1
 theme_editor.could_not_save_theme:ES:Imposible escribir el tema %1
+theme_editor.could_not_save_theme:pt_BR:Não foi possível salvar o tema %1
 # Translation missing
 
 
@@ -7444,6 +7475,7 @@ theme_editor.border:zh_CN:边框
 theme_editor.border:zh_TW:框線
 theme_editor.border:RO:Margine
 theme_editor.border:ES:Borde
+theme_editor.border:pt_BR:Borda
 # Translation missing
 
 
@@ -7480,6 +7512,7 @@ theme_editor.unfocused_background:zh_CN:背景(无焦点)
 theme_editor.unfocused_background:zh_TW:背景 (無焦點)
 theme_editor.unfocused_background:RO:În fundal (fără focus)
 theme_editor.unfocused_background:ES:Fondo (sin foco)
+theme_editor.unfocused_background:pt_BR:Fundo (sem o foco)
 # Translation missing
 
 
@@ -7501,6 +7534,7 @@ theme_editor.quick_search.unmatched_file:zh_CN:未匹配的文件
 theme_editor.quick_search.unmatched_file:zh_TW:沒有匹配的檔案
 theme_editor.quick_search.unmatched_file:RO:Fișiere care nu corespund
 theme_editor.quick_search.unmatched_file:ES:Fichero sin encajar
+theme_editor.quick_search.unmatched_file:pt_BR:Arquivo não encontrado
 # Translation missing
 
 
@@ -7522,6 +7556,7 @@ theme_editor.text:zh_CN:文本
 theme_editor.text:zh_TW:文字
 theme_editor.text:RO:Text
 theme_editor.text:ES:Texto
+theme_editor.text:pt_BR:Texto
 # Translation missing
 
 
@@ -7538,6 +7573,7 @@ theme_editor.progress:zh_CN:进度
 theme_editor.progress:zh_TW:進度
 theme_editor.progress:RO:Progres
 theme_editor.progress:ES:Progreso
+theme_editOr.progress:pt_BR:Progresso
 # Translation missing
 
 
@@ -7556,6 +7592,7 @@ theme_editor.normal:zh_CN:正常
 theme_editor.normal:zh_TW:一般
 theme_editor.normal:RO:Normal
 theme_editor.normal:ES:Normal
+theme_editor.normal:pt_BR:Normal
 # Translation missing
 
 
@@ -7574,6 +7611,7 @@ theme_editor.normal_unfocused:zh_CN:正常(无焦点)
 theme_editor.normal_unfocused:zh_TW:一般 (無焦點)
 theme_editor.normal_unfocused:RO:Normal (fără focus)
 theme_editor.normal_unfocused:ES:Normal (sin foco)
+theme_editor.normal_unfocused:pt_BR:Normal (sem o foco)
 # Translation missing
 
 
@@ -7592,6 +7630,7 @@ theme_editor.selected:zh_CN:选中的
 theme_editor.selected:zh_TW:被選取
 theme_editor.selected:RO:Selectat
 theme_editor.selected:ES:Seleccionado
+theme_editor.selected:pt_BR:Selecionado
 # Translation missing
 
 
@@ -7609,6 +7648,7 @@ theme_editor.selected_unfocused:zh_CN:选中的(无焦点)
 theme_editor.selected_unfocused:zh_TW:被選取 (無焦點)
 theme_editor.selected_unfocused:RO:Selectat (fără focus)
 theme_editor.selected_unfocused:ES:Seleccionado (sin foco)
+theme_editor.selected_unfocused:pt_BR:Selecionado (sem o foco)
 # Translation missing
 
 
@@ -7627,6 +7667,7 @@ theme_editor.color:zh_CN:颜色
 theme_editor.color:zh_TW:顏色
 theme_editor.color:RO:Culoare
 theme_editor.color:ES:Color
+theme_editor.color:pt_BR:Cor
 # Translation missing
 
 
@@ -7648,6 +7689,7 @@ theme_editor.colors:zh_CN:颜色
 theme_editor.colors:zh_TW:顏色
 theme_editor.colors:RO:Culori
 theme_editor.colors:ES:Colores
+theme_editor.colors:pt_BR:Cores
 # Translation missing
 
 
@@ -7687,6 +7729,7 @@ theme_editor.history_colors:zh_CN:历史颜色
 theme_editor.history_colors:zh_TW:歷史記錄顏色
 theme_editor.history_colors:RO:Culori pentru istorie
 theme_editor.history_colors:ES:Colores del historial
+theme_editor.history_colors:pt_BR:Cores do histórico
 # Translation missing
 
 
@@ -8283,6 +8326,7 @@ prefs_dialog.follow_symlinks_when_cd:zh_CN:改变当前目录时跟随符号连�
 prefs_dialog.follow_symlinks_when_cd:zh_TW:切換目前資料夾時跟隨符號鏈結
 prefs_dialog.follow_symlinks_when_cd:RO:Urmează legăturile simbolice la schimbarea directorului curent
 prefs_dialog.follow_symlinks_when_cd:ES:Seguir enlaces simbólicos al cambiar el directorio actual
+prefs_dialog.follow_symlinks_when_cd:pt_BR:Follow symlinks when changing current directory
 # Translation missing
 
 
@@ -8517,6 +8561,7 @@ prefs_dialog.import_theme:zh_CN:导入主题
 prefs_dialog.import_theme:zh_TW:匯入佈景主題
 prefs_dialog.import_theme:RO:Importă temă
 prefs_dialog.import_theme:ES:Importar tema
+prefs_dialog.import_theme:pt_BR:Importar tema
 # Translation missing
 
 
@@ -8534,6 +8579,7 @@ prefs_dialog.error_in_import:zh_CN:导入主题 %1 时出错.
 prefs_dialog.error_in_import:zh_TW:匯入佈景主題時發生錯誤 %1.
 prefs_dialog.error_in_import:RO:Eroare la importarea temei %1.
 prefs_dialog.error_in_import:ES:Error al importar el tema %1.
+prefs_dialog.error_in_import:pt_BR:Erro ao importar o tema %1
 # Translation missing
 
 
@@ -8551,6 +8597,7 @@ prefs_dialog.cannot_read_theme:zh_CN:不能从文件 %1 中载入主题
 prefs_dialog.cannot_read_theme:zh_TW:無法載入佈景主題從檔案 %1
 prefs_dialog.cannot_read_theme:RO:Nu am putut încărca tema din fișierul %1
 prefs_dialog.cannot_read_theme:ES:No se pudo leer el tema del fichero %1
+prefs_dialog.cannot_read_theme:pt_BR:Não foi possível carregar o tema a partir do arquivo %1
 # Translation missing
 
 
@@ -8569,6 +8616,7 @@ prefs_dialog.export_theme:zh_CN:导出 %1
 prefs_dialog.export_theme:zh_TW:匯出 %1
 prefs_dialog.export_theme:RO:Exportare %1
 prefs_dialog.export_theme:ES:Exportar %1
+prefs_dialog.export_theme:pt_BR:Exportar %1
 # Translation missing
 
 
@@ -8584,6 +8632,7 @@ prefs_dialog.import:zh_CN:导入
 prefs_dialog.import:zh_TW:匯入
 prefs_dialog.import:RO:Importă
 prefs_dialog.import:ES:Importar
+prefs_dialog.import:pt_BR:Importar
 # Translation missing
 
 
@@ -8598,6 +8647,7 @@ prefs_dialog.export:NL:Exporteer
 prefs_dialog.export:zh_CN:导出
 prefs_dialog.export:zh_TW:匯出
 prefs_dialog.export:ES:Exportar
+prefs_dialog.export:pt_BR:Exportar
 # Translation missing
 
 
@@ -8614,6 +8664,7 @@ prefs_dialog.theme_type:zh_CN:类型: %1
 prefs_dialog.theme_type:zh_TW:類型: %1
 prefs_dialog.theme_type:RO:Tipul: %1
 prefs_dialog.theme_type:ES:Tipo: %1
+prefs_dialog.theme_type:pt_BR:Tipo: %1
 # Translation missing
 
 
@@ -8629,6 +8680,7 @@ prefs_dialog.delete_theme:zh_CN:永久删除主题 %1 ?
 prefs_dialog.delete_theme:zh_TW:永遠刪除佈景主題 %1 ?
 prefs_dialog.delete_theme:RO:Sterg definitiv tema %1 ?
 prefs_dialog.delete_theme:ES:¿Eliminar permanentemente el tema %1?
+prefs_dialog.delete_theme:pt_BR:Remover permanentemente o tema %1 ?
 # Translation missing
 
 
@@ -8644,6 +8696,7 @@ prefs_dialog.rename_failed:zh_CN:未能重命名主题 %1
 prefs_dialog.rename_failed:zh_TW:無法更名佈景主題 %1
 prefs_dialog.rename_failed:RO:Nu am reușit să redenumesc tema %1
 prefs_dialog.rename_failed:ES:Error al renombrar el tema %1
+prefs_dialog.rename_failed:pt_BR:Falha ao renomear tema %1
 # Translation missing
 
 
@@ -8661,6 +8714,7 @@ prefs_dialog.xml_file:zh_CN:XML 文件
 prefs_dialog.xml_file:zh_TW:XML 檔案
 prefs_dialog.xml_file:RO:Fișier XML
 prefs_dialog.xml_file:ES:Fichero XML
+prefs_dialog.xml_file:pt_BR:Arquivo XML
 # Translation missing
 
 
@@ -8886,6 +8940,7 @@ prefs_dialog.enable_system_notifications:zh_CN:打开系统通告
 prefs_dialog.enable_system_notifications:zh_TW:啟用系統提醒功能
 prefs_dialog.enable_system_notifications:RO:Activează sistemul de notificare
 prefs_dialog.enable_system_notifications:ES:Activar las notificaciones del sistema
+prefs_dialog.enable_system_notifications:pt_BR:Ativar notificações do sistema
 # Translation missing
 
 
@@ -9199,6 +9254,7 @@ theme.custom:zh_CN:定制的
 theme.custom:zh_TW:自訂
 theme.custom:RO:Personalizată
 theme.custom:ES:Personalizado
+theme.custom:pt_BR:Customizado
 # Translation missing
 
 
@@ -9217,6 +9273,7 @@ theme.built_in:zh_CN:内置的
 theme.built_in:zh_TW:內建
 theme.built_in:RO:Predefinită
 theme.built_in:ES:Preinstalado
+theme.built_in:pt_BR:Pré-instalado
 # Translation missing
 
 
@@ -9235,6 +9292,7 @@ theme.add_on:zh_CN:附加
 theme.add_on:zh_TW:外掛
 theme.add_on:RO:Adițională
 theme.add_on:ES:Añadido
+theme.add_on:pt_BR:Complementos
 # Translation missing
 
 
@@ -9253,6 +9311,7 @@ theme.current:zh_CN:当前
 theme.current:zh_TW:目前
 theme.current:RO:curentă
 theme.current:ES:actual
+theme.current:pt_BR:Atual
 # Translation missing
 
 
@@ -9381,6 +9440,7 @@ font_chooser.font_size:RO:Dimensiune
 font_chooser.font_size:IT:Dimensione
 font_chooser.font_size:KR:크기
 font_chooser.font_size:NL:Grootte
+font_chooser.font_size:pt_BR:Tamanho
 # Translation missing (SK, pt_BR)
 
 
@@ -9403,6 +9463,7 @@ font_chooser.font_bold:RO:Îngroșat
 font_chooser.font_bold:IT:Grassetto
 font_chooser.font_bold:KR:볼드
 font_chooser.font_bold:NL:Vet
+font_chooser.font_bold:pt_BR:Negrito
 # Translation missing (SK, pt_BR)
 
 
@@ -9425,6 +9486,7 @@ font_chooser.font_italic:RO:Cursiv
 font_chooser.font_italic:IT:Corsivo
 font_chooser.font_italic:KR:이탤릭
 font_chooser.font_italic:NL:Schuin
+font_chooser.font_italic:pt_BR:Itálico
 # Translation missing (SK, pt_BR)
 
 
@@ -9443,6 +9505,7 @@ color_chooser.red:zh_CN:红色
 color_chooser.red:zh_TW:紅色
 color_chooser.red:RO:Roșu
 color_chooser.red:ES:Rojo
+color_chooser.red:pt_BR:Vermelho
 # Translation missing
 
 
@@ -9458,6 +9521,7 @@ color_chooser.green:zh_CN:绿色
 color_chooser.green:zh_TW:綠色
 color_chooser.green:RO:Verde
 color_chooser.green:ES:Verde
+color_chooser.green:pt_BR:Verde
 # Translation missing
 
 
@@ -9474,6 +9538,7 @@ color_chooser.blue:zh_CN:蓝色
 color_chooser.blue:zh_TW:藍色
 color_chooser.blue:RO:Albastru
 color_chooser.blue:ES:Azul
+color_chooser.blue:pt_BR:Azul
 # Translation missing
 
 
@@ -9490,6 +9555,7 @@ color_chooser.hue:zh_CN:色调
 color_chooser.hue:zh_TW:色調
 color_chooser.hue:RO:Tonalitate
 color_chooser.hue:ES:Tonalidad
+color_chooser.hue:pt_BR:Tonalidade
 # Translation missing
 
 
@@ -9506,6 +9572,7 @@ color_chooser.brightness:zh_CN:亮度
 color_chooser.brightness:zh_TW:明亮度
 color_chooser.brightness:RO:Luminozitate
 color_chooser.brightness:ES:Brillo
+color_chooser.brightness:pt_BR:Brilho
 # Translation missing
 
 
@@ -9521,6 +9588,7 @@ color_chooser.swatches:zh_CN:采样
 color_chooser.swatches:zh_TW:樣本
 color_chooser.swatches:RO:Mostre
 color_chooser.swatches:ES:Muestras
+color_chooser.swatches:pt_BR:Swatches
 # Translation missing
 
 
@@ -9536,6 +9604,7 @@ color_chooser.saturation:zh_CN:饱和度
 color_chooser.saturation:zh_TW:飽和度
 color_chooser.saturation:RO:Saturație
 color_chooser.saturation:ES:Saturación
+color_chooser.saturation:pt_BR:Saturação
 # Translation missing
 
 
@@ -9552,6 +9621,7 @@ color_chooser.rgb:zh_CN:RGB
 color_chooser.rgb:zh_TW:RGB
 color_chooser.rgb:RO:RGB
 color_chooser.rgb:ES:RGB
+color_chooser.rgb:pt_BR:RGB
 # Translation missing
 
 
@@ -9569,6 +9639,7 @@ color_chooser.hsb:zh_CN:HSB
 color_chooser.hsb:zh_TW:HSB
 color_chooser.hsb:RO:HSB
 color_chooser.hsb:ES:HSB
+color_chooser.hsb:pt_BR:HSB
 # Translation missing
 
 
@@ -9585,6 +9656,7 @@ color_chooser.recent:zh_CN:最近的
 color_chooser.recent:zh_TW:最近
 color_chooser.recent:RO:Recent
 color_chooser.recent:ES:Reciente
+color_chooser.recent:pt_BR:Recente
 # Translation missing
 
 
@@ -9602,6 +9674,7 @@ color_chooser.alpha:NL:Alpha transparantie
 color_chooser.alpha:zh_TW:Alpha 透明度
 color_chooser.alpha:RO:Transparență alpha
 color_chooser.alpha:ES:Transparencia alpha
+color_chooser.alpha:pt_BR:Transparência alpha
 # Translation missing
 
 
@@ -9627,6 +9700,7 @@ color_chooser.title:RO:Alegeți o culoare
 color_chooser.title:IT:Scegli un colore
 color_chooser.title:KR:색상 선택
 color_chooser.title:NL:Kies een kleur
+color_chooser.title:pt_BR:Escolha uma cor
 # Translation missing (SK, pt_BR)
 
 
