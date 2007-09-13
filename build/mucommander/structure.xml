@@ -264,7 +264,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <property name="conf.jar.obf"         location="${conf.tmp}/mucommander-conf_obf.jar"/>
   <!-- Where to store the compressed, obfuscated Configuration -->
   <!-- API JAR file.                                           -->
-  <property name="conf.jar.cmp"         location="${conf.tmp}/mucommander-ant-conf.jar"/>
+  <property name="conf.jar.cmp"         location="${conf.tmp}/mucommander-conf.jar"/>
   <!-- Where to store the non-obfuscated Configuration API     -->
   <!-- bytecode.                                               -->
   <property name="conf.classes.normal"  location="${conf.tmp}/classes"/>
