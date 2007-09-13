@@ -732,7 +732,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <mkdir dir="${doc.api}"/>
     <javadoc destdir="${doc.api}" author="true" windowtitle="muCommander API" encoding="UTF-8" access="protected">
       <bottom>
-         &lt;p>This file is part of &lt;a href=&quot;http://www.mucommander.com&quot; target=&quot;_top&quot;&gt;muCommander&lt;/a&gt; - Copyright (C) 2002-2007 Maxence Bernard&lt;/p&gt;
+         <![CDATA[
+           <p>This file is part of <a href="http://www.mucommander.com" target="_top">muCommander</a> - Copyright (C) 2002-2007 Maxence Bernard</p>
+         ]]>
       </bottom>
       <classpath>
          <fileset dir="${lib}">
