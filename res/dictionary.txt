@@ -168,7 +168,7 @@ edit:EN:Edit
 edit:FR:Editer
 edit:DE:Bearbeiten
 edit:ES:Editar
-edit:CS:Editovat
+edit:CS:Upravit
 edit:zh_TW:編輯
 edit:PL:Edycja
 edit:HU:Szerkeszt
@@ -214,6 +214,7 @@ reset:SK:Obnoviť
 reset:SI:Resetiraj
 reset:RU:сброс
 reset:DE:Zurücksetzen
+reset:CS:Resetovat
 # Translation missing
 
 
@@ -704,6 +705,7 @@ license:SK:Licencia
 license:SI:Licenca
 license:RU:Лицензия
 license:DE:Lizenz
+license:CS:Licence
 # Translation missing
 
 
@@ -953,6 +955,7 @@ preview:SK:Ukážka
 preview:SI:Predogled
 preview:RU:Предпросмотр
 preview:DE:Vorschau
+preview:CS:Náhled
 # Translation missing
 
 
@@ -978,6 +981,7 @@ sample_text:SK:Ukážkový text
 sample_text:SI:Vzorec besedila
 sample_text:RU:Пример текста
 sample_text:DE:Beispieltext
+sample_text:CS:Ukázkový text
 # Translation missing
 
 
@@ -1084,6 +1088,7 @@ this_file_does_not_exist:SK:Tento súbor neexistuje, alebo nie je k dispozícii:
 this_file_does_not_exist:SI:Datoteka ne obstaja oz. ni dostopna: %1
 this_file_does_not_exist:RU:Файл %1 не существует или недоступен
 this_file_does_not_exist:DE:Die Datei existiert nicht oder ist nicht verfügbar: %1
+this_file_does_not_exist:CS:Tento soubor neexistuje nebo není dostupný: %1
 # Translation missing
 
 
@@ -1365,6 +1370,7 @@ read_error:SK:Chyba pri čítaní
 read_error:SI:Napaka pri branju
 read_error:RU:Ошибка считывания
 read_error:DE:Lesefehler
+read_error:CS:Chyba při čtení
 # Translation missing
 
 
@@ -1564,7 +1570,7 @@ com.mucommander.ui.action.EditBookmarksAction.label:zh_CN:编辑书签
 com.mucommander.ui.action.EditBookmarksAction.label:SI:Uredi priljubljene
 com.mucommander.ui.action.EditBookmarksAction.label:RO:Modifică favoritele
 com.mucommander.ui.action.EditBookmarksAction.label:IT:Modifica favoriti
-com.mucommander.ui.action.EditBookmarksAction.label:CS:Editovat záložky
+com.mucommander.ui.action.EditBookmarksAction.label:CS:Upravit záložky
 com.mucommander.ui.action.EditBookmarksAction.label:DE:Lesezeichen bearbeiten
 com.mucommander.ui.action.EditBookmarksAction.label:KR:북마크 편집
 com.mucommander.ui.action.EditBookmarksAction.label:pt_BR:Editar favoritos
@@ -1576,7 +1582,7 @@ com.mucommander.ui.action.EditCredentialsAction.label:EN:Edit credentials
 com.mucommander.ui.action.EditCredentialsAction.label:FR:Éditer les indentifiants
 com.mucommander.ui.action.EditCredentialsAction.label:SI:Uredi akreditive
 com.mucommander.ui.action.EditCredentialsAction.label:IT:Modifica credenziali
-com.mucommander.ui.action.EditCredentialsAction.label:CS:Editovat účty
+com.mucommander.ui.action.EditCredentialsAction.label:CS:Upravit účty
 com.mucommander.ui.action.EditCredentialsAction.label:zh_TW:編輯認證資料
 com.mucommander.ui.action.EditCredentialsAction.label:DE:Zugriffsrechte bearbeiten
 com.mucommander.ui.action.EditCredentialsAction.label:RO:Schimbă identitatea
@@ -1794,7 +1800,7 @@ com.mucommander.ui.action.EditAction.tooltip:EN:Edit selected file
 com.mucommander.ui.action.EditAction.tooltip:FR:Editer le fichier selectionné
 com.mucommander.ui.action.EditAction.tooltip:DE:Markierte Datei bearbeiten
 com.mucommander.ui.action.EditAction.tooltip:ES:Editar el fichero seleccionado
-com.mucommander.ui.action.EditAction.tooltip:CS:Editovat vybraný soubor
+com.mucommander.ui.action.EditAction.tooltip:CS:Upravit vybraný soubor
 com.mucommander.ui.action.EditAction.tooltip:zh_TW:編輯已選取檔案
 com.mucommander.ui.action.EditAction.tooltip:PL:Edytuj wybrany plik
 com.mucommander.ui.action.EditAction.tooltip:HU:A kijelölt fájl módosítása
@@ -2390,7 +2396,7 @@ com.mucommander.ui.action.SortByDateAction.label:EN:Sort by Date
 com.mucommander.ui.action.SortByDateAction.label:FR:Trier par Date
 com.mucommander.ui.action.SortByDateAction.label:DE:Nach Datum sortieren
 com.mucommander.ui.action.SortByDateAction.label:ES:Ordenar por Fecha
-com.mucommander.ui.action.SortByDateAction.label:CS:Řadit dle data
+com.mucommander.ui.action.SortByDateAction.label:CS:Řadit dle datumu
 com.mucommander.ui.action.SortByDateAction.label:zh_TW:依日期排序
 com.mucommander.ui.action.SortByDateAction.label:PL:Sortuj po dacie
 com.mucommander.ui.action.SortByDateAction.label:HU:Dátum szerint rendez
@@ -3146,7 +3152,7 @@ com.mucommander.ui.action.ToggleAutoSizeAction.label:zh_CN:自动设置栏宽
 com.mucommander.ui.action.ToggleAutoSizeAction.label:SI:Samodejna širina stolpcev
 com.mucommander.ui.action.ToggleAutoSizeAction.label:RO:Dimensiune automată la coloane
 com.mucommander.ui.action.ToggleAutoSizeAction.label:IT:Auto-dimensiona colonne
-com.mucommander.ui.action.ToggleAutoSizeAction.label:CS:Automatická velikost sloupců
+com.mucommander.ui.action.ToggleAutoSizeAction.label:CS:Automatická šířka sloupců
 com.mucommander.ui.action.ToggleAutoSizeAction.label:DE:Spaltengröße automatisch bestimmen
 com.mucommander.ui.action.ToggleAutoSizeAction.label:KR:컬럼 자동 크기 조정
 com.mucommander.ui.action.ToggleAutoSizeAction.label:pt_BR:Dimensionar colunas automaticamente
@@ -3424,6 +3430,7 @@ com.mucommander.ui.action.BringAllToFrontAction.label:pt_BR:Trazer tudo para fre
 com.mucommander.ui.action.BringAllToFrontAction.label:SI:Postavi vse v ospredje
 com.mucommander.ui.action.BringAllToFrontAction.label:RU:Показать все окна
 com.mucommander.ui.action.BringAllToFrontAction.label:DE:Alle Fenster nach vorne bringen
+com.mucommander.ui.action.BringAllToFrontAction.label:CS:Přenést vše do popředí
 # Translation missing
 
 
@@ -3668,6 +3675,7 @@ com.mucommander.ui.action.OpenTrashAction.label:SK:Otvoriť kôš
 com.mucommander.ui.action.OpenTrashAction.label:SI:Odpri koš
 com.mucommander.ui.action.OpenTrashAction.label:RU:Открыть Корзину
 com.mucommander.ui.action.OpenTrashAction.label:DE:Papierkorb öffnen
+com.mucommander.ui.action.OpenTrashAction.label:CS:Otevřít Koš
 # Translation missing
 
 
@@ -3691,6 +3699,7 @@ com.mucommander.ui.action.EmptyTrashAction.label:SK:Kôš je prázdny
 com.mucommander.ui.action.EmptyTrashAction.label:SI:Izprazni koš
 com.mucommander.ui.action.EmptyTrashAction.label:RU:Очистить корзину
 com.mucommander.ui.action.EmptyTrashAction.label:DE:Papierkorb leeren
+com.mucommander.ui.action.EmptyTrashAction.label:CS:Vyprázdnit Koš
 # Translation missing
 
 
@@ -3951,7 +3960,7 @@ status_bar.connecting_to_folder:zh_CN:正在连接文件夹，按ESCAPE键取消
 status_bar.connecting_to_folder:SI:Povezovanje z mapo, pritisni ESCAPE za preklic.
 status_bar.connecting_to_folder:RO:În curs de conectare la un director, apasă ESCAPE pentru a anula.
 status_bar.connecting_to_folder:IT:Connessione in corso, premere ESC per annullare
-status_bar.connecting_to_folder:CS:Připojuji se ke složce, stiskem ESCAPE akci zrušíte.
+status_bar.connecting_to_folder:CS:Připojuji se, stiskem ESCAPE akci zrušíte.
 status_bar.connecting_to_folder:DE:Verbindungsaufbau zu Ordner, drücke ESC um Abzubrechen.
 status_bar.connecting_to_folder:KR:폴더 접속중, 취소하려면 ESCAPE를 눌러주세요.
 status_bar.connecting_to_folder:pt_BR:Conectando ao diretório, tecle ESC para cancelar.
@@ -4024,7 +4033,7 @@ table.folder_access_error_title:EN:Folder access error
 table.folder_access_error_title:FR:Folder access error
 table.folder_access_error_title:DE:Fehler beim Ordnerzugriff
 table.folder_access_error_title:ES:Error al acceder al directorio
-table.folder_access_error_title:CS:Chyba přístupu k složce
+table.folder_access_error_title:CS:Chyba při přístupu k složce
 table.folder_access_error_title:zh_TW:資料夾存取錯誤
 table.folder_access_error_title:PL:Błąd dostępu do katalogu
 table.folder_access_error_title:HU:Könyvtár hozzáférési hiba
@@ -4655,6 +4664,7 @@ optimizing_archive:SK:Archív sa optimalizuje %1
 optimizing_archive:SI:Optimiziranje arhiva %1
 optimizing_archive:RU:Оптимизация архива %1
 optimizing_archive:DE:Archiv optimieren  %1
+optimizing_archive:CS:Optimalizuji archív %1
 # Translation missing
 
 
@@ -4676,6 +4686,7 @@ error_while_optimizing_archive:zh_CN:优化压缩包 %1 时出错
 error_while_optimizing_archive:NL:Fout bij het optimalizeren van archief %1
 error_while_optimizing_archive:SI:Napaka pri optimizaciji arhiva %1
 error_while_optimizing_archive:DE:Fehler während der Archioptimierung %1
+error_while_optimizing_archive:CS:Chyba při optimalizaci archívu %1
 # Translation missing
 
 
@@ -4730,7 +4741,7 @@ move_dialog.error_title:EN:Move error
 move_dialog.error_title:FR:Erreur de déplacement
 move_dialog.error_title:DE:Fehler beim Verschieben
 move_dialog.error_title:ES:Error de movimiento
-move_dialog.error_title:CS:Chyba přesouvání
+move_dialog.error_title:CS:Chyba při přesouvání
 move_dialog.error_title:zh_TW:搬移錯誤
 move_dialog.error_title:PL:Błąd przenoszenia
 move_dialog.error_title:HU:Áthelyezési hiba
@@ -4809,7 +4820,7 @@ download_dialog.error_title:EN:Download error
 download_dialog.error_title:FR:Erreur de téléchargement
 download_dialog.error_title:DE:Fehler beim Download
 download_dialog.error_title:ES:Error de descarga
-download_dialog.error_title:CS:Chyba stahování
+download_dialog.error_title:CS:Chyba při stahování
 download_dialog.error_title:zh_TW:下載錯誤
 download_dialog.error_title:PL:Błąd pobierania
 download_dialog.error_title:HU:Letöltési hiba
@@ -4893,6 +4904,7 @@ delete_dialog.permanently_delete.confirmation_details:SK:Túto operáciu nie je 
 delete_dialog.permanently_delete.confirmation_details:SI:Ta operacija ne more biti razveljavljena.
 delete_dialog.permanently_delete.confirmation_details:RU:Эта операция не может быть отменена
 delete_dialog.permanently_delete.confirmation_details:DE:Diese Operation kann nicht rückgängig gemacht werden.
+delete_dialog.permanently_delete.confirmation_details:CS:Tato operace je nevratná.
 # Translation missing
 
 
@@ -4921,6 +4933,7 @@ delete_dialog.move_to_trash.confirmation:SK:Odstrániť vybraný súbor(y) ?
 delete_dialog.move_to_trash.confirmation:SI:Izbrišem izbrane datoteke?
 delete_dialog.move_to_trash.confirmation:RU:Удалить выбранные файл(ы)?
 delete_dialog.move_to_trash.confirmation:DE:Ausgewählte Datei(en) löschen ?
+delete_dialog.move_to_trash.confirmation:CS:Chcete smazat vybrané soubory ?
 # Translation missing
 
 
@@ -4949,6 +4962,7 @@ delete_dialog.move_to_trash.confirmation_details:SK:Súbory budú premiestnené 
 delete_dialog.move_to_trash.confirmation_details:SI:Datoteke bodo premaknjene v koš.
 delete_dialog.move_to_trash.confirmation_details:RU:Файлы будут помещены в Корзину
 delete_dialog.move_to_trash.confirmation_details:DE:Dateien werden in den Papierkorb bewegt.
+delete_dialog.move_to_trash.confirmation_details:CS:Soubory budou přesunuty do Koše.
 # Translation missing
 
 
@@ -4976,6 +4990,7 @@ delete_dialog.move_to_trash.option:SK:Premiestniť do koša
 delete_dialog.move_to_trash.option:SI:Premakni v koš
 delete_dialog.move_to_trash.option:RU:Поместить в Корзину
 delete_dialog.move_to_trash.option:DE:In den Papierkorb verschieben
+delete_dialog.move_to_trash.option:CS:Přesunout do Koše
 # Translation missing
 
 
@@ -5012,7 +5027,7 @@ delete_dialog.error_title:EN:Delete error
 delete_dialog.error_title:FR:Erreur de suppression
 delete_dialog.error_title:DE:Fehler beim Löschen
 delete_dialog.error_title:ES:Error al eliminar
-delete_dialog.error_title:CS:Chyba mazání
+delete_dialog.error_title:CS:Chyba při mazání
 delete_dialog.error_title:zh_TW:刪除錯誤
 delete_dialog.error_title:PL:Błąd usuwania
 delete_dialog.error_title:HU:Törlési hiba
@@ -5143,7 +5158,7 @@ email_dialog.prefs_not_set_title:EN:Mail not configured
 email_dialog.prefs_not_set_title:FR:Paramètres absents
 email_dialog.prefs_not_set_title:DE:eMail nicht konfiguriert
 email_dialog.prefs_not_set_title:ES:Correo no configurado
-email_dialog.prefs_not_set_title:CS:Elektronická pošta není nastavena
+email_dialog.prefs_not_set_title:CS:Chybějící nastavení elektronické pošty
 email_dialog.prefs_not_set_title:zh_TW:郵件尚未設定
 email_dialog.prefs_not_set_title:PL:Poczta nie skonfigurowana
 email_dialog.prefs_not_set_title:HU:A levelező nincs konfigurálva
@@ -5161,7 +5176,7 @@ email_dialog.prefs_not_set:EN:You need to set your mail parameters first.
 email_dialog.prefs_not_set:FR:Vous devez d'abord configurer vos paramètres email.
 email_dialog.prefs_not_set:DE:Nehmen sie erst die eMail Einstellungen vor.
 email_dialog.prefs_not_set:ES:Debes ajustar los parámatros de correo primero.
-email_dialog.prefs_not_set:CS:Nejprve nastavte parametry elektronické pošty.
+email_dialog.prefs_not_set:CS:Nejprve nastavte parametry pro odesílání elektronickou poštou.
 email_dialog.prefs_not_set:zh_TW:你必須要先設定郵件參數
 email_dialog.prefs_not_set:PL:Musisz ustwaić najpierw parametry poczty.
 email_dialog.prefs_not_set:HU:Önnek be kell állítania a levelező paramétereit.
@@ -5251,7 +5266,7 @@ email_dialog.error_title:EN:Email files error
 email_dialog.error_title:FR:Erreur d'envoi
 email_dialog.error_title:DE:Fehler beim Senden der Dateien
 email_dialog.error_title:ES:Error de envío
-email_dialog.error_title:CS:Chyba odesílání
+email_dialog.error_title:CS:Chyba při odesílání
 email_dialog.error_title:zh_TW:郵寄檔案錯誤
 email_dialog.error_title:PL:Błąd wysyłania plików
 email_dialog.error_title:HU:E-mail fájl hiba
@@ -5287,7 +5302,7 @@ email_dialog.nb_files:EN:%1 file(s)
 email_dialog.nb_files:FR:%1 fichier(s)
 email_dialog.nb_files:DE:%1 Datei(en)
 email_dialog.nb_files:ES:%1 fichero(s)
-email_dialog.nb_files:CS:%1 soubor(y)
+email_dialog.nb_files:CS:%1x soubor
 email_dialog.nb_files:zh_TW:%1 檔案
 email_dialog.nb_files:PL:%1 plik(i)
 email_dialog.nb_files:HU:%1 fájl
@@ -5654,7 +5669,7 @@ progress_dialog.transferred:EN:Transferred %1 at %2
 progress_dialog.transferred:FR:%1 transférés à %2
 progress_dialog.transferred:DE:Transferiert %1 von %2
 progress_dialog.transferred:ES:%1 transferidos a %2
-progress_dialog.transferred:CS:Přeneseno %1 při %2
+progress_dialog.transferred:CS:Přeneseno %1 při rychlosti %2
 progress_dialog.transferred:zh_TW:已傳送 %1 速度 %2
 progress_dialog.transferred:PL:Przesłano %1 z %2
 progress_dialog.transferred:HU:%1 átvitel %2 alatt megtörtént
@@ -5883,7 +5898,7 @@ properties_dialog.nb_files:EN:%1 file(s)
 properties_dialog.nb_files:FR:%1 fichier(s)
 properties_dialog.nb_files:DE:%1 Datei(en)
 properties_dialog.nb_files:ES:%1 fichero(s)
-properties_dialog.nb_files:CS:%1 soubor(y)
+properties_dialog.nb_files:CS:%1x soubor
 properties_dialog.nb_files:zh_TW:%1 檔案
 properties_dialog.nb_files:PL:%1 plik(i)
 properties_dialog.nb_files:HU:%1 fájl
@@ -5901,7 +5916,7 @@ properties_dialog.nb_folders:EN:%1 folder(s)
 properties_dialog.nb_folders:FR:%1 dossier(s)
 properties_dialog.nb_folders:DE:%1 Ordner
 properties_dialog.nb_folders:ES:%1 directorio(s)
-properties_dialog.nb_folders:CS:%1 složka(y)
+properties_dialog.nb_folders:CS:%1x složka
 properties_dialog.nb_folders:zh_TW:%1 資料夾
 properties_dialog.nb_folders:PL:%1 katalog(i)
 properties_dialog.nb_folders:HU:%1 könyvtár
@@ -6144,7 +6159,7 @@ server_connect_dialog.username:EN:Username
 server_connect_dialog.username:FR:Nom d'utilisateur
 server_connect_dialog.username:DE:Benutzername
 server_connect_dialog.username:ES:Nombre de usuario
-server_connect_dialog.username:CS:Uživatelské jméno
+server_connect_dialog.username:CS:Přihlašovací jméno
 server_connect_dialog.username:zh_TW:帳號
 server_connect_dialog.username:PL:Nazwa użytkownika
 server_connect_dialog.username:HU:Felhasználónév
@@ -6521,7 +6536,7 @@ auth_dialog.desc:EN:Please enter a login and password
 auth_dialog.desc:FR:Veuillez entrer un identifiant et un mot de passe
 auth_dialog.desc:DE:Bitte Login und Passwort eingeben
 auth_dialog.desc:ES:Por favor, introduzca un nombre y una contraseña
-auth_dialog.desc:CS:Zadejte prosím uživatelské jméno a heslo
+auth_dialog.desc:CS:Zadejte prosím přihlašovací jméno a heslo
 auth_dialog.desc:zh_TW:請輸入帳號及密碼
 auth_dialog.desc:PL:Proszę wprowadzić nazwę użytkownika i hasło
 auth_dialog.desc:HU:Írja be a felhasználónevet és a jelszót
@@ -6576,7 +6591,7 @@ auth_dialog.store_credentials:EN:Store login and password (weak encryption)
 auth_dialog.store_credentials:FR:Sauver les identifiants (encryption faible)
 auth_dialog.store_credentials:SI:Shrani uporabniško ime in geslo (nizka enkripcija)
 auth_dialog.store_credentials:IT:Memorizza login e password (weak encryption)
-auth_dialog.store_credentials:CS:Uložit uživatelské jméno a heslo (slabé šifrování)
+auth_dialog.store_credentials:CS:Uložit přihlašovací jméno a heslo (slabé šifrování)
 auth_dialog.store_credentials:zh_TW:儲存登入帳號及密碼(僅作簡易加密)
 auth_dialog.store_credentials:DE:Speichere Login und Passwort (schwach verschlüsselt)
 auth_dialog.store_credentials:RO:Salvează numele de utilizator și parola (protecție redusă)
@@ -6775,7 +6790,7 @@ file_viewer.large_file_warning:EN:This file may be too large for this operation.
 file_viewer.large_file_warning:FR:Ce fichier est peut-être trop large pour cette operation.
 file_viewer.large_file_warning:DE:Diese Datei könnte für diese Operation zu groß sein.
 file_viewer.large_file_warning:ES:Este fichero puede que sea demasiado largo para llevar a cabo la operación.
-file_viewer.large_file_warning:CS:Tento soubor může být příliš velký pro tuto operaci.
+file_viewer.large_file_warning:CS:Vybraný soubor může být příliš velký pro tuto operaci.
 file_viewer.large_file_warning:zh_TW:檔案可能太大而無法進行此操作
 file_viewer.large_file_warning:PL:Wybrany plik może być zbyt duży dla tej operacji.
 file_viewer.large_file_warning:HU:Ez a fájl túl nagy lehet ehhez a művelethez.
@@ -6816,7 +6831,7 @@ text_viewer.edit:EN:Edit
 text_viewer.edit:FR:Edition
 text_viewer.edit:DE:Bearbeiten
 text_viewer.edit:ES:Editar
-text_viewer.edit:CS:Editovat
+text_viewer.edit:CS:Upravit
 text_viewer.edit:zh_TW:編輯
 text_viewer.edit:PL:Edytuj
 text_viewer.edit:HU:Módosít
@@ -6934,7 +6949,7 @@ file_editor.edit_error_title:EN:Edit error
 file_editor.edit_error_title:FR:Erreur d'édition
 file_editor.edit_error_title:DE:Fehler beim Bearbeiten
 file_editor.edit_error_title:ES:Error al editar
-file_editor.edit_error_title:CS:Chyba editace
+file_editor.edit_error_title:CS:Chyba při provádění úprav
 file_editor.edit_error_title:zh_TW:編輯錯誤
 file_editor.edit_error_title:PL:Błąd edycji
 file_editor.edit_error_title:HU:Módosítási hiba
@@ -6952,7 +6967,7 @@ file_editor.edit_error:EN:Unable to edit file.
 file_editor.edit_error:FR:Impossible d'éditer le fichier.
 file_editor.edit_error:DE:Kann Datei nicht bearbeiten.
 file_editor.edit_error:ES:Imposible editar el fichero.
-file_editor.edit_error:CS:Soubor nelze editovat.
+file_editor.edit_error:CS:Soubor nelze upravovat.
 file_editor.edit_error:zh_TW:無法編輯檔案
 file_editor.edit_error:PL:Błąd edycji pliku.
 file_editor.edit_error:HU:A fájl módosítása nem lehetséges.
@@ -7197,7 +7212,7 @@ shortcuts_dialog.quick_search.cancel_search:FR:Annuler la recherche rapide
 shortcuts_dialog.quick_search.cancel_search:RO:Anulează căutarea rapidă
 shortcuts_dialog.quick_search.cancel_search:SI:Prekliči hitro iskanje
 shortcuts_dialog.quick_search.cancel_search:IT:Annullare ricerca rapida
-shortcuts_dialog.quick_search.cancel_search:CS:Přerušit rychlé hledání
+shortcuts_dialog.quick_search.cancel_search:CS:Ukončit rychlé hledání
 shortcuts_dialog.quick_search.cancel_search:zh_TW:取消快速搜尋
 shortcuts_dialog.quick_search.cancel_search:DE:Schnellsuche abbrechen
 shortcuts_dialog.quick_search.cancel_search:zh_CN:取消快速搜索
@@ -7318,6 +7333,7 @@ theme_editor.title:SK:Editor témy
 theme_editor.title:SI:Urejevalnik tem
 theme_editor.title:RU:Редактор темы
 theme_editor.title:DE:Thema-Editor
+theme_editor.title:CS:Editor témat
 # Translation missing
 
 
@@ -7337,6 +7353,7 @@ theme_editor.folder_tab:SK:Sekcia s priečinkom
 theme_editor.folder_tab:SI:Vrstica z mapami
 theme_editor.folder_tab:RU:Панель каталога
 theme_editor.folder_tab:DE:Ordnerbereich
+theme_editor.folder_tab:CS:Panely souborů
 # Translation missing
 
 
@@ -7357,6 +7374,7 @@ theme_editor.shell_tab:SK:Príkazový riadok
 theme_editor.shell_tab:SI:Ogrodje
 theme_editor.shell_tab:RU:Оболочка
 theme_editor.shell_tab:DE:Kommandozeile
+theme_editor.shell_tab:CS:Shell
 # Translation missing
 
 
@@ -7376,6 +7394,7 @@ theme_editor.statusbar_tab:SK:Stavový riadok
 theme_editor.statusbar_tab:SI:Statusna vrstica
 theme_editor.statusbar_tab:RU:Строка состояния
 theme_editor.statusbar_tab:DE:Statuszeile
+theme_editor.statusbar_tab:CS:Stavový řádek
 # Translation missing
 
 
@@ -7394,6 +7413,7 @@ theme_editor.free_space:SK:Voľné miesto (%1)
 theme_editor.free_space:SI:Nezaseden prostor (%1)
 theme_editor.free_space:RU:Свободное место (%1)
 theme_editor.free_space:DE:Free Speicher (%1)
+theme_editor.free_space:CS:Volné místo (%1)
 # Translation missing
 
 
@@ -7413,6 +7433,7 @@ theme_editor.free_space.ok:SK:OK
 theme_editor.free_space.ok:SI:OK
 theme_editor.free_space.ok:RU:OK
 theme_editor.free_space.ok:DE:OK
+theme_editor.free_space.ok:CS:OK
 # Translation missing
 
 
@@ -7432,6 +7453,7 @@ theme_editor.free_space.warning:SK:Varovné
 theme_editor.free_space.warning:SI:Opozorilo
 theme_editor.free_space.warning:RU:Заканчивается
 theme_editor.free_space.warning:DE:Warnung
+theme_editor.free_space.warning:CS:Upozornění
 # Translation missing
 
 
@@ -7451,6 +7473,7 @@ theme_editor.free_space.critical:SK:Kritické
 theme_editor.free_space.critical:SI:Kritično
 theme_editor.free_space.critical:RU:Очень мало
 theme_editor.free_space.critical:DE:Kritisch
+theme_editor.free_space.critical:CS:Kritické
 # Translation missing
 
 
@@ -7471,6 +7494,7 @@ theme_editor.locationbar_tab:SK:Panel s umiestnením
 theme_editor.locationbar_tab:SI:Lokacijska vrstica
 theme_editor.locationbar_tab:RU:Указатель местонахождения
 theme_editor.locationbar_tab:DE:Bereich aktueller Ordner
+theme_editor.locationbar_tab:CS:Adresní řádek
 # Translation missing
 
 
@@ -7489,6 +7513,7 @@ theme_editor.editor_tab:SK:Editor súboru
 theme_editor.editor_tab:SI:Urejevalnik datotek
 theme_editor.editor_tab:RU:Редактор файлов
 theme_editor.editor_tab:DE:Dateieditor
+theme_editor.editor_tab:CS:Editor souborů
 # Translation missing
 
 
@@ -7526,6 +7551,7 @@ theme_editor.shell_font:SK:Písmo príkazového riadku
 theme_editor.shell_font:SI:Pisava ogrodja
 theme_editor.shell_font:RU:Шрифт в оболочке
 theme_editor.shell_font:DE:Kommandozeilen-Zeichensatz
+theme_editor.shell_font:CS:Písmo shellu
 # Translation missing
 
 
@@ -7546,6 +7572,7 @@ theme_editor.history_font:SK:Písmo histórie
 theme_editor.history_font:SI:Pisava zgodovine
 theme_editor.history_font:RU:Шрифт буфера команд
 theme_editor.history_font:DE:Historien-Zeichensatz
+theme_editor.history_font:CS:Písmo historie
 # Translation missing
 
 
@@ -7562,7 +7589,7 @@ theme_editor.theme_warning:EN:This will overwrite the custom theme. Do you wish 
 theme_editor.theme_warning:FR:Cette opération va modifier le thème personnalisé. Voulez-vous continuer?
 theme_editor.theme_warning:SI:To bo prepisalo običajno temo. Želite nadaljevati?
 theme_editor.theme_warning:IT:Questa operazione sovrascrive il tema utente. Procedere ?
-theme_editor.theme_warning:CS:Operace přepíše uživatelské téma. Opravdu chcete pokračovat?
+theme_editor.theme_warning:CS:Operace přepíše vlastní téma uživatele. Opravdu chcete pokračovat?
 theme_editor.theme_warning:zh_TW:這將會覆蓋自訂的佈景主題. 確定要繼續?
 theme_editor.theme_warning:DE:Dies überschreibt ein angepasstes Thema. Wollen Sie fortfahren?
 theme_editor.theme_warning:RO:Această operație va suprascrie o temă personalizată. Doriți să continuați?
@@ -7591,6 +7618,7 @@ theme_editor.could_not_save_theme:SK:Nie je možné zapísať tému %1
 theme_editor.could_not_save_theme:SI:Ne morem zapisati teme %1
 theme_editor.could_not_save_theme:RU:Не удается сохранить тему %1
 theme_editor.could_not_save_theme:DE:Kann Thema %1 nicht schreiben
+theme_editor.could_not_save_theme:CS:Nelze uložit téma %1
 # Translation missing
 
 
@@ -7611,6 +7639,7 @@ theme_editor.border:SK:Rám
 theme_editor.border:SI:Okvir
 theme_editor.border:RU:Рамка
 theme_editor.border:DE:Rand
+theme_editor.border:CS:Ohraničení
 # Translation missing
 
 
@@ -7652,6 +7681,7 @@ theme_editor.unfocused_background:SK:Pozadie (neaktívne)
 theme_editor.unfocused_background:SI:Ozadje 
 theme_editor.unfocused_background:RU:Фон (без фокуса)
 theme_editor.unfocused_background:DE:Hintergrund (ohne Fokus)
+theme_editor.unfocused_background:CS:Pozadí (bez fokusu)
 # Translation missing
 
 
@@ -7678,6 +7708,7 @@ theme_editor.quick_search.unmatched_file:SK:Jedinečný súbor
 theme_editor.quick_search.unmatched_file:SI:Neustrezna datoteka
 theme_editor.quick_search.unmatched_file:RU:Несовпадающие файлы
 theme_editor.quick_search.unmatched_file:DE:Nichtpassende Datei
+theme_editor.quick_search.unmatched_file:CS:Nevyhovující soubor
 # Translation missing
 
 
@@ -7704,6 +7735,7 @@ theme_editor.text:SK:Text
 theme_editor.text:SI:Pisava
 theme_editor.text:RU:Текст
 theme_editor.text:DE:Text
+theme_editor.text:CS:Text
 # Translation missing
 
 
@@ -7725,6 +7757,7 @@ theme_editor.progress:SK:Priebeh
 theme_editor.progress:SI:Napredek
 theme_editor.progress:RU:Индикатор выполнения
 theme_editor.progress:DE:Fortschritt
+theme_editor.progress:CS:Průběh
 # Translation missing
 
 
@@ -7748,6 +7781,7 @@ theme_editor.normal:SK:Bežný
 theme_editor.normal:SI:Normalno
 theme_editor.normal:RU:Обычный
 theme_editor.normal:DE:Normal
+theme_editor*normal:CS:Normální
 # Translation missing
 
 
@@ -7771,6 +7805,7 @@ theme_editor.normal_unfocused:SK:Bežný (neaktívny)
 theme_editor.normal_unfocused:SI:Normalno (without focus)
 theme_editor.normal_unfocused:RU:Обычный (без фокуса)
 theme_editor.normal_unfocused:DE:Normal (ohne Fokus)
+theme_editor.normal_unfocused:CS:Normální (bez fokusu)
 # Translation missing
 
 
@@ -7794,6 +7829,7 @@ theme_editor.selected:SK:Vybraný
 theme_editor.selected:SI:Izbrano
 theme_editor.selected:RU:Выбранный
 theme_editor.selected:DE:Ausgewählt
+theme_editor.selected:CS:Výběr
 # Translation missing
 
 
@@ -7816,6 +7852,7 @@ theme_editor.selected_unfocused:SK:Vybraný (neaktívny)
 theme_editor.selected_unfocused:SI:Izbrano (without focus)
 theme_editor.selected_unfocused:RU:Выбраный (без фокуса)
 theme_editor.selected_unfocused:DE:Ausgewählt (ohne Fokus)
+theme_editor.selected_unfocused:CS:Výběr (bez fokusu)
 # Translation missing
 
 
@@ -7839,6 +7876,7 @@ theme_editor.color:SK:Farba
 theme_editor.color:SI:Barva
 theme_editor.color:RU:Цвет
 theme_editor.color:DE:Farbe
+theme_editor.color:CS:Barva
 # Translation missing
 
 
@@ -7865,6 +7903,7 @@ theme_editor.colors:SK:Farby
 theme_editor.colors:SI:Barve
 theme_editor.colors:RU:Цвета
 theme_editor.colors:DE:Farben
+theme_editor.colors:CS:Barvy
 # Translation missing
 
 
@@ -7909,6 +7948,7 @@ theme_editor.history_colors:SK:Farba histórie
 theme_editor.history_colors:SI:Barve v menuju Zgodovina
 theme_editor.history_colors:RU:Цвета буфера команд
 theme_editor.history_colors:DE:Historienfarbe
+theme_editor.history_colors:CS:Barvy historie
 # Translation missing
 
 
@@ -8766,6 +8806,7 @@ prefs_dialog.import_theme:SK:Import témy
 prefs_dialog.import_theme:SI:Uvoz teme
 prefs_dialog.import_theme:RU:Импортировать тему
 prefs_dialog.import_theme:DE:Thema importieren
+prefs_dialog.import_theme:CS:Importovat téma
 # Translation missing
 
 
@@ -8788,6 +8829,7 @@ prefs_dialog.error_in_import:SK:Chyba pri importovaní témy %1.
 prefs_dialog.error_in_import:SI:Napaka pri uvozu teme %1.
 prefs_dialog.error_in_import:RU:Ошибка при импорте темы %1.
 prefs_dialog.error_in_import:DE:Fehler beim Import von Thema %1.
+prefs_dialog.error_in_import:CS:Chyba při importu tématu %1.
 # Translation missing
 
 
@@ -8810,6 +8852,7 @@ prefs_dialog.cannot_read_theme:SK:Téma %1 sa nedá načítať
 prefs_dialog.cannot_read_theme:SI:Ne morem naložiti teme iz datoteke %1
 prefs_dialog.cannot_read_theme:RU:Не удается загрузить тему из файла %1
 prefs_dialog.cannot_read_theme:DE:Kann Thema nicht aus Datei %1 laden
+prefs_dialog.cannot_read_theme:CS:Nelze načíst téma ze souboru %1
 # Translation missing
 
 
@@ -8833,6 +8876,7 @@ prefs_dialog.export_theme:SK:Export %1
 prefs_dialog.export_theme:SI:Izvoz %1
 prefs_dialog.export_theme:RU:Экспорт %1
 prefs_dialog.export_theme:DE:Exportiere %1
+prefs_dialog.export_theme:CS:Exportovat %1
 # Translation missing
 
 
@@ -8853,6 +8897,7 @@ prefs_dialog.import:SK:Import
 prefs_dialog.import:SI:Uvoz
 prefs_dialog.import:RU:Импорт
 prefs_dialog.import:DE:Import
+prefs_dialog.import:CS:Importovat
 # Translation missing
 
 
@@ -8872,6 +8917,7 @@ prefs_dialog.export:SK:Export
 prefs_dialog.export:SI:Izvoz
 prefs_dialog.export:RU:Экспорт
 prefs_dialog.export:DE:Export
+prefs_dialog.export:CS:Exportovat
 # Translation missing
 
 
@@ -8893,6 +8939,7 @@ prefs_dialog.theme_type:SK:Typ: %1
 prefs_dialog.theme_type:SI:Vrsta: %1
 prefs_dialog.theme_type:RU:Тип: %1
 prefs_dialog.theme_type:DE:Typ: %1
+prefs_dialog.theme_type:CS:Typ: %1
 # Translation missing
 
 
@@ -8913,6 +8960,7 @@ prefs_dialog.delete_theme:SK:Natrvalo odstrániť tému %1 ?
 prefs_dialog.delete_theme:SI:Trajno izbrišem temo %1?
 prefs_dialog.delete_theme:RU:Удалить тему %1 полностью?
 prefs_dialog.delete_theme:DE:Thema %1 unwiderruflich löschen ?
+prefs_dialog.delete_theme:CS:Chcete trvale smazat téma %1 ?
 # Translation missing
 
 
@@ -8933,6 +8981,7 @@ prefs_dialog.rename_failed:SK:Chyba pri premenovaní témy %1
 prefs_dialog.rename_failed:SI:Ne morem preimenovati teme %1
 prefs_dialog.rename_failed:RU:Не удалось переименовать тему %1
 prefs_dialog.rename_failed:DE:Fehler beim Umbenennen von Thema %1
+prefs_dialog.rename_failed:CS:Nepodařilo se přejmenovat téma %1
 # Translation missing
 
 
@@ -8955,6 +9004,7 @@ prefs_dialog.xml_file:SK:XML súbor
 prefs_dialog.xml_file:SI:XML datoteka
 prefs_dialog.xml_file:RU:XML-файл
 prefs_dialog.xml_file:DE:XML-Datei
+prefs_dialog.xml_file:CS:Soubor XML
 # Translation missing
 
 
@@ -9138,7 +9188,7 @@ prefs_dialog.custom_shell:FR:Utiliser un shell spécifique
 prefs_dialog.custom_shell:RO:Folosește un shell anume
 prefs_dialog.custom_shell:SI:Uporabi izvajanje ukazov po meri
 prefs_dialog.custom_shell:IT:Usa il terminale utente
-prefs_dialog.custom_shell:CS:Použít jiný shell
+prefs_dialog.custom_shell:CS:Použít vlastní shell
 prefs_dialog.custom_shell:zh_TW:使用自訂 shell
 prefs_dialog.custom_shell:DE:Benutze angepasste Eingabeaufforderung
 prefs_dialog.custom_shell:zh_CN:使用定制 shell
@@ -9184,6 +9234,7 @@ prefs_dialog.enable_system_notifications:pt_BR:Ativar notificações do sistema
 prefs_dialog.enable_system_notifications:SI:Omogoči sistemska opozorila
 prefs_dialog.enable_system_notifications:RU:Разрешить системные уведомления
 prefs_dialog.enable_system_notifications:DE:System-Nachrichten einschalten
+prefs_dialog.enable_system_notifications:CS:Zobrazovat oznámení systému
 # Translation missing
 
 
@@ -9203,7 +9254,7 @@ unit.byte:EN:byte
 unit.byte:FR:octet
 unit.byte:DE:Byte
 unit.byte:ES:byte
-unit.byte:CS:bajt
+unit.byte:CS: bajt
 unit.byte:zh_TW:byte
 unit.byte:PL:bajt
 unit.byte:HU:bájt
@@ -9221,7 +9272,7 @@ unit.bytes:EN:bytes
 unit.bytes:FR:octets
 unit.bytes:DE:Bytes
 unit.bytes:ES:bytes
-unit.bytes:CS:bajtů
+unit.bytes:CS: bajtů
 unit.bytes:zh_TW:bytes
 unit.bytes:PL:bajty
 unit.bytes:HU:bájt
@@ -9239,7 +9290,7 @@ unit.bytes_short:EN:b
 unit.bytes_short:FR:o
 unit.bytes_short:DE:B
 unit.bytes_short:ES:b
-unit.bytes_short:CS:b
+unit.bytes_short:CS: b
 unit.bytes_short:zh_TW:b
 unit.bytes_short:PL:b
 unit.bytes_short:HU:b
@@ -9257,7 +9308,7 @@ unit.kb:EN:KB
 unit.kb:FR:Ko
 unit.kb:DE:KB
 unit.kb:ES:KB
-unit.kb:CS:KB
+unit.kb:CS: KB
 unit.kb:zh_TW:KB
 unit.kb:PL:KB
 unit.kb:HU:KB
@@ -9275,7 +9326,7 @@ unit.mb:EN:MB
 unit.mb:FR:Mo
 unit.mb:DE:MB
 unit.mb:ES:MB
-unit.mb:CS:MB
+unit.mb:CS: MB
 unit.mb:zh_TW:MB
 unit.mb:PL:MB
 unit.mb:HU:MB
@@ -9293,7 +9344,7 @@ unit.gb:EN:GB
 unit.gb:FR:Go
 unit.gb:DE:GB
 unit.gb:ES:GB
-unit.gb:CS:GB
+unit.gb:CS: GB
 unit.gb:zh_TW:GB
 unit.gb:PL:GB
 unit.gb:HU:GB
@@ -9311,7 +9362,7 @@ unit.tb:EN:TB
 unit.tb:FR:To
 unit.tb:DE:TB
 unit.tb:ES:TB
-unit.tb:CS:TB
+unit.tb:CS: TB
 unit.tb:zh_TW:TB
 unit.tb:PL:TB
 unit.tb:HU:TB
@@ -9352,7 +9403,7 @@ duration.seconds:EN:%1s
 duration.seconds:FR:%1s
 duration.seconds:SI:%1s
 duration.seconds:IT:%1s
-duration.seconds:CS:%1s
+duration.seconds:CS:%1 sek
 duration.seconds:zh_TW:%1s
 duration.seconds:DE:%1Sek
 duration.seconds:RO:%1s
@@ -9370,7 +9421,7 @@ duration.minutes:EN:%1m
 duration.minutes:FR:%1m
 duration.minutes:SI:%1min
 duration.minutes:IT:%1m
-duration.minutes:CS:%1m
+duration.minutes:CS:%1 min
 duration.minutes:zh_TW:%1m
 duration.minutes:DE:%1M
 duration.minutes:RO:%1m
@@ -9388,7 +9439,7 @@ duration.hours:EN:%1h
 duration.hours:FR:%1h
 duration.hours:SI:%1h
 duration.hours:IT:%1h
-duration.hours:CS:%1h
+duration.hours:CS:%1 hod
 duration.hours:zh_TW:%1h
 duration.hours:DE:%1S
 duration.hours:RO:%1h
@@ -9406,7 +9457,7 @@ duration.days:EN:%1d
 duration.days:FR:%1j
 duration.days:SI:%1d
 duration.days:IT:%1g
-duration.days:CS:%1d
+duration.days:CS:%1 d
 duration.days:zh_TW:%1d
 duration.days:DE:%1T
 duration.days:RO:%1z
@@ -9424,7 +9475,7 @@ duration.months:EN:%1mo
 duration.months:FR:%1mo
 duration.months:SI:%1m
 duration.months:IT:%1me
-duration.months:CS:%1měs.
+duration.months:CS:%1 měs
 duration.months:zh_TW:%1mo
 duration.months:DE:%1M
 duration.months:RO:%1l
@@ -9442,7 +9493,7 @@ duration.years:EN:%1y
 duration.years:FR:%1a
 duration.years:SI:%1l
 duration.years:IT:%1a
-duration.years:CS:%1let
+duration.years:CS:%1 let
 duration.years:zh_TW:%1y
 duration.years:DE:%1J
 duration.years:RO:%1a
@@ -9471,7 +9522,7 @@ theme.custom_theme:zh_TW:自訂佈景主題
 theme.custom_theme:DE:Angepasstes Thema
 theme.custom_theme:RO:Temă personalizată
 theme.custom_theme:IT:Tema utente
-theme.custom_theme:CS:Uživatelské téma
+theme.custom_theme:CS:Vlastní téma
 theme.custom_theme:zh_CN:定制的主题
 theme.custom_theme:ES:Tema personalizado
 theme.custom_theme:PL:Temat użytkownika
@@ -9503,6 +9554,7 @@ theme.custom:SK:Prispôsobená
 theme.custom:SI:Prirejeno
 theme.custom:RU:Пользовательская тема
 theme.custom:DE:Angepasst
+theme.custom:CS:Vlastní
 # Translation missing
 
 
@@ -9526,6 +9578,7 @@ theme.built_in:SK:Vstavaná
 theme.built_in:SI:Vgrajeno
 theme.built_in:RU:Встроенная
 theme.built_in:DE:Eingebaut
+theme.built_in:CS:Vestavěné
 # Translation missing
 
 
@@ -9549,6 +9602,7 @@ theme.add_on:SK:Prídavná
 theme.add_on:SI:Dodatek
 theme.add_on:RU:Дополнение
 theme.add_on:DE:Zusatz
+theme.add_on:CS:Doplněk
 # Translation missing
 
 
@@ -9572,6 +9626,7 @@ theme.current:SK:aktuálna
 theme.current:SI:Trenutno
 theme.current:RU:текущая
 theme.current:DE:aktuell
+theme.current:CS:stávající
 # Translation missing
 
 
@@ -9773,6 +9828,7 @@ color_chooser.red:SK:Červená
 color_chooser.red:SI:Rdeča
 color_chooser.red:RU:Красный
 color_chooser.red:DE:Rot
+color_chooser.red:CS:Červená
 # Translation missing
 
 
@@ -9793,6 +9849,7 @@ color_chooser.green:SK:Zelená
 color_chooser.green:SI:Zelena
 color_chooser.green:RU:Зеленый
 color_chooser.green:DE:Grün
+color_chooser.green:CS:Zelená
 # Translation missing
 
 
@@ -9814,6 +9871,7 @@ color_chooser.blue:SK:Modrá
 color_chooser.blue:SI:Modra
 color_chooser.blue:RU:Синий
 color_chooser.blue:DE:Blau
+color_chooser.blue:CS:Modrá
 # Translation missing
 
 
@@ -9835,6 +9893,7 @@ color_chooser.hue:SK:Hue
 color_chooser.hue:SI:Odtenek
 color_chooser.hue:RU:Оттенок
 color_chooser.hue:DE:Farbton
+color_chooser.hue:CS:Odstín
 # Translation missing
 
 
@@ -9856,6 +9915,7 @@ color_chooser.brightness:SK:Jas
 color_chooser.brightness:SI:Svetlost
 color_chooser.brightness:RU:Яркость
 color_chooser.brightness:DE:Helligkeit
+color_chooser.brightness:CS:Jas
 # Translation missing
 
 
@@ -9876,6 +9936,7 @@ color_chooser.swatches:SK:Vzorka
 color_chooser.swatches:SI:Swatches
 color_chooser.swatches:RU:Образцы
 color_chooser.swatches:DE:Muster
+color_chooser.swatches:CS:Barevný mixér
 # Translation missing
 
 
@@ -9896,6 +9957,7 @@ color_chooser.saturation:SK:Sýtosť
 color_chooser.saturation:SI:Zasičenost
 color_chooser.saturation:RU:Насыщенность
 color_chooser.saturation:DE:Sättigung
+color_chooser.saturation:CS:Sytost
 # Translation missing
 
 
@@ -9917,6 +9979,7 @@ color_chooser.rgb:SK:RGB
 color_chooser.rgb:SI:RGB
 color_chooser.rgb:RU:RGB
 color_chooser.rgb:DE:RGB
+color_chooser.rgb:CS:RGB
 # Translation missing
 
 
@@ -9939,6 +10002,7 @@ color_chooser.hsb:SK:HSB
 color_chooser.hsb:SI:HSB
 color_chooser.hsb:RU:HSB
 color_chooser.hsb:DE:HSB
+color_chooser.hsb:CS:HSB
 # Translation missing
 
 
@@ -9960,6 +10024,7 @@ color_chooser.recent:SK:Naposledy použité
 color_chooser.recent:SI:Nedaven
 color_chooser.recent:RU:Предыдущий
 color_chooser.recent:DE:Bisherige
+color_chooser.recent:CS:Poslední použité
 # Translation missing
 
 
@@ -9982,6 +10047,7 @@ color_chooser.alpha:SK:Alpha priehľadnosť
 color_chooser.alpha:SI:Alfa prepustnost
 color_chooser.alpha:RU:Прозрачность
 color_chooser.alpha:DE:Alpha-Transparenz
+color_chooser.alpha:CS:Průhlednost alfa
 # Translation missing
 
 
