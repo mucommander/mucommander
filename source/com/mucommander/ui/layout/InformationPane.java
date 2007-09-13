@@ -179,7 +179,7 @@ public class InformationPane extends JPanel {
     }
 
     /**
-     * Changes the icon displayed in this InformationPane to the given one. If <code>mull</code> is specified, this
+     * Changes the icon displayed in this InformationPane to the given one. If <code>null</code> is specified, this
      * InformationPane will not display any icon.
      *
      * @param icon the new icon to display, null for no icon
@@ -193,7 +193,7 @@ public class InformationPane extends JPanel {
         }
         else {
             if(iconLabel==null) {
-                iconLabel = new JLabel();
+                iconLabel = new JLabel(" ");
                 add(iconLabel, BorderLayout.WEST);
             }
 
