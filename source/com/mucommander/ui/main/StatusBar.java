@@ -42,6 +42,7 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.image.BufferedImage;
 
 
 /**
@@ -288,9 +289,20 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
      */
     public void setStatusInfo(String text, Icon icon, boolean iconBeforeText) {
         selectedFilesLabel.setText(text);
+
+        if(icon==null) {
+            // What we don't want here is the label's height to change depending on whether it has an icon or not.
+            // This would result in having to revalidate the status bar and in turn the whole MainFrame.
+            // A label's height is roughly the max of the text's font height and the icon (if any). So if there is no
+            // icon for the label, we use a transparent image for padding in case the text's font height is smaller
+            // than a 'standard' (16x16) icon. This ensures that the label's height remains constant.
+            BufferedImage bi = new BufferedImage(1, 16, BufferedImage.TYPE_INT_ARGB);
+            icon = new ImageIcon(bi);
+        }
         selectedFilesLabel.setIcon(icon);
-        if(icon!=null)
-            selectedFilesLabel.setHorizontalTextPosition(iconBeforeText?JLabel.TRAILING:JLabel.LEADING);
+
+        selectedFilesLabel.setHorizontalTextPosition(iconBeforeText?JLabel.TRAILING:JLabel.LEADING);
+
     }
 
 	
