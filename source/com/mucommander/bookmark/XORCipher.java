@@ -18,8 +18,8 @@
 
 package com.mucommander.bookmark;
 
-import com.mucommander.io.Base64InputStream;
-import com.mucommander.io.Base64OutputStream;
+import com.mucommander.io.base64.Base64Decoder;
+import com.mucommander.io.base64.Base64Encoder;
 
 import java.io.IOException;
 
@@ -80,7 +80,7 @@ public class XORCipher {
      * @return a XOR-Base64 encrypted String
      */
     public static String encryptXORBase64(String s) {
-        return Base64OutputStream.encode(xor(s));
+        return Base64Encoder.encode(xor(s));
     }
 
 
@@ -93,6 +93,6 @@ public class XORCipher {
      * @throws IOException if the given String is not properly Base64-encoded
      */
     public static String decryptXORBase64(String s) throws IOException {
-        return xor(Base64InputStream.decode(s));
+        return xor(Base64Decoder.decode(s));
     }
 }

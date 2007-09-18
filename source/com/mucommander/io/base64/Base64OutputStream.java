@@ -17,17 +17,18 @@
  */
 
 
-package com.mucommander.io;
+package com.mucommander.io.base64;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
 
 /**
- * This OuputStream allows to encode data in Base64.
+ * This <code>OuputStream</code> encodes supplied data to Base64 encoding and writes it to the underlying
+ * <code>OutputStream</code>.
  *
- * @author Maxence Bernard, Base64 comment description found on the net.
+ * @see Base64Encoder
+ * @author Maxence Bernard, with the exception of the Base64 description which was found on the Web.
  */
 public class Base64OutputStream extends OutputStream {
     /*
@@ -131,64 +132,11 @@ public class Base64OutputStream extends OutputStream {
         this.insertLineBreaks = insertLineBreaks;
     }
 
-
     /**
-     * Convenience method that encodes and returns the given String as a base64-encoded String.
-     * Returns <code>null</code> if there was an error encoding the String.
+     * Writes padding '=' characters to the underlying <code>OutputStream</code> if there currently is an
+     * unfinished 3-byte group. If it's not the case, then this method is a no-op.
      *
-     * @param s the String to encode as base64  
-     * @return the base64-encoded String, <code>null</code> if there was an error encoding the String
-     */
-    public static String encode(String s) {
-        ByteArrayOutputStream bout = new ByteArrayOutputStream();
-        Base64OutputStream out64 = new Base64OutputStream(bout, false);
-
-        try {
-            int len = s.length();
-            for(int i=0; i<len; i++)
-                out64.write(s.charAt(i));
-
-            out64.writePadding();
-
-            return new String(bout.toByteArray());
-        }
-        catch(IOException e) {
-            return null;
-        }
-        finally {
-            try { out64.close(); }
-            catch(IOException e) {}
-        }
-    }
-
-	
-    public void write(int i) throws IOException {
-        // We have a 3-byte group
-        if(nbBytesWaiting==2) {
-            // Write 3 bytes as 4 base64 characters
-            out.write(BASE64_ENCODING_TABLE[(byte)((byteAcc[0] & 0xFC) >> 2)]);
-            out.write(BASE64_ENCODING_TABLE[(byte)(((byteAcc[0] & 0x03) << 4) | ((byteAcc[1] & 0xF0) >> 4))]);
-            out.write(BASE64_ENCODING_TABLE[(byte)(((byteAcc[1] & 0x0F) << 2) | ((i & 0xC0) >> 6))]);
-            out.write(BASE64_ENCODING_TABLE[(byte)(i & 0x3F)]);
-
-            nbBytesWaiting = 0;
-
-            // Insert a line break after every 80 characters written
-            if (insertLineBreaks && (lineLength += 4) >= 76) {
-                out.write('\r');
-                out.write('\n');
-                lineLength = 0;
-            }
-        }
-        // Waiting for more bytes...
-        else {
-            byteAcc[nbBytesWaiting++] = (byte)i;
-        }
-    }
-
-	
-    /**
-     * Writes padding if there currently is an unfinished 3-byte group.
+     * @throws IOException if the padding characters could not be written to the underlying OutputStream.
      */
     public void writePadding() throws IOException {
         // No padding needed
@@ -214,9 +162,37 @@ public class Base64OutputStream extends OutputStream {
 
         // Just in case this method is called again
         nbBytesWaiting = 0;
-    }	
-	
-	
+    }
+
+
+    /////////////////////////////////
+    // OutputStream implementation //
+    /////////////////////////////////
+
+    public void write(int i) throws IOException {
+        // We have a 3-byte group
+        if(nbBytesWaiting==2) {
+            // Write 3 bytes as 4 base64 characters
+            out.write(BASE64_ENCODING_TABLE[(byte)((byteAcc[0] & 0xFC) >> 2)]);
+            out.write(BASE64_ENCODING_TABLE[(byte)(((byteAcc[0] & 0x03) << 4) | ((byteAcc[1] & 0xF0) >> 4))]);
+            out.write(BASE64_ENCODING_TABLE[(byte)(((byteAcc[1] & 0x0F) << 2) | ((i & 0xC0) >> 6))]);
+            out.write(BASE64_ENCODING_TABLE[(byte)(i & 0x3F)]);
+
+            nbBytesWaiting = 0;
+
+            // Insert a line break after every 80 characters written
+            if (insertLineBreaks && (lineLength += 4) >= 76) {
+                out.write('\r');
+                out.write('\n');
+                lineLength = 0;
+            }
+        }
+        // Waiting for more bytes...
+        else {
+            byteAcc[nbBytesWaiting++] = (byte)i;
+        }
+    }
+
     /**
      * Writes padding if necessary and closes the underlying stream.
      */
@@ -224,5 +200,4 @@ public class Base64OutputStream extends OutputStream {
         writePadding();
         out.close();
     }
-	
 }

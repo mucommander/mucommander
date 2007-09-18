@@ -23,9 +23,9 @@ import com.mucommander.auth.AuthException;
 import com.mucommander.auth.Credentials;
 import com.mucommander.file.*;
 import com.mucommander.file.util.PathTokenizer;
-import com.mucommander.io.Base64OutputStream;
 import com.mucommander.io.RandomAccessInputStream;
 import com.mucommander.io.RandomAccessOutputStream;
+import com.mucommander.io.base64.Base64Encoder;
 
 import java.io.*;
 import java.net.HttpURLConnection;
@@ -196,7 +196,7 @@ public class HTTPFile extends AbstractFile {
         if(credentials!=null)
             conn.setRequestProperty(
                 "Authorization",
-                "Basic "+ Base64OutputStream.encode(credentials.getLogin()+":"+credentials.getPassword())
+                "Basic "+ Base64Encoder.encode(credentials.getLogin()+":"+credentials.getPassword())
             );
 
         // Set user-agent header

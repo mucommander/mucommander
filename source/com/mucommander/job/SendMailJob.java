@@ -22,7 +22,7 @@ import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.MimeTypes;
 import com.mucommander.file.util.FileSet;
-import com.mucommander.io.Base64OutputStream;
+import com.mucommander.io.base64.Base64OutputStream;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;
