@@ -31,7 +31,7 @@ import com.mucommander.file.AbstractFile;
  * @see FileMonitor
  * @author Maxence Bernard
  */
-public interface FileChangeListener {
+public interface FileChangeListener extends FileMonitorConstants {
 
     /**
      * This method is called whenever a change in one or several attributes of the given file has changed. The

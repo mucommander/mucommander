@@ -25,10 +25,11 @@ import java.util.Iterator;
 import java.util.WeakHashMap;
 
 /**
- * FileMonitor allows to monitor a file and detect changes in the file's attributes and notify registered
+ * <code>FileMonitor</code> allows to monitor a file and detect changes in the file's attributes and notify registered
  * {@link FileChangeListener} listeners accordingly.
  *
- * <p>FileMonitor detects attributes changes by polling the file's attributes at a given frequency and comparing their
+ * <p>
+ * FileMonitor detects attributes changes by polling the file's attributes at a given frequency and comparing their
  * values with the previous ones. If any of the monitored attributes has changed, {@link FileChangeListener#fileChanged(AbstractFile, int)}
  * is called on each of the registered listeners to notify them of the file attributes that have changed.
  * <br>Here's the list of file attributes that can be monitored:
@@ -39,42 +40,21 @@ import java.util.WeakHashMap;
  *  <li>{@link #IS_DIRECTORY_ATTRIBUTE}
  *  <li>{@link #EXISTS_ATTRIBUTE}
  * </ul>
+ * </p>
  *
  * <p>The polling frequency is controlled by the poll period. This parameter determines how often the file's attributes
  * are checked. The lower this period is, the faster changes will be reported to listeners, but also the higher the
- * impact on I/O and CPU. This parameter should be carefully specified to avoid hogging resources excessively.
+ * impact on I/O and CPU. This parameter should be carefully specified to avoid hogging resources excessively.</p>
  *
  * <p>Note that FileMonitor uses file attributes polling because the Java API doesn't currently provide any better way
  * to do detect file changes. If Java ever does provide a callback mechanism for detecting file changes, this class
  * will be modified to take advantage of it. Another possible improvement would be to add JNI hooks for platform-specific
- * filesystem events such as 'inotify' (Linux Kernel), 'kqueue' (BSD, Mac OS X), PAM (Solaris), ...
+ * filesystem events such as 'inotify' (Linux Kernel), 'kqueue' (BSD, Mac OS X), PAM (Solaris), ...</p>
  *
  * @see FileChangeListener
  * @author Maxence Bernard
  */
-public class FileMonitor implements Runnable {
-
-    /** File date attribute, as returned by {@link AbstractFile#getDate()} */
-    public final static int DATE_ATTRIBUTE = 1;
-
-    /** File size attribute, as returned by {@link AbstractFile#getSize()} */
-    public final static int SIZE_ATTRIBUTE = 2;
-
-    /** File permissions attribute, as returned by {@link AbstractFile#getPermissions()} */
-    public final static int PERMISSIONS_ATTRIBUTE = 4;
-
-    /** File 'is directory' attribute, as returned by {@link AbstractFile#isDirectory()} */
-    public final static int IS_DIRECTORY_ATTRIBUTE = 8;
-
-    /** File 'exists' attribute, as returned by {@link AbstractFile#exists()} */
-    public final static int EXISTS_ATTRIBUTE = 16;
-
-    /** Default attribute set: DATE_ATTRIBUTE */
-    public final static int DEFAULT_ATTRIBUTES = DATE_ATTRIBUTE;
-
-    /** Default poll period in milliseconds */
-    public final static long DEFAULT_POLL_PERIOD = 10000;
-
+public class FileMonitor implements FileMonitorConstants, Runnable {
 
     /** Monitored file */
     private AbstractFile file;
@@ -85,6 +65,12 @@ public class FileMonitor implements Runnable {
 
     /** The thread that actually does the file attributes polling and event firing */
     private Thread monitorThread;
+
+    /**
+     * True once this monitor is ready to catch file changes, that is when the monitor thread has been started and
+     * initial file attributes have been fetched.
+     */
+    private boolean isInitialized;
 
     /** Registered FileChangeListener instances, stored as weak references */
     private WeakHashMap listeners = new WeakHashMap();
@@ -132,9 +118,10 @@ public class FileMonitor implements Runnable {
      * Creates a new FileMonitor that monitors the given file for changes, using the specified attribute set
      * and poll period.
      *
-     * <p>Note that monitoring will only start after {@link #startMonitoring()} has been called.
+     * <p>Note that monitoring will only start after {@link #startMonitoring()} has been called.</p>
      *
-     * <p>The following attributes can be monitored:
+     * <p>
+     * The following attributes can be monitored:
      * <ul>
      *  <li>{@link #DATE_ATTRIBUTE}
      *  <li>{@link #SIZE_ATTRIBUTE}
@@ -143,12 +130,15 @@ public class FileMonitor implements Runnable {
      *  <li>{@link #EXISTS_ATTRIBUTE}
      * </ul>
      * Several attributes can be specified by combining them with the binary OR operator.
+     * </p>
      *
-     * <p>The poll period specified in the constructor determines how often the file's attributes will be checked.
+     * <p>
+     * The poll period specified in the constructor determines how often the file's attributes will be checked.
      * The lower this period is, the faster changes will be reported to registered listeners, but also the higher the
      * impact on I/O and CPU.
      * <br>Note that the time spent for polling is taken into account for the poll period. For example, if the poll
      * period is 1000ms, and polling the file's attributes took 50ms, the next poll will happen in 950ms.
+     * </p>
      *
      * @param file the AbstractFile to monitor for changes
      * @param attributes the set of attributes to monitor, see constant fields for a list of possible attributes
@@ -190,32 +180,45 @@ public class FileMonitor implements Runnable {
      * <p>Once started, the monitoring thread will check for changes in the monitored file attributes specified in
      * the constructor, and call registered {@link FileChangeListener} instances whenever a change in one or several
      * attributes has been detected. The poll period specified in the constructor determines how often the file's
-     * attributes will be checked.
+     * attributes will be checked.</p>
      *
-     * <p>Monitoring will keep monitoring the file until {@link #stopMonitoring()} is called, even if the monitored
-     * file doesn't exist anymore. Thus, it is important not to forget to call {@link #stopMonitoring()} when monitoring
-     * is not needed anymore, in order to prevent unnecessary resource hogging.
+     * <p>This method waits until the thread is started effectively and the monitor is ready to monitor file changes.
+     * This guarantees that all changes made to the monitored file after this method returns will be caught and properly
+     * reported to listeners.</p>
+     *
+     * <p><code>FileMonitor</code> will keep monitoring the file until {@link #stopMonitoring()} is called, even if the
+     * monitored file doesn't exist anymore. Thus, it is important not to forget to call {@link #stopMonitoring()} when
+     * monitoring is not needed anymore, in order to prevent unnecessary resource hogging.</p>
      */
-    public void startMonitoring() {
-        // No synchronization performed here so if this method is called multiple times simultaneously from different
-        // threads, bad things can occur.
+    public synchronized void startMonitoring() {
         if(monitorThread ==null) {
             monitorThread = new Thread(this);
             monitorThread.start();
+
+            isInitialized = false;
+            // Wait until the thread has been started and initial file attributes have been fetched
+            while(!isInitialized) {
+                try {
+                    wait();     // run() will notify when initialization is complete
+                }
+                catch(InterruptedException e) {}
+            }
         }
     }
 
     /**
      * Stops monitoring the monitored file. Does nothing if monitoring has not yet been started.
      */
-    public void stopMonitoring() {
+    public synchronized void stopMonitoring() {
         monitorThread = null;
     }
 
     /**
-     * Returns <code>true</code> if FileMonitor is currently monitoring the file.
+     * Returns <code>true</code> if this FileMonitor is currently monitoring the file.
+     *
+     * @return true if this FileMonitor is currently monitoring the file.
      */
-    public boolean isMonitoring() {
+    public synchronized boolean isMonitoring() {
         return monitorThread!=null;
     }
 
@@ -246,8 +249,14 @@ public class FileMonitor implements Runnable {
         long lastDate = (attributes&DATE_ATTRIBUTE)!=0?file.getDate():0;
         long lastSize = (attributes&SIZE_ATTRIBUTE)!=0?file.getSize():0;
         int lastPermissions = (attributes&PERMISSIONS_ATTRIBUTE)!=0?file.getPermissions():0;
-        boolean lastIsDirectory = (attributes&IS_DIRECTORY_ATTRIBUTE)!=0?file.isDirectory():false;
-        boolean lastExists = (attributes&EXISTS_ATTRIBUTE)!=0?file.exists():false;
+        boolean lastIsDirectory = (attributes&IS_DIRECTORY_ATTRIBUTE)!=0 && file.isDirectory();
+        boolean lastExists = (attributes&EXISTS_ATTRIBUTE)!=0 && file.exists();
+
+        synchronized(this) {
+            // We are now ready to detect file changes, notify the thread that started this thread
+            isInitialized = true;
+            notify();
+        }
 
         long now;
         int changedAttributes;
