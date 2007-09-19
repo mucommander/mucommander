@@ -214,6 +214,30 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     </javac>
   </target>
 
+  <!-- Runs all JUnit test cases and halts if one test fails.  -->
+  <!-- Test cases are classes whose name ends with 'Test'.     -->
+  <!-- A summary of all test cases is printed to the standard  -->
+  <!-- Ant output and full reports are generated to disk       -->
+  <!-- in the ${junit.reports} folder.                         -->
+  <target name="unit-test" depends="load-junit,fail-junit,compile">
+  <echo>Running all JUnit test cases...</echo>
+  <mkdir dir="${junit.reports}"/>
+    <junit printsummary="yes" haltonfailure="yes">
+      <formatter type="plain"/>
+      <classpath>
+        <pathelement location="${classes.normal}"/>
+        <fileset dir="${lib}">
+          <include name="**/*.jar"/>
+        </fileset>
+      </classpath>
+      <batchtest fork="yes" todir="${junit.reports}">
+        <fileset dir="${classes.normal}">
+          <include name="**/*Test.class"/>
+        </fileset>
+      </batchtest>
+    </junit>
+  </target>
+
   <!-- Generates the application's uncompressed, unobfuscated  -->
   <!-- JAR file.                                               -->
   <!-- Output will be stored in {$jar.normal}.                 -->

@@ -79,6 +79,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <property name="classes.normal"      location="${tmp.compile}/classes/"/>
   <!-- Where to store the obfuscated bytecode.                 -->
   <property name="classes.obf"         location="${tmp.compile}/obf"/>
+    <!-- Folder where Junit test reports are generated.        -->
+  <property name="junit.reports"       location="${tmp}/test-reports"/>
   <property name="tmp.source"          location="${tmp}/source"/>
   <property name="doc.api"             location="${doc}/api"/>
   <property name="version-file"        location="${dist}/version.xml"/>

@@ -47,7 +47,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- = proGuard management ================================= -->
   <!-- ======================================================= -->
   <!-- The following targets are used to deal with proGuard,   -->
-  <!-- its availability and succesful loading.                 -->
+  <!-- its availability and successful loading.                -->
 
   <!-- Checks whether proGuard is available or not.            -->
   <!-- This is a helper target and should not be referenced    -->
@@ -57,6 +57,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <property name="proguard.lib" value="${tools}/proguard.jar"/>
 
     <!-- Checks for proGuard availability.                     -->
+    <!-- If proGuard is available, the ${proguard.available}   -->
+    <!-- property will be set to true.                         -->
     <condition property="proguard.available" value="true">
       <available classname="proguard.ant.ProGuardTask" classpath="${proguard.lib}"/>
     </condition>
@@ -64,12 +66,56 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
   <!-- Tries to load proGuard.                                 -->
-  <!-- If proGuard was succesfully loaded, property            -->
-  <!-- ${proguard.available} will be set to true.              -->
   <target name="load-proguard" depends="check-proguard" if="proguard.available">
     <taskdef name="proguard" classname="proguard.ant.ProGuardTask" classpath="${proguard.lib}"/>
   </target>
 
+
+  <!-- = JUnit loading ======================================= -->
+  <!-- ======================================================= -->
+  <!-- The JUnit Ant task comes bundled with Ant               -->
+  <!-- (ant-junit.jar) but requires the main JUnit package     -->
+  <!-- (junit.jar) which unfortunately is not bundled with Ant -->
+  <!-- and needs to be manually copied to $ANT_HOME/lib.       -->
+  <!-- Furthermore, 'junit.jar' cannot be copied elsewhere and -->
+  <!-- loaded separately, as both JAR files need to reside in  -->
+  <!-- Ant's boot classpath. More information about this here: -->
+  <!-- http://ant.apache.org/manual/OptionalTasks/junit.html . -->
+  <!--                                                         -->
+  <!-- The JUnit task of Ant 1.7.0 has improved in this        -->
+  <!-- department thanks to the <classpath> element. So the    -->
+  <!-- day Ant 1.7.0 becomes a minimum requirement, we'll be   -->
+  <!-- able to simplify this and use the 'junit.jar' file that -->
+  <!-- comes with muCommander.                                 -->
+
+  <!-- Checks if JUnit is available. The result is stored in   -->
+  <!-- ${junit.available}.                                     -->
+  <target name="check-junit">
+    <condition property="junit.available" value="true">
+      <!-- Test both Ant task and one of JUnit package         -->
+      <!-- framework classes.                                  -->
+      <and>
+        <available classname="org.apache.tools.ant.taskdefs.optional.junit.JUnitTask"/>
+        <available classname="junit.framework.Test"/>
+      </and>
+    </condition>
+  </target>
+
+  <!-- Halt if JUnit is not available and hints at a possible  -->
+  <!-- cause.                                                  -->
+  <target name="fail-junit" unless="junit.available">
+      <fail unless="junit.available">
+        JUnit could not be loaded. Verify that ${ant.home}lib/ contains both 'ant-junit.jar' (JUnit Ant task) and 'junit.jar' (JUnit package). The 'junit.jar' package can be found in ${lib}/.
+      </fail>
+  </target>
+
+  <!-- Tries to load the JUnit Ant task which comes bundled    -->
+  <!-- with Ant but requires the main JUnit package which      -->
+  <!-- unfortunately does not come with Ant and needs to be    -->
+  <!-- manually copied to $ANT_HOME/lib.                       -->
+  <target name="load-junit" depends="check-junit" if="junit.available">
+    <taskdef name="junit" classname="org.apache.tools.ant.taskdefs.optional.junit.JUnitTask"/>
+  </target>
 
 
   <!-- = 7za management ====================================== -->
