@@ -1,11 +1,11 @@
 ant-bzip2.jar	       -> from Ant 1.7.0 (compiled for Java 1.4)
-ant-tar.jar	       -> from Ant 1.7.0 (compiled for Java 1.4)
+ant-tar.jar	           -> from Ant 1.7.0 (compiled for Java 1.4)
 commons-logging.jar    -> Commons-logging (custom-made JAR, empty stubs)
 commons-net.jar	       -> Commons-net 1.4.1
 icu4j.jar              -> IBM ICU4J 3.6.1, trimmed to only include CharsetDetector
-j2ssh.jar	       -> J2SSH 0.2.7 (patched and compiled for Java 1.3)
+j2ssh.jar	           -> J2SSH 0.2.7 (patched and compiled for Java 1.3)
 jakarta-oro.jar	       -> Jakarta Oro 2.0.8
-jcifs.jar	       -> jCIFS 1.2.13 (compiled for Java 1.4 and patched to prevent NPE)
+jcifs.jar	           -> jCIFS 1.2.13 (compiled for Java 1.4 and patched to prevent NPE)
 jmdns.jar              -> jmdns 1.0 (with some sourceforge.net patches, compiled for Java 1.4)
 junit.jar              -> JUnit 4.4
 osx-cocoa.jar          -> Java-cocoa bridge provided by Apple under Mac OS X in the /System/Library/Java folder (deprecated).
