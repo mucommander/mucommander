@@ -316,41 +316,4 @@ public class FileMonitor implements FileMonitorConstants, Runnable {
             }
         }
     }
-
-
-    /////////////////
-    // Test method //
-    /////////////////
-
-    public static void main(String args[]) {
-        final AbstractFile file = com.mucommander.file.FileFactory.getFile(args[0]);
-
-        FileMonitor fm = new FileMonitor(file, DATE_ATTRIBUTE|SIZE_ATTRIBUTE|PERMISSIONS_ATTRIBUTE|IS_DIRECTORY_ATTRIBUTE|EXISTS_ATTRIBUTE, 1000);
-
-        FileChangeListener listener = new FileChangeListener() {
-            public void fileChanged(AbstractFile file, int changedAttributes) {
-                System.out.println("File attributes changed:"+changedAttributes);
-                if((changedAttributes&DATE_ATTRIBUTE)!=0)
-                    System.out.println("\t+ date");
-                if((changedAttributes&SIZE_ATTRIBUTE)!=0)
-                    System.out.println("\t+ size");
-                if((changedAttributes&PERMISSIONS_ATTRIBUTE)!=0)
-                    System.out.println("\t+ permissions");
-                if((changedAttributes&IS_DIRECTORY_ATTRIBUTE)!=0)
-                    System.out.println("\t+ isDirectory");
-                if((changedAttributes&EXISTS_ATTRIBUTE)!=0)
-                    System.out.println("\t+ exists");
-            }
-        };
-
-        fm.addFileChangeListener(listener);
-
-        fm.startMonitoring();
-        
-        try {
-            Thread.sleep(Integer.MAX_VALUE);
-        }
-        catch(InterruptedException e) {
-        }
-    }
 }
