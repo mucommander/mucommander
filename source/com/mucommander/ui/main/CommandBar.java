@@ -30,22 +30,18 @@ import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.button.NonFocusableButton;
 import com.mucommander.ui.icon.IconManager;
-
-import org.xml.sax.helpers.DefaultHandler;
-import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
-import org.xml.sax.Locator;
 import org.xml.sax.Attributes;
-import javax.xml.parsers.SAXParserFactory;
-import javax.xml.parsers.ParserConfigurationException;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.DefaultHandler;
+
 import javax.swing.*;
+import javax.xml.parsers.SAXParserFactory;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.*;
-import java.util.Hashtable;
 import java.util.Vector;
 
 /**
@@ -117,11 +113,21 @@ public class CommandBar extends JPanel implements ConfigurationListener, KeyList
      * @param destination where to copy the default commandbar destination file.
      */
     private static void copyDefaultDescriptionFile(File destination) throws IOException {
-        OutputStream out;
+        InputStream in = null;
+        OutputStream out = null;
 
-        out = null;
-        try {AbstractFile.copyStream(ResourceLoader.getResourceAsStream(COMMAND_BAR_RESOURCE_PATH), out = new FileOutputStream(destination));}
+        try {
+            in = ResourceLoader.getResourceAsStream(COMMAND_BAR_RESOURCE_PATH);
+            out = new FileOutputStream(destination);
+
+            AbstractFile.copyStream(in, out);
+        }
         finally {
+            if(in != null) {
+                try {in.close();}
+                catch(IOException e) {}
+            }
+
             if(out != null) {
                 try {out.close();}
                 catch(Exception e) {}
