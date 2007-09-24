@@ -3215,6 +3215,26 @@ com.mucommander.ui.action.ToggleCommandBarAction.hide:pt_BR:Esconder barra de co
 com.mucommander.ui.action.ToggleCommandBarAction.hide:NL:Commandoregel verbergen
 com.mucommander.ui.action.ToggleCommandBarAction.hide:SK:Skryť panel s príkazmi
 
+com.mucommander.ui.action.ToggleHiddenFilesAction.show:EN:$[prefs_dialog.show_hidden_files]	 
+ 	 
+com.mucommander.ui.action.ToggleHiddenFilesAction.hide:EN:Do not show hidden files	 
+com.mucommander.ui.action.ToggleHiddenFilesAction.hide:FR:Ne pas afficher les fichiers cachés
+com.mucommander.ui.action.ToggleHiddenFilesAction.hide:DE:Versteckte Dateien nicht anzeigen
+com.mucommander.ui.action.ToggleHiddenFilesAction.hide:pt_BR:Esconder arquivos ocultos
+com.mucommander.ui.action.ToggleHiddenFilesAction.hide:NL:verborgen bestanden niet tonen
+com.mucommander.ui.action.ToggleHiddenFilesAction.hide:SI:Skrij skrite datoteke
+com.mucommander.ui.action.ToggleHiddenFilesAction.hide:CS:Skrýt skryté soubory
+com.mucommander.ui.action.ToggleHiddenFilesAction.hide:RO:Nu arăta fișierele ascunse
+com.mucommander.ui.action.ToggleHiddenFilesAction.hide:zh_TW:不顯示隱藏檔案
+com.mucommander.ui.action.ToggleHiddenFilesAction.hide:HU:Rejtett fájlok elrejtése
+com.mucommander.ui.action.ToggleHiddenFilesAction.hide:ES:Ocultar ficheros ocultos
+# Translation missing
+
+
+
+
+
+
 com.mucommander.ui.action.ToggleToolBarAction.show:EN:Show toolbar
 com.mucommander.ui.action.ToggleToolBarAction.show:FR:Afficher la barre d'outils
 com.mucommander.ui.action.ToggleToolBarAction.show:DE:Toolbar anzeigen
