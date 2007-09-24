@@ -171,7 +171,7 @@ edit:ES:Editar
 edit:CS:Upravit
 edit:zh_TW:編輯
 edit:PL:Edycja
-edit:HU:Szerkeszt
+edit:HU:Szerkesztés
 edit:RU:Редактировать
 edit:zh_CN:编辑
 edit:SI:Uredi
@@ -2237,7 +2237,7 @@ com.mucommander.ui.action.GoBackAction.label:ES:Volver
 com.mucommander.ui.action.GoBackAction.label:CS:Zpět
 com.mucommander.ui.action.GoBackAction.label:zh_TW:退回
 com.mucommander.ui.action.GoBackAction.label:PL:Wstecz
-com.mucommander.ui.action.GoBackAction.label:HU:Vissza
+com.mucommander.ui.action.GoBackAction.label:HU:Ugrás vissza
 com.mucommander.ui.action.GoBackAction.label:RU:Назад
 com.mucommander.ui.action.GoBackAction.label:zh_CN:退回
 com.mucommander.ui.action.GoBackAction.label:SI:Nazaj
@@ -2624,7 +2624,7 @@ com.mucommander.ui.action.MarkPageDownAction.label:KR:페이지 아래로 선택
 com.mucommander.ui.action.MarkPageDownAction.label:pt_BR:Marcar página abaixo
 com.mucommander.ui.action.MarkPageDownAction.label:NL:Markeer bestanden tot volgende bladzijde
 com.mucommander.ui.action.MarkPageDownAction.label:SK:Označiť po nasledujúcu stránku
-com.mucommander.ui.action.MarkPageDownAction.label:HU:Kijelöl következő lap
+com.mucommander.ui.action.MarkPageDownAction.label:HU:Következő lap kijelölése
 
 com.mucommander.ui.action.MarkPageUpAction.label:EN:Mark page up
 com.mucommander.ui.action.MarkPageUpAction.label:FR:Marquer les fichiers jusqu'à la page précédente
@@ -2641,7 +2641,7 @@ com.mucommander.ui.action.MarkPageUpAction.label:KR:페이지 위로 선택
 com.mucommander.ui.action.MarkPageUpAction.label:pt_BR:Marcar página acima
 com.mucommander.ui.action.MarkPageUpAction.label:NL:Markeer bestanden tot vorige pagina
 com.mucommander.ui.action.MarkPageUpAction.label:SK:Označiť po predchádzajúcu stránku
-com.mucommander.ui.action.MarkPageUpAction.label:HU:Kijelöl előző lap
+com.mucommander.ui.action.MarkPageUpAction.label:HU:Előző lap kijelölése
 # Translation missing (IT)
 
 
@@ -3356,7 +3356,7 @@ com.mucommander.ui.action.RecallPreviousWindowAction.label:ES:Cambiar a la venta
 com.mucommander.ui.action.RecallPreviousWindowAction.label:CS:Přepnout do předchozího okna
 com.mucommander.ui.action.RecallPreviousWindowAction.label:zh_TW:切換至前一個視窗
 com.mucommander.ui.action.RecallPreviousWindowAction.label:PL:Przełącz do poprzedniego okna
-com.mucommander.ui.action.RecallPreviousWindowAction.label:HU:Válts az előző ablakra
+com.mucommander.ui.action.RecallPreviousWindowAction.label:HU:Váltás az előző ablakra
 com.mucommander.ui.action.RecallPreviousWindowAction.label:RU:Переключиться в предыдущее окно
 com.mucommander.ui.action.RecallPreviousWindowAction.label:zh_CN:切换到前一个窗口
 com.mucommander.ui.action.RecallPreviousWindowAction.label:SI:Preklopi na prejšnje okno
@@ -3374,7 +3374,7 @@ com.mucommander.ui.action.RecallNextWindowAction.label:ES:Cambiar a la siguiente
 com.mucommander.ui.action.RecallNextWindowAction.label:CS:Přepnout do následujícího okna
 com.mucommander.ui.action.RecallNextWindowAction.label:zh_TW:切換至後一個視窗
 com.mucommander.ui.action.RecallNextWindowAction.label:PL:Przełącz do następnego okna
-com.mucommander.ui.action.RecallNextWindowAction.label:HU:Válts a következő ablakra
+com.mucommander.ui.action.RecallNextWindowAction.label:HU:Váltás a következő ablakra
 com.mucommander.ui.action.RecallNextWindowAction.label:RU:Переключиться в следующее окно
 com.mucommander.ui.action.RecallNextWindowAction.label:zh_CN:切换到后一个窗口
 com.mucommander.ui.action.RecallNextWindowAction.label:SI:Preklopi na naslednje okno
@@ -4905,6 +4905,7 @@ delete_dialog.permanently_delete.confirmation_details:SI:Ta operacija ne more bi
 delete_dialog.permanently_delete.confirmation_details:RU:Эта операция не может быть отменена
 delete_dialog.permanently_delete.confirmation_details:DE:Diese Operation kann nicht rückgängig gemacht werden.
 delete_dialog.permanently_delete.confirmation_details:CS:Tato operace je nevratná.
+delete_dialog.permanently_delete.confirmation_details:HU:A művelet nem vonható vissza.
 # Translation missing
 
 
@@ -6268,7 +6269,7 @@ server_connect_dialog.protocol:FR:Protocole
 server_connect_dialog.protocol:CS:Protokol
 server_connect_dialog.protocol:NL:Protocol
 server_connect_dialog.protocol:SK:Protokol
-server_connect_dialog.protocol:HU:Prot
+server_connect_dialog.protocol:HU:Protokoll
 server_connect_dialog.protocol:zh_CN:协议
 server_connect_dialog.protocol:zh_TW:協議
 server_connect_dialog.protocol:RO:Protocol
@@ -7363,7 +7364,7 @@ theme_editor.folder_tab:CS:Panely souborů
 
 theme_editor.shell_tab:EN:Shell
 theme_editor.shell_tab:FR:Shell
-theme_editor.shell_tab:HU:Héjazat
+theme_editor.shell_tab:HU:Végrehajtás
 theme_editor.shell_tab:NL:Shell
 theme_editor.shell_tab:zh_CN:Shell
 theme_editor.shell_tab:zh_TW:Shell
@@ -7540,7 +7541,7 @@ theme_editor.font:SK:Písmo
 
 theme_editor.shell_font:EN:Shell font
 theme_editor.shell_font:FR:Fonte du shell
-theme_editor.shell_font:HU:Héjazat betűtípus
+theme_editor.shell_font:HU:Végrehajtás betűtípus
 theme_editor.shell_font:NL:Shell font
 theme_editor.shell_font:zh_CN:Shell字体
 theme_editor.shell_font:zh_TW:Shell 字型
@@ -7933,6 +7934,7 @@ theme_editor.shell_colors:KR:쉘 색상
 theme_editor.shell_colors:pt_BR:Cor do prompt de comandos (terminal)
 theme_editor.shell_colors:NL:Kleuren van de shell
 theme_editor.shell_colors:SK:Farba terminálu (shell)
+theme_editor.shell_colors:HU:Végrehajtás színek
 
 theme_editor.history_colors:EN:History colors
 theme_editor.history_colors:en_GB:History colours
@@ -8593,7 +8595,7 @@ prefs_dialog.look_and_feel:ES:Look & Feel
 prefs_dialog.look_and_feel:CS:Vzhled & chování
 prefs_dialog.look_and_feel:zh_TW:Look & Feel
 prefs_dialog.look_and_feel:PL:Look & Feel
-prefs_dialog.look_and_feel:HU:Kinézet & Hangulat
+prefs_dialog.look_and_feel:HU:Kinézet & Hatások
 prefs_dialog.look_and_feel:RU:Настройки отображения
 prefs_dialog.look_and_feel:zh_CN:外观
 prefs_dialog.look_and_feel:SI:Shema
@@ -9181,7 +9183,7 @@ prefs_dialog.default_shell:KR:기본 시스템 쉘을 사용합니다
 prefs_dialog.default_shell:pt_BR:Usar prompt de comando padrão do sistema
 prefs_dialog.default_shell:NL:Gebruik voorkeursshell van het systeem
 prefs_dialog.default_shell:SK:Použiť preddefinovaný systémový shell
-prefs_dialog.default_shell:HU:Az alapértelmezett Rendszerhéj használata
+prefs_dialog.default_shell:HU:Az alapértelmezett végrehajtás használata
 
 prefs_dialog.custom_shell:EN:Use custom shell
 prefs_dialog.custom_shell:FR:Utiliser un shell spécifique
@@ -9199,7 +9201,7 @@ prefs_dialog.custom_shell:KR:사용자 정의 쉘을 사용합니다
 prefs_dialog.custom_shell:pt_BR:Usar prompt de comando personalizado
 prefs_dialog.custom_shell:NL:Gebruik zelfgekozen shell
 prefs_dialog.custom_shell:SK:Použiť vlastný shell
-prefs_dialog.custom_shell:HU:Egyedi rendszerhéj használata
+prefs_dialog.custom_shell:HU:Egyedi végrehajtás használata
 
 # Bonjour is a service discovery protocol : http://en.wikipedia.org/wiki/Bonjour_%28software%29
 prefs_dialog.enable_bonjour_discovery:EN:Enable Bonjour services discovery
@@ -9697,7 +9699,7 @@ setup.intro:KR:muCommander가 작동하는 방식을 선택하세요
 setup.intro:pt_BR:Por favor, selecione como o muCommander deve se comportar.
 setup.intro:NL:Kiest u a.u.b. de manier waarop muCommander zich moet gedragen.
 setup.intro:SK:Prosím, zvoľte vlastné nastavenie aplikácie muCommander.
-setup.intro:HU:Válassza ki a muCommander működési módját.
+setup.intro:HU:Válassza ki a muCommander működési módját
 
 setup.look_and_feel:EN:Select your Look & feel
 setup.look_and_feel:FR:Selectionnez votre Look & Feel
@@ -9925,7 +9927,7 @@ color_chooser.brightness:CS:Jas
 
 color_chooser.swatches:EN:Swatches
 color_chooser.swatches:FR:Echantillons
-color_chooser.swatches:HU:Foltok
+color_chooser.swatches:HU:Minta
 color_chooser.swatches:NL:Actieve kleuren
 color_chooser.swatches:zh_CN:采样
 color_chooser.swatches:zh_TW:樣本
