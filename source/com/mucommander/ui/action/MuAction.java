@@ -159,15 +159,13 @@ public abstract class MuAction extends AbstractAction {
         if(lookupActionKeymap) {
             // Look for an accelerator registered in ActionKeymap for this action class
             KeyStroke accelerator = ActionKeymap.getAccelerator(classInstance);
-            if(accelerator!=null) {
+            if(accelerator!=null)
                 setAccelerator(accelerator);
 
-                // Look for an alternate accelerator registered in ActionKeymap for this action class
-                accelerator = ActionKeymap.getAlternateAccelerator(classInstance);
-                if(accelerator!=null) {
-                    setAlternateAccelerator(accelerator);
-                }
-            }
+            // Look for an alternate accelerator registered in ActionKeymap for this action class
+            accelerator = ActionKeymap.getAlternateAccelerator(classInstance);
+            if(accelerator!=null)
+                setAlternateAccelerator(accelerator);
         }
 
         if(lookupIconManager) {

@@ -24,29 +24,33 @@ import com.mucommander.file.AbstractFile;
 import com.mucommander.file.util.ResourceLoader;
 import com.mucommander.io.BackupInputStream;
 import com.mucommander.ui.main.MainFrame;
-
-import org.xml.sax.helpers.DefaultHandler;
-import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
-import org.xml.sax.Locator;
 import org.xml.sax.Attributes;
-import javax.xml.parsers.SAXParserFactory;
-import javax.xml.parsers.ParserConfigurationException;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.DefaultHandler;
+
 import javax.swing.*;
+import javax.xml.parsers.SAXParserFactory;
 import java.io.*;
 import java.util.Enumeration;
+import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Vector;
 
 
 /**
+ * This class manages keyboard associations with {@link MuAction} classes.
+ * Proper documentation and cleaning of this class is pending.  
+ *
  * @author Maxence Bernard
  */
 public class ActionKeymap extends DefaultHandler {
 
+    /** Maps action Class onto Keystroke instances*/
     private static Hashtable primaryActionKeymap = new Hashtable();
+    /** Maps action Class instances onto Keystroke instances*/
     private static Hashtable alternateActionKeymap = new Hashtable();
 
+    /** Maps Keystroke instances onto action Class */
     private static Hashtable acceleratorMap = new Hashtable();
 
     /** Default action keymap filename */
@@ -56,6 +60,19 @@ public class ActionKeymap extends DefaultHandler {
 
     /** Action keymap file used when calling {@link #loadActionKeyMap()} */
     private static File actionKeyMapFile;
+
+    /* Variables used for XML parsing */
+
+    private final static String ACTION_ELEMENT = "action";
+    private final static String CLASS_ATTRIBUTE = "class";
+    private final static String KEYSTROKE_ATTRIBUTE = "keystroke";
+    private final static String ALTERNATE_KEYSTROKE_ATTRIBUTE = "alt_keystroke";
+
+    /** True when default/JAR action keymap is being parsed */
+    private static boolean isParsingDefaultActionKeymap;
+
+    /** List of action Class which are defined in the user action keymap */
+    private static HashSet definedUserActionClasses = new HashSet();
 
 
     /**
@@ -103,19 +120,8 @@ public class ActionKeymap extends DefaultHandler {
 
 
     public static boolean isKeyStrokeRegistered(KeyStroke ks) {
-//        Collection keys = primaryActionKeymap.values();
-//        if(keys.contains(ks))
-//            return true;
-//
-//        keys = alternateActionKeymap.values();
-//        if(keys.contains(ks))
-//            return true;
-//
-//        return false;
-
         return getRegisteredActionClassForKeystroke(ks)!=null;
     }
-
 
     public static Class getRegisteredActionClassForKeystroke(KeyStroke ks) {
         return (Class)acceleratorMap.get(ks);
@@ -176,10 +182,8 @@ public class ActionKeymap extends DefaultHandler {
 
     public static void registerActionAccelerators(MuAction action, JComponent comp, int condition) {
         KeyStroke accelerator = action.getAccelerator();
-        if(accelerator==null)
-            return;
-
-        registerActionAccelerator(action, accelerator, comp, condition);
+        if(accelerator!=null)
+            registerActionAccelerator(action, accelerator, comp, condition);
 
         accelerator = action.getAlternateAccelerator();
         if(accelerator!=null)
@@ -188,10 +192,8 @@ public class ActionKeymap extends DefaultHandler {
 
     public static void unregisterActionAccelerators(MuAction action, JComponent comp, int condition) {
         KeyStroke accelerator = action.getAccelerator();
-        if(accelerator==null)
-            return;
-
-        unregisterActionAccelerator(action, accelerator, comp, condition);
+        if(accelerator!=null)
+            unregisterActionAccelerator(action, accelerator, comp, condition);
 
         accelerator = action.getAlternateAccelerator();
         if(accelerator!=null)
@@ -247,41 +249,54 @@ public class ActionKeymap extends DefaultHandler {
      * the ones from the JAR action keymap.
      */
     private ActionKeymap() throws Exception {
-        File file;
+        try {
+            File file;
 
-        // If the user hasn't yet defined an action keymap, copies the default one.
-        file = getActionKeyMapFile();
-        if(!file.exists()) {
-            OutputStream out;
+            // If the user hasn't yet defined an action keymap, copies the default one.
+            file = getActionKeyMapFile();
+            if(!file.exists()) {
+                InputStream in = null;
+                OutputStream out = null;
 
-            out = null;
-            if(Debug.ON) Debug.trace("Copying "+ACTION_KEYMAP_RESOURCE_PATH+" JAR resource to "+file);
+                if(Debug.ON) Debug.trace("Copying "+ACTION_KEYMAP_RESOURCE_PATH+" JAR resource to "+file);
 
-            try {AbstractFile.copyStream(ResourceLoader.getResourceAsStream(ACTION_KEYMAP_RESOURCE_PATH), out = new FileOutputStream(file));}
-            catch(IOException e) {if(Debug.ON) Debug.trace("Error: unable to copy "+ACTION_KEYMAP_RESOURCE_PATH+" resource to "+actionKeyMapFile+": "+e);}
-            finally {
-                if(out != null) {
-                    try {out.close();}
-                    catch(Exception e) {}
+                try {
+                    in = ResourceLoader.getResourceAsStream(ACTION_KEYMAP_RESOURCE_PATH);
+                    out = new FileOutputStream(file);
+
+                    AbstractFile.copyStream(in, out);
                 }
+                catch(IOException e) {
+                    if(Debug.ON) Debug.trace("Error: unable to copy "+ACTION_KEYMAP_RESOURCE_PATH+" resource to "+actionKeyMapFile+": "+e);
+                }
+                finally {
+                    if(in != null) {
+                        try {in.close();}
+                        catch(IOException e) {}
+                    }
+
+                    if(out != null) {
+                        try {out.close();}
+                        catch(IOException e) {}
+                    }
+                }
+
+                // No need to load the user action keymap here as it is the same as the default keymap
+            }
+            else {
+                // Load the user's custom action keymap file.
+                if(Debug.ON) Debug.trace("Loading user action keymap at " + file.getAbsolutePath());
+                parseActionKeymapFile(new BackupInputStream(file));
             }
 
+            isParsingDefaultActionKeymap = true;
+
             // Loads the default action keymap.
-            // Error at this point are fatal, are there are no other keymap file to load.
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Loading JAR action keymap file at "+ACTION_KEYMAP_RESOURCE_PATH);
+            if(Debug.ON) Debug.trace("Loading default JAR action keymap at "+ACTION_KEYMAP_RESOURCE_PATH);
             parseActionKeymapFile(ResourceLoader.getResourceAsStream(ACTION_KEYMAP_RESOURCE_PATH));
         }
-        else {
-            // Loads the default action keymap.
-            // Error at this point are non-fatal, are there still is the user defined keyamp to fall back to.
-            try {parseActionKeymapFile(ResourceLoader.getResourceAsStream(ACTION_KEYMAP_RESOURCE_PATH));}
-            catch(Exception e) {}
-
-            // Load the user's custom action keymap file.
-            // This will override the mappings customized by the user while retaining any new mapping that the user's
-            // action_keymap.xml doesn't yet have.
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Loading user action keymap file at " + file.getAbsolutePath());
-            parseActionKeymapFile(new BackupInputStream(file));
+        finally {
+            definedUserActionClasses = null;
         }
     }
 
@@ -303,65 +318,89 @@ public class ActionKeymap extends DefaultHandler {
     }
 
 
+    /**
+     * Parses the keystroke defined in the given attribute map (if any) and associates it with the given action class.
+     * The keystroke will not be associated in any of the following cases:
+     * <ul>
+     *  <li>the keystroke attribute does not contain any value.</li>
+     *  <li>the keystroke attribute has a value that does not represent a valid KeyStroke (syntax error).</li>
+     *  <li>the keystroke is already associated with an action class. In this case, the existing association is preserved.</li>
+     * </ul>
+     *
+     * @param actionClass the action class to associate the keystroke with
+     * @param attributes the attributes map that holds the value
+     * @param alternate true to process the alternate keystroke attribute, false for the primary one
+     */
+    private void processKeystrokeAttribute(Class actionClass, Attributes attributes, boolean alternate) {
+        String keyStrokeString = attributes.getValue(alternate?ALTERNATE_KEYSTROKE_ATTRIBUTE:KEYSTROKE_ATTRIBUTE);
+        KeyStroke keyStroke = null;
+
+        // Parse the keystroke and retrieve the corresponding KeyStroke instance and return if the attribute's value
+        // is invalid.
+        if(keyStrokeString!=null) {
+            keyStroke = KeyStroke.getKeyStroke(keyStrokeString);
+            if(keyStroke==null)
+                System.out.println("Error: action keymap file contains a keystroke which could not be resolved: "+keyStrokeString);
+        }
+
+        // Return if keystroke attribute is not defined or KeyStroke instance could not be resolved
+        if(keyStroke==null)
+            return;
+
+        // Discard the mapping if the keystroke is already associated with an action
+        Class existingActionClass = (Class)acceleratorMap.get(keyStroke);
+        if(existingActionClass!=null) {
+            System.out.println("Warning: action keymap file contains multiple associations for keystroke: "+keyStrokeString+", preserving association with action: "+existingActionClass.getName());
+            return;
+        }
+
+        // Add the action/keystroke mapping
+        (alternate?alternateActionKeymap:primaryActionKeymap).put(actionClass, keyStroke);
+        acceleratorMap.put(keyStroke, actionClass);
+    }
+
+    
     ///////////////////////////////////
     // ContentHandler implementation //
     ///////////////////////////////////
 
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
-        if(qName.equals("action")) {
-            String actionClassName = attributes.getValue("class");
+        if(qName.equals(ACTION_ELEMENT)) {
+            // Retrieve the action classname
+            String actionClassName = attributes.getValue(CLASS_ATTRIBUTE);
             if(actionClassName==null) {
                 if(Debug.ON) Debug.trace("Error in action keymap file: no 'class' attribute specified in 'action' element");
                 return;
             }
 
+            // Resolve the action Class
             Class actionClass;
-            try {actionClass = Class.forName(actionClassName);}
+            try {
+                actionClass = Class.forName(actionClassName);
+            }
             catch(ClassNotFoundException e) {
                 if(Debug.ON) Debug.trace("Error in action keymap file: could not resolve class "+actionClassName);
                 return;
             }
 
-            // Primary keystroke
-            String keyStrokeString = attributes.getValue("keystroke");
-            if(keyStrokeString==null) {
-                if(Debug.ON) Debug.trace("Error in action keymap file: no 'keystroke' attribute specified in 'action' element");
+            // When parsing the default/JAR action keymap:
+            // Skip action classes that have already been encountered in the user action keymap.
+            if(isParsingDefaultActionKeymap && definedUserActionClasses.contains(actionClass))
                 return;
+
+            // Load the action's primary accelator (if any)
+            processKeystrokeAttribute(actionClass, attributes, false);
+            // Load the action's secondary/alternate accelerator (if any)
+            processKeystrokeAttribute(actionClass, attributes, true);
+
+            // When parsing the user action keymap:
+            if(!isParsingDefaultActionKeymap) {
+                // Add the action Class to the list of actions that have already been encountered/defined in the user
+                // action keymap. Note that action elements that do not define any accelerator will still be added to
+                // this list ; this allows discarding accelerators defined in the default/JAR action keymap and having
+                // an action with no associated accelerator.
+                definedUserActionClasses.add(actionClass);
             }
-
-            KeyStroke keyStroke = KeyStroke.getKeyStroke(keyStrokeString);
-            if(keyStroke==null) {
-                if(Debug.ON) Debug.trace("Error in action keymap file: specified keystroke could not be resolved: "+keyStrokeString);
-                return;
-            }
-
-            if(Debug.ON) {
-                KeyStroke existingKeystroke = (KeyStroke)primaryActionKeymap.get(actionClass);
-                if(existingKeystroke!=null && !existingKeystroke.equals(keyStroke))
-                    Debug.trace("Overridding keystroke "+existingKeystroke+" for "+actionClass+" with "+keyStroke);
-            }
-
-            primaryActionKeymap.put(actionClass, keyStroke);
-            acceleratorMap.put(keyStroke, actionClass);
-
-            // Alternate keystroke (if any)
-            keyStrokeString = attributes.getValue("alt_keystroke");
-            if(keyStrokeString!=null) {
-                keyStroke = KeyStroke.getKeyStroke(keyStrokeString);
-                if(keyStroke==null) {
-                    if(Debug.ON) Debug.trace("Error in action keymap file: specified alternate keystroke could not be resolved: "+keyStrokeString);
-                    return;
-                }
-
-                if(Debug.ON) {
-                    KeyStroke existingKeystroke = (KeyStroke)alternateActionKeymap.get(actionClass);
-                    if(existingKeystroke!=null && !existingKeystroke.equals(keyStroke))
-                        Debug.trace("Overridding alternate keystroke "+existingKeystroke+" for "+actionClass+" with "+keyStroke);
-                }
-
-                alternateActionKeymap.put(actionClass, keyStroke);
-                acceleratorMap.put(keyStroke, actionClass);
-            }
-        }
+       }
     }
 }
