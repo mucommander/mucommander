@@ -434,7 +434,9 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
             // Makes sure the connection is started, if not starts it
             connHandler.checkConnection();
 
-            try { files = connHandler.ftpClient.listFiles(absPath); }
+            try {
+                files = connHandler.ftpClient.listFiles(absPath);
+            }
             // This exception is not an IOException and needs to be caught and rethrown
             catch(org.apache.commons.net.ftp.parser.ParserInitializationException e) {
                 if(Debug.ON) Debug.trace("ParserInitializationException caught");
@@ -471,6 +473,9 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
             parentPath += SEPARATOR;
 
         for(int i=0; i<nbFiles; i++) {
+            if(files[i]==null)
+                continue;
+
             childName = files[i].getName();
             if(childName.equals(".") || childName.equals(".."))
                 continue;
