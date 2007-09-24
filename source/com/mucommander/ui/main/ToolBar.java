@@ -32,15 +32,12 @@ import com.mucommander.ui.button.NonFocusableButton;
 import com.mucommander.ui.button.PopupButton;
 import com.mucommander.ui.button.RolloverButtonAdapter;
 import com.mucommander.ui.icon.IconManager;
-
-import org.xml.sax.helpers.DefaultHandler;
-import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
-import org.xml.sax.Locator;
 import org.xml.sax.Attributes;
-import javax.xml.parsers.SAXParserFactory;
-import javax.xml.parsers.ParserConfigurationException;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.DefaultHandler;
+
 import javax.swing.*;
+import javax.xml.parsers.SAXParserFactory;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -103,11 +100,21 @@ public class ToolBar extends JToolBar implements ConfigurationListener, MouseLis
     }
 
     private static void copyDefaultDescriptionFile(File destination) throws IOException {
-        OutputStream out;
+        InputStream in = null;
+        OutputStream out = null;
 
-        out = null;
-        try {AbstractFile.copyStream(ResourceLoader.getResourceAsStream(TOOLBAR_RESOURCE_PATH), out = new FileOutputStream(destination));}
+        try {
+            in = ResourceLoader.getResourceAsStream(TOOLBAR_RESOURCE_PATH);
+            out = new FileOutputStream(destination); 
+
+            AbstractFile.copyStream(in, out);
+        }
         finally {
+            if(in != null) {
+                try {in.close();}
+                catch(IOException e) {}
+            }
+
             if(out != null) {
                 try {out.close();}
                 catch(Exception e) {}
