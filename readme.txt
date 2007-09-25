@@ -116,6 +116,7 @@ New features:
 - Zip files can now be modified 'on-the-fly' as if they were regular 
   directories (on local and SMB filesystems)
 - Smart encoding detection used for Zip files, text viewer and editor
+- muCommander is now free software, licensed under the GNU GPL v3
 
 Improvements:
 - Added 'Go to' buttons to 'Edit bookmarks', 'Edit credentials' and 'Show open
