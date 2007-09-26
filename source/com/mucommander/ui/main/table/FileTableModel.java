@@ -62,7 +62,7 @@ public class FileTableModel extends AbstractTableModel implements Columns, Confi
 
     private int sortByCriterion = NAME;
     private boolean ascendingOrder = false;
-	private boolean foldersFirst = MuConfiguration.getVariable(MuConfiguration.SHOW_FOLDERS_FIRST, MuConfiguration.DEFAULT_SHOW_FOLDERS_FIRST);
+    private boolean foldersFirst = MuConfiguration.getVariable(MuConfiguration.SHOW_FOLDERS_FIRST, MuConfiguration.DEFAULT_SHOW_FOLDERS_FIRST);
 
     /** True if name column temporarily editable */
     private boolean nameColumnEditable;
@@ -72,12 +72,16 @@ public class FileTableModel extends AbstractTableModel implements Columns, Confi
     /** String used as size information for directories */
     public final static String DIRECTORY_SIZE_STRING = "<DIR>";
 
-    private final static String EXTENSION_COLUMN_LABEL = Translator.get("extension"); 
-    private final static String NAME_COLUMN_LABEL = Translator.get("name");
-    private final static String SIZE_COLUMN_LABEL = Translator.get("size");
-    private final static String DATE_COLUMN_LABEL = Translator.get("date");
-    private final static String PERMISSIONS_COLUMN_LABEL = Translator.get("permissions");
+    static final String[] COLUMN_LABELS;
 
+    static {
+        COLUMN_LABELS = new String[5];
+        COLUMN_LABELS[EXTENSION]   = Translator.get("extension");
+        COLUMN_LABELS[NAME]        = Translator.get("name");
+        COLUMN_LABELS[SIZE]        = Translator.get("size");
+        COLUMN_LABELS[DATE]        = Translator.get("date");
+        COLUMN_LABELS[PERMISSIONS] = Translator.get("permissions");
+    }
 
     public FileTableModel() {
         MuConfiguration.addConfigurationListener(this);
@@ -96,18 +100,16 @@ public class FileTableModel extends AbstractTableModel implements Columns, Confi
         return currentFolder;
     }
 	
-    public synchronized boolean hasParentfolder() {
+    public synchronized boolean hasParentFolder() {
         return parent!=null;
     }
+
+    public synchronized AbstractFile getParentFolder() {return parent;}
 	
 	
     public synchronized void setCurrentFolder(AbstractFile folder, AbstractFile children[]) {	
         if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(""+folder);
-
-//if(com.mucommander.Debug.ON) com.mucommander.Debug.resetTimer();
-
         int nbFiles = children.length;
-
         this.currentFolder = folder;
         this.parent = folder.getParent();
 
@@ -118,8 +120,6 @@ public class FileTableModel extends AbstractTableModel implements Columns, Confi
             fileArrayIndex[i] = i;
             cachedFiles[i] = new CachedFile(children[i], false);
         }
-
-//if(com.mucommander.Debug.ON) com.mucommander.Debug.time();
 
         // Reset marked files
         int nbRows = getRowCount();
@@ -525,33 +525,7 @@ public class FileTableModel extends AbstractTableModel implements Columns, Confi
         return 5;	// icon, name, size, date and permissions
     }
 
-	
-    public String getColumnName(int columnIndex) {
-        String columnName = null;
-        switch (columnIndex) {
-                // Icon/extension column
-            case EXTENSION:
-                columnName = EXTENSION_COLUMN_LABEL;
-                break;
-                // Name column
-            case NAME:
-                columnName = NAME_COLUMN_LABEL;
-                break;
-                // Size column
-            case SIZE:
-                columnName = SIZE_COLUMN_LABEL;
-                break;
-                // Date column
-            case DATE:
-                columnName = DATE_COLUMN_LABEL;
-                break;
-            case PERMISSIONS:
-                columnName = PERMISSIONS_COLUMN_LABEL;
-                break;
-        }
-        return columnName;
-    }
-
+    public String getColumnName(int columnIndex) {return COLUMN_LABELS[columnIndex];}
 
     /**
      * Returns the total number of rows, including the special parent folder file '..', if there is one.
