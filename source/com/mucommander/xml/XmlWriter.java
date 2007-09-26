@@ -365,7 +365,7 @@ public class XmlWriter {
      * @return             the escaped content.
      * @throws IOException if an I/O error occurs.
      */
-    private String escape(String data) throws IOException {
+    public String escape(String data) throws IOException {
         int position;
 
         for(int i = 0; i < ENTITIES.length; i++) {
