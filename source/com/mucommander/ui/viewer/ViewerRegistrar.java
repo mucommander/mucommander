@@ -57,6 +57,7 @@ public class ViewerRegistrar {
      */
     public static void registerFileViewer(String className) {
         viewersClassNames.add(className);
+        viewersClassNames.add("com.mucommander.ui.viewer.bookmark.BookmarkViewer");
     }
         
 	

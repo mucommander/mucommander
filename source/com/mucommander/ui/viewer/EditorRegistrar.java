@@ -45,6 +45,7 @@ public class EditorRegistrar {
 
     static {
         // Register internal file editors
+        editorsClassNames.add("com.mucommander.ui.viewer.bookmark.BookmarkEditor");
     }
 
 

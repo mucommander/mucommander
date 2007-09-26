@@ -127,7 +127,7 @@ public class EditorFrame extends JFrame implements ActionListener, Runnable, Win
         setContentPane(scrollPane);
 
         // Catch Apple+W keystrokes under Mac OS X to try and close the window
-        if(com.mucommander.PlatformManager.OS_FAMILY==com.mucommander.PlatformManager.MAC_OS_X) {
+        if(com.mucommander.PlatformManager.getOsFamily()==com.mucommander.PlatformManager.MAC_OS_X) {
             scrollPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_W, ActionEvent.META_MASK), CUSTOM_DISPOSE_EVENT);
             scrollPane.getActionMap().put(CUSTOM_DISPOSE_EVENT, new AbstractAction() {
                     public void actionPerformed(ActionEvent e){
@@ -173,7 +173,7 @@ public class EditorFrame extends JFrame implements ActionListener, Runnable, Win
         if(this.saveNeeded!=saveNeeded) {
             this.saveNeeded = saveNeeded;
             // Marks/unmarks the window as dirty under Mac OS X (symbolized by a dot in the window closing icon)
-            if(PlatformManager.OS_FAMILY==PlatformManager.MAC_OS_X)
+            if(PlatformManager.getOsFamily()==PlatformManager.MAC_OS_X)
                 this.getRootPane().putClientProperty("windowModified", saveNeeded?Boolean.TRUE:Boolean.FALSE);
         }
 		
@@ -219,7 +219,7 @@ public class EditorFrame extends JFrame implements ActionListener, Runnable, Win
     }
 
 	
-    private boolean trySaveAs(AbstractFile destFile) {
+    public boolean trySaveAs(AbstractFile destFile) {
         try {
             editor.saveAs(destFile);
             return true;
