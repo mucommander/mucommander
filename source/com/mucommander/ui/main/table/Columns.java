@@ -19,19 +19,28 @@
 package com.mucommander.ui.main.table;
 
 /**
- * Contains column indices, used indifferently to designate a column or a sort criterion.
- *
- * @author Maxence Bernard
+ * Defines columns related constants.
+ * @author Maxence Bernard, Nicolas Rinaudo
  */
 public interface Columns {
-
-    public final static int EXTENSION = 0;
-
-    public final static int NAME = 1;
-
-    public final static int SIZE = 2;
-
-    public final static int DATE = 3;
-
-    public final static int PERMISSIONS = 4;
+    /** Identifier of the extension column. */
+    public final static int EXTENSION                 = 0;
+    /** Identifier of the name column. */
+    public final static int NAME                      = 1;
+    /** Identifier of the size column. */
+    public final static int SIZE                      = 2;
+    /** Identifier of the date column. */
+    public final static int DATE                      = 3;
+    /** Identifier of the permissions column. */
+    public final static int PERMISSIONS               = 4;
+    /** Minimum width of the name column. */
+    public final static int MINIMUM_NAME_WIDTH        = 40;
+    /** Minimum width of the extension column. */
+    public final static int MINIMUM_EXTENSION_WIDTH   = 2 * CellLabel.CELL_BORDER_WIDTH;
+    /** Minimum width of the date column. */
+    public final static int MINIMUM_DATE_WIDTH        = 2 * CellLabel.CELL_BORDER_WIDTH;
+    /** Minimum width of the size column. */
+    public final static int MINIMUM_SIZE_WIDTH        = 2 * CellLabel.CELL_BORDER_WIDTH;
+    /** Minimumn width of the permissions column. */
+    public final static int MINIMUM_PERMISSIONS_WIDTH = 2 * CellLabel.CELL_BORDER_WIDTH;
 }
