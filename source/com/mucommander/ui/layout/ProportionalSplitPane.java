@@ -101,7 +101,6 @@ public class ProportionalSplitPane extends JSplitPane implements ComponentListen
 
         if(!window.isVisible())
             return;
-
         setDividerLocation((int)(splitRatio*(getOrientation()==HORIZONTAL_SPLIT?getWidth():getHeight())));
         // Remember last divider's location (see componentMoved())
         lastDividerLocation = getDividerLocation();
