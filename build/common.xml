@@ -64,7 +64,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     </condition>
   </target>  
 
-
   <!-- Tries to load proGuard.                                 -->
   <target name="load-proguard" depends="check-proguard" if="proguard.available">
     <taskdef name="proguard" classname="proguard.ant.ProGuardTask" classpath="${proguard.lib}"/>
@@ -90,6 +89,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
   <!-- Checks if JUnit is available. The result is stored in   -->
   <!-- ${junit.available}.                                     -->
+  <!-- If not in release mode (${is-release} set to false),    -->
+  <!-- this target will fail the build.                        -->
   <target name="check-junit">
     <condition property="junit.available" value="true">
       <!-- Test both Ant task and one of JUnit package         -->
@@ -99,23 +100,24 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         <available classname="junit.framework.Test"/>
       </and>
     </condition>
+
+    <!-- If we're not in release mode and junit is not         -->
+    <!-- available, fails the build.                           -->
+    <fail>
+      JUnit could not be loaded. Verify that ${ant.home}lib/ contains both 'ant-junit.jar' (JUnit Ant task) and 'junit.jar' (JUnit package). The 'junit.jar' package can be found in ${lib}/.
+      <condition>
+        <and>
+          <not>
+            <istrue value="${is-release}"/>
+          </not>
+          <not>
+            <istrue value="${junit.available}"/>
+          </not>
+        </and>
+      </condition>
+    </fail>
   </target>
 
-  <!-- Halt if JUnit is not available and hints at a possible  -->
-  <!-- cause.                                                  -->
-  <target name="fail-junit" unless="junit.available">
-      <fail unless="junit.available">
-        JUnit could not be loaded. Verify that ${ant.home}lib/ contains both 'ant-junit.jar' (JUnit Ant task) and 'junit.jar' (JUnit package). The 'junit.jar' package can be found in ${lib}/.
-      </fail>
-  </target>
-
-  <!-- Tries to load the JUnit Ant task which comes bundled    -->
-  <!-- with Ant but requires the main JUnit package which      -->
-  <!-- unfortunately does not come with Ant and needs to be    -->
-  <!-- manually copied to $ANT_HOME/lib.                       -->
-  <target name="load-junit" depends="check-junit" if="junit.available">
-    <taskdef name="junit" classname="org.apache.tools.ant.taskdefs.optional.junit.JUnitTask"/>
-  </target>
 
 
   <!-- = 7za management ====================================== -->
