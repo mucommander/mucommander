@@ -59,7 +59,7 @@ public class GrowlNotifier extends AbstractNotifier {
     public boolean setEnabled(boolean enabled) {
         if(enabled) {
             // No need to bother if the OS is not Mac OS X
-            if(PlatformManager.OS_FAMILY!=PlatformManager.MAC_OS_X)
+            if(PlatformManager.getOsFamily()!=PlatformManager.MAC_OS_X)
                 return false;
 
             // If Growl notifier has already been initialized

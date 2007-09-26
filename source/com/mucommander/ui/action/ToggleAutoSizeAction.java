@@ -37,9 +37,9 @@ public class ToggleAutoSizeAction extends MuAction {
     }
 
     public void performAction() {
-        FileTable activeTable = mainFrame.getActiveTable();
-        boolean autoSizeEnabled = !activeTable.isAutoSizeColumnsEnabled();
-        activeTable.setAutoSizeColumnsEnabled(autoSizeEnabled);
-        MuConfiguration.setVariable(MuConfiguration.AUTO_SIZE_COLUMNS, autoSizeEnabled);
+        boolean enabled;
+
+        mainFrame.setAutoSizeColumnsEnabled(enabled = !mainFrame.isAutoSizeColumnsEnabled());
+        MuConfiguration.setVariable(MuConfiguration.AUTO_SIZE_COLUMNS, enabled);
     }
 }

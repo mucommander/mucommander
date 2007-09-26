@@ -19,10 +19,8 @@
 package com.mucommander.ui.action;
 
 import com.mucommander.text.Translator;
-import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.table.Columns;
-import com.mucommander.ui.main.table.FileTable;
 
 import java.util.Hashtable;
 
@@ -39,12 +37,5 @@ public class TogglePermissionsColumnAction extends MuAction {
         setLabel(Translator.get("permissions"));
     }
 
-    public void performAction() {
-        if(mainFrame.getActiveTable() == mainFrame.getLeftTable())
-            MuConfiguration.setVariable(MuConfiguration.SHOW_LEFT_PERMISSIONS, !MuConfiguration.getVariable(MuConfiguration.SHOW_LEFT_PERMISSIONS,
-                                                                                                          MuConfiguration.DEFAULT_SHOW_PERMISSIONS));
-        else
-            MuConfiguration.setVariable(MuConfiguration.SHOW_RIGHT_PERMISSIONS, !MuConfiguration.getVariable(MuConfiguration.SHOW_RIGHT_PERMISSIONS,
-                                                                                                          MuConfiguration.DEFAULT_SHOW_PERMISSIONS));
-    }
+    public void performAction() {mainFrame.getActiveTable().setColumnVisible(Columns.PERMISSIONS, !mainFrame.getActiveTable().isColumnVisible(Columns.PERMISSIONS));}
 }

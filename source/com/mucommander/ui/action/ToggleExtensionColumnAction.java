@@ -19,10 +19,8 @@
 package com.mucommander.ui.action;
 
 import com.mucommander.text.Translator;
-import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.table.Columns;
-import com.mucommander.ui.main.table.FileTable;
 
 import java.util.Hashtable;
 
@@ -39,12 +37,5 @@ public class ToggleExtensionColumnAction extends MuAction {
         setLabel(Translator.get("extension"));
     }
 
-    public void performAction() {
-        if(mainFrame.getActiveTable() == mainFrame.getLeftTable())
-            MuConfiguration.setVariable(MuConfiguration.SHOW_LEFT_EXTENSION, !MuConfiguration.getVariable(MuConfiguration.SHOW_LEFT_EXTENSION,
-                                                                                                          MuConfiguration.DEFAULT_SHOW_EXTENSION));
-        else
-            MuConfiguration.setVariable(MuConfiguration.SHOW_RIGHT_EXTENSION, !MuConfiguration.getVariable(MuConfiguration.SHOW_RIGHT_EXTENSION,
-                                                                                                          MuConfiguration.DEFAULT_SHOW_EXTENSION));
-    }
+    public void performAction() {mainFrame.getActiveTable().setColumnVisible(Columns.EXTENSION, !mainFrame.getActiveTable().isColumnVisible(Columns.EXTENSION));}
 }

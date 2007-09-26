@@ -202,7 +202,7 @@ class AppearancePanel extends PreferencesPanel implements ActionListener {
         lnfPanel.add(flowPanel);
 
         // For Mac OS X only, creates the 'metal' checkbox.
-        if(PlatformManager.OS_FAMILY==PlatformManager.MAC_OS_X) {
+        if(PlatformManager.getOsFamily()==PlatformManager.MAC_OS_X) {
             // 'Use brushed metal look' option
             brushedMetalCheckBox = new JCheckBox(Translator.get("prefs_dialog.use_brushed_metal"));
             brushedMetalCheckBox.setSelected(MuConfiguration.getVariable(MuConfiguration.USE_BRUSHED_METAL,
@@ -382,7 +382,7 @@ class AppearancePanel extends PreferencesPanel implements ActionListener {
         if(MuConfiguration.setVariable(MuConfiguration.LOOK_AND_FEEL, lnfInfo[lnfComboBox.getSelectedIndex()].getClassName()))
             SwingUtilities.updateComponentTreeUI(parent);
 
-        if(PlatformManager.OS_FAMILY==PlatformManager.MAC_OS_X)
+        if(PlatformManager.getOsFamily()==PlatformManager.MAC_OS_X)
             MuConfiguration.setVariable(MuConfiguration.USE_BRUSHED_METAL,  brushedMetalCheckBox.isSelected());
 
         // Set ToolBar's icon size

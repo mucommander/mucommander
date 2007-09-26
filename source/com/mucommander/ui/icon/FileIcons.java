@@ -192,7 +192,7 @@ public class FileIcons {
      */
     private static void initSystemIcons() {
         // Initialize the Swing object used to retrieve system file icons
-        if(PlatformManager.OS_FAMILY==PlatformManager.MAC_OS_X)
+        if(PlatformManager.getOsFamily()==PlatformManager.MAC_OS_X)
             fileChooser = new JFileChooser();
         else
             fileSystemView = FileSystemView.getFileSystemView();
@@ -228,7 +228,7 @@ public class FileIcons {
             if(extension!=null) {
                 boolean systemIcon;
 
-                if(PlatformManager.OS_FAMILY==PlatformManager.MAC_OS_X && "app".equalsIgnoreCase(extension))
+                if(PlatformManager.getOsFamily()==PlatformManager.MAC_OS_X && "app".equalsIgnoreCase(extension))
                     systemIcon = true;
                 else if(PlatformManager.isWindowsFamily() && "exe".equalsIgnoreCase(extension))
                     systemIcon = true;
@@ -370,7 +370,7 @@ public class FileIcons {
      */
     private static Icon getSystemFileIcon(File file) {
         // Note: FileSystemView#getSystemIcon(File) returns bogus icons under Mac OS X
-        if(PlatformManager.OS_FAMILY==PlatformManager.MAC_OS_X)
+        if(PlatformManager.getOsFamily()==PlatformManager.MAC_OS_X)
             return fileChooser.getIcon(file);
 
         try {
@@ -459,7 +459,7 @@ public class FileIcons {
      * default file manager
      */
     public static boolean hasProperSystemIcons() {
-        return PlatformManager.OS_FAMILY==PlatformManager.MAC_OS_X || PlatformManager.isWindowsFamily();
+        return PlatformManager.getOsFamily()==PlatformManager.MAC_OS_X || PlatformManager.isWindowsFamily();
     }
 
     /////////////////

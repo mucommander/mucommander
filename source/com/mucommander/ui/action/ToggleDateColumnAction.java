@@ -19,10 +19,8 @@
 package com.mucommander.ui.action;
 
 import com.mucommander.text.Translator;
-import com.mucommander.conf.impl.MuConfiguration;
-import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.table.Columns;
-import com.mucommander.ui.main.table.FileTable;
+import com.mucommander.ui.main.MainFrame;
 
 import java.util.Hashtable;
 
@@ -39,12 +37,5 @@ public class ToggleDateColumnAction extends MuAction {
         setLabel(Translator.get("date"));
     }
 
-    public void performAction() {
-        if(mainFrame.getActiveTable() == mainFrame.getLeftTable())
-            MuConfiguration.setVariable(MuConfiguration.SHOW_LEFT_DATE, !MuConfiguration.getVariable(MuConfiguration.SHOW_LEFT_DATE,
-                                                                                                          MuConfiguration.DEFAULT_SHOW_DATE));
-        else
-            MuConfiguration.setVariable(MuConfiguration.SHOW_RIGHT_DATE, !MuConfiguration.getVariable(MuConfiguration.SHOW_RIGHT_DATE,
-                                                                                                          MuConfiguration.DEFAULT_SHOW_DATE));
-    }
+    public void performAction() {mainFrame.getActiveTable().setColumnVisible(Columns.DATE, !mainFrame.getActiveTable().isColumnVisible(Columns.DATE));}
 }

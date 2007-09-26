@@ -19,10 +19,8 @@
 package com.mucommander.ui.action;
 
 import com.mucommander.text.Translator;
-import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.table.Columns;
-import com.mucommander.ui.main.table.FileTable;
 
 import java.util.Hashtable;
 
@@ -39,12 +37,5 @@ public class ToggleSizeColumnAction extends MuAction {
         setLabel(Translator.get("size"));
     }
 
-    public void performAction() {
-        if(mainFrame.getActiveTable() == mainFrame.getLeftTable())
-            MuConfiguration.setVariable(MuConfiguration.SHOW_LEFT_SIZE, !MuConfiguration.getVariable(MuConfiguration.SHOW_LEFT_SIZE,
-                                                                                                          MuConfiguration.DEFAULT_SHOW_SIZE));
-        else
-            MuConfiguration.setVariable(MuConfiguration.SHOW_RIGHT_SIZE, !MuConfiguration.getVariable(MuConfiguration.SHOW_RIGHT_SIZE,
-                                                                                                          MuConfiguration.DEFAULT_SHOW_SIZE));
-    }
+    public void performAction() {mainFrame.getActiveTable().setColumnVisible(Columns.SIZE, !mainFrame.getActiveTable().isColumnVisible(Columns.SIZE));}
 }
