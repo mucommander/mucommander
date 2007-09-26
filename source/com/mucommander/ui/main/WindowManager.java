@@ -295,7 +295,10 @@ public class WindowManager implements WindowListener, ConfigurationListener {
         int       height;       // Height of the new MainFrame.
 
         // Initialisation.
-        newMainFrame = new MainFrame(folder1, folder2);
+        if(currentMainFrame == null)
+            newMainFrame = new MainFrame(folder1, folder2);
+        else
+            newMainFrame = currentMainFrame.cloneMainFrame();
         screenSize   = Toolkit.getDefaultToolkit().getScreenSize();
 
 
