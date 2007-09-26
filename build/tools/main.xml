@@ -44,6 +44,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- The following tasks are used to compile the muCommander -->
   <!-- Ant tools.                                              -->
 
+  <!-- Makes sure ant.lib is initialised to its default value  -->
+  <!-- if necessary.                                           -->
+  <target name="ant-lib">
+    <property name="ant.lib" location="${ant.home}/lib/ant.jar"/>
+  </target>
+
   <!-- Checks whether the tools jar file is up to date.        -->
   <!-- Output is stored in ${tools.up-to-date}.                -->
   <target name="check-tools">
@@ -65,9 +71,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <javac destdir="${tools.classes.normal}" debug="on" deprecation="on"
            encoding="utf-8" source="1.4" target="1.4">
       <classpath>
-        <fileset dir="${tools}">
-          <include name="**/*.jar"/>
-        </fileset>
+         <fileset dir="${lib}/">
+           <include name="*include/*.jar"/>
+         </fileset>
       </classpath>
       <src path="${source}/com/mucommander/ant"/>
       <src path="${source}/com/mucommander/xml"/>
@@ -85,7 +91,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <echo>Creating Ant tools JAR file...</echo>
     <copy file="${tools.res}/JavaApplicationStub" todir="${tools.classes.normal}" overwrite="true"/>
     <copy file="${tools.license}" todir="${tools.classes.normal}" overwrite="true"/>
-    <jar destfile="${tools.jar.normal}" basedir="${tools.classes.normal}" compress="false">
+    <jar destfile="${tools.jar.normal}" basedir="${tools.classes.normal}" excludes="**/*Test.class">
       <manifest>
         <attribute name="Specification-Title"    value="muCommander Ant tasks"/>
         <attribute name="Specification-Vendor"   value="Maxence Bernard"/>
@@ -142,7 +148,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- JAR file is found to be up-to-date by 'check-tools'.    -->
   <!-- The resulting JAR file will be stored in                -->
   <!-- ${tools.jar.obf}.                                       -->
-  <target name="obfuscate-tools-bytecode" if="proguard.available" unless="tools.up-to-date">
+  <target name="obfuscate-tools-bytecode" depends="ant-lib" if="proguard.available" unless="tools.up-to-date">
     <echo>Creating Ant tools obfuscated JAR file...</echo>
     <proguard overloadaggressively="false" usemixedcaseclassnames="true" ignorewarnings="true" optimize="true" shrink="true" obfuscate="true"
               allowaccessmodification="true" defaultpackage="" skipnonpubliclibraryclasses="false">
@@ -150,8 +156,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
       <outjar name="${tools.jar.obf}"/>
       <libraryjar name="${java.lib}"/>
       <libraryjar name="${ant.lib}"/>
+      <libraryjar name="${lib}/noinclude" jarfilter="*.jar"/>
 
-      <keep access="public" name="com.mucommander.ant.**" type="class">
+      <keep access="public">
         <method access="public" name="set*"/>
         <method access="public" name="create*"/>
         <method access="public" name="add**"/>
@@ -173,6 +180,23 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- ======================================================= -->
   <!-- The following targets are used to compress the          -->
   <!-- muCommander Ant tools when possible.                    -->
+
+  <!-- Checks whether we need to compress the tools JAR file.  -->
+  <!-- Note that the sole reason for this target is that Ant's -->
+  <!-- 'if' and 'unless' statements can only take one variable -->
+  <!-- as a parameter. For this reason, we need to aggregate   -->
+  <!-- ${tools.up-to-date} and ${7za.available} in one         -->
+  <!-- property.                                               -->
+  <target name="check-copy-obfuscated-tools">
+    <condition property="copy-obfuscated-tools" value="true">
+      <not>
+        <or>
+          <istrue value="${tools.up-to-date}"/>
+          <istrue value="${7za.available}"/>
+        </or>
+      </not>
+    </condition>
+  </target>
 
   <!-- Compress the obfuscated tools JAR file using 7za.       -->
   <!-- This target is only meant to be called if 7za is        -->
@@ -201,24 +225,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     </exec>
   </target>
 
-  <!-- Checks whether we need to compress the tools JAR file.  -->
-  <!-- Note that the sole reason for this target is that Ant's -->
-  <!-- 'if' and 'unless' statements can only take one varialbe -->
-  <!-- as a parameter. For this reason, we need to aggregate   -->
-  <!-- ${tools.up-to-date} and ${7za.available} in one         -->
-  <!-- property.                                               -->
-  <target name="check-copy-obfuscated-tools">
-    <condition property="copy-obfuscated-tools" value="true">
-      <not>
-        <or>
-          <istrue value="${tools.up-to-date}"/>
-          <istrue value="${7za.available}"/>
-        </or>
-      </not>
-    </condition>
-  </target>
-
-
   <!-- Compress the obfuscated tools JAR file using standard   -->
   <!-- zip compression.                                        -->
   <!-- This target is only meant to be called if 7za is not    -->
@@ -242,6 +248,46 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 
+  <!-- = Tools unit testing ================================== -->
+  <!-- ======================================================= -->
+  <target name="check-skip-unit-test-tools">
+    <condition property="skip-unit-test-tools" value="true">
+      <not>
+        <or>
+          <istrue value="${tools.up-to-date}"/>
+          <istrue value="${junit.available}"/>
+        </or>
+      </not>
+    </condition>
+  </target>
+
+  <target name="skip-unit-test-tools" depends="check-skip-unit-test-tools" if="skip-unit-test-tools">
+    <echo>JUnit not available, skipping Ant tools test cases...</echo>
+  </target>
+
+  <target name="do-unit-test-tools" if="junit.available" unless="tools.up-to-date">
+    <echo>Running Ant tools test cases...</echo>
+    <mkdir dir="${tools.junit.reports}"/>
+    <junit printsummary="yes" haltonfailure="yes">
+      <formatter type="plain"/>
+      <classpath>
+        <pathelement location="${tools.classes.normal}"/>
+        <fileset dir="${lib}">
+          <include name="**/*.jar"/>
+        </fileset>
+      </classpath>
+      <batchtest fork="yes" todir="${tools.junit.reports}">
+        <fileset dir="${tools.classes.normal}">
+          <include name="**/*Test.class"/>
+        </fileset>
+      </batchtest>
+    </junit>
+  </target>
+
+  <target name="unit-test-tools" depends="compile-tools,check-junit,skip-unit-test-tools,do-unit-test-tools"/>
+
+
+
   <!-- = Ant tools documentation ============================= -->
   <!-- ======================================================= -->
   <!-- The following targets are used to generate the          -->
@@ -251,7 +297,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- If it is, ${antdoclet.available} will be set to true.   -->
   <!-- Otherwise, depending on the context, this target will   -->
   <!-- either not set ${antdoclet.available} or fail the build -->
-  <target name="check-antdoclet">
+  <target name="check-antdoclet" depends="ant-lib">
     <!-- If AntDoclet or Velocity haven't been configured      -->
     <!-- properly, use default values.                         -->
     <property name="antdoclet.lib" location="${tools}/antdoclet.jar"/>
@@ -288,8 +334,23 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	<exclude name="*.vm"/>
       </fileset>
     </copy>
-    <javadoc access="public" sourcepath="${source}" packagenames="com.mucommander.ant.*"
+    <javadoc access="public" packagenames="com.mucommander.ant.*" 
              destdir="${tools.doc}" encoding="UTF-8" docletpath="${ant.lib}:${antdoclet.lib}:${velocity.lib}:${tools.jar.cmp}">
+
+      <!-- Excludes all non test sources.                      -->
+      <fileset dir="${source}/com/mucommander/ant">
+        <patternset id="non.test.sources">
+          <exclude name="**/*Test.java"/>
+          <exclude name="**/*html"/>
+        </patternset>
+      </fileset>
+      <fileset dir="${source}/com/mucommander/xml">
+        <patternset refid="non.test.sources"/>
+      </fileset>
+      <fileset dir="${source}/com/mucommander/res">
+        <patternset refid="non.test.sources"/>
+      </fileset>
+
       <doclet name="com.neuroning.antdoclet.AntDoclet">
 	<param name="-doctitle" value="muCommander Ant Tools" />
 	<param name="-templatesdir" value="${tools.template}"/>
@@ -307,6 +368,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- Generates the tools documentation.                      -->
   <target name="tools-doc" depends="check-antdoclet,make-tools-doc,skip-tools-doc"/>
 
+  <!-- Packages the tool documentation.                        -->
+  <!-- Output is stored in                                     -->
+  <!-- ${dist}/${tools.package-prefix-docs.tar.gz              -->
   <target name="tools-doc-tgz" depends="tools-doc,tools-prefixes" if="antdoclet.available">
     <echo>Packaging Ant tools documentation...</echo>
     <mkdir dir="${dist}"/>
@@ -339,6 +403,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Refreshes the release directory structure.            -->
     <delete dir="${tools.tmp}/release"/>
     <mkdir dir="${tools.tmp}/release/lib"/>
+    <mkdir dir="${tools.tmp}/release/lib/noinclude"/>
     <mkdir dir="${tools.tmp}/release/docs"/>
     <mkdir dir="${tools.tmp}/release/source"/>
     <mkdir dir="${tools.tmp}/release/tools"/>
@@ -351,6 +416,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
     <!-- Adds the compressed JAR file.                         -->
     <copy file="${tools.jar.cmp}" todir="${tools.tmp}/release/lib"/>
+
+    <!-- Adds the JUnit JAR file.                              -->
+    <copy file="${lib}/noinclude/junit.jar" todir="${tools.tmp}/release/lib/noinclude"/>
 
     <!-- Adds the resources.                                   -->
     <copy todir="${tools.tmp}/release/res">
@@ -394,7 +462,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     </copy>
 
     <!-- Creates the the release file.                         -->
-    <echo>Packaging tools distribution file...</echo>
+    <echo>Packaging Ant tools distribution file...</echo>
     <mkdir dir="${dist}"/>
     <tar destfile="${dist}/${tools.package-prefix}.tar.gz" compression="gzip">
       <tarfileset dir="${tools.tmp}/release/" prefix="${tools.archive-prefix}">
@@ -403,6 +471,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     </tar>
   </target>
 
+  <!-- Notifies the user that the release file cannot be       -->
+  <!-- generated because AntDoclet is not available.           -->
   <target name="skip-release-tools" unless="antdoclet.available">
     <echo>AntDoclet not available, skipping Ant tools release...</echo>
   </target>
@@ -410,5 +480,5 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- Generates a release package for the muCommander tasks.  -->
   <!-- The output will be stored in                            -->
   <!-- ${dist}/${tools.package-prefix}.tar.gz                  -->
-  <target name="release-tools" depends="tools-doc-tgz,make-release-tools,skip-release-tools" if="antdoclet.available"/>
+  <target name="release-tools" depends="unit-test-tools,tools-doc-tgz,make-release-tools,skip-release-tools"/>
 </project>

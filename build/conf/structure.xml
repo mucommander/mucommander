@@ -52,4 +52,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <property name="conf.build"          location="build.xml"/>
   <!-- Path to the tools JAR file.                             -->
   <property name="tools.jar.cmp"       location="${tools}/mucommander-ant-tools.jar"/>
+  <!-- Folder where Junit test reports are generated.        -->
+  <property name="conf.junit.reports"  location="${conf.tmp}/test-reports"/>
 </project>

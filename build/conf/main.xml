@@ -48,7 +48,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <javac destdir="${conf.classes.normal}" debug="on" deprecation="on"
            encoding="utf-8" source="1.4" target="1.4"
            srcdir="${source}" includes="com/mucommander/conf/**,com/mucommander/xml/**"
-           excludes="com/mucommander/conf/impl/**"/>
+           excludes="com/mucommander/conf/impl/**">
+      <classpath>
+         <fileset dir="${lib}/">
+           <include name="*include/*.jar"/>
+         </fileset>
+      </classpath>
+    </javac>
   </target>
 
   <!-- Creates a JAR file containing the uncompressed,         -->
@@ -58,7 +64,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <target name="jar-conf" depends="compile-conf">
     <echo>Creating the Configuration API JAR file...</echo>
     <copy file="${conf.license}" todir="${conf.classes.normal}" overwrite="true"/>
-    <jar destfile="${conf.jar.normal}" basedir="${conf.classes.normal}" compress="false">
+    <jar destfile="${conf.jar.normal}" basedir="${conf.classes.normal}" excludes="**/*Test.class">
       <manifest>
         <attribute name="Specification-Title"    value="muCommander Configuration API"/>
         <attribute name="Specification-Vendor"   value="Maxence Bernard"/>
@@ -101,7 +107,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
       <injar name="${conf.jar.normal}"/> 
       <outjar name="${conf.jar.obf}"/>
       <libraryjar name="${java.lib}"/>
-      <libraryjar name="${ant.lib}"/>
+      <libraryjar name="${lib}/noinclude" jarfilter="*.jar"/>
 
       <keep access="public">
         <field access="public,protected"/>
@@ -163,6 +169,35 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <target name="compress-conf" depends="check-7za,obfuscate-conf,compress-obfuscated-conf,copy-obfuscated-conf"/>
 
 
+  <!-- = Configuration unit testing ========================== -->
+  <!-- ======================================================= -->
+
+  <target name="skip-unit-test-conf" unless="junit.available">
+    <echo>JUnit not available, skipping Configuration API test cases...</echo>
+  </target>
+
+  <target name="do-unit-test-conf" if="junit.available">
+    <echo>Running Configuration API test cases...</echo>
+    <mkdir dir="${conf.junit.reports}"/>
+    <junit printsummary="yes" haltonfailure="yes">
+      <formatter type="plain"/>
+      <classpath>
+        <pathelement location="${conf.classes.normal}"/>
+        <fileset dir="${lib}">
+          <include name="**/*.jar"/>
+        </fileset>
+      </classpath>
+      <batchtest fork="yes" todir="${conf.junit.reports}">
+        <fileset dir="${conf.classes.normal}">
+          <include name="**/*Test.class"/>
+        </fileset>
+      </batchtest>
+    </junit>
+  </target>
+
+  <target name="unit-test-conf" depends="compile-conf,check-junit,skip-unit-test-conf,do-unit-test-conf"/>
+
+
 
   <!-- = Conf API documentation ============================== -->
   <!-- ======================================================= -->
@@ -216,10 +251,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <strreplace from="mucommander-conf-${conf.version}${conf.subversion}" to="conf.package-prefix" what="[ .]" with="_"/>
   </target>
 
-  <target name="release-conf" depends="compress-conf,conf-prefixes,conf-doc-tgz">
+  <target name="release-conf" depends="unit-test-conf,compress-conf,conf-prefixes,conf-doc-tgz">
     <!-- Refreshes the release directory structure.            -->
     <delete dir="${conf.tmp}/release"/>
     <mkdir dir="${conf.tmp}/release/lib"/>
+    <mkdir dir="${conf.tmp}/release/lib/noinclude"/>
     <mkdir dir="${conf.tmp}/release/docs"/>
     <mkdir dir="${conf.tmp}/release/source"/>
     <mkdir dir="${conf.tmp}/release/tools"/>
@@ -231,6 +267,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
     <!-- Adds the compressed JAR file.                         -->
     <copy file="${conf.jar.cmp}" todir="${conf.tmp}/release/lib"/>
+
+    <!-- Adds the JUnit JAR file.                              -->
+    <copy file="${lib}/noinclude/junit.jar" todir="${conf.tmp}/release/lib/noinclude"/>
 
     <!-- Adds the build files.                                 -->
     <copy file="${conf.build}" tofile="${conf.tmp}/release/build.xml"/>

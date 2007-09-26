@@ -54,4 +54,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <property name="tools.template"       location="${tools.res}/template"/>
   <!-- Main AntDoclet template.                                -->
   <property name="tools.doc-template"   value="main.vm"/>
+  <!-- Folder where Junit test reports are generated.        -->
+  <property name="tools.junit.reports"  location="${tools.tmp}/test-reports"/>
 </project>
