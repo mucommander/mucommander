@@ -100,13 +100,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <target name="include-libs" depends="check-libs" unless="libs.up-to-date">
     <echo>Unpacking external libraries...</echo>
     <unjar dest="${classes.normal}">
-      <fileset dir="${lib}">
-        <include name="**/*.jar"/>
-        <!-- Exclude APIs that are used only at compile time.  -->
-        <exclude name="osx-eawt-stubs.jar"/>
-        <exclude name="osx-cocoa.jar"/>
-        <exclude name="servlet-api.jar"/>
-        <exclude name="junit.jar"/>
+      <fileset dir="${lib}/include">
+        <include name="*.jar"/>
     </fileset>
     </unjar>
 
@@ -208,34 +203,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
       <!-- classpath.                                          -->
       <classpath>
          <fileset dir="${lib}">
-          <include name="**/*.jar"/>
+           <include name="*include/*.jar"/>
          </fileset>
       </classpath>
     </javac>
-  </target>
-
-  <!-- Runs all JUnit test cases and halts if one test fails.  -->
-  <!-- Test cases are classes whose name ends with 'Test'.     -->
-  <!-- A summary of all test cases is printed to the standard  -->
-  <!-- Ant output and full reports are generated to disk       -->
-  <!-- in the ${junit.reports} folder.                         -->
-  <target name="unit-test" depends="load-junit,fail-junit,compile">
-  <echo>Running all JUnit test cases...</echo>
-  <mkdir dir="${junit.reports}"/>
-    <junit printsummary="yes" haltonfailure="yes">
-      <formatter type="plain"/>
-      <classpath>
-        <pathelement location="${classes.normal}"/>
-        <fileset dir="${lib}">
-          <include name="**/*.jar"/>
-        </fileset>
-      </classpath>
-      <batchtest fork="yes" todir="${junit.reports}">
-        <fileset dir="${classes.normal}">
-          <include name="**/*Test.class"/>
-        </fileset>
-      </batchtest>
-    </junit>
   </target>
 
   <!-- Generates the application's uncompressed, unobfuscated  -->
@@ -244,7 +215,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <target name="jar" depends="compile,include-libs,resources">
     <tstamp/>
     <echo>Creating JAR file...</echo>
-    <jar jarfile="${jar.normal}" basedir="${classes.normal}">
+    <jar jarfile="${jar.normal}" basedir="${classes.normal}" excludes="**/*Test.class">
       <manifest>
         <attribute name="Main-Class"             value="${app.main}"/>
         <attribute name="Specification-Title"    value="muCommander"/>
@@ -285,13 +256,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
       <injar name="${jar.normal}"/> 
       <outjar name="${jar.obf}"/>
       <libraryjar name="${java.lib}"/>
-      <libraryjar name="${lib}/osx-eawt-stubs.jar"/>
-      <libraryjar name="${lib}/osx-cocoa.jar"/>
-      <libraryjar name="${lib}/servlet-api.jar"/>
-
+      <libraryjar name="${lib}/noinclude" jarfilter="*.jar"/>
 
       <!-- Viewer API uses reflection                          -->
-      <keep name="com.mucommander.file.AbstractFile"/>
       <keepclasseswithmembers extends="com.mucommander.ui.viewer.FileViewer">
 	<method access="public static" type="boolean" name="canViewFile" parameters="com.mucommander.file.AbstractFile"/>
       </keepclasseswithmembers>
@@ -303,10 +270,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
       <keepclasseswithmembers extends="com.mucommander.ui.action.MuAction">
         <constructor access="public" name="*"/>
       </keepclasseswithmembers>
-      <!-- File API uses reflection                            -->
-      <keepclasseswithmembers extends="com.mucommander.file.AbstractFile">
-        <constructor access="public" name="*"/>
-      </keepclasseswithmembers>
       <!-- Yanfs uses reflection                               -->
       <keep name="com.sun.nfs.XFileAccessor"/>
       <keep name="com.sun.nfs.XFileExtensionAccessor"/>
@@ -315,12 +278,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	<method access="public static" type="void" name="main" parameters="java.lang.String[]"/>
       </keep>
     </proguard>
-  </target>
-
-  <!-- Disables debug instructions in the generated binaries.  -->
-  <target name="disable-debug">
-    <echo>Disabling debug...</echo>
-    <property name="is-debug" value="false"/>
   </target>
 
   <!-- Generates the application's obfuscated jar file.        -->
@@ -367,6 +324,44 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- Generates the final appliation JAR depending on the     -->
   <!-- availability of 7za.                                    -->
   <target name="compress" depends="obfuscate,check-7za,copy-obfuscated,compress-obfuscated"/>
+
+
+
+  <!-- = JUnit management ==================================== -->
+  <!-- ======================================================= -->
+
+  <!-- Notifies user that unit tests are being skipped if      -->
+  <!-- junit is not available.                                 -->
+  <target name="skip-unit-test" unless="junit.available">
+    <echo>JUnit not available, skipping test cases...</echo>
+  </target>
+
+  <!-- Runs all JUnit test cases and halts if one test fails.  -->
+  <!-- Test cases are classes whose name ends with 'Test'.     -->
+  <!-- A summary of all test cases is printed to the standard  -->
+  <!-- Ant output and full reports are generated to disk       -->
+  <!-- in the ${junit.reports} folder.                         -->
+  <target name="do-unit-test" if="junit.available">
+    <echo>Running test cases...</echo>
+    <mkdir dir="${junit.reports}"/>
+    <junit printsummary="yes" haltonfailure="yes">
+      <formatter type="plain"/>
+      <classpath>
+        <pathelement location="${classes.normal}"/>
+        <fileset dir="${lib}">
+          <include name="**/*.jar"/>
+        </fileset>
+      </classpath>
+      <batchtest fork="yes" todir="${junit.reports}">
+        <fileset dir="${classes.normal}">
+          <include name="**/*Test.class"/>
+        </fileset>
+      </batchtest>
+    </junit>
+  </target>
+
+  <!-- Runs JUnit test cases if junit is available.            -->
+  <target name="unit-test" depends="compile,check-junit,skip-unit-test,do-unit-test"/>
 
 
 
@@ -757,7 +752,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <javadoc destdir="${doc.api}" author="true" windowtitle="muCommander API" encoding="UTF-8" access="protected">
       <bottom>
          <![CDATA[
-           <p>This file is part of <a href="http://www.mucommander.com" target="_top">muCommander</a> - Copyright (C) 2002-2007 Maxence Bernard</p>
+           <p>This file is part of <a href="http://www.mucommander.com" target="_top">muCommander</a> - Copyright (C) ${app.copyright} Maxence Bernard</p>
          ]]>
       </bottom>
       <classpath>
@@ -980,8 +975,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- JDeb wasn't properly configured, release builds will    -->
   <!-- will just print a warning out and skip the              -->
   <!-- corresponding target, while normal ones will fail.      -->
-  <target name="set-release">
+  <target name="set-release" depends="disable-debug">
     <property name="is-release" value="true"/>
+  </target>
+
+  <!-- Disables debug instructions in the generated binaries.  -->
+  <target name="disable-debug">
+    <echo>Disabling debug...</echo>
+    <property name="is-debug" value="false"/>
   </target>
 
   <!-- Sets the current build as a 'nightly' one.              -->
@@ -998,7 +999,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   </target>
 
   <!-- Generates all available release files.                  -->
-  <target name="all" depends="source,release-tools,release-conf,tgz,setup-exe,deb,portable,version,sign,jnlp,app.tgz,api-doc-tgz"/>
+  <target name="all" depends="source,release-tools,release-conf,unit-test,tgz,setup-exe,deb,portable,version,sign,jnlp,app.tgz,api-doc-tgz"/>
 
   <!-- Generates all the available release files.              -->
   <!-- This target is meant for official releases. Nightly     -->
