@@ -41,6 +41,7 @@ import com.mucommander.ui.dnd.FileDropTargetListener;
 import com.mucommander.ui.event.LocationManager;
 import com.mucommander.ui.main.menu.TablePopupMenu;
 import com.mucommander.ui.main.table.FileTable;
+import com.mucommander.ui.main.table.FileTableConfiguration;
 import com.mucommander.ui.main.table.FolderChangeMonitor;
 import com.mucommander.ui.progress.ProgressTextField;
 import com.mucommander.ui.theme.*;
@@ -103,8 +104,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
     private final static String BROWSE_TEXT = Translator.get("browse");
     private final static String DOWNLOAD_TEXT = Translator.get("download");
 
-
-    public FolderPanel(MainFrame mainFrame, AbstractFile initialFolder) {
+    FolderPanel(MainFrame mainFrame, AbstractFile initialFolder, FileTableConfiguration conf) {
         super(new BorderLayout());
 
         if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(" initialFolder="+initialFolder);
@@ -138,7 +138,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
         add(locationPanel, BorderLayout.NORTH);
 
         // Create the FileTable
-        fileTable = new FileTable(mainFrame, this);
+        fileTable = new FileTable(mainFrame, this, conf);
 
         // Init chained file filters used to filter out files in the current directory.
         // AndFileFilter is used, that means files must satisfy all the filters in order to be displayed.
@@ -276,7 +276,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
 
     /**
      * Returns the visited folders history wrapped in a FolderHistory object.
-\    */
+     */
     public FolderHistory getFolderHistory() {
         return this.folderHistory;
     }
@@ -387,10 +387,8 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
         }
 		
         this.changeFolderThread = new ChangeFolderThread(folder);
-
         if(selectThisFileAfter!=null)
             this.changeFolderThread.selectThisFileAfter(selectThisFileAfter);
-
         changeFolderThread.start();
     }
 
@@ -483,7 +481,6 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
      */
     private synchronized void setCurrentFolder(AbstractFile folder, AbstractFile children[], AbstractFile fileToSelect) {
         fileTable.setCurrentFolder(folder, children);
-
         // Select given file if not null
         if(fileToSelect!=null)
             fileTable.selectFile(fileToSelect);
