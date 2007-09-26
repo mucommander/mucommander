@@ -219,7 +219,7 @@ public class FileTableCellRenderer implements Columns, TableCellRenderer, ThemeL
 
     private static int getColorIndex(int row, AbstractFile file, FileTableModel tableModel) {
         // Parent directory.
-        if(row==0 && tableModel.hasParentfolder())
+        if(row==0 && tableModel.hasParentFolder())
             return FOLDER;
 
         // Marked file.
@@ -247,6 +247,7 @@ public class FileTableCellRenderer implements Columns, TableCellRenderer, ThemeL
     }
 
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+        int                   columnId;
         int                   colorIndex;
         int                   focusedIndex;
         int                   selectedIndex;
@@ -273,7 +274,7 @@ public class FileTableCellRenderer implements Columns, TableCellRenderer, ThemeL
             FileTable.QuickSearch search;
             search = this.table.getQuickSearch();
             if(search.isActive())
-                matches = search.matches((row == 0 && tableModel.hasParentfolder()) ? ".." : tableModel.getFileAtRow(row).getName());
+                matches = search.matches((row == 0 && tableModel.hasParentFolder()) ? ".." : tableModel.getFileAtRow(row).getName());
             else
                 matches = true;
         }
@@ -284,22 +285,22 @@ public class FileTableCellRenderer implements Columns, TableCellRenderer, ThemeL
         focusedIndex  = table.hasFocus() ? FOCUSED : UNFOCUSED;
         colorIndex    = getColorIndex(row, file, tableModel);
 
-        column = table.convertColumnIndexToModel(column);
+        columnId = table.convertColumnIndexToModel(column);
         
         // Extension/icon column: return ImageIcon instance
-        if(column==EXTENSION) {
+        if(columnId == EXTENSION) {
             label = extensionLabel;
 
             // Set file icon (parent folder icon if '..' file)
             extensionLabel.setIcon(
-                                   row==0 && tableModel.hasParentfolder()?
+                                   row==0 && tableModel.hasParentFolder()?
                                    FileIcons.getParentFolderIcon()
                                    :FileIcons.getFileIcon(file)
                                    );
         }
         // Any other column (name, date or size)
         else {
-            switch(column) {
+            switch(columnId) {
                 case NAME:
                     label = nameLabel;
                     break;
