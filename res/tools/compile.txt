@@ -14,6 +14,10 @@ the proper libraries and tools are installed.
 - Ant 1.6.5 or greater
   This can be retrieved from http://ant.apache.org/
 
+- p7zip 4.43 or greater
+  This is used to compress JAR files further than the Sun tools can.
+  It can be retrieved from http://p7zip.sourceforge.net/
+
   Once these tools have been installed, the build process needs to be
 configured.
 This is done by copying ./build/local_template.xml to ./local.xml and editing
@@ -27,10 +31,10 @@ it.
   Under Mac OS X, you'll find the classes JAR file in:
   /System/Library/Frameworks/JavaVM.framework/Versions/1.4.0/Classes/classes.jar
 
-- ant.lib (required)
+- ant.lib (defaults to /path/to/ant/lib/ant.jar)
   Path to the Ant JAR file.
-  This is necessary in order to compile the various Ant tasks used by
-  muCommander.
+  This value only needs to be set if the Ant JAR file is not in its standard
+  location.
 
 - proguard.lib (defaults to ./tools/proguard.jar)
   Path to the ProGuard JAR file.
