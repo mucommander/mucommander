@@ -49,10 +49,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- If not set, the obfuscation steps will be skipped.      -->
   <property name="proguard.lib"    location="${tools}/proguard.jar"/>
 
-  <!-- Path to the Ant core libraries (used to compile tools). -->
-  <!-- muCommander was built with Ant 1.6.5.                   -->
-  <property name="ant.lib"         location=""/>
-
   <!-- Path to the 7z executable.                              -->
   <!-- If this is not set, compression will be done using      -->
   <!-- standard ZIP algorithms.                                -->
@@ -71,6 +67,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- Defaults to the one bundled with the project, but can   -->
   <!-- be changed to another version by editing this value.    -->
   <property name="velocity.lib"    location="${tools}/velocity.jar"/>
+
+  <!-- Path to the Ant core libraries (used to compile tools). -->
+  <!-- muCommander was built with Ant 1.6.5.                   -->
+  <!-- Defaults to ${ant.home}/lib/ant.jar.                    -->
+  <property name="ant.lib"         location="${ant.home}/lib/ant.jar"/>
 
 
 
