@@ -42,23 +42,18 @@ public class FileTableHeaderRenderer extends DefaultTableCellRenderer implements
     private final static ImageIcon DESCENDING_ICON = IconManager.getIcon(IconManager.COMMON_ICON_SET, "arrow_down.png");
 
 
-    public FileTableHeaderRenderer() {
-    }
+    public FileTableHeaderRenderer() {}
 
 
     /**
      * Returns <code>true</code> if this header is the one currently selected.
      */
-    public void setCurrent(boolean isCurrent) {
-        this.isCurrent = isCurrent;
-    }
+    public void setCurrent(boolean isCurrent) {this.isCurrent = isCurrent;}
 
     /**
      * Sets the direction of arrow symbolizing the sort order.
      */
-    public void setOrder(boolean isAscending) {
-        this.ascendingOrder = isAscending;
-    }
+    public void setOrder(boolean isAscending) {this.ascendingOrder = isAscending;}
 
 
     ////////////////////////
