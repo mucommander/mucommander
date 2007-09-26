@@ -64,7 +64,7 @@ public class PlatformManager {
     /** Other OS */
     public static final int OTHER      = 0;
     /** OS family muCommander is running on (see constants) */
-    public static final int OS_FAMILY;
+    private static      int osFamily;
 
 
 
@@ -85,7 +85,7 @@ public class PlatformManager {
     /** Java 1.6.x */
     public static final int JAVA_1_6 = 6;
     /** Java version muCommander is running on (see constants) */
-    public static final int JAVA_VERSION;
+    private static      int javaVersion;
 
 
 
@@ -98,7 +98,7 @@ public class PlatformManager {
     /** GNOME desktop */
     public static final int GNOME_DESKTOP     = 2;
     /** Unix desktop muCommander is running on, used only if OS family is LINUX, SOLARIS or OTHER */
-    public static final int UNIX_DESKTOP;
+    private static      int unixDesktop;
 
     /** Environment variable used to determine if GNOME is the desktop currently running */
     private static final String GNOME_ENV_VAR = "GNOME_DESKTOP_SESSION_ID";
@@ -110,28 +110,28 @@ public class PlatformManager {
     // - Default commands -------------------------------------------------------
     // --------------------------------------------------------------------------
     /** Name of the system's default file manager. */
-    public static final String  DEFAULT_FILE_MANAGER_NAME;
+    private static      String  defaultFileManagerName;
     /** Command used to start the system's default file manager. */
-    public static final String  DEFAULT_FILE_MANAGER_COMMAND;
+    private static      String  defaultFileManagerCommand;
     /** Command used to start the system's default file opener. */
-    public static final String  DEFAULT_FILE_OPENER_COMMAND;
+    private static      String  defaultFileOpenerCommand;
     /** Command used to start the system's default URL opener. */
-    public static final String  DEFAULT_URL_OPENER_COMMAND;
+    private static      String  defaultUrlOpenerCommand;
     /** Command used to start the system's default executable file opener. */
-    public static final String  DEFAULT_EXE_OPENER_COMMAND;
+    private static      String  defaultExeOpenerCommand;
     /** Command used to run the system's default shell. */
-    public static final String  DEFAULT_SHELL_COMMAND;
+    private static      String  defaultShellCommand;
 
 
 
     // - Default file associations ----------------------------------------------
     // --------------------------------------------------------------------------
     /** Regular expression used to match executable file names. */
-    public static final String  EXE_ASSOCIATION;
+    private static       String  exeAssociation;
     /** Whether or not the system can or needs to run executable files as themselves. */
-    public static final boolean RUN_EXECUTABLES;
+    private static       boolean runExecutables;
     /** Whether or not default regular expressions must be case sensitive. */
-    public static final boolean DEFAULT_REGEXP_CASE_SENSITIVITY;
+    private static       boolean defaultRegexpCaseSensitivity;
 
     /** Windows file manager name. */
     private static final String WINDOWS_FILE_MANAGER_NAME   = "Explorer";
@@ -199,38 +199,38 @@ public class PlatformManager {
         // - Java version ----------------------------
         // -------------------------------------------
         // Java version detection //
-        String javaVersion = System.getProperty("java.version");
+        String jVersion = System.getProperty("java.version");
 
         // Java version property should never be null or empty, but better be safe than sorry ...
-        if(javaVersion==null || (javaVersion=javaVersion.trim()).equals(""))
+        if(jVersion==null || (jVersion=jVersion.trim()).equals(""))
             // Assume java 1.4 (first supported Java version)
-            JAVA_VERSION = JAVA_1_4;
+            javaVersion = JAVA_1_4;
         // Java 1.6
-        else if(javaVersion.startsWith("1.6"))
-            JAVA_VERSION = JAVA_1_6;
+        else if(jVersion.startsWith("1.6"))
+            javaVersion = JAVA_1_6;
         // Java 1.5
-        else if(javaVersion.startsWith("1.5"))
-            JAVA_VERSION = JAVA_1_5;
+        else if(jVersion.startsWith("1.5"))
+            javaVersion = JAVA_1_5;
         // Java 1.4
-        else if(javaVersion.startsWith("1.4"))
-            JAVA_VERSION = JAVA_1_4;
+        else if(jVersion.startsWith("1.4"))
+            javaVersion = JAVA_1_4;
         // Java 1.3
-        else if(javaVersion.startsWith("1.3"))
-            JAVA_VERSION = JAVA_1_3;
+        else if(jVersion.startsWith("1.3"))
+            javaVersion = JAVA_1_3;
         // Java 1.2
-        else if(javaVersion.startsWith("1.2"))
-            JAVA_VERSION = JAVA_1_2;
+        else if(jVersion.startsWith("1.2"))
+            javaVersion = JAVA_1_2;
         // Java 1.1
-        else if(javaVersion.startsWith("1.1"))
-            JAVA_VERSION = JAVA_1_1;
+        else if(jVersion.startsWith("1.1"))
+            javaVersion = JAVA_1_1;
         // Java 1.0
-        else if(javaVersion.startsWith("1.0"))
-            JAVA_VERSION = JAVA_1_0;
+        else if(jVersion.startsWith("1.0"))
+            javaVersion = JAVA_1_0;
         // Newer version we don't know of yet, assume latest supported Java version
         else
-            JAVA_VERSION = JAVA_1_6;
+            javaVersion = JAVA_1_6;
 
-        if(Debug.ON) Debug.trace("detected Java version value = "+JAVA_VERSION);
+        if(Debug.ON) Debug.trace("detected Java version value = "+javaVersion);
 
 
         // - OS family -------------------------------
@@ -241,87 +241,87 @@ public class PlatformManager {
 
         // Windows family
         if(osName.startsWith("Windows")) {
-            UNIX_DESKTOP              = UNKNOWN_DESKTOP;
-            DEFAULT_FILE_MANAGER_NAME = WINDOWS_FILE_MANAGER_NAME;
+            unixDesktop            = UNKNOWN_DESKTOP;
+            defaultFileManagerName = WINDOWS_FILE_MANAGER_NAME;
 
             // Windows 95, 98, Me
             if (osName.startsWith("Windows 95") || osName.startsWith("Windows 98") || osName.startsWith("Windows Me")) {
-                OS_FAMILY                       = WINDOWS_9X;
-                DEFAULT_FILE_MANAGER_COMMAND    = WINDOWS_9X_FILE_OPENER;
-                DEFAULT_FILE_OPENER_COMMAND     = WINDOWS_9X_FILE_OPENER;
-                DEFAULT_URL_OPENER_COMMAND      = WINDOWS_9X_FILE_OPENER;
-                DEFAULT_EXE_OPENER_COMMAND      = null;
-                EXE_ASSOCIATION                 = null;
-                RUN_EXECUTABLES                 = false;
-                DEFAULT_REGEXP_CASE_SENSITIVITY = false;
+                osFamily                     = WINDOWS_9X;
+                defaultFileManagerCommand    = WINDOWS_9X_FILE_OPENER;
+                defaultFileOpenerCommand     = WINDOWS_9X_FILE_OPENER;
+                defaultUrlOpenerCommand      = WINDOWS_9X_FILE_OPENER;
+                defaultExeOpenerCommand      = null;
+                exeAssociation               = null;
+                runExecutables               = false;
+                defaultRegexpCaseSensitivity = false;
             }
             // Windows NT, 2000, XP and up
             else {
-                OS_FAMILY                       = WINDOWS_NT;
-                DEFAULT_FILE_MANAGER_COMMAND    = WINDOWS_NT_FILE_OPENER;
-                DEFAULT_FILE_OPENER_COMMAND     = WINDOWS_NT_FILE_OPENER;
-                DEFAULT_URL_OPENER_COMMAND      = WINDOWS_NT_FILE_OPENER;
-                DEFAULT_EXE_OPENER_COMMAND      = WINDOWS_NT_EXE_OPENER;
-                EXE_ASSOCIATION                 = WINDOWS_EXE_REGEXP;
-                RUN_EXECUTABLES                 = false;
-                DEFAULT_REGEXP_CASE_SENSITIVITY = false;
+                osFamily                     = WINDOWS_NT;
+                defaultFileManagerCommand    = WINDOWS_NT_FILE_OPENER;
+                defaultFileOpenerCommand     = WINDOWS_NT_FILE_OPENER;
+                defaultUrlOpenerCommand      = WINDOWS_NT_FILE_OPENER;
+                defaultExeOpenerCommand      = WINDOWS_NT_EXE_OPENER;
+                exeAssociation               = WINDOWS_EXE_REGEXP;
+                runExecutables               = false;
+                defaultRegexpCaseSensitivity = false;
             }
         }
         // Mac OS family
         else if(osName.startsWith("Mac OS")) {
-            UNIX_DESKTOP = UNKNOWN_DESKTOP;
+            unixDesktop = UNKNOWN_DESKTOP;
 
             // Mac OS 7.x, 8.x or 9.x (doesn't run under Mac OS classic)
             if(osVersion.startsWith("7.")
                || osVersion.startsWith("8.")
                || osVersion.startsWith("9.")) {
-                OS_FAMILY = MAC_OS;
-                DEFAULT_FILE_MANAGER_NAME       = null;
-                DEFAULT_FILE_MANAGER_COMMAND    = null;
-                DEFAULT_FILE_OPENER_COMMAND     = null;
-                DEFAULT_URL_OPENER_COMMAND      = null;
-                DEFAULT_EXE_OPENER_COMMAND      = null;
-                EXE_ASSOCIATION                 = null;
-                RUN_EXECUTABLES                 = false;
-                DEFAULT_REGEXP_CASE_SENSITIVITY = true;
+                osFamily = MAC_OS;
+                defaultFileManagerName       = null;
+                defaultFileManagerCommand    = null;
+                defaultFileOpenerCommand     = null;
+                defaultUrlOpenerCommand      = null;
+                defaultExeOpenerCommand      = null;
+                exeAssociation               = null;
+                runExecutables               = false;
+                defaultRegexpCaseSensitivity = true;
             }
             // Mac OS X or up
             else {
-                OS_FAMILY                       = MAC_OS_X;
-                DEFAULT_FILE_MANAGER_NAME       = MAC_OS_X_FILE_MANAGER_NAME;
-                DEFAULT_FILE_MANAGER_COMMAND    = MAC_OS_X_FILE_MANAGER;
-                DEFAULT_FILE_OPENER_COMMAND     = MAC_OS_X_FILE_OPENER;
-                DEFAULT_URL_OPENER_COMMAND      = MAC_OS_X_FILE_OPENER;
-                DEFAULT_EXE_OPENER_COMMAND      = null;
-                EXE_ASSOCIATION                 = null;
-                RUN_EXECUTABLES                 = false;
-                DEFAULT_REGEXP_CASE_SENSITIVITY = true;
+                osFamily                     = MAC_OS_X;
+                defaultFileManagerName       = MAC_OS_X_FILE_MANAGER_NAME;
+                defaultFileManagerCommand    = MAC_OS_X_FILE_MANAGER;
+                defaultFileOpenerCommand     = MAC_OS_X_FILE_OPENER;
+                defaultUrlOpenerCommand      = MAC_OS_X_FILE_OPENER;
+                defaultExeOpenerCommand      = null;
+                exeAssociation               = null;
+                runExecutables               = false;
+                defaultRegexpCaseSensitivity = true;
             }
         }
         // OS/2 family.
         else if(osName.startsWith("OS/2")) {
-            OS_FAMILY                       = OS_2;
-            UNIX_DESKTOP                    = UNKNOWN_DESKTOP;
-            DEFAULT_FILE_MANAGER_NAME       = null;
-            DEFAULT_FILE_MANAGER_COMMAND    = null;
-            DEFAULT_FILE_OPENER_COMMAND     = null;
-            DEFAULT_URL_OPENER_COMMAND      = null;
-            DEFAULT_EXE_OPENER_COMMAND      = POSIX_EXE_OPENER;
-            RUN_EXECUTABLES                 = true;
-            EXE_ASSOCIATION                 = (JAVA_VERSION < JAVA_1_6) ? POSIX_EXE_REGEXP : null;
-            DEFAULT_REGEXP_CASE_SENSITIVITY = true;
+            osFamily                     = OS_2;
+            unixDesktop                  = UNKNOWN_DESKTOP;
+            defaultFileManagerName       = null;
+            defaultFileManagerCommand    = null;
+            defaultFileOpenerCommand     = null;
+            defaultUrlOpenerCommand      = null;
+            defaultExeOpenerCommand      = POSIX_EXE_OPENER;
+            runExecutables               = true;
+            exeAssociation               = (javaVersion < JAVA_1_6) ? POSIX_EXE_REGEXP : null;
+            defaultRegexpCaseSensitivity = true;
         }
         // Unix, or assimilated.
         else {
             // Linux family
             if(osName.startsWith("Linux"))
-                OS_FAMILY = LINUX;
+                osFamily = LINUX;
             // Solaris family
             else if(osName.startsWith("Solaris") || osName.startsWith("SunOS"))
-                OS_FAMILY = SOLARIS;
+                osFamily = SOLARIS;
             // Any other OS
             else
-                OS_FAMILY = OTHER;
+                osFamily = OTHER;
 
 
 
@@ -337,7 +337,7 @@ public class PlatformManager {
 
             // System.getenv() has been deprecated and not usable (throws an exception) under Java 1.3 and 1.4,
             // let's use System.getProperty() instead
-            if(JAVA_VERSION <= JAVA_1_4) {
+            if(javaVersion <= JAVA_1_4) {
                 gnomeEnvValue = System.getProperty(GNOME_ENV_VAR);
                 kdeEnvValue   = System.getProperty(KDE_ENV_VAR);
             }
@@ -347,60 +347,91 @@ public class PlatformManager {
                 kdeEnvValue   = System.getenv(KDE_ENV_VAR);
             }
 
-            // Tries to identify Gnome.
-            if((gnomeEnvValue!=null && !gnomeEnvValue.trim().equals("")) || couldRun("gnome-open")) {
-                UNIX_DESKTOP                    = GNOME_DESKTOP;
-                DEFAULT_FILE_MANAGER_NAME       = GNOME_FILE_MANAGER_NAME;
-                DEFAULT_FILE_MANAGER_COMMAND    = GNOME_FILE_OPENER;
-                DEFAULT_FILE_OPENER_COMMAND     = GNOME_FILE_OPENER;
-                DEFAULT_URL_OPENER_COMMAND      = GNOME_FILE_OPENER;
-                DEFAULT_EXE_OPENER_COMMAND      = POSIX_EXE_OPENER;
-                RUN_EXECUTABLES                 = true;
-                EXE_ASSOCIATION                 = (JAVA_VERSION < JAVA_1_6) ? POSIX_EXE_REGEXP : null;
-                DEFAULT_REGEXP_CASE_SENSITIVITY = true;
-            }
+            // Checks whether the Gnome environment variable is defined.
+            if(gnomeEnvValue!=null && !gnomeEnvValue.trim().equals(""))
+                setGnomeValues();
 
-            // Tries to identify KDE.
-            else if(kdeEnvValue!=null && !kdeEnvValue.trim().equals("") || couldRun("kfmclient")) {
-                UNIX_DESKTOP                    = KDE_DESKTOP;
-                DEFAULT_FILE_MANAGER_NAME       = KDE_FILE_MANAGER_NAME;
-                DEFAULT_FILE_MANAGER_COMMAND    = KDE_FILE_OPENER;
-                DEFAULT_FILE_OPENER_COMMAND     = KDE_FILE_OPENER;
-                DEFAULT_URL_OPENER_COMMAND      = KDE_URL_OPENER;
-                DEFAULT_EXE_OPENER_COMMAND      = null;
-                EXE_ASSOCIATION                 = null;
-                RUN_EXECUTABLES                 = false;
-                DEFAULT_REGEXP_CASE_SENSITIVITY = true;
-            }
+            // Checks whether the KDE environment variable is defined.
+            else if(kdeEnvValue!=null && !kdeEnvValue.trim().equals(""))
+                setKdeValues();
+
+            // In some cases, KDE doesn't set its environment variable. We
+            // can work around such cases by checking whether kfmclient is available.
+            else if(couldRun("kfmclient"))
+                setKdeValues();
+
+            // gnome-open might be available on some systems which are not running Gnome.
+            // It's a good fallback, as it will allow muCommander to use files properly, but
+            // has the disadvantage that it will create a 'Reveal in Nautilus' item in the
+            // right-click menu.
+            else if(couldRun("gnome-open"))
+                setGnomeValues();
 
             // Absolutely no clue what we're running.
             else {
-                UNIX_DESKTOP                    = UNKNOWN_DESKTOP;
-                DEFAULT_FILE_MANAGER_NAME       = null;
-                DEFAULT_FILE_MANAGER_COMMAND    = null;
-                DEFAULT_FILE_OPENER_COMMAND     = null;
-                DEFAULT_URL_OPENER_COMMAND      = null;
-                DEFAULT_EXE_OPENER_COMMAND      = POSIX_EXE_OPENER;
-                RUN_EXECUTABLES                 = true;
-                EXE_ASSOCIATION                 = (JAVA_VERSION < JAVA_1_6) ? POSIX_EXE_REGEXP : null;
-                DEFAULT_REGEXP_CASE_SENSITIVITY = true;
+                unixDesktop                  = UNKNOWN_DESKTOP;
+                defaultFileManagerName       = null;
+                defaultFileManagerCommand    = null;
+                defaultFileOpenerCommand     = null;
+                defaultUrlOpenerCommand      = null;
+                defaultExeOpenerCommand      = POSIX_EXE_OPENER;
+                runExecutables               = true;
+                exeAssociation               = (javaVersion < JAVA_1_6) ? POSIX_EXE_REGEXP : null;
+                defaultRegexpCaseSensitivity = true;
             }
         }
 
         // Identifies the default shell command.
-        if(OS_FAMILY == WINDOWS_9X)
-            DEFAULT_SHELL_COMMAND  = WINDOWS_9X_SHELL;
-        else if(OS_FAMILY == WINDOWS_NT)
-            DEFAULT_SHELL_COMMAND  = WINDOWS_NT_SHELL;
+        if(osFamily == WINDOWS_9X)
+            defaultShellCommand  = WINDOWS_9X_SHELL;
+        else if(osFamily == WINDOWS_NT)
+            defaultShellCommand  = WINDOWS_NT_SHELL;
         else
-            DEFAULT_SHELL_COMMAND  = POSIX_SHELL;
+            defaultShellCommand  = POSIX_SHELL;
     }
+
+    private static void setGnomeValues() {
+        unixDesktop                  = GNOME_DESKTOP;
+        defaultFileManagerName       = GNOME_FILE_MANAGER_NAME;
+        defaultFileManagerCommand    = GNOME_FILE_OPENER;
+        defaultFileOpenerCommand     = GNOME_FILE_OPENER;
+        defaultUrlOpenerCommand      = GNOME_FILE_OPENER;
+        defaultExeOpenerCommand      = POSIX_EXE_OPENER;
+        runExecutables               = true;
+        exeAssociation               = (javaVersion < JAVA_1_6) ? POSIX_EXE_REGEXP : null;
+        defaultRegexpCaseSensitivity = true;
+    }
+
+    private static void setKdeValues() {
+        unixDesktop                   = KDE_DESKTOP;
+        defaultFileManagerName        = KDE_FILE_MANAGER_NAME;
+        defaultFileManagerCommand     = KDE_FILE_OPENER;
+        defaultFileOpenerCommand      = KDE_FILE_OPENER;
+        defaultUrlOpenerCommand       = KDE_URL_OPENER;
+        defaultExeOpenerCommand       = null;
+        exeAssociation                = null;
+        runExecutables                = false;
+        defaultRegexpCaseSensitivity = true;
+    }
+
+    public static int getJavaVersion() {return javaVersion;}
+    public static int getOsFamily() {return osFamily;}
+    public static String getDefaultShellCommand() {return defaultShellCommand;}
+    public static int getUnixDesktop() {return unixDesktop;}
+    public static String getDefaultFileManagerName() {return defaultFileManagerName;}
+    public static String getDefaultFileManagerCommand() {return defaultFileManagerCommand;}
+    public static String getDefaultFileOpenerCommand() {return defaultFileOpenerCommand;}
+    public static String getDefaultUrlOpenerCommand() {return defaultUrlOpenerCommand;}
+    public static String getDefaultExeOpenerCommand() {return defaultExeOpenerCommand;}
+    public static boolean runExecutables() {return runExecutables;}
+    public static String getExeAssociation() {return exeAssociation;}
+    public static boolean getDefaultRegexpCaseSensitivity() {return defaultRegexpCaseSensitivity;}
 
     /**
      * Convenience method which returns true if the current OS is Windows-based,
      * that is if the OS family is either {@link #WINDOWS_9X} or {@link #WINDOWS_NT}.
      */
-    public static boolean isWindowsFamily() {return OS_FAMILY == WINDOWS_9X || OS_FAMILY == WINDOWS_NT;}
+    public static boolean isWindowsFamily() {return osFamily == WINDOWS_9X || osFamily == WINDOWS_NT;}
 
     /**
      * Returns true if the specified command could be executed.
@@ -520,7 +551,7 @@ public class PlatformManager {
      */
     public static boolean isLeftMouseButton(MouseEvent e) {
         int modifiers = e.getModifiers();
-        return (modifiers & MouseEvent.BUTTON1_MASK)!=0 && !(OS_FAMILY==MAC_OS_X && e.isControlDown());
+        return (modifiers & MouseEvent.BUTTON1_MASK)!=0 && !(osFamily==MAC_OS_X && e.isControlDown());
     }
 
     /**
@@ -533,7 +564,7 @@ public class PlatformManager {
      */
     public static boolean isRightMouseButton(MouseEvent e) {
         int modifiers = e.getModifiers();
-        return (modifiers & MouseEvent.BUTTON3_MASK)!=0 || (OS_FAMILY==MAC_OS_X && (modifiers & MouseEvent.BUTTON1_MASK)!=0 && e.isControlDown());
+        return (modifiers & MouseEvent.BUTTON3_MASK)!=0 || (osFamily==MAC_OS_X && (modifiers & MouseEvent.BUTTON1_MASK)!=0 && e.isControlDown());
     }
 
     /**
@@ -568,7 +599,7 @@ public class PlatformManager {
         File folder;
 
         // Mac OS X specific folder (~/Library/Preferences/muCommander)
-        if(OS_FAMILY==MAC_OS_X)
+        if(osFamily==MAC_OS_X)
             folder = new File(System.getProperty("user.home")+"/Library/Preferences/muCommander");
         // For all other platforms, use generic folder (~/.mucommander)
         else
