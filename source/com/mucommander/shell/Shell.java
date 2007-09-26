@@ -143,9 +143,9 @@ public class Shell implements ConfigurationListener {
 
         // Retrieves the configuration defined shell command.
         if(MuConfiguration.getVariable(MuConfiguration.USE_CUSTOM_SHELL, MuConfiguration.DEFAULT_USE_CUSTOM_SHELL))
-            buffer = MuConfiguration.getVariable(MuConfiguration.CUSTOM_SHELL, PlatformManager.DEFAULT_SHELL_COMMAND);
+            buffer = MuConfiguration.getVariable(MuConfiguration.CUSTOM_SHELL, PlatformManager.getDefaultShellCommand());
         else
-            buffer = PlatformManager.DEFAULT_SHELL_COMMAND;
+            buffer = PlatformManager.getDefaultShellCommand();
 
         // Splits the command into tokens, leaving room for the argument.
         tokens = CommandParser.getTokensWithParams(buffer, 1);
