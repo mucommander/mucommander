@@ -19,6 +19,7 @@
 package com.mucommander;
 
 import com.mucommander.auth.CredentialsManager;
+import com.mucommander.bookmark.BookmarkManager;
 import com.mucommander.command.CommandManager;
 import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.shell.ShellHistoryManager;
@@ -80,6 +81,10 @@ public class ShutdownHook extends Thread {
         // Write credentials file to disk, only if changes were made
         try {CredentialsManager.writeCredentials(false);}
         catch(Exception e) {if(Debug.ON) Debug.trace("Failed to save credentials: " + e);}
+
+        // Write bookmarks file to disk, only if changes were made
+        try {BookmarkManager.writeBookmarks(false);}
+        catch(Exception e) {if(Debug.ON) Debug.trace("Failed to save bookmarks: " + e);}
 
         // Saves the current theme.
         try {ThemeManager.saveCurrentTheme();}
