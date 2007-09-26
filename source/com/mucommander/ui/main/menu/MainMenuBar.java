@@ -142,7 +142,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
         MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(ChangeDateAction.class, mainFrame), menuItemMnemonicHelper);
 
         // Under Mac OS X, 'Preferences' already appears in the application (muCommander) menu, do not display it again
-        if(PlatformManager.OS_FAMILY!=PlatformManager.MAC_OS_X) {
+        if(PlatformManager.getOsFamily()!=PlatformManager.MAC_OS_X) {
             fileMenu.add(new JSeparator());
             MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(ShowPreferencesAction.class, mainFrame), menuItemMnemonicHelper);
         }
@@ -153,7 +153,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
         fileMenu.add(new JSeparator());
         MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(CloseWindowAction.class, mainFrame), menuItemMnemonicHelper);
         // Under Mac OS X, 'Quit' already appears in the application (muCommander) menu, do not display it again
-		if(PlatformManager.OS_FAMILY!=PlatformManager.MAC_OS_X)
+        if(PlatformManager.getOsFamily()!=PlatformManager.MAC_OS_X)
             MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(QuitAction.class, mainFrame), menuItemMnemonicHelper);
 
         add(fileMenu);
@@ -204,7 +204,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
         toggleDateColumnItem = MenuToolkit.addCheckBoxMenuItem(columnsMenu, ActionManager.getActionInstance(ToggleDateColumnAction.class, mainFrame), null);
         togglePermissionsColumnItem = MenuToolkit.addCheckBoxMenuItem(columnsMenu, ActionManager.getActionInstance(TogglePermissionsColumnAction.class, mainFrame), null);
         viewMenu.add(columnsMenu);
-        MenuToolkit.addCheckBoxMenuItem(viewMenu, ActionManager.getActionInstance(ToggleAutoSizeAction.class, mainFrame), menuItemMnemonicHelper).setSelected(mainFrame.getActiveTable().isAutoSizeColumnsEnabled());
+        MenuToolkit.addCheckBoxMenuItem(viewMenu, ActionManager.getActionInstance(ToggleAutoSizeAction.class, mainFrame), menuItemMnemonicHelper).setSelected(mainFrame.isAutoSizeColumnsEnabled());
 
         viewMenu.add(new JSeparator());
         MenuToolkit.addMenuItem(viewMenu, ActionManager.getActionInstance(ToggleToolBarAction.class, mainFrame), menuItemMnemonicHelper);
@@ -299,7 +299,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
         }
 		
         // Under Mac OS X, 'About' already appears in the application (muCommander) menu, do not display it again
-        if(PlatformManager.OS_FAMILY!=PlatformManager.MAC_OS_X) {
+        if(PlatformManager.getOsFamily()!=PlatformManager.MAC_OS_X) {
             helpMenu.add(new JSeparator());
             MenuToolkit.addMenuItem(helpMenu, ActionManager.getActionInstance(ShowAboutAction.class, mainFrame), menuItemMnemonicHelper);
         }
