@@ -524,17 +524,17 @@ public class CommandManager implements CommandBuilder {
                 AndFileFilter filter;
 
                 // Uses the 'executable' regexp if it exists.
-                if(PlatformManager.EXE_ASSOCIATION != null) {
+                if(PlatformManager.getExeAssociation() != null) {
                     try {
                         filter = new AndFileFilter();
-                        filter.addFileFilter(new RegexpFilenameFilter(PlatformManager.EXE_ASSOCIATION, PlatformManager.DEFAULT_REGEXP_CASE_SENSITIVITY));
+                        filter.addFileFilter(new RegexpFilenameFilter(PlatformManager.getExeAssociation(), PlatformManager.getDefaultRegexpCaseSensitivity()));
                         registerAssociation(EXE_OPENER_ALIAS, filter);
                     }
                     catch(Exception e) {if(Debug.ON) Debug.trace("Failed to create default EXE opener association: " + e.getMessage());}
                 }
 
                 // Match executables if necessary and if running under java >= 1.6.
-                if(PlatformManager.RUN_EXECUTABLES && (PlatformManager.JAVA_VERSION >= PlatformManager.JAVA_1_6)) {
+                if(PlatformManager.runExecutables() && (PlatformManager.getJavaVersion() >= PlatformManager.JAVA_1_6)) {
                     try {
                         filter = new AndFileFilter();
                         filter.addFileFilter(new PermissionsFileFilter(PermissionsFileFilter.EXECUTE_PERMISSION, true));
@@ -707,10 +707,10 @@ public class CommandManager implements CommandBuilder {
 
         finally {
             // Registers default commands if necessary.
-            registerDefaultCommand(FILE_OPENER_ALIAS,  PlatformManager.DEFAULT_FILE_OPENER_COMMAND, null);
-            registerDefaultCommand(URL_OPENER_ALIAS,   PlatformManager.DEFAULT_URL_OPENER_COMMAND, null);
-            registerDefaultCommand(EXE_OPENER_ALIAS,   PlatformManager.DEFAULT_EXE_OPENER_COMMAND, null);
-            registerDefaultCommand(FILE_MANAGER_ALIAS, PlatformManager.DEFAULT_FILE_MANAGER_COMMAND, PlatformManager.DEFAULT_FILE_MANAGER_NAME);
+            registerDefaultCommand(FILE_OPENER_ALIAS,  PlatformManager.getDefaultFileOpenerCommand(), null);
+            registerDefaultCommand(URL_OPENER_ALIAS,   PlatformManager.getDefaultUrlOpenerCommand(), null);
+            registerDefaultCommand(EXE_OPENER_ALIAS,   PlatformManager.getDefaultExeOpenerCommand(), null);
+            registerDefaultCommand(FILE_MANAGER_ALIAS, PlatformManager.getDefaultFileManagerCommand(), PlatformManager.getDefaultFileManagerName());
             wereCommandsModified = false;
 
             // Makes sure the input stream is closed.

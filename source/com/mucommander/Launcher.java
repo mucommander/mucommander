@@ -355,7 +355,7 @@ public class Launcher {
         // ------------------------------------------------------------
         // If muCommander is running under Mac OS X (how lucky!), add some
         // glue for the main menu bar and other OS X specifics.
-        if(PlatformManager.OS_FAMILY==PlatformManager.MAC_OS_X) {
+        if(PlatformManager.getOsFamily()==PlatformManager.MAC_OS_X) {
             // Configuration needs to be loaded before any sort of GUI creation
             // is performed - if we're to use the metal look, we need to know about
             // it right about now.
@@ -381,7 +381,7 @@ public class Launcher {
             splashScreen = new SplashScreen(RuntimeConstants.VERSION, "Loading preferences...");
 
         // If we're not running under OS_X, preferences haven't been loaded yet.
-        if(PlatformManager.OS_FAMILY != PlatformManager.MAC_OS_X) {
+        if(PlatformManager.getOsFamily() != PlatformManager.MAC_OS_X) {
             try {MuConfiguration.read();}
             catch(Exception e) {printFileError("Could not load configuration", e, fatalWarnings);}
         }

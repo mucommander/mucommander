@@ -115,7 +115,7 @@ public abstract class LRUCache {
      * @return an instance of the best LRUCache implementation for the current Java runtime 
      */
     public static LRUCache createInstance(int capacity) {
-        if(PlatformManager.JAVA_VERSION>=PlatformManager.JAVA_1_4)
+        if(PlatformManager.getJavaVersion()>=PlatformManager.JAVA_1_4)
             return new FastLRUCache(capacity);
         else
             return new LegacyLRUCache(capacity);

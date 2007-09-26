@@ -44,7 +44,7 @@ public class RootFolders {
 
         // Add Mac OS X's /Volumes subfolders and not file roots ('/') since Volumes already contains a named link 
         // (like 'Hard drive' or whatever silly name the user gave his primary hard disk) to /
-        if(PlatformManager.OS_FAMILY==PlatformManager.MAC_OS_X) {
+        if(PlatformManager.getOsFamily()==PlatformManager.MAC_OS_X) {
             addMacOSXVolumes(rootFoldersV);
             if(Debug.ON) Debug.trace("/Volumes's subfolders added: "+rootFoldersV);
         }
