@@ -92,6 +92,7 @@ public class FileTable extends JTable implements Columns, MouseListener, MouseMo
     private FilenameEditor        filenameEditor;
 
 
+    private AbstractFile currentFolder;
 
     /** Row currently selected */
     private int currentRow;
@@ -274,22 +275,42 @@ public class FileTable extends JTable implements Columns, MouseListener, MouseMo
     /**
      * Returns the folder currently displayed by this FileTable.
      */
-    public AbstractFile getCurrentFolder() {return tableModel.getCurrentFolder();}
+    public AbstractFile getCurrentFolder() {return currentFolder != null ? currentFolder : tableModel.getCurrentFolder();}
 
     /**
      * Changes current folder, keeping current selection if folder hasn't changed.
      * Should only be called by FolderPanel!
      */
     public synchronized void setCurrentFolder(AbstractFile folder, AbstractFile children[]) {
+        AbstractFile current;      // Current folder.
+        FileSet      markedFiles;  // Buffer for all previously marked file.
+        AbstractFile selectedFile; // Buffer for the previously selected file.
+
         // Stop quick search in case it was being used before folder change
         quickSearch.cancel();
+
+        currentFolder = folder;
+        current       = getCurrentFolder();
+
+        // If we're refreshing the current folder, save the current selection and marked files
+        // in order to restore them properly.
+        markedFiles  = null;
+        selectedFile = null;
+        if(current != null && folder.equals(current)) {
+            markedFiles = tableModel.getMarkedFiles();
+            selectedFile = getSelectedFile();
+        }
+
+        // If we're navigating to the current folder's parent, we must select
+        // the current folder.
+        else if(tableModel.hasParentFolder() && folder.equals(tableModel.getParentFolder()))
+            selectedFile = current;
 
         // Changes the current folder in the swing thread to make sure that repaints cannot
         // happen in the middle of the operation - this is used to prevent flickers, baddly
         // refreshed frames and such unpleasant graphical artifacts.
-        SwingUtilities.invokeLater(new FolderChangeThread(folder, children));
+        SwingUtilities.invokeLater(new FolderChangeThread(folder, children, markedFiles, selectedFile));
     }
-
 
     /**
      * Sets row height based on current cell's font and border, revalidates and repaints this JTable.
@@ -1195,14 +1216,14 @@ public class FileTable extends JTable implements Columns, MouseListener, MouseMo
             AbstractFile fileToRename = tableModel.getFileAtRow(editingRow);
 
             if(!newName.equals(fileToRename.getName())) {
-                AbstractFile currentFolder;
+                AbstractFile current;
 
-                currentFolder = getCurrentFolder();
+                current = getCurrentFolder();
                 // Starts moving files
                 ProgressDialog progressDialog = new ProgressDialog(mainFrame, Translator.get("move_dialog.moving"));
-                FileSet files = new FileSet(currentFolder);
+                FileSet files = new FileSet(current);
                 files.add(fileToRename);
-                MoveJob renameJob = new MoveJob(progressDialog, mainFrame, files, currentFolder, newName, FileCollisionDialog.ASK_ACTION, true);
+                MoveJob renameJob = new MoveJob(progressDialog, mainFrame, files, current, newName, FileCollisionDialog.ASK_ACTION, true);
                 progressDialog.start(renameJob);
             }
         }
@@ -1623,35 +1644,18 @@ public class FileTable extends JTable implements Columns, MouseListener, MouseMo
     private class FolderChangeThread implements Runnable {
         private AbstractFile   folder;
         private AbstractFile[] children;
+        private FileSet        markedFiles;
+        private AbstractFile   selectedFile;
 
-        public FolderChangeThread(AbstractFile folder, AbstractFile[] children) {
-            this.folder   = folder;
-            this.children = children;
+        public FolderChangeThread(AbstractFile folder, AbstractFile[] children, FileSet markedFiles, AbstractFile selectedFile) {
+            this.folder       = folder;
+            this.children     = children;
+            this.markedFiles  = markedFiles;
+            this.selectedFile = selectedFile;
         }
 
-        public void run() {
-            AbstractFile currentFolder; // Current folder.
-            FileSet      markedFiles;   // Buffer for all previously marked file.
-            AbstractFile selectedFile;  // Buffer for the previously selected file.
-
-            currentFolder = getCurrentFolder();
-
+        public synchronized void run() {
             try {
-                // If we're refreshing the current folder, save the current selection and marked files
-                // in order to restore them properly.
-                markedFiles  = null;
-                selectedFile = null;
-                if(currentFolder!=null && folder.equals(currentFolder)) {
-                    markedFiles = tableModel.getMarkedFiles();
-                    selectedFile = getSelectedFile();
-                }
-
-                // If we're navigating to the current folder's parent, we must select
-                // the current folder.
-                else if(tableModel.hasParentFolder() && folder.equals(tableModel.getParentFolder()))
-                    selectedFile = currentFolder;
-
-                // Set new current folder and parent.
                 tableModel.setCurrentFolder(folder, children);
 
                 // Computes the index of the new row selection.
@@ -1690,6 +1694,7 @@ public class FileTable extends JTable implements Columns, MouseListener, MouseMo
             // While no such thing should happen, we want to make absolutely sure no exception
             // is propagated in Swing's paint thread.
             catch(Throwable e) {}
+            finally {FileTable.this.currentFolder = null;}
         }
     }
 }
