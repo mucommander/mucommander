@@ -108,7 +108,7 @@ public class KDETrash extends QueuedTrash {
 
     public boolean isTrashFile(AbstractFile file) {
         return (file.getTopAncestor() instanceof LocalFile)
-                && file.getAbsolutePath(true).contains("/.local/share/Trash/");
+            && (file.getAbsolutePath(true).indexOf("/.local/share/Trash/") != -1);
     }
 
     /**
