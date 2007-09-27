@@ -289,8 +289,8 @@ public class FileTable extends JTable implements Columns, MouseListener, MouseMo
         // Stop quick search in case it was being used before folder change
         quickSearch.cancel();
 
-        currentFolder = folder;
         current       = getCurrentFolder();
+        currentFolder = folder;
 
         // If we're refreshing the current folder, save the current selection and marked files
         // in order to restore them properly.
