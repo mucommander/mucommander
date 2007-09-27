@@ -296,6 +296,7 @@ public class PlatformManager {
                 exeAssociation               = null;
                 runExecutables               = false;
                 defaultRegexpCaseSensitivity = true;
+                com.mucommander.file.FileFactory.setTrashProvider(new com.mucommander.file.impl.trash.OSXTrashProvider());
             }
         }
         // OS/2 family.
@@ -412,6 +413,7 @@ public class PlatformManager {
         exeAssociation                = null;
         runExecutables                = false;
         defaultRegexpCaseSensitivity = true;
+        com.mucommander.file.FileFactory.setTrashProvider(new com.mucommander.file.impl.trash.KDETrashProvider());
     }
 
     public static int getJavaVersion() {return javaVersion;}
