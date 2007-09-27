@@ -109,6 +109,7 @@ Improvements:
 Localization:
 
 Bug fixes:
+- Fixed broken 'file deletion' command under Java 1.4.
 
 Known issues:
 - Italian, Korean and Polish translations are not up-to-date
