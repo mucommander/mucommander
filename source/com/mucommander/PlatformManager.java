@@ -163,12 +163,8 @@ public class PlatformManager {
     private static final String WINDOWS_9X_SHELL            = "command.com /c";
     /** Default Windows NT shell. */
     private static final String WINDOWS_NT_SHELL            = "cmd /U /c";
-    /** Default encoding used by the windows NT shell. */
-    private static final String WINDOWS_NT_SHELL_ENCODING   = "UTF-16LE";
     /** Default shell for non-windows OSes. */
     private static final String POSIX_SHELL                 = "/bin/sh -l -c";
-    /** Default encoding for Posix shells. */
-    private static final String POSIX_SHELL_ENCODING        = "UTF-8";
 
 
 
