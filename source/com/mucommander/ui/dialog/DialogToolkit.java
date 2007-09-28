@@ -47,7 +47,6 @@ public class DialogToolkit {
         return fitToMaxDimension(window, new Dimension((int)screenBounds.getWidth(), (int)screenBounds.getHeight()));
     }
 	
-	
     private static boolean fitToDimension(Window window, Dimension d, boolean min) {
         int maxWidth = (int)d.getWidth();
         int maxHeight = (int)d.getHeight();
@@ -96,6 +95,32 @@ public class DialogToolkit {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         c.setLocation(screenSize.width/2 - c.getWidth()/2,
                     screenSize.height/2 - c.getHeight()/2);
+    }
+
+    /**
+     * Centers the specified component on the specified window.
+     * <p>
+     * Note that this method assumes <code>c</code>'s dimension to be at most that of the screen.
+     * This can be ensured through {@link #fitToScreen(Component)}. If this constraint is not respected,
+     * behaviour is unpredictable.
+     * </p>
+     * @param c      component to center.
+     * @param window window to center on.
+     */
+    public static void centerOnWindow(Component c, Window window) {
+        Dimension screenSize;
+        int       x;
+        int       y;
+        int       buffer;
+
+        x          = Math.max(0, window.getX() + (window.getWidth() - c.getWidth()) / 2);
+        y          = Math.max(0, window.getY() + (window.getHeight() - c.getHeight()) / 2);
+        screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        if((buffer = screenSize.width - (c.getWidth() + x)) < 0)
+            x += buffer;
+        if((buffer = screenSize.height - (c.getHeight() + y)) < 0)
+            y += buffer;
+        c.setLocation(x, y);
     }
     
 	
