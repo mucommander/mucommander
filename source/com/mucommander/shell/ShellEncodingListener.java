@@ -49,9 +49,8 @@ class ShellEncodingListener implements ProcessListener {
         if(Charset.isSupported(encoding)) {
             oldEncoding = MuConfiguration.getVariable(MuConfiguration.SHELL_ENCODING);
 
-            // If no encoding was previously set, or we have found a new encoding with a large enough sample set,
-            // change the current shell encoding.
-            if((oldEncoding == null) || (!encoding.equals(oldEncoding) && out.size() >= EncodingDetector.MAX_RECOMMENDED_BYTE_SIZE))
+            // If no encoding was previously set, or we have found a new encoding, change the current shell encoding.
+            if((oldEncoding == null) || !encoding.equals(oldEncoding))
                 MuConfiguration.setVariable(MuConfiguration.SHELL_ENCODING, encoding);
 
             // Stop listening for new byte input if we have gathered a large enough sample set.
