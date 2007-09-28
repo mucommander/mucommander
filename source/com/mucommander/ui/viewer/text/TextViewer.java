@@ -16,7 +16,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 package com.mucommander.ui.viewer.text;
 
 import com.mucommander.file.AbstractFile;
@@ -42,7 +41,7 @@ import java.io.InputStreamReader;
  *
  * @author Maxence Bernard
  */
-public class TextViewer extends FileViewer implements ActionListener, ThemeListener {
+class TextViewer extends FileViewer implements ActionListener, ThemeListener {
 
     private JMenuItem copyItem;
     private JMenuItem selectAllItem;
@@ -99,12 +98,6 @@ public class TextViewer extends FileViewer implements ActionListener, ThemeListe
         return new Insets(4, 3, 4, 3);
     }
 	
-	
-    public static boolean canViewFile(AbstractFile file) {
-        return true;
-    }
-
-
     public long getMaxRecommendedSize() {
         return 131072;
     }

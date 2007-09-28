@@ -44,7 +44,7 @@ import java.io.OutputStream;
  *
  * @author Maxence Bernard
  */
-public class TextEditor extends FileEditor implements ActionListener, DocumentListener, ThemeListener {
+class TextEditor extends FileEditor implements ActionListener, DocumentListener, ThemeListener {
 
     private JTextArea textArea;
 
@@ -107,14 +107,7 @@ public class TextEditor extends FileEditor implements ActionListener, DocumentLi
         }
     }
 		
-	
-    public static boolean canEditFile(AbstractFile file) {
-        return true;
-    }
-
-    public long getMaxRecommendedSize() {
-        return 131072;
-    }
+    public long getMaxRecommendedSize() {return 131072;}
 
 	
     protected void saveAs(AbstractFile destFile) throws IOException {
