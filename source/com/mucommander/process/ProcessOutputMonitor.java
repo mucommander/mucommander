@@ -21,7 +21,7 @@ package com.mucommander.process;
 import com.mucommander.Debug;
 
 import java.io.IOException;
-import java.io.Reader;
+import java.io.InputStream;
 
 /**
  * Used to monitor a process' stdout and stderr streams.
@@ -39,7 +39,8 @@ class ProcessOutputMonitor implements Runnable {
     // - Instance fields -------------------------------------------------------
     // -------------------------------------------------------------------------
     /** Stream to read from. */
-    private Reader          in;
+    private InputStream     in;
+    private String          encoding;
     /** Listener to notify of updates. */
     private ProcessListener listener;
     /** Process to wait on once the stream is closed. */
@@ -56,10 +57,11 @@ class ProcessOutputMonitor implements Runnable {
      * @param in       input stream to 'empty'.
      * @param listener where to send the content of the stream.
      */
-    public ProcessOutputMonitor(Reader in, ProcessListener listener) {
+    public ProcessOutputMonitor(InputStream in, String encoding, ProcessListener listener) {
         this.listener = listener;
         this.in       = in;
         monitor       = true;
+        this.encoding = encoding;
     }
 
     /**
@@ -72,8 +74,8 @@ class ProcessOutputMonitor implements Runnable {
      * @param listener where to send the content of the stream.
      * @param process  process to wait on.
      */
-    public ProcessOutputMonitor(Reader in, ProcessListener listener, AbstractProcess process) {
-        this(in, listener);
+    public ProcessOutputMonitor(InputStream in, String encoding, ProcessListener listener, AbstractProcess process) {
+        this(in, encoding, listener);
         this.process = process;
     }
 
@@ -85,16 +87,21 @@ class ProcessOutputMonitor implements Runnable {
      * Empties the content of the stream and notifies the listener.
      */
     public void run() {
-        char[] buffer; // Where to store the stream's output.
+        byte[] buffer; // Where to store the stream's output.
         int    read;   // Number of bytes read in the last read operation.
 
-        buffer = new char[512];
+        buffer = new byte[512];
 
         // Reads the content of the stream.
         try {
             while(monitor && ((read = in.read(buffer, 0, buffer.length)) != -1)) {
-                if(listener != null)
+                if(listener != null) {
                     listener.processOutput(buffer, 0, read);
+                    if(encoding == null)
+                        listener.processOutput(new String(buffer, 0, read));
+                    else
+                        listener.processOutput(new String(buffer, 0, read, encoding));
+                }
             }
         }
         // Ignore this exception: either there's nothing we can do about it anyway,
