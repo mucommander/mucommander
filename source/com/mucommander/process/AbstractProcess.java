@@ -79,26 +79,6 @@ public abstract class AbstractProcess {
     }
 
     /**
-     * Tries to open a reader on the specified stream, using the specified encoding.
-     * <p>
-     * If the specified encoding cannot be found, or is set to <code>null</code>, this method
-     * will use the default system encoding. In theory, this should be the <code>file.encoding</code>
-     * system property, but this is not stated clearly on the documentation and might change depending
-     * on the VM implementation.
-     * </p>
-     * @param           in InputStream on which to open the reader.
-     * @param  encoding encoding to use on the stream.
-     * @return          a reader on the specified stream using the specified encoding.
-     */
-    private static Reader getStreamReader(InputStream in, String encoding) {
-        if(encoding != null) {
-            try {return new InputStreamReader(in, encoding);}
-            catch(Exception e) {e.printStackTrace();}
-        }
-        return new InputStreamReader(in);
-    }
-
-    /**
      * Starts monitoring the process.
      * @param listener if non <code>null</code>, <code>listener</code> will receive updates about the process' event.
      * @param encoding encoding that should be used by the process' stdout and stderr streams.
@@ -107,13 +87,13 @@ public abstract class AbstractProcess {
         // Only monitors stdout if the process uses merged streams.
         if(usesMergedStreams()) {
             if(Debug.ON) Debug.trace("Starting process merged output monitor...");
-            new Thread(stdoutMonitor = new ProcessOutputMonitor(getStreamReader(getInputStream(), encoding), listener, this), "Process sdtout/stderr monitor").start();
+            new Thread(stdoutMonitor = new ProcessOutputMonitor(getInputStream(), encoding, listener, this), "Process sdtout/stderr monitor").start();
         }
         // Monitors both stdout and stderr.
         else {
             if(Debug.ON) Debug.trace("Starting process stdout and stderr monitors...");
-            new Thread(stdoutMonitor = new ProcessOutputMonitor(getStreamReader(getInputStream(), encoding), listener, this), "Process stdout monitor").start();
-            new Thread(stderrMonitor = new ProcessOutputMonitor(getStreamReader(getErrorStream(), encoding), listener), "Process stderr monitor").start();
+            new Thread(stdoutMonitor = new ProcessOutputMonitor(getInputStream(), encoding, listener, this), "Process stdout monitor").start();
+            new Thread(stderrMonitor = new ProcessOutputMonitor(getErrorStream(), encoding, listener), "Process stderr monitor").start();
         }
     }
 
