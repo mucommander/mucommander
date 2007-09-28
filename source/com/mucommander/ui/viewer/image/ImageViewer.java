@@ -42,8 +42,7 @@ import java.io.InputStream;
  *
  * @author Maxence Bernard
  */
-//public class ImageViewer extends FileViewer implements ComponentListener {
-public class ImageViewer extends FileViewer implements ActionListener, ThemeListener {
+class ImageViewer extends FileViewer implements ActionListener, ThemeListener {
 	
     private Image image;
     private Image scaledImage;
