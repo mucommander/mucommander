@@ -305,4 +305,8 @@
   <!-- Action  : Toggle hidden files display on and off.                         -->
   <!-- Default : shift alt H                                                     -->
   <action class="com.mucommander.ui.action.ToggleHiddenFilesAction"     keystroke="shift alt H"/>
+
+  <!-- Action  : Open the bookmark file system in the current folder panel.      -->
+  <!-- Default : alt B                                                           -->
+  <action class="com.mucommander.ui.action.OpenBookmarksAction"         keystroke="alt B"/>
 </keymap>
