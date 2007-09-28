@@ -42,13 +42,6 @@ public class EditorRegistrar {
     /** Default editor's class name */
     private final static String DEFAULT_EDITOR_CLASSNAME = "com.mucommander.ui.viewer.text.TextEditor";
 
-
-    static {
-        // Register internal file editors
-        editorsClassNames.add("com.mucommander.ui.viewer.bookmark.BookmarkEditor");
-    }
-
-
     /**
      * Registers a FileEditor. The given class name must correspond to a class that extends {@link FileEditor FileEditor}. 
      */
