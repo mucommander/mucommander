@@ -35,9 +35,25 @@ public interface ProcessListener {
 
     /**
      * This method is called whenever the process sends data to its output streams (stdout or stderr).
+     * <p>
+     * The output passed to this method is encoded. Listener that need to work with raw bytes should
+     * use {@link #processOutput(byte[],int,int)} instead.
+     * </p>
      * @param buffer contains the process' output.
      * @param offset offset in buffer at which the process' output starts.
      * @param length length of the process' output in buffer.
      */
-    public void processOutput(char buffer[], int offset, int length);
+    public void processOutput(String output);
+
+    /**
+     * This method is called whenever the process sends data to its output streams (stdout or stderr).
+     * <p>
+     * The output passed to this method is raw and doesn't take encoding into account. Listeners that
+     * need to work with properly encoded output should use {@link #processOutput(String)} instead.
+     * </p>
+     * @param buffer contains the process' output.
+     * @param offset offset in buffer at which the process' output starts.
+     * @param length length of the process' output in buffer.
+     */
+    public void processOutput(byte[] buffer, int offset, int length);
 }
