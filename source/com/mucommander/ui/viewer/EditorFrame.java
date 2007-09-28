@@ -259,6 +259,7 @@ public class EditorFrame extends JFrame implements ActionListener, Runnable, Win
 
             // Sets panel to preferred size, without exceeding a maximum size and with a minumum size
             pack();
+            DialogToolkit.centerOnWindow(this, mainFrame);
             setVisible(true);
         }
         catch(Exception e) {
