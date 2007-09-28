@@ -85,7 +85,10 @@ public class XAlignedComponentPanel extends JPanel {
         this.c = new GridBagConstraints();
         this.c.anchor = GridBagConstraints.EAST;
     }
-	
+
+    public void setLabelLeftAligned(boolean aligned) {
+        this.c.anchor = aligned ? GridBagConstraints.WEST : GridBagConstraints.EAST;
+    }
 
     /**
      * Adds a new row with the given label and component, the component taking all the horizontal space left
@@ -108,7 +111,7 @@ public class XAlignedComponentPanel extends JPanel {
      * @param component JComponent instance that will take all remaining width space
      * @param ySpaceAfter number of pixels to be inserted after this row
      */
-    public void addRow(JLabel label, JComponent component, int ySpaceAfter) {
+    public void addRow(JComponent label, JComponent component, int ySpaceAfter) {
         if(firstComponent ==null)
             firstComponent = component;
 		
