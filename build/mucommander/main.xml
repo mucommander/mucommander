@@ -258,14 +258,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
       <libraryjar name="${java.lib}"/>
       <libraryjar name="${lib}/noinclude" jarfilter="*.jar"/>
 
-      <!-- Viewer API uses reflection                          -->
-      <keepclasseswithmembers extends="com.mucommander.ui.viewer.FileViewer">
-	<method access="public static" type="boolean" name="canViewFile" parameters="com.mucommander.file.AbstractFile"/>
-      </keepclasseswithmembers>
-      <!-- Editor API uses reflection                          -->
-      <keepclasseswithmembers extends="com.mucommander.ui.viewer.FileEditor">
-	<method access="public static" type="boolean" name="canEditFile" parameters="com.mucommander.file.AbstractFile"/>
-      </keepclasseswithmembers>
       <!-- Action API uses reflection                          -->
       <keepclasseswithmembers extends="com.mucommander.ui.action.MuAction">
         <constructor access="public" name="*"/>
