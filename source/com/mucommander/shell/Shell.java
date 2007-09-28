@@ -28,6 +28,7 @@ import com.mucommander.file.AbstractFile;
 import com.mucommander.file.impl.local.LocalFile;
 import com.mucommander.process.AbstractProcess;
 import com.mucommander.process.ProcessListener;
+import com.mucommander.process.ProcessListenerList;
 import com.mucommander.process.ProcessRunner;
 
 import java.io.IOException;
@@ -40,6 +41,8 @@ public class Shell implements ConfigurationListener {
     // -----------------------------------------------------------------------
     /** Encoding used by the shell. */
     private static String   encoding;
+    /** Whether encoding should be auto-detected or not. */
+    private static boolean  autoDetectEncoding;
     /** Tokens that compose the shell command. */
     private static String[] tokens;
     /** Tokens that compose remote shell commands. */
@@ -128,6 +131,18 @@ public class Shell implements ConfigurationListener {
         }
 
         // Starts the process.
+        if(autoDetectEncoding) {
+            if(listener == null)
+                listener = new ShellEncodingListener();
+            else {
+                ProcessListenerList listeners;
+
+                listeners = new ProcessListenerList();
+                listeners.add(listener);
+                listeners.add(new ShellEncodingListener());
+                listener = listeners;
+            }
+        }
         return (encoding == null) ? ProcessRunner.execute(commandTokens, currentFolder, listener) : ProcessRunner.execute(commandTokens, currentFolder, listener, encoding);
     }
 
@@ -150,7 +165,9 @@ public class Shell implements ConfigurationListener {
         // Splits the command into tokens, leaving room for the argument.
         tokens = CommandParser.getTokensWithParams(buffer, 1);
 
-        encoding = MuConfiguration.getVariable(MuConfiguration.SHELL_ENCODING);
+        // Retrieves encoding configuration.
+        encoding           = MuConfiguration.getVariable(MuConfiguration.SHELL_ENCODING);
+        autoDetectEncoding = MuConfiguration.getVariable(MuConfiguration.AUTODETECT_SHELL_ENCODING, MuConfiguration.DEFAULT_AUTODETECT_SHELL_ENCODING);
     }
 
     /**
