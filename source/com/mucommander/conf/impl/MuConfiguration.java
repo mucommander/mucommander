@@ -88,8 +88,12 @@ public class MuConfiguration {
     public static final boolean DEFAULT_USE_CUSTOM_SHELL          = false;
     /** Maximum number of items that should be present in the shell history. */
     public static final String  SHELL_HISTORY_SIZE                = SHELL_SECTION + '.' + "history_size";
-    /** Endoding used to read the shell output. */
+    /** Encoding used to read the shell output. */
     public static final String  SHELL_ENCODING                    = SHELL_SECTION + '.' + "encoding";
+    /** Whether or not shell encoding should be auto-detected. */
+    public static final String  AUTODETECT_SHELL_ENCODING         = SHELL_SECTION + '.' + "autodect_encoding";
+    /** Default shell encoding auto-detection behaviour. */
+    public static final boolean DEFAULT_AUTODETECT_SHELL_ENCODING = true;
     /** Default maximum shell history size. */
     public static final int     DEFAULT_SHELL_HISTORY_SIZE        = 100;
 
@@ -506,6 +510,14 @@ public class MuConfiguration {
                 renameVariable("show_status_bar",   STATUS_BAR_VISIBLE);
                 renameVariable("show_command_bar",  COMMAND_BAR_VISIBLE);
                 setVariable(VERSION, RuntimeConstants.VERSION);
+            }
+
+            // Initialises mac os x specific values
+            if(PlatformManager.getOsFamily() == PlatformManager.MAC_OS_X) {
+                if(getVariable(SHELL_ENCODING) == null) {
+                    setVariable(SHELL_ENCODING, "UTF-8");
+                    setVariable(AUTODETECT_SHELL_ENCODING, false);
+                }
             }
         }
     }
