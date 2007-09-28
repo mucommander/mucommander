@@ -26,7 +26,11 @@ import com.mucommander.ui.dialog.pref.PreferencesDialog;
 import com.mucommander.ui.dialog.pref.PreferencesPanel;
 import com.mucommander.ui.layout.YBoxPanel;
 import com.mucommander.ui.notifier.AbstractNotifier;
+import com.mucommander.ui.layout.XAlignedComponentPanel;
+import com.mucommander.ui.combobox.SaneComboBox;
 
+import java.nio.charset.Charset;
+import java.util.Iterator;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
@@ -57,6 +61,41 @@ class MiscPanel extends PreferencesPanel {
     /** 'Enable Bonjour services discovery' checkbox */
     private JCheckBox bonjourDiscoveryCheckBox;
 
+    /** Shell encoding combo box. */
+    private JComboBox shellEncoding;
+
+    private JComboBox createEncodingComboBox() {
+        Iterator availableEncodings;
+        int      index;
+        String   encoding;
+        String   currentEncoding;
+        int      selectedIndex;
+
+        shellEncoding = new SaneComboBox();
+        shellEncoding.addItem(Translator.get("prefs_dialog.auto_detect_shell_encoding"));
+
+        // Otherwise, look for the selected character encoding as we add it.
+        availableEncodings = Charset.availableCharsets().keySet().iterator();
+        index              = 1;
+        selectedIndex      = 0;
+        currentEncoding    = MuConfiguration.getVariable(MuConfiguration.SHELL_ENCODING);
+        while(availableEncodings.hasNext()) {
+            encoding = (String)availableEncodings.next();
+
+            shellEncoding.addItem(encoding);
+            if(encoding.equals(currentEncoding))
+                selectedIndex = index;
+
+            index++;
+        }
+
+        if(MuConfiguration.getVariable(MuConfiguration.AUTODETECT_SHELL_ENCODING, MuConfiguration.DEFAULT_AUTODETECT_SHELL_ENCODING))
+            selectedIndex = 0;
+        shellEncoding.setSelectedIndex(selectedIndex);
+
+        return shellEncoding;
+    }
+
 
     public MiscPanel(PreferencesDialog parent) {
         super(parent, Translator.get("prefs_dialog.misc_tab"));
@@ -65,35 +104,33 @@ class MiscPanel extends PreferencesPanel {
 
         YBoxPanel northPanel = new YBoxPanel();
 
-        // Shell panel
-        YBoxPanel shellPanel = new YBoxPanel();
-        shellPanel.setBorder(BorderFactory.createTitledBorder(Translator.get("prefs_dialog.shell")));
+        JRadioButton useDefaultShellRadioButton = new JRadioButton(Translator.get("prefs_dialog.default_shell") + ':');
+        useCustomShellRadioButton = new JRadioButton(Translator.get("prefs_dialog.custom_shell") + ':');
 
-        JRadioButton useDefaultShellRadioButton = new JRadioButton(Translator.get("prefs_dialog.default_shell")+": "+PlatformManager.getDefaultShellCommand());
-        useCustomShellRadioButton = new JRadioButton(Translator.get("prefs_dialog.custom_shell")+": ");
         // Use sytem default or custom shell ?
         if(MuConfiguration.getVariable(MuConfiguration.USE_CUSTOM_SHELL, MuConfiguration.DEFAULT_USE_CUSTOM_SHELL))
             useCustomShellRadioButton.setSelected(true);
         else
             useDefaultShellRadioButton.setSelected(true);
-		
-        shellPanel.add(useDefaultShellRadioButton);
-        JPanel tempPanel = new JPanel(new BorderLayout());
-        tempPanel.add(useCustomShellRadioButton, BorderLayout.WEST);
-        customShellField = new JTextField(MuConfiguration.getVariable(MuConfiguration.CUSTOM_SHELL, ""));
-        // Typing in the text field automatically selects the associated radio button (if not already)
+
+        ButtonGroup buttonGroup = new ButtonGroup();
+        buttonGroup.add(useDefaultShellRadioButton);
+        buttonGroup.add(useCustomShellRadioButton);
+
+        // Shell panel
+        XAlignedComponentPanel shellPanel = new XAlignedComponentPanel();
+        shellPanel.setLabelLeftAligned(true);
+        shellPanel.setBorder(BorderFactory.createTitledBorder(Translator.get("prefs_dialog.shell")));
+
+        shellPanel.addRow(useDefaultShellRadioButton, new JLabel(PlatformManager.getDefaultShellCommand()), 5);
+        shellPanel.addRow(useCustomShellRadioButton, customShellField = new JTextField(MuConfiguration.getVariable(MuConfiguration.CUSTOM_SHELL, "")), 10);
         customShellField.addKeyListener(new KeyAdapter() {
                 public void keyTyped(KeyEvent e) {
                     if(!useCustomShellRadioButton.isSelected())
                         useCustomShellRadioButton.setSelected(true);
                 }
             });
-        tempPanel.add(customShellField, BorderLayout.CENTER);
-        shellPanel.add(tempPanel);
-
-        ButtonGroup buttonGroup = new ButtonGroup();
-        buttonGroup.add(useDefaultShellRadioButton);
-        buttonGroup.add(useCustomShellRadioButton);
+        shellPanel.addRow(Translator.get("prefs_dialog.shell_encoding"), createEncodingComboBox(), 5);
 
         northPanel.add(shellPanel, 5);
 
@@ -133,8 +170,16 @@ class MiscPanel extends PreferencesPanel {
     protected void commit() {
         MuConfiguration.setVariable(MuConfiguration.CHECK_FOR_UPDATE, checkForUpdatesCheckBox.isSelected());
 
+        // Saves the shell data.
         MuConfiguration.setVariable(MuConfiguration.USE_CUSTOM_SHELL, useCustomShellRadioButton.isSelected());
         MuConfiguration.setVariable(MuConfiguration.CUSTOM_SHELL, customShellField.getText());
+
+        // Saves the shell encoding data.
+        boolean isAutoDetect;
+        isAutoDetect = shellEncoding.getSelectedIndex() == 0;
+        MuConfiguration.setVariable(MuConfiguration.AUTODETECT_SHELL_ENCODING, isAutoDetect);
+        if(!isAutoDetect)
+            MuConfiguration.setVariable(MuConfiguration.SHELL_ENCODING, (String)shellEncoding.getSelectedItem());
 
         MuConfiguration.setVariable(MuConfiguration.CONFIRM_ON_QUIT, quitConfirmationCheckBox.isSelected());
 
