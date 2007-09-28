@@ -53,5 +53,5 @@ public interface FileProtocols {
     public final static String WEBDAVS   = "webdavs";
 
     /** Protocol for the virtual bookmarks file system. */
-    public static final String BOOKMARKS = "bookmarks";
+    public static final String BOOKMARKS = "bookmark";
 }
