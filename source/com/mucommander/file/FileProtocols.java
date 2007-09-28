@@ -21,34 +21,37 @@ package com.mucommander.file;
 /**
  * This interface contains a set of known protocol names, that can be found in {@link FileURL}. 
  *
- * @author Maxence Bernard
+ * @author Maxence Bernard, Nicolas Rinaudo
  */
 public interface FileProtocols {
 
     /** Protocol for local or locally mounted files */
-    public final static String FILE = "file";
+    public final static String FILE      = "file";
 
     /** Protocol for files served by an FTP server */
-    public final static String FTP = "ftp";
+    public final static String FTP       = "ftp";
 
     /** Protocol for files served by a web server using HTTP */
-    public final static String HTTP = "http";
+    public final static String HTTP      = "http";
 
     /** Protocol for files served by a web server using HTTPS */
-    public final static String HTTPS = "https";
+    public final static String HTTPS     = "https";
 
     /** Protocol for files served by an NFS server */
-    public final static String NFS = "nfs";
+    public final static String NFS       = "nfs";
 
     /** Protocol for files served by an SFTP server (not to be confused with FTPS or SCP) */
-    public final static String SFTP = "sftp";
+    public final static String SFTP      = "sftp";
 
     /** Protocol for files served by a SMB/CIFS server */
-    public final static String SMB = "smb";
+    public final static String SMB       = "smb";
 
     /** Protocol for files served by a web server using Webdav/HTTP */
-    public final static String WEBDAV = "webdav";
+    public final static String WEBDAV    = "webdav";
 
     /** Protocol for files served by a web server using Webdav/HTTPS */
-    public final static String WEBDAVS = "webdavs";
+    public final static String WEBDAVS   = "webdavs";
+
+    /** Protocol for the virtual bookmarks file system. */
+    public static final String BOOKMARKS = "bookmarks";
 }
