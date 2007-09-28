@@ -27,6 +27,7 @@ import java.awt.*;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.Vector;
+import java.util.Iterator;
 
 /**
  * EditorRegistrar maintains a list of registered file editors and provides methods to dynamically register file editors
@@ -37,18 +38,15 @@ import java.util.Vector;
 public class EditorRegistrar {
 	
     /** List of registered file editors */ 
-    private final static Vector editorsClassNames = new Vector();
+    private final static Vector editorFactories = new Vector();
 
-    /** Default editor's class name */
-    private final static String DEFAULT_EDITOR_CLASSNAME = "com.mucommander.ui.viewer.text.TextEditor";
+    /** Default editor. */
+    private final static EditorFactory DEFAULT_EDITOR = new com.mucommander.ui.viewer.text.TextFactory();
 
     /**
-     * Registers a FileEditor. The given class name must correspond to a class that extends {@link FileEditor FileEditor}. 
+     * Registers a FileEditor.
      */
-    public static void registerFileEditor(String className) {
-        editorsClassNames.add(className);
-    }
-
+    public static void registerFileEditor(EditorFactory factory) {editorFactories.add(factory);}
 
     /**
      * Creates and returns an EditorFrame to start viewing the given file. The EditorFrame will be monitored
@@ -78,39 +76,15 @@ public class EditorRegistrar {
      * @throws Exception if an editor couldn't be instanciated or the given file couldn't be read.
      */
     public static FileEditor createFileEditor(AbstractFile file) throws Exception {
-        Class editorClass = null;
-        Class candidateClass;
-        Constructor constructor;
-        FileEditor fileEditor;
-        Method method;
-        int nbRegisteredEditors = editorsClassNames.size();
-        // Find an editor that can edit the specified file
-        for(int i=0; i<nbRegisteredEditors; i++) {
-            try {
-                // Invoke the 'canEditFile' method
-                candidateClass = Class.forName((String)editorsClassNames.elementAt(i));
-                method = candidateClass.getMethod("canEditFile", new Class[]{Class.forName("com.mucommander.file.AbstractFile")});
+        Iterator      iterator;
+        EditorFactory factory;
 
-                if(((Boolean)method.invoke(null, new Object[]{file})).booleanValue()) {
-                    editorClass = candidateClass;
-                    break;
-                }
-            }
-            catch(Exception e) {    // Catch ClassNotFoundException, NoSuchMethodException and more...
-                // Report the error and continue
-                if(com.mucommander.Debug.ON)
-                    com.mucommander.Debug.trace("Exception thrown while trying to access "+editorsClassNames.elementAt(i)+": "+e);
-                continue;
-            }
+        iterator = editorFactories.iterator();
+        while(iterator.hasNext()) {
+            factory = (EditorFactory)iterator.next();
+            if(factory.canEditFile(file))
+                return factory.createFileEditor();
         }
-
-        // If no editor is able to edit the file, use the default editor 
-        if(editorClass==null)
-            editorClass = Class.forName(DEFAULT_EDITOR_CLASSNAME);
-
-        // Create an instance of the FileEditor's class
-        constructor = editorClass.getConstructor(new Class[]{});
-        fileEditor = (FileEditor)constructor.newInstance(new Object[]{});
-        return fileEditor;
+        return DEFAULT_EDITOR.createFileEditor();
     }
 }

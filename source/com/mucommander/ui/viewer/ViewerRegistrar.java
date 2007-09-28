@@ -16,7 +16,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 package com.mucommander.ui.viewer;
 
 import com.mucommander.file.AbstractFile;
@@ -24,9 +23,8 @@ import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.WindowManager;
 
 import java.awt.*;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Method;
 import java.util.Vector;
+import java.util.Iterator;
 
 /**
  * ViewerRegistrar maintains a list of registered file viewers and provides methods to dynamically register file viewers
@@ -37,27 +35,18 @@ import java.util.Vector;
 public class ViewerRegistrar {
 	
     /** List of registered file viewers */ 
-    private final static Vector viewersClassNames = new Vector();
+    private final static Vector viewerFactories = new Vector();
 
-    /** Default viewer's class name */
-    private final static String DEFAULT_VIEWER_CLASSNAME = "com.mucommander.ui.viewer.text.TextViewer";
+    /** Default viewer */
+    private final static ViewerFactory DEFAULT_VIEWER = new com.mucommander.ui.viewer.text.TextFactory();
 	    
-    /** Image viewer's class name */
-    private final static String IMAGE_VIEWER_CLASSNAME = "com.mucommander.ui.viewer.image.ImageViewer";
-
-        
-    static {
-        // Register internal file viewers
-        registerFileViewer(IMAGE_VIEWER_CLASSNAME);
-    }
+    static {registerFileViewer(new com.mucommander.ui.viewer.image.ImageFactory());}
     
     
     /**
-     * Registers a FileViewer. The given class name must correspond to a class that extends {@link FileViewer FileViewer}. 
+     * Registers a FileViewer.
      */
-    public static void registerFileViewer(String className) {
-        viewersClassNames.add(className);
-    }
+    public static void registerFileViewer(ViewerFactory factory) {viewerFactories.add(factory);}
         
 	
     /**
@@ -88,39 +77,15 @@ public class ViewerRegistrar {
      * @throws Exception if a viewer couldn't be instanciated or the given file couldn't be read.
      */
     public static FileViewer createFileViewer(AbstractFile file) throws Exception {
-        Class viewerClass = null;
-        Class candidateClass;
-        Constructor constructor;
-        FileViewer fileViewer;
-        Method method;
-        int nbRegisteredViewers = viewersClassNames.size();
-        // Find an editor that can edit the specified file
-        for(int i=0; i<nbRegisteredViewers; i++) {
-            try {
-                // Invoke the 'canViewFile' method
-                candidateClass = Class.forName((String)viewersClassNames.elementAt(i));
-                method = candidateClass.getMethod("canViewFile", new Class[]{Class.forName("com.mucommander.file.AbstractFile")});
+        Iterator      iterator;
+        ViewerFactory factory;
 
-                if(((Boolean)method.invoke(null, new Object[]{file})).booleanValue()) {
-                    viewerClass = candidateClass;
-                    break;
-                }
-            }
-            catch(Exception e) {    // Catch ClassNotFoundException, NoSuchMethodException and more...
-                // Report the error and continue
-                if(com.mucommander.Debug.ON)
-                    com.mucommander.Debug.trace("Exception thrown while trying to access "+viewersClassNames.elementAt(i)+": "+e);
-                continue;
-            }
+        iterator = viewerFactories.iterator();
+        while(iterator.hasNext()) {
+            factory = (ViewerFactory)iterator.next();
+            if(factory.canViewFile(file))
+                return factory.createFileViewer();
         }
-
-        // If no viewer is able to view the file, use the default viewer 
-        if(viewerClass==null)
-            viewerClass = Class.forName(DEFAULT_VIEWER_CLASSNAME);
-
-        // Create an instance of the FileViewer's class
-        constructor = viewerClass.getConstructor(new Class[]{});
-        fileViewer = (FileViewer)constructor.newInstance(new Object[]{});
-        return fileViewer;
+        return DEFAULT_VIEWER.createFileViewer();
     }
 }
