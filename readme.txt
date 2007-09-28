@@ -100,6 +100,8 @@ What's new since v0.8 ?
 -----------------------
 
 New features:
+- Created a bookmarks:// file system and added the default alt B keyboard
+  shortcut to access it.
 
 Improvements:
 - Non automatic sizing of columns is now working properly and preserved in the
