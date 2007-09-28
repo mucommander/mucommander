@@ -66,7 +66,12 @@ class DebugProcessListener implements ProcessListener {
     public void processDied(int returnValue) {if(Debug.ON) Debug.trace(command + ": died with return code " + returnValue);}
 
     /**
+     * Ignored.
+     */
+    public void processOutput(byte[] buffer, int offset, int length) {if(Debug.ON) Debug.trace(command + ": " + new String(buffer, offset, length));}
+
+    /**
      * Prints out the process output.
      */
-    public void processOutput(char[] buffer, int offset, int length) {if(Debug.ON) Debug.trace(command + ": " + new String(buffer, offset, length));}
+    public void processOutput(String output) {if(Debug.ON) Debug.trace(command + ": " + output);}
 }

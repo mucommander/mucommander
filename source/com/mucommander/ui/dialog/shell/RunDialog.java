@@ -209,15 +209,17 @@ public class RunDialog extends FocusDialog implements ActionListener, ProcessLis
     }	
 
     /**
+     * Ignored.
+     */
+    public void processOutput(byte[] buffer, int offset, int length) {}
+
+    /**
      * Notifies the RunDialog that the process has output some text.
      * @param buffer contains the process' output.
      * @param offset index in <code>buffer</code> at which the new process output starts.
      * @param length length of the new process' output.
      */
-    public void processOutput(char buffer[], int offset, int length) {
-        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("processOutput output= "+new String(buffer, 0, length));
-        addToTextArea(new String(buffer, offset, length));
-    }
+    public void processOutput(String output) {addToTextArea(output);}
 
 
 
