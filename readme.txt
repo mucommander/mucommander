@@ -100,8 +100,12 @@ What's new since v0.8 ?
 -----------------------
 
 New features:
-- Created a bookmarks:// file system and added the default alt B keyboard
+- Created a bookmark:// file system and added the default alt B keyboard
   shortcut to access it.
+- It's now possible to configure muCommander to auto-detect the shell encoding
+  or to force it to a specific encoding.
+- Editors and Viewers are now centered on the current window rather than set
+  to the upper-left corner of the screen.
 
 Improvements:
 - Non automatic sizing of columns is now working properly and preserved in the
