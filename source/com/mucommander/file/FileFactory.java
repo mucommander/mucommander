@@ -145,7 +145,7 @@ public class FileFactory {
         registerProtocol(FileProtocols.FTP,       new com.mucommander.file.impl.ftp.FTPProtocolProvider());
         registerProtocol(FileProtocols.SFTP,      new com.mucommander.file.impl.sftp.SFTPProtocolProvider());
         registerProtocol(FileProtocols.NFS,       new com.mucommander.file.impl.nfs.NFSProtocolProvider());
-        //        registerProtocol(FileProtocols.BOOKMARKS, new com.mucommander.file.impl.bookmark.BookmarkProtocolProvider());
+        registerProtocol(FileProtocols.BOOKMARKS, new com.mucommander.file.impl.bookmark.BookmarkProtocolProvider());
         
         // Register built-in archive file formats, order for TarArchiveFile and GzipArchiveFile/Bzip2ArchiveFile is important:
         // TarArchiveFile must match 'tar.gz'/'tar.bz2' files before GzipArchiveFile/Bzip2ArchiveFile does.
