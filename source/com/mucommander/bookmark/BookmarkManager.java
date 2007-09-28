@@ -160,6 +160,8 @@ public class BookmarkManager implements VectorChangeListener {
         }
     }
 
+    public static synchronized void readBookmarks(InputStream in) throws Exception {readBookmarks(in, new Loader());}
+
     public static synchronized void readBookmarks(InputStream in, BookmarkBuilder builder) throws Exception {new BookmarkParser().parse(in, builder);}
 
 
