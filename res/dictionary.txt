@@ -9224,6 +9224,23 @@ prefs_dialog.custom_shell:NL:Gebruik zelfgekozen shell
 prefs_dialog.custom_shell:SK:Použiť vlastný shell
 prefs_dialog.custom_shell:HU:Egyedi végrehajtás használata
 
+prefs_dialog.shell_encoding:EN:Shell encoding
+prefs_dialog.shell_encoding:FR:Encodage du shell
+# Translation required
+
+
+
+
+
+prefs_dialog.auto_detect_shell_encoding:EN:Auto-detect
+prefs_dialog.auto_detect_shell_encoding:FR:Détection automatique
+# Translation required
+
+
+
+
+
+
 # Bonjour is a service discovery protocol : http://en.wikipedia.org/wiki/Bonjour_%28software%29
 prefs_dialog.enable_bonjour_discovery:EN:Enable Bonjour services discovery
 prefs_dialog.enable_bonjour_discovery:FR:Activer la découverte des services Bonjour
