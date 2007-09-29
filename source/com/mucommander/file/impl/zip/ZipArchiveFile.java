@@ -84,7 +84,7 @@ public class ZipArchiveFile extends AbstractRWArchiveFile {
     // AbstractROArchiveFile implementation //
     //////////////////////////////////////////
 	
-    public Vector getEntries() throws IOException {
+    public synchronized Vector getEntries() throws IOException {
         Vector entries = new Vector();
 
         // If the underlying AbstractFile has random read access, use our own ZipFile implementation to read entries
@@ -122,7 +122,7 @@ public class ZipArchiveFile extends AbstractRWArchiveFile {
     }
 
 
-    public InputStream getEntryInputStream(ArchiveEntry entry) throws IOException {
+    public synchronized InputStream getEntryInputStream(ArchiveEntry entry) throws IOException {
         // If the underlying AbstractFile has random read access, use our own ZipFile implementation to read the entry
         if (file.hasRandomAccessInputStream()) {
             checkZipFile();
@@ -170,7 +170,7 @@ public class ZipArchiveFile extends AbstractRWArchiveFile {
     // AbstractRWArchiveFile implementation //
     //////////////////////////////////////////
 
-    public OutputStream addEntry(ArchiveEntry entry) throws IOException {
+    public synchronized OutputStream addEntry(ArchiveEntry entry) throws IOException {
         checkZipFile();
 
         final ZipEntry zipEntry = getZipEntry(entry);
@@ -196,7 +196,7 @@ public class ZipArchiveFile extends AbstractRWArchiveFile {
         }
     }
 
-    public void deleteEntry(ArchiveEntry entry) throws IOException {
+    public synchronized void deleteEntry(ArchiveEntry entry) throws IOException {
         // Most of the time, the given ArchiveEntry will be a ZipEntry. However, in some rare cases, it can be a
         // SimpleArchiveEntry for directory entries that have been created in the entries tree but don't exist in the
         // Zip file. That is the case when a file entry exists in the Zip file but has no directory entry for the parent.
@@ -218,42 +218,7 @@ public class ZipArchiveFile extends AbstractRWArchiveFile {
         removeFromEntriesTree(entry);
     }
 
-//    public OutputStream addFileEntry(ArchiveEntry entry) throws IOException {
-//        checkZipFile();
-//
-//        final ZipEntry zipEntry = getZipEntry(entry);
-//
-//        return new FilterOutputStream(zipFile.addEntry((com.mucommander.file.impl.zip.provider.ZipEntry)zipEntry.getEntryObject())) {
-//            public void close() throws IOException {
-//                super.close();
-//
-//                // Declare the zip file and entries tree up-to-date
-//                declareZipFileUpToDate();
-//                declareEntriesTreeUpToDate();
-//
-//                // Add the new directory entry to the entries tree
-//                addToEntriesTree(zipEntry);
-//            }
-//        };
-//    }
-//
-//    public void addDirectoryEntry(ArchiveEntry entry) throws IOException {
-//        checkZipFile();
-//
-//        ZipEntry zipEntry = getZipEntry(entry);
-//
-//        // Add the new directory entry to the zip file (physically)
-//        zipFile.addEntry((com.mucommander.file.impl.zip.provider.ZipEntry)zipEntry.getEntryObject());
-//
-//        // Declare the zip file and entries tree up-to-date and add the new entry to the entries tree
-//        declareZipFileUpToDate();
-//        declareEntriesTreeUpToDate();
-//
-//        // Add the new directory entry to the entries tree
-//        addToEntriesTree(zipEntry);
-//    }
-
-    public void optimizeArchive() throws IOException {
+    public synchronized void optimizeArchive() throws IOException {
         checkZipFile();
 
         // Defragment the zip file
