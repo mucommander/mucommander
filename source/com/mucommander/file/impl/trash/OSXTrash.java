@@ -289,7 +289,7 @@ public class OSXTrash extends QueuedTrash {
 
     public boolean isTrashFile(AbstractFile file) {
         return (file.getTopAncestor() instanceof LocalFile)
-            && file.getAbsolutePath(true).contains("/.Trash/");
+            && (file.getAbsolutePath(true).indexOf("/.Trash/") != -1);
     }
 
     public int getItemCount() {

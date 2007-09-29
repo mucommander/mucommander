@@ -1,6 +1,6 @@
 Package: mucommander
 Version: @VERSION@
-Section: non-free/utils
+Section: utils
 Priority: optional
 Recommends: java-virtual-machine
 Architecture: all
