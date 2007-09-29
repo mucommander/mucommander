@@ -264,10 +264,19 @@ public class ArchiveEntryFile extends AbstractFile {
             if(append)
                 throw new IOException("Can't append to an existing archive entry");
 
-            if(exists)
-                delete();
+            if(exists) {
+                try {
+                    delete();
+                }
+                catch(IOException e) {
+                    // Go ahead and try to add the file anyway 
+                }
+            }
 
-            return ((AbstractRWArchiveFile)archiveFile).addEntry(entry);
+            OutputStream out = ((AbstractRWArchiveFile)archiveFile).addEntry(entry);
+            exists = true;
+
+            return out;
         }
         else
             throw new IOException();
