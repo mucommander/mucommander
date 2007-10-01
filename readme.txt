@@ -118,6 +118,9 @@ Bug fixes:
 - Fixed broken 'file deletion' command under Java 1.4.
 
 Known issues:
+- The bookmarks file system doesn't allow users to specify which credits set
+  they wish to use when selecting a bookmark that needs authentification, it
+  will default to the first in the list.
 - Italian, Korean and Polish translations are not up-to-date
 - Executable permissions are not preserved properly for local files prior to
   Java 1.6
