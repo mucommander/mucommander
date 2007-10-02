@@ -25,12 +25,13 @@ import com.mucommander.conf.ConfigurationListener;
 import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.util.FileSet;
+import com.mucommander.job.MoveJob;
 import com.mucommander.text.CustomDateFormat;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionKeymap;
 import com.mucommander.ui.action.ActionManager;
-import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.dialog.file.FileCollisionDialog;
+import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.event.ActivePanelListener;
 import com.mucommander.ui.event.TableSelectionListener;
 import com.mucommander.ui.icon.FileIcons;
@@ -39,17 +40,15 @@ import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.menu.TablePopupMenu;
 import com.mucommander.ui.theme.*;
-import com.mucommander.job.MoveJob;
 
 import javax.swing.*;
-import javax.swing.event.TableColumnModelEvent;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.Iterator;
 import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.WeakHashMap;
 
 
@@ -317,7 +316,7 @@ public class FileTable extends JTable implements Columns, MouseListener, MouseMo
      */
     private void setRowHeight() {
         // JTable.setRowHeight() revalidates and repaints the JTable 
-        setRowHeight(2*CellLabel.CELL_BORDER_HEIGHT + Math.max(getFontMetrics(cellRenderer.getCellFont()).getHeight(), (int)FileIcons.getStandardSize().getHeight()));
+        setRowHeight(2*CellLabel.CELL_BORDER_HEIGHT + Math.max(getFontMetrics(cellRenderer.getCellFont()).getHeight(), (int)FileIcons.getIconDimension().getHeight()));
         // Filename editor's row resize disabled because of Java bug #4398268 which prevents new rows from being visible after setRowHeight(row, height) has been called :/
         //		setRowHeight(Math.max(getFontMetrics(cellRenderer.getCellFont()).getHeight()+cellRenderer.CELL_BORDER_HEIGHT, editorRowHeight));
     }
@@ -719,7 +718,7 @@ public class FileTable extends JTable implements Columns, MouseListener, MouseMo
                 nameColumn = column;
             else {
                 if(column.getModelIndex() == Columns.EXTENSION)
-                    columnWidth = (int)FileIcons.getStandardSize().getWidth();
+                    columnWidth = (int)FileIcons.getIconDimension().getWidth();
                 else {
                     columnWidth = MIN_COLUMN_AUTO_WIDTH;
 

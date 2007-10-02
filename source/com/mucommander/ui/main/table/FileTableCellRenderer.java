@@ -20,7 +20,9 @@
 package com.mucommander.ui.main.table;
 
 import com.mucommander.file.AbstractFile;
+import com.mucommander.ui.icon.CustomFileIconProvider;
 import com.mucommander.ui.icon.FileIcons;
+import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.theme.*;
 
 import javax.swing.*;
@@ -294,7 +296,7 @@ public class FileTableCellRenderer implements Columns, TableCellRenderer, ThemeL
             // Set file icon (parent folder icon if '..' file)
             extensionLabel.setIcon(
                                    row==0 && tableModel.hasParentFolder()?
-                                   FileIcons.getParentFolderIcon()
+                                   IconManager.getIcon(IconManager.FILE_ICON_SET, CustomFileIconProvider.PARENT_FOLDER_ICON_NAME, FileIcons.getScaleFactor())
                                    :FileIcons.getFileIcon(file)
                                    );
         }
