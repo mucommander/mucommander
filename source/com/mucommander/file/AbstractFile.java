@@ -28,6 +28,8 @@ import com.mucommander.io.RandomAccessInputStream;
 import com.mucommander.io.RandomAccessOutputStream;
 import com.mucommander.process.AbstractProcess;
 
+import javax.swing.*;
+import java.awt.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -65,10 +67,12 @@ public abstract class AbstractFile implements FilePermissions {
     // 65536, no more gain (not sure why).
     public final static int IO_BUFFER_SIZE = 65536;
 
-
     /** Pattern matching Windows drive root folders, e.g. C:\ */
     protected final static Pattern windowsDriveRootPattern = Pattern.compile("^[a-zA-Z]{1}[:]{1}[\\\\]{1}$");
 
+    /** Default dimension of icons returned by {@link #getIcon()} */
+    private final static Dimension DEFAULT_ICON_DIMENSION = new Dimension(16, 16);
+    
 
     /**
      * Creates a new file instance with the given URL.
@@ -635,7 +639,7 @@ public abstract class AbstractFile implements FilePermissions {
         return destFile.getTopAncestor().getClass().equals(getTopAncestor().getClass())?SHOULD_HINT:SHOULD_NOT_HINT;
     }
 
-    private final AbstractFile getChildFile(String name) throws IOException {
+    private AbstractFile getChildFile(String name) throws IOException {
         FileURL childURL = (FileURL)getURL().clone();
         String path = childURL.getPath();
         String pathSeparator = childURL.getPathSeparator();
@@ -653,7 +657,9 @@ public abstract class AbstractFile implements FilePermissions {
      * @param name the directory to create
      * @throws IOException if this operation is not possible.
      */
-    public final void mkdir(String name) throws IOException {getChildFile(name).mkdir();}
+    public final void mkdir(String name) throws IOException {
+        getChildFile(name).mkdir();
+    }
 
     /**
      * Convenience method that creates a file with the given name as a child of this directory.
@@ -662,7 +668,9 @@ public abstract class AbstractFile implements FilePermissions {
      * @param name the file to create
      * @throws IOException if this operation is not possible.
      */
-    public final void mkfile(String name) throws IOException {getChildFile(name).mkfile();}
+    public final void mkfile(String name) throws IOException {
+        getChildFile(name).mkfile();
+    }
 
     /**
      * Creates this file as a normal file. This method will fail if this file already exists.
@@ -1018,7 +1026,21 @@ public abstract class AbstractFile implements FilePermissions {
     }
 
 
-    
+    /**
+     * Returns an icon representing this file,    
+     *
+     * @param preferredDimension
+     * @return
+     */
+    public final Icon getIcon(Dimension preferredDimension) {
+        return FileFactory.getDefaultFileIconProvider().getFileIcon(this, preferredDimension);
+    }
+
+    public final Icon getIcon() {
+        return getIcon(DEFAULT_ICON_DIMENSION);
+    }
+
+
     ////////////////////////
     // Overridden methods //
     ////////////////////////

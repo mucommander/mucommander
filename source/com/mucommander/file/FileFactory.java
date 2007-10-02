@@ -23,9 +23,10 @@ import com.mucommander.auth.AuthException;
 import com.mucommander.auth.CredentialsManager;
 import com.mucommander.cache.LRUCache;
 import com.mucommander.conf.impl.MuConfiguration;
-import com.mucommander.file.filter.FileFilter;
-import com.mucommander.file.filter.FilenameFilter;
 import com.mucommander.file.filter.ExtensionFilenameFilter;
+import com.mucommander.file.filter.FilenameFilter;
+import com.mucommander.file.icon.FileIconProvider;
+import com.mucommander.file.icon.impl.SwingFileIconProvider;
 import com.mucommander.file.impl.local.LocalFile;
 import com.mucommander.file.util.FileToolkit;
 import com.mucommander.file.util.PathTokenizer;
@@ -33,12 +34,7 @@ import com.mucommander.util.Enumerator;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Enumeration;
-import java.util.Iterator;
-import java.util.Random;
-import java.util.Vector;
-import java.util.WeakHashMap;
-import java.util.Hashtable;
+import java.util.*;
 
 /**
  * FileFactory is an abstract class that provides static methods to get a {@link AbstractFile} instance for
@@ -130,6 +126,9 @@ public class FileFactory {
     /** System temp directory */
     private final static File TEMP_DIRECTORY = new File(System.getProperty("java.io.tmpdir"));
 
+    /** Default file icon provider, initialized in static block */
+    private static FileIconProvider defaultFileIconProvider;
+
 
 
     // - Initialisation ------------------------------------------------------------------
@@ -159,7 +158,14 @@ public class FileFactory {
         registerArchiveFormat(new com.mucommander.file.impl.iso.IsoFormatProvider(),     new ExtensionFilenameFilter(new String[] {".iso", ".nrg"}));
         registerArchiveFormat(new com.mucommander.file.impl.ar.ArFormatProvider(),       new ExtensionFilenameFilter(new String[] {".ar", ".a", ".deb"}));
         registerArchiveFormat(new com.mucommander.file.impl.lst.LstFormatProvider(),     new ExtensionFilenameFilter(".lst"));
+
+        // Set the default FileIconProvider instance
+//        if(PlatformManager.getOsFamily()==PlatformManager.MAC_OS_X)
+//            defaultFileIconProvider = new CocoaFileIconProvider();
+//        else
+        defaultFileIconProvider = new SwingFileIconProvider();
     }
+
 
     /**
      * Makes sure no instance of <code>FileFactory</code> is created.
@@ -307,6 +313,7 @@ public class FileFactory {
 
     /**
      * Returns an iterator on all known archive formats.
+     *
      * @return an iterator on all known archive formats.
      */
     public static Iterator archiveFormats() {return archiveFormatMappingsV.iterator();}
@@ -628,29 +635,30 @@ public class FileFactory {
         return file;
     }
 
-//    public static AbstractFile wrapArchive(AbstractFile file) {
-//        String filename = file.getName();
-//
-//        // Looks for an archive FilenameFilter that matches the given filename.
-//        // Comparing the filename against each and every archive extension has a cost, so we only perform the test if
-//        // the filename contains a dot '.' character, since most of the time this method is called with a filename that
-//        // doesn't match any of the filters.
-//        if(!file.isDirectory() && filename.indexOf('.')!=-1) {
-//            int nbMappings = archiveFormatMappings.length;
-//            for(int i=0; i<nbMappings; i++) {
-//                if(archiveFormatMappings[i].filenameFilter.accept(filename)) {
-//                    try {
-//                        // Found one, create the AbstractArchiveFile instance and return it
-//                        file = (AbstractFile)archiveFormatMappings[i].providerConstructor.newInstance(new Object[]{file});
-//                        break;
-//                    }
-//                    catch(Exception e) {
-//                        if(Debug.ON) Debug.trace("Caught exception while trying to instanciate registered AbstractArchiveFile constructor: "+archiveFormatMappings[i]);
-//                    }
-//                }
-//            }
-//        }
-//
-//        return file;
-//    }
+
+    /**
+     * Returns the default {@link com.mucommander.file.icon.FileIconProvider} instance. The default provider class
+     * (before {@link #setDefaultFileIconProvider(com.mucommander.file.icon.FileIconProvider)} is called) is
+     * platform-dependent and as such may vary across platforms.
+     *
+     * <p>It is noteworthy that the provider returned by this method is used by {@link com.mucommander.file.AbstractFile#getIcon()}
+     * to create and return the icon.</p>
+     *
+     * @return the default FileIconProvider implementation
+     */
+    public static FileIconProvider getDefaultFileIconProvider() {
+        return defaultFileIconProvider;
+    }
+
+    /**
+     * Sets the default {@link com.mucommander.file.icon.FileIconProvider} implementation.
+     *
+     * <p>It is noteworthy that the provider returned by this method is used by {@link com.mucommander.file.AbstractFile#getIcon()}
+      * to create and return the icon.</p>
+      *
+     * @param fip the new value for the default FileIconProvider
+     */
+    public static void setDefaultFileIconProvider(FileIconProvider fip) {
+        defaultFileIconProvider = fip;
+    }
 }
