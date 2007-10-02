@@ -584,6 +584,12 @@ public class FileTable extends JTable implements Columns, MouseListener, MouseMo
      */
     public void setColumnVisible(int colNum, boolean visible) {getFileTableColumnModel().setColumnVisible(colNum, visible);}
 
+    public void setColumnModel(TableColumnModel columnModel) {
+        if(filenameEditor != null)
+            columnModel.getColumn(convertColumnIndexToView(Columns.NAME)).setCellEditor(filenameEditor);
+        super.setColumnModel(columnModel);
+    }
+
     public int getColumnPosition(int colNum) {return getFileTableColumnModel().getColumnPosition(colNum);}
 
     /**
