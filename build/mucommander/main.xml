@@ -1019,27 +1019,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- ======================================================= -->
   <!-- The following tasks are meant for development purposes  -->
   <!-- only, and are just shorcuts for starting muCommander in -->
-  <!-- various modes (stress test, icon test, ...).            -->
+  <!-- various special modes such as stress-test mode.         -->
 
   <!-- Launches muCommander in stress test mode, changing      -->
   <!-- current folder every second or so.                      -->
-  <target name="stresstest" depends="compile,resources">
+  <target name="stress-test" depends="compile,resources">
     <java classname="com.mucommander.StressTester" fork="true">
       <classpath>
         <pathelement location="${classes.normal}"/>
          <fileset dir="lib">
-          <include name="**/*.jar"/>
-         </fileset>
-      </classpath>
-    </java>
-  </target>
-
-  <!-- Makes sure all of the required icons are present.       -->
-  <target name="testicons" depends="compile,resources">
-    <java classname="com.mucommander.ui.icon.FileIcons" fork="true">
-      <classpath>
-        <pathelement location="${classes.normal}"/>
-         <fileset dir="${lib}">
           <include name="**/*.jar"/>
          </fileset>
       </classpath>
