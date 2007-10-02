@@ -349,7 +349,8 @@ public class Launcher {
                 break;
         }
 
-
+        // Temporary workaround
+        System.setProperty("apple.awt.brushMetalLook", "true");
 
         // - MAC OS init ----------------------------------------------
         // ------------------------------------------------------------
