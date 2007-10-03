@@ -316,7 +316,7 @@ public class FileTable extends JTable implements Columns, MouseListener, MouseMo
      */
     private void setRowHeight() {
         // JTable.setRowHeight() revalidates and repaints the JTable 
-        setRowHeight(2*CellLabel.CELL_BORDER_HEIGHT + Math.max(getFontMetrics(cellRenderer.getCellFont()).getHeight(), (int)FileIcons.getIconDimension().getHeight()));
+        setRowHeight(2*CellLabel.CELL_BORDER_HEIGHT + Math.max(getFontMetrics(filenameEditor.filenameField.getFont()).getHeight(), (int)FileIcons.getIconDimension().getHeight()));
         // Filename editor's row resize disabled because of Java bug #4398268 which prevents new rows from being visible after setRowHeight(row, height) has been called :/
         //		setRowHeight(Math.max(getFontMetrics(cellRenderer.getCellFont()).getHeight()+cellRenderer.CELL_BORDER_HEIGHT, editorRowHeight));
     }
