@@ -41,6 +41,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- Path to the Java core libraries.                        -->
   <!-- Note that Java 1.6 is necessary in order to compile     -->
   <!-- muCommander.                                            -->
+  <!-- Defaults to a best guess taken from                     -->
+  <!-- ${sun.boot.class.path}.                                 -->
   <property name="java.lib"        location=""/>
 
   <!-- Path to the ProGuard binaries.                          -->

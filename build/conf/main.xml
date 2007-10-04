@@ -100,14 +100,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- available.                                              -->
   <!-- The resulting JAR file will be stored in                -->
   <!-- ${conf.jar.obf}.                                        -->
-  <target name="obfuscate-conf-bytecode" if="proguard.available">
+  <target name="obfuscate-conf-bytecode" depends="conf-load-libpath" if="proguard.available">
     <echo>Creating the Configuration API obfuscated JAR file...</echo>
     <proguard overloadaggressively="false" usemixedcaseclassnames="true" ignorewarnings="true" optimize="true" shrink="true" obfuscate="true"
-              allowaccessmodification="true" defaultpackage="" skipnonpubliclibraryclasses="false">
+              allowaccessmodification="false" repackageclasses="" skipnonpubliclibraryclasses="false">
       <injar name="${conf.jar.normal}"/> 
       <outjar name="${conf.jar.obf}"/>
       <libraryjar name="${java.lib}"/>
       <libraryjar name="${lib}/noinclude" jarfilter="*.jar"/>
+      <keepattribute name="exceptions"/>
 
       <keep access="public">
         <field access="public,protected"/>
@@ -195,7 +196,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     </junit>
   </target>
 
-  <target name="unit-test-conf" depends="compile-conf,check-junit,skip-unit-test-conf,do-unit-test-conf"/>
+  <target name="unit-test-conf" depends="jar-conf,check-junit,skip-unit-test-conf,do-unit-test-conf"/>
 
 
 
@@ -233,9 +234,26 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- The following targets are used to generate a release    -->
   <!-- of the muCommander Configuration API.                   -->
 
-  <target name="conf-load-strreplace" unless="conf.standalone">
-    <antcall target="compress-tools"/>
+  <target name="normal-load-strreplace" unless="conf.standalone">
+    <antcall target="load-strreplace"/>
   </target>
+  
+  <target name="standalone-load-strreplace" if="conf.standalone">
+    <taskdef name="strreplace" classname="com.mucommander.ant.util.ReplaceTask" classpath="${tools.jar.cmp}"/>
+  </target>
+
+  <target name="conf-load-strreplace" depends="normal-load-strreplace,standalone-load-strreplace"/>
+
+  <target name="normal-load-libpath" unless="conf.standalone">
+    <antcall target="load-libpath"/>
+  </target>
+  
+  <target name="standalone-load-libpath" if="conf.standalone">
+    <taskdef name="libpath" classname="com.mucommander.ant.util.SystemClasspathTask" classpath="${tools.jar.cmp}"/>
+    <libpath out="java.lib"/>
+  </target>
+
+  <target name="conf-load-libpath" depends="standalone-load-libpath,normal-load-libpath"/>
 
   <!-- Stores the conf package and archive prefixes in         -->
   <!-- ${conf.package-prefix} and ${conf.archive-prefix}.      -->
@@ -245,7 +263,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- the tar.gz release file.                                -->
   <target name="conf-prefixes" depends="conf-load-strreplace">
     <echo>Creating the Configuration API archive prefix...</echo>
-    <taskdef name="strreplace" classname="com.mucommander.ant.util.ReplaceTask" classpath="${tools.jar.cmp}"/>
     <strreplace from="muCommander-conf-${conf.version}${conf.subversion}" to="conf.archive-prefix" what="[ .]" with="_"/>
     <echo>Creating the Configuration API package name prefix...</echo>
     <strreplace from="mucommander-conf-${conf.version}${conf.subversion}" to="conf.package-prefix" what="[ .]" with="_"/>

@@ -248,15 +248,19 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
   <!-- Obfuscates the clear JAR file and stores the result in  -->
   <!-- ${jar.obf}.                                             -->
-  <target name="obfuscate-bytecode" if="proguard.available">
+  <target name="obfuscate-bytecode" depends="load-libpath" if="proguard.available">
     <echo>Creating obfuscated JAR file...</echo>
-    <proguard overloadaggressively="false" usemixedcaseclassnames="true" ignorewarnings="true" optimize="true" shrink="true" obfuscate="true"
+
+    <proguard overloadaggressively="false" usemixedcaseclassnames="true" ignorewarnings="false" optimize="true" shrink="true" obfuscate="true"
               printmapping="${tmp.compile}/obfuscate.map" printusage="${tmp.compile}/obf-usage.txt" printseeds="${tmp.compile}/obf-seeds.txt"
-              allowaccessmodification="true" defaultpackage="" skipnonpubliclibraryclasses="false">
+              allowaccessmodification="false" repackageclasses="" skipnonpubliclibraryclasses="true" target="${app.jvm}">
       <injar name="${jar.normal}"/> 
       <outjar name="${jar.obf}"/>
-      <libraryjar name="${java.lib}"/>
+
+      <libraryjar path="${java.lib}"/>
       <libraryjar name="${lib}/noinclude" jarfilter="*.jar"/>
+
+      <keepattribute name="exceptions"/>
 
       <!-- Action API uses reflection                          -->
       <keepclasseswithmembers extends="com.mucommander.ui.action.MuAction">
@@ -353,7 +357,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   </target>
 
   <!-- Runs JUnit test cases if junit is available.            -->
-  <target name="unit-test" depends="compile,check-junit,skip-unit-test,do-unit-test"/>
+  <target name="unit-test" depends="jar,check-junit,skip-unit-test,do-unit-test"/>
 
 
 

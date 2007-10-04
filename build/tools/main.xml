@@ -37,6 +37,24 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <taskdef name="strreplace" classname="com.mucommander.ant.util.ReplaceTask" classpath="${tools.jar.cmp}"/>
   </target>
 
+  <!-- Loads the libpath Ant task.                             -->
+  <!-- The libpath target is necessary to generate the tools   -->
+  <!-- obfuscated JAR file, which is why we depend on          -->
+  <!-- jar-tools rather than compress-tools.                   -->
+  <target name="load-libpath" depends="jar-tools">
+    <!-- If the tools are up to date, we must load libpath     -->
+    <!-- from the obfuscated JAR.                              -->
+    <condition property="libpath.path" value="${tools.jar.cmp}">
+      <istrue value="${tools.up-to-date}"/>
+    </condition>
+    <!-- Otherwise, use the normal JAR.                        -->
+    <property name="libpath.path" value="${tools.jar.normal}"/>
+
+    <taskdef name="libpath" classname="com.mucommander.ant.util.SystemClasspathTask" classpath="${libpath.path}"/>
+
+    <libpath out="java.lib"/>
+  </target>
+
 
 
   <!-- = Ant tools compilation =============================== -->
@@ -148,15 +166,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- JAR file is found to be up-to-date by 'check-tools'.    -->
   <!-- The resulting JAR file will be stored in                -->
   <!-- ${tools.jar.obf}.                                       -->
-  <target name="obfuscate-tools-bytecode" depends="ant-lib" if="proguard.available" unless="tools.up-to-date">
+  <target name="obfuscate-tools-bytecode" depends="ant-lib,load-libpath" if="proguard.available" unless="tools.up-to-date">
     <echo>Creating Ant tools obfuscated JAR file...</echo>
     <proguard overloadaggressively="false" usemixedcaseclassnames="true" ignorewarnings="true" optimize="true" shrink="true" obfuscate="true"
-              allowaccessmodification="true" defaultpackage="" skipnonpubliclibraryclasses="false">
+              allowaccessmodification="false" repackageclasses="" skipnonpubliclibraryclasses="false">
       <injar name="${tools.jar.normal}"/> 
       <outjar name="${tools.jar.obf}"/>
       <libraryjar name="${java.lib}"/>
       <libraryjar name="${ant.lib}"/>
       <libraryjar name="${lib}/noinclude" jarfilter="*.jar"/>
+      <keepattribute name="exceptions"/>
 
       <keep access="public">
         <method access="public" name="set*"/>
@@ -284,7 +303,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     </junit>
   </target>
 
-  <target name="unit-test-tools" depends="compile-tools,check-junit,skip-unit-test-tools,do-unit-test-tools"/>
+  <target name="unit-test-tools" depends="jar-tools,check-junit,skip-unit-test-tools,do-unit-test-tools"/>
 
 
 
