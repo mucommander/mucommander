@@ -70,9 +70,6 @@ public abstract class AbstractFile implements FilePermissions {
     /** Pattern matching Windows drive root folders, e.g. C:\ */
     protected final static Pattern windowsDriveRootPattern = Pattern.compile("^[a-zA-Z]{1}[:]{1}[\\\\]{1}$");
 
-    /** Default dimension of icons returned by {@link #getIcon()} */
-    private final static Dimension DEFAULT_ICON_DIMENSION = new Dimension(16, 16);
-    
 
     /**
      * Creates a new file instance with the given URL.
@@ -1027,17 +1024,33 @@ public abstract class AbstractFile implements FilePermissions {
 
 
     /**
-     * Returns an icon representing this file,    
+     * Returns an icon representing this file, using the default {@link com.mucommander.file.icon.FileIconProvider}
+     * registered in {@link FileFactory}. The specified preferred resolution will be used as a hint, but the returned
+     * icon may have different dimension; see {@link com.mucommander.file.icon.FileIconProvider#getFileIcon(AbstractFile, java.awt.Dimension)}
+     * for full details.
      *
-     * @param preferredDimension
-     * @return
+     * @param preferredResolution the preferred icon resolution
+     * @return an icon representing this file
+     * @see com.mucommander.file.FileFactory#getDefaultFileIconProvider()
+     * @see com.mucommander.file.icon.FileIconProvider#getFileIcon(AbstractFile, java.awt.Dimension)
      */
-    public final Icon getIcon(Dimension preferredDimension) {
-        return FileFactory.getDefaultFileIconProvider().getFileIcon(this, preferredDimension);
+    public final Icon getIcon(Dimension preferredResolution) {
+        return FileFactory.getDefaultFileIconProvider().getFileIcon(this, preferredResolution);
     }
 
+    /**
+     * Returns an icon representing this file, using the default {@link com.mucommander.file.icon.FileIconProvider}
+     * registered in {@link FileFactory}. The default preferred resolution for the icon is 16x16 pixels.
+     *
+     * @return an icon representing this file
+     * @see com.mucommander.file.FileFactory#getDefaultFileIconProvider()
+     * @see com.mucommander.file.icon.FileIconProvider#getFileIcon(AbstractFile, java.awt.Dimension)
+     */
     public final Icon getIcon() {
-        return getIcon(DEFAULT_ICON_DIMENSION);
+        // Note: the Dimension object is created here instead of returning a final static field, because creating
+        // a Dimension object triggers the AWT and Swing classes loading. Since these classes are not
+        // needed in a headless environment, we want them to be loaded only if strictly necessary.
+        return getIcon(new java.awt.Dimension(16, 16));
     }
 
 
