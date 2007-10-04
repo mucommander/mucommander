@@ -349,9 +349,6 @@ public class Launcher {
                 break;
         }
 
-        // Temporary workaround
-        System.setProperty("apple.awt.brushMetalLook", "true");
-
         // - MAC OS init ----------------------------------------------
         // ------------------------------------------------------------
         // If muCommander is running under Mac OS X (how lucky!), add some
