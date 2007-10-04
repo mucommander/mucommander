@@ -1,4 +1,4 @@
-proguard.jar  -> 3.10.1
+proguard.jar  -> 4.0
 jdeb.jar      -> 0.1
 antdoclet.jar -> 1.1 (patched to disable Velocity logging).
 velocity.jar  -> 1.3.1
