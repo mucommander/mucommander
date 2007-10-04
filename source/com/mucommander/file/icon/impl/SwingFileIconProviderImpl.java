@@ -52,10 +52,16 @@ class SwingFileIconProviderImpl extends LocalFileIconProvider implements Cacheab
     /** Caches icons for regular files, used only for non-local files */
     protected static LRUCache fileIconCache = CachedFileIconProvider.createCacheInstance();
 
+    /** True if init has been called */
+    protected static boolean initialized;
 
-    static {
-        // Initialize the Swing object that is used to retrieve file icons.
-        // Note that the constructor of those objects is very expensive so we really want to instanciate only once.
+
+    /**
+     * Initializes the Swing object used to retrieve the icon.
+     * Note: instanciating this object is expensive (I/O bound) so we want to do that only if needed, and only once.
+     */
+    private static void init() {
+        //
         if(PlatformManager.getOsFamily()==PlatformManager.MAC_OS_X)
             fileChooser = new JFileChooser();
         else
@@ -97,6 +103,12 @@ class SwingFileIconProviderImpl extends LocalFileIconProvider implements Cacheab
      * <code>preferredResolution</code> argument is simply ignored.
      */
     public Icon getLocalFileIcon(LocalFile file, Dimension preferredResolution) {
+        if(!initialized) {
+            // init() will be called once at most
+            init();
+            initialized = true;
+        }
+
         try {
             if(fileSystemView!=null) {
                 // FileSystemView.getSystemIcon() will behave in the following way if the specified file doesn't exist
@@ -122,8 +134,8 @@ class SwingFileIconProviderImpl extends LocalFileIconProvider implements Cacheab
             return null;
         }
         finally {
-            Debug.setSystemErrEnabled(true);
+            if(fileSystemView!=null)
+                Debug.setSystemErrEnabled(true);
         }
-
     }
 }
