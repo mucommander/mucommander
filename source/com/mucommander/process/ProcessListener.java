@@ -39,9 +39,7 @@ public interface ProcessListener {
      * The output passed to this method is encoded. Listener that need to work with raw bytes should
      * use {@link #processOutput(byte[],int,int)} instead.
      * </p>
-     * @param buffer contains the process' output.
-     * @param offset offset in buffer at which the process' output starts.
-     * @param length length of the process' output in buffer.
+     * @param output contains the encoded process output.
      */
     public void processOutput(String output);
 

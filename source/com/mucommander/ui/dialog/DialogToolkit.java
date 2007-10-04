@@ -101,7 +101,7 @@ public class DialogToolkit {
      * Centers the specified component on the specified window.
      * <p>
      * Note that this method assumes <code>c</code>'s dimension to be at most that of the screen.
-     * This can be ensured through {@link #fitToScreen(Component)}. If this constraint is not respected,
+     * This can be ensured through {@link #fitToScreen(Window)}. If this constraint is not respected,
      * behaviour is unpredictable.
      * </p>
      * @param c      component to center.
