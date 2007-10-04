@@ -182,7 +182,7 @@ public class LocalFile extends AbstractFile {
                     }
                 }
             }
-            // Parses the output of 'df -k "filePath"' command on UNIX/BSD-based systems to retrieve free and total space information
+            // Parses the output of 'df -k "filePath"' command on UNIX-based systems to retrieve free and total space information
             else {
                 // 'df -k' returns totals in block of 1K = 1024 bytes
                 Process process = Runtime.getRuntime().exec(new String[]{"df", "-k", absPath}, null, file);
@@ -195,12 +195,19 @@ public class LocalFile extends AbstractFile {
                     String line = br.readLine();
 
                     // Sample lines:
-                    // /dev/disk0s2                      116538416 109846712  6179704    95%    /
-                    // automount -fstab [202]                    0         0        0   100%    /automount/Servers
+                    // /dev/disk0s2            116538416 109846712  6179704    95%    /
+                    // automount -fstab [202]          0         0        0   100%    /automount/Servers
+                    // /dev/disk2s2                 2520      1548      972    61%    /Volumes/muCommander 0.8
 
-                    // Filesystem field can have several tokens (e.g. 'automount -fstab [202]') whereas other fields
-                    // don't, so all tokens are fetched first, and only the values of the '1K-blocks' and 'Avail'
-                    // fields are used.
+                    // We're interested in the '1K-blocks' and 'Avail' fields (only).
+                    // The 'Filesystem' and 'Mounted On' fields can contain spaces (e.g. 'automount -fstab [202]' and
+                    // '/Volumes/muCommander 0.8' resp.) and therefore be made of several tokens. A stable way to
+                    // determine the position of the fields we're interested in is to look for the last token that
+                    // starts with a '/' character which should necessarily correspond to the first token of the 
+                    // 'Mounted on' field. The '1K-blocks' and 'Avail' fields are 4 and 2 tokens away from it
+                    // respectively.
+
+                    // Start by tokenizing the whole line
                     Vector tokenV = new Vector();
                     if(line!=null) {
                         StringTokenizer st = new StringTokenizer(line);
@@ -210,15 +217,27 @@ public class LocalFile extends AbstractFile {
 
                     int nbTokens = tokenV.size();
                     if(nbTokens<6) {
-                        // This should normally not happen
+                        // This shouldn't normally happen
                         if(Debug.ON) Debug.trace("Failed to parse output of df -k "+absPath+" line="+line);
                         return dfInfo;
                     }
 
+                    // Find the last token starting with '/'
+                    int pos = nbTokens-1;
+                    while(!((String)tokenV.elementAt(pos)).startsWith("/")) {
+                        if(pos==0) {
+                            // This shouldn't normally happen
+                            if(Debug.ON) Debug.trace("Failed to parse output of df -k "+absPath+" line="+line);
+                            return dfInfo;
+                        }
+
+                        --pos;
+                    }
+
                     // '1-blocks' field (total space)
-                    dfInfo[0] = Long.parseLong((String)tokenV.elementAt(nbTokens-5)) * 1024;
+                    dfInfo[0] = Long.parseLong((String)tokenV.elementAt(pos-4)) * 1024;
                     // 'Avail' field (free space)
-                    dfInfo[1] = Long.parseLong((String)tokenV.elementAt(nbTokens-3)) * 1024;
+                    dfInfo[1] = Long.parseLong((String)tokenV.elementAt(pos-2)) * 1024;
                 }
             }
         }
