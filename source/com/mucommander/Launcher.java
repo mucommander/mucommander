@@ -212,7 +212,7 @@ public class Launcher {
      * Main method used to startup muCommander.
      */
     public static void main(String args[]) {
-        int                     i;          // Index in the command line arguments.
+        int i; // Index in the command line arguments.
 
         // Initialises fields.
         fatalWarnings = false;
