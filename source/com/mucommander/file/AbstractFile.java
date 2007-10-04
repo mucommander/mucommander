@@ -1028,7 +1028,6 @@ public abstract class AbstractFile implements FilePermissions {
      * registered in {@link FileFactory}. The specified preferred resolution will be used as a hint, but the returned
      * icon may have different dimension; see {@link com.mucommander.file.icon.FileIconProvider#getFileIcon(AbstractFile, java.awt.Dimension)}
      * for full details.
-     *
      * @param preferredResolution the preferred icon resolution
      * @return an icon representing this file
      * @see com.mucommander.file.FileFactory#getDefaultFileIconProvider()
