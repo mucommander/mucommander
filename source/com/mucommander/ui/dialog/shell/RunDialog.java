@@ -215,9 +215,7 @@ public class RunDialog extends FocusDialog implements ActionListener, ProcessLis
 
     /**
      * Notifies the RunDialog that the process has output some text.
-     * @param buffer contains the process' output.
-     * @param offset index in <code>buffer</code> at which the new process output starts.
-     * @param length length of the new process' output.
+     * @param output contains the process' output.
      */
     public void processOutput(String output) {addToTextArea(output);}
 
