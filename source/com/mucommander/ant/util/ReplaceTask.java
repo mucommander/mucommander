@@ -52,13 +52,13 @@ public class ReplaceTask extends Task {
 
     public void execute() throws BuildException {
         if(with == null)
-            throw new BuildException("Unspecified with - please fill in the with attribute.");
+            throw new BuildException("Unspecified with - please fill in the width attribute.");
         if(what == null)
             throw new BuildException("Unspecified what - please fill in the what attribute.");
         if(from == null)
             throw new BuildException("Unspecified from - please fill in the from attribute.");
         if(to == null)
             throw new BuildException("Unspecified to - please fill in the to attribute.");
-        getProject().setProperty(to, from.replaceAll(what, with));
+        getProject().setNewProperty(to, from.replaceAll(what, with));
     }
 }
