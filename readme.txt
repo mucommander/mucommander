@@ -116,6 +116,9 @@ Localization:
 
 Bug fixes:
 - Fixed broken 'file deletion' command under Java 1.4.
+- Fixed KDE detection when the Gnome libraries were installed.
+- Fixed random paint issues after changing the folder panel's font.
+- Fixed color choosers not using the right font in their preview.
 
 Known issues:
 - The bookmarks file system doesn't allow users to specify which credits set
