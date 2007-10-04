@@ -100,44 +100,44 @@ What's new since v0.8 ?
 -----------------------
 
 New features:
-- Created a bookmark:// file system and added the default alt B keyboard
-  shortcut to access it.
-- It's now possible to configure muCommander to auto-detect the shell encoding
-  or to force it to a specific encoding.
-- Editors and Viewers are now centered on the current window rather than set
-  to the upper-left corner of the screen.
+- New bookmark:// filesystem, mapped onto the alt+B shortcut by default.
 
 Improvements:
-- Non automatic sizing of columns is now working properly and preserved in the
-  configuration.
+- Non-automatic sizing of columns is now working properly and preserved in 
+  the configuration.
 - Columns order and visibility is now preserved in the configuration.
+- Editors and viewers are now centered on the current window rather than set
+  to the upper-left corner of the screen.
+- Shell encoding is now auto-detected by default, unless a specific encoding
+  is set in the preferences.
 
 Localization:
 
 Bug fixes:
-- Fixed broken 'file deletion' command under Java 1.4.
-- Fixed KDE detection when the Gnome libraries were installed.
-- Fixed random paint issues after changing the folder panel's font.
-- Fixed color choosers not using the right font in their preview.
+- Fixed KDE detection when the Gnome libraries are installed.
+- Fixed random display issues after changing the folder panel's font.
+- Fixed theme color choosers not displaying the right font in their preview.
+- Fixed incorrectly reported total and free space information under Unix-based
+  platforms when the mount point of the volume would contain space characters.
 
 Known issues:
-- The bookmarks file system doesn't allow users to specify which credits set
+- The bookmarks file system doesn't allow users to specify which credentials
   they wish to use when selecting a bookmark that needs authentification, it
   will default to the first in the list.
-- Italian, Korean and Polish translations are not up-to-date
+- Italian, Korean and Polish translations are not up-to-date.
 - Executable permissions are not preserved properly for local files prior to
-  Java 1.6
-- Some BZ2 archives can not be properly opened
-- SMB support may not work properly on non multi-language JRE
+  Java 1.6.
+- Some BZ2 archives can not be properly opened.
+- SMB support may not work properly on non multi-language JRE.
 - 'Copy files to clipboard' not working with some applications (files are not
-  pasted)
+  pasted).
 - Mac OS X : 'Sort by' keyboard shortcuts in menu show Command modifier instead
   of Ctrl, OS X's keyboard navigation shortcuts must be disabled in 'System
-  Preferences' for them to work properly
+  Preferences' for them to work properly.
 - Mac OS X : text fields don't work correctly when using a fractionally-scaled
   font (known Java bug,
-   http://lists.apple.com/archives/Java-dev/2005/May/msg00670.html)
-- Editable combo boxes have keyboard navigation issues under Java 1.6
+   http://lists.apple.com/archives/Java-dev/2005/May/msg00670.html).
+- Editable combo boxes have keyboard navigation issues under Java 1.6.
 
 
 Command Line Interface
