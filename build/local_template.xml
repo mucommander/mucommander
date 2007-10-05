@@ -33,6 +33,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- - muCommander specific configuration is only used if    -->
   <!--   you downloaded the whole muCommander source code,     -->
   <!--   rather than just the Ant tools.                       -->
+  <!--                                                         -->
+  <!-- Note that if you want to use a variable's default       -->
+  <!-- value, you must delete it from this file or it will use -->
+  <!-- an empty value.                                         -->
 
 
 
