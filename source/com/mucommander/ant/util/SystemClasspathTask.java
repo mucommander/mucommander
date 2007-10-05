@@ -59,7 +59,7 @@ public class SystemClasspathTask extends Task {
 
             // If we've found a file that exists and has a legal 'rt.jar' name, use that.
             if(file.exists() && (file.getName().equalsIgnoreCase("rt.jar") || file.getName().equalsIgnoreCase("classes.jar"))) {
-                getProject().setNewProperty(antProperty, file.getPath());
+                getProject().setNewProperty(antProperty, file.getAbsolutePath());
                 return;
             }
         }
