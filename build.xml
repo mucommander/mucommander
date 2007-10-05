@@ -26,7 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- muCommander specific directory structure.               -->
   <import file="build/mucommander/structure.xml"/>
   <!-- Paths to local tools.                                   -->
-  <import file="local.xml"/>
+  <import file="local.xml" optional="true"/>
   <!-- Ant tools specific targets.                             -->
   <import file="build/tools/main.xml"/>
   <!-- Configuration API specific targets.                     -->

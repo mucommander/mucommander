@@ -33,6 +33,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- project will be compiled.                               -->
   <import file="build/common.xml"/>
   <import file="build/conf/structure.xml"/>
-  <import file="local.xml"/>
+  <import file="local.xml" optional="true"/>
   <import file="build/conf/main.xml"/>
 </project>
