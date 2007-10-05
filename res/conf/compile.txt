@@ -18,10 +18,10 @@ all the proper libraries and tools are installed.
   This is used to compress JAR files further than the Sun tools can.
   It can be retrieved from http://p7zip.sourceforge.net/
 
-  Once these tools have been installed, the build process needs to be
-configured.
-This is done by copying ./build/local_template.xml to ./local.xml and editing
-it.
+  Once these tools have been installed, you might want / need to configure
+the build process.
+This is done by copying ./build/local_template.xml to ./local.xml and
+editing it.
 
   The values that need to be set are:
 - java.lib (defaults to a best guess system-dependant value)
