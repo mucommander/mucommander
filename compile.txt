@@ -29,12 +29,13 @@ libraries and tools are installed.
   This is used to compress JAR files further than the Sun tools can.
   It can be retrieved from http://p7zip.sourceforge.net/
   
-  Once these tools have been installed, the muCommander build process needs to
-be configured. This is done by copying ./build/local_template.xml to ./local.xml
-and editing it.
+  Once these tools have been installed, you might want / need to configure
+the muCommander build process.
+This is done by copying ./build/local_template.xml to ./local.xml and
+editing it.
 
   The values that need to be set are:
-- java.lib (defaults to a best guess system-dependant value)
+- java.lib (defaults to a system-dependant best guess)
   Path to the Java 1.6's classes JAR.
   This is usually found in /path/to/jre/lib/rt.jar
   Apple, however, decided to use non-standard paths for reasons of their own.
