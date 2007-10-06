@@ -110,6 +110,8 @@ Improvements:
   to the upper-left corner of the screen.
 - Shell encoding is now auto-detected by default, unless a specific encoding
   is set in the preferences.
+- Simplified and extended the theme editor, with new 'selection outline' and
+  'alternate background' values.
 
 Localization:
 
