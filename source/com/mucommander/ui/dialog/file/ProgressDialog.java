@@ -596,9 +596,9 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
      */
     private class SpeedGraph extends JPanel {
 
-        private final Color BACKGROUND_COLOR = ThemeManager.getCurrentColor(Theme.FILE_BACKGROUND_COLOR);
+        private final Color BACKGROUND_COLOR = ThemeManager.getCurrentColor(Theme.FILE_TABLE_BACKGROUND_COLOR);
 
-        private final Color GRAPH_COLOR = ThemeManager.getCurrentColor(Theme.FILE_SELECTED_BACKGROUND_COLOR);
+        private final Color GRAPH_COLOR = ThemeManager.getCurrentColor(Theme.FILE_TABLE_SELECTED_BACKGROUND_COLOR);
 
         private final Color BPS_LIMIT_COLOR = ThemeManager.getCurrentColor(Theme.MARKED_FOREGROUND_COLOR);
 

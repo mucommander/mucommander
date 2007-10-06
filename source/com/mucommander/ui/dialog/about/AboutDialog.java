@@ -278,7 +278,7 @@ public class AboutDialog extends FocusDialog implements ActionListener {
         StyleConstants.setFontFamily(master, font.getFamily());
         StyleConstants.setFontSize(master, font.getSize());
         StyleConstants.setForeground(master, ThemeManager.getCurrentColor(Theme.FILE_FOREGROUND_COLOR));
-        StyleConstants.setBackground(master, ThemeManager.getCurrentColor(Theme.FILE_BACKGROUND_COLOR));
+        StyleConstants.setBackground(master, ThemeManager.getCurrentColor(Theme.FILE_TABLE_BACKGROUND_COLOR));
         StyleConstants.setLeftIndent(master, 10);
         StyleConstants.setRightIndent(master, 10);
         StyleConstants.setLineSpacing(master, (float)0.2);
@@ -289,23 +289,23 @@ public class AboutDialog extends FocusDialog implements ActionListener {
         StyleConstants.setBold(currentStyle, true);
         StyleConstants.setFontSize(currentStyle, font.getSize() + 2);
         StyleConstants.setForeground(currentStyle, ThemeManager.getCurrentColor(Theme.FOLDER_FOREGROUND_COLOR));
-        StyleConstants.setBackground(currentStyle, ThemeManager.getCurrentColor(Theme.FOLDER_BACKGROUND_COLOR));
+        StyleConstants.setBackground(currentStyle, ThemeManager.getCurrentColor(Theme.FILE_TABLE_BACKGROUND_COLOR));
 
         // Title style.
         currentStyle = doc.addStyle(STYLE_TITLE, currentStyle);
         StyleConstants.setAlignment(currentStyle, StyleConstants.ALIGN_CENTER);
         StyleConstants.setForeground(currentStyle, ThemeManager.getCurrentColor(Theme.ARCHIVE_FOREGROUND_COLOR));
-        StyleConstants.setBackground(currentStyle, ThemeManager.getCurrentColor(Theme.ARCHIVE_BACKGROUND_COLOR));
+        StyleConstants.setBackground(currentStyle, ThemeManager.getCurrentColor(Theme.FILE_TABLE_BACKGROUND_COLOR));
 
         // Details style.
         currentStyle = doc.addStyle(STYLE_DETAILS, master);
         StyleConstants.setForeground(currentStyle, ThemeManager.getCurrentColor(Theme.HIDDEN_FILE_FOREGROUND_COLOR));
-        StyleConstants.setBackground(currentStyle, ThemeManager.getCurrentColor(Theme.HIDDEN_FILE_BACKGROUND_COLOR));
+        StyleConstants.setBackground(currentStyle, ThemeManager.getCurrentColor(Theme.FILE_TABLE_BACKGROUND_COLOR));
 
         // URL style.
         currentStyle = doc.addStyle(STYLE_URL, master);
         StyleConstants.setForeground(currentStyle, ThemeManager.getCurrentColor(Theme.SYMLINK_FOREGROUND_COLOR));
-        StyleConstants.setBackground(currentStyle, ThemeManager.getCurrentColor(Theme.SYMLINK_BACKGROUND_COLOR));
+        StyleConstants.setBackground(currentStyle, ThemeManager.getCurrentColor(Theme.FILE_TABLE_BACKGROUND_COLOR));
         StyleConstants.setUnderline(currentStyle, true);
     }
 
