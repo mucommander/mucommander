@@ -89,6 +89,8 @@ interface ThemeXmlConstants {
     public static final String ELEMENT_PROGRESS                      = "progress";
     public static final String ELEMENT_BORDER                        = "border";
     public static final String ELEMENT_INACTIVE_BORDER               = "inactive_border";
+    public static final String ELEMENT_OUTLINE                        = "outline";
+    public static final String ELEMENT_INACTIVE_OUTLINE               = "inactive_outline";
     public static final String ELEMENT_OK                            = "ok";
     public static final String ELEMENT_WARNING                       = "warning";
     public static final String ELEMENT_CRITICAL                      = "critical";

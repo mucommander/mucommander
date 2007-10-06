@@ -89,7 +89,7 @@ public class ThemeData {
      * by an instance of theme data by looping from 0 to {@link #COLOR_COUNT}.
      * </p>
      */
-    public static final int COLOR_COUNT = 57;
+    public static final int COLOR_COUNT = 59;
 
 
 
@@ -609,6 +609,16 @@ public class ThemeData {
      */
     public static final int STATUS_BAR_CRITICAL_COLOR = 55;
 
+    /**
+     * Color used to paint the outline of selected files.
+     */
+    public static final int FILE_TABLE_SELECTED_OUTLINE_COLOR = 57;
+
+    /**
+     * Color used to paint the outline of selected files in an inactive table.
+     */
+    public static final int FILE_TABLE_INACTIVE_SELECTED_OUTLINE_COLOR = 58;
+
 
 
     // - Default fonts -------------------------------------------------------------------
@@ -976,6 +986,8 @@ public class ThemeData {
             // Selected table background colors.
         case FILE_TABLE_SELECTED_BACKGROUND_COLOR:
         case FILE_TABLE_INACTIVE_SELECTED_BACKGROUND_COLOR:
+        case FILE_TABLE_SELECTED_OUTLINE_COLOR:
+        case FILE_TABLE_INACTIVE_SELECTED_OUTLINE_COLOR:
 	    return getTableSelectionBackgroundColor();
 
             // Border colors.
@@ -1891,6 +1903,8 @@ public class ThemeData {
         if(!getTableSelectionBackgroundColor().equals(buffer)) {
             triggerColorEvent(FILE_TABLE_SELECTED_BACKGROUND_COLOR, getTableSelectionBackgroundColor());
             triggerColorEvent(FILE_TABLE_INACTIVE_SELECTED_BACKGROUND_COLOR, getTableSelectionBackgroundColor());
+            triggerColorEvent(FILE_TABLE_SELECTED_OUTLINE_COLOR, getTableSelectionBackgroundColor());
+            triggerColorEvent(FILE_TABLE_INACTIVE_SELECTED_OUTLINE_COLOR, getTableSelectionBackgroundColor());
         }
     }
 

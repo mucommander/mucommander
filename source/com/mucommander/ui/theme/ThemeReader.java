@@ -366,6 +366,22 @@ class ThemeReader extends DefaultHandler implements ThemeXmlConstants {
                 traceIllegalDeclaration(qName);
         }
 
+        // File table outline color.
+        else if(qName.equals(ELEMENT_OUTLINE)) {
+            if(state == STATE_TABLE)
+                template.setColor(ThemeData.FILE_TABLE_SELECTED_OUTLINE_COLOR, createColor(attributes));
+            else
+                traceIllegalDeclaration(qName);
+        }
+
+        // File table inactive outline color.
+        else if(qName.equals(ELEMENT_INACTIVE_OUTLINE)) {
+            if(state == STATE_TABLE)
+                template.setColor(ThemeData.FILE_TABLE_INACTIVE_SELECTED_OUTLINE_COLOR, createColor(attributes));
+            else
+                traceIllegalDeclaration(qName);
+        }
+
         // Background color.
         else if(qName.equals(ELEMENT_BACKGROUND)) {
             if(state == STATE_TABLE_NORMAL)

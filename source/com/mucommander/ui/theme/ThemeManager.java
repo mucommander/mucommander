@@ -1002,16 +1002,14 @@ public class ThemeManager {
      */
     private static void triggerThemeChange(Theme oldTheme, Theme newTheme) {
         // Triggers font events.
-        for(int i = 0; i < Theme.FONT_COUNT; i++) {
+        for(int i = 0; i < Theme.FONT_COUNT; i++)
             if(oldTheme.isFontDifferent(i, newTheme.getFont(i)))
                 triggerFontEvent(new FontChangedEvent(currentTheme, i, newTheme.getFont(i)));
-        }
 
         // Triggers color events.
-        for(int i = 0; i < Theme.COLOR_COUNT; i++) {
+        for(int i = 0; i < Theme.COLOR_COUNT; i++)
             if(oldTheme.isColorDifferent(i, newTheme.getColor(i)))
                 triggerColorEvent(new ColorChangedEvent(currentTheme, i, newTheme.getColor(i)));
-        }
     }
 
     /**

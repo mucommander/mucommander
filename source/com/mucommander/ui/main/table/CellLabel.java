@@ -50,16 +50,19 @@ import java.awt.*;
  * @author Maxence Bernard, Sun Microsystems
  */
 public class CellLabel extends JLabel {
-
+    // - Constants -----------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------
     /** Amount of border space on the left and right of the cell */
     public static final int CELL_BORDER_WIDTH = 4;
-
     /** Amount of border space on the top and bottom of the cell */
     public static final int CELL_BORDER_HEIGHT = 1;
-
     /** Empty border to give more space around cells */
     private static final Border CELL_BORDER = new EmptyBorder(CELL_BORDER_HEIGHT, CELL_BORDER_WIDTH, CELL_BORDER_HEIGHT, CELL_BORDER_WIDTH);
 
+
+
+    // - Instance fields -----------------------------------------------------------------
+    // -----------------------------------------------------------------------------------
     /** Last text set by the setText method */
     private String    lastText;
     /** Last icon set by the setIcon method */
@@ -70,7 +73,13 @@ public class CellLabel extends JLabel {
     private Color     lastForegroundColor;
     /** Last background color set by the setBackground method */
     private Color     lastBackgroundColor;
+    /** Outline color (top and bottom). */
+    private Color     outlineColor;
 
+
+
+    // - Initialisation ------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------
     /**
      * Creates a new blank CellLabel.
      */
@@ -79,6 +88,9 @@ public class CellLabel extends JLabel {
         setBorder(CELL_BORDER);
     }
 
+
+    // - Color changing ------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------
     /**
      * Overrides <code>JComponent.setForeground</code> to call 
      * the super method only if the value has changed since last call.
@@ -91,7 +103,6 @@ public class CellLabel extends JLabel {
             lastForegroundColor = c;
         }
     }
-
     
     /**
      * Overrides <code>JComponent.setBackground</code> to call 
@@ -106,7 +117,16 @@ public class CellLabel extends JLabel {
         }
     }
 
-	
+    /**
+     * Sets the label outline color.
+     * @param c the new background's color for this label
+     */
+    public void setOutline(Color c) {outlineColor = c;}
+
+
+
+    // - Label content -------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------
     /**
      * Overrides <code>JLabel.setText</code> to call 
      * the super method only if the value has changed since last call.
@@ -147,11 +167,30 @@ public class CellLabel extends JLabel {
             lastTooltip = tooltip;
         }
     }
-	
 
-    //////////////////////////////////////////////////////////////////
-    // Copy/paste from Sun's DefaultTableCellRender implementation  //
-    //////////////////////////////////////////////////////////////////
+
+
+    // - Painting ------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------
+    /**
+     * Paints the label.
+     * @param g where to paint the label.
+     */
+    public void paint(Graphics g) {
+        super.paint(g);
+
+        // If necessary, paints the outline color.
+        if(outlineColor != null && !outlineColor.equals(lastBackgroundColor)) {
+            g.setColor(outlineColor);
+            g.drawLine(0, 0, getWidth(), 0);
+            g.drawLine(0, getHeight() - 1, getWidth(), getHeight() - 1);
+        }
+    }	
+
+
+
+    // - DefaultTableCellRenderer implementation -----------------------------------------
+    // -----------------------------------------------------------------------------------
     /*
      * The following methods are overridden as a performance measure to 
      * to prune code-paths are often called in the case of renders

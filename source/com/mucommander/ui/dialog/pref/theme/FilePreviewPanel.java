@@ -309,7 +309,14 @@ class FilePreviewPanel extends JScrollPane implements PropertyChangeListener {
                 currentLabel.setForeground(getForegroundColor(row, isSelected));
             }
 
-            // Initialises the label's background.
+            // Foreground.
+            if(isSelected)
+                currentLabel.setOutline(isActive ? data.getColor(ThemeData.FILE_TABLE_SELECTED_OUTLINE_COLOR) :
+                                        data.getColor(ThemeData.FILE_TABLE_INACTIVE_SELECTED_OUTLINE_COLOR));
+            else
+                currentLabel.setOutline(null);
+
+            // Background.
             if(FilePreviewPanel.this.isActive) {
                 if(isSelected)
                     currentLabel.setBackground(FilePreviewPanel.this.data.getColor(ThemeData.FILE_TABLE_SELECTED_BACKGROUND_COLOR));

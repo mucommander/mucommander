@@ -83,13 +83,6 @@ class FilePanel extends ThemeEditorPanel {
         gridPanel.add(createCaptionLabel("theme_editor.normal"));
         gridPanel.add(createCaptionLabel("theme_editor.selected"));
 
-        // Border
-        gridPanel.add(createCaptionLabel("theme_editor.border"));
-        gridPanel.add(borderButton = new ColorButton(parent, template, isActive ? ThemeData.FILE_TABLE_BORDER_COLOR :
-                                                     ThemeData.FILE_TABLE_INACTIVE_BORDER_COLOR, PreviewLabel.BORDER_COLOR_PROPERTY_NAME));
-        gridPanel.add(new JLabel());
-        borderButton.addUpdatedPreviewComponent(preview);
-
         // Background
         gridPanel.add(createCaptionLabel("theme_editor.background"));
         gridPanel.add(backgroundButton = new ColorButton(parent, template, isActive ? ThemeData.FILE_TABLE_BACKGROUND_COLOR :
@@ -150,6 +143,14 @@ class FilePanel extends ThemeEditorPanel {
         addForegroundColor(gridPanel, isActive ? ThemeData.MARKED_SELECTED_FOREGROUND_COLOR : ThemeData.MARKED_INACTIVE_SELECTED_FOREGROUND_COLOR,
                            selectedBackgroundButton, fontChooser, preview);
 
+        // Border.
+        gridPanel.add(createCaptionLabel("theme_editor.border"));
+        gridPanel.add(borderButton = new ColorButton(parent, template, isActive ? ThemeData.FILE_TABLE_BORDER_COLOR :
+                                                     ThemeData.FILE_TABLE_INACTIVE_BORDER_COLOR, PreviewLabel.BORDER_COLOR_PROPERTY_NAME));
+        borderButton.addUpdatedPreviewComponent(preview);
+        gridPanel.add(borderButton = new ColorButton(parent, template, isActive ? ThemeData.FILE_TABLE_SELECTED_OUTLINE_COLOR :
+                                                     ThemeData.FILE_TABLE_INACTIVE_SELECTED_OUTLINE_COLOR, PreviewLabel.BORDER_COLOR_PROPERTY_NAME));
+        borderButton.addUpdatedPreviewComponent(preview);
 
         setLayout(new BorderLayout());
         add(gridPanel, BorderLayout.WEST);

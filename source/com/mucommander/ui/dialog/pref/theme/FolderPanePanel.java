@@ -54,7 +54,6 @@ class FolderPanePanel extends ThemeEditorPanel {
         FontChooser fontChooser;
         FilePanel   filePanel;
 
-
         tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 
         // Adds the general panel.
@@ -82,28 +81,29 @@ class FolderPanePanel extends ThemeEditorPanel {
      * Creates the 'general' theme.
      */
     private JPanel createGeneralPanel(FontChooser chooser) {
-        YBoxPanel generalPanel;
-        JPanel    gridPanel;
+        YBoxPanel mainPanel;
+        JPanel    quickSearchPanel;
         JPanel    panel;
 
-        // Initialises the panel.
-        generalPanel = new YBoxPanel();
-
         // Initialises the quicksearch panel.
-        gridPanel = new ProportionalGridPanel(4);
-        addLabelRow(gridPanel);
-        addColorButtonRow(gridPanel, null, "theme_editor.quick_search.unmatched_file",
+        panel = new ProportionalGridPanel(4);
+        addLabelRow(panel);
+        addColorButtonRow(panel, null, "theme_editor.quick_search.unmatched_file",
                           ThemeData.FILE_TABLE_UNMATCHED_FOREGROUND_COLOR,
                           ThemeData.FILE_TABLE_UNMATCHED_BACKGROUND_COLOR);
-        gridPanel.setBorder(BorderFactory.createTitledBorder(Translator.get("theme_editor.quick_search")));
+        quickSearchPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        quickSearchPanel.add(panel);
+        quickSearchPanel.setBorder(BorderFactory.createTitledBorder(Translator.get("theme_editor.quick_search")));
 
-        // Creates the layout.
-        generalPanel.add(chooser);
-        generalPanel.add(gridPanel);
+        // Initialises the panel.
+        mainPanel = new YBoxPanel();
+        mainPanel.add(chooser);
+        mainPanel.addSpace(10);
+        mainPanel.add(quickSearchPanel);
 
-        // Wraps the whole thing in a flow layout.
-        panel = new JPanel();
-        panel.add(generalPanel);
+        // Wraps everything in a border layout.
+        panel = new JPanel(new BorderLayout());
+        panel.add(mainPanel, BorderLayout.NORTH);
         return panel;
     }
 

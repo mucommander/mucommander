@@ -74,6 +74,8 @@ public class FileTableCellRenderer implements Columns, TableCellRenderer, ThemeL
     private static Color[][]   backgroundColors;
     private static Color       unmatchedForeground;
     private static Color       unmatchedBackground;
+    private static Color       activeOutlineColor;
+    private static Color       inactiveOutlineColor;
     private static final int NORMAL               = 0;
     private static final int SELECTED             = 1;
     private static final int ALTERNATE            = 2;
@@ -145,6 +147,9 @@ public class FileTableCellRenderer implements Columns, TableCellRenderer, ThemeL
         unmatchedForeground                                = ThemeManager.getCurrentColor(Theme.FILE_TABLE_UNMATCHED_FOREGROUND_COLOR);
         unmatchedBackground                                = ThemeManager.getCurrentColor(Theme.FILE_TABLE_UNMATCHED_BACKGROUND_COLOR);
         font                                               = ThemeManager.getCurrentFont(Theme.FILE_TABLE_FONT);
+
+        activeOutlineColor                                 = ThemeManager.getCurrentColor(Theme.FILE_TABLE_SELECTED_OUTLINE_COLOR);
+        inactiveOutlineColor                               = ThemeManager.getCurrentColor(Theme.FILE_TABLE_INACTIVE_SELECTED_OUTLINE_COLOR);
     }
 
 
@@ -328,6 +333,12 @@ public class FileTableCellRenderer implements Columns, TableCellRenderer, ThemeL
         }
         else
             label.setBackground(unmatchedBackground);
+
+        if(selectedIndex == SELECTED)
+            label.setOutline(table.hasFocus() ? activeOutlineColor : inactiveOutlineColor);
+        else
+            label.setOutline(null);
+
         return label;
     }
 
@@ -498,6 +509,16 @@ public class FileTableCellRenderer implements Columns, TableCellRenderer, ThemeL
             // Inactive alternate background.
         case Theme.FILE_TABLE_INACTIVE_ALTERNATE_BACKGROUND_COLOR:
             backgroundColors[INACTIVE][ALTERNATE] = event.getColor();
+            break;
+
+            // Active selection outline.
+        case Theme.FILE_TABLE_SELECTED_OUTLINE_COLOR:
+            activeOutlineColor = event.getColor();
+            break;
+
+            // Inactive selection outline.
+        case Theme.FILE_TABLE_INACTIVE_SELECTED_OUTLINE_COLOR:
+            inactiveOutlineColor = event.getColor();
             break;
 
         default:
