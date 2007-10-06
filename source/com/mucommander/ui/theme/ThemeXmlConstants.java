@@ -48,6 +48,10 @@ interface ThemeXmlConstants {
     public static final String ELEMENT_NORMAL               = "normal";
     /** Item selected state description element. */
     public static final String ELEMENT_SELECTED             = "selected";
+    /** Item alternate state description element. */
+    public static final String ELEMENT_ALTERNATE            = "alternate";
+    /** Item unmatched state description element. */
+    public static final String ELEMENT_UNMATCHED            = "unmatched";
 
 
 
@@ -72,23 +76,22 @@ interface ThemeXmlConstants {
 
     // - Color elements ------------------------------------------------------------------
     // -----------------------------------------------------------------------------------
-    public static final String ELEMENT_UNFOCUSED_BACKGROUND = "unfocused_background";
-    public static final String ELEMENT_UNFOCUSED_FOREGROUND = "unfocused_foreground";
-    public static final String ELEMENT_UNMATCHED_BACKGROUND = "unmatched_background";
-    public static final String ELEMENT_UNMATCHED_FOREGROUND = "unmatched_foreground";
-    public static final String ELEMENT_BACKGROUND           = "background";
-    public static final String ELEMENT_FOREGROUND           = "foreground";
-    public static final String ELEMENT_HIDDEN               = "hidden";
-    public static final String ELEMENT_FOLDER               = "folder";
-    public static final String ELEMENT_ARCHIVE              = "archive";
-    public static final String ELEMENT_SYMLINK              = "symlink";
-    public static final String ELEMENT_MARKED               = "marked";
-    public static final String ELEMENT_FILE                 = "file";
-    public static final String ELEMENT_PROGRESS             = "progress";
-    public static final String ELEMENT_BORDER               = "border";
-    public static final String ELEMENT_OK                   = "ok";
-    public static final String ELEMENT_WARNING              = "warning";
-    public static final String ELEMENT_CRITICAL             = "critical";
-    public static final String ATTRIBUTE_COLOR              = "color";
-    public static final String ATTRIBUTE_ALPHA              = "alpha";
+    public static final String ELEMENT_INACTIVE_BACKGROUND           = "inactive_background";
+    public static final String ELEMENT_INACTIVE_FOREGROUND           = "inactive_foreground";
+    public static final String ELEMENT_BACKGROUND                    = "background";
+    public static final String ELEMENT_FOREGROUND                    = "foreground";
+    public static final String ELEMENT_HIDDEN                        = "hidden";
+    public static final String ELEMENT_FOLDER                        = "folder";
+    public static final String ELEMENT_ARCHIVE                       = "archive";
+    public static final String ELEMENT_SYMLINK                       = "symlink";
+    public static final String ELEMENT_MARKED                        = "marked";
+    public static final String ELEMENT_FILE                          = "file";
+    public static final String ELEMENT_PROGRESS                      = "progress";
+    public static final String ELEMENT_BORDER                        = "border";
+    public static final String ELEMENT_INACTIVE_BORDER               = "inactive_border";
+    public static final String ELEMENT_OK                            = "ok";
+    public static final String ELEMENT_WARNING                       = "warning";
+    public static final String ELEMENT_CRITICAL                      = "critical";
+    public static final String ATTRIBUTE_COLOR                       = "color";
+    public static final String ATTRIBUTE_ALPHA                       = "alpha";
 }

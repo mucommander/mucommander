@@ -89,7 +89,7 @@ public class ThemeData {
      * by an instance of theme data by looping from 0 to {@link #COLOR_COUNT}.
      * </p>
      */
-    public static final int COLOR_COUNT = 76;
+    public static final int COLOR_COUNT = 57;
 
 
 
@@ -156,16 +156,28 @@ public class ThemeData {
     public static final int FILE_TABLE_BORDER_COLOR = 0;
 
     /**
-     * Color used to paint the folder panel's background color.
+     * Color used to paint the folder panels' borders when it doesn't have the focus.
      * <p>
-     * Note that this only applies to bits of a folder panel that do not
-     * contain files.
+     * This defaults to <code>Color.GRAY</code>.
      * </p>
+     */
+    public static final int FILE_TABLE_INACTIVE_BORDER_COLOR = 56;
+
+    /**
+     * Color used to paint the folder panel's background color.
      * <p>
      * This defaults to the current <code>JTable</code> background color.
      * </p>
      */
     public static final int FILE_TABLE_BACKGROUND_COLOR = 1;
+
+    /**
+     * Color used to paint the folder panel's alternate background color.
+     * <p>
+     * This defaults to the current <code>JTable</code> background color.
+     * </p>
+     */
+    public static final int FILE_TABLE_ALTERNATE_BACKGROUND_COLOR = 2;
 
     /**
      * Color used to paint the folder panel's background color when it doesn't have the focus.
@@ -174,17 +186,35 @@ public class ThemeData {
      * to the same value.
      * </p>
      */
-    public static final int FILE_TABLE_UNFOCUSED_BACKGROUND_COLOR = 2;
+    public static final int FILE_TABLE_INACTIVE_BACKGROUND_COLOR = 3;
+
+    /**
+     * Color used to paint the folder panel's alternate background color when inactive.
+     * <p>
+     * This defaults to the current <code>JTable</code> background color.
+     * </p>
+     */
+    public static final int FILE_TABLE_INACTIVE_ALTERNATE_BACKGROUND_COLOR = 4;
 
     /**
      * Color used to paint the file table's background color when it's part of an unmatched file.
      */
-    public static final int FILE_TABLE_UNMATCHED_BACKGROUND_COLOR = 74;
+    public static final int FILE_TABLE_UNMATCHED_BACKGROUND_COLOR = 5;
 
     /**
      * Color used to paint the file table's foreground color when it's part of an unmatched file.
      */
-    public static final int FILE_TABLE_UNMATCHED_FOREGROUND_COLOR = 75;
+    public static final int FILE_TABLE_UNMATCHED_FOREGROUND_COLOR = 6;
+
+    /**
+     * Colors used to pain the file table's background color when in a selected row.
+     */
+    public static final int FILE_TABLE_SELECTED_BACKGROUND_COLOR = 7;
+
+    /**
+     * Colors used to pain the file table's background color when in an inactive selected row.
+     */
+    public static final int FILE_TABLE_INACTIVE_SELECTED_BACKGROUND_COLOR = 8;
 
     /**
      * Color used to paint hidden files text in the folder panels.
@@ -192,15 +222,7 @@ public class ThemeData {
      * This defaults to the current <code>JTable</code> foreground color.
      * </p>
      */
-    public static final int HIDDEN_FILE_FOREGROUND_COLOR = 3;
-
-    /**
-     * Color used to paint the background of hidden files in the folder panels.
-     * <p>
-     * This defaults to the current <code>JTable</code> background color.
-     * </p>
-     */
-    public static final int HIDDEN_FILE_BACKGROUND_COLOR = 4;
+    public static final int HIDDEN_FILE_FOREGROUND_COLOR = 9;
 
     /**
      * Color used to paint hidden files text in the folder panels when they don't have the focus.
@@ -209,33 +231,7 @@ public class ThemeData {
      * to the same value.
      * </p>
      */
-    public static final int HIDDEN_FILE_UNFOCUSED_FOREGROUND_COLOR = 5;
-
-    /**
-     * Color used to paint the background of hidden files in the folder panels when they don't have the focus.
-     * <p>
-     * This behaves in exactly the same fashion as {@link #HIDDEN_FILE_BACKGROUND_COLOR}, and defaults
-     * to the same value.
-     * </p>
-     */
-    public static final int HIDDEN_FILE_UNFOCUSED_BACKGROUND_COLOR = 6;
-
-    /**
-     * Color used to paint the background of selected hidden files in the folder panels.
-     * <p>
-     * This defaults to the current <code>JTable</code> selection background color.
-     * </p>
-     */
-    public static final int HIDDEN_FILE_SELECTED_BACKGROUND_COLOR = 7;
-
-    /**
-     * Color used to paint the background of selected hidden files in the folder panels when they don't have the focus.
-     * <p>
-     * This behaves in exactly the same fashion as {@link #HIDDEN_FILE_SELECTED_BACKGROUND_COLOR}, and defaults
-     * to the same value.
-     * </p>
-     */
-    public static final int HIDDEN_FILE_SELECTED_UNFOCUSED_BACKGROUND_COLOR = 8;
+    public static final int HIDDEN_FILE_INACTIVE_FOREGROUND_COLOR = 10;
 
     /**
      * Color used to paint selected hidden files text in the folder panels.
@@ -243,7 +239,7 @@ public class ThemeData {
      * This defaults to the current <code>JTable</code> selection foreground color.
      * </p>
      */
-    public static final int HIDDEN_FILE_SELECTED_FOREGROUND_COLOR = 9;
+    public static final int HIDDEN_FILE_SELECTED_FOREGROUND_COLOR = 11;
 
     /**
      * Color used to paint selected hidden files text in the folder panels when they don't have the focus.
@@ -252,7 +248,7 @@ public class ThemeData {
      * to the same value.
      * </p>
      */
-    public static final int HIDDEN_FILE_SELECTED_UNFOCUSED_FOREGROUND_COLOR = 10;
+    public static final int HIDDEN_FILE_INACTIVE_SELECTED_FOREGROUND_COLOR = 12;
 
     /**
      * Color used to paint folders text in the folder panels.
@@ -260,15 +256,7 @@ public class ThemeData {
      * This defaults to the current <code>JTable</code> foreground color.
      * </p>
      */
-    public static final int FOLDER_FOREGROUND_COLOR = 11;
-
-    /**
-     * Color used to paint the background of folders in the folder panels.
-     * <p>
-     * This defaults to the current <code>JTable</code> background color.
-     * </p>
-     */
-    public static final int FOLDER_BACKGROUND_COLOR = 12;
+    public static final int FOLDER_FOREGROUND_COLOR = 13;
 
     /**
      * Color used to paint folders text in the folder panels when they don't have the focus.
@@ -277,33 +265,7 @@ public class ThemeData {
      * to the same value.
      * </p>
      */
-    public static final int FOLDER_UNFOCUSED_FOREGROUND_COLOR = 13;
-
-    /**
-     * Color used to paint the background of folders in the folder panels when they don't have the focus.
-     * <p>
-     * This behaves in exactly the same fashion as {@link #FOLDER_BACKGROUND_COLOR}, and defaults
-     * to the same value.
-     * </p>
-     */
-    public static final int FOLDER_UNFOCUSED_BACKGROUND_COLOR = 14;
-
-    /**
-     * Color used to paint the background of selected folders in the folder panels.
-     * <p>
-     * This defaults to the current <code>JTable</code> selection background color.
-     * </p>
-     */
-    public static final int FOLDER_SELECTED_BACKGROUND_COLOR = 15;
-
-    /**
-     * Color used to paint the background of selected folders in the folder panels when they don't have the focus.
-     * <p>
-     * This behaves in exactly the same fashion as {@link #FOLDER_SELECTED_BACKGROUND_COLOR}, and defaults
-     * to the same value.
-     * </p>
-     */
-    public static final int FOLDER_SELECTED_UNFOCUSED_BACKGROUND_COLOR = 16;
+    public static final int FOLDER_INACTIVE_FOREGROUND_COLOR = 14;
 
     /**
      * Color used to paint selected folders text in the folder panels.
@@ -311,7 +273,7 @@ public class ThemeData {
      * This defaults to the current <code>JTable</code> selection foreground color.
      * </p>
      */
-    public static final int FOLDER_SELECTED_FOREGROUND_COLOR = 17;
+    public static final int FOLDER_SELECTED_FOREGROUND_COLOR = 15;
 
     /**
      * Color used to paint selected folders text in the folder panels when they don't have the focus.
@@ -320,7 +282,7 @@ public class ThemeData {
      * to the same value.
      * </p>
      */
-    public static final int FOLDER_SELECTED_UNFOCUSED_FOREGROUND_COLOR = 18;
+    public static final int FOLDER_INACTIVE_SELECTED_FOREGROUND_COLOR = 16;
 
     /**
      * Color used to paint archives text in the folder panels.
@@ -328,15 +290,7 @@ public class ThemeData {
      * This defaults to the current <code>JTable</code> foreground color.
      * </p>
      */
-    public static final int ARCHIVE_FOREGROUND_COLOR = 19;
-
-    /**
-     * Color used to paint the background of archives in the folder panels.
-     * <p>
-     * This defaults to the current <code>JTable</code> background color.
-     * </p>
-     */
-    public static final int ARCHIVE_BACKGROUND_COLOR = 20;
+    public static final int ARCHIVE_FOREGROUND_COLOR = 17;
 
     /**
      * Color used to paint archives text in the folder panels when they don't have the focus.
@@ -345,33 +299,7 @@ public class ThemeData {
      * to the same value.
      * </p>
      */
-    public static final int ARCHIVE_UNFOCUSED_FOREGROUND_COLOR = 21;
-
-    /**
-     * Color used to paint the background of archives in the folder panels when they don't have the focus.
-     * <p>
-     * This behaves in exactly the same fashion as {@link #ARCHIVE_BACKGROUND_COLOR}, and defaults
-     * to the same value.
-     * </p>
-     */
-    public static final int ARCHIVE_UNFOCUSED_BACKGROUND_COLOR = 22;
-
-    /**
-     * Color used to paint the background of selected archives in the folder panels.
-     * <p>
-     * This defaults to the current <code>JTable</code> selection background color.
-     * </p>
-     */
-    public static final int ARCHIVE_SELECTED_BACKGROUND_COLOR = 23;
-
-    /**
-     * Color used to paint the background of selected archives in the folder panels when they don't have the focus.
-     * <p>
-     * This behaves in exactly the same fashion as {@link #ARCHIVE_SELECTED_BACKGROUND_COLOR}, and defaults
-     * to the same value.
-     * </p>
-     */
-    public static final int ARCHIVE_SELECTED_UNFOCUSED_BACKGROUND_COLOR = 24;
+    public static final int ARCHIVE_INACTIVE_FOREGROUND_COLOR = 18;
 
     /**
      * Color used to paint selected archives text in the folder panels.
@@ -379,7 +307,7 @@ public class ThemeData {
      * This defaults to the current <code>JTable</code> selection foreground color.
      * </p>
      */
-    public static final int ARCHIVE_SELECTED_FOREGROUND_COLOR = 25;
+    public static final int ARCHIVE_SELECTED_FOREGROUND_COLOR = 19;
 
     /**
      * Color used to paint selected archives text in the folder panels when they don't have the focus.
@@ -388,7 +316,7 @@ public class ThemeData {
      * to the same value.
      * </p>
      */
-    public static final int ARCHIVE_SELECTED_UNFOCUSED_FOREGROUND_COLOR = 26;
+    public static final int ARCHIVE_INACTIVE_SELECTED_FOREGROUND_COLOR = 20;
 
     /**
      * Color used to paint symlinks text in the folder panels.
@@ -396,15 +324,7 @@ public class ThemeData {
      * This defaults to the current <code>JTable</code> foreground color.
      * </p>
      */
-    public static final int SYMLINK_FOREGROUND_COLOR = 27;
-
-    /**
-     * Color used to paint the background of symlinks in the folder panels.
-     * <p>
-     * This defaults to the current <code>JTable</code> background color.
-     * </p>
-     */
-    public static final int SYMLINK_BACKGROUND_COLOR = 28;
+    public static final int SYMLINK_FOREGROUND_COLOR = 21;
 
     /**
      * Color used to paint symlinks text in the folder panels when they don't have the focus.
@@ -413,33 +333,7 @@ public class ThemeData {
      * to the same value.
      * </p>
      */
-    public static final int SYMLINK_UNFOCUSED_FOREGROUND_COLOR = 29;
-
-    /**
-     * Color used to paint the background of symlinks in the folder panels when they don't have the focus.
-     * <p>
-     * This behaves in exactly the same fashion as {@link #SYMLINK_BACKGROUND_COLOR}, and defaults
-     * to the same value.
-     * </p>
-     */
-    public static final int SYMLINK_UNFOCUSED_BACKGROUND_COLOR = 30;
-
-    /**
-     * Color used to paint the background of selected symlinks in the folder panels.
-     * <p>
-     * This defaults to the current <code>JTable</code> selection background color.
-     * </p>
-     */
-    public static final int SYMLINK_SELECTED_BACKGROUND_COLOR = 31;
-
-    /**
-     * Color used to paint the background of selected symlinks in the folder panels when they don't have the focus.
-     * <p>
-     * This behaves in exactly the same fashion as {@link #SYMLINK_SELECTED_BACKGROUND_COLOR}, and defaults
-     * to the same value.
-     * </p>
-     */
-    public static final int SYMLINK_SELECTED_UNFOCUSED_BACKGROUND_COLOR = 32;
+    public static final int SYMLINK_INACTIVE_FOREGROUND_COLOR = 22;
 
     /**
      * Color used to paint selected symlinks text in the folder panels.
@@ -447,7 +341,7 @@ public class ThemeData {
      * This defaults to the current <code>JTable</code> selection foreground color.
      * </p>
      */
-    public static final int SYMLINK_SELECTED_FOREGROUND_COLOR = 33;
+    public static final int SYMLINK_SELECTED_FOREGROUND_COLOR = 23;
 
     /**
      * Color used to paint selected symlinks text in the folder panels when they don't have the focus.
@@ -456,7 +350,7 @@ public class ThemeData {
      * to the same value.
      * </p>
      */
-    public static final int SYMLINK_SELECTED_UNFOCUSED_FOREGROUND_COLOR = 34;
+    public static final int SYMLINK_INACTIVE_SELECTED_FOREGROUND_COLOR = 24;
 
     /**
      * Color used to paint marked files text in the folder panels.
@@ -464,15 +358,7 @@ public class ThemeData {
      * This defaults to the current <code>JTable</code> foreground color.
      * </p>
      */
-    public static final int MARKED_FOREGROUND_COLOR = 35;
-
-    /**
-     * Color used to paint the background of marked files in the folder panels.
-     * <p>
-     * This defaults to the current <code>JTable</code> background color.
-     * </p>
-     */
-    public static final int MARKED_BACKGROUND_COLOR = 36;
+    public static final int MARKED_FOREGROUND_COLOR = 25;
 
     /**
      * Color used to paint marked files text in the folder panels when they don't have the focus.
@@ -481,33 +367,7 @@ public class ThemeData {
      * to the same value.
      * </p>
      */
-    public static final int MARKED_UNFOCUSED_FOREGROUND_COLOR = 37;
-
-    /**
-     * Color used to paint the background of marked files in the folder panels when they don't have the focus.
-     * <p>
-     * This behaves in exactly the same fashion as {@link #MARKED_BACKGROUND_COLOR}, and defaults
-     * to the same value.
-     * </p>
-     */
-    public static final int MARKED_UNFOCUSED_BACKGROUND_COLOR = 38;
-
-    /**
-     * Color used to paint the background of selected marked files in the folder panels.
-     * <p>
-     * This defaults to the current <code>JTable</code> selection background color.
-     * </p>
-     */
-    public static final int MARKED_SELECTED_BACKGROUND_COLOR = 39;
-
-    /**
-     * Color used to paint the background of selected marked files in the folder panels when they don't have the focus.
-     * <p>
-     * This behaves in exactly the same fashion as {@link #MARKED_SELECTED_BACKGROUND_COLOR}, and defaults
-     * to the same value.
-     * </p>
-     */
-    public static final int MARKED_SELECTED_UNFOCUSED_BACKGROUND_COLOR = 40;
+    public static final int MARKED_INACTIVE_FOREGROUND_COLOR = 26;
 
     /**
      * Color used to paint selected marked files text in the folder panels.
@@ -515,7 +375,7 @@ public class ThemeData {
      * This defaults to the current <code>JTable</code> selection foreground color.
      * </p>
      */
-    public static final int MARKED_SELECTED_FOREGROUND_COLOR = 41;
+    public static final int MARKED_SELECTED_FOREGROUND_COLOR = 27;
 
     /**
      * Color used to paint selected marked files text in the folder panels when they don't have the focus.
@@ -524,7 +384,7 @@ public class ThemeData {
      * to the same value.
      * </p>
      */
-    public static final int MARKED_SELECTED_UNFOCUSED_FOREGROUND_COLOR = 42;
+    public static final int MARKED_INACTIVE_SELECTED_FOREGROUND_COLOR = 28;
 
     /**
      * Color used to paint plain files text in the folder panels.
@@ -532,15 +392,7 @@ public class ThemeData {
      * This defaults to the current <code>JTable</code> foreground color.
      * </p>
      */
-    public static final int FILE_FOREGROUND_COLOR = 43;
-
-    /**
-     * Color used to paint the background of plain files in the folder panels.
-     * <p>
-     * This defaults to the current <code>JTable</code> background color.
-     * </p>
-     */
-    public static final int FILE_BACKGROUND_COLOR = 44;
+    public static final int FILE_FOREGROUND_COLOR = 29;
 
     /**
      * Color used to paint plain files text in the folder panels when they don't have the focus.
@@ -549,33 +401,7 @@ public class ThemeData {
      * to the same value.
      * </p>
      */
-    public static final int FILE_UNFOCUSED_FOREGROUND_COLOR = 45;
-
-    /**
-     * Color used to paint the background of plain files in the folder panels when they don't have the focus.
-     * <p>
-     * This behaves in exactly the same fashion as {@link #FILE_BACKGROUND_COLOR}, and defaults
-     * to the same value.
-     * </p>
-     */
-    public static final int FILE_UNFOCUSED_BACKGROUND_COLOR = 46;
-
-    /**
-     * Color used to paint the background of selected plain files in the folder panels.
-     * <p>
-     * This defaults to the current <code>JTable</code> selection background color.
-     * </p>
-     */
-    public static final int FILE_SELECTED_BACKGROUND_COLOR = 47;
-
-    /**
-     * Color used to paint the background of selected plain files in the folder panels when they don't have the focus.
-     * <p>
-     * This behaves in exactly the same fashion as {@link #FILE_SELECTED_BACKGROUND_COLOR}, and defaults
-     * to the same value.
-     * </p>
-     */
-    public static final int FILE_SELECTED_UNFOCUSED_BACKGROUND_COLOR = 48;
+    public static final int FILE_INACTIVE_FOREGROUND_COLOR = 30;
 
     /**
      * Color used to paint selected plain files text in the folder panels.
@@ -583,7 +409,7 @@ public class ThemeData {
      * This defaults to the current <code>JTable</code> selection foreground color.
      * </p>
      */
-    public static final int FILE_SELECTED_FOREGROUND_COLOR = 49;
+    public static final int FILE_SELECTED_FOREGROUND_COLOR = 31;
 
     /**
      * Color used to paint selected plain files text in the folder panels when they don't have the focus.
@@ -592,7 +418,7 @@ public class ThemeData {
      * to the same value.
      * </p>
      */
-    public static final int FILE_SELECTED_UNFOCUSED_FOREGROUND_COLOR = 50;
+    public static final int FILE_INACTIVE_SELECTED_FOREGROUND_COLOR = 32;
 
     /**
      * Color used to paint shell commands output.
@@ -600,7 +426,7 @@ public class ThemeData {
      * This defaults to the current <code>JTextArea</code> foreground color.
      * </p>
      */
-    public static final int SHELL_FOREGROUND_COLOR = 51;
+    public static final int SHELL_FOREGROUND_COLOR = 33;
 
     /**
      * Color used to paint the background of shell commands output.
@@ -608,7 +434,7 @@ public class ThemeData {
      * This defaults to the current <code>JTextArea</code> background color.
      * </p>
      */
-    public static final int SHELL_BACKGROUND_COLOR = 52;
+    public static final int SHELL_BACKGROUND_COLOR = 34;
 
     /**
      * Color used to paint shell commands output when selected.
@@ -616,7 +442,7 @@ public class ThemeData {
      * This defaults to the current <code>JTextArea</code> selection foreground color.
      * </p>
      */
-    public static final int SHELL_SELECTED_FOREGROUND_COLOR = 53;
+    public static final int SHELL_SELECTED_FOREGROUND_COLOR = 35;
 
     /**
      * Color used to paint the background of shell commands output when selected.
@@ -624,7 +450,7 @@ public class ThemeData {
      * This defaults to the current <code>JTextArea</code> selection background color.
      * </p>
      */
-    public static final int SHELL_SELECTED_BACKGROUND_COLOR = 54;
+    public static final int SHELL_SELECTED_BACKGROUND_COLOR = 36;
 
     /**
      * Color used to paint the shell history's text.
@@ -632,7 +458,7 @@ public class ThemeData {
      * This defaults to the current <code>JTextField</code> foreground color.
      * </p>
      */
-    public static final int SHELL_HISTORY_FOREGROUND_COLOR = 55;
+    public static final int SHELL_HISTORY_FOREGROUND_COLOR = 37;
 
     /**
      * Color used to paint the shell history's background.
@@ -640,7 +466,7 @@ public class ThemeData {
      * This defaults to the current <code>JTextField</code> background color.
      * </p>
      */
-    public static final int SHELL_HISTORY_BACKGROUND_COLOR = 56;
+    public static final int SHELL_HISTORY_BACKGROUND_COLOR = 38;
 
     /**
      * Color used to paint the shell history's text when selected.
@@ -648,7 +474,7 @@ public class ThemeData {
      * This defaults to the current <code>JTextField</code> selection foreground color.
      * </p>
      */
-    public static final int SHELL_HISTORY_SELECTED_FOREGROUND_COLOR = 57;
+    public static final int SHELL_HISTORY_SELECTED_FOREGROUND_COLOR = 39;
 
     /**
      * Color used to paint the shell history's background when selected.
@@ -656,7 +482,7 @@ public class ThemeData {
      * This defaults to the current <code>JTextField</code> selection background color.
      * </p>
      */
-    public static final int SHELL_HISTORY_SELECTED_BACKGROUND_COLOR = 58;
+    public static final int SHELL_HISTORY_SELECTED_BACKGROUND_COLOR = 40;
 
     /**
      * Color used to paint the file editor / viewer's text.
@@ -664,7 +490,7 @@ public class ThemeData {
      * This defaults to the current <code>JTextArea</code> foreground color.
      * </p>
      */
-    public static final int EDITOR_FOREGROUND_COLOR = 59;
+    public static final int EDITOR_FOREGROUND_COLOR = 41;
 
     /**
      * Color used to paint the file editor / viewer's background.
@@ -672,7 +498,7 @@ public class ThemeData {
      * This defaults to the current <code>JTextArea</code> background color.
      * </p>
      */
-    public static final int EDITOR_BACKGROUND_COLOR = 60;
+    public static final int EDITOR_BACKGROUND_COLOR = 42;
 
     /**
      * Color used to paint the file editor / viewer's foreground when selected.
@@ -680,7 +506,7 @@ public class ThemeData {
      * This defaults to the current <code>JTextArea</code> selection foreground color.
      * </p>
      */
-    public static final int EDITOR_SELECTED_FOREGROUND_COLOR = 61;
+    public static final int EDITOR_SELECTED_FOREGROUND_COLOR = 43;
 
     /**
      * Color used to paint the file editor / viewer's background when selected.
@@ -688,7 +514,7 @@ public class ThemeData {
      * This defaults to the current <code>JTextArea</code> selection background color.
      * </p>
      */
-    public static final int EDITOR_SELECTED_BACKGROUND_COLOR = 62;
+    public static final int EDITOR_SELECTED_BACKGROUND_COLOR = 44;
 
     /**
      * Color used to paint the location's bar text.
@@ -696,7 +522,7 @@ public class ThemeData {
      * This defaults to the current <code>JTextField</code> foreground color.
      * </p>
      */
-    public static final int LOCATION_BAR_FOREGROUND_COLOR = 63;
+    public static final int LOCATION_BAR_FOREGROUND_COLOR = 45;
 
     /**
      * Color used to paint the location's bar background.
@@ -704,7 +530,7 @@ public class ThemeData {
      * This defaults to the current <code>JTextField</code> background color.
      * </p>
      */
-    public static final int LOCATION_BAR_BACKGROUND_COLOR = 64;
+    public static final int LOCATION_BAR_BACKGROUND_COLOR = 46;
 
     /**
      * Color used to paint the location's bar text when selected.
@@ -712,7 +538,7 @@ public class ThemeData {
      * This defaults to the current <code>JTextField</code> selection foreground color.
      * </p>
      */
-    public static final int LOCATION_BAR_SELECTED_FOREGROUND_COLOR = 65;
+    public static final int LOCATION_BAR_SELECTED_FOREGROUND_COLOR = 47;
 
     /**
      * Color used to paint the location's bar background when selected.
@@ -720,7 +546,7 @@ public class ThemeData {
      * This defaults to the current <code>JTextField</code> selection background color.
      * </p>
      */
-    public static final int LOCATION_BAR_SELECTED_BACKGROUND_COLOR = 66;
+    public static final int LOCATION_BAR_SELECTED_BACKGROUND_COLOR = 48;
 
     /**
      * Color used to paint the location's bar background when used as a progress bar.
@@ -733,7 +559,7 @@ public class ThemeData {
      * alpha transparency value of 64.
      * </p>
      */
-    public static final int LOCATION_BAR_PROGRESS_COLOR = 67;
+    public static final int LOCATION_BAR_PROGRESS_COLOR = 49;
 
     /**
      * Color used to paint the status bar's text.
@@ -741,7 +567,7 @@ public class ThemeData {
      * This defaults to the current <code>JLabel</code> foreground color.
      * </p>
      */
-    public static final int STATUS_BAR_FOREGROUND_COLOR = 68;
+    public static final int STATUS_BAR_FOREGROUND_COLOR = 50;
 
     /**
      * Color used to paint the status bar's background
@@ -749,7 +575,7 @@ public class ThemeData {
      * This defaults to the current <code>JLabel</code> background color.
      * </p>
      */
-    public static final int STATUS_BAR_BACKGROUND_COLOR = 69;
+    public static final int STATUS_BAR_BACKGROUND_COLOR = 51;
 
     /**
      * Color used to paint the status bar's border.
@@ -757,7 +583,7 @@ public class ThemeData {
      * This defaults to <code>Color.GRAY</code>.
      * </p>
      */
-    public static final int STATUS_BAR_BORDER_COLOR = 70;
+    public static final int STATUS_BAR_BORDER_COLOR = 52;
 
     /**
      * Color used to paint the status bar's drive usage color when there's plenty of space left.
@@ -765,7 +591,7 @@ public class ThemeData {
      * This defaults to <code>0x70EC2B</code>.
      * </p>
      */
-    public static final int STATUS_BAR_OK_COLOR = 71;
+    public static final int STATUS_BAR_OK_COLOR = 53;
 
     /**
      * Color used to paint the status bar's drive usage color when there's an average amount of space left.
@@ -773,7 +599,7 @@ public class ThemeData {
      * This defaults to <code>0xFF7F00</code>.
      * </p>
      */
-    public static final int STATUS_BAR_WARNING_COLOR = 72;
+    public static final int STATUS_BAR_WARNING_COLOR = 54;
 
     /**
      * Color used to paint the status bar's drive usage color when there's dangerously little space left.
@@ -781,7 +607,7 @@ public class ThemeData {
      * This defaults to <code>Color.RED</code>.
      * </p>
      */
-    public static final int STATUS_BAR_CRITICAL_COLOR = 73;
+    public static final int STATUS_BAR_CRITICAL_COLOR = 55;
 
 
 
@@ -1093,20 +919,10 @@ public class ThemeData {
 
         switch(id) {
             // File table background colors.
-        case FILE_UNFOCUSED_BACKGROUND_COLOR:
-        case FILE_TABLE_UNFOCUSED_BACKGROUND_COLOR:
-        case FOLDER_UNFOCUSED_BACKGROUND_COLOR:
-        case ARCHIVE_UNFOCUSED_BACKGROUND_COLOR:
-        case SYMLINK_UNFOCUSED_BACKGROUND_COLOR:
-        case HIDDEN_FILE_UNFOCUSED_BACKGROUND_COLOR:
-        case MARKED_UNFOCUSED_BACKGROUND_COLOR:
         case FILE_TABLE_BACKGROUND_COLOR:
-        case HIDDEN_FILE_BACKGROUND_COLOR:
-        case FOLDER_BACKGROUND_COLOR:
-        case ARCHIVE_BACKGROUND_COLOR:
-        case SYMLINK_BACKGROUND_COLOR:
-        case MARKED_BACKGROUND_COLOR:
-        case FILE_BACKGROUND_COLOR:
+        case FILE_TABLE_INACTIVE_BACKGROUND_COLOR:
+        case FILE_TABLE_ALTERNATE_BACKGROUND_COLOR:
+        case FILE_TABLE_INACTIVE_ALTERNATE_BACKGROUND_COLOR:
 	    return getTableBackgroundColor();
 
             // File table foreground colors (everything except marked
@@ -1115,20 +931,20 @@ public class ThemeData {
         case FOLDER_FOREGROUND_COLOR:
         case ARCHIVE_FOREGROUND_COLOR:
         case SYMLINK_FOREGROUND_COLOR:
-        case FILE_UNFOCUSED_FOREGROUND_COLOR:
-        case HIDDEN_FILE_UNFOCUSED_FOREGROUND_COLOR:
-        case FOLDER_UNFOCUSED_FOREGROUND_COLOR:
-        case ARCHIVE_UNFOCUSED_FOREGROUND_COLOR:
-        case SYMLINK_UNFOCUSED_FOREGROUND_COLOR:
+        case FILE_INACTIVE_FOREGROUND_COLOR:
+        case HIDDEN_FILE_INACTIVE_FOREGROUND_COLOR:
+        case FOLDER_INACTIVE_FOREGROUND_COLOR:
+        case ARCHIVE_INACTIVE_FOREGROUND_COLOR:
+        case SYMLINK_INACTIVE_FOREGROUND_COLOR:
         case FILE_FOREGROUND_COLOR:
 	    return getTableColor();
 
             // Marked files foreground colors (they have to be different
             // of the standard file foreground colors).
         case MARKED_FOREGROUND_COLOR:
-        case MARKED_UNFOCUSED_FOREGROUND_COLOR:
+        case MARKED_INACTIVE_FOREGROUND_COLOR:
         case MARKED_SELECTED_FOREGROUND_COLOR:
-        case MARKED_SELECTED_UNFOCUSED_FOREGROUND_COLOR:
+        case MARKED_INACTIVE_SELECTED_FOREGROUND_COLOR:
             return Color.RED;
 
             // Text areas default foreground colors.
@@ -1158,22 +974,13 @@ public class ThemeData {
             return getTextFieldProgressColor();
 
             // Selected table background colors.
-        case HIDDEN_FILE_SELECTED_BACKGROUND_COLOR:
-        case FOLDER_SELECTED_BACKGROUND_COLOR:
-        case ARCHIVE_SELECTED_BACKGROUND_COLOR:
-        case SYMLINK_SELECTED_BACKGROUND_COLOR:
-        case MARKED_SELECTED_BACKGROUND_COLOR:
-        case FILE_SELECTED_UNFOCUSED_BACKGROUND_COLOR:
-        case FOLDER_SELECTED_UNFOCUSED_BACKGROUND_COLOR:
-        case ARCHIVE_SELECTED_UNFOCUSED_BACKGROUND_COLOR:
-        case SYMLINK_SELECTED_UNFOCUSED_BACKGROUND_COLOR:
-        case HIDDEN_FILE_SELECTED_UNFOCUSED_BACKGROUND_COLOR:
-        case MARKED_SELECTED_UNFOCUSED_BACKGROUND_COLOR:
-        case FILE_SELECTED_BACKGROUND_COLOR:
+        case FILE_TABLE_SELECTED_BACKGROUND_COLOR:
+        case FILE_TABLE_INACTIVE_SELECTED_BACKGROUND_COLOR:
 	    return getTableSelectionBackgroundColor();
 
             // Border colors.
         case FILE_TABLE_BORDER_COLOR:
+        case FILE_TABLE_INACTIVE_BORDER_COLOR:
         case STATUS_BAR_BORDER_COLOR:
             return Color.GRAY;
 
@@ -1182,11 +989,11 @@ public class ThemeData {
         case FOLDER_SELECTED_FOREGROUND_COLOR:
         case ARCHIVE_SELECTED_FOREGROUND_COLOR:
         case SYMLINK_SELECTED_FOREGROUND_COLOR:
-        case HIDDEN_FILE_SELECTED_UNFOCUSED_FOREGROUND_COLOR:
-        case FOLDER_SELECTED_UNFOCUSED_FOREGROUND_COLOR:
-        case ARCHIVE_SELECTED_UNFOCUSED_FOREGROUND_COLOR:
-        case SYMLINK_SELECTED_UNFOCUSED_FOREGROUND_COLOR:
-        case FILE_SELECTED_UNFOCUSED_FOREGROUND_COLOR:
+        case HIDDEN_FILE_INACTIVE_SELECTED_FOREGROUND_COLOR:
+        case FOLDER_INACTIVE_SELECTED_FOREGROUND_COLOR:
+        case ARCHIVE_INACTIVE_SELECTED_FOREGROUND_COLOR:
+        case SYMLINK_INACTIVE_SELECTED_FOREGROUND_COLOR:
+        case FILE_INACTIVE_SELECTED_FOREGROUND_COLOR:
         case FILE_SELECTED_FOREGROUND_COLOR:
 	    return getTableSelectionColor();
 
@@ -2009,11 +1816,11 @@ public class ThemeData {
             triggerColorEvent(FOLDER_FOREGROUND_COLOR, getTableColor());
             triggerColorEvent(ARCHIVE_FOREGROUND_COLOR, getTableColor());
             triggerColorEvent(SYMLINK_FOREGROUND_COLOR, getTableColor());
-            triggerColorEvent(FILE_UNFOCUSED_FOREGROUND_COLOR, getTableColor());
-            triggerColorEvent(HIDDEN_FILE_UNFOCUSED_FOREGROUND_COLOR, getTableColor());
-            triggerColorEvent(FOLDER_UNFOCUSED_FOREGROUND_COLOR, getTableColor());
-            triggerColorEvent(ARCHIVE_UNFOCUSED_FOREGROUND_COLOR, getTableColor());
-            triggerColorEvent(SYMLINK_UNFOCUSED_FOREGROUND_COLOR, getTableColor());
+            triggerColorEvent(FILE_INACTIVE_FOREGROUND_COLOR, getTableColor());
+            triggerColorEvent(HIDDEN_FILE_INACTIVE_FOREGROUND_COLOR, getTableColor());
+            triggerColorEvent(FOLDER_INACTIVE_FOREGROUND_COLOR, getTableColor());
+            triggerColorEvent(ARCHIVE_INACTIVE_FOREGROUND_COLOR, getTableColor());
+            triggerColorEvent(SYMLINK_INACTIVE_FOREGROUND_COLOR, getTableColor());
             triggerColorEvent(FILE_FOREGROUND_COLOR, getTableColor());
             triggerColorEvent(FILE_TABLE_UNMATCHED_FOREGROUND_COLOR, getTableUnmatchedColor());
         }
@@ -2034,21 +1841,10 @@ public class ThemeData {
         DEFAULT_TABLE_UNMATCHED_BACKGROUND_COLOR = null;
 
         if(!getTableBackgroundColor().equals(buffer)) {
-            triggerColorEvent(FILE_UNFOCUSED_BACKGROUND_COLOR, getTableBackgroundColor());
-            triggerColorEvent(FILE_TABLE_UNFOCUSED_BACKGROUND_COLOR, getTableBackgroundColor());
-            triggerColorEvent(FOLDER_UNFOCUSED_BACKGROUND_COLOR, getTableBackgroundColor());
-            triggerColorEvent(ARCHIVE_UNFOCUSED_BACKGROUND_COLOR, getTableBackgroundColor());
-            triggerColorEvent(SYMLINK_UNFOCUSED_BACKGROUND_COLOR, getTableBackgroundColor());
-            triggerColorEvent(HIDDEN_FILE_UNFOCUSED_BACKGROUND_COLOR, getTableBackgroundColor());
-            triggerColorEvent(MARKED_UNFOCUSED_BACKGROUND_COLOR, getTableBackgroundColor());
-            triggerColorEvent(FILE_BACKGROUND_COLOR, getTableBackgroundColor());
-            triggerColorEvent(HIDDEN_FILE_BACKGROUND_COLOR, getTableBackgroundColor());
-            triggerColorEvent(FOLDER_BACKGROUND_COLOR, getTableBackgroundColor());
-            triggerColorEvent(ARCHIVE_BACKGROUND_COLOR, getTableBackgroundColor());
-            triggerColorEvent(SYMLINK_BACKGROUND_COLOR, getTableBackgroundColor());
-            triggerColorEvent(MARKED_BACKGROUND_COLOR, getTableBackgroundColor());
+            triggerColorEvent(FILE_TABLE_INACTIVE_BACKGROUND_COLOR, getTableBackgroundColor());
             triggerColorEvent(FILE_TABLE_BACKGROUND_COLOR, getTableBackgroundColor());
-            triggerColorEvent(FILE_TABLE_UNMATCHED_BACKGROUND_COLOR, getTableUnmatchedBackgroundColor());
+            triggerColorEvent(FILE_TABLE_INACTIVE_ALTERNATE_BACKGROUND_COLOR, getTableBackgroundColor());
+            triggerColorEvent(FILE_TABLE_ALTERNATE_BACKGROUND_COLOR, getTableBackgroundColor());
         }
     }
 
@@ -2070,11 +1866,11 @@ public class ThemeData {
             triggerColorEvent(FOLDER_SELECTED_FOREGROUND_COLOR, getTableSelectionColor());
             triggerColorEvent(ARCHIVE_SELECTED_FOREGROUND_COLOR, getTableSelectionColor());
             triggerColorEvent(SYMLINK_SELECTED_FOREGROUND_COLOR, getTableSelectionColor());
-            triggerColorEvent(FILE_SELECTED_UNFOCUSED_FOREGROUND_COLOR, getTableSelectionColor());
-            triggerColorEvent(HIDDEN_FILE_SELECTED_UNFOCUSED_FOREGROUND_COLOR, getTableSelectionColor());
-            triggerColorEvent(FOLDER_SELECTED_UNFOCUSED_FOREGROUND_COLOR, getTableSelectionColor());
-            triggerColorEvent(ARCHIVE_SELECTED_UNFOCUSED_FOREGROUND_COLOR, getTableSelectionColor());
-            triggerColorEvent(SYMLINK_SELECTED_UNFOCUSED_FOREGROUND_COLOR, getTableSelectionColor());
+            triggerColorEvent(FILE_INACTIVE_SELECTED_FOREGROUND_COLOR, getTableSelectionColor());
+            triggerColorEvent(HIDDEN_FILE_INACTIVE_SELECTED_FOREGROUND_COLOR, getTableSelectionColor());
+            triggerColorEvent(FOLDER_INACTIVE_SELECTED_FOREGROUND_COLOR, getTableSelectionColor());
+            triggerColorEvent(ARCHIVE_INACTIVE_SELECTED_FOREGROUND_COLOR, getTableSelectionColor());
+            triggerColorEvent(SYMLINK_INACTIVE_SELECTED_FOREGROUND_COLOR, getTableSelectionColor());
             triggerColorEvent(FILE_SELECTED_FOREGROUND_COLOR, getTableSelectionColor());
         }
     }
@@ -2093,18 +1889,8 @@ public class ThemeData {
         DEFAULT_TABLE_SELECTION_BACKGROUND_COLOR = null;
 
         if(!getTableSelectionBackgroundColor().equals(buffer)) {
-            triggerColorEvent(HIDDEN_FILE_SELECTED_BACKGROUND_COLOR, getTableSelectionBackgroundColor());
-            triggerColorEvent(FOLDER_SELECTED_BACKGROUND_COLOR, getTableSelectionBackgroundColor());
-            triggerColorEvent(ARCHIVE_SELECTED_BACKGROUND_COLOR, getTableSelectionBackgroundColor());
-            triggerColorEvent(SYMLINK_SELECTED_BACKGROUND_COLOR, getTableSelectionBackgroundColor());
-            triggerColorEvent(MARKED_SELECTED_BACKGROUND_COLOR, getTableSelectionBackgroundColor());
-            triggerColorEvent(FILE_SELECTED_UNFOCUSED_BACKGROUND_COLOR, getTableSelectionBackgroundColor());
-            triggerColorEvent(HIDDEN_FILE_SELECTED_UNFOCUSED_BACKGROUND_COLOR, getTableSelectionBackgroundColor());
-            triggerColorEvent(FOLDER_SELECTED_UNFOCUSED_BACKGROUND_COLOR, getTableSelectionBackgroundColor());
-            triggerColorEvent(ARCHIVE_SELECTED_UNFOCUSED_BACKGROUND_COLOR, getTableSelectionBackgroundColor());
-            triggerColorEvent(SYMLINK_SELECTED_UNFOCUSED_BACKGROUND_COLOR, getTableSelectionBackgroundColor());
-            triggerColorEvent(MARKED_SELECTED_UNFOCUSED_BACKGROUND_COLOR, getTableSelectionBackgroundColor());
-            triggerColorEvent(FILE_SELECTED_BACKGROUND_COLOR, getTableSelectionBackgroundColor());
+            triggerColorEvent(FILE_TABLE_SELECTED_BACKGROUND_COLOR, getTableSelectionBackgroundColor());
+            triggerColorEvent(FILE_TABLE_INACTIVE_SELECTED_BACKGROUND_COLOR, getTableSelectionBackgroundColor());
         }
     }
 

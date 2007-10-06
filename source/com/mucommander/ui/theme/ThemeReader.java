@@ -89,6 +89,10 @@ class ThemeReader extends DefaultHandler implements ThemeXmlConstants {
     private static final int STATE_FILE                   = 31;
     private static final int STATE_FILE_NORMAL            = 32;
     private static final int STATE_FILE_SELECTED          = 33;
+    private static final int STATE_TABLE_NORMAL           = 34;
+    private static final int STATE_TABLE_SELECTED         = 35;
+    private static final int STATE_TABLE_ALTERNATE        = 36;
+    private static final int STATE_TABLE_UNMATCHED        = 37;
 
 
 
@@ -219,6 +223,12 @@ class ThemeReader extends DefaultHandler implements ThemeXmlConstants {
             state = STATE_FILE;
         }
 
+        else if(qName.equals(ELEMENT_ALTERNATE)) {
+            if(state != STATE_TABLE)
+                traceIllegalDeclaration(qName);
+            state = STATE_TABLE_ALTERNATE;
+        }
+
         // Normal element declaration.
         else if(qName.equals(ELEMENT_NORMAL)) {
             if(state == STATE_SHELL)
@@ -241,6 +251,8 @@ class ThemeReader extends DefaultHandler implements ThemeXmlConstants {
                 state = STATE_MARKED_NORMAL;
             else if(state == STATE_FILE)
                 state = STATE_FILE_NORMAL;
+            else if(state == STATE_TABLE)
+                state = STATE_TABLE_NORMAL;
             else
                 traceIllegalDeclaration(qName);
         }
@@ -267,6 +279,8 @@ class ThemeReader extends DefaultHandler implements ThemeXmlConstants {
                 state = STATE_MARKED_SELECTED;
             else if(state == STATE_FILE)
                 state = STATE_FILE_SELECTED;
+            else if(state == STATE_TABLE)
+                state = STATE_TABLE_SELECTED;
             else
                 traceIllegalDeclaration(qName);
         }
@@ -289,80 +303,44 @@ class ThemeReader extends DefaultHandler implements ThemeXmlConstants {
                 traceIllegalDeclaration(qName);
         }
 
-        // Unmatched background color.
-        else if(qName.equals(ELEMENT_UNMATCHED_BACKGROUND)) {
-            if(state == STATE_TABLE)
-                template.setColor(ThemeData.FILE_TABLE_UNMATCHED_BACKGROUND_COLOR, createColor(attributes));
-            else
-                traceIllegalDeclaration(qName);
-        }
-
-        // Unmatched foreground color.
-        else if(qName.equals(ELEMENT_UNMATCHED_FOREGROUND)) {
-            if(state == STATE_TABLE)
-                template.setColor(ThemeData.FILE_TABLE_UNMATCHED_FOREGROUND_COLOR, createColor(attributes));
-            else
-                traceIllegalDeclaration(qName);
-        }
-
         // Unfocused background color.
-        else if(qName.equals(ELEMENT_UNFOCUSED_BACKGROUND)) {
-            if(state == STATE_FILE_NORMAL)
-                template.setColor(ThemeData.FILE_UNFOCUSED_BACKGROUND_COLOR, createColor(attributes));
-            else if(state == STATE_TABLE)
-                template.setColor(ThemeData.FILE_TABLE_UNFOCUSED_BACKGROUND_COLOR, createColor(attributes));
-            else if(state == STATE_FOLDER_NORMAL)
-                template.setColor(ThemeData.FOLDER_UNFOCUSED_BACKGROUND_COLOR, createColor(attributes));
-            else if(state == STATE_ARCHIVE_NORMAL)
-                template.setColor(ThemeData.ARCHIVE_UNFOCUSED_BACKGROUND_COLOR, createColor(attributes));
-            else if(state == STATE_SYMLINK_NORMAL)
-                template.setColor(ThemeData.SYMLINK_UNFOCUSED_BACKGROUND_COLOR, createColor(attributes));
-            else if(state == STATE_HIDDEN_NORMAL)
-                template.setColor(ThemeData.HIDDEN_FILE_UNFOCUSED_BACKGROUND_COLOR, createColor(attributes));
-            else if(state == STATE_MARKED_NORMAL)
-                template.setColor(ThemeData.MARKED_UNFOCUSED_BACKGROUND_COLOR, createColor(attributes));
-            else if(state == STATE_FILE_SELECTED)
-                template.setColor(ThemeData.FILE_SELECTED_UNFOCUSED_BACKGROUND_COLOR, createColor(attributes));
-            else if(state == STATE_FOLDER_SELECTED)
-                template.setColor(ThemeData.FOLDER_SELECTED_UNFOCUSED_BACKGROUND_COLOR, createColor(attributes));
-            else if(state == STATE_ARCHIVE_SELECTED)
-                template.setColor(ThemeData.ARCHIVE_SELECTED_UNFOCUSED_BACKGROUND_COLOR, createColor(attributes));
-            else if(state == STATE_SYMLINK_SELECTED)
-                template.setColor(ThemeData.SYMLINK_SELECTED_UNFOCUSED_BACKGROUND_COLOR, createColor(attributes));
-            else if(state == STATE_HIDDEN_SELECTED)
-                template.setColor(ThemeData.HIDDEN_FILE_SELECTED_UNFOCUSED_BACKGROUND_COLOR, createColor(attributes));
-            else if(state == STATE_MARKED_SELECTED)
-                template.setColor(ThemeData.MARKED_SELECTED_UNFOCUSED_BACKGROUND_COLOR, createColor(attributes));
+        else if(qName.equals(ELEMENT_INACTIVE_BACKGROUND)) {
+            if(state == STATE_TABLE_NORMAL)
+                template.setColor(ThemeData.FILE_TABLE_INACTIVE_BACKGROUND_COLOR, createColor(attributes));
+            else if(state == STATE_TABLE_SELECTED)
+                template.setColor(ThemeData.FILE_TABLE_INACTIVE_SELECTED_BACKGROUND_COLOR, createColor(attributes));
+            else if(state == STATE_TABLE_ALTERNATE)
+                template.setColor(ThemeData.FILE_TABLE_INACTIVE_ALTERNATE_BACKGROUND_COLOR, createColor(attributes));
             else
                 traceIllegalDeclaration(qName);
         }
 
         // Unfocused foreground color.
-        else if(qName.equals(ELEMENT_UNFOCUSED_FOREGROUND)) {
+        else if(qName.equals(ELEMENT_INACTIVE_FOREGROUND)) {
             if(state == STATE_FILE_NORMAL)
-                template.setColor(ThemeData.FILE_UNFOCUSED_FOREGROUND_COLOR, createColor(attributes));
+                template.setColor(ThemeData.FILE_INACTIVE_FOREGROUND_COLOR, createColor(attributes));
             else if(state == STATE_FOLDER_NORMAL)
-                template.setColor(ThemeData.FOLDER_UNFOCUSED_FOREGROUND_COLOR, createColor(attributes));
+                template.setColor(ThemeData.FOLDER_INACTIVE_FOREGROUND_COLOR, createColor(attributes));
             else if(state == STATE_ARCHIVE_NORMAL)
-                template.setColor(ThemeData.ARCHIVE_UNFOCUSED_FOREGROUND_COLOR, createColor(attributes));
+                template.setColor(ThemeData.ARCHIVE_INACTIVE_FOREGROUND_COLOR, createColor(attributes));
             else if(state == STATE_SYMLINK_NORMAL)
-                template.setColor(ThemeData.SYMLINK_UNFOCUSED_FOREGROUND_COLOR, createColor(attributes));
+                template.setColor(ThemeData.SYMLINK_INACTIVE_FOREGROUND_COLOR, createColor(attributes));
             else if(state == STATE_HIDDEN_NORMAL)
-                template.setColor(ThemeData.HIDDEN_FILE_UNFOCUSED_FOREGROUND_COLOR, createColor(attributes));
+                template.setColor(ThemeData.HIDDEN_FILE_INACTIVE_FOREGROUND_COLOR, createColor(attributes));
             else if(state == STATE_MARKED_NORMAL)
-                template.setColor(ThemeData.MARKED_UNFOCUSED_FOREGROUND_COLOR, createColor(attributes));
+                template.setColor(ThemeData.MARKED_INACTIVE_FOREGROUND_COLOR, createColor(attributes));
             else if(state == STATE_FILE_SELECTED)
-                template.setColor(ThemeData.FILE_SELECTED_UNFOCUSED_FOREGROUND_COLOR, createColor(attributes));
+                template.setColor(ThemeData.FILE_INACTIVE_SELECTED_FOREGROUND_COLOR, createColor(attributes));
             else if(state == STATE_FOLDER_SELECTED)
-                template.setColor(ThemeData.FOLDER_SELECTED_UNFOCUSED_FOREGROUND_COLOR, createColor(attributes));
+                template.setColor(ThemeData.FOLDER_INACTIVE_SELECTED_FOREGROUND_COLOR, createColor(attributes));
             else if(state == STATE_ARCHIVE_SELECTED)
-                template.setColor(ThemeData.ARCHIVE_SELECTED_UNFOCUSED_FOREGROUND_COLOR, createColor(attributes));
+                template.setColor(ThemeData.ARCHIVE_INACTIVE_SELECTED_FOREGROUND_COLOR, createColor(attributes));
             else if(state == STATE_SYMLINK_SELECTED)
-                template.setColor(ThemeData.SYMLINK_SELECTED_UNFOCUSED_FOREGROUND_COLOR, createColor(attributes));
+                template.setColor(ThemeData.SYMLINK_INACTIVE_SELECTED_FOREGROUND_COLOR, createColor(attributes));
             else if(state == STATE_HIDDEN_SELECTED)
-                template.setColor(ThemeData.HIDDEN_FILE_SELECTED_UNFOCUSED_FOREGROUND_COLOR, createColor(attributes));
+                template.setColor(ThemeData.HIDDEN_FILE_INACTIVE_SELECTED_FOREGROUND_COLOR, createColor(attributes));
             else if(state == STATE_MARKED_SELECTED)
-                template.setColor(ThemeData.MARKED_SELECTED_UNFOCUSED_FOREGROUND_COLOR, createColor(attributes));
+                template.setColor(ThemeData.MARKED_INACTIVE_SELECTED_FOREGROUND_COLOR, createColor(attributes));
             else
                 traceIllegalDeclaration(qName);
         }
@@ -379,40 +357,25 @@ class ThemeReader extends DefaultHandler implements ThemeXmlConstants {
                 traceIllegalDeclaration(qName);
         }
 
+        // File table inactive border color.
+        else if(qName.equals(ELEMENT_INACTIVE_BORDER)) {
+            if(state == STATE_TABLE)
+                template.setColor(ThemeData.FILE_TABLE_INACTIVE_BORDER_COLOR, createColor(attributes));
+
+            else
+                traceIllegalDeclaration(qName);
+        }
+
         // Background color.
         else if(qName.equals(ELEMENT_BACKGROUND)) {
-            if(state == STATE_HIDDEN_NORMAL)
-                template.setColor(ThemeData.HIDDEN_FILE_BACKGROUND_COLOR, createColor(attributes));
-            else if(state == STATE_HIDDEN_SELECTED)
-                template.setColor(ThemeData.HIDDEN_FILE_SELECTED_BACKGROUND_COLOR, createColor(attributes));
-
-            else if(state == STATE_FOLDER_NORMAL)
-                template.setColor(ThemeData.FOLDER_BACKGROUND_COLOR, createColor(attributes));
-            else if(state == STATE_FOLDER_SELECTED)
-                template.setColor(ThemeData.FOLDER_SELECTED_BACKGROUND_COLOR, createColor(attributes));
-
-            else if(state == STATE_ARCHIVE_NORMAL)
-                template.setColor(ThemeData.ARCHIVE_BACKGROUND_COLOR, createColor(attributes));
-            else if(state == STATE_ARCHIVE_SELECTED)
-                template.setColor(ThemeData.ARCHIVE_SELECTED_BACKGROUND_COLOR, createColor(attributes));
-
-            else if(state == STATE_SYMLINK_NORMAL)
-                template.setColor(ThemeData.SYMLINK_BACKGROUND_COLOR, createColor(attributes));
-            else if(state == STATE_SYMLINK_SELECTED)
-                template.setColor(ThemeData.SYMLINK_SELECTED_BACKGROUND_COLOR, createColor(attributes));
-
-            else if(state == STATE_MARKED_NORMAL)
-                template.setColor(ThemeData.MARKED_BACKGROUND_COLOR, createColor(attributes));
-            else if(state == STATE_MARKED_SELECTED)
-                template.setColor(ThemeData.MARKED_SELECTED_BACKGROUND_COLOR, createColor(attributes));
-
-            else if(state == STATE_FILE_NORMAL)
-                template.setColor(ThemeData.FILE_BACKGROUND_COLOR, createColor(attributes));
-            else if(state == STATE_FILE_SELECTED)
-                template.setColor(ThemeData.FILE_SELECTED_BACKGROUND_COLOR, createColor(attributes));
-
-            else if(state == STATE_TABLE)
+            if(state == STATE_TABLE_NORMAL)
                 template.setColor(ThemeData.FILE_TABLE_BACKGROUND_COLOR, createColor(attributes));
+            else if(state == STATE_TABLE_SELECTED)
+                template.setColor(ThemeData.FILE_TABLE_SELECTED_BACKGROUND_COLOR, createColor(attributes));
+            else if(state == STATE_TABLE_ALTERNATE)
+                template.setColor(ThemeData.FILE_TABLE_ALTERNATE_BACKGROUND_COLOR, createColor(attributes));
+            else if(state == STATE_TABLE_UNMATCHED)
+                template.setColor(ThemeData.FILE_TABLE_UNMATCHED_BACKGROUND_COLOR, createColor(attributes));
 
             else if(state == STATE_SHELL_NORMAL)
                 template.setColor(ThemeData.SHELL_BACKGROUND_COLOR, createColor(attributes));
@@ -479,6 +442,9 @@ class ThemeReader extends DefaultHandler implements ThemeXmlConstants {
                 template.setColor(ThemeData.HIDDEN_FILE_FOREGROUND_COLOR, createColor(attributes));
             else if(state == STATE_HIDDEN_SELECTED)
                 template.setColor(ThemeData.HIDDEN_FILE_SELECTED_FOREGROUND_COLOR, createColor(attributes));
+
+            else if(state == STATE_TABLE_UNMATCHED)
+                template.setColor(ThemeData.FILE_TABLE_UNMATCHED_FOREGROUND_COLOR, createColor(attributes));
 
             else if(state == STATE_FOLDER_NORMAL)
                 template.setColor(ThemeData.FOLDER_FOREGROUND_COLOR, createColor(attributes));
@@ -562,6 +528,12 @@ class ThemeReader extends DefaultHandler implements ThemeXmlConstants {
             if(state != STATE_TABLE)
                 if(Debug.ON) traceIllegalClosing(qName);
             state = STATE_ROOT;
+        }
+
+        else if(qName.equals(ELEMENT_ALTERNATE)) {
+            if(state != STATE_TABLE_ALTERNATE)
+                if(Debug.ON) traceIllegalClosing(qName);
+            state = STATE_TABLE;
         }
 
         else if(qName.equals(ELEMENT_HIDDEN)) {
@@ -657,6 +629,8 @@ class ThemeReader extends DefaultHandler implements ThemeXmlConstants {
                 state = STATE_EDITOR;
             else if(state == STATE_LOCATION_BAR_NORMAL)
                 state = STATE_LOCATION_BAR;
+            else if(state == STATE_TABLE_NORMAL)
+                state = STATE_TABLE;
             else
                 if(Debug.ON) traceIllegalClosing(qName);
         }
@@ -683,6 +657,8 @@ class ThemeReader extends DefaultHandler implements ThemeXmlConstants {
                 state = STATE_EDITOR;
             else if(state == STATE_LOCATION_BAR_SELECTED)
                 state = STATE_LOCATION_BAR;
+            else if(state == STATE_TABLE_SELECTED)
+                state = STATE_TABLE;
             else
                 if(Debug.ON) traceIllegalClosing(qName);
         }
