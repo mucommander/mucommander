@@ -108,26 +108,32 @@ public class PreferencesDialog extends FocusDialog implements ActionListener, Ch
     }
 
 
-    private Component getTabbedPanel(PreferencesPanel prefPanel) {
-        JScrollPane scrollPane = new JScrollPane(prefPanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        scrollPane.setBorder(null);
+    private Component getTabbedPanel(PreferencesPanel prefPanel, boolean scroll) {
+        if(scroll) {
+            JScrollPane scrollPane = new JScrollPane(prefPanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+            scrollPane.setBorder(null);
 
-        return scrollPane;
+            return scrollPane;
+        }
+        return prefPanel;
     }
-	
+
+    public void addPreferencesPanel(PreferencesPanel prefPanel, String iconName, boolean scroll) {
+        tabbedPane.addTab(prefPanel.getTitle(), IconManager.getIcon(IconManager.PREFERENCES_ICON_SET, iconName), getTabbedPanel(prefPanel, scroll));
+        prefPanels.add(prefPanel);
+    }
+
     /**
      * Adds a new prefences panel and creates a new tab with an icon.
      */
-    public void addPreferencesPanel(PreferencesPanel prefPanel, String iconName) {
-        tabbedPane.addTab(prefPanel.getTitle(), IconManager.getIcon(IconManager.PREFERENCES_ICON_SET, iconName), getTabbedPanel(prefPanel));
+    public void addPreferencesPanel(PreferencesPanel prefPanel, String iconName) {addPreferencesPanel(prefPanel, iconName, true);}
+
+    public void addPreferencesPanel(PreferencesPanel prefPanel, boolean scroll) {
+        tabbedPane.addTab(prefPanel.getTitle(), getTabbedPanel(prefPanel, scroll));
         prefPanels.add(prefPanel);
     }
 
-
-    public void addPreferencesPanel(PreferencesPanel prefPanel) {
-        tabbedPane.addTab(prefPanel.getTitle(), getTabbedPanel(prefPanel));
-        prefPanels.add(prefPanel);
-    }
+    public void addPreferencesPanel(PreferencesPanel prefPanel) {addPreferencesPanel(prefPanel, true);}
 
     /**
      * Calls {@link PreferencesPanel#commit()} on all registered preference panels.
