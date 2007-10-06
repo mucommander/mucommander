@@ -50,101 +50,75 @@ class FolderPanePanel extends ThemeEditorPanel {
      * Initialises the panel's UI.
      */
     private void initUI() {
-        YBoxPanel mainPanel = new YBoxPanel();
+        JTabbedPane tabbedPane;
+        FontChooser fontChooser;
+        FilePanel   filePanel;
 
-        FontChooser fontChooser = createFontChooser("theme_editor.font", ThemeData.FILE_TABLE_FONT);
-        mainPanel.add(fontChooser);
 
-        // Normal files
-        mainPanel.add(createColorPanel(
-                "theme_editor.plain_file", fontChooser,
-                ThemeData.FILE_FOREGROUND_COLOR, ThemeData.FILE_BACKGROUND_COLOR,
-                ThemeData.FILE_SELECTED_FOREGROUND_COLOR, ThemeData.FILE_SELECTED_BACKGROUND_COLOR,
-                ThemeData.FILE_UNFOCUSED_FOREGROUND_COLOR, ThemeData.FILE_UNFOCUSED_BACKGROUND_COLOR,
-                ThemeData.FILE_SELECTED_UNFOCUSED_FOREGROUND_COLOR, ThemeData.FILE_SELECTED_UNFOCUSED_BACKGROUND_COLOR
-        ));
+        tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 
-        // Folders
-        mainPanel.add(createColorPanel(
-                "theme_editor.folder", fontChooser,
-                ThemeData.FOLDER_FOREGROUND_COLOR, ThemeData.FOLDER_BACKGROUND_COLOR,
-                ThemeData.FOLDER_SELECTED_FOREGROUND_COLOR, ThemeData.FOLDER_SELECTED_BACKGROUND_COLOR,
-                ThemeData.FOLDER_UNFOCUSED_FOREGROUND_COLOR, ThemeData.FOLDER_UNFOCUSED_BACKGROUND_COLOR,
-                ThemeData.FOLDER_SELECTED_UNFOCUSED_FOREGROUND_COLOR, ThemeData.FOLDER_SELECTED_UNFOCUSED_BACKGROUND_COLOR
-        ));
+        // Adds the general panel.
+        tabbedPane.add(Translator.get("theme_editor.general_panel"),
+                       createScrollPane(createGeneralPanel(fontChooser = createFontChooser("theme_editor.font", ThemeData.FILE_TABLE_FONT))));
 
-        // Archives
-        mainPanel.add(createColorPanel(
-                "theme_editor.archive_file", fontChooser,
-                ThemeData.ARCHIVE_FOREGROUND_COLOR, ThemeData.ARCHIVE_BACKGROUND_COLOR,
-                ThemeData.ARCHIVE_SELECTED_FOREGROUND_COLOR, ThemeData.ARCHIVE_SELECTED_BACKGROUND_COLOR,
-                ThemeData.ARCHIVE_UNFOCUSED_FOREGROUND_COLOR, ThemeData.ARCHIVE_UNFOCUSED_BACKGROUND_COLOR,
-                ThemeData.ARCHIVE_SELECTED_UNFOCUSED_FOREGROUND_COLOR, ThemeData.ARCHIVE_SELECTED_UNFOCUSED_BACKGROUND_COLOR
-        ));
+        // Adds the active panel.
+        filePanel = new FilePanel(parent, true, template, fontChooser);
+        tabbedPane.add(filePanel.getTitle(), createScrollPane(filePanel));
 
-        // Hidden files
-        mainPanel.add(createColorPanel(
-                "theme_editor.hidden_file", fontChooser,
-                ThemeData.HIDDEN_FILE_FOREGROUND_COLOR, ThemeData.HIDDEN_FILE_BACKGROUND_COLOR,
-                ThemeData.HIDDEN_FILE_SELECTED_FOREGROUND_COLOR, ThemeData.HIDDEN_FILE_SELECTED_BACKGROUND_COLOR,
-                ThemeData.HIDDEN_FILE_UNFOCUSED_FOREGROUND_COLOR, ThemeData.HIDDEN_FILE_UNFOCUSED_BACKGROUND_COLOR,
-                ThemeData.HIDDEN_FILE_SELECTED_UNFOCUSED_FOREGROUND_COLOR, ThemeData.HIDDEN_FILE_SELECTED_UNFOCUSED_BACKGROUND_COLOR
-        ));
+        // Adds the inactive panel.
+        filePanel = new FilePanel(parent, false, template, fontChooser);
+        tabbedPane.add(filePanel.getTitle(), createScrollPane(filePanel));
 
-        // Symlinks
-        mainPanel.add(createColorPanel(
-                "theme_editor.symbolic_link", fontChooser,
-                ThemeData.SYMLINK_FOREGROUND_COLOR, ThemeData.SYMLINK_BACKGROUND_COLOR,
-                ThemeData.SYMLINK_SELECTED_FOREGROUND_COLOR, ThemeData.SYMLINK_SELECTED_BACKGROUND_COLOR,
-                ThemeData.SYMLINK_UNFOCUSED_FOREGROUND_COLOR, ThemeData.SYMLINK_UNFOCUSED_BACKGROUND_COLOR,
-                ThemeData.SYMLINK_SELECTED_UNFOCUSED_FOREGROUND_COLOR, ThemeData.SYMLINK_SELECTED_UNFOCUSED_BACKGROUND_COLOR
-        ));
+        // Creates the layout.
+        setLayout(new BorderLayout());
+        add(tabbedPane, BorderLayout.CENTER);
+    }
 
-        // Marked files
-        mainPanel.add(createColorPanel(
-                "theme_editor.marked_file", fontChooser,
-                ThemeData.MARKED_FOREGROUND_COLOR, ThemeData.MARKED_BACKGROUND_COLOR,
-                ThemeData.MARKED_SELECTED_FOREGROUND_COLOR, ThemeData.MARKED_SELECTED_BACKGROUND_COLOR,
-                ThemeData.MARKED_UNFOCUSED_FOREGROUND_COLOR, ThemeData.MARKED_UNFOCUSED_BACKGROUND_COLOR,
-                ThemeData.MARKED_SELECTED_UNFOCUSED_FOREGROUND_COLOR, ThemeData.MARKED_SELECTED_UNFOCUSED_BACKGROUND_COLOR
-        ));
 
-        addVerticalSeparator(mainPanel);
 
-        // File table
-        JPanel flowPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        JPanel gridPanel = new ProportionalGridPanel(2);
+    // - Helper methods ------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------
+    /**
+     * Creates the 'general' theme.
+     */
+    private JPanel createGeneralPanel(FontChooser chooser) {
+        YBoxPanel generalPanel;
+        JPanel    gridPanel;
+        JPanel    panel;
 
-        PreviewLabel previewLabel = new PreviewLabel();
+        // Initialises the panel.
+        generalPanel = new YBoxPanel();
 
-        gridPanel.add(createCaptionLabel("theme_editor.background"));
-        gridPanel.add(new ColorButton(parent, template, ThemeData.FILE_TABLE_BACKGROUND_COLOR, PreviewLabel.BACKGROUND_COLOR_PROPERTY_NAME, previewLabel));
-
-        gridPanel.add(createCaptionLabel("theme_editor.unfocused_background"));
-        gridPanel.add(new ColorButton(parent, template, ThemeData.FILE_TABLE_UNFOCUSED_BACKGROUND_COLOR, PreviewLabel.BACKGROUND_COLOR_PROPERTY_NAME, previewLabel));
-
-        gridPanel.add(createCaptionLabel("theme_editor.border"));
-        gridPanel.add(new ColorButton(parent, template, ThemeData.FILE_TABLE_BORDER_COLOR, PreviewLabel.BORDER_COLOR_PROPERTY_NAME, previewLabel));
-
-        flowPanel.setBorder(BorderFactory.createTitledBorder(Translator.get("theme_editor.folder_tab")));
-        flowPanel.add(gridPanel);
-
-        mainPanel.add(flowPanel);
-
-        // Quicksearch
-        flowPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        // Initialises the quicksearch panel.
         gridPanel = new ProportionalGridPanel(4);
         addLabelRow(gridPanel);
+        addColorButtonRow(gridPanel, null, "theme_editor.quick_search.unmatched_file",
+                          ThemeData.FILE_TABLE_UNMATCHED_FOREGROUND_COLOR,
+                          ThemeData.FILE_TABLE_UNMATCHED_BACKGROUND_COLOR);
+        gridPanel.setBorder(BorderFactory.createTitledBorder(Translator.get("theme_editor.quick_search")));
 
-        addColorButtonRow(gridPanel, null, "theme_editor.quick_search.unmatched_file", ThemeData.FILE_TABLE_UNMATCHED_FOREGROUND_COLOR, ThemeData.FILE_TABLE_UNMATCHED_BACKGROUND_COLOR);
+        // Creates the layout.
+        generalPanel.add(chooser);
+        generalPanel.add(gridPanel);
 
-        flowPanel.setBorder(BorderFactory.createTitledBorder(Translator.get("theme_editor.quick_search")));
-        flowPanel.add(gridPanel);
-
-        mainPanel.add(flowPanel);
-
-        add(mainPanel);
+        // Wraps the whole thing in a flow layout.
+        panel = new JPanel();
+        panel.add(generalPanel);
+        return panel;
     }
+
+    /**
+     * Wraps the specified panel within a scroll pane.
+     */
+    private JComponent createScrollPane(JPanel panel) {
+        JScrollPane scrollPane;
+
+        scrollPane = new JScrollPane(panel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane.setBorder(null);
+
+        return scrollPane;
+    }
+
 
 
     // - Modification management ---------------------------------------------------------

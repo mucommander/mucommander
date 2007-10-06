@@ -59,7 +59,7 @@ public class ThemeEditorDialog extends PreferencesDialog {
         data             = theme.cloneData();
         wasThemeModified = false;
 
-        addPreferencesPanel(new FolderPanePanel(this, data));
+        addPreferencesPanel(new FolderPanePanel(this, data), false);
         addPreferencesPanel(new LocationBarPanel(this, data));
         addPreferencesPanel(new StatusBarPanel(this, data));
         addPreferencesPanel(new ShellPanel(this, data));
