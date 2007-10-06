@@ -177,7 +177,6 @@ class GeneralPanel extends PreferencesPanel implements ItemListener, ActionListe
 
         tempPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         tempPanel.add(dateFormatComboBox);
-        tempPanel.add(dateFormatComboBox);
         tempPanel.add(Box.createHorizontalGlue());
         dateFormatPanel.add(tempPanel);
 
