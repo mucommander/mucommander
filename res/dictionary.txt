@@ -965,10 +965,6 @@ preview:CS:Náhled
 
 
 
-
-
-
-
 sample_text:EN:Sample text
 sample_text:FR:Texte d'exemple
 sample_text:HU:Példa szöveg
@@ -7599,6 +7595,26 @@ theme_editor.history_font:CS:Písmo historie
 
 
 
+theme_editor.active_panel:EN:Active
+theme_editor.active_panel:FR:Actif
+# Translation missing
+
+
+
+
+theme_editor.inactive_panel:EN:Inactive
+theme_editor.inactive_panel:FR:Inactif
+# Translation missing
+
+
+
+
+theme_editor.general_panel:EN:General
+theme_editor.general_panel:FR:General
+# Translation missing
+
+
+
 
 
 
@@ -7689,6 +7705,12 @@ theme_editor.background:KR:바탕
 theme_editor.background:pt_BR:Fundo
 theme_editor.background:NL:Achtergrond
 theme_editor.background:SK:Pozadie
+
+
+
+theme_editor.alternate_background:EN:Alternate background
+theme_editor.alternate_background:FR:Fond alterné
+
 
 theme_editor.unfocused_background:EN:Background (without focus)
 theme_editor.unfocused_background:FR:Fond (sans focus)
@@ -9226,7 +9248,7 @@ prefs_dialog.custom_shell:HU:Egyedi végrehajtás használata
 
 prefs_dialog.shell_encoding:EN:Shell encoding
 prefs_dialog.shell_encoding:FR:Encodage du shell
-# Translation required
+# Translation missing
 
 
 
@@ -9234,7 +9256,7 @@ prefs_dialog.shell_encoding:FR:Encodage du shell
 
 prefs_dialog.auto_detect_shell_encoding:EN:Auto-detect
 prefs_dialog.auto_detect_shell_encoding:FR:Détection automatique
-# Translation required
+# Translation missing
 
 
 
