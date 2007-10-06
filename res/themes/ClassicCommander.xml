@@ -14,6 +14,8 @@
     <font                  family="Lucida Grande,Tahoma,Lucida Sans" size ="12"/>
     <border                color="868686"/>
     <inactive_border       color="868686"/>
+    <outline               color="3875d7"/>
+    <inactive_outline      color="c0c0c0"/>
 
     <normal>
       <background          color="ffffff"/>
