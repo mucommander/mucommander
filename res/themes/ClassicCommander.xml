@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- =================================================== -->
 <!-- Author:           Nicolas Rinaudo                   -->
-<!-- Last modified on: 2007/07/06                        -->
+<!-- Last modified on: 2007/10/06                        -->
 <!-- Description:                                        -->
 <!-- A simple, black on white theme meant to look like   -->
 <!-- a native application on most platforms.             -->
@@ -11,28 +11,42 @@
   <!-- = File table appearance ========================= -->
   <!-- ================================================= -->
   <file_table>
-    <font                 family="Lucida Grande,Tahoma,Lucida Sans" size ="12"/>
-    <border               color="868686"/>
-    <background           color="ffffff"/>
-    <unfocused_background color="f5f5f5"/>
-    <unmatched_foreground color="404040"/>
-    <unmatched_background color="d1d1d1"/>
+    <font                  family="Lucida Grande,Tahoma,Lucida Sans" size ="12"/>
+    <border                color="868686"/>
+    <inactive_border       color="868686"/>
+
+    <normal>
+      <background          color="ffffff"/>
+      <inactive_background color="f5f5f5"/>
+    </normal>
+
+    <alternate>
+      <background          color="ffffff"/>
+      <inactive_background color="f5f5f5"/>
+    </alternate>
+
+    <selected>
+      <background          color="3875d7"/>
+      <inactive_background color="c0c0c0"/>
+    </selected>
+
+    <unmatched>
+      <foreground          color="404040"/>
+      <background          color="d1d1d1"/>
+    </unmatched>
+
 
 
     <!-- = Hidden files ================================ -->
     <!-- =============================================== -->
     <hidden>
       <normal>
-        <unfocused_background color="f5f5f5"/>
-        <unfocused_foreground color="666666"/>
-        <background           color="ffffff"/>
-        <foreground           color="666666"/>
+        <inactive_foreground color="666666"/>
+        <foreground          color="666666"/>
       </normal>
       <selected>
-        <unfocused_background color="c0c0c0"/>
-        <unfocused_foreground color="666666"/>
-        <background           color="3875d7"/>
-        <foreground           color="ffffff"/>
+        <inactive_foreground color="666666"/>
+        <foreground          color="ffffff"/>
       </selected>
     </hidden>
 
@@ -42,16 +56,12 @@
     <!-- =============================================== -->
     <folder>
       <normal>
-        <unfocused_background color="f5f5f5"/>
-        <unfocused_foreground color="000000"/>
-        <background           color="ffffff"/>
-        <foreground           color="000000"/>
+        <inactive_foreground color="000000"/>
+        <foreground          color="000000"/>
       </normal>
       <selected>
-        <unfocused_background color="c0c0c0"/>
-        <unfocused_foreground color="000000"/>
-        <background           color="3875d7"/>
-        <foreground           color="ffffff"/>
+        <inactive_foreground color="000000"/>
+        <foreground          color="ffffff"/>
       </selected>
     </folder>
 
@@ -61,16 +71,12 @@
     <!-- =============================================== -->
     <archive>
       <normal>
-        <unfocused_background color="f5f5f5"/>
-        <unfocused_foreground color="000000"/>
-        <background           color="ffffff"/>
-        <foreground           color="000000"/>
+        <inactive_foreground color="000000"/>
+        <foreground          color="000000"/>
       </normal>
       <selected>
-        <unfocused_background color="c0c0c0"/>
-        <unfocused_foreground color="000000"/>
-        <background           color="3875d7"/>
-        <foreground           color="ffffff"/>
+        <inactive_foreground color="000000"/>
+        <foreground          color="ffffff"/>
       </selected>
     </archive>
 
@@ -79,16 +85,12 @@
     <!-- =============================================== -->
     <symlink>
       <normal>
-        <unfocused_background color="f5f5f5"/>
-        <unfocused_foreground color="0000ee"/>
-        <background           color="ffffff"/>
-        <foreground           color="0000ee"/>
+        <inactive_foreground color="0000ee"/>
+        <foreground          color="0000ee"/>
       </normal>
       <selected>
-        <unfocused_background color="c0c0c0"/>
-        <unfocused_foreground color="0000ee"/>
-        <background           color="3875d7"/>
-        <foreground           color="ffffff"/>
+        <inactive_foreground color="0000ee"/>
+        <foreground          color="ffffff"/>
       </selected>
     </symlink>
 
@@ -98,16 +100,12 @@
     <!-- =============================================== -->
     <marked>
       <normal>
-        <unfocused_background color="f5f5f5"/>
-        <unfocused_foreground color="cc0000"/>
-        <background           color="ffffff"/>
-        <foreground           color="cc0000"/>
+        <inactive_foreground color="cc0000"/>
+        <foreground          color="cc0000"/>
       </normal>
       <selected>
-        <unfocused_background color="c0c0c0"/>
-        <unfocused_foreground color="cc0000"/>
-        <background           color="3875d7"/>
-        <foreground           color="cc0000"/>
+        <inactive_foreground color="cc0000"/>
+        <foreground          color="cc0000"/>
       </selected>
     </marked>
 
@@ -117,16 +115,12 @@
     <!-- =============================================== -->
     <file>
       <normal>
-        <unfocused_background color="f5f5f5"/>
-        <unfocused_foreground color="000000"/>
-        <background           color="ffffff"/>
-        <foreground           color="000000"/>
+        <inactive_foreground color="000000"/>
+        <foreground          color="000000"/>
       </normal>
       <selected>
-        <unfocused_background color="c0c0c0"/>
-        <unfocused_foreground color="000000"/>
-        <background           color="3875d7"/>
-        <foreground           color="ffffff"/>
+        <inactive_foreground color="000000"/>
+        <foreground          color="ffffff"/>
       </selected>
     </file>
   </file_table>

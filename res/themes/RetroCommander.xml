@@ -5,26 +5,40 @@
   <file_table>
     <font                 family="Lucida Grande,Arial,Lucida Sans" size="13"/>
     <border               color="404040"/>
-    <background           color="000084"/>
-    <unfocused_background color="000084"/>
-    <unmatched_background color="000084"/>
-    <unmatched_foreground color="00a8a8"/>
+    <inactive_border      color="404040"/>
+
+    <normal>
+      <background           color="000084"/>
+      <inactive_background color="000084"/>
+    </normal>
+
+    <selected>
+      <background           color="00ffff"/>
+      <inactive_background color="cccccc"/>
+    </selected>
+
+    <alternate>
+      <background           color="000084"/>
+      <inactive_background color="000084"/>
+    </alternate>
+
+    <unmatched>
+      <foreground color="00a8a8"/>
+      <background color="000084"/>
+    </unmatched>
+
 
 
     <!-- = Hidden files ================================ -->
     <!-- =============================================== -->
     <hidden>
       <normal>
-        <unfocused_background color="000084"/>
-        <unfocused_foreground color="c0c0c0"/>
-        <background           color="000084"/>
-        <foreground           color="c0c0c0"/>
+        <inactive_foreground color="c0c0c0"/>
+        <foreground          color="c0c0c0"/>
       </normal>
       <selected>
-        <unfocused_background color="cccccc"/>
-        <unfocused_foreground color="000080"/>
-        <background           color="00ffff"/>
-        <foreground           color="000080"/>
+        <inactive_foreground color="000080"/>
+        <foreground          color="000080"/>
       </selected>
     </hidden>
 
@@ -34,16 +48,12 @@
     <!-- =============================================== -->
     <folder>
       <normal>
-        <unfocused_background color="000084"/>
-        <unfocused_foreground color="ffffff"/>
-        <background           color="000084"/>
-        <foreground           color="ffffff"/>
+        <inactive_foreground color="ffffff"/>
+        <foreground          color="ffffff"/>
       </normal>
       <selected>
-        <unfocused_background color="cccccc"/>
-        <unfocused_foreground color="000080"/>
-        <background           color="00ffff"/>
-        <foreground           color="000080"/>
+        <inactive_foreground color="000080"/>
+        <foreground          color="000080"/>
       </selected>
     </folder>
 
@@ -53,16 +63,12 @@
     <!-- =============================================== -->
     <archive>
       <normal>
-        <unfocused_background color="000084"/>
-        <unfocused_foreground color="40ff40"/>
-        <background           color="000084"/>
-        <foreground           color="40ff40"/>
+        <inactive_foreground color="40ff40"/>
+        <foreground          color="40ff40"/>
       </normal>
       <selected>
-        <unfocused_background color="cccccc"/>
-        <unfocused_foreground color="000080"/>
-        <background           color="00ffff"/>
-        <foreground           color="000080"/>
+        <inactive_foreground color="000080"/>
+        <foreground          color="000080"/>
       </selected>
     </archive>
 
@@ -71,16 +77,12 @@
     <!-- =============================================== -->
     <symlink>
       <normal>
-        <unfocused_background color="000084"/>
-        <unfocused_foreground color="cc00cc"/>
-        <background           color="000084"/>
-        <foreground           color="cc00cc"/>
+        <inactive_foreground color="cc00cc"/>
+        <foreground          color="cc00cc"/>
       </normal>
       <selected>
-        <unfocused_background color="cccccc"/>
-        <unfocused_foreground color="000080"/>
-        <background           color="00ffff"/>
-        <foreground           color="000080"/>
+        <inactive_foreground color="000080"/>
+        <foreground          color="000080"/>
       </selected>
     </symlink>
 
@@ -90,16 +92,12 @@
     <!-- =============================================== -->
     <marked>
       <normal>
-        <unfocused_background color="000084"/>
-        <unfocused_foreground color="ffff00"/>
-        <background           color="000084"/>
-        <foreground           color="ffff00"/>
+        <inactive_foreground color="ffff00"/>
+        <foreground          color="ffff00"/>
       </normal>
       <selected>
-        <unfocused_background color="cccccc"/>
-        <unfocused_foreground color="ffc532"/>
-        <background           color="00ffff"/>
-        <foreground           color="ffc532"/>
+        <inactive_foreground color="ffc532"/>
+        <foreground          color="ffc532"/>
       </selected>
     </marked>
 
@@ -109,16 +107,12 @@
     <!-- =============================================== -->
     <file>
       <normal>
-        <unfocused_background color="000084"/>
-        <unfocused_foreground color="00f0f0"/>
-        <background           color="000084"/>
-        <foreground           color="00f0f0"/>
+        <inactive_foreground color="00f0f0"/>
+        <foreground          color="00f0f0"/>
       </normal>
       <selected>
-        <unfocused_background color="cccccc"/>
-        <unfocused_foreground color="000080"/>
-        <background           color="00ffff"/>
-        <foreground           color="000080"/>
+        <inactive_foreground color="000080"/>
+        <foreground          color="000080"/>
       </selected>
     </file>
   </file_table>
