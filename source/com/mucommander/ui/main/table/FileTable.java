@@ -278,9 +278,13 @@ public class FileTable extends JTable implements Columns, MouseListener, MouseMo
 
     /**
      * Changes current folder, keeping current selection if folder hasn't changed.
-     * Should only be called by FolderPanel!
      */
-    public synchronized void setCurrentFolder(AbstractFile folder, AbstractFile children[]) {
+    public void setCurrentFolder(AbstractFile folder, AbstractFile[] children) {setCurrentFolder(folder, children, null);}
+
+    /**
+     * Changes current folder, selecting the specified file if it can be found.
+     */
+    public synchronized void setCurrentFolder(AbstractFile folder, AbstractFile children[], AbstractFile select) {
         AbstractFile current;      // Current folder.
         FileSet      markedFiles;  // Buffer for all previously marked file.
         AbstractFile selectedFile; // Buffer for the previously selected file.
@@ -305,6 +309,10 @@ public class FileTable extends JTable implements Columns, MouseListener, MouseMo
         else if(tableModel.hasParentFolder() && folder.equals(tableModel.getParentFolder()))
             selectedFile = current;
 
+        // Makes sure we select the requested file if it was specified.
+        if(select != null)
+            selectedFile = select;
+
         // Changes the current folder in the swing thread to make sure that repaints cannot
         // happen in the middle of the operation - this is used to prevent flickers, baddly
         // refreshed frames and such unpleasant graphical artifacts.
@@ -315,7 +323,9 @@ public class FileTable extends JTable implements Columns, MouseListener, MouseMo
      * Sets row height based on current cell's font and border, revalidates and repaints this JTable.
      */
     private void setRowHeight() {
-        // JTable.setRowHeight() revalidates and repaints the JTable 
+        // JTable.setRowHeight() revalidates and repaints the JTable.
+        // Note that it's important here to use the cell editor's font rather than the cell renderer's: if this method is called
+        // as a result to a font changed event, we do not know which class' fontChanged event will be called first.
         setRowHeight(2*CellLabel.CELL_BORDER_HEIGHT + Math.max(getFontMetrics(filenameEditor.filenameField.getFont()).getHeight(), (int)FileIcons.getIconDimension().getHeight()));
         // Filename editor's row resize disabled because of Java bug #4398268 which prevents new rows from being visible after setRowHeight(row, height) has been called :/
         //		setRowHeight(Math.max(getFontMetrics(cellRenderer.getCellFont()).getHeight()+cellRenderer.CELL_BORDER_HEIGHT, editorRowHeight));

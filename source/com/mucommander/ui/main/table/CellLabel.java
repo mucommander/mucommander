@@ -49,7 +49,7 @@ import java.awt.*;
  *
  * @author Maxence Bernard, Sun Microsystems
  */
-class CellLabel extends JLabel {
+public class CellLabel extends JLabel {
 
     /** Amount of border space on the left and right of the cell */
     public static final int CELL_BORDER_WIDTH = 4;

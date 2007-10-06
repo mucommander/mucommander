@@ -44,9 +44,11 @@ import com.mucommander.ui.main.table.FileTable;
 import com.mucommander.ui.main.table.FileTableConfiguration;
 import com.mucommander.ui.main.table.FolderChangeMonitor;
 import com.mucommander.ui.progress.ProgressTextField;
+import com.mucommander.ui.border.MutableLineBorder;
 import com.mucommander.ui.theme.*;
 
 import javax.swing.*;
+import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.dnd.DropTarget;
 import java.awt.event.FocusEvent;
@@ -88,6 +90,8 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
     
     private FileDragSourceListener fileDragSourceListener;
 
+    private Color borderColor;
+    private Color unfocusedBorderColor;
     private Color backgroundColor;
     private Color unfocusedBackgroundColor;
     private Color unmatchedBackgroundColor;
@@ -184,10 +188,11 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
         scrollPane = new JScrollPane(fileTable, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
         // Sets the table border.
-        scrollPane.setBorder(BorderFactory.createLineBorder(ThemeManager.getCurrentColor(Theme.FILE_TABLE_BORDER_COLOR), 1));
+        scrollPane.setBorder(new MutableLineBorder(unfocusedBorderColor = ThemeManager.getCurrentColor(Theme.FILE_TABLE_INACTIVE_BORDER_COLOR), 1));
+        borderColor = ThemeManager.getCurrentColor(Theme.FILE_TABLE_BORDER_COLOR);
 
         // Set scroll pane's background color to match the one of this panel and FileTable
-        scrollPane.getViewport().setBackground(unfocusedBackgroundColor = ThemeManager.getCurrentColor(Theme.FILE_TABLE_UNFOCUSED_BACKGROUND_COLOR));
+        scrollPane.getViewport().setBackground(unfocusedBackgroundColor = ThemeManager.getCurrentColor(Theme.FILE_TABLE_INACTIVE_BACKGROUND_COLOR));
         backgroundColor          = ThemeManager.getCurrentColor(Theme.FILE_TABLE_BACKGROUND_COLOR);
         unmatchedBackgroundColor = ThemeManager.getCurrentColor(Theme.FILE_TABLE_UNMATCHED_BACKGROUND_COLOR);
 
@@ -385,7 +390,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
             if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(">>>>>>>>> THREAD NOT NULL = "+changeFolderThread, -1);
             return;
         }
-		
+
         this.changeFolderThread = new ChangeFolderThread(folder);
         if(selectThisFileAfter!=null)
             this.changeFolderThread.selectThisFileAfter(selectThisFileAfter);
@@ -480,10 +485,11 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
      * @param fileToSelect file to be selected after the folder has been refreshed (if it exists in the folder), can be null in which case FileTable rules will be used to select current file
      */
     private synchronized void setCurrentFolder(AbstractFile folder, AbstractFile children[], AbstractFile fileToSelect) {
-        fileTable.setCurrentFolder(folder, children);
         // Select given file if not null
-        if(fileToSelect!=null)
-            fileTable.selectFile(fileToSelect);
+        if(fileToSelect == null)
+            fileTable.setCurrentFolder(folder, children);
+        else
+            fileTable.setCurrentFolder(folder, children, fileToSelect);
 
         this.currentFolder = folder;
 
@@ -557,13 +563,17 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
     public void focusGained(FocusEvent e) {
         // Notify MainFrame that we are in control now! (our table/location field is active)
         mainFrame.setActiveTable(fileTable);
-        if(e.getSource() == fileTable)
+        if(e.getSource() == fileTable) {
+            ((MutableLineBorder)scrollPane.getBorder()).setLineColor(borderColor);
             scrollPane.getViewport().setBackground(backgroundColor);
+        }
     }
 
     public void focusLost(FocusEvent e) {
-        if(e.getSource() == fileTable)
+        if(e.getSource() == fileTable) {
+            ((MutableLineBorder)scrollPane.getBorder()).setLineColor(unfocusedBorderColor);
             scrollPane.getViewport().setBackground(unfocusedBackgroundColor);
+        }
         fileTable.getQuickSearch().cancel();
     }
 	
@@ -981,14 +991,21 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
     public void colorChanged(ColorChangedEvent event) {
         switch(event.getColorId()) {
         case Theme.FILE_TABLE_BORDER_COLOR:
-            scrollPane.setBorder(BorderFactory.createLineBorder(event.getColor(), 1));
+            borderColor = event.getColor();
+            if(fileTable.hasFocus())
+                ((MutableLineBorder)scrollPane.getBorder()).setLineColor(borderColor);
+            break;
+        case Theme.FILE_TABLE_INACTIVE_BORDER_COLOR:
+            unfocusedBorderColor = event.getColor();
+            if(!fileTable.hasFocus())
+                ((MutableLineBorder)scrollPane.getBorder()).setLineColor(unfocusedBorderColor);
             break;
         case Theme.FILE_TABLE_BACKGROUND_COLOR:
             backgroundColor = event.getColor();
             if(fileTable.hasFocus())
                 scrollPane.getViewport().setBackground(backgroundColor);
             break;
-        case Theme.FILE_TABLE_UNFOCUSED_BACKGROUND_COLOR:
+        case Theme.FILE_TABLE_INACTIVE_BACKGROUND_COLOR:
             unfocusedBackgroundColor = event.getColor();
             if(!fileTable.hasFocus())
                 scrollPane.getViewport().setBackground(unfocusedBackgroundColor);
