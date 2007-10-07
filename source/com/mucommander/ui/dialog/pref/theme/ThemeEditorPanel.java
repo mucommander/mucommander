@@ -162,6 +162,7 @@ abstract class ThemeEditorPanel extends PreferencesPanel {
             };
 
             fontChooser.addChangeListener(listener);
+            previewComponent.setFont(fontChooser.getCurrentFont());
 
             // Hold a reference to this listener to prevent garbage collection
             listenerReferences.add(listener);
@@ -181,5 +182,32 @@ abstract class ThemeEditorPanel extends PreferencesPanel {
         gridPanel.add(new ColorButton(parent, template, foregroundId, PreviewLabel.FOREGROUND_COLOR_PROPERTY_NAME, previewComponent));
         gridPanel.add(new ColorButton(parent, template, backgroundId, PreviewLabel.BACKGROUND_COLOR_PROPERTY_NAME, previewComponent));
         gridPanel.add(previewComponent);
+    }
+
+    /**
+     * Adds a foreground and background color buttons to the specified panel.
+     * @param gridPanel   panel to which the buttons must be added.
+     * @param fontChooser object to listen on for font changes.
+     * @param label       label of the buttons.
+     * @param foregroundId identifier of the foreground button's color.
+     * @param backgroundId identifier of the background button's color.
+     */
+    protected void createTextButtons(JPanel gridPanel, FontChooser fontChooser, String label, int foregroundId, int backgroundId) {
+        ColorButton  colorButton;
+        PreviewLabel previewLabel;
+
+        gridPanel.add(createCaptionLabel(label));
+
+        previewLabel = new PreviewLabel();
+        previewLabel.setTextPainted(true);
+        addFontChooserListener(fontChooser, previewLabel);
+
+        gridPanel.add(colorButton = new ColorButton(parent, template, foregroundId, PreviewLabel.FOREGROUND_COLOR_PROPERTY_NAME, previewLabel));
+        colorButton.addUpdatedPreviewComponent(this);
+        colorButton.addUpdatedPreviewComponent(previewLabel);
+
+        gridPanel.add(colorButton = new ColorButton(parent, template, backgroundId, PreviewLabel.BACKGROUND_COLOR_PROPERTY_NAME, previewLabel));
+        colorButton.addUpdatedPreviewComponent(this);
+        colorButton.addUpdatedPreviewComponent(previewLabel);
     }
 }
