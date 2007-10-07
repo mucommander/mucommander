@@ -382,6 +382,13 @@ class ThemeReader extends DefaultHandler implements ThemeXmlConstants {
                 traceIllegalDeclaration(qName);
         }
 
+        // Unmatched file table.
+        else if(qName.equals(ELEMENT_UNMATCHED)) {
+            if(state != STATE_TABLE)
+                traceIllegalDeclaration(qName);
+            state = STATE_TABLE_UNMATCHED;
+        }
+
         // Background color.
         else if(qName.equals(ELEMENT_BACKGROUND)) {
             if(state == STATE_TABLE_NORMAL)
@@ -549,6 +556,12 @@ class ThemeReader extends DefaultHandler implements ThemeXmlConstants {
         else if(qName.equals(ELEMENT_ALTERNATE)) {
             if(state != STATE_TABLE_ALTERNATE)
                 if(Debug.ON) traceIllegalClosing(qName);
+            state = STATE_TABLE;
+        }
+
+        else if(qName.equals(ELEMENT_UNMATCHED)) {
+            if(state != STATE_TABLE_UNMATCHED)
+                traceIllegalDeclaration(qName);
             state = STATE_TABLE;
         }
 
