@@ -22,12 +22,20 @@ import com.mucommander.text.Translator;
 import com.mucommander.ui.chooser.FontChooser;
 import com.mucommander.ui.dialog.pref.PreferencesDialog;
 import com.mucommander.ui.layout.YBoxPanel;
+import com.mucommander.ui.layout.ProportionalGridPanel;
 import com.mucommander.ui.theme.ThemeData;
+import com.mucommander.ui.chooser.PreviewLabel;
+
+import javax.swing.*;
+import java.awt.*;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeEvent;
 
 /**
  * @author Nicolas Rinaudo, Maxence Bernard
  */
-class FileEditorPanel extends ThemeEditorPanel {
+class FileEditorPanel extends ThemeEditorPanel implements PropertyChangeListener {
+    private JTextArea preview;
 
     // - Initialisation ------------------------------------------------------------------
     // -----------------------------------------------------------------------------------
@@ -39,25 +47,103 @@ class FileEditorPanel extends ThemeEditorPanel {
     public FileEditorPanel(PreferencesDialog parent, ThemeData template) {
         super(parent, Translator.get("theme_editor.editor_tab"), template);
         initUI();
+        addPropertyChangeListener(this);
+    }
+
+    private void createButtons(JPanel gridPanel, FontChooser fontChooser, String labelKey, int foregroundId, int backgroundId) {
+        PreviewLabel previewLabel;
+        ColorButton  colorButton;
+
+        previewLabel = new PreviewLabel();
+
+        previewLabel.setTextPainted(true);
+        addFontChooserListener(fontChooser, previewLabel);
+
+        gridPanel.add(createCaptionLabel(labelKey));
+        gridPanel.add(colorButton = new ColorButton(parent, template, foregroundId, PreviewLabel.FOREGROUND_COLOR_PROPERTY_NAME, previewLabel));
+        colorButton.addUpdatedPreviewComponent(this);
+        gridPanel.add(colorButton = new ColorButton(parent, template, backgroundId, PreviewLabel.BACKGROUND_COLOR_PROPERTY_NAME, previewLabel));
+        colorButton.addUpdatedPreviewComponent(this);
+        gridPanel.add(previewLabel);
     }
 
     /**
      * Initialises the panel's UI.
      */
     private void initUI() {
-        YBoxPanel mainPanel = new YBoxPanel();
+        YBoxPanel             mainPanel;
+        ProportionalGridPanel gridPanel;
+        JPanel                colorsPanel;
+        FontChooser           fontChooser;
+        JPanel                wrapper;
+        JPanel                previewPanel;
 
-        FontChooser fontChooser = createFontChooser("theme_editor.font", ThemeData.EDITOR_FONT);
+        // Font chooser.
+        fontChooser = createFontChooser("theme_editor.font", ThemeData.EDITOR_FONT);
+
+        // Colors.
+        gridPanel = new ProportionalGridPanel(4);
+        addLabelRow(gridPanel);
+        createButtons(gridPanel, fontChooser, "theme_editor.normal", ThemeData.EDITOR_FOREGROUND_COLOR, ThemeData.EDITOR_BACKGROUND_COLOR);
+        createButtons(gridPanel, fontChooser, "theme_editor.selected", ThemeData.EDITOR_SELECTED_FOREGROUND_COLOR, ThemeData.EDITOR_SELECTED_BACKGROUND_COLOR);
+        colorsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        colorsPanel.add(gridPanel);
+        colorsPanel.setBorder(BorderFactory.createTitledBorder(Translator.get("theme_editor.colors")));
+
+        // Main panel.
+        mainPanel = new YBoxPanel();
         mainPanel.add(fontChooser);
+        mainPanel.addSpace(10);
+        mainPanel.add(colorsPanel);
 
-        mainPanel.add(createColorPanel(
-                "theme_editor.colors", fontChooser,
-                ThemeData.EDITOR_FOREGROUND_COLOR, ThemeData.EDITOR_BACKGROUND_COLOR,
-                ThemeData.EDITOR_SELECTED_FOREGROUND_COLOR, ThemeData.EDITOR_SELECTED_BACKGROUND_COLOR
-        ));
+        // Preview.
+        previewPanel = new JPanel();
+        previewPanel.add(createPreviewPanel(mainPanel.getPreferredSize().height));
+        previewPanel.setBorder(BorderFactory.createTitledBorder(Translator.get("preview")));
+        addFontChooserListener(fontChooser, preview);
 
-        add(mainPanel);
+        // Wrapper.
+        wrapper = new JPanel(new BorderLayout());
+        wrapper.add(mainPanel, BorderLayout.CENTER);
+        wrapper.add(previewPanel, BorderLayout.EAST);
+
+        // Global layout.
+        setLayout(new BorderLayout());
+        add(wrapper, BorderLayout.NORTH);
     }
+
+    private JScrollPane createPreviewPanel(int preferredHeight) {
+        JScrollPane scroll;
+
+        preview = new JTextArea(15, 15);
+
+        scroll  = new JScrollPane(preview, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        scroll.getViewport().setPreferredSize(new Dimension(preview.getPreferredSize().width, preferredHeight));
+
+        preview.setText(Translator.get("sample_text"));
+        preview.setBackground(template.getColor(ThemeData.EDITOR_BACKGROUND_COLOR));
+        preview.setSelectionColor(template.getColor(ThemeData.EDITOR_SELECTED_BACKGROUND_COLOR));
+        preview.setForeground(template.getColor(ThemeData.EDITOR_FOREGROUND_COLOR));
+        preview.setSelectedTextColor(template.getColor(ThemeData.EDITOR_SELECTED_FOREGROUND_COLOR));
+        preview.setCaretColor(template.getColor(ThemeData.EDITOR_FOREGROUND_COLOR));
+        preview.setFont(template.getFont(ThemeData.EDITOR_FONT));
+
+        return scroll;
+    }
+
+    public void propertyChange(PropertyChangeEvent event) {
+        if(event.getPropertyName().equals(PreviewLabel.BACKGROUND_COLOR_PROPERTY_NAME)) {
+            preview.setBackground(template.getColor(ThemeData.EDITOR_BACKGROUND_COLOR));
+            preview.setSelectionColor(template.getColor(ThemeData.EDITOR_SELECTED_BACKGROUND_COLOR));
+        }
+        else if(!event.getPropertyName().equals(PreviewLabel.FOREGROUND_COLOR_PROPERTY_NAME)) {
+            preview.setForeground(template.getColor(ThemeData.EDITOR_FOREGROUND_COLOR));
+            preview.setSelectedTextColor(template.getColor(ThemeData.EDITOR_SELECTED_FOREGROUND_COLOR));
+            preview.setCaretColor(template.getColor(ThemeData.EDITOR_FOREGROUND_COLOR));
+        }
+        preview.repaint();
+    }
+
 
 
     // - Modification management ---------------------------------------------------------

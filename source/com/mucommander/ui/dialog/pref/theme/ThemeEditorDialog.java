@@ -36,7 +36,7 @@ public class ThemeEditorDialog extends PreferencesDialog {
     // - Action listening -------------------------------------------------------
     // --------------------------------------------------------------------------
     private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(580,0);
-    private final static Dimension MAXIMUM_DIALOG_DIMENSION = new Dimension(620,480);
+    private final static Dimension MAXIMUM_DIALOG_DIMENSION = new Dimension(620,500);
 
     private ThemeData data;
     private Theme     theme;

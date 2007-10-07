@@ -117,6 +117,7 @@ class FilePreviewPanel extends JScrollPane implements PropertyChangeListener {
      */
     private class PreviewTable extends JTable {
         private PreviewCellRenderer cellRenderer;
+        private Dimension           preferredSize;
 
         /**
          * Creates a new preview table.
@@ -181,12 +182,16 @@ class FilePreviewPanel extends JScrollPane implements PropertyChangeListener {
         /**
          * Returns the table's preferred size.
          */
-        public Dimension getPreferredSize() {return new Dimension(getIconWidth() + getLabelWidth() + 10, getModel().getRowCount()*getRowHeight());}
+        public Dimension getPreferredSize() {return new Dimension(getIconWidth() + 2 * getLabelWidth(), getModel().getRowCount()*getRowHeight());}
 
         /**
          * Returns the table's preferred size.
          */
-        public Dimension getPreferredScrollableViewportSize() {return getPreferredSize();}
+        public Dimension getPreferredScrollableViewportSize() {
+            if(preferredSize == null)
+                preferredSize = getPreferredSize();
+            return preferredSize;
+        }
 
         /**
          * Initialises the row height depending on the font.
