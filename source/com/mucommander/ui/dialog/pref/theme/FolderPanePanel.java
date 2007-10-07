@@ -88,7 +88,7 @@ class FolderPanePanel extends ThemeEditorPanel {
         // Initialises the quicksearch panel.
         panel = new ProportionalGridPanel(4);
         addLabelRow(panel);
-        addColorButtonRow(panel, null, "theme_editor.quick_search.unmatched_file",
+        addColorButtonRow(panel, chooser, "theme_editor.quick_search.unmatched_file",
                           ThemeData.FILE_TABLE_UNMATCHED_FOREGROUND_COLOR,
                           ThemeData.FILE_TABLE_UNMATCHED_BACKGROUND_COLOR);
         quickSearchPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
