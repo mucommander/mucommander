@@ -36,6 +36,7 @@ import com.mucommander.ui.theme.Theme;
 import com.mucommander.ui.theme.ThemeManager;
 import com.mucommander.ui.viewer.EditorFrame;
 import com.mucommander.ui.viewer.ViewerFrame;
+import com.mucommander.ui.dialog.pref.theme.ThemeEditorDialog;
 
 import javax.swing.*;
 import javax.swing.event.MenuEvent;
@@ -477,6 +478,8 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
             Iterator themes = ThemeManager.availableThemes();
             Theme theme;
             JCheckBoxMenuItem item;
+            themesMenu.add(new JMenuItem(new EditCurrentThemeAction()));
+            themesMenu.add(new JSeparator());
             while(themes.hasNext()) {
                 theme = (Theme)themes.next();
                 item = new JCheckBoxMenuItem(new ChangeCurrentThemeAction(theme));
@@ -513,6 +516,16 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
             catch(IllegalArgumentException e) {
                 JOptionPane.showMessageDialog(mainFrame, Translator.get("theme_could_not_be_loaded"), Translator.get("error"), JOptionPane.ERROR_MESSAGE);
             }
+        }
+    }
+
+    /**
+     * Actions that edits the current theme.
+     */
+    private class EditCurrentThemeAction extends AbstractAction {
+        public EditCurrentThemeAction() {super(Translator.get("prefs_dialog.edit_current_theme"));}
+        public void actionPerformed(ActionEvent actionEvent) {
+            new ThemeEditorDialog(mainFrame, ThemeManager.getCurrentTheme()).editTheme();
         }
     }
 }
