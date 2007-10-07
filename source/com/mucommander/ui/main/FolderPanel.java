@@ -537,10 +537,22 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
      * {@link com.mucommander.ui.main.table.FileTable.QuickSearch} when a quick search is over.
      */
     public void undimBackground() {
+        Color newColor;
+
+        // Identifies the new background color.
         if(fileTable.hasFocus())
-            scrollPane.getViewport().setBackground(backgroundColor);
+            newColor = backgroundColor;
         else
-            scrollPane.getViewport().setBackground(unfocusedBackgroundColor);
+            newColor = unfocusedBackgroundColor;
+
+        // If the old and new background color differ, set the new background
+        // color.
+        // Otherwise, repaint the table - if we were to skip that step, quicksearch
+        // cancellation might result in a corrupt display.
+        if(newColor.equals(scrollPane.getViewport().getBackground()))
+            fileTable.repaint();
+        else
+            scrollPane.getViewport().setBackground(newColor);
     }
 
 
