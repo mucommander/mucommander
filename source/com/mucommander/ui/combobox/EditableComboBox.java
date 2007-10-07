@@ -314,9 +314,8 @@ public class EditableComboBox extends SaneComboBox {
     }
 
     public void setFont(Font font) {
-        if(renderer == null)
-	    super.setFont(font);
-        else {
+        super.setFont(font);
+        if(renderer != null) {
             renderer.setFont(font);
             textField.setFont(font);
         }
