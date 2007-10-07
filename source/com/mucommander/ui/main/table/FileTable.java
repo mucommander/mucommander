@@ -1687,6 +1687,7 @@ public class FileTable extends JTable implements Columns, MouseListener, MouseMo
                 else
                     rowToSelect = 0;
                 selectRow(currentRow = rowToSelect);
+                fireSelectedFileChangedEvent();
 
                 // Restore previously marked files (if any / current folder hasn't changed)
                 if(markedFiles != null) {
