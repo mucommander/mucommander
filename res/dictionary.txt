@@ -8819,6 +8819,13 @@ prefs_dialog.use_system_file_icons.applications:DE:Nur für Programme
 
 
 
+prefs_dialog.edit_current_theme:EN:Edit current theme
+prefs_dialog.edit_current_theme:FR:Editer le thème courrant
+# Translation missing
+
+
+
+
 
 
 prefs_dialog.themes:EN:Themes
