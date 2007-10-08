@@ -546,35 +546,40 @@ public class FileFactory {
      * Returns a variation of the given filename, appending a pseudo-unique ID to the filename's prefix while keeping
      * the same filename extension.
      */
-    private static String getFilenameVariation(String desiredName) {
-        int lastDotPos = desiredName.lastIndexOf('.');
-        int len = desiredName.length();
+    private static String getFilenameVariation(String filename) {
+        int lastDotPos = filename.lastIndexOf('.');
+        int len = filename.length();
         String nameSuffix = "_"+System.currentTimeMillis()+(new Random().nextInt(10000));
 
         if(lastDotPos==-1)
-            desiredName += nameSuffix;
+            filename += nameSuffix;
         else
-            desiredName = desiredName.substring(0, lastDotPos) + nameSuffix + desiredName.substring(lastDotPos, len);
+            filename = filename.substring(0, lastDotPos) + nameSuffix + filename.substring(lastDotPos, len);
 
-        return desiredName;
+        return filename;
     }
 
     /**
-     * Creates and returns a temporary local file using the desired name.
+     * Creates and returns a temporary local file using the desired filename. If a file with this name already exists
+     * in the temp directory, the filename's prefix (name without extension) will be appended an ID. The filename's
+     * extension will however always be preserved.
      *
-     * @param desiredName the desired filename for the temporary file. If a file already exists with this name
-     * in the temp directory, the filename's prefix (name without extension) will be appended an ID,
-     * but the filename's extension will always be preserved.
+     * <p>The returned file may be a {@link LocalFile} or a {@link AbstractArchiveFile} if the extension corresponds
+     * to a registered archive format.</p>
+     *
+     * @param desiredFilename the desired filename for the temporary file. If a file with this name already exists
+     * in the temp directory, the filename's prefix (name without extension) will be appended an ID, but the filename's
+     * extension will always be preserved.
      * @param deleteOnExit if <code>true</code>, the temporary file will be deleted upon normal termination of the JVM
-     * @return the temporary AbstractFile
+     * @return the temporary file, may be a LocalFile or an AbstractArchiveFile if the filename's extension corresponds
+     * to a registered archive format.
      */
-    public static AbstractFile getTemporaryFile(String desiredName, boolean deleteOnExit) {
+    public static AbstractFile getTemporaryFile(String desiredFilename, boolean deleteOnExit) {
         // Attempt to use the desired name
-        File tempFile = new File(TEMP_DIRECTORY, desiredName);
+        File tempFile = new File(TEMP_DIRECTORY, desiredFilename);
 
-        if(tempFile.exists()) {
-            tempFile = new File(TEMP_DIRECTORY, getFilenameVariation(desiredName));
-        }
+        if(tempFile.exists())
+            tempFile = new File(TEMP_DIRECTORY, getFilenameVariation(desiredFilename));
 
         if(deleteOnExit)
             tempFile.deleteOnExit();

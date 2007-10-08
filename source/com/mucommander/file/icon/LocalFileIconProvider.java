@@ -50,6 +50,8 @@ public abstract class LocalFileIconProvider implements FileIconProvider {
      */
     protected LocalFile createTempLocalFile(AbstractFile nonLocalFile) {
         try {
+            // Note: the returned temporary file may be an AbstractArchiveFile if the filename's extension corresponds
+            // to a registered archive format
             LocalFile tempFile = (LocalFile)(FileFactory.getTemporaryFile(nonLocalFile.getName(), false).getAncestor(LocalFile.class));
 
             // Create a directory
