@@ -26,12 +26,17 @@ import com.mucommander.file.FileFactory;
 import com.mucommander.file.util.FileSet;
 import com.mucommander.job.DeleteJob;
 import com.mucommander.text.Translator;
-import com.mucommander.ui.dialog.QuestionDialog;
+import com.mucommander.ui.button.ButtonChoicePanel;
+import com.mucommander.ui.button.CollapseExpandButton;
+import com.mucommander.ui.dialog.FocusDialog;
 import com.mucommander.ui.layout.InformationPane;
+import com.mucommander.ui.layout.YBoxPanel;
 import com.mucommander.ui.main.MainFrame;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
@@ -45,13 +50,13 @@ import java.awt.event.ItemListener;
  * @see com.mucommander.ui.action.DeleteAction
  * @author Maxence Bernard
  */
-public class DeleteDialog extends QuestionDialog implements ItemListener {
+public class DeleteDialog extends FocusDialog implements ItemListener, ActionListener {
 
-    private final static int DELETE_ACTION = 0;
-    private final static int CANCEL_ACTION = 1;
-	
-    // Dialog size constraints
-    private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(320,0);	
+    /** The MainFrame that created this dialog */
+    private MainFrame mainFrame;
+
+    /** The files to be deleted */
+    private FileSet files;
 
     /** Should files be moved to the trash or permanently erased */
     private boolean moveToTrash;
@@ -62,9 +67,23 @@ public class DeleteDialog extends QuestionDialog implements ItemListener {
     /** Informs the user about the consequences of deleting files, based on the current 'Move to trash' choice */
     private InformationPane informationPane;
 
-    
+    /** The button that confirms deletion */
+    private JButton deleteButton;
+
+    /** Dialog size constraints */
+    private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(320,0);
+
+    /** Number of files displayed in the 'file details' text area */
+    private final static int NB_FILE_DETAILS_ROWS = 10;
+
+
     public DeleteDialog(MainFrame mainFrame, FileSet files) {
         super(mainFrame, Translator.get("delete"), null);
+
+        this.mainFrame = mainFrame;
+        this.files = files;
+
+        YBoxPanel mainPanel = new YBoxPanel();
 
         // Allow 'Move to trash' option only if:
         // - the current platform has a trash
@@ -85,30 +104,72 @@ public class DeleteDialog extends QuestionDialog implements ItemListener {
         informationPane = new InformationPane();
         updateInformationPane();
 
-        init(mainFrame,
-              informationPane,
-              new String[] {Translator.get("delete"), Translator.get("cancel")},
-              new int[] {DELETE_ACTION, CANCEL_ACTION},
-              0);
+        mainPanel.add(informationPane);
+        mainPanel.addSpace(10);
+
+        JScrollPane detailsPane = new JScrollPane(createFileDetailsArea(files), JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+
+        JPanel borderPanel = new JPanel(new BorderLayout());
+        borderPanel.add(new CollapseExpandButton(Translator.get("nb_files", ""+files.size()), detailsPane, this, false), BorderLayout.WEST);
+
+        // Create buttons and button panel
+        deleteButton = new JButton(Translator.get("delete"));
+        deleteButton.addActionListener(this);
+        JButton cancelButton = new JButton(Translator.get("cancel"));
+        cancelButton.addActionListener(this);
+
+        borderPanel.add(new ButtonChoicePanel(new JButton[]{deleteButton, cancelButton}, 2, getRootPane()), BorderLayout.EAST);
+        mainPanel.add(borderPanel);
+
+        mainPanel.add(detailsPane);
 
         if(moveToTrashCheckBox!=null)
-            addCheckBox(moveToTrashCheckBox);
-        
+            mainPanel.add(moveToTrashCheckBox);
+
+        getContentPane().add(mainPanel);
+
+        // Give initial keyboard focus to the 'Delete' button
+        setInitialFocusComponent(deleteButton);
+
+        // Call dispose() when dialog is closed
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+
+        // Size dialog and show it to the screen
         setMinimumSize(MINIMUM_DIALOG_DIMENSION);
         setResizable(false);
-
-        if(getActionValue()==DELETE_ACTION) {
-            if(moveToTrashCheckBox!=null) {
-                // Save the 'Move to trash' option choice in the preferences, will be used next time this dialog is invoked.
-                MuConfiguration.setVariable(MuConfiguration.DELETE_TO_TRASH, moveToTrash);
-            }
-
-            // Starts deleting files
-            ProgressDialog progressDialog = new ProgressDialog(mainFrame, Translator.get("delete_dialog.deleting"));
-            DeleteJob deleteJob = new DeleteJob(progressDialog, mainFrame, files, moveToTrash);
-            progressDialog.start(deleteJob);
-        }
+        showDialog();
     }
+
+
+    /**
+     * Creates the 'File details' text area that shows all the files that marked for deletion.
+     *
+     * @param files the files to be deleted
+     * @return the created text area
+     */
+    private JTextArea createFileDetailsArea(FileSet files) {
+        JTextArea detailsArea = new JTextArea(NB_FILE_DETAILS_ROWS, 0);
+        detailsArea.setEditable(false);
+
+        // Use a smaller font than JTextArea's default one
+        Font font = detailsArea.getFont();
+        detailsArea.setFont(font.deriveFont(font.getStyle(), font.getSize()-2));
+
+        // Initializes the text area's contents
+        int nbFiles = files.size();
+        StringBuffer sb = new StringBuffer();
+        AbstractFile file;
+        for(int i=0; i<nbFiles; i++) {
+            file = files.fileAt(i);
+            sb.append(file.getName());
+            if(i!=nbFiles-1)
+                sb.append('\n');
+        }
+        detailsArea.append(sb.toString());
+
+        return detailsArea;
+    }
+
 
     /**
      * Updates the information pane to reflect the current 'Move to trash' choice.
@@ -128,5 +189,27 @@ public class DeleteDialog extends QuestionDialog implements ItemListener {
         moveToTrash = moveToTrashCheckBox.isSelected();
         updateInformationPane();
         pack();
+    }
+
+
+    ///////////////////////////////////
+    // ActionListener implementation //
+    ///////////////////////////////////
+
+    public void actionPerformed(ActionEvent e) {
+        // Start by disposing this dialog
+        dispose();
+
+        if(e.getSource()==deleteButton) {
+            if(moveToTrashCheckBox!=null) {
+                // Save the 'Move to trash' option choice in the preferences, will be used next time this dialog is invoked.
+                MuConfiguration.setVariable(MuConfiguration.DELETE_TO_TRASH, moveToTrash);
+            }
+
+            // Starts deleting files
+            ProgressDialog progressDialog = new ProgressDialog(mainFrame, Translator.get("delete_dialog.deleting"));
+            DeleteJob deleteJob = new DeleteJob(progressDialog, mainFrame, files, moveToTrash);
+            progressDialog.start(deleteJob);
+        }
     }
 }
