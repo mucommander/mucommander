@@ -7380,6 +7380,12 @@ theme_editor.shell_tab:CS:Shell
 
 
 
+theme_editor.shell_history_tab:EN:Shell history
+theme_editor.shell_history_tab:FR:Historique du shell
+# Translation missing
+
+
+
 
 
 theme_editor.statusbar_tab:EN:Status bar
@@ -7539,20 +7545,20 @@ theme_editor.font:pt_BR:Fonte
 theme_editor.font:NL:Font
 theme_editor.font:SK:Písmo
 
-theme_editor.shell_font:EN:Shell font
-theme_editor.shell_font:FR:Fonte du shell
-theme_editor.shell_font:HU:Végrehajtás betűtípus
-theme_editor.shell_font:NL:Shell font
-theme_editor.shell_font:zh_CN:Shell字体
-theme_editor.shell_font:zh_TW:Shell 字型
-theme_editor.shell_font:RO:Font linie de comandă
-theme_editor.shell_font:ES:Fuente de consola
-theme_editor.shell_font:pt_BR:Fonte do shell
-theme_editor.shell_font:SK:Písmo príkazového riadku
-theme_editor.shell_font:SI:Pisava ogrodja
-theme_editor.shell_font:RU:Шрифт в оболочке
-theme_editor.shell_font:DE:Kommandozeilen-Zeichensatz
-theme_editor.shell_font:CS:Písmo shellu
+#theme_editor.shell_font:EN:Shell font
+#theme_editor.shell_font:FR:Fonte du shell
+#theme_editor.shell_font:HU:Végrehajtás betűtípus
+#theme_editor.shell_font:NL:Shell font
+#theme_editor.shell_font:zh_CN:Shell字体
+#theme_editor.shell_font:zh_TW:Shell 字型
+#theme_editor.shell_font:RO:Font linie de comandă
+#theme_editor.shell_font:ES:Fuente de consola
+#theme_editor.shell_font:pt_BR:Fonte do shell
+#theme_editor.shell_font:SK:Písmo príkazového riadku
+#theme_editor.shell_font:SI:Pisava ogrodja
+#theme_editor.shell_font:RU:Шрифт в оболочке
+#theme_editor.shell_font:DE:Kommandozeilen-Zeichensatz
+#theme_editor.shell_font:CS:Písmo shellu
 # Translation missing
 
 
@@ -7560,20 +7566,20 @@ theme_editor.shell_font:CS:Písmo shellu
 
 
 
-theme_editor.history_font:EN:History font
-theme_editor.history_font:FR:Fonte de l'historique
-theme_editor.history_font:HU:Előzmények betűtípus
-theme_editor.history_font:NL:Font van Geschiedenis
-theme_editor.history_font:zh_CN:历史字体
-theme_editor.history_font:zh_TW:歷史記錄字型
-theme_editor.history_font:RO:Font pentru istorie
-theme_editor.history_font:ES:Fuente de historial
-theme_editor.history_font:pt_BR:Fonte do histórico
-theme_editor.history_font:SK:Písmo histórie
-theme_editor.history_font:SI:Pisava zgodovine
-theme_editor.history_font:RU:Шрифт буфера команд
-theme_editor.history_font:DE:Historien-Zeichensatz
-theme_editor.history_font:CS:Písmo historie
+#theme_editor.history_font:EN:History font
+#theme_editor.history_font:FR:Fonte de l'historique
+#theme_editor.history_font:HU:Előzmények betűtípus
+#theme_editor.history_font:NL:Font van Geschiedenis
+#theme_editor.history_font:zh_CN:历史字体
+#theme_editor.history_font:zh_TW:歷史記錄字型
+#theme_editor.history_font:RO:Font pentru istorie
+#theme_editor.history_font:ES:Fuente de historial
+#theme_editor.history_font:pt_BR:Fonte do histórico
+#theme_editor.history_font:SK:Písmo histórie
+#theme_editor.history_font:SI:Pisava zgodovine
+#theme_editor.history_font:RU:Шрифт буфера команд
+#theme_editor.history_font:DE:Historien-Zeichensatz
+#theme_editor.history_font:CS:Písmo historie
 # Translation missing
 
 
@@ -7943,40 +7949,40 @@ theme_editor.colors:CS:Barvy
 
 
 
-theme_editor.shell_colors:EN:Shell colors
-theme_editor.shell_colors:en_GB:Shell colours
-theme_editor.shell_colors:FR:Couleurs du shell
-theme_editor.shell_colors:RO:Culori pentru shell
-theme_editor.shell_colors:SI:Barve v ukazni vrstici
-theme_editor.shell_colors:IT:Colori del terminale
-theme_editor.shell_colors:CS:Barvy shellu
-theme_editor.shell_colors:zh_TW:Shell 顏色
-theme_editor.shell_colors:DE:Farbe Eingabeauforderung
-theme_editor.shell_colors:zh_CN:Shell 颜色
-theme_editor.shell_colors:RU:Системные цвета
-theme_editor.shell_colors:ES:Colores de consola
-theme_editor.shell_colors:PL:Kolor okna terminala (shell)
-theme_editor.shell_colors:KR:쉘 색상
-theme_editor.shell_colors:pt_BR:Cor do prompt de comandos (terminal)
-theme_editor.shell_colors:NL:Kleuren van de shell
-theme_editor.shell_colors:SK:Farba terminálu (shell)
-theme_editor.shell_colors:HU:Végrehajtás színek
+#theme_editor.shell_colors:EN:Shell colors
+#theme_editor.shell_colors:en_GB:Shell colours
+#theme_editor.shell_colors:FR:Couleurs du shell
+#theme_editor.shell_colors:RO:Culori pentru shell
+#theme_editor.shell_colors:SI:Barve v ukazni vrstici
+#theme_editor.shell_colors:IT:Colori del terminale
+#theme_editor.shell_colors:CS:Barvy shellu
+#theme_editor.shell_colors:zh_TW:Shell 顏色
+#theme_editor.shell_colors:DE:Farbe Eingabeauforderung
+#theme_editor.shell_colors:zh_CN:Shell 颜色
+#theme_editor.shell_colors:RU:Системные цвета
+#theme_editor.shell_colors:ES:Colores de consola
+#theme_editor.shell_colors:PL:Kolor okna terminala (shell)
+#theme_editor.shell_colors:KR:쉘 색상
+#theme_editor.shell_colors:pt_BR:Cor do prompt de comandos (terminal)
+#theme_editor.shell_colors:NL:Kleuren van de shell
+#theme_editor.shell_colors:SK:Farba terminálu (shell)
+#theme_editor.shell_colors:HU:Végrehajtás színek
 
-theme_editor.history_colors:EN:History colors
-theme_editor.history_colors:en_GB:History colours
-theme_editor.history_colors:FR:Couleurs de l'historique
-theme_editor.history_colors:HU:Előzmények színei
-theme_editor.history_colors:NL:Kleuren van geschiedenis
-theme_editor.history_colors:zh_CN:历史颜色
-theme_editor.history_colors:zh_TW:歷史記錄顏色
-theme_editor.history_colors:RO:Culori pentru istorie
-theme_editor.history_colors:ES:Colores del historial
-theme_editor.history_colors:pt_BR:Cores do histórico
-theme_editor.history_colors:SK:Farba histórie
-theme_editor.history_colors:SI:Barve v menuju Zgodovina
-theme_editor.history_colors:RU:Цвета буфера команд
-theme_editor.history_colors:DE:Historienfarbe
-theme_editor.history_colors:CS:Barvy historie
+#theme_editor.history_colors:EN:History colors
+#theme_editor.history_colors:en_GB:History colours
+#theme_editor.history_colors:FR:Couleurs de l'historique
+#theme_editor.history_colors:HU:Előzmények színei
+#theme_editor.history_colors:NL:Kleuren van geschiedenis
+#theme_editor.history_colors:zh_CN:历史颜色
+#theme_editor.history_colors:zh_TW:歷史記錄顏色
+#theme_editor.history_colors:RO:Culori pentru istorie
+#theme_editor.history_colors:ES:Colores del historial
+#theme_editor.history_colors:pt_BR:Cores do histórico
+#theme_editor.history_colors:SK:Farba histórie
+#theme_editor.history_colors:SI:Barve v menuju Zgodovina
+#theme_editor.history_colors:RU:Цвета буфера команд
+#theme_editor.history_colors:DE:Historienfarbe
+#theme_editor.history_colors:CS:Barvy historie
 # Translation missing
 
 
