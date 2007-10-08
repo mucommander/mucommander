@@ -121,6 +121,11 @@ Bug fixes:
 - Fixed theme color choosers not displaying the right font in their preview.
 - Fixed incorrectly reported total and free space information under Unix-based
   platforms when the mount point of the volume would contain space characters.
+- Fixed quicksearch refresh issue when the 'unmatched' background and regular
+  background were the same.
+- Fixed editable combo-boxes not reacting well to font change.
+- Fixed folder panel borders failing to refresh properly when their color
+  was changed.
 
 Known issues:
 - The bookmarks file system doesn't allow users to specify which credentials
