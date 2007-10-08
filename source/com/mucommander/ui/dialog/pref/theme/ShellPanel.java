@@ -65,6 +65,7 @@ class ShellPanel extends ThemeEditorPanel implements PropertyChangeListener {
 
         fontChooser = createFontChooser("theme_editor.font", fontId);
         mainPanel.add(fontChooser);
+        mainPanel.addSpace(10);
         addFontChooserListener(fontChooser, fontListener);
 
         colorPanel = new ProportionalGridPanel(3);
@@ -145,12 +146,12 @@ class ShellPanel extends ThemeEditorPanel implements PropertyChangeListener {
         tabbedPane   = new JTabbedPane();
         previewPanel = createPreviewPanel();
 
-        tabbedPane.add("Shell", createConfigurationPanel(ThemeData.SHELL_FONT, ThemeData.SHELL_FOREGROUND_COLOR, ThemeData.SHELL_BACKGROUND_COLOR,
-                                                         ThemeData.SHELL_SELECTED_FOREGROUND_COLOR, ThemeData.SHELL_SELECTED_BACKGROUND_COLOR, shellPreview));
-        tabbedPane.add("Shell history", createConfigurationPanel(ThemeData.SHELL_HISTORY_FONT, ThemeData.SHELL_HISTORY_FOREGROUND_COLOR,
-                                                                 ThemeData.SHELL_HISTORY_BACKGROUND_COLOR,
-                                                                 ThemeData.SHELL_HISTORY_SELECTED_FOREGROUND_COLOR, ThemeData.SHELL_HISTORY_SELECTED_BACKGROUND_COLOR,
-                                                                 historyPreview));
+        tabbedPane.add(Translator.get("theme_editor.shell_tab"),
+                       createConfigurationPanel(ThemeData.SHELL_FONT, ThemeData.SHELL_FOREGROUND_COLOR, ThemeData.SHELL_BACKGROUND_COLOR,
+                                                ThemeData.SHELL_SELECTED_FOREGROUND_COLOR, ThemeData.SHELL_SELECTED_BACKGROUND_COLOR, shellPreview));
+        tabbedPane.add(Translator.get("theme_editor.shell_history_tab"),
+                       createConfigurationPanel(ThemeData.SHELL_HISTORY_FONT, ThemeData.SHELL_HISTORY_FOREGROUND_COLOR, ThemeData.SHELL_HISTORY_BACKGROUND_COLOR,
+                                                ThemeData.SHELL_HISTORY_SELECTED_FOREGROUND_COLOR, ThemeData.SHELL_HISTORY_SELECTED_BACKGROUND_COLOR, historyPreview));
 
         mainPanel = new JPanel(new BorderLayout());
         mainPanel.add(tabbedPane, BorderLayout.CENTER);
@@ -176,10 +177,6 @@ class ShellPanel extends ThemeEditorPanel implements PropertyChangeListener {
             historyPreview.setForeground(template.getColor(ThemeData.SHELL_HISTORY_FOREGROUND_COLOR));
             historyPreview.setSelectionForeground(template.getColor(ThemeData.SHELL_HISTORY_SELECTED_FOREGROUND_COLOR));
         }
-        else
-            return;
-        shellPreview.repaint();
-        historyPreview.repaint();
     }
 
 
