@@ -400,8 +400,11 @@ class AppearancePanel extends PreferencesPanel implements ActionListener {
         MuConfiguration.setVariable(MuConfiguration.TABLE_ICON_SCALE , scaleFactor);
 
         // Sets the current theme.
-        ThemeManager.setCurrentTheme((Theme)themeComboBox.getSelectedItem());
-        resetThemeButtons((Theme)themeComboBox.getSelectedItem());
+        if(!ThemeManager.isCurrentTheme((Theme)themeComboBox.getSelectedItem())) {
+            ThemeManager.setCurrentTheme((Theme)themeComboBox.getSelectedItem());
+            resetThemeButtons((Theme)themeComboBox.getSelectedItem());
+            themeComboBox.repaint();
+        }
 
         // Set system icons policy
         int comboIndex = useSystemFileIconsComboBox.getSelectedIndex();
@@ -431,7 +434,6 @@ class AppearancePanel extends PreferencesPanel implements ActionListener {
             return;
 
         setTypeLabel(theme);
-
 
         if(theme.getType() != Theme.CUSTOM_THEME) {
             renameButton.setEnabled(false);
