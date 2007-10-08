@@ -1004,13 +1004,17 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
         switch(event.getColorId()) {
         case Theme.FILE_TABLE_BORDER_COLOR:
             borderColor = event.getColor();
-            if(fileTable.hasFocus())
+            if(fileTable.hasFocus()) {
                 ((MutableLineBorder)scrollPane.getBorder()).setLineColor(borderColor);
+                scrollPane.repaint();
+            }
             break;
         case Theme.FILE_TABLE_INACTIVE_BORDER_COLOR:
             unfocusedBorderColor = event.getColor();
-            if(!fileTable.hasFocus())
+            if(!fileTable.hasFocus()) {
                 ((MutableLineBorder)scrollPane.getBorder()).setLineColor(unfocusedBorderColor);
+                scrollPane.repaint();
+            }
             break;
         case Theme.FILE_TABLE_BACKGROUND_COLOR:
             backgroundColor = event.getColor();
