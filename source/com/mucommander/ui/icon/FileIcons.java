@@ -78,7 +78,7 @@ public class FileIcons {
     private static FileIconProvider systemFileIconProvider;
 
     /** Current dimension of returned file icons */
-    private static Dimension iconDimension;
+    private static Dimension iconDimension = new Dimension((int)(BASE_ICON_DIMENSION * DEFAULT_SCALE_FACTOR), (int)(BASE_ICON_DIMENSION * DEFAULT_SCALE_FACTOR));;
 
 
     /**
