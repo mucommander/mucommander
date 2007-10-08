@@ -50,7 +50,7 @@ public abstract class LocalFileIconProvider implements FileIconProvider {
      */
     protected LocalFile createTempLocalFile(AbstractFile nonLocalFile) {
         try {
-            LocalFile tempFile = (LocalFile)FileFactory.getTemporaryFile(nonLocalFile.getName(), false);
+            LocalFile tempFile = (LocalFile)(FileFactory.getTemporaryFile(nonLocalFile.getName(), false).getAncestor(LocalFile.class));
 
             // Create a directory
             if(nonLocalFile.isDirectory())
