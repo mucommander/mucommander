@@ -97,14 +97,13 @@ public class ProportionalSplitPane extends JSplitPane implements ComponentListen
      * Updates the divider component's location to keep the current proportional divider location. 
      */
     public void updateDividerLocation() {
-//if(Debug.ON) Debug.trace("1: lastDividerLocation="+lastDividerLocation+" dimension="+(getOrientation()==HORIZONTAL_SPLIT?getWidth():getHeight())+" isVisible="+isVisible());
-
         if(!window.isVisible())
             return;
+
+        // Reset the last divider location to make sure that the next call to moveComponent doesn't
+        // needlessly recalculate the split ratio.
+        lastDividerLocation = -1;
         setDividerLocation((int)(splitRatio*(getOrientation()==HORIZONTAL_SPLIT?getWidth():getHeight())));
-        // Remember last divider's location (see componentMoved())
-        lastDividerLocation = getDividerLocation();
-//if(Debug.ON) Debug.trace("2: lastDividerLocation="+lastDividerLocation);
     }
 
 
@@ -116,7 +115,6 @@ public class ProportionalSplitPane extends JSplitPane implements ComponentListen
      */
     public void setSplitRatio(float splitRatio) {
         this.splitRatio = splitRatio;
-        lastDividerLocation = -1;
         updateDividerLocation();
     }
 
@@ -179,25 +177,20 @@ public class ProportionalSplitPane extends JSplitPane implements ComponentListen
     }
 
     public void componentMoved(ComponentEvent e) {
-        Object source = e.getSource();
-
-        // Called when divider (or window) has been moved
-        if(source== getDividerComponent()) {
-//            if(Debug.ON) Debug.trace("called on splitPane divider, lastDividerLocation="+lastDividerLocation+" splitPane.getDividerLocation()="+getDividerLocation());
-
+        if(e.getSource() == getDividerComponent()) {
             // Ignore this event if the divider's location hasn't changed, or if the initial divider's location
             // hasn't been set yet
-            if(lastDividerLocation==-1 || lastDividerLocation==getDividerLocation()) {
-//                if(Debug.ON) Debug.trace("same divider location, ignoring event");
+            if(lastDividerLocation == -1) {
+                lastDividerLocation = getDividerLocation();
                 return;
             }
+            else if(lastDividerLocation==getDividerLocation())
+                return;
 
-//            if(Debug.ON) Debug.trace("old ratio="+splitRatio);
 
             // Divider has been moved, calculate new split ratio
             lastDividerLocation = getDividerLocation();
-            splitRatio = lastDividerLocation/(float)(getOrientation()==HORIZONTAL_SPLIT?getWidth():getHeight());
-
+            splitRatio = lastDividerLocation / (float)(getOrientation()==HORIZONTAL_SPLIT?getWidth():getHeight());
 //            if(Debug.ON) Debug.trace("new ratio="+splitRatio);
         }
     }
