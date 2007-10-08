@@ -126,6 +126,7 @@ Bug fixes:
 - Fixed editable combo-boxes not reacting well to font change.
 - Fixed folder panel borders failing to refresh properly when their color
   was changed.
+- Fixed double "Download or browse" dialogs when opening http files.
 
 Known issues:
 - The bookmarks file system doesn't allow users to specify which credentials
