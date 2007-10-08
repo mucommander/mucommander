@@ -67,7 +67,7 @@ public class QuitDialog extends QuestionDialog {
               0);
 		
         JCheckBox showNextTimeCheckBox = new JCheckBox(Translator.get("quit_dialog.show_next_time"), true);
-        addCheckBox(showNextTimeCheckBox);
+        addComponent(showNextTimeCheckBox);
 		
         setMinimumSize(MINIMUM_DIALOG_DIMENSION);
 

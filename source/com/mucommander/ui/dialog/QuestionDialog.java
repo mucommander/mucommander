@@ -130,10 +130,12 @@ public class QuestionDialog extends FocusDialog implements ActionListener {
 	
 
     /**
-     * Adds a checkbox to this dialog, which will appear under the buttons panel.
+     * Adds a component to this dialog, under the buttons panel.
+     *
+     * @param comp the component to add
      */
-    protected void addCheckBox(JCheckBox checkBox) {
-        mainPanel.add(checkBox);
+    protected void addComponent(JComponent comp) {
+        mainPanel.add(comp);
     }
 	
 	

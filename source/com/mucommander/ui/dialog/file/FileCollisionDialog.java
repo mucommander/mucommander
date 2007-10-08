@@ -185,7 +185,7 @@ public class FileCollisionDialog extends QuestionDialog {
         // 'Apply to all' is available only for 'destination file already exists' collision type
         if(multipleFilesMode && collisionType==FileCollisionChecker.DESTINATION_FILE_ALREADY_EXISTS) {
             applyToAllCheckBox = new JCheckBox(Translator.get("apply_to_all"));
-            addCheckBox(applyToAllCheckBox);
+            addComponent(applyToAllCheckBox);
         }
 
         // Send a system notification if a notifier is available and enabled

@@ -145,7 +145,7 @@ public class CheckVersionDialog extends QuestionDialog implements Runnable {
         JCheckBox showNextTimeCheckBox = new JCheckBox(Translator.get("prefs_dialog.check_for_updates_on_startup"),
                                                        MuConfiguration.getVariable(MuConfiguration.CHECK_FOR_UPDATE,
                                                                                         MuConfiguration.DEFAULT_CHECK_FOR_UPDATE));
-        addCheckBox(showNextTimeCheckBox);
+        addComponent(showNextTimeCheckBox);
 
         setMinimumSize(MINIMUM_DIALOG_DIMENSION);
 		
