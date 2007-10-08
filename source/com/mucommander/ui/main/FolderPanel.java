@@ -685,8 +685,8 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
          * the preferences.
          */
         private boolean followCanonicalPath(AbstractFile file) {
-            if(MuConfiguration.getVariable(MuConfiguration.CD_FOLLOWS_SYMLINKS, MuConfiguration.DEFAULT_CD_FOLLOWS_SYMLINKS)
-                    || file.getURL().getProtocol().equals(FileProtocols.HTTP) && !file.getAbsolutePath(false).equals(file.getCanonicalPath(false)))
+            if((MuConfiguration.getVariable(MuConfiguration.CD_FOLLOWS_SYMLINKS, MuConfiguration.DEFAULT_CD_FOLLOWS_SYMLINKS)
+                || file.getURL().getProtocol().equals(FileProtocols.HTTP)) && !file.getAbsolutePath(false).equals(file.getCanonicalPath(false)))
                 return true;
 
             return false;
@@ -821,6 +821,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
                                                                                0);
 
                                     int ret = dialog.getActionValue();
+
                                     if(ret==-1 || ret==CANCEL_ACTION)
                                         break;
 
