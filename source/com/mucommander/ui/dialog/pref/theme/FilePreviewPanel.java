@@ -146,6 +146,7 @@ class FilePreviewPanel extends JScrollPane implements PropertyChangeListener {
             // Initialises the table header.
             getTableHeader().setResizingAllowed(false);
             getTableHeader().setReorderingAllowed(false);
+            ((DefaultTableCellRenderer)getTableHeader().getDefaultRenderer()).setHorizontalAlignment(SwingConstants.LEFT);
         }
 
         /**
