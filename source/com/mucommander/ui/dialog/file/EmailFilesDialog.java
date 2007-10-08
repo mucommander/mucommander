@@ -187,7 +187,7 @@ public class EmailFilesDialog extends FocusDialog implements ActionListener, Ite
             }
         }
         String text = 
-            Translator.get("email_dialog.nb_files", ""+nbSelected)
+            Translator.get("nb_files", ""+nbSelected)
             +(nbSelected==0?"":" ("+ SizeFormat.format(bytesTotal, SizeFormat.DIGITS_MEDIUM| SizeFormat.UNIT_LONG| SizeFormat.ROUND_TO_KB)+")");
         infoLabel.setText(text);
         infoLabel.repaint(100);

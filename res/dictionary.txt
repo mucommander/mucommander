@@ -990,6 +990,43 @@ sample_text:CS:Ukázkový text
 
 
 
+# %1 is replaced by a number of files, e.g. '5 files(s)'
+nb_files:EN:%1 file(s)
+nb_files:FR:%1 fichier(s)
+nb_files:DE:%1 Datei(en)
+nb_files:ES:%1 fichero(s)
+nb_files:CS:%1x soubor
+nb_files:zh_TW:%1 檔案
+nb_files:PL:%1 plik(i)
+nb_files:HU:%1 fájl
+nb_files:RU:%1 файл(ов)
+nb_files:zh_CN:%1 文件
+nb_files:SI:%1 datoteka(e)
+nb_files:RO:%1 fișier(e)
+nb_files:IT:%1 file
+nb_files:KR:%1 파일
+nb_files:pt_BR:%1 arquivo(s)
+nb_files:NL:%1 Bestand(en)
+nb_files:SK:%1 súbor(y)
+
+# %1 is replaced by a number of folders, e.g. '3 folder(s)'
+nb_folders:EN:%1 folder(s)
+nb_folders:FR:%1 dossier(s)
+nb_folders:DE:%1 Ordner
+nb_folders:ES:%1 directorio(s)
+nb_folders:CS:%1x složka
+nb_folders:zh_TW:%1 資料夾
+nb_folders:PL:%1 katalog(i)
+nb_folders:HU:%1 könyvtár
+nb_folders:RU:%1 каталог(ов)
+nb_folders:zh_CN:%1 文件夾
+nb_folders:SI:%1 mapa(e)
+nb_folders:RO:%1 directo(a)r(e)
+nb_folders:IT:%1 directory
+nb_folders:KR:%1 폴더
+nb_folders:pt_BR:%1 diretório(s)
+nb_folders:NL:%1 map(pen)
+nb_folders:SK:%1 priečinok(priečinky)
 
 
 ##########################
@@ -5316,24 +5353,6 @@ email_dialog.read_error:pt_BR:Não foi possível ler os arquivos no subdiretóri
 email_dialog.read_error:NL:Kan bestanen in onderliggende mappen niet lezen
 email_dialog.read_error:SK:Súbory vo vnorených priečinkoch sa nedajú čítať.
 
-email_dialog.nb_files:EN:%1 file(s)
-email_dialog.nb_files:FR:%1 fichier(s)
-email_dialog.nb_files:DE:%1 Datei(en)
-email_dialog.nb_files:ES:%1 fichero(s)
-email_dialog.nb_files:CS:%1x soubor
-email_dialog.nb_files:zh_TW:%1 檔案
-email_dialog.nb_files:PL:%1 plik(i)
-email_dialog.nb_files:HU:%1 fájl
-email_dialog.nb_files:RU:%1 файлов
-email_dialog.nb_files:zh_CN:%1 文件
-email_dialog.nb_files:SI:%1 datoteka(e)
-email_dialog.nb_files:RO:%1 fișier(e)
-email_dialog.nb_files:IT:%1 file
-email_dialog.nb_files:KR:%1 파일
-email_dialog.nb_files:pt_BR:%1 arquivo(s)
-email_dialog.nb_files:NL:%1 bestand(en)
-email_dialog.nb_files:SK:%1 súbor(y)
-
 email_dialog.sending:EN:Sending files
 email_dialog.sending:FR:Envoi en cours
 email_dialog.sending:DE:Sende Dateien
@@ -5911,42 +5930,6 @@ properties_dialog.contents:KR:내용
 properties_dialog.contents:pt_BR:Conteúdo
 properties_dialog.contents:NL:Inhoud
 properties_dialog.contents:SK:Obsah
-
-properties_dialog.nb_files:EN:%1 file(s)
-properties_dialog.nb_files:FR:%1 fichier(s)
-properties_dialog.nb_files:DE:%1 Datei(en)
-properties_dialog.nb_files:ES:%1 fichero(s)
-properties_dialog.nb_files:CS:%1x soubor
-properties_dialog.nb_files:zh_TW:%1 檔案
-properties_dialog.nb_files:PL:%1 plik(i)
-properties_dialog.nb_files:HU:%1 fájl
-properties_dialog.nb_files:RU:%1 файл(ов)
-properties_dialog.nb_files:zh_CN:%1 文件
-properties_dialog.nb_files:SI:%1 datoteka(e)
-properties_dialog.nb_files:RO:%1 fișier(e)
-properties_dialog.nb_files:IT:%1 file
-properties_dialog.nb_files:KR:%1 파일
-properties_dialog.nb_files:pt_BR:%1 arquivo(s)
-properties_dialog.nb_files:NL:%1 Bestand(en)
-properties_dialog.nb_files:SK:%1 súbor(y)
-
-properties_dialog.nb_folders:EN:%1 folder(s)
-properties_dialog.nb_folders:FR:%1 dossier(s)
-properties_dialog.nb_folders:DE:%1 Ordner
-properties_dialog.nb_folders:ES:%1 directorio(s)
-properties_dialog.nb_folders:CS:%1x složka
-properties_dialog.nb_folders:zh_TW:%1 資料夾
-properties_dialog.nb_folders:PL:%1 katalog(i)
-properties_dialog.nb_folders:HU:%1 könyvtár
-properties_dialog.nb_folders:RU:%1 каталог(ов)
-properties_dialog.nb_folders:zh_CN:%1 文件夾
-properties_dialog.nb_folders:SI:%1 mapa(e)
-properties_dialog.nb_folders:RO:%1 directo(a)r(e)
-properties_dialog.nb_folders:IT:%1 directory
-properties_dialog.nb_folders:KR:%1 폴더
-properties_dialog.nb_folders:pt_BR:%1 diretório(s)
-properties_dialog.nb_folders:NL:%1 map(pen)
-properties_dialog.nb_folders:SK:%1 priečinok(priečinky)
 
 properties_dialog.calculating:EN:calculating...
 properties_dialog.calculating:FR:calcul en cours...

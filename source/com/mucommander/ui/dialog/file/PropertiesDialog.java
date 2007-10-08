@@ -124,9 +124,9 @@ public class PropertiesDialog extends FocusDialog implements Runnable, ActionLis
         int nbFiles = job.getNbFilesRecurse();
         int nbFolders = job.getNbFolders();
         counterLabel.setText(
-                             (nbFiles>0?Translator.get("properties_dialog.nb_files", ""+nbFiles):"")
+                             (nbFiles>0?Translator.get("nb_files", ""+nbFiles):"")
                              +(nbFiles>0&&nbFolders>0?", ":"")
-                             +(nbFolders>0?Translator.get("properties_dialog.nb_folders", ""+nbFolders):"")
+                             +(nbFolders>0?Translator.get("nb_folders", ""+nbFolders):"")
                              );
         sizeLabel.setText(SizeFormat.format(job.getTotalBytes(), SizeFormat.DIGITS_SHORT | SizeFormat.UNIT_LONG | SizeFormat.INCLUDE_SPACE| SizeFormat.ROUND_TO_KB) + 
 			  " (" + SizeFormat.format(job.getTotalBytes(), SizeFormat.DIGITS_FULL | SizeFormat.UNIT_LONG | SizeFormat.INCLUDE_SPACE| SizeFormat.ROUND_TO_KB) + ")");
