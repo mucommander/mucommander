@@ -749,4 +749,9 @@ public class HTTPFile extends AbstractFile {
             }
         }
     }
+
+    public String getName() {
+        try {return java.net.URLDecoder.decode(super.getName(), "utf-8");}
+        catch(Exception e) {return super.getName();}
+    }
 }
