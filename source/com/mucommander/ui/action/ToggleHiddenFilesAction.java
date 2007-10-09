@@ -33,44 +33,13 @@ import java.util.Iterator;
  * A simple action that toggles hidden files visibility on and off.
  * @author Nicolas Rinaudo
  */
-public class ToggleHiddenFilesAction extends MuAction implements ConfigurationListener {
+public class ToggleHiddenFilesAction extends MuAction {
     // - Initialisation ------------------------------------------------------------------
     // -----------------------------------------------------------------------------------
     /**
      * Creates a new <code>ToggleHiddenFilesAction</code>.
      */
-    public ToggleHiddenFilesAction(MainFrame mainFrame, Hashtable properties) {
-        super(mainFrame, properties, false);
-        MuConfiguration.addConfigurationListener(this);
-        updateLabel(MuConfiguration.getVariable(MuConfiguration.SHOW_HIDDEN_FILES, MuConfiguration.DEFAULT_SHOW_HIDDEN_FILES));
-    }
-
-
-
-    // - State update --------------------------------------------------------------------
-    // -----------------------------------------------------------------------------------
-    /**
-     * Updates the action's label depending on whether hidden files are turned on or off.
-     * @param bool whether hidden files should be displayed or not.
-     */
-    public void updateLabel(boolean bool) {
-        setLabel(Translator.get(bool ? com.mucommander.ui.action.ToggleHiddenFilesAction.class.getName()+".hide" :
-                                com.mucommander.ui.action.ToggleHiddenFilesAction.class.getName()+".show"));
-    }
-
-    /**
-     * Updates the action's label if necessary.
-     * <p>
-     * If the event is related to {@link com.mucommander.conf.impl.MuConfiguration#SHOW_HIDDEN_FILES}, we need
-     * to update the action's label.
-     * </p>
-     * @param event described the configuration event.
-     */
-    public void configurationChanged(ConfigurationEvent event) {
-        if(event.getVariable().equals(MuConfiguration.SHOW_HIDDEN_FILES))
-            updateLabel(event.getBooleanValue());
-    }
-
+    public ToggleHiddenFilesAction(MainFrame mainFrame, Hashtable properties) {super(mainFrame, properties);}
 
 
     // - Action code ---------------------------------------------------------------------
