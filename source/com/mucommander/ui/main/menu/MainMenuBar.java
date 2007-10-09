@@ -37,6 +37,7 @@ import com.mucommander.ui.theme.ThemeManager;
 import com.mucommander.ui.viewer.EditorFrame;
 import com.mucommander.ui.viewer.ViewerFrame;
 import com.mucommander.ui.dialog.pref.theme.ThemeEditorDialog;
+import com.mucommander.conf.impl.MuConfiguration;
 
 import javax.swing.*;
 import javax.swing.event.MenuEvent;
@@ -79,6 +80,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
     private JCheckBoxMenuItem toggleDateColumnItem;
     private JCheckBoxMenuItem togglePermissionsColumnItem;
     private JCheckBoxMenuItem toggleShowFoldersFirstItem;
+    private JCheckBoxMenuItem toggleShowHiddenFiles;
 
     // Go menu
     private JMenu goMenu;
@@ -197,6 +199,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
 
         viewMenu.add(new JSeparator());
         toggleShowFoldersFirstItem = MenuToolkit.addCheckBoxMenuItem(viewMenu, ActionManager.getActionInstance(ToggleShowFoldersFirstAction.class, mainFrame), menuItemMnemonicHelper);
+        toggleShowHiddenFiles = MenuToolkit.addCheckBoxMenuItem(viewMenu, ActionManager.getActionInstance(ToggleHiddenFilesAction.class, mainFrame), menuItemMnemonicHelper);
 
         viewMenu.add(new JSeparator());
         columnsMenu = MenuToolkit.addMenu(Translator.get("view_menu.show_hide_columns"), null, this);
@@ -352,6 +355,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
             }
 
             toggleShowFoldersFirstItem.setSelected(activeTable.isShowFoldersFirstEnabled());
+            toggleShowHiddenFiles.setSelected(MuConfiguration.getVariable(MuConfiguration.SHOW_HIDDEN_FILES, MuConfiguration.DEFAULT_SHOW_HIDDEN_FILES));
         }
         else if(source==columnsMenu) {
             // Update visible columns state: select menu item if column is currently visible in the active table
