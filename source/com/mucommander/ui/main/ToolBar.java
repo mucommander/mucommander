@@ -70,8 +70,9 @@ public class ToolBar extends JToolBar implements ConfigurationListener, MouseLis
 
 
     /** Current icon scale value */
-    private static float scaleFactor = MuConfiguration.getVariable(MuConfiguration.TOOLBAR_ICON_SCALE,
-                                                                        MuConfiguration.DEFAULT_TOOLBAR_ICON_SCALE);
+    // The math.max(1.0f, ...) part is to workaround a bug which cause(d) this value to be set to 0.0 in the configuration file.
+    private static float scaleFactor = Math.max(1.0f, MuConfiguration.getVariable(MuConfiguration.TOOLBAR_ICON_SCALE,
+                                                                        MuConfiguration.DEFAULT_TOOLBAR_ICON_SCALE));
 
     /** Command bar actions: Class instances or null to signify a separator */
     private static Class actions[];

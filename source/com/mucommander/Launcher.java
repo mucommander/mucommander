@@ -422,8 +422,9 @@ public class Launcher {
 
         // Preload icons
         printStartupMessage("Loading icons...");
-        com.mucommander.ui.icon.FileIcons.setScaleFactor(MuConfiguration.getVariable(MuConfiguration.TABLE_ICON_SCALE,
-                                                                                          MuConfiguration.DEFAULT_TABLE_ICON_SCALE));
+        // The math.max(1.0f, ...) part is to workaround a bug which cause(d) this value to be set to 0.0 in the configuration file.
+        com.mucommander.ui.icon.FileIcons.setScaleFactor(Math.max(1.0f, MuConfiguration.getVariable(MuConfiguration.TABLE_ICON_SCALE,
+                                                                                          MuConfiguration.DEFAULT_TABLE_ICON_SCALE)));
         com.mucommander.ui.icon.FileIcons.setSystemIconsPolicy(MuConfiguration.getVariable(MuConfiguration.USE_SYSTEM_FILE_ICONS, MuConfiguration.DEFAULT_USE_SYSTEM_FILE_ICONS));
 
         // Loads the ActionKeymap file
