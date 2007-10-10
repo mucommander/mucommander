@@ -197,7 +197,7 @@ class AppearancePanel extends PreferencesPanel implements ActionListener {
         lnfComboBox.setSelectedIndex(currentLnfIndex);
 
         // Adds the l&f list to the panel.
-        JPanel flowPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));;
+        JPanel flowPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         flowPanel.add(lnfComboBox);
         lnfPanel.add(flowPanel);
 
@@ -223,13 +223,13 @@ class AppearancePanel extends PreferencesPanel implements ActionListener {
         ProportionalGridPanel gridPanel = new ProportionalGridPanel(2);
 
         gridPanel.add(new JLabel(Translator.get("prefs_dialog.toolbar_icons")));
-        gridPanel.add(toolbarIconsSizeComboBox = createIconSizeCombo(MuConfiguration.TOOLBAR_ICON_SCALE));
+        gridPanel.add(toolbarIconsSizeComboBox = createIconSizeCombo(MuConfiguration.TOOLBAR_ICON_SCALE, MuConfiguration.DEFAULT_TOOLBAR_ICON_SCALE));
 
         gridPanel.add(new JLabel(Translator.get("prefs_dialog.command_bar_icons")));
-        gridPanel.add(commandBarIconsSizeComboBox = createIconSizeCombo(MuConfiguration.COMMAND_BAR_ICON_SCALE));
+        gridPanel.add(commandBarIconsSizeComboBox = createIconSizeCombo(MuConfiguration.COMMAND_BAR_ICON_SCALE, MuConfiguration.DEFAULT_COMMAND_BAR_ICON_SCALE));
 
         gridPanel.add(new JLabel(Translator.get("prefs_dialog.file_icons")));
-        gridPanel.add(fileIconsSizeComboBox = createIconSizeCombo(MuConfiguration.TABLE_ICON_SCALE));
+        gridPanel.add(fileIconsSizeComboBox = createIconSizeCombo(MuConfiguration.TABLE_ICON_SCALE, MuConfiguration.DEFAULT_TABLE_ICON_SCALE));
 
         JPanel flowPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
         flowPanel.setBorder(BorderFactory.createTitledBorder(Translator.get("prefs_dialog.icons_size")));
@@ -343,16 +343,20 @@ class AppearancePanel extends PreferencesPanel implements ActionListener {
     }
 
     /**
-     * Creates a icon size selection panel, made of a label and combo box, adds the panel to the given one,
-     * and returns the combo box instance.
+     * Creates a combo box that allows to choose a size for a certain type of icon. The returned combo box is filled
+     * with allowed choices, and the current configuration value is selected.
+     *
+     * @param confVar the name of the configuration variable that contains the icon scale factor
+     * @param defaultValue the default value for the icon scale factor if the configuration variable has no value
+     * @return a combo box that allows to choose a size for a certain type of icon
      */
-    private JComboBox createIconSizeCombo(String confVar) {
+    private JComboBox createIconSizeCombo(String confVar, float defaultValue) {
         JComboBox iconSizeCombo = new JComboBox();
 
         for(int i=0; i<ICON_SIZES.length; i++)
             iconSizeCombo.addItem(ICON_SIZES[i]);
 
-        float scaleFactor = MuConfiguration.getVariable(confVar, 1.0f);
+        float scaleFactor = MuConfiguration.getVariable(confVar, defaultValue);
         int index = 0;
         for(int i=0; i<ICON_SCALE_FACTORS.length; i++) {
             if(scaleFactor==ICON_SCALE_FACTORS[i]) {
