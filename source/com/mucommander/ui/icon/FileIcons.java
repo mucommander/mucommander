@@ -78,7 +78,7 @@ public class FileIcons {
     private static FileIconProvider systemFileIconProvider;
 
     /** Current dimension of returned file icons */
-    private static Dimension iconDimension = new Dimension((int)(BASE_ICON_DIMENSION * DEFAULT_SCALE_FACTOR), (int)(BASE_ICON_DIMENSION * DEFAULT_SCALE_FACTOR));;
+    private static Dimension iconDimension = new Dimension((int)(BASE_ICON_DIMENSION * DEFAULT_SCALE_FACTOR), (int)(BASE_ICON_DIMENSION * DEFAULT_SCALE_FACTOR));
 
 
     /**
@@ -224,7 +224,7 @@ public class FileIcons {
 
 	
     /**
-     * Returns the current icon scale factor, initialized to {@link #DEFAULT_SCALE_FACTOR}.
+     * Returns the current icon scale factor, initialized by default to {@link #DEFAULT_SCALE_FACTOR}.
      *
      * @return the current icon scale factor
      */
@@ -233,11 +233,15 @@ public class FileIcons {
     }
 
     /**
-     * Sets the current icon scale factor to the given one.
+     * Sets the current icon scale factor. The given value must be greater than 0.
      *
      * @param factor the new icon scale factor to use
+     * @throw IllegalArgumentException if factor is lower or equal to 0
      */
     public static void setScaleFactor(float factor) {
+        if(scaleFactor<=0)
+            throw new IllegalArgumentException("Scale factor must be greater than 0, ("+factor+")");
+
         scaleFactor = factor;
         iconDimension = new Dimension((int)(BASE_ICON_DIMENSION *scaleFactor), (int)(BASE_ICON_DIMENSION*scaleFactor));
     }
