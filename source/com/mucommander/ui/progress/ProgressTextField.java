@@ -77,7 +77,12 @@ public class ProgressTextField extends ComboTextField {
      * Sets the color used to represent progress.
      * @param color new progress color.
      */
-    public void setProgressColor(Color color) {progressColor = color;}
+    public void setProgressColor(Color color) {
+        if(color != null && progressColor != null && !color.equals(progressColor)) {
+            progressColor = color;
+            repaint();
+        }
+    }
 	
     /**
      * Override JTextField's paint method to show progress information.
