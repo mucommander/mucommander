@@ -62,7 +62,7 @@ public class EditAction extends InternalEditAction implements ConfigurationListe
         // Initialises the icon
         String iconPath;
         iconPath = getIconPath(InternalEditAction.class);
-        if(ResourceLoader.getResource(iconPath)!=null)
+        if(ResourceLoader.getResourceAsURL(iconPath)!=null)
             setIcon(IconManager.getIcon(iconPath));
 
         // Initialises configuration.

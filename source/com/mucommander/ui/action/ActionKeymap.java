@@ -56,7 +56,7 @@ public class ActionKeymap extends DefaultHandler {
     /** Default action keymap filename */
     private final static String DEFAULT_ACTION_KEYMAP_FILE_NAME = "action_keymap.xml";
     /** Path to the action keymap resource file within the application JAR file */
-    private final static String ACTION_KEYMAP_RESOURCE_PATH = "/" + DEFAULT_ACTION_KEYMAP_FILE_NAME;
+    public final static String ACTION_KEYMAP_RESOURCE_PATH = "/" + DEFAULT_ACTION_KEYMAP_FILE_NAME;
 
     /** Action keymap file used when calling {@link #loadActionKeyMap()} */
     private static File actionKeyMapFile;

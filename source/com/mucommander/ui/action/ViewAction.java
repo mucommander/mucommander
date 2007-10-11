@@ -62,7 +62,7 @@ public class ViewAction extends InternalViewAction implements ConfigurationListe
         // Initialises the icon
         String iconPath;
         iconPath = getIconPath(InternalViewAction.class);
-        if(ResourceLoader.getResource(iconPath)!=null)
+        if(ResourceLoader.getResourceAsURL(iconPath)!=null)
             setIcon(IconManager.getIcon(iconPath));
 
 
