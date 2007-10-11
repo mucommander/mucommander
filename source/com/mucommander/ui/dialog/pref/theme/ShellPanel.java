@@ -38,7 +38,6 @@ import java.awt.*;
 class ShellPanel extends ThemeEditorPanel implements PropertyChangeListener {
     private JTextArea        shellPreview;
     private EditableComboBox historyPreview;
-    private JTextField       inputPreview;
 
 
 
@@ -47,33 +46,31 @@ class ShellPanel extends ThemeEditorPanel implements PropertyChangeListener {
     /**
      * Creates a new file table editor.
      * @param parent   dialog containing the panel.
-     * @param template template being edited.
+     * @param themeData themeData being edited.
      */
-    public ShellPanel(PreferencesDialog parent, ThemeData template) {
-        super(parent, Translator.get("theme_editor.shell_tab"), template);
+    public ShellPanel(PreferencesDialog parent, ThemeData themeData) {
+        super(parent, Translator.get("theme_editor.shell_tab"), themeData);
         initUI();
-        addPropertyChangeListener(this);
     }
 
     private JComponent createConfigurationPanel(int fontId, int foregroundId, int backgroundId, int selectedForegroundId, int selectedBackgroundId, JComponent fontListener) {
-        YBoxPanel   mainPanel;
-        JPanel      colorPanel;
-        JPanel      flowPanel;
-        FontChooser fontChooser;
+        YBoxPanel             mainPanel;
+        ProportionalGridPanel colorPanel;
+        JPanel                flowPanel;
+        FontChooser           fontChooser;
 
         mainPanel = new YBoxPanel();
 
-        fontChooser = createFontChooser("theme_editor.font", fontId);
+        fontChooser = createFontChooser(fontId);
         mainPanel.add(fontChooser);
         mainPanel.addSpace(10);
         addFontChooserListener(fontChooser, fontListener);
 
         colorPanel = new ProportionalGridPanel(3);
-        colorPanel.add(new JLabel());
-        colorPanel.add(createCaptionLabel("theme_editor.text"));
-        colorPanel.add(createCaptionLabel("theme_editor.background"));
-        createTextButtons(colorPanel, fontChooser, "theme_editor.normal", foregroundId, backgroundId);
-        createTextButtons(colorPanel, fontChooser, "theme_editor.selected", selectedForegroundId, selectedBackgroundId);
+        addLabelRow(colorPanel, false);
+
+        addColorButtons(colorPanel, fontChooser, "theme_editor.normal", foregroundId, backgroundId).addPropertyChangeListener(this);
+        addColorButtons(colorPanel, fontChooser, "theme_editor.selected", selectedForegroundId, selectedBackgroundId).addPropertyChangeListener(this);
 
         flowPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         flowPanel.add(colorPanel);
@@ -82,16 +79,6 @@ class ShellPanel extends ThemeEditorPanel implements PropertyChangeListener {
         mainPanel.add(flowPanel);
 
         return createScrollPane(mainPanel);
-    }
-
-
-    private JComponent createScrollPane(JPanel panel) {
-        JScrollPane scrollPane;
-
-        scrollPane = new JScrollPane(panel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        scrollPane.setBorder(null);
-
-        return scrollPane;
     }
 
     private JPanel createPreviewPanel() {
@@ -104,13 +91,9 @@ class ShellPanel extends ThemeEditorPanel implements PropertyChangeListener {
 
         headerPanel = new YBoxPanel();
         headerPanel.add(new JLabel(Translator.get("run_dialog.run_command_description") + ":"));
-        headerPanel.add(historyPreview = new EditableComboBox(inputPreview = new JTextField(Translator.get("sample_text"))));
+        headerPanel.add(historyPreview = new EditableComboBox(new JTextField(Translator.get("sample_text"))));
         historyPreview.addItem(Translator.get("sample_text"));
         historyPreview.addItem(Translator.get("sample_text"));
-        historyPreview.setForeground(template.getColor(ThemeData.SHELL_HISTORY_FOREGROUND_COLOR));
-        historyPreview.setBackground(template.getColor(ThemeData.SHELL_HISTORY_BACKGROUND_COLOR));
-        historyPreview.setSelectionForeground(template.getColor(ThemeData.SHELL_HISTORY_SELECTED_FOREGROUND_COLOR));
-        historyPreview.setSelectionBackground(template.getColor(ThemeData.SHELL_HISTORY_SELECTED_BACKGROUND_COLOR));
 
         headerPanel.addSpace(10);
         headerPanel.add(new JLabel(Translator.get("run_dialog.command_output")+":"));
@@ -121,14 +104,12 @@ class ShellPanel extends ThemeEditorPanel implements PropertyChangeListener {
         shellPreview.setText(Translator.get("sample_text"));
         shellPreview.setLineWrap(true);
         shellPreview.setCaretPosition(0);
-        shellPreview.setForeground(template.getColor(ThemeData.SHELL_FOREGROUND_COLOR));
-        shellPreview.setCaretColor(template.getColor(ThemeData.SHELL_FOREGROUND_COLOR));
-        shellPreview.setBackground(template.getColor(ThemeData.SHELL_BACKGROUND_COLOR));
-        shellPreview.setSelectedTextColor(template.getColor(ThemeData.SHELL_SELECTED_FOREGROUND_COLOR));
-        shellPreview.setSelectionColor(template.getColor(ThemeData.SHELL_SELECTED_BACKGROUND_COLOR));
 
         panel.add(scroll = new JScrollPane(shellPreview, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED), BorderLayout.CENTER);
         scroll.getViewport().setPreferredSize(shellPreview.getPreferredSize());
+
+        setForegroundColors();
+        setBackgroundColors();
 
         return panel;
     }
@@ -162,21 +143,27 @@ class ShellPanel extends ThemeEditorPanel implements PropertyChangeListener {
 
     public void propertyChange(PropertyChangeEvent event) {
         // Background color changed.
-        if(event.getPropertyName().equals(PreviewLabel.BACKGROUND_COLOR_PROPERTY_NAME)) {
-            shellPreview.setBackground(template.getColor(ThemeData.SHELL_BACKGROUND_COLOR));
-            shellPreview.setSelectionColor(template.getColor(ThemeData.SHELL_SELECTED_BACKGROUND_COLOR));
-            historyPreview.setBackground(template.getColor(ThemeData.SHELL_HISTORY_BACKGROUND_COLOR));
-            historyPreview.setSelectionForeground(template.getColor(ThemeData.SHELL_HISTORY_SELECTED_BACKGROUND_COLOR));
-        }
+        if(event.getPropertyName().equals(PreviewLabel.BACKGROUND_COLOR_PROPERTY_NAME))
+            setBackgroundColors();
 
         // Foreground color changed.
-        else if(!event.getPropertyName().equals(PreviewLabel.FOREGROUND_COLOR_PROPERTY_NAME)) {
-            shellPreview.setForeground(template.getColor(ThemeData.SHELL_FOREGROUND_COLOR));
-            shellPreview.setSelectedTextColor(template.getColor(ThemeData.SHELL_SELECTED_FOREGROUND_COLOR));
-            shellPreview.setCaretColor(template.getColor(ThemeData.SHELL_FOREGROUND_COLOR));
-            historyPreview.setForeground(template.getColor(ThemeData.SHELL_HISTORY_FOREGROUND_COLOR));
-            historyPreview.setSelectionForeground(template.getColor(ThemeData.SHELL_HISTORY_SELECTED_FOREGROUND_COLOR));
-        }
+        else if(event.getPropertyName().equals(PreviewLabel.FOREGROUND_COLOR_PROPERTY_NAME))
+            setForegroundColors();
+    }
+
+    private void setBackgroundColors() {
+        shellPreview.setBackground(themeData.getColor(ThemeData.SHELL_BACKGROUND_COLOR));
+        shellPreview.setSelectionColor(themeData.getColor(ThemeData.SHELL_SELECTED_BACKGROUND_COLOR));
+        historyPreview.setBackground(themeData.getColor(ThemeData.SHELL_HISTORY_BACKGROUND_COLOR));
+        historyPreview.setSelectionBackground(themeData.getColor(ThemeData.SHELL_HISTORY_SELECTED_BACKGROUND_COLOR));
+    }
+
+    private void setForegroundColors() {
+        shellPreview.setForeground(themeData.getColor(ThemeData.SHELL_FOREGROUND_COLOR));
+        shellPreview.setSelectedTextColor(themeData.getColor(ThemeData.SHELL_SELECTED_FOREGROUND_COLOR));
+        shellPreview.setCaretColor(themeData.getColor(ThemeData.SHELL_FOREGROUND_COLOR));
+        historyPreview.setForeground(themeData.getColor(ThemeData.SHELL_HISTORY_FOREGROUND_COLOR));
+        historyPreview.setSelectionForeground(themeData.getColor(ThemeData.SHELL_HISTORY_SELECTED_FOREGROUND_COLOR));
     }
 
 

@@ -47,12 +47,11 @@ class FileEditorPanel extends ThemeEditorPanel implements PropertyChangeListener
     /**
      * Creates a new file table editor.
      * @param parent    dialog containing the panel.
-     * @param template  template being edited.
+     * @param themeData  themeData being edited.
      */
-    public FileEditorPanel(PreferencesDialog parent, ThemeData template) {
-        super(parent, Translator.get("theme_editor.editor_tab"), template);
+    public FileEditorPanel(PreferencesDialog parent, ThemeData themeData) {
+        super(parent, Translator.get("theme_editor.editor_tab"), themeData);
         initUI();
-        addPropertyChangeListener(this);
     }
 
 
@@ -60,73 +59,85 @@ class FileEditorPanel extends ThemeEditorPanel implements PropertyChangeListener
     // - UI initialisation ---------------------------------------------------------------
     // -----------------------------------------------------------------------------------
     /**
-     * Initialises the panel's UI.
+     * Creates the JPanel that contains all of the color configuration elements.
+     * @param fontChooser font chooser used by the editor panel.
+     * @return the JPanel that contains all of the color configuration elements.
      */
-    private void initUI() {
-        YBoxPanel             mainPanel;
-        ProportionalGridPanel gridPanel;
-        JPanel                colorsPanel;
-        FontChooser           fontChooser;
-        JPanel                wrapper;
-        JPanel                previewPanel;
-        JScrollPane           scroll;
+    private JPanel createColorsPanel(FontChooser fontChooser) {
+        ProportionalGridPanel gridPanel;   // Contains all the color buttons.
+        JPanel                colorsPanel; // Used to wrap the colors panel in a flow layout.
 
-        // Font chooser.
-        fontChooser = createFontChooser("theme_editor.font", ThemeData.EDITOR_FONT);
-
-        // Colors.
+        // Initialisation.
         gridPanel = new ProportionalGridPanel(3);
-        gridPanel.add(new JLabel());
-        gridPanel.add(createCaptionLabel("theme_editor.text"));
-        gridPanel.add(createCaptionLabel("theme_editor.background"));
-        createTextButtons(gridPanel, fontChooser, "theme_editor.normal", ThemeData.EDITOR_FOREGROUND_COLOR, ThemeData.EDITOR_BACKGROUND_COLOR);
-        createTextButtons(gridPanel, fontChooser, "theme_editor.selected", ThemeData.EDITOR_SELECTED_FOREGROUND_COLOR, ThemeData.EDITOR_SELECTED_BACKGROUND_COLOR);
+
+        // Header.
+        addLabelRow(gridPanel, false);
+
+        // Color buttons.
+        addColorButtons(gridPanel, fontChooser, "theme_editor.normal",
+                        ThemeData.EDITOR_FOREGROUND_COLOR, ThemeData.EDITOR_BACKGROUND_COLOR).addPropertyChangeListener(this);
+        addColorButtons(gridPanel, fontChooser, "theme_editor.selected",
+                        ThemeData.EDITOR_SELECTED_FOREGROUND_COLOR, ThemeData.EDITOR_SELECTED_BACKGROUND_COLOR).addPropertyChangeListener(this);
+
+        // Wraps everything in a flow layout.
         colorsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         colorsPanel.add(gridPanel);
         colorsPanel.setBorder(BorderFactory.createTitledBorder(Translator.get("theme_editor.colors")));
 
-        // Main panel.
-        mainPanel = new YBoxPanel();
-        mainPanel.add(fontChooser);
-        mainPanel.addSpace(10);
-        mainPanel.add(colorsPanel);
+        return colorsPanel;
+    }
 
-        // Preview.
-        previewPanel = new JPanel();
-        previewPanel.add(createPreviewPanel(mainPanel.getPreferredSize().height));
-        previewPanel.setBorder(BorderFactory.createTitledBorder(Translator.get("preview")));
+    /**
+     * Initialises the panel's UI.
+     */
+    private void initUI() {
+        YBoxPanel   configurationPanel; // Contains all the configuration elements.
+        FontChooser fontChooser;        // Used to select a font.
+        JPanel      mainPanel;          // Main panel.
+
+        // Font chooser and preview initialisation.
+        mainPanel   = new JPanel(new BorderLayout());
+        fontChooser = createFontChooser(ThemeData.EDITOR_FONT);
+        mainPanel.add(createPreviewPanel(), BorderLayout.EAST);
         addFontChooserListener(fontChooser, preview);
 
-        // Wrapper.
-        wrapper = new JPanel(new BorderLayout());
-        wrapper.add(mainPanel, BorderLayout.CENTER);
-        wrapper.add(previewPanel, BorderLayout.EAST);
+        // Configuration panel initialisation.
+        configurationPanel = new YBoxPanel();
+        configurationPanel.add(fontChooser);
+        configurationPanel.addSpace(10);
+        configurationPanel.add(createColorsPanel(fontChooser));
+        mainPanel.add(configurationPanel, BorderLayout.CENTER);
 
-        // Global layout.
+        // Layout.
         setLayout(new BorderLayout());
-        add(wrapper, BorderLayout.NORTH);
+        add(mainPanel, BorderLayout.NORTH);
     }
 
     /**
      * Creates the file editor preview panel.
+     * @return the file editor preview panel.
      */
-    private JScrollPane createPreviewPanel(int preferredHeight) {
-        JScrollPane scroll;
+    private JPanel createPreviewPanel() {
+        JPanel      panel;  // Preview panel.
+        JScrollPane scroll; // Wraps the preview text are.
 
+        // Initialises the preview text area.
+        // Note that we do not need to set colors and fonts here, as this is all taken care
+        // of by the color buttons and font chooser.
         preview = new JTextArea(15, 15);
-
-        scroll  = new JScrollPane(preview, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        scroll.getViewport().setPreferredSize(new Dimension(preview.getPreferredSize().width, preferredHeight));
-
         preview.setText(Translator.get("sample_text"));
-        preview.setBackground(template.getColor(ThemeData.EDITOR_BACKGROUND_COLOR));
-        preview.setSelectionColor(template.getColor(ThemeData.EDITOR_SELECTED_BACKGROUND_COLOR));
-        preview.setForeground(template.getColor(ThemeData.EDITOR_FOREGROUND_COLOR));
-        preview.setSelectedTextColor(template.getColor(ThemeData.EDITOR_SELECTED_FOREGROUND_COLOR));
-        preview.setCaretColor(template.getColor(ThemeData.EDITOR_FOREGROUND_COLOR));
-        preview.setFont(template.getFont(ThemeData.EDITOR_FONT));
 
-        return scroll;
+        // Creates the panel.
+        panel = new JPanel(new BorderLayout());
+        panel.add(scroll = new JScrollPane(preview, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED), BorderLayout.CENTER);
+        scroll.getViewport().setPreferredSize(preview.getPreferredSize());
+        panel.setBorder(BorderFactory.createTitledBorder(Translator.get("preview")));
+
+        // Initialises colors.
+        setBackgroundColors();
+        setForegroundColors();
+
+        return panel;
     }
 
     /**
@@ -134,20 +145,23 @@ class FileEditorPanel extends ThemeEditorPanel implements PropertyChangeListener
      */
     public void propertyChange(PropertyChangeEvent event) {
         // Background color changed.
-        if(event.getPropertyName().equals(PreviewLabel.BACKGROUND_COLOR_PROPERTY_NAME)) {
-            preview.setBackground(template.getColor(ThemeData.EDITOR_BACKGROUND_COLOR));
-            preview.setSelectionColor(template.getColor(ThemeData.EDITOR_SELECTED_BACKGROUND_COLOR));
-        }
+        if(event.getPropertyName().equals(PreviewLabel.BACKGROUND_COLOR_PROPERTY_NAME))
+            setBackgroundColors();
 
         // Foreground color changed.
-        else if(!event.getPropertyName().equals(PreviewLabel.FOREGROUND_COLOR_PROPERTY_NAME)) {
-            preview.setForeground(template.getColor(ThemeData.EDITOR_FOREGROUND_COLOR));
-            preview.setSelectedTextColor(template.getColor(ThemeData.EDITOR_SELECTED_FOREGROUND_COLOR));
-            preview.setCaretColor(template.getColor(ThemeData.EDITOR_FOREGROUND_COLOR));
-        }
-        else
-            return;
-        preview.repaint();
+        else if(event.getPropertyName().equals(PreviewLabel.FOREGROUND_COLOR_PROPERTY_NAME))
+            setForegroundColors();
+    }
+
+    private void setBackgroundColors() {
+        preview.setBackground(themeData.getColor(ThemeData.EDITOR_BACKGROUND_COLOR));
+        preview.setSelectionColor(themeData.getColor(ThemeData.EDITOR_SELECTED_BACKGROUND_COLOR));
+    }
+
+    private void setForegroundColors() {
+        preview.setForeground(themeData.getColor(ThemeData.EDITOR_FOREGROUND_COLOR));
+        preview.setCaretColor(themeData.getColor(ThemeData.EDITOR_FOREGROUND_COLOR));
+        preview.setSelectedTextColor(themeData.getColor(ThemeData.EDITOR_SELECTED_FOREGROUND_COLOR));
     }
 
 

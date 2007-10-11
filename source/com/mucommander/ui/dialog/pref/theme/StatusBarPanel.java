@@ -51,10 +51,10 @@ class StatusBarPanel extends ThemeEditorPanel {
     /**
      * Creates a new file table editor.
      * @param parent   dialog containing the panel.
-     * @param template template being edited.
+     * @param themeData themeData being edited.
      */
-    public StatusBarPanel(PreferencesDialog parent, ThemeData template) {
-        super(parent, Translator.get("theme_editor.statusbar_tab"), template);
+    public StatusBarPanel(PreferencesDialog parent, ThemeData themeData) {
+        super(parent, Translator.get("theme_editor.statusbar_tab"), themeData);
         initUI();
     }
 
@@ -67,7 +67,7 @@ class StatusBarPanel extends ThemeEditorPanel {
 
         mainPanel = new YBoxPanel();
 
-        FontChooser fontChooser = createFontChooser("theme_editor.font", ThemeData.STATUS_BAR_FONT);
+        FontChooser fontChooser = createFontChooser(ThemeData.STATUS_BAR_FONT);
         mainPanel.add(fontChooser);
 
         gridPanel = new ProportionalGridPanel(3);
@@ -76,17 +76,17 @@ class StatusBarPanel extends ThemeEditorPanel {
         gridPanel.add(createCaptionLabel("preview"));
 
         gridPanel.add(createCaptionLabel("theme_editor.text"));
-        ColorButton foregroundColorButton = new ColorButton(parent, template, ThemeData.STATUS_BAR_FOREGROUND_COLOR, PreviewLabel.FOREGROUND_COLOR_PROPERTY_NAME);
+        ColorButton foregroundColorButton = new ColorButton(parent, themeData, ThemeData.STATUS_BAR_FOREGROUND_COLOR, PreviewLabel.FOREGROUND_COLOR_PROPERTY_NAME);
         gridPanel.add(foregroundColorButton);
         gridPanel.add(new JLabel());
 
         gridPanel.add(createCaptionLabel(Translator.get("theme_editor.free_space", Translator.get("theme_editor.background"))));
-        ColorButton backgroundColorButton = new ColorButton(parent, template, ThemeData.STATUS_BAR_BACKGROUND_COLOR, PreviewLabel.BACKGROUND_COLOR_PROPERTY_NAME);
+        ColorButton backgroundColorButton = new ColorButton(parent, themeData, ThemeData.STATUS_BAR_BACKGROUND_COLOR, PreviewLabel.BACKGROUND_COLOR_PROPERTY_NAME);
         gridPanel.add(backgroundColorButton);
         gridPanel.add(new JLabel());
 
         gridPanel.add(createCaptionLabel(Translator.get("theme_editor.free_space", Translator.get("theme_editor.border"))));
-        ColorButton borderColorButton = new ColorButton(parent, template, ThemeData.STATUS_BAR_BORDER_COLOR, PreviewLabel.BORDER_COLOR_PROPERTY_NAME);
+        ColorButton borderColorButton = new ColorButton(parent, themeData, ThemeData.STATUS_BAR_BORDER_COLOR, PreviewLabel.BORDER_COLOR_PROPERTY_NAME);
         gridPanel.add(borderColorButton);
         gridPanel.add(new JLabel(""));
 
@@ -101,7 +101,7 @@ class StatusBarPanel extends ThemeEditorPanel {
             addFontChooserListener(fontChooser, previewLabel);
 
             gridPanel.add(createCaptionLabel(WARNING_LEVEL_LABELS[i]));
-            gridPanel.add(new ColorButton(parent, template, WARNING_LEVEL_COLOR_IDS[i], PreviewLabel.OVERLAY_COLOR_PROPERTY_NAME, previewLabel));
+            gridPanel.add(new ColorButton(parent, themeData, WARNING_LEVEL_COLOR_IDS[i], PreviewLabel.OVERLAY_COLOR_PROPERTY_NAME, previewLabel));
             gridPanel.add(previewLabel);
         }
 

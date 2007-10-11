@@ -39,13 +39,17 @@ class FolderPanePanel extends ThemeEditorPanel {
     /**
      * Creates a new file table editor.
      * @param parent dialog containing the panel.
-     * @param template template being edited.
+     * @param themeData themeData being edited.
      */
-    public FolderPanePanel(PreferencesDialog parent, ThemeData template) {
-        super(parent, Translator.get("theme_editor.folder_tab"), template);
+    public FolderPanePanel(PreferencesDialog parent, ThemeData themeData) {
+        super(parent, Translator.get("theme_editor.folder_tab"), themeData);
         initUI();
     }
 
+
+
+    // - UI initialisation ---------------------------------------------------------------
+    // -----------------------------------------------------------------------------------
     /**
      * Initialises the panel's UI.
      */
@@ -58,39 +62,35 @@ class FolderPanePanel extends ThemeEditorPanel {
 
         // Adds the general panel.
         tabbedPane.add(Translator.get("theme_editor.general_panel"),
-                       createScrollPane(createGeneralPanel(fontChooser = createFontChooser("theme_editor.font", ThemeData.FILE_TABLE_FONT))));
+                       createScrollPane(createGeneralPanel(fontChooser = createFontChooser(ThemeData.FILE_TABLE_FONT))));
 
         // Adds the active panel.
-        filePanel = new FilePanel(parent, true, template, fontChooser);
+        filePanel = new FilePanel(parent, true, themeData, fontChooser);
         tabbedPane.add(filePanel.getTitle(), createScrollPane(filePanel));
 
         // Adds the inactive panel.
-        filePanel = new FilePanel(parent, false, template, fontChooser);
+        filePanel = new FilePanel(parent, false, themeData, fontChooser);
         tabbedPane.add(filePanel.getTitle(), createScrollPane(filePanel));
 
         // Creates the layout.
         setLayout(new BorderLayout());
-        add(tabbedPane, BorderLayout.CENTER);
+        add(tabbedPane, BorderLayout.NORTH);
     }
 
-
-
-    // - Helper methods ------------------------------------------------------------------
-    // -----------------------------------------------------------------------------------
     /**
      * Creates the 'general' theme.
      */
     private JPanel createGeneralPanel(FontChooser chooser) {
-        YBoxPanel mainPanel;
-        JPanel    quickSearchPanel;
-        JPanel    panel;
+        YBoxPanel             mainPanel;
+        JPanel                quickSearchPanel;
+        ProportionalGridPanel panel;
+        JPanel                wrapper;
 
         // Initialises the quicksearch panel.
         panel = new ProportionalGridPanel(4);
         addLabelRow(panel);
-        addColorButtonRow(panel, chooser, "theme_editor.quick_search.unmatched_file",
-                          ThemeData.FILE_TABLE_UNMATCHED_FOREGROUND_COLOR,
-                          ThemeData.FILE_TABLE_UNMATCHED_BACKGROUND_COLOR);
+        panel.add(addColorButtons(panel, chooser, "theme_editor.quick_search.unmatched_file", ThemeData.FILE_TABLE_UNMATCHED_FOREGROUND_COLOR,
+                                  ThemeData.FILE_TABLE_UNMATCHED_BACKGROUND_COLOR));
         quickSearchPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         quickSearchPanel.add(panel);
         quickSearchPanel.setBorder(BorderFactory.createTitledBorder(Translator.get("theme_editor.quick_search")));
@@ -102,27 +102,18 @@ class FolderPanePanel extends ThemeEditorPanel {
         mainPanel.add(quickSearchPanel);
 
         // Wraps everything in a border layout.
-        panel = new JPanel(new BorderLayout());
-        panel.add(mainPanel, BorderLayout.NORTH);
-        return panel;
-    }
-
-    /**
-     * Wraps the specified panel within a scroll pane.
-     */
-    private JComponent createScrollPane(JPanel panel) {
-        JScrollPane scrollPane;
-
-        scrollPane = new JScrollPane(panel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        scrollPane.setBorder(null);
-
-        return scrollPane;
+        wrapper = new JPanel(new BorderLayout());
+        wrapper.add(mainPanel, BorderLayout.NORTH);
+        return wrapper;
     }
 
 
 
     // - Modification management ---------------------------------------------------------
     // -----------------------------------------------------------------------------------
+    /**
+     * Ignored.
+     */
     public void commit() {}
 }
 

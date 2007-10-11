@@ -78,34 +78,30 @@ class ColorButton extends JPanel implements ActionListener, ColorChangeListener 
         flowLayout.setVgap(0);
         setLayout(flowLayout);
 
-        this.themeData = themeData;
-        this.colorId  = colorId;
-        this.parent   = parent;
-
-        this.previewComponent = previewComponent;
+        this.themeData                = themeData;
+        this.colorId                  = colorId;
+        this.parent                   = parent;
+        this.previewComponent         = previewComponent;
         this.previewColorPropertyName = previewColorPropertyName;
 
-        if(previewColorPropertyName!=null && previewComponent!=null)
+        if(previewColorPropertyName != null && previewComponent != null)
             addUpdatedPreviewComponent(previewComponent);
+ 
+        button = new JButton() {
+                public Dimension getPreferredSize() {return new Dimension(70, 30);}
 
-        this.button = new JButton() {
+                public void paint(Graphics g) {
+                    int width  = getWidth();
+                    int height = getHeight();
 
-            public Dimension getPreferredSize() {
-                return new Dimension(70, 30);
-            }
+                    // Fill the button with the specified color
+                    g.setColor((ColorButton.this).currentColor);
+                    g.fillRect(0, 0, width, height);
 
-            public void paint(Graphics g) {
-                int width  = getWidth();
-                int height = getHeight();
-
-                // Fill the button with the specified color
-                g.setColor((ColorButton.this).currentColor);
-                g.fillRect(0, 0, width, height);
-
-                // Paint custom border
-                border.paintBorder(this, g, 0, 0, width, height);
-            }
-        };
+                    // Paint custom border
+                    border.paintBorder(this, g, 0, 0, width, height);
+                }
+            };
 
         button.addActionListener(this);
         button.setBorderPainted(true);
@@ -124,10 +120,10 @@ class ColorButton extends JPanel implements ActionListener, ColorChangeListener 
 
 
     void addUpdatedPreviewComponent(JComponent previewComponent) {
-        if(previewColorPropertyName==null)
+        if(previewColorPropertyName == null)
             return;
 
-        if(updatedPreviewComponents==null)
+        if(updatedPreviewComponents == null)
             updatedPreviewComponents = new Vector();
 
         updatedPreviewComponents.add(previewComponent);
@@ -138,12 +134,11 @@ class ColorButton extends JPanel implements ActionListener, ColorChangeListener 
     private void setCurrentColor(Color color) {
         currentColor = color;
         themeData.setColor(colorId, currentColor);
-
         button.repaint();
 
-        if(updatedPreviewComponents!=null && previewColorPropertyName!=null) {
+        if(updatedPreviewComponents != null && previewColorPropertyName != null) {
             int nbPreviewComponents = updatedPreviewComponents.size();
-            for(int i=0; i<nbPreviewComponents; i++)
+            for(int i = 0; i < nbPreviewComponents; i++)
                 ((JComponent)updatedPreviewComponents.elementAt(i)).putClientProperty(previewColorPropertyName, color);
         }
     }
@@ -180,7 +175,5 @@ class ColorButton extends JPanel implements ActionListener, ColorChangeListener 
     // ColorChangeListener implementation //
     ////////////////////////////////////////
 
-    public void colorChanged(ColorChangeEvent event) {
-        setCurrentColor(event.getColor());
-    }
+    public void colorChanged(ColorChangeEvent event) {setCurrentColor(event.getColor());}
 }
