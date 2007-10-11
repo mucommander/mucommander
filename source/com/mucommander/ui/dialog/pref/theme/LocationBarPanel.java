@@ -101,13 +101,14 @@ class LocationBarPanel extends ThemeEditorPanel implements PropertyChangeListene
 
         panel = new YBoxPanel();
 
-        panel.add(new JLabel(Translator.get("theme_editor.normal")));
+        //        panel.add(new JLabel(Translator.get("theme_editor.normal")));
+        panel.add(createCaptionLabel("theme_editor.normal"));
         panel.add(normalPreview = new EditableComboBox(new JTextField(Translator.get("sample_text"))));
         normalPreview.addItem(Translator.get("sample_text"));
         normalPreview.addItem(Translator.get("sample_text"));
 
         panel.addSpace(10);
-        panel.add(new JLabel(Translator.get("theme_editor.progress")));
+        panel.add(createCaptionLabel("theme_editor.progress"));
         panel.add(progressPreview = new EditableComboBox(progressField = new ProgressTextField(50, themeData.getColor(ThemeData.LOCATION_BAR_PROGRESS_COLOR))));
         progressField.setComboBox(progressPreview);
         progressField.setText(Translator.get("sample_text"));
