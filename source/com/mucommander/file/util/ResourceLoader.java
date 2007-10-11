@@ -22,7 +22,6 @@ import com.mucommander.file.AbstractArchiveFile;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 
@@ -139,13 +138,14 @@ public class ResourceLoader {
 
         URL aClassURL = getResourceAsURL(path, classLoader);
         if(aClassURL==null)
-            return null;
+            return null;        // no resource under that path
 
         if("jar".equals(aClassURL.getProtocol())) {
             try {
                 return ((AbstractArchiveFile)FileFactory.getFile(getJarPath(aClassURL))).getArchiveEntryFile(path);
             }
-            catch(IOException e) {
+            catch(Exception e) {
+                // Shouldn't normally happen, unless the JAR file is corrupt or cannot be parsed by the file API
                 return null;
             }
         }
@@ -173,7 +173,7 @@ public class ResourceLoader {
         URL aClassURL = getResourceAsURL(aClassRelPath, classLoader);
 
         if(aClassURL==null)
-            return null;
+            return null;    // no resource under that path
 
         if("jar".equals(aClassURL.getProtocol()))
             return FileFactory.getFile(getJarPath(aClassURL));
