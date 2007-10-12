@@ -5717,7 +5717,7 @@ progress_dialog.transferred:RO:Am transferat %1 la %2
 progress_dialog.transferred:IT:Trasferendo %1 in %2
 progress_dialog.transferred:KR:이동됨 %1 속도 %2
 progress_dialog.transferred:pt_BR:Transferido %1 a %2
-progress_dialog.transferred:NL:Overgedragen %1 van %2
+progress_dialog.transferred:NL:Overgedragen %1 met %2
 progress_dialog.transferred:SK:Prenesených %1 pri %2
 
 progress_dialog.elapsed_time:EN:Elapsed time
