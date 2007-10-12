@@ -112,6 +112,8 @@ Improvements:
   is set in the preferences.
 - Simplified and extended the theme editor, with new 'selection outline' and
   'alternate background' values.
+- Added keyboard shortcuts for the items in the 'drive button' for quicker
+  selection
 
 Localization:
 

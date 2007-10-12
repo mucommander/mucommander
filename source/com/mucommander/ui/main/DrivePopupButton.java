@@ -36,6 +36,7 @@ import com.mucommander.ui.button.PopupButton;
 import com.mucommander.ui.dialog.server.ServerConnectDialog;
 import com.mucommander.ui.event.LocationEvent;
 import com.mucommander.ui.event.LocationListener;
+import com.mucommander.ui.helper.MnemonicHelper;
 import com.mucommander.ui.icon.FileIcons;
 
 import javax.swing.*;
@@ -204,9 +205,13 @@ public class DrivePopupButton extends PopupButton implements LocationListener, B
         int nbRoots = rootFolders.length;
         MainFrame mainFrame = folderPanel.getMainFrame();
 
-        // Set system icon for volumes, only if system icons are available on the current platform
+        MnemonicHelper mnemonicHelper = new MnemonicHelper();   // Provides mnemonics and ensures uniqueness
+        JMenuItem item;
         for(int i=0; i<nbRoots; i++) {
-            popupMenu.add(new OpenLocationAction(mainFrame, new Hashtable(), rootFolders[i])).setIcon(
+            item = popupMenu.add(new OpenLocationAction(mainFrame, new Hashtable(), rootFolders[i]));
+            setMnemonic(item, mnemonicHelper);
+            // Set system icon for volumes, only if system icons are available on the current platform
+            item.setIcon(
                     FileIcons.hasProperSystemIcons()?FileIcons.getSystemFileIcon(rootFolders[i]):null);
         }
 
@@ -215,10 +220,14 @@ public class DrivePopupButton extends PopupButton implements LocationListener, B
         // Add boookmarks
         Vector bookmarks = BookmarkManager.getBookmarks();
         int nbBookmarks = bookmarks.size();
+        Bookmark b;
 
         if(nbBookmarks>0) {
-            for(int i=0; i<nbBookmarks; i++)
-                popupMenu.add(new OpenLocationAction(mainFrame, new Hashtable(), (Bookmark)bookmarks.elementAt(i)));
+            for(int i=0; i<nbBookmarks; i++) {
+                b = (Bookmark)bookmarks.elementAt(i);
+                item = popupMenu.add(new OpenLocationAction(mainFrame, new Hashtable(), b));
+                setMnemonic(item, mnemonicHelper);
+            }
         }
         else {
             // No bookmark : add a disabled menu item saying there is no bookmark
@@ -228,15 +237,15 @@ public class DrivePopupButton extends PopupButton implements LocationListener, B
         popupMenu.add(new JSeparator());
 
         // Add Bonjour services menu
-        popupMenu.add(new BonjourMenu(folderPanel.getMainFrame()));
+        setMnemonic(popupMenu.add(new BonjourMenu(folderPanel.getMainFrame())), mnemonicHelper);
         popupMenu.add(new JSeparator());
 
         // Add 'connect to server' shortcuts
-        popupMenu.add(new ServerConnectAction("SMB...", ServerConnectDialog.SMB_INDEX));
-        popupMenu.add(new ServerConnectAction("FTP...", ServerConnectDialog.FTP_INDEX));
-        popupMenu.add(new ServerConnectAction("SFTP...", ServerConnectDialog.SFTP_INDEX));
-        popupMenu.add(new ServerConnectAction("HTTP...", ServerConnectDialog.HTTP_INDEX));
-        popupMenu.add(new ServerConnectAction("NFS...", ServerConnectDialog.NFS_INDEX));
+        setMnemonic(popupMenu.add(new ServerConnectAction("SMB...", ServerConnectDialog.SMB_INDEX)), mnemonicHelper);
+        setMnemonic(popupMenu.add(new ServerConnectAction("FTP...", ServerConnectDialog.FTP_INDEX)), mnemonicHelper);
+        setMnemonic(popupMenu.add(new ServerConnectAction("SFTP...", ServerConnectDialog.SFTP_INDEX)), mnemonicHelper);
+        setMnemonic(popupMenu.add(new ServerConnectAction("HTTP...", ServerConnectDialog.HTTP_INDEX)), mnemonicHelper);
+        setMnemonic(popupMenu.add(new ServerConnectAction("NFS...", ServerConnectDialog.NFS_INDEX)), mnemonicHelper);
 
         // Temporarily make the FileTable which contains this DrivePopupButton the currently active one so that menu actions
         // are triggered on it. The previously active table will be restored when the popup menu is closed (focus is lost).
@@ -245,6 +254,17 @@ public class DrivePopupButton extends PopupButton implements LocationListener, B
         mainFrame.setActiveTable(folderPanel.getFileTable());
 
         return popupMenu;
+    }
+
+
+    /**
+     * Convenience method that sets a mnemonic to the given JMenuItem, using the specified MnemonicHelper.
+     *
+     * @param menuItem the menu item for which to set a mnemonic
+     * @param mnemonicHelper the MnemonicHelper instance to be used to determine the mnemonic's character.
+     */
+    private void setMnemonic(JMenuItem menuItem, MnemonicHelper mnemonicHelper) {
+        menuItem.setMnemonic(mnemonicHelper.getMnemonic(menuItem.getText()));
     }
 
 
