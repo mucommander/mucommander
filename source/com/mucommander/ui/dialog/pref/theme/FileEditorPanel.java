@@ -18,6 +18,7 @@
 
 package com.mucommander.ui.dialog.pref.theme;
 
+import com.mucommander.RuntimeConstants;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.chooser.FontChooser;
 import com.mucommander.ui.dialog.pref.PreferencesDialog;
@@ -26,6 +27,7 @@ import com.mucommander.ui.layout.ProportionalGridPanel;
 import com.mucommander.ui.theme.ThemeData;
 import com.mucommander.ui.chooser.PreviewLabel;
 
+import java.io.InputStreamReader;
 import javax.swing.*;
 import java.awt.*;
 import java.beans.PropertyChangeListener;
@@ -122,10 +124,11 @@ class FileEditorPanel extends ThemeEditorPanel implements PropertyChangeListener
         JScrollPane scroll; // Wraps the preview text are.
 
         // Initialises the preview text area.
-        // Note that we do not need to set colors and fonts here, as this is all taken care
-        // of by the color buttons and font chooser.
         preview = new JTextArea(15, 15);
-        preview.setText(Translator.get("sample_text"));
+
+        // Initialises colors.
+        setBackgroundColors();
+        setForegroundColors();
 
         // Creates the panel.
         panel = new JPanel(new BorderLayout());
@@ -133,9 +136,8 @@ class FileEditorPanel extends ThemeEditorPanel implements PropertyChangeListener
         scroll.getViewport().setPreferredSize(preview.getPreferredSize());
         panel.setBorder(BorderFactory.createTitledBorder(Translator.get("preview")));
 
-        // Initialises colors.
-        setBackgroundColors();
-        setForegroundColors();
+        loadText();
+        preview.setCaretPosition(0);
 
         return panel;
     }
@@ -162,6 +164,32 @@ class FileEditorPanel extends ThemeEditorPanel implements PropertyChangeListener
         preview.setForeground(themeData.getColor(ThemeData.EDITOR_FOREGROUND_COLOR));
         preview.setCaretColor(themeData.getColor(ThemeData.EDITOR_FOREGROUND_COLOR));
         preview.setSelectedTextColor(themeData.getColor(ThemeData.EDITOR_SELECTED_FOREGROUND_COLOR));
+    }
+
+
+
+    // - Misc. ---------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------
+    private void loadText() {
+        char[]            buffer; // Buffer for each chunk of data read from the license file.
+        int               count;  // Number of characters read from the last read operation.
+        InputStreamReader in;     // Stream on the license file.
+
+        in   = null;
+        try {
+            in     = new InputStreamReader(FileEditorPanel.class.getResourceAsStream(RuntimeConstants.LICENSE));
+            buffer = new char[2048];
+
+            while((count = in.read(buffer)) != -1)
+                preview.append(new String(buffer, 0, count));
+        }
+        catch(Exception e) {}
+        finally {
+            if(in != null) {
+                try {in.close();}
+                catch(Exception e) {}
+            }
+        }
     }
 
 

@@ -18,6 +18,7 @@
 
 package com.mucommander.ui.dialog.pref.theme;
 
+import com.mucommander.RuntimeConstants;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.chooser.FontChooser;
 import com.mucommander.ui.chooser.PreviewLabel;
@@ -78,7 +79,7 @@ class LocationBarPanel extends ThemeEditorPanel implements PropertyChangeListene
         colorsPanel.add(createCaptionLabel("theme_editor.progress"));
         colorsPanel.add(new JLabel());
         colorsPanel.add(button = new ColorButton(parent, themeData, ThemeData.LOCATION_BAR_PROGRESS_COLOR, PreviewLabel.OVERLAY_COLOR_PROPERTY_NAME, label));
-        button.addUpdatedPreviewComponent(this);
+        label.addPropertyChangeListener(this);
 
         flowPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         flowPanel.add(colorsPanel);
@@ -89,8 +90,10 @@ class LocationBarPanel extends ThemeEditorPanel implements PropertyChangeListene
         mainPanel.addSpace(10);
         mainPanel.add(flowPanel);
 
+        /*
         normalPreview.setPreferredSize(new Dimension((normalPreview.getPreferredSize().width * 3) / 2, normalPreview.getPreferredSize().height));
         progressPreview.setPreferredSize(new Dimension((progressPreview.getPreferredSize().width * 3) / 2, progressPreview.getPreferredSize().height));
+        */
 
         return mainPanel;
     }
@@ -103,15 +106,15 @@ class LocationBarPanel extends ThemeEditorPanel implements PropertyChangeListene
 
         //        panel.add(new JLabel(Translator.get("theme_editor.normal")));
         panel.add(createCaptionLabel("theme_editor.normal"));
-        panel.add(normalPreview = new EditableComboBox(new JTextField(Translator.get("sample_text"))));
-        normalPreview.addItem(Translator.get("sample_text"));
-        normalPreview.addItem(Translator.get("sample_text"));
+        panel.add(normalPreview = new EditableComboBox(new JTextField(System.getProperty("user.home"))));
+        normalPreview.addItem(System.getProperty("user.home"));
+        normalPreview.addItem(RuntimeConstants.HOMEPAGE_URL);
 
         panel.addSpace(10);
         panel.add(createCaptionLabel("theme_editor.progress"));
         panel.add(progressPreview = new EditableComboBox(progressField = new ProgressTextField(50, themeData.getColor(ThemeData.LOCATION_BAR_PROGRESS_COLOR))));
         progressField.setComboBox(progressPreview);
-        progressField.setText(Translator.get("sample_text"));
+        progressField.setText(System.getProperty("user.home"));
         progressPreview.setEnabled(false);
 
         borderPanel = new JPanel(new BorderLayout());

@@ -18,6 +18,7 @@
 
 package com.mucommander.ui.dialog.pref.theme;
 
+import com.mucommander.RuntimeConstants;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.chooser.FontChooser;
 import com.mucommander.ui.dialog.pref.PreferencesDialog;
@@ -91,9 +92,9 @@ class ShellPanel extends ThemeEditorPanel implements PropertyChangeListener {
 
         headerPanel = new YBoxPanel();
         headerPanel.add(new JLabel(Translator.get("run_dialog.run_command_description") + ":"));
-        headerPanel.add(historyPreview = new EditableComboBox(new JTextField(Translator.get("sample_text"))));
-        historyPreview.addItem(Translator.get("sample_text"));
-        historyPreview.addItem(Translator.get("sample_text"));
+        headerPanel.add(historyPreview = new EditableComboBox(new JTextField("mucommander -v")));
+        historyPreview.addItem("mucommander -v");
+        historyPreview.addItem("java -version");
 
         headerPanel.addSpace(10);
         headerPanel.add(new JLabel(Translator.get("run_dialog.command_output")+":"));
@@ -101,7 +102,10 @@ class ShellPanel extends ThemeEditorPanel implements PropertyChangeListener {
         panel.add(headerPanel, BorderLayout.NORTH);
 
         shellPreview = new JTextArea(15, 15);
-        shellPreview.setText(Translator.get("sample_text"));
+        shellPreview.append(RuntimeConstants.APP_STRING);
+        shellPreview.append("\nCopyright (C) ");
+        shellPreview.append(RuntimeConstants.COPYRIGHT);
+        shellPreview.append(" Maxence Bernard\nThis is free software, distributed under the terms of the GNU General Public License.");
         shellPreview.setLineWrap(true);
         shellPreview.setCaretPosition(0);
 
