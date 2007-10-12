@@ -20,6 +20,7 @@ package com.mucommander.bonjour;
 
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.OpenLocationAction;
+import com.mucommander.ui.helper.MnemonicHelper;
 import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.main.MainFrame;
 
@@ -69,8 +70,12 @@ public class BonjourMenu extends JMenu implements MenuListener {
                 // Add a menu item for each Bonjour service.
                 // When clicked, the corresponding URL will opened in the active table.
                 JMenuItem menuItem;
+                MnemonicHelper mnemonicHelper = new MnemonicHelper();
+
                 for(int i=0; i<nbServices; i++) {
                     menuItem = new JMenuItem(new OpenLocationAction(mainFrame, new Hashtable(), services[i]));
+                    menuItem.setMnemonic(mnemonicHelper.getMnemonic(menuItem.getText()));
+
                     add(menuItem);
                 }
             }
