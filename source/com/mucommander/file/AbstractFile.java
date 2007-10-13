@@ -79,8 +79,13 @@ public abstract class AbstractFile implements FilePermissions {
     protected AbstractFile(FileURL url) {
         this.fileURL = url;
     }
-	
-    
+
+
+
+    /////////////////////////
+    // Overridable methods //
+    /////////////////////////
+
     /**
      * Returns the {@link FileURL} instance that represents this file's location.
      *
@@ -119,33 +124,6 @@ public abstract class AbstractFile implements FilePermissions {
 
 
     /**
-     * Returns the name of the file without its extension.
-     *
-     * <p>A filename has an extension if and only if:<br/>
-     * - it contains at least one <code>.</code> character<br/>
-     * - the last <code>.</code> is not the last character of the filename<br/>
-     * - the last <code>.</code> is not the first character of the filename<br/>
-     * If this file has no extension, its full name is returned.</p>
-     *
-     * @return this file's name, without its extension.
-     * @see    #getName()
-     * @see    #getExtension()
-     */
-    public final String getNameWithoutExtension() {
-        String name;
-        int    position;
-
-        name     = getName();
-        position = name.lastIndexOf('.');
-
-        if((position<=0) || (position == name.length() - 1))
-            return name;
-
-        return name.substring(0, position);
-    }
-
-
-    /**
      * Returns this file's extension, <code>null</code> if this file's name doesn't have an extension.
      *
      * <p>A filename has an extension if and only if:<br/>
@@ -160,29 +138,6 @@ public abstract class AbstractFile implements FilePermissions {
     }
 
     
-    /**
-     * Returns the given filename's extension, <code>null</code> if the filename doesn't have an extension.
-     *
-     * <p>A filename has an extension if and only if:<br/>
-     * - it contains at least one <code>.</code> character<br/>
-     * - the last <code>.</code> is not the last character of the filename<br/>
-     * - the last <code>.</code> is not the first character of the filename</p>
-     *
-     * @param filename a filename, not a full path
-     * @return the given filename's extension, <code>null</code> if the filename doesn't have an extension
-     */
-    public static String getExtension(String filename) {
-        int lastDotPos = filename.lastIndexOf('.');
-
-        int len;
-        if(lastDotPos<=0 || lastDotPos==(len=filename.length())-1)
-            return null;
-
-        return filename.substring(lastDotPos+1, len);
-    }
-
-
-
     /**
      * Returns the absolute path to this file:
      * <ul>
@@ -207,19 +162,6 @@ public abstract class AbstractFile implements FilePermissions {
 
 
     /**
-     * Returns the absolute path to this file.
-     * A separator character will be appended to the returned path if <code>true</code> is passed.
-     *
-     * @param appendSeparator if true, a separator will be appended to the returned path
-     * @return the absolute path to this file
-     */
-    public final String getAbsolutePath(boolean appendSeparator) {
-        String path = getAbsolutePath();
-        return appendSeparator?addTrailingSeparator(path):removeTrailingSlash(path);
-    }
-
-	
-    /**
      * Returns the canonical path to this file, resolving any symbolic links or '..' and '.' occurrences.
      *
      * <p>This implementation simply returns the value of {@link #getAbsolutePath()}, and thus should be overridden
@@ -229,19 +171,6 @@ public abstract class AbstractFile implements FilePermissions {
      */
     public String getCanonicalPath() {
         return getAbsolutePath();
-    }
-
-
-    /**
-     * Returns the canonical path to this file, resolving any symbolic links or '..' and '.' occurrences.
-     * A separator character will be appended to the returned path if <code>true</code> is passed.
-     *
-     * @param appendSeparator if true, a separator will be appended to the returned path
-     * @return the canonical path to this file
-     */
-    public final String getCanonicalPath(boolean appendSeparator) {
-        String path = getCanonicalPath();
-        return appendSeparator?addTrailingSeparator(path):removeTrailingSlash(path);
     }
 
 
@@ -358,7 +287,7 @@ public abstract class AbstractFile implements FilePermissions {
      * @param path the path for which to remove the trailing separator
      * @return the path free of a trailing separator
      */
-    protected final String removeTrailingSlash(String path) {
+    protected final String removeTrailingSeparator(String path) {
         // Remove trailing slash if path is not '/' or trailing backslash if path does not end with ':\' 
         // (Reminder: C: is C's current folder, while C:\ is C's root)
         String separator = getSeparator();
@@ -395,56 +324,6 @@ public abstract class AbstractFile implements FilePermissions {
         return in;
     }
 	
-
-    /**
-     * Copies the contents of the given <code>InputStream</code> to the specified </code>OutputStream</code>
-     * and throws an IOException if something went wrong. The streams will *NOT* be closed by this method.
-     *
-     * <p>Read and write operations are buffered, with a buffer of {@link #IO_BUFFER_SIZE} bytes. For performance
-     * reasons, this buffer is provided by {@link BufferPool}. There is no need to provide a BufferedInputStream.
-     * A BufferedOutputStream also isn't necessary, unless this method is called repeatedly with the same OutputStream
-     * and with potentially small InputStream (smaller than {@link #IO_BUFFER_SIZE}: in this case, providing a
-     * BufferedOutputStream will further improve performance by grouping calls to the underlying OutputStream write method.
-     *
-     * <p>Copy progress can optionally be monitored by supplying a {@link com.mucommander.io.CounterInputStream}
-     * and/or {@link com.mucommander.io.CounterOutputStream}.
-     *
-     * @param in the InputStream to read from
-     * @param out the OutputStream to write to
-     * @throws FileTransferException if something went wrong while reading from or writing to one of the provided streams
-     */
-    public static void copyStream(InputStream in, OutputStream out) throws FileTransferException {
-        // Use BufferPool to reuse any available buffer of the same size
-        byte buffer[] = BufferPool.getBuffer(IO_BUFFER_SIZE);
-        try {
-            // Copies the InputStream's content to the OutputStream chunks by chunks
-            int nbRead;
-
-            while(true) {
-                try {
-                    nbRead = in.read(buffer, 0, buffer.length);
-                }
-                catch(IOException e) {
-                    throw new FileTransferException(FileTransferException.READING_SOURCE);
-                }
-
-                if(nbRead==-1)
-                    break;
-
-                try {
-                    out.write(buffer, 0, nbRead);
-                }
-                catch(IOException e) {
-                    throw new FileTransferException(FileTransferException.WRITING_DESTINATION);
-                }
-            }
-        }
-        finally {
-            // Make the buffer available for further use
-            BufferPool.releaseBuffer(buffer);
-        }
-    }
-
 
     /**
      * Copies the contents of the given <code>InputStream</code> to this file. The provided <code>InputStream</code>
@@ -636,46 +515,12 @@ public abstract class AbstractFile implements FilePermissions {
         return destFile.getTopAncestor().getClass().equals(getTopAncestor().getClass())?SHOULD_HINT:SHOULD_NOT_HINT;
     }
 
-    private AbstractFile getChildFile(String name) throws IOException {
-        FileURL childURL = (FileURL)getURL().clone();
-        String path = childURL.getPath();
-        String pathSeparator = childURL.getPathSeparator();
-
-        path += (path.endsWith(pathSeparator)?"":pathSeparator)+name;
-        childURL.setPath(path);
-
-        return FileFactory.getFile(childURL, true);
-    }
-
-    /**
-     * Convenience method that creates a directory with the given name as a child of this directory.
-     * This method will fail if this file is not a directory.
-     *
-     * @param name the directory to create
-     * @throws IOException if this operation is not possible.
-     */
-    public final void mkdir(String name) throws IOException {
-        getChildFile(name).mkdir();
-    }
-
-    /**
-     * Convenience method that creates a file with the given name as a child of this directory.
-     * This method will fail if this file is not a directory.
-     *
-     * @param name the file to create
-     * @throws IOException if this operation is not possible.
-     */
-    public final void mkfile(String name) throws IOException {
-        getChildFile(name).mkfile();
-    }
-
     /**
      * Creates this file as a normal file. This method will fail if this file already exists.
      *
-     * @throws IOException if this operation is not possible.
+     * @throws IOException if the file could not be created, either because it already exists or because of an I/O error
      */
     public void mkfile() throws IOException {
-        // We don't want to overwrite files.
         if(exists())
             throw new IOException();
 
@@ -909,6 +754,130 @@ public abstract class AbstractFile implements FilePermissions {
     }
 
 
+    ///////////////////
+    // Final methods //
+    ///////////////////
+
+    /**
+     * Returns the name of the file without its extension.
+     *
+     * <p>A filename has an extension if and only if:<br/>
+     * - it contains at least one <code>.</code> character<br/>
+     * - the last <code>.</code> is not the last character of the filename<br/>
+     * - the last <code>.</code> is not the first character of the filename<br/>
+     * If this file has no extension, its full name is returned.</p>
+     *
+     * @return this file's name, without its extension.
+     * @see    #getName()
+     * @see    #getExtension()
+     */
+    public final String getNameWithoutExtension() {
+        String name;
+        int    position;
+
+        name     = getName();
+        position = name.lastIndexOf('.');
+
+        if((position<=0) || (position == name.length() - 1))
+            return name;
+
+        return name.substring(0, position);
+    }
+
+
+    /**
+     * Returns the absolute path to this file.
+     * A separator character will be appended to the returned path if <code>true</code> is passed.
+     *
+     * @param appendSeparator if true, a separator will be appended to the returned path
+     * @return the absolute path to this file
+     */
+    public final String getAbsolutePath(boolean appendSeparator) {
+        String path = getAbsolutePath();
+        return appendSeparator?addTrailingSeparator(path): removeTrailingSeparator(path);
+    }
+
+
+    /**
+     * Returns the canonical path to this file, resolving any symbolic links or '..' and '.' occurrences.
+     * A separator character will be appended to the returned path if <code>true</code> is passed.
+     *
+     * @param appendSeparator if true, a separator will be appended to the returned path
+     * @return the canonical path to this file
+     */
+    public final String getCanonicalPath(boolean appendSeparator) {
+        String path = getCanonicalPath();
+        return appendSeparator?addTrailingSeparator(path): removeTrailingSeparator(path);
+    }
+
+
+    /**
+     * Returns a child of this file, whose path is the concatenation of this file's path and the given relative path.
+     * Although this method does not enforce it, the specified path should be relative, i.e. should not start with
+     * a separator.<br/>
+     * An <code>IOException</code> may be thrown if the child file could not be instanciated but the returned file
+     * instance should never be <code>null</code>.
+     *
+     * @param relativePath the child's path, relatively to this file's path
+     * @return an AbstractFile representing the requested child file, never null
+     * @throws IOException if the child file could not be instanciated
+     */
+    public final AbstractFile getChild(String relativePath) throws IOException {
+        FileURL childURL = (FileURL)getURL().clone();
+        childURL.setPath(addTrailingSeparator(childURL.getPath())+ relativePath);
+
+        return FileFactory.getFile(childURL, true);
+    }
+
+    /**
+     * Returns a child of this file, whose path is the concatenation of this file's path and the given filename.
+     * Although this method does not enforce it, the specified filename should not contain any separator character,
+     * except for a trailing one.<br/>
+     * An <code>IOException</code> may be thrown if the child file could not be instanciated but the returned file 
+     * instance should never be <code>null</code>.
+     *
+     * <p>Although {@link #getChild} can be used to retrieve a direct child file, this method should be favored because
+     * it allows to use this file instance as the parent of the returned child file.</p>
+     *
+     * @param filename the child's filename
+     * @return an AbstractFile representing the requested direct child file, never null
+     * @throws IOException if the child file could not be instanciated
+     */
+    public final AbstractFile getDirectChild(String filename) throws IOException {
+        AbstractFile childFile = getChild(filename);
+
+        // Use this file as the child's parent, it avoids creating a new AbstractFile instance when getParent() is called
+        childFile.setParent(this);
+
+        return childFile;
+    }
+
+
+    /**
+     * Convenience method that creates a directory as a direct child of this directory.
+     * This method will fail if this file is not a directory.
+     *
+     * @param name name of the directory to create
+     * @throws IOException if the directory could not be created, either because the file already exists or for any
+     * other reason.
+     */
+    public final void mkdir(String name) throws IOException {
+        getChild(name).mkdir();
+    }
+
+    /**
+     * Convenience method that creates a file as a direct child of this directory.
+     * This method will fail if this file is not a directory.
+     *
+     * @param name name of the file to create
+     * @throws IOException if the file could not be created, either because the file already exists or for any
+     * other reason.
+     */
+    public final void mkfile(String name) throws IOException {
+        getChild(name).mkfile();
+    }
+
+
     /**
      * Returns the immediate ancestor of this <code>AbstractFile</code> if it has one, <code>this</code> otherwise:
      * <ul>
@@ -1050,6 +1019,82 @@ public abstract class AbstractFile implements FilePermissions {
         // a Dimension object triggers the AWT and Swing classes loading. Since these classes are not
         // needed in a headless environment, we want them to be loaded only if strictly necessary.
         return getIcon(new java.awt.Dimension(16, 16));
+    }
+
+
+    ////////////////////
+    // Static methods //
+    ////////////////////
+
+    /**
+     * Returns the given filename's extension, <code>null</code> if the filename doesn't have an extension.
+     *
+     * <p>A filename has an extension if and only if:<br/>
+     * - it contains at least one <code>.</code> character<br/>
+     * - the last <code>.</code> is not the last character of the filename<br/>
+     * - the last <code>.</code> is not the first character of the filename</p>
+     *
+     * @param filename a filename, not a full path
+     * @return the given filename's extension, <code>null</code> if the filename doesn't have an extension
+     */
+    public static String getExtension(String filename) {
+        int lastDotPos = filename.lastIndexOf('.');
+
+        int len;
+        if(lastDotPos<=0 || lastDotPos==(len=filename.length())-1)
+            return null;
+
+        return filename.substring(lastDotPos+1, len);
+    }
+
+
+    /**
+     * Copies the contents of the given <code>InputStream</code> to the specified </code>OutputStream</code>
+     * and throws an IOException if something went wrong. The streams will *NOT* be closed by this method.
+     *
+     * <p>Read and write operations are buffered, with a buffer of {@link #IO_BUFFER_SIZE} bytes. For performance
+     * reasons, this buffer is provided by {@link BufferPool}. There is no need to provide a BufferedInputStream.
+     * A BufferedOutputStream also isn't necessary, unless this method is called repeatedly with the same OutputStream
+     * and with potentially small InputStream (smaller than {@link #IO_BUFFER_SIZE}: in this case, providing a
+     * BufferedOutputStream will further improve performance by grouping calls to the underlying OutputStream write method.
+     *
+     * <p>Copy progress can optionally be monitored by supplying a {@link com.mucommander.io.CounterInputStream}
+     * and/or {@link com.mucommander.io.CounterOutputStream}.
+     *
+     * @param in the InputStream to read from
+     * @param out the OutputStream to write to
+     * @throws FileTransferException if something went wrong while reading from or writing to one of the provided streams
+     */
+    public static void copyStream(InputStream in, OutputStream out) throws FileTransferException {
+        // Use BufferPool to reuse any available buffer of the same size
+        byte buffer[] = BufferPool.getBuffer(IO_BUFFER_SIZE);
+        try {
+            // Copies the InputStream's content to the OutputStream chunks by chunks
+            int nbRead;
+
+            while(true) {
+                try {
+                    nbRead = in.read(buffer, 0, buffer.length);
+                }
+                catch(IOException e) {
+                    throw new FileTransferException(FileTransferException.READING_SOURCE);
+                }
+
+                if(nbRead==-1)
+                    break;
+
+                try {
+                    out.write(buffer, 0, nbRead);
+                }
+                catch(IOException e) {
+                    throw new FileTransferException(FileTransferException.WRITING_DESTINATION);
+                }
+            }
+        }
+        finally {
+            // Make the buffer available for further use
+            BufferPool.releaseBuffer(buffer);
+        }
     }
 
 
@@ -1198,7 +1243,8 @@ public abstract class AbstractFile implements FilePermissions {
     /**
      * Creates this file as a directory. This method will fail if this file already exists.
      *
-     * @throws IOException if this operation is not possible.
+     * @throws IOException if the directory could not be created, either because this file already exists or for any
+     * other reason.
      */
     public abstract void mkdir() throws IOException;
 
