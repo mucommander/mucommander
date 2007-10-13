@@ -285,6 +285,10 @@ public abstract class ProxyFile extends AbstractFile {
         return file.ls(filter);
     }
 
+    public void mkfile() throws IOException {
+        file.mkfile();
+    }
+
     public boolean equals(Object f) {
         return file.equals(f);
     }
