@@ -24,6 +24,7 @@ import com.mucommander.file.ArchiveEntry;
 import com.mucommander.file.SimpleArchiveEntry;
 import org.apache.tools.bzip2.CBZip2InputStream;
 
+import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Vector;
@@ -70,7 +71,23 @@ public class Bzip2ArchiveFile extends AbstractROArchiveFile {
 
 
     public InputStream getEntryInputStream(ArchiveEntry entry) throws IOException {
-        try { return new CBZip2InputStream(getInputStream()); }
+        try {
+            InputStream in = getInputStream();
+
+            // Skips the 2 magic bytes 'BZ', as required by CBZip2InputStream. Quoted from CBZip2InputStream's Javadoc:
+            // "Although BZip2 headers are marked with the magic 'Bz'. this constructor expects the next byte in the
+            // stream to be the first one after the magic.  Thus callers have to skip the first two bytes. Otherwise
+            // this constructor will throw an exception."
+            // Note: the return value of read() is unchecked. In the unlikely event that EOF is reached in the first
+            // 2 bytes, CBZip2InputStream will throw an IOException.
+            in.read();
+            in.read();
+
+            // Quoted from CBZip2InputStream's Javadoc:
+            // "CBZip2InputStream reads bytes from the compressed source stream via the single byte {@link java.io.InputStream#read()
+            // read()} method exclusively. Thus you should consider to use a buffered source stream."
+            return new CBZip2InputStream(new BufferedInputStream(in));
+        }
         catch(Exception e) {
             // CBZip2InputStream is known to throw NullPointerException if file is not properly Bzip2-encoded
             // so we need to catch those and throw them as IOException

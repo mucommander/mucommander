@@ -114,6 +114,7 @@ Improvements:
   'alternate background' values.
 - Added keyboard shortcuts for the items in the 'drive button' for quicker
   selection
+- Read access of bzip2 archives substantially improved
 
 Localization:
 
@@ -129,6 +130,7 @@ Bug fixes:
 - Fixed folder panel borders failing to refresh properly when their color
   was changed.
 - Fixed double "Download or browse" dialogs when opening http files.
+- Fixed issues with opening some bzip2 archives
 
 Known issues:
 - The bookmarks file system doesn't allow users to specify which credentials
@@ -137,7 +139,6 @@ Known issues:
 - Italian, Korean and Polish translations are not up-to-date.
 - Executable permissions are not preserved properly for local files prior to
   Java 1.6.
-- Some BZ2 archives can not be properly opened.
 - SMB support may not work properly on non multi-language JRE.
 - 'Copy files to clipboard' not working with some applications (files are not
   pasted).
