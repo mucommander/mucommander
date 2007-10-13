@@ -208,8 +208,8 @@ public abstract class Archiver {
 		
         return entryPath;
     }
-	
-	
+
+
     ////////////////////
     // Static methods //
     ////////////////////
@@ -270,7 +270,7 @@ public abstract class Archiver {
                 archiver = new SingleFileArchiver(new GZIPOutputStream(out));
                 break;
             case BZ2_FORMAT:
-                archiver = new SingleFileArchiver(new CBZip2OutputStream(out));
+                archiver = new SingleFileArchiver(createBzip2OutputStream(out));
                 break;
             case TAR_FORMAT:
                 archiver = new TarArchiver(out);
@@ -279,7 +279,7 @@ public abstract class Archiver {
                 archiver = new TarArchiver(new GZIPOutputStream(out));
                 break;
             case TAR_BZ2_FORMAT:
-                archiver = new TarArchiver(new CBZip2OutputStream(out));
+                archiver = new TarArchiver(createBzip2OutputStream(out));
                 break;
 
             default:
@@ -289,6 +289,25 @@ public abstract class Archiver {
         archiver.setFormat(format);
 
         return archiver;
+    }
+
+    /**
+     * Creates and returns a Bzip2 <code>OutputStream</code> using the given <code>OutputStream</code> as the underlying
+     * stream.
+     *
+     * @param out the underlying stream
+     * @return a Bzip2 OutputStream
+     * @throws IOException if an error occurred while initializing the Bzip2 OutputStream
+     */
+    protected static OutputStream createBzip2OutputStream(OutputStream out) throws IOException {
+        // Writes the 2 magic bytes 'BZ', as required by CBZip2OutputStream. A quote from CBZip2OutputStream's Javadoc:
+        // "Attention: The caller is resonsible to write the two BZip2 magic bytes "BZ" to the specified stream
+        // prior to calling this constructor."
+
+        out.write('B');
+        out.write('Z');
+
+        return new CBZip2OutputStream(out);
     }
 
 
