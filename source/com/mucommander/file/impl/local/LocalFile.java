@@ -508,7 +508,13 @@ public class LocalFile extends AbstractFile {
     ////////////////////////
 
     public String getName() {
-        return parentFilePath ==null?absPath+SEPARATOR:file.getName();
+        // If this file has no parent, return:
+        // - the drive's name under OSes with root drives such as Windows, e.g. "C:"
+        // - "/" under Unix-based systems
+        if(parentFilePath==null)
+            return usesRootDrives()?absPath:"/";
+
+        return file.getName();
     }
 
     public String getAbsolutePath() {
