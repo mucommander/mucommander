@@ -5704,7 +5704,7 @@ progress_dialog.starting:SK:Prenos spustený...
 # %1 is the amount of data transferred (already formatted+localized) and %2 the transfer speed.
 progress_dialog.transferred:EN:Transferred %1 at %2
 progress_dialog.transferred:FR:%1 transférés à %2
-progress_dialog.transferred:DE:Transferiert %1 von %2
+progress_dialog.transferred:DE:Transferiert %1 mit %2
 progress_dialog.transferred:ES:%1 transferidos a %2
 progress_dialog.transferred:CS:Přeneseno %1 při rychlosti %2
 progress_dialog.transferred:zh_TW:已傳送 %1 速度 %2
