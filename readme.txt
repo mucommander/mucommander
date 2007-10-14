@@ -112,9 +112,9 @@ Improvements:
   is set in the preferences.
 - Simplified and extended the theme editor, with new 'selection outline' and
   'alternate background' values.
-- Added keyboard shortcuts for the items in the 'drive button' for quicker
-  selection
-- Read access of bzip2 archives substantially improved
+- Added keyboard shortcuts for the items in the drive popup button
+- Windows: drives in the drive popup button now show extended names
+- Bzip2 read-access speed substantially improved
 
 Localization:
 
