@@ -207,17 +207,18 @@ public class DrivePopupButton extends PopupButton implements LocationListener, B
 
 
     /**
-     * Returns the extended name of the given local file, e.g. "Local Disk (C:)" for C:\. This should only be called
-     * under Windows.
+     * Returns the extended name of the given local file, e.g. "Local Disk (C:)" for C:\. The returned value is
+     * interesting only under Windows. This method is I/O bound and very slow so it should not be called from the main
+     * event thread.
      *
      * @param localFile the file for which to return the extended name
      * @return the extended name of the given local file
      */
-    private static String getWindowsExtendedDriveName(AbstractFile localFile) {
-        // Note: fileSystemView.getSystemDisplayName(java.io.File) is unfortunately very slow
+    private static String getExtendedDriveName(AbstractFile localFile) {
+        // Note: fileSystemView.getSystemDisplayName(java.io.File) is unfortunately very very slow
         String name = fileSystemView.getSystemDisplayName((java.io.File)localFile.getUnderlyingFileObject());
 
-        if(name==null || name.equals(""))
+        if(name==null || name.equals(""))   // This happens for CD/DVD drives when they don't contain any disc
             return localFile.getName();
 
         return name;
@@ -229,34 +230,47 @@ public class DrivePopupButton extends PopupButton implements LocationListener, B
     ////////////////////////////////////
 
     public JPopupMenu getPopupMenu() {
-        JPopupMenu popupMenu = new JPopupMenu();
+        final JPopupMenu popupMenu = new JPopupMenu();
 
         // Update root folders in case new volumes were mounted
         rootFolders = RootFolders.getRootFolders();
 
         // Add root volumes
-        int nbRoots = rootFolders.length;
+        final int nbRoots = rootFolders.length;
         MainFrame mainFrame = folderPanel.getMainFrame();
-
 
         MnemonicHelper mnemonicHelper = new MnemonicHelper();   // Provides mnemonics and ensures uniqueness
         JMenuItem item;
-        String name;
+
+        boolean useExtendedDriveNames = fileSystemView!=null;
+        final Vector itemsV = useExtendedDriveNames?new Vector():null;
 
         for(int i=0; i<nbRoots; i++) {
-            if(fileSystemView==null) {      // fileSystemView is null on all platforms but Windows
-                item = popupMenu.add(new OpenLocationAction(mainFrame, new Hashtable(), rootFolders[i]));
-                setMnemonic(item, mnemonicHelper);
-            }
-            else {
-                // Under Windows, show the extended drive name (e.g. "Local Disk (C:)" instead of just "C:") but use
-                // the simple drive name for the mnemonic (i.e. 'C' instead of 'L').
-                item = popupMenu.add(new OpenLocationAction(mainFrame, new Hashtable(), rootFolders[i], getWindowsExtendedDriveName(rootFolders[i])));
-                item.setMnemonic(mnemonicHelper.getMnemonic(rootFolders[i].getName()));
-            }
+            item = popupMenu.add(new OpenLocationAction(mainFrame, new Hashtable(), rootFolders[i]));
+            setMnemonic(item, mnemonicHelper);
 
             // Set system icon for volumes, only if system icons are available on the current platform
             item.setIcon(FileIcons.hasProperSystemIcons()?FileIcons.getSystemFileIcon(rootFolders[i]):null);
+
+            if(useExtendedDriveNames)
+                itemsV.add(item);   // JMenu offers no way to retrieve a particular JMenuItem, so we have to keep them
+        }
+
+        if(useExtendedDriveNames) {
+            // Calls to getExtendedDriveName(String) are very slow, so they are performed in a separate thread so as
+            // to not lock the main even thread. The popup menu gets first displayed with the short drive names, and
+            // then refreshed with the extended names as they are retrieved.
+
+            new Thread() {
+                public void run() {
+                    for(int i=0; i<nbRoots; i++) {
+                        // Under Windows, show the extended drive name (e.g. "Local Disk (C:)" instead of just "C:") but use
+                        // the simple drive name for the mnemonic (i.e. 'C' instead of 'L').
+                        ((JMenuItem)itemsV.elementAt(i)).setText(getExtendedDriveName(rootFolders[i]));
+                    }
+                }
+
+            }.start();
         }
 
         popupMenu.add(new JSeparator());
