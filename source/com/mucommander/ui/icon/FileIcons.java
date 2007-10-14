@@ -236,7 +236,7 @@ public class FileIcons {
      * Sets the current icon scale factor. The given value must be greater than 0.
      *
      * @param factor the new icon scale factor to use
-     * @throw IllegalArgumentException if factor is lower or equal to 0
+     * @throws IllegalArgumentException if factor is lower or equal to 0
      */
     public static void setScaleFactor(float factor) {
         if(scaleFactor<=0)
