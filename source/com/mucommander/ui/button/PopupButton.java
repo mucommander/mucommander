@@ -18,7 +18,6 @@
 
 package com.mucommander.ui.button;
 
-import com.mucommander.Debug;
 import com.mucommander.ui.action.MuteProxyAction;
 
 import javax.swing.*;
@@ -146,9 +145,6 @@ public abstract class PopupButton extends NonFocusableButton {
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 Dimension popupMenuSize = popupMenu.getPreferredSize();
-
-if(Debug.ON) Debug.trace("x="+(popupMenuLocation==RIGHT?getWidth():popupMenuLocation==LEFT?-popupMenuSize.getWidth():0)+" y="+(popupMenuLocation==BOTTOM?getHeight():popupMenuLocation==TOP?-popupMenuSize.getHeight():0));
-if(Debug.ON) Debug.trace("width="+popupMenuSize.getWidth()+" height="+popupMenuSize.getHeight());
 
                 popupMenu.show(PopupButton.this,
                         popupMenuLocation==RIGHT?getWidth():popupMenuLocation==LEFT?-(int)popupMenuSize.getWidth():0,
