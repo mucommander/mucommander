@@ -40,6 +40,7 @@ import com.mucommander.ui.helper.MnemonicHelper;
 import com.mucommander.ui.icon.FileIcons;
 
 import javax.swing.*;
+import javax.swing.filechooser.FileSystemView;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.Hashtable;
@@ -59,7 +60,15 @@ public class DrivePopupButton extends PopupButton implements LocationListener, B
 	
     /** Root folders array */
     private static AbstractFile rootFolders[] = RootFolders.getRootFolders();
-	
+
+    /** static FileSystemView instance, has a (non-null) value only under Windows */
+    private static FileSystemView fileSystemView;
+
+    static {
+        if(PlatformManager.isWindowsFamily())
+            fileSystemView = FileSystemView.getFileSystemView();
+    }
+
 
     /**
      * Action that triggers the 'server connection dialog' for a specified protocol.
@@ -124,7 +133,8 @@ public class DrivePopupButton extends PopupButton implements LocationListener, B
         FileURL currentURL = currentFolder.getURL();
 
         String newLabel = null;
-		
+//        String newToolTip = null;
+
         // First tries to find a bookmark matching the specified folder
         Vector bookmarks = BookmarkManager.getBookmarks();
         int nbBookmarks = bookmarks.size();
@@ -181,13 +191,36 @@ public class DrivePopupButton extends PopupButton implements LocationListener, B
                         }
                     }
                     newLabel = rootFolders[bestIndex].getName();
+
+                    // Not used because the call to FileSystemView is slow
+//                    if(fileSystemView!=null)
+//                        newToolTip = getWindowsExtendedDriveName(rootFolders[bestIndex]);
                 }
             }
         }
 		
         setText(newLabel);
+//        setToolTipText(newToolTip);
         // Set the folder icon based on the current system icons policy
         setIcon(FileIcons.getFileIcon(currentFolder));
+    }
+
+
+    /**
+     * Returns the extended name of the given local file, e.g. "Local Disk (C:)" for C:\. This should only be called
+     * under Windows.
+     *
+     * @param localFile the file for which to return the extended name
+     * @return the extended name of the given local file
+     */
+    private static String getWindowsExtendedDriveName(AbstractFile localFile) {
+        // Note: fileSystemView.getSystemDisplayName(java.io.File) is unfortunately very slow
+        String name = fileSystemView.getSystemDisplayName((java.io.File)localFile.getUnderlyingFileObject());
+
+        if(name==null || name.equals(""))
+            return localFile.getName();
+
+        return name;
     }
 
 
@@ -205,14 +238,19 @@ public class DrivePopupButton extends PopupButton implements LocationListener, B
         int nbRoots = rootFolders.length;
         MainFrame mainFrame = folderPanel.getMainFrame();
 
+
         MnemonicHelper mnemonicHelper = new MnemonicHelper();   // Provides mnemonics and ensures uniqueness
         JMenuItem item;
+
         for(int i=0; i<nbRoots; i++) {
-            item = popupMenu.add(new OpenLocationAction(mainFrame, new Hashtable(), rootFolders[i]));
+            if(fileSystemView==null)
+                item = popupMenu.add(new OpenLocationAction(mainFrame, new Hashtable(), rootFolders[i]));
+            else
+                item = popupMenu.add(new OpenLocationAction(mainFrame, new Hashtable(), rootFolders[i], getWindowsExtendedDriveName(rootFolders[i])));
+
             setMnemonic(item, mnemonicHelper);
             // Set system icon for volumes, only if system icons are available on the current platform
-            item.setIcon(
-                    FileIcons.hasProperSystemIcons()?FileIcons.getSystemFileIcon(rootFolders[i]):null);
+            item.setIcon(FileIcons.hasProperSystemIcons()?FileIcons.getSystemFileIcon(rootFolders[i]):null);
         }
 
         popupMenu.add(new JSeparator());
