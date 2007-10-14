@@ -241,14 +241,20 @@ public class DrivePopupButton extends PopupButton implements LocationListener, B
 
         MnemonicHelper mnemonicHelper = new MnemonicHelper();   // Provides mnemonics and ensures uniqueness
         JMenuItem item;
+        String name;
 
         for(int i=0; i<nbRoots; i++) {
-            if(fileSystemView==null)
+            if(fileSystemView==null) {      // fileSystemView is null on all platforms but Windows
                 item = popupMenu.add(new OpenLocationAction(mainFrame, new Hashtable(), rootFolders[i]));
-            else
+                setMnemonic(item, mnemonicHelper);
+            }
+            else {
+                // Under Windows, show the extended drive name (e.g. "Local Disk (C:)" instead of just "C:") but use
+                // the simple drive name for the mnemonic (i.e. 'C' instead of 'L').
                 item = popupMenu.add(new OpenLocationAction(mainFrame, new Hashtable(), rootFolders[i], getWindowsExtendedDriveName(rootFolders[i])));
+                item.setMnemonic(mnemonicHelper.getMnemonic(rootFolders[i].getName()));
+            }
 
-            setMnemonic(item, mnemonicHelper);
             // Set system icon for volumes, only if system icons are available on the current platform
             item.setIcon(FileIcons.hasProperSystemIcons()?FileIcons.getSystemFileIcon(rootFolders[i]):null);
         }
