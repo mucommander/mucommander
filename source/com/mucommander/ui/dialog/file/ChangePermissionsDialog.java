@@ -86,6 +86,7 @@ public class ChangePermissionsDialog extends FocusDialog implements FilePermissi
 
         AbstractFile destFile = files.size()==1?files.fileAt(0):files.getBaseFolder();
         int permSetMask = destFile.getPermissionSetMask();
+        boolean canSetPermission = permSetMask!=0;
         int defaultPerms = destFile.getPermissions();
 
         gridPanel.add(new JLabel());
@@ -97,9 +98,7 @@ public class ChangePermissionsDialog extends FocusDialog implements FilePermissi
             gridPanel.add(new JLabel(Translator.get(a== USER_ACCESS ?"permissions.user":a==GROUP_ACCESS?"permissions.group":"permissions.other")));
 
             for(int p=READ_PERMISSION; p>=EXECUTE_PERMISSION; p=p>>1) {
-//                permCheckBox = new JCheckBox(p==READ_PERMISSION?"read":p==WRITE_PERMISSION?"write":"executable");
                 permCheckBox = new JCheckBox();
-
                 permCheckBox.setSelected((defaultPerms & (p<<a*3))!=0);
 
                 // Enable the checkbox only if the permission can be set in the destination
@@ -134,12 +133,13 @@ public class ChangePermissionsDialog extends FocusDialog implements FilePermissi
         // Initializes the field's value
         updateOctalPermTextField();
 
-        // Disable text field if no permission bit can be set
-        if(permSetMask==0)
-            octalPermTextField.setEnabled(false);
-        else {
+        if(canSetPermission) {
             setInitialFocusComponent(octalPermTextField);
             doc.addDocumentListener(this);
+        }
+        // Disable text field if no permission bit can be set
+        else {
+            octalPermTextField.setEnabled(false);
         }
 
         yBoxPanel.addSpace(10);
@@ -151,6 +151,8 @@ public class ChangePermissionsDialog extends FocusDialog implements FilePermissi
         yBoxPanel.addSpace(15);
 
         recurseDirCheckBox = new JCheckBox(Translator.get("recurse_directories"));
+        // Disable check box if no permission bit can be set
+        recurseDirCheckBox.setEnabled(canSetPermission && (files.size()>1 || ((AbstractFile)files.elementAt(0)).isDirectory()));
         yBoxPanel.add(recurseDirCheckBox);
 
         Container contentPane = getContentPane();
@@ -161,7 +163,12 @@ public class ChangePermissionsDialog extends FocusDialog implements FilePermissi
 
         contentPane.add(DialogToolkit.createOKCancelPanel(okButton, cancelButton, this), BorderLayout.SOUTH);
 
-        getRootPane().setDefaultButton(okButton);
+        if(!canSetPermission) {
+            // Disable OK button if no permission bit can be set
+            okButton.setEnabled(false);
+        }
+
+        getRootPane().setDefaultButton(canSetPermission?okButton:cancelButton);
         setResizable(false);
     }
 
