@@ -1136,16 +1136,27 @@ public abstract class AbstractFile implements FilePermissions {
      * @return this file's last modified date, in milliseconds since the epoch (00:00:00 GMT, January 1, 1970)
      */
     public abstract long getDate();
-	
+
+    /**
+     * Returns <code>true</code> if this file's date can be changed using {@link #changeDate(long)}. It's important
+     * to note that a <code>true</code> return value doesn't mean that a call to {@link #changeDate(long)} will
+     * necessarily succeed ; it could fail because of unsufficient permissions or simply because of a low-level I/O ;
+     * but it should at least ensure that {@link #changeDate(long)} is implemented and has a chance of succeeding.   
+     *
+     * @return <code>true</code> if this file's date can be changed using {@link #changeDate(long)}
+     */
+    public abstract boolean canChangeDate();
+
     /**
      * Changes last modified date and returns <code>true</code> if date was changed successfully, <code>false</code>
-     *  if the operation is not implemented or could not be successfully completed.
+     * if the operation could not be completed, either because this method is not implemented for this file type, or
+     * because of insufficient permissions or a low-level I/O error.
      *
      * @param lastModified last modified date, in milliseconds since the epoch (00:00:00 GMT, January 1, 1970)
      * @return <code>true</code> if date was changed successfully.
      */
     public abstract boolean changeDate(long lastModified);
-	
+
     /**
      * Returns this file's size in bytes, <code>-1</code> if unknown.
      *

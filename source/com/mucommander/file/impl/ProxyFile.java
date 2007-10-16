@@ -84,6 +84,10 @@ public abstract class ProxyFile extends AbstractFile {
         return file.getDate();
     }
 
+    public boolean canChangeDate() {
+        return file.canChangeDate();
+    }
+
     public boolean changeDate(long lastModified) {
         return file.changeDate(lastModified);
     }

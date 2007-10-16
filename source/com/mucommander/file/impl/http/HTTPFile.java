@@ -235,7 +235,12 @@ public class HTTPFile extends AbstractFile {
     public long getDate() {
         return date;
     }
-	
+
+    public boolean canChangeDate() {
+        // File is read-only, return false
+        return false;
+    }
+
     public boolean changeDate(long date) {
         // File is read-only, return false
         return false;

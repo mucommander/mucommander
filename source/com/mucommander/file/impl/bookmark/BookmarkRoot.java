@@ -18,16 +18,15 @@
 
 package com.mucommander.file.impl.bookmark;
 
+import com.mucommander.bookmark.Bookmark;
+import com.mucommander.bookmark.BookmarkListener;
+import com.mucommander.bookmark.BookmarkManager;
 import com.mucommander.file.AbstractFile;
-import com.mucommander.file.FileFactory;
-import com.mucommander.file.FileURL;
 import com.mucommander.file.FileProtocols;
+import com.mucommander.file.FileURL;
 import com.mucommander.io.RandomAccessInputStream;
 import com.mucommander.io.RandomAccessOutputStream;
 import com.mucommander.process.AbstractProcess;
-import com.mucommander.bookmark.Bookmark;
-import com.mucommander.bookmark.BookmarkManager;
-import com.mucommander.bookmark.BookmarkListener;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -100,6 +99,7 @@ class BookmarkRoot extends AbstractFile implements BookmarkListener {
 
     public AbstractFile getParent() {return null;}
     public void delete() throws IOException {throw new IOException();}
+    public boolean canChangeDate() {return false;}
     public boolean changeDate(long lastModified) {return false;}
     public long getSize() {return -1;}
     public void setParent(AbstractFile parent) {}

@@ -158,7 +158,14 @@ public class NFSFile extends AbstractFile {
     }
 
     /**
-     * Always returns <code>false</code> (date cannot be changed)
+     * Always returns <code>false</code> (date cannot be changed).
+     */
+    public boolean canChangeDate() {
+        return false;
+    }
+
+    /**
+     * Always returns <code>false</code> (date cannot be changed).
      */
     public boolean changeDate(long lastModified) {
         // XFile has no method for that purpose

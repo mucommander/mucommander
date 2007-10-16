@@ -105,6 +105,13 @@ public class ArchiveEntryFile extends AbstractFile {
     /**
      * Always returns <code>false</code>: date of entries cannot be modified.
      */
+    public boolean canChangeDate() {
+        return false;
+    }
+
+    /**
+     * Always returns <code>false</code>: date of entries cannot be modified.
+     */
     public boolean changeDate(long lastModified) {
         return false;
     }

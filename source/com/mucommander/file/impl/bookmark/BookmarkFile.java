@@ -18,18 +18,17 @@
 
 package com.mucommander.file.impl.bookmark;
 
+import com.mucommander.bookmark.Bookmark;
+import com.mucommander.bookmark.BookmarkBuilder;
+import com.mucommander.bookmark.BookmarkManager;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
 import com.mucommander.file.FileProtocols;
 import com.mucommander.file.FileURL;
-import com.mucommander.file.impl.ProxyFile;
+import com.mucommander.io.FileTransferException;
 import com.mucommander.io.RandomAccessInputStream;
 import com.mucommander.io.RandomAccessOutputStream;
-import com.mucommander.io.FileTransferException;
 import com.mucommander.process.AbstractProcess;
-import com.mucommander.bookmark.Bookmark;
-import com.mucommander.bookmark.BookmarkManager;
-import com.mucommander.bookmark.BookmarkBuilder;
 
 import java.io.*;
 
@@ -368,6 +367,7 @@ public class BookmarkFile extends AbstractFile {
 
     public void mkdir() throws IOException {throw new IOException();}
     public long getDate() {return 0;}
+    public boolean canChangeDate() {return false;}
     public boolean changeDate(long lastModified) {return false;}
     public long getSize() {return -1;}
     public boolean hasRandomAccessInputStream() {return false;}

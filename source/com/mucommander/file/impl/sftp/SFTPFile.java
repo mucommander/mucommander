@@ -156,6 +156,10 @@ public class SFTPFile extends AbstractFile implements ConnectionHandlerFactory {
         return file==null?0:file.getAttributes().getModifiedTime().longValue()*1000;
     }
 
+    public boolean canChangeDate() {
+        return true;
+    }
+
     public boolean changeDate(long lastModified) {
         SFTPConnectionHandler connHandler = null;
         SftpFile sftpFile = null;
