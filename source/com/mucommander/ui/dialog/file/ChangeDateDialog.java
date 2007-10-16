@@ -18,6 +18,7 @@
 
 package com.mucommander.ui.dialog.file;
 
+import com.mucommander.file.AbstractFile;
 import com.mucommander.file.util.FileSet;
 import com.mucommander.job.ChangeFileAttributesJob;
 import com.mucommander.text.CustomDateFormat;
@@ -70,25 +71,29 @@ public class ChangeDateDialog extends FocusDialog implements ActionListener, Ite
 
         ButtonGroup buttonGroup = new ButtonGroup();
 
+        AbstractFile destFile = files.size()==1?files.fileAt(0):files.getBaseFolder();
+        boolean canChangeDate = destFile.canChangeDate();
+
         JPanel tempPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         nowRadioButton = new JRadioButton(Translator.get("change_date_dialog.now"));
         nowRadioButton.setSelected(true);
         nowRadioButton.addItemListener(this);
+
         tempPanel.add(nowRadioButton);
 
         yBoxPanel.add(tempPanel);
 
         buttonGroup.add(nowRadioButton);
-        JRadioButton radioButton = new JRadioButton(Translator.get("change_date_dialog.specific_date"));
-        buttonGroup.add(radioButton);
+        JRadioButton specificDateRadioButton = new JRadioButton(Translator.get("change_date_dialog.specific_date"));
+        buttonGroup.add(specificDateRadioButton);
 
         tempPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        tempPanel.add(radioButton);
+        tempPanel.add(specificDateRadioButton);
 
         this.dateSpinner = new JSpinner(new SpinnerDateModel());
         dateSpinner.setEditor(new JSpinner.DateEditor(dateSpinner, CustomDateFormat.getDateFormatString()));
         // Use the selected file's date if there is only one file, if not use base folder's date.
-        dateSpinner.setValue(new Date((files.size()==1?files.fileAt(0):files.getBaseFolder()).getDate()));
+        dateSpinner.setValue(new Date(destFile.getDate()));
         // Spinner is disabled until the 'Specific date' radio button is selected 
         dateSpinner.setEnabled(false);
         tempPanel.add(dateSpinner);
@@ -108,7 +113,15 @@ public class ChangeDateDialog extends FocusDialog implements ActionListener, Ite
         cancelButton = new JButton(Translator.get("cancel"));
         contentPane.add(DialogToolkit.createOKCancelPanel(okButton, cancelButton, this), BorderLayout.SOUTH);
 
-        getRootPane().setDefaultButton(okButton);
+        if(!canChangeDate) {
+            nowRadioButton.setEnabled(false);
+            specificDateRadioButton.setEnabled(false);
+            dateSpinner.setEnabled(false);
+            recurseDirCheckBox.setEnabled(false);
+            okButton.setEnabled(false);
+        }
+
+        getRootPane().setDefaultButton(canChangeDate?okButton:cancelButton);
         setInitialFocusComponent(dateSpinner);
         setResizable(false);
     }
