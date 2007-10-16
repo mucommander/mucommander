@@ -122,7 +122,7 @@ public class ChangeDateDialog extends FocusDialog implements ActionListener, Ite
         }
 
         getRootPane().setDefaultButton(canChangeDate?okButton:cancelButton);
-        setInitialFocusComponent(dateSpinner);
+        setInitialFocusComponent(canChangeDate?(JComponent)nowRadioButton:cancelButton);
         setResizable(false);
     }
 
