@@ -136,6 +136,8 @@ public class FileTable extends JTable implements Columns, MouseListener, MouseMo
     /** True when this table is the current or last active table in the MainFrame */
     private boolean isActiveTable;
 
+    /** Timestamp of the last focus gain (in milliseconds) */
+    private long focusGainedTime;
 
 
     /** Delay in ms after which filename editor can be triggered when current row's filename cell is clicked */
@@ -907,10 +909,10 @@ public class FileTable extends JTable implements Columns, MouseListener, MouseMo
         // If one of the table cells was left clicked...
         if(source==this && PlatformManager.isLeftMouseButton(e)) {
             int clickCount = e.getClickCount();
-            // Clicking on the selected row's :
-            //  - name label triggers the filename editor
-            //  - date label triggers the change date dialog
-            //  - permissions label triggers the change permissions dialog, only if permissions can be changed 
+            // Clicking on the selected row's ... :
+            //  - 'name' label triggers the filename editor
+            //  - 'date' label triggers the change date dialog
+            //  - 'permissions' label triggers the change permissions dialog, only if permissions can be changed
             // Timestamp check is used to make sure that this mouse click did not trigger current row selection
             //com.mucommander.Debug.trace("clickCount="+clickCount+" timeDiff="+(System.currentTimeMillis()-selectionChangedTimestamp));
             if (clickCount == 1 && (System.currentTimeMillis()-selectionChangedTimestamp)>EDIT_NAME_CLICK_DELAY) {
@@ -919,7 +921,7 @@ public class FileTable extends JTable implements Columns, MouseListener, MouseMo
                 final int row = rowAtPoint(p);
                 final int viewColumn = columnAtPoint(p);
                 final int column = convertColumnIndexToModel(viewColumn);
-                // Test if clicked row is current row, if column is name column, and if current row is not '..' file
+                // Test if the clicked row is current row, if column is name column, and if current row is not '..' file
                 //com.mucommander.Debug.trace("row="+row+" currentRow="+currentRow);
                 if(row==currentRow && !isParentFolderSelected() && (column==NAME || column==DATE || column==PERMISSIONS)) {
                     // Test if clicked point is inside the label and abort if not
@@ -930,32 +932,37 @@ public class FileTable extends JTable implements Columns, MouseListener, MouseMo
                     if(clickX<columnX+CellLabel.CELL_BORDER_WIDTH || clickX>columnX+labelWidth+CellLabel.CELL_BORDER_WIDTH)
                         return;
 
-                    // Create a new thread and sleep long enough to ensure that this click was not the first of a double click
-                    new Thread() {
-                        public void run() {
-                            try { sleep(800); }
-                            catch(InterruptedException e) {}
+                    // The following test ensures that this mouse click is not the one that gave the focus to this table.
+                    // Not checking for this would cause a single click on the inactive table's current row to trigger
+                    // the filename/date/permission editor
+                    if(hasFocus() && System.currentTimeMillis()-focusGainedTime>100) {
+                        // Create a new thread and sleep long enough to ensure that this click was not the first of a double click
+                        new Thread() {
+                            public void run() {
+                                try { sleep(800); }
+                                catch(InterruptedException e) {}
 
-                            // Do not execute this block (cancel editing) if:
-                            // - a double click was made in the last second
-                            // - current row changed
-                            // - isEditing() is true which could happen if multiple clicks were made
-//                            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("row= "+row+" currentRow="+currentRow);
-                            if((System.currentTimeMillis()-lastDoubleClickTimestamp)>1000 && row==currentRow) {
-                                if(column==NAME) {
-                                    if(!isEditing())
-                                        editCurrentFilename();
-                                }
-                                else if(column==DATE) {
-                                    ActionManager.performAction(com.mucommander.ui.action.ChangeDateAction.class, mainFrame);
-                                }
-                                else if(column==PERMISSIONS) {
-                                    if(getSelectedFile().getPermissionSetMask()!=0)
-                                        ActionManager.performAction(com.mucommander.ui.action.ChangePermissionsAction.class, mainFrame);
+                                // Do not execute this block (cancel editing) if:
+                                // - a double click was made in the last second
+                                // - current row changed
+                                // - isEditing() is true which could happen if multiple clicks were made
+    //                            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("row= "+row+" currentRow="+currentRow);
+                                if((System.currentTimeMillis()-lastDoubleClickTimestamp)>1000 && row==currentRow) {
+                                    if(column==NAME) {
+                                        if(!isEditing())
+                                            editCurrentFilename();
+                                    }
+                                    else if(column==DATE) {
+                                        ActionManager.performAction(com.mucommander.ui.action.ChangeDateAction.class, mainFrame);
+                                    }
+                                    else if(column==PERMISSIONS) {
+                                        if(getSelectedFile().getPermissionSetMask()!=0)
+                                            ActionManager.performAction(com.mucommander.ui.action.ChangePermissionsAction.class, mainFrame);
+                                    }
                                 }
                             }
-                        }
-                    }.start();
+                        }.start();
+                    }
                 }
             }
             // Double-clicking on a row opens the file/folder
@@ -1111,6 +1118,7 @@ public class FileTable extends JTable implements Columns, MouseListener, MouseMo
      */
     public void focusGained(FocusEvent e) {
 //if(Debug.ON) Debug.trace("called, this="+this);
+        focusGainedTime = System.currentTimeMillis(); 
 
         if(isEditing()) {
             filenameEditor.filenameField.requestFocus();

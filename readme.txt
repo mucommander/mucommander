@@ -112,9 +112,9 @@ Improvements:
   is set in the preferences.
 - Simplified and extended the theme editor, with new 'selection outline' and
   'alternate background' values.
-- Added keyboard shortcuts for the items in the drive popup button
-- Windows: drives in the drive popup button now show extended names
-- Bzip2 read-access speed substantially improved
+- Added keyboard shortcuts for the items in the drive popup button.
+- Windows: drives in the drive popup button now show extended names.
+- Bzip2 read-access speed substantially improved.
 
 Localization:
 
@@ -130,7 +130,9 @@ Bug fixes:
 - Fixed folder panel borders failing to refresh properly when their color
   was changed.
 - Fixed double "Download or browse" dialogs when opening http files.
-- Fixed issues with opening some bzip2 archives
+- Fixed issues with opening some bzip2 archives.
+- A single click on the current row of the inactive table can no longer 
+  trigger the filename/date/permission editor.
 
 Known issues:
 - The bookmarks file system doesn't allow users to specify which credentials
