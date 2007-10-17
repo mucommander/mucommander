@@ -48,6 +48,14 @@ public class ZipArchiveFile extends AbstractRWArchiveFile {
     /** The date at which the current ZipFile object was created */
     private long lastZipFileDate;
 
+    /** Contents of an empty Zip file, 22 bytes long */
+    private final static byte EMPTY_ZIP_BYTES[] = {
+        0x50, 0x4B, 0x05, 0x06, 0x00, 0x00, 0x00, 0x00,
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+    };
+
+
     /**
      * Creates a new ZipArchiveFile.
      */
@@ -77,6 +85,27 @@ public class ZipArchiveFile extends AbstractRWArchiveFile {
      */
     private void declareZipFileUpToDate() {
         lastZipFileDate = file.getDate();
+    }
+
+    private ZipEntry createZipEntry(ArchiveEntry entry) {
+        String path = entry.getPath();
+        if(entry.isDirectory() && !path.endsWith("/"))
+            path += "/";
+
+        com.mucommander.file.impl.zip.provider.ZipEntry entryObject = new com.mucommander.file.impl.zip.provider.ZipEntry(path);
+        entryObject.setMethod(ZipConstants.DEFLATED);
+        entryObject.setTime(System.currentTimeMillis());
+
+        return new ZipEntry(entryObject);
+    }
+
+    private void finishAddEntry(ZipEntry zipEntry) throws IOException {
+        // Declare the zip file and entries tree up-to-date
+        declareZipFileUpToDate();
+        declareEntriesTreeUpToDate();
+
+        // Add the new entry to the entries tree
+        addToEntriesTree(zipEntry);
     }
 
 
@@ -144,28 +173,6 @@ public class ZipArchiveFile extends AbstractRWArchiveFile {
         }
     }
 
-    private ZipEntry getZipEntry(ArchiveEntry entry) {
-        String path = entry.getPath();
-        if(entry.isDirectory() && !path.endsWith("/"))
-            path += "/";
-
-        com.mucommander.file.impl.zip.provider.ZipEntry entryObject = new com.mucommander.file.impl.zip.provider.ZipEntry(path);
-        entryObject.setMethod(ZipConstants.DEFLATED);
-        entryObject.setTime(System.currentTimeMillis());
-
-        return new ZipEntry(entryObject);
-    }
-
-    private void finishAddEntry(ZipEntry zipEntry) throws IOException {
-        // Declare the zip file and entries tree up-to-date
-        declareZipFileUpToDate();
-        declareEntriesTreeUpToDate();
-
-        // Add the new entry to the entries tree
-        addToEntriesTree(zipEntry);
-    }
-
-
     //////////////////////////////////////////
     // AbstractRWArchiveFile implementation //
     //////////////////////////////////////////
@@ -173,7 +180,7 @@ public class ZipArchiveFile extends AbstractRWArchiveFile {
     public synchronized OutputStream addEntry(ArchiveEntry entry) throws IOException {
         checkZipFile();
 
-        final ZipEntry zipEntry = getZipEntry(entry);
+        final ZipEntry zipEntry = createZipEntry(entry);
 
         if(zipEntry.isDirectory()) {
             // Add the new directory entry to the zip file (physically)
@@ -244,5 +251,22 @@ public class ZipArchiveFile extends AbstractRWArchiveFile {
      */
     public boolean isWritableArchive() {
         return file.hasRandomAccessInputStream() && file.hasRandomAccessOutputStream();
+    }
+
+
+    /**
+     * Creates an empty, valid Zip file. The resulting file is 22 bytes long.
+     */
+    public void mkfile() throws IOException {
+        if(exists())
+            throw new IOException();
+
+        OutputStream out = getOutputStream(false);
+        try {
+            out.write(EMPTY_ZIP_BYTES);
+        }
+        finally {
+            out.close();
+        }
     }
 }
