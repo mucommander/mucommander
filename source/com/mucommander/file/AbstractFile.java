@@ -33,6 +33,7 @@ import java.awt.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.security.MessageDigest;
 import java.util.regex.Pattern;
 
 /**
@@ -516,7 +517,10 @@ public abstract class AbstractFile implements FilePermissions {
     }
 
     /**
-     * Creates this file as a normal file. This method will fail if this file already exists.
+     * Creates this file as an empty, non-directory file. This method will fail if this file already exists.
+     *
+     * <p>{@link AbstractRWArchiveFile} implementations may want to override this method so that it creates
+     * a valid archive with no entry.</p>
      *
      * @throws IOException if the file could not be created, either because it already exists or because of an I/O error
      */
@@ -1021,6 +1025,27 @@ public abstract class AbstractFile implements FilePermissions {
         return getIcon(new java.awt.Dimension(16, 16));
     }
 
+    /**
+     * Returns a digest (also referred to as a <i>hash</i> or <i>checksum</i>) of this file calculated by reading this
+     * file's input stream and feeding the bytes to the <code>MessageDigest</code> until EOF is reached.
+     *
+     * <p>This method does not reset the <code>MessageDigest</code> after the digest has been calculated.
+     *
+     * @param messageDigest the MessageDigest that is used to calculate the digest
+     * @return the digest that identifies this file's contents
+     * @throws IOException if an I/O error occurred while calculating the digest
+     */
+    public final byte[] digest(MessageDigest messageDigest) throws IOException {
+        InputStream in = getInputStream();
+
+        try {
+            return digestStream(in, messageDigest);
+        }
+        finally {
+            in.close();
+        }
+    }
+
 
     ////////////////////
     // Static methods //
@@ -1095,6 +1120,64 @@ public abstract class AbstractFile implements FilePermissions {
             // Make the buffer available for further use
             BufferPool.releaseBuffer(buffer);
         }
+    }
+
+    /**
+     * Returns a digest (also referred to as a <i>hash</i> or <i>checksum</i>) of the given <code>InputStream</code>
+     * calculated by reading the stream and feeding the bytes to the <code>MessageDigest</code> until EOF is reached.
+     *
+     * <p><b>Important:</b> this method does not close the <code>InputStream</code>, and does not reset the
+     * <code>MessageDigest</code> after the digest has been calculated.
+     *
+     * @param in the InputStream to digest
+     * @param messageDigest the MessageDigest that is used to calculate the digest
+     * @return the digest that identifies the stream's contents
+     * @throws IOException if an I/O error occurred while calculating the digest
+     */
+    public static byte[] digestStream(InputStream in, MessageDigest messageDigest) throws IOException {
+        // Use BufferPool to reuse any available buffer of the same size
+        byte buffer[] = BufferPool.getBuffer(IO_BUFFER_SIZE);
+
+        int nbRead;
+        while(true) {
+            try {
+                nbRead = in.read(buffer, 0, buffer.length);
+            }
+            catch(IOException e) {
+                throw new FileTransferException(FileTransferException.READING_SOURCE);
+            }
+
+            if(nbRead==-1)
+                break;
+
+            messageDigest.update(buffer, 0, nbRead);
+        }
+
+        return messageDigest.digest();
+    }
+
+
+    /**
+     * Returns an hexadecimal string representation of the given digest, where each byte is represented by 2
+     * characters and padded with a zero if its value is comprised between 0 and 15 (inclusive).
+     * Here's an example returned for a 128-bit MD5 digest: "8350e5a3e24c153df2275c9f80692773".
+     *
+     * @param digest a digest value
+     * @return an hexadecimal string representation of the given digest
+     */
+    public static String getDigestHexString(byte digest[]) {
+        StringBuffer sb = new StringBuffer();
+
+        int digestLength = digest.length;
+        String hexByte;
+        for(int i=0; i<digestLength; i++) {
+            hexByte = Integer.toHexString(digest[i] & 0xFF);
+            if(hexByte.length()==1)
+                sb.append('0');
+            sb.append(hexByte);
+        }
+
+        return sb.toString();
     }
 
 
