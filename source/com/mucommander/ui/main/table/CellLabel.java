@@ -75,6 +75,10 @@ public class CellLabel extends JLabel {
     private Color     lastBackgroundColor;
     /** Outline color (top and bottom). */
     private Color     outlineColor;
+    /** Gradient color for the background. */
+    private Color     gradientColor;
+    /** Whether the component is opaque or not. */
+    private boolean   isOpaque;
 
 
 
@@ -115,7 +119,22 @@ public class CellLabel extends JLabel {
             super.setBackground(c); 
             lastBackgroundColor = c;
         }
+        isOpaque = true;
     }
+
+    /**
+     * Sets the background to a gradient between the two specified colors.
+     * @param c1 first component of the gradient.
+     * @param c2 second component of the gradient.
+     */
+    public void setBackground(Color c1, Color c2) {
+        // Prevents the background from being painted by super.paint
+        isOpaque            = false;
+
+        lastBackgroundColor = c1;
+        gradientColor       = c2;
+    }
+
 
     /**
      * Sets the label outline color.
@@ -177,6 +196,24 @@ public class CellLabel extends JLabel {
      * @param g where to paint the label.
      */
     public void paint(Graphics g) {
+        // Checks whether we need to paint a gradient background.
+        if(gradientColor != null) {
+            Graphics2D g2;       // Allows us to use the setPaint and getPaint methods.
+            Paint      oldPaint; // Used to restore the graphics's Paint component after filling the background.
+
+            // Initialisation.
+            g2       = (Graphics2D)g;
+            oldPaint = g2.getPaint();
+
+            // Paints the gradient background.
+            g2.setPaint(new GradientPaint(0, 0, lastBackgroundColor, 0, getHeight(), gradientColor, false));
+            g2.fillRect(0, 0, getWidth(), getHeight());
+
+            // Restores the Graphics instance to its previous state.
+            g2.setPaint(oldPaint);
+        }
+
+        // Normal painting.
         super.paint(g);
 
         // If necessary, paints the outline color.
@@ -202,16 +239,7 @@ public class CellLabel extends JLabel {
     /**
      * Overridden for performance reasons.
      */
-    public boolean isOpaque() {
-        Color     back;
-        Component p;
-
-        back = lastBackgroundColor;
-        if((p = getParent()) != null)
-            p = p.getParent();
-
-        return !((back != null) && (p != null) && back.equals(p.getBackground()) && p.isOpaque());
-    }
+    public boolean isOpaque() {return isOpaque;}
 
     /**
      * Overridden for performance reasons.
