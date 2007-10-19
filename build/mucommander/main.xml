@@ -23,11 +23,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 <project>
   <!-- = Task loading ======================================== -->
   <!-- ======================================================= -->
-  <!-- Loads the mkresources task.                             -->
-  <target name="load-mkresources" depends="compress-tools">
-    <taskdef name="mkresources" classname="com.mucommander.ant.res.ResourceTask" classpath="${tools.jar.cmp}"/>
-  </target>
-
   <!-- Loads the javaw task.                                   -->
   <target name="load-javaw" depends="compress-tools">
     <taskdef name="javaw" classname="com.mucommander.ant.java.JavaTask" classpath="${tools.jar.cmp}"/>
@@ -55,7 +50,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
   <!-- Copies the project's resources.                         -->
   <!-- All resources will be copied in ${classes.normal}.      -->
-  <target name="resources" depends="load-mkresources">
+  <target name="resources">
     <echo>Copying resources...</echo>
     <!-- Copies the images.                                    -->
     <copy todir="${classes.normal}" overwrite="true">
@@ -74,11 +69,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
     <!-- Generates the themes.                                 -->
     <echo>Creating themes...</echo>
-    <mkresources outfile="${classes.normal}/${themes.desc}" outdir="${classes.normal}">
-      <file out="${themes.out}/ClassicCommander.xml" in="${themes.in}/ClassicCommander.xml"/>
-      <file out="${themes.out}/Native.xml"           in="${themes.in}/Native.xml"/>
-      <file out="${themes.out}/RetroCommander.xml"   in="${themes.in}/RetroCommander.xml"/>
-    </mkresources>
+    <mkdir dir="${classes.normal}/${themes.out}"/>
+    <copy todir="${classes.normal}/${themes.out}" overwrite="true">
+      <fileset dir="${themes.in}">
+        <include name="**/*.xml"/>
+      </fileset>
+    </copy>
   </target>
 
 
@@ -182,7 +178,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
       <field name="FORUMS_URL"          value="${url.forums}"/>
       <field name="DONATION_URL"        value="${url.donation}"/>
       <field name="DICTIONARY_FILE"     value="/dictionary.txt"/>
-      <field name="THEMES_FILE"         value="${themes.desc}"/>
       <field name="THEMES_PATH"         value="${themes.out}"/>
       <field name="BUG_REPOSITORY_URL"  value="${url.bug-repository}"/>
       <field name="DEFAULT_THEME"       value="Native"/>

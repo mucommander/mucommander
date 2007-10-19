@@ -95,7 +95,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
       </classpath>
       <src path="${source}/com/mucommander/ant"/>
       <src path="${source}/com/mucommander/xml"/>
-      <src path="${source}/com/mucommander/res"/>
     </javac>
   </target>
 
@@ -366,9 +365,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
       <fileset dir="${source}/com/mucommander/xml">
         <patternset refid="non.test.sources"/>
       </fileset>
-      <fileset dir="${source}/com/mucommander/res">
-        <patternset refid="non.test.sources"/>
-      </fileset>
 
       <doclet name="com.neuroning.antdoclet.AntDoclet">
 	<param name="-doctitle" value="muCommander Ant Tools" />
@@ -471,7 +467,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
       <fileset dir="${source}/">
         <include name="com/mucommander/ant/**/*"/>
         <include name="com/mucommander/xml/**/*"/>
-        <include name="com/mucommander/res/**/*"/>
       </fileset>
     </copy>
 

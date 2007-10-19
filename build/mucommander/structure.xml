@@ -104,9 +104,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
   <!-- = Theme values ======================================== -->
   <!-- ======================================================= -->
-  <!-- Where to generate the predefined themes description     -->
-  <!-- file.                                                   -->
-  <property name="themes.desc"         value="/themes.xml"/>
   <!-- Where to load the themes from.                          -->
   <property name="themes.in"           location="${res}/themes"/>
   <!-- Where to write the themes to.                           -->
