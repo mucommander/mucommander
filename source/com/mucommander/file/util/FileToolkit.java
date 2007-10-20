@@ -180,7 +180,10 @@ public class FileToolkit {
 
 
     /**
-     * Removes any leading separator character (slash or backslash) from the givne path and returns the modified path.
+     * Removes any leading separator character (slash or backslash) from the given path and returns the modified path.
+     *
+     * @param path the path to modify
+     * @return the modified path, free of any leading separator
      */
     public static String removeLeadingSeparator(String path) {
         char firstChar;
@@ -190,15 +193,45 @@ public class FileToolkit {
         return path;
     }
 
+    /**
+     * Removes any leading separator character from the given path and returns the modified path.
+     *
+     * @param path the path to modify
+     * @param separator the path separator, usually "/" or "\\"
+     * @return the modified path, free of any leading separator
+     */
+    public static String removeLeadingSeparator(String path, String separator) {
+        if(path.startsWith(separator))
+            return path.substring(separator.length(), path.length());
+
+        return path;
+    }
 
     /**
-     * Removes any trailing separator character (slash or backslash) from the givne path and returns the modified path. 
+     * Removes any trailing separator character (slash or backslash) from the given path and returns the modified path.
+     *
+     * @param path the path to modify
+     * @return the modified path, free of any trailing separator
      */
     public static String removeTrailingSeparator(String path) {
         char lastChar;
         int len = path.length();
         if(len>0 && ((lastChar=path.charAt(len-1))=='/' || lastChar=='\\'))
             return path.substring(0, len-1);
+
+        return path;
+    }
+
+    /**
+     * Removes any trailing separator character (slash or backslash) from the given path and returns the modified path.
+     *
+     * @param path the path to modify
+     * @param separator the path separator, usually "/" or "\\"
+     * @return the modified path, free of any trailing separator
+     */
+    public static String removeTrailingSeparator(String path, String separator) {
+        if(path.endsWith(separator))
+            return path.substring(0, path.length()-separator.length());
 
         return path;
     }
