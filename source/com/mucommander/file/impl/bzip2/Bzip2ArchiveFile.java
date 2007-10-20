@@ -21,7 +21,6 @@ package com.mucommander.file.impl.bzip2;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.AbstractROArchiveFile;
 import com.mucommander.file.ArchiveEntry;
-import com.mucommander.file.SimpleArchiveEntry;
 import org.apache.tools.bzip2.CBZip2InputStream;
 
 import java.io.BufferedInputStream;
@@ -65,7 +64,7 @@ public class Bzip2ArchiveFile extends AbstractROArchiveFile {
         }
 
         Vector entries = new Vector();
-        entries.add(new SimpleArchiveEntry("/"+name, getDate(), -1, false));
+        entries.add(new ArchiveEntry("/"+name, false, getDate(), -1));
         return entries;
     }
 

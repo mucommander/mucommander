@@ -18,12 +18,14 @@
 
 package com.mucommander.file;
 
+import com.mucommander.file.util.FileToolkit;
+
 import javax.swing.tree.DefaultMutableTreeNode;
 
 /**
  * Stores archive entries and organizes them in a tree structure that maps entries in the way they are organized
- * inside the archive. An instance of <code>ArchiveEntryTree</code> also acts as the root node: all archive entries are
- * descendants of it.
+ * inside the archive. An instance of <code>ArchiveEntryTree</code> also acts as the root node: all entry nodes
+ * are children of it (direct or indirect).
  *
  * @author Maxence Bernard
  */
@@ -41,28 +43,27 @@ public class ArchiveEntryTree extends DefaultMutableTreeNode {
      * @param entry the entry to add to the tree
      */
     public void addArchiveEntry(ArchiveEntry entry) {
-
         String entryPath = entry.getPath();
         int entryDepth = entry.getDepth();
         int slashPos = 0;
         DefaultMutableTreeNode node = this;
         for(int d=0; d<=entryDepth; d++) {
             if(d==entryDepth && !entry.isDirectory()) {
-                // if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Creating leaf for "+entryPath);
+                // Create a leaf node for the entry
                 node.add(new DefaultMutableTreeNode(entry, true));
                 break;
             }
 
-            String subPath = d==entryDepth?entryPath:entryPath.substring(0, (slashPos=entryPath.indexOf('/', slashPos)+1));
-            // if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("subPath="+subPath+" depth="+d+"("+entryDepth+")");
+            String subPath = FileToolkit.removeTrailingSeparator(d==entryDepth?entryPath:entryPath.substring(0, (slashPos=entryPath.indexOf('/', slashPos)+1)), "/");
 
             int nbChildren = node.getChildCount();
             DefaultMutableTreeNode childNode = null;
             boolean matchFound = false;
             for(int c=0; c<nbChildren; c++) {
                 childNode = (DefaultMutableTreeNode)node.getChildAt(c);
-                if(((ArchiveEntry)childNode.getUserObject()).getPath().equals(subPath)) {
-                    // if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Found match for "+subPath);
+                // Path comparison is 'trailing slash insensitive'
+                if(FileToolkit.removeTrailingSeparator(((ArchiveEntry)childNode.getUserObject()).getPath(), "/").equals(subPath)) {
+                    // Found a match
                     matchFound = true;
                     break;
                 }
@@ -79,13 +80,13 @@ public class ArchiveEntryTree extends DefaultMutableTreeNode {
                 }
             }
             else {
-                if(d==entryDepth) {		// Leaf
-                    // if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Creating node for "+entryPath);
+                if(d==entryDepth) {
+                    // Create a leaf node for the entry
                     node.add(new DefaultMutableTreeNode(entry, true));
                 }
                 else {
                     // if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Creating node for "+subPath);
-                    childNode = new DefaultMutableTreeNode(new SimpleArchiveEntry(subPath, entry.getDate(), 0, true), true);
+                    childNode = new DefaultMutableTreeNode(new ArchiveEntry(subPath, true, entry.getDate(), 0), true);
                     node.add(childNode);
                     node = childNode;
                 }
@@ -95,35 +96,34 @@ public class ArchiveEntryTree extends DefaultMutableTreeNode {
 
 
     /**
-     * Finds and returns the node that corresponds to the specified entry path, null if no entry matching the path
-     * could be found.
+     * Finds and returns the node that corresponds to the specified entry path, <code>null</code> if no entry matching
+     * the path could be found.
      *
      * <p>Important note: the given path's separator character must be '/' and the path must be relative to the
      * archive's root, i.e. not start with a leading '/', otherwise the entry will not be found. Trailing separators
      * are ignored when paths are compared, for example the path 'temp' will match the entry 'temp/'.
+     *
+     * @param entryPath the path to the entry to look up in this tree
+     * @return the node that corresponds to the specified entry path
      */
     public DefaultMutableTreeNode findEntryNode(String entryPath) {
         int entryDepth = ArchiveEntry.getDepth(entryPath);
         int slashPos = 0;
         DefaultMutableTreeNode currentNode = this;
         for(int d=0; d<=entryDepth; d++) {
-            String subPath = d==entryDepth?entryPath:entryPath.substring(0, (slashPos=entryPath.indexOf('/', slashPos)+1));
-            if(subPath.charAt(subPath.length()-1)=='/')     // Remove any trailing slash to compare paths without trailing slashs
-                subPath = subPath.substring(0, subPath.length()-1);
-
-            // if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("subPath="+subPath+" depth="+d+"("+entryDepth+")");
+            // Remove any trailing slash to compare paths without trailing slashs
+             String subPath = FileToolkit.removeTrailingSeparator(d==entryDepth?entryPath:entryPath.substring(0, (slashPos=entryPath.indexOf('/', slashPos)+1)), "/");
 
             int nbChildren = currentNode.getChildCount();
             DefaultMutableTreeNode matchNode = null;
             for(int c=0; c<nbChildren; c++) {
                 DefaultMutableTreeNode childNode = (DefaultMutableTreeNode)currentNode.getChildAt(c);
 
-                String childNodePath = ((ArchiveEntry)childNode.getUserObject()).getPath();
-                if(childNodePath.charAt(childNodePath.length()-1)=='/')     // Remove any trailing slash to compare paths without trailing slashs
-                    childNodePath = childNodePath.substring(0, childNodePath.length()-1);
+                // Remove any trailing slash to compare paths without trailing slashs
+                String childNodePath = FileToolkit.removeTrailingSeparator(((ArchiveEntry)childNode.getUserObject()).getPath(), "/");
 
                 if(childNodePath.equals(subPath)) {
-                    //					if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Found match for "+subPath);
+                    // Found the node, let's return it
                     matchNode = childNode;
                     break;
                 }

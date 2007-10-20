@@ -19,7 +19,10 @@
 package com.mucommander.file.impl.lst;
 
 import com.mucommander.Debug;
-import com.mucommander.file.*;
+import com.mucommander.file.AbstractFile;
+import com.mucommander.file.AbstractROArchiveFile;
+import com.mucommander.file.ArchiveEntry;
+import com.mucommander.file.FileFactory;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -98,7 +101,7 @@ public class LstArchiveFile extends AbstractROArchiveFile {
                         path = currentDir+name;
                     }
 
-                    entries.add(new SimpleArchiveEntry(path, date, size, isDirectory));
+                    entries.add(new ArchiveEntry(path, isDirectory, date, size));
                 }
                 catch(Exception e) {    // Catches exceptions thrown by StringTokenizer and SimpleDateFormat
                     if(Debug.ON) {

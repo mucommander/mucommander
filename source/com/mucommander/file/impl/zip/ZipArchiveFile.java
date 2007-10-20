@@ -22,6 +22,7 @@ import com.mucommander.file.AbstractFile;
 import com.mucommander.file.AbstractRWArchiveFile;
 import com.mucommander.file.ArchiveEntry;
 import com.mucommander.file.impl.zip.provider.ZipConstants;
+import com.mucommander.file.impl.zip.provider.ZipEntry;
 import com.mucommander.file.impl.zip.provider.ZipFile;
 
 import java.io.FilterOutputStream;
@@ -30,8 +31,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Enumeration;
 import java.util.Vector;
-import java.util.zip.ZipInputStream;
-// do not import java.util.zip.ZipEntry or com.mucommander.file.impl.zip.provider.ZipEntry as it would create class name conflicts!
+
 
 /**
  * ZipArchiveFile provides read-only access to archives in the Zip format.
@@ -57,7 +57,9 @@ public class ZipArchiveFile extends AbstractRWArchiveFile {
 
 
     /**
-     * Creates a new ZipArchiveFile.
+     * Creates a new ZipArchiveFile on top of the given file.
+     *
+     * @param file the underlying archive file
      */
     public ZipArchiveFile(AbstractFile file) {
         super(file);
@@ -87,25 +89,51 @@ public class ZipArchiveFile extends AbstractRWArchiveFile {
         lastZipFileDate = file.getDate();
     }
 
+    /**
+     * Creates and returns a {@link com.mucommander.file.impl.zip.provider.ZipEntry} instance using the attributes
+     * of the given {@link ArchiveEntry}.
+     *
+     * @param entry the object that serves to initialize the attributes of the returned ZipEntry
+     * @return a ZipEntry whose attributes are fetched from the given ZipEntry
+     */
     private ZipEntry createZipEntry(ArchiveEntry entry) {
         String path = entry.getPath();
         if(entry.isDirectory() && !path.endsWith("/"))
             path += "/";
 
-        com.mucommander.file.impl.zip.provider.ZipEntry entryObject = new com.mucommander.file.impl.zip.provider.ZipEntry(path);
-        entryObject.setMethod(ZipConstants.DEFLATED);
-        entryObject.setTime(System.currentTimeMillis());
+        com.mucommander.file.impl.zip.provider.ZipEntry zipEntry = new com.mucommander.file.impl.zip.provider.ZipEntry(path);
+        zipEntry.setMethod(ZipConstants.DEFLATED);
+        zipEntry.setTime(System.currentTimeMillis());
 
-        return new ZipEntry(entryObject);
+        return zipEntry;
     }
 
-    private void finishAddEntry(ZipEntry zipEntry) throws IOException {
+    /**
+     * Creates and return an {@link ArchiveEntry()} whose attributes are fetched from the given {@link com.mucommander.file.impl.zip.provider.ZipEntry}
+     *
+     * @param zipEntry the object that serves to initialize the attributes of the returned ArchiveEntry
+     * @return an ArchiveEntry whose attributes are fetched from the given ZipEntry
+     */
+    private ArchiveEntry createArchiveEntry(ZipEntry zipEntry) {
+        ArchiveEntry entry = new ArchiveEntry(zipEntry.getName(), zipEntry.isDirectory(), zipEntry.getTime(), zipEntry.getSize());
+        entry.setEntryObject(zipEntry);
+
+        return entry;
+    }
+
+    /**
+     * Adds the given {@link ArchiveEntry} to the entries tree and declares the Zip file and entries tree up-to-date.
+     *
+     * @param entry the entry to add to the entries tree
+     * @throws IOException if an error occurred while adding the entry to the tree
+     */
+    private void finishAddEntry(ArchiveEntry entry) throws IOException {
         // Declare the zip file and entries tree up-to-date
         declareZipFileUpToDate();
         declareEntriesTreeUpToDate();
 
         // Add the new entry to the entries tree
-        addToEntriesTree(zipEntry);
+        addToEntriesTree(entry);
     }
 
 
@@ -122,18 +150,18 @@ public class ZipArchiveFile extends AbstractRWArchiveFile {
 
             Enumeration entriesEnum = zipFile.getEntries();
             while(entriesEnum.hasMoreElements())
-                entries.add(new ZipEntry((java.util.zip.ZipEntry)entriesEnum.nextElement()));
+                entries.add(createArchiveEntry((ZipEntry)entriesEnum.nextElement()));
         }
         // If the underlying AbstractFile doesn't have random read access, use java.util.InputStream to
         // read the entries. This is much slower than the former method as the file cannot be seeked and needs
         // to be traversed.
         else {
-            ZipInputStream zin = null;
+            java.util.zip.ZipInputStream zin = null;
             try {
-                zin = new ZipInputStream(file.getInputStream());
-                java.util.zip.ZipEntry entry;
-                while ((entry=zin.getNextEntry())!=null)
-                    entries.add(new ZipEntry(entry));
+                zin = new java.util.zip.ZipInputStream(file.getInputStream());
+                java.util.zip.ZipEntry zipEntry;
+                while ((zipEntry=zin.getNextEntry())!=null)
+                    entries.add(createArchiveEntry(new ZipEntry(zipEntry)));
             }
             catch(Exception e) {
                 // java.util.zip.ZipInputStream can throw an IllegalArgumentException when the filename/comment encoding
@@ -156,18 +184,22 @@ public class ZipArchiveFile extends AbstractRWArchiveFile {
         if (file.hasRandomAccessInputStream()) {
             checkZipFile();
 
-            return zipFile.getInputStream((com.mucommander.file.impl.zip.provider.ZipEntry)entry.getEntryObject());
+            ZipEntry zipEntry = (com.mucommander.file.impl.zip.provider.ZipEntry)entry.getEntryObject();
+            if(zipEntry==null)  // Should not normally happen
+                throw new IOException();
+
+            return zipFile.getInputStream(zipEntry);
         }
         // If the underlying AbstractFile doesn't have random read access, use java.util.InputStream to
         // read the entry. This is much slower than the former method as the file cannot be seeked and needs
-        // to be traversed.
+        // to be traversed to locate the entry we're interested in.
         else {
-            ZipInputStream zin = new ZipInputStream(file.getInputStream());
-            java.util.zip.ZipEntry tempEntry;
+            java.util.zip.ZipInputStream zin = new java.util.zip.ZipInputStream(file.getInputStream());
+            java.util.zip.ZipEntry zipEntry;
             String entryPath = entry.getPath();
             // Iterate until we find the entry we're looking for
-            while ((tempEntry=zin.getNextEntry())!=null)
-                if (tempEntry.getName().equals(entryPath)) // That's the one, return it
+            while ((zipEntry=zin.getNextEntry())!=null)
+                if (zipEntry.getName().equals(entryPath)) // That's the one, return it
                     return zin;
             return null;
         }
@@ -177,43 +209,54 @@ public class ZipArchiveFile extends AbstractRWArchiveFile {
     // AbstractRWArchiveFile implementation //
     //////////////////////////////////////////
 
-    public synchronized OutputStream addEntry(ArchiveEntry entry) throws IOException {
+    public synchronized OutputStream addEntry(final ArchiveEntry entry) throws IOException {
         checkZipFile();
 
         final ZipEntry zipEntry = createZipEntry(entry);
 
         if(zipEntry.isDirectory()) {
             // Add the new directory entry to the zip file (physically)
-            zipFile.addEntry((com.mucommander.file.impl.zip.provider.ZipEntry)zipEntry.getEntryObject());
+            zipFile.addEntry(zipEntry);
+
+            // Set the ZipEntry object into the ArchiveEntry
+            entry.setEntryObject(zipEntry);
 
             // Declare the zip file and entries tree up-to-date and add the new entry to the entries tree
-            finishAddEntry(zipEntry);
+            finishAddEntry(entry);
 
             return null;
         }
         else {
-            return new FilterOutputStream(zipFile.addEntry((com.mucommander.file.impl.zip.provider.ZipEntry)zipEntry.getEntryObject())) {
+            // Set the ZipEntry object into the ArchiveEntry
+            entry.setEntryObject(zipEntry);
+
+            return new FilterOutputStream(zipFile.addEntry(zipEntry)) {
                 public void close() throws IOException {
                     super.close();
 
                     // Declare the zip file and entries tree up-to-date and add the new entry to the entries tree
-                    finishAddEntry(zipEntry);
+                    finishAddEntry(entry);
                 }
             };
         }
     }
 
     public synchronized void deleteEntry(ArchiveEntry entry) throws IOException {
-        // Most of the time, the given ArchiveEntry will be a ZipEntry. However, in some rare cases, it can be a
-        // SimpleArchiveEntry for directory entries that have been created in the entries tree but don't exist in the
-        // Zip file. That is the case when a file entry exists in the Zip file but has no directory entry for the parent.
-        if(entry instanceof ZipEntry) {
+        ZipEntry zipEntry = (com.mucommander.file.impl.zip.provider.ZipEntry)entry.getEntryObject();
+
+        // Most of the time, the ZipEntry will not be null. However, it can be null in some rare cases, when directory
+        // entries have been created in the entries tree but don't exist in the Zip file.
+        // That is the case when a file entry exists in the Zip file but has no directory entry for the parent.
+        if(zipEntry!=null) {
             // Entry exists physically in the zip file
 
             checkZipFile();
 
             // Delete the entry from the zip file (physically)
-            zipFile.deleteEntry((com.mucommander.file.impl.zip.provider.ZipEntry)entry.getEntryObject());
+            zipFile.deleteEntry(zipEntry);
+
+            // Remove the ZipEntry object from the AchiveEntry
+            entry.setEntryObject(null);
 
             // Declare the zip file and entries tree up-to-date
             declareZipFileUpToDate();

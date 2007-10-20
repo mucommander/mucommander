@@ -20,6 +20,8 @@ package com.mucommander.file;
 
 import com.mucommander.file.filter.FileFilter;
 import com.mucommander.file.filter.FilenameFilter;
+import com.mucommander.io.ByteCounter;
+import com.mucommander.io.CounterOutputStream;
 import com.mucommander.io.RandomAccessInputStream;
 import com.mucommander.io.RandomAccessOutputStream;
 
@@ -199,8 +201,9 @@ public class ArchiveEntryFile extends AbstractFile {
             // Delete the entry in the archive file
             rwArchiveFile.deleteEntry(entry);
 
-            // Create a new non-existing entry
-            entry = new SimpleArchiveEntry(entry.getPath(), false);
+            // Non-existing entries are considered as zero-length regular files
+            entry.setDirectory(false);
+            entry.setSize(0);
             exists = false;
         }
         else
@@ -219,13 +222,15 @@ public class ArchiveEntryFile extends AbstractFile {
     public void mkdir() throws IOException {
         if(!exists && archiveFile.isWritableArchive()) {
             AbstractRWArchiveFile rwArchivefile = (AbstractRWArchiveFile)archiveFile;
-            ArchiveEntry newEntry = new SimpleArchiveEntry(entry.getPath(), true);
+            // Update the ArchiveEntry
+            entry.setDirectory(true);
+            entry.setDate(System.currentTimeMillis());
+            entry.setSize(0);
 
-            // Add the new entry to the archive file
-            rwArchivefile.addEntry(newEntry);
+            // Add the entry to the archive file
+            rwArchivefile.addEntry(entry);
 
-            // The new entry now exists
-            entry = newEntry;
+            // The entry now exists
             exists = true;
         }
         else
@@ -280,7 +285,13 @@ public class ArchiveEntryFile extends AbstractFile {
                 }
             }
 
-            OutputStream out = ((AbstractRWArchiveFile)archiveFile).addEntry(entry);
+            // Update the ArchiveEntry's size as data gets written to the OutputStream
+            OutputStream out = new CounterOutputStream(((AbstractRWArchiveFile)archiveFile).addEntry(entry),
+                    new ByteCounter() {
+                        public synchronized void add(long nbBytes) {
+                            entry.setSize(entry.getSize()+nbBytes);
+                        }
+                    });
             exists = true;
 
             return out;

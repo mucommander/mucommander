@@ -21,7 +21,6 @@ package com.mucommander.file.impl.ar;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.AbstractROArchiveFile;
 import com.mucommander.file.ArchiveEntry;
-import com.mucommander.file.SimpleArchiveEntry;
 import com.mucommander.io.ByteLimitInputStream;
 
 import java.io.IOException;
@@ -119,7 +118,7 @@ public class ArArchiveFile extends AbstractROArchiveFile {
                     name += (char)b;
             }
 
-            return new SimpleArchiveEntry(name, date, size, false);
+            return new ArchiveEntry(name, false, date, size);
         }
         // Re-throw IOException
         catch(IOException e) {
@@ -231,10 +230,5 @@ public class ArArchiveFile extends AbstractROArchiveFile {
 
         // Entry not found, should not normally happen
         throw new IOException();
-    }
-
-
-    public ArchiveEntry getArchiveEntry(String entryPath, boolean isDirectory) {
-        return new SimpleArchiveEntry(entryPath, System.currentTimeMillis(), 0, isDirectory);
     }
 }

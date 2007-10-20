@@ -41,7 +41,9 @@ import java.util.zip.GZIPInputStream;
 public class TarArchiveFile extends AbstractROArchiveFile {
 
     /**
-     * Creates a TarArchiveFile around the given file.
+     * Creates a TarArchiveFile on of the given file.
+     *
+     * @param file the underlying archive file
      */
     public TarArchiveFile(AbstractFile file) {
         super(file);
@@ -50,6 +52,9 @@ public class TarArchiveFile extends AbstractROArchiveFile {
 
     /**
      * Returns a TarInputStream which can be used to read TAR entries.
+     *
+     * @return a TarInputStream which can be used to read TAR entries
+     * @throws IOException if an error occurred while create the stream
      */
     private TarInputStream createTarStream() throws IOException {
         InputStream in = file.getInputStream();
@@ -91,6 +96,21 @@ public class TarArchiveFile extends AbstractROArchiveFile {
         return new TarInputStream(in);
     }
 
+    /**
+     * Creates and return an {@link ArchiveEntry()} whose attributes are fetched from the given
+     * <code>org.apache.tools.tar.TarEntry</code>.
+     *
+     * @param tarEntry the object that serves to initialize the attributes of the returned ArchiveEntry
+     * @return an ArchiveEntry whose attributes are fetched from the given org.apache.tools.tar.TarEntry
+     */
+    private ArchiveEntry createArchiveEntry(org.apache.tools.tar.TarEntry tarEntry) {
+        ArchiveEntry entry = new ArchiveEntry(tarEntry.getName(), tarEntry.isDirectory(), tarEntry.getModTime().getTime(), tarEntry.getSize());
+        entry.setPermissions(tarEntry.getMode());
+        entry.setPermissionMask(511);     // Full UNIX permissions (777 octal)
+
+        return entry;
+    }
+
 
     ////////////////////////////////////////
     // AbstractArchiveFile implementation //
@@ -106,7 +126,7 @@ public class TarArchiveFile extends AbstractROArchiveFile {
         Vector entries = new Vector();
         org.apache.tools.tar.TarEntry entry;
         while ((entry=tin.getNextEntry())!=null) {
-            entries.add(new TarEntry(entry));
+            entries.add(createArchiveEntry(entry));
         }
         tin.close();
 

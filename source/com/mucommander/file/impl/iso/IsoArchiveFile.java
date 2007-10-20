@@ -109,7 +109,7 @@ public class IsoArchiveFile extends AbstractROArchiveFile {
 
 
     public InputStream getEntryInputStream(ArchiveEntry entry) throws IOException {
-        return new isoInputStream(rais, (IsoEntry) entry, cooked);
+        return new isoInputStream(rais, entry, cooked);
     }
 
     private void newString(byte b[], int len, int level, StringBuffer name) throws Exception {
@@ -123,6 +123,7 @@ public class IsoArchiveFile extends AbstractROArchiveFile {
         todo td;
         int i;
         isoDr idr;
+        ArchiveEntry entry;
 
         while (len > 0) {
             rais.seek(sector(extent - sector_offset, cooked));
@@ -194,7 +195,10 @@ public class IsoArchiveFile extends AbstractROArchiveFile {
                     // offset from Greenwich Mean Time, in 15-minute intervals, as a twos complement signed number,
                     // positive for time zones east of Greenwich, and negative for time zones
                     calendar.setTimeZone(new java.util.SimpleTimeZone(15 * 60 * 1000 * idr.date[6], ""));
-                    entries.add(new IsoEntry(name.toString(), calendar.getTimeInMillis(), fstat_buf.st_size, dir, isonum_733(idr.extent) - sector_offset));
+
+                    entry = new ArchiveEntry(name.toString(), dir, calendar.getTimeInMillis(), fstat_buf.st_size);
+                    entry.setEntryObject(new Long(isonum_733(idr.extent) - sector_offset));
+                    entries.add(entry);
                 }
 
                 i += (buffer[i] & 0xff);
@@ -251,12 +255,12 @@ public class IsoArchiveFile extends AbstractROArchiveFile {
         private long size;
         private boolean cooked;
 
-        public isoInputStream(RandomAccessInputStream rais, IsoEntry entry, boolean cooked) throws IOException {
+        public isoInputStream(RandomAccessInputStream rais, ArchiveEntry entry, boolean cooked) throws IOException {
             this.rais = rais;
             this.size = entry.getSize();
             this.pos = 0;
             this.cooked = cooked;
-            rais.seek(sector(entry.getExtent(), cooked));
+            rais.seek(sector(((Long)entry.getEntryObject()).longValue(), cooked));
         }
 
         public int read() throws IOException {

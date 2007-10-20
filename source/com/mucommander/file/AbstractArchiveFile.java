@@ -288,7 +288,7 @@ public abstract class AbstractArchiveFile extends ProxyFile {
                     throw new IOException();
             }
 
-            return getArchiveEntryFile(new SimpleArchiveEntry(entryPath, false), parentFile, false);
+            return getArchiveEntryFile(new ArchiveEntry(entryPath, false), parentFile, false);
         }
 
         DefaultMutableTreeNode parentNode = (DefaultMutableTreeNode)entryNode.getParent();
