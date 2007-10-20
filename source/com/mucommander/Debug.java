@@ -117,6 +117,8 @@ public class Debug {
      */
     private static String getCallerTrace(int level) {
         try {
+            // Todo: rewrite this method using Thread#getStackTrace() that was introduced in Java 1.4, now that Java 1.3 compatibility is gone
+
             ByteArrayOutputStream bout = new ByteArrayOutputStream();
             PrintStream ps = new PrintStream(bout, true);
             new Throwable().printStackTrace(ps);
@@ -124,8 +126,8 @@ public class Debug {
             byte[] stackTrace = bout.toByteArray();
             ps.close();
 
-            // Parse stack trace to find out the method that triggered the first call to LogManager, that way
-            // we don't have to worry about how many method calls were made within LogManager.
+            // Parse stack trace to find out the method that triggered the first call to Debug, that way
+            // we don't have to worry about how many method calls were made within Debug.
             BufferedReader br = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(stackTrace)));
             br.readLine();
 
