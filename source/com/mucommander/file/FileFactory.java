@@ -89,40 +89,32 @@ import java.util.*;
  * Note that <code<FileFactory</code> does not automatically register a trash provider, and application
  * writers must do so themselves depending on their own needs.
  * </p>
+ *
  * @author Maxence Bernard, Nicolas Rinaudo
  */
 public class FileFactory {
-    // - Protocols and archives ----------------------------------------------------------
-    // -----------------------------------------------------------------------------------
+
     /** All registered protocol providers. */
-    private static Hashtable              protocolProviders      = new Hashtable();
+    private static Hashtable protocolProviders = new Hashtable();
+
     /** Vector of registered ArchiveFormatMapping instances */
-    private static Vector                 archiveFormatMappingsV = new Vector();
+    private static Vector archiveFormatMappingsV = new Vector();
+
     /** Array of registered FileProtocolMapping instances, for quicker access */
     private static ArchiveFormatMapping[] archiveFormatMappings;
 
-
-
-    // - Trash ---------------------------------------------------------------------------
-    // -----------------------------------------------------------------------------------
     /** Object used to create instances of {@link AbstractTrash}. */
     private static TrashProvider trashProvider;
+
     /** Used to synchronise access to the trash provider. */
-    private static Object        trashLock = new Object();
+    private final static Object trashLock = new Object();
 
-
-
-    // - Cache ---------------------------------------------------------------------------
-    // -----------------------------------------------------------------------------------
     /** Static LRUCache instance that caches frequently accessed AbstractFile instances */
     private static LRUCache fileCache = LRUCache.createInstance(MuConfiguration.getVariable(MuConfiguration.FILE_CACHE_CAPACITY,
                                                                                             MuConfiguration.DEFAULT_FILE_CACHE_CAPACITY));
+
     private static WeakHashMap archiveFileCache = new WeakHashMap();
 
-
-
-    // - Misc. fields --------------------------------------------------------------------
-    // -----------------------------------------------------------------------------------
     /** System temp directory */
     private final static File TEMP_DIRECTORY = new File(System.getProperty("java.io.tmpdir"));
 
@@ -131,8 +123,6 @@ public class FileFactory {
 
 
 
-    // - Initialisation ------------------------------------------------------------------
-    // -----------------------------------------------------------------------------------
     static {
         ProtocolProvider protocolProvider; // Buffer for protocols that use the same provider.
 
@@ -173,9 +163,6 @@ public class FileFactory {
     private FileFactory() {}
 
 
-
-    // - Trash provider ------------------------------------------------------------------
-    // -----------------------------------------------------------------------------------
     /**
      * Returns an instance of the {@link AbstractTrash} implementation that can be used on the current platform,
      * or <code>null</code if none is available.
@@ -195,7 +182,11 @@ public class FileFactory {
      * Returns the object used to create instances of {@link AbstractTrash}.
      * @return the object used to create instances of {@link AbstractTrash} if any, <code>null</code> otherwise.
      */
-    public static TrashProvider getTrashProvider() {synchronized(trashLock) {return trashProvider;}}
+    public static TrashProvider getTrashProvider() {
+        synchronized(trashLock) {
+            return trashProvider;
+        }
+    }
 
     /**
      * Sets the object that will be used to create instances of {@link AbstractTrash}.
@@ -212,10 +203,6 @@ public class FileFactory {
         }
     }
 
-
-
-    // - Protocol providers --------------------------------------------------------------
-    // -----------------------------------------------------------------------------------
     /**
      * Registers a new protocol.
      * <p>
@@ -234,6 +221,7 @@ public class FileFactory {
      * <p>
      * Built-in file protocols are listed in {@link FileProtocols}.
      * </p>
+     *
      * @param  protocol identifier of the protocol to register.
      * @param  provider object used to create instances of files using the specified protocol.
      * @return          the previously registered protocol provider if any, <code>null</code> otherwise.
@@ -244,17 +232,23 @@ public class FileFactory {
 
     /**
      * Unregisters the provider associated with the specified protocol.
+     *
      * @param  protocol identifier of the protocol whose provider should be unregistered.
      * @return          the provider that has been unregistered, or <code>null</code> if none.
      */
-    public static ProtocolProvider unregisterProtocol(String protocol) {return (ProtocolProvider)protocolProviders.remove(protocol);}
+    public static ProtocolProvider unregisterProtocol(String protocol) {
+        return (ProtocolProvider)protocolProviders.remove(protocol);
+    }
 
     /**
      * Returns the protocol provider registered to the specified protocol identifer.
+     *
      * @param  protocol identifier of the protocol whose provider should be retrieved.
      * @return          the protocol provider registered to the specified protocol identifer, or <code>null</code> if none.
      */
-    public static ProtocolProvider getProtocolProvider(String protocol) {return (ProtocolProvider)protocolProviders.get(protocol.toLowerCase());}
+    public static ProtocolProvider getProtocolProvider(String protocol) {
+        return (ProtocolProvider)protocolProviders.get(protocol.toLowerCase());
+    }
 
     /**
      * Returns an iterator on all known protocol names.
@@ -262,14 +256,14 @@ public class FileFactory {
      * All objects returned by the iterator's <code>nextElement()</code> method will be instanced of string. These can then
      * be passed to {@link #getProtocolProvider(String) getProtocolProvider} to retrieve the associated {@link ProtocolProvider}.
      * </code>
+     *
      * @return an iterator on all known protocol names.
      */
-    public static Iterator protocols() {return new Enumerator(protocolProviders.keys());}
+    public static Iterator protocols() {
+        return new Enumerator(protocolProviders.keys());
+    }
 
 
-
-    // - Archive formats -----------------------------------------------------------------
-    // -----------------------------------------------------------------------------------
     /**
      * Registers a new archive format.
      */
@@ -320,8 +314,6 @@ public class FileFactory {
 
 
 
-    // - File creation -------------------------------------------------------------------
-    // -----------------------------------------------------------------------------------
     /**
      * Returns an instance of AbstractFile for the given absolute path.
      *
@@ -458,7 +450,6 @@ public class FileFactory {
                 }
                 else {          // currentFile is an AbstractArchiveFile
                     // Note: wrapArchive() is already called by AbstractArchiveFile#createArchiveEntryFile()
-//                    currentFile = ((AbstractArchiveFile)currentFile).getEntryFile(FileToolkit.removeLeadingSeparator(currentPath.substring(currentFile.getURL().getPath().length(), currentPath.length())));
                     AbstractFile tempEntryFile = ((AbstractArchiveFile)currentFile).getArchiveEntryFile(FileToolkit.removeLeadingSeparator(currentPath.substring(currentFile.getURL().getPath().length(), currentPath.length())));
                     if(tempEntryFile instanceof AbstractArchiveFile) {
                         currentFile = tempEntryFile;
