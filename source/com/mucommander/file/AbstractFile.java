@@ -517,7 +517,8 @@ public abstract class AbstractFile implements FilePermissions {
     }
 
     /**
-     * Creates this file as an empty, non-directory file. This method will fail if this file already exists.
+     * Creates this file as an empty, non-directory file. This method will fail (throw an <code>IOException</code>)
+     * if this file already exists.
      *
      * <p>{@link AbstractRWArchiveFile} implementations may want to override this method so that it creates
      * a valid archive with no entry.</p>
@@ -1317,9 +1318,14 @@ public abstract class AbstractFile implements FilePermissions {
     public abstract boolean canSetPermission(int access, int permission);
 
     /**
-     * Returns <code>true</code> if this file is a regular directory, and not just a 'browsable' file.
+     * Returns <code>true</code> if this file is a directory, <code>false</code> in any of the following cases:
+     * <ul>
+     *  <li>this file does not exist</li>
+     *  <li>this file is a regular file</li>
+     *  <li>this file is browsable (as reported by {@link #isBrowsable()} but not a directory</li>
+     * </ul> 
      *
-     * @return <code>true</code> if this file is a directory
+     * @return <code>true</code> if this file is a directory, <code>false</code> in any of the cases listed above
      */
     public abstract boolean isDirectory();
 
@@ -1341,7 +1347,8 @@ public abstract class AbstractFile implements FilePermissions {
     public abstract AbstractFile[] ls() throws IOException;
 
     /**
-     * Creates this file as a directory. This method will fail if this file already exists.
+     * Creates this file as a directory. This method will fail (throw an <code>IOException</code>) if this file
+     * already exists.
      *
      * @throws IOException if the directory could not be created, either because this file already exists or for any
      * other reason.
