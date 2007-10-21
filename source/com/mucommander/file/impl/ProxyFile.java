@@ -190,9 +190,9 @@ public abstract class ProxyFile extends AbstractFile {
     }
 
     
-    ////////////////////////
-    // Overridden methods //
-    ////////////////////////
+    /////////////////////////////////////
+    // Overridden AbstractFile methods //
+    /////////////////////////////////////
 
     public FileURL getURL() {
         return file.getURL();
