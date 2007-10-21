@@ -36,7 +36,7 @@ import java.util.Random;
  *
  * @author Maxence Bernard
  */
-public abstract class AbstractFileTestCase extends TestCase {
+public abstract class AbstractFileTestCase extends TestCase implements FilePermissions {
 
     /**
      * A temporary file instance automatically instanciated by {@link #setUp()} when a test is started.
@@ -208,7 +208,7 @@ public abstract class AbstractFileTestCase extends TestCase {
      *
      * @throws IOException should not happen
      */
-    public void testExistence() throws IOException {
+    public void testExists() throws IOException {
         assertFalse(tempFile.exists());
 
         tempFile.mkfile();
@@ -267,7 +267,168 @@ public abstract class AbstractFileTestCase extends TestCase {
         assertTrue(ioExceptionThrown);
     }
 
+    /**
+     * Tests the {@link AbstractFile#mkdir()} method in various situations.
+     *
+     * @throws IOException should not happen
+     */
+    public void testMkdir() throws IOException {
+        // Assert that a directory can be created when the file doesn't already exist (without throwing an IOException)
+        tempFile.mkdir();
 
+        // Assert that the file exists after the directory has been created
+        assertTrue(tempFile.exists());
+
+        // Assert that an IOException is thrown when the directory already exists
+        boolean ioExceptionThrown = false;
+        try {
+            tempFile.mkdir();
+        }
+        catch(IOException e) {
+            ioExceptionThrown = true;
+        }
+
+        assertTrue(ioExceptionThrown);
+
+        // Assert that an IOException is thrown when a regular file exists
+        tempFile.delete();
+        tempFile.mkfile();
+
+        ioExceptionThrown = false;
+        try {
+            tempFile.mkdir();
+        }
+        catch(IOException e) {
+            ioExceptionThrown = true;
+        }
+
+        assertTrue(ioExceptionThrown);
+    }
+
+    /**
+     * Tests the {@link AbstractFile#mkfile()} method in various situations.
+     *
+     * @throws IOException should not happen
+     */
+    public void testMkfile() throws IOException {
+        // Assert that a file can be created when it doesn't already exist (without throwing an IOException)
+        tempFile.mkfile();
+
+        // Assert that the file exists after it has been created
+        assertTrue(tempFile.exists());
+
+        // Assert that an IOException is thrown when the file already exists
+        boolean ioExceptionThrown = false;
+        try {
+            tempFile.mkfile();
+        }
+        catch(IOException e) {
+            ioExceptionThrown = true;
+        }
+
+        assertTrue(ioExceptionThrown);
+
+        // Assert that an IOException is thrown when a directory exists
+        tempFile.delete();
+        tempFile.mkdir();
+
+        ioExceptionThrown = false;
+        try {
+            tempFile.mkfile();
+        }
+        catch(IOException e) {
+            ioExceptionThrown = true;
+        }
+
+        assertTrue(ioExceptionThrown);
+    }
+
+    /**
+     * Tests the {@link AbstractFile#isDirectory()} method in various situations.
+     *
+     * @throws IOException should not happen
+     */
+    public void testIsDirectory() throws IOException {
+        // Assert that isDirectory() returns false when the file does not exist
+        assertFalse(tempFile.isDirectory());
+
+        // Assert that isDirectory() returns true for directories
+        tempFile.mkdir();
+        assertTrue(tempFile.isDirectory());
+
+        // Assert that isDirectory() returns false for regular files
+        tempFile.delete();
+        tempFile.mkfile();
+        assertFalse(tempFile.isDirectory());
+    }
+
+    /**
+     * Tests all <code>AbstractFile</code> permissions methods and asserts the following things for each access
+     * (user, group, other) and permission (read, write, execute) combination:
+     * <ul>
+     *  <li>that the information returned by {@link AbstractFile#getPermissionGetMask()}
+     * and {@link AbstractFile#canGetPermission(int, int)} are consistent</li>
+     *  <li>that the information returned by {@link AbstractFile#getPermissionSetMask()}
+     * and {@link AbstractFile#canSetPermission(int, int)} are consistent</li>
+     *  <li>that the values returned by {@link AbstractFile#getPermissions()}
+     * and {@link AbstractFile#getPermission(int, int)} are consistent for supported permission flags</li>
+     *  <li>{@link AbstractFile#setPermission(int, int, boolean)} and {@link AbstractFile#setPermissions(int)} work as
+     * they should for supported permission flags</li>
+     * </ul>
+     *
+     * @throws IOException should not happen
+     */
+    public void testPermissions() throws IOException {
+        createFile(tempFile, 0);
+
+        int getPermMask = tempFile.getPermissionGetMask();
+        int setPermMask = tempFile.getPermissionSetMask();
+
+        int bitShift = 0;
+        int bitMask;
+        boolean canGetPermission, canSetPermission;
+
+        for(int a=OTHER_ACCESS; a<= USER_ACCESS; a++) {
+            for(int p=EXECUTE_PERMISSION; p<=READ_PERMISSION; p=p<<1) {
+                bitMask = 1<<bitShift;
+
+                canGetPermission = (getPermMask & bitMask)!=0;
+                assertTrue("getPermissionGetMask() doesn't match canGetPermission("+a+", "+p+")",
+                        tempFile.canGetPermission(a, p)==canGetPermission);
+
+                canSetPermission = (setPermMask & bitMask)!=0;
+                assertTrue("getPermissionSetMask() doesn't match canSetPermission("+a+", "+p+")",
+                        tempFile.canSetPermission(a, p)==canSetPermission);
+
+                if(canGetPermission) {
+                    assertTrue("getPermissions() doesn't match getPermission("+a+", "+p+")",
+                            tempFile.getPermission(a, p)==((tempFile.getPermissions() & bitMask)!=0));
+                }
+
+                if(canSetPermission) {
+                    for(boolean enabled=true; ;) {
+                        assertTrue("setPermission("+a+", "+p+") failed", tempFile.setPermission(a, p, enabled));
+                        assertTrue("setPermissions("+(enabled?bitMask:~bitMask)+") failed", tempFile.setPermissions(enabled?bitMask:~bitMask));
+
+                        if(canGetPermission) {
+                            assertTrue("getPermission("+a+", "+p+") should be "+enabled, tempFile.getPermission(a, p)==enabled);
+                            assertTrue("permission bit "+bitShift+" should be "+enabled, ((tempFile.getPermissions() & bitMask)!=0)==enabled);
+                        }
+
+                        if(!enabled)
+                            break;
+
+                        enabled = false;
+                    }
+                }
+
+                bitShift++;
+            }
+        }
+    }
+
+
+    
     //////////////////////
     // Abstract methods //
     //////////////////////
