@@ -25,22 +25,18 @@ import com.mucommander.file.FileFactory;
 import java.io.IOException;
 
 /**
- * An {@link com.mucommander.file.AbstractFileTestCase} implementation for {@link ZipArchiveFile}.
+ * An {@link com.mucommander.file.AbstractFileTestCase} implementation, which performs tests on {@link com.mucommander.file.ArchiveEntryFile}
+ * entries located inside a {@link ZipArchiveFile} residing in a temporary {@link com.mucommander.file.impl.local.LocalFile}.
  *
  * @author Maxence Bernard
  */
 public class ZipArchiveFileTest extends AbstractFileTestCase {
 
-    private int entryNum;
-
+    /** The archive file which contains the temporary entries */
     private static ZipArchiveFile tempZipFile;
 
-    public ZipArchiveFileTest() throws IOException {
-        if(tempZipFile==null) {
-            tempZipFile = (ZipArchiveFile)FileFactory.getTemporaryFile(ZipArchiveFileTest.class.getName()+".zip", false);
-            tempZipFile.mkfile();
-        }
-    }
+    /** id of the last temporary entry generated, to avoid collisions */
+    private int entryNum;
 
 
     /////////////////////////////////////////
@@ -48,6 +44,33 @@ public class ZipArchiveFileTest extends AbstractFileTestCase {
     /////////////////////////////////////////
     
     protected AbstractFile getTemporaryFile() throws IOException {
+        // use a incremental id to avoid collisions
         return tempZipFile.getDirectChild("entry"+(++entryNum));
+    }
+
+
+    ////////////////////////
+    // Overridden methods //
+    ////////////////////////
+
+    /**
+     * Overridden to create the archive file before each test.
+     */
+    protected void setUp() throws Exception {
+        tempZipFile = (ZipArchiveFile)FileFactory.getTemporaryFile(ZipArchiveFileTest.class.getName()+".zip", false);
+        tempZipFile.mkfile();
+
+        entryNum = 0;
+
+        super.setUp();
+    }
+
+    /**
+     * Overridden to delete the archive file after each test.
+     */
+    protected void tearDown() throws Exception {
+        super.tearDown();
+
+        tempZipFile.delete();
     }
 }
