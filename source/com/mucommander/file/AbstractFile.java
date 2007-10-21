@@ -1138,22 +1138,28 @@ public abstract class AbstractFile implements FilePermissions {
         // Use BufferPool to reuse any available buffer of the same size
         byte buffer[] = BufferPool.getBuffer(IO_BUFFER_SIZE);
 
-        int nbRead;
-        while(true) {
-            try {
-                nbRead = in.read(buffer, 0, buffer.length);
-            }
-            catch(IOException e) {
-                throw new FileTransferException(FileTransferException.READING_SOURCE);
+        try {
+            int nbRead;
+            while(true) {
+                try {
+                    nbRead = in.read(buffer, 0, buffer.length);
+                }
+                catch(IOException e) {
+                    throw new FileTransferException(FileTransferException.READING_SOURCE);
+                }
+
+                if(nbRead==-1)
+                    break;
+
+                messageDigest.update(buffer, 0, nbRead);
             }
 
-            if(nbRead==-1)
-                break;
-
-            messageDigest.update(buffer, 0, nbRead);
+            return messageDigest.digest();
         }
-
-        return messageDigest.digest();
+        finally {
+            // Make the buffer available for further use
+            BufferPool.releaseBuffer(buffer);
+        }
     }
 
 
