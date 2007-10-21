@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Random;
 
 /**
  * A generic JUnit test case for the {@link AbstractFile} class. This class is abstract and must be extended by
@@ -37,8 +38,17 @@ import java.security.NoSuchAlgorithmException;
  */
 public abstract class AbstractFileTestCase extends TestCase {
 
-    /** A temporary file instance automatically instanciated by {@link #setUp()} when a test is started */
+    /**
+     * A temporary file instance automatically instanciated by {@link #setUp()} when a test is started.
+     * The file itself is not physically created.
+     */
     protected AbstractFile tempFile;
+
+    /**
+     * Random instance initialized with a static seed so that the values it generates are reproducible.
+     * This makes it possible to reproduce and fix a failed test case.
+     */
+    protected Random random;
 
 
     /////////////////////////
@@ -46,23 +56,111 @@ public abstract class AbstractFileTestCase extends TestCase {
     /////////////////////////
 
     /**
-     * Creates a temporary {@link AbstractFile} instance each time a test is started. The instance is created but the
-     * file is not physically created.
+     * Initializes test variables before each test execution.
      *
-     * @throws Exception if an error occurred while creating the temporary file
+     * @throws Exception if an error occurred while creating test variables
      */
     protected void setUp() throws Exception {
         tempFile = getTemporaryFile();
+
+        // Use a static seed so that the generated values are reproducible
+        random = new Random(0);
     }
 
     /**
-     * Deletes the temporary file if it exists when the test is over.
+     * Cleans up test files after each test execution so as to leave the filesystem in the same state as it was
+     * before the test.
      *
-     * @throws Exception if an error occurred while deleting the temporary file
+     * @throws Exception if an error occurred while cleaning up test files
      */
     protected void tearDown() throws Exception {
         if(tempFile.exists())
-            tempFile.delete();
+            deleteRecursively(tempFile);
+    }
+
+
+    /////////////////////
+    // Support methods //
+    /////////////////////
+
+    /**
+     * Fills the given file with <code>length</code> bytes of random data, calling <code>OutputStream#write(byte b[])</code>
+     * with a random array length of up to <code>maxChunkSize</code>. The <code>write</code> method will be called
+     * <code>(length/(maxChunkSize/2)) times on average</code>. The <code>OutputStream</code> used for writing data is
+     * retrieved from {@link AbstractFile#getOutputStream(boolean)}, passing the specified <code>append</code> argument.
+     *
+     * <p>The {@link #random} instance used by this method is initialized with a static seed, so the data generated
+     * by this method will remain the same if the series of prior calls to the random instance haven't changed.
+     * This makes it possible to reproduce and fix a failed test case.</p>
+     *
+     * @param file the file to fill with data
+     * @param length the number of random bytes to fill the file with
+     * @param maxChunkSize maximum size of a data chunk written to the file. Size of chunks is comprised between 1 and this value (inclusive).
+     *        If -1 is passed,
+     * @param append if true, data written to the OutputStream will be appended to the end of this file. If false,
+     * any existing data this file contains will be discarded and overwritten.
+     * @throws IOException if an error occurred while retrieved the OutputStream or while writing to it
+     */
+    protected void fillRandomData(AbstractFile file, int length, int maxChunkSize, boolean append) throws IOException {
+        OutputStream out = file.getOutputStream(append);
+        int remaining = length;
+        byte bytes[];
+        int chunkSize;
+        try {
+            while(remaining>0) {
+                chunkSize = random.nextInt(1+Math.min(remaining, maxChunkSize));
+
+                bytes = new byte[chunkSize];
+                random.nextBytes(bytes);
+
+                out.write(bytes);
+
+                remaining -= chunkSize;
+            }
+        }
+        finally {
+            out.close();
+        }
+    }
+
+    /**
+     * Creates a regular file and fills it with <code>length</code> random bytes. The file must not already exist when
+     * this method is called or an <code>IOException</code> will be thrown.
+     *
+     * @param file the file to create
+     * @param length the number of random bytes to fill the file with
+     * @throws IOException if the file already exists or if an error occurred while writing to it
+     */
+    protected void createFile(AbstractFile file, int length) throws IOException {
+        OutputStream out = file.getOutputStream(false);
+
+        try {
+            byte b[] = new byte[length];
+            random.nextBytes(b);
+            out.write(b);
+        }
+        finally {
+            out.close();
+        }
+    }
+
+
+    /**
+     * Deletes the given file. If the file is a directory, enclosing files are deleted recursively. If the file is
+     * a regular file, if will simply be deleted. The bottom line is that the given file will always be deleted no
+     * matter the kind of file.
+     *
+     * @param file the file to delete
+     * @throws IOException if an error occurred while deleting a file or listing files in a directory
+     */
+    protected void deleteRecursively(AbstractFile file) throws IOException {
+        if(file.isDirectory()) {
+            AbstractFile children[] = file.ls();
+            for(int i=0; i<children.length; i++)
+                deleteRecursively(children[i]);
+        }
+
+        file.delete();
     }
 
 
@@ -124,6 +222,49 @@ public abstract class AbstractFileTestCase extends TestCase {
 
         tempFile.delete();
         assertFalse(tempFile.exists());
+    }
+
+
+    /**
+     * Tests the {@link AbstractFile#delete()} method in various situations.
+     *
+     * @throws IOException should not happen
+     */
+    public void testDelete() throws IOException {
+        // Assert that an IOException is thrown for a file that does not exist
+        boolean ioExceptionThrown = false;
+        try {
+            tempFile.delete();
+        }
+        catch(IOException e) {
+            ioExceptionThrown = true;
+        }
+
+        assertTrue(ioExceptionThrown);
+
+        // Assert that a regular file can be properly deleted and that the file does not exist anymore after
+        tempFile.mkfile();
+        tempFile.delete();
+        assertFalse(tempFile.exists());
+
+        // Assert that a regular directory can be properly deleted and that the file does not exist anymore after
+        tempFile.mkdir();
+        tempFile.delete();
+        assertFalse(tempFile.exists());
+
+        // Assert that an IOException is thrown for a directory that is not empty
+        tempFile.mkdir();
+        AbstractFile childFile = tempFile.getDirectChild("file");
+        childFile.mkfile();
+        ioExceptionThrown = false;
+        try {
+            tempFile.delete();
+        }
+        catch(IOException e) {
+            ioExceptionThrown = true;
+        }
+
+        assertTrue(ioExceptionThrown);
     }
 
 
