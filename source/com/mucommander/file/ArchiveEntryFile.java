@@ -25,6 +25,7 @@ import com.mucommander.io.CounterOutputStream;
 import com.mucommander.io.RandomAccessInputStream;
 import com.mucommander.io.RandomAccessOutputStream;
 
+import javax.swing.tree.DefaultMutableTreeNode;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -188,15 +189,29 @@ public class ArchiveEntryFile extends AbstractFile {
     /**
      * Deletes this entry from the associated <code>AbstractArchiveFile</code> if it is writable (as reported by
      * {@link com.mucommander.file.AbstractArchiveFile#isWritableArchive()}).
-     * Throws an <code>IOException</code> if it isn't, if this entry does not exist in the archive, or if an I/O error
-     * occurred.
+     * Throws an <code>IOException</code> in any of the following cases:
+     * <ul>
+     *  <li>if the associated <code>AbstractArchiveFile</code> is not writable</li>
+     *  <li>if this entry does not exist in the archive</li>
+     *  <li>if this entry is a non-empty directory</li>
+     *  <li>if an I/O error occurred</li>
+     * </ul>
      *
-     * @throws IOException if the associated archive file is not writable, if this entry does not exist in the archive,
-     * or if an I/O error occurred
+     * @throws IOException in any of the cases listed above.
      */
     public void delete() throws IOException {
         if(exists && archiveFile.isWritableArchive()) {
             AbstractRWArchiveFile rwArchiveFile = (AbstractRWArchiveFile)archiveFile;
+
+            // Throw an IOException if this entry is a non-empty directory
+            if(isDirectory()) {
+                ArchiveEntryTree tree = rwArchiveFile.getArchiveEntryTree();
+                if(tree!=null) {
+                    DefaultMutableTreeNode node = tree.findEntryNode(entry.getPath());
+                    if(node!=null && node.getChildCount()>0)
+                        throw new IOException();
+                }
+            }
 
             // Delete the entry in the archive file
             rwArchiveFile.deleteEntry(entry);
