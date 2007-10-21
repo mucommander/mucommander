@@ -34,14 +34,14 @@ import java.io.OutputStream;
 /**
  * ProxyFile is an {@link AbstractFile} that acts as a proxy between the class that extends it
  * and the proxied <code>AbstractFile</code> instance specified to the constructor.
- * All <code>AbstractFile</code> methods (abstract of not) are proxied and delegated to the proxied file.
- * The {@link #getProxiedFile()} method allows to retrieve the proxied file.
+ * All <code>AbstractFile</code> public methods (abstract or not) are delegated to the proxied file.
+ * The {@link #getProxiedFile()} method allows to retrieve the proxied file instance.
  *
- * <p>This class is useful for wrapper files, such as {@link com.mucommander.file.AbstractArchiveFile archive files}, that need
- * an existing <code>AbstractFile</code> instance (the proxied file) to provide additional functionalities.
- * By overriding/implementing every <code>AbstractFile</code> methods, <code>ProxyFile</code> ensures that
- * all <code>AbstractFile</code> methods can be safely used, even if they are overridden by the proxied
- * instance's class.
+ * <p>This class is useful for wrapper files, such as {@link com.mucommander.file.AbstractArchiveFile archive files},
+ * that provide additional functionalities over an existing <code>AbstractFile</code> instance (the proxied file).
+ * By implementing/overriding every <code>AbstractFile</code> methods, <code>ProxyFile</code> ensures that
+ * all <code>AbstractFile</code> methods can safely be used, even if they are overridden by the proxied
+ * file instance's class.
  *
  * <p><b>Implementation note:</b> the <code>java.lang.reflect.Proxy</code> class can unfortunately not be
  * used as it only works with interfaces (not abstract class). There doesn't seem to be any dynamic way to
@@ -53,7 +53,7 @@ import java.io.OutputStream;
  */
 public abstract class ProxyFile extends AbstractFile {
 
-    /** Proxied file */
+    /** The proxied file instance */
     protected AbstractFile file;
 
 
@@ -67,9 +67,10 @@ public abstract class ProxyFile extends AbstractFile {
         this.file = file;
     }
 
-
     /**
      * Returns the <code>AbstractFile</code> instance proxied by this </code>ProxyFile</code>.
+     *
+     * @return the <code>AbstractFile</code> instance proxied by this </code>ProxyFile</code>
      */
     public AbstractFile getProxiedFile() {
         return file;
