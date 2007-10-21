@@ -1409,9 +1409,16 @@ public abstract class AbstractFile implements FilePermissions {
     public abstract RandomAccessOutputStream getRandomAccessOutputStream() throws IOException;
 
     /**
-     * Deletes this file and this file only (does not recurse). Directories must be empty before they can be deleted.
+     * Deletes this file and this file only (does not recurse on folders).
+     * Throws an <code>IOException</code> in any of the following cases:
+     * <ul>
+     *  <li>if this file does not exist</li>
+     *  <li>if this file is a non-empty directory</li>
+     *  <li>if this file could not be deleted, for example because of insufficient permissions</li>
+     *  <li>if an I/O error occurred</li>
+     * </ul>
      *
-     * @throws IOException if this file could not be deleted
+     * @throws IOException if this file does not exist or could not be deleted
      */	
     public abstract void delete() throws IOException;
 	
