@@ -77,8 +77,6 @@ public class CellLabel extends JLabel {
     private Color     outlineColor;
     /** Gradient color for the background. */
     private Color     gradientColor;
-    /** Whether the component is opaque or not. */
-    private boolean   isOpaque;
 
 
 
@@ -118,8 +116,8 @@ public class CellLabel extends JLabel {
         if((c != null && !c.equals(lastBackgroundColor)) || (lastBackgroundColor != null && !lastBackgroundColor.equals(c))) {
             super.setBackground(c); 
             lastBackgroundColor = c;
+            gradientColor       = null;
         }
-        isOpaque = true;
     }
 
     /**
@@ -128,11 +126,12 @@ public class CellLabel extends JLabel {
      * @param c2 second component of the gradient.
      */
     public void setBackground(Color c1, Color c2) {
-        // Prevents the background from being painted by super.paint
-        isOpaque            = false;
-
-        lastBackgroundColor = c1;
-        gradientColor       = c2;
+        if(c1.equals(c2))
+            setBackground(c1);
+        else {
+            lastBackgroundColor = c1;
+            gradientColor       = c2;
+        }
     }
 
 
@@ -239,7 +238,26 @@ public class CellLabel extends JLabel {
     /**
      * Overridden for performance reasons.
      */
-    public boolean isOpaque() {return isOpaque;}
+    public boolean isOpaque() {
+        // If we're not using a gradient background, the component's opaque
+        // status is context dependant.
+        if(gradientColor == null) {
+            Color     back;
+            Component p;
+
+            back = lastBackgroundColor;
+            if((p = getParent()) != null)
+                p = p.getParent();
+
+            // The label does not need to be opaque if it has an opaque parent component
+            // of the same background color.
+            return !((back != null) && (p != null) && back.equals(p.getBackground()) && p.isOpaque());
+        }
+
+        // We must consider the label not to be opaque, otherwise the gradient would be overpainted by
+        // the component's background color.
+        return false;
+    }
 
     /**
      * Overridden for performance reasons.
