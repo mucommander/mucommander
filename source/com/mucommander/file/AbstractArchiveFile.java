@@ -158,9 +158,17 @@ public abstract class AbstractArchiveFile extends ProxyFile {
         if(entryNode!=null) {
             DefaultMutableTreeNode parentNode = (DefaultMutableTreeNode)entryNode.getParent();
             parentNode.remove(entryNode);
-
-//            if(Debug.ON) Debug.trace("Removed entry from tree: "+entry.getPath());
         }
+    }
+
+    /**
+     * Returns the {@link ArchiveEntryTree} instance corresponding to the root of the archive entry tree.
+     * The returned value can be <code>null</code> if the tree hasn't been intialized yet.
+     *
+     * @return the ArchiveEntryTree instance corresponding to the root of the archive entry tree
+     */
+    ArchiveEntryTree getArchiveEntryTree() {
+        return entryTreeRoot;
     }
 
     /**
@@ -269,7 +277,6 @@ public abstract class AbstractArchiveFile extends ProxyFile {
         // Find the entry node corresponding to the given path
         DefaultMutableTreeNode entryNode = entryTreeRoot.findEntryNode(entryPath);
 
-//        if(entryNode==null && isWritableArchive()) {
         if(entryNode==null) {
             int depth = ArchiveEntry.getDepth(entryPath);
 
