@@ -64,9 +64,15 @@ public class DrivePopupButton extends PopupButton implements LocationListener, B
     /** static FileSystemView instance, has a (non-null) value only under Windows */
     private static FileSystemView fileSystemView;
 
+    /** Caches extended drive names, has a (non-null) value only under Windows */
+    private static Hashtable extendedNameCache;
+
+
     static {
-        if(PlatformManager.isWindowsFamily())
+        if(PlatformManager.isWindowsFamily()) {
             fileSystemView = FileSystemView.getFileSystemView();
+            extendedNameCache = new Hashtable();
+        }
     }
 
 
@@ -252,8 +258,14 @@ public class DrivePopupButton extends PopupButton implements LocationListener, B
             // Set system icon for volumes, only if system icons are available on the current platform
             item.setIcon(FileIcons.hasProperSystemIcons()?FileIcons.getSystemFileIcon(rootFolders[i]):null);
 
-            if(useExtendedDriveNames)
+            if(useExtendedDriveNames) {
+                // Use the last known value (if any) while we update it in a separate thread
+                String previousExtendedName = (String)extendedNameCache.get(rootFolders[i]);
+                if(previousExtendedName!=null)
+                    item.setText(previousExtendedName);
+
                 itemsV.add(item);   // JMenu offers no way to retrieve a particular JMenuItem, so we have to keep them
+            }
         }
 
         if(useExtendedDriveNames) {
@@ -266,8 +278,15 @@ public class DrivePopupButton extends PopupButton implements LocationListener, B
                     for(int i=0; i<nbRoots; i++) {
                         // Under Windows, show the extended drive name (e.g. "Local Disk (C:)" instead of just "C:") but use
                         // the simple drive name for the mnemonic (i.e. 'C' instead of 'L').
-                        ((JMenuItem)itemsV.elementAt(i)).setText(getExtendedDriveName(rootFolders[i]));
+                        String extendedName = getExtendedDriveName(rootFolders[i]);
+                        ((JMenuItem)itemsV.elementAt(i)).setText(extendedName);
+
+                        // Keep the extended name for later (see above)
+                        extendedNameCache.put(rootFolders[i], extendedName);
                     }
+
+                    // Re-calculate the popup menu's dimensions
+                    popupMenu.revalidate();
                 }
 
             }.start();
