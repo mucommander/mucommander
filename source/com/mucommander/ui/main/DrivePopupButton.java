@@ -286,7 +286,11 @@ public class DrivePopupButton extends PopupButton implements LocationListener, B
                     }
 
                     // Re-calculate the popup menu's dimensions
-                    popupMenu.revalidate();
+                    SwingUtilities.invokeLater(new Runnable() {
+                        public void run() {
+                                popupMenu.pack();
+                        }
+                    });
                 }
 
             }.start();
