@@ -102,15 +102,14 @@ class ShellPanel extends ThemeEditorPanel implements PropertyChangeListener {
         panel.add(headerPanel, BorderLayout.NORTH);
 
         shellPreview = new JTextArea(15, 15);
+        panel.add(scroll = new JScrollPane(shellPreview, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED), BorderLayout.CENTER);
+        scroll.getViewport().setPreferredSize(shellPreview.getPreferredSize());
         shellPreview.append(RuntimeConstants.APP_STRING);
         shellPreview.append("\nCopyright (C) ");
         shellPreview.append(RuntimeConstants.COPYRIGHT);
         shellPreview.append(" Maxence Bernard\nThis is free software, distributed under the terms of the GNU General Public License.");
-        shellPreview.setLineWrap(true);
+        //        shellPreview.setLineWrap(true);
         shellPreview.setCaretPosition(0);
-
-        panel.add(scroll = new JScrollPane(shellPreview, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED), BorderLayout.CENTER);
-        scroll.getViewport().setPreferredSize(shellPreview.getPreferredSize());
 
         setForegroundColors();
         setBackgroundColors();
