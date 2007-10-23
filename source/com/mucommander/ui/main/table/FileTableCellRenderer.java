@@ -79,6 +79,7 @@ public class FileTableCellRenderer implements Columns, TableCellRenderer, ThemeL
     private static final int NORMAL               = 0;
     private static final int SELECTED             = 1;
     private static final int ALTERNATE            = 2;
+    private static final int SECONDARY            = 3;
     private static final int INACTIVE             = 0;
     private static final int ACTIVE               = 1;
     private static final int HIDDEN_FILE          = 0;
@@ -100,17 +101,19 @@ public class FileTableCellRenderer implements Columns, TableCellRenderer, ThemeL
     // -------------------------------------------------------------------------------
     static {
         foregroundColors = new Color[2][2][6];
-        backgroundColors = new Color[2][3];
+        backgroundColors = new Color[2][4];
 
         // Active background colors.
         backgroundColors[ACTIVE][NORMAL]    = ThemeManager.getCurrentColor(Theme.FILE_TABLE_BACKGROUND_COLOR);
         backgroundColors[ACTIVE][SELECTED]  = ThemeManager.getCurrentColor(Theme.FILE_TABLE_SELECTED_BACKGROUND_COLOR);
         backgroundColors[ACTIVE][ALTERNATE] = ThemeManager.getCurrentColor(Theme.FILE_TABLE_ALTERNATE_BACKGROUND_COLOR);
+        backgroundColors[ACTIVE][SECONDARY] = ThemeManager.getCurrentColor(Theme.FILE_TABLE_SELECTED_SECONDARY_BACKGROUND_COLOR);
 
         // Inactive background colors.
         backgroundColors[INACTIVE][NORMAL]    = ThemeManager.getCurrentColor(Theme.FILE_TABLE_INACTIVE_BACKGROUND_COLOR);
         backgroundColors[INACTIVE][SELECTED]  = ThemeManager.getCurrentColor(Theme.FILE_TABLE_INACTIVE_SELECTED_BACKGROUND_COLOR);
         backgroundColors[INACTIVE][ALTERNATE] = ThemeManager.getCurrentColor(Theme.FILE_TABLE_INACTIVE_ALTERNATE_BACKGROUND_COLOR);
+        backgroundColors[INACTIVE][SECONDARY] = ThemeManager.getCurrentColor(Theme.FILE_TABLE_INACTIVE_SELECTED_SECONDARY_BACKGROUND_COLOR);
 
         // Normal foreground foregroundColors.
         foregroundColors[ACTIVE][NORMAL][HIDDEN_FILE]     = ThemeManager.getCurrentColor(Theme.HIDDEN_FILE_FOREGROUND_COLOR);
@@ -324,7 +327,7 @@ public class FileTableCellRenderer implements Columns, TableCellRenderer, ThemeL
 
         // Set background color depending on whether the row is selected or not, and whether the table has focus or not
         if(selectedIndex == SELECTED)
-            label.setBackground(backgroundColors[focusedIndex][SELECTED]);
+            label.setBackground(backgroundColors[focusedIndex][SELECTED], backgroundColors[focusedIndex][SECONDARY]);
         else if(matches) {
             if(table.hasFocus() && search.isActive())
                 label.setBackground(backgroundColors[focusedIndex][NORMAL]);
@@ -519,6 +522,16 @@ public class FileTableCellRenderer implements Columns, TableCellRenderer, ThemeL
             // Inactive selection outline.
         case Theme.FILE_TABLE_INACTIVE_SELECTED_OUTLINE_COLOR:
             inactiveOutlineColor = event.getColor();
+            break;
+
+            // Secondary background color.
+        case Theme.FILE_TABLE_SELECTED_SECONDARY_BACKGROUND_COLOR:
+            backgroundColors[ACTIVE][SECONDARY] = event.getColor();
+            break;
+
+            // Inactive secondary background color.
+        case Theme.FILE_TABLE_INACTIVE_SELECTED_SECONDARY_BACKGROUND_COLOR:
+            backgroundColors[INACTIVE][SECONDARY] = event.getColor();
             break;
 
         default:
