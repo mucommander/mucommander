@@ -7406,21 +7406,21 @@ theme_editor.statusbar_tab:CS:Stavový řádek
 
 
 
-# 'Free space' refers to the free space indicator displayed in the status bar, %1 is replaced by one of the entries below (OK, Warning, Critical)
-theme_editor.free_space:EN:Free space (%1)
-theme_editor.free_space:FR:Espace libre (%1)
-theme_editor.free_space:HU:Szabad hely (%1)
-theme_editor.free_space:NL:(ruimte) Vrij (%1)
-theme_editor.free_space:zh_CN:剩余空间 (%1)
-theme_editor.free_space:zh_TW:剩餘空間 (%1)
-theme_editor.free_space:RO:Spațiu liber (%1)
-theme_editor.free_space:ES:Espacio libre (%1)
-theme_editor.free_space:pt_BR:Espaço livre (%1)
-theme_editor.free_space:SK:Voľné miesto (%1)
-theme_editor.free_space:SI:Nezaseden prostor (%1)
-theme_editor.free_space:RU:Свободное место (%1)
-theme_editor.free_space:DE:Free Speicher (%1)
-theme_editor.free_space:CS:Volné místo (%1)
+# 'Free space' refers to the free space indicator displayed in the status bar.
+theme_editor.free_space:EN:Free space
+theme_editor.free_space:FR:Espace libre
+theme_editor.free_space:HU:Szabad hely
+theme_editor.free_space:NL:(ruimte) Vrij
+theme_editor.free_space:zh_CN:剩余空间
+theme_editor.free_space:zh_TW:剩餘空間
+theme_editor.free_space:RO:Spațiu liber
+theme_editor.free_space:ES:Espacio libre
+theme_editor.free_space:pt_BR:Espaço livre
+theme_editor.free_space:SK:Voľné miesto
+theme_editor.free_space:SI:Nezaseden prostor
+theme_editor.free_space:RU:Свободное место
+theme_editor.free_space:DE:Free Speicher
+theme_editor.free_space:CS:Volné místo
 # Translation missing
 
 
