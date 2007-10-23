@@ -23,7 +23,9 @@ import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
 
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
+import java.net.URLDecoder;
 
 /**
  * This class provides methods to load resources located within reach of a <code>ClassLoader</code>. Those resources
@@ -150,7 +152,7 @@ public class ResourceLoader {
             }
         }
 
-        return FileFactory.getFile(aClassURL.getPath());
+        return FileFactory.getFile(getDecodedURLPath(aClassURL));
     }
 
 
@@ -178,7 +180,7 @@ public class ResourceLoader {
         if("jar".equals(aClassURL.getProtocol()))
             return FileFactory.getFile(getJarPath(aClassURL));
 
-        String aClassPath = aClassURL.getPath();
+        String aClassPath = getDecodedURLPath(aClassURL);
         return FileFactory.getFile(aClassPath.substring(0, aClassPath.length()-aClassRelPath.length()));
     }
 
@@ -190,8 +192,10 @@ public class ResourceLoader {
      * @return returns the path to the JAR file
      */
     private static String getJarPath(URL url) {
-        String path = url.getPath();
-        // Here's an example of a path:
+        // Get the URL-decoded path
+        String path = getDecodedURLPath(url);
+
+        // Here's an example of such a path:
         // file:/System/Library/Frameworks/JavaVM.framework/Versions/1.6.0/Classes/classes.jar!/java/lang/Object.class
 
         int pos = path.indexOf(".jar!");
@@ -213,4 +217,29 @@ public class ResourceLoader {
         return path.startsWith("/")?path.substring(1, path.length()):path;
     }
 
+    /**
+     * Returns the URL-decoded path of the given <code>java.net.URL</code>. The encoding used for URL-decoding is
+     * <code>UTF-8</code>.
+     *
+     * @param url the URL for which to decode the path
+     * @return the URL-decoded path of the given URL
+     */
+    private static String getDecodedURLPath(URL url) {
+        try {
+            // Decode the URL's path which may contain URL-encoded characters such as %20 for spaces, or non-ASCII
+            // characters.
+            // Note: the Java API's javadoc doesn't specify which encoding has been used to encoded URL paths.
+            // The only indication is in URLDecoder#decode(String, String) javadoc which says:
+            // "The World Wide Web Consortium Recommendation states that UTF-8 should be used. Not doing so may
+            // introduce incompatibilites."
+            // Also Note that URLDecoder#decode(String) uses System.getProperty("file.encoding") as the default encoding,
+            // using this value has been tested without luck under Mac OS X where the value equals "MacRoman" but
+            // URL are actually encoded in UTF-8. The bottom line is that we blindly use UTF-8 to decode resource URLs.
+            return URLDecoder.decode(url.getPath(), "UTF-8");
+        }
+        catch(UnsupportedEncodingException e) {
+            // This should never happen, UTF-8 is necessarily supported by the Java runtime
+            return null;
+        }
+    }
 }
