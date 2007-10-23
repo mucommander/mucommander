@@ -87,6 +87,11 @@ class ThemeWriter implements ThemeXmlConstants {
             out.writeStandAloneElement(ELEMENT_BACKGROUND, getColorAttributes(theme.getColor(Theme.FILE_TABLE_SELECTED_BACKGROUND_COLOR)));
         if(theme.isColorSet(Theme.FILE_TABLE_INACTIVE_SELECTED_BACKGROUND_COLOR))
             out.writeStandAloneElement(ELEMENT_INACTIVE_BACKGROUND, getColorAttributes(theme.getColor(Theme.FILE_TABLE_INACTIVE_SELECTED_BACKGROUND_COLOR)));
+        if(theme.isColorSet(Theme.FILE_TABLE_INACTIVE_SELECTED_SECONDARY_BACKGROUND_COLOR))
+            out.writeStandAloneElement(ELEMENT_INACTIVE_SECONDARY_BACKGROUND, getColorAttributes(theme.getColor(Theme.FILE_TABLE_INACTIVE_SELECTED_SECONDARY_BACKGROUND_COLOR)));
+        if(theme.isColorSet(Theme.FILE_TABLE_SELECTED_SECONDARY_BACKGROUND_COLOR))
+            out.writeStandAloneElement(ELEMENT_SECONDARY_BACKGROUND, getColorAttributes(theme.getColor(Theme.FILE_TABLE_SELECTED_SECONDARY_BACKGROUND_COLOR)));
+
         out.endElement(ELEMENT_SELECTED);
 
         // Alternate background colors.

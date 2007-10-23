@@ -77,8 +77,10 @@ interface ThemeXmlConstants {
     // - Color elements ------------------------------------------------------------------
     // -----------------------------------------------------------------------------------
     public static final String ELEMENT_INACTIVE_BACKGROUND           = "inactive_background";
+    public static final String ELEMENT_INACTIVE_SECONDARY_BACKGROUND = "inactive_secondary_background";
     public static final String ELEMENT_INACTIVE_FOREGROUND           = "inactive_foreground";
     public static final String ELEMENT_BACKGROUND                    = "background";
+    public static final String ELEMENT_SECONDARY_BACKGROUND          = "secondary_background";
     public static final String ELEMENT_FOREGROUND                    = "foreground";
     public static final String ELEMENT_HIDDEN                        = "hidden";
     public static final String ELEMENT_FOLDER                        = "folder";
@@ -89,8 +91,8 @@ interface ThemeXmlConstants {
     public static final String ELEMENT_PROGRESS                      = "progress";
     public static final String ELEMENT_BORDER                        = "border";
     public static final String ELEMENT_INACTIVE_BORDER               = "inactive_border";
-    public static final String ELEMENT_OUTLINE                        = "outline";
-    public static final String ELEMENT_INACTIVE_OUTLINE               = "inactive_outline";
+    public static final String ELEMENT_OUTLINE                       = "outline";
+    public static final String ELEMENT_INACTIVE_OUTLINE              = "inactive_outline";
     public static final String ELEMENT_OK                            = "ok";
     public static final String ELEMENT_WARNING                       = "warning";
     public static final String ELEMENT_CRITICAL                      = "critical";

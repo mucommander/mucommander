@@ -237,12 +237,16 @@ public class Theme extends ThemeData {
 
     private class DefaultValuesListener implements ThemeListener {
         private Theme theme;
+
         public DefaultValuesListener() {}
+
         public void setTheme(Theme theme) {this.theme = theme;}
+
         public void colorChanged(ColorChangedEvent event) {
             if(!theme.isColorSet(event.getColorId()))
                 theme.triggerColorEvent(new ColorChangedEvent(theme, event.getColorId(), getColor(event.getColorId())));
         }
+
         public void fontChanged(FontChangedEvent event) {
             if(!theme.isFontSet(event.getFontId()))
                 theme.triggerFontEvent(new FontChangedEvent(theme, event.getFontId(), getFont(event.getFontId())));

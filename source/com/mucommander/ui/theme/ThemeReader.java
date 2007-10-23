@@ -315,6 +315,22 @@ class ThemeReader extends DefaultHandler implements ThemeXmlConstants {
                 traceIllegalDeclaration(qName);
         }
 
+        // Secondary background.
+        else if(qName.equals(ELEMENT_SECONDARY_BACKGROUND)) {
+            if(state == STATE_TABLE_SELECTED)
+                template.setColor(ThemeData.FILE_TABLE_SELECTED_SECONDARY_BACKGROUND_COLOR, createColor(attributes));
+            else
+                traceIllegalDeclaration(qName);
+        }
+
+        // Inactive secondary background.
+        else if(qName.equals(ELEMENT_INACTIVE_SECONDARY_BACKGROUND)) {
+            if(state == STATE_TABLE_SELECTED)
+                template.setColor(ThemeData.FILE_TABLE_INACTIVE_SELECTED_SECONDARY_BACKGROUND_COLOR, createColor(attributes));
+            else
+                traceIllegalDeclaration(qName);
+        }
+
         // Unfocused foreground color.
         else if(qName.equals(ELEMENT_INACTIVE_FOREGROUND)) {
             if(state == STATE_FILE_NORMAL)

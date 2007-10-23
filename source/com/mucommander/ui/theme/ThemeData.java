@@ -45,7 +45,7 @@ import java.util.WeakHashMap;
  * </p>
  * <p>
  * This default values system means that theme items can change outside of anybody's control: Swing UI properties can be updated, the current
- * look&amp;feel can be modified to a new one... <code>ThemeData</code> will track this changes and make sure that the proper event are dispatched
+ * look&amp;feel can be modified... <code>ThemeData</code> will track this changes and make sure that the proper event are dispatched
  * to listeners.
  * </p>
  * <p>
@@ -89,7 +89,7 @@ public class ThemeData {
      * by an instance of theme data by looping from 0 to {@link #COLOR_COUNT}.
      * </p>
      */
-    public static final int COLOR_COUNT = 59;
+    public static final int COLOR_COUNT = 61;
 
 
 
@@ -207,9 +207,19 @@ public class ThemeData {
     public static final int FILE_TABLE_UNMATCHED_FOREGROUND_COLOR = 6;
 
     /**
-     * Colors used to pain the file table's background color when in a selected row.
+     * Color used to paint the file table's background color when in a selected row.
      */
     public static final int FILE_TABLE_SELECTED_BACKGROUND_COLOR = 7;
+
+    /**
+     * Color used to paint the gradient of the file table's selection.
+     */
+    public static final int FILE_TABLE_SELECTED_SECONDARY_BACKGROUND_COLOR = 59;
+
+    /**
+     * Color used to paint the gradient of the file table's selection when inactive.
+     */
+    public static final int FILE_TABLE_INACTIVE_SELECTED_SECONDARY_BACKGROUND_COLOR = 60;
 
     /**
      * Colors used to pain the file table's background color when in an inactive selected row.
@@ -831,6 +841,13 @@ public class ThemeData {
 
         buffer = isColorDifferent(id, color);
         colors[id] = color;
+        switch(id) {
+        case FILE_TABLE_SELECTED_SECONDARY_BACKGROUND_COLOR:
+        case FILE_TABLE_SELECTED_OUTLINE_COLOR:
+        case FILE_TABLE_INACTIVE_SELECTED_SECONDARY_BACKGROUND_COLOR:
+        case FILE_TABLE_INACTIVE_SELECTED_OUTLINE_COLOR:
+            triggerColorEvent(id, color);
+        }
 
         return buffer;
     }
@@ -872,12 +889,12 @@ public class ThemeData {
      * </p>
      * @param  id identifier of the color to retrieve.
      * @return    the requested color, or its default value if not set.
-     * @see       #getDefaultColor(int)
+     * @see       #getDefaultColor(int,ThemeData)
      * @see       #isColorSet(int)
      */
     public synchronized Color getColor(int id) {
         checkColorIdentifier(id);
-        return (colors[id] == null) ? getDefaultColor(id) : colors[id];
+        return (colors[id] == null) ? getDefaultColor(id, this) : colors[id];
     }
 
     /**
@@ -900,7 +917,7 @@ public class ThemeData {
      * Returns <code>true</code> if the specified color is set.
      * @param  id identifier of the color to check for.
      * @return    <code>true</code> if the specified color is set, <code>false</code> otherwise.
-     * @see       #getDefaultColor(int)
+     * @see       #getDefaultColor(int,ThemeData)
      */
     public boolean isColorSet(int id) {return colors[id] != null;}
 
@@ -923,7 +940,7 @@ public class ThemeData {
      * @return    the default value for the specified color.
      * @see       #addDefaultValuesListener(ThemeListener)
      */
-    public static Color getDefaultColor(int id) {
+    private static Color getDefaultColor(int id, ThemeData data) {
         // Makes sure id is a legal color identifier.
         checkColorIdentifier(id);
 
@@ -986,9 +1003,17 @@ public class ThemeData {
             // Selected table background colors.
         case FILE_TABLE_SELECTED_BACKGROUND_COLOR:
         case FILE_TABLE_INACTIVE_SELECTED_BACKGROUND_COLOR:
-        case FILE_TABLE_SELECTED_OUTLINE_COLOR:
-        case FILE_TABLE_INACTIVE_SELECTED_OUTLINE_COLOR:
 	    return getTableSelectionBackgroundColor();
+
+            // The secondary background and outline colors default to the current
+            // value of 'selected background'.
+        case FILE_TABLE_SELECTED_SECONDARY_BACKGROUND_COLOR:
+        case FILE_TABLE_SELECTED_OUTLINE_COLOR:
+            return data.getColor(FILE_TABLE_SELECTED_BACKGROUND_COLOR);
+
+        case FILE_TABLE_INACTIVE_SELECTED_SECONDARY_BACKGROUND_COLOR:
+        case FILE_TABLE_INACTIVE_SELECTED_OUTLINE_COLOR:
+            return data.getColor(FILE_TABLE_INACTIVE_SELECTED_BACKGROUND_COLOR);
 
             // Border colors.
         case FILE_TABLE_BORDER_COLOR:
@@ -1221,7 +1246,7 @@ public class ThemeData {
         // If colors[id] is null and we're set to ignore defaults, both colors are different.
         // If we're set to use defaults, we must compare color and the default value for id.
         if(colors[id] == null)
-            return ignoreDefaults ? true : !getDefaultColor(id).equals(color);
+            return ignoreDefaults ? true : !getDefaultColor(id, this).equals(color);
 
         // 'Standard' case: both colors are set, compare them normally.
         return !color.equals(colors[id]);
@@ -1905,6 +1930,8 @@ public class ThemeData {
             triggerColorEvent(FILE_TABLE_INACTIVE_SELECTED_BACKGROUND_COLOR, getTableSelectionBackgroundColor());
             triggerColorEvent(FILE_TABLE_SELECTED_OUTLINE_COLOR, getTableSelectionBackgroundColor());
             triggerColorEvent(FILE_TABLE_INACTIVE_SELECTED_OUTLINE_COLOR, getTableSelectionBackgroundColor());
+            triggerColorEvent(FILE_TABLE_SELECTED_SECONDARY_BACKGROUND_COLOR, getTableSelectionBackgroundColor());
+            triggerColorEvent(FILE_TABLE_INACTIVE_SELECTED_SECONDARY_BACKGROUND_COLOR, getTableSelectionBackgroundColor());
         }
     }
 
