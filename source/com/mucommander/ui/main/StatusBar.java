@@ -34,6 +34,7 @@ import com.mucommander.ui.event.TableSelectionListener;
 import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.main.table.FileTable;
 import com.mucommander.ui.main.table.FileTableModel;
+import com.mucommander.ui.border.MutableLineBorder;
 import com.mucommander.ui.theme.*;
 
 import javax.swing.*;
@@ -500,7 +501,6 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
         private long totalSpace;
 
         private Color backgroundColor;
-        private Color borderColor;
         private Color okColor;
         private Color warningColor;
         private Color criticalColor;
@@ -513,10 +513,11 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
             super("");
             setHorizontalAlignment(CENTER);
             backgroundColor = ThemeManager.getCurrentColor(Theme.STATUS_BAR_BACKGROUND_COLOR);
-            borderColor     = ThemeManager.getCurrentColor(Theme.STATUS_BAR_BORDER_COLOR);
+            //            borderColor     = ThemeManager.getCurrentColor(Theme.STATUS_BAR_BORDER_COLOR);
             okColor         = ThemeManager.getCurrentColor(Theme.STATUS_BAR_OK_COLOR);
             warningColor    = ThemeManager.getCurrentColor(Theme.STATUS_BAR_WARNING_COLOR);
             criticalColor   = ThemeManager.getCurrentColor(Theme.STATUS_BAR_CRITICAL_COLOR);
+            setBorder(new MutableLineBorder(ThemeManager.getCurrentColor(Theme.STATUS_BAR_BORDER_COLOR)));
             ThemeManager.addCurrentThemeListener(this);
         }
 
@@ -580,14 +581,6 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
                 int width = getWidth();
                 int height = getHeight();
 
-                // Fill background
-                g.setColor(backgroundColor);
-                g.fillRect(0, 0, width, height);
-
-                // Paint border
-                g.setColor(borderColor);
-                g.drawRect(0, 0, width-1, height-1);
-
                 // Paint amount of free volume space if both free and total space are available
                 float freeSpacePercentage = freeSpace/(float)totalSpace;
 
@@ -596,7 +589,11 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
                            :okColor);
 
                 int freeSpaceWidth = Math.max(Math.round(freeSpacePercentage*(float)(width-2)), 1);
-                g.fillRect(1, 1, freeSpaceWidth, height-2);
+                g.fillRect(1, 1, freeSpaceWidth + 1, height - 2);
+
+                // Fill background
+                g.setColor(backgroundColor);
+                g.fillRect(freeSpaceWidth + 1, 1, width - freeSpaceWidth - 1, height - 2);
             }
 
             super.paint(g);
@@ -610,7 +607,7 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
                 backgroundColor = event.getColor();
                 break;
             case Theme.STATUS_BAR_BORDER_COLOR:
-                borderColor = event.getColor();
+                ((MutableLineBorder)getBorder()).setLineColor(event.getColor());
                 break;
             case Theme.STATUS_BAR_OK_COLOR:
                 okColor = event.getColor();
