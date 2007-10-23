@@ -3,30 +3,32 @@
   <!-- = File table appearance ========================= -->
   <!-- ================================================= -->
   <file_table>
-    <font                  family="Lucida Grande,Arial,Lucida Sans" size="13"/>
-    <border                color="404040"/>
-    <inactive_border       color="404040"/>
-    <outline               color="00ffff"/>
-    <inactive_outline      color="cccccc"/>
+    <font                            family="Lucida Grande,Arial,Lucida Sans" size="13"/>
+    <border                          color="404040"/>
+    <inactive_border                 color="404040"/>
+    <outline                         color="00ffff"/>
+    <inactive_outline                color="cccccc"/>
 
     <normal>
-      <background          color="000084"/>
-      <inactive_background color="000084"/>
+      <background                    color="000084"/>
+      <inactive_background           color="000084"/>
     </normal>
 
     <selected>
-      <background          color="00ffff"/>
-      <inactive_background color="cccccc"/>
+      <background                    color="00ffff"/>
+      <secondary_background          color="00ffff"/>
+      <inactive_background           color="cccccc"/>
+      <inactive_secondary_background color="cccccc"/>
     </selected>
 
     <alternate>
-      <background          color="000084"/>
-      <inactive_background color="000084"/>
+      <background                    color="000084"/>
+      <inactive_background           color="000084"/>
     </alternate>
 
     <unmatched>
-      <foreground color="00a8a8"/>
-      <background color="000084"/>
+      <foreground                   color="00a8a8"/>
+      <background                   color="000084"/>
     </unmatched>
 
 

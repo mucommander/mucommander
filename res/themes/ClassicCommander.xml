@@ -11,30 +11,32 @@
   <!-- = File table appearance ========================= -->
   <!-- ================================================= -->
   <file_table>
-    <font                  family="Lucida Grande,Tahoma,Lucida Sans" size ="12"/>
-    <border                color="868686"/>
-    <inactive_border       color="868686"/>
-    <outline               color="3875d7"/>
-    <inactive_outline      color="c0c0c0"/>
+    <font                            family="Lucida Grande,Tahoma,Lucida Sans" size ="12"/>
+    <border                          color="868686"/>
+    <inactive_border                 color="868686"/>
+    <outline                         color="3875d7"/>
+    <inactive_outline                color="c0c0c0"/>
 
     <normal>
-      <background          color="ffffff"/>
-      <inactive_background color="f5f5f5"/>
+      <background                    color="ffffff"/>
+      <inactive_background           color="f5f5f5"/>
     </normal>
 
     <alternate>
-      <background          color="ffffff"/>
-      <inactive_background color="f5f5f5"/>
+      <background                    color="ffffff"/>
+      <inactive_background           color="f5f5f5"/>
     </alternate>
 
     <selected>
-      <background          color="3875d7"/>
-      <inactive_background color="c0c0c0"/>
+      <background                    color="3875d7"/>
+      <secondary_background          color="3875d7"/>
+      <inactive_background           color="c0c0c0"/>
+      <inactive_secondary_background color="c0c0c0"/>
     </selected>
 
     <unmatched>
-      <foreground          color="404040"/>
-      <background          color="d1d1d1"/>
+      <foreground                    color="404040"/>
+      <background                    color="d1d1d1"/>
     </unmatched>
 
 
