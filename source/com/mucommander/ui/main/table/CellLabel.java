@@ -64,19 +64,19 @@ public class CellLabel extends JLabel {
     // - Instance fields -----------------------------------------------------------------
     // -----------------------------------------------------------------------------------
     /** Last text set by the setText method */
-    private String        lastText;
+    private String    lastText;
     /** Last icon set by the setIcon method */
-    private ImageIcon     lastIcon;
+    private ImageIcon lastIcon;
     /** Last tooltip text set by the setToolTipText method */
-    private String        lastTooltip;
+    private String    lastTooltip;
     /** Last foreground color set by the setForeground method */
-    private Color         lastForegroundColor;
+    private Color     lastForegroundColor;
     /** Last background color set by the setBackground method */
-    private Color         lastBackgroundColor;
+    private Color     lastBackgroundColor;
     /** Outline color (top and bottom). */
-    private Color         outlineColor;
-    /** Gradient for the background. */
-    private GradientPaint gradient;
+    private Color     outlineColor;
+    /** Gradient color for the background. */
+    private Color     gradientColor;
 
 
 
@@ -113,7 +113,7 @@ public class CellLabel extends JLabel {
         if((c != null && !c.equals(lastBackgroundColor)) || (lastBackgroundColor != null && !lastBackgroundColor.equals(c))) {
             super.setBackground(c); 
             lastBackgroundColor = c;
-            gradient            = null;
+            gradientColor       = null;
         }
     }
 
@@ -127,7 +127,7 @@ public class CellLabel extends JLabel {
             setBackground(c1);
         else {
             lastBackgroundColor = c1;
-            gradient            = new GradientPaint(0, 0, c1, 0, getHeight(), c2, false);
+            gradientColor       = c2;
         }
     }
 
@@ -193,7 +193,7 @@ public class CellLabel extends JLabel {
      */
     public void paint(Graphics g) {
         // Checks whether we need to paint a gradient background.
-        if(gradient != null) {
+        if(gradientColor != null) {
             Graphics2D g2;       // Allows us to use the setPaint and getPaint methods.
             Paint      oldPaint; // Used to restore the graphics's Paint component after filling the background.
 
@@ -202,7 +202,7 @@ public class CellLabel extends JLabel {
             oldPaint = g2.getPaint();
 
             // Paints the gradient background.
-            g2.setPaint(gradient);
+            g2.setPaint(new GradientPaint(0, 0, lastBackgroundColor, 0, getHeight(), gradientColor, false));
             g2.fillRect(0, 0, getWidth(), getHeight());
 
             // Restores the Graphics instance to its previous state.
@@ -238,7 +238,7 @@ public class CellLabel extends JLabel {
     public boolean isOpaque() {
         // If we're not using a gradient background, the component's opaque
         // status is context dependant.
-        if(gradient == null) {
+        if(gradientColor == null) {
             Color     back;
             Component p;
 
