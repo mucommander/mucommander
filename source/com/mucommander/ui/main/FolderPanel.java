@@ -205,6 +205,8 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
                 }
                 // Right-click brings a contextual popup menu
                 else if (PlatformManager.isRightMouseButton(e)) {
+                    if(!fileTable.hasFocus())
+                        fileTable.requestFocus();
                     AbstractFile currentFolder = getCurrentFolder();
                     new TablePopupMenu(FolderPanel.this.mainFrame, currentFolder, null, false, fileTable.getFileTableModel().getMarkedFiles()).show(scrollPane, e.getX(), e.getY());
                 }
