@@ -4,10 +4,9 @@ include/commons-logging.jar  -> Commons-logging (custom-made JAR, empty stubs)
 include/commons-net.jar	     -> Commons-net 1.4.1
 include/icu4j.jar            -> IBM ICU4J 3.6.1, trimmed to only include
                                 CharsetDetector
-include/j2ssh.jar	     -> J2SSH 0.2.7 (patched and compiled for Java 1.3)
+include/j2ssh.jar	     -> J2SSH 0.2.7 (patched and compiled for Java 1.4)
 include/jakarta-oro.jar	     -> Jakarta Oro 2.0.8
-include/jcifs.jar	     -> jCIFS 1.2.13 (compiled for Java 1.4 and
-                                patched to prevent NPE)
+include/jcifs.jar	     -> jCIFS 1.2.17 (patched and compiled for Java 1.4)                                
 include/jmdns.jar            -> jmdns 1.0 (with some sourceforge.net patches,
                                 compiled for Java 1.4)
 include/osx-growl.jar        -> Growl Java bindings, updated on 09/04/2007.

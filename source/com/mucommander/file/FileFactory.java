@@ -490,47 +490,56 @@ public class FileFactory {
 
     private static AbstractFile createRawFile(FileURL fileURL) throws IOException {
         String protocol = fileURL.getProtocol().toLowerCase();
+
+        // Cache file instances only for certain protocols
+        boolean useFileCache = protocol.equals(FileProtocols.FILE) || protocol.equals(FileProtocols.SMB);
+
+        // This value is used twice, only if file caching is used
+        String urlRep = useFileCache?fileURL.toString(true):null;
+
         AbstractFile file;
 
-        // Special case for local files, do not use protocol registration mechanism to speed things up a bit
-        if(protocol.equals(FileProtocols.FILE)) {
-            // Use an LRU file cache to recycle frequently used local file instances.
-            String urlRep = fileURL.toString(true);
+        if(useFileCache) {
+            // Lookup the cache for an existing AbstractFile instance
             file = (AbstractFile)fileCache.get(urlRep);
-
-            //                if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("file cache hits/misses: "+fileCache.getHitCount()+"/"+fileCache.getMissCount());
+//            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("file cache hits/misses: "+fileCache.getHitCount()+"/"+fileCache.getMissCount());
 
             if(file!=null)
                 return file;
-
-            // Create a local file instance
-            file = new LocalFile(fileURL);
-            // Uncomment this line and comment the previous one to simulate a slow filesystem 
-            //file = new DebugFile(new LocalFile(fileURL), 0, 50);
-
-            // Note: Creating an archive file on top of the file must be done after adding the file to the LRU cache,
-            // this could otherwise lead to weird behaviors, for example if a directory with the same filename
-            // of a former archive was created, the directory would be considered as an archive
-            fileCache.add(urlRep, file);
-            //                if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Added to file cache: "+file);
-
-            return file;
         }
-        // For any other file protocol, use registered protocols map
+
+        // Special case for local files, do not use protocol registration mechanism to speed things up a bit
+        // (saves a hashtable lookup)
+        if(protocol.equals(FileProtocols.FILE)) {
+            file = new LocalFile(fileURL);
+            // Uncomment this line and comment the previous one to simulate a slow filesystem
+            //file = new DebugFile(new LocalFile(fileURL), 0, 50);
+        }
+        // Use the protocol map for any other file protocol
         else {
             // If the specified FileURL doesn't contain any credentials, use CredentialsManager to find
             // any credentials matching the url and use them.
             if(Debug.ON) Debug.trace("fileURL.containsCredentials() "+fileURL.containsCredentials());
             if(!fileURL.containsCredentials())
                 CredentialsManager.authenticateImplicit(fileURL);
-            if(Debug.ON) Debug.trace("credentials="+fileURL.getCredentials());
+//            if(Debug.ON) Debug.trace("credentials="+fileURL.getCredentials());
 
-            // Finds the right file protocol.
+            // Finds the right file protocol provider
             ProtocolProvider provider;
             if((provider = getProtocolProvider(protocol)) == null)
                 throw new IOException("Unknown file protocol: " + protocol);
-            return provider.getFile(fileURL);
+            file = provider.getFile(fileURL);
         }
+
+        if(useFileCache) {
+            // Note: Creating an archive file on top of the file must be done after adding the file to the LRU cache,
+            // this could otherwise lead to weird behaviors, for example if a directory with the same filename
+            // of a former archive was created, the directory would be considered as an archive
+            fileCache.add(urlRep, file);
+//                            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Added to file cache: "+file);
+        }
+
+        return file;
     }
 
     /**
