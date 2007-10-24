@@ -87,18 +87,17 @@ class FilePanel extends ThemeEditorPanel {
         gridPanel.add(createCaptionLabel("theme_editor.background"));
         gridPanel.add(backgroundButton = new ColorButton(parent, themeData, isActive ? ThemeData.FILE_TABLE_BACKGROUND_COLOR :
                                                          ThemeData.FILE_TABLE_INACTIVE_BACKGROUND_COLOR,
-                                                         PreviewLabel.BACKGROUND_COLOR_PROPERTY_NAME));
-        backgroundButton.addUpdatedPreviewComponent(preview);
+                                                         PreviewLabel.BACKGROUND_COLOR_PROPERTY_NAME, preview));
         gridPanel.add(selectedBackgroundButton = new ColorButton(parent, themeData,
                                                                  isActive ? ThemeData.FILE_TABLE_SELECTED_BACKGROUND_COLOR :
                                                                  ThemeData.FILE_TABLE_INACTIVE_SELECTED_BACKGROUND_COLOR,
-                                                                 PreviewLabel.BACKGROUND_COLOR_PROPERTY_NAME));
+                                                                 PreviewLabel.BACKGROUND_COLOR_PROPERTY_NAME, preview));
 
         // Alternate background
         gridPanel.add(createCaptionLabel("theme_editor.alternate_background"));
         gridPanel.add(new ColorButton(parent, themeData,
                                       isActive ? ThemeData.FILE_TABLE_ALTERNATE_BACKGROUND_COLOR : ThemeData.FILE_TABLE_INACTIVE_ALTERNATE_BACKGROUND_COLOR,
-                                      PreviewLabel.BACKGROUND_COLOR_PROPERTY_NAME));
+                                      PreviewLabel.BACKGROUND_COLOR_PROPERTY_NAME, preview));
         gridPanel.add(new JLabel());
 
         // Folders.
