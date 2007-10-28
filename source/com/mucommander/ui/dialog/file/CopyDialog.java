@@ -80,7 +80,7 @@ public class CopyDialog extends DestinationDialog {
                 startPosition  = fieldText.length();
 
                 if(!(file.isDirectory() && (destFile=FileFactory.getFile(fieldText+file.getName()))!=null && destFile.exists() && destFile.isDirectory())) {
-                    endPosition = file.getName().indexOf('.');
+                    endPosition = file.getName().lastIndexOf('.');
                     if(endPosition > 0)
                         endPosition += startPosition;
                     else

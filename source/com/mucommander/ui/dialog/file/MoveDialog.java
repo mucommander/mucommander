@@ -61,7 +61,7 @@ public class MoveDialog extends DestinationDialog {
             // TODO: move those I/O bound calls to another thread as they can lock the main thread
             startPosition = fieldText.length();
             if(!(file.isDirectory() && (destFile=FileFactory.getFile(fieldText+file.getName()))!=null && destFile.exists() && destFile.isDirectory())) {
-                endPosition = file.getName().indexOf('.');
+                endPosition = file.getName().lastIndexOf('.');
                 if(endPosition > 0)
                     endPosition += startPosition;
                 else
