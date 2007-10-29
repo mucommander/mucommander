@@ -294,6 +294,10 @@ public abstract class ProxyFile extends AbstractFile {
         file.mkfile();
     }
 
+    public void deleteRecursively() throws IOException {
+        file.deleteRecursively();
+    }
+
     public boolean equals(Object f) {
         return file.equals(f);
     }
