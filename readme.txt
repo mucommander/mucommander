@@ -115,6 +115,7 @@ Improvements:
 - Added keyboard shortcuts for the items in the drive popup button.
 - Windows: drives in the drive popup button now show extended names.
 - Bzip2 read-access speed substantially improved.
+- Improved icon representation of symbolic links
 
 Localization:
 
@@ -129,11 +130,12 @@ Bug fixes:
 - Fixed editable combo-boxes not reacting well to font change.
 - Fixed folder panel borders failing to refresh properly when their color
   was changed.
-- Fixed double "Download or browse" dialogs when opening http files.
+- Fixed "Download or browse" dialog that appeared twice when opening HTTP files.
 - Fixed issues with opening some bzip2 archives.
 - A single click on the current row of the inactive table can no longer 
   trigger the filename/date/permission editor.
 - Fixed issues when exploring the SMB 'network neighborhood' (smb://)
+- SFTP: fixed symlinks to directories not properly handled
 
 Known issues:
 - Italian, Korean and Polish translations are not up-to-date.
