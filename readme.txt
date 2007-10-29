@@ -133,11 +133,9 @@ Bug fixes:
 - Fixed issues with opening some bzip2 archives.
 - A single click on the current row of the inactive table can no longer 
   trigger the filename/date/permission editor.
+- Fixed issues when exploring the SMB 'network neighborhood' (smb://)
 
 Known issues:
-- The bookmarks file system doesn't allow users to specify which credentials
-  they wish to use when selecting a bookmark that needs authentification, it
-  will default to the first in the list.
 - Italian, Korean and Polish translations are not up-to-date.
 - Executable permissions are not preserved properly for local files prior to
   Java 1.6.
@@ -151,6 +149,9 @@ Known issues:
   font (known Java bug,
    http://lists.apple.com/archives/Java-dev/2005/May/msg00670.html).
 - Editable combo boxes have keyboard navigation issues under Java 1.6.
+- The bookmark file system doesn't allow users to specify which credentials
+  they wish to use when selecting a bookmark that needs authentification, it
+  will default to the first in the list.
 
 
 Command Line Interface
