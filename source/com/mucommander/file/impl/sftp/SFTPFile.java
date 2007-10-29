@@ -285,6 +285,32 @@ public class SFTPFile extends AbstractFile implements ConnectionHandlerFactory {
     }
 
     public boolean isDirectory() {
+        if(isSymlink()) {
+            // If this file is a symlink, file.isDirectory() will always return false. We need to retrieve the symlink's
+            // target and fetch its file attributes.
+            SFTPConnectionHandler connHandler = null;
+            try {
+                // Retrieve a ConnectionHandler and lock it
+                connHandler = (SFTPConnectionHandler)ConnectionPool.getConnectionHandler(this, fileURL, true);
+                // Makes sure the connection is started, if not starts it
+                connHandler.checkConnection();
+
+                // getSymbolicLinkTarget returns a path without sftp://... and without a leading '/' (bug?)
+                String targetPath = connHandler.sftpChannel.getSymbolicLinkTarget(absPath);
+                if(!targetPath.startsWith("/"))
+                    targetPath = "/"+targetPath;
+
+                return connHandler.sftpChannel.getAttributes(targetPath).isDirectory();
+            }
+            catch(IOException e) {
+                // Simply continue
+            }
+            finally {
+                // Release the lock on the ConnectionHandler
+                connHandler.releaseLock();
+            }
+        }
+
         return file!=null && file.isDirectory();
     }
 	
@@ -616,6 +642,38 @@ public class SFTPFile extends AbstractFile implements ConnectionHandlerFactory {
         }
     }
 
+    public String getCanonicalPath() {
+        if(isSymlink()){
+            // Fetch and return the path to the symlink target
+            SFTPConnectionHandler connHandler = null;
+            try {
+                // Retrieve a ConnectionHandler and lock it
+                connHandler = (SFTPConnectionHandler)ConnectionPool.getConnectionHandler(this, fileURL, true);
+                // Makes sure the connection is started, if not starts it
+                connHandler.checkConnection();
+
+                // getSymbolicLinkTarget returns a path without sftp://... and without a leading '/' (bug?)
+                String targetPath = connHandler.sftpChannel.getSymbolicLinkTarget(absPath);
+                if(!targetPath.startsWith("/"))
+                    targetPath = "/"+targetPath;
+
+                FileURL targetURL = (FileURL)this.fileURL.clone();
+                targetURL.setPath(targetPath);
+
+                return targetURL.toString(false);
+            }
+            catch(IOException e) {
+                // Simply continue
+            }
+            finally {
+                // Release the lock on the ConnectionHandler
+                connHandler.releaseLock();
+            }
+        }
+
+        // If this file is not a symlink or the symlink's target could not be retrieved, return the absolute path.
+        return getAbsolutePath();
+    }
 
     ///////////////////
     // Inner classes //
