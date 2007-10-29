@@ -262,42 +262,7 @@ public abstract class AbstractFile implements FilePermissions {
         else
             return path.equals("/");
     }
-    
 
-    /**
-     * Tests if the given path contains a trailing separator, and if not, adds one to the returned path.
-     * The separator used is the one returned by {@link #getSeparator()}.
-     *
-     * @param path the path for which to add a trailing separator
-     * @return the path with a trailing separator
-     */
-    protected final String addTrailingSeparator(String path) {
-        // Even though getAbsolutePath() is not supposed to return a trailing separator, root folders ('/', 'c:\' ...)
-        // are exceptions that's why we still have to test if path ends with a separator
-        String separator = getSeparator();
-        if(!path.endsWith(separator))
-            return path+separator;
-        return path;
-    }
-	
-	
-    /**
-     * Tests if the given path contains a trailing separator, and if it does, removes it from the returned path.
-     * The separator used is the one returned by {@link #getSeparator()}.
-     *
-     * @param path the path for which to remove the trailing separator
-     * @return the path free of a trailing separator
-     */
-    protected final String removeTrailingSeparator(String path) {
-        // Remove trailing slash if path is not '/' or trailing backslash if path does not end with ':\' 
-        // (Reminder: C: is C's current folder, while C:\ is C's root)
-        String separator = getSeparator();
-        if(path.endsWith(separator)
-           && !((separator.equals("/") && path.length()==1) || (separator.equals("\\") && path.charAt(path.length()-2)==':')))
-            path = path.substring(0, path.length()-1);
-        return path;
-    }
-	
 
     /**
      * Returns an <code>InputStream</code> to read this file's contents, starting at the specified offset (in bytes).
@@ -365,60 +330,85 @@ public abstract class AbstractFile implements FilePermissions {
             }
         }
     }
-    
 
     /**
-     * Copies this file to another specified one, overwriting the contents of the destination file (if any).
-     * Returns <code>true</code> if the operation could be successfully be completed, <code>false</code> if the
-     * operation could not be performed because of unsatisfied conditions (not an error), or throws an
-     * {@link FileTransferException} if the operation was attempted but failed.
+     * Checks the prerequisites of a copy operation.
+     * Throws a {@link FileTransferException} in any of the following cases, does nothing otherwise:
+     * <ul>
+     *   <li>this file does not exist</li>
+     *   <li>the destination file exists</li>
+     *   <li>this file and the destination file are the same</li>
+     *   <li>this file is a directory and a parent of the destination file</li>
+     * </ul>
      *
-     * <p>This generic implementation copies this file to the destination one, overwriting any data it contains.
-     * The operation will always be attempted, thus will either return <code>true</code> or throw an exception, but
-     * will never return <code>false</code>.</p>
-     *
-     * <p>This method should be overridden by file protocols which are able to perform a server-to-server copy.</p>
-     *
-     * @param destFile the destination file this file should be copied to
-     * @return true if the operation could be successfully be completed, false if the operation could not be performed
-     * because of unsatisfied conditions (not an error)
-     * @throws FileTransferException if this file or the destination could not be written or if the operation failed
-     * for any other reason (use {@link FileTransferException#getReason()} to get the reason of the failure).
+     * @param destFile the destination file to copy this file to
+     * @throws FileTransferException in any of the cases listed above, use {@link FileTransferException#getReason()} to
+     * know the reason.
      */
-    public boolean copyTo(AbstractFile destFile) throws FileTransferException {
-        // Throw a specific FileTransferException if source and destination files are identical
-        if(this.equals(destFile))
-            throw new FileTransferException(FileTransferException.SOURCE_AND_DESTINATION_IDENTICAL);
-        
-        InputStream in;
+    protected final void checkCopyPrerequisites(AbstractFile destFile) throws FileTransferException {
+        // Test if source file is a folder and destination is a subfolder of source, also true if both files are equal
+        if(isDirectory() && isParentOf(destFile)) {
+            // Throw a specific FileTransferException if the source and destination files are identical
+            if(this.equals(destFile))
+                throw new FileTransferException(FileTransferException.SOURCE_AND_DESTINATION_IDENTICAL);
 
-        try {
-            in = getInputStream();
-        }
-        catch(IOException e) {
-            throw new FileTransferException(FileTransferException.OPENING_SOURCE);
+            throw new FileTransferException(FileTransferException.SOURCE_PARENT_OF_DESTINATION);
         }
 
-        try {
-            destFile.copyStream(in, false);
-            return true;
-        }
-        finally {
-            // Close stream even if copyStream() threw an IOException
-            try {
-                in.close();
-            }
-            catch(IOException e) {
-                throw new FileTransferException(FileTransferException.CLOSING_SOURCE);
-            }
-        }
+        // Throw an exception if the source file does not exist
+        if(!exists())
+            throw new FileTransferException(FileTransferException.FILE_NOT_FOUND);
+
+        // Throw an exception if the destination file exists
+        if(destFile.exists())
+            throw new FileTransferException(FileTransferException.DESTINATION_EXISTS);
     }
 
-    
+
+    /**
+     * Copies this file to a specified destination file. If this file is a directory, any file or directory
+     * it contains will also be copied. An exception will be thrown if the destination file exists.
+     *
+     * <p>This method returns <code>true</code> if the operation was successfully completed, <code>false</code> if the
+     * operation could not be performed because of unsatisfied conditions (not an error).
+     * A {@link FileTransferException} if the operation was attempted but failed for any of the following reasons:
+     * <ul>
+     *  <li>the destination file exists</li>
+     *  <li>this file and the destination file are the same</li>
+     *  <li>this file is a directory and a parent of the destination file (operation would otherwise loop indefinitely)</li>
+     *  <li>this file (or one if its child) could not be read</li>
+     *  <li>the destination file (or one of its child) could not be written</li>
+     *  <li>an I/O error occurred</li>
+     * </ul>
+     * </p>
+     *
+     * <p>This generic implementation will always attempt to copy files, thus either return <code>true</code> or
+     * throw an exception, but will never return <code>false</code>. Symbolic links are skipped when encountered:
+     * neither the link nor the linked file is copied. Also noteworthy is that no clean up is performed if an error
+     * occurs in the midst of a transfer: files that have been copied (even partially) are left in the destination.</p>
+     *
+     * <p>This method should be overridden by filesystems which are able to provide a more efficient implementation --
+     * in particular, network-based filesystems that can perform a server-to-server copy.</p>
+     *
+     * @param destFile the destination file to copy this file to
+     * @return true if the operation could be successfully be completed, false if the operation could not be performed
+     * because of unsatisfied conditions (not an error)
+     * @throws FileTransferException in any of the cases listed above, use {@link FileTransferException#getReason()} to
+     * know the reason.
+     */
+    public boolean copyTo(AbstractFile destFile) throws FileTransferException {
+        checkCopyPrerequisites(destFile);
+
+        // Copy the file and its contents if the file is a directory
+        copyRecursively(this, destFile);
+
+        return true;
+    }
+
     /**
      * Returns a hint that indicates whether the {@link #copyTo(AbstractFile)} method should be used to
-     * copy this file to the specified destination file, rather than copying the file using
-     * {@link #copyStream(InputStream, boolean)} or {@link #getInputStream()} and {@link #getOutputStream(boolean)}.
+     * copy this file to the specified destination file, rather than copying the file 'manually', using
+     * {@link #copyStream(InputStream, boolean)}, or {@link #getInputStream()} and {@link #getOutputStream(boolean)}.
      *
      * <p>Potential returned values are:
      * <ul>
@@ -441,33 +431,55 @@ public abstract class AbstractFile implements FilePermissions {
 
 
     /**
-     * Moves this file to another specified one. Returns <code>true</code> if the operation was successfully
-     * completed, <code>false</code> if the operation could not be performed because of unsatisfied conditions
-     * (not an error), or throws an {@link FileTransferException} if the operation was attempted but failed.
+     * Moves this file to a specified destination file. If this file is a directory, any file or directory
+     * it contains will also be moved. An exception will be thrown if the destination file exists.
+     * After normal completion, this file will not exist anymore: {@link #exists()} will return <code>false</code>.
      *
-     * <p>This generic implementation copies this file to the destination one, overwriting any data it contains,
-     * and if (and only if) the copy was successful, deletes the original file (this file). The operation will always
-     * be attempted, thus will either return <code>true</code> or throw an exception, but will never return
-     * <code>false</code>.
+     * <p>This method returns <code>true</code> if the operation was successfully completed, <code>false</code> if the
+     * operation could not be performed because of unsatisfied conditions (not an error).
+     * A {@link FileTransferException} if the operation was attempted but failed for any of the following reasons:
+     * <ul>
+     *  <li>the destination file exists</li>
+     *  <li>this file and the destination file are the same</li>
+     *  <li>this file is a directory and a parent of the destination file (operation would otherwise loop indefinitely)</li>
+     *  <li>this file (or one if its child) could not be read</li>
+     *  <li>this file )or one of its child) could not be written</li>
+     *  <li>the destination file (or one of its children) could not be written</li>
+     *  <li>an I/O error occurred</li>
+     * </ul>
+     * </p>
      *
-     * <p>This method should be overridden by file protocols which are able to rename files.</p>
+     * <p>This generic implementation will always attempt to move files, thus either return <code>true</code> or
+     * throw an exception, but will never return <code>false</code>.
+     * Symbolic links are not moved to the destination when encountered: neither the link nor the linked file is moved,
+     * and the symlink file is deleted.</p>
      *
-     * @param destFile the destination file this file should be moved to
+     * <p>This implementation first copies the file and it contents (if any) and then deletes it. Deletion occurs only
+     * after all files have been successfully copied. Also noteworthy is that no clean up is performed if an error
+     * occurs in the midst of a transfer: files that have been copied (even partially) are left in the destination.</p>
+     *
+     * <p>This method should be overridden by filesystems which are able to provide a more efficient implementation --
+     * in particular, network-based filesystems that can perform remote renaming.</p>
+     *
+     * @param destFile the destination file to move this file to
      * @return true if the operation could be successfully be completed, false if the operation could not be performed
      * because of unsatisfied conditions (not an error)
-     * @throws FileTransferException if this file or the destination could be written or if the operation failed
-     * for any other reason (use {@link FileTransferException#getReason()} to get the reason of the failure).
+     * @throws FileTransferException in any of the cases listed above, use {@link FileTransferException#getReason()} to
+     * know the reason.
      */
     public boolean moveTo(AbstractFile destFile) throws FileTransferException {
-        // Throw a specific FileTransferException if source and destination files are identical
-        if(this.equals(destFile))
-            throw new FileTransferException(FileTransferException.SOURCE_AND_DESTINATION_IDENTICAL);
+        checkCopyPrerequisites(destFile);
 
-        copyTo(destFile);
+        // Copy the file and its contents if the file is a directory
+        copyRecursively(this, destFile);
 
-        // The file won't be deleted if copyTo() failed (threw an IOException)
+        // Note: the above code is the same as #copyTo(), but we don't want to avoid using #copyTo() so that both
+        // moveTo() and copyTo() can be overridden separately.
+
+        // Delete the source file and its contents now that it has been copied OK.
+        // Note that the file won't be deleted if copyTo() failed (threw an IOException)
         try {
-            delete();
+            deleteRecursively();
             return true;
         }
         catch(IOException e) {
@@ -518,10 +530,11 @@ public abstract class AbstractFile implements FilePermissions {
 
     /**
      * Creates this file as an empty, non-directory file. This method will fail (throw an <code>IOException</code>)
-     * if this file already exists.
+     * if this file already exists. Note that this method may not always yield a zero-byte file (see below).
      *
-     * <p>{@link AbstractRWArchiveFile} implementations may want to override this method so that it creates
-     * a valid archive with no entry.</p>
+     * <p>This generic implementation simply creates a zero-byte file. {@link AbstractRWArchiveFile} implementations
+     * may want to override this method so that it creates a valid archive with no entry. To illustrate, an empty Zip
+     * file with proper headers is 22-byte long.</p>
      *
      * @throws IOException if the file could not be created, either because it already exists or because of an I/O error
      */
@@ -561,24 +574,6 @@ public abstract class AbstractFile implements FilePermissions {
      */
     public AbstractFile[] ls(FilenameFilter filter) throws IOException {
         return filter==null?ls():filter.filter(ls());
-    }
-
-
-    /**
-     * Convenience method that sets/unsets a bit in the given permission int.
-     *
-     * @param permissions the permission int
-     * @param bit the bit to set
-     * @param enabled true to enable the bit, false to disable it
-     * @return the modified permission int
-     */
-    protected static int setPermissionBit(int permissions, int bit, boolean enabled) {
-        if(enabled)
-            permissions |= bit;
-        else
-            permissions &= ~bit;
-
-        return permissions;
     }
 
 
@@ -756,6 +751,17 @@ public abstract class AbstractFile implements FilePermissions {
         }
 
         return s;
+    }
+
+
+    /**
+     * Deletes this file. If the file is a directory, enclosing files are deleted recursively.
+     * Symbolic links to directories are simply deleted, without deleting the contents of the linked directory.
+     *
+     * @throws IOException if an error occurred while deleting a file or listing a directory's contents
+     */
+    public void deleteRecursively() throws IOException {
+        deleteRecursively(this);
     }
 
 
@@ -1048,6 +1054,126 @@ public abstract class AbstractFile implements FilePermissions {
     }
 
 
+    /**
+     * Tests if the given path contains a trailing separator, and if not, adds one to the returned path.
+     * The separator used is the one returned by {@link #getSeparator()}.
+     *
+     * @param path the path for which to add a trailing separator
+     * @return the path with a trailing separator
+     */
+    protected final String addTrailingSeparator(String path) {
+        // Even though getAbsolutePath() is not supposed to return a trailing separator, root folders ('/', 'c:\' ...)
+        // are exceptions that's why we still have to test if path ends with a separator
+        String separator = getSeparator();
+        if(!path.endsWith(separator))
+            return path+separator;
+        return path;
+    }
+
+    /**
+     * Tests if the given path contains a trailing separator, and if it does, removes it from the returned path.
+     * The separator used is the one returned by {@link #getSeparator()}.
+     *
+     * @param path the path for which to remove the trailing separator
+     * @return the path free of a trailing separator
+     */
+    protected final String removeTrailingSeparator(String path) {
+        // Remove trailing slash if path is not '/' or trailing backslash if path does not end with ':\'
+        // (Reminder: C: is C's current folder, while C:\ is C's root)
+        String separator = getSeparator();
+        if(path.endsWith(separator)
+           && !((separator.equals("/") && path.length()==1) || (separator.equals("\\") && path.charAt(path.length()-2)==':')))
+            path = path.substring(0, path.length()-1);
+        return path;
+    }
+
+
+    /**
+     * Copies the source file to the destination one and recurses on directory contents.
+     * This method assumes that the destination file does not exists, this must be checked prior to calling this method.
+     * Symbolic links are skipped when encountered: neither the link nor the linked file are copied.
+     *
+     * @param sourceFile the file to copy
+     * @param destFile the destination file
+     * @throws FileTransferException if an error occurred while copying the file
+     */
+    protected final void copyRecursively(AbstractFile sourceFile, AbstractFile destFile) throws FileTransferException {
+        if(sourceFile.isSymlink())
+            return;
+
+        if(sourceFile.isDirectory()) {
+            try {
+                destFile.mkdir();
+            }
+            catch(IOException e) {
+                throw new FileTransferException(FileTransferException.WRITING_DESTINATION);
+            }
+
+            AbstractFile children[];
+            try {
+                children = sourceFile.ls();
+            }
+            catch(IOException e) {
+                throw new FileTransferException(FileTransferException.READING_SOURCE);
+            }
+
+            AbstractFile child;
+            AbstractFile destChild;
+            for(int i=0; i<children.length; i++) {
+                child = children[i];
+                try {
+                    destChild = destFile.getDirectChild(child.getName());
+                }
+                catch(IOException e) {
+                    throw new FileTransferException(FileTransferException.OPENING_DESTINATION);
+                }
+
+                copyRecursively(child, destChild);
+            }
+        }
+        else {
+            InputStream in;
+
+            try {
+                in = sourceFile.getInputStream();
+            }
+            catch(IOException e) {
+                throw new FileTransferException(FileTransferException.OPENING_SOURCE);
+            }
+
+            try {
+                destFile.copyStream(in, false);
+            }
+            finally {
+                // Close stream even if copyStream() threw an IOException
+                try {
+                    in.close();
+                }
+                catch(IOException e) {
+                    throw new FileTransferException(FileTransferException.CLOSING_SOURCE);
+                }
+            }
+        }
+    }
+
+    /**
+     * Deletes the given file. If the file is a directory, enclosing files are deleted recursively.
+     * Symbolic links to directories are simply deleted, without deleting the contents of the linked directory.
+     *
+     * @param file the file to delete
+     * @throws IOException if an error occurred while deleting a file or listing a directory's contents
+     */
+    protected final void deleteRecursively(AbstractFile file) throws IOException {
+        if(file.isDirectory() && !file.isSymlink()) {
+            AbstractFile children[] = file.ls();
+            for(int i=0; i<children.length; i++)
+                deleteRecursively(children[i]);
+        }
+
+        file.delete();
+    }
+
+
     ////////////////////
     // Static methods //
     ////////////////////
@@ -1188,6 +1314,24 @@ public abstract class AbstractFile implements FilePermissions {
     }
 
 
+    /**
+     * Convenience method that sets/unsets a bit in the given permissions int.
+     *
+     * @param permissions the permission int
+     * @param bit the bit to set
+     * @param enabled true to enable the bit, false to disable it
+     * @return the modified permission int
+     */
+    protected static int setPermissionBit(int permissions, int bit, boolean enabled) {
+        if(enabled)
+            permissions |= bit;
+        else
+            permissions &= ~bit;
+
+        return permissions;
+    }
+
+
     ////////////////////////
     // Overridden methods //
     ////////////////////////
@@ -1248,16 +1392,17 @@ public abstract class AbstractFile implements FilePermissions {
     public abstract boolean changeDate(long lastModified);
 
     /**
-     * Returns this file's size in bytes, <code>-1</code> if unknown.
+     * Returns this file's size in bytes, <code>0</code> if this file doesn't exist, <code>-1</code> if the size is
+     * undetermined.
      *
-     * @return this file's size in bytes, <code>-1</code> if unknown
+     * @return this file's size in bytes, 0 if this file doesn't exist, -1 if the size is undetermined
      */
     public abstract long getSize();
 	
     /**
-     * Returns this file's parent, <code>null</code> if it doesn't have any parent.
+     * Returns this file's parent, <code>null</code> if it doesn't have one.
      *
-     * @return this file's parent, <code>null</code> if it doesn't have any parent
+     * @return this file's parent, <code>null</code> if it doesn't have one
      */
     public abstract AbstractFile getParent();
 	
@@ -1340,6 +1485,7 @@ public abstract class AbstractFile implements FilePermissions {
     /**
      * Returns the children files that this file contains. For this operation to be successful, this file must be
      * 'browsable', i.e. {@link #isBrowsable()} must return <code>true</code>.
+     * This method may return a zero-length array if it has no children but may never return <code>null</code>.
      *
      * @return the children files that this file contains
      * @throws IOException if this operation is not possible (file is not browsable) or if an error occurred.
@@ -1356,22 +1502,39 @@ public abstract class AbstractFile implements FilePermissions {
     public abstract void mkdir() throws IOException;
 
     /**
-     * Returns an <code>InputStream</code> to read this file's contents.
+     * Returns an <code>InputStream</code> to read the contents of this file.
+     * Throws an <code>IOException</code> in any of the following cases:
+     * <ul>
+     *  <li>this file does not exist</li>
+     *  <li>this file is a directory</li>
+     *  <li>this file cannot be read</li>
+     *  <li>a {@link RandomAccessInputStream} cannot be provided because the underlying file protocol doesn't have
+     * random access support (see {@link #hasRandomAccessInputStream()}</li>
+     *  <li>an I/O error occurs</li>
+     * </ul>
+     * This method may never return <code>null</code>.
      *
-     * @return an <code>InputStream</code> to read this file's contents
-     * @throws IOException if this file could not be read or if an <code>InputStream</code> could not be
-     * provided for any other reason (e.g. file is a directory).
+     * @return an <code>InputStream</code> to read the contents of this file
+     * @throws IOException in any of the cases listed above
      */
     public abstract InputStream getInputStream() throws IOException;
 
     /**
-     * Returns an <code>OuputStream</code> to write this file's contents, appending or overwriting the existing
-     * contents.
+     * Returns an <code>OuputStream</code> to write the contents of this file, appending or overwriting the existing
+     * contents. This file will be created as a zero-byte file if it does not yet exist.
+     * Throws an <code>IOException</code> in any of the following cases:
+     * <ul>
+     *  <li>this file is a directory</li>
+     *  <li>this file cannot be written</li>
+     *  <li><code>append</code> is specified but not supported</li>
+     *  <li>an I/O error occurs</li>
+     * </ul>
+     * This method may never return <code>null</code>.
      *
      * @param append if true, data written to the OutputStream will be appended to the end of this file. If false,
      * any existing data this file contains will be discarded and overwritten.
-     * @return an <code>OuputStream</code> to write this file's contents
-     * @throws IOException if this operation is not permitted or if this file is a folder
+     * @return an <code>OuputStream</code> to write the contents of this file
+     * @throws IOException in any of the cases listed above
      */
     public abstract OutputStream getOutputStream(boolean append) throws IOException;
 
@@ -1386,12 +1549,20 @@ public abstract class AbstractFile implements FilePermissions {
     public abstract boolean hasRandomAccessInputStream();
 
     /**
-     * Returns a {@link RandomAccessInputStream} to read this file's contents with random access.
+     * Returns a {@link RandomAccessInputStream} to read the contents of this file with random access.
+     * Throws an <code>IOException</code> in any of the following cases:
+     * <ul>
+     *  <li>this file does not exist</li>
+     *  <li>this file is a directory</li>
+     *  <li>this file cannot be read</li>
+     *  <li>a {@link RandomAccessInputStream} cannot be provided because the underlying file protocol doesn't have
+     * random access support (see {@link #hasRandomAccessInputStream()}</li>
+     *  <li>an I/O error occurs</li>
+     * </ul>
+     * This method may never return <code>null</code>.
      *
-     * @return a <code>RandomAccessInputStream</code> to read this file's contents with random access
-     * @throws IOException if this file cannot be read or if a {@link RandomAccessInputStream} cannot
-     * be provided because the underlying file protocol doesn't have random access support or for any other reason
-     * (e.g. file is a directory).
+     * @return a <code>RandomAccessInputStream</code> to read the contents of this file with random access
+     * @throws IOException in any of the cases listed above
      */
     public abstract RandomAccessInputStream getRandomAccessInputStream() throws IOException;
 
@@ -1406,12 +1577,20 @@ public abstract class AbstractFile implements FilePermissions {
     public abstract boolean hasRandomAccessOutputStream();
 
     /**
-     * Returns a {@link RandomAccessOutputStream} to write this file's contents with random access.
+     * Returns a {@link RandomAccessOutputStream} to write the contents of this file with random access.
+     * This file will be created as a zero-byte file if it does not yet exist.
+     * Throws an <code>IOException</code> in any of the following cases:
+     * <ul>
+     *  <li>this file is a directory</li>
+     *  <li>this file cannot be written</li>
+     *  <li>a {@link RandomAccessOutputStream} cannot be provided because the underlying file protocol doesn't have
+     * random access support (see {@link #hasRandomAccessOutputStream()}</li>
+     *  <li>an I/O error occurs</li>
+     * </ul>
+     * This method may never return <code>null</code>.
      *
-     * @return a <code>RandomAccessOutputStream</code> to write this file's contents with random access
-     * @throws IOException if this file cannot be written or if a {@link RandomAccessOutputStream} cannot
-     * be provided because the underlying file protocol doesn't have random access support or for any other reason
-     * (e.g. file is a directory).
+     * @return a <code>RandomAccessOutputStream</code> to write the contents of this file with random access
+     * @throws IOException in any of the cases listed above
      */
     public abstract RandomAccessOutputStream getRandomAccessOutputStream() throws IOException;
 
@@ -1472,52 +1651,4 @@ public abstract class AbstractFile implements FilePermissions {
      * @throws IOException                   thrown if an error occured while creating the process, if the current file is not a directory or if the operation is not supported.
      */
     public abstract AbstractProcess runProcess(String[] tokens) throws IOException;
-
-
-
-    //////////////////
-    // Test methods //
-    //////////////////
-
-    /**
-     * Simple bench method.
-     */
-    public static void main(String args[]) throws IOException {
-        AbstractFile folder = FileFactory.getFile(args[0]);
-        folder.ls();
-
-        int nbIter = 100;
-
-        long totalTime = 0;
-        long now;
-        for(int i=0; i<nbIter; i++) {
-            now = System.currentTimeMillis();
-            folder.ls();
-            totalTime += System.currentTimeMillis()-now;
-        }
-	
-        System.out.println("Average AbstractFile#ls() time = "+totalTime/nbIter);
-
-        totalTime = 0;
-        java.io.File ioFolder = new java.io.File(args[0]);
-        for(int i=0; i<nbIter; i++) {
-            now = System.currentTimeMillis();
-            ioFolder.listFiles();
-            totalTime += System.currentTimeMillis()-now;
-        }
-
-        System.out.println("Average java.io.File#listFiles() time = "+totalTime/nbIter);
-
-        totalTime = 0;
-        ioFolder = new java.io.File(args[0]);
-        for(int i=0; i<nbIter; i++) {
-            now = System.currentTimeMillis();
-            String names[] = ioFolder.list();
-            for(int j=0; j<names.length; j++)
-                new java.io.File(names[j]);
-            totalTime += System.currentTimeMillis()-now;
-        }
-
-        System.out.println("Average java.io.File#list() time = "+totalTime/nbIter);
-    }
 }
