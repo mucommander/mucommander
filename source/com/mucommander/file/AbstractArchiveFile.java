@@ -178,11 +178,12 @@ public abstract class AbstractArchiveFile extends ProxyFile {
         // Make sure the entries tree is created and up-to-date
         checkEntriesTree();        
 
-        DefaultMutableTreeNode matchNode = entryTreeRoot.findEntryNode(entryFile.getEntry().getPath());
-        if(matchNode==null) {
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Error: no match found for "+entryFile.getEntry().getPath()+" , this is not supposed to happen!");
+        if(!entryFile.isBrowsable())
             throw new IOException();
-        }
+
+        DefaultMutableTreeNode matchNode = entryTreeRoot.findEntryNode(entryFile.getEntry().getPath());
+        if(matchNode==null)
+            throw new IOException();
 
         return ls(matchNode, entryFile, filenameFilter, fileFilter);
     }
