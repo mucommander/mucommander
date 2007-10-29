@@ -18,13 +18,19 @@
 
 package com.mucommander.file;
 
+import com.mucommander.io.FileTransferException;
+import com.mucommander.io.RandomAccessInputStream;
+import com.mucommander.io.RandomAccessOutputStream;
 import junit.framework.TestCase;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Iterator;
 import java.util.Random;
+import java.util.Vector;
 
 /**
  * A generic JUnit test case for the {@link AbstractFile} class. This class is abstract and must be extended by
@@ -39,8 +45,13 @@ import java.util.Random;
 public abstract class AbstractFileTestCase extends TestCase implements FilePermissions {
 
     /**
-     * A temporary file instance automatically instanciated by {@link #setUp()} when a test is started.
-     * The file itself is not physically created.
+     * AbstractFile instances to be deleted if they exist when {@link #tearDown()} is called.
+     */
+    protected Vector filesToDelete;
+
+    /**
+     * A temporary file instance automatically instanciated by {@link #setUp()} when a test is started. The file
+     * is not physically created.
      */
     protected AbstractFile tempFile;
 
@@ -58,10 +69,16 @@ public abstract class AbstractFileTestCase extends TestCase implements FilePermi
     /**
      * Initializes test variables before each test execution.
      *
-     * @throws Exception if an error occurred while creating test variables
+     * <p>In particular, the {@link #tempFile} file is created and ready for use by test methods.
+     * Note that this <code>AbstractFile</code> instance is created, but the file is not physically created.</p> 
+     *
+     * @throws IOException if an error occurred while creating test variables
      */
-    protected void setUp() throws Exception {
+    protected void setUp() throws IOException {
+        filesToDelete = new Vector();
+
         tempFile = getTemporaryFile();
+        deleteWhenFinished(tempFile);   // this file will be automatically deleted when the test is over
 
         // Use a static seed so that the generated values are reproducible
         random = new Random(0);
@@ -69,19 +86,38 @@ public abstract class AbstractFileTestCase extends TestCase implements FilePermi
 
     /**
      * Cleans up test files after each test execution so as to leave the filesystem in the same state as it was
-     * before the test.
+     * before the test. In particular, all files registered with {@link #deleteWhenFinished(AbstractFile)} are
+     * deleted if they exist.
      *
-     * @throws Exception if an error occurred while cleaning up test files
+     * @throws IOException if an error occurred while delete files registered with {@link # deleteWhenFinished (AbstractFile)}
      */
-    protected void tearDown() throws Exception {
-        if(tempFile.exists())
-            deleteRecursively(tempFile);
+    protected void tearDown() throws IOException {
+        Iterator iterator = filesToDelete.iterator();
+
+        AbstractFile file;
+        while(iterator.hasNext()) {
+            file = (AbstractFile)iterator.next();
+            if(file.exists())
+                file.deleteRecursively();
+        }
     }
 
 
     /////////////////////
     // Support methods //
     /////////////////////
+
+    /**
+     * Adds the specified file to the list of files to be deleted by {@link #tearDown()} when the test is finished.
+     * This file will be deleted only if it exists, and any children file it contains will also be deleted.
+     *
+     * @param fileToDelete a file to be deleted when the test is finished
+     */
+    protected void deleteWhenFinished(AbstractFile fileToDelete) {
+        if(!filesToDelete.contains(fileToDelete))
+            filesToDelete.add(fileToDelete);
+    }
+
 
     /**
      * Fills the given file with <code>length</code> bytes of random data, calling <code>OutputStream#write(byte b[])</code>
@@ -124,10 +160,11 @@ public abstract class AbstractFileTestCase extends TestCase implements FilePermi
     }
 
     /**
-     * Creates a regular file and fills it with <code>length</code> random bytes. The file must not already exist when
-     * this method is called or an <code>IOException</code> will be thrown.
+     * Creates a regular file and fills it with <code>length</code> random bytes. The file will be overwritten if it
+     * already exists. Before returning, this method asserts that the file exists and that its size by
+     * {@link AbstractFile#getSize()} matches the specified length argument. 
      *
-     * @param file the file to create
+     * @param file the file to create or overwrite
      * @param length the number of random bytes to fill the file with
      * @throws IOException if the file already exists or if an error occurred while writing to it
      */
@@ -138,29 +175,28 @@ public abstract class AbstractFileTestCase extends TestCase implements FilePermi
             byte b[] = new byte[length];
             random.nextBytes(b);
             out.write(b);
+
+            assertTrue(file.exists());
+            assertEquals(length, file.getSize());
         }
         finally {
             out.close();
         }
     }
 
-
     /**
-     * Deletes the given file. If the file is a directory, enclosing files are deleted recursively. If the file is
-     * a regular file, if will simply be deleted. The bottom line is that the given file will always be deleted no
-     * matter the kind of file.
+     * Sleeps for the given number of milliseconds.
      *
-     * @param file the file to delete
-     * @throws IOException if an error occurred while deleting a file or listing files in a directory
+     * @param timeMs number of milliseconds to sleep
      */
-    protected void deleteRecursively(AbstractFile file) throws IOException {
-        if(file.isDirectory()) {
-            AbstractFile children[] = file.ls();
-            for(int i=0; i<children.length; i++)
-                deleteRecursively(children[i]);
+    protected void sleep(long timeMs) {
+        try {
+            Thread.sleep(timeMs);
         }
-
-        file.delete();
+        catch(InterruptedException e) {
+            // Should not happen, and even if it did, it's no big deal as the test that called this method will most
+            // likely fail
+        }
     }
 
 
@@ -172,8 +208,8 @@ public abstract class AbstractFileTestCase extends TestCase implements FilePermi
      * Tests {@link AbstractFile#digest(java.security.MessageDigest)} and {@link AbstractFile#getDigestHexString(byte[])}
      * by computing file digests using different algorithms (MD5, SHA-1, ...) and comparing them against known values.
      *
-     * @throws IOException should not normally happen
-     * @throws NoSuchAlgorithmException should not normally happen
+     * @throws IOException should not happen
+     * @throws NoSuchAlgorithmException should not happen
      */
     public void testDigest() throws IOException, NoSuchAlgorithmException {
 
@@ -204,6 +240,15 @@ public abstract class AbstractFileTestCase extends TestCase implements FilePermi
     }
 
     /**
+     * Verifies that temporary files can be resolved again by {@link FileFactory#getFile(String)}.
+     *
+     * @throws IOException should not happen
+     */
+    public void testPathResolution() throws IOException {
+        assertNotNull(FileFactory.getFile(getTemporaryFile().getURL().toString(true)));
+    }
+
+    /**
      * Tests {@link com.mucommander.file.AbstractFile#exists()} in various situations.
      *
      * @throws IOException should not happen
@@ -223,7 +268,6 @@ public abstract class AbstractFileTestCase extends TestCase implements FilePermi
         tempFile.delete();
         assertFalse(tempFile.exists());
     }
-
 
     /**
      * Tests the {@link AbstractFile#delete()} method in various situations.
@@ -427,19 +471,455 @@ public abstract class AbstractFileTestCase extends TestCase implements FilePermi
         }
     }
 
+    /**
+     * Tests {@link AbstractFile#getDate()}, {@link AbstractFile#canChangeDate()} and {@link AbstractFile#changeDate(long)},
+     * no matter if dates can be changed or not.
+     *
+     * @throws IOException should not happen
+     */
+    public void testDate() throws IOException {
+        createFile(tempFile, 0);
 
-    
+        // Asserts that the date changes when the file is modified
+        long date = tempFile.getDate();
+        sleep(1000);    // Sleep a full second, some filesystems may only have a one-second granularity
+        createFile(tempFile, 1);  // 1 byte should be enough
+
+        assertTrue(tempFile.getDate()>date);
+
+        if(tempFile.canChangeDate()) {
+            // Assert that changeDate succeeds (returns true)
+            assertTrue(tempFile.changeDate(date=(tempFile.getDate()-1000)));
+
+            // Assert that the getDate returns the date that was set
+            assertEquals(date, tempFile.getDate());
+        }
+        else {
+            // Assert that changeDate returns false if date cannot be changed
+            assertFalse(tempFile.changeDate(tempFile.getDate()-1000));
+        }
+    }
+
+
+    /**
+     * Tests {@link AbstractFile#hasRandomAccessInputStream()} and {@link AbstractFile#getRandomAccessInputStream()}.
+     *
+     * @throws IOException should not happen
+     */
+    public void testRandomAccessInputStream() throws IOException {
+        boolean ioExceptionThrown;
+
+        if(tempFile.hasRandomAccessInputStream()) {
+            // Assert that getRandomAccessInputStream throws an IOException when the file does not exist
+            ioExceptionThrown = false;
+            try {
+                tempFile.getRandomAccessInputStream();
+            }
+            catch(IOException e) {
+                ioExceptionThrown = true;
+            }
+
+            assertTrue(ioExceptionThrown);
+
+            createFile(tempFile, 1);
+
+            // Assert that getRandomAccessInputStream does not throw an IOException and returns a non-null value
+            // when the file exists
+            RandomAccessInputStream rais = tempFile.getRandomAccessInputStream();
+
+            assertNotNull(rais);
+            // Ensure that the size returned by RandomAccessInputStream#getLength() matches the one returned by
+            // AbstractFile#getSize()
+            assertEquals(tempFile.getSize(), rais.getLength());
+
+            rais.close();
+        }
+        else {
+            // Assert that getRandomAccessInputStream throws an IOException when such a stream cannot be provided
+            ioExceptionThrown = false;
+            try {
+                tempFile.getRandomAccessInputStream();
+            }
+            catch(IOException e) {
+                ioExceptionThrown = true;
+            }
+
+            assertTrue(ioExceptionThrown);
+        }
+    }
+
+    /**
+     * Tests {@link AbstractFile#hasRandomAccessOutputStream()} and {@link AbstractFile#getRandomAccessOutputStream()}.
+     *
+     * @throws IOException should not happen
+     */
+    public void testRandomAccessOutputStream() throws IOException {
+        if(tempFile.hasRandomAccessOutputStream()) {
+            // Assert that:
+            // - getRandomAccessOutputStream does not throw an IOException
+            // - returns a non-null value
+            // - the file exists after
+            RandomAccessOutputStream raos = tempFile.getRandomAccessOutputStream();
+
+            assertNotNull(raos);
+            assertTrue(tempFile.exists());
+
+            raos.close();
+
+            // Assert that the size returned by RandomAccessOutputStream#getLength() matches the one returned by
+            // AbstractFile#getSize()
+            createFile(tempFile, 1);
+            raos = tempFile.getRandomAccessOutputStream();
+
+            assertEquals(tempFile.getSize(), raos.getLength());
+
+            raos.close();
+        }
+        else {
+            // Assert that getRandomAccessOutputStream throws an IOException when such a stream cannot be provided
+            boolean ioExceptionThrown = false;
+            try {
+                tempFile.getRandomAccessOutputStream();
+            }
+            catch(IOException e) {
+                ioExceptionThrown = true;
+            }
+
+            assertTrue(ioExceptionThrown);
+        }
+    }
+
+    /**
+     * Tests {@link AbstractFile#getInputStream()}.
+     *
+     * @throws IOException should not happen
+     */
+    public void testInputStream() throws IOException {
+        boolean ioExceptionThrown;
+
+        // Assert that getInputStream throws an IOException when the file does not exist
+        ioExceptionThrown = false;
+        try {
+            tempFile.getInputStream();
+        }
+        catch(IOException e) {
+            ioExceptionThrown = true;
+        }
+
+        assertTrue(ioExceptionThrown);
+
+        createFile(tempFile, 0);
+
+        // Assert that getInputStream does not throw an IOException and returns a non-null value when the file exists
+        InputStream in = tempFile.getInputStream();
+
+        assertNotNull(in);
+
+        in.close();
+    }
+
+    /**
+     * Tests {@link AbstractFile#getOutputStream(boolean)}.
+     *
+     * @throws IOException should not happen
+     */
+    public void testOutputStream() throws IOException {
+        // Assert that:
+        // - getOutputStream does not throw an IOException
+        // - returns a non-null value
+        // - the file exists after
+        OutputStream out = tempFile.getOutputStream(false);
+
+        assertNotNull(out);
+        assertTrue(tempFile.exists());
+
+        out.close();
+
+        // Assert that getOutputStream(false) overwrites the existing file contents (resets the file size to 0)
+        createFile(tempFile, 1);
+        out = tempFile.getOutputStream(false);
+        out.close();
+
+        assertEquals(0, tempFile.getSize());
+
+        // Assert that getOutputStream(true) does not overwrite the existing file contents.
+        // Appending to the file may not be supported, catch IOException thrown by getOutputStream(true) and only those  
+        try {
+            createFile(tempFile, 1);
+
+            out = null;
+            out = tempFile.getOutputStream(true);
+
+            out.write('a');
+            out.close();
+
+            assertEquals(2, tempFile.getSize());
+        }
+        catch(IOException e) {
+            if(out!=null)
+                throw e;    // Exception was not thrown by getOutputStream(true), re-throw it
+            else
+                System.out.println("testOutputStream(): looks like append is not supported, caught: "+e);
+        }
+    }
+
+    /**
+     * Tests {@link AbstractFile#ls()}.
+     *
+     * @throws IOException should not happen
+     */
+    public void testLs() throws IOException {
+        // Assert that an IOException is thrown when the file does not exist
+        boolean ioExceptionThrown = false;
+        try {
+            tempFile.ls();
+        }
+        catch(IOException e) {
+            ioExceptionThrown = true;
+        }
+
+        assertTrue(ioExceptionThrown);
+
+        // Assert that an IOException is thrown when the file is not browsable
+        tempFile.mkfile();
+        ioExceptionThrown = false;
+        try {
+            tempFile.ls();
+        }
+        catch(IOException e) {
+            ioExceptionThrown = true;
+        }
+
+        assertTrue(ioExceptionThrown);
+
+        // Create an empty directory and assert that ls() does not throw an IOException and returns a zero-length array
+        tempFile.delete();
+        tempFile.mkdir();
+
+        AbstractFile children[] = tempFile.ls();
+        assertNotNull(children);
+        assertEquals(0, children.length);
+
+        // Create a child file and assert that this child (and only this child) is returned by ls()
+        AbstractFile child = tempFile.getChild("child");
+        child.mkfile();
+        children = tempFile.ls();
+
+        assertNotNull(children);
+        assertEquals(1, children.length);
+        assertEquals(child, children[0]);
+    }
+
+    /**
+     * Tests {@link AbstractFile#getFreeSpace()} by asserting that the returned value is either <code>-1</code>
+     * (not available), or a positive (potentially null) value.
+     */
+    public void testFreeSpace() {
+        long freeSpace = tempFile.getFreeSpace();
+
+        assertTrue(freeSpace>=-1);
+
+        // Note: it would be interesting to assert that allocating space to a file diminishes free space accordingly
+        // but it is not possible to guarantee that free space is not altered by another process.
+    }
+
+    /**
+     * Tests {@link AbstractFile#getTotalSpace()} by asserting that the returned value is either <code>-1</code>
+     * (not available), or a positive (potentially null) value. 
+     */
+    public void testTotalSpace() {
+        long totalSpace = tempFile.getFreeSpace();
+
+        assertTrue(totalSpace>=-1);
+    }
+
+
+    /**
+     * Tests {@link AbstractFile#getCopyToHint(AbstractFile)} and {@link AbstractFile#copyTo(AbstractFile)}.
+     *
+     * @throws IOException should not happen
+     * @throws NoSuchAlgorithmException should not happen
+     */
+    public void testCopyTo() throws IOException, NoSuchAlgorithmException {
+        createFile(tempFile, 100000);
+        AbstractFile destFile = getTemporaryFile();
+        deleteWhenFinished(destFile);       // this file will automatically be deleted if it exists when the test is over
+
+        // Assert that getCopyToHint(AbstractFile) returns an allowed value (one of the hint constants)
+        int copyToHint = tempFile.getCopyToHint(destFile);
+        assertTrue(copyToHint>=AbstractFile.SHOULD_HINT && copyToHint<=AbstractFile.MUST_NOT_HINT);
+
+        // Abort test if copyTo must not be called
+        if(copyToHint==AbstractFile.MUST_NOT_HINT) {
+            System.out.println("#copyTo(AbstractFile) not supported, skipping test.");
+            return;
+        }
+
+       // Try and copy the file, copyTo is allowed to fail gracefully and return false
+        if(tempFile.copyTo(destFile)) {     // If copyTo succeeded
+            // Assert that the checksum of source and destination match
+            assertEquals(AbstractFile.getDigestHexString(tempFile.digest(MessageDigest.getInstance("md5"))), AbstractFile.getDigestHexString(destFile.digest(MessageDigest.getInstance("md5"))));
+
+            // At this point, we know that copyTo works (doesn't return false), at least for this destination file
+
+            // Assert that copyTo fails when the destination exists, and that the destination file still exists after
+            boolean exceptionThrown = false;
+            try { tempFile.copyTo(destFile); }
+            catch(FileTransferException e) { exceptionThrown = true; }
+
+            assertTrue(exceptionThrown);
+            assertTrue(destFile.exists());
+
+            // Assert that copyTo fails when the source and destination files are the same
+            destFile.delete();
+            exceptionThrown = false;
+            try { tempFile.copyTo(tempFile); }
+            catch(FileTransferException e) { exceptionThrown = true; }
+
+            assertTrue(exceptionThrown);
+            assertFalse(destFile.exists());
+
+            // Assert that copyTo fails when the source file doesn't exist
+            tempFile.delete();
+            exceptionThrown = false;
+            try { tempFile.copyTo(destFile); }
+            catch(FileTransferException e) { exceptionThrown = true; }
+
+            assertTrue(exceptionThrown);
+            assertFalse(destFile.exists());
+
+            // Assert that copyTo succeeds copying a directory
+            tempFile.mkdir();
+
+            assertTrue(tempFile.copyTo(destFile));
+            assertTrue(destFile.exists());
+            assertTrue(destFile.isDirectory());
+
+            // Assert that copyTo fails when the source is a directory, and when the destination is a subfolder of source
+            AbstractFile subFolder = tempFile.getDirectChild("subfolder");
+            exceptionThrown = false;
+            try { tempFile.copyTo(subFolder); }
+            catch(FileTransferException e) { exceptionThrown = true; }
+
+            assertTrue(exceptionThrown);
+            assertFalse(subFolder.exists());
+
+            // Todo: test copyTo on a large, randomly-generated file tree
+        }
+        else {                              // copyTo failed gracefully
+            System.out.println("Warning: AbstractFile#copyTo(AbstractFile) did not succeed (returned false)");
+
+            // Assert that the destination file does not exist
+            assertFalse(destFile.exists());
+        }
+    }
+
+
+    /**
+     * Tests {@link AbstractFile#getMoveToHint(AbstractFile)} and {@link AbstractFile#moveTo(AbstractFile)}.
+     *
+     * @throws IOException should not happen
+     * @throws NoSuchAlgorithmException should not happens
+     */
+    public void testMoveTo() throws IOException, NoSuchAlgorithmException {
+        createFile(tempFile, 100000);
+        AbstractFile destFile = getTemporaryFile();
+        deleteWhenFinished(destFile);       // this file will automatically be deleted if it exists when the test is over
+
+        // Assert that getMoveToHint(AbstractFile) returns an allowed value (one of the hint constants)
+        int moveToHint = tempFile.getMoveToHint(destFile);
+        assertTrue(moveToHint>=AbstractFile.SHOULD_HINT && moveToHint<=AbstractFile.MUST_NOT_HINT);
+
+        // Abort test if moveTo must not be called
+        if(moveToHint==AbstractFile.MUST_NOT_HINT) {
+            System.out.println("#moveTo(AbstractFile) not supported, skipping test.");
+            return;
+        }
+
+        String sourceChecksum = AbstractFile.getDigestHexString(tempFile.digest(MessageDigest.getInstance("md5")));
+
+       // Try and move the file, moveTo is allowed to fail gracefully and return false
+        if(tempFile.moveTo(destFile)) {     // If moveTo succeeded
+            // Assert that the source file is gone and the destination file exists
+            assertFalse(tempFile.exists());
+            assertTrue(destFile.exists());
+
+            // Assert that the checksum of source and destination match
+            assertEquals(sourceChecksum, AbstractFile.getDigestHexString(destFile.digest(MessageDigest.getInstance("md5"))));
+
+            // At this point, we know that moveTo works (doesn't return false), at least for this destination file
+
+            // Assert that moveTo fails when the destination exists, and that the source and destination files still
+            // exists after
+            createFile(tempFile, 1);
+            boolean exceptionThrown = false;
+            try { tempFile.moveTo(destFile); }
+            catch(FileTransferException e) { exceptionThrown = true; }
+
+            assertTrue(exceptionThrown);
+            assertTrue(tempFile.exists());
+            assertTrue(destFile.exists());
+
+            // Assert that moveTo fails when the source and destination files are the same
+            destFile.delete();
+            exceptionThrown = false;
+            try { tempFile.moveTo(tempFile); }
+            catch(FileTransferException e) { exceptionThrown = true; }
+
+            assertTrue(exceptionThrown);
+            assertTrue(tempFile.exists());
+            assertFalse(destFile.exists());
+
+            // Assert that moveTo fails when the source file doesn't exist
+            tempFile.delete();
+            exceptionThrown = false;
+            try { tempFile.moveTo(destFile); }
+            catch(FileTransferException e) { exceptionThrown = true; }
+
+            assertTrue(exceptionThrown);
+            assertFalse(destFile.exists());
+
+            // Assert that moveTo succeeds moving a directory
+            tempFile.mkdir();
+
+            assertTrue(tempFile.moveTo(destFile));
+            assertFalse(tempFile.exists());
+            assertTrue(destFile.exists());
+            assertTrue(destFile.isDirectory());
+
+            // Assert that moveTo fails when the source is a directory and a parent of the destination
+            tempFile.mkdir();
+            AbstractFile subFolder = tempFile.getDirectChild("subfolder");
+            exceptionThrown = false;
+            try { tempFile.moveTo(subFolder); }
+            catch(FileTransferException e) { exceptionThrown = true; }
+
+            assertTrue(exceptionThrown);
+            assertTrue(tempFile.exists());
+            assertFalse(subFolder.exists());
+
+            // Todo: test moveTo on a large, randomly-generated file tree
+        }
+        else {                              // moveTo failed gracefully
+            System.out.println("Warning: AbstractFile#moveTo(AbstractFile) did not succeed (returned false)");
+
+            // Assert that the destination file does not exist
+            assertFalse(destFile.exists());
+        }
+    }
+
+
     //////////////////////
     // Abstract methods //
     //////////////////////
 
     /**
-     * Returns a temporary file that can be used for testing purposes. The returned file should must not exist.
-     * Note: implementations do not need to worry about deleting the file when the test is finished, 
-     * {@link com.mucommander.file.AbstractFileTestCase} already takes care of that.
+     * Returns a temporary file that can be used for testing purposes.
+     * The implementation should return a file that does not exist, i.e. for which {@link AbstractFile#exists()}
+     * returns <code>false</code>.
      *
-     * @return a temporary, non-existing file
-     * @throws Exception if an error occurred
+     * @return a temporary file that does not physically exist
+     * @throws IOException if an error occurred while creating a temporary file
      */
-    protected abstract AbstractFile getTemporaryFile() throws Exception;
+    protected abstract AbstractFile getTemporaryFile() throws IOException;
 }
