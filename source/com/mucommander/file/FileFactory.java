@@ -519,7 +519,7 @@ public class FileFactory {
         else {
             // If the specified FileURL doesn't contain any credentials, use CredentialsManager to find
             // any credentials matching the url and use them.
-            if(Debug.ON) Debug.trace("fileURL.containsCredentials() "+fileURL.containsCredentials());
+//            if(Debug.ON) Debug.trace("fileURL.containsCredentials() "+fileURL.containsCredentials());
             if(!fileURL.containsCredentials())
                 CredentialsManager.authenticateImplicit(fileURL);
 //            if(Debug.ON) Debug.trace("credentials="+fileURL.getCredentials());
