@@ -57,6 +57,14 @@ public class FileTransferException extends IOException {
     /** Destination file could not be closed */
     public final static int CLOSING_DESTINATION = 8;
 
+    /** Destination file exists */
+    public final static int DESTINATION_EXISTS = 9;
+
+    /** File not found (does not exist) */
+    public final static int FILE_NOT_FOUND = 10;
+
+    /** Source file is a parent of the destination file */
+    public final static int SOURCE_PARENT_OF_DESTINATION = 11;
 
     protected int reason;
 
