@@ -56,7 +56,7 @@ public class ZipArchiveFileTest extends AbstractFileTestCase {
     /**
      * Overridden to create the archive file before each test.
      */
-    protected void setUp() throws Exception {
+    protected void setUp() throws IOException {
         tempZipFile = (ZipArchiveFile)FileFactory.getTemporaryFile(ZipArchiveFileTest.class.getName()+".zip", false);
         tempZipFile.mkfile();
 
@@ -68,7 +68,7 @@ public class ZipArchiveFileTest extends AbstractFileTestCase {
     /**
      * Overridden to delete the archive file after each test.
      */
-    protected void tearDown() throws Exception {
+    protected void tearDown() throws IOException {
         super.tearDown();
 
         tempZipFile.delete();
