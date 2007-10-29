@@ -22,6 +22,7 @@ import com.mucommander.file.AbstractFile;
 import com.mucommander.file.AbstractFileTestCase;
 import com.mucommander.file.FileFactory;
 
+import java.io.IOException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
@@ -37,7 +38,7 @@ public class ProxyFileTest extends AbstractFileTestCase {
     // AbstractFileTestCase implementation //
     /////////////////////////////////////////
 
-    protected AbstractFile getTemporaryFile() throws Exception {
+    protected AbstractFile getTemporaryFile() throws IOException {
         // Returns a ProxyFile instance proxying a LocalFile ; the kind of proxied file should not matter as long as it
         // passes AbstractFileTestCase.
         return new ProxyFile(FileFactory.getTemporaryFile(getClass().getName(), false)) {
