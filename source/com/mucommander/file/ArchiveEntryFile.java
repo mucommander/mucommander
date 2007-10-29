@@ -305,6 +305,7 @@ public class ArchiveEntryFile extends AbstractFile {
                     new ByteCounter() {
                         public synchronized void add(long nbBytes) {
                             entry.setSize(entry.getSize()+nbBytes);
+                            entry.setDate(System.currentTimeMillis());
                         }
                     });
             exists = true;
