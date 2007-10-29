@@ -600,6 +600,11 @@ public class LocalFile extends AbstractFile {
             return super.moveTo(destFile);
         }
 
+        // Fail in some situations where java.io.File#renameTo() doesn't, such as if the destination already exists.
+        // Note that java.io.File#renameTo()'s implementation is system-dependant, so it's always a good idea to
+        // perform all those checks even if some are not necessary on this or that platform.
+        checkCopyPrerequisites(destFile);
+
         // Move file
         return file.renameTo(((LocalFile)destFile).file);
     }
