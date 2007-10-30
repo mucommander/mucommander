@@ -218,10 +218,10 @@ public class MainFrame extends JFrame implements LocationListener {
      */
     public MainFrame(AbstractFile initialFolder1, AbstractFile initialFolder2) {
         init(new FolderPanel(this, initialFolder1, getFileTableConfiguration(true)), new FolderPanel(this, initialFolder2, getFileTableConfiguration(false)));
-        table1.sortBy(getConfigurationSortBy(MuConfiguration.getVariable(MuConfiguration.LEFT_SORT_BY)),
-                      !MuConfiguration.getVariable(MuConfiguration.LEFT_SORT_ORDER).equals(MuConfiguration.SORT_ORDER_DESCENDING));
-        table2.sortBy(getConfigurationSortBy(MuConfiguration.getVariable(MuConfiguration.RIGHT_SORT_BY)),
-                      !MuConfiguration.getVariable(MuConfiguration.RIGHT_SORT_ORDER).equals(MuConfiguration.SORT_ORDER_DESCENDING));
+        table1.sortBy(getConfigurationSortBy(MuConfiguration.getVariable(MuConfiguration.LEFT_SORT_BY, MuConfiguration.DEFAULT_SORT_BY)),
+                      !MuConfiguration.getVariable(MuConfiguration.LEFT_SORT_ORDER, MuConfiguration.DEFAULT_SORT_ORDER).equals(MuConfiguration.SORT_ORDER_DESCENDING));
+        table2.sortBy(getConfigurationSortBy(MuConfiguration.getVariable(MuConfiguration.RIGHT_SORT_BY, MuConfiguration.DEFAULT_SORT_BY)),
+                      !MuConfiguration.getVariable(MuConfiguration.RIGHT_SORT_ORDER, MuConfiguration.DEFAULT_SORT_ORDER).equals(MuConfiguration.SORT_ORDER_DESCENDING));
     }
 
     MainFrame cloneMainFrame() {
