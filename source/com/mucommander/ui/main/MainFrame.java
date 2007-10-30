@@ -218,6 +218,10 @@ public class MainFrame extends JFrame implements LocationListener {
      */
     public MainFrame(AbstractFile initialFolder1, AbstractFile initialFolder2) {
         init(new FolderPanel(this, initialFolder1, getFileTableConfiguration(true)), new FolderPanel(this, initialFolder2, getFileTableConfiguration(false)));
+        table1.sortBy(getConfigurationSortBy(MuConfiguration.getVariable(MuConfiguration.LEFT_SORT_BY)),
+                      !MuConfiguration.getVariable(MuConfiguration.LEFT_SORT_ORDER).equals(MuConfiguration.SORT_ORDER_DESCENDING));
+        table2.sortBy(getConfigurationSortBy(MuConfiguration.getVariable(MuConfiguration.RIGHT_SORT_BY)),
+                      !MuConfiguration.getVariable(MuConfiguration.RIGHT_SORT_ORDER).equals(MuConfiguration.SORT_ORDER_DESCENDING));
     }
 
     MainFrame cloneMainFrame() {
@@ -226,7 +230,8 @@ public class MainFrame extends JFrame implements LocationListener {
         mainFrame = new MainFrame();
         mainFrame.init(new FolderPanel(mainFrame, folderPanel1.getCurrentFolder(), table1.getConfiguration()),
                        new FolderPanel(mainFrame, folderPanel2.getCurrentFolder(), table2.getConfiguration()));
-
+        mainFrame.table1.sortBy(table1.getSortByCriteria(), table1.isSortAscending());
+        mainFrame.table2.sortBy(table2.getSortByCriteria(), table2.isSortAscending());
         return mainFrame;
     }
 
@@ -524,6 +529,35 @@ public class MainFrame extends JFrame implements LocationListener {
     ///////////////////////
     // Overriden methods //
     ///////////////////////
+    private static String getConfigurationSortBy(int column) {
+        switch(column) {
+        case Columns.EXTENSION:
+            return MuConfiguration.EXTENSION_COLUMN;
+        case Columns.NAME:
+            return MuConfiguration.NAME_COLUMN;
+        case Columns.SIZE:
+            return MuConfiguration.SIZE_COLUMN;
+        case Columns.DATE:
+            return MuConfiguration.DATE_COLUMN;
+        case Columns.PERMISSIONS:
+            return MuConfiguration.PERMISSIONS_COLUMN;
+        }
+        return MuConfiguration.DEFAULT_SORT_BY;
+    }
+
+    private static int getConfigurationSortBy(String column) {
+        if(column.equals(MuConfiguration.EXTENSION_COLUMN))
+            return Columns.EXTENSION;
+        if(column.equals(MuConfiguration.NAME_COLUMN))
+            return Columns.NAME;
+        if(column.equals(MuConfiguration.SIZE_COLUMN))
+            return Columns.SIZE;
+        if(column.equals(MuConfiguration.PERMISSIONS_COLUMN))
+            return Columns.PERMISSIONS;
+        if(column.equals(MuConfiguration.DATE_COLUMN))
+            return Columns.DATE;
+        return getConfigurationSortBy(MuConfiguration.DEFAULT_SORT_BY);
+    }
 
     /**
      * Overrides <code>java.awt.Window#dispose</code> to save last MainFrame's attributes in the preferences
@@ -575,6 +609,12 @@ public class MainFrame extends JFrame implements LocationListener {
         MuConfiguration.setVariable(MuConfiguration.RIGHT_DATE_WIDTH,           table2.getColumnWidth(Columns.DATE));
         MuConfiguration.setVariable(MuConfiguration.RIGHT_SIZE_WIDTH,           table2.getColumnWidth(Columns.SIZE));
         MuConfiguration.setVariable(MuConfiguration.RIGHT_PERMISSIONS_WIDTH,    table2.getColumnWidth(Columns.PERMISSIONS));
+
+        // Saves left and right table sort order.
+        MuConfiguration.setVariable(MuConfiguration.LEFT_SORT_BY, getConfigurationSortBy(table1.getSortByCriteria()));
+        MuConfiguration.setVariable(MuConfiguration.LEFT_SORT_ORDER, table1.isSortAscending() ? MuConfiguration.SORT_ORDER_ASCENDING : MuConfiguration.SORT_ORDER_DESCENDING);
+        MuConfiguration.setVariable(MuConfiguration.RIGHT_SORT_BY, getConfigurationSortBy(table2.getSortByCriteria()));
+        MuConfiguration.setVariable(MuConfiguration.RIGHT_SORT_ORDER, table2.isSortAscending() ? MuConfiguration.SORT_ORDER_ASCENDING : MuConfiguration.SORT_ORDER_DESCENDING);
 
         // Save split pane orientation
         saveSplitPaneOrientation();
