@@ -117,9 +117,9 @@ class StatusBarPanel extends ThemeEditorPanel implements PropertyChangeListener 
         colorPanel = new ProportionalGridPanel(2);
         colorPanel.add(new JLabel());
         colorPanel.add(createCaptionLabel("theme_editor.color"));
-        colorPanel.add(createCaptionLabel(Translator.get("theme_editor.background")));
+        colorPanel.add(createCaptionLabel("theme_editor.background"));
         colorPanel.add(background);
-        colorPanel.add(createCaptionLabel(Translator.get("theme_editor.border")));
+        colorPanel.add(createCaptionLabel("theme_editor.border"));
         colorPanel.add(border);
 
         for(int i=0; i<3; i++) {
