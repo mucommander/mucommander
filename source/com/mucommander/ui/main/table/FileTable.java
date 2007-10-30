@@ -545,8 +545,10 @@ public class FileTable extends JTable implements Columns, MouseListener, MouseMo
 
         // Remove arrow icon from old header and put it on the new one
         TableColumnModel cm = getColumnModel();
+        FileTableHeaderRenderer headerRenderer;
         ((FileTableHeaderRenderer)cm.getColumn(convertColumnIndexToView(sortByCriteria)).getHeaderRenderer()).setCurrent(false);
-        ((FileTableHeaderRenderer)cm.getColumn(convertColumnIndexToView(criteria)).getHeaderRenderer()).setCurrent(true);
+        (headerRenderer = (FileTableHeaderRenderer)cm.getColumn(convertColumnIndexToView(criteria)).getHeaderRenderer()).setCurrent(true);
+        headerRenderer.setOrder(ascending);
 
         // Saves the new sort values.
         sortByCriteria           = criteria;
