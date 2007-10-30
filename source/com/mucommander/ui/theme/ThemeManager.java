@@ -22,14 +22,14 @@ import com.mucommander.Debug;
 import com.mucommander.PlatformManager;
 import com.mucommander.RuntimeConstants;
 import com.mucommander.conf.impl.MuConfiguration;
-import com.mucommander.file.util.ResourceLoader;
-import com.mucommander.file.filter.ExtensionFilenameFilter;
 import com.mucommander.file.AbstractFile;
+import com.mucommander.file.FileFactory;
+import com.mucommander.file.filter.ExtensionFilenameFilter;
+import com.mucommander.file.util.ResourceLoader;
 import com.mucommander.io.BackupInputStream;
 import com.mucommander.io.BackupOutputStream;
 import com.mucommander.text.Translator;
 
-import javax.swing.*;
 import java.awt.*;
 import java.io.*;
 import java.util.*;
@@ -134,28 +134,27 @@ public class ThemeManager {
     // - Themes access -------------------------------------------------------------------
     // -----------------------------------------------------------------------------------
     private static Iterator predefinedThemeNames() {
+        return getThemeNames(ResourceLoader.getResourceAsFile(RuntimeConstants.THEMES_PATH));
+    }
+
+    private static Iterator customThemeNames() {
+        return getThemeNames(FileFactory.getFile(getCustomThemesFolder().getAbsolutePath()));
+    }
+
+    private static Iterator getThemeNames(AbstractFile themeFolder) {
         AbstractFile[] files;
         Vector         names;
 
         try {
-            files = ResourceLoader.getResourceAsFile(RuntimeConstants.THEMES_PATH).ls(new ExtensionFilenameFilter(".xml"));
+            files = themeFolder.ls(new ExtensionFilenameFilter(".xml"));
             names = new Vector();
             for(int i = 0; i < files.length; i++)
-                names.add(getThemeName(files[i].getAbsolutePath()));
+                names.add(getThemeName(files[i]));
             return names.iterator();
         }
-        catch(Exception e) {return new Vector().iterator();}
-    }
-
-    private static Iterator customThemeNames() {
-        String[] files;
-        Vector   names;
-
-        names = new Vector();
-        files = getCustomThemesFolder().list(new FilenameFilter() {public boolean accept(File dir, String name) {return name.toLowerCase().endsWith(".xml");}});
-        for(int i = 0; i < files.length; i++)
-            names.add(getThemeName(files[i]));
-        return names.iterator();
+        catch(Exception e) {
+            return new Vector().iterator();
+        }
     }
 
     public static Vector getAvailableThemes() {
@@ -1091,7 +1090,9 @@ public class ThemeManager {
         throw new IllegalStateException("Unknown theme type: " + label);
     }
 
-    private static String getThemeName(String path) {return path.substring(path.lastIndexOf('/') + 1, path.lastIndexOf('.'));}
+    private static String getThemeName(AbstractFile themeFile) {
+        return themeFile.getNameWithoutExtension();
+    }
 
 
 
