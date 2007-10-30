@@ -214,6 +214,10 @@ public class BackupOutputStream extends FilterOutputStream implements BackupCons
      * @exception IOException thrown if any IO related error occurs.
      */
     private void backup() throws IOException {
+        // Deletes the destination file (AbstractFile.copyTo now fails when the destination exists).
+        if(target.exists())
+            target.delete();
+
         // We're not using backup.moveTo(target) because we want to make absolutely sure
         // that if an error occurs in the middle of the operation, at least one of the two files
         // is complete.
