@@ -988,18 +988,17 @@ public abstract class AbstractFile implements FilePermissions {
     /**
      * Convenience method that returns the parent {@link AbstractArchiveFile} that contains this file. If this file
      * is an AbstractArchiveFile or an ancestor of AbstractArchiveFile, <code>this</code> is returned. If this file
-     * is not contained by an archive, <code>null</code> is returned.
+     * is not contained by an archive or is not an archive, <code>null</code> is returned.
      *
      * @return the parent AbstractArchiveFile that contains this file
      */
     public final AbstractArchiveFile getParentArchive() {
-        AbstractArchiveFile archiveFile = null;
         if(hasAncestor(AbstractArchiveFile.class))
             return (AbstractArchiveFile)getAncestor(AbstractArchiveFile.class);
         else if(hasAncestor(ArchiveEntryFile.class))
             return ((ArchiveEntryFile)getAncestor(ArchiveEntryFile.class)).getArchiveFile();
 
-        return archiveFile;
+        return null;
     }
 
 
