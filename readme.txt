@@ -105,7 +105,7 @@ New features:
 Improvements:
 - Non-automatic sizing of columns is now working properly and preserved in 
   the configuration.
-- Columns order and visibility is now preserved in the configuration.
+- Columns order, sort and visibility are now preserved in the configuration.
 - Editors and viewers are now centered on the current window rather than set
   to the upper-left corner of the screen.
 - Shell encoding is now auto-detected by default, unless a specific encoding
