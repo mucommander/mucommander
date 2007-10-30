@@ -156,43 +156,71 @@ public class MuConfiguration {
     // - Folders variables ---------------------------------------------------
     // -----------------------------------------------------------------------
     /** Section describing the folders view configuration. */
-    public static final String  FILE_TABLE_SECTION                = "file_table";
+    public static final String  FILE_TABLE_SECTION                 = "file_table";
     /** Whether or not to display hidden files. */
-    public static final String  SHOW_HIDDEN_FILES                 = FILE_TABLE_SECTION + '.' + "show_hidden_files";
+    public static final String  SHOW_HIDDEN_FILES                  = FILE_TABLE_SECTION + '.' + "show_hidden_files";
     /** Default hidden files visibility. */
-    public static final boolean DEFAULT_SHOW_HIDDEN_FILES         = true;
+    public static final boolean DEFAULT_SHOW_HIDDEN_FILES          = true;
     /** Whether or not to display OS X .DS_Store files. */
-    public static final String  SHOW_DS_STORE_FILES               = FILE_TABLE_SECTION + '.' + "show_ds_store_files";
+    public static final String  SHOW_DS_STORE_FILES                = FILE_TABLE_SECTION + '.' + "show_ds_store_files";
     /** Default .DS_Store files visibility. */
-    public static final boolean DEFAULT_SHOW_DS_STORE_FILES       = true;
+    public static final boolean DEFAULT_SHOW_DS_STORE_FILES        = true;
     /** Whether or not to display system folders. */
-    public static final String  SHOW_SYSTEM_FOLDERS               = FILE_TABLE_SECTION + '.' + "show_system_folders";
+    public static final String  SHOW_SYSTEM_FOLDERS                = FILE_TABLE_SECTION + '.' + "show_system_folders";
     /** Default system folders visibility. */
-    public static final boolean DEFAULT_SHOW_SYSTEM_FOLDERS       = true;
+    public static final boolean DEFAULT_SHOW_SYSTEM_FOLDERS        = true;
     /** Scale factor of file table icons. */
-    public static final String  TABLE_ICON_SCALE                  = FILE_TABLE_SECTION + '.' + "icon_scale";
+    public static final String  TABLE_ICON_SCALE                   = FILE_TABLE_SECTION + '.' + "icon_scale";
     /** Default scale factor of file table icons. */
-    public static final float   DEFAULT_TABLE_ICON_SCALE          = 1.0f;
+    public static final float   DEFAULT_TABLE_ICON_SCALE           = 1.0f;
     /** Whether or not columns should resize themselves automatically. */
-    public static final String  AUTO_SIZE_COLUMNS                 = FILE_TABLE_SECTION + '.' + "auto_size_columns";
+    public static final String  AUTO_SIZE_COLUMNS                  = FILE_TABLE_SECTION + '.' + "auto_size_columns";
     /** Default columns auto-resizing behavior. */
-    public static final boolean DEFAULT_AUTO_SIZE_COLUMNS         = true;
+    public static final boolean DEFAULT_AUTO_SIZE_COLUMNS          = true;
     /** Controls if and when system file icons should be used instead of custom file icons */
-    public static final String  USE_SYSTEM_FILE_ICONS             = FILE_TABLE_SECTION + '.' + "use_system_file_icons";
+    public static final String  USE_SYSTEM_FILE_ICONS              = FILE_TABLE_SECTION + '.' + "use_system_file_icons";
     /** Default system file icons policy */
-    public static final String  DEFAULT_USE_SYSTEM_FILE_ICONS     = FileIcons.USE_SYSTEM_ICONS_APPLICATIONS;
+    public static final String  DEFAULT_USE_SYSTEM_FILE_ICONS      = FileIcons.USE_SYSTEM_ICONS_APPLICATIONS;
     /** Controls whether folders are displayed first in the FileTable or mixed with regular files */
-    public static final String  SHOW_FOLDERS_FIRST                = FILE_TABLE_SECTION + '.' + "show_folders_first";
+    public static final String  SHOW_FOLDERS_FIRST                 = FILE_TABLE_SECTION + '.' + "show_folders_first";
     /** Default value for 'Show folders first' option */
-    public static final boolean DEFAULT_SHOW_FOLDERS_FIRST        = true;
+    public static final boolean DEFAULT_SHOW_FOLDERS_FIRST         = true;
     /** Controls whether symlinks should be followed when changing directory */
-    public static final String  CD_FOLLOWS_SYMLINKS               = FILE_TABLE_SECTION + '.' + "cd_follows_symlinks";
+    public static final String  CD_FOLLOWS_SYMLINKS                = FILE_TABLE_SECTION + '.' + "cd_follows_symlinks";
     /** Default value for 'Follow symlinks when changing directory' option */
-    public static final boolean DEFAULT_CD_FOLLOWS_SYMLINKS       = false;
+    public static final boolean DEFAULT_CD_FOLLOWS_SYMLINKS        = false;
+    /** Identifier of the left file table. */
+    public static final String  LEFT                               = "left";
+    /** Identifier of the right file table. */
+    public static final String  RIGHT                              = "right";
     /** Section describing the left table's configuration. */
-    public static final String  LEFT_FILE_TABLE_SECTION            = FILE_TABLE_SECTION + '.' + "left";
+    public static final String  LEFT_FILE_TABLE_SECTION            = FILE_TABLE_SECTION + '.' + LEFT;
     /** Section describing the right table's configuration. */
-    public static final String  RIGHT_FILE_TABLE_SECTION           = FILE_TABLE_SECTION + '.' + "right";
+    public static final String  RIGHT_FILE_TABLE_SECTION           = FILE_TABLE_SECTION + '.' + RIGHT;
+    /** Identifier of the sort section in a file table's configuration. */
+    public static final String  SORT                               = "sort";
+    /** Identifier of the sort criteria in a file table's configuration. */
+    public static final String  SORT_BY                            = "by";
+    /** Identifier of the sort order in a file table's configuration. */
+    public static final String  SORT_ORDER                         = "order";
+    /** Section described the sort order of the right file table. */
+    public static final String  RIGHT_FILE_TABLE_SORT_SECTION      = LEFT_FILE_TABLE_SECTION + '.' + SORT;
+    /** Section described the sort order of the left file table. */
+    public static final String  LEFT_FILE_TABLE_SORT_SECTION       = RIGHT_FILE_TABLE_SECTION + '.' + SORT;
+    /** Controls the column on which the left file table should be sorted. */
+    public static final String  LEFT_SORT_BY                       = LEFT_FILE_TABLE_SORT_SECTION + '.' + SORT_BY;
+    /** Controls the column on which the right file table should be sorted. */
+    public static final String  RIGHT_SORT_BY                      = RIGHT_FILE_TABLE_SORT_SECTION + '.' + SORT_BY;
+    /** Controls the column on which the left file table should be sorted. */
+    public static final String  LEFT_SORT_ORDER                    = LEFT_FILE_TABLE_SORT_SECTION + '.' + SORT_ORDER;
+    /** Controls the column on which the right file table should be sorted. */
+    public static final String  RIGHT_SORT_ORDER                   = RIGHT_FILE_TABLE_SORT_SECTION + '.' + SORT_ORDER;
+    /** Describes an ascending sort order. */
+    public static final String  SORT_ORDER_ASCENDING               = "asc";
+    /** Describes a descending sort order. */
+    public static final String  SORT_ORDER_DESCENDING              = "desc";
+    /** Default 'sort order' column for the file table. */
+    public static final String  DEFAULT_SORT_ORDER                 = SORT_ORDER_DESCENDING;
     /** Identifier of the extension column. */
     public static final String  EXTENSION_COLUMN                   = "extension";
     /** Identifier of the name column. */
@@ -289,6 +317,8 @@ public class MuConfiguration {
     public static final String  SHOW_RIGHT_DATE                    = RIGHT_DATE_SECTION + '.' + SHOW_COLUMN;
     /** Controls whether the permissions column is visible in the right table. */
     public static final String  SHOW_RIGHT_PERMISSIONS             = RIGHT_PERMISSIONS_SECTION + '.' + SHOW_COLUMN;
+    /** Default 'sort by' column for the file table. */
+    public static final String  DEFAULT_SORT_BY                    = NAME_COLUMN;
 
 
 
@@ -312,9 +342,9 @@ public class MuConfiguration {
     /** Section describing muCommander's Mac OS X integration. */
     public static final String  STARTUP_FOLDER_SECTION            = "startup_folder";
     /** Section describing the right panel's startup folder. */
-    public static final String  RIGHT_STARTUP_FOLDER_SECTION      = STARTUP_FOLDER_SECTION + '.' + "right";
+    public static final String  RIGHT_STARTUP_FOLDER_SECTION      = STARTUP_FOLDER_SECTION + '.' + RIGHT;
     /** Section describing the left panel's startup folder. */
-    public static final String  LEFT_STARTUP_FOLDER_SECTION       = STARTUP_FOLDER_SECTION + '.' + "left";
+    public static final String  LEFT_STARTUP_FOLDER_SECTION       = STARTUP_FOLDER_SECTION + '.' + LEFT;
     /** Name for variables that describe the last visited folder of a panel. */
     public static final String  LAST_FOLDER                       = "last_folder";
     /** Last visited folder in the left panel. */
@@ -402,13 +432,13 @@ public class MuConfiguration {
     // - Variables used for caches -------------------------------------------
     // -----------------------------------------------------------------------
     /** Section controlling the caching mechanisms used throughout the application */
-    public static final String  CACHE_SECTION                     = "cache";
+    public static final String  CACHE_SECTION                      = "cache";
     /** Capacity of the AbstractFile instances cache */
-    public static final String  FILE_CACHE_CAPACITY               = CACHE_SECTION + '.' + "file_cache_capacity";
+    public static final String  FILE_CACHE_CAPACITY                = CACHE_SECTION + '.' + "file_cache_capacity";
     /** Default capacity of the AbstractFile instances cache */
-    public static final int     DEFAULT_FILE_CACHE_CAPACITY       = 1000;
+    public static final int     DEFAULT_FILE_CACHE_CAPACITY        = 1000;
     /** Capacity of the system file icon cache */
-    public static final String  SYSTEM_ICON_CACHE_CAPACITY       = CACHE_SECTION + '.' + "system_icon_cache_capacity";
+    public static final String  SYSTEM_ICON_CACHE_CAPACITY         = CACHE_SECTION + '.' + "system_icon_cache_capacity";
     /** Default capacity of the system file icon cache */
     public static final int     DEFAULT_SYSTEM_ICON_CACHE_CAPACITY = 100;
 
