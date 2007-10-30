@@ -21,6 +21,7 @@ package com.mucommander.file.util;
 import com.mucommander.file.AbstractArchiveFile;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
+import com.mucommander.file.impl.local.LocalFile;
 
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
@@ -53,7 +54,7 @@ public class ResourceLoader {
      * @return a URL pointing to the resource, or null if the resource couldn't be located
      */
     public static URL getResourceAsURL(String path) {
-        return ClassLoader.getSystemClassLoader().getResource(normalizePath(path));
+        return ClassLoader.getSystemClassLoader().getResource(removeLeadingSlash(path));
     }
 
     /**
@@ -68,7 +69,7 @@ public class ResourceLoader {
      * @return a URL pointing to the resource, or null if the resource couldn't be located
      */
     public static URL getResourceAsURL(String path, ClassLoader classLoader) {
-        return classLoader.getResource(normalizePath(path));
+        return classLoader.getResource(removeLeadingSlash(path));
     }
 
 
@@ -83,7 +84,7 @@ public class ResourceLoader {
      * @return an InputStream that allows to read from the resource, or null if the resource couldn't be located
      */
     public static InputStream getResourceAsStream(String path) {
-        return ClassLoader.getSystemClassLoader().getResourceAsStream(normalizePath(path));
+        return ClassLoader.getSystemClassLoader().getResourceAsStream(removeLeadingSlash(path));
     }
 
     /**
@@ -98,7 +99,7 @@ public class ResourceLoader {
      * @return an InputStream that allows to read from the resource, or null if the resource couldn't be located
      */
     public static InputStream getResourceAsStream(String path, ClassLoader classLoader) {
-        return classLoader.getResourceAsStream(normalizePath(path));
+        return classLoader.getResourceAsStream(removeLeadingSlash(path));
     }
 
 
@@ -117,7 +118,7 @@ public class ResourceLoader {
      * @return an AbstractFile that allows to access the resource, or null if the resource couldn't be located
      */
     public static AbstractFile getResourceAsFile(String path) {
-        return getResourceAsFile(normalizePath(path), ClassLoader.getSystemClassLoader());
+        return getResourceAsFile(removeLeadingSlash(path), ClassLoader.getSystemClassLoader());
     }
 
     /**
@@ -136,7 +137,7 @@ public class ResourceLoader {
      * @return an AbstractFile that allows to access the resource, or null if the resource couldn't be located
      */
     public static AbstractFile getResourceAsFile(String path, ClassLoader classLoader) {
-        path = normalizePath(path);
+        path = removeLeadingSlash(path);
 
         URL aClassURL = getResourceAsURL(path, classLoader);
         if(aClassURL==null)
@@ -144,7 +145,7 @@ public class ResourceLoader {
 
         if("jar".equals(aClassURL.getProtocol())) {
             try {
-                return ((AbstractArchiveFile)FileFactory.getFile(getJarPath(aClassURL))).getArchiveEntryFile(path);
+                return ((AbstractArchiveFile)FileFactory.getFile(getJarFilePath(aClassURL))).getArchiveEntryFile(path);
             }
             catch(Exception e) {
                 // Shouldn't normally happen, unless the JAR file is corrupt or cannot be parsed by the file API
@@ -152,7 +153,7 @@ public class ResourceLoader {
             }
         }
 
-        return FileFactory.getFile(getDecodedURLPath(aClassURL));
+        return FileFactory.getFile(getLocalFilePath(aClassURL));
     }
 
 
@@ -178,21 +179,22 @@ public class ResourceLoader {
             return null;    // no resource under that path
 
         if("jar".equals(aClassURL.getProtocol()))
-            return FileFactory.getFile(getJarPath(aClassURL));
+            return FileFactory.getFile(getJarFilePath(aClassURL));
 
-        String aClassPath = getDecodedURLPath(aClassURL);
+        String aClassPath = getLocalFilePath(aClassURL);
         return FileFactory.getFile(aClassPath.substring(0, aClassPath.length()-aClassRelPath.length()));
     }
 
 
     /**
      * Extracts and returns the path to the JAR file from a URL that points to a resource inside a JAR file.
+     * The returned path is in a format that {@link FileFactory} can turn into an {@link AbstractFile}.
      *
      * @param url a URL that points to a resource inside a JAR file
      * @return returns the path to the JAR file
      */
-    private static String getJarPath(URL url) {
-        // Get the URL-decoded path
+    private static String getJarFilePath(URL url) {
+        // URL-decode the path
         String path = getDecodedURLPath(url);
 
         // Here's an example of such a path:
@@ -200,10 +202,25 @@ public class ResourceLoader {
 
         int pos = path.indexOf(".jar!");
         if(pos==-1)
-            return null;
+            return path;
 
-        // Strip out the leading "file:" and trailing ".jar!"
-        return path.substring(5, pos+4);
+        // Strip out the part after ".jar" and normalize the path
+        return normalizeUrlPath(path.substring(0, pos+4));
+    }
+
+    /**
+     * Extracts and returns the path to a local file represented by the given URL.
+     * The returned path is in a format that {@link FileFactory} can turn into an {@link AbstractFile}.
+     *
+     * @param url a URL that points to a resource inside a JAR file
+     * @return returns the path to the JAR file
+     */
+    private static String getLocalFilePath(URL url) {
+        // Here's an example of such a path under Windows:
+        // /C:/cygwin/home/Administrator/mucommander/tmp/compile/classes/
+
+        // URL-decode the path and normalize it
+        return normalizeUrlPath(getDecodedURLPath(url));
     }
 
     /**
@@ -213,8 +230,32 @@ public class ResourceLoader {
      * @param path the path to normalize
      * @return the path without a leading slash
      */
-    private static String normalizePath(String path) {
+    private static String removeLeadingSlash(String path) {
         return path.startsWith("/")?path.substring(1, path.length()):path;
+    }
+
+    /**
+     * Normalizes the specified path issued from a <code>java.net.URL</code> and returns it.
+     * The returned path is in a format that {@link FileFactory} can turn into an {@link AbstractFile}.
+     *
+     * @param path the URL path to normalize
+     * @return the normalized path
+     */
+    private static String normalizeUrlPath(String path) {
+        // Remove the leading "file:" (if any)
+        if(path.startsWith("file:"))
+            path = path.substring(5, path.length());
+
+        // Under platforms that use root drives (Windows and OS/2), strip out the leading '/'
+        if(LocalFile.usesRootDrives() && path.startsWith("/"))
+            path = removeLeadingSlash(path);
+
+        // Use the local file separator
+        String separator = LocalFile.SEPARATOR;
+        if(!"/".equals(separator))
+            path = path.replace("/", separator);
+
+        return path;
     }
 
     /**
