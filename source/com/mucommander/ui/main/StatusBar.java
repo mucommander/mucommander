@@ -27,6 +27,7 @@ import com.mucommander.file.impl.local.LocalFile;
 import com.mucommander.text.SizeFormat;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionManager;
+import com.mucommander.ui.border.MutableLineBorder;
 import com.mucommander.ui.event.ActivePanelListener;
 import com.mucommander.ui.event.LocationEvent;
 import com.mucommander.ui.event.LocationListener;
@@ -34,7 +35,6 @@ import com.mucommander.ui.event.TableSelectionListener;
 import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.main.table.FileTable;
 import com.mucommander.ui.main.table.FileTableModel;
-import com.mucommander.ui.border.MutableLineBorder;
 import com.mucommander.ui.theme.*;
 
 import javax.swing.*;
@@ -241,7 +241,7 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
 
         if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called, currentFolder="+currentFolder);
 
-        long cachedVolumeInfo[] = (long[])volumeInfoCache.get(currentFolder.getAbsolutePath());
+        long cachedVolumeInfo[] = (long[])volumeInfoCache.get(getVolumeInfoCacheKey(currentFolder));
         if(cachedVolumeInfo!=null) {
             if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Cache hit!");
             volumeSpaceLabel.setVolumeSpace(cachedVolumeInfo[0], cachedVolumeInfo[1]);
@@ -273,10 +273,43 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
                     volumeSpaceLabel.setVolumeSpace(volumeTotal, volumeFree);
 
                     if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Adding to cache");
-                    volumeInfoCache.add(currentFolder.getAbsolutePath(), new long[]{volumeTotal, volumeFree}, VOLUME_INFO_TIME_TO_LIVE);
+                    volumeInfoCache.add(getVolumeInfoCacheKey(currentFolder), new long[]{volumeTotal, volumeFree}, VOLUME_INFO_TIME_TO_LIVE);
                 }
             }.start();
         }
+    }
+
+    /**
+     * Returns the 'volume info cache' key for the specified folder.
+     *
+     * @param folder the folder for which to retrieve a key
+     * @return the 'volume info cache' key for the specified folder
+     */
+    private String getVolumeInfoCacheKey(AbstractFile folder) {
+        // - for archive entries or archive files on any file protocol, use the archive file as the key
+        // - for local file on platforms that use root drives (e.g. C:\), use the the drive's root
+        // - for local file on platforms that do not use root drives (Unix-based platforms), use the exact folder
+        //   as any folder could potentially be a mount point and have a different volume info
+        // - for non-local files, use the exact folder as any folder could have a different volume info
+
+        AbstractFile archive = folder.getParentArchive();
+        AbstractFile key;
+
+        if(archive!=null) {
+            key = archive;
+        }
+        else {
+            if(folder.hasAncestor(LocalFile.class)) {
+                key = LocalFile.usesRootDrives()?
+                    folder.getRoot():
+                    folder;
+            }
+            else {
+                key = folder;
+            }
+        }
+
+        return key.getAbsolutePath(false);
     }
 
 
