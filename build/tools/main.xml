@@ -167,7 +167,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- ${tools.jar.obf}.                                       -->
   <target name="obfuscate-tools-bytecode" depends="ant-lib,load-libpath" if="proguard.available" unless="tools.up-to-date">
     <echo>Creating Ant tools obfuscated JAR file...</echo>
-    <proguard overloadaggressively="false" usemixedcaseclassnames="true" ignorewarnings="true" optimize="true" shrink="true" obfuscate="true"
+    <proguard overloadaggressively="false" usemixedcaseclassnames="${case-sensitive-fs}" ignorewarnings="true" optimize="true" shrink="true" obfuscate="true"
               allowaccessmodification="false" repackageclasses="" skipnonpubliclibraryclasses="false">
       <injar name="${tools.jar.normal}"/> 
       <outjar name="${tools.jar.obf}"/>

@@ -102,7 +102,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- ${conf.jar.obf}.                                        -->
   <target name="obfuscate-conf-bytecode" depends="conf-load-libpath" if="proguard.available">
     <echo>Creating the Configuration API obfuscated JAR file...</echo>
-    <proguard overloadaggressively="false" usemixedcaseclassnames="true" ignorewarnings="true" optimize="true" shrink="true" obfuscate="true"
+    <proguard overloadaggressively="false" usemixedcaseclassnames="${case-sensitive-fs}" ignorewarnings="true" optimize="true" shrink="true" obfuscate="true"
               allowaccessmodification="false" repackageclasses="" skipnonpubliclibraryclasses="false">
       <injar name="${conf.jar.normal}"/> 
       <outjar name="${conf.jar.obf}"/>
