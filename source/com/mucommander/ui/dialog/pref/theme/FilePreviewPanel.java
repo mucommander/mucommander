@@ -54,6 +54,7 @@ class FilePreviewPanel extends JScrollPane implements PropertyChangeListener {
     private ThemeData    data;
     private boolean      isActive;
     private PreviewTable table;
+    private ImageIcon    symlinkIcon;
 
 
 
@@ -68,6 +69,8 @@ class FilePreviewPanel extends JScrollPane implements PropertyChangeListener {
         super(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         this.data     = data;
         this.isActive = isActive;
+        symlinkIcon   = IconManager.getCompositeIcon(IconManager.getIcon(IconManager.FILE_ICON_SET, CustomFileIconProvider.FILE_ICON_NAME),
+                                                     IconManager.getIcon(IconManager.FILE_ICON_SET, CustomFileIconProvider.SYMLINK_ICON_NAME));
 
         initUI();
     }
@@ -304,6 +307,8 @@ class FilePreviewPanel extends JScrollPane implements PropertyChangeListener {
                     currentLabel.setIcon(IconManager.getIcon(IconManager.FILE_ICON_SET, CustomFileIconProvider.FOLDER_ICON_NAME));
                 else if(row == ARCHIVE)
                     currentLabel.setIcon(IconManager.getIcon(IconManager.FILE_ICON_SET, CustomFileIconProvider.ARCHIVE_ICON_NAME));
+                else if(row == SYMLINK)
+                    currentLabel.setIcon(symlinkIcon);
                 else
                     currentLabel.setIcon(IconManager.getIcon(IconManager.FILE_ICON_SET, CustomFileIconProvider.FILE_ICON_NAME));
             }
