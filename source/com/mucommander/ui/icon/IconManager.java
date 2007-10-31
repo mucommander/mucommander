@@ -123,6 +123,27 @@ public class IconManager {
         return new ImageIcon(image.getScaledInstance((int)(scaleFactor*image.getWidth(null)), (int)(scaleFactor*image.getHeight(null)), Image.SCALE_AREA_AVERAGING));
     }
 
+    /**
+     * Returns a 'composite' icon made by composing the two given icons: the <code>backgroundIcon</code> is painted
+     * first, and the <code>foregroundIcon</code> is superposed, letting its non-transparent pixels reveal the
+     * background icon.
+     * For this method to provide a meaningful result, the two icons should have the same dimensions and the
+     * <code>foreground</code> should have some transparent pixels.
+     *
+     * @param backgroundIcon the icon that is painted first
+     * @param foregroundIcon the icon that is superposed above backgroundIcon, should use transparency
+     * @return a 'composite' icon made by composing the two given icons
+     */
+    public static ImageIcon getCompositeIcon(Icon backgroundIcon, Icon foregroundIcon) {
+        BufferedImage bi = new BufferedImage(backgroundIcon.getIconWidth(), backgroundIcon.getIconHeight(), BufferedImage.TYPE_INT_ARGB);
+
+        Graphics g = bi.getGraphics();
+        backgroundIcon.paintIcon(null, g, 0, 0);
+        foregroundIcon.paintIcon(null, g, 0, 0);
+
+        return new ImageIcon(bi);
+    }
+
 
     /**
      * Returns an icon in the specified icon set and with the given name. If a scale factor other than 1.0f is passed,
