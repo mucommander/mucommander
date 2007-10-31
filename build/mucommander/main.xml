@@ -458,7 +458,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <target name="make-exe" depends="compress" if="launch4j.available">
     <echo>Creating Win32 executable...</echo>
     <launch4j>
-      <config outfile="${exe.file}" jarpath="${jar.cmp}" icon="${nsis.icon}">
+      <config outfile="${exe.file}" jarpath="mucommander.jar" icon="${nsis.icon}" dontwrapjar="true" chdir=".">
         <jre minversion="${app.jvm}.0"/>
       </config>
     </launch4j>
@@ -492,6 +492,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Prepares the NSIS directory.                          -->
     <mkdir dir="${nsis.tmp}"/>
     <copy file="${exe.file}"             tofile="${nsis.tmp}/muCommander.exe" overwrite="true"/>
+    <copy file="${jar.cmp}"              tofile="${nsis.tmp}/mucommander.jar" overwrite="true"/>
     <copy file="${nsis.icon}"            tofile="${nsis.tmp}/mucommander.ico" overwrite="true"/>
 
     <!-- Makes sure readme.txt and license.txt contain         -->
@@ -503,6 +504,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
       <filterset>
         <filter token="MU_VERSION" value="${app.version}${app.subversion}"/>
         <filter token="MU_EXE"     value="muCommander.exe"/>
+        <filter token="MU_JAR"     value="mucommander.jar"/>
         <filter token="MU_ICON"    value="mucommander.ico"/>
         <filter token="MU_OUT"     value="mucommander-setup.exe"/>
         <filter token="MU_README"  value="readme.txt"/>
