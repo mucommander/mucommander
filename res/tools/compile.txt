@@ -59,6 +59,11 @@ editing it.
   The one used by muCommander can be found in ./tools/velocity.jar, but you can
   modify that if you wish to try out other versions.
 
+- case-sensitive-fs (defaults to false)
+  Whether the file system is case sensitive.
+  Case sensitive systems allow ProGuard to perform slightly more agressive
+  obfuscation of the bytecode. If unsure, leave this value to false.
+
 
 
 2. Compiling muCommander Ant Tools
