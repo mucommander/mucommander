@@ -65,8 +65,20 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   </target>  
 
   <!-- Tries to load proGuard.                                 -->
-  <target name="load-proguard" depends="check-proguard" if="proguard.available">
+  <target name="load-proguard" depends="check-proguard,check-7za" if="proguard.available">
     <taskdef name="proguard" classname="proguard.ant.ProGuardTask" classpath="${proguard.lib}"/>
+
+    <!-- Use mixed-case obfuscation if:                        -->
+    <!-- - 7za is not available (the obfuscated JAR is not     -->
+    <!--   extracted).                                         -->
+    <!-- - configuration defines the file system as case       -->
+    <!--   sensitive.                                          -->
+    <condition property="proguard.mixed-case" value="true">
+      <or>
+        <isfalse value="${7za.available}"/>
+        <istrue value="${case-sensitive-fs}"/>
+      </or>
+    </condition>
   </target>
 
 
