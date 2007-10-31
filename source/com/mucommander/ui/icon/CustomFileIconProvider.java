@@ -130,7 +130,7 @@ public class CustomFileIconProvider implements FileIconProvider {
     }
 
     /**
-     * Returns an icon symbolizing a symlink to the given target icon. The icon is
+     * Returns an icon symbolizing a symlink to the given target icon.
      *
      * @param targetIcon the icon representing the symlink's target
      * @return an icon symbolizing a symlink to the given target
