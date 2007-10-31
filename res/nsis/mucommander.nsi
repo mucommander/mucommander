@@ -33,6 +33,7 @@ Section "muCommander @MU_VERSION@ (required)"
   SetOutPath $INSTDIR
   ; Copy muCommander files
   File /oname=muCommander.exe @MU_EXE@
+  File /oname=mucommander.jar @MU_JAR@
   File /oname=readme.txt @MU_README@
   File /oname=license.txt @MU_LICENSE@
   ; Write the installation path into the registry
@@ -74,6 +75,7 @@ Section "Uninstall"
   DeleteRegKey HKLM SOFTWARE\muCommander
   ; remove files
   Delete $INSTDIR\muCommander.exe
+  Delete $INSTDIR\mucommander.jar
   Delete $INSTDIR\muCommander.lnk
   Delete $INSTDIR\readme.txt
   Delete $INSTDIR\license.txt
