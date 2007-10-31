@@ -25,7 +25,6 @@ import com.mucommander.file.icon.FileIconProvider;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.util.Hashtable;
 
 /**
@@ -130,6 +129,16 @@ public class CustomFileIconProvider implements FileIconProvider {
         initialized = true;
     }
 
+    /**
+     * Returns an icon symbolizing a symlink to the given target icon. The icon is
+     *
+     * @param targetIcon the icon representing the symlink's target
+     * @return an icon symbolizing a symlink to the given target
+     */
+    public static ImageIcon getSymlinkIcon(Icon targetIcon) {
+        return IconManager.getCompositeIcon(targetIcon, IconManager.getIcon(IconManager.FILE_ICON_SET, SYMLINK_ICON_NAME));
+    }
+
 
     /////////////////////////////////////
     // FileIconProvider implementation //
@@ -183,16 +192,8 @@ public class CustomFileIconProvider implements FileIconProvider {
         }
 
         // If file is a symlink, paint a semi-transparent symbolic icon over the linked file's icon
-        if(isSymlink) {
-            BufferedImage bi = new BufferedImage(icon.getIconWidth(), icon.getIconHeight(), BufferedImage.TYPE_INT_ARGB);
-            Graphics g = bi.getGraphics();
-            icon.paintIcon(null, g, 0, 0);
-
-            icon = IconManager.getIcon(IconManager.FILE_ICON_SET, SYMLINK_ICON_NAME);
-            icon.paintIcon(null, g, 0, 0);
-
-            return new ImageIcon(bi);
-        }
+        if(isSymlink)
+            return getSymlinkIcon(icon);
 
         return icon;
     }
