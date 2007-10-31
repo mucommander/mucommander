@@ -23,6 +23,7 @@ import com.mucommander.cache.LRUCache;
 import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
+import com.mucommander.file.FileProtocols;
 import com.mucommander.file.impl.local.LocalFile;
 import com.mucommander.text.SizeFormat;
 import com.mucommander.text.Translator;
@@ -299,7 +300,7 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
             key = archive;
         }
         else {
-            if(folder.hasAncestor(LocalFile.class)) {
+            if(FileProtocols.FILE.equals(folder.getURL().getProtocol())) {
                 key = LocalFile.usesRootDrives()?
                     folder.getRoot():
                     folder;
