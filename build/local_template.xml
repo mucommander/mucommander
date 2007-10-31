@@ -47,18 +47,26 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- muCommander.                                            -->
   <!-- Defaults to a best guess taken from                     -->
   <!-- ${sun.boot.class.path}.                                 -->
-  <property name="java.lib"        location=""/>
+  <property name="java.lib"          location=""/>
 
   <!-- Path to the ProGuard binaries.                          -->
   <!-- Defaults to the one bundled with the project, but can   -->
   <!-- be changed to another version by editing this value.    -->
   <!-- If not set, the obfuscation steps will be skipped.      -->
-  <property name="proguard.lib"    location="${tools}/proguard.jar"/>
+  <property name="proguard.lib"      location="${tools}/proguard.jar"/>
 
   <!-- Path to the 7z executable.                              -->
   <!-- If this is not set, compression will be done using      -->
   <!-- standard ZIP algorithms.                                -->
-  <property name="7za.executable"  location=""/>
+  <property name="7za.executable"    location=""/>
+
+  <!-- Whether or not the current file system is               -->
+  <!-- case sensitive.                                         -->
+  <!-- This variable affects the way muCommander's bytecode is -->
+  <!-- obfuscated. Case sensitive file systems will allow us   -->
+  <!-- make the JAR file slightly smaller.                     -->
+  <!-- Defaults to false.                                      -->
+  <property name="case-sensitive-fs" value="false"/>
 
 
 
@@ -67,17 +75,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- Path to the AntDoclet binaries.                         -->
   <!-- Defaults to the one bundled with the project, but can   -->
   <!-- be changed to another version by editing this value.    -->
-  <property name="antdoclet.lib"   location="${tools}/antdoclet.jar"/>
+  <property name="antdoclet.lib"     location="${tools}/antdoclet.jar"/>
 
   <!-- Path to the Velocity binaries.                          -->
   <!-- Defaults to the one bundled with the project, but can   -->
   <!-- be changed to another version by editing this value.    -->
-  <property name="velocity.lib"    location="${tools}/velocity.jar"/>
+  <property name="velocity.lib"      location="${tools}/velocity.jar"/>
 
   <!-- Path to the Ant core libraries (used to compile tools). -->
   <!-- muCommander was built with Ant 1.6.5.                   -->
   <!-- Defaults to ${ant.home}/lib/ant.jar.                    -->
-  <property name="ant.lib"         location="${ant.home}/lib/ant.jar"/>
+  <property name="ant.lib"           location="${ant.home}/lib/ant.jar"/>
 
 
 
@@ -86,15 +94,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- Path to the JDeb binaries.                              -->
   <!-- Defaults to the one bundled with the project, but can   -->
   <!-- be changed to another version by editing this value.    -->
-  <property name="jdeb.lib"        location="${tools}/jdeb.jar"/>
+  <property name="jdeb.lib"          location="${tools}/jdeb.jar"/>
 
   <!-- Password for the JAR keystore. If you're not Maxence,   -->
   <!-- then don't bother with this.                            -->
-  <property name="store.pass"      value=""/>
+  <property name="store.pass"        value=""/>
 
   <!-- Path to the makensis executable.                        -->
-  <property name="nsis.executable" location=""/>
+  <property name="nsis.executable"   location=""/>
 
   <!-- Path to the launch4j installation dir.                  -->
-  <property name="launch4j.dir"    location=""/>
+  <property name="launch4j.dir"      location=""/>
 </project>
