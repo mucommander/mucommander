@@ -89,7 +89,7 @@ public abstract class AbstractFileTestCase extends TestCase implements FilePermi
      * before the test. In particular, all files registered with {@link #deleteWhenFinished(AbstractFile)} are
      * deleted if they exist.
      *
-     * @throws IOException if an error occurred while delete files registered with {@link # deleteWhenFinished (AbstractFile)}
+     * @throws IOException if an error occurred while delete files registered with {@link # deleteWhenFinished(AbstractFile)}
      */
     protected void tearDown() throws IOException {
         Iterator iterator = filesToDelete.iterator();
@@ -197,6 +197,16 @@ public abstract class AbstractFileTestCase extends TestCase implements FilePermi
             // Should not happen, and even if it did, it's no big deal as the test that called this method will most
             // likely fail
         }
+    }
+
+    /**
+     * Generates and returns a pseudo unique filename, prepended by the given prefix.
+     *
+     * @param prefix the string to prepend to the filename, can be null.
+     * @return a pseudo unique filename
+     */
+    protected String getPseudoUniqueFilename(String prefix) {
+        return (prefix==null?"":prefix+"_")+System.currentTimeMillis()+(new Random().nextInt(10000));
     }
 
 
@@ -452,7 +462,7 @@ public abstract class AbstractFileTestCase extends TestCase implements FilePermi
                 if(canSetPermission) {
                     for(boolean enabled=true; ;) {
                         assertTrue("setPermission("+a+", "+p+") failed", tempFile.setPermission(a, p, enabled));
-                        assertTrue("setPermissions("+(enabled?bitMask:~bitMask)+") failed", tempFile.setPermissions(enabled?bitMask:~bitMask));
+                        assertTrue("setPermissions("+(enabled?bitMask:(0777&~bitMask))+") failed", tempFile.setPermissions(enabled?bitMask:(0777&~bitMask)));
 
                         if(canGetPermission) {
                             assertTrue("getPermission("+a+", "+p+") should be "+enabled, tempFile.getPermission(a, p)==enabled);
@@ -700,7 +710,7 @@ public abstract class AbstractFileTestCase extends TestCase implements FilePermi
         assertNotNull(children);
         assertEquals(0, children.length);
 
-        // Create a child file and assert that this child (and only this child) is returned by ls()
+        // Create a child file and assert that this child (and only this child) is returned by ls(), and that the file exists
         AbstractFile child = tempFile.getChild("child");
         child.mkfile();
         children = tempFile.ls();
@@ -708,6 +718,7 @@ public abstract class AbstractFileTestCase extends TestCase implements FilePermi
         assertNotNull(children);
         assertEquals(1, children.length);
         assertEquals(child, children[0]);
+        assertTrue(children[0].exists());
     }
 
     /**
