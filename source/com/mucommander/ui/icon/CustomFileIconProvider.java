@@ -20,7 +20,6 @@ package com.mucommander.ui.icon;
 
 import com.mucommander.Debug;
 import com.mucommander.file.AbstractFile;
-import com.mucommander.file.FileFactory;
 import com.mucommander.file.icon.FileIconProvider;
 
 import javax.swing.*;
@@ -152,7 +151,7 @@ public class CustomFileIconProvider implements FileIconProvider {
         // If file is a symlink, get the linked file's icon and paint a semi-transparent symbolic icon on top of it
         boolean isSymlink = file.isSymlink();
         if(isSymlink)
-            file = FileFactory.getFile(file.getCanonicalPath());
+            file = file.getCanonicalFile();
 
         ImageIcon icon;
         // Retrieve the file's extension, null if the file has no extension
