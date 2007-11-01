@@ -118,7 +118,7 @@ public class FileTableModel extends AbstractTableModel implements Columns, Confi
         this.fileArrayIndex = new int[nbFiles];
         for(int i=0; i<nbFiles; i++) {
             fileArrayIndex[i] = i;
-            cachedFiles[i] = new CachedFile(children[i], false);
+            cachedFiles[i] = new CachedFile(children[i], true);
         }
 
         // Reset marked files
