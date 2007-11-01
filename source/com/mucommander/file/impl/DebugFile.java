@@ -193,6 +193,13 @@ public class DebugFile extends ProxyFile {
         return super.getCanonicalPath();
     }
 
+    public AbstractFile getCanonicalFile() {
+        if(Debug.ON) Debug.trace(getDebugString(), traceLevel);
+        lag();
+
+        return super.getCanonicalFile();
+    }
+
     public boolean isBrowsable() {
         if(Debug.ON) Debug.trace(getDebugString(), traceLevel);
         lag();

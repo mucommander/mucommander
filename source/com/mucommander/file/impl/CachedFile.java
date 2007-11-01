@@ -116,6 +116,9 @@ public class CachedFile extends ProxyFile {
     private AbstractFile getRoot;
     private boolean getRootSet;
 
+    private AbstractFile getCanonicalFile;
+    private boolean getCanonicalFileSet;
+
     // Used to access the java.io.FileSystem#getBooleanAttributes method
     private static boolean getFileAttributesAvailable;
     private static Method mGetBooleanAttributes;
@@ -429,7 +432,20 @@ public class CachedFile extends ProxyFile {
         return getRoot;
     }
 
+    public AbstractFile getCanonicalFile() {
+        if(!getCanonicalFileSet) {
+            getCanonicalFile = file.getCanonicalFile();
+            // Create a CachedFile instance around the file if recursion is enabled
+            if(recurseInstances)
+                getCanonicalFile = new CachedFile(getCanonicalFile, true);
 
+            getCanonicalFileSet = true;
+        }
+
+        return getCanonicalFile;
+    }
+
+    
     ////////////////////////////////////////////////
     // Overridden for recursion only (no caching) //
     ////////////////////////////////////////////////

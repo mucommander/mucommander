@@ -214,6 +214,10 @@ public abstract class ProxyFile extends AbstractFile {
         return file.getCanonicalPath();
     }
 
+    public AbstractFile getCanonicalFile() {
+        return file.getCanonicalFile();
+    }
+
     public String getSeparator() {
         return file.getSeparator();
     }

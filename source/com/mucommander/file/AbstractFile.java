@@ -174,6 +174,31 @@ public abstract class AbstractFile implements FilePermissions {
         return getAbsolutePath();
     }
 
+    /**
+     * Returns an <code>AbstractFile</code> representing the canonical path of this file, or <code>this</code> if the
+     * absolute and canonical path of this file are identical.<br/>
+     * Note that the returned file may or may not exist, for example if this file is a symlink to a file that doesn't 
+     * exist.
+     *
+     * @return an <code>AbstractFile representing the canonical path of this file, or this if the absolute and canonical
+     * path of this file are identical.
+     */
+    public AbstractFile getCanonicalFile() {
+        String canonicalPath = getCanonicalPath(false);
+        if(canonicalPath.equals(getAbsolutePath(false)))
+            return this;
+
+        try {
+            FileURL canonicalURL = new FileURL(canonicalPath);
+            canonicalURL.setCredentials(fileURL.getCredentials());
+
+            return FileFactory.getFile(canonicalURL);
+        }
+        catch(IOException e) {
+            return this;
+        }
+    }
+
 
     /**
      * Returns the path separator used by this file.
