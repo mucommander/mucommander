@@ -492,7 +492,9 @@ public class FileFactory {
         String protocol = fileURL.getProtocol().toLowerCase();
 
         // Cache file instances only for certain protocols
-        boolean useFileCache = protocol.equals(FileProtocols.FILE) || protocol.equals(FileProtocols.SMB);
+        boolean useFileCache = protocol.equals(FileProtocols.FILE)
+                || protocol.equals(FileProtocols.SMB)
+                || protocol.equals(FileProtocols.SFTP);
 
         // This value is used twice, only if file caching is used
         String urlRep = useFileCache?fileURL.toString(true):null;
