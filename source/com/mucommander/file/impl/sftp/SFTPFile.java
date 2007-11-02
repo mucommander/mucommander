@@ -20,6 +20,7 @@
 package com.mucommander.file.impl.sftp;
 
 import com.mucommander.Debug;
+import com.mucommander.auth.AuthException;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
 import com.mucommander.file.FileProtocols;
@@ -101,6 +102,10 @@ public class SFTPFile extends AbstractFile {
     
     private SFTPFile(FileURL fileURL, SFTPFileAttributes fileAttributes) throws IOException {
         super(fileURL);
+
+        // Throw an AuthException if the url doesn't contain any credentials
+        if(!fileURL.containsCredentials())
+            throw new AuthException(fileURL);
 
         this.absPath = fileURL.getPath();
 
