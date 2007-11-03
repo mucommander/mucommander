@@ -103,9 +103,9 @@ public class SFTPFile extends AbstractFile {
     private SFTPFile(FileURL fileURL, SFTPFileAttributes fileAttributes) throws IOException {
         super(fileURL);
 
-        // Throw an AuthException if the url doesn't contain any credentials
-        if(!fileURL.containsCredentials())
-            throw new AuthException(fileURL);
+//        // Throw an AuthException if the url doesn't contain any credentials
+//        if(!fileURL.containsCredentials())
+//            throw new AuthException(fileURL);
 
         this.absPath = fileURL.getPath();
 
@@ -716,11 +716,11 @@ public class SFTPFile extends AbstractFile {
         private boolean isSymlink;
 
 
-        private SFTPFileAttributes(FileURL url) {
+        private SFTPFileAttributes(FileURL url) throws AuthException {
             // this constructor is called by SFTPFile public constructor
             this.url = url;
 
-            fetchAttributes();
+            fetchAttributes();      // throws AuthException if no or bad credentials
             lastFetchedTime = System.currentTimeMillis();
         }
 
@@ -742,7 +742,7 @@ public class SFTPFile extends AbstractFile {
             lastFetchedTime = System.currentTimeMillis();
         }
 
-        private void fetchAttributes() {
+        private void fetchAttributes() throws AuthException {
             // Retrieve a ConnectionHandler and lock it
             SFTPConnectionHandler connHandler = (SFTPConnectionHandler)ConnectionPool.getConnectionHandler(SFTPFile.connHandlerFactory, url, true);
             try {
@@ -765,12 +765,17 @@ public class SFTPFile extends AbstractFile {
                 attrs = new FileAttributes();
                 attrs.setPermissions(new UnsignedInteger32(0));     // need to prevent getPermissions() from returning null
                 exists = false;
+
+                // Rethrow AuthException
+                if(e instanceof AuthException)
+                    throw (AuthException)e;
             }
+            finally {
+                // Release the lock on the ConnectionHandler
+                connHandler.releaseLock();
 
-            // Release the lock on the ConnectionHandler
-            connHandler.releaseLock();
-
-            lastFetchedTime = System.currentTimeMillis();
+                lastFetchedTime = System.currentTimeMillis();
+            }
         }
 
         /**
@@ -778,8 +783,16 @@ public class SFTPFile extends AbstractFile {
          * and if they have, fetches them from the server.
          */
         private void checkForExpiration() {
-            if(System.currentTimeMillis()-lastFetchedTime>=attributeCachingPeriod)
-                fetchAttributes();
+            if(System.currentTimeMillis()-lastFetchedTime>=attributeCachingPeriod) {
+                try {
+                    fetchAttributes();
+                }
+                catch(AuthException e) {
+                    // Should not normally happen since attributes have already been feched using the same credentials.
+                    // If it does happen (credentials are no longer valid), the file will be considered as a
+                    // non-existing one.
+                }
+            }
         }
 
         ///////////////////////////////
