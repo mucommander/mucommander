@@ -6882,10 +6882,60 @@ text_viewer.select_all:pt_BR:Selecionar tudo
 text_viewer.select_all:NL:Selecteer alles
 text_viewer.select_all:SK:Označiť všetko
 
+text_viewer.find:EN:Find
+text_viewer.find:FR:Rechercher
+text_viewer.find:PL:Znajdź
+# Translation missing
 
-###############
+
+
+
+
+
+
+
+
+
+
+
+
+text_viewer.find_next:EN:Find next
+text_viewer.find_next:FR:Rechercher suivant
+text_viewer.find_next:PL:Znajdź następne
+# Translation missing
+
+
+
+
+
+
+
+
+
+
+
+
+
+text_viewer.find_previous:EN:Find previous
+text_viewer.find_previous:FR:Rechercher précédent
+# Translation missing
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+################
 # Image viewer #
-###############
+################
 
 image_viewer.controls_menu:EN:Controls
 image_viewer.controls_menu:FR:Contrôles

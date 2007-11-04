@@ -19,133 +19,59 @@
 package com.mucommander.ui.viewer.text;
 
 import com.mucommander.file.AbstractFile;
-import com.mucommander.io.EncodingDetector;
 import com.mucommander.text.Translator;
-import com.mucommander.ui.helper.MenuToolkit;
-import com.mucommander.ui.helper.MnemonicHelper;
-import com.mucommander.ui.theme.*;
 import com.mucommander.ui.viewer.EditorFrame;
 import com.mucommander.ui.viewer.FileEditor;
 
-import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 
 
 /**
- * 
+ * A simple text editor. Most of the implementation is located in {@link TextEditorImpl}.
  *
  * @author Maxence Bernard
  */
-class TextEditor extends FileEditor implements ActionListener, DocumentListener, ThemeListener {
+class TextEditor extends FileEditor implements DocumentListener {
 
-    private JTextArea textArea;
+    private TextEditorImpl textEditorImpl;
 
-    private JMenuItem copyItem;
-    private JMenuItem cutItem;
-    private JMenuItem pasteItem;
-    private JMenuItem selectAllItem;
-
-	
     public TextEditor() {
+        textEditorImpl = new TextEditorImpl(true);
+
         setLayout(new BorderLayout());
-        textArea = new JTextArea();
-        textArea.setEditable(true);
-        initTheme();
-        add(textArea, BorderLayout.NORTH);
-        ThemeManager.addCurrentThemeListener(this);
-    }
-
-    private void initTheme() {
-        textArea.setForeground(ThemeManager.getCurrentColor(Theme.EDITOR_FOREGROUND_COLOR));
-        textArea.setCaretColor(ThemeManager.getCurrentColor(Theme.EDITOR_FOREGROUND_COLOR));
-        textArea.setBackground(ThemeManager.getCurrentColor(Theme.EDITOR_BACKGROUND_COLOR));
-        textArea.setSelectedTextColor(ThemeManager.getCurrentColor(Theme.EDITOR_SELECTED_FOREGROUND_COLOR));
-        textArea.setSelectionColor(ThemeManager.getCurrentColor(Theme.EDITOR_SELECTED_BACKGROUND_COLOR));
-        textArea.setFont(ThemeManager.getCurrentFont(Theme.EDITOR_FONT));
+        add(textEditorImpl.getTextArea(), BorderLayout.NORTH);
     }
 
 
-    public Insets getInsets() {
-        return new Insets(4, 3, 4, 3);
-    }
-			
-    public void edit(AbstractFile file) throws IOException {
-        // Auto-detect encoding
-        InputStream in = file.getInputStream();
-        String encoding = EncodingDetector.detectEncoding(in);
-        in.close();
+    ///////////////////////////////
+    // FileEditor implementation //
+    ///////////////////////////////
 
-        // If encoding could not be detected, default to UTF-8
-        if(encoding==null)
-            encoding = "UTF-8";
-
-        InputStreamReader isr = new InputStreamReader(file.getInputStream(), encoding);
-        textArea.read(isr, null);
-        isr.close();
-
-        textArea.setCaretPosition(0);
-        textArea.getDocument().addDocumentListener(this);
-
-        EditorFrame frame = getFrame();
-        if(frame!=null) {
-            MnemonicHelper menuItemMnemonicHelper = new MnemonicHelper();
-			
-            // Edit menu
-            JMenu menu = frame.addMenu(Translator.get("text_editor.edit"));
-            copyItem = MenuToolkit.addMenuItem(menu, Translator.get("text_editor.copy"), menuItemMnemonicHelper, null, this);
-            cutItem = MenuToolkit.addMenuItem(menu, Translator.get("text_editor.cut"), menuItemMnemonicHelper, null, this);
-            pasteItem = MenuToolkit.addMenuItem(menu, Translator.get("text_editor.paste"), menuItemMnemonicHelper, null, this);
-            selectAllItem = MenuToolkit.addMenuItem(menu, Translator.get("text_editor.select_all"), menuItemMnemonicHelper, null, this);
-        }
-    }
-		
-    public long getMaxRecommendedSize() {return 131072;}
-
-	
     protected void saveAs(AbstractFile destFile) throws IOException {
         OutputStream out = destFile.getOutputStream(false);
-        out.write(textArea.getText().getBytes());
+        out.write(textEditorImpl.getTextArea().getText().getBytes());
         out.close();
-		
+
         setSaveNeeded(false);
     }
 
+    public void edit(AbstractFile file) throws IOException {
+        textEditorImpl.startEditing(file);
+        textEditorImpl.getTextArea().getDocument().addDocumentListener(this);
 
-    public void requestFocus() {
-        textArea.requestFocus();
-    }
-	
-	
-    ////////////////////////////
-    // ActionListener methods //
-    ////////////////////////////
-	
-    public void actionPerformed(ActionEvent e) {
-        Object source = e.getSource();
-		
-        // Edit menu
-        if(source == copyItem)
-            textArea.copy();
-        else if(source == cutItem)
-            textArea.cut();
-        else if(source == pasteItem)
-            textArea.paste();
-        else if(source == selectAllItem)
-            textArea.selectAll();
+        EditorFrame frame = getFrame();
+        if(frame!=null)
+            textEditorImpl.addMenuItems(frame.addMenu(Translator.get("text_editor.edit")));
     }
 
 
-    //////////////////////////////
-    // DocumentListener methods //
-    //////////////////////////////
+    /////////////////////////////////////
+    // DocumentListener implementation //
+    /////////////////////////////////////
 	
     public void changedUpdate(DocumentEvent e) {
         setSaveNeeded(true);
@@ -160,37 +86,19 @@ class TextEditor extends FileEditor implements ActionListener, DocumentListener,
     }
 
 
+    ////////////////////////
+    // Overridden methods //
+    ////////////////////////
 
-    // - Theme listening -------------------------------------------------------------
-    // -------------------------------------------------------------------------------
-    /**
-     * Receives theme color changes notifications.
-     */
-    public void colorChanged(ColorChangedEvent event) {
-        switch(event.getColorId()) {
-        case Theme.EDITOR_FOREGROUND_COLOR:
-            textArea.setForeground(event.getColor());
-            break;
-
-        case Theme.EDITOR_BACKGROUND_COLOR:
-            textArea.setBackground(event.getColor());
-            break;
-
-        case Theme.EDITOR_SELECTED_FOREGROUND_COLOR:
-            textArea.setSelectedTextColor(event.getColor());
-            break;
-
-        case Theme.EDITOR_SELECTED_BACKGROUND_COLOR:
-            textArea.setSelectionColor(event.getColor());
-            break;
-        }
+    public long getMaxRecommendedSize() {
+        return 1048576;
     }
 
-    /**
-     * Receives theme font changes notifications.
-     */
-    public void fontChanged(FontChangedEvent event) {
-        if(event.getFontId() == Theme.EDITOR_FONT)
-            textArea.setFont(event.getFont());
+    public Insets getInsets() {
+        return new Insets(4, 3, 4, 3);
+    }
+
+    public void requestFocus() {
+        textEditorImpl.getTextArea().requestFocus();
     }
 }
