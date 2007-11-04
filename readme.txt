@@ -72,7 +72,9 @@ Lead developers:
 - Nicolas Rinaudo
 
 Code contributors:
-- Xavier Martin (ISO and NRG archives support)
+- Mariusz Jakubowski
+- Xavier Martin
+- Alejandro Scandroli
 
 Translators: 
 - Tony Klüver and Frank Berger (German)
@@ -115,7 +117,11 @@ Improvements:
 - Added keyboard shortcuts for the items in the drive popup button.
 - Windows: drives in the drive popup button now show extended names.
 - Bzip2 read-access speed substantially improved.
-- Improved icon representation of symbolic links
+- Improved icon representation of symbolic links.
+- 'Delete' dialog now shows the list of file to be deleted 
+  (contributed by Alejandro Scandroli)
+- New 'Find' functionality added to the text viewer and editor
+  (contributed by Mariusz Jakubowski)
 
 Localization:
 
@@ -134,8 +140,8 @@ Bug fixes:
 - Fixed issues with opening some bzip2 archives.
 - A single click on the current row of the inactive table can no longer 
   trigger the filename/date/permission editor.
-- Fixed issues when exploring the SMB 'network neighborhood' (smb://)
-- SFTP: fixed symlinks to directories not properly handled
+- Fixed issues when exploring the SMB 'network neighborhood' (smb://).
+- Fixed symlinks to directories not properly handled on SFTP shares.
 
 Known issues:
 - Italian, Korean and Polish translations are not up-to-date.
