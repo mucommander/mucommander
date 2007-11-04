@@ -122,8 +122,10 @@ public class AboutDialog extends FocusDialog implements ActionListener {
             insertLineBreak(doc);
 
             // Contributors.
-            insertHeader(doc,         "Contributors");
-            insertDetailedString(doc, "Xavier Martin",       "ISO and NRG support");
+            insertHeader(doc,         "Code contributors");
+            insertNormalString(doc,   "Mariusz Jakubowski");
+            insertNormalString(doc,   "Xavier Martin");
+            insertNormalString(doc,   "Alejandro Scandroli");
             insertLineBreak(doc);
 
             // Translators.
