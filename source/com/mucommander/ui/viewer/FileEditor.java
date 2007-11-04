@@ -19,17 +19,16 @@
 package com.mucommander.ui.viewer;
 
 import com.mucommander.file.AbstractFile;
-import com.mucommander.ui.theme.Theme;
-import com.mucommander.ui.theme.ThemeListener;
-import com.mucommander.ui.theme.ThemeManager;
+import com.mucommander.ui.theme.*;
 
 import javax.swing.*;
-import java.awt.*;
 import java.io.IOException;
 
 
 /**
- * 
+ * An abstract class to be subclassed by file editor implementations.
+ *
+ * <p><b>Warning:</b> the file viewer/editor API may soon receive a major overhaul.</p>
  *
  * @author Maxence Bernard
  */
@@ -110,6 +109,28 @@ public abstract class FileEditor extends JPanel implements ThemeListener {
             frame.setSaveNeeded(saveNeeded);
     }
 
+
+    ///////////////////////////
+    // ThemeListener methods //
+    ///////////////////////////
+
+    /**
+     * Receives theme color changes notifications.
+     */
+    public void colorChanged(ColorChangedEvent event) {
+        if(event.getColorId() == Theme.EDITOR_BACKGROUND_COLOR)
+            setBackground(event.getColor());
+
+        repaint();
+    }
+
+    /**
+     * Not used, implemented as a no-op.
+     */
+    public void fontChanged(FontChangedEvent event) {
+    }
+
+
     //////////////////////
     // Abstract methods //
     //////////////////////
@@ -131,25 +152,4 @@ public abstract class FileEditor extends JPanel implements ThemeListener {
      * (path can be different from current file if the user chose 'Save as').
      */
     protected abstract void saveAs(AbstractFile saveAsFile) throws IOException;
-
-
-
-    // - Theme listening -------------------------------------------------------------
-    // -------------------------------------------------------------------------------
-    /**
-     * Receives theme color changes notifications.
-     * @param colorId identifier of the color that has changed.
-     * @param color   new value for the color.
-     */
-    public void colorChanged(int colorId, Color color) {
-        if(colorId == Theme.EDITOR_BACKGROUND_COLOR)
-            setBackground(color);
-
-        repaint();
-    }
-
-    /**
-     * Not used.
-     */
-    public void fontChanged(int fontId, Font font) {}
 }

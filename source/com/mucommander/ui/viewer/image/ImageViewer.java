@@ -38,7 +38,7 @@ import java.io.InputStream;
 
 
 /**
- * 
+ * A simple image viewer, capable of displaying <code>PNG</code>, <code>GIF</code> and <code>JPEG</code> images. 
  *
  * @author Maxence Bernard
  */
@@ -61,30 +61,6 @@ class ImageViewer extends FileViewer implements ActionListener, ThemeListener {
     }	
 
 
-    public void view(AbstractFile file) throws IOException {
-
-        ViewerFrame frame = getFrame();
-        if(frame!=null) {
-            MnemonicHelper menuItemMnemonicHelper = new MnemonicHelper();
-	
-            // Create Go menu
-            JMenu controlsMenu = frame.addMenu(Translator.get("image_viewer.controls_menu"));
-            //		nextImageItem = MenuToolkit.addMenuItem(controlsMenu, Translator.get("image_viewer.next_image"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0), this);
-            //		prevImageItem = MenuToolkit.addMenuItem(controlsMenu, Translator.get("image_viewer.previous_image"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_BACK_SPACE, 0), this);
-            //		controlsMenu.add(new JSeparator());
-            zoomInItem = MenuToolkit.addMenuItem(controlsMenu, Translator.get("image_viewer.zoom_in"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_ADD, 0), this);
-            zoomOutItem = MenuToolkit.addMenuItem(controlsMenu, Translator.get("image_viewer.zoom_out"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_SUBTRACT, 0), this);
-        }
-
-        loadImage(file);
-    }
-	
-	
-    public String getTitle() {
-        return file.getName()+" - "+image.getWidth(null)+"x"+image.getHeight(null)+" - "+((int)(zoomFactor*100))+"%";
-    }
-	
-	
     public static boolean canViewFile(AbstractFile file) {
         String name = file.getName();
         String nameLowerCase = name.toLowerCase();
@@ -94,12 +70,6 @@ class ImageViewer extends FileViewer implements ActionListener, ThemeListener {
             ||nameLowerCase.endsWith(".jpeg");
     }
 
-	
-    public synchronized Dimension getPreferredSize() {
-        return new Dimension(scaledImage.getWidth(null), scaledImage.getHeight(null));
-    }
-
-	
     private synchronized void loadImage(AbstractFile file) throws IOException {
         frame.setCursor(new Cursor(Cursor.WAIT_CURSOR));
 		
@@ -160,6 +130,23 @@ class ImageViewer extends FileViewer implements ActionListener, ThemeListener {
         frame.setCursor(Cursor.getDefaultCursor());
     }
 
+    private void updateFrame() {
+        // Revalidate, pack and repaint should be called in this order
+        revalidate();
+        frame.pack();
+        frame.getContentPane().repaint();
+    }
+
+    private void checkZoom() {
+        Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
+		
+        zoomInItem.setEnabled(zoomFactor<1.0 || (2*zoomFactor*image.getWidth(null) < d.width
+                                                 && 2*zoomFactor*image.getHeight(null) < d.height));
+
+        zoomOutItem.setEnabled(zoomFactor>1.0 || (zoomFactor/2*image.getWidth(null)>160
+                                                  && zoomFactor/2*image.getHeight(null)>120));
+    }
+
     /*
       private synchronized void goToImage(boolean next) {
       AbstractFile newFile;
@@ -167,7 +154,7 @@ class ImageViewer extends FileViewer implements ActionListener, ThemeListener {
       newFile = getNextFileInFolder(file, true);
       else
       newFile = getPreviousFileInFolder(file, true);
-		
+
       if(newFile!=null) {
       try {
       loadImage(newFile);
@@ -179,40 +166,61 @@ class ImageViewer extends FileViewer implements ActionListener, ThemeListener {
       }
       }
     */
-	
-    private void updateFrame() {
-        // Revalidate, pack and repaint should be called in this order
-        revalidate();
-        frame.pack();
-        frame.getContentPane().repaint();
-    }
 
+
+    ///////////////////////////////
+    // FileViewer implementation //
+    ///////////////////////////////
+
+    public void view(AbstractFile file) throws IOException {
+
+        ViewerFrame frame = getFrame();
+        if(frame!=null) {
+            MnemonicHelper menuItemMnemonicHelper = new MnemonicHelper();
+
+            // Create Go menu
+            JMenu controlsMenu = frame.addMenu(Translator.get("image_viewer.controls_menu"));
+            //		nextImageItem = MenuToolkit.addMenuItem(controlsMenu, Translator.get("image_viewer.next_image"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0), this);
+            //		prevImageItem = MenuToolkit.addMenuItem(controlsMenu, Translator.get("image_viewer.previous_image"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_BACK_SPACE, 0), this);
+            //		controlsMenu.add(new JSeparator());
+            zoomInItem = MenuToolkit.addMenuItem(controlsMenu, Translator.get("image_viewer.zoom_in"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_ADD, 0), this);
+            zoomOutItem = MenuToolkit.addMenuItem(controlsMenu, Translator.get("image_viewer.zoom_out"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_SUBTRACT, 0), this);
+        }
+
+        loadImage(file);
+    }
 	
+
+    ////////////////////////
+    // Overridden methods //
+    ////////////////////////
+
     public void paint(Graphics g) {
         int width = getWidth();
         int height = getHeight();
-		
+
         g.setColor(backgroundColor);
         g.fillRect(0, 0, width, height);
-		
+
         if(scaledImage!=null) {
             int imageWidth = scaledImage.getWidth(null);
             int imageHeight = scaledImage.getHeight(null);
             g.drawImage(scaledImage, Math.max(0, (width-imageWidth)/2), Math.max(0, (height-imageHeight)/2), null);
         }
     }
-	
 
-    private void checkZoom() {
-        Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
-		
-        zoomInItem.setEnabled(zoomFactor<1.0 || (2*zoomFactor*image.getWidth(null) < d.width
-                                                 && 2*zoomFactor*image.getHeight(null) < d.height));
 
-        zoomOutItem.setEnabled(zoomFactor>1.0 || (zoomFactor/2*image.getWidth(null)>160
-                                                  && zoomFactor/2*image.getHeight(null)>120));
+    ///////////////////////////////////
+    // ActionListener implementation //
+    ///////////////////////////////////
+
+    public String getTitle() {
+        return file.getName()+" - "+image.getWidth(null)+"x"+image.getHeight(null)+" - "+((int)(zoomFactor*100))+"%";
     }
-	
+
+    public synchronized Dimension getPreferredSize() {
+        return new Dimension(scaledImage.getWidth(null), scaledImage.getHeight(null));
+    }
 
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
@@ -239,8 +247,10 @@ class ImageViewer extends FileViewer implements ActionListener, ThemeListener {
     }
 
 
-    // - Theme listening -------------------------------------------------------------
-    // -------------------------------------------------------------------------------
+    //////////////////////////////////
+    // ThemeListener implementation //
+    //////////////////////////////////
+
     /**
      * Receives theme color changes notifications.
      */
@@ -252,7 +262,7 @@ class ImageViewer extends FileViewer implements ActionListener, ThemeListener {
     }
 
     /**
-     * Not used.
+     * Not used, implemented as a no-op.
      */
     public void fontChanged(FontChangedEvent event) {}
 }

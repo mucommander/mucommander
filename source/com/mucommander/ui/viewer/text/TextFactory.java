@@ -18,18 +18,32 @@
 
 package com.mucommander.ui.viewer.text;
 
-import com.mucommander.ui.viewer.ViewerFactory;
-import com.mucommander.ui.viewer.EditorFactory;
-import com.mucommander.ui.viewer.FileViewer;
-import com.mucommander.ui.viewer.FileEditor;
 import com.mucommander.file.AbstractFile;
+import com.mucommander.ui.viewer.EditorFactory;
+import com.mucommander.ui.viewer.FileEditor;
+import com.mucommander.ui.viewer.FileViewer;
+import com.mucommander.ui.viewer.ViewerFactory;
 
 /**
+ * <code>ViewerFactory</code> and <code>EditorFactory</code> implementation for creating text viewers and editors.
+ *
  * @author Nicolas Rinaudo
  */
 public class TextFactory implements ViewerFactory, EditorFactory {
-    public boolean canViewFile(AbstractFile file) {return true;}
-    public FileViewer createFileViewer() {return new TextViewer();}
-    public boolean canEditFile(AbstractFile file) {return true;}
-    public FileEditor createFileEditor() {return new TextEditor();}
+
+    public boolean canViewFile(AbstractFile file) {
+        return true;
+    }
+
+    public FileViewer createFileViewer() {
+        return new TextViewer();
+    }
+
+    public boolean canEditFile(AbstractFile file) {
+        return true;
+    }
+
+    public FileEditor createFileEditor() {
+        return new TextEditor();
+    }
 }

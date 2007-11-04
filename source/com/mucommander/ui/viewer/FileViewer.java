@@ -19,16 +19,15 @@
 package com.mucommander.ui.viewer;
 
 import com.mucommander.file.AbstractFile;
-import com.mucommander.ui.theme.Theme;
-import com.mucommander.ui.theme.ThemeListener;
-import com.mucommander.ui.theme.ThemeManager;
+import com.mucommander.ui.theme.*;
 
 import javax.swing.*;
-import java.awt.*;
 import java.io.IOException;
 
 /**
- * 
+ * An abstract class to be subclassed by file viewer implementations.
+ *
+ * <p><b>Warning:</b> the file viewer/editor API may soon receive a major overhaul.</p>
  *
  * @author Maxence Bernard
  */
@@ -102,71 +101,29 @@ public abstract class FileViewer extends JPanel implements ThemeListener {
     public final void setCurrentFile(AbstractFile file) {
         this.file = file;
     }
-	
-    /*
-      protected AbstractFile getNextFileInFolder(AbstractFile file, boolean loop) {
-      return getNextFile(file, true, loop);
-      }
-	
-      protected AbstractFile getPreviousFileInFolder(AbstractFile file, boolean loop) {
-      return getNextFile(file, false, loop);
-      }
-	
-      private AbstractFile getNextFile(AbstractFile file, boolean forward, boolean loop) {
-      AbstractFile folder = file.getParent();
-      MainFrame mainFrame = frame.getMainFrame();
-      FileTable table = mainFrame.getActiveTable();
 
-      if(!table.getCurrentFolder().equals(folder)) {
-      table = mainFrame.getInactiveTable();
-      if(!table.getCurrentFolder().equals(folder))
-      return null;
-      }
-		
-      FileTableModel model = table.getFileTableModel();
-      int rowCount = model.getRowCount();
-      int fileRow = table.getFileRow(file);
-		
-      int newFileRow = fileRow;
-      AbstractFile newFile;
-      if(forward) {
-      do {
-      if(newFileRow==rowCount-1) {
-      if(loop)
-      newFileRow = 0;
-      else
-      return null;
-      }
-      else
-      newFileRow++;
 
-      newFile = model.getFileAtRow(newFileRow);
-      }
-      while(!canViewFile(newFile) && fileRow!=newFileRow);
-      }
-      else {
-      do {
-      if(newFileRow==0) {
-      if(loop)
-      newFileRow = rowCount-1;
-      else
-      return null;
-      }
-      else
-      newFileRow--;
+    ///////////////////////////
+    // ThemeListener methods //
+    ///////////////////////////
 
-      newFile = model.getFileAtRow(newFileRow);
-      }
-      while(!canViewFile(newFile) && fileRow!=newFileRow);
-      }
+    /**
+     * Receives theme color changes notifications.
+     */
+    public void colorChanged(ColorChangedEvent event) {
+        if(event.getColorId() == Theme.EDITOR_BACKGROUND_COLOR)
+            setBackground(event.getColor());
 
-      if(fileRow==newFileRow)
-      return null;
-		
-      return newFile;
-      }
+        repaint();
+    }
 
-    */
+    /**
+     * Not used, implemented as a no-op.
+     */
+    public void fontChanged(FontChangedEvent event) {
+    }
+
+
     //////////////////////
     // Abstract methods //
     //////////////////////
@@ -179,23 +136,4 @@ public abstract class FileViewer extends JPanel implements ThemeListener {
      */
     public abstract void view(AbstractFile file) throws IOException;
 
-
-    // - Theme listening -------------------------------------------------------------
-    // -------------------------------------------------------------------------------
-    /**
-     * Receives theme color changes notifications.
-     * @param colorId identifier of the color that has changed.
-     * @param color   new value for the color.
-     */
-    public void colorChanged(int colorId, Color color) {
-        if(colorId == Theme.EDITOR_BACKGROUND_COLOR)
-            setBackground(color);
-
-        repaint();
-    }
-
-    /**
-     * Not used.
-     */
-    public void fontChanged(int fontId, Font font) {}
 }

@@ -21,6 +21,9 @@ package com.mucommander.ui.viewer;
 import com.mucommander.file.AbstractFile;
 
 /**
+ * A common interface for instanciating {@link FileEditor} implementations, and finding out if a editor is capable
+ * of editing a particular file.
+ *
  * @author Nicolas Rinaudo
  */
 public interface EditorFactory {

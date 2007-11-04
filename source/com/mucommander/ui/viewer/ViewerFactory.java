@@ -21,8 +21,12 @@ package com.mucommander.ui.viewer;
 import com.mucommander.file.AbstractFile;
 
 /**
- * @author Nicolas Rinaudo
- */
+ /**
+  * A common interface for instanciating {@link FileViewer} implementations, and finding out if a viewer is capable
+  * of viewing a particular file.
+  *
+  * @author Nicolas Rinaudo
+  */
 public interface ViewerFactory {
     /**
      * Returns <code>true</code> if this factory can create a file viewer for the specified file.

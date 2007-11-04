@@ -18,11 +18,13 @@
 
 package com.mucommander.ui.viewer.image;
 
-import com.mucommander.ui.viewer.ViewerFactory;
-import com.mucommander.ui.viewer.FileViewer;
 import com.mucommander.file.AbstractFile;
+import com.mucommander.ui.viewer.FileViewer;
+import com.mucommander.ui.viewer.ViewerFactory;
 
 /**
+ * <code>ViewerFactory</code> implementation for creating image viewers.
+ *
  * @author Nicolas Rinaudo
  */
 public class ImageFactory implements ViewerFactory {

@@ -36,7 +36,8 @@ import java.awt.event.KeyEvent;
 
 
 /**
- * 
+ * A specialized <code>JFrame</code> that displays a {@link FileViewer} for a given file.
+ * The {@link FileViewer} instance is provided by {@link ViewerRegistrar}.
  *
  * @author Maxence Bernard
  */
@@ -95,43 +96,6 @@ public class ViewerFrame extends JFrame implements ActionListener, Runnable {
         return menu;
     }
 	
-	
-    public void run() {
-        try {
-            FileViewer viewer = ViewerRegistrar.createFileViewer(file);
-
-            // Test if file is too large to be viewed and warns user
-            long max = viewer.getMaxRecommendedSize();
-            if (max!=-1 && file.getSize()>max) {
-                QuestionDialog dialog = new QuestionDialog(mainFrame, Translator.get("warning"), Translator.get("file_viewer.large_file_warning"), mainFrame,
-                                                           new String[] {Translator.get("file_viewer.open_anyway"), Translator.get("cancel")},
-                                                           new int[]  {0, 1},
-                                                           0);
-	
-                int ret = dialog.getActionValue();
-				
-                if (ret==1 || ret==-1)
-                    return;
-            }
-
-            viewer.setFrame(this);
-            viewer.setCurrentFile(file);
-            viewer.view(file);
-            setViewer(viewer);
-
-            // Sets panel to preferred size, without exceeding a maximum size and with a minumum size
-            pack();
-            DialogToolkit.centerOnWindow(this, mainFrame);
-            setVisible(true);
-        }
-        catch(Exception e) {
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Exception caught: "+e);
-
-            JOptionPane.showMessageDialog(mainFrame, Translator.get("file_viewer.view_error"), Translator.get("file_viewer.view_error_title"), JOptionPane.ERROR_MESSAGE);
-        }
-    }
-
-
     private void setViewer(FileViewer viewer) {
         this.viewer = viewer;
 	
@@ -156,7 +120,61 @@ public class ViewerFrame extends JFrame implements ActionListener, Runnable {
         // Request focus on text area when visible
         FocusRequester.requestFocus(viewer);
     }
-	
+
+
+    /////////////////////////////
+    // Runnable implementation //
+    /////////////////////////////
+
+    public void run() {
+        try {
+            FileViewer viewer = ViewerRegistrar.createFileViewer(file);
+
+            // Test if file is too large to be viewed and warns user
+            long max = viewer.getMaxRecommendedSize();
+            if (max!=-1 && file.getSize()>max) {
+                QuestionDialog dialog = new QuestionDialog(mainFrame, Translator.get("warning"), Translator.get("file_viewer.large_file_warning"), mainFrame,
+                                                           new String[] {Translator.get("file_viewer.open_anyway"), Translator.get("cancel")},
+                                                           new int[]  {0, 1},
+                                                           0);
+
+                int ret = dialog.getActionValue();
+
+                if (ret==1 || ret==-1)
+                    return;
+            }
+
+            viewer.setFrame(this);
+            viewer.setCurrentFile(file);
+            viewer.view(file);
+            setViewer(viewer);
+
+            // Sets panel to preferred size, without exceeding a maximum size and with a minumum size
+            pack();
+            DialogToolkit.centerOnWindow(this, mainFrame);
+            setVisible(true);
+        }
+        catch(Exception e) {
+            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Exception caught: "+e);
+
+            JOptionPane.showMessageDialog(mainFrame, Translator.get("file_viewer.view_error"), Translator.get("file_viewer.view_error_title"), JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+
+    ///////////////////////////////////
+    // ActionListener implementation //
+    ///////////////////////////////////
+
+    public void actionPerformed(ActionEvent e) {
+        if(e.getSource()==closeItem)
+            dispose();
+    }
+
+
+    ////////////////////////
+    // Overridden methods //
+    ////////////////////////
 
     public void pack() {
         super.pack();
@@ -166,12 +184,4 @@ public class ViewerFrame extends JFrame implements ActionListener, Runnable {
         DialogToolkit.fitToScreen(this);
         DialogToolkit.fitToMinDimension(this, MIN_DIMENSION);
     }
-	
-	
-    public void actionPerformed(ActionEvent e) {
-        if(e.getSource()==closeItem)
-            dispose();
-    }
-
-	
 }
