@@ -130,7 +130,6 @@ public class CopyJob extends TransferFileJob {
                 }
                 catch(IOException e) {
                     // File could not be uncompressed properly
-//                    int ret = showErrorDialog(errorDialogTitle, Translator.get("unpack.unable_to_open_zip", currentFile.getName()));
                     int ret = showErrorDialog(errorDialogTitle, Translator.get("cannot_read_file", currentFile.getName()));
                     // Retry loops
                     if(ret==RETRY_ACTION)
@@ -151,12 +150,15 @@ public class CopyJob extends TransferFileJob {
             destFileName = originalName;
 		
         // Create destination AbstractFile instance
-        AbstractFile destFile = FileFactory.getFile(destFolder.getAbsolutePath(true)+destFileName);
-        if(destFile==null) {
-            // Destination file couldn't be created
+        AbstractFile destFile;
+        do {    // Loop for retry
+            try {
+                destFile = destFolder.getDirectChild(destFileName);
+                break;
+            }
+            catch(IOException e) {
+                // Destination file couldn't be instanciated
 
-            // Loop for retry
-            do {
                 int ret = showErrorDialog(errorDialogTitle, Translator.get("cannot_write_file", destFileName));
                 // Retry loops
                 if(ret==RETRY_ACTION)
@@ -164,8 +166,8 @@ public class CopyJob extends TransferFileJob {
                 // Cancel or close dialog return false
                 return false;
                 // Skip continues
-            } while(true);
-        }
+            }
+        } while(true);
 
         // Do nothing if file is a symlink (skip file and return)
         if(file.isSymlink())
@@ -175,7 +177,6 @@ public class CopyJob extends TransferFileJob {
         // if a default action hasn't been specified
         int collision = FileCollisionChecker.checkForCollision(file, destFile);
         boolean append = false;
-//        boolean overwrite = false;
 
         // Handle collision, asking the user what to do or using a default action to resolve the collision 
         if(collision != FileCollisionChecker.NO_COLLOSION) {
@@ -207,14 +208,12 @@ public class CopyJob extends TransferFileJob {
             // Overwrite file
             else if (choice== FileCollisionDialog.OVERWRITE_ACTION) {
                 // Do nothing, simply continue
-//                overwrite = true;
             }
             //  Overwrite file if destination is older
             else if (choice== FileCollisionDialog.OVERWRITE_IF_OLDER_ACTION) {
                 // Overwrite if file is newer (stricly)
                 if(file.getDate()<=destFile.getDate())
                     return false;
-//                overwrite = true;
             }
         }
 
@@ -271,18 +270,8 @@ public class CopyJob extends TransferFileJob {
         }
         // File is a regular file, copy it
         else  {
-// The source of this issue was that FtpClient#storeUniqueFileStream() was used instead open FtpClient#storeFileStream()
-//            // FTP overwrite bug workaround: if the destination file is not deleted, the existing destination
-//            // file is renamed to <filename>.1
-//            if(overwrite && destFile.getURL().getProtocol().equals(FileProtocols.FTP)) {
-//                try { destFile.delete(); }
-//                catch(IOException e) {}
-//            }
-
             // Copy the file
-            boolean success = tryCopyFile(file, destFile, append, errorDialogTitle);
-			
-            return success;
+            return tryCopyFile(file, destFile, append, errorDialogTitle);
         }
     }
 
@@ -334,8 +323,8 @@ public class CopyJob extends TransferFileJob {
         // If this job correponds to a 'local copy' of a single file and in the same directory,
         // select the copied file in the active table after this job has finished (and hasn't been cancelled)
         if(files.size()==1 && newName!=null && baseDestFolder.equals(files.fileAt(0).getParent())) {
-            // Resolve new file instance now that it exists: remote files do not update file attributes after
-            // creation, we need to get an instance that reflects the newly created file attributes
+            // Resolve new file instance now that it exists: some remote files do not immediately update file attributes
+            // after creation, we need to get an instance that reflects the newly created file attributes
             selectFileWhenFinished(FileFactory.getFile(baseDestFolder.getAbsolutePath(true)+newName));
         }
     }

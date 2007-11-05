@@ -27,7 +27,6 @@ import com.mucommander.ui.dialog.file.FileCollisionDialog;
 import com.mucommander.ui.main.MainFrame;
 
 import java.io.IOException;
-import java.io.OutputStream;
 
 
 /**
@@ -74,7 +73,7 @@ public class MkdirJob extends FileJob {
             try {
                 if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Creating "+destFolder+" "+ filename);
 
-                AbstractFile newFile = FileFactory.getFile(destFolder.getAbsolutePath(true)+filename, true);
+                AbstractFile newFile = destFolder.getDirectChild(filename);
 
                 // Check for file collisions, i.e. if the file already exists in the destination
                 int collision = FileCollisionChecker.checkForCollision(null, newFile);
@@ -107,9 +106,6 @@ public class MkdirJob extends FileJob {
                 // Resolve new file instance now that it exists: remote files do not update file attributes after
                 // creation, we need to get an instance that reflects the newly created file attributes
                 newFile = FileFactory.getFile(newFile.getURL());
-
-//if(Debug.ON) Debug.trace("newFile.isDirectory()="+newFile.isDirectory());
-//if(Debug.ON) Debug.trace("newFile.exists()="+newFile.exists());
 
                 // Select newly created file when job is finished
                 selectFileWhenFinished(newFile);

@@ -138,12 +138,15 @@ public class MoveJob extends TransferFileJob {
             destFileName = originalName;
 		
         // Create destination AbstractFile instance
-        AbstractFile destFile = FileFactory.getFile(destFolder.getAbsolutePath(true)+destFileName);
-        if(destFile==null) {
-            // Destination file couldn't be created
+        AbstractFile destFile;
+        do {    // Loop for retry
+            try {
+                destFile = destFolder.getDirectChild(destFileName);
+                break;
+            }
+            catch(IOException e) {
+                // Destination file couldn't be instanciated
 
-            // Loop for retry
-            do {
                 int ret = showErrorDialog(errorDialogTitle, Translator.get("cannot_write_file", destFileName));
                 // Retry loops
                 if(ret==RETRY_ACTION)
@@ -151,8 +154,8 @@ public class MoveJob extends TransferFileJob {
                 // Cancel or close dialog return false
                 return false;
                 // Skip continues
-            } while(true);
-        }
+            }
+        } while(true);
 
         // Do not follow symlink, simply delete it and return
         if(file.isSymlink()) {
@@ -179,7 +182,6 @@ public class MoveJob extends TransferFileJob {
         // if a default action hasn't been specified
         int collision = FileCollisionChecker.checkForCollision(file, destFile);
         boolean append = false;
-//        boolean overwrite = false;
 
         boolean caseRenaming = false;
         // Tests if destination filename is a variation of the original filename with a different case.
@@ -222,14 +224,12 @@ public class MoveJob extends TransferFileJob {
             // Overwrite file
             else if (choice== FileCollisionDialog.OVERWRITE_ACTION) {
                 // Do nothing, simply continue
-//                overwrite = true;
             }
             //  Overwrite file if destination is older
             else if (choice== FileCollisionDialog.OVERWRITE_IF_OLDER_ACTION) {
                 // Overwrite if file is newer (stricly)
                 if(file.getDate()<=destFile.getDate())
                     return false;
-//                overwrite = true;
             }
         }
 
@@ -407,8 +407,8 @@ public class MoveJob extends TransferFileJob {
         // If this job correponds to a file renaming in the same directory, select the renamed file
         // in the active table after this job has finished (and hasn't been cancelled)
         if(files.size()==1 && newName!=null && baseDestFolder.equals(files.fileAt(0).getParent())) {
-            // Resolve new file instance now that it exists: remote files do not update file attributes after
-            // creation, we need to get an instance that reflects the newly created file attributes
+            // Resolve new file instance now that it exists: some remote files do not immediately update file attributes
+            // after creation, we need to get an instance that reflects the newly created file attributes
             selectFileWhenFinished(FileFactory.getFile(baseDestFolder.getAbsolutePath(true)+newName));
         }
     }
