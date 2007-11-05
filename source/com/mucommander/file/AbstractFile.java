@@ -854,7 +854,7 @@ public abstract class AbstractFile implements FilePermissions {
      * An <code>IOException</code> may be thrown if the child file could not be instanciated but the returned file
      * instance should never be <code>null</code>.
      *
-     * @param relativePath the child's path, relatively to this file's path
+     * @param relativePath the child's path, relative to this file's path
      * @return an AbstractFile representing the requested child file, never null
      * @throws IOException if the child file could not be instanciated
      */
@@ -866,20 +866,25 @@ public abstract class AbstractFile implements FilePermissions {
     }
 
     /**
-     * Returns a child of this file, whose path is the concatenation of this file's path and the given filename.
-     * Although this method does not enforce it, the specified filename should not contain any separator character,
-     * except for a trailing one.<br/>
-     * An <code>IOException</code> may be thrown if the child file could not be instanciated but the returned file 
-     * instance should never be <code>null</code>.
+     * Returns a direct child of this file, whose path is the concatenation of this file's path and the given filename.
+     * An <code>IOException</code> will be thrown in any of the following cases:
+     * <ul>
+     *  <li>if the filename contains one or several path separator (the file would not be a direct child)</li>
+     *  <li>if the child file could not be instanciated</li>
+     * </ul>
+     * This method never returns <<code>null</code>.
      *
      * <p>Although {@link #getChild} can be used to retrieve a direct child file, this method should be favored because
      * it allows to use this file instance as the parent of the returned child file.</p>
      *
-     * @param filename the child's filename
+     * @param filename the name of the child file to be created
      * @return an AbstractFile representing the requested direct child file, never null
-     * @throws IOException if the child file could not be instanciated
+     * @throws IOException in any of the cases listed above
      */
     public final AbstractFile getDirectChild(String filename) throws IOException {
+        if(filename.indexOf(getSeparator())!=-1)
+            throw new IOException();
+
         AbstractFile childFile = getChild(filename);
 
         // Use this file as the child's parent, it avoids creating a new AbstractFile instance when getParent() is called
