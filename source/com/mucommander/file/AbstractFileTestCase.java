@@ -89,7 +89,7 @@ public abstract class AbstractFileTestCase extends TestCase implements FilePermi
      * before the test. In particular, all files registered with {@link #deleteWhenFinished(AbstractFile)} are
      * deleted if they exist.
      *
-     * @throws IOException if an error occurred while delete files registered with {@link # deleteWhenFinished(AbstractFile)}
+     * @throws IOException if an error occurred while delete files registered with {@link #deleteWhenFinished(AbstractFile)}
      */
     protected void tearDown() throws IOException {
         Iterator iterator = filesToDelete.iterator();
