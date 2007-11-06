@@ -160,6 +160,8 @@ Known issues:
 - The bookmark file system doesn't allow users to specify which credentials
   they wish to use when selecting a bookmark that needs authentification, it
   will default to the first in the list.
+- Authentication issues when using several sets of credentials (login/password)
+  on the same server.
 
 
 Command Line Interface
