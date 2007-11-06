@@ -378,6 +378,11 @@ public class Launcher {
         if(useSplash)
             splashScreen = new SplashScreen(RuntimeConstants.VERSION, "Loading preferences...");
 
+        // This the property is supposed to have the java.net package use the proxy defined in the system settings
+        // to establish HTTP connections. This property is supported only under Java 1.5 and up.
+        // Note that Mac OS X already uses the system HTTP proxy, with or without this property being set.
+        System.setProperty("java.net.useSystemProxies", "true");
+
         // If we're not running under OS_X, preferences haven't been loaded yet.
         if(PlatformManager.getOsFamily() != PlatformManager.MAC_OS_X) {
             try {MuConfiguration.read();}
