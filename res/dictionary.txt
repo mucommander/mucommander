@@ -1028,6 +1028,24 @@ nb_folders:pt_BR:%1 diretório(s)
 nb_folders:NL:%1 map(pen)
 nb_folders:SK:%1 priečinok(priečinky)
 
+# Displayed briefly on some panels while their contents is being loaded.
+loading:EN:Loading...
+loading:FR:Chargement en cours...
+# Translation missing
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ##########################
 # Generic error messages #
