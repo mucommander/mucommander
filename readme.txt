@@ -113,7 +113,8 @@ Improvements:
 - Shell encoding is now auto-detected by default, unless a specific encoding
   is set in the preferences.
 - Simplified and extended the theme editor, with new 'selection outline' and
-  'alternate background' values.
+  'alternate background' values. A new 'Striped' theme has been added to
+  show these effects off.
 - Added keyboard shortcuts for the items in the drive popup button.
 - Windows: drives in the drive popup button now show extended names.
 - Bzip2 read-access speed substantially improved.
