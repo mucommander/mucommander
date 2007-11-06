@@ -29,6 +29,7 @@ import com.mucommander.text.Translator;
 import com.mucommander.ui.button.ButtonChoicePanel;
 import com.mucommander.ui.button.CollapseExpandButton;
 import com.mucommander.ui.dialog.FocusDialog;
+import com.mucommander.ui.layout.AsyncPanel;
 import com.mucommander.ui.layout.InformationPane;
 import com.mucommander.ui.layout.YBoxPanel;
 import com.mucommander.ui.main.MainFrame;
@@ -107,10 +108,14 @@ public class DeleteDialog extends FocusDialog implements ItemListener, ActionLis
         mainPanel.add(informationPane);
         mainPanel.addSpace(10);
 
-        JScrollPane detailsPane = new JScrollPane(createFileDetailsArea(files), JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        AsyncPanel detailsPane = new AsyncPanel() {
+            public JComponent getTargetComponent() {
+                return new JScrollPane(createFileDetailsArea(DeleteDialog.this.files), JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+            }
+        };
 
         JPanel borderPanel = new JPanel(new BorderLayout());
-        borderPanel.add(new CollapseExpandButton(Translator.get("nb_files", ""+files.size()), detailsPane, this, false), BorderLayout.WEST);
+        borderPanel.add(new CollapseExpandButton(Translator.get("nb_files", ""+files.size()), detailsPane, false), BorderLayout.WEST);
 
         // Create buttons and button panel
         deleteButton = new JButton(Translator.get("delete"));
@@ -161,6 +166,7 @@ public class DeleteDialog extends FocusDialog implements ItemListener, ActionLis
         AbstractFile file;
         for(int i=0; i<nbFiles; i++) {
             file = files.fileAt(i);
+
             sb.append(file.getName());
             if(i!=nbFiles-1)
                 sb.append('\n');
