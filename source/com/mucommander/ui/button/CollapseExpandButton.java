@@ -35,9 +35,10 @@ import java.awt.event.KeyListener;
  */
 public class CollapseExpandButton extends ArrowButton implements ActionListener, KeyListener {
 
+    /** The component to collapse/expand */
     private Component comp;
 
-
+    /** True if this button is in the 'expanded' state and the associated component is being displayed */
     private boolean expandedState;
 
     
