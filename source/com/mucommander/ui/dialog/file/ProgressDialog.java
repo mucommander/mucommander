@@ -191,7 +191,7 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
             speedGraph.setPreferredSize(new Dimension(0, SPEED_GRAPH_HEIGHT));
             advancedPanel.add(speedGraph);
 
-            this.collapseExpandButton = new CollapseExpandButton(Translator.get("progress_dialog.advanced"), advancedPanel, this, true);
+            this.collapseExpandButton = new CollapseExpandButton(Translator.get("progress_dialog.advanced"), advancedPanel, true);
             collapseExpandButton.setExpandedState(MuConfiguration.getVariable(MuConfiguration.PROGRESS_DIALOG_EXPANDED,
                                                                                    MuConfiguration.DEFAULT_PROGRESS_DIALOG_EXPANDED));
             tempPanel.add(collapseExpandButton, BorderLayout.EAST);
