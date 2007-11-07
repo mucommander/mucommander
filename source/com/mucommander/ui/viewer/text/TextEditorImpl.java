@@ -50,6 +50,7 @@ class TextEditorImpl implements ThemeListener, ActionListener {
     private JMenuItem selectAllItem;
     private JMenuItem findItem;
     private JMenuItem findNextItem;
+    private JMenuItem findPreviousItem;
 
     private String searchString;
 
@@ -79,24 +80,32 @@ class TextEditorImpl implements ThemeListener, ActionListener {
 				Translator.get("text_viewer.find") + ":",
 				Translator.get("text_viewer.find"),
 				JOptionPane.PLAIN_MESSAGE, null, null, searchString)).toLowerCase();
-		doSearch(0);
+		doSearch(0, true);
 	}
 
     private void findNext() {
-    	doSearch(textArea.getSelectionEnd());
+    	doSearch(textArea.getSelectionEnd(), true);
     }
+    
+    private void findPrevious() {
+    	doSearch(textArea.getSelectionStart() - 1, false);
+	}
 
     private String getTextLC() {
     	return textArea.getText().toLowerCase();
     }
 
-    private void doSearch(int startPos) {
+    private void doSearch(int startPos, boolean forward) {
     	if (searchString == null || searchString.length() == 0)
     		return;
-		int pos = getTextLC().indexOf(searchString, startPos);
+		int pos;
+		if (forward) {
+			pos = getTextLC().indexOf(searchString, startPos);
+		} else {
+			pos = getTextLC().lastIndexOf(searchString, startPos);
+		}
 		if (pos >= 0) {
-			textArea.setSelectionStart(pos);
-			textArea.setSelectionEnd(pos + searchString.length());
+			textArea.select(pos, pos + searchString.length());
 		} else {
             // Beep when no match has been found.
             // The beep method is called from a separate thread because this method seems to lock until the beep has
@@ -138,6 +147,7 @@ class TextEditorImpl implements ThemeListener, ActionListener {
 
         findItem = MenuToolkit.addMenuItem(menu, Translator.get("text_viewer.find"), menuItemMnemonicHelper, KeyStroke.getKeyStroke("control F"), this);
         findNextItem = MenuToolkit.addMenuItem(menu, Translator.get("text_viewer.find_next"), menuItemMnemonicHelper, KeyStroke.getKeyStroke("F3"), this);
+        findPreviousItem = MenuToolkit.addMenuItem(menu, Translator.get("text_viewer.find_previous"), menuItemMnemonicHelper, KeyStroke.getKeyStroke("shift F3"), this);
     }
 
 
@@ -184,6 +194,8 @@ class TextEditorImpl implements ThemeListener, ActionListener {
         	find();
         else if(source == findNextItem)
         	findNext();
+        else if(source == findPreviousItem)
+        	findPrevious();
     }
 
 
