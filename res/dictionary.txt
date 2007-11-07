@@ -707,6 +707,7 @@ license:SI:Licenca
 license:RU:Лицензия
 license:DE:Lizenz
 license:CS:Licence
+license:PL:Licencja
 # Translation missing
 
 
@@ -957,6 +958,7 @@ preview:SI:Predogled
 preview:RU:Предпросмотр
 preview:DE:Vorschau
 preview:CS:Náhled
+preview:PL:Podgląd
 # Translation missing
 
 
@@ -979,6 +981,7 @@ sample_text:SI:Vzorec besedila
 sample_text:RU:Пример текста
 sample_text:DE:Beispieltext
 sample_text:CS:Ukázkový text
+sample_text:PL:Przykładowy tekst
 # Translation missing
 
 
@@ -3373,6 +3376,7 @@ com.mucommander.ui.action.ToggleShowFoldersFirstAction.label:pt_BR:Exibir diret�
 com.mucommander.ui.action.ToggleShowFoldersFirstAction.label:SI:Najprej prikaži mape
 com.mucommander.ui.action.ToggleShowFoldersFirstAction.label:RU:Вынести каталоги в начало списка
 com.mucommander.ui.action.ToggleShowFoldersFirstAction.label:DE:Ordner zuerst anzeigen
+com.mucommander.ui.action.ToggleShowFoldersFirstAction.label:PL:Pokazuj foldery jako pierwsze
 # Translation missing
 
 
@@ -6936,6 +6940,7 @@ text_viewer.find_next:PL:Znajdź następne
 
 text_viewer.find_previous:EN:Find previous
 text_viewer.find_previous:FR:Rechercher précédent
+text_viewer.find_previous:PL:Znajdź poprzednie
 # Translation missing
 
 
@@ -7423,6 +7428,7 @@ theme_editor.folder_tab:SI:Vrstica z mapami
 theme_editor.folder_tab:RU:Панель каталога
 theme_editor.folder_tab:DE:Ordnerbereich
 theme_editor.folder_tab:CS:Panely souborů
+theme_editor.folder_tab:PL:Panel plików
 # Translation missing
 
 
@@ -7450,6 +7456,7 @@ theme_editor.shell_tab:CS:Shell
 
 theme_editor.shell_history_tab:EN:Shell history
 theme_editor.shell_history_tab:FR:Historique du shell
+theme_editor.shell_history_tab:PL:Historia shell'a
 # Translation missing
 
 
@@ -7489,6 +7496,7 @@ theme_editor.free_space:SI:Nezaseden prostor
 theme_editor.free_space:RU:Свободное место
 theme_editor.free_space:DE:Free Speicher
 theme_editor.free_space:CS:Volné místo
+theme_editor.free_space:PL:Wolne miejsce
 # Translation missing
 
 
@@ -7529,6 +7537,7 @@ theme_editor.free_space.warning:SI:Opozorilo
 theme_editor.free_space.warning:RU:Заканчивается
 theme_editor.free_space.warning:DE:Warnung
 theme_editor.free_space.warning:CS:Upozornění
+theme_editor.free_space.warning:PL:Ostrzeżenie
 # Translation missing
 
 
@@ -7549,6 +7558,7 @@ theme_editor.free_space.critical:SI:Kritično
 theme_editor.free_space.critical:RU:Очень мало
 theme_editor.free_space.critical:DE:Kritisch
 theme_editor.free_space.critical:CS:Kritické
+theme_editor.free_space.critical:PL:Krytyczne
 # Translation missing
 
 
@@ -7570,6 +7580,7 @@ theme_editor.locationbar_tab:SI:Lokacijska vrstica
 theme_editor.locationbar_tab:RU:Указатель местонахождения
 theme_editor.locationbar_tab:DE:Bereich aktueller Ordner
 theme_editor.locationbar_tab:CS:Adresní řádek
+theme_editor.locationbar_tab:PL:Pasek lokalizacji
 # Translation missing
 
 
@@ -7589,6 +7600,7 @@ theme_editor.editor_tab:SI:Urejevalnik datotek
 theme_editor.editor_tab:RU:Редактор файлов
 theme_editor.editor_tab:DE:Dateieditor
 theme_editor.editor_tab:CS:Editor souborů
+theme_editor.editor_tab:PL:Edytor plików
 # Translation missing
 
 
@@ -7654,6 +7666,7 @@ theme_editor.font:SK:Písmo
 
 theme_editor.active_panel:EN:Active
 theme_editor.active_panel:FR:Actif
+theme_editor.active_panel:PL:Aktywny
 # Translation missing
 
 
@@ -7661,6 +7674,7 @@ theme_editor.active_panel:FR:Actif
 
 theme_editor.inactive_panel:EN:Inactive
 theme_editor.inactive_panel:FR:Inactif
+theme_editor.inactive_panel:PL:Nieaktywny
 # Translation missing
 
 
@@ -7668,6 +7682,7 @@ theme_editor.inactive_panel:FR:Inactif
 
 theme_editor.general_panel:EN:General
 theme_editor.general_panel:FR:General
+theme_editor.general_panel:PL:Ogólne
 # Translation missing
 
 
@@ -7735,6 +7750,7 @@ theme_editor.border:SI:Okvir
 theme_editor.border:RU:Рамка
 theme_editor.border:DE:Rand
 theme_editor.border:CS:Ohraničení
+theme_editor.border:PL:Ramka
 # Translation missing
 
 
@@ -7767,6 +7783,7 @@ theme_editor.background:SK:Pozadie
 
 theme_editor.alternate_background:EN:Alternate background
 theme_editor.alternate_background:FR:Fond alterné
+theme_editor.alternate_background:PL:Tło (alternatywne)
 
 
 theme_editor.unfocused_background:EN:Background (without focus)
@@ -7810,6 +7827,7 @@ theme_editor.quick_search.unmatched_file:SI:Neustrezna datoteka
 theme_editor.quick_search.unmatched_file:RU:Несовпадающие файлы
 theme_editor.quick_search.unmatched_file:DE:Nichtpassende Datei
 theme_editor.quick_search.unmatched_file:CS:Nevyhovující soubor
+theme_editor.quick_search.unmatched_file:PL:Pliki niepasujące
 # Translation missing
 
 
@@ -7837,6 +7855,7 @@ theme_editor.text:SI:Pisava
 theme_editor.text:RU:Текст
 theme_editor.text:DE:Text
 theme_editor.text:CS:Text
+theme_editor.text:PL:Tekst
 # Translation missing
 
 
@@ -7859,6 +7878,7 @@ theme_editor.progress:SI:Napredek
 theme_editor.progress:RU:Индикатор выполнения
 theme_editor.progress:DE:Fortschritt
 theme_editor.progress:CS:Průběh
+theme_editor.progress:PL:Postęp
 # Translation missing
 
 
@@ -7883,6 +7903,7 @@ theme_editor.normal:SI:Normalno
 theme_editor.normal:RU:Обычный
 theme_editor.normal:DE:Normal
 theme_editor*normal:CS:Normální
+theme_editor.normal:PL:Zwykły
 # Translation missing
 
 
@@ -7931,6 +7952,7 @@ theme_editor.selected:SI:Izbrano
 theme_editor.selected:RU:Выбранный
 theme_editor.selected:DE:Ausgewählt
 theme_editor.selected:CS:Výběr
+theme_editor.selected:PL:Zaznaczone
 # Translation missing
 
 
@@ -7978,6 +8000,7 @@ theme_editor.color:SI:Barva
 theme_editor.color:RU:Цвет
 theme_editor.color:DE:Farbe
 theme_editor.color:CS:Barva
+theme_editor.color:PL:Kolor
 # Translation missing
 
 
@@ -8005,6 +8028,7 @@ theme_editor.colors:SI:Barve
 theme_editor.colors:RU:Цвета
 theme_editor.colors:DE:Farben
 theme_editor.colors:CS:Barvy
+theme_editor.colors:PL:Kolory
 # Translation missing
 
 
@@ -8405,6 +8429,7 @@ prefs_dialog.show_seconds:ES:Mostrar segundos
 prefs_dialog.show_seconds:SI:Prikaži sekunde
 prefs_dialog.show_seconds:RU:Показывать секунды
 prefs_dialog.show_seconds:DE:Sekunden anzeigen
+prefs_dialog.show_seconds:PL:Pokaż sekundy
 # Translation missing
 
 
@@ -8431,6 +8456,7 @@ prefs_dialog.show_century:ES:Mostrar siglo
 prefs_dialog.show_century:SI:Prikaži stoletje
 prefs_dialog.show_century:RU:Показывать 4 цифры года
 prefs_dialog.show_century:DE:Jahrhundert anzeigen
+prefs_dialog.show_century:PL:Pokaż wiek
 # Translation missing
 
 
@@ -8793,6 +8819,7 @@ prefs_dialog.use_system_file_icons:ES:Usar iconos del sistema de ficheros
 prefs_dialog.use_system_file_icons:SI:Uporabi sistemske ikone
 prefs_dialog.use_system_file_icons:RU:Использовать системные значки файлов
 prefs_dialog.use_system_file_icons:DE:Dateisystem-Icons nutzen
+prefs_dialog.use_system_file_icons:PL:Używaj ikon systemowych
 # Translation missing
 
 
@@ -8818,6 +8845,7 @@ prefs_dialog.use_system_file_icons.always:ES:Siempre
 prefs_dialog.use_system_file_icons.always:SI:Vedno
 prefs_dialog.use_system_file_icons.always:RU:Всегда
 prefs_dialog.use_system_file_icons.always:DE:Immer
+prefs_dialog.use_system_file_icons.always:PL:Zawsze
 # Translation missing
 
 
@@ -8843,6 +8871,7 @@ prefs_dialog.use_system_file_icons.never:ES:Nunca
 prefs_dialog.use_system_file_icons.never:SI:Nikoli
 prefs_dialog.use_system_file_icons.never:RU:Никогда
 prefs_dialog.use_system_file_icons.never:DE:Nie
+prefs_dialog.use_system_file_icons.never:PL:Nigdy
 # Translation missing
 
 
@@ -8868,6 +8897,7 @@ prefs_dialog.use_system_file_icons.applications:ES:Sólo para las aplicaciones
 prefs_dialog.use_system_file_icons.applications:SI:Samo za aplikacije
 prefs_dialog.use_system_file_icons.applications:RU:Только для приложений
 prefs_dialog.use_system_file_icons.applications:DE:Nur für Programme
+prefs_dialog.use_system_file_icons.applications:PL:Tylko dla aplikacji
 # Translation missing
 
 
@@ -8878,6 +8908,7 @@ prefs_dialog.use_system_file_icons.applications:DE:Nur für Programme
 
 prefs_dialog.edit_current_theme:EN:Edit current theme...
 prefs_dialog.edit_current_theme:FR:Editer le thème courrant...
+prefs_dialog.edit_current_theme:PL:Edytuj bieżący temat...
 # Translation missing
 
 
@@ -8916,6 +8947,7 @@ prefs_dialog.import_theme:SI:Uvoz teme
 prefs_dialog.import_theme:RU:Импортировать тему
 prefs_dialog.import_theme:DE:Thema importieren
 prefs_dialog.import_theme:CS:Importovat téma
+prefs_dialog.import_theme:PL:Importuj temat
 # Translation missing
 
 
@@ -8986,6 +9018,7 @@ prefs_dialog.export_theme:SI:Izvoz %1
 prefs_dialog.export_theme:RU:Экспорт %1
 prefs_dialog.export_theme:DE:Exportiere %1
 prefs_dialog.export_theme:CS:Exportovat %1
+prefs_dialog.export_theme:PL:Eksport %1
 # Translation missing
 
 
@@ -9007,6 +9040,7 @@ prefs_dialog.import:SI:Uvoz
 prefs_dialog.import:RU:Импорт
 prefs_dialog.import:DE:Import
 prefs_dialog.import:CS:Importovat
+prefs_dialog.import:PL:Import
 # Translation missing
 
 
@@ -9027,6 +9061,7 @@ prefs_dialog.export:SI:Izvoz
 prefs_dialog.export:RU:Экспорт
 prefs_dialog.export:DE:Export
 prefs_dialog.export:CS:Exportovat
+prefs_dialog.export:PL:Eksport
 # Translation missing
 
 
@@ -9312,6 +9347,7 @@ prefs_dialog.custom_shell:HU:Egyedi végrehajtás használata
 
 prefs_dialog.shell_encoding:EN:Shell encoding
 prefs_dialog.shell_encoding:FR:Encodage du shell
+prefs_dialog.shell_encoding:PL:Kodowanie shella
 # Translation missing
 
 
@@ -9361,6 +9397,7 @@ prefs_dialog.enable_system_notifications:SI:Omogoči sistemska opozorila
 prefs_dialog.enable_system_notifications:RU:Разрешить системные уведомления
 prefs_dialog.enable_system_notifications:DE:System-Nachrichten einschalten
 prefs_dialog.enable_system_notifications:CS:Zobrazovat oznámení systému
+prefs_dialog.enable_system_notifications:PL:Włącz powiadomienia
 # Translation missing
 
 
@@ -9753,6 +9790,7 @@ theme.current:SI:Trenutno
 theme.current:RU:текущая
 theme.current:DE:aktuell
 theme.current:CS:stávající
+theme.current:PL:bieżący
 # Translation missing
 
 
@@ -10174,6 +10212,7 @@ color_chooser.alpha:SI:Alfa prepustnost
 color_chooser.alpha:RU:Прозрачность
 color_chooser.alpha:DE:Alpha-Transparenz
 color_chooser.alpha:CS:Průhlednost alfa
+color_chooser.alpha:PL:Przeźroczystość
 # Translation missing
 
 
