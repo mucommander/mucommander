@@ -26,7 +26,7 @@ import java.util.Hashtable;
 
 /**
  * This action triggers in-table renaming of the currently selected file, if no file is marked.
- * If files are marked, it simply invokes 'Move dialog' just like {@link com.mucommander.ui.action}.
+ * If files are marked, it simply invokes 'Move dialog' just like {@link CopyAction}.
  *
  * @author Maxence Bernard
  */
