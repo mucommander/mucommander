@@ -22,26 +22,26 @@ import com.mucommander.PlatformManager;
 import com.mucommander.bonjour.BonjourDirectory;
 import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.text.Translator;
+import com.mucommander.ui.combobox.SaneComboBox;
 import com.mucommander.ui.dialog.pref.PreferencesDialog;
 import com.mucommander.ui.dialog.pref.PreferencesPanel;
+import com.mucommander.ui.layout.XAlignedComponentPanel;
 import com.mucommander.ui.layout.YBoxPanel;
 import com.mucommander.ui.notifier.AbstractNotifier;
-import com.mucommander.ui.layout.XAlignedComponentPanel;
-import com.mucommander.ui.combobox.SaneComboBox;
 
-import java.nio.charset.Charset;
-import java.util.Iterator;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.nio.charset.Charset;
+import java.util.Iterator;
 
 /**
  * 'Misc' preferences panel.
  *
  * @author Maxence Bernard
  */
-class MiscPanel extends PreferencesPanel {
+class MiscPanel extends PreferencesPanel implements ItemListener {
 
     /** Custom shell command text field */
     private JTextField customShellField;
@@ -113,6 +113,8 @@ class MiscPanel extends PreferencesPanel {
         else
             useDefaultShellRadioButton.setSelected(true);
 
+        useCustomShellRadioButton.addItemListener(this);
+
         ButtonGroup buttonGroup = new ButtonGroup();
         buttonGroup.add(useDefaultShellRadioButton);
         buttonGroup.add(useCustomShellRadioButton);
@@ -122,14 +124,11 @@ class MiscPanel extends PreferencesPanel {
         shellPanel.setLabelLeftAligned(true);
         shellPanel.setBorder(BorderFactory.createTitledBorder(Translator.get("prefs_dialog.shell")));
 
+        customShellField = new JTextField(MuConfiguration.getVariable(MuConfiguration.CUSTOM_SHELL, ""));
+        customShellField.setEnabled(useCustomShellRadioButton.isSelected());
+
         shellPanel.addRow(useDefaultShellRadioButton, new JLabel(PlatformManager.getDefaultShellCommand()), 5);
-        shellPanel.addRow(useCustomShellRadioButton, customShellField = new JTextField(MuConfiguration.getVariable(MuConfiguration.CUSTOM_SHELL, "")), 10);
-        customShellField.addKeyListener(new KeyAdapter() {
-                public void keyTyped(KeyEvent e) {
-                    if(!useCustomShellRadioButton.isSelected())
-                        useCustomShellRadioButton.setSelected(true);
-                }
-            });
+        shellPanel.addRow(useCustomShellRadioButton, customShellField, 10);
         shellPanel.addRow(Translator.get("prefs_dialog.shell_encoding"), createEncodingComboBox(), 5);
 
         northPanel.add(shellPanel, 5);
@@ -164,9 +163,22 @@ class MiscPanel extends PreferencesPanel {
     }
 
 
-    ///////////////////////
-    // PrefPanel methods //
-    ///////////////////////
+    /////////////////////////////////
+    // ItemListener implementation //
+    /////////////////////////////////
+
+    public void itemStateChanged(ItemEvent e) {
+        Object source = e.getSource();
+        if(source==useCustomShellRadioButton) {
+            customShellField.setEnabled(useCustomShellRadioButton.isSelected());
+        }
+    }
+
+
+    //////////////////////////////
+    // PrefPanel implementation //
+    //////////////////////////////
+
     protected void commit() {
         MuConfiguration.setVariable(MuConfiguration.CHECK_FOR_UPDATE, checkForUpdatesCheckBox.isSelected());
 
