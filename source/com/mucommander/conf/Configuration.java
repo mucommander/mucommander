@@ -51,7 +51,17 @@ import java.util.EmptyStackException;
  * <h3>Variable types</h3>
  * While the <code>com.mucommander.conf</code> really only handles one type of variables, strings, it offers
  * tools to cast them as primitive Java types (int, long, float, double, boolean). This is done through the use
- * of the various primitive types' class implementation <code>parseXXX</code> method.
+ * of the various primitive types' class implementation <code>parseXXX</code> method.<br>
+ * When a variable hasn't been set but ant attempt is made to cast it, the standard Java default value will
+ * be returned:
+ * <ul>
+ *   <li>String: <code>null</code></li>
+ *   <li>Integer: <code>0</code></li>
+ *   <li>Long: <code>0</code></li>
+ *   <li>Float: <code>0</code></li>
+ *   <li>Double: <code>0</code></li>
+ *   <li>Boolean: <code>false</code></li>
+ * </ul>
  * </p>
  * <p>
  * <h3>Configuration file format</h3>
