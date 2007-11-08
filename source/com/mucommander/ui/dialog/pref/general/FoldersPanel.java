@@ -25,33 +25,31 @@ import com.mucommander.ui.dialog.pref.PreferencesDialog;
 import com.mucommander.ui.dialog.pref.PreferencesPanel;
 import com.mucommander.ui.layout.XBoxPanel;
 import com.mucommander.ui.layout.YBoxPanel;
-import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.WindowManager;
 
 import javax.swing.*;
-import java.util.Iterator;
 import java.awt.*;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.awt.event.*;
+import java.io.File;
 
 
 /**
  * 'Folders' preferences panel.
  *
- * @author Maxence Bernard
+ * @author Maxence Bernard, Mariuz Jakubowski
  */
-class FoldersPanel extends PreferencesPanel implements ItemListener, KeyListener {
+class FoldersPanel extends PreferencesPanel implements ItemListener, KeyListener, ActionListener {
 
     // Startup folders
     private JRadioButton leftLastFolderRadioButton;
     private JRadioButton leftCustomFolderRadioButton;
     private JTextField leftCustomFolderTextField;
+    private JButton leftCustomFolderButton;
 	
     private JRadioButton rightLastFolderRadioButton;
     private JRadioButton rightCustomFolderRadioButton;
     private JTextField rightCustomFolderTextField;
+	private JButton rightCustomFolderButton;
 
     // Show hidden files?
     private JCheckBox showHiddenFilesCheckBox;
@@ -99,12 +97,20 @@ class FoldersPanel extends PreferencesPanel implements ItemListener, KeyListener
         leftCustomFolderTextField = new JTextField(MuConfiguration.getVariable(MuConfiguration.LEFT_CUSTOM_FOLDER, ""));
         leftCustomFolderTextField.addKeyListener(this);
         tempPanel.add(leftCustomFolderTextField);
+
+        leftCustomFolderButton = new JButton("...");
+        leftCustomFolderButton.addActionListener(this);
+        tempPanel.add(leftCustomFolderButton);
         startupFolderPanel.add(tempPanel);
 
-        if(MuConfiguration.getVariable(MuConfiguration.LEFT_STARTUP_FOLDER, "").equals(MuConfiguration.STARTUP_FOLDER_LAST))
+        if(MuConfiguration.getVariable(MuConfiguration.LEFT_STARTUP_FOLDER, "").equals(MuConfiguration.STARTUP_FOLDER_LAST)) {
             leftLastFolderRadioButton.setSelected(true);
+            setCustomFolderComponentsEnabled(true, false);
+        }
         else
             leftCustomFolderRadioButton.setSelected(true);
+
+        leftCustomFolderRadioButton.addItemListener(this);
 
         ButtonGroup buttonGroup = new ButtonGroup();
         buttonGroup.add(leftLastFolderRadioButton);
@@ -132,12 +138,20 @@ class FoldersPanel extends PreferencesPanel implements ItemListener, KeyListener
         rightCustomFolderTextField = new JTextField(MuConfiguration.getVariable(MuConfiguration.RIGHT_CUSTOM_FOLDER, ""));
         rightCustomFolderTextField.addKeyListener(this);
         tempPanel.add(rightCustomFolderTextField);
+
+        rightCustomFolderButton = new JButton("...");
+        rightCustomFolderButton.addActionListener(this);
+        tempPanel.add(rightCustomFolderButton);
         startupFolderPanel.add(tempPanel);
 
-        if(MuConfiguration.getVariable(MuConfiguration.RIGHT_STARTUP_FOLDER, "").equals(MuConfiguration.STARTUP_FOLDER_LAST))
+        if(MuConfiguration.getVariable(MuConfiguration.RIGHT_STARTUP_FOLDER, "").equals(MuConfiguration.STARTUP_FOLDER_LAST)) {
             rightLastFolderRadioButton.setSelected(true);
+            setCustomFolderComponentsEnabled(false, false);
+        }
         else
             rightCustomFolderRadioButton.setSelected(true);
+
+        rightCustomFolderRadioButton.addItemListener(this);
 
         buttonGroup = new ButtonGroup();
         buttonGroup.add(rightLastFolderRadioButton);
@@ -183,9 +197,22 @@ class FoldersPanel extends PreferencesPanel implements ItemListener, KeyListener
         add(northPanel, BorderLayout.NORTH);
     }
 
-    ///////////////////////
-    // PrefPanel methods //
-    ///////////////////////
+    /**
+     * Enables/disables the custom folder components.
+     *
+     * @param isLeft true if the components pertain to the left folder
+     * @param enabled true to enable the components
+     */
+    private void setCustomFolderComponentsEnabled(boolean isLeft, boolean enabled) {
+        (isLeft?leftCustomFolderTextField:rightCustomFolderTextField).setEnabled(enabled);
+        (isLeft?leftCustomFolderButton:rightCustomFolderButton).setEnabled(enabled);
+    }
+
+
+    /////////////////////////////////////
+    // PreferencesPanel implementation //
+    /////////////////////////////////////
+
     protected void commit() {
         MuConfiguration.setVariable(MuConfiguration.LEFT_STARTUP_FOLDER, leftLastFolderRadioButton.isSelected() ? MuConfiguration.STARTUP_FOLDER_LAST :
                 MuConfiguration.STARTUP_FOLDER_CUSTOM);
@@ -212,20 +239,29 @@ class FoldersPanel extends PreferencesPanel implements ItemListener, KeyListener
     }
 
 
-    //////////////////////////
-    // ItemListener methods //
-    //////////////////////////
+    /////////////////////////////////
+    // ItemListener implementation //
+    /////////////////////////////////
 
     public void itemStateChanged(ItemEvent event) {
+        Object source = event.getSource();
+
         // Disable 'show .DS_Store files' option when 'Show hidden files' is disabled, as .DS_Store files are hidden files
-        if(event.getSource()==showHiddenFilesCheckBox)
+        if(source==showHiddenFilesCheckBox) {
             showDSStoreFilesCheckBox.setEnabled(showHiddenFilesCheckBox.isSelected());
+        }
+        else if(source==leftCustomFolderRadioButton) {
+            setCustomFolderComponentsEnabled(true, leftCustomFolderRadioButton.isSelected());
+        }
+        else if(source==rightCustomFolderRadioButton) {
+            setCustomFolderComponentsEnabled(false, rightCustomFolderRadioButton.isSelected());
+        }
     }
 
 
-    /////////////////////////
-    // KeyListener methods //
-    /////////////////////////
+    ////////////////////////////////
+    // KeyListener implementation //
+    ////////////////////////////////
 
     /**
      * Catches key events to automagically select custom folder radio button if it was not already selected.
@@ -248,4 +284,34 @@ class FoldersPanel extends PreferencesPanel implements ItemListener, KeyListener
 	
     public void keyReleased(KeyEvent e) {
     }
+
+
+    ///////////////////////////////////
+    // ActionListener implementation //
+    ///////////////////////////////////
+
+    /**
+     * Opens dialog for selecting starting folder.
+     */
+    public void actionPerformed(ActionEvent e) {
+        Object source = e.getSource();
+
+    	JFileChooser chooser = new JFileChooser();
+    	chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        chooser.setDialogTitle(Translator.get("choose_folder"));
+        chooser.setDialogType(JFileChooser.OPEN_DIALOG);
+        if(chooser.showDialog(parent, Translator.get("choose")) == JFileChooser.APPROVE_OPTION) {
+            File file = chooser.getSelectedFile();
+            if (source==leftCustomFolderButton) {
+                leftCustomFolderTextField.setText(file.getPath());
+                if(!leftCustomFolderRadioButton.isSelected())
+                    leftCustomFolderRadioButton.setSelected(true);
+            }
+            else if (source==rightCustomFolderButton) {
+                rightCustomFolderTextField.setText(file.getPath());
+                if(!rightCustomFolderRadioButton.isSelected())
+                	rightCustomFolderRadioButton.setSelected(true);
+            }
+        }
+	}
 }
