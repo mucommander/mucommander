@@ -211,11 +211,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <echo>Creating the Configuration API documentation...</echo>
     <mkdir dir="${conf.doc}"/>
     <javadoc destdir="${conf.doc}" author="true" windowtitle="muCommander Configuration API" encoding="UTF-8" access="protected">
-      <packageset dir="${source}">
-        <include name="com/mucommander/conf/**"/>
-        <include name="com/mucommander/xml/**"/>
-        <exclude name="com/mucommander/conf/impl/**"/>
-      </packageset>
+      <fileset dir="${source}/com/mucommander/conf/">
+        <patternset refid="non-test-sources"/>
+        <exclude name="impl/**"/>
+      </fileset>
+      <fileset dir="${source}/com/mucommander/xml/">
+        <patternset refid="non-test-sources"/>
+      </fileset>
     </javadoc>
   </target>
 

@@ -357,13 +357,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
       <!-- Excludes all non test sources.                      -->
       <fileset dir="${source}/com/mucommander/ant">
-        <patternset id="non.test.sources">
-          <exclude name="**/*Test.java"/>
-          <exclude name="**/*html"/>
-        </patternset>
+        <patternset refid="non-test-sources"/>
       </fileset>
       <fileset dir="${source}/com/mucommander/xml">
-        <patternset refid="non.test.sources"/>
+        <patternset refid="non-test-sources"/>
       </fileset>
 
       <doclet name="com.neuroning.antdoclet.AntDoclet">

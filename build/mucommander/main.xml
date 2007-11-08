@@ -754,13 +754,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
          <include name="**/*.jar"/>
          </fileset>
       </classpath>
-      <packageset dir="${source}">
-        <include name="com/mucommander/**"/>
+      <!-- 'Static' sources, excluding the Ant tools and JUnit -->
+      <!-- test cases.                                         -->
+      <fileset dir="${source}">
+        <patternset refid="non-test-sources"/>
         <exclude name="com/mucommander/ant/**"/>
-      </packageset>
-      <packageset dir="${tmp.source}">
-        <include name="com/mucommander/**"/>
-      </packageset>
+      </fileset>
+
+      <!-- Dynamically generated sources.                      -->
+      <fileset dir="${tmp.source}"/>
     </javadoc>
   </target>
 
