@@ -952,6 +952,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   </target>
 
 
+  <!-- = Interaction with the CVS repository ================= -->
+  <!-- ======================================================= -->
+  <!-- Brings the local project tree in sync with the          -->
+  <!-- repository.                                             -->
+  <target name="update">
+    <cvs command="update -dP"/>
+  </target>
+
 
   <!-- = Bulk release ======================================== -->
   <!-- ======================================================= -->
