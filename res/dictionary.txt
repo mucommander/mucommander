@@ -631,6 +631,35 @@ create:pt_BR:Criar
 create:NL:Maken
 create:SK:Vytvoriť
 
+choose:EN:Choose
+choose:FR:Choisir
+# Translation missing
+
+
+
+
+
+
+
+
+
+
+
+choose_folder:EN:Choose a folder
+choose_folder:FR:Choisir un répertoire
+# Translation missing
+
+
+
+
+
+
+
+
+
+
+
+
 login:EN:Login
 login:FR:Identifiant
 login:DE:Login
@@ -8684,15 +8713,6 @@ prefs_dialog.follow_symlinks_when_cd:SI:Sledi simbolnim povezavam, ko spremeniš
 prefs_dialog.follow_symlinks_when_cd:RU:Переходить по ссылкам при смене каталога
 prefs_dialog.follow_symlinks_when_cd:DE:Symbolischen Links beim Wechsel des aktuellen Verzeichnis folgen
 # Translation missing
-
-
-
-
-
-
-
-
-
 
 # Appearance tab
 
