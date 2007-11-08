@@ -337,6 +337,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <mkdir dir="${junit.reports}"/>
     <junit printsummary="yes" haltonfailure="yes">
       <formatter type="plain"/>
+      <formatter type="xml"/>
       <classpath>
         <pathelement location="${classes.normal}"/>
         <fileset dir="${lib}">
