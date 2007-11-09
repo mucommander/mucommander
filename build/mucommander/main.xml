@@ -362,12 +362,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- Checks if Simian is available. The result is stored in  -->
   <!-- ${simian.available}.                                    -->
   <target name="check-simian">
-    <!-- If the value is not set, use built-in jar.          -->
+    <!-- If the value is not set, use built-in jar.            -->
     <property name="simian.lib" value="${tools}/simian.jar"/>
 
-    <!-- Checks for Simian availability.                     -->
-    <!-- If Simian is available, the ${simian.available}     -->
-    <!-- property will be set to true.                       -->
+    <!-- Checks for Simian availability.                       -->
+    <!-- If Simian is available, the ${simian.available}       -->
+    <!-- property will be set to true.                         -->
     <condition property="simian.available" value="true">
       <available resource="simiantask.properties" classpath="${simian.lib}"/>
     </condition>
