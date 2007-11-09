@@ -183,7 +183,7 @@ public class Configuration {
 
     /**
      * Returns the current configuration source.
-     * @return the current configuration source.
+     * @return the current configuration source, or <code>null</code> if it hasn't been set.
      */
     public ConfigurationSource getSource() {synchronized(sourceLock) {return source;}}
 
