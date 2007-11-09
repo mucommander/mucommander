@@ -356,6 +356,46 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <target name="unit-test" depends="jar,check-junit,skip-unit-test,do-unit-test"/>
 
 
+  <!-- = Simian integration (similarity checker) ============= -->
+  <!-- ======================================================= -->
+
+  <!-- Checks if Simian is available. The result is stored in  -->
+  <!-- ${simian.available}.                                    -->
+  <target name="check-simian">
+    <!-- If the value is not set, use built-in jar.          -->
+    <property name="simian.lib" value="${tools}/simian.jar"/>
+
+    <!-- Checks for Simian availability.                     -->
+    <!-- If Simian is available, the ${simian.available}     -->
+    <!-- property will be set to true.                       -->
+    <condition property="simian.available" value="true">
+      <available resource="simiantask.properties" classpath="${simian.lib}"/>
+    </condition>
+  </target>
+
+  <!-- Loads the Simian task if it's available.                -->
+  <target name="load-simian" depends="check-simian" if="simian.available">
+    <taskdef resource="simiantask.properties" classpath="${simian.lib}"/>
+  </target>
+
+  <!-- Notifies user that unit tests are being skipped if      -->
+  <!-- junit is not available.                                 -->
+  <target name="skip-similarity-test" unless="simian.available">
+    <echo>Simian not available, skipping similarity check...</echo>
+  </target>
+
+  <!-- Run similarity test                                     -->
+  <target name="do-similarity-test" depends="load-simian" if="simian.available">
+    <echo>Running similarity check...</echo>    
+    <simian>
+      <fileset dir="${source}" includes="**/*.java"/>
+    </simian>
+  </target>
+
+  <!-- Runs similarity test only if Simian is available.       -->
+  <target name="similarity-test" depends="check-simian,skip-similarity-test,do-similarity-test"/>
+
+
 
   <!-- = Launch4j management ================================= -->
   <!-- ======================================================= -->
