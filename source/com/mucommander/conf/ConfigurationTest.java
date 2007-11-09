@@ -20,13 +20,24 @@ package com.mucommander.conf;
 
 import junit.framework.TestCase;
 
+import java.util.Hashtable;
 import java.util.Stack;
+import java.io.InputStream;
+import java.io.OutputStream;
+
+/*
+  TO TEST:
+  - build
+  - write
+  - read
+ */
 
 /**
  * A test case for the {@link Configuration} class.
  * @author Maxence Bernard, Nicolas Rinaudo
  */
-public class ConfigurationTest extends TestCase implements ConfigurationListener {
+public class ConfigurationTest extends TestCase implements ConfigurationListener, ConfigurationReader, ConfigurationReaderFactory,
+                                                           ConfigurationWriter, ConfigurationWriterFactory, ConfigurationSource {
     // - Class variables -----------------------------------------------------------------
     // -----------------------------------------------------------------------------------
     /** Maximum depth at which to conduct tests in the configuration tree. */
@@ -49,9 +60,11 @@ public class ConfigurationTest extends TestCase implements ConfigurationListener
     // - Instance fields -----------------------------------------------------------------
     // -----------------------------------------------------------------------------------
     /** The Configuration instance that is being tested. Intialized each time a test is performed */
-    private Configuration      conf;
+    private       Configuration conf;
     /** Stack of configuration events. */
-    private Stack              events;
+    private       Stack         events;
+    /** Identifier of the current instance. */
+    private final String        identifier = Long.toString(System.currentTimeMillis());
 
 
 
@@ -87,6 +100,23 @@ public class ConfigurationTest extends TestCase implements ConfigurationListener
      * @return <code>true</code> if there are still some unhandled events in the stack, <code>false</code> otherwise.
      */
     private boolean hasEvents() {return !events.empty();}
+
+    /**
+     * Makes sure that event listener registration works.
+     */
+    public void testListenerRegistration() {
+        // Makes sure events are not received anymore after
+        // removeConfigurationListener has been called.
+        conf.removeConfigurationListener(this);
+        conf.setVariable("event.test", "value");
+        assertFalse(hasEvents());
+
+        // Makes sure events are received after addConfigurationListener
+        // has been called.
+        conf.addConfigurationListener(this);
+        conf.setVariable("event.test", "new-value");
+        assertNotNull(popEvent());
+    }
 
 
 
@@ -902,4 +932,130 @@ public class ConfigurationTest extends TestCase implements ConfigurationListener
             section.append(BOOLEAN_SECTION);
         }
     }
+
+
+
+    // - ConfigurationReader -------------------------------------------------------------
+    // -----------------------------------------------------------------------------------
+    /**
+     * Ignored.
+     */
+    public void read(InputStream in, ConfigurationBuilder builder) {}
+
+    /**
+     * Returns the current instance.
+     */
+    public ConfigurationReader getReaderInstance() {return this;}
+
+    /**
+     * Makes sure configuration reader factory registration works as expected.
+     */
+    public void testReaderFactory() {
+        // Makes sure that setting a custom reader factory will result in the right
+        // instances being generated.
+        conf.setReaderFactory(this);
+        assertEquals(conf.getReaderFactory().toString(), identifier);
+        try {assertEquals(conf.getReader().toString(), identifier);}
+        catch(ReaderConfigurationException e) {fail();}
+
+        // Makes sure that setting the reader factory to null restores default behaviour.
+        conf.setReaderFactory(null);
+        assertTrue(conf.getReaderFactory() instanceof XmlConfigurationReaderFactory);
+        try {assertTrue(conf.getReader() instanceof XmlConfigurationReader);}
+        catch(ReaderConfigurationException e) {fail();}
+    }
+
+
+
+    // - ConfigurationSource -------------------------------------------------------------
+    // -----------------------------------------------------------------------------------
+    /**
+     * Ignored.
+     */
+    public InputStream getInputStream() {return null;}
+
+    /**
+     * Ignored.
+     */
+    public OutputStream getOutputStream() {return null;}
+
+    /**
+     * Makes sure configuration source registration works as expected.
+     */
+    public void testConfigurationSource() {
+        conf.setSource(this);
+        assertEquals(conf.getSource().toString(), identifier);
+
+        conf.setSource(null);
+        assertNull(conf.getSource());
+    }
+
+
+
+    // - ConfigurationWriter -------------------------------------------------------------
+    // -----------------------------------------------------------------------------------
+    /**
+     * Ignored.
+     */
+    public void startConfiguration() {}
+
+    /**
+     * Ignored.
+     */
+    public void endConfiguration() {}
+
+    /**
+     * Ignored.
+     */
+    public void startSection(String name) {}
+
+    /**
+     * Ignored.
+     */
+    public void endSection(String name) {}
+
+    /**
+     * Ignored.
+     */
+    public void addVariable(String name, String value) {}
+
+    /**
+     * Ignored.
+     */
+    public void setOutputStream(OutputStream out) {}
+
+
+    /**
+     * Returns the current instance.
+     */
+    public ConfigurationWriter getWriterInstance() {return this;}
+
+    /**
+     * Makes sure configuration writer factory registration works as expected.
+     */
+    public void testWriterFactory() {
+        // Makes sure that setting a custom writer factory will result in the right
+        // instances being generated.
+        conf.setWriterFactory(this);
+        assertEquals(conf.getWriterFactory().toString(), identifier);
+        try {assertEquals(conf.getWriter().toString(), identifier);}
+        catch(WriterConfigurationException e) {fail();}
+
+        // Makes sure that setting the writer factory to null restores default behaviour.
+        conf.setWriterFactory(null);
+        assertTrue(conf.getWriterFactory() instanceof XmlConfigurationWriterFactory);
+        try {assertTrue(conf.getWriter() instanceof XmlConfigurationWriter);}
+        catch(WriterConfigurationException e) {fail();}
+    }
+
+
+
+
+    // - Misc. ---------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------
+    /**
+     * Returns this instance's identifier.
+     * @return this instance's identifier.
+     */
+    public String toString() {return identifier;}
 }
