@@ -542,6 +542,7 @@ public class Configuration {
      *  <li>One when <code>fromVar</code> is removed.</li>
      *  <li>One when <code>toVar</code> is set.</li>
      * </ul>
+     * The removal event will always be triggered first.
      * </p>
      * @param fromVar fully qualified name of the variable to rename.
      * @param toVar   fully qualified name of the variable that will receive <code>fromVar</code>'s value.
