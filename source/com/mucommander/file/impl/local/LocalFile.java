@@ -626,7 +626,7 @@ public class LocalFile extends AbstractFile {
     public int getPermissionGetMask() {
         // Windows only supports write permission for user: files are either read-only or read-write
         if(PlatformManager.isWindowsFamily())
-            return 200;
+            return 128;
 
         // Get permission support is limited to the user access type. Executable permission flag is only available under
         // Java 1.6 and up.
@@ -641,7 +641,7 @@ public class LocalFile extends AbstractFile {
     public int getPermissionSetMask() {
         // Windows only supports write permission for user: files are either read-only or read-write
         if(PlatformManager.isWindowsFamily())
-            return 200;  
+            return 128;
 
         // Set permission support is only available under Java 1.6 and up and is limited to the user access type
         return PlatformManager.getJavaVersion() >= PlatformManager.JAVA_1_6?
