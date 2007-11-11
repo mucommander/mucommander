@@ -19,7 +19,6 @@
 package com.mucommander.ui.action;
 
 import com.mucommander.command.Command;
-import com.mucommander.command.CommandParser;
 import com.mucommander.conf.ConfigurationEvent;
 import com.mucommander.conf.ConfigurationListener;
 import com.mucommander.conf.impl.MuConfiguration;
@@ -129,6 +128,6 @@ public class ViewAction extends InternalViewAction implements ConfigurationListe
         if(command == null)
             customViewer = null;
         else
-            customViewer = CommandParser.getCommand("view", command);
+            customViewer = new Command("view", command);
     }
 }

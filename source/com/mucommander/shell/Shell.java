@@ -20,7 +20,7 @@ package com.mucommander.shell;
 
 import com.mucommander.Debug;
 import com.mucommander.PlatformManager;
-import com.mucommander.command.CommandParser;
+import com.mucommander.command.Command;
 import com.mucommander.conf.ConfigurationEvent;
 import com.mucommander.conf.ConfigurationListener;
 import com.mucommander.conf.impl.MuConfiguration;
@@ -154,16 +154,19 @@ public class Shell implements ConfigurationListener {
      * Extracts the shell command from configuration.
      */
     private static synchronized void setShellCommand() {
-        String buffer;
+        String   shellCommand;
+        String[] buffer;
 
         // Retrieves the configuration defined shell command.
         if(MuConfiguration.getVariable(MuConfiguration.USE_CUSTOM_SHELL, MuConfiguration.DEFAULT_USE_CUSTOM_SHELL))
-            buffer = MuConfiguration.getVariable(MuConfiguration.CUSTOM_SHELL, PlatformManager.getDefaultShellCommand());
+            shellCommand = MuConfiguration.getVariable(MuConfiguration.CUSTOM_SHELL, PlatformManager.getDefaultShellCommand());
         else
-            buffer = PlatformManager.getDefaultShellCommand();
+            shellCommand = PlatformManager.getDefaultShellCommand();
 
         // Splits the command into tokens, leaving room for the argument.
-        tokens = CommandParser.getTokensWithParams(buffer, 1);
+        buffer = Command.getTokens(shellCommand);
+        tokens = new String[buffer.length + 1];
+        System.arraycopy(buffer, 0, tokens, 0, buffer.length);
 
         // Retrieves encoding configuration.
         encoding           = MuConfiguration.getVariable(MuConfiguration.SHELL_ENCODING);

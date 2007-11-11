@@ -19,7 +19,6 @@
 package com.mucommander.ui.action;
 
 import com.mucommander.command.Command;
-import com.mucommander.command.CommandParser;
 import com.mucommander.conf.ConfigurationEvent;
 import com.mucommander.conf.ConfigurationListener;
 import com.mucommander.conf.impl.MuConfiguration;
@@ -128,6 +127,6 @@ public class EditAction extends InternalEditAction implements ConfigurationListe
         if(command == null)
             customEditor = null;
         else
-            customEditor = CommandParser.getCommand("edit", command);
+            customEditor = new Command("edit", command);
     }
 }
