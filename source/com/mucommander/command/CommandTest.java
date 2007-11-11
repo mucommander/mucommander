@@ -79,6 +79,19 @@ public class CommandTest extends TestCase {
     }
 
     /**
+     * Returns the specified file's parent, or an empty string if it doesn't have one.
+     * @param  file file whose parent should be returned.
+     * @return      the specified file's parent, or an empty string if it doesn't have one.
+     */
+    private String getParent(AbstractFile file) {
+        AbstractFile parent;
+
+        if((parent = file.getParentSilently()) == null)
+            return "";
+        return parent.getAbsolutePath();
+    }
+
+    /**
      * Tests the <code>$p</code> keyword.
      */
     public void testParentSubstitution() {
@@ -87,13 +100,13 @@ public class CommandTest extends TestCase {
         // Makes sure single file substitution works.
         tokens = Command.getTokens("$p", files[0]);
         assertEquals(1, tokens.length);
-        assertEquals(files[0].getParentSilently().getAbsolutePath(), tokens[0]);
+        assertEquals(getParent(files[0]), tokens[0]);
 
         // Makes sure multiple file substitution works.
         tokens = Command.getTokens("$p", files);
         assertEquals(files.length, tokens.length);
         for(int i = 0; i < 3; i++)
-            assertEquals(files[i].getParentSilently().getAbsolutePath(), tokens[i]);
+            assertEquals(getParent(files[i]), tokens[i]);
     }
 
     /**
