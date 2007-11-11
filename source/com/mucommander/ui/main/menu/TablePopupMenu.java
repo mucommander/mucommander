@@ -109,6 +109,8 @@ public class TablePopupMenu extends JPopupMenu {
 
         add(new JSeparator());
         addAction(com.mucommander.ui.action.ShowFilePropertiesAction.class);
+        addAction(com.mucommander.ui.action.ChangePermissionsAction.class);
+        addAction(com.mucommander.ui.action.ChangeDateAction.class);
     }
 
 
