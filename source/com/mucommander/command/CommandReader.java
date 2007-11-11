@@ -111,7 +111,7 @@ public class CommandReader extends DefaultHandler implements CommandsXmlConstant
 
 
             // Creates the command and passes it to the builder.
-            try {builder.addCommand(buffer = CommandParser.getCommand(alias, command, type, display));}
+            try {builder.addCommand(buffer = new Command(alias, command, type, display));}
             catch(CommandException e) {throw new SAXException(e);}
         }
     }
@@ -139,7 +139,7 @@ public class CommandReader extends DefaultHandler implements CommandsXmlConstant
         if(type.equals(VALUE_SYSTEM))
             return Command.SYSTEM_COMMAND;
         if(type.equals(VALUE_INVISIBLE))
-           return Command.INVISIBLE_COMMAND;
+            return Command.INVISIBLE_COMMAND;
         return Command.NORMAL_COMMAND;
     }
 }

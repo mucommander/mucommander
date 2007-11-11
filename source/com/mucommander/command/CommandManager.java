@@ -54,7 +54,7 @@ public class CommandManager implements CommandBuilder {
     /** Alias of the 'run as executable' command. */
     public static final String  RUN_AS_EXECUTABLE_ALIAS   = "execute";
     /** Command used to run a file as an executable. */
-    public static final Command RUN_AS_EXECUTABLE_COMMAND = CommandParser.getCommand(RUN_AS_EXECUTABLE_ALIAS, "$f", Command.SYSTEM_COMMAND);
+    public static final Command RUN_AS_EXECUTABLE_COMMAND = new Command(RUN_AS_EXECUTABLE_ALIAS, "$f", Command.SYSTEM_COMMAND);
 
 
 
@@ -724,7 +724,8 @@ public class CommandManager implements CommandBuilder {
     private static void registerDefaultCommand(String alias, String command, String display) {
         if(getCommandForAlias(alias) == null) {
             if(command != null) {
-                try {registerCommand(CommandParser.getCommand(alias, command, Command.SYSTEM_COMMAND, display));}
+                //                try {registerCommand(CommandParser.getCommand(alias, command, Command.SYSTEM_COMMAND, display));}
+                try {registerCommand(new Command(alias, command, Command.SYSTEM_COMMAND, display));}
                 catch(Exception e) {if(Debug.ON) Debug.trace("Failed to register " + command + ": " + e.getMessage());}
             }
         }
