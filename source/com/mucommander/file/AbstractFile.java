@@ -255,8 +255,9 @@ public abstract class AbstractFile implements FilePermissions {
      * a root folder (has no parent), <code>this</code> is returned.
      *
      * @return the root folder that contains this file
+     * @throws IOException if the root file or one parent file could not be instanciated
      */
-    public AbstractFile getRoot() {
+    public AbstractFile getRoot() throws IOException {
         AbstractFile parent;
         AbstractFile child = this; 
         while((parent=child.getParent())!=null && !parent.equals(child)) {
@@ -895,6 +896,23 @@ public abstract class AbstractFile implements FilePermissions {
 
 
     /**
+     * Convience method that returns this file's parent, <code>null</code> if it doesn't have one or if it couldn't
+     * be instanciated. This method is less granular than {@link #getParent} but is convenient in cases where no
+     * distinction is made between having no parent and not being able to instanciate it.
+     *
+     * @return this file's parent, <code>null</code> if it doesn't have one or if it couldn't be instanciated
+     */
+    public final AbstractFile getParentSilently() {
+        try {
+            return getParent();
+        }
+        catch(IOException e) {
+            return null;
+        }
+    }
+
+
+    /**
      * Convenience method that creates a directory as a direct child of this directory.
      * This method will fail if this file is not a directory.
      *
@@ -1432,8 +1450,9 @@ public abstract class AbstractFile implements FilePermissions {
      * Returns this file's parent, <code>null</code> if it doesn't have one.
      *
      * @return this file's parent, <code>null</code> if it doesn't have one
+     * @throws IOException if the parent file could not be instanciated
      */
-    public abstract AbstractFile getParent();
+    public abstract AbstractFile getParent() throws IOException;
 	
     /**
      * Sets this file's parent. <code>null</code> can be specified if this file doesn't have a parent.
