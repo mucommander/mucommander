@@ -123,6 +123,8 @@ Improvements:
   (contributed by Alejandro Scandroli)
 - New 'Find' functionality added to the text viewer and editor
   (contributed by Mariusz Jakubowski)
+- command keyword substitution now applies to marked files as well as the
+  current selection.
 
 Localization:
 
