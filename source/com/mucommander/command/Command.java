@@ -19,6 +19,10 @@
 package com.mucommander.command;
 
 import com.mucommander.file.AbstractFile;
+import com.mucommander.file.util.FileSet;
+
+import java.util.Vector;
+import java.io.File;
 
 /**
  * Compiled shell commands.
@@ -34,38 +38,29 @@ import com.mucommander.file.AbstractFile;
  * </ul>
  * </p>
  * <p>
- * Retrieving an instance of <code>Command</code> can be done in two main fashions: either through the {@link CommandParser},
- * which is used to create new commands, or through the {@link CommandManager}, which is used to retrieve commands that have already
- * been loaded.<br/>
- * Creating new instances through {@link CommandManager} is fairly simple:
- * <pre>
- * Command myCommand;
- *
- * myCommand = CommandParser.getCommand("Safari", "open -a Safari $f", Command.NORMAL_COMMAND);
- * </pre>
- * The {@link CommandManager} offers different ways of retrieving <code>Command</code> instances:
- * <pre>
- * Command myCommand;
- *
- * // Retrieves the command associated to URLs.
- * myCommand = CommandManager.getCommandForFile(FileFactory.getFile("http://mucommander.com"));
- *
- * // Retrieves the command associated to the specified alias.
- * myCommand = CommandManager.getCommandForAlias("Safari");
- *
- * // Runs through all commands known to the CommandManager.
- * Iterator commands;
- *
- * commands = CommandManager.commands();
- * while(commands.hasNext())
- *     System.out.println(((Command)commands.next()).getAlias());
- * </pre>
+ * The basic command syntax is fairly simple:
+ * <ul>
+ *  <li>Any non-escaped <code>\</code> character will escape the following character and be removed from the tokens.</li>
+ *  <li>Any non-escaped <code>"</code> character will escape all characters until the next occurence of <code>"</code>, except for <code>\</code>.</li>
+ *  <li>Non-escaped space characters are used as token separators.</li>
+ * </ul>
+ * It is important to remember that <code>"</code> characters are <b>not</b> removed from the resulting tokens.
+ * </p>
+ * <p>
+ * It's also possible to include keywords in a command:
+ * <ul>
+ *  <li><code>$f</code> is replaced by a file's full path.</li>
+ *  <li><code>$n</code> is replaced by a file's name.</li>
+ *  <li><code>$e</code> is replaced by a file's extension.</li>
+ *  <li><code>$N</code> is replaced by a file's name without its extension.</li>
+ *  <li><code>$p</code> is replaced by a file's parent's path.</li>
+ *  <li><code>$j</code> is replaced by the path of the folder in which the JVM was started.</li>
+ * </ul>
  * </p>
  * <p>
  * Once a <code>Command</code> instance has been retrieved, execution tokens can be retrieved through the
  * {@link #getTokens(AbstractFile)} method. This will return a tokenized version of the command and replace any
- * keyword by the corresponding file value (see {@link CommandParser} for syntax information). It's also possible
- * to skip keyword replacement through the {@link #getTokens()} method.
+ * keyword by the corresponding file value . It's also possible to skip keyword replacement through the {@link #getTokens()} method.
  * </p>
  * <p>
  * A command's executable tokens are typically meant to be used with {@link com.mucommander.process.ProcessRunner#execute(String[],AbstractFile)}
@@ -73,11 +68,29 @@ import com.mucommander.file.AbstractFile;
  * </p>
  * @author Nicolas Rinaudo
  * @see    CommandManager
- * @see    CommandParser
  * @see    com.mucommander.process.ProcessRunner
  * @see    com.mucommander.process.AbstractProcess
  */
 public class Command {
+    // - Keywords --------------------------------------------------------------
+    // -------------------------------------------------------------------------
+    /** Header of replacement keywords. */
+    private static final char KEYWORD_HEADER                      = '$';
+    /** Instances of this keyword will be replaced by the file's full path. */
+    private static final char KEYWORD_PATH                        = 'f';
+    /** Instances of this keyword will be replaced by the file's name. */
+    private static final char KEYWORD_NAME                        = 'n';
+    /** Instances of this keyword will be replaced by the file's parent directory. */
+    private static final char KEYWORD_PARENT                      = 'p';
+    /** Instances of this keyword will be replaced by the JVM's current directory. */
+    private static final char KEYWORD_VM_PATH                     = 'j';
+    /** Instances of this keyword will be replaced by the file's extension. */
+    private static final char KEYWORD_EXTENSION                   = 'e';
+    /** Instances of this keyword will be replaced by the file's name without its extension. */
+    private static final char KEYWORD_NAME_WITHOUT_EXTENSION      = 'b';
+
+
+
     // - Type definitions ------------------------------------------------------
     // -------------------------------------------------------------------------
     /** Describes <i>normal</i> commands. */
@@ -93,8 +106,6 @@ public class Command {
     // -------------------------------------------------------------------------
     /** Different tokens that compose the command. */
     private String[]  tokens;
-    /** Information about potential keywords contained in the tokens. */
-    private boolean[] tokenTypes;
     /** Command's alias. */
     private String    alias;
     /** Original command. */
@@ -110,62 +121,246 @@ public class Command {
     // -------------------------------------------------------------------------
     /**
      * Creates a new command.
-     * <p>
-     * This is not the prefered way of creating instances of <code>Command</code>.
-     * Developers should use either {@link CommandManager#getCommandForFile(AbstractFile)}
-     * or {@link CommandParser#getCommand(String,String)} for that purpose.
-     * </p>
-     * @param alias      alias of the command.
-     * @param command    original command (before tokenisation).
-     * @param tokens     tokens that compose the command.
-     * @param tokenTypes description of each token in <code>tokens</code>
+     * @param alias       alias of the command.
+     * @param command command that will be executed.
+     * @param type        type of the command.
+     * @param displayName name of the command as seen by users (if <code>null</code>, defaults to <code>alias</code>).
      */
-    Command(String alias, String command, String[] tokens, boolean[] tokenTypes, int type, String displayName) {
-        this.tokens      = tokens;
-        this.tokenTypes  = tokenTypes;
+    public Command(String alias, String command, int type, String displayName) {
         this.alias       = alias;
         this.command     = command;
         this.type        = type;
         this.displayName = displayName;
     }
 
+    /**
+     * Creates a new command.
+     * <p>
+     * This is a convenience constructor and is strictly equivalent to calling
+     * <code>{@link #Command(String,String,int,String) Command(}alias, command, {@link #NORMAL_COMMAND}, null)</code>.
+     * </p>
+     * @param alias   alias of the command.
+     * @param command command that will be executed.
+     */
+    public Command(String alias, String command) {this(alias, command, NORMAL_COMMAND, null);}
+
+    /**
+     * Creates a new command.
+     * <p>
+     * This is a convenience constructor and is strictly equivalent to calling
+     * <code>{@link #Command(String,String,int,String) Command(}alias, command, type, null)</code>.
+     * </p>
+     * @param alias   alias of the command.
+     * @param command command that will be executed.
+     * @param type    type of the command.
+     */
+    public Command(String alias, String command, int type) {this(alias, command, type, null);}
+
 
 
     // - Token retrieval -------------------------------------------------------
     // -------------------------------------------------------------------------
     /**
-     * Returns the command's tokens, replacing any keyword by the values from <code>target</code>.
-     * @param  target file from which to get the values by which to replace keywords.
-     * @return        the command's tokens.
+     * Returns this command's tokens without performing keyword substitution.
+     * @return this command's tokens without performing keyword substitution.
      */
-    public String[] getTokens(AbstractFile target) {
-        String[] newTokens; // Buffer for the final tokens.
+    public String[] getTokens() {return getTokens(command, (AbstractFile[])null);}
 
-        newTokens = new String[tokens.length];
-        // Performs keyword replacement.
-        for(int i = 0; i < tokens.length; i++) {
-            if(tokenTypes[i])
-                newTokens[i] = CommandParser.replaceKeywords(tokens[i], target);
+    /**
+     * Returns this command's tokens, replacing keywords by the corresponding values from the specified file.
+     * @param  file file from which to retrieve keyword substitution values.
+     * @return      this command's tokens, replacing keywords by the corresponding values from the specified file.
+     */
+    public String[] getTokens(AbstractFile file) {return getTokens(command, file);}
+
+    /**
+     * Returns this command's tokens, replacing keywords by the corresponding values from the specified fileset.
+     * @param  files files from which to retrieve keyword substitution values.
+     * @return       this command's tokens, replacing keywords by the corresponding values from the specified fileset.
+     */
+    public String[] getTokens(FileSet files) {return getTokens(command, files);}
+
+    /**
+     * Returns this command's tokens, replacing keywords by the corresponding values from the specified files
+     * @param  files files from which to retrieve keyword substitution values.
+     * @return       this command's tokens, replacing keywords by the corresponding values from the specified files.
+     */
+    public String[] getTokens(AbstractFile[] files) {return getTokens(command, files);}
+
+    /**
+     * Returns the specified command's tokens without performing keyword substitution.
+     * @return the specified command's tokens without performing keyword substitution.
+     */
+    public static String[] getTokens(String command) {return getTokens(command, (AbstractFile[])null);}
+
+    /**
+     * Returns the specified command's tokens after replacing keywords by the corresponding values from the specified file.
+     * @param  file file from which to retrieve keyword substitution values.
+     * @return the specified command's tokens after replacing keywords by the corresponding values from the specified file.
+     */
+    public static String[] getTokens(String command, AbstractFile file) {return getTokens(command, new AbstractFile[] {file});}
+
+    /**
+     * Returns the specified command's tokens after replacing keywords by the corresponding values from the specified fileset.
+     * @param  files file from which to retrieve keyword substitution values.
+     * @return       the specified command's tokens after replacing keywords by the corresponding values from the specified fileset.
+     */
+    public static String[] getTokens(String command, FileSet files) {return getTokens(command, (AbstractFile[])(files.toArray(new AbstractFile[0])));}
+
+    /**
+     * Returns the specified command's tokens after replacing keywords by the corresponding values from the specified files.
+     * @param  files file from which to retrieve keyword substitution values.
+     * @return the specified command's tokens after replacing keywords by the corresponding values from the specified files.
+     */
+    public static String[] getTokens(String command, AbstractFile[] files) {
+        Vector       tokens;        // All tokens.
+        char[]       buffer;        // All the characters that compose command.
+        StringBuffer currentToken;  // Buffer for the current token.
+        boolean      isInQuotes;    // Whether we're currently within quotes or not.
+
+        // Initialises parsing.
+        tokens       = new Vector();
+        command      = command.trim();
+        currentToken = new StringBuffer(command.length());
+        buffer       = command.toCharArray();
+        isInQuotes   = false;
+
+        // Parses the command.
+        for(int i = 0; i < command.length(); i++) {
+            // Quote escaping: toggle isInQuotes.
+            if(buffer[i] == '\"') {
+                currentToken.append(buffer[i]);
+                isInQuotes = !isInQuotes;
+            }
+
+            // Backslash escaping: the next character is not analyzed.
+            else if(buffer[i] == '\\') {
+                if(i + 1 != command.length())
+                    currentToken.append(buffer[++i]);
+            }
+
+            // Whitespace: end of token if we're not between quotes.
+            else if(buffer[i] == ' ' && !isInQuotes) {
+                // Skips un-escaped blocks of spaces.
+                while(i + 1 < command.length() && buffer[i + 1] == ' ')
+                    i++;
+
+                // Stores the current token.
+                tokens.add(currentToken.toString());
+                currentToken.setLength(0);
+            }
+
+            // Keyword: perform keyword substitution.
+            else if(buffer[i] == KEYWORD_HEADER) {
+                // Skips keyword replacement if we're not interested
+                // in it.
+                if(files == null)
+                    currentToken.append(KEYWORD_HEADER);
+
+                // If this is the last character, append it.
+                else if(++i == buffer.length)
+                    currentToken.append(KEYWORD_HEADER);
+
+                // If we've found a legal keyword, perform keyword replacement
+                else if(isLegalKeyword(buffer[i])) {
+                    // Deals with the first file.
+                    currentToken.append(getKeywordReplacement(buffer[i], files[0]));
+
+                    // $j is a special case, we only ever insert it once.
+                    if(buffer[i] != KEYWORD_VM_PATH) {
+                        // If we're not between quotes and there's more than one file,
+                        // each file will be in its own token.
+                        if(!isInQuotes && files.length != 1) {
+                            tokens.add(currentToken.toString());
+                            currentToken.setLength(0);
+                        }
+
+                        // Deals with all subsequent files:
+                        // - if we're in quotes, separates each files by a space.
+                        // - if we're not in quotes, each new file is its own token.
+                        for(int j = 1; j < files.length; j++) {
+                            if(isInQuotes) {
+                                currentToken.append(' ');
+                                currentToken.append(getKeywordReplacement(buffer[i], files[j]));
+                            }
+
+                            // When not in quotes, the last file is the beginning of a new token
+                            // rather than a single one.
+                            else if(j != files.length - 1)
+                                tokens.add(getKeywordReplacement(buffer[i], files[j]));
+                            else
+                                currentToken.append(getKeywordReplacement(buffer[i], files[j]));
+                        }
+                    }
+                }
+
+                // If we've found an illegal keyword, ignore it.
+                else {
+                    currentToken.append(KEYWORD_HEADER);
+                    currentToken.append(buffer[i]);
+                }
+            }
+
+            // Nothing special about this character.
             else
-                newTokens[i] = tokens[i];
+                currentToken.append(buffer[i]);
         }
 
-        return newTokens;
+        // Adds a possible last token.
+        if(currentToken.length() != 0)
+            tokens.add(currentToken.toString());
+
+        // Empty commands are returned as an empty token rather than an empty array.
+        if(tokens.size() == 0)
+            return new String[] {""};
+
+        return (String[])tokens.toArray(new String[0]);
     }
 
     /**
-     * Returns the command's tokens without performing keyword replacement.
-     * @return the command's tokens.
+     * Returns <code>true</code> if the specified character is a legal keyword.
+     * @param  keyword character to check.
+     * @return         <code>true</code> if the specified character is a legal keyword, <code>false</code> otherwise.
      */
-    public String[] getTokens() {
-        String[] newTokens;
-
-        // Copies the token to prevent modification of the command.
-        newTokens = new String[tokens.length];
-        System.arraycopy(tokens, 0, newTokens, 0, tokens.length);
-
-        return newTokens;
+    private static boolean isLegalKeyword(char keyword) {
+        return keyword == KEYWORD_PATH || keyword == KEYWORD_NAME || keyword == KEYWORD_PARENT ||
+            keyword == KEYWORD_VM_PATH || keyword == KEYWORD_EXTENSION || keyword == KEYWORD_NAME_WITHOUT_EXTENSION;
     }
+
+    /**
+     * Gets the value from <code>file</code> that should be used to replace <code>keyword</code>.
+     * @param  keyword character to replace.
+     * @param  file    file from which to retrieve the replacement value.
+     * @return         the requested replacement value.
+     */
+    private static String getKeywordReplacement(char keyword, AbstractFile file) {
+        switch(keyword) {
+        case KEYWORD_PATH:
+            return file.getAbsolutePath();
+
+        case KEYWORD_NAME:
+            return file.getName();
+
+        case KEYWORD_PARENT:
+            return file.getParent().getAbsolutePath();
+
+        case KEYWORD_VM_PATH:
+            return new File(System.getProperty("user.dir")).getAbsolutePath();
+
+        case KEYWORD_EXTENSION:
+            String extension;
+
+            if((extension = file.getExtension()) == null)
+                return "";
+            return extension;
+
+        case KEYWORD_NAME_WITHOUT_EXTENSION:
+            return file.getNameWithoutExtension();
+        }
+        throw new IllegalArgumentException();
+    }
+
+
 
     // - Misc. -----------------------------------------------------------------
     // -------------------------------------------------------------------------
@@ -187,11 +382,23 @@ public class Command {
      */
     public int getType() {return type;}
 
+    /**
+     * Returns the command's display name.
+     * <p>
+     * If it hasn't been set, returns this command's alias.
+     * </p>
+     * @return the command's display name.
+     */
     public String getDisplayName() {
         if(displayName == null)
             return alias;
         return displayName;
     }
 
+    /**
+     * Returns <code>true</code> if the command's display name has been set.
+     * @return <code>true</code> if the command's display name has been set, <code>false</code> otherwise.
+     */
     boolean isDisplayNameSet() {return displayName != null;}
+
 }
