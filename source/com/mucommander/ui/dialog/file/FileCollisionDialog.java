@@ -197,7 +197,8 @@ public class FileCollisionDialog extends QuestionDialog {
     private void addFileDetails(XAlignedComponentPanel panel, AbstractFile file, String nameLabel) {
         panel.addRow(nameLabel+":", new FilenameLabel(file), 0);
 
-        String parentLocation = file.getParent().getCanonicalPath();
+        AbstractFile parent = file.getParentSilently();
+        String parentLocation = (parent==null?file:parent).getCanonicalPath();
         JLabel label = new JLabel(parentLocation);
         label.setToolTipText(parentLocation);
         panel.addRow(Translator.get("location")+":", label, 0);

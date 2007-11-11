@@ -97,7 +97,7 @@ public abstract class ProxyFile extends AbstractFile {
         return file.getSize();
     }
 
-    public AbstractFile getParent() {
+    public AbstractFile getParent() throws IOException {
         return file.getParent();
     }
 
@@ -254,7 +254,7 @@ public abstract class ProxyFile extends AbstractFile {
         return file.getPermissionsString();
     }
 
-    public AbstractFile getRoot() {
+    public AbstractFile getRoot() throws IOException {
         return file.getRoot();
     }
 

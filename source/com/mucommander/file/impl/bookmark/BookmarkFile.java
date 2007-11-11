@@ -71,7 +71,7 @@ public class BookmarkFile extends AbstractFile {
      * </p>
      * @return the <code>AbstractFile</code> this instance wraps.
      */
-    private synchronized AbstractFile getAbstractFile() {
+    private synchronized AbstractFile getUnderlyingFile() {
         // Resolves the file if necessary.
         if(file == null)
             file = FileFactory.getFile(bookmark.getLocation());
@@ -96,41 +96,40 @@ public class BookmarkFile extends AbstractFile {
      * @return             the wrapped file's descendants.
      * @throws IOException if an I/O error occurs.
      */
-    public AbstractFile[] ls() throws IOException {return getAbstractFile().ls();}
+    public AbstractFile[] ls() throws IOException {return getUnderlyingFile().ls();}
 
     /**
      * Returns the wrapped file's parent.
      * @return the wrapped file's parent.
      */
-    public AbstractFile getParent() {
-        try {return new BookmarkRoot();}
-        catch(Exception e) {return null;}
+    public AbstractFile getParent() throws IOException {
+        return new BookmarkRoot();
     }
 
     /**
      * Returns <code>true</code> if the wrapped file knows how to create processes.
      * @return <code>true</code> if the wrapped file knows how to create processes.
      */
-    public boolean canRunProcess() {return getAbstractFile().canRunProcess();}
+    public boolean canRunProcess() {return getUnderlyingFile().canRunProcess();}
 
     /**
      * Runs the specified command on the wrapped file.
      * @param  tokens command to run.
      * @return        a process running the specified command.
      */
-    public AbstractProcess runProcess(String[] tokens) throws IOException {return getAbstractFile().runProcess(tokens);}
+    public AbstractProcess runProcess(String[] tokens) throws IOException {return getUnderlyingFile().runProcess(tokens);}
 
     /**
      * Returns the result of the wrapped file's <code>getFreeSpace()</code> methods.
      * @return the result of the wrapped file's <code>getFreeSpace()</code> methods.
      */
-    public long getFreeSpace() {return getAbstractFile().getFreeSpace();}
+    public long getFreeSpace() {return getUnderlyingFile().getFreeSpace();}
 
     /**
      * Returns the result of the wrapped file's <code>getTotalSpace()</code> methods.
      * @return the result of the wrapped file's <code>getTotalSpace()</code> methods.
      */
-    public long getTotalSpace() {return getAbstractFile().getTotalSpace();}
+    public long getTotalSpace() {return getUnderlyingFile().getTotalSpace();}
 
     /**
      * Returns <code>false</code>.
@@ -148,7 +147,8 @@ public class BookmarkFile extends AbstractFile {
      * Sets the wrapped file's parent.
      * @param parent object to use as the wrapped file's parent.
      */
-    public void setParent(AbstractFile parent) {getAbstractFile().setParent(parent);}
+    public void setParent(AbstractFile parent) {
+        getUnderlyingFile().setParent(parent);}
 
     /**
      * Returns <code>true</code> if the specified bookmark exists.

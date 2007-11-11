@@ -113,7 +113,7 @@ public class PackDialog extends FocusDialog implements ActionListener, ItemListe
         // - if it contains more than one file, uses the FileSet's parent folder's name.
         if(files.size() == 1)
             fileName = files.fileAt(0).getNameWithoutExtension();
-        else if(files.getBaseFolder().getParent() != null)
+        else if(files.getBaseFolder().getParentSilently() != null)
             fileName = files.getBaseFolder().getName();
         else
             fileName = "";

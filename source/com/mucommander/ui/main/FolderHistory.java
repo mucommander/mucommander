@@ -24,6 +24,7 @@ import com.mucommander.file.FileProtocols;
 import com.mucommander.file.FileURL;
 import com.mucommander.file.impl.local.LocalFile;
 
+import java.io.IOException;
 import java.util.Vector;
 
 
@@ -98,9 +99,14 @@ public class FolderHistory {
         //  - it is a directory on a local filesytem
         //  - it doesn't look like a removable media drive (cd/dvd/floppy), especially in order to prevent
         // Java from triggering that dreaded 'Drive not ready' popup.
-        if(folderURL.getProtocol().equals(FileProtocols.FILE) && folder.isDirectory() && (folder instanceof LocalFile) && !((LocalFile)folder.getRoot()).guessRemovableDrive()) {
-            this.lastRecallableFolder = folder.getAbsolutePath();
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("lastRecallableFolder= "+lastRecallableFolder);
+        try {
+            if(folderURL.getProtocol().equals(FileProtocols.FILE) && folder.isDirectory() && (folder instanceof LocalFile) && !((LocalFile)folder.getRoot()).guessRemovableDrive()) {
+                this.lastRecallableFolder = folder.getAbsolutePath();
+                if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("lastRecallableFolder= "+lastRecallableFolder);
+            }
+        }
+        catch(IOException e) {
+            // last folder's value won't be updated that's all 
         }
     }
 

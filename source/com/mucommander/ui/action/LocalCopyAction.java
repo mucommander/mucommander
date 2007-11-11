@@ -44,7 +44,7 @@ public class LocalCopyAction extends SelectedFileAction {
 
         // Display local copy dialog only if a file other than '..' is currently selected
         if(selectedFile!=null) {
-            new CopyDialog(mainFrame, new FileSet(selectedFile.getParent(), selectedFile), true).showDialog();
+            new CopyDialog(mainFrame, new FileSet(selectedFile.getParentSilently(), selectedFile), true).showDialog();
         }
     }
 }

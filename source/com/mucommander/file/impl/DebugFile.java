@@ -21,6 +21,7 @@ package com.mucommander.file.impl;
 import com.mucommander.Debug;
 import com.mucommander.file.AbstractFile;
 
+import java.io.IOException;
 import java.util.Random;
 
 /**
@@ -228,7 +229,7 @@ public class DebugFile extends ProxyFile {
         return super.getPermissions();
     }
 
-    public AbstractFile getRoot() {
+    public AbstractFile getRoot() throws IOException {
         if(Debug.ON) Debug.trace(getDebugString(), traceLevel);
         lag();
 
@@ -256,7 +257,7 @@ public class DebugFile extends ProxyFile {
         return super.toString();
     }
 
-    public AbstractFile getParent() {
+    public AbstractFile getParent() throws IOException {
         if(Debug.ON) Debug.trace(getDebugString(), traceLevel);
         lag();
 

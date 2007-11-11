@@ -331,7 +331,7 @@ public class HTTPFile extends AbstractFile {
     }
 
     public RandomAccessInputStream getRandomAccessInputStream() throws IOException {
-        return new HTTPRandomInputStream();
+        return new HTTPRandomAccessInputStream();
     }
 
     public boolean hasRandomAccessOutputStream() {
@@ -601,11 +601,11 @@ public class HTTPFile extends AbstractFile {
 
 
     /**
-     * HTTPRandomInputStream extends BlockRandomInputStream to provide random read access to an HTTPFile.
+     * HTTPRandomAccessInputStream extends BlockRandomInputStream to provide random read access to an HTTPFile.
      * It uses the 'Range' request header to read the HTTP resource partially, chunk by chunk and reposition the offset
      * when {@link #seek(long)} is called.
      */
-    private class HTTPRandomInputStream extends BlockRandomInputStream {
+    private class HTTPRandomAccessInputStream extends BlockRandomInputStream {
 
         /** Amount of data returned  */
         private final static int CHUNK_SIZE = 1024;
@@ -614,7 +614,7 @@ public class HTTPFile extends AbstractFile {
         private long length;
 
 
-        private HTTPRandomInputStream() throws IOException {
+        private HTTPRandomAccessInputStream() throws IOException {
             super(CHUNK_SIZE);
 
             // HEAD the HTTP resource to get its length

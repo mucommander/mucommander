@@ -297,23 +297,16 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
     }
 
 
-    public AbstractFile getParent() {
+    public AbstractFile getParent() throws IOException {
         if(!parentValSet) {
             FileURL parentFileURL = this.fileURL.getParent();
-            if(parentFileURL!=null) {
-                try {
-                    this.parent = new FTPFile(parentFileURL, createFTPFile(parentFileURL.getFilename(), true));
-                }
-                catch(IOException e) {
-                    // Parent will be null
-                }
-            }
+            if(parentFileURL!=null)
+                parent = new FTPFile(parentFileURL, createFTPFile(parentFileURL.getFilename(), true));
 
-            this.parentValSet = true;
-            return this.parent;
+            parentValSet = true;
         }
 
-        return this.parent;
+        return parent;
     }
 
 

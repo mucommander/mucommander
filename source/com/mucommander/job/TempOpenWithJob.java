@@ -40,7 +40,7 @@ public class TempOpenWithJob extends CopyJob {
     private Command      command;
 
     public TempOpenWithJob(ProgressDialog progressDialog, MainFrame mainFrame, AbstractFile fileToExecute, AbstractFile tempFile, Command command) {
-        super(progressDialog, mainFrame, new FileSet(fileToExecute.getParent(), fileToExecute), tempFile.getParent(), tempFile.getName(), COPY_MODE, FileCollisionDialog.OVERWRITE_ACTION);
+        super(progressDialog, mainFrame, new FileSet(fileToExecute.getParentSilently(), fileToExecute), tempFile.getParentSilently(), tempFile.getName(), COPY_MODE, FileCollisionDialog.OVERWRITE_ACTION);
         this.tempFile = tempFile;
         this.command  = command;
     }

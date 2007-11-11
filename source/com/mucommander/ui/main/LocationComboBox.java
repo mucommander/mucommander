@@ -109,7 +109,7 @@ public class LocationComboBox extends EditableComboBox implements LocationListen
         do {
             addItem(folder);
         }
-        while((folder=folder.getParent())!=null);
+        while((folder=folder.getParentSilently())!=null);
     }
 
 

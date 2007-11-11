@@ -190,7 +190,7 @@ public class FileSelectionDialog extends FocusDialog implements ActionListener {
             String fileName;
             FileTableModel tableModel = activeTable.getFileTableModel();
             int nbFiles = tableModel.getRowCount();
-            for(int i=activeTable.getCurrentFolder().getParent()==null?0:1; i<nbFiles; i++) {
+            for(int i=activeTable.getCurrentFolder().getParentSilently()==null?0:1; i<nbFiles; i++) {
                 file = tableModel.getFileAtRow(i);
                 if (includeFolders || !file.isDirectory())  {
                     fileName = file.getName();

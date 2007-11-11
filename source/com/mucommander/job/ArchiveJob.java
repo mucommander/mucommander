@@ -144,7 +144,7 @@ public class ArchiveJob extends TransferFileJob {
 
     protected boolean hasFolderChanged(AbstractFile folder) {
         // This job modifies the folder where the archive is
-        return folder.equals(destFile.getParent());     // Note: parent may be null
+        return folder.equals(destFile.getParentSilently());     // Note: parent may be null
     }
 
 

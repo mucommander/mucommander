@@ -34,8 +34,8 @@ import java.awt.*;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
-import java.util.Vector;
 import java.util.Iterator;
+import java.util.Vector;
 
 /**
  * Window Manager is responsible for creating, disposing, switching,
@@ -206,7 +206,7 @@ public class WindowManager implements WindowListener, ConfigurationListener {
         if(!file.isBrowsable())
             // This is just playing things safe, as I doubt there might ever be a case of
             // a file without a parent directory.
-            if((file = file.getParent()) == null)
+            if((file = file.getParentSilently()) == null)
                 return getInitialPath(frame);
 
         return file;

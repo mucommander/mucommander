@@ -38,7 +38,7 @@ public class TempExecJob extends CopyJob {
     private AbstractFile tempFile;
 
     public TempExecJob(ProgressDialog progressDialog, MainFrame mainFrame, AbstractFile fileToExecute, AbstractFile tempFile) {
-        super(progressDialog, mainFrame, new FileSet(fileToExecute.getParent(), fileToExecute), tempFile.getParent(), tempFile.getName(), COPY_MODE, FileCollisionDialog.OVERWRITE_ACTION);
+        super(progressDialog, mainFrame, new FileSet(fileToExecute.getParentSilently(), fileToExecute), tempFile.getParentSilently(), tempFile.getName(), COPY_MODE, FileCollisionDialog.OVERWRITE_ACTION);
         this.tempFile = tempFile;
     }
 

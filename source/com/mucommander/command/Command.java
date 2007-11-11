@@ -21,8 +21,8 @@ package com.mucommander.command;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.util.FileSet;
 
-import java.util.Vector;
 import java.io.File;
+import java.util.Vector;
 
 /**
  * Compiled shell commands.
@@ -342,7 +342,8 @@ public class Command {
             return file.getName();
 
         case KEYWORD_PARENT:
-            return file.getParent().getAbsolutePath();
+            AbstractFile parentFile = file.getParentSilently();
+            return parentFile==null?"":parentFile.getAbsolutePath();
 
         case KEYWORD_VM_PATH:
             return new File(System.getProperty("user.dir")).getAbsolutePath();

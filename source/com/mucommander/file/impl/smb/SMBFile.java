@@ -188,32 +188,23 @@ import java.net.MalformedURLException;
     }
 
 
-    public AbstractFile getParent() {
+    public AbstractFile getParent() throws IOException {
         if(!parentValSet) {
-            try {
-                FileURL parentURL = fileURL.getParent();
-                // If parent URL as returned by fileURL.getParent() is null and URL's host is not null,
-                // create an 'smb://' parent to browse network workgroups
-                if(parentURL==null) {
-                    if(fileURL.getHost()!=null)
-                        parentURL = new FileURL(FileProtocols.SMB+"://");
-                    else
-                        return null;    // This file is already smb://
-                }
+            FileURL parentURL = fileURL.getParent();
+            // If parent URL as returned by fileURL.getParent() is null and URL's host is not null,
+            // create an 'smb://' parent to browse network workgroups
+            if(parentURL==null) {
+                if(fileURL.getHost()!=null)
+                    parentURL = new FileURL(FileProtocols.SMB+"://");
+                else
+                    return null;    // This file is already smb://
+            }
 
-                this.parent = new SMBFile(parentURL, null);
-
-                return parent;
-            }
-            catch(IOException e) {
-                // this.parent and returned parent will be null
-            }
-            finally {
-                this.parentValSet = true;
-            }
+            parent = new SMBFile(parentURL, null);
+            parentValSet = true;
         }
 
-        return this.parent;
+        return parent;
     }
 
     public void setParent(AbstractFile parent) {

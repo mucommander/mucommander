@@ -20,8 +20,6 @@ package com.mucommander.command;
 
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
-import com.mucommander.file.util.FileSet;
-
 import junit.framework.TestCase;
 
 import java.io.File;
@@ -89,13 +87,13 @@ public class CommandTest extends TestCase {
         // Makes sure single file substitution works.
         tokens = Command.getTokens("$p", files[0]);
         assertEquals(1, tokens.length);
-        assertEquals(files[0].getParent().getAbsolutePath(), tokens[0]);
+        assertEquals(files[0].getParentSilently().getAbsolutePath(), tokens[0]);
 
         // Makes sure multiple file substitution works.
         tokens = Command.getTokens("$p", files);
         assertEquals(files.length, tokens.length);
         for(int i = 0; i < 3; i++)
-            assertEquals(files[i].getParent().getAbsolutePath(), tokens[i]);
+            assertEquals(files[i].getParentSilently().getAbsolutePath(), tokens[i]);
     }
 
     /**

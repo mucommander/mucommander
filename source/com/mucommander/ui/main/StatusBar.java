@@ -45,6 +45,7 @@ import java.awt.event.ComponentListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 
 
 /**
@@ -301,9 +302,14 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
         }
         else {
             if(FileProtocols.FILE.equals(folder.getURL().getProtocol())) {
-                key = LocalFile.usesRootDrives()?
-                    folder.getRoot():
-                    folder;
+                try {
+                    key = LocalFile.usesRootDrives()?
+                        folder.getRoot():
+                        folder;
+                }
+                catch(IOException e) {
+                    key = folder;
+                }
             }
             else {
                 key = folder;

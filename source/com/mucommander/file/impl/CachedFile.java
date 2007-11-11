@@ -407,7 +407,7 @@ public class CachedFile extends ProxyFile {
     }
 
 
-    public AbstractFile getParent() {
+    public AbstractFile getParent() throws IOException {
         if(!getParentSet) {
             getParent = file.getParent();
             // Create a CachedFile instance around the file if recursion is enabled
@@ -419,7 +419,7 @@ public class CachedFile extends ProxyFile {
         return getParent;
     }
 
-    public AbstractFile getRoot() {
+    public AbstractFile getRoot() throws IOException {
         if(!getRootSet) {
             getRoot = file.getRoot();
             // Create a CachedFile instance around the file if recursion is enabled

@@ -55,7 +55,7 @@ public class GoToParentAction extends MuAction implements ActivePanelListener, L
      * has a parent, this action will be enabled, if not it will be disabled.
      */
     private void toggleEnabledState() {
-        setEnabled(mainFrame.getActiveTable().getFolderPanel().getCurrentFolder().getParent()!=null);
+        setEnabled(mainFrame.getActiveTable().getFolderPanel().getCurrentFolder().getParentSilently()!=null);
     }
 
 
@@ -68,7 +68,7 @@ public class GoToParentAction extends MuAction implements ActivePanelListener, L
         // Does nothing if the current folder doesn't have a parent.
         AbstractFile parent;
         FolderPanel folderPanel = mainFrame.getActiveTable().getFolderPanel();
-        if((parent=folderPanel.getCurrentFolder().getParent())!=null)
+        if((parent=folderPanel.getCurrentFolder().getParentSilently())!=null)
             folderPanel.tryChangeCurrentFolder(parent);
     }
 

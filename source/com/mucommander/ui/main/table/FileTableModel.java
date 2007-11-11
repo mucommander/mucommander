@@ -111,7 +111,7 @@ public class FileTableModel extends AbstractTableModel implements Columns, Confi
         if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(""+folder);
         int nbFiles = children.length;
         this.currentFolder = folder;
-        this.parent = folder.getParent();
+        this.parent = folder.getParentSilently();
 
         // Initialize file indexes and create CachedFile instances to speed up table display and navigation
         this.cachedFiles = children;

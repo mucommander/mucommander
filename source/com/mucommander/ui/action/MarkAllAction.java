@@ -40,7 +40,7 @@ public class MarkAllAction extends MuAction {
         FileTableModel tableModel = fileTable.getFileTableModel();
 
         int nbRows = tableModel.getRowCount();
-        for(int i=fileTable.getCurrentFolder().getParent()==null?0:1; i<nbRows; i++)
+        for(int i=fileTable.getCurrentFolder().getParentSilently()==null?0:1; i<nbRows; i++)
             tableModel.setRowMarked(i, true);
         fileTable.repaint();
 

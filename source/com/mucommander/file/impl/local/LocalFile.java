@@ -653,7 +653,7 @@ public class LocalFile extends AbstractFile {
      * Overridden for performance reasons. This method doesn't iterate like {@link AbstractFile#getRoot()} to resolve
      * the root file.
      */
-    public AbstractFile getRoot() {
+    public AbstractFile getRoot() throws IOException {
         if(PlatformManager.isWindowsFamily()) {
             // Extract drive letter from the path
             Matcher matcher = windowsDriveRootPattern.matcher(absPath);
@@ -682,8 +682,15 @@ public class LocalFile extends AbstractFile {
         // Not doing this under Windows would mean files would get moved between drives with renameTo, which doesn't
         // allow the transfer to be monitored.
         // Note that Windows UNC paths are handled by the super method when comparing hosts for equality.  
-        if(PlatformManager.isWindowsFamily() && !getRoot().equals(destFile.getRoot()))
-            return SHOULD_NOT_HINT;
+        if(PlatformManager.isWindowsFamily()) {
+            try {
+                if(!getRoot().equals(destFile.getRoot()))
+                    return SHOULD_NOT_HINT; 
+            }
+            catch(IOException e) {
+                return SHOULD_NOT_HINT;
+            }
+        }
 
         return moveHint;
     }
