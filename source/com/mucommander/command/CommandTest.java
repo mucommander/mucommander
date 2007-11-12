@@ -29,6 +29,17 @@ import java.io.File;
  * @author Nicolas Rinaudo
  */
 public class CommandTest extends TestCase {
+    // - Constants -------------------------------------------------------------
+    // -------------------------------------------------------------------------
+    /** Test command's alias. */
+    private static final String ALIAS        = "alias";
+    /** Test command's command. */
+    private static final String COMMAND      = "ls -la";
+    /** Test command's display name. */
+    private static final String DISPLAY_NAME = "test";
+
+
+
     // - Instance fields -------------------------------------------------------
     // -------------------------------------------------------------------------
     /** Used while testing keyword substitution. */
@@ -331,5 +342,47 @@ public class CommandTest extends TestCase {
         assertEquals("-c",                 tokens[6]);
         assertEquals("\"echo {}; wc {}\"", tokens[7]);
         assertEquals("\\;",                tokens[8]);
+    }
+
+
+
+    // - Constructors tests ----------------------------------------------------
+    // -------------------------------------------------------------------------
+    /**
+     * Makes sure the specified command matches the specified arguments.
+     */
+    private void checkCommand(Command command, int type, boolean isDisplayNameSet) {
+        // Tests common values.
+        assertEquals(ALIAS, command.getAlias());
+        assertEquals(COMMAND, command.getCommand());
+        assertEquals(type, command.getType());
+
+        // Tests context dependant values.
+        if(isDisplayNameSet) {
+            assertTrue(command.isDisplayNameSet());
+            assertEquals(DISPLAY_NAME, command.getDisplayName());
+        }
+        else {
+            assertFalse(command.isDisplayNameSet());
+            assertEquals(ALIAS, command.getDisplayName());
+        }
+    }
+
+    /**
+     * Makes sure all constructors initialise a command to the right values.
+     */
+    public void testConstructors() {
+        // Tests the 2 arguments constructor.
+        checkCommand(new Command(ALIAS, COMMAND), Command.NORMAL_COMMAND, false);
+
+        // Tests the 3 arguments constructor.
+        checkCommand(new Command(ALIAS, COMMAND, Command.NORMAL_COMMAND), Command.NORMAL_COMMAND, false);
+        checkCommand(new Command(ALIAS, COMMAND, Command.SYSTEM_COMMAND), Command.SYSTEM_COMMAND, false);
+        checkCommand(new Command(ALIAS, COMMAND, Command.INVISIBLE_COMMAND), Command.INVISIBLE_COMMAND, false);
+
+        // Tests the 4 arguments constructor.
+        checkCommand(new Command(ALIAS, COMMAND, Command.NORMAL_COMMAND, DISPLAY_NAME), Command.NORMAL_COMMAND, true);
+        checkCommand(new Command(ALIAS, COMMAND, Command.SYSTEM_COMMAND, DISPLAY_NAME), Command.SYSTEM_COMMAND, true);
+        checkCommand(new Command(ALIAS, COMMAND, Command.INVISIBLE_COMMAND, DISPLAY_NAME), Command.INVISIBLE_COMMAND, true);
     }
 }
