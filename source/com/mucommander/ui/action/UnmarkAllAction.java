@@ -29,22 +29,9 @@ import java.util.Hashtable;
  *
  * @author Maxence Bernard
  */
-public class UnmarkAllAction extends MuAction {
+public class UnmarkAllAction extends MarkAllAction {
 
     public UnmarkAllAction(MainFrame mainFrame, Hashtable properties) {
-        super(mainFrame, properties);
-    }
-
-    public void performAction() {
-        FileTable fileTable = mainFrame.getActiveTable();
-        FileTableModel tableModel = fileTable.getFileTableModel();
-
-        int nbRows = tableModel.getRowCount();
-        for(int i=fileTable.getCurrentFolder().getParentSilently()==null?0:1; i<nbRows; i++)
-            tableModel.setRowMarked(i, false);
-        fileTable.repaint();
-
-        // Notify registered listeners that currently marked files have changed on the FileTable
-        fileTable.fireMarkedFilesChangedEvent();
+        super(mainFrame, properties, false);
     }
 }

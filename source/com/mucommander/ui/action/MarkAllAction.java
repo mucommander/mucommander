@@ -30,9 +30,15 @@ import java.util.Hashtable;
  * @author Maxence Bernard
  */
 public class MarkAllAction extends MuAction {
+    private boolean mark;
+
+    protected MarkAllAction(MainFrame mainFrame, Hashtable properties, boolean mark) {
+        super(mainFrame, properties);
+        this.mark = mark;
+    }
 
     public MarkAllAction(MainFrame mainFrame, Hashtable properties) {
-        super(mainFrame, properties);
+        this(mainFrame, properties, true);
     }
 
     public void performAction() {
@@ -41,7 +47,7 @@ public class MarkAllAction extends MuAction {
 
         int nbRows = tableModel.getRowCount();
         for(int i=fileTable.getCurrentFolder().getParentSilently()==null?0:1; i<nbRows; i++)
-            tableModel.setRowMarked(i, true);
+            tableModel.setRowMarked(i, mark);
         fileTable.repaint();
 
         // Notify registered listeners that currently marked files have changed on the FileTable
