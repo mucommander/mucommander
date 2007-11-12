@@ -44,7 +44,7 @@ public class GoToParentAction extends GoToAction {
      * Enables or disables this action based on the currently active folder's
      * has a parent, this action will be enabled, if not it will be disabled.
      */
-    private void toggleEnabledState() {
+    protected void toggleEnabledState() {
         setEnabled(mainFrame.getActiveTable().getFolderPanel().getCurrentFolder().getParentSilently()!=null);
     }
 
