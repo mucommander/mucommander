@@ -31,19 +31,10 @@ import java.util.Hashtable;
  *
  * @author Maxence Bernard
  */
-public class GoForwardAction extends MuAction implements ActivePanelListener, LocationListener {
+public class GoForwardAction extends GoToAction {
 
     public GoForwardAction(MainFrame mainFrame, Hashtable properties) {
         super(mainFrame, properties);
-
-        // Listen to active table change events
-        mainFrame.addActivePanelListener(this);
-
-        // Listen to location change events
-        mainFrame.getFolderPanel1().getLocationManager().addLocationListener(this);
-        mainFrame.getFolderPanel2().getLocationManager().addLocationListener(this);
-
-        toggleEnabledState();
     }
 
 
@@ -60,30 +51,4 @@ public class GoForwardAction extends MuAction implements ActivePanelListener, Lo
         setEnabled(mainFrame.getActiveTable().getFolderPanel().getFolderHistory().hasForwardFolder());
     }
 
-
-    /////////////////////////////////
-    // ActivePanelListener methods //
-    /////////////////////////////////
-
-    public void activePanelChanged(FolderPanel folderPanel) {
-        toggleEnabledState();
-    }
-
-
-    //////////////////////////////
-    // LocationListener methods //
-    //////////////////////////////
-
-    public void locationChanged(LocationEvent e) {
-        toggleEnabledState();
-    }
-
-    public void locationChanging(LocationEvent e) {
-    }
-
-    public void locationCancelled(LocationEvent e) {
-    }
-
-    public void locationFailed(LocationEvent e) {
-    }
 }

@@ -27,27 +27,62 @@ import com.mucommander.ui.main.MainFrame;
 import java.util.Hashtable;
 
 /**
- * This action recalls the previous folder in the current FolderPanel's history.
- *
- * @author Maxence Bernard
+ * @author Maxence Bernard, Nicolas Rinaudo
  */
-public class GoBackAction extends GoToAction {
+public abstract class GoToAction extends MuAction implements ActivePanelListener, LocationListener {
 
-    public GoBackAction(MainFrame mainFrame, Hashtable properties) {
+    public GoToAction(MainFrame mainFrame, Hashtable properties) {
         super(mainFrame, properties);
+
+        // Listen to active table change events
+        mainFrame.addActivePanelListener(this);
+
+        // Listen to location change events
+        mainFrame.getFolderPanel1().getLocationManager().addLocationListener(this);
+        mainFrame.getFolderPanel2().getLocationManager().addLocationListener(this);
+
+        toggleEnabledState();
     }
 
 
-    public void performAction() {
-        mainFrame.getActiveTable().getFolderPanel().getFolderHistory().goBack();
-    }
 
+    //////////////////////
+    // Abstract methods //
+    //////////////////////
+    public abstract void performAction();
 
     /**
      * Enables or disables this action based on the history of the currently active FolderPanel: if there is a previous
      * folder in the history, this action will be enabled, if not it will be disabled.
      */
-    private void toggleEnabledState() {
-        setEnabled(mainFrame.getActiveTable().getFolderPanel().getFolderHistory().hasBackFolder());
+    private abstract void toggleEnabledState();
+
+
+
+    /////////////////////////////////
+    // ActivePanelListener methods //
+    /////////////////////////////////
+
+    public void activePanelChanged(FolderPanel folderPanel) {
+        toggleEnabledState();
+    }
+
+
+
+    //////////////////////////////
+    // LocationListener methods //
+    //////////////////////////////
+
+    public void locationChanged(LocationEvent e) {
+        toggleEnabledState();
+    }
+
+    public void locationChanging(LocationEvent e) {
+    }
+
+    public void locationCancelled(LocationEvent e) {
+    }
+
+    public void locationFailed(LocationEvent e) {
     }
 }
