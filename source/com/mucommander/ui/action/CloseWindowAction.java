@@ -19,11 +19,15 @@
 package com.mucommander.ui.action;
 
 import com.mucommander.ui.main.MainFrame;
+import com.mucommander.ui.main.WindowManager;
 
 import java.util.Hashtable;
 
 /**
- * This action closes the currently active MainFrame (the one this action is attached to).
+ * If there is more than one window currently open, this action disposes the currently active MainFrame
+ * (i.e. the one this action is attached to). On the contrary, if there is only one MainFrame currently open, this
+ * action performs {@link com.mucommander.ui.action.QuitAction} to quit the application after confirmation by the user,
+ * if the quit confirmation has not been disabled.
  *
  * @author Maxence Bernard
  */
@@ -34,6 +38,11 @@ public class CloseWindowAction extends MuAction {
     }
 
     public void performAction() {
-        mainFrame.dispose();
+        // Closing the last window is equivalent to quitting the application: perform QuitAction in that case
+        if(WindowManager.getMainFrames().size()==1)
+            ActionManager.performAction(QuitAction.class, mainFrame);
+        // Simply dispose the MainFrame
+        else
+            mainFrame.dispose();
     }
 }

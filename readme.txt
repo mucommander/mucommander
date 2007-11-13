@@ -120,11 +120,13 @@ Improvements:
 - Bzip2 read-access speed substantially improved.
 - Improved icon representation of symbolic links.
 - 'Delete' dialog now shows the list of file to be deleted 
-  (contributed by Alejandro Scandroli)
+  (contributed by Alejandro Scandroli).
 - New 'Find' functionality added to the text viewer and editor
-  (contributed by Mariusz Jakubowski)
+  (contributed by Mariusz Jakubowski).
 - command keyword substitution now applies to marked files as well as the
   current selection.
+- Quit confirmation dialog now shows the number of open windows and asks
+  for confirmation when the last window is closed.
 
 Localization:
 

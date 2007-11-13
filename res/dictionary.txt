@@ -4342,8 +4342,12 @@ quit_dialog.title:pt_BR:Sair do muCommander
 quit_dialog.title:NL:muCommander afsluiten
 quit_dialog.title:SK:Ukončiť muCommander
 
-quit_dialog.desc:EN:Close all windows and quit muCommander ? 
-quit_dialog.desc:FR:Fermer toutes les fenêtres et quitter muCommander ?
+# %1 will be replaced by the number of windows that are currently open. This
+# number may be 1 or more, so the phrase has to accomodate both singular
+# and plural forms. This entry gets displayed on a single line so it should
+# stay reasonnably short.
+quit_dialog.desc:EN:You have %1 window(s) open. Are you sure you want to quit ? 
+quit_dialog.desc:FR:Il y a %1 fenêtre(s) ouverte(s). Etes-vous sûr de vouloir quitter ?
 quit_dialog.desc:DE:Alle Fenster schließen und muCommander beenden ?
 quit_dialog.desc:ES:¿Desea cerrar todas las ventanas y salir de muCommander?
 quit_dialog.desc:CS:Zavřít všechna okna a ukončit muCommander ?
@@ -4359,6 +4363,18 @@ quit_dialog.desc:KR:모든 창들과 muCommander를 종료 하시겠습니까?
 quit_dialog.desc:pt_BR:Fechar todas as janelas e sair do muCommander ?
 quit_dialog.desc:NL:Alle vensters sluiten en muCommander afsluiten ?
 quit_dialog.desc:SK:Zatvoriť všetky okná a ukončiť muCommander?
+# Translation missing : this entry needs to be updated to take into account the number of windows
+
+
+
+
+
+
+
+
+
+
+
 
 quit_dialog.show_next_time:EN:Show next time
 quit_dialog.show_next_time:FR:Afficher la prochaine fois

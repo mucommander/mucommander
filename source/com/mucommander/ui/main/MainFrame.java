@@ -22,6 +22,8 @@ import com.mucommander.Debug;
 import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.ui.action.ActionKeymap;
+import com.mucommander.ui.action.ActionManager;
+import com.mucommander.ui.action.CloseWindowAction;
 import com.mucommander.ui.event.ActivePanelListener;
 import com.mucommander.ui.event.LocationEvent;
 import com.mucommander.ui.event.LocationListener;
@@ -29,15 +31,15 @@ import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.layout.ProportionalSplitPane;
 import com.mucommander.ui.layout.YBoxPanel;
 import com.mucommander.ui.main.menu.MainMenuBar;
-import com.mucommander.ui.main.table.FileTable;
 import com.mucommander.ui.main.table.Columns;
+import com.mucommander.ui.main.table.FileTable;
 import com.mucommander.ui.main.table.FileTableConfiguration;
 
 import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
 import javax.swing.table.TableColumnModel;
-import javax.swing.event.ChangeEvent;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.Iterator;
 import java.util.Vector;
 import java.util.WeakHashMap;
@@ -163,8 +165,13 @@ public class MainFrame extends JFrame implements LocationListener {
         southPanel.add(commandBar);
         contentPane.add(southPanel, BorderLayout.SOUTH);
 
-        // Dispose window on close
-        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        // Perform CloseAction when the user asked the window to close
+        setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+        addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e) {
+                ActionManager.performAction(CloseWindowAction.class, MainFrame.this);
+            }
+        });
 
         ActionKeymap.registerActions(this);
 
