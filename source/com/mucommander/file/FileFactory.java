@@ -32,7 +32,6 @@ import com.mucommander.file.util.FileToolkit;
 import com.mucommander.file.util.PathTokenizer;
 import com.mucommander.util.Enumerator;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
@@ -116,7 +115,7 @@ public class FileFactory {
     private static WeakHashMap archiveFileCache = new WeakHashMap();
 
     /** System temp directory */
-    private final static File TEMP_DIRECTORY = new File(System.getProperty("java.io.tmpdir"));
+    private final static AbstractFile TEMP_DIRECTORY;
 
     /** Default file icon provider, initialized in static block */
     private static FileIconProvider defaultFileIconProvider;
@@ -135,7 +134,8 @@ public class FileFactory {
         registerProtocol(FileProtocols.SFTP,      new com.mucommander.file.impl.sftp.SFTPProtocolProvider());
         registerProtocol(FileProtocols.NFS,       new com.mucommander.file.impl.nfs.NFSProtocolProvider());
         registerProtocol(FileProtocols.BOOKMARKS, new com.mucommander.file.impl.bookmark.BookmarkProtocolProvider());
-        
+//        registerProtocol(FileProtocols.S3,        new com.mucommander.file.impl.s3.S3Provider());
+
         // Register built-in archive file formats, order for TarArchiveFile and GzipArchiveFile/Bzip2ArchiveFile is important:
         // TarArchiveFile must match 'tar.gz'/'tar.bz2' files before GzipArchiveFile/Bzip2ArchiveFile does.
         registerArchiveFormat(new com.mucommander.file.impl.zip.ZipFormatProvider(),     new ExtensionFilenameFilter(new String[] {".zip", ".jar", ".war", ".wal", ".wmz",
@@ -154,6 +154,9 @@ public class FileFactory {
 //            defaultFileIconProvider = new CocoaFileIconProvider();
 //        else
         defaultFileIconProvider = new SwingFileIconProvider();
+
+        // Create the temp directory folder
+        TEMP_DIRECTORY = getFile(System.getProperty("java.io.tmpdir"));
     }
 
 
@@ -575,19 +578,49 @@ public class FileFactory {
      * @param deleteOnExit if <code>true</code>, the temporary file will be deleted upon normal termination of the JVM
      * @return the temporary file, may be a LocalFile or an AbstractArchiveFile if the filename's extension corresponds
      * to a registered archive format.
+     * @throws IOException if an error occurred while instanciating the temporary file. This should not happen under
+     * normal circumstances.
      */
-    public static AbstractFile getTemporaryFile(String desiredFilename, boolean deleteOnExit) {
+    public static AbstractFile getTemporaryFile(String desiredFilename, boolean deleteOnExit) throws IOException {
+        if(desiredFilename==null || desiredFilename.equals(""))
+            desiredFilename = "temp";
+        
         // Attempt to use the desired name
-        File tempFile = new File(TEMP_DIRECTORY, desiredFilename);
+        AbstractFile tempFile = TEMP_DIRECTORY.getDirectChild(desiredFilename);
 
         if(tempFile.exists())
-            tempFile = new File(TEMP_DIRECTORY, getFilenameVariation(desiredFilename));
+            tempFile = TEMP_DIRECTORY.getDirectChild(getFilenameVariation(desiredFilename));
 
         if(deleteOnExit)
-            tempFile.deleteOnExit();
+            ((java.io.File)tempFile.getUnderlyingFileObject()).deleteOnExit();
 
-        return getFile(tempFile.getAbsolutePath());
+        return tempFile;
     }
+
+    /**
+     * Convenience method that creates a temporary file with a default 'desired name'. Yield the same result as calling
+     * {@link #getTemporaryFile(String, boolean)} with <code>null</code>
+     *
+     * @param deleteOnExit if <code>true</code>, the temporary file will be deleted upon normal termination of the JVM
+     * @return the temporary file, may be a LocalFile or an AbstractArchiveFile if the filename's extension corresponds
+     * to a registered archive format.
+     * @throws IOException if an error occurred while instanciating the temporary file. This should not happen under
+     * normal circumstances.
+     */
+    public static AbstractFile getTemporaryFile(boolean deleteOnExit) throws IOException {
+        return getTemporaryFile(null, deleteOnExit);
+    }
+
+    /**
+     * Returns the temporary folder, i.e. the folder where the parent folder of temporary files returned by
+     * {@link #getTemporaryFile(String, boolean)}.
+     *
+     * @return the temporary folder
+     */
+    public static AbstractFile getTemporaryFolder() {
+        return TEMP_DIRECTORY;
+    }
+
 
     /**
      * Returns true if the given filename's extension matches one of the registered archive formats.
