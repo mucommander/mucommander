@@ -21,25 +21,41 @@ package com.mucommander.job;
 import com.mucommander.PlatformManager;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.util.FileSet;
-import com.mucommander.ui.dialog.file.FileCollisionDialog;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;
 
-import java.io.File;
-
 /**
- * This job copies a file to a temporary local file, makes the temporary file read-only and executes it
- * with native file associations.
+ * This job copies a file or a set of files to a temporary folder, makes the temporary file(s) read-only and
+ * executes each of them with native file associations. The temporary files are deleted when the JVM terminates.
+ *
+ * <p>It is important to understand that when this job operates on a set of files a process is started for each file
+ * to execute, so this operation should require confirmation by the user before being attempted.</p>
  *
  * @author Maxence Bernard
  */
-public class TempExecJob extends CopyJob {
+public class TempExecJob extends TempCopyJob {
 
-    private AbstractFile tempFile;
+    /**
+     * Creates a new <code>TempExecJob</code> that operates on a single file.
+     *
+     * @param progressDialog the ProgressDialog that monitors this job
+     * @param mainFrame the MainFrame this job is attached to
+     * @param fileToExecute the file to copy to a temporary location and execute
+     */
+    public TempExecJob(ProgressDialog progressDialog, MainFrame mainFrame, AbstractFile fileToExecute) {
+        super(progressDialog, mainFrame, fileToExecute);
+    }
 
-    public TempExecJob(ProgressDialog progressDialog, MainFrame mainFrame, AbstractFile fileToExecute, AbstractFile tempFile) {
-        super(progressDialog, mainFrame, new FileSet(fileToExecute.getParentSilently(), fileToExecute), tempFile.getParentSilently(), tempFile.getName(), COPY_MODE, FileCollisionDialog.OVERWRITE_ACTION);
-        this.tempFile = tempFile;
+    /**
+     * Creates a new <code>TempExecJob</code> that operates on a set of files. Only a single command get executed, operating on
+     * all files.
+     *
+     * @param progressDialog the ProgressDialog that monitors this job
+     * @param mainFrame the MainFrame this job is attached to
+     * @param filesToExecute the set of files to copy to a temporary location and execute
+     */
+    public TempExecJob(ProgressDialog progressDialog, MainFrame mainFrame, FileSet filesToExecute) {
+        super(progressDialog, mainFrame, filesToExecute);
     }
 
 
@@ -47,13 +63,13 @@ public class TempExecJob extends CopyJob {
     // Overridden methods //
     ////////////////////////
 
-    protected void jobCompleted() {
-        super.jobCompleted();
-
-        // Make the temporary file read only
-        new File(tempFile.getAbsolutePath()).setReadOnly();
+    protected boolean processFile(AbstractFile file, Object recurseParams) {
+        if(!super.processFile(file, recurseParams))
+            return false;
 
         // Try to open the file.
-        PlatformManager.open(tempFile);
+        PlatformManager.open(destFile);
+
+        return true;
     }
 }

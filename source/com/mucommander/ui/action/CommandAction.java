@@ -20,17 +20,14 @@ package com.mucommander.ui.action;
 
 import com.mucommander.Debug;
 import com.mucommander.command.Command;
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.FileFactory;
 import com.mucommander.file.FileProtocols;
-import com.mucommander.file.util.FileSet;
 import com.mucommander.file.impl.local.LocalFile;
-import com.mucommander.job.TempCommandJob;
+import com.mucommander.file.util.FileSet;
+import com.mucommander.job.TempOpenWithJob;
 import com.mucommander.process.ProcessRunner;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;
-import com.mucommander.ui.main.table.FileTable;
 
 import java.util.Hashtable;
 
@@ -83,11 +80,10 @@ public class CommandAction extends MuAction {
                 }
             }
         }
-        /*
         // Otherwise, copies the files locally before running the command.
-        else
-            progressDialog.start(new TempCommandJob(new ProgressDialog(mainFrame, Translator.get("copy_dialog.copying")), mainFrame, selectedFile,
-                                                    FileFactory.getTemporaryFile(selectedFile.getName(), true), command));
-        */
+        else {
+            ProgressDialog progressDialog = new ProgressDialog(mainFrame, Translator.get("copy_dialog.copying"));
+            progressDialog.start(new TempOpenWithJob(new ProgressDialog(mainFrame, Translator.get("copy_dialog.copying")), mainFrame, selectedFiles, command));
+        }
     }
 }

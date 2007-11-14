@@ -18,30 +18,49 @@
 
 package com.mucommander.job;
 
+import com.mucommander.Debug;
 import com.mucommander.command.Command;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.util.FileSet;
 import com.mucommander.process.ProcessRunner;
-import com.mucommander.ui.dialog.file.FileCollisionDialog;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;
 
-import java.io.File;
-
 /**
- * This job copies a file to a temporary local file, makes the temporary file read-only and executes it
- * with a customisable command.
+ * This job copies a file or a set of files to a temporary folder, makes the temporary file(s) read-only and
+ * executes them with a specific command. The temporary files are deleted when the JVM terminates.
  *
  * @author Maxence Bernard, Nicolas Rinaudo
  */
-public class TempOpenWithJob extends CopyJob {
+public class TempOpenWithJob extends TempCopyJob {
 
-    private AbstractFile tempFile;
-    private Command      command;
+    /** The commmand to execute, appended with the temporary file path(s) */
+    private Command command;
 
-    public TempOpenWithJob(ProgressDialog progressDialog, MainFrame mainFrame, AbstractFile fileToExecute, AbstractFile tempFile, Command command) {
-        super(progressDialog, mainFrame, new FileSet(fileToExecute.getParentSilently(), fileToExecute), tempFile.getParentSilently(), tempFile.getName(), COPY_MODE, FileCollisionDialog.OVERWRITE_ACTION);
-        this.tempFile = tempFile;
+    /**
+     * Creates a new <code>TempOpenWithJob</code> that operates on a single file.
+     *
+     * @param progressDialog the ProgressDialog that monitors this job
+     * @param mainFrame the MainFrame this job is attached to
+     * @param fileToExecute the file to copy to a temporary location and execute
+     * @param command the command used to execute the temporary file
+     */
+    public TempOpenWithJob(ProgressDialog progressDialog, MainFrame mainFrame, AbstractFile fileToExecute, Command command) {
+        super(progressDialog, mainFrame, fileToExecute);
+        this.command  = command;
+    }
+
+    /**
+     * Creates a new <code>TempOpenWithJob</code> that operates on a set of files. Only a single command get executed, operating on
+     * all files.
+     *
+     * @param progressDialog the ProgressDialog that monitors this job
+     * @param mainFrame the MainFrame this job is attached to
+     * @param filesToExecute the set of files to copy to a temporary location and execute
+     * @param command the command used to execute the temporary file
+     */
+    public TempOpenWithJob(ProgressDialog progressDialog, MainFrame mainFrame, FileSet filesToExecute, Command command) {
+        super(progressDialog, mainFrame, filesToExecute);
         this.command  = command;
     }
 
@@ -53,10 +72,11 @@ public class TempOpenWithJob extends CopyJob {
     protected void jobCompleted() {
         super.jobCompleted();
 
-        // Make the temporary file read only
-        new File(tempFile.getAbsolutePath()).setReadOnly();
-
-        try {ProcessRunner.execute(command.getTokens(tempFile), tempFile);}
-        catch(Exception e) {}
+        try {
+            ProcessRunner.execute(command.getTokens(tempFiles), baseDestFolder);
+        }
+        catch(Exception e) {
+            if(Debug.ON) Debug.trace("Caught exception executing "+command+" "+tempFiles);
+        }
     }
 }

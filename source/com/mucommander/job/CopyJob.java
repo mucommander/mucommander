@@ -43,6 +43,10 @@ public class CopyJob extends TransferFileJob {
     /** Base destination folder */
     protected AbstractFile baseDestFolder;
 
+    /** Destination file that is being copied, this value is updated every time #processFile() is called.
+     * The value can be used by subclasses that override processFile should they need to work on the destination file. */
+    protected AbstractFile destFile;
+
     /** New filename in destination */
     private String newName;
 
@@ -150,7 +154,7 @@ public class CopyJob extends TransferFileJob {
             destFileName = originalName;
 		
         // Create destination AbstractFile instance
-        AbstractFile destFile;
+        destFile = null;
         do {    // Loop for retry
             try {
                 destFile = destFolder.getDirectChild(destFileName);

@@ -23,7 +23,6 @@ import com.mucommander.conf.ConfigurationEvent;
 import com.mucommander.conf.ConfigurationListener;
 import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.file.AbstractFile;
-import com.mucommander.file.FileFactory;
 import com.mucommander.file.FileProtocols;
 import com.mucommander.file.impl.local.LocalFile;
 import com.mucommander.file.util.ResourceLoader;
@@ -93,7 +92,7 @@ public class ViewAction extends InternalViewAction implements ConfigurationListe
                 // If it's distant, copies it locally before running the custom viewer on it.
                 else {
                     ProgressDialog progressDialog = new ProgressDialog(mainFrame, Translator.get("copy_dialog.copying"));
-                    TempOpenWithJob job = new TempOpenWithJob(progressDialog, mainFrame, file, FileFactory.getTemporaryFile(file.getName(), true), customViewer);
+                    TempOpenWithJob job = new TempOpenWithJob(progressDialog, mainFrame, file, customViewer);
                     progressDialog.start(job);
                 }
             }
