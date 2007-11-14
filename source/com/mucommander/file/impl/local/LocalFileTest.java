@@ -22,6 +22,8 @@ import com.mucommander.file.AbstractFile;
 import com.mucommander.file.AbstractFileTestCase;
 import com.mucommander.file.FileFactory;
 
+import java.io.IOException;
+
 /**
  * An {@link com.mucommander.file.AbstractFileTestCase} implementation for {@link LocalFile}.
  *
@@ -33,7 +35,7 @@ public class LocalFileTest extends AbstractFileTestCase {
     // AbstractFileTestCase implementation //
     /////////////////////////////////////////
 
-    protected AbstractFile getTemporaryFile() {
+    protected AbstractFile getTemporaryFile() throws IOException {
         return FileFactory.getTemporaryFile(getClass().getName(), false);
     }
 }
