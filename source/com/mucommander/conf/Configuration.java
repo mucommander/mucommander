@@ -931,7 +931,7 @@ public class Configuration {
      * @param  root where to start exploring from.
      * @param  name name of the variable to seek.
      * @param  create whether or not the path to the variable should be created if it doesn't exist.
-     * @return the name of the variable trimmed of section information, <code>null</code> if not found.
+     * @return        the name of the variable trimmed of section information, <code>null</code> if not found.
      */
     private String moveToParent(ConfigurationExplorer root, String name, boolean create) {
         StringTokenizer parser; // Used to parse the variable's path.
@@ -978,6 +978,16 @@ public class Configuration {
         while(iterator.hasNext())
             ((ConfigurationListener)iterator.next()).configurationChanged(event);
     }
+
+
+
+    // - Misc. -----------------------------------------------------------------
+    // -------------------------------------------------------------------------
+    /**
+     * Returns the configuration's root section.
+     * @return the configuration's root section.
+     */
+    ConfigurationSection getRoot() {return root;}
 
 
 
