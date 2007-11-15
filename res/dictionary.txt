@@ -182,7 +182,6 @@ edit:pt_BR:Editar
 edit:NL:Bewerken
 edit:SK:Upraviť
 
-
 close:EN:Close
 close:FR:Fermer
 close:DE:Schließen
@@ -215,7 +214,7 @@ reset:SI:Resetiraj
 reset:RU:сброс
 reset:DE:Zurücksetzen
 reset:CS:Resetovat
-# Translation missing
+# Translation missing (PL, IT, KR)
 
 
 
@@ -711,7 +710,7 @@ encoding:ES:Codificación
 encoding:SI:Kodiranje
 encoding:RU:Кодировка
 encoding:DE:Kodierung
-# Translation missing
+# Translation missing (PL, IT, KR)
 
 
 
@@ -737,7 +736,7 @@ license:RU:Лицензия
 license:DE:Lizenz
 license:CS:Licence
 license:PL:Licencja
-# Translation missing
+# Translation missing (IT, KR)
 
 
 
@@ -946,7 +945,7 @@ go_to:ES:Ir a
 go_to:SI:Pojdi v
 go_to:RU:Перейти к
 go_to:DE:Gehe zu
-# Translation missing
+# Translation missing (PL, KR)
 
 
 
@@ -988,7 +987,7 @@ preview:RU:Предпросмотр
 preview:DE:Vorschau
 preview:CS:Náhled
 preview:PL:Podgląd
-# Translation missing
+# Translation missing (IT, KR)
 
 
 
@@ -1011,7 +1010,7 @@ sample_text:RU:Пример текста
 sample_text:DE:Beispieltext
 sample_text:CS:Ukázkový text
 sample_text:PL:Przykładowy tekst
-# Translation missing
+# Translation missing (IT, KR)
 
 
 
@@ -1173,7 +1172,7 @@ this_file_does_not_exist:SI:Datoteka ne obstaja oz. ni dostopna: %1
 this_file_does_not_exist:RU:Файл %1 не существует или недоступен
 this_file_does_not_exist:DE:Die Datei existiert nicht oder ist nicht verfügbar: %1
 this_file_does_not_exist:CS:Tento soubor neexistuje nebo není dostupný: %1
-# Translation missing
+# Translation missing (HU, PL, IT, KR)
 
 
 
@@ -1455,7 +1454,7 @@ read_error:SI:Napaka pri branju
 read_error:RU:Ошибка считывания
 read_error:DE:Lesefehler
 read_error:CS:Chyba při čtení
-# Translation missing
+# Translation missing (PL, IT, KR)
 
 
 
@@ -2735,8 +2734,6 @@ com.mucommander.ui.action.MarkPageUpAction.label:HU:Előző lap kijelölése
 
 
 
-
-
 com.mucommander.ui.action.MarkUpToFirstRowAction.label:EN:Mark files to the beginning
 com.mucommander.ui.action.MarkUpToFirstRowAction.label:FR:Marquer les fichiers jusqu'au début
 com.mucommander.ui.action.MarkUpToFirstRowAction.label:zh_TW:標記檔案至開頭
@@ -3311,7 +3308,7 @@ com.mucommander.ui.action.ToggleHiddenFilesAction.label:EN:$[prefs_dialog.show_h
 #com.mucommander.ui.action.ToggleHiddenFilesAction.hide:zh_TW:不顯示隱藏檔案
 #com.mucommander.ui.action.ToggleHiddenFilesAction.hide:HU:Rejtett fájlok elrejtése
 #com.mucommander.ui.action.ToggleHiddenFilesAction.hide:ES:Ocultar ficheros ocultos
-# Translation missing
+# Translation missing (PL, IT, KR, SK, RU, zh_CN)
 
 
 
@@ -3406,10 +3403,7 @@ com.mucommander.ui.action.ToggleShowFoldersFirstAction.label:SI:Najprej prikaži
 com.mucommander.ui.action.ToggleShowFoldersFirstAction.label:RU:Вынести каталоги в начало списка
 com.mucommander.ui.action.ToggleShowFoldersFirstAction.label:DE:Ordner zuerst anzeigen
 com.mucommander.ui.action.ToggleShowFoldersFirstAction.label:PL:Pokazuj foldery jako pierwsze
-# Translation missing
-
-
-
+# Translation missing (IT)
 
 
 
@@ -3536,12 +3530,7 @@ com.mucommander.ui.action.BringAllToFrontAction.label:SI:Postavi vse v ospredje
 com.mucommander.ui.action.BringAllToFrontAction.label:RU:Показать все окна
 com.mucommander.ui.action.BringAllToFrontAction.label:DE:Alle Fenster nach vorne bringen
 com.mucommander.ui.action.BringAllToFrontAction.label:CS:Přenést vše do popředí
-# Translation missing
-
-
-
-
-
+# Translation missing (PL, IT, KR)
 
 
 
@@ -3781,7 +3770,7 @@ com.mucommander.ui.action.OpenTrashAction.label:SI:Odpri koš
 com.mucommander.ui.action.OpenTrashAction.label:RU:Открыть Корзину
 com.mucommander.ui.action.OpenTrashAction.label:DE:Papierkorb öffnen
 com.mucommander.ui.action.OpenTrashAction.label:CS:Otevřít Koš
-# Translation missing
+# Translation missing (PL, IT, KR)
 
 
 
@@ -3805,7 +3794,7 @@ com.mucommander.ui.action.EmptyTrashAction.label:SI:Izprazni koš
 com.mucommander.ui.action.EmptyTrashAction.label:RU:Очистить корзину
 com.mucommander.ui.action.EmptyTrashAction.label:DE:Papierkorb leeren
 com.mucommander.ui.action.EmptyTrashAction.label:CS:Vyprázdnit Koš
-# Translation missing
+# Translation missing (PL, IT, KR)
 
 
 
@@ -4370,12 +4359,6 @@ quit_dialog.desc:SK:Zatvoriť všetky okná a ukončiť muCommander?
 
 
 
-
-
-
-
-
-
 quit_dialog.show_next_time:EN:Show next time
 quit_dialog.show_next_time:FR:Afficher la prochaine fois
 quit_dialog.show_next_time:DE:Nächstes Mal anzeigen
@@ -4786,10 +4769,7 @@ optimizing_archive:SI:Optimiziranje arhiva %1
 optimizing_archive:RU:Оптимизация архива %1
 optimizing_archive:DE:Archiv optimieren  %1
 optimizing_archive:CS:Optimalizuji archív %1
-# Translation missing
-
-
-
+# Translation missing (PL, IT, KR)
 
 
 
@@ -4809,6 +4789,9 @@ error_while_optimizing_archive:SI:Napaka pri optimizaciji arhiva %1
 error_while_optimizing_archive:DE:Fehler während der Archioptimierung %1
 error_while_optimizing_archive:CS:Chyba při optimalizaci archívu %1
 # Translation missing
+
+
+
 
 
 
@@ -5027,11 +5010,7 @@ delete_dialog.permanently_delete.confirmation_details:RU:Эта операция
 delete_dialog.permanently_delete.confirmation_details:DE:Diese Operation kann nicht rückgängig gemacht werden.
 delete_dialog.permanently_delete.confirmation_details:CS:Tato operace je nevratná.
 delete_dialog.permanently_delete.confirmation_details:HU:A művelet nem vonható vissza.
-# Translation missing
-
-
-
-
+# Translation missing (NL, PL, IT, KR)
 
 
 
@@ -5056,12 +5035,7 @@ delete_dialog.move_to_trash.confirmation:SI:Izbrišem izbrane datoteke?
 delete_dialog.move_to_trash.confirmation:RU:Удалить выбранные файл(ы)?
 delete_dialog.move_to_trash.confirmation:DE:Ausgewählte Datei(en) löschen ?
 delete_dialog.move_to_trash.confirmation:CS:Chcete smazat vybrané soubory ?
-# Translation missing
-
-
-
-
-
+# Translation missing (IT)
 
 
 
@@ -5085,12 +5059,7 @@ delete_dialog.move_to_trash.confirmation_details:SI:Datoteke bodo premaknjene v 
 delete_dialog.move_to_trash.confirmation_details:RU:Файлы будут помещены в Корзину
 delete_dialog.move_to_trash.confirmation_details:DE:Dateien werden in den Papierkorb bewegt.
 delete_dialog.move_to_trash.confirmation_details:CS:Soubory budou přesunuty do Koše.
-# Translation missing
-
-
-
-
-
+# Translation missing (PL, IT, KR)
 
 
 
@@ -5113,13 +5082,7 @@ delete_dialog.move_to_trash.option:SI:Premakni v koš
 delete_dialog.move_to_trash.option:RU:Поместить в Корзину
 delete_dialog.move_to_trash.option:DE:In den Papierkorb verschieben
 delete_dialog.move_to_trash.option:CS:Přesunout do Koše
-# Translation missing
-
-
-
-
-
-
+# Translation missing (PL, IT, KR)
 
 
 
@@ -5945,7 +5908,7 @@ progress_dialog.job_error:ES:Error
 progress_dialog.job_error:SI:Napaka pri izvršitvi naloge
 progress_dialog.job_error:RU:Ошибка обработки
 progress_dialog.job_error:DE:Jobfehler
-# Translation missing
+# Translation missing (PL, IT, KR)
 
 
 
@@ -6209,12 +6172,7 @@ server_connect_dialog.share:pt_BR:Compartilhar
 server_connect_dialog.share:SI:Share
 server_connect_dialog.share:RU:Общий ресурс
 server_connect_dialog.share:DE:Freigabe
-# Translation missing
-
-
-
-
-
+# Translation missing (PL, IT, KR)
 
 
 
@@ -6345,10 +6303,7 @@ server_connect_dialog.protocol:pt_BR:Protocolo
 server_connect_dialog.protocol:SI:Protokol
 server_connect_dialog.protocol:RU:Протокол
 server_connect_dialog.protocol:DE:Protokoll
-# Translation missing
-
-
-
+# Translation missing (PL, IT, KR)
 
 
 
@@ -6371,11 +6326,7 @@ server_connect_dialog.nfs_version:pt_BR:Versão NFS
 server_connect_dialog.nfs_version:SI:NFS različica
 server_connect_dialog.nfs_version:RU:Версия NFS
 server_connect_dialog.nfs_version:DE:NFS-Version
-# Translation missing
-
-
-
-
+# Translation missing (PL, IT, KR)
 
 
 
@@ -6489,15 +6440,6 @@ server_connections_dialog.connection_busy:NL:Bezet
 server_connections_dialog.connection_busy:SK:Zaneprázdnený
 server_connections_dialog.connection_busy:HU:Foglalt
 server_connections_dialog.connection_busy:ES:Ocupado
-# Translation missing (ES)
-
-
-
-
-
-
-
-
 
 # Appears in the connection list if the connection is currently idle
 server_connections_dialog.connection_idle:EN:Idle
@@ -6672,15 +6614,6 @@ auth_dialog.store_credentials:NL:Sla naam en wachtwoord op (matige encryptie)
 auth_dialog.store_credentials:SK:Uložiť užívateľské meno a heslo (slabé šifrovanie)
 auth_dialog.store_credentials:HU:A felhasználónév és a jelszó mentése (gyenge titkosítás)
 auth_dialog.store_credentials:RU:Сохранить логин и пароль (со слабым шифрованием)
-#auth_dialog.store_credentials:RU:Включить логин и пароль (будут сохранены без шифрования)
-# Translation missing (RU)
-
-
-
-
-
-
-
 
 
 #################
@@ -7453,7 +7386,7 @@ theme_editor.title:SI:Urejevalnik tem
 theme_editor.title:RU:Редактор темы
 theme_editor.title:DE:Thema-Editor
 theme_editor.title:CS:Editor témat
-# Translation missing
+# Translation missing (PL, IT, KR)
 
 
 
@@ -7474,7 +7407,7 @@ theme_editor.folder_tab:RU:Панель каталога
 theme_editor.folder_tab:DE:Ordnerbereich
 theme_editor.folder_tab:CS:Panely souborů
 theme_editor.folder_tab:PL:Panel plików
-# Translation missing
+# Translation missing (IT, KR)
 
 
 
@@ -7495,7 +7428,10 @@ theme_editor.shell_tab:SI:Ogrodje
 theme_editor.shell_tab:RU:Оболочка
 theme_editor.shell_tab:DE:Kommandozeile
 theme_editor.shell_tab:CS:Shell
-# Translation missing
+# Translation missing (PL, IT, KR)
+
+
+
 
 
 
@@ -7503,6 +7439,13 @@ theme_editor.shell_history_tab:EN:Shell history
 theme_editor.shell_history_tab:FR:Historique du shell
 theme_editor.shell_history_tab:PL:Historia shell'a
 # Translation missing
+
+
+
+
+
+
+
 
 
 
@@ -7522,7 +7465,10 @@ theme_editor.statusbar_tab:SI:Statusna vrstica
 theme_editor.statusbar_tab:RU:Строка состояния
 theme_editor.statusbar_tab:DE:Statuszeile
 theme_editor.statusbar_tab:CS:Stavový řádek
-# Translation missing
+# Translation missing (PL, IT, KR)
+
+
+
 
 
 
@@ -7542,7 +7488,7 @@ theme_editor.free_space:RU:Свободное место
 theme_editor.free_space:DE:Free Speicher
 theme_editor.free_space:CS:Volné místo
 theme_editor.free_space:PL:Wolne miejsce
-# Translation missing
+# Translation missing (IT, KR)
 
 
 
@@ -7562,7 +7508,7 @@ theme_editor.free_space.ok:SI:OK
 theme_editor.free_space.ok:RU:OK
 theme_editor.free_space.ok:DE:OK
 theme_editor.free_space.ok:CS:OK
-# Translation missing
+# Translation missing (PL, IT, KR)
 
 
 
@@ -7583,7 +7529,7 @@ theme_editor.free_space.warning:RU:Заканчивается
 theme_editor.free_space.warning:DE:Warnung
 theme_editor.free_space.warning:CS:Upozornění
 theme_editor.free_space.warning:PL:Ostrzeżenie
-# Translation missing
+# Translation missing (IT, KR)
 
 
 
@@ -7604,7 +7550,7 @@ theme_editor.free_space.critical:RU:Очень мало
 theme_editor.free_space.critical:DE:Kritisch
 theme_editor.free_space.critical:CS:Kritické
 theme_editor.free_space.critical:PL:Krytyczne
-# Translation missing
+# Translation missing (IT, KR)
 
 
 
@@ -7626,7 +7572,7 @@ theme_editor.locationbar_tab:RU:Указатель местонахождени�
 theme_editor.locationbar_tab:DE:Bereich aktueller Ordner
 theme_editor.locationbar_tab:CS:Adresní řádek
 theme_editor.locationbar_tab:PL:Pasek lokalizacji
-# Translation missing
+# Translation missing (IT, KR)
 
 
 
@@ -7646,7 +7592,7 @@ theme_editor.editor_tab:RU:Редактор файлов
 theme_editor.editor_tab:DE:Dateieditor
 theme_editor.editor_tab:CS:Editor souborů
 theme_editor.editor_tab:PL:Edytor plików
-# Translation missing
+# Translation missing (IT, KR)
 
 
 
@@ -7670,49 +7616,14 @@ theme_editor.font:pt_BR:Fonte
 theme_editor.font:NL:Font
 theme_editor.font:SK:Písmo
 
-#theme_editor.shell_font:EN:Shell font
-#theme_editor.shell_font:FR:Fonte du shell
-#theme_editor.shell_font:HU:Végrehajtás betűtípus
-#theme_editor.shell_font:NL:Shell font
-#theme_editor.shell_font:zh_CN:Shell字体
-#theme_editor.shell_font:zh_TW:Shell 字型
-#theme_editor.shell_font:RO:Font linie de comandă
-#theme_editor.shell_font:ES:Fuente de consola
-#theme_editor.shell_font:pt_BR:Fonte do shell
-#theme_editor.shell_font:SK:Písmo príkazového riadku
-#theme_editor.shell_font:SI:Pisava ogrodja
-#theme_editor.shell_font:RU:Шрифт в оболочке
-#theme_editor.shell_font:DE:Kommandozeilen-Zeichensatz
-#theme_editor.shell_font:CS:Písmo shellu
-# Translation missing
-
-
-
-
-
-
-#theme_editor.history_font:EN:History font
-#theme_editor.history_font:FR:Fonte de l'historique
-#theme_editor.history_font:HU:Előzmények betűtípus
-#theme_editor.history_font:NL:Font van Geschiedenis
-#theme_editor.history_font:zh_CN:历史字体
-#theme_editor.history_font:zh_TW:歷史記錄字型
-#theme_editor.history_font:RO:Font pentru istorie
-#theme_editor.history_font:ES:Fuente de historial
-#theme_editor.history_font:pt_BR:Fonte do histórico
-#theme_editor.history_font:SK:Písmo histórie
-#theme_editor.history_font:SI:Pisava zgodovine
-#theme_editor.history_font:RU:Шрифт буфера команд
-#theme_editor.history_font:DE:Historien-Zeichensatz
-#theme_editor.history_font:CS:Písmo historie
-# Translation missing
-
-
-
 theme_editor.active_panel:EN:Active
 theme_editor.active_panel:FR:Actif
 theme_editor.active_panel:PL:Aktywny
 # Translation missing
+
+
+
+
 
 
 
@@ -7725,12 +7636,15 @@ theme_editor.inactive_panel:PL:Nieaktywny
 
 
 
+
+
+
+
+
 theme_editor.general_panel:EN:General
 theme_editor.general_panel:FR:General
 theme_editor.general_panel:PL:Ogólne
 # Translation missing
-
-
 
 
 
@@ -7774,7 +7688,7 @@ theme_editor.could_not_save_theme:SI:Ne morem zapisati teme %1
 theme_editor.could_not_save_theme:RU:Не удается сохранить тему %1
 theme_editor.could_not_save_theme:DE:Kann Thema %1 nicht schreiben
 theme_editor.could_not_save_theme:CS:Nelze uložit téma %1
-# Translation missing
+# Translation missing (PL, IT, KR)
 
 
 
@@ -7796,7 +7710,7 @@ theme_editor.border:RU:Рамка
 theme_editor.border:DE:Rand
 theme_editor.border:CS:Ohraničení
 theme_editor.border:PL:Ramka
-# Translation missing
+# Translation missing (IT, KR)
 
 
 
@@ -7824,11 +7738,20 @@ theme_editor.background:pt_BR:Fundo
 theme_editor.background:NL:Achtergrond
 theme_editor.background:SK:Pozadie
 
-
-
 theme_editor.alternate_background:EN:Alternate background
 theme_editor.alternate_background:FR:Fond alterné
 theme_editor.alternate_background:PL:Tło (alternatywne)
+# Translation missing
+
+
+
+
+
+
+
+
+
+
 
 
 theme_editor.unfocused_background:EN:Background (without focus)
@@ -7845,7 +7768,7 @@ theme_editor.unfocused_background:SI:Ozadje
 theme_editor.unfocused_background:RU:Фон (без фокуса)
 theme_editor.unfocused_background:DE:Hintergrund (ohne Fokus)
 theme_editor.unfocused_background:CS:Pozadí (bez fokusu)
-# Translation missing
+# Translation missing (PL, IT, KR)
 
 
 
@@ -7873,7 +7796,7 @@ theme_editor.quick_search.unmatched_file:RU:Несовпадающие файл�
 theme_editor.quick_search.unmatched_file:DE:Nichtpassende Datei
 theme_editor.quick_search.unmatched_file:CS:Nevyhovující soubor
 theme_editor.quick_search.unmatched_file:PL:Pliki niepasujące
-# Translation missing
+# Translation missing (IT, KR)
 
 
 
@@ -7901,7 +7824,7 @@ theme_editor.text:RU:Текст
 theme_editor.text:DE:Text
 theme_editor.text:CS:Text
 theme_editor.text:PL:Tekst
-# Translation missing
+# Translation missing (IT, KR)
 
 
 
@@ -7924,8 +7847,7 @@ theme_editor.progress:RU:Индикатор выполнения
 theme_editor.progress:DE:Fortschritt
 theme_editor.progress:CS:Průběh
 theme_editor.progress:PL:Postęp
-# Translation missing
-
+# Translation missing (IT, KR)
 
 
 
@@ -7949,7 +7871,7 @@ theme_editor.normal:RU:Обычный
 theme_editor.normal:DE:Normal
 theme_editor*normal:CS:Normální
 theme_editor.normal:PL:Zwykły
-# Translation missing
+# Translation missing (IT, KR)
 
 
 
@@ -7973,8 +7895,7 @@ theme_editor.normal_unfocused:SI:Normalno (without focus)
 theme_editor.normal_unfocused:RU:Обычный (без фокуса)
 theme_editor.normal_unfocused:DE:Normal (ohne Fokus)
 theme_editor.normal_unfocused:CS:Normální (bez fokusu)
-# Translation missing
-
+# Translation missing (PL, IT, KR)
 
 
 
@@ -7998,8 +7919,7 @@ theme_editor.selected:RU:Выбранный
 theme_editor.selected:DE:Ausgewählt
 theme_editor.selected:CS:Výběr
 theme_editor.selected:PL:Zaznaczone
-# Translation missing
-
+# Translation missing (IT, KR)
 
 
 
@@ -8021,8 +7941,7 @@ theme_editor.selected_unfocused:SI:Izbrano (without focus)
 theme_editor.selected_unfocused:RU:Выбраный (без фокуса)
 theme_editor.selected_unfocused:DE:Ausgewählt (ohne Fokus)
 theme_editor.selected_unfocused:CS:Výběr (bez fokusu)
-# Translation missing
-
+# Translation missing (PL, IT, KR)
 
 
 
@@ -8046,11 +7965,7 @@ theme_editor.color:RU:Цвет
 theme_editor.color:DE:Farbe
 theme_editor.color:CS:Barva
 theme_editor.color:PL:Kolor
-# Translation missing
-
-
-
-
+# Translation missing (IT, KR)
 
 
 
@@ -8074,53 +7989,9 @@ theme_editor.colors:RU:Цвета
 theme_editor.colors:DE:Farben
 theme_editor.colors:CS:Barvy
 theme_editor.colors:PL:Kolory
-# Translation missing
+# Translation missing (IT, KR)
 
 
-
-
-
-
-
-
-
-
-
-#theme_editor.shell_colors:EN:Shell colors
-#theme_editor.shell_colors:en_GB:Shell colours
-#theme_editor.shell_colors:FR:Couleurs du shell
-#theme_editor.shell_colors:RO:Culori pentru shell
-#theme_editor.shell_colors:SI:Barve v ukazni vrstici
-#theme_editor.shell_colors:IT:Colori del terminale
-#theme_editor.shell_colors:CS:Barvy shellu
-#theme_editor.shell_colors:zh_TW:Shell 顏色
-#theme_editor.shell_colors:DE:Farbe Eingabeauforderung
-#theme_editor.shell_colors:zh_CN:Shell 颜色
-#theme_editor.shell_colors:RU:Системные цвета
-#theme_editor.shell_colors:ES:Colores de consola
-#theme_editor.shell_colors:PL:Kolor okna terminala (shell)
-#theme_editor.shell_colors:KR:쉘 색상
-#theme_editor.shell_colors:pt_BR:Cor do prompt de comandos (terminal)
-#theme_editor.shell_colors:NL:Kleuren van de shell
-#theme_editor.shell_colors:SK:Farba terminálu (shell)
-#theme_editor.shell_colors:HU:Végrehajtás színek
-
-#theme_editor.history_colors:EN:History colors
-#theme_editor.history_colors:en_GB:History colours
-#theme_editor.history_colors:FR:Couleurs de l'historique
-#theme_editor.history_colors:HU:Előzmények színei
-#theme_editor.history_colors:NL:Kleuren van geschiedenis
-#theme_editor.history_colors:zh_CN:历史颜色
-#theme_editor.history_colors:zh_TW:歷史記錄顏色
-#theme_editor.history_colors:RO:Culori pentru istorie
-#theme_editor.history_colors:ES:Colores del historial
-#theme_editor.history_colors:pt_BR:Cores do histórico
-#theme_editor.history_colors:SK:Farba histórie
-#theme_editor.history_colors:SI:Barve v menuju Zgodovina
-#theme_editor.history_colors:RU:Цвета буфера команд
-#theme_editor.history_colors:DE:Historienfarbe
-#theme_editor.history_colors:CS:Barvy historie
-# Translation missing
 
 
 
@@ -8475,11 +8346,7 @@ prefs_dialog.show_seconds:SI:Prikaži sekunde
 prefs_dialog.show_seconds:RU:Показывать секунды
 prefs_dialog.show_seconds:DE:Sekunden anzeigen
 prefs_dialog.show_seconds:PL:Pokaż sekundy
-# Translation missing
-
-
-
-
+# Translation missing (IT)
 
 
 
@@ -8502,7 +8369,7 @@ prefs_dialog.show_century:SI:Prikaži stoletje
 prefs_dialog.show_century:RU:Показывать 4 цифры года
 prefs_dialog.show_century:DE:Jahrhundert anzeigen
 prefs_dialog.show_century:PL:Pokaż wiek
-# Translation missing
+# Translation missing (IT)
 
 
 
@@ -8714,6 +8581,8 @@ prefs_dialog.compact_file_size:pt_BR:Arendondar o tamanho dos arquivos exibidos
 prefs_dialog.compact_file_size:NL:Getoonde bestandsgroottes afronden
 prefs_dialog.compact_file_size:SK:Zaokrúhliť zobrazenú veľkosť súborov
 
+# When enabled and 'entering' a symlink which points to a directory, the
+# current directory will be changed to the link's target.
 prefs_dialog.follow_symlinks_when_cd:EN:Follow symlinks when changing current directory
 prefs_dialog.follow_symlinks_when_cd:FR:Suivre les liens symboliques en changeant de répertoire courant
 prefs_dialog.follow_symlinks_when_cd:CS:Následovat symbolické odkazy při změnách složky
@@ -8728,7 +8597,12 @@ prefs_dialog.follow_symlinks_when_cd:pt_BR:Follow symlinks when changing current
 prefs_dialog.follow_symlinks_when_cd:SI:Sledi simbolnim povezavam, ko spremeniš trenutno mapo
 prefs_dialog.follow_symlinks_when_cd:RU:Переходить по ссылкам при смене каталога
 prefs_dialog.follow_symlinks_when_cd:DE:Symbolischen Links beim Wechsel des aktuellen Verzeichnis folgen
-# Translation missing
+# Translation missing (PL, IT, KR)
+
+
+
+
+
 
 # Appearance tab
 
@@ -8856,9 +8730,7 @@ prefs_dialog.use_system_file_icons:SI:Uporabi sistemske ikone
 prefs_dialog.use_system_file_icons:RU:Использовать системные значки файлов
 prefs_dialog.use_system_file_icons:DE:Dateisystem-Icons nutzen
 prefs_dialog.use_system_file_icons:PL:Używaj ikon systemowych
-# Translation missing
-
-
+# Translation missing (IT)
 
 
 
@@ -8882,8 +8754,7 @@ prefs_dialog.use_system_file_icons.always:SI:Vedno
 prefs_dialog.use_system_file_icons.always:RU:Всегда
 prefs_dialog.use_system_file_icons.always:DE:Immer
 prefs_dialog.use_system_file_icons.always:PL:Zawsze
-# Translation missing
-
+# Translation missing (IT)
 
 
 
@@ -8908,8 +8779,7 @@ prefs_dialog.use_system_file_icons.never:SI:Nikoli
 prefs_dialog.use_system_file_icons.never:RU:Никогда
 prefs_dialog.use_system_file_icons.never:DE:Nie
 prefs_dialog.use_system_file_icons.never:PL:Nigdy
-# Translation missing
-
+# Translation missing (IT)
 
 
 
@@ -8934,7 +8804,7 @@ prefs_dialog.use_system_file_icons.applications:SI:Samo za aplikacije
 prefs_dialog.use_system_file_icons.applications:RU:Только для приложений
 prefs_dialog.use_system_file_icons.applications:DE:Nur für Programme
 prefs_dialog.use_system_file_icons.applications:PL:Tylko dla aplikacji
-# Translation missing
+# Translation missing (IT)
 
 
 
@@ -8946,6 +8816,10 @@ prefs_dialog.edit_current_theme:EN:Edit current theme...
 prefs_dialog.edit_current_theme:FR:Editer le thème courrant...
 prefs_dialog.edit_current_theme:PL:Edytuj bieżący temat...
 # Translation missing
+
+
+
+
 
 
 
@@ -8984,7 +8858,7 @@ prefs_dialog.import_theme:RU:Импортировать тему
 prefs_dialog.import_theme:DE:Thema importieren
 prefs_dialog.import_theme:CS:Importovat téma
 prefs_dialog.import_theme:PL:Importuj temat
-# Translation missing
+# Translation missing (NL, IT, KR)
 
 
 
@@ -9007,7 +8881,7 @@ prefs_dialog.error_in_import:SI:Napaka pri uvozu teme %1.
 prefs_dialog.error_in_import:RU:Ошибка при импорте темы %1.
 prefs_dialog.error_in_import:DE:Fehler beim Import von Thema %1.
 prefs_dialog.error_in_import:CS:Chyba při importu tématu %1.
-# Translation missing
+# Translation missing (PL, IT, KR)
 
 
 
@@ -9030,7 +8904,7 @@ prefs_dialog.cannot_read_theme:SI:Ne morem naložiti teme iz datoteke %1
 prefs_dialog.cannot_read_theme:RU:Не удается загрузить тему из файла %1
 prefs_dialog.cannot_read_theme:DE:Kann Thema nicht aus Datei %1 laden
 prefs_dialog.cannot_read_theme:CS:Nelze načíst téma ze souboru %1
-# Translation missing
+# Translation missing (PL, IT, KR)
 
 
 
@@ -9055,7 +8929,7 @@ prefs_dialog.export_theme:RU:Экспорт %1
 prefs_dialog.export_theme:DE:Exportiere %1
 prefs_dialog.export_theme:CS:Exportovat %1
 prefs_dialog.export_theme:PL:Eksport %1
-# Translation missing
+# Translation missing (IT, KR)
 
 
 
@@ -9077,7 +8951,7 @@ prefs_dialog.import:RU:Импорт
 prefs_dialog.import:DE:Import
 prefs_dialog.import:CS:Importovat
 prefs_dialog.import:PL:Import
-# Translation missing
+# Translation missing (IT, KR)
 
 
 
@@ -9098,7 +8972,7 @@ prefs_dialog.export:RU:Экспорт
 prefs_dialog.export:DE:Export
 prefs_dialog.export:CS:Exportovat
 prefs_dialog.export:PL:Eksport
-# Translation missing
+# Translation missing (RO, IT, KR)
 
 
 
@@ -9120,7 +8994,7 @@ prefs_dialog.theme_type:SI:Vrsta: %1
 prefs_dialog.theme_type:RU:Тип: %1
 prefs_dialog.theme_type:DE:Typ: %1
 prefs_dialog.theme_type:CS:Typ: %1
-# Translation missing
+# Translation missing (PL, IT, KR)
 
 
 
@@ -9129,7 +9003,7 @@ prefs_dialog.theme_type:CS:Typ: %1
 
 # %1 will be replaced by the theme name.
 prefs_dialog.delete_theme:EN:Permanently delete theme %1 ?
-prefs_dialog.delete_theme:Fr:Supprimer définitivement le thème %1 ?
+prefs_dialog.delete_theme:FR:Supprimer définitivement le thème %1 ?
 prefs_dialog.delete_theme:HU:Folyamatosan törli a %1 témát?
 prefs_dialog.delete_theme:zh_CN:永久删除主题 %1 ?
 prefs_dialog.delete_theme:zh_TW:永遠刪除佈景主題 %1 ?
@@ -9141,7 +9015,7 @@ prefs_dialog.delete_theme:SI:Trajno izbrišem temo %1?
 prefs_dialog.delete_theme:RU:Удалить тему %1 полностью?
 prefs_dialog.delete_theme:DE:Thema %1 unwiderruflich löschen ?
 prefs_dialog.delete_theme:CS:Chcete trvale smazat téma %1 ?
-# Translation missing
+# Translation missing (NL, PL, IT, KR)
 
 
 
@@ -9149,7 +9023,7 @@ prefs_dialog.delete_theme:CS:Chcete trvale smazat téma %1 ?
 
 
 prefs_dialog.rename_failed:EN:Failed to rename theme %1
-prefs_dialog.rename_failed:Fr:Impossible de renommer le thème %1
+prefs_dialog.rename_failed:FR:Impossible de renommer le thème %1
 prefs_dialog.rename_failed:HU:Hiba a téma átnevezéskor %1
 prefs_dialog.rename_failed:NL:Fout bij hernoemen thema %1
 prefs_dialog.rename_failed:zh_CN:未能重命名主题 %1
@@ -9162,7 +9036,7 @@ prefs_dialog.rename_failed:SI:Ne morem preimenovati teme %1
 prefs_dialog.rename_failed:RU:Не удалось переименовать тему %1
 prefs_dialog.rename_failed:DE:Fehler beim Umbenennen von Thema %1
 prefs_dialog.rename_failed:CS:Nepodařilo se přejmenovat téma %1
-# Translation missing
+# Translation missing (PL, IT, KR)
 
 
 
@@ -9185,7 +9059,7 @@ prefs_dialog.xml_file:SI:XML datoteka
 prefs_dialog.xml_file:RU:XML-файл
 prefs_dialog.xml_file:DE:XML-Datei
 prefs_dialog.xml_file:CS:Soubor XML
-# Translation missing
+# Translation missing (PL, IT, KR)
 
 
 
@@ -9390,9 +9264,15 @@ prefs_dialog.shell_encoding:PL:Kodowanie shella
 
 
 
+
+
+
 prefs_dialog.auto_detect_shell_encoding:EN:Auto-detect
 prefs_dialog.auto_detect_shell_encoding:FR:Détection automatique
 # Translation missing
+
+
+
 
 
 
@@ -9434,8 +9314,7 @@ prefs_dialog.enable_system_notifications:RU:Разрешить системны�
 prefs_dialog.enable_system_notifications:DE:System-Nachrichten einschalten
 prefs_dialog.enable_system_notifications:CS:Zobrazovat oznámení systému
 prefs_dialog.enable_system_notifications:PL:Włącz powiadomienia
-# Translation missing
-
+# Translation missing (IT, KR)
 
 
 
@@ -9754,7 +9633,7 @@ theme.custom:SI:Prirejeno
 theme.custom:RU:Пользовательская тема
 theme.custom:DE:Angepasst
 theme.custom:CS:Vlastní
-# Translation missing
+# Translation missing (PL, IT, KR)
 
 
 
@@ -9778,7 +9657,7 @@ theme.built_in:SI:Vgrajeno
 theme.built_in:RU:Встроенная
 theme.built_in:DE:Eingebaut
 theme.built_in:CS:Vestavěné
-# Translation missing
+# Translation missing (PL, IT, KR)
 
 
 
@@ -9802,7 +9681,7 @@ theme.add_on:SI:Dodatek
 theme.add_on:RU:Дополнение
 theme.add_on:DE:Zusatz
 theme.add_on:CS:Doplněk
-# Translation missing
+# Translation missing (PL, IT, KR)
 
 
 
@@ -9827,7 +9706,7 @@ theme.current:RU:текущая
 theme.current:DE:aktuell
 theme.current:CS:stávající
 theme.current:PL:bieżący
-# Translation missing
+# Translation missing (IT, KR)
 
 
 
@@ -9957,12 +9836,6 @@ font_chooser.font_size:KR:크기
 font_chooser.font_size:NL:Grootte
 font_chooser.font_size:pt_BR:Tamanho
 font_chooser.font_size:SK:Veľkosť
-# Translation missing (SK, pt_BR)
-
-
-
-
-
 
 font_chooser.font_bold:EN:Bold
 font_chooser.font_bold:FR:Gras
@@ -9981,12 +9854,6 @@ font_chooser.font_bold:KR:볼드
 font_chooser.font_bold:NL:Vet
 font_chooser.font_bold:pt_BR:Negrito
 font_chooser.font_bold:SK:Tučné
-# Translation missing (SK, pt_BR)
-
-
-
-
-
 
 font_chooser.font_italic:EN:Italic
 font_chooser.font_italic:FR:Italique
@@ -10005,10 +9872,6 @@ font_chooser.font_italic:KR:이탤릭
 font_chooser.font_italic:NL:Schuin
 font_chooser.font_italic:pt_BR:Itálico
 font_chooser.font_italic:SK:Šikmé
-# Translation missing (SK, pt_BR)
-
-
-
 
 
 #################
@@ -10029,7 +9892,7 @@ color_chooser.red:SI:Rdeča
 color_chooser.red:RU:Красный
 color_chooser.red:DE:Rot
 color_chooser.red:CS:Červená
-# Translation missing
+# Translation missing (PL, IT, KR)
 
 
 
@@ -10050,7 +9913,7 @@ color_chooser.green:SI:Zelena
 color_chooser.green:RU:Зеленый
 color_chooser.green:DE:Grün
 color_chooser.green:CS:Zelená
-# Translation missing
+# Translation missing (PL, IT, KR)
 
 
 
@@ -10072,7 +9935,7 @@ color_chooser.blue:SI:Modra
 color_chooser.blue:RU:Синий
 color_chooser.blue:DE:Blau
 color_chooser.blue:CS:Modrá
-# Translation missing
+# Translation missing (PL, IT, KR)
 
 
 
@@ -10094,7 +9957,7 @@ color_chooser.hue:SI:Odtenek
 color_chooser.hue:RU:Оттенок
 color_chooser.hue:DE:Farbton
 color_chooser.hue:CS:Odstín
-# Translation missing
+# Translation missing (PL, IT, KR)
 
 
 
@@ -10116,7 +9979,7 @@ color_chooser.brightness:SI:Svetlost
 color_chooser.brightness:RU:Яркость
 color_chooser.brightness:DE:Helligkeit
 color_chooser.brightness:CS:Jas
-# Translation missing
+# Translation missing (PL, IT, KR)
 
 
 
@@ -10137,7 +10000,7 @@ color_chooser.swatches:SI:Swatches
 color_chooser.swatches:RU:Образцы
 color_chooser.swatches:DE:Muster
 color_chooser.swatches:CS:Barevný mixér
-# Translation missing
+# Translation missing (PL, IT, KR)
 
 
 
@@ -10158,7 +10021,7 @@ color_chooser.saturation:SI:Zasičenost
 color_chooser.saturation:RU:Насыщенность
 color_chooser.saturation:DE:Sättigung
 color_chooser.saturation:CS:Sytost
-# Translation missing
+# Translation missing (PL, IT, KR)
 
 
 
@@ -10166,6 +10029,7 @@ color_chooser.saturation:CS:Sytost
 
 
 
+# RGB stands for Red Green Blue
 color_chooser.rgb:EN:RGB
 color_chooser.rgb:FR:RVB
 color_chooser.rgb:HU:RGB
@@ -10180,7 +10044,7 @@ color_chooser.rgb:SI:RGB
 color_chooser.rgb:RU:RGB
 color_chooser.rgb:DE:RGB
 color_chooser.rgb:CS:RGB
-# Translation missing
+# Translation missing (PL, IT, KR)
 
 
 
@@ -10203,7 +10067,7 @@ color_chooser.hsb:SI:HSB
 color_chooser.hsb:RU:HSB
 color_chooser.hsb:DE:HSB
 color_chooser.hsb:CS:HSB
-# Translation missing
+# Translation missing (PL, IT, KR)
 
 
 
@@ -10225,7 +10089,7 @@ color_chooser.recent:SI:Nedaven
 color_chooser.recent:RU:Предыдущий
 color_chooser.recent:DE:Bisherige
 color_chooser.recent:CS:Poslední použité
-# Translation missing
+# Translation missing (PL, IT, KR)
 
 
 
@@ -10249,7 +10113,7 @@ color_chooser.alpha:RU:Прозрачность
 color_chooser.alpha:DE:Alpha-Transparenz
 color_chooser.alpha:CS:Průhlednost alfa
 color_chooser.alpha:PL:Przeźroczystość
-# Translation missing
+# Translation missing (IT, KR)
 
 
 
@@ -10276,13 +10140,6 @@ color_chooser.title:KR:색상 선택
 color_chooser.title:NL:Kies een kleur
 color_chooser.title:pt_BR:Escolha uma cor
 color_chooser.title:SK:Vyberte farbu
-# Translation missing (SK, pt_BR)
-
-
-
-
-
-
 
 
 ######################
@@ -10457,3 +10314,69 @@ color_chooser.title:SK:Vyberte farbu
 #move_dialog.rename_description:pt_BR:Renomear arquivo para
 #move_dialog.rename_description:NL:Hernoem bestand naar
 #move_dialog.rename_description:SK:Premenovať súbor na
+
+#theme_editor.shell_font:EN:Shell font
+#theme_editor.shell_font:FR:Fonte du shell
+#theme_editor.shell_font:HU:Végrehajtás betűtípus
+#theme_editor.shell_font:NL:Shell font
+#theme_editor.shell_font:zh_CN:Shell字体
+#theme_editor.shell_font:zh_TW:Shell 字型
+#theme_editor.shell_font:RO:Font linie de comandă
+#theme_editor.shell_font:ES:Fuente de consola
+#theme_editor.shell_font:pt_BR:Fonte do shell
+#theme_editor.shell_font:SK:Písmo príkazového riadku
+#theme_editor.shell_font:SI:Pisava ogrodja
+#theme_editor.shell_font:RU:Шрифт в оболочке
+#theme_editor.shell_font:DE:Kommandozeilen-Zeichensatz
+#theme_editor.shell_font:CS:Písmo shellu
+
+#theme_editor.history_font:EN:History font
+#theme_editor.history_font:FR:Fonte de l'historique
+#theme_editor.history_font:HU:Előzmények betűtípus
+#theme_editor.history_font:NL:Font van Geschiedenis
+#theme_editor.history_font:zh_CN:历史字体
+#theme_editor.history_font:zh_TW:歷史記錄字型
+#theme_editor.history_font:RO:Font pentru istorie
+#theme_editor.history_font:ES:Fuente de historial
+#theme_editor.history_font:pt_BR:Fonte do histórico
+#theme_editor.history_font:SK:Písmo histórie
+#theme_editor.history_font:SI:Pisava zgodovine
+#theme_editor.history_font:RU:Шрифт буфера команд
+#theme_editor.history_font:DE:Historien-Zeichensatz
+#theme_editor.history_font:CS:Písmo historie
+
+#theme_editor.shell_colors:EN:Shell colors
+#theme_editor.shell_colors:en_GB:Shell colours
+#theme_editor.shell_colors:FR:Couleurs du shell
+#theme_editor.shell_colors:RO:Culori pentru shell
+#theme_editor.shell_colors:SI:Barve v ukazni vrstici
+#theme_editor.shell_colors:IT:Colori del terminale
+#theme_editor.shell_colors:CS:Barvy shellu
+#theme_editor.shell_colors:zh_TW:Shell 顏色
+#theme_editor.shell_colors:DE:Farbe Eingabeauforderung
+#theme_editor.shell_colors:zh_CN:Shell 颜色
+#theme_editor.shell_colors:RU:Системные цвета
+#theme_editor.shell_colors:ES:Colores de consola
+#theme_editor.shell_colors:PL:Kolor okna terminala (shell)
+#theme_editor.shell_colors:KR:쉘 색상
+#theme_editor.shell_colors:pt_BR:Cor do prompt de comandos (terminal)
+#theme_editor.shell_colors:NL:Kleuren van de shell
+#theme_editor.shell_colors:SK:Farba terminálu (shell)
+#theme_editor.shell_colors:HU:Végrehajtás színek
+
+#theme_editor.history_colors:EN:History colors
+#theme_editor.history_colors:en_GB:History colours
+#theme_editor.history_colors:FR:Couleurs de l'historique
+#theme_editor.history_colors:HU:Előzmények színei
+#theme_editor.history_colors:NL:Kleuren van geschiedenis
+#theme_editor.history_colors:zh_CN:历史颜色
+#theme_editor.history_colors:zh_TW:歷史記錄顏色
+#theme_editor.history_colors:RO:Culori pentru istorie
+#theme_editor.history_colors:ES:Colores del historial
+#theme_editor.history_colors:pt_BR:Cores do histórico
+#theme_editor.history_colors:SK:Farba histórie
+#theme_editor.history_colors:SI:Barve v menuju Zgodovina
+#theme_editor.history_colors:RU:Цвета буфера команд
+#theme_editor.history_colors:DE:Historienfarbe
+#theme_editor.history_colors:CS:Barvy historie
+
