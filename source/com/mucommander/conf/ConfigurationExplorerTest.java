@@ -22,28 +22,28 @@ import junit.framework.TestCase;
 
 /**
  * A test case for the {@link ConfigurationExplorer} class.
- * @author Maxence Bernard, Nicolas Rinaudo
+ * @author Nicolas Rinaudo
  */
 public class ConfigurationExplorerTest extends TestCase {
     // - Test constants ------------------------------------------------------------------
     // -----------------------------------------------------------------------------------
     /** Root name of test sections. */
-    private static final String SECTION_NAME   = "section";
+    protected static final String SECTION_NAME   = "section";
     /** Root name of test variables. */
-    private static final String VARIABLE_NAME  = "variable";
+    protected static final String VARIABLE_NAME  = "variable";
     /** Root name of test values. */
-    private static final String VARIABLE_VALUE = "value";
+    protected static final String VARIABLE_VALUE = "value";
     /** Name for non-existing sections. */
-    private static final String FAKE_SECTION   = "fake";
+    protected static final String FAKE_SECTION   = "fake";
     /** Depth of the tests. */
-    private static final int    DEPTH          = 4;
+    protected static final int    DEPTH          = 4;
 
 
 
     // - Instance variables --------------------------------------------------------------
     // -----------------------------------------------------------------------------------
     /** Configuration used for tests. */
-    private Configuration conf;
+    protected Configuration conf;
 
 
 
@@ -70,12 +70,12 @@ public class ConfigurationExplorerTest extends TestCase {
     /**
      * Returns a configuration explorer on the test section.
      */
-    private ConfigurationExplorer getExplorer() {return new ConfigurationExplorer(conf.getRoot());}
+    protected ConfigurationExplorer getExplorer() {return new ConfigurationExplorer(conf.getRoot());}
 
     /**
      * Moves to the specified depth.
      */
-    private ConfigurationSection moveTo(ConfigurationExplorer explorer, int depth) {
+    protected ConfigurationSection moveTo(ConfigurationExplorer explorer, int depth) {
         ConfigurationSection section;
 
         section = conf.getRoot();
