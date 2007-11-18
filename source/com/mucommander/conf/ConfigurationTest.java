@@ -25,13 +25,6 @@ import java.util.Stack;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-/*
-  TO TEST:
-  - build
-  - write
-  - read
- */
-
 /**
  * A test case for the {@link Configuration} class.
  * @author Maxence Bernard, Nicolas Rinaudo
@@ -309,10 +302,12 @@ public class ConfigurationTest extends TestCase implements ConfigurationListener
     public void testStringVariables() {
         StringBuffer section; // Name of the section in which to test string variables.
 
-        section = new StringBuffer();
+        testStringVariables("");
+
+        section = new StringBuffer(STRING_SECTION);
         for(int i = 0; i < MAX_DEPTH; i++) {
-            testStringVariables(section.toString());
             section.append('.');
+            testStringVariables(section.toString());
             section.append(STRING_SECTION);
         }
     }
@@ -439,10 +434,12 @@ public class ConfigurationTest extends TestCase implements ConfigurationListener
     public void testIntegerVariables() {
         StringBuffer section; // Name of the section in which to test integer variables.
 
-        section = new StringBuffer();
+        testIntegerVariables("");
+
+        section = new StringBuffer(INTEGER_SECTION);
         for(int i = 0; i < MAX_DEPTH; i++) {
-            testIntegerVariables(section.toString());
             section.append('.');
+            testIntegerVariables(section.toString());
             section.append(INTEGER_SECTION);
         }
     }
@@ -561,6 +558,22 @@ public class ConfigurationTest extends TestCase implements ConfigurationListener
         try {conf.getVariable(var1, value1);}
         catch(NumberFormatException e) {caughtException = true;}
         assertTrue(caughtException);
+    }
+
+    /**
+     * Runs long variable tests at different depths in the configuration tree.
+     */
+    public void testLongVariables() {
+        StringBuffer section; // Name of the section in which to test integer variables.
+
+        testLongVariables("");
+
+        section = new StringBuffer(LONG_SECTION);
+        for(int i = 0; i < MAX_DEPTH; i++) {
+            section.append('.');
+            testLongVariables(section.toString());
+            section.append(LONG_SECTION);
+        }
     }
 
 
@@ -685,10 +698,12 @@ public class ConfigurationTest extends TestCase implements ConfigurationListener
     public void testFloatVariables() {
         StringBuffer section; // Name of the section in which to test float variables.
 
-        section = new StringBuffer();
+        testFloatVariables("");
+
+        section = new StringBuffer(FLOAT_SECTION);
         for(int i = 0; i < MAX_DEPTH; i++) {
-            testFloatVariables(section.toString());
             section.append('.');
+            testFloatVariables(section.toString());
             section.append(FLOAT_SECTION);
         }
     }
@@ -815,10 +830,12 @@ public class ConfigurationTest extends TestCase implements ConfigurationListener
     public void testDoubleVariables() {
         StringBuffer section; // Name of the section in which to test double variables.
 
-        section = new StringBuffer();
+        testDoubleVariables("");
+
+        section = new StringBuffer(DOUBLE_SECTION);
         for(int i = 0; i < MAX_DEPTH; i++) {
-            testDoubleVariables(section.toString());
             section.append('.');
+            testDoubleVariables(section.toString());
             section.append(DOUBLE_SECTION);
         }
     }
@@ -925,15 +942,95 @@ public class ConfigurationTest extends TestCase implements ConfigurationListener
     public void testBooleanVariables() {
         StringBuffer section; // Name of the section in which to test boolean variables.
 
-        section = new StringBuffer();
+        testBooleanVariables("");
+
+        section = new StringBuffer(BOOLEAN_SECTION);
         for(int i = 0; i < MAX_DEPTH; i++) {
-            testBooleanVariables(section.toString());
             section.append('.');
+            testBooleanVariables(section.toString());
             section.append(BOOLEAN_SECTION);
         }
     }
 
 
+
+    // - Pruning -------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------
+    /**
+     * Tests pruning of a whole branch, all the way down to the root, at various depths.
+     */
+    private void testCompletePrune(String section) {
+        String variableName;
+        String variableValue;
+
+        variableName  = section + "variable";
+        variableValue = "value";
+
+        assertTrue(conf.setVariable(variableName, variableValue));
+        assertEquals(variableValue, conf.removeVariable(variableName));
+        assertTrue(conf.getRoot().isEmpty());
+    }
+
+    /**
+     * Makes sure no pruning occur when a the section from which a variable has been removed is not empty.
+     */
+    private void testNoPrune(String section) {
+        String variable1Name;
+        String variable1Value;
+        String variable2Name;
+        String variable2Value;
+
+        variable1Name  = section + "variable1";
+        variable1Value = "value1";
+        variable2Name  = section + "variable2";
+        variable2Value = "value2";
+
+        assertTrue(conf.setVariable(variable1Name, variable1Value));
+        assertTrue(conf.setVariable(variable2Name, variable2Value));
+        assertEquals(variable1Value, conf.removeVariable(variable1Name));
+        assertEquals(variable2Value, conf.removeVariable(variable2Name));
+    }
+
+    /**
+     * Makes sure pruning stops at the first non empty section.
+     */
+    private void testPartialPrune(String section) {
+        String variable1Name;
+        String variable1Value;
+        String variable2Name;
+        String variable2Value;
+
+        variable1Name  = section + "section1.section2.variable1";
+        variable1Value = "value1";
+        variable2Name  = section + "variable2";
+        variable2Value = "value2";
+
+        assertTrue(conf.setVariable(variable1Name, variable1Value));
+        assertTrue(conf.setVariable(variable2Name, variable2Value));
+        assertEquals(variable1Value, conf.removeVariable(variable1Name));
+        assertEquals(variable2Value, conf.removeVariable(variable2Name));
+    }
+
+    /**
+     * Tests configuration tree pruning.
+     */
+    public void testPrune() {
+        StringBuffer section;
+
+        // Makes sure that 
+        section = new StringBuffer();
+
+        testCompletePrune("");
+        section.append(0);
+
+        for(int i = 0; i < MAX_DEPTH; i++) {
+            section.append('.');
+            testCompletePrune(section.toString());
+            testPartialPrune(section.toString());
+            testNoPrune(section.toString());
+            section.append(i);
+        }
+    }
 
     // - ConfigurationReader -------------------------------------------------------------
     // -----------------------------------------------------------------------------------
