@@ -732,6 +732,30 @@ public class Configuration {
     // - Variable removal ------------------------------------------------------
     // -------------------------------------------------------------------------
     /**
+     * Prunes dead branches from the specified configuration tree.
+     * @param explorer used to backtrack through the configuration tree.
+     */
+    private void prune(BufferedConfigurationExplorer explorer) {
+        ConfigurationSection current;
+        ConfigurationSection parent;
+
+        // If we're at the root level, nothing to prune.
+        if(!explorer.hasSections())
+            return;
+
+        current = explorer.popSection();
+
+        // Look for branches to prune until we've either found a non-empty one
+        // or reached the root of the three.
+        while(current.isEmpty() && current != root) {
+            // Gets the current section's parent and prune.
+            parent = explorer.hasSections() ? explorer.popSection() : root;
+            parent.removeSection(current);
+            current = parent;
+        }
+    }
+
+    /**
      * Deletes the specified variable from the configuration.
      * <p>
      * If the variable was set, a configuration {@link ConfigurationEvent event} will be passed to
@@ -741,16 +765,18 @@ public class Configuration {
      * @return      the variable's old value, or <code>null</code> if it wasn't set.
      */
     public synchronized String removeVariable(String name) {
-        ConfigurationExplorer explorer; // Used to navigate to the variable's parent section.
-        String                buffer;   // Buffer for the variable's name trimmed of section information.
+        BufferedConfigurationExplorer explorer; // Used to navigate to the variable's parent section.
+        String                        buffer;   // Buffer for the variable's name trimmed of section information.
 
         // If the variable's 'path' doesn't exist, return null.
-        if((buffer = moveToParent(explorer = new ConfigurationExplorer(root), name, false)) == null)
+        if((buffer = moveToParent(explorer = new BufferedConfigurationExplorer(root), name, false)) == null)
             return null;
 
         // If the variable was actually set, triggers an event.
-        if((buffer = explorer.getSection().removeVariable(buffer)) != null)
+        if((buffer = explorer.getSection().removeVariable(buffer)) != null) {
+            prune(explorer);
             triggerEvent(new ConfigurationEvent(this, name, null));
+        }
 
         return buffer;
     }
