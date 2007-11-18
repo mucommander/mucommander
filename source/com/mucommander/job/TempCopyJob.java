@@ -99,10 +99,10 @@ public class TempCopyJob extends CopyJob {
             return false;
 
         // Make the temporary file read only
-        if(destFile.canSetPermission(FilePermissions.USER_ACCESS, FilePermissions.WRITE_PERMISSION))
-            destFile.setPermission(FilePermissions.USER_ACCESS, FilePermissions.WRITE_PERMISSION, false);
+        if(currentDestFile.canSetPermission(FilePermissions.USER_ACCESS, FilePermissions.WRITE_PERMISSION))
+            currentDestFile.setPermission(FilePermissions.USER_ACCESS, FilePermissions.WRITE_PERMISSION, false);
 
-        tempFiles.add(destFile);
+        tempFiles.add(currentDestFile);
 
         return true;
     }
