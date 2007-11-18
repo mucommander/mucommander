@@ -224,6 +224,32 @@ class ConfigurationSection {
     public ConfigurationSection removeSection(String name) {return (ConfigurationSection)sections.remove(name);}
 
     /**
+     * Deletes the specified section.
+     * <p>
+     * Note that this method is very inefficient and should only be called when strictly necessary.
+     * </p>
+     * @param section section to remove.
+     */
+    public void removeSection(ConfigurationSection section) {
+        String      name;
+        Enumeration sectionNames;
+
+        sectionNames = sectionNames();
+
+        // Goes through each key / value pair and checks whether we've found the sectioon
+        // we were looking for.
+        while(sectionNames.hasMoreElements()) {
+            name = (String)sectionNames.nextElement();
+
+            // If we have, remove it and break.
+            if(getSection(name).equals(section)) {
+                removeSection(name);
+                break;
+            }
+        }
+    }
+
+    /**
      * Returns the subsection with the specified name.
      * @param  name name of the section to retrieve.
      * @return      the requested section if found, <code>null</code> otherwise.
@@ -241,4 +267,17 @@ class ConfigurationSection {
      * @return <code>true</code> if this section has subsections, <code>false</code> otherwise.
      */
     public boolean hasSections() {return !sections.isEmpty();}
+
+
+
+    // - Misc. -----------------------------------------------------------------
+    // -------------------------------------------------------------------------
+    /**
+     * Returns <code>true</code> if the section doesn't contain either variables or sub-sections.
+     * <p>
+     * This method is meant for {@link Configuration} instances to prune dead branches.
+     * </p>
+     * @return <code>true</code> if the section doesn't contain either variables or sub-sections, <code>false</code> otherwise.
+     */
+    public boolean isEmpty() {return !hasSections() && !hasVariables();}
 }
