@@ -1043,7 +1043,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   </target>
 
   <!-- Generates all available release files.                  -->
-  <target name="all" depends="source,release-tools,release-conf,unit-test,tgz,setup-exe,deb,portable,version,sign,jnlp,app.tgz,api-doc-tgz"/>
+  <!-- This target will also try and start the resulting JAR   -->
+  <!-- to make sure it boots properly.                         -->
+  <target name="all" depends="source,release-tools,release-conf,unit-test,tgz,setup-exe,deb,portable,version,sign,jnlp,app.tgz,api-doc-tgz">
+    <java jar="${jar.cmp}" failonerror="true" fork="true">
+      <arg value="--help"/>
+    </java>
+  </target>
 
   <!-- Generates all the available release files.              -->
   <!-- This target is meant for official releases. Nightly     -->
