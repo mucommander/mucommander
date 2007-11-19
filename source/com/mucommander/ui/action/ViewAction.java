@@ -28,7 +28,7 @@ import com.mucommander.ui.viewer.ViewerRegistrar;
 import java.util.Hashtable;
 
 /**
- * Customisable version of {@link InternalViewAction}.
+ * Opens the current file in view mode.
  * @author Maxence Bernard, Nicolas Rinaudo
  */
 public class ViewAction extends AbstractViewerAction {
@@ -47,23 +47,23 @@ public class ViewAction extends AbstractViewerAction {
 
 
 
-    // - Action execution ----------------------------------------------------------------
+    // - Abstract methods ----------------------------------------------------------------
     // -----------------------------------------------------------------------------------
+    /**
+     * Opens the internal viewer on the specified file.
+     * @param file file to view.
+     */
     public void performInternalAction(AbstractFile file) {ViewerRegistrar.createViewerFrame(mainFrame, file, getIcon().getImage());}
 
-
-
-    // - Configuration management --------------------------------------------------------
-    // -----------------------------------------------------------------------------------
     /**
      * Reacts to configuration changed events.
      * @param event describes the configuration change.
      */
     public synchronized void configurationChanged(ConfigurationEvent event) {
-        // Updates useCustomViewer.
+        // Sets the custom command.
         if(event.getVariable().equals(MuConfiguration.USE_CUSTOM_VIEWER))
             setUseCustomCommand(event.getBooleanValue());
-        // Updates customViewer.
+        // Sets the 'use custom command' flag.
         else if(event.getVariable().equals(MuConfiguration.CUSTOM_VIEWER))
             setCustomCommand(event.getValue());
     }

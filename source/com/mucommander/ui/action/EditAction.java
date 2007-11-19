@@ -28,7 +28,7 @@ import com.mucommander.ui.viewer.EditorRegistrar;
 import java.util.Hashtable;
 
 /**
- * Customisable version of {@link InternalEditAction}.
+ * Opens the current file in edit mode.
  * @author Maxence Bernard, Nicolas Rinaudo
  */
 public class EditAction extends AbstractViewerAction {
@@ -46,9 +46,12 @@ public class EditAction extends AbstractViewerAction {
 
 
 
-
-    // - Configuration management --------------------------------------------------------
+    // - Abstract methods ----------------------------------------------------------------
     // -----------------------------------------------------------------------------------
+    /**
+     * Opens the internal editor on the specified file.
+     * @param file file to edit.
+     */
     public void performInternalAction(AbstractFile file) {EditorRegistrar.createEditorFrame(mainFrame, file, getIcon().getImage());}
 
     /**
@@ -56,10 +59,10 @@ public class EditAction extends AbstractViewerAction {
      * @param event describes the configuration change.
      */
     public synchronized void configurationChanged(ConfigurationEvent event) {
-        // Updates useCustomEditor.
+        // Sets the custom command.
         if(event.getVariable().equals(MuConfiguration.USE_CUSTOM_EDITOR))
             setUseCustomCommand(event.getBooleanValue());
-        // Updates customEditor.
+        // Sets the 'use custom command' flag.
         else if(event.getVariable().equals(MuConfiguration.CUSTOM_EDITOR))
             setCustomCommand(event.getValue());
     }
