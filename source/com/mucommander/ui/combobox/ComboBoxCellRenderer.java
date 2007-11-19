@@ -44,7 +44,9 @@ public class ComboBoxCellRenderer implements ListCellRenderer {
     public void setFont(Font f) {font = f;}
 
     public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean hasFocus) {
-        label.setText(value.toString());
+        if(value!=null)
+            label.setText(value.toString());
+
         if(font == null)
             label.setFont(list.getFont());
         else
