@@ -18,20 +18,12 @@
 
 package com.mucommander.ui.action;
 
-import com.mucommander.command.Command;
 import com.mucommander.conf.ConfigurationEvent;
 import com.mucommander.conf.ConfigurationListener;
 import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.file.AbstractFile;
-import com.mucommander.file.FileProtocols;
-import com.mucommander.file.impl.local.LocalFile;
-import com.mucommander.file.util.ResourceLoader;
-import com.mucommander.job.TempOpenWithJob;
-import com.mucommander.process.ProcessRunner;
-import com.mucommander.text.Translator;
-import com.mucommander.ui.dialog.file.ProgressDialog;
-import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.main.MainFrame;
+import com.mucommander.ui.viewer.ViewerRegistrar;
 
 import java.util.Hashtable;
 
@@ -39,16 +31,7 @@ import java.util.Hashtable;
  * Customisable version of {@link InternalViewAction}.
  * @author Maxence Bernard, Nicolas Rinaudo
  */
-public class ViewAction extends InternalViewAction implements ConfigurationListener {
-    // - Instance variables --------------------------------------------------------------
-    // -----------------------------------------------------------------------------------
-    /** Custom viewer defined in the configuration. */
-    private Command customViewer;
-    /** Whether or not to use the custom viewer. */
-    private boolean useCustomViewer;
-
-
-
+public class ViewAction extends AbstractViewerAction {
     // - Initialisation ------------------------------------------------------------------
     // -----------------------------------------------------------------------------------
     /**
@@ -57,52 +40,16 @@ public class ViewAction extends InternalViewAction implements ConfigurationListe
     public ViewAction(MainFrame mainFrame, Hashtable properties) {
         super(mainFrame, properties);
 
-        // Initialises the icon
-        String iconPath;
-        iconPath = getIconPath(InternalViewAction.class);
-        if(ResourceLoader.getResourceAsURL(iconPath)!=null)
-            setIcon(IconManager.getIcon(iconPath));
-
-
         // Initialises configuration.
-        useCustomViewer = MuConfiguration.getVariable(MuConfiguration.USE_CUSTOM_VIEWER, MuConfiguration.DEFAULT_USE_CUSTOM_VIEWER);
-        setCustomViewer(MuConfiguration.getVariable(MuConfiguration.CUSTOM_VIEWER));
-
-        MuConfiguration.addConfigurationListener(this);
+        setUseCustomCommand(MuConfiguration.getVariable(MuConfiguration.USE_CUSTOM_VIEWER, MuConfiguration.DEFAULT_USE_CUSTOM_VIEWER));
+        setCustomCommand(MuConfiguration.getVariable(MuConfiguration.CUSTOM_VIEWER));
     }
 
 
 
     // - Action execution ----------------------------------------------------------------
     // -----------------------------------------------------------------------------------
-    /**
-     * Views the currently selected file.
-     */
-    public synchronized void performAction() {
-        // If we're using a custom viewer...
-        if(useCustomViewer) {
-            AbstractFile file;
-
-            file = mainFrame.getActiveTable().getSelectedFile();
-            // If the file is viewable...
-            if(file != null && !(file.isDirectory() || file.isSymlink())) {
-                // If it's local, run the custom viewer on it.
-                if(file.getURL().getProtocol().equals(FileProtocols.FILE) && (file instanceof LocalFile)) {
-                    try {ProcessRunner.execute(customViewer.getTokens(file), file);}
-                    catch(Exception e) {}
-                }
-                // If it's distant, copies it locally before running the custom viewer on it.
-                else {
-                    ProgressDialog progressDialog = new ProgressDialog(mainFrame, Translator.get("copy_dialog.copying"));
-                    TempOpenWithJob job = new TempOpenWithJob(progressDialog, mainFrame, file, customViewer);
-                    progressDialog.start(job);
-                }
-            }
-        }
-        // If we're not using a custom viewer, this action behaves exactly like its parent.
-        else
-            super.performAction();
-    }
+    public void performInternalAction(AbstractFile file) {ViewerRegistrar.createViewerFrame(mainFrame, file, getIcon().getImage());}
 
 
 
@@ -115,20 +62,9 @@ public class ViewAction extends InternalViewAction implements ConfigurationListe
     public synchronized void configurationChanged(ConfigurationEvent event) {
         // Updates useCustomViewer.
         if(event.getVariable().equals(MuConfiguration.USE_CUSTOM_VIEWER))
-            useCustomViewer = event.getBooleanValue();
+            setUseCustomCommand(event.getBooleanValue());
         // Updates customViewer.
         else if(event.getVariable().equals(MuConfiguration.CUSTOM_VIEWER))
-            setCustomViewer(event.getValue());
-    }
-
-    /**
-     * Sets the custom viewer to the specified command.
-     * @param command command to use as a custom viewer.
-     */
-    private void setCustomViewer(String command) {
-        if(command == null)
-            customViewer = null;
-        else
-            customViewer = new Command("view", command);
+            setCustomCommand(event.getValue());
     }
 }
