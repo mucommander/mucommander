@@ -630,9 +630,10 @@ create:pt_BR:Criar
 create:NL:Maken
 create:SK:Vytvoriť
 
+# Used as a button label in the file chooser of the 'Folders' preferences
 choose:EN:Choose
 choose:FR:Choisir
-# Translation missing
+# Translation missing (New!)
 
 
 
@@ -643,10 +644,10 @@ choose:FR:Choisir
 
 
 
-
+# Used as a button label in the file chooser of the 'Folders' preferences
 choose_folder:EN:Choose a folder
 choose_folder:FR:Choisir un répertoire
-# Translation missing
+# Translation missing (New!)
 
 
 
@@ -1059,10 +1060,10 @@ nb_folders:pt_BR:%1 diretório(s)
 nb_folders:NL:%1 map(pen)
 nb_folders:SK:%1 priečinok(priečinky)
 
-# Displayed briefly on some panels while their contents is being loaded.
+# Displayed briefly on some panels while their contents is being loaded
 loading:EN:Loading...
 loading:FR:Chargement en cours...
-# Translation missing
+# Translation missing (New!)
 
 
 
@@ -4352,7 +4353,7 @@ quit_dialog.desc:KR:모든 창들과 muCommander를 종료 하시겠습니까?
 quit_dialog.desc:pt_BR:Fechar todas as janelas e sair do muCommander ?
 quit_dialog.desc:NL:Alle vensters sluiten en muCommander afsluiten ?
 quit_dialog.desc:SK:Zatvoriť všetky okná a ukončiť muCommander?
-# Translation missing : this entry needs to be updated to take into account the number of windows
+# Translation missing (New!) : this entry needs to be updated to take into account the number of windows
 
 
 
@@ -4779,6 +4780,8 @@ optimizing_archive:CS:Optimalizuji archív %1
 
 
 
+# This gets displayed in the file progress diaog when files are copied into
+# a writable archive (Zip only at the moment).
 error_while_optimizing_archive:EN:Error while optimizing archive %1
 error_while_optimizing_archive:en_GB:Error while optimising archive %1
 error_while_optimizing_archive:FR:Erreur pendant l'optimisation de %1
@@ -4788,7 +4791,7 @@ error_while_optimizing_archive:NL:Fout bij het optimalizeren van archief %1
 error_while_optimizing_archive:SI:Napaka pri optimizaciji arhiva %1
 error_while_optimizing_archive:DE:Fehler während der Archioptimierung %1
 error_while_optimizing_archive:CS:Chyba při optimalizaci archívu %1
-# Translation missing
+# Translation missing (New!)
 
 
 
@@ -6882,10 +6885,11 @@ text_viewer.select_all:pt_BR:Selecionar tudo
 text_viewer.select_all:NL:Selecteer alles
 text_viewer.select_all:SK:Označiť všetko
 
+# Displayed in the 'Edit' menu of the internal text viewer
 text_viewer.find:EN:Find
 text_viewer.find:FR:Rechercher
 text_viewer.find:PL:Znajdź
-# Translation missing
+# Translation missing (New!)
 
 
 
@@ -6898,11 +6902,11 @@ text_viewer.find:PL:Znajdź
 
 
 
-
+# Displayed in the 'Edit' menu of the internal text editor
 text_viewer.find_next:EN:Find next
 text_viewer.find_next:FR:Rechercher suivant
 text_viewer.find_next:PL:Znajdź następne
-# Translation missing
+# Translation missing (New!)
 
 
 
@@ -6915,11 +6919,11 @@ text_viewer.find_next:PL:Znajdź następne
 
 
 
-
+# Displayed in the 'Edit' menu of the internal text editor
 text_viewer.find_previous:EN:Find previous
 text_viewer.find_previous:FR:Rechercher précédent
 text_viewer.find_previous:PL:Znajdź poprzednie
-# Translation missing
+# Translation missing (New!)
 
 
 
@@ -7435,10 +7439,14 @@ theme_editor.shell_tab:CS:Shell
 
 
 
+
+
+
+# Shell history refers to the text field's popup menu of the 'Run command' dialog
 theme_editor.shell_history_tab:EN:Shell history
 theme_editor.shell_history_tab:FR:Historique du shell
 theme_editor.shell_history_tab:PL:Historia shell'a
-# Translation missing
+# Translation missing (New!)
 
 
 
@@ -7616,10 +7624,11 @@ theme_editor.font:pt_BR:Fonte
 theme_editor.font:NL:Font
 theme_editor.font:SK:Písmo
 
+# 'Active' refers to a file pane that currently has keyboard focus.
 theme_editor.active_panel:EN:Active
 theme_editor.active_panel:FR:Actif
 theme_editor.active_panel:PL:Aktywny
-# Translation missing
+# Translation missing (New!)
 
 
 
@@ -7628,10 +7637,12 @@ theme_editor.active_panel:PL:Aktywny
 
 
 
+
+# 'Inactive' refers to a file pane that doesn't have keyboard focus.
 theme_editor.inactive_panel:EN:Inactive
 theme_editor.inactive_panel:FR:Inactif
 theme_editor.inactive_panel:PL:Nieaktywny
-# Translation missing
+# Translation missing (New!)
 
 
 
@@ -7640,11 +7651,10 @@ theme_editor.inactive_panel:PL:Nieaktywny
 
 
 
-
-theme_editor.general_panel:EN:General
-theme_editor.general_panel:FR:General
-theme_editor.general_panel:PL:Ogólne
-# Translation missing
+theme_editor.general:EN:General
+theme_editor.general:FR:General
+theme_editor.general:PL:Ogólne
+# Translation missing (New!)
 
 
 
@@ -7738,10 +7748,11 @@ theme_editor.background:pt_BR:Fundo
 theme_editor.background:NL:Achtergrond
 theme_editor.background:SK:Pozadie
 
+# Refers to the secondary background color used for odd file rows.
 theme_editor.alternate_background:EN:Alternate background
 theme_editor.alternate_background:FR:Fond alterné
 theme_editor.alternate_background:PL:Tło (alternatywne)
-# Translation missing
+# Translation missing (New!)
 
 
 
@@ -8812,10 +8823,11 @@ prefs_dialog.use_system_file_icons.applications:PL:Tylko dla aplikacji
 
 
 
+
 prefs_dialog.edit_current_theme:EN:Edit current theme...
 prefs_dialog.edit_current_theme:FR:Editer le thème courrant...
 prefs_dialog.edit_current_theme:PL:Edytuj bieżący temat...
-# Translation missing
+# Translation missing (New!)
 
 
 
@@ -9255,10 +9267,11 @@ prefs_dialog.custom_shell:NL:Gebruik zelfgekozen shell
 prefs_dialog.custom_shell:SK:Použiť vlastný shell
 prefs_dialog.custom_shell:HU:Egyedi végrehajtás használata
 
+# Encoding in the sense of 'character encoding' such as UTF-8, ISO-8859-1, etc... 
 prefs_dialog.shell_encoding:EN:Shell encoding
 prefs_dialog.shell_encoding:FR:Encodage du shell
 prefs_dialog.shell_encoding:PL:Kodowanie shella
-# Translation missing
+# Translation missing (New!)
 
 
 
@@ -9267,9 +9280,10 @@ prefs_dialog.shell_encoding:PL:Kodowanie shella
 
 
 
+# Refers to automatic detecting of the character encoding
 prefs_dialog.auto_detect_shell_encoding:EN:Auto-detect
 prefs_dialog.auto_detect_shell_encoding:FR:Détection automatique
-# Translation missing
+# Translation missing (New!)
 
 
 
