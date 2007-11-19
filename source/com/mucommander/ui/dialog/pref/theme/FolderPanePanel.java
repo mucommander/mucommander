@@ -20,7 +20,6 @@ package com.mucommander.ui.dialog.pref.theme;
 
 import com.mucommander.text.Translator;
 import com.mucommander.ui.chooser.FontChooser;
-import com.mucommander.ui.chooser.PreviewLabel;
 import com.mucommander.ui.dialog.pref.PreferencesDialog;
 import com.mucommander.ui.layout.ProportionalGridPanel;
 import com.mucommander.ui.layout.YBoxPanel;
@@ -61,7 +60,7 @@ class FolderPanePanel extends ThemeEditorPanel {
         tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 
         // Adds the general panel.
-        tabbedPane.add(Translator.get("theme_editor.general_panel"),
+        tabbedPane.add(Translator.get("theme_editor.general"),
                        createScrollPane(createGeneralPanel(fontChooser = createFontChooser(ThemeData.FILE_TABLE_FONT))));
 
         // Adds the active panel.
