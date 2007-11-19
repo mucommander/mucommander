@@ -66,6 +66,8 @@ public class EditAction extends InternalEditAction implements ConfigurationListe
         // Initialises configuration.
         useCustomEditor = MuConfiguration.getVariable(MuConfiguration.USE_CUSTOM_EDITOR, MuConfiguration.DEFAULT_USE_CUSTOM_EDITOR);
         setCustomEditor(MuConfiguration.getVariable(MuConfiguration.CUSTOM_EDITOR));
+
+        MuConfiguration.addConfigurationListener(this);
     }
 
 

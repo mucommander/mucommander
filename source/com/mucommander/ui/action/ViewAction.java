@@ -67,6 +67,8 @@ public class ViewAction extends InternalViewAction implements ConfigurationListe
         // Initialises configuration.
         useCustomViewer = MuConfiguration.getVariable(MuConfiguration.USE_CUSTOM_VIEWER, MuConfiguration.DEFAULT_USE_CUSTOM_VIEWER);
         setCustomViewer(MuConfiguration.getVariable(MuConfiguration.CUSTOM_VIEWER));
+
+        MuConfiguration.addConfigurationListener(this);
     }
 
 
