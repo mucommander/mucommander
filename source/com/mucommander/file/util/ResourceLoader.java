@@ -43,70 +43,106 @@ import java.net.URLDecoder;
  */
 public class ResourceLoader {
 
+    /** the default ClassLoader that is used by methods without a ClassLoader argument */
+    private static ClassLoader defaultClassLoader = ResourceLoader.class.getClassLoader();
+
+    /**
+     * Returns the default <code>ClassLoader</code> that is used by methods without a <code>ClassLoader</code> argument.
+     * This default <code>ClassLoader</code> is the one that loaded this class, and <b>not</b> the system <code>ClassLoader</code>. 
+     *
+     * @return the default <code>ClassLoader</code> that is used by methods without a <code>ClassLoader</code> argument
+     */
+    public static ClassLoader getDefaultClassLoader() {
+        // We do not use the system class loader because it does not work with JNLP/Webstart applications.
+        // A quote from a FAQ at java.sun.com:
+        //
+        // Java Web Start uses a user-level classloader to load all the application resources specified in the JNLP file.
+        // This classloader implements the security model and the downloading model defined by the JNLP specification.
+        // This is no different than how the AppletViewer or the Java Plug-In works.
+        // This has the, unfortunate, side-effect that Class.forName will not find any resources that are defined in the
+        // JNLP file. The same is true for looking up resources and classes using the system class loader
+        // (ClassLoader.getSystemClassLoader).
+        //
+        return defaultClassLoader;
+    }
+    
+
     /**
      * Finds the resource with the given path and returns a URL pointing to its location, or <code>null</code>
-     * if the resource couldn't be located. The system <code>ClassLoader</code> is used for locating the resource.
+     * if the resource couldn't be located.
+     * The <code>ClassLoader</code> returned by {@link #getDefaultClassLoader()} is used for locating the resource.
      *
      * <p>The given path may or may not start with a leading slash character ('/'), this doesn't affect the way it
      * is interpreted.</p>
      *
-     * @param path a path to the resource, relative to the system ClassLoader's classpath
+     * @param path a path to the resource, relative to the default ClassLoader's classpath
      * @return a URL pointing to the resource, or null if the resource couldn't be located
      */
     public static URL getResourceAsURL(String path) {
-        return ClassLoader.getSystemClassLoader().getResource(removeLeadingSlash(path));
+        return getResourceAsURL(path, null);
     }
 
     /**
      * Finds the resource with the given path and returns a URL pointing to its location, or <code>null</code>
-     * if the resource couldn't be located. The given <code>ClassLoader</code> is used for locating the resource.
+     * if the resource couldn't be located.
+     * The given <code>ClassLoader</code> is used for locating the resource. If it is <code>null</code>, the
+     * <code>ClassLoader</code> returned by {@link #getDefaultClassLoader()} is used.
+
      *
      * <p>The given path may or may not start with a leading slash character ('/'), this doesn't affect the way it
      * is interpreted.</p>
      *
-     * @param path a path to the resource, relative to the system ClassLoader's classpath
+     * @param path a path to the resource, relative to the given ClassLoader's classpath
      * @param classLoader the ClassLoader used for locating the resource
      * @return a URL pointing to the resource, or null if the resource couldn't be located
      */
     public static URL getResourceAsURL(String path, ClassLoader classLoader) {
+        if(classLoader==null)
+            classLoader = getDefaultClassLoader();
+
         return classLoader.getResource(removeLeadingSlash(path));
     }
 
 
     /**
      * Finds the resource with the given path and returns an <code>InputStream</code> to read from it, or <code>null</code>
-     * if the resource couldn't be located. The system <code>ClassLoader</code> is used for locating the resource.
+     * if the resource couldn't be located.
+     * The <code>ClassLoader</code> returned by {@link #getDefaultClassLoader()} is used for locating the resource.
      *
      * <p>The given path may or may not start with a leading slash character ('/'), this doesn't affect the way it
      * is interpreted.</p>
 
-     * @param path a path to the resource, relative to the system ClassLoader's classpath
+     * @param path a path to the resource, relative to the default ClassLoader's classpath
      * @return an InputStream that allows to read from the resource, or null if the resource couldn't be located
      */
     public static InputStream getResourceAsStream(String path) {
-        return ClassLoader.getSystemClassLoader().getResourceAsStream(removeLeadingSlash(path));
+        return getResourceAsStream(path, null);
     }
 
     /**
      * Finds the resource with the given path and returns an <code>InputStream</code> to read from it, or <code>null</code>
-     * if the resource couldn't be located. The given <code>ClassLoader</code> is used for locating the resource.
+     * The given <code>ClassLoader</code> is used for locating the resource. If it is <code>null</code>, the
+     * <code>ClassLoader</code> returned by {@link #getDefaultClassLoader()} is used.
      *
      * <p>The given path may or may not start with a leading slash character ('/'), this doesn't affect the way it
      * is interpreted.</p>
 
-     * @param path a path to the resource, relative to the system ClassLoader's classpath
+     * @param path a path to the resource, relative to the given ClassLoader's classpath
      * @param classLoader the Class whose ClassLoader is used for locating the resource
      * @return an InputStream that allows to read from the resource, or null if the resource couldn't be located
      */
     public static InputStream getResourceAsStream(String path, ClassLoader classLoader) {
+        if(classLoader==null)
+            classLoader = getDefaultClassLoader();
+
         return classLoader.getResourceAsStream(removeLeadingSlash(path));
     }
 
 
     /**
      * Finds the resource with the given path and returns an {@link AbstractFile} that gives full access to it,
-     * or <code>null</code> if the resource couldn't be located. The system <code>ClassLoader</code> is used for
-     * locating the resource.
+     * or <code>null</code> if the resource couldn't be located.
+     * The <code>ClassLoader</code> returned by {@link #getDefaultClassLoader()} is used for locating the resource.
      *
      * <p>The given path may or may not start with a leading slash character ('/'), this doesn't affect the way it
      * is interpreted. Also noteworthy is this method may be slower than {@link #getResourceAsStream(String)} if
@@ -114,17 +150,18 @@ public class ResourceLoader {
      * the archive is accessed. So this latter method should be favored if the file is simply used for reading the
      * resource.</p>
      *
-     * @param path a path to the resource, relative to the system ClassLoader's classpath
+     * @param path a path to the resource, relative to the default ClassLoader's classpath
      * @return an AbstractFile that allows to access the resource, or null if the resource couldn't be located
      */
     public static AbstractFile getResourceAsFile(String path) {
-        return getResourceAsFile(removeLeadingSlash(path), ClassLoader.getSystemClassLoader());
+        return getResourceAsFile(removeLeadingSlash(path), null);
     }
 
     /**
      * Finds the resource with the given path and returns an {@link AbstractFile} that gives full access to it,
-     * or <code>null</code> if the resource couldn't be located. The given <code>ClassLoader</code> is used for
-     * locating the resource.
+     * or <code>null</code> if the resource couldn't be located.
+     * The given <code>ClassLoader</code> is used for locating the resource. If it is <code>null</code>, the
+     * <code>ClassLoader</code> returned by {@link #getDefaultClassLoader()} is used.
      *
      * <p>The given path may or may not start with a leading slash character ('/'), this doesn't affect the way it
      * is interpreted. Also noteworthy is this method may be slower than {@link #getResourceAsStream(String)} if
@@ -132,11 +169,14 @@ public class ResourceLoader {
      * the archive is accessed. So this latter method should be favored if the file is simply used for reading the
      * resource.</p>
 
-     * @param path a path to the resource, relative to the system ClassLoader's classpath
+     * @param path a path to the resource, relative to the given ClassLoader's classpath
      * @param classLoader the ClassLoader is used for locating the resource
      * @return an AbstractFile that allows to access the resource, or null if the resource couldn't be located
      */
     public static AbstractFile getResourceAsFile(String path, ClassLoader classLoader) {
+        if(classLoader==null)
+            classLoader = getDefaultClassLoader();
+
         path = removeLeadingSlash(path);
 
         URL aClassURL = getResourceAsURL(path, classLoader);
@@ -170,7 +210,7 @@ public class ResourceLoader {
     public static AbstractFile getRootPackageAsFile(Class aClass) {
         ClassLoader classLoader = aClass.getClassLoader();
         if(classLoader==null)
-            classLoader = ClassLoader.getSystemClassLoader();
+            classLoader = getDefaultClassLoader();
 
         String aClassRelPath = aClass.getName().replace('.', '/')+".class";
         URL aClassURL = getResourceAsURL(aClassRelPath, classLoader);
