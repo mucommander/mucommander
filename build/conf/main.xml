@@ -239,23 +239,19 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <target name="normal-load-strreplace" unless="conf.standalone">
     <antcall target="load-strreplace"/>
   </target>
-  
-  <target name="standalone-load-strreplace" if="conf.standalone">
+
+  <target name="conf-load-strreplace" depends="normal-load-strreplace">
     <taskdef name="strreplace" classname="com.mucommander.ant.util.ReplaceTask" classpath="${tools.jar.cmp}"/>
   </target>
-
-  <target name="conf-load-strreplace" depends="normal-load-strreplace,standalone-load-strreplace"/>
 
   <target name="normal-load-libpath" unless="conf.standalone">
     <antcall target="load-libpath"/>
   </target>
   
-  <target name="standalone-load-libpath" if="conf.standalone">
+  <target name="conf-load-libpath" depends="normal-load-libpath">
     <taskdef name="libpath" classname="com.mucommander.ant.util.SystemClasspathTask" classpath="${tools.jar.cmp}"/>
     <libpath out="java.lib"/>
   </target>
-
-  <target name="conf-load-libpath" depends="standalone-load-libpath,normal-load-libpath"/>
 
   <!-- Stores the conf package and archive prefixes in         -->
   <!-- ${conf.package-prefix} and ${conf.archive-prefix}.      -->
@@ -313,6 +309,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <copy todir="${conf.tmp}/release/source">
       <fileset dir="${source}/">
         <include name="com/mucommander/conf/**/*"/>
+        <exclude name="com/mucommander/conf/impl/"/>
         <include name="com/mucommander/xml/**/*"/>
       </fileset>
     </copy>
