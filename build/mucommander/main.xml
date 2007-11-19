@@ -696,7 +696,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             <istrue value="${is-release}"/>
           </not>
           <not>
-            <istrue value="${store..available}"/>
+            <istrue value="${store.available}"/>
           </not>
         </and>
       </condition>
