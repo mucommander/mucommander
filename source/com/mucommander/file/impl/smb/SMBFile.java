@@ -443,7 +443,7 @@ import java.net.MalformedURLException;
         // Special tests to fail in situations where SmbFile#copyTo() does not, for instance:
         // - when the destination file exists (the destination is simply overwritten)
         // - when the source file doesn't exist
-        checkCopyPrerequisites(destFile);
+        checkCopyPrerequisites(destFile, false);
 
         // Everything cool, proceed with the copy
         try {
@@ -484,7 +484,7 @@ import java.net.MalformedURLException;
         // Special tests to fail in situations where SmbFile#renameTo() does not, for instance:
         // - when the source and destination are the same
         // - when the source file doesn't exist
-        checkCopyPrerequisites(destFile);
+        checkCopyPrerequisites(destFile, true);
 
         // Attempt to move the file using jcifs.smb.SmbFile#renameTo.
         try {

@@ -222,10 +222,6 @@ public abstract class ProxyFile extends AbstractFile {
         return file.getSeparator();
     }
 
-    public boolean isParentOf(AbstractFile f) {
-        return file.isParentOf(f);
-    }
-
     public boolean isBrowsable() {
         return file.isBrowsable();
     }

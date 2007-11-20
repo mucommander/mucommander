@@ -208,13 +208,6 @@ public class DebugFile extends ProxyFile {
         return super.isBrowsable();
     }
 
-    public boolean isParentOf(AbstractFile f) {
-        if(Debug.ON) Debug.trace(getDebugString(), traceLevel);
-        lag();
-
-        return super.isParentOf(f);
-    }
-
     public boolean isHidden() {
         if(Debug.ON) Debug.trace(getDebugString(), traceLevel);
         lag();

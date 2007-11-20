@@ -214,17 +214,6 @@ public abstract class AbstractFile implements FilePermissions {
 
 
     /**
-     * Returns <code>true</code> if this file is a parent folder of the given file, or if the 2 files are equal.
-     *
-     * @param file the AbstractFile to test
-     * @return true if this file is a parent folder of the given file, or if the 2 files are equal
-     */
-    public boolean isParentOf(AbstractFile file) {
-        return isBrowsable() && file.getCanonicalPath(true).startsWith(getCanonicalPath(true));
-    }
-
-	
-    /**
      * Returns <code>true</code> if this file is browsable. A file is considered browsable if it contains children files
      * that can be exposed by calling the <code>ls()</code> methods. {@link AbstractArchiveFile} implementations will
      * usually return <code>true</code>, as will directories (directories are always browsable).
@@ -358,35 +347,50 @@ public abstract class AbstractFile implements FilePermissions {
     }
 
     /**
-     * Checks the prerequisites of a copy operation.
-     * Throws a {@link FileTransferException} in any of the following cases, does nothing otherwise:
+     * Checks the prerequisites of a copy (or move) operation.
+     * Throws a {@link FileTransferException} in any of the following conditions are true, does nothing otherwise:
      * <ul>
      *   <li>this file does not exist</li>
      *   <li>the destination file exists</li>
-     *   <li>this file and the destination file are the same</li>
-     *   <li>this file is a directory and a parent of the destination file</li>
+     *   <li>this file and the destination file are the same, unless <code>allowCaseVariations</code> is <code>true</code>
+     * and the destination filename is a case variation of the source</li>
+     *   <li>this file is a parent of the destination file</li>
      * </ul>
      *
      * @param destFile the destination file to copy this file to
+     * @param allowCaseVariations if true and the destination file is a case variation of source, no exception will be thrown
      * @throws FileTransferException in any of the cases listed above, use {@link FileTransferException#getReason()} to
      * know the reason.
      */
-    protected final void checkCopyPrerequisites(AbstractFile destFile) throws FileTransferException {
-        // Test if source file is a folder and destination is a subfolder of source, also true if both files are equal
-        if(isDirectory() && isParentOf(destFile)) {
-            // Throw a specific FileTransferException if the source and destination files are identical
-            if(this.equals(destFile))
-                throw new FileTransferException(FileTransferException.SOURCE_AND_DESTINATION_IDENTICAL);
+    protected final void checkCopyPrerequisites(AbstractFile destFile, boolean allowCaseVariations) throws FileTransferException {
+        boolean isAllowedCaseVariation = false;
 
-            throw new FileTransferException(FileTransferException.SOURCE_PARENT_OF_DESTINATION);
+        // Throw an exception of a specific kind if the source and destination files are identical
+        boolean filesEqual = this.equals(destFile);
+        if(filesEqual) {
+            // If case variations are allowed and the destination filename is a case variation of the source,
+            // do not throw an exception.
+            if(allowCaseVariations) {
+                String sourceFileName = getName();
+                String destFileName = destFile.getName();
+                if(sourceFileName.equalsIgnoreCase(destFileName) && !sourceFileName.equals(destFileName))
+                    isAllowedCaseVariation = true;
+            }
+
+            if(!isAllowedCaseVariation)
+                throw new FileTransferException(FileTransferException.SOURCE_AND_DESTINATION_IDENTICAL);
         }
+
+        // Throw an exception if source is a parent of destination
+        if(!filesEqual && isParentOf(destFile))      // Note: isParentOf(destFile) returns true if both files are equal
+            throw new FileTransferException(FileTransferException.SOURCE_PARENT_OF_DESTINATION);
 
         // Throw an exception if the source file does not exist
         if(!exists())
             throw new FileTransferException(FileTransferException.FILE_NOT_FOUND);
 
         // Throw an exception if the destination file exists
-        if(destFile.exists())
+        if(destFile.exists() && !isAllowedCaseVariation)
             throw new FileTransferException(FileTransferException.DESTINATION_EXISTS);
     }
 
@@ -423,7 +427,7 @@ public abstract class AbstractFile implements FilePermissions {
      * know the reason.
      */
     public boolean copyTo(AbstractFile destFile) throws FileTransferException {
-        checkCopyPrerequisites(destFile);
+        checkCopyPrerequisites(destFile, false);
 
         // Copy the file and its contents if the file is a directory
         copyRecursively(this, destFile);
@@ -494,7 +498,7 @@ public abstract class AbstractFile implements FilePermissions {
      * know the reason.
      */
     public boolean moveTo(AbstractFile destFile) throws FileTransferException {
-        checkCopyPrerequisites(destFile);
+        checkCopyPrerequisites(destFile, false);
 
         // Copy the file and its contents if the file is a directory
         copyRecursively(this, destFile);
@@ -1031,6 +1035,17 @@ public abstract class AbstractFile implements FilePermissions {
         while(lastAncestor!=ancestor);
 
         return false;
+    }
+
+
+    /**
+     * Returns <code>true</code> if this file is a parent folder of the given file, or if the two files are equal.
+     *
+     * @param file the AbstractFile to test
+     * @return true if this file is a parent folder of the given file, or if the two files are equal
+     */
+    public final boolean isParentOf(AbstractFile file) {
+        return isBrowsable() && file.getCanonicalPath(true).startsWith(getCanonicalPath(true));
     }
 
     /**
