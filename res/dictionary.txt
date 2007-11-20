@@ -4348,7 +4348,7 @@ quit_dialog.desc:RO:Aveți %1 ferestre deschise. Sunteți sigur ca doriti sa în
 quit_dialog.desc:IT:Hai %1 finestra(e) aperta(e). Sei sicuro di voler uscire ?
 quit_dialog.desc:KR:모든 창들과 muCommander를 종료 하시겠습니까? 
 quit_dialog.desc:pt_BR:Fechar todas as janelas e sair do muCommander ?
-quit_dialog.desc:NL:Alle vensters sluiten en muCommander afsluiten ?
+quit_dialog.desc:NL:Er zijn %1 venster(s) geopend. Alle vensters sluiten en muCommander afsluiten?
 quit_dialog.desc:SK:Zatvoriť všetky okná a ukončiť muCommander?
 # Translation missing (New!) : this entry needs to be updated to take into account the number of windows
 
@@ -5015,6 +5015,7 @@ delete_dialog.permanently_delete.confirmation_details:DE:Diese Operation kann ni
 delete_dialog.permanently_delete.confirmation_details:CS:Tato operace je nevratná.
 delete_dialog.permanently_delete.confirmation_details:HU:A művelet nem vonható vissza.
 delete_dialog.permanently_delete.confirmation_details:IT:Questa operazione non puo' essere annullata.
+delete_dialog.permanently_delete.confirmation_details:NL:Deze bewerking kan niet ongedaan gemaakt worden.
 # Translation missing (NL, PL, KR)
 
 
