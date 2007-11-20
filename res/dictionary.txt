@@ -635,6 +635,7 @@ choose:EN:Choose
 choose:FR:Choisir
 choose:RO:Alege
 choose:NL:Kies uit
+choose:DE:Auswählen
 # Translation missing (New!)
 
 
@@ -651,6 +652,7 @@ choose_folder:EN:Choose a folder
 choose_folder:FR:Choisir un répertoire
 choose_folder:RO:Alege un director
 choose_folder:NL:Kies map
+choose_folder:DE:Wähle ein Verzeichnis
 # Translation missing (New!)
 
 
@@ -1069,6 +1071,7 @@ loading:EN:Loading...
 loading:FR:Chargement en cours...
 loading:RO:Încărcare în curs...
 loading:NL:Laden...
+loading:DE:lade...
 # Translation missing (New!)
 
 
@@ -4344,7 +4347,7 @@ quit_dialog.title:SK:Ukončiť muCommander
 # stay reasonnably short.
 quit_dialog.desc:EN:You have %1 window(s) open. Are you sure you want to quit ? 
 quit_dialog.desc:FR:Il y a %1 fenêtre(s) ouverte(s). Etes-vous sûr de vouloir quitter ?
-quit_dialog.desc:DE:Alle Fenster schließen und muCommander beenden ?
+quit_dialog.desc:DE:Sie haben %1 offene(s) Fenster. Alle Fenster schließen und muCommander beenden?
 quit_dialog.desc:ES:¿Desea cerrar todas las ventanas y salir de muCommander?
 quit_dialog.desc:CS:Zavřít všechna okna a ukončit muCommander ?
 quit_dialog.desc:zh_TW:關閉所有視窗並離開 muCommander ?
@@ -4795,7 +4798,7 @@ error_while_optimizing_archive:HU:Hiba az archívum optimalizálásakor %1
 error_while_optimizing_archive:zh_CN:优化压缩包 %1 时出错
 error_while_optimizing_archive:NL:Fout bij het optimalizeren van archief %1
 error_while_optimizing_archive:SI:Napaka pri optimizaciji arhiva %1
-error_while_optimizing_archive:DE:Fehler während der Archioptimierung %1
+error_while_optimizing_archive:DE:Fehler bei der Optimierung des Archivs %1
 error_while_optimizing_archive:CS:Chyba při optimalizaci archívu %1
 error_while_optimizing_archive:RO:Eroare la optimizarea arhivei %1
 # Translation missing (New!)
@@ -6898,6 +6901,7 @@ text_viewer.find:FR:Rechercher
 text_viewer.find:PL:Znajdź
 text_viewer.find:RO:Caută
 text_viewer.find:NL:Zoeken
+text_viewer.find:DE:Suchen
 # Translation missing (New!)
 
 
@@ -6917,6 +6921,7 @@ text_viewer.find_next:FR:Rechercher suivant
 text_viewer.find_next:PL:Znajdź następne
 text_viewer.find_next:RO:Caută urmatoarea apariție
 text_viewer.find_next:NL:Zoek volgende
+text_viewer.find_next:DE:Weitersuchen
 # Translation missing (New!)
 
 
@@ -6936,6 +6941,7 @@ text_viewer.find_previous:FR:Rechercher précédent
 text_viewer.find_previous:PL:Znajdź poprzednie
 text_viewer.find_previous:RO:Caută apariția precedentă
 text_viewer.find_previous:NL:Zoek vorige
+text_viewer.find_previous:DE:Vorherigen suchen
 # Translation missing (New!)
 
 
@@ -7461,6 +7467,7 @@ theme_editor.shell_history_tab:FR:Historique du shell
 theme_editor.shell_history_tab:PL:Historia shell'a
 theme_editor.shell_history_tab:RO:Istoria terminalului
 theme_editor.shell_history_tab:NL:Shell geschiedenis
+theme_editor.shell_history_tab:DE:Shell Historie
 # Translation missing (New!)
 
 
@@ -7645,6 +7652,7 @@ theme_editor.active_panel:FR:Actif
 theme_editor.active_panel:PL:Aktywny
 theme_editor.active_panel:RO:Activ
 theme_editor.active_panel:NL:Actief
+theme_editor.active_panel:DE:Aktiv
 # Translation missing (New!)
 
 
@@ -7661,6 +7669,7 @@ theme_editor.inactive_panel:FR:Inactif
 theme_editor.inactive_panel:PL:Nieaktywny
 theme_editor.inactive_panel:RO:Inactiv
 theme_editor.inactive_panel:NL:Niet actief
+theme_editor.inactive_panel:DE:Inaktiv
 # Translation missing (New!)
 
 
@@ -7675,6 +7684,7 @@ theme_editor.general:FR:General
 theme_editor.general:PL:Ogólne
 theme_editor.general:RO:General
 theme_editor.general:NL:Algemeen
+theme_editor.general:DE:Allgemein
 # Translation missing (New!)
 
 
@@ -7775,6 +7785,7 @@ theme_editor.alternate_background:FR:Fond alterné
 theme_editor.alternate_background:PL:Tło (alternatywne)
 theme_editor.alternate_background:RO:Fond alternativ
 theme_editor.alternate_background:NL:Afwisselende achtergrond
+theme_editor.alternate_background:DE:Alternativer Hintergrund
 # Translation missing (New!)
 
 
@@ -8852,6 +8863,7 @@ prefs_dialog.edit_current_theme:FR:Editer le thème courrant...
 prefs_dialog.edit_current_theme:PL:Edytuj bieżący temat...
 prefs_dialog.edit_current_theme:RO:Modifică tema curentă...
 prefs_dialog.edit_current_theme:NL:Huidige thema bewerken...
+prefs_dialog.edit_current_theme:DE:Aktuelles Thema bearbeiten...
 # Translation missing (New!)
 
 
@@ -9301,6 +9313,7 @@ prefs_dialog.shell_encoding:FR:Encodage du shell
 prefs_dialog.shell_encoding:PL:Kodowanie shella
 prefs_dialog.shell_encoding:RO:Codificarea terminalului
 prefs_dialog.shell_encoding:NL:Tekenset shell
+prefs_dialog.shell_encoding:DE:Shell Kodierung
 # Translation missing (New!)
 
 
@@ -9315,6 +9328,7 @@ prefs_dialog.auto_detect_shell_encoding:EN:Auto-detect
 prefs_dialog.auto_detect_shell_encoding:FR:Détection automatique
 prefs_dialog.auto_detect_shell_encoding:RO:Detectează automat
 prefs_dialog.auto_detect_shell_encoding:NL:Auto-detect
+prefs_dialog.auto_detect_shell_encoding:DE:Automatisch feststellen
 # Translation missing (New!)
 
 
