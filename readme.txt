@@ -149,7 +149,7 @@ Bug fixes:
 - Fixed symlinks to directories not properly handled on SFTP shares.
 
 Known issues:
-- Italian, Korean and Polish translations are not up-to-date.
+- Korean and Polish translations are not up-to-date.
 - Executable permissions are not preserved properly for local files prior to
   Java 1.6.
 - SMB support may not work properly on non multi-language JRE.
