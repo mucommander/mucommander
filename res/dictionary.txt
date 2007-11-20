@@ -636,6 +636,7 @@ choose:FR:Choisir
 choose:RO:Alege
 choose:NL:Kies uit
 choose:DE:Auswählen
+choose:SI:Izberi
 # Translation missing (New!)
 
 
@@ -653,6 +654,7 @@ choose_folder:FR:Choisir un répertoire
 choose_folder:RO:Alege un director
 choose_folder:NL:Kies map
 choose_folder:DE:Wähle ein Verzeichnis
+choose_folder:SI:Izberi mapo
 # Translation missing (New!)
 
 
@@ -1072,6 +1074,7 @@ loading:FR:Chargement en cours...
 loading:RO:Încărcare în curs...
 loading:NL:Laden...
 loading:DE:lade...
+loading:SI:Nalagam...
 # Translation missing (New!)
 
 
@@ -4355,7 +4358,7 @@ quit_dialog.desc:PL:Zamknąć wszystkie okna i zakończyć pracę muCommandera ?
 quit_dialog.desc:HU:Minden ablak bázárása és kilépés a muCommanderből?
 quit_dialog.desc:RU:Закрыть все окна и выйти из muCommander ?
 quit_dialog.desc:zh_CN:关闭所有窗口并退出 muCommander ?
-quit_dialog.desc:SI:Zaprem vsa okna in zaključim muCommander? 
+quit_dialog.desc:SI:Odprto/-ih je %1 okno/-en. Želite zapreti vsa okna? 
 quit_dialog.desc:RO:Aveți %1 ferestre deschise. Sunteți sigur ca doriti sa închideți muCommander?
 quit_dialog.desc:IT:Chiudo tutte le finestre ed esco da muCommander ?
 quit_dialog.desc:KR:모든 창들과 muCommander를 종료 하시겠습니까? 
@@ -6902,6 +6905,7 @@ text_viewer.find:PL:Znajdź
 text_viewer.find:RO:Caută
 text_viewer.find:NL:Zoeken
 text_viewer.find:DE:Suchen
+text_viewer.find:SI:Najdi
 # Translation missing (New!)
 
 
@@ -6922,6 +6926,7 @@ text_viewer.find_next:PL:Znajdź następne
 text_viewer.find_next:RO:Caută urmatoarea apariție
 text_viewer.find_next:NL:Zoek volgende
 text_viewer.find_next:DE:Weitersuchen
+text_viewer.find_next:SI:Najdi naslednje
 # Translation missing (New!)
 
 
@@ -6942,6 +6947,7 @@ text_viewer.find_previous:PL:Znajdź poprzednie
 text_viewer.find_previous:RO:Caută apariția precedentă
 text_viewer.find_previous:NL:Zoek vorige
 text_viewer.find_previous:DE:Vorherigen suchen
+text_viewer.find_previous:SI:Najdi prejšnje
 # Translation missing (New!)
 
 
@@ -7468,6 +7474,7 @@ theme_editor.shell_history_tab:PL:Historia shell'a
 theme_editor.shell_history_tab:RO:Istoria terminalului
 theme_editor.shell_history_tab:NL:Shell geschiedenis
 theme_editor.shell_history_tab:DE:Shell Historie
+theme_editor.shell_history_tab:SI:Ogrodje zgodovine
 # Translation missing (New!)
 
 
@@ -7653,6 +7660,7 @@ theme_editor.active_panel:PL:Aktywny
 theme_editor.active_panel:RO:Activ
 theme_editor.active_panel:NL:Actief
 theme_editor.active_panel:DE:Aktiv
+theme_editor.active_panel:SI:Aktivno
 # Translation missing (New!)
 
 
@@ -7670,6 +7678,7 @@ theme_editor.inactive_panel:PL:Nieaktywny
 theme_editor.inactive_panel:RO:Inactiv
 theme_editor.inactive_panel:NL:Niet actief
 theme_editor.inactive_panel:DE:Inaktiv
+theme_editor.inactive_panel:SI:Neaktivno
 # Translation missing (New!)
 
 
@@ -7685,6 +7694,7 @@ theme_editor.general:PL:Ogólne
 theme_editor.general:RO:General
 theme_editor.general:NL:Algemeen
 theme_editor.general:DE:Allgemein
+theme_editor.general:SI:Splošno
 # Translation missing (New!)
 
 
@@ -7786,6 +7796,7 @@ theme_editor.alternate_background:PL:Tło (alternatywne)
 theme_editor.alternate_background:RO:Fond alternativ
 theme_editor.alternate_background:NL:Afwisselende achtergrond
 theme_editor.alternate_background:DE:Alternativer Hintergrund
+theme_editor.alternate_background:SI:Ozadje (izmenično)
 # Translation missing (New!)
 
 
@@ -8864,6 +8875,7 @@ prefs_dialog.edit_current_theme:PL:Edytuj bieżący temat...
 prefs_dialog.edit_current_theme:RO:Modifică tema curentă...
 prefs_dialog.edit_current_theme:NL:Huidige thema bewerken...
 prefs_dialog.edit_current_theme:DE:Aktuelles Thema bearbeiten...
+prefs_dialog.edit_current_theme:SI:Uredi trenutno temo...
 # Translation missing (New!)
 
 
@@ -9314,6 +9326,7 @@ prefs_dialog.shell_encoding:PL:Kodowanie shella
 prefs_dialog.shell_encoding:RO:Codificarea terminalului
 prefs_dialog.shell_encoding:NL:Tekenset shell
 prefs_dialog.shell_encoding:DE:Shell Kodierung
+prefs_dialog.shell_encoding:SI:Kodiranje ogrodja
 # Translation missing (New!)
 
 
@@ -9329,6 +9342,7 @@ prefs_dialog.auto_detect_shell_encoding:FR:Détection automatique
 prefs_dialog.auto_detect_shell_encoding:RO:Detectează automat
 prefs_dialog.auto_detect_shell_encoding:NL:Auto-detect
 prefs_dialog.auto_detect_shell_encoding:DE:Automatisch feststellen
+prefs_dialog.auto_detect_shell_encoding:SI:Samodejno zaznaj
 # Translation missing (New!)
 
 
