@@ -633,6 +633,7 @@ create:SK:Vytvoriť
 # Used as a button label in the file chooser of the 'Folders' preferences
 choose:EN:Choose
 choose:FR:Choisir
+choose:RO:Alege
 # Translation missing (New!)
 
 
@@ -647,6 +648,7 @@ choose:FR:Choisir
 # Used as a button label in the file chooser of the 'Folders' preferences
 choose_folder:EN:Choose a folder
 choose_folder:FR:Choisir un répertoire
+choose_folder:RO:Alege un director
 # Translation missing (New!)
 
 
@@ -1063,6 +1065,7 @@ nb_folders:SK:%1 priečinok(priečinky)
 # Displayed briefly on some panels while their contents is being loaded
 loading:EN:Loading...
 loading:FR:Chargement en cours...
+loading:RO:Încărcare în curs...
 # Translation missing (New!)
 
 
@@ -4347,7 +4350,7 @@ quit_dialog.desc:HU:Minden ablak bázárása és kilépés a muCommanderből?
 quit_dialog.desc:RU:Закрыть все окна и выйти из muCommander ?
 quit_dialog.desc:zh_CN:关闭所有窗口并退出 muCommander ?
 quit_dialog.desc:SI:Zaprem vsa okna in zaključim muCommander? 
-quit_dialog.desc:RO:Închide toate ferestrele și părăsește muCommander ?
+quit_dialog.desc:RO:Aveți %1 ferestre deschise. Sunteți sigur ca doriti sa închideți muCommander?
 quit_dialog.desc:IT:Chiudo tutte le finestre ed esco da muCommander ?
 quit_dialog.desc:KR:모든 창들과 muCommander를 종료 하시겠습니까? 
 quit_dialog.desc:pt_BR:Fechar todas as janelas e sair do muCommander ?
@@ -4791,6 +4794,7 @@ error_while_optimizing_archive:NL:Fout bij het optimalizeren van archief %1
 error_while_optimizing_archive:SI:Napaka pri optimizaciji arhiva %1
 error_while_optimizing_archive:DE:Fehler während der Archioptimierung %1
 error_while_optimizing_archive:CS:Chyba při optimalizaci archívu %1
+error_while_optimizing_archive:RO:Eroare la optimizarea arhivei %1
 # Translation missing (New!)
 
 
@@ -6889,6 +6893,7 @@ text_viewer.select_all:SK:Označiť všetko
 text_viewer.find:EN:Find
 text_viewer.find:FR:Rechercher
 text_viewer.find:PL:Znajdź
+text_viewer.find:RO:Caută
 # Translation missing (New!)
 
 
@@ -6906,6 +6911,7 @@ text_viewer.find:PL:Znajdź
 text_viewer.find_next:EN:Find next
 text_viewer.find_next:FR:Rechercher suivant
 text_viewer.find_next:PL:Znajdź następne
+text_viewer.find_next:RO:Caută urmatoarea apariție
 # Translation missing (New!)
 
 
@@ -6923,6 +6929,7 @@ text_viewer.find_next:PL:Znajdź następne
 text_viewer.find_previous:EN:Find previous
 text_viewer.find_previous:FR:Rechercher précédent
 text_viewer.find_previous:PL:Znajdź poprzednie
+text_viewer.find_previous:RO:Caută apariția precedentă
 # Translation missing (New!)
 
 
@@ -7446,6 +7453,7 @@ theme_editor.shell_tab:CS:Shell
 theme_editor.shell_history_tab:EN:Shell history
 theme_editor.shell_history_tab:FR:Historique du shell
 theme_editor.shell_history_tab:PL:Historia shell'a
+theme_editor.shell_history_tab:RO:Istoria terminalului
 # Translation missing (New!)
 
 
@@ -7628,6 +7636,7 @@ theme_editor.font:SK:Písmo
 theme_editor.active_panel:EN:Active
 theme_editor.active_panel:FR:Actif
 theme_editor.active_panel:PL:Aktywny
+theme_editor.active_panel:RO:Activ
 # Translation missing (New!)
 
 
@@ -7642,6 +7651,7 @@ theme_editor.active_panel:PL:Aktywny
 theme_editor.inactive_panel:EN:Inactive
 theme_editor.inactive_panel:FR:Inactif
 theme_editor.inactive_panel:PL:Nieaktywny
+theme_editor.inactive_panel:RO:Inactiv
 # Translation missing (New!)
 
 
@@ -7654,6 +7664,7 @@ theme_editor.inactive_panel:PL:Nieaktywny
 theme_editor.general:EN:General
 theme_editor.general:FR:General
 theme_editor.general:PL:Ogólne
+theme_editor.general:RO:General
 # Translation missing (New!)
 
 
@@ -7752,6 +7763,7 @@ theme_editor.background:SK:Pozadie
 theme_editor.alternate_background:EN:Alternate background
 theme_editor.alternate_background:FR:Fond alterné
 theme_editor.alternate_background:PL:Tło (alternatywne)
+theme_editor.alternate_background:RO:Fond alternativ
 # Translation missing (New!)
 
 
@@ -8827,6 +8839,7 @@ prefs_dialog.use_system_file_icons.applications:PL:Tylko dla aplikacji
 prefs_dialog.edit_current_theme:EN:Edit current theme...
 prefs_dialog.edit_current_theme:FR:Editer le thème courrant...
 prefs_dialog.edit_current_theme:PL:Edytuj bieżący temat...
+prefs_dialog.edit_current_theme:RO:Modifică tema curentă...
 # Translation missing (New!)
 
 
@@ -8984,7 +8997,8 @@ prefs_dialog.export:RU:Экспорт
 prefs_dialog.export:DE:Export
 prefs_dialog.export:CS:Exportovat
 prefs_dialog.export:PL:Eksport
-# Translation missing (RO, IT, KR)
+prefs_dialog.export:RO:Export
+# Translation missing (IT, KR)
 
 
 
@@ -9233,7 +9247,7 @@ prefs_dialog.shell:EN:$[com.mucommander.ui.action.RunCommandAction.label]
 
 prefs_dialog.default_shell:EN:Use default system shell
 prefs_dialog.default_shell:FR:Utiliser le shell par défaut du système
-prefs_dialog.default_shell:RO:Folosește shell-ul implicit pe sistem
+prefs_dialog.default_shell:RO:Folosește terminalul implicit pe sistem
 prefs_dialog.default_shell:SI:Uporabi privzeto izvajanje ukazov
 prefs_dialog.default_shell:IT:Usa il terminale di default del sistema
 prefs_dialog.default_shell:CS:Použít výchozí systémový shell
@@ -9251,7 +9265,7 @@ prefs_dialog.default_shell:HU:Az alapértelmezett végrehajtás használata
 
 prefs_dialog.custom_shell:EN:Use custom shell
 prefs_dialog.custom_shell:FR:Utiliser un shell spécifique
-prefs_dialog.custom_shell:RO:Folosește un shell anume
+prefs_dialog.custom_shell:RO:Folosește un terminal anume
 prefs_dialog.custom_shell:SI:Uporabi izvajanje ukazov po meri
 prefs_dialog.custom_shell:IT:Usa il terminale utente
 prefs_dialog.custom_shell:CS:Použít vlastní shell
@@ -9271,6 +9285,7 @@ prefs_dialog.custom_shell:HU:Egyedi végrehajtás használata
 prefs_dialog.shell_encoding:EN:Shell encoding
 prefs_dialog.shell_encoding:FR:Encodage du shell
 prefs_dialog.shell_encoding:PL:Kodowanie shella
+prefs_dialog.shell_encoding:RO:Codificarea terminalului
 # Translation missing (New!)
 
 
@@ -9283,6 +9298,7 @@ prefs_dialog.shell_encoding:PL:Kodowanie shella
 # Refers to automatic detecting of the character encoding
 prefs_dialog.auto_detect_shell_encoding:EN:Auto-detect
 prefs_dialog.auto_detect_shell_encoding:FR:Détection automatique
+prefs_dialog.auto_detect_shell_encoding:RO:Detectează automat
 # Translation missing (New!)
 
 
