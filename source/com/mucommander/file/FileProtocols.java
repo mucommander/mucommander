@@ -40,6 +40,9 @@ public interface FileProtocols {
     /** Protocol for files served by an NFS server */
     public final static String NFS       = "nfs";
 
+    /** Protocol for files served by an Amazon S3 (or protocol-compatible) server */
+    public final static String S3        = "s3";
+
     /** Protocol for files served by an SFTP server (not to be confused with FTPS or SCP) */
     public final static String SFTP      = "sftp";
 
