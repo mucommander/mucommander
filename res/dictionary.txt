@@ -637,6 +637,7 @@ choose:RO:Alege
 choose:NL:Kies uit
 choose:DE:Auswählen
 choose:SI:Izberi
+choose:zh_TW:選擇
 # Translation missing (New!)
 
 
@@ -655,6 +656,7 @@ choose_folder:RO:Alege un director
 choose_folder:NL:Kies map
 choose_folder:DE:Wähle ein Verzeichnis
 choose_folder:SI:Izberi mapo
+choose_folder:zh_TW:選擇資料夾
 # Translation missing (New!)
 
 
@@ -1075,6 +1077,7 @@ loading:RO:Încărcare în curs...
 loading:NL:Laden...
 loading:DE:lade...
 loading:SI:Nalagam...
+loading:zh_TW:載入中...
 # Translation missing (New!)
 
 
@@ -4353,7 +4356,7 @@ quit_dialog.desc:FR:Il y a %1 fenêtre(s) ouverte(s). Etes-vous sûr de vouloir 
 quit_dialog.desc:DE:Sie haben %1 offene(s) Fenster. Alle Fenster schließen und muCommander beenden?
 quit_dialog.desc:ES:¿Desea cerrar todas las ventanas y salir de muCommander?
 quit_dialog.desc:CS:Zavřít všechna okna a ukončit muCommander ?
-quit_dialog.desc:zh_TW:關閉所有視窗並離開 muCommander ?
+quit_dialog.desc:zh_TW:你有 %1 個開啟的視窗. 確定要離開 ?
 quit_dialog.desc:PL:Zamknąć wszystkie okna i zakończyć pracę muCommandera ?
 quit_dialog.desc:HU:Minden ablak bázárása és kilépés a muCommanderből?
 quit_dialog.desc:RU:Закрыть все окна и выйти из muCommander ?
@@ -4804,6 +4807,7 @@ error_while_optimizing_archive:SI:Napaka pri optimizaciji arhiva %1
 error_while_optimizing_archive:DE:Fehler bei der Optimierung des Archivs %1
 error_while_optimizing_archive:CS:Chyba při optimalizaci archívu %1
 error_while_optimizing_archive:RO:Eroare la optimizarea arhivei %1
+error_while_optimizing_archive:zh_TW:最佳化壓縮檔 %1 時出錯
 # Translation missing (New!)
 
 
@@ -6906,6 +6910,7 @@ text_viewer.find:RO:Caută
 text_viewer.find:NL:Zoeken
 text_viewer.find:DE:Suchen
 text_viewer.find:SI:Najdi
+text_viewer.find:zh_TW:尋找
 # Translation missing (New!)
 
 
@@ -6927,6 +6932,7 @@ text_viewer.find_next:RO:Caută urmatoarea apariție
 text_viewer.find_next:NL:Zoek volgende
 text_viewer.find_next:DE:Weitersuchen
 text_viewer.find_next:SI:Najdi naslednje
+text_viewer.find_next:zh_TW:尋找下一個
 # Translation missing (New!)
 
 
@@ -6948,6 +6954,7 @@ text_viewer.find_previous:RO:Caută apariția precedentă
 text_viewer.find_previous:NL:Zoek vorige
 text_viewer.find_previous:DE:Vorherigen suchen
 text_viewer.find_previous:SI:Najdi prejšnje
+text_viewer.find_previous:zh_TW:尋找上一個
 # Translation missing (New!)
 
 
@@ -7475,6 +7482,7 @@ theme_editor.shell_history_tab:RO:Istoria terminalului
 theme_editor.shell_history_tab:NL:Shell geschiedenis
 theme_editor.shell_history_tab:DE:Shell Historie
 theme_editor.shell_history_tab:SI:Ogrodje zgodovine
+theme_editor.shell_history_tab:zh_TW:Shell 歷史記錄
 # Translation missing (New!)
 
 
@@ -7661,6 +7669,7 @@ theme_editor.active_panel:RO:Activ
 theme_editor.active_panel:NL:Actief
 theme_editor.active_panel:DE:Aktiv
 theme_editor.active_panel:SI:Aktivno
+theme_editor.active_panel:zh_TW:取得焦點
 # Translation missing (New!)
 
 
@@ -7679,6 +7688,7 @@ theme_editor.inactive_panel:RO:Inactiv
 theme_editor.inactive_panel:NL:Niet actief
 theme_editor.inactive_panel:DE:Inaktiv
 theme_editor.inactive_panel:SI:Neaktivno
+theme_editor.inactive_panel:zh_TW:失去焦點
 # Translation missing (New!)
 
 
@@ -7695,6 +7705,7 @@ theme_editor.general:RO:General
 theme_editor.general:NL:Algemeen
 theme_editor.general:DE:Allgemein
 theme_editor.general:SI:Splošno
+theme_editor.general:zh_TW:一般
 # Translation missing (New!)
 
 
@@ -7797,6 +7808,7 @@ theme_editor.alternate_background:RO:Fond alternativ
 theme_editor.alternate_background:NL:Afwisselende achtergrond
 theme_editor.alternate_background:DE:Alternativer Hintergrund
 theme_editor.alternate_background:SI:Ozadje (izmenično)
+theme_editor.alternate_background:zh_TW:間隔替代背景
 # Translation missing (New!)
 
 
@@ -8876,6 +8888,7 @@ prefs_dialog.edit_current_theme:RO:Modifică tema curentă...
 prefs_dialog.edit_current_theme:NL:Huidige thema bewerken...
 prefs_dialog.edit_current_theme:DE:Aktuelles Thema bearbeiten...
 prefs_dialog.edit_current_theme:SI:Uredi trenutno temo...
+prefs_dialog.edit_current_theme:zh_TW:編輯目前佈景主題...
 # Translation missing (New!)
 
 
@@ -9327,6 +9340,7 @@ prefs_dialog.shell_encoding:RO:Codificarea terminalului
 prefs_dialog.shell_encoding:NL:Tekenset shell
 prefs_dialog.shell_encoding:DE:Shell Kodierung
 prefs_dialog.shell_encoding:SI:Kodiranje ogrodja
+prefs_dialog.shell_encoding:zh_TW:Shell 編碼
 # Translation missing (New!)
 
 
@@ -9343,6 +9357,7 @@ prefs_dialog.auto_detect_shell_encoding:RO:Detectează automat
 prefs_dialog.auto_detect_shell_encoding:NL:Auto-detect
 prefs_dialog.auto_detect_shell_encoding:DE:Automatisch feststellen
 prefs_dialog.auto_detect_shell_encoding:SI:Samodejno zaznaj
+prefs_dialog.auto_detect_shell_encoding:zh_TW:自動偵測
 # Translation missing (New!)
 
 
