@@ -66,7 +66,7 @@ public class FileCollisionChecker {
                 return SAME_SOURCE_AND_DESTINATION;
 
             // Both source and destination are folders and destination is a subfolder of source
-            if(sourceFile.isDirectory() && sourceFile.isParentOf(destFile))
+            if(sourceFile.isParentOf(destFile))
                 return SOURCE_PARENT_OF_DESTINATION;
         }
 
