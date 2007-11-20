@@ -393,7 +393,7 @@ public class MoveJob extends TransferFileJob {
         super.jobCompleted();
 
         // If the source files are located inside an archive, optimize the archive file
-        AbstractArchiveFile sourceArchiveFile = baseSourceFolder.getParentArchive();
+        AbstractArchiveFile sourceArchiveFile = baseSourceFolder==null?null:baseSourceFolder.getParentArchive();
         if(sourceArchiveFile!=null && sourceArchiveFile.isWritableArchive())
             optimizeArchive((AbstractRWArchiveFile)sourceArchiveFile);
 
