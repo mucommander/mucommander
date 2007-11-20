@@ -5016,7 +5016,7 @@ delete_dialog.permanently_delete.confirmation_details:CS:Tato operace je nevratn
 delete_dialog.permanently_delete.confirmation_details:HU:A művelet nem vonható vissza.
 delete_dialog.permanently_delete.confirmation_details:IT:Questa operazione non puo' essere annullata.
 delete_dialog.permanently_delete.confirmation_details:NL:Deze bewerking kan niet ongedaan gemaakt worden.
-# Translation missing (NL, PL, KR)
+# Translation missing (PL, KR)
 
 
 
