@@ -31,6 +31,31 @@ import java.io.IOException;
  */
 public class LocalFileTest extends AbstractFileTestCase {
 
+    /////////////////////////////
+    // Additional test methods //
+    /////////////////////////////
+
+    /**
+     * Asserts that a file can be renamed to a filename variation of the same file.
+     *
+     * @throws IOException should not normally happen
+     */
+    public void testMoveToCaseVariation() throws IOException {
+        // First test with a regular file
+        createFile(tempFile, 1);
+        AbstractFile destFile = tempFile.getParent().getDirectChild(tempFile.getName().toUpperCase());
+        deleteWhenFinished(destFile);
+
+        assertTrue(tempFile.moveTo(destFile));
+
+        // Repeat the test with a directory
+        destFile.delete();
+        tempFile.mkdir();
+
+        assertTrue(tempFile.moveTo(destFile));
+    }
+
+
     /////////////////////////////////////////
     // AbstractFileTestCase implementation //
     /////////////////////////////////////////
