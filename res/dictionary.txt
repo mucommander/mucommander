@@ -634,6 +634,7 @@ create:SK:Vytvoriť
 choose:EN:Choose
 choose:FR:Choisir
 choose:RO:Alege
+choose:NL:Kies uit
 # Translation missing (New!)
 
 
@@ -649,6 +650,7 @@ choose:RO:Alege
 choose_folder:EN:Choose a folder
 choose_folder:FR:Choisir un répertoire
 choose_folder:RO:Alege un director
+choose_folder:NL:Kies map
 # Translation missing (New!)
 
 
@@ -1066,6 +1068,7 @@ nb_folders:SK:%1 priečinok(priečinky)
 loading:EN:Loading...
 loading:FR:Chargement en cours...
 loading:RO:Încărcare în curs...
+loading:NL:Laden...
 # Translation missing (New!)
 
 
@@ -6894,6 +6897,7 @@ text_viewer.find:EN:Find
 text_viewer.find:FR:Rechercher
 text_viewer.find:PL:Znajdź
 text_viewer.find:RO:Caută
+text_viewer.find:NL:Zoeken
 # Translation missing (New!)
 
 
@@ -6912,6 +6916,7 @@ text_viewer.find_next:EN:Find next
 text_viewer.find_next:FR:Rechercher suivant
 text_viewer.find_next:PL:Znajdź następne
 text_viewer.find_next:RO:Caută urmatoarea apariție
+text_viewer.find_next:NL:Zoek volgende
 # Translation missing (New!)
 
 
@@ -6930,6 +6935,7 @@ text_viewer.find_previous:EN:Find previous
 text_viewer.find_previous:FR:Rechercher précédent
 text_viewer.find_previous:PL:Znajdź poprzednie
 text_viewer.find_previous:RO:Caută apariția precedentă
+text_viewer.find_previous:NL:Zoek vorige
 # Translation missing (New!)
 
 
@@ -7454,6 +7460,7 @@ theme_editor.shell_history_tab:EN:Shell history
 theme_editor.shell_history_tab:FR:Historique du shell
 theme_editor.shell_history_tab:PL:Historia shell'a
 theme_editor.shell_history_tab:RO:Istoria terminalului
+theme_editor.shell_history_tab:NL:Shell geschiedenis
 # Translation missing (New!)
 
 
@@ -7637,6 +7644,7 @@ theme_editor.active_panel:EN:Active
 theme_editor.active_panel:FR:Actif
 theme_editor.active_panel:PL:Aktywny
 theme_editor.active_panel:RO:Activ
+theme_editor.active_panel:NL:Actief
 # Translation missing (New!)
 
 
@@ -7652,6 +7660,7 @@ theme_editor.inactive_panel:EN:Inactive
 theme_editor.inactive_panel:FR:Inactif
 theme_editor.inactive_panel:PL:Nieaktywny
 theme_editor.inactive_panel:RO:Inactiv
+theme_editor.inactive_panel:NL:Niet actief
 # Translation missing (New!)
 
 
@@ -7665,6 +7674,7 @@ theme_editor.general:EN:General
 theme_editor.general:FR:General
 theme_editor.general:PL:Ogólne
 theme_editor.general:RO:General
+theme_editor.general:NL:Algemeen
 # Translation missing (New!)
 
 
@@ -7764,6 +7774,7 @@ theme_editor.alternate_background:EN:Alternate background
 theme_editor.alternate_background:FR:Fond alterné
 theme_editor.alternate_background:PL:Tło (alternatywne)
 theme_editor.alternate_background:RO:Fond alternativ
+theme_editor.alternate_background:NL:Afwisselende achtergrond
 # Translation missing (New!)
 
 
@@ -8840,6 +8851,7 @@ prefs_dialog.edit_current_theme:EN:Edit current theme...
 prefs_dialog.edit_current_theme:FR:Editer le thème courrant...
 prefs_dialog.edit_current_theme:PL:Edytuj bieżący temat...
 prefs_dialog.edit_current_theme:RO:Modifică tema curentă...
+prefs_dialog.edit_current_theme:NL:Huidige thema bewerken...
 # Translation missing (New!)
 
 
@@ -8883,7 +8895,8 @@ prefs_dialog.import_theme:RU:Импортировать тему
 prefs_dialog.import_theme:DE:Thema importieren
 prefs_dialog.import_theme:CS:Importovat téma
 prefs_dialog.import_theme:PL:Importuj temat
-# Translation missing (NL, IT, KR)
+prefs_dialog.import_theme:NL:Thema importeren
+# Translation missing (IT, KR)
 
 
 
@@ -9041,7 +9054,8 @@ prefs_dialog.delete_theme:SI:Trajno izbrišem temo %1?
 prefs_dialog.delete_theme:RU:Удалить тему %1 полностью?
 prefs_dialog.delete_theme:DE:Thema %1 unwiderruflich löschen ?
 prefs_dialog.delete_theme:CS:Chcete trvale smazat téma %1 ?
-# Translation missing (NL, PL, IT, KR)
+prefs_dialog.delete_theme:NL:Voorgoed verwijderen thema %1 ?
+# Translation missing (PL, IT, KR)
 
 
 
@@ -9286,6 +9300,7 @@ prefs_dialog.shell_encoding:EN:Shell encoding
 prefs_dialog.shell_encoding:FR:Encodage du shell
 prefs_dialog.shell_encoding:PL:Kodowanie shella
 prefs_dialog.shell_encoding:RO:Codificarea terminalului
+prefs_dialog.shell_encoding:NL:Tekenset shell
 # Translation missing (New!)
 
 
@@ -9299,6 +9314,7 @@ prefs_dialog.shell_encoding:RO:Codificarea terminalului
 prefs_dialog.auto_detect_shell_encoding:EN:Auto-detect
 prefs_dialog.auto_detect_shell_encoding:FR:Détection automatique
 prefs_dialog.auto_detect_shell_encoding:RO:Detectează automat
+prefs_dialog.auto_detect_shell_encoding:NL:Auto-detect
 # Translation missing (New!)
 
 
