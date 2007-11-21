@@ -640,6 +640,7 @@ choose:DE:Auswählen
 choose:SI:Izberi
 choose:zh_TW:選擇
 choose:IT:Seleziona
+choose:CS:Vybrat
 # Translation missing (New!)
 
 
@@ -660,6 +661,7 @@ choose_folder:DE:Wähle ein Verzeichnis
 choose_folder:SI:Izberi mapo
 choose_folder:zh_TW:選擇資料夾
 choose_folder:IT:Seleziona una cartella
+choose_folder:CS:Vyberte složku
 # Translation missing (New!)
 
 
@@ -1087,6 +1089,7 @@ loading:DE:lade...
 loading:SI:Nalagam...
 loading:zh_TW:載入中...
 loading:IT:Caricamento in corso...
+loading:CS:Načítám obsah...
 # Translation missing (New!)
 
 
@@ -4337,7 +4340,7 @@ quit_dialog.desc:EN:You have %1 window(s) open. Are you sure you want to quit ?
 quit_dialog.desc:FR:Il y a %1 fenêtre(s) ouverte(s). Etes-vous sûr de vouloir quitter ?
 quit_dialog.desc:DE:Sie haben %1 offene(s) Fenster. Alle Fenster schließen und muCommander beenden?
 quit_dialog.desc:ES:¿Desea cerrar todas las ventanas y salir de muCommander?
-quit_dialog.desc:CS:Zavřít všechna okna a ukončit muCommander ?
+quit_dialog.desc:CS:Chcete zavřít všechna otevřená okna (%1) a ukončit muCommander ?
 quit_dialog.desc:zh_TW:你有 %1 個開啟的視窗. 確定要離開 ?
 quit_dialog.desc:PL:Zamknąć wszystkie okna i zakończyć pracę muCommandera ?
 quit_dialog.desc:HU:Minden ablak bázárása és kilépés a muCommanderből?
@@ -5560,7 +5563,7 @@ file_selection_dialog.mark_description:EN:Mark files whose filename
 file_selection_dialog.mark_description:FR:Marquer les fichiers dont le nom
 file_selection_dialog.mark_description:DE:Markiere Dateien deren Name
 file_selection_dialog.mark_description:ES:Marcar ficheros cuyo nombre
-file_selection_dialog.mark_description:CS:Označit soubory se jménem
+file_selection_dialog.mark_description:CS:Označit soubory, jejichž jméno
 file_selection_dialog.mark_description:zh_TW:標記檔案, 若檔名為
 file_selection_dialog.mark_description:PL:Zaznacz pliki nazywające się
 file_selection_dialog.mark_description:HU:Kijelöli a fájlokat, amelyeknek a neve
@@ -5578,7 +5581,7 @@ file_selection_dialog.unmark_description:EN:Unmark files whose filename
 file_selection_dialog.unmark_description:FR:Dé-marquer les fichiers dont le nom
 file_selection_dialog.unmark_description:DE:Demarkiere Dateien deren Name
 file_selection_dialog.unmark_description:ES:Desmarcar ficheros cuyo nombre
-file_selection_dialog.unmark_description:CS:Odznačit soubory se jménem
+file_selection_dialog.unmark_description:CS:Odznačit soubory, jejichž jméno
 file_selection_dialog.unmark_description:zh_TW:取消標記, 若檔名為
 file_selection_dialog.unmark_description:PL:Odznacz pliki nazywające się
 file_selection_dialog.unmark_description:HU:Kijelölés visszavonása azon fájloknál, amelyeknek a neve
@@ -6896,6 +6899,7 @@ text_viewer.find:DE:Suchen
 text_viewer.find:SI:Najdi
 text_viewer.find:zh_TW:尋找
 text_viewer.find:IT:Cerca
+text_viewer.find:CS:Najít
 # Translation missing (New!)
 
 
@@ -6919,6 +6923,7 @@ text_viewer.find_next:DE:Weitersuchen
 text_viewer.find_next:SI:Najdi naslednje
 text_viewer.find_next:zh_TW:尋找下一個
 text_viewer.find_next:IT:Trova il successivo
+text_viewer.find_next:CS:Najít následující
 # Translation missing (New!)
 
 
@@ -6942,6 +6947,7 @@ text_viewer.find_previous:DE:Vorherigen suchen
 text_viewer.find_previous:SI:Najdi prejšnje
 text_viewer.find_previous:zh_TW:尋找上一個
 text_viewer.find_previous:IT:Trova il precedente
+text_viewer.find_previous:CS:Najít předchozí
 # Translation missing (New!)
 
 
@@ -7474,6 +7480,7 @@ theme_editor.shell_history_tab:DE:Shell Historie
 theme_editor.shell_history_tab:SI:Ogrodje zgodovine
 theme_editor.shell_history_tab:zh_TW:Shell 歷史記錄
 theme_editor.shell_history_tab:IT:Shell history
+theme_editor.shell_history_tab:CS:Historie shellu
 # Translation missing (New!)
 
 
@@ -7669,6 +7676,7 @@ theme_editor.active_panel:DE:Aktiv
 theme_editor.active_panel:SI:Aktivno
 theme_editor.active_panel:zh_TW:取得焦點
 theme_editor.active_panel:IT:Attivo
+theme_editor.active_panel:CS:Aktivní
 # Translation missing (New!)
 
 
@@ -7689,6 +7697,7 @@ theme_editor.inactive_panel:DE:Inaktiv
 theme_editor.inactive_panel:SI:Neaktivno
 theme_editor.inactive_panel:zh_TW:失去焦點
 theme_editor.inactive_panel:IT:Disattivo
+theme_editor.inactive_panel:CS:Neaktivní
 # Translation missing (New!)
 
 
@@ -7707,6 +7716,7 @@ theme_editor.general:DE:Allgemein
 theme_editor.general:SI:Splošno
 theme_editor.general:zh_TW:一般
 theme_editor.general:IT:Generale
+theme_editor.general:CS:Obecné
 # Translation missing (New!)
 
 
@@ -7813,6 +7823,7 @@ theme_editor.alternate_background:DE:Alternativer Hintergrund
 theme_editor.alternate_background:SI:Ozadje (izmenično)
 theme_editor.alternate_background:zh_TW:間隔替代背景
 theme_editor.alternate_background:IT:Sfondo alternativo
+theme_editor.alternate_background:CS:Alternativní pozadí
 # Translation missing (New!)
 
 
@@ -8864,6 +8875,7 @@ prefs_dialog.edit_current_theme:DE:Aktuelles Thema bearbeiten...
 prefs_dialog.edit_current_theme:SI:Uredi trenutno temo...
 prefs_dialog.edit_current_theme:zh_TW:編輯目前佈景主題...
 prefs_dialog.edit_current_theme:IT:Modifica il tema corrente...
+prefs_dialog.edit_current_theme:CS:Změnit stávající téma...
 # Translation missing (New!)
 
 
@@ -9327,6 +9339,7 @@ prefs_dialog.shell_encoding:DE:Shell Kodierung
 prefs_dialog.shell_encoding:SI:Kodiranje ogrodja
 prefs_dialog.shell_encoding:zh_TW:Shell 編碼
 prefs_dialog.shell_encoding:IT:Codifica Shell
+prefs_dialog.shell_encoding:CS:Kódování textu shellu
 # Translation missing (New!)
 
 
@@ -9345,6 +9358,7 @@ prefs_dialog.auto_detect_shell_encoding:DE:Automatisch feststellen
 prefs_dialog.auto_detect_shell_encoding:SI:Samodejno zaznaj
 prefs_dialog.auto_detect_shell_encoding:zh_TW:自動偵測
 prefs_dialog.auto_detect_shell_encoding:IT:Auto-detect
+prefs_dialog.auto_detect_shell_encoding:CS:Automatické rozpoznání
 # Translation missing (New!)
 
 
