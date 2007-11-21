@@ -158,6 +158,7 @@ public class CopyJob extends TransferFileJob {
         do {    // Loop for retry
             try {
                 destFile = destFolder.getDirectChild(destFileName);
+                currentDestFile = destFile;
                 break;
             }
             catch(IOException e) {
