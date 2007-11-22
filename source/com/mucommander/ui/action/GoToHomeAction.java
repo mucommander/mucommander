@@ -19,7 +19,7 @@
 package com.mucommander.ui.action;
 
 import com.mucommander.file.AbstractFile;
-import com.mucommander.file.RootFolders;
+import com.mucommander.file.impl.local.LocalFile;
 import com.mucommander.ui.main.MainFrame;
 
 import java.util.Hashtable;
@@ -37,7 +37,7 @@ public class GoToHomeAction extends MuAction {
 
     public void performAction() {
         // Changes the current folder to make it the user home folder
-        AbstractFile homeFolder = RootFolders.getUserHomeFolder();
+        AbstractFile homeFolder = LocalFile.getUserHome();
         if(homeFolder!=null)
             mainFrame.getActiveTable().getFolderPanel().tryChangeCurrentFolder(homeFolder);
     }

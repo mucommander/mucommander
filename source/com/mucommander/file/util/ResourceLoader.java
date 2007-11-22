@@ -287,7 +287,7 @@ public class ResourceLoader {
             path = path.substring(5, path.length());
 
         // Under platforms that use root drives (Windows and OS/2), strip out the leading '/'
-        if(LocalFile.usesRootDrives() && path.startsWith("/"))
+        if(LocalFile.hasRootDrives() && path.startsWith("/"))
             path = removeLeadingSlash(path);
 
         // Use the local file separator

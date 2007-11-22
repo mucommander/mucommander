@@ -303,7 +303,7 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
         else {
             if(FileProtocols.FILE.equals(folder.getURL().getProtocol())) {
                 try {
-                    key = LocalFile.usesRootDrives()?
+                    key = LocalFile.hasRootDrives()?
                         folder.getRoot():
                         folder;
                 }

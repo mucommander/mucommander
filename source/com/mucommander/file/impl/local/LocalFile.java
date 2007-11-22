@@ -125,6 +125,21 @@ public class LocalFile extends AbstractFile {
 
 
     /**
+     * Returns the user home folder. Most if not all OSes have one, but in the unlikely event that the OS doesn't have
+     * one or that the folder cannot be resolved, <code>null</code> will be returned.
+     *
+     * @return the user home folder
+     */
+    public static AbstractFile getUserHome() {
+        String userHomePath = System.getProperty("user.home");
+        if(userHomePath==null)
+            return null;
+
+        return FileFactory.getFile(userHomePath);
+    }
+
+
+    /**
      * Uses platform dependant commands to extract free and total space on the volume where this file resides.
      *
      * <p>This method has been made public as it is more efficient to retrieve both free space and volume space
@@ -257,18 +272,18 @@ public class LocalFile extends AbstractFile {
 
 	
     /**
-     * Guesses if this drive is a floppy drive. This method will only return true when tested against the floppy drive's
-     * root folder (e.g. A:\ under Windows).
+     * Attemps to detect if this file is the root of a floppy drive.
+     * This method works only on platform that have root drives, such as Windows, and even on those the result is just 
+     * a guess.
      *
-//     * <p>The result of this method should be accurate under Java 1.4 and up, just a guess under Java 1.3
-//     * running under Windows, will return false for Java 1.3 running under a non-Windows platform.</p>
+     * @return <code>true</code> if this file looks like the root of a floppy drive. 
      */
     public boolean guessFloppyDrive() {
         if(PlatformManager.isWindowsFamily() && !isRoot())
             return false;
 
-        // Use FileSystemView.isFloppyDrive(File) to determine if this file
-        // is a floppy drive. This method being available only in Java 1.4 and up.
+        // Use FileSystemView.isFloppyDrive(File) to determine if this file is a floppy drive.
+        // This method is available only in Java 1.4 and up.
 //        if(PlatformManager.JAVA_VERSION>=PlatformManager.JAVA_1_4)
         return FileSystemView.getFileSystemView().isFloppyDrive(file);
 
@@ -281,25 +296,35 @@ public class LocalFile extends AbstractFile {
     }
 	
     /**
-     * Guesses if this drive is a removable media drive (Floppy/CD/DVD). This method will only return true when tested
-     * against the drive's root folder (e.g. D:\ under Windows).
+     * Attemps to detect if this file is the root of a removable media drive (floppy, CD, DVD, ...).
+     * This method works only on platform that have root drives, such as Windows, and even on those the result is just
+     * a guess.
      *
-     * <p>The result is just a guess that works rather well under Windows.</p>
+     * @return <code>true</code> if this file looks like the root of a removable media drive (floppy, CD, DVD, ...). 
      */
     public boolean guessRemovableDrive() {
         // A weak way to characterize such a drive is to check if the corresponding root folder is a floppy drive or 
         // read-only. A better way would be to create a JNI interface as described here: http://forum.java.sun.com/thread.jspa?forumID=256&threadID=363074
-        return guessFloppyDrive() || (IS_WINDOWS && isRoot() && !file.canWrite());
+        return guessFloppyDrive() || (hasRootDrives() && isRoot() && !file.canWrite());
     }
 
 
     /**
-     * Returns true if the underlying local filesystem uses drives assigned to letters (e.g. A:\, C:\, ...) instead
-     * of having single a root folder '/'. This method will return <code>true</code> for Windows and OS/2 systems,
-     * false for all other systems.
+     * Returns <code>true</code> if the underlying local filesystem uses drives assigned to letters (e.g. A:\, C:\, ...)
+     * instead of having a single root folder '/' under which mount points are attached.
+     * This is <code>true</code> for the following platforms:
+     * <ul>
+     *  <li>Windows</li>
+     *  <li>OS/2</li>
+     *  <li>Any other platform that has '\' for a path separator</li>
+     * </ul>
+     *
+     * @return <code>true</code> if the underlying local filesystem uses drives assigned to letters
      */
-    public static boolean usesRootDrives() {
-        return PlatformManager.isWindowsFamily() || PlatformManager.getOsFamily()==PlatformManager.OS_2;
+    public static boolean hasRootDrives() {
+        return PlatformManager.isWindowsFamily()
+            || PlatformManager.getOsFamily()==PlatformManager.OS_2
+            || "\\".equals(SEPARATOR);
     }
 
 
@@ -521,7 +546,7 @@ public class LocalFile extends AbstractFile {
         // - the drive's name under OSes with root drives such as Windows, e.g. "C:"
         // - "/" under Unix-based systems
         if(parentFilePath==null)
-            return usesRootDrives()?absPath:"/";
+            return hasRootDrives()?absPath:"/";
 
         return file.getName();
     }
@@ -694,6 +719,7 @@ public class LocalFile extends AbstractFile {
 
         return moveHint;
     }
+
 
     ///////////////////
     // Inner classes //
