@@ -31,9 +31,19 @@ import java.io.IOException;
  */
 public class LocalFileTest extends AbstractFileTestCase {
 
-    /////////////////////////////
-    // Additional test methods //
-    /////////////////////////////
+
+    /////////////////////////////////////////
+    // AbstractFileTestCase implementation //
+    /////////////////////////////////////////
+
+    protected AbstractFile getTemporaryFile() throws IOException {
+        return FileFactory.getTemporaryFile(getClass().getName(), false);
+    }
+
+
+    /////////////////////////////////////////
+    // Additional LocalFile-specific tests //
+    /////////////////////////////////////////
 
     /**
      * Asserts that a file can be renamed to a filename variation of the same file.
@@ -55,12 +65,26 @@ public class LocalFileTest extends AbstractFileTestCase {
         assertTrue(tempFile.moveTo(destFile));
     }
 
+    /**
+     * Asserts that {@link com.mucommander.file.impl.local.LocalFile#getUserHome()} returns a file that is not null,
+     * is a directory, and exists. 
+     */
+    public void testUserHome() {
+        AbstractFile homeFolder = LocalFile.getUserHome();
+        assertNotNull(homeFolder);
+        assertTrue(homeFolder.isDirectory());
+        assertTrue(homeFolder.exists());
+    }
 
-    /////////////////////////////////////////
-    // AbstractFileTestCase implementation //
-    /////////////////////////////////////////
+    /**
+     * Tests methods related to root drives (e.g. C:\).
+     */
+    public void testRootDriveMethods() {
+        // The following test simply assert that the method doesn't produce an uncaught exception.
+        LocalFile.hasRootDrives();
 
-    protected AbstractFile getTemporaryFile() throws IOException {
-        return FileFactory.getTemporaryFile(getClass().getName(), false);
+        LocalFile localFile = (LocalFile)tempFile.getAncestor(LocalFile.class);
+        localFile.guessFloppyDrive();
+        localFile.guessRemovableDrive();
     }
 }
