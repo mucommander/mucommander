@@ -175,7 +175,7 @@ class ThemeWriter implements ThemeXmlConstants {
         out.startElement(ELEMENT_NORMAL);
         out.println();
         if(theme.isColorSet(Theme.SYMLINK_FOREGROUND_COLOR))
-            out.writeStandAloneElement(ELEMENT_INACTIVE_FOREGROUND, getColorAttributes(theme.getColor(Theme.SYMLINK_FOREGROUND_COLOR)));
+            out.writeStandAloneElement(ELEMENT_INACTIVE_FOREGROUND, getColorAttributes(theme.getColor(Theme.SYMLINK_INACTIVE_FOREGROUND_COLOR)));
         if(theme.isColorSet(Theme.SYMLINK_FOREGROUND_COLOR))
             out.writeStandAloneElement(ELEMENT_FOREGROUND, getColorAttributes(theme.getColor(Theme.SYMLINK_FOREGROUND_COLOR)));
         out.endElement(ELEMENT_NORMAL);
@@ -194,7 +194,7 @@ class ThemeWriter implements ThemeXmlConstants {
         out.startElement(ELEMENT_NORMAL);
         out.println();
         if(theme.isColorSet(Theme.MARKED_FOREGROUND_COLOR))
-            out.writeStandAloneElement(ELEMENT_INACTIVE_FOREGROUND, getColorAttributes(theme.getColor(Theme.MARKED_FOREGROUND_COLOR)));
+            out.writeStandAloneElement(ELEMENT_INACTIVE_FOREGROUND, getColorAttributes(theme.getColor(Theme.MARKED_INACTIVE_FOREGROUND_COLOR)));
         if(theme.isColorSet(Theme.MARKED_FOREGROUND_COLOR))
             out.writeStandAloneElement(ELEMENT_FOREGROUND, getColorAttributes(theme.getColor(Theme.MARKED_FOREGROUND_COLOR)));
         out.endElement(ELEMENT_NORMAL);
