@@ -3325,7 +3325,7 @@ com.mucommander.ui.action.ToggleHiddenFilesAction.label:EN:$[prefs_dialog.show_h
 
 com.mucommander.ui.action.ToggleToolBarAction.show:EN:Show toolbar
 com.mucommander.ui.action.ToggleToolBarAction.show:FR:Afficher la barre d'outils
-com.mucommander.ui.action.ToggleToolBarAction.show:DE:Toolbar anzeigen
+com.mucommander.ui.action.ToggleToolBarAction.show:DE:Symbolleiste anzeigen
 com.mucommander.ui.action.ToggleToolBarAction.show:ES:Mostrar la barra de herramientas
 com.mucommander.ui.action.ToggleToolBarAction.show:CS:Zobrazit tlačítkovou lištu
 com.mucommander.ui.action.ToggleToolBarAction.show:zh_TW:顯示工具列
@@ -3343,7 +3343,7 @@ com.mucommander.ui.action.ToggleToolBarAction.show:SK:Zobraziť panel s nástroj
 
 com.mucommander.ui.action.ToggleToolBarAction.hide:EN:Hide toolbar
 com.mucommander.ui.action.ToggleToolBarAction.hide:FR:Cacher la barre d'outils
-com.mucommander.ui.action.ToggleToolBarAction.hide:DE:Werkzeugleiste verstecken
+com.mucommander.ui.action.ToggleToolBarAction.hide:DE:Symbolleiste verbergen
 com.mucommander.ui.action.ToggleToolBarAction.hide:ES:Ocultar la barra de herramientas
 com.mucommander.ui.action.ToggleToolBarAction.hide:CS:Skrýt tlačítkovou lištu
 com.mucommander.ui.action.ToggleToolBarAction.hide:zh_TW:隱藏工具列
