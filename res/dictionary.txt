@@ -10109,7 +10109,8 @@ color_chooser.swatches:SI:Swatches
 color_chooser.swatches:RU:Образцы
 color_chooser.swatches:DE:Muster
 color_chooser.swatches:CS:Barevný mixér
-# Translation missing (PL, IT, KR)
+color_chooser.swatches:IT:Palette dei colori
+# Translation missing (PL, KR)
 
 
 
