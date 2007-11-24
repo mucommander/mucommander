@@ -215,7 +215,8 @@ reset:RU:сброс
 reset:DE:Zurücksetzen
 reset:CS:Resetovat
 reset:IT:Reset
-# Translation missing (PL, KR)
+reset:PL:Resetuj
+# Translation missing (KR)
 
 
 
@@ -643,6 +644,7 @@ choose:IT:Seleziona
 choose:CS:Vybrat
 choose:pt_BR:Escolha
 choose:HU:Kiválaszt
+choose:PL:Wybierz
 # Translation missing (New!)
 
 
@@ -666,6 +668,7 @@ choose_folder:IT:Seleziona una cartella
 choose_folder:CS:Vyberte složku
 choose_folder:pt_BR:Escolha um diretório
 choose_folder:HU:Könyvtár választás
+choose_folder:PL:Wybierz katalog
 # Translation missing (New!)
 
 
@@ -731,7 +734,8 @@ encoding:SI:Kodiranje
 encoding:RU:Кодировка
 encoding:DE:Kodierung
 encoding:IT:Codifica
-# Translation missing (PL, KR)
+encoding:PL:Kodowanie
+# Translation missing (KR)
 
 
 
@@ -968,7 +972,8 @@ go_to:SI:Pojdi v
 go_to:RU:Перейти к
 go_to:DE:Gehe zu
 go_to:IT:Vai a
-# Translation missing (PL, KR)
+go_to:PL:Przejdź do
+# Translation missing (KR)
 
 
 
@@ -1096,6 +1101,7 @@ loading:IT:Caricamento in corso...
 loading:CS:Načítám obsah...
 loading:pt_BR:Carregando...
 loading:HU:Betöltés...
+loading:PL:Ładowanie...
 # Translation missing (New!)
 
 
@@ -1208,7 +1214,8 @@ this_file_does_not_exist:DE:Die Datei existiert nicht oder ist nicht verfügbar:
 this_file_does_not_exist:CS:Tento soubor neexistuje nebo není dostupný: %1
 this_file_does_not_exist:IT:Questo file non esiste o non e' disponibile: %1
 this_file_does_not_exist:HU:A fájl nem létezik vagy nem elérhető: %1
-# Translation missing (PL, KR)
+this_file_does_not_exist:PL:Plik nie istnieje lub jest niedostępny: %1
+# Translation missing (KR)
 
 
 
@@ -1491,7 +1498,8 @@ read_error:RU:Ошибка считывания
 read_error:DE:Lesefehler
 read_error:CS:Chyba při čtení
 read_error:IT:Errore in lettura
-# Translation missing (PL, KR)
+read_error:PL:Błąd odczytu
+# Translation missing (KR)
 
 
 
@@ -3536,7 +3544,8 @@ com.mucommander.ui.action.BringAllToFrontAction.label:RU:Показать все
 com.mucommander.ui.action.BringAllToFrontAction.label:DE:Alle Fenster nach vorne bringen
 com.mucommander.ui.action.BringAllToFrontAction.label:CS:Přenést vše do popředí
 com.mucommander.ui.action.BringAllToFrontAction.label:IT:Porta tutte le finestre in primo piano
-# Translation missing (PL, KR)
+com.mucommander.ui.action.BringAllToFrontAction.label:PL:Pokaż wszystkie okna
+# Translation missing (KR)
 
 
 
@@ -3777,7 +3786,8 @@ com.mucommander.ui.action.OpenTrashAction.label:RU:Открыть Корзину
 com.mucommander.ui.action.OpenTrashAction.label:DE:Papierkorb öffnen
 com.mucommander.ui.action.OpenTrashAction.label:CS:Otevřít Koš
 com.mucommander.ui.action.OpenTrashAction.label:IT:Apri il cestino
-# Translation missing (PL, KR)
+com.mucommander.ui.action.OpenTrashAction.label:PL:Otwórz kosz
+# Translation missing (KR)
 
 
 
@@ -3802,7 +3812,8 @@ com.mucommander.ui.action.EmptyTrashAction.label:RU:Очистить корзи�
 com.mucommander.ui.action.EmptyTrashAction.label:DE:Papierkorb leeren
 com.mucommander.ui.action.EmptyTrashAction.label:CS:Vyprázdnit Koš
 com.mucommander.ui.action.EmptyTrashAction.label:IT:Vuota il cestino
-# Translation missing (PL, KR)
+com.mucommander.ui.action.EmptyTrashAction.label:PL:Opróżnij kosz
+# Translation missing (KR)
 
 
 
@@ -4349,7 +4360,7 @@ quit_dialog.desc:DE:Sie haben %1 offene(s) Fenster. Alle Fenster schließen und 
 quit_dialog.desc:ES:¿Desea cerrar todas las ventanas y salir de muCommander?
 quit_dialog.desc:CS:Chcete zavřít všechna otevřená okna (%1) a ukončit muCommander ?
 quit_dialog.desc:zh_TW:你有 %1 個開啟的視窗. 確定要離開 ?
-quit_dialog.desc:PL:Zamknąć wszystkie okna i zakończyć pracę muCommandera ?
+quit_dialog.desc:PL:Masz otwartych %1 okien. Zamknąć wszystkie okna i zakończyć pracę muCommandera ?
 quit_dialog.desc:HU:Biztos ki akar lépni? (%1 muCommander van megnyitva.)
 quit_dialog.desc:RU:Закрыть все окна и выйти из muCommander ?
 quit_dialog.desc:zh_CN:关闭所有窗口并退出 muCommander ?
@@ -4778,7 +4789,8 @@ optimizing_archive:RU:Оптимизация архива %1
 optimizing_archive:DE:Archiv optimieren  %1
 optimizing_archive:CS:Optimalizuji archív %1
 optimizing_archive:IT:Ottimizzazione archivio %1
-# Translation missing (PL, KR)
+optimizing_archive:PL:Optymalizacja archiwum %1
+# Translation missing (KR)
 
 
 
@@ -4803,6 +4815,7 @@ error_while_optimizing_archive:RO:Eroare la optimizarea arhivei %1
 error_while_optimizing_archive:zh_TW:最佳化壓縮檔 %1 時出錯
 error_while_optimizing_archive:IT:Errore ottimizzando l'archivio %1
 error_while_optimizing_archive:pt_BR:Erro ao otimizar arquivo %1
+error_while_optimizing_archive:PL:Błąd podczas optymalizacji archiwum %1
 # Translation missing (New!)
 
 
@@ -5027,7 +5040,8 @@ delete_dialog.permanently_delete.confirmation_details:CS:Tato operace je nevratn
 delete_dialog.permanently_delete.confirmation_details:HU:A művelet nem vonható vissza.
 delete_dialog.permanently_delete.confirmation_details:IT:Questa operazione non puo' essere annullata.
 delete_dialog.permanently_delete.confirmation_details:NL:Deze bewerking kan niet ongedaan gemaakt worden.
-# Translation missing (PL, KR)
+delete_dialog.permanently_delete.confirmation_details:PL:Operacja nie może być cofnięta.
+# Translation missing (KR)
 
 
 
@@ -5069,7 +5083,8 @@ delete_dialog.move_to_trash.confirmation_details:RU:Файлы будут пом
 delete_dialog.move_to_trash.confirmation_details:DE:Dateien werden in den Papierkorb bewegt.
 delete_dialog.move_to_trash.confirmation_details:CS:Soubory budou přesunuty do Koše.
 delete_dialog.move_to_trash.confirmation_details:IT:I file saranno spostati nel cestino.
-# Translation missing (PL, KR)
+delete_dialog.move_to_trash.confirmation_details:PL:Pliki zostaną przeniesione do kosza.
+# Translation missing (KR)
 
 
 
@@ -5093,7 +5108,8 @@ delete_dialog.move_to_trash.option:RU:Поместить в Корзину
 delete_dialog.move_to_trash.option:DE:In den Papierkorb verschieben
 delete_dialog.move_to_trash.option:CS:Přesunout do Koše
 delete_dialog.move_to_trash.option:IT:Sposta nel cestino
-# Translation missing (PL, KR)
+delete_dialog.move_to_trash.option:PL:Przenieś do kosza
+# Translation missing (KR)
 
 
 
@@ -5920,7 +5936,8 @@ progress_dialog.job_error:SI:Napaka pri izvršitvi naloge
 progress_dialog.job_error:RU:Ошибка обработки
 progress_dialog.job_error:DE:Jobfehler
 progress_dialog.job_error:IT:Errore durante il lavoro
-# Translation missing (PL, KR)
+progress_dialog.job_error:PL:Błąd
+# Translation missing (KR)
 
 
 
@@ -6185,7 +6202,8 @@ server_connect_dialog.share:SI:Share
 server_connect_dialog.share:RU:Общий ресурс
 server_connect_dialog.share:DE:Freigabe
 server_connect_dialog.share:IT:Condividi
-# Translation missing (PL, KR)
+server_connect_dialog.share:PL:Udział
+# Translation missing (KR)
 
 
 
@@ -6317,7 +6335,8 @@ server_connect_dialog.protocol:SI:Protokol
 server_connect_dialog.protocol:RU:Протокол
 server_connect_dialog.protocol:DE:Protokoll
 server_connect_dialog.protocol:IT:Protocollo
-# Translation missing (PL, KR)
+server_connect_dialog.protocol:PL:Protokół
+# Translation missing (KR)
 
 
 
@@ -6341,7 +6360,8 @@ server_connect_dialog.nfs_version:SI:NFS različica
 server_connect_dialog.nfs_version:RU:Версия NFS
 server_connect_dialog.nfs_version:DE:NFS-Version
 server_connect_dialog.nfs_version:IT:Versione-NFS
-# Translation missing (PL, KR)
+server_connect_dialog.nfs_version:PL:Wersja NFS
+# Translation missing (KR)
 
 
 
@@ -7430,7 +7450,8 @@ theme_editor.title:RU:Редактор темы
 theme_editor.title:DE:Thema-Editor
 theme_editor.title:CS:Editor témat
 theme_editor.title:IT:Modifica tema
-# Translation missing (PL, KR)
+theme_editor.title:PL:Edytor tematu
+# Translation missing (KR)
 
 
 
@@ -7474,7 +7495,8 @@ theme_editor.shell_tab:RU:Оболочка
 theme_editor.shell_tab:DE:Kommandozeile
 theme_editor.shell_tab:CS:Shell
 theme_editor.shell_tab:IT:Shell
-# Translation missing (PL, KR)
+theme_editor.shell_tab:PL:Shell
+# Translation missing (KR)
 
 
 
@@ -7525,7 +7547,8 @@ theme_editor.statusbar_tab:RU:Строка состояния
 theme_editor.statusbar_tab:DE:Statuszeile
 theme_editor.statusbar_tab:CS:Stavový řádek
 theme_editor.statusbar_tab:IT:Barra di stato
-# Translation missing (PL, KR)
+theme_editor.statusbar_tab:PL:Pasek stanu
+# Translation missing (KR)
 
 
 
@@ -7570,7 +7593,8 @@ theme_editor.free_space.ok:RU:OK
 theme_editor.free_space.ok:DE:OK
 theme_editor.free_space.ok:CS:OK
 theme_editor.free_space.ok:IT:OK
-# Translation missing (PL, KR)
+theme_editor.free_space.ok:PL:OK
+# Translation missing (KR)
 
 
 
@@ -7784,7 +7808,8 @@ theme_editor.could_not_save_theme:RU:Не удается сохранить те
 theme_editor.could_not_save_theme:DE:Kann Thema %1 nicht schreiben
 theme_editor.could_not_save_theme:CS:Nelze uložit téma %1
 theme_editor.could_not_save_theme:IT:Impossibile scrivere il tema %1
-# Translation missing (PL, KR)
+theme_editor.could_not_save_theme:PL:Nie mogę zapisać tematu %1
+# Translation missing (KR)
 
 
 
@@ -7876,7 +7901,8 @@ theme_editor.unfocused_background:RU:Фон (без фокуса)
 theme_editor.unfocused_background:DE:Hintergrund (ohne Fokus)
 theme_editor.unfocused_background:CS:Pozadí (bez fokusu)
 theme_editor.unfocused_background:IT:Sfondo (non selezionato)
-# Translation missing (PL, KR)
+theme_editor.unfocused_background:PL:Background (bez fokusa)
+# Translation missing (KR)
 
 
 
@@ -8008,7 +8034,8 @@ theme_editor.normal_unfocused:RU:Обычный (без фокуса)
 theme_editor.normal_unfocused:DE:Normal (ohne Fokus)
 theme_editor.normal_unfocused:CS:Normální (bez fokusu)
 theme_editor.normal_unfocused:IT:Normale (senza selezione)
-# Translation missing (PL, KR)
+theme_editor.normal_unfocused:PL:Normalne (bez fokusa)
+# Translation missing (KR)
 
 
 
@@ -8056,7 +8083,8 @@ theme_editor.selected_unfocused:RU:Выбраный (без фокуса)
 theme_editor.selected_unfocused:DE:Ausgewählt (ohne Fokus)
 theme_editor.selected_unfocused:CS:Výběr (bez fokusu)
 theme_editor.selected_unfocused:IT:Selezionato (senza focus)
-# Translation missing (PL, KR)
+theme_editor.selected_unfocused:PL:Zaznaczone (bez fokusa)
+# Translation missing (KR)
 
 
 
@@ -8701,7 +8729,8 @@ prefs_dialog.follow_symlinks_when_cd:SI:Sledi simbolnim povezavam, ko spremeniš
 prefs_dialog.follow_symlinks_when_cd:RU:Переходить по ссылкам при смене каталога
 prefs_dialog.follow_symlinks_when_cd:DE:Symbolischen Links beim Wechsel des aktuellen Verzeichnis folgen
 prefs_dialog.follow_symlinks_when_cd:IT:Segui link simbolici quando si cambia la directory corrente
-# Translation missing (PL, KR)
+prefs_dialog.follow_symlinks_when_cd:PL:Zmień katalog przy przechodzeniu do dowiązania symbolicznego
+# Translation missing (KR)
 
 
 
@@ -8971,7 +9000,8 @@ prefs_dialog.error_in_import:RU:Ошибка при импорте темы %1.
 prefs_dialog.error_in_import:DE:Fehler beim Import von Thema %1.
 prefs_dialog.error_in_import:CS:Chyba při importu tématu %1.
 prefs_dialog.error_in_import:IT:Errore durante import del tema %1.
-# Translation missing (PL, KR)
+prefs_dialog.error_in_import:PL:Błąd podczas importu tematu %1.
+# Translation missing (KR)
 
 
 
@@ -8995,7 +9025,8 @@ prefs_dialog.cannot_read_theme:RU:Не удается загрузить тем�
 prefs_dialog.cannot_read_theme:DE:Kann Thema nicht aus Datei %1 laden
 prefs_dialog.cannot_read_theme:CS:Nelze načíst téma ze souboru %1
 prefs_dialog.cannot_read_theme:IT:Impossibile caricare il tema dal file %1
-# Translation missing (PL, KR)
+prefs_dialog.cannot_read_theme:PL:Nie można załadować tematu z pliku %1
+# Translation missing (KR)
 
 
 
@@ -9090,7 +9121,8 @@ prefs_dialog.theme_type:RU:Тип: %1
 prefs_dialog.theme_type:DE:Typ: %1
 prefs_dialog.theme_type:CS:Typ: %1
 prefs_dialog.theme_type:IT:Tipo: %1
-# Translation missing (PL, KR)
+prefs_dialog.theme_type:PL:Typ: %1
+# Translation missing (KR)
 
 
 
@@ -9113,7 +9145,8 @@ prefs_dialog.delete_theme:DE:Thema %1 unwiderruflich löschen ?
 prefs_dialog.delete_theme:CS:Chcete trvale smazat téma %1 ?
 prefs_dialog.delete_theme:NL:Voorgoed verwijderen thema %1 ?
 prefs_dialog.delete_theme:IT:Cancellazione definitiva del tema %1 ?
-# Translation missing (PL, KR)
+prefs_dialog.delete_theme:PL:Czy na pewno usunąć temat %1 ?
+# Translation missing (KR)
 
 
 
@@ -9135,7 +9168,8 @@ prefs_dialog.rename_failed:RU:Не удалось переименовать т�
 prefs_dialog.rename_failed:DE:Fehler beim Umbenennen von Thema %1
 prefs_dialog.rename_failed:CS:Nepodařilo se přejmenovat téma %1
 prefs_dialog.rename_failed:IT:Impossibile rinominare il tema %1
-# Translation missing (PL, KR)
+prefs_dialog.rename_failed:PL:Nie można zmienić nazwy tematu %1
+# Translation missing (KR)
 
 
 
@@ -9159,7 +9193,8 @@ prefs_dialog.xml_file:RU:XML-файл
 prefs_dialog.xml_file:DE:XML-Datei
 prefs_dialog.xml_file:CS:Soubor XML
 prefs_dialog.xml_file:IT:File XML
-# Translation missing (PL, KR)
+prefs_dialog.xml_file:PL:plik XML
+# Translation missing (KR)
 
 
 
@@ -9389,6 +9424,7 @@ prefs_dialog.auto_detect_shell_encoding:IT:Auto-detect
 prefs_dialog.auto_detect_shell_encoding:CS:Automatické rozpoznání
 prefs_dialog.auto_detect_shell_encoding:pt_BR:Auto-detectar
 prefs_dialog.auto_detect_shell_encoding:HU:Automatikus felismerés
+prefs_dialog.auto_detect_shell_encoding:PL:Auto-wybór
 # Translation missing (New!)
 
 
@@ -9749,7 +9785,8 @@ theme.custom:RU:Пользовательская тема
 theme.custom:DE:Angepasst
 theme.custom:CS:Vlastní
 theme.custom:IT:Personalizzato
-# Translation missing (PL, KR)
+theme.custom:PL:Użytkownika
+# Translation missing (KR)
 
 
 
@@ -9774,7 +9811,8 @@ theme.built_in:RU:Встроенная
 theme.built_in:DE:Eingebaut
 theme.built_in:CS:Vestavěné
 theme.built_in:IT:Pre-istallato
-# Translation missing (PL, KR)
+theme.built_in:PL:Wbudowany
+# Translation missing (KR)
 
 
 
@@ -9799,7 +9837,8 @@ theme.add_on:RU:Дополнение
 theme.add_on:DE:Zusatz
 theme.add_on:CS:Doplněk
 theme.add_on:IT:Aggiuntivo
-# Translation missing (PL, KR)
+theme.add_on:PL:Dodatek
+# Translation missing (KR)
 
 
 
@@ -10012,7 +10051,8 @@ color_chooser.red:RU:Красный
 color_chooser.red:DE:Rot
 color_chooser.red:CS:Červená
 color_chooser.red:IT:Rosso
-# Translation missing (PL, KR)
+color_chooser.red:PL:Czerwony
+# Translation missing (KR)
 
 
 
@@ -10034,7 +10074,8 @@ color_chooser.green:RU:Зеленый
 color_chooser.green:DE:Grün
 color_chooser.green:CS:Zelená
 color_chooser.green:IT:Verde
-# Translation missing (PL, KR)
+color_chooser.green:PL:Zielony
+# Translation missing (KR)
 
 
 
@@ -10057,7 +10098,8 @@ color_chooser.blue:RU:Синий
 color_chooser.blue:DE:Blau
 color_chooser.blue:CS:Modrá
 color_chooser.blue:IT:Blu
-# Translation missing (PL, KR)
+color_chooser.blue:PL:Niebieski
+# Translation missing (KR)
 
 
 
@@ -10080,7 +10122,8 @@ color_chooser.hue:RU:Оттенок
 color_chooser.hue:DE:Farbton
 color_chooser.hue:CS:Odstín
 color_chooser.hue:IT:Tonalita'
-# Translation missing (PL, KR)
+color_chooser.hue:PL:Odcień
+# Translation missing (KR)
 
 
 
@@ -10103,7 +10146,8 @@ color_chooser.brightness:RU:Яркость
 color_chooser.brightness:DE:Helligkeit
 color_chooser.brightness:CS:Jas
 color_chooser.brightness:IT:Luminosita'
-# Translation missing (PL, KR)
+color_chooser.brightness:PL:Jasność
+# Translation missing (KR)
 
 
 
@@ -10125,7 +10169,8 @@ color_chooser.swatches:RU:Образцы
 color_chooser.swatches:DE:Muster
 color_chooser.swatches:CS:Barevný mixér
 color_chooser.swatches:IT:Palette dei colori
-# Translation missing (PL, KR)
+color_chooser.swatches:PL:Próbki
+# Translation missing (KR)
 
 
 
@@ -10147,7 +10192,8 @@ color_chooser.saturation:RU:Насыщенность
 color_chooser.saturation:DE:Sättigung
 color_chooser.saturation:CS:Sytost
 color_chooser.saturation:IT:Saturazione
-# Translation missing (PL, KR)
+color_chooser.saturation:PL:Nasycenie
+# Translation missing (KR)
 
 
 
@@ -10171,7 +10217,8 @@ color_chooser.rgb:RU:RGB
 color_chooser.rgb:DE:RGB
 color_chooser.rgb:CS:RGB
 color_chooser.rgb:IT:RGB
-# Translation missing (PL, KR)
+color_chooser.rgb:PL:RGB
+# Translation missing (KR)
 
 
 
@@ -10195,7 +10242,8 @@ color_chooser.hsb:RU:HSB
 color_chooser.hsb:DE:HSB
 color_chooser.hsb:CS:HSB
 color_chooser.hsb:IT:HSB
-# Translation missing (PL, KR)
+color_chooser.hsb:PL:HSB
+# Translation missing (KR)
 
 
 
@@ -10218,7 +10266,8 @@ color_chooser.recent:RU:Предыдущий
 color_chooser.recent:DE:Bisherige
 color_chooser.recent:CS:Poslední použité
 color_chooser.recent:IT:Recente
-# Translation missing (PL, KR)
+color_chooser.recent:PL:Ostatnie
+# Translation missing (KR)
 
 
 
