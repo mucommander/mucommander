@@ -642,6 +642,7 @@ choose:zh_TW:選擇
 choose:IT:Seleziona
 choose:CS:Vybrat
 choose:pt_BR:Escolha
+choose:HU:Kiválaszt
 # Translation missing (New!)
 
 
@@ -664,6 +665,7 @@ choose_folder:zh_TW:選擇資料夾
 choose_folder:IT:Seleziona una cartella
 choose_folder:CS:Vyberte složku
 choose_folder:pt_BR:Escolha um diretório
+choose_folder:HU:Könyvtár választás
 # Translation missing (New!)
 
 
@@ -1093,6 +1095,7 @@ loading:zh_TW:載入中...
 loading:IT:Caricamento in corso...
 loading:CS:Načítám obsah...
 loading:pt_BR:Carregando...
+loading:HU:Betöltés...
 # Translation missing (New!)
 
 
@@ -1179,7 +1182,7 @@ this_folder_does_not_exist:ES:El directoio no existe o no está disponible: %1
 this_folder_does_not_exist:CS:Tato složka neexistuje nebo není dostupná: %1
 this_folder_does_not_exist:zh_TW:資料夾不存在或無法使用: %1
 this_folder_does_not_exist:PL:Ten katalog nie istnieje lub jest nieosiągalny: %1
-this_folder_does_not_exist:HU:A könyvtár nem létezik vagy nem található: %1
+this_folder_does_not_exist:HU:A könyvtár nem létezik vagy nem elérhető: %1
 this_folder_does_not_exist:RU:Каталог %1 не существует или недоступен
 this_folder_does_not_exist:zh_CN:文件夹不存在或无法使用: %1
 this_folder_does_not_exist:SI:Mapa ne obstaja oz. ni dostopna: %1
@@ -1204,7 +1207,8 @@ this_file_does_not_exist:RU:Файл %1 не существует или нед�
 this_file_does_not_exist:DE:Die Datei existiert nicht oder ist nicht verfügbar: %1
 this_file_does_not_exist:CS:Tento soubor neexistuje nebo není dostupný: %1
 this_file_does_not_exist:IT:Questo file non esiste o non e' disponibile: %1
-# Translation missing (HU, PL, KR)
+this_file_does_not_exist:HU:A fájl nem létezik vagy nem elérhető: %1
+# Translation missing (PL, KR)
 
 
 
@@ -4346,7 +4350,7 @@ quit_dialog.desc:ES:¿Desea cerrar todas las ventanas y salir de muCommander?
 quit_dialog.desc:CS:Chcete zavřít všechna otevřená okna (%1) a ukončit muCommander ?
 quit_dialog.desc:zh_TW:你有 %1 個開啟的視窗. 確定要離開 ?
 quit_dialog.desc:PL:Zamknąć wszystkie okna i zakończyć pracę muCommandera ?
-quit_dialog.desc:HU:Minden ablak bázárása és kilépés a muCommanderből?
+quit_dialog.desc:HU:Biztos ki akar lépni? (%1 muCommander van megnyitva.)
 quit_dialog.desc:RU:Закрыть все окна и выйти из muCommander ?
 quit_dialog.desc:zh_CN:关闭所有窗口并退出 muCommander ?
 quit_dialog.desc:SI:Odprto/-ih je %1 okno/-en. Želite zapreti vsa okna? 
@@ -4370,7 +4374,7 @@ quit_dialog.show_next_time:ES:Mostrar la próxima vez
 quit_dialog.show_next_time:CS:Zobrazit příště
 quit_dialog.show_next_time:zh_TW:下次再顯示
 quit_dialog.show_next_time:PL:Do zobaczenia następnym razem
-quit_dialog.show_next_time:HU:Megtekintés legközelebb
+quit_dialog.show_next_time:HU:Üzenet megjelenítése
 quit_dialog.show_next_time:RU:Показывать следующий раз
 quit_dialog.show_next_time:zh_CN:下次还显示
 quit_dialog.show_next_time:SI:Prikaži naslednjič
@@ -6787,7 +6791,7 @@ file_viewer.close:ES:Cerrar
 file_viewer.close:CS:Zavřít
 file_viewer.close:zh_TW:關閉
 file_viewer.close:PL:Zamknij
-file_viewer.close:HU:Bezár
+file_viewer.close:HU:Bezárás
 file_viewer.close:RU:Закрыть
 file_viewer.close:zh_CN:关闭
 file_viewer.close:SI:Zapri
@@ -6846,7 +6850,7 @@ text_viewer.edit:ES:Editar
 text_viewer.edit:CS:Upravit
 text_viewer.edit:zh_TW:編輯
 text_viewer.edit:PL:Edytuj
-text_viewer.edit:HU:Módosít
+text_viewer.edit:HU:Módosítás
 text_viewer.edit:RU:Редактировать
 text_viewer.edit:zh_CN:编辑
 text_viewer.edit:SI:Uredi
@@ -6864,7 +6868,7 @@ text_viewer.copy:ES:Copiar
 text_viewer.copy:CS:Kopírovat
 text_viewer.copy:zh_TW:複製
 text_viewer.copy:PL:Kopiuj
-text_viewer.copy:HU:Másol
+text_viewer.copy:HU:Másolás
 text_viewer.copy:RU:Копировать
 text_viewer.copy:zh_CN:复制
 text_viewer.copy:SI:Kopiraj
@@ -6905,6 +6909,7 @@ text_viewer.find:zh_TW:尋找
 text_viewer.find:IT:Cerca
 text_viewer.find:CS:Najít
 text_viewer.find:pt_BR:Procurar
+text_viewer.find:HU:Keresés
 # Translation missing (New!)
 
 
@@ -6930,6 +6935,7 @@ text_viewer.find_next:zh_TW:尋找下一個
 text_viewer.find_next:IT:Trova il successivo
 text_viewer.find_next:CS:Najít následující
 text_viewer.find_next:pt_BR:Procurar próxima ocorrência
+text_viewer.find_next:HU:Következő keresése
 # Translation missing (New!)
 
 
@@ -6955,6 +6961,7 @@ text_viewer.find_previous:zh_TW:尋找上一個
 text_viewer.find_previous:IT:Trova il precedente
 text_viewer.find_previous:CS:Najít předchozí
 text_viewer.find_previous:pt_BR:Procurar ocorrência anterior
+text_viewer.find_previous:HU:Előző keresése
 # Translation missing (New!)
 
 
@@ -7489,6 +7496,7 @@ theme_editor.shell_history_tab:zh_TW:Shell 歷史記錄
 theme_editor.shell_history_tab:IT:Shell history
 theme_editor.shell_history_tab:CS:Historie shellu
 theme_editor.shell_history_tab:pt_BR:Histórico do Shell
+theme_editor.shell_history_tab:HU:Előzmények
 # Translation missing (New!)
 
 
@@ -7686,6 +7694,7 @@ theme_editor.active_panel:zh_TW:取得焦點
 theme_editor.active_panel:IT:Attivo
 theme_editor.active_panel:CS:Aktivní
 theme_editor.active_panel:pt_BR:Ativo
+theme_editor.active_panel:HU:Aktív
 # Translation missing (New!)
 
 
@@ -7708,6 +7717,7 @@ theme_editor.inactive_panel:zh_TW:失去焦點
 theme_editor.inactive_panel:IT:Disattivo
 theme_editor.inactive_panel:CS:Neaktivní
 theme_editor.inactive_panel:pt_BR:Inativo
+theme_editor.inactive_panel:HU:Inaktív
 # Translation missing (New!)
 
 
@@ -7728,6 +7738,7 @@ theme_editor.general:zh_TW:一般
 theme_editor.general:IT:Generale
 theme_editor.general:CS:Obecné
 theme_editor.general:pt_BR:Geral
+theme_editor.general:HU:Általános
 # Translation missing (New!)
 
 
@@ -7836,6 +7847,7 @@ theme_editor.alternate_background:zh_TW:間隔替代背景
 theme_editor.alternate_background:IT:Sfondo alternativo
 theme_editor.alternate_background:CS:Alternativní pozadí
 theme_editor.alternate_background:pt_BR:Cor de fundo alternativa
+theme_editor.alternate_background:HU:Alternatív háttér
 # Translation missing (New!)
 
 
@@ -8889,6 +8901,7 @@ prefs_dialog.edit_current_theme:zh_TW:編輯目前佈景主題...
 prefs_dialog.edit_current_theme:IT:Modifica il tema corrente...
 prefs_dialog.edit_current_theme:CS:Změnit stávající téma...
 prefs_dialog.edit_current_theme:pt_BR:Editar tema atual...
+prefs_dialog.edit_current_theme:HU:Jelenlegi téma javítása...
 # Translation missing (New!)
 
 
@@ -9354,6 +9367,7 @@ prefs_dialog.shell_encoding:zh_TW:Shell 編碼
 prefs_dialog.shell_encoding:IT:Codifica Shell
 prefs_dialog.shell_encoding:CS:Kódování textu shellu
 prefs_dialog.shell_encoding:pt_BR:Codificação do Shell
+prefs_dialog.shell_encoding:HU:Karakter kódolás
 # Translation missing (New!)
 
 
@@ -9374,6 +9388,7 @@ prefs_dialog.auto_detect_shell_encoding:zh_TW:自動偵測
 prefs_dialog.auto_detect_shell_encoding:IT:Auto-detect
 prefs_dialog.auto_detect_shell_encoding:CS:Automatické rozpoznání
 prefs_dialog.auto_detect_shell_encoding:pt_BR:Auto-detectar
+prefs_dialog.auto_detect_shell_encoding:HU:Automatikus felismerés
 # Translation missing (New!)
 
 
