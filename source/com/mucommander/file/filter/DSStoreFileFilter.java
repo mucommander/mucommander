@@ -18,16 +18,19 @@
 
 package com.mucommander.file.filter;
 
-import com.mucommander.file.AbstractFile;
 
 /**
- * A <code>FileFilter</code> used to filter out Mac OS X '.DS_Store' files.
+ * <code>DSStoreFileFilter</code> is a {@link FilenameFilter} that matches Mac OS X '.DS_Store' files.
  *
  * @author Maxence Bernard
  */
-public class DSStoreFileFilter extends FileFilter {
+public class DSStoreFileFilter extends FilenameFilter {
 
-    public boolean accept(AbstractFile file) {
-        return !".DS_Store".equals(file.getName());
+    ///////////////////////////////////
+    // FilenameFilter implementation //
+    ///////////////////////////////////
+
+    public boolean accept(String filename) {
+        return !".DS_Store".equals(filename);
     }
 }
