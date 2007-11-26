@@ -19,40 +19,59 @@
 package com.mucommander.file.filter;
 
 /**
- * This filename filter only accepts filenames ending with an extension specified at creation time of this filter.
- * The case is ignored when testing filenames: all case variations of an extension will be accepted by {@link #accept(String)}.
+ * This {@link FilenameFilter} matches filenames ending with one of several specified extensions.
+ * The filter can be made case-sensitive or case-insensitive, this behavior is specified at creation time.
  *
  * <p>The extension(s) may be any string, but when used in the traditional sense of a file extension (e.g. zip extension)
- * the '.' character must be included in the specified extension (e.g. ".zip" must be used, not "zip").
+ * the '.' character must be included in the specified extension (e.g. ".zip" must be used, not just "zip").</p>
  * 
  * @author Maxence Bernard
  */
 public class ExtensionFilenameFilter extends FilenameFilter {
 
+    /** File extensions to match against filenames */
     private String extensions[];
 
-    public ExtensionFilenameFilter(String extensions[]) {
-        this.extensions = extensions;
-
-        // Convert extensions to lower-case
-        int nbExtensions = extensions.length;
-        for(int i=0; i<nbExtensions; i++)
-            extensions[i] = extensions[i].toLowerCase();
-    }
-
+    /**
+     * Creates a new <code>ExtensionFilenameFilter</code> that matches filenames ending with the specified extension.
+     * By default, new <code>FilenameFilter</code> are case-insensitive.
+     *
+     * @param extension the extension to match
+     */
     public ExtensionFilenameFilter(String extension) {
         this(new String[]{extension});
     }
 
+    /**
+     * Creates a new <code>ExtensionFilenameFilter</code> that matches filenames ending with one of the specified
+     * extensions. By default, new <code>FilenameFilter</code> are case-insensitive.
+     *
+     * @param extensions the extensions to match
+     */
+    public ExtensionFilenameFilter(String extensions[]) {
+        this.extensions = extensions;
+    }
+
+
+    ///////////////////////////////////
+    // FilenameFilter implementation //
+    ///////////////////////////////////
 
     public boolean accept(String filename) {
-        // Convert filename to lower-case, as extensions already are lower-cased.
-        String filenameLC = filename.toLowerCase();
-        int nbExtensions = extensions.length;
+        boolean isCaseInsensitive = !isCaseSensitive();
+        if(isCaseInsensitive)
+            filename = filename.toLowerCase();
 
-        for(int i=0; i<nbExtensions; i++)
-            if(filenameLC.endsWith(extensions[i]))
+        int nbExtensions = extensions.length;
+        String extension;
+        for(int i=0; i<nbExtensions; i++) {
+            extension = extensions[i];
+            if(isCaseInsensitive)
+                extension = extension.toLowerCase();
+
+            if(filename.endsWith(extension))
                 return true;
+        }
 
         return false;
     }

@@ -21,17 +21,14 @@ package com.mucommander.file.filter;
 import com.mucommander.file.AbstractFile;
 
 /**
- * AndFileFilter is a {@link ChainedFileFilter} that must satisfy all of the registered filters'
- * {@link FileFilter#accept(AbstractFile)} methods. If any of those methods returns false, the file will not be accepted.
- *
- * If this {@link ChainedFileFilter} contains no filter, {@link #accept(AbstractFile)} will always return true.
+ * AndFileFilter is a {@link ChainedFileFilter} that matches a file if all of its registered filters match it.
  *
  * @author Maxence Bernard
  */
 public class AndFileFilter extends ChainedFileFilter {
 
     /**
-     * Creates a new AndFileFilter that initially contains no {@link FileFilter}.
+     * Creates a new AndFileFilter that contains no {@link FileFilter} initially.
      */
     public AndFileFilter() {
     }
@@ -42,19 +39,19 @@ public class AndFileFilter extends ChainedFileFilter {
     ///////////////////////////////
 
     /**
-     * Calls the registered filters' {@link FileFilter#accept(AbstractFile)} methods, and returns true if all of them
-     * accepted the given AbstractFile (i.e. returned true).  Returns false if one of them rejected the file.
+     * Calls {@link #match(com.mucommander.file.AbstractFile)} on each of the registered filters, and returns
+     * <code>true</code> if all of them matched the given file, <code>false</code> if one of them didn't.
      *
-     * <p>If this {@link ChainedFileFilter} contains no filter, true will always be returned.
+     * <p>If this {@link ChainedFileFilter} contains no filter, this method will always return <code>true</code>.</p>
      *
      * @param file the file to test against the registered filters
-     * @return if the file was accepted by all filters, false if it was rejected by one filter 
+     * @return if the file was matched by all filters, false if one of them didn't 
      */
     public synchronized boolean accept(AbstractFile file) {
         int nbFilters = filters.size();
 
         for(int i=0; i<nbFilters; i++)
-            if(!((FileFilter)filters.elementAt(i)).accept(file))
+            if(!((FileFilter)filters.elementAt(i)).match(file))
                 return false;
         return true;
     }

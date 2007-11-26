@@ -21,7 +21,7 @@ package com.mucommander.file.filter;
 import com.mucommander.file.AbstractFile;
 
 /**
- * Filter used to filter out Mac OS X '.DS_Store' files.
+ * A <code>FileFilter</code> used to filter out Mac OS X '.DS_Store' files.
  *
  * @author Maxence Bernard
  */

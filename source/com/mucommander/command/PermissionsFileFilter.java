@@ -16,11 +16,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.mucommander.file.filter;
+package com.mucommander.command;
 
 import com.mucommander.PlatformManager;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FilePermissions;
+import com.mucommander.file.filter.FileFilter;
 
 /**
  * Filter on a file's permissions.

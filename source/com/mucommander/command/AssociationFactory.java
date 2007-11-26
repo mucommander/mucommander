@@ -19,9 +19,8 @@
 package com.mucommander.command;
 
 import com.mucommander.file.filter.AndFileFilter;
-import com.mucommander.file.filter.PermissionsFileFilter;
+import com.mucommander.file.filter.AttributeFileFilter;
 import com.mucommander.file.filter.RegexpFilenameFilter;
-import com.mucommander.file.filter.TypeFileFilter;
 
 /**
  * @author Nicolas Rinaudo
@@ -41,9 +40,9 @@ class AssociationFactory implements AssociationBuilder {
     public void endAssociation() throws CommandException {CommandManager.registerAssociation(command, filter);}
 
     public void setMask(String mask, boolean isCaseSensitive) {filter.addFileFilter(new RegexpFilenameFilter(mask, isCaseSensitive));}
-    public void setIsDir(boolean isDir) {filter.addFileFilter(new TypeFileFilter(TypeFileFilter.DIRECTORY, isDir));}
-    public void setIsSymlink(boolean isSymlink) {filter.addFileFilter(new TypeFileFilter(TypeFileFilter.SYMLINK, isSymlink));}
-    public void setIsHidden(boolean isHidden) {filter.addFileFilter(new TypeFileFilter(TypeFileFilter.HIDDEN, isHidden));}
+    public void setIsDir(boolean isDir) {filter.addFileFilter(new AttributeFileFilter(AttributeFileFilter.DIRECTORY, isDir));}
+    public void setIsSymlink(boolean isSymlink) {filter.addFileFilter(new AttributeFileFilter(AttributeFileFilter.SYMLINK, isSymlink));}
+    public void setIsHidden(boolean isHidden) {filter.addFileFilter(new AttributeFileFilter(AttributeFileFilter.HIDDEN, isHidden));}
     public void setIsReadable(boolean isReadable) {filter.addFileFilter(new PermissionsFileFilter(PermissionsFileFilter.READ_PERMISSION, isReadable));}
     public void setIsWritable(boolean isWritable) {filter.addFileFilter(new PermissionsFileFilter(PermissionsFileFilter.WRITE_PERMISSION, isWritable));}
     public void setIsExecutable(boolean isExecutable) {filter.addFileFilter(new PermissionsFileFilter(PermissionsFileFilter.EXECUTE_PERMISSION, isExecutable));}

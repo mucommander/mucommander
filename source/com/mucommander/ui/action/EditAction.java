@@ -19,7 +19,6 @@
 package com.mucommander.ui.action;
 
 import com.mucommander.conf.ConfigurationEvent;
-import com.mucommander.conf.ConfigurationListener;
 import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.ui.main.MainFrame;
@@ -29,14 +28,11 @@ import java.util.Hashtable;
 
 /**
  * Opens the current file in edit mode.
+ *
  * @author Maxence Bernard, Nicolas Rinaudo
  */
 public class EditAction extends AbstractViewerAction {
-    // - Initialisation ------------------------------------------------------------------
-    // -----------------------------------------------------------------------------------
-    /**
-     * Creates a new <code>EditAction</code>.
-     */
+
     public EditAction(MainFrame mainFrame, Hashtable properties) {
         super(mainFrame, properties);
 
@@ -45,14 +41,17 @@ public class EditAction extends AbstractViewerAction {
     }
 
 
+    /////////////////////////////////////////
+    // AbstractViewerAction implementation //
+    /////////////////////////////////////////
 
-    // - Abstract methods ----------------------------------------------------------------
-    // -----------------------------------------------------------------------------------
     /**
      * Opens the internal editor on the specified file.
      * @param file file to edit.
      */
-    public void performInternalAction(AbstractFile file) {EditorRegistrar.createEditorFrame(mainFrame, file, getIcon().getImage());}
+    public void performInternalAction(AbstractFile file) {
+        EditorRegistrar.createEditorFrame(mainFrame, file, getIcon().getImage());
+    }
 
     /**
      * Reacts to configuration changed events.

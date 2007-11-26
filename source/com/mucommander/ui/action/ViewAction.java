@@ -19,7 +19,6 @@
 package com.mucommander.ui.action;
 
 import com.mucommander.conf.ConfigurationEvent;
-import com.mucommander.conf.ConfigurationListener;
 import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.ui.main.MainFrame;
@@ -29,14 +28,11 @@ import java.util.Hashtable;
 
 /**
  * Opens the current file in view mode.
+ *
  * @author Maxence Bernard, Nicolas Rinaudo
  */
 public class ViewAction extends AbstractViewerAction {
-    // - Initialisation ------------------------------------------------------------------
-    // -----------------------------------------------------------------------------------
-    /**
-     * Creates a new <code>ViewAction</code>.
-     */
+
     public ViewAction(MainFrame mainFrame, Hashtable properties) {
         super(mainFrame, properties);
 
@@ -46,14 +42,17 @@ public class ViewAction extends AbstractViewerAction {
     }
 
 
+    /////////////////////////////////////////
+    // AbstractViewerAction implementation //
+    /////////////////////////////////////////
 
-    // - Abstract methods ----------------------------------------------------------------
-    // -----------------------------------------------------------------------------------
     /**
      * Opens the internal viewer on the specified file.
      * @param file file to view.
      */
-    public void performInternalAction(AbstractFile file) {ViewerRegistrar.createViewerFrame(mainFrame, file, getIcon().getImage());}
+    public void performInternalAction(AbstractFile file) {
+        ViewerRegistrar.createViewerFrame(mainFrame, file, getIcon().getImage());
+    }
 
     /**
      * Reacts to configuration changed events.

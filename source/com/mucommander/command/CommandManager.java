@@ -393,17 +393,17 @@ public class CommandManager implements CommandBuilder {
                     filter = (FileFilter)filters.next();
 
                     // Filter on the file type.
-                    if(filter instanceof TypeFileFilter) {
-                        TypeFileFilter typeFilter;
+                    if(filter instanceof AttributeFileFilter) {
+                        AttributeFileFilter attributeFilter;
 
-                        typeFilter = (TypeFileFilter)filter;
-                        switch(typeFilter.getType()) {
-                        case TypeFileFilter.HIDDEN:
-                            builder.setIsHidden(typeFilter.getFilter());
+                        attributeFilter = (AttributeFileFilter)filter;
+                        switch(attributeFilter.getAttribute()) {
+                        case AttributeFileFilter.HIDDEN:
+                            builder.setIsHidden(!attributeFilter.isInverted());
                             break;
 
-                        case TypeFileFilter.SYMLINK:
-                            builder.setIsSymlink(typeFilter.getFilter());
+                        case AttributeFileFilter.SYMLINK:
+                            builder.setIsSymlink(!attributeFilter.isInverted());
                             break;
                         }
                     }

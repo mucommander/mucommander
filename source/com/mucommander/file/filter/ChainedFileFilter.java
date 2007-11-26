@@ -22,12 +22,12 @@ import java.util.Iterator;
 import java.util.Vector;
 
 /**
- * ChainedFileFilter combines several {@link FileFilter} and acts as just one. The {@link AndFileFilter} and
- * {@link OrFileFilter} implementations allow to accept files that respectively match all of the registered
- * <code>FileFilter</code>, or any one of them.
+ * ChainedFileFilter combines one or several {@link FileFilter} to act as just one.
+ *{@link #addFileFilter(FileFilter)} and {@link #removeFileFilter(FileFilter)} allow to add or remove a
+ * <code>FileFilter</code>, {@link #getFileFilterIterator()} to iterate through all the registered filters.
  *
- * <p>Use the {@link #addFileFilter(FileFilter)} and {@link #removeFileFilter(FileFilter)} to respectively add or
- * remove a <code>FileFilter</code>, and {@link #getFileFilterIterator()} to iterate through all the registered filters.
+ * <p>The {@link AndFileFilter} and {@link OrFileFilter} implementations match files that respectively match all of
+ * the registered filters, or any of them</p>.
  *
  * @see AndFileFilter
  * @see OrFileFilter
@@ -64,11 +64,11 @@ public abstract class ChainedFileFilter extends FileFilter {
     }
 
     /**
-     * Returns an <code>Iterator</code> that traverses all the registered filters. 
+     * Returns an <code>Iterator</code> that traverses all the registered filters.
+     *
+     * @return an <code>Iterator</code> that traverses all the registered filters. 
      */
     public synchronized Iterator getFileFilterIterator() {
         return filters.iterator();
     }
-
-    public synchronized boolean isEmpty() {return filters.isEmpty();}
 }

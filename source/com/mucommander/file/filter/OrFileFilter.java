@@ -21,17 +21,14 @@ package com.mucommander.file.filter;
 import com.mucommander.file.AbstractFile;
 
 /**
- * AndFileFilter is a {@link ChainedFileFilter} that must statisfy only one of the registered filters'
- * {@link FileFilter#accept(AbstractFile)} methods. If any of those methods returns true, the file will be accepted.
- *
- * If this {@link ChainedFileFilter} contains no filter, {@link #accept(AbstractFile)} will always return true.
+ * OrFileFilter is a {@link ChainedFileFilter} that matches a file if one of its registered filters matches it.
  *
  * @author Maxence Bernard
  */
 public class OrFileFilter extends ChainedFileFilter {
 
     /**
-     * Creates a new AndFileFilter that initially contains no {@link FileFilter}.
+     * Creates a new AndFileFilter that contains no {@link FileFilter} initially.
      */
     public OrFileFilter() {
     }
@@ -42,13 +39,13 @@ public class OrFileFilter extends ChainedFileFilter {
     ///////////////////////////////
 
     /**
-     * Calls the registered filters' {@link FileFilter#accept(AbstractFile)} methods, and returns true if one of them
-     * accepted the given AbstractFile (i.e. returned true). Returns false if none of them accepted the file.
+     * Calls {@link #match(com.mucommander.file.AbstractFile)} on each of the registered filters, and returns
+     * <code>true</code> if one of them matched the given file, <code>false</code> if none of them did.
      *
-     * <p>If this {@link ChainedFileFilter} contains no filter, true will always be returned.
+     * <p>If this {@link ChainedFileFilter} contains no filter, this method will always return <code>true</code>.</p>
      *
      * @param file the file to test against the registered filters
-     * @return if the file was accepted by one filter, false if it was rejected by one filter
+     * @return if the file was matched by one filter, false if none of them did
      */
     public synchronized boolean accept(AbstractFile file) {
         int nbFilters = filters.size();
@@ -57,7 +54,7 @@ public class OrFileFilter extends ChainedFileFilter {
             return true;
 
         for(int i=0; i<nbFilters; i++)
-            if(((FileFilter)filters.elementAt(i)).accept(file))
+            if(((FileFilter)filters.elementAt(i)).match(file))
                 return true;
 
         return false;

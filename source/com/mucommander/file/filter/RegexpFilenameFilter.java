@@ -24,7 +24,7 @@ import java.util.regex.PatternSyntaxException;
 /**
  * Regular expressions based filename filter.
 
- * @author Nicolas Rinaudo
+ * @author Nicolas Rinaudo, Maxence Bernard
  */
 public class RegexpFilenameFilter extends FilenameFilter {
 
@@ -44,6 +44,8 @@ public class RegexpFilenameFilter extends FilenameFilter {
      * @throws PatternSyntaxException if the syntax of the regular expression is not correct.
      */
     public RegexpFilenameFilter(String regexp, boolean caseSensitive) throws PatternSyntaxException {
+        super(caseSensitive);
+
         if(caseSensitive)
             pattern = Pattern.compile(regexp);
         else
@@ -69,5 +71,4 @@ public class RegexpFilenameFilter extends FilenameFilter {
      * @return the regular expression used by this filter.
      */
     public String getRegularExpression() {return pattern.pattern();}
-    public boolean isCaseSensitive() {return (pattern.flags() & Pattern.CASE_INSENSITIVE) == 0;}
 }

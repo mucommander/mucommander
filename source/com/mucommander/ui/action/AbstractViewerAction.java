@@ -19,56 +19,44 @@
 package com.mucommander.ui.action;
 
 import com.mucommander.command.Command;
-import com.mucommander.conf.ConfigurationEvent;
 import com.mucommander.conf.ConfigurationListener;
 import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.file.AbstractFile;
-import com.mucommander.file.impl.local.LocalFile;
 import com.mucommander.file.FileProtocols;
-import com.mucommander.file.util.ResourceLoader;
+import com.mucommander.file.filter.AttributeFileFilter;
+import com.mucommander.file.impl.local.LocalFile;
 import com.mucommander.job.TempOpenWithJob;
 import com.mucommander.process.ProcessRunner;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.file.ProgressDialog;
-import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.main.MainFrame;
-import com.mucommander.file.filter.DirectoryFileFilter;
 
 import java.util.Hashtable;
 
 /**
- * Customisable version of {@link InternalEditAction}.
+ * Provides a common base for viewer and editor actions.
+ *
  * @author Maxence Bernard, Nicolas Rinaudo
  */
 abstract class AbstractViewerAction extends SelectedFileAction implements ConfigurationListener {
-    // - Instance variables --------------------------------------------------------------
-    // -----------------------------------------------------------------------------------
+
     /** Custom command defined in the configuration. */
     private Command customCommand;
     /** Whether or not to use the custom command. */
     private boolean useCustomCommand;
 
 
-
-    // - Initialisation ------------------------------------------------------------------
-    // -----------------------------------------------------------------------------------
-    /**
-     * Creates a new <code>EditAction</code>.
-     */
     public AbstractViewerAction(MainFrame mainFrame, Hashtable properties) {
         super(mainFrame, properties);
 
-        // Only enable this action if currently selected file is not a directory.
-        setSelectedFileFilter(new DirectoryFileFilter());
+        // Enable this action only when the currently selected file is not a directory.
+        setSelectedFileFilter(new AttributeFileFilter(AttributeFileFilter.DIRECTORY, true));
 
         // Listens to configuration.
         MuConfiguration.addConfigurationListener(this);
     }
 
 
-
-    // - Action execution ----------------------------------------------------------------
-    // -----------------------------------------------------------------------------------
     /**
      * Edits the currently selected file.
      */
@@ -98,9 +86,6 @@ abstract class AbstractViewerAction extends SelectedFileAction implements Config
         }
     }
 
-    public abstract void performInternalAction(AbstractFile file);
-
-
     /**
      * Sets the custom editor to the specified command.
      * @param command command to use as a custom editor.
@@ -112,5 +97,10 @@ abstract class AbstractViewerAction extends SelectedFileAction implements Config
             customCommand = new Command(getClass().getName(), command);
     }
 
-    protected void setUseCustomCommand(boolean use) {useCustomCommand = use;}
+    protected void setUseCustomCommand(boolean use) {
+        useCustomCommand = use;
+    }
+
+
+    public abstract void performInternalAction(AbstractFile file);
 }

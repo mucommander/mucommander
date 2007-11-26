@@ -18,7 +18,7 @@
 
 package com.mucommander.ui.action;
 
-import com.mucommander.file.filter.ArchiveFileKeeper;
+import com.mucommander.file.filter.AttributeFileFilter;
 import com.mucommander.file.util.FileSet;
 import com.mucommander.ui.dialog.file.UnpackDialog;
 import com.mucommander.ui.main.MainFrame;
@@ -35,7 +35,7 @@ public class UnpackAction extends SelectedFilesAction implements InvokesDialog {
     public UnpackAction(MainFrame mainFrame, Hashtable properties) {
         super(mainFrame, properties);
 
-        setSelectedFileFilter(new ArchiveFileKeeper());
+        setSelectedFileFilter(new AttributeFileFilter(AttributeFileFilter.ARCHIVE));
     }
 
     public void performAction() {

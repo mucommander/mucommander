@@ -55,7 +55,7 @@ public abstract class SelectedFileAction extends FileAction {
         boolean enable = selectedFile!=null;
 
         if(enable && filter!=null)
-            enable = filter.accept(selectedFile);
+            enable = filter.match(selectedFile);
 
         return enable;
     }

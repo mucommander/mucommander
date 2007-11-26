@@ -43,7 +43,7 @@ public class CommandAssociation {
         this.fileFilter = filter;
     }
 
-    public boolean accept(AbstractFile file) {return fileFilter.accept(file);}
+    public boolean accept(AbstractFile file) {return fileFilter.match(file);}
 
     // - Command retrieval -----------------------------------------------------
     // -------------------------------------------------------------------------

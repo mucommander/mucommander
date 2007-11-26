@@ -28,11 +28,12 @@ import com.mucommander.conf.ConfigurationListener;
 import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.file.*;
 import com.mucommander.file.filter.AndFileFilter;
+import com.mucommander.file.filter.AttributeFileFilter;
 import com.mucommander.file.filter.DSStoreFileFilter;
-import com.mucommander.file.filter.HiddenFileFilter;
 import com.mucommander.file.filter.SystemFileFilter;
 import com.mucommander.file.util.FileSet;
 import com.mucommander.text.Translator;
+import com.mucommander.ui.border.MutableLineBorder;
 import com.mucommander.ui.dialog.QuestionDialog;
 import com.mucommander.ui.dialog.auth.AuthDialog;
 import com.mucommander.ui.dialog.file.DownloadDialog;
@@ -44,11 +45,9 @@ import com.mucommander.ui.main.table.FileTable;
 import com.mucommander.ui.main.table.FileTableConfiguration;
 import com.mucommander.ui.main.table.FolderChangeMonitor;
 import com.mucommander.ui.progress.ProgressTextField;
-import com.mucommander.ui.border.MutableLineBorder;
 import com.mucommander.ui.theme.*;
 
 import javax.swing.*;
-import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.dnd.DropTarget;
 import java.awt.event.FocusEvent;
@@ -150,7 +149,8 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
 
         // Filters out hidden files, null when 'show hidden files' option is enabled
         if(!MuConfiguration.getVariable(MuConfiguration.SHOW_HIDDEN_FILES, MuConfiguration.DEFAULT_SHOW_HIDDEN_FILES))
-            chainedFileFilter.addFileFilter(new HiddenFileFilter());
+            // This filter is inverted and matches non-hidden files
+            chainedFileFilter.addFileFilter(new AttributeFileFilter(AttributeFileFilter.HIDDEN, true));
 
         // Filters out Mac OS X .DS_Store files, null when 'show DS_Store files' option is enabled
         if(!MuConfiguration.getVariable(MuConfiguration.SHOW_DS_STORE_FILES, MuConfiguration.DEFAULT_SHOW_DS_STORE_FILES))
@@ -605,9 +605,10 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
         // Show or hide hidden files
         if (var.equals(MuConfiguration.SHOW_HIDDEN_FILES)) {
             if(event.getBooleanValue())
-                removeFileFilter(HiddenFileFilter.class);
+                removeFileFilter(AttributeFileFilter.class);
             else
-                chainedFileFilter.addFileFilter(new HiddenFileFilter());
+                // This filter is inverted and matches non-hidden files
+                chainedFileFilter.addFileFilter(new AttributeFileFilter(AttributeFileFilter.HIDDEN, true));
         }
         // Show or hide .DS_Store files (Mac OS X option)
         else if (var.equals(MuConfiguration.SHOW_DS_STORE_FILES)) {

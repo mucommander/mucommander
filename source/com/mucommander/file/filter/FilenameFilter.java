@@ -25,26 +25,109 @@ import java.util.Vector;
 
 
 /**
- * FilenameFilter is a {@link FileFilter} that operates on filenames. It can be used to filter out filenames without
- * having to create {@link AbstractFile} instances.
+ * <code>FilenameFilter</code> is a {@link FileFilter} that operates on filenames. It can be used to match filenames
+ * without having to deal with {@link AbstractFile} instances.
  *
- * <p>FilenameFilter implements the {@link #accept(AbstractFile)} using its filename, so it can be used anywhere
- * a <code>FileFilter</code> is required.
+ * <p><code>FilenameFilter</code> implements {@link #accept(AbstractFile)} by delegating it to {@link #accept(String)}.
+ * By extending <code>FileFilter</code>, this class can be used everywhere a <code>FileFilter</code> is accepted.</p>
+ *
+ * <p>Several convenience methods are provided to operate this filter on a set of filenames, and filter out filenames
+ * that do not match this filter.</p>
  *
  * <p>A <code>FilenameFilter</code> can be passed to {@link AbstractFile#ls(FilenameFilter)}, in order to filter out
- * files contained by a folder without creating the associated <code>AbstractFile</code> instances.
+ * files contained by a folder without creating the associated <code>AbstractFile</code> instances.</p>
  */
 public abstract class FilenameFilter extends FileFilter {
 
+    /** True if this FilenameFilter is case-sensitive. */
+    protected boolean caseSensitive;
+
+    /**
+     * Creates a new <code>FilenameFilter</code> that operates in normal, non-inverted mode, and that is case-insensitive.
+     */
     public FilenameFilter() {
+        this(false, false);
+    }
+
+    /**
+     * Creates a new <code>FilenameFilter</code> that operates in normal, non-inverted mode.
+     *
+     * @param caseSensitive if true, this FilenameFilter will be case-sentive
+     */
+    public FilenameFilter(boolean caseSensitive) {
+        this(caseSensitive, false);
+    }
+
+    /**
+     * Creates a new <code>FilenameFilter</code> that operates in the specified mode.
+     *
+     * @param caseSensitive if true, this FilenameFilter will be case-sentive
+     * @param inverted if true, this filter will operate in inverted mode.
+     */
+    public FilenameFilter(boolean caseSensitive, boolean inverted) {
+        super(inverted);
+        setCaseSensitive(caseSensitive);
     }
 
 
     /**
-     * Convenience method that filters out filenames that do not satisfy the {@link #accept(AbstractFile)} method and
-     * returns an array of accepted <code>AbstractFile</code> instances.
+     * Returns <code>true</code> if this <code>FilenameFilter</code> is case-sensitive.
      *
-     * @param filenames files to be test against {@link #accept(AbstractFile)}
+     * @return true if this <code>FilenameFilter</code> is case-sensitive.
+     */
+    public boolean isCaseSensitive() {
+        return caseSensitive;
+    }
+
+    /**
+     * Specifies whether this <code>FilenameFilter</code> should be case-sensitive or not when comparing filenames.
+     *
+     * @param caseSensitive if true, this FilenameFilter will be case-sentive
+     */
+    public void setCaseSensitive(boolean caseSensitive) {
+        this.caseSensitive = caseSensitive;
+    }
+
+
+    /**
+     * Returns <code>true</code> if this filter matched the given filename, according to the current {@link #isInverted()}
+     * mode:
+     * <ul>
+     *  <li>if this filter currently operates in normal (non-inverted) mode, this method will return the value of {@link #accept(String)}</li>
+     *  <li>if this filter currently operates in inverted mode, this method will return the value of {@link #reject(String)}</li>
+     * </ul>
+     *
+     * @param filename the filename to test
+     * @return true if this filter matched the given filename, according to the current inverted mode
+     */
+    public boolean match(String filename) {
+        if(inverted)
+            return reject(filename);
+
+        return accept(filename);
+    }
+
+    /**
+     * Returns <code>true</code> if the given filename was rejected by this filter, <code>false</code> if it was accepted.
+     * This method is implemented by negating the value returned by {@link #accept(String)}.
+     *
+     * <p>The {@link #isInverted() inverted} mode has no effect on the values returned by this method.</p>
+     *
+     * @param filename the filename to be tested
+     * @return true if the given filefilename was rejected by this filter
+     */
+    public boolean reject(String filename) {
+        return !accept(filename);
+    }
+
+
+
+    /**
+     * Convenience method that filters out files that do not {@link #match(AbstractFile) match} this filter and
+     * returns a file array of matched <code>AbstractFile</code> instances.
+     *
+     * @param filenames filenames to be tested
+     * @return an array of accepted AbstractFile instances
      */
     public String[] filter(String filenames[]) {
         Vector filteredFilenamesV = new Vector();
@@ -63,15 +146,48 @@ public abstract class FilenameFilter extends FileFilter {
     
 
     /**
-     * Convenience method that returns <code>true</code> if all the filenames containted in the specified array were
-     * accepted by {@link #accept(String)}, <code>false</code> if one of the filenames was not accepted.
+     * Convenience method that returns <code>true</code> if all the filenames in the specified array were matched by
+     * {@link #match(String)}, <code>false</code> if one of the filenames wasn't.
      *
-     * @param filenames the filenames to test against this FilenameFilter
+     * @param filenames the filenames to be tested
+     * @return true if all the filenames in the specified array were accepted
+     */
+    public boolean match(String filenames[]) {
+        int nbFiles = filenames.length;
+        for(int i=0; i<nbFiles; i++)
+            if(!match(filenames[i]))
+                return false;
+
+        return true;
+    }
+
+    /**
+     * Convenience method that returns <code>true</code> if all the filenames in the specified array were accepted by
+     * {@link #accept(String)}, <code>false</code> if one of the filenames wasn't.
+     *
+     * @param filenames the filenames to be tested
+     * @return true if all the filenames in the specified array were accepted
      */
     public boolean accept(String filenames[]) {
         int nbFiles = filenames.length;
         for(int i=0; i<nbFiles; i++)
             if(!accept(filenames[i]))
+                return false;
+
+        return true;
+    }
+
+    /**
+     * Convenience method that returns <code>true</code> if all the filenames in the specified array were rejected by
+     * {@link #reject(String)}, <code>false</code> if one of the filenames wasn't.
+     *
+     * @param filenames the filenames to be tested
+     * @return true if all the filenames in the specified array were rejected
+     */
+    public boolean reject(String filenames[]) {
+        int nbFiles = filenames.length;
+        for(int i=0; i<nbFiles; i++)
+            if(!reject(filenames[i]))
                 return false;
 
         return true;
@@ -83,11 +199,11 @@ public abstract class FilenameFilter extends FileFilter {
     ///////////////////////////////
 
     /**
-     * Implements FileFilter by calling {@link #accept(String)} with the filename of the given file, as returned by
-     * {@link AbstractFile#getName()}, and returning its value.
+     * Implements FileFilter by calling {@link #accept(String)} with the filename of the given file (as returned by
+     * {@link AbstractFile#getName()}) and returning its value.
      *
-     * @param file the file's name to test
-     * @return true if the file was accepted, false if it was rejected
+     * @param file the file to be tested
+     * @return true if the file was accepted
      */
     public boolean accept(AbstractFile file) {
         return accept(file.getName());
@@ -99,10 +215,10 @@ public abstract class FilenameFilter extends FileFilter {
     //////////////////////
     
     /**
-     * Returns <code>true</code> if the given filename was accepted by this FilenameFilter, false it was rejected.
+     * Returns <code>true</code> if the given filename was accepted by this filter, <code>false</code> if it was rejected.
      *
      * @param filename the filename to test
-     * @return <code>true</code> if the given filename was accepted by this FilenameFilter, false it was rejected
+     * @return true if the given filename was accepted by this filter, false if it was rejected
      */
     public abstract boolean accept(String filename);
 }
