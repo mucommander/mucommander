@@ -22,6 +22,7 @@ import junit.framework.TestCase;
 
 import java.util.Hashtable;
 import java.util.Stack;
+import java.util.Vector;
 import java.io.InputStream;
 import java.io.OutputStream;
 
@@ -37,6 +38,8 @@ public class ConfigurationTest extends TestCase implements ConfigurationListener
     private static final int    MAX_DEPTH       = 4;
     /** Name of the section in which to store string variables. */
     private static final String STRING_SECTION  = "string.";
+    /** Name of the section in which to store list variables. */
+    private static final String LIST_SECTION    = "list.";
     /** Name of the section in which to store boolean variables. */
     private static final String BOOLEAN_SECTION = "boolean.";
     /** Name of the section in which to store integer variables. */
@@ -191,6 +194,18 @@ public class ConfigurationTest extends TestCase implements ConfigurationListener
         assertEquals(event.getBooleanValue(), value);
     }
 
+    /**
+     * Makes sure the specified event matches the specified values.
+     * @param event     event to check.
+     * @param name      expected event name.
+     * @param separator separator used to tokenise the value.
+     * @param value     expected event value.
+     */
+    private void assertEvent(ConfigurationEvent event, String name, String separator, Vector value) {
+        assertEventName(event, name);
+        assertEquals(event.getListValue(separator), value);
+    }
+
 
 
     // - String variables test -----------------------------------------------------------
@@ -309,6 +324,132 @@ public class ConfigurationTest extends TestCase implements ConfigurationListener
             section.append('.');
             testStringVariables(section.toString());
             section.append(STRING_SECTION);
+        }
+    }
+
+
+
+    // - List variables test -------------------------------------------------------------
+    // -----------------------------------------------------------------------------------
+    /**
+     * Tests list variable operations in the specified section.
+     * @param section section in which to manipulate the string variables.
+     */
+    private void testListVariables(String section) {
+        String var1;   // First variable we're using for tests.
+        String var2;   // Second variable we're using for tests.
+        Vector value1; // First value for that variable.
+        Vector value2; // Second value for that variable.
+
+        // Initialises test variables.
+        var1   = section + "list1";
+        var2   = section + "list2";
+        value1 = new Vector();
+        value2 = new Vector();
+
+        for(int i = 0; i < 4; i++) {
+            value1.add("val1-" + i);
+            value2.add("val2-" + i);
+        }
+
+        // Makes sure that null is returned when requesting a variable that hasn't been defined.
+        assertNull(conf.getListVariable(var1, ";"));
+
+        // Makes sure that true is returned when creating a new variable, and checks on the
+        // event generated as a result.
+        assertTrue(conf.setVariable(var1, value1, ";"));
+        assertEvent(popEvent(), var1, ";", value1);
+        assertFalse(hasEvents());
+
+        // Makes sure the variable was actually set.
+        assertTrue(conf.isVariableSet(var1));
+        assertEquals(value1, conf.getListVariable(var1, ";"));
+
+        // Makes sure that true is returned when changing a variable's value, and checks on the
+        // event generated as a result.
+        assertTrue(conf.setVariable(var1, value2, ";"));
+        assertEvent(popEvent(), var1, ";", value2);
+        assertFalse(hasEvents());
+
+        // Makes sure that the right string value is returned.
+        assertEquals(value2, conf.getListVariable(var1, ";"));
+
+        // Makes sure that false is returned when setting a variable to its old value.
+        assertFalse(conf.setVariable(var1, value2, ";"));
+        assertFalse(hasEvents());
+
+        // Makes sure that default values do not override existing values.
+        assertEquals(value2, conf.getVariable(var1, value1, ";"));
+        assertFalse(hasEvents());
+
+        // Makes sure the right value is returned and the right event generated
+        // by the remove method
+        assertEquals(value2, conf.removeListVariable(var1, ";"));
+        assertFalse(conf.isVariableSet(var1));
+        assertEvent(popEvent(), var1, ";", null);
+        assertFalse(hasEvents());
+
+        // Makes sure removing a null variable returns null and doesn't generate an event.
+        assertNull(conf.removeVariable(var1));
+        assertFalse(conf.isVariableSet(var1));
+        assertFalse(hasEvents());
+
+        // Makes sure that false is returned when an undefined variable is set to null.
+        assertFalse(conf.setVariable(var1, null));
+        assertFalse(hasEvents());
+
+        // Makes sure default values are properly set.
+        assertEquals(value1, conf.getVariable(var1, value1, ";"));
+        assertEquals(value1, conf.getListVariable(var1, ";"));
+        assertEvent(popEvent(), var1, ";", value1);
+        assertFalse(hasEvents());
+
+        // Makes sure the rename method works properly.
+        conf.renameVariable(var1, var2);
+        assertFalse(conf.isVariableSet(var1));
+        assertEquals(value1, conf.getListVariable(var2, ";"));
+        assertEvent(popEvent(), var2, ";", value1);
+        assertEvent(popEvent(), var1, ";", null);
+        assertFalse(hasEvents());
+
+        // Makes sure that renaming a variable to another with the same value
+        // only triggers the variable deletion event.
+        conf.setVariable(var1, value1, ";");
+        popEvent();
+        conf.renameVariable(var1, var2);
+        assertFalse(conf.isVariableSet(var1));
+        assertEvent(popEvent(), var1, null);
+        assertFalse(hasEvents());
+
+        // Makes sure that renaming a non-set variable results in deleting
+        // both the source and target.
+        conf.renameVariable(var1, var2);
+        assertFalse(conf.isVariableSet(var1));
+        assertFalse(conf.isVariableSet(var2));
+        assertEvent(popEvent(), var2, null);
+        assertFalse(hasEvents());
+
+        // Makes sure that meaningless renames leave the configuration untouched
+        // and do not generate any event.
+        conf.renameVariable(var1, var2);
+        assertFalse(conf.isVariableSet(var1));
+        assertFalse(conf.isVariableSet(var2));
+        assertFalse(hasEvents());
+    }
+
+    /**
+     * Runs list variable tests at different depths in the configuration tree.
+     */
+    public void testListVariables() {
+        StringBuffer section; // Name of the section in which to test string variables.
+
+        testStringVariables("");
+
+        section = new StringBuffer(LIST_SECTION);
+        for(int i = 0; i < MAX_DEPTH; i++) {
+            section.append('.');
+            testListVariables(section.toString());
+            section.append(LIST_SECTION);
         }
     }
 

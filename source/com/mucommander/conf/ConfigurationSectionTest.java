@@ -18,9 +18,10 @@
 
 package com.mucommander.conf;
 
-import java.util.Enumeration;
-
 import junit.framework.TestCase;
+
+import java.util.Enumeration;
+import java.util.Vector;
 
 /**
  * A test case for the {@link Configuration} class.
@@ -144,6 +145,8 @@ public class ConfigurationSectionTest extends TestCase {
      * Tests value casting.
      */
     public void testCasting() {
+        Vector listValue;
+
         // Tests integer casting.
         assertEquals(10, ConfigurationSection.getIntegerValue("10"));
         assertEquals(0, ConfigurationSection.getIntegerValue(null));
@@ -174,5 +177,13 @@ public class ConfigurationSectionTest extends TestCase {
         assertFalse(ConfigurationSection.getBooleanValue(null));
         assertEquals("true", ConfigurationSection.getValue(true));
         assertEquals("false", ConfigurationSection.getValue(false));
+
+        // Test list casting.
+        listValue = new Vector();
+        for(int i = 0; i < 7; i++)
+            listValue.add(Integer.toString(i));
+        assertEquals(listValue, ConfigurationSection.getListValue(ValueList.toString(listValue, ";"), ";"));
+        assertEquals(null, ConfigurationSection.getListValue(null, ";"));
+        assertEquals(ValueList.toString(listValue, ";"), ConfigurationSection.getValue(listValue, ";"));
     }
 }

@@ -143,4 +143,14 @@ public class ConfigurationEvent {
      * @throws NumberFormatException if {@link #getValue()} cannot be cast as a double.
      */
     public double getDoubleValue() {return ConfigurationSection.getDoubleValue(value);}
+
+    /**
+     * Returns the new value for the modified variable cast as a {@link ValueList}.
+     * <p>
+     * If the variable has been deleted, this method will return null.
+     * </p>
+     * @param  separator string used to tokenise the variable's value.
+     * @return           the new value for the modified variable.
+     */
+    public ValueList getListValue(String separator) {return ConfigurationSection.getListValue(value, separator);}
 }

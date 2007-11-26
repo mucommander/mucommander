@@ -22,11 +22,13 @@ import com.mucommander.ui.icon.FileIcons;
 import com.mucommander.PlatformManager;
 import com.mucommander.RuntimeConstants;
 import com.mucommander.conf.Configuration;
+import com.mucommander.conf.ValueList;
 import com.mucommander.conf.ConfigurationFormatException;
 import com.mucommander.conf.ConfigurationException;
 import com.mucommander.conf.ConfigurationListener;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * @author Nicolas Rinaudo
@@ -571,6 +573,8 @@ public class MuConfiguration {
 
     public static boolean setVariable(String name, double value) {return configuration.setVariable(name, value);}
 
+    public static boolean setVariable(String name, List value, String separator) {return configuration.setVariable(name, value, separator);}
+
 
 
     // - Variable retrieval ----------------------------------------------------
@@ -586,6 +590,8 @@ public class MuConfiguration {
     public static double getDoubleVariable(String name) {return configuration.getDoubleVariable(name);}
 
     public static boolean getBooleanVariable(String name) {return configuration.getBooleanVariable(name);}
+
+    public static ValueList getListVariable(String name, String separator) {return configuration.getListVariable(name, separator);}
 
     public static boolean isVariableSet(String name) {return configuration.isVariableSet(name);}
 
@@ -605,6 +611,8 @@ public class MuConfiguration {
 
     public static boolean removeBooleanVariable(String name) {return configuration.removeBooleanVariable(name);}
 
+    public static ValueList removeListVariable(String name, String separator) {return configuration.removeListVariable(name, separator);}
+
 
 
     // - Advanced variable retrieval -------------------------------------------
@@ -620,6 +628,8 @@ public class MuConfiguration {
     public static boolean getVariable(String name, boolean defaultValue) {return configuration.getVariable(name, defaultValue);}
 
     public static double getVariable(String name, double defaultValue) {return configuration.getVariable(name, defaultValue);}
+
+    public static ValueList getVariable(String name, List defaultValue, String separator) {return configuration.getVariable(name, defaultValue, separator);}
 
 
     // - Configuration listening -----------------------------------------------

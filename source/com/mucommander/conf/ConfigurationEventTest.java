@@ -20,6 +20,8 @@ package com.mucommander.conf;
 
 import junit.framework.TestCase;
 
+import java.util.Vector;
+
 /**
  * A test case for the {@link ConfigurationEvent} class.
  * @author Nicolas Rinaudo
@@ -31,6 +33,8 @@ public class ConfigurationEventTest extends TestCase {
     private static final String  VARIABLE_NAME = "variable";
     /** Test string value. */
     private static final String  STRING_VALUE  = "value";
+    /** Test list value. */
+    private static final Vector  LIST_VALUE    = new Vector();
     /** Test integer value. */
     private static final int     INTEGER_VALUE = 10;
     /** Test long value. */
@@ -53,6 +57,11 @@ public class ConfigurationEventTest extends TestCase {
 
     // - Initialisation ------------------------------------------------------------------
     // -----------------------------------------------------------------------------------
+    static {
+        for(int i = 0; i < 7; i++)
+            LIST_VALUE.add(Integer.toString(i));
+    }
+
     /**
      * Initialises the test case.
      */
@@ -75,6 +84,21 @@ public class ConfigurationEventTest extends TestCase {
         // Makes sure unset values are returned as null.
         event = new ConfigurationEvent(conf, VARIABLE_NAME, null);
         assertEquals(null, event.getValue());
+    }
+
+    /**
+     * Tests list events.
+     */
+    public void testListEvents() {
+        ConfigurationEvent event;
+
+        // Makes sure the value passed to the constructor is properly returned.
+        event = new ConfigurationEvent(conf, VARIABLE_NAME, ValueList.toString(LIST_VALUE, ";"));
+        assertEquals(LIST_VALUE, event.getListValue(";"));
+
+        // Makes sure unset values are returned as null.
+        event = new ConfigurationEvent(conf, VARIABLE_NAME, null);
+        assertEquals(null, event.getListValue(";"));
     }
 
     /**

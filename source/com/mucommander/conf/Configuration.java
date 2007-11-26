@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.StringTokenizer;
 import java.util.Iterator;
 import java.util.WeakHashMap;
@@ -606,6 +607,24 @@ public class Configuration {
      * If the value of the specified variable is actually modified, an {@link ConfigurationEvent event} will be passed to all
      * listeners.
      * </p>
+     * @param  name      fully qualified name of the variable to set.
+     * @param  value     new value for the variable.
+     * @param  separator string used to separate each element of the list.
+     * @return           <code>true</code> if this call resulted in a modification of the variable's value, <code>false</code> otherwise.
+     */
+    public boolean setVariable(String name, List value, String separator) {return setVariable(name, ConfigurationSection.getValue(value, separator));}
+
+    /**
+     * Sets the value of the specified variable.
+     * <p>
+     * This method will return <code>false</code> if it didn't modify <code>name</code>'s value. This, however, is not a way
+     * of indicating that the call failed: <code>false</code> is only ever returned if the previous value is equal to the
+     * new value.
+     * </p>
+     * <p>
+     * If the value of the specified variable is actually modified, an {@link ConfigurationEvent event} will be passed to all
+     * listeners.
+     * </p>
      * @param  name  fully qualified name of the variable to set.
      * @param  value new value for the variable.
      * @return       <code>true</code> if this call resulted in a modification of the variable's value, <code>false</code> otherwise.
@@ -680,6 +699,13 @@ public class Configuration {
             return null;
         return explorer.getSection().getVariable(name);
     }
+
+    /**
+     * Returns the value of the specified variable as a {@link ValueList}.
+     * @param  name fully qualified name of the variable whose value should be retrieved.
+     * @return      the variable's value if set, <code>null</code> otherwise.
+     */
+    public ValueList getListVariable(String name, String separator) {return ConfigurationSection.getListValue(getVariable(name), separator);}
 
     /**
      * Returns the value of the specified variable as an integer.
@@ -788,6 +814,17 @@ public class Configuration {
      * all registered listeners.
      * </p>
      * @param  name name of the variable to remove.
+     * @return      the variable's old value, or <code>null</code> if it wasn't set.
+     */
+    public ValueList removeListVariable(String name, String separator) {return ConfigurationSection.getListValue(removeVariable(name), separator);}
+
+    /**
+     * Deletes the specified variable from the configuration.
+     * <p>
+     * If the variable was set, a configuration {@link ConfigurationEvent event} will be passed to
+     * all registered listeners.
+     * </p>
+     * @param  name name of the variable to remove.
      * @return      the variable's old value, or <code>0</code> if it wasn't set.
      */
     public int removeIntegerVariable(String name) {return ConfigurationSection.getIntegerValue(removeVariable(name));}
@@ -867,6 +904,23 @@ public class Configuration {
             return defaultValue;
         }
         return value;
+    }
+
+    /**
+     * Retrieves the value of the specified variable as a {@link ValueList}.
+     * <p>
+     * If the variable isn't set, this method will set it to <code>defaultValue</code> before
+     * returning it. If this happens, a configuration {@link ConfigurationEvent event} will
+     * be sent to all registered listeners.
+     * </p>
+     * @param  name                  name of the variable to retrieve.
+     * @param  defaultValue          value to use if variable <code>name</code> is not set.
+     * @param  separator             separator to use for <code>defaultValue</code> if variable <code>name</code> is not set.
+     * @return                       the specified variable's value.
+     * @throws NumberFormatException if the variable's value cannot be cast to a {@link ValueList}.
+     */
+    public ValueList getVariable(String name, List defaultValue, String separator) {
+        return ConfigurationSection.getListValue(getVariable(name, ConfigurationSection.getValue(defaultValue, separator)), separator);
     }
 
     /**
