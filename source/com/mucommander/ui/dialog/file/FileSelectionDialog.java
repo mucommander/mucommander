@@ -18,33 +18,35 @@
 
 package com.mucommander.ui.dialog.file;
 
-import com.mucommander.file.AbstractFile;
+import com.mucommander.Debug;
+import com.mucommander.file.filter.*;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.DialogToolkit;
 import com.mucommander.ui.dialog.FocusDialog;
 import com.mucommander.ui.layout.YBoxPanel;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.table.FileTable;
-import com.mucommander.ui.main.table.FileTableModel;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.regex.PatternSyntaxException;
 
 /**
- * This dialog allows the user to add (mark) or remove (unmark)
- * files from current selection, matching a specified keyword.
+ * This dialog allows the user to add (mark) or remove (unmark) files from the current selection,
+ * based on a match criterium and string.
  *
  * @author Maxence Bernard
  */
 public class FileSelectionDialog extends FocusDialog implements ActionListener {
 
-    /* Filename comparison */		
-    private final static int CONTAINS = 0;
+    /* Filename comparison criteria */		
+    private final static int CONTAINS    = 0;
     private final static int STARTS_WITH = 1;
-    private final static int ENDS_WIDTH = 2;
-    private final static int IS = 3;
+    private final static int ENDS_WIDTH  = 2;
+    private final static int IS          = 3;
+    private final static int REGEXP      = 4;
 
     /** Add to or remove from selection ? */	 
     private boolean addToSelection;
@@ -115,6 +117,7 @@ public class FileSelectionDialog extends FocusDialog implements ActionListener {
         comparisonComboBox.addItem(Translator.get("file_selection_dialog.starts_with"));
         comparisonComboBox.addItem(Translator.get("file_selection_dialog.ends_with"));
         comparisonComboBox.addItem(Translator.get("file_selection_dialog.is"));
+        comparisonComboBox.addItem(Translator.get("file_selection_dialog.matches_regexp"));
         comparisonComboBox.setSelectedIndex(comparison);
         tempPanel.add(comparisonComboBox);
 				
@@ -154,6 +157,7 @@ public class FileSelectionDialog extends FocusDialog implements ActionListener {
         setMaximumSize(MAXIMUM_DIALOG_DIMENSION);
     }
 
+
     ////////////////////////////
     // ActionListener methods //
     ////////////////////////////
@@ -170,53 +174,63 @@ public class FileSelectionDialog extends FocusDialog implements ActionListener {
             includeFolders = includeFoldersCheckBox.isSelected();
             comparison = comparisonComboBox.getSelectedIndex();
 
-            // Remove '*' characters
-            this.keywordString = selectionField.getText();
-            StringBuffer sb = new StringBuffer();
-            char c;
-            String testString;
-            for(int i=0; i<keywordString.length(); i++) {
-                c = keywordString.charAt(i);
-                if(c!='*')
-                    sb.append(c);
-            }
-            testString = sb.toString();
 
-            if(!caseSensitive)
-                testString = testString.toLowerCase();
-			
-            // Marks or unmarks matching *files* (not folders)
-            AbstractFile file;
-            String fileName;
-            FileTableModel tableModel = activeTable.getFileTableModel();
-            int nbFiles = tableModel.getRowCount();
-            for(int i=activeTable.getCurrentFolder().getParentSilently()==null?0:1; i<nbFiles; i++) {
-                file = tableModel.getFileAtRow(i);
-                if (includeFolders || !file.isDirectory())  {
-                    fileName = file.getName();
-                    if(!caseSensitive)
-                        fileName = fileName.toLowerCase();
-					
-                    boolean markFile = false;
-                    switch (comparison) {
-                    case CONTAINS:
-                        markFile = fileName.indexOf(testString) != -1;
-                        break;
-                    case STARTS_WITH:
-                        markFile = fileName.startsWith(testString);
-                        break;
-                    case ENDS_WIDTH:
-                        markFile = fileName.endsWith(testString);
-                        break;
-                    case IS:
-                        markFile = fileName.equals(testString);
-                        break;
-                    }
-					
-                    if(markFile)
-                        tableModel.setRowMarked(i, addToSelection);
+            String testString;
+            keywordString = selectionField.getText();
+            if(comparison!=REGEXP) {
+                // Remove '*' characters
+                StringBuffer sb = new StringBuffer();
+                for(int i=0; i<keywordString.length(); i++) {
+                    char c = keywordString.charAt(i);
+                    if(c!='*')
+                        sb.append(c);
                 }
+                testString = sb.toString();
             }
+            else {
+                testString = keywordString;
+            }
+
+            // Instanciate the main file filter
+            FileFilter filter;
+            switch (comparison) {
+                case CONTAINS:
+                    filter = new ContainsFilenameFilter(testString, caseSensitive);
+                    break;
+                case STARTS_WITH:
+                    filter = new StartsFilenameFilter(testString, caseSensitive);
+                    break;
+                case ENDS_WIDTH:
+                    filter = new EndsFilenameFilter(testString, caseSensitive);
+                    break;
+                case IS:
+                    filter = new EqualsFilenameFilter(testString, caseSensitive);
+                    break;
+                case REGEXP:
+                default:
+                    try {
+                        filter = new RegexpFilenameFilter(testString, caseSensitive);
+                    }
+                    catch(PatternSyntaxException ex) {
+                        // Todo: let the user know the regexp is invalid
+                        if(Debug.ON) Debug.trace("Invalid regexp: "+e);
+
+                        // This filter does match any file
+                        filter = new PassThroughFileFilter(false);
+                    }
+                    break;
+            }
+
+            // If folders are excluded, add a regular file filter and chain it with an AndFileFilter
+            if(!includeFolders) {
+                AndFileFilter andFilter = new AndFileFilter();
+                andFilter.addFileFilter(new AttributeFileFilter(AttributeFileFilter.FILE));
+                andFilter.addFileFilter(filter);
+                filter = andFilter;
+            }
+
+            // Mark/unmark the files using the filter
+            activeTable.getFileTableModel().setFilesMarked(filter, addToSelection);
 
             // Notify registered listeners that currently marked files have changed on this FileTable
             activeTable.fireMarkedFilesChangedEvent();

@@ -5735,6 +5735,24 @@ file_selection_dialog.include_folders:pt_BR:Incluir diretórios
 file_selection_dialog.include_folders:NL:Mappen erbij nemen
 file_selection_dialog.include_folders:SK:Zahrnúť priečinky
 
+file_selection_dialog.matches_regexp:EN:Matches Regexp
+file_selection_dialog.matches_regexp:FR:Satisfait la Regexp
+# Translation missing (New!)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ###################
 # Progress dialog #
