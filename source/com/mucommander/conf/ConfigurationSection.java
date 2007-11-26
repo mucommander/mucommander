@@ -20,6 +20,7 @@ package com.mucommander.conf;
 
 import java.util.Hashtable;
 import java.util.Enumeration;
+import java.util.List;
 
 /**
  * Represents a section in the configuration tree.
@@ -118,6 +119,16 @@ class ConfigurationSection {
     public static int getIntegerValue(String value) {return value == null ? 0 : Integer.parseInt(value);}
 
     /**
+     * Casts the specified value into a value list.
+     * <p>
+     * If <code>value</code> is <code>null</code>, this method will return <code>null</code>.
+     * </p>
+     * @param value value to cast to a value list.
+     * @return <code>value</code> as a value list.
+     */
+    public static ValueList getListValue(String value, String separator) {return value == null ? null : new ValueList(value, separator);}
+
+    /**
      * Casts the specified value into an float.
      * <p>
      * If <code>value</code> is <code>null</code>, this method will return <code>0</code>.
@@ -163,6 +174,14 @@ class ConfigurationSection {
      * @return <code>value</code> as a string.
      */
     public static String getValue(int value) {return Integer.toString(value);}
+
+    /**
+     * Casts the specified value into a string.
+     * @param  value     value to cast as a string.
+     * @param  separator string to use as a separator.
+     * @return           <code>value</code> as a string.
+     */
+    public static String getValue(List value, String separator) {return ValueList.toString(value, separator);}
 
     /**
      * Casts the specified value into a string.
