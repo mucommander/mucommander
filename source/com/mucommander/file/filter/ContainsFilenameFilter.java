@@ -19,8 +19,8 @@
 package com.mucommander.file.filter;
 
 /**
- * This {@link FilenameFilter} matches filenames that contain a specified string.
- * The filter can be made case-sensitive or case-insensitive, this behavior is specified at creation time.
+ * This {@link FilenameFilter} matches filenames that contain a specified string that can be located anywhere in the
+ * filename.
  *
  * @author Maxence Bernard
  */
@@ -32,7 +32,7 @@ public class ContainsFilenameFilter extends FilenameFilter {
     /**
      * Creates a new <code>ContainsFilenameFilter</code>.
      *
-     * @param s the string to compare against filenames
+     * @param s the string to compare filenames against
      * @param caseSensitive if true, this FilenameFilter will be case-sentive
      */
     public ContainsFilenameFilter(String s, boolean caseSensitive) {
