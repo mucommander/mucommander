@@ -22,6 +22,7 @@ import com.mucommander.conf.ConfigurationEvent;
 import com.mucommander.conf.ConfigurationListener;
 import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.file.AbstractFile;
+import com.mucommander.file.filter.FileFilter;
 import com.mucommander.file.impl.CachedFile;
 import com.mucommander.file.util.FileComparator;
 import com.mucommander.file.util.FileSet;
@@ -349,9 +350,23 @@ public class FileTableModel extends AbstractTableModel implements Columns, Confi
     public synchronized void setFileMarked(AbstractFile file, boolean marked) {
         int row = getFileRow(file);
 
-        // if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("file="+file+" row="+row+" marked="+marked);    	
     	if(row!=-1)
             setRowMarked(row, marked);
+    }
+
+
+    /**
+     * Marks/unmarks the files that match the given {@link FileFilter}.
+     *
+     * @param filter the FileFilter to match the files against
+     * @param marked if true, matching files will be marked, if false, they will be unmarked
+     */
+    public synchronized void setFilesMarked(FileFilter filter, boolean marked) {
+        int nbFiles = getRowCount();
+        for(int i=parent==null?0:1; i<nbFiles; i++) {
+            if(filter.match(getCachedFileAtRow(i)))
+                setRowMarked(i, marked);
+        }
     }
 
 
