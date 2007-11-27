@@ -22,6 +22,7 @@ package com.mucommander.ui.main.table;
 import com.mucommander.ui.icon.IconManager;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.JTableHeader;
 import java.awt.*;
@@ -42,18 +43,34 @@ public class FileTableHeaderRenderer extends DefaultTableCellRenderer implements
     private final static ImageIcon DESCENDING_ICON = IconManager.getIcon(IconManager.COMMON_ICON_SET, "arrow_down.png");
 
 
-    public FileTableHeaderRenderer() {}
+    public FileTableHeaderRenderer() {
+        // These properties can be set only once
 
+        // Icon should be on the right
+        setHorizontalTextPosition(LEFT);
+        // Increase gap size between text and icon (defaut is 4 pixels)
+        setIconTextGap(6);
+        // Note: the label is left-aligned by default
+        setHorizontalAlignment(JLabel.CENTER);
+    }
 
     /**
-     * Returns <code>true</code> if this header is the one currently selected.
+     * Returns <code>true</code> if this header is the currently selected one.
+     *
+     * @param isCurrent true if this header is the currently selected one
      */
-    public void setCurrent(boolean isCurrent) {this.isCurrent = isCurrent;}
+    public void setCurrent(boolean isCurrent) {
+        this.isCurrent = isCurrent;
+    }
 
     /**
-     * Sets the direction of arrow symbolizing the sort order.
+     * Sets the direction of the arrow symbolizing the sort order.
+     *
+     * @param isAscending true if the order is ascending, false for descending
      */
-    public void setOrder(boolean isAscending) {this.ascendingOrder = isAscending;}
+    public void setOrder(boolean isAscending) {
+        this.ascendingOrder = isAscending;
+    }
 
 
     ////////////////////////
@@ -61,15 +78,8 @@ public class FileTableHeaderRenderer extends DefaultTableCellRenderer implements
     ////////////////////////
 
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-        JLabel label = new JLabel((String)value);
-
-        if(isCurrent) {
-            // Icon should be on the right
-            label.setHorizontalTextPosition(LEFT);
-            // Increase gap size between text and icon (defaut is 4 pixels)
-            label.setIconTextGap(8);
-            label.setIcon(ascendingOrder? ASCENDING_ICON : DESCENDING_ICON);
-        }
+        // Note: the label is returned by DefaultTableHeaderRenderer#getTableCellRendererComponent() is in fact this
+        JLabel label = (JLabel)super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
         if (table != null) {
             JTableHeader header = table.getTableHeader();
@@ -80,13 +90,23 @@ public class FileTableHeaderRenderer extends DefaultTableCellRenderer implements
             }
         }
 
-        int col = table.convertColumnIndexToModel(column);
-        // Extension and permissions columns are too small for label to fit (ugly otherwise)
-//        label.setText(col==EXTENSION||col==PERMISSIONS?"":(String)value);
-        label.setText((String)value);
+        // Use borders made specifically for table headers
+        Border border = UIManager.getBorder("TableHeader.cellBorder");
+        label.setBorder(border);
+
+        // Add a tooltip as headers are sometimes too small for the text to fit entirely
         label.setToolTipText((String)value);
-        label.setBorder(UIManager.getBorder("TableHeader.cellBorder"));
-        label.setHorizontalAlignment(JLabel.CENTER);
+
+        if(isCurrent) {
+            // This header is the currently selected one
+            label.setIcon(ascendingOrder? ASCENDING_ICON : DESCENDING_ICON);
+        }
+        else {
+            // The renderer component acts as a rubber-stamp, therefore the icon value needs to be set to null explicitely
+            // as it might still hold a previous value
+            label.setIcon(null);
+        }
+
         return label;
     }
 }

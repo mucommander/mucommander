@@ -147,6 +147,7 @@ Bug fixes:
   trigger the filename/date/permission editor.
 - Fixed issues when exploring the SMB 'network neighborhood' (smb://).
 - Fixed symlinks to directories not properly handled on SFTP shares.
+- Fixed rendering issues with column headers under Mac OS X 10.5 (Leopard).
 
 Known issues:
 - Korean translation is not up-to-date.
