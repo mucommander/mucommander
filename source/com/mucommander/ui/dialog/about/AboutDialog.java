@@ -162,25 +162,25 @@ public class AboutDialog extends FocusDialog implements ActionListener {
 
             // External Libraries.
             insertHeader(doc,         "External libraries");
-            insertDetailedUrl(doc,    "jCIFS",               "LGPL",                                 "http://jcifs.samba.org");
-            insertDetailedUrl(doc,    "Jakarta Commons Net", "Apache License",                       "http://jakarta.apache.org/commons/net");
-            insertDetailedUrl(doc,    "J2SSH",               "LGPL",                                 "http://sourceforge.net/projects/sshtools");
             insertDetailedUrl(doc,    "Ant",                 "Apache License",                       "http://ant.apache.org");
+            insertDetailedUrl(doc,    "ICU4J",               "ICU License",                          "http://www.icu-project.org");
+            insertDetailedUrl(doc,    "J2SSH",               "LGPL",                                 "http://sourceforge.net/projects/sshtools");
+            insertDetailedUrl(doc,    "Jakarta Commons Net", "Apache License",                       "http://jakarta.apache.org/commons/net");
+            insertDetailedUrl(doc,    "jCIFS",               "LGPL",                                 "http://jcifs.samba.org");
             insertDetailedUrl(doc,    "JmDNS",               "LGPL",                                 "http://jmdns.sourceforge.net");
             insertDetailedUrl(doc,    "Yanfs",               "BSD",                                  "http://yanfs.dev.java.net");
             insertDetailedUrl(doc,    "Mark James' icons",   "Creative Commons Attribution License", "http://famfamfam.com");
-            insertDetailedUrl(doc,    "ICU4J",               "ICU License",                          "http://www.icu-project.org");
             insertLineBreak(doc);
 
             // External tools.
             insertHeader(doc,         "External tools");
             insertDetailedUrl(doc,    "Ant",                 "Apache Software License",              "http://ant.apache.org");
-            insertDetailedUrl(doc,    "ProGuard",            "GPL",                                  "http://proguard.sourceforge.net");
-            insertDetailedUrl(doc,    "NSIS",                "zlib/libpng license",                  "http://nsis.sourceforge.net");
-            insertDetailedUrl(doc,    "Launch4j",            "GPL",                                  "http://launch4j.sourceforge.net");
-            insertDetailedUrl(doc,    "p7zip",               "LGPL",                                 "http://p7zip.sourceforge.net");
             insertDetailedUrl(doc,    "AntDoclet",           "GPL",                                  "http://antdoclet.neuroning.com/");
             insertDetailedUrl(doc,    "jdeb",                "Apache Software License",              "http://vafer.org/projects/jdeb/");
+            insertDetailedUrl(doc,    "Launch4j",            "GPL",                                  "http://launch4j.sourceforge.net");
+            insertDetailedUrl(doc,    "NSIS",                "zlib/libpng license",                  "http://nsis.sourceforge.net");
+            insertDetailedUrl(doc,    "p7zip",               "LGPL",                                 "http://p7zip.sourceforge.net");
+            insertDetailedUrl(doc,    "ProGuard",            "GPL",                                  "http://proguard.sourceforge.net");
             insertLineBreak(doc);
             insertLineBreak(doc);
 
