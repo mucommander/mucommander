@@ -30,7 +30,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <property name="app.version"         value="0.8"/>
   <!-- Minor version number of the application.                -->
   <!-- Note that this should be empty for major releases.      -->
-  <property name="app.subversion"      value=".1"/>
+  <property name="app.subversion"      value=".2"/>
   <!-- Copyright line of the application.                      -->
   <!-- This should typically be 2002-<current-year>            -->
   <property name="app.copyright"       value="2002-2007"/>
