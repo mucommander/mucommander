@@ -84,6 +84,8 @@ public class PlatformManager {
     public static final int JAVA_1_5 = 5;
     /** Java 1.6.x */
     public static final int JAVA_1_6 = 6;
+    /** Java 1.7.x */
+    public static final int JAVA_1_7 = 7;
     /** Java version muCommander is running on (see constants) */
     private static      int javaVersion;
 
@@ -201,6 +203,9 @@ public class PlatformManager {
         if(jVersion==null || (jVersion=jVersion.trim()).equals(""))
             // Assume java 1.4 (first supported Java version)
             javaVersion = JAVA_1_4;
+        // Java 1.7
+        else if(jVersion.startsWith("1.7"))
+            javaVersion = JAVA_1_7;
         // Java 1.6
         else if(jVersion.startsWith("1.6"))
             javaVersion = JAVA_1_6;
