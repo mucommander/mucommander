@@ -18,14 +18,13 @@
 
 package com.mucommander.conf.impl;
 
-import com.mucommander.ui.icon.FileIcons;
 import com.mucommander.PlatformManager;
 import com.mucommander.RuntimeConstants;
 import com.mucommander.conf.Configuration;
-import com.mucommander.conf.ValueList;
-import com.mucommander.conf.ConfigurationFormatException;
 import com.mucommander.conf.ConfigurationException;
 import com.mucommander.conf.ConfigurationListener;
+import com.mucommander.conf.ValueList;
+import com.mucommander.ui.icon.FileIcons;
 
 import java.io.IOException;
 import java.util.List;
@@ -68,9 +67,11 @@ public class MuConfiguration {
     public static final String  LOOK_AND_FEEL                     = "lookAndFeel";
     /** Controls whether system notifications are enabled. */
     public static final String  ENABLE_SYSTEM_NOTIFICATIONS       = "enable_system_notifications";
-    /** Default for enable system notifications. */
+    /** System notifications are enabled by default on platforms where a notifier is available and works well enough.
+     * In particular, the system tray notifier is available under Linux+Java 1.6, but it doesn't work well so it is not
+     * enabled by default. */
     public static final boolean DEFAULT_ENABLE_SYSTEM_NOTIFICATIONS = com.mucommander.ui.notifier.AbstractNotifier.isAvailable()
-        && (PlatformManager.getOsFamily()==PlatformManager.MAC_OS_X || PlatformManager.getOsFamily()==PlatformManager.WINDOWS_NT);
+        && (PlatformManager.getOsFamily()==PlatformManager.MAC_OS_X || PlatformManager.isWindowsFamily());
     /** Controls whether files should be moved to trash or permanently erased */
     public static final String DELETE_TO_TRASH                    = "delete_to_trash";
     /** Default 'delete to trash' behavior */

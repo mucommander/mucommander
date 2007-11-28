@@ -474,7 +474,8 @@ public class Launcher {
         // a MainFrame instance
         if(MuConfiguration.getVariable(MuConfiguration.ENABLE_SYSTEM_NOTIFICATIONS, MuConfiguration.DEFAULT_ENABLE_SYSTEM_NOTIFICATIONS)) {
             printStartupMessage("Enabling system notifications...");
-            com.mucommander.ui.notifier.AbstractNotifier.getNotifier().setEnabled(true);
+            if(com.mucommander.ui.notifier.AbstractNotifier.isAvailable())
+                com.mucommander.ui.notifier.AbstractNotifier.getNotifier().setEnabled(true);
         }
 
         // Dispose splash screen.
