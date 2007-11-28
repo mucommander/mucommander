@@ -22,6 +22,7 @@ import com.mucommander.file.AbstractArchiveFile;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
 import com.mucommander.file.impl.local.LocalFile;
+import com.mucommander.util.StringUtils;
 
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
@@ -293,7 +294,7 @@ public class ResourceLoader {
         // Use the local file separator
         String separator = LocalFile.SEPARATOR;
         if(!"/".equals(separator))
-            path = path.replace("/", separator);
+            path = StringUtils.replaceCompat(path, "/", separator);
 
         return path;
     }
