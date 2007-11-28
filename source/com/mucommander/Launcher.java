@@ -101,10 +101,10 @@ public class Launcher {
         System.out.println(" -p FOLDER, --preferences FOLDER   Store configuration files in FOLDER");
 
         // Disables the splash screen.
-        System.out.println(" -o, --no-splash                   Disable splashscreen on startup");
+        System.out.println(" --no-splash                       Disable splashscreen on startup");
 
         // Enables the splashscreen.
-        System.out.println(" -O, --splash                      Enable splashscreen on startup (default)");
+        System.out.println(" --splash                          Enable splashscreen on startup (default)");
 
         // muCommander will not print verbose error messages.
         System.out.println(" -S, --silent                      Do not print verbose error messages");
@@ -233,12 +233,12 @@ public class Launcher {
                 printUsage();
 
             // Disable splashscreen.
-            else if(args[i].equals("-o") || args[i].equals("--no-splash"))
+            else if(args[i].equals("--no-splash"))
                 useSplash = false;
 
             // Enables splashscreen.
-            else if(args[i].equals("-O") || args[i].equals("--splash"))
-                useSplash = false;
+            else if(args[i].equals("--splash"))
+                useSplash = true;
 
             // Associations handling.
             else if(args[i].equals("-a") || args[i].equals("--assoc")) {
