@@ -152,8 +152,8 @@ The following options are available:
  -n, --no-debug                    Disable debug output to stdout
  -d, --debug                       Enable debug output to stdout (default)
  -p FOLDER, --preferences FOLDER   Store configuration files in FOLDER
- -o, --no-splash                   Disable splashscreen on startup
- -O, --splash                      Enable splashscreen on startup (default)
+ --no-splash                       Disable splashscreen on startup
+ --splash                          Enable splashscreen on startup (default)
  -S, --silent                      Do not print verbose error messages
  -s FILE, --shell-history FILE     Load shell history from FILE
  -t FILE, --toolbar FILE           Load toolbar from FILE
