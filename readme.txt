@@ -5,7 +5,7 @@
 
 
 ------------------
-muCommander v0.8.1
+muCommander v0.8.2
 ------------------
 
 muCommander is a cross-platform file manager featuring a Norton Commander
@@ -42,17 +42,20 @@ Please refer to the 'license.txt' file bundled with muCommander.
 
 muCommander uses the following great third party works :
 
-- the jCIFS library released under the GNU LGPL.
- jCIFS can be found at http://jcifs.samba.org .
+- the Ant library released under the Apache License.
+ Ant can be found at http://ant.apache.org .
 
-- the Jakarta Commons Net library released under the Apache License.
- Jarkata Commons Net can be found at http://jakarta.apache.org .
+- the ICU4J library released under the ICU License.
+ the ICU project can be found at http://icu-project.org .
 
 - the J2SSH library released under the GNU LGPL license.
  J2SSH can be found at http://www.sshtools.com .
 
-- the Ant library released under the Apache License.
- Ant can be found at http://ant.apache.org .
+- the Jakarta Commons Net library released under the Apache License.
+ Jarkata Commons Net can be found at http://jakarta.apache.org .
+
+- the jCIFS library released under the GNU LGPL.
+ jCIFS can be found at http://jcifs.samba.org .
 
 - the JmDNS library released under the GNU LGPL.
  JmDNS can be found at http://jmdns.sourceforge.net .
@@ -98,56 +101,20 @@ Many thanks to all of you who suggested new features, reported bugs, sent warm
 emails or generously donated to the project !
 
 
-What's new since v0.8 ?
------------------------
+What's new since v0.8.1 ?
+-------------------------
 
 New features:
-- New bookmark:// filesystem, mapped onto the alt+B shortcut by default.
+- Files can be marked/unmarked using Regexp
 
 Improvements:
-- Non-automatic sizing of columns is now working properly and preserved in 
-  the configuration.
-- Columns order, sort and visibility are now preserved in the configuration.
-- Editors and viewers are now centered on the current window rather than set
-  to the upper-left corner of the screen.
-- Shell encoding is now auto-detected by default, unless a specific encoding
-  is set in the preferences.
-- Simplified and extended the theme editor, with new 'selection outline' and
-  'alternate background' values. A new 'Striped' theme has been added to
-  show these effects off.
-- Added keyboard shortcuts for the items in the drive popup button.
-- Windows: drives in the drive popup button now show extended names.
-- Bzip2 read-access speed substantially improved.
-- Improved icon representation of symbolic links.
-- 'Delete' dialog now shows the list of file to be deleted 
-  (contributed by Alejandro Scandroli).
-- New 'Find' functionality added to the text viewer and editor
-  (contributed by Mariusz Jakubowski).
-- command keyword substitution now applies to marked files as well as the
-  current selection.
-- Quit confirmation dialog now shows the number of open windows and asks
-  for confirmation when the last window is closed.
+- 
 
 Localization:
+-
 
 Bug fixes:
-- Fixed KDE detection when the Gnome libraries are installed.
-- Fixed random display issues after changing the folder panel's font.
-- Fixed theme color choosers not displaying the right font in their preview.
-- Fixed incorrectly reported total and free space information under Unix-based
-  platforms when the mount point of the volume would contain space characters.
-- Fixed quicksearch refresh issue when the 'unmatched' background and regular
-  background were the same.
-- Fixed editable combo-boxes not reacting well to font change.
-- Fixed folder panel borders failing to refresh properly when their color
-  was changed.
-- Fixed "Download or browse" dialog that appeared twice when opening HTTP files.
-- Fixed issues with opening some bzip2 archives.
-- A single click on the current row of the inactive table can no longer 
-  trigger the filename/date/permission editor.
-- Fixed issues when exploring the SMB 'network neighborhood' (smb://).
-- Fixed symlinks to directories not properly handled on SFTP shares.
-- Fixed rendering issues with column headers under Mac OS X 10.5 (Leopard).
+- 
 
 Known issues:
 - Korean translation is not up-to-date.
