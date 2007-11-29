@@ -114,7 +114,7 @@ Localization:
 -
 
 Bug fixes:
-- 
+- SMB passwords that contain '@' characters are now properly handled.
 
 Known issues:
 - Korean translation is not up-to-date.
