@@ -20,6 +20,7 @@ package com.mucommander.file.impl.smb;
 
 import com.mucommander.Debug;
 import com.mucommander.auth.AuthException;
+import com.mucommander.auth.Credentials;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
 import com.mucommander.file.FileProtocols;
@@ -85,7 +86,7 @@ import java.net.MalformedURLException;
 
         if(smbFile==null) {         // Called by public constructor
             while(true) {
-                file = new SmbFile(fileURL.toString(true));
+                file = createSmbFile(fileURL);
 
                 // The following test comes at a cost, so it's only used by the public constructor, SmbFile instances
                 // created by this class are considered OK.
@@ -114,27 +115,56 @@ import java.net.MalformedURLException;
         }
     }
 
+
+    /**
+     * Creates and returns a <code>jcifs.smb.SmbFile</code> for the given location. The credentials contained by
+     * the {@link FileURL} (if any) are passed along to the <code>SmbFile</code>.
+     *
+     * @param url the location to the SmbFile file to create
+     * @return an SmbFile corresponding to the given location
+     * @throws MalformedURLException if an error occurred while creating the SmbFile instance
+     */
+    private static SmbFile createSmbFile(FileURL url) throws MalformedURLException {
+        Credentials credentials = url.getCredentials();
+        if(credentials==null)
+            return new SmbFile(url.toString(false));
+
+        // A NtlmPasswordAuthentication is created from the FileURL credentials and passed to a specific SmbFile constructor.
+        // The reason for doing this rather than using the SmbFile(String) constructor is that SmbFile uses java.net.URL
+        // for the URL parsing which is unable to properly parse urls where the password contains a '@' character,
+        // such as smb://user:p@ssword@host/path . 
+        return new SmbFile(url.toString(false), new NtlmPasswordAuthentication(null, credentials.getLogin(), credentials.getPassword()));
+    }
+
+
     /**
      * Background information: <code>jcifs.smb.SmbFile</code> is a tad cumbersome to work with because it requires its
      * file path to end with '/' when the file is a directory and vice-versa.
      * This method ensures that the path of the current <code>jcifs.smb.SmbFile</code> instance matches the
-     * <code>directory</code> argument and if not, recreate it with the proper path.
+     * <code>directory</code> argument and if not, recreates it with the proper path.
      *
      * @param directory true if the current <code>jcifs.smb.SmbFile</code> designates a directory
      */
     private void checkSmbFile(boolean directory) {
         try {
+            String path = file.getURL().getPath();
+            boolean endsWithSeparator = path.endsWith("/");
+
             if(directory) {
-                if(!file.getPath().endsWith("/"))
-                    file = new SmbFile(file.getPath()+"/");
+                if(!endsWithSeparator) {
+                    fileURL.setPath(path+"/");
+                    file = createSmbFile(fileURL);
+                }
             }
             else {
-                if(file.getPath().endsWith("/"))
-                    file = new SmbFile(file.getPath());
+                if(endsWithSeparator) {
+                    fileURL.setPath(removeTrailingSeparator(path));
+                    file = createSmbFile(fileURL);
+                }
             }
         }
         catch(MalformedURLException e) {
-            // This should never happen. If some reason wicked reason it ever did, SmbFile would just not be changed.  
+            // This should never happen. If some reason wicked reason it ever did, SmbFile would just not be changed.
         }
     }
 
@@ -281,16 +311,16 @@ import java.net.MalformedURLException;
     }
 
     public boolean isSymlink() {
-        // Symlinks are not supported with jCIFS (or in CIFS/SMB?)
+        // Symlinks are not supported by jCIFS (or maybe by CIFS/SMB?)
         return false;
     }
 
     public InputStream getInputStream() throws IOException {
-        return new SmbFileInputStream(getURL().toString(true));
+        return new SmbFileInputStream(file);
     }
 
     public OutputStream getOutputStream(boolean append) throws IOException {
-        return new SmbFileOutputStream(getURL().toString(true), append);
+        return new SmbFileOutputStream(file, append);
     }
 
     public boolean hasRandomAccessInputStream() {
@@ -488,10 +518,11 @@ import java.net.MalformedURLException;
 
         // Attempt to move the file using jcifs.smb.SmbFile#renameTo.
         try {
+            boolean isDirectory = file.isDirectory();
             file.renameTo(((SMBFile)destFile).file);
 
             // Ensure that the destination jcifs.smb.SmbFile's path is consistent with its new directory/non-directory state
-            ((SMBFile)destFile).checkSmbFile(file.isDirectory());
+            ((SMBFile)destFile).checkSmbFile(isDirectory);
 
             return true;
         }
