@@ -298,6 +298,21 @@ public class HTTPFile extends AbstractFile {
         return false;
     }
 
+    public String getOwner() {
+        return null;
+    }
+
+    public boolean canGetOwner() {
+        return false;
+    }
+
+    public String getGroup() {
+        return null;
+    }
+
+    public boolean canGetGroup() {
+        return false;
+    }
 
     public boolean isDirectory() {
         return false;

@@ -45,6 +45,12 @@ public class ArchiveEntry {
     /** This entry's permission mask */
     protected int permissionMask = 0;       // permissions should not be taken into acount
 
+    /** This entry's owner */
+    protected String owner;
+
+    /** This entry's group */
+    protected String group;
+
     /** Encapsulated entry object */
     protected Object entryObject;
 
@@ -241,6 +247,42 @@ public class ArchiveEntry {
      */
     public void setPermissionMask(int permissionMask) {
         this.permissionMask = permissionMask;
+    }
+
+    /**
+     * Returns the owner of this entry, <code>null</code> if this information is not available.
+     *
+     * @return the owner of this entry, null if this information is not available
+     */
+    public String getOwner() {
+        return owner;
+    }
+
+    /**
+     * Sets the owner of this entry, <code>null</code> if this information is not available.
+     *
+     * @param owner the owner of this entry, null if this information is not available
+     */
+    public void setOwner(String owner) {
+        this.owner = owner;
+    }
+
+    /**
+     * Returns the group this entry belongs to, <code>null</code> if this information is not available.
+     *
+     * @return the group this entry belongs to, null if this information is not available
+     */
+    public String getGroup() {
+        return group;
+    }
+
+    /**
+     * Sets the group of this entry, <code>null</code> if this information is not available.
+     *
+     * @param group the group this entry belongs to, null if this information is not available
+     */
+    public void setGroup(String group) {
+        this.group = group;
     }
 
     /**

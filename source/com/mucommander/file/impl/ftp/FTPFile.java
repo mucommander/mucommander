@@ -361,6 +361,21 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
         return ((FTPConnectionHandler)ConnectionPool.getConnectionHandler(this, fileURL, false)).chmodCommandSupported;
     }
 
+    public String getOwner() {
+        return file.getUser();
+    }
+
+    public boolean canGetOwner() {
+        return true;
+    }
+
+    public String getGroup() {
+        return file.getGroup();
+    }
+
+    public boolean canGetGroup() {
+        return true;
+    }
 
     public boolean isDirectory() {
         return file.isDirectory();

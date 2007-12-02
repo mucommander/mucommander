@@ -222,6 +222,20 @@ public class DebugFile extends ProxyFile {
         return super.getPermissions();
     }
 
+    public String getOwner() {
+        if(Debug.ON) Debug.trace(getDebugString(), traceLevel);
+        lag();
+
+        return super.getOwner();
+    }
+
+    public String getGroup() {
+        if(Debug.ON) Debug.trace(getDebugString(), traceLevel);
+        lag();
+
+        return super.getGroup();
+    }
+
     public AbstractFile getRoot() throws IOException {
         if(Debug.ON) Debug.trace(getDebugString(), traceLevel);
         lag();

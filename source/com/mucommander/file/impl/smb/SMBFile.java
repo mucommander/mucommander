@@ -300,6 +300,33 @@ import java.net.MalformedURLException;
         return access== USER_ACCESS && permission==WRITE_PERMISSION;
     }
 
+    /**
+     * Always returns <code>null</code>, this information is not available unfortunately.
+     */
+    public String getOwner() {
+        return null;
+    }
+
+    /**
+     * Always returns <code>false</code>, this information is not available unfortunately.
+     */
+    public boolean canGetOwner() {
+        return false;
+    }
+
+    /**
+     * Always returns <code>null</code>, this information is not available unfortunately.
+     */
+    public String getGroup() {
+        return null;
+    }
+
+    /**
+     * Always returns <code>false</code>, this information is not available unfortunately.
+     */
+    public boolean canGetGroup() {
+        return false;
+    }
 
     public boolean isDirectory() {
         try {

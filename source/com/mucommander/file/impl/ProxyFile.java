@@ -125,6 +125,22 @@ public abstract class ProxyFile extends AbstractFile {
         return file.canSetPermission(access, permission);
     }
 
+    public String getOwner() {
+        return file.getOwner();
+    }
+
+    public boolean canGetOwner() {
+        return file.canGetOwner();
+    }
+
+    public String getGroup() {
+        return file.getGroup();
+    }
+
+    public boolean canGetGroup() {
+        return file.canGetGroup();
+    }
+
     public boolean isDirectory() {
         return file.isDirectory();
     }

@@ -253,6 +253,21 @@ public class SFTPFile extends AbstractFile {
         return true;    // Full permission support
     }
 
+    public String getOwner() {
+        return fileAttributes.getOwner();
+    }
+
+    public boolean canGetOwner() {
+        return true;
+    }
+
+    public String getGroup() {
+        return fileAttributes.getGroup();
+    }
+
+    public boolean canGetGroup() {
+        return true;
+    }
 
     /**
      * Changes the SFTP file permissions to the given permissions int.
@@ -851,6 +866,18 @@ public class SFTPFile extends AbstractFile {
 
         private void setPermissions(int permissions) {
             attrs.setPermissions(new UnsignedInteger32((attrs.getPermissions().intValue() & ~511) | (permissions & 511)));
+        }
+
+        private String getOwner() {
+            checkForExpiration();
+
+            return attrs.getUID().toString();
+        }
+
+        private String getGroup() {
+            checkForExpiration();
+
+            return attrs.getGID().toString();
         }
 
         private boolean isSymlink() {

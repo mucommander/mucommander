@@ -179,6 +179,22 @@ public class ArchiveEntryFile extends AbstractFile {
         return false;
     }
 
+    public String getOwner() {
+        return entry.getOwner();
+    }
+
+    public boolean canGetOwner() {
+        return entry.getOwner()!=null;
+    }
+
+    public String getGroup() {
+        return entry.getGroup();
+    }
+
+    public boolean canGetGroup() {
+        return entry.getGroup()!=null;
+    }
+
     /**
      * Always returns <code>false</code>.
      */

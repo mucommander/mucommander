@@ -447,7 +447,33 @@ public class LocalFile extends AbstractFile {
         return !PlatformManager.isWindowsFamily() || permission==WRITE_PERMISSION;
     }
 
+    /**
+     * Always returns <code>null</code>, this information is not available unfortunately.
+     */
+    public String getOwner() {
+        return null;
+    }
 
+    /**
+     * Always returns <code>false</code>, this information is not available unfortunately.
+     */
+    public boolean canGetOwner() {
+        return false;
+    }
+
+    /**
+     * Always returns <code>null</code>, this information is not available unfortunately.
+     */
+    public String getGroup() {
+        return null;
+    }
+
+    /**
+     * Always returns <code>false</code>, this information is not available unfortunately.
+     */
+    public boolean canGetGroup() {
+        return false;
+    }
 
     public boolean isDirectory() {
         // To avoid drive seeks and potential 'floppy drive not available' dialog under Win32

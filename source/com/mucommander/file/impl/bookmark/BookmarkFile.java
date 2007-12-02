@@ -376,5 +376,8 @@ public class BookmarkFile extends AbstractFile {
     public RandomAccessOutputStream getRandomAccessOutputStream() throws IOException {throw new IOException();}
     public Object getUnderlyingFileObject() {return null;}
     public boolean isSymlink() {return false;}
-
+    public String getOwner() {return null;}
+    public boolean canGetOwner() {return false;}
+    public String getGroup() {return null;}
+    public boolean canGetGroup() {return false;}
 }

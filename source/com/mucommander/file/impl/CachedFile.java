@@ -107,6 +107,12 @@ public class CachedFile extends ProxyFile {
     private String getPermissionsString;
     private boolean getPermissionsStringSet;
 
+    private String getOwner;
+    private boolean getOwnerSet;
+
+    private String getGroup;
+    private boolean getGroupSet;
+
     private boolean isRoot;
     private boolean isRootSet;
 
@@ -395,6 +401,24 @@ public class CachedFile extends ProxyFile {
         }
 
         return getPermissionsString;
+    }
+
+    public String getOwner() {
+        if(!getOwnerSet) {
+            getOwner = file.getOwner();
+            getOwnerSet = true;
+        }
+
+        return getOwner;
+    }
+
+    public String getGroup() {
+        if(!getGroupSet) {
+            getGroup = file.getGroup();
+            getGroupSet = true;
+        }
+
+        return getGroup;
     }
 
     public boolean isRoot() {

@@ -121,4 +121,8 @@ class BookmarkRoot extends AbstractFile implements BookmarkListener {
     public Object getUnderlyingFileObject() {return null;}
     public boolean canRunProcess() {return false;}
     public AbstractProcess runProcess(String[] tokens) throws IOException {throw new IOException();}
+    public String getOwner() {return null;}
+    public boolean canGetOwner() {return false;}
+    public String getGroup() {return null;}
+    public boolean canGetGroup() {return false;}
 }
