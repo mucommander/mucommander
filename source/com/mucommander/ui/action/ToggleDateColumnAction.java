@@ -18,24 +18,19 @@
 
 package com.mucommander.ui.action;
 
-import com.mucommander.text.Translator;
-import com.mucommander.ui.main.table.Columns;
 import com.mucommander.ui.main.MainFrame;
 
 import java.util.Hashtable;
 
 /**
- * Shows/hides the 'Date' column of the currently active FileTable. If the column is currently visible, this will
- * hide it and vice-versa.
+ * Shows/hides the 'Date' column of the currently active FileTable. If the column is currently visible, this action
+ * will hide it and vice-versa.
  *
  * @author Maxence Bernard
  */
-public class ToggleDateColumnAction extends MuAction {
+public class ToggleDateColumnAction extends ToggleColumnAction {
 
     public ToggleDateColumnAction(MainFrame mainFrame, Hashtable properties) {
-        super(mainFrame, properties, false);
-        setLabel(Translator.get("date"));
+        super(mainFrame, properties, DATE);
     }
-
-    public void performAction() {mainFrame.getActiveTable().setColumnVisible(Columns.DATE, !mainFrame.getActiveTable().isColumnVisible(Columns.DATE));}
 }

@@ -23,14 +23,14 @@ import com.mucommander.ui.main.MainFrame;
 import java.util.Hashtable;
 
 /**
- * Shows/hides the 'Permissions' column of the currently active FileTable. If the column is currently visible, this action
+ * Shows/hides the 'Group' column of the currently active FileTable. If the column is currently visible, this action
  * will hide it and vice-versa.
  *
  * @author Maxence Bernard
  */
-public class TogglePermissionsColumnAction extends ToggleColumnAction {
+public class ToggleGroupColumnAction extends ToggleColumnAction {
 
-    public TogglePermissionsColumnAction(MainFrame mainFrame, Hashtable properties) {
-        super(mainFrame, properties, PERMISSIONS);
+    public ToggleGroupColumnAction(MainFrame mainFrame, Hashtable properties) {
+        super(mainFrame, properties, GROUP);
     }
 }

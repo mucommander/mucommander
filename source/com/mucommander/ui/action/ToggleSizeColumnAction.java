@@ -18,24 +18,19 @@
 
 package com.mucommander.ui.action;
 
-import com.mucommander.text.Translator;
 import com.mucommander.ui.main.MainFrame;
-import com.mucommander.ui.main.table.Columns;
 
 import java.util.Hashtable;
 
 /**
- * Shows/hides the 'Size' column of the currently active FileTable. If the column is currently visible, this will
- * hide it and vice-versa.
+ * Shows/hides the 'Size' column of the currently active FileTable. If the column is currently visible, this action
+ * will hide it and vice-versa.
  *
  * @author Maxence Bernard
  */
-public class ToggleSizeColumnAction extends MuAction {
+public class ToggleSizeColumnAction extends ToggleColumnAction {
 
     public ToggleSizeColumnAction(MainFrame mainFrame, Hashtable properties) {
-        super(mainFrame, properties, false);
-        setLabel(Translator.get("size"));
+        super(mainFrame, properties, SIZE);
     }
-
-    public void performAction() {mainFrame.getActiveTable().setColumnVisible(Columns.SIZE, !mainFrame.getActiveTable().isColumnVisible(Columns.SIZE));}
 }

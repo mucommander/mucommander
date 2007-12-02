@@ -19,18 +19,29 @@
 package com.mucommander.ui.action;
 
 import com.mucommander.ui.main.MainFrame;
+import com.mucommander.ui.main.table.Columns;
 
 import java.util.Hashtable;
 
 /**
- * Shows/hides the 'Permissions' column of the currently active FileTable. If the column is currently visible, this action
+ * Shows/hides a specified column of the currently active FileTable. If the column is currently visible, this action
  * will hide it and vice-versa.
  *
  * @author Maxence Bernard
  */
-public class TogglePermissionsColumnAction extends ToggleColumnAction {
+public abstract class ToggleColumnAction extends MuAction implements Columns {
 
-    public TogglePermissionsColumnAction(MainFrame mainFrame, Hashtable properties) {
-        super(mainFrame, properties, PERMISSIONS);
+    /** Index of the FileTable column this action operates on */
+    protected int columnIndex;
+
+    public ToggleColumnAction(MainFrame mainFrame, Hashtable properties, int columnIndex) {
+        super(mainFrame, properties, false);
+        setLabel(COLUMN_LABELS[columnIndex]);
+
+        this.columnIndex = columnIndex;
+    }
+
+    public void performAction() {
+        mainFrame.getActiveTable().setColumnVisible(columnIndex, !mainFrame.getActiveTable().isColumnVisible(columnIndex));
     }
 }

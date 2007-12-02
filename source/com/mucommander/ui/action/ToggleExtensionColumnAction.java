@@ -18,24 +18,19 @@
 
 package com.mucommander.ui.action;
 
-import com.mucommander.text.Translator;
 import com.mucommander.ui.main.MainFrame;
-import com.mucommander.ui.main.table.Columns;
 
 import java.util.Hashtable;
 
 /**
- * Shows/hides the 'Extension' column of the currently active FileTable. If the column is currently visible, this will
- * hide it and vice-versa.
+ * Shows/hides the 'Extension' column of the currently active FileTable. If the column is currently visible, this action
+ * will hide it and vice-versa.
  *
  * @author Maxence Bernard
  */
-public class ToggleExtensionColumnAction extends MuAction {
+public class ToggleExtensionColumnAction extends ToggleColumnAction {
 
     public ToggleExtensionColumnAction(MainFrame mainFrame, Hashtable properties) {
-        super(mainFrame, properties, false);
-        setLabel(Translator.get("extension"));
+        super(mainFrame, properties, EXTENSION);
     }
-
-    public void performAction() {mainFrame.getActiveTable().setColumnVisible(Columns.EXTENSION, !mainFrame.getActiveTable().isColumnVisible(Columns.EXTENSION));}
 }
