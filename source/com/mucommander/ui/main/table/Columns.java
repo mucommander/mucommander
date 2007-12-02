@@ -18,8 +18,11 @@
 
 package com.mucommander.ui.main.table;
 
+import com.mucommander.text.Translator;
+
 /**
  * Defines columns related constants.
+ * 
  * @author Maxence Bernard, Nicolas Rinaudo
  */
 public interface Columns {
@@ -33,14 +36,47 @@ public interface Columns {
     public final static int DATE                      = 3;
     /** Identifier of the permissions column. */
     public final static int PERMISSIONS               = 4;
-    /** Minimum width of the name column. */
-    public final static int MINIMUM_NAME_WIDTH        = 40;
-    /** Minimum width of the extension column. */
-    public final static int MINIMUM_EXTENSION_WIDTH   = 2 * CellLabel.CELL_BORDER_WIDTH;
-    /** Minimum width of the date column. */
-    public final static int MINIMUM_DATE_WIDTH        = 2 * CellLabel.CELL_BORDER_WIDTH;
-    /** Minimum width of the size column. */
-    public final static int MINIMUM_SIZE_WIDTH        = 2 * CellLabel.CELL_BORDER_WIDTH;
-    /** Minimumn width of the permissions column. */
-    public final static int MINIMUM_PERMISSIONS_WIDTH = 2 * CellLabel.CELL_BORDER_WIDTH;
+    /** Identifier of the owner column. */
+    public final static int OWNER                     = 5;
+    /** Identifier of the group column. */
+    public final static int GROUP                     = 6;
+
+    /** Total number of columns */
+    public final static int COLUMN_COUNT              = 7;
+
+    /** Raw column names (not localized / not for display) */
+    public static final String[] COLUMN_NAMES = {
+        "extension",
+        "name",
+        "size",
+        "date",
+        "permissions",
+        "owner",
+        "group"
+    };
+
+    /** Localized column labels */
+    public static final String[] COLUMN_LABELS = {
+        Translator.get(COLUMN_NAMES[EXTENSION]),
+        Translator.get(COLUMN_NAMES[NAME]),
+        Translator.get(COLUMN_NAMES[SIZE]),
+        Translator.get(COLUMN_NAMES[DATE]),
+        Translator.get(COLUMN_NAMES[PERMISSIONS]),
+        Translator.get(COLUMN_NAMES[OWNER]),
+        Translator.get(COLUMN_NAMES[GROUP])
+    };
+
+    /** Standard minimum column width */
+    public final static int STANDARD_MINIMUM_WIDTH    = 2 * CellLabel.CELL_BORDER_WIDTH;
+
+    /** Minimum width of each column */
+    public static final int MINIMUM_COLUMN_SIZES[] = {
+        STANDARD_MINIMUM_WIDTH,         // Extension
+        40,                             // Name
+        STANDARD_MINIMUM_WIDTH,         // Size
+        STANDARD_MINIMUM_WIDTH,         // Date
+        STANDARD_MINIMUM_WIDTH,         // Permissions
+        STANDARD_MINIMUM_WIDTH,         // Owner
+        STANDARD_MINIMUM_WIDTH,         // Group 
+    };
 }

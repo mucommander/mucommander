@@ -18,36 +18,27 @@
 
 package com.mucommander.ui.main.table;
 
-import java.util.Enumeration;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Vector;
-import java.util.NoSuchElementException;
-import java.util.Iterator;
-import java.util.WeakHashMap;
-import javax.swing.ListSelectionModel;
-import javax.swing.DefaultListSelectionModel;
-import javax.swing.event.TableColumnModelListener;
-import javax.swing.event.TableColumnModelEvent;
+import javax.swing.*;
 import javax.swing.event.ChangeEvent;
-import javax.swing.table.TableColumnModel;
+import javax.swing.event.TableColumnModelEvent;
+import javax.swing.event.TableColumnModelListener;
 import javax.swing.table.TableColumn;
-import javax.swing.table.TableCellEditor;
-import java.beans.PropertyChangeListener;
+import javax.swing.table.TableColumnModel;
 import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.util.*;
 
 /**
  * Used to keep track of a file table's columns position and visibility settings.
  * @author Nicolas Rinaudo
  */
-class FileTableColumnModel implements TableColumnModel, Columns, PropertyChangeListener {
+public class FileTableColumnModel implements TableColumnModel, Columns, PropertyChangeListener {
     // - Class constants -----------------------------------------------------------------
     // -----------------------------------------------------------------------------------
     /** If {@link #widthCache} is set to this, it needs to be recalulated. */
     private static final int                CACHE_OUT_OF_DATE = -1;
     /** Even though we're not using column selection, the table API forces us to return this instance or will crash. */
     private static final ListSelectionModel SELECTION_MODEL   = new DefaultListSelectionModel();
-
 
 
     // - Instance fields -----------------------------------------------------------------
@@ -57,9 +48,9 @@ class FileTableColumnModel implements TableColumnModel, Columns, PropertyChangeL
     /** Cache for the table's total width. */
     private int           widthCache = CACHE_OUT_OF_DATE;
     /** All available columns. */
-    private Vector        columns    = new Vector(5);
+    private Vector        columns    = new Vector(COLUMN_COUNT);
     /** Visibility status of each column. */
-    private boolean[]     visibility = new boolean[5];
+    private boolean[]     visibility = new boolean[COLUMN_COUNT];
     /** Cache for the number of available columns. */
     private int           countCache;
     /** Whether the column sizes were set already. */
@@ -84,7 +75,7 @@ class FileTableColumnModel implements TableColumnModel, Columns, PropertyChangeL
         for(int i = 0; i < visibility.length; i++) {
             columns.add(column = new TableColumn(i));
             column.setCellEditor(null);
-            column.setHeaderValue(FileTableModel.COLUMN_LABELS[i]);
+            column.setHeaderValue(COLUMN_LABELS[i]);
             column.setHeaderRenderer(headerRenderer = new FileTableHeaderRenderer());
             column.addPropertyChangeListener(this);
 
@@ -96,26 +87,12 @@ class FileTableColumnModel implements TableColumnModel, Columns, PropertyChangeL
             if(i == NAME) {
                 headerRenderer.setCurrent(true);
                 visibility[i] = true;
-                column.setMinWidth(MINIMUM_NAME_WIDTH);
             }
             else {
                 if((visibility[i] = conf.isVisible(i)))
                     countCache++;
-                switch(i) {
-                case EXTENSION:
-                    column.setMinWidth(MINIMUM_EXTENSION_WIDTH);
-                    break;
-                case DATE:
-                    column.setMinWidth(MINIMUM_DATE_WIDTH);
-                    break;
-                case SIZE:
-                    column.setMinWidth(MINIMUM_SIZE_WIDTH);
-                    break;
-                case PERMISSIONS:
-                    column.setMinWidth(MINIMUM_PERMISSIONS_WIDTH);
-                    break;
-                }
             }
+            column.setMinWidth(MINIMUM_COLUMN_SIZES[i]);
         }
 
         // Sorts the columns.
@@ -132,7 +109,7 @@ class FileTableColumnModel implements TableColumnModel, Columns, PropertyChangeL
         int                    index;
 
         conf = new FileTableConfiguration();
-        for(int i = 0; i < 5; i++) {
+        for(int i = 0; i < COLUMN_COUNT; i++) {
             column = (TableColumn)columns.get(i);
             index  = column.getModelIndex();
 
@@ -285,13 +262,13 @@ class FileTableColumnModel implements TableColumnModel, Columns, PropertyChangeL
     public int getColumnIndexAtX(int x) {
         int count;
 
-	count = getColumnCount();
-	for(int i = 0; i < count; i++) { 
-	    x = x - getColumn(i).getWidth(); 
-	    if(x < 0)
-		return i;
-        }
-	return -1; 
+        count = getColumnCount();
+        for(int i = 0; i < count; i++) {
+            x = x - getColumn(i).getWidth();
+            if(x < 0)
+            return i;
+            }
+        return -1;
     }
 
     /**
@@ -320,14 +297,14 @@ class FileTableColumnModel implements TableColumnModel, Columns, PropertyChangeL
      * Invalidates the width cache if a column's width has changed.
      */
     public void propertyChange(PropertyChangeEvent event) {
-	String name;
+        String name;
 
         name = event.getPropertyName();
-	if(name.equals("width")) {
-            columnSizesSet = true;
-	    widthCache = CACHE_OUT_OF_DATE;
-            // Notifies the table that columns width have changed and that it should repaint itself.
-            triggerColumnMarginChanged(new ChangeEvent(this));
+        if(name.equals("width")) {
+                columnSizesSet = true;
+            widthCache = CACHE_OUT_OF_DATE;
+                // Notifies the table that columns width have changed and that it should repaint itself.
+                triggerColumnMarginChanged(new ChangeEvent(this));
         }
     }
 

@@ -40,9 +40,9 @@ public class FileTableConfiguration implements Columns {
      * Creates a new file table configuration.
      */
     public FileTableConfiguration() {
-        visibility = new boolean[5];
-        width      = new int[5];
-        order      = new int[5];
+        visibility = new boolean[COLUMN_COUNT];
+        width      = new int[COLUMN_COUNT];
+        order      = new int[COLUMN_COUNT];
     }
 
 

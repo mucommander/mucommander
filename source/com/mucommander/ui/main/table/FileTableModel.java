@@ -28,7 +28,6 @@ import com.mucommander.file.util.FileComparator;
 import com.mucommander.file.util.FileSet;
 import com.mucommander.text.CustomDateFormat;
 import com.mucommander.text.SizeFormat;
-import com.mucommander.text.Translator;
 
 import javax.swing.table.AbstractTableModel;
 import java.util.Date;
@@ -73,16 +72,6 @@ public class FileTableModel extends AbstractTableModel implements Columns, Confi
     /** String used as size information for directories */
     public final static String DIRECTORY_SIZE_STRING = "<DIR>";
 
-    static final String[] COLUMN_LABELS;
-
-    static {
-        COLUMN_LABELS = new String[5];
-        COLUMN_LABELS[EXTENSION]   = Translator.get("extension");
-        COLUMN_LABELS[NAME]        = Translator.get("name");
-        COLUMN_LABELS[SIZE]        = Translator.get("size");
-        COLUMN_LABELS[DATE]        = Translator.get("date");
-        COLUMN_LABELS[PERMISSIONS] = Translator.get("permissions");
-    }
 
     public FileTableModel() {
         MuConfiguration.addConfigurationListener(this);
@@ -91,7 +80,7 @@ public class FileTableModel extends AbstractTableModel implements Columns, Confi
         // gets called for the first time
         cachedFiles = new AbstractFile[0];
         fileArrayIndex = new int[0];
-        cellValuesCache = new Object[0][4];
+        cellValuesCache = new Object[0][COLUMN_COUNT-1];
         rowMarked = new boolean[0];
         markedFiles = new FileSet();
     }
@@ -128,18 +117,12 @@ public class FileTableModel extends AbstractTableModel implements Columns, Confi
         this.markedFiles = new FileSet(folder);
         this.markedTotalSize = 0;
 
-//if(com.mucommander.Debug.ON) com.mucommander.Debug.time();
-
         // Init and fill cell cache to speed up table even more
-        this.cellValuesCache = new Object[nbRows][4];
+        this.cellValuesCache = new Object[nbRows][COLUMN_COUNT-1];
         fillCellCache();
-
-//if(com.mucommander.Debug.ON) com.mucommander.Debug.time();
 
         // Sort the new folder using the current sort criteria, ascending/descending order and 'folders first' value
         sortBy(sortByCriterion, ascendingOrder, foldersFirst);
-
-//if(com.mucommander.Debug.ON) com.mucommander.Debug.time();
     }
 
 	
@@ -156,14 +139,18 @@ public class FileTableModel extends AbstractTableModel implements Columns, Confi
             cellValuesCache[0][NAME-1] = "..";
             cellValuesCache[0][SIZE-1] = DIRECTORY_SIZE_STRING;
             cellValuesCache[0][DATE-1] =	CustomDateFormat.format(new Date(currentFolder.getDate()));
-//            cellValuesCache[0][PERMISSIONS-1] =	parent.getPermissionsString();
             // Don't display parent's permissions as they can have a different format from the folder contents
             // (e.g. for archives) and this looks weird
             cellValuesCache[0][PERMISSIONS-1] =	"";
+            cellValuesCache[0][OWNER-1] = "";
+            cellValuesCache[0][GROUP-1] = "";
         }
 		
         AbstractFile file;
         int fileIndex = 0;
+        boolean canGetOwner = currentFolder.canGetOwner();
+        boolean canGetGroup = currentFolder.canGetGroup();
+
         for(int i=parent==null?0:1; i<len; i++) {
             file = getCachedFileAtRow(i);
             int cellIndex = fileArrayIndex[fileIndex]+(parent==null?0:1);
@@ -171,6 +158,10 @@ public class FileTableModel extends AbstractTableModel implements Columns, Confi
             cellValuesCache[cellIndex][SIZE-1] = file.isDirectory()?DIRECTORY_SIZE_STRING: SizeFormat.format(file.getSize(), (displayCompactSize? SizeFormat.DIGITS_SHORT: SizeFormat.DIGITS_FULL)|(displayCompactSize? SizeFormat.UNIT_SHORT: SizeFormat.UNIT_NONE)| SizeFormat.INCLUDE_SPACE| SizeFormat.ROUND_TO_KB);
             cellValuesCache[cellIndex][DATE-1] = CustomDateFormat.format(new Date(file.getDate()));
             cellValuesCache[cellIndex][PERMISSIONS-1] = file.getPermissionsString();
+            if(canGetOwner)
+                cellValuesCache[cellIndex][OWNER-1] = file.getOwner();
+            if(canGetGroup)
+                cellValuesCache[cellIndex][GROUP-1] = file.getGroup();
             fileIndex++;
         }
     }
@@ -236,10 +227,8 @@ public class FileTableModel extends AbstractTableModel implements Columns, Confi
         while(left<=right) {
             mid = (right-left)/2 + left;
             midFile = getCachedFileAtRow(mid);
-            // if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("left="+left+" right="+right+" mid="+mid+" midFile="+midFile);
             if(midFile.equals(file))
                 return mid;
-//            if(compareTo(file, midFile, sortByCriterion, ascendingOrder)>0)
             if(fc.compare(file, midFile)>0)
                 right = mid-1;
             else
@@ -290,8 +279,6 @@ public class FileTableModel extends AbstractTableModel implements Columns, Confi
      * Marks the given row. If the specified row corresponds to the special '..' parent file, the row won't be marked.
      */
     public synchronized void setRowMarked(int row, boolean marked) {
-        //		if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("row="+row+" marked="+marked+" rowMarked="+rowMarked[row]);
-
         if(row==0 && parent!=null)
             return;
 			
@@ -332,7 +319,6 @@ public class FileTableModel extends AbstractTableModel implements Columns, Confi
      * @param marked if true, all the rows within the range will be marked, unmarked otherwise
      */
     public void setRangeMarked(int startRow, int endRow, boolean marked) {
-
         if(endRow >= startRow) {
             for(int i= startRow; i<= endRow; i++)
                 setRowMarked(i, marked);
@@ -450,6 +436,12 @@ public class FileTableModel extends AbstractTableModel implements Columns, Confi
             case PERMISSIONS:
                 comparatorCriterion = FileComparator.PERMISSIONS_CRITERION;
                 break;
+            case OWNER:
+                comparatorCriterion = FileComparator.OWNER_CRITERION;
+                break;
+            case GROUP:
+                comparatorCriterion = FileComparator.GROUP_CRITERION;
+                break;
             default:
                 comparatorCriterion = FileComparator.NAME_CRITERION;
         }
@@ -537,10 +529,12 @@ public class FileTableModel extends AbstractTableModel implements Columns, Confi
     //////////////////////////////////////////
 	
     public int getColumnCount() {
-        return 5;	// icon, name, size, date and permissions
+        return COLUMN_COUNT;	// icon, name, size, date, permissions, owner, group
     }
 
-    public String getColumnName(int columnIndex) {return COLUMN_LABELS[columnIndex];}
+    public String getColumnName(int columnIndex) {
+        return COLUMN_LABELS[columnIndex];
+    }
 
     /**
      * Returns the total number of rows, including the special parent folder file '..', if there is one.

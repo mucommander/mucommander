@@ -18,7 +18,6 @@
 
 package com.mucommander.ui.main;
 
-import com.mucommander.Debug;
 import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.ui.action.ActionKeymap;
@@ -182,40 +181,37 @@ public class MainFrame extends JFrame implements LocationListener {
         setFocusTraversalPolicy(new CustomFocusTraversalPolicy());
     }
 
-    private MainFrame() {}
+    private MainFrame() {
+    }
 
     private FileTableConfiguration getFileTableConfiguration(boolean isLeft) {
         FileTableConfiguration conf;
 
         conf = new FileTableConfiguration();
 
-        // Sets the table's initial column visibility.
-        conf.setVisible(Columns.EXTENSION,   MuConfiguration.getVariable(isLeft ? MuConfiguration.SHOW_LEFT_EXTENSION : MuConfiguration.SHOW_RIGHT_EXTENSION,
-                                                                         MuConfiguration.DEFAULT_SHOW_EXTENSION));
-        conf.setVisible(Columns.DATE,        MuConfiguration.getVariable(isLeft ? MuConfiguration.SHOW_LEFT_DATE : MuConfiguration.SHOW_RIGHT_DATE,
-                                                                         MuConfiguration.DEFAULT_SHOW_DATE));
-        conf.setVisible(Columns.SIZE,        MuConfiguration.getVariable(isLeft ? MuConfiguration.SHOW_LEFT_SIZE : MuConfiguration.SHOW_RIGHT_SIZE,
-                                                                         MuConfiguration.DEFAULT_SHOW_SIZE));
-        conf.setVisible(Columns.PERMISSIONS, MuConfiguration.getVariable(isLeft ? MuConfiguration.SHOW_LEFT_PERMISSIONS : MuConfiguration.SHOW_RIGHT_PERMISSIONS,
-                                                                         MuConfiguration.DEFAULT_SHOW_PERMISSIONS));
+        // Loop on columns
+        for(int c=0; c<Columns.COLUMN_COUNT; c++) {
+            if(c!=Columns.NAME) {       // Skip the special name column (always visible, width automatically calculated)
+                // Sets the column's initial visibility.
+                conf.setVisible(c,
+                    MuConfiguration.getVariable(
+                            MuConfiguration.getShowColumnVariable(c, isLeft),
+                            MuConfiguration.getShowColumnDefault(c)
+                    )
+                );
 
-        // Sets the table's initial column width.
-        conf.setWidth(Columns.EXTENSION,   MuConfiguration.getIntegerVariable(isLeft ? MuConfiguration.LEFT_EXTENSION_WIDTH : MuConfiguration.RIGHT_EXTENSION_WIDTH));
-        conf.setWidth(Columns.DATE,        MuConfiguration.getIntegerVariable(isLeft ? MuConfiguration.LEFT_DATE_WIDTH : MuConfiguration.RIGHT_DATE_WIDTH));
-        conf.setWidth(Columns.SIZE,        MuConfiguration.getIntegerVariable(isLeft ? MuConfiguration.LEFT_SIZE_WIDTH : MuConfiguration.RIGHT_SIZE_WIDTH));
-        conf.setWidth(Columns.PERMISSIONS, MuConfiguration.getIntegerVariable(isLeft ? MuConfiguration.LEFT_PERMISSIONS_WIDTH : MuConfiguration.RIGHT_PERMISSIONS_WIDTH));
+                // Sets the column's initial width.
+                conf.setWidth(c, MuConfiguration.getIntegerVariable(MuConfiguration.getColumnWidthVariable(c, isLeft)));
+            }
 
-        // Sets the table's initial column order.
-        conf.setPosition(Columns.EXTENSION,   MuConfiguration.getVariable(isLeft ? MuConfiguration.LEFT_EXTENSION_POSITION : MuConfiguration.RIGHT_EXTENSION_POSITION,
-                                                                      Columns.EXTENSION));
-        conf.setPosition(Columns.NAME,        MuConfiguration.getVariable(isLeft ? MuConfiguration.LEFT_NAME_POSITION : MuConfiguration.RIGHT_NAME_POSITION,
-                                                                      Columns.NAME));
-        conf.setPosition(Columns.DATE,        MuConfiguration.getVariable(isLeft ? MuConfiguration.LEFT_DATE_POSITION : MuConfiguration.RIGHT_DATE_POSITION,
-                                                                      Columns.DATE));
-        conf.setPosition(Columns.SIZE,        MuConfiguration.getVariable(isLeft ? MuConfiguration.LEFT_SIZE_POSITION : MuConfiguration.RIGHT_SIZE_POSITION,
-                                                                      Columns.SIZE));
-        conf.setPosition(Columns.PERMISSIONS, MuConfiguration.getVariable(isLeft ? MuConfiguration.LEFT_PERMISSIONS_POSITION : MuConfiguration.RIGHT_PERMISSIONS_POSITION,
-                                                                      Columns.PERMISSIONS));
+            // Sets the column's initial order
+            conf.setPosition(c,
+                    MuConfiguration.getVariable(
+                            MuConfiguration.getColumnPositionVariable(c, isLeft),
+                            c
+                    )
+            );
+        }
 
         return conf;
     }
@@ -225,11 +221,27 @@ public class MainFrame extends JFrame implements LocationListener {
      */
     public MainFrame(AbstractFile initialFolder1, AbstractFile initialFolder2) {
         init(new FolderPanel(this, initialFolder1, getFileTableConfiguration(true)), new FolderPanel(this, initialFolder2, getFileTableConfiguration(false)));
-        table1.sortBy(getConfigurationSortBy(MuConfiguration.getVariable(MuConfiguration.LEFT_SORT_BY, MuConfiguration.DEFAULT_SORT_BY)),
+
+        table1.sortBy(columnNameToIndex(MuConfiguration.getVariable(MuConfiguration.LEFT_SORT_BY, MuConfiguration.DEFAULT_SORT_BY)),
                       !MuConfiguration.getVariable(MuConfiguration.LEFT_SORT_ORDER, MuConfiguration.DEFAULT_SORT_ORDER).equals(MuConfiguration.SORT_ORDER_DESCENDING));
-        table2.sortBy(getConfigurationSortBy(MuConfiguration.getVariable(MuConfiguration.RIGHT_SORT_BY, MuConfiguration.DEFAULT_SORT_BY)),
+        table2.sortBy(columnNameToIndex(MuConfiguration.getVariable(MuConfiguration.RIGHT_SORT_BY, MuConfiguration.DEFAULT_SORT_BY)),
                       !MuConfiguration.getVariable(MuConfiguration.RIGHT_SORT_ORDER, MuConfiguration.DEFAULT_SORT_ORDER).equals(MuConfiguration.SORT_ORDER_DESCENDING));
     }
+
+    /**
+     * Returns the index of the column designated by the given name.
+     *
+     * @param column the name of a column, see {@link com.mucommander.ui.main.table.Columns#COLUMN_NAMES} for possible values
+     * @return the index of the column, see {@link com.mucommander.ui.main.table.Columns} for possible values
+     */
+    private static int columnNameToIndex(String column) {
+        for(int c=0; c<Columns.COLUMN_COUNT; c++)
+            if(Columns.COLUMN_NAMES[c].equals(column))
+                return c;
+
+        return columnNameToIndex(MuConfiguration.DEFAULT_SORT_BY);
+    }
+
 
     MainFrame cloneMainFrame() {
         MainFrame mainFrame;
@@ -329,8 +341,13 @@ public class MainFrame extends JFrame implements LocationListener {
         return activeTable;
     }
 
-    public FileTable getLeftTable() {return table1;}
-    public FileTable getRightTable() {return table2;}
+    public FileTable getLeftTable() {
+        return table1;
+    }
+
+    public FileTable getRightTable() {
+        return table2;
+    }
 
     /**
      * Sets currently active FileTable (called by FolderPanel).
@@ -466,12 +483,16 @@ public class MainFrame extends JFrame implements LocationListener {
     /**
      * Returns <code>true</code> if this MainFrame is active in the foreground.
      */
-    public boolean isForegroundActive() {return foregroundActive;}
+    public boolean isForegroundActive() {
+        return foregroundActive;
+    }
 
     /**
      * Sets whether this MainFrame is active in the foreground. Method to be called solely by WindowManager.
      */
-    void setForegroundActive(boolean foregroundActive) {this.foregroundActive = foregroundActive;}
+    void setForegroundActive(boolean foregroundActive) {
+        this.foregroundActive = foregroundActive;
+    }
 
     /**
      * Forces a refrehs of the frame's folder panel.
@@ -536,35 +557,6 @@ public class MainFrame extends JFrame implements LocationListener {
     ///////////////////////
     // Overriden methods //
     ///////////////////////
-    private static String getConfigurationSortBy(int column) {
-        switch(column) {
-        case Columns.EXTENSION:
-            return MuConfiguration.EXTENSION_COLUMN;
-        case Columns.NAME:
-            return MuConfiguration.NAME_COLUMN;
-        case Columns.SIZE:
-            return MuConfiguration.SIZE_COLUMN;
-        case Columns.DATE:
-            return MuConfiguration.DATE_COLUMN;
-        case Columns.PERMISSIONS:
-            return MuConfiguration.PERMISSIONS_COLUMN;
-        }
-        return MuConfiguration.DEFAULT_SORT_BY;
-    }
-
-    private static int getConfigurationSortBy(String column) {
-        if(column.equals(MuConfiguration.EXTENSION_COLUMN))
-            return Columns.EXTENSION;
-        if(column.equals(MuConfiguration.NAME_COLUMN))
-            return Columns.NAME;
-        if(column.equals(MuConfiguration.SIZE_COLUMN))
-            return Columns.SIZE;
-        if(column.equals(MuConfiguration.PERMISSIONS_COLUMN))
-            return Columns.PERMISSIONS;
-        if(column.equals(MuConfiguration.DATE_COLUMN))
-            return Columns.DATE;
-        return getConfigurationSortBy(MuConfiguration.DEFAULT_SORT_BY);
-    }
 
     /**
      * Overrides <code>java.awt.Window#dispose</code> to save last MainFrame's attributes in the preferences
@@ -572,7 +564,7 @@ public class MainFrame extends JFrame implements LocationListener {
      */
     public void dispose() {
         // Save last MainFrame's attributes (last folders, window position) in the preferences.
-//        if(WindowManager.getMainFrames().size()==1) {
+
         // Save last folders
         MuConfiguration.setVariable(MuConfiguration.LAST_LEFT_FOLDER, 
                                          getFolderPanel1().getFolderHistory().getLastRecallableFolder());
@@ -590,37 +582,36 @@ public class MainFrame extends JFrame implements LocationListener {
         MuConfiguration.setVariable(MuConfiguration.SCREEN_HEIGHT, screenSize.height);
 
         // Saves left and right table positions.
-        MuConfiguration.setVariable(MuConfiguration.SHOW_LEFT_EXTENSION,        table1.isColumnVisible(Columns.EXTENSION));
-        MuConfiguration.setVariable(MuConfiguration.SHOW_LEFT_SIZE,             table1.isColumnVisible(Columns.SIZE));
-        MuConfiguration.setVariable(MuConfiguration.SHOW_LEFT_DATE,             table1.isColumnVisible(Columns.DATE));
-        MuConfiguration.setVariable(MuConfiguration.SHOW_LEFT_PERMISSIONS,      table1.isColumnVisible(Columns.PERMISSIONS));
-        MuConfiguration.setVariable(MuConfiguration.LEFT_EXTENSION_POSITION,    table1.getColumnPosition(Columns.EXTENSION));
-        MuConfiguration.setVariable(MuConfiguration.LEFT_DATE_POSITION,         table1.getColumnPosition(Columns.DATE));
-        MuConfiguration.setVariable(MuConfiguration.LEFT_SIZE_POSITION,         table1.getColumnPosition(Columns.SIZE));
-        MuConfiguration.setVariable(MuConfiguration.LEFT_NAME_POSITION,         table1.getColumnPosition(Columns.NAME));
-        MuConfiguration.setVariable(MuConfiguration.LEFT_PERMISSIONS_POSITION,  table1.getColumnPosition(Columns.PERMISSIONS));
-        MuConfiguration.setVariable(MuConfiguration.SHOW_RIGHT_EXTENSION,       table2.isColumnVisible(Columns.EXTENSION));
-        MuConfiguration.setVariable(MuConfiguration.SHOW_RIGHT_SIZE,            table2.isColumnVisible(Columns.SIZE));
-        MuConfiguration.setVariable(MuConfiguration.SHOW_RIGHT_DATE,            table2.isColumnVisible(Columns.DATE));
-        MuConfiguration.setVariable(MuConfiguration.SHOW_RIGHT_PERMISSIONS,     table2.isColumnVisible(Columns.PERMISSIONS));
-        MuConfiguration.setVariable(MuConfiguration.RIGHT_EXTENSION_POSITION,   table2.getColumnPosition(Columns.EXTENSION));
-        MuConfiguration.setVariable(MuConfiguration.RIGHT_DATE_POSITION,        table2.getColumnPosition(Columns.DATE));
-        MuConfiguration.setVariable(MuConfiguration.RIGHT_SIZE_POSITION,        table2.getColumnPosition(Columns.SIZE));
-        MuConfiguration.setVariable(MuConfiguration.RIGHT_NAME_POSITION,        table2.getColumnPosition(Columns.NAME));
-        MuConfiguration.setVariable(MuConfiguration.RIGHT_PERMISSIONS_POSITION, table2.getColumnPosition(Columns.PERMISSIONS));
-        MuConfiguration.setVariable(MuConfiguration.LEFT_EXTENSION_WIDTH,       table1.getColumnWidth(Columns.EXTENSION));
-        MuConfiguration.setVariable(MuConfiguration.LEFT_DATE_WIDTH,            table1.getColumnWidth(Columns.DATE));
-        MuConfiguration.setVariable(MuConfiguration.LEFT_SIZE_WIDTH,            table1.getColumnWidth(Columns.SIZE));
-        MuConfiguration.setVariable(MuConfiguration.LEFT_PERMISSIONS_WIDTH,     table1.getColumnWidth(Columns.PERMISSIONS));
-        MuConfiguration.setVariable(MuConfiguration.RIGHT_EXTENSION_WIDTH,      table2.getColumnWidth(Columns.EXTENSION));
-        MuConfiguration.setVariable(MuConfiguration.RIGHT_DATE_WIDTH,           table2.getColumnWidth(Columns.DATE));
-        MuConfiguration.setVariable(MuConfiguration.RIGHT_SIZE_WIDTH,           table2.getColumnWidth(Columns.SIZE));
-        MuConfiguration.setVariable(MuConfiguration.RIGHT_PERMISSIONS_WIDTH,    table2.getColumnWidth(Columns.PERMISSIONS));
+        for(boolean isLeft=true; ; isLeft=false) {
+            FileTable table = isLeft?table1:table2;
+            // Loop on columns
+            for(int c=0; c<Columns.COLUMN_COUNT; c++) {
+                if(c!=Columns.NAME) {       // Skip the special name column (always visible, width automatically calculated)
+                    MuConfiguration.setVariable(
+                        MuConfiguration.getShowColumnVariable(c, isLeft),
+                        table.isColumnVisible(c)
+                    );
+
+                    MuConfiguration.setVariable(
+                        MuConfiguration.getColumnWidthVariable(c, isLeft),
+                        table.getColumnWidth(c)
+                    );
+                }
+
+                MuConfiguration.setVariable(
+                    MuConfiguration.getColumnPositionVariable(c, isLeft),
+                    table.getColumnPosition(c)
+                );
+            }
+
+            if(!isLeft)
+                break;
+        }
 
         // Saves left and right table sort order.
-        MuConfiguration.setVariable(MuConfiguration.LEFT_SORT_BY, getConfigurationSortBy(table1.getSortByCriteria()));
+        MuConfiguration.setVariable(MuConfiguration.LEFT_SORT_BY, Columns.COLUMN_NAMES[table1.getSortByCriteria()]);
         MuConfiguration.setVariable(MuConfiguration.LEFT_SORT_ORDER, table1.isSortAscending() ? MuConfiguration.SORT_ORDER_ASCENDING : MuConfiguration.SORT_ORDER_DESCENDING);
-        MuConfiguration.setVariable(MuConfiguration.RIGHT_SORT_BY, getConfigurationSortBy(table2.getSortByCriteria()));
+        MuConfiguration.setVariable(MuConfiguration.RIGHT_SORT_BY, Columns.COLUMN_NAMES[table2.getSortByCriteria()]);
         MuConfiguration.setVariable(MuConfiguration.RIGHT_SORT_ORDER, table2.isSortAscending() ? MuConfiguration.SORT_ORDER_ASCENDING : MuConfiguration.SORT_ORDER_DESCENDING);
 
         // Save split pane orientation
@@ -665,28 +656,26 @@ public class MainFrame extends JFrame implements LocationListener {
         }
 
         public Component getComponentBefore(Container container, Component component) {
-    if(Debug.ON) Debug.trace("container="+container.getClass().getName()+" component="+component.getClass().getName());
             // Completly symetrical with getComponentAfter
             return getComponentAfter(container, component);
        }
 
         public Component getFirstComponent(Container container) {
-    if(Debug.ON) Debug.trace("container="+container.getClass().getName());
             return table1;
         }
 
         public Component getLastComponent(Container container) {
-    if(Debug.ON) Debug.trace("container="+container.getClass().getName());
             return table2;
         }
 
         public Component getDefaultComponent(Container container) {
-    if(Debug.ON) Debug.trace("container="+container.getClass().getName());
             return getActiveTable();
         }
     }
 
-    public boolean isAutoSizeColumnsEnabled() {return table1.isAutoSizeColumnsEnabled();}
+    public boolean isAutoSizeColumnsEnabled() {
+        return table1.isAutoSizeColumnsEnabled();
+    }
 
     public void setAutoSizeColumnsEnabled(boolean b) {
         table1.setAutoSizeColumnsEnabled(b);

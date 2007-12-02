@@ -863,6 +863,41 @@ permissions:NL:Rechten
 permissions:SK:Oprávnenia
 permissions:HU:Engedély
 
+owner:EN:Owner
+owner:FR:Propriétaire
+# Translation missing (New!)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+group:EN:Group
+group:FR:Groupe
+# Translation missing (New!)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 location:EN:Location
 location:FR:Emplacement
 location:DE:Ort
@@ -2591,6 +2626,44 @@ com.mucommander.ui.action.SortByPermissionsAction.label:pt_BR:Ordenar pela permi
 com.mucommander.ui.action.SortByPermissionsAction.label:NL:Sorteer op rechten
 com.mucommander.ui.action.SortByPermissionsAction.label:SK:Zoradiť podľa oprávnení
 com.mucommander.ui.action.SortByPermissionsAction.label:HU:Jogosultság szerint rendez
+
+com.mucommander.ui.action.SortByOwnerAction.label:EN:Sort by Owner
+com.mucommander.ui.action.SortByOwnerAction.label:FR:Trier par Propriétaire
+# Translation missing (New!)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+com.mucommander.ui.action.SortByGroupAction.label:EN:Sort by Group
+com.mucommander.ui.action.SortByGroupAction.label:FR:Trier par Groupe
+# Translation missing (New!)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 com.mucommander.ui.action.MarkGroupAction.label:EN:Mark files
 com.mucommander.ui.action.MarkGroupAction.label:FR:Marquer fichiers

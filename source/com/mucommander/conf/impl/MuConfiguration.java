@@ -25,14 +25,17 @@ import com.mucommander.conf.ConfigurationException;
 import com.mucommander.conf.ConfigurationListener;
 import com.mucommander.conf.ValueList;
 import com.mucommander.ui.icon.FileIcons;
+import com.mucommander.ui.main.table.Columns;
 
 import java.io.IOException;
 import java.util.List;
 
 /**
- * @author Nicolas Rinaudo
+ *
+ *
+ * @author Nicolas Rinaudo, Maxence Bernard
  */
-public class MuConfiguration {
+public class MuConfiguration implements Columns {
     // - Misc. variables -----------------------------------------------------
     // -----------------------------------------------------------------------
     /** Whether or not to automaticaly check for updates on startup. */
@@ -156,7 +159,7 @@ public class MuConfiguration {
 
 
 
-    // - Folders variables ---------------------------------------------------
+    // - FileTable variables ---------------------------------------------------
     // -----------------------------------------------------------------------
     /** Section describing the folders view configuration. */
     public static final String  FILE_TABLE_SECTION                 = "file_table";
@@ -224,105 +227,95 @@ public class MuConfiguration {
     public static final String  SORT_ORDER_DESCENDING              = "desc";
     /** Default 'sort order' column for the file table. */
     public static final String  DEFAULT_SORT_ORDER                 = SORT_ORDER_DESCENDING;
-    /** Identifier of the extension column. */
-    public static final String  EXTENSION_COLUMN                   = "extension";
-    /** Identifier of the name column. */
-    public static final String  NAME_COLUMN                        = "name";
-    /** Identifier of the date column. */
-    public static final String  DATE_COLUMN                        = "date";
-    /** Identifier of the size column. */
-    public static final String  SIZE_COLUMN                        = "size";
-    /** Identifier of the permissions column. */
-    public static final String  PERMISSIONS_COLUMN                 = "permissions";
     /** Name of the 'show column' variable. */
     public static final String  SHOW_COLUMN                        = "show";
     /** Name of the 'column position' variable. */
     public static final String  COLUMN_POSITION                    = "position";
     /** Name of the 'column width' variable. */
     public static final String  COLUMN_WIDTH                       = "width";
-    /** Section containing the left extension column configuration. */
-    public static final String  LEFT_EXTENSION_SECTION             = LEFT_FILE_TABLE_SECTION + '.' + EXTENSION_COLUMN;
-    /** Section containing the left name column configuration. */
-    public static final String  LEFT_NAME_SECTION                  = LEFT_FILE_TABLE_SECTION + '.' + NAME_COLUMN;
-    /** Section containing the left size column configuration. */
-    public static final String  LEFT_SIZE_SECTION                  = LEFT_FILE_TABLE_SECTION + '.' + SIZE_COLUMN;
-    /** Section containing the left date column configuration. */
-    public static final String  LEFT_DATE_SECTION                  = LEFT_FILE_TABLE_SECTION + '.' + DATE_COLUMN;
-    /** Section containing the left permissions column configuration. */
-    public static final String  LEFT_PERMISSIONS_SECTION           = LEFT_FILE_TABLE_SECTION + '.' + PERMISSIONS_COLUMN;
-    /** Section containing the right extension column configuration. */
-    public static final String  RIGHT_EXTENSION_SECTION            = RIGHT_FILE_TABLE_SECTION + '.' + EXTENSION_COLUMN;
-    /** Section containing the right name column configuration. */
-    public static final String  RIGHT_NAME_SECTION                 = RIGHT_FILE_TABLE_SECTION + '.' + NAME_COLUMN;
-    /** Section containing the right size column configuration. */
-    public static final String  RIGHT_SIZE_SECTION                 = RIGHT_FILE_TABLE_SECTION + '.' + SIZE_COLUMN;
-    /** Section containing the right date column configuration. */
-    public static final String  RIGHT_DATE_SECTION                 = RIGHT_FILE_TABLE_SECTION + '.' + DATE_COLUMN;
-    /** Section containing the right permissions column configuration. */
-    public static final String  RIGHT_PERMISSIONS_SECTION          = RIGHT_FILE_TABLE_SECTION + '.' + PERMISSIONS_COLUMN;
-    /** Default value for the 'show extensions' variable. */
-    public static final boolean DEFAULT_SHOW_EXTENSION             = true;
-    /** Default value for the 'show size' variable. */
-    public static final boolean DEFAULT_SHOW_SIZE                  = true;
-    /** Default value for the 'show date' variable. */
-    public static final boolean DEFAULT_SHOW_DATE                  = true;
-    /** Default value for the 'show permissions' variable. */
-    public static final boolean DEFAULT_SHOW_PERMISSIONS           = true;
-    /** Controls the width of the 'extension' column in the left table. */
-    public static final String  LEFT_EXTENSION_WIDTH               = LEFT_EXTENSION_SECTION + '.' + COLUMN_WIDTH;
-    /** Controls the width of the 'date' column in the left table. */
-    public static final String  LEFT_DATE_WIDTH                    = LEFT_DATE_SECTION + '.' + COLUMN_WIDTH;
-    /** Controls the width of the 'size' column in the left table. */
-    public static final String  LEFT_SIZE_WIDTH                    = LEFT_SIZE_SECTION + '.' + COLUMN_WIDTH;
-    /** Controls the width of the 'permissions' column in the left table. */
-    public static final String  LEFT_PERMISSIONS_WIDTH             = LEFT_PERMISSIONS_SECTION + '.' + COLUMN_WIDTH;
-    /** Controls the width of the 'extension' column in the right table. */
-    public static final String  RIGHT_EXTENSION_WIDTH              = RIGHT_EXTENSION_SECTION + '.' + COLUMN_WIDTH;
-    /** Controls the width of the 'date' column in the right table. */
-    public static final String  RIGHT_DATE_WIDTH                   = RIGHT_DATE_SECTION + '.' + COLUMN_WIDTH;
-    /** Controls the width of the 'size' column in the right table. */
-    public static final String  RIGHT_SIZE_WIDTH                   = RIGHT_SIZE_SECTION + '.' + COLUMN_WIDTH;
-    /** Controls the width of the 'permissions' column in the right table. */
-    public static final String  RIGHT_PERMISSIONS_WIDTH            = RIGHT_PERMISSIONS_SECTION + '.' + COLUMN_WIDTH;
-    /** Controls the position of the 'extension' column in the left table. */
-    public static final String  LEFT_EXTENSION_POSITION            = LEFT_EXTENSION_SECTION + '.' + COLUMN_POSITION;
-    /** Controls the position of the 'name' column in the left table. */
-    public static final String  LEFT_NAME_POSITION                 = LEFT_NAME_SECTION + '.' + COLUMN_POSITION;
-    /** Controls the position of the 'size' column in the left table. */
-    public static final String  LEFT_SIZE_POSITION                 = LEFT_SIZE_SECTION + '.' + COLUMN_POSITION;
-    /** Controls the position of the 'date' column in the left table. */
-    public static final String  LEFT_DATE_POSITION                 = LEFT_DATE_SECTION + '.' + COLUMN_POSITION;
-    /** Controls the position of the 'permissions' column in the left table. */
-    public static final String  LEFT_PERMISSIONS_POSITION          = LEFT_PERMISSIONS_SECTION + '.' + COLUMN_POSITION;
-    /** Controls the position of the 'extension' column in the right table. */
-    public static final String  RIGHT_EXTENSION_POSITION           = RIGHT_EXTENSION_SECTION + '.' + COLUMN_POSITION;
-    /** Controls the position of the 'name' column in the right table. */
-    public static final String  RIGHT_NAME_POSITION                = RIGHT_NAME_SECTION + '.' + COLUMN_POSITION;
-    /** Controls the position of the 'size' column in the right table. */
-    public static final String  RIGHT_SIZE_POSITION                = RIGHT_SIZE_SECTION + '.' + COLUMN_POSITION;
-    /** Controls the position of the 'date' column in the right table. */
-    public static final String  RIGHT_DATE_POSITION                = RIGHT_DATE_SECTION + '.' + COLUMN_POSITION;
-    /** Controls the position of the 'permissions' column in the right table. */
-    public static final String  RIGHT_PERMISSIONS_POSITION         = RIGHT_PERMISSIONS_SECTION + '.' + COLUMN_POSITION;
-    /** Controls whether the extension column is visible in the left table. */
-    public static final String  SHOW_LEFT_EXTENSION                = LEFT_EXTENSION_SECTION + '.' + SHOW_COLUMN;
-    /** Controls whether the size column is visible in the left table. */
-    public static final String  SHOW_LEFT_SIZE                     = LEFT_SIZE_SECTION + '.' + SHOW_COLUMN;
-    /** Controls whether the date column is visible in the left table. */
-    public static final String  SHOW_LEFT_DATE                     = LEFT_DATE_SECTION + '.' + SHOW_COLUMN;
-    /** Controls whether the permissions column is visible in the left table. */
-    public static final String  SHOW_LEFT_PERMISSIONS              = LEFT_PERMISSIONS_SECTION + '.' + SHOW_COLUMN;
-    /** Controls whether the extension column is visible in the right table. */
-    public static final String  SHOW_RIGHT_EXTENSION               = RIGHT_EXTENSION_SECTION + '.' + SHOW_COLUMN;
-    /** Controls whether the size column is visible in the right table. */
-    public static final String  SHOW_RIGHT_SIZE                    = RIGHT_SIZE_SECTION + '.' + SHOW_COLUMN;
-    /** Controls whether the date column is visible in the right table. */
-    public static final String  SHOW_RIGHT_DATE                    = RIGHT_DATE_SECTION + '.' + SHOW_COLUMN;
-    /** Controls whether the permissions column is visible in the right table. */
-    public static final String  SHOW_RIGHT_PERMISSIONS             = RIGHT_PERMISSIONS_SECTION + '.' + SHOW_COLUMN;
-    /** Default 'sort by' column for the file table. */
-    public static final String  DEFAULT_SORT_BY                    = NAME_COLUMN;
 
+    /** Default 'sort by' column for the file table. */
+    public static final String  DEFAULT_SORT_BY                    = "name";
+
+    /** Default visibility for each of the FileTable columns. */
+    public final static boolean[] DEFAULT_SHOW_COLUMN = {
+        true,   // Extension
+        true,   // Name (not used, always visible)
+        true,   // Size
+        true,   // Date
+        true,   // Permissions
+        false,  // Owner
+        false   // Group
+    };
+
+    /**
+     * Returns the configuration section corresponding to the specified {@link com.mucommander.ui.main.table.FileTable},
+     * left or right one.
+     *
+     * @param left true for the left FileTable, false for the right one
+     * @return the configuration section corresponding to the specified FileTable
+     */
+    private static String getFileTableSection(boolean left) {
+        return FILE_TABLE_SECTION + "." + (left?LEFT:RIGHT);
+    }
+
+    /**
+     * Returns the configuration section corresponding to the specified column in the left or right
+     * {@link com.mucommander.ui.main.table.FileTable}.
+     *
+     * @param columnIndex index of the column, see {@link com.mucommander.ui.main.table.Columns} for allowed values
+     * @param left true for the left FileTable, false for the right one
+     * @return the configuration section corresponding to the specified FileTable
+     */
+    private static String getColumnSection(int columnIndex, boolean left) {
+        return getFileTableSection(left) + "." + COLUMN_NAMES[columnIndex];
+    }
+
+    /**
+     * Returns the variable that controls the visibility of the specified column, in the left or right
+     * {@link com.mucommander.ui.main.table.FileTable}.
+     *
+     * @param columnIndex index of the column, see {@link com.mucommander.ui.main.table.Columns} for allowed values
+     * @param left true for the left FileTable, false for the right one
+     * @return the variable that controls the visibility of the specified column
+     */
+    public static String getShowColumnVariable(int columnIndex, boolean left) {
+        return getColumnSection(columnIndex, left) + "." + SHOW_COLUMN;
+    }
+
+    /**
+     * Returns the default visibility of the specified column.
+     *
+     * @param columnIndex index of the column, see {@link com.mucommander.ui.main.table.Columns} for allowed values
+     * @return the default visibility of the specified column
+     */
+    public static boolean getShowColumnDefault(int columnIndex) {
+        return DEFAULT_SHOW_COLUMN[columnIndex];
+    }
+
+    /**
+     * Returns the variable that holds the width of the specified column, in the left or right
+     * {@link com.mucommander.ui.main.table.FileTable}.
+     *
+     * @param columnIndex index of the column, see {@link com.mucommander.ui.main.table.Columns} for allowed values
+     * @param left true for the left FileTable, false for the right one
+     * @return the variable that holds the width of the specified column
+     */
+    public static String getColumnWidthVariable(int columnIndex, boolean left) {
+        return getColumnSection(columnIndex, left) + "." + COLUMN_WIDTH;
+    }
+
+    /**
+     * Returns the variable that holds the position of the specified column, in the left or right
+     * {@link com.mucommander.ui.main.table.FileTable}.
+     *
+     * @param columnIndex index of the column, see {@link com.mucommander.ui.main.table.Columns} for allowed values
+     * @param left true for the left FileTable, false for the right one
+     * @return the variable that holds the position of the specified column
+     */
+    public static String getColumnPositionVariable(int columnIndex, boolean left) {
+        return getColumnSection(columnIndex, left) + "." + COLUMN_POSITION;
+    }
 
 
     // - Mac OS X variables --------------------------------------------------
@@ -635,9 +628,9 @@ public class MuConfiguration {
 
     // - Configuration listening -----------------------------------------------
     // -------------------------------------------------------------------------
-    public static void addConfigurationListener(ConfigurationListener listener) {configuration.addConfigurationListener(listener);}
+    public static void addConfigurationListener(ConfigurationListener listener) {Configuration.addConfigurationListener(listener);}
 
-    public static void removeConfigurationListener(ConfigurationListener listener) {configuration.removeConfigurationListener(listener);}
+    public static void removeConfigurationListener(ConfigurationListener listener) {Configuration.removeConfigurationListener(listener);}
 
 
     // - Configuration source --------------------------------------------------

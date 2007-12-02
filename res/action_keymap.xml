@@ -257,9 +257,17 @@
   <!-- Default : control F3                                                      -->
   <action class="com.mucommander.ui.action.SortByExtensionAction"       keystroke="control F3"/>
 
+  <!-- Action  : Sort current pane by group.                                     -->
+  <!-- Default : control F9                                                      -->
+  <action class="com.mucommander.ui.action.SortByGroupAction"           keystroke="control F9"/>
+
   <!-- Action  : Sort current pane by name.                                      -->
   <!-- Default : control F4                                                      -->
   <action class="com.mucommander.ui.action.SortByNameAction"            keystroke="control F4"/>
+
+  <!-- Action  : Sort current pane by owner.                                     -->
+  <!-- Default : control F8                                                      -->
+  <action class="com.mucommander.ui.action.SortByOwnerAction"           keystroke="control F8"/>
 
   <!-- Action  : Sort current pane by permissions.                               -->
   <!-- Default : control F7                                                      -->

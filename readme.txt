@@ -105,7 +105,10 @@ What's new since v0.8.1 ?
 -------------------------
 
 New features:
-- Files can be marked/unmarked using Regexp
+- Files can be marked/unmarked using a Regexp.
+- New 'Owner' and 'Group' columns added to the folder pane (not visible by
+  default). The owner and group information is available on FTP and SFTP folders
+  and some TAR archives.
 
 Improvements:
 - 
@@ -115,6 +118,9 @@ Localization:
 
 Bug fixes:
 - SMB passwords that contain '@' characters are now properly handled.
+- Fixed a bug that occurred when sorting the folder pane by an invisible column 
+  or when hiding the current column. This bug would leave the folder pane in an 
+  inconsistent sort order and could prevent the application from restarting.
 
 Known issues:
 - Korean translation is not up-to-date.

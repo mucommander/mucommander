@@ -77,6 +77,12 @@ public class FileTableHeader extends JTableHeader implements Columns, MouseListe
                 case PERMISSIONS:
                     hideActionClass = TogglePermissionsColumnAction.class;
                     break;
+                case OWNER:
+                    hideActionClass = ToggleOwnerColumnAction.class;
+                    break;
+                case GROUP:
+                    hideActionClass = ToggleGroupColumnAction.class;
+                    break;
                 default:        // Name column cannot be hidden
                     return;
             }
