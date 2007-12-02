@@ -19,19 +19,18 @@
 package com.mucommander.ui.action;
 
 import com.mucommander.ui.main.MainFrame;
-import com.mucommander.ui.main.table.Columns;
 
 import java.util.Hashtable;
 
 /**
- * This action sorts the currently active {@link com.mucommander.ui.main.table.FileTable} by name.
- * If the table is already sorted by name, the sort order will be reversed.
+ * This action sorts the currently active {@link com.mucommander.ui.main.table.FileTable} by group.
+ * If the table is already sorted by group, the sort order will be reversed.
  *
  * @author Maxence Bernard
  */
-public class SortByNameAction extends SortByAction {
+public class SortByGroupAction extends SortByAction {
 
-    public SortByNameAction(MainFrame mainFrame, Hashtable properties) {
-        super(mainFrame, properties, Columns.NAME);
+    public SortByGroupAction(MainFrame mainFrame, Hashtable properties) {
+        super(mainFrame, properties, GROUP);
     }
 }
