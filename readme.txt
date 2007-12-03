@@ -237,62 +237,11 @@ command_bar.xml, with two notable differences:
 
 - commands.xml
 This file controls the various system commands that muCommander can call.
-Documentation on how to customize those commands can be found here:
+Documentation on how to customise those commands can be found here:
 http://www.mucommander.com/forums/viewtopic.php?t=420
 
 
 - associations.xml
-This file controls muCommander's custom file associations. They will be
-initialised according to the system muCommander is running on and depend on
-commands.xml.
-
-This file is not (yet) written by muCommander, so you have to create it
-manually for the time being.
-
-It looks something like this:
-<?xml version="1.0" encoding="UTF-8"?>
-<associations>
-    <association mask=".*" command="open"/>
-</associations>
-
-Each association has the following attributes:
-- mask:    regular expression that the file name must match in order to be
-           managed by the association.
-- read:    if set to 'yes', a file must be readable in order to be matched by
-           the association.
-- write:   if set to 'yes', a file must be writable in order to be matched by
-           the association.
-- execute: if set to 'yes', a file must be executable in order to be matched by
-           the association.
-- command: the alias of the command to execute for this type of files.
-
-You must be extremely careful when editing this file, as it's quite easy to
-break muCommander by fiddling with it. Make sure that the system's default
-associations are always present, and that you do not change their attributes.
-- Windows 9x:
-<association mask=".*" command="open"/>
-
-- Windows NT:
-<association mask=".*\\.[eE][xX][eE]" command="openEXE"/>
-<association mask=".*" command="open"/>
-
-- Mac OS X:
-<association mask=".*" command="open"/>
-
-- Gnome:
-<!-- Only if running on Java prior to 1.6 -->
-<association mask="[^.]+" command="execute"/>
-
-<association mask=".*"    command="execute" execute="yes"/>
-<association mask=".*"    command="open"/>
-
-- KDE:
-<association mask="^https?:\\/\\/.+" command="openURL"/>
-<association mask=".*"               command="open"/>
-
-- Anything else:
-<!-- Only if running on Java prior to 1.6 -->
-<association mask="[^.]+" command="execute"/>
-
-<association mask=".*"    command="execute"/>
-
+This file controls custom command / file associations.
+Documentation on how to customise those associations can be found here:
+http://www.mucommander.com/forums/viewtopic.php?t=634
