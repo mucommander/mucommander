@@ -164,7 +164,7 @@ public class PlatformManager {
     /** Default Windows 9x shell. */
     private static final String WINDOWS_9X_SHELL            = "command.com /c";
     /** Default Windows NT shell. */
-    private static final String WINDOWS_NT_SHELL            = "cmd /U /c";
+    private static final String WINDOWS_NT_SHELL            = "cmd /c";
     /** Default shell for non-windows OSes. */
     private static final String POSIX_SHELL                 = "/bin/sh -l -c";
 
