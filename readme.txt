@@ -114,7 +114,7 @@ Improvements:
 - 
 
 Localization:
--
+- Japanese translation contributed by Nardog
 
 Bug fixes:
 - SMB passwords that contain '@' characters are now properly handled.
