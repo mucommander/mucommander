@@ -9311,6 +9311,7 @@ prefs_dialog.look_and_feel:KO:룩엔필
 prefs_dialog.look_and_feel:pt_BR:Look & Feel
 prefs_dialog.look_and_feel:NL:Look & Feel
 prefs_dialog.look_and_feel:SK:Vzhľad & chovanie
+prefs_dialog.look_and_feel:JA:外観
 
 prefs_dialog.icons_size:EN:Icon size
 prefs_dialog.icons_size:FR:Taille des icônes
