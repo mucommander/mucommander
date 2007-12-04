@@ -96,6 +96,7 @@ Translators:
 - Pieter Kristensen (Dutch)
 - Ján Ľudvík (Slovak)
 - Jonathan Murphy (British English)
+- Nardog (Japanese)
 
 Many thanks to all of you who suggested new features, reported bugs, sent warm
 emails or generously donated to the project !
