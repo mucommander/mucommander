@@ -71,4 +71,13 @@ public abstract class ChainedFileFilter extends FileFilter {
     public synchronized Iterator getFileFilterIterator() {
         return filters.iterator();
     }
+
+    /**
+     * Returns <code>true</code> if this chained filter doesn't contain any file filter.
+     *
+     * @return <code>true</code> if this chained filter doesn't contain any file filter.
+     */
+    public boolean isEmpty() {
+        return filters.isEmpty();
+    }
 }
