@@ -104,9 +104,12 @@ import java.net.MalformedURLException;
                     break;
                 }
                 catch(SmbException e) {
-                    // Need credentials, throw AuthException
+                    // Transform an SmbAuthException into an SmbFile exception
                     if(e instanceof SmbAuthException)
                         throw new AuthException(fileURL, e.getMessage());
+
+                    // Re-throw the SmbException
+                    throw e;
                 }
             }
         }
