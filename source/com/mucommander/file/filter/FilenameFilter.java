@@ -34,7 +34,7 @@ import java.util.Vector;
  * <p>Several convenience methods are provided to operate this filter on a set of filenames, and filter out filenames
  * that do not match this filter.</p>
  *
- * <p>A <code>FilenameFilter</code> can be passed to {@link AbstractFile#ls(FilenameFilter)}, in order to filter out
+ * <p>A <code>FilenameFilter</code> can be passed to {@link AbstractFile#ls(FilenameFilter)} to filter out some of the
  * files contained by a folder without creating the associated <code>AbstractFile</code> instances.</p>
  */
 public abstract class FilenameFilter extends FileFilter {

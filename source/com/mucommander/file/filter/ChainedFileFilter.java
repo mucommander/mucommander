@@ -49,7 +49,7 @@ public abstract class ChainedFileFilter extends FileFilter {
      *
      * @param filter the FileFilter to add
      */
-    public synchronized void addFileFilter(FileFilter filter) {
+    public void addFileFilter(FileFilter filter) {
         filters.add(filter);
     }
 
@@ -59,7 +59,7 @@ public abstract class ChainedFileFilter extends FileFilter {
      *
      * @param filter the FileFilter to remove
      */
-    public synchronized void removeFileFilter(FileFilter filter) {
+    public void removeFileFilter(FileFilter filter) {
         filters.remove(filter);
     }
 
@@ -68,7 +68,7 @@ public abstract class ChainedFileFilter extends FileFilter {
      *
      * @return an <code>Iterator</code> that traverses all the registered filters. 
      */
-    public synchronized Iterator getFileFilterIterator() {
+    public Iterator getFileFilterIterator() {
         return filters.iterator();
     }
 

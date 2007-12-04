@@ -25,15 +25,20 @@ import java.util.Vector;
 
 
 /**
- * FileFilter allows to filter out files that do not match certain criteria. The {@link #accept(AbstractFile)}
- * method must be implemented by subclasses in order to accept or reject a given AbstractFile.
+ * A <code>FileFilter</code> matches files that meet certain criteria. The {@link #accept(AbstractFile)}
+ * method has to be implemented by subclasses in order to accept or reject a given <code>AbstractFile</code>.
+ * By default, a <code>FileFilter</code> operates in non-inverted mode and {@link #match(AbstractFile)} returns the
+ * value of {@link #accept(AbstractFile)}. When operating in inverted mode, {@link #match(AbstractFile)} returns the
+ * value of {@link #reject(AbstractFile)}. It is important to understand that {@link #accept(AbstractFile)} and
+ * {@link #reject(AbstractFile)} are not affected by the inverted order in which the filter operates.
  *
  * <p>Several convenience methods are provided to operate this filter on a set of files, and filter out files that
  * do not match this filter.</p>
  *
- * <p>A <code>FileFilter</code> can be passed to {@link AbstractFile#ls(FileFilter)}, in order to filter out files
- * contained by a folder.</p>
+ * <p>A <code>FileFilter</code> instance can be passed to {@link AbstractFile#ls(FileFilter)} to filter out some of the
+ * some of the files contained by a folder.</p>
  *
+ * @see FilenameFilter
  * @see com.mucommander.file.AbstractFile#ls(FileFilter)
  */
 public abstract class FileFilter {
