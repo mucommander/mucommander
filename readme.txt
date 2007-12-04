@@ -121,6 +121,8 @@ Bug fixes:
 - Fixed a bug that occurred when sorting the folder pane by an invisible column 
   or when hiding the current column. This bug would leave the folder pane in an 
   inconsistent sort order and could prevent the application from restarting.
+- Fixed a bug that allowed empty custom associations to be registered, breaking
+  the whole file matching process.
 
 Known issues:
 - Korean translation is not up-to-date.
