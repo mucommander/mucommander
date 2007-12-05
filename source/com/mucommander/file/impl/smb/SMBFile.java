@@ -84,7 +84,7 @@ import java.net.MalformedURLException;
         if(!fileURL.containsCredentials())
             throw new AuthException(fileURL);
 
-        if(smbFile==null) {         // Called by public constructor
+        if(smbFile==null) {
             while(true) {
                 file = createSmbFile(fileURL);
 
@@ -92,9 +92,10 @@ import java.net.MalformedURLException;
                 // created by this class are considered OK.
                 try {
                     // SmbFile requires a trailing slash for directories otherwise listFiles() will throw an SmbException.
-                    // As we cannot guarantee that the path will contain a trailing slash for directories, test if the
-                    // SmbFile is a directory and if it doesn't contain a trailing slash, create a new SmbFile.
-                    // SmbFile.isDirectory() will throw an SmbAuthException if access to the file requires (new) credentials.
+                    // As we cannot guarantee that the path will contain a trailing slash for directories, we test if the
+                    // SmbFile is a directory and if it doesn't contain a trailing slash, we create a new SmbFile with
+                    // a trailing slash.
+                    // SmbFile.isDirectory() will throw an SmbAuthException if access to the file requires different credentials.
                     if(file.isDirectory() && !getURL().getPath().endsWith("/")) {
                         // Add trailing slash and loop to create a new SmbFile
                         fileURL.setPath(fileURL.getPath()+'/');
@@ -104,16 +105,21 @@ import java.net.MalformedURLException;
                     break;
                 }
                 catch(SmbException e) {
-                    // Transform an SmbAuthException into an SmbFile exception
+                    // SmbFile.isDirectory() threw an exception. We distinguish 2 types of SmbException:
+                    // 1) SmbAuthException, caused by a credentials problem -> turn it into an AuthException and throw it
+                    // 2) any other SmbException -> this may happen if access to the file was denied for example, this
+                    //    shouldn't prevent this SMBFile from being created.
+
+                    // 1) Create an AuthException out of the SmbAuthException and throw it
                     if(e instanceof SmbAuthException)
                         throw new AuthException(fileURL, e.getMessage());
 
-                    // Re-throw the SmbException
-                    throw e;
+                    // 2) Swallow the exception to let this SMBFile be created
+                    break;
                 }
             }
         }
-        else {                      // Instanciated by this class
+        else {                      // The private constructor was called directly
             file = smbFile;
         }
     }
@@ -417,7 +423,12 @@ import java.net.MalformedURLException;
                 childURL.setHost(smbFile.getServer());
                 childURL.setPath(smbFile.getURL().getPath());
 
-                children[currentIndex++] = FileFactory.getFile(childURL, this);
+                // Use SMBFile private constructor to recycle the SmbFile instance
+                children[currentIndex] = FileFactory.wrapArchive(new SMBFile(childURL, smbFile));
+                children[currentIndex].setParent(this);
+                currentIndex++;
+
+//                children[currentIndex++] = FileFactory.getFile(childURL, this);
             }
 
             return children;
