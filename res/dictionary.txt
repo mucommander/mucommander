@@ -5871,7 +5871,7 @@ email.connection_closed:KO:서버에서 접속이 종료되었습니다. 메일�
 email.connection_closed:pt_BR:Conexão encerrada pelo servidor, email não enviado.
 email.connection_closed:NL:Verbinding door server verbroken, email niet verzonden
 email.connection_closed:SK:Server zatvoril pripojenie, pošta nebola odoslaná.
-email.connection_closed:JA:接続がサーバーによって閉じられました、メールが送信されません。
+email.connection_closed:JA:接続がサーバーによって閉じられました、メールが送信されませんでした。
 
 email.goodbye_failed:EN:Error while closing connection, mail may not have been sent.
 email.goodbye_failed:FR:Erreur lors de la fermeture de connexion, le message n'a peut-être pas été envoyé.
@@ -5909,7 +5909,7 @@ email.send_file_error:KO:파일 %1을 보내지 못했습니다, 메일을 보�
 email.send_file_error:pt_BR:Não foi possível enviar o arquivo %1, email não enviado.
 email.send_file_error:NL:Kan bestand %1 niet verzenden, emial niet verstuurd.
 email.send_file_error:SK:Súbor %1 sa nedá odoslať, pošta nebola odoslaná.
-email.send_file_error:JA:ファイル %1 を送信することができません、メールが送信されません。
+email.send_file_error:JA:ファイル %1 を送信することができません、メールが送信されませんでした。
 
 
 #########################
@@ -6009,7 +6009,7 @@ file_selection_dialog.contains:KO:포함
 file_selection_dialog.contains:pt_BR:Contém
 file_selection_dialog.contains:NL:Bevat
 file_selection_dialog.contains:SK:Obsahuje
-file_selection_dialog.contains:JA:包含
+file_selection_dialog.contains:JA:含む
 
 file_selection_dialog.starts_with:EN:Starts with
 file_selection_dialog.starts_with:FR:Commence par
@@ -6028,7 +6028,7 @@ file_selection_dialog.starts_with:KO:으로 시작
 file_selection_dialog.starts_with:pt_BR:Iniciam com
 file_selection_dialog.starts_with:NL:Begint met
 file_selection_dialog.starts_with:SK:Začína na
-file_selection_dialog.starts_with:JA:始まり
+file_selection_dialog.starts_with:JA:始まる
 
 file_selection_dialog.ends_with:EN:Ends with
 file_selection_dialog.ends_with:FR:Termine par
@@ -6046,7 +6046,7 @@ file_selection_dialog.ends_with:IT:Termina con
 file_selection_dialog.ends_with:pt_BR:Terminam com
 file_selection_dialog.ends_with:NL:Eindigt met
 file_selection_dialog.ends_with:SK:Končí na
-file_selection_dialog.ends_with:JA:終わり
+file_selection_dialog.ends_with:JA:終わる
 # Translation missing (KO)
 
 
@@ -6074,7 +6074,7 @@ file_selection_dialog.is:KO:is
 file_selection_dialog.is:pt_BR:É
 file_selection_dialog.is:NL:Is
 file_selection_dialog.is:SK:Je
-file_selection_dialog.is:JA:は
+file_selection_dialog.is:JA:一致する
 
 file_selection_dialog.case_sensitive:EN:Case sensitive
 file_selection_dialog.case_sensitive:FR:Respecter la casse
@@ -6486,7 +6486,7 @@ run_dialog.run_command_description:KO:현재 폴더에서 실행
 run_dialog.run_command_description:pt_BR:Executar no diretório corrente
 run_dialog.run_command_description:NL:Voer uit in huidige map
 run_dialog.run_command_description:SK:Spustiť v aktuálnom priečinku
-run_dialog.run_command_description:JA:現在のフォルダで起動する
+run_dialog.run_command_description:JA:現在のフォルダで起動します
 
 run_dialog.run_in_home_description:EN:Run in home folder
 run_dialog.run_in_home_description:FR:Exécuter dans le répertoire utilisateur
@@ -6505,7 +6505,7 @@ run_dialog.run_in_home_description:pt_BR:Executar no diretório inicial
 run_dialog.run_in_home_description:NL:Voer uit in home-map
 run_dialog.run_in_home_description:SK:Spustiť v domovskom priečinku
 run_dialog.run_in_home_description:HU:Futtatás a főkönyvtárban
-run_dialog.run_in_home_description:JA:ホーム フォルダで起動する
+run_dialog.run_in_home_description:JA:ホーム フォルダで起動します
 
 run_dialog.command_output:EN:Command output
 run_dialog.command_output:FR:Sortie de la commande
@@ -6973,7 +6973,7 @@ bonjour.no_service_discovered:pt_BR:Nenhum serviço encontrado
 bonjour.no_service_discovered:NL:Geen service gevonden
 bonjour.no_service_discovered:SK:Služba nenájdená
 bonjour.no_service_discovered:HU:Nincs felderített szolgáltatás
-bonjour.no_service_discovered:JA:サービスが発見されません
+bonjour.no_service_discovered:JA:サービスが発見されませんでした
 
 bonjour.bonjour_disabled:EN:Bonjour disabled
 bonjour.bonjour_disabled:FR:Bonjour disabled
