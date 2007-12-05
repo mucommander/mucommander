@@ -680,7 +680,8 @@ choose:pt_BR:Escolha
 choose:HU:Kiválaszt
 choose:PL:Wybierz
 choose:JA:選択
-# Translation missing (ES, zh_CN, RU, KO, SK)
+choose:SK:Zvoliť
+# Translation missing (ES, zh_CN, RU, KO)
 
 
 
@@ -705,7 +706,8 @@ choose_folder:pt_BR:Escolha um diretório
 choose_folder:HU:Könyvtár választás
 choose_folder:PL:Wybierz katalog
 choose_folder:JA:フォルダを選択します
-# Translation missing (ES, zh_CN, RU, KO, SK)
+choose_folder:SK:Zvoliť priečinok
+# Translation missing (ES, zh_CN, RU, KO)
 
 
 
@@ -911,6 +913,7 @@ permissions:JA:権限
 owner:EN:Owner
 owner:FR:Propriétaire
 owner:JA:所有者
+owner:SK:Vlastník
 # Translation missing (New!)
 
 
@@ -929,6 +932,7 @@ owner:JA:所有者
 group:EN:Group
 group:FR:Groupe
 group:JA:グループ
+group:SK:Skupina
 # Translation missing (New!)
 
 
@@ -1196,7 +1200,8 @@ loading:pt_BR:Carregando...
 loading:HU:Betöltés...
 loading:PL:Ładowanie...
 loading:JA:読み込んでいます...
-# Translation missing (ES, zh_CN, RU, KO, SK)
+loading:SK:Načítavam obsah...
+# Translation missing (ES, zh_CN, RU, KO)
 
 
 
@@ -2764,6 +2769,7 @@ com.mucommander.ui.action.SortByPermissionsAction.label:JA:権限で整列
 com.mucommander.ui.action.SortByOwnerAction.label:EN:Sort by Owner
 com.mucommander.ui.action.SortByOwnerAction.label:FR:Trier par Propriétaire
 com.mucommander.ui.action.SortByOwnerAction.label:JA:所有者で整列
+com.mucommander.ui.action.SortByOwnerAction.label:SK:Zoradiť podľa vlastníka
 # Translation missing (New!)
 
 
@@ -2784,6 +2790,7 @@ com.mucommander.ui.action.SortByOwnerAction.label:JA:所有者で整列
 com.mucommander.ui.action.SortByGroupAction.label:EN:Sort by Group
 com.mucommander.ui.action.SortByGroupAction.label:FR:Trier par Groupe
 com.mucommander.ui.action.SortByGroupAction.label:JA:グループで整列
+com.mucommander.ui.action.SortByGroupAction.label:SK:Zoradiť podľa skupiny
 # Translation missing (New!)
 
 
@@ -4671,9 +4678,9 @@ quit_dialog.desc:IT:Hai %1 finestra(e) aperta(e). Sei sicuro di voler uscire ?
 quit_dialog.desc:KO:모든 창들과 muCommander를 종료 하시겠습니까? 
 quit_dialog.desc:pt_BR:Você tem %1 janela(s) aberta(s). Deseja realmente sair?
 quit_dialog.desc:NL:Er zijn %1 venster(s) geopend. Alle vensters sluiten en muCommander afsluiten?
-quit_dialog.desc:SK:Zatvoriť všetky okná a ukončiť muCommander?
+quit_dialog.desc:SK:Chcete zatvoriť všetkých %1 okien a ukončiť muCommander?
 quit_dialog.desc:JA:%1 個のウィンドウを開いています。終了してもよろしいですか ? 
-# Translation missing (ES, zh_CN, RU, KO, SK) : this entry needs to be updated to take into account the number of windows
+# Translation missing (ES, zh_CN, RU, KO) : this entry needs to be updated to take into account the number of windows
 
 
 
@@ -5140,7 +5147,8 @@ error_while_optimizing_archive:IT:Errore ottimizzando l'archivio %1
 error_while_optimizing_archive:pt_BR:Erro ao otimizar arquivo %1
 error_while_optimizing_archive:PL:Błąd podczas optymalizacji archiwum %1
 error_while_optimizing_archive:JA:アーカイブ %1 の最適化中のエラーです
-# Translation missing (ES, RU, KO, SK)
+error_while_optimizing_archive:SK:Chyba pri optimalizácii archívu %1
+# Translation missing (ES, RU, KO)
 
 
 
@@ -6109,6 +6117,7 @@ file_selection_dialog.include_folders:JA:フォルダを含める
 file_selection_dialog.matches_regexp:EN:Matches Regexp
 file_selection_dialog.matches_regexp:FR:Satisfait la Regexp
 file_selection_dialog.matches_regexp:JA:正規表現に一致する
+file_selection_dialog.matches_regexp:SK:Regulárny výraz
 # Translation missing (New!)
 
 
@@ -7380,7 +7389,8 @@ text_viewer.find:CS:Najít
 text_viewer.find:pt_BR:Procurar
 text_viewer.find:HU:Keresés
 text_viewer.find:JA:検索
-# Translation missing (ES, zh_CN, RU, KO, SK)
+text_viewer.find:SK:Nájsť
+# Translation missing (ES, zh_CN, RU, KO)
 
 
 
@@ -7407,7 +7417,8 @@ text_viewer.find_next:CS:Najít následující
 text_viewer.find_next:pt_BR:Procurar próxima ocorrência
 text_viewer.find_next:HU:Következő keresése
 text_viewer.find_next:JA:次を検索
-# Translation missing (ES, zh_CN, RU, KO, SK)
+text_viewer.find_next:SK:Nájsť nasledujúce
+# Translation missing (ES, zh_CN, RU, KO)
 
 
 
@@ -7434,7 +7445,8 @@ text_viewer.find_previous:CS:Najít předchozí
 text_viewer.find_previous:pt_BR:Procurar ocorrência anterior
 text_viewer.find_previous:HU:Előző keresése
 text_viewer.find_previous:JA:前を検索
-# Translation missing (ES, zh_CN, RU, KO, SK)
+text_viewer.find_previous:SK:Nájsť predchádzajúce
+# Translation missing (ES, zh_CN, RU, KO)
 
 
 
@@ -7997,7 +8009,8 @@ theme_editor.shell_history_tab:CS:Historie shellu
 theme_editor.shell_history_tab:pt_BR:Histórico do Shell
 theme_editor.shell_history_tab:HU:Előzmények
 theme_editor.shell_history_tab:JA:シェルの履歴
-# Translation missing (ES, zh_CN, RU, KO, SK)
+theme_editor.shell_history_tab:SK:História shellu
+# Translation missing (ES, zh_CN, RU, KO)
 
 
 
@@ -8206,7 +8219,8 @@ theme_editor.active_panel:CS:Aktivní
 theme_editor.active_panel:pt_BR:Ativo
 theme_editor.active_panel:HU:Aktív
 theme_editor.active_panel:JA:アクティブ
-# Translation missing (ES, zh_CN, RU, KO, SK)
+theme_editor.active_panel:SK:Aktívne
+# Translation missing (ES, zh_CN, RU, KO)
 
 
 
@@ -8230,7 +8244,8 @@ theme_editor.inactive_panel:CS:Neaktivní
 theme_editor.inactive_panel:pt_BR:Inativo
 theme_editor.inactive_panel:HU:Inaktív
 theme_editor.inactive_panel:JA:非アクティブ
-# Translation missing (ES, zh_CN, RU, KO, SK)
+theme_editor.inactive_panel:SK:Neaktívne
+# Translation missing (ES, zh_CN, RU, KO)
 
 
 
@@ -8252,7 +8267,8 @@ theme_editor.general:CS:Obecné
 theme_editor.general:pt_BR:Geral
 theme_editor.general:HU:Általános
 theme_editor.general:JA:一般
-# Translation missing (ES, zh_CN, RU, KO, SK)
+theme_editor.general:SK:Všeobecné
+# Translation missing (ES, zh_CN, RU, KO)
 
 
 
@@ -8367,7 +8383,8 @@ theme_editor.alternate_background:CS:Alternativní pozadí
 theme_editor.alternate_background:pt_BR:Cor de fundo alternativa
 theme_editor.alternate_background:HU:Alternatív háttér
 theme_editor.alternate_background:JA:代替の背景
-# Translation missing (ES, zh_CN, RU, KO, SK)
+theme_editor.alternate_background:SK:Alternatívne pozadie
+# Translation missing (ES, zh_CN, RU, KO)
 
 
 
@@ -9478,7 +9495,8 @@ prefs_dialog.edit_current_theme:CS:Změnit stávající téma...
 prefs_dialog.edit_current_theme:pt_BR:Editar tema atual...
 prefs_dialog.edit_current_theme:HU:Jelenlegi téma javítása...
 prefs_dialog.edit_current_theme:JA:現在のテーマの編集...
-# Translation missing (ES, zh_CN, RU, KO, SK)
+prefs_dialog.edit_current_theme:SK:Upraviť aktuálnu tému...
+# Translation missing (ES, zh_CN, RU, KO)
 
 
 
@@ -9972,7 +9990,8 @@ prefs_dialog.shell_encoding:CS:Kódování textu shellu
 prefs_dialog.shell_encoding:pt_BR:Codificação do Shell
 prefs_dialog.shell_encoding:HU:Karakter kódolás
 prefs_dialog.shell_encoding:JA:シェルのエンコード
-# Translation missing (ES, zh_CN, RU, KO, SK)
+prefs_dialog.shell_encoding:SK:Kódovanie textu shellu
+# Translation missing (ES, zh_CN, RU, KO)
 
 
 
@@ -9995,7 +10014,8 @@ prefs_dialog.auto_detect_shell_encoding:pt_BR:Auto-detectar
 prefs_dialog.auto_detect_shell_encoding:HU:Automatikus felismerés
 prefs_dialog.auto_detect_shell_encoding:PL:Auto-wybór
 prefs_dialog.auto_detect_shell_encoding:JA:自動検出
-# Translation missing (ES, zh_CN, RU, KO, SK)
+prefs_dialog.auto_detect_shell_encoding:SK:Automatické rozpoznávanie
+# Translation missing (ES, zh_CN, RU, KO)
 
 
 
