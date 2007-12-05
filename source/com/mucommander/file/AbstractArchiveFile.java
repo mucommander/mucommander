@@ -229,7 +229,7 @@ public abstract class AbstractArchiveFile extends ProxyFile {
      * That means entries paths of archives located on Windows local filesystems will use '\' as a separator, and
      * '/' for Unix local archives.
      */
-    protected AbstractFile getArchiveEntryFile(ArchiveEntry entry, AbstractFile parentFile, boolean exists) throws java.net.MalformedURLException {
+    protected AbstractFile getArchiveEntryFile(ArchiveEntry entry, AbstractFile parentFile, boolean exists) throws IOException {
 
         String entryPath = entry.getPath();
 

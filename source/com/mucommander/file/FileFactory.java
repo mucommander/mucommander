@@ -633,9 +633,9 @@ public class FileFactory {
      * Tests based on the given file's extension, if the file corresponds to a registered archive format.
      * If it does, an appropriate {@link AbstractArchiveFile} instance is created on top of the provided file
      * and returned. If it doesn't (the file's extension doesn't correspond to a registered archive format or is a
-     * directory), the provided AbstractFile instance is returned.
+     * directory), the provided <code>AbstractFile</code> instance is returned.
      */
-    public static AbstractFile wrapArchive(AbstractFile file) {
+    public static AbstractFile wrapArchive(AbstractFile file) throws IOException {
         String filename = file.getName();
 
         // Looks for an archive FilenameFilter that matches the given filename.
@@ -660,15 +660,12 @@ public class FileFactory {
 
             ArchiveFormatProvider provider;
             if((provider = getArchiveFormatProvider(filename)) != null) {
-                try {
-                    archiveFile = provider.getFile(file);
-                    if(useCache) {
-                        if(Debug.ON) Debug.trace("Adding archive file to cache: "+file.getAbsolutePath());
-                        archiveFileCache.put(file.getAbsolutePath(), archiveFile);
-                    }
-                    return archiveFile;
+                archiveFile = provider.getFile(file);
+                if(useCache) {
+                    if(Debug.ON) Debug.trace("Adding archive file to cache: "+file.getAbsolutePath());
+                    archiveFileCache.put(file.getAbsolutePath(), archiveFile);
                 }
-                catch(Exception e) {}
+                return archiveFile;
             }
         }
 
