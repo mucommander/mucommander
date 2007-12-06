@@ -16,14 +16,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.mucommander.file.impl.bookmark;
+package com.mucommander.bookmark.file.bookmark;
 
-import com.mucommander.file.FileURL;
-import com.mucommander.file.FileFactory;
-import com.mucommander.file.ProtocolProvider;
-import com.mucommander.file.AbstractFile;
-import com.mucommander.bookmark.BookmarkManager;
 import com.mucommander.bookmark.Bookmark;
+import com.mucommander.bookmark.BookmarkManager;
+import com.mucommander.file.AbstractFile;
+import com.mucommander.file.FileFactory;
+import com.mucommander.file.FileURL;
+import com.mucommander.file.ProtocolProvider;
 
 import java.io.IOException;
 
