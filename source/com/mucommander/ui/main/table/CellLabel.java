@@ -194,19 +194,17 @@ public class CellLabel extends JLabel {
     public void paint(Graphics g) {
         // Checks whether we need to paint a gradient background.
         if(gradientColor != null) {
-            Graphics2D g2;       // Allows us to use the setPaint and getPaint methods.
-            Paint      oldPaint; // Used to restore the graphics's Paint component after filling the background.
+            Graphics2D g2; // Allows us to use the setPaint and getPaint methods.
 
             // Initialisation.
-            g2       = (Graphics2D)g;
-            oldPaint = g2.getPaint();
+            g2 = (Graphics2D)g.create();
 
             // Paints the gradient background.
             g2.setPaint(new GradientPaint(0, 0, lastBackgroundColor, 0, getHeight(), gradientColor, false));
             g2.fillRect(0, 0, getWidth(), getHeight());
 
             // Restores the Graphics instance to its previous state.
-            g2.setPaint(oldPaint);
+            g2.dispose();
         }
 
         // Normal painting.
