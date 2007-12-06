@@ -51,11 +51,6 @@
   <!-- Default : F4                                                              -->
   <action class="com.mucommander.ui.action.EditAction"                  keystroke="F4"/>
 
-  <!-- Action  : Edit selected file with internal editor.                        -->
-  <!-- Ignores multiple selection.                                               -->
-  <!-- Default : shift F4                                                        -->
-  <action class="com.mucommander.ui.action.InternalEditAction"          keystroke="shift F4"/>
-
   <!-- Action  : Email selected file(s).                                         -->
   <!-- Default : control S                                                       -->
   <action class="com.mucommander.ui.action.EmailAction"                 keystroke="control S"/>
@@ -305,10 +300,6 @@
   <!-- Action  : Open the custom file viewer on selected file.                   -->
   <!-- Default : F3                                                              -->
   <action class="com.mucommander.ui.action.ViewAction"                  keystroke="F3"/>
-
-  <!-- Action  : Open the internal file viewer on selected file.                 -->
-  <!-- Default : shift F3                                                        -->
-  <action class="com.mucommander.ui.action.InternalViewAction"          keystroke="shift F3"/>
 
   <!-- Action  : Toggle hidden files display on and off.                         -->
   <!-- Default : shift alt H                                                     -->
