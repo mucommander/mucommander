@@ -24,6 +24,8 @@ import com.mucommander.io.BackupOutputStream;
 import com.mucommander.io.BackupInputStream;
 import com.mucommander.util.AlteredVector;
 import com.mucommander.util.VectorChangeListener;
+import com.mucommander.file.AbstractFile;
+import com.mucommander.file.FileFactory;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -46,7 +48,7 @@ public class BookmarkManager implements VectorChangeListener {
     private static boolean isLoading = false;
 
     /** Bookmarks file location */
-    private static File bookmarksFile;
+    private static AbstractFile bookmarksFile;
 
     /** Default bookmarks file name */
     private static final String DEFAULT_BOOKMARKS_FILE_NAME = "bookmarks.xml";
@@ -117,27 +119,45 @@ public class BookmarkManager implements VectorChangeListener {
      * @return the path to the bookmark file.
      * @see    #setBookmarksFile(String)
      */
-    public static synchronized File getBookmarksFile() {
+    public static synchronized AbstractFile getBookmarksFile() {
         if(bookmarksFile == null)
-            return new File(PlatformManager.getPreferencesFolder(), DEFAULT_BOOKMARKS_FILE_NAME);
+            return FileFactory.getFile(new File(PlatformManager.getPreferencesFolder(), DEFAULT_BOOKMARKS_FILE_NAME).getAbsolutePath());
         return bookmarksFile;
     }
 
     /**
      * Sets the path to the bookmarks file.
-     * @param     path                  path to the bookmarks file
+     * <p>
+     * This is a convenience method and is strictly equivalent to calling <code>setBookmarksFile(FileFactory.getFile(file))</code>.
+     * </p>
+     * @param     file                  path to the bookmarks file
      * @exception FileNotFoundException if <code>path</code> is not accessible.
      * @see       #getBookmarksFile()
      */
-    public static synchronized void setBookmarksFile(String path) throws FileNotFoundException {
-        File tempFile;
+    public static void setBookmarksFile(String file) throws FileNotFoundException {setBookmarksFile(FileFactory.getFile(file));}
 
-        // Makes sure the file is accessible.
-        tempFile = new File(path);
-        if(!(tempFile.exists() && tempFile.isFile() && tempFile.canRead()))
-            throw new FileNotFoundException("Not a valid file: " + path);
+    /**
+     * Sets the path to the bookmarks file.
+     * <p>
+     * This is a convenience method and is strictly equivalent to calling <code>setBookmarksFile(FileFactory.getFile(file.getAbsolutePath()))</code>.
+     * </p>
+     * @param     file                  path to the bookmarks file
+     * @exception FileNotFoundException if <code>path</code> is not accessible.
+     * @see       #getBookmarksFile()
+     */
+    public static void setBookmarksFile(File file) throws FileNotFoundException {setBookmarksFile(FileFactory.getFile(file.getAbsolutePath()));}
 
-        bookmarksFile = tempFile;
+    /**
+     * Sets the path to the bookmarks file.
+     * @param     file                  path to the bookmarks file
+     * @exception FileNotFoundException if <code>path</code> is not accessible.
+     * @see       #getBookmarksFile()
+     */
+
+    public static synchronized void setBookmarksFile(AbstractFile file) throws FileNotFoundException {
+        if(file.isBrowsable())
+            throw new FileNotFoundException("Not a valid file: " + file.getAbsolutePath());
+        bookmarksFile = file;
     }
 
 
