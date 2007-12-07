@@ -21,6 +21,7 @@ package com.mucommander.ui.action;
 import com.mucommander.Debug;
 import com.mucommander.PlatformManager;
 import com.mucommander.file.AbstractFile;
+import com.mucommander.file.FileFactory;
 import com.mucommander.file.util.ResourceLoader;
 import com.mucommander.io.BackupInputStream;
 import com.mucommander.ui.main.MainFrame;
@@ -59,7 +60,7 @@ public class ActionKeymap extends DefaultHandler {
     public final static String ACTION_KEYMAP_RESOURCE_PATH = "/" + DEFAULT_ACTION_KEYMAP_FILE_NAME;
 
     /** Action keymap file used when calling {@link #loadActionKeyMap()} */
-    private static File actionKeyMapFile;
+    private static AbstractFile actionKeyMapFile;
 
     /* Variables used for XML parsing */
 
@@ -78,21 +79,41 @@ public class ActionKeymap extends DefaultHandler {
     /**
      * Sets the path to the user action keymap file to be loaded when calling {@link #loadActionKeyMap()}.
      * By default, this file is {@link #DEFAULT_ACTION_KEYMAP_FILE_NAME} within the preferences folder.
-     *
-     * @param filePath path to the action keymap file
+     * <p>
+     * This is a convenience method and is strictly equivalent to calling <code>setActionKeyMapFile(FileFactory.getFile(file))</code>.
+     * </p>
+     * @param  file                  path to the action keymap file
+     * @throws FileNotFoundException if <code>file</code> is not accessible.
      */
-    public static void setActionKeyMapFile(String filePath) throws FileNotFoundException {
-        File tempFile;
+    public static void setActionKeyMapFile(String file) throws FileNotFoundException {setActionKeyMapFile(FileFactory.getFile(file));}
 
-        tempFile = new File(filePath);
-        if(!(tempFile.exists() && tempFile.isFile() && tempFile.canRead()))
-            throw new FileNotFoundException("Not a valid file: " + filePath);
-        actionKeyMapFile = tempFile;
+    /**
+     * Sets the path to the user action keymap file to be loaded when calling {@link #loadActionKeyMap()}.
+     * By default, this file is {@link #DEFAULT_ACTION_KEYMAP_FILE_NAME} within the preferences folder.
+     * <p>
+     * This is a convenience method and is strictly equivalent to calling <code>setActionKeyMapFile(FileFactory.getFile(file.getAbsolutePath()))</code>.
+     * </p>
+     * @param  file                  path to the action keymap file
+     * @throws FileNotFoundException if <code>file</code> is not accessible.
+     */
+    public static void setActionKeyMapFile(File file) throws FileNotFoundException {setActionKeyMapFile(FileFactory.getFile(file.getAbsolutePath()));}
+
+    /**
+     * Sets the path to the user action keymap file to be loaded when calling {@link #loadActionKeyMap()}.
+     * By default, this file is {@link #DEFAULT_ACTION_KEYMAP_FILE_NAME} within the preferences folder.
+     * @param  file                  path to the action keymap file
+     * @throws FileNotFoundException if <code>file</code> is not accessible.
+     */
+    public static void setActionKeyMapFile(AbstractFile file) throws FileNotFoundException {
+        if(file.isBrowsable())
+            throw new FileNotFoundException("Not a valid file: " + file.getAbsolutePath());
+
+        actionKeyMapFile = file;
     }
 
-    public static File getActionKeyMapFile() {
+    public static AbstractFile getActionKeyMapFile() {
         if(actionKeyMapFile == null)
-            return new File(PlatformManager.getPreferencesFolder(), DEFAULT_ACTION_KEYMAP_FILE_NAME);
+            return FileFactory.getFile(new File(PlatformManager.getPreferencesFolder(), DEFAULT_ACTION_KEYMAP_FILE_NAME).getAbsolutePath());
         return actionKeyMapFile;
     }
 
@@ -250,7 +271,7 @@ public class ActionKeymap extends DefaultHandler {
      */
     private ActionKeymap() throws Exception {
         try {
-            File file;
+            AbstractFile file;
 
             // If the user hasn't yet defined an action keymap, copies the default one.
             file = getActionKeyMapFile();
@@ -262,7 +283,7 @@ public class ActionKeymap extends DefaultHandler {
 
                 try {
                     in = ResourceLoader.getResourceAsStream(ACTION_KEYMAP_RESOURCE_PATH);
-                    out = new FileOutputStream(file);
+                    out = file.getOutputStream(false);
 
                     AbstractFile.copyStream(in, out);
                 }
