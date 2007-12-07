@@ -158,12 +158,12 @@ public class CheckVersionDialog extends QuestionDialog implements Runnable {
             labelsV.add(Translator.get(GoToWebsiteAction.class.getName()+".label"));
         }
 
-        // 'Install and restart' choice (if available)
-        if(jarURL!=null) {
-            actionsV.add(new Integer(INSTALL_AND_RESTART_ACTION));
-            // Todo: Localize me
-            labelsV.add(Translator.get("Install and restart"));
-        }
+//        // 'Install and restart' choice (if available)
+//        if(jarURL!=null) {
+//            actionsV.add(new Integer(INSTALL_AND_RESTART_ACTION));
+//            // Todo: Localize me
+//            labelsV.add(Translator.get("Install and restart"));
+//        }
 
         // Turn the vectors into arrays
         int nbChoices = actionsV.size();
