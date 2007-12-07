@@ -21,6 +21,7 @@ package com.mucommander.command;
 import com.mucommander.Debug;
 import com.mucommander.PlatformManager;
 import com.mucommander.file.AbstractFile;
+import com.mucommander.file.FileFactory;
 import com.mucommander.file.filter.*;
 import com.mucommander.io.BackupInputStream;
 import com.mucommander.io.BackupOutputStream;
@@ -61,28 +62,28 @@ public class CommandManager implements CommandBuilder {
     // - Association definitions -----------------------------------------------
     // -------------------------------------------------------------------------
     /** All known file associations. */
-    private static       Vector  associations;
+    private static       Vector       associations;
     /** Path to the custom association file, <code>null</code> if the default one should be used. */
-    private static       File    associationFile;
+    private static       AbstractFile associationFile;
     /** Whether the associations were modified since the last time they were saved. */
-    private static       boolean wereAssociationsModified;
+    private static       boolean      wereAssociationsModified;
     /** Default name of the association XML file. */
-    public  static final String  DEFAULT_ASSOCIATION_FILE_NAME = "associations.xml";
+    public  static final String       DEFAULT_ASSOCIATION_FILE_NAME = "associations.xml";
 
 
 
     // - Commands definition ---------------------------------------------------
     // -------------------------------------------------------------------------
     /** All known commands. */
-    private static       Vector  commands;
+    private static       Vector       commands;
     /** Path to the custom commands XML file, <code>null</code> if the default one should be used. */
-    private static       File    commandsFile;
+    private static       AbstractFile commandsFile;
     /** Whether the custom commands have been modified since the last time they were saved. */
-    private static       boolean wereCommandsModified;
+    private static       boolean      wereCommandsModified;
     /** Default name of the custom commands file. */
-    public  static final String  DEFAULT_COMMANDS_FILE_NAME    = "commands.xml";
+    public  static final String       DEFAULT_COMMANDS_FILE_NAME    = "commands.xml";
     /** Default command used when no other command is found for a specific file type. */
-    private static       Command defaultCommand;
+    private static       Command      defaultCommand;
 
 
 
@@ -461,11 +462,37 @@ public class CommandManager implements CommandBuilder {
      * @see    #loadAssociations()
      * @see    #writeAssociations()
      */
-    public static File getAssociationFile() {
+    public static AbstractFile getAssociationFile() {
         if(associationFile == null)
-            return new File(PlatformManager.getPreferencesFolder(), DEFAULT_ASSOCIATION_FILE_NAME);
+            return FileFactory.getFile(new File(PlatformManager.getPreferencesFolder(), DEFAULT_ASSOCIATION_FILE_NAME).getAbsolutePath());
         return associationFile;
     }
+
+    /**
+     * Sets the path to the custom associations file.
+     * <p>
+     * This is a convenience method and is strictly equivalent to calling <code>setAssociationFile(FileFactory.getFile(file))</code>.
+     * </p>
+     * @param  file                  path to the custom associations file.
+     * @throws FileNotFoundException if <code>file</code> is not accessible.
+     * @see    #getAssociationFile()
+     * @see    #loadAssociations()
+     * @see    #writeAssociations()
+     */
+    public static void setAssociationFile(String file) throws FileNotFoundException {setAssociationFile(FileFactory.getFile(file));}
+
+    /**
+     * Sets the path to the custom associations file.
+     * <p>
+     * This is a convenience method and is strictly equivalent to calling <code>setAssociationFile(FileFactory.getFile(file.getAbsolutePath()))</code>.
+     * </p>
+     * @param  file                  path to the custom associations file.
+     * @throws FileNotFoundException if <code>file</code> is not accessible.
+     * @see    #getAssociationFile()
+     * @see    #loadAssociations()
+     * @see    #writeAssociations()
+     */
+    public static void setAssociationFile(File file) throws FileNotFoundException {setAssociationFile(FileFactory.getFile(file.getAbsolutePath()));}
 
     /**
      * Sets the path to the custom associations file.
@@ -475,15 +502,11 @@ public class CommandManager implements CommandBuilder {
      * @see    #loadAssociations()
      * @see    #writeAssociations()
      */
-    public static void setAssociationFile(String file) throws FileNotFoundException {
-        File tempFile;
-
-        // If the file exists, it must accessible and readable.
-        tempFile = new File(file);
-        if(!(tempFile.exists() && tempFile.isFile() && tempFile.canRead()))
+    public static void setAssociationFile(AbstractFile file) throws FileNotFoundException {
+        if(file.isBrowsable())
             throw new FileNotFoundException("Not a valid file: " + file);
 
-        associationFile = tempFile;
+        associationFile = file;
     }
 
     /**
@@ -497,8 +520,8 @@ public class CommandManager implements CommandBuilder {
      * @see #setAssociationFile(String)
      */
     public static void loadAssociations() throws IOException {
-        File        file;
-        InputStream in;
+        AbstractFile file;
+        InputStream  in;
 
         // Checks whether the associations file exists. If it doesn't, create default associations.
         file = getAssociationFile();
@@ -613,11 +636,37 @@ public class CommandManager implements CommandBuilder {
      * @see    #loadCommands()
      * @see    #writeCommands()
      */
-    public static File getCommandFile() {
+    public static AbstractFile getCommandFile() {
         if(commandsFile == null)
-            return new File(PlatformManager.getPreferencesFolder(), DEFAULT_COMMANDS_FILE_NAME);
+            return FileFactory.getFile(new File(PlatformManager.getPreferencesFolder(), DEFAULT_COMMANDS_FILE_NAME).getAbsolutePath());
         return commandsFile;
     }
+
+    /**
+     * Sets the path to the custom commands file.
+     * <p>
+     * This is a convenience method and is strictly equivalent to calling <code>setCommandFile(FileFactory.getFile(file));</code>.
+     * </p>
+     * @param  file                  path to the custom commands file.
+     * @throws FileNotFoundException if <code>file</code> is not accessible.
+     * @see    #getCommandFile()
+     * @see    #loadCommands()
+     * @see    #writeCommands()
+     */
+    public static void setCommandFile(String file) throws FileNotFoundException {setCommandFile(FileFactory.getFile(file));}
+
+    /**
+     * Sets the path to the custom commands file.
+     * <p>
+     * This is a convenience method and is strictly equivalent to calling <code>setCommandFile(FileFactory.getFile(file.getAbsolutePath()));</code>.
+     * </p>
+     * @param  file                  path to the custom commands file.
+     * @throws FileNotFoundException if <code>file</code> is not accessible.
+     * @see    #getCommandFile()
+     * @see    #loadCommands()
+     * @see    #writeCommands()
+     */
+    public static void setCommandFile(File file) throws FileNotFoundException {setCommandFile(FileFactory.getFile(file.getAbsolutePath()));}
 
     /**
      * Sets the path to the custom commands file.
@@ -627,15 +676,12 @@ public class CommandManager implements CommandBuilder {
      * @see    #loadCommands()
      * @see    #writeCommands()
      */
-    public static void setCommandFile(String file) throws FileNotFoundException {
-        File tempFile;
+    public static void setCommandFile(AbstractFile file) throws FileNotFoundException {
+        // Makes sure file can be used as a command file.
+        if(file.isBrowsable())
+            throw new FileNotFoundException("Not a valid file: " + file.getAbsolutePath());
 
-        // If the file exists, it must accessible and readable.
-        tempFile = new File(file);
-        if(!(tempFile.exists() && tempFile.isFile() && tempFile.canRead()))
-            throw new FileNotFoundException("Not a valid file: " + file);
-
-        commandsFile = tempFile;
+        commandsFile = file;
     }
 
     /**
@@ -688,8 +734,8 @@ public class CommandManager implements CommandBuilder {
      * @see #setCommandFile(String)
      */
     public static void loadCommands() throws IOException {
-        File        file;
-        InputStream in;
+        AbstractFile file;
+        InputStream  in;
 
         file = getCommandFile();
         if(Debug.ON)
