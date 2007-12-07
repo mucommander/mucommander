@@ -504,7 +504,7 @@ public class CommandManager implements CommandBuilder {
      */
     public static void setAssociationFile(AbstractFile file) throws FileNotFoundException {
         if(file.isBrowsable())
-            throw new FileNotFoundException("Not a valid file: " + file);
+            throw new FileNotFoundException("Not a valid file: " + file.getAbsolutePath());
 
         associationFile = file;
     }
