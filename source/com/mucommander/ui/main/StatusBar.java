@@ -647,7 +647,10 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
                 backgroundColor = event.getColor();
                 break;
             case Theme.STATUS_BAR_BORDER_COLOR:
-                ((MutableLineBorder)getBorder()).setLineColor(event.getColor());
+                // Some (rather evil) look and feels will change borders outside of muCommander's control,
+                // this check is necessary to ensure no exception is thrown.
+                if(getBorder() instanceof MutableLineBorder)
+                    ((MutableLineBorder)getBorder()).setLineColor(event.getColor());
                 break;
             case Theme.STATUS_BAR_OK_COLOR:
                 okColor = event.getColor();

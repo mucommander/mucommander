@@ -48,6 +48,7 @@ import com.mucommander.ui.progress.ProgressTextField;
 import com.mucommander.ui.theme.*;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.dnd.DropTarget;
 import java.awt.event.FocusEvent;
@@ -573,19 +574,26 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
     ///////////////////////////
     // FocusListener methods //
     ///////////////////////////
+    public void setBorderColor(Color color) {
+        Border border;
+        // Some (rather evil) look and feels will change borders outside of muCommander's control,
+        // this check is necessary to ensure no exception is thrown.
+        if((border = scrollPane.getBorder()) instanceof MutableLineBorder)
+            ((MutableLineBorder)border).setLineColor(color);
+    }
 
     public void focusGained(FocusEvent e) {
         // Notify MainFrame that we are in control now! (our table/location field is active)
         mainFrame.setActiveTable(fileTable);
         if(e.getSource() == fileTable) {
-            ((MutableLineBorder)scrollPane.getBorder()).setLineColor(borderColor);
+            setBorderColor(borderColor);
             scrollPane.getViewport().setBackground(backgroundColor);
         }
     }
 
     public void focusLost(FocusEvent e) {
         if(e.getSource() == fileTable) {
-            ((MutableLineBorder)scrollPane.getBorder()).setLineColor(unfocusedBorderColor);
+            setBorderColor(unfocusedBorderColor);
             scrollPane.getViewport().setBackground(unfocusedBackgroundColor);
         }
         fileTable.getQuickSearch().cancel();
@@ -1009,14 +1017,14 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
         case Theme.FILE_TABLE_BORDER_COLOR:
             borderColor = event.getColor();
             if(fileTable.hasFocus()) {
-                ((MutableLineBorder)scrollPane.getBorder()).setLineColor(borderColor);
+                setBorderColor(borderColor);
                 scrollPane.repaint();
             }
             break;
         case Theme.FILE_TABLE_INACTIVE_BORDER_COLOR:
             unfocusedBorderColor = event.getColor();
             if(!fileTable.hasFocus()) {
-                ((MutableLineBorder)scrollPane.getBorder()).setLineColor(unfocusedBorderColor);
+                setBorderColor(unfocusedBorderColor);
                 scrollPane.repaint();
             }
             break;
