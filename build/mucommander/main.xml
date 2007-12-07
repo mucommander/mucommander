@@ -987,9 +987,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <tstamp/>
     <copy file="${res.version}" tofile="${version-file}">
       <filterset>
-        <filter token="VERSION" value="${app.version}${app.subversion}"/>
-        <filter token="URL"     value="${url.app-download}"/>
-        <filter token="DATE"    value="${DSTAMP}"/>
+        <filter token="VERSION"      value="${app.version}${app.subversion}"/>
+        <filter token="DATE"         value="${DSTAMP}"/>
+        <filter token="DOWNLOAD_URL" value="${url.app-download}"/>
+        <filter token="JAR_URL"      value="${url.jar}"/>
       </filterset>
     </copy>
   </target>
@@ -1040,6 +1041,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <property name="version-url" value="${url.nightly-version}"/>
     <property name="is-nightly"  value="true"/>
     <property name="url.jnlp"    value="${url.jnlp.nightly}"/>
+    <property name="url.jar"     value="${url.jar-nightly}/"/>
   </target>
 
   <!-- Generates all available release files.                  -->

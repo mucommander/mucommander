@@ -23,16 +23,20 @@ import com.mucommander.PlatformManager;
 import com.mucommander.VersionChecker;
 import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.file.FileFactory;
+import com.mucommander.job.SelfUpdateJob;
 import com.mucommander.text.Translator;
+import com.mucommander.ui.action.GoToWebsiteAction;
 import com.mucommander.ui.dialog.QuestionDialog;
+import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Vector;
 
 /**
- * This class takes care of retrieving information about the latest muCommander
- * version from a remote server and displaying the result to the end user.
+ * This class takes care of retrieving the information about the latest muCommander version from a remote server and
+ * displaying the result to the end user.
  *
  * @author Maxence Bernard
  */
@@ -49,8 +53,9 @@ public class CheckVersionDialog extends QuestionDialog implements Runnable {
     private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(320,0);	
 
     private final static int OK_ACTION = 0;
-    private final static int DOWNLOAD_ACTION = 1;
-	
+    private final static int GO_TO_WEBSITE_ACTION = 1;
+    private final static int INSTALL_AND_RESTART_ACTION = 2;
+
 	
     /**
      * Checks for updates and notifies the user of the outcome. The check itself is performed in a separate thread
@@ -79,9 +84,11 @@ public class CheckVersionDialog extends QuestionDialog implements Runnable {
         
         String         text;
         String         title;
-        String         downloadURL = null;
         VersionChecker version;
+        String         downloadURL = null;
         boolean        downloadOption = false;
+        String         jarURL = null;
+
         try {
             if(Debug.ON) Debug.trace("Checking for new version...");            
 
@@ -104,6 +111,8 @@ public class CheckVersionDialog extends QuestionDialog implements Runnable {
                 else {
                     text = Translator.get("version_dialog.new_version_url", downloadURL);
                 }
+
+                jarURL = version.getJarURL();
             }
             // We're already running latest version
             else {
@@ -135,11 +144,39 @@ public class CheckVersionDialog extends QuestionDialog implements Runnable {
 
         // Set title
         setTitle(title);
-        
-        String okText = Translator.get("ok");
-        init(mainFrame, new JLabel(text), 
-             downloadOption?new String[]{Translator.get("download"), okText}:new String[]{okText},
-             downloadOption?new int[]{DOWNLOAD_ACTION, OK_ACTION}:new int[]{OK_ACTION},
+
+        Vector actionsV = new Vector();
+        Vector labelsV = new Vector();
+
+        // 'OK' choice
+        actionsV.add(new Integer(OK_ACTION));
+        labelsV.add(Translator.get("ok"));
+
+        // 'Go to website' choice (if available)
+        if(downloadOption) {
+            actionsV.add(new Integer(GO_TO_WEBSITE_ACTION));
+            labelsV.add(Translator.get(GoToWebsiteAction.class.getName()+".label"));
+        }
+
+        // 'Install and restart' choice (if available)
+        if(jarURL!=null) {
+            actionsV.add(new Integer(INSTALL_AND_RESTART_ACTION));
+            // Todo: Localize me
+            labelsV.add(Translator.get("Install and restart"));
+        }
+
+        // Turn the vectors into arrays
+        int nbChoices = actionsV.size();
+        int actions[] = new int[nbChoices];
+        String labels[] = new String[nbChoices];
+        for(int i=0; i<nbChoices; i++) {
+            actions[i] = ((Integer)actionsV.elementAt(i)).intValue();
+            labels[i] = (String)labelsV.elementAt(i);
+        }
+
+        init(mainFrame, new JLabel(text),
+             labels,
+             actions,
              0);
 			
         JCheckBox showNextTimeCheckBox = new JCheckBox(Translator.get("prefs_dialog.check_for_updates_on_startup"),
@@ -150,9 +187,16 @@ public class CheckVersionDialog extends QuestionDialog implements Runnable {
         setMinimumSize(MINIMUM_DIALOG_DIMENSION);
 		
         // Show dialog and get user action
-        if(getActionValue()==DOWNLOAD_ACTION)
-            //            PlatformManager.openURLInBrowser(downloadURL); // Open URL in a new browser windoow
+        int action = getActionValue();
+
+        if(action==GO_TO_WEBSITE_ACTION) {
             PlatformManager.openUrl(FileFactory.getFile(downloadURL));
+        }
+        else if(action==INSTALL_AND_RESTART_ACTION) {
+            ProgressDialog progressDialog = new ProgressDialog(mainFrame, Translator.get("Installing new version"));
+            SelfUpdateJob job = new SelfUpdateJob(progressDialog, mainFrame, FileFactory.getFile(jarURL));
+            progressDialog.start(job);
+        }
 		
         // Remember user preference
         MuConfiguration.setVariable(MuConfiguration.CHECK_FOR_UPDATE, showNextTimeCheckBox.isSelected());

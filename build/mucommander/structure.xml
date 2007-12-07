@@ -68,8 +68,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- URL to which users should be directed in the unlikely   -->
   <!-- event that they'd want to donate money to the project.  -->
   <property name="url.donation"        value="${url.homepage}/#donate"/>
-
-
+  <!-- URL to the JAR file of the current release              -->
+  <property name="url.jar-release"     value="${url.homepage}/download/mucommander.jar"/>
+  <!-- URL to the JAR file of the latest nightly build         -->
+  <property name="url.jar-nightly"     value="${url.homepage}/download/nightly/mucommander.jar"/>
+  <!-- URL to the JAR file, set to the release value and       -->
+  <!-- overridden when in nightly mode.                        -->
+  <property name="url.jar"             value="${url.jar-release}/"/>
 
   <!-- = Folder structure ==================================== -->
   <!-- ======================================================= -->

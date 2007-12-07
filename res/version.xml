@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <mucommander>
   <latest_version>@VERSION@</latest_version>
-  <download_url>@URL@</download_url>
   <release_date>@DATE@</release_date>
+  <download_url>@DOWNLOAD_URL@</download_url>
+  <jar_url>@JAR_URL@</jar_url>
 </mucommander>
     

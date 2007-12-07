@@ -18,17 +18,14 @@
 
 package com.mucommander;
 
-import org.xml.sax.helpers.DefaultHandler;
-import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
-import org.xml.sax.Locator;
 import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.DefaultHandler;
+
 import javax.xml.parsers.SAXParserFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.Hashtable;
 
 /**
  * Retrieves information about the latest release of muCommander.
@@ -78,8 +75,10 @@ public class VersionChecker extends DefaultHandler {
     public static final String ROOT_ELEMENT    = "mucommander";
     /** Version XML element. */
     public static final String VERSION_ELEMENT = "latest_version";
-    /** URL XML element. */
-    public static final String URL_ELEMENT     = "download_url";
+    /** Download URL XML element. */
+    public static final String DOWNLOAD_URL_ELEMENT = "download_url";
+    /** JAR URL XML element. */
+    public static final String JAR_URL_ELEMENT = "jar_url";
     /** Date XML element. */
     public static final String DATE_ELEMENT    = "release_date";
 
@@ -88,13 +87,15 @@ public class VersionChecker extends DefaultHandler {
     // - XML parsing states -----------------------------------------------------
     // --------------------------------------------------------------------------
     /** Currently parsing the version tag. */
-    public static final int STATE_VERSION = 1;
-    /** Currently parsing the URL tag. */
-    public static final int STATE_URL     = 2;
+    public static final int STATE_VERSION      = 1;
+    /** Currently parsing the download URL tag. */
+    public static final int STATE_DOWNLOAD_URL = 2;
+    /** Currently parsing the download URL tag. */
+    public static final int STATE_JAR_URL      = 3;
     /** Currently parsing the date tag. */
-    public static final int STATE_DATE    = 3;
+    public static final int STATE_DATE         = 4;
     /** We're not quite sure what we're parsing. */
-    public static final int STATE_UNKNOWN = 0;
+    public static final int STATE_UNKNOWN      = 5;
 
 
 
@@ -104,6 +105,8 @@ public class VersionChecker extends DefaultHandler {
     private String latestVersion;
     /** Where to download the latest version. */
     private String downloadURL;
+    /** URL to the latest JAR file. */
+    private String jarURL;
     /** Remote release date. */
     private String releaseDate;
     /** Current state the parser is in. */
@@ -186,6 +189,12 @@ public class VersionChecker extends DefaultHandler {
     public String getDownloadURL() {return downloadURL;}
 
     /**
+     * Returns the URL to the latest JAR file, <code>null</code> if not available.
+     * @return the URL to the latest JAR file.
+     */
+    public String getJarURL() {return jarURL;}
+
+    /**
      * Returns the date at which the latest version of muCommander has been released.
      * <p>
      * The date format is YYYYMMDD.
@@ -204,6 +213,7 @@ public class VersionChecker extends DefaultHandler {
     public void startDocument() {
         latestVersion = "";
         downloadURL   = "";
+        jarURL        = "";
         releaseDate   = "";
     }
 
@@ -213,8 +223,10 @@ public class VersionChecker extends DefaultHandler {
     public void characters(char[] ch, int offset, int length) {
         if(state == STATE_VERSION)
             latestVersion += new String(ch, offset, length);
-        else if(state == STATE_URL)
+        else if(state == STATE_DOWNLOAD_URL)
             downloadURL += new String(ch, offset, length);
+        else if(state == STATE_JAR_URL)
+            jarURL += new String(ch, offset, length);
         else if(state == STATE_DATE)
             releaseDate += new String(ch, offset, length);
     }
@@ -226,8 +238,10 @@ public class VersionChecker extends DefaultHandler {
         // Checks whether we know the tag and updates the current state.
         if(qName.equals(VERSION_ELEMENT))
             state = STATE_VERSION;
-        else if(qName.equals(URL_ELEMENT))
-            state = STATE_URL;
+        else if(qName.equals(DOWNLOAD_URL_ELEMENT))
+            state = STATE_DOWNLOAD_URL;
+        else if(qName.equals(JAR_URL_ELEMENT))
+            state = STATE_JAR_URL;
         else if(qName.equals(DATE_ELEMENT))
             state = STATE_DATE;
         else
@@ -246,13 +260,17 @@ public class VersionChecker extends DefaultHandler {
         // Make sure we're not keep meaningless whitecase characters in the data.
         latestVersion = latestVersion.toLowerCase().trim();
         downloadURL   = downloadURL.trim();
+        jarURL        = jarURL.trim();
+        if("".equals(jarURL))
+            jarURL = null;
         releaseDate   = releaseDate.trim();
 
         // Logs the data if in debug mode.
         if(com.mucommander.Debug.ON) {
-            com.mucommander.Debug.trace("download URL:  "  + downloadURL);
+            com.mucommander.Debug.trace("download URL: "  + downloadURL);
+            com.mucommander.Debug.trace("jar URL: "       + jarURL);
             com.mucommander.Debug.trace("latestVersion: " + latestVersion);
-            com.mucommander.Debug.trace("releaseDate:   "   + releaseDate);
+            com.mucommander.Debug.trace("releaseDate:   " + releaseDate);
         }
     }
 }
