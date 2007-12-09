@@ -21,6 +21,7 @@ package com.mucommander.job;
 import com.mucommander.Debug;
 import com.mucommander.PlatformManager;
 import com.mucommander.file.AbstractFile;
+import com.mucommander.file.FileFactory;
 import com.mucommander.file.filter.AttributeFileFilter;
 import com.mucommander.file.filter.EqualsFilenameFilter;
 import com.mucommander.file.filter.ExtensionFilenameFilter;
@@ -55,7 +56,10 @@ import java.io.IOException;
 public class SelfUpdateJob extends CopyJob {
 
     /** The JAR file to be updated */
-    private AbstractFile destJarFile;
+    private AbstractFile destJar;
+
+    /** The temporary file where the remote JAR file is copied, before being moved to its final location */
+    private AbstractFile tempDestJar;
 
     /** The ClassLoader to use for loading all classes from the JAR file */
     private ClassLoader classLoader;
@@ -71,17 +75,44 @@ public class SelfUpdateJob extends CopyJob {
         this(progressDialog, mainFrame, new FileSet(remoteJarFile.getParentSilently(), remoteJarFile), getDestJarFile());
     }
 
-    private SelfUpdateJob(ProgressDialog progressDialog, MainFrame mainFrame, FileSet files, AbstractFile destJarFile) {
-        // Todo: copy to temp first, then to JAR
-        super(progressDialog, mainFrame, files, destJarFile.getParentSilently(), destJarFile.getName(), CopyJob.DOWNLOAD_MODE, FileCollisionDialog.OVERWRITE_ACTION);
+    private SelfUpdateJob(ProgressDialog progressDialog, MainFrame mainFrame, FileSet files, AbstractFile destJar) {
+        this(progressDialog, mainFrame, files, destJar, getTempDestJar(destJar));
+    }
 
-        this.destJarFile = destJarFile;
+    private SelfUpdateJob(ProgressDialog progressDialog, MainFrame mainFrame, FileSet files, AbstractFile destJar, AbstractFile tempDestJar) {
+        super(progressDialog, mainFrame, files, tempDestJar.getParentSilently(), tempDestJar.getName(), CopyJob.DOWNLOAD_MODE, FileCollisionDialog.OVERWRITE_ACTION);
+
+        this.destJar = destJar;
+        this.tempDestJar = tempDestJar;
         this.classLoader = getClass().getClassLoader();
 
         directoryOrClassFileFilter = new OrFileFilter();
         directoryOrClassFileFilter.addFileFilter(new AttributeFileFilter(AttributeFileFilter.DIRECTORY));
         directoryOrClassFileFilter.addFileFilter(new ExtensionFilenameFilter(".class"));
     }
+
+    private static AbstractFile getTempDestJar(AbstractFile destJar) {
+        try {
+            return createTemporaryFolder().getChild(destJar.getName());
+        }
+        catch(IOException e) {
+            return destJar;
+        }
+    }
+
+    private static AbstractFile createTemporaryFolder() {
+        AbstractFile tempFolder;
+        try {
+            tempFolder = FileFactory.getTemporaryFile("mucomander-self-update", true);
+            tempFolder.mkdir();
+        }
+        catch(IOException e) {
+            tempFolder = FileFactory.getTemporaryFolder();
+        }
+
+        return tempFolder;
+    }
+
 
     /**
      * Returns the JAR file to update.
@@ -108,9 +139,9 @@ public class SelfUpdateJob extends CopyJob {
 
             String classname = file.getAbsolutePath(false);
             // Strip off the JAR file's path and ".class" extension
-            classname = classname.substring(destJarFile.getAbsolutePath(true).length(), classname.length()-6);
+            classname = classname.substring(destJar.getAbsolutePath(true).length(), classname.length()-6);
             // Replace separator characters by '.'
-            classname = StringUtils.replaceCompat(classname, destJarFile.getSeparator(), ".");
+            classname = StringUtils.replaceCompat(classname, destJar.getSeparator(), ".");
             // We now have a class name, e.g. "com.mucommander.Launcher"
 
             try {
@@ -131,8 +162,7 @@ public class SelfUpdateJob extends CopyJob {
 
     public String getStatusString() {
         if(loadingClasses) {
-            // Todo: localize me
-            return Translator.get("Preparing install...");
+            return Translator.get("version_dialog.preparing_for_update");
         }
 
         return super.getStatusString();
@@ -144,7 +174,7 @@ public class SelfUpdateJob extends CopyJob {
         try {
             // Loads all classes from the JAR file before the new JAR file is installed.
             // This will ensure that the shutdown sequence, which invokes so not-yet-loaded classes goes down smoothly.
-            loadClassRecurse(destJarFile);
+            loadClassRecurse(destJar);
             loadingClasses = false;
         }
         catch(Exception e) {
@@ -160,9 +190,9 @@ public class SelfUpdateJob extends CopyJob {
             AbstractFile parent;
             // Mac OS X
             if(PlatformManager.getOsFamily()==PlatformManager.MAC_OS_X) {
-                parent = destJarFile.getParent();
+                parent = destJar.getParent();
 
-                // Find the .app container that encloses the JAR file
+                // Look for an .app container that encloses the JAR file
                 if(parent.getName().equals("Java")
                 &&(parent=parent.getParent())!=null && parent.getName().equals("Resources")
                 &&(parent=parent.getParent())!=null && parent.getName().equals("Contents")
@@ -177,23 +207,34 @@ public class SelfUpdateJob extends CopyJob {
                     return;
                 }
             }
-            // Windows
-            else if(PlatformManager.isWindowsFamily()) {
-                parent = destJarFile.getParent();
+            else {
+                parent = destJar.getParent();
+                EqualsFilenameFilter launcherFilter;
 
-                // Find the muCommander.exe launcher located in the same folder as the JAR file
-                EqualsFilenameFilter exeFilter = new EqualsFilenameFilter("muCommander.exe", false);
-                AbstractFile[] exeFile = parent.ls(exeFilter);
+                // Windows
+                if(PlatformManager.isWindowsFamily()) {
+                    // Look for a muCommander.exe launcher located in the same folder as the JAR file
+                    launcherFilter = new EqualsFilenameFilter("muCommander.exe", false);
 
-                if(exeFile!=null && exeFile.length==1) {
-                    PlatformManager.open(exeFile[0]);
+                }
+                // Other platforms, possibly Unix/Linux
+                else {
+                    // Look for a mucommander.sh located in the same folder as the JAR file
+                    launcherFilter = new EqualsFilenameFilter("mucommander.sh", false);
+                }
+
+                AbstractFile[] launcherFile = parent.ls(launcherFilter);
+
+                // If a launcher file was found, execute it
+                if(launcherFile!=null && launcherFile.length==1) {
+                    PlatformManager.open(launcherFile[0]);
 
                     return;
                 }
             }
 
-            // Todo: preserve KDE/Gnome desktop properties and other properties
-            ProcessRunner.execute(new String[]{"java", "-jar", destJarFile.getAbsolutePath()});
+            // No platform-specific launcher found, launch the Jar directly
+            ProcessRunner.execute(new String[]{"java", "-jar", destJar.getAbsolutePath()});
         }
         catch(IOException e) {
             if(Debug.ON) Debug.trace("Caught exception: "+e);
@@ -201,6 +242,19 @@ public class SelfUpdateJob extends CopyJob {
         }
         finally {
             WindowManager.quit();
+        }
+    }
+
+    protected boolean processFile(AbstractFile file, Object recurseParams) {
+        if(!super.processFile(file, recurseParams))
+            return false;
+
+        // Move the file from the temporary location to its final destination
+        try {
+            return tempDestJar.moveTo(destJar);
+        }
+        catch(IOException e) {
+            return false;
         }
     }
 }

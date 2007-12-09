@@ -4634,6 +4634,40 @@ version_dialog.not_available:NL:Kan geen versie-informatie van server krijgen
 version_dialog.not_available:SK:Nie je možné získať informácie o verzii zo serveru.
 version_dialog.not_available:JA:サーバーからバージョン情報を取得することができません。
 
+# This entry is used as a button label in the 'Check for updates' dialog.
+# As such, the text should be reasonnably short. Clicking this button will
+# download the latest version, install it and restart muCommander.
+version_dialog.install_and_restart:EN:Install and restart
+version_dialog.install_and_restart:FR:Installer et redémarrer
+# Translation missing (New!)
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Displayed in the progress dialog before actually installing the a new version
+version_dialog.preparing_for_update:EN:Preparing for update...
+version_dialog.preparing_for_update:FR:Préparation de la mise à jour...
+# Translation missing (New!)
+
+
+
+
+
+
+
+
+
+
+
 
 ###############
 # Quit dialog #
