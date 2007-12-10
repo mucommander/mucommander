@@ -176,4 +176,20 @@ public class SystemTrayNotifier extends AbstractNotifier implements ActionListen
 
         WindowManager.getCurrentMainFrame().toFront();
     }
+
+
+    ////////////////////////
+    // Overridden methods //
+    ////////////////////////
+
+    protected void finalize() throws Throwable {
+        // This ensures that the system tray icon is removed when the application terminates.
+        // Even though this is a bit of a shot in the dark, this may fix a problem reported under Linux where the
+        // tray icon stayed after the application had quit:
+        /// http://www.mucommander.com/forums/viewtopic.php?t=604
+        if(isEnabled())
+            setEnabled(false);
+
+        super.finalize();
+    }
 }
