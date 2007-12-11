@@ -117,9 +117,23 @@ public class OpenLocationAction extends MuAction {
         this(mainFrame, properties, bonjourService.getURL(), bonjourService.getNameWithProtocol());
     }
 
+    /**
+     * Returns the {@link FolderPanel} on which to change the current folder. This method returns the currently active
+     * panel but can be overridden if another panel should be used.
+     *
+     * @return the currently active panel
+     */
+    protected FolderPanel getFolderPanel() {
+        return mainFrame.getActiveTable().getFolderPanel();
+    }
+
+
+    /////////////////////////////
+    // MuAction implementation //
+    /////////////////////////////
 
     public void performAction() {
-        FolderPanel folderPanel = mainFrame.getActiveTable().getFolderPanel();
+        FolderPanel folderPanel = getFolderPanel();
         if(url!=null) {
             folderPanel.tryChangeCurrentFolder(url);
         }
