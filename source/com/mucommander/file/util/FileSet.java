@@ -25,34 +25,36 @@ import java.util.Vector;
 
 
 /**
- * FileSet is a file vector, with an optional base folder attached which is the parent
- * folder of all contained files.
+ * FileSet is a <code>java.util.Vector</code> of {@link AbstractFile} instances, and an optional base folder which is
+ * the folder containing the files.
  *
  * @author Maxence Bernard
  */
 public class FileSet extends Vector {
 
-    /** Parent folder of all contained files */
+    /** The base/parent folder of the files this Vector contains */
     private AbstractFile baseFolder;
-	
-	
+
     /**
      * Creates a new empty FileSet.
      */
     public FileSet() {
     }
 
-
     /**
      * Creates a new empty FileSet with the specified base folder.
+     *
+     * @param baseFolder the folder containing the files
      */
     public FileSet(AbstractFile baseFolder) {
         this.baseFolder = baseFolder;
     }
 
-	
     /**
      * Creates a new empty FileSet with the specified base folder, and adds the given file.
+     *
+     * @param baseFolder the folder containing the files
+     * @param file the file to add
      */
     public FileSet(AbstractFile baseFolder, AbstractFile file) {
         this.baseFolder = baseFolder;
@@ -61,7 +63,9 @@ public class FileSet extends Vector {
 
 	
     /**
-     * Returns the base folder associated with this FileSet, null if there isn't any.
+     * Returns the base folder associated with this FileSet, <code>null</code> if there isn't any.
+     *
+     * @return the base folder associated with this FileSet, null if there isn't any.
      */
     public AbstractFile getBaseFolder() {
         return baseFolder;
@@ -69,17 +73,12 @@ public class FileSet extends Vector {
 	
 
     /**
-     * Convenience method to avoid casts to AbstractFile.
+     * Convenience method that returns the {@link AbstractFile} located at the specified position.
+     *
+     * @param i index of the file to retrieve
+     * @return the AbstractFile located at the specified position
      */
     public AbstractFile fileAt(int i) {
         return (AbstractFile)super.elementAt(i);
     }
-	
-	
-    /**
-     * 
-     */
-    //	public Object clone() {
-    //		return super.clone();
-    //	}
 }
