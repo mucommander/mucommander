@@ -27,6 +27,10 @@ import com.mucommander.ui.main.MainFrame;
 import java.util.Hashtable;
 
 /**
+ * This class is an abstract {@link MuAction} that monitors changes in the currently active panel's location and calls
+ * {@link #toggleEnabledState()} every time the location has changed, and when the current panel has changed to update
+ * enable or disable this action.
+ *
  * @author Maxence Bernard, Nicolas Rinaudo
  */
 public abstract class GoToAction extends MuAction implements ActivePanelListener, LocationListener {
@@ -45,18 +49,17 @@ public abstract class GoToAction extends MuAction implements ActivePanelListener
     }
 
 
-
     //////////////////////
     // Abstract methods //
     //////////////////////
-    public abstract void performAction();
 
     /**
-     * Enables or disables this action based on the history of the currently active FolderPanel: if there is a previous
-     * folder in the history, this action will be enabled, if not it will be disabled.
+     * Enables or disables this action based on the location of the currently active {@link FolderPanel}.
+     * This method is called once by the constructor to set the initial state. Then it is called every time the location
+     * of the currently active <code>FolderPanel</code> has changed, and when the currently active <code>FolderPanel</code>
+     * has changed.
      */
     protected abstract void toggleEnabledState();
-
 
 
     /////////////////////////////////
@@ -66,7 +69,6 @@ public abstract class GoToAction extends MuAction implements ActivePanelListener
     public void activePanelChanged(FolderPanel folderPanel) {
         toggleEnabledState();
     }
-
 
 
     //////////////////////////////
