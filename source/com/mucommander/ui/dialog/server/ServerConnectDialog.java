@@ -28,6 +28,7 @@ import com.mucommander.ui.dialog.FocusDialog;
 import com.mucommander.ui.helper.FocusRequester;
 import com.mucommander.ui.layout.XBoxPanel;
 import com.mucommander.ui.layout.YBoxPanel;
+import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.main.MainFrame;
 
 import javax.swing.*;
@@ -44,14 +45,14 @@ import java.util.Vector;
 
 
 /**
- * Dialog that facilitate the connection to a server. It contains tabs and associated panels for each of the protocols
- * supported.   
+ * Dialog that assists the user in connecting to a filesystem. It contains tabs and associated panels for each of the
+ * supported protocols.
  *
  * @author Maxence Bernard
  */
 public class ServerConnectDialog extends FocusDialog implements ActionListener, ChangeListener, DocumentListener {
 
-    private MainFrame mainFrame;
+    private FolderPanel folderPanel;
 	
     private JButton cancelButton;
     private ServerPanel currentServerPanel;
@@ -72,32 +73,40 @@ public class ServerConnectDialog extends FocusDialog implements ActionListener, 
     public final static int NFS_INDEX = 4;
 
     private static int lastPanelIndex = SMB_INDEX;
-	
-	
-    public ServerConnectDialog(MainFrame mainFrame) {
-        this(mainFrame, lastPanelIndex);
+
+
+    /**
+     * Creates a new <code>ServerConnectDialog</code> that changes the current folder on the specified {@link FolderPanel}.
+     *
+     * @param folderPanel the panel on which to change the current folder
+     */
+    public ServerConnectDialog(FolderPanel folderPanel) {
+        this(folderPanel, lastPanelIndex);
     }
 	
 		
-    public ServerConnectDialog(MainFrame mainFrame, int panelIndex) {
-        super(mainFrame, Translator.get(com.mucommander.ui.action.ConnectToServerAction.class.getName()+".label"), mainFrame);
-        this.mainFrame = mainFrame;
-        this.lastPanelIndex = panelIndex;
+    /**
+     * Creates a new <code>ServerConnectDialog</code> that changes the current folder on the specified {@link FolderPanel}.
+     * The specified panel is selected when the dialog appears.
+     *
+     * @param folderPanel the panel on which to change the current folder
+     * @param panelIndex the panel to select
+     */
+    public ServerConnectDialog(FolderPanel folderPanel, int panelIndex) {
+        super(folderPanel.getMainFrame(), Translator.get(com.mucommander.ui.action.ConnectToServerAction.class.getName()+".label"), folderPanel.getMainFrame());
+        this.folderPanel = folderPanel;
+        lastPanelIndex = panelIndex;
 
+        MainFrame mainFrame = folderPanel.getMainFrame();
         Container contentPane = getContentPane();
 		
         this.tabbedPane = new JTabbedPane(JTabbedPane.TOP);
         this.serverPanels = new Vector();
 
-//        Enumeration registeredProtocols = FileFactory.getRegisteredFileProtocols();
-//        if(registeredProtocols.contains(FileProtocols.SMB))
-            addTab("SMB", new SMBPanel(this, mainFrame));
-//        if(registeredProtocols.contains(FileProtocols.FTP))
-            addTab("FTP", new FTPPanel(this, mainFrame));
-//        if(registeredProtocols.contains(FileProtocols.SFTP))
-            addTab("SFTP", new SFTPPanel(this, mainFrame));
-//        if(registeredProtocols.contains(FileProtocols.HTTP))
-            addTab("HTTP", new HTTPPanel(this, mainFrame));
+        addTab("SMB", new SMBPanel(this, mainFrame));
+        addTab("FTP", new FTPPanel(this, mainFrame));
+        addTab("SFTP", new SFTPPanel(this, mainFrame));
+        addTab("HTTP", new HTTPPanel(this, mainFrame));
         addTab("NFS", new NFSPanel(this, mainFrame));
 
         tabbedPane.setSelectedIndex(panelIndex);
@@ -182,12 +191,11 @@ public class ServerConnectDialog extends FocusDialog implements ActionListener, 
             currentServerPanel.dispose();
             dispose();
 
-            // Change current folder
-            mainFrame.getActiveTable().getFolderPanel().tryChangeCurrentFolder(serverURL);
+            // Change the current folder
+            folderPanel.tryChangeCurrentFolder(serverURL);
         }
         catch(IOException ex) {
             JOptionPane.showMessageDialog(this, Translator.get("folder_does_not_exist"), Translator.get("table.folder_access_error_title"), JOptionPane.ERROR_MESSAGE);
-            return;
         }
     }
 	
