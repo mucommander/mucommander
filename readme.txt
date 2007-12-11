@@ -112,10 +112,10 @@ New features:
   and some TAR archives.
 
 Improvements:
-- 
+- Added an 'Explore bookmarks' item to the 'Bookmarks' menu.
 
 Localization:
-- Japanese translation contributed by Nardog
+- Japanese translation contributed by Nardog.
 
 Bug fixes:
 - SMB passwords that contain '@' characters are now properly handled.
@@ -130,6 +130,7 @@ Known issues:
 - Executable permissions are not preserved properly for local files prior to
   Java 1.6.
 - SMB support may not work properly on non multi-language JRE.
+- Access to public SMB shares require credentials.
 - 'Copy files to clipboard' not working with some applications (files are not
   pasted).
 - Mac OS X : 'Sort by' keyboard shortcuts in menu show Command modifier instead

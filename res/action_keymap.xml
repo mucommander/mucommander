@@ -307,5 +307,5 @@
 
   <!-- Action  : Open the bookmark file system in the current folder panel.      -->
   <!-- Default : alt B                                                           -->
-  <action class="com.mucommander.ui.action.OpenBookmarksAction"         keystroke="alt B"/>
+  <action class="com.mucommander.ui.action.ExploreBookmarksAction"      keystroke="alt B"/>
 </keymap>

@@ -248,6 +248,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
         bookmarksMenu = MenuToolkit.addMenu(Translator.get("bookmarks_menu"), menuItemMnemonicHelper, this);
         MenuToolkit.addMenuItem(bookmarksMenu, ActionManager.getActionInstance(AddBookmarkAction.class, mainFrame), menuItemMnemonicHelper);
         MenuToolkit.addMenuItem(bookmarksMenu, ActionManager.getActionInstance(EditBookmarksAction.class, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(bookmarksMenu, ActionManager.getActionInstance(ExploreBookmarksAction.class, mainFrame), menuItemMnemonicHelper);
         bookmarksMenu.add(new JSeparator());
         MenuToolkit.addMenuItem(bookmarksMenu, ActionManager.getActionInstance(EditCredentialsAction.class, mainFrame), menuItemMnemonicHelper);
         bookmarksMenu.add(new JSeparator());

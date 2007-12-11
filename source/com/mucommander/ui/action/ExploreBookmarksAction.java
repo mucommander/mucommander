@@ -18,25 +18,23 @@
 
 package com.mucommander.ui.action;
 
-import com.mucommander.PlatformManager;
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.FileFactory;
-import com.mucommander.file.FileProtocols;
-import com.mucommander.file.impl.local.LocalFile;
-import com.mucommander.job.TempExecJob;
-import com.mucommander.text.Translator;
-import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;
-import com.mucommander.ui.main.table.FileTable;
 
 import java.util.Hashtable;
 
 /**
+ * This action changes the current folder of the currently active {@link com.mucommander.ui.main.FolderPanel} to
+ * <code>bookmark://</code> which is the root of bookmark filesystem, allowing to explore all the bookmarks the user has.
+ *
  * @author Nicolas Rinaudo
  */
-public class OpenBookmarksAction extends MuAction {
+public class ExploreBookmarksAction extends MuAction {
 
-    public OpenBookmarksAction(MainFrame mainFrame, Hashtable properties) {super(mainFrame, properties);}
+    public ExploreBookmarksAction(MainFrame mainFrame, Hashtable properties) {
+        super(mainFrame, properties);
+    }
 
-    public void performAction() {mainFrame.getActiveTable().getFolderPanel().tryChangeCurrentFolder(FileProtocols.BOOKMARKS + "://");}
+    public void performAction() {
+        mainFrame.getActiveTable().getFolderPanel().tryChangeCurrentFolder("bookmark://");
+    }
 }

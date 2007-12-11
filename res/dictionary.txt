@@ -1831,6 +1831,28 @@ com.mucommander.ui.action.EditBookmarksAction.label:SK:Editovať záložky
 com.mucommander.ui.action.EditBookmarksAction.label:HU:Könyvjelzők rendezése
 com.mucommander.ui.action.EditBookmarksAction.label:JA:ブックマークの編集
 
+# This action changes the current folder to 'bookmark://', allowing to browse
+# bookmarks as if they were directories.
+com.mucommander.ui.action.ExploreBookmarksAction.label:EN:Explore bookmarks
+com.mucommander.ui.action.ExploreBookmarksAction.label:FR:Explorer les favoris
+# Translation missing (New!)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 com.mucommander.ui.action.EditCredentialsAction.label:EN:Edit credentials
 com.mucommander.ui.action.EditCredentialsAction.label:FR:Éditer les indentifiants
 com.mucommander.ui.action.EditCredentialsAction.label:SL:Uredi akreditive
