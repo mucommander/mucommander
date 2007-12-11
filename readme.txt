@@ -124,6 +124,9 @@ Bug fixes:
   inconsistent sort order and could prevent the application from restarting.
 - Fixed a bug that allowed empty custom associations to be registered, breaking
   the whole file matching process.
+- Fixed a regression affecting the opening of files on non-local filesystems.
+- Fixed an issue with the drive button which would sometimes change the folder
+  on the opposite panel.
 
 Known issues:
 - Korean translation is not up-to-date.
