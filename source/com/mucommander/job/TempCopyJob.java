@@ -30,7 +30,7 @@ import com.mucommander.ui.main.MainFrame;
 import java.io.IOException;
 
 /**
- * This job copies a file or a set of files to a temporary folder, makes the temporary file(s) read-only.
+ * This job copies a file or a set of files to a temporary folder and makes the temporary file(s) read-only.
  * The temporary files are deleted when the JVM terminates.
  *
  * @author Maxence Bernard
