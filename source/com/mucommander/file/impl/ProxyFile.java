@@ -30,6 +30,8 @@ import com.mucommander.process.AbstractProcess;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 /**
  * ProxyFile is an {@link AbstractFile} that acts as a proxy between the class that extends it
@@ -212,6 +214,10 @@ public abstract class ProxyFile extends AbstractFile {
 
     public FileURL getURL() {
         return file.getURL();
+    }
+
+    public URL getJavaNetURL() throws MalformedURLException {
+        return file.getJavaNetURL();
     }
 
     public String getName() {
