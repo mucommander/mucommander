@@ -19,6 +19,7 @@
 package com.mucommander.file;
 
 import com.mucommander.PlatformManager;
+import com.mucommander.file.compat.CompatURLStreamHandler;
 import com.mucommander.file.filter.FileFilter;
 import com.mucommander.file.filter.FilenameFilter;
 import com.mucommander.file.impl.ProxyFile;
@@ -33,6 +34,8 @@ import java.awt.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.security.MessageDigest;
 import java.util.regex.Pattern;
 
@@ -94,6 +97,26 @@ public abstract class AbstractFile implements FilePermissions {
      */
     public FileURL getURL() {
         return fileURL;
+    }
+
+
+    /**
+     * Creates and returns a <code>java.net.URL</code> referring to the same location as the {@link FileURL} associated
+     * with this <code>AbstractFile</code>.
+     * The <code>java.net.URL</code> is created from the string representation of this file's <code>FileURL</code>.
+     * Thus, any credentials this <code>FileURL</code> contains are preserved, but properties are lost.
+     *
+     * <p>The returned <code>URL</code> uses this {@link AbstractFile} to access the associated resource, via the
+     * underlying <code>URLConnection</code> which delegates to this class.</p>
+     *
+     * <p>It is important to note that this method is provided for interoperability purposes, for the sole purpose of
+     * connecting to APIs that require a <code>java.net.URL</code>.</p>
+     *
+     * @return a <code>java.net.URL</code> referring to the same location as this <code>FileURL</code>
+     * @throws java.net.MalformedURLException if the java.net.URL could not parse the location of this FileURL
+     */
+    public URL getJavaNetURL() throws MalformedURLException {
+        return new URL(null, getURL().toString(true), new CompatURLStreamHandler());
     }
 
 
