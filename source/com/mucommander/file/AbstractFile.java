@@ -116,7 +116,7 @@ public abstract class AbstractFile implements FilePermissions {
      * @throws java.net.MalformedURLException if the java.net.URL could not parse the location of this FileURL
      */
     public URL getJavaNetURL() throws MalformedURLException {
-        return new URL(null, getURL().toString(true), new CompatURLStreamHandler());
+        return new URL(null, getURL().toString(true), new CompatURLStreamHandler(this));
     }
 
 
