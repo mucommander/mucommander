@@ -26,6 +26,7 @@ import com.mucommander.ui.main.CommandBar;
 import com.mucommander.ui.main.SplashScreen;
 import com.mucommander.ui.main.ToolBar;
 import com.mucommander.ui.main.WindowManager;
+import com.mucommander.extension.ExtensionManager;
 
 import java.lang.reflect.Constructor;
 
@@ -79,7 +80,10 @@ public class Launcher {
         System.out.println(" -c FILE, --configuration FILE     Load configuration from FILE");
 
         // Allows users to tweak how command bar configuration is loaded / saved.
-        System.out.println(" -C FILE, --commandbar FILE        Load command bar from FILE");
+        System.out.println(" -C FILE, --commandbar FILE        Load command bar from FILE.");
+
+        // Allows users to change the extensions folder.
+        System.out.println(" -e FOLDER, --extensions FOLDER    Load extensions from FOLDER.");
 
         // Allows users to tweak how custom commands are loaded / saved.
         System.out.println(" -f FILE, --commands FILE          Load custom commands from FILE.");
@@ -219,8 +223,6 @@ public class Launcher {
         verbose       = true;
         useSplash     = true;
 
-
-
         // - Command line parsing -------------------------------------
         // ------------------------------------------------------------
         for(i = 0; i < args.length; i++) {
@@ -328,6 +330,14 @@ public class Launcher {
                 catch(Exception e) {printError("Could not set preferences folder", e, fatalWarnings);}
             }
 
+            // Extensions folder.
+            else if((args[i].equals("-e") || args[i].equals("--extensions"))) {
+                if(i >= args.length - 1)
+                    printError("Missing FOLDER parameter to " + args[i], null, true);
+                try {ExtensionManager.setExtensionsFolder(args[++i]);}
+                catch(Exception e) {printError("Could not set extensions folder", e, fatalWarnings);}
+            }
+
             // Ignore warnings.
             else if(args[i].equals("-i") || args[i].equals("--ignore-warnings"))
                 fatalWarnings = false;
@@ -348,6 +358,8 @@ public class Launcher {
             else
                 break;
         }
+
+
 
         // - MAC OS init ----------------------------------------------
         // ------------------------------------------------------------
@@ -374,6 +386,10 @@ public class Launcher {
 
         // - muCommander boot -----------------------------------------
         // ------------------------------------------------------------
+        // Adds all extensions to the classpath.
+        try {ExtensionManager.addExtensionsToClasspath();}
+        catch(Exception e) {if(Debug.ON) Debug.trace("Failed to add extensions to the classpath");}
+
         // Shows the splash screen.
         if(useSplash)
             splashScreen = new SplashScreen(RuntimeConstants.VERSION, "Loading preferences...");
@@ -393,7 +409,7 @@ public class Launcher {
 
         // Traps VM shutdown
         Runtime.getRuntime().addShutdownHook(new ShutdownHook());
-		
+
         // Loads dictionary
         printStartupMessage("Loading dictionary...");
         try {com.mucommander.text.Translator.loadDictionaryFile();}
