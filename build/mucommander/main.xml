@@ -920,7 +920,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
       </filterset>
     </copy>
     <copy todir="${deb.data}/usr/share/mucommander" overwrite="true">
-      <fileset file="${res}/mucommander.sh"/>
       <fileset file="${res.license}"/>
       <fileset file="${res.readme}"/>
       <fileset file="${jar.cmp}"/>
