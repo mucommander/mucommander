@@ -69,8 +69,11 @@ public class AbstractFileClassLoader extends ClassLoader {
      * @throws IllegalArgumentException if <code>file</code> is not browsable.
      */
     public void addFile(AbstractFile file) {
+        // Makes sure the specified file is browsable.
         if(!file.isBrowsable())
             throw new IllegalArgumentException();
+
+        // Only adds the file if it's not already there.
         if(!contains(file))
             files.add(file);
     }
@@ -245,6 +248,7 @@ public class AbstractFileClassLoader extends ClassLoader {
      */
     protected synchronized Class findClass(String name) throws ClassNotFoundException {
         AbstractFile file; // File containing the class' bytecode.
+        Class        c;
 
         // Tries to locate the specified class and, if found, load it.
         if((file = findResourceAsFile(name.replace('.', '/') + ".class")) != null) {
