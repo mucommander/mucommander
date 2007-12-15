@@ -40,6 +40,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <property name="app.jvm"             value="1.4"/>
   <!-- Fully qualified name of the application's main class.   -->
   <property name="app.main"            value="com.mucommander.Launcher"/>
+  <!-- Fully qualified name of the application's class loader. -->
+  <property name="app.loader"          value="com.mucommander.file.AbstractFileClassLoader"/>
 
 
 

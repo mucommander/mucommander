@@ -500,7 +500,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <echo>Creating Win32 executable...</echo>
     <launch4j>
       <config outfile="${exe.file}" jarpath="mucommander.jar" icon="${nsis.icon}" dontwrapjar="true" chdir=".">
-        <jre minversion="${app.jvm}.0"/>
+        <jre minversion="${app.jvm}.0" args="-Djava.system.class.loader=${app.loader}"/>
       </config>
     </launch4j>
   </target>
@@ -655,6 +655,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         <string name="MainClass"  value="${app.main}"/>
         <string name="JVMVersion" value="${app.jvm}+"/>
         <dict name="Properties">
+          <string name="java.system.class.loader"   value="${app.loader}"/>
           <string name="com.apple.smallTabs"        value="true"/>
           <string name="com.apple.hwaccel"          value="true"/>
           <string name="apple.laf.useScreenMenuBar" value="true"/>
@@ -823,7 +824,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <mkdir dir="${portable.tmp}"/>
     <launch4j>
       <config outfile="${portable.exe}" jarpath="mucommander.jar" icon="${nsis.icon}" dontwrapjar="true" jarargs="-p .mucommander" chdir=".">
-        <jre minversion="${app.jvm}.0"/>
+        <jre minversion="${app.jvm}.0" args="Djava.system.class.loader=${app.loader}"/>
       </config>
     </launch4j>
   </target>
@@ -841,6 +842,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
       <fileset file="${res}/mucommander.sh"/>
       <filterset>
         <filter token="ARGS" value="-p $0/../.mucommander"/>
+        <filter token="JAVA_ARGS" value="-Djava.system.class.loader=${app.loader}"/>
       </filterset>
     </copy>
 
@@ -872,7 +874,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <copy todir="${tmp}" overwrite="true">
       <fileset file="${res}/mucommander.sh"/>
       <filterset>
-        <filter token="ARGS" value=""/>
+        <filter token="ARGS"      value=""/>
+        <filter token="JAVA_ARGS" value="-Djava.system.class.loader=${app.loader}"/>
       </filterset>
     </copy>
 
@@ -916,7 +919,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <copy todir="${deb.data}/usr/share/mucommander" overwrite="true">
       <fileset file="${res}/mucommander.sh"/>
       <filterset>
-        <filter token="ARGS" value=""/>
+        <filter token="ARGS"      value=""/>
+        <filter token="JAVA_ARGS" value="-Djava.system.class.loader=${app.loader}"/>
       </filterset>
     </copy>
     <copy todir="${deb.data}/usr/share/mucommander" overwrite="true">
@@ -1096,6 +1100,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- Runs the application from unpackaged binaries.          -->
   <target name="run" depends="compile,resources">
     <java classname="${app.main}" fork="true">
+      <sysproperty key="java.system.class.loader" value="${app.loader}"/>
       <classpath>
         <pathelement location="${classes.normal}"/>
         <fileset dir="${lib}">
