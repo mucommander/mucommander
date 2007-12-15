@@ -24,7 +24,6 @@ import com.mucommander.file.AbstractFileClassLoader;
 import com.mucommander.file.FileFactory;
 import com.mucommander.file.filter.OrFileFilter;
 import com.mucommander.file.filter.ExtensionFilenameFilter;
-import com.mucommander.file.filter.DirectoryFileFilter;
 
 import java.io.IOException;
 import java.io.File;
