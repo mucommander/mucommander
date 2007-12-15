@@ -28,6 +28,7 @@ import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
 import com.mucommander.ui.dialog.auth.AuthDialog;
+import com.mucommander.extension.ExtensionManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -35,6 +36,7 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Vector;
 
 /**
@@ -80,10 +82,41 @@ public class WindowManager implements WindowListener, ConfigurationListener {
 
     // - Initialisation ---------------------------------------------------------
     // --------------------------------------------------------------------------
+    /**
+     * Installs all custom look and feels.
+     */
+    private static final void installCustomLookAndFeels() {
+        List        plafs;         // All available custom look and feels.
+        Iterator    plafsIterator; // Iterator on custom look and feels.
+        LookAndFeel plaf;          // Current look and feel.
+
+        // Tries to retrieve the custom look and feels list.
+        if((plafs = MuConfiguration.getListVariable(MuConfiguration.CUSTOM_LOOK_AND_FEELS, MuConfiguration.CUSTOM_LOOK_AND_FEELS_SEPARATOR)) == null)
+            return;
+
+        // Goes through the list and install every custom look and feel we could find.
+        plafsIterator = plafs.iterator();
+        while(plafsIterator.hasNext()) {
+            try {
+                plaf = (LookAndFeel)Class.forName((String)plafsIterator.next(), true, ClassLoader.getSystemClassLoader()).newInstance();
+                UIManager.installLookAndFeel(plaf.getName(), plaf.getClass().getName());
+            }
+            catch(Exception e) {if(Debug.ON) Debug.trace(e);}
+        }
+    }
 
     static {
         mainFrames = new Vector();
         instance   = new WindowManager();
+
+        // Notifies Swing that look&feels must be loaded as extensions.
+        // This is necessary to ensure that look and feels placed in the extensions folder
+        // are accessible.
+        UIManager.getDefaults().put("ClassLoader", ClassLoader.getSystemClassLoader());
+
+        // Installs all custom look and feels.
+        installCustomLookAndFeels();
+        
 
         // Sets custom lookAndFeel if different from current lookAndFeel
         String lnfName = MuConfiguration.getVariable(MuConfiguration.LOOK_AND_FEEL);
@@ -483,7 +516,7 @@ public class WindowManager implements WindowListener, ConfigurationListener {
             for(int i=0; i<mainFrames.size(); i++)
                 SwingUtilities.updateComponentTreeUI((MainFrame)(mainFrames.elementAt(i)));
         }
-        catch(Exception e) {}
+        catch(Throwable e) {}
     }
 
 
