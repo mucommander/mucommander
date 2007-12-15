@@ -68,6 +68,10 @@ public class MuConfiguration implements Columns {
     public static final boolean DEFAULT_CONFIRM_ON_QUIT           = true;
     /** Look and feel used by muCommander. */
     public static final String  LOOK_AND_FEEL                     = "lookAndFeel";
+    /** All registered custom Look and feels. */
+    public static final String  CUSTOM_LOOK_AND_FEELS             = "custom_look_and_feels";
+    /** Separator used to tokenise the custom look and feels variable. */
+    public static final String  CUSTOM_LOOK_AND_FEELS_SEPARATOR   = ";";
     /** Controls whether system notifications are enabled. */
     public static final String  ENABLE_SYSTEM_NOTIFICATIONS       = "enable_system_notifications";
     /** System notifications are enabled by default on platforms where a notifier is available and works well enough.
