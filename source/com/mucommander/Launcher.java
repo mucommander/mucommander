@@ -453,14 +453,12 @@ public class Launcher {
 
         // Loads the ToolBar's description file
         printStartupMessage("Loading toolbar description...");
-        try {
-            ToolBar.loadDescriptionFile();}
+        try {ToolBar.loadDescriptionFile();}
         catch(Exception e) {printFileError("Could not load toolbar description", e, fatalWarnings);}
 
         // Loads the CommandBar's description file
         printStartupMessage("Loading command bar description...");
-        try {
-            CommandBar.loadDescriptionFile();}
+        try {CommandBar.loadDescriptionFile();}
         catch(Exception e) {printFileError("Could not load commandbar description", e, fatalWarnings);}
 
         // Loads the themes.
