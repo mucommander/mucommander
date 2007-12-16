@@ -159,6 +159,7 @@ The following options are available:
  -b FILE, --bookmarks FILE         Load bookmarks from FILE.
  -c FILE, --configuration FILE     Load configuration from FILE
  -C FILE, --commandbar FILE        Load command bar from FILE
+ -e FOLDER, --extensions FOLDER    Load extensions from FOLDER.
  -f FILE, --commands FILE          Load custom commands from FILE.
  -i, --ignore-warnings             Do not fail on warnings (default).
  -k FILE, --keymap FILE            Load keymap from FILE
