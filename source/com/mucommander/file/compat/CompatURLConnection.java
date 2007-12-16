@@ -43,8 +43,10 @@ class CompatURLConnection extends URLConnection {
     public CompatURLConnection(URL url, AbstractFile file) throws IOException {
         super(url);
 
-        this.file = file;
-        connected = true;
+        if(file!=null) {
+            this.file = file;
+            connected = true;
+        }
     }
 
     /**
