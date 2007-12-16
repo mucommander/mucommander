@@ -1093,8 +1093,10 @@ public abstract class AbstractFile implements FilePermissions {
      * registered in {@link FileFactory}. The specified preferred resolution will be used as a hint, but the returned
      * icon may have different dimension; see {@link com.mucommander.file.icon.FileIconProvider#getFileIcon(AbstractFile, java.awt.Dimension)}
      * for full details.
+     * This method returns <code>null</code> if the JVM is running on a headless environment.
+     *
      * @param preferredResolution the preferred icon resolution
-     * @return an icon representing this file
+     * @return an icon representing this file, <code>null</code> if the JVM is running on a headless environment
      * @see com.mucommander.file.FileFactory#getDefaultFileIconProvider()
      * @see com.mucommander.file.icon.FileIconProvider#getFileIcon(AbstractFile, java.awt.Dimension)
      */
@@ -1105,8 +1107,9 @@ public abstract class AbstractFile implements FilePermissions {
     /**
      * Returns an icon representing this file, using the default {@link com.mucommander.file.icon.FileIconProvider}
      * registered in {@link FileFactory}. The default preferred resolution for the icon is 16x16 pixels.
+     * This method returns <code>null</code> if the JVM is running on a headless environment.
      *
-     * @return an icon representing this file
+     * @return an icon representing this file, <code>null</code> if the JVM is running on a headless environment
      * @see com.mucommander.file.FileFactory#getDefaultFileIconProvider()
      * @see com.mucommander.file.icon.FileIconProvider#getFileIcon(AbstractFile, java.awt.Dimension)
      */
