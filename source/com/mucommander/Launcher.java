@@ -326,7 +326,7 @@ public class Launcher {
             else if((args[i].equals("-p") || args[i].equals("--preferences"))) {
                 if(i >= args.length - 1)
                     printError("Missing FOLDER parameter to " + args[i], null, true);
-                try {PlatformManager.setPreferencesFolder(new java.io.File(args[++i]));}
+                try {PlatformManager.setPreferencesFolder(args[++i]);}
                 catch(Exception e) {printError("Could not set preferences folder", e, fatalWarnings);}
             }
 
@@ -381,8 +381,6 @@ public class Launcher {
             }
             catch(Exception e) {if(Debug.ON) Debug.trace("Exception thrown while initializing Mac OS X integration");}
         }
-
-
 
         // - muCommander boot -----------------------------------------
         // ------------------------------------------------------------
