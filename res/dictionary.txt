@@ -9605,6 +9605,11 @@ prefs_dialog.import_theme:JA:テーマのインポート
 
 
 
+prefs_dialog.import_look_and_feel:EN:Import look and feel
+prefs_dialog.import_look_and_feel:FR:Importer un look and feel
+# Translation missing (KO)
+
+
 
 # Error message displayed when a theme import fails because it couldn't be written.
 # %1 will be replaced by the theme's name.
@@ -9781,6 +9786,14 @@ prefs_dialog.delete_theme:JA:テーマ %1 を永久に削除しますか ?
 
 
 
+# %1 will be replaced by the look and feel name.
+prefs_dialog.delete_look_and_feel:EN:Permanently delete look and feel %1 ?
+prefs_dialog.delete_look_and_feel:FR:Supprimer définitivement le look and feel %1 ?
+# Translation missing
+
+
+
+
 
 
 prefs_dialog.rename_failed:EN:Failed to rename theme %1
@@ -9827,6 +9840,16 @@ prefs_dialog.xml_file:IT:File XML
 prefs_dialog.xml_file:PL:plik XML
 prefs_dialog.xml_file:JA:XML ファイル
 # Translation missing (KO)
+
+
+
+
+
+# Label of the JAR file' filter used by the look&feel import / export dialog boxes.
+prefs_dialog.jar_file:EN:JAR file
+prefs_dialog.jar_file:FR:Fichier JAR
+# Translation missing
+
 
 
 
