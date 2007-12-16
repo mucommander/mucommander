@@ -28,6 +28,7 @@ import com.mucommander.ui.icon.FileIcons;
 import com.mucommander.ui.main.table.Columns;
 
 import java.io.IOException;
+import java.io.FileNotFoundException;
 import java.util.List;
 
 /**
@@ -639,6 +640,5 @@ public class MuConfiguration implements Columns {
 
     // - Configuration source --------------------------------------------------
     // -------------------------------------------------------------------------
-    public static void setConfigurationFile(String file) {configuration.setSource(new MuConfigurationSource(file));}
-
+    public static void setConfigurationFile(String file) throws FileNotFoundException {configuration.setSource(new MuConfigurationSource(file));}
 }
