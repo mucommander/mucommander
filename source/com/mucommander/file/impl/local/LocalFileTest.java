@@ -23,6 +23,7 @@ import com.mucommander.file.AbstractFileTestCase;
 import com.mucommander.file.FileFactory;
 
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 
 /**
  * An {@link com.mucommander.file.AbstractFileTestCase} implementation for {@link LocalFile}.
@@ -49,8 +50,9 @@ public class LocalFileTest extends AbstractFileTestCase {
      * Asserts that a file can be renamed to a filename variation of the same file.
      *
      * @throws IOException should not normally happen
+     * @throws NoSuchAlgorithmException should not happen
      */
-    public void testMoveToCaseVariation() throws IOException {
+    public void testMoveToCaseVariation() throws IOException, NoSuchAlgorithmException {
         // First test with a regular file
         createFile(tempFile, 1);
         AbstractFile destFile = tempFile.getParent().getDirectChild(tempFile.getName().toUpperCase());
