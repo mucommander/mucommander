@@ -226,20 +226,13 @@ import java.net.MalformedURLException;
         }
     }
 
-
     public AbstractFile getParent() throws IOException {
         if(!parentValSet) {
             FileURL parentURL = fileURL.getParent();
-            // If parent URL as returned by fileURL.getParent() is null and URL's host is not null,
-            // create an 'smb://' parent to browse network workgroups
-            if(parentURL==null) {
-                if(fileURL.getHost()!=null)
-                    parentURL = new FileURL(FileProtocols.SMB+"://");
-                else
-                    return null;    // This file is already smb://
-            }
+            if(parentURL!=null)
+                parent = new SMBFile(parentURL, null);
+            // Note: do not make the special smb:// file a parent of smb://host/, this would cause parent unit tests to fail
 
-            parent = new SMBFile(parentURL, null);
             parentValSet = true;
         }
 
@@ -385,6 +378,7 @@ import java.net.MalformedURLException;
 
     public void delete() throws IOException {
         file.delete();
+        checkSmbFile(false);
     }
 
 
@@ -571,7 +565,6 @@ import java.net.MalformedURLException;
             throw new FileTransferException(FileTransferException.UNKNOWN_REASON);
         }
     }
-
 
     public boolean equals(Object f) {
         if(!(f instanceof SMBFile))
