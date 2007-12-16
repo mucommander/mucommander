@@ -95,11 +95,13 @@ public class WindowManager implements WindowListener, ConfigurationListener {
             return;
 
         // Goes through the list and install every custom look and feel we could find.
+        // Look and feels that aren't supported under the current platform are ignored.
         plafsIterator = plafs.iterator();
         while(plafsIterator.hasNext()) {
             try {
                 plaf = (LookAndFeel)Class.forName((String)plafsIterator.next(), true, ClassLoader.getSystemClassLoader()).newInstance();
-                UIManager.installLookAndFeel(plaf.getName(), plaf.getClass().getName());
+                if(plaf.isSupportedLookAndFeel())
+                    UIManager.installLookAndFeel(plaf.getName(), plaf.getClass().getName());
             }
             catch(Throwable e) {if(Debug.ON) Debug.trace(e);}
         }
