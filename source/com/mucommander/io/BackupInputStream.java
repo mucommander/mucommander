@@ -20,6 +20,7 @@ package com.mucommander.io;
 
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
+import com.mucommander.file.FileURL;
 
 import java.io.File;
 import java.io.FilterInputStream;
@@ -70,10 +71,14 @@ public class BackupInputStream extends FilterInputStream implements BackupConsta
      */
     private static InputStream getInputStream(AbstractFile file) throws IOException {
         AbstractFile backup;
+        FileURL test;
+
+        test = (FileURL)file.getURL().clone();
+        test.setPath(test.getPath() + BACKUP_SUFFIX);
 
         // Checks whether the backup file is a better choice than the target one.
-        backup = FileFactory.getFile(file.getAbsolutePath() + BACKUP_SUFFIX);
-        if(backup.exists() && (file.getSize() < backup.getSize()))
+        backup = FileFactory.getFile(test);
+        if(backup != null && backup.exists() && (file.getSize() < backup.getSize()))
             return backup.getInputStream();
 
         // Opens a stream on the target file.
