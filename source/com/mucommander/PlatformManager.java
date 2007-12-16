@@ -22,12 +22,13 @@ import com.mucommander.command.Command;
 import com.mucommander.command.CommandManager;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileProtocols;
+import com.mucommander.file.FileFactory;
 import com.mucommander.process.AbstractProcess;
 import com.mucommander.process.ProcessRunner;
 
 import java.awt.event.MouseEvent;
 import java.io.File;
-
+import java.io.IOException;
 
 /**
  * This class takes care of platform-specific issues, such as getting screen dimensions
@@ -184,7 +185,7 @@ public class PlatformManager {
     // - Misc. fields -----------------------------------------------------------
     // --------------------------------------------------------------------------
     /** Folder in which to store the preferences. */
-    private static File prefFolder;
+    private static AbstractFile prefFolder;
 
 
 
@@ -598,7 +599,7 @@ public class PlatformManager {
      * </p>
      * @return the path to the default muCommander preferences folder.
      */
-    public static File getDefaultPreferencesFolder() {
+    public static AbstractFile getDefaultPreferencesFolder() {
         File folder;
 
         // Mac OS X specific folder (~/Library/Preferences/muCommander)
@@ -614,7 +615,7 @@ public class PlatformManager {
                 if(Debug.ON)
                     Debug.trace("Could not create preference folder: " + folder.getAbsolutePath());
 
-        return folder;
+        return FileFactory.getFile(folder.getAbsolutePath());
     }
 
     /**
@@ -630,7 +631,7 @@ public class PlatformManager {
      * </p>
      * @return the path to the user's preference folder.
      */
-    public static File getPreferencesFolder() {
+    public static AbstractFile getPreferencesFolder() {
         // If the preferences folder has been set, use it.
         if(prefFolder != null)
             return prefFolder;
@@ -647,21 +648,21 @@ public class PlatformManager {
      * @param     folder                   path to the folder in which muCommander will look for its preferences.
      * @exception IllegalArgumentException thrown if <code>folder</code> is not a valid folder path.
      */
-    public static void setPreferencesFolder(File folder) throws IllegalArgumentException {
-        // Makes sure we get the canonical path
-        // (for 'dirty hacks' such as ./mucommander.sh/../.mucommander)
-        try {folder = folder.getCanonicalFile();}
-        catch(Exception e) {throw new IllegalArgumentException(e);}
+    public static void setPreferencesFolder(File folder) throws IOException {setPreferencesFolder(FileFactory.getFile(folder.getAbsolutePath()));}
+    public static void setPreferencesFolder(String path) throws IOException {
+        AbstractFile folder;
 
-        // Makes sure the specified folder exists and is valid.
-        if(!folder.isDirectory()) {
-            if(folder.exists())
-                folder = folder.getParentFile();
-            else if(!folder.mkdirs()) {
-                if(Debug.ON) Debug.trace("Could not create preferences directory: " + folder);
-                throw new IllegalArgumentException("Could not create folder " + folder);
-            }
-        }
+        if((folder = FileFactory.getFile(path)) == null)
+            setPreferencesFolder(new File(path));
+        else
+            setPreferencesFolder(folder);
+    }
+
+    public static void setPreferencesFolder(AbstractFile folder) throws IOException {
+        if(!folder.exists())
+            folder.mkdir();
+        else if(!folder.isBrowsable())
+            folder = folder.getParent();
         prefFolder = folder;
     }
 }
