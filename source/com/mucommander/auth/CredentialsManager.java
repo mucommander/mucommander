@@ -21,6 +21,8 @@ package com.mucommander.auth;
 import com.mucommander.Debug;
 import com.mucommander.PlatformManager;
 import com.mucommander.file.FileURL;
+import com.mucommander.file.AbstractFile;
+import com.mucommander.file.FileFactory;
 import com.mucommander.io.BackupOutputStream;
 import com.mucommander.util.AlteredVector;
 import com.mucommander.util.VectorChangeListener;
@@ -60,7 +62,7 @@ public class CredentialsManager implements VectorChangeListener {
 //    private static Vector implicitCredentials = new Vector();
 
     /** Credentials file location */
-    private static File credentialsFile;
+    private static AbstractFile credentialsFile;
 
     /** Default credentials file name */
     private static final String DEFAULT_CREDENTIALS_FILE_NAME = "credentials.xml";
@@ -79,27 +81,46 @@ public class CredentialsManager implements VectorChangeListener {
 
 
     /**
-     * Return a java.io.File instance that points to the credentials file location.
+     * Returns the path to the credentials file.
+     * @return the path to the credentials file.
+     * @throws IOException if there was some problem locating the default credentials file.
      */
-    private static File getCredentialsFile() {
+    private static AbstractFile getCredentialsFile() throws IOException {
         if(credentialsFile == null)
-            return new File(PlatformManager.getPreferencesFolder(), DEFAULT_CREDENTIALS_FILE_NAME);
+            return PlatformManager.getPreferencesFolder().getChild(DEFAULT_CREDENTIALS_FILE_NAME);
         return credentialsFile;
     }
 
     /**
      * Sets the path to the credentials file.
-     * @param path the path to the credentials file
+     * @param  path                  path to the credentials file
      * @throws FileNotFoundException if <code>path</code> is not available.
      */
     public static void setCredentialsFile(String path) throws FileNotFoundException {
-        File tempFile;
+        AbstractFile file;
 
-        tempFile = new File(path);
-        if(!(tempFile.exists() && tempFile.isFile() && tempFile.canRead()))
-            throw new FileNotFoundException("Not a valid file: " + path);
+        if((file = FileFactory.getFile(path)) == null)
+            setCredentialsFile(new File(path));
+        else
+            setCredentialsFile(file);
+    }
 
-        credentialsFile = tempFile;
+    /**
+     * Sets the path to the credentials file.
+     * @param  file                  path to the credentials file
+     * @throws FileNotFoundException if <code>path</code> is not available.
+     */
+    public static void setCredentialsFile(File file) throws FileNotFoundException {setCredentialsFile(FileFactory.getFile(file.getAbsolutePath()));}
+
+    /**
+     * Sets the path to the credentials file.
+     * @param  file                  path to the credentials file
+     * @throws FileNotFoundException if <code>path</code> is not available.
+     */
+    public static void setCredentialsFile(AbstractFile file) throws FileNotFoundException {
+        if(file.isBrowsable())
+            throw new FileNotFoundException("Not a valid file: " + file);
+        credentialsFile = file;
     }
 
 
@@ -108,7 +129,7 @@ public class CredentialsManager implements VectorChangeListener {
      * @throws Exception if an error occurs while loading the credentials file.
      */
     public static void loadCredentials() throws Exception {
-        File credentialsFile = getCredentialsFile();
+        AbstractFile credentialsFile = getCredentialsFile();
         if(credentialsFile.exists()) {
             if(Debug.ON) Debug.trace("Found credentials file: "+credentialsFile.getAbsolutePath());
             // Parse the credentials file

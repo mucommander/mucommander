@@ -38,6 +38,8 @@ import java.lang.reflect.InvocationTargetException;
  * @author Nicolas Rinaudo
  */
 public class ExtensionManager {
+    private static AbstractFileClassLoader loader;
+
     // - Extensions folder ------------------------------------------------------
     // --------------------------------------------------------------------------
     /** Path to the extensions folder. */
@@ -49,10 +51,19 @@ public class ExtensionManager {
 
     // - Initialisation ---------------------------------------------------------
     // --------------------------------------------------------------------------
+    static {
+        ClassLoader temp;
+        if((temp = ClassLoader.getSystemClassLoader()) instanceof AbstractFileClassLoader)
+            loader = (AbstractFileClassLoader)temp;
+        else
+            loader = new AbstractFileClassLoader();
+    }
+
     /**
      * Prevents instanciations of this class.
      */
     private ExtensionManager() {}
+
 
 
     // - Extension folder access ------------------------------------------------
@@ -68,19 +79,18 @@ public class ExtensionManager {
     }
 
     public static void setExtensionsFolder(String path) throws IOException {
-        File folder;
+        AbstractFile folder;
 
-        // Makes sure we get the canonical path
-        // (for 'dirty hacks' such as ./mucommander.sh/../.mucommander)
-        try {setExtensionsFolder(new File(path).getCanonicalFile());}
-        catch(Exception e) {throw new IllegalArgumentException(e);}
+        if((folder = FileFactory.getFile(path)) == null)
+            setExtensionsFolder(new File(path));
+        else
+            setExtensionsFolder(FileFactory.getFile(path));
     }
 
     private static AbstractFile getDefaultExtensionsFolder() throws IOException {
         AbstractFile folder;
 
-        //        folder = FileFactory.getFile(DEFAULT_EXTENSIONS_FOLDER_NAME, PlatformManager.getPreferencesFolder());
-        folder = FileFactory.getFile(new File(PlatformManager.getPreferencesFolder(), DEFAULT_EXTENSIONS_FOLDER_NAME).getAbsolutePath());
+        folder = PlatformManager.getPreferencesFolder().getChild(DEFAULT_EXTENSIONS_FOLDER_NAME);
 
         // Makes sure the folder exists.
         if(!folder.exists())
@@ -102,58 +112,10 @@ public class ExtensionManager {
     // - Classpath extension ----------------------------------------------------
     // --------------------------------------------------------------------------
     /**
-     * Adds the specified file to the current classpath.
-     * <p>
-     * This method does its best to modify the current classpath, but this isn't always possible. Either of
-     * the following conditions must be met for the method to be succesfull:
-     * <ul>
-     *   <li>
-     *     The system classloader as returned by <code>ClassLoader.getSystemClassLoader()</code> is an instance
-     *     of {@link AbstractFileClassLoader}. This can be achieved by setting the system property
-     *     <code>java.system.class.loader</code> to <code>com.mucommander.file.AbstractFileClassLoader</code>
-     *     when starting the Java VM.
-     *   </li>
-     *   <li>
-     *     The system classloader as returned by <code>ClassLoader.getSystemClassLoader()</code> is an instance
-     *     of <code>URLClassLoader</code> and no security manager prevents us from overriding its <code>addURL</code>
-     *     method's protection.
-     *   </li>
-     * </ul>
-     * </p>
-     * @param  file                  file to add to the classpath.
-     * @throws IllegalStateException if the VM is not in a state that allows this method to work.
-     * @throws MalformedURLException if the specified <code>file</code> couldn't be converted to a <code>java.net.URL</code>.
+     * Adds the specified file to the extension's classpath.
+     * @param file file to add to the classpath.
      */
-    public static void addToClassPath(AbstractFile file) throws IllegalStateException, MalformedURLException {
-        ClassLoader loader;
-
-        loader = ClassLoader.getSystemClassLoader();
-
-        // If the system classloader is an AbstractFileClassLoader, we can just add the file.
-        if(loader instanceof AbstractFileClassLoader)
-            ((AbstractFileClassLoader)loader).addFile(file);
-
-        // If the system classloader is an URLClassLoader, we need to override the addURL method's
-        // protection.
-        else if(loader instanceof URLClassLoader) {
-            try {
-                Method method = URLClassLoader.class.getDeclaredMethod("addURL", new Class[]{URL.class});
-                method.setAccessible(true);
-                method.invoke(loader, new Object[]{file.getJavaNetURL()});
-            }
-            // We couldn't override addURL's protection, the JVM is not in a state that allows this method
-            // to work.
-            catch(IllegalAccessException e) {throw new IllegalStateException();}
-
-            // Ignore these errors as they cannot happen.
-            catch(NoSuchMethodException e) {}
-            catch(InvocationTargetException e) {}
-        }
-
-        // The JVM is not in a state that allows this method to work.
-        else
-            throw new IllegalStateException();
-    }
+    public static void addToClassPath(AbstractFile file) {loader.addFile(file);}
 
     /**
      * Adds all known extensions to the current classpath.
@@ -165,10 +127,8 @@ public class ExtensionManager {
      * </ul>
      * </p>
      * @throws IOException if the extensions folder is not accessible.
-     * @throws IllegalStateException if the JVM is not in a state that allows us to modify the classpath at runtime.
-     * @throws MalformedURLException if any of the new classpath entries couldn't be converted to a <code>java.net.URL</code>.
      */
-    public static void addExtensionsToClasspath() throws IOException, IllegalStateException, MalformedURLException {
+    public static void addExtensionsToClasspath() throws IOException {
         AbstractFile[] files;
 
         // Adds the extensions folder to the classpath.
@@ -179,4 +139,6 @@ public class ExtensionManager {
         for(int i = 0; i < files.length; i++)
             addToClassPath(files[i]);
     }
+
+    public static ClassLoader getClassLoader() {return loader;}
 }

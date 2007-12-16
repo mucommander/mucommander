@@ -461,10 +461,11 @@ public class CommandManager implements CommandBuilder {
      * @see    #setAssociationFile(String)
      * @see    #loadAssociations()
      * @see    #writeAssociations()
+     * @throws IOException if there was an error locating the default commands file.
      */
-    public static AbstractFile getAssociationFile() {
+    public static AbstractFile getAssociationFile() throws IOException {
         if(associationFile == null)
-            return FileFactory.getFile(new File(PlatformManager.getPreferencesFolder(), DEFAULT_ASSOCIATION_FILE_NAME).getAbsolutePath());
+            return PlatformManager.getPreferencesFolder().getChild(DEFAULT_ASSOCIATION_FILE_NAME);
         return associationFile;
     }
 
@@ -473,13 +474,20 @@ public class CommandManager implements CommandBuilder {
      * <p>
      * This is a convenience method and is strictly equivalent to calling <code>setAssociationFile(FileFactory.getFile(file))</code>.
      * </p>
-     * @param  file                  path to the custom associations file.
+     * @param  path                  path to the custom associations file.
      * @throws FileNotFoundException if <code>file</code> is not accessible.
      * @see    #getAssociationFile()
      * @see    #loadAssociations()
      * @see    #writeAssociations()
      */
-    public static void setAssociationFile(String file) throws FileNotFoundException {setAssociationFile(FileFactory.getFile(file));}
+    public static void setAssociationFile(String path) throws FileNotFoundException {
+        AbstractFile file;
+
+        if((file = FileFactory.getFile(path)) == null)
+            setAssociationFile(new File(path));
+        else
+            setAssociationFile(file);
+    }
 
     /**
      * Sets the path to the custom associations file.
@@ -523,7 +531,6 @@ public class CommandManager implements CommandBuilder {
         AbstractFile file;
         InputStream  in;
 
-        // Checks whether the associations file exists. If it doesn't, create default associations.
         file = getAssociationFile();
         if(Debug.ON)
             Debug.trace("Loading associations from file: " + file.getAbsolutePath());
@@ -635,10 +642,11 @@ public class CommandManager implements CommandBuilder {
      * @see    #setCommandFile(String)
      * @see    #loadCommands()
      * @see    #writeCommands()
+     * @throws IOException if there was some error locating the default commands file.
      */
-    public static AbstractFile getCommandFile() {
+    public static AbstractFile getCommandFile() throws IOException {
         if(commandsFile == null)
-            return FileFactory.getFile(new File(PlatformManager.getPreferencesFolder(), DEFAULT_COMMANDS_FILE_NAME).getAbsolutePath());
+            return PlatformManager.getPreferencesFolder().getChild(DEFAULT_COMMANDS_FILE_NAME);
         return commandsFile;
     }
 
@@ -647,13 +655,21 @@ public class CommandManager implements CommandBuilder {
      * <p>
      * This is a convenience method and is strictly equivalent to calling <code>setCommandFile(FileFactory.getFile(file));</code>.
      * </p>
-     * @param  file                  path to the custom commands file.
+     * @param  path                  path to the custom commands file.
      * @throws FileNotFoundException if <code>file</code> is not accessible.
      * @see    #getCommandFile()
      * @see    #loadCommands()
      * @see    #writeCommands()
      */
-    public static void setCommandFile(String file) throws FileNotFoundException {setCommandFile(FileFactory.getFile(file));}
+    public static void setCommandFile(String path) throws FileNotFoundException {
+        AbstractFile file;
+
+        if((file = FileFactory.getFile(path)) == null)
+            setCommandFile(new File(path));
+        else
+            setCommandFile(file);
+    }
+        
 
     /**
      * Sets the path to the custom commands file.

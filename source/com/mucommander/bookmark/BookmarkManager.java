@@ -116,12 +116,13 @@ public class BookmarkManager implements VectorChangeListener {
      * If it hasn't been changed through a call to {@link #setBookmarksFile(String)},
      * this method will return the default, system dependant bookmarks file.
      * </p>
-     * @return the path to the bookmark file.
+     * @return             the path to the bookmark file.
      * @see    #setBookmarksFile(String)
+     * @throws IOException if there was a problem locating the default bookmarks file.
      */
-    public static synchronized AbstractFile getBookmarksFile() {
+    public static synchronized AbstractFile getBookmarksFile() throws IOException {
         if(bookmarksFile == null)
-            return FileFactory.getFile(new File(PlatformManager.getPreferencesFolder(), DEFAULT_BOOKMARKS_FILE_NAME).getAbsolutePath());
+            return PlatformManager.getPreferencesFolder().getChild(DEFAULT_BOOKMARKS_FILE_NAME);
         return bookmarksFile;
     }
 
@@ -130,11 +131,18 @@ public class BookmarkManager implements VectorChangeListener {
      * <p>
      * This is a convenience method and is strictly equivalent to calling <code>setBookmarksFile(FileFactory.getFile(file))</code>.
      * </p>
-     * @param     file                  path to the bookmarks file
+     * @param     path                  path to the bookmarks file
      * @exception FileNotFoundException if <code>path</code> is not accessible.
      * @see       #getBookmarksFile()
      */
-    public static void setBookmarksFile(String file) throws FileNotFoundException {setBookmarksFile(FileFactory.getFile(file));}
+    public static void setBookmarksFile(String path) throws FileNotFoundException {
+        AbstractFile file;
+
+        if((file = FileFactory.getFile(path)) == null)
+            setBookmarksFile(new File(path));
+        else
+            setBookmarksFile(file);
+    }
 
     /**
      * Sets the path to the bookmarks file.

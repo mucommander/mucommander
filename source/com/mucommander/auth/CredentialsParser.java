@@ -21,6 +21,7 @@ package com.mucommander.auth;
 import com.mucommander.Debug;
 import com.mucommander.bookmark.XORCipher;
 import com.mucommander.file.FileURL;
+import com.mucommander.file.AbstractFile;
 import com.mucommander.io.BackupInputStream;
 
 import org.xml.sax.helpers.DefaultHandler;
@@ -66,7 +67,7 @@ class CredentialsParser extends DefaultHandler implements CredentialsConstants {
     /**
      * Parses the given XML credentials file. Should only be called by CredentialsManager.
      */
-    void parse(File file) throws Exception {
+    void parse(AbstractFile file) throws Exception {
         InputStream in;
 
         in = null;
