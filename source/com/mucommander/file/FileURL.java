@@ -462,7 +462,7 @@ public class FileURL implements Cloneable {
      * The filename and query parts of this FileURL (if any) will not be set in the returned parent, both will be null.
      *
      * <p>Note: this method returns a new FileURL instance everytime it is called, and all mutable fields of this FileURL
-     * are cloned. Therefore the returned parent can be safely modified without risking to modify other FileURL instances.
+     * are cloned. Therefore the returned parent can be safely modified without risking to modify other FileURL instances.</p>
      */
     public FileURL getParent() {
         // If path equals '/', url has no parent
@@ -481,6 +481,7 @@ public class FileURL implements Cloneable {
                 parentURL.host = host;
                 parentURL.port = port;
                 parentURL.path = parentPath.substring(0, lastSeparatorPos+1);  // Keep trailing slash
+                parentURL.filename = getFilenameFromPath(parentURL.path, separator);
 
                 // Set same credentials for parent, (if any)
                 // Note: Credentials are immutable.
