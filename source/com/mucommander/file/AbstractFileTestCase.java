@@ -23,6 +23,7 @@ import com.mucommander.io.RandomAccessInputStream;
 import com.mucommander.io.RandomAccessOutputStream;
 import junit.framework.TestCase;
 
+import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
 import java.io.InputStream;
@@ -1337,12 +1338,23 @@ public abstract class AbstractFileTestCase extends TestCase implements FilePermi
 
 
     /**
-     * Tests {@link AbstractFile#getIcon()} and {@link AbstractFile#getIcon(java.awt.Dimension)} by simply asserting
-     * that the return values are not <code>null</code>.
+     * Tests {@link AbstractFile#getIcon()} and {@link AbstractFile#getIcon(java.awt.Dimension)}.
      */
     public void testIcon() {
-        assertNotNull(tempFile.getIcon());
-        assertNotNull(new Dimension(16, 16));
+        Icon icon;
+        boolean isHeadless = GraphicsEnvironment.isHeadless();
+
+        icon = tempFile.getIcon();
+        if(isHeadless)
+            assertNull(icon);
+        else
+            assertNotNull(icon);
+
+        icon = tempFile.getIcon(new Dimension(16, 16));
+        if(isHeadless)
+            assertNull(icon);
+        else
+            assertNotNull(icon);
     }
 
 
