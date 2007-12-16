@@ -23,6 +23,8 @@ import com.mucommander.PlatformManager;
 import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.io.BackupInputStream;
 import com.mucommander.io.BackupOutputStream;
+import com.mucommander.file.AbstractFile;
+import com.mucommander.file.FileFactory;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -50,15 +52,15 @@ public class ShellHistoryManager {
     // - Class fields ---------------------------------------------------------------
     // ------------------------------------------------------------------------------
     /** List of shell history registered listeners. */
-    private static WeakHashMap listeners;
+    private static WeakHashMap  listeners;
     /** Stores the shell history. */
-    private static String[]    history;
+    private static String[]     history;
     /** Index of the first element of the history. */
-    private static int         historyStart;
+    private static int          historyStart;
     /** Index of the last element of the history. */
-    private static int         historyEnd;
+    private static int          historyEnd;
     /** Path to the history file. */
-    private static File        historyFile;
+    private static AbstractFile historyFile;
 
 
 
@@ -178,13 +180,31 @@ public class ShellHistoryManager {
      * @exception FileNotFoundException if <code>path</code> is not accessible.
      */
     public static void setHistoryFile(String path) throws FileNotFoundException {
-        File tempFile;
+        AbstractFile file;
 
-        tempFile = new File(path);
-        if(!(tempFile.exists() && tempFile.isFile() && tempFile.canRead()))
-            throw new FileNotFoundException("Not a valid file: " + path);
+        if((file = FileFactory.getFile(path)) == null)
+            setHistoryFile(new File(path));
+        else
+            setHistoryFile(file);
+    }
 
-        historyFile = tempFile;
+    /**
+     * Sets the path of the shell history file.
+     * @param     file                  where to load the shell history from.
+     * @exception FileNotFoundException if <code>path</code> is not accessible.
+     */
+    public static void setHistoryFile(File file) throws FileNotFoundException {setHistoryFile(FileFactory.getFile(file.getAbsolutePath()));}
+
+    /**
+     * Sets the path of the shell history file.
+     * @param     file                  where to load the shell history from.
+     * @exception FileNotFoundException if <code>path</code> is not accessible.
+     */
+    public static void setHistoryFile(AbstractFile file) throws FileNotFoundException {
+        // Makes sure file can be used as a shell history file.
+        if(file.isBrowsable())
+            throw new FileNotFoundException("Not a valid file: " + file.getAbsolutePath());
+        historyFile = file;
     }
 
     /**
@@ -198,11 +218,12 @@ public class ShellHistoryManager {
      * If this wasn't called, the default path will be used: {@link #DEFAULT_HISTORY_FILE_NAME}
      * in the {@link com.mucommander.PlatformManager#getPreferencesFolder() preferences} folder.
      * </p>
-     * @return the path to the shell history file.
+     * @return             the path to the shell history file.
+     * @throws IOException if an error occured while locating the default shell history file.
      */
-    public static File getHistoryFile() {
+    public static AbstractFile getHistoryFile() throws IOException {
         if(historyFile == null)
-            return new File(PlatformManager.getPreferencesFolder(), DEFAULT_HISTORY_FILE_NAME);
+            return PlatformManager.getPreferencesFolder().getChild(DEFAULT_HISTORY_FILE_NAME);
         return historyFile;
     }
 
