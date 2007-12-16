@@ -1345,15 +1345,11 @@ public abstract class AbstractFileTestCase extends TestCase implements FilePermi
         boolean isHeadless = GraphicsEnvironment.isHeadless();
 
         icon = tempFile.getIcon();
-        if(isHeadless)
-            assertNull(icon);
-        else
+        if(!isHeadless)
             assertNotNull(icon);
 
         icon = tempFile.getIcon(new Dimension(16, 16));
-        if(isHeadless)
-            assertNull(icon);
-        else
+        if(!isHeadless)
             assertNotNull(icon);
     }
 
