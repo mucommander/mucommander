@@ -24,6 +24,7 @@ import com.mucommander.conf.ConfigurationEvent;
 import com.mucommander.conf.ConfigurationListener;
 import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.file.AbstractFile;
+import com.mucommander.file.FileFactory;
 import com.mucommander.file.util.ResourceLoader;
 import com.mucommander.io.BackupInputStream;
 import com.mucommander.ui.action.ActionManager;
@@ -69,7 +70,7 @@ public class CommandBar extends JPanel implements ConfigurationListener, KeyList
     private final static String COMMAND_BAR_RESOURCE_PATH = "/" + DEFAULT_COMMAND_BAR_FILE_NAME;
 
     /** Command bar descriptor file used when calling {@link #loadDescriptionFile()} */
-    private static File commandBarFile;
+    private static AbstractFile commandBarFile;
 
 
     /** Current icon scale factor */
@@ -86,26 +87,45 @@ public class CommandBar extends JPanel implements ConfigurationListener, KeyList
     /** Modifier key that triggers the display of alternate actions when pressed */
     private static KeyStroke modifier;
 
+    /**
+     * Sets the path to the command bar description file to be loaded when calling {@link #loadDescriptionFile()}.
+     * By default, this file is {@link #DEFAULT_COMMAND_BAR_FILE_NAME} within the preferences folder.
+     * @param  path                  path to the command bar descriptor file
+     * @throws FileNotFoundException if the specified file is not accessible.
+     */
+    public static void setDescriptionFile(String path) throws FileNotFoundException {
+        AbstractFile file;
+
+        if((file = FileFactory.getFile(path)) == null)
+            setDescriptionFile(new File(path));
+        else
+            setDescriptionFile(file);
+    }
 
     /**
      * Sets the path to the command bar description file to be loaded when calling {@link #loadDescriptionFile()}.
      * By default, this file is {@link #DEFAULT_COMMAND_BAR_FILE_NAME} within the preferences folder.
-     *
-     * @param filePath path to the command bar descriptor file
+     * @param  path                  path to the command bar descriptor file
+     * @throws FileNotFoundException if the specified file is not accessible.
      */
-    public static void setDescriptionFile(String filePath) throws FileNotFoundException {
-        File tempFile;
+    public static void setDescriptionFile(File file) throws FileNotFoundException {setDescriptionFile(FileFactory.getFile(file.getAbsolutePath()));}
 
-        tempFile = new File(filePath);
-        if(!(tempFile.exists() && tempFile.isFile() && tempFile.canRead()))
-            throw new FileNotFoundException("Not a valid file: " + filePath);
-        
-        commandBarFile = tempFile;
+    /**
+     * Sets the path to the command bar description file to be loaded when calling {@link #loadDescriptionFile()}.
+     * By default, this file is {@link #DEFAULT_COMMAND_BAR_FILE_NAME} within the preferences folder.
+     * @param  path                  path to the command bar descriptor file
+     * @throws FileNotFoundException if the specified file is not accessible.
+     */
+    public static void setDescriptionFile(AbstractFile file) throws FileNotFoundException {
+        // Makes sure file can be used as a commandbar description file.
+        if(file.isBrowsable())
+            throw new FileNotFoundException("Not a valid file: " + file.getAbsolutePath());
+        commandBarFile = file;
     }
 
-    public static File getDescriptionFile() {
+    public static AbstractFile getDescriptionFile() throws IOException {
         if(commandBarFile == null)
-            return new File(PlatformManager.getPreferencesFolder(), DEFAULT_COMMAND_BAR_FILE_NAME);
+            return PlatformManager.getPreferencesFolder().getChild(DEFAULT_COMMAND_BAR_FILE_NAME);
         return commandBarFile;
     }
 
@@ -113,13 +133,13 @@ public class CommandBar extends JPanel implements ConfigurationListener, KeyList
      * Copies the default commandbar description file.
      * @param destination where to copy the default commandbar destination file.
      */
-    private static void copyDefaultDescriptionFile(File destination) throws IOException {
+    private static void copyDefaultDescriptionFile(AbstractFile destination) throws IOException {
         InputStream in = null;
         OutputStream out = null;
 
         try {
             in = ResourceLoader.getResourceAsStream(COMMAND_BAR_RESOURCE_PATH);
-            out = new FileOutputStream(destination);
+            out = destination.getOutputStream(false);
 
             AbstractFile.copyStream(in, out);
         }
@@ -143,7 +163,7 @@ public class CommandBar extends JPanel implements ConfigurationListener, KeyList
      * This method must be called before instanciating CommandBar for the first time.
      */
     public static void loadDescriptionFile() throws Exception {
-        File file;
+        AbstractFile file;
 
         file = getDescriptionFile();
 

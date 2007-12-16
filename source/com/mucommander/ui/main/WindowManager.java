@@ -99,7 +99,7 @@ public class WindowManager implements WindowListener, ConfigurationListener {
         plafsIterator = plafs.iterator();
         while(plafsIterator.hasNext()) {
             try {
-                plaf = (LookAndFeel)Class.forName((String)plafsIterator.next(), true, ClassLoader.getSystemClassLoader()).newInstance();
+                plaf = (LookAndFeel)Class.forName((String)plafsIterator.next(), true, ExtensionManager.getClassLoader()).newInstance();
                 if(plaf.isSupportedLookAndFeel())
                     UIManager.installLookAndFeel(plaf.getName(), plaf.getClass().getName());
             }
@@ -114,7 +114,7 @@ public class WindowManager implements WindowListener, ConfigurationListener {
         // Notifies Swing that look&feels must be loaded as extensions.
         // This is necessary to ensure that look and feels placed in the extensions folder
         // are accessible.
-        UIManager.getDefaults().put("ClassLoader", ClassLoader.getSystemClassLoader());
+        UIManager.getDefaults().put("ClassLoader", ExtensionManager.getClassLoader());
 
         // Installs all custom look and feels.
         installCustomLookAndFeels();
@@ -513,7 +513,7 @@ public class WindowManager implements WindowListener, ConfigurationListener {
      */
     private static void setLookAndFeel(String lnfName) {
         try {
-            UIManager.setLookAndFeel(lnfName);
+            UIManager.setLookAndFeel((LookAndFeel)Class.forName(lnfName, true, ExtensionManager.getClassLoader()).newInstance());
 
             for(int i=0; i<mainFrames.size(); i++)
                 SwingUtilities.updateComponentTreeUI((MainFrame)(mainFrames.elementAt(i)));

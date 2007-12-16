@@ -116,8 +116,11 @@ public class ThemeEditorDialog extends PreferencesDialog {
                 }
             }
             catch(Exception exception) {
-                JOptionPane.showMessageDialog(this, Translator.get("cannot_write_file", ThemeManager.getUserThemeFile().getAbsolutePath()),
-                                              Translator.get("write_error"), JOptionPane.ERROR_MESSAGE);
+                try {
+                    JOptionPane.showMessageDialog(this, Translator.get("cannot_write_file", ThemeManager.getUserThemeFile().getAbsolutePath()),
+                                                  Translator.get("write_error"), JOptionPane.ERROR_MESSAGE);
+                }
+                catch(Exception e) {}
             }
         }
     }

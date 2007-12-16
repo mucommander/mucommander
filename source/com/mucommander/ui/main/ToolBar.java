@@ -24,6 +24,7 @@ import com.mucommander.conf.ConfigurationEvent;
 import com.mucommander.conf.ConfigurationListener;
 import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.file.AbstractFile;
+import com.mucommander.file.FileFactory;
 import com.mucommander.file.FileURL;
 import com.mucommander.file.util.ResourceLoader;
 import com.mucommander.io.BackupInputStream;
@@ -63,7 +64,7 @@ public class ToolBar extends JToolBar implements ConfigurationListener, MouseLis
     private final static String TOOLBAR_RESOURCE_PATH = "/"+DEFAULT_TOOLBAR_FILE_NAME;
 
     /** Toolbar descriptor file used when calling {@link #loadDescriptionFile()} */
-    private static File descriptionFile;
+    private static AbstractFile descriptionFile;
 
     /** Dimension of button separators */
     private final static Dimension SEPARATOR_DIMENSION = new Dimension(10, 16);
@@ -81,32 +82,48 @@ public class ToolBar extends JToolBar implements ConfigurationListener, MouseLis
     /**
      * Sets the path to the toolbar description file to be loaded when calling {@link #loadDescriptionFile()}.
      * By default, this file is {@link #DEFAULT_TOOLBAR_FILE_NAME} within the preferences folder.
-     *
-     * @param filePath path to the toolbar descriptor file
+     * @param path path to the toolbar descriptor file
      */
-    public static void setDescriptionFile(String filePath) throws FileNotFoundException {
-        File tempFile;
+    public static void setDescriptionFile(String path) throws FileNotFoundException {
+        AbstractFile file;
 
-        tempFile = new File(filePath);
-        if(!(tempFile.exists() && tempFile.isFile() && tempFile.canRead()))
-            throw new FileNotFoundException("Not a valid file: " + filePath);
-
-        descriptionFile = tempFile;
+        if((file = FileFactory.getFile(path)) == null)
+            setDescriptionFile(new File(path));
+        else
+            setDescriptionFile(file);
     }
 
-    public static File getDescriptionFile() {
+    /**
+     * Sets the path to the toolbar description file to be loaded when calling {@link #loadDescriptionFile()}.
+     * By default, this file is {@link #DEFAULT_TOOLBAR_FILE_NAME} within the preferences folder.
+     * @param file path to the toolbar descriptor file
+     */
+    public static void setDescriptionFile(File file) throws FileNotFoundException {setDescriptionFile(FileFactory.getFile(file.getAbsolutePath()));}
+
+    /**
+     * Sets the path to the toolbar description file to be loaded when calling {@link #loadDescriptionFile()}.
+     * By default, this file is {@link #DEFAULT_TOOLBAR_FILE_NAME} within the preferences folder.
+     * @param file path to the toolbar descriptor file
+     */
+    public static void setDescriptionFile(AbstractFile file) throws FileNotFoundException {
+        if(file.isBrowsable())
+            throw new FileNotFoundException("Not a valid file: " + file);
+        descriptionFile = file;
+    }
+
+    public static AbstractFile getDescriptionFile() throws IOException {
         if(descriptionFile == null)
-            return new File(PlatformManager.getPreferencesFolder(), DEFAULT_TOOLBAR_FILE_NAME);
+            return PlatformManager.getPreferencesFolder().getChild(DEFAULT_TOOLBAR_FILE_NAME);
         return descriptionFile;
     }
 
-    private static void copyDefaultDescriptionFile(File destination) throws IOException {
+    private static void copyDefaultDescriptionFile(AbstractFile destination) throws IOException {
         InputStream in = null;
         OutputStream out = null;
 
         try {
             in = ResourceLoader.getResourceAsStream(TOOLBAR_RESOURCE_PATH);
-            out = new FileOutputStream(destination); 
+            out = destination.getOutputStream(false);
 
             AbstractFile.copyStream(in, out);
         }
@@ -130,7 +147,7 @@ public class ToolBar extends JToolBar implements ConfigurationListener, MouseLis
      * <p>This method must be called before instanciating ToolBar for the first time.
      */
     public static void loadDescriptionFile() throws Exception {
-        File file;
+        AbstractFile file;
 
         file = getDescriptionFile();
         // If the given file doesn't exist, copy the default one in the JAR file

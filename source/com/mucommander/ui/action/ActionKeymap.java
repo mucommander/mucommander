@@ -82,10 +82,17 @@ public class ActionKeymap extends DefaultHandler {
      * <p>
      * This is a convenience method and is strictly equivalent to calling <code>setActionKeyMapFile(FileFactory.getFile(file))</code>.
      * </p>
-     * @param  file                  path to the action keymap file
+     * @param  path                  path to the action keymap file
      * @throws FileNotFoundException if <code>file</code> is not accessible.
      */
-    public static void setActionKeyMapFile(String file) throws FileNotFoundException {setActionKeyMapFile(FileFactory.getFile(file));}
+    public static void setActionKeyMapFile(String path) throws FileNotFoundException {
+        AbstractFile file;
+
+        if((file = FileFactory.getFile(path)) == null)
+            setActionKeyMapFile(new File(path));
+        else
+            setActionKeyMapFile(file);
+    }
 
     /**
      * Sets the path to the user action keymap file to be loaded when calling {@link #loadActionKeyMap()}.
@@ -111,9 +118,14 @@ public class ActionKeymap extends DefaultHandler {
         actionKeyMapFile = file;
     }
 
-    public static AbstractFile getActionKeyMapFile() {
+    /**
+     * Returns the path to the action keymap file.
+     * @return             the path to the action keymap file.
+     * @throws IOException if an error occured while locating the default action keymap file.
+     */
+    public static AbstractFile getActionKeyMapFile() throws IOException {
         if(actionKeyMapFile == null)
-            return FileFactory.getFile(new File(PlatformManager.getPreferencesFolder(), DEFAULT_ACTION_KEYMAP_FILE_NAME).getAbsolutePath());
+            return PlatformManager.getPreferencesFolder().getChild(DEFAULT_ACTION_KEYMAP_FILE_NAME);
         return actionKeyMapFile;
     }
 
