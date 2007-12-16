@@ -304,6 +304,7 @@ public abstract class AbstractFile implements FilePermissions {
 
     /**
      * Returns an <code>InputStream</code> to read this file's contents, starting at the specified offset (in bytes).
+     * A <code>java.io.IOException</code> is thrown if the file doesn't exist. 
      *
      * <p>This method should be overridden whenever possible to provide a more efficient implementation, as this
      * default implementation uses {@link java.io.InputStream#skip(long)} which may just read bytes and discards them, 
