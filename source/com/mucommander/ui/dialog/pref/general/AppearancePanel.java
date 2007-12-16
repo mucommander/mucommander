@@ -41,7 +41,8 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.Iterator;
-
+import java.util.Arrays;
+import java.util.Comparator;
 
 /**
  * 'Appearance' preferences panel.
@@ -127,6 +128,24 @@ class AppearancePanel extends PreferencesPanel implements ActionListener {
         initUI();
     }
 
+    /**
+     * Returns all available look and feels sorted by name.
+     * @return all available look and feels sorted by name.
+     */
+    private UIManager.LookAndFeelInfo[] getAvailableLookAndFeels() {
+        UIManager.LookAndFeelInfo[] buffer;
+
+        // Loads all available look and feels.
+        buffer = UIManager.getInstalledLookAndFeels();
+
+        // Sorts them.
+        Arrays.sort(buffer, new Comparator() {
+                public int compare(Object a, Object b) {return ((UIManager.LookAndFeelInfo)a).getName().compareTo(((UIManager.LookAndFeelInfo)b).getName());}
+                public boolean equals(Object a) {return false;}
+            });
+        return buffer;
+    }
+
 
 
     // - UI initialisation ------------------------------------------------------
@@ -173,10 +192,10 @@ class AppearancePanel extends PreferencesPanel implements ActionListener {
 
         // Populates the l&f combo box.
         lnfComboBox     = new JComboBox();
-        lnfInfo         = UIManager.getInstalledLookAndFeels();
+        lnfInfo         = getAvailableLookAndFeels();
         currentLnfIndex = -1;
         currentLnfName  = UIManager.getLookAndFeel().getName();
-        for(int i=0; i<lnfInfo.length; i++) {
+        for(int i = 0; i < lnfInfo.length; i++) {
             lnfString = lnfInfo[i].getName();
 			
             // Tries to select current L&F
