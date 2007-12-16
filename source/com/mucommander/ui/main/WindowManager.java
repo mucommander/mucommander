@@ -101,7 +101,7 @@ public class WindowManager implements WindowListener, ConfigurationListener {
                 plaf = (LookAndFeel)Class.forName((String)plafsIterator.next(), true, ClassLoader.getSystemClassLoader()).newInstance();
                 UIManager.installLookAndFeel(plaf.getName(), plaf.getClass().getName());
             }
-            catch(Exception e) {if(Debug.ON) Debug.trace(e);}
+            catch(Throwable e) {if(Debug.ON) Debug.trace(e);}
         }
     }
 
@@ -516,7 +516,7 @@ public class WindowManager implements WindowListener, ConfigurationListener {
             for(int i=0; i<mainFrames.size(); i++)
                 SwingUtilities.updateComponentTreeUI((MainFrame)(mainFrames.elementAt(i)));
         }
-        catch(Throwable e) {}
+        catch(Throwable e) {if(Debug.ON) Debug.trace(e);}
     }
 
 
