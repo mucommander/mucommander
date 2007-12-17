@@ -24,6 +24,7 @@ import com.mucommander.io.ByteCounter;
 import com.mucommander.io.CounterOutputStream;
 import com.mucommander.io.RandomAccessInputStream;
 import com.mucommander.io.RandomAccessOutputStream;
+import com.mucommander.util.StringUtils;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 import java.io.IOException;
@@ -79,9 +80,9 @@ public class ArchiveEntryFile extends AbstractFile {
 	
 	
     /**
-     * Returns the ArchiveEntry instance that contains information about the archive entry (name, size, date, ...).
+     * Returns the ArchiveEntry instance that contains information about the archive entry (path, size, date, ...).
      *
-     * @return the ArchiveEntry instance that contains information about the archive entry (name, size, date, ...)
+     * @return the ArchiveEntry instance that contains information about the archive entry (path, size, date, ...)
      */
     public ArchiveEntry getEntry() {
         return entry;
@@ -94,6 +95,26 @@ public class ArchiveEntryFile extends AbstractFile {
      */
     public AbstractArchiveFile getArchiveFile() {
         return archiveFile;
+    }
+
+
+    /**
+     * Returns the relative path of this entry, with respect to the archive file. The path separator of the returned
+     * path is the one returned by {@link #getSeparator()}. As a relative path, the returned path does not start
+     * with a separator character.
+     *
+     * @return the relative path of this entry, with respect to the archive file.
+     */
+    public String getRelativeEntryPath() {
+        String path = entry.getPath();
+
+        // Replace all occurrences of the entry's separator by the archive file's separator, only if the separator is
+        // not "/" (i.e. the entry path separator).
+        String separator = getSeparator();
+        if(!separator.equals("/"))
+            path = StringUtils.replaceCompat(path, "/", separator);
+
+        return path;
     }
 
 
@@ -386,13 +407,27 @@ public class ArchiveEntryFile extends AbstractFile {
     // Overridden methods //
     ////////////////////////
 
+    /**
+     * This method is overridden to return the separator of the {@link #getArchiveFile() archive file} that contains
+     * this entry.
+     *
+     * @return the separator of the archive file that contains this entry
+     */
+    public String getSeparator() {
+        return archiveFile.getSeparator();
+    }
+
+    /**
+     * This method is overridden to use the archive file's canonical path as the base path of this entry file.
+     */
+    public String getCanonicalPath() {
+        // Use the archive file's canonical path and append it with the entry's relative path
+        return archiveFile.getCanonicalPath(true)+getRelativeEntryPath();
+    }
+
     public int getPermissions() {
         // Return entry's permissions mask
         return entry.getPermissions();
-    }
-    
-    public String getSeparator() {
-        return archiveFile.getSeparator();
     }
 
     public int getMoveToHint(AbstractFile destFile) {
