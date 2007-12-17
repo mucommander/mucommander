@@ -96,10 +96,8 @@ public class FileMonitorTest extends TestCase implements FileMonitorConstants {
     public void testPermissionsAttribute() throws IOException {
         setUp(PERMISSIONS_ATTRIBUTE);
 
-        if(!file.setPermission(AbstractFile.USER_ACCESS, AbstractFile.WRITE_PERMISSION, !file.getPermission(AbstractFile.USER_ACCESS, AbstractFile.WRITE_PERMISSION)))
-            throw new IOException();
-
-        assertTrue(hasAttributeChanged(PERMISSIONS_ATTRIBUTE));
+        if(file.setPermission(AbstractFile.USER_ACCESS, AbstractFile.WRITE_PERMISSION, !file.getPermission(AbstractFile.USER_ACCESS, AbstractFile.WRITE_PERMISSION)))
+            assertTrue(hasAttributeChanged(PERMISSIONS_ATTRIBUTE));
     }
 
     /**
