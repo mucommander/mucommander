@@ -169,6 +169,11 @@ public class ZipArchiveFile extends AbstractRWArchiveFile {
                 // (just to be safe) and an IOException thrown.
                 throw new IOException();
             }
+            catch(Error e) {
+                // ZipInpustStream#getNextEntry() will throw a java.lang.InternalError ("invalid compression method")
+                // if the compression method is different from DEFLATED or STORED (happens with IMPLODED for example).
+                throw new IOException();
+            }
             finally {
                 if(zin!=null)
                     zin.close();

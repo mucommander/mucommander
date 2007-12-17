@@ -129,6 +129,8 @@ Bug fixes:
 - Fixed a regression affecting the opening of files on non-local filesystems.
 - Fixed an issue with the drive button which would sometimes change the folder
   on the opposite panel.
+- A proper error message is displayed when trying to open Zip files with an
+  unsupported compression method (e.g. IMPLODED or LZMA).
 
 Known issues:
 - Korean translation is not up-to-date.

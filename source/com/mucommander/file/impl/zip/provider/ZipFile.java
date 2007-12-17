@@ -796,7 +796,14 @@ public class ZipFile implements ZipConstants {
             off += 2;
 //if(Debug.ON) Debug.trace("hasDataDescriptor="+entryInfo.hasDataDescriptor);
 
-            ze.setMethod(ZipShort.getValue(cfh, off));
+            int method = ZipShort.getValue(cfh, off);
+            // Note: ZipEntry#setMethod(int) will throw a java.lang.InternalError ("invalid compression method") if the
+            // method is different from DEFLATED or STORED (happens with IMPLODED for example).
+            // Thus we check the method ourselves to fail gracefully.
+            if(method!=DEFLATED && method!=STORED)
+                throw new ZipException("Unsupported compression method");
+
+            ze.setMethod(method);
             off += 2;
 
             // FIXME this is actually not very cpu cycles friendly as we are converting from
