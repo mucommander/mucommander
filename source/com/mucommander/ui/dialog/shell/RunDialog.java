@@ -154,8 +154,11 @@ public class RunDialog extends FocusDialog implements ActionListener, ProcessLis
         buttonsPanel.add(Box.createHorizontalGlue());
 
         // 'Run / stop' and 'Cancel' buttons.
-        buttonsPanel.add(DialogToolkit.createOKCancelPanel(runStopButton = new JButton(Translator.get("run_dialog.run")),
-                                                           cancelButton  = new JButton(Translator.get("cancel")), this));
+        buttonsPanel.add(DialogToolkit.createOKCancelPanel(
+                runStopButton = new JButton(Translator.get("run_dialog.run")),
+                cancelButton  = new JButton(Translator.get("cancel")),
+                getRootPane(),
+                this));
 
         return buttonsPanel;
     }

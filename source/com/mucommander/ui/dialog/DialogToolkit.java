@@ -19,6 +19,7 @@
 
 package com.mucommander.ui.dialog;
 
+import com.mucommander.ui.button.ButtonChoicePanel;
 import com.mucommander.ui.helper.MnemonicHelper;
 import com.mucommander.ui.main.WindowManager;
 
@@ -127,24 +128,23 @@ public class DialogToolkit {
     /**
      * Creates an OK/Cancel panel using the given buttons, and register the given listener for button actions.
      */
-    public static JPanel createOKCancelPanel(JButton okButton, JButton cancelButton, ActionListener actionListener) {
-        return createButtonPanel(new JButton[]{okButton, cancelButton}, actionListener);
+    public static JPanel createOKCancelPanel(JButton okButton, JButton cancelButton, JRootPane rootPane, ActionListener actionListener) {
+        return createButtonPanel(new JButton[]{okButton, cancelButton}, rootPane, actionListener);
     }
 
     /**
      * Creates an OK panel using the given button, and register the given listener for button actions.
      */
-    public static JPanel createOKPanel(JButton okButton, ActionListener actionListener) {
-        return createButtonPanel(new JButton[]{okButton}, actionListener);
+    public static JPanel createOKPanel(JButton okButton, JRootPane rootPane, ActionListener actionListener) {
+        return createButtonPanel(new JButton[]{okButton}, rootPane, actionListener);
     }
 
     /**
      * Creates a button panel using the given buttons, and register the given listener for button actions.
      * Buttons are disposed horizontally, aligned to the right.
      */
-    public static JPanel createButtonPanel(JButton buttons[], ActionListener actionListener) {
-        JPanel panel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        JPanel tempPanel = new JPanel(new GridLayout(1,buttons.length));
+    public static JPanel createButtonPanel(JButton buttons[], JRootPane rootPane, ActionListener actionListener) {
+        JPanel panel = new ButtonChoicePanel(buttons, 0, rootPane);
         
         MnemonicHelper mnemonicHelper = new MnemonicHelper();
         JButton button;
@@ -152,10 +152,9 @@ public class DialogToolkit {
             button = buttons[i];
             button.setMnemonic(mnemonicHelper.getMnemonic(button.getText()));
             button.addActionListener(actionListener);
-            tempPanel.add(button);
+            panel.add(button);
         }
-        
-        panel.add(tempPanel);
+
         return panel;
     }
 

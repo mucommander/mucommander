@@ -134,16 +134,13 @@ public class ServerConnectDialog extends FocusDialog implements ActionListener, 
 
         JButton okButton = new JButton(Translator.get("server_connect_dialog.connect"));
         cancelButton = new JButton(Translator.get("cancel"));
-        yPanel.add(DialogToolkit.createOKCancelPanel(okButton, cancelButton, this));
+        yPanel.add(DialogToolkit.createOKCancelPanel(okButton, cancelButton, getRootPane(), this));
 
         contentPane.add(yPanel, BorderLayout.SOUTH);
 		
         // initial focus
         setInitialFocusComponent(currentServerPanel);		
 		
-        // Selects OK when enter is pressed
-        getRootPane().setDefaultButton(okButton);
-
         setMinimumSize(MINIMUM_DIALOG_DIMENSION);
     }
 

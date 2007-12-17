@@ -165,7 +165,7 @@ public class AuthDialog extends FocusDialog implements ActionListener, EditableC
         // Add OK/Cancel buttons
         this.okButton = new JButton(Translator.get("ok"));
         this.cancelButton = new JButton(Translator.get("cancel"));
-        contentPane.add(DialogToolkit.createOKCancelPanel(okButton, cancelButton, this), BorderLayout.SOUTH);
+        contentPane.add(DialogToolkit.createOKCancelPanel(okButton, cancelButton, getRootPane(), this), BorderLayout.SOUTH);
 
         // Login field will receive initial focus
         setInitialFocusComponent(loginField);
@@ -175,9 +175,6 @@ public class AuthDialog extends FocusDialog implements ActionListener, EditableC
 
         // Set minimum dimension
         setMaximumSize(MAXIMUM_DIALOG_DIMENSION);
-
-        // Make the 'OK' button the default button
-        getRootPane().setDefaultButton(okButton);
     }
 
 

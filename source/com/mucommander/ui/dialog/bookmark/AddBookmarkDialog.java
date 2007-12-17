@@ -86,14 +86,11 @@ public class AddBookmarkDialog extends FocusDialog implements ActionListener, Do
 				
         addButton = new JButton(Translator.get("add_bookmark_dialog.add"));
         cancelButton = new JButton(Translator.get("cancel"));
-        contentPane.add(DialogToolkit.createOKCancelPanel(addButton, cancelButton, this), BorderLayout.SOUTH);
+        contentPane.add(DialogToolkit.createOKCancelPanel(addButton, cancelButton, getRootPane(), this), BorderLayout.SOUTH);
 
         // Select text in name field and transfer focus to it for immediate user change
         nameField.selectAll();
         setInitialFocusComponent(nameField);
-
-        // Selects Add when enter is pressed
-        getRootPane().setDefaultButton(addButton);
 
         // Packs dialog
         setMinimumSize(MINIMUM_DIALOG_DIMENSION);

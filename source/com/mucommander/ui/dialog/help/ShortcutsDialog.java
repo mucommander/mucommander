@@ -182,7 +182,7 @@ public class ShortcutsDialog extends FocusDialog implements ActionListener {
 
         // Add an OK button
         JButton okButton = new JButton(Translator.get("ok"));
-        contentPane.add(DialogToolkit.createOKPanel(okButton, this), BorderLayout.SOUTH);
+        contentPane.add(DialogToolkit.createOKPanel(okButton, getRootPane(), this), BorderLayout.SOUTH);
         // OK will be selected when enter is pressed
         getRootPane().setDefaultButton(okButton);
         // First tab will receive initial focus
