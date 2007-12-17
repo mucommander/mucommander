@@ -26,10 +26,7 @@ import com.mucommander.file.FileFactory;
 import com.mucommander.file.util.FileSet;
 import com.mucommander.job.DeleteJob;
 import com.mucommander.text.Translator;
-import com.mucommander.ui.button.ButtonChoicePanel;
-import com.mucommander.ui.button.CollapseExpandButton;
-import com.mucommander.ui.dialog.FocusDialog;
-import com.mucommander.ui.layout.AsyncPanel;
+import com.mucommander.ui.dialog.DialogToolkit;
 import com.mucommander.ui.layout.InformationPane;
 import com.mucommander.ui.layout.YBoxPanel;
 import com.mucommander.ui.main.MainFrame;
@@ -51,13 +48,7 @@ import java.awt.event.ItemListener;
  * @see com.mucommander.ui.action.DeleteAction
  * @author Maxence Bernard
  */
-public class DeleteDialog extends FocusDialog implements ItemListener, ActionListener {
-
-    /** The MainFrame that created this dialog */
-    private MainFrame mainFrame;
-
-    /** The files to be deleted */
-    private FileSet files;
+public class DeleteDialog extends JobDialog implements ItemListener, ActionListener {
 
     /** Should files be moved to the trash or permanently erased */
     private boolean moveToTrash;
@@ -74,15 +65,9 @@ public class DeleteDialog extends FocusDialog implements ItemListener, ActionLis
     /** Dialog size constraints */
     private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(320,0);
 
-    /** Number of files displayed in the 'file details' text area */
-    private final static int NB_FILE_DETAILS_ROWS = 10;
-
 
     public DeleteDialog(MainFrame mainFrame, FileSet files) {
-        super(mainFrame, Translator.get("delete"), null);
-
-        this.mainFrame = mainFrame;
-        this.files = files;
+        super(mainFrame, Translator.get("delete"), files);
 
         YBoxPanel mainPanel = new YBoxPanel();
 
@@ -108,25 +93,16 @@ public class DeleteDialog extends FocusDialog implements ItemListener, ActionLis
         mainPanel.add(informationPane);
         mainPanel.addSpace(10);
 
-        AsyncPanel detailsPane = new AsyncPanel() {
-            public JComponent getTargetComponent() {
-                return new JScrollPane(createFileDetailsArea(DeleteDialog.this.files), JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-            }
-        };
+        JPanel fileDetailsPanel = createFileDetailsPanel();
 
-        JPanel borderPanel = new JPanel(new BorderLayout());
-        borderPanel.add(new CollapseExpandButton(Translator.get("nb_files", ""+files.size()), detailsPane, false), BorderLayout.WEST);
-
-        // Create buttons and button panel
+        // Create file details button and OK/cancel buttons and lay them out a single row
         deleteButton = new JButton(Translator.get("delete"));
-        deleteButton.addActionListener(this);
         JButton cancelButton = new JButton(Translator.get("cancel"));
-        cancelButton.addActionListener(this);
 
-        borderPanel.add(new ButtonChoicePanel(new JButton[]{deleteButton, cancelButton}, 2, getRootPane()), BorderLayout.EAST);
-        mainPanel.add(borderPanel);
+        mainPanel.add(createButtonsPanel(createFileDetailsButton(fileDetailsPanel),
+                DialogToolkit.createOKCancelPanel(deleteButton, cancelButton, getRootPane(), this)));
 
-        mainPanel.add(detailsPane);
+        mainPanel.add(fileDetailsPanel);
 
         if(moveToTrashCheckBox!=null)
             mainPanel.add(moveToTrashCheckBox);
@@ -143,37 +119,6 @@ public class DeleteDialog extends FocusDialog implements ItemListener, ActionLis
         setMinimumSize(MINIMUM_DIALOG_DIMENSION);
         setResizable(false);
         showDialog();
-    }
-
-
-    /**
-     * Creates the 'File details' text area that shows all the files that marked for deletion.
-     *
-     * @param files the files to be deleted
-     * @return the created text area
-     */
-    private JTextArea createFileDetailsArea(FileSet files) {
-        JTextArea detailsArea = new JTextArea(NB_FILE_DETAILS_ROWS, 0);
-        detailsArea.setEditable(false);
-
-        // Use a smaller font than JTextArea's default one
-        Font font = detailsArea.getFont();
-        detailsArea.setFont(font.deriveFont(font.getStyle(), font.getSize()-2));
-
-        // Initializes the text area's contents
-        int nbFiles = files.size();
-        StringBuffer sb = new StringBuffer();
-        AbstractFile file;
-        for(int i=0; i<nbFiles; i++) {
-            file = files.fileAt(i);
-
-            sb.append(file.getName());
-            if(i!=nbFiles-1)
-                sb.append('\n');
-        }
-        detailsArea.append(sb.toString());
-
-        return detailsArea;
     }
 
 

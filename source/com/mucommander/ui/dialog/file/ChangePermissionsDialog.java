@@ -24,7 +24,6 @@ import com.mucommander.file.util.FileSet;
 import com.mucommander.job.ChangeFileAttributesJob;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.DialogToolkit;
-import com.mucommander.ui.dialog.FocusDialog;
 import com.mucommander.ui.layout.YBoxPanel;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.text.SizeConstrainedDocument;
@@ -48,11 +47,7 @@ import java.awt.event.ItemListener;
  *
  * @author Maxence Bernard
  */
-public class ChangePermissionsDialog extends FocusDialog implements FilePermissions, ActionListener, ItemListener, DocumentListener {
-
-    private MainFrame mainFrame;
-
-    private FileSet files;
+public class ChangePermissionsDialog extends JobDialog implements FilePermissions, ActionListener, ItemListener, DocumentListener {
 
     private JCheckBox permCheckBoxes[][];
 
@@ -70,15 +65,12 @@ public class ChangePermissionsDialog extends FocusDialog implements FilePermissi
 
 
     public ChangePermissionsDialog(MainFrame mainFrame, FileSet files) {
-        super(mainFrame, Translator.get(com.mucommander.ui.action.ChangePermissionsAction.class.getName()+".label"), mainFrame);
+        super(mainFrame, Translator.get(com.mucommander.ui.action.ChangePermissionsAction.class.getName()+".label"), files);
 
-        this.mainFrame = mainFrame;
-        this.files = files;
+        YBoxPanel mainPanel = new YBoxPanel();
 
-        YBoxPanel yBoxPanel = new YBoxPanel();
-
-        yBoxPanel.add(new JLabel(Translator.get(com.mucommander.ui.action.ChangePermissionsAction.class.getName()+".tooltip")+" :"));
-        yBoxPanel.addSpace(10);
+        mainPanel.add(new JLabel(Translator.get(com.mucommander.ui.action.ChangePermissionsAction.class.getName()+".tooltip")+" :"));
+        mainPanel.addSpace(10);
 
         JPanel gridPanel = new JPanel(new GridLayout(4, 4));
         permCheckBoxes = new JCheckBox[5][5];
@@ -112,7 +104,7 @@ public class ChangePermissionsDialog extends FocusDialog implements FilePermissi
             }
         }
 
-        yBoxPanel.add(gridPanel);
+        mainPanel.add(gridPanel);
 
         octalPermTextField = new JTextField(3);
         // Constrains text field to 3 digits, from 0 to 7 (octal base)
@@ -142,26 +134,30 @@ public class ChangePermissionsDialog extends FocusDialog implements FilePermissi
             octalPermTextField.setEnabled(false);
         }
 
-        yBoxPanel.addSpace(10);
+        mainPanel.addSpace(10);
         JPanel tempPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         tempPanel.add(new JLabel(Translator.get("permissions.octal_notation")));
         tempPanel.add(octalPermTextField);
-        yBoxPanel.add(tempPanel);
+        mainPanel.add(tempPanel);
 
-        yBoxPanel.addSpace(15);
+        mainPanel.addSpace(15);
 
         recurseDirCheckBox = new JCheckBox(Translator.get("recurse_directories"));
         // Disable check box if no permission bit can be set
         recurseDirCheckBox.setEnabled(canSetPermission && (files.size()>1 || ((AbstractFile)files.elementAt(0)).isDirectory()));
-        yBoxPanel.add(recurseDirCheckBox);
+        mainPanel.add(recurseDirCheckBox);
 
-        Container contentPane = getContentPane();
-        contentPane.add(yBoxPanel, BorderLayout.NORTH);
+        // Create file details button and OK/cancel buttons and lay them out a single row
+        JPanel fileDetailsPanel = createFileDetailsPanel();
 
-        okButton = new JButton(Translator.get("ok"));
+        okButton = new JButton(Translator.get("apply"));
         cancelButton = new JButton(Translator.get("cancel"));
 
-        contentPane.add(DialogToolkit.createOKCancelPanel(okButton, cancelButton, this), BorderLayout.SOUTH);
+        mainPanel.add(createButtonsPanel(createFileDetailsButton(fileDetailsPanel),
+                DialogToolkit.createOKCancelPanel(okButton, cancelButton, getRootPane(), this)));
+        mainPanel.add(fileDetailsPanel);
+
+        getContentPane().add(mainPanel, BorderLayout.NORTH);
 
         if(!canSetPermission) {
             // Disable OK button if no permission bit can be set

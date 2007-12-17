@@ -27,7 +27,6 @@ import com.mucommander.file.util.FileToolkit;
 import com.mucommander.job.ArchiveJob;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.DialogToolkit;
-import com.mucommander.ui.dialog.FocusDialog;
 import com.mucommander.ui.dialog.QuestionDialog;
 import com.mucommander.ui.layout.YBoxPanel;
 import com.mucommander.ui.main.MainFrame;
@@ -47,13 +46,8 @@ import java.awt.event.ItemListener;
  *
  * @author Maxence Bernard
  */
-public class PackDialog extends FocusDialog implements ActionListener, ItemListener {
+public class PackDialog extends JobDialog implements ActionListener, ItemListener {
 
-    private MainFrame mainFrame;
-
-    /** Files to archive */
-    private FileSet files;
-	
     private JTextField filePathField;
 	
     private JComboBox formatsComboBox;
@@ -78,11 +72,8 @@ public class PackDialog extends FocusDialog implements ActionListener, ItemListe
 
 
     public PackDialog(MainFrame mainFrame, FileSet files, boolean isShiftDown) {
-        super(mainFrame, Translator.get(com.mucommander.ui.action.PackAction.class.getName()+".label"), mainFrame);
+        super(mainFrame, Translator.get(com.mucommander.ui.action.PackAction.class.getName()+".label"), files);
 
-        this.mainFrame = mainFrame;
-        this.files = files;
-		
         // Retrieve available formats for single file or many file archives
         int nbFiles = files.size();
         this.formats = Archiver.getFormats(nbFiles>1 || (nbFiles>0 && files.fileAt(0).isDirectory()));
@@ -154,17 +145,20 @@ public class PackDialog extends FocusDialog implements ActionListener, ItemListe
 
         mainPanel.addSpace(10);
 
-        contentPane.add(mainPanel, BorderLayout.NORTH);
-				
+        // Create file details button and OK/cancel buttons and lay them out a single row
+        JPanel fileDetailsPanel = createFileDetailsPanel();
+
         okButton = new JButton(Translator.get("pack_dialog.pack"));
         cancelButton = new JButton(Translator.get("cancel"));
-        contentPane.add(DialogToolkit.createOKCancelPanel(okButton, cancelButton, this), BorderLayout.SOUTH);
 
+        mainPanel.add(createButtonsPanel(createFileDetailsButton(fileDetailsPanel),
+                DialogToolkit.createOKCancelPanel(okButton, cancelButton, getRootPane(), this)));
+        mainPanel.add(fileDetailsPanel);
+        
         // Text field will receive initial focus
         setInitialFocusComponent(filePathField);		
 		
-        // Selects OK when enter is pressed
-        getRootPane().setDefaultButton(okButton);
+        contentPane.add(mainPanel, BorderLayout.NORTH);
 
         // Packs dialog
         setMinimumSize(MINIMUM_DIALOG_DIMENSION);

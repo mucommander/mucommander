@@ -113,6 +113,8 @@ New features:
 
 Improvements:
 - Added an 'Explore bookmarks' item to the 'Bookmarks' menu.
+- Job confirmation dialogs show the list of files to be processed.
+- All OK/cancel choices can be navigated with the arrow keys.
 
 Localization:
 - Japanese translation contributed by Nardog.

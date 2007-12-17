@@ -98,14 +98,11 @@ public class MkdirDialog extends FocusDialog implements ActionListener {
         
         okButton = new JButton(Translator.get("create"));
         JButton cancelButton = new JButton(Translator.get("cancel"));
-        contentPane.add(DialogToolkit.createOKCancelPanel(okButton, cancelButton, this), BorderLayout.SOUTH);
+        contentPane.add(DialogToolkit.createOKCancelPanel(okButton, cancelButton, getRootPane(), this), BorderLayout.SOUTH);
 
         // Path field will receive initial focus
         setInitialFocusComponent(pathField);
 
-        // Selects OK when enter is pressed
-        getRootPane().setDefaultButton(okButton);
-        
         setMinimumSize(MINIMUM_DIALOG_DIMENSION);
         setMaximumSize(MAXIMUM_DIALOG_DIMENSION);
         showDialog();

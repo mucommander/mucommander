@@ -105,14 +105,11 @@ public class PropertiesDialog extends FocusDialog implements Runnable, ActionLis
         contentPane.add(yPanel, BorderLayout.NORTH);
 		
         okCancelButton = new JButton(Translator.get("cancel"));
-        contentPane.add(DialogToolkit.createOKPanel(okCancelButton, this), BorderLayout.SOUTH);
+        contentPane.add(DialogToolkit.createOKPanel(okCancelButton, getRootPane(), this), BorderLayout.SOUTH);
 
         // OK button will receive initial focus
         setInitialFocusComponent(okCancelButton);		
 		
-        // Selects OK when enter is pressed
-        getRootPane().setDefaultButton(okCancelButton);
-
         setMinimumSize(MINIMUM_DIALOG_DIMENSION);
         setMaximumSize(MAXIMUM_DIALOG_DIMENSION);
 		

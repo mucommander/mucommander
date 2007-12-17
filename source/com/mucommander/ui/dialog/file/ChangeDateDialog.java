@@ -24,7 +24,6 @@ import com.mucommander.job.ChangeFileAttributesJob;
 import com.mucommander.text.CustomDateFormat;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.DialogToolkit;
-import com.mucommander.ui.dialog.FocusDialog;
 import com.mucommander.ui.layout.YBoxPanel;
 import com.mucommander.ui.main.MainFrame;
 
@@ -42,11 +41,7 @@ import java.util.Date;
  *
  * @author Maxence Bernard
  */
-public class ChangeDateDialog extends FocusDialog implements ActionListener, ItemListener {
-
-    private MainFrame mainFrame;
-
-    private FileSet files;
+public class ChangeDateDialog extends JobDialog implements ActionListener, ItemListener {
 
     private JRadioButton nowRadioButton;
 
@@ -59,15 +54,12 @@ public class ChangeDateDialog extends FocusDialog implements ActionListener, Ite
 
 
     public ChangeDateDialog(MainFrame mainFrame, FileSet files) {
-        super(mainFrame, Translator.get(com.mucommander.ui.action.ChangeDateAction.class.getName()+".label"), mainFrame);
+        super(mainFrame, Translator.get(com.mucommander.ui.action.ChangeDateAction.class.getName()+".label"), files);
 
-        this.mainFrame = mainFrame;
-        this.files = files;
+        YBoxPanel mainPanel = new YBoxPanel();
 
-        YBoxPanel yBoxPanel = new YBoxPanel();
-
-        yBoxPanel.add(new JLabel(Translator.get(com.mucommander.ui.action.ChangeDateAction.class.getName()+".tooltip")+" :"));
-        yBoxPanel.addSpace(10);
+        mainPanel.add(new JLabel(Translator.get(com.mucommander.ui.action.ChangeDateAction.class.getName()+".tooltip")+" :"));
+        mainPanel.addSpace(10);
 
         ButtonGroup buttonGroup = new ButtonGroup();
 
@@ -81,7 +73,7 @@ public class ChangeDateDialog extends FocusDialog implements ActionListener, Ite
 
         tempPanel.add(nowRadioButton);
 
-        yBoxPanel.add(tempPanel);
+        mainPanel.add(tempPanel);
 
         buttonGroup.add(nowRadioButton);
         JRadioButton specificDateRadioButton = new JRadioButton(Translator.get("change_date_dialog.specific_date"));
@@ -98,20 +90,25 @@ public class ChangeDateDialog extends FocusDialog implements ActionListener, Ite
         dateSpinner.setEnabled(false);
         tempPanel.add(dateSpinner);
 
-        yBoxPanel.add(tempPanel);
+        mainPanel.add(tempPanel);
 
-        yBoxPanel.addSpace(10);
+        mainPanel.addSpace(10);
         recurseDirCheckBox = new JCheckBox(Translator.get("recurse_directories"));
-        yBoxPanel.add(recurseDirCheckBox);
+        mainPanel.add(recurseDirCheckBox);
 
-        yBoxPanel.addSpace(15);
+        mainPanel.addSpace(15);
 
-        Container contentPane = getContentPane();
-        contentPane.add(yBoxPanel, BorderLayout.NORTH);
+        // Create file details button and OK/cancel buttons and lay them out a single row
+        JPanel fileDetailsPanel = createFileDetailsPanel();
 
-        okButton = new JButton(Translator.get("ok"));
+        okButton = new JButton(Translator.get("apply"));
         cancelButton = new JButton(Translator.get("cancel"));
-        contentPane.add(DialogToolkit.createOKCancelPanel(okButton, cancelButton, this), BorderLayout.SOUTH);
+
+        mainPanel.add(createButtonsPanel(createFileDetailsButton(fileDetailsPanel),
+                DialogToolkit.createOKCancelPanel(okButton, cancelButton, getRootPane(), this)));
+        mainPanel.add(fileDetailsPanel);
+
+        getContentPane().add(mainPanel, BorderLayout.NORTH);
 
         if(!canChangeDate) {
             nowRadioButton.setEnabled(false);

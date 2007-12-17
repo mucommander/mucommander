@@ -33,9 +33,6 @@ import com.mucommander.ui.main.MainFrame;
  */
 public class DownloadDialog extends DestinationDialog {
 
-    private FileSet files;
-	
-	
     public DownloadDialog(MainFrame mainFrame, FileSet files) {
         super(mainFrame, files,
               Translator.get("download_dialog.download"),
@@ -43,7 +40,6 @@ public class DownloadDialog extends DestinationDialog {
               Translator.get("download_dialog.download"),
               Translator.get("download_dialog.error_title"));
 
-        this.files = files;
         AbstractFile file = (AbstractFile)files.elementAt(0);
 		
         //		AbstractFile activeFolder = mainFrame.getActiveTable().getCurrentFolder();

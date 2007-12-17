@@ -24,7 +24,6 @@ import com.mucommander.file.util.FileSet;
 import com.mucommander.file.util.FileToolkit;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.DialogToolkit;
-import com.mucommander.ui.dialog.FocusDialog;
 import com.mucommander.ui.layout.YBoxPanel;
 import com.mucommander.ui.main.MainFrame;
 
@@ -40,11 +39,8 @@ import java.awt.event.ActionListener;
  *
  * @author Maxence Bernard
  */
-public abstract class DestinationDialog extends FocusDialog implements ActionListener {
+public abstract class DestinationDialog extends JobDialog implements ActionListener {
 
-    protected MainFrame mainFrame;
-    protected FileSet files;
-	
     protected JTextField pathField;
     protected JComboBox fileExistsActionComboBox;
     protected JButton okButton;
@@ -75,23 +71,10 @@ public abstract class DestinationDialog extends FocusDialog implements ActionLis
     };
 	
 
-    /**
-     * Creates a new DestinationDialog.
-     *
-     * @param mainFrame the main frame this dialog is attached to.
-     */
     public DestinationDialog(MainFrame mainFrame, FileSet files) {
-        super(mainFrame, null, mainFrame);
-        this.mainFrame = mainFrame;
-        this.files = files;
+        super(mainFrame, null, files);
     }
 	
-	
-    /**
-     * Creates a new DestinationDialog.
-     *
-     * @param mainFrame the main frame this dialog is attached to.
-     */
     public DestinationDialog(MainFrame mainFrame, FileSet files, String title, String labelText, String okText, String errorDialogTitle) {
         this(mainFrame, files);
 		
@@ -104,7 +87,6 @@ public abstract class DestinationDialog extends FocusDialog implements ActionLis
 
         setTitle(title);
 		
-        Container contentPane = getContentPane();
         YBoxPanel mainPanel = new YBoxPanel();
 		
         JLabel label = new JLabel(labelText+" :");
@@ -118,14 +100,6 @@ public abstract class DestinationDialog extends FocusDialog implements ActionLis
 
         // Path field will receive initial focus
         setInitialFocusComponent(pathField);		
-		
-        // OK / Cancel buttons panel
-        okButton = new JButton(okText);
-        cancelButton = new JButton(Translator.get("cancel"));
-        contentPane.add(DialogToolkit.createOKCancelPanel(okButton, cancelButton, this), BorderLayout.SOUTH);
-
-        // Selects OK when enter is pressed
-        getRootPane().setDefaultButton(okButton);
 
         // Checkbox that allows the user to choose the default action when a file already exists in destination
         mainPanel.add(new JLabel(Translator.get("destination_dialog.file_exists_action")));
@@ -136,8 +110,18 @@ public abstract class DestinationDialog extends FocusDialog implements ActionLis
             fileExistsActionComboBox.addItem(DEFAULT_ACTIONS_TEXT[i]);
         mainPanel.add(fileExistsActionComboBox);
         mainPanel.addSpace(10);
-		
-        contentPane.add(mainPanel, BorderLayout.NORTH);
+
+        // Create file details button and OK/cancel buttons and lay them out a single row
+        JPanel fileDetailsPanel = createFileDetailsPanel();
+
+        okButton = new JButton(okText);
+        cancelButton = new JButton(Translator.get("cancel"));
+
+        mainPanel.add(createButtonsPanel(createFileDetailsButton(fileDetailsPanel),
+                DialogToolkit.createOKCancelPanel(okButton, cancelButton, getRootPane(), this)));
+        mainPanel.add(fileDetailsPanel);
+
+        getContentPane().add(mainPanel, BorderLayout.NORTH);
 		
         // Set minimum/maximum dimension
         setMinimumSize(MINIMUM_DIALOG_DIMENSION);

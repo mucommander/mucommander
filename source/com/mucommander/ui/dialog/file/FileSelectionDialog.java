@@ -145,11 +145,8 @@ public class FileSelectionDialog extends FocusDialog implements ActionListener {
         contentPane.add(northPanel, BorderLayout.NORTH);
 
         okButton = new JButton(Translator.get(addToSelection?"file_selection_dialog.mark":"file_selection_dialog.unmark"));
-        // Sets default 'enter' button
-        okButton.setDefaultCapable(true);
-        getRootPane().setDefaultButton(okButton);
         cancelButton = new JButton(Translator.get("cancel"));
-        contentPane.add(DialogToolkit.createOKCancelPanel(okButton, cancelButton, this), BorderLayout.SOUTH);
+        contentPane.add(DialogToolkit.createOKCancelPanel(okButton, cancelButton, getRootPane(), this), BorderLayout.SOUTH);
 
         // Selection field receives initial keyboard focus
         setInitialFocusComponent(selectionField);
