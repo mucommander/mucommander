@@ -263,12 +263,12 @@ public class CopyJob extends TransferFileJob {
                     return true;
                 }
                 catch(IOException e) {
-                    // Unable to open source file
-                    int ret = showErrorDialog(errorDialogTitle, Translator.get("cannot_read_folder", destFile.getName()));
+                    // file.ls() failed
+                    int ret = showErrorDialog(errorDialogTitle, Translator.get("cannot_read_folder", file.getName()));
                     // Retry loops
                     if(ret==RETRY_ACTION)
                         continue;
-                    // Cancel, skip or close dialog return false
+                    // Cancel, skip or close dialog returns false
                     return false;
                 }
             } while(true);

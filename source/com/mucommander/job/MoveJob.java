@@ -268,8 +268,6 @@ public class MoveJob extends TransferFileJob {
                         destFile.mkdir();
                     }
                     catch(IOException e) {
-                        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("IOException caught: "+e);
-
                         int ret = showErrorDialog(errorDialogTitle, Translator.get("cannot_create_folder", destFile.getAbsolutePath()));
                         // Retry loops
                         if(ret==RETRY_ACTION)
@@ -305,9 +303,8 @@ public class MoveJob extends TransferFileJob {
                         return false;
                 }
                 catch(IOException e) {
-                    if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("IOException caught: "+e);
-
-                    int ret = showErrorDialog(errorDialogTitle, Translator.get("cannot_read_file", file.getAbsolutePath()));
+                    // file.ls() failed
+                    int ret = showErrorDialog(errorDialogTitle, Translator.get("cannot_read_folder", file.getName()));
                     // Retry loops
                     if(ret==RETRY_ACTION)
                         continue;
@@ -328,8 +325,6 @@ public class MoveJob extends TransferFileJob {
                     return true;
                 }
                 catch(IOException e) {
-                    if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("IOException caught: "+e);
-
                     int ret = showErrorDialog(errorDialogTitle, Translator.get("cannot_delete_folder", file.getAbsolutePath()));
                     // Retry loops
                     if(ret==RETRY_ACTION)
