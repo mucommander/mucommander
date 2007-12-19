@@ -52,6 +52,26 @@ public abstract class JobDialog extends FocusDialog {
 
 
     /**
+     * Displays an error dialog with the specified message and title.
+     *
+     * @param message the error message
+     * @param title the error title
+     */
+    protected void showErrorDialog(String message, String title) {
+        JOptionPane.showMessageDialog(mainFrame, message, title, JOptionPane.ERROR_MESSAGE);
+    }
+
+    /**
+     * Displays an error dialog with the specified message and the default error title.
+     *
+     * @param message the error message
+     */
+    protected void showErrorDialog(String message) {
+        showErrorDialog(message, Translator.get("error"));
+    }
+
+
+    /**
      * Creates and returns a 'File details' panel, showing details about the files that the job will operate on. The file details
      * are loaded in a separate thread, when the panel becomes visible.
      *  
