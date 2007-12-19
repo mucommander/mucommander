@@ -106,6 +106,9 @@ What's new since v0.8.1 ?
 -------------------------
 
 New features:
+- New 'Calculate checksum' feature added to the 'File' menu (mapped onto 
+  Alt+K by default) which allows to calculate the checksum of selected files
+  using various algorithms.
 - Files can be marked/unmarked using a Regexp.
 - New 'Owner' and 'Group' columns added to the folder pane (not visible by
   default). The owner and group information is available on FTP and SFTP folders
@@ -115,6 +118,8 @@ Improvements:
 - Added an 'Explore bookmarks' item to the 'Bookmarks' menu.
 - Job confirmation dialogs show the list of files to be processed.
 - All OK/cancel choices can be navigated with the arrow keys.
+- Added keyboard shortcuts to 'Change date' and 'Change permissions' action
+  (Alt+D and Alt+P resp.).
 
 Localization:
 - Japanese translation contributed by Nardog.
