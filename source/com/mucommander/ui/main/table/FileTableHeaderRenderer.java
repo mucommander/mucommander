@@ -54,21 +54,23 @@ public class FileTableHeaderRenderer extends DefaultTableCellRenderer implements
         setHorizontalAlignment(JLabel.CENTER);
     }
 
+
     /**
-     * Returns <code>true</code> if this header is the currently selected one.
+     * Specifies whether the column corresponding to this renderer is the currently selected one, i.e. the one the table
+     * is currently sorted by.
      *
-     * @param isCurrent true if this header is the currently selected one
+     * @param isCurrent true if the column corresponding to this renderer is the currently selected one.
      */
     public void setCurrent(boolean isCurrent) {
         this.isCurrent = isCurrent;
     }
 
     /**
-     * Sets the direction of the arrow symbolizing the sort order.
+     * Specifies whether if the sort order of the column corresponding to this renderer is ascending or descending.
      *
      * @param isAscending true if the order is ascending, false for descending
      */
-    public void setOrder(boolean isAscending) {
+    public void setSortOrder(boolean isAscending) {
         this.ascendingOrder = isAscending;
     }
 
