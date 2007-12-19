@@ -46,7 +46,7 @@ public abstract class DestinationDialog extends JobDialog implements ActionListe
     protected JButton okButton;
     protected JButton cancelButton;
 
-    protected String errorDialogTitle = Translator.get("move_dialog.error_title");
+    protected String errorDialogTitle = Translator.get("error");
 	
     // Dialog size constraints
     protected final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(320,0);	
@@ -102,7 +102,7 @@ public abstract class DestinationDialog extends JobDialog implements ActionListe
         setInitialFocusComponent(pathField);		
 
         // Checkbox that allows the user to choose the default action when a file already exists in destination
-        mainPanel.add(new JLabel(Translator.get("destination_dialog.file_exists_action")));
+        mainPanel.add(new JLabel(Translator.get("destination_dialog.file_exists_action")+" :"));
         fileExistsActionComboBox = new JComboBox();
         fileExistsActionComboBox.addItem(Translator.get("ask"));
         int nbChoices = DEFAULT_ACTIONS_TEXT.length;
@@ -145,14 +145,6 @@ public abstract class DestinationDialog extends JobDialog implements ActionListe
     }
 	
 	
-    /**
-     * Displays an error message.
-     */
-    protected void showErrorDialog(String msg) {
-        JOptionPane.showMessageDialog(mainFrame, msg, errorDialogTitle, JOptionPane.ERROR_MESSAGE);
-    }
-
-
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
         dispose();
@@ -175,7 +167,7 @@ public abstract class DestinationDialog extends JobDialog implements ActionListe
         Object ret[] = FileToolkit.resolvePath(destPath, mainFrame.getActiveTable().getCurrentFolder());
         // The path entered doesn't correspond to any existing folder
         if (ret==null || (files.size()>1 && ret[1]!=null)) {
-            showErrorDialog(Translator.get("this_folder_does_not_exist", destPath));
+            showErrorDialog(Translator.get("this_folder_does_not_exist", destPath), errorDialogTitle);
             return;
         }
 
