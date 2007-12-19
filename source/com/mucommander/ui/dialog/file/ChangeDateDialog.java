@@ -59,7 +59,7 @@ public class ChangeDateDialog extends JobDialog implements ActionListener, ItemL
         YBoxPanel mainPanel = new YBoxPanel();
 
         mainPanel.add(new JLabel(Translator.get(com.mucommander.ui.action.ChangeDateAction.class.getName()+".tooltip")+" :"));
-        mainPanel.addSpace(10);
+        mainPanel.addSpace(5);
 
         ButtonGroup buttonGroup = new ButtonGroup();
 
