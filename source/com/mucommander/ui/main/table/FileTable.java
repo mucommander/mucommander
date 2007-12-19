@@ -185,7 +185,40 @@ public class FileTable extends JTable implements Columns, MouseListener, MouseMo
         addFocusListener(this);
         mainFrame.addActivePanelListener(this);
         MuConfiguration.addConfigurationListener(this);
+
+        // Mac OS X 10.5 (Leopard) and up uses JTableHeader properties to render sort indicators on table headers
+        // instead of a custom header renderer.
+        if(usesTableHeaderRenderingProperties())
+            setTableHeaderRenderingProperties();
     }
+
+
+    /**
+     * Under Mac OS X 10.5 (Leopard) and up, sets client properties on this table's JTableHeader to indicate the current
+     * sort criterion/column and sort order (ascending or descending). These properties allow Mac OS X/Java to render
+     * the headers accordingly, instead of having to use a {@link FileTableHeaderRenderer custom header renderer}.
+     * This method has no effect whatsoever on platforms other than Mac OS X 10.5+.
+     */
+    private void setTableHeaderRenderingProperties() {
+        if(usesTableHeaderRenderingProperties()) {
+            getTableHeader().putClientProperty("JTableHeader.selectedColumn", new Integer(getColumnPosition(getSortByCriteria())));
+            getTableHeader().putClientProperty("JTableHeader.sortDirection", isSortAscending()?"ascending":"decending");
+        }
+    }
+
+    /**
+     * Returns <code>true</code> if the current platform is capable of indicating the sort criterion and sort order
+     * on the table headers by setting client properties, instead of using a {@link FileTableHeaderRenderer custom header renderer}.
+     * At the moment this method returns <code>true</code> only under Mac OS X 10.5 (Leopard) and up.
+     *  
+     * @return true if the current platform is capable of indicating the sort criterion and sort order on the table
+     * headers by setting client properties.
+     */
+    static boolean usesTableHeaderRenderingProperties() {
+        return PlatformManager.getOsFamily()==PlatformManager.MAC_OS_X
+            && PlatformManager.getOsVersion()>=PlatformManager.MAC_OS_X_10_5;
+    }
+
 
     /**
      * Returns the FolderPanel that contains this FileTable.
@@ -553,26 +586,36 @@ public class FileTable extends JTable implements Columns, MouseListener, MouseMo
      */
     public void sortBy(int criterion, boolean ascending) {
         // If we're not changing the current sort values, abort.
-        if(criterion== sortByCriterion && ascendingOrder[criterion]==ascending)
+        if(criterion==sortByCriterion && ascendingOrder[criterion]==ascending)
             return;
 
         // Abort if the column that corresponds to the specified criterion is not visible
         if(!isColumnVisible(criterion))
             return;
 
-        // Remove arrow icon from old header and put it on the new one
-        TableColumnModel cm = getColumnModel();
-        FileTableHeaderRenderer headerRenderer;
-        ((FileTableHeaderRenderer)cm.getColumn(convertColumnIndexToView(sortByCriterion)).getHeaderRenderer()).setCurrent(false);
-        (headerRenderer = (FileTableHeaderRenderer)cm.getColumn(convertColumnIndexToView(criterion)).getHeaderRenderer()).setCurrent(true);
-        headerRenderer.setOrder(ascending);
+        // Keep a copy of the current sort values and store the new ones.
+        int oldSortByCriterion = sortByCriterion;
 
-        // Saves the new sort values.
         sortByCriterion = criterion;
         ascendingOrder[criterion] = ascending;
 
-        // Repaint header
-        getTableHeader().repaint();
+        // Mac OS X 10.5 (Leopard) and up uses JTableHeader properties to render sort indicators on table headers
+        if(usesTableHeaderRenderingProperties()) {
+            setTableHeaderRenderingProperties();
+        }
+        // On other platforms, update the custom header renderer
+        else {
+            // Remove arrow icon from old header and put it on the new one
+            TableColumnModel cm = getColumnModel();
+            FileTableHeaderRenderer headerRenderer;
+
+            ((FileTableHeaderRenderer)cm.getColumn(convertColumnIndexToView(oldSortByCriterion)).getHeaderRenderer()).setCurrent(false);
+            (headerRenderer = (FileTableHeaderRenderer)cm.getColumn(convertColumnIndexToView(sortByCriterion)).getHeaderRenderer()).setCurrent(true);
+            headerRenderer.setSortOrder(ascending);
+
+            // Repaint header
+            getTableHeader().repaint();
+        }
 
         // Sorts table while keeping current file selected
         sortTable();
@@ -662,14 +705,21 @@ public class FileTable extends JTable implements Columns, MouseListener, MouseMo
     public void reverseSortOrder() {
         ascendingOrder[sortByCriterion] = !ascendingOrder[sortByCriterion];
 
-        TableColumnModel cm = getColumnModel();
-        FileTableHeaderRenderer currentHeaderRenderer = (FileTableHeaderRenderer)cm.getColumn(convertColumnIndexToView(sortByCriterion)).getHeaderRenderer();
+        // Mac OS X 10.5 (Leopard) and up uses JTableHeader properties to render sort indicators on table headers
+        if(usesTableHeaderRenderingProperties()) {
+            setTableHeaderRenderingProperties();
+        }
+        // On other platforms, update the custom header renderer
+        else {
+            TableColumnModel cm = getColumnModel();
+            FileTableHeaderRenderer currentHeaderRenderer = (FileTableHeaderRenderer)cm.getColumn(convertColumnIndexToView(sortByCriterion)).getHeaderRenderer();
 
-        // Change current header's arrow direction
-        currentHeaderRenderer.setOrder(ascendingOrder[sortByCriterion]);
+            // Change current header's arrow direction
+            currentHeaderRenderer.setSortOrder(ascendingOrder[sortByCriterion]);
 
-        // Repaint header
-        getTableHeader().repaint();
+            // Repaint header
+            getTableHeader().repaint();
+        }
 
         // Sorts table while keeping current file selected
         sortTable();

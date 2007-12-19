@@ -213,9 +213,18 @@ public class CommandBar extends JPanel implements ConfigurationListener, KeyList
             MuAction action = ActionManager.getActionInstance(actions[i], mainFrame);
             JButton button = new NonFocusableButton();
 
+            // Use new JButton decorations introduced in Mac OS X 10.5 (Leopard)
+            if(PlatformManager.getOsFamily()==PlatformManager.MAC_OS_X && PlatformManager.getOsVersion()>= PlatformManager.MAC_OS_X_10_5) {
+                button.setMargin(new Insets(6,8,6,8));
+                button.putClientProperty("JComponent.sizeVariant", "small");
+                button.putClientProperty("JButton.buttonType", "textured");
+            }
+            else {
+                button.setMargin(new Insets(3,4,3,4));
+            }
+
             setButtonAction(button, action);
 
-            button.setMargin(new Insets(3,4,3,4));
             // For Mac OS X whose default minimum width for buttons is enormous
             button.setMinimumSize(new Dimension(40, (int)button.getPreferredSize().getHeight()));
             button.addMouseListener(this);

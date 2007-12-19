@@ -206,6 +206,35 @@ public class ToolBar extends JToolBar implements ConfigurationListener, MouseLis
                     addButton(action);
             }
         }
+
+        // Use new JButton decorations introduced in Mac OS X 10.5 (Leopard)
+        if(PlatformManager.getOsFamily()==PlatformManager.MAC_OS_X && PlatformManager.getOsVersion()>= PlatformManager.MAC_OS_X_10_5) {
+            int nbComponents = getComponentCount();
+            Component comp;
+            boolean hasPrevious, hasNext;
+
+            // Set the 'segment position' required for the 'segmented capsule' style  
+            for(int i=0; i<nbComponents; i++) {
+                comp = getComponent(i);
+                if(!(comp instanceof JButton))
+                    continue;
+
+                hasPrevious = i!=0 && (getComponent(i-1) instanceof JButton);
+                hasNext = i!=nbComponents-1 && (getComponent(i+1) instanceof JButton);
+
+                String segmentPosition;
+                if(hasPrevious && hasNext)
+                    segmentPosition = "middle";
+                else if(hasPrevious)
+                    segmentPosition = "last";
+                else if(hasNext)
+                    segmentPosition = "first";
+                else
+                    segmentPosition = "only";
+
+                ((JButton)comp).putClientProperty("JButton.segmentPosition", segmentPosition);
+             }
+        }
     }
 
 
@@ -234,9 +263,17 @@ public class ToolBar extends JToolBar implements ConfigurationListener, MouseLis
         if(scaleFactor!=1.0f)
             button.setIcon(IconManager.getScaledIcon(action.getIcon(), scaleFactor));
 
-        // Init rollover
-        RolloverButtonAdapter.setButtonDecoration(button);
-        button.addMouseListener(rolloverButtonAdapter);
+        // Use new JButton decorations introduced in Mac OS X 10.5 (Leopard)
+        if(PlatformManager.getOsFamily()==PlatformManager.MAC_OS_X && PlatformManager.getOsVersion()>= PlatformManager.MAC_OS_X_10_5) {
+            button.putClientProperty("JButton.buttonType", "segmentedCapsule");
+            button.setRolloverEnabled(true);
+        }
+        // On other platforms, use a custom rollover effect
+        else {
+            // Init rollover
+            RolloverButtonAdapter.setButtonDecoration(button);
+            button.addMouseListener(rolloverButtonAdapter);
+        }
 
         add(button);
     }

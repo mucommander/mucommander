@@ -64,7 +64,6 @@ public class FileTableColumnModel implements TableColumnModel, Columns, Property
      * Creates a new file table column model.
      */
     public FileTableColumnModel(FileTableConfiguration conf) {
-        FileTableHeaderRenderer headerRenderer; // Buffer for each column's header.
         TableColumn             column;         // Buffer for the current column.
 
         // The name column is always visible, so we know that the column count is always
@@ -76,7 +75,15 @@ public class FileTableColumnModel implements TableColumnModel, Columns, Property
             columns.add(column = new TableColumn(i));
             column.setCellEditor(null);
             column.setHeaderValue(COLUMN_LABELS[i]);
-            column.setHeaderRenderer(headerRenderer = new FileTableHeaderRenderer());
+
+            FileTableHeaderRenderer headerRenderer = null;
+            // Mac OS X 10.5 (Leopard) and up uses JTableHeader properties to render sort indicators on table headers.
+            // On other platforms, we use a custom header renderer
+            if(!FileTable.usesTableHeaderRenderingProperties()) {
+                headerRenderer = new FileTableHeaderRenderer();
+                column.setHeaderRenderer(headerRenderer);
+            }
+
             column.addPropertyChangeListener(this);
 
             // Sets the column's initial width.
@@ -85,8 +92,9 @@ public class FileTableColumnModel implements TableColumnModel, Columns, Property
 
             // Initialises the column's visibility and minimum width.
             if(i == NAME) {
-                headerRenderer.setCurrent(true);
                 visibility[i] = true;
+                if(headerRenderer!=null)
+                    headerRenderer.setCurrent(true);
             }
             else {
                 if((visibility[i] = conf.isVisible(i)))

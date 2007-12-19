@@ -18,8 +18,11 @@
 
 package com.mucommander.ui.main;
 
+import com.mucommander.PlatformManager;
 import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.file.AbstractFile;
+import com.mucommander.file.ArchiveEntryFile;
+import com.mucommander.file.FileProtocols;
 import com.mucommander.ui.action.ActionKeymap;
 import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.action.CloseWindowAction;
@@ -527,11 +530,35 @@ public class MainFrame extends JFrame implements LocationListener {
      */
     public void updateWindowTitle() {
         // Update window title
-        String title = activeTable.getCurrentFolder().getAbsolutePath()+" - muCommander";
+        String title = activeTable.getCurrentFolder().getAbsolutePath();
         Vector mainFrames = WindowManager.getMainFrames();
         if(mainFrames.size()>1)
             title += " ["+(mainFrames.indexOf(this)+1)+"]";
         setTitle(title);
+
+        // Use new Window decorations introduced in Mac OS X 10.5 (Leopard)
+        if(PlatformManager.getOsVersion()>= PlatformManager.MAC_OS_X_10_5) {
+            // Displays the document icon in the window title bar, works only for local files
+            AbstractFile currentFolder = activeTable.getCurrentFolder();
+            Object javaIoFile;
+            if(currentFolder.getURL().getProtocol().equals(FileProtocols.FILE)) {
+                // If the current folder is an archive entry, display the archive file, this is the closest we can get
+                // with a java.io.File
+                if(currentFolder.hasAncestor(ArchiveEntryFile.class))
+                    javaIoFile = currentFolder.getParentArchive().getUnderlyingFileObject();
+                else
+                    javaIoFile = currentFolder.getUnderlyingFileObject();
+            }
+            else {
+                // If the current folder is not a local file, use the special /Network directory which is sort of
+                // 'Network Neighborhood'.
+                javaIoFile = new java.io.File("/Network");
+            }
+
+            // Note that for some strange reason (looks like a bug), setting the property to null won't remove
+            // the previous icon.
+            getRootPane().putClientProperty("Window.documentFile", javaIoFile);
+        }
     }
     
 

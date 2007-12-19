@@ -120,6 +120,8 @@ Improvements:
 - All OK/cancel choices can be navigated with the arrow keys.
 - Added keyboard shortcuts to 'Change date' and 'Change permissions' action
   (Alt+D and Alt+P resp.).
+- Visual enhancements to the main window under Mac OS X Leopard which now uses
+  more native looking components.
 
 Localization:
 - Japanese translation contributed by Nardog.

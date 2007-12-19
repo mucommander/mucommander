@@ -18,13 +18,15 @@
 
 package com.mucommander.ui.viewer;
 
+import com.mucommander.PlatformManager;
 import com.mucommander.file.AbstractFile;
+import com.mucommander.file.FileProtocols;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.WindowManager;
 
 import java.awt.*;
-import java.util.Vector;
 import java.util.Iterator;
+import java.util.Vector;
 
 /**
  * ViewerRegistrar maintains a list of registered file viewers and provides methods to dynamically register file viewers
@@ -60,6 +62,13 @@ public class ViewerRegistrar {
      */
     public static ViewerFrame createViewerFrame(MainFrame mainFrame, AbstractFile file, Image icon) {
         ViewerFrame frame = new ViewerFrame(mainFrame, file, icon);
+
+        // Use new Window decorations introduced in Mac OS X 10.5 (Leopard)
+        if(PlatformManager.getOsVersion()>= PlatformManager.MAC_OS_X_10_5) {
+            // Displays the document icon in the window title bar, works only for local files
+            if(file.getURL().getProtocol().equals(FileProtocols.FILE))
+                frame.getRootPane().putClientProperty("Window.documentFile", file.getUnderlyingFileObject()); 
+        }
 
         // WindowManager will listen to window closed events to trigger shutdown sequence
         // if it is the last window visible
