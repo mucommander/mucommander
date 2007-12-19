@@ -308,4 +308,17 @@
   <!-- Action  : Open the bookmark file system in the current folder panel.      -->
   <!-- Default : alt B                                                           -->
   <action class="com.mucommander.ui.action.ExploreBookmarksAction"      keystroke="alt B"/>
+
+  <!-- Action  : Change the selected files' date.                                -->
+  <!-- Default : alt D                                                           -->
+  <action class="com.mucommander.ui.action.ChangeDateAction"            keystroke="alt D"/>
+
+  <!-- Action  : Change the selected files' permissions.                         -->
+  <!-- Default : alt P                                                           -->
+  <action class="com.mucommander.ui.action.ChangePermissionsAction"     keystroke="alt P"/>
+
+  <!-- Action  : Calculate the checksum of the selected files'                   -->
+  <!-- Default : alt K                                                           -->
+  <action class="com.mucommander.ui.action.CalculateChecksumAction"     keystroke="alt K"/>
+
 </keymap>
