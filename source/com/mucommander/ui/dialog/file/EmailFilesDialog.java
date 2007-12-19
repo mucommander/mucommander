@@ -74,7 +74,7 @@ public class EmailFilesDialog extends JobDialog implements ActionListener, ItemL
 
         // Notifies the user that mail preferences are not set and brings the preferences dialog 
         if(!SendMailJob.mailPreferencesSet()) {
-            JOptionPane.showMessageDialog(mainFrame, Translator.get("email_dialog.prefs_not_set"), Translator.get("email_dialog.prefs_not_set_title"), JOptionPane.INFORMATION_MESSAGE);
+            showErrorDialog(Translator.get("email_dialog.prefs_not_set"), Translator.get("email_dialog.prefs_not_set_title"));
 	
             GeneralPreferencesDialog preferencesDialog = GeneralPreferencesDialog.getDialog();
             preferencesDialog.setActiveTab(GeneralPreferencesDialog.MAIL_TAB);
@@ -159,7 +159,7 @@ public class EmailFilesDialog extends JobDialog implements ActionListener, ItemL
             showDialog();
         }
         catch(IOException e) {
-            JOptionPane.showMessageDialog(this, Translator.get("email_dialog.read_error"), Translator.get("email_dialog.error_title"), JOptionPane.ERROR_MESSAGE);	
+            showErrorDialog(Translator.get("email_dialog.read_error"), Translator.get("email_dialog.error_title"));
         }
     }
 
