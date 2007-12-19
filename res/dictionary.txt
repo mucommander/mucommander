@@ -4128,6 +4128,25 @@ com.mucommander.ui.action.EmptyTrashAction.label:JA:ごみ箱を空にする
 
 
 
+
+
+com.mucommander.ui.action.CalculateChecksumAction.label:EN:Calculate checksum
+com.mucommander.ui.action.CalculateChecksumAction.label:FR:Calculer la checksum
+# Translation missing (New!)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #############
 # File menu #
 #############
@@ -6458,8 +6477,8 @@ properties_dialog.contents:NL:Inhoud
 properties_dialog.contents:SK:Obsah
 properties_dialog.contents:JA:内容
 
-properties_dialog.calculating:EN:calculating...
-properties_dialog.calculating:FR:calcul en cours...
+properties_dialog.calculating:EN:Calculating...
+properties_dialog.calculating:FR:Calcul en cours...
 properties_dialog.calculating:DE:Kalkuliere...
 properties_dialog.calculating:ES:Calculando..
 properties_dialog.calculating:CS:počítám...
@@ -6476,6 +6495,46 @@ properties_dialog.calculating:pt_BR:Calculando...
 properties_dialog.calculating:NL:Berekenen...
 properties_dialog.calculating:SK:počítam...
 properties_dialog.calculating:JA:計算しています...
+
+
+#############################
+# Calculate checksum dialog #
+#############################
+
+calculate_checksum_dialog.checksum_algorithm:EN:Checksum algorithm
+calculate_checksum_dialog.checksum_algorithm:FR:Algorithme de checksum
+# Translation missing (New!)
+
+
+
+
+
+
+
+
+
+
+
+
+
+calculate_checksum_dialog.temporary_file:EN:Temporary file
+calculate_checksum_dialog.temporary_file:FR:Fichier temporaire
+# Translation missing (New!)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 ######################
