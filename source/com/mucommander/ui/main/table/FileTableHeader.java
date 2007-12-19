@@ -47,8 +47,6 @@ public class FileTableHeader extends JTableHeader implements Columns, MouseListe
     //////////////////////////////////
 
     public void mouseClicked(MouseEvent e) {
-        int modifiers = e.getModifiers();
-
         int colNum = table.convertColumnIndexToModel(getColumnModel().getColumnIndexAtX(e.getX()));
 
         table.requestFocus();
