@@ -21,8 +21,8 @@ package com.mucommander;
 import com.mucommander.command.Command;
 import com.mucommander.command.CommandManager;
 import com.mucommander.file.AbstractFile;
-import com.mucommander.file.FileProtocols;
 import com.mucommander.file.FileFactory;
+import com.mucommander.file.FileProtocols;
 import com.mucommander.process.AbstractProcess;
 import com.mucommander.process.ProcessRunner;
 
@@ -46,27 +46,45 @@ public class PlatformManager {
 
 
 
-    // - OS definition ----------------------------------------------------------
+    // - OS families ------------------------------------------------------------
     // --------------------------------------------------------------------------
     /** Windows 95, 98, Me */
-    public static final int WINDOWS_9X = 10;
+    public static final int WINDOWS_9X = 1;
     /** Windows NT, 2000, XP and up */
-    public static final int WINDOWS_NT = 11;
-    /** Mac OS classic (not supported) */
-    public static final int MAC_OS     = 20;
-    /** Mac OS X */
-    public static final int MAC_OS_X   = 21;
+    public static final int WINDOWS_NT = 2;
+    /** Mac OS X  (Mac OS Classic not supported) */
+    public static final int MAC_OS_X   = 3;
     /** Linux */
-    public static final int LINUX      = 30;
+    public static final int LINUX      = 4;
     /** Solaris */
-    public static final int SOLARIS    = 40;
+    public static final int SOLARIS    = 5;
     /** OS/2 */
-    public static final int OS_2       = 50;
+    public static final int OS_2       = 6;
     /** Other OS */
-    public static final int OTHER      = 0;
-    /** OS family muCommander is running on (see constants) */
+    public static final int UNKNOWN_OS = 0;
+
+    /** OS family muCommander is currently running on */
     private static      int osFamily;
 
+    // - OS versions ------------------------------------------------------------
+    // --------------------------------------------------------------------------
+    /** Mac OS X 10.0 */
+    public static final int MAC_OS_X_10_0 = 300;
+    /** Mac OS X 10.1 */
+    public static final int MAC_OS_X_10_1 = 301;
+    /** Mac OS X 10.2 */
+    public static final int MAC_OS_X_10_2 = 302;
+    /** Mac OS X 10.3 */
+    public static final int MAC_OS_X_10_3 = 303;
+    /** Mac OS X 10.4 */
+    public static final int MAC_OS_X_10_4 = 304;
+    /** Mac OS X 10.5 */
+    public static final int MAC_OS_X_10_5 = 305;
+    /** Unknown OS version */
+    public static final int UNKNOWN_VERSION = 0;
+
+    /** OS version muCommander is currently running on */
+    private static      int osVersion = UNKNOWN_VERSION;
 
 
     // - Java version -----------------------------------------------------------
@@ -87,7 +105,8 @@ public class PlatformManager {
     public static final int JAVA_1_6 = 6;
     /** Java 1.7.x */
     public static final int JAVA_1_7 = 7;
-    /** Java version muCommander is running on (see constants) */
+
+    /** Java version muCommander is currently running on */
     private static      int javaVersion;
 
 
@@ -100,6 +119,7 @@ public class PlatformManager {
     public static final int KDE_DESKTOP       = 1;
     /** GNOME desktop */
     public static final int GNOME_DESKTOP     = 2;
+
     /** Unix desktop muCommander is running on, used only if OS family is LINUX, SOLARIS or OTHER */
     private static      int unixDesktop;
 
@@ -239,7 +259,7 @@ public class PlatformManager {
         // -------------------------------------------
 
         String osName    = System.getProperty("os.name");
-        String osVersion = System.getProperty("os.version");
+        String osVersionString = System.getProperty("os.version");
 
         // Windows family
         if(osName.startsWith("Windows")) {
@@ -269,36 +289,42 @@ public class PlatformManager {
                 defaultRegexpCaseSensitivity = false;
             }
         }
-        // Mac OS family
-        else if(osName.startsWith("Mac OS")) {
+        // Mac OS X family
+        else if(osName.startsWith("Mac OS X")) {
             unixDesktop = UNKNOWN_DESKTOP;
 
-            // Mac OS 7.x, 8.x or 9.x (doesn't run under Mac OS classic)
-            if(osVersion.startsWith("7.")
-               || osVersion.startsWith("8.")
-               || osVersion.startsWith("9.")) {
-                osFamily = MAC_OS;
-                defaultFileManagerName       = null;
-                defaultFileManagerCommand    = null;
-                defaultFileOpenerCommand     = null;
-                defaultUrlOpenerCommand      = null;
-                defaultExeOpenerCommand      = null;
-                exeAssociation               = null;
-                runExecutables               = false;
-                defaultRegexpCaseSensitivity = true;
+            osFamily                     = MAC_OS_X;
+            defaultFileManagerName       = MAC_OS_X_FILE_MANAGER_NAME;
+            defaultFileManagerCommand    = MAC_OS_X_FILE_MANAGER;
+            defaultFileOpenerCommand     = MAC_OS_X_FILE_OPENER;
+            defaultUrlOpenerCommand      = MAC_OS_X_FILE_OPENER;
+            defaultExeOpenerCommand      = null;
+            exeAssociation               = null;
+            runExecutables               = false;
+            defaultRegexpCaseSensitivity = true;
+            com.mucommander.file.FileFactory.setTrashProvider(new com.mucommander.file.impl.trash.OSXTrashProvider());
+
+            if(osVersionString.startsWith("10.5")) {
+                osVersion = MAC_OS_X_10_5;
             }
-            // Mac OS X or up
+            else if(osVersionString.startsWith("10.4")) {
+                osVersion = MAC_OS_X_10_4;
+            }
+            else if(osVersionString.startsWith("10.3")) {
+                osVersion = MAC_OS_X_10_3;
+            }
+            else if(osVersionString.startsWith("10.2")) {
+                osVersion = MAC_OS_X_10_2;
+            }
+            else if(osVersionString.startsWith("10.1")) {
+                osVersion = MAC_OS_X_10_1;
+            }
+            else if(osVersionString.startsWith("10.0")) {
+                osVersion = MAC_OS_X_10_0;
+            }
             else {
-                osFamily                     = MAC_OS_X;
-                defaultFileManagerName       = MAC_OS_X_FILE_MANAGER_NAME;
-                defaultFileManagerCommand    = MAC_OS_X_FILE_MANAGER;
-                defaultFileOpenerCommand     = MAC_OS_X_FILE_OPENER;
-                defaultUrlOpenerCommand      = MAC_OS_X_FILE_OPENER;
-                defaultExeOpenerCommand      = null;
-                exeAssociation               = null;
-                runExecutables               = false;
-                defaultRegexpCaseSensitivity = true;
-                com.mucommander.file.FileFactory.setTrashProvider(new com.mucommander.file.impl.trash.OSXTrashProvider());
+                // Newer version we don't know of yet, assume latest supported Java version
+                osVersion = MAC_OS_X_10_5;
             }
         }
         // OS/2 family.
@@ -324,7 +350,7 @@ public class PlatformManager {
                 osFamily = SOLARIS;
             // Any other OS
             else
-                osFamily = OTHER;
+                osFamily = UNKNOWN_OS;
 
 
 
@@ -418,10 +444,57 @@ public class PlatformManager {
         com.mucommander.file.FileFactory.setTrashProvider(new com.mucommander.file.impl.trash.KDETrashProvider());
     }
 
-    public static int getJavaVersion() {return javaVersion;}
-    public static int getOsFamily() {return osFamily;}
+    /**
+     * Returns the version of Java the current JVM instance is running on. See constant fields for possible values.
+     *
+     * @return the version of Java the current JVM instance is running on
+     */
+    public static int getJavaVersion() {
+        return javaVersion;
+    }
+
+    /**
+     * Returns the OS family the current JVM instance is running on, {@link #UNKNOWN_OS} if unknown.
+     * See constant fields for possible values.
+     *
+     * @return the OS family the current JVM instance is running on.
+     */
+    public static int getOsFamily() {
+        return osFamily;
+    }
+
+    /**
+     * Returns the OS version the current JVM instance is running on, {@link #UNKNOWN_VERSION} if unknown.
+     * See constant fields for possible values.
+     *
+     * @return the OS version the current JVM instance is running on.
+     */
+    public static int getOsVersion() {
+        return osVersion;
+    }
+
+    /**
+     * Returns the Desktop environment the current JVM instance is running on, {@link #UNKNOWN_DESKTOP} if unknown.
+     * See constant fields for possible values.
+     *
+     * @return the OS version the current JVM instance is running on.
+     */
+    public static int getUnixDesktop() {
+        return unixDesktop;
+    }
+
+    /**
+     * Convenience method which returns <code>true</code> if the current OS is Windows-based, that is if the current
+     * OS family is either {@link #WINDOWS_9X} or {@link #WINDOWS_NT}.
+     *
+     * @return true if the current OS is Windows-based
+     */
+    public static boolean isWindowsFamily() {
+        return osFamily == WINDOWS_9X || osFamily == WINDOWS_NT;
+    }
+
+
     public static String getDefaultShellCommand() {return defaultShellCommand;}
-    public static int getUnixDesktop() {return unixDesktop;}
     public static String getDefaultFileManagerName() {return defaultFileManagerName;}
     public static String getDefaultFileManagerCommand() {return defaultFileManagerCommand;}
     public static String getDefaultFileOpenerCommand() {return defaultFileOpenerCommand;}
@@ -430,12 +503,6 @@ public class PlatformManager {
     public static boolean runExecutables() {return runExecutables;}
     public static String getExeAssociation() {return exeAssociation;}
     public static boolean getDefaultRegexpCaseSensitivity() {return defaultRegexpCaseSensitivity;}
-
-    /**
-     * Convenience method which returns true if the current OS is Windows-based,
-     * that is if the OS family is either {@link #WINDOWS_9X} or {@link #WINDOWS_NT}.
-     */
-    public static boolean isWindowsFamily() {return osFamily == WINDOWS_9X || osFamily == WINDOWS_NT;}
 
     /**
      * Returns true if the specified command could be executed.
@@ -649,6 +716,7 @@ public class PlatformManager {
      * @exception IllegalArgumentException thrown if <code>folder</code> is not a valid folder path.
      */
     public static void setPreferencesFolder(File folder) throws IOException {setPreferencesFolder(FileFactory.getFile(folder.getAbsolutePath()));}
+
     public static void setPreferencesFolder(String path) throws IOException {
         AbstractFile folder;
 
