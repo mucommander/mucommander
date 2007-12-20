@@ -1014,10 +1014,10 @@ public class FileTable extends JTable implements Columns, MouseListener, MouseMo
             return;
 
         Object source = e.getSource();
+        int clickCount = e.getClickCount();
 
         // If one of the table cells was left clicked...
         if(source==this && PlatformManager.isLeftMouseButton(e)) {
-            int clickCount = e.getClickCount();
             // Clicking on the selected row's ... :
             //  - 'name' label triggers the filename editor
             //  - 'date' label triggers the change date dialog
@@ -1075,7 +1075,7 @@ public class FileTable extends JTable implements Columns, MouseListener, MouseMo
                 }
             }
             // Double-clicking on a row opens the file/folder
-            else if(e.getClickCount()==2) {
+            else if(clickCount%2==0 && clickCount>0) {      // allow successive double-clicks: clickCount==2, 4, 6, 8, ...
                 this.lastDoubleClickTimestamp = System.currentTimeMillis();
                 ActionManager.performAction(e.isShiftDown()?com.mucommander.ui.action.OpenNativelyAction.class:com.mucommander.ui.action.OpenAction.class
                     , mainFrame);

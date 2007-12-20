@@ -138,6 +138,8 @@ Bug fixes:
   on the opposite panel.
 - A proper error message is displayed when trying to open Zip files with an
   unsupported compression method (e.g. IMPLODED or LZMA).
+- When multiple double-clicks were issues on the table, only the first one
+  was taken into account.
 
 Known issues:
 - Korean translation is not up-to-date.
