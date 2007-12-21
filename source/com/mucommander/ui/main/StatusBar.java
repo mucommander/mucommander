@@ -33,7 +33,7 @@ import com.mucommander.ui.event.ActivePanelListener;
 import com.mucommander.ui.event.LocationEvent;
 import com.mucommander.ui.event.LocationListener;
 import com.mucommander.ui.event.TableSelectionListener;
-import com.mucommander.ui.icon.IconManager;
+import com.mucommander.ui.icon.SpinningDial;
 import com.mucommander.ui.main.table.FileTable;
 import com.mucommander.ui.main.table.FileTableModel;
 import com.mucommander.ui.theme.*;
@@ -96,8 +96,8 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
     /** SizeFormat's format used to display volume info in status bar */
     private final static int VOLUME_INFO_SIZE_FORMAT = SizeFormat.DIGITS_SHORT| SizeFormat.UNIT_SHORT| SizeFormat.INCLUDE_SPACE| SizeFormat.ROUND_TO_KB;
 
-    /** Icon that is displayed when folder is changing */
-    public final static String WAITING_ICON = "waiting.png";
+//    /** Icon that is displayed when folder is changing */
+//    public final static String WAITING_ICON = "waiting.png";
 
 
     /**
@@ -452,7 +452,8 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
 
     public void locationChanging(LocationEvent e) {
         // Show a message in the status bar saying that folder is being changed
-        setStatusInfo(Translator.get("status_bar.connecting_to_folder"), IconManager.getIcon(IconManager.STATUS_BAR_ICON_SET, WAITING_ICON), true);
+//        setStatusInfo(Translator.get("status_bar.connecting_to_folder"), IconManager.getIcon(IconManager.STATUS_BAR_ICON_SET, WAITING_ICON), true);
+        setStatusInfo(Translator.get("status_bar.connecting_to_folder"), new SpinningDial(16, 16, true), true);
     }
 	
     public void locationCancelled(LocationEvent e) {

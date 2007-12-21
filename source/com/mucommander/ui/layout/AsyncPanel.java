@@ -19,6 +19,7 @@
 package com.mucommander.ui.layout;
 
 import com.mucommander.text.Translator;
+import com.mucommander.ui.icon.SpinningDial;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -31,7 +32,8 @@ import java.awt.event.ComponentListener;
  * initialize and that allows to deport their initialization in a separate thread as to not lock the event thread.
  * It works as follows:
  * <ol>
- *  <li>Initially, this panel displays a 'wait component' that symbolizes the contents of the panel is being loaded.
+ *  <li>Initially, this panel displays a 'please wait component' that symbolizes the fact that the contents of the panel
+ *      is being loaded.
  *  <li>When the panel becomes visible, the {@link #getTargetComponent()} method is called to trigger the initialization
  *      of the real component to display.
  *  <li>As soon as the method returns, the wait component is removed and the target component added to this panel.
@@ -82,6 +84,8 @@ public abstract class AsyncPanel extends JPanel implements ComponentListener {
      */
     private static JComponent getDefaultWaitComponent() {
         JLabel label = new JLabel(Translator.get("loading"));
+        label.setIcon(new SpinningDial(24, 24, true));
+        
         JPanel tempPanel = new JPanel(new FlowLayout());
         tempPanel.add(label);
 
