@@ -96,8 +96,8 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
     /** SizeFormat's format used to display volume info in status bar */
     private final static int VOLUME_INFO_SIZE_FORMAT = SizeFormat.DIGITS_SHORT| SizeFormat.UNIT_SHORT| SizeFormat.INCLUDE_SPACE| SizeFormat.ROUND_TO_KB;
 
-//    /** Icon that is displayed when folder is changing */
-//    public final static String WAITING_ICON = "waiting.png";
+    /** Icon that is displayed when folder is changing */
+    public final static String WAITING_ICON = "waiting.png";
 
 
     /**
