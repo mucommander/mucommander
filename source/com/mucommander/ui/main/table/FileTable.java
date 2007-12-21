@@ -42,6 +42,7 @@ import com.mucommander.ui.main.menu.TablePopupMenu;
 import com.mucommander.ui.theme.*;
 
 import javax.swing.*;
+import javax.swing.table.JTableHeader;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
@@ -197,12 +198,23 @@ public class FileTable extends JTable implements Columns, MouseListener, MouseMo
      * Under Mac OS X 10.5 (Leopard) and up, sets client properties on this table's JTableHeader to indicate the current
      * sort criterion/column and sort order (ascending or descending). These properties allow Mac OS X/Java to render
      * the headers accordingly, instead of having to use a {@link FileTableHeaderRenderer custom header renderer}.
-     * This method has no effect whatsoever on platforms other than Mac OS X 10.5+.
+     * This method has no effect whatsoever on platforms other where {@link #usesTableHeaderRenderingProperties()}
+     * returns <code>false</code>.
      */
     private void setTableHeaderRenderingProperties() {
         if(usesTableHeaderRenderingProperties()) {
-            getTableHeader().putClientProperty("JTableHeader.selectedColumn", new Integer(getColumnPosition(getSortByCriteria())));
-            getTableHeader().putClientProperty("JTableHeader.sortDirection", isSortAscending()?"ascending":"decending");
+            JTableHeader tableHeader = getTableHeader();
+
+            // Highlights the selected column. If this table is not currently active, the property is cleared to remove
+            // the highlighting effect.
+            // However, clearing the property does not yield the desired behavior as it does not restore the table header
+            // back to normal. This looks like a bug in Apple's implementation. 
+            tableHeader.putClientProperty("JTableHeader.selectedColumn", isActiveTable()
+                    ?new Integer(getColumnPosition(getSortByCriteria()))
+                    :null);
+
+            // Displays an ascending/descending arrow
+            tableHeader.putClientProperty("JTableHeader.sortDirection", isSortAscending()?"ascending":"decending");
         }
     }
 
@@ -1260,8 +1272,11 @@ public class FileTable extends JTable implements Columns, MouseListener, MouseMo
 
     public void activePanelChanged(FolderPanel folderPanel) {
         isActiveTable = folderPanel==getFolderPanel();
-        // Repaint selected row to show the new active/inactive state 
-        //repaint(currentRow);
+
+        // Mac OS X 10.5 (Leopard) and up uses JTableHeader properties to render sort indicators on table headers
+        // instead of a custom header renderer. These indicators change when the active table has changed. 
+        if(usesTableHeaderRenderingProperties())
+            setTableHeaderRenderingProperties();
     }
 
 
