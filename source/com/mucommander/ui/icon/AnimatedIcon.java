@@ -73,7 +73,7 @@ public abstract class AnimatedIcon implements Icon {
      * Creates a new animated icon.
      * <p>
      * This is a convenience constructor and is strictly equivalent to calling
-     * <code>{@link #AnimatedIcon(int,int)}({@link #DEFAULT_FRAME_COUNT}, {@link #DEFAULT_FRAME_DLAY});</code>
+     * <code>{@link #AnimatedIcon(int,int)}({@link #DEFAULT_FRAME_COUNT}, {@link #DEFAULT_FRAME_DELAY});</code>
      * </p>
      */
     public AnimatedIcon() {this(DEFAULT_FRAME_COUNT, DEFAULT_FRAME_DELAY);}
@@ -82,7 +82,7 @@ public abstract class AnimatedIcon implements Icon {
      * Creates a new animated icon with the specified number of frames.
      * <p>
      * This is a convenience constructor and is strictly equivalent to calling
-     * <code>{@link #AnimatedIcon(int,int)}(frameCount, {@link #DEFAULT_FRAME_DLAY});</code>
+     * <code>{@link #AnimatedIcon(int,int)}(frameCount, {@link #DEFAULT_FRAME_DELAY});</code>
      * </p>
      * @param frameCount number of frames in the animation.
      */
