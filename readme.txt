@@ -54,10 +54,10 @@ muCommander uses the following great third party works :
 - the Jakarta Commons Net library released under the Apache License.
  Jarkata Commons Net can be found at http://jakarta.apache.org .
 
-- the jCIFS library released under the GNU LGPL.
+- the jCIFS library released under the GNU LGPL license.
  jCIFS can be found at http://jcifs.samba.org .
 
-- the JmDNS library released under the GNU LGPL.
+- the JmDNS library released under the GNU LGPL license.
  JmDNS can be found at http://jmdns.sourceforge.net .
 
 - the Yanfs library released under the BSD license.
@@ -65,6 +65,9 @@ muCommander uses the following great third party works :
 
 - Icons by Mark James released under the Creative Commons Attribution License.
  Mark James can be found at http://famfamfam.com .
+
+- the Furbelow library released under the GNU LGPL license.
+Furbelow can be found at http://sourceforge.net/projects/furbelow .
 
 
 Credits
