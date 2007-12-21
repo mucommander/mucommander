@@ -25,22 +25,24 @@ import javax.swing.ImageIcon;
 public class SpinningDial extends AnimatedIcon {
     // - Class constants -----------------------------------------------------------------
     // -----------------------------------------------------------------------------------
+    /** Default creation animation status. */
+    public  static final boolean DEFAULT_ANIMATE = false;
     /** Dial's default color. */
-    public  static final Color DEFAULT_COLOR  = Color.BLACK;
+    public  static final Color DEFAULT_COLOR     = Color.BLACK;
     /** Minimum alpha-transparency value that must be applied to the dial's color as it fades out. */
-    private static final int   MIN_ALPHA      = 32;
+    private static final int   MIN_ALPHA         = 32;
     /** Icon's default width and height. */
-    public  static final int   DEFAULT_SIZE   = 32;
+    public  static final int   DEFAULT_SIZE      = 16;
     /** Default number of spokes in the dial. */
-    public  static final int   DEFAULT_SPOKES = 16;
+    public  static final int   DEFAULT_SPOKES    = 16;
     /** Dial's full size, will be scaled down at paint time. */
-    private static final int   FULL_SIZE      = 256;
+    private static final int   FULL_SIZE         = 256;
     /** Width of each of the dial's strokes. */
-    private static final float STROKE_WIDTH   = FULL_SIZE / 16f;
+    private static final float STROKE_WIDTH      = FULL_SIZE / 16f;
     /** Scale down factor for the dial. */
-    private static final float FRACTION       = 0.6f;
+    private static final float FRACTION          = 0.6f;
     /** Used to compute each spoke's coordinates. */
-    private static final int   RADIUS         = FULL_SIZE / 2 - 1 - (int)(STROKE_WIDTH / 2);
+    private static final int   RADIUS            = FULL_SIZE / 2 - 1 - (int)(STROKE_WIDTH / 2);
 
 
 
@@ -69,8 +71,26 @@ public class SpinningDial extends AnimatedIcon {
      *   <li>{@link #DEFAULT_SPOKES} for its number of spokes.</li>
      * </ul>
      * </p>
+     * <p>
+     * A dial created that way will not be displayed until {@link #setAnimated(boolean)} is
+     * called to animate it.
+     * </p>
      */
     public SpinningDial() {this(DEFAULT_SIZE, DEFAULT_SIZE);}
+
+    /**
+     * Creates a new spinning dial.
+     * <p>
+     * The new instance will be initialised using default values:
+     * <ul>
+     *   <li>{@link #DEFAULT_SIZE} for its width and height.</li>
+     *   <li>{@link #DEFAULT_COLOR} for its color.</li>
+     *   <li>{@link #DEFAULT_SPOKES} for its number of spokes.</li>
+     * </ul>
+     * </p>
+     * @param animate whether to animate the dial immediately or not.
+     */
+    public SpinningDial(boolean animate) {this(DEFAULT_SIZE, DEFAULT_SIZE, animate);}
 
     /**
      * Creates a new spinning dial with the specified color.
@@ -81,9 +101,27 @@ public class SpinningDial extends AnimatedIcon {
      *   <li>{@link #DEFAULT_SPOKES} for its number of spokes.</li>
      * </ul>
      * </p>
+     * <p>
+     * A dial created that way will not be displayed until {@link #setAnimated(boolean)} is
+     * called to animate it.
+     * </p>
      * @param c color in which to paint the dial.
      */
     public SpinningDial(Color c) {this(DEFAULT_SIZE, DEFAULT_SIZE, c);}
+
+    /**
+     * Creates a new spinning dial with the specified color.
+     * <p>
+     * The new instance will be initialised using default values:
+     * <ul>
+     *   <li>{@link #DEFAULT_SIZE} for its width and height.</li>
+     *   <li>{@link #DEFAULT_SPOKES} for its number of spokes.</li>
+     * </ul>
+     * </p>
+     * @param c       color in which to paint the dial.
+     * @param animate whether to animate the dial immediately or not.
+     */
+    public SpinningDial(Color c, boolean animate) {this(DEFAULT_SIZE, DEFAULT_SIZE, c, animate);}
 
     /**
      * Creates a new spinning dial with the specified dimensions.
@@ -94,15 +132,38 @@ public class SpinningDial extends AnimatedIcon {
      *   <li>{@link #DEFAULT_SPOKES} for its number of spokes.</li>
      * </ul>
      * </p>
+     * <p>
+     * A dial created that way will not be displayed until {@link #setAnimated(boolean)} is
+     * called to animate it.
+     * </p>
      * @param w width of the icon.
      * @param h height of the icon.
      */
     public SpinningDial(int w, int h) {this(w, h, DEFAULT_SPOKES);}
 
     /**
+     * Creates a new spinning dial with the specified dimensions.
+     * <p>
+     * The new instance will be initialised using default values:
+     * <ul>
+     *   <li>{@link #DEFAULT_COLOR} for its color.</li>
+     *   <li>{@link #DEFAULT_SPOKES} for its number of spokes.</li>
+     * </ul>
+     * </p>
+     * @param w       width of the icon.
+     * @param h       height of the icon.
+     * @param animate whether to animate the dial immediately or not.
+     */
+    public SpinningDial(int w, int h, boolean animate) {this(w, h, DEFAULT_SPOKES, animate);}
+
+    /**
      * Creates a new spinning dial with the specified dimensions and color.
      * <p>
      * The new instance will use {@link #DEFAULT_SPOKES} for its number of spokes.
+     * </p>
+     * <p>
+     * A dial created that way will not be displayed until {@link #setAnimated(boolean)} is
+     * called to animate it.
      * </p>
      * @param w width of the icon.
      * @param h height of the icon.
@@ -111,9 +172,25 @@ public class SpinningDial extends AnimatedIcon {
     public SpinningDial(int w, int h, Color c) {this(w, h, DEFAULT_SPOKES, c);}
 
     /**
+     * Creates a new spinning dial with the specified dimensions and color.
+     * <p>
+     * The new instance will use {@link #DEFAULT_SPOKES} for its number of spokes.
+     * </p>
+     * @param w       width of the icon.
+     * @param h       height of the icon.
+     * @param c       color in which to paint the dial.
+     * @param animate whether to animate the dial immediately or not.
+     */
+    public SpinningDial(int w, int h, Color c, boolean animate) {this(w, h, DEFAULT_SPOKES, c, animate);}
+
+    /**
      * Creates a new spinning dial with the specified dimensions and number of spokes.
      * <p>
      * The new instance will use {@link #DEFAULT_COLOR} for its color.
+     * </p>
+     * <p>
+     * A dial created that way will not be displayed until {@link #setAnimated(boolean)} is
+     * called to animate it.
      * </p>
      * @param w      width of the icon.
      * @param h      height of the icon.
@@ -122,18 +199,50 @@ public class SpinningDial extends AnimatedIcon {
     public SpinningDial(int w, int h, int spokes) {this(w, h, spokes, DEFAULT_COLOR);}
 
     /**
+     * Creates a new spinning dial with the specified dimensions and number of spokes.
+     * <p>
+     * The new instance will use {@link #DEFAULT_COLOR} for its color.
+     * </p>
+     * @param w       width of the icon.
+     * @param h       height of the icon.
+     * @param spokes  number of spokes that compose the dial.
+     * @param animate whether to animate the dial immediately or not.
+     */
+    public SpinningDial(int w, int h, int spokes, boolean animate) {this(w, h, spokes, DEFAULT_COLOR, animate);}
+
+    /**
      * Creates a new spinning dial with the specified characteristics.
+     * <p>
+     * A dial created that way will not be displayed until {@link #setAnimated(boolean)} is
+     * called to animate it.
+     * </p>
      * @param w      width of the icon.
      * @param h      height of the icon.
      * @param spokes number of spokes that compose the dial.
      * @param c      color in which to paint the dial.
      */
-    public SpinningDial(int w, int h, int spokes, Color c) {
+    public SpinningDial(int w, int h, int spokes, Color c) {this(w, h, spokes, c, DEFAULT_ANIMATE);}
+
+    /**
+     * Creates a new spinning dial with the specified characteristics.
+     * @param w       width of the icon.
+     * @param h       height of the icon.
+     * @param spokes  number of spokes that compose the dial.
+     * @param c       color in which to paint the dial.
+     * @param animate whether to animate the dial immediately or not.
+     */
+    public SpinningDial(int w, int h, int spokes, Color c, boolean animate) {
         super(spokes, 1000 / spokes);
+
+        // Initialises the icon.
         width  = w;
         height = h;
         color  = c;
         frames = new Image[getFrameCount()];
+
+        // Animates the icon if necessary.
+        if(animate)
+            setAnimated(true);
     }
 
 
