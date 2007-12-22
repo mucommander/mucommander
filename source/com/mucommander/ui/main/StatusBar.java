@@ -72,6 +72,9 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
 
     /** Label that displays info about current selected file(s) */
     private JLabel selectedFilesLabel;
+
+    /** Icon used while loading is in progress. */
+    private SpinningDial dial;
 	
     /** Label that displays info about current volume (free/total space) */
     private VolumeSpaceLabel volumeSpaceLabel;
@@ -110,6 +113,7 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
         this.mainFrame = mainFrame;
 		
         selectedFilesLabel = new JLabel("");
+        dial               = new SpinningDial();
         add(selectedFilesLabel);
 
         add(Box.createHorizontalGlue());
@@ -453,7 +457,8 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
     public void locationChanging(LocationEvent e) {
         // Show a message in the status bar saying that folder is being changed
 //        setStatusInfo(Translator.get("status_bar.connecting_to_folder"), IconManager.getIcon(IconManager.STATUS_BAR_ICON_SET, WAITING_ICON), true);
-        setStatusInfo(Translator.get("status_bar.connecting_to_folder"), new SpinningDial(16, 16, true), true);
+        setStatusInfo(Translator.get("status_bar.connecting_to_folder"), dial, true);
+        dial.setAnimated(true);
     }
 	
     public void locationCancelled(LocationEvent e) {
