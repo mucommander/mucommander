@@ -20,6 +20,11 @@ import javax.swing.ImageIcon;
  * {@link #setAnimated(boolean)}, the dial won't be displayed anymore until the animation is
  * resumed.
  * </p>
+ * <p>
+ * This heavily borrows code from Technomage's <code>furbelow</code> package, distributed
+ * under the GNU Lesser General Public License.<br>
+ * The original source code can be found <a href="http://furbelow.svn.sourceforge.net/viewvc/furbelow/trunk/src/furbelow">here</a>.
+ * </p>
  * @author twall, Nicolas Rinaudo
  */
 public class SpinningDial extends AnimatedIcon {
