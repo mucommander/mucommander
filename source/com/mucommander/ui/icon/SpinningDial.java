@@ -26,23 +26,21 @@ public class SpinningDial extends AnimatedIcon {
     // - Class constants -----------------------------------------------------------------
     // -----------------------------------------------------------------------------------
     /** Default creation animation status. */
-    public  static final boolean DEFAULT_ANIMATE = false;
+    public  static final boolean DEFAULT_ANIMATE    = false;
     /** Dial's default color. */
-    public  static final Color DEFAULT_COLOR     = Color.BLACK;
+    public  static final Color DEFAULT_COLOR        = Color.BLACK;
     /** Minimum alpha-transparency value that must be applied to the dial's color as it fades out. */
-    private static final int   MIN_ALPHA         = 32;
+    private static final int   MIN_ALPHA            = 32;
     /** Icon's default width and height. */
-    public  static final int   DEFAULT_SIZE      = 16;
+    public  static final int   DEFAULT_SIZE         = 16;
     /** Default number of spokes in the dial. */
-    public  static final int   DEFAULT_SPOKES    = 16;
+    public  static final int   DEFAULT_SPOKES       = 12;
     /** Dial's full size, will be scaled down at paint time. */
-    private static final int   FULL_SIZE         = 256;
+    private static final int   FULL_SIZE            = 256;
     /** Width of each of the dial's strokes. */
-    private static final float STROKE_WIDTH      = FULL_SIZE / 16f;
+    private static final float DEFAULT_STROKE_WIDTH = FULL_SIZE / 10f;
     /** Scale down factor for the dial. */
-    private static final float FRACTION          = 0.6f;
-    /** Used to compute each spoke's coordinates. */
-    private static final int   RADIUS            = FULL_SIZE / 2 - 1 - (int)(STROKE_WIDTH / 2);
+    private static final float FRACTION             = 0.6f;
 
 
 
@@ -56,6 +54,8 @@ public class SpinningDial extends AnimatedIcon {
     private Image[] frames;
     /** Color used to paint the dial. */
     private Color   color;
+    /** Width of each stroke. */
+    private float   strokeWidth;
 
 
 
@@ -235,15 +235,28 @@ public class SpinningDial extends AnimatedIcon {
         super(spokes, 1000 / spokes);
 
         // Initialises the icon.
-        width  = w;
-        height = h;
-        color  = c;
-        frames = new Image[getFrameCount()];
+        width       = w;
+        height      = h;
+        color       = c;
+        frames      = new Image[getFrameCount()];
+        strokeWidth = DEFAULT_STROKE_WIDTH;
 
         // Animates the icon if necessary.
         if(animate)
             setAnimated(true);
     }
+
+    /**
+     * Sets the width of the strokes used to paint each of the dial's spokes.
+     * @param width width of the strokes used to paint each of the dial's spokes.
+     */
+    public synchronized void setStrokeWidth(float width) {strokeWidth = width;}
+
+    /**
+     * Returns the width of the strokes used to paint each of the dial's spokes.
+     * @return the width of the strokes used to paint each of the dial's spokes.
+     */
+    public synchronized float getStrokeWidth() {return strokeWidth;}
 
 
 
@@ -310,7 +323,7 @@ public class SpinningDial extends AnimatedIcon {
         graphics.fillRect(0, 0, width, height);
         graphics.setComposite(AlphaComposite.Src);
         graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        graphics.setStroke(new BasicStroke(STROKE_WIDTH, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
+        graphics.setStroke(new BasicStroke(strokeWidth, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
         graphics.translate((float)width / 2, (float)height / 2);
         graphics.scale(scale, scale);
     }
@@ -335,6 +348,7 @@ public class SpinningDial extends AnimatedIcon {
                 int        alpha;
                 double     cos;
                 double     sin;
+                int        radius;
 
                 // Initialises the frame.
                 if(c == null)
@@ -346,14 +360,15 @@ public class SpinningDial extends AnimatedIcon {
                 initialiseGraphics(g = (Graphics2D)frame.getGraphics());
 
                 // Draws each spoke in the dial.
-                alpha = 255;
+                alpha  = 255;
+                radius = FULL_SIZE / 2 - 1 - (int)(strokeWidth / 2);
                 for(int i = 0; i < getFrameCount(); i++) {
                     cos = Math.cos((Math.PI * 2) - (Math.PI * 2 * (i - currentFrame)) / getFrameCount());
                     sin = Math.sin((Math.PI * 2) - (Math.PI * 2 * (i - currentFrame)) / getFrameCount());
 
                     g.setColor(getSpokeColor(alpha));
-                    g.drawLine((int)(RADIUS * FRACTION * cos), (int)(RADIUS * FRACTION * sin),
-                               (int)(RADIUS * cos), (int)(RADIUS * sin));
+                    g.drawLine((int)(radius * FRACTION * cos), (int)(radius * FRACTION * sin),
+                               (int)(radius * cos), (int)(radius * sin));
                     alpha = Math.max(MIN_ALPHA, (alpha * 3) / 4);
                 }
                 g.dispose();
