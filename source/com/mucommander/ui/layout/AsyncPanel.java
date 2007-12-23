@@ -24,8 +24,8 @@ import com.mucommander.ui.icon.SpinningDial;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
 
 /**
  * <code>AsyncPanel</code> is a <code>JPanel</code> aimed at components that potentially take a long time to
@@ -46,7 +46,7 @@ import java.awt.event.ComponentListener;
  *
  * @author Maxence Bernard
  */
-public abstract class AsyncPanel extends JPanel implements ComponentListener {
+public abstract class AsyncPanel extends JPanel {
 
     /** The component displayed while the target component is being loaded */
     private JComponent waitComponent;
@@ -73,8 +73,41 @@ public abstract class AsyncPanel extends JPanel implements ComponentListener {
         this.waitComponent = waitComponent;
         add(waitComponent, BorderLayout.CENTER);
 
-        // Get notified when this component becomes visible
-        addComponentListener(this);
+        if(isVisible()) {
+            // Don't listen to ComponentListener events if the component is already visible, as componentShow() would
+            // never be called.
+            loadTargetComponent();
+        }
+        else {
+            // Load the component when this panel becomes visible
+            addComponentListener(new ComponentAdapter() {
+                public void componentShown(ComponentEvent e) {
+                    if(componentShown)
+                        return;
+                    componentShown = true;
+
+                    loadTargetComponent();
+                }
+            });
+        }
+    }
+
+    /**
+     * Loads the target component by calling {@link #getTargetComponent()} and replace the wait component by it.
+     */
+    private void loadTargetComponent() {
+        new Thread() {
+            public void run() {
+                JComponent targetComponent = getTargetComponent();
+
+                remove(waitComponent);
+                setBorder(new EmptyBorder(0, 0, 0, 0));
+
+                add(targetComponent, BorderLayout.CENTER);
+
+                updateLayout();
+            }
+        }.start();
     }
 
     /**
@@ -85,47 +118,34 @@ public abstract class AsyncPanel extends JPanel implements ComponentListener {
     private static JComponent getDefaultWaitComponent() {
         JLabel label = new JLabel(Translator.get("loading"));
         label.setIcon(new SpinningDial(24, 24, true));
-        
-        JPanel tempPanel = new JPanel(new FlowLayout());
-        tempPanel.add(label);
+
+        // Center the label both horizontally and vertically
+        JPanel tempPanel = new JPanel(new GridBagLayout());
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.fill = GridBagConstraints.BOTH;
+
+        tempPanel.add(label, gbc);
 
         return tempPanel;
     }
 
 
-    //////////////////////////////////////
-    // ComponentListener implementation //
-    //////////////////////////////////////
+    /////////////////////////
+    // Overridable methods //
+    /////////////////////////
 
-    public void componentShown(ComponentEvent e) {
-        if(componentShown)
-            return;
-
-        componentShown = true;
-
-        new Thread() {
-            public void run() {
-                JComponent targetComponent = getTargetComponent();
-
-                remove(waitComponent);
-                setBorder(new EmptyBorder(0, 0, 0, 0));
-
-                add(targetComponent, BorderLayout.CENTER);
-
-                Container tla = getTopLevelAncestor();
-                if(tla instanceof Window)
-                    ((Window)tla).pack();
-            }
-        }.start();
-    }
-
-    public void componentResized(ComponentEvent e) {
-    }
-
-    public void componentMoved(ComponentEvent e) {
-    }
-
-    public void componentHidden(ComponentEvent e) {
+    /**
+     * Packs the parent Window that contains this component, if any. This method is called once the target component
+     * has been made initialized and added to this panel. This method can be overridden by subclasses if additional work
+     * needs to be done to update the layout.
+     */
+    protected void updateLayout() {
+        Container tla = getTopLevelAncestor();
+        if(tla instanceof Window)
+            ((Window)tla).pack();
     }
 
 
