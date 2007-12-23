@@ -125,6 +125,8 @@ Improvements:
   (Alt+D and Alt+P resp.).
 - Visual enhancements to the main window under Mac OS X Leopard which now uses
   more native looking components.
+- Improved the file loading in the internal viewers and editors.
+- The internal text viewer and editor allow to change the file encoding.
 
 Localization:
 - Japanese translation contributed by Nardog.
@@ -143,6 +145,8 @@ Bug fixes:
   unsupported compression method (e.g. IMPLODED or LZMA).
 - When multiple double-clicks were issues on the table, only the first one
   was taken into account.
+- Fixed an issue under Linux causing the muCommander icon to sometimes stay in
+  the system tray after the application has quit.
 
 Known issues:
 - Korean translation is not up-to-date.
