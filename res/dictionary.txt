@@ -1260,6 +1260,21 @@ error:SK:Chyba
 error:HU:Hiba
 error:JA:エラー
 
+# Generic error message, usually used as the content of error dialogs
+generic_error:EN:An error has occured while performing the requested operation.
+generic_error:FR:Une erreur est survenue pendant l'exécution de la tache demandée.
+# Translation missing (New!)
+
+
+
+
+
+
+
+
+
+
+
 folder_does_not_exist:EN:This folder doesn't exist or is not available.
 folder_does_not_exist:FR:Ce dossier n'existe pas ou n'est pas disponible.
 folder_does_not_exist:DE:Dieser Ordner existiert nicht oder ist nicht verfügbar.
