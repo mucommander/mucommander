@@ -183,6 +183,8 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
         add(mainPanel, BorderLayout.NORTH);
     }
 
+    private void showGenericError() {JOptionPane.showMessageDialog(this, Translator.get("generic_error"), Translator.get("error"), JOptionPane.ERROR_MESSAGE);}
+
     /**
      * Populates the look&feel combo box will all available look&feels.
      */
@@ -693,7 +695,7 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
                 populateLookAndFeels();
             }
         }
-        catch(Exception e) {e.printStackTrace();}
+        catch(Exception e) {showGenericError();}
         setLookAndFeelsLoading(false);
     }
 
@@ -799,8 +801,7 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
             ThemeManager.deleteCustomTheme(theme.getName());
             themeComboBox.removeItem(theme);
         }
-        // TODO: report error.
-        catch(Exception e) {}
+        catch(Exception e) {showGenericError();}
     }
 
     /**
@@ -924,8 +925,7 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
      */
     private void duplicateTheme(Theme theme) {
         try {insertTheme(ThemeManager.duplicateTheme(theme));}
-        // TODO: report error
-        catch(Exception e) {}
+        catch(Exception e) {showGenericError();}
     }
 
 
