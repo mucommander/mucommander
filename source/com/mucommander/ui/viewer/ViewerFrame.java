@@ -26,6 +26,7 @@ import com.mucommander.ui.dialog.QuestionDialog;
 import com.mucommander.ui.helper.FocusRequester;
 import com.mucommander.ui.helper.MenuToolkit;
 import com.mucommander.ui.helper.MnemonicHelper;
+import com.mucommander.ui.layout.AsyncPanel;
 import com.mucommander.ui.main.MainFrame;
 
 import javax.swing.*;
@@ -41,14 +42,12 @@ import java.awt.event.KeyEvent;
  *
  * @author Maxence Bernard
  */
-public class ViewerFrame extends JFrame implements ActionListener, Runnable {
+public class ViewerFrame extends JFrame implements ActionListener {
 	
     private MainFrame mainFrame;
     private AbstractFile file;
     private FileViewer viewer;
 
-    private JMenuBar menuBar;
-    private MnemonicHelper menuMnemonicHelper;
     private JMenuItem closeItem;
 
     private final static Dimension MIN_DIMENSION = new Dimension(200, 150);
@@ -70,65 +69,29 @@ public class ViewerFrame extends JFrame implements ActionListener, Runnable {
         this.file = file;
 		
         // Create default menu
-        this.menuMnemonicHelper = new MnemonicHelper();
+        MnemonicHelper menuMnemonicHelper = new MnemonicHelper();
         MnemonicHelper menuItemMnemonicHelper = new MnemonicHelper();
 
         // File menu
-        this.menuBar = new JMenuBar();
-        JMenu menu = addMenu(Translator.get("file_viewer.file_menu"));
+        JMenuBar menuBar = new JMenuBar();
+        JMenu menu = MenuToolkit.addMenu(Translator.get("file_viewer.file_menu"), menuMnemonicHelper, null);
         closeItem = MenuToolkit.addMenuItem(menu, Translator.get("file_viewer.close"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), this);
         menu.add(closeItem);
+        menuBar.add(menu);
 
-        // Add menu to frame
         setJMenuBar(menuBar);
-		
-        // Important: dispose window on close (default is hide)
+
+        // Call #dispose() on close (default is hide)
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
         setResizable(true);
 
-        new Thread(ViewerFrame.this, "com.mucommander.ui.viewer.ViewerFrame's Thread").start();
+        initContentPane();
     }
 
-    public JMenu addMenu(String menuTitle) {
-        JMenu menu = MenuToolkit.addMenu(menuTitle, menuMnemonicHelper, null);
-        this.menuBar.add(menu);
-        return menu;
-    }
-	
-    private void setViewer(FileViewer viewer) {
-        this.viewer = viewer;
-	
-        JScrollPane scrollPane = new JScrollPane(viewer, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED) {
-                public Insets getInsets() {
-                    return new Insets(0, 0, 0, 0);
-                }
-            };
-		
-        setContentPane(scrollPane);
-
-        // Catch Apple+W keystrokes under Mac OS X to close the window
-        if(com.mucommander.PlatformManager.getOsFamily() == com.mucommander.PlatformManager.MAC_OS_X) {
-            scrollPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_W, ActionEvent.META_MASK), CUSTOM_DISPOSE_EVENT);
-            scrollPane.getActionMap().put(CUSTOM_DISPOSE_EVENT, new AbstractAction() {
-                    public void actionPerformed(ActionEvent e){
-                        dispose();
-                    }
-                });
-        }
-
-        // Request focus on text area when visible
-        FocusRequester.requestFocus(viewer);
-    }
-
-
-    /////////////////////////////
-    // Runnable implementation //
-    /////////////////////////////
-
-    public void run() {
+    private void initContentPane() {
         try {
-            FileViewer viewer = ViewerRegistrar.createFileViewer(file);
+            this.viewer = ViewerRegistrar.createFileViewer(file);
 
             // Test if file is too large to be viewed and warns user
             long max = viewer.getMaxRecommendedSize();
@@ -146,19 +109,65 @@ public class ViewerFrame extends JFrame implements ActionListener, Runnable {
 
             viewer.setFrame(this);
             viewer.setCurrentFile(file);
-            viewer.view(file);
-            setViewer(viewer);
+
+            AsyncPanel asyncPanel = new AsyncPanel() {
+                public JComponent getTargetComponent() {
+                    try {
+                        viewer.view(file);
+                    }
+                    catch(Exception e) {
+                        showGenericViewErrorDialog();
+                        dispose();
+                        return viewer;
+                    }
+
+                    setTitle(viewer.getTitle());
+
+                    JScrollPane scrollPane = new JScrollPane(viewer, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED) {
+                            public Insets getInsets() {
+                                return new Insets(0, 0, 0, 0);
+                            }
+                        };
+
+                    // Catch Apple+W keystrokes under Mac OS X to close the window
+                    if(com.mucommander.PlatformManager.getOsFamily() == com.mucommander.PlatformManager.MAC_OS_X) {
+                        scrollPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_W, ActionEvent.META_MASK), CUSTOM_DISPOSE_EVENT);
+                        scrollPane.getActionMap().put(CUSTOM_DISPOSE_EVENT, new AbstractAction() {
+                                public void actionPerformed(ActionEvent e){
+                                    dispose();
+                                }
+                            });
+                    }
+
+                    return scrollPane;
+                }
+
+                protected void updateLayout() {
+                    super.updateLayout();
+                    
+                    // Request focus on the viewer when it is visible
+                    FocusRequester.requestFocus(viewer);
+                }
+            };
+
+            // Add the AsyncPanel to the content pane
+            JPanel contentPane = new JPanel(new BorderLayout());
+            contentPane.add(asyncPanel, BorderLayout.CENTER);
+            setContentPane(contentPane);
 
             // Sets panel to preferred size, without exceeding a maximum size and with a minumum size
             pack();
-            DialogToolkit.centerOnWindow(this, mainFrame);
             setVisible(true);
         }
         catch(Exception e) {
             if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Exception caught: "+e);
 
-            JOptionPane.showMessageDialog(mainFrame, Translator.get("file_viewer.view_error"), Translator.get("file_viewer.view_error_title"), JOptionPane.ERROR_MESSAGE);
+            showGenericViewErrorDialog();
         }
+    }
+
+    public void showGenericViewErrorDialog() {
+        JOptionPane.showMessageDialog(mainFrame, Translator.get("file_viewer.view_error"), Translator.get("file_viewer.view_error_title"), JOptionPane.ERROR_MESSAGE);
     }
 
 
@@ -179,9 +188,9 @@ public class ViewerFrame extends JFrame implements ActionListener, Runnable {
     public void pack() {
         super.pack();
 
-        setTitle(viewer.getTitle());
-
         DialogToolkit.fitToScreen(this);
         DialogToolkit.fitToMinDimension(this, MIN_DIMENSION);
+
+        DialogToolkit.centerOnWindow(this, mainFrame);
     }
 }
