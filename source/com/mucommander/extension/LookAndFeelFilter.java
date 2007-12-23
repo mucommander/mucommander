@@ -33,6 +33,7 @@ import javax.swing.LookAndFeel;
  *   <li>They are public and not abstract.</li>
  *   <li>They have a public, no-arg constructor.</li>
  *   <li>Their <code>isSupportedLookAndFeel</code> method returns <code>true</code>.</li>
+ *   <li>They are not an inner class.</li>
  * </ul>
  * </p>
  * @author Nicolas Rinaudo
@@ -52,6 +53,10 @@ public class LookAndFeelFilter implements ClassFilter {
         int         modifiers;   // Class' modifiers.
         Constructor constructor; // Public, no-arg constructor.
         Class       buffer;      // Used to explore c's ancestors.
+
+        // Ignores inner classes.
+        if(c.getDeclaringClass() != null)
+            return false;
 
         // Makes sure the class is public and non abstract.
         modifiers = c.getModifiers();
