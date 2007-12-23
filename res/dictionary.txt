@@ -9666,7 +9666,11 @@ prefs_dialog.import_theme:JA:テーマのインポート
 
 prefs_dialog.import_look_and_feel:EN:Import look & feel
 prefs_dialog.import_look_and_feel:FR:Importer un look & feel
-# Translation missing
+# Translation missing (New!)
+
+
+
+
 
 
 
@@ -9677,7 +9681,8 @@ prefs_dialog.import_look_and_feel:FR:Importer un look & feel
 
 prefs_dialog.no_look_and_feel:EN:No look & feel was found.
 prefs_dialog.no_look_and_feel:FR:Aucun look & feel n'a été trouvé.
-# Translation missing
+# Translation missing (New!)
+
 
 
 
@@ -9867,7 +9872,13 @@ prefs_dialog.delete_theme:JA:テーマ %1 を永久に削除しますか ?
 # %1 will be replaced by the look and feel name.
 prefs_dialog.delete_look_and_feel:EN:Permanently delete look & feel %1 ?
 prefs_dialog.delete_look_and_feel:FR:Supprimer définitivement le look & feel %1 ?
-# Translation missing
+# Translation missing (New!)
+
+
+
+
+
+
 
 
 
@@ -11112,9 +11123,10 @@ color_chooser.title:JA:色の抽出
 ##############################
 # Extensions related entries #
 ##############################
+
 extensions.file_already_exists:EN:File %1 already exists in the extensions directory.
 extensions.file_already_exists:FR:Le fichier %1 existe déjà dans le répertoire d'extensions.
-# Translation missing
+# Translation missing (New!)
 
 
 
