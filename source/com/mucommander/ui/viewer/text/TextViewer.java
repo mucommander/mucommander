@@ -19,7 +19,6 @@
 package com.mucommander.ui.viewer.text;
 
 import com.mucommander.file.AbstractFile;
-import com.mucommander.text.Translator;
 import com.mucommander.ui.viewer.FileViewer;
 import com.mucommander.ui.viewer.ViewerFrame;
 
@@ -49,11 +48,11 @@ class TextViewer extends FileViewer {
     ///////////////////////////////
 
     public void view(AbstractFile file) throws IOException {
-        textEditorImpl.startEditing(file);
+        textEditorImpl.startEditing(file, null);
 
         ViewerFrame frame = getFrame();
         if(frame!=null)
-            textEditorImpl.addMenuItems(frame.addMenu(Translator.get("text_editor.edit")));
+            textEditorImpl.populateMenus(frame);
     }
 
 

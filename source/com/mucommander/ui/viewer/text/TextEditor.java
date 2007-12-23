@@ -19,7 +19,6 @@
 package com.mucommander.ui.viewer.text;
 
 import com.mucommander.file.AbstractFile;
-import com.mucommander.text.Translator;
 import com.mucommander.ui.viewer.EditorFrame;
 import com.mucommander.ui.viewer.FileEditor;
 
@@ -53,19 +52,18 @@ class TextEditor extends FileEditor implements DocumentListener {
 
     protected void saveAs(AbstractFile destFile) throws IOException {
         OutputStream out = destFile.getOutputStream(false);
-        out.write(textEditorImpl.getTextArea().getText().getBytes());
+        out.write(textEditorImpl.getTextArea().getText().getBytes(textEditorImpl.getFileEncoding()));
         out.close();
 
         setSaveNeeded(false);
     }
 
     public void edit(AbstractFile file) throws IOException {
-        textEditorImpl.startEditing(file);
-        textEditorImpl.getTextArea().getDocument().addDocumentListener(this);
+        textEditorImpl.startEditing(file, this);
 
         EditorFrame frame = getFrame();
         if(frame!=null)
-            textEditorImpl.addMenuItems(frame.addMenu(Translator.get("text_editor.edit")));
+            textEditorImpl.populateMenus(frame);
     }
 
 

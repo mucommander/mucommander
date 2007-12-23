@@ -24,14 +24,18 @@ import com.mucommander.text.Translator;
 import com.mucommander.ui.helper.MenuToolkit;
 import com.mucommander.ui.helper.MnemonicHelper;
 import com.mucommander.ui.theme.*;
+import com.mucommander.ui.viewer.EditorFrame;
 
 import javax.swing.*;
+import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.Charset;
+import java.util.Iterator;
 
 /**
  * Text editor implementation used by {@link TextViewer} and {@link TextEditor}.
@@ -41,6 +45,11 @@ import java.io.InputStreamReader;
 class TextEditorImpl implements ThemeListener, ActionListener {
 
     private boolean isEditable;
+    private DocumentListener documentListener;
+
+    private AbstractFile file;
+
+    private JFrame frame;
 
     private JTextArea textArea;
 
@@ -54,6 +63,10 @@ class TextEditorImpl implements ThemeListener, ActionListener {
 
     private String searchString;
 
+    private JMenu encodingMenu;
+    private String encoding;
+    private JMenuItem encodingMenuItem;
+    
 
     public TextEditorImpl(boolean isEditable) {
         this.isEditable = isEditable;
@@ -130,10 +143,51 @@ class TextEditorImpl implements ThemeListener, ActionListener {
         return textArea;
     }
 
-    void addMenuItems(JMenu menu) {
-        MnemonicHelper menuItemMnemonicHelper = new MnemonicHelper();
+    void startEditing(AbstractFile file, DocumentListener documentListener) throws IOException {
+        this.file = file;
+        this.documentListener = documentListener;
+
+        // Auto-detect encoding
+        InputStream in = file.getInputStream();
+        String encoding = EncodingDetector.detectEncoding(in);
+        in.close();
+
+        // If encoding could not be detected, default to UTF-8
+        if(encoding==null)
+            encoding = "UTF-8";
+
+        // Prepare the text area
+        loadDocument(encoding);
+
+        // Listen to theme changes to update the text area if it is visible
+        ThemeManager.addCurrentThemeListener(this);
+    }
+
+    void loadDocument(String encoding) throws IOException {
+        this.encoding = encoding;
+
+        // Feed the file's contents to text area
+        InputStreamReader isr = new InputStreamReader(file.getInputStream(), encoding);
+        textArea.read(isr, null);
+        isr.close();
+
+        // Listen to document changes
+        if(documentListener!=null)
+            textArea.getDocument().addDocumentListener(documentListener);
+
+        // Move cursor to the top
+        textArea.setCaretPosition(0);
+    }
+
+    void populateMenus(JFrame frame) {
+        JMenuBar menuBar = frame.getJMenuBar();
+        this.frame = frame;
 
         // Edit menu
+
+        JMenu menu = new JMenu(Translator.get("text_editor.edit"));
+        MnemonicHelper menuItemMnemonicHelper = new MnemonicHelper();
+
         copyItem = MenuToolkit.addMenuItem(menu, Translator.get("text_editor.copy"), menuItemMnemonicHelper, null, this);
 
         // These menu items are not available to text viewers
@@ -148,29 +202,34 @@ class TextEditorImpl implements ThemeListener, ActionListener {
         findItem = MenuToolkit.addMenuItem(menu, Translator.get("text_viewer.find"), menuItemMnemonicHelper, KeyStroke.getKeyStroke("control F"), this);
         findNextItem = MenuToolkit.addMenuItem(menu, Translator.get("text_viewer.find_next"), menuItemMnemonicHelper, KeyStroke.getKeyStroke("F3"), this);
         findPreviousItem = MenuToolkit.addMenuItem(menu, Translator.get("text_viewer.find_previous"), menuItemMnemonicHelper, KeyStroke.getKeyStroke("shift F3"), this);
+
+        // Encoding submenu
+        menu.add(new JSeparator());
+        encodingMenu = new JMenu(Translator.get("encoding"));
+
+        Iterator availableEncodings = Charset.availableCharsets().keySet().iterator();
+        EncodingMenuItem encodingMenuItem;
+        while(availableEncodings.hasNext()) {
+            String encoding = (String)availableEncodings.next();
+
+            encodingMenuItem = new EncodingMenuItem(encoding);
+            encodingMenu.add(encodingMenuItem);
+            encodingMenuItem.addActionListener(this);
+
+            // Select the current encoding
+            if(encoding.equals(this.encoding)) {
+                this.encodingMenuItem = encodingMenuItem;
+                encodingMenuItem.setSelected(true);
+            }
+        }
+
+        menu.add(encodingMenu);
+
+        menuBar.add(menu);
     }
 
-
-    void startEditing(AbstractFile file) throws IOException {
-        // Auto-detect encoding
-        InputStream in = file.getInputStream();
-        String encoding = EncodingDetector.detectEncoding(in);
-        in.close();
-
-        // If encoding could not be detected, default to UTF-8
-        if(encoding==null)
-            encoding = "UTF-8";
-
-        // Feed the file's contents to text area
-        InputStreamReader isr = new InputStreamReader(file.getInputStream(), encoding);
-        textArea.read(isr, null);
-        isr.close();
-
-        // Move cursor to the top
-        textArea.setCaretPosition(0);
-
-        // Listen to theme changes to update the text area if it is visible
-        ThemeManager.addCurrentThemeListener(this);
+    String getFileEncoding() {
+        return encoding;
     }
 
 
@@ -181,8 +240,29 @@ class TextEditorImpl implements ThemeListener, ActionListener {
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
 
-        // Edit menu
-        if(source == copyItem)
+        // Encoding submenu
+        if(source instanceof EncodingMenuItem) {
+            if(isEditable) {
+                if(!((EditorFrame)frame).askSave())
+                    return;         // Abort if the file could not be saved
+            }
+
+            try {
+                // Unselect the previous encoding menu item
+                EncodingMenuItem newEncodingMenuItem = (EncodingMenuItem)source;
+
+                // Reload the file using the new encoding
+                loadDocument(newEncodingMenuItem.getText());
+
+                // Select the new encoding menu item and keep the instance at hand
+                encodingMenuItem.setSelected(false);
+                encodingMenuItem = newEncodingMenuItem;
+            }
+            catch(IOException ex) {
+                JOptionPane.showMessageDialog(frame, Translator.get("file_editor.cannot_read_file", file.getName()), Translator.get("read_error"), JOptionPane.ERROR_MESSAGE);
+            }
+        }
+        else if(source == copyItem)
             textArea.copy();
         else if(source == cutItem)
             textArea.cut();
@@ -232,5 +312,17 @@ class TextEditorImpl implements ThemeListener, ActionListener {
     public void fontChanged(FontChangedEvent event) {
         if(event.getFontId() == Theme.EDITOR_FONT)
             textArea.setFont(event.getFont());
+    }
+
+
+    ///////////////////
+    // Inner classes //
+    ///////////////////
+
+    private class EncodingMenuItem extends JCheckBoxMenuItem {
+
+        public EncodingMenuItem(String encoding) {
+            super(encoding);
+        }
     }
 }
