@@ -86,9 +86,8 @@ public class WindowManager implements WindowListener, ConfigurationListener {
      * Installs all custom look and feels.
      */
     private static final void installCustomLookAndFeels() {
-        List        plafs;         // All available custom look and feels.
-        Iterator    plafsIterator; // Iterator on custom look and feels.
-        LookAndFeel plaf;          // Current look and feel.
+        List     plafs;         // All available custom look and feels.
+        Iterator plafsIterator; // Iterator on custom look and feels.
 
         // Tries to retrieve the custom look and feels list.
         if((plafs = MuConfiguration.getListVariable(MuConfiguration.CUSTOM_LOOK_AND_FEELS, MuConfiguration.CUSTOM_LOOK_AND_FEELS_SEPARATOR)) == null)
@@ -98,11 +97,7 @@ public class WindowManager implements WindowListener, ConfigurationListener {
         // Look and feels that aren't supported under the current platform are ignored.
         plafsIterator = plafs.iterator();
         while(plafsIterator.hasNext()) {
-            try {
-                plaf = (LookAndFeel)Class.forName((String)plafsIterator.next(), true, ExtensionManager.getClassLoader()).newInstance();
-                if(plaf.isSupportedLookAndFeel())
-                    UIManager.installLookAndFeel(plaf.getName(), plaf.getClass().getName());
-            }
+            try {installLookAndFeel((String)plafsIterator.next());}
             catch(Throwable e) {if(Debug.ON) Debug.trace(e);}
         }
     }
@@ -507,13 +502,33 @@ public class WindowManager implements WindowListener, ConfigurationListener {
         mainFrame.toFront();
     }
 
+    public static void installLookAndFeel(String className) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
+        LookAndFeel plaf;
+
+        plaf = (LookAndFeel)Class.forName(className, true, ExtensionManager.getClassLoader()).newInstance();
+        if(plaf.isSupportedLookAndFeel())
+            UIManager.installLookAndFeel(plaf.getName(), plaf.getClass().getName());
+    }
 
     /**
      * Changes LooknFeel to the given one, updating the UI of each MainFrame.
      */
     private static void setLookAndFeel(String lnfName) {
         try {
+            ClassLoader oldLoader;
+            Thread      currentThread;
+
+            // Initialises class loading.
+            // This is necessary due to Swing's UIDefaults.LazyProxyValue behaviour that just
+            // won't use the right ClassLoader instance to load resources.
+            currentThread = Thread.currentThread();
+            oldLoader     = currentThread.getContextClassLoader();
+            currentThread.setContextClassLoader(ExtensionManager.getClassLoader());
+
             UIManager.setLookAndFeel((LookAndFeel)Class.forName(lnfName, true, ExtensionManager.getClassLoader()).newInstance());
+
+            // Restores the contextual ClassLoader.
+            currentThread.setContextClassLoader(oldLoader);
 
             for(int i=0; i<mainFrames.size(); i++)
                 SwingUtilities.updateComponentTreeUI((MainFrame)(mainFrames.elementAt(i)));
