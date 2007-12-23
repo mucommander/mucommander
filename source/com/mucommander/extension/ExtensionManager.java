@@ -32,6 +32,7 @@ import java.net.URL;
 import java.net.MalformedURLException;
 import java.lang.reflect.Method;
 import java.lang.reflect.InvocationTargetException;
+import java.util.StringTokenizer;
 
 /**
  * Manages muCommander's extensions.
@@ -206,8 +207,69 @@ public class ExtensionManager {
 
 
 
+    // - Classpath querying -----------------------------------------------------
+    // --------------------------------------------------------------------------
+    /**
+     * Returns <code>true</code> if the specified file is in the extension's classloader path.
+     * @param  file file whose presence in the extensions path will be checked.
+     * @return      <code>true</code> if the specified file is in the extension's classloader path, <code>false</code> otherwise.
+     */
+    public static boolean isInExtensionsPath(AbstractFile file) {return loader.contains(file);}
+
+    /**
+     * Returns <code>true</code> if the specified file is in the system classpath.
+     * @param  file file whose presence in the system classpath will be checked.
+     * @return      <code>true</code> if the specified file is in the system classpath, <code>false</code> otherwise.
+     */
+    public static boolean isInClasspath(AbstractFile file) {
+        StringTokenizer parser;
+        String          path;
+
+        path   = file.getAbsolutePath();
+        parser = new StringTokenizer(System.getProperty("java.class.path"), System.getProperty("path.separator"));
+        while(parser.hasMoreTokens())
+            if(parser.nextToken().equals(path))
+                return true;
+        return false;
+    }
+
+    /**
+     * Returns <code>true</code> if the specified file is either in the extension or system classpath.
+     * <p>
+     * This is a convenience method and is equivalent to calling:
+     * <code>{@link #isInClassPath(AbstractFile) isInClassPath}(file) || {@link #isInExtensions(AbstractFile) isInExtensionsPath}(file)</code>.
+     * </p>
+     * @param file file whose availability will be checked.
+     */
+    public static boolean isAvailable(AbstractFile file) {return isInClasspath(file) || isInExtensionsPath(file);}
+
+
+
     // - Classpath extension ----------------------------------------------------
     // --------------------------------------------------------------------------
+    public static boolean importLibrary(AbstractFile file, boolean force) throws IOException {
+        AbstractFile dest;
+
+        // If the file is already in the extensions or classpath,
+        // there's nothing to do.
+        if(isAvailable(file))
+            return true;
+
+        // If the destination file already exists, either delete it
+        // if force is set to true or just return false.
+        dest = getExtensionsFolder().getDirectChild(file.getName());
+        if(dest.exists()) {
+            if(!force)
+                return false;
+            dest.delete();
+        }
+
+        // Copies the library and adds it to the extensions classpath.
+        file.copyTo(dest);
+        addToClassPath(dest);
+        return true;
+    }
+
     /**
      * Adds the specified file to the extension's classpath.
      * @param file file to add to the classpath.
