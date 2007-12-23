@@ -237,7 +237,7 @@ public class ExtensionManager {
      * Returns <code>true</code> if the specified file is either in the extension or system classpath.
      * <p>
      * This is a convenience method and is equivalent to calling:
-     * <code>{@link #isInClassPath(AbstractFile) isInClassPath}(file) || {@link #isInExtensions(AbstractFile) isInExtensionsPath}(file)</code>.
+     * <code>{@link #isInClasspath(AbstractFile) isInClasspath}(file) || {@link #isInExtensionsPath(AbstractFile) isInExtensionsPath}(file)</code>.
      * </p>
      * @param file file whose availability will be checked.
      */
