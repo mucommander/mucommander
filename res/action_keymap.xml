@@ -321,4 +321,12 @@
   <!-- Default : alt K                                                           -->
   <action class="com.mucommander.ui.action.CalculateChecksumAction"     keystroke="alt K"/>
 
+  <!-- Action  : Opens browsable files in the inactive panel.                    -->
+  <!-- Default : shift alt ENTER                                                 -->
+  <action class="com.mucommander.ui.action.OpenInOtherPanelAction"      keystroke="shift alt ENTER"/>
+
+  <!-- Action  : Marks all files whose extension match the current selection.    -->
+  <!-- Default : shift ADD                                                       -->
+  <action class="com.mucommander.ui.action.MarkExtensionAction"         keystroke="shift ADD"/>
+
 </keymap>
