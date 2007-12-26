@@ -16,7 +16,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 package com.mucommander.ui.dialog.file;
 
 import com.mucommander.file.util.FileSet;
@@ -29,13 +28,13 @@ import com.mucommander.ui.dialog.FocusDialog;
 import com.mucommander.ui.layout.XAlignedComponentPanel;
 import com.mucommander.ui.layout.YBoxPanel;
 import com.mucommander.ui.main.MainFrame;
+import com.mucommander.ui.icon.SpinningDial;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
-
 
 /**
  * This dialog shows properties of a file or a group of files : number of files, file kind,
@@ -47,6 +46,7 @@ public class PropertiesDialog extends FocusDialog implements Runnable, ActionLis
     private MainFrame mainFrame;
     private PropertiesJob job;
     private Thread repaintThread;
+    private SpinningDial dial;
 	
     private JLabel counterLabel;
     private JLabel sizeLabel;
@@ -60,22 +60,12 @@ public class PropertiesDialog extends FocusDialog implements Runnable, ActionLis
     /** How often should progress information be refreshed (in ms) */
     private final static int REFRESH_RATE = 500;
 	
-    /* Window title without status */
-    private String title;
-
-	
     public PropertiesDialog(MainFrame mainFrame, FileSet files) {
-        super(mainFrame, "", mainFrame);
+        super(mainFrame,
+              files.size() > 1 ? Translator.get(com.mucommander.ui.action.ShowFilePropertiesAction.class.getName()+".label") :
+              Translator.get("properties_dialog.file_properties", files.fileAt(0).getName()), mainFrame);
         this.mainFrame = mainFrame;
 
-        // Set dialog's title
-        if(files.size()>1)
-            this.title = Translator.get(com.mucommander.ui.action.ShowFilePropertiesAction.class.getName()+".label");
-        else
-            this.title = Translator.get("properties_dialog.file_properties", files.fileAt(0).getName());
-
-        setTitle(title+" ("+Translator.get("properties_dialog.calculating")+")");
-		
         // Display wait cursor while calculating size
         mainFrame.setCursor(new Cursor(Cursor.WAIT_CURSOR));
 		
@@ -96,8 +86,11 @@ public class PropertiesDialog extends FocusDialog implements Runnable, ActionLis
         mainPanel.addRow(Translator.get("location")+":", locationLabel, 10);
 
         // Combined size (set later)
-        sizeLabel = new JLabel("");
-        mainPanel.addRow(Translator.get("size")+":", sizeLabel, 5);
+        JPanel sizePanel;
+        sizePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        sizePanel.add(sizeLabel = new JLabel(""));
+        sizePanel.add(new JLabel(dial = new SpinningDial()));
+        mainPanel.addRow(Translator.get("size")+":", sizePanel, 5);
 
         updateLabels();
         YBoxPanel yPanel = new YBoxPanel(5);
@@ -146,6 +139,7 @@ public class PropertiesDialog extends FocusDialog implements Runnable, ActionLis
     //////////////////////
 
     public void run() {
+        dial.setAnimated(true);
         while(repaintThread!=null && job.getState()!= FileJob.FINISHED) {
             updateLabels();
 			
@@ -153,11 +147,11 @@ public class PropertiesDialog extends FocusDialog implements Runnable, ActionLis
             catch(InterruptedException e) {}
         }
 
-        // Change title and button's label to indicate that calculation is over
+        // Updates button labels and stops spinning dial.
         updateLabels();
-        setTitle(title);
         okCancelButton.setText(Translator.get("ok"));
         mainFrame.setCursor(Cursor.getDefaultCursor());
+        dial.setAnimated(false);
     }
 
 
