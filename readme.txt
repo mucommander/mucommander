@@ -116,6 +116,11 @@ New features:
 - New 'Owner' and 'Group' columns added to the folder pane (not visible by
   default). The owner and group information is available on FTP and SFTP folders
   and some TAR archives.
+- Custom look&feels can now be imported from the preferences.
+- New 'Mark selection' feature (mapped to shift+add by default) that lets users
+  mark all files whose extension match that of the current selection.
+- New 'Open in other pane' feature (mapped to shift+alt+enter by default) that
+  will open the current selection in the other panel.
 
 Improvements:
 - Added an 'Explore bookmarks' item to the 'Bookmarks' menu.
