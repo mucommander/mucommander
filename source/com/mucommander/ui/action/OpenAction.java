@@ -26,7 +26,7 @@ import com.mucommander.job.TempExecJob;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;
-import com.mucommander.ui.main.table.FileTable;
+import com.mucommander.ui.main.FolderPanel;
 
 import java.util.Hashtable;
 
@@ -39,32 +39,68 @@ import java.util.Hashtable;
  * <li>For any other file type, remote or local: copies file to a temporary local file and executes it with native file associations
  * </ul>
  *
- * @author Maxence Bernard
+ * @author Maxence Bernard, Nicolas Rinaudo
  */
 public class OpenAction extends MuAction {
-
+    /**
+     * Creates a new <code>OpenAction</code> with the specified parameters.
+     * @param mainFrame  frame to which the action is attached.
+     * @param properties action's properties.
+     */
     public OpenAction(MainFrame mainFrame, Hashtable properties) {
         super(mainFrame, properties);
     }
 
-    public void performAction() {
-        FileTable fileTable = mainFrame.getActiveTable();
-        AbstractFile selectedFile = fileTable.getSelectedFile(true);
+    /**
+     * Opens the specified file in the specified folder panel.
+     * <p>
+     * <code>file</code> will be opened using the following rules:
+     * <ul>
+     *   <li>
+     *     If <code>file</code> is {@link com.mucommander.file.AbstractFile#isBrowsable() browsable},
+     *     it will be opened in <code>destination</code>.
+     *   </li>
+     *   <li>
+     *     If <code>file</code> is local, it will be opened using its native associations.
+     *   </li>
+     *   <li>
+     *     If <code>file</code> is remote, it will first be copied in a temporary local file and
+     *     then opened using its native association.
+     *   </li>
+     * </ul>
+     * </p>
+     * @param file        file to open.
+     * @param destination if <code>file</code> is browsable, folder panel in which to open the file.
+     */
+    protected void open(AbstractFile file, FolderPanel destination) {
+        // Opens browsable files in the destination FolderPanel.
+        if(file.isBrowsable())
+            destination.tryChangeCurrentFolder(file);
 
-        if(selectedFile==null)
-            return;
+        // Opens local files using their native associations.
+        else if(file.getURL().getProtocol().equals(FileProtocols.FILE) && (file instanceof LocalFile))
+            PlatformManager.open(file);
 
-        // Browsable file: show file contents
-        if(selectedFile.isBrowsable())
-            fileTable.getFolderPanel().tryChangeCurrentFolder(selectedFile);
-        // Local file that is not an archive or archive entry: execute file with native file associations
-        else if(selectedFile.getURL().getProtocol().equals(FileProtocols.FILE) && (selectedFile instanceof LocalFile))
-            PlatformManager.open(selectedFile);
-        // Any other file remote or local: copy file to a temporary local file and execute it with native file associations
+        // Copies non-local file in a temporary local file and opens them using their native association.
         else {
             ProgressDialog progressDialog = new ProgressDialog(mainFrame, Translator.get("copy_dialog.copying"));
-            TempExecJob job = new TempExecJob(progressDialog, mainFrame, selectedFile);
+            TempExecJob job = new TempExecJob(progressDialog, mainFrame, file);
             progressDialog.start(job);
         }
+    }
+
+    /**
+     * Opens the currently selected file in the active folder panel.
+     */
+    public void performAction() {
+        AbstractFile file;
+
+        // Retrieves the currently selected file, aborts if none.
+        if((file = mainFrame.getActiveTable().getSelectedFile(true)) == null)
+            return;
+
+        // Opens the currently selected file.
+        open(file, mainFrame.getActiveTable().getFolderPanel());
+
     }
 }

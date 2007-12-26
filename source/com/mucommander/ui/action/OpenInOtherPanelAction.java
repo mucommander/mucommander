@@ -31,10 +31,15 @@ import com.mucommander.ui.main.table.FileTable;
 import java.util.Hashtable;
 
 /**
- * Opens browsable files in the inactive panel.
+ * Opens files in the inactive panel.
+ * <p>
+ * This action will behave exactly like {@link OpenAction} for non-browsable files.
+ * Browsable files, however, will be opened in the inactive folder panel rather than
+ * the active one.
+ * </p>
  * @author Nicolas Rinaudo
  */
-public class OpenInOtherPanelAction extends MuAction {
+public class OpenInOtherPanelAction extends OpenAction {
     /**
      * Creates a new <code>OpenInOtherPanelAction</code> with the specified parameters.
      * @param mainFrame  frame to which the action is attached.
@@ -43,24 +48,16 @@ public class OpenInOtherPanelAction extends MuAction {
     public OpenInOtherPanelAction(MainFrame mainFrame, Hashtable properties) {super(mainFrame, properties);}
 
     /**
-     * Opens the selected file in the inactive panel.
-     * <p>
-     * This action won't do anything if the selected file is not browsable.
-     * </p>
+     * Opens the currently selected file in the inactive folder panel.
      */
     public void performAction() {
-        FileTable    otherTable;
         AbstractFile file;
 
-        // Initialisation.
-        otherTable = mainFrame.getInactiveTable();
-        file       = mainFrame.getActiveTable().getSelectedFile(true);
-
-        // Ignores non-browsable files.
-        if(file == null || !file.isBrowsable())
+        // Retrieves the currently selected file, aborts if none.
+        if((file = mainFrame.getActiveTable().getSelectedFile(true)) == null)
             return;
 
-        // opens the selected file in the inactive panel.
-        otherTable.getFolderPanel().tryChangeCurrentFolder(file);
+        // Opens the currently selected file in the inactive panel.
+        open(file, mainFrame.getInactiveTable().getFolderPanel());
     }
 }
