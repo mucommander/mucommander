@@ -30,12 +30,12 @@ import com.mucommander.ui.layout.YBoxPanel;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.theme.Theme;
 import com.mucommander.ui.theme.ThemeManager;
+import com.mucommander.ui.icon.SpinningDial;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.PrintStream;
-
 
 /**
  * Dialog used to execute a user-defined command.
@@ -64,6 +64,8 @@ public class RunDialog extends FocusDialog implements ActionListener, ProcessLis
     private JButton       clearButton;
     /** Text area used to display the shell output. */
     private JTextArea     outputTextArea;
+    /** Used to let the user known that the command is still running. */
+    private SpinningDial  dial;
 
 
 
@@ -116,6 +118,7 @@ public class RunDialog extends FocusDialog implements ActionListener, ProcessLis
      */
     private YBoxPanel createInputArea() {
         YBoxPanel mainPanel;
+        JPanel    labelPanel;
 
         mainPanel = new YBoxPanel();
 
@@ -131,7 +134,11 @@ public class RunDialog extends FocusDialog implements ActionListener, ProcessLis
 
         // Adds a textual description of the shell output area.
         mainPanel.addSpace(10);
-        mainPanel.add(new JLabel(Translator.get("run_dialog.command_output")+":"));
+
+        labelPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        labelPanel.add(new JLabel(Translator.get("run_dialog.command_output")+":"));
+        labelPanel.add(new JLabel(dial = new SpinningDial()));
+        mainPanel.add(labelPanel);
 
         return mainPanel;
     }
@@ -329,6 +336,9 @@ public class RunDialog extends FocusDialog implements ActionListener, ProcessLis
      * Switches the UI back to 'Run command' state.
      */
     private void switchToRunState() {
+        // Stops the spinning dial.
+        dial.setAnimated(false);
+
         // Change 'Stop' button to 'Run'
         this.runStopButton.setText(Translator.get("run_dialog.run"));
 
@@ -349,6 +359,9 @@ public class RunDialog extends FocusDialog implements ActionListener, ProcessLis
      */
     public void runCommand(String command) {
         try {
+            // Starts the spinning dial.
+            dial.setAnimated(true);
+
             // Change 'Run' button to 'Stop'
             this.runStopButton.setText(Translator.get("run_dialog.stop"));
 
