@@ -4414,7 +4414,7 @@ status_bar.selected_files:KO:%1 / %2 선택됨
 status_bar.selected_files:pt_BR:%1 de %2 selecionados 
 status_bar.selected_files:NL:%1 van %2 geselecteerd
 status_bar.selected_files:SK:%1 z %2 vybraných
-status_bar.selected_files:JA:%2 中 %1 個選択されています
+status_bar.selected_files:JA:%2 個中 %1 個選択されています
 
 # Displayed in the status bar when connecting to a folder
 status_bar.connecting_to_folder:EN:Connecting to folder, press ESCAPE to cancel.
@@ -4701,6 +4701,7 @@ version_dialog.not_available:JA:サーバーからバージョン情報を取得
 version_dialog.install_and_restart:EN:Install and restart
 version_dialog.install_and_restart:FR:Installer et redémarrer
 version_dialog.install_and_restart:NL:Installeren en opnieuw opstarten
+version_dialog.install_and_restart:JA:インストールと再起動
 # Translation missing (New!)
 
 
@@ -4718,6 +4719,7 @@ version_dialog.install_and_restart:NL:Installeren en opnieuw opstarten
 # Displayed in the progress dialog before actually installing the a new version
 version_dialog.preparing_for_update:EN:Preparing for update...
 version_dialog.preparing_for_update:FR:Préparation de la mise à jour...
+version_dialog.preparing_for_update:JA:更新を準備しています...
 # Translation missing (New!)
 
 
