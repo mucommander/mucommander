@@ -482,7 +482,7 @@ duplicate:ES:Duplicar
 duplicate:PL:Powiel
 duplicate:KO:중복
 duplicate:pt_BR:Duplicar
-duplicate:NL:Dupliceer
+duplicate:NL:Dupliceren
 duplicate:SK:Duplikovať
 duplicate:HU:Megkettőz
 duplicate:JA:複製
@@ -670,7 +670,7 @@ create:JA:作成
 choose:EN:Choose
 choose:FR:Choisir
 choose:RO:Alege
-choose:NL:Kies uit
+choose:NL:Uitkiezen
 choose:DE:Auswählen
 choose:SL:Izberi
 choose:zh_TW:選擇
@@ -914,6 +914,7 @@ owner:EN:Owner
 owner:FR:Propriétaire
 owner:JA:所有者
 owner:SK:Vlastník
+owner:NL:Eigenaar
 # Translation missing (New!)
 
 
@@ -933,6 +934,7 @@ group:EN:Group
 group:FR:Groupe
 group:JA:グループ
 group:SK:Skupina
+group:NL:Groep
 # Translation missing (New!)
 
 
@@ -1850,6 +1852,7 @@ com.mucommander.ui.action.EditBookmarksAction.label:JA:ブックマークの編�
 # bookmarks as if they were directories.
 com.mucommander.ui.action.ExploreBookmarksAction.label:EN:Explore bookmarks
 com.mucommander.ui.action.ExploreBookmarksAction.label:FR:Explorer les favoris
+com.mucommander.ui.action.ExploreBookmarksAction.label:NL:Bladwijzers verkennen
 # Translation missing (New!)
 
 
@@ -2132,7 +2135,7 @@ com.mucommander.ui.action.CopyAction.label:RO:Copiază
 com.mucommander.ui.action.CopyAction.label:IT:Copia
 com.mucommander.ui.action.CopyAction.label:KO:복사
 com.mucommander.ui.action.CopyAction.label:pt_BR:Copiar
-com.mucommander.ui.action.CopyAction.label:NL:Kopieer
+com.mucommander.ui.action.CopyAction.label:NL:Kopieren
 com.mucommander.ui.action.CopyAction.label:SK:Kopírovať
 com.mucommander.ui.action.CopyAction.label:JA:コピー
 
@@ -2419,7 +2422,7 @@ com.mucommander.ui.action.CloseWindowAction.label:RO:Închide fereastră
 com.mucommander.ui.action.CloseWindowAction.label:IT:Chiudi
 com.mucommander.ui.action.CloseWindowAction.label:KO:창닫기
 com.mucommander.ui.action.CloseWindowAction.label:pt_BR:Fechar janela
-com.mucommander.ui.action.CloseWindowAction.label:NL:Sluit venster
+com.mucommander.ui.action.CloseWindowAction.label:NL:Venster sluiten
 com.mucommander.ui.action.CloseWindowAction.label:SK:Zatvoriť okno
 com.mucommander.ui.action.CloseWindowAction.label:JA:ウィンドウを閉じる
 
@@ -2828,6 +2831,7 @@ com.mucommander.ui.action.SortByGroupAction.label:EN:Sort by Group
 com.mucommander.ui.action.SortByGroupAction.label:FR:Trier par Groupe
 com.mucommander.ui.action.SortByGroupAction.label:JA:グループで整列
 com.mucommander.ui.action.SortByGroupAction.label:SK:Zoradiť podľa skupiny
+com.mucommander.ui.action.SortByGroupAction.label:NL:Sorteer op groep
 # Translation missing (New!)
 
 
@@ -2860,7 +2864,7 @@ com.mucommander.ui.action.MarkGroupAction.label:RO:Selectează fișiere...
 com.mucommander.ui.action.MarkGroupAction.label:IT:Seleziona file
 com.mucommander.ui.action.MarkGroupAction.label:KO:파일 선택
 com.mucommander.ui.action.MarkGroupAction.label:pt_BR:Marcar arquivos
-com.mucommander.ui.action.MarkGroupAction.label:NL:Markeer bestanden
+com.mucommander.ui.action.MarkGroupAction.label:NL:Bestanden markeren
 com.mucommander.ui.action.MarkGroupAction.label:SK:Označiť súbory
 com.mucommander.ui.action.MarkGroupAction.label:JA:ファイルのマーク
 
@@ -2879,7 +2883,7 @@ com.mucommander.ui.action.MarkGroupAction.tooltip:RO:Selectează un grup de fiș
 com.mucommander.ui.action.MarkGroupAction.tooltip:IT:Seleziona un gruppo di file
 com.mucommander.ui.action.MarkGroupAction.tooltip:KO:여러 파일 선택
 com.mucommander.ui.action.MarkGroupAction.tooltip:pt_BR:Marcar um grupo de arquivos
-com.mucommander.ui.action.MarkGroupAction.tooltip:NL:Markeer een groep bestanden
+com.mucommander.ui.action.MarkGroupAction.tooltip:NL:Een groep bestanden markeren
 com.mucommander.ui.action.MarkGroupAction.tooltip:SK:Označiť skupinu súborov
 com.mucommander.ui.action.MarkGroupAction.tooltip:JA:ファイルのグループをマークします
 
@@ -2898,7 +2902,7 @@ com.mucommander.ui.action.UnmarkGroupAction.label:RO:Deselectează fișiere...
 com.mucommander.ui.action.UnmarkGroupAction.label:IT:Deseleziona file
 com.mucommander.ui.action.UnmarkGroupAction.label:KO:파일 선택 해제
 com.mucommander.ui.action.UnmarkGroupAction.label:pt_BR:Desmarcar arquivos
-com.mucommander.ui.action.UnmarkGroupAction.label:NL:Demarkeer bestanden
+com.mucommander.ui.action.UnmarkGroupAction.label:NL:Bestanden demarkeren
 com.mucommander.ui.action.UnmarkGroupAction.label:SK:Odznačiť súbory
 com.mucommander.ui.action.UnmarkGroupAction.label:JA:ファイルのマーク解除
 
@@ -2936,7 +2940,7 @@ com.mucommander.ui.action.MarkAllAction.label:RO:Selecteză tot
 com.mucommander.ui.action.MarkAllAction.label:IT:Seleziona tutto
 com.mucommander.ui.action.MarkAllAction.label:KO:모두 선택
 com.mucommander.ui.action.MarkAllAction.label:pt_BR:Marcar tudo
-com.mucommander.ui.action.MarkAllAction.label:NL:Markeer alles
+com.mucommander.ui.action.MarkAllAction.label:NL:Alles markeren
 com.mucommander.ui.action.MarkAllAction.label:SK:Označiť všetko
 com.mucommander.ui.action.MarkAllAction.label:JA:すべてマーク
 
@@ -3011,7 +3015,7 @@ com.mucommander.ui.action.MarkPageDownAction.label:ES:Marcar página abajo
 com.mucommander.ui.action.MarkPageDownAction.label:PL:Zaznacz strone niżej (page down)
 com.mucommander.ui.action.MarkPageDownAction.label:KO:페이지 아래로 선택
 com.mucommander.ui.action.MarkPageDownAction.label:pt_BR:Marcar página abaixo
-com.mucommander.ui.action.MarkPageDownAction.label:NL:Markeer bestanden tot volgende bladzijde
+com.mucommander.ui.action.MarkPageDownAction.label:NL:Markeer bestanden tot volgende bladzijde 
 com.mucommander.ui.action.MarkPageDownAction.label:SK:Označiť po nasledujúcu stránku
 com.mucommander.ui.action.MarkPageDownAction.label:HU:Következő lap kijelölése
 com.mucommander.ui.action.MarkPageDownAction.label:JA:下にページをマーク
@@ -3088,7 +3092,7 @@ com.mucommander.ui.action.InvertSelectionAction.label:RO:Inversează selectarea
 com.mucommander.ui.action.InvertSelectionAction.label:IT:Inverti selezione
 com.mucommander.ui.action.InvertSelectionAction.label:KO:선택 반전
 com.mucommander.ui.action.InvertSelectionAction.label:pt_BR:Inverter seleção
-com.mucommander.ui.action.InvertSelectionAction.label:NL:Keer selectie om
+com.mucommander.ui.action.InvertSelectionAction.label:NL:Selectie omkeren
 com.mucommander.ui.action.InvertSelectionAction.label:SK:Obrátiť výber
 com.mucommander.ui.action.InvertSelectionAction.label:JA:選択範囲の反転
 
@@ -4092,7 +4096,7 @@ com.mucommander.ui.action.OpenTrashAction.label:EN:Open Trash
 com.mucommander.ui.action.OpenTrashAction.label:FR:Ouvrir la Corbeille
 com.mucommander.ui.action.OpenTrashAction.label:HU:Lomtár megnyitása
 com.mucommander.ui.action.OpenTrashAction.label:zh_CN:打开垃圾桶
-com.mucommander.ui.action.OpenTrashAction.label:NL:Open prullebak
+com.mucommander.ui.action.OpenTrashAction.label:NL:Open prullenbak
 com.mucommander.ui.action.OpenTrashAction.label:zh_TW:開啟資源回收桶
 com.mucommander.ui.action.OpenTrashAction.label:RO:Deschide coșul de gunoi
 com.mucommander.ui.action.OpenTrashAction.label:ES:Abrir papelera
@@ -4147,6 +4151,7 @@ com.mucommander.ui.action.EmptyTrashAction.label:JA:ごみ箱を空にする
 
 com.mucommander.ui.action.CalculateChecksumAction.label:EN:Calculate checksum
 com.mucommander.ui.action.CalculateChecksumAction.label:FR:Calculer la checksum
+com.mucommander.ui.action.CalculateChecksumAction.label:NL:Checksum berekenen
 # Translation missing (New!)
 
 
@@ -4695,6 +4700,7 @@ version_dialog.not_available:JA:サーバーからバージョン情報を取得
 # download the latest version, install it and restart muCommander.
 version_dialog.install_and_restart:EN:Install and restart
 version_dialog.install_and_restart:FR:Installer et redémarrer
+version_dialog.install_and_restart:NL:Installeren en opnieuw opstarten
 # Translation missing (New!)
 
 
@@ -5270,7 +5276,7 @@ move_dialog.move:RO:Mută
 move_dialog.move:IT:Sposta
 move_dialog.move:KO:이동
 move_dialog.move:pt_BR:Mover
-move_dialog.move:NL:Verplaats
+move_dialog.move:NL:Verplaatsen
 move_dialog.move:SK:Presunúť
 move_dialog.move:JA:移動
 
@@ -5505,7 +5511,7 @@ delete_dialog.move_to_trash.confirmation:JA:選択されたファイルを削除
 delete_dialog.move_to_trash.confirmation_details:EN:Files will be moved to the trash.
 delete_dialog.move_to_trash.confirmation_details:FR:Les fichiers seront déplacés dans la corbeille.
 delete_dialog.move_to_trash.confirmation_details:HU:A fájlok a lomtárba lesznek áthelyezve.
-delete_dialog.move_to_trash.confirmation_details:NL:Bestanden worden naar de prullebak verplaatst.
+delete_dialog.move_to_trash.confirmation_details:NL:Bestanden worden naar de prullebnak verplaatst.
 delete_dialog.move_to_trash.confirmation_details:zh_CN:文件将被移动到垃圾桶.
 delete_dialog.move_to_trash.confirmation_details:zh_TW:檔案將被移至資源回收桶
 delete_dialog.move_to_trash.confirmation_details:RO:Fișierele selectate vor fi aruncate la gunoi.
@@ -5531,7 +5537,7 @@ delete_dialog.move_to_trash.confirmation_details:JA:ファイルはごみ箱へ�
 delete_dialog.move_to_trash.option:EN:Move to trash
 delete_dialog.move_to_trash.option:FR:Déplacer dans la corbeille
 delete_dialog.move_to_trash.option:HU:Áthelyezés a lomtárba
-delete_dialog.move_to_trash.option:NL:Verplaats naar prullebak
+delete_dialog.move_to_trash.option:NL:Verplaats naar prullebnak
 delete_dialog.move_to_trash.option:zh_CN:移动到垃圾桶
 delete_dialog.move_to_trash.option:zh_TW:移至資源回收桶
 delete_dialog.move_to_trash.option:RO:Aruncă la gunoi
@@ -6021,7 +6027,7 @@ file_selection_dialog.mark:RO:Selectează
 file_selection_dialog.mark:IT:Selezione
 file_selection_dialog.mark:KO:선택
 file_selection_dialog.mark:pt_BR:Marcar
-file_selection_dialog.mark:NL:Markeer
+file_selection_dialog.mark:NL:Markeren
 file_selection_dialog.mark:SK:Označiť
 file_selection_dialog.mark:JA:マーク
 
@@ -6040,7 +6046,7 @@ file_selection_dialog.unmark:RO:Deselectează
 file_selection_dialog.unmark:IT:Deselezione
 file_selection_dialog.unmark:KO:선택 해제
 file_selection_dialog.unmark:pt_BR:Desmarcar
-file_selection_dialog.unmark:NL:Demarkeer
+file_selection_dialog.unmark:NL:Demarkeren
 file_selection_dialog.unmark:SK:Odznačiť
 file_selection_dialog.unmark:JA:マーク解除
 
@@ -6534,6 +6540,7 @@ calculate_checksum_dialog.checksum_algorithm:FR:Algorithme de checksum
 
 calculate_checksum_dialog.temporary_file:EN:Temporary file
 calculate_checksum_dialog.temporary_file:FR:Fichier temporaire
+calculate_checksum_dialog.temporary_file:NL:Tijdelijk bestand
 # Translation missing (New!)
 
 
@@ -9681,6 +9688,7 @@ prefs_dialog.import_theme:JA:テーマのインポート
 
 prefs_dialog.import_look_and_feel:EN:Import look & feel
 prefs_dialog.import_look_and_feel:FR:Importer un look & feel
+prefs_dialog.import_look_and_feel:NL:Importeer look and feel
 # Translation missing (New!)
 
 
@@ -9887,6 +9895,7 @@ prefs_dialog.delete_theme:JA:テーマ %1 を永久に削除しますか ?
 # %1 will be replaced by the look and feel name.
 prefs_dialog.delete_look_and_feel:EN:Permanently delete look & feel %1 ?
 prefs_dialog.delete_look_and_feel:FR:Supprimer définitivement le look & feel %1 ?
+prefs_dialog.delete_look_and_feel:NL:Voorgoed verwijderen van look and feel %1 ?
 # Translation missing (New!)
 
 
