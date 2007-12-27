@@ -18,9 +18,11 @@
 
 package com.mucommander.file;
 
+import com.mucommander.io.ByteUtils;
 import com.mucommander.io.FileTransferException;
 import com.mucommander.io.RandomAccessInputStream;
 import com.mucommander.io.RandomAccessOutputStream;
+import com.mucommander.io.security.MuProvider;
 import junit.framework.TestCase;
 
 import javax.swing.*;
@@ -154,7 +156,7 @@ public abstract class AbstractFileTestCase extends TestCase implements FilePermi
             assertTrue(file.exists());
             assertEquals(length, file.getSize());
 
-            return AbstractFile.getDigestHexString(out.getMessageDigest().digest());
+            return ByteUtils.toHexString(out.getMessageDigest().digest());
         }
         finally {
             out.close();
@@ -285,7 +287,7 @@ public abstract class AbstractFileTestCase extends TestCase implements FilePermi
      * @throws NoSuchAlgorithmException should not happen
      */
     protected String calculateMd5(InputStream in) throws IOException, NoSuchAlgorithmException {
-        return AbstractFile.getDigestHexString(AbstractFile.digestStream(in, MessageDigest.getInstance("MD5")));
+        return AbstractFile.calculateChecksum(in, MessageDigest.getInstance("MD5"));
     }
 
     /**
@@ -394,7 +396,7 @@ public abstract class AbstractFileTestCase extends TestCase implements FilePermi
     //////////////////
 
     /**
-     * Tests {@link AbstractFile#digest(java.security.MessageDigest)} and {@link AbstractFile#getDigestHexString(byte[])}
+     * Tests {@link AbstractFile#calculateChecksum(java.security.MessageDigest)} and {@link com.mucommander.io.ByteUtils#toHexString(byte[])}
      * by computing file digests using different algorithms (MD5, SHA-1, ...) and comparing them against known values.
      *
      * @throws IOException should not happen
@@ -406,12 +408,19 @@ public abstract class AbstractFileTestCase extends TestCase implements FilePermi
 
         tempFile.mkfile();
 
-        assertEquals("8350e5a3e24c153df2275c9f80692773", AbstractFile.getDigestHexString(tempFile.digest(MessageDigest.getInstance("MD2"))));
-        assertEquals("d41d8cd98f00b204e9800998ecf8427e", AbstractFile.getDigestHexString(tempFile.digest(MessageDigest.getInstance("MD5"))));
-        assertEquals("da39a3ee5e6b4b0d3255bfef95601890afd80709", AbstractFile.getDigestHexString(tempFile.digest(MessageDigest.getInstance("SHA-1"))));
-        assertEquals("e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855", AbstractFile.getDigestHexString(tempFile.digest(MessageDigest.getInstance("SHA-256"))));
-        assertEquals("38b060a751ac96384cd9327eb1b1e36a21fdb71114be07434c0cc7bf63f6e1da274edebfe76f65fbd51ad2f14898b95b", AbstractFile.getDigestHexString(tempFile.digest(MessageDigest.getInstance("SHA-384"))));
-        assertEquals("cf83e1357eefb8bdf1542850d66d8007d620e4050b5715dc83f4a921d36ce9ce47d0d13c5d85f2b0ff8318d2877eec2f63b931bd47417a81a538327af927da3e", AbstractFile.getDigestHexString(tempFile.digest(MessageDigest.getInstance("SHA-512"))));
+        // Built-in JCE algorithms
+        assertEquals("8350e5a3e24c153df2275c9f80692773", tempFile.calculateChecksum("MD2"));
+        assertEquals("d41d8cd98f00b204e9800998ecf8427e", tempFile.calculateChecksum("MD5"));
+        assertEquals("da39a3ee5e6b4b0d3255bfef95601890afd80709", tempFile.calculateChecksum("SHA-1"));
+        assertEquals("e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855", tempFile.calculateChecksum("SHA-256"));
+        assertEquals("38b060a751ac96384cd9327eb1b1e36a21fdb71114be07434c0cc7bf63f6e1da274edebfe76f65fbd51ad2f14898b95b", tempFile.calculateChecksum("SHA-384"));
+        assertEquals("cf83e1357eefb8bdf1542850d66d8007d620e4050b5715dc83f4a921d36ce9ce47d0d13c5d85f2b0ff8318d2877eec2f63b931bd47417a81a538327af927da3e", tempFile.calculateChecksum("SHA-512"));
+
+        // MuProvider algorithms
+        MuProvider.registerProvider();  // registers the provider
+        assertEquals("00000000", tempFile.calculateChecksum("CRC32"));
+        assertEquals("00000001", tempFile.calculateChecksum("Adler32"));
+        assertEquals("31d6cfe0d16ae931b73c59d7e0c089c0", tempFile.calculateChecksum("MD4"));
 
         OutputStream tempOut = tempFile.getOutputStream(false);
 
@@ -420,12 +429,17 @@ public abstract class AbstractFileTestCase extends TestCase implements FilePermi
         tempOut.write("The quick brown fox jumps over the lazy dog".getBytes());
         tempOut.close();
 
-        assertEquals("03d85a0d629d2c442e987525319fc471", AbstractFile.getDigestHexString(tempFile.digest(MessageDigest.getInstance("MD2"))));
-        assertEquals("9e107d9d372bb6826bd81d3542a419d6", AbstractFile.getDigestHexString(tempFile.digest(MessageDigest.getInstance("MD5"))));
-        assertEquals("2fd4e1c67a2d28fced849ee1bb76e7391b93eb12", AbstractFile.getDigestHexString(tempFile.digest(MessageDigest.getInstance("SHA-1"))));
-        assertEquals("d7a8fbb307d7809469ca9abcb0082e4f8d5651e46d3cdb762d02d0bf37c9e592", AbstractFile.getDigestHexString(tempFile.digest(MessageDigest.getInstance("SHA-256"))));
-        assertEquals("ca737f1014a48f4c0b6dd43cb177b0afd9e5169367544c494011e3317dbf9a509cb1e5dc1e85a941bbee3d7f2afbc9b1", AbstractFile.getDigestHexString(tempFile.digest(MessageDigest.getInstance("SHA-384"))));
-        assertEquals("07e547d9586f6a73f73fbac0435ed76951218fb7d0c8d788a309d785436bbb642e93a252a954f23912547d1e8a3b5ed6e1bfd7097821233fa0538f3db854fee6", AbstractFile.getDigestHexString(tempFile.digest(MessageDigest.getInstance("SHA-512"))));
+        assertEquals("03d85a0d629d2c442e987525319fc471", tempFile.calculateChecksum("MD2"));
+        assertEquals("9e107d9d372bb6826bd81d3542a419d6", tempFile.calculateChecksum("MD5"));
+        assertEquals("2fd4e1c67a2d28fced849ee1bb76e7391b93eb12", tempFile.calculateChecksum("SHA-1"));
+        assertEquals("d7a8fbb307d7809469ca9abcb0082e4f8d5651e46d3cdb762d02d0bf37c9e592", tempFile.calculateChecksum("SHA-256"));
+        assertEquals("ca737f1014a48f4c0b6dd43cb177b0afd9e5169367544c494011e3317dbf9a509cb1e5dc1e85a941bbee3d7f2afbc9b1", tempFile.calculateChecksum("SHA-384"));
+        assertEquals("07e547d9586f6a73f73fbac0435ed76951218fb7d0c8d788a309d785436bbb642e93a252a954f23912547d1e8a3b5ed6e1bfd7097821233fa0538f3db854fee6", tempFile.calculateChecksum("SHA-512"));
+
+        // MuProvider algorithms
+        assertEquals("414fa339", tempFile.calculateChecksum("CRC32"));
+        assertEquals("5bdc0fda", tempFile.calculateChecksum("Adler32"));
+        assertEquals("1bee69a46ba811185c194762abaeae90", tempFile.calculateChecksum("MD4"));
     }
 
 
@@ -556,7 +570,7 @@ public abstract class AbstractFileTestCase extends TestCase implements FilePermi
         writeRandomData(md5Out, 100000, 1000);
         md5Out.close();
 
-        assertEquals(AbstractFile.getDigestHexString(md5Out.getMessageDigest().digest()), calculateMd5(tempFile));
+        assertEquals(ByteUtils.toHexString(md5Out.getMessageDigest().digest()), calculateMd5(tempFile));
 
         // Test path resolution on a directory
 
@@ -1037,7 +1051,7 @@ public abstract class AbstractFileTestCase extends TestCase implements FilePermi
         writeRandomData(md5Out, 100000, 1000);
         md5Out.close();
 
-        assertEquals(AbstractFile.getDigestHexString(md5Out.getMessageDigest().digest()), calculateMd5(tempFile));
+        assertEquals(ByteUtils.toHexString(md5Out.getMessageDigest().digest()), calculateMd5(tempFile));
     }
 
     /**
@@ -1073,7 +1087,7 @@ public abstract class AbstractFileTestCase extends TestCase implements FilePermi
             writeRandomData(md5Out, 100000, 1000);
             md5Out.close();
 
-            assertEquals(AbstractFile.getDigestHexString(md5Out.getMessageDigest().digest()), calculateMd5(tempFile));
+            assertEquals(ByteUtils.toHexString(md5Out.getMessageDigest().digest()), calculateMd5(tempFile));
         }
         else {
             // Assert that getRandomAccessOutputStream throws an IOException when such a stream cannot be provided
