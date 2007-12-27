@@ -89,4 +89,17 @@ public class LocalFileTest extends AbstractFileTestCase {
         localFile.guessFloppyDrive();
         localFile.guessRemovableDrive();
     }
+
+    /**
+     * Asserts that {@link com.mucommander.file.impl.local.LocalFile#getVolumeInfo()} returns the same values as
+     * {@link com.mucommander.file.impl.local.LocalFile#getTotalSpace()}
+     * and {@link com.mucommander.file.impl.local.LocalFile#getFreeSpace()}.
+     */
+    public void testVolumeInfo() {
+        long volumeInfo[] = ((LocalFile)tempFile).getVolumeInfo();
+
+        assertNotNull(volumeInfo);
+        assertEquals(volumeInfo[0], tempFile.getTotalSpace());
+        assertEquals(volumeInfo[1], tempFile.getFreeSpace());
+    }
 }
