@@ -145,9 +145,19 @@ public class LocalFile extends AbstractFile {
      * <p>This method has been made public as it is more efficient to retrieve both free space and volume space
      * info than calling getFreeSpace() and getTotalSpace() separately, since a single command process retrieves both.
      *
-     * @return [totalSpace, freeSpace], both of which can be null if information could not be retrieved.
+     * @return a [totalSpace, freeSpace] long array, where both values can be null if the information could not be retrieved
      */
     public long[] getVolumeInfo() {
+        // Under Java 1.6, use the new java.io.File methods
+        if(PlatformManager.getJavaVersion() >= PlatformManager.JAVA_1_6) {
+            return new long[] {
+                getTotalSpace(),
+                getFreeSpace()
+            };
+        }
+
+        // We're running Java 1.5 or lower
+
         BufferedReader br = null;
         String absPath = getAbsolutePath();
         long dfInfo[] = new long[]{-1, -1};
