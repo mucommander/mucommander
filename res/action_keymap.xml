@@ -7,206 +7,206 @@
 <keymap>
   <!-- Action  : Create a bookmark from the location of the current panel.       -->
   <!-- Default : control B                                                       -->
-  <action class="com.mucommander.ui.action.AddBookmarkAction"           keystroke="control B"/>
+  <action class="com.mucommander.ui.action.AddBookmarkAction"            keystroke="control B"/>
 
   <!-- Action  : Set keyboard focus to the location bar.                         -->
   <!-- Default : control G                                                       -->
-  <action class="com.mucommander.ui.action.ChangeLocationAction"        keystroke="control G"/>
+  <action class="com.mucommander.ui.action.ChangeLocationAction"         keystroke="control G"/>
 
   <!-- Action  : Close the current window.                                       -->
   <!-- Default : F10, meta W                                                     -->
-  <action class="com.mucommander.ui.action.CloseWindowAction"           keystroke="F10"
-                                                                        alt_keystroke="meta W"/>
+  <action class="com.mucommander.ui.action.CloseWindowAction"            keystroke="F10"
+                                                                         alt_keystroke="meta W"/>
 
   <!-- Action  : Compare the content of both panels.                             -->
   <!-- Default : control M                                                       -->
-  <action class="com.mucommander.ui.action.CompareFoldersAction"        keystroke="control M"/>
+  <action class="com.mucommander.ui.action.CompareFoldersAction"         keystroke="control M"/>
 
   <!-- Action  : Open the 'Connect to server...' dialog.                         -->
   <!-- Default : control K                                                       -->
-  <action class="com.mucommander.ui.action.ConnectToServerAction"       keystroke="control K"/>
+  <action class="com.mucommander.ui.action.ConnectToServerAction"        keystroke="control K"/>
 
   <!-- Action  : Copy selected file(s).                                          -->
   <!-- Default : F5                                                              -->
-  <action class="com.mucommander.ui.action.CopyAction"                  keystroke="F5"/>
+  <action class="com.mucommander.ui.action.CopyAction"                   keystroke="F5"/>
 
   <!-- Action  : Copy selected file(s) name(s) to clipboard.                     -->
   <!-- Default : alt C                                                           -->
-  <action class="com.mucommander.ui.action.CopyFileNamesAction"         keystroke="alt C"/>
+  <action class="com.mucommander.ui.action.CopyFileNamesAction"          keystroke="alt C"/>
 
   <!-- Action  : Copy selected file(s) full path(s) to clipboard.                -->
   <!-- Default : shift alt C                                                     -->
-  <action class="com.mucommander.ui.action.CopyFilePathsAction"         keystroke="shift alt C"/>
+  <action class="com.mucommander.ui.action.CopyFilePathsAction"          keystroke="shift alt C"/>
 
   <!-- Action  : Copy selected file(s) name(s) to clipboard.                     -->
   <!-- Default : meta C, control C                                               -->
-  <action class="com.mucommander.ui.action.CopyFilesToClipboardAction"  keystroke="control C"
-                                                                        alt_keystroke="meta C"/>
+  <action class="com.mucommander.ui.action.CopyFilesToClipboardAction"   keystroke="control C"
+                                                                         alt_keystroke="meta C"/>
   <!-- Action  : Delete selected file(s).                                        -->
   <!-- Default : F8, DELETE                                                      -->
-  <action class="com.mucommander.ui.action.DeleteAction"                keystroke="F8"
-                                                                        alt_keystroke="DELETE"/>
+  <action class="com.mucommander.ui.action.DeleteAction"                 keystroke="F8"
+                                                                         alt_keystroke="DELETE"/>
   <!-- Action  : Edit selected file using custom editor.                         -->
   <!-- Ignores multiple selection.                                               -->
   <!-- Default : F4                                                              -->
-  <action class="com.mucommander.ui.action.EditAction"                  keystroke="F4"/>
+  <action class="com.mucommander.ui.action.EditAction"                   keystroke="F4"/>
 
   <!-- Action  : Email selected file(s).                                         -->
   <!-- Default : control S                                                       -->
-  <action class="com.mucommander.ui.action.EmailAction"                 keystroke="control S"/>
+  <action class="com.mucommander.ui.action.EmailAction"                  keystroke="control S"/>
 
   <!-- Action  : Go back (in history).                                           -->
   <!-- Default : alt LEFT                                                        -->
-  <action class="com.mucommander.ui.action.GoBackAction"                keystroke="alt LEFT"/>
+  <action class="com.mucommander.ui.action.GoBackAction"                 keystroke="alt LEFT"/>
 
   <!-- Action  : Go forward (in history).                                        -->
   <!-- Default : alt RIGHT                                                       -->
-  <action class="com.mucommander.ui.action.GoForwardAction"             keystroke="alt RIGHT"/>
+  <action class="com.mucommander.ui.action.GoForwardAction"              keystroke="alt RIGHT"/>
 
   <!-- Action  : Go to the current folder's parent folder                        -->
   <!-- Default : BACK_SPACE, LEFT                                                -->
-  <action class="com.mucommander.ui.action.GoToParentAction"            keystroke="BACK_SPACE"
-                                                                        alt_keystroke="LEFT"/>
+  <action class="com.mucommander.ui.action.GoToParentAction"             keystroke="BACK_SPACE"
+                                                                         alt_keystroke="LEFT"/>
 
   <!-- Action  : Go to the current folder's root folder                          -->
   <!-- Default : shift BACK_SPACE, control BACK_SLASH                            -->
-  <action class="com.mucommander.ui.action.GoToRootAction"              keystroke="shift BACK_SPACE"
-                                                                        alt_keystroke="control BACK_SLASH"/>
+  <action class="com.mucommander.ui.action.GoToRootAction"               keystroke="shift BACK_SPACE"
+                                                                         alt_keystroke="control BACK_SLASH"/>
 
   <!-- Action  : Invert current selection (ignoring folders).                    -->
   <!-- Default : MULTIPLY                                                        -->
-  <action class="com.mucommander.ui.action.InvertSelectionAction"       keystroke="MULTIPLY"/>
+  <action class="com.mucommander.ui.action.InvertSelectionAction"        keystroke="MULTIPLY"/>
 
   <!-- Action  : Copy selected file to same folder (ignores multiple selection). -->
   <!-- Default : shift F5                                                        -->
-  <action class="com.mucommander.ui.action.LocalCopyAction"             keystroke="shift F5"/>
+  <action class="com.mucommander.ui.action.LocalCopyAction"              keystroke="shift F5"/>
 
   <!-- Action  : Select all files and folders in current pane.                   -->
   <!-- Default : control A                                                       -->
-  <action class="com.mucommander.ui.action.MarkAllAction"               keystroke="control A"/>
+  <action class="com.mucommander.ui.action.MarkAllAction"                keystroke="control A"/>
 
   <!-- Action  : Open the 'mark' dialog.                                         -->
   <!-- Default : ADD                                                             -->
-  <action class="com.mucommander.ui.action.MarkGroupAction"             keystroke="ADD"/>
+  <action class="com.mucommander.ui.action.MarkGroupAction"              keystroke="ADD"/>
 
   <!-- Action  : Marks or unmarks files from the currently selected row to the   -->
   <!--           next page's row                                                 -->
   <!-- Default : shift PAGE_DOWN                                                 -->
-  <action class="com.mucommander.ui.action.MarkPageDownAction"          keystroke="shift PAGE_DOWN"/>
+  <action class="com.mucommander.ui.action.MarkPageDownAction"           keystroke="shift PAGE_DOWN"/>
 
   <!-- Action  : Marks or unmarks files from the currently selected row to the   -->
   <!--           previous page's row                                             -->
   <!-- Default : shift PAGE_UP                                                   -->
-  <action class="com.mucommander.ui.action.MarkPageUpAction"            keystroke="shift PAGE_UP"/>
+  <action class="com.mucommander.ui.action.MarkPageUpAction"             keystroke="shift PAGE_UP"/>
 
   <!-- Action  : Marks or unmarks the current selected file.                     -->
   <!-- Default : SPACE, INSERT                                                   -->
-  <action class="com.mucommander.ui.action.MarkSelectedFileAction"      keystroke="SPACE"
-                                                                        alt_keystroke="INSERT"/>
+  <action class="com.mucommander.ui.action.MarkSelectedFileAction"       keystroke="SPACE"
+                                                                         alt_keystroke="INSERT"/>
   <!-- Action  : Marks or unmarks files from the currently selected row          -->
   <!--           to the first row.                                               -->
   <!-- Default : shift HOME                                                      -->
-  <action class="com.mucommander.ui.action.MarkUpToFirstRowAction"      keystroke="shift HOME"/>
+  <action class="com.mucommander.ui.action.MarkUpToFirstRowAction"       keystroke="shift HOME"/>
 
   <!-- Action  : Marks or unmarks files from the currently selected row          -->
   <!--           to the last row.                                                -->
   <!-- Default : shift END                                                       -->
-  <action class="com.mucommander.ui.action.MarkUpToLastRowAction"       keystroke="shift END"/>
+  <action class="com.mucommander.ui.action.MarkUpToLastRowAction"        keystroke="shift END"/>
 
   <!-- Action  : Create a new folder.                                            -->
   <!-- Default : F7                                                              -->
-  <action class="com.mucommander.ui.action.MkdirAction"                 keystroke="F7"/>
+  <action class="com.mucommander.ui.action.MkdirAction"                  keystroke="F7"/>
 
   <!-- Action  : Create a new file.                                              -->
   <!-- Default : shift F7                                                        -->
-  <action class="com.mucommander.ui.action.MkfileAction"                keystroke="shift F7"/>
+  <action class="com.mucommander.ui.action.MkfileAction"                 keystroke="shift F7"/>
 
   <!-- Action  : Move selected file(s).                                          -->
   <!-- Default : F6                                                              -->
-  <action class="com.mucommander.ui.action.MoveAction"                  keystroke="F6"/>
+  <action class="com.mucommander.ui.action.MoveAction"                   keystroke="F6"/>
 
   <!-- Action  : Create a new window.                                            -->
   <!-- Default : control N                                                       -->
-  <action class="com.mucommander.ui.action.NewWindowAction"             keystroke="control N"/>
+  <action class="com.mucommander.ui.action.NewWindowAction"              keystroke="control N"/>
 
   <!-- Action  : Open selected file or folder (ignores multiple selections).     -->
   <!-- Default : ENTER, RIGHT                                                    -->
-  <action class="com.mucommander.ui.action.OpenAction"                  keystroke="ENTER"
-                                                                        alt_keystroke="RIGHT"/>
+  <action class="com.mucommander.ui.action.OpenAction"                   keystroke="ENTER"
+                                                                         alt_keystroke="RIGHT"/>
 
   <!-- Action  : Open selected file or folder (ignores multiple selections)      -->
   <!--           using system associations.                                      -->
   <!-- Default : shift ENTER                                                     -->
-  <action class="com.mucommander.ui.action.OpenNativelyAction"          keystroke="shift ENTER"/>
+  <action class="com.mucommander.ui.action.OpenNativelyAction"           keystroke="shift ENTER"/>
 
   <!-- Action  : Open 'Pack files' dialog.                                       -->
   <!-- Default : control I                                                       -->
-  <action class="com.mucommander.ui.action.PackAction"                  keystroke="control I"/>
+  <action class="com.mucommander.ui.action.PackAction"                   keystroke="control I"/>
 
   <!-- Action  : Paste clipboard file(s) to the current folder.                  -->
   <!-- Default : meta V, control V                                               -->
-  <action class="com.mucommander.ui.action.PasteClipboardFilesAction"   keystroke="control V"
-                                                                        alt_keystroke="meta V"/>
+  <action class="com.mucommander.ui.action.PasteClipboardFilesAction"    keystroke="control V"
+                                                                         alt_keystroke="meta V"/>
     
   <!-- Action  : Set keyboard focus on the left drive list.                      -->
   <!-- Default : alt F1                                                          -->
-  <action class="com.mucommander.ui.action.PopupLeftDriveButtonAction"  keystroke="alt F1"/>
+  <action class="com.mucommander.ui.action.PopupLeftDriveButtonAction"   keystroke="alt F1"/>
 
   <!-- Action  : Set keyboard focus on the right drive list.                     -->
   <!-- Default : alt F2                                                          -->
-  <action class="com.mucommander.ui.action.PopupRightDriveButtonAction" keystroke="alt F2"/>
+  <action class="com.mucommander.ui.action.PopupRightDriveButtonAction"  keystroke="alt F2"/>
 
   <!-- Action  : Quit the application (Ignored under Mac OS X).                  -->
   <!-- Default : control Q                                                       -->
-  <action class="com.mucommander.ui.action.QuitAction"                  keystroke="control Q"/>
+  <action class="com.mucommander.ui.action.QuitAction"                   keystroke="control Q"/>
 
   <!-- Action  : Refresh the content of the current panel.                       -->
   <!-- Default : F9                                                              -->
-  <action class="com.mucommander.ui.action.RefreshAction"               keystroke="F9"/>
+  <action class="com.mucommander.ui.action.RefreshAction"                keystroke="F9"/>
 
   <!-- Action  : Switch focus to next window.                                    -->
   <!-- Default : control RIGHT                                                   -->
-  <action class="com.mucommander.ui.action.RecallNextWindowAction"      keystroke="control RIGHT"/>
+  <action class="com.mucommander.ui.action.RecallNextWindowAction"       keystroke="control RIGHT"/>
 
   <!-- Action  : Switch focus to previous window.                                -->
   <!-- Default : control LEFT                                                    -->
-  <action class="com.mucommander.ui.action.RecallPreviousWindowAction"  keystroke="control LEFT"/>
+  <action class="com.mucommander.ui.action.RecallPreviousWindowAction"   keystroke="control LEFT"/>
 
   <!-- Action  : Recalls window number 1.                                        -->
   <!-- Default : control 1                                                       -->
-  <action class="com.mucommander.ui.action.RecallWindow1Action"         keystroke="control 1"/>
+  <action class="com.mucommander.ui.action.RecallWindow1Action"          keystroke="control 1"/>
 
   <!-- Action  : Recalls window number 2.                                        -->
   <!-- Default : control 2                                                       -->
-  <action class="com.mucommander.ui.action.RecallWindow2Action"         keystroke="control 2"/>
+  <action class="com.mucommander.ui.action.RecallWindow2Action"          keystroke="control 2"/>
 
   <!-- Action  : Recalls window number 3.                                        -->
   <!-- Default : control 3                                                       -->
-  <action class="com.mucommander.ui.action.RecallWindow3Action"         keystroke="control 3"/>
+  <action class="com.mucommander.ui.action.RecallWindow3Action"          keystroke="control 3"/>
 
   <!-- Action  : Recalls window number 4.                                        -->
   <!-- Default : control 4                                                       -->
-  <action class="com.mucommander.ui.action.RecallWindow4Action"         keystroke="control 4"/>
+  <action class="com.mucommander.ui.action.RecallWindow4Action"          keystroke="control 4"/>
 
   <!-- Action  : Recalls window number 5.                                        -->
   <!-- Default : control 5                                                       -->
-  <action class="com.mucommander.ui.action.RecallWindow5Action"         keystroke="control 5"/>
+  <action class="com.mucommander.ui.action.RecallWindow5Action"          keystroke="control 5"/>
 
   <!-- Action  : Recalls window number 6.                                        -->
   <!-- Default : control 6                                                       -->
-  <action class="com.mucommander.ui.action.RecallWindow6Action"         keystroke="control 6"/>
+  <action class="com.mucommander.ui.action.RecallWindow6Action"          keystroke="control 6"/>
 
   <!-- Action  : Recalls window number 7.                                        -->
   <!-- Default : control 7                                                       -->
-  <action class="com.mucommander.ui.action.RecallWindow7Action"         keystroke="control 7"/>
+  <action class="com.mucommander.ui.action.RecallWindow7Action"          keystroke="control 7"/>
 
   <!-- Action  : Recalls window number 8.                                        -->
   <!-- Default : control 8                                                       -->
-  <action class="com.mucommander.ui.action.RecallWindow8Action"         keystroke="control 8"/>
+  <action class="com.mucommander.ui.action.RecallWindow8Action"          keystroke="control 8"/>
 
   <!-- Action  : Recalls window number 9.                                        -->
   <!-- Default : control 9                                                       -->
-  <action class="com.mucommander.ui.action.RecallWindow9Action"         keystroke="control 9"/>
+  <action class="com.mucommander.ui.action.RecallWindow9Action"          keystroke="control 9"/>
 
   <!-- Action  : Recalls window number 10.                                        -->
   <!-- Default : control 10                                                       -->
@@ -214,119 +214,130 @@
 
   <!-- Action  : Rename the current file (ignores multiple selections).          -->
   <!-- Default : shift F6                                                        -->
-  <action class="com.mucommander.ui.action.RenameAction"                keystroke="shift F6"/>
+  <action class="com.mucommander.ui.action.RenameAction"                 keystroke="shift F6"/>
 
   <!-- Action  : Reveal current selection in OS dependant file manager.          -->
   <!-- Default : control L                                                       -->
-  <action class="com.mucommander.ui.action.RevealInDesktopAction"       keystroke="control L"/>
+  <action class="com.mucommander.ui.action.RevealInDesktopAction"        keystroke="control L"/>
 
   <!-- Action  : Open the 'Run command' dialog.                                  -->
   <!-- Default : control R                                                       -->
-  <action class="com.mucommander.ui.action.RunCommandAction"            keystroke="control R"/>
+  <action class="com.mucommander.ui.action.RunCommandAction"             keystroke="control R"/>
 
   <!-- Action  : Moves the carret to the first line in the pane.                 -->
   <!-- Default : HOME                                                            -->
-  <action class="com.mucommander.ui.action.SelectFirstRowAction"        keystroke="HOME"/>
+  <action class="com.mucommander.ui.action.SelectFirstRowAction"         keystroke="HOME"/>
 
   <!-- Action  : Moves the carret to the last line in the pane.                  -->
   <!-- Default : END                                                             -->
-  <action class="com.mucommander.ui.action.SelectLastRowAction"         keystroke="END"/>
+  <action class="com.mucommander.ui.action.SelectLastRowAction"          keystroke="END"/>
 
   <!-- Action  : Set both panes to the location of the current one.              -->
   <!-- Default : control E                                                       -->
-  <action class="com.mucommander.ui.action.SetSameFolderAction"         keystroke="control E"/>
+  <action class="com.mucommander.ui.action.SetSameFolderAction"          keystroke="control E"/>
 
   <!-- Action  : Show the properties of current selection.                       -->
   <!-- Default : alt ENTER                                                       -->
-  <action class="com.mucommander.ui.action.ShowFilePropertiesAction"    keystroke="alt ENTER"/>
+  <action class="com.mucommander.ui.action.ShowFilePropertiesAction"     keystroke="alt ENTER"/>
 
   <!-- Action  : Show a list of active server connections.                       -->
   <!-- Default : alt ENTER                                                       -->
-  <action class="com.mucommander.ui.action.ShowServerConnectionsAction" keystroke="shift control K"/>
+  <action class="com.mucommander.ui.action.ShowServerConnectionsAction"  keystroke="shift control K"/>
 
   <!-- Action  : Sort current pane by date.                                      -->
   <!-- Default : control F6                                                      -->
-  <action class="com.mucommander.ui.action.SortByDateAction"            keystroke="control F6"/>
+  <action class="com.mucommander.ui.action.SortByDateAction"             keystroke="control F6"/>
 
   <!-- Action  : Sort current pane by extension.                                 -->
   <!-- Default : control F3                                                      -->
-  <action class="com.mucommander.ui.action.SortByExtensionAction"       keystroke="control F3"/>
+  <action class="com.mucommander.ui.action.SortByExtensionAction"        keystroke="control F3"/>
 
   <!-- Action  : Sort current pane by group.                                     -->
   <!-- Default : control F9                                                      -->
-  <action class="com.mucommander.ui.action.SortByGroupAction"           keystroke="control F9"/>
+  <action class="com.mucommander.ui.action.SortByGroupAction"            keystroke="control F9"/>
 
   <!-- Action  : Sort current pane by name.                                      -->
   <!-- Default : control F4                                                      -->
-  <action class="com.mucommander.ui.action.SortByNameAction"            keystroke="control F4"/>
+  <action class="com.mucommander.ui.action.SortByNameAction"             keystroke="control F4"/>
 
   <!-- Action  : Sort current pane by owner.                                     -->
   <!-- Default : control F8                                                      -->
-  <action class="com.mucommander.ui.action.SortByOwnerAction"           keystroke="control F8"/>
+  <action class="com.mucommander.ui.action.SortByOwnerAction"            keystroke="control F8"/>
 
   <!-- Action  : Sort current pane by permissions.                               -->
   <!-- Default : control F7                                                      -->
-  <action class="com.mucommander.ui.action.SortByPermissionsAction"     keystroke="control F7"/>
+  <action class="com.mucommander.ui.action.SortByPermissionsAction"      keystroke="control F7"/>
 
   <!-- Action  : Sort current pane by size.                                      -->
   <!-- Default : control F5                                                      -->
-  <action class="com.mucommander.ui.action.SortBySizeAction"            keystroke="control F5"/>
+  <action class="com.mucommander.ui.action.SortBySizeAction"             keystroke="control F5"/>
 
   <!-- Action  : Stops the current action.                                       -->
   <!-- Default : ESCAPE                                                          -->
-  <action class="com.mucommander.ui.action.StopAction"                  keystroke="ESCAPE"/>
+  <action class="com.mucommander.ui.action.StopAction"                   keystroke="ESCAPE"/>
 
   <!-- Action  : Swap the location of both panes.                                -->
   <!-- Default : control U                                                       -->
-  <action class="com.mucommander.ui.action.SwapFoldersAction"           keystroke="control U"/>
+  <action class="com.mucommander.ui.action.SwapFoldersAction"            keystroke="control U"/>
 
   <!-- Action  : Switch selection to other tab.                                  -->
   <!-- Default : TAB, shift TAB                                                  -->
-  <action class="com.mucommander.ui.action.SwitchActiveTableAction"     keystroke="TAB"
-                                                                        alt_keystroke="shift TAB"/>
+  <action class="com.mucommander.ui.action.SwitchActiveTableAction"      keystroke="TAB"
+                                                                         alt_keystroke="shift TAB"/>
 
   <!-- Action  : Unmark all marked files and folders in current pane.            -->
   <!-- Default : control D                                                       -->
-  <action class="com.mucommander.ui.action.UnmarkAllAction"             keystroke="control D"/>
+  <action class="com.mucommander.ui.action.UnmarkAllAction"              keystroke="control D"/>
 
   <!-- Action  : Open the "Unmark" dialog.                                       -->
   <!-- Default : SUBSTRACT                                                       -->
-  <action class="com.mucommander.ui.action.UnmarkGroupAction"           keystroke="SUBTRACT"/>
+  <action class="com.mucommander.ui.action.UnmarkGroupAction"            keystroke="SUBTRACT"/>
 
   <!-- Action  : Open the "Unpack" dialog.                                       -->
   <!-- Default : control P                                                       -->
-  <action class="com.mucommander.ui.action.UnpackAction"                keystroke="control P"/>
+  <action class="com.mucommander.ui.action.UnpackAction"                 keystroke="control P"/>
 
   <!-- Action  : Open the custom file viewer on selected file.                   -->
   <!-- Default : F3                                                              -->
-  <action class="com.mucommander.ui.action.ViewAction"                  keystroke="F3"/>
+  <action class="com.mucommander.ui.action.ViewAction"                   keystroke="F3"/>
 
   <!-- Action  : Toggle hidden files display on and off.                         -->
   <!-- Default : shift alt H                                                     -->
-  <action class="com.mucommander.ui.action.ToggleHiddenFilesAction"     keystroke="shift alt H"/>
+  <action class="com.mucommander.ui.action.ToggleHiddenFilesAction"      keystroke="shift alt H"/>
 
   <!-- Action  : Open the bookmark file system in the current folder panel.      -->
   <!-- Default : alt B                                                           -->
-  <action class="com.mucommander.ui.action.ExploreBookmarksAction"      keystroke="alt B"/>
+  <action class="com.mucommander.ui.action.ExploreBookmarksAction"       keystroke="alt B"/>
 
   <!-- Action  : Change the selected files' date.                                -->
   <!-- Default : alt D                                                           -->
-  <action class="com.mucommander.ui.action.ChangeDateAction"            keystroke="alt D"/>
+  <action class="com.mucommander.ui.action.ChangeDateAction"             keystroke="alt D"/>
 
   <!-- Action  : Change the selected files' permissions.                         -->
   <!-- Default : alt P                                                           -->
-  <action class="com.mucommander.ui.action.ChangePermissionsAction"     keystroke="alt P"/>
+  <action class="com.mucommander.ui.action.ChangePermissionsAction"      keystroke="alt P"/>
 
   <!-- Action  : Calculate the checksum of the selected files'                   -->
   <!-- Default : alt K                                                           -->
-  <action class="com.mucommander.ui.action.CalculateChecksumAction"     keystroke="alt K"/>
+  <action class="com.mucommander.ui.action.CalculateChecksumAction"      keystroke="alt K"/>
 
-  <!-- Action  : Opens browsable files in the inactive panel.                    -->
+  <!-- Action  : Open files in the inactive panel.                               -->
   <!-- Default : shift alt ENTER                                                 -->
-  <action class="com.mucommander.ui.action.OpenInOtherPanelAction"      keystroke="shift alt ENTER"/>
+  <action class="com.mucommander.ui.action.OpenInOtherPanelAction"       keystroke="shift alt ENTER"/>
 
-  <!-- Action  : Marks all files whose extension match the current selection.    -->
+  <!-- Action  : Mark all files whose extension match the current selection.     -->
   <!-- Default : shift ADD                                                       -->
-  <action class="com.mucommander.ui.action.MarkExtensionAction"         keystroke="shift ADD"/>
+  <action class="com.mucommander.ui.action.MarkExtensionAction"          keystroke="shift ADD"/>
+
+  <!-- Action  : Open matching files in both the active and inactive panel.      -->
+  <!-- Default : meta ENTER, meta RIGHT                                          -->
+  <action class="com.mucommander.ui.action.OpenInBothPanelsAction"       keystroke="meta ENTER"
+                                                                         alt_keystroke="meta RIGHT"/>
+
+  <!-- Action  : Go to the current directory's parent in both active and         -->
+  <!--           inactive panels.                                                -->
+  <!-- Default : meta BACK_SPACE, meta LEFT                                      -->
+  <action class="com.mucommander.ui.action.GoToParentInBothPanelsAction" keystroke="meta BACK_SPACE"
+                                                                         alt_keystroke="meta LEFT"/>
 
 </keymap>
