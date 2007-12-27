@@ -48,6 +48,15 @@ public class GoToParentAction extends GoToAction {
         setEnabled(mainFrame.getActiveTable().getFolderPanel().getCurrentFolder().getParentSilently()!=null);
     }
 
+    protected boolean goToParent(FolderPanel panel) {
+        AbstractFile parent;
+
+        if((parent = panel.getCurrentFolder().getParentSilently()) != null) {
+            panel.tryChangeCurrentFolder(parent);
+            return true;
+        }
+        return false;
+    }
 
     ///////////////////////////////
     // MuAction implementation //
@@ -56,9 +65,6 @@ public class GoToParentAction extends GoToAction {
     public void performAction() {
         // Changes the current folder to make it the current folder's parent.
         // Does nothing if the current folder doesn't have a parent.
-        AbstractFile parent;
-        FolderPanel folderPanel = mainFrame.getActiveTable().getFolderPanel();
-        if((parent=folderPanel.getCurrentFolder().getParentSilently())!=null)
-            folderPanel.tryChangeCurrentFolder(parent);
+        goToParent(mainFrame.getActiveTable().getFolderPanel());
     }
 }
