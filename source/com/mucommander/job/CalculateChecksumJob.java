@@ -42,20 +42,36 @@ import java.security.MessageDigest;
  * 3c0d332902b9b8dfec43ba02d1618c6e  ppc/debian-40r1-ppc-DVD-1.iso
  * ...
  * </pre>
- *
  * The path of each file is relative to the checksum file's path. In the above example, <code>readme.txt</code> and
  * the checksum file are located in the same folder. Note that 2 space characters (and not just one as anyone in his
  * right mind would think) separate the hexadecimal checksum from the file path.
+ * </p>
+ *
+ * <p>The above file format is used for all checksum algorithms but one: CRC32, which uses the special SFV format where
+ * the checksum for each file is written as follow:
+ * <pre>
+ * wne-ebai.r00 697115b2
+ * wne-ebai.r01 f80a8443
+ * ...
+ * </pre>
+ * </p>
  *
  * @author Maxence Bernard
  */
 public class CalculateChecksumJob extends TransferFileJob {
 
+    /** The checksum file where the checksum of each file is written */
     private AbstractFile checksumFile;
+    /** The OutputStream of the checksum file */
     private OutputStream checksumFileOut;
 
+    /** The path to the base source folder, i.e. the folder which contains all the files this job operates on */
     private String baseSourcePath;
 
+    /** True if the SFV format is used rather than the default 'SUMS' format */
+    private boolean useSfvFormat;
+
+    /** The MessageDigest that serves to calculate the checksum */
     private MessageDigest digest;
 
 
@@ -64,6 +80,7 @@ public class CalculateChecksumJob extends TransferFileJob {
 
         this.checksumFile = checksumFile;
         this.digest = digest;
+        this.useSfvFormat = digest.getAlgorithm().equalsIgnoreCase("CRC32");
 
         this.baseSourcePath = baseSourceFolder.getAbsolutePath(true);
     }
@@ -103,6 +120,8 @@ public class CalculateChecksumJob extends TransferFileJob {
         // Calculate the file's checksum
         do {		// Loop for retry
             InputStream in = null;
+            String line;
+            String checksum;
             try {
                 // Resets the digest before use
                 digest.reset();
@@ -110,17 +129,22 @@ public class CalculateChecksumJob extends TransferFileJob {
                 in = null;
                 in = setCurrentInputStream(file.getInputStream());
 
+                // Determine the path relative to the base source folder
                 String relativePath = file.getAbsolutePath();
                 relativePath = relativePath.substring(baseSourcePath.length(), relativePath.length());
 
-                // Each file/line goes like this, the path is relative to the base source folder:
-                // 119abda7c941135d5bf382c386bca2ca  subdir/debian-40r1-i386-DVD-1.iso
+                // Write a new line in the checksum file, in the appropriate format
+                checksum = AbstractFile.calculateChecksum(in, digest);
+                if(useSfvFormat) {
+                    // SFV format for CRC32 checksums
+                    line = relativePath + " " + checksum;     // 1 space character
+                }
+                else {
+                    // 'SUMS' format for other checksum algorithms
+                    line = checksum + "  " + relativePath;    // 2 space characters, that's how the format is
+                }
 
-                String line =
-                        AbstractFile.getDigestHexString(AbstractFile.digestStream(in, digest))
-                        +"  "                   // 2 space characters, that's how the format is, don't ask me why
-                        +relativePath
-                        +'\n';
+                line += '\n';
 
                 // Close the InputStream, we're done with it
                 in.close();
