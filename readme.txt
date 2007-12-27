@@ -119,8 +119,14 @@ New features:
 - Custom look&feels can now be imported from the preferences.
 - New 'Mark selection' feature (mapped to shift+add by default) that lets users
   mark all files whose extension match that of the current selection.
-- New 'Open in other pane' feature (mapped to shift+alt+enter by default) that
+- New 'Open in other panel' feature (mapped to shift+alt+enter by default) that
   will open the current selection in the other panel.
+- New 'Open in both panels' feature (mapped to meta+ENTER by default) that
+  opens the current selection in the active panel and, if it exists, the
+  matching file in the inactive one.
+- New 'Go to parent in both panels' feature (mapped to meta+BACK_SPACE
+  by default) that goes to the parent directory in both the active and
+  inactive panels.
 
 Improvements:
 - Added an 'Explore bookmarks' item to the 'Bookmarks' menu.
