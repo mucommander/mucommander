@@ -22,6 +22,7 @@ import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
 import com.mucommander.file.util.FileSet;
 import com.mucommander.file.util.FileToolkit;
+import com.mucommander.io.security.MuProvider;
 import com.mucommander.job.CalculateChecksumJob;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.CalculateChecksumAction;
@@ -69,6 +70,12 @@ public class CalculateChecksumDialog extends JobDialog implements ActionListener
 
     /** Dialog size constraints */
     private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(320,0);
+
+
+    static {
+        // Register additional MessageDigest implementations provided by the muCommander API
+        MuProvider.registerProvider();
+    }
 
 
     public CalculateChecksumDialog(MainFrame mainFrame, FileSet files) {
@@ -178,26 +185,30 @@ public class CalculateChecksumDialog extends JobDialog implements ActionListener
     }
 
     /**
-     * Returns a standard checksum filename for the specified checksum algorithm, e.g. <code>MD5SUMS</code> for
+     * Returns a de-facto standard filename for the specified checksum algorithm, e.g. <code>MD5SUMS</code> for
      * <code>md5</code>.
      *
      * @param algorithm a checksum algorithm
-     * @return a standard checksum filename for the specified checksum algorithm
+     * @return a standard filename for the specified checksum algorithm
      */
-    private static String getChecksumFilename(String algorithm) {
-        // Here's a list of commonly accepted checksum filesnames:
-
-        // md2 -> MD2SUMS
-        // md5 -> MD5SUMS
-        // sha -> SHA1SUMS          (needs special treatment)
-        // sha-256 -> SHA256SUMS
-        // sha-384 -> SHA384SUMS
-        // sha-512 -> SHA384SUMS
+    private String getChecksumFilename(String algorithm) {
+        // Adler32 -> ADLER32SUMS
+        // CRC32   -> <filename>.sfv    (needs special treatment)
+        // MD2     -> MD2SUMS
+        // MD4     -> MD4SUMS
+        // MD5     -> MD5SUMS
+        // SHA     -> SHA1SUMS          (needs special treatment)
+        // SHA-256 -> SHA256SUMS
+        // SHA-384 -> SHA384SUMS
+        // SHA-512 -> SHA512SUMS
 
         algorithm = algorithm.toUpperCase();
 
         if(algorithm.equals("SHA"))
             return "SHA1SUMS";
+
+        if(algorithm.equals("CRC32"))
+            return (files.size()==1?files.fileAt(0):files.getBaseFolder()).getName()+".sfv";
 
         return StringUtils.replaceCompat(algorithm, "-", "")+"SUMS";
     }
