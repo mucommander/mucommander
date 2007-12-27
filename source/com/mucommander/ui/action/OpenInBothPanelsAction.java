@@ -77,6 +77,10 @@ public class OpenInBothPanelsAction extends OpenAction implements LocationListen
     public synchronized void performAction() {
         AbstractFile    file;
 
+        // If we're already in the middle of an 'open in both panels' action, aborts.
+        if(otherFile != null)
+            return;
+
         // Retrieves the current selection, aborts if none.
         if((file = mainFrame.getActiveTable().getSelectedFile(true)) == null)
             return;

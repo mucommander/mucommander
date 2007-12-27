@@ -55,7 +55,13 @@ public class GoToParentInBothPanelsAction extends GoToParentAction {
     /**
      * Opens both the active and inactive folder panel's parent directories.
      */
-    public synchronized void performAction() {goToParent = goToParent(mainFrame.getActiveTable().getFolderPanel());}
+    public synchronized void performAction() {
+        // If we're already in the middle of an 'go to parent in both panels' action, aborts.
+        if(goToParent)
+            return;
+
+        goToParent = goToParent(mainFrame.getActiveTable().getFolderPanel());
+    }
 
     /**
      * If necessary, triggers a 'GoToParentAction' on the inactive panel.
