@@ -21,11 +21,11 @@ package com.mucommander.io;
 import java.io.IOException;
 
 /**
- * BufferedRandomOutputStream is a buffered output stream for {@link RandomAccessOutputStream} which, unlike
- * <code>java.io.BufferedOutputStream</code>, makes it safe to seek in the RandomAccessOutputStream.
+ * BufferedRandomOutputStream is a buffered output stream for {@link RandomAccessOutputStream} which, unlike a regular
+ * <code>java.io.BufferedOutputStream</code>, makes it safe to seek in the underlying <code>RandomAccessOutputStream</code>.
  *
  * <p>This class uses {@link BufferPool} to create the internal buffer, to avoid excessive memory allocation and
- * garbage collection.
+ * garbage collection. The buffer is released when this stream is closed.</p>
  *
  * @author Maxence Bernard
  */
@@ -45,8 +45,8 @@ public class BufferedRandomOutputStream extends RandomAccessOutputStream {
 
 
     /**
-     * Creates a new <code>BufferedRandomOutputStream</code> on top of the given
-     * <code>RandomAccessOutputStream</code>. An internal buffer of {@link #DEFAULT_BUFFER_SIZE} bytes is created.
+     * Creates a new <code>BufferedRandomOutputStream</code> on top of the given {@link RandomAccessOutputStream}.
+     * An internal buffer of {@link #DEFAULT_BUFFER_SIZE} bytes is created.
      *
      * @param raos the underlying RandomAccessOutputStream used by this buffered output stream
      */
@@ -55,8 +55,8 @@ public class BufferedRandomOutputStream extends RandomAccessOutputStream {
     }
 
     /**
-     * Creates a new <code>BufferedRandomOutputStream</code> on top of the given
-     * <code>RandomAccessOutputStream</code>. An internal buffer of the given size is created.
+     * Creates a new <code>BufferedRandomOutputStream</code> on top of the given {@link RandomAccessOutputStream}.
+     * An internal buffer of the specified size is created.
      *
      * @param raos the underlying RandomAccessOutputStream used by this buffered output stream
      * @param size size of the buffer in bytes
@@ -115,7 +115,7 @@ public class BufferedRandomOutputStream extends RandomAccessOutputStream {
      * needed. However, if the requested data length is equal or larger than this stream's
      * buffer, then this method will flush the buffer and write the
      * bytes directly to the underlying output stream. Thus redundant
-     * <code>RandomBufferedOutputStream</code>s will not copy data unnecessarily.
+     * <code>RandomBufferedOutputStream</code>s will not copy data unnecessarily.</p>
      *
      * @param b the data.
      * @param off the start offset in the data.
@@ -175,6 +175,14 @@ public class BufferedRandomOutputStream extends RandomAccessOutputStream {
         raos.setLength(newLength);
     }
 
+
+    ////////////////////////
+    // Overridden methods //
+    ////////////////////////
+
+    /**
+     * This method is overridden to release the internal buffer when this stream is closed.
+     */
     public synchronized void close() throws IOException {
         if(buffer!=null) {      // buffer is null if close() was already called
             try {
@@ -192,11 +200,10 @@ public class BufferedRandomOutputStream extends RandomAccessOutputStream {
         raos.close();
     }
 
-
-    ////////////////////////
-    // Overridden methods //
-    ////////////////////////
-
+    /**
+     * This method is overridden to release the internal buffer if {@link #close()} has not been called, to avoid any
+     * memory leak.
+     */
     protected void finalize() throws Throwable {
         // If this stream hasn't been closed, release the buffer before finalizing the object
         if(buffer!=null)
