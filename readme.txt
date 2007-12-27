@@ -110,21 +110,22 @@ What's new since v0.8.1 ?
 
 New features:
 - New 'Calculate checksum' feature added to the 'File' menu (mapped onto 
-  Alt+K by default) which allows to calculate the checksum of selected files
-  using various algorithms.
+  Alt+K by default) which calculates the checksum of selected files and writes
+  them to a file in a standard format. The following checksum algorithms are
+  provided: Alder32, CRC32, MD2, MD4, MD5, SHA-1, SHA-256, SHA-384 and SHA-512.
 - Files can be marked/unmarked using a Regexp.
 - New 'Owner' and 'Group' columns added to the folder pane (not visible by
   default). The owner and group information is available on FTP and SFTP folders
   and some TAR archives.
-- Custom look&feels can now be imported from the preferences.
-- New 'Mark selection' feature (mapped to shift+add by default) that lets users
+- Custom look&feels can now be imported from the preferences dialog.
+- New 'Mark selection' feature (mapped to Shift+Add by default) that lets users
   mark all files whose extension match that of the current selection.
-- New 'Open in other panel' feature (mapped to shift+alt+enter by default) that
-  will open the current selection in the other panel.
-- New 'Open in both panels' feature (mapped to meta+ENTER by default) that
+- New 'Open in other panel' feature (mapped to Shift+Alt+ENTER by default) that
+  opens the current selection in the other panel.
+- New 'Open in both panels' feature (mapped to Meta+ENTER by default) that
   opens the current selection in the active panel and, if it exists, the
   matching file in the inactive one.
-- New 'Go to parent in both panels' feature (mapped to meta+BACK_SPACE
+- New 'Go to parent in both panels' feature (mapped to Meta+BACK_SPACE
   by default) that goes to the parent directory in both the active and
   inactive panels.
 
@@ -132,12 +133,12 @@ Improvements:
 - Added an 'Explore bookmarks' item to the 'Bookmarks' menu.
 - Job confirmation dialogs show the list of files to be processed.
 - All OK/cancel choices can be navigated with the arrow keys.
-- Added keyboard shortcuts to 'Change date' and 'Change permissions' action
+- Added keyboard shortcuts to 'Change date' and 'Change permissions' actions
   (Alt+D and Alt+P resp.).
 - Visual enhancements to the main window under Mac OS X Leopard which now uses
   more native looking components.
 - Improved the file loading in the internal viewers and editors.
-- The internal text viewer and editor allow to change the file encoding.
+- The file encoding can be changed in the internal text viewer and editor.
 
 Localization:
 - Japanese translation contributed by Nardog.
@@ -157,7 +158,7 @@ Bug fixes:
 - When multiple double-clicks were issues on the table, only the first one
   was taken into account.
 - Fixed an issue under Linux causing the muCommander icon to sometimes stay in
-  the system tray after the application has quit.
+  the system tray after the application had quit.
 
 Known issues:
 - Korean translation is not up-to-date.
