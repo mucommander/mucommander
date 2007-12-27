@@ -242,7 +242,7 @@ public class SFTPFile extends AbstractFile {
     }
 
     public boolean setPermission(int access, int permission, boolean enabled) {
-        return setPermissions(setPermissionBit(getPermissions(), (permission << (access*3)), enabled));
+        return setPermissions(ByteUtils.setBit(getPermissions(), (permission << (access*3)), enabled));
     }
 
     public boolean canGetPermission(int access, int permission) {

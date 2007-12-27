@@ -30,10 +30,7 @@ import com.mucommander.file.FileURL;
 import com.mucommander.file.connection.ConnectionHandler;
 import com.mucommander.file.connection.ConnectionHandlerFactory;
 import com.mucommander.file.connection.ConnectionPool;
-import com.mucommander.io.FileTransferException;
-import com.mucommander.io.RandomAccessInputStream;
-import com.mucommander.io.RandomAccessOutputStream;
-import com.mucommander.io.SinkOutputStream;
+import com.mucommander.io.*;
 import com.mucommander.process.AbstractProcess;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPConnectionClosedException;
@@ -348,7 +345,7 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
 
 
     public boolean setPermission(int access, int permission, boolean enabled) {
-        return setPermissions(setPermissionBit(getPermissions(), (permission << (access*3)), enabled));
+        return setPermissions(ByteUtils.setBit(getPermissions(), (permission << (access*3)), enabled));
     }
 
     public boolean canGetPermission(int access, int permission) {

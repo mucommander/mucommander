@@ -23,10 +23,7 @@ import com.mucommander.file.compat.CompatURLStreamHandler;
 import com.mucommander.file.filter.FileFilter;
 import com.mucommander.file.filter.FilenameFilter;
 import com.mucommander.file.impl.ProxyFile;
-import com.mucommander.io.BufferPool;
-import com.mucommander.io.FileTransferException;
-import com.mucommander.io.RandomAccessInputStream;
-import com.mucommander.io.RandomAccessOutputStream;
+import com.mucommander.io.*;
 import com.mucommander.process.AbstractProcess;
 
 import javax.swing.*;
@@ -37,6 +34,7 @@ import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.regex.Pattern;
 
 /**
@@ -1121,21 +1119,44 @@ public abstract class AbstractFile implements FilePermissions {
         return getIcon(new java.awt.Dimension(16, 16));
     }
 
+
     /**
-     * Returns a digest (also referred to as a <i>hash</i> or <i>checksum</i>) of this file calculated by reading this
-     * file's input stream and feeding the bytes to the <code>MessageDigest</code> until EOF is reached.
+     * Returns a checksum of this file (also referred to as <i>hash</i> or <i>digest</i>) calculated by reading this
+     * file's contents and feeding the bytes to the given <code>MessageDigest</code>, until EOF is reached.
      *
-     * <p>This method does not reset the <code>MessageDigest</code> after the digest has been calculated.
+     * <p>The checksum is returned as an hexadecimal string, such as "6d75636f0a". The length of this string depends on
+     * the kind of algorithm.</p>
      *
-     * @param messageDigest the MessageDigest that is used to calculate the digest
-     * @return the digest that identifies this file's contents
-     * @throws IOException if an I/O error occurred while calculating the digest
+     * <p>Note: this method does not reset the <code>MessageDigest</code> after the checksum has been calculated.</p>
+     *
+     * @param algorithm the algorithm to use for calculating the checksum
+     * @return this file's checksum, as an hexadecimal string
+     * @throws IOException if an I/O error occurred while calculating the checksum
+     * @throws NoSuchAlgorithmException if the specified algorithm does not correspond to any MessageDigest registered
+     * with the Java Cryptography Extension.
      */
-    public final byte[] digest(MessageDigest messageDigest) throws IOException {
+    public final String calculateChecksum(String algorithm) throws IOException, NoSuchAlgorithmException {
+        return calculateChecksum(MessageDigest.getInstance(algorithm));
+    }
+
+    /**
+     * Returns a checksum of this file (also referred to as <i>hash</i> or <i>digest</i>) calculated by reading this
+     * file's contents and feeding the bytes to the given <code>MessageDigest</code>, until EOF is reached.
+     *
+     * <p>The checksum is returned as an hexadecimal string, such as "6d75636f0a". The length of this string depends on
+     * the kind of <code>MessageDigest</code>.</p>
+     *
+     * <p>Note: this method does not reset the <code>MessageDigest</code> after the checksum has been calculated.</p>
+     *
+     * @param messageDigest the MessageDigest to use for calculating the checksum
+     * @return this file's checksum, as an hexadecimal string
+     * @throws IOException if an I/O error occurred while calculating the checksum
+     */
+    public final String calculateChecksum(MessageDigest messageDigest) throws IOException {
         InputStream in = getInputStream();
 
         try {
-            return digestStream(in, messageDigest);
+            return calculateChecksum(in, messageDigest);
         }
         finally {
             in.close();
@@ -1339,18 +1360,19 @@ public abstract class AbstractFile implements FilePermissions {
     }
 
     /**
-     * Returns a digest (also referred to as a <i>hash</i> or <i>checksum</i>) of the given <code>InputStream</code>
-     * calculated by reading the stream and feeding the bytes to the <code>MessageDigest</code> until EOF is reached.
+     * Returns the checksum (also referred to as <i>hash</i> or <i>digest</i>) of the given <code>InputStream</code>
+     * calculated by reading the stream and feeding the bytes to the given <code>MessageDigest</code> until EOF is
+     * reached.
      *
      * <p><b>Important:</b> this method does not close the <code>InputStream</code>, and does not reset the
-     * <code>MessageDigest</code> after the digest has been calculated.
+     * <code>MessageDigest</code> after the checksum has been calculated.</p>
      *
-     * @param in the InputStream to digest
-     * @param messageDigest the MessageDigest that is used to calculate the digest
-     * @return the digest that identifies the stream's contents
-     * @throws IOException if an I/O error occurred while calculating the digest
+     * @param in the InputStream for which to calculate the checksum
+     * @param messageDigest the MessageDigest to use for calculating the checksum
+     * @return the given InputStream's checksum, as an hexadecimal string
+     * @throws IOException if an I/O error occurred while calculating the checksum
      */
-    public static byte[] digestStream(InputStream in, MessageDigest messageDigest) throws IOException {
+    public static String calculateChecksum(InputStream in, MessageDigest messageDigest) throws IOException {
         // Use BufferPool to reuse any available buffer of the same size
         byte buffer[] = BufferPool.getBuffer(IO_BUFFER_SIZE);
 
@@ -1370,56 +1392,13 @@ public abstract class AbstractFile implements FilePermissions {
                 messageDigest.update(buffer, 0, nbRead);
             }
 
-            return messageDigest.digest();
+            return ByteUtils.toHexString(messageDigest.digest());
         }
         finally {
             // Make the buffer available for further use
             BufferPool.releaseBuffer(buffer);
         }
     }
-
-
-    /**
-     * Returns an hexadecimal string representation of the given digest, where each byte is represented by 2
-     * characters and padded with a zero if its value is comprised between 0 and 15 (inclusive).
-     * Here's an example returned for a 128-bit MD5 digest: "8350e5a3e24c153df2275c9f80692773".
-     *
-     * @param digest a digest value
-     * @return an hexadecimal string representation of the given digest
-     */
-    public static String getDigestHexString(byte digest[]) {
-        StringBuffer sb = new StringBuffer();
-
-        int digestLength = digest.length;
-        String hexByte;
-        for(int i=0; i<digestLength; i++) {
-            hexByte = Integer.toHexString(digest[i] & 0xFF);
-            if(hexByte.length()==1)
-                sb.append('0');
-            sb.append(hexByte);
-        }
-
-        return sb.toString();
-    }
-
-
-    /**
-     * Convenience method that sets/unsets a bit in the given permissions int.
-     *
-     * @param permissions the permission int
-     * @param bit the bit to set
-     * @param enabled true to enable the bit, false to disable it
-     * @return the modified permission int
-     */
-    protected static int setPermissionBit(int permissions, int bit, boolean enabled) {
-        if(enabled)
-            permissions |= bit;
-        else
-            permissions &= ~bit;
-
-        return permissions;
-    }
-
 
     ////////////////////////
     // Overridden methods //
