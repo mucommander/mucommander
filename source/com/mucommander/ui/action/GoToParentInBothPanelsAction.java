@@ -42,9 +42,19 @@ import java.util.Hashtable;
  * @author Nicolas Rinaudo
  */
 public class GoToParentInBothPanelsAction extends GoToParentAction {
-    /** Whether or not we should react to location changed events. */
-    private boolean goToParent;
+    // - Instance variables --------------------------------------------------------------
+    // -----------------------------------------------------------------------------------
+    /** Whether or not the action is currently waiting on a location event. */
+    private boolean isWaiting;
+    /** Whether or not the last open action was a success. */
+    private boolean status;
+    /** Used to synchronize calls to {@link #performAction()}. */
+    private Object lock = new Object();
 
+
+
+    // - Initialisation ------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------
     /**
      * Creates a new <code>GoToParentInBothPanelsAction</code> instance with the specified parameters.
      * @param mainFrame  frame to which the action is attached.
@@ -52,40 +62,65 @@ public class GoToParentInBothPanelsAction extends GoToParentAction {
      */
     public GoToParentInBothPanelsAction(MainFrame mainFrame, Hashtable properties) {super(mainFrame, properties);}
 
+
+
+    // - Action code ---------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------
     /**
      * Opens both the active and inactive folder panel's parent directories.
      */
-    public synchronized void performAction() {
-        // If we're already in the middle of an 'go to parent in both panels' action, aborts.
-        if(goToParent)
-            return;
+    public void performAction() {
+        synchronized(lock) {
 
-        goToParent = goToParent(mainFrame.getActiveTable().getFolderPanel());
+            if(goToParent(mainFrame.getActiveTable().getFolderPanel())) {
+                isWaiting = true;
+                status    = false;
+                while(isWaiting) {
+                    try {wait();}
+                    catch(Exception e) {}
+                }
+                if(status)
+                    goToParent(mainFrame.getInactiveTable().getFolderPanel());
+            }
+        }
+    }
+
+
+
+    // - Synchronisation code ------------------------------------------------------------
+    // -----------------------------------------------------------------------------------
+    /**
+     * If necessary, notifies the performAction that it can resume its work.
+     */
+    private synchronized void unlock(boolean status) {
+        if(isWaiting) {
+            isWaiting   = false;
+            this.status = status;
+            notifyAll();
+        }
     }
 
     /**
-     * If necessary, triggers a 'GoToParentAction' on the inactive panel.
+     * If necessary, notifies the performAction that it can resume its work.
      */
-    public synchronized void locationChanged(LocationEvent e) {
+    public void locationChanged(LocationEvent e) {
         super.locationChanged(e);
-        if((e.getFolderPanel() == mainFrame.getActiveTable().getFolderPanel()) && goToParent)
-            goToParent(mainFrame.getInactiveTable().getFolderPanel());
-        goToParent = false;
+        unlock(true);
     }
 
     /**
-     * Cancels the 'GoToParentAction' on the inactive panel.
+     * If necessary, notifies the performAction that it can resume its work.
      */
-    public synchronized void locationCancelled(LocationEvent e) {
+    public void locationCancelled(LocationEvent e) {
         super.locationCancelled(e);
-        goToParent = false;
+        unlock(false);
     }
 
     /**
-     * Cancels the 'GoToParentAction' on the inactive panel.
+     * If necessary, notifies the performAction that it can resume its work.
      */
-    public synchronized void locationFailed(LocationEvent e) {
+    public void locationFailed(LocationEvent e) {
         super.locationFailed(e);
-        goToParent = false;
+        unlock(false);
     }
 }
