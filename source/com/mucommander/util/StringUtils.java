@@ -20,6 +20,16 @@ public class StringUtils {
         return a.regionMatches(true, a.length() - (bLength = b.length()), b, 0, bLength);
     }
 
+    /**
+     * Returns <code>true</code> if <code>a</code> starts with <code>b</code> regardless of the case.
+     * @param a string to test.
+     * @param b preffix to test for.
+     * Returns <code>true</code> if <code>a</code> starts with <code>b</code> regardless of the case, <code>false</code> otherwise.</code>.
+     */
+    public static boolean startsWithIgnoreCase(String a, String b) {
+        return a.regionMatches(true, 0, b, 0, b.length());
+    }
+
 
     /**
      * Replaces each occurrence of the target string in the given string with the specified replacement string, and
