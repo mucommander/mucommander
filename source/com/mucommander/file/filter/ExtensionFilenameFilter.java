@@ -25,7 +25,7 @@ package com.mucommander.file.filter;
  * <p>The extension(s) may be any string, but when used in the traditional sense of a file extension (e.g. zip extension)
  * the '.' character must be included in the specified extension (e.g. ".zip" must be used, not just "zip").</p>
  * 
- * @author Maxence Bernard
+ * @author Maxence Bernard, Nicolas Rinaudo
  */
 public class ExtensionFilenameFilter extends FilenameFilter {
 
