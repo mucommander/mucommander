@@ -43,7 +43,6 @@ import java.io.InputStream;
  * @author Maxence Bernard
  */
 class ImageViewer extends FileViewer implements ActionListener, ThemeListener {
-	
     private Image image;
     private Image scaledImage;
     private Color backgroundColor;
@@ -54,21 +53,10 @@ class ImageViewer extends FileViewer implements ActionListener, ThemeListener {
     private JMenuItem zoomInItem;
     private JMenuItem zoomOutItem;
 	
-	
     public ImageViewer() {
         backgroundColor = ThemeManager.getCurrentColor(Theme.EDITOR_BACKGROUND_COLOR);
         ThemeManager.addCurrentThemeListener(this);
     }	
-
-
-    public static boolean canViewFile(AbstractFile file) {
-        String name = file.getName();
-        String nameLowerCase = name.toLowerCase();
-        return nameLowerCase.endsWith(".png")
-            ||nameLowerCase.endsWith(".gif")
-            ||nameLowerCase.endsWith(".jpg")
-            ||nameLowerCase.endsWith(".jpeg");
-    }
 
     private synchronized void loadImage(AbstractFile file) throws IOException {
         frame.setCursor(new Cursor(Cursor.WAIT_CURSOR));
