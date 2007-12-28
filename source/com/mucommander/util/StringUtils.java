@@ -8,6 +8,18 @@ import com.mucommander.PlatformManager;
  * @author Maxence Bernard
  */
 public class StringUtils {
+    /**
+     * Returns <code>true</code> if <code>a</code> ends with <code>b</code> regardless of the case.
+     * @param a string to test.
+     * @param b suffix to test for.
+     * Returns <code>true</code> if <code>a</code> ends with <code>b</code> regardless of the case, <code>false</code> otherwise.</code>.
+     */
+    public static boolean endsWithIgnoreCase(String a, String b) {
+        int bLength;
+
+        return a.regionMatches(true, a.length() - (bLength = b.length()), b, 0, bLength);
+    }
+
 
     /**
      * Replaces each occurrence of the target string in the given string with the specified replacement string, and
