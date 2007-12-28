@@ -18,6 +18,8 @@
 
 package com.mucommander.file.filter;
 
+import com.mucommander.util.StringUtils;
+
 /**
  * This {@link FilenameFilter} matches filenames that start with a specified string.
  *
@@ -47,7 +49,6 @@ public class StartsFilenameFilter extends FilenameFilter {
     public boolean accept(String filename) {
         if(isCaseSensitive())
             return filename.startsWith(s);
-
-        return filename.toLowerCase().startsWith(s.toLowerCase());
+        return StringUtils.startsWithIgnoreCase(filename, s);
     }
 }
