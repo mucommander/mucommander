@@ -58,21 +58,15 @@ public class ExtensionFilenameFilter extends FilenameFilter {
     ///////////////////////////////////
 
     public boolean accept(String filename) {
-        boolean isCaseInsensitive = !isCaseSensitive();
-        if(isCaseInsensitive)
-            filename = filename.toLowerCase();
+        int nameLength;      // Filename's length.
+        int extensionLength; // Length of the current extension.
 
-        int nbExtensions = extensions.length;
-        String extension;
-        for(int i=0; i<nbExtensions; i++) {
-            extension = extensions[i];
-            if(isCaseInsensitive)
-                extension = extension.toLowerCase();
-
-            if(filename.endsWith(extension))
+        // Matches the file name to each extension.
+        nameLength = filename.length();
+        for(int i = 0; i < extensions.length; i++)
+            if(filename.regionMatches(isCaseSensitive(), nameLength - (extensionLength = extensions[i].length()), extensions[i], 0, extensionLength))
                 return true;
-        }
-
         return false;
+ 
     }
 }
