@@ -29,6 +29,7 @@ import com.mucommander.file.util.ResourceLoader;
 import com.mucommander.io.BackupInputStream;
 import com.mucommander.io.BackupOutputStream;
 import com.mucommander.text.Translator;
+import com.mucommander.util.StringUtils;
 
 import java.awt.*;
 import java.io.*;
@@ -599,8 +600,7 @@ public class ThemeManager {
 
         // Retrieves the file's name, cutting the .xml extension off if
         // necessary.
-        name = file.getName();
-        if(name.toLowerCase().endsWith(".xml"))
+        if(StringUtils.endsWithIgnoreCase(name = file.getName(), ".xml"))
             name = name.substring(0, name.length() - 4);
 
         return getAvailableCustomThemeName(name);

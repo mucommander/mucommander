@@ -18,6 +18,8 @@
 
 package com.mucommander.file.filter;
 
+import com.mucommander.util.StringUtils;
+
 /**
  * This {@link FilenameFilter} matches filenames that end with a specified string.
  *
@@ -47,7 +49,6 @@ public class EndsFilenameFilter extends FilenameFilter {
     public boolean accept(String filename) {
         if(isCaseSensitive())
             return filename.endsWith(s);
-
-        return filename.toLowerCase().endsWith(s.toLowerCase());
+        return StringUtils.endsWithIgnoreCase(filename, s);
     }
 }
