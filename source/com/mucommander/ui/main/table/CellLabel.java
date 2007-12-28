@@ -192,26 +192,35 @@ public class CellLabel extends JLabel {
      * @param g where to paint the label.
      */
     public void paint(Graphics g) {
+        boolean doOutline;
+
+        doOutline = outlineColor != null && !outlineColor.equals(lastBackgroundColor);
+
         // Checks whether we need to paint a gradient background.
         if(gradientColor != null) {
-            Graphics2D g2; // Allows us to use the setPaint and getPaint methods.
+            Graphics2D g2;       // Allows us to use the setPaint and getPaint methods.
+            Paint      oldPaint; // Previous Paint affected to g.
 
             // Initialisation.
-            g2 = (Graphics2D)g.create();
+            g2       = (Graphics2D)g;
+            oldPaint = g2.getPaint();
 
             // Paints the gradient background.
             g2.setPaint(new GradientPaint(0, 0, lastBackgroundColor, 0, getHeight(), gradientColor, false));
-            g2.fillRect(0, 0, getWidth(), getHeight());
+            if(doOutline)
+                g2.fillRect(0, 1, getWidth(), getHeight() - 2);
+            else
+                g2.fillRect(0, 0, getWidth(), getHeight());
 
-            // Restores the Graphics instance to its previous state.
-            g2.dispose();
+            // Restores the graphics to its previous state.
+            g2.setPaint(oldPaint);
         }
 
         // Normal painting.
         super.paint(g);
 
         // If necessary, paints the outline color.
-        if(outlineColor != null && !outlineColor.equals(lastBackgroundColor)) {
+        if(doOutline) {
             g.setColor(outlineColor);
             g.drawLine(0, 0, getWidth(), 0);
             g.drawLine(0, getHeight() - 1, getWidth(), getHeight() - 1);
