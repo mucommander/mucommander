@@ -19,6 +19,7 @@
 package com.mucommander.ui.viewer.image;
 
 import com.mucommander.file.AbstractFile;
+import com.mucommander.file.filter.ExtensionFilenameFilter;
 import com.mucommander.ui.viewer.FileViewer;
 import com.mucommander.ui.viewer.ViewerFactory;
 
@@ -28,13 +29,16 @@ import com.mucommander.ui.viewer.ViewerFactory;
  * @author Nicolas Rinaudo
  */
 public class ImageFactory implements ViewerFactory {
+    /** Used to filter out file extensions that the image viewer cannot open. */
+    private ExtensionFilenameFilter filter;
+
+    public ImageFactory() {
+        filter = new ExtensionFilenameFilter(new String[] {".png", ".gif", ".jpg", ".jpeg"});
+        filter.setCaseSensitive(false);
+    }
+
     public boolean canViewFile(AbstractFile file) {
-        String name = file.getName();
-        String nameLowerCase = name.toLowerCase();
-        return nameLowerCase.endsWith(".png")
-            ||nameLowerCase.endsWith(".gif")
-            ||nameLowerCase.endsWith(".jpg")
-            ||nameLowerCase.endsWith(".jpeg");
+        return filter.accept(file);
     }
     public FileViewer createFileViewer() {return new ImageViewer();}
 }
