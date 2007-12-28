@@ -23,11 +23,14 @@ import com.mucommander.PlatformManager;
 /**
  * This class contains convenience methods for working with strings.
  *
- * @author Maxence Bernard
+ * @author Maxence Bernard, Nicolas Rinaudo
  */
 public class StringUtils {
     /**
      * Returns <code>true</code> if <code>a</code> ends with <code>b</code> regardless of the case.
+     * <p>
+     * Note that this method will return <code>true</code> if <code>b</code> is an emptry string.
+     * </p>
      * @param a string to test.
      * @param b suffix to test for.
      * Returns <code>true</code> if <code>a</code> ends with <code>b</code> regardless of the case, <code>false</code> otherwise.</code>.
@@ -40,8 +43,11 @@ public class StringUtils {
 
     /**
      * Returns <code>true</code> if <code>a</code> starts with <code>b</code> regardless of the case.
+     * <p>
+     * Note that this method will return <code>true</code> if <code>b</code> is an emptry string.
+     * </p>
      * @param a string to test.
-     * @param b preffix to test for.
+     * @param b prefix to test for.
      * Returns <code>true</code> if <code>a</code> starts with <code>b</code> regardless of the case, <code>false</code> otherwise.</code>.
      */
     public static boolean startsWithIgnoreCase(String a, String b) {
