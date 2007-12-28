@@ -73,13 +73,13 @@ public class ExtensionFilenameFilterTest extends TestCase {
         assertFalse(filter.accept("test.tar.bz2"));
         assertFalse(filter.accept("test.tbz2"));
         assertFalse(filter.accept("test.gz"));
-        assertFalse(filter.accept("test.bz2");
-        assertFalse(filter.accept("test.iso");
-        assertFalse(filter.accept("test.nrg");
-        assertFalse(filter.accept("test.a");
-        assertFalse(filter.accept("test.ar");
-        assertFalse(filter.accept("test.deb");
-        assertFalse(filter.accept("test.lst");
+        assertFalse(filter.accept("test.bz2"));
+        assertFalse(filter.accept("test.iso"));
+        assertFalse(filter.accept("test.nrg"));
+        assertFalse(filter.accept("test.a"));
+        assertFalse(filter.accept("test.ar"));
+        assertFalse(filter.accept("test.deb"));
+        assertFalse(filter.accept("test.lst"));
 
         assertFalse(filter.accept("test"));
         assertFalse(filter.accept(""));
