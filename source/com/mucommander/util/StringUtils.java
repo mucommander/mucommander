@@ -26,6 +26,7 @@ import com.mucommander.PlatformManager;
  * @author Maxence Bernard, Nicolas Rinaudo
  */
 public class StringUtils {
+
     /**
      * Returns <code>true</code> if <code>a</code> ends with <code>b</code> regardless of the case.
      * <p>
@@ -33,7 +34,7 @@ public class StringUtils {
      * </p>
      * @param a string to test.
      * @param b suffix to test for.
-     * Returns <code>true</code> if <code>a</code> ends with <code>b</code> regardless of the case, <code>false</code> otherwise.</code>.
+     * @return <code>true</code> if <code>a</code> ends with <code>b</code> regardless of the case, <code>false</code> otherwise.</code>.
      */
     public static boolean endsWithIgnoreCase(String a, String b) {
         int bLength;
@@ -48,7 +49,7 @@ public class StringUtils {
      * </p>
      * @param a string to test.
      * @param b prefix to test for.
-     * Returns <code>true</code> if <code>a</code> starts with <code>b</code> regardless of the case, <code>false</code> otherwise.</code>.
+     * @return <code>true</code> if <code>a</code> starts with <code>b</code> regardless of the case, <code>false</code> otherwise.</code>.
      */
     public static boolean startsWithIgnoreCase(String a, String b) {
         return a.regionMatches(true, 0, b, 0, b.length());
