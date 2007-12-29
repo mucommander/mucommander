@@ -194,6 +194,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
 
         // Set scroll pane's background color to match the one of this panel and FileTable
         scrollPane.getViewport().setBackground(unfocusedBackgroundColor = ThemeManager.getCurrentColor(Theme.FILE_TABLE_INACTIVE_BACKGROUND_COLOR));
+        fileTable.setBackground(unfocusedBackgroundColor);
         backgroundColor          = ThemeManager.getCurrentColor(Theme.FILE_TABLE_BACKGROUND_COLOR);
         unmatchedBackgroundColor = ThemeManager.getCurrentColor(Theme.FILE_TABLE_UNMATCHED_BACKGROUND_COLOR);
 
@@ -532,6 +533,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
      * Dims the scrollpane's background, called by {@link com.mucommander.ui.main.table.FileTable.QuickSearch} when a quick search is started.
      */
     public void dimBackground() {
+        fileTable.setBackground(unmatchedBackgroundColor);
         scrollPane.getViewport().setBackground(unmatchedBackgroundColor);
     }
 
@@ -554,8 +556,10 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
         // cancellation might result in a corrupt display.
         if(newColor.equals(scrollPane.getViewport().getBackground()))
             fileTable.repaint();
-        else
+        else {
+            fileTable.setBackground(newColor);
             scrollPane.getViewport().setBackground(newColor);
+        }
     }
 
 
@@ -588,6 +592,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
         if(e.getSource() == fileTable) {
             setBorderColor(borderColor);
             scrollPane.getViewport().setBackground(backgroundColor);
+            fileTable.setBackground(backgroundColor);
         }
     }
 
@@ -595,6 +600,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
         if(e.getSource() == fileTable) {
             setBorderColor(unfocusedBorderColor);
             scrollPane.getViewport().setBackground(unfocusedBackgroundColor);
+            fileTable.setBackground(unfocusedBackgroundColor);
         }
         fileTable.getQuickSearch().cancel();
     }
@@ -1030,13 +1036,17 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
             break;
         case Theme.FILE_TABLE_BACKGROUND_COLOR:
             backgroundColor = event.getColor();
-            if(fileTable.hasFocus())
+            if(fileTable.hasFocus()) {
                 scrollPane.getViewport().setBackground(backgroundColor);
+                fileTable.setBackground(backgroundColor);
+            }
             break;
         case Theme.FILE_TABLE_INACTIVE_BACKGROUND_COLOR:
             unfocusedBackgroundColor = event.getColor();
-            if(!fileTable.hasFocus())
+            if(!fileTable.hasFocus()) {
                 scrollPane.getViewport().setBackground(unfocusedBackgroundColor);
+                fileTable.setBackground(unfocusedBackgroundColor);
+            }
             break;
 
         case Theme.FILE_TABLE_UNMATCHED_BACKGROUND_COLOR:
