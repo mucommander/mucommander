@@ -18,6 +18,8 @@
 
 package com.mucommander.file.filter;
 
+import com.mucommander.util.StringUtils;
+
 /**
  * This {@link FilenameFilter} matches filenames ending with one of several specified extensions.
  * The filter can be made case-sensitive or case-insensitive, this behavior is specified at creation time.
@@ -70,13 +72,12 @@ public class ExtensionFilenameFilter extends FilenameFilter {
         // If case is important, we have to be a bit more creative and
         // use String.regionMatches.
         else {
-            int nameLength;      // Filename's length.
-            int extensionLength; // Length of the current extension.
+            int nameLength; // Filename's length.
 
             // Matches the file name to each extension.
             nameLength = filename.length();
             for(i = 0; i < extensions.length; i++)
-                if(filename.regionMatches(true, nameLength - (extensionLength = extensions[i].length()), extensions[i], 0, extensionLength))
+                if(StringUtils.endsWithIgnoreCase(filename, extensions[i], nameLength))
                     return true;
         }
         return false; 
