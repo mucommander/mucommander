@@ -154,13 +154,6 @@ public class FileTable extends JTable implements Columns, MouseListener, MouseMo
 
         setAutoResizeMode(AUTO_RESIZE_NEXT_COLUMN);
 
-        // It might seem that the table is never actually visible (being 'covered' by its cells
-        // or the FolderPanel's viewport), and that this call is not at all necessary.
-        // However, in some cases - such as a directory change - the table might be repainted
-        // while empty, in which case its background color will actually be used. If it's
-        // not set to Theme.FILE_TABLE_BACKGROUND_COLOR, flickering will occur.
-        setBackground(ThemeManager.getCurrentColor(Theme.FILE_TABLE_BACKGROUND_COLOR));
-
         // Stores the mainframe and folderpanel.
         this.mainFrame   = mainFrame;
         this.folderPanel = folderPanel;
@@ -1763,10 +1756,7 @@ public class FileTable extends JTable implements Columns, MouseListener, MouseMo
     /**
      * Not used.
      */
-    public void colorChanged(ColorChangedEvent event) {
-        if(event.getColorId() == Theme.FILE_TABLE_BACKGROUND_COLOR)
-            setBackground(event.getColor());
-    }
+    public void colorChanged(ColorChangedEvent event) {}
 
     /**
      * Receives theme font changes notifications.
