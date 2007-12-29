@@ -26,20 +26,72 @@ import com.mucommander.PlatformManager;
  * @author Maxence Bernard, Nicolas Rinaudo
  */
 public class StringUtils {
+    /**
+     * Prevents instanciation of this class.
+     */
+    private StringUtils() {}
 
     /**
      * Returns <code>true</code> if <code>a</code> ends with <code>b</code> regardless of the case.
+     * <p>
+     * This method has a known bug under some alphabets with peculiar capitalisation rules such as the Georgian one,
+     * where <code>Character.toUpperCase(a) == Character.toUpperCase(b)</code> doesn't necessarily imply that
+     * <code>Character.toLowerCase(a) == Character.toLowerCase(b)</code>. The performance hit of testing for this
+     * exceptions is so huge that it was deemed an acceptable issue.
+     * </p>
      * <p>
      * Note that this method will return <code>true</code> if <code>b</code> is an emptry string.
      * </p>
      * @param a string to test.
      * @param b suffix to test for.
-     * @return <code>true</code> if <code>a</code> ends with <code>b</code> regardless of the case, <code>false</code> otherwise.</code>.
+     * @return <code>true</code> if <code>a</code> ends with <code>b</code> regardless of the case, <code>false</code> otherwise.
      */
     public static boolean endsWithIgnoreCase(String a, String b) {
-        int bLength;
+        return endsWithIgnoreCase(a, b, a.length());
+    }
 
-        return a.regionMatches(true, a.length() - (bLength = b.length()), b, 0, bLength);
+    /**
+     * Returns <code>true</code> if <code>a</code> ends with <code>b</code> regardless of the case.
+     * <p>
+     * This method is meant for optimisation purposes when <code>a.length()</code> is known and re-used frequently.
+     * An example of such a case is when <code>a</code> is meant to be matched against a number of other strings
+     * until a match is found.
+     * </p>
+     * <p>
+     * This method has a known bug under some alphabets with peculiar capitalisation rules such as the Georgian one,
+     * where <code>Character.toUpperCase(a) == Character.toUpperCase(b)</code> doesn't necessarily imply that
+     * <code>Character.toLowerCase(a) == Character.toLowerCase(b)</code>. The performance hit of testing for this
+     * exceptions is so huge that it was deemed an acceptable issue.
+     * </p>
+     * <p>
+     * Note that this method will return <code>true</code> if <code>b</code> is an emptry string.
+     * </p>
+     * @param a    string to test.
+     * @param b    suffix to test for.
+     * @param posA length of <code>a</code>.
+     * Returns <code>true</code> if <code>a</code> ends with <code>b</code> regardless of the case, <code>false</code> otherwise.</code>.
+     */
+    public static boolean endsWithIgnoreCase(String a, String b, int posA) {
+        int  posB; // Position in b.
+        char cA;   // Current character in a.
+        char cB;   // Current character in b.
+
+        // Checks whether there's any point in testing the strings.
+        if(posA < (posB = b.length()))
+            return false;
+
+        // Loops until we've tested the whole of b.
+        while(posB > 0) {
+
+            // Works on lower-case characters only. 
+            if(!Character.isLowerCase(cA = a.charAt(--posA)))
+                cA = Character.toLowerCase(cA);
+            if(!Character.isLowerCase(cB = b.charAt(--posB)))
+                cB = Character.toLowerCase(cB);
+            if(cA != cB)
+                return false;
+        }
+        return true;
     }
 
     /**
@@ -49,7 +101,7 @@ public class StringUtils {
      * </p>
      * @param a string to test.
      * @param b prefix to test for.
-     * @return <code>true</code> if <code>a</code> starts with <code>b</code> regardless of the case, <code>false</code> otherwise.</code>.
+     * @return <code>true</code> if <code>a</code> starts with <code>b</code> regardless of the case, <code>false</code> otherwise..
      */
     public static boolean startsWithIgnoreCase(String a, String b) {
         return a.regionMatches(true, 0, b, 0, b.length());
