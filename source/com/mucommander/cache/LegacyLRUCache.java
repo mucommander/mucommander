@@ -46,6 +46,10 @@ public class LegacyLRUCache extends LRUCache {
 
     public LegacyLRUCache(int capacity) {
         super(capacity);
+        init();
+    }
+
+    private void init() {
         keys = new Vector(capacity+1);
         values = new Hashtable();
         expirationDates = new Vector(capacity+1);
@@ -198,10 +202,7 @@ public class LegacyLRUCache extends LRUCache {
 
 	
     public synchronized void clearAll() {
-        this.capacity = capacity;
-        keys = new Vector();
-        values = new Hashtable();
-        expirationDates = new Vector();	
+        init();
         eldestExpirationDate = Long.MAX_VALUE;
     }
 
