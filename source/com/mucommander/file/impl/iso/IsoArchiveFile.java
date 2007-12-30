@@ -236,12 +236,12 @@ public class IsoArchiveFile extends AbstractROArchiveFile {
     private static int S_IFREG = 0100000;
     private static int S_IFDIR = 0040000;
 
-    private class stat {
+    private static class stat {
         int st_size;
         int st_mode;
     }
 
-    private class todo {
+    private static class todo {
         private todo next;
         private String name;
         private int extent;
@@ -249,7 +249,7 @@ public class IsoArchiveFile extends AbstractROArchiveFile {
     }
 
     // WIP rewrite it cleanly for cooked
-    private class isoInputStream extends InputStream {
+    private static class isoInputStream extends InputStream {
         private RandomAccessInputStream rais;
         private int pos;
         private long size;
@@ -315,7 +315,7 @@ public class IsoArchiveFile extends AbstractROArchiveFile {
         }
     }
 
-    private class isoDr {
+    private static class isoDr {
         public byte[] length = new byte[ISODCL(1, 1)];
         public byte[] ext_attr_length = new byte[ISODCL(2, 2)];
         public byte[] extent = new byte[ISODCL(3, 10)];
@@ -345,7 +345,7 @@ public class IsoArchiveFile extends AbstractROArchiveFile {
         }
     }
 
-    private class isoPvd {
+    private static class isoPvd {
         public byte[] type = new byte[ISODCL(1, 1)];
         public byte[] id = new byte[ISODCL(2, 6)];
         public byte[] version = new byte[ISODCL(7, 7)];

@@ -268,7 +268,7 @@ if(Debug.ON) Debug.trace("keyModifiers="+keyEvent.getModifiers()+" keyCode="+key
     // Inner classes //
     ///////////////////
 
-    private class KeyChoice {
+    private static class KeyChoice {
 
         private int keyValue;
         private String keyLabel;

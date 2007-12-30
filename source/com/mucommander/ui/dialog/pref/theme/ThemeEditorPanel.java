@@ -263,7 +263,7 @@ abstract class ThemeEditorPanel extends PreferencesPanel {
      * Used to listen on <code>FontChoosers</code> and update theme data when the font is changed.
      * @author Nicolas Rinaudo
      */
-    private class ThemeFontChooserListener implements ChangeListener {
+    private static class ThemeFontChooserListener implements ChangeListener {
         // - Instance fields -------------------------------------------------------------
         // -------------------------------------------------------------------------------
         /** Theme data in which to update the font when it changes. */
@@ -299,7 +299,7 @@ abstract class ThemeEditorPanel extends PreferencesPanel {
      * Used to listen on <code>FontChoosers</code> and update preview components when the font is changed.
      * @author Nicolas Rinaudo
      */
-    private class PreviewFontChooserListener implements ChangeListener {
+    private static class PreviewFontChooserListener implements ChangeListener {
         // - Instance fields -------------------------------------------------------------
         // -------------------------------------------------------------------------------
         /** Component to update when the font has changed. */

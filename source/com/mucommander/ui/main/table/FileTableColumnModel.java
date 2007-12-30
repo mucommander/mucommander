@@ -536,7 +536,7 @@ public class FileTableColumnModel implements TableColumnModel, Columns, Property
      * </p>
      * @author Nicolas Rinaudo
      */
-    private class ColumnSorter implements Comparator {
+    private static class ColumnSorter implements Comparator {
         // - Instance fields -------------------------------------------------------------
         // -------------------------------------------------------------------------------
         /** Defines the columns order. */

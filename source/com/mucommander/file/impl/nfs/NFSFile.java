@@ -441,7 +441,7 @@ public class NFSFile extends AbstractFile {
     /**
      * NFSRandomAccessInputStream extends RandomAccessInputStream to provide random read access to an NFSFile.
      */
-    public class NFSRandomAccessInputStream extends RandomAccessInputStream {
+    public static class NFSRandomAccessInputStream extends RandomAccessInputStream {
 
         private XRandomAccessFile raf;
 
@@ -480,7 +480,7 @@ public class NFSFile extends AbstractFile {
      * <p><b>Warning:</b> this RandomAccessOutputStream is not fully functional, the {@link #setLength(long)} has a
      * limitation.
      */
-    public class NFSRandomAccessOutputStream extends RandomAccessOutputStream {
+    public static class NFSRandomAccessOutputStream extends RandomAccessOutputStream {
 
         private XRandomAccessFile raf;
 

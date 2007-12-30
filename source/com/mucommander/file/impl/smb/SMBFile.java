@@ -583,7 +583,7 @@ import java.net.MalformedURLException;
     /**
      * SMBRandomAccessInputStream extends RandomAccessInputStream to provide random read access to an SMBFile.
      */
-    public class SMBRandomAccessInputStream extends RandomAccessInputStream {
+    public static class SMBRandomAccessInputStream extends RandomAccessInputStream {
 
         private SmbRandomAccessFile raf;
 
@@ -619,7 +619,7 @@ import java.net.MalformedURLException;
     /**
      * SMBRandomAccessOutputStream extends RandomAccessOutputStream to provide random write access to an SMBFile.
      */
-    public class SMBRandomAccessOutputStream extends RandomAccessOutputStream {
+    public static class SMBRandomAccessOutputStream extends RandomAccessOutputStream {
 
         private SmbRandomAccessFile raf;
 

@@ -990,7 +990,7 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
      * Filter used to only display XML files in the JFileChooser.
      * @author Nicolas Rinaudo
      */
-    private class ExtensionFileFilter extends javax.swing.filechooser.FileFilter {
+    private static class ExtensionFileFilter extends javax.swing.filechooser.FileFilter {
         /** Extension to match. */
         private String extension;
         /** Filter's description. */

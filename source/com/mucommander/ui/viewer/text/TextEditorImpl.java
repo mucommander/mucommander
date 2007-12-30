@@ -319,7 +319,7 @@ class TextEditorImpl implements ThemeListener, ActionListener {
     // Inner classes //
     ///////////////////
 
-    private class EncodingMenuItem extends JCheckBoxMenuItem {
+    private static class EncodingMenuItem extends JCheckBoxMenuItem {
 
         public EncodingMenuItem(String encoding) {
             super(encoding);

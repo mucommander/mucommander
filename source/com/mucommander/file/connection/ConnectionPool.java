@@ -214,7 +214,7 @@ public class ConnectionPool implements Runnable {
      * Closes a specified ConnectionHandler's connection in a separate thread and removes the ConnectionHandler from
      * the list of registered ConnectionHandler instances.
      */
-    private class CloseConnectionThread extends Thread {
+    private static class CloseConnectionThread extends Thread {
 
         private ConnectionHandler connHandler;
 
@@ -236,7 +236,7 @@ public class ConnectionPool implements Runnable {
      * Keeps alive a specified ConnectionHandler's connection in a separate thread. If the connection is not currently
      * active, {@link com.mucommander.file.connection.ConnectionHandler#keepAlive()} will not be called.
      */
-    private class KeepAliveConnectionThread extends Thread {
+    private static class KeepAliveConnectionThread extends Thread {
 
         private final ConnectionHandler connHandler;
 

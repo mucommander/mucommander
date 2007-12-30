@@ -152,7 +152,7 @@ class CocoaFileIconProviderImpl extends LocalFileIconProvider implements Cacheab
      * This class wraps the icon and preferred dimension in a CacheItem. This allows to return a cached icon only if
      * the requested preferred resolution matches the one that was originally requested when the icon was created.
      */
-    private class CacheItem {
+    private static class CacheItem {
         private Icon icon;
         private Dimension preferredDimension;
 

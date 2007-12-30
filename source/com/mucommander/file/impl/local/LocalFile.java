@@ -764,7 +764,7 @@ public class LocalFile extends AbstractFile {
     /**
      * LocalRandomAccessInputStream extends RandomAccessInputStream to provide random read access to a LocalFile.
      */
-    public class LocalRandomAccessInputStream extends RandomAccessInputStream {
+    public static class LocalRandomAccessInputStream extends RandomAccessInputStream {
 
         private RandomAccessFile raf;
 
@@ -800,7 +800,7 @@ public class LocalFile extends AbstractFile {
     /**
      * LocalRandomAccessOutputStream extends RandomAccessOutputStream to provide random write access to a LocalFile.
      */
-    public class LocalRandomAccessOutputStream extends RandomAccessOutputStream {
+    public static class LocalRandomAccessOutputStream extends RandomAccessOutputStream {
 
         private RandomAccessFile raf;
 

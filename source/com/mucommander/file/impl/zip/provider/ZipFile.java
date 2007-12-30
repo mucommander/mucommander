@@ -1095,7 +1095,7 @@ public class ZipFile implements ZipConstants {
      * RandomAccessFile, making sure that only bytes from a certain
      * range can be read.
      */
-    private class BoundedInputStream extends InputStream {
+    private static class BoundedInputStream extends InputStream {
 
         private final RandomAccessInputStream rais;
 

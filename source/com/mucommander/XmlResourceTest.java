@@ -95,7 +95,7 @@ public class XmlResourceTest extends TestCase {
      * This SAX handler reports errors that are found in the parsed XML document on the standard ouput and throws
      * exceptions to the parser. 
      */
-    private class SAXErrorHandler extends DefaultHandler {
+    private static class SAXErrorHandler extends DefaultHandler {
 
         public void warning(SAXParseException e) throws SAXException {
             printSAXError(e, "warning");

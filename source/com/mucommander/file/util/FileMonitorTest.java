@@ -217,7 +217,7 @@ public class FileMonitorTest extends TestCase implements FileMonitorConstants {
      * This {@link FileChangeListener} keeps track of the attributes that changed, as reported by
      * {@link #fileChanged(com.mucommander.file.AbstractFile, int)}.
      */
-    private class FileChangeTracker implements FileChangeListener {
+    private static class FileChangeTracker implements FileChangeListener {
 
         /** Bit mask that describes the attributes that have changed */
         private int changedAttributes;
