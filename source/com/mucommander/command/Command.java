@@ -104,8 +104,6 @@ public class Command {
 
     // - Instance variables ----------------------------------------------------
     // -------------------------------------------------------------------------
-    /** Different tokens that compose the command. */
-    private String[]  tokens;
     /** Command's alias. */
     private String    alias;
     /** Original command. */
