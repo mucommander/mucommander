@@ -166,7 +166,7 @@ public class ExtensionManager {
         if((folder = FileFactory.getFile(path)) == null)
             setExtensionsFolder(new File(path));
         else
-            setExtensionsFolder(FileFactory.getFile(path));
+            setExtensionsFolder(folder);
     }
 
     /**
