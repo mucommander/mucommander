@@ -516,7 +516,7 @@ public class MuConfiguration implements Columns {
 
     // - Instance fields -----------------------------------------------------
     // -----------------------------------------------------------------------
-    public static Configuration configuration = new Configuration(new MuConfigurationSource());
+    private static Configuration configuration = new Configuration(new MuConfigurationSource());
 
 
 
