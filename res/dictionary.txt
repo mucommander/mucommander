@@ -1263,7 +1263,7 @@ error:HU:Hiba
 error:JA:エラー
 
 # Generic error message, usually used as the content of error dialogs
-generic_error:EN:An error has occured while performing the requested operation.
+generic_error:EN:An error has occurred while performing the requested operation.
 generic_error:FR:Une erreur est survenue pendant l'exécution de la tache demandée.
 # Translation missing (New!)
 
@@ -10680,7 +10680,7 @@ theme.current:JA:現在
 
 
 # Error message displayed when a theme cannot be loaded
-theme_could_not_be_loaded:EN:An error occured while loading this theme.
+theme_could_not_be_loaded:EN:An error occurred while loading this theme.
 theme_could_not_be_loaded:FR:Une erreur est survenue lors du chargement de ce thème.
 theme_could_not_be_loaded:zh_TW:在載入此佈景主題時發生錯誤
 theme_could_not_be_loaded:DE:Beim Laden dieses Themas trat ein Fehler auf.
