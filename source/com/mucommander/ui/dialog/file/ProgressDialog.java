@@ -602,11 +602,11 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
 
         private final Color BPS_LIMIT_COLOR = ThemeManager.getCurrentColor(Theme.MARKED_FOREGROUND_COLOR);
 
-        private final int LINE_SPACING = 6;
+        private static final int LINE_SPACING = 6;
 
-        private final int NB_SAMPLES_MAX = 320;
+        private static final int NB_SAMPLES_MAX = 320;
 
-        private final int STROKE_WIDTH = 2;
+        private static final int STROKE_WIDTH = 2;
 
         private Vector samples = new Vector(NB_SAMPLES_MAX);
 
