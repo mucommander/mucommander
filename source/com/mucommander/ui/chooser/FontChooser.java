@@ -125,7 +125,7 @@ public class FontChooser extends YBoxPanel implements ActionListener {
         add(panel);
 
         // Initialises the current font.
-        font = selection == null ? createFont() : selection;
+        font = selection;
 
         // Creates the preview panel.
         panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
