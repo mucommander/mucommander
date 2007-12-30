@@ -220,18 +220,6 @@ public class CommandManager implements CommandBuilder {
         return false;
     }
 
-    private static boolean isCommandAssociated(String alias) {
-        Iterator iterator;
-
-        // Goes through all the command associations looking for command.
-        iterator = associations.iterator();
-        while(iterator.hasNext())
-            if(((CommandAssociation)iterator.next()).getCommand().getAlias().equals(alias))
-                return true;
-
-        return false;
-    }
-
     /**
      * Removes the specified command from the list of registered commands.
      * <p>
