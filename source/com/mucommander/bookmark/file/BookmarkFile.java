@@ -346,8 +346,8 @@ public class BookmarkFile extends AbstractFile {
                 e = e2;
 
             // If the cause is an IOException, thow it.
-            if(e2 instanceof IOException)
-                throw (IOException)e2;
+            if(e instanceof IOException)
+                throw (IOException)e;
 
             // Otherwise, throw the exception as an IOException with a the underlying cause's message.
             throw new IOException(e.getMessage());
