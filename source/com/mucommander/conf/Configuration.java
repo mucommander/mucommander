@@ -448,7 +448,7 @@ public class Configuration {
             throw new SourceConfigurationException("No configuration source has been set");
 
         // Writes the configuration data.
-        try {write(out = getSource().getOutputStream(), writer);}
+        try {write(out = source.getOutputStream(), writer);}
         finally {
             if(out != null) {
                 try {out.close();}
