@@ -101,7 +101,6 @@ public class CommandReader extends DefaultHandler implements CommandsXmlConstant
             String  command;
             int     type;
             String  display;
-            Command buffer;
 
             // Makes sure the required attributes are there.
             if(((alias = attributes.getValue(ATTRIBUTE_ALIAS)) == null) || ((command = attributes.getValue(ATTRIBUTE_VALUE)) == null))
@@ -111,7 +110,7 @@ public class CommandReader extends DefaultHandler implements CommandsXmlConstant
 
 
             // Creates the command and passes it to the builder.
-            try {builder.addCommand(buffer = new Command(alias, command, type, display));}
+            try {builder.addCommand(new Command(alias, command, type, display));}
             catch(CommandException e) {throw new SAXException(e);}
         }
     }
