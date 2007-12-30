@@ -60,7 +60,6 @@ class LocationBarPanel extends ThemeEditorPanel implements PropertyChangeListene
         JPanel                flowPanel;
         ProportionalGridPanel colorsPanel;
         PreviewLabel          label;
-        ColorButton           button;
 
         fontChooser = createFontChooser(ThemeData.LOCATION_BAR_FONT);
         addFontChooserListener(fontChooser, normalPreview);
@@ -78,7 +77,7 @@ class LocationBarPanel extends ThemeEditorPanel implements PropertyChangeListene
         addFontChooserListener(fontChooser, label);
         colorsPanel.add(createCaptionLabel("theme_editor.progress"));
         colorsPanel.add(new JLabel());
-        colorsPanel.add(button = new ColorButton(parent, themeData, ThemeData.LOCATION_BAR_PROGRESS_COLOR, PreviewLabel.OVERLAY_COLOR_PROPERTY_NAME, label));
+        colorsPanel.add(new ColorButton(parent, themeData, ThemeData.LOCATION_BAR_PROGRESS_COLOR, PreviewLabel.OVERLAY_COLOR_PROPERTY_NAME, label));
         label.addPropertyChangeListener(this);
 
         flowPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
