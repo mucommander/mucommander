@@ -68,7 +68,6 @@ public class FastLRUCache extends LRUCache {
      * Returns a String representation of this cache.
      */
     public String toString() {
-        int size = cacheMap.size();
         String s = super.toString()+" size="+cacheMap.size()+" capacity="+capacity+" eldestExpirationDate="+eldestExpirationDate+"\n";
 
         Iterator iterator = cacheMap.entrySet().iterator();
