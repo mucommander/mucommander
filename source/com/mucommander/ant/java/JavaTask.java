@@ -127,6 +127,13 @@ public class JavaTask extends Task {
 
     // - Misc. -----------------------------------------------------------
     // -------------------------------------------------------------------
+    private static void createDirectoryStructure(File root, String packageName) throws IOException {
+        if(packageName != null)
+            root = JavaWriter.getPathToPackage(root, packageName);
+        if(!root.isDirectory() && !root.mkdirs())
+            throw new IOException("Failed to create directory structure: " + root.getAbsolutePath());
+    }
+
     /**
      * Opens a java output stream on the requested file.
      * @return    a java output stream on the requested file.
@@ -150,10 +157,8 @@ public class JavaTask extends Task {
 
         // Makes sure the directory structure to the class exists
         packageName = JavaWriter.getPackageName(name);
-        root.mkdirs();
-        if(packageName != null)
-            JavaWriter.getPathToPackage(root, packageName).mkdirs();
-
+        createDirectoryStructure(root, packageName);
+            
         // Extracts the class name from the package
         className = JavaWriter.getClassName(name);
 
