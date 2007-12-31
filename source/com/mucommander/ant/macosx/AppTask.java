@@ -490,7 +490,8 @@ public class AppTask extends Task {
             process.waitFor();
             failed = process.exitValue() != 0;
         }
-        catch(Exception e) {failed = true;}
+        catch(IOException e) {failed = true;}
+        catch(InterruptedException e) {failed = true;}
 
         // Could not find chmod. Prints a helpful message, and tries to get on with the build.
         if(failed) {
