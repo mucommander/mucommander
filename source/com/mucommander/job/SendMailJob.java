@@ -175,7 +175,10 @@ public class SendMailJob extends TransferFileJob {
                 recipients.add(rec.substring(pos1+1, pos2));
             else
                 recipients.add(rec);
-            newRecipientsSb.append(rec+(st.hasMoreTokens()?", ":""));
+
+            newRecipientsSb.append(rec);
+            if(st.hasMoreTokens())
+                newRecipientsSb.append(", ");
         }
 		
         return newRecipientsSb.toString();

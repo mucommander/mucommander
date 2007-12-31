@@ -59,7 +59,9 @@ public class ConfigurationExplorerTest extends TestCase {
         conf   = new Configuration();
         for(int i = 0; i < DEPTH; i++) {
             conf.setVariable(buffer.toString() + VARIABLE_NAME + i, VARIABLE_VALUE + i);
-            buffer.append(SECTION_NAME + i + '.');
+            buffer.append(SECTION_NAME);
+            buffer.append(i);
+            buffer.append('.');
         }
     }
 
