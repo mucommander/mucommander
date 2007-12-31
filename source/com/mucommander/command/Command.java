@@ -203,7 +203,7 @@ public class Command {
      * @param  files file from which to retrieve keyword substitution values.
      * @return       the specified command's tokens after replacing keywords by the corresponding values from the specified fileset.
      */
-    public static String[] getTokens(String command, FileSet files) {return getTokens(command, (AbstractFile[])(files.toArray(new AbstractFile[0])));}
+    public static String[] getTokens(String command, FileSet files) {return getTokens(command, (AbstractFile[])(files.toArray(new AbstractFile[files.size()])));}
 
     /**
      * Returns the specified command's tokens after replacing keywords by the corresponding values from the specified files.
@@ -312,7 +312,7 @@ public class Command {
         if(tokens.size() == 0)
             return new String[] {""};
 
-        return (String[])tokens.toArray(new String[0]);
+        return (String[]) tokens.toArray(new String[tokens.size()]);
     }
 
     /**
