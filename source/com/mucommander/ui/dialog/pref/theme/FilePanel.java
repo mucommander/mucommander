@@ -39,7 +39,7 @@ class FilePanel extends ThemeEditorPanel {
      * @param parent   dialog containing the panel
      * @param isActive whether the color values should be taken from the <i>active</i> or <i>inactive</i> state.
      * @param data     theme to edit.
-     * @param chooser  File table font chooser.
+     * @param fontChooser  File table font chooser.
      */
     public FilePanel(PreferencesDialog parent, boolean isActive, ThemeData data, FontChooser fontChooser) {
         super(parent, Translator.get(isActive ? "theme_editor.active_panel" : "theme_editor.inactive_panel"), data);
@@ -64,7 +64,6 @@ class FilePanel extends ThemeEditorPanel {
 
     private void initUI(boolean isActive, FontChooser fontChooser) {
         JPanel           gridPanel;
-        PreviewLabel     label;
         ColorButton      backgroundButton;
         ColorButton      selectedBackgroundButton;
         ColorButton      borderButton;

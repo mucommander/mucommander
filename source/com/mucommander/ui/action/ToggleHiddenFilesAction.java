@@ -23,7 +23,6 @@ import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.WindowManager;
 
 import java.util.Hashtable;
-import java.util.Iterator;
 
 /**
  * A simple action that toggles hidden files visibility on and off.
@@ -44,9 +43,6 @@ public class ToggleHiddenFilesAction extends MuAction {
      * Toggles hidden files display on and off and requests for all file tables to be repainted.
      */
     public void performAction() {
-        Iterator  frames;
-        MainFrame frame;
-
         MuConfiguration.setVariable(MuConfiguration.SHOW_HIDDEN_FILES,
                                     !MuConfiguration.getVariable(MuConfiguration.SHOW_HIDDEN_FILES, MuConfiguration.DEFAULT_SHOW_HIDDEN_FILES));
         WindowManager.tryRefreshCurrentFolders();

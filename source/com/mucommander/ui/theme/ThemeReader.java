@@ -690,8 +690,7 @@ class ThemeReader extends DefaultHandler implements ThemeXmlConstants {
         String          buffer; // Buffer for attribute values.
         int             size;   // Font size.
         int             style;  // Font style.
-	StringTokenizer parser; // Used to parse the font family.
-	Font            font;   // Generated font.
+        StringTokenizer parser; // Used to parse the font family.
 
         // Computes the font style.
         style = 0;
@@ -704,28 +703,28 @@ class ThemeReader extends DefaultHandler implements ThemeXmlConstants {
         if((buffer = (String)attributes.getValue(ATTRIBUTE_SIZE)) == null) {
             if(Debug.ON) Debug.trace("Missing font size attribute in theme, ignoring.");
             return null;
-	}
-	size = Integer.parseInt(buffer);
+	    }
+        size = Integer.parseInt(buffer);
 
-        // Computes the font family.
-        if((buffer = (String)attributes.getValue(ATTRIBUTE_FAMILY)) == null) {
-            if(Debug.ON) Debug.trace("Missing font family attribute in theme, ignoring.");
+            // Computes the font family.
+            if((buffer = (String)attributes.getValue(ATTRIBUTE_FAMILY)) == null) {
+                if(Debug.ON) Debug.trace("Missing font family attribute in theme, ignoring.");
+                return null;
+        }
+
+        // Looks through the list of declared fonts to find one that is installed on the system.
+        parser = new StringTokenizer(buffer, ",");
+        while(parser.hasMoreTokens()) {
+            buffer = parser.nextToken().trim();
+
+            // Font was found, use it.
+            if(isFontAvailable(buffer))
+            return new Font(buffer, style, size);
+        }
+
+            // No font was found, instructs the ThemeManager to use the system default.
+        if(Debug.ON) Debug.trace("Requested font families are not installed on the system, using default.");
             return null;
-	}
-
-	// Looks through the list of declared fonts to find one that is installed on the system.
-	parser = new StringTokenizer(buffer, ",");
-	while(parser.hasMoreTokens()) {
-	    buffer = parser.nextToken().trim();
-
-	    // Font was found, use it.
-	    if(isFontAvailable(buffer))
-		return new Font(buffer, style, size);
-	}
-
-        // No font was found, instructs the ThemeManager to use the system default.
-	if(Debug.ON) Debug.trace("Requested font families are not installed on the system, using default.");
-        return null;
     }
 
     /**

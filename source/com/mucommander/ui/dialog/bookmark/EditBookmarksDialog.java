@@ -287,7 +287,7 @@ public class EditBookmarksDialog extends FocusDialog implements ActionListener, 
         }
 
 
-        String newName = null;
+        String newName;
         while(containsName(newName=(name+" ("+num+++")")));
 
         return newName;

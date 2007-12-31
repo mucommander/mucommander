@@ -215,7 +215,6 @@ public class AbstractFileClassLoader extends ClassLoader {
     private Class loadClass(String name, AbstractFile file) throws IOException {
         byte[]      buffer; // Buffer for the class' bytecode.
         int         offset; // Current offset in buffer.
-        int         read;   // Number of bytes read in the current loop.
         InputStream in;     // Stream on the class' bytecode.
 
         // Initialisation.
@@ -248,7 +247,6 @@ public class AbstractFileClassLoader extends ClassLoader {
      */
     protected synchronized Class findClass(String name) throws ClassNotFoundException {
         AbstractFile file; // File containing the class' bytecode.
-        Class        c;
 
         // Tries to locate the specified class and, if found, load it.
         if((file = findResourceAsFile(name.replace('.', '/') + ".class")) != null) {

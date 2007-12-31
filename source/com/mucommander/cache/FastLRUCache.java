@@ -104,7 +104,6 @@ public class FastLRUCache extends LRUCache {
         this.eldestExpirationDate = Long.MAX_VALUE;
         Long expirationDateL;
         long expirationDate;
-        Object value[];
         Iterator iterator = cacheMap.values().iterator();
         // Iterate on all cached values
         while(iterator.hasNext()) {

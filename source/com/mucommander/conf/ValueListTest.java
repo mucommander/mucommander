@@ -182,7 +182,6 @@ public class ValueListTest extends TestCase {
      */
     public void testListValues() {
         Vector    data;
-        ValueList values;
 
         data = new Vector();
         data.add(ValueList.toString(createIntegerData(), ";"));

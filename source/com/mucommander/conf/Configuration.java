@@ -485,7 +485,6 @@ public class Configuration {
     private synchronized void build(ConfigurationBuilder builder, ConfigurationSection root) throws ConfigurationException {
         Enumeration          enumeration; // Enumeration on the section's variables, then subsections.
         String               name;        // Name of the current variable, then section.
-        String               value;       // Value of the current variable.
         ConfigurationSection section;     // Current section.
 
         // Explores the section's variables.

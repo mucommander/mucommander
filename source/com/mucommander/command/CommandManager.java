@@ -334,7 +334,6 @@ public class CommandManager implements CommandBuilder {
      */
     public static void buildCommands(CommandBuilder builder) throws CommandException {
         Iterator           iterator; // Used to iterate through commands and associations.
-        CommandAssociation current;  // Current command association.
 
         builder.startBuilding();
 

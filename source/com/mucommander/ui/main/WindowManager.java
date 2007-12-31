@@ -193,7 +193,7 @@ public class WindowManager implements WindowListener, ConfigurationListener {
 
         // Tries the specified path as-is.
         AbstractFile file;
-        MappedCredentials newCredentials = null;
+        MappedCredentials newCredentials;
 
         while(true) {
             try {
