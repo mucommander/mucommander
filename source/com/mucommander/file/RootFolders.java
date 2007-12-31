@@ -95,8 +95,11 @@ public class RootFolders {
      * Parses /etc/fstab file and adds resolved folders to the given vector.
      */
     private static void addFstabEntries(Vector v) {
+        BufferedReader br;
+
+        br = null;
         try {
-            BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream("/etc/fstab")));
+            br = new BufferedReader(new InputStreamReader(new FileInputStream("/etc/fstab")));
             StringTokenizer st;
             String line;
             AbstractFile file;
@@ -119,7 +122,12 @@ public class RootFolders {
         catch(Exception e) {
             if(Debug.ON) Debug.trace("Error reading /etc/fstab entries: "+ e);
         }
-		
+        finally {
+            if(br != null) {
+                try {br.close();}
+                catch(IOException e) {}
+            }
+        }
     }
 	
 	
