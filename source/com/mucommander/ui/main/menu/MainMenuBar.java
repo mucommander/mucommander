@@ -123,6 +123,8 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
         fileMenu.add(new JSeparator());
         MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(OpenAction.class, mainFrame), menuItemMnemonicHelper);
         MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(OpenNativelyAction.class, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(OpenInOtherPanelAction.class, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(OpenInBothPanelsAction.class, mainFrame), menuItemMnemonicHelper);
         fileMenu.add(new OpenWithMenu(mainFrame));
         MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(RevealInDesktopAction.class, mainFrame), menuItemMnemonicHelper);
 
@@ -163,6 +165,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
         MenuToolkit.addMenuItem(markMenu, ActionManager.getActionInstance(UnmarkGroupAction.class, mainFrame), menuItemMnemonicHelper);
         MenuToolkit.addMenuItem(markMenu, ActionManager.getActionInstance(MarkAllAction.class, mainFrame), menuItemMnemonicHelper);
         MenuToolkit.addMenuItem(markMenu, ActionManager.getActionInstance(UnmarkAllAction.class, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(markMenu, ActionManager.getActionInstance(MarkExtensionAction.class, mainFrame), menuItemMnemonicHelper);
         MenuToolkit.addMenuItem(markMenu, ActionManager.getActionInstance(InvertSelectionAction.class, mainFrame), menuItemMnemonicHelper);
 
         markMenu.add(new JSeparator());
