@@ -541,8 +541,9 @@ public class HTTPFile extends AbstractFile {
                 prevToken = token==null?"":token.toLowerCase();
             }
 
-            Object childrenArray[] = new AbstractFile[children.size()];
-            return (AbstractFile[])children.toArray(childrenArray);
+            AbstractFile childrenArray[] = new AbstractFile[children.size()];
+            children.toArray(childrenArray);
+            return childrenArray;
         }
         catch (Exception e) {
             if (com.mucommander.Debug.ON) com.mucommander.Debug.trace("Exception caught while parsing HTML:"+e+", throwing IOException");
