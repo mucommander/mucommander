@@ -31,27 +31,27 @@ import java.text.NumberFormat;
 public class SizeFormat {
 
     /** Bit mask for short digits string, e.g. "15" */
-    public final static int DIGITS_SHORT = 0;	
+    public final static int DIGITS_SHORT = 1;
     /** Bit mask for medium digits string, e.g. "15,2" */
-    public final static int DIGITS_MEDIUM = 1;	
+    public final static int DIGITS_MEDIUM = 2;
     /** Bit mask for full digits string, e.g. "15,204,405" */
-    public final static int DIGITS_FULL = 2;
+    public final static int DIGITS_FULL = 4;
 
     /** Bit mask for no unit string */
     public final static int UNIT_NONE = 0;
     /** Bit mask for short unit string, e.g. "b" */
-    public final static int UNIT_SHORT = 4;
+    public final static int UNIT_SHORT = 8;
     /** Bit mask for short unit string, e.g. "bytes" */
-    public final static int UNIT_LONG = 8;
+    public final static int UNIT_LONG = 16;
 
     /** Bit mask to add '/s' (per second) to the returned String */
-    public final static int UNIT_SPEED = 16;
+    public final static int UNIT_SPEED = 32;
     
     /** Bit mask to include a space character between digits and unit parts */
-    public final static int INCLUDE_SPACE = 32;
+    public final static int INCLUDE_SPACE = 64;
 
     /** Bit mask to round any size < 1KB to 1KB (except 0 which will be 0 KB) */
-    public final static int ROUND_TO_KB = 64;
+    public final static int ROUND_TO_KB = 128;
 
     private final static int KB_1 = 1024;
     private final static int KB_10 = 10240;
