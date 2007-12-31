@@ -109,12 +109,7 @@ public class XmlWriter {
      * @param  stream      where to write XML output to.
      * @throws IOException if an I/O error occurs.
      */
-    public XmlWriter(OutputStream stream) throws IOException {
-        try {init(new OutputStreamWriter(stream, DEFAULT_ENCODING), DEFAULT_ENCODING);}
-        // UTF-8 is guaranteed to be supported by the Java specifications,
-        // we can safely ignore this exception.
-        catch(UnsupportedEncodingException e) {}
-    }
+    public XmlWriter(OutputStream stream) throws IOException {init(new OutputStreamWriter(stream, DEFAULT_ENCODING), DEFAULT_ENCODING);}
 
     /**
      * Creates an <code>XmlWriter</code> that will write to the specified stream using the specified encoding.
