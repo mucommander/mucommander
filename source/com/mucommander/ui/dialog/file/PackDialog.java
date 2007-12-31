@@ -195,7 +195,7 @@ public class PackDialog extends JobDialog implements ActionListener, ItemListene
 
             // TODO: move those I/O bound calls to job as they can lock the main thread
             // TODO: destFile could potentially be null !
-            AbstractFile destFile = FileFactory.getFile(((AbstractFile)dest[0]).getAbsolutePath(true)+(String)dest[1]);
+            AbstractFile destFile = FileFactory.getFile(((AbstractFile)dest[0]).getAbsolutePath(true)+dest[1]);
 
             // Start packing
             ProgressDialog progressDialog = new ProgressDialog(mainFrame, Translator.get("pack_dialog.packing"));

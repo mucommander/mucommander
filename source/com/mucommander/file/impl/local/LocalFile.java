@@ -527,7 +527,7 @@ public class LocalFile extends AbstractFile {
 
 
     public AbstractFile[] ls() throws IOException {
-        return ls((FilenameFilter)null);
+        return ls(null);
     }
 
     public void mkdir() throws IOException {

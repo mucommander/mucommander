@@ -694,20 +694,20 @@ class ThemeReader extends DefaultHandler implements ThemeXmlConstants {
 
         // Computes the font style.
         style = 0;
-        if(((buffer = (String)attributes.getValue(ATTRIBUTE_BOLD)) != null) && buffer.equals(VALUE_TRUE))
+        if(((buffer = attributes.getValue(ATTRIBUTE_BOLD)) != null) && buffer.equals(VALUE_TRUE))
             style |= Font.BOLD;
-        if(((buffer = (String)attributes.getValue(ATTRIBUTE_ITALIC)) != null) && buffer.equals(VALUE_TRUE))
+        if(((buffer = attributes.getValue(ATTRIBUTE_ITALIC)) != null) && buffer.equals(VALUE_TRUE))
             style |= Font.ITALIC;
 
         // Computes the font size.
-        if((buffer = (String)attributes.getValue(ATTRIBUTE_SIZE)) == null) {
+        if((buffer = attributes.getValue(ATTRIBUTE_SIZE)) == null) {
             if(Debug.ON) Debug.trace("Missing font size attribute in theme, ignoring.");
             return null;
 	    }
         size = Integer.parseInt(buffer);
 
             // Computes the font family.
-            if((buffer = (String)attributes.getValue(ATTRIBUTE_FAMILY)) == null) {
+            if((buffer = attributes.getValue(ATTRIBUTE_FAMILY)) == null) {
                 if(Debug.ON) Debug.trace("Missing font family attribute in theme, ignoring.");
                 return null;
         }
@@ -737,14 +737,14 @@ class ThemeReader extends DefaultHandler implements ThemeXmlConstants {
         int    color;
 
         // Retrieves the color attribute's value.
-        if((buffer = (String)attributes.getValue(ATTRIBUTE_COLOR)) == null) {
+        if((buffer = attributes.getValue(ATTRIBUTE_COLOR)) == null) {
             if(Debug.ON) Debug.trace("Missing color attribute in theme, ignoring.");
             return null;
         }
         color = Integer.parseInt(buffer, 16);
 
         // Retrieves the transparency attribute's value..
-        if((buffer = (String)attributes.getValue(ATTRIBUTE_ALPHA)) == null)
+        if((buffer = attributes.getValue(ATTRIBUTE_ALPHA)) == null)
             return new Color(color);
         return new Color(color | (Integer.parseInt(buffer, 16) << 24), true);
     }

@@ -1011,7 +1011,7 @@ public class Configuration {
         parser = new StringTokenizer(name, ".");
         while(parser.hasMoreTokens()) {
             // If we've reached the variable's name, return it.
-            name = (String)parser.nextToken();
+            name = parser.nextToken();
             if(!parser.hasMoreTokens())
                 return name;
 
@@ -1123,7 +1123,7 @@ public class Configuration {
             if(sectionNames.empty())
                 sectionNames.push(name + '.');
             else
-                sectionNames.push(((String)sectionNames.peek()) + name + '.');
+                sectionNames.push(sectionNames.peek() + name + '.');
             currentSection = buffer;
         }
 
@@ -1159,7 +1159,7 @@ public class Configuration {
                 if(sectionNames.empty())
                     triggerEvent(new ConfigurationEvent(Configuration.this, name, value));
                 else
-                    triggerEvent(new ConfigurationEvent(Configuration.this, ((String)sectionNames.peek()) + name, value));
+                    triggerEvent(new ConfigurationEvent(Configuration.this, sectionNames.peek() + name, value));
             }
         }
     }

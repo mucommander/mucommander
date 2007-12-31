@@ -45,7 +45,7 @@ public class DurationFormat {
         if(durationMs/1000>Integer.MAX_VALUE)
             return INFINITE;
 
-        int remainderSec = (int)Math.round(((float)durationMs)/1000);
+        int remainderSec = Math.round(((float)durationMs)/1000);
         String s = "";
 
         String keys[] = new String[]{YEARS_KEY, MONTHS_KEY, DAYS_KEY, HOURS_KEY, MINUTES_KEY};

@@ -220,7 +220,7 @@ public class BookmarkFile extends AbstractFile {
             throw new FileTransferException(FileTransferException.OPENING_DESTINATION);
 
         // Creates the new bookmark and checks for conflicts.
-        newBookmark = new Bookmark(((BookmarkFile)destination).getName(), bookmark.getLocation());
+        newBookmark = new Bookmark(destination.getName(), bookmark.getLocation());
         if((oldBookmark = BookmarkManager.getBookmark(newBookmark.getName())) != null)
             BookmarkManager.removeBookmark(oldBookmark);
 
@@ -267,7 +267,7 @@ public class BookmarkFile extends AbstractFile {
             throw new FileTransferException(FileTransferException.OPENING_DESTINATION);
 
         // Copies this bookmark to the specified destination.
-        BookmarkManager.addBookmark(new Bookmark(((BookmarkFile)destination).getName(), bookmark.getLocation()));
+        BookmarkManager.addBookmark(new Bookmark(destination.getName(), bookmark.getLocation()));
 
         return true;
     }
