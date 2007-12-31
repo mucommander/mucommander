@@ -911,7 +911,7 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
 
                 // If it was exported to the custom themes folder, reload the theme combobox to reflect the
                 // changes.
-                if(file.getParentFile().equals(ThemeManager.getCustomThemesFolder()))
+                if(FileFactory.getFile(file.getParentFile().getAbsolutePath()).equals(ThemeManager.getCustomThemesFolder()))
                     populateThemes(theme);
             }
 
