@@ -101,7 +101,7 @@ class CocoaFileIconProviderImpl extends LocalFileIconProvider implements Cacheab
         for(int i = 0; i<repr.count(); i++) {
             NSImageRep imRep = (NSImageRep)repr.objectAtIndex(i);
             if((imRep instanceof NSBitmapImageRep) && (dim=imRep.pixelsWide())<=nearestDim && dim>nearestAvailableDim) {
-`                bmRep = (NSBitmapImageRep)imRep;
+                bmRep = (NSBitmapImageRep)imRep;
                 break;
             }
         }
