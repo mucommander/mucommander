@@ -3077,6 +3077,27 @@ com.mucommander.ui.action.MarkUpToLastRowAction.label:SK:Označiť súbory do ko
 com.mucommander.ui.action.MarkUpToLastRowAction.label:HU:Fájlok kijelölése a végéhez
 com.mucommander.ui.action.MarkUpToLastRowAction.label:JA:終わりまでのファイルをマーク
 
+com.mucommander.ui.action.MarkExtensionAction.label:EN:Mark extension
+com.mucommander.ui.action.MarkExtensionAction.label:FR:Marquer l'extension
+# Translation missing (New!)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 com.mucommander.ui.action.InvertSelectionAction.label:EN:Invert selection
 com.mucommander.ui.action.InvertSelectionAction.label:FR:Inverser sélection
 com.mucommander.ui.action.InvertSelectionAction.label:DE:Auswahl umkehren
@@ -3286,6 +3307,42 @@ com.mucommander.ui.action.OpenNativelyAction.tooltip:pt_BR:Executar o arquivo co
 com.mucommander.ui.action.OpenNativelyAction.tooltip:NL:Uitvoeren met systeem-geassocieerd programma
 com.mucommander.ui.action.OpenNativelyAction.tooltip:SK:Otvoriť vybraný súbor s asociovanou aplikáciou
 com.mucommander.ui.action.OpenNativelyAction.tooltip:JA:システムのファイルの関連付けで選択されたファイルを実行します
+
+com.mucommander.ui.action.OpenInOtherPanelAction.label:EN:Open in other panel
+com.mucommander.ui.action.OpenInOtherPanelAction.label:FR:Ouvrir dans l'autre panneau
+# Translation missing (New!)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+com.mucommander.ui.action.OpenInBothPanelsAction.label:EN:Open in both panels
+com.mucommander.ui.action.OpenInBothPanelsAction.label:FR:Ouvrir dans les deux panneaux
+# Translation missing (New!)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 # This action is used to show a selected file in the system's default file manager, %1 is the name of the system's 
 # file manager (Finder, Explorer...)
@@ -4153,6 +4210,8 @@ com.mucommander.ui.action.CalculateChecksumAction.label:EN:Calculate checksum
 com.mucommander.ui.action.CalculateChecksumAction.label:FR:Calculer la checksum
 com.mucommander.ui.action.CalculateChecksumAction.label:NL:Checksum berekenen
 # Translation missing (New!)
+
+
 
 
 
