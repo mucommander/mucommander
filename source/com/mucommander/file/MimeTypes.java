@@ -38,8 +38,11 @@ public class MimeTypes extends Hashtable {
     
 	
     private MimeTypes() {
+        BufferedReader br;
+
+        br = null;
         try {
-            BufferedReader br = new BufferedReader(new InputStreamReader(ResourceLoader.getResourceAsStream("/mime.types")));
+            br = new BufferedReader(new InputStreamReader(ResourceLoader.getResourceAsStream("/mime.types")));
 
             String line;
             StringTokenizer st;
@@ -59,6 +62,16 @@ public class MimeTypes extends Hashtable {
             }
         }
         catch(IOException e) {}
+        // Makes sure the stream is closed.
+        // This might not be strictly necessary as streams on internal resources are a bit of an unknown,
+        // but since the ClassLoader.getResourceAsStream documentation doesn't explicitly say that such
+        // streams do not need closing, it's safer to assume they do.
+        finally {
+            if(br != null) {
+                try {br.close();}
+                catch(IOException e) {}
+            }
+        }
     }
 
 	
