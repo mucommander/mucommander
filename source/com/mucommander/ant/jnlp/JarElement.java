@@ -26,7 +26,6 @@ public class JarElement extends Downloadable {
     private String href;
     private String version;
     private boolean main;
-    private int     download;
     private int     size;
     private String  part;
 
