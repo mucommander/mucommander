@@ -208,7 +208,7 @@ public class Translator {
      * @return an array of language codes.
      */
     public static String[] getAvailableLanguages() {
-        return (String[])availableLanguages.toArray(new String[]{});
+        return (String[])availableLanguages.toArray(new String[availableLanguages.size()]);
     }
 
 
