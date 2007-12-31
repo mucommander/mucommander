@@ -18,8 +18,8 @@
 
 package com.mucommander.process;
 
-import java.util.Vector;
 import java.util.Iterator;
+import java.util.Vector;
 
 /**
  * Convenience class used to have more than one listener on any given process.

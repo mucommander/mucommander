@@ -20,7 +20,6 @@ package com.mucommander.ui.action;
 
 import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.ui.main.MainFrame;
-import com.mucommander.ui.main.table.FileTable;
 
 import java.util.Hashtable;
 

@@ -25,10 +25,10 @@ import com.mucommander.auth.MappedCredentials;
 import com.mucommander.conf.ConfigurationEvent;
 import com.mucommander.conf.ConfigurationListener;
 import com.mucommander.conf.impl.MuConfiguration;
+import com.mucommander.extension.ExtensionManager;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
 import com.mucommander.ui.dialog.auth.AuthDialog;
-import com.mucommander.extension.ExtensionManager;
 
 import javax.swing.*;
 import java.awt.*;

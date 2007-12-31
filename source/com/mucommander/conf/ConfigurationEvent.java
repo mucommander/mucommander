@@ -18,8 +18,6 @@
 
 package com.mucommander.conf;
 
-import java.awt.*;
-
 /**
  * An event which indicates that configuration has been modified.
  * <p>

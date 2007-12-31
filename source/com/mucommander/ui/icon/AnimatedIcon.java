@@ -18,20 +18,14 @@
 
 package com.mucommander.ui.icon;
 
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.geom.AffineTransform;
 import java.lang.ref.WeakReference;
 import java.util.HashSet;
 import java.util.Iterator;
-import javax.swing.Timer;
-import javax.swing.Icon;
-import javax.swing.SwingUtilities;
-import javax.swing.CellRendererPane;
-import java.awt.Component;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Point;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import java.awt.geom.AffineTransform;
 
 /**
  * <code>javax.swing.Icon</code> implementation that manages animation.

@@ -21,17 +21,17 @@ package com.mucommander.ui.dialog.pref.theme;
 import com.mucommander.RuntimeConstants;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.chooser.FontChooser;
-import com.mucommander.ui.dialog.pref.PreferencesDialog;
-import com.mucommander.ui.layout.YBoxPanel;
-import com.mucommander.ui.layout.ProportionalGridPanel;
-import com.mucommander.ui.theme.ThemeData;
 import com.mucommander.ui.chooser.PreviewLabel;
+import com.mucommander.ui.dialog.pref.PreferencesDialog;
+import com.mucommander.ui.layout.ProportionalGridPanel;
+import com.mucommander.ui.layout.YBoxPanel;
+import com.mucommander.ui.theme.ThemeData;
 
-import java.io.InputStreamReader;
 import javax.swing.*;
 import java.awt.*;
-import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.io.InputStreamReader;
 
 /**
  * @author Nicolas Rinaudo, Maxence Bernard

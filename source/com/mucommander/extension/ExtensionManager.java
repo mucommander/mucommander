@@ -22,16 +22,10 @@ import com.mucommander.PlatformManager;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.AbstractFileClassLoader;
 import com.mucommander.file.FileFactory;
-import com.mucommander.file.filter.OrFileFilter;
 import com.mucommander.file.filter.ExtensionFilenameFilter;
 
-import java.io.IOException;
 import java.io.File;
-import java.net.URLClassLoader;
-import java.net.URL;
-import java.net.MalformedURLException;
-import java.lang.reflect.Method;
-import java.lang.reflect.InvocationTargetException;
+import java.io.IOException;
 import java.util.StringTokenizer;
 
 /**

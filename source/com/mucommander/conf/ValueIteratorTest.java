@@ -18,10 +18,6 @@
 
 package com.mucommander.conf;
 
-import junit.framework.TestCase;
-
-import java.util.Vector;
-
 /**
  * Test case for the {@link ValueIterator} class.
  * @author Nicolas Rinaudo

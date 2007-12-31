@@ -18,9 +18,9 @@
 
 package com.mucommander.conf;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.IOException;
 
 /**
  * Provides instances of {@link Configuration} with streams to configuration data.

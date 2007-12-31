@@ -21,7 +21,9 @@ package com.mucommander.io;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
 
-import java.io.*;
+import java.io.File;
+import java.io.FilterOutputStream;
+import java.io.IOException;
 
 /**
  * Saves file in as crash-safe a manner as possible.

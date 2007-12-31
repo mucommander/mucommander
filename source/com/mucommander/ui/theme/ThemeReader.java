@@ -19,17 +19,13 @@
 package com.mucommander.ui.theme;
 
 import com.mucommander.Debug;
-
-import org.xml.sax.helpers.DefaultHandler;
-import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
-import org.xml.sax.Locator;
 import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.DefaultHandler;
+
 import javax.xml.parsers.SAXParserFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import java.awt.*;
 import java.io.InputStream;
-import java.util.Hashtable;
 import java.util.StringTokenizer;
 
 /**

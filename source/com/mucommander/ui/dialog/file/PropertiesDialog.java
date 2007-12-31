@@ -25,10 +25,10 @@ import com.mucommander.text.SizeFormat;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.DialogToolkit;
 import com.mucommander.ui.dialog.FocusDialog;
+import com.mucommander.ui.icon.SpinningDial;
 import com.mucommander.ui.layout.XAlignedComponentPanel;
 import com.mucommander.ui.layout.YBoxPanel;
 import com.mucommander.ui.main.MainFrame;
-import com.mucommander.ui.icon.SpinningDial;
 
 import javax.swing.*;
 import java.awt.*;

@@ -19,20 +19,21 @@
 package com.mucommander.ui.dialog.pref.theme;
 
 import com.mucommander.text.Translator;
-import com.mucommander.ui.theme.*;
-import com.mucommander.ui.main.table.CellLabel;
-import com.mucommander.ui.chooser.PreviewLabel;
 import com.mucommander.ui.border.MutableLineBorder;
+import com.mucommander.ui.chooser.PreviewLabel;
 import com.mucommander.ui.icon.CustomFileIconProvider;
 import com.mucommander.ui.icon.FileIcons;
 import com.mucommander.ui.icon.IconManager;
+import com.mucommander.ui.main.table.CellLabel;
+import com.mucommander.ui.theme.Theme;
+import com.mucommander.ui.theme.ThemeData;
 
 import javax.swing.*;
-import javax.swing.table.*;
-import java.awt.*;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
-import java.beans.PropertyChangeListener;
+import java.awt.*;
 import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 /**
  * @author Nicolas Rinaudo

@@ -20,7 +20,9 @@ package com.mucommander.ui.dialog.pref.general;
 
 import com.mucommander.PlatformManager;
 import com.mucommander.conf.impl.MuConfiguration;
-import com.mucommander.conf.ValueList;
+import com.mucommander.extension.ClassFinder;
+import com.mucommander.extension.ExtensionManager;
+import com.mucommander.extension.LookAndFeelFilter;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
 import com.mucommander.text.Translator;
@@ -33,12 +35,9 @@ import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.icon.SpinningDial;
 import com.mucommander.ui.layout.ProportionalGridPanel;
 import com.mucommander.ui.layout.YBoxPanel;
+import com.mucommander.ui.main.WindowManager;
 import com.mucommander.ui.theme.Theme;
 import com.mucommander.ui.theme.ThemeManager;
-import com.mucommander.ui.main.WindowManager;
-import com.mucommander.extension.ClassFinder;
-import com.mucommander.extension.ExtensionManager;
-import com.mucommander.extension.LookAndFeelFilter;
 
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicComboBoxRenderer;
@@ -47,10 +46,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.util.Iterator;
-import java.util.Vector;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.Iterator;
+import java.util.Vector;
 
 /**
  * 'Appearance' preferences panel.

@@ -18,8 +18,8 @@
 
 package com.mucommander.file.impl.trash;
 
-import com.mucommander.file.TrashProvider;
 import com.mucommander.file.AbstractTrash;
+import com.mucommander.file.TrashProvider;
 
 public class OSXTrashProvider implements TrashProvider {
     public AbstractTrash getTrash() {return new OSXTrash();}

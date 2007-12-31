@@ -21,8 +21,8 @@ package com.mucommander.command;
 import com.mucommander.xml.XmlAttributes;
 import com.mucommander.xml.XmlWriter;
 
-import java.io.OutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 
 /**
  * Class used to write custom associations XML files.

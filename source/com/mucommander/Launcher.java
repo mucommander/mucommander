@@ -19,6 +19,7 @@
 package com.mucommander;
 
 import com.mucommander.conf.impl.MuConfiguration;
+import com.mucommander.extension.ExtensionManager;
 import com.mucommander.shell.ShellHistoryManager;
 import com.mucommander.ui.dialog.startup.CheckVersionDialog;
 import com.mucommander.ui.dialog.startup.InitialSetupDialog;
@@ -26,7 +27,6 @@ import com.mucommander.ui.main.CommandBar;
 import com.mucommander.ui.main.SplashScreen;
 import com.mucommander.ui.main.ToolBar;
 import com.mucommander.ui.main.WindowManager;
-import com.mucommander.extension.ExtensionManager;
 
 import java.lang.reflect.Constructor;
 

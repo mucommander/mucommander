@@ -20,8 +20,9 @@ package com.mucommander.ant.util;
 
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
-import java.util.StringTokenizer;
+
 import java.io.File;
+import java.util.StringTokenizer;
 
 /**
  * Ant task meant to extract the rt.jar file from a path.

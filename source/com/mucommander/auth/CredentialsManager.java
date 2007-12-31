@@ -20,9 +20,9 @@ package com.mucommander.auth;
 
 import com.mucommander.Debug;
 import com.mucommander.PlatformManager;
-import com.mucommander.file.FileURL;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
+import com.mucommander.file.FileURL;
 import com.mucommander.io.BackupOutputStream;
 import com.mucommander.util.AlteredVector;
 import com.mucommander.util.VectorChangeListener;

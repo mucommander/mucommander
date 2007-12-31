@@ -20,11 +20,10 @@ package com.mucommander.conf;
 
 import junit.framework.TestCase;
 
-import java.util.Hashtable;
-import java.util.Stack;
-import java.util.Vector;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Stack;
+import java.util.Vector;
 
 /**
  * A test case for the {@link Configuration} class.

@@ -18,10 +18,9 @@
 
 package com.mucommander.shell;
 
-import com.mucommander.Debug;
-import com.mucommander.process.ProcessListener;
-import com.mucommander.io.EncodingDetector;
 import com.mucommander.conf.impl.MuConfiguration;
+import com.mucommander.io.EncodingDetector;
+import com.mucommander.process.ProcessListener;
 
 import java.io.ByteArrayOutputStream;
 import java.nio.charset.Charset;

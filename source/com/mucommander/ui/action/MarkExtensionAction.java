@@ -18,12 +18,12 @@
 
 package com.mucommander.ui.action;
 
+import com.mucommander.file.AbstractFile;
+import com.mucommander.file.filter.ExtensionFilenameFilter;
+import com.mucommander.file.filter.FilenameFilter;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.table.FileTable;
 import com.mucommander.ui.main.table.FileTableModel;
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.filter.FilenameFilter;
-import com.mucommander.file.filter.ExtensionFilenameFilter;
 
 import java.util.Hashtable;
 

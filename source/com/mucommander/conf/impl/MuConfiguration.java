@@ -27,8 +27,8 @@ import com.mucommander.conf.ValueList;
 import com.mucommander.ui.icon.FileIcons;
 import com.mucommander.ui.main.table.Columns;
 
-import java.io.IOException;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.List;
 
 /**

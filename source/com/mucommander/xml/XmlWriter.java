@@ -18,15 +18,7 @@
 
 package com.mucommander.xml;
 
-import java.io.Writer;
-import java.io.File;
-import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
-import java.io.OutputStream;
-import java.io.IOException;
-import java.io.FileOutputStream;
-import java.io.OutputStreamWriter;
-import java.io.FileNotFoundException;
+import java.io.*;
 import java.util.Iterator;
 
 /**

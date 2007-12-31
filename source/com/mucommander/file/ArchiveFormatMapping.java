@@ -20,9 +20,6 @@ package com.mucommander.file;
 
 import com.mucommander.file.filter.FilenameFilter;
 
-import java.beans.IntrospectionException;
-import java.lang.reflect.Constructor;
-
 /**
  * ArchiveFormatMapping maps a {@link FilenameFilter} characterizing the archive format onto an {@link AbstractArchiveFile}
  * class. This class can be used with {@link FileFactory} to register and unregister archive file formats at runtime.

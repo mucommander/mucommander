@@ -18,10 +18,10 @@
 
 package com.mucommander.conf;
 
-import java.util.Vector;
 import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
+import java.util.Vector;
 
 /**
  * Provides support for variables whose value is a list of tokens.

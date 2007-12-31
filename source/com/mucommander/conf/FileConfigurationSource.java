@@ -18,12 +18,7 @@
 
 package com.mucommander.conf;
 
-import java.io.File;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 
 /**
  * Configuration source that open input and output streams on a local file.

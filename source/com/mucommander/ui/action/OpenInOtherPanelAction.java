@@ -18,15 +18,8 @@
 
 package com.mucommander.ui.action;
 
-import com.mucommander.PlatformManager;
 import com.mucommander.file.AbstractFile;
-import com.mucommander.file.FileProtocols;
-import com.mucommander.file.impl.local.LocalFile;
-import com.mucommander.job.TempExecJob;
-import com.mucommander.text.Translator;
-import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;
-import com.mucommander.ui.main.table.FileTable;
 
 import java.util.Hashtable;
 

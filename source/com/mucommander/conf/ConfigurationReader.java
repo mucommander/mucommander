@@ -18,8 +18,8 @@
 
 package com.mucommander.conf;
 
-import java.io.InputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * Interface for reading from a configuration source using callbacks.

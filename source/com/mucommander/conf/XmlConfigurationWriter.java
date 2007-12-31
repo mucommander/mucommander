@@ -20,8 +20,8 @@ package com.mucommander.conf;
 
 import com.mucommander.xml.XmlWriter;
 
-import java.io.OutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 
 /**
  * Implementation of {@link ConfigurationWriter} used to write XML configuration streams.

@@ -18,7 +18,6 @@
 
 package com.mucommander.file.impl.zip;
 
-import com.mucommander.file.FileURL;
 import com.mucommander.file.AbstractArchiveFile;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.ArchiveFormatProvider;

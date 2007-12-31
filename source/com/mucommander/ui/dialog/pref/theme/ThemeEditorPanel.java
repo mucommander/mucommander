@@ -24,9 +24,7 @@ import com.mucommander.ui.chooser.PreviewLabel;
 import com.mucommander.ui.dialog.pref.PreferencesDialog;
 import com.mucommander.ui.dialog.pref.PreferencesPanel;
 import com.mucommander.ui.layout.ProportionalGridPanel;
-import com.mucommander.ui.layout.YBoxPanel;
 import com.mucommander.ui.theme.ThemeData;
-import java.beans.PropertyChangeListener;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;

@@ -18,8 +18,6 @@
 
 package com.mucommander.file.filter;
 
-import com.mucommander.file.AbstractFile;
-
 import junit.framework.TestCase;
 
 /**

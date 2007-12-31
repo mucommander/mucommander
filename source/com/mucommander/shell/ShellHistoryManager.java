@@ -21,10 +21,10 @@ package com.mucommander.shell;
 import com.mucommander.Debug;
 import com.mucommander.PlatformManager;
 import com.mucommander.conf.impl.MuConfiguration;
-import com.mucommander.io.BackupInputStream;
-import com.mucommander.io.BackupOutputStream;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
+import com.mucommander.io.BackupInputStream;
+import com.mucommander.io.BackupOutputStream;
 
 import java.io.File;
 import java.io.FileNotFoundException;

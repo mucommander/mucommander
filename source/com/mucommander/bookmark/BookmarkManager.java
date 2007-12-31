@@ -20,18 +20,14 @@ package com.mucommander.bookmark;
 
 import com.mucommander.Debug;
 import com.mucommander.PlatformManager;
-import com.mucommander.io.BackupOutputStream;
-import com.mucommander.io.BackupInputStream;
-import com.mucommander.util.AlteredVector;
-import com.mucommander.util.VectorChangeListener;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
+import com.mucommander.io.BackupInputStream;
+import com.mucommander.io.BackupOutputStream;
+import com.mucommander.util.AlteredVector;
+import com.mucommander.util.VectorChangeListener;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.OutputStream;
-import java.io.InputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.Iterator;
 import java.util.WeakHashMap;
 

@@ -18,12 +18,12 @@
 
 package com.mucommander.file;
 
-import java.util.Vector;
-import java.util.Iterator;
-import java.util.Enumeration;
-import java.io.InputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
+import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.Vector;
 
 /**
  * <code>ClassLoader</code> implementation capable of loading classes from instances of {@link AbstractFile}.

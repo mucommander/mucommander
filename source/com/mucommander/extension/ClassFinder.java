@@ -20,12 +20,12 @@ package com.mucommander.extension;
 
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.AbstractFileClassLoader;
+import com.mucommander.file.filter.AttributeFileFilter;
 import com.mucommander.file.filter.ExtensionFilenameFilter;
 import com.mucommander.file.filter.OrFileFilter;
-import com.mucommander.file.filter.AttributeFileFilter;
 
-import java.util.Vector;
 import java.io.IOException;
+import java.util.Vector;
 
 /**
  * Finds specific classes within a browsable file.

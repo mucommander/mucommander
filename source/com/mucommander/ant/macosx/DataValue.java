@@ -19,9 +19,9 @@
 package com.mucommander.ant.macosx;
 
 import com.mucommander.xml.XmlWriter;
+import org.apache.tools.ant.BuildException;
 
 import java.io.IOException;
-import org.apache.tools.ant.BuildException;
 
 class DataValue implements InfoElement {
     private static final String DATA_ELEMENT = "data";

@@ -21,7 +21,9 @@ package com.mucommander.process;
 
 import com.mucommander.Debug;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 /**
  * muCommander specific version of a process.

@@ -19,7 +19,7 @@
 package com.mucommander.ui.border;
 
 import javax.swing.border.LineBorder;
-import java.awt.Color;
+import java.awt.*;
 
 /**
  * Implementation of <code>LineBorder</code> that allows applications to change the color after it's been instanciated.

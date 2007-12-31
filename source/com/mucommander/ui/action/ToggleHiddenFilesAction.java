@@ -19,12 +19,8 @@
 package com.mucommander.ui.action;
 
 import com.mucommander.conf.impl.MuConfiguration;
-import com.mucommander.conf.ConfigurationListener;
-import com.mucommander.conf.ConfigurationEvent;
-import com.mucommander.text.Translator;
-import com.mucommander.ui.main.CommandBar;
-import com.mucommander.ui.main.WindowManager;
 import com.mucommander.ui.main.MainFrame;
+import com.mucommander.ui.main.WindowManager;
 
 import java.util.Hashtable;
 import java.util.Iterator;

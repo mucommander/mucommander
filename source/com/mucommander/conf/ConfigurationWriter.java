@@ -19,7 +19,6 @@
 package com.mucommander.conf;
 
 import java.io.OutputStream;
-import java.io.IOException;
 
 /**
  * Interface for writing to a configuration source using callbacks.

@@ -19,9 +19,6 @@
 package com.mucommander.ui.action;
 
 import com.mucommander.file.AbstractFile;
-import com.mucommander.ui.event.ActivePanelListener;
-import com.mucommander.ui.event.LocationEvent;
-import com.mucommander.ui.event.LocationListener;
 import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.main.MainFrame;
 

@@ -19,8 +19,8 @@
 package com.mucommander.ant.macosx;
 
 import com.mucommander.xml.XmlWriter;
-
 import org.apache.tools.ant.BuildException;
+
 import java.io.IOException;
 
 /**

@@ -25,12 +25,12 @@ import com.mucommander.shell.ShellHistoryManager;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.DialogToolkit;
 import com.mucommander.ui.dialog.FocusDialog;
+import com.mucommander.ui.icon.SpinningDial;
 import com.mucommander.ui.layout.XBoxPanel;
 import com.mucommander.ui.layout.YBoxPanel;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.theme.Theme;
 import com.mucommander.ui.theme.ThemeManager;
-import com.mucommander.ui.icon.SpinningDial;
 
 import javax.swing.*;
 import java.awt.*;

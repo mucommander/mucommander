@@ -18,19 +18,16 @@
 
 package com.mucommander.xml;
 
-import javax.xml.parsers.DocumentBuilder; 
-import javax.xml.parsers.DocumentBuilderFactory;  
-import javax.xml.parsers.FactoryConfigurationError;  
-import javax.xml.parsers.ParserConfigurationException;
-import org.xml.sax.SAXException;  
-import org.xml.sax.SAXParseException;
+import junit.framework.TestCase;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
-import org.w3c.dom.DOMException;
-import junit.framework.TestCase;
-import java.io.ByteArrayOutputStream;
+import org.xml.sax.SAXException;
+
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 /**

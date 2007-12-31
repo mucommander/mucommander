@@ -18,9 +18,7 @@
 
 package com.mucommander.ui.action;
 
-import com.mucommander.file.AbstractFile;
 import com.mucommander.ui.event.LocationEvent;
-import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.main.MainFrame;
 
 import java.util.Hashtable;
