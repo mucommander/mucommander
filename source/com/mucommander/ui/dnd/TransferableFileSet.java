@@ -188,25 +188,36 @@ public class TransferableFileSet implements Transferable {
             }
             // Text plain DataFlavor: assume that lines designate file paths
             else if(transferable.isDataFlavorSupported(DataFlavor.stringFlavor)) {
-                BufferedReader br = new BufferedReader(DataFlavor.getTextPlainUnicodeFlavor().getReaderForText(transferable));
+                BufferedReader br;
 
-                // Read input line by line and try to create AbstractFile instances
-                String path;
-                files = new FileSet();
-                while((path=br.readLine())!=null) {
-                    // Try to create an AbstractFile instance, returned instance may be null
-                    file = FileFactory.getFile(path);
+                br = null;
+                try {
+                    br = new BufferedReader(DataFlavor.getTextPlainUnicodeFlavor().getReaderForText(transferable));
 
-                    // Safety precaution: if at least one line doesn't resolve as a file, stop reading
-                    // and return null. This is to avoid any nasty effect that could arise if a random
-                    // piece of text (let's say an email contents) was inadvertently pasted or dropped to muCommander.
-                    if(file==null)
-                        return null;
+                    // Read input line by line and try to create AbstractFile instances
+                    String path;
+                    files = new FileSet();
+                    while((path=br.readLine())!=null) {
+                        // Try to create an AbstractFile instance, returned instance may be null
+                        file = FileFactory.getFile(path);
 
-                    files.add(file);
+                        // Safety precaution: if at least one line doesn't resolve as a file, stop reading
+                        // and return null. This is to avoid any nasty effect that could arise if a random
+                        // piece of text (let's say an email contents) was inadvertently pasted or dropped to muCommander.
+                        if(file==null)
+                            return null;
+
+                        files.add(file);
+                    }
                 }
-
-                br.close();
+                // Documentation is not explicit on whether DataFlavor streams need to be closed, we might as well
+                // do so just to be sure.
+                finally {
+                    if(br != null) {
+                        try {br.close();}
+                        catch(IOException e) {}
+                    }
+                }
             }
             else {
                 return null;
