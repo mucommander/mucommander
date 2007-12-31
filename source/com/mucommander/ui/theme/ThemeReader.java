@@ -552,101 +552,56 @@ class ThemeReader extends DefaultHandler implements ThemeXmlConstants {
         }
 
         // XML root element.
-        if(qName.equals(ELEMENT_ROOT)) {
-            if(state != STATE_ROOT)
-                if(Debug.ON) traceIllegalClosing(qName);
+        if(qName.equals(ELEMENT_ROOT))
             state = STATE_UNKNOWN;
-        }
 
         // File table declaration.
-        else if(qName.equals(ELEMENT_TABLE)) {
-            if(state != STATE_TABLE)
-                if(Debug.ON) traceIllegalClosing(qName);
+        else if(qName.equals(ELEMENT_TABLE))
             state = STATE_ROOT;
-        }
 
-        else if(qName.equals(ELEMENT_ALTERNATE)) {
-            if(state != STATE_TABLE_ALTERNATE)
-                if(Debug.ON) traceIllegalClosing(qName);
+        else if(qName.equals(ELEMENT_ALTERNATE))
             state = STATE_TABLE;
-        }
 
-        else if(qName.equals(ELEMENT_UNMATCHED)) {
-            if(state != STATE_TABLE_UNMATCHED)
-                traceIllegalDeclaration(qName);
+        else if(qName.equals(ELEMENT_UNMATCHED))
             state = STATE_TABLE;
-        }
 
-        else if(qName.equals(ELEMENT_HIDDEN)) {
-            if(state != STATE_HIDDEN)
-                if(Debug.ON) traceIllegalClosing(qName);
+        else if(qName.equals(ELEMENT_HIDDEN))
             state = STATE_TABLE;
-        }
 
-        else if(qName.equals(ELEMENT_FOLDER)) {
-            if(state != STATE_FOLDER)
-                if(Debug.ON) traceIllegalClosing(qName);
+        else if(qName.equals(ELEMENT_FOLDER))
             state = STATE_TABLE;
-        }
 
-        else if(qName.equals(ELEMENT_ARCHIVE)) {
-            if(state != STATE_ARCHIVE)
-                if(Debug.ON) traceIllegalClosing(qName);
+        else if(qName.equals(ELEMENT_ARCHIVE))
             state = STATE_TABLE;
-        }
 
-        else if(qName.equals(ELEMENT_SYMLINK)) {
-            if(state != STATE_SYMLINK)
-                if(Debug.ON) traceIllegalClosing(qName);
+        else if(qName.equals(ELEMENT_SYMLINK))
             state = STATE_TABLE;
-        }
 
-        else if(qName.equals(ELEMENT_MARKED)) {
-            if(state != STATE_MARKED)
-                if(Debug.ON) traceIllegalClosing(qName);
+        else if(qName.equals(ELEMENT_MARKED))
             state = STATE_TABLE;
-        }
 
-        else if(qName.equals(ELEMENT_FILE)) {
-            if(state != STATE_FILE)
-                if(Debug.ON) traceIllegalClosing(qName);
+        else if(qName.equals(ELEMENT_FILE))
             state = STATE_TABLE;
-        }
 
         // Shell declaration.
-        else if(qName.equals(ELEMENT_SHELL)) {
-            if(state != STATE_SHELL)
-                if(Debug.ON) traceIllegalClosing(qName);
+        else if(qName.equals(ELEMENT_SHELL))
             state = STATE_ROOT;
-        }
 
         // Shell history declaration.
-        else if(qName.equals(ELEMENT_SHELL_HISTORY)) {
-            if(state != STATE_SHELL_HISTORY)
-                if(Debug.ON) traceIllegalClosing(qName);
+        else if(qName.equals(ELEMENT_SHELL_HISTORY))
             state = STATE_ROOT;
-        }
 
         // Editor declaration.
-        else if(qName.equals(ELEMENT_EDITOR)) {
-            if(state != STATE_EDITOR)
-                if(Debug.ON) traceIllegalClosing(qName);
+        else if(qName.equals(ELEMENT_EDITOR))
             state = STATE_ROOT;
-        }
 
         // Location bar declaration.
-        else if(qName.equals(ELEMENT_LOCATION_BAR)) {
-            if(state != STATE_LOCATION_BAR)
-                if(Debug.ON) traceIllegalClosing(qName);
+        else if(qName.equals(ELEMENT_LOCATION_BAR))
             state = STATE_ROOT;
-        }
 
         // Volume label declaration
-        else if(qName.equals(ELEMENT_STATUS_BAR)) {
-            if(state != STATE_STATUS_BAR)
-                if(Debug.ON) traceIllegalClosing(qName);
+        else if(qName.equals(ELEMENT_STATUS_BAR))
             state = STATE_ROOT;
-        }
 
         // Normal element declaration.
         else if(qName.equals(ELEMENT_NORMAL)) {
@@ -672,8 +627,6 @@ class ThemeReader extends DefaultHandler implements ThemeXmlConstants {
                 state = STATE_LOCATION_BAR;
             else if(state == STATE_TABLE_NORMAL)
                 state = STATE_TABLE;
-            else
-                if(Debug.ON) traceIllegalClosing(qName);
         }
 
         // Selected element declaration.
@@ -700,8 +653,6 @@ class ThemeReader extends DefaultHandler implements ThemeXmlConstants {
                 state = STATE_LOCATION_BAR;
             else if(state == STATE_TABLE_SELECTED)
                 state = STATE_TABLE;
-            else
-                if(Debug.ON) traceIllegalClosing(qName);
         }
     }
 
@@ -807,6 +758,4 @@ class ThemeReader extends DefaultHandler implements ThemeXmlConstants {
         if(Debug.ON)
             Debug.trace("Unexpected start of element " + element + ", ignoring.");
     }
-
-    private static void traceIllegalClosing(String element) {if(Debug.ON) Debug.trace("Unexpected end of element " + element + ", ignoring.");}
 }
