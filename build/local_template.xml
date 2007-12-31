@@ -68,6 +68,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- Defaults to false.                                      -->
   <property name="case-sensitive-fs" value="false"/>
 
+  <!-- Path to FindBugs installation directory.                -->
+  <!-- If this is not set, FindBugs bytecode analysis will not -->
+  <!-- be performed.                                           -->
+  <property name="findbugs.home"     location=""/>
+
 
 
   <!-- = Ant tools configuration ============================= -->

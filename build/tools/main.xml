@@ -31,9 +31,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- Minor version of the muCommander Ant tools.             -->
   <property name="tools.subversion"    value=".0"/>
 
+  <!-- Defines the sources that must be included at compile    -->
+  <!-- time.                                                   -->
+  <patternset id="tools.sources">
+    <include name="com/mucommander/ant/**"/>
+    <include name="com/mucommander/xml/**"/>
+  </patternset>
 
   <!-- Loads the strreplace Ant task.                          -->
-  <target name="load-strreplace" depends="compress-tools">
+  <target name="load-strreplace" depends="tools-compress">
     <taskdef name="strreplace" classname="com.mucommander.ant.util.ReplaceTask" classpath="${tools.jar.cmp}"/>
   </target>
 
@@ -41,11 +47,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- The libpath target is necessary to generate the tools   -->
   <!-- obfuscated JAR file, which is why we depend on          -->
   <!-- jar-tools rather than compress-tools.                   -->
-  <target name="load-libpath" depends="jar-tools">
+  <target name="load-libpath" depends="tools-jar">
     <!-- If the tools are up to date, we must load libpath     -->
     <!-- from the obfuscated JAR.                              -->
     <condition property="libpath.path" value="${tools.jar.cmp}">
-      <istrue value="${tools.up-to-date}"/>
+      <available file="${tools.jar.cmp}"/>
     </condition>
     <!-- Otherwise, use the normal JAR.                        -->
     <property name="libpath.path" value="${tools.jar.normal}"/>
@@ -68,9 +74,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <property name="ant.lib" location="${ant.home}/lib/ant.jar"/>
   </target>
 
+  <target name="tools-force-compile">
+    <property name="tools.force-compile" value="true"/>
+  </target>
+
   <!-- Checks whether the tools jar file is up to date.        -->
   <!-- Output is stored in ${tools.up-to-date}.                -->
-  <target name="check-tools">
+  <target name="check-tools" unless="tools.force-compile">
     <echo>Checking whether the Ant tools are up-to-date...</echo>
     <uptodate property="tools.up-to-date" targetfile="${tools.jar.cmp}">
       <srcfiles dir="${source}/com/mucommander/ant" includes="**/*.java"/>
@@ -82,19 +92,18 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- JAR file is found to be up-to-date by 'check-tools'.    -->
   <!-- Compiled sources will be stored in                      -->
   <!-- ${tools.classes.normal}.                                -->
-  <target name="compile-tools" depends="check-tools" unless="tools.up-to-date">
+  <target name="tools-compile" depends="check-tools" unless="tools.up-to-date">
     <echo>Compiling Ant tools...</echo>
     <delete dir="${tools.classes.normal}"/>
     <mkdir dir="${tools.classes.normal}"/>
     <javac destdir="${tools.classes.normal}" debug="on" deprecation="on"
-           encoding="utf-8" source="1.4" target="1.4">
+           encoding="utf-8" source="1.4" target="1.4" srcdir="${source}">
       <classpath>
          <fileset dir="${lib}/">
            <include name="*include/*.jar"/>
          </fileset>
       </classpath>
-      <src path="${source}/com/mucommander/ant"/>
-      <src path="${source}/com/mucommander/xml"/>
+      <patternset refid="tools.sources"/>
     </javac>
   </target>
 
@@ -104,7 +113,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- JAR file is found to be up-to-date by 'check-tools'.    -->
   <!-- The resulting JAR file will be stored in                -->
   <!-- ${tools.jar.normal}.                                    -->
-  <target name="jar-tools" depends="compile-tools" unless="tools.up-to-date">
+  <target name="tools-jar" depends="tools-compile" unless="tools.up-to-date">
     <echo>Creating Ant tools JAR file...</echo>
     <copy file="${tools.res}/JavaApplicationStub" todir="${tools.classes.normal}" overwrite="true"/>
     <copy file="${tools.license}" todir="${tools.classes.normal}" overwrite="true"/>
@@ -133,7 +142,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- as a parameter. For this reason, we need to aggregate   -->
   <!-- ${tools.up-to-date} and ${proguard.available} in one    -->
   <!-- property.                                               -->
-  <target name="check-copy-tools-bytecode">
+  <target name="tools-check-copy-bytecode">
     <condition property="copy-tools-bytecode" value="true">
       <not>
         <or>
@@ -152,7 +161,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- JAR file is found to be up-to-date by 'check-tools'.    -->
   <!-- The resulting JAR file will be stored in                -->
   <!-- ${tools.jar.obf}.                                       -->
-  <target name="copy-tools-bytecode" depends="check-copy-tools-bytecode" if="copy-tools-bytecode">
+  <target name="tools-copy-bytecode" depends="tools-check-copy-bytecode" if="copy-tools-bytecode">
     <echo>proGuard unavailable, skipping obfuscation of Ant tools...</echo>
     <copy file="${tools.jar.normal}" tofile="${tools.jar.obf}" overwrite="true"/>
   </target>
@@ -165,10 +174,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- JAR file is found to be up-to-date by 'check-tools'.    -->
   <!-- The resulting JAR file will be stored in                -->
   <!-- ${tools.jar.obf}.                                       -->
-  <target name="obfuscate-tools-bytecode" depends="ant-lib,load-libpath" if="proguard.available" unless="tools.up-to-date">
+  <target name="tools-obfuscate-bytecode" depends="ant-lib,load-libpath" if="proguard.available" unless="tools.up-to-date">
     <echo>Creating Ant tools obfuscated JAR file...</echo>
+    <mkdir dir="${tools.reports}"/>
     <proguard overloadaggressively="false" usemixedcaseclassnames="${case-sensitive-fs}" ignorewarnings="true" optimize="true" shrink="true" obfuscate="true"
-              allowaccessmodification="false" repackageclasses="" skipnonpubliclibraryclasses="false">
+              allowaccessmodification="false" repackageclasses="" skipnonpubliclibraryclasses="false" printusage="${tools.proguard.reports}">
       <injar name="${tools.jar.normal}"/> 
       <outjar name="${tools.jar.obf}"/>
       <libraryjar name="${java.lib}"/>
@@ -190,7 +200,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- JAR file is found to be up-to-date by 'check-tools'.    -->
   <!-- The resulting JAR file will be stored in                -->
   <!-- ${tools.jar.obf}.                                       -->
-  <target name="obfuscate-tools" depends="jar-tools,load-proguard,copy-tools-bytecode,obfuscate-tools-bytecode"/>
+  <target name="tools-obfuscate" depends="tools-jar,load-proguard,tools-copy-bytecode,tools-obfuscate-bytecode"/>
 
 
 
@@ -205,7 +215,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- as a parameter. For this reason, we need to aggregate   -->
   <!-- ${tools.up-to-date} and ${7za.available} in one         -->
   <!-- property.                                               -->
-  <target name="check-copy-obfuscated-tools">
+  <target name="tools-check-copy-obfuscated">
     <condition property="copy-obfuscated-tools" value="true">
       <not>
         <or>
@@ -223,7 +233,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- JAR file is found to be up-to-date by 'check-tools'.    -->
   <!-- The resulting JAR file will be stored in                -->
   <!-- ${tools.jar.cmp}.                                       -->
-  <target name="compress-obfuscated-tools" if="7za.available" unless="tools.up-to-date">
+  <target name="tools-compress-obfuscated" if="7za.available" unless="tools.up-to-date">
     <echo>Compressing Ant tool...</echo>
     <!-- Makes sure the compressed files gets deleted before   -->
     <!-- being created again, as this can sometimes cause heap -->
@@ -251,7 +261,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- JAR file is found to be up-to-date by 'check-tools'.    -->
   <!-- The resulting JAR file will be stored in                -->
   <!-- ${tools.jar.cmp}.                                       -->
-  <target name="copy-obfuscated-tools" depends="check-copy-obfuscated-tools" if="copy-obfuscated-tools">
+  <target name="tools-copy-obfuscated" depends="tools-check-copy-obfuscated" if="copy-obfuscated-tools">
     <echo>7za unavailable, using standard compression for Ant tools...</echo>
     <copy file="${tools.jar.obf}" tofile="${tools.jar.cmp}"/>
   </target>
@@ -262,13 +272,85 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- JAR file is found to be up-to-date by 'check-tools'.    -->
   <!-- The resulting JAR file will be stored in                -->
   <!-- ${tools.jar.cmp}.                                       -->
-  <target name="compress-tools" depends="check-7za,obfuscate-tools,compress-obfuscated-tools,copy-obfuscated-tools"/>
+  <target name="tools-compress" depends="check-7za,tools-obfuscate,tools-compress-obfuscated,tools-copy-obfuscated"/>
+
+
+
+  <!-- = Reports generation ================================== -->
+  <!-- ======================================================= -->
+  <target name="tools-reports" depends="clean,tools-force-compile,tools-obfuscate,tools-unit-test,tools-findbugs,tools-similarity-test"/>
+
+
+
+  <!-- = Simian integration (similarity checker) ============= -->
+  <!-- ======================================================= -->
+
+  <!-- Notifies user that unit tests are being skipped if      -->
+  <!-- junit is not available.                                 -->
+  <target name="tools-skip-similarity-test" unless="simian.available">
+    <echo>Simian not available, skipping Ant tools similarity check...</echo>
+  </target>
+
+  <!-- Run similarity test                                     -->
+  <target name="tools-do-similarity-test" depends="load-simian" if="simian.available">
+    <echo>Running Ant tools similarity check...</echo>
+    <mkdir dir="${tools.reports}"/>
+    <simian>
+      <fileset dir="${source}">
+        <patternset refid="tools.sources"/>
+      </fileset>
+      <formatter type="plain" toFile="${tools.simian.reports}"/>
+    </simian>
+  </target>
+
+  <!-- Runs similarity test only if Simian is available.       -->
+  <target name="tools-similarity-test" depends="check-simian,tools-skip-similarity-test,tools-do-similarity-test"/>
+
+
+
+  <!-- = Findbugs integration ================================ -->
+  <!-- ======================================================= -->
+  <!-- Notifies user that bytecode analysis is being skipped   -->
+  <!-- if FindBugs is not available.                           -->
+  <target name="tools-skip-findbugs" unless="findbugs.available">
+    <echo>FindBugs not available, skipping Ant tools bytecode analysis...</echo>
+  </target>
+
+  <!-- Runs FindBugs bytecode analysis and stores the output   -->
+  <!-- ${tmp.compile}/findbugs.xml.                            -->
+  <target name="tools-do-findbugs" depends="ant-lib,tools-jar" if="findbugs.available">
+    <echo>Analysing Ant tools bytecode...</echo>
+    <mkdir dir="${tools.reports}"/>
+    <mkdir dir="${tools.tmp}"/>
+    <echo file="${tools.tmp}/findbugs-filter.xml">
+&lt;FindBugsFilter&gt;
+  &lt;Match&gt;
+    &lt;Package name="~com\.mucommander.*" /&gt;
+  &lt;/Match&gt;
+&lt;/FindBugsFilter&gt;
+    </echo>
+
+    <findbugs home="${findbugs.home}" output="xml" outputFile="${tools.findbugs.reports}" jvmargs="-Xmx128m" effort="max"
+              includefilter="${tools.tmp}/findbugs-filter.xml">
+      <sourcePath path="${source}" />
+      <class location="${tools.jar.normal}"/>
+      <auxclasspath>
+        <fileset file="${ant.lib}"/>
+        <fileset dir="${lib}/noinclude">
+          <include name="**/*.jar"/>
+        </fileset>
+      </auxclasspath>
+    </findbugs>
+  </target>
+
+  <!-- Runs FindBugs bytecode analysis if it's available.      -->
+  <target name="tools-findbugs" depends="load-findbugs,tools-skip-findbugs,tools-do-findbugs"/>
 
 
 
   <!-- = Tools unit testing ================================== -->
   <!-- ======================================================= -->
-  <target name="check-skip-unit-test-tools">
+  <target name="tools-check-skip-unit-test">
     <condition property="skip-unit-test-tools" value="true">
       <not>
         <or>
@@ -279,11 +361,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     </condition>
   </target>
 
-  <target name="skip-unit-test-tools" depends="check-skip-unit-test-tools" if="skip-unit-test-tools">
+  <target name="tools-skip-unit-test" depends="tools-check-skip-unit-test" if="skip-unit-test-tools">
     <echo>JUnit not available, skipping Ant tools test cases...</echo>
   </target>
 
-  <target name="do-unit-test-tools" if="junit.available" unless="tools.up-to-date">
+  <target name="tools-do-unit-test" if="junit.available" unless="tools.up-to-date">
     <echo>Running Ant tools test cases...</echo>
     <mkdir dir="${tools.junit.reports}"/>
     <junit printsummary="yes" haltonfailure="yes">
@@ -302,7 +384,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     </junit>
   </target>
 
-  <target name="unit-test-tools" depends="jar-tools,check-junit,skip-unit-test-tools,do-unit-test-tools"/>
+  <target name="tools-unit-test" depends="tools-jar,check-junit,tools-skip-unit-test,tools-do-unit-test"/>
 
 
 
@@ -344,7 +426,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
   <!-- Generates the Ant Tools documentation.                  -->
   <!-- Output will be stored in ${tools.doc}.                  -->
-  <target name="make-tools-doc" depends="compress-tools" if="antdoclet.available">
+  <target name="tools-make-doc" depends="tools-compress" if="antdoclet.available">
     <echo>Creating Ant tools documentation...</echo>
     <mkdir dir="${tools.doc}"/>
     <copy todir="${tools.doc}" overwrite="true">
@@ -373,12 +455,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
   <!-- Skips the documentation generation and notifies the     -->
   <!-- user if AntDoclet is not available.                     -->
-  <target name="skip-tools-doc" unless="antdoclet.available">
+  <target name="tools-skip-doc" unless="antdoclet.available">
     <echo>AntDoclet not available, skipping Ant tools documentation...</echo>
   </target>
 
   <!-- Generates the tools documentation.                      -->
-  <target name="tools-doc" depends="check-antdoclet,make-tools-doc,skip-tools-doc"/>
+  <target name="tools-doc" depends="check-antdoclet,tools-make-doc,tools-skip-doc"/>
 
   <!-- Packages the tool documentation.                        -->
   <!-- Output is stored in                                     -->
@@ -411,7 +493,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <strreplace from="mucommander-ant-tools-${tools.version}${tools.subversion}" to="tools.package-prefix" what="[ .]" with="_"/>
   </target>
 
-  <target name="make-release-tools" depends="compress-tools,tools-prefixes" if="antdoclet.available">
+  <target name="tools-make-release" depends="tools-compress,tools-prefixes" if="antdoclet.available">
     <!-- Refreshes the release directory structure.            -->
     <delete dir="${tools.tmp}/release"/>
     <mkdir dir="${tools.tmp}/release/lib"/>
@@ -456,14 +538,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         <include name="antdoclet.jar"/>
         <include name="velocity.jar"/>
         <include name="proguard.jar"/>
+        <include name="simian.jar"/>
       </fileset>
     </copy>
 
     <!-- Adds the sources.                                     -->
     <copy todir="${tools.tmp}/release/source">
       <fileset dir="${source}/">
-        <include name="com/mucommander/ant/**/*"/>
-        <include name="com/mucommander/xml/**/*"/>
+        <patternset refid="tools.sources"/>
       </fileset>
     </copy>
 
@@ -484,12 +566,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
   <!-- Notifies the user that the release file cannot be       -->
   <!-- generated because AntDoclet is not available.           -->
-  <target name="skip-release-tools" unless="antdoclet.available">
+  <target name="tools-skip-release" unless="antdoclet.available">
     <echo>AntDoclet not available, skipping Ant tools release...</echo>
   </target>
 
   <!-- Generates a release package for the muCommander tasks.  -->
   <!-- The output will be stored in                            -->
   <!-- ${dist}/${tools.package-prefix}.tar.gz                  -->
-  <target name="release-tools" depends="unit-test-tools,tools-doc-tgz,make-release-tools,skip-release-tools"/>
+  <target name="tools-release" depends="tools-unit-test,tools-doc-tgz,tools-make-release,tools-skip-release"/>
 </project>

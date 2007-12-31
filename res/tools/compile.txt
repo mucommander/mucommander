@@ -14,6 +14,11 @@ the proper libraries and tools are installed.
 - Ant 1.6.5 or greater
   This can be retrieved from http://ant.apache.org/
 
+  Optional tools are:
+- FindBugs 1.3.1 or greater.
+  This is used to generate bytecode analysis reports.
+  It can be retrieved from http://findbugs.sourceforge.net/
+
 - p7zip 4.43 or greater
   This is used to compress JAR files further than the Sun tools can.
   It can be retrieved from http://p7zip.sourceforge.net/
@@ -64,6 +69,11 @@ editing it.
   Case sensitive systems allow ProGuard to perform slightly more agressive
   obfuscation of the bytecode. If unsure, leave this value to false.
 
+- findbugs.home (non-required).
+  Path to the FindBugs installation directory.
+  Thi sis used to generate bytecode analysis reports.
+  If this property is not set, bytecode analysis reports won't be generated.
+
 
 
 2. Compiling muCommander Ant Tools
@@ -77,6 +87,9 @@ The most common ways are:
 - ant tools-doc
   This will generate the muCommander Ant Tools documentation in ./docs
 
-- ant release-tools
+- ant tools-release
   This will package the binary and documentation files of the muCommander
   Ant Tools in ./dist.
+
+- ant tools-reports
+  This will Generate reports about various aspects of the Ant tools.

@@ -24,22 +24,22 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- = Task loading ======================================== -->
   <!-- ======================================================= -->
   <!-- Loads the javaw task.                                   -->
-  <target name="load-javaw" depends="compress-tools">
+  <target name="load-javaw" depends="tools-compress">
     <taskdef name="javaw" classname="com.mucommander.ant.java.JavaTask" classpath="${tools.jar.cmp}"/>
   </target>
 
   <!-- Loads the mksize task.                                  -->
-  <target name="load-mksize" depends="compress-tools">
+  <target name="load-mksize" depends="tools-compress">
     <taskdef name="mksize" classname="com.mucommander.ant.util.SizeTask" classpath="${tools.jar.cmp}"/>
   </target>
 
   <!-- Loads the mkapp task.                                   -->
-  <target name="load-mkapp" depends="compress-tools">
+  <target name="load-mkapp" depends="tools-compress">
     <taskdef name="mkapp" classname="com.mucommander.ant.macosx.AppTask" classpath="${tools.jar.cmp}"/>
   </target>
 
   <!-- Loakds the mkjnlp task.                                 -->
-  <target name="load-mkjnlp" depends="compress-tools">
+  <target name="load-mkjnlp" depends="tools-compress">
     <taskdef name="mkjnlp" classname="com.mucommander.ant.jnlp.JnlpTask" classpath="${tools.jar.cmp}"/>
   </target>
 
@@ -245,9 +245,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- ${jar.obf}.                                             -->
   <target name="obfuscate-bytecode" depends="load-libpath" if="proguard.available">
     <echo>Creating obfuscated JAR file...</echo>
-
+    <mkdir dir="${reports.main}"/>
     <proguard overloadaggressively="false" usemixedcaseclassnames="${proguard.mixed-case}" ignorewarnings="false" optimize="true" shrink="true" obfuscate="true"
-              printmapping="${tmp.compile}/obfuscate.map" printusage="${tmp.compile}/obf-usage.txt" printseeds="${tmp.compile}/obf-seeds.txt"
+              printmapping="${tmp.compile}/obfuscate.map" printusage="${proguard.reports}" printseeds="${tmp.compile}/obf-seeds.txt"
               allowaccessmodification="false" repackageclasses="" skipnonpubliclibraryclasses="true" target="${app.jvm}">
       <injar name="${jar.normal}"/> 
       <outjar name="${jar.obf}"/>
@@ -324,6 +324,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 
+  <!-- = Reports ============================================= -->
+  <!-- ======================================================= -->
+  <!-- Generates all meaningful reports in ${reports}.         -->
+  <target name="reports" depends="clean,tools-reports,conf-reports,obfuscate,unit-test,similarity-test,findbugs"/>
+
+
+
   <!-- = JUnit management ==================================== -->
   <!-- ======================================================= -->
 
@@ -362,27 +369,47 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <target name="unit-test" depends="jar,check-junit,skip-unit-test,do-unit-test"/>
 
 
+
+  <!-- = Findbugs integration ================================ -->
+  <!-- ======================================================= -->
+  <!-- Notifies user that bytecode analysis is being skipped   -->
+  <!-- if FindBugs is not available.                           -->
+  <target name="skip-findbugs" unless="findbugs.available">
+    <echo>FindBugs not available, skipping bytecode analysis...</echo>
+  </target>
+
+  <!-- Runs FindBugs bytecode analysis and stores the output   -->
+  <!-- ${tmp.compile}/findbugs.xml.                            -->
+  <target name="do-findbugs" depends="jar" if="findbugs.available">
+    <echo>Analysing bytecode...</echo>
+    <mkdir dir="${reports.main}"/>
+    <echo file="${tmp.compile}/findbugs-filter.xml">
+&lt;FindBugsFilter&gt;
+  &lt;Match&gt;
+    &lt;Package name="~com\.mucommander.*" /&gt;
+  &lt;/Match&gt;
+&lt;/FindBugsFilter&gt;
+    </echo>
+
+    <findbugs home="${findbugs.home}" output="xml" outputFile="${findbugs.reports}" jvmargs="-Xmx256m" effort="max"
+              includefilter="${tmp.compile}/findbugs-filter.xml">
+      <sourcePath path="${source}" />
+      <class location="${jar.normal}"/>
+      <auxclasspath>
+        <fileset dir="${lib}/noinclude">
+          <include name="**/*.jar"/>
+        </fileset>
+      </auxclasspath>
+    </findbugs>
+  </target>
+
+  <!-- Runs FindBugs bytecode analysis if it's available.      -->
+  <target name="findbugs" depends="load-findbugs,skip-findbugs,do-findbugs"/>
+
+
+
   <!-- = Simian integration (similarity checker) ============= -->
   <!-- ======================================================= -->
-
-  <!-- Checks if Simian is available. The result is stored in  -->
-  <!-- ${simian.available}.                                    -->
-  <target name="check-simian">
-    <!-- If the value is not set, use built-in jar.            -->
-    <property name="simian.lib" value="${tools}/simian.jar"/>
-
-    <!-- Checks for Simian availability.                       -->
-    <!-- If Simian is available, the ${simian.available}       -->
-    <!-- property will be set to true.                         -->
-    <condition property="simian.available" value="true">
-      <available resource="simiantask.properties" classpath="${simian.lib}"/>
-    </condition>
-  </target>
-
-  <!-- Loads the Simian task if it's available.                -->
-  <target name="load-simian" depends="check-simian" if="simian.available">
-    <taskdef resource="simiantask.properties" classpath="${simian.lib}"/>
-  </target>
 
   <!-- Notifies user that unit tests are being skipped if      -->
   <!-- junit is not available.                                 -->
@@ -392,9 +419,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
   <!-- Run similarity test                                     -->
   <target name="do-similarity-test" depends="load-simian" if="simian.available">
-    <echo>Running similarity check...</echo>    
+    <echo>Running similarity check...</echo>
+    <mkdir dir="${reports.main}"/>
     <simian>
       <fileset dir="${source}" includes="**/*.java"/>
+      <formatter type="plain" toFile="${simian.reports}"/>
     </simian>
   </target>
 
@@ -1056,7 +1085,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- Generates all available release files.                  -->
   <!-- This target will also try and start the resulting JAR   -->
   <!-- to make sure it boots properly.                         -->
-  <target name="all" depends="source,release-tools,release-conf,unit-test,tgz,setup-exe,deb,portable,version,sign,jnlp,app.tgz,api-doc-tgz">
+  <target name="all" depends="source,tools-release,conf-release,unit-test,tgz,setup-exe,deb,portable,version,sign,jnlp,app.tgz,api-doc-tgz">
     <java jar="${jar.cmp}" failonerror="true" fork="true">
       <arg value="--help"/>
     </java>

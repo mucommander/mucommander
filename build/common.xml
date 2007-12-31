@@ -30,6 +30,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <property name="dist"                value="dist"/>
   <!-- Directory in which to store temporary files.            -->
   <property name="tmp"                 value="tmp"/>
+  <!-- Directory in which to store reports.                    -->
+  <property name="reports"             value="reports"/>
   <!-- Directory in which to store the documentation.          -->
   <property name="doc"                 location="docs"/>
   <!-- Directory from which to load resources.                 -->
@@ -41,6 +43,30 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <property name="source"              location="source"/>
   <!-- Directory containing the project's libraries.           -->
   <property name="lib"                 location="lib"/>
+
+
+
+  <!-- = FindBugs management ================================= -->
+  <!-- ======================================================= -->
+  <!-- The following targets are used to deal with FindBugs,   -->
+  <!-- its availability and successful loading.                -->
+
+  <!-- Checks whether FindBugs is available or not.            -->
+  <!-- This is a helper target and should not be referenced    -->
+  <!-- directly.                                               -->
+  <target name="check-findbugs">
+    <!-- Checks for FindBugs availability.                     -->
+    <!-- If FindBugs is available, the ${findbugs.available}   -->
+    <!-- property will be set to true.                         -->
+    <condition property="findbugs.available" value="true">
+      <available classname="edu.umd.cs.findbugs.anttask.FindBugsTask" classpath="${findbugs.home}/lib/findbugs-ant.jar"/>
+    </condition>
+  </target>  
+
+  <!-- Tries to load FindBugs.                                 -->
+  <target name="load-findbugs" depends="check-findbugs" if="findbugs.available">
+    <taskdef name="findbugs" classname="edu.umd.cs.findbugs.anttask.FindBugsTask" classpath="${findbugs.home}/lib/findbugs-ant.jar"/>
+  </target>
 
 
 
@@ -144,15 +170,40 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 
+  <!-- = Simian integration (similarity checker) ============= -->
+  <!-- ======================================================= -->
+  <!-- Checks if Simian is available. The result is stored in  -->
+  <!-- ${simian.available}.                                    -->
+  <target name="check-simian">
+    <!-- If the value is not set, use built-in jar.            -->
+    <property name="simian.lib" value="${tools}/simian.jar"/>
+
+    <!-- Checks for Simian availability.                       -->
+    <!-- If Simian is available, the ${simian.available}       -->
+    <!-- property will be set to true.                         -->
+    <condition property="simian.available" value="true">
+      <available resource="simiantask.properties" classpath="${simian.lib}"/>
+    </condition>
+  </target>
+
+  <!-- Loads the Simian task if it's available.                -->
+  <target name="load-simian" depends="check-simian" if="simian.available">
+    <taskdef resource="simiantask.properties" classpath="${simian.lib}"/>
+  </target>
+
+
+
   <!-- = Maintenance ========================================= -->
   <!-- ======================================================= -->
   <!-- Deletes any dynamically generated file, effectively     -->
   <!-- re-initialising the whole project.                      -->
-  <target name="clean">
+  <target name="clean" unless="clean.done">
     <echo>Deleting temporary files...</echo>
+    <property name="clean.done" value="true"/>
     <delete dir="${tmp}"/>
     <delete dir="${dist}"/>
     <delete dir="${doc}"/>
+    <delete dir="${reports}"/>
     <echo>Deleting emacs backup files...</echo>
     <delete includeEmptyDirs="true">
       <fileset dir="." includes="**/*~" defaultexcludes="no"/>

@@ -27,21 +27,21 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- constants, such as the current version number.          -->
 
   <!-- Major version number of the application.                -->
-  <property name="app.version"         value="0.8"/>
+  <property name="app.version"            value="0.8"/>
   <!-- Minor version number of the application.                -->
   <!-- Note that this should be empty for major releases.      -->
-  <property name="app.subversion"      value=".2"/>
+  <property name="app.subversion"         value=".2"/>
   <!-- Copyright line of the application.                      -->
   <!-- This should typically be 2002-<current-year>            -->
-  <property name="app.copyright"       value="2002-2007"/>
+  <property name="app.copyright"          value="2002-2007"/>
   <!-- Targeted version of the JVM.                            -->
   <!-- Note that this has got to match the following format:   -->
   <!-- <MAJOR_VERSION>.<MINOR_VERSION>                         -->
-  <property name="app.jvm"             value="1.4"/>
+  <property name="app.jvm"                value="1.4"/>
   <!-- Fully qualified name of the application's main class.   -->
-  <property name="app.main"            value="com.mucommander.Launcher"/>
+  <property name="app.main"               value="com.mucommander.Launcher"/>
   <!-- Fully qualified name of the application's class loader. -->
-  <property name="app.loader"          value="com.mucommander.file.AbstractFileClassLoader"/>
+  <property name="app.loader"             value="com.mucommander.file.AbstractFileClassLoader"/>
 
 
 
@@ -52,78 +52,83 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- problems between different versions of muCommander.     -->
 
   <!-- Homepage of the application.                            -->
-  <property name="url.homepage"        value="http://www.mucommander.com"/>
+  <property name="url.homepage"           value="http://www.mucommander.com"/>
   <!-- URL at which to download the latest version data.       -->
-  <property name="url.app-version"     value="${url.homepage}/version/version.xml"/>
+  <property name="url.app-version"        value="${url.homepage}/version/version.xml"/>
   <!-- URL at which to download the latest nightly version     -->
   <!-- data.                                                   -->
-  <property name="url.nightly-version" value="${url.homepage}/version/nightly.xml"/>
+  <property name="url.nightly-version"    value="${url.homepage}/version/nightly.xml"/>
   <!-- URL to which users should be directed in order to       -->
   <!-- download the latest version of muCommander.             -->
-  <property name="url.app-download"    value="${url.homepage}/#download"/>
+  <property name="url.app-download"       value="${url.homepage}/#download"/>
   <!-- URL to which users should be directed in order to       -->
   <!-- browse the muCommander forums.                          -->
-  <property name="url.forums"          value="${url.homepage}/forums/"/>
+  <property name="url.forums"             value="${url.homepage}/forums/"/>
   <!-- URL to which users should be directed in order to       -->
   <!-- report a bug in the application.                        -->
-  <property name="url.bug-repository"  value="${url.homepage}/bugs/"/>
+  <property name="url.bug-repository"     value="${url.homepage}/bugs/"/>
   <!-- URL to which users should be directed in the unlikely   -->
   <!-- event that they'd want to donate money to the project.  -->
-  <property name="url.donation"        value="${url.homepage}/#donate"/>
+  <property name="url.donation"           value="${url.homepage}/#donate"/>
   <!-- URL to the JAR file of the current release              -->
-  <property name="url.jar-release"     value="${url.homepage}/download/mucommander.jar"/>
+  <property name="url.jar-release"        value="${url.homepage}/download/mucommander.jar"/>
   <!-- URL to the JAR file of the latest nightly build         -->
-  <property name="url.jar-nightly"     value="${url.homepage}/download/nightly/mucommander.jar"/>
+  <property name="url.jar-nightly"        value="${url.homepage}/download/nightly/mucommander.jar"/>
   <!-- URL to the JAR file, set to the release value and       -->
   <!-- overridden when in nightly mode.                        -->
-  <property name="url.jar"             value="${url.jar-release}/"/>
+  <property name="url.jar"                value="${url.jar-release}/"/>
 
   <!-- = Folder structure ==================================== -->
   <!-- ======================================================= -->
   <!-- Where to store compilation files.                       -->
-  <property name="tmp.compile"         location="${tmp}/compile"/>
+  <property name="tmp.compile"            location="${tmp}/compile"/>
   <!-- Where to store the non-obfuscated bytecode.             -->
-  <property name="classes.normal"      location="${tmp.compile}/classes/"/>
+  <property name="classes.normal"         location="${tmp.compile}/classes/"/>
   <!-- Where to store the obfuscated bytecode.                 -->
-  <property name="classes.obf"         location="${tmp.compile}/obf"/>
-  <!-- Folder where Junit test reports are generated.        -->
-  <property name="junit.reports"       location="${tmp}/test-reports"/>
-  <property name="tmp.source"          location="${tmp}/source"/>
-  <property name="doc.api"             location="${doc}/api"/>
-  <property name="version-file"        location="${dist}/version.xml"/>
+  <property name="classes.obf"            location="${tmp.compile}/obf"/>
+  <!-- Where to store all automated reports about muCommander. -->
+  <property name="reports.main"           location="${reports}/mucommander"/>
+  <!-- Where to store JUnit reports.                           -->
+  <property name="junit.reports"          location="${reports.main}/junit/"/>
+  <property name="findbugs.reports"       location="${reports.main}/findbugs.xml"/>
+  <property name="simian.reports"         location="${reports.main}/simian.txt"/>
+  <property name="proguard.reports"       location="${reports.main}/proguard.txt"/>
+  <property name="tmp.source"             location="${tmp}/source"/>
+  <property name="doc.api"                location="${doc}/api"/>
+  <property name="version-file"           location="${dist}/version.xml"/>
 
 
 
   <!-- = Resource values ===================================== -->
   <!-- ======================================================= -->
   <!-- muCommander's readme file.                              -->
-  <property name="res.readme"          location="readme.txt"/>
+  <property name="res.readme"             location="readme.txt"/>
   <!-- Template for muCommander's version file.                -->
-  <property name="res.version"         location="${res}/version.xml"/>
+  <property name="res.version"            location="${res}/version.xml"/>
   <!-- muCommander's license file.                             -->
-  <property name="res.license"         location="license.txt"/>
+  <property name="res.license"            location="license.txt"/>
   <!-- muCommander's dictionary file.                          -->
-  <property name="res.dictionary"      location="${res}/dictionary.txt"/>
+  <property name="res.dictionary"         location="${res}/dictionary.txt"/>
   <!-- Where to look for the muCommander images.               -->
-  <property name="res.images"          location="${res}/images"/>
+  <property name="res.images"             location="${res}/images"/>
 
 
 
   <!-- = Theme values ======================================== -->
   <!-- ======================================================= -->
   <!-- Where to load the themes from.                          -->
-  <property name="themes.in"           location="${res}/themes"/>
+  <property name="themes.in"              location="${res}/themes"/>
   <!-- Where to write the themes to.                           -->
-  <property name="themes.out"          value="/themes"/>
+  <property name="themes.out"             value="/themes"/>
 
 
 
   <!-- = Win32 values ======================================== -->
   <!-- ======================================================= -->
   <!-- Name of the Win32 muCommander executable.               -->
-  <property name="exe.name"            value="muCommander.exe"/>
+  <property name="exe.name"               value="muCommander.exe"/>
   <!-- Where to store the Win32 executable.                    -->
-  <property name="exe.file"            value="${dist}/${exe.name}"/>
+  <property name="exe.file"               value="${dist}/${exe.name}"/>
 
 
 
@@ -131,49 +136,49 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- ======================================================= -->
   <!-- Where to store temporary files while generating the     -->
   <!-- portable version.                                       -->
-  <property name="portable.tmp"        location="${tmp}/portable"/>
+  <property name="portable.tmp"           location="${tmp}/portable"/>
   <!-- Where to generate the portable version *nix startup     -->
   <!-- script.                                                 -->
-  <property name="portable.sh"         location="${portable.tmp}/mucommander.sh"/>
+  <property name="portable.sh"            location="${portable.tmp}/mucommander.sh"/>
   <!-- Where to generate the portable version Win32            -->
   <!-- executable.                                             -->
-  <property name="portable.exe"        location="${portable.tmp}/mucommander.exe"/>
+  <property name="portable.exe"           location="${portable.tmp}/mucommander.exe"/>
 
 
 
   <!-- = MAC OS X app values ================================= -->
   <!-- ======================================================= -->
   <!-- Where to store the muCommander app Mac OS X release.    -->
-  <property name="app.name"            value="muCommander.app"/>
+  <property name="app.name"               value="muCommander.app"/>
   <!-- Folder in which to store the muCommander app Mac OS X   -->
   <!-- release.                                                -->
-  <property name="app.folder"          location="${dist}/${app.name}"/>
+  <property name="app.folder"             location="${dist}/${app.name}"/>
 
 
 
   <!-- = NSIS values ========================================= -->
   <!-- ======================================================= -->
   <!-- Directory containing the various NSIS scripts and files -->
-  <property name="nsis.res"            location="${res}/nsis"/>
+  <property name="nsis.res"               location="${res}/nsis"/>
   <!-- Path to the NSIS script template.                       -->
-  <property name="nsis.script"         location="${nsis.res}/mucommander.nsi"/>
+  <property name="nsis.script"            location="${nsis.res}/mucommander.nsi"/>
   <!-- Path to the Win32 icons.                                -->
-  <property name="nsis.icon"           location="${nsis.res}/mucommander.ico"/>
+  <property name="nsis.icon"              location="${nsis.res}/mucommander.ico"/>
   <!-- Directory in which NSIS will store its temporary files. -->
-  <property name="nsis.tmp"            location="${tmp}/nsis"/>
+  <property name="nsis.tmp"               location="${tmp}/nsis"/>
 
 
 
   <!-- = Debian values ======================================= -->
   <!-- ======================================================= -->
   <!-- Directory in which the deb scripts are stored.          -->
-  <property name="deb.res"             location="${res}/deb"/>
+  <property name="deb.res"                location="${res}/deb"/>
   <!-- Directory in which to store .deb temporary files.       -->
-  <property name="deb.tmp"             location="${tmp}/deb"/>
+  <property name="deb.tmp"                location="${tmp}/deb"/>
   <!-- Data part of the debian package.                        -->
-  <property name="deb.data"            location="${deb.tmp}/data"/>
+  <property name="deb.data"               location="${deb.tmp}/data"/>
   <!-- Control part of the debian package.                     -->
-  <property name="deb.control"         location="${deb.tmp}/control"/>
+  <property name="deb.control"            location="${deb.tmp}/control"/>
 
 
 
@@ -181,103 +186,112 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- ======================================================= -->
   <!-- Path to the file in which to store the unobfuscated     -->
   <!-- application JAR file.                                   -->
-  <property name="jar.normal"          location="${tmp.compile}/mucommander_unobf.jar"/>
+  <property name="jar.normal"             location="${tmp.compile}/mucommander_unobf.jar"/>
   <!-- Path to the file in which to store the obfuscated       -->
   <!-- application JAR file.                                   -->
-  <property name="jar.obf"             location="${tmp.compile}/mucommander_obf.jar"/>
+  <property name="jar.obf"                location="${tmp.compile}/mucommander_obf.jar"/>
   <!-- Path toe the file inw hich to store the compressed      -->
   <!-- application JAR file.                                   -->
-  <property name="jar.cmp"             location="${dist}/mucommander.jar"/>
+  <property name="jar.cmp"                location="${dist}/mucommander.jar"/>
   <!-- Path to the file in which to store the obfuscated,      -->
   <!-- signed application JAR file.                            -->
-  <property name="jar.signed"          location="${dist}/mucommander_signed.jar"/>
+  <property name="jar.signed"             location="${dist}/mucommander_signed.jar"/>
 
 
 
   <!-- = JNLP values ========================================= -->
   <!-- ======================================================= -->
   <!-- Codebase for the 'normal' muCommander JNLP file.        -->
-  <property name="url.jnlp.normal"     value="http://www.mucommander.com/webstart/"/>
+  <property name="url.jnlp.normal"        value="http://www.mucommander.com/webstart/"/>
   <!-- Codebase for the 'nightly' muCommander JNLP file.       -->
-  <property name="url.jnlp.nightly"    value="http://www.mucommander.com/webstart/nightly/"/>
+  <property name="url.jnlp.nightly"       value="http://www.mucommander.com/webstart/nightly/"/>
   <!-- Name of the icon used by the JNLP file.                 -->
-  <property name="jnlp.icon"           value="icon.gif"/>
+  <property name="jnlp.icon"              value="icon.gif"/>
   <!-- Name of the muCommander JNLP file.                      -->
-  <property name="jnlp.file"           value="mucommander.jnlp"/>
+  <property name="jnlp.file"              value="mucommander.jnlp"/>
 
 
 
   <!-- = Ant tools values ==================================== -->
   <!-- ======================================================= -->
   <!-- Where to generae the Ant tools documentation.           -->
-  <property name="tools.doc"            location="${doc}/ant-tools"/>
+  <property name="tools.doc"              location="${doc}/ant-tools"/>
   <!-- Where to store temporary files while generating the Ant -->
   <!-- tools.                                                  -->
-  <property name="tools.tmp"            location="${tmp}/ant-tools/"/>
+  <property name="tools.tmp"              location="${tmp}/ant-tools/"/>
   <!-- Where to look for the Ant tools resources.              -->
-  <property name="tools.res"            location="${res}/tools"/>
+  <property name="tools.res"              location="${res}/tools"/>
   <!-- Directory in which the final Ant tools file is stored.  -->
-  <property name="tools.out"            location="${tools}"/>
+  <property name="tools.out"              location="${tools}"/>
   <!-- Ant tools' license file.                                -->
-  <property name="tools.license"        location="${tools.res}/license.txt"/>
+  <property name="tools.license"          location="${tools.res}/license.txt"/>
   <!-- Ant tools' compilation instructions.                    -->
-  <property name="tools.compile"        location="${tools.res}/compile.txt"/>
+  <property name="tools.compile"          location="${tools.res}/compile.txt"/>
   <!-- Ant tools' readme file.                                 -->
-  <property name="tools.readme"         location="${tools.res}/readme.txt"/>
+  <property name="tools.readme"           location="${tools.res}/readme.txt"/>
   <!-- Path to the Ant tools' buildfile.                       -->
-  <property name="tools.build"          location="build/tools/build.xml"/>
+  <property name="tools.build"            location="build/tools/build.xml"/>
   <!-- Where the AntDoclet templates are stored.               -->
-  <property name="tools.template"       location="${tools.res}/template"/>
+  <property name="tools.template"         location="${tools.res}/template"/>
   <!-- Main AntDoclet template.                                -->
-  <property name="tools.doc-template"   value="main.vm"/>
+  <property name="tools.doc-template"     value="main.vm"/>
   <!-- Where to store the un-compressed, non-obfuscated Ant    -->
   <!-- tools JAR file.                                         -->
-  <property name="tools.jar.normal"     location="${tools.tmp}/mucommander-ant-tools_unobf.jar"/>
+  <property name="tools.jar.normal"       location="${tools.tmp}/mucommander-ant-tools_unobf.jar"/>
   <!-- Where to store the un-compressed, obfuscated Ant tools  -->
   <!-- JAR file.                                               -->
-  <property name="tools.jar.obf"        location="${tools.tmp}/mucommander-ant-tools_obf.jar"/>
+  <property name="tools.jar.obf"          location="${tools.tmp}/mucommander-ant-tools_obf.jar"/>
   <!-- Where to store the compressed, obfuscated Ant tools JAR -->
   <!-- file.                                                   -->
-  <property name="tools.jar.cmp"        location="${tools.out}/mucommander-ant-tools.jar"/>
+  <property name="tools.jar.cmp"          location="${tools.out}/mucommander-ant-tools.jar"/>
   <!-- Where to store the non-obfuscated Ant tools bytecode.   -->
-  <property name="tools.classes.normal" location="${tools.tmp}/classes"/>
+  <property name="tools.classes.normal"   location="${tools.tmp}/classes"/>
   <!-- Where to store the obfuscated Ant tools bytecode.       -->
-  <property name="tools.classes.obf"    location="${tools.tmp}/obf"/>
-  <!-- Folder where Junit test reports are generated.        -->
-  <property name="tools.junit.reports"  location="${tools.tmp}/test-reports"/>
+  <property name="tools.classes.obf"      location="${tools.tmp}/obf"/>
+  <!-- Where to store all automated tool reports.              -->
+  <property name="tools.reports"          location="${reports}/ant-tools"/>
+  <!-- Where to store JUnit reports.                           -->
+  <property name="tools.junit.reports"    location="${tools.reports}/junit"/>
+  <property name="tools.simian.reports"   location="${tools.reports}/simian.txt"/>
+  <property name="tools.findbugs.reports" location="${tools.reports}/findbugs.xml"/>
+  <property name="tools.proguard.reports" location="${tools.reports}/proguard.txt"/>
 
 
 
   <!-- = Configuration API values ============================ -->
   <!-- ======================================================= -->
   <!-- Where to look for the Configuration API resource files. -->
-  <property name="conf.res"             location="${res}/conf"/>
+  <property name="conf.res"               location="${res}/conf"/>
   <!-- Configuration API readme file.                          -->
-  <property name="conf.readme"          location="${conf.res}/readme.txt"/>
+  <property name="conf.readme"            location="${conf.res}/readme.txt"/>
   <!-- Configuration API license file.                         -->
-  <property name="conf.license"         location="${conf.res}/license.txt"/>
+  <property name="conf.license"           location="${conf.res}/license.txt"/>
   <!-- Configuration API compilation instructions.             -->
-  <property name="conf.compile"         location="${conf.res}/compile.txt"/>
+  <property name="conf.compile"           location="${conf.res}/compile.txt"/>
   <!-- Where to store the Configuration API documentation.     -->
-  <property name="conf.doc"             location="${doc}/conf"/>
+  <property name="conf.doc"               location="${doc}/conf"/>
   <!-- Where to store the Configuration API temporary files.   -->
-  <property name="conf.tmp"             location="${tmp}/conf"/>
+  <property name="conf.tmp"               location="${tmp}/conf"/>
   <!-- Path to the Configuration API buildfile.                -->
-  <property name="conf.build"           location="build/conf/build.xml"/>
+  <property name="conf.build"             location="build/conf/build.xml"/>
   <!-- Where to store the un-compressed, non-obfuscated        -->
   <!-- Configuration API JAR file.                             -->
-  <property name="conf.jar.normal"      location="${conf.tmp}/mucommander-conf_unobf.jar"/>
+  <property name="conf.jar.normal"        location="${conf.tmp}/mucommander-conf_unobf.jar"/>
   <!-- Where to store the un-compressed, obfuscated            -->
   <!-- Configuration API JAR file.                             -->
-  <property name="conf.jar.obf"         location="${conf.tmp}/mucommander-conf_obf.jar"/>
+  <property name="conf.jar.obf"           location="${conf.tmp}/mucommander-conf_obf.jar"/>
   <!-- Where to store the compressed, obfuscated Configuration -->
   <!-- API JAR file.                                           -->
-  <property name="conf.jar.cmp"         location="${conf.tmp}/mucommander-conf.jar"/>
+  <property name="conf.jar.cmp"           location="${conf.tmp}/mucommander-conf.jar"/>
   <!-- Where to store the non-obfuscated Configuration API     -->
   <!-- bytecode.                                               -->
-  <property name="conf.classes.normal"  location="${conf.tmp}/classes"/>
+  <property name="conf.classes.normal"    location="${conf.tmp}/classes"/>
   <!-- Where to store obfuscated Configuration API bytecode.   -->
-  <property name="conf.classes.obf"     location="${conf.tmp}/obf"/>
-  <!-- Folder where Junit test reports are generated.        -->
-  <property name="conf.junit.reports"   location="${conf.tmp}/test-reports"/>
+  <property name="conf.classes.obf"       location="${conf.tmp}/obf"/>
+  <property name="conf.reports"           location="${reports}/conf"/>
+  <!-- Where to store JUnit reports.                           -->
+  <property name="conf.junit.reports"     location="${conf.reports}/junit"/>
+  <property name="conf.findbugs.reports"  location="${conf.reports}/findbugs.xml"/>
+  <property name="conf.proguard.reports"  location="${conf.reports}/proguard.txt"/>
+  <property name="conf.simian.reports"    location="${conf.reports}/simian.txt"/>
 </project>
