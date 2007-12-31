@@ -34,7 +34,7 @@ public class SizeTask extends Task {
     private String  propertyName;
     private FileSet files;
 
-    public void SizeTask() {}
+    public SizeTask() {}
 
     public void init() {
         propertyName = null;
