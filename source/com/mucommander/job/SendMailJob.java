@@ -210,9 +210,6 @@ public class SendMailJob extends TransferFileJob {
 	
             writeLine("\r\n--" + boundary);
         }
-        catch(IOException e) {
-            throw e;
-        }
         finally {
             if(fileIn!=null)
                 fileIn.close();
