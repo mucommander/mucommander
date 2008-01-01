@@ -28,7 +28,7 @@ package com.mucommander.conf;
  * </p>
  * @author Nicolas Rinaudo
  */
-public class DefaultConfigurationBuilder {
+public class DefaultConfigurationBuilder implements ConfigurationBuilder {
     /**
      * Receive notification at the begining of the configuration.
      * <p>
