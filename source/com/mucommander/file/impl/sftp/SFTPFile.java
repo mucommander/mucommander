@@ -965,15 +965,15 @@ public class SFTPFile extends AbstractFile {
                 // by one of the J2SSH developers : http://sourceforge.net/forum/message.php?msg_id=1826569
 
                 // Concatenates all tokens to create the command string
-                String command = "";
+                StringBuffer command = new StringBuffer();
                 int nbTokens = tokens.length;
                 for(int i=0; i<nbTokens; i++) {
-                    command += tokens[i];
+                    command.append(tokens[i]);
                     if(i!=nbTokens-1)
-                        command += " ";
+                        command.append(" ");
                 }
 
-                success = sessionClient.executeCommand(command);
+                success = sessionClient.executeCommand(command.toString());
                 if(Debug.ON) Debug.trace("commmand="+command+" returned "+success);
             }
             catch(IOException e) {
