@@ -314,6 +314,8 @@ public abstract class AnimatedIcon implements Icon {
             hashCode    = (x + "," + y + ":" + c.hashCode()).hashCode();
         }
 
+        public int hashCode() {return hashCode;}
+
         /**
          * Finds the specified component's first non-renderer ancestor.
          * @param c component whose ancestors should be explored.
