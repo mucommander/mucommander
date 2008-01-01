@@ -1092,7 +1092,7 @@ public class ThemeData {
      * @return    the default value for the specified font.
      * @see       #addDefaultValuesListener(ThemeListener)
      */
-    public static final Font getDefaultFont(int id) {
+    public static Font getDefaultFont(int id) {
         checkFontIdentifier(id);
 
 	switch(id) {

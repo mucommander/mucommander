@@ -418,7 +418,7 @@ public class ThemeManager {
      * @param  out         where to write the data to.
      * @throws IOException if an error occured.
      */
-    private static final void copyStreams(InputStream in, OutputStream out) throws IOException {
+    private static void copyStreams(InputStream in, OutputStream out) throws IOException {
         byte[] buffer; // Used to store the data before transfering it.
         int    count;  // Number of bytes read during the last read operation.
 

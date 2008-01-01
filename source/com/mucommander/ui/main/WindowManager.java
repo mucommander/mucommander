@@ -85,7 +85,7 @@ public class WindowManager implements WindowListener, ConfigurationListener {
     /**
      * Installs all custom look and feels.
      */
-    private static final void installCustomLookAndFeels() {
+    private static void installCustomLookAndFeels() {
         List     plafs;         // All available custom look and feels.
         Iterator plafsIterator; // Iterator on custom look and feels.
 
