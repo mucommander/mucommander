@@ -50,7 +50,7 @@ class CredentialsParser extends DefaultHandler implements CredentialsConstants {
     private StringBuffer characters;
 
     /** Contains the encryption method used to encrypt/decrypt passwords */
-    private String encryptionMethod;
+    //    private String encryptionMethod;
 
 
     /**
@@ -98,10 +98,12 @@ class CredentialsParser extends DefaultHandler implements CredentialsConstants {
                 urlProperties = new Hashtable();
             urlProperties.put(attributes.getValue(ATTRIBUTE_NAME), attributes.getValue(ATTRIBUTE_VALUE));
         }
+        /*
         // Root element, the 'encryption' attribute specifies which encoding was used to encrypt passwords
         else if(qName.equals(ELEMENT_ROOT)) {
             encryptionMethod = attributes.getValue("encryption");
         }
+        */
     }
 
     public void endElement(String uri, String localName, String qName) throws SAXException {

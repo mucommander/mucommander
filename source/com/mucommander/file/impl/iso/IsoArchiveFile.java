@@ -390,11 +390,11 @@ public class IsoArchiveFile extends AbstractROArchiveFile {
                 effective_date, file_structure_version, unused4, application_data,
                 unused5};
 
-        boolean cooked;
+        //        boolean cooked;
 
         public isoPvd(RandomAccessInputStream rais, int start, boolean cooked) throws Exception {
             byte[] pvd = new byte[2048];
-            this.cooked = cooked;
+            //            this.cooked = cooked;
             rais.seek(sector(start, cooked));
             rais.read(pvd);
             load(pvd);
