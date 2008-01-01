@@ -259,9 +259,11 @@ public abstract class AnimatedIcon implements Icon {
         }
     }
 
-    protected void finalize() {
+    protected void finalize() throws Throwable {
         // Forces the timer to stop when the animation isn't used anymore.
         timer.stop();
+
+        super.finalize();
     }
 
 
