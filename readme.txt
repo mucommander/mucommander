@@ -159,6 +159,8 @@ Bug fixes:
   was taken into account.
 - Fixed an issue under Linux causing the muCommander icon to sometimes stay in
   the system tray after the application had quit.
+- Security fix: credentials.xml is no longer readable by 'group' and 'other'
+  under UNIX-based systems.
 
 Known issues:
 - Korean translation is not up-to-date.

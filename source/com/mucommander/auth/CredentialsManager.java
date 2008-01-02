@@ -23,6 +23,7 @@ import com.mucommander.PlatformManager;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
 import com.mucommander.file.FileURL;
+import com.mucommander.file.util.Chmod;
 import com.mucommander.io.BackupOutputStream;
 import com.mucommander.util.AlteredVector;
 import com.mucommander.util.VectorChangeListener;
@@ -156,7 +157,6 @@ public class CredentialsManager implements VectorChangeListener {
         try {
             credentialsFile = getCredentialsFile();
             CredentialsWriter.write(out = new BackupOutputStream(credentialsFile));
-            if(Debug.ON) Debug.trace("Credentials file saved successfully.");
             saveNeeded = false;
         }
         finally {
@@ -164,6 +164,17 @@ public class CredentialsManager implements VectorChangeListener {
                 try {out.close();}
                 catch(Exception e) {}
             }
+        }
+
+        // Under UNIX-based systems, change the credentials file's permissions so that the file can't be read by
+        // 'group' and 'other'.
+        boolean fileSecured = !PlatformManager.isUnixBased() || Chmod.chmod(credentialsFile, 0600);     // rw-------
+
+        if(Debug.ON) {
+            if(fileSecured)
+                Debug.trace("Credentials file saved successfully.");
+            else
+                Debug.trace("Warning: credentials file could not be chmod.");
         }
     }
 
