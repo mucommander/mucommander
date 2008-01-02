@@ -25,41 +25,10 @@ import com.mucommander.Debug;
 */
 public class OsVersion extends ComparableRuntimeProperty {
 
-    private final static OsVersion currentValue;
+    private final static OsVersion currentValue = parseSystemProperty(getRawSystemProperty());
 
     static {
-        String osVersionString = getRawSystemProperty();
-
-        // Mac OS X versions
-        if(OsFamily.getCurrent()==OsFamilies.MAC_OS_X) {
-            if(osVersionString.startsWith("10.5")) {
-                currentValue = OsVersions.MAC_OS_X_10_5;
-            }
-            else if(osVersionString.startsWith("10.4")) {
-                currentValue = OsVersions.MAC_OS_X_10_4;
-            }
-            else if(osVersionString.startsWith("10.3")) {
-                currentValue = OsVersions.MAC_OS_X_10_3;
-            }
-            else if(osVersionString.startsWith("10.2")) {
-                currentValue = OsVersions.MAC_OS_X_10_2;
-            }
-            else if(osVersionString.startsWith("10.1")) {
-                currentValue = OsVersions.MAC_OS_X_10_1;
-            }
-            else if(osVersionString.startsWith("10.0")) {
-                currentValue = OsVersions.MAC_OS_X_10_0;
-            }
-            else {
-                // Newer version we don't know of yet, assume latest supported OS version
-                currentValue = OsVersions.MAC_OS_X_10_5;
-            }
-        }
-        else {
-            currentValue = OsVersions.UNKNOWN_VERSION;
-        }
-
-        if(Debug.ON) Debug.trace("Detected OS version: "+ currentValue);
+        if(Debug.ON) Debug.trace("Current OS version: "+ currentValue);
     }
 
     protected OsVersion(String osVersionString, int osVersionInt) {
@@ -72,6 +41,42 @@ public class OsVersion extends ComparableRuntimeProperty {
 
     public static String getRawSystemProperty() {
         return System.getProperty("os.version");
+    }
+
+    static OsVersion parseSystemProperty(String osVersionProp) {
+        OsFamily osFamily = OsFamily.getCurrent();
+        OsVersion osVersion;
+
+        // Mac OS X versions
+        if(osFamily==OsFamilies.MAC_OS_X) {
+            if(osVersionProp.startsWith("10.5")) {
+                osVersion = OsVersions.MAC_OS_X_10_5;
+            }
+            else if(osVersionProp.startsWith("10.4")) {
+                osVersion = OsVersions.MAC_OS_X_10_4;
+            }
+            else if(osVersionProp.startsWith("10.3")) {
+                osVersion = OsVersions.MAC_OS_X_10_3;
+            }
+            else if(osVersionProp.startsWith("10.2")) {
+                osVersion = OsVersions.MAC_OS_X_10_2;
+            }
+            else if(osVersionProp.startsWith("10.1")) {
+                osVersion = OsVersions.MAC_OS_X_10_1;
+            }
+            else if(osVersionProp.startsWith("10.0")) {
+                osVersion = OsVersions.MAC_OS_X_10_0;
+            }
+            else {
+                // Newer version we don't know of yet, assume latest supported OS version
+                osVersion = OsVersions.MAC_OS_X_10_5;
+            }
+        }
+        else {
+            osVersion = OsVersions.UNKNOWN_VERSION;
+        }
+
+        return osVersion;
     }
 
     

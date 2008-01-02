@@ -25,47 +25,10 @@ import com.mucommander.Debug;
 */
 public class JavaVersion extends ComparableRuntimeProperty {
 
-    private final static JavaVersion currentValue;
+    private final static JavaVersion currentValue = parseSystemProperty(getRawSystemProperty());
 
     static {
-        // - Java version ----------------------------
-        // -------------------------------------------
-        // Java version detection //
-        String versionString = getRawSystemProperty();
-
-        // Java version property should never be null or empty, but better be safe than sorry ...
-        if(versionString==null || (versionString=versionString.trim()).equals(""))
-            // Assume java 1.4 (first supported Java version)
-            currentValue = JavaVersions.JAVA_1_4;
-        // Java 1.7
-        else if(versionString.startsWith("1.7"))
-            currentValue = JavaVersions.JAVA_1_7;
-        // Java 1.6
-        else if(versionString.startsWith("1.6"))
-            currentValue = JavaVersions.JAVA_1_6;
-        // Java 1.5
-        else if(versionString.startsWith("1.5"))
-            currentValue = JavaVersions.JAVA_1_5;
-        // Java 1.4
-        else if(versionString.startsWith("1.4"))
-            currentValue = JavaVersions.JAVA_1_4;
-        // Java 1.3
-        else if(versionString.startsWith("1.3"))
-            currentValue = JavaVersions.JAVA_1_3;
-        // Java 1.2
-        else if(versionString.startsWith("1.2"))
-            currentValue = JavaVersions.JAVA_1_2;
-        // Java 1.1
-        else if(versionString.startsWith("1.1"))
-            currentValue = JavaVersions.JAVA_1_1;
-        // Java 1.0
-        else if(versionString.startsWith("1.0"))
-            currentValue = JavaVersions.JAVA_1_0;
-        // Newer version we don't know of yet, assume latest supported Java version
-        else
-            currentValue = JavaVersions.JAVA_1_6;
-
-        if(Debug.ON) Debug.trace("Detected Java version: "+ currentValue);
+        if(Debug.ON) Debug.trace("Current Java version: "+ currentValue);
     }
 
     protected JavaVersion(String javaVersionString, int javaVersionInt) {
@@ -80,6 +43,43 @@ public class JavaVersion extends ComparableRuntimeProperty {
         return System.getProperty("java.version");
     }
 
+    static JavaVersion parseSystemProperty(String javaVersionString) {
+        JavaVersion javaVersion;
+
+        // Java version property should never be null or empty, but better be safe than sorry ...
+        if(javaVersionString==null || (javaVersionString=javaVersionString.trim()).equals(""))
+            // Assume java 1.4 (first supported Java version)
+            javaVersion = JavaVersions.JAVA_1_4;
+        // Java 1.7
+        else if(javaVersionString.startsWith("1.7"))
+            javaVersion = JavaVersions.JAVA_1_7;
+        // Java 1.6
+        else if(javaVersionString.startsWith("1.6"))
+            javaVersion = JavaVersions.JAVA_1_6;
+        // Java 1.5
+        else if(javaVersionString.startsWith("1.5"))
+            javaVersion = JavaVersions.JAVA_1_5;
+        // Java 1.4
+        else if(javaVersionString.startsWith("1.4"))
+            javaVersion = JavaVersions.JAVA_1_4;
+        // Java 1.3
+        else if(javaVersionString.startsWith("1.3"))
+            javaVersion = JavaVersions.JAVA_1_3;
+        // Java 1.2
+        else if(javaVersionString.startsWith("1.2"))
+            javaVersion = JavaVersions.JAVA_1_2;
+        // Java 1.1
+        else if(javaVersionString.startsWith("1.1"))
+            javaVersion = JavaVersions.JAVA_1_1;
+        // Java 1.0
+        else if(javaVersionString.startsWith("1.0"))
+            javaVersion = JavaVersions.JAVA_1_0;
+        // Newer version we don't know of yet, assume latest supported Java version
+        else
+            javaVersion = JavaVersions.JAVA_1_6;
+
+        return javaVersion;
+    }
 
     ///////////////////////////////////////////////
     // ComparableRuntimeProperty implementation //

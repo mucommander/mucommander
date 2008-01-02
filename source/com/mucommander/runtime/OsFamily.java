@@ -25,44 +25,10 @@ import com.mucommander.Debug;
 */
 public class OsFamily extends RuntimeProperty {
 
-    private final static OsFamily currentValue;
+    private final static OsFamily currentValue = parseSystemProperty(getRawSystemProperty());
 
     static {
-        String osName = getRawSystemProperty();
-        
-        // Windows family
-        if(osName.startsWith("Windows")) {
-            // Windows 95, 98, Me
-            if (osName.startsWith("Windows 95") || osName.startsWith("Windows 98") || osName.startsWith("Windows Me")) {
-                currentValue = OsFamilies.WINDOWS_9X;
-            }
-            // Windows NT, 2000, XP and up
-            else {
-                currentValue = OsFamilies.WINDOWS_NT;
-            }
-        }
-        // Mac OS X family
-        else if(osName.startsWith("Mac OS X")) {
-            currentValue = OsFamilies.MAC_OS_X;
-        }
-        // OS/2 family
-        else if(osName.startsWith("OS/2")) {
-            currentValue = OsFamilies.OS_2;
-        }
-        // Linux family
-        else if(osName.startsWith("Linux")) {
-            currentValue = OsFamilies.LINUX;
-        }
-        // Solaris family
-        else if(osName.startsWith("Solaris") || osName.startsWith("SunOS")) {
-            currentValue = OsFamilies.SOLARIS;
-        }
-        // Any other OS
-        else {
-            currentValue = OsFamilies.UNKNOWN_OS_FAMILY;
-        }
-
-        if(Debug.ON) Debug.trace("Detected OS family: "+ currentValue);
+        if(Debug.ON) Debug.trace("Current OS family: "+ currentValue);
     }
 
     protected OsFamily(String osFamilyString) {
@@ -75,6 +41,44 @@ public class OsFamily extends RuntimeProperty {
 
     public static OsFamily getCurrent() {
         return currentValue;
+    }
+
+    static OsFamily parseSystemProperty(String osNameProp) {
+        OsFamily osFamily;
+
+        // Windows family
+        if(osNameProp.startsWith("Windows")) {
+            // Windows 95, 98, Me
+            if (osNameProp.startsWith("Windows 95") || osNameProp.startsWith("Windows 98") || osNameProp.startsWith("Windows Me")) {
+                osFamily = OsFamilies.WINDOWS_9X;
+            }
+            // Windows NT, 2000, XP and up
+            else {
+                osFamily = OsFamilies.WINDOWS_NT;
+            }
+        }
+        // Mac OS X family
+        else if(osNameProp.startsWith("Mac OS X")) {
+            osFamily = OsFamilies.MAC_OS_X;
+        }
+        // OS/2 family
+        else if(osNameProp.startsWith("OS/2")) {
+            osFamily = OsFamilies.OS_2;
+        }
+        // Linux family
+        else if(osNameProp.startsWith("Linux")) {
+            osFamily = OsFamilies.LINUX;
+        }
+        // Solaris family
+        else if(osNameProp.startsWith("Solaris") || osNameProp.startsWith("SunOS")) {
+            osFamily = OsFamilies.SOLARIS;
+        }
+        // Any other OS
+        else {
+            osFamily = OsFamilies.UNKNOWN_OS_FAMILY;
+        }
+
+        return osFamily;
     }
 
     /////////////////////////////////////
