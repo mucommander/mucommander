@@ -96,9 +96,9 @@ public class Configuration {
     /** Used to create objects that will write to the configuration source. */
     private ConfigurationWriterFactory writerFactory;
     /** Holds the content of the configuration file. */
-    private ConfigurationSection       root = new ConfigurationSection();
+    private final ConfigurationSection root = new ConfigurationSection();
     /** Contains all registered configuration listeners, stored as weak references */
-    private static WeakHashMap         listeners = new WeakHashMap();
+    private static final WeakHashMap   listeners = new WeakHashMap();
 
 
 
@@ -291,7 +291,7 @@ public class Configuration {
      * @see                                    #read(ConfigurationReader)
      * @see                                    #read()
      */
-    public synchronized void read(InputStream in, ConfigurationReader reader) throws IOException, ConfigurationException {reader.read(in, new ConfigurationLoader(root));}
+    synchronized void read(InputStream in, ConfigurationReader reader) throws IOException, ConfigurationException {reader.read(in, new ConfigurationLoader(root));}
 
     /**
      * Loads configuration from the specified input stream.
