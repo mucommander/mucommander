@@ -551,7 +551,7 @@ public class CommandManager implements CommandBuilder {
                 }
 
                 // Match executables if necessary and if running under java >= 1.6.
-                if(PlatformManager.runExecutables() && (PlatformManager.getJavaVersion() >= PlatformManager.JAVA_1_6)) {
+                if(PlatformManager.runExecutables() && PlatformManager.JAVA_1_6.isCurrentOrHigher()) {
                     try {
                         filter = new AndFileFilter();
                         filter.addFileFilter(new PermissionsFileFilter(PermissionsFileFilter.EXECUTE_PERMISSION, true));

@@ -122,7 +122,7 @@ public class StringUtils {
      * @return the resulting string
      */
     public static String replaceCompat(String s, String target, String replacement) {
-        if(PlatformManager.getJavaVersion()>= PlatformManager.JAVA_1_5) {
+        if(PlatformManager.JAVA_1_5.isCurrentOrHigher()) {
             // Java 1.5 or later
             return s.replace(target, replacement);
         }

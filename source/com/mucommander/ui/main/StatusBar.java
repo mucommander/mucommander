@@ -265,7 +265,7 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
 
                     // Folder is a local file and Java version is 1.5 or lower: call getVolumeInfo() instead of 
                     // separate calls to getFreeSpace() and getTotalSpace() as it is twice as fast.
-                    if(currentFolder instanceof LocalFile && PlatformManager.getJavaVersion()<=PlatformManager.JAVA_1_5) {
+                    if(currentFolder instanceof LocalFile && PlatformManager.JAVA_1_5.isCurrentOrLower()) {
                         long volumeInfo[] = ((LocalFile)currentFolder).getVolumeInfo();
                         volumeTotal = volumeInfo[0];
                         volumeFree = volumeInfo[1];

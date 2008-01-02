@@ -95,7 +95,7 @@ public class DrivePopupButton extends PopupButton implements LocationListener, B
         MuConfiguration.addConfigurationListener(this);
 
         // Use new JButton decorations introduced in Mac OS X 10.5 (Leopard)
-        if(PlatformManager.getOsFamily()==PlatformManager.MAC_OS_X && PlatformManager.getOsVersion()>= PlatformManager.MAC_OS_X_10_5) {
+        if(PlatformManager.MAC_OS_X_10_5.isCurrentOrHigher()) {
             setMargin(new Insets(6,8,6,8));
             putClientProperty("JComponent.sizeVariant", "small");
             putClientProperty("JButton.buttonType", "textured");

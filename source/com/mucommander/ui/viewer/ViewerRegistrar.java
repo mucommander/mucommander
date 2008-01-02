@@ -64,7 +64,7 @@ public class ViewerRegistrar {
         ViewerFrame frame = new ViewerFrame(mainFrame, file, icon);
 
         // Use new Window decorations introduced in Mac OS X 10.5 (Leopard)
-        if(PlatformManager.getOsVersion()>= PlatformManager.MAC_OS_X_10_5) {
+        if(PlatformManager.MAC_OS_X_10_5.isCurrentOrHigher()) {
             // Displays the document icon in the window title bar, works only for local files
             if(file.getURL().getProtocol().equals(FileProtocols.FILE))
                 frame.getRootPane().putClientProperty("Window.documentFile", file.getUnderlyingFileObject()); 

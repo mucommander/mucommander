@@ -220,8 +220,7 @@ public class FileTable extends JTable implements Columns, MouseListener, MouseMo
      * headers by setting client properties.
      */
     static boolean usesTableHeaderRenderingProperties() {
-        return PlatformManager.getOsFamily()==PlatformManager.MAC_OS_X
-            && PlatformManager.getOsVersion()>=PlatformManager.MAC_OS_X_10_5;
+        return PlatformManager.MAC_OS_X_10_5.isCurrentOrHigher();
     }
 
 

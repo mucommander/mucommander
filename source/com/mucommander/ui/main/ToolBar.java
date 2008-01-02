@@ -208,7 +208,7 @@ public class ToolBar extends JToolBar implements ConfigurationListener, MouseLis
         }
 
         // Use new JButton decorations introduced in Mac OS X 10.5 (Leopard)
-        if(PlatformManager.getOsFamily()==PlatformManager.MAC_OS_X && PlatformManager.getOsVersion()>= PlatformManager.MAC_OS_X_10_5) {
+        if(PlatformManager.MAC_OS_X_10_5.isCurrentOrHigher()) {
             int nbComponents = getComponentCount();
             Component comp;
             boolean hasPrevious, hasNext;
@@ -264,7 +264,7 @@ public class ToolBar extends JToolBar implements ConfigurationListener, MouseLis
             button.setIcon(IconManager.getScaledIcon(action.getIcon(), scaleFactor));
 
         // Use new JButton decorations introduced in Mac OS X 10.5 (Leopard)
-        if(PlatformManager.getOsFamily()==PlatformManager.MAC_OS_X && PlatformManager.getOsVersion()>= PlatformManager.MAC_OS_X_10_5) {
+        if(PlatformManager.MAC_OS_X_10_5.isCurrentOrHigher()) {
             button.putClientProperty("JButton.buttonType", "segmentedTextured");
             button.setRolloverEnabled(true);
         }

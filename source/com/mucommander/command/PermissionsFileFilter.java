@@ -37,7 +37,7 @@ public class PermissionsFileFilter extends FileFilter implements FilePermissions
     }
 
     public boolean accept(AbstractFile file) {
-        if((permission == EXECUTE_PERMISSION) && (PlatformManager.getJavaVersion() <= PlatformManager.JAVA_1_5))
+        if(permission==EXECUTE_PERMISSION && PlatformManager.JAVA_1_5.isCurrentOrLower())
             return true;
 
         return filter ? file.getPermission(USER_ACCESS, permission) : !file.getPermission(USER_ACCESS, permission);

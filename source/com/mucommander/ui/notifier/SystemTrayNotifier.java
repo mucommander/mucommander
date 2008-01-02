@@ -83,7 +83,7 @@ public class SystemTrayNotifier extends AbstractNotifier implements ActionListen
     public boolean setEnabled(boolean enabled) {
         if(enabled) {
             // No need to bother if the current Java runtime version is not 1.6 or up, or if SystemTray is not available
-            if(PlatformManager.getJavaVersion()<PlatformManager.JAVA_1_6 || !SystemTray.isSupported())
+            if(PlatformManager.JAVA_1_6.isCurrentLower() || !SystemTray.isSupported())
                 return false;
 
             // If System Tray has already been initialized
