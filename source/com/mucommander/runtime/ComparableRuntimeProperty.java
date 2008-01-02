@@ -18,8 +18,6 @@
 
 package com.mucommander.runtime;
 
-import com.mucommander.PlatformManager;
-
 /**
  * @author Maxence Bernard
 */
@@ -34,19 +32,19 @@ public abstract class ComparableRuntimeProperty extends RuntimeProperty implemen
     }
 
     public boolean isCurrentOrLower() {
-        return PlatformManager.getOsVersion().compareTo(this)<=0;
+        return ((ComparableRuntimeProperty)getCurrentValue()).compareTo(this)<=0;
     }
 
     public boolean isCurrentLower() {
-        return PlatformManager.getOsVersion().compareTo(this)<0;
+        return ((ComparableRuntimeProperty)getCurrentValue()).compareTo(this)<0;
     }
 
     public boolean isCurrentOrHigher() {
-        return PlatformManager.getOsVersion().compareTo(this)>=0;
+        return ((ComparableRuntimeProperty)getCurrentValue()).compareTo(this)>=0;
     }
 
     public boolean isCurrentHigher() {
-        return PlatformManager.getOsVersion().compareTo(this)>0;
+        return ((ComparableRuntimeProperty)getCurrentValue()).compareTo(this)>0;
     }
 
     ///////////////////////////////
