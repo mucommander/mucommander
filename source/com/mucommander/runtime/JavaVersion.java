@@ -35,6 +35,12 @@ public class JavaVersion extends ComparableRuntimeProperty {
         super(javaVersionString, javaVersionInt);
     }
 
+    /**
+     * This method is a no-op that can be used to force the static initialization of this class.
+     */
+    public static void doStaticInit() {
+    }
+
     public static JavaVersion getCurrent() {
         return currentValue;
     }

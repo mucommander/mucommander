@@ -35,6 +35,17 @@ public class OsVersion extends ComparableRuntimeProperty {
         super(osVersionString, osVersionInt);
     }
 
+
+    ////////////////////
+    // Static methods //
+    ////////////////////
+
+    /**
+     * This method is a no-op that can be used to force the static initialization of this class.
+     */
+    public static void doStaticInit() {
+    }
+
     public static OsVersion getCurrent() {
         return currentValue;
     }

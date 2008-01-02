@@ -35,12 +35,18 @@ public class OsFamily extends RuntimeProperty {
         super(osFamilyString);
     }
 
-    public static String getRawSystemProperty() {
-        return System.getProperty("os.name");
+    /**
+     * This method is a no-op that can be used to force the static initialization of this class.
+     */
+    public static void doStaticInit() {
     }
 
     public static OsFamily getCurrent() {
         return currentValue;
+    }
+
+    public static String getRawSystemProperty() {
+        return System.getProperty("os.name");
     }
 
     static OsFamily parseSystemProperty(String osNameProp) {
