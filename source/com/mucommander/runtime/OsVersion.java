@@ -25,14 +25,15 @@ import com.mucommander.Debug;
 */
 public class OsVersion extends ComparableRuntimeProperty {
 
+    /** Holds the OsVersion of the current runtime environment  */
     private final static OsVersion currentValue = parseSystemProperty(getRawSystemProperty(), OsFamily.getCurrent());
 
     static {
         if(Debug.ON) Debug.trace("Current OS version: "+ currentValue);
     }
 
-    protected OsVersion(String osVersionString, int osVersionInt) {
-        super(osVersionString, osVersionInt);
+    protected OsVersion(String stringRepresentation, int intValue) {
+        super(stringRepresentation, intValue);
     }
 
 
@@ -46,14 +47,30 @@ public class OsVersion extends ComparableRuntimeProperty {
     public static void doStaticInit() {
     }
 
+    /**
+     * Returns the OS version of the current runtime environment.
+     *
+     * @return the OS version of the current runtime environment
+     */
     public static OsVersion getCurrent() {
         return currentValue;
     }
 
+    /**
+     * Returns the value of the system property which serves to detect the OS version at runtime.
+     *
+     * @return the value of the system property which serves to detect the OS version at runtime.
+     */
     public static String getRawSystemProperty() {
         return System.getProperty("os.version");
     }
 
+    /**
+     * Returns an <code>OsVersion</code> instance corresponding to the specified system property's value.
+     *
+     * @param osVersionProp the value of the "os.version" system property
+     * @return an OsVersion instance corresponding to the specified system property's value
+     */
     static OsVersion parseSystemProperty(String osVersionProp, OsFamily osFamily) {
         OsVersion osVersion;
 
@@ -86,7 +103,7 @@ public class OsVersion extends ComparableRuntimeProperty {
                 osVersion = OsVersions.WINDOWS_VISTA;
             }
             else {
-                // Newer version we don't know yet, assume latest supported OS version
+                // Newer version we don't know of yet, assume latest supported OS version
                 osVersion = OsVersions.WINDOWS_VISTA;
             }
         }
@@ -111,7 +128,7 @@ public class OsVersion extends ComparableRuntimeProperty {
                 osVersion = OsVersions.MAC_OS_X_10_0;
             }
             else {
-                // Newer version we don't know yet, assume latest supported OS version
+                // Newer version we don't know of yet, assume latest supported OS version
                 osVersion = OsVersions.MAC_OS_X_10_5;
             }
         }

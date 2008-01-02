@@ -19,31 +19,62 @@
 package com.mucommander.runtime;
 
 /**
+ * This abstract class represents a property of the runtime environment. A runtime property has a finite number of
+ * values -- each value having a corresponding <code>RuntimeProperty</code> instance, and only one. Subclasses must
+ * ensure that only instance exists per runtime value. Based on this assumption, RuntimeProperty instances can be 
+ * compared using the shallow equals operator '=='.
+ *
+ * <p>When running on a JVM, a RuntimeProperty has a runtime value (and only one), which can be retrieved using
+ * {@link #getCurrentValue()}.</p>
+ *
  * @author Maxence Bernard
-*/
+ */
 public abstract class RuntimeProperty {
 
-    private String propertyString;
+    /** The String representation of this RuntimeProperty, set at creation time */
+    protected final String stringRepresentation;
 
-    protected RuntimeProperty(String propertyString) {
-        this.propertyString = propertyString;
+    /**
+     * Creates a new RuntimeProperty using the specified String representation.
+     *
+     * @param stringRepresentation a String representation of this property
+     */
+    protected RuntimeProperty(String stringRepresentation) {
+        this.stringRepresentation = stringRepresentation;
     }
 
+    /**
+     * Returns <code>true</code> if this instance is the same instance as the one returned by {@link #getCurrentValue()}.
+     *
+     * @return true if this instance is the same as the current runtime's value
+     */
     public boolean isCurrent() {
         return this==getCurrentValue();
     }
+
 
     ////////////////////////
     // Overridden methods //
     ////////////////////////
 
+    /**
+     * Returns the String representation passed to the constructor at creation time.
+     *
+     * @return the String representation passed to the constructor at creation time
+     */
     public String toString() {
-        return propertyString;
+        return stringRepresentation;
     }
+
 
     //////////////////////
     // Abstract methods //
     //////////////////////
 
+    /**
+     * Returns the current runtime environment's value of this runtime property.
+     *
+     * @return the current runtime environment's value of this runtime property
+     */
     protected abstract RuntimeProperty getCurrentValue();
 }

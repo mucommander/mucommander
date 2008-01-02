@@ -25,14 +25,15 @@ import com.mucommander.Debug;
 */
 public class OsFamily extends RuntimeProperty {
 
+    /** Holds the OsFamily of the current runtime environment  */
     private final static OsFamily currentValue = parseSystemProperty(getRawSystemProperty());
 
     static {
         if(Debug.ON) Debug.trace("Current OS family: "+ currentValue);
     }
 
-    protected OsFamily(String osFamilyString) {
-        super(osFamilyString);
+    protected OsFamily(String stringRepresentation) {
+        super(stringRepresentation);
     }
 
     /**
@@ -41,14 +42,30 @@ public class OsFamily extends RuntimeProperty {
     public static void doStaticInit() {
     }
 
+    /**
+     * Returns the OS family of the current runtime environment.
+     *
+     * @return the OS family of the current runtime environment
+     */
     public static OsFamily getCurrent() {
         return currentValue;
     }
 
+    /**
+     * Returns the value of the system property which serves to detect the OS family at runtime.
+     *
+     * @return the value of the system property which serves to detect the OS family at runtime.
+     */
     public static String getRawSystemProperty() {
         return System.getProperty("os.name");
     }
 
+    /**
+     * Returns an <code>OsFamily</code> instance corresponding to the specified system property's value.
+     *
+     * @param osNameProp the value of the "os.name" system property
+     * @return an OsFamily instance corresponding to the specified system property's value
+     */
     static OsFamily parseSystemProperty(String osNameProp) {
         OsFamily osFamily;
 
@@ -79,6 +96,7 @@ public class OsFamily extends RuntimeProperty {
 
         return osFamily;
     }
+
 
     /////////////////////////////////////
     // RuntimeProperty implementation //

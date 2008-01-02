@@ -19,6 +19,8 @@
 package com.mucommander.runtime;
 
 /**
+ * This interface contains a list of all known OS families.
+ *
  * @author Maxence Bernard
  */
 public interface OsFamilies {
