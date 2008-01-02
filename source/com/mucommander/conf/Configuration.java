@@ -105,11 +105,11 @@ public class Configuration {
     // - Synchronisation locks -----------------------------------------------------------
     // -----------------------------------------------------------------------------------
     /** Used to synchronise concurent access of the configuration source. */
-    private Object sourceLock = new Object();
+    private final Object sourceLock = new Object();
     /** Used to synchronise concurent access of the reader factory. */
-    private Object readerLock = new Object();
+    private final Object readerLock = new Object();
     /** Used to synchronise concurent access of the writer factory. */
-    private Object writerLock = new Object();
+    private final Object writerLock = new Object();
 
 
 
@@ -268,7 +268,7 @@ public class Configuration {
      * modified by {@link #setWriterFactory(ConfigurationWriterFactory) setWriterFactory}.
      * </p>
      * @return                              an instance of the class that will be used to read configuration data.
-     * @throws ReaderConfigurationException any configuration writer error, possibly wrapping another exception.
+     * @throws WriterConfigurationException any configuration writer error, possibly wrapping another exception.
      * @see                                 #setWriterFactory(ConfigurationWriterFactory)
      * @see                                 #getWriterFactory()
      */
@@ -693,8 +693,9 @@ public class Configuration {
 
     /**
      * Returns the value of the specified variable as a {@link ValueList}.
-     * @param  name fully qualified name of the variable whose value should be retrieved.
-     * @return      the variable's value if set, <code>null</code> otherwise.
+     * @param  name      fully qualified name of the variable whose value should be retrieved.
+     * @param  separator character used to split the variable's value into a list.
+     * @return           the variable's value if set, <code>null</code> otherwise.
      */
     public ValueList getListVariable(String name, String separator) {return ConfigurationSection.getListValue(getVariable(name), separator);}
 
@@ -805,6 +806,7 @@ public class Configuration {
      * all registered listeners.
      * </p>
      * @param  name name of the variable to remove.
+     * @param  separator character used to split the variable's value into a list.
      * @return      the variable's old value, or <code>null</code> if it wasn't set.
      */
     public ValueList removeListVariable(String name, String separator) {return ConfigurationSection.getListValue(removeVariable(name), separator);}
