@@ -151,6 +151,7 @@ public class PlatformManager implements JavaVersions, OsFamilies, OsVersions {
      */
     static {
         OsFamily osFamily = OsFamily.getCurrent();
+        OsVersion.doStaticInit();
         JavaVersion javaVersion = getJavaVersion();
 
         // Windows family
