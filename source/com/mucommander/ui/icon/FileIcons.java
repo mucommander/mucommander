@@ -110,9 +110,9 @@ public class FileIcons {
             if(extension!=null) {
                 boolean systemIcon;
 
-                if(PlatformManager.getOsFamily()==PlatformManager.MAC_OS_X && "app".equalsIgnoreCase(extension))
+                if(PlatformManager.MAC_OS_X.isCurrent() && "app".equalsIgnoreCase(extension))
                     systemIcon = true;
-                else if(PlatformManager.isWindowsFamily() && "exe".equalsIgnoreCase(extension))
+                else if(PlatformManager.WINDOWS.isCurrent() && "exe".equalsIgnoreCase(extension))
                     systemIcon = true;
                 else
                     systemIcon = false;
@@ -280,6 +280,6 @@ public class FileIcons {
      * default file manager
      */
     public static boolean hasProperSystemIcons() {
-        return PlatformManager.getOsFamily()==PlatformManager.MAC_OS_X || PlatformManager.isWindowsFamily();
+        return PlatformManager.MAC_OS_X.isCurrent() || PlatformManager.WINDOWS.isCurrent();
     }
 }

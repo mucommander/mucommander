@@ -54,9 +54,8 @@ public class RootFolders {
             addFileRoots(rootFoldersV);
             if(Debug.ON) Debug.trace("java.io.File's root folders: "+rootFoldersV);
 	
-            // Add /etc/fstab folders
-            // If we're running Windows, we can just skip that
-            if(!PlatformManager.isWindowsFamily()) {
+            // Add /etc/fstab folders under UNIX-based systems.
+            if(PlatformManager.isUnixBased()) {
                 addFstabEntries(rootFoldersV);
                 if(Debug.ON) Debug.trace("/etc/fstab mount points added: "+rootFoldersV);
             }

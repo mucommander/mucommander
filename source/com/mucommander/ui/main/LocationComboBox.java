@@ -57,7 +57,7 @@ public class LocationComboBox extends EditableComboBox implements LocationListen
     private static Pattern windowsTrailingSpacePattern;
 
     static {
-        if(PlatformManager.isWindowsFamily())
+        if(PlatformManager.WINDOWS.isCurrent())
             windowsTrailingSpacePattern = Pattern.compile("[ ]+[\\\\]*$");
     }
 
@@ -207,7 +207,7 @@ public class LocationComboBox extends EditableComboBox implements LocationListen
         // Note that Win32 doesn't allow creating files with trailing spaces (in Explorer, command prompt...), but
         // those files can still be manually crafted and thus exist on one's hard drive.
         // Mucommander should in theory be able to access such files without any problem but this hasn't been tested.
-        if(PlatformManager.isWindowsFamily() && location.indexOf(":\\")==1) {
+        if(PlatformManager.WINDOWS.isCurrent() && location.indexOf(":\\")==1) {
             // Looks for trailing spaces and if some 
             Matcher matcher = windowsTrailingSpacePattern.matcher(location);
             if(matcher.find())

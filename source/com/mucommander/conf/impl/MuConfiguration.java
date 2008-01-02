@@ -79,7 +79,7 @@ public class MuConfiguration implements Columns {
      * In particular, the system tray notifier is available under Linux+Java 1.6, but it doesn't work well so it is not
      * enabled by default. */
     public static final boolean DEFAULT_ENABLE_SYSTEM_NOTIFICATIONS = com.mucommander.ui.notifier.AbstractNotifier.isAvailable()
-        && (PlatformManager.getOsFamily()==PlatformManager.MAC_OS_X || PlatformManager.isWindowsFamily());
+        && (PlatformManager.MAC_OS_X.isCurrent() || PlatformManager.WINDOWS.isCurrent());
     /** Controls whether files should be moved to trash or permanently erased */
     public static final String DELETE_TO_TRASH                    = "delete_to_trash";
     /** Default 'delete to trash' behavior */

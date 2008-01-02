@@ -100,7 +100,7 @@ public class FileURL implements Cloneable {
                 // - under other OS, conveniently transform it into smb://hostname/path to be nice with folks
                 //   who've spent too much time using Windows
                 else if(url.startsWith("\\\\") && urlLen>2) {
-                    if(PlatformManager.isWindowsFamily()) {
+                    if(PlatformManager.WINDOWS.isCurrent()) {
                         pos = url.indexOf('\\', 2);
                         if(pos==-1)
                             url =  FileProtocols.FILE+"://"+url.substring(2);

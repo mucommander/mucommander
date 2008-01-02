@@ -141,7 +141,7 @@ public class CachedFile extends ProxyFile {
         //  - http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=5036988
         //  - http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6240028
 
-        if(PlatformManager.isWindowsFamily()) {
+        if(PlatformManager.WINDOWS.isCurrent()) {
             try {
                 // Resolve FileSystem class, 'getBooleanAttributes' method and fields
                 Class cFile = File.class;

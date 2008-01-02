@@ -294,7 +294,7 @@ public abstract class AbstractFile implements FilePermissions {
         String path = fileURL.getPath();
 
         if(fileURL.getProtocol().equals(FileProtocols.FILE))
-            return PlatformManager.isWindowsFamily()?windowsDriveRootPattern.matcher(path).matches():path.equals("/");
+            return PlatformManager.WINDOWS.isCurrent()?windowsDriveRootPattern.matcher(path).matches():path.equals("/");
         else
             return path.equals("/");
     }

@@ -151,16 +151,16 @@ public class PlatformManager implements JavaVersions, OsFamilies, OsVersions {
      */
     static {
         OsFamily osFamily = OsFamily.getCurrent();
-        OsVersion.doStaticInit();
+        OsVersion osVersion = OsVersion.getCurrent();
         JavaVersion javaVersion = getJavaVersion();
 
         // Windows family
-        if(osFamily==WINDOWS_9X || osFamily==WINDOWS_NT) {
+        if(osFamily==WINDOWS) {
             unixDesktop            = UNKNOWN_DESKTOP;
             defaultFileManagerName = WINDOWS_FILE_MANAGER_NAME;
 
-            // Windows 95, 98, Me
-            if (osFamily==WINDOWS_9X) {
+            // Windows 9X: 95, 98, Me
+            if (osVersion.compareTo(WINDOWS_NT)<0) {
                 defaultFileManagerCommand    = WINDOWS_9X_FILE_OPENER;
                 defaultFileOpenerCommand     = WINDOWS_9X_FILE_OPENER;
                 defaultUrlOpenerCommand      = WINDOWS_9X_FILE_OPENER;
@@ -169,7 +169,7 @@ public class PlatformManager implements JavaVersions, OsFamilies, OsVersions {
                 runExecutables               = false;
                 defaultRegexpCaseSensitivity = false;
             }
-            // Windows NT, 2000, XP and up
+            // Windows NT: NT, 2000, XP, 2003, Vista and up
             else {
                 defaultFileManagerCommand    = WINDOWS_NT_FILE_OPENER;
                 defaultFileOpenerCommand     = WINDOWS_NT_FILE_OPENER;
@@ -265,12 +265,15 @@ public class PlatformManager implements JavaVersions, OsFamilies, OsVersions {
         }
 
         // Identifies the default shell command.
-        if(osFamily == WINDOWS_9X)
-            defaultShellCommand  = WINDOWS_9X_SHELL;
-        else if(osFamily == WINDOWS_NT)
-            defaultShellCommand  = WINDOWS_NT_SHELL;
-        else
+        if(osFamily==WINDOWS) {
+            if(osVersion.compareTo(WINDOWS_NT)<0)
+                defaultShellCommand  = WINDOWS_9X_SHELL;
+            else
+                defaultShellCommand  = WINDOWS_NT_SHELL;
+        }
+        else {
             defaultShellCommand  = POSIX_SHELL;
+        }
     }
 
     private static void setGnomeValues() {
@@ -335,18 +338,6 @@ public class PlatformManager implements JavaVersions, OsFamilies, OsVersions {
      */
     public static int getUnixDesktop() {
         return unixDesktop;
-    }
-
-    /**
-     * Convenience method which returns <code>true</code> if the current OS is Windows-based, that is if the current
-     * OS family is either {@link #WINDOWS_9X} or {@link #WINDOWS_NT}.
-     *
-     * @return true if the current OS is Windows-based
-     */
-    public static boolean isWindowsFamily() {
-        OsFamily osFamily = OsFamily.getCurrent();
-
-        return osFamily == WINDOWS_9X || osFamily == WINDOWS_NT;
     }
 
     /**

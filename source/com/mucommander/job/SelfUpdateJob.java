@@ -212,7 +212,7 @@ public class SelfUpdateJob extends CopyJob {
                 EqualsFilenameFilter launcherFilter;
 
                 // Windows
-                if(PlatformManager.isWindowsFamily()) {
+                if(PlatformManager.WINDOWS.isCurrent()) {
                     // Look for a muCommander.exe launcher located in the same folder as the JAR file
                     launcherFilter = new EqualsFilenameFilter("muCommander.exe", false);
 

@@ -84,14 +84,14 @@ public class LocalFile extends AbstractFile {
 
     /** true if the underlying local filesystem uses drives assigned to letters (e.g. A:\, C:\, ...) instead
      * of having single a root folder '/' */
-    public final static boolean USES_ROOT_DRIVES = PlatformManager.isWindowsFamily() || PlatformManager.getOsFamily()==PlatformManager.OS_2;
+    public final static boolean USES_ROOT_DRIVES = PlatformManager.WINDOWS.isCurrent() || PlatformManager.OS_2.isCurrent();
 
     /** Are we running Windows ? */
     private final static boolean IS_WINDOWS;
 
 		
     static {
-        IS_WINDOWS = PlatformManager.isWindowsFamily();
+        IS_WINDOWS = PlatformManager.WINDOWS.isCurrent();
     }
 
 
@@ -289,7 +289,7 @@ public class LocalFile extends AbstractFile {
      * @return <code>true</code> if this file looks like the root of a floppy drive. 
      */
     public boolean guessFloppyDrive() {
-        if(PlatformManager.isWindowsFamily() && !isRoot())
+        if(IS_WINDOWS && !isRoot())
             return false;
 
         // Use FileSystemView.isFloppyDrive(File) to determine if this file is a floppy drive.
@@ -332,8 +332,8 @@ public class LocalFile extends AbstractFile {
      * @return <code>true</code> if the underlying local filesystem uses drives assigned to letters
      */
     public static boolean hasRootDrives() {
-        return PlatformManager.isWindowsFamily()
-            || PlatformManager.getOsFamily()==PlatformManager.OS_2
+        return IS_WINDOWS
+            || PlatformManager.OS_2.isCurrent()
             || "\\".equals(SEPARATOR);
     }
 
@@ -441,7 +441,7 @@ public class LocalFile extends AbstractFile {
             return false;
 
         // Windows only supports write permission: files are either read-only or read-write
-        if(PlatformManager.isWindowsFamily())
+        if(IS_WINDOWS)
             return permission==WRITE_PERMISSION;
 
         // Execute permission is supported only under Java 1.6 (and on platforms other than Windows)
@@ -454,7 +454,7 @@ public class LocalFile extends AbstractFile {
             return false;
 
         // Windows only supports write permission: files are either read-only or read-write
-        return !PlatformManager.isWindowsFamily() || permission==WRITE_PERMISSION;
+        return !IS_WINDOWS || permission==WRITE_PERMISSION;
     }
 
     /**
@@ -686,7 +686,7 @@ public class LocalFile extends AbstractFile {
      */
     public int getPermissionGetMask() {
         // Windows only supports write permission for user: files are either read-only or read-write
-        if(PlatformManager.isWindowsFamily())
+        if(IS_WINDOWS)
             return 128;
 
         // Get permission support is limited to the user access type. Executable permission flag is only available under
@@ -701,7 +701,7 @@ public class LocalFile extends AbstractFile {
      */
     public int getPermissionSetMask() {
         // Windows only supports write permission for user: files are either read-only or read-write
-        if(PlatformManager.isWindowsFamily())
+        if(IS_WINDOWS)
             return 128;
 
         // Set permission support is only available under Java 1.6 and up and is limited to the user access type
@@ -715,7 +715,7 @@ public class LocalFile extends AbstractFile {
      * the root file.
      */
     public AbstractFile getRoot() throws IOException {
-        if(PlatformManager.isWindowsFamily()) {
+        if(IS_WINDOWS) {
             // Extract drive letter from the path
             Matcher matcher = windowsDriveRootPattern.matcher(absPath);
             if(matcher.matches())
@@ -743,7 +743,7 @@ public class LocalFile extends AbstractFile {
         // Not doing this under Windows would mean files would get moved between drives with renameTo, which doesn't
         // allow the transfer to be monitored.
         // Note that Windows UNC paths are handled by the super method when comparing hosts for equality.  
-        if(PlatformManager.isWindowsFamily()) {
+        if(IS_WINDOWS) {
             try {
                 if(!getRoot().equals(destFile.getRoot()))
                     return SHOULD_NOT_HINT; 
