@@ -23,11 +23,8 @@ package com.mucommander.runtime;
  */
 public interface OsFamilies {
 
-    /** Windows 95, 98, Me */
-    public static final OsFamily WINDOWS_9X =        new OsFamily("Windows 9X");
-
-    /** Windows NT, 2000, XP and up */
-    public static final OsFamily WINDOWS_NT =        new OsFamily("Windows NT");
+    /** Windows */
+    public static final OsFamily WINDOWS    =        new OsFamily("Windows");
 
     /** Mac OS X */
     public static final OsFamily MAC_OS_X   =        new OsFamily("Mac OS X");

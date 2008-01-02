@@ -23,6 +23,39 @@ package com.mucommander.runtime;
  */
 public interface OsVersions {
 
+    //////////////////////
+    // Windows versions //
+    //////////////////////
+
+    /** Windows 95 */
+    public static final OsVersion WINDOWS_95    = new OsVersion("Windows 95", 0);
+
+    /** Windows 98 */
+    public static final OsVersion WINDOWS_98    = new OsVersion("Windows 98", 1);
+
+    /** Windows Me */
+    public static final OsVersion WINDOWS_ME    = new OsVersion("Windows Me", 2);
+
+    /** Windows NT */
+    public static final OsVersion WINDOWS_NT    = new OsVersion("Windows NT", 3);
+
+    /** Windows 2000 */
+    public static final OsVersion WINDOWS_2000  = new OsVersion("Windows 2000", 4);
+
+    /** Windows XP */
+    public static final OsVersion WINDOWS_XP    = new OsVersion("Windows XP", 5);
+
+    /** Windows 2003 */
+    public static final OsVersion WINDOWS_2003  = new OsVersion("Windows 2003", 6);
+
+    /** Windows Vista */
+    public static final OsVersion WINDOWS_VISTA = new OsVersion("Windows Vista", 7);
+
+
+    ///////////////////////
+    // Mac OS X versions //
+    ///////////////////////
+
     /** Mac OS X 10.0 */
     public static final OsVersion MAC_OS_X_10_0   = new OsVersion("10.0", 0);
 
@@ -40,6 +73,8 @@ public interface OsVersions {
 
     /** Mac OS X 10.5 */
     public static final OsVersion MAC_OS_X_10_5   = new OsVersion("10.5", 5);
+
+
 
     /** Unknown OS version */
     public static final OsVersion UNKNOWN_VERSION = new OsVersion("Unknown", -1);

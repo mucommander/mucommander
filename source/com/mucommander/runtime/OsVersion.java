@@ -25,7 +25,7 @@ import com.mucommander.Debug;
 */
 public class OsVersion extends ComparableRuntimeProperty {
 
-    private final static OsVersion currentValue = parseSystemProperty(getRawSystemProperty());
+    private final static OsVersion currentValue = parseSystemProperty(getRawSystemProperty(), OsFamily.getCurrent());
 
     static {
         if(Debug.ON) Debug.trace("Current OS version: "+ currentValue);
@@ -54,12 +54,44 @@ public class OsVersion extends ComparableRuntimeProperty {
         return System.getProperty("os.version");
     }
 
-    static OsVersion parseSystemProperty(String osVersionProp) {
-        OsFamily osFamily = OsFamily.getCurrent();
+    static OsVersion parseSystemProperty(String osVersionProp, OsFamily osFamily) {
         OsVersion osVersion;
 
+        // This website holds a collection of os.name values under many OSes:
+        // http://lopica.sourceforge.net/os.html
+
+        if(osFamily==OsFamilies.WINDOWS) {
+            if(osVersionProp.equals("Windows 95")) {
+                osVersion = OsVersions.WINDOWS_95;
+            }
+            else if(osVersionProp.equals("Windows 98")) {
+                osVersion = OsVersions.WINDOWS_98;
+            }
+            else if(osVersionProp.equals("Windows Me")) {
+                osVersion = OsVersions.WINDOWS_ME;
+            }
+            else if(osVersionProp.equals("Windows NT")) {
+                osVersion = OsVersions.WINDOWS_NT;
+            }
+            else if(osVersionProp.equals("Windows 2000")) {
+                osVersion = OsVersions.WINDOWS_2000;
+            }
+            else if(osVersionProp.equals("Windows XP")) {
+                osVersion = OsVersions.WINDOWS_XP;
+            }
+            else if(osVersionProp.equals("Windows 2003")) {
+                osVersion = OsVersions.WINDOWS_2003;
+            }
+            else if(osVersionProp.equals("Windows Vista")) {
+                osVersion = OsVersions.WINDOWS_VISTA;
+            }
+            else {
+                // Newer version we don't know yet, assume latest supported OS version
+                osVersion = OsVersions.WINDOWS_VISTA;
+            }
+        }
         // Mac OS X versions
-        if(osFamily==OsFamilies.MAC_OS_X) {
+        else if(osFamily==OsFamilies.MAC_OS_X) {
             if(osVersionProp.startsWith("10.5")) {
                 osVersion = OsVersions.MAC_OS_X_10_5;
             }
@@ -79,7 +111,7 @@ public class OsVersion extends ComparableRuntimeProperty {
                 osVersion = OsVersions.MAC_OS_X_10_0;
             }
             else {
-                // Newer version we don't know of yet, assume latest supported OS version
+                // Newer version we don't know yet, assume latest supported OS version
                 osVersion = OsVersions.MAC_OS_X_10_5;
             }
         }

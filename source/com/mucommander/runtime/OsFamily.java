@@ -54,14 +54,7 @@ public class OsFamily extends RuntimeProperty {
 
         // Windows family
         if(osNameProp.startsWith("Windows")) {
-            // Windows 95, 98, Me
-            if (osNameProp.startsWith("Windows 95") || osNameProp.startsWith("Windows 98") || osNameProp.startsWith("Windows Me")) {
-                osFamily = OsFamilies.WINDOWS_9X;
-            }
-            // Windows NT, 2000, XP and up
-            else {
-                osFamily = OsFamilies.WINDOWS_NT;
-            }
+            osFamily = OsFamilies.WINDOWS;
         }
         // Mac OS X family
         else if(osNameProp.startsWith("Mac OS X")) {
