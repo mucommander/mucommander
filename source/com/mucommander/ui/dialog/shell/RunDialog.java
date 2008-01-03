@@ -374,15 +374,16 @@ public class RunDialog extends FocusDialog implements ActionListener, ProcessLis
             // No new command can be entered while a process is running.
             inputCombo.setEnabled(false);
 
-            // Starts the new process.
             currentProcess = Shell.execute(command, mainFrame.getActiveTable().getCurrentFolder(), this);
             processInput   = new PrintStream(currentProcess.getOutputStream(), true);
 
             // Repaints the dialog.
             repaint();
         }
-        catch(Exception e1) {
-            // Probably should notify the user if the command could not be executed
+        catch(Exception e) {
+            // Notifies the user that an error occured and resets to normal state.
+            addToTextArea(Translator.get("generic_error"));
+            switchToRunState();
         }
     }
 
