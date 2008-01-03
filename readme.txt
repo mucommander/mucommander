@@ -100,6 +100,7 @@ Translators:
 - Ján Ľudvík (Slovak)
 - Jonathan Murphy (British English)
 - Nardog (Japanese)
+- Jakob Ekström (Swedish)
 
 Many thanks to all of you who suggested new features, reported bugs, sent warm
 emails or generously donated to the project !
@@ -142,6 +143,7 @@ Improvements:
 
 Localization:
 - Japanese translation contributed by Nardog.
+- Swedish translation contributed by Jakob Ekström.
 
 Bug fixes:
 - SMB passwords that contain '@' characters are now properly handled.
