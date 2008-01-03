@@ -25,6 +25,7 @@ import com.mucommander.file.FileFactory;
 import com.mucommander.file.FileURL;
 import com.mucommander.file.util.Chmod;
 import com.mucommander.io.BackupOutputStream;
+import com.mucommander.runtime.OsFamily;
 import com.mucommander.util.AlteredVector;
 import com.mucommander.util.VectorChangeListener;
 
@@ -168,7 +169,7 @@ public class CredentialsManager implements VectorChangeListener {
 
         // Under UNIX-based systems, change the credentials file's permissions so that the file can't be read by
         // 'group' and 'other'.
-        boolean fileSecured = !PlatformManager.isUnixBased() || Chmod.chmod(credentialsFile, 0600);     // rw-------
+        boolean fileSecured = !OsFamily.getCurrent().isUnixBased() || Chmod.chmod(credentialsFile, 0600);     // rw-------
 
         if(Debug.ON) {
             if(fileSecured)

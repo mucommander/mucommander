@@ -340,22 +340,6 @@ public class PlatformManager implements JavaVersions, OsFamilies, OsVersions {
         return unixDesktop;
     }
 
-    /**
-     * Returns <code>true</code> if the current OS is UNIX-based. The following OS families are considered UNIX-based:
-     * <ul>
-     *  <li>{@link #LINUX}</li>
-     *  <li>{@link #MAC_OS_X}</li>
-     *  <li>{@link #SOLARIS}</li>
-     *  <li>{@link #UNKNOWN_OS_FAMILY}: the reasonning for this being that most alternative OSes are Unix-based.</li>
-     * </ul>
-     *
-     * @return <code>true</code> if the current OS is UNIX-based
-     */
-    public static boolean isUnixBased() {
-        OsFamily osFamily = OsFamily.getCurrent();
-
-        return osFamily == MAC_OS_X || osFamily==LINUX || osFamily==SOLARIS || osFamily== UNKNOWN_OS_FAMILY;
-    }
 
     public static String getDefaultShellCommand() {return defaultShellCommand;}
     public static String getDefaultFileManagerName() {return defaultFileManagerName;}

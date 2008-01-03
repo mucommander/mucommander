@@ -22,6 +22,7 @@ package com.mucommander.file;
 import com.mucommander.Debug;
 import com.mucommander.PlatformManager;
 import com.mucommander.file.impl.local.LocalFile;
+import com.mucommander.runtime.OsFamily;
 
 import java.io.*;
 import java.util.StringTokenizer;
@@ -55,7 +56,7 @@ public class RootFolders {
             if(Debug.ON) Debug.trace("java.io.File's root folders: "+rootFoldersV);
 	
             // Add /etc/fstab folders under UNIX-based systems.
-            if(PlatformManager.isUnixBased()) {
+            if(OsFamily.getCurrent().isUnixBased()) {
                 addFstabEntries(rootFoldersV);
                 if(Debug.ON) Debug.trace("/etc/fstab mount points added: "+rootFoldersV);
             }
