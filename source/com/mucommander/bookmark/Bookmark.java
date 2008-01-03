@@ -102,9 +102,7 @@ public class Bookmark implements Cloneable {
     /**
      * Returns a clone of this bookmark.
      */
-    public Object clone() throws CloneNotSupportedException {
-        return new Bookmark(name, location);
-    }
+    public Object clone() throws CloneNotSupportedException {return super.clone();}
 
 
     /**
