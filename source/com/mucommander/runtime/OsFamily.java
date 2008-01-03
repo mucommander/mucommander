@@ -21,9 +21,14 @@ package com.mucommander.runtime;
 import com.mucommander.Debug;
 
 /**
+ * This class represents a non-versioned family of operating system, like <code>Windows</code> or <code>Linux</code>. 
+ * The current runtime instance is determined using the value of the <code>os.name</code> system property.
+ *
+ * @see OsFamilies
+ * @see OsVersion
  * @author Maxence Bernard
-*/
-public class OsFamily extends RuntimeProperty {
+ */
+public class OsFamily extends RuntimeProperty implements OsFamilies {
 
     /** Holds the OsFamily of the current runtime environment  */
     private final static OsFamily currentValue = parseSystemProperty(getRawSystemProperty());
@@ -52,6 +57,34 @@ public class OsFamily extends RuntimeProperty {
     }
 
     /**
+     * Returns <code>true</code> if this OS family is UNIX-based. The following OS families are considered UNIX-based:
+     * <ul>
+     *  <li>{@link #LINUX}</li>
+     *  <li>{@link #MAC_OS_X}</li>
+     *  <li>{@link #SOLARIS}</li>
+     *  <li>{@link #FREEBSD}</li>
+     *  <li>{@link #AIX}</li>
+     *  <li>{@link #HP_UX}</li>
+     *  <li>{@link #OPENVMS}</li>
+     *  <li>{@link #UNKNOWN_OS_FAMILY}: the reasonning for this being that most alternative OSes are Unix-based.</li>
+     * </ul>
+     *
+     * @return <code>true</code> if the current OS is UNIX-based
+     */
+    public boolean isUnixBased() {
+        return this==MAC_OS_X
+                || this==LINUX
+                || this==SOLARIS
+                || this==FREEBSD
+                || this==AIX
+                || this==HP_UX
+                || this==OPENVMS
+                || this== UNKNOWN_OS_FAMILY;
+
+        // Not UNIX-based: WINDOWS and OS/2
+    }
+
+    /**
      * Returns the value of the system property which serves to detect the OS family at runtime.
      *
      * @return the value of the system property which serves to detect the OS family at runtime.
@@ -69,29 +102,44 @@ public class OsFamily extends RuntimeProperty {
     static OsFamily parseSystemProperty(String osNameProp) {
         OsFamily osFamily;
 
+        // This website holds a collection of system property values under many OSes:
+        // http://lopica.sourceforge.net/os.html
+
         // Windows family
         if(osNameProp.startsWith("Windows")) {
-            osFamily = OsFamilies.WINDOWS;
+            osFamily = WINDOWS;
         }
         // Mac OS X family
         else if(osNameProp.startsWith("Mac OS X")) {
-            osFamily = OsFamilies.MAC_OS_X;
+            osFamily = MAC_OS_X;
         }
         // OS/2 family
         else if(osNameProp.startsWith("OS/2")) {
-            osFamily = OsFamilies.OS_2;
+            osFamily = OS_2;
         }
         // Linux family
         else if(osNameProp.startsWith("Linux")) {
-            osFamily = OsFamilies.LINUX;
+            osFamily = LINUX;
         }
         // Solaris family
         else if(osNameProp.startsWith("Solaris") || osNameProp.startsWith("SunOS")) {
-            osFamily = OsFamilies.SOLARIS;
+            osFamily = SOLARIS;
+        }
+        else if(osNameProp.startsWith("FreeBSD")) {
+            osFamily = FREEBSD;
+        }
+        else if(osNameProp.startsWith("AIX")) {
+            osFamily = AIX;
+        }
+        else if(osNameProp.startsWith("HP-UX")) {
+            osFamily = HP_UX;
+        }
+        else if(osNameProp.startsWith("OpenVMS")) {
+            osFamily = OPENVMS;
         }
         // Any other OS
         else {
-            osFamily = OsFamilies.UNKNOWN_OS_FAMILY;
+            osFamily = UNKNOWN_OS_FAMILY;
         }
 
         return osFamily;
