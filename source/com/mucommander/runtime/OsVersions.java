@@ -19,8 +19,19 @@
 package com.mucommander.runtime;
 
 /**
- * This interface contains a list of all known OS versions.
+ * This interface contains a list of all known OS versions. OS versions are ordered by their date of release.
  *
+ * <p>
+ * Windows versions can be split into two subfamilies:
+ * <li>Windows 9X: {@link #WINDOWS_95}, {@link #WINDOWS_98}, {@link #WINDOWS_ME}</li>
+ * <li>Windows NT: {@link #WINDOWS_NT}, {@link #WINDOWS_2000}, {@link #WINDOWS_XP}, {@link #WINDOWS_2003}, {@link #WINDOWS_VISTA}</li>
+ * It is noneworthy that </i>Windows 9X</i> versions are lowered than <i>Windows NT</i> ones.
+ * Thus, <code>OsVersions.WINDOWS_NT.isCurrentLower()</code> tests if the current OS is <i>Windows 9X</i> based ;
+ * <code>OsVersions.WINDOWS_NT.isCurrentOrHigher()</code> if it is <i>Windows NT</i> based.
+ * </p>
+ *
+ * @see OsVersion
+ * @see OsFamily
  * @author Maxence Bernard
  */
 public interface OsVersions {
@@ -28,6 +39,8 @@ public interface OsVersions {
     //////////////////////
     // Windows versions //
     //////////////////////
+
+    // Windows 9X subfamily
 
     /** Windows 95 */
     public static final OsVersion WINDOWS_95    = new OsVersion("Windows 95", 0);
@@ -37,6 +50,8 @@ public interface OsVersions {
 
     /** Windows Me */
     public static final OsVersion WINDOWS_ME    = new OsVersion("Windows Me", 2);
+
+    // Windows NT subfamily
 
     /** Windows NT */
     public static final OsVersion WINDOWS_NT    = new OsVersion("Windows NT", 3);
@@ -75,7 +90,6 @@ public interface OsVersions {
 
     /** Mac OS X 10.5 */
     public static final OsVersion MAC_OS_X_10_5   = new OsVersion("10.5", 5);
-
 
 
     /** Unknown OS version */

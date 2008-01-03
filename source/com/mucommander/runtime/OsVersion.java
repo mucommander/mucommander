@@ -21,9 +21,17 @@ package com.mucommander.runtime;
 import com.mucommander.Debug;
 
 /**
+ * This class represents a major version of an operating system, like <code>Mac OS X 10.5</code> or
+ * <code>Windows XP</code>. The current runtime value is determined using the value of the <code>os.version</code>
+ * system property and the current {@link OsFamily} instance.
+ * Being a {@link com.mucommander.runtime.ComparableRuntimeProperty}, OS versions are ordered and can be compared
+ * against each other.
+ *
+ * @see OsVersions
+ * @see OsFamily
  * @author Maxence Bernard
-*/
-public class OsVersion extends ComparableRuntimeProperty {
+ */
+public class OsVersion extends ComparableRuntimeProperty implements OsVersions {
 
     /** Holds the OsVersion of the current runtime environment  */
     private final static OsVersion currentValue = parseSystemProperty(getRawSystemProperty(), OsFamily.getCurrent());
@@ -69,67 +77,68 @@ public class OsVersion extends ComparableRuntimeProperty {
      * Returns an <code>OsVersion</code> instance corresponding to the specified system property's value.
      *
      * @param osVersionProp the value of the "os.version" system property
+     * @param osFamily the current OS family
      * @return an OsVersion instance corresponding to the specified system property's value
      */
     static OsVersion parseSystemProperty(String osVersionProp, OsFamily osFamily) {
         OsVersion osVersion;
 
-        // This website holds a collection of os.name values under many OSes:
+        // This website holds a collection of system property values under many OSes:
         // http://lopica.sourceforge.net/os.html
 
         if(osFamily==OsFamilies.WINDOWS) {
             if(osVersionProp.equals("Windows 95")) {
-                osVersion = OsVersions.WINDOWS_95;
+                osVersion = WINDOWS_95;
             }
             else if(osVersionProp.equals("Windows 98")) {
-                osVersion = OsVersions.WINDOWS_98;
+                osVersion = WINDOWS_98;
             }
             else if(osVersionProp.equals("Windows Me")) {
-                osVersion = OsVersions.WINDOWS_ME;
+                osVersion = WINDOWS_ME;
             }
             else if(osVersionProp.equals("Windows NT")) {
-                osVersion = OsVersions.WINDOWS_NT;
+                osVersion = WINDOWS_NT;
             }
             else if(osVersionProp.equals("Windows 2000")) {
-                osVersion = OsVersions.WINDOWS_2000;
+                osVersion = WINDOWS_2000;
             }
             else if(osVersionProp.equals("Windows XP")) {
-                osVersion = OsVersions.WINDOWS_XP;
+                osVersion = WINDOWS_XP;
             }
             else if(osVersionProp.equals("Windows 2003")) {
-                osVersion = OsVersions.WINDOWS_2003;
+                osVersion = WINDOWS_2003;
             }
             else if(osVersionProp.equals("Windows Vista")) {
-                osVersion = OsVersions.WINDOWS_VISTA;
+                osVersion = WINDOWS_VISTA;
             }
             else {
                 // Newer version we don't know of yet, assume latest supported OS version
-                osVersion = OsVersions.WINDOWS_VISTA;
+                osVersion = WINDOWS_VISTA;
             }
         }
         // Mac OS X versions
         else if(osFamily==OsFamilies.MAC_OS_X) {
             if(osVersionProp.startsWith("10.5")) {
-                osVersion = OsVersions.MAC_OS_X_10_5;
+                osVersion = MAC_OS_X_10_5;
             }
             else if(osVersionProp.startsWith("10.4")) {
-                osVersion = OsVersions.MAC_OS_X_10_4;
+                osVersion = MAC_OS_X_10_4;
             }
             else if(osVersionProp.startsWith("10.3")) {
-                osVersion = OsVersions.MAC_OS_X_10_3;
+                osVersion = MAC_OS_X_10_3;
             }
             else if(osVersionProp.startsWith("10.2")) {
-                osVersion = OsVersions.MAC_OS_X_10_2;
+                osVersion = MAC_OS_X_10_2;
             }
             else if(osVersionProp.startsWith("10.1")) {
-                osVersion = OsVersions.MAC_OS_X_10_1;
+                osVersion = MAC_OS_X_10_1;
             }
             else if(osVersionProp.startsWith("10.0")) {
-                osVersion = OsVersions.MAC_OS_X_10_0;
+                osVersion = MAC_OS_X_10_0;
             }
             else {
                 // Newer version we don't know of yet, assume latest supported OS version
-                osVersion = OsVersions.MAC_OS_X_10_5;
+                osVersion = MAC_OS_X_10_5;
             }
         }
         else {

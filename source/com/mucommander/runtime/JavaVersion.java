@@ -21,8 +21,12 @@ package com.mucommander.runtime;
 import com.mucommander.Debug;
 
 /**
- * This class represents the version of Java
+ * This class represents a major version of Java, like <code>Java 1.5</code> for instance. The current runtime instance
+ * is determined using the value of the <code>java.version</code> system property.
+ * Being a {@link com.mucommander.runtime.ComparableRuntimeProperty}, versions of Java are ordered and can be compared
+ * against each other.
  *
+ * @see JavaVersions
  * @author Maxence Bernard
 */
 public class JavaVersion extends ComparableRuntimeProperty implements JavaVersions {

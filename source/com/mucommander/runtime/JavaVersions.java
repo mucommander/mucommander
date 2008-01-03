@@ -19,20 +19,23 @@
 package com.mucommander.runtime;
 
 /**
+ * This interface contains a list of all known major Java versions.
+ * 
+ * @see JavaVersion
  * @author Maxence Bernard
-*/
+ */
 public interface JavaVersions {
 
-    /** Java 1.0.x (not supported). */
+    /** Java 1.0.x */
     public static final JavaVersion JAVA_1_0 = new JavaVersion("1.0", 0);
 
-    /** Java 1.1.x (not supported). */
+    /** Java 1.1.x */
     public static final JavaVersion JAVA_1_1 = new JavaVersion("1.1", 1);
 
-    /** Java 1.2.x (not supported). */
+    /** Java 1.2.x */
     public static final JavaVersion JAVA_1_2 = new JavaVersion("1.2", 2);
 
-    /** Java 1.3.x (not supported). */
+    /** Java 1.3.x */
     public static final JavaVersion JAVA_1_3 = new JavaVersion("1.3", 3);
 
     /** Java 1.4.x */
