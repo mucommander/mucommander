@@ -28,7 +28,7 @@ public class StringUtilsTest extends TestCase {
     /**
      * Runs through a variety of {@link StringUtils#endsWithIgnoreCase(String,String)} test cases.
      */
-    public void testEndsWith() {
+    public void testEndsWithString() {
         assertTrue(StringUtils.endsWithIgnoreCase("this is a test", "a test"));
         assertTrue(StringUtils.endsWithIgnoreCase("this is a test", "a TeSt"));
         assertTrue(StringUtils.endsWithIgnoreCase("this is a test", "A TEST"));
@@ -66,6 +66,49 @@ public class StringUtilsTest extends TestCase {
         assertFalse(StringUtils.endsWithIgnoreCase("ThIs Is A tEst", "test a is this"));
         assertFalse(StringUtils.endsWithIgnoreCase("ThIs Is A tEst", "tEsT a Is ThIs"));
         assertFalse(StringUtils.endsWithIgnoreCase("ThIs Is A tEst", "TEST A IS THIS"));
+    }
+
+    /**
+     * Runs through a variety of {@link StringUtils#endsWithIgnoreCase(String,char[])} test cases.
+     */
+    public void testEndsWithCharArray() {
+        assertTrue(StringUtils.endsWithIgnoreCase("this is a test", "a test".toCharArray()));
+        assertTrue(StringUtils.endsWithIgnoreCase("this is a test", "a TeSt".toCharArray()));
+        assertTrue(StringUtils.endsWithIgnoreCase("this is a test", "A TEST".toCharArray()));
+
+        assertTrue(StringUtils.endsWithIgnoreCase("THIS IS A TEST", "a test".toCharArray()));
+        assertTrue(StringUtils.endsWithIgnoreCase("THIS IS A TEST", "a TeSt".toCharArray()));
+        assertTrue(StringUtils.endsWithIgnoreCase("THIS IS A TEST", "A TEST".toCharArray()));
+
+        assertTrue(StringUtils.endsWithIgnoreCase("ThIs Is A TeSt", "a test".toCharArray()));
+        assertTrue(StringUtils.endsWithIgnoreCase("ThIs Is A TeSt", "a TeSt".toCharArray()));
+        assertTrue(StringUtils.endsWithIgnoreCase("ThIs Is A TeSt", "A TEST".toCharArray()));
+
+        assertTrue(StringUtils.endsWithIgnoreCase("this is a test", "this is a test".toCharArray()));
+        assertTrue(StringUtils.endsWithIgnoreCase("this is a test", "ThIs Is A TeSt".toCharArray()));
+        assertTrue(StringUtils.endsWithIgnoreCase("this is a test", "THIS IS A TEST".toCharArray()));
+
+        assertTrue(StringUtils.endsWithIgnoreCase("THIS IS A TEST", "this is a test".toCharArray()));
+        assertTrue(StringUtils.endsWithIgnoreCase("THIS IS A TEST", "ThIs Is A TeSt".toCharArray()));
+        assertTrue(StringUtils.endsWithIgnoreCase("THIS IS A TEST", "THIS IS A TEST".toCharArray()));
+
+        assertTrue(StringUtils.endsWithIgnoreCase("ThIs Is A TeSt", "this is a test".toCharArray()));
+        assertTrue(StringUtils.endsWithIgnoreCase("ThIs Is A TeSt", "ThIs Is A TeSt".toCharArray()));
+        assertTrue(StringUtils.endsWithIgnoreCase("ThIs Is A TeSt", "THIS IS A TEST".toCharArray()));
+
+        assertTrue(StringUtils.endsWithIgnoreCase("this is a test", "".toCharArray()));
+
+        assertFalse(StringUtils.endsWithIgnoreCase("this is a test", "test a is this".toCharArray()));
+        assertFalse(StringUtils.endsWithIgnoreCase("this is a test", "tEsT a Is ThIs".toCharArray()));
+        assertFalse(StringUtils.endsWithIgnoreCase("this is a test", "TEST A IS THIS".toCharArray()));
+
+        assertFalse(StringUtils.endsWithIgnoreCase("THIS IS A TEST", "test a is this".toCharArray()));
+        assertFalse(StringUtils.endsWithIgnoreCase("THIS IS A TEST", "tEsT a Is ThIs".toCharArray()));
+        assertFalse(StringUtils.endsWithIgnoreCase("THIS IS A TEST", "TEST A IS THIS".toCharArray()));
+
+        assertFalse(StringUtils.endsWithIgnoreCase("ThIs Is A tEst", "test a is this".toCharArray()));
+        assertFalse(StringUtils.endsWithIgnoreCase("ThIs Is A tEst", "tEsT a Is ThIs".toCharArray()));
+        assertFalse(StringUtils.endsWithIgnoreCase("ThIs Is A tEst", "TEST A IS THIS".toCharArray()));
     }
 
     /**

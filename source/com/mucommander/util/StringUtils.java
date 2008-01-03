@@ -46,17 +46,10 @@ public class StringUtils {
      * @param b suffix to test for.
      * @return <code>true</code> if <code>a</code> ends with <code>b</code> regardless of the case, <code>false</code> otherwise.
      */
-    public static boolean endsWithIgnoreCase(String a, String b) {
-        return endsWithIgnoreCase(a, b, a.length());
-    }
+    public static boolean endsWithIgnoreCase(String a, String b) {return matchesIgnoreCase(a, b, a.length());}
 
     /**
-     * Returns <code>true</code> if <code>a</code> ends with <code>b</code> regardless of the case.
-     * <p>
-     * This method is meant for optimisation purposes when <code>a.length()</code> is known and re-used frequently.
-     * An example of such a case is when <code>a</code> is meant to be matched against a number of other strings
-     * until a match is found.
-     * </p>
+     * Returns <code>true</code> if the substring of <code>a</code> starting at <code>posA</code> matches <code>b</code> regardless of the case.
      * <p>
      * This method has a known bug under some alphabets with peculiar capitalisation rules such as the Georgian one,
      * where <code>Character.toUpperCase(a) == Character.toUpperCase(b)</code> doesn't necessarily imply that
@@ -66,12 +59,13 @@ public class StringUtils {
      * <p>
      * Note that this method will return <code>true</code> if <code>b</code> is an emptry string.
      * </p>
-     * @param a    string to test.
-     * @param b    suffix to test for.
-     * @param posA length of <code>a</code>.
-     * Returns <code>true</code> if <code>a</code> ends with <code>b</code> regardless of the case, <code>false</code> otherwise.</code>.
+     * @param  a                              string to test.
+     * @param  b                              suffix to test for.
+     * @param  posA                           length of <code>a</code>.
+     * @return                                <code>true</code> if <code>a</code> ends with <code>b</code> regardless of the case, <code>false</code> otherwise.</code>.
+     * @throws ArrayIndexOutOfBoundsException if <code>a.length</code> is smaller than <code>posA</code>.
      */
-    public static boolean endsWithIgnoreCase(String a, String b, int posA) {
+    public static boolean matchesIgnoreCase(String a, String b, int posA) {
         int  posB; // Position in b.
         char cA;   // Current character in a.
         char cB;   // Current character in b.
@@ -91,6 +85,85 @@ public class StringUtils {
             if(cA != cB)
                 return false;
         }
+        return true;
+    }
+
+    /**
+     * Returns <code>true</code> if <code>a</code> ends with <code>b</code> regardless of the case.
+     * <p>
+     * This method has a known bug under some alphabets with peculiar capitalisation rules such as the Georgian one,
+     * where <code>Character.toUpperCase(a) == Character.toUpperCase(b)</code> doesn't necessarily imply that
+     * <code>Character.toLowerCase(a) == Character.toLowerCase(b)</code>. The performance hit of testing for this
+     * exceptions is so huge that it was deemed an acceptable issue.
+     * </p>
+     * <p>
+     * Note that this method will return <code>true</code> if <code>b</code> is an emptry string.
+     * </p>
+     * @param a string to test.
+     * @param b suffix to test for.
+     * @return <code>true</code> if <code>a</code> ends with <code>b</code> regardless of the case, <code>false</code> otherwise.
+     */
+    public static boolean endsWithIgnoreCase(String a, char[] b) {return matchesIgnoreCase(a, b, a.length());}
+
+    /**
+     * Returns <code>true</code> if the substring of <code>a</code> starting at <code>posA</code> matches <code>b</code> regardless of the case.
+     * <p>
+     * This method has a known bug under some alphabets with peculiar capitalisation rules such as the Georgian one,
+     * where <code>Character.toUpperCase(a) == Character.toUpperCase(b)</code> doesn't necessarily imply that
+     * <code>Character.toLowerCase(a) == Character.toLowerCase(b)</code>. The performance hit of testing for this
+     * exceptions is so huge that it was deemed an acceptable issue.
+     * </p>
+     * <p>
+     * Note that this method will return <code>true</code> if <code>b</code> is an emptry string.
+     * </p>
+     * @param  a                              string to test.
+     * @param  b                              suffix to test for.
+     * @param  posA                           length of <code>a</code>.
+     * @return                                <code>true</code> if <code>a</code> ends with <code>b</code> regardless of the case, <code>false</code> otherwise.</code>.
+     * @throws ArrayIndexOutOfBoundsException if <code>a.length</code> is smaller than <code>posA</code>.
+     */
+    public static boolean matchesIgnoreCase(String a, char[] b, int posA) {
+        int  posB; // Position in b.
+        char cA;   // Current character in a.
+        char cB;   // Current character in b.
+
+        // Checks whether there's any point in testing the strings.
+        if(posA < (posB = b.length))
+            return false;
+
+        while(posB > 0) {
+            if(!Character.isLowerCase(cA = a.charAt(--posA)))
+                cA = Character.toLowerCase(cA);
+            if(!Character.isLowerCase(cB = b[--posB]))
+                cB = Character.toLowerCase(cB);
+            if(cA != cB)
+                return false;
+        }
+        return true;
+    }
+
+    /**
+     * Equivalent of <code>String.endsWith(String)</code> using a <code>char[]</code>.
+     * @param  a String to test.
+     * @param  b suffix to test.
+     * @return   <code>true</code> if <code>a</code> ends with <code>b</code>.
+     */
+    public static boolean endsWith(String a, char[] b) {return matches(a, b, a.length());}
+
+    /**
+     * Returns <code>true</code> if the substring of <code>a</code> starting at <code>posA</code> matches <code>b</code>.
+     * @param  a String to test.
+     * @param  b substring to look for.
+     * @return   <code>true</code> if <code>a</code> contains <code>b</code> at position <code>posA</code>, <code>false</code> otherwise..
+     */
+    public static boolean matches(String a, char[] b, int posA) {
+        int posB;
+
+        if(posA < (posB = b.length))
+            return false;
+        while(posB > 0)
+            if(a.charAt(--posA) != b[--posB])
+                return false;
         return true;
     }
 
