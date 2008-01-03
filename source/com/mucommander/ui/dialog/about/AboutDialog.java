@@ -32,6 +32,7 @@ import javax.swing.text.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 /**
  * Dialog displaying information about muCommander.
@@ -407,8 +408,11 @@ public class AboutDialog extends FocusDialog implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == okButton)
             dispose();
-        else if(e.getSource() == homeButton)
-            PlatformManager.open(com.mucommander.file.FileFactory.getFile(RuntimeConstants.HOMEPAGE_URL));
+        else if(e.getSource() == homeButton) {
+            try {PlatformManager.open(com.mucommander.file.FileFactory.getFile(RuntimeConstants.HOMEPAGE_URL));}
+            // Ignores errors here as there really isn't anything we can do.
+            catch(IOException ignored) {}
+        }
         else if(e.getSource() == licenseButton)
             new LicenseDialog(this).showDialog();
     }

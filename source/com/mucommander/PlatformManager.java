@@ -394,17 +394,14 @@ public class PlatformManager implements JavaVersions, OsFamilies, OsVersions {
 
     /**
      * Attempts to open the specified file through registered command associations.
-     * @param  file file to open.
-     * @return      the process in which the file was opened, or <code>null</code> if an error occured.
+     * @param  file        file to open.
+     * @return             the process in which the file was opened.
+     * @throws IOException if an error occured while creating the file opening process.
      */
-    public static AbstractProcess open(AbstractFile file) {
+    public static AbstractProcess open(AbstractFile file) throws IOException {
         if(Debug.ON) Debug.trace("Opening " + file.getAbsolutePath());
 
-        try {return ProcessRunner.execute(CommandManager.getTokensForFile(file), file);}
-        catch(Exception e) {
-            if(Debug.ON) Debug.trace("Error while executing " + file + ": " + e);
-            return null;
-        }
+        return ProcessRunner.execute(CommandManager.getTokensForFile(file), file);
     }
 
     /**

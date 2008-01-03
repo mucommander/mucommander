@@ -68,7 +68,8 @@ public class TempExecJob extends TempCopyJob {
             return false;
 
         // Try to open the file.
-        PlatformManager.open(currentDestFile);
+        try {PlatformManager.open(currentDestFile);}
+        catch(Exception e) {return false;}
 
         return true;
     }

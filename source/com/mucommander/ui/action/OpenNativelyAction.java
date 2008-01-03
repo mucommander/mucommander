@@ -28,6 +28,7 @@ import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;
 
 import java.util.Hashtable;
+import java.io.IOException;
 
 /**
  * This action opens the currently selected file or folder with native file associations.
@@ -55,7 +56,9 @@ public class OpenNativelyAction extends MuAction {
         }
         else {
             // Tries to execute file with native file associations
-            PlatformManager.open(selectedFile);
+            try {PlatformManager.open(selectedFile);}
+            // Ignores errors here are there really isn't anything we can do.
+            catch(IOException e) {}
         }
     }
 }

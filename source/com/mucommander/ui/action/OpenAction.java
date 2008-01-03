@@ -29,6 +29,7 @@ import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.main.MainFrame;
 
 import java.util.Hashtable;
+import java.io.IOException;
 
 /**
  * This action 'opens' the currently selected file or folder in the active FileTable.
@@ -78,8 +79,11 @@ public class OpenAction extends MuAction {
             destination.tryChangeCurrentFolder(file);
 
         // Opens local files using their native associations.
-        else if(file.getURL().getProtocol().equals(FileProtocols.FILE) && (file instanceof LocalFile))
-            PlatformManager.open(file);
+        else if(file.getURL().getProtocol().equals(FileProtocols.FILE) && (file instanceof LocalFile)) {
+            try {PlatformManager.open(file);}
+            // Ignores errors here are there's really nothing we can do.
+            catch(IOException e) {}
+        }
 
         // Copies non-local file in a temporary local file and opens them using their native association.
         else {
