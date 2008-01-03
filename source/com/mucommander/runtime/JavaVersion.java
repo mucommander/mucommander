@@ -25,23 +25,25 @@ import com.mucommander.Debug;
  *
  * @author Maxence Bernard
 */
-public class JavaVersion extends ComparableRuntimeProperty {
+public class JavaVersion extends ComparableRuntimeProperty implements JavaVersions {
 
     /** Holds the JavaVersion of the current runtime environment  */
-    private final static JavaVersion currentValue = parseSystemProperty(getRawSystemProperty());
-
-    static {
-        if(Debug.ON) Debug.trace("Current Java version: "+ currentValue);
-    }
+    private static JavaVersion currentValue;
 
     protected JavaVersion(String stringRepresentation, int intValue) {
         super(stringRepresentation, intValue);
     }
 
     /**
-     * This method is a no-op that can be used to force the static initialization of this class.
+     * Determines the current value by parsing the system property. This method is called automatically by this class
+     * the first time the current value is accessed. However, this method has been made public to allow to force the
+     * initialization if it needs to be done at a predictable time.
      */
-    public static void doStaticInit() {
+    public static void init() {
+        if(currentValue==null) {
+            currentValue = parseSystemProperty(getRawSystemProperty());
+            if(Debug.ON) Debug.trace("Current Java version: "+ currentValue);
+        }
     }
 
     /**
@@ -50,6 +52,11 @@ public class JavaVersion extends ComparableRuntimeProperty {
      * @return the Java version of the current runtime environment
      */
     public static JavaVersion getCurrent() {
+        if(currentValue==null) {
+            // init() is called only once
+            init();
+        }
+
         return currentValue;
     }
 
@@ -112,6 +119,6 @@ public class JavaVersion extends ComparableRuntimeProperty {
     ///////////////////////////////////////////////
 
     protected RuntimeProperty getCurrentValue() {
-        return currentValue;
+        return getCurrent();
     }
 }
