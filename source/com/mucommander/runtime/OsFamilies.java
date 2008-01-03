@@ -19,8 +19,9 @@
 package com.mucommander.runtime;
 
 /**
- * This interface contains a list of all known OS families.
+ * This interface contains a list of all major OS families where a Java runtime environment is available.
  *
+ * @see OsFamily
  * @author Maxence Bernard
  */
 public interface OsFamilies {
@@ -39,6 +40,18 @@ public interface OsFamilies {
 
     /** OS/2 */
     public static final OsFamily OS_2       =        new OsFamily("OS/2");
+
+    /** FreeBSD */
+    public static final OsFamily FREEBSD    =        new OsFamily("FreeBSD");
+
+    /** AIX */
+    public static final OsFamily AIX        =        new OsFamily("AIX");
+
+    /** HP-UX */
+    public static final OsFamily HP_UX      =        new OsFamily("HP-UX");
+
+    /** OpenVMS */
+    public static final OsFamily OPENVMS    =        new OsFamily("OpenVMS");
 
     /** Other OS */
     public static final OsFamily UNKNOWN_OS_FAMILY = new OsFamily("Unknown");
