@@ -329,15 +329,4 @@
   <!-- Default : shift ADD                                                       -->
   <action class="com.mucommander.ui.action.MarkExtensionAction"          keystroke="shift ADD"/>
 
-  <!-- Action  : Open matching files in both the active and inactive panel.      -->
-  <!-- Default : meta ENTER, meta RIGHT                                          -->
-  <action class="com.mucommander.ui.action.OpenInBothPanelsAction"       keystroke="meta ENTER"
-                                                                         alt_keystroke="meta RIGHT"/>
-
-  <!-- Action  : Go to the current directory's parent in both active and         -->
-  <!--           inactive panels.                                                -->
-  <!-- Default : meta BACK_SPACE, meta LEFT                                      -->
-  <action class="com.mucommander.ui.action.GoToParentInBothPanelsAction" keystroke="meta BACK_SPACE"
-                                                                         alt_keystroke="meta LEFT"/>
-
 </keymap>
