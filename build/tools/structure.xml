@@ -58,7 +58,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <property name="tools.reports"          location="${reports}"/>
   <!-- Where to store JUnit reports.                           -->
   <property name="tools.junit.reports"    location="${tools.reports}/junit/"/>
-  <property name="tools.findbugs.reports" location="${tools.reports}/findbugs.xml"/>
-  <property name="tools.proguard.reports" location="${tools.reports}/proguard.txt"/>
-  <property name="tools.simian.reports"   location="${tools.reports}/simian.txt"/>
+  <property name="tools.findbugs.reports" location="${tools.reports}/findbugs"/>
+  <property name="tools.proguard.reports" location="${tools.reports}/proguard"/>
+  <property name="tools.simian.reports"   location="${tools.reports}/simian"/>
+  <property name="tools.javancss.reports" location="${tools.reports}/javancss"/>
 </project>

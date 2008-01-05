@@ -155,20 +155,20 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
   <!-- Copies the uncompressed, unobfuscated tools JAR file    -->
   <!-- over the obfuscated one.                                -->
-  <!-- This target is only meant to be used when proGuard is   -->
+  <!-- This target is only meant to be used when ProGuard is   -->
   <!-- not available.                                          -->
   <!-- Note that this target will be skipped if the current    -->
   <!-- JAR file is found to be up-to-date by 'check-tools'.    -->
   <!-- The resulting JAR file will be stored in                -->
   <!-- ${tools.jar.obf}.                                       -->
   <target name="tools-copy-bytecode" depends="tools-check-copy-bytecode" if="copy-tools-bytecode">
-    <echo>proGuard unavailable, skipping obfuscation of Ant tools...</echo>
+    <echo>ProGuard unavailable, skipping obfuscation of Ant tools...</echo>
     <copy file="${tools.jar.normal}" tofile="${tools.jar.obf}" overwrite="true"/>
   </target>
 
   <!-- Obfuscated the uncompressed, unobfuscated tools JAR     -->
   <!-- file.                                                   -->
-  <!-- This target is only meant to be used when proGuard is   -->
+  <!-- This target is only meant to be used when ProGuard is   -->
   <!-- available.                                              -->
   <!-- Note that this target will be skipped if the current    -->
   <!-- JAR file is found to be up-to-date by 'check-tools'.    -->
@@ -176,9 +176,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- ${tools.jar.obf}.                                       -->
   <target name="tools-obfuscate-bytecode" depends="ant-lib,load-libpath" if="proguard.available" unless="tools.up-to-date">
     <echo>Creating Ant tools obfuscated JAR file...</echo>
-    <mkdir dir="${tools.reports}"/>
+    <mkdir dir="${tools.proguard.reports}"/>
     <proguard overloadaggressively="false" usemixedcaseclassnames="${case-sensitive-fs}" ignorewarnings="true" optimize="true" shrink="true" obfuscate="true"
-              allowaccessmodification="false" repackageclasses="" skipnonpubliclibraryclasses="false" printusage="${tools.proguard.reports}">
+              printmapping="${tools.proguard.reports}/mapping.txt" printusage="${tools.proguard.reports}/usage.txt" printseeds="${tools.proguard.reports}/seeds.txt"
+              allowaccessmodification="false" repackageclasses="" skipnonpubliclibraryclasses="false">
       <injar name="${tools.jar.normal}"/> 
       <outjar name="${tools.jar.obf}"/>
       <libraryjar name="${java.lib}"/>
@@ -278,7 +279,27 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
   <!-- = Reports generation ================================== -->
   <!-- ======================================================= -->
-  <target name="tools-reports" depends="clean,tools-force-compile,tools-obfuscate,tools-unit-test,tools-findbugs,tools-similarity-test"/>
+  <target name="tools-reports" depends="clean,tools-force-compile,tools-obfuscate,tools-unit-test,tools-findbugs,tools-simian,tools-javancss"/>
+
+
+
+  <!-- = JavaNCSS ============================================ -->
+  <!-- ======================================================= -->
+  <target name="tools-skip-javancss" unless="javancss.available">
+    <echo>JavaNCSS not available, skipping the Ant tools NCSS report...</echo>
+  </target>
+
+  <target name="tools-do-javancss" if="javancss.available">
+    <echo>Generating the Ant tools JavaNCSS report...</echo>
+    <mkdir dir="${tools.javancss.reports}"/>
+    <javancss generatereport="true" srcdir="${source}" abortOnFail="false" includes="com/mucommander/ant/**/*.java,com/mucommander/xml/*.java"
+              outputfile="${tools.javancss.reports}/javancss.xml" format="xml"/>
+
+    <echo>Formatting the Ant tools JavaNCSS report...</echo>
+    <xslt basedir="${tools.javancss.reports}" destdir="${tools.javancss.reports}" extension=".html" style="${reports-style}/javancss.xsl"/>
+  </target>
+
+  <target name="tools-javancss" depends="load-javancss,tools-skip-javancss,tools-do-javancss"/>
 
 
 
@@ -287,24 +308,27 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
   <!-- Notifies user that unit tests are being skipped if      -->
   <!-- junit is not available.                                 -->
-  <target name="tools-skip-similarity-test" unless="simian.available">
-    <echo>Simian not available, skipping Ant tools similarity check...</echo>
+  <target name="tools-skip-simian" unless="simian.available">
+    <echo>Simian not available, skipping Ant tools similarity report...</echo>
   </target>
 
   <!-- Run similarity test                                     -->
-  <target name="tools-do-similarity-test" depends="load-simian" if="simian.available">
-    <echo>Running Ant tools similarity check...</echo>
-    <mkdir dir="${tools.reports}"/>
+  <target name="tools-do-simian" depends="load-simian" if="simian.available">
+    <echo>Generating Ant tools Simian report...</echo>
+    <mkdir dir="${tools.simian.reports}"/>
     <simian>
       <fileset dir="${source}">
         <patternset refid="tools.sources"/>
       </fileset>
-      <formatter type="plain" toFile="${tools.simian.reports}"/>
+      <formatter type="xml" toFile="${tools.simian.reports}/simian.xml"/>
     </simian>
+
+    <echo>Formatting Ant tools Simian report...</echo>
+    <xslt basedir="${tools.simian.reports}" destdir="${tools.simian.reports}" extension=".html" style="${reports-style}/simian.xsl"/>
   </target>
 
   <!-- Runs similarity test only if Simian is available.       -->
-  <target name="tools-similarity-test" depends="check-simian,tools-skip-similarity-test,tools-do-similarity-test"/>
+  <target name="tools-simian" depends="check-simian,tools-skip-simian,tools-do-simian"/>
 
 
 
@@ -313,14 +337,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- Notifies user that bytecode analysis is being skipped   -->
   <!-- if FindBugs is not available.                           -->
   <target name="tools-skip-findbugs" unless="findbugs.available">
-    <echo>FindBugs not available, skipping Ant tools bytecode analysis...</echo>
+    <echo>FindBugs not available, skipping the Ant tools bug report...</echo>
   </target>
 
   <!-- Runs FindBugs bytecode analysis and stores the output   -->
   <!-- ${tmp.compile}/findbugs.xml.                            -->
   <target name="tools-do-findbugs" depends="ant-lib,tools-jar" if="findbugs.available">
-    <echo>Analysing Ant tools bytecode...</echo>
-    <mkdir dir="${tools.reports}"/>
+    <echo>Generating Ant tools FindBugs report...</echo>
+    <mkdir dir="${tools.findbugs.reports}"/>
     <mkdir dir="${tools.tmp}"/>
     <echo file="${tools.tmp}/findbugs-filter.xml">
 &lt;FindBugsFilter&gt;
@@ -330,7 +354,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 &lt;/FindBugsFilter&gt;
     </echo>
 
-    <findbugs home="${findbugs.home}" output="xml" outputFile="${tools.findbugs.reports}" jvmargs="-Xmx128m" effort="max"
+    <findbugs home="${findbugs.home}" output="xml" outputFile="${tools.findbugs.reports}/findbugs.xml" jvmargs="-Xmx128m" effort="max"
               includefilter="${tools.tmp}/findbugs-filter.xml">
       <sourcePath path="${source}" />
       <class location="${tools.jar.normal}"/>
@@ -341,6 +365,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         </fileset>
       </auxclasspath>
     </findbugs>
+
+    <echo>Formatting Ant tools FindBugs report...</echo>
+    <xslt basedir="${tools.findbugs.reports}" destdir="${tools.findbugs.reports}" extension=".html" style="${reports-style}/findbugs.xsl"/>
   </target>
 
   <!-- Runs FindBugs bytecode analysis if it's available.      -->
@@ -367,21 +394,31 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
   <target name="tools-do-unit-test" if="junit.available" unless="tools.up-to-date">
     <echo>Running Ant tools test cases...</echo>
-    <mkdir dir="${tools.junit.reports}"/>
+    <mkdir dir="${tools.junit.reports}/raw"/>
+    <mkdir dir="${tools.junit.reports}/html"/>
     <junit printsummary="yes" haltonfailure="yes">
       <formatter type="plain"/>
+      <formatter type="xml"/>
       <classpath>
         <pathelement location="${tools.classes.normal}"/>
         <fileset dir="${lib}">
           <include name="**/*.jar"/>
         </fileset>
       </classpath>
-      <batchtest fork="yes" todir="${tools.junit.reports}">
+      <batchtest fork="yes" todir="${tools.junit.reports}/raw">
         <fileset dir="${tools.classes.normal}">
           <include name="**/*Test.class"/>
         </fileset>
       </batchtest>
     </junit>
+
+    <echo>Formatting Ant tools test cases...</echo>
+    <junitreport todir="${tools.junit.reports}/raw">
+      <fileset dir="${tools.junit.reports}/raw">
+        <include name="TEST-*.xml"/>
+      </fileset>
+      <report format="frames" todir="${tools.junit.reports}/html"/>
+    </junitreport>
   </target>
 
   <target name="tools-unit-test" depends="tools-jar,check-junit,tools-skip-unit-test,tools-do-unit-test"/>
@@ -520,6 +557,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         <exclude name="**/*.txt"/>
       </fileset>
     </copy>
+    <copy todir="${tools.tmp}/release/res/reports">
+      <fileset dir="${reports-style}"/>
+    </copy>
 
     <!-- Adds the build files.                                 -->
     <copy file="${tools.build}" tofile="${tools.tmp}/release/build.xml"/>
@@ -539,6 +579,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         <include name="velocity.jar"/>
         <include name="proguard.jar"/>
         <include name="simian.jar"/>
+        <include name="javancss.jar"/>
       </fileset>
     </copy>
 

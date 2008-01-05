@@ -235,9 +235,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
   <!-- Copies ${jar.normal} to ${jar.obf}.                     -->
   <!-- This target is meant to be used when it was not         -->
-  <!-- to load the proGuard task.                              -->
+  <!-- to load the ProGuard task.                              -->
   <target name="copy-bytecode" unless="proguard.available">
-    <echo>proGuard unavailable, skipping obfuscation...</echo>
+    <echo>ProGuard unavailable, skipping obfuscation...</echo>
     <copy file="${jar.normal}" tofile="${jar.obf}" overwrite="true"/>
   </target>
 
@@ -245,9 +245,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- ${jar.obf}.                                             -->
   <target name="obfuscate-bytecode" depends="load-libpath" if="proguard.available">
     <echo>Creating obfuscated JAR file...</echo>
-    <mkdir dir="${reports.main}"/>
+    <mkdir dir="${proguard.reports}"/>
     <proguard overloadaggressively="false" usemixedcaseclassnames="${proguard.mixed-case}" ignorewarnings="false" optimize="true" shrink="true" obfuscate="true"
-              printmapping="${tmp.compile}/obfuscate.map" printusage="${proguard.reports}" printseeds="${tmp.compile}/obf-seeds.txt"
+              printmapping="${proguard.reports}/mapping.txt" printusage="${proguard.reports}/usage.txt" printseeds="${proguard.reports}/seeds.txt"
               allowaccessmodification="false" repackageclasses="" skipnonpubliclibraryclasses="true" target="${app.jvm}">
       <injar name="${jar.normal}"/> 
       <outjar name="${jar.obf}"/>
@@ -327,7 +327,28 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- = Reports ============================================= -->
   <!-- ======================================================= -->
   <!-- Generates all meaningful reports in ${reports}.         -->
-  <target name="reports" depends="clean,tools-reports,conf-reports,obfuscate,unit-test,similarity-test,findbugs"/>
+  <target name="reports" depends="clean,tools-reports,conf-reports,obfuscate,unit-test,simian,findbugs,javancss"/>
+
+
+
+
+  <!-- = JavaNCSS ============================================ -->
+  <!-- ======================================================= -->
+  <target name="skip-javancss" unless="javancss.available">
+    <echo>JavaNCSS not available, skipping NCSS report...</echo>
+  </target>
+
+  <target name="do-javancss" if="javancss.available">
+    <echo>Generating JavaNCSS report...</echo>
+    <mkdir dir="${javancss.reports}"/>
+    <javancss generatereport="true" srcdir="${source}" abortOnFail="false" includes="**/*.java" excludes="com/mucommander/ant/**/*"
+              outputfile="${javancss.reports}/javancss.xml" format="xml"/>
+
+    <echo>Formatting JavaNCSS report...</echo>
+    <xslt basedir="${javancss.reports}" destdir="${javancss.reports}" extension=".html" style="${reports-style}/javancss.xsl"/>
+  </target>
+
+  <target name="javancss" depends="load-javancss,skip-javancss,do-javancss"/>
 
 
 
@@ -347,7 +368,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- in the ${junit.reports} folder.                         -->
   <target name="do-unit-test" if="junit.available">
     <echo>Running test cases...</echo>
-    <mkdir dir="${junit.reports}"/>
+    <mkdir dir="${junit.reports}/raw"/>
+    <mkdir dir="${junit.reports}/html"/>
     <junit printsummary="yes" haltonfailure="yes">
       <formatter type="plain"/>
       <formatter type="xml"/>
@@ -357,12 +379,20 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
           <include name="**/*.jar"/>
         </fileset>
       </classpath>
-      <batchtest fork="yes" todir="${junit.reports}">
+      <batchtest fork="yes" todir="${junit.reports}/raw">
         <fileset dir="${classes.normal}">
           <include name="**/*Test.class"/>
         </fileset>
       </batchtest>
     </junit>
+
+    <echo>Formatting test reports...</echo>
+    <junitreport todir="${junit.reports}/raw">
+      <fileset dir="${junit.reports}/raw">
+        <include name="TEST-*.xml"/>
+      </fileset>
+      <report format="frames" todir="${junit.reports}/html"/>
+    </junitreport>
   </target>
 
   <!-- Runs JUnit test cases if junit is available.            -->
@@ -375,14 +405,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- Notifies user that bytecode analysis is being skipped   -->
   <!-- if FindBugs is not available.                           -->
   <target name="skip-findbugs" unless="findbugs.available">
-    <echo>FindBugs not available, skipping bytecode analysis...</echo>
+    <echo>FindBugs not available, skipping bug report...</echo>
   </target>
 
   <!-- Runs FindBugs bytecode analysis and stores the output   -->
   <!-- ${tmp.compile}/findbugs.xml.                            -->
   <target name="do-findbugs" depends="jar" if="findbugs.available">
-    <echo>Analysing bytecode...</echo>
-    <mkdir dir="${reports.main}"/>
+    <echo>Generating FindBugs report...</echo>
+    <mkdir dir="${findbugs.reports}"/>
     <echo file="${tmp.compile}/findbugs-filter.xml">
 &lt;FindBugsFilter&gt;
   &lt;Match&gt;
@@ -391,7 +421,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 &lt;/FindBugsFilter&gt;
     </echo>
 
-    <findbugs home="${findbugs.home}" output="xml" outputFile="${findbugs.reports}" jvmargs="-Xmx256m" effort="max"
+    <findbugs home="${findbugs.home}" output="xml:withMessages" outputFile="${findbugs.reports}/findbugs.xml" jvmargs="-Xmx256m" effort="max"
               includefilter="${tmp.compile}/findbugs-filter.xml">
       <sourcePath path="${source}" />
       <class location="${jar.normal}"/>
@@ -401,6 +431,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         </fileset>
       </auxclasspath>
     </findbugs>
+
+    <echo>Formatting FindBugs report...</echo>
+    <xslt basedir="${findbugs.reports}" destdir="${findbugs.reports}" extension=".html" style="${reports-style}/findbugs.xsl"/>
   </target>
 
   <!-- Runs FindBugs bytecode analysis if it's available.      -->
@@ -413,22 +446,25 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
   <!-- Notifies user that unit tests are being skipped if      -->
   <!-- junit is not available.                                 -->
-  <target name="skip-similarity-test" unless="simian.available">
-    <echo>Simian not available, skipping similarity check...</echo>
+  <target name="skip-simian" unless="simian.available">
+    <echo>Simian not available, skipping similarity report...</echo>
   </target>
 
   <!-- Run similarity test                                     -->
-  <target name="do-similarity-test" depends="load-simian" if="simian.available">
-    <echo>Running similarity check...</echo>
-    <mkdir dir="${reports.main}"/>
-    <simian>
+  <target name="do-simian" depends="load-simian" if="simian.available">
+    <echo>Generating Simian report...</echo>
+    <mkdir dir="${simian.reports}"/>
+    <simian language="java">
       <fileset dir="${source}" includes="**/*.java"/>
-      <formatter type="plain" toFile="${simian.reports}"/>
+      <formatter type="xml" toFile="${simian.reports}/simian.xml"/>
     </simian>
+
+    <echo>Formatting Simian report...</echo>
+    <xslt basedir="${simian.reports}" destdir="${simian.reports}" extension=".html" style="${reports-style}/simian.xsl"/>
   </target>
 
   <!-- Runs similarity test only if Simian is available.       -->
-  <target name="similarity-test" depends="check-simian,skip-similarity-test,do-similarity-test"/>
+  <target name="simian" depends="check-simian,skip-simian,do-simian"/>
 
 
 

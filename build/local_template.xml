@@ -55,6 +55,18 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- If not set, the obfuscation steps will be skipped.      -->
   <property name="proguard.lib"      location="${tools}/proguard.jar"/>
 
+  <!-- Path to the JavaNCSS binaries.                          -->
+  <!-- Defaults to the one bundled with the project, but can   -->
+  <!-- be changed to another version by editing this value.    -->
+  <!-- If not set, the JavaNCSS report will be skipped.        -->
+  <property name="javancss.lib"      location="${tools}/javancss.jar"/>
+
+  <!-- Path to the Simian binaries.                            -->
+  <!-- Defaults to the one bundled with the project, but can   -->
+  <!-- be changed to another version by editing this value.    -->
+  <!-- If not set, the similarity report will be skipped.      -->
+  <property name="simian.lib"        location="${tools}/simian.jar"/>
+
   <!-- Path to the 7z executable.                              -->
   <!-- If this is not set, compression will be done using      -->
   <!-- standard ZIP algorithms.                                -->

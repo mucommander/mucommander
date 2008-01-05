@@ -89,26 +89,27 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
   <!-- Copies the uncompressed, unobfuscated conf JAR file     -->
   <!-- over the obfuscated one.                                -->
-  <!-- This target is only meant to be used when proGuard is   -->
+  <!-- This target is only meant to be used when ProGuard is   -->
   <!-- not available.                                          -->
   <!-- The resulting JAR file will be stored in                -->
   <!-- ${conf.jar.obf}.                                        -->
   <target name="conf-copy-bytecode" unless="proguard.available">
-    <echo>proGuard unavailable, skipping obfuscation of the Configuration API...</echo>
+    <echo>ProGuard unavailable, skipping obfuscation of the Configuration API...</echo>
     <copy file="${conf.jar.normal}" tofile="${conf.jar.obf}" overwrite="true"/>
   </target>
 
   <!-- Obfuscated the uncompressed, unobfuscated conf JAR      -->
   <!-- file.                                                   -->
-  <!-- This target is only meant to be used when proGuard is   -->
+  <!-- This target is only meant to be used when ProGuard is   -->
   <!-- available.                                              -->
   <!-- The resulting JAR file will be stored in                -->
   <!-- ${conf.jar.obf}.                                        -->
   <target name="conf-obfuscate-bytecode" depends="conf-load-libpath" if="proguard.available">
     <echo>Creating Configuration API obfuscated JAR file...</echo>
-    <mkdir dir="${conf.reports}"/>
+    <mkdir dir="${conf.proguard.reports}"/>
     <proguard overloadaggressively="false" usemixedcaseclassnames="${case-sensitive-fs}" ignorewarnings="true" optimize="true" shrink="true" obfuscate="true"
-              allowaccessmodification="false" repackageclasses="" skipnonpubliclibraryclasses="false" printusage="${conf.proguard.reports}">
+              printmapping="${conf.proguard.reports}/mapping.txt" printusage="${conf.proguard.reports}/usage.txt" printseeds="${conf.proguard.reports}/seeds.txt"
+              allowaccessmodification="false" repackageclasses="" skipnonpubliclibraryclasses="false">
       <injar name="${conf.jar.normal}"/> 
       <outjar name="${conf.jar.obf}"/>
       <libraryjar name="${java.lib}"/>
@@ -142,7 +143,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- The resulting JAR file will be stored in                -->
   <!-- ${conf.jar.cmp}.                                        -->
   <target name="conf-compress-obfuscated" if="7za.available">
-    <echo>Compressing the Configuration API...</echo>
+    <echo>Compressing Configuration API...</echo>
     <delete dir="${conf.classes.obf}"/>
     <unjar src="${conf.jar.obf}" dest="${conf.classes.obf}"/>
     <exec executable="${7za.executable}" dir="${conf.classes.obf}">
@@ -178,7 +179,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
   <!-- = Reports generation ================================== -->
   <!-- ======================================================= -->
-  <target name="conf-reports" depends="clean,conf-obfuscate,conf-unit-test,conf-findbugs,conf-similarity-test"/>
+  <target name="conf-reports" depends="clean,conf-obfuscate,conf-unit-test,conf-findbugs,conf-simian,conf-javancss"/>
 
 
 
@@ -187,24 +188,27 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
   <!-- Notifies user that unit tests are being skipped if      -->
   <!-- junit is not available.                                 -->
-  <target name="conf-skip-similarity-test" unless="simian.available">
-    <echo>Simian not available, skipping Configuration API similarity check...</echo>
+  <target name="conf-skip-simian" unless="simian.available">
+    <echo>Simian not available, skipping Configuration API similarity report...</echo>
   </target>
 
   <!-- Run similarity test                                     -->
-  <target name="conf-do-similarity-test" depends="load-simian" if="simian.available">
-    <echo>Running Configuration API similarity check...</echo>
-    <mkdir dir="${conf.reports}"/>
+  <target name="conf-do-simian" depends="load-simian" if="simian.available">
+    <echo>Generating Configuration API Simian report...</echo>
+    <mkdir dir="${conf.simian.reports}"/>
     <simian>
       <fileset dir="${source}">
         <patternset refid="conf.sources"/>
       </fileset>
-      <formatter type="plain" toFile="${conf.simian.reports}"/>
+      <formatter type="xml" toFile="${conf.simian.reports}/simian.xml"/>
     </simian>
+
+    <echo>Formatting Configuration API Simian report...</echo>
+    <xslt basedir="${conf.simian.reports}" destdir="${conf.simian.reports}" extension=".html" style="${reports-style}/simian.xsl"/>
   </target>
 
   <!-- Runs similarity test only if Simian is available.       -->
-  <target name="conf-similarity-test" depends="check-simian,conf-skip-similarity-test,conf-do-similarity-test"/>
+  <target name="conf-simian" depends="check-simian,conf-skip-simian,conf-do-simian"/>
 
 
 
@@ -217,8 +221,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
   <target name="conf-do-unit-test" if="junit.available">
     <echo>Running Configuration API test cases...</echo>
-    <mkdir dir="${conf.junit.reports}"/>
+    <mkdir dir="${conf.junit.reports}/raw"/>
+    <mkdir dir="${conf.junit.reports}/html"/>
     <junit printsummary="yes" haltonfailure="yes">
+      <formatter type="xml"/>
       <formatter type="plain"/>
       <classpath>
         <pathelement location="${conf.classes.normal}"/>
@@ -226,12 +232,20 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
           <include name="**/*.jar"/>
         </fileset>
       </classpath>
-      <batchtest fork="yes" todir="${conf.junit.reports}">
+      <batchtest fork="yes" todir="${conf.junit.reports}/raw">
         <fileset dir="${conf.classes.normal}">
           <include name="**/*Test.class"/>
         </fileset>
       </batchtest>
     </junit>
+
+    <echo>Formatting Configuration API test cases...</echo>
+    <junitreport todir="${conf.junit.reports}/raw">
+      <fileset dir="${conf.junit.reports}/raw">
+        <include name="TEST-*.xml"/>
+      </fileset>
+      <report format="frames" todir="${conf.junit.reports}/html"/>
+    </junitreport>
   </target>
 
   <target name="conf-unit-test" depends="conf-jar,check-junit,conf-skip-unit-test,conf-do-unit-test"/>
@@ -246,7 +260,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- Generates the conf API documentation.                   -->
   <!-- Output will be stored in ${conf.doc}.                   -->
   <target name="conf-doc">
-    <echo>Creating the Configuration API documentation...</echo>
+    <echo>Creating Configuration API documentation...</echo>
     <mkdir dir="${conf.doc}"/>
     <javadoc destdir="${conf.doc}" author="true" windowtitle="muCommander Configuration API" encoding="UTF-8" access="protected">
       <fileset dir="${source}/com/mucommander/conf/">
@@ -260,7 +274,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   </target>
 
   <target name="conf-doc-tgz" depends="conf-doc,conf-prefixes">
-    <echo>Packaging the Configuration API documentation...</echo>
+    <echo>Packaging Configuration API documentation...</echo>
     <mkdir dir="${dist}"/>
     <tar destfile="${dist}/${conf.package-prefix}-docs.tar.gz" compression="gzip">
       <tarfileset dir="${conf.doc}" prefix="${conf.archive-prefix}"/>
@@ -273,14 +287,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- Notifies user that bytecode analysis is being skipped   -->
   <!-- if FindBugs is not available.                           -->
   <target name="conf-skip-findbugs" unless="findbugs.available">
-    <echo>FindBugs not available, skipping the Configuration API bytecode analysis...</echo>
+    <echo>FindBugs not available, skipping Configuration API bug report...</echo>
   </target>
 
   <!-- Runs FindBugs bytecode analysis and stores the output   -->
   <!-- ${tmp.compile}/findbugs.xml.                            -->
   <target name="conf-do-findbugs" depends="conf-jar" if="findbugs.available">
-    <echo>Analysing the Configuration API bytecode...</echo>
-    <mkdir dir="${conf.reports}"/>
+    <echo>Generating Configuration API FindBugs report...</echo>
+    <mkdir dir="${conf.findbugs.reports}"/>
     <echo file="${conf.tmp}/findbugs-filter.xml">
 &lt;FindBugsFilter&gt;
   &lt;Match&gt;
@@ -289,7 +303,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 &lt;/FindBugsFilter&gt;
     </echo>
 
-    <findbugs home="${findbugs.home}" output="xml" outputFile="${conf.findbugs.reports}" jvmargs="-Xmx128m" effort="max"
+    <findbugs home="${findbugs.home}" output="xml:withMessages" outputFile="${conf.findbugs.reports}/findbugs.xml" jvmargs="-Xmx128m" effort="max"
               includefilter="${conf.tmp}/findbugs-filter.xml">
       <sourcePath path="${source}" />
       <class location="${conf.jar.normal}"/>
@@ -299,10 +313,33 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         </fileset>
       </auxclasspath>
     </findbugs>
+
+    <echo>Formatting Configuration API FindBugs report...</echo>
+    <xslt basedir="${conf.findbugs.reports}" destdir="${conf.findbugs.reports}" extension=".html" style="${reports-style}/findbugs.xsl"/>
   </target>
 
   <!-- Runs FindBugs bytecode analysis if it's available.      -->
   <target name="conf-findbugs" depends="load-findbugs,conf-skip-findbugs,conf-do-findbugs"/>
+
+
+
+  <!-- = JavaNCSS ============================================ -->
+  <!-- ======================================================= -->
+  <target name="conf-skip-javancss" unless="javancss.available">
+    <echo>JavaNCSS not available, skipping Configuration API NCSS report...</echo>
+  </target>
+
+  <target name="conf-do-javancss" if="javancss.available">
+    <echo>Generating Configuration API JavaNCSS report...</echo>
+    <mkdir dir="${conf.javancss.reports}"/>
+    <javancss generatereport="true" srcdir="${source}" abortOnFail="false" includes="com/mucommander/conf/*.java,com/mucommander/xml/*.java"
+              outputfile="${conf.javancss.reports}/javancss.xml" format="xml"/>
+
+    <echo>Formatting Configuration API JavaNCSS report...</echo>
+    <xslt basedir="${conf.javancss.reports}" destdir="${conf.javancss.reports}" extension=".html" style="${reports-style}/javancss.xsl"/>
+  </target>
+
+  <target name="conf-javancss" depends="load-javancss,conf-skip-javancss,conf-do-javancss"/>
 
 
 
@@ -348,9 +385,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- The package prefix is meant to be used as the name of   -->
   <!-- the tar.gz release file.                                -->
   <target name="conf-prefixes" depends="conf-load-strreplace">
-    <echo>Creating the Configuration API archive prefix...</echo>
+    <echo>Creating Configuration API archive prefix...</echo>
     <strreplace from="muCommander-conf-${conf.version}${conf.subversion}" to="conf.archive-prefix" what="[ .]" with="_"/>
-    <echo>Creating the Configuration API package name prefix...</echo>
+    <echo>Creating Configuration API package name prefix...</echo>
     <strreplace from="mucommander-conf-${conf.version}${conf.subversion}" to="conf.package-prefix" what="[ .]" with="_"/>
   </target>
 
@@ -367,6 +404,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <copy file="${conf.license}" todir="${conf.tmp}/release"/>
     <copy file="${conf.readme}"  todir="${conf.tmp}/release"/>
     <copy file="${conf.compile}" todir="${conf.tmp}/release"/>
+    <copy todir="${conf.tmp}/release/res/reports">
+      <fileset dir="${reports-style}"/>
+    </copy>
 
     <!-- Adds the compressed JAR file.                         -->
     <copy file="${conf.jar.cmp}" todir="${conf.tmp}/release/lib"/>
@@ -390,6 +430,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
       <fileset dir="${tools}/">
         <include name="proguard.jar"/>
         <include name="simian.jar"/>
+        <include name="javancss.jar"/>
         <include name="mucommander-ant-tools.jar"/>
       </fileset>
     </copy>
@@ -407,7 +448,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     </copy>
 
     <!-- Creates the the release file.                         -->
-    <echo>Packaging the Configuration API release file...</echo>
+    <echo>Packaging Configuration API release file...</echo>
     <mkdir dir="${dist}"/>
     <tar destfile="${dist}/${conf.package-prefix}.tar.gz" compression="gzip">
       <tarfileset dir="${conf.tmp}/release/" prefix="${conf.archive-prefix}">

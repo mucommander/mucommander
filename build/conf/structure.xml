@@ -22,41 +22,42 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ========================================================= -->
 <project>
   <!-- Where to look for the Configuration API resources.      -->
-  <property name="conf.res"            location="${res}"/>
+  <property name="conf.res"              location="${res}"/>
   <!-- Configuration API readme file.                          -->
-  <property name="conf.readme"         location="readme.txt"/>
+  <property name="conf.readme"           location="readme.txt"/>
   <!-- Configuration API license file.                         -->
-  <property name="conf.license"        location="license.txt"/>
+  <property name="conf.license"          location="license.txt"/>
   <!-- Configuration API compilation instructions.             -->
-  <property name="conf.compile"        location="compile.txt"/>
+  <property name="conf.compile"          location="compile.txt"/>
   <!-- Where to store the Configuration API documentation.     -->
-  <property name="conf.doc"            location="${doc}"/>
+  <property name="conf.doc"              location="${doc}"/>
   <!-- Where to store temporary files.                         -->
-  <property name="conf.tmp"            location="${tmp}"/>
+  <property name="conf.tmp"              location="${tmp}"/>
   <!-- Where to store the Configuration API uncompressed,      -->
   <!-- non-obfuscated JAR file.                                -->
-  <property name="conf.jar.normal"     location="${conf.tmp}/mucommander-conf_unobf.jar"/>
+  <property name="conf.jar.normal"       location="${conf.tmp}/mucommander-conf_unobf.jar"/>
   <!-- Where to store the Configuration API uncompressed,      -->
   <!-- obfuscated JAR file.                                    -->
-  <property name="conf.jar.obf"        location="${conf.tmp}/mucommander-conf_obf.jar"/>
+  <property name="conf.jar.obf"          location="${conf.tmp}/mucommander-conf_obf.jar"/>
   <!-- Where to store the Configuration API compressed,        -->
   <!-- obfuscated JAR file.                                    -->
-  <property name="conf.jar.cmp"        location="${lib}/mucommander-conf.jar"/>
+  <property name="conf.jar.cmp"          location="${lib}/mucommander-conf.jar"/>
   <!-- Where to store the Configuration API non-obfuscated     -->
   <!-- bytecode.                                               -->
-  <property name="conf.classes.normal" location="${conf.tmp}/classes"/>
+  <property name="conf.classes.normal"   location="${conf.tmp}/classes"/>
   <!-- Where to store the Configuration API obfuscated         -->
   <!-- bytecode.                                               -->
-  <property name="conf.classes.obf"    location="${conf.tmp}/obf"/>
+  <property name="conf.classes.obf"      location="${conf.tmp}/obf"/>
   <!-- Configuration API buildfile.                            -->
-  <property name="conf.build"          location="build.xml"/>
+  <property name="conf.build"            location="build.xml"/>
   <!-- Path to the tools JAR file.                             -->
-  <property name="tools.jar.cmp"       location="${tools}/mucommander-ant-tools.jar"/>
+  <property name="tools.jar.cmp"         location="${tools}/mucommander-ant-tools.jar"/>
   <!-- Where to store all automated reports about muCommander. -->
   <property name="conf.reports"          location="${reports}"/>
   <!-- Where to store JUnit reports.                           -->
   <property name="conf.junit.reports"    location="${conf.reports}/junit/"/>
-  <property name="conf.findbugs.reports" location="${conf.reports}/findbugs.xml"/>
-  <property name="conf.proguard.reports" location="${conf.reports}/proguard.txt"/>
-  <property name="conf.simian.reports"    location="${conf.reports}/simian.txt"/>
+  <property name="conf.findbugs.reports" location="${conf.reports}/findbugs"/>
+  <property name="conf.proguard.reports" location="${conf.reports}/proguard"/>
+  <property name="conf.simian.reports"   location="${conf.reports}/simian"/>
+  <property name="conf.javancss.reports" location="${conf.reports}/javancss"/>
 </project>

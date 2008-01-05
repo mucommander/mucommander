@@ -90,9 +90,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <property name="reports.main"           location="${reports}/mucommander"/>
   <!-- Where to store JUnit reports.                           -->
   <property name="junit.reports"          location="${reports.main}/junit/"/>
-  <property name="findbugs.reports"       location="${reports.main}/findbugs.xml"/>
-  <property name="simian.reports"         location="${reports.main}/simian.txt"/>
-  <property name="proguard.reports"       location="${reports.main}/proguard.txt"/>
+  <property name="javancss.reports"       location="${reports.main}/javancss"/>
+  <property name="findbugs.reports"       location="${reports.main}/findbugs"/>
+  <property name="simian.reports"         location="${reports.main}/simian"/>
+  <property name="proguard.reports"       location="${reports.main}/proguard"/>
   <property name="tmp.source"             location="${tmp}/source"/>
   <property name="doc.api"                location="${doc}/api"/>
   <property name="version-file"           location="${dist}/version.xml"/>
@@ -252,9 +253,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <property name="tools.reports"          location="${reports}/ant-tools"/>
   <!-- Where to store JUnit reports.                           -->
   <property name="tools.junit.reports"    location="${tools.reports}/junit"/>
-  <property name="tools.simian.reports"   location="${tools.reports}/simian.txt"/>
-  <property name="tools.findbugs.reports" location="${tools.reports}/findbugs.xml"/>
-  <property name="tools.proguard.reports" location="${tools.reports}/proguard.txt"/>
+  <property name="tools.simian.reports"   location="${tools.reports}/simian"/>
+  <property name="tools.findbugs.reports" location="${tools.reports}/findbugs"/>
+  <property name="tools.javancss.reports" location="${tools.reports}/javancss"/>
+  <property name="tools.proguard.reports" location="${tools.reports}/proguard"/>
 
 
 
@@ -291,7 +293,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <property name="conf.reports"           location="${reports}/conf"/>
   <!-- Where to store JUnit reports.                           -->
   <property name="conf.junit.reports"     location="${conf.reports}/junit"/>
-  <property name="conf.findbugs.reports"  location="${conf.reports}/findbugs.xml"/>
-  <property name="conf.proguard.reports"  location="${conf.reports}/proguard.txt"/>
-  <property name="conf.simian.reports"    location="${conf.reports}/simian.txt"/>
+  <property name="conf.findbugs.reports"  location="${conf.reports}/findbugs"/>
+  <property name="conf.javancss.reports"  location="${conf.reports}/javancss"/>
+  <property name="conf.proguard.reports"  location="${conf.reports}/proguard"/>
+  <property name="conf.simian.reports"    location="${conf.reports}/simian"/>
 </project>

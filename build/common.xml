@@ -36,6 +36,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <property name="doc"                 location="docs"/>
   <!-- Directory from which to load resources.                 -->
   <property name="res"                 location="res"/>
+  <!-- Directory in which to find report stylesheets.          -->
+  <property name="reports-style"       location="${res}/reports"/>
   <!-- Directory from which to load the various tools used to  -->
   <!-- build the software.                                     -->
   <property name="tools"               location="tools"/>
@@ -168,6 +170,28 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     </condition>
   </target>  
 
+
+
+  <!-- = JavaNCSS ============================================ -->
+  <!-- ======================================================= -->
+  <!-- Checks whether JavaNCSS is available. Result is stored  -->
+  <!-- in ${javancss.available}.                               -->
+  <target name="check-javancss">
+    <!-- If the value is not set, use built-in jar.            -->
+    <property name="javancss.lib" value="${tools}/javancss.jar"/>
+
+    <!-- Checks for JavaNCSS availability.                     -->
+    <!-- If JavaNCSS is available, the ${javancss.available}   -->
+    <!-- property will be set to true.                         -->
+    <condition property="javancss.available" value="true">
+      <available classname="javancss.JavancssAntTask" classpath="${javancss.lib}"/>
+    </condition>
+  </target>
+
+  <!-- Loads the JavaNCSS task if it's available.              -->
+  <target name="load-javancss" depends="check-javancss" if="javancss.available">
+    <taskdef name="javancss" classname="javancss.JavancssAntTask" classpath="${javancss.lib}"/>
+  </target>
 
 
   <!-- = Simian integration (similarity checker) ============= -->
