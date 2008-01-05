@@ -108,6 +108,16 @@ editing it.
   Thi sis used to generate bytecode analysis reports.
   If this property is not set, bytecode analysis reports won't be generated.
 
+- simian.lib (Defaults to ./tools/simian.jar)
+  Path to the Simian JAR file.
+  The one used by muCommander can be found in ./tools/simian.jar, but you can
+  modify that if you wish to try out other versions.
+
+- javancss.lib (Defaults to ./tools/javancss.jar)
+  Path to the JavaNCSS JAR file.
+  The one used by muCommander can be found in ./tools/javancss.jar, but you can
+  modify that if you wish to try out other versions.
+
 
 
 2. Compiling muCommander
