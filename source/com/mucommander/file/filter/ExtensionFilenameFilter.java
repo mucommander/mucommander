@@ -43,7 +43,7 @@ public class ExtensionFilenameFilter extends FilenameFilter {
     /**
      * Creates a new <code>ExtensionFilenameFilter</code> that matches filenames ending with one of the specified
      * extensions. By default, new <code>FilenameFilter</code> are case-insensitive.
-     * @param extensions the extensions to match
+     * @param ext the extensions to match
      */
     public ExtensionFilenameFilter(String[] ext) {
         extensions = new char[ext.length][];
