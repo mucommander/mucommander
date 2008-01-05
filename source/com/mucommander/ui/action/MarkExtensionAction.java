@@ -28,9 +28,22 @@ import com.mucommander.ui.main.table.FileTableModel;
 import java.util.Hashtable;
 
 /**
- * Action that marks all files with a specific extension.
+ * Action that marks / unmarks all files with a specific extension.
  * <p>
- * By default, this action will mark all files whose extension match that of the currently selected file in a case-insensitive fashion.
+ * Marking behaves as follows:
+ * <ul>
+ *   <li>
+ *     If the current selection is marked, all files whose extension matches that of the current selection will
+ *     be unmarked.
+ *   </li>
+ *   <li>
+ *     If the current selection isn't marked, all files whose extension matches that of the current selection will
+ *     be marked.
+ *   </li>
+ * </ul>
+ * </p>
+ * <p>
+ * By default, this action will mark all files whose extension match that of the current selection in a case-insensitive fashion.
  * It can, however, be configured:
  * <ul>
  *   <li>
@@ -154,18 +167,20 @@ public class MarkExtensionAction extends MuAction {
         FileTableModel tableModel;
         FilenameFilter filter;
         int            rowCount;
+        boolean        mark;
 
-        // Initialisation.
+        // Initialisation. Aborts if there is no selected file.
         fileTable  = mainFrame.getActiveTable();
-        tableModel = fileTable.getFileTableModel();
-        rowCount  = tableModel.getRowCount();
         if((filter = getFilter(fileTable.getSelectedFile())) == null)
             return;
+        tableModel = fileTable.getFileTableModel();
+        rowCount   = tableModel.getRowCount();
+        mark       = !tableModel.isRowMarked(fileTable.getSelectedRow());
 
         // Goes through all files in the active table, marking all that match 'filter'.
         for(int i = fileTable.getCurrentFolder().getParentSilently() == null ? 0 : 1; i < rowCount; i++)
             if(filter.accept(tableModel.getFileAtRow(i)))
-                tableModel.setRowMarked(i, true);
+                tableModel.setRowMarked(i, mark);
         fileTable.repaint();
 
         // Notify registered listeners that currently marked files have changed on the FileTable
