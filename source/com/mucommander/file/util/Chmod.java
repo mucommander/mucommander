@@ -27,7 +27,7 @@ import com.mucommander.process.ProcessRunner;
  * This class is a gateway to the <code>chmod</code> UNIX command. It provides static methods that allow to change a
  * file's permissions, overcoming the limitations of <code>java.io.File</code>.
  *
- * <p>The <code>chmod</code> command is available only under {@link com.mucommander.PlatformManager#isUnixBased() UNIX-based}
+ * <p>The <code>chmod</code> command is available only under {@link com.mucommander.runtime.OsFamily#isUnixBased() UNIX-based}
  * systems -- a call to any of this class' methods under other OS will likely fail.</p>
  *
  * @author Maxence Bernard
