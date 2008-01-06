@@ -18,7 +18,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- ========================================================= -->
 <!-- Main muCommander buildfile.                               -->
-<!-- This acts as a proxy to all other buildfiles.             -->
+<!--                                                           -->
+<!-- This file acts as a proxy to all other necessary          -->
+<!-- buildfiles:                                               -->
+<!-- - directory structure.                                    -->
+<!-- - common targets.                                         -->
+<!-- - mucommander specific targets.                           -->
+<!-- - Ant tools specific targets.                             -->
+<!-- - Configuration API specific targets.                     -->
+<!-- - if available, local configuration.                      -->
+<!--                                                           -->
+<!-- Author: Nicolas Rinaudo                                   -->
 <!-- ========================================================= -->
 <project name="mucommander" default="run" basedir=".">
   <!-- Common targets and directory structure.                 -->
