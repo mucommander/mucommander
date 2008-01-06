@@ -46,6 +46,16 @@ editing it.
   The one used by muCommander can be found in ./tools/proguard.jar, but you can
   modify that if you wish to try out other versions.
 
+- antcontrib.lib (defaults to ./tools/ant-contrib.jar)
+  Path to the Ant Contrib JAR file.
+  The one used by muCommander can be found in ./tools/ant-contrib.jar, but you can
+  modify that if you wish to try out other versions.
+
+- doccheck.lib (defaults to ./tools/doccheck.jar)
+  Path to the Doccheck JAR file.
+  The one used by muCommander can be found in ./tools/doccheck.jar, but you can
+  modify that if you wish to try out other versions.
+
 - 7za.executable (non-required)
   Path to the 7za executable.
   This is used to compress muCommander's JAR file better than Java's ZIP
@@ -83,6 +93,19 @@ editing it.
   Path to the JavaNCSS JAR file.
   The one used by muCommander can be found in ./tools/javancss.jar, but you can
   modify that if you wish to try out other versions.
+
+  Some external tools need additional configuration to work properly:
+
+- JUnit
+  To ensure that unit testing can be performed, the
+  ./lib/noinclude/junit.jar file must be copied to $ANT_HOME/lib.
+  If this isn't done, unit testing will most likely be skipped.
+
+- JDepend
+  To ensure that dependency analysis can be performed, the
+  ./tools/jdepend.jar file must be copied to $ANT_HOME/lib.
+  If this isn't done, dependency analysis will most likely
+  be skipped.
 
 
 
