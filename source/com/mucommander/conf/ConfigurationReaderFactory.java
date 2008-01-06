@@ -39,7 +39,8 @@ package com.mucommander.conf;
 public interface ConfigurationReaderFactory {
     /**
      * Creates an instance of {@link ConfigurationReader}.
-     * @return an instance of {@link ConfigurationReader}.
+     * @return                              an instance of {@link ConfigurationReader}.
+     * @throws ReaderConfigurationException if the factory wasn't properly configured.
      */
     public ConfigurationReader getReaderInstance() throws ReaderConfigurationException;
 }

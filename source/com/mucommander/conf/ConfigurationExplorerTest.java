@@ -71,11 +71,15 @@ public class ConfigurationExplorerTest extends TestCase {
     // -----------------------------------------------------------------------------------
     /**
      * Returns a configuration explorer on the test section.
+     * @return a configuration explorer on the test section.
      */
     protected ConfigurationExplorer getExplorer() {return new ConfigurationExplorer(conf.getRoot());}
 
     /**
      * Moves to the specified depth.
+     * @param  explorer explorer to use when moving to the specified depth.
+     * @param  depth    depth in the configuration tree at which to move.
+     * @return          section that was found at the specified depth.
      */
     protected ConfigurationSection moveTo(ConfigurationExplorer explorer, int depth) {
         ConfigurationSection section;

@@ -53,18 +53,24 @@ public class FileConfigurationSource implements ConfigurationSource {
     /**
      * Sets the file on which input and output streams will be opened.
      * @param file path to the file on which input and output streams will be opened.
+     * @see        #setFile(String)
+     * @see        #getFile()
      */
     public synchronized void setFile(File file) {this.file = file;}
 
     /**
      * Sets the file on which input and output streams will be opened.
      * @param path path to the file on which input and output streams will be opened.
+     * @see        #setFile(File)
+     * @see        #getFile()
      */
     public synchronized void setFile(String path) {file = new File(path);}
 
     /**
      * Returns the file on which input and output streams are opened.
      * @return the file on which input and output streams are opened.
+     * @see    #setFile(File)
+     * @see    #setFile(String)
      */
     public synchronized File getFile() {return file;}
 

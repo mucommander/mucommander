@@ -171,12 +171,14 @@ public class Configuration {
     /**
      * Sets the source that will be used to read and write configuration information.
      * @param s new configuration source.
+     * @see     #getSource()
      */
     public void setSource(ConfigurationSource s) {synchronized(sourceLock) {source = s;}}
 
     /**
      * Returns the current configuration source.
      * @return the current configuration source, or <code>null</code> if it hasn't been set.
+     * @see    #setSource(ConfigurationSource)
      */
     public ConfigurationSource getSource() {synchronized(sourceLock) {return source;}}
 
@@ -554,6 +556,8 @@ public class Configuration {
      * @param  name  fully qualified name of the variable to set.
      * @param  value new value for the variable.
      * @return       <code>true</code> if this call resulted in a modification of the variable's value, <code>false</code> otherwise.
+     * @see          #getVariable(String)
+     * @see          #getVariable(String,String)
      */
     public synchronized boolean setVariable(String name, String value) {
         ConfigurationExplorer explorer; // Used to navigate to the variable's parent section.
@@ -584,6 +588,8 @@ public class Configuration {
      * @param  name  fully qualified name of the variable to set.
      * @param  value new value for the variable.
      * @return       <code>true</code> if this call resulted in a modification of the variable's value, <code>false</code> otherwise.
+     * @see          #getIntegerVariable(String)
+     * @see          #getVariable(String,int)
      */
     public boolean setVariable(String name, int value) {return setVariable(name, ConfigurationSection.getValue(value));}
 
@@ -602,6 +608,8 @@ public class Configuration {
      * @param  value     new value for the variable.
      * @param  separator string used to separate each element of the list.
      * @return           <code>true</code> if this call resulted in a modification of the variable's value, <code>false</code> otherwise.
+     * @see              #getListVariable(String,String)
+     * @see              #getVariable(String,List,String)
      */
     public boolean setVariable(String name, List value, String separator) {return setVariable(name, ConfigurationSection.getValue(value, separator));}
 
@@ -619,6 +627,8 @@ public class Configuration {
      * @param  name  fully qualified name of the variable to set.
      * @param  value new value for the variable.
      * @return       <code>true</code> if this call resulted in a modification of the variable's value, <code>false</code> otherwise.
+     * @see          #getFloatVariable(String)
+     * @see          #getVariable(String,float)
      */
     public boolean setVariable(String name, float value) {return setVariable(name, ConfigurationSection.getValue(value));}
 
@@ -636,6 +646,8 @@ public class Configuration {
      * @param  name  fully qualified name of the variable to set.
      * @param  value new value for the variable.
      * @return       <code>true</code> if this call resulted in a modification of the variable's value, <code>false</code> otherwise.
+     * @see          #getBooleanVariable(String)
+     * @see          #getVariable(String,boolean)
      */
     public boolean setVariable(String name, boolean value) {return setVariable(name, ConfigurationSection.getValue(value));}
 
@@ -653,6 +665,8 @@ public class Configuration {
      * @param  name  fully qualified name of the variable to set.
      * @param  value new value for the variable.
      * @return       <code>true</code> if this call resulted in a modification of the variable's value, <code>false</code> otherwise.
+     * @see          #getLongVariable(String)
+     * @see          #getVariable(String,long)
      */
     public boolean setVariable(String name, long value) {return setVariable(name, ConfigurationSection.getValue(value));}
 
@@ -670,6 +684,8 @@ public class Configuration {
      * @param  name  fully qualified name of the variable to set.
      * @param  value new value for the variable.
      * @return       <code>true</code> if this call resulted in a modification of the variable's value, <code>false</code> otherwise.
+     * @see          #getDoubleVariable(String)
+     * @see          #getVariable(String,double)
      */
     public boolean setVariable(String name, double value) {return setVariable(name, ConfigurationSection.getValue(value));}
 
@@ -681,6 +697,8 @@ public class Configuration {
      * Returns the value of the specified variable.
      * @param  name fully qualified name of the variable whose value should be retrieved.
      * @return      the variable's value if set, <code>null</code> otherwise.
+     * @see         #setVariable(String,String)
+     * @see         #getVariable(String,String)
      */
     public synchronized String getVariable(String name) {
         ConfigurationExplorer explorer; // Used to navigate to the variable's parent section.
@@ -696,6 +714,8 @@ public class Configuration {
      * @param  name      fully qualified name of the variable whose value should be retrieved.
      * @param  separator character used to split the variable's value into a list.
      * @return           the variable's value if set, <code>null</code> otherwise.
+     * @see              #setVariable(String,List,String)
+     * @see              #getVariable(String,List,String)
      */
     public ValueList getListVariable(String name, String separator) {return ConfigurationSection.getListValue(getVariable(name), separator);}
 
@@ -704,6 +724,8 @@ public class Configuration {
      * @param                        name fully qualified name of the variable whose value should be retrieved.
      * @return                       the variable's value if set, <code>0</code> otherwise.
      * @throws NumberFormatException if the variable's value cannot be cast to an integer.
+     * @see                          #setVariable(String,int)
+     * @see                          #getVariable(String,int)
      */
     public int getIntegerVariable(String name) {return ConfigurationSection.getIntegerValue(getVariable(name));}
 
@@ -712,6 +734,8 @@ public class Configuration {
      * @param                        name fully qualified name of the variable whose value should be retrieved.
      * @return                       the variable's value if set, <code>0</code> otherwise.
      * @throws NumberFormatException if the variable's value cannot be cast to a long.
+     * @see                          #setVariable(String,long)
+     * @see                          #getVariable(String,long)
      */
     public long getLongVariable(String name) {return ConfigurationSection.getLongValue(getVariable(name));}
 
@@ -720,6 +744,8 @@ public class Configuration {
      * @param                        name fully qualified name of the variable whose value should be retrieved.
      * @return                       the variable's value if set, <code>0</code> otherwise.
      * @throws NumberFormatException if the variable's value cannot be cast to a float.
+     * @see                          #setVariable(String,float)
+     * @see                          #getVariable(String,float)
      */
     public float getFloatVariable(String name) {return ConfigurationSection.getFloatValue(getVariable(name));}
 
@@ -728,6 +754,8 @@ public class Configuration {
      * @param                        name fully qualified name of the variable whose value should be retrieved.
      * @return                       the variable's value if set, <code>0</code> otherwise.
      * @throws NumberFormatException if the variable's value cannot be cast to a double.
+     * @see                          #setVariable(String,double)
+     * @see                          #getVariable(String,double)
      */
     public double getDoubleVariable(String name) {return ConfigurationSection.getDoubleValue(getVariable(name));}
 
@@ -735,6 +763,8 @@ public class Configuration {
      * Returns the value of the specified variable as a boolean.
      * @param  name fully qualified name of the variable whose value should be retrieved.
      * @return the variable's value if set, <code>false</code> otherwise.
+     * @see                          #setVariable(String,boolean)
+     * @see                          #getVariable(String,boolean)
      */
     public boolean getBooleanVariable(String name) {return ConfigurationSection.getBooleanValue(getVariable(name));}
 
@@ -880,6 +910,8 @@ public class Configuration {
      * @param  name         name of the variable to retrieve.
      * @param  defaultValue value to use if <code>name</code> is not set.
      * @return              the specified variable's value.
+     * @see                 #setVariable(String,String)
+     * @see                 #getVariable(String)
      */
     public synchronized String getVariable(String name, String defaultValue) {
         ConfigurationExplorer explorer; // Used to navigate to the variable's parent section.
@@ -906,11 +938,12 @@ public class Configuration {
      * returning it. If this happens, a configuration {@link ConfigurationEvent event} will
      * be sent to all registered listeners.
      * </p>
-     * @param  name                  name of the variable to retrieve.
-     * @param  defaultValue          value to use if variable <code>name</code> is not set.
-     * @param  separator             separator to use for <code>defaultValue</code> if variable <code>name</code> is not set.
-     * @return                       the specified variable's value.
-     * @throws NumberFormatException if the variable's value cannot be cast to a {@link ValueList}.
+     * @param  name         name of the variable to retrieve.
+     * @param  defaultValue value to use if variable <code>name</code> is not set.
+     * @param  separator    separator to use for <code>defaultValue</code> if variable <code>name</code> is not set.
+     * @return              the specified variable's value.
+     * @see                 #setVariable(String,List,String)
+     * @see                 #getListVariable(String,String)
      */
     public ValueList getVariable(String name, List defaultValue, String separator) {
         return ConfigurationSection.getListValue(getVariable(name, ConfigurationSection.getValue(defaultValue, separator)), separator);
@@ -927,6 +960,8 @@ public class Configuration {
      * @param  defaultValue          value to use if <code>name</code> is not set.
      * @return                       the specified variable's value.
      * @throws NumberFormatException if the variable's value cannot be cast to an integer.
+     * @see                          #setVariable(String,int)
+     * @see                          #getIntegerVariable(String)
      */
     public int getVariable(String name, int defaultValue) {
         return ConfigurationSection.getIntegerValue(getVariable(name, ConfigurationSection.getValue(defaultValue)));
@@ -943,6 +978,8 @@ public class Configuration {
      * @param  defaultValue          value to use if <code>name</code> is not set.
      * @return                       the specified variable's value.
      * @throws NumberFormatException if the variable's value cannot be cast to a long.
+     * @see                          #setVariable(String,long)
+     * @see                          #getLongVariable(String)
      */
     public long getVariable(String name, long defaultValue) {
         return ConfigurationSection.getLongValue(getVariable(name, ConfigurationSection.getValue(defaultValue)));
@@ -959,6 +996,8 @@ public class Configuration {
      * @param  defaultValue          value to use if <code>name</code> is not set.
      * @return                       the specified variable's value.
      * @throws NumberFormatException if the variable's value cannot be cast to a float.
+     * @see                          #setVariable(String,float)
+     * @see                          #getFloatVariable(String)
      */
     public float getVariable(String name, float defaultValue) {
         return ConfigurationSection.getFloatValue(getVariable(name, ConfigurationSection.getValue(defaultValue)));
@@ -974,6 +1013,8 @@ public class Configuration {
      * @param  name                  name of the variable to retrieve.
      * @param  defaultValue          value to use if <code>name</code> is not set.
      * @return                       the specified variable's value.
+     * @see                          #setVariable(String,boolean)
+     * @see                          #getBooleanVariable(String)
      */
     public boolean getVariable(String name, boolean defaultValue) {
         return ConfigurationSection.getBooleanValue(getVariable(name, ConfigurationSection.getValue(defaultValue)));
@@ -990,6 +1031,8 @@ public class Configuration {
      * @param  defaultValue          value to use if <code>name</code> is not set.
      * @return                       the specified variable's value.
      * @throws NumberFormatException if the variable's value cannot be cast to a double.
+     * @see                          #setVariable(String,double)
+     * @see                          #getDoubleVariable(String)
      */
     public double getVariable(String name, double defaultValue) {
         return ConfigurationSection.getDoubleValue(getVariable(name, ConfigurationSection.getValue(defaultValue)));
@@ -1031,12 +1074,14 @@ public class Configuration {
     /**
      * Adds the specified object to the list of registered configuration listeners.
      * @param listener object to register as a configuration listener.
+     * @see            #removeConfigurationListener(ConfigurationListener)
      */
     public static void addConfigurationListener(ConfigurationListener listener) {listeners.put(listener, null);}
 
     /**
      * Removes the specified object from the list of registered configuration listeners.
      * @param listener object to remove from the list of registered configuration listeners.
+     * @see            #addConfigurationListener(ConfigurationListener)
      */
     public static void removeConfigurationListener(ConfigurationListener listener) {listeners.remove(listener);}
 

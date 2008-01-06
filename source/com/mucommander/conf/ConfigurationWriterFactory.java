@@ -39,7 +39,8 @@ package com.mucommander.conf;
 public interface ConfigurationWriterFactory {
     /**
      * Creates an instance of {@link ConfigurationWriter}.
-     * @return an instance of {@link ConfigurationWriter}.
+     * @return                              an instance of {@link ConfigurationWriter}.
+     * @throws WriterConfigurationException if the factory wasn't properly configured.
      */
     public ConfigurationWriter getWriterInstance() throws WriterConfigurationException;
 }

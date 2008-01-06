@@ -1213,6 +1213,7 @@ public class ConfigurationTest extends TestCase implements ConfigurationListener
 
     /**
      * Ignored.
+     * @see #setOutputStream(OutputStream)
      */
     public OutputStream getOutputStream() {return null;}
 
@@ -1258,6 +1259,7 @@ public class ConfigurationTest extends TestCase implements ConfigurationListener
 
     /**
      * Ignored.
+     * @see #getOutputStream()
      */
     public void setOutputStream(OutputStream out) {}
 

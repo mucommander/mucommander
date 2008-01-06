@@ -58,7 +58,10 @@ public class FileConfigurationSourceTest extends TestCase {
 
     // - Tests ---------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------
-    public void testFiles() {
+    /**
+     * Tests file source initialisation.
+     */
+    public void testInitialisation() {
         FileConfigurationSource source;
 
         // Makes sure the 'file' constructor works properly.
@@ -89,6 +92,7 @@ public class FileConfigurationSourceTest extends TestCase {
 
     /**
      * Tests the source's streams.
+     * @throws IOException if an IO related error occurs.
      */
     public void testStreams() throws IOException {
         FileConfigurationSource source;

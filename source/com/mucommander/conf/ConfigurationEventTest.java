@@ -180,6 +180,9 @@ public class ConfigurationEventTest extends TestCase {
 
     // - Misc. tests ---------------------------------------------------------------------
     // -----------------------------------------------------------------------------------
+    /**
+     * Tests event creation.
+     */
     public void testConstructor() {
         ConfigurationEvent event;
 
