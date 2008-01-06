@@ -39,6 +39,7 @@ import java.lang.reflect.Constructor;
  * @author Maxence Bernard, Nicolas Rinaudo
  */
 public class Launcher {
+
     // - Class fields -----------------------------------------------------------
     // --------------------------------------------------------------------------
     private static SplashScreen splashScreen;
