@@ -19,6 +19,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ========================================================= -->
 <!-- Defines the directory structure and other constants of    -->
 <!-- muCommander Ant tools project.                            -->
+<!--                                                           -->
+<!-- This file is only used when working on the Ant tools      -->
+<!-- standalone source code rather than the whole of           -->
+<!-- muCommander. Otherwise, build/mucommander/structure.xml   -->
+<!-- is used.                                                  -->
+<!--                                                           -->
+<!-- Author: Nicolas Rinaudo                                   -->
 <!-- ========================================================= -->
 <project>
   <!-- Where to store the tools documentation.                 -->
@@ -58,8 +65,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <property name="tools.reports"          location="${reports}"/>
   <!-- Where to store JUnit reports.                           -->
   <property name="tools.junit.reports"    location="${tools.reports}/junit/"/>
+  <!-- Where to store FindBugs reports.                        -->
   <property name="tools.findbugs.reports" location="${tools.reports}/findbugs"/>
+  <!-- Where to store ProGuard reports.                        -->
   <property name="tools.proguard.reports" location="${tools.reports}/proguard"/>
+  <!-- Where to store Simian reports.                          -->
   <property name="tools.simian.reports"   location="${tools.reports}/simian"/>
+  <!-- Where to store JavaNCSS reports.                        -->
   <property name="tools.javancss.reports" location="${tools.reports}/javancss"/>
+  <!-- Where to store Doccheck reports.                        -->
+  <property name="tools.doccheck.reports" location="${tools.reports}/doccheck"/>
+  <!-- Where to store JDepend reports.                         -->
+  <property name="tools.jdepend.reports"  location="${tools.reports}/jdepend"/>
 </project>

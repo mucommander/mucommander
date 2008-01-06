@@ -19,6 +19,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ========================================================= -->
 <!-- Properties and targets common to all muCommander          -->
 <!-- subprojects.                                              -->
+<!--                                                           -->
+<!-- Author: Nicolas Rinaudo, Maxence Bernard                  -->
 <!-- ========================================================= -->
 <project>
   <!-- = Directory structure ================================= -->
@@ -45,17 +47,53 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <property name="source"              location="source"/>
   <!-- Directory containing the project's libraries.           -->
   <property name="lib"                 location="lib"/>
+  <!-- Defines a pattern that matches any non-test Java source -->
+  <!-- file.                                                   -->
+  <patternset id="non-test-sources">
+    <include name="**/*.java"/>
+    <exclude name="**/*Test.java"/>
+  </patternset>
+
+
+
+  <!-- = Ant Contrib management ============================== -->
+  <!-- ======================================================= -->
+  <!-- The following targets are used to load the Ant Contrib  -->
+  <!-- tasks.                                                  -->
+
+  <!-- Tries to load Ant Contrib.                              -->
+  <!--                                                         -->
+  <!-- If Ant Contrib couldn't be loaded, the build will fail. -->
+  <target name="load-antcontrib">
+    <!-- If the AntContrib path is not set, uses default       -->
+    <!-- value.                                                -->
+    <property name="antcontrib.lib" value="${tools}/ant-contrib.jar"/>
+
+    <!-- Checks whether the necessary resources are available, -->
+    <!-- fails otherwise.                                      -->
+    <condition property="antcontrib.available" value="true">
+      <available resource="net/sf/antcontrib/antlib.xml" classpath="${antcontrib.lib}"/>
+    </condition>
+    <fail unless="antcontrib.available">Ant Contrib not available.</fail>
+
+    <!-- Loads the Ant Contrib tasks.                          -->
+    <taskdef resource="net/sf/antcontrib/antlib.xml" classpath="${antcontrib.lib}"/>
+  </target>
 
 
 
   <!-- = FindBugs management ================================= -->
   <!-- ======================================================= -->
-  <!-- The following targets are used to deal with FindBugs,   -->
-  <!-- its availability and successful loading.                -->
+  <!-- The following targets are used to check whether         -->
+  <!-- FindBugs is available and load it if so.                -->
 
-  <!-- Checks whether FindBugs is available or not.            -->
-  <!-- This is a helper target and should not be referenced    -->
-  <!-- directly.                                               -->
+  <!-- Checks whether FindBugs is available.                   -->
+  <!--                                                         -->
+  <!-- If FindBugs is available, ${findbugs.available} will be -->
+  <!-- set to true.                                            -->
+  <!--                                                         -->
+  <!-- This is a 'private' target and should never be          -->
+  <!-- referenced directly outside of this file.               -->
   <target name="check-findbugs">
     <!-- Checks for FindBugs availability.                     -->
     <!-- If FindBugs is available, the ${findbugs.available}   -->
@@ -66,33 +104,47 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   </target>  
 
   <!-- Tries to load FindBugs.                                 -->
+  <!--                                                         -->
+  <!-- If FindBugs is available, ${findbugs.available} will be -->
+  <!-- set to true.                                            -->
   <target name="load-findbugs" depends="check-findbugs" if="findbugs.available">
     <taskdef name="findbugs" classname="edu.umd.cs.findbugs.anttask.FindBugsTask" classpath="${findbugs.home}/lib/findbugs-ant.jar"/>
   </target>
 
 
 
-  <!-- = proGuard management ================================= -->
+  <!-- = ProGuard management ================================= -->
   <!-- ======================================================= -->
-  <!-- The following targets are used to deal with proGuard,   -->
-  <!-- its availability and successful loading.                -->
+  <!-- The following targets are used to check whether         -->
+  <!-- ProGuard is available and load it if so.                -->
 
-  <!-- Checks whether proGuard is available or not.            -->
-  <!-- This is a helper target and should not be referenced    -->
-  <!-- directly.                                               -->
+  <!-- Checks whether ProGuard is available.                   -->
+  <!--                                                         -->
+  <!-- If ProGuard is available, ${proguard.available} will be -->
+  <!-- set to true.                                            -->
+  <!--                                                         -->
+  <!-- This is a 'private' target and should never be          -->
+  <!-- referenced directly outside of this file.               -->
   <target name="check-proguard">
-    <!-- If the proGuard path is not set, uses default value.  -->
+    <!-- If the ProGuard path is not set, uses default value.  -->
     <property name="proguard.lib" value="${tools}/proguard.jar"/>
 
-    <!-- Checks for proGuard availability.                     -->
-    <!-- If proGuard is available, the ${proguard.available}   -->
+    <!-- Checks for ProGuard availability.                     -->
+    <!-- If ProGuard is available, the ${proguard.available}   -->
     <!-- property will be set to true.                         -->
     <condition property="proguard.available" value="true">
       <available classname="proguard.ant.ProGuardTask" classpath="${proguard.lib}"/>
     </condition>
   </target>  
 
-  <!-- Tries to load proGuard.                                 -->
+  <!-- Tries to load ProGuard.                                 -->
+  <!--                                                         -->
+  <!-- If ProGuard is available, ${proguard.available} will be -->
+  <!-- set to true.                                            -->
+  <!--                                                         -->
+  <!-- Additionally, this task will check whether ProGuard can -->
+  <!-- use mixed-case class names. If it can,                  -->
+  <!-- ${proguard.mixed-case} will be set to true.             -->
   <target name="load-proguard" depends="check-proguard,check-7za" if="proguard.available">
     <taskdef name="proguard" classname="proguard.ant.ProGuardTask" classpath="${proguard.lib}"/>
 
@@ -101,6 +153,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <!--   extracted).                                         -->
     <!-- - configuration defines the file system as case       -->
     <!--   sensitive.                                          -->
+    <!-- In other cases, classes would be lost in the          -->
+    <!-- compression step if mixed-case obfuscation was used.  -->
     <condition property="proguard.mixed-case" value="true">
       <or>
         <isfalse value="${7za.available}"/>
@@ -110,25 +164,53 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   </target>
 
 
-  <!-- = JUnit loading ======================================= -->
-  <!-- ======================================================= -->
-  <!-- The JUnit Ant task comes bundled with Ant               -->
-  <!-- (ant-junit.jar) but requires the main JUnit package     -->
-  <!-- (junit.jar) which unfortunately is not bundled with Ant -->
-  <!-- and needs to be manually copied to $ANT_HOME/lib.       -->
-  <!-- Furthermore, 'junit.jar' cannot be copied elsewhere and -->
-  <!-- loaded separately, as both JAR files need to reside in  -->
-  <!-- Ant's boot classpath. More information about this here: -->
-  <!-- http://ant.apache.org/manual/OptionalTasks/junit.html . -->
-  <!--                                                         -->
-  <!-- The JUnit task of Ant 1.7.0 has improved in this        -->
-  <!-- department thanks to the <classpath> element. So the    -->
-  <!-- day Ant 1.7.0 becomes a minimum requirement, we'll be   -->
-  <!-- able to simplify this and use the 'junit.jar' file that -->
-  <!-- comes with muCommander.                                 -->
 
-  <!-- Checks if JUnit is available. The result is stored in   -->
-  <!-- ${junit.available}.                                     -->
+  <!-- = JDepend management ================================== -->
+  <!-- ======================================================= -->
+  <!-- The following targets are used to check whether         -->
+  <!-- JDepend is available.                                   -->
+  <!--                                                         -->
+  <!-- Ant comes bundled with an optional JDepend task, but    -->
+  <!-- this requires the main JDepend package to run.          -->
+  <!--                                                         -->
+  <!-- Ant is a bit peculiar about configuring optional tasks  -->
+  <!-- and won't let us do that at runtime, which forces users -->
+  <!-- to copy ./tools/jdepend.jar in $ANT_HOME/lib.           -->
+
+  <!-- Tries to load the JDepend Ant task.                     -->
+  <!--                                                         -->
+  <!-- If JDepend is available, ${jdepend.available} will be   -->
+  <!-- set to true.                                            -->
+  <target name="check-jdepend">
+    <condition property="jdepend.available" value="true">
+      <!-- Test both Ant task and one of JDepend package       -->
+      <!-- framework classes.                                  -->
+      <and>
+        <available classname="org.apache.tools.ant.taskdefs.optional.jdepend.JDependTask"/>
+        <available classname="jdepend.framework.JDepend"/>
+      </and>
+    </condition>
+  </target>
+
+
+
+  <!-- = JUnit management ==================================== -->
+  <!-- ======================================================= -->
+  <!-- The following targets are used to check whether         -->
+  <!-- JUnit is available.                                     -->
+  <!--                                                         -->
+  <!-- Ant comes bundled with an optional JUnit task, but      -->
+  <!-- this requires the main JUnit package to run.            -->
+  <!--                                                         -->
+  <!-- Ant is a bit peculiar about configuring optional tasks  -->
+  <!-- and won't let us do that at runtime, which forces users -->
+  <!-- to copy ./lib/noinclude/junit.jar in $ANT_HOME/lib.     -->
+
+  <!-- Tries to load the JUnit Ant task.                       -->
+  <!--                                                         -->
+  <!-- If JUnit is available, ${junit.available} will be       -->
+  <!-- set to true.                                            -->
+  <!--                                                         -->
   <!-- If not in release mode (${is-release} set to false),    -->
   <!-- this target will fail the build.                        -->
   <target name="check-junit">
@@ -162,8 +244,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
   <!-- = 7za management ====================================== -->
   <!-- ======================================================= -->
+  <!-- The following targets are used to check whether 7za is  -->
+  <!-- available.                                              -->
+
   <!-- Checks whether 7za is available.                        -->
-  <!-- The result will be stored in ${7za.available}.          -->
+  <!--                                                         -->
+  <!-- If 7za is available, ${7za.available} will be set to    -->
+  <!-- true.                                                   -->
   <target name="check-7za">
     <condition property="7za.available" value="true">
       <available file="${7za.executable}" type="file"/>
@@ -172,10 +259,18 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 
-  <!-- = JavaNCSS ============================================ -->
+  <!-- = JavaNCSS management ================================= -->
   <!-- ======================================================= -->
-  <!-- Checks whether JavaNCSS is available. Result is stored  -->
-  <!-- in ${javancss.available}.                               -->
+  <!-- The following targets are used to check whether         -->
+  <!-- JavaNCSS is available and load it if so.                -->
+
+  <!-- Checks whether JavaNCSS is available.                   -->
+  <!--                                                         -->
+  <!-- If JavaNCSS is available, ${javancss.available} will be -->
+  <!-- set to true.                                            -->
+  <!--                                                         -->
+  <!-- This is a 'private' target and should never be          -->
+  <!-- referenced directly outside of this file.               -->
   <target name="check-javancss">
     <!-- If the value is not set, use built-in jar.            -->
     <property name="javancss.lib" value="${tools}/javancss.jar"/>
@@ -188,16 +283,28 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     </condition>
   </target>
 
-  <!-- Loads the JavaNCSS task if it's available.              -->
+  <!-- Tries to load JavaNCSS.                                 -->
+  <!--                                                         -->
+  <!-- If JavaNCSS is available, ${javancss.available} will be -->
+  <!-- set to true.                                            -->
   <target name="load-javancss" depends="check-javancss" if="javancss.available">
     <taskdef name="javancss" classname="javancss.JavancssAntTask" classpath="${javancss.lib}"/>
   </target>
 
 
-  <!-- = Simian integration (similarity checker) ============= -->
+
+  <!-- = Simian management =================================== -->
   <!-- ======================================================= -->
-  <!-- Checks if Simian is available. The result is stored in  -->
-  <!-- ${simian.available}.                                    -->
+  <!-- The following targets are used to check whether         -->
+  <!-- Simian is available and load it if so.                  -->
+
+  <!-- Checks whether Simian is available.                     -->
+  <!--                                                         -->
+  <!-- If Simian is available, ${simian.available} will be set -->
+  <!-- to true.                                                -->
+  <!--                                                         -->
+  <!-- This is a 'private' target and should never be          -->
+  <!-- referenced directly outside of this file.               -->
   <target name="check-simian">
     <!-- If the value is not set, use built-in jar.            -->
     <property name="simian.lib" value="${tools}/simian.jar"/>
@@ -210,9 +317,35 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     </condition>
   </target>
 
-  <!-- Loads the Simian task if it's available.                -->
+  <!-- Tries to load Simian.                                   -->
+  <!--                                                         -->
+  <!-- If simian is available, ${simian.available} will be set -->
+  <!-- to true.                                                -->
   <target name="load-simian" depends="check-simian" if="simian.available">
     <taskdef resource="simiantask.properties" classpath="${simian.lib}"/>
+  </target>
+
+
+
+  <!-- = Doccheck management ================================= -->
+  <!-- ======================================================= -->
+  <!-- The following targets are used to check whether         -->
+  <!-- Doccheck is available.                                  -->
+
+  <!-- Checks whether DocCheck is available.                   -->
+  <!--                                                         -->
+  <!-- If Doccheck is available, ${doccheck.available} will be -->
+  <!-- set to true.                                            -->
+  <target name="check-doccheck">
+    <!-- If the value is not set, use built-in jar.            -->
+    <property name="doccheck.lib" value="${tools}/doccheck.jar"/>
+
+    <!-- Checks for Doccheck availability.                     -->
+    <!-- If Doccheck is available, the ${doccheck.available}   -->
+    <!-- property will be set to true.                         -->
+    <condition property="doccheck.available" value="true">
+      <available classname="com.sun.tools.doclets.doccheck.DocCheck" classpath="${doccheck.lib}"/>
+    </condition>
   </target>
 
 
@@ -233,11 +366,4 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
       <fileset dir="." includes="**/*~" defaultexcludes="no"/>
     </delete>
   </target>
-
-  <!-- Defines a pattern that matches any non-test Java source -->
-  <!-- file.                                                   -->
-  <patternset id="non-test-sources">
-    <include name="**/*.java"/>
-    <exclude name="**/*Test.java"/>
-  </patternset>
 </project>

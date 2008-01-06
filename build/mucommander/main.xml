@@ -19,39 +19,24 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ========================================================= -->
 <!-- Defines muCommander specific targets.                     -->
 <!--                                                           -->
+<!-- Author: Nicolas Rinaudo                                   -->
 <!-- ========================================================= -->
 <project>
-  <!-- = Task loading ======================================== -->
-  <!-- ======================================================= -->
-  <!-- Loads the javaw task.                                   -->
-  <target name="load-javaw" depends="tools-compress">
-    <taskdef name="javaw" classname="com.mucommander.ant.java.JavaTask" classpath="${tools.jar.cmp}"/>
-  </target>
-
-  <!-- Loads the mksize task.                                  -->
-  <target name="load-mksize" depends="tools-compress">
-    <taskdef name="mksize" classname="com.mucommander.ant.util.SizeTask" classpath="${tools.jar.cmp}"/>
-  </target>
-
-  <!-- Loads the mkapp task.                                   -->
-  <target name="load-mkapp" depends="tools-compress">
-    <taskdef name="mkapp" classname="com.mucommander.ant.macosx.AppTask" classpath="${tools.jar.cmp}"/>
-  </target>
-
-  <!-- Loakds the mkjnlp task.                                 -->
-  <target name="load-mkjnlp" depends="tools-compress">
-    <taskdef name="mkjnlp" classname="com.mucommander.ant.jnlp.JnlpTask" classpath="${tools.jar.cmp}"/>
-  </target>
-
-
-
   <!-- = Resources generation ================================ -->
   <!-- ======================================================= -->
+  <!-- The following targets are used to generate resources    -->
+  <!-- used by muCommander.                                    -->
 
-  <!-- Copies the project's resources.                         -->
+  <!-- Copies muCommander's resources in the compilation       -->
+  <!-- directory.                                              -->
+  <!--                                                         -->
   <!-- All resources will be copied in ${classes.normal}.      -->
+  <!--                                                         -->
+  <!-- This is a 'private' target and should never be          -->
+  <!-- referenced directly outside of this file.               -->
   <target name="resources">
     <echo>Copying resources...</echo>
+
     <!-- Copies the images.                                    -->
     <copy todir="${classes.normal}" overwrite="true">
       <fileset dir="${res.images}">
@@ -67,10 +52,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <copy file="${res}/action_keymap.xml" todir="${classes.normal}" overwrite="true"/>
     <copy file="${res.license}"           tofile="${classes.normal}/license.txt" overwrite="true"/>
 
-    <!-- Generates the themes.                                 -->
-    <echo>Creating themes...</echo>
-    <mkdir dir="${classes.normal}/${themes.out}"/>
-    <copy todir="${classes.normal}/${themes.out}" overwrite="true">
+    <!-- Copies themes.                                        -->
+    <mkdir dir="${themes.out}"/>
+    <copy todir="${themes.out}" overwrite="true">
       <fileset dir="${themes.in}">
         <include name="**/*.xml"/>
       </fileset>
@@ -81,18 +65,29 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
   <!-- = External libraries management ======================= -->
   <!-- ======================================================= -->
-  <!-- The following tasks are used manage the various the     -->
-  <!-- various external libraries used by muCommander.         -->
+  <!-- The following tasks are used manage the various         -->
+  <!-- libraries used by muCommander.                          -->
 
   <!-- Checks whether the external libraries are up to date.   -->
+  <!--                                                         -->
+  <!-- If external libraries are up-to-date,                   -->
+  <!-- ${libs.up-to-date} will be set to true.                 -->
+  <!--                                                         -->
+  <!-- This is a 'private' target and should never be          -->
+  <!-- referenced directly outside of this file.               -->
   <target name="check-libs" unless="libs.up-to-date">
     <uptodate property="libs.up-to-date" targetfile="${jar.normal}">
       <srcfiles dir="${lib}" includes="**/*.jar"/>
     </uptodate>
   </target>
 
-  <!-- Includes the application's libraries with its binaries. -->
+  <!-- Includes muCommander's libraries in the compilation     -->
+  <!-- directory.                                              -->
+  <!--                                                         -->
   <!-- All libraries will be unpacked in ${classes.normal}.    -->
+  <!--                                                         -->
+  <!-- This is a 'private' target and should never be          -->
+  <!-- referenced directly outside of this file.               -->
   <target name="include-libs" depends="check-libs" unless="libs.up-to-date">
     <echo>Unpacking external libraries...</echo>
     <unjar dest="${classes.normal}">
@@ -119,53 +114,81 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 
-  <!-- = Name generation ===================================== -->
+  <!-- = Filename generation ================================= -->
   <!-- ======================================================= -->
+  <!-- The following targets are used to generate release file -->
+  <!-- names depending on the context (nightly or normal       -->
+  <!-- release.                                                -->
 
   <!-- Generates the package-prefix for nightly builds.        -->
+  <!--                                                         -->
+  <!-- The package prefix will be stored in ${package-prefix}. -->
+  <!--                                                         -->
+  <!-- This is a 'private' target and should never be          -->
+  <!-- referenced directly outside of this file.               -->
   <target name="nightly-prefix" if="is-nightly">
     <echo>Creating nightly package name prefix...</echo>
     <property name="package-prefix" value="mucommander-current"/>
   </target>
 
   <!-- Generates the package-prefix for non-nightly builds.    -->
-  <target name="release-prefix" depends="load-strreplace" unless="is-nightly">
+  <!--                                                         -->
+  <!-- The package prefix will be stored in ${package-prefix}. -->
+  <!--                                                         -->
+  <!-- This is a 'private' target and should never be          -->
+  <!-- referenced directly outside of this file.               -->
+  <target name="release-prefix" depends="load-antcontrib" unless="is-nightly">
     <echo>Creating release package name prefix...</echo>
-    <strreplace from="mucommander-${app.version}${app.subversion}" to="package-prefix" what="[ .]" with="_"/>
+    <propertyregex property="package-prefix" input="mucommander-${app.version}${app.subversion}" regexp="[ .]" replace="_"/>
   </target>
 
   <!-- Generates the current build's package prefix.           -->
+  <!--                                                         -->
   <!-- The package prefix will be stored in ${package-prefix}, -->
   <!-- and depends on whether we're compiling a nightly build  -->
   <!-- or an official release one.                             -->
+  <!--                                                         -->
+  <!-- This is a 'private' target and should never be          -->
+  <!-- referenced directly outside of this file.               -->
   <target name="package-prefix" depends="nightly-prefix,release-prefix"/>
 
   <!-- Generates the prefix folder for all archives.           -->
+  <!--                                                         -->
   <!-- Output will be stored in property ${archive-prefix}.    -->
-  <target name="archive-prefix" depends="load-strreplace">
+  <!--                                                         -->
+  <!-- This is a 'private' target and should never be          -->
+  <!-- referenced directly outside of this file.               -->
+  <target name="archive-prefix" depends="load-antcontrib">
     <echo>Creating archive prefix...</echo>
     <!-- Escapes the version number for the TGZ prefix.        -->
-    <strreplace from="muCommander-${app.version}${app.subversion}" to="archive-prefix" what="[ .]" with="_"/>
+    <propertyregex property="archive-prefix" input="muCommander-${app.version}${app.subversion}" regexp="[ .]" replace="_"/>
   </target>
 
 
 
-  <!-- = Compilation targets ================================= -->
+  <!-- = Compilation ========================================= -->
   <!-- ======================================================= -->
   <!-- The following targets are used to generate the clear    -->
   <!-- muCommander JAR file.                                   -->
-  <!-- The only target that should be referenced is 'jar', as  -->
-  <!-- the other ones are only helper targets.                 -->
-
+ 
 
   <!-- Creates the runtime constant class.                     -->
+  <!--                                                         -->
   <!-- Output will be stored in ${tmp.source}.                 -->
-  <target name="constants" depends="load-javaw">
+  <!--                                                         -->
+  <!-- This is a 'private' target and should never be          -->
+  <!-- referenced directly outside of this file.               -->
+  <target name="constants" depends="load-anttools">
     <tstamp/>
     <echo>Creating runtime constants...</echo>
     <mkdir dir="${tmp.source}"/>
+
+    <!-- Sets runtime properties to their default values if    -->
+    <!-- they haven't already been set.                        -->
     <property name="is-debug"    value="true"/>
     <property name="version-url" value="${url.app-version}"/>
+
+    <!-- Creates the RuntimeConstants class.                   -->
     <javaw name="${tmp.source}/com.mucommander.RuntimeConstants">
       <field name="DEBUG"               value="${is-debug}"    type="boolean"/>
       <field name="VERSION"             value="${app.version}${app.subversion}"/>
@@ -178,15 +201,19 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
       <field name="FORUMS_URL"          value="${url.forums}"/>
       <field name="DONATION_URL"        value="${url.donation}"/>
       <field name="DICTIONARY_FILE"     value="/dictionary.txt"/>
-      <field name="THEMES_PATH"         value="${themes.out}"/>
+      <field name="THEMES_PATH"         value="/themes"/>
       <field name="BUG_REPOSITORY_URL"  value="${url.bug-repository}"/>
       <field name="DEFAULT_THEME"       value="Native"/>
     </javaw>
   </target>
 
   <!-- Compiles all java files found in ${source} and          -->
-  <!-- ${tmp.source}, and stores the resulting bytecode in     -->
-  <!-- {$classes.normal}.                                      -->
+  <!-- ${tmp.source}.                                          -->
+  <!--                                                         -->
+  <!-- Compilation output will be stored in ${classes.normal}. -->
+  <!--                                                         -->
+  <!-- This is a 'private' target and should never be          -->
+  <!-- referenced directly outside of this file.               -->
   <target name="compile" depends="constants">
     <echo>Compiling sources...</echo>
     <mkdir dir="${classes.normal}"/>
@@ -206,6 +233,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
   <!-- Generates the application's uncompressed, unobfuscated  -->
   <!-- JAR file.                                               -->
+  <!--                                                         -->
   <!-- Output will be stored in {$jar.normal}.                 -->
   <target name="jar" depends="compile,include-libs,resources">
     <tstamp/>
@@ -225,24 +253,19 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 
-  <!-- = Obfuscation targets ================================= -->
+  <!-- = ProGuard ============================================ -->
   <!-- ======================================================= -->
   <!-- The following targets are used to obfuscate the         -->
   <!-- muCommander bytecode.                                   -->
-  <!-- The only target that should be refered is 'obfuscate',  -->
-  <!-- as all the other ones are used to figure out the best   -->
-  <!-- obfuscation policy.                                     -->
 
-  <!-- Copies ${jar.normal} to ${jar.obf}.                     -->
-  <!-- This target is meant to be used when it was not         -->
-  <!-- to load the ProGuard task.                              -->
-  <target name="copy-bytecode" unless="proguard.available">
-    <echo>ProGuard unavailable, skipping obfuscation...</echo>
-    <copy file="${jar.normal}" tofile="${jar.obf}" overwrite="true"/>
-  </target>
-
-  <!-- Obfuscates the clear JAR file and stores the result in  -->
+  <!-- Obfuscated the uncompressed, unobfuscated JAR file.     -->
+  <!--                                                         -->
+  <!-- The resulting JAR file will be stored in                -->
   <!-- ${jar.obf}.                                             -->
+  <!--                                                         -->
+  <!-- This is a 'private' target and should never be          -->
+  <!-- referenced directly outside of this file. It's only     -->
+  <!-- meant to be used when ProGuard is available.            -->
   <target name="obfuscate-bytecode" depends="load-libpath" if="proguard.available">
     <echo>Creating obfuscated JAR file...</echo>
     <mkdir dir="${proguard.reports}"/>
@@ -277,8 +300,21 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     </proguard>
   </target>
 
-  <!-- Generates the application's obfuscated jar file.        -->
-  <!-- Output will be stored in ${jar.obf}.                    -->
+  <!-- Copies ${jar.normal} to ${jar.obf}.                     -->
+  <!--                                                         -->
+  <!-- This is a 'private' target and should never be          -->
+  <!-- referenced directly outside of this file. It's only     -->
+  <!-- meant to be used when ProGuard isn't available.         -->
+  <target name="copy-bytecode" unless="proguard.available">
+    <echo>ProGuard unavailable, skipping obfuscation. See compile.txt for information on how to configure ProGuard.</echo>
+    <copy file="${jar.normal}" tofile="${jar.obf}" overwrite="true"/>
+  </target>
+
+  <!-- Identifies the best available obfuscation policy and    -->
+  <!-- obfuscates muCommander.                                 -->
+  <!--                                                         -->
+  <!-- The resulting JAR file will be stored in                -->
+  <!-- ${jar.obf}.                                             -->
   <target name="obfuscate" depends="disable-debug,clean,jar,load-proguard,copy-bytecode,obfuscate-bytecode"/>
 
 
@@ -327,8 +363,79 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- = Reports ============================================= -->
   <!-- ======================================================= -->
   <!-- Generates all meaningful reports in ${reports}.         -->
-  <target name="reports" depends="clean,tools-reports,conf-reports,obfuscate,unit-test,simian,findbugs,javancss"/>
+  <target name="reports" depends="clean,obfuscate,unit-test,simian,findbugs,javancss,jdepend,doccheck"/>
 
+  <target name="all-reports" depends="clean,tools-reports,conf-reports,reports"/>
+
+
+
+  <!-- = Doccheck ============================================ -->
+  <!-- ======================================================= -->
+  <target name="do-doccheck" if="doccheck.available">
+    <echo>Generating Doccheck report...</echo>
+    <mkdir dir="${doccheck.reports}"/>
+    <javadoc destdir="${doccheck.reports}" encoding="UTF-8" access="protected" docletpath="${doccheck.lib}" doclet="com.sun.tools.doclets.doccheck.DocCheck">
+      <classpath>
+        <fileset dir="${lib}">
+          <include name="**/*.jar"/>
+        </fileset>
+      </classpath>
+
+      <!-- 'Static' sources, excluding the Ant tools and JUnit -->
+      <!-- test cases.                                         -->
+      <packageset dir="${source}" defaultexcludes="yes">
+        <include name="com/mucommander/**"/>
+        <patternset refid="non-test-sources"/>
+        <exclude name="com/mucommander/ant/**"/>
+      </packageset>
+
+      <!-- Dynamically generated sources.                      -->
+      <packageset dir="${tmp.source}" defaultexcludes="yes">
+        <include name="com/mucommander/**"/>
+      </packageset>
+    </javadoc>
+  </target>
+
+  <target name="skip-doccheck" unless="doccheck.available">
+    <echo>Doccheck unavailable, skipping Javadoc analysis...</echo>
+  </target>
+
+  <target name="doccheck" depends="check-doccheck,do-doccheck,skip-doccheck"/>
+
+
+
+  <!-- = JDepend ============================================= -->
+  <!-- ======================================================= -->
+  <target name="do-jdepend" if="jdepend.available">
+    <echo>Generating JDepend report...</echo>
+    <mkdir dir="${jdepend.reports}"/>
+    <jdepend outputfile="${jdepend.reports}/jdepend.xml" format="xml">
+      <exclude name="java.*"/>
+      <exclude name="javax.*"/>
+      <exclude name="org.*"/>
+      <exclude name="com.apple.*"/>
+      <exclude name="com.ibm.*"/>
+      <exclude name="com.sshtools.*"/>
+      <exclude name="com.sun.*"/>
+      <exclude name="com.growl*"/>
+      <exclude name="jcifs*"/>
+      <exclude name="junit.*"/>
+      <classespath>
+        <dirset dir="${classes.normal}">
+          <include name="com/mucommander/**"/>
+        </dirset>
+      </classespath>
+    </jdepend>
+
+    <echo>Formatting JDepend report...</echo>
+    <xslt basedir="${jdepend.reports}" destdir="${jdepend.reports}" extension=".html" style="${ant.home}/etc/jdepend.xsl" />
+  </target>
+
+  <target name="skip-jdepend" unless="jdepend.available">
+    <echo>JDepend not available, skipping dependency analysis...</echo>
+  </target>
+
+  <target name="jdepend" depends="compile,check-jdepend,do-jdepend,skip-jdepend"/>
 
 
 
@@ -352,7 +459,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 
-  <!-- = JUnit management ==================================== -->
+  <!-- = JUnit =============================================== -->
   <!-- ======================================================= -->
 
   <!-- Notifies user that unit tests are being skipped if      -->
@@ -400,7 +507,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 
-  <!-- = Findbugs integration ================================ -->
+  <!-- = Findbugs ============================================ -->
   <!-- ======================================================= -->
   <!-- Notifies user that bytecode analysis is being skipped   -->
   <!-- if FindBugs is not available.                           -->
@@ -441,7 +548,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 
-  <!-- = Simian integration (similarity checker) ============= -->
+  <!-- = Simian ============================================== -->
   <!-- ======================================================= -->
 
   <!-- Notifies user that unit tests are being skipped if      -->
@@ -468,7 +575,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 
-  <!-- = Launch4j management ================================= -->
+  <!-- = Launch4j ============================================ -->
   <!-- ======================================================= -->
   <!-- The following targets are used to deal with launch4j's  -->
   <!-- availability.                                           -->
@@ -711,7 +818,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
    <!-- Generates a Mac OS X .app distribution of muCommander. -->
    <!-- Output will be stored in ${app.folder}.                -->
-  <target name="app" depends="load-mkapp,compress">
+  <target name="app" depends="load-anttools,compress">
     <echo>Creating Mac OS X application...</echo>
     <mkapp jar="${jar.cmp}" dest="${app.folder}" type="APPL" creator="MUCO" icon="${res}/icons/icon.icns"
            infoversion="0.9" classpath="/System/Library/Java">
@@ -723,14 +830,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
       <string  name="CFBundleGetInfoString"           value="muCommander ${app.version}${app.subversion}, (c) ${app.copyright} Maxence Bernard, ${url.homepage}"/>
       <string  name="CFBundleInfoDictionaryVersion"   value="6.0"/>
       <dict    name="Java">
-        <string name="MainClass"  value="${app.main}"/>
-        <string name="JVMVersion" value="${app.jvm}+"/>
+        <string name="MainClass"                      value="${app.main}"/>
+        <string name="JVMVersion"                     value="${app.jvm}+"/>
         <dict name="Properties">
-          <string name="java.system.class.loader"   value="${app.loader}"/>
-          <string name="com.apple.smallTabs"        value="true"/>
-          <string name="com.apple.hwaccel"          value="true"/>
-          <string name="apple.laf.useScreenMenuBar" value="true"/>
-	  <string name="file.encoding" value="UTF-8"/>
+          <string name="java.system.class.loader"     value="${app.loader}"/>
+          <string name="com.apple.smallTabs"          value="true"/>
+          <string name="com.apple.hwaccel"            value="true"/>
+          <string name="apple.laf.useScreenMenuBar"   value="true"/>
+	  <string name="file.encoding"                value="UTF-8"/>
         </dict>
       </dict>
     </mkapp>
@@ -745,7 +852,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 
-  <!-- = JNLP management ===================================== -->
+  <!-- = Webstart launcher==================================== -->
   <!-- ======================================================= -->
   <!-- Checks whether the keystore password is available.      -->
   <!-- If it is, sets ${store.available} to true.      -->
@@ -785,7 +892,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
   <!-- Generates the Java webstart descriptor.                 -->
   <!-- Output will be stored in ${dist}/mucommander.jnlp.      -->
-  <target name="jnlp" depends="load-mkjnlp">
+  <target name="jnlp" depends="load-anttools">
     <!-- Prepares the necessary tasks and properties.          -->
     <echo>Creating JNLP file...</echo>
     <property name="url.jnlp" value="${url.jnlp.normal}"/>
@@ -961,16 +1068,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
   <!-- Generates the debian version and file name for          -->
   <!-- nightly builds.                                         -->
-  <target name="nightly-debian-names" depends="load-strreplace" if="is-nightly">
+  <target name="nightly-debian-names" depends="load-antcontrib" if="is-nightly">
     <tstamp/>
-    <strreplace from="${app.version}${app.subversion} ${DSTAMP}" to="deb.version" what="[ ]" with="-"/>
+    <propertyregex property="deb.version" input="${app.version}${app.subversion} ${DSTAMP}" regexp="[ .]" replace="_"/>
     <property name="deb.name" value="mucommander_current_all.deb"/>
   </target>
 
   <!-- Generates the debian version and file name for          -->
   <!-- non-nightly builds.                                     -->
-  <target name="release-debian-names" depends="load-strreplace" unless="is-nightly">
-    <strreplace from="${app.version}${app.subversion}" to="deb.version" what="[ ]" with="-"/>
+  <target name="release-debian-names" depends="load-antcontrib" unless="is-nightly">
+    <propertyregex property="deb.version" input="${app.version}${app.subversion}" regexp="[ .]" replace="_"/>
     <property name="deb.name" value="mucommander_${deb.version}_all.deb"/>
   </target>
 
@@ -978,7 +1085,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- Output will be stored in ${dist}/${deb.name}.           -->
   <!-- This target will only be executed if JDeb is properly   -->
   <!-- configured.                                             -->
-  <target name="make-deb" depends="load-mksize,compress" if="jdeb.available">
+  <target name="make-deb" depends="load-anttools,compress" if="jdeb.available">
     <!-- Creates the required directories.                     -->
     <echo>Creating debian release file...</echo>
     <mkdir dir="${deb.tmp}"/>
@@ -1077,6 +1184,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <target name="update">
     <cvs command="update -dP"/>
   </target>
+
 
 
   <!-- = Bulk release ======================================== -->

@@ -60,4 +60,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <property name="conf.proguard.reports" location="${conf.reports}/proguard"/>
   <property name="conf.simian.reports"   location="${conf.reports}/simian"/>
   <property name="conf.javancss.reports" location="${conf.reports}/javancss"/>
+  <property name="conf.doccheck.reports" location="${conf.reports}/doccheck"/>
+  <property name="conf.jdepend.reports"  location="${conf.reports}/jdepend"/>
 </project>

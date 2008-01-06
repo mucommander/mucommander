@@ -179,7 +179,65 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
   <!-- = Reports generation ================================== -->
   <!-- ======================================================= -->
-  <target name="conf-reports" depends="clean,conf-obfuscate,conf-unit-test,conf-findbugs,conf-simian,conf-javancss"/>
+  <target name="conf-reports" depends="clean,conf-obfuscate,conf-unit-test,conf-findbugs,conf-simian,conf-javancss,conf-jdepend,conf-doccheck"/>
+
+
+
+  <!-- = Doccheck ============================================ -->
+  <!-- ======================================================= -->
+  <target name="conf-do-doccheck" if="doccheck.available">
+    <echo>Generating Configuration API Doccheck report...</echo>
+    <mkdir dir="${conf.doccheck.reports}"/>
+    <javadoc destdir="${conf.doccheck.reports}" encoding="UTF-8" access="protected" docletpath="${doccheck.lib}" doclet="com.sun.tools.doclets.doccheck.DocCheck">
+      <classpath>
+        <fileset dir="${lib}">
+          <include name="**/*.jar"/>
+        </fileset>
+      </classpath>
+
+      <!-- 'Static' sources, excluding JUnit test cases.       -->
+      <packageset dir="${source}" defaultexcludes="yes">
+        <include name="com/mucommander/conf"/>
+        <include name="com/mucommander/xml/**"/>
+      </packageset>
+    </javadoc>
+  </target>
+
+  <target name="conf-skip-doccheck" unless="doccheck.available">
+    <echo>Doccheck unavailable, skipping Configuration API Javadoc analysis...</echo>
+  </target>
+
+  <target name="conf-doccheck" depends="check-doccheck,conf-do-doccheck,conf-skip-doccheck"/>
+
+
+
+  <!-- = JDepend ============================================= -->
+  <!-- ======================================================= -->
+  <target name="conf-do-jdepend" if="jdepend.available">
+    <echo>Generating Configuration API JDepend report...</echo>
+    <mkdir dir="${conf.jdepend.reports}"/>
+    <jdepend outputfile="${conf.jdepend.reports}/jdepend.xml" format="xml">
+      <exclude name="java.*"/>
+      <exclude name="javax.*"/>
+      <exclude name="junit.*"/>
+      <exclude name="org.*"/>
+      <classespath>
+        <dirset dir="${conf.classes.normal}">
+          <include name="com/mucommander/conf"/>
+          <include name="com/mucommander/xml"/>
+        </dirset>
+      </classespath>
+    </jdepend>
+
+    <echo>Formatting Configuration API JDepend report...</echo>
+    <xslt basedir="${conf.jdepend.reports}" destdir="${conf.jdepend.reports}" extension=".html" style="${ant.home}/etc/jdepend.xsl" />
+  </target>
+
+  <target name="conf-skip-jdepend" unless="jdepend.available">
+    <echo>JDepend not available, skipping Configuration API dependency analysis...</echo>
+  </target>
+
+  <target name="conf-jdepend" depends="conf-compile,check-jdepend,conf-do-jdepend,conf-skip-jdepend"/>
 
 
 
@@ -348,32 +406,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- The following targets are used to generate a release    -->
   <!-- of the muCommander Configuration API.                   -->
 
-  <target name="normal-load-strreplace" unless="conf.standalone">
-    <antcall target="load-strreplace"/>
-  </target>
-
-  <target name="conf-load-strreplace" depends="normal-load-strreplace">
-    <taskdef name="strreplace" classname="com.mucommander.ant.util.ReplaceTask" classpath="${tools.jar.cmp}"/>
-  </target>
-
   <!-- TODO: I'm not very happy with this target that mirrors  -->
   <!-- "load-libpath", there should be a more elegant solution -->
   <!-- to this problem.                                        -->
-  <target name="normal-load-libpath" unless="conf.standalone">
-    <antcall target="tools-jar" inheritall="false"/>
-    <condition property="libpath.path" value="${tools.jar.cmp}">
-      <available file="${tools.jar.cmp}"/>
-    </condition>
-    <property name="libpath.path" value="${tools.jar.normal}"/>
-
-    <taskdef name="libpath" classname="com.mucommander.ant.util.SystemClasspathTask" classpath="${libpath.path}"/>
-
-    <libpath out="java.lib"/>
+  <target name="normal-load-libpath" depends="load-antcontrib" unless="conf.standalone">
+    <runtarget target="load-libpath"/>
   </target>
 
   <target name="conf-standalone-load-libpath" if="conf.standalone">
-    <taskdef name="libpath" classname="com.mucommander.ant.util.SystemClasspathTask" classpath="${tools.jar.cmp}"/>
-    <libpath out="java.lib"/>
+    <taskdef resource="antlib.xml" classpath="${anttools.path}"/>
+    <libpath property="java.lib"/>
   </target>
   
   <target name="conf-load-libpath" depends="normal-load-libpath,conf-standalone-load-libpath"/>
@@ -384,14 +426,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- the root directory in the conf tar.gz release file.     -->
   <!-- The package prefix is meant to be used as the name of   -->
   <!-- the tar.gz release file.                                -->
-  <target name="conf-prefixes" depends="conf-load-strreplace">
+  <target name="conf-prefixes" depends="load-antcontrib">
     <echo>Creating Configuration API archive prefix...</echo>
-    <strreplace from="muCommander-conf-${conf.version}${conf.subversion}" to="conf.archive-prefix" what="[ .]" with="_"/>
+    <propertyregex property="conf.archive-prefix" input="muCommander-conf-${conf.version}${conf.subversion}" regexp="[ .]" replace="_"/>
     <echo>Creating Configuration API package name prefix...</echo>
-    <strreplace from="mucommander-conf-${conf.version}${conf.subversion}" to="conf.package-prefix" what="[ .]" with="_"/>
+    <propertyregex property="conf.package-prefix" input="mucommander-conf-${conf.version}${conf.subversion}" regexp="[ .]" replace="_"/>
   </target>
 
-  <target name="conf-release" depends="conf-unit-test,conf-compress,conf-prefixes,conf-doc-tgz">
+  <target name="conf-release" depends="clean,conf-unit-test,conf-compress,conf-prefixes,conf-doc-tgz">
     <!-- Refreshes the release directory structure.            -->
     <delete dir="${conf.tmp}/release"/>
     <mkdir dir="${conf.tmp}/release/lib"/>
@@ -431,6 +473,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         <include name="proguard.jar"/>
         <include name="simian.jar"/>
         <include name="javancss.jar"/>
+        <include name="jdepend.jar"/>
+        <include name="doccheck.jar"/>
+        <include name="ant-contrib.jar"/>
         <include name="mucommander-ant-tools.jar"/>
       </fileset>
     </copy>

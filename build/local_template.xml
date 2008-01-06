@@ -19,68 +19,85 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ========================================================= -->
 <!-- Template for system dependant configuration values.       -->
 <!--                                                           -->
+<!-- This file is used to configure the way muCommander and    -->
+<!-- its various subprojects are built.                        -->
+<!-- Depending on how you downloaded this, some values may not -->
+<!-- need to be set:                                           -->
+<!-- - Global configuration is always used.                    -->
+<!--                                                           -->
+<!-- - Ant tools configuration is used by muCommander and      -->
+<!--   the Ant tools.                                          -->
+<!--                                                           -->
+<!-- - muCommander specific configuration is only used if      -->
+<!--   you downloaded the whole muCommander source code,       -->
+<!--   rather than just the Ant tools.                         -->
+<!--                                                           -->
+<!-- Note that if you want to use a variable's default         -->
+<!-- value, you must delete it from this file or it will use   -->
+<!-- an empty value.                                           -->
+<!--                                                           -->
+<!-- Author: Nicolas Rinaudo                                   -->
 <!-- ========================================================= -->
 <project>
-  <!-- This file is used to configure the way muCommander and  -->
-  <!-- its Ant tools are built.                                -->
-  <!-- Depending on how you downloaded this, some values may   -->
-  <!-- not need to be set:                                     -->
-  <!-- - Global configuration is always used.                  -->
-  <!--                                                         -->
-  <!-- - Ant tools configuration is used by muCommander and    -->
-  <!--   the Ant tools.                                        -->
-  <!--                                                         -->
-  <!-- - muCommander specific configuration is only used if    -->
-  <!--   you downloaded the whole muCommander source code,     -->
-  <!--   rather than just the Ant tools.                       -->
-  <!--                                                         -->
-  <!-- Note that if you want to use a variable's default       -->
-  <!-- value, you must delete it from this file or it will use -->
-  <!-- an empty value.                                         -->
-
-
-
   <!-- = Global configuration ================================ -->
   <!-- ======================================================= -->
   <!-- Path to the Java core libraries.                        -->
+  <!--                                                         -->
   <!-- Note that Java 1.6 is necessary in order to compile     -->
   <!-- muCommander.                                            -->
+  <!--                                                         -->
   <!-- Defaults to a best guess taken from                     -->
   <!-- ${sun.boot.class.path}.                                 -->
   <property name="java.lib"          location=""/>
 
   <!-- Path to the ProGuard binaries.                          -->
+  <!--                                                         -->
   <!-- Defaults to the one bundled with the project, but can   -->
   <!-- be changed to another version by editing this value.    -->
-  <!-- If not set, the obfuscation steps will be skipped.      -->
   <property name="proguard.lib"      location="${tools}/proguard.jar"/>
 
-  <!-- Path to the JavaNCSS binaries.                          -->
+  <!-- Path to the Ant Contrib binaries.                       -->
+  <!--                                                         -->
   <!-- Defaults to the one bundled with the project, but can   -->
   <!-- be changed to another version by editing this value.    -->
-  <!-- If not set, the JavaNCSS report will be skipped.        -->
+  <property name="antcontrib.lib"    location="${tools}/ant-contrib.jar"/>
+
+  <!-- Path to the JavaNCSS binaries.                          -->
+  <!--                                                         -->
+  <!-- Defaults to the one bundled with the project, but can   -->
+  <!-- be changed to another version by editing this value.    -->
   <property name="javancss.lib"      location="${tools}/javancss.jar"/>
 
-  <!-- Path to the Simian binaries.                            -->
+  <!-- Path to the doccheck binaries.                          -->
+  <!--                                                         -->
   <!-- Defaults to the one bundled with the project, but can   -->
   <!-- be changed to another version by editing this value.    -->
-  <!-- If not set, the similarity report will be skipped.      -->
+  <property name="doccheck.lib"      location="${tools}/doccheck.jar"/>
+
+  <!-- Path to the Simian binaries.                            -->
+  <!--                                                         -->
+  <!-- Defaults to the one bundled with the project, but can   -->
+  <!-- be changed to another version by editing this value.    -->
   <property name="simian.lib"        location="${tools}/simian.jar"/>
 
   <!-- Path to the 7z executable.                              -->
+  <!--                                                         -->
   <!-- If this is not set, compression will be done using      -->
   <!-- standard ZIP algorithms.                                -->
   <property name="7za.executable"    location=""/>
 
   <!-- Whether or not the current file system is               -->
   <!-- case sensitive.                                         -->
+  <!--                                                         -->
   <!-- This variable affects the way muCommander's bytecode is -->
   <!-- obfuscated. Case sensitive file systems will allow us   -->
   <!-- make the JAR file slightly smaller.                     -->
+  <!--                                                         -->
   <!-- Defaults to false.                                      -->
   <property name="case-sensitive-fs" value="false"/>
 
   <!-- Path to FindBugs installation directory.                -->
+  <!--                                                         -->
   <!-- If this is not set, FindBugs bytecode analysis will not -->
   <!-- be performed.                                           -->
   <property name="findbugs.home"     location=""/>
@@ -90,17 +107,20 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- = Ant tools configuration ============================= -->
   <!-- ======================================================= -->
   <!-- Path to the AntDoclet binaries.                         -->
+  <!--                                                         -->
   <!-- Defaults to the one bundled with the project, but can   -->
   <!-- be changed to another version by editing this value.    -->
   <property name="antdoclet.lib"     location="${tools}/antdoclet.jar"/>
 
   <!-- Path to the Velocity binaries.                          -->
+  <!--                                                         -->
   <!-- Defaults to the one bundled with the project, but can   -->
   <!-- be changed to another version by editing this value.    -->
   <property name="velocity.lib"      location="${tools}/velocity.jar"/>
 
   <!-- Path to the Ant core libraries (used to compile tools). -->
   <!-- muCommander was built with Ant 1.6.5.                   -->
+  <!--                                                         -->
   <!-- Defaults to ${ant.home}/lib/ant.jar.                    -->
   <property name="ant.lib"           location="${ant.home}/lib/ant.jar"/>
 
@@ -109,6 +129,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- = muCommander specific configuration ================== -->
   <!-- ======================================================= -->
   <!-- Path to the JDeb binaries.                              -->
+  <!--                                                         -->
   <!-- Defaults to the one bundled with the project, but can   -->
   <!-- be changed to another version by editing this value.    -->
   <property name="jdeb.lib"          location="${tools}/jdeb.jar"/>
@@ -118,8 +139,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <property name="store.pass"        value=""/>
 
   <!-- Path to the makensis executable.                        -->
+  <!--                                                         -->
+  <!-- If not set, Windows executables won't be generated.     -->
   <property name="nsis.executable"   location=""/>
 
   <!-- Path to the launch4j installation dir.                  -->
+  <!--                                                         -->
+  <!-- If not set, Windows executables won't be generated.     -->
   <property name="launch4j.dir"      location=""/>
 </project>

@@ -91,6 +91,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- Where to store JUnit reports.                           -->
   <property name="junit.reports"          location="${reports.main}/junit/"/>
   <property name="javancss.reports"       location="${reports.main}/javancss"/>
+  <property name="doccheck.reports"       location="${reports.main}/doccheck"/>
+  <property name="jdepend.reports"        location="${reports.main}/jdepend"/>
   <property name="findbugs.reports"       location="${reports.main}/findbugs"/>
   <property name="simian.reports"         location="${reports.main}/simian"/>
   <property name="proguard.reports"       location="${reports.main}/proguard"/>
@@ -120,7 +122,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- Where to load the themes from.                          -->
   <property name="themes.in"              location="${res}/themes"/>
   <!-- Where to write the themes to.                           -->
-  <property name="themes.out"             value="/themes"/>
+  <property name="themes.out"             value="${classes.normal}/themes"/>
 
 
 
@@ -256,6 +258,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <property name="tools.simian.reports"   location="${tools.reports}/simian"/>
   <property name="tools.findbugs.reports" location="${tools.reports}/findbugs"/>
   <property name="tools.javancss.reports" location="${tools.reports}/javancss"/>
+  <property name="tools.doccheck.reports" location="${tools.reports}/doccheck"/>
+  <property name="tools.jdepend.reports"  location="${tools.reports}/jdepend"/>
   <property name="tools.proguard.reports" location="${tools.reports}/proguard"/>
 
 
@@ -295,6 +299,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <property name="conf.junit.reports"     location="${conf.reports}/junit"/>
   <property name="conf.findbugs.reports"  location="${conf.reports}/findbugs"/>
   <property name="conf.javancss.reports"  location="${conf.reports}/javancss"/>
+  <property name="conf.doccheck.reports"  location="${conf.reports}/doccheck"/>
+  <property name="conf.jdepend.reports"   location="${conf.reports}/jdepend"/>
   <property name="conf.proguard.reports"  location="${conf.reports}/proguard"/>
   <property name="conf.simian.reports"    location="${conf.reports}/simian"/>
 </project>
