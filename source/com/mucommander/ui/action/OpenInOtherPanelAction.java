@@ -20,25 +20,28 @@ package com.mucommander.ui.action;
 
 import com.mucommander.file.AbstractFile;
 import com.mucommander.ui.main.MainFrame;
+import com.mucommander.file.filter.AttributeFileFilter;
 
 import java.util.Hashtable;
 
 /**
- * Opens files in the inactive panel.
+ * Opens browsable files in the inactive panel.
  * <p>
- * This action will behave exactly like {@link OpenAction} for non-browsable files.
- * Browsable files, however, will be opened in the inactive folder panel rather than
- * the active one.
+ * This action is only enabled if the current selection is browsable as defined by
+ * {@link com.mucommander.file.AbstractFile#isBrowsable()}.
  * </p>
  * @author Nicolas Rinaudo
  */
-public class OpenInOtherPanelAction extends OpenAction {
+public class OpenInOtherPanelAction extends SelectedFileAction {
     /**
      * Creates a new <code>OpenInOtherPanelAction</code> with the specified parameters.
      * @param mainFrame  frame to which the action is attached.
      * @param properties action's properties.
      */
-    public OpenInOtherPanelAction(MainFrame mainFrame, Hashtable properties) {super(mainFrame, properties);}
+    public OpenInOtherPanelAction(MainFrame mainFrame, Hashtable properties) {
+        super(mainFrame, properties);
+        setSelectedFileFilter(new AttributeFileFilter(AttributeFileFilter.BROWSABLE));
+    }
 
     /**
      * Opens the currently selected file in the inactive folder panel.
@@ -47,10 +50,10 @@ public class OpenInOtherPanelAction extends OpenAction {
         AbstractFile file;
 
         // Retrieves the currently selected file, aborts if none.
-        if((file = mainFrame.getActiveTable().getSelectedFile(true)) == null)
+        if((file = mainFrame.getActiveTable().getSelectedFile(true)) == null || !file.isBrowsable())
             return;
 
         // Opens the currently selected file in the inactive panel.
-        open(file, mainFrame.getInactiveTable().getFolderPanel());
+        mainFrame.getInactiveTable().getFolderPanel().tryChangeCurrentFolder(file);
     }
 }
