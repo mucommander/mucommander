@@ -322,8 +322,14 @@
   <action class="com.mucommander.ui.action.CalculateChecksumAction"      keystroke="alt K"/>
 
   <!-- Action  : Open files in the inactive panel.                               -->
-  <!-- Default : shift alt ENTER                                                 -->
-  <action class="com.mucommander.ui.action.OpenInOtherPanelAction"       keystroke="shift alt ENTER"/>
+  <!-- Default : shift alt ENTER, shift alt RIGHT                                -->
+  <action class="com.mucommander.ui.action.OpenInOtherPanelAction"       keystroke="shift alt ENTER"
+                                                                         alt_keystroke="shift alt RIGHT"/>
+
+  <!-- Action  : Go to the current selection's parent in the inactive panel.     -->
+  <!-- Default : shift alt BACK_SPACE, shift alt LEFT                            -->
+  <action class="com.mucommander.ui.action.GoToParentInOtherPanelAction" keystroke="shift alt BACK_SPACE"
+                                                                         alt_keystroke="shift alt LEFT"/>
 
   <!-- Action  : Mark all files whose extension match the current selection.     -->
   <!-- Default : shift ADD                                                       -->
