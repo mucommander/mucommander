@@ -41,7 +41,7 @@ public class SystemClasspathTask extends Task {
         path        = null;
     }
 
-    public void setOut(String s) {antProperty = s;}
+    public void setProperty(String s) {antProperty = s;}
     public void setPath(String s) {path = s;}
 
     public void execute() throws BuildException {

@@ -31,7 +31,11 @@ import java.io.File;
  * @author Nicolas Rinaudo
  */
 public class SizeTask extends Task {
+    // - Task fields -----------------------------------------------------------
+    // -------------------------------------------------------------------------
+    /** Name of the property in which to store the size of the analysed fileset. */
     private String  propertyName;
+    /** Fileset to analyse. */
     private FileSet files;
 
     public SizeTask() {}
