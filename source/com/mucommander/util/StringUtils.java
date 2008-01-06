@@ -61,7 +61,7 @@ public class StringUtils {
      * </p>
      * @param  a                              string to test.
      * @param  b                              suffix to test for.
-     * @param  posA                           length of <code>a</code>.
+     * @param  posA                           position in <code>a</code> at which to look for <code>b</code>
      * @return                                <code>true</code> if <code>a</code> ends with <code>b</code> regardless of the case, <code>false</code> otherwise.</code>.
      * @throws ArrayIndexOutOfBoundsException if <code>a.length</code> is smaller than <code>posA</code>.
      */
@@ -118,7 +118,7 @@ public class StringUtils {
      * </p>
      * @param  a                              string to test.
      * @param  b                              suffix to test for.
-     * @param  posA                           length of <code>a</code>.
+     * @param  posA                           position in <code>a</code> at which to look for <code>b</code>
      * @return                                <code>true</code> if <code>a</code> ends with <code>b</code> regardless of the case, <code>false</code> otherwise.</code>.
      * @throws ArrayIndexOutOfBoundsException if <code>a.length</code> is smaller than <code>posA</code>.
      */
@@ -152,9 +152,10 @@ public class StringUtils {
 
     /**
      * Returns <code>true</code> if the substring of <code>a</code> starting at <code>posA</code> matches <code>b</code>.
-     * @param  a String to test.
-     * @param  b substring to look for.
-     * @return   <code>true</code> if <code>a</code> contains <code>b</code> at position <code>posA</code>, <code>false</code> otherwise..
+     * @param  a    String to test.
+     * @param  b    substring to look for.
+     * @param  posA position in <code>a</code> at which to look for <code>b</code>
+     * @return      <code>true</code> if <code>a</code> contains <code>b</code> at position <code>posA</code>, <code>false</code> otherwise..
      */
     public static boolean matches(String a, char[] b, int posA) {
         int posB;

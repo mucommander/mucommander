@@ -61,6 +61,7 @@ public class XmlWriterTest extends TestCase {
     // -------------------------------------------------------------------
     /**
      * Makes sure that XML entities are escaped properly.
+     * @throws IOException if an IO related error occurs.
      */
     public void testXmlEntities() throws IOException {
         XmlWriter             writer;
