@@ -97,14 +97,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- found to be up to date.                                 -->
   <!--                                                         -->
   <!-- This target must be referenced before 'check-tools' is  -->
-  <!-- called to have any effect. Calling it after would most  -->
-  <!-- probably break the build.                               -->
+  <!-- called to have any effect.                              -->
   <!--                                                         -->
   <!-- Note that this task doesn't actually compile the tasks, -->
   <!-- but only makes sure that tools-compile will be executed -->
   <!-- if referenced.                                          -->
   <target name="tools-force-compile">
-    <delete file="${tools.jar.cmp}"/>
+    <property name="tools.force-compile" value="true"/>
   </target>
 
   <!-- Checks whether the tools jar file is up to date.        -->
@@ -114,7 +113,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- Note that if 'tools-force-compile' has been referenced, -->
   <!-- this target will be ignored and ${tools.up-to-date}     -->
   <!-- stay undefined.                                         -->
-  <target name="check-tools">
+  <target name="check-tools" unless="tools.force-compile">
     <echo>Checking whether the Ant tools are up-to-date...</echo>
     <uptodate property="tools.up-to-date" targetfile="${tools.jar.cmp}">
       <srcfiles dir="${source}/com/mucommander/ant" includes="**/*.java"/>
