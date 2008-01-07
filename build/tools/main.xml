@@ -53,17 +53,26 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <target name="load-anttools" depends="tools-jar">
     <!-- Checks which Ant tools JAR file is available, either  -->
     <!-- the obfuscated or 'clear' one.                        -->
+    <!-- If both are available, takes the most up-to-date one. -->
     <!-- This is necessary as some of the Ant tools are        -->
-    <!-- necessary to generate the obfuscated JAR file, in     -->
+    <!-- required to generate the obfuscated JAR file, in      -->
     <!-- which case we'll load the 'clear' one.                -->
     <condition property="anttools.path" value="${tools.jar.cmp}">
-      <available file="${tools.jar.cmp}"/>
+      <and>
+        <available file="${tools.jar.cmp}"/>
+        <or>
+          <not>
+            <available file="${tools.jar.normal}"/>
+          </not>
+          <uptodate srcfile="${tools.jar.normal}" targetfile="${tools.jar.cmp}"/>
+        </or>
+      </and>
     </condition>
     <property name="anttools.path" value="${tools.jar.normal}"/>
 
     <!-- Loads the Ant tools as defined in their XML           -->
     <!-- description file.                                     -->
-    <taskdef resource="antlib.xml" classpath="${anttools.path}"/>
+    <taskdef resource="com/mucommander/ant/antlib.xml" classpath="${anttools.path}"/>
   </target>
 
   <!-- Stores the path to the JDK classes in ${java.lib}.      -->
@@ -87,11 +96,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- Forces the Ant tasks to be recompiled even if they're   -->
   <!-- found to be up to date.                                 -->
   <!--                                                         -->
+  <!-- This target must be referenced before 'check-tools' is  -->
+  <!-- called to have any effect. Calling it after would most  -->
+  <!-- probably break the build.                               -->
+  <!--                                                         -->
   <!-- Note that this task doesn't actually compile the tasks, -->
   <!-- but only makes sure that tools-compile will be executed -->
   <!-- if referenced.                                          -->
   <target name="tools-force-compile">
-    <property name="tools.force-compile" value="true"/>
+    <delete file="${tools.jar.cmp}"/>
   </target>
 
   <!-- Checks whether the tools jar file is up to date.        -->
@@ -101,7 +114,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- Note that if 'tools-force-compile' has been referenced, -->
   <!-- this target will be ignored and ${tools.up-to-date}     -->
   <!-- stay undefined.                                         -->
-  <target name="check-tools" unless="tools.force-compile">
+  <target name="check-tools">
     <echo>Checking whether the Ant tools are up-to-date...</echo>
     <uptodate property="tools.up-to-date" targetfile="${tools.jar.cmp}">
       <srcfiles dir="${source}/com/mucommander/ant" includes="**/*.java"/>
@@ -159,7 +172,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
       <!-- Includes resources.                                 -->
       <fileset file="${tools.res}/JavaApplicationStub"/>
       <fileset file="${tools.license}"/>
-      <fileset file="${tools.res}/antlib.xml"/>
+      <zipfileset prefix="com/mucommander/ant" file="${tools.res}/antlib.xml"/>
 
       <!-- Generates the correct manifest.                     -->
       <manifest>
@@ -1013,5 +1026,5 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!--                                                         -->
   <!-- The output will be stored in                            -->
   <!-- ${dist}/${tools.package-prefix}.tar.gz                  -->
-  <target name="tools-release" depends="clean,tools-unit-test,tools-doc-tgz,tools-make-release,tools-skip-release"/>
+  <target name="tools-release" depends="tools-force-compile,clean,tools-unit-test,tools-doc-tgz,tools-make-release,tools-skip-release"/>
 </project>
