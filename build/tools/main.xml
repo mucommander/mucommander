@@ -336,7 +336,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <unjar src="${tools.jar.obf}" dest="${tools.classes.obf}"/>
 
     <!-- Compresses the Ant tools as far as 7za can take it.   -->
-    <exec executable="${7za.executable}" dir="${tools.classes.obf}">
+    <exec executable="${7za.executable}" dir="${tools.classes.obf}" failonerror="true">
       <arg value="a"/>
       <arg value="-tzip"/>
       <arg value="-mm=Deflate"/>

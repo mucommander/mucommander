@@ -146,7 +146,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <echo>Compressing Configuration API...</echo>
     <delete dir="${conf.classes.obf}"/>
     <unjar src="${conf.jar.obf}" dest="${conf.classes.obf}"/>
-    <exec executable="${7za.executable}" dir="${conf.classes.obf}">
+    <exec executable="${7za.executable}" dir="${conf.classes.obf}" failonerror="true">
       <arg value="a"/>
       <arg value="-tzip"/>
       <arg value="-mm=Deflate"/>

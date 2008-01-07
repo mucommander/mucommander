@@ -342,7 +342,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <echo>Compressing JAR file...</echo>
     <mkdir dir="${dist}"/>
     <unjar src="${jar.obf}" dest="${classes.obf}"/>
-    <exec executable="${7za.executable}" dir="${classes.obf}">
+    <exec executable="${7za.executable}" dir="${classes.obf}" failonerror="true">
       <arg value="a"/>
       <arg value="-tzip"/>
       <arg value="-mm=Deflate"/>
@@ -732,7 +732,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
    </copy>
 
     <!-- Generates the muCommander windows installer.          -->
-    <exec executable="${nsis.executable}">
+    <exec executable="${nsis.executable}" failonerror="true">
       <arg value="${nsis.tmp}/mucommander.nsi"/>
     </exec>
 
