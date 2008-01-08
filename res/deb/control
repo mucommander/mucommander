@@ -2,11 +2,19 @@ Package: mucommander
 Version: @VERSION@
 Section: utils
 Priority: optional
-Recommends: java-virtual-machine
+Recommends: java-virtual-machine, java2-runtime
+Suggests: sun-java5-jre
 Architecture: all
 Installed-Size: @SIZE@
 Maintainer: Maxence Bernard <maxence@maxence.info>
-Description: Java based file commander
- muCommander is a lightweight, cross-platform file manager featuring a Norton Commander style interface and running on any operating system with Java support.
+Description: a lightweight, cross-platform file manager
+ muCommander is a lightweight, cross-platform file manager running on any operating system with Java support.
+ It features a dual-pane interface in the tradition of Norton Commander and other commanders, allowing to quickly
+ and efficiently manage your files.
  .
- For more information see http://www.mucommander.com
+ muCommander comes with built-in support for a variety of file protocols (Local, FTP, SFTP, SMB, NFS, HTTP) and
+ archive formats (ZIP, TAR, GZIP, BZIP2, ISO, NRG, AR, DEB, LST) and is available in 18 languages.
+ .
+ Java 1.4 or higher is required to run muCommander. Some features are available only under Java 1.5 and 1.6.
+ .
+ muCommander can be found at http://www.mucommander.com
