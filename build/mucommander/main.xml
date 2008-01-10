@@ -1231,6 +1231,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- to make sure it boots properly.                         -->
   <target name="all" depends="source,tools-release,conf-release,unit-test,tgz,setup-exe,deb,portable,version,sign,jnlp,app.tgz,api-doc-tgz">
     <java jar="${jar.cmp}" failonerror="true" fork="true">
+      <sysproperty key="java.system.class.loader" value="${app.loader}"/>
       <arg value="--help"/>
     </java>
   </target>
@@ -1267,6 +1268,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- current folder every second or so.                      -->
   <target name="stress-test" depends="compile,resources">
     <java classname="com.mucommander.StressTester" fork="true">
+      <sysproperty key="java.system.class.loader" value="${app.loader}"/>
       <classpath>
         <pathelement location="${classes.normal}"/>
          <fileset dir="lib">
