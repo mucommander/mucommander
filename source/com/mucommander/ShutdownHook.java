@@ -31,14 +31,20 @@ import com.mucommander.ui.theme.ThemeManager;
  * @author Maxence Bernard
  */
 public class ShutdownHook extends Thread {
-
+    /** Whether shutdown tasks have been performed already. */
     private static boolean shutdownTasksPerformed;
 
+    /**
+     * Creates a new <code>ShutdownHook</code>.
+     */
     public ShutdownHook() {
         super(ShutdownHook.class.getName());
     }
 
 
+    /**
+     * Shuts down muCommander.
+     */
     public static void initiateShutdown() {
         if(Debug.ON) Debug.trace("shutting down");
 

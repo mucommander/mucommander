@@ -31,10 +31,10 @@ import java.net.URLConnection;
  * Retrieves information about the latest release of muCommander.
  * <p>
  * The {@link com.mucommander.RuntimeConstants#VERSION_URL} URL contains information
- * about the latest release of muCommander:<br/>
- * - date of latest release.<br/>
- * - latest official version.<br/>
- * - where to download the latest version from.<br/>
+ * about the latest release of muCommander:<br>
+ * - date of latest release.<br>
+ * - latest official version.<br>
+ * - where to download the latest version from.<br>
  * This class is used to access those informations and compare them with what is known
  * of the current one, making it possible to notify users of new releases.
  * </p>
@@ -55,11 +55,11 @@ import java.net.URLConnection;
  * </pre>
  * </p>
  * <p>
- * muCommander is considered up to date if:<br/>
+ * muCommander is considered up to date if:<br>
  * - the {@link com.mucommander.RuntimeConstants#VERSION local version} is
- *   not smaller than the remote one.<br/>
+ *   not smaller than the remote one.<br>
  * - the {@link com.mucommander.RuntimeConstants#RELEASE_DATE local release date} is
- *   not smaller than the remote one.<br/>
+ *   not smaller than the remote one.<br>
  * While comparing release dates seems a bit odd - after all, if a new version is release,
  * a new version number should be created. However, it's possible to download development
  * versions of the current release, and those might be updated almost daily. Comparing dates

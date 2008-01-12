@@ -41,26 +41,26 @@ public class PlatformManager implements JavaVersions, OsFamilies, OsVersions {
 
     // - Misc. constants --------------------------------------------------------
     // --------------------------------------------------------------------------
-    /** Custom user agent for HTTP requests */
+    /** Custom user agent for HTTP requests. */
     public static final String USER_AGENT = RuntimeConstants.APP_STRING  + " (Java "+System.getProperty("java.vm.version")
                                             + "; " + System.getProperty("os.name") + " " +
                                             System.getProperty("os.version") + " " + System.getProperty("os.arch") + ")";
 
     // - Unix desktop -----------------------------------------------------------
     // --------------------------------------------------------------------------
-    /** Unknown desktop */
+    /** Unknown desktop. */
     public static final int UNKNOWN_DESKTOP   = 0;
-    /** KDE desktop */
+    /** KDE desktop. */
     public static final int KDE_DESKTOP       = 1;
-    /** GNOME desktop */
+    /** GNOME desktop. */
     public static final int GNOME_DESKTOP     = 2;
 
-    /** Unix desktop muCommander is running on, used only if OS family is LINUX, SOLARIS or OTHER */
+    /** Unix desktop muCommander is running on, used only if OS family is LINUX, SOLARIS or OTHER. */
     private static      int unixDesktop;
 
-    /** Environment variable used to determine if GNOME is the desktop currently running */
+    /** Environment variable used to determine if GNOME is the desktop currently running. */
     private static final String GNOME_ENV_VAR = "GNOME_DESKTOP_SESSION_ID";
-    /** Environment variable used to determine if KDE is the desktop currently running */
+    /** Environment variable used to determine if KDE is the desktop currently running. */
     private static final String KDE_ENV_VAR   = "KDE_FULL_SESSION";
 
 
@@ -340,15 +340,58 @@ public class PlatformManager implements JavaVersions, OsFamilies, OsVersions {
         return unixDesktop;
     }
 
-
+    /**
+     * Returns the system's default shell command.
+     * @return the system's default shell command, or <code>null</code> if not known.
+     */
     public static String getDefaultShellCommand() {return defaultShellCommand;}
+
+    /**
+     * Returns the name of the system's default file manager.
+     * @return the name of the system's default file manager, or <code>null</code> if not known.
+     */
     public static String getDefaultFileManagerName() {return defaultFileManagerName;}
+
+    /**
+     * Returns the command used to start the system's default file manager.
+     * @return the command used to start the system's default file manager, or <code>null</code> if not found.
+     */
     public static String getDefaultFileManagerCommand() {return defaultFileManagerCommand;}
+
+    /**
+     * Returns the default command used to open files under the current system.
+     * @return the default command used to open files under the current system, or <code>null</code> if not found.
+     */
     public static String getDefaultFileOpenerCommand() {return defaultFileOpenerCommand;}
+
+    /**
+     * Returns the default command used to open URLs under the current system.
+     * @return the default command used to open URLs under the current system, or <code>null</code> if not found.
+     */
     public static String getDefaultUrlOpenerCommand() {return defaultUrlOpenerCommand;}
+
+    /**
+     * Returns the default command used to open executable files under the current system.
+     * @return the default command used to open executable files under the current system, or <code>null</code> if not found.
+     */
     public static String getDefaultExeOpenerCommand() {return defaultExeOpenerCommand;}
+
+    /**
+     * Returns <code>true</code> if executable files must be opened with a different command than regular files.
+     * @return <code>true</code> if executable files must be opened with a different command than regular files, <code>false</code> otherwise.
+     */
     public static boolean runExecutables() {return runExecutables;}
+
+    /**
+     * Returns the regular expression used to match executable files.
+     * @return the regular expression used to match executable files, <code>null</code> if not found.
+     */
     public static String getExeAssociation() {return exeAssociation;}
+
+    /**
+     * Returns <code>true</code> if the current system should use case-sensitive regular expression when matching file names.
+     * @return <code>true</code> if the current system should use case-sensitive regular expression when matching file names, <code>false</code> otherwise.
+     */
     public static boolean getDefaultRegexpCaseSensitivity() {return defaultRegexpCaseSensitivity;}
 
     /**
@@ -383,6 +426,7 @@ public class PlatformManager implements JavaVersions, OsFamilies, OsVersions {
     /**
      * Returns <code>true</code> if the current platform is capable of opening a file or folder in the desktop's
      * default file manager (Finder for Mac OS X, Explorer for Windows...).
+     * @return <code>true</code> if the current platform is capable of opening file or folders in the default file manager, <code>false</code> otherwise.
      */
     public static boolean canOpenInFileManager() {return CommandManager.getCommandForAlias(CommandManager.FILE_MANAGER_ALIAS) != null;}	
 
@@ -406,6 +450,7 @@ public class PlatformManager implements JavaVersions, OsFamilies, OsVersions {
 
     /**
      * Opens the specified URL in the registered web browser.
+     * @param file URL to open.
      */
     public static void openUrl(AbstractFile file) {
         try {
@@ -430,6 +475,7 @@ public class PlatformManager implements JavaVersions, OsFamilies, OsVersions {
      * Developers should make sure the operation is possible before calling this.
      * This can be done through {@link #canOpenInFileManager()}.
      * </p>
+     * @param file file to open in the system's file manager.
      */
     public static void openInFileManager(AbstractFile file) {
         try {
@@ -541,6 +587,7 @@ public class PlatformManager implements JavaVersions, OsFamilies, OsVersions {
      * used.
      * </p>
      * @return the path to the user's preference folder.
+     * @see    #setPreferencesFolder(AbstractFile)
      */
     public static AbstractFile getPreferencesFolder() {
         // If the preferences folder has been set, use it.
@@ -556,11 +603,26 @@ public class PlatformManager implements JavaVersions, OsFamilies, OsVersions {
      * If <code>folder</code> is a file, its parent folder will be used instead. If it doesn't exist,
      * this method will create it.
      * </p>
-     * @param     folder                   path to the folder in which muCommander will look for its preferences.
-     * @exception IllegalArgumentException thrown if <code>folder</code> is not a valid folder path.
+     * @param  folder      path to the folder in which muCommander will look for its preferences.
+     * @throws IOException if an IO error occurs.
+     * @see                #getPreferencesFolder()
+     * @see                #setPreferencesFolder(String)
+     * @see                #setPreferencesFolder(AbstractFile)
      */
     public static void setPreferencesFolder(File folder) throws IOException {setPreferencesFolder(FileFactory.getFile(folder.getAbsolutePath()));}
 
+    /**
+     * Sets the path to the folder in which muCommande rwill look for its preferences.
+     * <p>
+     * If <code>folder</code> is a file, its parent folder will be used instead. If it doesn't exist,
+     * this method will create it.
+     * </p>
+     * @param  path        path to the folder in which muCommander will look for its preferences.
+     * @throws IOException if an IO error occurs.
+     * @see                #getPreferencesFolder()
+     * @see                #setPreferencesFolder(File)
+     * @see                #setPreferencesFolder(AbstractFile)
+     */
     public static void setPreferencesFolder(String path) throws IOException {
         AbstractFile folder;
 
@@ -570,6 +632,18 @@ public class PlatformManager implements JavaVersions, OsFamilies, OsVersions {
             setPreferencesFolder(folder);
     }
 
+    /**
+     * Sets the path to the folder in which muCommander will look for its preferences.
+     * <p>
+     * If <code>folder</code> is a file, its parent folder will be used instead. If it doesn't exist,
+     * this method will create it.
+     * </p>
+     * @param  folder      path to the folder in which muCommander will look for its preferences.
+     * @throws IOException if an IO error occurs.
+     * @see                #getPreferencesFolder()
+     * @see                #setPreferencesFolder(String)
+     * @see                #setPreferencesFolder(File)
+     */
     public static void setPreferencesFolder(AbstractFile folder) throws IOException {
         if(!folder.exists())
             folder.mkdir();

@@ -36,7 +36,7 @@ import java.util.Vector;
  */
 public class Debug {
 
-    /** Sets whether or not debug messages should be output to the standard output */
+    /** Sets whether or not debug messages should be output to the standard output. */
     public final static boolean ON        = RuntimeConstants.DEBUG;
     /** Used to disable debug messages even though debug instructions have been compiled in. */
     private static      boolean enabled   = true;

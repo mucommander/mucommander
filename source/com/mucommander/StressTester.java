@@ -31,7 +31,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Random;
 
-
+/**
+ * Used to start muCommander in stress-test mode.
+ * @author Maxence Bernard
+ */
 public class StressTester implements Runnable, ActionListener {
 
     private static Thread stressThread;
@@ -40,6 +43,9 @@ public class StressTester implements Runnable, ActionListener {
         (stressThread = new Thread(this)).start();
     }
 
+    /**
+     * Stops the current stress test.
+     */
     public static void stop() {
         stressThread = null;
     }
@@ -89,6 +95,10 @@ public class StressTester implements Runnable, ActionListener {
         stop();
     }
 
+    /**
+     * Method used to start the stress tester.
+     * @param args command line arguments.
+     */
     public static void main(String args[]) {
         Launcher.main(args);
 
