@@ -72,7 +72,6 @@ public interface CommandBuilder {
 
     /**
      * Notifies the builder that a new command has been found.
-     * </p>
      * @param  command          command that has been found.
      * @throws CommandException if an error occurs.
      */

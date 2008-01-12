@@ -179,7 +179,7 @@ public class Command {
     public String[] getTokens(FileSet files) {return getTokens(command, files);}
 
     /**
-     * Returns this command's tokens, replacing keywords by the corresponding values from the specified files
+     * Returns this command's tokens, replacing keywords by the corresponding values from the specified files.
      * @param  files files from which to retrieve keyword substitution values.
      * @return       this command's tokens, replacing keywords by the corresponding values from the specified files.
      */
@@ -187,28 +187,32 @@ public class Command {
 
     /**
      * Returns the specified command's tokens without performing keyword substitution.
-     * @return the specified command's tokens without performing keyword substitution.
+     * @param  command command to tokenize.
+     * @return         the specified command's tokens without performing keyword substitution.
      */
     public static String[] getTokens(String command) {return getTokens(command, (AbstractFile[])null);}
 
     /**
      * Returns the specified command's tokens after replacing keywords by the corresponding values from the specified file.
-     * @param  file file from which to retrieve keyword substitution values.
-     * @return the specified command's tokens after replacing keywords by the corresponding values from the specified file.
+     * @param  command command to tokenize.
+     * @param  file    file from which to retrieve keyword substitution values.
+     * @return         the specified command's tokens after replacing keywords by the corresponding values from the specified file.
      */
     public static String[] getTokens(String command, AbstractFile file) {return getTokens(command, new AbstractFile[] {file});}
 
     /**
      * Returns the specified command's tokens after replacing keywords by the corresponding values from the specified fileset.
-     * @param  files file from which to retrieve keyword substitution values.
-     * @return       the specified command's tokens after replacing keywords by the corresponding values from the specified fileset.
+     * @param  command command to tokenize.
+     * @param  files   file from which to retrieve keyword substitution values.
+     * @return         the specified command's tokens after replacing keywords by the corresponding values from the specified fileset.
      */
     public static String[] getTokens(String command, FileSet files) {return getTokens(command, (AbstractFile[])(files.toArray(new AbstractFile[files.size()])));}
 
     /**
      * Returns the specified command's tokens after replacing keywords by the corresponding values from the specified files.
-     * @param  files file from which to retrieve keyword substitution values.
-     * @return the specified command's tokens after replacing keywords by the corresponding values from the specified files.
+     * @param  command command to tokenize.
+     * @param  files   file from which to retrieve keyword substitution values.
+     * @return         the specified command's tokens after replacing keywords by the corresponding values from the specified files.
      */
     public static String[] getTokens(String command, AbstractFile[] files) {
         Vector       tokens;        // All tokens.

@@ -34,6 +34,7 @@ import java.util.Iterator;
 import java.util.Vector;
 
 /**
+ * Manages custom commands and associations.
  * @author Nicolas Rinaudo
  */
 public class CommandManager implements CommandBuilder {
@@ -107,7 +108,23 @@ public class CommandManager implements CommandBuilder {
 
     // - Command handling ------------------------------------------------------
     // -------------------------------------------------------------------------
+    /**
+     * Returns the tokens that compose the command that must be executed to open the specified file.
+     * <p>
+     * This is a convenience method and is stricly equivalent to calling
+     * <code>{@link #getTokensForFile(AbstractFile,boolean) getTokensForFile(}file, true)</code>.
+     * </p>
+     * @param file file for which the opening command's tokens must be returned.
+     * @return the tokens that compose the command that must be executed to open the specified file.
+     */
     public static String[] getTokensForFile(AbstractFile file) {return getTokensForFile(file, true);}
+
+    /**
+     * Returns the tokens that compose the command that must be executed to open the specified file.
+     * @param  file         file for which the opening command's tokens must be returned.
+     * @param  allowDefault whether to use the default command if none was found to match the specified file.
+     * @return              the tokens that compose the command that must be executed to open the specified file, <code>null</code> if not found.
+     */
     public static String[] getTokensForFile(AbstractFile file, boolean allowDefault) {
         Command command;
 
@@ -116,8 +133,23 @@ public class CommandManager implements CommandBuilder {
         return command.getTokens(file);
     }
 
+    /**
+     * Returns the command that must be executed to open the specified file.
+     * <p>
+     * This is a convenience method and is stricly equivalent to calling
+     * <code>{@link #getCommandForFile(AbstractFile,boolean) getCommandForFile(}file, true)</code>.
+     * </p>
+     * @param  file file for which the opening command must be returned.
+     * @return      the command that must be executed to open the specified file.
+     */
     public static Command getCommandForFile(AbstractFile file) {return getCommandForFile(file, true);}
 
+    /**
+     * Returns the command that must be executed to open the specified file.
+     * @param  file         file for which the opening command must be returned.
+     * @param  allowDefault whether to use the default command if none was found to match the specified file.
+     * @return              the command that must be executed to open the specified file, <code>null</code> if not found.
+     */
     public static Command getCommandForFile(AbstractFile file, boolean allowDefault) {
         Iterator           iterator;
         CommandAssociation association;
@@ -224,7 +256,7 @@ public class CommandManager implements CommandBuilder {
      * Removes the specified command from the list of registered commands.
      * <p>
      * This method might actually refuse to remove <code>command</code>: if it is associated to any
-     * file name filter, a command cannot be removed without, well, messing the system up quite baddly.<br/>
+     * file name filter, a command cannot be removed without, well, messing the system up quite baddly.<br>
      * If the command is associated to any file name filter, this method will return <code>false</code> and not
      * do anything.
      * </p>
@@ -246,7 +278,7 @@ public class CommandManager implements CommandBuilder {
      * Removes the command found at the specified index of the command list.
      * <p>
      * This method might actually not remove the command: if it is associated to any
-     * file name filter, a command cannot be removed without, well, messing the system up quite baddly.<br/>
+     * file name filter, a command cannot be removed without, well, messing the system up quite baddly.<br>
      * If the command is associated to any file name filter, this method will return <code>false</code> and not
      * do anything.
      * </p>
@@ -276,6 +308,12 @@ public class CommandManager implements CommandBuilder {
      */
     public static Iterator associations() {return associations.iterator();}
 
+    /**
+     * Registers the specified association.
+     * @param  command          command to execute when the association is matched.
+     * @param  filter           file filters that a file must match to be accepted by the association.
+     * @throws CommandException if an error occurs.
+     */
     public static void registerAssociation(String command, ChainedFileFilter filter) throws CommandException {
         Command cmd;
 
@@ -510,9 +548,10 @@ public class CommandManager implements CommandBuilder {
      * The command files will be loaded as a <i>backed-up file</i> (see {@link com.mucommander.io.BackupInputStream}).
      * Its format is described {@link AssociationsXmlConstants here}.
      * </p>
-     * @see #writeAssociations()
-     * @see #getAssociationFile()
-     * @see #setAssociationFile(String)
+     * @throws IOException if an IO error occurs.
+     * @see                #writeAssociations()
+     * @see                #getAssociationFile()
+     * @see                #setAssociationFile(String)
      */
     public static void loadAssociations() throws IOException {
         AbstractFile file;
@@ -581,10 +620,11 @@ public class CommandManager implements CommandBuilder {
      * The association files will be saved as a <i>backed-up file</i> (see {@link com.mucommander.io.BackupOutputStream}).
      * Its format is described {@link AssociationsXmlConstants here}.
      * </p>
-     * @see    #loadAssociations()
-     * @see    #getAssociationFile()
-     * @see    #setAssociationFile(String)
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException      if an I/O error occurs.
+     * @throws CommandException if an error occurs.
+     * @see                     #loadAssociations()
+     * @see                     #getAssociationFile()
+     * @see                     #setAssociationFile(String)
      */
     public static void writeAssociations() throws CommandException, IOException {
         // Do not save the associations if they were not modified.
@@ -698,10 +738,11 @@ public class CommandManager implements CommandBuilder {
      * The command files will be saved as a <i>backed-up file</i> (see {@link com.mucommander.io.BackupOutputStream}).
      * Its format is described {@link CommandsXmlConstants here}.
      * </p>
-     * @see    #loadCommands()
-     * @see    #getCommandFile()
-     * @see    #setCommandFile(String)
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException      if an I/O error occurs.
+     * @throws CommandException if an error occurs.
+     * @see                     #loadCommands()
+     * @see                     #getCommandFile()
+     * @see                     #setCommandFile(String)
      */
     public static void writeCommands() throws IOException, CommandException {
         // Only saves the command if they were modified since the last time they were written.
@@ -732,9 +773,10 @@ public class CommandManager implements CommandBuilder {
      * The command files will be loaded as a <i>backed-up file</i> (see {@link com.mucommander.io.BackupInputStream}).
      * Its format is described {@link CommandsXmlConstants here}.
      * </p>
-     * @see #writeCommands()
-     * @see #getCommandFile()
-     * @see #setCommandFile(String)
+     * @throws IOException if an I/O error occurs.
+     * @see                #writeCommands()
+     * @see                #getCommandFile()
+     * @see                #setCommandFile(String)
      */
     public static void loadCommands() throws IOException {
         AbstractFile file;

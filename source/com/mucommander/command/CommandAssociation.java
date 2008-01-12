@@ -24,9 +24,10 @@ import com.mucommander.file.filter.ChainedFileFilter;
 import java.util.Iterator;
 
 /**
+ * Associates a command to a set of file filters.
  * @author Nicolas Rinaudo
  */
-public class CommandAssociation {
+class CommandAssociation {
 
     // - Instance fields -------------------------------------------------------
     // -------------------------------------------------------------------------
@@ -38,11 +39,21 @@ public class CommandAssociation {
 
     // - Initialisation --------------------------------------------------------
     // -------------------------------------------------------------------------
+    /**
+     * Creates a new <code>CommandAssociation</code>.
+     * @param command command that must be executed if the association is matched.
+     * @param filter  filter that files must match in order to be taken into account by the association.
+     */
     public CommandAssociation(Command command, ChainedFileFilter filter) {
         this.command    = command;
         this.fileFilter = filter;
     }
 
+    /**
+     * Returns <code>true</code> if the specified file matches the association.
+     * @param  file file to match against the association.
+     * @return      <code>true</code> if the specified file matches the association, <code>false</code> otherwise.
+     */
     public boolean accept(AbstractFile file) {return fileFilter.match(file);}
 
     // - Command retrieval -----------------------------------------------------
@@ -53,5 +64,9 @@ public class CommandAssociation {
      */
     public Command getCommand() {return command;}
 
+    /**
+     * Returns an iterator on the various filters that must accept a file for it to match the association.
+     * @return an iterator on the various filters that must accept a file for it to match the association.
+     */
     public Iterator filters() {return fileFilter.getFileFilterIterator();}
 }
