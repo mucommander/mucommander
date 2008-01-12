@@ -432,8 +432,11 @@ public class CredentialsManager implements VectorChangeListener {
 
 
     /**
-     * Returns the list of known volatile MappedCredentials, stored in a Vector. The returned Vector instance is
-     * the one actually used by CredentialsManager, so use it with care.
+     * Returns the list of known volatile {@link MappedCredentials}, stored in a Vector.
+     * <p>
+     * The returned Vector instance is the one actually used by CredentialsManager, so use it with care.
+     * </p>
+     * @return the list of known volatile {@link MappedCredentials}.
      */
     public static Vector getVolatileCredentials() {
         return volatileCredentials;
@@ -441,9 +444,12 @@ public class CredentialsManager implements VectorChangeListener {
 
 
     /**
-     * Returns the list of known persistent MappedCredentials, stored in an AlteredVector.
+     * Returns the list of known persistent {@link MappedCredentials}, stored in an {@link AlteredVector}.
+     * <p>
      * Any changes made to the Vector will be detected and will yield to writing the credentials file when
      * {@link #writeCredentials(boolean)} is called with false.
+     * </p>
+     * @return the list of known persistent {@link MappedCredentials}.
      */
     public static AlteredVector getPersistentCredentials() {
         return persistentCredentials;

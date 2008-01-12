@@ -53,14 +53,22 @@ public class Credentials {
     }
 
     /**
-     * Returns the login part. Returned login may be an empty string but never null.
+     * Returns the login part.
+     * <p>
+     * Returned login may be an empty string but never <code>null</code>.
+     * </p>
+     * @return the login part.
      */
     public String getLogin() {
         return login;
     }
 	
     /**
-     * Returns the password part. Returned password may be an empty string but never null.
+     * Returns the password part.
+     * <p>
+     * Returned password may be an empty string but never <code>null</code>.
+     * </p>
+     * @return the password part.
      */
     public String getPassword() {
         return password;
@@ -68,6 +76,7 @@ public class Credentials {
 
     /**
      * Returns the password as a masked string, each of the characters replaced by '*' characters. 
+     * @return the password as a masked string.
      */
     public String getMaskedPassword() {
         int passwordLength = password.length();
@@ -80,6 +89,7 @@ public class Credentials {
 
     /**
      * Returns the password as a weakly encrypted string.
+     * @return the password as a weakly encrypted string.
      */
     public String getEncryptedPassword() {
         return XORCipher.encryptXORBase64(password);
@@ -87,7 +97,11 @@ public class Credentials {
 
 
     /**
-     * Returns true if these credentials are empty, that is both the login and password are empty strings.
+     * Returns <code>true</code> if these credentials are empty.
+     * <p>
+     * Credentials are said to be empty if both login and password are empty strings.
+     * </p>
+     * @return <code>true</code> if these credentials are empty, <code>false</code> otherwise.
      */
     public boolean isEmpty() {
         return "".equals(login) && "".equals(password);

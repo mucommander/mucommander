@@ -68,8 +68,11 @@ public class MappedCredentials extends Credentials {
 
 
     /**
-     * Returns the location to the server these credentials are associated with. The returned {@link FileURL} will not
-     * contain any credentials.
+     * Returns the location to the server these credentials are associated with.
+     * <p>
+     * The returned {@link FileURL} will not contain any credentials.
+     * </p>
+     * @return the location to the server these credentials are associated with.
      */
     public FileURL getRealm() {
         return realm;
@@ -77,7 +80,8 @@ public class MappedCredentials extends Credentials {
 
 
     /**
-     * Returns true if these credentials should be saved when the application terminates.
+     * Returns <code>true</code> if these credentials should be saved when the application terminates.
+     * @return <code>true</code> if these credentials should be saved when the application terminates, <code>false</code> otherwise.
      */
     public boolean isPersistent() {
         return isPersistent;

@@ -62,6 +62,7 @@ public class AuthException extends IOException {
 
     /**
      * Returns the URL of the file for which authentication failed.
+     * @return the URL of the file for which authentication failed.
      */
     public FileURL getFileURL() {
         return fileURL;
@@ -70,6 +71,7 @@ public class AuthException extends IOException {
 	
     /**
      * Returns a message describing the exception.
+     * @return a message describing the exception.
      */
     public String getMessage() {
         return msg;
