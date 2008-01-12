@@ -32,8 +32,7 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- *
- *
+ * muCommander specific wrapper for the <code>com.mucommander.conf</code> API.
  * @author Nicolas Rinaudo, Maxence Bernard
  */
 public class MuConfiguration implements Columns {
@@ -80,9 +79,9 @@ public class MuConfiguration implements Columns {
      * enabled by default. */
     public static final boolean DEFAULT_ENABLE_SYSTEM_NOTIFICATIONS = com.mucommander.ui.notifier.AbstractNotifier.isAvailable()
         && (PlatformManager.MAC_OS_X.isCurrent() || PlatformManager.WINDOWS.isCurrent());
-    /** Controls whether files should be moved to trash or permanently erased */
+    /** Controls whether files should be moved to trash or permanently erased. */
     public static final String DELETE_TO_TRASH                    = "delete_to_trash";
-    /** Default 'delete to trash' behavior */
+    /** Default 'delete to trash' behavior. */
     public static final boolean DEFAULT_DELETE_TO_TRASH           = true;
 
 
@@ -188,17 +187,17 @@ public class MuConfiguration implements Columns {
     public static final String  AUTO_SIZE_COLUMNS                  = FILE_TABLE_SECTION + '.' + "auto_size_columns";
     /** Default columns auto-resizing behavior. */
     public static final boolean DEFAULT_AUTO_SIZE_COLUMNS          = true;
-    /** Controls if and when system file icons should be used instead of custom file icons */
+    /** Controls if and when system file icons should be used instead of custom file icons. */
     public static final String  USE_SYSTEM_FILE_ICONS              = FILE_TABLE_SECTION + '.' + "use_system_file_icons";
-    /** Default system file icons policy */
+    /** Default system file icons policy. */
     public static final String  DEFAULT_USE_SYSTEM_FILE_ICONS      = FileIcons.USE_SYSTEM_ICONS_APPLICATIONS;
-    /** Controls whether folders are displayed first in the FileTable or mixed with regular files */
+    /** Controls whether folders are displayed first in the FileTable or mixed with regular files. */
     public static final String  SHOW_FOLDERS_FIRST                 = FILE_TABLE_SECTION + '.' + "show_folders_first";
-    /** Default value for 'Show folders first' option */
+    /** Default value for 'Show folders first' option. */
     public static final boolean DEFAULT_SHOW_FOLDERS_FIRST         = true;
-    /** Controls whether symlinks should be followed when changing directory */
+    /** Controls whether symlinks should be followed when changing directory. */
     public static final String  CD_FOLLOWS_SYMLINKS                = FILE_TABLE_SECTION + '.' + "cd_follows_symlinks";
-    /** Default value for 'Follow symlinks when changing directory' option */
+    /** Default value for 'Follow symlinks when changing directory' option. */
     public static final boolean DEFAULT_CD_FOLLOWS_SYMLINKS        = false;
     /** Identifier of the left file table. */
     public static final String  LEFT                               = "left";
@@ -389,7 +388,7 @@ public class MuConfiguration implements Columns {
     public static final String SCREEN_WIDTH                       = LAST_WINDOW_SECTION + '.' + "screen_width";
     /** Last known screen height. */
     public static final String SCREEN_HEIGHT                      = LAST_WINDOW_SECTION + '.' + "screen_height";
-    /** Last orientation used to split folder panels */
+    /** Last orientation used to split folder panels. */
     public static final String SPLIT_ORIENTATION                  = LAST_WINDOW_SECTION + '.' + "split_orientation";
     /** Vertical split pane orientation. */
     public static final String VERTICAL_SPLIT_ORIENTATION         = "vertical";
@@ -432,15 +431,15 @@ public class MuConfiguration implements Columns {
 
     // - Variables used for caches -------------------------------------------
     // -----------------------------------------------------------------------
-    /** Section controlling the caching mechanisms used throughout the application */
+    /** Section controlling the caching mechanisms used throughout the application. */
     public static final String  CACHE_SECTION                      = "cache";
-    /** Capacity of the AbstractFile instances cache */
+    /** Capacity of the AbstractFile instances cache. */
     public static final String  FILE_CACHE_CAPACITY                = CACHE_SECTION + '.' + "file_cache_capacity";
-    /** Default capacity of the AbstractFile instances cache */
+    /** Default capacity of the AbstractFile instances cache. */
     public static final int     DEFAULT_FILE_CACHE_CAPACITY        = 1000;
-    /** Capacity of the system file icon cache */
+    /** Capacity of the system file icon cache. */
     public static final String  SYSTEM_ICON_CACHE_CAPACITY         = CACHE_SECTION + '.' + "system_icon_cache_capacity";
-    /** Default capacity of the system file icon cache */
+    /** Default capacity of the system file icon cache. */
     public static final int     DEFAULT_SYSTEM_ICON_CACHE_CAPACITY = 100;
 
 
@@ -468,11 +467,11 @@ public class MuConfiguration implements Columns {
 
     // - Variables used by Bonjour/Zeroconf support --------------------------
     // -----------------------------------------------------------------------
-    /** Section controlling parameters related to Bonjour/Zeroconf support */
+    /** Section controlling parameters related to Bonjour/Zeroconf support. */
     public static final String  BONJOUR_SECTION                   = "bonjour";
-    /** Used do determine whether discovery of Bonjour services should be activated or not */
+    /** Used do determine whether discovery of Bonjour services should be activated or not. */
     public static final String  ENABLE_BONJOUR_DISCOVERY          = BONJOUR_SECTION + '.' + "discovery_enabled";
-    /** Default Bonjour discovery activation used on startup */
+    /** Default Bonjour discovery activation used on startup. */
     public static final boolean DEFAULT_ENABLE_BONJOUR_DISCOVERY  = true;
 
 
@@ -507,27 +506,35 @@ public class MuConfiguration implements Columns {
     // -----------------------------------------------------------------------
     /** Section containing all FTP variables. */
     public static final String FTP_SECTION                        = "ftp";
-    /** Controls whether hidden files should be listed by the client (LIST -al instead of LIST -l) */
+    /** Controls whether hidden files should be listed by the client (LIST -al instead of LIST -l). */
     public static final String LIST_HIDDEN_FILES                  = FTP_SECTION + '.' + "list_hidden_files";
-    /** Default value for {@link #LIST_HIDDEN_FILES} */
+    /** Default value for {@link #LIST_HIDDEN_FILES}. */
     public static final boolean DEFAULT_LIST_HIDDEN_FILES         = false;
 
 
 
     // - Instance fields -----------------------------------------------------
     // -----------------------------------------------------------------------
-    private static Configuration configuration = new Configuration(new MuConfigurationSource());
+    private static final Configuration configuration = new Configuration(new MuConfigurationSource());
 
 
 
     // - Initialisation ------------------------------------------------------
     // -----------------------------------------------------------------------
+    /**
+     * Prevents instanciation of this class.
+     */
     private MuConfiguration() {}
 
 
 
     // - Configuration reading / writing -------------------------------------
     // -----------------------------------------------------------------------
+    /**
+     * Loads the muCommander configuration.
+     * @throws IOException            if an I/O error occurs.
+     * @throws ConfigurationException if a configuration related error occurs.
+     */
     public static void read() throws IOException, ConfigurationException {
         String configurationVersion;
 
@@ -553,92 +560,468 @@ public class MuConfiguration implements Columns {
         }
     }
 
+    /**
+     * Saves the muCommander configuration.
+     * @throws IOException            if an I/O error occurs.
+     * @throws ConfigurationException if a configuration related error occurs.
+     */
     public static void write() throws IOException, ConfigurationException {configuration.write();}
+
 
 
     // - Variable setting ------------------------------------------------------
     // -------------------------------------------------------------------------
+    /**
+     * Moves the value of <code>fromVar</code> to <code>toVar</code>.
+     * <p>
+     * At the end of this call, <code>fromVar</code> will have been deleted. Note that if <code>fromVar</code> doesn't exist,
+     * but <code>toVar</code> does, <code>toVar</code> will be deleted.
+     * </p>
+     * <p>
+     * This method might trigger as many as two {@link ConfigurationEvent events}:
+     * <ul>
+     *  <li>One when <code>fromVar</code> is removed.</li>
+     *  <li>One when <code>toVar</code> is set.</li>
+     * </ul>
+     * The removal event will always be triggered first.
+     * </p>
+     * @param fromVar fully qualified name of the variable to rename.
+     * @param toVar   fully qualified name of the variable that will receive <code>fromVar</code>'s value.
+     */
     public static void renameVariable(String fromVar, String toVar) {configuration.renameVariable(fromVar, toVar);}
 
+    /**
+     * Sets the value of the specified variable.
+     * <p>
+     * This method will return <code>false</code> if it didn't modify <code>name</code>'s value. Note that this doesn't mean
+     * the call failed, but that <code>name</code>'s value was already equal to <code>value</code>.
+     * </p>
+     * <p>
+     * If the value of the specified variable is actually modified, an {@link ConfigurationEvent event} will be passed to all
+     * listeners.
+     * </p>
+     * @param  name  fully qualified name of the variable to set.
+     * @param  value new value for the variable.
+     * @return       <code>true</code> if this call resulted in a modification of the variable's value, <code>false</code> otherwise.
+     * @see          #getVariable(String)
+     * @see          #getVariable(String,String)
+     */
     public static boolean setVariable(String name, String value) {return configuration.setVariable(name, value);}
 
+    /**
+     * Sets the value of the specified variable.
+     * <p>
+     * This method will return <code>false</code> if it didn't modify <code>name</code>'s value. This, however, is not a way
+     * of indicating that the call failed: <code>false</code> is only ever returned if the previous value is equal to the
+     * new value.
+     * </p>
+     * <p>
+     * If the value of the specified variable is actually modified, an {@link ConfigurationEvent event} will be passed to all
+     * listeners.
+     * </p>
+     * @param  name  fully qualified name of the variable to set.
+     * @param  value new value for the variable.
+     * @return       <code>true</code> if this call resulted in a modification of the variable's value, <code>false</code> otherwise.
+     * @see          #getIntegerVariable(String)
+     * @see          #getVariable(String,int)
+     */
     public static boolean setVariable(String name, int value) {return configuration.setVariable(name, value);}
 
+    /**
+     * Sets the value of the specified variable.
+     * <p>
+     * This method will return <code>false</code> if it didn't modify <code>name</code>'s value. This, however, is not a way
+     * of indicating that the call failed: <code>false</code> is only ever returned if the previous value is equal to the
+     * new value.
+     * </p>
+     * <p>
+     * If the value of the specified variable is actually modified, an {@link ConfigurationEvent event} will be passed to all
+     * listeners.
+     * </p>
+     * @param  name  fully qualified name of the variable to set.
+     * @param  value new value for the variable.
+     * @return       <code>true</code> if this call resulted in a modification of the variable's value, <code>false</code> otherwise.
+     * @see          #getFloatVariable(String)
+     * @see          #getVariable(String,float)
+     */
     public static boolean setVariable(String name, float value) {return configuration.setVariable(name, value);}
 
+    /**
+     * Sets the value of the specified variable.
+     * <p>
+     * This method will return <code>false</code> if it didn't modify <code>name</code>'s value. This, however, is not a way
+     * of indicating that the call failed: <code>false</code> is only ever returned if the previous value is equal to the
+     * new value.
+     * </p>
+     * <p>
+     * If the value of the specified variable is actually modified, an {@link ConfigurationEvent event} will be passed to all
+     * listeners.
+     * </p>
+     * @param  name  fully qualified name of the variable to set.
+     * @param  value new value for the variable.
+     * @return       <code>true</code> if this call resulted in a modification of the variable's value, <code>false</code> otherwise.
+     * @see          #getBooleanVariable(String)
+     * @see          #getVariable(String,boolean)
+     */
     public static boolean setVariable(String name, boolean value) {return configuration.setVariable(name, value);}
 
+    /**
+     * Sets the value of the specified variable.
+     * <p>
+     * This method will return <code>false</code> if it didn't modify <code>name</code>'s value. This, however, is not a way
+     * of indicating that the call failed: <code>false</code> is only ever returned if the previous value is equal to the
+     * new value.
+     * </p>
+     * <p>
+     * If the value of the specified variable is actually modified, an {@link ConfigurationEvent event} will be passed to all
+     * listeners.
+     * </p>
+     * @param  name  fully qualified name of the variable to set.
+     * @param  value new value for the variable.
+     * @return       <code>true</code> if this call resulted in a modification of the variable's value, <code>false</code> otherwise.
+     * @see          #getLongVariable(String)
+     * @see          #getVariable(String,long)
+     */
     public static boolean setVariable(String name, long value) {return configuration.setVariable(name, value);}
 
+    /**
+     * Sets the value of the specified variable.
+     * <p>
+     * This method will return <code>false</code> if it didn't modify <code>name</code>'s value. This, however, is not a way
+     * of indicating that the call failed: <code>false</code> is only ever returned if the previous value is equal to the
+     * new value.
+     * </p>
+     * <p>
+     * If the value of the specified variable is actually modified, an {@link ConfigurationEvent event} will be passed to all
+     * listeners.
+     * </p>
+     * @param  name  fully qualified name of the variable to set.
+     * @param  value new value for the variable.
+     * @return       <code>true</code> if this call resulted in a modification of the variable's value, <code>false</code> otherwise.
+     * @see          #getDoubleVariable(String)
+     * @see          #getVariable(String,double)
+     */
     public static boolean setVariable(String name, double value) {return configuration.setVariable(name, value);}
 
+    /**
+     * Sets the value of the specified variable.
+     * <p>
+     * This method will return <code>false</code> if it didn't modify <code>name</code>'s value. This, however, is not a way
+     * of indicating that the call failed: <code>false</code> is only ever returned if the previous value is equal to the
+     * new value.
+     * </p>
+     * <p>
+     * If the value of the specified variable is actually modified, an {@link ConfigurationEvent event} will be passed to all
+     * listeners.
+     * </p>
+     * @param  name      fully qualified name of the variable to set.
+     * @param  value     new value for the variable.
+     * @param  separator string used to separate each element of the list.
+     * @return           <code>true</code> if this call resulted in a modification of the variable's value, <code>false</code> otherwise.
+     * @see              #getListVariable(String,String)
+     * @see              #getVariable(String,List,String)
+     */
     public static boolean setVariable(String name, List value, String separator) {return configuration.setVariable(name, value, separator);}
 
 
 
     // - Variable retrieval ----------------------------------------------------
     // -------------------------------------------------------------------------
+    /**
+     * Returns the value of the specified variable.
+     * @param  name fully qualified name of the variable whose value should be retrieved.
+     * @return      the variable's value if set, <code>null</code> otherwise.
+     * @see         #setVariable(String,String)
+     * @see         #getVariable(String,String)
+     */
     public static String getVariable(String name) {return configuration.getVariable(name);}
 
+    /**
+     * Returns the value of the specified variable as an integer.
+     * @param                        name fully qualified name of the variable whose value should be retrieved.
+     * @return                       the variable's value if set, <code>0</code> otherwise.
+     * @throws NumberFormatException if the variable's value cannot be cast to an integer.
+     * @see                          #setVariable(String,int)
+     * @see                          #getVariable(String,int)
+     */
     public static int getIntegerVariable(String name) {return configuration.getIntegerVariable(name);}
 
+    /**
+     * Returns the value of the specified variable as a long.
+     * @param                        name fully qualified name of the variable whose value should be retrieved.
+     * @return                       the variable's value if set, <code>0</code> otherwise.
+     * @throws NumberFormatException if the variable's value cannot be cast to a long.
+     * @see                          #setVariable(String,long)
+     * @see                          #getVariable(String,long)
+     */
     public static long getLongVariable(String name) {return configuration.getLongVariable(name);}
 
+    /**
+     * Returns the value of the specified variable as a float.
+     * @param                        name fully qualified name of the variable whose value should be retrieved.
+     * @return                       the variable's value if set, <code>0</code> otherwise.
+     * @throws NumberFormatException if the variable's value cannot be cast to a float.
+     * @see                          #setVariable(String,float)
+     * @see                          #getVariable(String,float)
+     */
     public static float getFloatVariable(String name) {return configuration.getFloatVariable(name);}
 
+    /**
+     * Returns the value of the specified variable as a double.
+     * @param                        name fully qualified name of the variable whose value should be retrieved.
+     * @return                       the variable's value if set, <code>0</code> otherwise.
+     * @throws NumberFormatException if the variable's value cannot be cast to a double.
+     * @see                          #setVariable(String,double)
+     * @see                          #getVariable(String,double)
+     */
     public static double getDoubleVariable(String name) {return configuration.getDoubleVariable(name);}
 
+    /**
+     * Returns the value of the specified variable as a boolean.
+     * @param  name fully qualified name of the variable whose value should be retrieved.
+     * @return the variable's value if set, <code>false</code> otherwise.
+     * @see                          #setVariable(String,boolean)
+     * @see                          #getVariable(String,boolean)
+     */
     public static boolean getBooleanVariable(String name) {return configuration.getBooleanVariable(name);}
 
+    /**
+     * Returns the value of the specified variable as a {@link ValueList}.
+     * @param  name      fully qualified name of the variable whose value should be retrieved.
+     * @param  separator character used to split the variable's value into a list.
+     * @return           the variable's value if set, <code>null</code> otherwise.
+     * @see              #setVariable(String,List,String)
+     * @see              #getVariable(String,List,String)
+     */
     public static ValueList getListVariable(String name, String separator) {return configuration.getListVariable(name, separator);}
 
+    /**
+     * Checks whether the specified variable has been set.
+     * @param  name fully qualified name of the variable to check for.
+     * @return      <code>true</code> if the variable is set, <code>false</code> otherwise.
+     */
     public static boolean isVariableSet(String name) {return configuration.isVariableSet(name);}
 
 
 
     // - Variable removal ------------------------------------------------------
     // -------------------------------------------------------------------------
+    /**
+     * Deletes the specified variable from the configuration.
+     * <p>
+     * If the variable was set, a configuration {@link ConfigurationEvent event} will be passed to
+     * all registered listeners.
+     * </p>
+     * @param  name name of the variable to remove.
+     * @return      the variable's old value, or <code>null</code> if it wasn't set.
+     */
     public static String removeVariable(String name) {return configuration.removeVariable(name);}
 
+    /**
+     * Deletes the specified variable from the configuration.
+     * <p>
+     * If the variable was set, a configuration {@link ConfigurationEvent event} will be passed to
+     * all registered listeners.
+     * </p>
+     * @param  name name of the variable to remove.
+     * @return      the variable's old value, or <code>0</code> if it wasn't set.
+     */
     public static int removeIntegerVariable(String name) {return configuration.removeIntegerVariable(name);}
 
+    /**
+     * Deletes the specified variable from the configuration.
+     * <p>
+     * If the variable was set, a configuration {@link ConfigurationEvent event} will be passed to
+     * all registered listeners.
+     * </p>
+     * @param  name name of the variable to remove.
+     * @return      the variable's old value, or <code>0</code> if it wasn't set.
+     */
     public static long removeLongVariable(String name) {return configuration.removeLongVariable(name);}
 
+    /**
+     * Deletes the specified variable from the configuration.
+     * <p>
+     * If the variable was set, a configuration {@link ConfigurationEvent event} will be passed to
+     * all registered listeners.
+     * </p>
+     * @param  name name of the variable to remove.
+     * @return      the variable's old value, or <code>0</code> if it wasn't set.
+     */
     public static float removeFloatVariable(String name) {return configuration.removeFloatVariable(name);}
 
+    /**
+     * Deletes the specified variable from the configuration.
+     * <p>
+     * If the variable was set, a configuration {@link ConfigurationEvent event} will be passed to
+     * all registered listeners.
+     * </p>
+     * @param  name name of the variable to remove.
+     * @return      the variable's old value, or <code>0</code> if it wasn't set.
+     */
     public static double removeDoubleVariable(String name) {return configuration.removeDoubleVariable(name);}
 
+    /**
+     * Deletes the specified variable from the configuration.
+     * <p>
+     * If the variable was set, a configuration {@link ConfigurationEvent event} will be passed to
+     * all registered listeners.
+     * </p>
+     * @param  name name of the variable to remove.
+     * @return      the variable's old value, or <code>false</code> if it wasn't set.
+     */
     public static boolean removeBooleanVariable(String name) {return configuration.removeBooleanVariable(name);}
 
+    /**
+     * Deletes the specified variable from the configuration.
+     * <p>
+     * If the variable was set, a configuration {@link ConfigurationEvent event} will be passed to
+     * all registered listeners.
+     * </p>
+     * @param  name name of the variable to remove.
+     * @param  separator character used to split the variable's value into a list.
+     * @return      the variable's old value, or <code>null</code> if it wasn't set.
+     */
     public static ValueList removeListVariable(String name, String separator) {return configuration.removeListVariable(name, separator);}
 
 
 
     // - Advanced variable retrieval -------------------------------------------
     // -------------------------------------------------------------------------
+    /**
+     * Retrieves the value of the specified variable.
+     * <p>
+     * If the variable isn't set, this method will set it to <code>defaultValue</code> before
+     * returning it. If this happens, a configuration {@link ConfigurationEvent event} will
+     * be sent to all registered listeners.
+     * </p>
+     * @param  name         name of the variable to retrieve.
+     * @param  defaultValue value to use if <code>name</code> is not set.
+     * @return              the specified variable's value.
+     * @see                 #setVariable(String,String)
+     * @see                 #getVariable(String)
+     */
     public static String getVariable(String name, String defaultValue) {return configuration.getVariable(name, defaultValue);}
 
+    /**
+     * Retrieves the value of the specified variable as an integer.
+     * <p>
+     * If the variable isn't set, this method will set it to <code>defaultValue</code> before
+     * returning it. If this happens, a configuration {@link ConfigurationEvent event} will
+     * be sent to all registered listeners.
+     * </p>
+     * @param  name                  name of the variable to retrieve.
+     * @param  defaultValue          value to use if <code>name</code> is not set.
+     * @return                       the specified variable's value.
+     * @throws NumberFormatException if the variable's value cannot be cast to an integer.
+     * @see                          #setVariable(String,int)
+     * @see                          #getIntegerVariable(String)
+     */
     public static int getVariable(String name, int defaultValue) {return configuration.getVariable(name, defaultValue);}
 
+    /**
+     * Retrieves the value of the specified variable as a long.
+     * <p>
+     * If the variable isn't set, this method will set it to <code>defaultValue</code> before
+     * returning it. If this happens, a configuration {@link ConfigurationEvent event} will
+     * be sent to all registered listeners.
+     * </p>
+     * @param  name                  name of the variable to retrieve.
+     * @param  defaultValue          value to use if <code>name</code> is not set.
+     * @return                       the specified variable's value.
+     * @throws NumberFormatException if the variable's value cannot be cast to a long.
+     * @see                          #setVariable(String,long)
+     * @see                          #getLongVariable(String)
+     */
     public static long getVariable(String name, long defaultValue) {return configuration.getVariable(name, defaultValue);}
 
+    /**
+     * Retrieves the value of the specified variable as a float.
+     * <p>
+     * If the variable isn't set, this method will set it to <code>defaultValue</code> before
+     * returning it. If this happens, a configuration {@link ConfigurationEvent event} will
+     * be sent to all registered listeners.
+     * </p>
+     * @param  name                  name of the variable to retrieve.
+     * @param  defaultValue          value to use if <code>name</code> is not set.
+     * @return                       the specified variable's value.
+     * @throws NumberFormatException if the variable's value cannot be cast to a float.
+     * @see                          #setVariable(String,float)
+     * @see                          #getFloatVariable(String)
+     */
     public static float getVariable(String name, float defaultValue) {return configuration.getVariable(name, defaultValue);}
 
+    /**
+     * Retrieves the value of the specified variable as a boolean.
+     * <p>
+     * If the variable isn't set, this method will set it to <code>defaultValue</code> before
+     * returning it. If this happens, a configuration {@link ConfigurationEvent event} will
+     * be sent to all registered listeners.
+     * </p>
+     * @param  name                  name of the variable to retrieve.
+     * @param  defaultValue          value to use if <code>name</code> is not set.
+     * @return                       the specified variable's value.
+     * @see                          #setVariable(String,boolean)
+     * @see                          #getBooleanVariable(String)
+     */
     public static boolean getVariable(String name, boolean defaultValue) {return configuration.getVariable(name, defaultValue);}
 
+    /**
+     * Retrieves the value of the specified variable as a double.
+     * <p>
+     * If the variable isn't set, this method will set it to <code>defaultValue</code> before
+     * returning it. If this happens, a configuration {@link ConfigurationEvent event} will
+     * be sent to all registered listeners.
+     * </p>
+     * @param  name                  name of the variable to retrieve.
+     * @param  defaultValue          value to use if <code>name</code> is not set.
+     * @return                       the specified variable's value.
+     * @throws NumberFormatException if the variable's value cannot be cast to a double.
+     * @see                          #setVariable(String,double)
+     * @see                          #getDoubleVariable(String)
+     */
     public static double getVariable(String name, double defaultValue) {return configuration.getVariable(name, defaultValue);}
 
+    /**
+     * Retrieves the value of the specified variable as a {@link ValueList}.
+     * <p>
+     * If the variable isn't set, this method will set it to <code>defaultValue</code> before
+     * returning it. If this happens, a configuration {@link ConfigurationEvent event} will
+     * be sent to all registered listeners.
+     * </p>
+     * @param  name         name of the variable to retrieve.
+     * @param  defaultValue value to use if variable <code>name</code> is not set.
+     * @param  separator    separator to use for <code>defaultValue</code> if variable <code>name</code> is not set.
+     * @return              the specified variable's value.
+     * @see                 #setVariable(String,List,String)
+     * @see                 #getListVariable(String,String)
+     */
     public static ValueList getVariable(String name, List defaultValue, String separator) {return configuration.getVariable(name, defaultValue, separator);}
 
 
     // - Configuration listening -----------------------------------------------
     // -------------------------------------------------------------------------
+    /**
+     * Adds the specified object to the list of registered configuration listeners.
+     * @param listener object to register as a configuration listener.
+     * @see            #removeConfigurationListener(ConfigurationListener)
+     */
     public static void addConfigurationListener(ConfigurationListener listener) {Configuration.addConfigurationListener(listener);}
 
+    /**
+     * Removes the specified object from the list of registered configuration listeners.
+     * @param listener object to remove from the list of registered configuration listeners.
+     * @see            #addConfigurationListener(ConfigurationListener)
+     */
     public static void removeConfigurationListener(ConfigurationListener listener) {Configuration.removeConfigurationListener(listener);}
 
 
     // - Configuration source --------------------------------------------------
     // -------------------------------------------------------------------------
+    /**
+     * Sets the path to the configuration file.
+     * @param  file                  path to the file that should be used for configuration storage.
+     * @throws FileNotFoundException if the specified file is not a valid file.
+     */
     public static void setConfigurationFile(String file) throws FileNotFoundException {configuration.setSource(new MuConfigurationSource(file));}
 }
