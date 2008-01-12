@@ -46,6 +46,7 @@ import java.io.IOException;
  *     as the backup and original file should always have the same size. If they don't, then the backup
  *     file should be used rather than the original one.
  *   </li>
+ * </ul>
  * </p>
  * <p>
  * Files that have been saved by this class should be read with {@link com.mucommander.io.BackupInputStream}

@@ -190,6 +190,7 @@ public class ExtensionManager {
      * Returns the folder in which all extensions are stored.
      * @return             the folder in which all extensions are stored.
      * @throws IOException if an error occured while locating the default extensions folder.
+     * @see                #setExtensionsFolder(AbstractFile)
      */
     public static AbstractFile getExtensionsFolder() throws IOException {
         // If the extensions folder has been set, use it.
@@ -234,6 +235,7 @@ public class ExtensionManager {
      * <code>{@link #isInClasspath(AbstractFile) isInClasspath}(file) || {@link #isInExtensionsPath(AbstractFile) isInExtensionsPath}(file)</code>.
      * </p>
      * @param file file whose availability will be checked.
+     * @return <code>true</code> if the specified file is either in the extension or system classpath, <code>false</code> otherwise.
      */
     public static boolean isAvailable(AbstractFile file) {return isInClasspath(file) || isInExtensionsPath(file);}
 
@@ -241,6 +243,15 @@ public class ExtensionManager {
 
     // - Classpath extension ----------------------------------------------------
     // --------------------------------------------------------------------------
+    /**
+     * Imports the specified file in muCommander's libraries.
+     * @param file  path to the library to import.
+     * @param  force       wether to overwrite eventual existing libraries of the same name.
+     * @return             <code>true</code> if the operation was a success,
+     *                     <code>false</code> if a library of the same name already exists and
+     *                     <code>force</code> is set to <code>false</code>.
+     * @throws IOException if an I/O error occurs.
+     */
     public static boolean importLibrary(AbstractFile file, boolean force) throws IOException {
         AbstractFile dest;
 

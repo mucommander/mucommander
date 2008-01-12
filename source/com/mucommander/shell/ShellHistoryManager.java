@@ -122,7 +122,7 @@ public class ShellHistoryManager {
     }
 
     /**
-     * Returns a <b>non thread-safe</code> iterator on the history.
+     * Returns a <b>non thread-safe</b> iterator on the history.
      * @return an iterator on the history.
      */
     public static Iterator getHistoryIterator() {return new HistoryIterator();}
@@ -178,6 +178,9 @@ public class ShellHistoryManager {
      * Sets the path of the shell history file.
      * @param     path                  where to load the shell history from.
      * @exception FileNotFoundException if <code>path</code> is not accessible.
+     * @see                             #getHistoryFile()
+     * @see                             #setHistoryFile(File)
+     * @see                             #setHistoryFile(AbstractFile)
      */
     public static void setHistoryFile(String path) throws FileNotFoundException {
         AbstractFile file;
@@ -192,6 +195,9 @@ public class ShellHistoryManager {
      * Sets the path of the shell history file.
      * @param     file                  where to load the shell history from.
      * @exception FileNotFoundException if <code>path</code> is not accessible.
+     * @see                             #getHistoryFile()
+     * @see                             #setHistoryFile(AbstractFile)
+     * @see                             #setHistoryFile(String)
      */
     public static void setHistoryFile(File file) throws FileNotFoundException {setHistoryFile(FileFactory.getFile(file.getAbsolutePath()));}
 
@@ -199,6 +205,9 @@ public class ShellHistoryManager {
      * Sets the path of the shell history file.
      * @param     file                  where to load the shell history from.
      * @exception FileNotFoundException if <code>path</code> is not accessible.
+     * @see                             #getHistoryFile()
+     * @see                             #setHistoryFile(File)
+     * @see                             #setHistoryFile(String)
      */
     public static void setHistoryFile(AbstractFile file) throws FileNotFoundException {
         // Makes sure file can be used as a shell history file.
@@ -220,6 +229,9 @@ public class ShellHistoryManager {
      * </p>
      * @return             the path to the shell history file.
      * @throws IOException if an error occured while locating the default shell history file.
+     * @see                #setHistoryFile(File)
+     * @see                #setHistoryFile(String)
+     * @see                #setHistoryFile(AbstractFile)
      */
     public static AbstractFile getHistoryFile() throws IOException {
         if(historyFile == null)
@@ -246,6 +258,7 @@ public class ShellHistoryManager {
 
     /**
      * Loads the shell history.
+     * @throws Exception if an error occurs.
      */
     public static void loadHistory() throws Exception {
         BackupInputStream in;

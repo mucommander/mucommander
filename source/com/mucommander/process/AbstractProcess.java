@@ -107,7 +107,7 @@ public abstract class AbstractProcess {
      * Returns <code>true</code> if this process only uses one output stream.
      * <p>
      * Some processes will use a single stream for their standard error and standard output streams. Such
-     * processes should return <code>true</code> here to prevent both streams from being monitored.<br/>
+     * processes should return <code>true</code> here to prevent both streams from being monitored.<br>
      * Note that if a process uses merged streams, {@link #getInputStream()} will be monitored.
      * </p>
      * @return <code>true</code> if this process merges his output streams, <code>false</code> otherwise.

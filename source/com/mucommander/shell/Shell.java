@@ -34,6 +34,7 @@ import com.mucommander.process.ProcessRunner;
 import java.io.IOException;
 
 /**
+ * Used to execute shell commands.
  * @author Maxence Bernard, Nicolas Rinaudo
  */
 public class Shell implements ConfigurationListener {

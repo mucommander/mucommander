@@ -52,9 +52,9 @@ public class ProcessRunner {
     /**
      * Executes the specified command in the specified directory.
      * <p>
-     * Note that both <code>currentDirectory</code> and <code>listener</code> can be set to <code>null</code>.<br/>
+     * Note that both <code>currentDirectory</code> and <code>listener</code> can be set to <code>null</code>.<br>
      * If no current directory is specified, the VM's current directory will be used. Moreover, if the current directory
-     * is not on a file system that supports process running, the user's home directory will be used instead.<br/>
+     * is not on a file system that supports process running, the user's home directory will be used instead.<br>
      * If <code>listener</code> is set to <code>null</code>, nobody will be notified of the process' state. Its streams
      * will still be emptied to prevent deadlocks.
      * </p>
@@ -171,7 +171,7 @@ public class ProcessRunner {
      */
     public static AbstractProcess execute(String command, AbstractFile currentDirectory) throws IOException {return execute(command, currentDirectory, null, null);}
 
-    /*
+    /**
      * Executes the specified command in the specified directory.
      * <p>
      * This is a convenience method and behaves exactly as a call to <code>execute(command, currentDirectory, null, encoding)</code>.
@@ -199,6 +199,7 @@ public class ProcessRunner {
      * @param  command          command to execute.
      * @param  currentDirectory directory in which to run the command (uses the VM's current directory if <code>null</code>).
      * @param  encoding         encoding used to read from the process' stream (system default is used if <code>null</code>).
+     * @param  listener         object that will be notified of modifications in the process' state (ignored if <code>null</code>).
      * @return                  the generated process.
      * @throws IOException      thrown if an error happens while starting the process.
      */

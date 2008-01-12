@@ -106,7 +106,7 @@ public class ClassFinder {
     // - Public code ---------------------------------------------------------------------
     // -----------------------------------------------------------------------------------
     /**
-     * Explores the content of the specified file and looks for classes that match the specified class filter,
+     * Explores the content of the specified file and looks for classes that match the specified class filter.
      * <p>
      * The <code>browsable</code> argument must be browsable as defined by {@link com.mucommander.file.AbstractFile#isBrowsable()}.
      * If such is not the case, the returned vector will be empty.
@@ -135,7 +135,7 @@ public class ClassFinder {
     }
 
     /**
-     * Explores the content of the specified file and looks for classes that match the specified class filter,
+     * Explores the content of the specified file and looks for classes that match the specified class filter.
      * <p>
      * This is a convenience method and is strictly equivalent to calling {@link #find(AbstractFile,ClassFilter,ClassLoader)}
      * with a class loader argument initialised with the following code:
