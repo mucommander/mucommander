@@ -19,10 +19,27 @@
 package com.mucommander.bookmark;
 
 /**
+ * Implementations of this interface are used to build bookmark sets.
  * @author Nicolas Rinaudo
  */
 public interface BookmarkBuilder {
+    /**
+     * Notifies the builder that the bookmark list is starting.
+     * @throws BookmarkException if an error occurs.
+     */
     public void startBookmarks() throws BookmarkException;
+
+    /**
+     * Notifies the builder of a new bookmark in the list.
+     * @param  name              bookmark's name.
+     * @param  location          bookmark's location.
+     * @throws BookmarkException if an error occurs.
+     */
     public void addBookmark(String name, String location) throws BookmarkException;
+
+    /**
+     * Notifies the builder that the bookmark list is finished.
+     * @throws BookmarkException if an error occurs.
+     */
     public void endBookmarks() throws BookmarkException;
 }

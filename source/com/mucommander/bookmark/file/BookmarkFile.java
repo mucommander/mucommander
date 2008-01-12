@@ -79,6 +79,10 @@ public class BookmarkFile extends AbstractFile {
         return file;
     }
 
+    /**
+     * Returns the underlying bookmark.
+     * @return the underlying bookmark.
+     */
     public Bookmark getBookmark() {return bookmark;}
 
 
@@ -100,7 +104,9 @@ public class BookmarkFile extends AbstractFile {
 
     /**
      * Returns the wrapped file's parent.
-     * @return the wrapped file's parent.
+     * @return             the wrapped file's parent.
+     * @throws IOException if an IO error occurs.
+     * @see                #setParent(AbstractFile)
      */
     public AbstractFile getParent() throws IOException {
         return new BookmarkRoot();
@@ -114,8 +120,9 @@ public class BookmarkFile extends AbstractFile {
 
     /**
      * Runs the specified command on the wrapped file.
-     * @param  tokens command to run.
-     * @return        a process running the specified command.
+     * @param  tokens      command to run.
+     * @return             a process running the specified command.
+     * @throws IOException if an IO error occurs.
      */
     public AbstractProcess runProcess(String[] tokens) throws IOException {return getUnderlyingFile().runProcess(tokens);}
 
@@ -146,6 +153,7 @@ public class BookmarkFile extends AbstractFile {
     /**
      * Sets the wrapped file's parent.
      * @param parent object to use as the wrapped file's parent.
+     * @see          #getParent()
      */
     public void setParent(AbstractFile parent) {
         getUnderlyingFile().setParent(parent);}
@@ -285,6 +293,7 @@ public class BookmarkFile extends AbstractFile {
      * @param  access     ignored.
      * @param  permission ignored.
      * @return            <code>true</code>.
+     * @see               #setPermission(int,int,boolean)
      */
     public boolean getPermission(int access, int permission) {return true;}
 
@@ -309,6 +318,7 @@ public class BookmarkFile extends AbstractFile {
      * @param  permission ignored.
      * @param  enabled    ignored.
      * @return            <code>false</code>.
+     * @see               #getPermission(int,int)
      */
     public boolean setPermission(int access, int permission, boolean enabled) {return false;}
 

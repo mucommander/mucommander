@@ -43,6 +43,10 @@ public class BonjourMenu extends JMenu implements MenuListener {
 
     private MainFrame mainFrame;
 
+    /**
+     * Creates a new instance of <code>BonjourMenu</code>.
+     * @param mainFrame frame to which the menu will be attached.
+     */
     public BonjourMenu(MainFrame mainFrame) {
         super(Translator.get("bonjour.bonjour_services"));
         this.mainFrame = mainFrame;

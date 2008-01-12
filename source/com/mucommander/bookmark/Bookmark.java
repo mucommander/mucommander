@@ -20,12 +20,16 @@
 package com.mucommander.bookmark;
 
 /**
- * This class represents a bookmark, which is a simple name/location pair:
- * <ul>
- * <li>The name is a String describing the bookmark.</li>
- * <li>The location should designate a path or file URL. The designated location may not exist or may not even be
- * a valid path or URL, so it is up to classes that call {@link #getLocation()} to deal with it appropriately.</li>
- * </ul>
+ * Represents a bookmark.
+ * <p>Bookmarks are simple name/location pairs:
+ *   <ul>
+ *     <li>The name is a String describing the bookmark.</li>
+ *     <li>
+ *       The location should designate a path or file URL. The designated location may not exist or may not even be
+ *       a valid path or URL, so it is up to classes that call {@link #getLocation()} to deal with it appropriately.
+ *     </li>
+ *   </ul>
+ * </p>
  * @author Maxence Bernard
  */
 public class Bookmark implements Cloneable {
@@ -48,6 +52,8 @@ public class Bookmark implements Cloneable {
 
     /**
      * Returns this bookmark's name.
+     * @return this bookmark's name.
+     * @see    #setName(String)
      */
     public String getName() {
         return name;
@@ -57,6 +63,8 @@ public class Bookmark implements Cloneable {
     /**
      * Changes this bookmark's name to the given one and fires an event to registered {@link BookmarkListener}
      * instances.
+     * @param newName bookmark's new name.
+     * @see           #getName()
      */
     public void setName(String newName) {
         // Replace null values by empty strings
@@ -75,6 +83,8 @@ public class Bookmark implements Cloneable {
     /**
      * Returns this bookmark's location which should normally designate a path or file URL, but which isn't
      * necessarily valid nor exists.
+     * @return this bookmark's location.
+     * @see    #setLocation(String)
      */
     public String getLocation() {
         return location;
@@ -84,6 +94,8 @@ public class Bookmark implements Cloneable {
     /**
      * Changes this bookmark's location to the given one and fires an event to registered {@link BookmarkListener}
      * instances.
+     * @param newLocation bookmark's new location.
+     * @see               #getLocation()
      */
     public void setLocation(String newLocation) {
         // Replace null values by empty strings

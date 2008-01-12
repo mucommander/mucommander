@@ -89,6 +89,11 @@ public class BookmarkManager implements VectorChangeListener {
 
     // - Bookmark building -----------------------------------------------------
     // -------------------------------------------------------------------------
+    /**
+     * Passes messages about all known bookmarks to the specified builder.
+     * @param  builder           where to send bookmark building messages.
+     * @throws BookmarkException if an error occurs.
+     */
     public static synchronized void buildBookmarks(BookmarkBuilder builder) throws BookmarkException {
         Iterator iterator;
         Bookmark bookmark;
@@ -168,6 +173,10 @@ public class BookmarkManager implements VectorChangeListener {
 
     // - Bookmarks loading -----------------------------------------------------
     // -------------------------------------------------------------------------
+    /**
+     * Loads all available bookmarks.
+     * @throws Exception if an error occurs.
+     */
     public static synchronized void loadBookmarks() throws Exception {
         InputStream in;
 
@@ -184,14 +193,31 @@ public class BookmarkManager implements VectorChangeListener {
         }
     }
 
-    public static synchronized void readBookmarks(InputStream in) throws Exception {readBookmarks(in, new Loader());}
+    /**
+     * Reads bookmarks from the specified <code>InputStream</code>.
+     * @param  in        where to read bookmarks from.
+     * @throws Exception if an error occurs.
+     */
+    public static void readBookmarks(InputStream in) throws Exception {readBookmarks(in, new Loader());}
 
+    /**
+     * Reads bookmarks from the specified <code>InputStream</code> and passes messages to the specified {@link BookmarkBuilder}.
+     * @param  in        where to read bookmarks from.
+     * @param  builder   where to send builing messages to.
+     * @throws Exception if an error occurs.
+     */
     public static synchronized void readBookmarks(InputStream in, BookmarkBuilder builder) throws Exception {new BookmarkParser().parse(in, builder);}
 
 
 
     // - Bookmarks writing -----------------------------------------------------
     // -------------------------------------------------------------------------
+    /**
+     * Returns a {@link BookmarkBuilder} that will write all building messages as XML to the specified output stream.
+     * @param out where to write the bookmarks' XML content.
+     * @return             a {@link BookmarkBuilder} that will write all building messages as XML to the specified output stream.
+     * @throws IOException if an IO related error occurs.
+     */
     public static BookmarkBuilder getBookmarkWriter(OutputStream out) throws IOException {return new BookmarkWriter(out);}
 
     /**
@@ -230,6 +256,7 @@ public class BookmarkManager implements VectorChangeListener {
      * <p>Important: the returned Vector should not directly be used to
      * add or remove bookmarks, doing so won't trigger any event to registered bookmark listeners.
      * However, it is safe to modify bookmarks individually, events will be properly fired.
+     * @return an {@link AlteredVector} that contains all bookmarks.
      */
     public static synchronized AlteredVector getBookmarks() {
         return bookmarks;
@@ -278,6 +305,7 @@ public class BookmarkManager implements VectorChangeListener {
      * doesn't need to be called for listeners to be garbage collected when they're not used anymore.
      *
      * @param listener the BookmarkListener to add to the list of registered listeners.
+     * @see   #removeBookmarkListener(BookmarkListener)
      */
     public static void addBookmarkListener(BookmarkListener listener) {synchronized(listeners) {listeners.put(listener, null);}}
 
@@ -285,6 +313,7 @@ public class BookmarkManager implements VectorChangeListener {
      * Removes the specified BookmarkListener from the list of registered listeners.
      *
      * @param listener the BookmarkListener to remove from the list of registered listeners.
+     * @see   #addBookmarkListener(BookmarkListener)
      */
     public static void removeBookmarkListener(BookmarkListener listener) {synchronized(listeners) {listeners.remove(listener);}}
 
@@ -322,7 +351,8 @@ public class BookmarkManager implements VectorChangeListener {
      * to temporarily suspend events firing when a lot of them are made, for example when editing the bookmarks list.
      *
      * <p>If true is speicified, any subsequent calls to fireBookmarksChanged will be ignored, until this method is
-     * called again with false.
+     * called again with false.</p>
+     * @param b whether to fire events.
      */
     public static synchronized void setFireEvents(boolean b) {
         if(b) {

@@ -73,6 +73,7 @@ public class BonjourDirectory implements ServiceListener {
      * will be lost and {@link #getServices()} will return an empty array. If currently inactive and true is specified,
      * services discovery will be immediately started but it may take a while (a few seconds at least) to
      * collect services.
+     * @param enabled whether Bonjour services discovery should be enabled.
      */
     public static void setActive(boolean enabled) {
         if(enabled && jmDNS==null) {
@@ -98,7 +99,8 @@ public class BonjourDirectory implements ServiceListener {
     }
 
     /**
-     * Returns true if Bonjour services discovery is currently running.
+     * Returns <code>true</code> if Bonjour services discovery is currently running.
+     * @return <code>true</code> if Bonjour services discovery is currently running, <code>false</code> otherwise.
      */
     public static boolean isActive() {
         return jmDNS!=null;
@@ -108,6 +110,7 @@ public class BonjourDirectory implements ServiceListener {
     /**
      * Returns all currently available Bonjour services. The returned array may be empty but never null.
      * If BonjourDirectory is not currently active ({@link #isActive()}, an empty array will be returned.
+     * @return all currently available Bonjour services
      */
     public static BonjourService[] getServices() {
         BonjourService servicesArray[] = new BonjourService[services.size()];

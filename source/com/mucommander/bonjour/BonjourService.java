@@ -44,6 +44,7 @@ public class BonjourService {
 
     /**
      * Returns the service's name.
+     * @return the service's name.
      */
     public String getName() {
         return name;
@@ -51,6 +52,7 @@ public class BonjourService {
 
     /**
      * Returns the name appended with the URL's protocol.
+     * @return the name appended with the URL's protocol.
      */
     public String getNameWithProtocol() {
         return name+" ["+url.getProtocol().toUpperCase()+"]";
@@ -59,6 +61,7 @@ public class BonjourService {
     
     /**
      * Returns the location of this service.
+     * @return the location of this service.
      */
     public FileURL getURL() {
         return url;

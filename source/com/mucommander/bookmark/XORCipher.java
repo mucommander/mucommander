@@ -40,7 +40,7 @@ import java.io.IOException;
 public class XORCipher {
 
 
-    /** Long enough key (256 bytes) to avoid having too much redundancy in small text strings */
+    /** Long enough key (256 bytes) to avoid having too much redundancy in small text strings. */
     public final static char NOT_SO_PRIVATE_KEY[] = {
         161, 220, 156, 76, 177, 174, 56, 37, 98, 93, 224, 19, 160, 95, 69, 140,
         91, 138, 33, 114, 248, 57, 179, 17, 54, 172, 249, 58, 26, 181, 167, 231,
