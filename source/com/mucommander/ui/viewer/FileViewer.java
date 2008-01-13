@@ -33,10 +33,10 @@ import java.io.IOException;
  */
 public abstract class FileViewer extends JPanel implements ThemeListener {
 	
-    /** ViewerFrame instance that contains this viewer (may be null) */
+    /** ViewerFrame instance that contains this viewer (may be null). */
     protected ViewerFrame frame;
 	
-    /** File currently being viewed */
+    /** File currently being viewed. */
     protected AbstractFile file;
 	
     /**
@@ -50,6 +50,8 @@ public abstract class FileViewer extends JPanel implements ThemeListener {
 
     /**
      * Sets the ViewerFrame (separate window) that contains this FileViewer.
+     * @param frame frame that contains this <code>FileViewer</code>.
+     * @see         #getFrame()
      */
     public void setFrame(ViewerFrame frame) {
         this.frame = frame;
@@ -57,8 +59,12 @@ public abstract class FileViewer extends JPanel implements ThemeListener {
 	
 	
     /**
-     * Returns the frame which contains this viewer, may return <code>null</code>
-     * if the viewer is not inside a ViewerFrame.
+     * Returns the frame which contains this viewer.
+     * <p>
+     * This method may return <code>null</code>if the viewer is not inside a ViewerFrame.
+     * </p>
+     * @return the frame which contains this viewer.
+     * @see    #setFrame(ViewerFrame)
      */
     protected ViewerFrame getFrame() {
         return frame;
@@ -66,9 +72,13 @@ public abstract class FileViewer extends JPanel implements ThemeListener {
 	
 	
     /**
-     * Returns <code>true</code> if the given file can be handled by this FileViewer.<br>
+     * Returns <code>true</code> if the given file can be handled by this FileViewer.
+     * <p>
      * The FileViewer may base its decision only upon the filename and its extension or may
      * wish to read some of the file and compare it to a magic number.
+     * </p>
+     * @param  file file that must be checked.
+     * @return      <code>true</code> if the given file can be handled by this <code>FileViewer</code>, <code>false</code> otherwise.
      */
     public static boolean canViewFile(AbstractFile file) {
         return false;
@@ -76,9 +86,15 @@ public abstract class FileViewer extends JPanel implements ThemeListener {
 	
 	
     /**
-     * Returns maximum file size this FileViewer can handle for sure, -1 if there is no such limit.
+     * Returns maximum file size this FileViewer can handle for sure.
+     * <p>
+     * If there is no maximum limit, returns <code>-1</code>.
+     * </p>
+     * <p>
      * If a user wish to view a file that exceeds this size, he/she will be asked if he/she still
      * wants to view it.
+     * </p>
+     * @return the maximum file size this file viewer can handle.
      */
     public long getMaxRecommendedSize() {
         return -1;
@@ -88,6 +104,7 @@ public abstract class FileViewer extends JPanel implements ThemeListener {
     /**
      * Returns a description of the file currently being viewed which will be used as a window title.
      * This method returns the file's name but it can be overridden to provide more information.
+     * @return this dialog's title.
      */
     public String getTitle() {
         return file.getName();
@@ -97,6 +114,7 @@ public abstract class FileViewer extends JPanel implements ThemeListener {
     /**
      * Sets the file that is to be viewed.
      * This method will automatically be called after a file viewer is created and should not be called directly.
+     * @param file file that is to be viewed.
      */
     public final void setCurrentFile(AbstractFile file) {
         this.file = file;
@@ -132,7 +150,8 @@ public abstract class FileViewer extends JPanel implements ThemeListener {
      * This method is invoked when the specified file is about to be viewed.
      * This method should retrieve the file and do the necessary so that this component can be displayed.
      *
-     * @param file the file that is about to be viewed.
+     * @param  file        the file that is about to be viewed.
+     * @throws IOException if an I/O error occurs.
      */
     public abstract void view(AbstractFile file) throws IOException;
 

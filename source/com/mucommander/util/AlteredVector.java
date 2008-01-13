@@ -24,14 +24,16 @@ import java.util.Vector;
 import java.util.WeakHashMap;
 
 /**
- * AlteredVector is a Vector that is able to notify registered listeners whenever its contents has changed, that is when:
+ * AlteredVector is a Vector that is able to notify registered listeners whenever its contents has changed.
+ * <p>
+ * Events are triggered when:
  * <ul>
  * <li>one or more elements has been added
  * <li>one or more elements has been removed
  * <li>an element has been changed
  * </ul>
- *
- * <p>It is however not aware of modifications that are made to the contained objects themselves.
+ * </p>
+ * <p>It is however not aware of modifications that are made to the contained objects themselves.</p>
  *
  * @author Maxence Bernard
  */
@@ -65,6 +67,7 @@ public class AlteredVector extends Vector {
      * doesn't need to be called for listeners to be garbage collected when they're not used anymore.</p>
      *
      * @param listener the VectorChangeListener to add to the list of registered listeners.
+     * @see            #removeVectorChangeListener(VectorChangeListener)
      */
     public void addVectorChangeListener(VectorChangeListener listener) {
         listeners.put(listener, null);
@@ -74,6 +77,7 @@ public class AlteredVector extends Vector {
      * Removes the specified VectorChangeListener from the list of registered listeners.
      *
      * @param listener the VectorChangeListener to remove from the list of registered listeners.
+     * @see            #addVectorChangeListener(VectorChangeListener)
      */
     public void removeVectorChangeListener(VectorChangeListener listener) {
         listeners.remove(listener);

@@ -45,6 +45,7 @@ public class EditorRegistrar {
 
     /**
      * Registers a FileEditor.
+     * @param factory file editor factory to register.
      */
     public static void registerFileEditor(EditorFactory factory) {editorFactories.add(factory);}
 
