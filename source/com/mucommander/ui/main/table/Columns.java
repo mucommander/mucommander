@@ -22,10 +22,9 @@ import com.mucommander.text.Translator;
 
 /**
  * Defines columns related constants.
- * 
  * @author Maxence Bernard, Nicolas Rinaudo
  */
-public interface Columns {
+public class Columns {
     /** Identifier of the extension column. */
     public final static int EXTENSION                 = 0;
     /** Identifier of the name column. */
@@ -45,7 +44,7 @@ public interface Columns {
     public final static int COLUMN_COUNT              = 7;
 
     /** Raw column names (not localized / not for display) */
-    public static final String[] COLUMN_NAMES = {
+    private static final String[] COLUMN_NAMES = {
         "extension",
         "name",
         "size",
@@ -55,8 +54,21 @@ public interface Columns {
         "group"
     };
 
+    /**
+     * Returns the specified column's identifier as a string.
+     * <p>
+     * Note that the returned identifier should never be used as a displayable label, as it's not localised.
+     * It's only meant for internal use.
+     * </p>
+     * @param  column identifier of the column whose name should be retrieved.
+     * @return        the specified column's identifier as a string.
+     */
+    public static String getColumnName(int column) {
+        return COLUMN_NAMES[column];
+    }
+
     /** Localized column labels */
-    public static final String[] COLUMN_LABELS = {
+    private static final String[] COLUMN_LABELS = {
         Translator.get(COLUMN_NAMES[EXTENSION]),
         Translator.get(COLUMN_NAMES[NAME]),
         Translator.get(COLUMN_NAMES[SIZE]),
@@ -66,11 +78,29 @@ public interface Columns {
         Translator.get(COLUMN_NAMES[GROUP])
     };
 
+    /**
+     * Returns the localised name of the specified column.
+     * @param  column column whose name should be returned.
+     * @return        the localised name of the specified column.
+     */
+    public static String getColumnLabel(int column) {
+        return COLUMN_LABELS[column];
+    }
+
     /** Standard minimum column width */
-    public final static int STANDARD_MINIMUM_WIDTH    = 2 * CellLabel.CELL_BORDER_WIDTH;
+    private final static int STANDARD_MINIMUM_WIDTH    = 2 * CellLabel.CELL_BORDER_WIDTH;
+
+    /**
+     * Returns the minimum width of the specified column.
+     * @param  column column whose minimum width should be returned.
+     * @return        the minimum width of the specified column.
+     */
+    public static int getMinimumColumnWidth(int column) {
+        return MINIMUM_COLUMN_WIDTHS[column];
+    }
 
     /** Minimum width of each column */
-    public static final int MINIMUM_COLUMN_SIZES[] = {
+    private static final int MINIMUM_COLUMN_WIDTHS[] = {
         STANDARD_MINIMUM_WIDTH,         // Extension
         40,                             // Name
         STANDARD_MINIMUM_WIDTH,         // Size
@@ -79,4 +109,9 @@ public interface Columns {
         STANDARD_MINIMUM_WIDTH,         // Owner
         STANDARD_MINIMUM_WIDTH,         // Group 
     };
+
+    /**
+     * Prevents instanciations of the class.
+     */
+    private Columns() {}
 }

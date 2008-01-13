@@ -40,7 +40,7 @@ import java.util.Hashtable;
  *
  * @author Maxence Bernard
  */
-public abstract class SortByAction extends MuAction implements Columns, ActivePanelListener, TableColumnModelListener {
+public abstract class SortByAction extends MuAction implements ActivePanelListener, TableColumnModelListener {
 
     /** Index of the FileTable column this action operates on */ 
     protected int columnIndex;

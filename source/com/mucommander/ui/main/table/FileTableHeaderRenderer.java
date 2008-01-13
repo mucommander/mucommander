@@ -34,7 +34,7 @@ import java.awt.*;
  *
  * @author Maxence Bernard
  */
-public class FileTableHeaderRenderer extends DefaultTableCellRenderer implements Columns {
+public class FileTableHeaderRenderer extends DefaultTableCellRenderer {
 
     private boolean ascendingOrder = false;
     private boolean isCurrent = false;

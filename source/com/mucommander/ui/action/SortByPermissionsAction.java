@@ -19,12 +19,12 @@
 package com.mucommander.ui.action;
 
 import com.mucommander.ui.main.MainFrame;
-import com.mucommander.ui.main.table.FileTable;
+import com.mucommander.ui.main.table.Columns;
 
 import java.util.Hashtable;
 
 /**
- * This action sorts the currently active {@link FileTable} by permissions.
+ * This action sorts the currently active {@link com.mucommander.ui.main.table.FileTable} by permissions.
  * If the table is already sorted by permissions, the sort order will be reversed.
  *
  * @author Maxence Bernard
@@ -32,6 +32,6 @@ import java.util.Hashtable;
 public class SortByPermissionsAction extends SortByAction {
 
     public SortByPermissionsAction(MainFrame mainFrame, Hashtable properties) {
-        super(mainFrame, properties, PERMISSIONS);
+        super(mainFrame, properties, Columns.PERMISSIONS);
     }
 }

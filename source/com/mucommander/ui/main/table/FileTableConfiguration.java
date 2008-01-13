@@ -22,7 +22,7 @@ package com.mucommander.ui.main.table;
  * Describes a file table's initial configuration.
  * @author Nicolas Rinaudo
  */
-public class FileTableConfiguration implements Columns {
+public class FileTableConfiguration {
     // - Instance fields -----------------------------------------------------------------
     // -----------------------------------------------------------------------------------
     /** Each column's visibility status. */
@@ -40,9 +40,9 @@ public class FileTableConfiguration implements Columns {
      * Creates a new file table configuration.
      */
     public FileTableConfiguration() {
-        visibility = new boolean[COLUMN_COUNT];
-        width      = new int[COLUMN_COUNT];
-        order      = new int[COLUMN_COUNT];
+        visibility = new boolean[Columns.COLUMN_COUNT];
+        width      = new int[Columns.COLUMN_COUNT];
+        order      = new int[Columns.COLUMN_COUNT];
     }
 
 

@@ -50,13 +50,13 @@ import java.awt.*;
  *
  * @author Maxence Bernard, Nicolas Rinaudo
  */
-public class FileTableCellRenderer implements Columns, TableCellRenderer, ThemeListener {
+public class FileTableCellRenderer implements TableCellRenderer, ThemeListener {
 
     private FileTable table;
     private FileTableModel tableModel;
 
     /** Custom JLabel that render specific column cells */
-    private CellLabel[] cellLabels = new CellLabel[COLUMN_COUNT];
+    private CellLabel[] cellLabels = new CellLabel[Columns.COLUMN_COUNT];
 
     // - Color definitions -----------------------------------------------------------
     // -------------------------------------------------------------------------------
@@ -147,20 +147,20 @@ public class FileTableCellRenderer implements Columns, TableCellRenderer, ThemeL
         this.tableModel = table.getFileTableModel();
 
         // Create a label for each column
-        for(int i=0; i<COLUMN_COUNT; i++)
+        for(int i=0; i<Columns.COLUMN_COUNT; i++)
             this.cellLabels[i] = new CellLabel();
 
         // Set labels' font.
         setCellLabelsFont(font);
 
         // Set labels' text alignment
-        cellLabels[EXTENSION].setHorizontalAlignment(CellLabel.CENTER);
-        cellLabels[NAME].setHorizontalAlignment(CellLabel.LEFT);
-        cellLabels[SIZE].setHorizontalAlignment(CellLabel.RIGHT);
-        cellLabels[DATE].setHorizontalAlignment(CellLabel.RIGHT);
-        cellLabels[PERMISSIONS].setHorizontalAlignment(CellLabel.LEFT);
-        cellLabels[OWNER].setHorizontalAlignment(CellLabel.LEFT);
-        cellLabels[GROUP].setHorizontalAlignment(CellLabel.LEFT);
+        cellLabels[Columns.EXTENSION].setHorizontalAlignment(CellLabel.CENTER);
+        cellLabels[Columns.NAME].setHorizontalAlignment(CellLabel.LEFT);
+        cellLabels[Columns.SIZE].setHorizontalAlignment(CellLabel.RIGHT);
+        cellLabels[Columns.DATE].setHorizontalAlignment(CellLabel.RIGHT);
+        cellLabels[Columns.PERMISSIONS].setHorizontalAlignment(CellLabel.LEFT);
+        cellLabels[Columns.OWNER].setHorizontalAlignment(CellLabel.LEFT);
+        cellLabels[Columns.GROUP].setHorizontalAlignment(CellLabel.LEFT);
 
         // Listens to certain configuration variables
         ThemeManager.addCurrentThemeListener(this);
@@ -180,9 +180,9 @@ public class FileTableCellRenderer implements Columns, TableCellRenderer, ThemeL
      */
     private void setCellLabelsFont(Font newFont) {
         // Set custom font
-        for(int i=0; i<COLUMN_COUNT; i++) {
+        for(int i=0; i<Columns.COLUMN_COUNT; i++) {
             // No need to set extension label's font as this label renders only icons and no text
-            if(i==EXTENSION)
+            if(i==Columns.EXTENSION)
                 continue;
 
             cellLabels[i].setFont(newFont);
@@ -266,7 +266,7 @@ public class FileTableCellRenderer implements Columns, TableCellRenderer, ThemeL
         label = cellLabels[columnId];
 
         // Extension/icon column: return ImageIcon instance
-        if(columnId == EXTENSION) {
+        if(columnId == Columns.EXTENSION) {
             // Set file icon (parent folder icon if '..' file)
             label.setIcon(
                                    row==0 && tableModel.hasParentFolder()?

@@ -29,14 +29,14 @@ import java.util.Hashtable;
  *
  * @author Maxence Bernard
  */
-public abstract class ToggleColumnAction extends MuAction implements Columns {
+public abstract class ToggleColumnAction extends MuAction {
 
     /** Index of the FileTable column this action operates on */
     protected int columnIndex;
 
     public ToggleColumnAction(MainFrame mainFrame, Hashtable properties, int columnIndex) {
         super(mainFrame, properties, false);
-        setLabel(COLUMN_LABELS[columnIndex]);
+        setLabel(Columns.getColumnLabel(columnIndex));
 
         this.columnIndex = columnIndex;
     }

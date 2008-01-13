@@ -62,16 +62,16 @@ import java.util.WeakHashMap;
  *
  * @author Maxence Bernard
  */
-public class MainMenuBar extends JMenuBar implements ActionListener, MenuListener, Columns {
+public class MainMenuBar extends JMenuBar implements ActionListener, MenuListener {
 
     private MainFrame mainFrame;
 
     // View menu
     private JMenu viewMenu;
     private JMenu themesMenu;
-    private JCheckBoxMenuItem[] sortByItems = new JCheckBoxMenuItem[COLUMN_COUNT];
+    private JCheckBoxMenuItem[] sortByItems = new JCheckBoxMenuItem[Columns.COLUMN_COUNT];
     private JMenu columnsMenu;
-    private JCheckBoxMenuItem[] toggleColumnItems = new JCheckBoxMenuItem[COLUMN_COUNT];
+    private JCheckBoxMenuItem[] toggleColumnItems = new JCheckBoxMenuItem[Columns.COLUMN_COUNT];
     private JCheckBoxMenuItem toggleShowFoldersFirstItem;
     private JCheckBoxMenuItem toggleShowHiddenFiles;
 
@@ -187,13 +187,13 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
 
         viewMenu.add(new JSeparator());
         ButtonGroup buttonGroup = new ButtonGroup();
-        buttonGroup.add(sortByItems[EXTENSION] = MenuToolkit.addCheckBoxMenuItem(viewMenu, ActionManager.getActionInstance(SortByExtensionAction.class, mainFrame), menuItemMnemonicHelper));
-        buttonGroup.add(sortByItems[NAME] = MenuToolkit.addCheckBoxMenuItem(viewMenu, ActionManager.getActionInstance(SortByNameAction.class, mainFrame), menuItemMnemonicHelper));
-        buttonGroup.add(sortByItems[SIZE] = MenuToolkit.addCheckBoxMenuItem(viewMenu, ActionManager.getActionInstance(SortBySizeAction.class, mainFrame), menuItemMnemonicHelper));
-        buttonGroup.add(sortByItems[DATE] = MenuToolkit.addCheckBoxMenuItem(viewMenu, ActionManager.getActionInstance(SortByDateAction.class, mainFrame), menuItemMnemonicHelper));
-        buttonGroup.add(sortByItems[PERMISSIONS] = MenuToolkit.addCheckBoxMenuItem(viewMenu, ActionManager.getActionInstance(SortByPermissionsAction.class, mainFrame), menuItemMnemonicHelper));
-        buttonGroup.add(sortByItems[OWNER] = MenuToolkit.addCheckBoxMenuItem(viewMenu, ActionManager.getActionInstance(SortByOwnerAction.class, mainFrame), menuItemMnemonicHelper));
-        buttonGroup.add(sortByItems[GROUP] = MenuToolkit.addCheckBoxMenuItem(viewMenu, ActionManager.getActionInstance(SortByGroupAction.class, mainFrame), menuItemMnemonicHelper));
+        buttonGroup.add(sortByItems[Columns.EXTENSION] = MenuToolkit.addCheckBoxMenuItem(viewMenu, ActionManager.getActionInstance(SortByExtensionAction.class, mainFrame), menuItemMnemonicHelper));
+        buttonGroup.add(sortByItems[Columns.NAME] = MenuToolkit.addCheckBoxMenuItem(viewMenu, ActionManager.getActionInstance(SortByNameAction.class, mainFrame), menuItemMnemonicHelper));
+        buttonGroup.add(sortByItems[Columns.SIZE] = MenuToolkit.addCheckBoxMenuItem(viewMenu, ActionManager.getActionInstance(SortBySizeAction.class, mainFrame), menuItemMnemonicHelper));
+        buttonGroup.add(sortByItems[Columns.DATE] = MenuToolkit.addCheckBoxMenuItem(viewMenu, ActionManager.getActionInstance(SortByDateAction.class, mainFrame), menuItemMnemonicHelper));
+        buttonGroup.add(sortByItems[Columns.PERMISSIONS] = MenuToolkit.addCheckBoxMenuItem(viewMenu, ActionManager.getActionInstance(SortByPermissionsAction.class, mainFrame), menuItemMnemonicHelper));
+        buttonGroup.add(sortByItems[Columns.OWNER] = MenuToolkit.addCheckBoxMenuItem(viewMenu, ActionManager.getActionInstance(SortByOwnerAction.class, mainFrame), menuItemMnemonicHelper));
+        buttonGroup.add(sortByItems[Columns.GROUP] = MenuToolkit.addCheckBoxMenuItem(viewMenu, ActionManager.getActionInstance(SortByGroupAction.class, mainFrame), menuItemMnemonicHelper));
         MenuToolkit.addMenuItem(viewMenu, ActionManager.getActionInstance(ReverseSortOrderAction.class, mainFrame), menuItemMnemonicHelper);
 
         viewMenu.add(new JSeparator());
@@ -202,12 +202,12 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
 
         viewMenu.add(new JSeparator());
         columnsMenu = MenuToolkit.addMenu(Translator.get("view_menu.show_hide_columns"), null, this);
-        toggleColumnItems[EXTENSION] = MenuToolkit.addCheckBoxMenuItem(columnsMenu, ActionManager.getActionInstance(ToggleExtensionColumnAction.class, mainFrame), null);
-        toggleColumnItems[SIZE] = MenuToolkit.addCheckBoxMenuItem(columnsMenu, ActionManager.getActionInstance(ToggleSizeColumnAction.class, mainFrame), null);
-        toggleColumnItems[DATE] = MenuToolkit.addCheckBoxMenuItem(columnsMenu, ActionManager.getActionInstance(ToggleDateColumnAction.class, mainFrame), null);
-        toggleColumnItems[PERMISSIONS] = MenuToolkit.addCheckBoxMenuItem(columnsMenu, ActionManager.getActionInstance(TogglePermissionsColumnAction.class, mainFrame), null);
-        toggleColumnItems[OWNER] = MenuToolkit.addCheckBoxMenuItem(columnsMenu, ActionManager.getActionInstance(ToggleOwnerColumnAction.class, mainFrame), null);
-        toggleColumnItems[GROUP] = MenuToolkit.addCheckBoxMenuItem(columnsMenu, ActionManager.getActionInstance(ToggleGroupColumnAction.class, mainFrame), null);
+        toggleColumnItems[Columns.EXTENSION] = MenuToolkit.addCheckBoxMenuItem(columnsMenu, ActionManager.getActionInstance(ToggleExtensionColumnAction.class, mainFrame), null);
+        toggleColumnItems[Columns.SIZE] = MenuToolkit.addCheckBoxMenuItem(columnsMenu, ActionManager.getActionInstance(ToggleSizeColumnAction.class, mainFrame), null);
+        toggleColumnItems[Columns.DATE] = MenuToolkit.addCheckBoxMenuItem(columnsMenu, ActionManager.getActionInstance(ToggleDateColumnAction.class, mainFrame), null);
+        toggleColumnItems[Columns.PERMISSIONS] = MenuToolkit.addCheckBoxMenuItem(columnsMenu, ActionManager.getActionInstance(TogglePermissionsColumnAction.class, mainFrame), null);
+        toggleColumnItems[Columns.OWNER] = MenuToolkit.addCheckBoxMenuItem(columnsMenu, ActionManager.getActionInstance(ToggleOwnerColumnAction.class, mainFrame), null);
+        toggleColumnItems[Columns.GROUP] = MenuToolkit.addCheckBoxMenuItem(columnsMenu, ActionManager.getActionInstance(ToggleGroupColumnAction.class, mainFrame), null);
         viewMenu.add(columnsMenu);
         MenuToolkit.addCheckBoxMenuItem(viewMenu, ActionManager.getActionInstance(ToggleAutoSizeAction.class, mainFrame), menuItemMnemonicHelper).setSelected(mainFrame.isAutoSizeColumnsEnabled());
 
@@ -349,8 +349,8 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
         else if(source==columnsMenu) {
             // Update visible columns state: select menu item if column is currently visible in the active table
             FileTable activeTable = mainFrame.getActiveTable();
-            for(int i=0; i<COLUMN_COUNT; i++) {
-                if(i==NAME)     // Name column doesn't have a menu item as it cannot be hidden
+            for(int i=0; i<Columns.COLUMN_COUNT; i++) {
+                if(i==Columns.NAME)     // Name column doesn't have a menu item as it cannot be hidden
                     continue;
                 toggleColumnItems[i].setSelected(activeTable.isColumnVisible(i));
             }

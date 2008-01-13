@@ -35,7 +35,7 @@ import java.util.List;
  * muCommander specific wrapper for the <code>com.mucommander.conf</code> API.
  * @author Nicolas Rinaudo, Maxence Bernard
  */
-public class MuConfiguration implements Columns {
+public class MuConfiguration {
     // - Misc. variables -----------------------------------------------------
     // -----------------------------------------------------------------------
     /** Whether or not to automaticaly check for updates on startup. */
@@ -242,7 +242,7 @@ public class MuConfiguration implements Columns {
     public static final String  DEFAULT_SORT_BY                    = "name";
 
     /** Default visibility for each of the FileTable columns. */
-    public final static boolean[] DEFAULT_SHOW_COLUMN = {
+    private final static boolean[] DEFAULT_SHOW_COLUMN = {
         true,   // Extension
         true,   // Name (not used, always visible)
         true,   // Size
@@ -272,7 +272,7 @@ public class MuConfiguration implements Columns {
      * @return the configuration section corresponding to the specified FileTable
      */
     private static String getColumnSection(int columnIndex, boolean left) {
-        return getFileTableSection(left) + "." + COLUMN_NAMES[columnIndex];
+        return getFileTableSection(left) + "." + Columns.getColumnName(columnIndex);
     }
 
     /**

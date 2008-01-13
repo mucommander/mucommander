@@ -19,6 +19,7 @@
 package com.mucommander.ui.action;
 
 import com.mucommander.ui.main.MainFrame;
+import com.mucommander.ui.main.table.Columns;
 
 import java.util.Hashtable;
 
@@ -31,6 +32,6 @@ import java.util.Hashtable;
 public class TogglePermissionsColumnAction extends ToggleColumnAction {
 
     public TogglePermissionsColumnAction(MainFrame mainFrame, Hashtable properties) {
-        super(mainFrame, properties, PERMISSIONS);
+        super(mainFrame, properties, Columns.PERMISSIONS);
     }
 }

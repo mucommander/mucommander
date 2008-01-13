@@ -60,7 +60,7 @@ import java.util.WeakHashMap;
  *
  * @author Maxence Bernard, Nicolas Rinaudo
  */
-public class FileTable extends JTable implements Columns, MouseListener, MouseMotionListener, KeyListener, FocusListener,
+public class FileTable extends JTable implements MouseListener, MouseMotionListener, KeyListener, FocusListener,
                                                  ActivePanelListener, ConfigurationListener, ThemeListener {
     // - Column sizes --------------------------------------------------------------------
     // -----------------------------------------------------------------------------------
@@ -94,9 +94,9 @@ public class FileTable extends JTable implements Columns, MouseListener, MouseMo
     private int currentRow;
 
     /** Current sort criteria */
-    private int sortByCriterion = NAME;
+    private int sortByCriterion = Columns.NAME;
     /** Ascending/Descending order for all columns */
-    private boolean ascendingOrder[] = new boolean[COLUMN_COUNT];
+    private boolean ascendingOrder[] = new boolean[Columns.COLUMN_COUNT];
 
     // Used when right button is pressed and mouse is dragged
     private boolean markOnRightClick;
@@ -680,7 +680,7 @@ public class FileTable extends JTable implements Columns, MouseListener, MouseMo
 
     /**
      * Shows/hides the specified column. If the current sort criterion corresponds to the specified column and this
-     * column is made invisible, the sort criterion will be reset to {@link #NAME} to prevent the table from being
+     * column is made invisible, the sort criterion will be reset to {@link Columns#NAME} to prevent the table from being
      * sorted by an invisible column/criterion.
      *
      * @param colNum  identifier of the column which should be shown or hidden.
@@ -690,7 +690,7 @@ public class FileTable extends JTable implements Columns, MouseListener, MouseMo
         getFileTableColumnModel().setColumnVisible(colNum, visible);
 
         if(!visible && getSortByCriteria()==colNum)
-            sortBy(NAME);
+            sortBy(Columns.NAME);
     }
 
     public void setColumnModel(TableColumnModel columnModel) {
@@ -743,7 +743,7 @@ public class FileTable extends JTable implements Columns, MouseListener, MouseMo
         // // Adjust row height to match filename editor's height
         // setRowHeight(row, (int)filenameEditor.filenameField.getPreferredSize().getHeight());
         // Starts editing clicked cell's name column
-        editCellAt(currentRow, convertColumnIndexToView(NAME));
+        editCellAt(currentRow, convertColumnIndexToView(Columns.NAME));
         // Saves current/editing row in the filename editor and requests focus on the text field
         filenameEditor.notifyEditingRow(currentRow);
         // Disable editing
@@ -1036,7 +1036,7 @@ public class FileTable extends JTable implements Columns, MouseListener, MouseMo
                 final int column = convertColumnIndexToModel(viewColumn);
                 // Test if the clicked row is current row, if column is name column, and if current row is not '..' file
                 //com.mucommander.Debug.trace("row="+row+" currentRow="+currentRow);
-                if(row==currentRow && !isParentFolderSelected() && (column==NAME || column==DATE || column==PERMISSIONS)) {
+                if(row==currentRow && !isParentFolderSelected() && (column==Columns.NAME || column==Columns.DATE || column==Columns.PERMISSIONS)) {
                     // Test if clicked point is inside the label and abort if not
                     FontMetrics fm = getFontMetrics(cellRenderer.getCellFont());
                     int labelWidth = fm.stringWidth((String)tableModel.getValueAt(row, column));
@@ -1061,14 +1061,14 @@ public class FileTable extends JTable implements Columns, MouseListener, MouseMo
                                 // - isEditing() is true which could happen if multiple clicks were made
     //                            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("row= "+row+" currentRow="+currentRow);
                                 if((System.currentTimeMillis()-lastDoubleClickTimestamp)>1000 && row==currentRow) {
-                                    if(column==NAME) {
+                                    if(column==Columns.NAME) {
                                         if(!isEditing())
                                             editCurrentFilename();
                                     }
-                                    else if(column==DATE) {
+                                    else if(column==Columns.DATE) {
                                         ActionManager.performAction(com.mucommander.ui.action.ChangeDateAction.class, mainFrame);
                                     }
-                                    else if(column==PERMISSIONS) {
+                                    else if(column==Columns.PERMISSIONS) {
                                         if(getSelectedFile().getPermissionSetMask()!=0)
                                             ActionManager.performAction(com.mucommander.ui.action.ChangePermissionsAction.class, mainFrame);
                                     }

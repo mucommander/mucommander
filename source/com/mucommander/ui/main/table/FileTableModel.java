@@ -38,7 +38,7 @@ import java.util.Date;
  *
  * @author Maxence Bernard
  */
-public class FileTableModel extends AbstractTableModel implements Columns, ConfigurationListener {
+public class FileTableModel extends AbstractTableModel implements ConfigurationListener {
 
     /** Cached file instances */
     private AbstractFile cachedFiles[];
@@ -60,7 +60,7 @@ public class FileTableModel extends AbstractTableModel implements Columns, Confi
     private AbstractFile currentFolder;
     private AbstractFile parent;
 
-    private int sortByCriterion = NAME;
+    private int sortByCriterion = Columns.NAME;
     private boolean ascendingOrder = false;
     private boolean foldersFirst = MuConfiguration.getVariable(MuConfiguration.SHOW_FOLDERS_FIRST, MuConfiguration.DEFAULT_SHOW_FOLDERS_FIRST);
 
@@ -80,7 +80,7 @@ public class FileTableModel extends AbstractTableModel implements Columns, Confi
         // gets called for the first time
         cachedFiles = new AbstractFile[0];
         fileArrayIndex = new int[0];
-        cellValuesCache = new Object[0][COLUMN_COUNT-1];
+        cellValuesCache = new Object[0][Columns.COLUMN_COUNT-1];
         rowMarked = new boolean[0];
         markedFiles = new FileSet();
     }
@@ -118,7 +118,7 @@ public class FileTableModel extends AbstractTableModel implements Columns, Confi
         this.markedTotalSize = 0;
 
         // Init and fill cell cache to speed up table even more
-        this.cellValuesCache = new Object[nbRows][COLUMN_COUNT-1];
+        this.cellValuesCache = new Object[nbRows][Columns.COLUMN_COUNT-1];
         fillCellCache();
 
         // Sort the new folder using the current sort criteria, ascending/descending order and 'folders first' value
@@ -136,14 +136,14 @@ public class FileTableModel extends AbstractTableModel implements Columns, Confi
 		
         // Special '..' file
         if(parent!=null) {
-            cellValuesCache[0][NAME-1] = "..";
-            cellValuesCache[0][SIZE-1] = DIRECTORY_SIZE_STRING;
-            cellValuesCache[0][DATE-1] =	CustomDateFormat.format(new Date(currentFolder.getDate()));
+            cellValuesCache[0][Columns.NAME-1] = "..";
+            cellValuesCache[0][Columns.SIZE-1] = DIRECTORY_SIZE_STRING;
+            cellValuesCache[0][Columns.DATE-1] =	CustomDateFormat.format(new Date(currentFolder.getDate()));
             // Don't display parent's permissions as they can have a different format from the folder contents
             // (e.g. for archives) and this looks weird
-            cellValuesCache[0][PERMISSIONS-1] =	"";
-            cellValuesCache[0][OWNER-1] = "";
-            cellValuesCache[0][GROUP-1] = "";
+            cellValuesCache[0][Columns.PERMISSIONS-1] =	"";
+            cellValuesCache[0][Columns.OWNER-1] = "";
+            cellValuesCache[0][Columns.GROUP-1] = "";
         }
 		
         AbstractFile file;
@@ -154,14 +154,14 @@ public class FileTableModel extends AbstractTableModel implements Columns, Confi
         for(int i=parent==null?0:1; i<len; i++) {
             file = getCachedFileAtRow(i);
             int cellIndex = fileArrayIndex[fileIndex]+(parent==null?0:1);
-            cellValuesCache[cellIndex][NAME-1] = file.getName();
-            cellValuesCache[cellIndex][SIZE-1] = file.isDirectory()?DIRECTORY_SIZE_STRING: SizeFormat.format(file.getSize(), (displayCompactSize? SizeFormat.DIGITS_SHORT: SizeFormat.DIGITS_FULL)|(displayCompactSize? SizeFormat.UNIT_SHORT: SizeFormat.UNIT_NONE)| SizeFormat.INCLUDE_SPACE| SizeFormat.ROUND_TO_KB);
-            cellValuesCache[cellIndex][DATE-1] = CustomDateFormat.format(new Date(file.getDate()));
-            cellValuesCache[cellIndex][PERMISSIONS-1] = file.getPermissionsString();
+            cellValuesCache[cellIndex][Columns.NAME-1] = file.getName();
+            cellValuesCache[cellIndex][Columns.SIZE-1] = file.isDirectory()?DIRECTORY_SIZE_STRING: SizeFormat.format(file.getSize(), (displayCompactSize? SizeFormat.DIGITS_SHORT: SizeFormat.DIGITS_FULL)|(displayCompactSize? SizeFormat.UNIT_SHORT: SizeFormat.UNIT_NONE)| SizeFormat.INCLUDE_SPACE| SizeFormat.ROUND_TO_KB);
+            cellValuesCache[cellIndex][Columns.DATE-1] = CustomDateFormat.format(new Date(file.getDate()));
+            cellValuesCache[cellIndex][Columns.PERMISSIONS-1] = file.getPermissionsString();
             if(canGetOwner)
-                cellValuesCache[cellIndex][OWNER-1] = file.getOwner();
+                cellValuesCache[cellIndex][Columns.OWNER-1] = file.getOwner();
             if(canGetGroup)
-                cellValuesCache[cellIndex][GROUP-1] = file.getGroup();
+                cellValuesCache[cellIndex][Columns.GROUP-1] = file.getGroup();
             fileIndex++;
         }
     }
@@ -421,25 +421,25 @@ public class FileTableModel extends AbstractTableModel implements Columns, Confi
     private static int getComparatorCriterion(int sortByCriterion) {
         int comparatorCriterion;
         switch(sortByCriterion) {
-            case NAME:
+            case Columns.NAME:
                 comparatorCriterion = FileComparator.NAME_CRITERION;
                 break;
-            case SIZE:
+            case Columns.SIZE:
                 comparatorCriterion = FileComparator.SIZE_CRITERION;
                 break;
-            case DATE:
+            case Columns.DATE:
                 comparatorCriterion = FileComparator.DATE_CRITERION;
                 break;
-            case EXTENSION:
+            case Columns.EXTENSION:
                 comparatorCriterion = FileComparator.EXTENSION_CRITERION;
                 break;
-            case PERMISSIONS:
+            case Columns.PERMISSIONS:
                 comparatorCriterion = FileComparator.PERMISSIONS_CRITERION;
                 break;
-            case OWNER:
+            case Columns.OWNER:
                 comparatorCriterion = FileComparator.OWNER_CRITERION;
                 break;
-            case GROUP:
+            case Columns.GROUP:
                 comparatorCriterion = FileComparator.GROUP_CRITERION;
                 break;
             default:
@@ -529,11 +529,11 @@ public class FileTableModel extends AbstractTableModel implements Columns, Confi
     //////////////////////////////////////////
 	
     public int getColumnCount() {
-        return COLUMN_COUNT;	// icon, name, size, date, permissions, owner, group
+        return Columns.COLUMN_COUNT; // icon, name, size, date, permissions, owner, group
     }
 
     public String getColumnName(int columnIndex) {
-        return COLUMN_LABELS[columnIndex];
+        return Columns.getColumnLabel(columnIndex);
     }
 
     /**
@@ -555,7 +555,7 @@ public class FileTableModel extends AbstractTableModel implements Columns, Confi
         }
 
         // Icon/extension column, return a null value
-        if(columnIndex==EXTENSION)
+        if(columnIndex==Columns.EXTENSION)
             return null;
 		
         // Decrement column index for cellValuesCache array
@@ -575,7 +575,7 @@ public class FileTableModel extends AbstractTableModel implements Columns, Confi
     public boolean isCellEditable(int rowIndex, int columnIndex) {
         // Name column can temporarily be made editable by FileTable
         // but parent file '..' name should never be editable
-        if(columnIndex==NAME && (parent==null || rowIndex!=0))
+        if(columnIndex==Columns.NAME && (parent==null || rowIndex!=0))
             return nameColumnEditable;
 	
         return false;

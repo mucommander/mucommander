@@ -30,7 +30,7 @@ import java.awt.event.MouseListener;
 /**
  * @author Maxence Bernard
  */
-public class FileTableHeader extends JTableHeader implements Columns, MouseListener {
+public class FileTableHeader extends JTableHeader implements MouseListener {
 
     private FileTable table;
 
@@ -63,22 +63,22 @@ public class FileTableHeader extends JTableHeader implements Columns, MouseListe
         else if(PlatformManager.isRightMouseButton(e)) {
             Class hideActionClass;
             switch(colNum) {
-                case EXTENSION:
+                case Columns.EXTENSION:
                     hideActionClass = ToggleExtensionColumnAction.class;
                     break;
-                case SIZE:
+                case Columns.SIZE:
                     hideActionClass = ToggleSizeColumnAction.class;
                     break;
-                case DATE:
+                case Columns.DATE:
                     hideActionClass = ToggleDateColumnAction.class;
                     break;
-                case PERMISSIONS:
+                case Columns.PERMISSIONS:
                     hideActionClass = TogglePermissionsColumnAction.class;
                     break;
-                case OWNER:
+                case Columns.OWNER:
                     hideActionClass = ToggleOwnerColumnAction.class;
                     break;
-                case GROUP:
+                case Columns.GROUP:
                     hideActionClass = ToggleGroupColumnAction.class;
                     break;
                 default:        // Name column cannot be hidden

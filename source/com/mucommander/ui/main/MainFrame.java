@@ -234,12 +234,12 @@ public class MainFrame extends JFrame implements LocationListener {
     /**
      * Returns the index of the column designated by the given name.
      *
-     * @param column the name of a column, see {@link com.mucommander.ui.main.table.Columns#COLUMN_NAMES} for possible values
+     * @param column the name of a column, see {@link com.mucommander.ui.main.table.Columns#getColumnName(int)} for possible values
      * @return the index of the column, see {@link com.mucommander.ui.main.table.Columns} for possible values
      */
     private static int columnNameToIndex(String column) {
         for(int c=0; c<Columns.COLUMN_COUNT; c++)
-            if(Columns.COLUMN_NAMES[c].equals(column))
+            if(Columns.getColumnName(c).equals(column))
                 return c;
 
         return columnNameToIndex(MuConfiguration.DEFAULT_SORT_BY);
@@ -636,9 +636,9 @@ public class MainFrame extends JFrame implements LocationListener {
         }
 
         // Saves left and right table sort order.
-        MuConfiguration.setVariable(MuConfiguration.LEFT_SORT_BY, Columns.COLUMN_NAMES[table1.getSortByCriteria()]);
+        MuConfiguration.setVariable(MuConfiguration.LEFT_SORT_BY, Columns.getColumnName(table1.getSortByCriteria()));
         MuConfiguration.setVariable(MuConfiguration.LEFT_SORT_ORDER, table1.isSortAscending() ? MuConfiguration.SORT_ORDER_ASCENDING : MuConfiguration.SORT_ORDER_DESCENDING);
-        MuConfiguration.setVariable(MuConfiguration.RIGHT_SORT_BY, Columns.COLUMN_NAMES[table2.getSortByCriteria()]);
+        MuConfiguration.setVariable(MuConfiguration.RIGHT_SORT_BY, Columns.getColumnName(table2.getSortByCriteria()));
         MuConfiguration.setVariable(MuConfiguration.RIGHT_SORT_ORDER, table2.isSortAscending() ? MuConfiguration.SORT_ORDER_ASCENDING : MuConfiguration.SORT_ORDER_DESCENDING);
 
         // Save split pane orientation

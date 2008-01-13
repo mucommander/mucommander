@@ -32,7 +32,7 @@ import java.util.*;
  * Used to keep track of a file table's columns position and visibility settings.
  * @author Nicolas Rinaudo
  */
-public class FileTableColumnModel implements TableColumnModel, Columns, PropertyChangeListener {
+public class FileTableColumnModel implements TableColumnModel, PropertyChangeListener {
     // - Class constants -----------------------------------------------------------------
     // -----------------------------------------------------------------------------------
     /** If {@link #widthCache} is set to this, it needs to be recalulated. */
@@ -48,9 +48,9 @@ public class FileTableColumnModel implements TableColumnModel, Columns, Property
     /** Cache for the table's total width. */
     private int           widthCache = CACHE_OUT_OF_DATE;
     /** All available columns. */
-    private Vector        columns    = new Vector(COLUMN_COUNT);
+    private Vector        columns    = new Vector(Columns.COLUMN_COUNT);
     /** Visibility status of each column. */
-    private boolean[]     visibility = new boolean[COLUMN_COUNT];
+    private boolean[]     visibility = new boolean[Columns.COLUMN_COUNT];
     /** Cache for the number of available columns. */
     private int           countCache;
     /** Whether the column sizes were set already. */
@@ -74,7 +74,7 @@ public class FileTableColumnModel implements TableColumnModel, Columns, Property
         for(int i = 0; i < visibility.length; i++) {
             columns.add(column = new TableColumn(i));
             column.setCellEditor(null);
-            column.setHeaderValue(COLUMN_LABELS[i]);
+            column.setHeaderValue(Columns.getColumnLabel(i));
 
             FileTableHeaderRenderer headerRenderer = null;
             // Mac OS X 10.5 (Leopard) and up uses JTableHeader properties to render sort indicators on table headers.
@@ -91,7 +91,7 @@ public class FileTableColumnModel implements TableColumnModel, Columns, Property
                 column.setWidth(conf.getWidth(i));
 
             // Initialises the column's visibility and minimum width.
-            if(i == NAME) {
+            if(i == Columns.NAME) {
                 visibility[i] = true;
                 if(headerRenderer!=null)
                     headerRenderer.setCurrent(true);
@@ -100,7 +100,7 @@ public class FileTableColumnModel implements TableColumnModel, Columns, Property
                 if((visibility[i] = conf.isVisible(i)))
                     countCache++;
             }
-            column.setMinWidth(MINIMUM_COLUMN_SIZES[i]);
+            column.setMinWidth(Columns.getMinimumColumnWidth(i));
         }
 
         // Sorts the columns.
@@ -117,7 +117,7 @@ public class FileTableColumnModel implements TableColumnModel, Columns, Property
         int                    index;
 
         conf = new FileTableConfiguration();
-        for(int i = 0; i < COLUMN_COUNT; i++) {
+        for(int i = 0; i < Columns.COLUMN_COUNT; i++) {
             column = (TableColumn)columns.get(i);
             index  = column.getModelIndex();
 
