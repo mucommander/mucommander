@@ -36,25 +36,24 @@ import java.util.Random;
  * @author Maxence Bernard
  */
 public class StressTester implements Runnable, ActionListener {
-
-    private static Thread stressThread;
+    private boolean run;
 
     public StressTester() {
-        (stressThread = new Thread(this)).start();
+        run = true;
     }
 
     /**
      * Stops the current stress test.
      */
-    public static void stop() {
-        stressThread = null;
+    public void stop() {
+        run = false;
     }
 
     public void run() {
         Random random = new Random();
         MainFrame mainFrame = WindowManager.getCurrentMainFrame();
 
-        while(stressThread!=null) {
+        while(run) {
             if(random.nextInt(2)==0)
                 ActionManager.performAction(com.mucommander.ui.action.SwitchActiveTableAction.class, mainFrame);    
 
@@ -86,7 +85,7 @@ public class StressTester implements Runnable, ActionListener {
             }
 
             if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Sleeping for a bit...");
-            try { stressThread.sleep(100+random.nextInt(200)); }
+            try {Thread.currentThread().sleep(100+random.nextInt(200)); }
             catch(InterruptedException e) { if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Caught InterruptedException "+e);}
         }
     }
@@ -105,6 +104,7 @@ public class StressTester implements Runnable, ActionListener {
         StressTester instance = new StressTester();
         JDialog stopDialog = new JDialog();
         JButton stopButton = new JButton("Stop");
+        new Thread(instance).start();
         stopButton.addActionListener(instance);
         stopDialog.getContentPane().add(stopButton);
         stopDialog.setSize(new Dimension(80, 60));

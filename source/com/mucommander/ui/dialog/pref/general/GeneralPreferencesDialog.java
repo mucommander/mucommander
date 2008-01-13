@@ -24,6 +24,7 @@ import com.mucommander.ui.dialog.pref.PreferencesDialog;
 import com.mucommander.ui.main.WindowManager;
 
 import java.awt.*;
+import javax.swing.JOptionPane;
 
 /**
  * This is the main preferences dialog that contains all preferences panels organized by tabs.
@@ -33,9 +34,7 @@ public class GeneralPreferencesDialog extends PreferencesDialog {
     // - Singleton --------------------------------------------------------------
     // --------------------------------------------------------------------------
     /** Used to ensure we only have the one preferences dialog open at any given time. */
-    private static       GeneralPreferencesDialog singleton;
-    /** Used to synchronize calls to the singleton. */
-    private static final Object                   singletonLock = new Object();
+    private static GeneralPreferencesDialog singleton;
 
 
 
@@ -80,32 +79,15 @@ public class GeneralPreferencesDialog extends PreferencesDialog {
 
     // - Misc .fields -----------------------------------------------------------
     // --------------------------------------------------------------------------
-    /** Index of the tab that was last selected by the user */
-    private static int lastTabIndex = 0;
+    /** Index of the tab that was last selected by the user. */
+    private static int      lastTabIndex = 0;
     /** Whether or not the dialog should take tab selection events into account. */
-    private boolean listenToChanges;
+    private         boolean listenToChanges;
 
 
 
     // - Initialisation ---------------------------------------------------------
     // --------------------------------------------------------------------------
-    /**
-     * Returns an instance of <code>GeneralPreferencesDialog</code>.
-     * <p>
-     * This will not necessarily create a new instance - if a dialog is already in use, it
-     * will be returned. This is an attempt to ensure that the preferences dialog is not opened
-     * more than once.
-     * </p>
-     * @return an instance of <code>GeneralPreferencesDialog</code>.
-     */
-    public static GeneralPreferencesDialog getDialog() {
-        synchronized(singletonLock) {
-            if(singleton == null)
-                singleton = new GeneralPreferencesDialog();
-            return singleton;
-        }
-    }
-
     /**
      * Creates a new instance of the <code>GeneralPreferencesDialog</code>.
      */
@@ -139,8 +121,7 @@ public class GeneralPreferencesDialog extends PreferencesDialog {
     public void commit() {
         super.commit();
         try {MuConfiguration.write();}
-        // TODO: this should pop an error dialog.
-        catch(Exception e) {}
+        catch(Exception e) {JOptionPane.showMessageDialog(this, Translator.get("generic_error"), Translator.get("error"), JOptionPane.ERROR_MESSAGE);}
     }
 
     /**
@@ -155,7 +136,42 @@ public class GeneralPreferencesDialog extends PreferencesDialog {
      * Releases the singleton.
      */
     public void dispose() {
-        synchronized(singletonLock) {singleton = null;}
+        releaseSingleton(getSelectedPanelIndex());
         super.dispose();
     }
+
+
+
+    // - Singleton management ---------------------------------------------------
+    // --------------------------------------------------------------------------
+    /**
+     * Returns an instance of <code>GeneralPreferencesDialog</code>.
+     * <p>
+     * This will not necessarily create a new instance - if a dialog is already in use, it
+     * will be returned. This is an attempt to ensure that the preferences dialog is not opened
+     * more than once.
+     * </p>
+     * @return an instance of <code>GeneralPreferencesDialog</code>.
+     */
+    public static synchronized GeneralPreferencesDialog getDialog() {
+        // If no instance already exists, create a new one.
+        if(singleton == null)
+            singleton = new GeneralPreferencesDialog();
+
+        return singleton;
+    }
+
+    /**
+     * Releases the singleton.
+     * <p>
+     * After this method has been called, calls to {@link #getDialog()} will
+     * result in creating a new instance of <code>GeneralPreferencesDialog</code>.
+     * </p>
+     * @param lastTab index of the last selected panel.
+     */
+    private static synchronized void releaseSingleton(int lastTab) {
+        singleton    = null;
+        lastTabIndex = lastTab;
+    }
+
 }

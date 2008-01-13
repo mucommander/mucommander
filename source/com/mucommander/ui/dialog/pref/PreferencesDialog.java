@@ -26,7 +26,6 @@ import com.mucommander.ui.layout.XBoxPanel;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -37,7 +36,7 @@ import java.util.Vector;
  * Dialog meant to let users edit software preferences.
  * @author Maxence Bernard, Nicolas Rinaudo
  */
-public class PreferencesDialog extends FocusDialog implements ActionListener, ChangeListener {
+public class PreferencesDialog extends FocusDialog implements ActionListener {
     // - Instance fields --------------------------------------------------------
     // --------------------------------------------------------------------------
     /** Displays the different panels. */
@@ -90,7 +89,6 @@ public class PreferencesDialog extends FocusDialog implements ActionListener, Ch
         // Initialises the tabbed pane.
         prefPanels = new Vector();
         tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-        tabbedPane.addChangeListener(this);
 
         // Adds the tabbed pane.
         contentPane = getContentPane();
@@ -219,16 +217,8 @@ public class PreferencesDialog extends FocusDialog implements ActionListener, Ch
     }
 
     /**
-     * Ignored.
-     * @param newIndex ignored.
+     * Returns the index of the currently selected configuration panel.
+     * @return the index of the currently selected configuration panel.
      */
-    public void tabSelectionChanged(int newIndex) {}
-
-    /**
-     * Reacts to changes in the panel selection.
-     */
-    public void stateChanged(ChangeEvent e) {
-        if (e.getSource() == tabbedPane)
-            tabSelectionChanged(tabbedPane.getSelectedIndex());
-    }
+    public int getSelectedPanelIndex() {return tabbedPane.getSelectedIndex();}
 }
