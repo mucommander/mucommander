@@ -189,7 +189,8 @@ public class CheckVersionDialog extends QuestionDialog implements Runnable {
         int action = getActionValue();
 
         if(action==GO_TO_WEBSITE_ACTION) {
-            PlatformManager.openUrl(FileFactory.getFile(downloadURL));
+            try {PlatformManager.openUrl(FileFactory.getFile(downloadURL));}
+            catch(Exception e) {JOptionPane.showMessageDialog(this, Translator.get("generic_error"), Translator.get("error"), JOptionPane.ERROR_MESSAGE);}
         }
         else if(action==INSTALL_AND_RESTART_ACTION) {
             ProgressDialog progressDialog = new ProgressDialog(mainFrame, Translator.get("Installing new version"));
