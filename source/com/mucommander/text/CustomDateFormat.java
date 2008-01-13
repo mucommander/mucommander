@@ -97,7 +97,7 @@ public class CustomDateFormat implements ConfigurationListener {
     /**
      * Forces CustomDateFormat to update the date format by looking it up in the preferences.
      */
-    public static void updateDateFormat() {
+    public static synchronized void updateDateFormat() {
         dateFormat = createDateFormat();
     }
 
@@ -116,7 +116,7 @@ public class CustomDateFormat implements ConfigurationListener {
      * @return a formatted string representing the given date.
      */
     public static synchronized String format(Date date) {
-        // Calls to SimpleDateFormat MUST be synchronized otherwise if will start throwing exceptions (verified that!),
+        // Calls to SimpleDateFormat MUST be synchronized otherwise it will start throwing exceptions (verified that!),
         // that is why this method is synchronized.
         // Quote from SimpleDateFormat's Javadoc: "Date formats are not synchronized. It is recommended to create
         // separate format instances for each thread. If multiple threads access a format concurrently, 
@@ -136,6 +136,6 @@ public class CustomDateFormat implements ConfigurationListener {
         String var = event.getVariable();
 
         if (var.equals(MuConfiguration.TIME_FORMAT) || var.equals(MuConfiguration.DATE_FORMAT) || var.equals(MuConfiguration.DATE_SEPARATOR))
-            dateFormat = createDateFormat();
+            updateDateFormat();
     }
 }
