@@ -450,23 +450,21 @@ public class PlatformManager implements JavaVersions, OsFamilies, OsVersions {
 
     /**
      * Opens the specified URL in the registered web browser.
-     * @param file URL to open.
+     * @param  file        URL to open.
+     * @throws IOException if an error occurs while opening the specified URL.
      */
-    public static void openUrl(AbstractFile file) {
-        try {
-            String protocol;
+    public static void openUrl(AbstractFile file) throws IOException {
+        String protocol;
 
-            // Makes sure the file is a URL.
-            protocol = file.getURL().getProtocol();
-            if(!protocol.equals(FileProtocols.HTTP) && !protocol.equals(FileProtocols.HTTPS))
-                return;
+        // Makes sure the file is a URL.
+        protocol = file.getURL().getProtocol();
+        if(!protocol.equals(FileProtocols.HTTP) && !protocol.equals(FileProtocols.HTTPS))
+            throw new IllegalArgumentException("Not an HTTP URL: " + file);
 
-            // Opens the file with the registered URL opener.
-            Command command;
-            if((command = CommandManager.getCommandForAlias(CommandManager.URL_OPENER_ALIAS)) != null)
-                ProcessRunner.execute(command.getTokens(file), file);
-        }
-        catch(Exception e) {}
+        // Opens the file with the registered URL opener.
+        Command command;
+        if((command = CommandManager.getCommandForAlias(CommandManager.URL_OPENER_ALIAS)) != null)
+            ProcessRunner.execute(command.getTokens(file), file);
     }
 
     /**
