@@ -52,10 +52,10 @@ public class FileURL implements Cloneable {
     private Credentials credentials;
     private Hashtable properties;
 
-    /** String designating the localhost */
+    /** String designating the localhost. */
     public final static String LOCALHOST = "localhost";
 
-    /** Charset used to encode and decode special characters in URL */
+    /** Charset used to encode and decode special characters in URL. */
     private final static String URL_CHARSET = "UTF-8";
 
 
@@ -68,6 +68,8 @@ public class FileURL implements Cloneable {
 
     /**
      * Creates a new FileURL from the given URL string.
+     * @param url the string to parse as <code>FileURL</code>.
+     * @throws MalformedURLException if the specified string isn't a valid URL.
      */
     public FileURL(String url) throws MalformedURLException {
         //if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Parsing "+url);
@@ -303,6 +305,8 @@ public class FileURL implements Cloneable {
 
     /**
      * Returns the protocol part of this FileURL (e.g. smb). The returned protocol may never be <code>null</code>.
+     * @return the protocol part of this <code>FileURL</code>.
+     * @see    #setProtocol(String)
      */
     public String getProtocol() {
         return protocol;
@@ -310,6 +314,8 @@ public class FileURL implements Cloneable {
 
     /**
      * Sets the protocol part of this FileURL. The specified protocol must not be null.
+     * @param protocol new protocol part for this <code>FileURL</code>.
+     * @see            #getProtocol()
      */
     public void setProtocol(String protocol) {
         this.protocol = protocol;
@@ -348,6 +354,8 @@ public class FileURL implements Cloneable {
     /**
      * Returns the host part of this FileURL (e.g. google.com), <code>null</code> if this FileURL doesn't contain
      * any host.
+     * @return the host part of this <code>FileURL</code>.
+     * @see    #setHost(String)
      */
     public String getHost() {
         return host;
@@ -355,6 +363,8 @@ public class FileURL implements Cloneable {
 
     /**
      * Sets the host part of this FileURL, <code>null</code> for no host.
+     * @param host new host part for this <code>FileURL</code>.
+     * @see        #getHost()
      */
     public void setHost(String host) {
         this.host = host;
@@ -364,6 +374,8 @@ public class FileURL implements Cloneable {
     /**
      * Returns the port specified in this FileURL (e.g. 8080) if there is one, -1 otherwise.
      * (-1 means the protocol's default port).
+     * @return the port specified in this <code>FileURL</code>.
+     * @see    #setPort(int)
      */
     public int getPort() {
         return port;
@@ -371,6 +383,8 @@ public class FileURL implements Cloneable {
 	
     /**
      * Sets a custom port, -1 for no custom port (use the protocol's defaut port).
+     * @param port new port for this <code>FileURL</code>.
+     * @see        #getPort()
      */
     public void setPort(int port) {
         this.port = port;
@@ -380,6 +394,7 @@ public class FileURL implements Cloneable {
     /**
      * Returns the login specified in this FileURL (e.g. maxence for ftp://maxence@mucommander.com),
      * <code>null</code> otherwise.
+     * @return the login specified in this <code>FileURL</code>.
      */
     public String getLogin() {
         return credentials==null?null:credentials.getLogin();
@@ -389,6 +404,7 @@ public class FileURL implements Cloneable {
     /**
      * Returns the password specified in this FileURL (e.g. blah for ftp://maxence:blah@mucommander.com),
      * <code>null</code> otherwise.
+     * @return the password specified in this <code>FileURL</code>.
      */
     public String getPassword() {
         return credentials==null?null:credentials.getPassword();
@@ -408,6 +424,7 @@ public class FileURL implements Cloneable {
     /**
      * Returns true if this FileURL contains credentials. If true is returned, {@link #getCredentials()}
      * will return a non-null value.
+     * @return <code>true</code> if this <code>FileURL</code> contains credentials, <code>false</code> otherwise.
      */
     public boolean containsCredentials() {
         return credentials!=null;
@@ -417,6 +434,8 @@ public class FileURL implements Cloneable {
     /**
      * Returns the credentials (login and password) contained in this FileURL, wrapped in an {@link Credentials} object.
      * Returns null if this FileURL doesn't contain any login or password.
+     * @return the credentials contained by this <code>FileURL</code>, <code>null</code> if none.
+     * @see    #setCredentials(Credentials)
      */
     public Credentials getCredentials() {
         return credentials;
@@ -429,6 +448,7 @@ public class FileURL implements Cloneable {
      *
      * @param credentials the new credentials to use, replacing any existing credentials. If null is passed, existing
      * credentials will be discarded. 
+     * @see #getCredentials()
      */
     public void setCredentials(Credentials credentials) {
         if(credentials==null || credentials.isEmpty())  // Empty credentials are equivalent to null credentials
@@ -440,7 +460,8 @@ public class FileURL implements Cloneable {
 	
     /**
      * Returns the path part of this FileURL (e.g. /webstart/mucommander.jnlp for http://mucommander.com/webstart/mucommander.jnlp).
-     *
+     * @return the path part of this <code>FileURL</code>.
+     * @see    #setPath(String)
      */
     public String getPath() {
         return path;
@@ -448,6 +469,8 @@ public class FileURL implements Cloneable {
 
     /**
      * Sets the path part of this FileURL. The specified path must not be <code>null</code>.
+     * @param path new path part for this <code>FileURL</code>.
+     * @see        #getPath()
      */
     public void setPath(String path) {
         this.path = path;
@@ -463,6 +486,7 @@ public class FileURL implements Cloneable {
      *
      * <p>Note: this method returns a new FileURL instance everytime it is called, and all mutable fields of this FileURL
      * are cloned. Therefore the returned parent can be safely modified without risking to modify other FileURL instances.</p>
+     * @return this <code>FileURL</code>'s parent, <code>null</code> if it doesn't have one.
      */
     public FileURL getParent() {
         // If path equals '/', url has no parent
@@ -545,6 +569,9 @@ public class FileURL implements Cloneable {
     /**
      * Returns the filename part of this FileURL (e.g. mucommander.jnlp for http://mucommander.com/webstart/mucommander.jnlp)
      * <code>null</code> if this FileURL doesn't contain any URL (e.g. http://google.com)
+     * @return the filename part of this <code>FileURL</code>, <code>null</code> if none.
+     * @see    #setPath(String)
+     * @see    #getFilename(boolean)
      */
     public String getFilename() {
         return filename;
@@ -552,6 +579,10 @@ public class FileURL implements Cloneable {
 
     /**
      * Returns the filename part of this FileURL, and if specified, decodes URL-encoded characters (e.g. %5D%35)
+     * @param  urlDecode whether to URL-decode the filename.
+     * @return the filename part of this <code>FileURL</code>, URL-decoded if necessary.
+     * @see    #setPath(String)
+     * @see    #getFilename()
      */
     public String getFilename(boolean urlDecode) {
         try {
@@ -569,6 +600,8 @@ public class FileURL implements Cloneable {
     /**
      * Returns the query part of this FileURL if there is one (e.g. ?dummy=1&void=1 for http://mucommander.com/useless.php?dummy=1&void=1),
      * <code>null</code> otherwise.
+     * @return the query part of this <code>FileURL</code> if present, <code>null</code> otherwise.
+     * @see    #setQuery(String)
      */
     public String getQuery() {
         return query;
@@ -576,6 +609,8 @@ public class FileURL implements Cloneable {
 
     /**
      * Sets the query part of this FileURL, <code>null</code> for no query part.
+     * @param query new query part for this <code>FileURL</code>.
+     * @see         #getQuery()
      */
     public void setQuery(String query) {
         this.query = query;
@@ -584,6 +619,9 @@ public class FileURL implements Cloneable {
 	
     /**
      * Returns the value corresponding to the given property's name, null if the property doesn't exist (has no value).
+     * @param  name name of the property whose value should be retrieved.
+     * @return      the value associated with the specified <code>name</code>, <code>null</code> if not found.
+     * @see         #setProperty(String,String)
      */
     public String getProperty(String name) {
         return properties==null?null:(String)properties.get(name);
@@ -592,6 +630,9 @@ public class FileURL implements Cloneable {
     /**
      * Sets the given properties (name/value pair) to this FileURL.
      * Properties can be used as a way to pass parameters to AbstractFile constructors.
+     * @param name  name of the property to set.
+     * @param value value for the property.
+     * @see         #getProperty(String)
      */
     public void setProperty(String name, String value) {
         if(properties==null)
@@ -603,13 +644,16 @@ public class FileURL implements Cloneable {
 
     /**
      * Returns an Enumeration of property keys, or null if this FileURL contains no keys.
+     * @return an <code>Enumaration</code> on all available property names, <code>null</code> if none.
      */
     public Enumeration getPropertyKeys() {
+        // NOTE: might be cleaner to return an empty enumeration?
         return properties==null?null:properties.keys();
     }
 
     /**
      * Copies the properties of the given FileURL into this FileURL.
+     * @param url url whose properties should be copied.
      */
     public void copyProperties(FileURL url) {
         Enumeration propertyKeys = url.getPropertyKeys();
@@ -630,6 +674,7 @@ public class FileURL implements Cloneable {
      * Login and password in URLs should never be visible to the end user.
      * @param maskPassword if <code>true</code> (and includeCredentials param too), password will be replaced by '*' characters. This
      * can be used to display a full URL to the end user without displaying the actual password.
+     * @return a string representation of this <code>FileURL</code>.
      */
     public String toString(boolean includeCredentials, boolean maskPassword) {
         return reconstructURL(this.path, includeCredentials, maskPassword);
@@ -640,6 +685,7 @@ public class FileURL implements Cloneable {
      *
      * @param includeCredentials if <code>true</code>, login and password (if any) will be included in the returned URL and not masked.
      * Login and password in URLs should never be visible to the end user.
+     * @return a string representation of this <code>FileURL</code>.
      */
     public String toString(boolean includeCredentials) {
         return toString(includeCredentials, false);
@@ -709,8 +755,9 @@ public class FileURL implements Cloneable {
 
     /**
      * Test method.
+     * @param args command line arguments.
      */
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         String urls[] = new String[]{
             "http://google.com",
             "http://mucommander.com",
@@ -824,15 +871,18 @@ public class FileURL implements Cloneable {
 
 
     /**
-     * Tests FileURL instances for equality:
-     * <ul
+     * Tests FileURL instances for equality.
+     * <p>
+     * Two <code>FileURL</code> instances are said to be equal if:
+     * <ul>
      * <li>credentials (login and password) are not taken into account when testing equality
      * <li>case is ignored
      * <li>there can be a trailing slash or backslash difference in the path of 2 otherwise identical URLs,
      * true will still be returned
      * </ul>
-     *
-     * @return true if both FileURL instances are equal.
+     * </p>
+     * @param  o object against which to compare this <code>FileURL</code>.
+     * @return   true if both FileURL instances are equal.
      */
     public boolean equals(Object o) {
         if(o==null || !(o instanceof FileURL))

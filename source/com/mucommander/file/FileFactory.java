@@ -85,7 +85,7 @@ import java.util.*;
  *   <li>{@link com.mucommander.file.impl.trash.OSXTrashProvider OS X} trash.</li>
  *   <li>{@link com.mucommander.file.impl.trash.KDETrashProvider KDE} trash.</li>
  * </ul>
- * Note that <code<FileFactory</code> does not automatically register a trash provider, and application
+ * Note that <code>FileFactory</code> does not automatically register a trash provider, and application
  * writers must do so themselves depending on their own needs.
  * </p>
  *
@@ -269,18 +269,25 @@ public class FileFactory {
 
     /**
      * Registers a new archive format.
+     * @param mapping new mapping to register.
      */
     public static void registerArchiveFormat(ArchiveFormatMapping mapping) {
             archiveFormatMappingsV.add(mapping);
             updateArchiveFormatMappingsArray();
     }
 
+    /**
+     * Registers a new archive format.
+     * @param provider class used to create instances of the new archive format.
+     * @param filter   filter that files must match to be considered of the new format.
+     */
     public static void registerArchiveFormat(ArchiveFormatProvider provider, FilenameFilter filter) {
         registerArchiveFormat(new ArchiveFormatMapping(provider, filter));
     }
 
     /**
      * Removes any archive format that might have been registered to the specified extension.
+     * @param mapping archive format mapping to unregister.
      */
     public static void unregisterArchiveFileFormat(ArchiveFormatMapping mapping) {
         int index = archiveFormatMappingsV.indexOf(mapping);
@@ -366,6 +373,7 @@ public class FileFactory {
      *
      * @param absPath the absolute path to the file
      * @param parent the returned file's parent
+     * @return an instance of <code>AbstractFile</code> for the specified absolute path.
      *
      * @throws java.io.IOException if something went wrong during file or file url creation.
      * @throws AuthException if additionnal authentication information is required to create the file
@@ -418,6 +426,7 @@ public class FileFactory {
      *
      * @param fileURL the file URL representing the file to be created
      * @param parent the parent AbstractFile to use as the created file's parent, can be <code>null</code>
+     * @return an instance of {@link AbstractFile} for the given {@link FileURL}.
      *
      * @throws java.io.IOException if something went wrong during file creation.
      */
@@ -626,6 +635,7 @@ public class FileFactory {
      * Returns true if the given filename's extension matches one of the registered archive formats.
      *
      * @param filename the filename to test
+     * @return <code>true</code> if the specified filename is a known archive file name, <code>false</code> otherwise.
      */
     public static boolean isArchiveFilename(String filename) {return getArchiveFormatProvider(filename) != null;}
 
