@@ -47,6 +47,7 @@ public class GoToRootAction extends GoToParentAction {
             folderPanel.tryChangeCurrentFolder(currentFolder.getRoot());
         }
         catch(IOException e) {
+            reportGenericError();
             if(Debug.ON) Debug.trace("Failed to retrieve root folder for : "+currentFolder+" :"+e);
         }
     }

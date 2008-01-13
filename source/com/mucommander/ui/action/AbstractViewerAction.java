@@ -71,7 +71,7 @@ abstract class AbstractViewerAction extends SelectedFileAction implements Config
                 // If it's local, run the custom editor on it.
                 if(file.getURL().getProtocol().equals(FileProtocols.FILE) && (file instanceof LocalFile)) {
                     try {ProcessRunner.execute(customCommand.getTokens(file), file);}
-                    catch(Exception e) {}
+                    catch(Exception e) {reportGenericError();}
                 }
                 // If it's distant, copies it locally before running the custom editor on it.
                 else {

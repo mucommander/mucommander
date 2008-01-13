@@ -57,8 +57,7 @@ public class OpenNativelyAction extends MuAction {
         else {
             // Tries to execute file with native file associations
             try {PlatformManager.open(selectedFile);}
-            // Ignores errors here are there really isn't anything we can do.
-            catch(IOException e) {}
+            catch(IOException e) {reportGenericError();}
         }
     }
 }

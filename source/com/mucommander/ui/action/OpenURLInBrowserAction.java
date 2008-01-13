@@ -24,6 +24,7 @@ import com.mucommander.file.FileFactory;
 import com.mucommander.ui.main.MainFrame;
 
 import java.util.Hashtable;
+import javax.swing.JOptionPane;
 
 /**
  * This action opens a URL in the system's default browser. This action is enabled only if the OS/Window manager
@@ -53,8 +54,10 @@ public class OpenURLInBrowserAction extends MuAction {
         if(url!=null && (url instanceof String)) {
             AbstractFile file = FileFactory.getFile((String)url);
 
-            if(file!=null)
-                PlatformManager.openUrl(file);
+            if(file != null) {
+                try {PlatformManager.openUrl(file);}
+                catch(Exception e) {reportGenericError();}
+            }
         }
     }
 }

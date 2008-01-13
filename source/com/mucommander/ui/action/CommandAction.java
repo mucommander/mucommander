@@ -74,6 +74,7 @@ public class CommandAction extends MuAction {
         if(selectedFiles.getBaseFolder().getURL().getProtocol().equals(FileProtocols.FILE) && (selectedFiles.getBaseFolder() instanceof LocalFile)) {
             try {ProcessRunner.execute(command.getTokens(selectedFiles), selectedFiles.getBaseFolder());}
             catch(Exception e) {
+                reportGenericError();
                 if(Debug.ON) {
                     Debug.trace("Failed to execute command: " + command.getCommand());
                     Debug.trace(e);

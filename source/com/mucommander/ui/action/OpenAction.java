@@ -81,8 +81,7 @@ public class OpenAction extends MuAction {
         // Opens local files using their native associations.
         else if(file.getURL().getProtocol().equals(FileProtocols.FILE) && (file instanceof LocalFile)) {
             try {PlatformManager.open(file);}
-            // Ignores errors here are there's really nothing we can do.
-            catch(IOException e) {}
+            catch(IOException e) {reportGenericError();}
         }
 
         // Copies non-local file in a temporary local file and opens them using their native association.
