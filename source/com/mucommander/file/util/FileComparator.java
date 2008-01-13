@@ -51,19 +51,19 @@ public class FileComparator implements Comparator {
     /** Specifies whether directories should precede files or be handled as regular files */
     private boolean directoriesFirst;
 
-    /** Criterion for filename comparison */
+    /** Criterion for filename comparison. */
     public final static int NAME_CRITERION = 0;
-    /** Criterion for file size comparison */
+    /** Criterion for file size comparison. */
     public final static int SIZE_CRITERION = 1;
-    /** Criterion for file date comparison */
+    /** Criterion for file date comparison. */
     public final static int DATE_CRITERION = 2;
-    /** Criterion for file extension comparison */
+    /** Criterion for file extension comparison. */
     public final static int EXTENSION_CRITERION = 3;
-    /** Criterion for file permissions comparison */
+    /** Criterion for file permissions comparison. */
     public final static int PERMISSIONS_CRITERION = 4;
-    /** Criterion for owner comparison */
+    /** Criterion for owner comparison. */
     public final static int OWNER_CRITERION = 5;
-    /** Criterion for group comparison */
+    /** Criterion for group comparison. */
     public final static int GROUP_CRITERION = 6;
 
 

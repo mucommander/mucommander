@@ -201,7 +201,7 @@ public class ResourceLoader {
     /**
      * Returns an {@link AbstractFile} to the root package of the given <code>Class</code>. For example, if the
      * specified <code>Class</code> is <code>java.lang.Object</code>'s, the returned file will be the Java runtime
-     * JAR file, which on most platforms is <code>$JAVA_HOME/lib/jre/rt.jar</code>.<br/>
+     * JAR file, which on most platforms is <code>$JAVA_HOME/lib/jre/rt.jar</code>.<br>
      * The returned file can be used to list or manipulate all resource files contained in a particular classpath's
      * location, including the .class files.
      *

@@ -25,27 +25,27 @@ package com.mucommander.file.util;
  */
 public interface FileMonitorConstants {
 
-    /** File date attribute, as returned by {@link com.mucommander.file.AbstractFile#getDate()} */
+    /** File date attribute, as returned by {@link com.mucommander.file.AbstractFile#getDate()}. */
     public final static int DATE_ATTRIBUTE = 1;
 
-    /** File size attribute, as returned by {@link com.mucommander.file.AbstractFile#getSize()} */
+    /** File size attribute, as returned by {@link com.mucommander.file.AbstractFile#getSize()}. */
     public final static int SIZE_ATTRIBUTE = 2;
 
-    /** File permissions attribute, as returned by {@link com.mucommander.file.AbstractFile#getPermissions()} */
+    /** File permissions attribute, as returned by {@link com.mucommander.file.AbstractFile#getPermissions()}. */
     public final static int PERMISSIONS_ATTRIBUTE = 4;
 
-    /** File 'is directory' attribute, as returned by {@link com.mucommander.file.AbstractFile#isDirectory()} */
+    /** File 'is directory' attribute, as returned by {@link com.mucommander.file.AbstractFile#isDirectory()}. */
     public final static int IS_DIRECTORY_ATTRIBUTE = 8;
 
-    /** File 'exists' attribute, as returned by {@link com.mucommander.file.AbstractFile#exists()} */
+    /** File 'exists' attribute, as returned by {@link com.mucommander.file.AbstractFile#exists()}. */
     public final static int EXISTS_ATTRIBUTE = 16;
 
-    /** Default attribute set: {@link #DATE_ATTRIBUTE} */
+    /** Default attribute set: {@link #DATE_ATTRIBUTE}. */
     public final static int DEFAULT_ATTRIBUTES = DATE_ATTRIBUTE;
 
-    /** Designates all attributes */
+    /** Designates all attributes. */
     public final static int ALL_ATTRIBUTES = DATE_ATTRIBUTE|SIZE_ATTRIBUTE|PERMISSIONS_ATTRIBUTE|IS_DIRECTORY_ATTRIBUTE|EXISTS_ATTRIBUTE;
 
-    /** Default poll period in milliseconds */
+    /** Default poll period in milliseconds. */
     public final static long DEFAULT_POLL_PERIOD = 10000;
 }

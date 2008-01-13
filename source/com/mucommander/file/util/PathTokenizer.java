@@ -59,19 +59,19 @@ public class PathTokenizer implements Enumeration {
     /** Separator characters */
     private String separators;
 
-    /** True if this PathTokenizer tokenizes the path in reverse order, from right to left */
+    /** True if this PathTokenizer tokenizes the path in reverse order, from right to left. */
     private boolean reverseOrder;
 
-    /** Path tokens: separators and filenames */
+    /** Path tokens: separators and filenames. */
     private String[] tokens;
-    /** Current index in the token array */
+    /** Current index in the token array. */
     private int currentIndex;
-    /** Path part that has been tokenized */
+    /** Path part that has been tokenized. */
     private StringBuffer currentPath;
-    /** Last separators token */ 
+    /** Last separators token. */ 
     private String lastSeparator;
 
-    /** Default separator characters */
+    /** Default separator characters. */
     public final static String DEFAULT_SEPARATORS = "/\\";
 
 
@@ -148,7 +148,8 @@ public class PathTokenizer implements Enumeration {
 
 
     /**
-     * Returns true if this PathTokenizer has more filename tokens.
+     * Returns <code>true</code> if this PathTokenizer has more filename tokens.
+     * @return <code>true</code> if this PathTokenizer has more filename tokens, <code>false</code> otherwise.
      */
     public boolean hasMoreFilenames() {
         return currentIndex<tokens.length;
@@ -191,6 +192,7 @@ public class PathTokenizer implements Enumeration {
      * {@link #nextFilename()} and separator string returned by {@link #getLastSeparator()}.<br>
      * If this PathTokenizer operates in reverse order, the returned path is the path part that has not yet been 
      * tokenized.
+     * @return the current path part that has been tokenized.
      */
     public String getCurrentPath() {
         return currentPath.toString();
@@ -205,6 +207,7 @@ public class PathTokenizer implements Enumeration {
      *
      * <p>Initially, before any calls to {@link #nextFilename()} have been made, this method will return any leading
      * separator string in the path string, or an empty string if the path doesn't start with a separator.
+     * @return the last separator string that appeared in the path.
      */
     public String getLastSeparator() {
         return lastSeparator;

@@ -158,6 +158,7 @@ public class FileMonitor implements FileMonitorConstants, Runnable {
      * doesn't need to be called for listeners to be garbage collected when they're not used anymore.</p>
      *
      * @param listener the FileChangeListener to add to the list of registered listeners.
+     * @see   #removeFileChangeListener(FileChangeListener)
      */
     public void addFileChangeListener(FileChangeListener listener) {
         listeners.put(listener, null);
@@ -167,6 +168,7 @@ public class FileMonitor implements FileMonitorConstants, Runnable {
      * Removes the given {@link FileChangeListener} instance to the list of registered listeners.
      *
      * @param listener the FileChangeListener to remove from the list of registered listeners.
+     * @see   #addFileChangeListener(FileChangeListener)
      */
     public void removeFileChangeListener(FileChangeListener listener) {
         listeners.remove(listener);

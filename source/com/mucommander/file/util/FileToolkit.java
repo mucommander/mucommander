@@ -134,6 +134,8 @@ public class FileToolkit {
 
     /**
      * Recursively calculates the total size for the given files and folders.
+     * @param  files files and folders that need to be explored and weighed.
+     * @return       the specified files total size.
      */
     public static long getFileSize(AbstractFile files[]) {
         AbstractFile file;
@@ -159,8 +161,10 @@ public class FileToolkit {
 
     /**
      * Recursively calculates the total number of files.
+     * @param  files files and folders that need to be explored and counted.
+     * @return       the total number of files contained in the specified array.
      */
-    public static int getFileCount(AbstractFile files[]) {
+    public static int getFileCount(AbstractFile[] files) {
         AbstractFile file;
         int total = 0;
         for(int i=0; i<files.length; i++) {
