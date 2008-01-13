@@ -125,14 +125,6 @@ public class GeneralPreferencesDialog extends PreferencesDialog {
     }
 
     /**
-     * Listens to tab selection changes in order to store the last tab selected by the user.
-     */
-    public void tabSelectionChanged(int newIndex) {
-        if(listenToChanges)
-            lastTabIndex = newIndex;
-    }
-
-    /**
      * Releases the singleton.
      */
     public void dispose() {
