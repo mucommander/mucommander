@@ -404,6 +404,43 @@ public abstract class MuAction extends AbstractAction {
     }
 
 
+    /////////////////////
+    // Error reporting //
+    /////////////////////
+    /**
+     * Opens a dialog with a generic error message.
+     * <p>
+     * This is a convenience method and is strictly equivalent to calling
+     * <code>{@link reportError(String,String) reportError(}{@link Translator#get(String) Translator.get(}("error"),
+     * {@link Translator#get(String) Translator.get(}("generic_error"))<code>
+     * </p>
+     */
+    protected void reportGenericError() {
+        reportError(Translator.get("error"), Translator.get("generic_error"));
+    }
+
+    /**
+     * Opens a dialog with the specified error message.
+     * <p>
+     * This is a convenience method and is strictly equivalent to calling
+     * <code>{@link reportError(String,String) reportError(}{@link Translator#get(String) Translator.get(}("error"), message)</code>
+     * </p>
+     * @param message error message to display.
+     */
+    protected void reportError(String message) {
+        reportError(Translator.get("error"), message);
+    }
+
+    /**
+     * Opens an error dialog with the specified title and message.
+     * @param title   title for the error dialog.
+     * @param message message contained by the error dialog.
+     */
+    protected void reportError(String title, String message) {
+        JOptionPane.showMessageDialog(mainFrame, message, title, JOptionPane.ERROR_MESSAGE);
+    }
+
+
     ///////////////////////////////////
     // AbstractAction implementation //
     ///////////////////////////////////
