@@ -197,17 +197,22 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
     private void setTableHeaderRenderingProperties() {
         if(usesTableHeaderRenderingProperties()) {
             JTableHeader tableHeader = getTableHeader();
+            boolean isActiveTable = isActiveTable();
 
-            // Highlights the selected column. If this table is not currently active, the property is cleared to remove
-            // the highlighting effect.
-            // However, clearing the property does not yield the desired behavior as it does not restore the table header
-            // back to normal. This looks like a bug in Apple's implementation. 
-            tableHeader.putClientProperty("JTableHeader.selectedColumn", isActiveTable()
+            // Highlights the selected column
+            tableHeader.putClientProperty("JTableHeader.selectedColumn", isActiveTable
                     ?new Integer(getColumnPosition(getSortByCriteria()))
                     :null);
 
             // Displays an ascending/descending arrow
-            tableHeader.putClientProperty("JTableHeader.sortDirection", isSortAscending()?"ascending":"decending");
+            tableHeader.putClientProperty("JTableHeader.sortDirection", isActiveTable
+                    ?isSortAscending()?"ascending":"decending"      // decending is mispelled but this is OK
+                    :null);
+
+            // Note: if this table is not currently active, properties are cleared to remove the highlighting effect.
+            // However, clearing the properties does not yield the desired behavior as it does not restore the table
+            // header back to normal. This looks like a bug in Apple's implementation.
+
         }
     }
 
@@ -616,10 +621,10 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
             ((FileTableHeaderRenderer)cm.getColumn(convertColumnIndexToView(oldSortByCriterion)).getHeaderRenderer()).setCurrent(false);
             (headerRenderer = (FileTableHeaderRenderer)cm.getColumn(convertColumnIndexToView(sortByCriterion)).getHeaderRenderer()).setCurrent(true);
             headerRenderer.setSortOrder(ascending);
-
-            // Repaint header
-            getTableHeader().repaint();
         }
+
+        // Repaint header
+        getTableHeader().repaint();
 
         // Sorts table while keeping current file selected
         sortTable();
@@ -720,11 +725,11 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
 
             // Change current header's arrow direction
             currentHeaderRenderer.setSortOrder(ascendingOrder[sortByCriterion]);
-
-            // Repaint header
-            getTableHeader().repaint();
         }
 
+        // Repaint header
+        getTableHeader().repaint();
+        
         // Sorts table while keeping current file selected
         sortTable();
     }
