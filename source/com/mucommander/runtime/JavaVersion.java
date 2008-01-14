@@ -38,12 +38,18 @@ public class JavaVersion extends ComparableRuntimeProperty implements JavaVersio
         super(stringRepresentation, intValue);
     }
 
+
+    ////////////////////
+    // Static methods //
+    ////////////////////
+
     /**
-     * Determines the current value by parsing the system property. This method is called automatically by this class
-     * the first time the current value is accessed. However, this method has been made public to allow to force the
-     * initialization if it needs to be done at a predictable time.
+     * Determines the current value by parsing the corresponding system property. This method is called automatically
+     * by this class the first time the current value is accessed. However, this method has been made public to allow
+     * to force the initialization if it needs to happen at a predictable time.
      */
     public static void init() {
+        // Note: performing the initialization outside of the class static block avoids cyclic dependency problems.
         if(currentValue==null) {
             currentValue = parseSystemProperty(getRawSystemProperty());
             if(Debug.ON) Debug.trace("Current Java version: "+ currentValue);
@@ -118,9 +124,9 @@ public class JavaVersion extends ComparableRuntimeProperty implements JavaVersio
     }
 
 
-    ///////////////////////////////////////////////
+    //////////////////////////////////////////////
     // ComparableRuntimeProperty implementation //
-    ///////////////////////////////////////////////
+    //////////////////////////////////////////////
 
     protected RuntimeProperty getCurrentValue() {
         return getCurrent();
