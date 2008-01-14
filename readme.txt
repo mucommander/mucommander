@@ -180,7 +180,7 @@ Known issues:
   will default to the first in the list.
 - Authentication issues when using several sets of credentials (login/password)
   on the same server.
-- Untrusted HTTPS connections are allowed without warning.
+- Untrusted HTTPS connections are allowed without a warning.
 
 
 Command Line Interface
