@@ -18,11 +18,12 @@
 
 package com.mucommander.ui.main;
 
-import com.mucommander.PlatformManager;
 import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.ArchiveEntryFile;
 import com.mucommander.file.FileProtocols;
+import com.mucommander.runtime.JavaVersions;
+import com.mucommander.runtime.OsVersions;
 import com.mucommander.ui.action.ActionKeymap;
 import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.action.CloseWindowAction;
@@ -536,8 +537,8 @@ public class MainFrame extends JFrame implements LocationListener {
             title += " ["+(mainFrames.indexOf(this)+1)+"]";
         setTitle(title);
 
-        // Use new Window decorations introduced in Mac OS X 10.5 (Leopard)
-        if(PlatformManager.MAC_OS_X_10_5.isCurrentOrHigher()) {
+        // Use new Window decorations introduced in Mac OS X 10.5 (Leopard) with Java 1.5 and up
+        if(OsVersions.MAC_OS_X_10_5.isCurrentOrHigher() && JavaVersions.JAVA_1_5.isCurrentOrHigher()) {
             // Displays the document icon in the window title bar, works only for local files
             AbstractFile currentFolder = activeTable.getCurrentFolder();
             Object javaIoFile;

@@ -30,6 +30,8 @@ import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileProtocols;
 import com.mucommander.file.FileURL;
 import com.mucommander.file.RootFolders;
+import com.mucommander.runtime.JavaVersions;
+import com.mucommander.runtime.OsVersions;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.OpenLocationAction;
 import com.mucommander.ui.button.PopupButton;
@@ -94,8 +96,8 @@ public class DrivePopupButton extends PopupButton implements LocationListener, B
         // Listen to configuration changes to update the drive if the system file icons policy has changed 
         MuConfiguration.addConfigurationListener(this);
 
-        // Use new JButton decorations introduced in Mac OS X 10.5 (Leopard)
-        if(PlatformManager.MAC_OS_X_10_5.isCurrentOrHigher()) {
+        // Use new JButton decorations introduced in Mac OS X 10.5 (Leopard) with Java 1.5 and up
+        if(OsVersions.MAC_OS_X_10_5.isCurrentOrHigher() && JavaVersions.JAVA_1_5.isCurrentOrHigher()) {
             setMargin(new Insets(6,8,6,8));
             putClientProperty("JComponent.sizeVariant", "small");
             putClientProperty("JButton.buttonType", "textured");

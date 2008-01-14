@@ -26,6 +26,7 @@ import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.util.FileSet;
 import com.mucommander.job.MoveJob;
+import com.mucommander.runtime.JavaVersions;
 import com.mucommander.text.CustomDateFormat;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionKeymap;
@@ -219,13 +220,13 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
     /**
      * Returns <code>true</code> if the current platform is capable of indicating the sort criterion and sort order
      * on the table headers by setting client properties, instead of using a {@link FileTableHeaderRenderer custom header renderer}.
-     * At the moment this method returns <code>true</code> only under Mac OS X 10.5 (Leopard) and up.
+     * At the moment this method returns <code>true</code> only under Mac OS X 10.5 (and up) and with Java 1.5 (and up).
      *  
      * @return true if the current platform is capable of indicating the sort criterion and sort order on the table
      * headers by setting client properties.
      */
     static boolean usesTableHeaderRenderingProperties() {
-        return PlatformManager.MAC_OS_X_10_5.isCurrentOrHigher();
+        return PlatformManager.MAC_OS_X_10_5.isCurrentOrHigher() && JavaVersions.JAVA_1_5.isCurrentOrHigher();
     }
 
 

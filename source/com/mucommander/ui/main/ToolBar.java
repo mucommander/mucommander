@@ -28,6 +28,8 @@ import com.mucommander.file.FileFactory;
 import com.mucommander.file.FileURL;
 import com.mucommander.file.util.ResourceLoader;
 import com.mucommander.io.BackupInputStream;
+import com.mucommander.runtime.JavaVersions;
+import com.mucommander.runtime.OsVersions;
 import com.mucommander.ui.action.*;
 import com.mucommander.ui.button.NonFocusableButton;
 import com.mucommander.ui.button.PopupButton;
@@ -207,8 +209,8 @@ public class ToolBar extends JToolBar implements ConfigurationListener, MouseLis
             }
         }
 
-        // Use new JButton decorations introduced in Mac OS X 10.5 (Leopard)
-        if(PlatformManager.MAC_OS_X_10_5.isCurrentOrHigher()) {
+        // Use new JButton decorations introduced in Mac OS X 10.5 (Leopard) with Java 1.5 and up
+        if(OsVersions.MAC_OS_X_10_5.isCurrentOrHigher() && JavaVersions.JAVA_1_5.isCurrentOrHigher()) {
             int nbComponents = getComponentCount();
             Component comp;
             boolean hasPrevious, hasNext;
@@ -263,8 +265,8 @@ public class ToolBar extends JToolBar implements ConfigurationListener, MouseLis
         if(scaleFactor!=1.0f)
             button.setIcon(IconManager.getScaledIcon(action.getIcon(), scaleFactor));
 
-        // Use new JButton decorations introduced in Mac OS X 10.5 (Leopard)
-        if(PlatformManager.MAC_OS_X_10_5.isCurrentOrHigher()) {
+        // Use new JButton decorations introduced in Mac OS X 10.5 (Leopard) with Java 1.5 and up
+        if(OsVersions.MAC_OS_X_10_5.isCurrentOrHigher() && JavaVersions.JAVA_1_5.isCurrentOrHigher()) {
             button.putClientProperty("JButton.buttonType", "segmentedTextured");
             button.setRolloverEnabled(true);
         }
