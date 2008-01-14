@@ -46,6 +46,13 @@ editing it.
   Under Mac OS X, you'll find the classes JAR file in:
   /System/Library/Frameworks/JavaVM.framework/Versions/1.6.0/Classes/classes.jar
 
+- jsse.lib (defaults to a system-dependant best guess)
+  Path to the JSSE JAR file.
+  This is usually found in /path/to/jre/lib/jsse.jar
+  Apple, however, decided to use non-standard paths for reasons of their own.
+  Under Mac OS X, you'll find the classes JAR file in:
+  /System/Library/Frameworks/JavaVM.framework/Versions/1.6.0/Classes/jsse.jar
+
 - ant.lib (defaults to /path/to/ant/lib/ant.jar)
   Path to the Ant JAR file.
   This is necessary in order to compile the various Ant tasks used by

@@ -276,6 +276,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
       <outjar name="${jar.obf}"/>
 
       <libraryjar path="${java.lib}"/>
+      <libraryjar path="${jsse.lib}"/>
       <libraryjar name="${lib}/noinclude" jarfilter="*.jar"/>
 
       <keepattribute name="exceptions"/>

@@ -77,7 +77,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
   <!-- Stores the path to the JDK classes in ${java.lib}.      -->
   <target name="load-libpath" depends="load-anttools">
-    <libpath property="java.lib"/>
+    <libpath property="java.lib" library="rt.jar:classes.jar"/>
+    <libpath property="jsse.lib" library="jsse.jar"/>
   </target>
 
   <!-- Stores the path to the Ant runtime libraries in         -->

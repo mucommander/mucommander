@@ -36,6 +36,13 @@ editing it.
   Under Mac OS X, you'll find the classes JAR file in:
   /System/Library/Frameworks/JavaVM.framework/Versions/1.4.0/Classes/classes.jar
 
+- jsse.lib (defaults to a system-dependant best guess)
+  Path to the JSSE JAR file.
+  This is usually found in /path/to/jre/lib/jsse.jar
+  Apple, however, decided to use non-standard paths for reasons of their own.
+  Under Mac OS X, you'll find the classes JAR file in:
+  /System/Library/Frameworks/JavaVM.framework/Versions/1.6.0/Classes/jsse.jar
+
 - proguard.lib (defaults to ./tools/proguard.jar)
   Path to the ProGuard JAR file.
   The one used by muCommander can be found in ./tools/proguard.jar, but you can

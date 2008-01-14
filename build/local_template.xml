@@ -50,6 +50,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- ${sun.boot.class.path}.                                 -->
   <property name="java.lib"          location=""/>
 
+  <!-- Path to the Java JSSE libraries.                        -->
+  <!--                                                         -->
+  <!-- Defaults to a best guess taken from                     -->
+  <!-- ${sun.boot.class.path}.                                 -->
+  <property name="jsse.lib"          location=""/>
+
   <!-- Path to the ProGuard binaries.                          -->
   <!--                                                         -->
   <!-- Defaults to the one bundled with the project, but can   -->
