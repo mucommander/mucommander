@@ -28,9 +28,13 @@ import com.mucommander.io.RandomAccessInputStream;
 import com.mucommander.io.RandomAccessOutputStream;
 import com.mucommander.io.base64.Base64Encoder;
 
+import javax.net.ssl.*;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.security.SecureRandom;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 import java.util.StringTokenizer;
 import java.util.TreeSet;
 import java.util.Vector;
@@ -84,7 +88,7 @@ public class HTTPFile extends AbstractFile {
     private boolean parentValSet;
     protected AbstractFile parent;
 	
-    /** True if the URL looks like */
+    /** True if the remote resource is browsable, i.e. is or seems to be an HTML file */
     private boolean isHTML;
 
     /** True if file has been resolved on the remote HTTP server, either successfully or unsuccessfully */
@@ -94,9 +98,16 @@ public class HTTPFile extends AbstractFile {
 	private boolean exists;
 
 
-    /**
-     * Creates a new instance of HTTPFile.
-     */
+    static {
+        try {
+            disableCertificateVerifications();
+        }
+        catch(Exception e) {
+            if(Debug.ON) Debug.trace("Failed to install a custom TrustManager: "+e);
+        }
+    }
+
+
     public HTTPFile(FileURL fileURL) throws IOException {
         this(fileURL, new URL(fileURL.toString(false)), fileURL.toString(false));
     }
@@ -137,7 +148,58 @@ public class HTTPFile extends AbstractFile {
         }
     }
 
+    /**
+	 * Installs a custom <code>javax.net.ssl.X509TrustManager</code> and <code>javax.net.ssl.HostnameVerifier</code>
+     * to bypass the default SSL certificate verifications and blindly trust all SSL certificates, even if they are
+     * self-signed, expired, or do not match the requested hostname.
+     * As a result in such cases, <code>HttpsURLConnection#openConnection()</code> will succeed instead of throwing a
+     * <code>javax.net.ssl.SSLException</code>.
+     *
+     * <p>This method needs to be called only once in the JVM lifetime and will impact all HTTPS connections made,
+     * i.e. not only the ones made by this class.</p>
+     *
+     * <p>This clearly is unsecure for the user, but arguably better from a feature standpoint than systematically
+     * failing untrusted connections.</p>
+     *
+     * @throws Exception if an error occurred while installing the custom X509TrustManager.
+	 */
+	private static void disableCertificateVerifications() throws Exception {
+        // Todo: find a way to warn the user when the server cannot be trusted
 
+        // Create a custom X509 trust manager that does not validate certificate chains
+        TrustManager permissiveTrustManager = new X509TrustManager() {
+            public X509Certificate[] getAcceptedIssuers() {
+                return null;
+            }
+            public void checkServerTrusted(X509Certificate[] certs, String authType) throws CertificateException {
+            }
+
+            public void checkClientTrusted(X509Certificate[] certs, String authType) throws CertificateException {
+            }
+        };
+
+        // Install the permissive trust manager
+        SSLContext sc = SSLContext.getInstance("SSL");
+        sc.init(null, new TrustManager[]{permissiveTrustManager}, new SecureRandom());
+        HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+
+        // Create and install a custom hostname verifier that allows hostname mismatches
+        HostnameVerifier permissiveHostnameVerifier = new HostnameVerifier() {
+           public boolean verify(String urlHostName, SSLSession session) {
+               return true;
+           }
+
+        };
+       HttpsURLConnection.setDefaultHostnameVerifier(permissiveHostnameVerifier);
+    }
+
+
+    /**
+     * Performs a HEAD request on the HTTP server to retrieve the file's attributes.
+     *
+     * @throws IOException if the HEAD request failed, either because the resource doesn't exist (404) or for any other
+     * reason
+     */
     private void resolveFile() throws IOException {
         try {
             // Default values.
@@ -183,9 +245,12 @@ public class HTTPFile extends AbstractFile {
 
 
     /**
-     * Returns HttpURLConnection instance for the given URL. If the {@link FileURL} contained by this HTTPFile
-     * contains {@link Credentials}, these will be used in the connection for HTTP Basic Authentication.  
-
+     * Opens and returns a <code>HttpURLConnection</code> to the resource denoted by the specified URL.
+     * If the {@link FileURL} contained by this HTTPFile contains {@link Credentials}, these will be used as credentials
+     * for <i>HTTP Basic Authentication<i>.
+     *
+     * @param url the URL to open
+     * @return a HttpURLConnection to the resource denoted by the specified URL
      * @throws IOException if the HttpURLConnection could not be opened
      */
     private HttpURLConnection getHttpURLConnection(URL url) throws IOException {
@@ -215,8 +280,10 @@ public class HTTPFile extends AbstractFile {
      *  <li>does nothing otherwise
      *
      * @param conn the HttpURLConnection connection to examine
+     * @throws AuthException if the response code is 401 (Unauthorized)
+     * @throws IOException if the response code is not in the 2xx - 3xx range (not a positive response)
      */
-    private void checkHTTPResponse(HttpURLConnection conn) throws IOException {
+    private void checkHTTPResponse(HttpURLConnection conn) throws AuthException, IOException {
         int responseCode = conn.getResponseCode();
         if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("response code = "+responseCode);
 

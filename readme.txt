@@ -134,6 +134,8 @@ Improvements:
   more native looking components.
 - Improved the file loading in the internal viewers and editors.
 - The file encoding can be changed in the internal text viewer and editor.
+- HTTPS connections can now be established even if the SSL certificate is
+  not trusted.
 
 Localization:
 - Japanese translation contributed by Nardog.
@@ -178,6 +180,7 @@ Known issues:
   will default to the first in the list.
 - Authentication issues when using several sets of credentials (login/password)
   on the same server.
+- Untrusted HTTPS connections are allowed without warning.
 
 
 Command Line Interface
