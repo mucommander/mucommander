@@ -34,11 +34,8 @@ import com.mucommander.Debug;
 public class OsVersion extends ComparableRuntimeProperty implements OsVersions {
 
     /** Holds the OsVersion of the current runtime environment  */
-    private final static OsVersion currentValue = parseSystemProperty(getRawSystemProperty(), OsFamily.getCurrent());
+    private static OsVersion currentValue;
 
-    static {
-        if(Debug.ON) Debug.trace("Current OS version: "+ currentValue);
-    }
 
     protected OsVersion(String stringRepresentation, int intValue) {
         super(stringRepresentation, intValue);
@@ -50,9 +47,16 @@ public class OsVersion extends ComparableRuntimeProperty implements OsVersions {
     ////////////////////
 
     /**
-     * This method is a no-op that can be used to force the static initialization of this class.
+     * Determines the current value by parsing the corresponding system property. This method is called automatically
+     * by this class the first time the current value is accessed. However, this method has been made public to allow
+     * to force the initialization if it needs to happen at a predictable time.
      */
-    public static void doStaticInit() {
+    public static void init() {
+        // Note: performing the initialization outside of the class static block avoids cyclic dependency problems.
+        if(currentValue==null) {
+            currentValue = parseSystemProperty(getRawSystemProperty(), OsFamily.getCurrent());
+            if(Debug.ON) Debug.trace("Current OS version: "+ currentValue);
+        }
     }
 
     /**
@@ -61,6 +65,11 @@ public class OsVersion extends ComparableRuntimeProperty implements OsVersions {
      * @return the OS version of the current runtime environment
      */
     public static OsVersion getCurrent() {
+        if(currentValue==null) {
+            // init() is called only once
+            init();
+        }
+
         return currentValue;
     }
 
@@ -149,9 +158,9 @@ public class OsVersion extends ComparableRuntimeProperty implements OsVersions {
     }
 
     
-    ///////////////////////////////////////////////
+    //////////////////////////////////////////////
     // ComparableRuntimeProperty implementation //
-    ///////////////////////////////////////////////
+    //////////////////////////////////////////////
 
     protected RuntimeProperty getCurrentValue() {
         return currentValue;

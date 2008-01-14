@@ -31,20 +31,29 @@ import com.mucommander.Debug;
 public class OsFamily extends RuntimeProperty implements OsFamilies {
 
     /** Holds the OsFamily of the current runtime environment  */
-    private final static OsFamily currentValue = parseSystemProperty(getRawSystemProperty());
+    private static OsFamily currentValue;
 
-    static {
-        if(Debug.ON) Debug.trace("Current OS family: "+ currentValue);
-    }
 
     protected OsFamily(String stringRepresentation) {
         super(stringRepresentation);
     }
 
+
+    ////////////////////
+    // Static methods //
+    ////////////////////
+
     /**
-     * This method is a no-op that can be used to force the static initialization of this class.
+     * Determines the current value by parsing the corresponding system property. This method is called automatically
+     * by this class the first time the current value is accessed. However, this method has been made public to allow
+     * to force the initialization if it needs to happen at a predictable time.
      */
-    public static void doStaticInit() {
+    public static void init() {
+        // Note: performing the initialization outside of the class static block avoids cyclic dependency problems.
+        if(currentValue==null) {
+            currentValue = parseSystemProperty(getRawSystemProperty());
+            if(Debug.ON) Debug.trace("Current OS family: "+ currentValue);
+        }
     }
 
     /**
@@ -53,6 +62,11 @@ public class OsFamily extends RuntimeProperty implements OsFamilies {
      * @return the OS family of the current runtime environment
      */
     public static OsFamily getCurrent() {
+        if(currentValue==null) {
+            // init() is called only once
+            init();
+        }
+
         return currentValue;
     }
 
@@ -146,9 +160,9 @@ public class OsFamily extends RuntimeProperty implements OsFamilies {
     }
 
 
-    /////////////////////////////////////
+    ////////////////////////////////////
     // RuntimeProperty implementation //
-    /////////////////////////////////////
+    ////////////////////////////////////
 
     protected RuntimeProperty getCurrentValue() {
         return currentValue;
