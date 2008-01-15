@@ -165,6 +165,6 @@ public class OsFamily extends RuntimeProperty implements OsFamilies {
     ////////////////////////////////////
 
     protected RuntimeProperty getCurrentValue() {
-        return currentValue;
+        return getCurrent();
     }
 }

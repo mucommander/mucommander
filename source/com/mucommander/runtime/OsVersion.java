@@ -163,6 +163,6 @@ public class OsVersion extends ComparableRuntimeProperty implements OsVersions {
     //////////////////////////////////////////////
 
     protected RuntimeProperty getCurrentValue() {
-        return currentValue;
+        return getCurrent();
     }
 }
