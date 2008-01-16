@@ -59,10 +59,17 @@ public class AppleScriptTest extends TestCase {
                 // MacRoman test string
                 "mércî mr röbôt";
 
-        AppleScript.execute("do shell script \"echo "+s+"\"", output);
+        boolean success = AppleScript.execute("do shell script \"echo "+s+"\"", output);
 
-        // Assert that we got the same text as the one we passed to the script
-        assertEquals(s, output.toString());
+        if(OsFamilies.MAC_OS_X.isCurrent()) {
+            // Assert that the script was executed successfully and that we got the same text as the one we passed
+            assertTrue(success);
+            assertEquals(s, output.toString());
+        }
+        else {
+            // We're not running Mac OS X, assert that execute returns false
+            assertFalse(success);
+        }
     }
 
     /**
