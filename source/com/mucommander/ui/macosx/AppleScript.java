@@ -27,6 +27,7 @@ import com.mucommander.runtime.OsVersions;
 
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 
 /**
  * This class allows to run AppleScript code under Mac OS X, relying on the <code>osacript</code> command available
@@ -97,7 +98,7 @@ public class AppleScript {
         OutputStreamWriter pout = null;
         try {
             // Execute the osascript command.
-            AbstractProcess process = ProcessRunner.execute(tokens, outputBuffer==null?null:new ScriptOutputListener(outputBuffer));
+            AbstractProcess process = ProcessRunner.execute(tokens, outputBuffer==null?null:new ScriptOutputListener(outputBuffer, AppleScript.getScriptEncoding()));
 
             // Pipe the script to the osascript process.
             pout = new OutputStreamWriter(process.getOutputStream(), getScriptEncoding());
@@ -167,17 +168,27 @@ public class AppleScript {
     private static class ScriptOutputListener implements ProcessListener {
 
         private StringBuffer outputBuffer;
+        private String outputEncoding;
 
-        private ScriptOutputListener(StringBuffer outputBuffer) {
+        private ScriptOutputListener(StringBuffer outputBuffer, String outputEncoding) {
             this.outputBuffer = outputBuffer;
+            this.outputEncoding = outputEncoding;
         }
 
         ////////////////////////////////////
         // ProcessListener implementation //
         ////////////////////////////////////
 
+        public void processOutput(byte[] buffer, int offset, int length) {
+            try {
+                outputBuffer.append(new String(buffer, offset, length, outputEncoding));
+            }
+            catch(UnsupportedEncodingException e) {
+                // The encoding is necessarily supported
+            }
+        }
+
         public void processOutput(String s) {
-            outputBuffer.append(s);
         }
 
         public void processDied(int returnValue) {
@@ -185,9 +196,6 @@ public class AppleScript {
             int len = outputBuffer.length();
             if(len>0 && outputBuffer.charAt(len-1)=='\n')
                 outputBuffer.setLength(len-1);    
-        }
-
-        public void processOutput(byte[] buffer, int offset, int length) {
         }
     }
 
