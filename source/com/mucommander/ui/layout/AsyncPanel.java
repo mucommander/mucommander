@@ -23,22 +23,22 @@ import com.mucommander.ui.icon.SpinningDial;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.AncestorEvent;
+import javax.swing.event.AncestorListener;
 import java.awt.*;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
 
 /**
  * <code>AsyncPanel</code> is a <code>JPanel</code> aimed at components that potentially take a long time to
- * initialize and that allows to deport their initialization in a separate thread as to not lock the event thread.
+ * initialize. It allows to deport their initialization in a separate thread as to not lock the event thread.
  * It works as follows:
  * <ol>
- *  <li>Initially, this panel displays a 'please wait component' that symbolizes the fact that the contents of the panel
- *      is being loaded.
- *  <li>When the panel becomes visible, the {@link #getTargetComponent()} method is called to trigger the initialization
- *      of the real component to display.
- *  <li>As soon as the method returns, the wait component is removed and the target component added to this panel.
- *      If this panel is the child of a <code>java.awt.Window</code>, the window is repacked to take into account the
- *      new size of this panel.
+ *  <li>Initially, AsyncPanel displays a 'please wait component' that symbolizes the fact that the contents of the
+ *      panel is being loaded.</li>
+ *  <li>When AsyncPanel becomes visible on screen, the {@link #getTargetComponent()} method is called to trigger the
+ *      initialization of the real component to display.</li>
+ *  <li>As soon as the method returns, the wait component is removed and the target component added to AsyncPanel.
+ *      If AsyncPanel is the child of a <code>java.awt.Window</code>, the window is repacked to take into account the
+ *      new size of this panel.</li>
  * </ol>
  *
  * <p>This panel tries to be as 'transparent' as possible for the target component: the borders of this panel are empty
@@ -51,8 +51,8 @@ public abstract class AsyncPanel extends JPanel {
     /** The component displayed while the target component is being loaded */
     private JComponent waitComponent;
 
-    /** True if this panel has already received a componentShown event */
-    private boolean componentShown;
+    /** This field becomes true when this panel has become visible on screen. */
+    private boolean visibleOnScreen;
 
     /**
      * Creates a new <code>AsyncPanel</code> with the default wait component.
@@ -73,23 +73,24 @@ public abstract class AsyncPanel extends JPanel {
         this.waitComponent = waitComponent;
         add(waitComponent, BorderLayout.CENTER);
 
-        if(isVisible()) {
-            // Don't listen to ComponentListener events if the component is already visible, as componentShow() would
-            // never be called.
-            loadTargetComponent();
-        }
-        else {
-            // Load the component when this panel becomes visible
-            addComponentListener(new ComponentAdapter() {
-                public void componentShown(ComponentEvent e) {
-                    if(componentShown)
-                        return;
-                    componentShown = true;
+        // Starts loading the component when this panel has become visible on screen
+        addAncestorListener(new AncestorListener() {
 
-                    loadTargetComponent();
-                }
-            });
-        }
+            public void ancestorAdded(AncestorEvent e) {
+                if(visibleOnScreen)
+                    return;
+
+                visibleOnScreen = true;
+                removeAncestorListener(this);
+
+                loadTargetComponent();
+            }
+
+            public void ancestorRemoved(AncestorEvent event) {}
+
+            public void ancestorMoved(AncestorEvent event) {}
+        });
+
     }
 
     /**
