@@ -54,7 +54,7 @@ public class OsVersion extends ComparableRuntimeProperty implements OsVersions {
     public static void init() {
         // Note: performing the initialization outside of the class static block avoids cyclic dependency problems.
         if(currentValue==null) {
-            currentValue = parseSystemProperty(getRawSystemProperty(), OsFamily.getCurrent());
+            currentValue = parseSystemProperty(getRawSystemProperty(), OsFamily.getRawSystemProperty(), OsFamily.getCurrent());
             if(Debug.ON) Debug.trace("Current OS version: "+ currentValue);
         }
     }
@@ -86,38 +86,39 @@ public class OsVersion extends ComparableRuntimeProperty implements OsVersions {
      * Returns an <code>OsVersion</code> instance corresponding to the specified system property's value.
      *
      * @param osVersionProp the value of the "os.version" system property
+     * @param osNameProp the value of the "os.name" system property
      * @param osFamily the current OS family
      * @return an OsVersion instance corresponding to the specified system property's value
      */
-    static OsVersion parseSystemProperty(String osVersionProp, OsFamily osFamily) {
+    static OsVersion parseSystemProperty(String osVersionProp, String osNameProp, OsFamily osFamily) {
         OsVersion osVersion;
 
         // This website holds a collection of system property values under many OSes:
         // http://lopica.sourceforge.net/os.html
 
         if(osFamily==OsFamilies.WINDOWS) {
-            if(osVersionProp.equals("Windows 95")) {
+            if(osNameProp.equals("Windows 95")) {
                 osVersion = WINDOWS_95;
             }
-            else if(osVersionProp.equals("Windows 98")) {
+            else if(osNameProp.equals("Windows 98")) {
                 osVersion = WINDOWS_98;
             }
-            else if(osVersionProp.equals("Windows Me")) {
+            else if(osNameProp.equals("Windows Me")) {
                 osVersion = WINDOWS_ME;
             }
-            else if(osVersionProp.equals("Windows NT")) {
+            else if(osNameProp.equals("Windows NT")) {
                 osVersion = WINDOWS_NT;
             }
-            else if(osVersionProp.equals("Windows 2000")) {
+            else if(osNameProp.equals("Windows 2000")) {
                 osVersion = WINDOWS_2000;
             }
-            else if(osVersionProp.equals("Windows XP")) {
+            else if(osNameProp.equals("Windows XP")) {
                 osVersion = WINDOWS_XP;
             }
-            else if(osVersionProp.equals("Windows 2003")) {
+            else if(osNameProp.equals("Windows 2003")) {
                 osVersion = WINDOWS_2003;
             }
-            else if(osVersionProp.equals("Windows Vista")) {
+            else if(osNameProp.equals("Windows Vista")) {
                 osVersion = WINDOWS_VISTA;
             }
             else {
