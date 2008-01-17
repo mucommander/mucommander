@@ -160,10 +160,11 @@ public class CalculateChecksumJob extends TransferFileJob {
                     catch(IOException e2){}
                 }
 
-                // If job was interrupted by the user at the time when the exception occurred,
-                // it most likely means that the exception was caused by user cancellation.
-                // In this case, the exception should not be interpreted as an error.
-                if(getState()==INTERRUPTED)
+                // If the job was interrupted by the user at the time the exception occurred, it most likely means that
+                // the IOException was caused by the stream being closed as a result of the user interruption.
+                // If that is the case, the exception should not be interpreted as an error.
+                // Same goes if the current file was skipped.
+                if(getState()==INTERRUPTED || wasCurrentFileSkipped())
                     return false;
 
                 if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Caught IOException: "+e);
@@ -186,10 +187,6 @@ public class CalculateChecksumJob extends TransferFileJob {
     protected boolean hasFolderChanged(AbstractFile folder) {
         // This job modifies the folder where the checksum file is
         return folder.equals(checksumFile.getParentSilently());     // Note: parent may be null
-    }
-
-    public String getStatusString() {
-        return Translator.get("progress_dialog.processing_file", getCurrentFileInfo());
     }
 
 
