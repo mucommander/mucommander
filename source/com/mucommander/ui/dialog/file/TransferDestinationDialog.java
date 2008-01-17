@@ -34,15 +34,20 @@ import java.awt.event.ActionListener;
 
 
 /**
- * Abstract Dialog which displays an input field in order to enter a destination path.
- * This dialog is used by CopyDialog, MoveDialog, UnpackDialog and DownloadDialog.
+ * This class is an abstract dialog which allows the user to specify in a text field the destination of a transfer
+ * and control some options such as the default action to perform when a file already exists in the destination, or
+ * if the files should be checked for integrity.
+ *
+ * <p>The {@link #startJob(com.mucommander.file.AbstractFile, String, int, boolean)} method is called to start the job when the
+ * user has confirmed the operation, either by pressing the OK button or by pressing the Enter key.</p>
  *
  * @author Maxence Bernard
  */
-public abstract class DestinationDialog extends JobDialog implements ActionListener {
+public abstract class TransferDestinationDialog extends JobDialog implements ActionListener {
 
     protected JTextField pathField;
     protected JComboBox fileExistsActionComboBox;
+    protected JCheckBox verifyIntegrityCheckBox;
     protected JButton okButton;
     protected JButton cancelButton;
 
@@ -71,11 +76,11 @@ public abstract class DestinationDialog extends JobDialog implements ActionListe
     };
 	
 
-    public DestinationDialog(MainFrame mainFrame, FileSet files) {
+    public TransferDestinationDialog(MainFrame mainFrame, FileSet files) {
         super(mainFrame, null, files);
     }
 	
-    public DestinationDialog(MainFrame mainFrame, FileSet files, String title, String labelText, String okText, String errorDialogTitle) {
+    public TransferDestinationDialog(MainFrame mainFrame, FileSet files, String title, String labelText, String okText, String errorDialogTitle) {
         this(mainFrame, files);
 		
         init(title, labelText, okText, errorDialogTitle);
@@ -101,7 +106,7 @@ public abstract class DestinationDialog extends JobDialog implements ActionListe
         // Path field will receive initial focus
         setInitialFocusComponent(pathField);		
 
-        // Checkbox that allows the user to choose the default action when a file already exists in destination
+        // Combo box that allows the user to choose the default action when a file already exists in destination
         mainPanel.add(new JLabel(Translator.get("destination_dialog.file_exists_action")+" :"));
         fileExistsActionComboBox = new JComboBox();
         fileExistsActionComboBox.addItem(Translator.get("ask"));
@@ -109,6 +114,12 @@ public abstract class DestinationDialog extends JobDialog implements ActionListe
         for(int i=0; i<nbChoices; i++)
             fileExistsActionComboBox.addItem(DEFAULT_ACTIONS_TEXT[i]);
         mainPanel.add(fileExistsActionComboBox);
+
+        mainPanel.addSpace(10);
+
+        verifyIntegrityCheckBox = new JCheckBox(Translator.get("destination_dialog.verify_integrity"));
+        mainPanel.add(verifyIntegrityCheckBox);
+
         mainPanel.addSpace(10);
 
         // Create file details button and OK/cancel buttons and lay them out a single row
@@ -145,17 +156,6 @@ public abstract class DestinationDialog extends JobDialog implements ActionListe
     }
 	
 	
-    public void actionPerformed(ActionEvent e) {
-        Object source = e.getSource();
-        dispose();
-		
-        // OK action
-        if(source == okButton || source == pathField) {
-            okPressed();
-        }
-    }
-
-	
     /**
      * This method is invoked when the OK button is pressed.
      */
@@ -181,13 +181,31 @@ public abstract class DestinationDialog extends JobDialog implements ActionListe
             defaultFileExistsAction = FileCollisionDialog.ASK_ACTION;
         else
             defaultFileExistsAction = DEFAULT_ACTIONS[defaultFileExistsAction-1];
-        // We don't remember default action on purpose: we want the user to specify it each time,
+        // Note: we don't remember default action on purpose: we want the user to specify it each time,
         // it would be too dangerous otherwise.
 		
-        startJob(destFolder, newName, defaultFileExistsAction);
+        startJob(destFolder, newName, defaultFileExistsAction, verifyIntegrityCheckBox.isSelected());
     }
+
+
+    //////////////////////
+    // Abstract methods //
+    //////////////////////
+
+    protected abstract void startJob(AbstractFile destFolder, String newName, int defaultFileExistsAction, boolean verifyIntegrity);
 	
-	
-    protected abstract void startJob(AbstractFile destFolder, String newName, int defaultFileExistsAction);
-	
+
+    ////////////////////////
+    // Overridden methods //
+    ////////////////////////
+
+    public void actionPerformed(ActionEvent e) {
+        Object source = e.getSource();
+        dispose();
+
+        // OK action
+        if(source == okButton || source == pathField) {
+            okPressed();
+        }
+    }
 }

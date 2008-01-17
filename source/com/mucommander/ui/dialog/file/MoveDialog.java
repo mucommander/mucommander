@@ -35,9 +35,8 @@ import com.mucommander.ui.main.MainFrame;
  * @see com.mucommander.ui.action.RenameAction
  * @author Maxence Bernard
  */
-public class MoveDialog extends DestinationDialog {
+public class MoveDialog extends TransferDestinationDialog {
 
-	
     public MoveDialog(MainFrame mainFrame, FileSet files) {
         super(mainFrame, files);
 		
@@ -81,15 +80,12 @@ public class MoveDialog extends DestinationDialog {
         showDialog();
     }
 
-
-
-    /**
-     * Starts a MoveJob. This method is trigged by the 'OK' button or return key.
-     */
-    protected void startJob(AbstractFile destFolder, String newName, int defaultFileExistsAction) {
-        // Starts moving files
+    protected void startJob(AbstractFile destFolder, String newName, int defaultFileExistsAction, boolean verifyIntegrity) {
         ProgressDialog progressDialog = new ProgressDialog(mainFrame, Translator.get("move_dialog.moving"));
+
         MoveJob moveJob = new MoveJob(progressDialog, mainFrame, files, destFolder, newName, defaultFileExistsAction, false);
+        moveJob.setIntegrityCheckEnabled(verifyIntegrity);
+
         progressDialog.start(moveJob);
     }
 	

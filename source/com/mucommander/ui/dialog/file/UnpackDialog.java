@@ -31,9 +31,8 @@ import com.mucommander.ui.main.MainFrame;
  *
  * @author Maxence Bernard
  */
-public class UnpackDialog extends DestinationDialog {
+public class UnpackDialog extends TransferDestinationDialog {
 
-	
     /**
      * Creates and displays a new UnpackDialog.
      *
@@ -60,15 +59,12 @@ public class UnpackDialog extends DestinationDialog {
         showDialog();
     }
 
-
-    /**
-     * Starts a CopyJob. This method is trigged by the 'OK' button or return key.
-     */
-    protected void startJob(AbstractFile destFolder, String newName, int defaultFileExistsAction) {
-
-        // Starts copying files
+    protected void startJob(AbstractFile destFolder, String newName, int defaultFileExistsAction, boolean verifyIntegrity) {
         ProgressDialog progressDialog = new ProgressDialog(mainFrame, Translator.get("unpack_dialog.unpacking"));
+
         CopyJob job = new CopyJob(progressDialog, mainFrame, files, destFolder, newName, CopyJob.UNPACK_MODE, defaultFileExistsAction);
+        job.setIntegrityCheckEnabled(verifyIntegrity);
+
         progressDialog.start(job);
     }
 

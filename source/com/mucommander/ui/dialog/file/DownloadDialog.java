@@ -31,7 +31,7 @@ import com.mucommander.ui.main.MainFrame;
  *
  * @author Maxence Bernard
  */
-public class DownloadDialog extends DestinationDialog {
+public class DownloadDialog extends TransferDestinationDialog {
 
     public DownloadDialog(MainFrame mainFrame, FileSet files) {
         super(mainFrame, files,
@@ -49,11 +49,12 @@ public class DownloadDialog extends DestinationDialog {
         showDialog();
     }
 
-	
-    protected void startJob(AbstractFile destFolder, String newName, int defaultFileExistsAction) {
-        // Starts moving files
+    protected void startJob(AbstractFile destFolder, String newName, int defaultFileExistsAction, boolean verifyIntegrity) {
         ProgressDialog progressDialog = new ProgressDialog(mainFrame, Translator.get("download_dialog.downloading"));
+
         CopyJob downloadJob = new CopyJob(progressDialog, mainFrame, files, destFolder, newName, CopyJob.DOWNLOAD_MODE, defaultFileExistsAction);
+        downloadJob.setIntegrityCheckEnabled(verifyIntegrity);
+
         progressDialog.start(downloadJob);
     }
 	

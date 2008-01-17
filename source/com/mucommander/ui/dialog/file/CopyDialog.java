@@ -33,7 +33,7 @@ import com.mucommander.ui.main.MainFrame;
  * @see com.mucommander.ui.action.CopyAction
  * @author Maxence Bernard
  */
-public class CopyDialog extends DestinationDialog {
+public class CopyDialog extends TransferDestinationDialog {
 
     /**
      * Creates and displays a new CopyDialog.
@@ -100,14 +100,12 @@ public class CopyDialog extends DestinationDialog {
         setTextField(fieldText, startPosition, endPosition);
     }
 
-
-    /**
-     * Starts a CopyJob. This method is trigged by the 'OK' button or return key.
-     */
-    protected void startJob(AbstractFile destFolder, String newName, int defaultFileExistsAction) {
-        // Starts copying files
+    protected void startJob(AbstractFile destFolder, String newName, int defaultFileExistsAction, boolean verifyIntegrity) {
         ProgressDialog progressDialog = new ProgressDialog(mainFrame, Translator.get("copy_dialog.copying"));
+
         CopyJob job = new CopyJob(progressDialog, mainFrame, files, destFolder, newName, CopyJob.COPY_MODE, defaultFileExistsAction);
+        job.setIntegrityCheckEnabled(verifyIntegrity);
+
         progressDialog.start(job);
     }
 
