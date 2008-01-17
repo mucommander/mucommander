@@ -1714,6 +1714,20 @@ read_error:SV:Läsfel
 
 
 
+# This error is displayed during a transfer when the 'Verify data integrity' 
+# option has been enabled and the checksum of the source and destination files
+# don't match. Most people will probably never see this message but they'll
+# be grateful if they ever do!
+integrity_check_error:EN:Integrity check failed: source and destination don't match
+integrity_check_error:FR:Echec du contrôle d'intégrité: les fichiers source et destination sont différents
+# Translation missing (New!)
+
+
+
+
+
+
+
 
 
 
@@ -5123,6 +5137,26 @@ destination_dialog.file_exists_action:SK:Predvolená akcia pre existujúci súbo
 destination_dialog.file_exists_action:JA:ファイルが存在するときの既定の動作
 destination_dialog.file_exists_action:SV:Standardåtgärd om filen redan finns
 
+# This option ensures that the transferred files are exactly the same on the
+# source and destination, by calculating their checksum and verifying that
+# they match. This prevents any data loss from occurring.
+destination_dialog.verify_integrity:EN:Verify data integrity
+destination_dialog.verify_integrity:FR:Vérifier l'intégrité des données
+# Translation missing (New!)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 #########################
 # File collision dialog #
@@ -6780,6 +6814,26 @@ progress_dialog.processing_file:SK:Spracováva sa %1
 progress_dialog.processing_file:HU:Feldolgozás %1
 progress_dialog.processing_file:JA:%1 の処理中
 progress_dialog.processing_file:SV:Bearbetar %1
+
+# If the 'Verify data integrity' transfer option has been enabled, this message
+# is displayed while the checksum of the source and destination files is being 
+# calculated.
+progress_dialog.verifying_file:EN:Verifying %1
+progress_dialog.verifying_file:FR:Vérification de %1
+# Translation missing (New!)
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 progress_dialog.job_finished:EN:Job finished
 progress_dialog.job_finished:FR:Tâche terminée

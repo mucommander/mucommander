@@ -364,17 +364,7 @@ public class MoveJob extends TransferFileJob {
         }
     }
 
-	
-    public String getStatusString() {
-        if(isOptimizingArchive)
-            return Translator.get("optimizing_archive", archiveToOptimize.getName());
-
-        return Translator.get("move_dialog.moving_file", getCurrentFileInfo());
-    }
-
-
     // This job modifies baseDestFolder and its subfolders
-	
     protected boolean hasFolderChanged(AbstractFile folder) {
         return (baseSourceFolder!=null && baseSourceFolder.isParentOf(folder)) || baseDestFolder.isParentOf(folder);
     }
@@ -406,5 +396,15 @@ public class MoveJob extends TransferFileJob {
             // after creation, we need to get an instance that reflects the newly created file attributes
             selectFileWhenFinished(FileFactory.getFile(baseDestFolder.getAbsolutePath(true)+newName));
         }
+    }
+
+    public String getStatusString() {
+        if(isCheckingIntegrity())
+            return super.getStatusString();
+
+        if(isOptimizingArchive)
+            return Translator.get("optimizing_archive", archiveToOptimize.getName());
+
+        return Translator.get("move_dialog.moving_file", getCurrentFileInfo());
     }
 }

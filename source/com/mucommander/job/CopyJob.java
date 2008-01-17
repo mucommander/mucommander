@@ -280,13 +280,6 @@ public class CopyJob extends TransferFileJob {
         }
     }
 
-    public String getStatusString() {
-        if(isOptimizingArchive)
-            return Translator.get("optimizing_archive", archiveToOptimize.getName());
-
-        return Translator.get(mode==UNPACK_MODE?"unpack_dialog.unpacking_file":mode==DOWNLOAD_MODE?"download_dialog.downloading_file":"copy_dialog.copying_file", getCurrentFileInfo());
-    }
-	
     // This job modifies baseDestFolder and its subfolders
     protected boolean hasFolderChanged(AbstractFile folder) {
         if(Debug.ON) Debug.trace("folder="+folder+" returning "+baseDestFolder.isParentOf(folder));
@@ -307,7 +300,7 @@ public class CopyJob extends TransferFileJob {
         if(archiveFile!=null && archiveFile.isWritableArchive()) {
             while(true) {
                 try {
-                    archiveToOptimize = ((AbstractRWArchiveFile)archiveFile);
+                    archiveToOptimize = (AbstractRWArchiveFile)archiveFile;
                     isOptimizingArchive = true;
 
                     archiveToOptimize.optimizeArchive();
@@ -332,5 +325,15 @@ public class CopyJob extends TransferFileJob {
             // after creation, we need to get an instance that reflects the newly created file attributes
             selectFileWhenFinished(FileFactory.getFile(baseDestFolder.getAbsolutePath(true)+newName));
         }
+    }
+
+    public String getStatusString() {
+        if(isCheckingIntegrity())
+            return super.getStatusString();
+        
+        if(isOptimizingArchive)
+            return Translator.get("optimizing_archive", archiveToOptimize.getName());
+
+        return Translator.get(mode==UNPACK_MODE?"unpack_dialog.unpacking_file":mode==DOWNLOAD_MODE?"download_dialog.downloading_file":"copy_dialog.copying_file", getCurrentFileInfo());
     }
 }
