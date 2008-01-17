@@ -22,16 +22,17 @@ package com.mucommander.job;
 import com.mucommander.Debug;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.util.FileSet;
-import com.mucommander.io.ByteCounter;
-import com.mucommander.io.CounterInputStream;
-import com.mucommander.io.FileTransferException;
-import com.mucommander.io.ThroughputLimitInputStream;
+import com.mucommander.io.*;
+import com.mucommander.io.security.MuProvider;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.security.DigestInputStream;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 
 /**
@@ -69,6 +70,23 @@ public abstract class TransferFileJob extends FileJob {
     private final static int DEFAULT_PERMISSIONS = 420;
 
 
+    /** If true, all transfers will be checked for integrity: the checksum of the source and destination file will
+     *  be calculated and compared to verify they match. */
+    private boolean integrityCheckEnabled;
+
+    /** True when the checksum of the source or destination file is being calculated. */
+    private boolean isCheckingIntegrity;
+
+    /** The checksum algorithm used for checking the integrity of transferred files. The algorithm has to be the fastest
+     * possible (to have the minimum impact on transfer speed) and does not need to have a good resitance to collision. */
+    private final static String CHECKSUM_VERIFICATION_ALGORITHM = "Adler32";
+
+
+    static {
+        // Register additional MessageDigest implementations provided by the muCommander API
+        MuProvider.registerProvider();
+    }
+
     /**
      * Creates a new TransferFileJob.
      */
@@ -89,6 +107,9 @@ public abstract class TransferFileJob extends FileJob {
      * As much as the source and destination protocols allow, the source file's date and permissions will be preserved.
      */
     protected void copyFile(AbstractFile sourceFile, AbstractFile destFile, boolean append) throws FileTransferException {
+        // Reset this field in case it was set to true for the previous file
+        isCheckingIntegrity = false;
+
         // Throw a specific FileTransferException if source and destination files are identical
         if(sourceFile.equals(destFile))
             throw new FileTransferException(FileTransferException.SOURCE_AND_DESTINATION_IDENTICAL);
@@ -106,25 +127,32 @@ public abstract class TransferFileJob extends FileJob {
         }
 
         // If the file wasn't copied using copyTo(), or if copyTo() didn't work (return false)
+        InputStream in = null;
         if(!copied) {
             // Copy source file stream to destination file
             try {
                 // Try to open InputStream
                 try  {
                     long destFileSize = destFile.getSize();
-
                     if(append && destFileSize!=-1) {
-                        setCurrentInputStream(sourceFile.getInputStream(destFileSize));
+                        in = sourceFile.getInputStream(destFileSize);
+                        // Do not calculate checksum, as it needs to be calculated on the whole file
+
+                        setCurrentInputStream(in);
                         // Increase current file ByteCounter by the number of bytes skipped
                         currentFileByteCounter.add(destFileSize);
                         // Increase skipped ByteCounter by the number of bytes skipped
                         currentFileSkippedByteCounter.add(destFileSize);
                     }
                     else {
-                        setCurrentInputStream(sourceFile.getInputStream());
+                        in = sourceFile.getInputStream();
+                        if(integrityCheckEnabled)
+                            in = new DigestInputStream(in, MessageDigest.getInstance(CHECKSUM_VERIFICATION_ALGORITHM));
+
+                        setCurrentInputStream(in);
                     }
                 }
-                catch(IOException e) {
+                catch(Exception e) {
                     if(com.mucommander.Debug.ON) {
                         com.mucommander.Debug.trace("IOException caught: "+e+", throwing FileTransferException");
                         e.printStackTrace();
@@ -152,10 +180,61 @@ public abstract class TransferFileJob extends FileJob {
         //  - a file without any permission will have default permissions in the destination.
         //  - a file with all permission bits set (mask = 777 octal) will ignore the default permissions
         int permMask = sourceFile.getPermissionGetMask();
-//if(Debug.ON) Debug.trace("source perms="+sourceFile.getPermissions()+" dest perms="+((sourceFile.getPermissions() & permMask) | (~permMask & DEFAULT_PERMISSIONS))+" mask="+permMask);
         destFile.setPermissions((sourceFile.getPermissions() & permMask) | (~permMask & DEFAULT_PERMISSIONS));
+
+        // This block is executed only if integrity check has been enabled (disabled by default)
+        if(integrityCheckEnabled) {
+            String sourceChecksum;
+            String destinationChecksum;
+
+            // Indicate that integrity is being checked, the value is reset when the next file starts
+            isCheckingIntegrity = true;
+
+            if(in!=null && (in instanceof DigestInputStream)) {
+                // The file was copied with a DigestInputStream, the checksum is already calculated, simply
+                // retrieve it
+                sourceChecksum = ByteUtils.toHexString(((DigestInputStream)in).getMessageDigest().digest());
+            }
+            else {
+                // The file was copied using AbstractFile#copyTo(), or the transfer was resumed:
+                // we have to calculate the source file's checksum from scratch.
+                try {
+                    sourceChecksum = calculateChecksum(sourceFile);
+                }
+                catch(Exception e) {
+                    throw new FileTransferException(FileTransferException.READING_SOURCE);
+                }
+            }
+
+            if(Debug.ON) Debug.trace("Source checksum= "+sourceChecksum);
+
+            // Calculate the destination file's checksum
+            try {
+                destinationChecksum = calculateChecksum(destFile);
+            }
+            catch(Exception e) {
+                throw new FileTransferException(FileTransferException.READING_DESTINATION);
+            }
+
+            if(Debug.ON) Debug.trace("Destination checksum= "+destinationChecksum);
+
+            // Compare both checksums and throw an exception if they don't match
+            if(!sourceChecksum.equals(destinationChecksum)) {
+                throw new FileTransferException(FileTransferException.CHECKSUM_MISMATCH);
+            }
+        }
     }
 
+    private String calculateChecksum(AbstractFile file) throws IOException, NoSuchAlgorithmException {
+        currentFileByteCounter.reset();
+        InputStream in = setCurrentInputStream(file.getInputStream());
+        try {
+            return AbstractFile.calculateChecksum(in, MessageDigest.getInstance(CHECKSUM_VERIFICATION_ALGORITHM));
+        }
+        finally {
+            closeCurrentInputStream();
+        }
+    }
 
     /**
      * Tries to copy the given source file to the specified destination file (see {@link #copyFile(AbstractFile,AbstractFile,boolean)}
@@ -173,19 +252,14 @@ public abstract class TransferFileJob extends FileJob {
                 return true;
             }
             catch(FileTransferException e) {
-                // If job was interrupted by the user at the time when the exception occurred,
-                // it most likely means that the exception by user cancellation.
-                // In this case, the exception should not be interpreted as an error.
-                if(getState()==INTERRUPTED)
+                // If the job was interrupted by the user at the time the exception occurred, it most likely means that
+                // the IOException was caused by the stream being closed as a result of the user interruption.
+                // If that is the case, the exception should not be interpreted as an error.
+                // Same goes if the current file was skipped.
+                if(getState()==INTERRUPTED || wasCurrentFileSkipped())
                     return false;
 
-                // Same goes if current file was skipped.
-                if(currentFileSkipped) {
-                    currentFileSkipped = false;
-                    return false;
-                }
-
-                // Copy failed
+                // Print the exception's stack trace when in debug mode
                 if(com.mucommander.Debug.ON) {
                     com.mucommander.Debug.trace("Copy failed: "+e);
                     e.printStackTrace();
@@ -206,8 +280,10 @@ public abstract class TransferFileJob extends FileJob {
                     case FileTransferException.SOURCE_AND_DESTINATION_IDENTICAL:
                         choice = showErrorDialog(errorDialogTitle, Translator.get("same_source_destination"));
                         break;
-    //                     An error occurred during file transfer
-    //                case FileTransferException.ERROR_WHILE_TRANSFERRING:
+                    // Checksum of source and destination files don't match
+                    case FileTransferException.CHECKSUM_MISMATCH:
+                        choice = showErrorDialog(errorDialogTitle, Translator.get("integrity_check_error"));
+                        break;
                     default:
                         choice = showErrorDialog(errorDialogTitle,
                                                  Translator.get("error_while_transferring", sourceFile.getName()),
@@ -229,23 +305,6 @@ public abstract class TransferFileJob extends FileJob {
 
                 // Skip or Cancel action (stop() is already called by showErrorDialog)
                 return false;
-
-//                // cancel action or close dialog
-//                if(choice==-1 || choice==CANCEL_ACTION) {
-//                    stop();
-//                    return false;
-//                }
-//                else if(choice==SKIP_ACTION) { 	// skip
-//                    return false;
-//                }
-//                // Retry action (append or retry)
-//                else {
-//                    // Reset processed bytes counter
-//                    currentFileByteCounter.reset();
-//                    // Append resumes transfer
-//                    append = choice==APPEND_ACTION;
-//                    continue;
-//                }
             }
         } while(true);
     }
@@ -276,7 +335,6 @@ public abstract class TransferFileJob extends FileJob {
         return tlin;
     }
 
-
     /**
      * Closes the currently registered source InputStream.
      */
@@ -285,6 +343,36 @@ public abstract class TransferFileJob extends FileJob {
             try { tlin.close(); }
             catch(IOException e) {}
         }
+    }
+
+
+    /**
+     * Returns <code>true</code> if file transfers need to be checked for data integrity. In this case, the checksum of
+     * the source and destination files are both calculated and compared to verify they match.
+     *
+     * @return true if file transfers need to be checked for data integrity
+     */
+    public boolean isIntegrityCheckEnabled() {
+        return integrityCheckEnabled;
+    }
+
+    /**
+     * Specifies if file transfers need to be checked for data integrity. If <code>true</code> is specified, the
+     * checksum of the source and destination files will both be calculated and compared to verify they match.
+     *
+     * @param integrityCheckEnabled true if file transfers need to be checked for data integrity
+     */
+    public void setIntegrityCheckEnabled(boolean integrityCheckEnabled) {
+        this.integrityCheckEnabled = integrityCheckEnabled;
+    }
+
+    /**
+     * Returns <code>true</code> if the integrity of the current file is being verified.
+     *
+     * @return true if the integrity of the current file is being verified
+     */
+    protected boolean isCheckingIntegrity() {
+        return isCheckingIntegrity;
     }
 
 
@@ -307,10 +395,20 @@ public abstract class TransferFileJob extends FileJob {
             setPaused(false);
     }
 
+    /**
+     * Return <code>true</code> if the file that is currently being processed has been skipped.
+     *
+     * @return true if the file that is currently being processed has been skipped
+     */
+    public synchronized boolean wasCurrentFileSkipped() {
+        return currentFileSkipped;
+    }
 
     /**
-     * Returns the percentage of the current file which has been processed, or 0 if current file's size is not available
-     * (in this case getNbCurrentFileBytesProcessed() returns -1).
+     * Returns the percentage of the current file that has been processed, <code>0</code> if the current file's size
+     * is not available (in this case getNbCurrentFileBytesProcessed() returns <code>-1</code>).
+     *
+     * @return the percentage of the current file that has been processed
      */
     public float getFilePercentDone() {
         long currentFileSize = getCurrentFileSize();
@@ -320,24 +418,29 @@ public abstract class TransferFileJob extends FileJob {
             return getCurrentFileByteCounter().getByteCount()/(float)currentFileSize;
     }
 
-
     /**
      * Returns the number of bytes that have been processed in the current file.
+     *
+     * @return the number of bytes that have been processed in the current file
      */
     public ByteCounter getCurrentFileByteCounter() {
         return currentFileByteCounter;
     }
 
     /**
-     * Returns the number of bytes that have been skipped in the current file.
-     * Bytes are skipped when file transfers are resumed.
+     * Returns the number of bytes that have been skipped in the current file. Bytes are skipped when file transfers
+     * are resumed.
+     *
+     * @return the number of bytes that have been skipped in the current file
      */
     public ByteCounter getCurrentFileSkippedByteCounter() {
         return currentFileSkippedByteCounter;
     }
 
     /**
-     * Returns the size of the file currently being processed, -1 if is not available.
+     * Returns the size of the file currently being processed, <code>-1</code> if this information is not available.
+     *
+     * @return the size of the file currently being processed, -1 if this information is not available.
      */
     public long getCurrentFileSize() {
         return currentFile==null?-1:currentFile.getSize();
@@ -346,6 +449,8 @@ public abstract class TransferFileJob extends FileJob {
 
     /**
      * Returns a {@link ByteCounter} that holds the total number of bytes that have been processed by this job so far.
+     *
+     * @return a ByteCounter that holds the total number of bytes that have been processed by this job so far
      */
     public ByteCounter getTotalByteCounter() {
         return totalByteCounter;
@@ -354,6 +459,8 @@ public abstract class TransferFileJob extends FileJob {
     /**
      * Returns a {@link ByteCounter} that holds the total number of bytes that have been skipped by this job so far.
      * Bytes are skipped when file transfers are resumed.
+     *
+     * @return a ByteCounter that holds the total number of bytes that have been skipped by this job so far
      */
     public ByteCounter getTotalSkippedByteCounter() {
         return totalSkippedByteCounter;
@@ -382,10 +489,11 @@ public abstract class TransferFileJob extends FileJob {
         }
     }
 
-
     /**
-     * Returns the current transfer throughput limit, in bytes per second.
-     * 0 or -1 means that no there currently is no limit to the attainable transfer speed (full speed).
+     * Returns the current transfer throughput limit, in bytes per second. <code>0</code> or <code>-1</code> means that
+     * there currently is no limit to the attainable transfer speed (full speed).
+     *
+     * @return the current transfer throughput limit, in bytes per second
      */
     public long getThroughputLimit() {
         return throughputLimit;
@@ -449,10 +557,41 @@ public abstract class TransferFileJob extends FileJob {
         totalByteCounter.add(currentFileByteCounter, true);
         totalSkippedByteCounter.add(currentFileSkippedByteCounter, true);
 
+        // Reset some fields that need it
+        currentFileSkipped = false;
+
         super.nextFile(file);
     }
 
+    /**
+     * Method overridden to return a more accurate percentage of job processed so far by taking into account the current
+     * file's percentage of completion.
+     */
+    public float getTotalPercentDone() {
+        float nbFilesProcessed = getCurrentFileIndex();
+        int nbFiles = getNbFiles();
 
+        // If file is in base folder and is not a directory...
+        if(currentFile!=null && nbFilesProcessed!=nbFiles && files.indexOf(currentFile)!=-1 && !currentFile.isDirectory()) {
+            // Add current file's progress
+            long currentFileSize = currentFile.getSize();
+            if(currentFileSize>0)
+                nbFilesProcessed += getCurrentFileByteCounter().getByteCount()/(float)currentFileSize;
+        }
+
+        return nbFilesProcessed/(float)nbFiles;
+    }
+
+    /**
+     * This method is overridden to return a custom string "Checking integrity of CURRENT_FILE" when the current file
+     * is being checked for integrity.
+     */
+    public String getStatusString() {
+        if(isCheckingIntegrity())
+            return Translator.get("progress_dialog.verifying_file", getCurrentFileInfo());
+
+        return super.getStatusString();
+    }
 
 //    /**
 //     * Method overridden to return a more accurate percentage of job processed so far by taking
@@ -473,24 +612,4 @@ public abstract class TransferFileJob extends FileJob {
 //
 //        return nbFilesProcessed/getNbFilesDiscovered();
 //    }
-
-    /**
-     * Method overridden to return a more accurate percentage of job processed so far by taking
-     * into account the current file's processed percentage.
-     */
-    public float getTotalPercentDone() {
-        float nbFilesProcessed = getCurrentFileIndex();
-        int nbFiles = getNbFiles();
-
-        // If file is in base folder and is not a directory...
-        if(currentFile!=null && nbFilesProcessed!=nbFiles && files.indexOf(currentFile)!=-1 && !currentFile.isDirectory()) {
-            // Add current file's progress
-            long currentFileSize = currentFile.getSize();
-            if(currentFileSize>0)
-                nbFilesProcessed += getCurrentFileByteCounter().getByteCount()/(float)currentFileSize;
-        }
-
-        return nbFilesProcessed/(float)nbFiles;
-    }
-    
 }
