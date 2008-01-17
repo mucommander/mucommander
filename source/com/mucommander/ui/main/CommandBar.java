@@ -28,6 +28,7 @@ import com.mucommander.file.FileFactory;
 import com.mucommander.file.util.ResourceLoader;
 import com.mucommander.io.BackupInputStream;
 import com.mucommander.runtime.JavaVersions;
+import com.mucommander.runtime.OsFamilies;
 import com.mucommander.runtime.OsVersions;
 import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.action.MuAction;
@@ -216,7 +217,7 @@ public class CommandBar extends JPanel implements ConfigurationListener, KeyList
             JButton button = new NonFocusableButton();
 
             // Use new JButton decorations introduced in Mac OS X 10.5 (Leopard) with Java 1.5 and up
-            if(OsVersions.MAC_OS_X_10_5.isCurrentOrHigher() && JavaVersions.JAVA_1_5.isCurrentOrHigher()) {
+            if(OsFamilies.MAC_OS_X.isCurrent() && OsVersions.MAC_OS_X_10_5.isCurrentOrHigher() && JavaVersions.JAVA_1_5.isCurrentOrHigher()) {
                 button.setMargin(new Insets(6,8,6,8));
                 button.putClientProperty("JComponent.sizeVariant", "small");
                 button.putClientProperty("JButton.buttonType", "textured");
