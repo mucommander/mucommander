@@ -5137,9 +5137,9 @@ destination_dialog.file_exists_action:SK:Predvolená akcia pre existujúci súbo
 destination_dialog.file_exists_action:JA:ファイルが存在するときの既定の動作
 destination_dialog.file_exists_action:SV:Standardåtgärd om filen redan finns
 
-# This option ensures that the transferred files are exactly the same on the
-# source and destination, by calculating their checksum and verifying that
-# they match. This prevents any data loss from occurring.
+# This option New 'Verify data integrity' transfer option that ensures that the
+# files are  strictly identical on the source and destination after being
+# transferred.
 destination_dialog.verify_integrity:EN:Verify data integrity
 destination_dialog.verify_integrity:FR:Vérifier l'intégrité des données
 # Translation missing (New!)

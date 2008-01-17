@@ -114,6 +114,8 @@ New features:
   Alt+K by default) which calculates the checksum of selected files and writes
   them to a file in a standard format. The following checksum algorithms are
   provided: Alder32, CRC32, MD2, MD4, MD5, SHA-1, SHA-256, SHA-384 and SHA-512.
+- New 'Verify data integrity' transfer option that ensures that the files are
+  strictly identical on the source and destination after being transferred.
 - Files can be marked/unmarked using a Regexp.
 - New 'Owner' and 'Group' columns added to the folder pane (not visible by
   default). The owner and group information is available on FTP and SFTP folders
@@ -146,8 +148,7 @@ Bug fixes:
 - Fixed a bug that occurred when sorting the folder pane by an invisible column 
   or when hiding the current column. This bug would leave the folder pane in an 
   inconsistent sort order and could prevent the application from restarting.
-- Fixed a bug that allowed empty custom associations to be registered, breaking
-  the whole file matching process.
+- Fixed a bug affecting custom associations.
 - Fixed a regression affecting the opening of files on non-local filesystems.
 - Fixed an issue with the drive button which would sometimes change the folder
   on the opposite panel.
@@ -159,6 +160,8 @@ Bug fixes:
   the system tray after the application had quit.
 - Security fix: credentials.xml is no longer readable by 'group' and 'other'
   under UNIX-based systems.
+- Mac OS X: fixed the 'Empty trash' option which would sometimes be enabled when 
+  the trash was empty.
 
 Known issues:
 - Korean translation is not up-to-date.
