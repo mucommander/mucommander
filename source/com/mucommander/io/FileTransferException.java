@@ -66,6 +66,13 @@ public class FileTransferException extends IOException {
     /** Source file is a parent of the destination file */
     public final static int SOURCE_PARENT_OF_DESTINATION = 11;
 
+    /** An error occurred while reading the destination file */
+    public final static int READING_DESTINATION = 12;
+
+    /** The checksum of the source and destination files don't match */
+    public final static int CHECKSUM_MISMATCH = 13;
+
+
     protected int reason;
 
 
