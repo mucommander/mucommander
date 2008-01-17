@@ -133,13 +133,6 @@ public class MkdirJob extends FileJob {
     }
 
     /**
-     * Not used.
-     */
-    public String getStatusString() {
-        return null;
-    }
-
-    /**
      * Folders only needs to be refreshed if it is the destination folder
      */
     protected boolean hasFolderChanged(AbstractFile folder) {

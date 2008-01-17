@@ -96,10 +96,6 @@ public class ChangeFileAttributesJob extends FileJob {
         return file.changeDate(date);
     }
 
-    public String getStatusString() {
-        return Translator.get("progress_dialog.processing_file", getCurrentFileInfo());
-    }
-
     // This job modifies the FileSet's base folder and potentially its subfolders
     protected boolean hasFolderChanged(AbstractFile folder) {
         return files.getBaseFolder().isParentOf(folder);

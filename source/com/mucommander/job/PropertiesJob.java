@@ -111,16 +111,7 @@ public class PropertiesJob extends FileJob {
         return true;
     }
 
-
-    /**
-     * Not used.
-     */
-    public String getStatusString() {
-        return null;
-    }
-
     // This job does not modify anything
-	
     protected boolean hasFolderChanged(AbstractFile folder) {
         return false;
     }

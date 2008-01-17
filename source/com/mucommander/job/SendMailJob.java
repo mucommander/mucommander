@@ -275,15 +275,6 @@ public class SendMailJob extends TransferFileJob {
         return true;
     }
 
-
-    public String getStatusString() {
-        if(connectedToMailServer)
-            return Translator.get("email.sending_file", getCurrentFileInfo());
-        else
-            return Translator.get("email.connecting_to_server", mailServer);
-    }
-
-    
     protected boolean hasFolderChanged(AbstractFile folder) {
         // This job does not modify anything
         return false;
@@ -330,5 +321,12 @@ public class SendMailJob extends TransferFileJob {
 
         // Close the connection
         closeConnection();
+    }
+
+    public String getStatusString() {
+        if(connectedToMailServer)
+            return Translator.get("email.sending_file", getCurrentFileInfo());
+        else
+            return Translator.get("email.connecting_to_server", mailServer);
     }
 }

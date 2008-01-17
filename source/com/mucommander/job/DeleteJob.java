@@ -215,14 +215,6 @@ public class DeleteJob extends FileJob {
         } while(true);
     }
 
-
-    public String getStatusString() {
-        if(isOptimizingArchive)
-            return Translator.get("optimizing_archive", archiveToOptimize.getName());
-
-        return Translator.get("delete.deleting_file", getCurrentFileInfo());
-    }
-
     // This job modifies baseFolder and subfolders
     protected boolean hasFolderChanged(AbstractFile folder) {
         return baseSourceFolder.isParentOf(folder);
@@ -267,5 +259,12 @@ public class DeleteJob extends FileJob {
 
             isOptimizingArchive = true;
         }
+    }
+
+    public String getStatusString() {
+        if(isOptimizingArchive)
+            return Translator.get("optimizing_archive", archiveToOptimize.getName());
+
+        return Translator.get("delete.deleting_file", getCurrentFileInfo());
     }
 }

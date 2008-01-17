@@ -57,7 +57,7 @@ public class ArchiveJob extends TransferFileJob {
     /** Lock to avoid Archiver.close() to be called while data is being written */
     private final Object ioLock = new Object();
 
-    /** OutputStream of the file Current file  */
+    /** OutputStream of the current file  */
     private OutputStream out;
 
     
@@ -138,10 +138,6 @@ public class ArchiveJob extends TransferFileJob {
         } while(true);
     }
 
-    public String getStatusString() {
-        return Translator.get("pack_dialog.packing_file", getCurrentFileInfo());
-    }
-
     protected boolean hasFolderChanged(AbstractFile folder) {
         // This job modifies the folder where the archive is
         return folder.equals(destFile.getParentSilently());     // Note: parent may be null
@@ -205,7 +201,6 @@ public class ArchiveJob extends TransferFileJob {
         } while(true);
     }
 
-
     /**
      * Overriden method to close the archiver.
      */
@@ -235,5 +230,9 @@ public class ArchiveJob extends TransferFileJob {
                 catch(IOException e) {}
             }
         }
+    }
+
+    public String getStatusString() {
+        return Translator.get("pack_dialog.packing_file", getCurrentFileInfo());
     }
 }
