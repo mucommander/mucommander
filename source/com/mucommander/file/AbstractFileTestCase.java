@@ -1073,21 +1073,51 @@ public abstract class AbstractFileTestCase extends TestCase implements FilePermi
 
             raos.close();
 
-            // Assert that the size returned by RandomAccessOutputStream#getLength() matches the one returned by
-            // AbstractFile#getSize()
-            createFile(tempFile, 1);
-            raos = tempFile.getRandomAccessOutputStream();
-
-            assertEquals(tempFile.getSize(), raos.getLength());
-
-            raos.close();
-
             // Test the integrity of the OuputStream after writing a somewhat large amount of random data
             DigestOutputStream md5Out = getMd5OutputStream(tempFile.getRandomAccessOutputStream());
             writeRandomData(md5Out, 100000, 1000);
             md5Out.close();
 
             assertEquals(ByteUtils.toHexString(md5Out.getMessageDigest().digest()), calculateMd5(tempFile));
+            tempFile.delete();
+
+            // Test getOffset(), seek(), getLength() and setLength()
+
+            // Expand the file starting at 0
+            raos = tempFile.getRandomAccessOutputStream();
+            writeRandomData(raos, 100, 10);
+            assertEquals(100, raos.getOffset());
+            assertEquals(100, raos.getLength());
+            assertEquals(100, tempFile.getSize());
+
+            // Overwrite the existing data, without expanding the file
+            raos.seek(0);
+            assertEquals(0, raos.getOffset());
+
+            writeRandomData(raos, 100, 10);
+
+            assertEquals(100, raos.getOffset());
+            assertEquals(100, raos.getLength());
+            assertEquals(100, tempFile.getSize());
+
+            // Overwrite part of the file and expand it
+            raos.seek(50);
+            assertEquals(50, raos.getOffset());
+
+            writeRandomData(raos, 100, 10);
+
+            assertEquals(150, raos.getOffset());
+            assertEquals(150, raos.getLength());
+            assertEquals(150, tempFile.getSize());
+
+            // Truncate the file
+            raos.setLength(100);
+
+            assertEquals(100, raos.getOffset());
+            assertEquals(100, raos.getLength());
+            assertEquals(100, tempFile.getSize());
+
+            raos.close();
         }
         else {
             // Assert that getRandomAccessOutputStream throws an IOException when such a stream cannot be provided
