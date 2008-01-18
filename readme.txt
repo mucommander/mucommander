@@ -162,6 +162,7 @@ Bug fixes:
   under UNIX-based systems.
 - Mac OS X: fixed the 'Empty trash' option which would sometimes be enabled when 
   the trash was empty.
+- Fixed an encoding issue affecting SFTP filenames on some platforms.
 
 Known issues:
 - Korean translation is not up-to-date.
