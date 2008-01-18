@@ -163,6 +163,7 @@ Bug fixes:
 - Mac OS X: fixed the 'Empty trash' option which would sometimes be enabled when 
   the trash was empty.
 - Fixed an encoding issue affecting SFTP filenames on some platforms.
+- J2SSH library upgraded to 0.2.9 which fixes some bugs.
 
 Known issues:
 - Korean translation is not up-to-date.
