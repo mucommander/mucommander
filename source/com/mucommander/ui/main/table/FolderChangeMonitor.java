@@ -142,7 +142,7 @@ public class FolderChangeMonitor implements Runnable, WindowListener, LocationLi
         while(monitorThread!=null) {
 			
             // Sleep for a while
-            try { monitorThread.sleep(TICK);}
+            try { Thread.sleep(TICK);}
             catch(InterruptedException e) {}
 			
             // Loop on instances
@@ -176,16 +176,18 @@ public class FolderChangeMonitor implements Runnable, WindowListener, LocationLi
      * Stops monitoring (stops monitoring thread).
      */
     public void stop() {
-        this.monitorThread = null;
+        monitorThread = null;
     }
 
 
     /**
-     * Temporarily pauses/resumes folder checks/refresh.
+     * Suspends or resumes this monitor.
+     *
+     * @param paused true to supsend, false to resume
      */
-    public synchronized void setPaused(boolean paused) {
-//        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(this+" paused="+paused);
-	
+    public void setPaused(boolean paused) {
+        // Note: this method should *not* be synchronized as it would potentially lock while the folder is being
+        // checked/refreshed
         this.paused = paused;
 
         // Check folder for changes immediately as
