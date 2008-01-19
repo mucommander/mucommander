@@ -22,10 +22,8 @@ import junit.framework.TestCase;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
-import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -47,12 +45,10 @@ public class XmlWriterTest extends TestCase {
      * Reads the content of the specified byte array in a DOM Document.
      * @param  bytes       content of the XML document.
      * @return             the content of the specified byte array in a DOM Document.
-     * @throws IOException if any error occurs.
+     * @throws Exception if any error occurs.
      */
-    private Document getDocument(byte[] bytes) throws IOException {
-        try {return DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new ByteArrayInputStream(bytes));}
-        catch(ParserConfigurationException e) {throw new IOException(e);}
-        catch(SAXException e) {throw new IOException(e);}
+    private Document getDocument(byte[] bytes) throws Exception {
+        return DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new ByteArrayInputStream(bytes));
     }
 
 
@@ -61,9 +57,9 @@ public class XmlWriterTest extends TestCase {
     // -------------------------------------------------------------------
     /**
      * Makes sure that XML entities are escaped properly.
-     * @throws IOException if an IO related error occurs.
+     * @throws IOException if an error occurs.
      */
-    public void testXmlEntities() throws IOException {
+    public void testXmlEntities() throws Exception {
         XmlWriter             writer;
         XmlAttributes         attributes;
         ByteArrayOutputStream out;
