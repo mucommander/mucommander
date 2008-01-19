@@ -23,6 +23,7 @@ import com.mucommander.io.FileTransferException;
 import com.mucommander.io.RandomAccessInputStream;
 import com.mucommander.io.RandomAccessOutputStream;
 import com.mucommander.io.security.MuProvider;
+import com.mucommander.util.StringUtils;
 import junit.framework.TestCase;
 
 import javax.swing.*;
@@ -35,6 +36,7 @@ import java.security.DigestOutputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Iterator;
+import java.util.Locale;
 import java.util.Random;
 import java.util.Vector;
 
@@ -1395,6 +1397,56 @@ public abstract class AbstractFileTestCase extends TestCase implements FilePermi
         icon = tempFile.getIcon(new Dimension(16, 16));
         if(!isHeadless)
             assertNotNull(icon);
+    }
+
+    /**
+     * Verifies that the file implementation handles unicode/non-ascii filenames properly.
+     *
+     * @throws IOException should not happen
+     */
+    public void testUnicodeFilenames() throws IOException {
+        tempFile.mkdir();
+
+        String unicodeFilename = "どうもありがとうミスターロボット";
+        Locale filenameLocale = Locale.JAPANESE;
+
+        AbstractFile unicodeFile = tempFile.getDirectChild(unicodeFilename);
+        assertEquals(unicodeFilename, unicodeFile.getName());
+
+        testUnicodeFilenames(unicodeFile, false, filenameLocale);
+        testUnicodeFilenames(unicodeFile, true, filenameLocale);
+    }
+
+    /**
+     * Tests the given file to reveal encoding-handling problems. For the test to be meaningful, the specified file
+     * should have a unicode/non-ascii filename.
+     *
+     * @param unicodeFile a file which features a unicode/non-ascii filename
+     * @param directory true to create the file as a directory, false to create a regular file
+     * @param locale the locale to use for locale-aware String comparisons
+     * @throws IOException should not happen
+     */
+    private void testUnicodeFilenames(AbstractFile unicodeFile, boolean directory, Locale locale) throws IOException {
+        if(directory)
+            unicodeFile.mkdir();
+        else
+            unicodeFile.mkfile();
+
+        assertTrue(unicodeFile.exists());
+        assertEquals(unicodeFile.isDirectory(), directory);
+
+        AbstractFile children[] = unicodeFile.getParent().ls();
+        assertEquals(1, children.length);
+        assertTrue(children[0].exists());
+        assertEquals(unicodeFile.isDirectory(), children[0].isDirectory());
+        assertTrue(StringUtils.equals(unicodeFile.getName(), children[0].getName(), locale));
+        assertTrue(StringUtils.equals(unicodeFile.getAbsolutePath(false), children[0].getAbsolutePath(false), locale));
+        assertTrue(StringUtils.equals(unicodeFile.getCanonicalPath(false), children[0].getCanonicalPath(false), locale));
+        // Note: AbstractFile#equals may return false if the two paths are equal according to StringUtils#equals but
+        // not to String#equals, which is why we're not calling it.
+
+        children[0].delete();
+        assertFalse(children[0].exists());
     }
 
 
