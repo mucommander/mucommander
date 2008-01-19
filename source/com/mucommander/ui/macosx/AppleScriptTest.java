@@ -19,7 +19,10 @@
 package com.mucommander.ui.macosx;
 
 import com.mucommander.runtime.OsFamilies;
+import com.mucommander.util.StringUtils;
 import junit.framework.TestCase;
+
+import java.util.Locale;
 
 /**
  * A test case for {@link com.mucommander.ui.macosx.AppleScript}.
@@ -53,18 +56,27 @@ public class AppleScriptTest extends TestCase {
      */
     public void testScriptEncoding() {
         StringBuffer output = new StringBuffer();
-        String s = AppleScript.getScriptEncoding().equals(AppleScript.UTF8)?
-                // Unicode test string
-                "どうもありがとうミスターロボット":
-                // MacRoman test string
-                "mércî mr röbôt";
 
-        boolean success = AppleScript.execute("do shell script \"echo "+s+"\"", output);
+        String nonAsciiString;
+        Locale stringLocale;        // for locale-aware String comparison
+
+        if(AppleScript.getScriptEncoding().equals(AppleScript.UTF8)) {      // Under AppleScript 2.0 and up
+            nonAsciiString = "どうもありがとうミスターロボット";
+            stringLocale = Locale.JAPANESE;
+        }
+        else {                                                              // MacRoman under AppleScript 1.10 and lower
+            // This String must only contain MacRoman characters
+            nonAsciiString = "mércî mr röbôt";
+            stringLocale = Locale.FRENCH;
+        }
+
+
+        boolean success = AppleScript.execute("do shell script \"echo "+nonAsciiString+"\"", output);
 
         if(OsFamilies.MAC_OS_X.isCurrent()) {
             // Assert that the script was executed successfully and that we got the same text as the one we passed
             assertTrue(success);
-            assertEquals(s, output.toString());
+            assertTrue(StringUtils.equals(nonAsciiString, output.toString(), stringLocale));
         }
         else {
             // We're not running Mac OS X, assert that execute returns false
