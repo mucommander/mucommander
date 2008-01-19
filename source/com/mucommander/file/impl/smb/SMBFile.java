@@ -657,6 +657,11 @@ import java.net.MalformedURLException;
 
         public void setLength(long newLength) throws IOException {
             raf.setLength(newLength);
+
+            // jCIFS doesn't automatically position the offset to the end of the file when it is truncated.
+            // We have to do it ourselves to honour this method's contract.   
+            if(getOffset()>newLength)
+                raf.seek(newLength);
         }
     }
 }
