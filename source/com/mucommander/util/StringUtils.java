@@ -20,6 +20,9 @@ package com.mucommander.util;
 
 import com.mucommander.PlatformManager;
 
+import java.text.Collator;
+import java.util.Locale;
+
 /**
  * This class contains convenience methods for working with strings.
  *
@@ -223,5 +226,23 @@ public class StringUtils {
             return sb.toString();
         }
 
+    }
+
+    /**
+     * This method is a locale-aware version of <code>java.lang.String#equals(Object)</code>. It returns
+     * <code>true</code> if the two given <code>String</code> are equal in the specified <code>Locale</code>.
+     *
+     * <p>This method is useful for testing text expressed in a language where two strings with an identical
+     * written representation can have a different <code>String</code> representation according to
+     * <code>java.lang.String#equals(Object)</code>. Japanese is such a language for instance.
+     * This method uses the <code>java.text.Collator</code> class under the hood.
+     *
+     * @param s1 a String to compare
+     * @param s2 a String to compare
+     * @param locale the Locale to consider for testing the String
+     * @return true if the two given String are equal in the specified Locale
+     */
+    public static boolean equals(String s1, String s2, Locale locale) {
+        return Collator.getInstance(locale).equals(s1, s2);
     }
 }
