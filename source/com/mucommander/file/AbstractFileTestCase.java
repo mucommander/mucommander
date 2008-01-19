@@ -1410,23 +1410,24 @@ public abstract class AbstractFileTestCase extends TestCase implements FilePermi
         String unicodeFilename = "どうもありがとうミスターロボット";
         Locale filenameLocale = Locale.JAPANESE;
 
-        AbstractFile unicodeFile = tempFile.getDirectChild(unicodeFilename);
-        assertEquals(unicodeFilename, unicodeFile.getName());
-
-        testUnicodeFilenames(unicodeFile, false, filenameLocale);
-        testUnicodeFilenames(unicodeFile, true, filenameLocale);
+        testUnicodeFilename(tempFile, unicodeFilename, filenameLocale, false);
+        testUnicodeFilename(tempFile, unicodeFilename, filenameLocale, true);
     }
 
     /**
-     * Tests the given file to reveal encoding-handling problems. For the test to be meaningful, the specified file
-     * should have a unicode/non-ascii filename.
+     * Creates a file as a child of the given folder using the specified unicode/non-ascii filename and tests it to
+     * reveal encoding-handling problems.
      *
-     * @param unicodeFile a file which features a unicode/non-ascii filename
-     * @param directory true to create the file as a directory, false to create a regular file
+     * @param baseFolder the folder in which to create the test file
+     * @param unicodeFilename a unicode/non-ascii filename
      * @param locale the locale to use for locale-aware String comparisons
+     * @param directory true to create the file as a directory, false for a regular file
      * @throws IOException should not happen
      */
-    private void testUnicodeFilenames(AbstractFile unicodeFile, boolean directory, Locale locale) throws IOException {
+    private void testUnicodeFilename(AbstractFile baseFolder, String unicodeFilename, Locale locale, boolean directory) throws IOException {
+        AbstractFile unicodeFile = baseFolder.getDirectChild(unicodeFilename);
+        assertEquals(unicodeFilename, unicodeFile.getName());
+
         if(directory)
             unicodeFile.mkdir();
         else
