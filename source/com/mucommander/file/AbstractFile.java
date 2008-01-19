@@ -167,7 +167,7 @@ public abstract class AbstractFile implements FilePermissions {
      * <li>For any other file protocol, the full URL including the protocol and host parts is returned (e.g. smb://192.168.1.1/root/blah)
      * </ul>
      *
-     * <p>The returned path will always be free of any login and password and thus can be safely displayed or stored.
+     * <p>The returned path will always be free of any login and password and thus can be safely displayed or stored.</p>
      *
      * @return the absolute path to this file
      */
@@ -287,6 +287,7 @@ public abstract class AbstractFile implements FilePermissions {
      *  <li>For local files under other OS: if the path is "/"
      *  <li>For any other file kinds: if the FileURL's path is '/'
      * </ul>
+     * </p>
      *
      * @return <code>true</code> if this file is a root folder
      */
@@ -333,12 +334,12 @@ public abstract class AbstractFile implements FilePermissions {
      * will *NOT* be closed by this method.
      * 
      * <p>This method should be overridden by file protocols that do not offer a {@link #getOutputStream(boolean)}
-     * implementation, but that can take an <code>InputStream</code> and use it to write the file.
+     * implementation, but that can take an <code>InputStream</code> and use it to write the file.</p>
      *
      * <p>Read and write operations are buffered, with a buffer of {@link #IO_BUFFER_SIZE} bytes. For performance
-     * reasons, this buffer is provided by {@link BufferPool}. There is no need to provide a BufferedInputStream.
+     * reasons, this buffer is provided by {@link BufferPool}. There is no need to provide a BufferedInputStream.</p>
      *
-     * <p>Copy progress can optionally be monitored by supplying a {@link com.mucommander.io.CounterInputStream}.
+     * <p>Copy progress can optionally be monitored by supplying a {@link com.mucommander.io.CounterInputStream}.</p>
      *
      * @param in the InputStream to read from
      * @param append if true, data written to the OutputStream will be appended to the end of this file. If false, any existing data will be overwritten.
@@ -469,10 +470,11 @@ public abstract class AbstractFile implements FilePermissions {
      * <li>{@link #MUST_HINT} if the file can only be copied using copyTo(), that's the case when getOutputStream() or copyStream() is not implemented
      * <li>{@link #MUST_NOT_HINT} if the file can only be copied using copyStream()
      * </ul>
+     * </p>
      *
      * <p>This default implementation returns {@link #SHOULD_NOT_HINT} as some granularity is lost when using
      *  <code>copyTo()</code> making it impossible to monitor progress when copying a file.
-     * This method should be overridden when <code>copyTo()</code> should be favored over <code>copyStream()</code>.
+     * This method should be overridden when <code>copyTo()</code> should be favored over <code>copyStream()</code>.</p>
      *
      * @param destFile the destination file that is considered being copied
      * @return the hint int indicating whether the {@link #copyTo(AbstractFile)} method should be used
@@ -552,11 +554,12 @@ public abstract class AbstractFile implements FilePermissions {
      * <li>{@link #MUST_HINT} if the file can only be copied using copyTo(), that's the case when getOutputStream() or copyStream() is not implemented
      * <li>{@link #MUST_NOT_HINT} if the file can only be copied using copyStream()
      * </ul>
+     * </p>
      *
      * <p>This default implementation returns {@link #SHOULD_HINT} if both this file and the specified destination file
      * use the same protocol and are located on the same host, {@link #SHOULD_NOT_HINT} otherwise.
      * This method should be overridden to return {@link #SHOULD_NOT_HINT} if the underlying file protocol doesn't not
-     * allow direct move/renaming without copying the contents of the source (this) file.
+     * allow direct move/renaming without copying the contents of the source (this) file.</p>
      *
      * @param destFile the destination file that is considered being copied
      * @return the hint int indicating whether the {@link #moveTo(AbstractFile)} method should be used
@@ -618,7 +621,7 @@ public abstract class AbstractFile implements FilePermissions {
      * <code>true</code>.
      *
      * <p>This default implementation filters out files *after* they have been created. This method
-     * should be overridden if a more efficient implementation can be provided by subclasses.
+     * should be overridden if a more efficient implementation can be provided by subclasses.</p>
      *
      * @param filter the FilenameFilter to be used to filter out files from the list, may be <code>null</code>
      * @return the children files that this file contains
@@ -637,7 +640,7 @@ public abstract class AbstractFile implements FilePermissions {
      * <p>Implementation note: the default implementation of this method calls sequentially {@link #getPermission(int, int)} for
      * each permission and access (that's a total of 9 calls). This may affect performance on filesystems which need to perform
      * an I/O request to retrieve each permission individually. In that case, and if the fileystem allows to retrieve all
-     * permissions at once, this method should be overridden.
+     * permissions at once, this method should be overridden.</p>
      *
      * @return permissions as an int, UNIX octal style.
      */
@@ -667,8 +670,8 @@ public abstract class AbstractFile implements FilePermissions {
      * <p>Implementation note: the default implementation of this method calls sequentially {@link #setPermission(int, int, boolean)},
      * for each permission and access (that's a total 9 calls). This may affect performance on filesystems which need
      * to perform an I/O request to change each permission individually. In that case, and if the fileystem allows
-     * to change all permissions at once, this method should be overridden.
-         *
+     * to change all permissions at once, this method should be overridden.</p>
+     *
      * @param permissions the new permissions this file should have
      * @return true if the operation was successful, false if at least one of the file permissions could not be changed
      */
@@ -698,7 +701,7 @@ public abstract class AbstractFile implements FilePermissions {
      * <p>Implementation note: the default implementation of this method calls sequentially {@link #canGetPermission(int, int)},
      * for each permission and access (that's a total 9 calls). This method should be overridden if a more efficient
      * implementation can be provided. Usually, file permissions support is the same for all files on a filesystem. If
-     * that is the case, this method should be overridden to return a static permission mask.
+     * that is the case, this method should be overridden to return a static permission mask.</p>
      *
      * @return a bit mask describing the permission bits that the filesystem can read
      */
@@ -728,7 +731,7 @@ public abstract class AbstractFile implements FilePermissions {
      * <p>Implementation note: the default implementation of this method calls sequentially {@link #canGetPermission(int, int)},
      * for each permission and access (that's a total 9 calls). This method should be overridden if a more efficient
      * implementation can be provided. Usually, file permissions support is the same for all files on a filesystem. If
-     * that is the case, this method should be overridden to return a static permission mask.
+     * that is the case, this method should be overridden to return a static permission mask.</p>
      *
      * @return a bit mask describing the permission bits that the filesystem can change
      */
@@ -761,6 +764,7 @@ public abstract class AbstractFile implements FilePermissions {
      *  <li>'w' if this file has write permission, '-' otherwise
      *  <li>'x' if this file has executable permission, '-' otherwise
      * </ul>
+     * </p>
      *
      * <p>The first character triplet for 'user' access will always be added to the permissions. Then the 'group' and 'other'
      * triplets will only be added if at least one of the user permission bits can be retrieved, as tested with
@@ -772,6 +776,7 @@ public abstract class AbstractFile implements FilePermissions {
      *  <li>a regular file for which {@link #getPermissionGetMask()} returns 777 (full permissions support) and which
      * has read/write/executable permissions for all three 'user', 'group' and 'other' access types will return "-rwxrwxrwx".
      * </ul>
+     * </p>
      *
      * @return a string representation of this file's permissions
      */
@@ -1318,10 +1323,11 @@ public abstract class AbstractFile implements FilePermissions {
      * reasons, this buffer is provided by {@link BufferPool}. There is no need to provide a BufferedInputStream.
      * A BufferedOutputStream also isn't necessary, unless this method is called repeatedly with the same OutputStream
      * and with potentially small InputStream (smaller than {@link #IO_BUFFER_SIZE}: in this case, providing a
-     * BufferedOutputStream will further improve performance by grouping calls to the underlying OutputStream write method.
+     * BufferedOutputStream will further improve performance by grouping calls to the underlying OutputStream write
+     * method.</p>
      *
      * <p>Copy progress can optionally be monitored by supplying a {@link com.mucommander.io.CounterInputStream}
-     * and/or {@link com.mucommander.io.CounterOutputStream}.
+     * and/or {@link com.mucommander.io.CounterOutputStream}.</p>
      *
      * @param in the InputStream to read from
      * @param out the OutputStream to write to
@@ -1408,8 +1414,13 @@ public abstract class AbstractFile implements FilePermissions {
      * Tests a file for equality: returns <code>true</code> if the given file has the same canonical path,
      * as returned by {@link #getCanonicalPath()}.
      *
+     * <p>It is noteworthy that this method uses <code>java.lang.String#equals(Object)</code> to compare paths, which
+     * in some rare cases may return <code>false</code> for non-ascii/Unicode paths that have the same written
+     * representation but are not equal according to <code>java.lang.String#equals(Object)</code>. Handling such cases
+     * would require a locale-aware String comparison which is not an option here.</p>
+     *
      * <p>This method should be overriden for network-based filesystems for which a host can have multiple
-     * path representations (hostname and IP address).
+     * path representations (hostname and IP address).</p>
      */
     public boolean equals(Object f) {
         if(f==null || !(f instanceof AbstractFile))
