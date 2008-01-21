@@ -36,7 +36,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 <!-- value, you must delete it from this file or it will use   -->
 <!-- an empty value.                                           -->
 <!--                                                           -->
-<!-- Author: Nicolas Rinaudo                                   -->
+<!-- Author: Nicolas Rinaudo, Maxence Bernard                  -->
 <!-- ========================================================= -->
 <project>
   <!-- = Global configuration ================================ -->
@@ -153,4 +153,40 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!--                                                         -->
   <!-- If not set, Windows executables won't be generated.     -->
   <property name="launch4j.dir"      location=""/>
+
+
+  <!-- = muCommander unit test properties ==================== -->
+  <!-- ======================================================= -->
+  <!-- The following properties allow to configure certain     -->
+  <!-- unit tests that require user-defined paramaters.        -->
+  <!-- Note: all properties starting with 'test_properties'    -->
+  <!-- are automatically made available to unit tests as       -->
+  <!-- system properties.                                      -->
+
+  <!-- = SMB file tests ====================================== -->
+
+  <!-- Set this property to "true" to enable SMB tests,        -->
+  <!-- "false" to skip them                                    -->
+  <property name="test_properties.smb_test.enabled"
+            value="false"/>
+
+  <!-- Specifies the URI to the SMB folder where temporary     -->
+  <!-- test files are created. This URI must contain valid     -->
+  <!-- credentials.                                            -->
+  <property name="test_properties.smb_test.temp_folder"
+            value="smb://login:password@localhost/share/folder"/>
+
+  <!-- = SFTP file tests ===================================== -->
+
+  <!-- Set this property to "true" to enable SFTP tests,       -->
+  <!-- "false" to skip them                                    -->
+  <property name="test_properties.sftp_test.enabled"
+            value="false"/>
+
+  <!-- Specifies the URI to the SFTP folder where temporary    -->
+  <!-- test files are created. This URI must contain valid     -->
+  <!-- credentials.                                            -->
+  <property name="test_properties.sftp_test.temp_folder"
+            value="sftp://login:password@localhost/share/folder"/>
+
 </project>
