@@ -496,12 +496,13 @@ public class SFTPFile extends AbstractFile {
             // Makes sure the connection is started, if not starts it
             connHandler.checkConnection();
 
+            // Note: this J2SSH method has been patched to set the permissions of the new directory to 0755 (rwxr-xr-x)
+            // instead of 0. This patches allows to avoid a 'change permissions' request (cf comment code hereunder).
             connHandler.sftpSubsystem.makeDirectory(absPath);
 
-            // Todo: patch j2ssh to create the directory directly with those permissions, would save one request
-            // Set new directory permissions to 755 octal (493 dec): "rwxr-xr-x"
-            // Note: by default, permissions for files freshly created is 0 (not readable/writable/executable by anyone)!
-            connHandler.sftpSubsystem.changePermissions(absPath, 493);
+//            // Set new directory permissions to 755 octal (493 dec): "rwxr-xr-x"
+//            // Note: by default, permissions for files freshly created is 0 (not readable/writable/executable by anyone)!
+//            connHandler.sftpSubsystem.changePermissions(absPath, 493);
 
             // Update local attributes
             fileAttributes.setExists(true);
@@ -771,7 +772,7 @@ public class SFTPFile extends AbstractFile {
             catch(IOException e) {
                 // File doesn't exist on the server, create FileAttributes instance with default values
                 attrs = new FileAttributes();
-                attrs.setPermissions(new UnsignedInteger32(0));     // need to prevent getPermissions() from returning null
+                attrs.setPermissions(new UnsignedInteger32(0));     // needed to prevent getPermissions() from returning null
                 exists = false;
 
                 // Rethrow AuthException
