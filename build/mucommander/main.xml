@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ========================================================= -->
 <!-- Defines muCommander specific targets.                     -->
 <!--                                                           -->
-<!-- Author: Nicolas Rinaudo                                   -->
+<!-- Author: Nicolas Rinaudo, Maxence Bernard                  -->
 <!-- ========================================================= -->
 <project>
   <!-- = Resources generation ================================ -->
@@ -487,6 +487,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
           <include name="**/*.jar"/>
         </fileset>
       </classpath>
+      <syspropertyset>
+        <propertyset id="test_properties">
+          <propertyref prefix="test_properties."/>
+        </propertyset>
+      </syspropertyset>
       <batchtest fork="yes" todir="${junit.reports}/raw">
         <fileset dir="${classes.normal}">
           <include name="**/*Test.class"/>
