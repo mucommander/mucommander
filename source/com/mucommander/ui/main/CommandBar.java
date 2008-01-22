@@ -27,6 +27,7 @@ import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
 import com.mucommander.file.util.ResourceLoader;
 import com.mucommander.io.BackupInputStream;
+import com.mucommander.io.StreamUtils;
 import com.mucommander.runtime.JavaVersions;
 import com.mucommander.runtime.OsFamilies;
 import com.mucommander.runtime.OsVersions;
@@ -144,7 +145,7 @@ public class CommandBar extends JPanel implements ConfigurationListener, KeyList
             in = ResourceLoader.getResourceAsStream(COMMAND_BAR_RESOURCE_PATH);
             out = destination.getOutputStream(false);
 
-            AbstractFile.copyStream(in, out);
+            StreamUtils.copyStream(in, out);
         }
         finally {
             if(in != null) {

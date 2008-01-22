@@ -22,6 +22,7 @@ import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.MimeTypes;
 import com.mucommander.file.util.FileSet;
+import com.mucommander.io.StreamUtils;
 import com.mucommander.io.base64.Base64OutputStream;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.file.ProgressDialog;
@@ -203,7 +204,7 @@ public class SendMailJob extends TransferFileJob {
             fileIn = setCurrentInputStream(file.getInputStream());
             
             // Write file to socket
-            AbstractFile.copyStream(fileIn, out64);
+            StreamUtils.copyStream(fileIn, out64);
 	
             // Writes padding bytes without closing the stream.
             out64.writePadding();

@@ -28,6 +28,7 @@ import com.mucommander.file.FileFactory;
 import com.mucommander.file.FileURL;
 import com.mucommander.file.util.ResourceLoader;
 import com.mucommander.io.BackupInputStream;
+import com.mucommander.io.StreamUtils;
 import com.mucommander.runtime.JavaVersions;
 import com.mucommander.runtime.OsFamilies;
 import com.mucommander.runtime.OsVersions;
@@ -128,7 +129,7 @@ public class ToolBar extends JToolBar implements ConfigurationListener, MouseLis
             in = ResourceLoader.getResourceAsStream(TOOLBAR_RESOURCE_PATH);
             out = destination.getOutputStream(false);
 
-            AbstractFile.copyStream(in, out);
+            StreamUtils.copyStream(in, out);
         }
         finally {
             if(in != null) {

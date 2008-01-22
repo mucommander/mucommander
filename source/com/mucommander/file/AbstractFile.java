@@ -356,7 +356,7 @@ public abstract class AbstractFile implements FilePermissions {
         }
 
         try {
-            copyStream(in, out);
+            StreamUtils.copyStream(in, out, IO_BUFFER_SIZE);
         }
         finally {
             // Close stream even if copyStream() threw an IOException
@@ -1314,56 +1314,6 @@ public abstract class AbstractFile implements FilePermissions {
         return filename.substring(lastDotPos+1, len);
     }
 
-
-    /**
-     * Copies the contents of the given <code>InputStream</code> to the specified </code>OutputStream</code>
-     * and throws an IOException if something went wrong. The streams will *NOT* be closed by this method.
-     *
-     * <p>Read and write operations are buffered, with a buffer of {@link #IO_BUFFER_SIZE} bytes. For performance
-     * reasons, this buffer is provided by {@link BufferPool}. There is no need to provide a BufferedInputStream.
-     * A BufferedOutputStream also isn't necessary, unless this method is called repeatedly with the same OutputStream
-     * and with potentially small InputStream (smaller than {@link #IO_BUFFER_SIZE}: in this case, providing a
-     * BufferedOutputStream will further improve performance by grouping calls to the underlying OutputStream write
-     * method.</p>
-     *
-     * <p>Copy progress can optionally be monitored by supplying a {@link com.mucommander.io.CounterInputStream}
-     * and/or {@link com.mucommander.io.CounterOutputStream}.</p>
-     *
-     * @param in the InputStream to read from
-     * @param out the OutputStream to write to
-     * @throws FileTransferException if something went wrong while reading from or writing to one of the provided streams
-     */
-    public static void copyStream(InputStream in, OutputStream out) throws FileTransferException {
-        // Use BufferPool to reuse any available buffer of the same size
-        byte buffer[] = BufferPool.getBuffer(IO_BUFFER_SIZE);
-        try {
-            // Copies the InputStream's content to the OutputStream chunks by chunks
-            int nbRead;
-
-            while(true) {
-                try {
-                    nbRead = in.read(buffer, 0, buffer.length);
-                }
-                catch(IOException e) {
-                    throw new FileTransferException(FileTransferException.READING_SOURCE);
-                }
-
-                if(nbRead==-1)
-                    break;
-
-                try {
-                    out.write(buffer, 0, nbRead);
-                }
-                catch(IOException e) {
-                    throw new FileTransferException(FileTransferException.WRITING_DESTINATION);
-                }
-            }
-        }
-        finally {
-            // Make the buffer available for further use
-            BufferPool.releaseBuffer(buffer);
-        }
-    }
 
     /**
      * Returns the checksum (also referred to as <i>hash</i> or <i>digest</i>) of the given <code>InputStream</code>

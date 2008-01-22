@@ -24,6 +24,7 @@ import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
 import com.mucommander.file.util.ResourceLoader;
 import com.mucommander.io.BackupInputStream;
+import com.mucommander.io.StreamUtils;
 import com.mucommander.ui.main.MainFrame;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -297,7 +298,7 @@ public class ActionKeymap extends DefaultHandler {
                     in = ResourceLoader.getResourceAsStream(ACTION_KEYMAP_RESOURCE_PATH);
                     out = file.getOutputStream(false);
 
-                    AbstractFile.copyStream(in, out);
+                    StreamUtils.copyStream(in, out);
                 }
                 catch(IOException e) {
                     if(Debug.ON) Debug.trace("Error: unable to copy "+ACTION_KEYMAP_RESOURCE_PATH+" resource to "+actionKeyMapFile+": "+e);

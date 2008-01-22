@@ -22,6 +22,7 @@ package com.mucommander.job;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.archiver.Archiver;
 import com.mucommander.file.util.FileSet;
+import com.mucommander.io.StreamUtils;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.file.FileCollisionDialog;
 import com.mucommander.ui.dialog.file.ProgressDialog;
@@ -108,7 +109,7 @@ public class ArchiveJob extends TransferFileJob {
                     // written to the archive OutputStream, this would cause ZipOutputStream to deadlock.
                     synchronized(ioLock) {
                         // Create a new file entry in archive and copy the current file
-                        AbstractFile.copyStream(in, archiver.createEntry(entryRelativePath, file));
+                        StreamUtils.copyStream(in, archiver.createEntry(entryRelativePath, file));
                         in.close();
                     }
                     return true;
