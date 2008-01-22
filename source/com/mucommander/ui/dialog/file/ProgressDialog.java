@@ -28,6 +28,7 @@ import com.mucommander.text.SizeFormat;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.button.ButtonChoicePanel;
 import com.mucommander.ui.button.CollapseExpandButton;
+import com.mucommander.ui.chooser.SizeChooser;
 import com.mucommander.ui.dialog.FocusDialog;
 import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.layout.YBoxPanel;
@@ -51,8 +52,6 @@ import java.util.Vector;
  */
 public class ProgressDialog extends FocusDialog implements Runnable, ActionListener, ItemListener, ChangeListener, FileJobListener {
 
-    private MainFrame mainFrame;
-
     private JLabel currentFileLabel;
     private JLabel totalTransferredLabel;
 
@@ -61,8 +60,7 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
 
     private JLabel currentSpeedLabel;
     private JCheckBox limitSpeedCheckBox;
-    private JSpinner limitSpeedSpinner;
-    private JComboBox speedUnitComboBox;
+    private SizeChooser speedChooser;
     private JLabel elapsedTimeLabel;
 
     private SpeedGraph speedGraph;
@@ -109,8 +107,6 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
 
     public ProgressDialog(MainFrame mainFrame, String title) {
         super(mainFrame, title, mainFrame);
-
-        this.mainFrame = mainFrame;
 
         // Sets maximum and minimum dimensions for this dialog
         setMaximumSize(MAXIMUM_DIALOG_DIMENSION);
@@ -169,21 +165,12 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
             limitSpeedCheckBox.addItemListener(this);
 
             tempPanel2.add(limitSpeedCheckBox, BorderLayout.WEST);
-            this.limitSpeedSpinner = new JSpinner(new SpinnerNumberModel(0, 0, 10000, 100));
-            limitSpeedSpinner.setEnabled(false);
-            limitSpeedSpinner.addChangeListener(this);
 
-            JPanel tempPanel3 = new JPanel(new FlowLayout(FlowLayout.LEADING));
-            tempPanel3.add(limitSpeedSpinner);
-            speedUnitComboBox = new JComboBox();
-            for(int i=SizeFormat.BYTE_UNIT; i<SizeFormat.GIGA_BYTE_UNIT; i++)
-                speedUnitComboBox.addItem(SizeFormat.getUnitString(i, true));
-            speedUnitComboBox.setSelectedIndex(SizeFormat.KILO_BYTE_UNIT);
-            speedUnitComboBox.setEnabled(false);
-            speedUnitComboBox.addItemListener(this);
-            tempPanel3.add(speedUnitComboBox);
+            speedChooser = new SizeChooser(true);
+            speedChooser.setEnabled(false);
+            speedChooser.addChangeListener(this);
 
-            tempPanel2.add(tempPanel3, BorderLayout.EAST);
+            tempPanel2.add(speedChooser, BorderLayout.EAST);
             advancedPanel.add(tempPanel2);
             advancedPanel.addSpace(5);
 
@@ -272,7 +259,7 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
 //    }
 
     private void updateThroughputLimit() {
-        transferFileJob.setThroughputLimit(limitSpeedCheckBox.isSelected()?SizeFormat.getUnitBytes(speedUnitComboBox.getSelectedIndex())*(((Integer)limitSpeedSpinner.getValue())).intValue():-1);
+        transferFileJob.setThroughputLimit(limitSpeedCheckBox.isSelected()?speedChooser.getValue():-1);
     }
 
     private void updateCurrentSpeedLabel(String value) {
@@ -313,8 +300,7 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
                 if(transferFileJob!=null) {
                     skipButton.setEnabled(false);
                     limitSpeedCheckBox.setEnabled(false);
-                    speedUnitComboBox.setEnabled(false);
-                    limitSpeedSpinner.setEnabled(false);
+                    speedChooser.setEnabled(false);
                 }
             }
         }
@@ -533,15 +519,10 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
     /////////////////////////////////
 
     public void itemStateChanged(ItemEvent e) {
-//if(Debug.ON) Debug.trace("called, source="+e.getSource()+" isEnabled="+limitSpeedCheckBox.isEnabled());
         Object source = e.getSource();
         if(source==limitSpeedCheckBox) {
             boolean isEnabled = limitSpeedCheckBox.isSelected();
-            limitSpeedSpinner.setEnabled(isEnabled);
-            speedUnitComboBox.setEnabled(isEnabled);
-            updateThroughputLimit();
-        }
-        else if(source==speedUnitComboBox) {
+            speedChooser.setEnabled(isEnabled);
             updateThroughputLimit();
         }
     }
@@ -552,7 +533,7 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
     ///////////////////////////////////
 
     public void stateChanged(ChangeEvent e) {
-        if(e.getSource()==limitSpeedSpinner) {
+        if(e.getSource()==speedChooser) {
             updateThroughputLimit();
         }
     }
