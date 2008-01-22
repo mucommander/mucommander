@@ -352,7 +352,7 @@ public class ZipFile implements ZipConstants {
                     long cdLength = cdEndOffset-cdStartOffset;
 
                     // Copy the central directory
-                    copyChunk(rais, raos, cdStartOffset, newCdStartOffset, cdLength);
+                    StreamUtils.copyChunk(rais, raos, cdStartOffset, newCdStartOffset, cdLength);
 
                     // Update central directory header offsets
                     shift = cdStartOffset-newCdStartOffset;
@@ -375,7 +375,7 @@ public class ZipFile implements ZipConstants {
                     // Note: the data descriptor (if any) is not erased, this would require some extra check and it is
                     // not really necessary, as the information it contains is not sensitive
                     raos.seek(entryInfo.headerOffset);
-                    writeZeros(raos, entryInfo.dataOffset-entryInfo.headerOffset + ze.getCompressedSize());
+                    StreamUtils.fillWithConstant(raos, (byte)0, entryInfo.dataOffset-entryInfo.headerOffset + ze.getCompressedSize(), WRITE_BUFFER_SIZE);
 
                     // Update the central directory :
                     // - do not touch the file headers that are located before the deleted entry
@@ -387,7 +387,7 @@ public class ZipFile implements ZipConstants {
                     long startOffset = ((ZipEntry)entries.elementAt(entryIndex+1)).getEntryInfo().centralHeaderOffset;
                     cdEndOffset = lastEntryInfo.centralHeaderOffset + lastEntryInfo.centralHeaderLen;
 
-                    copyChunk(rais, raos, startOffset, entryInfo.centralHeaderOffset, cdEndOffset-startOffset);
+                    StreamUtils.copyChunk(rais, raos, startOffset, entryInfo.centralHeaderOffset, cdEndOffset-startOffset);
 
                     // Update central directory header offsets for files located after the deleted entry as their
                     // offset has changed
@@ -545,7 +545,7 @@ public class ZipFile implements ZipConstants {
                 calculateDataOffset(currentEntryInfo);
 
             if(currentEntryInfo.headerOffset>0) {
-                copyChunk(rais, raos, currentEntryInfo.headerOffset, 0, (currentEntryInfo.dataOffset- currentEntryInfo.headerOffset)+currentEntry.getCompressedSize());
+                StreamUtils.copyChunk(rais, raos, currentEntryInfo.headerOffset, 0, (currentEntryInfo.dataOffset- currentEntryInfo.headerOffset)+currentEntry.getCompressedSize());
                 shift = currentEntryInfo.headerOffset;
 
                 currentEntryInfo.headerOffset = 0;
@@ -574,7 +574,7 @@ public class ZipFile implements ZipConstants {
 
                 // Tests if there is some unused space between the 2 entries
                 if(previousEntryEnd < currentEntryInfo.headerOffset) {
-                    copyChunk(rais, raos, currentEntryInfo.headerOffset, previousEntryInfo.dataOffset+previousCompressedSize, (currentEntryInfo.dataOffset- currentEntryInfo.headerOffset)+currentEntry.getCompressedSize());
+                    StreamUtils.copyChunk(rais, raos, currentEntryInfo.headerOffset, previousEntryInfo.dataOffset+previousCompressedSize, (currentEntryInfo.dataOffset- currentEntryInfo.headerOffset)+currentEntry.getCompressedSize());
                     shift = currentEntryInfo.headerOffset - (previousEntryInfo.dataOffset+previousCompressedSize);
 
                     currentEntryInfo.headerOffset -= shift;
@@ -620,72 +620,6 @@ public class ZipFile implements ZipConstants {
             catch(IOException e) {}
         }
     }
-
-
-    /**
-     * Copies a chunk of data from the given {@link RandomAccessInputStream} to the specified
-     * {@link RandomAccessOutputStream}.
-     *
-     * @param rais the source stream
-     * @param raos the destination stream
-     * @param srcOffset start of data in the source stream
-     * @param destOffset start of data in the destination stream
-     * @param length number of bytes to copy
-     * @throws IOException if an error occurred while copying data
-     */
-    private static void copyChunk(RandomAccessInputStream rais, RandomAccessOutputStream raos, long srcOffset, long destOffset, long length) throws IOException {
-//if(Debug.ON) Debug.trace("srcOffset="+srcOffset+" destOffset="+destOffset+" length="+length);
-
-        rais.seek(srcOffset);
-        raos.seek(destOffset);
-
-        // Use BufferPool to avoid excessive memory allocation and garbage collection
-        byte buffer[] = BufferPool.getBuffer(WRITE_BUFFER_SIZE);
-
-        try {
-            long remaining = length;
-            int nbBytes;
-            while(remaining>0) {
-                nbBytes = (int)(remaining< WRITE_BUFFER_SIZE ?remaining: WRITE_BUFFER_SIZE);
-                rais.readFully(buffer, 0, nbBytes);
-                raos.write(buffer, 0, nbBytes);
-                remaining -= nbBytes;
-            }
-        }
-        finally {
-            BufferPool.releaseBuffer(buffer);
-        }
-    }
-
-
-    /**
-     * Writes the specified number of zero bytes to the given <code>OutputStream</code>. 
-     *
-     * @param out the OutputStream to write zeros to
-     * @param len number of zero bytes to write
-     * @throws IOException if an error occurred while writing zeros
-     */
-    private static void writeZeros(OutputStream out, long len) throws IOException {
-//if(Debug.ON) Debug.trace("writing "+len+" zeros");
-
-        // Use BufferPool to avoid excessive memory allocation and garbage collection
-        int bufferLen = WRITE_BUFFER_SIZE;
-        byte buffer[] = BufferPool.getBuffer(bufferLen);
-
-        try {
-            long remaining = len;
-            int nbWrite;
-            while(remaining>0) {
-                nbWrite = (int)(remaining>bufferLen?bufferLen:remaining);
-                out.write(buffer, 0, nbWrite);
-                remaining -= nbWrite;
-            }
-        }
-        finally {
-            BufferPool.releaseBuffer(buffer);
-        }
-    }
-
 
 
     /**
