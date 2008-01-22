@@ -414,7 +414,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   </target>
 
   <target name="conf-standalone-load-libpath" if="conf.standalone">
-    <taskdef resource="antlib.xml" classpath="${anttools.path}"/>
+    <taskdef resource="com/mucommander/ant/antlib.xml" classpath="${tools.jar.cmp}"/>
     <libpath property="java.lib"/>
   </target>
   
