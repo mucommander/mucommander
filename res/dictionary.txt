@@ -696,6 +696,24 @@ create:SK:Vytvoriť
 create:JA:作成
 create:SV:Skapa
 
+# Used in the Mkdir/Mkfile progress dialog, %1 is replaced by a filename
+creating_file:EN:Creating %1
+creating_file:FR:Création de %1 en cours
+# Translation missing (New!)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # Used as a button label in the file chooser of the 'Folders' preferences
 choose:EN:Choose
 choose:FR:Choisir
@@ -5798,6 +5816,28 @@ download_dialog.downloading_file:NL:Downloaden %1
 download_dialog.downloading_file:SK:Sťahuje sa %1
 download_dialog.downloading_file:JA:%1 のダウンロード中
 download_dialog.downloading_file:SV:Laddar ner %1
+
+
+#################
+# Mkfile dialog #
+#################
+
+mkfile_dialog.allocate_space:EN:Allocate space
+mkfile_dialog.allocate_space:FR:Allouer de l'espace
+# Translation missing (New!)
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 ##########

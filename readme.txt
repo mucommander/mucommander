@@ -116,6 +116,8 @@ New features:
   provided: Alder32, CRC32, MD2, MD4, MD5, SHA-1, SHA-256, SHA-384 and SHA-512.
 - New 'Verify data integrity' transfer option that ensures that the files are
   strictly identical on the source and destination after being transferred.
+  This option slows down transfers significantly but can prevent data loss
+  caused by faulty mediums.
 - Files can be marked/unmarked using a Regexp.
 - New 'Owner' and 'Group' columns added to the folder pane (not visible by
   default). The owner and group information is available on FTP and SFTP folders
@@ -125,6 +127,7 @@ New features:
   users mark all files whose extension match that of the current selection.
 - New 'Open in other panel' feature (mapped onto Shift+Alt+ENTER by default) 
   that opens the current selection in the other panel.
+- 'Mkfile' can now allocate space for the file.
 
 Improvements:
 - Added an 'Explore bookmarks' item to the 'Bookmarks' menu.

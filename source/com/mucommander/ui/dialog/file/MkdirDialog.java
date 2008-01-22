@@ -27,6 +27,7 @@ import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.action.MkdirAction;
 import com.mucommander.ui.action.MkfileAction;
+import com.mucommander.ui.chooser.SizeChooser;
 import com.mucommander.ui.dialog.DialogToolkit;
 import com.mucommander.ui.dialog.FocusDialog;
 import com.mucommander.ui.layout.YBoxPanel;
@@ -36,6 +37,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 
 
 /**
@@ -45,12 +48,15 @@ import java.awt.event.ActionListener;
  * @see MkfileAction
  * @author Maxence Bernard
  */
-public class MkdirDialog extends FocusDialog implements ActionListener {
+public class MkdirDialog extends FocusDialog implements ActionListener, ItemListener {
 
     private MainFrame mainFrame;
 	
     private JTextField pathField;
-	
+
+    private JCheckBox allocateSpaceCheckBox;
+    private SizeChooser allocateSpaceChooser;
+
     private JButton okButton;
 
     private boolean mkfileMode;
@@ -92,7 +98,21 @@ public class MkdirDialog extends FocusDialog implements ActionListener {
         pathField.setSelectionStart(0);
         pathField.setSelectionEnd(pathField.getText().length());
         mainPanel.add(pathField);
-		
+
+        if(mkfileMode) {
+            JPanel tempPanel = new JPanel(new BorderLayout());
+
+            allocateSpaceCheckBox = new JCheckBox(Translator.get("mkfile_dialog.allocate_space")+":", false);
+            allocateSpaceCheckBox.addItemListener(this);
+            tempPanel.add(allocateSpaceCheckBox, BorderLayout.WEST);
+
+            allocateSpaceChooser = new SizeChooser(false);
+            allocateSpaceChooser.setEnabled(false);
+            tempPanel.add(allocateSpaceChooser, BorderLayout.EAST);
+
+            mainPanel.add(tempPanel);
+        }
+        
         mainPanel.addSpace(10);
         contentPane.add(mainPanel, BorderLayout.NORTH);
         
@@ -111,9 +131,9 @@ public class MkdirDialog extends FocusDialog implements ActionListener {
 
 
     /**
-     * Creates a new directory. This method is trigged by the 'OK' button or return key.
+     * Starts an {@link com.mucommander.job.MkdirJob}. This method is trigged by the 'OK' button or the return key.
      */
-    public void doMkdir() {
+    public void startJob() {
         String enteredPath = pathField.getText();
 
         // Resolves destination folder
@@ -136,7 +156,16 @@ public class MkdirDialog extends FocusDialog implements ActionListener {
         FileSet fileSet = new FileSet(folder);
         // Job's FileSet needs to contain at least one file
         fileSet.add(folder);
-        new MkdirJob(mainFrame, fileSet, newName, mkfileMode).start();
+
+        ProgressDialog progressDialog = new ProgressDialog(mainFrame, getTitle());
+
+        MkdirJob job;
+        if(mkfileMode)
+            job = new MkdirJob(progressDialog, mainFrame, fileSet, newName, allocateSpaceCheckBox.isSelected()?allocateSpaceChooser.getValue():-1);
+        else
+            job = new MkdirJob(progressDialog, mainFrame, fileSet, newName);
+
+        progressDialog.start(job);
     }
 
 	
@@ -145,9 +174,9 @@ public class MkdirDialog extends FocusDialog implements ActionListener {
     }
 
 
-    ////////////////////////////
-    // ActionListener methods //
-    ////////////////////////////
+    ///////////////////////////////////
+    // ActionListener implementation //
+    ///////////////////////////////////
 	
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
@@ -155,9 +184,16 @@ public class MkdirDialog extends FocusDialog implements ActionListener {
 		
         // OK Button
         if(source == okButton || source == pathField) {
-            doMkdir();
+            startJob();
         }
     }
-	
-	
+
+
+    /////////////////////////////////
+    // ItemListener implementation //
+    /////////////////////////////////
+
+    public void itemStateChanged(ItemEvent e) {
+        allocateSpaceChooser.setEnabled(allocateSpaceCheckBox.isSelected());
+    }
 }
