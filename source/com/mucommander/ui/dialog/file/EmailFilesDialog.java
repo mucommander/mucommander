@@ -135,7 +135,7 @@ public class EmailFilesDialog extends JobDialog implements ActionListener, ItemL
                 for(int i=0; i<nbFiles; i++) {
                     file = (AbstractFile)flattenedFiles.elementAt(i);
                     fileCheckboxes[i] = new JCheckBox(file.getName()
-                                                      +" ("+ SizeFormat.format(file.getSize(), SizeFormat.DIGITS_SHORT| SizeFormat.UNIT_SHORT| SizeFormat.INCLUDE_SPACE| SizeFormat.ROUND_TO_KB)+")", true);
+                                                      +" ("+ SizeFormat.format(file.getSize(), SizeFormat.DIGITS_MEDIUM| SizeFormat.UNIT_SHORT| SizeFormat.INCLUDE_SPACE| SizeFormat.ROUND_TO_KB)+")", true);
                     fileCheckboxes[i].addItemListener(this);
                     tempPanel2.add(fileCheckboxes[i]);
                 }

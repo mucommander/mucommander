@@ -155,7 +155,7 @@ public class FileTableModel extends AbstractTableModel implements ConfigurationL
             file = getCachedFileAtRow(i);
             int cellIndex = fileArrayIndex[fileIndex]+(parent==null?0:1);
             cellValuesCache[cellIndex][Columns.NAME-1] = file.getName();
-            cellValuesCache[cellIndex][Columns.SIZE-1] = file.isDirectory()?DIRECTORY_SIZE_STRING: SizeFormat.format(file.getSize(), (displayCompactSize? SizeFormat.DIGITS_SHORT: SizeFormat.DIGITS_FULL)|(displayCompactSize? SizeFormat.UNIT_SHORT: SizeFormat.UNIT_NONE)| SizeFormat.INCLUDE_SPACE| SizeFormat.ROUND_TO_KB);
+            cellValuesCache[cellIndex][Columns.SIZE-1] = file.isDirectory()?DIRECTORY_SIZE_STRING: SizeFormat.format(file.getSize(), (displayCompactSize? SizeFormat.DIGITS_MEDIUM: SizeFormat.DIGITS_FULL)|(displayCompactSize? SizeFormat.UNIT_SHORT: SizeFormat.UNIT_NONE)| SizeFormat.INCLUDE_SPACE| SizeFormat.ROUND_TO_KB);
             cellValuesCache[cellIndex][Columns.DATE-1] = CustomDateFormat.format(new Date(file.getDate()));
             cellValuesCache[cellIndex][Columns.PERMISSIONS-1] = file.getPermissionsString();
             if(canGetOwner)
