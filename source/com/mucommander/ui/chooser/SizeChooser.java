@@ -59,7 +59,7 @@ public class SizeChooser extends JPanel {
     public SizeChooser(boolean speedUnits) {
         super(new FlowLayout(FlowLayout.LEADING));
 
-        valueSpinner = new JSpinner(new SpinnerNumberModel(0, 0, 10000, 100));
+        valueSpinner = new JSpinner(new SpinnerNumberModel(0, 0, Integer.MAX_VALUE, 100));
         valueSpinner.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent e) {
                 fireChangeEvent();
@@ -68,7 +68,7 @@ public class SizeChooser extends JPanel {
         add(valueSpinner);
 
         unitComboBox = new JComboBox();
-        for(int i= SizeFormat.BYTE_UNIT; i<SizeFormat.GIGA_BYTE_UNIT; i++)
+        for(int i= SizeFormat.BYTE_UNIT; i<=SizeFormat.GIGA_BYTE_UNIT; i++)
             unitComboBox.addItem(SizeFormat.getUnitString(i, speedUnits));
         unitComboBox.setSelectedIndex(SizeFormat.KILO_BYTE_UNIT);
         unitComboBox.addItemListener(new ItemListener() {
