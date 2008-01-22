@@ -37,12 +37,23 @@ import java.util.Vector;
  * <p>Note: this class is thread safe and thus can safely be called by concurrent threads.
  *
  * @author Maxence Bernard
- * @see com.mucommander.file.AbstractFile#copyStream(java.io.InputStream, java.io.OutputStream)
+ * @see com.mucommander.io.StreamUtils
  */
 public class BufferPool {
 
     /** List of available buffer instances */
     private static Vector buffers = new Vector();
+
+    /** The default buffer size when not specified */
+    public final static int DEFAULT_BUFFER_SIZE = 65536;
+
+
+    /**
+     * Convenience method that has the same effect as calling {@link #getBuffer(int)} with {@link #DEFAULT_BUFFER_SIZE}.
+     */
+    public static synchronized byte[] getBuffer() {
+        return getBuffer(DEFAULT_BUFFER_SIZE);
+    }
 
     /**
      * Returns a buffer of the specified size. This method first checks if a buffer instance of the specified size
