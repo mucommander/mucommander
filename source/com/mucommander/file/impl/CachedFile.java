@@ -19,7 +19,6 @@
 package com.mucommander.file.impl;
 
 import com.mucommander.Debug;
-import com.mucommander.PlatformManager;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileProtocols;
 import com.mucommander.file.filter.FileFilter;
@@ -140,37 +139,38 @@ public class CachedFile extends ProxyFile {
         // References:
         //  - http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=5036988
         //  - http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6240028
+        //
+        // This hack was made for Windows, but is now used for other platforms as well as it is necessarily faster than
+        // retrieving file attributes individually.
 
-        if(PlatformManager.WINDOWS.isCurrent()) {
-            try {
-                // Resolve FileSystem class, 'getBooleanAttributes' method and fields
-                Class cFile = File.class;
-                Class cFileSystem = Class.forName("java.io.FileSystem");
-                mGetBooleanAttributes = cFileSystem.getDeclaredMethod("getBooleanAttributes", new Class [] {cFile});
-                Field fBA_EXISTS = cFileSystem.getDeclaredField("BA_EXISTS");
-                Field fBA_DIRECTORY = cFileSystem.getDeclaredField("BA_DIRECTORY");
-                Field fBA_HIDDEN = cFileSystem.getDeclaredField("BA_HIDDEN");
-                Field fFs = cFile.getDeclaredField("fs");
+        try {
+            // Resolve FileSystem class, 'getBooleanAttributes' method and fields
+            Class cFile = File.class;
+            Class cFileSystem = Class.forName("java.io.FileSystem");
+            mGetBooleanAttributes = cFileSystem.getDeclaredMethod("getBooleanAttributes", new Class [] {cFile});
+            Field fBA_EXISTS = cFileSystem.getDeclaredField("BA_EXISTS");
+            Field fBA_DIRECTORY = cFileSystem.getDeclaredField("BA_DIRECTORY");
+            Field fBA_HIDDEN = cFileSystem.getDeclaredField("BA_HIDDEN");
+            Field fFs = cFile.getDeclaredField("fs");
 
-                // Allow access to the 'getBooleanAttributes' method and to the fields we're interested in
-                mGetBooleanAttributes.setAccessible(true);
-                fFs.setAccessible(true);
-                fBA_EXISTS.setAccessible(true);
-                fBA_DIRECTORY.setAccessible(true);
-                fBA_HIDDEN.setAccessible(true);
+            // Allow access to the 'getBooleanAttributes' method and to the fields we're interested in
+            mGetBooleanAttributes.setAccessible(true);
+            fFs.setAccessible(true);
+            fBA_EXISTS.setAccessible(true);
+            fBA_DIRECTORY.setAccessible(true);
+            fBA_HIDDEN.setAccessible(true);
 
-                // Retrieve constant field values once for all
-                BA_EXISTS = ((Integer)fBA_EXISTS.get(null)).intValue();
-                BA_DIRECTORY = ((Integer)fBA_DIRECTORY.get(null)).intValue();
-                BA_HIDDEN = ((Integer)fBA_HIDDEN.get(null)).intValue();
-                fs = fFs.get(null);
+            // Retrieve constant field values once for all
+            BA_EXISTS = ((Integer)fBA_EXISTS.get(null)).intValue();
+            BA_DIRECTORY = ((Integer)fBA_DIRECTORY.get(null)).intValue();
+            BA_HIDDEN = ((Integer)fBA_HIDDEN.get(null)).intValue();
+            fs = fFs.get(null);
 
-                getFileAttributesAvailable = true;
-                if(Debug.ON) Debug.trace("Access to java.io.FileSystem granted");
-            }
-            catch(Exception e) {
-                if(Debug.ON) Debug.trace("Error while allowing access to java.io.FileSystem: "+e);
-            }
+            getFileAttributesAvailable = true;
+            if(Debug.ON) Debug.trace("Access to java.io.FileSystem granted");
+        }
+        catch(Exception e) {
+            if(Debug.ON) Debug.trace("Error while allowing access to java.io.FileSystem: "+e);
         }
     }
 
@@ -223,8 +223,6 @@ public class CachedFile extends ProxyFile {
 
                 isHidden = (ba & BA_HIDDEN)!=0;
                 isHiddenSet = true;
-
-//                if(Debug.ON) Debug.trace("Retrieved file attributes for "+file);
             }
             catch(Exception e) {
                 if(Debug.ON) Debug.trace("Could not retrieve file attributes for "+file+": "+e);
@@ -276,6 +274,7 @@ public class CachedFile extends ProxyFile {
     public boolean isDirectory() {
         if(!isDirectorySet && getFileAttributesAvailable && FileProtocols.FILE.equals(file.getURL().getProtocol()))
             getFileAttributes(file);
+        // Note: getFileAttributes() might fail to retrieve file attributes, so we need to test isDirectorySet again
 
         if(!isDirectorySet) {
             isDirectory = file.isDirectory();
@@ -297,6 +296,7 @@ public class CachedFile extends ProxyFile {
     public boolean isHidden() {
         if(!isHiddenSet && getFileAttributesAvailable && FileProtocols.FILE.equals(file.getURL().getProtocol()))
             getFileAttributes(file);
+        // Note: getFileAttributes() might fail to retrieve file attributes, so we need to test isDirectorySet again
 
         if(!isHiddenSet) {
             isHidden = file.isHidden();
@@ -363,6 +363,7 @@ public class CachedFile extends ProxyFile {
     public boolean exists() {
         if(!existsSet && getFileAttributesAvailable && FileProtocols.FILE.equals(file.getURL().getProtocol()))
             getFileAttributes(file);
+        // Note: getFileAttributes() might fail to retrieve file attributes, so we need to test isDirectorySet again
 
         if(!existsSet) {
             exists = file.exists();
