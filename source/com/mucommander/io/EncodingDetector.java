@@ -76,7 +76,8 @@ public class EncodingDetector {
     /**
      * Try and detect the character encoding in which the given bytes are encoded, and returns the best guess or
      * <code>null</code> if there is none (not enough data or confidence).
-     * Note that the returned character encoding may or may not be available on the Java runtime.
+     * Note that the returned character encoding may not be available on the Java runtime -- use
+     * <code>java.nio.Charset#isSupported(String)</code> to determine if it is available.
      *
      * <p>A maximum of {@link #MAX_RECOMMENDED_BYTE_SIZE} will be read from the array. If the array is larger than this
      * value, all further bytes will be ignored.</p>
@@ -91,7 +92,8 @@ public class EncodingDetector {
     /**
      * Try and detect the character encoding in which the given bytes are encoded, and returns the best guess or
      * <code>null</code> if there is none (not enough data or confidence).
-     * Note that the returned character encoding may or may not be available on the Java runtime.
+     * Note that the returned character encoding may not be available on the Java runtime -- use
+     * <code>java.nio.Charset#isSupported(String)</code> to determine if it is available.
      *
      * <p>A maximum of {@link #MAX_RECOMMENDED_BYTE_SIZE} will be read from the array. If the array is larger than this
      * value, all further bytes will be ignored.</p>
@@ -135,14 +137,15 @@ public class EncodingDetector {
                 Debug.trace("getName()="+cms[i].getName()+" getConfidence()="+cms[i].getConfidence());
         }
 
-        return cm.getName();
+        return cm==null?null:cm.getName();
     }
 
 
     /**
      * Try and detect the character encoding in which the bytes contained by the given <code>InputStream</code> are
      * encoded, and returns the best guess or <code>null</code> if there is none (not enough data or confidence).
-     * Note that the returned character encoding may or may not be available on the Java runtime.
+     * Note that the returned character encoding may or may not be available on the Java runtime -- use
+     * <code>java.nio.Charset#isSupported(String)</code> to determine if it is available.
      *
      * <p>A maximum of {@link #MAX_RECOMMENDED_BYTE_SIZE} will be read from the <code>InputStream</code>. The
      * InputStream will not be repositionned after the bytes have been read. It is up to the calling method to
@@ -152,6 +155,7 @@ public class EncodingDetector {
      *
      * @param in the InputStream that supplies the bytes
      * @return the best guess at the character encoding, null if there is none (not enough data or confidence)
+     * @throws IOException if an error occurred while reading the stream
      */
     public static String detectEncoding(InputStream in) throws IOException {
         int totalRead = 0;
@@ -171,7 +175,7 @@ public class EncodingDetector {
 
     /**
      * Returns an array of encodings that can be detected by the <code>detectEncoding</code> methods.
-     * Note that some of the returned character encoding may not be available on the Java runtime.
+     * Note that some of the returned character encodings may not be available on the Java runtime.
      *
      * @return an array of encodings that can be detected by the <code>detectEncoding</code> methods.
      */
