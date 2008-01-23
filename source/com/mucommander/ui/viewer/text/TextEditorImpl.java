@@ -20,6 +20,7 @@ package com.mucommander.ui.viewer.text;
 
 import com.mucommander.file.AbstractFile;
 import com.mucommander.io.EncodingDetector;
+import com.mucommander.io.RandomAccessInputStream;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.helper.MenuToolkit;
 import com.mucommander.ui.helper.MnemonicHelper;
@@ -148,35 +149,64 @@ class TextEditorImpl implements ThemeListener, ActionListener {
         this.documentListener = documentListener;
 
         // Auto-detect encoding
-        InputStream in = file.getInputStream();
-        String encoding = EncodingDetector.detectEncoding(in);
-        in.close();
 
-        // If encoding could not be detected, default to UTF-8
-        if(encoding==null)
+        // Get a RandomAccessInputStream on the file if possible, if not get a simple InputStream
+        InputStream in = null;
+        if(file.hasRandomAccessInputStream()) {
+            try { in = file.getRandomAccessInputStream(); }
+            catch(IOException e) {
+                // In that case we simply get an InputStream
+            }
+        }
+
+        if(in==null)
+            in = file.getInputStream();
+
+        String encoding = EncodingDetector.detectEncoding(in);
+        // If the encoding could not be detected or the detected encoding is not supported, default to UTF-8
+        if(encoding==null || Charset.isSupported(encoding))
             encoding = "UTF-8";
 
-        // Prepare the text area
-        loadDocument(encoding);
+        if(in instanceof RandomAccessInputStream) {
+            // Seek to the beginning of the file and reuse the stream
+            ((RandomAccessInputStream)in).seek(0);
+        }
+        else {
+            // Close the InputStream and open a new one
+            // Note: we could use mark/reset if the InputStream supports it, but it is almost never implemented by
+            // InputStream subclasses and a broken by design anyway.
+            in.close();
+            in = file.getInputStream();
+        }
+
+        // Load the file into the text area
+        // Note: loadDocument closes the InputStream
+        loadDocument(in, encoding);
 
         // Listen to theme changes to update the text area if it is visible
         ThemeManager.addCurrentThemeListener(this);
     }
 
-    void loadDocument(String encoding) throws IOException {
+    void loadDocument(InputStream in, String encoding) throws IOException {
+        InputStreamReader isr = new InputStreamReader(in, encoding);
         this.encoding = encoding;
 
-        // Feed the file's contents to text area
-        InputStreamReader isr = new InputStreamReader(file.getInputStream(), encoding);
-        textArea.read(isr, null);
-        isr.close();
+        try {
+            // Feed the file's contents to text area
+            textArea.read(isr, null);
+            isr.close();
 
-        // Listen to document changes
-        if(documentListener!=null)
-            textArea.getDocument().addDocumentListener(documentListener);
+            // Listen to document changes
+            if(documentListener!=null)
+                textArea.getDocument().addDocumentListener(documentListener);
 
-        // Move cursor to the top
-        textArea.setCaretPosition(0);
+            // Move cursor to the top
+            textArea.setCaretPosition(0);
+        }
+        finally {
+            // Close the stream no matter what
+            isr.close();
+        }
     }
 
     void populateMenus(JFrame frame) {
@@ -252,7 +282,8 @@ class TextEditorImpl implements ThemeListener, ActionListener {
                 EncodingMenuItem newEncodingMenuItem = (EncodingMenuItem)source;
 
                 // Reload the file using the new encoding
-                loadDocument(newEncodingMenuItem.getText());
+                // Note: loadDocument closes the InputStream
+                loadDocument(file.getInputStream(), newEncodingMenuItem.getText());
 
                 // Select the new encoding menu item and keep the instance at hand
                 encodingMenuItem.setSelected(false);

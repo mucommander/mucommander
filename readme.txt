@@ -167,6 +167,8 @@ Bug fixes:
   the trash was empty.
 - Fixed an encoding issue affecting SFTP filenames on some platforms.
 - J2SSH library upgraded to 0.2.9 which fixes some bugs.
+- Fixed a bug in the text viewer and editor which prevented certain files from
+  being opened.
 
 Known issues:
 - Korean translation is not up-to-date.
