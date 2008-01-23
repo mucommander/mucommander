@@ -74,6 +74,9 @@ public class LocalFile extends AbstractFile {
     private String parentFilePath;
     private String absPath;
 
+    /** True if this file has a Windows-style UNC path. Can be true only under Windows. */
+    private boolean isUNC;
+
     /** Caches the parent folder, initially null until getParent() gets called */
     private AbstractFile parent;
     /** Indicates whether the parent folder instance has been retrieved and cached or not (parent can be null) */
@@ -89,7 +92,7 @@ public class LocalFile extends AbstractFile {
     /** Are we running Windows ? */
     private final static boolean IS_WINDOWS;
 
-		
+
     static {
         IS_WINDOWS = PlatformManager.WINDOWS.isCurrent();
     }
@@ -104,11 +107,13 @@ public class LocalFile extends AbstractFile {
 
         String path = fileURL.getPath();
 
-        // If OS is Windows and hostname is not 'localhost', translate path back
-        // into a Windows-style UNC network path ( \\hostname\path )
+        // If OS is Windows and hostname is not 'localhost', translate the path back into a Windows-style UNC path
+        // in the form \\hostname\share\path .
         String hostname = fileURL.getHost();
-        if(IS_WINDOWS && !FileURL.LOCALHOST.equals(hostname))
+        if(IS_WINDOWS && !FileURL.LOCALHOST.equals(hostname)) {
             path = "\\\\"+hostname+fileURL.getPath().replace('/', '\\');    // Replace leading / char by \
+            isUNC = true;
+        }
 
         this.file = new File(path);
 
@@ -635,11 +640,16 @@ public class LocalFile extends AbstractFile {
 
         AbstractFile children[] = new AbstractFile[names.length];
         FileURL childURL;
+
         for(int i=0; i<names.length; i++) {
             // Clone the FileURL of this file and set the child's path, this is more efficient than creating a new
             // FileURL instance from scratch.
             childURL = (FileURL)fileURL.clone();
-            childURL.setPath(absPath+SEPARATOR+names[i]);
+
+            if(isUNC)   // Special case for UNC paths which include the hostname in it
+                childURL.setPath(addTrailingSeparator(fileURL.getPath())+names[i]);
+            else
+                childURL.setPath(absPath+SEPARATOR+names[i]);
 
             // Retrieves an AbstractFile (LocalFile or AbstractArchiveFile) instance potentially fetched from the
             // LRU cache and reuse this file as parent
