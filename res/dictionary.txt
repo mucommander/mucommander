@@ -1341,6 +1341,7 @@ error:SV:Fel
 generic_error:EN:An error has occurred while performing the requested operation.
 generic_error:FR:Une erreur est survenue pendant l'exécution de la tache demandée.
 generic_error:SV:Ett fel uppstod när åtgärden utfördes.
+generic_error:NL:Er heeft zich een fout voorgedaan bij het uitvoeren van de gevraagde taak.
 # Translation missing (New!)
 
 
@@ -2889,7 +2890,7 @@ com.mucommander.ui.action.SortByNameAction.label:RO:Sortează după nume
 com.mucommander.ui.action.SortByNameAction.label:IT:Ordina per Nome
 com.mucommander.ui.action.SortByNameAction.label:KO:이름으로 정렬
 com.mucommander.ui.action.SortByNameAction.label:pt_BR:Order por nome
-com.mucommander.ui.action.SortByNameAction.label:NL:Sorteer op naam
+com.mucommander.ui.action.SortByNameAction.label:NL:Sorteren op naam
 com.mucommander.ui.action.SortByNameAction.label:SK:Zoradiť podľa názvu
 com.mucommander.ui.action.SortByNameAction.label:JA:名前で整列
 com.mucommander.ui.action.SortByNameAction.label:SV:Sortera efter Namn
@@ -2909,7 +2910,7 @@ com.mucommander.ui.action.SortByDateAction.label:RO:Sortează după dată
 com.mucommander.ui.action.SortByDateAction.label:IT:Ordina per Data
 com.mucommander.ui.action.SortByDateAction.label:KO:날짜로 정렬
 com.mucommander.ui.action.SortByDateAction.label:pt_BR:Ordenar por data
-com.mucommander.ui.action.SortByDateAction.label:NL:Sorteer op datum
+com.mucommander.ui.action.SortByDateAction.label:NL:Sorteren op datum
 com.mucommander.ui.action.SortByDateAction.label:SK:Zoradiť podľa dátumu
 com.mucommander.ui.action.SortByDateAction.label:JA:日付で整列
 com.mucommander.ui.action.SortByDateAction.label:SV:Sortera efter Datum
@@ -2929,7 +2930,7 @@ com.mucommander.ui.action.SortBySizeAction.label:RO:Sortează după dimensiune
 com.mucommander.ui.action.SortBySizeAction.label:IT:Ordina per Dimensione
 com.mucommander.ui.action.SortBySizeAction.label:KO:크기로 정렬
 com.mucommander.ui.action.SortBySizeAction.label:pt_BR:Ordenar pelo tamanho
-com.mucommander.ui.action.SortBySizeAction.label:NL:Sorteer op grootte
+com.mucommander.ui.action.SortBySizeAction.label:NL:Sorteren op grootte
 com.mucommander.ui.action.SortBySizeAction.label:SK:Zoradiť podľa veľkosti
 com.mucommander.ui.action.SortBySizeAction.label:JA:サイズで整列
 com.mucommander.ui.action.SortBySizeAction.label:SV:Sortera efter Storlek
@@ -2949,7 +2950,7 @@ com.mucommander.ui.action.SortByExtensionAction.label:RO:Sortează după extensi
 com.mucommander.ui.action.SortByExtensionAction.label:IT:Ordina per Estensione
 com.mucommander.ui.action.SortByExtensionAction.label:KO:확장자로 정렬
 com.mucommander.ui.action.SortByExtensionAction.label:pt_BR:Ordenar pelo extensão
-com.mucommander.ui.action.SortByExtensionAction.label:NL:Sorteer op extensie
+com.mucommander.ui.action.SortByExtensionAction.label:NL:Sorteren op extensie
 com.mucommander.ui.action.SortByExtensionAction.label:SK:Zoradiť podľa prípony
 com.mucommander.ui.action.SortByExtensionAction.label:JA:拡張子で整列
 com.mucommander.ui.action.SortByExtensionAction.label:SV:Sortera efter Ändelse
@@ -2968,7 +2969,7 @@ com.mucommander.ui.action.SortByPermissionsAction.label:ES:Ordenar por Permisos
 com.mucommander.ui.action.SortByPermissionsAction.label:PL:Sortuj po uprawnieniach
 com.mucommander.ui.action.SortByPermissionsAction.label:KO:권한별로 정렬
 com.mucommander.ui.action.SortByPermissionsAction.label:pt_BR:Ordenar pela permissão
-com.mucommander.ui.action.SortByPermissionsAction.label:NL:Sorteer op rechten
+com.mucommander.ui.action.SortByPermissionsAction.label:NL:Sorteren op rechten
 com.mucommander.ui.action.SortByPermissionsAction.label:SK:Zoradiť podľa oprávnení
 com.mucommander.ui.action.SortByPermissionsAction.label:HU:Jogosultság szerint rendez
 com.mucommander.ui.action.SortByPermissionsAction.label:JA:権限で整列
@@ -2979,6 +2980,7 @@ com.mucommander.ui.action.SortByOwnerAction.label:FR:Trier par Propriétaire
 com.mucommander.ui.action.SortByOwnerAction.label:JA:所有者で整列
 com.mucommander.ui.action.SortByOwnerAction.label:SK:Zoradiť podľa vlastníka
 com.mucommander.ui.action.SortByOwnerAction.label:SV:Sortera efter Ägare
+com.mucommander.ui.action.SortByOwnerAction.label:NL:Sorteren op eigenaar
 # Translation missing (New!)
 
 
@@ -3000,7 +3002,7 @@ com.mucommander.ui.action.SortByGroupAction.label:EN:Sort by Group
 com.mucommander.ui.action.SortByGroupAction.label:FR:Trier par Groupe
 com.mucommander.ui.action.SortByGroupAction.label:JA:グループで整列
 com.mucommander.ui.action.SortByGroupAction.label:SK:Zoradiť podľa skupiny
-com.mucommander.ui.action.SortByGroupAction.label:NL:Sorteer op groep
+com.mucommander.ui.action.SortByGroupAction.label:NL:Sorteren op groep
 com.mucommander.ui.action.SortByGroupAction.label:SV:Sortera efter Grupp
 # Translation missing (New!)
 
@@ -3261,6 +3263,7 @@ com.mucommander.ui.action.MarkUpToLastRowAction.label:SV:Markera filer till slut
 
 com.mucommander.ui.action.MarkExtensionAction.label:EN:Mark extension
 com.mucommander.ui.action.MarkExtensionAction.label:FR:Marquer l'extension
+com.mucommander.ui.action.MarkExtensionAction.label:NL:Markeer extensie
 # Translation missing (New!)
 
 
@@ -3503,6 +3506,7 @@ com.mucommander.ui.action.OpenNativelyAction.tooltip:SV:Öppna filen med systeme
 
 com.mucommander.ui.action.OpenInOtherPanelAction.label:EN:Open in other panel
 com.mucommander.ui.action.OpenInOtherPanelAction.label:FR:Ouvrir dans l'autre panneau
+com.mucommander.ui.action.OpenInOtherPanelAction.label:NL:Openen in nieuw scherm
 # Translation missing (New!)
 
 
@@ -3521,6 +3525,7 @@ com.mucommander.ui.action.OpenInOtherPanelAction.label:FR:Ouvrir dans l'autre pa
 
 com.mucommander.ui.action.OpenInBothPanelsAction.label:EN:Open in both panels
 com.mucommander.ui.action.OpenInBothPanelsAction.label:FR:Ouvrir dans les deux panneaux
+com.mucommander.ui.action.OpenInBothPanelsAction.label:NL:Openen in beide schermen
 # Translation missing (New!)
 
 
@@ -4415,7 +4420,7 @@ com.mucommander.ui.action.EmptyTrashAction.label:EN:Empty Trash
 com.mucommander.ui.action.EmptyTrashAction.label:FR:Vider la Corbeille
 com.mucommander.ui.action.EmptyTrashAction.label:HU:Lomtár ürítése
 com.mucommander.ui.action.EmptyTrashAction.label:zh_CN:清空垃圾桶
-com.mucommander.ui.action.EmptyTrashAction.label:NL:Prullebak leeg maken
+com.mucommander.ui.action.EmptyTrashAction.label:NL:Prullenbak leeg maken
 com.mucommander.ui.action.EmptyTrashAction.label:zh_TW:清空資源回收桶
 com.mucommander.ui.action.EmptyTrashAction.label:RO:Golește coșul de gunoi
 com.mucommander.ui.action.EmptyTrashAction.label:ES:Vaciar papelera
@@ -5043,6 +5048,7 @@ version_dialog.preparing_for_update:EN:Preparing for update...
 version_dialog.preparing_for_update:FR:Préparation de la mise à jour...
 version_dialog.preparing_for_update:JA:更新を準備しています...
 version_dialog.preparing_for_update:SV:Förbereder uppdatering...
+version_dialog.preparing_for_update:NL:Update voorbereiden...
 # Translation missing (New!)
 
 
@@ -5570,7 +5576,7 @@ optimizing_archive:en_GB:Optimising archive %1
 optimizing_archive:FR:Optimisation de l'archive %1
 optimizing_archive:HU:Archívum optimalizálás %1
 optimizing_archive:zh_CN:优化压缩包 %1
-optimizing_archive:NL:Optimalizeren van archief %1
+optimizing_archive:NL:Optimaliseren van archief %1
 optimizing_archive:zh_TW:最佳化備份檔 %1
 optimizing_archive:RO:Optimizez arhiva %1
 optimizing_archive:ES:Optimizando fichero %1
@@ -5601,7 +5607,7 @@ error_while_optimizing_archive:en_GB:Error while optimising archive %1
 error_while_optimizing_archive:FR:Erreur pendant l'optimisation de %1
 error_while_optimizing_archive:HU:Hiba az archívum optimalizálásakor %1
 error_while_optimizing_archive:zh_CN:优化压缩包 %1 时出错
-error_while_optimizing_archive:NL:Fout bij het optimalizeren van archief %1
+error_while_optimizing_archive:NL:Fout bij het optimaliseren van archief %1
 error_while_optimizing_archive:SL:Napaka pri optimizaciji arhiva %1
 error_while_optimizing_archive:DE:Fehler bei der Optimierung des Archivs %1
 error_while_optimizing_archive:CS:Chyba při optimalizaci archívu %1
@@ -5914,7 +5920,7 @@ delete_dialog.move_to_trash.confirmation:SV:Radera markerade fil(er)?
 delete_dialog.move_to_trash.confirmation_details:EN:Files will be moved to the trash.
 delete_dialog.move_to_trash.confirmation_details:FR:Les fichiers seront déplacés dans la corbeille.
 delete_dialog.move_to_trash.confirmation_details:HU:A fájlok a lomtárba lesznek áthelyezve.
-delete_dialog.move_to_trash.confirmation_details:NL:Bestanden worden naar de prullebnak verplaatst.
+delete_dialog.move_to_trash.confirmation_details:NL:Bestanden worden naar de prullenbnak verplaatst.
 delete_dialog.move_to_trash.confirmation_details:zh_CN:文件将被移动到垃圾桶.
 delete_dialog.move_to_trash.confirmation_details:zh_TW:檔案將被移至資源回收桶
 delete_dialog.move_to_trash.confirmation_details:RO:Fișierele selectate vor fi aruncate la gunoi.
@@ -5941,7 +5947,7 @@ delete_dialog.move_to_trash.confirmation_details:SV:Filerna kommer flyttas till 
 delete_dialog.move_to_trash.option:EN:Move to trash
 delete_dialog.move_to_trash.option:FR:Déplacer dans la corbeille
 delete_dialog.move_to_trash.option:HU:Áthelyezés a lomtárba
-delete_dialog.move_to_trash.option:NL:Verplaats naar prullebnak
+delete_dialog.move_to_trash.option:NL:Verplaats naar prullenbnak
 delete_dialog.move_to_trash.option:zh_CN:移动到垃圾桶
 delete_dialog.move_to_trash.option:zh_TW:移至資源回收桶
 delete_dialog.move_to_trash.option:RO:Aruncă la gunoi
@@ -6653,6 +6659,7 @@ file_selection_dialog.matches_regexp:FR:Satisfait la Regexp
 file_selection_dialog.matches_regexp:JA:正規表現に一致する
 file_selection_dialog.matches_regexp:SK:Regulárny výraz
 file_selection_dialog.matches_regexp:SV:Matchar reguljärt uttryck
+file_selection_dialog.matches_regexp:NL:Reguliere uitdrukking
 # Translation missing (New!)
 
 
@@ -6998,6 +7005,7 @@ properties_dialog.calculating:SV:Beräknar...
 calculate_checksum_dialog.checksum_algorithm:EN:Checksum algorithm
 calculate_checksum_dialog.checksum_algorithm:FR:Algorithme de checksum
 calculate_checksum_dialog.checksum_algorithm:SV:Kontrollnummer algoritm
+calculate_checksum_dialog.checksum_algorithm:NL:Checksum algoritme
 # Translation missing (New!)
 
 
@@ -8738,7 +8746,7 @@ theme_editor.statusbar_tab:SV:Statuslisten
 theme_editor.free_space:EN:Free space
 theme_editor.free_space:FR:Espace libre
 theme_editor.free_space:HU:Szabad hely
-theme_editor.free_space:NL:(ruimte) Vrij
+theme_editor.free_space:NL:Ruimte vrij
 theme_editor.free_space:zh_CN:剩余空间
 theme_editor.free_space:zh_TW:剩餘空間
 theme_editor.free_space:RO:Spațiu liber
@@ -10326,6 +10334,7 @@ prefs_dialog.import_look_and_feel:SV:Importera utseende och känsla
 prefs_dialog.no_look_and_feel:EN:No look & feel was found.
 prefs_dialog.no_look_and_feel:FR:Aucun look & feel n'a été trouvé.
 prefs_dialog.no_look_and_feel:SV:Inget utseende och känsla funnen.
+prefs_dialog.no_look_and_feel:NL:Geen look en feel gevonden.
 # Translation missing (New!)
 
 
@@ -10424,7 +10433,7 @@ prefs_dialog.export_theme:SV:Exportera %1
 prefs_dialog.import:EN:Import
 prefs_dialog.import:FR:Importer
 prefs_dialog.import:HU:Importálás
-prefs_dialog.import:NL:Importeer
+prefs_dialog.import:NL:Importeren
 prefs_dialog.import:zh_CN:导入
 prefs_dialog.import:zh_TW:匯入
 prefs_dialog.import:RO:Importă
@@ -10449,7 +10458,7 @@ prefs_dialog.import:SV:Importera
 prefs_dialog.export:EN:Export
 prefs_dialog.export:FR:Exporter
 prefs_dialog.export:HU:Exportálás
-prefs_dialog.export:NL:Exporteer
+prefs_dialog.export:NL:Exporteren
 prefs_dialog.export:zh_CN:导出
 prefs_dialog.export:zh_TW:匯出
 prefs_dialog.export:ES:Exportar
@@ -10594,6 +10603,7 @@ prefs_dialog.xml_file:SV:XML-fil
 prefs_dialog.jar_file:EN:JAR file
 prefs_dialog.jar_file:FR:Fichier JAR
 prefs_dialog.jar_file:SV:JAR-fil
+prefs_dialog.jar_file:NL:JAR bestand
 # Translation missing
 
 
@@ -10886,7 +10896,7 @@ prefs_dialog.enable_bonjour_discovery:SV:Aktivera upptäckt av Bonjour-tjänster
 # System notifications are displayed in the System tray, or using Growl under Mac OS X
 prefs_dialog.enable_system_notifications:EN:Enable system notifications
 prefs_dialog.enable_system_notifications:FR:Activer les notifications système
-prefs_dialog.enable_system_notifications:NL:Schakel systeemnotificaties in
+prefs_dialog.enable_system_notifications:NL:Systeemnotificaties inschakelen
 prefs_dialog.enable_system_notifications:SK:Povoliť systémové oznámenia (v system tray)
 prefs_dialog.enable_system_notifications:HU:Rendszerértesítések engedélyezése
 prefs_dialog.enable_system_notifications:zh_CN:打开系统通告
@@ -11836,6 +11846,7 @@ color_chooser.title:SV:Välj en färg
 
 extensions.file_already_exists:EN:File %1 already exists in the extensions directory.
 extensions.file_already_exists:FR:Le fichier %1 existe déjà dans le répertoire d'extensions.
+extensions.file_already_exists:NL:Bestand %1 bestaat al in de extensies-map
 # Translation missing (New!)
 
 
