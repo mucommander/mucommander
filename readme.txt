@@ -169,6 +169,8 @@ Bug fixes:
 - J2SSH library upgraded to 0.2.9 which fixes some bugs.
 - Fixed a bug in the text viewer and editor which prevented certain files from
   being opened.
+- Fixed a regression which prevented UNC paths from being listed properly
+  (Bug #7).
 
 Known issues:
 - Korean translation is not up-to-date.
