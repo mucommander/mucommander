@@ -23,7 +23,6 @@ import com.mucommander.text.SizeFormat;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.Iterator;
@@ -50,6 +49,15 @@ public class SizeChooser extends JPanel {
     /** Contains all registered listeners, stored as weak references */
     private WeakHashMap listeners = new WeakHashMap();
 
+    /** Maximum value allowed by the spinner */
+    private final static int MAX_SPINNER_VALUE = Integer.MAX_VALUE;
+
+    /** Value increase/decrease when clicking the spinner's up/down buttons */
+    private final static int SPINNER_STEP = 100;
+
+    /** Maximum number of columns that the spinner's text field can have */
+    private final static int MAX_SPINNER_COLUMNS = 7;
+
 
     /**
      * Creates a new SizeChooser.
@@ -57,14 +65,26 @@ public class SizeChooser extends JPanel {
      * @param speedUnits if true, speed units will be displayed (B/s, KB/s, MB/s, ...) instead of size unit (B, KB, MB, ...).
      */
     public SizeChooser(boolean speedUnits) {
-        super(new FlowLayout(FlowLayout.LEADING));
+        setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 
-        valueSpinner = new JSpinner(new SpinnerNumberModel(0, 0, Integer.MAX_VALUE, 100));
+        valueSpinner = new JSpinner(new SpinnerNumberModel(0, 0, MAX_SPINNER_VALUE, SPINNER_STEP));
         valueSpinner.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent e) {
                 fireChangeEvent();
             }
         });
+
+        // Limit the number of columns of the spinner's JTextField to a reasonable amount.
+        // By default, the text field has as many columns as needed to fit the spinner maximum value.
+        // If this maximum value is Integer.MAX_VALUE, the text field has 13 columns which makes it enormous.
+        JComponent editor = valueSpinner.getEditor();
+        if (editor instanceof JSpinner.DefaultEditor) {
+            JTextField textField = ((JSpinner.DefaultEditor)editor).getTextField();
+            int nbColumns = textField.getColumns();
+            if(nbColumns>MAX_SPINNER_COLUMNS )
+                textField.setColumns(MAX_SPINNER_COLUMNS );
+        }
+        
         add(valueSpinner);
 
         unitComboBox = new JComboBox();
@@ -76,6 +96,7 @@ public class SizeChooser extends JPanel {
                 fireChangeEvent();
             }
         });
+
         add(unitComboBox);
     }
 
