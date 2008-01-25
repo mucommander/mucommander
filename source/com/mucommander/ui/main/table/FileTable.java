@@ -1475,11 +1475,12 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
 
         /**
          * Returns <code>true</code> if a quick search is being performed.
+         *
+         * @return true if a quick search is being performed
          */
         public boolean isActive() {
             return timerThread != null;
         }
-
 
         /**
          * Finds a match (if any) for the current quick search string and selects the corresponding row.
@@ -1609,11 +1610,31 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
          * @return true if the current quick search string matches the given filename
          */
         public boolean matches(String filename) {
-            if(!isActive())
+            return isActive() && filename.toLowerCase().indexOf(searchString.toLowerCase())!=-1;
+        }
+
+
+        /**
+         * Returns <code>true</code> if the given <code>KeyEvent</code> corresponds to a valid quick search input,
+         * <code>false</code> in any of the following cases:
+         *
+         * <ul>
+         *   <li>has any of the Alt, Ctrl or Meta modifier keys down (Shift is OK)</li>
+         *   <li>is an ASCII control character (<32 or ==127)</li>
+         *   <li>is not a valid Unicode character</li>
+         * </ul>
+         *
+         * @param e the KeyEvent to test
+         * @return true if the given <code>KeyEvent</code> corresponds to a valid quick search input
+         */
+        private boolean isValidQuickSearchInput(KeyEvent e) {
+            if((e.getModifiersEx()&(KeyEvent.ALT_DOWN_MASK|KeyEvent.CTRL_DOWN_MASK|KeyEvent.META_DOWN_MASK))!=0)
                 return false;
 
-            return filename.toLowerCase().indexOf(searchString.toLowerCase())!=-1;
+            char keyChar = e.getKeyChar();
+            return keyChar>=32 && keyChar!=127 && Character.isDefined(keyChar);
         }
+
 
         //////////////////////
         // Runnable methods //
@@ -1631,6 +1652,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
             }
         }
 
+
         ///////////////////////////////////
         // Overridden KeyAdapter methods //
         ///////////////////////////////////
@@ -1647,18 +1669,15 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
 
             // If quick search is not active...
             if (!isActive()) {
-                // Return (do not start quick search) if the typed key:
-                // - has any of the Alt, Ctrl or Meta modifier keys down (Shift is OK)
-                // - is a ASCII control character (<32 or 127 for delete)
-                // - is not a valid Unicode character
-                if((e.getModifiers()&(KeyEvent.ALT_DOWN_MASK|KeyEvent.CTRL_DOWN_MASK|KeyEvent.META_DOWN_MASK))!=0 || keyChar<32 || keyChar==127 || !Character.isDefined(keyChar))
+                // Return (do not start quick search) if the key is not a valid quick search input
+                if(!isValidQuickSearchInput(e))
                     return;
 
-                // Return if the typed key corresponds to a registered action's accelerator
+                // Return (do not start quick search) if the typed key corresponds to a registered action's accelerator
                 if(ActionKeymap.isKeyStrokeRegistered(KeyStroke.getKeyStrokeForEvent(e)))
                     return;
 
-                // Start the quick search and continue to properly process the key event
+                // Start the quick search and continue to process the current key event
                 start();
             }
 
@@ -1709,7 +1728,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
             }
             // If no modifier other than Shift is pressed and the typed character is not a control character (space is ok)
             // and a valid Unicode character, add it to the current search string
-            else if((e.getModifiers()&(KeyEvent.ALT_DOWN_MASK|KeyEvent.CTRL_DOWN_MASK|KeyEvent.META_DOWN_MASK))==0 && keyChar>=32 && keyChar!=127 && Character.isDefined(keyChar)) {
+            else if(isValidQuickSearchInput(e)) {
                 // Update search string with the key that has just been typed
                 // Since the search string has been updated, match information has changed as well
                 // and we need to repaint the table.
@@ -1720,7 +1739,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
                 findMatch(0, true, true);
             }
             else {
-                // Test if the typed key combination corresponds to a registered actions.
+                // Test if the typed key combination corresponds to a registered action.
                 // If that's the case, the quick search is cancelled and the action is performed.
                 Class muActionClass = ActionKeymap.getRegisteredActionClassForKeystroke(KeyStroke.getKeyStrokeForEvent(e));
                 if(muActionClass!=null) {
