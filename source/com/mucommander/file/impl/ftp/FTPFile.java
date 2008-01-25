@@ -134,6 +134,10 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
 
 
     private org.apache.commons.net.ftp.FTPFile getFTPFile(FileURL fileURL) throws IOException {
+        // Todo: this method is very ineffective as it lists the parent directory to retrieve the information about the
+        // requested file to workaround the fact that FTPClient#listFiles follows directories. Use 'ls -ld' or 'ls -ldH'
+        // to list only the file's information.
+
         FileURL parentURL = fileURL.getParent();
         if(Debug.ON) Debug.trace("fileURL="+fileURL+" parent="+parentURL);
 
@@ -375,6 +379,17 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
     }
 
     public boolean isDirectory() {
+        // org.apache.commons.net.ftp.FTPFile#isDirectory() returns false if the file is a symlink pointing to a
+        // directory, this is a limitation of the Commons-net library.
+        // Todo: fix this by either:
+        // a) find a combination of 'LIST' switches which allows the output to contain both the 'is symlink' and the
+        // 'is the symlink target a directory' information. At a first glance, there doesn't seem to be one: either
+        // symlinks are followed or there aren't.
+        // b) Patch #ls() to issue an extra 'LIST -ldH *' to retrieve all symlinks' information when the directory has
+        // at least one symlink.
+        // c) if this file is a symlink, retrieve the symlink's target using #getFTPFile(FileURL) with '-ldH' switches
+        // and return the value of isDirectory(). This clearly is the least effective solution at it requires issuing
+        // one 'ls' command per symlink.
         return file.isDirectory();
     }
 
@@ -1152,6 +1167,7 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
                 // Note that by default, if 'LIST -l' is used, the decision to list hidden files is left to the
                 // FTP server: some servers will choose to show them, some other will not. This behavior usually is a
                 // configuration setting of the FTP server.
+                // Todo: this should not be a configuration variable but rather a FileURL property
                 ftpClient.setListHiddenFiles(MuConfiguration.getVariable(MuConfiguration.LIST_HIDDEN_FILES, MuConfiguration.DEFAULT_LIST_HIDDEN_FILES));
 
                 if(encoding.equalsIgnoreCase("UTF-8")) {
