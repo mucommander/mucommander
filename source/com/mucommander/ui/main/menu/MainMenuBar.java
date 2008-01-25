@@ -20,6 +20,7 @@ package com.mucommander.ui.main.menu;
 
 import com.mucommander.PlatformManager;
 import com.mucommander.bonjour.BonjourMenu;
+import com.mucommander.bonjour.BonjourService;
 import com.mucommander.bookmark.Bookmark;
 import com.mucommander.bookmark.BookmarkManager;
 import com.mucommander.conf.impl.MuConfiguration;
@@ -234,7 +235,11 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
 
         // Add Bonjour services menu
         goMenu.add(new JSeparator());
-        BonjourMenu bonjourMenu = new BonjourMenu(mainFrame);
+        BonjourMenu bonjourMenu = new BonjourMenu() {
+            public MuAction getMenuItemAction(BonjourService bs) {
+                return new OpenLocationAction(MainMenuBar.this.mainFrame, new Hashtable(), bs);
+            }
+        };
         char mnemonic = menuItemMnemonicHelper.getMnemonic(bonjourMenu.getName());
         if(mnemonic!=0)
             bonjourMenu.setMnemonic(mnemonic);

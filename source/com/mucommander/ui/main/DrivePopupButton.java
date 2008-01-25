@@ -20,6 +20,7 @@ package com.mucommander.ui.main;
 
 import com.mucommander.PlatformManager;
 import com.mucommander.bonjour.BonjourMenu;
+import com.mucommander.bonjour.BonjourService;
 import com.mucommander.bookmark.Bookmark;
 import com.mucommander.bookmark.BookmarkListener;
 import com.mucommander.bookmark.BookmarkManager;
@@ -34,6 +35,7 @@ import com.mucommander.runtime.JavaVersions;
 import com.mucommander.runtime.OsFamilies;
 import com.mucommander.runtime.OsVersions;
 import com.mucommander.text.Translator;
+import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.action.OpenLocationAction;
 import com.mucommander.ui.button.PopupButton;
 import com.mucommander.ui.dialog.server.ServerConnectDialog;
@@ -236,7 +238,7 @@ public class DrivePopupButton extends PopupButton implements LocationListener, B
 
         // Add root volumes
         final int nbRoots = rootFolders.length;
-        MainFrame mainFrame = folderPanel.getMainFrame();
+        final MainFrame mainFrame = folderPanel.getMainFrame();
 
         MnemonicHelper mnemonicHelper = new MnemonicHelper();   // Provides mnemonics and ensures uniqueness
         JMenuItem item;
@@ -311,7 +313,11 @@ public class DrivePopupButton extends PopupButton implements LocationListener, B
         popupMenu.add(new JSeparator());
 
         // Add Bonjour services menu
-        setMnemonic(popupMenu.add(new BonjourMenu(folderPanel.getMainFrame())), mnemonicHelper);
+        setMnemonic(popupMenu.add(new BonjourMenu() {
+            public MuAction getMenuItemAction(BonjourService bs) {
+                return new CustomOpenLocationAction(mainFrame, new Hashtable(), bs);
+            }
+        }) , mnemonicHelper);
         popupMenu.add(new JSeparator());
 
         // Add 'connect to server' shortcuts
@@ -417,7 +423,10 @@ public class DrivePopupButton extends PopupButton implements LocationListener, B
             super(mainFrame, properties, file);
         }
 
-        
+        public CustomOpenLocationAction(MainFrame mainFrame, Hashtable properties, BonjourService bs) {
+            super(mainFrame, properties, bs);
+        }
+
         ////////////////////////
         // Overridden methods //
         ////////////////////////
