@@ -1238,18 +1238,13 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
      * Restores selection when focus is gained.
      */
     public void focusGained(FocusEvent e) {
-//if(Debug.ON) Debug.trace("called, this="+this);
-        focusGainedTime = System.currentTimeMillis(); 
+        focusGainedTime = System.currentTimeMillis();
 
         if(isEditing()) {
             filenameEditor.filenameField.requestFocus();
         }
         else {
-            // (Re)select current row and repaint it to show the new focused state.
-            // An explicit repaint is needed as the row would not
-            // be repainted by changeSelection if it was already selected.
-            selectRow(currentRow);
-            //repaintRow(currentRow);
+            // Repaints the table to reflect the new focused state
             repaint();
         }
     }
@@ -1258,10 +1253,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
      * Hides selection when focus is lost.
      */
     public void focusLost(FocusEvent e) {
-//if(Debug.ON) Debug.trace("called, this="+this);
-
-        // Repaint selected row to show the new out of focus state
-        //repaintRow(currentRow);
+        // Repaints the table to reflect the new focused state
         repaint();
     }
 
