@@ -24,6 +24,8 @@ import com.mucommander.conf.Configuration;
 import com.mucommander.conf.ConfigurationException;
 import com.mucommander.conf.ConfigurationListener;
 import com.mucommander.conf.ValueList;
+import com.mucommander.file.FileFactory;
+import com.mucommander.file.icon.CachedFileIconProvider;
 import com.mucommander.ui.icon.FileIcons;
 import com.mucommander.ui.main.table.Columns;
 
@@ -549,6 +551,15 @@ public class MuConfiguration {
                 renameVariable("show_command_bar",  COMMAND_BAR_VISIBLE);
                 setVariable(VERSION, RuntimeConstants.VERSION);
             }
+
+            // Initialises core API variables
+            FileFactory.setFileCacheCapacity(MuConfiguration.getVariable(
+                    MuConfiguration.FILE_CACHE_CAPACITY,
+                    MuConfiguration.DEFAULT_FILE_CACHE_CAPACITY));
+
+            CachedFileIconProvider.setCacheCapacity(MuConfiguration.getVariable(
+                    MuConfiguration.SYSTEM_ICON_CACHE_CAPACITY,
+                    MuConfiguration.DEFAULT_SYSTEM_ICON_CACHE_CAPACITY));
 
             // Initialises mac os x specific values
             if(PlatformManager.getOsFamily() == PlatformManager.MAC_OS_X) {
