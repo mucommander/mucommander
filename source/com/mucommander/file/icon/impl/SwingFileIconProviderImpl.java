@@ -47,10 +47,10 @@ class SwingFileIconProviderImpl extends LocalFileIconProvider implements Cacheab
     private static JFileChooser fileChooser;
 
     /** Caches icons for directories, used only for non-local files */
-    protected static LRUCache directoryIconCache = CachedFileIconProvider.createCacheInstance();
+    protected static LRUCache directoryIconCache = CachedFileIconProvider.createCache();
 
     /** Caches icons for regular files, used only for non-local files */
-    protected static LRUCache fileIconCache = CachedFileIconProvider.createCacheInstance();
+    protected static LRUCache fileIconCache = CachedFileIconProvider.createCache();
 
     /** True if init has been called */
     protected static boolean initialized;

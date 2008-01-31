@@ -44,10 +44,10 @@ import java.awt.*;
 class CocoaFileIconProviderImpl extends LocalFileIconProvider implements CacheableFileIconProvider {
 
     /** Caches icons for directories, used only for non-local files */
-    protected static LRUCache directoryIconCache = CachedFileIconProvider.createCacheInstance();
+    protected static LRUCache directoryIconCache = CachedFileIconProvider.createCache();
 
     /** Caches icons for regular files, used only for non-local files */
-    protected static LRUCache fileIconCache = CachedFileIconProvider.createCacheInstance();
+    protected static LRUCache fileIconCache = CachedFileIconProvider.createCache();
 
     
     /**
