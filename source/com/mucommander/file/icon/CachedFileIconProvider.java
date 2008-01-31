@@ -19,7 +19,6 @@
 package com.mucommander.file.icon;
 
 import com.mucommander.cache.LRUCache;
-import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.file.AbstractFile;
 
 import javax.swing.*;
@@ -41,6 +40,12 @@ public class CachedFileIconProvider implements FileIconProvider {
     /** The underlying icon provider and cache manager */
     protected CacheableFileIconProvider cacheableFip;
 
+    /** Default capacity of icon caches */
+    public final static int DEFAULT_FILE_CACHE_CAPACITY = 100;
+
+    /** Current capacity of icon caches */
+    protected static int cacheCapacity = DEFAULT_FILE_CACHE_CAPACITY;
+
 
     /**
      * Creates a new CachedFileIconProvider that uses the given {@link CacheableFileIconProvider} to access the cache
@@ -53,17 +58,38 @@ public class CachedFileIconProvider implements FileIconProvider {
     }
 
     /**
-     * Creates and returns an {@link com.mucommander.cache.LRUCache} instance, with a cache capacity defined
-     * by the {@link com.mucommander.conf.impl.MuConfiguration#SYSTEM_ICON_CACHE_CAPACITY} configuration variable which
-     * value defaults to {@link com.mucommander.conf.impl.MuConfiguration#DEFAULT_SYSTEM_ICON_CACHE_CAPACITY}.
+     * Creates and returns an {@link com.mucommander.cache.LRUCache} instance with a capacity equal to
+     * {@link #getCacheCapacity()}.
      *
-     * @return Creates and returns an LRUCache instance
+     * @return an LRUCache instance
      */
-    public static LRUCache createCacheInstance() {
-        return LRUCache.createInstance(
-                MuConfiguration.getVariable(MuConfiguration.SYSTEM_ICON_CACHE_CAPACITY,
-                                            MuConfiguration.DEFAULT_SYSTEM_ICON_CACHE_CAPACITY)
-        );
+    public static LRUCache createCache() {
+        return LRUCache.createInstance(cacheCapacity);
+    }
+
+    /**
+     * Sets the capacity of the {@link LRUCache} that caches frequently accessed file instances. The more the capacity,
+     * the more frequent the cache is hit but the higher the memory usage. By default, the capacity is
+     * {@link #DEFAULT_FILE_CACHE_CAPACITY}.
+     *
+     * <p>Note that calling this method does not change the capacity of existing caches so to be effective, this method
+     * must be called before {@link #createCache()} is called.</p>
+     *
+     * @param capacity the capacity of the LRU cache that caches frequently accessed icon instances
+     * @see com.mucommander.cache.LRUCache
+     */
+    public static void setCacheCapacity(int capacity) {
+        cacheCapacity = capacity;
+    }
+
+    /**
+     * Returns the capacity of the {@link LRUCache} that caches frequently accessed icon instances. By default, the
+     * capacity is {@link #DEFAULT_FILE_CACHE_CAPACITY}.
+     *
+     * @return the capacity of the LRU cache that caches frequently accessed icon instances
+     */
+    public static int getCacheCapacity() {
+        return cacheCapacity;
     }
 
 
