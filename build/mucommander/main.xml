@@ -968,7 +968,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <target name="api-doc" depends="constants">
     <echo>Creating API javadoc...</echo>
     <mkdir dir="${doc.api}"/>
-    <javadoc destdir="${doc.api}" author="true" windowtitle="muCommander API" encoding="UTF-8" access="protected">
+    <!-- Set the linksource property to "yes" only when in nightly mode -->
+    <condition property="api-doc.linksource" value="yes">
+        <istrue value="${is-nightly}"/>
+    </condition>
+    <javadoc destdir="${doc.api}" author="true" windowtitle="muCommander API" encoding="UTF-8" access="protected" linksource="${api-doc.linksource}">
       <bottom>
          <![CDATA[
            <p>This file is part of <a href="http://www.mucommander.com" target="_top">muCommander</a> - Copyright (C) ${app.copyright} Maxence Bernard</p>
