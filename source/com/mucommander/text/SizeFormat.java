@@ -24,51 +24,63 @@ import java.text.NumberFormat;
 
 
 /**
- * SizeFormat formats byte sizes into localized string reprensentations.
+ * SizeFormat formats byte sizes into localized string representations.
  *
  * @author Maxence Bernard.
  */
 public class SizeFormat {
 
-    /** Bit mask for short digits string, e.g. "15" */
+    /** Bitmask for short digits, e.g. "15" */
     public final static int DIGITS_SHORT = 1;
-    /** Bit mask for medium digits string, e.g. "15,2" */
+    /** Bitmask for medium digits, e.g. "15,2" */
     public final static int DIGITS_MEDIUM = 2;
-    /** Bit mask for full digits string, e.g. "15,204,405" */
+    /** Bitmask for full digits, e.g. "15,204,405" */
     public final static int DIGITS_FULL = 4;
 
-    /** Bit mask for no unit string */
+    /** Bitmask for no unit string */
     public final static int UNIT_NONE = 0;
-    /** Bit mask for short unit string, e.g. "b" */
+    /** Bitmask for short unit string, e.g. "b" */
     public final static int UNIT_SHORT = 8;
-    /** Bit mask for short unit string, e.g. "bytes" */
+    /** Bitmask for short unit string, e.g. "bytes" */
     public final static int UNIT_LONG = 16;
 
-    /** Bit mask to add '/s' (per second) to the returned String */
+    /** Byte unit */
+    public final static int BYTE_UNIT = 0;
+    /** Kilobyte unit */
+    public final static int KILOBYTE_UNIT = 1;
+    /** Megabyte unit */
+    public final static int MEGABYTE_UNIT = 2;
+    /** Gigabyte unit */
+    public final static int GIGABYTE_UNIT = 3;
+    /** Terabyte unit */
+    public final static int TERABYTE_UNIT = 4;
+
+    /** Bitmask to add '/s' (per second) to the returned String */
     public final static int UNIT_SPEED = 32;
     
-    /** Bit mask to include a space character between digits and unit parts */
+    /** Bitmask to include a space character to separate the digits and unit parts */
     public final static int INCLUDE_SPACE = 64;
 
-    /** Bit mask to round any size < 1KB to 1KB (except 0 which will be 0 KB) */
+    /** Bitmask to round any size < 1KB to 1KB (except 0 which will be 0 KB) */
     public final static int ROUND_TO_KB = 128;
 
+    /** One kilobyte: 2^10 */
     private final static int KB_1 = 1024;
+    /** Ten kilobytes: (2^10)*10 */
     private final static int KB_10 = 10240;
+    /** One megabyte: 2^20 */
     private final static int MB_1 = 1048576;
+    /** Ten megabytes: (2^20)*10 */
     private final static int MB_10 = 10485760;
+    /** One gigabyte: 2^30 */
     private final static int GB_1 = 1073741824;
+    /** Ten gigabytes: (2^10)*10 */
     private final static long GB_10 = 10737418240l;
+    /** One terabyte: 2^40 */
     private final static long TB_1 = 1099511627776l;
+    /** Ten terabytes: (2^40)*10 */
     private final static long TB_10 = 10995116277760l;
 
-    public final static int BYTE_UNIT = 0;
-    public final static int KILO_BYTE_UNIT = 1;
-    public final static int MEGA_BYTE_UNIT = 2;
-    public final static int GIGA_BYTE_UNIT = 3;
-    public final static int TERA_BYTE_UNIT = 4;
-
-    
     /** DecimalFormat instance to localize thousands separators */
     private final static DecimalFormat DECIMAL_FORMAT = (DecimalFormat)NumberFormat.getInstance();
 
@@ -76,9 +88,9 @@ public class SizeFormat {
     private final static String DECIMAL_SEPARATOR = ""+DECIMAL_FORMAT.getDecimalFormatSymbols().getDecimalSeparator();
 
 
-    //////////////////////////
-    // Localized text keys //
-    //////////////////////////
+    /////////////////////
+    // Dictionary keys //
+    /////////////////////
 
     private final static String BYTE = Translator.get("unit.byte");
     private final static String BYTES = Translator.get("unit.bytes");
@@ -90,7 +102,14 @@ public class SizeFormat {
 
     private final static String SPEED_KEY = "unit.speed";
 
-	
+
+    /**
+     * Returns a String representation of the given byte size.
+     *
+     * @param size the size to format
+     * @param format format bitmask, see constant fields for allowed values
+     * @return a String representation of the given byte size
+     */
     public static String format(long size, int format) {
         if(size<0)
             return "?";
@@ -109,7 +128,19 @@ public class SizeFormat {
         // Whether any size < 1024 bytes should be rounded to a kilobyte
         boolean roundToKb = (format&ROUND_TO_KB)!=0;
 		
-        if((format&DIGITS_FULL)!=0) {
+        // size < 1KB
+        if(size<KB_1) {
+            if(roundToKb) {
+                // Note: ROUND_TO_KB must have precedence over DIGITS_FULL
+                digitsString = size==0?"0":"1";
+                unitString = noUnit?"":KB;
+            }
+            else {
+                digitsString = ""+size;
+                unitString = unitLong?(size<=1?BYTE:BYTES):unitShort?B:"";
+            }
+        }
+        else if((format&DIGITS_FULL)!=0) {
             // DecimalFormat localizes thousands separators
 
             // Calls to DecimalFormat must be synchronized.
@@ -122,21 +153,10 @@ public class SizeFormat {
             unitString = unitLong?BYTES:unitShort?B:"";
         }
         else {
-            // size < 1KB
-            if(size<KB_1) {
-                if(roundToKb) {
-                    digitsString = size==0?"0":"1";
-                    unitString = noUnit?"":KB;
-                }
-                else {
-                    digitsString = ""+size;
-                    unitString = unitLong?(size<=1?BYTE:BYTES):unitShort?B:"";
-                }
-            }
             // size < 10KB	-> "9.6 KB"
-            else if(size<KB_10 && !digitsShort) {
+            if(size<KB_10 && !digitsShort) {
                 int nKB = (int)size/KB_1;
-                digitsString = nKB+DECIMAL_SEPARATOR+((""+(size-nKB*KB_1)/(float)KB_1).charAt(2));
+                digitsString = nKB+DECIMAL_SEPARATOR+(int)((size-nKB*KB_1)/(float)KB_1*10);
                 unitString = noUnit?"":KB;
             }
             // size < 1MB -> "436 KB"
@@ -147,7 +167,7 @@ public class SizeFormat {
             // size < 10MB -> "4.3 MB"
             else if(size<MB_10 && !digitsShort) {
                 int nMB = (int)size/MB_1;
-                digitsString = nMB+DECIMAL_SEPARATOR+((""+(size-nMB*MB_1)/(float)MB_1).charAt(2));
+                digitsString = nMB+DECIMAL_SEPARATOR+(int)((size-nMB*MB_1)/(float)MB_1*10);
                 unitString = noUnit?"":MB;
             }
             // size < 1GB -> "548 MB"
@@ -158,7 +178,7 @@ public class SizeFormat {
             // size < 10GB -> "4.8 GB"
             else if(size<GB_10 && !digitsShort) {
                 long nGB = size/GB_1;
-                digitsString = nGB+DECIMAL_SEPARATOR+((""+(size-nGB*GB_1)/(float)GB_1).charAt(2));
+                digitsString = nGB+DECIMAL_SEPARATOR+(int)((size-nGB*GB_1)/(double)GB_1*10);
                 unitString = noUnit?"":GB;
             }
             // size < 1TB -> "216 GB"
@@ -169,7 +189,7 @@ public class SizeFormat {
             // size < 10TB -> "4.8 TB"
             else if(size<TB_10 && !digitsShort) {
                 long nTB = size/TB_1;
-                digitsString = nTB+DECIMAL_SEPARATOR+((""+(size-nTB*TB_1)/(float)TB_1).charAt(2));
+                digitsString = nTB+DECIMAL_SEPARATOR+(int)((size-nTB*TB_1)/(double)TB_1*10);
                 unitString = noUnit?"":TB;
             }
             else {
@@ -195,16 +215,16 @@ public class SizeFormat {
             case BYTE_UNIT:
                 unitString = B;
                 break;
-            case KILO_BYTE_UNIT:
+            case KILOBYTE_UNIT:
                 unitString = KB;
                 break;
-            case MEGA_BYTE_UNIT:
+            case MEGABYTE_UNIT:
                 unitString = MB;
                 break;
-            case GIGA_BYTE_UNIT:
+            case GIGABYTE_UNIT:
                 unitString = GB;
                 break;
-            case TERA_BYTE_UNIT:
+            case TERABYTE_UNIT:
                 unitString = TB;
                 break;
             default:
@@ -215,6 +235,12 @@ public class SizeFormat {
     }
 
 
+    /**
+     * Returns the size in bytes of the given byte unit, e.g. <code>1024</code> for {@link #KILOBYTE_UNIT}.
+     *
+     * @param unit a unit constant, see constant fields for allowed values
+     * @return the size in bytes of the given byte unit
+     */
     public static long getUnitBytes(int unit) {
         long bytes;
 
@@ -222,16 +248,16 @@ public class SizeFormat {
             case BYTE_UNIT:
                 bytes = 1;
                 break;
-            case KILO_BYTE_UNIT:
+            case KILOBYTE_UNIT:
                 bytes = KB_1;
                 break;
-            case MEGA_BYTE_UNIT:
+            case MEGABYTE_UNIT:
                 bytes = MB_1;
                 break;
-            case GIGA_BYTE_UNIT:
+            case GIGABYTE_UNIT:
                 bytes = GB_1;
                 break;
-            case TERA_BYTE_UNIT:
+            case TERABYTE_UNIT:
                 bytes = TB_1;
                 break;
             default:
