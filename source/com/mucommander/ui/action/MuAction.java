@@ -411,7 +411,7 @@ public abstract class MuAction extends AbstractAction {
      * Opens a dialog with a generic error message.
      * <p>
      * This is a convenience method and is strictly equivalent to calling
-     * <code>{@link reportError(String,String) reportError(}{@link Translator#get(String) Translator.get(}("error"),
+     * <code>{@link #reportError(String,String) reportError(}{@link Translator#get(String) Translator.get(}("error"),
      * {@link Translator#get(String) Translator.get(}("generic_error"))<code>
      * </p>
      */
@@ -423,7 +423,7 @@ public abstract class MuAction extends AbstractAction {
      * Opens a dialog with the specified error message.
      * <p>
      * This is a convenience method and is strictly equivalent to calling
-     * <code>{@link reportError(String,String) reportError(}{@link Translator#get(String) Translator.get(}("error"), message)</code>
+     * <code>{@link #reportError(String,String) reportError(}{@link Translator#get(String) Translator.get(}("error"), message)</code>
      * </p>
      * @param message error message to display.
      */

@@ -59,7 +59,7 @@ public class FileTableConfiguration {
     /**
      * Sets the visibility status of the specified column.
      * <p>
-     * Note that the {@link #NAME} column's visibility is ignored, it will always be visible.
+     * Note that the {@link Columns#NAME} column's visibility is ignored, it will always be visible.
      * </p>
      * @param column column whose visibility status should be set.
      * @param flag   whether the column should be visible.
@@ -80,7 +80,7 @@ public class FileTableConfiguration {
     /**
      * Sets the specified column's width.
      * <p>
-     * Note that the {@link #NAME} column's width will be ignored, as it depends on the frame's
+     * Note that the {@link Columns#NAME} column's width will be ignored, as it depends on the frame's
      * initial dimensions.
      * </p>
      * @param column column whose width should be set.

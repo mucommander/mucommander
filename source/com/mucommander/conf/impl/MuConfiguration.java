@@ -578,7 +578,7 @@ public class MuConfiguration {
      * but <code>toVar</code> does, <code>toVar</code> will be deleted.
      * </p>
      * <p>
-     * This method might trigger as many as two {@link ConfigurationEvent events}:
+     * This method might trigger as many as two {@link com.mucommander.conf.ConfigurationEvent events}:
      * <ul>
      *  <li>One when <code>fromVar</code> is removed.</li>
      *  <li>One when <code>toVar</code> is set.</li>
@@ -597,7 +597,7 @@ public class MuConfiguration {
      * the call failed, but that <code>name</code>'s value was already equal to <code>value</code>.
      * </p>
      * <p>
-     * If the value of the specified variable is actually modified, an {@link ConfigurationEvent event} will be passed to all
+     * If the value of the specified variable is actually modified, an {@link com.mucommander.conf.ConfigurationEvent event} will be passed to all
      * listeners.
      * </p>
      * @param  name  fully qualified name of the variable to set.
@@ -616,7 +616,7 @@ public class MuConfiguration {
      * new value.
      * </p>
      * <p>
-     * If the value of the specified variable is actually modified, an {@link ConfigurationEvent event} will be passed to all
+     * If the value of the specified variable is actually modified, an {@link com.mucommander.conf.ConfigurationEvent event} will be passed to all
      * listeners.
      * </p>
      * @param  name  fully qualified name of the variable to set.
@@ -635,7 +635,7 @@ public class MuConfiguration {
      * new value.
      * </p>
      * <p>
-     * If the value of the specified variable is actually modified, an {@link ConfigurationEvent event} will be passed to all
+     * If the value of the specified variable is actually modified, an {@link com.mucommander.conf.ConfigurationEvent event} will be passed to all
      * listeners.
      * </p>
      * @param  name  fully qualified name of the variable to set.
@@ -654,7 +654,7 @@ public class MuConfiguration {
      * new value.
      * </p>
      * <p>
-     * If the value of the specified variable is actually modified, an {@link ConfigurationEvent event} will be passed to all
+     * If the value of the specified variable is actually modified, an {@link com.mucommander.conf.ConfigurationEvent event} will be passed to all
      * listeners.
      * </p>
      * @param  name  fully qualified name of the variable to set.
@@ -673,7 +673,7 @@ public class MuConfiguration {
      * new value.
      * </p>
      * <p>
-     * If the value of the specified variable is actually modified, an {@link ConfigurationEvent event} will be passed to all
+     * If the value of the specified variable is actually modified, an {@link com.mucommander.conf.ConfigurationEvent event} will be passed to all
      * listeners.
      * </p>
      * @param  name  fully qualified name of the variable to set.
@@ -692,7 +692,7 @@ public class MuConfiguration {
      * new value.
      * </p>
      * <p>
-     * If the value of the specified variable is actually modified, an {@link ConfigurationEvent event} will be passed to all
+     * If the value of the specified variable is actually modified, an {@link com.mucommander.conf.ConfigurationEvent event} will be passed to all
      * listeners.
      * </p>
      * @param  name  fully qualified name of the variable to set.
@@ -711,7 +711,7 @@ public class MuConfiguration {
      * new value.
      * </p>
      * <p>
-     * If the value of the specified variable is actually modified, an {@link ConfigurationEvent event} will be passed to all
+     * If the value of the specified variable is actually modified, an {@link com.mucommander.conf.ConfigurationEvent event} will be passed to all
      * listeners.
      * </p>
      * @param  name      fully qualified name of the variable to set.
@@ -809,7 +809,7 @@ public class MuConfiguration {
     /**
      * Deletes the specified variable from the configuration.
      * <p>
-     * If the variable was set, a configuration {@link ConfigurationEvent event} will be passed to
+     * If the variable was set, a configuration {@link com.mucommander.conf.ConfigurationEvent event} will be passed to
      * all registered listeners.
      * </p>
      * @param  name name of the variable to remove.
@@ -820,7 +820,7 @@ public class MuConfiguration {
     /**
      * Deletes the specified variable from the configuration.
      * <p>
-     * If the variable was set, a configuration {@link ConfigurationEvent event} will be passed to
+     * If the variable was set, a configuration {@link com.mucommander.conf.ConfigurationEvent event} will be passed to
      * all registered listeners.
      * </p>
      * @param  name name of the variable to remove.
@@ -831,7 +831,7 @@ public class MuConfiguration {
     /**
      * Deletes the specified variable from the configuration.
      * <p>
-     * If the variable was set, a configuration {@link ConfigurationEvent event} will be passed to
+     * If the variable was set, a configuration {@link com.mucommander.conf.ConfigurationEvent event} will be passed to
      * all registered listeners.
      * </p>
      * @param  name name of the variable to remove.
@@ -842,7 +842,7 @@ public class MuConfiguration {
     /**
      * Deletes the specified variable from the configuration.
      * <p>
-     * If the variable was set, a configuration {@link ConfigurationEvent event} will be passed to
+     * If the variable was set, a configuration {@link com.mucommander.conf.ConfigurationEvent event} will be passed to
      * all registered listeners.
      * </p>
      * @param  name name of the variable to remove.
@@ -853,7 +853,7 @@ public class MuConfiguration {
     /**
      * Deletes the specified variable from the configuration.
      * <p>
-     * If the variable was set, a configuration {@link ConfigurationEvent event} will be passed to
+     * If the variable was set, a configuration {@link com.mucommander.conf.ConfigurationEvent event} will be passed to
      * all registered listeners.
      * </p>
      * @param  name name of the variable to remove.
@@ -864,7 +864,7 @@ public class MuConfiguration {
     /**
      * Deletes the specified variable from the configuration.
      * <p>
-     * If the variable was set, a configuration {@link ConfigurationEvent event} will be passed to
+     * If the variable was set, a configuration {@link com.mucommander.conf.ConfigurationEvent event} will be passed to
      * all registered listeners.
      * </p>
      * @param  name name of the variable to remove.
@@ -875,7 +875,7 @@ public class MuConfiguration {
     /**
      * Deletes the specified variable from the configuration.
      * <p>
-     * If the variable was set, a configuration {@link ConfigurationEvent event} will be passed to
+     * If the variable was set, a configuration {@link com.mucommander.conf.ConfigurationEvent event} will be passed to
      * all registered listeners.
      * </p>
      * @param  name name of the variable to remove.
@@ -892,7 +892,7 @@ public class MuConfiguration {
      * Retrieves the value of the specified variable.
      * <p>
      * If the variable isn't set, this method will set it to <code>defaultValue</code> before
-     * returning it. If this happens, a configuration {@link ConfigurationEvent event} will
+     * returning it. If this happens, a configuration {@link com.mucommander.conf.ConfigurationEvent event} will
      * be sent to all registered listeners.
      * </p>
      * @param  name         name of the variable to retrieve.
@@ -907,7 +907,7 @@ public class MuConfiguration {
      * Retrieves the value of the specified variable as an integer.
      * <p>
      * If the variable isn't set, this method will set it to <code>defaultValue</code> before
-     * returning it. If this happens, a configuration {@link ConfigurationEvent event} will
+     * returning it. If this happens, a configuration {@link com.mucommander.conf.ConfigurationEvent event} will
      * be sent to all registered listeners.
      * </p>
      * @param  name                  name of the variable to retrieve.
@@ -923,7 +923,7 @@ public class MuConfiguration {
      * Retrieves the value of the specified variable as a long.
      * <p>
      * If the variable isn't set, this method will set it to <code>defaultValue</code> before
-     * returning it. If this happens, a configuration {@link ConfigurationEvent event} will
+     * returning it. If this happens, a configuration {@link com.mucommander.conf.ConfigurationEvent event} will
      * be sent to all registered listeners.
      * </p>
      * @param  name                  name of the variable to retrieve.
@@ -939,7 +939,7 @@ public class MuConfiguration {
      * Retrieves the value of the specified variable as a float.
      * <p>
      * If the variable isn't set, this method will set it to <code>defaultValue</code> before
-     * returning it. If this happens, a configuration {@link ConfigurationEvent event} will
+     * returning it. If this happens, a configuration {@link com.mucommander.conf.ConfigurationEvent event} will
      * be sent to all registered listeners.
      * </p>
      * @param  name                  name of the variable to retrieve.
@@ -955,7 +955,7 @@ public class MuConfiguration {
      * Retrieves the value of the specified variable as a boolean.
      * <p>
      * If the variable isn't set, this method will set it to <code>defaultValue</code> before
-     * returning it. If this happens, a configuration {@link ConfigurationEvent event} will
+     * returning it. If this happens, a configuration {@link com.mucommander.conf.ConfigurationEvent event} will
      * be sent to all registered listeners.
      * </p>
      * @param  name                  name of the variable to retrieve.
@@ -970,7 +970,7 @@ public class MuConfiguration {
      * Retrieves the value of the specified variable as a double.
      * <p>
      * If the variable isn't set, this method will set it to <code>defaultValue</code> before
-     * returning it. If this happens, a configuration {@link ConfigurationEvent event} will
+     * returning it. If this happens, a configuration {@link com.mucommander.conf.ConfigurationEvent event} will
      * be sent to all registered listeners.
      * </p>
      * @param  name                  name of the variable to retrieve.
@@ -986,7 +986,7 @@ public class MuConfiguration {
      * Retrieves the value of the specified variable as a {@link ValueList}.
      * <p>
      * If the variable isn't set, this method will set it to <code>defaultValue</code> before
-     * returning it. If this happens, a configuration {@link ConfigurationEvent event} will
+     * returning it. If this happens, a configuration {@link com.mucommander.conf.ConfigurationEvent event} will
      * be sent to all registered listeners.
      * </p>
      * @param  name         name of the variable to retrieve.
