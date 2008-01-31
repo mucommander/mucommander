@@ -22,7 +22,6 @@ import com.mucommander.Debug;
 import com.mucommander.auth.AuthException;
 import com.mucommander.auth.CredentialsManager;
 import com.mucommander.cache.LRUCache;
-import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.file.filter.ExtensionFilenameFilter;
 import com.mucommander.file.filter.FilenameFilter;
 import com.mucommander.file.icon.FileIconProvider;
@@ -109,8 +108,10 @@ public class FileFactory {
     private final static Object trashLock = new Object();
 
     /** Static LRUCache instance that caches frequently accessed AbstractFile instances */
-    private static LRUCache fileCache = LRUCache.createInstance(MuConfiguration.getVariable(MuConfiguration.FILE_CACHE_CAPACITY,
-                                                                                            MuConfiguration.DEFAULT_FILE_CACHE_CAPACITY));
+    private static LRUCache fileCache;
+
+    /** Default capacity of the file cache */
+    public final static int DEFAULT_FILE_CACHE_CAPACITY = 1000;
 
     private static WeakHashMap archiveFileCache = new WeakHashMap();
 
@@ -123,10 +124,12 @@ public class FileFactory {
 
 
     static {
-        ProtocolProvider protocolProvider; // Buffer for protocols that use the same provider.
+        // Initialize the LRUCache that caches frequently accessed AbstractFile instances
+        setFileCacheCapacity(DEFAULT_FILE_CACHE_CAPACITY);
 
         // Register built-in file protocols.
         // Local file protocol is hard-wired for performance reasons, no need to add it.
+        ProtocolProvider protocolProvider;
         registerProtocol(FileProtocols.SMB,       new com.mucommander.file.impl.smb.SMBProtocolProvider());
         registerProtocol(FileProtocols.HTTP,      protocolProvider = new com.mucommander.file.impl.http.HTTPProtocolProvider());
         registerProtocol(FileProtocols.HTTPS,     protocolProvider);
@@ -164,6 +167,33 @@ public class FileFactory {
      * Makes sure no instance of <code>FileFactory</code> is created.
      */
     private FileFactory() {}
+
+
+    /**
+     * Sets the capacity of the {@link LRUCache} that caches frequently accessed file instances. The more the capacity,
+     * the more frequent the cache is hit but the higher the memory usage. By default, the capacity is
+     * {@link #DEFAULT_FILE_CACHE_CAPACITY}.
+     *
+     * <p>If the specified capacity is different from the current one, a new cache instance will be created, thus clearing
+     * all previously cached files.</p>
+     *
+     * @param capacity the capacity of the LRU cache that caches frequently accessed file instances
+     * @see com.mucommander.cache.LRUCache
+     */
+    public static void setFileCacheCapacity(int capacity) {
+        if(fileCache==null || fileCache.getCapacity()!=capacity)   // Don't recreate an instance if the capacity is the same
+            fileCache = LRUCache.createInstance(DEFAULT_FILE_CACHE_CAPACITY);
+    }
+
+    /**
+     * Returns the capacity of the {@link LRUCache} that caches frequently accessed file instances. By default, the
+     * capacity is {@link #DEFAULT_FILE_CACHE_CAPACITY}.
+     *
+     * @return capacity of the LRU cache that caches frequently accessed file instances
+     */
+    public static int getFileCacheCapacity() {
+        return fileCache.getCapacity();
+    }
 
 
     /**
