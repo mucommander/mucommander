@@ -54,7 +54,7 @@ public class CustomFileIconProvider implements FileIconProvider {
     public final static String PARENT_FOLDER_ICON_NAME = "parent.png";
 
     /** Transparent icon symbolizing symlinks, painted over an existing icon */
-     public final static String SYMLINK_ICON_NAME = "link.png";
+    public final static String SYMLINK_ICON_NAME = "link.png";
 
     /** Icon for Mac OS X's applications */
     public final static String MAC_OS_X_APP_ICON_NAME = "executable_osx.png";
@@ -134,7 +134,7 @@ public class CustomFileIconProvider implements FileIconProvider {
      * @param targetIcon the icon representing the symlink's target
      * @return an icon symbolizing a symlink to the given target
      */
-    public static ImageIcon getSymlinkIcon(Icon targetIcon) {
+    private static ImageIcon getSymlinkIcon(Icon targetIcon) {
         return IconManager.getCompositeIcon(targetIcon, IconManager.getIcon(IconManager.FILE_ICON_SET, SYMLINK_ICON_NAME));
     }
 
