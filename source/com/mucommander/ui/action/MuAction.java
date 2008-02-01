@@ -19,8 +19,8 @@
 package com.mucommander.ui.action;
 
 import com.mucommander.Debug;
-import com.mucommander.PlatformManager;
 import com.mucommander.file.util.ResourceLoader;
+import com.mucommander.runtime.OsFamilies;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.main.MainFrame;
@@ -334,7 +334,7 @@ public abstract class MuAction extends AbstractAction {
         if((modifiers&KeyEvent.CTRL_MASK)!=0)
             modifiersString += (modifiersString.equals("")?"":"+")+CTRL_MODIFIER_STRING;
 
-        if(PlatformManager.getOsFamily()==PlatformManager.MAC_OS_X) {
+        if(OsFamilies.MAC_OS_X.isCurrent()) {
             if((modifiers&KeyEvent.ALT_MASK)!=0)
                 modifiersString += (modifiersString.equals("")?"":"+")+ALT_MODIFIER_STRING;
 

@@ -18,13 +18,13 @@
 
 package com.mucommander.file;
 
-import com.mucommander.PlatformManager;
 import com.mucommander.file.compat.CompatURLStreamHandler;
 import com.mucommander.file.filter.FileFilter;
 import com.mucommander.file.filter.FilenameFilter;
 import com.mucommander.file.impl.ProxyFile;
 import com.mucommander.io.*;
 import com.mucommander.process.AbstractProcess;
+import com.mucommander.runtime.OsFamilies;
 
 import javax.swing.*;
 import java.awt.*;
@@ -295,7 +295,7 @@ public abstract class AbstractFile implements FilePermissions {
         String path = fileURL.getPath();
 
         if(fileURL.getProtocol().equals(FileProtocols.FILE))
-            return PlatformManager.WINDOWS.isCurrent()?windowsDriveRootPattern.matcher(path).matches():path.equals("/");
+            return OsFamilies.WINDOWS.isCurrent()?windowsDriveRootPattern.matcher(path).matches():path.equals("/");
         else
             return path.equals("/");
     }

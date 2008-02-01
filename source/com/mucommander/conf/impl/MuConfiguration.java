@@ -18,7 +18,6 @@
 
 package com.mucommander.conf.impl;
 
-import com.mucommander.PlatformManager;
 import com.mucommander.RuntimeConstants;
 import com.mucommander.conf.Configuration;
 import com.mucommander.conf.ConfigurationException;
@@ -26,6 +25,7 @@ import com.mucommander.conf.ConfigurationListener;
 import com.mucommander.conf.ValueList;
 import com.mucommander.file.FileFactory;
 import com.mucommander.file.icon.CachedFileIconProvider;
+import com.mucommander.runtime.OsFamilies;
 import com.mucommander.ui.icon.FileIcons;
 import com.mucommander.ui.main.table.Columns;
 
@@ -80,7 +80,7 @@ public class MuConfiguration {
      * In particular, the system tray notifier is available under Linux+Java 1.6, but it doesn't work well so it is not
      * enabled by default. */
     public static final boolean DEFAULT_ENABLE_SYSTEM_NOTIFICATIONS = com.mucommander.ui.notifier.AbstractNotifier.isAvailable()
-        && (PlatformManager.MAC_OS_X.isCurrent() || PlatformManager.WINDOWS.isCurrent());
+        && (OsFamilies.MAC_OS_X.isCurrent() || OsFamilies.WINDOWS.isCurrent());
     /** Controls whether files should be moved to trash or permanently erased. */
     public static final String DELETE_TO_TRASH                    = "delete_to_trash";
     /** Default 'delete to trash' behavior. */
@@ -562,7 +562,7 @@ public class MuConfiguration {
                     MuConfiguration.DEFAULT_SYSTEM_ICON_CACHE_CAPACITY));
 
             // Initialises mac os x specific values
-            if(PlatformManager.getOsFamily() == PlatformManager.MAC_OS_X) {
+            if(OsFamilies.MAC_OS_X.isCurrent()) {
                 if(getVariable(SHELL_ENCODING) == null) {
                     setVariable(SHELL_ENCODING, "UTF-8");
                     setVariable(AUTODETECT_SHELL_ENCODING, false);

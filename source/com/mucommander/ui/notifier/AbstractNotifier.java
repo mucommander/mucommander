@@ -19,7 +19,8 @@
 package com.mucommander.ui.notifier;
 
 import com.mucommander.Debug;
-import com.mucommander.PlatformManager;
+import com.mucommander.runtime.JavaVersions;
+import com.mucommander.runtime.OsFamilies;
 import com.mucommander.ui.main.WindowManager;
 
 import javax.swing.*;
@@ -50,9 +51,9 @@ public abstract class AbstractNotifier implements NotificationTypes {
 
     static {
         // Finds and creates a suitable AbstractNotifier instance for the platform, if there is one
-        if(PlatformManager.getOsFamily()==PlatformManager.MAC_OS_X)
+        if(OsFamilies.MAC_OS_X.isCurrent())
             notifier = new GrowlNotifier();
-        else if(PlatformManager.JAVA_1_6.isCurrentOrHigher() && SystemTray.isSupported())
+        else if(JavaVersions.JAVA_1_6.isCurrentOrHigher() && SystemTray.isSupported())
             notifier = new SystemTrayNotifier();
     }
 

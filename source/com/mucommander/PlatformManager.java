@@ -32,8 +32,7 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- * This class takes care of platform-specific issues, such as getting screen dimensions
- * and issuing commands.
+ * This class takes care of platform-specific issues, such as getting screen dimensions and issuing commands.
  *
  * @author Maxence Bernard, Nicolas Rinaudo
  */
@@ -152,7 +151,7 @@ public class PlatformManager implements JavaVersions, OsFamilies, OsVersions {
     static {
         OsFamily osFamily = OsFamily.getCurrent();
         OsVersion osVersion = OsVersion.getCurrent();
-        JavaVersion javaVersion = getJavaVersion();
+        JavaVersion javaVersion = JavaVersion.getCurrent();
 
         // Windows family
         if(osFamily==WINDOWS) {
@@ -299,35 +298,6 @@ public class PlatformManager implements JavaVersions, OsFamilies, OsVersions {
         runExecutables                = false;
         defaultRegexpCaseSensitivity = true;
         com.mucommander.file.FileFactory.setTrashProvider(new com.mucommander.file.impl.trash.KDETrashProvider());
-    }
-
-    /**
-     * Returns the version of Java the current JVM instance is running on. See constant fields for possible values.
-     *
-     * @return the version of Java the current JVM instance is running on
-     */
-    public static JavaVersion getJavaVersion() {
-        return JavaVersion.getCurrent();
-    }
-
-    /**
-     * Returns the OS family the current JVM instance is running on, {@link #UNKNOWN_OS_FAMILY} if unknown.
-     * See constant fields for possible values.
-     *
-     * @return the OS family the current JVM instance is running on.
-     */
-    public static OsFamily getOsFamily() {
-        return OsFamily.getCurrent();
-    }
-
-    /**
-     * Returns the OS version the current JVM instance is running on, {@link #UNKNOWN_VERSION} if unknown.
-     * See constant fields for possible values.
-     *
-     * @return the OS version the current JVM instance is running on.
-     */
-    public static OsVersion getOsVersion() {
-        return OsVersion.getCurrent();
     }
 
     /**

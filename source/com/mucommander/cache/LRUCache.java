@@ -20,7 +20,7 @@
 package com.mucommander.cache;
 
 import com.mucommander.Debug;
-import com.mucommander.PlatformManager;
+import com.mucommander.runtime.JavaVersions;
 
 
 /**
@@ -115,7 +115,7 @@ public abstract class LRUCache {
      * @return an instance of the best LRUCache implementation for the current Java runtime 
      */
     public static LRUCache createInstance(int capacity) {
-        if(PlatformManager.JAVA_1_4.isCurrentOrHigher())
+        if(JavaVersions.JAVA_1_4.isCurrentOrHigher())
             return new FastLRUCache(capacity);
         else
             return new LegacyLRUCache(capacity);

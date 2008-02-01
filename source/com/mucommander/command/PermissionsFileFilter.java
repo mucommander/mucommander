@@ -18,10 +18,10 @@
 
 package com.mucommander.command;
 
-import com.mucommander.PlatformManager;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FilePermissions;
 import com.mucommander.file.filter.FileFilter;
+import com.mucommander.runtime.JavaVersions;
 
 /**
  * Filter on a file's permissions.
@@ -42,7 +42,7 @@ public class PermissionsFileFilter extends FileFilter implements FilePermissions
     }
 
     public boolean accept(AbstractFile file) {
-        if(permission==EXECUTE_PERMISSION && PlatformManager.JAVA_1_5.isCurrentOrLower())
+        if(permission==EXECUTE_PERMISSION && JavaVersions.JAVA_1_5.isCurrentOrLower())
             return true;
 
         return filter ? file.getPermission(USER_ACCESS, permission) : !file.getPermission(USER_ACCESS, permission);

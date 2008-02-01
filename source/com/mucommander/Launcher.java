@@ -20,6 +20,7 @@ package com.mucommander;
 
 import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.extension.ExtensionManager;
+import com.mucommander.runtime.OsFamilies;
 import com.mucommander.shell.ShellHistoryManager;
 import com.mucommander.ui.dialog.startup.CheckVersionDialog;
 import com.mucommander.ui.dialog.startup.InitialSetupDialog;
@@ -367,7 +368,7 @@ public class Launcher {
         // ------------------------------------------------------------
         // If muCommander is running under Mac OS X (how lucky!), add some
         // glue for the main menu bar and other OS X specifics.
-        if(PlatformManager.getOsFamily()==PlatformManager.MAC_OS_X) {
+        if(OsFamilies.MAC_OS_X.isCurrent()) {
             // Configuration needs to be loaded before any sort of GUI creation
             // is performed - if we're to use the metal look, we need to know about
             // it right about now.
@@ -400,7 +401,7 @@ public class Launcher {
         System.setProperty("java.net.useSystemProxies", "true");
 
         // If we're not running under OS_X, preferences haven't been loaded yet.
-        if(PlatformManager.getOsFamily() != PlatformManager.MAC_OS_X) {
+        if(!OsFamilies.MAC_OS_X.isCurrent()) {
             try {MuConfiguration.read();}
             catch(Exception e) {printFileError("Could not load configuration", e, fatalWarnings);}
         }

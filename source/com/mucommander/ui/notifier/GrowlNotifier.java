@@ -19,7 +19,7 @@
 package com.mucommander.ui.notifier;
 
 import com.mucommander.Debug;
-import com.mucommander.PlatformManager;
+import com.mucommander.runtime.OsFamilies;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.macosx.AppleScript;
 //import com.growl.Growl;
@@ -94,7 +94,7 @@ public class GrowlNotifier extends AbstractNotifier {
     public boolean setEnabled(boolean enabled) {
         if(enabled) {
             // No need to bother if the OS is not Mac OS X
-            if(PlatformManager.getOsFamily()!=PlatformManager.MAC_OS_X)
+            if(!OsFamilies.MAC_OS_X.isCurrent())
                 return false;
 
             // Nothing else to do if the application has already been registered

@@ -18,10 +18,11 @@
 
 package com.mucommander.ui.action;
 
-import com.mucommander.PlatformManager;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.util.FileSet;
 import com.mucommander.job.CopyJob;
+import com.mucommander.runtime.JavaVersions;
+import com.mucommander.runtime.OsFamilies;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.file.FileCollisionDialog;
 import com.mucommander.ui.dialog.file.ProgressDialog;
@@ -47,7 +48,7 @@ public class PasteClipboardFilesAction extends MuAction {
 
         // Allows this action to be dynamically enabled when the clipboard contains files, and disabled otherwise.
         // ClipboardNotifier requires Java 1.5 and does not work under Mac OS X (tested under Tiger with Java 1.5.0_06)
-        if(PlatformManager.JAVA_1_5.isCurrentOrHigher() && PlatformManager.getOsFamily()!=PlatformManager.MAC_OS_X)
+        if(JavaVersions.JAVA_1_5.isCurrentOrHigher() && !OsFamilies.MAC_OS_X.isCurrent())
             new ClipboardNotifier(this);
     }
 

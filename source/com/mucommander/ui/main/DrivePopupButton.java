@@ -18,7 +18,6 @@
 
 package com.mucommander.ui.main;
 
-import com.mucommander.PlatformManager;
 import com.mucommander.bonjour.BonjourMenu;
 import com.mucommander.bonjour.BonjourService;
 import com.mucommander.bookmark.Bookmark;
@@ -74,7 +73,7 @@ public class DrivePopupButton extends PopupButton implements LocationListener, B
 
 
     static {
-        if(PlatformManager.WINDOWS.isCurrent()) {
+        if(OsFamilies.WINDOWS.isCurrent()) {
             fileSystemView = FileSystemView.getFileSystemView();
             extendedNameCache = new Hashtable();
         }
@@ -160,7 +159,7 @@ public class DrivePopupButton extends PopupButton implements LocationListener, B
             else {
                 // Patch for Windows UNC network paths (weakly characterized by having a host different from 'localhost'):
                 // display 'SMB' which is the underlying protocol
-                if(PlatformManager.WINDOWS.isCurrent() && !FileURL.LOCALHOST.equals(currentURL.getHost())) {
+                if(OsFamilies.WINDOWS.isCurrent() && !FileURL.LOCALHOST.equals(currentURL.getHost())) {
                     newLabel = "SMB";
                 }
                 else {
@@ -170,7 +169,7 @@ public class DrivePopupButton extends PopupButton implements LocationListener, B
                     // c) when network drives are present but not mounted (e.g. X:\ mapped onto an SMB share),
                     // getCanonicalPath which is I/O bound will take a looooong time to execute
 
-                    if(PlatformManager.WINDOWS.isCurrent())
+                    if(OsFamilies.WINDOWS.isCurrent())
                         currentPath = currentFolder.getAbsolutePath(false).toLowerCase();
                     else
                         currentPath = currentFolder.getCanonicalPath(false).toLowerCase();
@@ -180,7 +179,7 @@ public class DrivePopupButton extends PopupButton implements LocationListener, B
                     String temp;
                     int len;
                     for(int i=0; i<rootFolders.length; i++) {
-                        if(PlatformManager.WINDOWS.isCurrent())
+                        if(OsFamilies.WINDOWS.isCurrent())
                             temp = rootFolders[i].getAbsolutePath(false).toLowerCase();
                         else
                             temp = rootFolders[i].getCanonicalPath(false).toLowerCase();

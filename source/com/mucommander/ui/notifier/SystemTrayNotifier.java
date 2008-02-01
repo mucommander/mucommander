@@ -19,7 +19,7 @@
 package com.mucommander.ui.notifier;
 
 import com.mucommander.Debug;
-import com.mucommander.PlatformManager;
+import com.mucommander.runtime.JavaVersions;
 import com.mucommander.ui.action.*;
 import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.main.WindowManager;
@@ -83,7 +83,7 @@ public class SystemTrayNotifier extends AbstractNotifier implements ActionListen
     public boolean setEnabled(boolean enabled) {
         if(enabled) {
             // No need to bother if the current Java runtime version is not 1.6 or up, or if SystemTray is not available
-            if(PlatformManager.JAVA_1_6.isCurrentLower() || !SystemTray.isSupported())
+            if(JavaVersions.JAVA_1_6.isCurrentLower() || !SystemTray.isSupported())
                 return false;
 
             // If System Tray has already been initialized

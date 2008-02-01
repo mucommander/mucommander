@@ -20,6 +20,7 @@
 package com.mucommander.ui.viewer;
 
 import com.mucommander.file.AbstractFile;
+import com.mucommander.runtime.OsFamilies;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.DialogToolkit;
 import com.mucommander.ui.dialog.QuestionDialog;
@@ -130,7 +131,7 @@ public class ViewerFrame extends JFrame implements ActionListener {
                         };
 
                     // Catch Apple+W keystrokes under Mac OS X to close the window
-                    if(com.mucommander.PlatformManager.getOsFamily() == com.mucommander.PlatformManager.MAC_OS_X) {
+                    if(OsFamilies.MAC_OS_X.isCurrent()) {
                         scrollPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_W, ActionEvent.META_MASK), CUSTOM_DISPOSE_EVENT);
                         scrollPane.getActionMap().put(CUSTOM_DISPOSE_EVENT, new AbstractAction() {
                                 public void actionPerformed(ActionEvent e){

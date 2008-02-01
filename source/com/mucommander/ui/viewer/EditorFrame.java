@@ -19,10 +19,10 @@
 
 package com.mucommander.ui.viewer;
 
-import com.mucommander.PlatformManager;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
 import com.mucommander.file.FileProtocols;
+import com.mucommander.runtime.OsFamilies;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.DialogToolkit;
 import com.mucommander.ui.dialog.QuestionDialog;
@@ -145,7 +145,7 @@ public class EditorFrame extends JFrame implements ActionListener {
                         };
 
                     // Catch Apple+W keystrokes under Mac OS X to try and close the window
-                    if(com.mucommander.PlatformManager.getOsFamily()==com.mucommander.PlatformManager.MAC_OS_X) {
+                    if(OsFamilies.MAC_OS_X.isCurrent()) {
                         scrollPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_W, ActionEvent.META_MASK), CUSTOM_DISPOSE_EVENT);
                         scrollPane.getActionMap().put(CUSTOM_DISPOSE_EVENT, new AbstractAction() {
                                 public void actionPerformed(ActionEvent e){
@@ -190,7 +190,7 @@ public class EditorFrame extends JFrame implements ActionListener {
         if(this.saveNeeded!=saveNeeded) {
             this.saveNeeded = saveNeeded;
             // Marks/unmarks the window as dirty under Mac OS X (symbolized by a dot in the window closing icon)
-            if(PlatformManager.getOsFamily()==PlatformManager.MAC_OS_X)
+            if(OsFamilies.MAC_OS_X.isCurrent())
                 this.getRootPane().putClientProperty("windowModified", saveNeeded?Boolean.TRUE:Boolean.FALSE);
         }
 		

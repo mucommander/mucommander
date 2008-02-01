@@ -29,6 +29,8 @@ import com.mucommander.io.FileTransferException;
 import com.mucommander.io.RandomAccessInputStream;
 import com.mucommander.io.RandomAccessOutputStream;
 import com.mucommander.process.AbstractProcess;
+import com.mucommander.runtime.JavaVersions;
+import com.mucommander.runtime.OsFamilies;
 
 import javax.swing.filechooser.FileSystemView;
 import java.io.*;
@@ -87,14 +89,14 @@ public class LocalFile extends AbstractFile {
 
     /** true if the underlying local filesystem uses drives assigned to letters (e.g. A:\, C:\, ...) instead
      * of having single a root folder '/' */
-    public final static boolean USES_ROOT_DRIVES = PlatformManager.WINDOWS.isCurrent() || PlatformManager.OS_2.isCurrent();
+    public final static boolean USES_ROOT_DRIVES = OsFamilies.WINDOWS.isCurrent() || OsFamilies.OS_2.isCurrent();
 
     /** Are we running Windows ? */
     private final static boolean IS_WINDOWS;
 
 
     static {
-        IS_WINDOWS = PlatformManager.WINDOWS.isCurrent();
+        IS_WINDOWS = OsFamilies.WINDOWS.isCurrent();
     }
 
 
@@ -154,7 +156,7 @@ public class LocalFile extends AbstractFile {
      */
     public long[] getVolumeInfo() {
         // Under Java 1.6, use the new java.io.File methods
-        if(PlatformManager.JAVA_1_6.isCurrentOrHigher()) {
+        if(JavaVersions.JAVA_1_6.isCurrentOrHigher()) {
             return new long[] {
                 getTotalSpace(),
                 getFreeSpace()
@@ -338,7 +340,7 @@ public class LocalFile extends AbstractFile {
      */
     public static boolean hasRootDrives() {
         return IS_WINDOWS
-            || PlatformManager.OS_2.isCurrent()
+            || OsFamilies.OS_2.isCurrent()
             || "\\".equals(SEPARATOR);
     }
 
@@ -420,21 +422,21 @@ public class LocalFile extends AbstractFile {
             return file.canRead();
         else if(permission==WRITE_PERMISSION)
             return file.canWrite();
-        else if(permission==EXECUTE_PERMISSION && PlatformManager.JAVA_1_6.isCurrentOrHigher())
+        else if(permission==EXECUTE_PERMISSION && JavaVersions.JAVA_1_6.isCurrentOrHigher())
             return file.canExecute();
 
         return false;
     }
 
     public boolean setPermission(int access, int permission, boolean enabled) {
-        if(access!= USER_ACCESS || PlatformManager.JAVA_1_6.isCurrentLower())
+        if(access!= USER_ACCESS || JavaVersions.JAVA_1_6.isCurrentLower())
             return false;
 
         if(permission==READ_PERMISSION)
             return file.setReadable(enabled);
         else if(permission==WRITE_PERMISSION)
             return file.setWritable(enabled);
-        else if(permission==EXECUTE_PERMISSION && PlatformManager.JAVA_1_6.isCurrentOrHigher())
+        else if(permission==EXECUTE_PERMISSION && JavaVersions.JAVA_1_6.isCurrentOrHigher())
             return file.setExecutable(enabled);
 
         return false;
@@ -450,12 +452,12 @@ public class LocalFile extends AbstractFile {
             return permission==WRITE_PERMISSION;
 
         // Execute permission is supported only under Java 1.6 (and on platforms other than Windows)
-        return permission!=EXECUTE_PERMISSION || PlatformManager.JAVA_1_6.isCurrentOrHigher();
+        return permission!=EXECUTE_PERMISSION || JavaVersions.JAVA_1_6.isCurrentOrHigher();
     }
 
     public boolean canSetPermission(int access, int permission) {
         // setPermission is limited to the user access type
-        if(access!=USER_ACCESS || PlatformManager.JAVA_1_6.isCurrentLower())
+        if(access!=USER_ACCESS || JavaVersions.JAVA_1_6.isCurrentLower())
             return false;
 
         // Windows only supports write permission: files are either read-only or read-write
@@ -542,14 +544,14 @@ public class LocalFile extends AbstractFile {
 	
 
     public long getFreeSpace() {
-        if(PlatformManager.JAVA_1_6.isCurrentOrHigher())
+        if(JavaVersions.JAVA_1_6.isCurrentOrHigher())
             return file.getFreeSpace();
 
         return getVolumeInfo()[1];
     }
 	
     public long getTotalSpace() {
-        if(PlatformManager.JAVA_1_6.isCurrentOrHigher())
+        if(JavaVersions.JAVA_1_6.isCurrentOrHigher())
             return file.getTotalSpace();
 
         return getVolumeInfo()[0];
@@ -701,7 +703,7 @@ public class LocalFile extends AbstractFile {
 
         // Get permission support is limited to the user access type. Executable permission flag is only available under
         // Java 1.6 and up.
-        return PlatformManager.JAVA_1_6.isCurrentOrHigher()?
+        return JavaVersions.JAVA_1_6.isCurrentOrHigher()?
                 448         // rwx------ (700 octal)
                 :384;       // rw------- (300 octal)
     }
@@ -715,7 +717,7 @@ public class LocalFile extends AbstractFile {
             return 128;
 
         // Set permission support is only available under Java 1.6 and up and is limited to the user access type
-        return PlatformManager.JAVA_1_6.isCurrentOrHigher()?
+        return JavaVersions.JAVA_1_6.isCurrentOrHigher()?
                 448         // rwx------ (700 octal)
                 :0;         // --------- (0 octal)
     }

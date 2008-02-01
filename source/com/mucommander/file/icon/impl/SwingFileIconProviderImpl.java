@@ -19,7 +19,6 @@
 package com.mucommander.file.icon.impl;
 
 import com.mucommander.Debug;
-import com.mucommander.PlatformManager;
 import com.mucommander.cache.LRUCache;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.icon.CacheableFileIconProvider;
@@ -67,7 +66,7 @@ class SwingFileIconProviderImpl extends LocalFileIconProvider implements Cacheab
      * Note: instanciating this object is expensive (I/O bound) so we want to do that only if needed, and only once.
      */
     private static void init() {
-        if(PlatformManager.getOsFamily()==PlatformManager.MAC_OS_X)
+        if(OsFamilies.MAC_OS_X.isCurrent())
             fileChooser = new JFileChooser();
         else
             fileSystemView = FileSystemView.getFileSystemView();

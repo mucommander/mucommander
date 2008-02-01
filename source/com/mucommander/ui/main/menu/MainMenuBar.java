@@ -26,6 +26,7 @@ import com.mucommander.bookmark.BookmarkManager;
 import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.RootFolders;
+import com.mucommander.runtime.OsFamilies;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.*;
 import com.mucommander.ui.dialog.pref.theme.ThemeEditorDialog;
@@ -142,7 +143,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
         MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(ChangeDateAction.class, mainFrame), menuItemMnemonicHelper);
 
         // Under Mac OS X, 'Preferences' already appears in the application (muCommander) menu, do not display it again
-        if(PlatformManager.getOsFamily()!=PlatformManager.MAC_OS_X) {
+        if(!OsFamilies.MAC_OS_X.isCurrent()) {
             fileMenu.add(new JSeparator());
             MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(ShowPreferencesAction.class, mainFrame), menuItemMnemonicHelper);
         }
@@ -153,7 +154,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
         fileMenu.add(new JSeparator());
         MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(CloseWindowAction.class, mainFrame), menuItemMnemonicHelper);
         // Under Mac OS X, 'Quit' already appears in the application (muCommander) menu, do not display it again
-        if(PlatformManager.getOsFamily()!=PlatformManager.MAC_OS_X)
+        if(!OsFamilies.MAC_OS_X.isCurrent())
             MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(QuitAction.class, mainFrame), menuItemMnemonicHelper);
 
         add(fileMenu);
@@ -310,7 +311,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
         }
 		
         // Under Mac OS X, 'About' already appears in the application (muCommander) menu, do not display it again
-        if(PlatformManager.getOsFamily()!=PlatformManager.MAC_OS_X) {
+        if(!OsFamilies.MAC_OS_X.isCurrent()) {
             helpMenu.add(new JSeparator());
             MenuToolkit.addMenuItem(helpMenu, ActionManager.getActionInstance(ShowAboutAction.class, mainFrame), menuItemMnemonicHelper);
         }

@@ -18,8 +18,8 @@
 
 package com.mucommander.ui.dialog.pref.general;
 
-import com.mucommander.PlatformManager;
 import com.mucommander.conf.impl.MuConfiguration;
+import com.mucommander.runtime.OsFamilies;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.pref.PreferencesDialog;
 import com.mucommander.ui.dialog.pref.PreferencesPanel;
@@ -166,7 +166,7 @@ class FoldersPanel extends PreferencesPanel implements ItemListener, KeyListener
         northPanel.add(showHiddenFilesCheckBox);
 
         // Mac OS X-only options
-        if(PlatformManager.getOsFamily()==PlatformManager.MAC_OS_X) {
+        if(OsFamilies.MAC_OS_X.isCurrent()) {
             // Monitor showHiddenFilesCheckBox state to disable 'show .DS_Store files' option
             // when 'Show hidden files' is disabled, as .DS_Store files are hidden files
             showHiddenFilesCheckBox.addItemListener(this);
@@ -229,7 +229,7 @@ class FoldersPanel extends PreferencesPanel implements ItemListener, KeyListener
         // If one of the show/hide file filters have changed, refresh current folders of current MainFrame
         boolean refreshFolders = MuConfiguration.setVariable(MuConfiguration.SHOW_HIDDEN_FILES, showHiddenFilesCheckBox.isSelected());
         
-        if(PlatformManager.getOsFamily()==PlatformManager.MAC_OS_X) {
+        if(OsFamilies.MAC_OS_X.isCurrent()) {
             refreshFolders |= MuConfiguration.setVariable(MuConfiguration.SHOW_DS_STORE_FILES, showDSStoreFilesCheckBox.isSelected());
             refreshFolders |= MuConfiguration.setVariable(MuConfiguration.SHOW_SYSTEM_FOLDERS, showSystemFoldersCheckBox.isSelected());
         }

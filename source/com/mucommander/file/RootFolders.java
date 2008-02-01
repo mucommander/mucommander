@@ -20,8 +20,8 @@
 package com.mucommander.file;
 
 import com.mucommander.Debug;
-import com.mucommander.PlatformManager;
 import com.mucommander.file.impl.local.LocalFile;
+import com.mucommander.runtime.OsFamilies;
 import com.mucommander.runtime.OsFamily;
 
 import java.io.*;
@@ -46,7 +46,7 @@ public class RootFolders {
 
         // Add Mac OS X's /Volumes subfolders and not file roots ('/') since Volumes already contains a named link 
         // (like 'Hard drive' or whatever silly name the user gave his primary hard disk) to /
-        if(PlatformManager.getOsFamily()==PlatformManager.MAC_OS_X) {
+        if(OsFamilies.MAC_OS_X.isCurrent()) {
             addMacOSXVolumes(rootFoldersV);
             if(Debug.ON) Debug.trace("/Volumes's subfolders added: "+rootFoldersV);
         }

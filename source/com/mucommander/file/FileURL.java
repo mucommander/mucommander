@@ -20,10 +20,10 @@
 package com.mucommander.file;
 
 import com.mucommander.Debug;
-import com.mucommander.PlatformManager;
 import com.mucommander.auth.Credentials;
 import com.mucommander.file.compat.CompatURLStreamHandler;
 import com.mucommander.file.impl.local.LocalFile;
+import com.mucommander.runtime.OsFamilies;
 
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
@@ -102,7 +102,7 @@ public class FileURL implements Cloneable {
                 // - under other OS, conveniently transform it into smb://hostname/path to be nice with folks
                 //   who've spent too much time using Windows
                 else if(url.startsWith("\\\\") && urlLen>2) {
-                    if(PlatformManager.WINDOWS.isCurrent()) {
+                    if(OsFamilies.WINDOWS.isCurrent()) {
                         pos = url.indexOf('\\', 2);
                         if(pos==-1)
                             url =  FileProtocols.FILE+"://"+url.substring(2);

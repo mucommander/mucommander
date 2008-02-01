@@ -19,11 +19,11 @@
 package com.mucommander.ui.dnd;
 
 import com.mucommander.Debug;
-import com.mucommander.PlatformManager;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.util.FileSet;
 import com.mucommander.job.CopyJob;
 import com.mucommander.job.MoveJob;
+import com.mucommander.runtime.OsFamilies;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.file.FileCollisionDialog;
 import com.mucommander.ui.dialog.file.ProgressDialog;
@@ -82,7 +82,7 @@ public class FileDropTargetListener implements DropTargetListener {
      * <code>InputEvent.META_DOWN_MASK</code> under Mac OS X, <code>InputEvent.ALT_DOWN_MASK</code> under any other
      * platform.
      */
-    private final static int MOVE_ACTION_MODIFIERS_EX = PlatformManager.getOsFamily()==PlatformManager.MAC_OS_X?
+    private final static int MOVE_ACTION_MODIFIERS_EX = OsFamilies.MAC_OS_X.isCurrent()?
             InputEvent.META_DOWN_MASK
             :InputEvent.ALT_DOWN_MASK;
 

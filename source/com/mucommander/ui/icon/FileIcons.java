@@ -18,10 +18,10 @@
 
 package com.mucommander.ui.icon;
 
-import com.mucommander.PlatformManager;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
 import com.mucommander.file.icon.FileIconProvider;
+import com.mucommander.runtime.OsFamilies;
 
 import javax.swing.*;
 import java.awt.*;
@@ -110,9 +110,9 @@ public class FileIcons {
             if(extension!=null) {
                 boolean systemIcon;
 
-                if(PlatformManager.MAC_OS_X.isCurrent() && "app".equalsIgnoreCase(extension))
+                if(OsFamilies.MAC_OS_X.isCurrent() && "app".equalsIgnoreCase(extension))
                     systemIcon = true;
-                else if(PlatformManager.WINDOWS.isCurrent() && "exe".equalsIgnoreCase(extension))
+                else if(OsFamilies.WINDOWS.isCurrent() && "exe".equalsIgnoreCase(extension))
                     systemIcon = true;
                 else
                     systemIcon = false;
@@ -280,6 +280,6 @@ public class FileIcons {
      * default file manager
      */
     public static boolean hasProperSystemIcons() {
-        return PlatformManager.MAC_OS_X.isCurrent() || PlatformManager.WINDOWS.isCurrent();
+        return OsFamilies.MAC_OS_X.isCurrent() || OsFamilies.WINDOWS.isCurrent();
     }
 }

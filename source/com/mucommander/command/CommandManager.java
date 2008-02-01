@@ -25,6 +25,7 @@ import com.mucommander.file.FileFactory;
 import com.mucommander.file.filter.*;
 import com.mucommander.io.BackupInputStream;
 import com.mucommander.io.BackupOutputStream;
+import com.mucommander.runtime.JavaVersions;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -590,7 +591,7 @@ public class CommandManager implements CommandBuilder {
                 }
 
                 // Match executables if necessary and if running under java >= 1.6.
-                if(PlatformManager.runExecutables() && PlatformManager.JAVA_1_6.isCurrentOrHigher()) {
+                if(PlatformManager.runExecutables() && JavaVersions.JAVA_1_6.isCurrentOrHigher()) {
                     try {
                         filter = new AndFileFilter();
                         filter.addFileFilter(new PermissionsFileFilter(PermissionsFileFilter.EXECUTE_PERMISSION, true));

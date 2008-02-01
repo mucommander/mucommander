@@ -18,13 +18,13 @@
 
 package com.mucommander.ui.dialog.pref.general;
 
-import com.mucommander.PlatformManager;
 import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.extension.ClassFinder;
 import com.mucommander.extension.ExtensionManager;
 import com.mucommander.extension.LookAndFeelFilter;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
+import com.mucommander.runtime.OsFamilies;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.QuestionDialog;
 import com.mucommander.ui.dialog.pref.PreferencesDialog;
@@ -277,8 +277,8 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
         flowPanel.add(new JLabel(dial = new SpinningDial()));
         lnfPanel.add(flowPanel);
 
-        // For Mac OS X only, creates the 'metal' checkbox.
-        if(PlatformManager.getOsFamily()==PlatformManager.MAC_OS_X) {
+        // For Mac OS X only, creates the 'brushed metal' checkbox.
+        if(OsFamilies.MAC_OS_X.isCurrent()) {
             // 'Use brushed metal look' option
             brushedMetalCheckBox = new JCheckBox(Translator.get("prefs_dialog.use_brushed_metal"));
             brushedMetalCheckBox.setSelected(MuConfiguration.getVariable(MuConfiguration.USE_BRUSHED_METAL,
@@ -464,7 +464,7 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
             SwingUtilities.updateComponentTreeUI(parent);
         }
 
-        if(PlatformManager.getOsFamily()==PlatformManager.MAC_OS_X)
+        if(OsFamilies.MAC_OS_X.isCurrent())
             MuConfiguration.setVariable(MuConfiguration.USE_BRUSHED_METAL,  brushedMetalCheckBox.isSelected());
 
         // Set ToolBar's icon size

@@ -18,7 +18,7 @@
 
 package com.mucommander.util;
 
-import com.mucommander.PlatformManager;
+import com.mucommander.runtime.JavaVersions;
 
 import java.text.Collator;
 import java.util.Locale;
@@ -199,7 +199,7 @@ public class StringUtils {
      * @return the resulting string
      */
     public static String replaceCompat(String s, String target, String replacement) {
-        if(PlatformManager.JAVA_1_5.isCurrentOrHigher()) {
+        if(JavaVersions.JAVA_1_5.isCurrentOrHigher()) {
             // Java 1.5 or later
             return s.replace(target, replacement);
         }

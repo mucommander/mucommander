@@ -19,13 +19,13 @@
 
 package com.mucommander.ui.main;
 
-import com.mucommander.PlatformManager;
 import com.mucommander.bookmark.Bookmark;
 import com.mucommander.bookmark.BookmarkManager;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileProtocols;
 import com.mucommander.file.FileURL;
 import com.mucommander.file.RootFolders;
+import com.mucommander.runtime.OsFamilies;
 import com.mucommander.ui.combobox.EditableComboBox;
 import com.mucommander.ui.combobox.EditableComboBoxListener;
 import com.mucommander.ui.combobox.SaneComboBox;
@@ -57,7 +57,7 @@ public class LocationComboBox extends EditableComboBox implements LocationListen
     private static Pattern windowsTrailingSpacePattern;
 
     static {
-        if(PlatformManager.WINDOWS.isCurrent())
+        if(OsFamilies.WINDOWS.isCurrent())
             windowsTrailingSpacePattern = Pattern.compile("[ ]+[\\\\]*$");
     }
 
@@ -207,7 +207,7 @@ public class LocationComboBox extends EditableComboBox implements LocationListen
         // Note that Win32 doesn't allow creating files with trailing spaces (in Explorer, command prompt...), but
         // those files can still be manually crafted and thus exist on one's hard drive.
         // Mucommander should in theory be able to access such files without any problem but this hasn't been tested.
-        if(PlatformManager.WINDOWS.isCurrent() && location.indexOf(":\\")==1) {
+        if(OsFamilies.WINDOWS.isCurrent() && location.indexOf(":\\")==1) {
             // Looks for trailing spaces and if some 
             Matcher matcher = windowsTrailingSpacePattern.matcher(location);
             if(matcher.find())
