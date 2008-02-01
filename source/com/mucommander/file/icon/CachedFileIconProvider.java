@@ -98,21 +98,35 @@ public class CachedFileIconProvider implements FileIconProvider {
     /////////////////////////////////////
 
     /**
-     * <i>Implementation notes</i>: this method first calls {@link CacheableFileIconProvider#lookupCache(com.mucommander.file.AbstractFile, java.awt.Dimension)}
-     * to look for a matching cached icon. If a value is found, it is returned. If not, <code>CacheableFileIconProvider</code>'s
-     * {@link #getFileIcon(com.mucommander.file.AbstractFile, java.awt.Dimension)} is called to retrieve the icon.
-     * Before being returned, this icon is added to the cache by calling {@link CacheableFileIconProvider#addToCache(com.mucommander.file.AbstractFile, javax.swing.Icon, java.awt.Dimension)}.
+     * <i>Implementation notes</i>: this method first calls {@link CacheableFileIconProvider#isCacheable(com.mucommander.file.AbstractFile, java.awt.Dimension)}
+     * to determine if the icon cache is used.
+     *
+     * <p><b>If the file icon is cacheable</b>, {@link CacheableFileIconProvider#lookupCache(com.mucommander.file.AbstractFile, java.awt.Dimension)}
+     * is called to look for a previously cached icon. If a value is found, it is returned. If not,
+     * {@link #getFileIcon(com.mucommander.file.AbstractFile, java.awt.Dimension)} is called on the <code>CacheableFileIconProvider</code>
+     * to retrieve the icon. This icon is then added to the cache by calling
+     * {@link CacheableFileIconProvider#addToCache(com.mucommander.file.AbstractFile, javax.swing.Icon, java.awt.Dimension)}.
+     * </p>
+     *
+     * <p><b>If the file icon is not cacheable</b>, {@link #getFileIcon(com.mucommander.file.AbstractFile, java.awt.Dimension)}
+     * is simply called on the <code>CacheableFileIconProvider</code> and its value returned.</p>
      */
     public Icon getFileIcon(AbstractFile file, Dimension preferredResolution) {
-        // Look for the file icon in the provider's cache
-        Icon icon = cacheableFip.lookupCache(file, preferredResolution);
+        Icon icon;
+        boolean isCacheable = cacheableFip.isCacheable(file, preferredResolution);
 
+        // Look for the file icon in the provider's cache
+        if(isCacheable)
+            icon = cacheableFip.lookupCache(file, preferredResolution);
+        else
+            icon = null;
+
+        // Icon is not cacheable or isn't present in the cache, retrieve it from the provider
         if(icon==null) {
-            // Icon isn't present in cache, retrieve it from the provider
             icon = cacheableFip.getFileIcon(file, preferredResolution);
 
             // Cache the icon
-            if(icon!=null)
+            if(isCacheable && icon!=null)
                 cacheableFip.addToCache(file, icon, preferredResolution);
         }
 
