@@ -31,10 +31,10 @@ import java.io.IOException;
  * implementations that are only able to provide icons for local files.
  *
  * <p>This class implements {@link #getFileIcon(com.mucommander.file.AbstractFile, java.awt.Dimension)} and passes on
- * requests for local file icons to {@link #getLocalFileIcon(com.mucommander.file.impl.local.LocalFile, java.awt.Dimension)}.
+ * requests for local file icons to {@link #getLocalFileIcon(com.mucommander.file.impl.local.LocalFile, com.mucommander.file.AbstractFile, java.awt.Dimension)}.
  * On the other hand, requests for non-local file icons are transformed to local ones, by creating a local temporary
  * file with the same name (best effort) and extension (guaranteed) as the non-local file, and passes on the file
- * to {@link #getLocalFileIcon(com.mucommander.file.impl.local.LocalFile, java.awt.Dimension)}.</p> 
+ * to {@link #getLocalFileIcon(com.mucommander.file.impl.local.LocalFile, com.mucommander.file.AbstractFile, java.awt.Dimension)}.</p>
  *
  * @author Maxence Bernard
  */
@@ -73,28 +73,28 @@ public abstract class LocalFileIconProvider implements FileIconProvider {
     // FileIconProvider implementation //
     /////////////////////////////////////
 
-    public Icon getFileIcon(AbstractFile file, Dimension preferredResolution) {
+    public Icon getFileIcon(AbstractFile originalFile, Dimension preferredResolution) {
         // Specified file is a LocalFile or a ProxyFile proxying a LocalFile (e.g. an archive file): let's simply get
         // the icon using #getLocalFileIcon(LocalFile)
-        file = file.getTopAncestor();
+        AbstractFile topFile = originalFile.getTopAncestor();
         Icon icon;
 
-        if(file instanceof LocalFile) {
-            icon = getLocalFileIcon((LocalFile)file, preferredResolution);
+        if(topFile instanceof LocalFile) {
+            icon = getLocalFileIcon((LocalFile)topFile, originalFile, preferredResolution);
         }
         // File is a remote file: create a temporary local file (or directory) with the same extension to grab the icon
         // and then delete the file. This operation is I/O bound and thus expensive, so an LRU is used to cache
         // frequently-accessed file extensions.
         else {
             // Create the temporary, local file
-            LocalFile tempFile = createTempLocalFile(file);
+            LocalFile tempFile = createTempLocalFile(topFile);
             if(tempFile==null) {
                 // No temp file, no icon!
                 return null;
             }
 
             // Get the file icon
-            icon = getLocalFileIcon(tempFile, preferredResolution);
+            icon = getLocalFileIcon(tempFile, originalFile, preferredResolution);
 
             // Delete the temporary file
             try {
@@ -114,8 +114,9 @@ public abstract class LocalFileIconProvider implements FileIconProvider {
     //////////////////////
 
     /**
-     * Returns an icon for the given file, or <code>null</code> if it couldn't be retrieved, either because the
-     * given file doesn't exist or for any other reason.
+     * Returns an icon for the given local file, <code>null</code> if the icon couldn't be retrieved. This method is
+     * called by {@link #getFileIcon(com.mucommander.file.AbstractFile, java.awt.Dimension)} with a {@link LocalFile}
+     * equivalent to the {@link AbstractFile} originally requested.
      *
      * <p>The specified <code>Dimension</code> is used as a hint at the preferred icon's resolution; there is
      * absolutely no guarantee that the returned <code>Icon</code> will indeed have this resolution. This dimension is
@@ -125,10 +126,11 @@ public abstract class LocalFileIconProvider implements FileIconProvider {
      * 'native' icon resolutions. For example, if this provider is able to create icons both in 16x16 and 32x32
      * resolutions, and a 48x48 resolution is preferred, the 32x32 resolution should be favored for the returned icon.</p>
      *
-     * @param file the LocalFile instance for which an icon is requested
+     * @param localFile the LocalFile instance for which an icon is requested
+     * @param originalFile the AbstractFile for which an icon was originally requested
      * @param preferredResolution the preferred icon resolution
      * @return an icon for the requested file
      */
-    public abstract Icon getLocalFileIcon(LocalFile file, Dimension preferredResolution);
+    public abstract Icon getLocalFileIcon(LocalFile localFile, AbstractFile originalFile, Dimension preferredResolution);
 
 }
