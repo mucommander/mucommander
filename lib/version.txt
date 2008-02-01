@@ -12,9 +12,5 @@ include/jmdns.jar            -> jmdns 1.0 (with some sourceforge.net patches,
 include/yanfs.jar            -> Yanfs (formerly WebNFS), version unknown but
                                 probably the same as WebNFS 1.2
 noinclude/junit.jar          -> JUnit 4.4
-noinclude/osx-cocoa.jar      -> Java-cocoa bridge provided by Apple under 
-                                Mac OS X in the /System/Library/Java folder.
-                                This library has been deprecated by Apple but 
-                                still comes with Mac OS X as of 10.5.
 noinclude/osx-eawt-stubs.jar -> Stubs for Mac OS X's EAWT API.
 noinclude/servlet-api.jar    -> Java Servlet API
