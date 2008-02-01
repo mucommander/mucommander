@@ -26,6 +26,9 @@ import com.mucommander.file.icon.CacheableFileIconProvider;
 import com.mucommander.file.icon.CachedFileIconProvider;
 import com.mucommander.file.icon.LocalFileIconProvider;
 import com.mucommander.file.impl.local.LocalFile;
+import com.mucommander.runtime.OsFamilies;
+import com.mucommander.runtime.OsVersion;
+import com.mucommander.ui.icon.IconManager;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileSystemView;
@@ -55,17 +58,29 @@ class SwingFileIconProviderImpl extends LocalFileIconProvider implements Cacheab
     /** True if init has been called */
     protected static boolean initialized;
 
+    /** Transparent icon symbolizing symlinks, painted over an existing icon */
+    public final static String SYMLINK_ICON_NAME = "link.png";
+
 
     /**
      * Initializes the Swing object used to retrieve the icon.
      * Note: instanciating this object is expensive (I/O bound) so we want to do that only if needed, and only once.
      */
     private static void init() {
-        //
         if(PlatformManager.getOsFamily()==PlatformManager.MAC_OS_X)
             fileChooser = new JFileChooser();
         else
             fileSystemView = FileSystemView.getFileSystemView();
+    }
+
+    /**
+     * Returns an icon symbolizing a symlink to the given target icon.
+     *
+     * @param targetIcon the icon representing the symlink's target
+     * @return an icon symbolizing a symlink to the given target
+     */
+    private static ImageIcon getSymlinkIcon(Icon targetIcon) {
+        return IconManager.getCompositeIcon(targetIcon, IconManager.getIcon(IconManager.FILE_ICON_SET, SYMLINK_ICON_NAME));
     }
 
 
@@ -74,35 +89,33 @@ class SwingFileIconProviderImpl extends LocalFileIconProvider implements Cacheab
     //////////////////////////////////////////
 
     /**
-     * Implementation notes: only non-local icons are cached to avoid excessive temporary file creation.
-     * Local icons are cached by the Swing component used to retrieve icons.
+     * <b>Implementation notes:</b> returns <code>false</code> (no caching) for:
+     * <ul>
+     *  <li>local files: their icons are cached by the Swing component that provides icons.</li>
+     *  <li>symlinks: their icon cannot be cached using the file's extension as a key.</li>
+     * </ul>
+     * <code>true</code> is returned for non-local files that are not symlinks to avoid excessive temporary file
+     * creation.
      */
-    public Icon lookupCache(AbstractFile file, Dimension preferredResolution) {
-        // Do not use cache for local files, the Swing object already caches icons
-        if(file.getTopAncestor() instanceof LocalFile)
-            return null;
+    public boolean isCacheable(AbstractFile file, Dimension preferredResolution) {
+        return !((file.getTopAncestor() instanceof LocalFile) || file.isSymlink());
+    }
 
+    public Icon lookupCache(AbstractFile file, Dimension preferredResolution) {
         // Look for an existing icon instance for the file's extension
         return (Icon)(file.isDirectory()? directoryIconCache : fileIconCache).get(file.getExtension());
     }
 
-    /**
-     * Implementation notes: only non-local icons are cached to avoid excessive temporary file creation.
-     * Local icons are cached by the Swing component used to retrieve icons.
-     */
     public void addToCache(AbstractFile file, Icon icon, Dimension preferredResolution) {
-        // Do not use cache for local files, the Swing object already caches icons
-        if(!(file.getTopAncestor() instanceof LocalFile)) {
-            // Map the extension onto the given icon
-            (file.isDirectory()? directoryIconCache : fileIconCache).add(file.getExtension(), icon);
-        }
+        // Map the extension onto the given icon
+        (file.isDirectory()? directoryIconCache : fileIconCache).add(file.getExtension(), icon);
     }
 
     /**
      * <i>Implementation note:</i> only one resolution is available (usually 16x16) and blindly returned, the
      * <code>preferredResolution</code> argument is simply ignored.
      */
-    public Icon getLocalFileIcon(LocalFile file, Dimension preferredResolution) {
+    public Icon getLocalFileIcon(LocalFile localFile, AbstractFile originalFile, Dimension preferredResolution) {
         if(!initialized) {
             // init() will be called once at most
             init();
@@ -110,6 +123,8 @@ class SwingFileIconProviderImpl extends LocalFileIconProvider implements Cacheab
         }
 
         try {
+            Icon icon;
+
             if(fileSystemView!=null) {
                 // FileSystemView.getSystemIcon() will behave in the following way if the specified file doesn't exist
                 // when the icon is requested:
@@ -123,14 +138,29 @@ class SwingFileIconProviderImpl extends LocalFileIconProvider implements Cacheab
 
                 Debug.setSystemErrEnabled(false);
 
-                return fileSystemView.getSystemIcon((java.io.File)file.getUnderlyingFileObject());
+                icon = fileSystemView.getSystemIcon((java.io.File) localFile.getUnderlyingFileObject());
             }
             else {
-                return fileChooser.getIcon((java.io.File)file.getUnderlyingFileObject());
+                icon = fileChooser.getIcon((java.io.File) localFile.getUnderlyingFileObject());
             }
+
+            // Add a symlink indication to the icon if:
+            // - the original file is a symlink AND
+            //   - the original file is not a local file OR
+            //   - the original file is a local file but the Swing component generates icons which do not have a symlink
+            // indication. That is the case on Mac OS X 10.5 (regression, 10.4 did this just fine).
+            //
+            // Note that the symlink test is performed last because it is the most expensive.
+            //
+            if((!(originalFile.getTopAncestor() instanceof LocalFile) || (OsFamilies.MAC_OS_X.isCurrent() && OsVersion.MAC_OS_X_10_5.isCurrent()))
+                    && originalFile.isSymlink()) {
+                icon = getSymlinkIcon(icon);
+            }
+
+            return icon;
         }
         catch(Exception e) {
-            if(Debug.ON) Debug.trace("Caught exception while retrieving system icon for file "+file.getAbsolutePath()+" :"+e);
+            if(Debug.ON) Debug.trace("Caught exception while retrieving system icon for file "+ localFile.getAbsolutePath()+" :"+e);
             return null;
         }
         finally {
