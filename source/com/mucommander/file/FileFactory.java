@@ -153,9 +153,6 @@ public class FileFactory {
         registerArchiveFormat(new com.mucommander.file.impl.lst.LstFormatProvider(),     new ExtensionFilenameFilter(".lst"));
 
         // Set the default FileIconProvider instance
-//        if(PlatformManager.getOsFamily()==PlatformManager.MAC_OS_X)
-//            defaultFileIconProvider = new CocoaFileIconProvider();
-//        else
         defaultFileIconProvider = new SwingFileIconProvider();
 
         // Create the temp directory folder
