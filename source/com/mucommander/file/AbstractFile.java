@@ -955,6 +955,23 @@ public abstract class AbstractFile implements FilePermissions {
         getChild(name).mkdir();
     }
 
+
+    /**
+     * Creates this file as a directory and any parent directory that does not already exist. This method will fail
+     * (throw an <code>IOException</code>) if this file already exists. It may also fail because of an I/O error ;
+     * in this case, this method will not remove the parent directories it has created (if any).
+     *
+     * @throws IOException if this file already exists or if an I/O error occurred.
+     */
+    public final void mkdirs() throws IOException {
+        AbstractFile parent;
+        if(((parent=getParent())!=null) && !parent.exists())
+            parent.mkdirs();
+
+        mkdir();
+    }
+
+
     /**
      * Convenience method that creates a file as a direct child of this directory.
      * This method will fail if this file is not a directory.

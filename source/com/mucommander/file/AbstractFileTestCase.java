@@ -747,6 +747,51 @@ public abstract class AbstractFileTestCase extends TestCase implements FilePermi
     }
 
     /**
+     * Tests the {@link AbstractFile#mkdirs()} method in various situations.
+     *
+     * @throws IOException should not happen
+     */
+    public void testMkdirs() throws IOException {
+        // Assert that a directory can be created when the file doesn't already exist (without throwing an IOException)
+        AbstractFile dir1 = tempFile.getDirectChild("dir1");
+        AbstractFile dir2 = dir1.getDirectChild("dir2");
+        dir2.mkdirs();
+
+        // Assert that the file exists after the directory has been created
+        assertTrue(dir2.exists());
+
+        // Delete 'dir2' and perform the same test. The difference with the previous test is that 'temp' and 'dir1' exist.
+        dir2.delete();
+        dir2.mkdirs();
+        assertTrue(dir2.exists());
+
+        // Assert that an IOException is thrown when the directory already exists
+        boolean ioExceptionThrown = false;
+        try {
+            dir2.mkdirs();
+        }
+        catch(IOException e) {
+            ioExceptionThrown = true;
+        }
+
+        assertTrue(ioExceptionThrown);
+
+        // Assert that an IOException is thrown when a regular file exists
+        dir2.delete();
+        dir2.mkfile();
+
+        ioExceptionThrown = false;
+        try {
+            dir2.mkdir();
+        }
+        catch(IOException e) {
+            ioExceptionThrown = true;
+        }
+
+        assertTrue(ioExceptionThrown);
+    }
+
+    /**
      * Tests the {@link AbstractFile#mkfile()} method in various situations.
      *
      * @throws IOException should not happen
