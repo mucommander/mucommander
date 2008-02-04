@@ -22,7 +22,7 @@ package com.mucommander.ui.dialog.auth;
 
 import com.mucommander.auth.Credentials;
 import com.mucommander.auth.CredentialsManager;
-import com.mucommander.auth.MappedCredentials;
+import com.mucommander.auth.CredentialsMapping;
 import com.mucommander.file.FileURL;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.combobox.EditableComboBox;
@@ -61,11 +61,11 @@ public class AuthDialog extends FocusDialog implements ActionListener, EditableC
 
     private JCheckBox saveCredentialsCheckBox;
 
-    private MappedCredentials enteredCredentials;
+    private CredentialsMapping enteredCredentialsMapping;
 
     private FileURL fileURL;
 
-    private MappedCredentials[] credentials;
+    private CredentialsMapping[] credentialsMappings;
 
     // Dialog size constraints
     private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(320,0);	
@@ -98,13 +98,13 @@ public class AuthDialog extends FocusDialog implements ActionListener, EditableC
         compPanel.addRow(Translator.get("auth_dialog.server")+":", serverField, 15);
 
         // Retrieve a list of credentials matching the URL
-        this.credentials = CredentialsManager.getMatchingCredentials(fileURL);
+        this.credentialsMappings = CredentialsManager.getMatchingCredentials(fileURL);
 
         // Create login field / combo box: if no matching credentials were found, a text field is created
         // to let the user enter a login, otherwise an editable combo box is created to also allow him to select
         // an existing login/password pair (credentials)
         JComponent loginComp;
-        int nbCredentials = credentials.length;
+        int nbCredentials = credentialsMappings.length;
         if(nbCredentials>0) {
             // Editable combo box
             loginComboBox = new EditableComboBox();
@@ -112,7 +112,7 @@ public class AuthDialog extends FocusDialog implements ActionListener, EditableC
 
             // Add credentials to the combo box's choices
             for(int i=0; i<nbCredentials; i++)
-                loginComboBox.addItem(credentials[i].getLogin());
+                loginComboBox.addItem(credentialsMappings[i].getCredentials().getLogin());
 
             loginComboBox.addEditableComboBoxListener(this);
 
@@ -141,11 +141,13 @@ public class AuthDialog extends FocusDialog implements ActionListener, EditableC
         }
         // If not, initialize the login and password fields with the best credentials matching the url (if any)
         else if(nbCredentials>0) {
-            MappedCredentials bestCredentials = credentials[0];
+            CredentialsMapping bestCredentialsMapping = credentialsMappings[0];
+            Credentials bestCredentials = bestCredentialsMapping.getCredentials();
+
             loginField.setText(bestCredentials.getLogin());
             passwordField.setText(bestCredentials.getPassword());
 
-            saveCredentialsCheckBoxSelected = bestCredentials.isPersistent();
+            saveCredentialsCheckBoxSelected = bestCredentialsMapping.isPersistent();
         }
 
         // Select any text in the text fields so that the login and password can be erased just by typing
@@ -179,10 +181,12 @@ public class AuthDialog extends FocusDialog implements ActionListener, EditableC
 
 
     /**
-     * Returns the credentials entered by the user, or null if the dialog was cancelled.
+     * Returns the credentials entered by the user, <code>null</code> if the dialog was cancelled.
+     *
+     * @return the credentials entered by the user, <code>null</code> if the dialog was cancelled
      */
-    public MappedCredentials getCredentials() {
-        return enteredCredentials;
+    public CredentialsMapping getCredentialsMapping() {
+        return enteredCredentialsMapping;
     }
 
     /**
@@ -190,12 +194,13 @@ public class AuthDialog extends FocusDialog implements ActionListener, EditableC
      * been pressed in a text field.
      */
     private void setCredentials() {
-        this.enteredCredentials = new MappedCredentials(loginField.getText(), new String(passwordField.getPassword()), fileURL, saveCredentialsCheckBox.isSelected());
+        Credentials enteredCredentials = new Credentials(loginField.getText(), new String(passwordField.getPassword()));
+        this.enteredCredentialsMapping = new CredentialsMapping(enteredCredentials, fileURL, saveCredentialsCheckBox.isSelected());
 
-        // Reuse existing instances which may also contain properties
-        for(int i=0; i<credentials.length; i++) {
-            if(credentials[i].equals(this.enteredCredentials)) {
-                this.enteredCredentials = credentials[i];
+        // Reuse any existing instance which may contain connection properties
+        for(int i=0; i< credentialsMappings.length; i++) {
+            if(credentialsMappings[i].getCredentials().equals(enteredCredentials, true)) {  // Comparison must be password-sensitive
+                this.enteredCredentialsMapping = credentialsMappings[i];
                 break;
             }
         }
@@ -224,13 +229,14 @@ public class AuthDialog extends FocusDialog implements ActionListener, EditableC
     /////////////////////////////////////////////
 
     public void comboBoxSelectionChanged(SaneComboBox source) {
-        MappedCredentials selectedCredentials = credentials[loginComboBox.getSelectedIndex()];
+        CredentialsMapping selectedCredentialsMapping = credentialsMappings[loginComboBox.getSelectedIndex()];
+        Credentials selectedCredentials = selectedCredentialsMapping.getCredentials();
         loginField.setText(selectedCredentials.getLogin());
         passwordField.setText(selectedCredentials.getPassword());
 
         // Enable/disable 'save credentials' checkbox depending on whether the selected credentials are persistent or not
         if(saveCredentialsCheckBox!=null)
-            saveCredentialsCheckBox.setSelected(selectedCredentials.isPersistent());
+            saveCredentialsCheckBox.setSelected(selectedCredentialsMapping.isPersistent());
     }
 
     public void textFieldValidated(EditableComboBox source) {
