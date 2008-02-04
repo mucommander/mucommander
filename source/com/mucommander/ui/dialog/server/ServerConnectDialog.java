@@ -20,7 +20,7 @@
 package com.mucommander.ui.dialog.server;
 
 import com.mucommander.auth.Credentials;
-import com.mucommander.auth.MappedCredentials;
+import com.mucommander.auth.CredentialsMapping;
 import com.mucommander.file.FileURL;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.DialogToolkit;
@@ -179,17 +179,22 @@ public class ServerConnectDialog extends FocusDialog implements ActionListener, 
         try {
             FileURL serverURL = currentServerPanel.getServerURL();	// Can thrown a MalformedURLException
 
-            // Create MappedCedentials instance and use it in the URL so that it's added to CredentialsManager once the
-            // location has been properly opened
+            // Create a CredentialsMapping instance and pass to Folder so that it uses it to connect to the folder and
+            // adds to CredentialsManager once the folder has been successfully changed
             Credentials credentials = serverURL.getCredentials();
-            if(credentials!=null)
-                serverURL.setCredentials(new MappedCredentials(credentials, serverURL, saveCredentialsCheckBox.isSelected()));
+            CredentialsMapping credentialsMapping;
+            if(credentials!=null) {
+                credentialsMapping = new CredentialsMapping(credentials, serverURL, saveCredentialsCheckBox.isSelected());
+            }
+            else {
+                credentialsMapping = null;
+            }
 
             currentServerPanel.dispose();
             dispose();
 
             // Change the current folder
-            folderPanel.tryChangeCurrentFolder(serverURL);
+            folderPanel.tryChangeCurrentFolder(serverURL, credentialsMapping);
         }
         catch(IOException ex) {
             JOptionPane.showMessageDialog(this, Translator.get("folder_does_not_exist"), Translator.get("table.folder_access_error_title"), JOptionPane.ERROR_MESSAGE);

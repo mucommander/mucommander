@@ -20,9 +20,8 @@ package com.mucommander.ui.main;
 
 import com.mucommander.PlatformManager;
 import com.mucommander.auth.AuthException;
-import com.mucommander.auth.Credentials;
 import com.mucommander.auth.CredentialsManager;
-import com.mucommander.auth.MappedCredentials;
+import com.mucommander.auth.CredentialsMapping;
 import com.mucommander.conf.ConfigurationEvent;
 import com.mucommander.conf.ConfigurationListener;
 import com.mucommander.conf.impl.MuConfiguration;
@@ -343,10 +342,10 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
      * @param errorMessage optional (can be null), an error message sent by the server to display to the user
      * @return the credentials the user entered/chose and validated, null if he cancelled the dialog.
      */
-    private MappedCredentials getCredentialsFromUser(FileURL fileURL, String errorMessage) {
+    private CredentialsMapping getCredentialsFromUser(FileURL fileURL, String errorMessage) {
         AuthDialog authDialog = new AuthDialog(mainFrame, fileURL, errorMessage);
         authDialog.showDialog();
-        return authDialog.getCredentials();
+        return authDialog.getCredentialsMapping();
     }
 
 
@@ -362,28 +361,25 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
         new DownloadDialog(mainFrame, fileSet);
     }
 	
-
-
     /**
-     * Tries to change current folder to the new specified one. 
-     * The user is notified by a dialog if the folder could not be changed.
-     * 
-     * <p>This method creates a separate thread (which will take care of the actual folder change) and returns immediately.
+     * Tries to change current folder to the new specified one and notifies the user in case of a problem.
      *
-     * @param folder folder to be made current folder. If folder is null or doesn't exist, a dialog will popup and inform the user
+     * <p>This method spawns a separate thread to take care of the actual folder change and returns immediately.</p>
+     *
+     * @param folder the folder to be made current folder
      */
     public synchronized void tryChangeCurrentFolder(AbstractFile folder) {
         tryChangeCurrentFolder(folder, null);
     }
 
     /**
-     * Tries to change current folder to the new specified one, and select the given file after the folder has been changed.
-     * The user is notified by a dialog if the folder could not be changed.
+     * Tries to change current folder to the new specified one, and select the given file after the folder has been
+     * changed. The user is notified by a dialog if the folder could not be changed.
      * 
-     * <p>This method creates a separate thread (which will take care of the actual folder change) and returns immediately.
+     * <p>This method spawns a separate thread to take care of the actual folder change and returns immediately.</p>
      *
-     * @param folder folder to be made current folder. If folder is null or doesn't exist, a dialog will popup and inform the user
-     * @param selectThisFileAfter file to be selected after the folder has been changed (if it exists in the folder), can be null in which case FileTable rules will be used to select current file 
+     * @param folder the folder to be made current folder
+     * @param selectThisFileAfter the file to be selected after the folder has been changed (if it exists in the folder), can be null in which case FileTable rules will be used to select current file
      */
     public synchronized void tryChangeCurrentFolder(AbstractFile folder, AbstractFile selectThisFileAfter) {
         if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("folder="+folder+" selectThisFileAfter="+selectThisFileAfter, 3);
@@ -402,26 +398,15 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
     }
 
     /**
-     * Tries to change current folder to the new specified path.
-     * The user is notified by a dialog if the folder could not be changed.
-     * 
-     * <p>This method creates a separate thread (which will take care of the actual folder change) and returns immediately.
+     * Tries to change the current folder to the specified path and notifies the user in case of a problem.
      *
-     * @param folderPath folder's path to be made current folder. If this path does not resolve into an existing file, an error message will be displayed
+     * <p>This method spawns a separate thread to take care of the actual folder change and returns immediately.</p>
+     *
+     * @param folderPath path to the new current folder. If this path does not resolve into a file, an error message will be displayed.
      */
     public synchronized void tryChangeCurrentFolder(String folderPath) {
-        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("folderPath="+folderPath, 3);
-
-        // Make sure there is not an existing thread running,
-        // this should not normally happen but if it does, report the error
-        if(changeFolderThread!=null) {
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(">>>>>>>>> THREAD NOT NULL = "+changeFolderThread, -1);
-            return;
-        }
-
         try {
-            this.changeFolderThread = new ChangeFolderThread(new FileURL(folderPath));
-            changeFolderThread.start();
+            tryChangeCurrentFolder(new FileURL(folderPath), null);
         }
         catch(MalformedURLException e) {
             // FileURL could not be resolved, notify the user that the folder doesn't exist
@@ -430,14 +415,28 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
     }
 
     /**
-     * Tries to change current folder to the new specified URL.
-     * The user is notified by a dialog if the folder could not be changed.
-     * 
-     * <p>This method creates a separate thread (which will take care of the actual folder change) and returns immediately.
+     * Tries to change current folder to the new specified path and notifies the user in case of a problem.
      *
-     * @param folderURL folder's URL to be made current folder. If this URL does not resolve into an existing file, an error message will be displayed
+     * <p>This method spawns a separate thread to take care of the actual folder change and returns immediately.</p>
+     *
+     * @param folderURL location to the new current folder. If this URL does not resolve into a file, an error message will be displayed.
      */
     public synchronized void tryChangeCurrentFolder(FileURL folderURL) {
+        tryChangeCurrentFolder(folderURL, null);
+    }
+
+    /**
+     * Tries to change current folder to the new specified path and notifies the user in case of a problem.
+     *
+     * <p>If not <code>null</code>, the specified {@link com.mucommander.auth.CredentialsMapping} is used to authenticate
+     * the folder, and added to {@link CredentialsManager} if the folder has been successfully changed.</p>
+     *
+     * <p>This method spawns a separate thread to take care of the actual folder change and returns immediately.</p>
+     *
+     * @param folderURL folder's URL to be made current folder. If this URL does not resolve into an existing file, an error message will be displayed.
+     * @param credentialsMapping the CredentialsMapping to use for authentication, can be null
+     */
+    public synchronized void tryChangeCurrentFolder(FileURL folderURL, CredentialsMapping credentialsMapping) {
         if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("folderURL="+folderURL, 3);
 
         // Make sure there is not an existing thread running,
@@ -448,22 +447,23 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
         }
 
         this.changeFolderThread = new ChangeFolderThread(folderURL);
+        changeFolderThread.setCredentialsMapping(credentialsMapping);
         changeFolderThread.start();
     }
 
     /**
-     * Refreshes current folder's contents and notifies the user if current folder could not be refreshed.
+     * Refreshes the current folder's contents and notifies the user in case of a problem.
      *
-     * <p>This method creates a separate thread (which will take care of the actual folder change) and returns immediately.
+     * <p>This method spawns a separate thread to take care of the actual folder change and returns immediately.</p>
      */
     public synchronized void tryRefreshCurrentFolder() {
         tryChangeCurrentFolder(currentFolder, null);
     }
 
     /**
-     * Refreshes current folder's contents and notifies the user if current folder could not be refreshed.
+     * Refreshes current folder's contents and notifies the user if the current folder could not be refreshed.
      *
-     * <p>This method creates a separate thread (which will take care of the actual folder change) and returns immediately.
+     * <p>This method spawns a separate thread to take care of the actual folder change and returns immediately.</p>
      *
      * @param selectThisFileAfter file to be selected after the folder has been refreshed (if it exists in the folder), can be null in which case FileTable rules will be used to select current file 
      */
@@ -674,6 +674,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
         private AbstractFile folder;
         private FileURL folderURL;
         private AbstractFile fileToSelect;
+        private CredentialsMapping credentialsMapping;
 
         private boolean userInterrupted;
         private boolean doNotKill;
@@ -695,6 +696,24 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
         }
 
         /**
+         * Sets the file to be selected after the folder has been changed, <code>null</code> for none.
+         *
+         * @param fileToSelect the file to be selected after the folder has been changed
+         */
+        public void selectThisFileAfter(AbstractFile fileToSelect) {
+            this.fileToSelect = fileToSelect;
+        }
+
+        /**
+         * Sets the {@link CredentialsMapping} to use for accessing the folder, <code>null</code> for none.
+         * 
+         * @param credentialsMapping the CredentialsMapping to use
+         */
+        public void setCredentialsMapping(CredentialsMapping credentialsMapping) {
+            this.credentialsMapping = credentialsMapping;
+        }
+
+        /**
          * Returns true if the given file should have its canonical path followed. In that case, the AbstractFile
          * instance must be resolved again.
          *
@@ -707,13 +726,6 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
                 return true;
 
             return false;
-        }
-
-        /**
-         * Sets the file to be selected after the folder has been changed, can be null. 
-         */
-        public void selectThisFileAfter(AbstractFile fileToSelect) {
-            this.fileToSelect = fileToSelect;
         }
 
         /**
@@ -752,22 +764,24 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
             // Show some progress in the progress bar to give hope
             locationField.setProgressValue(10);
 
-//            // Disable automatic refresh
-//            fileTable.setAutoRefreshActive(false);
-
-            // If folder URL doesn't contain any credentials but CredentialsManager found some matching the URL,
+            // If folder URL doesn't contain any credentials but CredentialsManager found credentials matching the URL,
             // popup the authentication dialog to avoid having to wait for an AuthException to be thrown
             boolean userCancelled = false;
-            if(!folderURL.containsCredentials() && CredentialsManager.getMatchingCredentials(folderURL).length>0) {
-                MappedCredentials newCredentials = getCredentialsFromUser(folderURL, null);
+            CredentialsMapping newCredentialsMapping = null;
+            if(credentialsMapping!=null) {
+                newCredentialsMapping = credentialsMapping;
+                CredentialsManager.authenticate(folderURL, newCredentialsMapping);
+            }
+            else if(!folderURL.containsCredentials() && CredentialsManager.getMatchingCredentials(folderURL).length>0) {
+                newCredentialsMapping = getCredentialsFromUser(folderURL, null);
 
                 // User cancelled the authentication dialog, stop
-                if(newCredentials==null)
+                if(newCredentialsMapping ==null)
                     userCancelled = true;
                 // Use the provided credentials and invalidate the folder AbstractFile instance (if any) so that
                 // it gets recreated with the new credentials
                 else {
-                    CredentialsManager.authenticate(folderURL, newCredentials);
+                    CredentialsManager.authenticate(folderURL, newCredentialsMapping);
                     folder = null;
                 }
             }
@@ -930,14 +944,9 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
                         locationField.setProgressValue(95);
 
                         // If some new credentials were entered by the user, these can now be considered valid
-                        // (folder was changed successfully) -> add them to the credentials list.
-                        Credentials credentials = folder.getURL().getCredentials();
-                        if(credentials!=null) {
-                            if(credentials instanceof MappedCredentials)
-                                CredentialsManager.addCredentials((MappedCredentials)credentials);
-                            else
-                                CredentialsManager.addCredentials(new MappedCredentials(credentials, folderURL, false));
-                        }
+                        // (folder was changed successfully) -> add them to the CredentialsManager.
+                        if(newCredentialsMapping!=null)
+                            CredentialsManager.addCredentials(newCredentialsMapping);
 
                         // All good !
                         folderChangedSuccessfully = true;
@@ -953,12 +962,12 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
                         if(e instanceof AuthException) {
                             AuthException authException = (AuthException)e;
                             // Retry (loop) if user provided new credentials, if not stop
-                            MappedCredentials newCredentials = getCredentialsFromUser(authException.getFileURL(), authException.getMessage());
-                            if(newCredentials!=null) {
-                                // Invalidate AbstractFile instance
+                            newCredentialsMapping = getCredentialsFromUser(authException.getFileURL(), authException.getMessage());
+                            if(newCredentialsMapping !=null) {
+                                // Invalidate the existing AbstractFile instance
                                 folder = null;
                                 // Use the provided credentials
-                                CredentialsManager.authenticate(folderURL, newCredentials);
+                                CredentialsManager.authenticate(folderURL, newCredentialsMapping);
                                 continue;
                             }
                         }
@@ -987,9 +996,6 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
 
             // Restore normal mouse cursor
             mainFrame.setCursor(Cursor.getDefaultCursor());
-
-//            // Re-enable automatic refresh
-//            fileTable.setAutoRefreshActive(true);
 
             changeFolderThread = null;
 
