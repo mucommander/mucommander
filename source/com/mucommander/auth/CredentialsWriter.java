@@ -28,9 +28,10 @@ import java.util.Enumeration;
 import java.util.Iterator;
 
 /**
- * This class provides a method to write the credentials XML file.
+ * This class provides a method to write persistent credentials contained by {@link CredentialsManager} to an XML file.
  *
  * @author Maxence Bernard
+ * @see CredentialsParser
  */
 public class CredentialsWriter implements CredentialsConstants {
 
@@ -53,15 +54,15 @@ public class CredentialsWriter implements CredentialsConstants {
         out.writeCData(com.mucommander.RuntimeConstants.VERSION);
         out.endElement(ELEMENT_VERSION);
 
-        Iterator iterator = CredentialsManager.getPersistentCredentials().iterator();
-        MappedCredentials credentials;
+        Iterator iterator = CredentialsManager.getPersistentCredentialMappings().iterator();
+        CredentialsMapping credentialsMapping;
         FileURL realm;
         Enumeration propertyKeys;
         String name;
 
         while(iterator.hasNext()) {
-            credentials = (MappedCredentials)iterator.next();
-            realm = credentials.getRealm();
+            credentialsMapping = (CredentialsMapping)iterator.next();
+            realm = credentialsMapping.getRealm();
 
             // Start credentials element
             out.startElement(ELEMENT_CREDENTIALS);
@@ -71,6 +72,8 @@ public class CredentialsWriter implements CredentialsConstants {
             out.startElement(ELEMENT_URL);
             out.writeCData(realm.toString(false));
             out.endElement(ELEMENT_URL);
+
+            Credentials credentials = credentialsMapping.getCredentials();
 
             // Write login
             out.startElement(ELEMENT_LOGIN);

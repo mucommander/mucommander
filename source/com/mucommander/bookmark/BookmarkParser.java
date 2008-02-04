@@ -20,7 +20,7 @@ package com.mucommander.bookmark;
 
 import com.mucommander.auth.Credentials;
 import com.mucommander.auth.CredentialsManager;
-import com.mucommander.auth.MappedCredentials;
+import com.mucommander.auth.CredentialsMapping;
 import com.mucommander.file.FileURL;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -125,7 +125,7 @@ class BookmarkParser extends DefaultHandler implements BookmarkConstants {
                 // If the URL contains credentials, import them into CredentialsManager and remove credentials
                 // from the bookmark's location
                 if(credentials!=null) {
-                    CredentialsManager.addCredentials(new MappedCredentials(credentials, url, true));
+                    CredentialsManager.addCredentials(new CredentialsMapping(credentials, url, true));
                     bookmarkLocation = url.toString(false);
                 }
                 else {

@@ -35,10 +35,11 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 
 /**
- * This class takes care of parsing the credentials XML file and adding parsed {@link MappedCredentials} instances
- * to {@link CredentialsManager}'s persistent credentials list.
+ * This class takes care of parsing the credentials XML file and adding parsed {@link CredentialsMapping} instances
+ * to {@link CredentialsManager}.
  *
  * @author Maxence Bernard
+ * @see CredentialsWriter
  */
 class CredentialsParser extends DefaultHandler implements CredentialsConstants {
 
@@ -129,7 +130,7 @@ class CredentialsParser extends DefaultHandler implements CredentialsConstants {
             }
 
             // Add credentials to persistent credentials list
-            CredentialsManager.getPersistentCredentials().add(new MappedCredentials(login, password, url, true));
+            CredentialsManager.getPersistentCredentialMappings().add(new CredentialsMapping(new Credentials(login, password), url, true));
         }
         else if(qName.equals(ELEMENT_URL)) {
             try {url = new FileURL(characters.toString().trim());}
@@ -141,5 +142,7 @@ class CredentialsParser extends DefaultHandler implements CredentialsConstants {
             password = characters.toString().trim();
     }
 
-    public void characters(char[] ch, int offset, int length) {characters.append(ch, offset, length);}
+    public void characters(char[] ch, int offset, int length) {
+        characters.append(ch, offset, length);
+    }
 }

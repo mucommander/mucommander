@@ -21,7 +21,7 @@ package com.mucommander.ui.main;
 import com.mucommander.Debug;
 import com.mucommander.ShutdownHook;
 import com.mucommander.auth.AuthException;
-import com.mucommander.auth.MappedCredentials;
+import com.mucommander.auth.CredentialsMapping;
 import com.mucommander.conf.ConfigurationEvent;
 import com.mucommander.conf.ConfigurationListener;
 import com.mucommander.conf.impl.MuConfiguration;
@@ -193,7 +193,7 @@ public class WindowManager implements WindowListener, ConfigurationListener {
 
         // Tries the specified path as-is.
         AbstractFile file;
-        MappedCredentials newCredentials;
+        CredentialsMapping newCredentialsMapping;
 
         while(true) {
             try {
@@ -209,9 +209,9 @@ public class WindowManager implements WindowListener, ConfigurationListener {
                     AuthException authException = (AuthException)e;
                     AuthDialog authDialog = new AuthDialog(currentMainFrame, authException.getFileURL(), authException.getMessage());
                     authDialog.showDialog();
-                    newCredentials = authDialog.getCredentials();
-                    if(newCredentials!=null) {
-                        path = newCredentials.getRealm().toString(true);
+                    newCredentialsMapping = authDialog.getCredentialsMapping();
+                    if(newCredentialsMapping !=null) {
+                        path = newCredentialsMapping.getRealm().toString(true);
                     }
                     // If the user cancels, we fall back to the default path.
                     else {

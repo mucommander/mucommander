@@ -19,8 +19,9 @@
 package com.mucommander.ui.dialog.auth;
 
 import com.mucommander.Debug;
+import com.mucommander.auth.Credentials;
 import com.mucommander.auth.CredentialsManager;
-import com.mucommander.auth.MappedCredentials;
+import com.mucommander.auth.CredentialsMapping;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.FocusDialog;
 import com.mucommander.ui.helper.MnemonicHelper;
@@ -61,7 +62,7 @@ public class EditCredentialsDialog extends FocusDialog implements ActionListener
     private AlteredVector credentials;
     private DynamicList credentialsList;
 
-    private MappedCredentials lastSelectedItem;
+    private CredentialsMapping lastSelectedItem;
 
     // Dialog's size has to be at least 400x300
     private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(440,330);
@@ -79,12 +80,12 @@ public class EditCredentialsDialog extends FocusDialog implements ActionListener
         Container contentPane = getContentPane();
 
         // Retrieve persistent credentials list
-        this.credentials = CredentialsManager.getPersistentCredentials();
+        this.credentials = CredentialsManager.getPersistentCredentialMappings();
 
         // Create the sortable credentials list panel
         SortableListPanel listPanel = new SortableListPanel(credentials);
         this.credentialsList = listPanel.getDynamicList();
-        this.lastSelectedItem = (MappedCredentials) credentialsList.getSelectedValue();
+        this.lastSelectedItem = (CredentialsMapping) credentialsList.getSelectedValue();
 
         contentPane.add(listPanel, BorderLayout.CENTER);
 
@@ -166,9 +167,10 @@ public class EditCredentialsDialog extends FocusDialog implements ActionListener
         if(!credentialsList.isSelectionEmpty() && credentials.size()>0) {
             componentsEnabled = true;
 
-            MappedCredentials mappedCredentials = (MappedCredentials) credentialsList.getSelectedValue();
-            loginValue = mappedCredentials.getLogin();
-            passwordValue = mappedCredentials.getPassword();
+            CredentialsMapping credentialsMapping = (CredentialsMapping) credentialsList.getSelectedValue();
+            Credentials credentials = credentialsMapping.getCredentials();
+            loginValue = credentials.getLogin();
+            passwordValue = credentials.getPassword();
         }
 
         loginField.setText(loginValue);
@@ -188,10 +190,10 @@ public class EditCredentialsDialog extends FocusDialog implements ActionListener
         // Make sure that the item still exists (could have been removed) before trying to modify its value
         int itemIndex = credentials.indexOf(lastSelectedItem);
         if(lastSelectedItem!=null && itemIndex!=-1) {
-            credentials.setElementAt(new MappedCredentials(loginField.getText(), new String(passwordField.getPassword()), lastSelectedItem.getRealm(), true), itemIndex);
+            credentials.setElementAt(new CredentialsMapping(new Credentials(loginField.getText(), new String(passwordField.getPassword())), lastSelectedItem.getRealm(), true), itemIndex);
         }
         
-        this.lastSelectedItem = (MappedCredentials) credentialsList.getSelectedValue();
+        this.lastSelectedItem = (CredentialsMapping) credentialsList.getSelectedValue();
     }
 
 
@@ -227,7 +229,7 @@ public class EditCredentialsDialog extends FocusDialog implements ActionListener
             // Dispose dialog first
             dispose();
             // Go to credentials' realm location
-            mainFrame.getActiveTable().getFolderPanel().tryChangeCurrentFolder(((MappedCredentials)credentialsList.getSelectedValue()).getRealm());
+            mainFrame.getActiveTable().getFolderPanel().tryChangeCurrentFolder(((CredentialsMapping)credentialsList.getSelectedValue()).getRealm());
         }
     }
 
