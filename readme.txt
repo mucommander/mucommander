@@ -173,6 +173,7 @@ Bug fixes:
   (Bug #7).
 - Fixed system file icons which did not show the symlink indication for
   non-local files (on all platforms), and for local files under Mac OS X 10.5.
+- Fixed password changes not properly taken into account (Bug #10).
 
 Known issues:
 - Korean translation is not up-to-date.
