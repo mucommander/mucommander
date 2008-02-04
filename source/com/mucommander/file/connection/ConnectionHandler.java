@@ -253,7 +253,7 @@ public abstract class ConnectionHandler {
         // Note: Credentials.equals() considers null as equal to empty Credentials (see Credentials#isEmpty())
         return (this.credentials==null && credentials==null)
             || (this.credentials!=null && this.credentials.equals(credentials))
-            || (credentials!=null && credentials.equals(this.credentials));
+            || (credentials!=null && credentials.equals(this.credentials, true));
     }
 
 
