@@ -31,8 +31,8 @@
   <action class="com.mucommander.ui.action.CopyAction"                   keystroke="F5"/>
 
   <!-- Action  : Copy selected file(s) name(s) to clipboard.                     -->
-  <!-- Default : alt C                                                           -->
-  <action class="com.mucommander.ui.action.CopyFileNamesAction"          keystroke="alt C"/>
+  <!-- Default : shift control C                                                           -->
+  <action class="com.mucommander.ui.action.CopyFileNamesAction"          keystroke="shift control C"/>
 
   <!-- Action  : Copy selected file(s) full path(s) to clipboard.                -->
   <!-- Default : shift alt C                                                     -->
@@ -306,20 +306,20 @@
   <action class="com.mucommander.ui.action.ToggleHiddenFilesAction"      keystroke="shift alt H"/>
 
   <!-- Action  : Open the bookmark file system in the current folder panel.      -->
-  <!-- Default : alt B                                                           -->
-  <action class="com.mucommander.ui.action.ExploreBookmarksAction"       keystroke="alt B"/>
+  <!-- Default : shift control B                                                           -->
+  <action class="com.mucommander.ui.action.ExploreBookmarksAction"       keystroke="shift control B"/>
 
   <!-- Action  : Change the selected files' date.                                -->
-  <!-- Default : alt D                                                           -->
-  <action class="com.mucommander.ui.action.ChangeDateAction"             keystroke="alt D"/>
+  <!-- Default : shift alt D                                                           -->
+  <action class="com.mucommander.ui.action.ChangeDateAction"             keystroke="shift alt D"/>
 
   <!-- Action  : Change the selected files' permissions.                         -->
-  <!-- Default : alt P                                                           -->
-  <action class="com.mucommander.ui.action.ChangePermissionsAction"      keystroke="alt P"/>
+  <!-- Default : shift alt P                                                           -->
+  <action class="com.mucommander.ui.action.ChangePermissionsAction"      keystroke="shift alt P"/>
 
   <!-- Action  : Calculate the checksum of the selected files'                   -->
-  <!-- Default : alt K                                                           -->
-  <action class="com.mucommander.ui.action.CalculateChecksumAction"      keystroke="alt K"/>
+  <!-- Default : shift alt K                                                           -->
+  <action class="com.mucommander.ui.action.CalculateChecksumAction"      keystroke="shift alt K"/>
 
   <!-- Action  : Open files in the inactive panel.                               -->
   <!-- Default : shift alt ENTER, shift alt RIGHT                                -->
