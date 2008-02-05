@@ -90,11 +90,17 @@ class TextEditorImpl implements ThemeListener, ActionListener {
     }
 
     private void find() {
-		searchString = ((String) JOptionPane.showInputDialog(null,
+		searchString = (String)JOptionPane.showInputDialog(null,
 				Translator.get("text_viewer.find") + ":",
 				Translator.get("text_viewer.find"),
-				JOptionPane.PLAIN_MESSAGE, null, null, searchString)).toLowerCase();
-		doSearch(0, true);
+				JOptionPane.PLAIN_MESSAGE, null, null, searchString);
+
+        // Note: JOptionPane.showInputDialog() returns null when the user cancels the dialog
+
+        if(searchString!=null) {
+            searchString = searchString.toLowerCase();            
+            doSearch(0, true);
+        }
 	}
 
     private void findNext() {
