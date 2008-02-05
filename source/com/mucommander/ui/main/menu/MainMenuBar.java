@@ -115,7 +115,11 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
     public MainMenuBar(MainFrame mainFrame) {
         this.mainFrame = mainFrame;
 
-        MnemonicHelper menuMnemonicHelper = new MnemonicHelper();
+        // Disable menu bar (NOT menu item) mnemonics under Mac OS X because of a bug: when screen menu bar is enabled
+        // and a menu is triggered by a mnemonic, the menu pops up where it would appear with a regular menu bar
+        // (i.e. with screen menu bar disabled).
+        MnemonicHelper menuMnemonicHelper = OsFamilies.MAC_OS_X.isCurrent()?null:new MnemonicHelper();
+
         MnemonicHelper menuItemMnemonicHelper = new MnemonicHelper();
 
         // File menu
@@ -255,7 +259,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
 
         // Bookmark menu, menu items will be added when the menu gets selected
         menuItemMnemonicHelper.clear();
-        bookmarksMenu = MenuToolkit.addMenu(Translator.get("bookmarks_menu"), menuItemMnemonicHelper, this);
+        bookmarksMenu = MenuToolkit.addMenu(Translator.get("bookmarks_menu"), menuMnemonicHelper, this);
         MenuToolkit.addMenuItem(bookmarksMenu, ActionManager.getActionInstance(AddBookmarkAction.class, mainFrame), menuItemMnemonicHelper);
         MenuToolkit.addMenuItem(bookmarksMenu, ActionManager.getActionInstance(EditBookmarksAction.class, mainFrame), menuItemMnemonicHelper);
         MenuToolkit.addMenuItem(bookmarksMenu, ActionManager.getActionInstance(ExploreBookmarksAction.class, mainFrame), menuItemMnemonicHelper);
@@ -271,7 +275,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
         // Window menu
         menuItemMnemonicHelper.clear();
 
-        windowMenu = MenuToolkit.addMenu(Translator.get("window_menu"), menuItemMnemonicHelper, this);
+        windowMenu = MenuToolkit.addMenu(Translator.get("window_menu"), menuMnemonicHelper, this);
 
         MenuToolkit.addMenuItem(windowMenu, ActionManager.getActionInstance(SplitEquallyAction.class, mainFrame), menuItemMnemonicHelper);
         buttonGroup = new ButtonGroup();
