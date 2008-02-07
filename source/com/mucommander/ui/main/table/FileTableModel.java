@@ -38,7 +38,7 @@ import java.util.Date;
  *
  * @author Maxence Bernard
  */
-public class FileTableModel extends AbstractTableModel implements ConfigurationListener {
+public class FileTableModel extends AbstractTableModel {
 
     /** Cached file instances */
     private AbstractFile cachedFiles[];
@@ -67,15 +67,51 @@ public class FileTableModel extends AbstractTableModel implements ConfigurationL
     /** True if name column temporarily editable */
     private boolean nameColumnEditable;
 
-    private static boolean displayCompactSize = MuConfiguration.getVariable(MuConfiguration.DISPLAY_COMPACT_FILE_SIZE,
-                                                                                 MuConfiguration.DEFAULT_DISPLAY_COMPACT_FILE_SIZE);
+    /** SizeFormat format used to create the size column's string */
+    private static int sizeFormat;
+
     /** String used as size information for directories */
     public final static String DIRECTORY_SIZE_STRING = "<DIR>";
 
+    /** Listens to configuration changes and updates static fields accordingly */
+    public final static ConfigurationListener CONFIGURATION_ADAPTER;
+
+
+    static {
+        // Initialize the size column format based on the configuration
+        setSizeFormat(MuConfiguration.getVariable(MuConfiguration.DISPLAY_COMPACT_FILE_SIZE,
+                                                  MuConfiguration.DEFAULT_DISPLAY_COMPACT_FILE_SIZE));
+
+        // Listens to configuration changes and updates static fields accordingly.
+        // Note: a reference to the listener must be kept to prevent it from being garbage-collected.
+        CONFIGURATION_ADAPTER = new ConfigurationListener() {
+            public synchronized void configurationChanged(ConfigurationEvent event) {
+                String var = event.getVariable();
+
+                if (var.equals(MuConfiguration.DISPLAY_COMPACT_FILE_SIZE))
+                    setSizeFormat(event.getBooleanValue());
+            }
+        };
+        MuConfiguration.addConfigurationListener(CONFIGURATION_ADAPTER);
+    }
+
+
+    /**
+     * Sets the SizeFormat format used to create the size column's string.
+     *
+     * @param compactSize true to use a compact size format, false for full size in bytes 
+     */
+    private static void setSizeFormat(boolean compactSize) {
+        if(compactSize)
+            sizeFormat = SizeFormat.DIGITS_MEDIUM | SizeFormat.UNIT_SHORT | SizeFormat.ROUND_TO_KB;
+        else
+            sizeFormat = SizeFormat.DIGITS_FULL | SizeFormat.UNIT_NONE;
+
+        sizeFormat |= SizeFormat.INCLUDE_SPACE;
+    }
+
 
     public FileTableModel() {
-        MuConfiguration.addConfigurationListener(this);
-
         // Arrays init to avoid NullPointerExcepions until setCurrentFolder()
         // gets called for the first time
         cachedFiles = new AbstractFile[0];
@@ -155,7 +191,7 @@ public class FileTableModel extends AbstractTableModel implements ConfigurationL
             file = getCachedFileAtRow(i);
             int cellIndex = fileArrayIndex[fileIndex]+(parent==null?0:1);
             cellValuesCache[cellIndex][Columns.NAME-1] = file.getName();
-            cellValuesCache[cellIndex][Columns.SIZE-1] = file.isDirectory()?DIRECTORY_SIZE_STRING: SizeFormat.format(file.getSize(), (displayCompactSize? SizeFormat.DIGITS_MEDIUM: SizeFormat.DIGITS_FULL)|(displayCompactSize? SizeFormat.UNIT_SHORT: SizeFormat.UNIT_NONE)| SizeFormat.INCLUDE_SPACE| SizeFormat.ROUND_TO_KB);
+            cellValuesCache[cellIndex][Columns.SIZE-1] = file.isDirectory()?DIRECTORY_SIZE_STRING:SizeFormat.format(file.getSize(), sizeFormat);
             cellValuesCache[cellIndex][Columns.DATE-1] = CustomDateFormat.format(new Date(file.getDate()));
             cellValuesCache[cellIndex][Columns.PERMISSIONS-1] = file.getPermissionsString();
             if(canGetOwner)
@@ -579,20 +615,5 @@ public class FileTableModel extends AbstractTableModel implements ConfigurationL
             return nameColumnEditable;
 	
         return false;
-    }
-
-
-    ///////////////////////////////////
-    // ConfigurationListener methods //
-    ///////////////////////////////////
-	
-    /**
-     * Listens to some configuration variables.
-     */
-    public synchronized void configurationChanged(ConfigurationEvent event) {
-        String var = event.getVariable();
-		
-        if (var.equals(MuConfiguration.DISPLAY_COMPACT_FILE_SIZE))
-            displayCompactSize = event.getBooleanValue();
     }
 }

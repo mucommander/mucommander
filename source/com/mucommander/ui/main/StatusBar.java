@@ -20,6 +20,8 @@ package com.mucommander.ui.main;
 
 import com.mucommander.PlatformManager;
 import com.mucommander.cache.LRUCache;
+import com.mucommander.conf.ConfigurationEvent;
+import com.mucommander.conf.ConfigurationListener;
 import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
@@ -97,11 +99,51 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
      * Each cache item maps a path to a volume info string */
     private static LRUCache volumeInfoCache = LRUCache.createInstance(VOLUME_INFO_CACHE_CAPACITY);
 	
+    /** Icon that is displayed when folder is changing */
+    public final static String WAITING_ICON = "waiting.png";
+
     /** SizeFormat's format used to display volume info in status bar */
     private final static int VOLUME_INFO_SIZE_FORMAT = SizeFormat.DIGITS_MEDIUM| SizeFormat.UNIT_SHORT| SizeFormat.INCLUDE_SPACE| SizeFormat.ROUND_TO_KB;
 
-    /** Icon that is displayed when folder is changing */
-    public final static String WAITING_ICON = "waiting.png";
+    /** Listens to configuration changes and updates static fields accordingly */
+    public final static ConfigurationListener CONFIGURATION_ADAPTER;
+
+    /** SizeFormat format used to create the selected file(s) size string */
+    private static int selectedFileSizeFormat;
+
+
+    static {
+        // Initialize the size column format based on the configuration
+        setSelectedFileSizeFormat(MuConfiguration.getVariable(MuConfiguration.DISPLAY_COMPACT_FILE_SIZE,
+                                                  MuConfiguration.DEFAULT_DISPLAY_COMPACT_FILE_SIZE));
+
+        // Listens to configuration changes and updates static fields accordingly.
+        // Note: a reference to the listener must be kept to prevent it from being garbage-collected.
+        CONFIGURATION_ADAPTER = new ConfigurationListener() {
+            public synchronized void configurationChanged(ConfigurationEvent event) {
+                String var = event.getVariable();
+
+                if (var.equals(MuConfiguration.DISPLAY_COMPACT_FILE_SIZE))
+                    setSelectedFileSizeFormat(event.getBooleanValue());
+            }
+        };
+        MuConfiguration.addConfigurationListener(CONFIGURATION_ADAPTER);
+    }
+
+
+    /**
+     * Sets the SizeFormat format used to create the selected file(s) size string.
+     *
+     * @param compactSize true to use a compact size format, false for full size in bytes
+     */
+    private static void setSelectedFileSizeFormat(boolean compactSize) {
+        if(compactSize)
+            selectedFileSizeFormat = SizeFormat.DIGITS_MEDIUM | SizeFormat.UNIT_SHORT | SizeFormat.ROUND_TO_KB;
+        else
+            selectedFileSizeFormat = SizeFormat.DIGITS_FULL | SizeFormat.UNIT_LONG;
+
+        selectedFileSizeFormat |= SizeFormat.INCLUDE_SPACE;
+    }
 
 
     /**
@@ -212,8 +254,6 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
         else
             nbSelectedFiles = nbMarkedFiles;
 
-        boolean compactFileSize = MuConfiguration.getVariable(MuConfiguration.DISPLAY_COMPACT_FILE_SIZE,
-                                                                   MuConfiguration.DEFAULT_DISPLAY_COMPACT_FILE_SIZE);
         String filesInfo;
 		
         if(fileCount==0) {
@@ -225,7 +265,7 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
             filesInfo = Translator.get("status_bar.selected_files", ""+nbSelectedFiles, ""+fileCount);
 			
             if(nbMarkedFiles>0)
-                filesInfo += " - "+ SizeFormat.format(markedTotalSize, (compactFileSize? SizeFormat.DIGITS_MEDIUM: SizeFormat.DIGITS_FULL)|(compactFileSize? SizeFormat.UNIT_SHORT: SizeFormat.UNIT_LONG)| SizeFormat.INCLUDE_SPACE| SizeFormat.ROUND_TO_KB);
+                filesInfo += " - "+ SizeFormat.format(markedTotalSize, selectedFileSizeFormat);
 	
             if(selectedFile!=null)
                 filesInfo += " - "+selectedFile.getName();
@@ -538,6 +578,11 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
             repaint();
         }
     }
+
+
+    ///////////////////
+    // Inner classes //
+    ///////////////////
 
     /**
      * This label displays the amount of free and/or total space on a volume.
