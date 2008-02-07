@@ -111,9 +111,10 @@ What's new since v0.8.1 ?
 
 New features:
 - New 'Calculate checksum' feature added to the 'File' menu (mapped onto 
-  Alt+K by default) which calculates the checksum of selected files and writes
-  them to a file in a standard format. The following checksum algorithms are
-  provided: Alder32, CRC32, MD2, MD4, MD5, SHA-1, SHA-256, SHA-384 and SHA-512.
+  Shift+Alt+K by default) which calculates the checksum of selected files and 
+  writes them to a file in a standard format. The following checksum algorithms 
+  are provided: Alder32, CRC32, MD2, MD4, MD5, SHA-1, SHA-256, SHA-384 
+  and SHA-512.
 - New 'Verify data integrity' transfer option that ensures that the files are
   strictly identical on the source and destination after being transferred.
   This option slows down transfers significantly but can prevent data loss
@@ -134,7 +135,7 @@ Improvements:
 - Job confirmation dialogs show the list of files to be processed.
 - All OK/cancel choices can be navigated with the arrow keys.
 - Added keyboard shortcuts to 'Change date' and 'Change permissions' actions
-  (Alt+D and Alt+P resp.).
+  (Shift+Alt+D and Shift+Alt+P resp.).
 - Visual enhancements to the main window under Mac OS X Leopard which now uses
   more native looking components.
 - Improved the file loading in the internal viewers and editors.
@@ -258,8 +259,8 @@ Here are a few hints on how to edit these files.
 
  - action_keymap.xml
 All customisable actions are listed in that file, using the following format:
-<action class="com.mucommander.ui.action.CopyFileNamesAction"
-        keystroke="alt C" alt_keystroke="meta C"/>
+<action class="com.mucommander.ui.action.CopyFilesToClipboardAction"
+        keystroke="control C" alt_keystroke="meta C"/>
 
 It's probably safer not to mess around with the class argument, as this could
 actually remove features from muCommander.
