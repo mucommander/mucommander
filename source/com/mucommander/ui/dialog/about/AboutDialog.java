@@ -33,6 +33,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.util.Locale;
 
 /**
  * Dialog displaying information about muCommander.
@@ -209,6 +210,14 @@ public class AboutDialog extends FocusDialog implements ActionListener {
             insertNormalString(doc,   "Name: " + System.getProperty("os.name"));
             insertNormalString(doc,   "Version: " + System.getProperty("os.version"));
             insertNormalString(doc,   "Architecture: " + System.getProperty("os.arch"));
+            insertLineBreak(doc);
+
+            // Locale information.
+            Locale locale = Locale.getDefault();
+            insertHeader(doc,         "Locale");
+            insertNormalString(doc,   "Language: " + locale.getLanguage());
+            insertNormalString(doc,   "Country: " + locale.getCountry());
+            insertNormalString(doc,   "Encoding: " + System.getProperty("file.encoding"));
         }
         catch(Exception e) {}
 
