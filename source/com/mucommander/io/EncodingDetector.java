@@ -160,7 +160,7 @@ public class EncodingDetector {
     public static String detectEncoding(InputStream in) throws IOException {
         int totalRead = 0;
         int read;
-        byte buf[] = BufferPool.getBuffer(MAX_RECOMMENDED_BYTE_SIZE);
+        byte buf[] = BufferPool.getArrayBuffer(MAX_RECOMMENDED_BYTE_SIZE);
 
         try {
             while((totalRead<MAX_RECOMMENDED_BYTE_SIZE) && (read=in.read(buf, totalRead, MAX_RECOMMENDED_BYTE_SIZE-totalRead))!=-1)
@@ -169,7 +169,7 @@ public class EncodingDetector {
             return detectEncoding(buf, 0, totalRead);
         }
         finally {
-            BufferPool.releaseBuffer(buf);
+            BufferPool.releaseArrayBuffer(buf);
         }
     }
 

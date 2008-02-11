@@ -86,7 +86,7 @@ public class ZipEntryOutputStream extends OutputStream implements ZipConstants {
 
         // Use BufferPool to avoid excessive memory allocation and garbage collection.
         // /!\ For some unknown reason, having a larger buffer *hurts* performance.
-        buf = BufferPool.getBuffer(512);
+        buf = BufferPool.getArrayBuffer(512);
 
         if(method == DEFLATED)
             deflater = new Deflater(level, true);
@@ -238,7 +238,7 @@ public class ZipEntryOutputStream extends OutputStream implements ZipConstants {
             finishDeflate();
 
         if(buf!=null) {         // Only if close() has not already been called
-            BufferPool.releaseBuffer(buf);
+            BufferPool.releaseArrayBuffer(buf);
             buf = null;
         }
     }

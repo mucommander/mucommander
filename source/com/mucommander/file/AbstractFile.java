@@ -1347,7 +1347,7 @@ public abstract class AbstractFile implements FilePermissions {
      */
     public static String calculateChecksum(InputStream in, MessageDigest messageDigest) throws IOException {
         // Use BufferPool to reuse any available buffer of the same size
-        byte buffer[] = BufferPool.getBuffer(IO_BUFFER_SIZE);
+        byte buffer[] = BufferPool.getArrayBuffer(IO_BUFFER_SIZE);
 
         try {
             int nbRead;
@@ -1369,7 +1369,7 @@ public abstract class AbstractFile implements FilePermissions {
         }
         finally {
             // Make the buffer available for further use
-            BufferPool.releaseBuffer(buffer);
+            BufferPool.releaseArrayBuffer(buffer);
         }
     }
 
