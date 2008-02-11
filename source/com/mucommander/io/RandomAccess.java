@@ -28,8 +28,8 @@ import java.io.IOException;
 public interface RandomAccess {
 
     /**
-     * Closes the random access file stream and releases any system resources associated with the stream.
-     * A closed random access file cannot perform input or output operations and cannot be reopened.
+     * Closes the random access stream and releases any system resources associated with the stream.
+     * A closed stream cannot perform input or output operations and cannot be reopened.
      *
      * @throws IOException if an I/O error occurs
      */
