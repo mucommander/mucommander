@@ -25,6 +25,7 @@ import com.mucommander.file.FileFactory;
 import com.mucommander.file.FileProtocols;
 import com.mucommander.file.FileURL;
 import com.mucommander.file.filter.FilenameFilter;
+import com.mucommander.io.BufferPool;
 import com.mucommander.io.FileTransferException;
 import com.mucommander.io.RandomAccessInputStream;
 import com.mucommander.io.RandomAccessOutputStream;
@@ -34,6 +35,8 @@ import com.mucommander.runtime.OsFamilies;
 
 import javax.swing.filechooser.FileSystemView;
 import java.io.*;
+import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
 import java.util.StringTokenizer;
 import java.util.Vector;
 import java.util.regex.Matcher;
@@ -501,28 +504,48 @@ public class LocalFile extends AbstractFile {
         return file.isDirectory();
     }
 
+    /**
+     * Implementation notes: the returned <code>InputStream</code> uses a NIO {@link FileChannel} under the hood to
+     * benefit from <code>InterruptibleChannel</code> and allow a thread waiting for an I/O to be gracefully interrupted
+     * using <code>Thread#interrupt()</code>.
+     */
     public InputStream getInputStream() throws IOException {
-        return new FileInputStream(file);
+        return new LocalInputStream(new FileInputStream(file).getChannel());
     }
 
+    /**
+     * Implementation notes: the returned <code>InputStream</code> uses a NIO {@link FileChannel} under the hood to
+     * benefit from <code>InterruptibleChannel</code> and allow a thread waiting for an I/O to be gracefully interrupted
+     * using <code>Thread#interrupt()</code>.
+     */
     public OutputStream getOutputStream(boolean append) throws IOException {
-        return new FileOutputStream(absPath, append);
+        return new LocalOutputStream(new FileOutputStream(absPath, append).getChannel());
     }
 
     public boolean hasRandomAccessInputStream() {
         return true;
     }
 
+    /**
+     * Implementation notes: the returned <code>InputStream</code> uses a NIO {@link FileChannel} under the hood to
+     * benefit from <code>InterruptibleChannel</code> and allow a thread waiting for an I/O to be gracefully interrupted
+     * using <code>Thread#interrupt()</code>.
+     */
     public RandomAccessInputStream getRandomAccessInputStream() throws IOException {
-        return new LocalRandomAccessInputStream(new RandomAccessFile(file, "r"));
+        return new LocalRandomAccessInputStream(new RandomAccessFile(file, "r").getChannel());
     }
 
     public boolean hasRandomAccessOutputStream() {
         return true;
     }
 
+    /**
+     * Implementation notes: the returned <code>InputStream</code> uses a NIO {@link FileChannel} under the hood to
+     * benefit from <code>InterruptibleChannel</code> and allow a thread waiting for an I/O to be gracefully interrupted
+     * using <code>Thread#interrupt()</code>.
+     */
     public RandomAccessOutputStream getRandomAccessOutputStream() throws IOException {
-        return new LocalRandomAccessOutputStream(new RandomAccessFile(file, "rw"));
+        return new LocalRandomAccessOutputStream(new RandomAccessFile(file, "rw").getChannel());
     }
 
     public void delete() throws IOException {
@@ -775,37 +798,107 @@ public class LocalFile extends AbstractFile {
 
     /**
      * LocalRandomAccessInputStream extends RandomAccessInputStream to provide random read access to a LocalFile.
+     * This implementation uses a NIO <code>FileChannel</code> under the hood to benefit from
+     * <code>InterruptibleChannel</code> and allow a thread waiting for an I/O to be gracefully interrupted using
+     * <code>Thread#interrupt()</code>.
      */
     public static class LocalRandomAccessInputStream extends RandomAccessInputStream {
 
-        private RandomAccessFile raf;
+        private final FileChannel channel;
+        private final ByteBuffer bb;
 
-        public LocalRandomAccessInputStream(RandomAccessFile raf) {
-            this.raf = raf;
+        private LocalRandomAccessInputStream(FileChannel channel) {
+            this.channel = channel;
+            this.bb = BufferPool.getByteBuffer();
         }
 
         public int read() throws IOException {
-            return raf.read();
+            synchronized(bb) {
+                bb.position(0);
+                bb.limit(1);
+
+                channel.read(bb);
+                return bb.get(0);
+            }
         }
 
         public int read(byte b[], int off, int len) throws IOException {
-            return raf.read(b, off, len);
+            synchronized(bb) {
+                bb.position(0);
+                bb.limit(Math.min(bb.capacity(), len));
+
+                int nbRead = channel.read(bb);
+                if(nbRead<=0)
+                    return nbRead;
+
+                bb.position(0);
+                bb.get(b, off, nbRead);
+
+                return nbRead;
+            }
         }
 
         public void close() throws IOException {
-            raf.close();
+            BufferPool.releaseByteBuffer(bb);
+            channel.close();
         }
 
         public long getOffset() throws IOException {
-            return raf.getFilePointer();
+            return channel.position();
         }
 
         public long getLength() throws IOException {
-            return raf.length();
+            return channel.size();
         }
 
         public void seek(long offset) throws IOException {
-            raf.seek(offset);
+            channel.position(offset);
+        }
+    }
+
+    /**
+     * A replacement for <code>java.io.FileInputStream</code> that uses a NIO {@link FileChannel} under the hood to
+     * benefit from <code>InterruptibleChannel</code> and allow a thread waiting for an I/O to be gracefully interrupted
+     * using <code>Thread#interrupt()</code>.
+     *
+     * <p>This class simply delegates all its methods to a
+     * {@link com.mucommander.file.impl.local.LocalFile.LocalRandomAccessInputStream} instance. Therefore, this class
+     * does not derive from {@link com.mucommander.io.RandomAccessInputStream}, preventing random-access methods from
+     * being used.</p>
+     *
+     */
+    public static class LocalInputStream extends FilterInputStream {
+
+        public LocalInputStream(FileChannel channel) {
+            super(new LocalRandomAccessInputStream(channel));
+        }
+    }
+
+    /**
+     * A replacement for <code>java.io.FileOutputStream</code> that uses a NIO {@link FileChannel} under the hood to
+     * benefit from <code>InterruptibleChannel</code> and allow a thread waiting for an I/O to be gracefully interrupted
+     * using <code>Thread#interrupt()</code>.
+     *
+     * <p>This class simply delegates all its methods to a
+     * {@link com.mucommander.file.impl.local.LocalFile.LocalRandomAccessOutputStream} instance. Therefore, this class
+     * does not derive from {@link com.mucommander.io.RandomAccessOutputStream}, preventing random-access methods from
+     * being used.</p>
+     *
+     */
+    public static class LocalOutputStream extends FilterOutputStream {
+
+        public LocalOutputStream(FileChannel channel) {
+            super(new LocalRandomAccessOutputStream(channel));
+        }
+
+        // Note: this method is not proxied by FilterOutputStream(!)
+        public void write(byte b[]) throws IOException {
+            out.write(b);
+        }
+
+        // Note: this method is not proxied by FilterOutputStream(!)
+         public void write(byte b[], int off, int len) throws IOException {
+            out.write(b, off, len);
         }
     }
 
@@ -814,42 +907,86 @@ public class LocalFile extends AbstractFile {
      */
     public static class LocalRandomAccessOutputStream extends RandomAccessOutputStream {
 
-        private RandomAccessFile raf;
+        private final FileChannel channel;
+        private final ByteBuffer bb;
 
-        public LocalRandomAccessOutputStream(RandomAccessFile raf) {
-            this.raf = raf;
+        public LocalRandomAccessOutputStream(FileChannel channel) {
+            this.channel = channel;
+            this.bb = BufferPool.getByteBuffer();
         }
 
         public void write(int i) throws IOException {
-            raf.write(i);
+            synchronized(bb) {
+                bb.position(0);
+                bb.limit(1);
+
+                bb.put((byte)i);
+                bb.position(0);
+
+                channel.write(bb);
+            }
         }
 
         public void write(byte b[]) throws IOException {
-            raf.write(b);
+            write(b, 0, b.length);
         }
 
         public void write(byte b[], int off, int len) throws IOException {
-            raf.write(b, off, len);
-        }
+            int nbToWrite;
+            synchronized(bb) {
+                bb.position(0);
+                nbToWrite = Math.min(bb.capacity(), len);
+                bb.limit(nbToWrite);
 
-        public void close() throws IOException {
-            raf.close();
-        }
+                bb.put(b, off, nbToWrite);
+                bb.position(0);
 
-        public long getOffset() throws IOException {
-            return raf.getFilePointer();
-        }
-
-        public long getLength() throws IOException {
-            return raf.length();
-        }
-
-        public void seek(long offset) throws IOException {
-            raf.seek(offset);
+                channel.write(bb);
+            }
         }
 
         public void setLength(long newLength) throws IOException {
-            raf.setLength(newLength);
+            long currentLength = getLength();
+
+            if(newLength==currentLength)
+                return;
+
+            long currentPos = channel.position();
+
+            if(newLength<currentLength) {
+                // Truncate the file and position the offset to the new EOF if it was beyond
+                channel.truncate(newLength);
+                if(currentPos>newLength)
+                    channel.position(newLength);
+            }
+            else {
+                // Expand the file by positionning the offset at the new EOF and writing a byte, and reposition the
+                // offset to where it was
+                channel.position(newLength-1);      // Note: newLength cannot be 0
+                write(0);
+                channel.position(currentPos);
+            }
+
+        }
+
+        public void close() throws IOException {
+            BufferPool.releaseByteBuffer(bb);
+            channel.close();
+        }
+
+        public long getOffset() throws IOException {
+            return channel.position();
+        }
+
+        public long getLength() throws IOException {
+            return channel.size();
+        }
+
+        public void seek(long offset) throws IOException {
+            channel.position(offset);
         }
     }
+
+
+
 }
