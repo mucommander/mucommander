@@ -747,5 +747,9 @@ public class HTTPFile extends AbstractFile {
         public long getLength() throws IOException {
             return length;
         }
+
+        public void close() throws IOException {
+            // No-op, the underlying stream is already closed
+        }
     }
 }
