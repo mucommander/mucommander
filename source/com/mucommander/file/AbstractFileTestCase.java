@@ -1130,7 +1130,7 @@ public abstract class AbstractFileTestCase extends TestCase implements FilePermi
 
             // Test getOffset(), seek(), getLength() and setLength()
 
-            // Expand the file starting at 0
+            // Expand the file by writing data to it, starting at 0
             raos = tempFile.getRandomAccessOutputStream();
             writeRandomData(raos, 100, 10);
             assertEquals(100, raos.getOffset());
@@ -1156,6 +1156,12 @@ public abstract class AbstractFileTestCase extends TestCase implements FilePermi
             assertEquals(150, raos.getOffset());
             assertEquals(150, raos.getLength());
             assertEquals(150, tempFile.getSize());
+
+            // Expand the file using setLength()
+            raos.setLength(200);
+            assertEquals(200, raos.getLength());
+            assertEquals(200, tempFile.getSize());
+            assertEquals(150, raos.getOffset());
 
             // Truncate the file
             raos.setLength(100);
