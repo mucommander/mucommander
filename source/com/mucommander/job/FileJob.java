@@ -518,54 +518,6 @@ public abstract class FileJob implements Runnable {
 	
 	
     /**
-     * Actual job is performed in a separate thread.
-     */
-    public void run() {
-        FileTable activeTable = mainFrame.getActiveTable();
-        AbstractFile currentFile;
-
-        // Notify that this job has started
-        jobStarted();
-
-//this.nbFilesDiscovered += nbFiles;
-
-        // Loop on all source files, checking that job has not been interrupted
-        for(int i=0; i<nbFiles; i++) {
-            currentFile = files.fileAt(i);
-	
-            // Change current file and advance file index
-            currentFileIndex = i;
-            nextFile(currentFile);
-			
-            // Process current file
-            boolean success = processFile(currentFile, null);
-
-            // Stop if job was interrupted
-            if(getState()==INTERRUPTED)
-                break;
-
-            // Unmark file in active table if 'auto unmark' is enabled
-            // and file was processed successfully
-            if(autoUnmark && success) {
-                activeTable.setFileMarked(currentFile, false);
-            }
-
-            // If last file was reached without any user interruption, all files have been processed with or
-            // without errors, switch to FINISHED state and notify listeners
-            if(i==nbFiles-1) {
-                currentFileIndex++;
-                stop();
-                jobCompleted();
-                setState(FINISHED);
-            }
-        }
-
-        // Refresh tables's current folders, based on the job's refresh policy.
-        refreshTables();
-    }
-
-
-    /**
      * Displays an error dialog with the specified title and message,
      * offers to skip the file, retry or cancel and waits for user choice.
      * The job is stopped if 'cancel' or 'close' was chosen, and the result 
@@ -691,6 +643,58 @@ public abstract class FileJob implements Runnable {
      */
     public String getStatusString() {
         return Translator.get("progress_dialog.processing_file", getCurrentFileInfo());
+    }
+
+
+    /////////////////////////////
+    // Runnable implementation //
+    /////////////////////////////
+
+    /**
+     * This method is public as a side-effect of this class implementing <code>Runnable</code>.
+     */
+    public final void run() {
+        FileTable activeTable = mainFrame.getActiveTable();
+        AbstractFile currentFile;
+
+        // Notify that this job has started
+        jobStarted();
+
+//this.nbFilesDiscovered += nbFiles;
+
+        // Loop on all source files, checking that job has not been interrupted
+        for(int i=0; i<nbFiles; i++) {
+            currentFile = files.fileAt(i);
+
+            // Change current file and advance file index
+            currentFileIndex = i;
+            nextFile(currentFile);
+
+            // Process current file
+            boolean success = processFile(currentFile, null);
+
+            // Stop if job was interrupted
+            if(getState()==INTERRUPTED)
+                break;
+
+            // Unmark file in active table if 'auto unmark' is enabled
+            // and file was processed successfully
+            if(autoUnmark && success) {
+                activeTable.setFileMarked(currentFile, false);
+            }
+
+            // If last file was reached without any user interruption, all files have been processed with or
+            // without errors, switch to FINISHED state and notify listeners
+            if(i==nbFiles-1) {
+                currentFileIndex++;
+                stop();
+                jobCompleted();
+                setState(FINISHED);
+            }
+        }
+
+        // Refresh tables's current folders, based on the job's refresh policy.
+        refreshTables();
     }
 
 
