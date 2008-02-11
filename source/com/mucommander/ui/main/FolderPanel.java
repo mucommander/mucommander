@@ -18,6 +18,7 @@
 
 package com.mucommander.ui.main;
 
+import com.mucommander.Debug;
 import com.mucommander.PlatformManager;
 import com.mucommander.auth.AuthException;
 import com.mucommander.auth.CredentialsManager;
@@ -326,7 +327,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
     /**
      * Displays a popup dialog informing the user that the requested folder couldn't be opened.
      */
-    private void showAccessErrorDialog(IOException e) {
+    private void showAccessErrorDialog(Exception e) {
         String exceptionMsg = e==null?null:e.getMessage();
         String errorMsg = Translator.get("table.folder_access_error")+(exceptionMsg==null?"":": "+exceptionMsg);
 
@@ -676,8 +677,16 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
         private AbstractFile fileToSelect;
         private CredentialsMapping credentialsMapping;
 
-        private boolean userInterrupted;
+        /** True if this thread has been interrupted by the user using #tryKill */
+        private boolean killed;
+        /** True if an attempt to kill this thread using Thread#interrupt() has already been made */
+        private boolean killedByInterrupt;
+        /** True if an attempt to kill this thread using Thread#stop() has already been made */
+        private boolean killedByStop;
+        /** True if it is unsafe to kill this thread */
         private boolean doNotKill;
+
+        private boolean disposed;
 
         private final Object lock = new Object();
 
@@ -729,22 +738,65 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
         }
 
         /**
-         * Kills the thread using the deprecated an not recommanded Thread#stop.
+         * Attempts to stop this thread and returns <code>true</code> if an attempt was made.
+         * An attempt to stop this thread will be made using one of the methods detailed hereunder, only if
+         * it is still safe to do so: if the thread is too far into the process of changing the current folder,
+         * this method will have no effect and return <code>false</code>.
+         *
+         * <p>The first time this method is called, {@link #interrupt()} is called, giving the thread a chance to stop
+         * gracefully should it be waiting for a thread or blocked in an interruptible operation such as an
+         * InterruptibleChannel. This may have no immediate effect if the thread is blocked in a non-interruptible
+         * operation. This thread will however be marked as 'killed' which will sooner or later cause {@link #run()}
+         * to stop the thread by simply returning.</p> 
+         *
+         * <p>The second time this method is called, the deprecated (and unsafe) {@link #stop()} method is called,
+         * forcing the thread to abort.</p>
+         *
+         * <p>Any subsequent calls to this method will have no effect and return <code>false</code>.</p>
+         *
+         * @return true if an attempt was made to stop this thread.
          */
-        public void tryKill() {
+        public boolean tryKill() {
             if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called");
             synchronized(lock) {
-                if(userInterrupted)
-                    return;
-
-                userInterrupted = true;
-                if(!doNotKill) {
-                    if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("killing thread");
-                    super.stop();
-
-                    // execute post processing as it would have been done by run()
-                    finish(false);
+                if(killedByStop) {
+                    if(Debug.ON) Debug.trace("Thread already killed by #interrupt() and #stop(), there's nothing we can do, returning");
+                    return false;
                 }
+
+                if(doNotKill) {
+                    if(Debug.ON) Debug.trace("Can't kill thread now, it's too late, returning");
+                    return false;
+                }
+
+                // This field needs to be set before actually killing the thread, #run() relies on it
+                killed = true;
+
+                // Call Thread#interrupt() the first time this method is called to give the thread a chance to stop
+                // gracefully if it is waiting in Thread#sleep() or Thread#wait() or Thread#join() or in an
+                // interruptible operation such as java.nio.channel.InterruptibleChannel. If this is the case,
+                // InterruptedException or ClosedByInterruptException will be thrown and thus need to be catched by
+                // #run().
+                if(!killedByInterrupt) {
+                    if(Debug.ON) Debug.trace("Killing thread using #interrupt()");
+
+                    // This field needs to be set before actually interrupting the thread, #run() relies on it
+                    killedByInterrupt = true;
+                    interrupt();
+                }
+                // Call Thread#stop() the first time this method is called
+                else {
+                    if(Debug.ON) Debug.trace("Killing thread using #stop()");
+
+                    killedByStop = true;
+                    super.stop();
+                    // Execute #cleanup() as it would have been done by #run() had the thread not been stopped.
+                    // Note that #run() may end pseudo-gracefully and catch the underlying Exception. In this case
+                    // it will also call #cleanup() but the (2nd) call to #cleanup() will be ignored.
+                    cleanup(false);
+                }
+
+                return true;
             }
         }
 
@@ -807,8 +859,8 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
                             AbstractFile file = FileFactory.getFile(folderURL, true);
 
                             synchronized(lock) {
-                                if(userInterrupted) {
-                                    if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("killed, get out");
+                                if(killed) {
+                                    if(Debug.ON) Debug.trace("this thread has been killed, returning");
                                     break;
                                 }
                             }
@@ -910,8 +962,8 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
                         }
                         
                         synchronized(lock) {
-                            if(userInterrupted) {
-                                if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("killed, get out");
+                            if(killed) {
+                                if(Debug.ON) Debug.trace("this thread has been killed, returning");
                                 break;
                             }
                         }
@@ -919,13 +971,13 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
                         // File tested -> 50% complete
                         locationField.setProgressValue(50);
 
-                        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("calling ls()");
+                        if(Debug.ON) Debug.trace("calling ls()");
 
                         AbstractFile children[] = folder.ls(chainedFileFilter);
 
                         synchronized(lock) {
-                            if(userInterrupted) {
-                                if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("killed, get out");
+                            if(killed) {
+                                if(Debug.ON) Debug.trace("this thread has been killed, returning");
                                 break;
                             }
                             // From now on, thread cannot be killed (would comprise table integrity)
@@ -935,7 +987,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
                         // files listed -> 75% complete
                         locationField.setProgressValue(75);
 
-                        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("calling setCurrentFolder");
+                        if(Debug.ON) Debug.trace("calling setCurrentFolder");
 
                         // Change the file table's current folder and select the specified file (if any)
                         setCurrentFolder(folder, children, fileToSelect);
@@ -953,8 +1005,21 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
 
                         break;
                     }
-                    catch(IOException e) {
-                        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("IOException caught: "+e);
+                    catch(Exception e) {
+                        if(Debug.ON) Debug.trace("Caught Exception: "+e);
+
+                        if(killed) {
+                            // If #tryKill() called #interrupt(), the exception we just caught was most likely
+                            // thrown as a result of the thread being interrupted.
+                            //
+                            // The exception can be a java.lang.InterruptedException (Thread throws those),
+                            // a java.nio.channels.ClosedByInterruptException (InterruptibleChannel throws those)
+                            // or any other exception thrown by some code that swallowed the original exception
+                            // and threw a new one.
+
+                            if(Debug.ON) Debug.trace("Thread was interrupted, ignoring exception");
+                            break;
+                        }
 
                         // Restore default cursor
                         mainFrame.setCursor(Cursor.getDefaultCursor());
@@ -981,16 +1046,32 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
                 }
                 while(true);
             }
-            
+
             synchronized(lock) {
                 // Clean things up
-                finish(folderChangedSuccessfully);
+                cleanup(folderChangedSuccessfully);
             }
         }
 
 
-        public void finish(boolean folderChangedSuccessfully) {
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("cleaning up, success="+folderChangedSuccessfully);
+        public void cleanup(boolean folderChangedSuccessfully) {
+            // Ensures that this method is called only once
+            synchronized(lock) {
+                if(disposed) {
+                    if(Debug.ON) Debug.trace("already called, returning");
+                    return;
+                }
+
+                disposed = true;
+            }
+
+            if(Debug.ON) Debug.trace("cleaning up, folderChangedSuccessfully="+folderChangedSuccessfully);
+
+            // Clear the interrupted flag in case this thread has been killed using #interrupt().
+            // Not doing this could cause some of the code called by this method to be interrupted (because this thread
+            // is interrupted) and throw an exception
+            interrupted();
+
             // Reset location field's progress bar
             locationField.setProgressValue(0);
 
@@ -1005,7 +1086,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
             if(!folderChangedSuccessfully) {
                 FileURL failedURL = folder==null?folderURL:folder.getURL();
                 // Notifies listeners that location change has been cancelled by the user or has failed
-                if(userInterrupted)
+                if(killed)
                     locationManager.fireLocationCancelled(failedURL);
                 else
                     locationManager.fireLocationFailed(failedURL);
@@ -1015,7 +1096,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
 
         // For debugging purposes
         public String toString() {
-            return "folderURL="+folderURL+" folder="+folder;
+            return super.toString()+" folderURL="+folderURL+" folder="+folder;
         }
     }
 
