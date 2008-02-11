@@ -78,4 +78,12 @@ public abstract class RandomAccessOutputStream extends OutputStream implements R
      * @throws IOException If an I/O error occurred while trying to change the file's length
      */
     public abstract void setLength(long newLength) throws IOException;
+
+    /**
+     * Closes this stream and releases any system resources associated with the stream.
+     * A closed stream cannot perform output operations and cannot be reopened.
+     *
+     * @throws IOException if an I/O error occurs.
+     */
+    public abstract void close() throws IOException;
 }
