@@ -36,10 +36,10 @@ import java.util.Vector;
  * <p>
  * Usage of this class is similar to malloc/free:
  * <ul>
- *  <li>Call {@link #getArrayBuffer(int)} to retrieve a buffer instance of a specified size</li>
+ *  <li>Call <code>#get*Buffer(int)</code> to retrieve a buffer instance of a specified size</li>
  *  <li>Use the buffer</li>
- *  <li>When finished using the buffer, call {@link #releaseArrayBuffer(byte[])} to make this buffer available for
- * subsequent calls to {@link #getArrayBuffer(int)}. Failing to call this method will prevent the buffer from being
+ *  <li>When finished using the buffer, call <code>#release*Buffer(byte[])</code> to make this buffer available for
+ * subsequent calls to <code>#get*Buffer(int)</code>. Failing to call this method will prevent the buffer from being
  * used again and from being garbage-collected.</li>
  * </ul>
  * </p>
@@ -70,7 +70,8 @@ public class BufferPool {
 
     /**
      * Returns a byte array of the specified size. This method first checks if a byte array of the specified size
-     * exists in the pool. If one is found, it is returned. If not, a new instance is created and returned.
+     * exists in the pool. If one is found, it is removed from the pool and returned. If not, a new instance is created
+     * and returned.
      *
      * <p>This method won't return the same buffer instance until it has been released with
      * {@link #releaseArrayBuffer(byte[])}.</p>
@@ -97,8 +98,8 @@ public class BufferPool {
 
     /**
      * Returns a ByteBuffer of the specified capacity. This method first checks if a ByteBuffer instance of the
-     * specified capacity exists in the pool. If one is found, it is returned. If not, a new instance is created and
-     * returned.
+     * specified capacity exists in the pool. If one is found, it is removed from the pool and returned. If not,
+     * a new instance is created and returned.
      *
      * <p>This method won't return the same buffer instance until it has been released with
      * {@link #releaseByteBuffer(ByteBuffer)}.</p>
@@ -115,7 +116,8 @@ public class BufferPool {
 
     /**
      * Returns a byte array of the specified size. This method first checks if a buffer the same size as the specified
-     * one and a class compatible with the specified factory exists in the pool. If one is found, it is returned.
+     * one and a class compatible with the specified factory exists in the pool. If one is found, it is removed from the
+     * pool and returned.
      * If not, a new instance is created and returned using {@link BufferFactory#newBuffer(int)}.
      *
      * <p>This method won't return the same buffer instance until it has been released with
@@ -135,7 +137,7 @@ public class BufferPool {
             bufferContainer = (BufferContainer) bufferContainers.elementAt(i);
             buffer = bufferContainer.getBuffer();
 
-            if(bufferContainer.getSize()==size && (factory.getBufferClass().isAssignableFrom(buffer.getClass()))) {
+            if(bufferContainer.getSize()==size && (factory.matchesBufferClass(buffer.getClass()))) {
                 bufferContainers.removeElementAt(i);
                 if(Debug.ON) Debug.trace("Returning buffer "+buffer+", size="+size);
                 return buffer;
@@ -150,9 +152,9 @@ public class BufferPool {
 
 
     /**
-     * Makes the given buffer available to further calls to {@link #getArrayBuffer(int)} with the same buffer size.
-     * After calling this method, the given buffer instance <b>must not be used anymore</b>, otherwise it could get
-     * corrupted if some other threads use it.
+     * Makes the given buffer available for further calls to {@link #getArrayBuffer(int)} with the same buffer size.
+     * Does nothing if the specified buffer already is in the pool. After calling this method, the given buffer
+     * instance <b>must not be used</b>, otherwise it could get corrupted if some other threads use it.
      *
      * @param buffer the buffer instance to make available for further use
      * @throws IllegalArgumentException if specified buffer is null
@@ -162,9 +164,9 @@ public class BufferPool {
     }
 
     /**
-     * Makes the given buffer available to further calls to {@link #getArrayBuffer(int)} with the same buffer size.
-     * After calling this method, the given buffer instance <b>must not be used anymore</b>, otherwise it could get
-     * corrupted if some other threads use it.
+     * Makes the given buffer available for further calls to {@link #getByteBuffer(int)} with the same buffer size.
+     * Does nothing if the specified buffer already is in the pool. After calling this method, the given buffer
+     * instance <b>must not be used</b>, otherwise it could get corrupted if some other threads use it.
      *
      * @param buffer the buffer instance to make available for further use
      * @throws IllegalArgumentException if specified buffer is null
@@ -173,6 +175,16 @@ public class BufferPool {
         releaseBuffer(buffer, new ByteBufferFactory());
     }
 
+    /**
+     * Makes the given buffer available for further calls to {@link #getBuffer(int, BufferFactory)} with the same buffer
+     * size and factory. Does nothing if the specified buffer already is in the pool.
+     * After calling this method, the given buffer instance <b>must not be used</b>, otherwise it could get
+     * corrupted if some other threads use it.
+     *
+     * @param buffer the buffer instance to make available for further use
+     * @param factory BufferFactory used create a buffer container
+     * @throws IllegalArgumentException if specified buffer is null
+     */
     public static synchronized void releaseBuffer(Object buffer, BufferFactory factory) {
         if(buffer==null)
             throw new IllegalArgumentException("specified buffer is null");
@@ -187,6 +199,35 @@ public class BufferPool {
         if(Debug.ON) Debug.trace("Adding buffer to pool: "+buffer);
 
         bufferContainers.add(bufferContainer);
+    }
+
+    /**
+     * Returns the number of buffers that currently are in the pool. This method is provided only for debugging
+     * purposes only.
+     *
+     * @return the number of buffers currently in the pool
+     */
+    static int getBufferCount() {
+        return bufferContainers.size();
+    }
+
+    /**
+     * Returns the number of buffers that currently are in the pool and whose Class are the same as the provided
+     * factory's. This method is provided only for debugging purposes only.
+     *
+     * @param factory the BufferFactory
+     * @return the number of buffers currently in the pool
+     */
+    static int getBufferCount(BufferFactory factory) {
+        int count = 0;        
+        int nbBuffers = bufferContainers.size();
+        for(int i=0; i<nbBuffers; i++) {
+            if(factory.matchesBufferClass(((BufferContainer)bufferContainers.elementAt(i)).getBuffer().getClass())) {
+                count ++;
+            }
+        }
+
+        return count;
     }
 
 
@@ -242,8 +283,40 @@ public class BufferPool {
      * objects returned by {@link #newBuffer(int)}.
      */
     public static abstract class BufferFactory {
+
+        /**
+         * Returns <code>true</code> if the class returned by {@link #getBufferClass()} is equal or a
+         * superclass/superinterface of the specified buffer class.
+         *
+         * @param bufferClass the buffer Class to test
+         * @return true if the class returned by <code>#getBufferClass()</code> is equal or a superclass/superinterface
+         * of the specified buffer class
+         */
+        protected boolean matchesBufferClass(Class bufferClass) {
+            return getBufferClass().isAssignableFrom(bufferClass);
+        }
+
+        /**
+         * Creates and returns a buffer instance of the specified size.
+         *
+         * @param size size of the buffer to create
+         * @return a buffer instance of the specified size
+         */
         protected abstract Object newBuffer(int size);
+
+        /**
+         * Creates and returns a {@link BufferContainer} for the specified buffer instance.
+         *
+         * @param buffer the buffer to wrap in a BufferContainer
+         * @return returns a BufferContainer for the specified buffer instance
+         */
         protected abstract BufferContainer newBufferContainer(Object buffer);
+
+        /**
+         * Returns the Class of buffer instances this factory creates. 
+         *
+         * @return the Class of buffer instances this factory creates
+         */
         protected abstract Class getBufferClass();
     }
 
