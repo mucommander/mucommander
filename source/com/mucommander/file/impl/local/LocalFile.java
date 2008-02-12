@@ -904,6 +904,9 @@ public class LocalFile extends AbstractFile {
 
     /**
      * LocalRandomAccessOutputStream extends RandomAccessOutputStream to provide random write access to a LocalFile.
+     * This implementation uses a NIO <code>FileChannel</code> under the hood to benefit from
+     * <code>InterruptibleChannel</code> and allow a thread waiting for an I/O to be gracefully interrupted using
+     * <code>Thread#interrupt()</code>.
      */
     public static class LocalRandomAccessOutputStream extends RandomAccessOutputStream {
 
