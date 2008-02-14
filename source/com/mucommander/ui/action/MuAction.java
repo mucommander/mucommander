@@ -169,13 +169,22 @@ public abstract class MuAction extends AbstractAction {
         }
 
         if(lookupIconManager) {
-            // Look for an icon image file with the /action/<classname>.png path and use it if it exists
-            String iconPath = getIconPath(classInstance);
-            if(ResourceLoader.getResourceAsURL(iconPath)!=null)
-                setIcon(IconManager.getIcon(iconPath));
+            ImageIcon icon;
+
+            if((icon = getIcon(classInstance)) != null)
+                setIcon(icon);
         }
     }
 
+    protected static ImageIcon getIcon(Class action) {
+        String iconPath;
+
+        // Look for an icon image file with the /action/<classname>.png path and use it if it exists
+        iconPath = getIconPath(action);
+        if(ResourceLoader.getResourceAsURL(iconPath) == null)
+            return null;
+        return IconManager.getIcon(iconPath);
+    }
 
     /**
      * Returns the path to the icon image within the application's JAR file corresponding to the specified
