@@ -19,8 +19,6 @@
 package com.mucommander.ui.action;
 
 import com.mucommander.command.Command;
-import com.mucommander.conf.ConfigurationListener;
-import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileProtocols;
 import com.mucommander.file.filter.AttributeFileFilter;
@@ -35,37 +33,95 @@ import java.util.Hashtable;
 
 /**
  * Provides a common base for viewer and editor actions.
- *
  * @author Maxence Bernard, Nicolas Rinaudo
  */
-abstract class AbstractViewerAction extends SelectedFileAction implements ConfigurationListener {
+abstract class AbstractViewerAction extends SelectedFileAction {
+    // - Property names ------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------
+    /** Key that controls whether or not to use the custom command. */
+    public static final String USE_CUSTOM_COMMAND_PROPERTY_KEY = "use_custom";
+    /** Key that controls the command that will be used to open files. */
+    public static final String CUSTOM_COMMAND_PROPERTY_KEY     = "custom_command";
 
-    /** Custom command defined in the configuration. */
-    private Command customCommand;
-    /** Whether or not to use the custom command. */
-    private boolean useCustomCommand;
 
 
+    // - Initialisation ------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------
+    /**
+     * Creates a new instance of <code>AbstractViewerAction</code>.
+     * @param mainFrame  frame to which the action is attached.
+     * @param properties action's properties.
+     */
     public AbstractViewerAction(MainFrame mainFrame, Hashtable properties) {
         super(mainFrame, properties);
 
         // Enable this action only when the currently selected file is not a directory.
         setSelectedFileFilter(new AttributeFileFilter(AttributeFileFilter.DIRECTORY, true));
-
-        // Listens to configuration.
-        MuConfiguration.addConfigurationListener(this);
     }
 
 
+
+    // - Property retrieval --------------------------------------------------------------
+    // -----------------------------------------------------------------------------------
+    /**
+     * Returns <code>true</code> if this action should use custom command.
+     * @return <code>true</code> if this action should use custom command, <code>false</code> otherwise.
+     */
+    protected boolean useCustomCommand() {
+        Object o;
+
+        if((o = getValue(USE_CUSTOM_COMMAND_PROPERTY_KEY)) == null)
+            return false;
+        if(o instanceof Boolean)
+            return ((Boolean)o).booleanValue();
+        return false;
+    }
+
+    /**
+     * Returns the command that should be used to open files.
+     * @return the command that should be used to open files, or <code>false</code> if none.
+     */
+    protected Command getCustomCommand() {
+        Object o;
+
+        if((o = getValue(CUSTOM_COMMAND_PROPERTY_KEY)) == null)
+            return null;
+        if(o instanceof Command)
+            return (Command)o;
+        return null;
+    }
+
+    /**
+     * Sets the command to use to open files.
+     * @param command command that will be used to open files.
+     */
+    protected void setCustomCommand(String command) {putValue(CUSTOM_COMMAND_PROPERTY_KEY, command == null ? null : new Command(getClass().getName(), command));}
+
+    /**
+     * Sets whether or not to use custom commands to open files.
+     * @param use whether or not to use custom commands.
+     */
+    protected void setUseCustomCommand(boolean use) {putValue(USE_CUSTOM_COMMAND_PROPERTY_KEY, new Boolean(use));}
+
+
+
+    // - AbstractAction implementation ---------------------------------------------------
+    // -----------------------------------------------------------------------------------
     /**
      * Edits the currently selected file.
      */
     public synchronized void performAction() {
         AbstractFile file;
+        boolean      useCustomCommand;
+        Command      customCommand;
 
         file = mainFrame.getActiveTable().getSelectedFile();
+
         // If the file is editable...
         if(file != null && !(file.isDirectory() || file.isSymlink())) {
+            useCustomCommand = useCustomCommand();
+            customCommand    = getCustomCommand();
+
             // If we're using a custom editor...
             if(useCustomCommand && customCommand != null) {
                 // If it's local, run the custom editor on it.
@@ -86,21 +142,13 @@ abstract class AbstractViewerAction extends SelectedFileAction implements Config
         }
     }
 
+
+
+    // - Abstract methods ----------------------------------------------------------------
+    // -----------------------------------------------------------------------------------
     /**
-     * Sets the custom editor to the specified command.
-     * @param command command to use as a custom editor.
+     * Opens the specified file without a custom command.
+     * @param file file to open.
      */
-    protected void setCustomCommand(String command) {
-        if(command == null)
-            customCommand = null;
-        else
-            customCommand = new Command(getClass().getName(), command);
-    }
-
-    protected void setUseCustomCommand(boolean use) {
-        useCustomCommand = use;
-    }
-
-
     public abstract void performInternalAction(AbstractFile file);
 }

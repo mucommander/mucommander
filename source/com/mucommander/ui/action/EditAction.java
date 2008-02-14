@@ -23,36 +23,37 @@ import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.viewer.EditorRegistrar;
+import com.mucommander.conf.ConfigurationListener;
+import com.mucommander.conf.impl.MuConfiguration;
 
 import java.util.Hashtable;
 
 /**
- * Opens the current file in edit mode.
- *
+ * User configurable variant of {@link InternalEditAction}.
  * @author Maxence Bernard, Nicolas Rinaudo
  */
-public class EditAction extends AbstractViewerAction {
-
+public class EditAction extends InternalEditAction implements ConfigurationListener {
+    // - Initialisation ------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------
+    /**
+     * Creates a new instance of <code>EditAction</code>.
+     * @param mainFrame  frame to which the action is attached.
+     * @param properties action's properties.
+     */
     public EditAction(MainFrame mainFrame, Hashtable properties) {
         super(mainFrame, properties);
 
         setUseCustomCommand(MuConfiguration.getVariable(MuConfiguration.USE_CUSTOM_EDITOR, MuConfiguration.DEFAULT_USE_CUSTOM_EDITOR));
         setCustomCommand(MuConfiguration.getVariable(MuConfiguration.CUSTOM_EDITOR));
+
+        // Listens to configuration.
+        MuConfiguration.addConfigurationListener(this);
     }
 
 
-    /////////////////////////////////////////
-    // AbstractViewerAction implementation //
-    /////////////////////////////////////////
 
-    /**
-     * Opens the internal editor on the specified file.
-     * @param file file to edit.
-     */
-    public void performInternalAction(AbstractFile file) {
-        EditorRegistrar.createEditorFrame(mainFrame, file, getIcon().getImage());
-    }
-
+    // - Configuration listening ---------------------------------------------------------
+    // -----------------------------------------------------------------------------------
     /**
      * Reacts to configuration changed events.
      * @param event describes the configuration change.

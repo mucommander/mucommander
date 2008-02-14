@@ -23,37 +23,38 @@ import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.viewer.ViewerRegistrar;
+import com.mucommander.conf.ConfigurationListener;
+import com.mucommander.conf.impl.MuConfiguration;
 
 import java.util.Hashtable;
 
 /**
- * Opens the current file in view mode.
- *
+ * User configurable variant of {@link InternalViewAction}.
  * @author Maxence Bernard, Nicolas Rinaudo
  */
-public class ViewAction extends AbstractViewerAction {
-
+public class ViewAction extends InternalViewAction implements ConfigurationListener {
+    // - Initialisation ------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------
+    /**
+     * Creates a new instance of <code>ViewAction</code>.
+     * @param mainFrame  frame to which the action is attached.
+     * @param properties action's properties.
+     */
     public ViewAction(MainFrame mainFrame, Hashtable properties) {
         super(mainFrame, properties);
 
         // Initialises configuration.
         setUseCustomCommand(MuConfiguration.getVariable(MuConfiguration.USE_CUSTOM_VIEWER, MuConfiguration.DEFAULT_USE_CUSTOM_VIEWER));
         setCustomCommand(MuConfiguration.getVariable(MuConfiguration.CUSTOM_VIEWER));
+
+        // Listens to configuration.
+        MuConfiguration.addConfigurationListener(this);
     }
 
 
-    /////////////////////////////////////////
-    // AbstractViewerAction implementation //
-    /////////////////////////////////////////
 
-    /**
-     * Opens the internal viewer on the specified file.
-     * @param file file to view.
-     */
-    public void performInternalAction(AbstractFile file) {
-        ViewerRegistrar.createViewerFrame(mainFrame, file, getIcon().getImage());
-    }
-
+    // - Configuration listening ---------------------------------------------------------
+    // -----------------------------------------------------------------------------------
     /**
      * Reacts to configuration changed events.
      * @param event describes the configuration change.
