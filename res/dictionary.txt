@@ -699,6 +699,7 @@ create:SV:Skapa
 # Used in the Mkdir/Mkfile progress dialog, %1 is replaced by a filename
 creating_file:EN:Creating %1
 creating_file:FR:Création de %1 en cours
+creating_file:SV:Skapar %1
 # Translation missing (New!)
 
 
@@ -1483,7 +1484,7 @@ file_exists_in_destination:pt_BR:Existe um arquivo com mesmo nome neste caminho
 file_exists_in_destination:NL:Bestand bestaat al in het doel
 file_exists_in_destination:SK:Tento súbor už v cieli existuje
 file_exists_in_destination:JA:ファイルはすでに先にあります
-file_exists_in_destination:SV:Filen finns redan vid målet.
+file_exists_in_destination:SV:Filen finns redan denna plats.
 
 source_parent_of_destination:EN:Attempt to transfer a folder to one of its subfolders
 source_parent_of_destination:FR:Tentative de déplacement d'un répertoire vers un de ses sous-répertoires
@@ -2129,7 +2130,7 @@ com.mucommander.ui.action.CheckForUpdatesAction.label:pt_BR:Checar atualizaçõe
 com.mucommander.ui.action.CheckForUpdatesAction.label:NL:Zoeken naar updates
 com.mucommander.ui.action.CheckForUpdatesAction.label:SK:Kontrola aktualizácii
 com.mucommander.ui.action.CheckForUpdatesAction.label:JA:更新のチェック
-com.mucommander.ui.action.CheckForUpdatesAction.label:SV:Leta efter uppdateringar
+com.mucommander.ui.action.CheckForUpdatesAction.label:SV:Sök uppdateringar
 
 com.mucommander.ui.action.CompareFoldersAction.label:EN:Compare folders
 com.mucommander.ui.action.CompareFoldersAction.label:FR:Comparer dossiers
@@ -3264,6 +3265,7 @@ com.mucommander.ui.action.MarkUpToLastRowAction.label:SV:Markera filer till slut
 com.mucommander.ui.action.MarkExtensionAction.label:EN:Mark extension
 com.mucommander.ui.action.MarkExtensionAction.label:FR:Marquer l'extension
 com.mucommander.ui.action.MarkExtensionAction.label:NL:Markeer extensie
+com.mucommander.ui.action.MarkExtensionAction.label:SV:Markera ändelse
 # Translation missing (New!)
 
 
@@ -3502,11 +3504,12 @@ com.mucommander.ui.action.OpenNativelyAction.tooltip:pt_BR:Executar o arquivo co
 com.mucommander.ui.action.OpenNativelyAction.tooltip:NL:Uitvoeren met systeem-geassocieerd programma
 com.mucommander.ui.action.OpenNativelyAction.tooltip:SK:Otvoriť vybraný súbor s asociovanou aplikáciou
 com.mucommander.ui.action.OpenNativelyAction.tooltip:JA:システムのファイルの関連付けで選択されたファイルを実行します
-com.mucommander.ui.action.OpenNativelyAction.tooltip:SV:Öppna filen med systemets förvalda filassociation
+com.mucommander.ui.action.OpenNativelyAction.tooltip:SV:Öppna markerad filen med systemets förvalda filassociation
 
 com.mucommander.ui.action.OpenInOtherPanelAction.label:EN:Open in other panel
 com.mucommander.ui.action.OpenInOtherPanelAction.label:FR:Ouvrir dans l'autre panneau
 com.mucommander.ui.action.OpenInOtherPanelAction.label:NL:Openen in nieuw scherm
+com.mucommander.ui.action.OpenInOtherPanelAction.label:SV:Öppna i andra vyn
 # Translation missing (New!)
 
 
@@ -3526,6 +3529,7 @@ com.mucommander.ui.action.OpenInOtherPanelAction.label:NL:Openen in nieuw scherm
 com.mucommander.ui.action.OpenInBothPanelsAction.label:EN:Open in both panels
 com.mucommander.ui.action.OpenInBothPanelsAction.label:FR:Ouvrir dans les deux panneaux
 com.mucommander.ui.action.OpenInBothPanelsAction.label:NL:Openen in beide schermen
+com.mucommander.ui.action.OpenInBothPanelsAction.label:SV:Öppna i båda vyerna
 # Translation missing (New!)
 
 
@@ -4979,7 +4983,7 @@ version_dialog.new_version_url:pt_BR:Uma nova versão do muCommander está dispo
 version_dialog.new_version_url:NL:Een nieuwe versie van muCommander is beschikbaar op %1.
 version_dialog.new_version_url:SK:Nová verzia muCommander-a je k dispozícii na %1.
 version_dialog.new_version_url:JA:muCommander の新しいバージョンは %1 で 利用可能です。
-version_dialog.new_version_url:SV:En ny version av muCommander finns att hämta här: %1.
+version_dialog.new_version_url:SV:En ny version av muCommander finns här: %1.
 
 version_dialog.not_available_title:EN:Server not reachable
 version_dialog.not_available_title:FR:Serveur indisponible
@@ -5108,7 +5112,7 @@ quit_dialog.desc:pt_BR:Você tem %1 janela(s) aberta(s). Deseja realmente sair?
 quit_dialog.desc:NL:Er zijn %1 venster(s) geopend. Alle vensters sluiten en muCommander afsluiten?
 quit_dialog.desc:SK:Chcete zatvoriť všetkých %1 okien a ukončiť muCommander?
 quit_dialog.desc:JA:%1 個のウィンドウを開いています。終了してもよろしいですか ? 
-quit_dialog.desc:SV:Du har %1 fönster öppna. Vill du ända avsluta ? 
+quit_dialog.desc:SV:Du har %1 fönster öppna. Vill du avsluta ändå? 
 # Translation missing (ES, zh_CN, RU, KO) : this entry needs to be updated to take into account the number of windows
 
 
@@ -6068,7 +6072,7 @@ delete.symlink_warning:pt_BR:Este arquivo parece ser um link simbólico:\n\n Arq
 delete.symlink_warning:NL:Dit bestand lijkt op een symbolische koppeling:\n\n Bestand: %1\n Verwijst naar: %2\n\nAlleen koppeling verwijderen of \nKoppeling volgen en map verwijderen (VOORZICHTIG)?
 delete.symlink_warning:SK:Tento súbor vyzerá ako symbolický odkaz:\n\n Súbor:%1\n Odkazuje na: %2\n\nOdstrániť iba symbolický odkaz, alebo\naj cieľ odkazu (UPOZORNENIE) ?
 delete.symlink_warning:JA:このファイルはシンボリック リンクのように見えます:\n\n  ファイル: %1\n  リンク先: %2\n\nシンボリック リンクを削除するか\nシンボリック リンクに追従してフォルダを削除しますか (注意) ?
-delete.symlink_warning:SV:Filen ser ut som en symbolisk länk:\n\n  Fil: %1\n  Länkar till: %2\n\nRadera symbolisk länk bara om\nFölj symbolisk länk och radera mappen (VARNING) ?
+delete.symlink_warning:SV:Filen ser ut som en symbolisk länk:\n\n  Fil: %1\n  Länkar till: %2\n\nRadera bara symbolisk länk eller\nFölj symbolisk länk och radera mappen (VARNING) ?
 
 delete.delete_link_only:EN:Delete link
 delete.delete_link_only:FR:Supprimer le lien
@@ -6379,7 +6383,7 @@ email.server_unavailable:pt_BR:Não foi possível contactar o servidor de email 
 email.server_unavailable:NL:Kan niet verbinden met server %1, kontroleer uw emailvoorkeuren of probeer het later nog eens
 email.server_unavailable:SK:Nedá sa pripojiť na poštový server %1, skontrolujte nastavenie pošty, alebo akciu opakujte neskôr.
 email.server_unavailable:JA:メール サーバー %1 に接触することができません、メールの環境設定をチェックするか後で再び試行します。
-email.server_unavailable:SV:Kunde inte kontakta mejlservern %1, kolla dina mejlintällningar eller försök igen senare.
+email.server_unavailable:SV:Kunde inte kontakta mejlservern %1, kolla dina mejlinställningar eller försök igen senare.
 
 email.connection_closed:EN:Connection closed by server, mail not sent.
 email.connection_closed:FR:Connexion fermée par le serveur, le message n'a pas été envoyé.
@@ -6419,7 +6423,7 @@ email.goodbye_failed:pt_BR:Erro ao encerrar a conexão, o email talvez não tenh
 email.goodbye_failed:NL:Fout bij het beeinigen van de verbinding, email eventueel niet verzonden
 email.goodbye_failed:SK:Chyba pri zatváraní pripojenia, pošta nemusela byť odoslaná.
 email.goodbye_failed:JA:接続を閉じている間のエラーです、メールは送信されていない可能性があります。
-email.goodbye_failed:SV:Fel vid stängning av anslutning, mejlet kanske inte sändes.
+email.goodbye_failed:SV:Fel när anslutning stängdes, mejlet kanske inte skickades.
 
 email.send_file_error:EN:Unable to send file %1, mail not sent.
 email.send_file_error:FR:Erreur lors de l'envoi du fichier %1, le message n'a pas été envoyé.
@@ -6439,7 +6443,7 @@ email.send_file_error:pt_BR:Não foi possível enviar o arquivo %1, email não e
 email.send_file_error:NL:Kan bestand %1 niet verzenden, emial niet verstuurd.
 email.send_file_error:SK:Súbor %1 sa nedá odoslať, pošta nebola odoslaná.
 email.send_file_error:JA:ファイル %1 を送信することができません、メールが送信されませんでした。
-email.send_file_error:SV:Kunde inte skicka %1, Mejlet skickades inte.
+email.send_file_error:SV:Kunde inte skicka filen %1, mejlet skickades inte.
 
 
 #########################
@@ -6867,6 +6871,7 @@ progress_dialog.processing_file:SV:Bearbetar %1
 # calculated.
 progress_dialog.verifying_file:EN:Verifying %1
 progress_dialog.verifying_file:FR:Vérification de %1
+progress_dialog.verifying_file:SV:Verifierar %1
 # Translation missing (New!)
 
 
@@ -8296,7 +8301,7 @@ file_editor.save_warning:pt_BR:Salvar mudanças feitas ao arquivo antes de fecha
 file_editor.save_warning:NL:Voor het afsluiten veranderingen opslaan?
 file_editor.save_warning:SK:Uložiť zmeny v tomto súbore pred zatvorením ?
 file_editor.save_warning:JA:閉じる前にこのファイルへの変更を保存しますか ?
-file_editor.save_warning:SV:Spara ändringar till filen innan stängning?
+file_editor.save_warning:SV:Spara ändringar till filen innan avslut?
 
 file_editor.cannot_write:EN:Unable to write file.
 file_editor.cannot_write:FR:Impossible d'écrire le fichier. 
@@ -10333,7 +10338,7 @@ prefs_dialog.import_look_and_feel:SV:Importera utseende och känsla
 
 prefs_dialog.no_look_and_feel:EN:No look & feel was found.
 prefs_dialog.no_look_and_feel:FR:Aucun look & feel n'a été trouvé.
-prefs_dialog.no_look_and_feel:SV:Inget utseende och känsla funnen.
+prefs_dialog.no_look_and_feel:SV:Inget utseende och känsla hittades.
 prefs_dialog.no_look_and_feel:NL:Geen look en feel gevonden.
 # Translation missing (New!)
 
@@ -10367,7 +10372,7 @@ prefs_dialog.error_in_import:CS:Chyba při importu tématu %1.
 prefs_dialog.error_in_import:IT:Errore durante import del tema %1.
 prefs_dialog.error_in_import:PL:Błąd podczas importu tematu %1.
 prefs_dialog.error_in_import:JA:テーマ %1 のインポート中のエラーです。
-prefs_dialog.error_in_import:SV:Fel vid importera av temat %1.
+prefs_dialog.error_in_import:SV:Fel vid import av temat %1.
 # Translation missing (KO)
 
 
@@ -11847,6 +11852,7 @@ color_chooser.title:SV:Välj en färg
 extensions.file_already_exists:EN:File %1 already exists in the extensions directory.
 extensions.file_already_exists:FR:Le fichier %1 existe déjà dans le répertoire d'extensions.
 extensions.file_already_exists:NL:Bestand %1 bestaat al in de extensies-map
+extensions.file_already_exists:SV:Filen %1 finns redan i ändelsemappen.
 # Translation missing (New!)
 
 
