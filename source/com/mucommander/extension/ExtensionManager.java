@@ -200,6 +200,17 @@ public class ExtensionManager {
         return getDefaultExtensionsFolder();
     }
 
+    /**
+     * Returns an <code>AbstractFile</code> to the extension file with the specified filename and located in the
+     * {@link #getExtensionsFolder() extensions folder}. The returned file may or may not exist.
+     * @param  filename    the extension's filename 
+     * @return             an AbstractFile to the extension file with the specified filename and located in the
+     * extensions folder.
+     * @throws IOException if the file could not be instanciated.
+     */
+    public static AbstractFile getExtensionsFile(String filename) throws IOException {
+        return getExtensionsFolder().getDirectChild(filename);
+    }
 
 
     // - Classpath querying -----------------------------------------------------
@@ -262,7 +273,7 @@ public class ExtensionManager {
 
         // If the destination file already exists, either delete it
         // if force is set to true or just return false.
-        dest = getExtensionsFolder().getDirectChild(file.getName());
+        dest = getExtensionsFile(file.getName());
         if(dest.exists()) {
             if(!force)
                 return false;
