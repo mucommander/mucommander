@@ -24,9 +24,11 @@ import com.mucommander.extension.ExtensionManager;
 import com.mucommander.extension.LookAndFeelFilter;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
+import com.mucommander.job.FileCollisionChecker;
 import com.mucommander.runtime.OsFamilies;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.QuestionDialog;
+import com.mucommander.ui.dialog.file.FileCollisionDialog;
 import com.mucommander.ui.dialog.pref.PreferencesDialog;
 import com.mucommander.ui.dialog.pref.PreferencesPanel;
 import com.mucommander.ui.dialog.pref.theme.ThemeEditorDialog;
@@ -45,7 +47,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
-import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -102,25 +104,25 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
     // - Theme fields --------------------------------------------------------------------
     // -----------------------------------------------------------------------------------
     /** Lists all available themes. */
-    private JComboBox themeComboBox;
+    private JComboBox    themeComboBox;
     /** Triggers the theme editor. */
-    private JButton   editThemeButton;
+    private JButton      editThemeButton;
     /** Triggers the theme duplication dialog. */
-    private JButton   duplicateThemeButton;
+    private JButton      duplicateThemeButton;
     /** Triggers the theme import dialog. */
-    private JButton   importThemeButton;
+    private JButton      importThemeButton;
     /** Triggers the theme export dialog. */
-    private JButton   exportThemeButton;
+    private JButton      exportThemeButton;
     /** Triggers the theme rename dialog. */
-    private JButton   renameThemeButton;
+    private JButton      renameThemeButton;
     /** Triggers the theme delete dialog. */
-    private JButton   deleteThemeButton;
+    private JButton      deleteThemeButton;
     /** Used to display the currently selected theme's type. */
-    private JLabel    typeLabel;
+    private JLabel       typeLabel;
     /** Whether or not to ignore theme comobox related events. */
-    private boolean   ignoreComboChanges;
+    private boolean      ignoreComboChanges;
     /** Last folder that was selected in import or export operations. */
-    private File      lastSelectedFolder;
+    private AbstractFile lastSelectedFolder;
 
 
 
@@ -644,21 +646,38 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
      * If there is already a file with the same name in the extensions folder,
      * this method will ask the user for confirmation before overwriting it.
      * </p>
-     * @param  library library to import in the extensions folder.
-     * @return         <code>true</code> if the library was imported, <code>false</code> if the user cancelled the operation.
+     * @param  library     library to import in the extensions folder.
+     * @return             <code>true</code> if the library was imported, <code>false</code> if the user cancelled the operation.
+     * @throws IOException if an I/O error occurred while importing the library
      */
-    private boolean importLookAndFeelLibrary(AbstractFile library) throws Exception {
-        // Tries to import the file, but if a version of it is already present,
+    private boolean importLookAndFeelLibrary(AbstractFile library) throws IOException {
+        // Tries to import the file, but if a version of it is already present in the extensions folder,
         // asks the user for confirmation.
-        if(!ExtensionManager.importLibrary(library, false)) {
-            if(new QuestionDialog(parent, null, Translator.get("extensions.file_already_exists", library.getName()), parent,
-                                  new String[] {Translator.get("overwrite"), Translator.get("cancel")},
-                                  new int[]  {YES_ACTION, NO_ACTION},
-                                  0).getActionValue() != YES_ACTION)
+
+        AbstractFile destFile = ExtensionManager.getExtensionsFile(library.getName());
+
+        int collision = FileCollisionChecker.checkForCollision(library, destFile);
+        if(collision!=FileCollisionChecker.NO_COLLOSION) {
+            // Do not offer the multiple files mode options such as 'skip' and 'apply to all'
+            int action = new FileCollisionDialog(parent, parent, collision, library, destFile, false).getActionValue();
+
+            // User chose to overwrite the file
+            if(action==FileCollisionDialog.OVERWRITE_ACTION) {
+                // Simply continue and file will be overwritten
+            }
+            else if(action==FileCollisionDialog.OVERWRITE_IF_OLDER_ACTION) {
+                // Overwrite if the source is more recent than the destination
+                if(library.getDate()<=destFile.getDate())
+                    return false;
+                // Simply continue and file will be overwritten
+            }
+            // User chose to cancel or closed the dialog
+            else {
                 return false;
-            ExtensionManager.importLibrary(library, true);
+            }
         }
-        return true;
+
+        return ExtensionManager.importLibrary(library, true);
     }
 
     public void run() {
@@ -700,7 +719,7 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
 
     private void importLookAndFeel() {
         JFileChooser chooser; // Used to select the theme to import.
-        File         file;    // Path to the theme to import.
+        AbstractFile file;    // Path to the theme to import.
 
         // Initialises the file chooser.
         chooser = createFileChooser();
@@ -710,8 +729,8 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
         chooser.setDialogType(JFileChooser.OPEN_DIALOG);
 
         if(chooser.showDialog(parent, Translator.get("prefs_dialog.import")) == JFileChooser.APPROVE_OPTION) {
-            file               = chooser.getSelectedFile();
-            lastSelectedFolder = file.getParentFile();
+            file               = FileFactory.getFile(chooser.getSelectedFile().getAbsolutePath());
+            lastSelectedFolder = file.getParentSilently();
 
             // Makes sure the file actually exists - JFileChooser apparently doesn't enforce that properly in all look&feels.
             if(!file.exists()) {
@@ -720,7 +739,7 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
             }
 
             // Imports the JAR in a separate thread.
-            lookAndFeelLibrary = FileFactory.getFile(file.getAbsolutePath());
+            lookAndFeelLibrary = file;
             new Thread(this).start();
         }
     }
@@ -819,7 +838,7 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
     private JFileChooser createFileChooser() {
         if(lastSelectedFolder == null)
             return new JFileChooser();
-        return new JFileChooser(lastSelectedFolder);
+        return new JFileChooser((java.io.File)lastSelectedFolder.getUnderlyingFileObject());
     }
 
     private void insertTheme(Theme theme) {
@@ -840,11 +859,10 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
 
     /**
      * Imports a new theme in muCommander.
-     * @param theme currently selected theme.
      */
-    private void importTheme(Theme theme) {
+    private void importTheme() {
         JFileChooser chooser; // Used to select the theme to import.
-        File         file;    // Path to the theme to import.
+        AbstractFile         file;    // Path to the theme to import.
 
         // Initialises the file chooser.
         chooser = createFileChooser();
@@ -855,15 +873,15 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
 
         if(chooser.showDialog(parent, Translator.get("prefs_dialog.import")) == JFileChooser.APPROVE_OPTION) {
             // Makes sure the file actually exists - JFileChooser apparently doesn't enforce that properly in all look&feels.
-            file               = chooser.getSelectedFile();
-            lastSelectedFolder = file.getParentFile();
+            file               = FileFactory.getFile(chooser.getSelectedFile().getAbsolutePath());
+            lastSelectedFolder = file.getParentSilently();
             if(!file.exists()) {
                 JOptionPane.showMessageDialog(this, Translator.get("this_file_does_not_exist", file.getName()), Translator.get("error"), JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
             // Imports the theme and makes sure it appears in the combobox.
-            try {insertTheme(ThemeManager.importTheme(file));}
+            try {insertTheme(ThemeManager.importTheme((java.io.File)file.getUnderlyingFileObject()));}
             // Notifies the user that something went wrong.
             catch(Exception ex) {
                 JOptionPane.showMessageDialog(this, Translator.get("prefs_dialog.error_in_import", file.getName()),
@@ -878,7 +896,7 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
      */
     private void exportTheme(Theme theme) {
         JFileChooser chooser;
-        File         file;
+        AbstractFile         file;
 
         chooser = createFileChooser();
         chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
@@ -886,36 +904,42 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
 
         chooser.setDialogTitle(Translator.get("prefs_dialog.export_theme", theme.getName()));
         if(chooser.showDialog(parent, Translator.get("prefs_dialog.export")) == JFileChooser.APPROVE_OPTION) {
-            String extension;
+
+            file               = FileFactory.getFile(chooser.getSelectedFile().getAbsolutePath());
+            lastSelectedFolder = file.getParentSilently();
 
             // Makes sure the file's extension is .xml.
-            file               = chooser.getSelectedFile();
-            lastSelectedFolder = file.getParentFile();
-            if(((extension = AbstractFile.getExtension(file.getName())) == null) || !extension.equalsIgnoreCase("xml"))
-                file = new File(file.getParent(), file.getName() + ".xml");
-
             try {
-                // In case of naming conflict, asks the user what to do, and aborts if necessary.
-                if (file.exists()) {
-                    QuestionDialog dialog = new QuestionDialog(parent, null, Translator.get("file_already_exists", file.getName()), parent, 
-                                                               new String[] {Translator.get("replace"), Translator.get("cancel")},
-                                                               new int[]  {YES_ACTION, CANCEL_ACTION},
-                                                               0);
-                    if(dialog.getActionValue() != YES_ACTION)
+                if(!"xml".equalsIgnoreCase(file.getExtension()))    // Note: getExtension() may return null if no extension
+                    file = lastSelectedFolder.getDirectChild(file.getName()+".xml");
+
+                int collision = FileCollisionChecker.checkForCollision(null, file);
+                if(collision!=FileCollisionChecker.NO_COLLOSION) {
+                    // Do not offer the multiple files mode options such as 'skip' and 'apply to all'
+                    int action = new FileCollisionDialog(parent, parent, collision, null, file, false).getActionValue();
+
+                    // User chose to overwrite the file
+                    if(action==FileCollisionDialog.OVERWRITE_ACTION) {
+                        // Simply continue and file will be overwritten
+                    }
+                    // User chose to cancel or closed the dialog
+                    else {
                         return;
+                    }
                 }
 
                 // Exports the theme.
-                ThemeManager.exportTheme(theme, file);
+                ThemeManager.exportTheme(theme, (java.io.File)file.getUnderlyingFileObject());
 
                 // If it was exported to the custom themes folder, reload the theme combobox to reflect the
                 // changes.
-                if(FileFactory.getFile(file.getParentFile().getAbsolutePath()).equals(ThemeManager.getCustomThemesFolder()))
+                if(lastSelectedFolder.equals(ThemeManager.getCustomThemesFolder()))
                     populateThemes(theme);
             }
-
             // Notifies users of errors.
-            catch(Exception exception) {JOptionPane.showMessageDialog(this, Translator.get("cannot_write_file", file.getName()), Translator.get("write_error"), JOptionPane.ERROR_MESSAGE);}
+            catch(Exception exception) {
+                JOptionPane.showMessageDialog(this, Translator.get("cannot_write_file", file.getName()), Translator.get("write_error"), JOptionPane.ERROR_MESSAGE);
+            }
         }
     }
 
@@ -970,7 +994,7 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
 
         // Import button was pressed.
         else if(e.getSource() == importThemeButton)
-            importTheme(theme);
+            importTheme();
 
         // Export button was pressed.
         else if(e.getSource() == exportThemeButton)
