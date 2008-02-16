@@ -7007,6 +7007,7 @@ properties_dialog.calculating:SV:Beräknar...
 # Calculate checksum dialog #
 #############################
 
+# Checksum algorithms include MD5, SHA, CRC32, ...
 calculate_checksum_dialog.checksum_algorithm:EN:Checksum algorithm
 calculate_checksum_dialog.checksum_algorithm:FR:Algorithme de checksum
 calculate_checksum_dialog.checksum_algorithm:SV:Kontrollnummer algoritm
@@ -7024,7 +7025,7 @@ calculate_checksum_dialog.checksum_algorithm:NL:Checksum algoritme
 
 
 
-
+# Used as the label of a radio button for the destination checksum file
 calculate_checksum_dialog.temporary_file:EN:Temporary file
 calculate_checksum_dialog.temporary_file:FR:Fichier temporaire
 calculate_checksum_dialog.temporary_file:NL:Tijdelijk bestand
@@ -11843,28 +11844,6 @@ color_chooser.title:pt_BR:Escolha uma cor
 color_chooser.title:SK:Vyberte farbu
 color_chooser.title:JA:色の抽出
 color_chooser.title:SV:Välj en färg
-
-
-##############################
-# Extensions related entries #
-##############################
-
-extensions.file_already_exists:EN:File %1 already exists in the extensions directory.
-extensions.file_already_exists:FR:Le fichier %1 existe déjà dans le répertoire d'extensions.
-extensions.file_already_exists:NL:Bestand %1 bestaat al in de extensies-map
-extensions.file_already_exists:SV:Filen %1 finns redan i ändelsemappen.
-# Translation missing (New!)
-
-
-
-
-
-
-
-
-
-
-
 
 
 ######################
