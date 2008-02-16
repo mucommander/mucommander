@@ -363,127 +363,171 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
     }
 	
     /**
-     * Tries to change current folder to the new specified one and notifies the user in case of a problem.
+     * Tries to change the current folder to the new specified one and notifies the user in case of a problem.
      *
-     * <p>This method spawns a separate thread to take care of the actual folder change and returns immediately.</p>
+     * <p>This method spawns a separate thread that takes care of the actual folder change and returns it.
+     * It does nothing and returns <code>null</code> if another folder change is already underway.</p>
+     *
+     * <p>
+     * This method is <b>not</b> I/O-bound and returns immmediately without any chance of locking the calling thread.
+     * </p>
      *
      * @param folder the folder to be made current folder
+     * @return the thread that performs the actual folder change, null if another folder change is already underway
      */
-    public synchronized void tryChangeCurrentFolder(AbstractFile folder) {
-        tryChangeCurrentFolder(folder, null);
+    public synchronized ChangeFolderThread tryChangeCurrentFolder(AbstractFile folder) {
+        return tryChangeCurrentFolder(folder, null);
     }
 
     /**
      * Tries to change current folder to the new specified one, and select the given file after the folder has been
      * changed. The user is notified by a dialog if the folder could not be changed.
-     * 
-     * <p>This method spawns a separate thread to take care of the actual folder change and returns immediately.</p>
+     *
+     * <p>This method spawns a separate thread that takes care of the actual folder change and returns it.
+     * It does nothing and returns <code>null</code> if another folder change is already underway.</p>
+     *
+     * <p>
+     * This method is <b>not</b> I/O-bound and returns immmediately without any chance of locking the calling thread.
+     * </p>
      *
      * @param folder the folder to be made current folder
      * @param selectThisFileAfter the file to be selected after the folder has been changed (if it exists in the folder), can be null in which case FileTable rules will be used to select current file
+     * @return the thread that performs the actual folder change, null if another folder change is already underway  
      */
-    public synchronized void tryChangeCurrentFolder(AbstractFile folder, AbstractFile selectThisFileAfter) {
+    public synchronized ChangeFolderThread tryChangeCurrentFolder(AbstractFile folder, AbstractFile selectThisFileAfter) {
         if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("folder="+folder+" selectThisFileAfter="+selectThisFileAfter, 3);
 
         // Make sure there is not an existing thread running,
         // this should not normally happen but if it does, report the error
         if(changeFolderThread!=null) {
             if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(">>>>>>>>> THREAD NOT NULL = "+changeFolderThread, -1);
-            return;
+            return null;
         }
 
         this.changeFolderThread = new ChangeFolderThread(folder);
         if(selectThisFileAfter!=null)
             this.changeFolderThread.selectThisFileAfter(selectThisFileAfter);
         changeFolderThread.start();
+
+        return changeFolderThread;
     }
 
     /**
      * Tries to change the current folder to the specified path and notifies the user in case of a problem.
      *
-     * <p>This method spawns a separate thread to take care of the actual folder change and returns immediately.</p>
+     * <p>This method spawns a separate thread that takes care of the actual folder change and returns it.
+     * It does nothing and returns <code>null</code> if another folder change is already underway or if the given
+     * path could not be resolved.</p>
+     *
+     * <p>
+     * This method is <b>not</b> I/O-bound and returns immmediately without any chance of locking the calling thread.
+     * </p>
      *
      * @param folderPath path to the new current folder. If this path does not resolve into a file, an error message will be displayed.
+     * @return the thread that performs the actual folder change, null if another folder change is already underway or if the given path could not be resolved
      */
-    public synchronized void tryChangeCurrentFolder(String folderPath) {
+    public synchronized ChangeFolderThread tryChangeCurrentFolder(String folderPath) {
         try {
-            tryChangeCurrentFolder(new FileURL(folderPath), null);
+            return tryChangeCurrentFolder(new FileURL(folderPath), null);
         }
         catch(MalformedURLException e) {
             // FileURL could not be resolved, notify the user that the folder doesn't exist
             showFolderDoesNotExistDialog();
+
+            return null;
         }
     }
 
     /**
-     * Tries to change current folder to the new specified path and notifies the user in case of a problem.
+     * Tries to change current folder to the new specified URL and notifies the user in case of a problem.
      *
-     * <p>This method spawns a separate thread to take care of the actual folder change and returns immediately.</p>
+     * <p>This method spawns a separate thread that takes care of the actual folder change and returns it.
+     * It does nothing and returns <code>null</code> if another folder change is already underway.</p>
+     *
+     * <p>
+     * This method is <b>not</b> I/O-bound and returns immmediately without any chance of locking the calling thread.
+     * </p>
      *
      * @param folderURL location to the new current folder. If this URL does not resolve into a file, an error message will be displayed.
+     * @return the thread that performs the actual folder change, null if another folder change is already underway
      */
-    public synchronized void tryChangeCurrentFolder(FileURL folderURL) {
-        tryChangeCurrentFolder(folderURL, null);
+    public synchronized ChangeFolderThread tryChangeCurrentFolder(FileURL folderURL) {
+        return tryChangeCurrentFolder(folderURL, null);
     }
 
     /**
      * Tries to change current folder to the new specified path and notifies the user in case of a problem.
-     *
-     * <p>If not <code>null</code>, the specified {@link com.mucommander.auth.CredentialsMapping} is used to authenticate
+     * If not <code>null</code>, the specified {@link com.mucommander.auth.CredentialsMapping} is used to authenticate
      * the folder, and added to {@link CredentialsManager} if the folder has been successfully changed.</p>
      *
-     * <p>This method spawns a separate thread to take care of the actual folder change and returns immediately.</p>
+     * <p>This method spawns a separate thread that takes care of the actual folder change and returns it.
+     * It does nothing and returns <code>null</code> if another folder change is already underway.</p>
+     *
+     * <p>
+     * This method is <b>not</b> I/O-bound and returns immmediately without any chance of locking the calling thread.
+     * </p>
      *
      * @param folderURL folder's URL to be made current folder. If this URL does not resolve into an existing file, an error message will be displayed.
      * @param credentialsMapping the CredentialsMapping to use for authentication, can be null
+     * @return the thread that performs the actual folder change, null if another folder change is already underway
      */
-    public synchronized void tryChangeCurrentFolder(FileURL folderURL, CredentialsMapping credentialsMapping) {
+    public synchronized ChangeFolderThread tryChangeCurrentFolder(FileURL folderURL, CredentialsMapping credentialsMapping) {
         if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("folderURL="+folderURL, 3);
 
         // Make sure there is not an existing thread running,
         // this should not normally happen but if it does, report the error
         if(changeFolderThread!=null) {
             if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(">>>>>>>>> THREAD NOT NULL = "+changeFolderThread, -1);
-            return;
+            return null;
         }
 
         this.changeFolderThread = new ChangeFolderThread(folderURL);
         changeFolderThread.setCredentialsMapping(credentialsMapping);
         changeFolderThread.start();
+
+        return changeFolderThread;
     }
 
     /**
-     * Refreshes the current folder's contents and notifies the user in case of a problem.
+     * Tries to refresh the current folder's contents and notifies the user in case of a problem.
      *
-     * <p>This method spawns a separate thread to take care of the actual folder change and returns immediately.</p>
+     * <p>This method spawns a separate thread that takes care of the actual folder change and returns it.
+     * It does nothing and returns <code>null</code> if another folder change is already underway.</p>
+     *
+     * <p>
+     * This method is <b>not</b> I/O-bound and returns immmediately without any chance of locking the calling thread.
+     * </p>
+     *
+     * @return the thread that performs the actual folder change, null if another folder change is already underway
      */
-    public synchronized void tryRefreshCurrentFolder() {
-        tryChangeCurrentFolder(currentFolder, null);
+    public synchronized ChangeFolderThread tryRefreshCurrentFolder() {
+        return tryChangeCurrentFolder(currentFolder, null);
     }
 
     /**
      * Refreshes current folder's contents and notifies the user if the current folder could not be refreshed.
      *
-     * <p>This method spawns a separate thread to take care of the actual folder change and returns immediately.</p>
+     * <p>This method spawns a separate thread that takes care of the actual folder change and returns it.
+     * It does nothing and returns <code>null</code> if another folder change is already underway.</p>
+     *
+     * <p>
+     * This method is <b>not</b> I/O-bound and returns immmediately without any chance of locking the calling thread.
+     * </p>
      *
      * @param selectThisFileAfter file to be selected after the folder has been refreshed (if it exists in the folder), can be null in which case FileTable rules will be used to select current file 
+     * @return the thread that performs the actual folder change, null if another folder change is already underway
      */
-    public synchronized void tryRefreshCurrentFolder(AbstractFile selectThisFileAfter) {
-        tryChangeCurrentFolder(currentFolder, selectThisFileAfter);
+    public synchronized ChangeFolderThread tryRefreshCurrentFolder(AbstractFile selectThisFileAfter) {
+        return tryChangeCurrentFolder(currentFolder, selectThisFileAfter);
     }
 		
     /**
-     * Refreshes current folder's contents in the same thread and throws an IOException if current folder could not be refreshed.
-     *
-     * @throws IOException if current folder could not be refreshed.
-     */
-    public synchronized void refreshCurrentFolder() throws IOException {
-        setCurrentFolder(currentFolder, currentFolder.ls(chainedFileFilter), null);
-    }
-
-
-    /**
      * Changes current folder using the given folder and children files.
+     *
+     * <p>
+     * This method <b>is</b> I/O-bound and locks the calling thread until the folder has been changed. It may under
+     * certain circumstances lock indefinitely, for example when accessing network-based filesystems.
+     * </p>
      *
      * @param folder folder to be made current folder
      * @param children current folder's files (value of folder.ls())
