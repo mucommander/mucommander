@@ -22,10 +22,12 @@ package com.mucommander.ui.viewer;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
 import com.mucommander.file.FileProtocols;
+import com.mucommander.job.FileCollisionChecker;
 import com.mucommander.runtime.OsFamilies;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.DialogToolkit;
 import com.mucommander.ui.dialog.QuestionDialog;
+import com.mucommander.ui.dialog.file.FileCollisionDialog;
 import com.mucommander.ui.helper.FocusRequester;
 import com.mucommander.ui.helper.MenuToolkit;
 import com.mucommander.ui.helper.MnemonicHelper;
@@ -206,28 +208,34 @@ public class EditorFrame extends JFrame implements ActionListener {
         int ret = fileChooser.showSaveDialog(this);
 		
         if (ret==JFileChooser.APPROVE_OPTION) {
-            AbstractFile selectedFile;
+            AbstractFile destFile;
             try {
-                selectedFile = FileFactory.getFile(fileChooser.getSelectedFile().getAbsolutePath(), true);
+                destFile = FileFactory.getFile(fileChooser.getSelectedFile().getAbsolutePath(), true);
             }
             catch(IOException e) {
                 JOptionPane.showMessageDialog(this, Translator.get("file_editor.cannot_write"), Translator.get("write_error"), JOptionPane.ERROR_MESSAGE);
                 return;
             }
-			
-            if (selectedFile.exists()) {
-                QuestionDialog dialog = new QuestionDialog(this, null, Translator.get("file_already_exists", selectedFile.getName()), this, 
-                                                           new String[] {Translator.get("replace"), Translator.get("dont_replace"), Translator.get("cancel")},
-                                                           new int[]  {YES_ACTION, NO_ACTION, CANCEL_ACTION},
-                                                           0);
-                ret = dialog.getActionValue();
-				
-                if (ret==NO_ACTION || ret==CANCEL_ACTION)
+
+            // Check for file collisions, i.e. if the file already exists in the destination
+            int collision = FileCollisionChecker.checkForCollision(null, destFile);
+            if(collision!=FileCollisionChecker.NO_COLLOSION) {
+                // File already exists in destination, ask the user what to do (cancel, overwrite,...) but
+                // do not offer the multiple files mode options such as 'skip' and 'apply to all'.
+                int action = new FileCollisionDialog(this, mainFrame, collision, null, destFile, false).getActionValue();
+
+                // User chose to overwrite the file
+                if (action== FileCollisionDialog.OVERWRITE_ACTION) {
+                    // Do nothing, simply continue and file will be overwritten
+                }
+                // User chose to cancel or closed the dialog
+                else {
                     return;
+                }
             }
-			
-            if (trySave(selectedFile)) {
-                this.file = selectedFile;
+
+            if (trySave(destFile)) {
+                this.file = destFile;
                 editor.setCurrentFile(file);
                 setTitle(editor.getTitle());
             }
