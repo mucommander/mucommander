@@ -28,6 +28,7 @@ import com.mucommander.file.filter.ExtensionFilenameFilter;
 import com.mucommander.file.util.ResourceLoader;
 import com.mucommander.io.BackupInputStream;
 import com.mucommander.io.BackupOutputStream;
+import com.mucommander.io.StreamUtils;
 import com.mucommander.text.Translator;
 import com.mucommander.util.StringUtils;
 
@@ -413,22 +414,6 @@ public class ThemeManager {
     }
 
     /**
-     * Copies the content of <code>in</code> into <code>out</code>.
-     * @param  in          where to read the data from.
-     * @param  out         where to write the data to.
-     * @throws IOException if an error occured.
-     */
-    private static void copyStreams(InputStream in, OutputStream out) throws IOException {
-        byte[] buffer; // Used to store the data before transfering it.
-        int    count;  // Number of bytes read during the last read operation.
-
-        // Transfers the content of in to out.
-        buffer = new byte[65536];
-        while((count = in.read(buffer, 0, buffer.length)) != -1)
-            out.write(buffer, 0, count);
-    }
-
-    /**
      * Writes the content of the specified theme data to the specified output stream.
      * <p>
      * This method differs from {@link #exportTheme(Theme,OutputStream)} in that it will
@@ -532,7 +517,7 @@ public class ThemeManager {
         InputStream in; // Where to read the theme from.
 
         in = null;
-        try {copyStreams(in = getInputStream(type, name), out);}
+        try {StreamUtils.copyStream(in = getInputStream(type, name), out);}
         finally {
             if(in != null) {
                 try {in.close();}
@@ -658,7 +643,7 @@ public class ThemeManager {
         in   = null;
 
         // Imports the theme.
-        try {copyStreams(in = new FileInputStream(file), out = getCustomThemeOutputStream(name));}
+        try {StreamUtils.copyStream(in = new FileInputStream(file), out = getCustomThemeOutputStream(name));}
 
         // Cleanup.
         finally {
@@ -1101,7 +1086,7 @@ public class ThemeManager {
     // -----------------------------------------------------------------------------------
     /**
      * Returns a valid type identifier from the specified configuration type definition.
-     * @param  label label of the theme type as defined in {@link com.mucommander.conf.MuConfiguration}.
+     * @param  label label of the theme type as defined in {@link com.mucommander.conf.impl.MuConfiguration}.
      * @return       a valid theme type identifier.
      */
     private static int getThemeTypeFromLabel(String label) {
