@@ -19,9 +19,8 @@
 package com.mucommander.ui.action;
 
 import com.mucommander.file.AbstractFile;
-import com.mucommander.ui.event.LocationEvent;
-import com.mucommander.ui.event.LocationListener;
 import com.mucommander.ui.main.MainFrame;
+import com.mucommander.file.filter.AttributeFileFilter;
 
 import java.util.Hashtable;
 
@@ -53,18 +52,7 @@ import java.util.Hashtable;
  * </p>
  * @author Nicolas Rinaudo
  */
-public class OpenInBothPanelsAction extends OpenAction implements LocationListener {
-    // - Instance variables --------------------------------------------------------------
-    // -----------------------------------------------------------------------------------
-    /** Whether or not the action is currently waiting on a location event. */
-    private boolean isWaiting;
-    /** Whether or not the last open action was a success. */
-    private boolean status;
-    /** Used to synchronize calls to {@link #performAction()}. */
-    private Object  lock = new Object();
-
-
-
+public class OpenInBothPanelsAction extends SelectedFileAction {
     // - Initialisation ------------------------------------------------------------------
     // -----------------------------------------------------------------------------------
     /**
@@ -74,10 +62,7 @@ public class OpenInBothPanelsAction extends OpenAction implements LocationListen
      */
     public OpenInBothPanelsAction(MainFrame mainFrame, Hashtable properties) {
         super(mainFrame, properties);
-
-        // Listen to location change events
-        mainFrame.getFolderPanel1().getLocationManager().addLocationListener(this);
-        mainFrame.getFolderPanel2().getLocationManager().addLocationListener(this);
+        setSelectedFileFilter(new AttributeFileFilter(AttributeFileFilter.BROWSABLE));
     }
 
 
@@ -88,84 +73,38 @@ public class OpenInBothPanelsAction extends OpenAction implements LocationListen
      * Opens the current selection and its inactive equivalent.
      */
     public void performAction() {
-        synchronized(lock) {
-            AbstractFile file;
-            AbstractFile otherFile;
+        Thread       openThread;
+        AbstractFile file;
+        AbstractFile otherFile;
 
-            // Retrieves the current selection, aborts if none.
-            if((file = mainFrame.getActiveTable().getSelectedFile(true)) == null)
-                return;
+        // Retrieves the current selection, aborts if none.
+        if((file = mainFrame.getActiveTable().getSelectedFile(true)) == null || !file.isBrowsable())
+            return;
 
-            // Retrieves the current selection's inactive equivalent, sets it to null
-            // if anything wrong occurs or it doesn't have the same 'browsable' status
-            // as the current selection.
-            try {
-                if(mainFrame.getActiveTable().isParentFolderSelected())
-                    otherFile = mainFrame.getInactiveTable().getCurrentFolder().getParentSilently();
-                else {
-                    otherFile = mainFrame.getInactiveTable().getCurrentFolder().getDirectChild(file.getName());
-                    if(!(file.isBrowsable() == otherFile.isBrowsable()))
-                        otherFile = null;
-                }
-            }
-            catch(Exception e) {otherFile = null;}
-
-            // Opens 'file' in the active panel.
-            open(file, mainFrame.getActiveTable().getFolderPanel());
-
-            // If this is not a 'navigate' action, we don't need to wait for the active
-            // open to be completed before running the inactive one.
-            if(!file.isBrowsable())
-                open(otherFile, mainFrame.getInactiveTable().getFolderPanel());
-
-            // If the inactive file exists, wait for the current change directory action
-            // to be finished before opening it.
-            else if(otherFile != null && otherFile.exists()) {
-                isWaiting = true;
-                status    = true;
-                while(isWaiting) {
-                    try {wait();}
-                    catch(Exception e) {}
-                }
-                // Ignores failed open calls.
-                if(status)
-                    open(otherFile, mainFrame.getInactiveTable().getFolderPanel());
+        try {
+            if(mainFrame.getActiveTable().isParentFolderSelected())
+                otherFile = mainFrame.getInactiveTable().getCurrentFolder().getParentSilently();
+            else {
+                otherFile = mainFrame.getInactiveTable().getCurrentFolder().getDirectChild(file.getName());
+                if(!otherFile.exists() && !otherFile.isBrowsable())
+                    otherFile = null;
             }
         }
-    }
+        catch(Exception e) {otherFile = null;}
 
+        // Opens 'file' in the active panel.
+        openThread = mainFrame.getActiveTable().getFolderPanel().tryChangeCurrentFolder(file);
 
-
-    // - Synchronisation code ------------------------------------------------------------
-    // -----------------------------------------------------------------------------------
-    /**
-     * If necessary, notifies the performAction that it can resume its work.
-     */
-    private synchronized void unlock(boolean status) {
-        if(isWaiting) {
-            this.status = status;
-            isWaiting   = false;
-            notifyAll();
+        // Opens 'otherFIle' in the inactive panel if necessary.
+        if(otherFile != null) {
+            // Waits for the previous operation to be finished.
+            if(openThread != null) {
+                while(openThread.isAlive()) {
+                    try {openThread.join();}
+                    catch(InterruptedException e) {}
+                }
+            }
+            mainFrame.getInactiveTable().getFolderPanel().tryChangeCurrentFolder(otherFile);
         }
     }
-
-    /**
-     * Ignored.
-     */
-    public void locationChanging(LocationEvent e) {}
-
-    /**
-     * If necessary, notifies the performAction that it can resume its work.
-     */
-    public void locationChanged(LocationEvent e) {unlock(true);}
-
-    /**
-     * If necessary, notifies the performAction that it can resume its work.
-     */
-    public void locationCancelled(LocationEvent e) {unlock(false);}
-
-    /**
-     * If necessary, notifies the performAction that it can resume its work.
-     */
-    public void locationFailed(LocationEvent e) {unlock(false);}
 }

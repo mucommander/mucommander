@@ -20,6 +20,7 @@ package com.mucommander.ui.action;
 
 import com.mucommander.ui.event.LocationEvent;
 import com.mucommander.ui.main.MainFrame;
+import com.mucommander.file.AbstractFile;
 
 import java.util.Hashtable;
 
@@ -30,7 +31,7 @@ import java.util.Hashtable;
  * if the inactive panel's current folder has a parent, it will open that one as well.
  * </p>
  * <p>
- * Note that this action's behaviour is strictly equivalent to that of {@link OpenAction} in the
+ * Note that this action's behaviour is strictly equivalent to that of {@link GoToParentAction} in the
  * active panel. Differences will only occur in the inactive panel, and then again only when possible.
  * </p>
  * <p>
@@ -40,17 +41,6 @@ import java.util.Hashtable;
  * @author Nicolas Rinaudo
  */
 public class GoToParentInBothPanelsAction extends GoToParentAction {
-    // - Instance variables --------------------------------------------------------------
-    // -----------------------------------------------------------------------------------
-    /** Whether or not the action is currently waiting on a location event. */
-    private boolean isWaiting;
-    /** Whether or not the last open action was a success. */
-    private boolean status;
-    /** Used to synchronize calls to {@link #performAction()}. */
-    private Object lock = new Object();
-
-
-
     // - Initialisation ------------------------------------------------------------------
     // -----------------------------------------------------------------------------------
     /**
@@ -68,57 +58,24 @@ public class GoToParentInBothPanelsAction extends GoToParentAction {
      * Opens both the active and inactive folder panel's parent directories.
      */
     public void performAction() {
-        synchronized(lock) {
+        Thread       openThread;
+        AbstractFile parent;
 
-            if(goToParent(mainFrame.getActiveTable().getFolderPanel())) {
-                isWaiting = true;
-                status    = false;
-                while(isWaiting) {
-                    try {wait();}
-                    catch(Exception e) {}
+        // If the current panel has a parent file, navigate to it.
+        if((parent = mainFrame.getActiveTable().getFolderPanel().getCurrentFolder().getParentSilently()) != null) {
+            openThread = mainFrame.getActiveTable().getFolderPanel().tryChangeCurrentFolder(parent);
+
+            // If the inactive panel has a parent file, wait for the current panel change to be complete and navigate
+            // to it.
+            if((parent = mainFrame.getInactiveTable().getFolderPanel().getCurrentFolder().getParentSilently()) != null) {
+                if(openThread != null) {
+                    while(openThread.isAlive()) {
+                        try {openThread.join();}
+                        catch(InterruptedException e) {}
+                    }
                 }
-                if(status)
-                    goToParent(mainFrame.getInactiveTable().getFolderPanel());
+                mainFrame.getInactiveTable().getFolderPanel().tryChangeCurrentFolder(parent);
             }
         }
-    }
-
-
-
-    // - Synchronisation code ------------------------------------------------------------
-    // -----------------------------------------------------------------------------------
-    /**
-     * If necessary, notifies the performAction that it can resume its work.
-     */
-    private synchronized void unlock(boolean status) {
-        if(isWaiting) {
-            isWaiting   = false;
-            this.status = status;
-            notifyAll();
-        }
-    }
-
-    /**
-     * If necessary, notifies the performAction that it can resume its work.
-     */
-    public void locationChanged(LocationEvent e) {
-        super.locationChanged(e);
-        unlock(true);
-    }
-
-    /**
-     * If necessary, notifies the performAction that it can resume its work.
-     */
-    public void locationCancelled(LocationEvent e) {
-        super.locationCancelled(e);
-        unlock(false);
-    }
-
-    /**
-     * If necessary, notifies the performAction that it can resume its work.
-     */
-    public void locationFailed(LocationEvent e) {
-        super.locationFailed(e);
-        unlock(false);
     }
 }
