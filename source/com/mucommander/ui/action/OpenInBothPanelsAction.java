@@ -86,7 +86,7 @@ public class OpenInBothPanelsAction extends SelectedFileAction {
                 otherFile = mainFrame.getInactiveTable().getCurrentFolder().getParentSilently();
             else {
                 otherFile = mainFrame.getInactiveTable().getCurrentFolder().getDirectChild(file.getName());
-                if(!otherFile.exists() && !otherFile.isBrowsable())
+                if(!otherFile.exists() || !otherFile.isBrowsable())
                     otherFile = null;
             }
         }
