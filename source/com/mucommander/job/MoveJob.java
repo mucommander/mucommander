@@ -83,18 +83,23 @@ public class MoveJob extends TransferFileJob {
         this.renameMode = renameMode;
     }
 
+    /**
+     * Optimizes the given writable archive file and notifies the user in case of an error.
+     *
+     * @param rwArchiveFile the writable archive file to optimize
+     */
+    // Todo: this method is duplicated in CopyJob
     private void optimizeArchive(AbstractRWArchiveFile rwArchiveFile) {
+        isOptimizingArchive = true;
+
         while(true) {
             try {
                 archiveToOptimize = rwArchiveFile;
-                isOptimizingArchive = true;
-
                 archiveToOptimize.optimizeArchive();
 
                 break;
             }
             catch(IOException e) {
-    // Todo: localize this entry
                 if(showErrorDialog(errorDialogTitle, Translator.get("error_while_optimizing_archive", rwArchiveFile.getName()))==RETRY_ACTION)
                     continue;
 

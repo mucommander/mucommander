@@ -91,7 +91,34 @@ public class CopyJob extends TransferFileJob {
         this.errorDialogTitle = Translator.get(mode==UNPACK_MODE?"unpack_dialog.error_title":mode==DOWNLOAD_MODE?"download_dialog.error_title":"copy_dialog.error_title");
     }
 
-	
+    /**
+     * Optimizes the given writable archive file and notifies the user in case of an error.
+     *
+     * @param rwArchiveFile the writable archive file to optimize
+     */
+    // Todo: this method is duplicated in MoveJob
+    private void optimizeArchive(AbstractRWArchiveFile rwArchiveFile) {
+        isOptimizingArchive = true;
+
+        while(true) {
+            try {
+                archiveToOptimize = rwArchiveFile;
+                archiveToOptimize.optimizeArchive();
+
+                break;
+            }
+            catch(IOException e) {
+                if(showErrorDialog(errorDialogTitle, Translator.get("error_while_optimizing_archive", rwArchiveFile.getName()))==RETRY_ACTION)
+                    continue;
+
+                break;
+            }
+        }
+
+        isOptimizingArchive = false;
+    }
+
+
     ////////////////////////////////////
     // TransferFileJob implementation //
     ////////////////////////////////////
@@ -297,27 +324,9 @@ public class CopyJob extends TransferFileJob {
 
         // If the destination files are located inside an archive, optimize the archive file
         AbstractArchiveFile archiveFile = baseDestFolder.getParentArchive();
-        if(archiveFile!=null && archiveFile.isWritableArchive()) {
-            while(true) {
-                try {
-                    archiveToOptimize = (AbstractRWArchiveFile)archiveFile;
-                    isOptimizingArchive = true;
+        if(archiveFile!=null && archiveFile.isWritableArchive())
+            optimizeArchive((AbstractRWArchiveFile)archiveFile);
 
-                    archiveToOptimize.optimizeArchive();
-
-                    break;
-                }
-                catch(IOException e) {
-                    if(showErrorDialog(errorDialogTitle, Translator.get("error_while_optimizing_archive", archiveFile.getName()))==RETRY_ACTION)
-                        continue;
-
-                    break;
-                }
-            }
-
-            isOptimizingArchive = true;
-        }
-            
         // If this job correponds to a 'local copy' of a single file and in the same directory,
         // select the copied file in the active table after this job has finished (and hasn't been cancelled)
         if(files.size()==1 && newName!=null && baseDestFolder.equals(files.fileAt(0).getParentSilently())) {
