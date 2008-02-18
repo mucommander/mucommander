@@ -937,14 +937,20 @@ public class LocalFile extends AbstractFile {
         public void write(byte b[], int off, int len) throws IOException {
             int nbToWrite;
             synchronized(bb) {
-                bb.position(0);
-                nbToWrite = Math.min(bb.capacity(), len);
-                bb.limit(nbToWrite);
+                do {
+                    bb.position(0);
+                    nbToWrite = Math.min(bb.capacity(), len);
+                    bb.limit(nbToWrite);
 
-                bb.put(b, off, nbToWrite);
-                bb.position(0);
+                    bb.put(b, off, nbToWrite);
+                    bb.position(0);
 
-                channel.write(bb);
+                    nbToWrite = channel.write(bb);
+
+                    len -= nbToWrite;
+                    off += nbToWrite;
+                }
+                while(len>0);
             }
         }
 
