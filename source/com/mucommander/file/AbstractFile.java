@@ -411,22 +411,17 @@ public abstract class AbstractFile implements FilePermissions {
         // Throw an exception if the source file does not exist
         if(!exists())
             throw new FileTransferException(FileTransferException.FILE_NOT_FOUND);
-
-        // Throw an exception if the destination file exists
-        if(destFile.exists() && !isAllowedCaseVariation)
-            throw new FileTransferException(FileTransferException.DESTINATION_EXISTS);
     }
 
 
     /**
-     * Copies this file to a specified destination file. If this file is a directory, any file or directory
-     * it contains will also be copied. An exception will be thrown if the destination file exists.
+     * Copies this file to a specified destination file, overwriting the destination if it exists. If this file is a
+     * directory, any file or directory it contains will also be copied.
      *
      * <p>This method returns <code>true</code> if the operation was successfully completed, <code>false</code> if the
      * operation could not be performed because of unsatisfied conditions (not an error).
      * A {@link FileTransferException} if the operation was attempted but failed for any of the following reasons:
      * <ul>
-     *  <li>the destination file exists</li>
      *  <li>this file and the destination file are the same</li>
      *  <li>this file is a directory and a parent of the destination file (operation would otherwise loop indefinitely)</li>
      *  <li>this file (or one if its child) could not be read</li>
@@ -485,8 +480,8 @@ public abstract class AbstractFile implements FilePermissions {
 
 
     /**
-     * Moves this file to a specified destination file. If this file is a directory, any file or directory
-     * it contains will also be moved. An exception will be thrown if the destination file exists.
+     * Moves this file to a specified destination file, overwriting the destination if it exists. If this file is a
+     * directory, any file or directory it contains will also be moved.
      * After normal completion, this file will not exist anymore: {@link #exists()} will return <code>false</code>.
      *
      * <p>This method returns <code>true</code> if the operation was successfully completed, <code>false</code> if the
@@ -497,7 +492,7 @@ public abstract class AbstractFile implements FilePermissions {
      *  <li>this file and the destination file are the same</li>
      *  <li>this file is a directory and a parent of the destination file (operation would otherwise loop indefinitely)</li>
      *  <li>this file (or one if its child) could not be read</li>
-     *  <li>this file )or one of its child) could not be written</li>
+     *  <li>this file (or one of its child) could not be written</li>
      *  <li>the destination file (or one of its children) could not be written</li>
      *  <li>an I/O error occurred</li>
      * </ul>

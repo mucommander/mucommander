@@ -554,6 +554,11 @@ import java.net.MalformedURLException;
         // Attempt to move the file using jcifs.smb.SmbFile#renameTo.
         try {
             boolean isDirectory = file.isDirectory();
+
+            // SmbFile#renameTo() throws an IOException if the destination exists (instead of overwriting the file)
+            if(destFile.exists())
+                destFile.delete();
+
             file.renameTo(((SMBFile)destFile).file);
 
             // Ensure that the destination jcifs.smb.SmbFile's path is consistent with its new directory/non-directory state
@@ -561,7 +566,7 @@ import java.net.MalformedURLException;
 
             return true;
         }
-        catch(SmbException e) {
+        catch(IOException e) {
             throw new FileTransferException(FileTransferException.UNKNOWN_REASON);
         }
     }

@@ -1287,17 +1287,14 @@ public abstract class AbstractFileTestCase extends TestCase implements FilePermi
 
             // At this point, we know that copyTo works (doesn't return false), at least for this destination file
 
-            // Assert that copyTo fails when the destination exists, and that the destination file still exists after
-            boolean exceptionThrown = false;
-            try { tempFile.copyTo(destFile); }
-            catch(FileTransferException e) { exceptionThrown = true; }
-
-            assertTrue(exceptionThrown);
-            assertTrue(destFile.exists());
+            // Assert that copyTo overwrites the destination file when it exists
+            createFile(tempFile, 100000);
+            tempFile.copyTo(destFile);
+            assertContentsEquals(tempFile, destFile);
 
             // Assert that copyTo fails when the source and destination files are the same
             destFile.delete();
-            exceptionThrown = false;
+            boolean exceptionThrown = false;
             try { tempFile.copyTo(tempFile); }
             catch(FileTransferException e) { exceptionThrown = true; }
 
@@ -1374,20 +1371,19 @@ public abstract class AbstractFileTestCase extends TestCase implements FilePermi
 
             // At this point, we know that moveTo works (doesn't return false), at least for this destination file
 
-            // Assert that moveTo fails when the destination exists, and that the source and destination files still
-            // exists after
-            createFile(tempFile, 1);
-            boolean exceptionThrown = false;
-            try { tempFile.moveTo(destFile); }
-            catch(FileTransferException e) { exceptionThrown = true; }
+            // Assert that moveTo overwrites the destination file when it exists
+            createFile(tempFile, 100000);
+            sourceChecksum = calculateMd5(tempFile);
+            assertTrue(tempFile.moveTo(destFile));
 
-            assertTrue(exceptionThrown);
-            assertTrue(tempFile.exists());
+            assertFalse(tempFile.exists());
             assertTrue(destFile.exists());
+            assertEquals(sourceChecksum, calculateMd5(destFile));
 
             // Assert that moveTo fails when the source and destination files are the same
+            createFile(tempFile, 1);
             destFile.delete();
-            exceptionThrown = false;
+            boolean exceptionThrown = false;
             try { tempFile.moveTo(tempFile); }
             catch(FileTransferException e) { exceptionThrown = true; }
 

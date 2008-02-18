@@ -587,6 +587,10 @@ public class SFTPFile extends AbstractFile {
             return super.moveTo(destFile);
         }
 
+        // Special tests to fail in situations where SmbFile#renameTo() does not, for instance:
+        // - when the source and destination are the same
+        checkCopyPrerequisites(destFile, true);
+
         // If destination file is an SFTP file located on the same server, tell the server to rename the file.
 
         // Retrieve a ConnectionHandler and lock it
@@ -594,6 +598,10 @@ public class SFTPFile extends AbstractFile {
         try {
             // Makes sure the connection is started, if not starts it
             connHandler.checkConnection();
+
+            // SftpClient#rename() throws an IOException if the destination exists (instead of overwriting the file)
+            if(destFile.exists())
+                destFile.delete();
 
             // Will throw an IOException if the operation failed
             connHandler.sftpClient.rename(absPath, destFile.getURL().getPath());
