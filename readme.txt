@@ -128,6 +128,9 @@ New features:
   users mark all files whose extension match that of the current selection.
 - New 'Open in other panel' feature (mapped onto Shift+Alt+ENTER by default) 
   that opens the current selection in the other panel.
+- New 'Open in both panels' and 'Go to parent in both panels' features
+  (mapped onto Meta+Enter and Meta+Backspace by default) that open browsable
+  files with a similar name in both panels.
 - 'Mkfile' can now allocate space for the file.
 
 Improvements:
