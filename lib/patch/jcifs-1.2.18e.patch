@@ -1,0 +1,56 @@
+diff -ur jcifs_1.2.18e/build.xml jcifs_1.2.18e_patched/build.xml
+--- jcifs_1.2.18e/build.xml	2008-02-06 06:19:09.000000000 +0100
++++ jcifs_1.2.18e_patched/build.xml	2008-02-18 00:31:54.000000000 +0100
+@@ -47,7 +47,7 @@
+ 
+     <target name="compile" depends="dependencies">
+         <mkdir dir="build"/>
+-        <javac srcdir="src" destdir="build" debug="on">
++        <javac srcdir="src" destdir="build" debug="on" source="1.4" target="1.4">
+ <!--
+             <compilerarg line="-Xlint:deprecation -Xlint:unchecked"/>
+ -->
+diff -ur jcifs_1.2.18e/src/jcifs/smb/SmbFile.java jcifs_1.2.18e_patched/src/jcifs/smb/SmbFile.java
+--- jcifs_1.2.18e/src/jcifs/smb/SmbFile.java	2008-02-18 00:36:38.000000000 +0100
++++ jcifs_1.2.18e_patched/src/jcifs/smb/SmbFile.java	2008-02-18 00:37:37.000000000 +0100
+@@ -2353,23 +2353,23 @@
+ 
+         if(( attributes & ATTR_DIRECTORY ) != 0 ) {
+ 
+-            /* Recursively delete directory contents
+-             */
+-
+-            try {
+-                SmbFile[] l = listFiles( "*", ATTR_DIRECTORY | ATTR_HIDDEN | ATTR_SYSTEM, null, null );
+-                for( int i = 0; i < l.length; i++ ) {
+-                    l[i].delete();
+-                }
+-            } catch( SmbException se ) {
+-                /* Oracle FilesOnline version 9.0.4 doesn't send '.' and '..' so
+-                 * listFiles may generate undesireable "cannot find
+-                 * the file specified".
+-                 */
+-                if( se.getNtStatus() != SmbException.NT_STATUS_NO_SUCH_FILE ) {
+-                    throw se;
+-                }
+-            }
++//            /* Recursively delete directory contents
++//             */
++//
++//            try {
++//                SmbFile[] l = listFiles( "*", ATTR_DIRECTORY | ATTR_HIDDEN | ATTR_SYSTEM, null, null );
++//                for( int i = 0; i < l.length; i++ ) {
++//                    l[i].delete();
++//                }
++//            } catch( SmbException se ) {
++//                /* Oracle FilesOnline version 9.0.4 doesn't send '.' and '..' so
++//                 * listFiles may generate undesireable "cannot find
++//                 * the file specified".
++//                 */
++//                if( se.getNtStatus() != SmbException.NT_STATUS_NO_SUCH_FILE ) {
++//                    throw se;
++//                }
++//            }
+ 
+             send( new SmbComDeleteDirectory( fileName ), blank_resp() );
+         } else {

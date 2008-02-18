@@ -6,7 +6,7 @@ include/icu4j.jar            -> IBM ICU4J 3.8.1, trimmed to only include
                                 CharsetDetector
 include/j2ssh.jar	         -> J2SSH 0.2.9 (patched and compiled for Java 1.4)
 include/jakarta-oro.jar	     -> Jakarta Oro 2.0.8
-include/jcifs.jar	         -> jCIFS 1.2.18e
+include/jcifs.jar	         -> jCIFS 1.2.18e (patched and compiled for Java 1.4)
 include/jmdns.jar            -> jmdns 1.0 (with some sourceforge.net patches,
                                 compiled for Java 1.4)
 include/yanfs.jar            -> Yanfs (formerly WebNFS), version unknown but
