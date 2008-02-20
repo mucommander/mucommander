@@ -362,7 +362,7 @@ public class LocalFile extends AbstractFile {
 
     public boolean isSymlink() {
         // Note: this value must not be cached as its value can change over time (canonical path can change)
-        LocalFile parent = (LocalFile)getParent();
+        AbstractFile parent = getParent();
         String canonPath = getCanonicalPath(false);
         if(parent==null || canonPath==null)
             return false;
