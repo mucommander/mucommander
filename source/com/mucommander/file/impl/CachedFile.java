@@ -436,7 +436,7 @@ public class CachedFile extends ProxyFile {
         if(!getParentSet) {
             getParent = file.getParent();
             // Create a CachedFile instance around the file if recursion is enabled
-            if(recurseInstances)
+            if(recurseInstances && getParent!=null)
                 getParent = new CachedFile(getParent, true);
             getParentSet = true;
         }
