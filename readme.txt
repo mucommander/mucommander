@@ -147,6 +147,7 @@ Improvements:
 - The file encoding can be changed in the internal text viewer and editor.
 - HTTPS connections can now be established even if the SSL certificate is
   not trusted.
+- Added a dedicated icon for the root of remote locations.
 
 Localization:
 - Japanese translation contributed by Nardog.
