@@ -21,6 +21,7 @@ package com.mucommander.file.icon.impl;
 import com.mucommander.Debug;
 import com.mucommander.cache.LRUCache;
 import com.mucommander.file.AbstractFile;
+import com.mucommander.file.FileProtocols;
 import com.mucommander.file.icon.CacheableFileIconProvider;
 import com.mucommander.file.icon.CachedFileIconProvider;
 import com.mucommander.file.icon.LocalFileIconProvider;
@@ -72,6 +73,46 @@ class SwingFileIconProviderImpl extends LocalFileIconProvider implements Cacheab
             fileSystemView = FileSystemView.getFileSystemView();
     }
 
+
+    /**
+     * Returns an icon for the given <code>java.io.File</code> using the underlying Swing provider component,
+     * <code>null</code> in case of an error.
+     *
+     * @param javaIoFile the file for which to return an icon
+     * @return an icon for the specified file, null in case of an unexpected error
+     */
+    private static Icon getSwingIcon(java.io.File javaIoFile) {
+        try {
+            if(fileSystemView!=null) {
+                // FileSystemView.getSystemIcon() will behave in the following way if the specified file doesn't exist
+                // when the icon is requested:
+                //  - throw a NullPointerException (caused by a java.io.FileNotFoundException) => OK why not
+                //  - dump the stack trace to System.err => bad! bad! bad!
+                //
+                // A way to workaround this odd behavior would be to test if the file exists when it is requested,
+                // but a/ this is an expensive operation (especially under Windows) and b/ it wouldn't guarantee that
+                // the file effectively exists when the icon is requested.
+                // So the workaround here is to catch exceptions and disable System.err output during the call.
+
+                Debug.setSystemErrEnabled(false);
+
+                return fileSystemView.getSystemIcon(javaIoFile);
+            }
+            else {
+                return fileChooser.getIcon(javaIoFile);
+            }
+        }
+        catch(Exception e) {
+            if(Debug.ON) Debug.trace("Caught exception while retrieving system icon for file "+ javaIoFile.getAbsolutePath()+" :"+e);
+            return null;
+        }
+        finally {
+            if(fileSystemView!=null)
+                Debug.setSystemErrEnabled(true);
+        }
+    }
+
+
     /**
      * Returns an icon symbolizing a symlink to the given target icon.
      *
@@ -101,6 +142,10 @@ class SwingFileIconProviderImpl extends LocalFileIconProvider implements Cacheab
     }
 
     public Icon lookupCache(AbstractFile file, Dimension preferredResolution) {
+        // Under Mac OS X, return the icon of /Network for the root of remote (non-local) locations. 
+        if(OsFamilies.MAC_OS_X.isCurrent() && !FileProtocols.FILE.equals(file.getURL().getProtocol()) && file.isRoot())
+            return getSwingIcon(new java.io.File("/Network"));
+
         // Look for an existing icon instance for the file's extension
         return (Icon)(file.isDirectory()? directoryIconCache : fileIconCache).get(file.getExtension());
     }
@@ -121,50 +166,22 @@ class SwingFileIconProviderImpl extends LocalFileIconProvider implements Cacheab
             initialized = true;
         }
 
-        try {
-            Icon icon;
+        // Retrieve the icon using the Swing provider component
+        Icon icon = getSwingIcon((java.io.File)localFile.getUnderlyingFileObject());
 
-            if(fileSystemView!=null) {
-                // FileSystemView.getSystemIcon() will behave in the following way if the specified file doesn't exist
-                // when the icon is requested:
-                //  - throw a NullPointerException (caused by a java.io.FileNotFoundException) => OK why not
-                //  - dump the stack trace to System.err => bad! bad! bad!
-                //
-                // A way to workaround this odd behavior would be to test if the file exists when it is requested,
-                // but a/ this is an expensive operation (especially under Windows) and b/ it wouldn't guarantee that
-                // the file effectively exists when the icon is requested.
-                // So the workaround here is to catch exceptions and disable System.err output during the call.
-
-                Debug.setSystemErrEnabled(false);
-
-                icon = fileSystemView.getSystemIcon((java.io.File) localFile.getUnderlyingFileObject());
-            }
-            else {
-                icon = fileChooser.getIcon((java.io.File) localFile.getUnderlyingFileObject());
-            }
-
-            // Add a symlink indication to the icon if:
-            // - the original file is a symlink AND
-            //   - the original file is not a local file OR
-            //   - the original file is a local file but the Swing component generates icons which do not have a symlink
-            // indication. That is the case on Mac OS X 10.5 (regression, 10.4 did this just fine).
-            //
-            // Note that the symlink test is performed last because it is the most expensive.
-            //
-            if((!(originalFile.getTopAncestor() instanceof LocalFile) || (OsFamilies.MAC_OS_X.isCurrent() && OsVersion.MAC_OS_X_10_5.isCurrent()))
-                    && originalFile.isSymlink()) {
-                icon = getSymlinkIcon(icon);
-            }
-
-            return icon;
+        // Add a symlink indication to the icon if:
+        // - the original file is a symlink AND
+        //   - the original file is not a local file OR
+        //   - the original file is a local file but the Swing component generates icons which do not have a symlink
+        // indication. That is the case on Mac OS X 10.5 (regression, 10.4 did this just fine).
+        //
+        // Note that the symlink test is performed last because it is the most expensive.
+        //
+        if((!(originalFile.getTopAncestor() instanceof LocalFile) || (OsFamilies.MAC_OS_X.isCurrent() && OsVersion.MAC_OS_X_10_5.isCurrent()))
+                && originalFile.isSymlink()) {
+            icon = getSymlinkIcon(icon);
         }
-        catch(Exception e) {
-            if(Debug.ON) Debug.trace("Caught exception while retrieving system icon for file "+ localFile.getAbsolutePath()+" :"+e);
-            return null;
-        }
-        finally {
-            if(fileSystemView!=null)
-                Debug.setSystemErrEnabled(true);
-        }
+
+        return icon;
     }
 }

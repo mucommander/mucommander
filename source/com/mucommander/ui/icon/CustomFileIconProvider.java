@@ -20,6 +20,7 @@ package com.mucommander.ui.icon;
 
 import com.mucommander.Debug;
 import com.mucommander.file.AbstractFile;
+import com.mucommander.file.FileProtocols;
 import com.mucommander.file.icon.FileIconProvider;
 
 import javax.swing.*;
@@ -58,6 +59,9 @@ public class CustomFileIconProvider implements FileIconProvider {
 
     /** Icon for Mac OS X's applications */
     public final static String MAC_OS_X_APP_ICON_NAME = "executable_osx.png";
+
+    /** Icon for the root of remote (non-local) locations */
+    public final static String NETWORK_ICON_NAME = "network.png";
 
 
     /** File icon <-> extensions association map. For information about specific file extensions, refer to:
@@ -157,19 +161,25 @@ public class CustomFileIconProvider implements FileIconProvider {
         // Retrieve the file's extension, null if the file has no extension
         String fileExtension = file.getExtension();
 
-        // If file is a directory, use folder icon. One exception is made for Mac OS X's applications
-        // which are directories with .app extension and have a dedicated icon
-        if(file.isDirectory()) {
+        // If file is a directory, use folder icon. One exception is made for
+
+        // Special icon for the root of remote (non-local) locations
+        if(!FileProtocols.FILE.equals(file.getURL().getProtocol()) && file.isRoot()) {
+            icon = IconManager.getIcon(IconManager.FILE_ICON_SET, NETWORK_ICON_NAME);
+        }
+        else if(file.isDirectory()) {
+            // Mac OS X application are directories with the .app extension and have a dedicated icon
             if(fileExtension!=null && fileExtension.equals("app"))
                 icon = IconManager.getIcon(IconManager.FILE_ICON_SET, MAC_OS_X_APP_ICON_NAME);
+            // Default folder icon
             else
                 icon = IconManager.getIcon(IconManager.FILE_ICON_SET, FOLDER_ICON_NAME);
         }
-        // If file is browsable (supported archive or other), use archive icon
+        // If the file is browsable (supported archive or other), use an icon symbolizing an archive
         else if(file.isBrowsable()) {
             icon = IconManager.getIcon(IconManager.FILE_ICON_SET, ARCHIVE_ICON_NAME);
         }
-        // Regular file
+        // Regular file icon
         else {
             // Determine if the file's extension has an associated icon
             if(fileExtension==null)
