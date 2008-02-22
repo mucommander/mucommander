@@ -659,7 +659,7 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
         int collision = FileCollisionChecker.checkForCollision(library, destFile);
         if(collision!=FileCollisionChecker.NO_COLLOSION) {
             // Do not offer the multiple files mode options such as 'skip' and 'apply to all'
-            int action = new FileCollisionDialog(parent, parent, collision, library, destFile, false).getActionValue();
+            int action = new FileCollisionDialog(parent, parent, collision, library, destFile, false, false).getActionValue();
 
             // User chose to overwrite the file
             if(action==FileCollisionDialog.OVERWRITE_ACTION) {
@@ -916,7 +916,7 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
                 int collision = FileCollisionChecker.checkForCollision(null, file);
                 if(collision!=FileCollisionChecker.NO_COLLOSION) {
                     // Do not offer the multiple files mode options such as 'skip' and 'apply to all'
-                    int action = new FileCollisionDialog(parent, parent, collision, null, file, false).getActionValue();
+                    int action = new FileCollisionDialog(parent, parent, collision, null, file, false, false).getActionValue();
 
                     // User chose to overwrite the file
                     if(action==FileCollisionDialog.OVERWRITE_ACTION) {

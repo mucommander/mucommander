@@ -131,7 +131,9 @@ New features:
 - New 'Open in both panels' and 'Go to parent in both panels' features
   (mapped onto Meta+Enter and Meta+Backspace by default) that open browsable
   files with a similar name in both panels.
-- 'Mkfile' can now allocate space for the file.
+- 'Mkfile' can now allocate space to the newly created file.
+- New 'Rename' option added to file operations, allowing files that already 
+  exist in the destination to be renamed (contributed by Mariusz Jakubowski).
 
 Improvements:
 - Added an 'Explore bookmarks' item to the 'Bookmarks' menu.

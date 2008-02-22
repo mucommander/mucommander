@@ -222,7 +222,7 @@ public class EditorFrame extends JFrame implements ActionListener {
             if(collision!=FileCollisionChecker.NO_COLLOSION) {
                 // File already exists in destination, ask the user what to do (cancel, overwrite,...) but
                 // do not offer the multiple files mode options such as 'skip' and 'apply to all'.
-                int action = new FileCollisionDialog(this, mainFrame, collision, null, destFile, false).getActionValue();
+                int action = new FileCollisionDialog(this, mainFrame, collision, null, destFile, false, false).getActionValue();
 
                 // User chose to overwrite the file
                 if (action== FileCollisionDialog.OVERWRITE_ACTION) {

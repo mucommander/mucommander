@@ -54,12 +54,14 @@ public class FileCollisionDialog extends QuestionDialog {
     public final static int OVERWRITE_ACTION = 2;
     public final static int OVERWRITE_IF_OLDER_ACTION = 3;
     public final static int RESUME_ACTION = 4;
+    public final static int RENAME_ACTION = 5;
 
     public final static String CANCEL_TEXT = Translator.get("cancel");
     public final static String SKIP_TEXT = Translator.get("skip");
     public final static String OVERWRITE_TEXT = Translator.get("overwrite");
     public final static String OVERWRITE_IF_OLDER_TEXT = Translator.get("overwrite_if_older");
     public final static String RESUME_TEXT = Translator.get("resume");
+    public final static String RENAME_TEXT = Translator.get("rename");
 
     private JCheckBox applyToAllCheckBox;
 
@@ -73,11 +75,12 @@ public class FileCollisionDialog extends QuestionDialog {
      * @param sourceFile the source file that 'conflicts' with the destination file, can be null.
      * @param destFile the destination file which already exists
      * @param multipleFilesMode if true, options that apply to multiple files will be displayed (skip, apply to all)
+     * @param allowRename if true, display an option to rename a file
      */
-    public FileCollisionDialog(Dialog owner, Component locationRelative, int collisionType, AbstractFile sourceFile, AbstractFile destFile, boolean multipleFilesMode) {
+    public FileCollisionDialog(Dialog owner, Component locationRelative, int collisionType, AbstractFile sourceFile, AbstractFile destFile, boolean multipleFilesMode, boolean allowRename) {
         super(owner, Translator.get("file_collision_dialog.title"), locationRelative);
 		
-        init(owner, collisionType, sourceFile, destFile, multipleFilesMode);
+        init(owner, collisionType, sourceFile, destFile, multipleFilesMode, allowRename);
     }
 
     /**
@@ -89,15 +92,16 @@ public class FileCollisionDialog extends QuestionDialog {
      * @param sourceFile the source file that 'conflicts' with the destination file, can be null.
      * @param destFile the destination file which already exists
      * @param multipleFilesMode if true, options that apply to multiple files will be displayed (skip, apply to all)
+     * @param allowRename if true, display an option to rename a file
      */
-    public FileCollisionDialog(Frame owner, Component locationRelative, int collisionType, AbstractFile sourceFile, AbstractFile destFile, boolean multipleFilesMode) {
+    public FileCollisionDialog(Frame owner, Component locationRelative, int collisionType, AbstractFile sourceFile, AbstractFile destFile, boolean multipleFilesMode, boolean allowRename) {
         super(owner, Translator.get("file_collision_dialog.title"), locationRelative);
 
-        init(owner, collisionType, sourceFile, destFile, multipleFilesMode);
+        init(owner, collisionType, sourceFile, destFile, multipleFilesMode, allowRename);
     }
 
 
-    private void init(Container owner, int collisionType, AbstractFile sourceFile, AbstractFile destFile, boolean multipleFilesMode) {
+    private void init(Container owner, int collisionType, AbstractFile sourceFile, AbstractFile destFile, boolean multipleFilesMode, boolean allowRename) {
 
         // Init choices
 
@@ -128,7 +132,13 @@ public class FileCollisionDialog extends QuestionDialog {
                     choicesTextV.add(RESUME_TEXT);
                     choicesActionsV.add(new Integer(RESUME_ACTION));
                 }
+
+                if (allowRename) {
+                    choicesTextV.add(RENAME_TEXT);
+                    choicesActionsV.add(new Integer(RENAME_ACTION));
+                }
             }
+        
         }
 
         // Convert choice vectors into arrays

@@ -700,6 +700,7 @@ create:SV:Skapa
 creating_file:EN:Creating %1
 creating_file:FR:Création de %1 en cours
 creating_file:SV:Skapar %1
+creating_file:PL:Tworzenie %1
 # Translation missing (New!)
 
 
@@ -976,6 +977,7 @@ owner:JA:所有者
 owner:SK:Vlastník
 owner:NL:Eigenaar
 owner:SV:Ägare
+owner:PL:Właściciel
 # Translation missing (New!)
 
 
@@ -997,6 +999,7 @@ group:JA:グループ
 group:SK:Skupina
 group:NL:Groep
 group:SV:Grupp
+group:PL:Grupa
 # Translation missing (New!)
 
 
@@ -1343,6 +1346,7 @@ generic_error:EN:An error has occurred while performing the requested operation.
 generic_error:FR:Une erreur est survenue pendant l'exécution de la tache demandée.
 generic_error:SV:Ett fel uppstod när åtgärden utfördes.
 generic_error:NL:Er heeft zich een fout voorgedaan bij het uitvoeren van de gevraagde taak.
+generic_error:PL:Wystąpił błąd podczas wykonywania operacji.
 # Translation missing (New!)
 
 
@@ -1740,6 +1744,7 @@ read_error:SV:Läsfel
 # be grateful if they ever do!
 integrity_check_error:EN:Integrity check failed: source and destination don't match
 integrity_check_error:FR:Echec du contrôle d'intégrité: les fichiers source et destination sont différents
+integrity_check_error:PL:Błąd integralności danych: plik źródlowy i docelowy nie zgadzają się
 # Translation missing (New!)
 
 
@@ -1974,6 +1979,7 @@ com.mucommander.ui.action.ExploreBookmarksAction.label:EN:Explore bookmarks
 com.mucommander.ui.action.ExploreBookmarksAction.label:FR:Explorer les favoris
 com.mucommander.ui.action.ExploreBookmarksAction.label:NL:Bladwijzers verkennen
 com.mucommander.ui.action.ExploreBookmarksAction.label:SV:Visa bokmärken
+com.mucommander.ui.action.ExploreBookmarksAction.label:PL:Przeglądaj zakładki
 # Translation missing (New!)
 
 
@@ -2982,6 +2988,7 @@ com.mucommander.ui.action.SortByOwnerAction.label:JA:所有者で整列
 com.mucommander.ui.action.SortByOwnerAction.label:SK:Zoradiť podľa vlastníka
 com.mucommander.ui.action.SortByOwnerAction.label:SV:Sortera efter Ägare
 com.mucommander.ui.action.SortByOwnerAction.label:NL:Sorteren op eigenaar
+com.mucommander.ui.action.SortByOwnerAction.label:PL:Sortuj po właścicielu
 # Translation missing (New!)
 
 
@@ -3005,6 +3012,7 @@ com.mucommander.ui.action.SortByGroupAction.label:JA:グループで整列
 com.mucommander.ui.action.SortByGroupAction.label:SK:Zoradiť podľa skupiny
 com.mucommander.ui.action.SortByGroupAction.label:NL:Sorteren op groep
 com.mucommander.ui.action.SortByGroupAction.label:SV:Sortera efter Grupp
+com.mucommander.ui.action.SortByGroupAction.label:PL:Sortuj po grupie
 # Translation missing (New!)
 
 
@@ -3266,6 +3274,7 @@ com.mucommander.ui.action.MarkExtensionAction.label:EN:Mark extension
 com.mucommander.ui.action.MarkExtensionAction.label:FR:Marquer l'extension
 com.mucommander.ui.action.MarkExtensionAction.label:NL:Markeer extensie
 com.mucommander.ui.action.MarkExtensionAction.label:SV:Markera ändelse
+com.mucommander.ui.action.MarkExtensionAction.label:PL:Zaznacz wg rozszerzenia
 # Translation missing (New!)
 
 
@@ -3510,6 +3519,7 @@ com.mucommander.ui.action.OpenInOtherPanelAction.label:EN:Open in other panel
 com.mucommander.ui.action.OpenInOtherPanelAction.label:FR:Ouvrir dans l'autre panneau
 com.mucommander.ui.action.OpenInOtherPanelAction.label:NL:Openen in nieuw scherm
 com.mucommander.ui.action.OpenInOtherPanelAction.label:SV:Öppna i andra vyn
+com.mucommander.ui.action.OpenInOtherPanelAction.label:PL:Otwórz w drugim panelu
 # Translation missing (New!)
 
 
@@ -3530,6 +3540,7 @@ com.mucommander.ui.action.OpenInBothPanelsAction.label:EN:Open in both panels
 com.mucommander.ui.action.OpenInBothPanelsAction.label:FR:Ouvrir dans les deux panneaux
 com.mucommander.ui.action.OpenInBothPanelsAction.label:NL:Openen in beide schermen
 com.mucommander.ui.action.OpenInBothPanelsAction.label:SV:Öppna i båda vyerna
+com.mucommander.ui.action.OpenInBothPanelsAction.label:PL:Otwórz w dwóch panelach
 # Translation missing (New!)
 
 
@@ -4455,6 +4466,7 @@ com.mucommander.ui.action.CalculateChecksumAction.label:EN:Calculate checksum
 com.mucommander.ui.action.CalculateChecksumAction.label:FR:Calculer la checksum
 com.mucommander.ui.action.CalculateChecksumAction.label:NL:Checksum berekenen
 com.mucommander.ui.action.CalculateChecksumAction.label:SV:Beräkna checksum
+com.mucommander.ui.action.CalculateChecksumAction.label:PL:Oblicz sumę kontrolną
 # Translation missing (New!)
 
 
@@ -5033,6 +5045,7 @@ version_dialog.install_and_restart:FR:Installer et redémarrer
 version_dialog.install_and_restart:NL:Installeren en opnieuw opstarten
 version_dialog.install_and_restart:JA:インストールと再起動
 version_dialog.install_and_restart:SV:Installera och starta om
+version_dialog.install_and_restart:PL:Instaluj i uruchom
 # Translation missing (New!)
 
 
@@ -5053,6 +5066,7 @@ version_dialog.preparing_for_update:FR:Préparation de la mise à jour...
 version_dialog.preparing_for_update:JA:更新を準備しています...
 version_dialog.preparing_for_update:SV:Förbereder uppdatering...
 version_dialog.preparing_for_update:NL:Update voorbereiden...
+version_dialog.preparing_for_update:PL:Przygotowanie do uaktualnienia...
 # Translation missing (New!)
 
 
@@ -5170,6 +5184,7 @@ destination_dialog.file_exists_action:SV:Standardåtgärd om filen redan finns
 # transferred.
 destination_dialog.verify_integrity:EN:Verify data integrity
 destination_dialog.verify_integrity:FR:Vérifier l'intégrité des données
+destination_dialog.verify_integrity:PL:Weryfikuj zgodność danych
 # Translation missing (New!)
 
 
@@ -5212,6 +5227,18 @@ file_collision_dialog.title:SK:Kolízia súboru
 file_collision_dialog.title:HU:Fájlütközés
 file_collision_dialog.title:JA:ファイルの衝突
 file_collision_dialog.title:SV:Filen finns redan
+
+
+#################
+# Rename dialog #
+#################
+
+# This dialog is displayed during file jobs, when a file already exists in the 
+# destination. It allows the user to choose a different filename.
+
+rename_dialog.new_name:EN:New name
+rename_dialog.new_name:FR:Nouveau nom
+rename_dialog.new_name:PL:Nowa nazwa
 
 
 ########
@@ -5834,6 +5861,7 @@ download_dialog.downloading_file:SV:Laddar ner %1
 
 mkfile_dialog.allocate_space:EN:Allocate space
 mkfile_dialog.allocate_space:FR:Allouer de l'espace
+mkfile_dialog.allocate_space:PL:Ustaw wielkość
 # Translation missing (New!)
 
 
@@ -6664,6 +6692,7 @@ file_selection_dialog.matches_regexp:JA:正規表現に一致する
 file_selection_dialog.matches_regexp:SK:Regulárny výraz
 file_selection_dialog.matches_regexp:SV:Matchar reguljärt uttryck
 file_selection_dialog.matches_regexp:NL:Reguliere uitdrukking
+file_selection_dialog.matches_regexp:PL:Wyrażenie regularne
 # Translation missing (New!)
 
 
@@ -6872,6 +6901,7 @@ progress_dialog.processing_file:SV:Bearbetar %1
 progress_dialog.verifying_file:EN:Verifying %1
 progress_dialog.verifying_file:FR:Vérification de %1
 progress_dialog.verifying_file:SV:Verifierar %1
+progress_dialog.verifying_file:PL:Weryfikacja %1
 # Translation missing (New!)
 
 
@@ -7012,6 +7042,7 @@ calculate_checksum_dialog.checksum_algorithm:EN:Checksum algorithm
 calculate_checksum_dialog.checksum_algorithm:FR:Algorithme de checksum
 calculate_checksum_dialog.checksum_algorithm:SV:Kontrollnummer algoritm
 calculate_checksum_dialog.checksum_algorithm:NL:Checksum algoritme
+calculate_checksum_dialog.checksum_algorithm:PL:Algorytm sumy kontrolnej
 # Translation missing (New!)
 
 
@@ -7030,6 +7061,7 @@ calculate_checksum_dialog.temporary_file:EN:Temporary file
 calculate_checksum_dialog.temporary_file:FR:Fichier temporaire
 calculate_checksum_dialog.temporary_file:NL:Tijdelijk bestand
 calculate_checksum_dialog.temporary_file:SV:Temporär fil
+calculate_checksum_dialog.temporary_file:PL:Plik tymczasowy
 # Translation missing (New!)
 
 
@@ -10610,6 +10642,7 @@ prefs_dialog.jar_file:EN:JAR file
 prefs_dialog.jar_file:FR:Fichier JAR
 prefs_dialog.jar_file:SV:JAR-fil
 prefs_dialog.jar_file:NL:JAR bestand
+prefs_dialog.jar_file:PL:Plik JAR
 # Translation missing
 
 

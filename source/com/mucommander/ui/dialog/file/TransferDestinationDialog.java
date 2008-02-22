@@ -64,7 +64,8 @@ public abstract class TransferDestinationDialog extends JobDialog implements Act
         FileCollisionDialog.SKIP_ACTION,
         FileCollisionDialog.OVERWRITE_ACTION,
         FileCollisionDialog.OVERWRITE_IF_OLDER_ACTION,
-        FileCollisionDialog.RESUME_ACTION
+        FileCollisionDialog.RESUME_ACTION,
+        FileCollisionDialog.RENAME_ACTION
     };
 
     private final static String DEFAULT_ACTIONS_TEXT[] = {
@@ -72,7 +73,8 @@ public abstract class TransferDestinationDialog extends JobDialog implements Act
         FileCollisionDialog.SKIP_TEXT,
         FileCollisionDialog.OVERWRITE_TEXT,
         FileCollisionDialog.OVERWRITE_IF_OLDER_TEXT,
-        FileCollisionDialog.RESUME_TEXT
+        FileCollisionDialog.RESUME_TEXT,
+        FileCollisionDialog.RENAME_TEXT
     };
 	
 

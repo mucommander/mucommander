@@ -26,7 +26,6 @@ import com.mucommander.file.AbstractRWArchiveFile;
 import com.mucommander.file.FileFactory;
 import com.mucommander.file.util.FileSet;
 import com.mucommander.text.Translator;
-import com.mucommander.ui.dialog.file.FileCollisionDialog;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;
 
@@ -38,36 +37,19 @@ import java.io.IOException;
  *
  * @author Maxence Bernard
  */
-public class CopyJob extends TransferFileJob {
-
-    /** Base destination folder */
-    protected AbstractFile baseDestFolder;
+public class CopyJob extends AbstractCopyJob {
 
     /** Destination file that is being copied, this value is updated every time #processFile() is called.
      * The value can be used by subclasses that override processFile should they need to work on the destination file. */
     protected AbstractFile currentDestFile;
 
-    /** New filename in destination */
-    private String newName;
-
-    /** Default choice when encountering an existing file */
-    private int defaultFileExistsAction = FileCollisionDialog.ASK_ACTION;
-
-    /** Title used for error dialogs */
-    private String errorDialogTitle;
-	
     /** Operating mode : COPY_MODE, UNPACK_MODE or DOWNLOAD_MODE */
     private int mode;
-
-    /** The archive that contains the destination files (may be null) */
-    private AbstractRWArchiveFile archiveToOptimize;
-
-    /** True when an archive is being optimized */
-    private boolean isOptimizingArchive;
 
     public final static int COPY_MODE = 0;
     public final static int UNPACK_MODE = 1;
     public final static int DOWNLOAD_MODE = 2;
+
 	
 	
     /**
@@ -79,44 +61,15 @@ public class CopyJob extends TransferFileJob {
      * @param destFolder destination folder where the files will be copied
      * @param newName the new filename in the destination folder, can be <code>null</code> in which case the original filename will be used.
      * @param mode mode in which CopyJob is to operate: COPY_MODE, UNPACK_MODE or DOWNLOAD_MODE.
-     * @param fileExistsAction default action to be triggered if a file already exists in the destination (action can be to ask the user)
+     * @param fileExistsAction default action to be performed when a file already exists in the destination, see {@link com.mucommander.ui.dialog.file.FileCollisionDialog} for allowed values
      */
     public CopyJob(ProgressDialog progressDialog, MainFrame mainFrame, FileSet files, AbstractFile destFolder, String newName, int mode, int fileExistsAction) {
-        super(progressDialog, mainFrame, files);
+        super(progressDialog, mainFrame, files, destFolder, newName, fileExistsAction);
 
-        this.baseDestFolder = destFolder;
-        this.newName = newName;
         this.mode = mode;
-        this.defaultFileExistsAction = fileExistsAction;
         this.errorDialogTitle = Translator.get(mode==UNPACK_MODE?"unpack_dialog.error_title":mode==DOWNLOAD_MODE?"download_dialog.error_title":"copy_dialog.error_title");
     }
 
-    /**
-     * Optimizes the given writable archive file and notifies the user in case of an error.
-     *
-     * @param rwArchiveFile the writable archive file to optimize
-     */
-    // Todo: this method is duplicated in MoveJob
-    private void optimizeArchive(AbstractRWArchiveFile rwArchiveFile) {
-        isOptimizingArchive = true;
-
-        while(true) {
-            try {
-                archiveToOptimize = rwArchiveFile;
-                archiveToOptimize.optimizeArchive();
-
-                break;
-            }
-            catch(IOException e) {
-                if(showErrorDialog(errorDialogTitle, Translator.get("error_while_optimizing_archive", rwArchiveFile.getName()))==RETRY_ACTION)
-                    continue;
-
-                break;
-            }
-        }
-
-        isOptimizingArchive = false;
-    }
 
 
     ////////////////////////////////////
@@ -181,73 +134,18 @@ public class CopyJob extends TransferFileJob {
             destFileName = originalName;
 		
         // Create destination AbstractFile instance
-        AbstractFile destFile;
-        do {    // Loop for retry
-            try {
-                destFile = destFolder.getDirectChild(destFileName);
-                currentDestFile = destFile;
-                break;
-            }
-            catch(IOException e) {
-                // Destination file couldn't be instanciated
-
-                int ret = showErrorDialog(errorDialogTitle, Translator.get("cannot_write_file", destFileName));
-                // Retry loops
-                if(ret==RETRY_ACTION)
-                    continue;
-                // Cancel or close dialog return false
-                return false;
-                // Skip continues
-            }
-        } while(true);
+        AbstractFile destFile = createDestinationFile(destFolder, destFileName);
+        if (destFile == null)
+            return false;
+        currentDestFile = destFile;
 
         // Do nothing if file is a symlink (skip file and return)
         if(file.isSymlink())
             return true;
 
-        // Check for file collisions (file exists in the destination, destination subfolder of source, ...)
-        // if a default action hasn't been specified
-        int collision = FileCollisionChecker.checkForCollision(file, destFile);
-        boolean append = false;
-
-        // Handle collision, asking the user what to do or using a default action to resolve the collision 
-        if(collision != FileCollisionChecker.NO_COLLOSION) {
-            int choice;
-            // Use default action if one has been set, if not show up a dialog
-            if(defaultFileExistsAction==FileCollisionDialog.ASK_ACTION) {
-                FileCollisionDialog dialog = new FileCollisionDialog(progressDialog, mainFrame, collision, file, destFile, true);
-                choice = waitForUserResponse(dialog);
-                // If 'apply to all' was selected, this choice will be used for any other files (user will not be asked again)
-                if(dialog.applyToAllSelected())
-                    defaultFileExistsAction = choice;
-            }
-            else
-                choice = defaultFileExistsAction;
-
-            // Cancel, skip or close dialog
-            if (choice==-1 || choice== FileCollisionDialog.CANCEL_ACTION) {
-                interrupt();
-                return false;
-            }
-            // Skip file
-            else if (choice== FileCollisionDialog.SKIP_ACTION) {
-                return false;
-            }
-            // Append to file (resume file copy)
-            else if (choice== FileCollisionDialog.RESUME_ACTION) {
-                append = true;
-            }
-            // Overwrite file
-            else if (choice== FileCollisionDialog.OVERWRITE_ACTION) {
-                // Do nothing, simply continue
-            }
-            //  Overwrite file if destination is older
-            else if (choice== FileCollisionDialog.OVERWRITE_IF_OLDER_ACTION) {
-                // Overwrite if file is newer (stricly)
-                if(file.getDate()<=destFile.getDate())
-                    return false;
-            }
-        }
+        destFile = checkForCollision(file, destFolder, destFile, false);
+        if (destFile == null)
+            return false;
 
         // Copy directory recursively
         if(file.isDirectory()) {
@@ -306,6 +204,8 @@ public class CopyJob extends TransferFileJob {
             return tryCopyFile(file, destFile, append, errorDialogTitle);
         }
     }
+
+
 
     // This job modifies baseDestFolder and its subfolders
     protected boolean hasFolderChanged(AbstractFile folder) {

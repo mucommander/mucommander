@@ -26,7 +26,6 @@ import com.mucommander.file.FileFactory;
 import com.mucommander.file.util.FileSet;
 import com.mucommander.io.FileTransferException;
 import com.mucommander.text.Translator;
-import com.mucommander.ui.dialog.file.FileCollisionDialog;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;
 
@@ -38,30 +37,12 @@ import java.io.IOException;
  *
  * @author Maxence Bernard
  */
-public class MoveJob extends TransferFileJob {
-
-    /** Base destination folder */
-    protected AbstractFile baseDestFolder;
-
-    /** New filename in destination */
-    private String newName;
-
-    /** Default choice when encountering an existing file */
-    private int defaultFileExistsAction = -1;
-
-    /** Title used for error dialogs */
-    private String errorDialogTitle;
+public class MoveJob extends AbstractCopyJob {
 
     /** True if this job corresponds to a single file renaming */
-    private boolean renameMode;
+    protected boolean renameMode = false;
 
-    /** The archive that contains the destination files (may be null) */
-    private AbstractRWArchiveFile archiveToOptimize;
-
-    /** True when an archive is being optimized */
-    private boolean isOptimizingArchive;
-
-
+    
     /**
      * Creates a new MoveJob without starting it.
      *
@@ -70,47 +51,17 @@ public class MoveJob extends TransferFileJob {
      * @param files files which are going to be moved
      * @param destFolder destination folder where the files will be moved
      * @param newName the new filename in the destination folder, can be <code>null</code> in which case the original filename will be used.
-     * @param fileExistsAction default action to be triggered if a file already exists in the destination (action can be to ask the user)
+     * @param fileExistsAction default action to be performed when a file already exists in the destination, see {@link com.mucommander.ui.dialog.file.FileCollisionDialog} for allowed values
      * @param renameMode true if this job corresponds to a single file renaming
      */
     public MoveJob(ProgressDialog progressDialog, MainFrame mainFrame, FileSet files, AbstractFile destFolder, String newName, int fileExistsAction, boolean renameMode) {
-        super(progressDialog, mainFrame, files);
+        super(progressDialog, mainFrame, files, destFolder, newName, fileExistsAction);
 
-        this.baseDestFolder = destFolder;
-        this.newName = newName;
-        this.defaultFileExistsAction = fileExistsAction;
         this.errorDialogTitle = Translator.get("move_dialog.error_title");
         this.renameMode = renameMode;
     }
 
-    /**
-     * Optimizes the given writable archive file and notifies the user in case of an error.
-     *
-     * @param rwArchiveFile the writable archive file to optimize
-     */
-    // Todo: this method is duplicated in CopyJob
-    private void optimizeArchive(AbstractRWArchiveFile rwArchiveFile) {
-        isOptimizingArchive = true;
 
-        while(true) {
-            try {
-                archiveToOptimize = rwArchiveFile;
-                archiveToOptimize.optimizeArchive();
-
-                break;
-            }
-            catch(IOException e) {
-                if(showErrorDialog(errorDialogTitle, Translator.get("error_while_optimizing_archive", rwArchiveFile.getName()))==RETRY_ACTION)
-                    continue;
-
-                break;
-            }
-        }
-
-        isOptimizingArchive = false;
-    }
-
-	
     ////////////////////////////////////
     // TransferFileJob implementation //
     ////////////////////////////////////
@@ -143,24 +94,9 @@ public class MoveJob extends TransferFileJob {
             destFileName = originalName;
 		
         // Create destination AbstractFile instance
-        AbstractFile destFile;
-        do {    // Loop for retry
-            try {
-                destFile = destFolder.getDirectChild(destFileName);
-                break;
-            }
-            catch(IOException e) {
-                // Destination file couldn't be instanciated
-
-                int ret = showErrorDialog(errorDialogTitle, Translator.get("cannot_write_file", destFileName));
-                // Retry loops
-                if(ret==RETRY_ACTION)
-                    continue;
-                // Cancel or close dialog return false
-                return false;
-                // Skip continues
-            }
-        } while(true);
+        AbstractFile destFile = createDestinationFile(destFolder, destFileName);
+        if (destFile == null)
+            return false;
 
         // Do not follow symlink, simply delete it and return
         if(file.isSymlink()) {
@@ -182,61 +118,9 @@ public class MoveJob extends TransferFileJob {
             } while(true);
         }
 
-
-        // Check for file collisions (file exists in the destination, destination subfolder of source, ...)
-        // if a default action hasn't been specified
-        int collision = FileCollisionChecker.checkForCollision(file, destFile);
-        boolean append = false;
-
-        boolean caseRenaming = false;
-        // Tests if destination filename is a variation of the original filename with a different case.
-        // In this case, do not show warn about the source and destination being the same and try to rename the file.
-        // Note: renaming will only work if AbstractFile#moveTo() succeeds.
-        if(renameMode && collision==FileCollisionChecker.SAME_SOURCE_AND_DESTINATION) {
-            String sourceFileName = file.getName();
-            if(sourceFileName.equalsIgnoreCase(destFileName) && !sourceFileName.equals(destFileName))
-                caseRenaming = true;
-        }
-
-        // Handle collision, asking the user what to do or using a default action to resolve it
-        if(!caseRenaming && collision!=FileCollisionChecker.NO_COLLOSION) {
-
-            int choice;
-            // Use default action if one has been set, if not show up a dialog
-            if(defaultFileExistsAction==FileCollisionDialog.ASK_ACTION) {
-                FileCollisionDialog dialog = new FileCollisionDialog(progressDialog, mainFrame, collision, file, destFile, true);
-                choice = waitForUserResponse(dialog);
-                // If 'apply to all' was selected, this choice will be used for any other files (user will not be asked again)
-                if(dialog.applyToAllSelected())
-                    defaultFileExistsAction = choice;
-            }
-            else
-                choice = defaultFileExistsAction;
-
-            // Cancel, skip or close dialog
-            if (choice==-1 || choice== FileCollisionDialog.CANCEL_ACTION) {
-                interrupt();
-                return false;
-            }
-            // Skip file
-            else if (choice== FileCollisionDialog.SKIP_ACTION) {
-                return false;
-            }
-            // Append to file (resume file copy)
-            else if (choice== FileCollisionDialog.RESUME_ACTION) {
-                append = true;
-            }
-            // Overwrite file
-            else if (choice== FileCollisionDialog.OVERWRITE_ACTION) {
-                // Do nothing, simply continue
-            }
-            //  Overwrite file if destination is older
-            else if (choice== FileCollisionDialog.OVERWRITE_IF_OLDER_ACTION) {
-                // Overwrite if file is newer (stricly)
-                if(file.getDate()<=destFile.getDate())
-                    return false;
-            }
-        }
+        destFile = checkForCollision(file, destFolder, destFile, renameMode);
+        if (destFile == null)
+            return false;
 
         // First, let's try to move/rename the file using AbstractFile#moveTo() if it is more efficient than moving
         // the file manually. Do not attempt to rename the file if the destination must be appended.
