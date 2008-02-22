@@ -1339,13 +1339,16 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
                         int keyCode = e.getKeyCode();
                         if(keyCode == KeyEvent.VK_ESCAPE)
                             cancelCellEditing();
-                        else if(keyCode == KeyEvent.VK_ENTER)
-                            rename();
                     }
                 }
             );
+            textField.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    rename();
+                }
+            });
         }
-
+        
 
         /**
          * Renames the currently edited name cell, only if the filename has changed.
