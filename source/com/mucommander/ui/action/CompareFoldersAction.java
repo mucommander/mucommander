@@ -37,55 +37,55 @@ public class CompareFoldersAction extends MuAction {
     }
 
     public void performAction() {
-        FileTable table1 = mainFrame.getFolderPanel1().getFileTable();
-        FileTable table2 = mainFrame.getFolderPanel2().getFileTable();
+        FileTable leftTable = mainFrame.getLeftPanel().getFileTable();
+        FileTable rightTable = mainFrame.getRightPanel().getFileTable();
 
-        FileTableModel tableModel1 = table1.getFileTableModel();
-        FileTableModel tableModel2 = table2.getFileTableModel();
+        FileTableModel leftTableModel = leftTable.getFileTableModel();
+        FileTableModel rightTableModel = rightTable.getFileTableModel();
 
-        int nbFiles1 = tableModel1.getFileCount();
-        int nbFiles2 = tableModel2.getFileCount();
+        int nbFilesLeft = leftTableModel.getFileCount();
+        int nbFilesRight = rightTableModel.getFileCount();
         int fileIndex;
         String tempFileName;
         AbstractFile tempFile;
-        for(int i=0; i<nbFiles1; i++) {
-            tempFile = tableModel1.getFileAt(i);
+        for(int i=0; i<nbFilesLeft; i++) {
+            tempFile = leftTableModel.getFileAt(i);
             if(tempFile.isDirectory())
                 continue;
 
             tempFileName = tempFile.getName();
             fileIndex = -1;
-            for(int j=0; j<nbFiles2; j++)
-                if (tableModel2.getFileAt(j).getName().equals(tempFileName)) {
+            for(int j=0; j<nbFilesRight; j++)
+                if (rightTableModel.getFileAt(j).getName().equals(tempFileName)) {
                     fileIndex = j;
                     break;
                 }
-            if (fileIndex==-1 || tableModel2.getFileAt(fileIndex).getDate()<tempFile.getDate()) {
-                tableModel1.setFileMarked(tempFile, true);
-                table1.repaint();
+            if (fileIndex==-1 || rightTableModel.getFileAt(fileIndex).getDate()<tempFile.getDate()) {
+                leftTableModel.setFileMarked(tempFile, true);
+                leftTable.repaint();
             }
         }
 
-        for(int i=0; i<nbFiles2; i++) {
-            tempFile = tableModel2.getFileAt(i);
+        for(int i=0; i<nbFilesRight; i++) {
+            tempFile = rightTableModel.getFileAt(i);
             if(tempFile.isDirectory())
                 continue;
 
             tempFileName = tempFile.getName();
             fileIndex = -1;
-            for(int j=0; j<nbFiles1; j++)
-                if (tableModel1.getFileAt(j).getName().equals(tempFileName)) {
+            for(int j=0; j<nbFilesLeft; j++)
+                if (leftTableModel.getFileAt(j).getName().equals(tempFileName)) {
                     fileIndex = j;
                     break;
                 }
-            if (fileIndex==-1 || tableModel1.getFileAt(fileIndex).getDate()<tempFile.getDate()) {
-                tableModel2.setFileMarked(tempFile, true);
-                table2.repaint();
+            if (fileIndex==-1 || leftTableModel.getFileAt(fileIndex).getDate()<tempFile.getDate()) {
+                rightTableModel.setFileMarked(tempFile, true);
+                rightTable.repaint();
             }
         }
 
         // Notify registered listeners that currently marked files have changed on the file tables
-        table1.fireMarkedFilesChangedEvent();
-        table2.fireMarkedFilesChangedEvent();
+        leftTable.fireMarkedFilesChangedEvent();
+        rightTable.fireMarkedFilesChangedEvent();
     }
 }

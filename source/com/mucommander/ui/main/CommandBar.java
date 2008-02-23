@@ -201,8 +201,8 @@ public class CommandBar extends JPanel implements ConfigurationListener, KeyList
         this.mainFrame = mainFrame;
 
         // Listen to modifier key events to display alternate actions
-        mainFrame.getFolderPanel1().getFileTable().addKeyListener(this);
-        mainFrame.getFolderPanel2().getFileTable().addKeyListener(this);
+        mainFrame.getLeftPanel().getFileTable().addKeyListener(this);
+        mainFrame.getRightPanel().getFileTable().addKeyListener(this);
 
         // Listen to mouse events to popup a menu when command bar is right clicked
         addMouseListener(this);

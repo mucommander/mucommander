@@ -55,8 +55,8 @@ public abstract class FileAction extends MuAction implements TableSelectionListe
     
     private void init(MainFrame mainFrame) {
         mainFrame.addActivePanelListener(this);
-        mainFrame.getFolderPanel1().getFileTable().addTableSelectionListener(this);
-        mainFrame.getFolderPanel2().getFileTable().addTableSelectionListener(this);
+        mainFrame.getLeftPanel().getFileTable().addTableSelectionListener(this);
+        mainFrame.getRightPanel().getFileTable().addTableSelectionListener(this);
 
         // Set initial enabled state
         updateEnabledState(mainFrame.getActiveTable());

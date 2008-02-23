@@ -42,8 +42,8 @@ public abstract class GoToAction extends MuAction implements ActivePanelListener
         mainFrame.addActivePanelListener(this);
 
         // Listen to location change events
-        mainFrame.getFolderPanel1().getLocationManager().addLocationListener(this);
-        mainFrame.getFolderPanel2().getLocationManager().addLocationListener(this);
+        mainFrame.getLeftPanel().getLocationManager().addLocationListener(this);
+        mainFrame.getRightPanel().getLocationManager().addLocationListener(this);
 
         toggleEnabledState();
     }

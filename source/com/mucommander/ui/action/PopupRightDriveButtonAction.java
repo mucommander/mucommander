@@ -35,6 +35,6 @@ public class PopupRightDriveButtonAction extends MuAction {
     }
 
     public void performAction() {
-        mainFrame.getFolderPanel2().getDriveButton().popupMenu();
+        mainFrame.getRightPanel().getDriveButton().popupMenu();
     }
 }

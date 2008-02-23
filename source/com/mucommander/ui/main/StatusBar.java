@@ -180,16 +180,16 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
         setVisible(MuConfiguration.getVariable(MuConfiguration.STATUS_BAR_VISIBLE, MuConfiguration.DEFAULT_STATUS_BAR_VISIBLE));
         
         // Catch location events to update status bar info when folder is changed
-        FolderPanel folderPanel1 = mainFrame.getFolderPanel1();
-        folderPanel1.getLocationManager().addLocationListener(this);
+        FolderPanel leftPanel = mainFrame.getLeftPanel();
+        leftPanel.getLocationManager().addLocationListener(this);
 
-        FolderPanel folderPanel2 = mainFrame.getFolderPanel2();
-        folderPanel2.getLocationManager().addLocationListener(this);
+        FolderPanel rightPanel = mainFrame.getRightPanel();
+        rightPanel.getLocationManager().addLocationListener(this);
 
         // Catch table selection change events to update the selected files info when the selected files have changed on
         // one of the file tables
-        folderPanel1.getFileTable().addTableSelectionListener(this);
-        folderPanel2.getFileTable().addTableSelectionListener(this);
+        leftPanel.getFileTable().addTableSelectionListener(this);
+        rightPanel.getFileTable().addTableSelectionListener(this);
 
         // Catch active panel change events to update status bar info when current table has changed
         mainFrame.addActivePanelListener(this);

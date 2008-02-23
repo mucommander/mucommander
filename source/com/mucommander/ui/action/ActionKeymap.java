@@ -163,33 +163,33 @@ public class ActionKeymap extends DefaultHandler {
 
 
     public static void registerActions(MainFrame mainFrame) {
-        JComponent table1 = mainFrame.getFolderPanel1().getFileTable();
-        JComponent table2 = mainFrame.getFolderPanel2().getFileTable();
+        JComponent leftTable = mainFrame.getLeftPanel().getFileTable();
+        JComponent rightTable = mainFrame.getRightPanel().getFileTable();
 
         Enumeration actionClasses = primaryActionKeymap.keys();
         while(actionClasses.hasMoreElements()) {
             MuAction action = ActionManager.getActionInstance((Class)actionClasses.nextElement(), mainFrame);
-            ActionKeymap.registerActionAccelerators(action, table1, JComponent.WHEN_FOCUSED);
-            ActionKeymap.registerActionAccelerators(action, table2, JComponent.WHEN_FOCUSED);
+            ActionKeymap.registerActionAccelerators(action, leftTable, JComponent.WHEN_FOCUSED);
+            ActionKeymap.registerActionAccelerators(action, rightTable, JComponent.WHEN_FOCUSED);
         }
 
         actionClasses = alternateActionKeymap.keys();
         while(actionClasses.hasMoreElements()) {
             MuAction action = ActionManager.getActionInstance((Class)actionClasses.nextElement(), mainFrame);
-            ActionKeymap.registerActionAccelerators(action, table1, JComponent.WHEN_FOCUSED);
-            ActionKeymap.registerActionAccelerators(action, table2, JComponent.WHEN_FOCUSED);
+            ActionKeymap.registerActionAccelerators(action, leftTable, JComponent.WHEN_FOCUSED);
+            ActionKeymap.registerActionAccelerators(action, rightTable, JComponent.WHEN_FOCUSED);
         }
     }
 
 
     public static void registerAction(MainFrame mainFrame, MuAction action) {
-        registerActionAccelerators(action, mainFrame.getFolderPanel1().getFileTable(), JComponent.WHEN_FOCUSED);
-        registerActionAccelerators(action, mainFrame.getFolderPanel2().getFileTable(), JComponent.WHEN_FOCUSED);
+        registerActionAccelerators(action, mainFrame.getLeftPanel().getFileTable(), JComponent.WHEN_FOCUSED);
+        registerActionAccelerators(action, mainFrame.getRightPanel().getFileTable(), JComponent.WHEN_FOCUSED);
     }
 
     public static void unregisterAction(MainFrame mainFrame, MuAction action) {
-        unregisterActionAccelerators(action, mainFrame.getFolderPanel1().getFileTable(), JComponent.WHEN_FOCUSED);
-        unregisterActionAccelerators(action, mainFrame.getFolderPanel2().getFileTable(), JComponent.WHEN_FOCUSED);
+        unregisterActionAccelerators(action, mainFrame.getLeftPanel().getFileTable(), JComponent.WHEN_FOCUSED);
+        unregisterActionAccelerators(action, mainFrame.getRightPanel().getFileTable(), JComponent.WHEN_FOCUSED);
     }
 
 

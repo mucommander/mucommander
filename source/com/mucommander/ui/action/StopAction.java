@@ -39,8 +39,8 @@ public class StopAction extends MuAction implements LocationListener {
         setEnabled(false);
 
         // Listen to location change events
-        mainFrame.getFolderPanel1().getLocationManager().addLocationListener(this);
-        mainFrame.getFolderPanel2().getLocationManager().addLocationListener(this);
+        mainFrame.getLeftPanel().getLocationManager().addLocationListener(this);
+        mainFrame.getRightPanel().getLocationManager().addLocationListener(this);
     }
 
     public void performAction() {

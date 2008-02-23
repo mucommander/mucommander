@@ -21,7 +21,6 @@ package com.mucommander.ui.action;
 import com.mucommander.ui.event.ActivePanelListener;
 import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.main.MainFrame;
-import com.mucommander.ui.main.table.Columns;
 import com.mucommander.ui.main.table.FileTable;
 
 import javax.swing.event.ChangeEvent;
@@ -51,8 +50,8 @@ public abstract class SortByAction extends MuAction implements ActivePanelListen
         this.columnIndex = columnIndex;
 
         mainFrame.addActivePanelListener(this);
-        mainFrame.getLeftTable().getColumnModel().addColumnModelListener(this);
-        mainFrame.getRightTable().getColumnModel().addColumnModelListener(this);
+        mainFrame.getLeftPanel().getFileTable().getColumnModel().addColumnModelListener(this);
+        mainFrame.getRightPanel().getFileTable().getColumnModel().addColumnModelListener(this);
 
         updateState(mainFrame.getActiveTable());
     }

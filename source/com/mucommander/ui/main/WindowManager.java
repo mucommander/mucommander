@@ -296,8 +296,8 @@ public class WindowManager implements WindowListener, ConfigurationListener {
     public static synchronized MainFrame createNewMainFrame() {
         if(currentMainFrame == null)
             return createNewMainFrame(getInitialPath(LEFT_FRAME), getInitialPath(RIGHT_FRAME));
-        return createNewMainFrame(currentMainFrame.getFolderPanel1().getFileTable().getCurrentFolder(),
-                                  currentMainFrame.getFolderPanel2().getFileTable().getCurrentFolder());
+        return createNewMainFrame(currentMainFrame.getLeftPanel().getFileTable().getCurrentFolder(),
+                                  currentMainFrame.getRightPanel().getFileTable().getCurrentFolder());
     }
 
     /**
@@ -410,9 +410,9 @@ public class WindowManager implements WindowListener, ConfigurationListener {
     public static synchronized void disposeMainFrame(MainFrame mainFrameToDispose) {
         // Saves last folders
         MuConfiguration.setVariable("prefs.startup_folder.left.last_folder", 
-                                         mainFrameToDispose.getFolderPanel1().getFolderHistory().getLastRecallableFolder());
+                                         mainFrameToDispose.getLeftPanel().getFolderHistory().getLastRecallableFolder());
         MuConfiguration.setVariable("prefs.startup_folder.right.last_folder", 
-                                         mainFrameToDispose.getFolderPanel2().getFolderHistory().getLastRecallableFolder());
+                                         mainFrameToDispose.getRightPanel().getFolderHistory().getLastRecallableFolder());
 
         // Saves window position, size and screen resolution
         Rectangle bounds = mainFrameToDispose.getBounds();

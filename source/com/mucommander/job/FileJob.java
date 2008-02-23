@@ -212,8 +212,8 @@ public abstract class FileJob implements Runnable {
 
         // Pause auto-refresh during file job as it potentially modifies the current folders contents
         // and would potentially cause folder panel to auto-refresh
-        mainFrame.getFolderPanel1().getFolderChangeMonitor().setPaused(true);
-        mainFrame.getFolderPanel2().getFolderChangeMonitor().setPaused(true);
+        mainFrame.getLeftPanel().getFolderChangeMonitor().setPaused(true);
+        mainFrame.getRightPanel().getFolderChangeMonitor().setPaused(true);
 
         setState(RUNNING);
         startDate = System.currentTimeMillis();
@@ -601,8 +601,8 @@ public abstract class FileJob implements Runnable {
         }
 
         // Resume current folders auto-refresh
-        mainFrame.getFolderPanel1().getFolderChangeMonitor().setPaused(false);
-        mainFrame.getFolderPanel2().getFolderChangeMonitor().setPaused(false);
+        mainFrame.getLeftPanel().getFolderChangeMonitor().setPaused(false);
+        mainFrame.getRightPanel().getFolderChangeMonitor().setPaused(false);
     }
 	
 
