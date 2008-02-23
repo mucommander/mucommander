@@ -200,6 +200,9 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
     private void setTableHeaderRenderingProperties() {
         if(usesTableHeaderRenderingProperties()) {
             JTableHeader tableHeader = getTableHeader();
+            if(tableHeader==null)
+                return;
+
             boolean isActiveTable = isActiveTable();
 
             // Highlights the selected column
@@ -702,9 +705,15 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
     }
 
     public void setColumnModel(TableColumnModel columnModel) {
+        // super.setColumnModel() must be called BEFORE the methods below
+        super.setColumnModel(columnModel);
+
         if(filenameEditor != null)
             columnModel.getColumn(convertColumnIndexToView(Columns.NAME)).setCellEditor(filenameEditor);
-        super.setColumnModel(columnModel);
+
+        // Mac OS X 10.5 (Leopard) and up uses JTableHeader properties to render sort indicators on table headers
+        if(usesTableHeaderRenderingProperties())
+            setTableHeaderRenderingProperties();
     }
 
     public int getColumnPosition(int colNum) {
