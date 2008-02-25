@@ -185,6 +185,7 @@ Bug fixes:
 - Fixed a couple issues with 'Swap folders' (Bug #21).
 - A warning is now displayed when attempting to view or edit binary files
   (Bug #20).
+- Symbolic links can now be viewed/edited (Bug #24).
 
 Known issues:
 - Korean translation is not up-to-date.
