@@ -117,8 +117,9 @@ abstract class AbstractViewerAction extends SelectedFileAction {
 
         file = mainFrame.getActiveTable().getSelectedFile();
 
-        // If the file is editable...
-        if(file != null && !(file.isDirectory() || file.isSymlink())) {
+        // At this stage, no assumption should be made on the type of file that is allowed to be viewed/edited:
+        // viewer/editor implementations will decide whether they allow a particular file or not.
+        if(file!=null) {
             useCustomCommand = useCustomCommand();
             customCommand    = getCustomCommand();
 

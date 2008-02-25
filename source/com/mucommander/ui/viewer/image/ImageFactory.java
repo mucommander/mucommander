@@ -38,7 +38,14 @@ public class ImageFactory implements ViewerFactory {
     }
 
     public boolean canViewFile(AbstractFile file) {
+        // Do not allow directories
+        if(file.isDirectory())
+            return false;
+
         return filter.accept(file);
     }
-    public FileViewer createFileViewer() {return new ImageViewer();}
+
+    public FileViewer createFileViewer() {
+        return new ImageViewer();
+    }
 }

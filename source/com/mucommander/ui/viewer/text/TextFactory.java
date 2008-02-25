@@ -51,6 +51,10 @@ public class TextFactory implements ViewerFactory, EditorFactory {
 
 
     private boolean doGenericChecks(AbstractFile file) throws WarnUserException {
+        // Do not allow directories
+        if(file.isDirectory())
+            return false;
+
         // Warn the user if the file is large that a certain size as the whole file is loaded into memory
         // (in a JTextArea)
         if(file.getSize()>1048576)
