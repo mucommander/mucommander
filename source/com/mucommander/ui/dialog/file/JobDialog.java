@@ -18,16 +18,15 @@
 
 package com.mucommander.ui.dialog.file;
 
-import com.mucommander.file.AbstractFile;
 import com.mucommander.file.util.FileSet;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.button.CollapseExpandButton;
 import com.mucommander.ui.dialog.FocusDialog;
 import com.mucommander.ui.layout.AsyncPanel;
+import com.mucommander.ui.list.FileList;
 import com.mucommander.ui.main.MainFrame;
 
 import javax.swing.*;
-import java.awt.*;
 
 /**
  * This abstract dialog is to be sub-classed by job confirmation dialogs and provides helper methods for common
@@ -80,7 +79,10 @@ public abstract class JobDialog extends FocusDialog {
     protected AsyncPanel createFileDetailsPanel() {
         return new AsyncPanel() {
             public JComponent getTargetComponent() {
-                return new JScrollPane(createFileDetailsArea(), JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+                FileList fileList = new FileList(files, true);
+                fileList.setVisibleRowCount(NB_FILE_DETAILS_ROWS);
+
+                return new JScrollPane(fileList, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
             }
         };
     }
@@ -115,33 +117,4 @@ public abstract class JobDialog extends FocusDialog {
         return panel;
     }
 
-
-    /**
-     * Creates the 'File details' text area that shows all the files that have been marked/selected.
-     *
-     * @return the created text area
-     */
-    protected JTextArea createFileDetailsArea() {
-        JTextArea detailsArea = new JTextArea(NB_FILE_DETAILS_ROWS, 0);
-        detailsArea.setEditable(false);
-
-        // Use a smaller font than JTextArea's default one
-        Font font = detailsArea.getFont();
-        detailsArea.setFont(font.deriveFont(font.getStyle(), font.getSize()-2));
-
-        // Initializes the text area's contents
-        int nbFiles = files.size();
-        StringBuffer sb = new StringBuffer();
-        AbstractFile file;
-        for(int i=0; i<nbFiles; i++) {
-            file = files.fileAt(i);
-
-            sb.append(file.getName());
-            if(i!=nbFiles-1)
-                sb.append('\n');
-        }
-        detailsArea.append(sb.toString());
-
-        return detailsArea;
-    }
 }
