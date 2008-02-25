@@ -23,6 +23,8 @@ import com.mucommander.file.FileProtocols;
 import com.mucommander.runtime.JavaVersions;
 import com.mucommander.runtime.OsFamilies;
 import com.mucommander.runtime.OsVersions;
+import com.mucommander.text.Translator;
+import com.mucommander.ui.dialog.QuestionDialog;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.WindowManager;
 
@@ -41,17 +43,19 @@ public class ViewerRegistrar {
     /** List of registered file viewers */ 
     private final static Vector viewerFactories = new Vector();
 
-    /** Default viewer */
-    private final static ViewerFactory DEFAULT_VIEWER = new com.mucommander.ui.viewer.text.TextFactory();
-	    
-    static {registerFileViewer(new com.mucommander.ui.viewer.image.ImageFactory());}
+    static {
+        registerFileViewer(new com.mucommander.ui.viewer.image.ImageFactory());
+        registerFileViewer(new com.mucommander.ui.viewer.text.TextFactory());
+    }
     
     
     /**
      * Registers a FileViewer.
      * @param factory file viewer factory to register.
      */
-    public static void registerFileViewer(ViewerFactory factory) {viewerFactories.add(factory);}
+    public static void registerFileViewer(ViewerFactory factory) {
+        viewerFactories.add(factory);
+    }
         
 	
     /**
@@ -86,18 +90,35 @@ public class ViewerRegistrar {
      *
      * @param file the file that will be displayed by the returned FileViewer
      * @return the created FileViewer
-     * @throws Exception if a viewer couldn't be instanciated or the given file couldn't be read.
+     * @throws UserCancelledException if the user has been asked to confirm the operation and cancelled
      */
-    public static FileViewer createFileViewer(AbstractFile file) throws Exception {
+    public static FileViewer createFileViewer(AbstractFile file) throws UserCancelledException {
         Iterator      iterator;
         ViewerFactory factory;
 
         iterator = viewerFactories.iterator();
         while(iterator.hasNext()) {
             factory = (ViewerFactory)iterator.next();
-            if(factory.canViewFile(file))
+
+            try {
+                if(factory.canViewFile(file))
+                    return factory.createFileViewer();
+            }
+            catch(WarnUserException e) {
+                // Todo: display a proper warning dialog with the appropriate icon
+                QuestionDialog dialog = new QuestionDialog((Frame)null, Translator.get("warning"), Translator.get(e.getMessage()), null,
+                                                           new String[] {Translator.get("file_editor.open_anyway"), Translator.get("cancel")},
+                                                           new int[]  {0, 1},
+                                                           0);
+
+                int ret = dialog.getActionValue();
+                if(ret==1 || ret==-1)   // User cancelled the operation
+                    throw new UserCancelledException();
+
+                // User confirmed the operation
                 return factory.createFileViewer();
+            }
         }
-        return DEFAULT_VIEWER.createFileViewer();
+        return null;
     }
 }

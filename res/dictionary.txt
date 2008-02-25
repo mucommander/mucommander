@@ -8164,6 +8164,25 @@ text_viewer.find_previous:SV:Sök föregående
 
 
 
+text_viewer.binary_file_warning:EN:This appears to be a binary file
+text_viewer.binary_file_warning:FR:Ce fichier a l'air d'être un fichier binaire
+# Translation missing (New!)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -8359,8 +8378,6 @@ file_editor.cannot_write:SV:Kunde inte läsa filen.
 file_editor.file_menu:EN:$[file_viewer.file_menu]
 
 file_editor.close:EN:$[file_viewer.close]
-
-file_editor.large_file_warning:EN:$[file_viewer.large_file_warning]
 
 file_editor.open_anyway:EN:$[file_viewer.open_anyway]
 

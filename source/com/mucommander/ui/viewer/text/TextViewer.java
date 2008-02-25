@@ -63,8 +63,4 @@ class TextViewer extends FileViewer {
     public Insets getInsets() {
         return new Insets(4, 3, 4, 3);
     }
-
-    public long getMaxRecommendedSize() {
-        return 1048576;
-    }
 }

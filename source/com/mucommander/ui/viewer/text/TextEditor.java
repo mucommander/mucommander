@@ -88,10 +88,6 @@ class TextEditor extends FileEditor implements DocumentListener {
     // Overridden methods //
     ////////////////////////
 
-    public long getMaxRecommendedSize() {
-        return 1048576;
-    }
-
     public Insets getInsets() {
         return new Insets(4, 3, 4, 3);
     }

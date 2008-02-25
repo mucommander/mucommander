@@ -24,15 +24,21 @@ import com.mucommander.file.AbstractFile;
  * A common interface for instanciating {@link FileEditor} implementations, and finding out if a editor is capable
  * of editing a particular file.
  *
- * @author Nicolas Rinaudo
+ * @author Nicolas Rinaudo, Maxence Bernard
  */
 public interface EditorFactory {
     /**
      * Returns <code>true</code> if this factory can create a file editor for the specified file.
+     * <p>
+     * The FileEditor may base its decision stricly upon the file's name and its extension or may wish to read some of
+     * the file and compare it to a magic number.
+     * </p>
      * @param  file file for which a editor must be created.
+     * @throws WarnUserException if the specified file can be edited after the warning message contained in the
+     * exception is displayed to the end user.
      * @return      <code>true</code> if this factory can create a file editor for the specified file.
      */
-    public boolean canEditFile(AbstractFile file);
+    public boolean canEditFile(AbstractFile file) throws WarnUserException;
 
     /**
      * Returns a new instance of {@link FileEditor}.

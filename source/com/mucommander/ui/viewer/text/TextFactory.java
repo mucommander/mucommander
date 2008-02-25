@@ -19,10 +19,12 @@
 package com.mucommander.ui.viewer.text;
 
 import com.mucommander.file.AbstractFile;
-import com.mucommander.ui.viewer.EditorFactory;
-import com.mucommander.ui.viewer.FileEditor;
-import com.mucommander.ui.viewer.FileViewer;
-import com.mucommander.ui.viewer.ViewerFactory;
+import com.mucommander.io.BinaryDetector;
+import com.mucommander.text.Translator;
+import com.mucommander.ui.viewer.*;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * <code>ViewerFactory</code> and <code>EditorFactory</code> implementation for creating text viewers and editors.
@@ -31,19 +33,45 @@ import com.mucommander.ui.viewer.ViewerFactory;
  */
 public class TextFactory implements ViewerFactory, EditorFactory {
 
-    public boolean canViewFile(AbstractFile file) {
-        return true;
+    public boolean canViewFile(AbstractFile file) throws WarnUserException {
+        return doGenericChecks(file);
+    }
+
+    public boolean canEditFile(AbstractFile file) throws WarnUserException {
+        return doGenericChecks(file);
     }
 
     public FileViewer createFileViewer() {
         return new TextViewer();
     }
 
-    public boolean canEditFile(AbstractFile file) {
-        return true;
-    }
-
     public FileEditor createFileEditor() {
         return new TextEditor();
+    }
+
+
+    private boolean doGenericChecks(AbstractFile file) throws WarnUserException {
+        // Warn the user if the file is large that a certain size as the whole file is loaded into memory
+        // (in a JTextArea)
+        if(file.getSize()>1048576)
+            throw new WarnUserException(Translator.get("file_viewer.large_file_warning"));
+
+        // Warn the user if the file looks like a binary file
+        InputStream in = null;
+        try {
+            in = file.getInputStream();
+            if(BinaryDetector.guessBinary(in))
+                throw new WarnUserException(Translator.get("text_viewer.binary_file_warning"));
+        }
+        catch(IOException e) {
+            // Not much too do
+        }
+        finally {
+            if(in!=null) {
+                try { in.close(); } catch(IOException e2) {}
+            }
+        }
+
+        return true;
     }
 }

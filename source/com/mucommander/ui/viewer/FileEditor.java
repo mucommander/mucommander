@@ -69,36 +69,6 @@ public abstract class FileEditor extends JPanel implements ThemeListener {
     protected EditorFrame getFrame() {
         return frame;
     }
-	
-	
-    /**
-     * Returns <code>true</code> if the given file can be handled by this FileEditor.
-     * <p>
-     * The FileEditor may base its decision only upon the filename and its extension or may
-     * wish to read some of the file and compare it to a magic number.
-     * </p>
-     * @param  file file that must be checked.
-     * @return <code>true</code> if the given file can be handled by this FileEditor, <code>false</code> otherwise.
-     */
-    public static boolean canEditFile(AbstractFile file) {
-        return false;
-    }
-	
-	
-    /**
-     * Returns the maximum file size this FileEditor can handle.
-     * <p>
-     * If there is no maximum limit, returns <code>-1</code>.
-     * </p>
-     * <p>
-     * If a user wish to edit a file that exceeds this size, he/she will be asked if he/she still
-     * wants to edit it.
-     * </p>
-     * @return the maximum file size this <code>FileEditor</code> can handle.
-     */
-    public long getMaxRecommendedSize() {
-        return -1;
-    }
 
 
     /**

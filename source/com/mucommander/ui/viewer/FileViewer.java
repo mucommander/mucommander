@@ -72,36 +72,6 @@ public abstract class FileViewer extends JPanel implements ThemeListener {
 	
 	
     /**
-     * Returns <code>true</code> if the given file can be handled by this FileViewer.
-     * <p>
-     * The FileViewer may base its decision only upon the filename and its extension or may
-     * wish to read some of the file and compare it to a magic number.
-     * </p>
-     * @param  file file that must be checked.
-     * @return      <code>true</code> if the given file can be handled by this <code>FileViewer</code>, <code>false</code> otherwise.
-     */
-    public static boolean canViewFile(AbstractFile file) {
-        return false;
-    }
-	
-	
-    /**
-     * Returns maximum file size this FileViewer can handle for sure.
-     * <p>
-     * If there is no maximum limit, returns <code>-1</code>.
-     * </p>
-     * <p>
-     * If a user wish to view a file that exceeds this size, he/she will be asked if he/she still
-     * wants to view it.
-     * </p>
-     * @return the maximum file size this file viewer can handle.
-     */
-    public long getMaxRecommendedSize() {
-        return -1;
-    }
-
-
-    /**
      * Returns a description of the file currently being viewed which will be used as a window title.
      * This method returns the file's name but it can be overridden to provide more information.
      * @return this dialog's title.

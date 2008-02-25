@@ -107,80 +107,66 @@ public class EditorFrame extends JFrame implements ActionListener {
     }
 
     private void initContentPane() {
-        try {
-            this.editor = EditorRegistrar.createFileEditor(file);
+        AsyncPanel asyncPanel = new AsyncPanel() {
+            public JComponent getTargetComponent() {
+                try {
+                    editor = EditorRegistrar.createFileEditor(file);
+                    if(editor==null)
+                        throw new Exception("No suitable editor found");
 
-            // Test if file is too large to be viewed and warns user
-            long max = editor.getMaxRecommendedSize();
-            if (max!=-1 && file.getSize()>max) {
-                QuestionDialog dialog = new QuestionDialog(mainFrame, Translator.get("warning"), Translator.get("file_editor.large_file_warning"), mainFrame,
-                                                           new String[] {Translator.get("file_editor.open_anyway"), Translator.get("cancel")},
-                                                           new int[]  {0, 1},
-                                                           0);
+                    editor.setFrame(EditorFrame.this);
+                    editor.setCurrentFile(file);
 
-                int ret = dialog.getActionValue();
+                    editor.edit(file);
+                }
+                catch(Exception e) {
+                    if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Exception caught: "+e);
 
-                if (ret==1 || ret==-1)
-                    return;
+                    // May be a UserCancelledException if the user cancelled (refused to confirm the operation after a warning)
+                    if(!(e instanceof UserCancelledException))
+                        showGenericEditErrorDialog();
+
+                    dispose();
+                    return editor==null?new JPanel():editor;
+                }
+
+                setTitle(editor.getTitle());
+
+                JScrollPane scrollPane = new JScrollPane(editor, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED) {
+                        public Insets getInsets() {
+                            return new Insets(0, 0, 0, 0);
+                        }
+                    };
+
+                // Catch Apple+W keystrokes under Mac OS X to try and close the window
+                if(OsFamilies.MAC_OS_X.isCurrent()) {
+                    scrollPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_W, ActionEvent.META_MASK), CUSTOM_DISPOSE_EVENT);
+                    scrollPane.getActionMap().put(CUSTOM_DISPOSE_EVENT, new AbstractAction() {
+                            public void actionPerformed(ActionEvent e){
+                                dispose();
+                            }
+                        });
+                }
+
+                return scrollPane;
             }
 
-            editor.setFrame(EditorFrame.this);
-            editor.setCurrentFile(file);
+            protected void updateLayout() {
+                super.updateLayout();
 
-            AsyncPanel asyncPanel = new AsyncPanel() {
-                public JComponent getTargetComponent() {
-                    try {
-                        editor.edit(file);
-                    }
-                    catch(Exception e) {
-                        showGenericEditErrorDialog();
-                        dispose();
-                        return editor;
-                    }
+                // Request focus on the viewer when it is visible
+                FocusRequester.requestFocus(editor);
+            }
+        };
 
-                    setTitle(editor.getTitle());
+        // Add the AsyncPanel to the content pane
+        JPanel contentPane = new JPanel(new BorderLayout());
+        contentPane.add(asyncPanel, BorderLayout.CENTER);
+        setContentPane(contentPane);
 
-                    JScrollPane scrollPane = new JScrollPane(editor, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED) {
-                            public Insets getInsets() {
-                                return new Insets(0, 0, 0, 0);
-                            }
-                        };
-
-                    // Catch Apple+W keystrokes under Mac OS X to try and close the window
-                    if(OsFamilies.MAC_OS_X.isCurrent()) {
-                        scrollPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_W, ActionEvent.META_MASK), CUSTOM_DISPOSE_EVENT);
-                        scrollPane.getActionMap().put(CUSTOM_DISPOSE_EVENT, new AbstractAction() {
-                                public void actionPerformed(ActionEvent e){
-                                    dispose();
-                                }
-                            });
-                    }
-
-                    return scrollPane;
-                }
-
-                protected void updateLayout() {
-                    super.updateLayout();
-
-                    // Request focus on the viewer when it is visible
-                    FocusRequester.requestFocus(editor);
-                }
-            };
-
-            // Add the AsyncPanel to the content pane
-            JPanel contentPane = new JPanel(new BorderLayout());
-            contentPane.add(asyncPanel, BorderLayout.CENTER);
-            setContentPane(contentPane);
-
-            // Sets panel to preferred size, without exceeding a maximum size and with a minumum size
-            pack();
-            setVisible(true);
-        }
-        catch(Exception e) {
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Exception caught: "+e);
-
-            showGenericEditErrorDialog();
-        }
+        // Sets panel to preferred size, without exceeding a maximum size and with a minumum size
+        pack();
+        setVisible(true);
     }
 
     public void showGenericEditErrorDialog() {

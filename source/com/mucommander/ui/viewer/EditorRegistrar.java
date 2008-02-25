@@ -24,6 +24,8 @@ import com.mucommander.file.FileProtocols;
 import com.mucommander.runtime.JavaVersions;
 import com.mucommander.runtime.OsFamilies;
 import com.mucommander.runtime.OsVersions;
+import com.mucommander.text.Translator;
+import com.mucommander.ui.dialog.QuestionDialog;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.WindowManager;
 
@@ -42,14 +44,17 @@ public class EditorRegistrar {
     /** List of registered file editors */ 
     private final static Vector editorFactories = new Vector();
 
-    /** Default editor. */
-    private final static EditorFactory DEFAULT_EDITOR = new com.mucommander.ui.viewer.text.TextFactory();
+    static {
+        registerFileEditor(new com.mucommander.ui.viewer.text.TextFactory());
+    }
 
     /**
      * Registers a FileEditor.
      * @param factory file editor factory to register.
      */
-    public static void registerFileEditor(EditorFactory factory) {editorFactories.add(factory);}
+    public static void registerFileEditor(EditorFactory factory) {
+        editorFactories.add(factory);
+    }
 
     /**
      * Creates and returns an EditorFrame to start viewing the given file. The EditorFrame will be monitored
@@ -83,18 +88,35 @@ public class EditorRegistrar {
      *
      * @param file the file that will be displayed by the returned FileEditor
      * @return the created FileEditor
-     * @throws Exception if an editor couldn't be instanciated or the given file couldn't be read.
+     * @throws UserCancelledException if the user has been asked to confirm the operation and cancelled
      */
-    public static FileEditor createFileEditor(AbstractFile file) throws Exception {
+    public static FileEditor createFileEditor(AbstractFile file) throws UserCancelledException {
         Iterator      iterator;
         EditorFactory factory;
 
         iterator = editorFactories.iterator();
         while(iterator.hasNext()) {
             factory = (EditorFactory)iterator.next();
-            if(factory.canEditFile(file))
+
+            try {
+                if(factory.canEditFile(file))
+                    return factory.createFileEditor();
+            }
+            catch(WarnUserException e) {
+                QuestionDialog dialog = new QuestionDialog((Frame)null, Translator.get("warning"), Translator.get(e.getMessage()), null,
+                                                           new String[] {Translator.get("file_editor.open_anyway"), Translator.get("cancel")},
+                                                           new int[]  {0, 1},
+                                                           0);
+
+                int ret = dialog.getActionValue();
+                if(ret==1 || ret==-1)   // User cancelled the operation
+                    throw new UserCancelledException();
+
+                // User confirmed the operation
                 return factory.createFileEditor();
+            }
         }
-        return DEFAULT_EDITOR.createFileEditor();
+
+        return null;
     }
 }

@@ -23,7 +23,6 @@ import com.mucommander.file.AbstractFile;
 import com.mucommander.runtime.OsFamilies;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.DialogToolkit;
-import com.mucommander.ui.dialog.QuestionDialog;
 import com.mucommander.ui.helper.FocusRequester;
 import com.mucommander.ui.helper.MenuToolkit;
 import com.mucommander.ui.helper.MnemonicHelper;
@@ -91,80 +90,66 @@ public class ViewerFrame extends JFrame implements ActionListener {
     }
 
     private void initContentPane() {
-        try {
-            this.viewer = ViewerRegistrar.createFileViewer(file);
+        AsyncPanel asyncPanel = new AsyncPanel() {
+            public JComponent getTargetComponent() {
+                try {
+                    viewer = ViewerRegistrar.createFileViewer(file);
+                    if(viewer==null)
+                        throw new Exception("No suitable viewer found");
 
-            // Test if file is too large to be viewed and warns user
-            long max = viewer.getMaxRecommendedSize();
-            if (max!=-1 && file.getSize()>max) {
-                QuestionDialog dialog = new QuestionDialog(mainFrame, Translator.get("warning"), Translator.get("file_viewer.large_file_warning"), mainFrame,
-                                                           new String[] {Translator.get("file_viewer.open_anyway"), Translator.get("cancel")},
-                                                           new int[]  {0, 1},
-                                                           0);
+                    viewer.setFrame(ViewerFrame.this);
+                    viewer.setCurrentFile(file);
 
-                int ret = dialog.getActionValue();
+                    viewer.view(file);
+                }
+                catch(Exception e) {
+                    if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Exception caught: "+e);
 
-                if (ret==1 || ret==-1)
-                    return;
+                    // May be a UserCancelledException if the user cancelled (refused to confirm the operation after a warning)
+                    if(!(e instanceof UserCancelledException))
+                        showGenericViewErrorDialog();
+
+                    dispose();
+                    return viewer==null?new JPanel():viewer;
+                }
+
+                setTitle(viewer.getTitle());
+
+                JScrollPane scrollPane = new JScrollPane(viewer, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED) {
+                        public Insets getInsets() {
+                            return new Insets(0, 0, 0, 0);
+                        }
+                    };
+
+                // Catch Apple+W keystrokes under Mac OS X to close the window
+                if(OsFamilies.MAC_OS_X.isCurrent()) {
+                    scrollPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_W, ActionEvent.META_MASK), CUSTOM_DISPOSE_EVENT);
+                    scrollPane.getActionMap().put(CUSTOM_DISPOSE_EVENT, new AbstractAction() {
+                            public void actionPerformed(ActionEvent e){
+                                dispose();
+                            }
+                        });
+                }
+
+                return scrollPane;
             }
 
-            viewer.setFrame(this);
-            viewer.setCurrentFile(file);
+            protected void updateLayout() {
+                super.updateLayout();
 
-            AsyncPanel asyncPanel = new AsyncPanel() {
-                public JComponent getTargetComponent() {
-                    try {
-                        viewer.view(file);
-                    }
-                    catch(Exception e) {
-                        showGenericViewErrorDialog();
-                        dispose();
-                        return viewer;
-                    }
+                // Request focus on the viewer when it is visible
+                FocusRequester.requestFocus(viewer);
+            }
+        };
 
-                    setTitle(viewer.getTitle());
+        // Add the AsyncPanel to the content pane
+        JPanel contentPane = new JPanel(new BorderLayout());
+        contentPane.add(asyncPanel, BorderLayout.CENTER);
+        setContentPane(contentPane);
 
-                    JScrollPane scrollPane = new JScrollPane(viewer, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED) {
-                            public Insets getInsets() {
-                                return new Insets(0, 0, 0, 0);
-                            }
-                        };
-
-                    // Catch Apple+W keystrokes under Mac OS X to close the window
-                    if(OsFamilies.MAC_OS_X.isCurrent()) {
-                        scrollPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_W, ActionEvent.META_MASK), CUSTOM_DISPOSE_EVENT);
-                        scrollPane.getActionMap().put(CUSTOM_DISPOSE_EVENT, new AbstractAction() {
-                                public void actionPerformed(ActionEvent e){
-                                    dispose();
-                                }
-                            });
-                    }
-
-                    return scrollPane;
-                }
-
-                protected void updateLayout() {
-                    super.updateLayout();
-                    
-                    // Request focus on the viewer when it is visible
-                    FocusRequester.requestFocus(viewer);
-                }
-            };
-
-            // Add the AsyncPanel to the content pane
-            JPanel contentPane = new JPanel(new BorderLayout());
-            contentPane.add(asyncPanel, BorderLayout.CENTER);
-            setContentPane(contentPane);
-
-            // Sets panel to preferred size, without exceeding a maximum size and with a minumum size
-            pack();
-            setVisible(true);
-        }
-        catch(Exception e) {
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Exception caught: "+e);
-
-            showGenericViewErrorDialog();
-        }
+        // Sets panel to preferred size, without exceeding a maximum size and with a minumum size
+        pack();
+        setVisible(true);
     }
 
     public void showGenericViewErrorDialog() {
