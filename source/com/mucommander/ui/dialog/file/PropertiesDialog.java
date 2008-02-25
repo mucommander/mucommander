@@ -29,6 +29,7 @@ import com.mucommander.ui.icon.SpinningDial;
 import com.mucommander.ui.layout.XAlignedComponentPanel;
 import com.mucommander.ui.layout.YBoxPanel;
 import com.mucommander.ui.main.MainFrame;
+import com.mucommander.ui.text.FileLabel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -80,10 +81,7 @@ public class PropertiesDialog extends FocusDialog implements Runnable, ActionLis
         mainPanel.addRow(Translator.get("properties_dialog.contents")+":", counterLabel, 10);
 
         // Location (set here)
-        String location = files.getBaseFolder().getAbsolutePath();
-        JLabel locationLabel = new JLabel(location);
-        locationLabel.setToolTipText(location);
-        mainPanel.addRow(Translator.get("location")+":", locationLabel, 10);
+        mainPanel.addRow(Translator.get("location")+":", new FileLabel(files.getBaseFolder(), true), 10);
 
         // Combined size (set later)
         JPanel sizePanel;
