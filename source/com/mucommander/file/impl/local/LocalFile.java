@@ -817,8 +817,11 @@ public class LocalFile extends AbstractFile {
                 bb.position(0);
                 bb.limit(1);
 
-                channel.read(bb);
-                return bb.get(0);
+                int nbRead = channel.read(bb);
+                if(nbRead<=0)
+                    return nbRead;
+
+                return 0xFF&bb.get(0);
             }
         }
 
