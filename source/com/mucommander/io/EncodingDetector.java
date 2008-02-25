@@ -74,13 +74,7 @@ public class EncodingDetector {
 
 
     /**
-     * Try and detect the character encoding in which the given bytes are encoded, and returns the best guess or
-     * <code>null</code> if there is none (not enough data or confidence).
-     * Note that the returned character encoding may not be available on the Java runtime -- use
-     * <code>java.nio.Charset#isSupported(String)</code> to determine if it is available.
-     *
-     * <p>A maximum of {@link #MAX_RECOMMENDED_BYTE_SIZE} will be read from the array. If the array is larger than this
-     * value, all further bytes will be ignored.</p>
+     * This method is a shorthand for {@link #detectEncoding(byte[], int, int) detectEncoding(b, 0, b.length)}.
      *
      * @param bytes the bytes for which to detect the encoding
      * @return the best guess at the character encoding, null if there is none (not enough data or confidence)
@@ -148,9 +142,9 @@ public class EncodingDetector {
      * <code>java.nio.Charset#isSupported(String)</code> to determine if it is available.
      *
      * <p>A maximum of {@link #MAX_RECOMMENDED_BYTE_SIZE} will be read from the <code>InputStream</code>. The
-     * InputStream will not be repositionned after the bytes have been read. It is up to the calling method to
-     * use the <code>InputStream#mark()</code> and <code>InputStream#reset()</code> methods (if supported) or reopen
-     * the stream if needed.
+     * stream will not be closed and will not be repositionned after the bytes have been read. It is up to the calling
+     * method to use the <code>InputStream#mark()</code> and <code>InputStream#reset()</code> methods (if supported) 
+     * or reopen the stream if needed.
      * </p>
      *
      * @param in the InputStream that supplies the bytes
@@ -158,15 +152,10 @@ public class EncodingDetector {
      * @throws IOException if an error occurred while reading the stream
      */
     public static String detectEncoding(InputStream in) throws IOException {
-        int totalRead = 0;
-        int read;
         byte buf[] = BufferPool.getArrayBuffer(MAX_RECOMMENDED_BYTE_SIZE);
 
         try {
-            while((totalRead<MAX_RECOMMENDED_BYTE_SIZE) && (read=in.read(buf, totalRead, MAX_RECOMMENDED_BYTE_SIZE-totalRead))!=-1)
-                totalRead += read;
-
-            return detectEncoding(buf, 0, totalRead);
+            return detectEncoding(buf, 0, StreamUtils.readUpTo(in, buf));
         }
         finally {
             BufferPool.releaseArrayBuffer(buf);
