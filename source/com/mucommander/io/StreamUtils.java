@@ -18,6 +18,7 @@
 
 package com.mucommander.io;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -30,8 +31,12 @@ import java.io.OutputStream;
 public class StreamUtils {
 
     /**
-     * Convience method that calls {@link #copyStream(java.io.InputStream, java.io.OutputStream, int)} with a
+     * This method is a shorthand for {@link #copyStream(java.io.InputStream, java.io.OutputStream, int)} called with a
      * {@link BufferPool#DEFAULT_BUFFER_SIZE default buffer size}.
+     *
+     * @param in the InputStream to read from
+     * @param out the OutputStream to write to
+     * @throws FileTransferException if something went wrong while reading from or writing to one of the provided streams
      */
     public static void copyStream(InputStream in, OutputStream out) throws FileTransferException {
         copyStream(in, out, BufferPool.DEFAULT_BUFFER_SIZE);
@@ -90,8 +95,13 @@ public class StreamUtils {
 
 
     /**
-     * Convience method that calls {@link #fillWithConstant(java.io.OutputStream, byte, long, int)} with a
+     * This method is a shorthand for {@link #fillWithConstant(java.io.OutputStream, byte, long, int)} called with a
      * {@link BufferPool#DEFAULT_BUFFER_SIZE default buffer size}.
+     *
+     * @param out the OutputStream to write to
+     * @param value the byte constant to write len times
+     * @param len number of bytes to write
+     * @throws java.io.IOException if an error occurred while writing
      */
     public static void fillWithConstant(OutputStream out, byte value, long len) throws IOException {
         fillWithConstant(out, value, len, BufferPool.DEFAULT_BUFFER_SIZE);
@@ -132,8 +142,15 @@ public class StreamUtils {
     }
 
     /**
-     * Convience method that calls {@link #copyChunk(RandomAccessInputStream, RandomAccessOutputStream, long, long, long, int)}
-     * with a {@link BufferPool#DEFAULT_BUFFER_SIZE default buffer size}.
+     * This method is a shorthand for {@link #copyChunk(RandomAccessInputStream, RandomAccessOutputStream, long, long, long, int)}
+     * called with a {@link BufferPool#DEFAULT_BUFFER_SIZE default buffer size}.
+     *
+     * @param rais the source stream
+     * @param raos the destination stream
+     * @param srcOffset offset to the beginning of the chunk in the source stream
+     * @param destOffset offset to the beginning of the chunk in the destination stream
+     * @param length number of bytes to copy
+     * @throws java.io.IOException if an error occurred while copying data
      */
     public static void copyChunk(RandomAccessInputStream rais, RandomAccessOutputStream raos, long srcOffset, long destOffset, long length) throws IOException {
         copyChunk(rais, raos, srcOffset, destOffset, length, BufferPool.DEFAULT_BUFFER_SIZE);
@@ -171,5 +188,91 @@ public class StreamUtils {
         finally {
             BufferPool.releaseArrayBuffer(buffer);
         }
+    }
+
+
+    /**
+     * This method is a shorthand for {@link #readFully(java.io.InputStream, byte[], int, int) readFully(in, b, 0, b.length)}.
+     *
+     * @param in the InputStream to read from
+     * @param b the buffer into which the stream data is copied
+     * @return the same byte array that was passed, returned only for convience
+     * @throws java.io.EOFException if EOF is reached before all bytes have been read
+     * @throws IOException if an I/O error occurs
+     */
+    public static byte[] readFully(InputStream in, byte b[]) throws EOFException, IOException {
+        return readFully(in, b, 0, b.length);
+    }
+
+    /**
+     * Reads <code>len</code> bytes from the <code>InputStream</code> into the byte array, starting at <code>off</code>.
+     * This method reads repeatedly from the stream until the requested number of bytes are read. It blocks
+     * until the requested number of bytes have been read or the end of file has been reached.
+     *
+     * @param in the InputStream to read from
+     * @param b the buffer into which the stream data is copied
+     * @param off specifies where the copy should start in the buffer
+     * @param len the number of bytes to read
+     * @return the same byte array that was passed, returned only for convience
+     * @throws java.io.EOFException if EOF is reached before all bytes have been read
+     * @throws IOException if an I/O error occurs
+     */
+    public static byte[] readFully(InputStream in, byte b[], int off, int len) throws EOFException, IOException {
+        if(len>0) {
+            int totalRead = 0;
+            do {
+                int nbRead = in.read(b, off + totalRead, len - totalRead);
+                if (nbRead < 0)
+                    throw new EOFException();
+                totalRead += nbRead;
+            }
+            while (totalRead < len);
+        }
+
+        return b;
+    }
+
+    /**
+     * This method is a shorthand for {@link #readUpTo(java.io.InputStream, byte[], int, int) readUpTo(in, b, 0, b.length)}.
+     *
+     * @param in the InputStream to read from
+     * @param b the buffer into which the stream data is copied
+     * @return the number of bytes that have been read, can be less than len if EOF has been reached prematurely
+     * @throws IOException if an I/O error occurs
+     */
+    public static int readUpTo(InputStream in, byte b[]) throws IOException {
+        return readUpTo(in, b, 0, b.length);
+    }
+
+    /**
+     * Read up to <code>len</code> bytes from the <code>InputStream</code> into the byte array, starting at
+     * <code>off</code>. This method reads repeatedly from the stream until the requested number of bytes are read.
+     * It blocks until the requested number of bytes have been read or the end of file has been reached.
+     *
+     * <p>This method differs from {@link #readFully(java.io.InputStream, byte[], int, int)} in that it does not throw
+     * a <code>java.io.EOFException</code> if the end of stream is reached before all bytes have been read. In that
+     * case (and in that case only), the number of bytes returned by this method will be lower than <code>len</code>.
+     * </p>
+     *
+     * @param in the InputStream to read from
+     * @param b the buffer into which the stream data is copied
+     * @param off specifies where the copy should start in the buffer
+     * @param len the number of bytes to read
+     * @return the number of bytes that have been read, can be less than len if EOF has been reached prematurely
+     * @throws IOException if an I/O error occurs
+     */
+    public static int readUpTo(InputStream in, byte b[], int off, int len) throws IOException {
+        int totalRead = 0;
+        if(len>0) {
+            do {
+                int nbRead = in.read(b, off + totalRead, len - totalRead);
+                if (nbRead < 0)
+                    break;
+                totalRead += nbRead;
+            }
+            while (totalRead < len);
+        }
+
+        return totalRead;
     }
 }
