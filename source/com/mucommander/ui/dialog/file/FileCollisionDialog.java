@@ -29,7 +29,7 @@ import com.mucommander.ui.layout.XAlignedComponentPanel;
 import com.mucommander.ui.layout.YBoxPanel;
 import com.mucommander.ui.notifier.AbstractNotifier;
 import com.mucommander.ui.notifier.NotificationTypes;
-import com.mucommander.ui.text.FilenameLabel;
+import com.mucommander.ui.text.FileLabel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -205,13 +205,11 @@ public class FileCollisionDialog extends QuestionDialog {
 
 
     private void addFileDetails(XAlignedComponentPanel panel, AbstractFile file, String nameLabel) {
-        panel.addRow(nameLabel+":", new FilenameLabel(file), 0);
+        panel.addRow(nameLabel+":", new FileLabel(file, false), 0);
 
         AbstractFile parent = file.getParentSilently();
-        String parentLocation = (parent==null?file:parent).getCanonicalPath();
-        JLabel label = new JLabel(parentLocation);
-        label.setToolTipText(parentLocation);
-        panel.addRow(Translator.get("location")+":", label, 0);
+
+        panel.addRow(Translator.get("location")+":", new FileLabel((parent==null?file:parent), true), 0);
 
         panel.addRow(Translator.get("size")+":", new JLabel(SizeFormat.format(file.getSize(), SizeFormat.DIGITS_FULL| SizeFormat.UNIT_LONG| SizeFormat.INCLUDE_SPACE)), 0);
 
