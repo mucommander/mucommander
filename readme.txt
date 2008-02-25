@@ -183,6 +183,8 @@ Bug fixes:
 - Fixed password changes not properly taken into account (Bug #10).
 - Main menus can now be selected using their mnemonic (Bug #13).
 - Fixed a couple issues with 'Swap folders' (Bug #21).
+- A warning is now displayed when attempting to view or edit binary files
+  (Bug #20).
 
 Known issues:
 - Korean translation is not up-to-date.
