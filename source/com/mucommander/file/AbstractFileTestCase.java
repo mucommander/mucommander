@@ -28,6 +28,7 @@ import junit.framework.TestCase;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -984,6 +985,12 @@ public abstract class AbstractFileTestCase extends TestCase implements FilePermi
         
         assertEquals(md5, calculateMd5(in));
 
+        // Assert that read methods return -1 when EOF has been reached
+        assertEquals(-1, in.read());
+        byte b[] = new byte[1];
+        assertEquals(-1, in.read(b));
+        assertEquals(-1, in.read(b, 0, 1));
+
         in.close();
     }
 
@@ -1029,6 +1036,27 @@ public abstract class AbstractFileTestCase extends TestCase implements FilePermi
             assertNotNull(rais);
 
             assertEquals(md5, calculateMd5(rais));
+
+            // Assert that read methods return -1 when EOF has been reached
+            assertEquals(-1, rais.read());
+            byte b[] = new byte[1];
+            assertEquals(-1, rais.read(b));
+            assertEquals(-1, rais.read(b, 0, 1));
+
+            // Assert that readFully methods throw an EOFException
+            boolean eofExceptionThrown = false;
+            try { rais.readFully(b); }
+            catch(EOFException e) {
+                eofExceptionThrown = true;
+            }
+            assertTrue(eofExceptionThrown);
+
+            eofExceptionThrown = false;
+            try { rais.readFully(b, 0, 1); }
+            catch(EOFException e) {
+                eofExceptionThrown = true;
+            }
+            assertTrue(eofExceptionThrown);
 
             rais.close();
         }
