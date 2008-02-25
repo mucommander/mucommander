@@ -18,7 +18,6 @@
 
 package com.mucommander.io;
 
-import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -63,7 +62,7 @@ public abstract class RandomAccessInputStream extends InputStream implements Ran
      * @throws IOException if an I/O error occurs.
      */
     public void readFully(byte b[]) throws IOException {
-        readFully(b, 0, b.length);
+        StreamUtils.readFully(this, b, 0, b.length);
     }
 
     /**
@@ -78,17 +77,7 @@ public abstract class RandomAccessInputStream extends InputStream implements Ran
      * @throws IOException if an I/O error occurs.
      */
     public void readFully(byte b[], int off, int len) throws IOException {
-        if(len==0)
-            return;
-
-        int n = 0;
-        do {
-            int count = read(b, off + n, len - n);
-            if (count < 0)
-                throw new EOFException();
-            n += count;
-        }
-        while (n < len);
+        StreamUtils.readFully(this, b, off, len);
     }
 
 
