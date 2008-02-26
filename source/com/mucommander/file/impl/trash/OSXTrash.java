@@ -118,6 +118,10 @@ public class OSXTrash extends QueuedTrash {
             && (file.getAbsolutePath(true).indexOf("/.Trash/") != -1);
     }
 
+    /**
+     * Implementation notes: this method is implemented and returns <code>-1</code> only if an error ocurred while
+     * retrieving the trash item count.
+     */
     public int getItemCount() {
         StringBuffer output = new StringBuffer();
         if(!AppleScript.execute(COUNT_TRASH_ITEMS_APPLESCRIPT, output))
