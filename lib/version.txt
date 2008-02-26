@@ -2,15 +2,17 @@ include/ant-bzip2.jar	     -> from Ant 1.7.0 (compiled for Java 1.4)
 include/ant-tar.jar	         -> from Ant 1.7.0 (compiled for Java 1.4)
 include/commons-logging.jar  -> Commons-logging (custom-made JAR, empty stubs)
 include/commons-net.jar	     -> Commons-net 1.4.1
-include/icu4j.jar            -> IBM ICU4J 3.8.1, trimmed to only include
-                                CharsetDetector
+include/icu4j.jar            -> IBM ICU4J 3.8.1, JAR file trimmed to include
+                                only the CharsetDetector functionality
 include/j2ssh.jar	         -> J2SSH 0.2.9 (patched and compiled for Java 1.4)
 include/jakarta-oro.jar	     -> Jakarta Oro 2.0.8
 include/jcifs.jar	         -> jCIFS 1.2.18e (patched and compiled for Java 1.4)
 include/jmdns.jar            -> jmdns 1.0 (with some sourceforge.net patches,
                                 compiled for Java 1.4)
+include/jna.jar              -> Java Native Access (JNA), JAR file trimmed to
+                                include only win32 support
 include/yanfs.jar            -> Yanfs (formerly WebNFS), version unknown but
                                 probably the same as WebNFS 1.2
 noinclude/junit.jar          -> JUnit 4.4
-noinclude/osx-eawt-stubs.jar -> Stubs for Mac OS X's EAWT API.
+noinclude/osx-eawt-stubs.jar -> Stubs for Mac OS X's EAWT API
 noinclude/servlet-api.jar    -> Java Servlet API
