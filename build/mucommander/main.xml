@@ -290,13 +290,40 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
       <keep name="com.sun.nfs.XFileExtensionAccessor"/>
       <!-- Main class                                          -->
       <keep name="${app.main}">
-	<method access="public static" type="void" name="main" parameters="java.lang.String[]"/>
+        <method access="public static" type="void" name="main" parameters="java.lang.String[]"/>
       </keep>
       <!-- Class loader                                        -->
       <keep name="${app.loader}">
         <field access="public,protected"/>
         <method access="public,protected"/>
         <constructor access="public,protected"/>
+      </keep>
+      <!-- Don't obfuscate the JNA library                     -->
+      <keep name="com.sun.jna.**">
+          <field name="*"/>
+          <method name="*"/>
+          <constructor name="*"/>
+      </keep>
+      <keep name="com.sun.jna.ptr.**">
+          <field name="*"/>
+          <method name="*"/>
+          <constructor name="*"/>
+      </keep>
+      <keep name="com.sun.jna.win32.**">
+          <field name="*"/>
+          <method name="*"/>
+          <constructor name="*"/>
+      </keep>
+      <keep name="com.sun.jna.examples.win32.**">
+          <field name="*"/>
+          <method name="*"/>
+          <constructor name="*"/>
+      </keep>
+      <!-- Don't obfuscate Classes that use JNA                -->
+      <keep extends="com.sun.jna.**">
+          <field name="*"/>
+          <method name="*"/>
+          <constructor name="*"/>
       </keep>
     </proguard>
   </target>
