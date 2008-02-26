@@ -134,6 +134,8 @@ New features:
 - 'Mkfile' can now allocate space to the newly created file.
 - New 'Rename' option added to file operations, allowing files that already 
   exist in the destination to be renamed (contributed by Mariusz Jakubowski).
+- Windows: 'Delete' now moves files to the Recycle Bin by default.
+- Windows: the Recycle Bin can be opened and emptied from the status bar.
 
 Improvements:
 - Added an 'Explore bookmarks' item to the 'Bookmarks' menu.

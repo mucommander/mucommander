@@ -23,6 +23,7 @@ import com.mucommander.command.CommandManager;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
 import com.mucommander.file.FileProtocols;
+import com.mucommander.file.impl.trash.WindowsTrashProvider;
 import com.mucommander.process.AbstractProcess;
 import com.mucommander.process.ProcessRunner;
 import com.mucommander.runtime.*;
@@ -178,6 +179,8 @@ public class PlatformManager implements JavaVersions, OsFamilies, OsVersions {
                 runExecutables               = false;
                 defaultRegexpCaseSensitivity = false;
             }
+
+            FileFactory.setTrashProvider(new WindowsTrashProvider());
         }
         // Mac OS X family
         else if(osFamily==MAC_OS_X) {
@@ -191,7 +194,7 @@ public class PlatformManager implements JavaVersions, OsFamilies, OsVersions {
             exeAssociation               = null;
             runExecutables               = false;
             defaultRegexpCaseSensitivity = true;
-            com.mucommander.file.FileFactory.setTrashProvider(new com.mucommander.file.impl.trash.OSXTrashProvider());
+            FileFactory.setTrashProvider(new com.mucommander.file.impl.trash.OSXTrashProvider());
         }
         // OS/2 family.
         else if(osFamily==OS_2) {
@@ -297,7 +300,7 @@ public class PlatformManager implements JavaVersions, OsFamilies, OsVersions {
         exeAssociation                = null;
         runExecutables                = false;
         defaultRegexpCaseSensitivity = true;
-        com.mucommander.file.FileFactory.setTrashProvider(new com.mucommander.file.impl.trash.KDETrashProvider());
+        FileFactory.setTrashProvider(new com.mucommander.file.impl.trash.KDETrashProvider());
     }
 
     /**
