@@ -19,7 +19,6 @@
 package com.mucommander.file.impl.local;
 
 import com.mucommander.Debug;
-import com.mucommander.PlatformManager;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
 import com.mucommander.file.FileProtocols;
@@ -33,6 +32,7 @@ import com.mucommander.io.RandomAccessOutputStream;
 import com.mucommander.process.AbstractProcess;
 import com.mucommander.runtime.JavaVersions;
 import com.mucommander.runtime.OsFamilies;
+import com.sun.jna.ptr.LongByReference;
 
 import javax.swing.filechooser.FileSystemView;
 import java.io.*;
@@ -184,46 +184,59 @@ public class LocalFile extends AbstractFile {
         try {
             // OS is Windows
             if(IS_WINDOWS) {
-                // Parses the output of 'dir "filePath"' command to retrieve free space information
-                // Note : total space information is not available under Windows
+//                // Parses the output of 'dir "filePath"' command to retrieve free space information
+//                // Note : total space information is not available under Windows
+//
+//                // 'dir' command returns free space on the last line
+//                //Process process = PlatformManager.execute("dir \""+absPath+"\"", this);
+//                //Process process = Runtime.getRuntime().exec(new String[] {"dir", absPath}, null, new File(getAbsolutePath()));
+//                Process process = Runtime.getRuntime().exec(PlatformManager.getDefaultShellCommand() + " dir \""+absPath+"\"");
+//
+//                // Check that the process was correctly started
+//                if(process!=null) {
+//                    br = new BufferedReader(new InputStreamReader(process.getInputStream()));
+//                    String line;
+//                    String lastLine = null;
+//                    // Retrieves last line of dir
+//                    while((line=br.readLine())!=null) {
+//                        if(!line.trim().equals(""))
+//                            lastLine = line;
+//                    }
+//
+//                    // Last dir line may look like something this (might vary depending on system's language, below in French):
+//                    // 6 Rep(s)  14 767 521 792 octets libres
+//                    if(lastLine!=null) {
+//                        StringTokenizer st = new StringTokenizer(lastLine, " \t\n\r\f,.");
+//                        // Discard first token
+//                        st.nextToken();
+//
+//                        // Concatenates as many contiguous groups of numbers
+//                        String token;
+//                        String freeSpace = "";
+//                        while(st.hasMoreTokens()) {
+//                            token = st.nextToken();
+//                            char c = token.charAt(0);
+//                            if(c>='0' && c<='9')
+//                                freeSpace += token;
+//                            else if(!freeSpace.equals(""))
+//                                break;
+//                        }
+//
+//                        dfInfo[1] = Long.parseLong(freeSpace);
+//                    }
+//                }
 
-                // 'dir' command returns free space on the last line
-                //Process process = PlatformManager.execute("dir \""+absPath+"\"", this);
-                //Process process = Runtime.getRuntime().exec(new String[] {"dir", absPath}, null, new File(getAbsolutePath()));
-                Process process = Runtime.getRuntime().exec(PlatformManager.getDefaultShellCommand() + " dir \""+absPath+"\"");
+                // Retrieves the total and free space information using the GetDiskFreeSpaceEx function of the
+                // Kernel32 API.
+                LongByReference totalSpaceLBR = new LongByReference();
+                LongByReference freeSpaceLBR = new LongByReference();
 
-                // Check that the process was correctly started
-                if(process!=null) {
-                    br = new BufferedReader(new InputStreamReader(process.getInputStream()));
-                    String line;
-                    String lastLine = null;
-                    // Retrieves last line of dir
-                    while((line=br.readLine())!=null) {
-                        if(!line.trim().equals(""))
-                            lastLine = line;
-                    }
-
-                    // Last dir line may look like something this (might vary depending on system's language, below in French):
-                    // 6 Rep(s)  14 767 521 792 octets libres		
-                    if(lastLine!=null) {
-                        StringTokenizer st = new StringTokenizer(lastLine, " \t\n\r\f,.");
-                        // Discard first token
-                        st.nextToken();
-
-                        // Concatenates as many contiguous groups of numbers
-                        String token;
-                        String freeSpace = "";
-                        while(st.hasMoreTokens()) {
-                            token = st.nextToken();
-                            char c = token.charAt(0);
-                            if(c>='0' && c<='9')
-                                freeSpace += token;
-                            else if(!freeSpace.equals(""))
-                                break;
-                        }
-
-                        dfInfo[1] = Long.parseLong(freeSpace);
-                    }
+                if(Kernel32API.INSTANCE.GetDiskFreeSpaceEx(absPath, null, totalSpaceLBR, freeSpaceLBR)) {
+                    dfInfo[0] = totalSpaceLBR.getValue();
+                    dfInfo[1] = freeSpaceLBR.getValue();
+                }
+                else {
+                    if(Debug.ON) Debug.trace("Call to GetDiskFreeSpaceEx failed, absPath="+absPath);
                 }
             }
             // Parses the output of 'df -k "filePath"' command on UNIX-based systems to retrieve free and total space information
