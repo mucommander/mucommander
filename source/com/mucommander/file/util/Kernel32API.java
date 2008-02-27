@@ -21,6 +21,7 @@ package com.mucommander.file.util;
 import com.sun.jna.Native;
 import com.sun.jna.Structure;
 import com.sun.jna.examples.win32.W32API;
+import com.sun.jna.ptr.LongByReference;
 
 /**
  * Exposes parts of the Windows Kernel32 API using JNA (Java Native Access).
@@ -76,4 +77,32 @@ public interface Kernel32API extends W32API {
      * @return the previous state of the error-mode bit flags.
      */
     int SetErrorMode(int uMode);
+
+
+    /**
+     * Retrieves information about the amount of space that is available on a disk volume, which is the total amount of
+     * space, the total amount of free space, and the total amount of free space available to the user that is 
+     * associated with the calling thread.
+     *
+     * @param lpDirectoryName A directory on the disk.
+     * If this parameter is NULL, the function uses the root of the current disk.
+     * If this parameter is a UNC name, it must include a trailing backslash, for example, "\\MyServer\MyShare\".
+     * This parameter does not have to specify the root directory on a disk. The function accepts any directory on a disk.
+     * The calling application must have FILE_LIST_DIRECTORY access rights for this directory.
+     * @param lpFreeBytesAvailable A pointer to a variable that receives the total number of free bytes on a disk that
+     * are available to the user who is associated with the calling thread. This parameter can be NULL.
+     * If per-user quotas are being used, this value may be less than the total number of free bytes on a disk.
+     * @param lpTotalNumberOfBytes A pointer to a variable that receives the total number of bytes on a disk that are
+     * available to the user who is associated with the calling thread. This parameter can be NULL.
+     * If per-user quotas are being used, this value may be less than the total number of bytes on a disk.
+     * To determine the total number of bytes on a disk or volume, use IOCTL_DISK_GET_LENGTH_INFO.
+     * @param lpTotalNumberOfFreeBytes A pointer to a variable that receives the total number of free bytes on a disk.
+     * This parameter can be NULL.
+     * @return If the function succeeds, the return value is nonzero. If the function fails, the return value is
+     * zero (0). To get extended error information, call GetLastError.
+     */
+    boolean GetDiskFreeSpaceEx(String lpDirectoryName,
+    		LongByReference lpFreeBytesAvailable,
+    		LongByReference lpTotalNumberOfBytes,
+    		LongByReference lpTotalNumberOfFreeBytes);
 }
