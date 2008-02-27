@@ -25,6 +25,7 @@ import com.mucommander.file.FileFactory;
 import com.mucommander.file.FileProtocols;
 import com.mucommander.file.FileURL;
 import com.mucommander.file.filter.FilenameFilter;
+import com.mucommander.file.util.Kernel32API;
 import com.mucommander.io.BufferPool;
 import com.mucommander.io.FileTransferException;
 import com.mucommander.io.RandomAccessInputStream;
@@ -100,6 +101,14 @@ public class LocalFile extends AbstractFile {
 
     static {
         IS_WINDOWS = OsFamilies.WINDOWS.isCurrent();
+
+        // Prevents Windows from poping up a message box when it cannot find a file. Those message box are triggered by
+        // java.io.File methods when operating on removable drives such as floppy or CD-ROM drives which have no disk
+        // inserted.
+        // This has been fixed in Java 1.6 b55 but this fixes previous versions of Java.
+        // See http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4089199
+        if(IS_WINDOWS)
+            Kernel32API.INSTANCE.SetErrorMode(Kernel32API.SEM_NOOPENFILEERRORBOX);
     }
 
 
