@@ -188,6 +188,7 @@ Bug fixes:
 - A warning is now displayed when attempting to view or edit binary files
   (Bug #20).
 - Symbolic links can now be viewed/edited (Bug #24).
+- Fixed potential 'No disk' error dialogs showing up under Windows (Bug #25).
 
 Known issues:
 - Korean translation is not up-to-date.
