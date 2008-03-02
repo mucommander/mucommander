@@ -139,7 +139,7 @@ public class BufferPool {
 
             if(bufferContainer.getSize()==size && (factory.matchesBufferClass(buffer.getClass()))) {
                 bufferContainers.removeElementAt(i);
-                if(Debug.ON) Debug.trace("Returning buffer "+buffer+", size="+size);
+//                if(Debug.ON) Debug.trace("Returning buffer "+buffer+", size="+size);
                 return buffer;
             }
         }
@@ -196,7 +196,7 @@ public class BufferPool {
             return;
         }
 
-        if(Debug.ON) Debug.trace("Adding buffer to pool: "+buffer);
+//        if(Debug.ON) Debug.trace("Adding buffer to pool: "+buffer);
 
         bufferContainers.add(bufferContainer);
     }
