@@ -34,7 +34,6 @@ import com.mucommander.runtime.JavaVersions;
 import com.mucommander.runtime.OsFamilies;
 import com.sun.jna.ptr.LongByReference;
 
-import javax.swing.filechooser.FileSystemView;
 import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
@@ -314,40 +313,22 @@ public class LocalFile extends AbstractFile {
 
 	
     /**
-     * Attemps to detect if this file is the root of a floppy drive.
-     * This method works only on platform that have root drives, such as Windows, and even on those the result is just 
-     * a guess.
+     * Attemps to detect if this file is the root of a removable media drive (floppy, CD, DVD, USB drive...).
+     * This method produces accurate results only under Windows.
      *
-     * @return <code>true</code> if this file looks like the root of a floppy drive. 
-     */
-    public boolean guessFloppyDrive() {
-        if(IS_WINDOWS && !isRoot())
-            return false;
-
-        // Use FileSystemView.isFloppyDrive(File) to determine if this file is a floppy drive.
-        // This method is available only in Java 1.4 and up.
-//        if(PlatformManager.JAVA_VERSION>=PlatformManager.JAVA_1_4)
-        return FileSystemView.getFileSystemView().isFloppyDrive(file);
-
-//        // We're running Java 1.3 or below, try to guess if file is floppy drive under Windows
-//        if(IS_WINDOWS && absPath.equals("A:") || absPath.equals("B:"))
-//            return true;
-//
-//        // No clue, return false
-//        return false;
-    }
-	
-    /**
-     * Attemps to detect if this file is the root of a removable media drive (floppy, CD, DVD, ...).
-     * This method works only on platform that have root drives, such as Windows, and even on those the result is just
-     * a guess.
-     *
-     * @return <code>true</code> if this file looks like the root of a removable media drive (floppy, CD, DVD, ...). 
+     * @return <code>true</code> if this file is the root of a removable media drive (floppy, CD, DVD, USB drive...). 
      */
     public boolean guessRemovableDrive() {
-        // A weak way to characterize such a drive is to check if the corresponding root folder is a floppy drive or 
-        // read-only. A better way would be to create a JNI interface as described here: http://forum.java.sun.com/thread.jspa?forumID=256&threadID=363074
-        return guessFloppyDrive() || (hasRootDrives() && isRoot() && !file.canWrite());
+        if(IS_WINDOWS) {
+            int driveType = Kernel32API.INSTANCE.GetDriveType(getAbsolutePath(true));
+            if(driveType!=Kernel32API.DRIVE_UNKNOWN)
+                return driveType==Kernel32API.DRIVE_REMOVABLE || driveType==Kernel32API.DRIVE_CDROM;
+        }
+
+
+        // For other OS that have root drives (OS/2), a weak way to characterize removable drives is by checking if the
+        // corresponding root folder is read-only.
+        return hasRootDrives() && isRoot() && !file.canWrite();
     }
 
 
@@ -518,10 +499,13 @@ public class LocalFile extends AbstractFile {
     }
 
     public boolean isDirectory() {
-        // To avoid drive seeks and potential 'floppy drive not available' dialog under Win32
-        // triggered by java.io.File.getCanonicalPath() 
-        if(IS_WINDOWS && guessFloppyDrive())
-            return true;
+        // This test is not necessary anymore now that 'No disk' error dialogs are disabled entirely (using Kernel32
+        // DLL's SetErrorMode function). Leaving this code commented for a while in case the problem comes back.
+
+//        // To avoid drive seeks and potential 'floppy drive not available' dialog under Win32
+//        // triggered by java.io.File.isDirectory()
+//        if(IS_WINDOWS && guessFloppyDrive())
+//            return true;
 
         return file.isDirectory();
     }
@@ -649,10 +633,13 @@ public class LocalFile extends AbstractFile {
 
 
     public String getCanonicalPath() {
-        // To avoid drive seeks and potential 'floppy drive not available' dialog under Win32
-        // triggered by java.io.File.getCanonicalPath()
-        if(IS_WINDOWS && guessFloppyDrive())
-            return absPath;
+        // This test is not necessary anymore now that 'No disk' error dialogs are disabled entirely (using Kernel32
+        // DLL's SetErrorMode function). Leaving this code commented for a while in case the problem comes back.
+         
+//        // To avoid drive seeks and potential 'floppy drive not available' dialog under Win32
+//        // triggered by java.io.File.getCanonicalPath()
+//        if(IS_WINDOWS && guessFloppyDrive())
+//            return absPath;
 
         // Note: canonical path must not be cached as its resolution can change over time, for instance
         // if a file 'Test' is renamed to 'test' in the same folder, its canonical path would still be 'Test'
