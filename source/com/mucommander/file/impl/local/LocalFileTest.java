@@ -86,7 +86,6 @@ public class LocalFileTest extends AbstractFileTestCase {
         LocalFile.hasRootDrives();
 
         LocalFile localFile = (LocalFile)tempFile.getAncestor(LocalFile.class);
-        localFile.guessFloppyDrive();
         localFile.guessRemovableDrive();
     }
 
