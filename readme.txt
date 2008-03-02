@@ -60,6 +60,9 @@ muCommander uses the following great third party works :
 - the JmDNS library released under the GNU LGPL license.
  JmDNS can be found at http://jmdns.sourceforge.net .
 
+- the JNA library released under the GNU LGPL license.
+ JmDNS can be found at http://jna.dev.java.net .
+
 - the Yanfs library released under the BSD license.
  Yanfs can be found at http://yanfs.dev.java.net .
 
