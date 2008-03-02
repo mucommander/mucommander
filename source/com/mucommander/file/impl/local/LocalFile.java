@@ -25,6 +25,7 @@ import com.mucommander.file.FileProtocols;
 import com.mucommander.file.FileURL;
 import com.mucommander.file.filter.FilenameFilter;
 import com.mucommander.file.util.Kernel32API;
+import com.mucommander.file.util.POSIX;
 import com.mucommander.io.BufferPool;
 import com.mucommander.io.FileTransferException;
 import com.mucommander.io.RandomAccessInputStream;
@@ -32,13 +33,12 @@ import com.mucommander.io.RandomAccessOutputStream;
 import com.mucommander.process.AbstractProcess;
 import com.mucommander.runtime.JavaVersions;
 import com.mucommander.runtime.OsFamilies;
+import com.mucommander.runtime.OsFamily;
 import com.sun.jna.ptr.LongByReference;
 
 import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
-import java.util.StringTokenizer;
-import java.util.Vector;
 import java.util.regex.Matcher;
 
 
@@ -156,17 +156,17 @@ public class LocalFile extends AbstractFile {
         return FileFactory.getFile(userHomePath);
     }
 
-
     /**
-     * Uses platform dependant commands to extract free and total space on the volume where this file resides.
+     * Returns the total and free space on the volume where this file resides.
      *
-     * <p>This method has been made public as it is more efficient to retrieve both free space and volume space
-     * info than calling getFreeSpace() and getTotalSpace() separately, since a single command process retrieves both.
+     * <p>Using this method to retrieve both free space and volume space is more efficient than calling
+     * {@link #getFreeSpace()} and {@link #getTotalSpace()} separately -- the underlying method retrieving both
+     * attributes at the same time.</p>
      *
-     * @return a [totalSpace, freeSpace] long array, where both values can be null if the information could not be retrieved
+     * @return a {totalSpace, freeSpace} long array, both values can be null if the information could not be retrieved
      */
     public long[] getVolumeInfo() {
-        // Under Java 1.6, use the new java.io.File methods
+        // Under Java 1.6 and up, use the (new) java.io.File methods
         if(JavaVersions.JAVA_1_6.isCurrentOrHigher()) {
             return new long[] {
                 getTotalSpace(),
@@ -174,9 +174,17 @@ public class LocalFile extends AbstractFile {
             };
         }
 
-        // We're running Java 1.5 or lower
+        // Under Java 1.5 or lower, use native methods
+        return getNativeVolumeInfo();
+    }
 
-        BufferedReader br = null;
+    /**
+     * Uses platform dependant functions to retrieve the total and free space on the volume where this file resides.
+     *
+     * @return a {totalSpace, freeSpace} long array, both values can be null if the information could not be retrieved
+     */
+    protected long[] getNativeVolumeInfo() {
+//        BufferedReader br = null;
         String absPath = getAbsolutePath();
         long dfInfo[] = new long[]{-1, -1};
 
@@ -184,7 +192,6 @@ public class LocalFile extends AbstractFile {
             // OS is Windows
             if(IS_WINDOWS) {
 //                // Parses the output of 'dir "filePath"' command to retrieve free space information
-//                // Note : total space information is not available under Windows
 //
 //                // 'dir' command returns free space on the last line
 //                //Process process = PlatformManager.execute("dir \""+absPath+"\"", this);
@@ -238,75 +245,83 @@ public class LocalFile extends AbstractFile {
                     if(Debug.ON) Debug.trace("Call to GetDiskFreeSpaceEx failed, absPath="+absPath);
                 }
             }
-            // Parses the output of 'df -k "filePath"' command on UNIX-based systems to retrieve free and total space information
-            else {
-                // 'df -k' returns totals in block of 1K = 1024 bytes
-                Process process = Runtime.getRuntime().exec(new String[]{"df", "-k", absPath}, null, file);
-				
-                // Check that the process was correctly started
-                if(process!=null) {
-                    br = new BufferedReader(new InputStreamReader(process.getInputStream()));
-                    // Discard the first line ("Filesystem   1K-blocks     Used    Avail Capacity  Mounted on");
-                    br.readLine();
-                    String line = br.readLine();
+            else if(OsFamily.getCurrent().isUnixBased()) {
+//                // Parses the output of 'df -k "filePath"' command on UNIX-based systems to retrieve free and total space information
+//
+//                // 'df -k' returns totals in block of 1K = 1024 bytes
+//                Process process = Runtime.getRuntime().exec(new String[]{"df", "-k", absPath}, null, file);
+//
+//                // Check that the process was correctly started
+//                if(process!=null) {
+//                    br = new BufferedReader(new InputStreamReader(process.getInputStream()));
+//                    // Discard the first line ("Filesystem   1K-blocks     Used    Avail Capacity  Mounted on");
+//                    br.readLine();
+//                    String line = br.readLine();
+//
+//                    // Sample lines:
+//                    // /dev/disk0s2            116538416 109846712  6179704    95%    /
+//                    // automount -fstab [202]          0         0        0   100%    /automount/Servers
+//                    // /dev/disk2s2                 2520      1548      972    61%    /Volumes/muCommander 0.8
+//
+//                    // We're interested in the '1K-blocks' and 'Avail' fields (only).
+//                    // The 'Filesystem' and 'Mounted On' fields can contain spaces (e.g. 'automount -fstab [202]' and
+//                    // '/Volumes/muCommander 0.8' resp.) and therefore be made of several tokens. A stable way to
+//                    // determine the position of the fields we're interested in is to look for the last token that
+//                    // starts with a '/' character which should necessarily correspond to the first token of the
+//                    // 'Mounted on' field. The '1K-blocks' and 'Avail' fields are 4 and 2 tokens away from it
+//                    // respectively.
+//
+//                    // Start by tokenizing the whole line
+//                    Vector tokenV = new Vector();
+//                    if(line!=null) {
+//                        StringTokenizer st = new StringTokenizer(line);
+//                        while(st.hasMoreTokens())
+//                            tokenV.add(st.nextToken());
+//                    }
+//
+//                    int nbTokens = tokenV.size();
+//                    if(nbTokens<6) {
+//                        // This shouldn't normally happen
+//                        if(Debug.ON) Debug.trace("Failed to parse output of df -k "+absPath+" line="+line);
+//                        return dfInfo;
+//                    }
+//
+//                    // Find the last token starting with '/'
+//                    int pos = nbTokens-1;
+//                    while(!((String)tokenV.elementAt(pos)).startsWith("/")) {
+//                        if(pos==0) {
+//                            // This shouldn't normally happen
+//                            if(Debug.ON) Debug.trace("Failed to parse output of df -k "+absPath+" line="+line);
+//                            return dfInfo;
+//                        }
+//
+//                        --pos;
+//                    }
+//
+//                    // '1-blocks' field (total space)
+//                    dfInfo[0] = Long.parseLong((String)tokenV.elementAt(pos-4)) * 1024;
+//                    // 'Avail' field (free space)
+//                    dfInfo[1] = Long.parseLong((String)tokenV.elementAt(pos-2)) * 1024;
+//                }
 
-                    // Sample lines:
-                    // /dev/disk0s2            116538416 109846712  6179704    95%    /
-                    // automount -fstab [202]          0         0        0   100%    /automount/Servers
-                    // /dev/disk2s2                 2520      1548      972    61%    /Volumes/muCommander 0.8
-
-                    // We're interested in the '1K-blocks' and 'Avail' fields (only).
-                    // The 'Filesystem' and 'Mounted On' fields can contain spaces (e.g. 'automount -fstab [202]' and
-                    // '/Volumes/muCommander 0.8' resp.) and therefore be made of several tokens. A stable way to
-                    // determine the position of the fields we're interested in is to look for the last token that
-                    // starts with a '/' character which should necessarily correspond to the first token of the 
-                    // 'Mounted on' field. The '1K-blocks' and 'Avail' fields are 4 and 2 tokens away from it
-                    // respectively.
-
-                    // Start by tokenizing the whole line
-                    Vector tokenV = new Vector();
-                    if(line!=null) {
-                        StringTokenizer st = new StringTokenizer(line);
-                        while(st.hasMoreTokens())
-                            tokenV.add(st.nextToken());
-                    }
-
-                    int nbTokens = tokenV.size();
-                    if(nbTokens<6) {
-                        // This shouldn't normally happen
-                        if(Debug.ON) Debug.trace("Failed to parse output of df -k "+absPath+" line="+line);
-                        return dfInfo;
-                    }
-
-                    // Find the last token starting with '/'
-                    int pos = nbTokens-1;
-                    while(!((String)tokenV.elementAt(pos)).startsWith("/")) {
-                        if(pos==0) {
-                            // This shouldn't normally happen
-                            if(Debug.ON) Debug.trace("Failed to parse output of df -k "+absPath+" line="+line);
-                            return dfInfo;
-                        }
-
-                        --pos;
-                    }
-
-                    // '1-blocks' field (total space)
-                    dfInfo[0] = Long.parseLong((String)tokenV.elementAt(pos-4)) * 1024;
-                    // 'Avail' field (free space)
-                    dfInfo[1] = Long.parseLong((String)tokenV.elementAt(pos-2)) * 1024;
+                // Retrieves the total and free space information using the POSIX statvfs function
+                POSIX.STATVFSSTRUCT struct = new POSIX.STATVFSSTRUCT();
+                if(POSIX.INSTANCE.statvfs(absPath, struct)==0) {
+                    dfInfo[0] = struct.f_blocks * struct.f_frsize;
+                    dfInfo[1] = struct.f_bfree * struct.f_frsize;
                 }
             }
         }
-        catch(Exception e) {	// Could be IOException, NoSuchElementException or NumberFormatException, but better be safe and catch Exception
+        catch(Throwable e) {	// JNA throws a java.lang.UnsatisfiedLinkError if the native can't be found
             if(com.mucommander.Debug.ON) {
                 com.mucommander.Debug.trace("Exception thrown while retrieving volume info: "+e);
                 e.printStackTrace();
             }
         }
-        finally {
-            if(br!=null)
-                try { br.close(); } catch(IOException e) {}
-        }
+//        finally {
+//            if(br!=null)
+//                try { br.close(); } catch(IOException e) {}
+//        }
 
         return dfInfo;
     }
