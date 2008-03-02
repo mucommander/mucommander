@@ -79,6 +79,10 @@ public interface Kernel32API extends W32API {
     int SetErrorMode(int uMode);
 
 
+    /////////////////////////////////
+    // GetDiskFreeSpaceEx function //
+    /////////////////////////////////
+
     /**
      * Retrieves information about the amount of space that is available on a disk volume, which is the total amount of
      * space, the total amount of free space, and the total amount of free space available to the user that is 
@@ -105,4 +109,39 @@ public interface Kernel32API extends W32API {
     		LongByReference lpFreeBytesAvailable,
     		LongByReference lpTotalNumberOfBytes,
     		LongByReference lpTotalNumberOfFreeBytes);
+
+
+    ///////////////////////////
+    // GetDriveType function //
+    ///////////////////////////
+
+    /** The drive type cannot be determined. */
+    public final static int DRIVE_UNKNOWN = 0;
+
+    /** The root path is invalid; for example, there is no volume is mounted at the path. */
+    public final static int DRIVE_NO_ROOT_DIR = 1;
+
+    /** The drive has removable media; for example, a floppy drive, thumb drive, or flash card reader. */
+    public final static int DRIVE_REMOVABLE = 2;
+
+    /** The drive has fixed media; for example, a hard drive or flash drive. */
+    public final static int DRIVE_FIXED = 3;
+
+    /** The drive is a remote (network) drive. */
+    public final static int DRIVE_REMOTE = 4;
+
+    /** The drive is a CD-ROM drive. */
+    public final static int DRIVE_CDROM = 5;
+
+    /** The drive is a RAM disk. */
+    public final static int DRIVE_RAMDISK = 6;
+
+    /**
+     * Determines whether a disk drive is a removable, fixed, CD-ROM, RAM disk, or network drive.
+     * 
+     * @param lpRootPathName The root directory for the drive. A trailing backslash is required. If this parameter is
+     * NULL, the function uses the root of the current directory.
+     * @return The return value specifies the type of drive, which can be one of the above values.
+     */
+    int GetDriveType(String lpRootPathName);
 }
