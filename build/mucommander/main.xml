@@ -269,7 +269,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <target name="obfuscate-bytecode" depends="load-libpath" if="proguard.available">
     <echo>Creating obfuscated JAR file...</echo>
     <mkdir dir="${proguard.reports}"/>
-    <proguard overloadaggressively="false" usemixedcaseclassnames="${proguard.mixed-case}" ignorewarnings="false" optimize="true" shrink="true" obfuscate="true"
+    <proguard overloadaggressively="false" usemixedcaseclassnames="${proguard.mixed-case}" ignorewarnings="false" optimize="false" shrink="true" obfuscate="false"
               printmapping="${proguard.reports}/mapping.txt" printusage="${proguard.reports}/usage.txt" printseeds="${proguard.reports}/seeds.txt"
               allowaccessmodification="false" repackageclasses="" skipnonpubliclibraryclasses="true" target="${app.jvm}">
       <injar name="${jar.normal}"/> 
