@@ -42,9 +42,9 @@ public interface POSIX extends Library {
      */
     public static class STATVFSSTRUCT extends Structure {
         /* file system block size */
-        public long f_bsize;
+        public int f_bsize;
         /* fragment size */
-        public long f_frsize;
+        public int f_frsize;
         /* size of fs in f_frsize units */
         public int f_blocks;
         /* # free blocks */
@@ -60,9 +60,9 @@ public interface POSIX extends Library {
         /* file system ID */
         public long f_fsid;
         /* mount flags */
-        public long f_flag;
+        public int f_flag;
         /* maximum filename length */
-        public long f_namemax;
+        public int f_namemax;
     }
 
     /**
