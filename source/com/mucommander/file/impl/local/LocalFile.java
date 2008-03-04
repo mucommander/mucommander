@@ -307,8 +307,8 @@ public class LocalFile extends AbstractFile {
                 // Retrieves the total and free space information using the POSIX statvfs function
                 POSIX.STATVFSSTRUCT struct = new POSIX.STATVFSSTRUCT();
                 if(POSIX.INSTANCE.statvfs(absPath, struct)==0) {
-                    dfInfo[0] = struct.f_blocks * struct.f_frsize;
-                    dfInfo[1] = struct.f_bfree * struct.f_frsize;
+                    dfInfo[0] = struct.f_blocks * (long)struct.f_frsize;
+                    dfInfo[1] = struct.f_bfree * (long)struct.f_frsize;
                 }
             }
         }
