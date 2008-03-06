@@ -232,7 +232,7 @@ public class MuConfiguration {
     /** Describes a descending sort order. */
     public static final String  SORT_ORDER_DESCENDING              = "desc";
     /** Default 'sort order' column for the file table. */
-    public static final String  DEFAULT_SORT_ORDER                 = SORT_ORDER_DESCENDING;
+    public static final String  DEFAULT_SORT_ORDER                 = SORT_ORDER_ASCENDING;
     /** Name of the 'show column' variable. */
     public static final String  SHOW_COLUMN                        = "show";
     /** Name of the 'column position' variable. */

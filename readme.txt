@@ -192,6 +192,10 @@ Bug fixes:
   (Bug #20).
 - Symbolic links can now be viewed/edited (Bug #24).
 - Fixed potential 'No disk' error dialogs showing up under Windows (Bug #25).
+- The sort order (ascending/descending) of the 'Name' column was inconsistent 
+  with that other columns.
+- Columns other than 'Name' defaulted to 'descending' sort order instead of 
+ 'ascending'.
 
 Known issues:
 - Korean translation is not up-to-date.

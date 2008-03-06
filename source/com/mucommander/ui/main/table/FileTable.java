@@ -152,6 +152,11 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
     // -----------------------------------------------------------------------------------
     public FileTable(MainFrame mainFrame, FolderPanel folderPanel, FileTableConfiguration conf) {
         super(new FileTableModel(), new FileTableColumnModel(conf));
+
+        // Initialize ascending order to true for all columns
+        for(int i=0; i<ascendingOrder.length; i++)
+            ascendingOrder[i] = true;
+
         tableModel = (FileTableModel)getModel();
         ThemeManager.addCurrentThemeListener(this);
 
