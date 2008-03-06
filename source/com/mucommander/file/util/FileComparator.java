@@ -85,15 +85,15 @@ public class FileComparator implements Comparator {
         long diff;
 
         if(s1==null && s2!=null)	    // s1 is null, s2 isn't
-            diff = 1;
-        else if(s1!=null && s2==null)	// s2 is null, s1 isn't
             diff = -1;
+        else if(s1!=null && s2==null)	// s2 is null, s1 isn't
+            diff = 1;
         // At this point, either both strings are null, or none of them are
         else {
             if (s1==null)		        // Both strings are null
                 diff = 0;
             else			            // Both strings are not null
-                diff = s2.compareToIgnoreCase(s1);
+                diff = s1.compareToIgnoreCase(s2);
         }
 
         return diff;
@@ -115,9 +115,9 @@ public class FileComparator implements Comparator {
 
         if(directoriesFirst) {
             if(is1Directory && !is2Directory)
-                return 1;	// ascending has no effect on the result (a directory is always first) so let's return
-            else if(is2Directory && !is1Directory)
                 return -1;	// ascending has no effect on the result (a directory is always first) so let's return
+            else if(is2Directory && !is1Directory)
+                return 1;	// ascending has no effect on the result (a directory is always first) so let's return
 
             // At this point, either both files are directories or none of them are
         }
@@ -146,19 +146,19 @@ public class FileComparator implements Comparator {
             diff = compareStrings(f1.getGroup(), f2.getGroup());
         }
         else {      // criterion == NAME_CRITERION
-            diff = f2.getName().compareToIgnoreCase(f1.getName());
+            diff = f1.getName().compareToIgnoreCase(f2.getName());
             if(diff==0) {
                 // This should never happen unless the current filesystem allows a directory to have
                 // several files with different case variations of the same name.
                 // AFAIK, no OS/filesystem allows this, but just to be safe.
 
                 // Case-sensitive name comparison
-                diff = f2.getName().compareTo(f1.getName());
+                diff = f1.getName().compareTo(f2.getName());
             }
         }
 
         if(criterion!=NAME_CRITERION && diff==0)	// If both files have the same criterion's value, compare names
-            diff = f2.getName().compareToIgnoreCase(f1.getName());
+            diff = f1.getName().compareToIgnoreCase(f2.getName());
 
         // Cast long value to int, without overflowing the int if the long value exceeds the min or max int value
         int intValue;
@@ -170,7 +170,7 @@ public class FileComparator implements Comparator {
         else
             intValue = (int)diff;
 
-        return ascending?-intValue:intValue;
+        return ascending?intValue:-intValue; // Note: ascending is used more often, more efficient to negate for descending
     }
 
 
