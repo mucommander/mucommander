@@ -61,7 +61,7 @@ public class FileTableModel extends AbstractTableModel {
     private AbstractFile parent;
 
     private int sortByCriterion = Columns.NAME;
-    private boolean ascendingOrder = false;
+    private boolean ascendingOrder = true;
     private boolean foldersFirst = MuConfiguration.getVariable(MuConfiguration.SHOW_FOLDERS_FIRST, MuConfiguration.DEFAULT_SHOW_FOLDERS_FIRST);
 
     /** True if name column temporarily editable */
@@ -513,7 +513,7 @@ public class FileTableModel extends AbstractTableModel {
         }
         else if( lo == hi - 1 ) {
             // sort a two element list by swapping if necessary
-            if (fc.compare(cachedFiles[fileArrayIndex[lo]],cachedFiles[fileArrayIndex[hi]])<0) {
+            if (fc.compare(cachedFiles[fileArrayIndex[lo]],cachedFiles[fileArrayIndex[hi]])>0) {
                 temp = fileArrayIndex[lo];
                 fileArrayIndex[lo] = fileArrayIndex[hi];
                 fileArrayIndex[hi] = temp;
@@ -530,13 +530,13 @@ public class FileTableModel extends AbstractTableModel {
         while( lo < hi ) {
             // Search forward from files[lo] until an element is found that
             // is greater than the pivot or lo >= hi
-            while (fc.compare(cachedFiles[fileArrayIndex[lo]], pivot)>=0 && lo < hi) {
+            while (fc.compare(cachedFiles[fileArrayIndex[lo]], pivot)<=0 && lo < hi) {
                 lo++;
             }
 
             // Search backward from files[hi] until element is found that
             // is less than the pivot, or lo >= hi
-            while (fc.compare(pivot, cachedFiles[fileArrayIndex[hi]])>=0 && lo < hi ) {
+            while (fc.compare(pivot, cachedFiles[fileArrayIndex[hi]])<=0 && lo < hi ) {
                 hi--;
             }
 
