@@ -253,8 +253,8 @@ public class MainFrame extends JFrame implements LocationListener {
         mainFrame = new MainFrame();
         mainFrame.init(new FolderPanel(mainFrame, leftFolderPanel.getCurrentFolder(), leftTable.getConfiguration()),
                        new FolderPanel(mainFrame, rightFolderPanel.getCurrentFolder(), rightTable.getConfiguration()));
-        mainFrame.leftTable.sortBy(leftTable.getSortByCriteria(), leftTable.isSortAscending());
-        mainFrame.rightTable.sortBy(rightTable.getSortByCriteria(), rightTable.isSortAscending());
+        mainFrame.leftTable.sortBy(leftTable.getSortByCriteria(), leftTable.isAscendingOrder());
+        mainFrame.rightTable.sortBy(rightTable.getSortByCriteria(), rightTable.isAscendingOrder());
         return mainFrame;
     }
 
@@ -453,8 +453,8 @@ public class MainFrame extends JFrame implements LocationListener {
         boolean ascending;
         int     criteria;
         criteria  = leftTable.getSortByCriteria();
-        ascending = leftTable.isSortAscending();
-        leftTable.sortBy(rightTable.getSortByCriteria(), rightTable.isSortAscending());
+        ascending = leftTable.isAscendingOrder();
+        leftTable.sortBy(rightTable.getSortByCriteria(), rightTable.isAscendingOrder());
         rightTable.sortBy(criteria, ascending);
 
         splitPane.setLeftComponent(leftFolderPanel);
@@ -631,9 +631,9 @@ public class MainFrame extends JFrame implements LocationListener {
 
         // Saves left and right table sort order.
         MuConfiguration.setVariable(MuConfiguration.LEFT_SORT_BY, Columns.getColumnName(leftTable.getSortByCriteria()));
-        MuConfiguration.setVariable(MuConfiguration.LEFT_SORT_ORDER, leftTable.isSortAscending() ? MuConfiguration.SORT_ORDER_ASCENDING : MuConfiguration.SORT_ORDER_DESCENDING);
+        MuConfiguration.setVariable(MuConfiguration.LEFT_SORT_ORDER, leftTable.isAscendingOrder() ? MuConfiguration.SORT_ORDER_ASCENDING : MuConfiguration.SORT_ORDER_DESCENDING);
         MuConfiguration.setVariable(MuConfiguration.RIGHT_SORT_BY, Columns.getColumnName(rightTable.getSortByCriteria()));
-        MuConfiguration.setVariable(MuConfiguration.RIGHT_SORT_ORDER, rightTable.isSortAscending() ? MuConfiguration.SORT_ORDER_ASCENDING : MuConfiguration.SORT_ORDER_DESCENDING);
+        MuConfiguration.setVariable(MuConfiguration.RIGHT_SORT_ORDER, rightTable.isAscendingOrder() ? MuConfiguration.SORT_ORDER_ASCENDING : MuConfiguration.SORT_ORDER_DESCENDING);
 
         // Save split pane orientation
         saveSplitPaneOrientation();
