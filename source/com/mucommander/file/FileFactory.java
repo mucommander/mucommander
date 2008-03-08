@@ -163,7 +163,8 @@ public class FileFactory {
     /**
      * Makes sure no instance of <code>FileFactory</code> is created.
      */
-    private FileFactory() {}
+    private FileFactory() {
+    }
 
 
     /**
@@ -210,6 +211,7 @@ public class FileFactory {
 
     /**
      * Returns the object used to create instances of {@link AbstractTrash}.
+     *
      * @return the object used to create instances of {@link AbstractTrash} if any, <code>null</code> otherwise.
      */
     public static TrashProvider getTrashProvider() {
@@ -220,6 +222,7 @@ public class FileFactory {
 
     /**
      * Sets the object that will be used to create instances of {@link AbstractTrash}.
+     *
      * @param  provider object that will be used to create instances of {@link AbstractTrash}.
      * @return          the previous trash provider if any, <code>null</code> otherwise.
      */
@@ -296,6 +299,7 @@ public class FileFactory {
 
     /**
      * Registers a new archive format.
+     *
      * @param mapping new mapping to register.
      */
     public static void registerArchiveFormat(ArchiveFormatMapping mapping) {
@@ -305,6 +309,7 @@ public class FileFactory {
 
     /**
      * Registers a new archive format.
+     *
      * @param provider class used to create instances of the new archive format.
      * @param filter   filter that files must match to be considered of the new format.
      */
@@ -314,6 +319,7 @@ public class FileFactory {
 
     /**
      * Removes any archive format that might have been registered to the specified extension.
+     *
      * @param mapping archive format mapping to unregister.
      */
     public static void unregisterArchiveFileFormat(ArchiveFormatMapping mapping) {
@@ -347,8 +353,9 @@ public class FileFactory {
      *
      * @return an iterator on all known archive formats.
      */
-    public static Iterator archiveFormats() {return archiveFormatMappingsV.iterator();}
-
+    public static Iterator archiveFormats() {
+        return archiveFormatMappingsV.iterator();
+    }
 
 
     /**
@@ -357,7 +364,6 @@ public class FileFactory {
      * <p>This method does not throw any IOException but returns <code>null</code> if the file could not be created.</p>
      *
      * @param absPath the absolute path to the file
-     *
      * @return <code>null</code> if the given path is not absolute or incorrect (doesn't correspond to any file) or
      * if something went wrong during file creation.
      */
@@ -376,7 +382,6 @@ public class FileFactory {
      *
      * @param absPath the absolute path to the file
      * @param throwException if set to <code>true</code>, an IOException will be thrown if something went wrong during file creation
-     *
      * @return <code>null</code> if the given path is not absolute or incorrect (doesn't correspond to any file)
      * @throws java.io.IOException  and throwException param was set to <code>true</code>.
      * @throws AuthException if additionnal authentication information is required to create the file
@@ -401,17 +406,17 @@ public class FileFactory {
      * @param absPath the absolute path to the file
      * @param parent the returned file's parent
      * @return an instance of <code>AbstractFile</code> for the specified absolute path.
-     *
      * @throws java.io.IOException if something went wrong during file or file url creation.
      * @throws AuthException if additionnal authentication information is required to create the file
      */
-    public static AbstractFile getFile(String absPath, AbstractFile parent) throws AuthException, IOException {return getFile(new FileURL(absPath), parent);}
+    public static AbstractFile getFile(String absPath, AbstractFile parent) throws AuthException, IOException {
+        return getFile(new FileURL(absPath), parent);
+    }
 
     /**
      * Returns an instance of AbstractFile for the given FileURL instance.
      *
      * @param fileURL the file URL
-     *
      * @return the created file or null if something went wrong during file creation
      */
     public static AbstractFile getFile(FileURL fileURL) {
@@ -427,7 +432,6 @@ public class FileFactory {
      *
      * @param fileURL the file URL
      * @param throwException if set to <code>true</code>, an IOException will be thrown if something went wrong during file creation
-     *
      * @return the created file
      * @throws java.io.IOException if something went wrong during file creation
      */
@@ -454,7 +458,6 @@ public class FileFactory {
      * @param fileURL the file URL representing the file to be created
      * @param parent the parent AbstractFile to use as the created file's parent, can be <code>null</code>
      * @return an instance of {@link AbstractFile} for the given {@link FileURL}.
-     *
      * @throws java.io.IOException if something went wrong during file creation.
      */
     public static AbstractFile getFile(FileURL fileURL, AbstractFile parent) throws IOException {
@@ -586,6 +589,8 @@ public class FileFactory {
     /**
      * Returns a variation of the given filename, appending a pseudo-unique ID to the filename's prefix while keeping
      * the same filename extension.
+     *
+     * @param filename base filename
      */
     private static String getFilenameVariation(String filename) {
         int lastDotPos = filename.lastIndexOf('.');
@@ -634,8 +639,8 @@ public class FileFactory {
     }
 
     /**
-     * Convenience method that creates a temporary file with a default 'desired name'. Yield the same result as calling
-     * {@link #getTemporaryFile(String, boolean)} with <code>null</code>
+     * Creates a temporary file with a default filename. This method is a shorthand for
+     * {@link #getTemporaryFile(String, boolean)} called with a <code>null</code> name.
      *
      * @param deleteOnExit if <code>true</code>, the temporary file will be deleted upon normal termination of the JVM
      * @return the temporary file, may be a LocalFile or an AbstractArchiveFile if the filename's extension corresponds
@@ -648,7 +653,7 @@ public class FileFactory {
     }
 
     /**
-     * Returns the temporary folder, i.e. the folder where the parent folder of temporary files returned by
+     * Returns the temporary folder, i.e. the parent folder of temporary files returned by
      * {@link #getTemporaryFile(String, boolean)}.
      *
      * @return the temporary folder
@@ -664,7 +669,9 @@ public class FileFactory {
      * @param filename the filename to test
      * @return <code>true</code> if the specified filename is a known archive file name, <code>false</code> otherwise.
      */
-    public static boolean isArchiveFilename(String filename) {return getArchiveFormatProvider(filename) != null;}
+    public static boolean isArchiveFilename(String filename) {
+        return getArchiveFormatProvider(filename) != null;
+    }
 
     /**
      * Tests based on the given file's extension, if the file corresponds to a registered archive format.
