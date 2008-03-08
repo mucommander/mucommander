@@ -36,7 +36,7 @@ import java.awt.*;
  */
 public class FileTableHeaderRenderer extends DefaultTableCellRenderer {
 
-    private boolean ascendingOrder = false;
+    private boolean ascendingOrder = true;
     private boolean isCurrent = false;
 
     private final static ImageIcon ASCENDING_ICON = IconManager.getIcon(IconManager.COMMON_ICON_SET, "arrow_up.png");
