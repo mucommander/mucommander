@@ -217,7 +217,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
 
             // Displays an ascending/descending arrow
             tableHeader.putClientProperty("JTableHeader.sortDirection", isActiveTable
-                    ?isSortAscending()?"ascending":"decending"      // decending is mispelled but this is OK
+                    ? isAscendingOrder()?"ascending":"decending"      // decending is mispelled but this is OK
                     :null);
 
             // Note: if this table is not currently active, properties are cleared to remove the highlighting effect.
@@ -642,8 +642,8 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
     }
 
     /**
-     * Sorts this FileTable by the given criterion. The sort order (ascending or descending) is left unchanged by this
-     * method.
+     * Sorts this FileTable by the given criterion. If the criterion is already the current one, the sort order
+     * (ascending or descending) is reversed.
      *
      * @param criterion the sort criterion, see {@link com.mucommander.ui.main.table.Columns} for allowed values
      */
@@ -670,7 +670,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
      *
      * @return true if the current sort order is ascending, false if it is descending
      */
-    public boolean isSortAscending() {
+    public boolean isAscendingOrder() {
         return ascendingOrder[sortByCriterion];
     }
 
@@ -726,7 +726,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
     }
 
     /**
-     * Reverses the sort order.
+     * Reverses the current sort order, from ascending to descending or vice-versa.
      */
     public void reverseSortOrder() {
         ascendingOrder[sortByCriterion] = !ascendingOrder[sortByCriterion];
