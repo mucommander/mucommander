@@ -3819,7 +3819,7 @@ com.mucommander.ui.action.QuitAction.label:SK:Koniec
 com.mucommander.ui.action.QuitAction.label:JA:終了
 com.mucommander.ui.action.QuitAction.label:SV:Avsluta
 
-com.mucommander.ui.action.ReverseSortOrderAction.label:EN:Invert order
+com.mucommander.ui.action.ReverseSortOrderAction.label:EN:Reverse order
 com.mucommander.ui.action.ReverseSortOrderAction.label:FR:Inverser l'ordre
 com.mucommander.ui.action.ReverseSortOrderAction.label:DE:Sortierung umdrehen
 com.mucommander.ui.action.ReverseSortOrderAction.label:ES:Invertir el orden
