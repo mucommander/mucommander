@@ -34,6 +34,7 @@ import com.mucommander.process.AbstractProcess;
 import com.mucommander.runtime.JavaVersions;
 import com.mucommander.runtime.OsFamilies;
 import com.mucommander.runtime.OsFamily;
+import com.mucommander.runtime.OsVersions;
 import com.sun.jna.ptr.LongByReference;
 
 import java.io.*;
@@ -90,17 +91,15 @@ public class LocalFile extends AbstractFile {
     /** Underlying local filesystem's path separator: "/" under UNIX systems, "\" under Windows and OS/2 */
     public final static String SEPARATOR = File.separator;
 
+    /** Are we running Windows ? */
+    private final static boolean IS_WINDOWS =  OsFamilies.WINDOWS.isCurrent();
+
     /** true if the underlying local filesystem uses drives assigned to letters (e.g. A:\, C:\, ...) instead
      * of having single a root folder '/' */
-    public final static boolean USES_ROOT_DRIVES = OsFamilies.WINDOWS.isCurrent() || OsFamilies.OS_2.isCurrent();
-
-    /** Are we running Windows ? */
-    private final static boolean IS_WINDOWS;
+    public final static boolean USES_ROOT_DRIVES = IS_WINDOWS || OsFamilies.OS_2.isCurrent();
 
 
     static {
-        IS_WINDOWS = OsFamilies.WINDOWS.isCurrent();
-
         // Prevents Windows from poping up a message box when it cannot find a file. Those message box are triggered by
         // java.io.File methods when operating on removable drives such as floppy or CD-ROM drives which have no disk
         // inserted.
@@ -714,24 +713,51 @@ public class LocalFile extends AbstractFile {
      * is also a local file.
      */
     public boolean moveTo(AbstractFile destFile) throws FileTransferException  {
+        // If destination file is not a LocalFile nor has a LocalFile ancestor (for instance an archive entry),
+        // renaming won't work so use the default moveTo() implementation instead
         if(!destFile.getURL().getProtocol().equals(FileProtocols.FILE)) {
             return super.moveTo(destFile);
         }
 
-        // If destination file is not a LocalFile nor has a LocalFile ancestor (for instance an archive entry),
-        // renaming won't work so use the default moveTo() implementation instead
         destFile = destFile.getTopAncestor();
         if(!(destFile instanceof LocalFile)) {
             return super.moveTo(destFile);
         }
 
-        // Fail in some situations where java.io.File#renameTo() doesn't, such as if the destination already exists.
+        // Fail in some situations where java.io.File#renameTo() doesn't.
         // Note that java.io.File#renameTo()'s implementation is system-dependant, so it's always a good idea to
         // perform all those checks even if some are not necessary on this or that platform.
         checkCopyPrerequisites(destFile, true);
 
-        // Move file
-        return file.renameTo(((LocalFile)destFile).file);
+        // The behavior of java.io.File#renameTo() when the destination file already exists is not consistent
+        // accross platforms:
+        // - Under UNIX, it succeeds and return true
+        // - Under Windows, it fails and return false
+        // This Java bug goes in great details about this issue: http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4017593
+        //
+        // => Since this method is required to succeed when the destination file exists, the Windows platform needs
+        // special treatment.
+
+        File destJavaIoFile = ((LocalFile)destFile).file;
+
+        if(IS_WINDOWS) {
+            // Windows 9x or Windows Me: Kernel32's MoveFileEx function is NOT available
+            if(OsVersions.WINDOWS_ME.isCurrentOrLower() && destFile.exists()) {
+                // The destination file is deleted before calling java.io.File#renameTo().
+                // Note that in this case, the atomicity of this method is not guaranteed anymore -- if
+                // java.io.File#renameTo() fails (for whatever reason), the destination file is deleted anyway.
+                destJavaIoFile.delete();
+            }
+            // Windows NT: Kernel32's MoveFileEx function is available.
+            else {
+                // Note: MoveFileEx is always used, even if the destination file does not exist, to avoid having to
+                // call #exists() on the destination file which has a cost.
+                return  Kernel32API.INSTANCE.MoveFileEx(absPath, destFile.getAbsolutePath(),
+                        Kernel32API.MOVEFILE_REPLACE_EXISTING|Kernel32API.MOVEFILE_WRITE_THROUGH);
+            }
+        }
+
+        return file.renameTo(destJavaIoFile);
     }
 
 
