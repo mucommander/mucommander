@@ -144,4 +144,58 @@ public interface Kernel32API extends W32API {
      * @return The return value specifies the type of drive, which can be one of the above values.
      */
     int GetDriveType(String lpRootPathName);
+
+
+    /////////////////////////
+    // MoveFileEx function //
+    /////////////////////////
+
+    /** If a file named lpNewFileName exists, the function replaces its contents with the contents of the
+     * lpExistingFileName file. This value cannot be used if lpNewFileName or lpExistingFileName names a directory. */
+    public final static int MOVEFILE_REPLACE_EXISTING = 1;
+
+    /** If the file is to be moved to a different volume, the function simulates the move by using the CopyFile and
+     * DeleteFile functions.<br/>
+     * This value cannot be used with MOVEFILE_DELAY_UNTIL_REBOOT. */
+    public final static int MOVEFILE_COPY_ALLOWED = 2;
+
+    /** The system does not move the file until the operating system is restarted. The system moves the file immediately
+     * after AUTOCHK is executed, but before creating any paging files. Consequently, this parameter enables the
+     * function to delete paging files from previous startups.<br/>
+     * This value can be used only if the process is in the context of a user who belongs to the administrators group or
+     * the LocalSystem account.<br/>
+     * This value cannot be used with MOVEFILE_COPY_ALLOWED.<br/>
+     * <b>Windows 2000</b>:  If you specify the MOVEFILE_DELAY_UNTIL_REBOOT flag for dwFlags, you cannot also prepend
+     * the filename that is specified by lpExistingFileName with "\\?". */
+    public final static int MOVEFILE_DELAY_UNTIL_REBOOT = 4;
+
+    /** The function does not return until the file is actually moved on the disk.<br/>
+     * Setting this value guarantees that a move performed as a copy and delete operation is flushed to disk before the
+     * function returns. The flush occurs at the end of the copy operation.<br/>
+     * This value has no effect if MOVEFILE_DELAY_UNTIL_REBOOT is set. */
+    public final static int MOVEFILE_WRITE_THROUGH = 8;
+
+    /** Reserved for future use. */
+    public final static int MOVEFILE_CREATE_HARDLINK = 16;
+
+    /** The function fails if the source file is a link source, but the file cannot be tracked after the move.
+     * This situation can occur if the destination is a volume formatted with the FAT file system. */
+    public final static int MOVEFILE_FAIL_IF_NOT_TRACKABLE = 32;
+
+    /**
+     * Moves an existing file or directory, including its children, with various move options.
+     *
+     * <p><b>Warning</b>: this method is NOT available on Windows 95, 98 and Me.</p>
+     * 
+     * @param lpExistingFileName The current name of the file or directory on the local computer. If dwFlags specifies
+     * MOVEFILE_DELAY_UNTIL_REBOOT, the file cannot exist on a remote share, because delayed operations are performed
+     * before the network is available.
+     * @param lpNewFileName The new name of the file or directory on the local computer. When moving a file, the
+     * destination can be on a different file system or volume. If the destination is on another drive, you must set the
+     * MOVEFILE_COPY_ALLOWED flag in dwFlags. When moving a directory, the destination must be on the same drive.
+     * @param dwFlags This parameter can be one or more of the 'MOVEFILE_' constant values. 
+     * @return If the function succeeds, the return value is nonzero. If the function fails, the return value is
+     * zero (0). To get extended error information, call GetLastError.
+     */
+    boolean MoveFileEx(String lpExistingFileName, String lpNewFileName, int dwFlags);
 }
