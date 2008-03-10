@@ -265,7 +265,7 @@ public class FileTableModel extends AbstractTableModel {
             midFile = getCachedFileAtRow(mid);
             if(midFile.equals(file))
                 return mid;
-            if(fc.compare(file, midFile)>0)
+            if(fc.compare(file, midFile)<0)
                 right = mid-1;
             else
                 left = mid+1;
