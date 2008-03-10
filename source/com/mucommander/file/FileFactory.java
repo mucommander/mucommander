@@ -29,6 +29,7 @@ import com.mucommander.file.icon.impl.SwingFileIconProvider;
 import com.mucommander.file.impl.local.LocalFile;
 import com.mucommander.file.util.FileToolkit;
 import com.mucommander.file.util.PathTokenizer;
+import com.mucommander.runtime.OsFamilies;
 import com.mucommander.util.Enumerator;
 
 import java.io.IOException;
@@ -461,8 +462,12 @@ public class FileFactory {
      * @throws java.io.IOException if something went wrong during file creation.
      */
     public static AbstractFile getFile(FileURL fileURL, AbstractFile parent) throws IOException {
+        String filePath = fileURL.getPath();
+        // For local paths under Windows (e.g. "/C:\temp"), remove the leading '/' character
+        if(OsFamilies.WINDOWS.isCurrent() && FileProtocols.FILE.equals(fileURL.getProtocol()))
+            filePath = FileToolkit.removeLeadingSeparator(filePath, "/");
 
-        PathTokenizer pt = new PathTokenizer(fileURL.getPath(),
+        PathTokenizer pt = new PathTokenizer(filePath,
                 fileURL.getPathSeparator(),
                 false);
 
@@ -492,7 +497,7 @@ public class FileFactory {
                 }
                 else {          // currentFile is an AbstractArchiveFile
                     // Note: wrapArchive() is already called by AbstractArchiveFile#createArchiveEntryFile()
-                    AbstractFile tempEntryFile = ((AbstractArchiveFile)currentFile).getArchiveEntryFile(FileToolkit.removeLeadingSeparator(currentPath.substring(currentFile.getURL().getPath().length(), currentPath.length())));
+                    AbstractFile tempEntryFile = ((AbstractArchiveFile)currentFile).getArchiveEntryFile(FileToolkit.removeLeadingSeparator(currentPath.substring(currentFile.getAbsolutePath().length(), currentPath.length())));
                     if(tempEntryFile instanceof AbstractArchiveFile) {
                         currentFile = tempEntryFile;
                         lastFileResolved = true;
@@ -518,7 +523,7 @@ public class FileFactory {
                 currentFile = createRawFile(clonedURL);
             }
             else {          // currentFile is an AbstractArchiveFile
-                currentFile = ((AbstractArchiveFile)currentFile).getArchiveEntryFile(FileToolkit.removeLeadingSeparator(currentPath.substring(currentFile.getURL().getPath().length(), currentPath.length())));
+                currentFile = ((AbstractArchiveFile)currentFile).getArchiveEntryFile(FileToolkit.removeLeadingSeparator(currentPath.substring(currentFile.getAbsolutePath().length(), currentPath.length())));
             }
         }
 
