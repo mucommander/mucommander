@@ -40,6 +40,7 @@ public class SizeFormatTest extends TestCase {
 
     private final static DecimalFormat DECIMAL_FORMAT = (DecimalFormat)NumberFormat.getInstance();
 
+    private final static String DECIMAL_SEPARATOR = ""+DECIMAL_FORMAT.getDecimalFormatSymbols().getDecimalSeparator();
 
     static {
         // SizeFormat uses localized strings
@@ -104,10 +105,10 @@ public class SizeFormatTest extends TestCase {
         for(int i=0; i<UNITS.length; i++) {
             unit = UNITS[i];
 
-            testDigitsMedium("1.0", unit);
-            testDigitsMedium("1.0", unit+1);
-            testDigitsMedium("9.0", unit*9);
-            testDigitsMedium("9.9", unit*10-1);
+            testDigitsMedium("1" + DECIMAL_SEPARATOR + "0", unit);
+            testDigitsMedium("1" + DECIMAL_SEPARATOR + "0", unit+1);
+            testDigitsMedium("9" + DECIMAL_SEPARATOR + "0", unit*9);
+            testDigitsMedium("9" + DECIMAL_SEPARATOR + "9", unit*10-1);
             testDigitsMedium("10", unit*10);
             testDigitsMedium("10", unit*10+1);
             testDigitsMedium("11", unit*11);
