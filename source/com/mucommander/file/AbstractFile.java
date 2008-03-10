@@ -374,7 +374,6 @@ public abstract class AbstractFile implements FilePermissions {
      * Throws a {@link FileTransferException} in any of the following conditions are true, does nothing otherwise:
      * <ul>
      *   <li>this file does not exist</li>
-     *   <li>the destination file exists</li>
      *   <li>this file and the destination file are the same, unless <code>allowCaseVariations</code> is <code>true</code>
      * and the destination filename is a case variation of the source</li>
      *   <li>this file is a parent of the destination file</li>
@@ -488,7 +487,6 @@ public abstract class AbstractFile implements FilePermissions {
      * operation could not be performed because of unsatisfied conditions (not an error).
      * A {@link FileTransferException} if the operation was attempted but failed for any of the following reasons:
      * <ul>
-     *  <li>the destination file exists</li>
      *  <li>this file and the destination file are the same</li>
      *  <li>this file is a directory and a parent of the destination file (operation would otherwise loop indefinitely)</li>
      *  <li>this file (or one if its child) could not be read</li>
