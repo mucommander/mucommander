@@ -1460,10 +1460,15 @@ public abstract class AbstractFileTestCase extends TestCase implements FilePermi
 
     /**
      * Tests {@link AbstractFile#getIcon()} and {@link AbstractFile#getIcon(java.awt.Dimension)}.
+     *
+     * @throws IOException should not happen
      */
-    public void testIcon() {
+    public void testIcon() throws IOException {
         Icon icon;
         boolean isHeadless = GraphicsEnvironment.isHeadless();
+
+        // Some icon providers will fail (return a null icon) if the file doesn't exist
+        tempFile.mkfile();
 
         icon = tempFile.getIcon();
         if(!isHeadless)
