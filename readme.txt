@@ -123,9 +123,8 @@ New features:
   This option slows down transfers significantly but can prevent data loss
   caused by faulty mediums.
 - Files can be marked/unmarked using a Regexp.
-- New 'Owner' and 'Group' columns added to the folder pane (not visible by
-  default). The owner and group information is available on FTP and SFTP folders
-  and some TAR archives.
+- Added 'Owner' and 'Group' columns (disabled by default). The owner and group
+  information is available on FTP and SFTP folders and some TAR archives.
 - Custom look&feels can now be imported from the preferences dialog.
 - New 'Mark selection' feature (mapped onto Shift+Add by default) that lets 
   users mark all files whose extension match that of the current selection.
@@ -195,6 +194,7 @@ Bug fixes:
 - Sort order (ascending/descending) of the 'Name' column was inconsistent 
   with that other columns. 'ascending' order has also been made the default for 
   all columns.
+- Fixed 'Swap folders' not preserving the 'Show folders first' view options.
 
 Known issues:
 - Korean translation is not up-to-date.
