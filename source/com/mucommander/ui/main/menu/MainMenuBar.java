@@ -351,18 +351,19 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
             FileTable activeTable = mainFrame.getActiveTable();
 
             // Select the 'sort by' criterion currently in use in the active table
-            sortByItems[activeTable.getSortByCriteria()].setSelected(true);
+            sortByItems[activeTable.getSortInfo().getCriterion()].setSelected(true);
 
-            toggleShowFoldersFirstItem.setSelected(activeTable.isShowFoldersFirstEnabled());
+            toggleShowFoldersFirstItem.setSelected(activeTable.getSortInfo().getFoldersFirst());
             toggleShowHiddenFiles.setSelected(MuConfiguration.getVariable(MuConfiguration.SHOW_HIDDEN_FILES, MuConfiguration.DEFAULT_SHOW_HIDDEN_FILES));
         }
         else if(source==columnsMenu) {
-            // Update visible columns state: select menu item if column is currently visible in the active table
+            // Update the selected and enabled state of each column menu item.
             FileTable activeTable = mainFrame.getActiveTable();
             for(int i=0; i<Columns.COLUMN_COUNT; i++) {
-                if(i==Columns.NAME)     // Name column doesn't have a menu item as it cannot be hidden
+                if(i==Columns.NAME)     // Name column doesn't have a menu item as it cannot be disabled
                     continue;
-                toggleColumnItems[i].setSelected(activeTable.isColumnVisible(i));
+                toggleColumnItems[i].setSelected(activeTable.isColumnEnabled(i));
+                toggleColumnItems[i].setEnabled(activeTable.isColumnDisplayable(i));
             }
         }
         else if(source==goMenu) {

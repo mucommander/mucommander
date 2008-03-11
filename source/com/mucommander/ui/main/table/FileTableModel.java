@@ -40,6 +40,12 @@ import java.util.Date;
  */
 public class FileTableModel extends AbstractTableModel {
 
+    /** The current folder */
+    private AbstractFile currentFolder;
+
+    /** The current folder's parent folder, may be null */
+    private AbstractFile parent;
+
     /** Cached file instances */
     private AbstractFile cachedFiles[];
 
@@ -54,17 +60,14 @@ public class FileTableModel extends AbstractTableModel {
 	
     /** Marked files FileSet */
     private FileSet markedFiles;
+
     /** Combined size of files currently marked */
     private long markedTotalSize;
 
-    private AbstractFile currentFolder;
-    private AbstractFile parent;
+    /** Contains sort-related variables */
+    private SortInfo sortInfo;
 
-    private int sortByCriterion = Columns.NAME;
-    private boolean ascendingOrder = true;
-    private boolean foldersFirst = MuConfiguration.getVariable(MuConfiguration.SHOW_FOLDERS_FIRST, MuConfiguration.DEFAULT_SHOW_FOLDERS_FIRST);
-
-    /** True if name column temporarily editable */
+    /** True if the name column is temporarily editable */
     private boolean nameColumnEditable;
 
     /** SizeFormat format used to create the size column's string */
@@ -112,8 +115,7 @@ public class FileTableModel extends AbstractTableModel {
 
 
     public FileTableModel() {
-        // Arrays init to avoid NullPointerExcepions until setCurrentFolder()
-        // gets called for the first time
+        // Init arrays to avoid NullPointerExcepions until setCurrentFolder() gets called for the first time
         cachedFiles = new AbstractFile[0];
         fileArrayIndex = new int[0];
         cellValuesCache = new Object[0][Columns.COLUMN_COUNT-1];
@@ -121,7 +123,10 @@ public class FileTableModel extends AbstractTableModel {
         markedFiles = new FileSet();
     }
 
-	
+    void setSortInfo(SortInfo sortInfo) {
+        this.sortInfo = sortInfo;
+    }
+
     public synchronized AbstractFile getCurrentFolder() {
         return currentFolder;
     }
@@ -156,9 +161,6 @@ public class FileTableModel extends AbstractTableModel {
         // Init and fill cell cache to speed up table even more
         this.cellValuesCache = new Object[nbRows][Columns.COLUMN_COUNT-1];
         fillCellCache();
-
-        // Sort the new folder using the current sort criteria, ascending/descending order and 'folders first' value
-        sortBy(sortByCriterion, ascendingOrder, foldersFirst);
     }
 
 	
@@ -259,7 +261,8 @@ public class FileTableModel extends AbstractTableModel {
         int right = getRowCount()-1;
         int mid;
         AbstractFile midFile;
-        FileComparator fc = new FileComparator(getComparatorCriterion(sortByCriterion), ascendingOrder, foldersFirst);
+        FileComparator fc = getFileComparator(sortInfo);
+
         while(left<=right) {
             mid = (right-left)/2 + left;
             midFile = getCachedFileAtRow(mid);
@@ -485,17 +488,16 @@ public class FileTableModel extends AbstractTableModel {
         return comparatorCriterion;
     }
 
+    private static FileComparator getFileComparator(SortInfo sortInfo) {
+        return new FileComparator(getComparatorCriterion(sortInfo.getCriterion()), sortInfo.getAscendingOrder(), sortInfo.getFoldersFirst());
+    }
+
 
     /**
-     * Sorts rows by the given criterion, by ascending or descending order, showing folders first or mixing them with
-     * regular files.
+     * Sorts rows by the current criterion, ascending/descending order and 'folders first' value.
      */
-    public synchronized void sortBy(int criterion, boolean ascending, boolean foldersFirst)  {		// boolean ascending
-        this.sortByCriterion = criterion;
-        this.ascendingOrder = ascending;
-        this.foldersFirst = foldersFirst;
-
-        sort(new FileComparator(getComparatorCriterion(criterion), ascending, foldersFirst), 0, fileArrayIndex.length-1);
+    synchronized void sortRows()  {
+        sort(getFileComparator(sortInfo), 0, fileArrayIndex.length-1);
     }
 
 

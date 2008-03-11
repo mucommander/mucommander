@@ -38,8 +38,8 @@ public class ToggleShowFoldersFirstAction extends MuAction {
 
     public void performAction() {
         FileTable activeTable = mainFrame.getActiveTable();
-        boolean showFoldersFirst = !activeTable.isShowFoldersFirstEnabled();
-        activeTable.setShowFoldersFirstEnabled(showFoldersFirst);
+        boolean showFoldersFirst = !activeTable.getSortInfo().getFoldersFirst();
+        activeTable.setFoldersFirst(showFoldersFirst);
         MuConfiguration.setVariable(MuConfiguration.SHOW_FOLDERS_FIRST, showFoldersFirst);
     }
 }

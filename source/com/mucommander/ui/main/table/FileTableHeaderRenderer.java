@@ -36,9 +36,6 @@ import java.awt.*;
  */
 public class FileTableHeaderRenderer extends DefaultTableCellRenderer {
 
-    private boolean ascendingOrder = true;
-    private boolean isCurrent = false;
-
     private final static ImageIcon ASCENDING_ICON = IconManager.getIcon(IconManager.COMMON_ICON_SET, "arrow_up.png");
     private final static ImageIcon DESCENDING_ICON = IconManager.getIcon(IconManager.COMMON_ICON_SET, "arrow_down.png");
 
@@ -52,26 +49,6 @@ public class FileTableHeaderRenderer extends DefaultTableCellRenderer {
         setIconTextGap(6);
         // Note: the label is left-aligned by default
         setHorizontalAlignment(JLabel.CENTER);
-    }
-
-
-    /**
-     * Specifies whether the column corresponding to this renderer is the currently selected one, i.e. the one the table
-     * is currently sorted by.
-     *
-     * @param isCurrent true if the column corresponding to this renderer is the currently selected one.
-     */
-    public void setCurrent(boolean isCurrent) {
-        this.isCurrent = isCurrent;
-    }
-
-    /**
-     * Specifies whether if the sort order of the column corresponding to this renderer is ascending or descending.
-     *
-     * @param isAscending true if the order is ascending, false for descending
-     */
-    public void setSortOrder(boolean isAscending) {
-        this.ascendingOrder = isAscending;
     }
 
 
@@ -90,6 +67,17 @@ public class FileTableHeaderRenderer extends DefaultTableCellRenderer {
                 label.setBackground(header.getBackground());
                 label.setFont(header.getFont());
             }
+
+            FileTable fileTable = (FileTable)table;
+            if(fileTable.getSortInfo().getCriterion()==fileTable.convertColumnIndexToModel(column)) {
+                // This header is the currently selected one
+                label.setIcon(fileTable.getSortInfo().getAscendingOrder()? ASCENDING_ICON : DESCENDING_ICON);
+            }
+            else {
+                // The renderer component acts as a rubber-stamp, therefore the icon value needs to be set to null explicitely
+                // as it might still hold a previous value
+                label.setIcon(null);
+            }
         }
 
         // Use borders made specifically for table headers
@@ -98,16 +86,6 @@ public class FileTableHeaderRenderer extends DefaultTableCellRenderer {
 
         // Add a tooltip as headers are sometimes too small for the text to fit entirely
         label.setToolTipText((String)value);
-
-        if(isCurrent) {
-            // This header is the currently selected one
-            label.setIcon(ascendingOrder? ASCENDING_ICON : DESCENDING_ICON);
-        }
-        else {
-            // The renderer component acts as a rubber-stamp, therefore the icon value needs to be set to null explicitely
-            // as it might still hold a previous value
-            label.setIcon(null);
-        }
 
         return label;
     }

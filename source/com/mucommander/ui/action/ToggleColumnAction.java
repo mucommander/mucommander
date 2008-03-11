@@ -42,6 +42,6 @@ public abstract class ToggleColumnAction extends MuAction {
     }
 
     public void performAction() {
-        mainFrame.getActiveTable().setColumnVisible(columnIndex, !mainFrame.getActiveTable().isColumnVisible(columnIndex));
+        mainFrame.getActiveTable().setColumnEnabled(columnIndex, !mainFrame.getActiveTable().isColumnVisible(columnIndex));
     }
 }

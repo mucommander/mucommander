@@ -30,7 +30,7 @@ import java.util.*;
 
 /**
  * Used to keep track of a file table's columns position and visibility settings.
- * @author Nicolas Rinaudo
+ * @author Nicolas Rinaudo, Maxence Bernard
  */
 public class FileTableColumnModel implements TableColumnModel, PropertyChangeListener {
     // - Class constants -----------------------------------------------------------------
@@ -49,7 +49,9 @@ public class FileTableColumnModel implements TableColumnModel, PropertyChangeLis
     private int           widthCache = CACHE_OUT_OF_DATE;
     /** All available columns. */
     private Vector        columns    = new Vector(Columns.COLUMN_COUNT);
-    /** Visibility status of each column. */
+    /** Enabled state of each column. */
+    private boolean[]     enabled = new boolean[Columns.COLUMN_COUNT];
+    /** Visibility state of each column. */
     private boolean[]     visibility = new boolean[Columns.COLUMN_COUNT];
     /** Cache for the number of available columns. */
     private int           countCache;
@@ -71,17 +73,15 @@ public class FileTableColumnModel implements TableColumnModel, PropertyChangeLis
         countCache = 1;
 
         // Initialises the columns.
-        for(int i = 0; i < visibility.length; i++) {
+        for(int i = 0; i < Columns.COLUMN_COUNT; i++) {
             columns.add(column = new TableColumn(i));
             column.setCellEditor(null);
             column.setHeaderValue(Columns.getColumnLabel(i));
 
-            FileTableHeaderRenderer headerRenderer = null;
             // Mac OS X 10.5 (Leopard) and up uses JTableHeader properties to render sort indicators on table headers.
-            // On other platforms, we use a custom header renderer
+            // On other platforms, we use a custom table header renderer.
             if(!FileTable.usesTableHeaderRenderingProperties()) {
-                headerRenderer = new FileTableHeaderRenderer();
-                column.setHeaderRenderer(headerRenderer);
+                column.setHeaderRenderer(new FileTableHeaderRenderer());
             }
 
             column.addPropertyChangeListener(this);
@@ -92,15 +92,16 @@ public class FileTableColumnModel implements TableColumnModel, PropertyChangeLis
 
             // Initialises the column's visibility and minimum width.
             if(i == Columns.NAME) {
-                visibility[i] = true;
-                if(headerRenderer!=null)
-                    headerRenderer.setCurrent(true);
+                enabled[i] = true;
             }
             else {
-                if((visibility[i] = conf.isVisible(i)))
+                if((enabled[i] = conf.isEnabled(i)))
                     countCache++;
             }
             column.setMinWidth(Columns.getMinimumColumnWidth(i));
+
+            // Init visibility state to enabled state, FileTable will adjust the values for conditional columns later
+            visibility[i] = enabled[i]; 
         }
 
         // Sorts the columns.
@@ -121,7 +122,7 @@ public class FileTableColumnModel implements TableColumnModel, PropertyChangeLis
             column = (TableColumn)columns.get(i);
             index  = column.getModelIndex();
 
-            conf.setVisible(index, visibility[index]);
+            conf.setEnabled(index, enabled[index]);
             conf.setPosition(index, i);
             conf.setWidth(index, column.getWidth());
         }
@@ -131,14 +132,37 @@ public class FileTableColumnModel implements TableColumnModel, PropertyChangeLis
 
 
 
-    // - Columns visibility --------------------------------------------------------------
+    // - Enabled state -------------------------------------------------------------------
     // -----------------------------------------------------------------------------------
+
     /**
-     * Sets the specified column's visibility status.
+     * Returns <code>true</code> if the specified column is enabled.
+     * @param  id      a column identifier, see {@link Columns} for allowed values.
+     * @return true if the column is enabled, false if disabled.
+     */
+    public synchronized boolean isColumnEnabled(int id) {
+        return enabled[id];
+    }
+
+    /**
+     * Sets the specified column's enabled state.
+     * @param id      a column identifier, see {@link Columns} for allowed values.
+     * @param enabled true to enable the column, false to disable it.
+     */
+    public synchronized void setColumnEnabled(int id, boolean enabled) {
+        this.enabled[id] = enabled;
+    }
+
+
+    // - Visibility state ----------------------------------------------------------------
+    // -----------------------------------------------------------------------------------
+
+    /**
+     * Sets the specified column's visibility state.
      * @param id      identifier of the column as defined in {@link Columns}.
      * @param visible whether the column should be visible or not.
      */
-    public synchronized void setColumnVisible(int id, boolean visible) {
+    synchronized void setColumnVisible(int id, boolean visible) {
         // Ignores calls that won't actually change anything.
         if(visibility[id] != visible) {
             visibility[id] = visible;

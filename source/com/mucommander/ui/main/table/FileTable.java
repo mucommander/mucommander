@@ -90,16 +90,11 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
     /** CellEditor used to edit filenames when clicked */
     private FilenameEditor        filenameEditor;
 
-
-    private AbstractFile currentFolder;
+    /** Contains sort-related variables */
+    private SortInfo sortInfo = new SortInfo();
 
     /** Row currently selected */
     private int currentRow;
-
-    /** Current sort criteria */
-    private int sortByCriterion = Columns.NAME;
-    /** Ascending/Descending order for all columns */
-    private boolean ascendingOrder[] = new boolean[Columns.COLUMN_COUNT];
 
     // Used when right button is pressed and mouse is dragged
     private boolean markOnRightClick;
@@ -124,9 +119,6 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
     /** Is automatic columns sizing enabled ? */
     private boolean autoSizeColumnsEnabled;
 
-    /** Should folders be displayed first, or mixed with regular files */
-    private boolean showFoldersFirst = MuConfiguration.getVariable(MuConfiguration.SHOW_FOLDERS_FIRST, MuConfiguration.DEFAULT_SHOW_FOLDERS_FIRST);
-
     /** Instance of the inner class that handles quick search */
     private QuickSearch quickSearch = new QuickSearch();
 
@@ -147,17 +139,12 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
     private final static Class MARK_ACTION_CLASS = com.mucommander.ui.action.MarkSelectedFileAction.class;
 
 
-
-    // - Initialisation ------------------------------------------------------------------
-    // -----------------------------------------------------------------------------------
     public FileTable(MainFrame mainFrame, FolderPanel folderPanel, FileTableConfiguration conf) {
         super(new FileTableModel(), new FileTableColumnModel(conf));
 
-        // Initialize ascending order to true for all columns
-        for(int i=0; i<ascendingOrder.length; i++)
-            ascendingOrder[i] = true;
-
         tableModel = (FileTableModel)getModel();
+        tableModel.setSortInfo(sortInfo);
+
         ThemeManager.addCurrentThemeListener(this);
 
         setAutoResizeMode(AUTO_RESIZE_NEXT_COLUMN);
@@ -212,12 +199,12 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
 
             // Highlights the selected column
             tableHeader.putClientProperty("JTableHeader.selectedColumn", isActiveTable
-                    ?new Integer(getColumnPosition(getSortByCriteria()))
+                    ?new Integer(convertColumnIndexToView(sortInfo.getCriterion()))
                     :null);
 
             // Displays an ascending/descending arrow
             tableHeader.putClientProperty("JTableHeader.sortDirection", isActiveTable
-                    ? isAscendingOrder()?"ascending":"decending"      // decending is mispelled but this is OK
+                    ? sortInfo.getAscendingOrder()?"ascending":"decending"      // decending is mispelled but this is OK
                     :null);
 
             // Note: if this table is not currently active, properties are cleared to remove the highlighting effect.
@@ -241,7 +228,9 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
 
 
     /**
-     * Returns the FolderPanel that contains this FileTable.
+     * Returns the {@link FolderPanel} that contains this FileTable.
+     *
+     * @return the FolderPanel that contains this FileTable
      */
     public FolderPanel getFolderPanel() {
         return folderPanel;
@@ -253,8 +242,9 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
      * Being the active table doesn't necessarily mean that it currently has focus, the focus can be in some other component
      * of the active {@link FolderPanel}, or nowhere in the MainFrame if the window is not in the foreground.
      *
-     * <p>Use {@link #hasFocus()} to test if the table currently has focus.
+     * <p>Use {@link #hasFocus()} to test if the table currently has focus.</p>
      *
+     * @return true if this table is the active one in the MainFrame
      * @see com.mucommander.ui.main.MainFrame#getActiveTable()
      */
     public boolean isActiveTable() {
@@ -263,31 +253,49 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
 
     /**
      * Convenience method that returns this table's model (the one that {@link #getModel()} returns),
-     * as a FileTableModel, to avoid having to cast it.
+     * as a {@link FileTableModel}, to avoid having to cast it.
+     *
+     * @return this table's model cast as a FileTableModel
      */
     public FileTableModel getFileTableModel() {
         return tableModel;
     }
 
     /**
-     * Returns the QuickSearch inner class instance used by this FileTable. 
+     * Returns a {@link SortInfo} instance that holds information about how this table is currently sorted.
+     *
+     * @return a SortInfo instance that holds information about how this table is currently sorted
+     */
+    public SortInfo getSortInfo() {
+        return sortInfo;
+    }
+
+    /**
+     * Returns the {@link QuickSearch} inner class instance used by this FileTable.
+     *
+     * @return the QuickSearch inner class instance used by this FileTable
      */
     public FileTable.QuickSearch getQuickSearch() {
         return quickSearch;
     }
 
     /**
-     * Returns the file that is currently selected (highlighted) or null if the parent folder '..' is currently selected.
+     * Returns the file that is currently selected (highlighted), <code>null</code> if the parent folder '..' is
+     * currently selected.
+     *
+     * @return the file that is currently selected (highlighted), null if the parent folder '..' is currently selected
      */
     public synchronized AbstractFile getSelectedFile() {
         return getSelectedFile(false, false);
     }
 
     /**
-     * Returns the file that is currently selected (highlighted).
+     * Returns the file that is currently selected (highlighted). If the currently selected file is the
+     * parent folder '..', the parent folder is returned only if the corresponding parameter is <code>true</code>.
      *
      * @param includeParentFolder if <code>true</code> and parent folder '..' is currently selected, the parent folder
      * will be returned.
+     * @return the file that is currently selected (highlighted)
      */
     public synchronized AbstractFile getSelectedFile(boolean includeParentFolder) {
         return getSelectedFile(includeParentFolder, false);
@@ -295,11 +303,14 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
 
 
     /**
-     * Returns the file that is currently selected (highlighted).
+     * Returns the file that is currently selected (highlighted), wrapped in a {@link com.mucommander.file.impl.CachedFile}
+     * instance if the corresponding parameter is <code>true</code>. If the currently selected file is the
+     * parent folder '..', the parent folder is returned only if the corresponding parameter is <code>true</code>.
      *
      * @param includeParentFolder if true and the parent folder '..' is currently selected, the parent folder file
      * will be returned. If false, null will be returned if the parent folder file is currently selected.
      * @param returnCachedFile if true, a CachedFile corresponding to the currently selected file will be returned
+     * @return the file that is currently selected (highlighted)
      */
     public synchronized AbstractFile getSelectedFile(boolean includeParentFolder, boolean returnCachedFile) {
         if(tableModel.getRowCount()==0 || (!includeParentFolder && isParentFolderSelected()))
@@ -309,7 +320,10 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
 
 
     /**
-     * Returns selected files: marked files or currently selected file if no file is marked.
+     * Returns selected files in a {@link FileSet}. Selected files are either the marked files or the currently selected
+     * file if no file is currently marked. The parent folder '..' is never included in the returned set.
+     *
+     * @return selected files in a FileSet
      */
     public FileSet getSelectedFiles() {
         FileSet selectedFiles = tableModel.getMarkedFiles();
@@ -323,14 +337,19 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
     }
 
     /**
-     * Returns true if the currently selected row/file is the parent folder '..' .
+     * Returns <code>true</code> if the currently selected row/file is the parent folder '..' .
+     *
+     * @return true if the currently selected row/file is the parent folder '..'
      */
     public boolean isParentFolderSelected() {
         return currentRow == 0 && tableModel.hasParentFolder();
     }
 
     /**
-     * Returns true if the given row is the parent folder '..' .
+     * Returns <code>true</code> if the given row is the parent folder '..' .
+     *
+     * @param row index of the row to test
+     * @return true if the given row is the parent folder '..'
      */
     public boolean isParentFolder(int row) {
         return row == 0 && tableModel.hasParentFolder();
@@ -338,37 +357,46 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
 
     /**
      * Returns the folder currently displayed by this FileTable.
+     *
+     * @return the folder currently displayed by this FileTable
      */
     public AbstractFile getCurrentFolder() {
-        return currentFolder != null ? currentFolder : tableModel.getCurrentFolder();
+        return tableModel.getCurrentFolder();
     }
 
     /**
-     * Changes current folder, keeping current selection if folder hasn't changed.
+     * Changes the current folder, preserving the current file selection if the folder hasn't changed.
+     *
+     * @param folder the new folder
+     * @param children child files of the new folder
      */
     public void setCurrentFolder(AbstractFile folder, AbstractFile[] children) {
         setCurrentFolder(folder, children, null);
     }
 
     /**
-     * Changes current folder, selecting the specified file if it can be found.
+     * Changes the current folder, selecting the specified file if it can be found in the folder.
+     * The current file selection is preserved if the folder hasn't changed.
+     *
+     * @param folder the new folder
+     * @param children child files of the new folder
+     * @param select the file to select (highlight), can be null.
      */
     public synchronized void setCurrentFolder(AbstractFile folder, AbstractFile children[], AbstractFile select) {
-        AbstractFile current;      // Current folder.
+        AbstractFile currentFolder;      // Current folder.
         FileSet      markedFiles;  // Buffer for all previously marked file.
         AbstractFile selectedFile; // Buffer for the previously selected file.
 
         // Stop quick search in case it was being used before folder change
         quickSearch.cancel();
 
-        current       = getCurrentFolder();
-        currentFolder = folder;
+        currentFolder = getCurrentFolder();
 
         // If we're refreshing the current folder, save the current selection and marked files
         // in order to restore them properly.
         markedFiles  = null;
         selectedFile = null;
-        if(current != null && folder.equals(current)) {
+        if(currentFolder != null && folder.equals(currentFolder)) {
             markedFiles = tableModel.getMarkedFiles();
             selectedFile = getSelectedFile();
         }
@@ -376,7 +404,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
         // If we're navigating to the current folder's parent, we must select
         // the current folder.
         else if(tableModel.hasParentFolder() && folder.equals(tableModel.getParentFolder()))
-            selectedFile = current;
+            selectedFile = currentFolder;
 
         // Makes sure we select the requested file if it was specified.
         if(select != null)
@@ -403,7 +431,9 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
 
 
     /**
-     * Returns <code>true</code> if the auto-columns sizing feature is enabled.
+     * Returns <code>true</code> if the auto-columns sizing is currently enabled.
+     *
+     * @return true if the auto-columns sizing is currently enabled
      */
     public boolean isAutoSizeColumnsEnabled() {
         return this.autoSizeColumnsEnabled;
@@ -412,6 +442,8 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
 
     /**
      * Enables/disables auto-columns sizing, which automatically resizes columns to fit the table's width.
+     *
+     * @param enabled true to enable auto-columns sizing, false to disable it
      */
     public void setAutoSizeColumnsEnabled(boolean enabled) {
         this.autoSizeColumnsEnabled = enabled;
@@ -427,7 +459,9 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
 
 
     /**
-     * Returns true if auto columns sizing is enabled.
+     * Returns <code>true</code> if auto columns sizing is currently enabled.
+     *
+     * @return true if auto columns sizing is currently enabled
      */
     public boolean getAutoSizeColumnsEnabled() {
         return autoSizeColumnsEnabled;
@@ -438,30 +472,23 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
      * Controls whether folders are displayed first in this FileTable or mixed with regular files.
      * After calling this method, the table is refreshed to reflect the change.
      * 
-     * @param enabled if true, folders will be
+     * @param enabled if true, folders are displayed before regular files. If false, files are mixed with directories.
      */
-    public void setShowFoldersFirstEnabled(boolean enabled) {
-        if(showFoldersFirst!=enabled) {
-            this.showFoldersFirst = enabled;
+    public void setFoldersFirst(boolean enabled) {
+        if(sortInfo.getFoldersFirst()!=enabled) {
+            sortInfo.setFoldersFirst(enabled);
             sortTable();
         }
     }
 
-    /**
-     * Returns true if folders are displayed first, false if they are mixed with regular files.
-     */
-    public boolean isShowFoldersFirstEnabled() {
-        return showFoldersFirst;
-    }
-
 
     /**
-     * Selects the given file.
+     * Selects the given file, does nothing if this table does not contain the file.
+     *
+     * @param file the file to select
      */
     public void selectFile(AbstractFile file) {
         int row = tableModel.getFileRow(file);
-
-        if(Debug.ON) Debug.trace("file="+file+" row="+row);
 
         if(row!=-1)
             selectRow(row);
@@ -470,6 +497,8 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
 
     /**
      * Makes the given row the currently selected one.
+     *
+     * @param row index of the row to select
      */
     public void selectRow(int row) {
         changeSelection(row, 0, false, false);
@@ -481,7 +510,10 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
      * and notifies registered {@link com.mucommander.ui.event.TableSelectionListener} that the files currently marked
      * on this FileTable have changed.
      *
-     * <p>This method has no effect if the row corresponds to the parent folder row '..'.
+     * <p>This method has no effect if the row corresponds to the parent folder row '..' .</p>
+     *
+     * @param row index of the row to select
+     * @param marked true to mark the row, false to unmark it
      */
     public void setRowMarked(int row, boolean marked) {
         if(isParentFolder(row))
@@ -499,6 +531,9 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
      * Sets the given file as marked/unmarked in the table model, repaints the corresponding row to reflect the change,
      * and notifies registered {@link com.mucommander.ui.event.TableSelectionListener} that currently marked files
      * have changed on this FileTable.
+     *
+     * @param file file to select
+     * @param marked true to mark the file, false to unmark it
      */
     public void setFileMarked(AbstractFile file, boolean marked) {
         int row = tableModel.getFileRow(file);
@@ -596,82 +631,74 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
         return getScrollableBlockIncrement(getVisibleRect(), SwingConstants.VERTICAL, 1)/getRowHeight() - 1;
     }
 
+    /**
+     * Sorts this FileTable by the given sort criterion, order and 'folders first' value. The criterion and ascending
+     * order will be ignored if the corresponding column is not currently visible, but the 'folders first' value will
+     * still be taken into account.
+     *
+     * @param criterion the sort criterion, see {@link com.mucommander.ui.main.table.Columns} for allowed values
+     * @param ascending true for ascending order, false for descending order
+     * @param foldersFirst if true, folders are displayed before regular files. If false, files are mixed with directories.
+     */
+    public void sortBy(int criterion, boolean ascending, boolean foldersFirst) {
+        // If we're not changing the current sort values, abort.
+        if(criterion==sortInfo.getCriterion() && ascending==sortInfo.getAscendingOrder() && foldersFirst==sortInfo.getFoldersFirst())
+            return;
+
+        sortInfo.setFoldersFirst(foldersFirst);
+
+        // Ignore the sort criterion and order if the corresponding column is not visible
+        if(isColumnVisible(criterion)) {
+            sortInfo.setCriterion(criterion);
+            sortInfo.setAscendingOrder(ascending);
+
+            // Mac OS X 10.5 (Leopard) and up uses JTableHeader properties to render sort indicators on table headers
+            if(usesTableHeaderRenderingProperties()) {
+                setTableHeaderRenderingProperties();
+            }
+
+            // Repaint header
+            getTableHeader().repaint();
+        }
+
+        // Sorts table while keeping the current file selection
+        sortTable();
+    }
 
     /**
-     * Sorts this FileTable by the given criterion and sort order. The column corresponding to the specified criterion
+     * Calls {@link #sortBy(int, boolean, boolean)} with the sort information contained in the given {@link SortInfo}.
+     *
+     * @param sortInfo the information to use to sort this table.
+     */
+    public void sortBy(SortInfo sortInfo) {
+        sortBy(sortInfo.getCriterion(), sortInfo.getAscendingOrder(), sortInfo.getFoldersFirst());
+    }
+
+
+    /**
+     * Sorts this FileTable by the given sort criterion and order. The column corresponding to the specified criterion
      * has to be visible when this method is called. If it isn't, this method won't have any effect.
      *
      * @param criterion the sort criterion, see {@link com.mucommander.ui.main.table.Columns} for allowed values
      * @param ascending true for ascending order, false for descending order
      */
     public void sortBy(int criterion, boolean ascending) {
-        // If we're not changing the current sort values, abort.
-        if(criterion==sortByCriterion && ascendingOrder[criterion]==ascending)
-            return;
-
-        // Abort if the column that corresponds to the specified criterion is not visible
-        if(!isColumnVisible(criterion))
-            return;
-
-        // Keep a copy of the current sort values and store the new ones.
-        int oldSortByCriterion = sortByCriterion;
-
-        sortByCriterion = criterion;
-        ascendingOrder[criterion] = ascending;
-
-        // Mac OS X 10.5 (Leopard) and up uses JTableHeader properties to render sort indicators on table headers
-        if(usesTableHeaderRenderingProperties()) {
-            setTableHeaderRenderingProperties();
-        }
-        // On other platforms, update the custom header renderer
-        else {
-            // Remove arrow icon from old header and put it on the new one
-            TableColumnModel cm = getColumnModel();
-            FileTableHeaderRenderer headerRenderer;
-
-            ((FileTableHeaderRenderer)cm.getColumn(convertColumnIndexToView(oldSortByCriterion)).getHeaderRenderer()).setCurrent(false);
-            (headerRenderer = (FileTableHeaderRenderer)cm.getColumn(convertColumnIndexToView(sortByCriterion)).getHeaderRenderer()).setCurrent(true);
-            headerRenderer.setSortOrder(ascending);
-        }
-
-        // Repaint header
-        getTableHeader().repaint();
-
-        // Sorts table while keeping current file selected
-        sortTable();
+        sortBy(criterion, ascending, sortInfo.getFoldersFirst());
     }
 
     /**
-     * Sorts this FileTable by the given criterion. If the criterion is already the current one, the sort order
-     * (ascending or descending) is reversed.
+     * Sorts this FileTable by the given sort criterion. If the criterion is already the current one, the sort order
+     * (ascending or descending) will be reversed.
      *
      * @param criterion the sort criterion, see {@link com.mucommander.ui.main.table.Columns} for allowed values
      */
     public void sortBy(int criterion) {
-        if (criterion== sortByCriterion) {
+        if (criterion==sortInfo.getCriterion()) {
             reverseSortOrder();
             return;
         }
 
-        sortBy(criterion, ascendingOrder[criterion]);
-    }
-
-    /**
-     * Returns the current sort by criterion, see {@link Columns} for allowed values.
-     *
-     * @return the current sort by criterion
-     */
-    public int getSortByCriteria() {
-        return sortByCriterion;
-    }
-
-    /**
-     * Returns <code>true</code> if the current sort order is ascending, <code>false</code> if it is descending.
-     *
-     * @return true if the current sort order is ascending, false if it is descending
-     */
-    public boolean isAscendingOrder() {
-        return ascendingOrder[sortByCriterion];
+        sortBy(criterion, sortInfo.getAscendingOrder());
     }
 
     /**
@@ -682,31 +709,6 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
      */
     public FileTableColumnModel getFileTableColumnModel() {
         return (FileTableColumnModel)getColumnModel();
-    }
-
-    /**
-     * Returns <code>true</code> if the specified column is currently visible.
-     *
-     * @param colNum column index, see {@link Columns} for allowed values
-     * @return true if the specified column is currently visible
-     */
-    public boolean isColumnVisible(int colNum) {
-        return getFileTableColumnModel().isColumnVisible(colNum);
-    }
-
-    /**
-     * Shows/hides the specified column. If the current sort criterion corresponds to the specified column and this
-     * column is made invisible, the sort criterion will be reset to {@link Columns#NAME} to prevent the table from being
-     * sorted by an invisible column/criterion.
-     *
-     * @param colNum  identifier of the column which should be shown or hidden.
-     * @param visible whether the column should be shown or hidden.
-     */
-    public void setColumnVisible(int colNum, boolean visible) {
-        getFileTableColumnModel().setColumnVisible(colNum, visible);
-
-        if(!visible && getSortByCriteria()==colNum)
-            sortBy(Columns.NAME);
     }
 
     public void setColumnModel(TableColumnModel columnModel) {
@@ -721,6 +723,83 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
             setTableHeaderRenderingProperties();
     }
 
+    /**
+     * Returns <code>true</code> if the specified column is currently visible.
+     *
+     * @param colNum column index, see {@link Columns} for allowed values
+     * @return true if the specified column is currently visible
+     */
+    public boolean isColumnVisible(int colNum) {
+        return getFileTableColumnModel().isColumnVisible(colNum);
+    }
+
+    /**
+     * Returns <code>true</code> if the given column can be displayed given the current folder. Certain columns such as
+     * {@link Columns#OWNER} and {@link Columns#GROUP} can be displayed only if the current folder can supply this
+     * information for the files it contains.
+     * Note that the return value does not take into account the column's current enabled state.
+     *
+     * @param colNum column index, see {@link Columns} for allowed values
+     * @return true if the given column can be displayed given the current folder
+     */
+    public boolean isColumnDisplayable(int colNum) {
+        // The Owner and Group columns are displayable only if current folder has this information
+        if(colNum==Columns.OWNER) {
+            return getCurrentFolder().canGetOwner();
+        }
+        else if(colNum==Columns.GROUP) {
+            return getCurrentFolder().canGetGroup();
+        }
+
+        return true;
+    }
+
+    /**
+     * Updates the visibility of all columns based on their enabled state, and for conditional columns on the
+     * current folder.
+     */
+    public void updateColumnsVisibility() {
+        FileTableColumnModel columnModel = getFileTableColumnModel();
+
+        for(int c=0; c< Columns.COLUMN_COUNT; c++)
+            columnModel.setColumnVisible(c, columnModel.isColumnEnabled(c) && isColumnDisplayable(c));
+    }
+
+    /**
+     * Returns <code>true</code> if the specified column is enabled.
+     *
+     * @param colNum column index, see {@link Columns} for allowed values
+     * @return true if the specified column is enabled
+     */
+    public boolean isColumnEnabled(int colNum) {
+        return getFileTableColumnModel().isColumnEnabled(colNum);
+    }
+
+    /**
+     * Enables/disables the specified column. Disabling a column will make it invisible. Enabling a column will make it
+     * visible only if the column can be displayed. See {@link #isColumnDisplayable(int)} for more information about
+     * this.
+     *
+     * <p>If the current sort criterion corresponds to the specified column and this
+     * column is disabled, the sort criterion will be reset to {@link Columns#NAME} to prevent the table from being
+     * sorted by an invisible column/criterion.</p>
+     *
+     * @param colNum  identifier of the column which should be enabled or disabled, see {@link Columns} for allowed values
+     * @param enabled true to enable the column, false to disable it.
+     */
+    public void setColumnEnabled(int colNum, boolean enabled) {
+        FileTableColumnModel columnModel = getFileTableColumnModel();
+        columnModel.setColumnEnabled(colNum, enabled);
+
+        // Update the visibility of the column
+        updateColumnsVisibility();
+
+        // The column may be the current 'sort by' criterion and may have become invisible.
+        // If that is the case, change the criterion to NAME.
+        if(sortInfo.getCriterion()==colNum && !columnModel.isColumnVisible(colNum))
+            sortBy(Columns.NAME);
+    }
+
     public int getColumnPosition(int colNum) {
         return getFileTableColumnModel().getColumnPosition(colNum);
     }
@@ -729,19 +808,13 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
      * Reverses the current sort order, from ascending to descending or vice-versa.
      */
     public void reverseSortOrder() {
-        ascendingOrder[sortByCriterion] = !ascendingOrder[sortByCriterion];
+        boolean newSortOrder = !sortInfo.getAscendingOrder();
+
+        sortInfo.setAscendingOrder(newSortOrder);
 
         // Mac OS X 10.5 (Leopard) and up uses JTableHeader properties to render sort indicators on table headers
         if(usesTableHeaderRenderingProperties()) {
             setTableHeaderRenderingProperties();
-        }
-        // On other platforms, update the custom header renderer
-        else {
-            TableColumnModel cm = getColumnModel();
-            FileTableHeaderRenderer currentHeaderRenderer = (FileTableHeaderRenderer)cm.getColumn(convertColumnIndexToView(sortByCriterion)).getHeaderRenderer();
-
-            // Change current header's arrow direction
-            currentHeaderRenderer.setSortOrder(ascendingOrder[sortByCriterion]);
         }
 
         // Repaint header
@@ -775,14 +848,14 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
 
     /**
      * Sorts this FileTable and repaints it. Marked files and selected file will remain the same, only
-     * there position will have changed in the newly sorted table. 
+     * their position will have changed in the newly sorted table.
      */
     private void sortTable() {
         // Save currently selected file
         AbstractFile selectedFile = tableModel.getFileAtRow(currentRow);
 
         // Sort table, doesn't affect marked files
-        tableModel.sortBy(sortByCriterion, ascendingOrder[sortByCriterion], showFoldersFirst);
+        tableModel.sortRows();
 
         // Restore selected file
         selectFile(selectedFile);
@@ -1339,6 +1412,8 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
 
         /**
          * Creates a new FilenameEditor instance.
+         *
+         * @param textField the text field to use for editing filenames
          */
         public FilenameEditor(JTextField textField) {
             super(textField);
@@ -1806,12 +1881,18 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
         }
     }
 
-    public FileTableConfiguration getConfiguration() {return getFileTableColumnModel().getConfiguration();}
+    public FileTableConfiguration getConfiguration() {
+        return getFileTableColumnModel().getConfiguration();
+    }
 
-    public int getColumnWidth(int columnId) {return getFileTableColumnModel().getColumnFromId(columnId).getWidth();}
+    public int getColumnWidth(int columnId) {
+        return getFileTableColumnModel().getColumnFromId(columnId).getWidth();
+    }
 
     /**
-     * @author Nicolas Rinaudo
+     * This thread performs the change of current folder.
+     *
+     * @author Nicolas Rinaudo, Maxence Bernard
      */
     private class FolderChangeThread implements Runnable {
         private AbstractFile   folder;
@@ -1828,7 +1909,27 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
 
         public synchronized void run() {
             try {
+                // Set the new current folder.
                 tableModel.setCurrentFolder(folder, children);
+
+                // Update the visibility state of conditional columns
+                FileTableColumnModel columnModel = getFileTableColumnModel();
+                updateColumnsVisibility();
+
+                // The column corresponding to the current 'sort by' criterion may have become invisible.
+                // If that is the case, change the criterion to NAME. 
+                if(!columnModel.isColumnVisible(sortInfo.getCriterion())) {
+                    sortInfo.setCriterion(Columns.NAME);
+
+                    // Mac OS X 10.5 (Leopard) and up uses JTableHeader properties to render sort indicators on table headers
+                    if(usesTableHeaderRenderingProperties()) {
+                        setTableHeaderRenderingProperties();
+                    }
+                }
+
+                // Sort the new folder using the current sort criteria, ascending/descending order and
+                // 'show folders first' values.
+                tableModel.sortRows();
 
                 // Computes the index of the new row selection.
                 int rowToSelect;
@@ -1866,8 +1967,8 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
 
             // While no such thing should happen, we want to make absolutely sure no exception
             // is propagated in Swing's paint thread.
-            catch(Throwable e) {}
-            finally {FileTable.this.currentFolder = null;}
+            catch(Throwable e) {
+            }
         }
     }
 }

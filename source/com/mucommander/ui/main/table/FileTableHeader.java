@@ -41,6 +41,15 @@ public class FileTableHeader extends JTableHeader implements MouseListener {
         addMouseListener(this);
     }
 
+
+    ////////////////////////
+    // Overridden methods //
+    ////////////////////////
+
+    public boolean getReorderingAllowed() {
+        return true;
+    }
+
     
     //////////////////////////////////
     // MouseListener implementation //
@@ -54,7 +63,7 @@ public class FileTableHeader extends JTableHeader implements MouseListener {
         // One of the table headers was left-clicked, sort the table by the clicked column's criterion
         if(PlatformManager.isLeftMouseButton(e)) {
             // If the table was already sorted by this criteria, reverse order
-            if (table.getSortByCriteria()==colNum)
+            if (table.getSortInfo().getCriterion()==colNum)
                 table.reverseSortOrder();
             else
                 table.sortBy(colNum);
@@ -105,6 +114,4 @@ public class FileTableHeader extends JTableHeader implements MouseListener {
 
     public void mouseExited(MouseEvent e) {
     }
-
-    public boolean getReorderingAllowed() {return true;}
 }
