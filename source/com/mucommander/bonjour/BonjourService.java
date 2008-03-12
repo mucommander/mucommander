@@ -27,24 +27,34 @@ import com.mucommander.file.FileURL;
  */
 public class BonjourService {
 
+    /** the unqualified name of the service, e.g. 'foobar' */
     private String name;
+
+    /** the url pointing to the service's location */
     private FileURL url;
+
+    /** the fully qualified name of the service, e.g. 'foobar._http._tcp.local' */
+    private String fullyQualifiedName;
 
 
     /**
      * Creates a new BonjourService instance using the given name and URL.
-     * @param name the name of the Bonjour service
+     *
+     * @param name the unqualified name of the service, e.g. 'foobar'
      * @param url the url pointing to the service's location
+     * @param fullyQualifiedName the fully qualified name of the service, e.g. 'foobar._http._tcp.local'
      */
-    public BonjourService(String name, FileURL url) {
+    public BonjourService(String name, FileURL url, String fullyQualifiedName) {
         this.name = name;
         this.url = url;
+        this.fullyQualifiedName = fullyQualifiedName;
     }
 
 
     /**
-     * Returns the service's name.
-     * @return the service's name.
+     * Returns the unqualified name of this service, e.g. 'foobar'.
+     *
+     * @return the unqualified name of this service
      */
     public String getName() {
         return name;
@@ -52,32 +62,44 @@ public class BonjourService {
 
     /**
      * Returns the name appended with the URL's protocol.
+     *
      * @return the name appended with the URL's protocol.
      */
     public String getNameWithProtocol() {
         return name+" ["+url.getProtocol().toUpperCase()+"]";
     }
 
-    
     /**
      * Returns the location of this service.
+     *
      * @return the location of this service.
      */
     public FileURL getURL() {
         return url;
     }
 
+    /**
+     * Returns the fully qualified name of this service, e.g. 'foobar._http._tcp.local'
+     *
+     * @return the fully qualified name of this service
+     */
+    public String getFullyQualifiedName() {
+        return fullyQualifiedName;
+    }
+
+
+    ////////////////////////
+    // Overridden methods //
+    ////////////////////////
 
     /**
-     * Returns true if the given Object is a BonjourService instance with the same name and URL.
+     * Returns <code>true</code> if the given Object is a BonjourService instance with the same fully qualified name.
      */
     public boolean equals(Object o) {
         if(!(o instanceof BonjourService))
             return false;
 
-        BonjourService bs = (BonjourService)o;
-
-        return name.equals(bs.name) && url.equals(bs.url);
+        return fullyQualifiedName.equals(((BonjourService)o).fullyQualifiedName);
     }
 
 

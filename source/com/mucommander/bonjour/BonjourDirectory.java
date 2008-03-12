@@ -43,7 +43,7 @@ import java.util.Vector;
 public class BonjourDirectory implements ServiceListener {
 
     /** Singleton instance held to prevent garbage collection and also used for synchronization */
-    private static BonjourDirectory instance = new BonjourDirectory();
+    private final static BonjourDirectory instance = new BonjourDirectory();
     /** Does all the hard work */
     private static JmDNS jmDNS;
     /** List of discovered and currently active Bonjour services */
@@ -120,9 +120,11 @@ public class BonjourDirectory implements ServiceListener {
 
 
     /**
-     * Wraps a Bonjour service into a {@link BonjourService} object and returns it.
-     * Returns null if the service type doesn't correspond to any of the supported protocols, or if the service URL is 
-     * malformed.
+     * Wraps a Bonjour service into a {@link BonjourService} object and returns it. Returns <code>null</code> if
+     * the service type doesn't correspond to any of the supported protocols, or if the service URL is malformed.
+     *
+     * @param serviceInfo the ServiceInfo to wrap into a BonjourService
+     * @return a BonjourService instance corresponding to the given ServiceInfo
      */
     private static BonjourService createBonjourService(ServiceInfo serviceInfo) {
         try {
@@ -131,11 +133,12 @@ public class BonjourDirectory implements ServiceListener {
             // Looks for the file protocol corresponding to the service type
             for(int i=0; i<nbServices; i++) {
                 if(KNOWN_SERVICE_TYPES[i][0].equals(type)) {
-                    return new BonjourService(serviceInfo.getName(), new FileURL(serviceInfo.getURL(KNOWN_SERVICE_TYPES[i][1])));
+                    return new BonjourService(serviceInfo.getName(), new FileURL(serviceInfo.getURL(KNOWN_SERVICE_TYPES[i][1])), serviceInfo.getQualifiedName());
                 }
             }
         }
         catch(MalformedURLException e) {
+            // Null will be returned
         }
 
         return null;
@@ -210,6 +213,7 @@ public class BonjourDirectory implements ServiceListener {
             BonjourService bs = createBonjourService(serviceInfo);
             // Synchronized to properly handle duplicate calls
             synchronized(instance) {
+                // Note: BonjourService#equals() uses the service's fully qualified name as the discriminator.
                 if(bs!=null && services.contains(bs)) {
                     if(Debug.ON) Debug.trace("BonjourService "+bs+" removed");
                     services.remove(bs);
