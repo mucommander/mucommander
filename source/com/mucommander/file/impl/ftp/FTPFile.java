@@ -220,7 +220,7 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
     }
 
     public long getDate() {
-        return file.getTimestamp().getTime().getTime();
+        return file.getTimestamp().getTimeInMillis();
     }
 
     /**
