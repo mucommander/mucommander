@@ -197,7 +197,9 @@ Bug fixes:
 - Fixed 'Swap folders' not preserving the 'Show folders first' view options.
 - jCIFS library upgraded to version 1.2.18e.
 - Zip compression is now more efficient in terms of memory and CPU usage 
-  (Bug #29)
+  (Bug #29).
+- Fixed an issue with 'Pack files' when creating a Zip archive that already 
+  exists in the destination (Bug #30).
 
 Known issues:
 - Korean translation is not up-to-date.

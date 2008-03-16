@@ -222,7 +222,6 @@ public abstract class Archiver {
      * one, and if not, fall back to a regular <code>OutputStream</code>. Note that if the file exists, its contents
      * will be overwritten. Write bufferring is used under the hood to improve performance.</p>
      *
-     *
      * @param file the AbstractFile which the returned Archiver will write entries to
      * @param format an archive format
      * @return an Archiver for the specified format and that uses the given {@link AbstractFile} to write entries to ;
@@ -234,6 +233,11 @@ public abstract class Archiver {
 
         if(file.hasRandomAccessOutputStream()) {
             try {
+                // Important: if the file exists, it has to be overwritten as AbstractFile#getRandomAccessOutputStream()
+                // does NOT overwrite the file. This fixes bug #30.
+                if(file.exists())
+                    file.delete();
+                
                 out = new BufferedRandomOutputStream(file.getRandomAccessOutputStream());
             }
             catch(IOException e) {
