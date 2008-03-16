@@ -126,17 +126,12 @@ public class AsiExtraField implements ZipExtraField, UnixStat, Cloneable {
     public byte[] getLocalFileDataData() {
         // CRC will be added later
         byte[] data = new byte[getLocalFileDataLength().getValue() - 4];
-        System.arraycopy(ZipShort.getBytes(getMode()), 0, data, 0, 2);
+        ZipShort.getBytes(getMode(), data, 0);
 
         byte[] linkArray = getLinkedFile().getBytes();
-        System.arraycopy(ZipLong.getBytes(linkArray.length),
-                         0, data, 2, 4);
-
-        System.arraycopy(ZipShort.getBytes(getUserId()),
-                         0, data, 6, 2);
-        System.arraycopy(ZipShort.getBytes(getGroupId()),
-                         0, data, 8, 2);
-
+        ZipLong.getBytes(linkArray.length, data, 2);
+        ZipShort.getBytes(getUserId(), data, 6);
+        ZipShort.getBytes(getGroupId(), data, 8);
         System.arraycopy(linkArray, 0, data, 10, linkArray.length);
 
         crc.reset();
@@ -144,8 +139,9 @@ public class AsiExtraField implements ZipExtraField, UnixStat, Cloneable {
         long checksum = crc.getValue();
 
         byte[] result = new byte[data.length + 4];
-        System.arraycopy(ZipLong.getBytes(checksum), 0, result, 0, 4);
+        ZipLong.getBytes(checksum, result, 0);
         System.arraycopy(data, 0, result, 4, data.length);
+
         return result;
     }
 

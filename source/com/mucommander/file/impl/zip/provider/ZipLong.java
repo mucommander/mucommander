@@ -76,16 +76,38 @@ public final class ZipLong implements Cloneable {
     }
 
     /**
-     * Get value as four bytes in big endian byte order.
-     * @param value the value to convert
-     * @return value as four bytes in big endian byte order
+     * Converts the given int value as four bytes in big endian byte order.
+     * @param value the unsigned int value (stored as a long) to convert
+     * @return the converted value as a byte array in big endian byte order
      */
     public static byte[] getBytes(long value) {
-        byte[] result = new byte[4];
-        result[0] = (byte) ((value & 0xFF));
-        result[1] = (byte) ((value & 0xFF00) >> 8);
-        result[2] = (byte) ((value & 0xFF0000) >> 16);
-        result[3] = (byte) ((value & 0xFF000000L) >> 24);
+        return getBytes(value, new byte[4], 0);
+    }
+
+    /**
+     * Converts the given int value as four bytes in big endian byte order. The specified byte array is used to store
+     * the result, starting at offset 0. The returned byte array is the same as the given one.
+     * @param value the unsigned int value (stored as a long) to convert
+     * @param result the byte array in which to store the value in big endian byte order
+     * @return the converted value as a byte array in big endian byte order
+     */
+    public static byte[] getBytes(long value, byte[] result) {
+        return getBytes(value, result, 0);
+    }
+
+    /**
+     * Converts the given int value as four bytes in big endian byte order. The specified byte array is used to store
+     * the result, starting at the given offset. The returned byte array is the same as the given one.
+     * @param value the unsigned int value (stored as a long) to convert
+     * @param result the byte array in which to store the value in big endian byte order
+     * @param off offset at which to start writing the result in the array
+     * @return the converted value as a byte array in big endian byte order
+     */
+    public static byte[] getBytes(long value, byte[] result, int off) {
+        result[off] = (byte) ((value & 0xFF));
+        result[++off] = (byte) ((value & 0xFF00) >> 8);
+        result[++off] = (byte) ((value & 0xFF0000) >> 16);
+        result[off+1] = (byte) ((value & 0xFF000000L) >> 24);
         return result;
     }
 

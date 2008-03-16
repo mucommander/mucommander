@@ -43,6 +43,12 @@ public interface ZipConstants {
     public static final int DEFAULT_DEFLATER_COMPRESSION = Deflater.DEFAULT_COMPRESSION;
 
     /**
+     * Default size of the buffer used by Deflater.
+     */
+    // /!\ For some unknown reason, using a larger buffer *hurts* performance.
+    public static final int DEFAULT_DEFLATER_BUFFER_SIZE = 512;
+
+    /**
      * Size of write buffers
      */
     final static int WRITE_BUFFER_SIZE = 65536;

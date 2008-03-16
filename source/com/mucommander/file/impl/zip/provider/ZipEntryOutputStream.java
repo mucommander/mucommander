@@ -18,18 +18,26 @@
 
 package com.mucommander.file.impl.zip.provider;
 
-import com.mucommander.io.BufferPool;
-
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.zip.CRC32;
-import java.util.zip.Deflater;
-
 
 /**
- * ZipEntryOutputStream is a <code>OutputStream</code> that allows to write a Zip entry's data using one of the
- * supported compression methods: {@link #DEFLATED} or {@link #STORED}, and calculates the compressed and
- * uncompressed size and CRC of the data.
+ * ZipEntryOutputStream is an abstract <code>OutputStream</code> used for compressing a Zip entry's data to an
+ * underlying OutputStream.
+ *
+ * <p>The CRC32 checksum is calculated on-the-fly as data gets written to the stream, {@link #getCrc()} returns the
+ * current checksum value. The {@link #getTotalIn()} and {@link #getTotalOut()} methods keep track of the uncompressed
+ * and compressed of the supplied data.</p>
+ *
+ * <p>There currently are two implementations of this class:
+ * <ul>
+ *  <li>{@link com.mucommander.file.impl.zip.provider.DeflatedOutputStream}: implements the DEFLATED compression method
+ *  </li>
+ *  <li>{@link com.mucommander.file.impl.zip.provider.StoredOutputStream}: implements the STORED compression method
+ * (i.e. no compression)</li>
+ * </ul>
+ * </p>
  *
  * <p>--------------------------------------------------------------------------------------------------------------<br>
  * <br>
@@ -37,77 +45,30 @@ import java.util.zip.Deflater;
  * code has been modified under the terms of the Apache License which you can find in the bundled muCommander license
  * file. It was forked at version 1.7.0 of Ant.</p>
  *
- * @author Apache Ant, Maxence Bernard
+ * @author Maxence Bernard
  */
-public class ZipEntryOutputStream extends OutputStream implements ZipConstants {
+public abstract class ZipEntryOutputStream extends OutputStream {
 
-    /** The underlying stream this ZipOutputStream writes zip-compressed data to */
+    /** The underlying stream where the compressed data is sent */
     protected OutputStream out;
 
     /** Compression method (DEFLATED or STORED) */
-    private int method;
+    protected int method;
 
-    /** Compression level, used only for DEFLATED method */
-    private int level = DEFAULT_DEFLATER_COMPRESSION;
-
-    /** This Deflater object is used for output */
-    private Deflater deflater;
-
-    /** Buffer for the Deflater */
-    protected byte[] buf;
-
-    /** CRC instance to avoid parsing DEFLATED data twice */
-    private CRC32 crc = new CRC32();
-
-    /** Used for STORED method only: number of bytes in/out so far */
-    private int storedCount;
+    /** The CRC32 instance that calculates the checksum */
+    protected CRC32 crc = new CRC32();
 
 
     /**
-     * Creates a new <code>ZipEntryOutputStream</code> that compresses the supplied data using the {@link #DEFLATED}
-     * compression method and writes it to the given <code>OutputStream</code>.
+     * Creates a new <code>EntryOutputStream</code> that writes compressed data to the given <code>OutputStream</code>
+     * and automatically updates the supplied <code>CRC32</code> checksum.
      *
      * @param out the OutputStream where the compressed data is sent to
-     */
-    public ZipEntryOutputStream(OutputStream out) {
-        this(out, DEFLATED);
-    }
-
-    /**
-     * Creates a new <code>ZipEntryOutputStream</code> that compresses the supplied data using the specified compression
-     * method and writes it to the given <code>OutputStream</code>.
-     *
-     * @param out the OutputStream where the compressed data is sent to
-     * @param method the compression method, {@link #DEFLATED} or {@link #STORED}
+     * @param method the compression method, {@link ZipConstants#DEFLATED} or {@link ZipConstants#STORED}
      */
     public ZipEntryOutputStream(OutputStream out, int method) {
         this.out = out;
         this.method = method;
-
-        // Use BufferPool to avoid excessive memory allocation and garbage collection.
-        // /!\ For some unknown reason, having a larger buffer *hurts* performance.
-        buf = BufferPool.getArrayBuffer(512);
-
-        if(method == DEFLATED)
-            deflater = new Deflater(level, true);
-    }
-
-    /**
-     * Returns the compression level when the {@link #DEFLATED} compression method is used.
-     *
-     * @return the compression level for the DEFLATED compression method
-     */
-    public int getLevel() {
-        return level;
-    }
-
-    /**
-     * Sets the compression level when the {@link #DEFLATED} compression method is used.
-     *
-     * @param level the compression level for the DEFLATED compression method
-     */
-    public void setLevel(int level) {
-        this.level = level;
     }
 
     /**
@@ -120,30 +81,6 @@ public class ZipEntryOutputStream extends OutputStream implements ZipConstants {
     }
 
     /**
-     * Returns the uncompressed size of the data written so far.
-     *
-     * @return the uncompressed size of the data written so far
-     */
-    public int getTotalIn() {
-        if(method == DEFLATED)
-            return deflater.getTotalIn();
-        else        // STORED
-            return storedCount;
-    }
-
-    /**
-     * Returns the compressed size of the data written so far.
-     *
-     * @return the compressed size of the data written so far
-     */
-    public int getTotalOut() {
-        if(method == DEFLATED)
-            return deflater.getTotalOut();
-        else        // STORED
-            return storedCount;
-    }
-
-    /**
      * Returns the CRC value of the data written so far.
      *
      * @return the CRC value of the data written so far.
@@ -152,67 +89,11 @@ public class ZipEntryOutputStream extends OutputStream implements ZipConstants {
         return crc.getValue();
     }
 
-    /**
-     * Writes next block of compressed data to the output stream.
-     *
-     * @throws IOException on error
-     */
-    private void deflate() throws IOException {
-        int len = deflater.deflate(buf, 0, buf.length);
-        if (len > 0) {
-            out.write(buf, 0, len);
-        }
-    }
 
-    /**
-     * Finishes writing the DEFLATED-compressed data.
-     *
-     * @throws IOException if an I/O occurred
-     */
-    protected void finishDeflate() throws IOException {
-        deflater.finish();
-        while (!deflater.finished()) {
-            deflate();
-        }
-    }
+    /////////////////////////////////////////
+    // Partial OutputStream implementation //
+    /////////////////////////////////////////
 
-
-    /////////////////////////////////
-    // OutputStream implementation //
-    /////////////////////////////////
-
-    /**
-     * Writes the given bytes to the Zip entry.
-     *
-     * @param b the byte array to write
-     * @param offset the start position to write from
-     * @param length the number of bytes to write
-     * @throws java.io.IOException on error
-     */
-    public void write(byte[] b, int offset, int length) throws IOException {
-        if (method == DEFLATED) {
-            if (length > 0) {
-                if (!deflater.finished()) {
-                    deflater.setInput(b, offset, length);
-                    while (!deflater.needsInput()) {
-                        deflate();
-                    }
-                }
-            }
-        } else {        // STORED
-            out.write(b, offset, length);
-            storedCount += length;
-        }
-
-        crc.update(b, offset, length);
-    }
-
-    /**
-     * Writes a single byte to the Zip entry.
-     *
-     * @param b the byte to write
-     * @throws IOException on error
-     */
     public void write(int b) throws IOException {
         byte[] array = new byte[1];
         array[0] = (byte) (b & 0xff);
@@ -221,25 +102,27 @@ public class ZipEntryOutputStream extends OutputStream implements ZipConstants {
 
     /**
      * Flushes the underlying <code>OutputStream</code>.
-     *
-     * @throws IOException
      */
     public void flush() throws IOException {
         out.flush();
     }
 
-    /**
-     * Completes writing the entry <b>without</b> closing the underlying <code>OutputStream</code>.
-     *
-     * @throws IOException
-     */
-    public void close() throws IOException {
-        if (method == DEFLATED)
-            finishDeflate();
 
-        if(buf!=null) {         // Only if close() has not already been called
-            BufferPool.releaseArrayBuffer(buf);
-            buf = null;
-        }
-    }
+    //////////////////////
+    // Abstract methods //
+    //////////////////////
+
+    /**
+     * Returns the uncompressed size of the data written so far.
+     *
+     * @return the uncompressed size of the data written so far
+     */
+    public abstract int getTotalIn();
+
+    /**
+     * Returns the compressed size of the data written so far.
+     *
+     * @return the compressed size of the data written so far
+     */
+    public abstract int getTotalOut();
 }

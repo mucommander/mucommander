@@ -18,13 +18,12 @@
 
 package com.mucommander.file.impl.zip.provider;
 
+import com.mucommander.io.BufferPool;
 import com.mucommander.io.RandomAccessOutputStream;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.Vector;
 import java.util.zip.Deflater;
 import java.util.zip.ZipException;
@@ -62,6 +61,12 @@ public class ZipOutputStream extends OutputStream implements ZipConstants {
     /** Compression method zip entries */
     private int method = DEFLATED;
 
+    /** Deflater instance that is used to compress DEFLATED entries */
+    protected Deflater deflater = new Deflater(level, true);
+
+    /** Buffer used by Deflater to deflate data */
+    protected byte[] deflaterBuf;
+
     /** List of ZipEntries written so far */
     private Vector entries = new Vector();
 
@@ -71,11 +76,32 @@ public class ZipOutputStream extends OutputStream implements ZipConstants {
     /** The encoding to use for filenames and the file comment, UTF-8 by default */
     private String encoding = UTF_8;
 
-    /** Helper, a 0 as ZipShort */
-    private static final byte[] ZERO = {0, 0};
+    /** Holds byte buffer instance used to convert short and longs, avoids creating lots of small arrays */
+    private ZipBuffer zipBuffer = new ZipBuffer();
 
-    /** Helper, a 0 as ZipLong */
-    private static final byte[] LZERO = {0, 0, 0, 0};
+    /** 0 (zero) as ZipShort */
+    private static final byte[] SHORT_0 = ZipShort.getBytes(0);
+
+    /** 0 (zero) as ZipLong */
+    private static final byte[] LONG_0 = ZipLong.getBytes(0);
+
+    /** Three ZipLong zeros */
+    private static final byte[] LONG_TRIPLE_0 = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+
+    /** 8 as ZipShort */
+    private static final byte[] SHORT_8 = ZipShort.getBytes(8);
+
+    /** 10 as ZipShort */
+    private static final byte[] SHORT_10 = ZipShort.getBytes(10);
+
+    /** 20 as ZipShort */
+    private static final byte[] SHORT_20 = ZipShort.getBytes(20);
+
+    /** 2048 as ZipShort */
+    private static final byte[] SHORT_2048 = ZipShort.getBytes(2048);
+
+    /** 2056 as ZipShort */
+    private static final byte[] SHORT_2056 = ZipShort.getBytes(2056);
 
 
     /**
@@ -99,6 +125,9 @@ public class ZipOutputStream extends OutputStream implements ZipConstants {
     public ZipOutputStream(OutputStream out) {
         this.out = out;
         this.hasRandomAccess = out instanceof RandomAccessOutputStream;
+
+        // Use BufferPool to avoid excessive memory allocation and garbage collection.
+        deflaterBuf = BufferPool.getArrayBuffer(DEFAULT_DEFLATER_BUFFER_SIZE);
     }
 
 
@@ -157,10 +186,10 @@ public class ZipOutputStream extends OutputStream implements ZipConstants {
         ZipEntry ze;
         for (int i=0; i <nbEntries; i++) {
             ze =  (ZipEntry)entries.elementAt(i);
-            written += writeCentralFileHeader(ze, out, encoding, ze.getEntryInfo().headerOffset, !hasRandomAccess);
+            written += writeCentralFileHeader(ze, out, encoding, ze.getEntryInfo().headerOffset, !hasRandomAccess, zipBuffer);
         }
         long cdLength = written - cdOffset;
-        writeCentralDirectoryEnd(out, nbEntries, cdLength, cdOffset, comment, encoding);
+        writeCentralDirectoryEnd(out, nbEntries, cdLength, cdOffset, comment, encoding, zipBuffer);
         entries.removeAllElements();
     }
 
@@ -174,11 +203,11 @@ public class ZipOutputStream extends OutputStream implements ZipConstants {
         if (entry == null)
             return;
 
-        finalizeEntryData(entry, zeos, out, !hasRandomAccess);
+        finalizeEntryData(entry, zeos, out, !hasRandomAccess, zipBuffer);
         written += entry.getCompressedSize();
 
         if(!hasRandomAccess)
-            written += writeDataDescriptor(entry, out);
+            written += writeDataDescriptor(entry, out, zipBuffer);
 
         entry = null;
         entryInfo = null;
@@ -199,13 +228,14 @@ public class ZipOutputStream extends OutputStream implements ZipConstants {
      * @param out the
      * @param useDataDescriptor if true, a data descriptor will be written to out. If false, size and CRC information
      * will be written in the local file header (requires out to be a RandomAccessOutputStream).
+     * @param zipBuffer a ZipBuffer instance used to convert integer values to Zip variants
      * @throws IOException if an I/O error occurred
      */
-    protected static void finalizeEntryData(ZipEntry entry, ZipEntryOutputStream zeos, OutputStream out, boolean useDataDescriptor) throws IOException {
+    protected static void finalizeEntryData(ZipEntry entry, ZipEntryOutputStream zeos, OutputStream out, boolean useDataDescriptor, ZipBuffer zipBuffer) throws IOException {
         long crc = zeos.getCrc();
 
         if (entry.getMethod() == DEFLATED) {
-            zeos.finishDeflate();
+            ((DeflatedOutputStream)zeos).finishDeflate();
 
             entry.setSize(adjustToLong(zeos.getTotalIn()));
             long compressedSize = adjustToLong(zeos.getTotalOut());
@@ -228,9 +258,9 @@ public class ZipOutputStream extends OutputStream implements ZipConstants {
             long save = raos.getOffset();
 
             raos.seek(entry.getEntryInfo().headerOffset + 14);
-            raos.write(ZipLong.getBytes(entry.getCrc()));
-            raos.write(ZipLong.getBytes(entry.getCompressedSize()));
-            raos.write(ZipLong.getBytes(entry.getSize()));
+            raos.write(ZipLong.getBytes(entry.getCrc(), zipBuffer.longBuffer));
+            raos.write(ZipLong.getBytes(entry.getCompressedSize(), zipBuffer.longBuffer));
+            raos.write(ZipLong.getBytes(entry.getSize(), zipBuffer.longBuffer));
             raos.seek(save);
         }
     }
@@ -262,13 +292,18 @@ public class ZipOutputStream extends OutputStream implements ZipConstants {
             entry.setTime(System.currentTimeMillis());
         }
 
-        zeos = new ZipEntryOutputStream(out, entryMethod);
+        if(entryMethod == DEFLATED) {
+            deflater.reset();
+            deflater.setLevel(level);
 
-        if (entryMethod == DEFLATED)
-            zeos.setLevel(level);
+            zeos = new DeflatedOutputStream(out, deflater, deflaterBuf);
+        }
+        else {
+            zeos = new StoredOutputStream(out);
+        }
 
         entryInfo.headerOffset = written;
-        written += writeLocalFileHeader(entry, out, encoding, !hasRandomAccess);
+        written += writeLocalFileHeader(entry, out, encoding, !hasRandomAccess, zipBuffer);
         entryInfo.dataOffset = written;
     }
 
@@ -318,62 +353,50 @@ public class ZipOutputStream extends OutputStream implements ZipConstants {
      * flag will be set accordingly.
      * @param useDataDescriptor indicates whether a data descriptor will follow the file entry's data. The general
      * purpose bit flag will be set accordingly.
+     * @param zipBuffer a ZipBuffer instance used to convert integer values to Zip variants
      * @return the size (number of bytes) of the written local file header
      * @throws IOException if an I/O error occurred
      */
-    protected static long writeLocalFileHeader(ZipEntry ze, OutputStream out, String encoding, boolean useDataDescriptor) throws IOException {
-        long written = 0;
-
+    protected static long writeLocalFileHeader(ZipEntry ze, OutputStream out, String encoding, boolean useDataDescriptor, ZipBuffer zipBuffer) throws IOException {
         out.write(LFH_SIG);
-        written += 4;
+        // written += 4;
 
         int zipMethod = ze.getMethod();
 
         // version needed to extract
         // general purpose bit flag
-        int gp = isUTF8(encoding)?0x800:0;  // Bit 11 signals UTF-8 is used
-
-        if (useDataDescriptor) {
-            // requires version 2 as we are going to store length info
-            // in the data descriptor
-            out.write(ZipShort.getBytes(20));
-
-            // Bit 3 set to signal we use a data descriptor
-            out.write(ZipShort.getBytes(gp|8));
-        } else {
-            out.write(ZipShort.getBytes(10));
-            out.write(ZipShort.getBytes(gp));
-        }
-        written += 4;
+        writeVersionAndGPBF(out, encoding, useDataDescriptor);
+        // nbWritten += 4;
 
         // compression method
-        out.write(ZipShort.getBytes(zipMethod));
-        written += 2;
+        out.write(ZipShort.getBytes(zipMethod, zipBuffer.shortBuffer));
+        // written += 2;
 
         // last mod. time and date
-        out.write(toDosTime(ze.getTime()));
-        written += 4;
+        out.write(ZipLong.getBytes(ze.getDosTime(), zipBuffer.longBuffer));
+        //  written += 4;
 
         // CRC
         // compressed length
         // uncompressed length
 
-        // information is not known at this stage so it will be set after the data has been written,
+        // this information is not known at this stage so it will be set after the data has been written,
         // either in the data descriptor (if used), or here by seeking (requires random access)
-        out.write(LZERO);
-        out.write(LZERO);
-        out.write(LZERO);
-        written += 12;
+        out.write(LONG_TRIPLE_0);   // 12 zero bytes
+        // written += 12;
 
         // file name length
         byte[] name = getBytes(ze.getName(), encoding);
-        out.write(ZipShort.getBytes(name.length));
-        written += 2;
+        out.write(ZipShort.getBytes(name.length, zipBuffer.shortBuffer));
+        // written += 2;
 
         // extra field length
         byte[] extra = ze.getLocalFileDataExtra();
-        out.write(ZipShort.getBytes(extra.length));
-        written += 2;
+        out.write(ZipShort.getBytes(extra.length, zipBuffer.shortBuffer));
+        // written += 2;
+
+        // Number of bytes written by this method so far
+        long written = 30;
 
         // file name
         out.write(name);
@@ -392,14 +415,15 @@ public class ZipOutputStream extends OutputStream implements ZipConstants {
      *
      * @param ze the entry for which to write the data descriptor
      * @param out the OutputStream to write the data descriptor to
+     * @param zipBuffer a ZipBuffer instance used to convert integer values to Zip variants
      * @throws IOException if an I/O error occurred
      * @return the number of bytes that were written, i.e. the size of the data descriptor
      */
-    protected static long writeDataDescriptor(ZipEntry ze, OutputStream out) throws IOException {
+    protected static long writeDataDescriptor(ZipEntry ze, OutputStream out, ZipBuffer zipBuffer) throws IOException {
         out.write(DD_SIG);
-        out.write(ZipLong.getBytes(ze.getCrc()));
-        out.write(ZipLong.getBytes(ze.getCompressedSize()));
-        out.write(ZipLong.getBytes(ze.getSize()));
+        out.write(ZipLong.getBytes(ze.getCrc(), zipBuffer.longBuffer));
+        out.write(ZipLong.getBytes(ze.getCompressedSize(), zipBuffer.longBuffer));
+        out.write(ZipLong.getBytes(ze.getSize(), zipBuffer.longBuffer));
 
         return 16;
     }
@@ -412,61 +436,48 @@ public class ZipOutputStream extends OutputStream implements ZipConstants {
      * @param encoding the encoding to use for writing the filename and optional comment
      * @param localFileHeaderOffset the offset to the local file header start
      * @param useDataDescriptor true if a data descriptor is used for the entry
+     * @param zipBuffer a ZipBuffer instance used to convert integer values to Zip variants
      * @throws IOException if an I/O error occurred
      * @return the number of bytes that were written, i.e. the size of the central file header 
      */
-    protected static long writeCentralFileHeader(ZipEntry ze, OutputStream out, String encoding, long localFileHeaderOffset, boolean useDataDescriptor) throws IOException {
-        long nbWritten = 0;
-
+    protected static long writeCentralFileHeader(ZipEntry ze, OutputStream out, String encoding, long localFileHeaderOffset, boolean useDataDescriptor, ZipBuffer zipBuffer) throws IOException {
         out.write(CFH_SIG);
-        nbWritten += 4;
+        // nbWritten += 4;
 
         // version made by
-        out.write(ZipShort.getBytes((ze.getPlatform() << 8) | 20));
-        nbWritten += 2;
+        out.write(ZipShort.getBytes((ze.getPlatform() << 8) | 20, zipBuffer.shortBuffer));
+        // nbWritten += 2;
 
         // version needed to extract
         // general purpose bit flag
-        int gp = isUTF8(encoding)?0x800:0;  // Bit 11 signals UTF-8 is used
-
-        if (useDataDescriptor) {
-            // requires version 2 as we are going to store length info
-            // in the data descriptor
-            out.write(ZipShort.getBytes(20));
-
-            // bit3 set to signal, we use a data descriptor
-            out.write(ZipShort.getBytes(gp|8));
-        } else {
-            out.write(ZipShort.getBytes(10));
-            out.write(ZipShort.getBytes(gp));
-        }
-        nbWritten += 4;
+        writeVersionAndGPBF(out, encoding, useDataDescriptor);
+        // nbWritten += 4;
 
         // compression method
-        out.write(ZipShort.getBytes(ze.getMethod()));
-        nbWritten += 2;
+        out.write(ZipShort.getBytes(ze.getMethod(), zipBuffer.shortBuffer));
+        // nbWritten += 2;
 
         // last mod. time and date
-        out.write(toDosTime(ze.getTime()));
-        nbWritten += 4;
+        out.write(ZipLong.getBytes(ze.getDosTime(), zipBuffer.longBuffer));
+        // nbWritten += 4;
 
         // CRC
         // compressed length
         // uncompressed length
-        out.write(ZipLong.getBytes(ze.getCrc()));
-        out.write(ZipLong.getBytes(ze.getCompressedSize()));
-        out.write(ZipLong.getBytes(ze.getSize()));
-        nbWritten += 12;
+        out.write(ZipLong.getBytes(ze.getCrc(), zipBuffer.longBuffer));
+        out.write(ZipLong.getBytes(ze.getCompressedSize(), zipBuffer.longBuffer));
+        out.write(ZipLong.getBytes(ze.getSize(), zipBuffer.longBuffer));
+        // nbWritten += 12;
 
         // file name length
         byte[] name = getBytes(ze.getName(), encoding);
-        out.write(ZipShort.getBytes(name.length));
-        nbWritten += 2;
+        out.write(ZipShort.getBytes(name.length, zipBuffer.shortBuffer));
+        // nbWritten += 2;
 
         // extra field length
         byte[] extra = ze.getCentralDirectoryExtra();
-        out.write(ZipShort.getBytes(extra.length));
-        nbWritten += 2;
+        out.write(ZipShort.getBytes(extra.length, zipBuffer.shortBuffer));
+        // nbWritten += 2;
 
         // file comment length
         String comm = ze.getComment();
@@ -474,24 +485,26 @@ public class ZipOutputStream extends OutputStream implements ZipConstants {
             comm = "";
         }
         byte[] commentB = getBytes(comm, encoding);
-        out.write(ZipShort.getBytes(commentB.length));
-        nbWritten += 2;
+        out.write(ZipShort.getBytes(commentB.length, zipBuffer.shortBuffer));
+        // nbWritten += 2;
 
         // disk number start
-        out.write(ZERO);
-        nbWritten += 2;
+        out.write(SHORT_0);
+        // nbWritten += 2;
 
         // internal file attributes
-        out.write(ZipShort.getBytes(ze.getInternalAttributes()));
-        nbWritten += 2;
+        out.write(ZipShort.getBytes(ze.getInternalAttributes(), zipBuffer.shortBuffer));
+        // nbWritten += 2;
 
         // external file attributes
-        out.write(ZipLong.getBytes(ze.getExternalAttributes()));
-        nbWritten += 4;
+        out.write(ZipLong.getBytes(ze.getExternalAttributes(), zipBuffer.longBuffer));
+        // nbWritten += 4;
 
         // relative offset of LFH
-        out.write(ZipLong.getBytes(localFileHeaderOffset));
-        nbWritten += 4;
+        out.write(ZipLong.getBytes(localFileHeaderOffset, zipBuffer.longBuffer));
+        // nbWritten += 4;
+
+        long nbWritten = 46;
 
         // file name
         out.write(name);
@@ -508,6 +521,48 @@ public class ZipOutputStream extends OutputStream implements ZipConstants {
         return nbWritten;
     }
 
+
+    /**
+     * Writes the 'version needed to extract' (2 bytes) and 'general purpose bit flag' (2 bytes) fields.
+     *
+     * @param out the OutputStream to write the fields to
+     * @param encoding the encoding used for writing the filename and optional comment
+     * @param useDataDescriptor true if a data descriptor is used for the entry
+     * @return the number of bytes that were written, i.e. 4
+     * @throws IOException if an I/O error occurred
+     */
+    protected static long writeVersionAndGPBF(OutputStream out, String encoding, boolean useDataDescriptor) throws IOException {
+        boolean isUTF8 = isUTF8(encoding);
+
+        // General purpose bit flag :
+        // Bit 11 signals UTF-8 is used
+        // Bit 3 signals a data descriptor is used
+
+        if (useDataDescriptor) {
+            // requires version 2 as we are going to store length info in the data descriptor
+            out.write(SHORT_20);
+
+            // General purpose bit flag
+            out.write(isUTF8?
+                SHORT_2056                  // Bit 3 | Bit 11 = 2056
+                :SHORT_8                    // Bit 3          = 8
+            );
+        }
+        else {
+            // Version
+            out.write(SHORT_10);
+
+            // General purpose bit flag
+            out.write(isUTF8?
+                SHORT_2048                  // Bit 11 = 2048
+                :SHORT_0                    // No bit set
+            );
+        }
+
+        return 4;
+    }
+
+
     /**
      * Writes the end of the central directory record.
      *
@@ -517,67 +572,30 @@ public class ZipOutputStream extends OutputStream implements ZipConstants {
      * @param cdOffset offset from the beginning of the Zip file to the start of the central directory record
      * @param comment the optional Zip file comment
      * @param encoding the encoding to use for writing the optional Zip comment
+     * @param zipBuffer a ZipBuffer instance used to convert integer values to Zip variants
      * @throws IOException if an I/O error occurred
      */
-    protected static void writeCentralDirectoryEnd(OutputStream out, int nbEntries, long cdLength, long cdOffset, String comment, String encoding)
+    protected static void writeCentralDirectoryEnd(OutputStream out, int nbEntries, long cdLength, long cdOffset, String comment, String encoding, ZipBuffer zipBuffer)
             throws IOException {
 
         out.write(EOCD_SIG);
 
         // disk numbers
-        out.write(ZERO);
-        out.write(ZERO);
+        out.write(LONG_0);      // 2x SHORT_0
 
         // number of entries
-        byte[] num = ZipShort.getBytes(nbEntries);
-        out.write(num);
-        out.write(num);
+        ZipShort.getBytes(nbEntries, zipBuffer.shortBuffer);
+        out.write(zipBuffer.shortBuffer);
+        out.write(zipBuffer.shortBuffer);
 
         // length and location of CD
-        out.write(ZipLong.getBytes(cdLength));
-        out.write(ZipLong.getBytes(cdOffset));
+        out.write(ZipLong.getBytes(cdLength, zipBuffer.longBuffer));
+        out.write(ZipLong.getBytes(cdOffset, zipBuffer.longBuffer));
 
         // ZIP file comment
         byte[] data = getBytes(comment, encoding);
-        out.write(ZipShort.getBytes(data.length));
+        out.write(ZipShort.getBytes(data.length, zipBuffer.shortBuffer));
         out.write(data);
-    }
-
-    /**
-     * Convert a Date object to a DOS date/time field.
-     * @param time the <code>Date</code> to convert
-     * @return the date as a <code>ZipLong</code>
-     */
-    protected static ZipLong toDosTime(Date time) {
-        return new ZipLong(toDosTime(time.getTime()));
-    }
-
-    /** Smallest date/time ZIP can handle. */
-    private static final byte[] MIN_DOS_TIME = ZipLong.getBytes(0x00002100L);
-
-    /**
-     * Convert a Date object to a DOS date/time field.
-     *
-     * @param t number of milliseconds since the epoch
-     * @return the date as a byte array
-     */
-    protected static byte[] toDosTime(long t) {
-        Calendar cal = Calendar.getInstance();
-        cal.setTimeInMillis(t);
-
-        int year = cal.get(Calendar.YEAR);
-        if (year < 1980) {
-            return MIN_DOS_TIME;
-        }
-
-        long value =  ((year - 1980) << 25)
-            |         ((cal.get(Calendar.MONTH)+1) << 21)
-            |         (cal.get(Calendar.DAY_OF_MONTH) << 16)
-            |         (cal.get(Calendar.HOUR_OF_DAY) << 11)
-            |         (cal.get(Calendar.MINUTE) << 5)
-            |         (cal.get(Calendar.SECOND) >> 1);
-
-        return ZipLong.getBytes(value);
     }
 
     /**
@@ -601,17 +619,13 @@ public class ZipOutputStream extends OutputStream implements ZipConstants {
     }
 
     /**
-     * Assumes a negative integer really is a positive integer that
-     * has wrapped around and re-creates the original value.
-     * @param i the value to treat as unsigned int.
-     * @return the unsigned int as a long.
+     * Returns a long that is the unsigned intepretation of the given (signed) int.
+     *
+     * @param i the value to treat as unsigned int
+     * @return the unsigned int as a long
      */
     protected static long adjustToLong(int i) {
-        if (i < 0) {
-            return 2 * ((long) Integer.MAX_VALUE) + 2 + i;
-        } else {
-            return i;
-        }
+        return i & 0xFFFFFFFFl;
     }
 
 
@@ -665,6 +679,12 @@ public class ZipOutputStream extends OutputStream implements ZipConstants {
      */
     public void close() throws IOException {
         finish();
+
+        if(deflaterBuf !=null) {         // Only if close() has not already been called already
+            BufferPool.releaseArrayBuffer(deflaterBuf);
+            deflaterBuf = null;
+        }
+
         out.close();
     }
 

@@ -18,6 +18,7 @@
 
 package com.mucommander.file.impl.zip.provider;
 
+import java.util.Calendar;
 import java.util.Vector;
 import java.util.zip.ZipException;
 
@@ -35,20 +36,34 @@ import java.util.zip.ZipException;
  */
 public class ZipEntry extends java.util.zip.ZipEntry implements Cloneable {
 
-    private static final int PLATFORM_UNIX = 3;
-    private static final int PLATFORM_FAT  = 0;
+    protected static final int PLATFORM_UNIX = 3;
+    protected static final int PLATFORM_FAT  = 0;
 
-    private int internalAttributes = 0;
-    private int platform = PLATFORM_FAT;
-    private long externalAttributes = 0;
-    private Vector/*<ZipExtraField>*/ extraFields = null;
-    private String name = null;
+    protected int internalAttributes = 0;
+    protected int platform = PLATFORM_FAT;
+    protected long externalAttributes = 0;
+    protected Vector/*<ZipExtraField>*/ extraFields = null;
+    protected String name = null;
 
     /** Contains info about how this entry is stored in the zip file */
-    private ZipEntryInfo entryInfo;
+    protected ZipEntryInfo entryInfo;
+
+    /** An instance of Calendar shared through all instances of this class and used for Java<->DOS time conversion */
+    protected final static Calendar CALENDAR = Calendar.getInstance();
+
+    /** Smallest DOS time (Epoch 1980) */
+    protected static final long MIN_DOS_TIME = 0x00002100L;
+
+    /** Data/time of this entry, in the Java time format */
+    protected long javaTime = -1;
+
+    /** Data/time of this entry, in the DOS time format */
+    protected long dosTime = -1;
+
 
     /**
      * Creates a new zip entry with the specified name.
+     *
      * @param name the name of the entry
      */
     public ZipEntry(String name) {
@@ -57,15 +72,18 @@ public class ZipEntry extends java.util.zip.ZipEntry implements Cloneable {
 
     /**
      * Creates a new zip entry with fields taken from the specified zip entry.
+     *
      * @param entry the entry to get fields from
      * @throws ZipException on error
      */
     public ZipEntry(java.util.zip.ZipEntry entry) throws ZipException {
         super(entry);
+
         byte[] extra = entry.getExtra();
         if (extra != null) {
             setExtraFields(ExtraFieldUtils.parse(extra));
-        } else {
+        }
+        else {
             // initializes extra data to an empty byte array
             setExtra();
         }
@@ -73,11 +91,13 @@ public class ZipEntry extends java.util.zip.ZipEntry implements Cloneable {
 
     /**
      * Creates a new zip entry with fields taken from the specified zip entry.
+     *
      * @param entry the entry to get fields from
      * @throws ZipException on error
      */
     public ZipEntry(ZipEntry entry) throws ZipException {
         this((java.util.zip.ZipEntry) entry);
+
         setInternalAttributes(entry.getInternalAttributes());
         setExternalAttributes(entry.getExternalAttributes());
         setExtraFields(entry.getExtraFields());
@@ -98,6 +118,7 @@ public class ZipEntry extends java.util.zip.ZipEntry implements Cloneable {
 
     /**
      * Sets the internal file attributes.
+     *
      * @param value an <code>int</code> value
      */
     public void setInternalAttributes(int value) {
@@ -106,6 +127,7 @@ public class ZipEntry extends java.util.zip.ZipEntry implements Cloneable {
 
     /**
      * Retrieves the external file attributes.
+     *
      * @return the external file attributes
      */
     public long getExternalAttributes() {
@@ -114,6 +136,7 @@ public class ZipEntry extends java.util.zip.ZipEntry implements Cloneable {
 
     /**
      * Sets the external file attributes.
+     *
      * @param value an <code>long</code> value
      */
     public void setExternalAttributes(long value) {
@@ -121,8 +144,8 @@ public class ZipEntry extends java.util.zip.ZipEntry implements Cloneable {
     }
 
     /**
-     * Sets Unix permissions in a way that is understood by Info-Zip's
-     * unzip command.
+     * Sets Unix permissions in a way that is understood by Info-Zip's unzip command.
+     *
      * @param mode an <code>int</code> value
      */
     public void setUnixMode(int mode) {
@@ -136,6 +159,7 @@ public class ZipEntry extends java.util.zip.ZipEntry implements Cloneable {
 
     /**
      * Unix permission.
+     *
      * @return the unix permissions
      */
     public int getUnixMode() {
@@ -143,8 +167,7 @@ public class ZipEntry extends java.util.zip.ZipEntry implements Cloneable {
     }
 
     /**
-     * Platform specification to put into the &quot;version made
-     * by&quot; part of the central file header.
+     * Platform specification to put into the 'version made by' part of the central file header.
      *
      * @return 0 (MS-DOS FAT) unless {@link #setUnixMode setUnixMode}
      * has been called, in which case 3 (Unix) will be returned.
@@ -155,6 +178,7 @@ public class ZipEntry extends java.util.zip.ZipEntry implements Cloneable {
 
     /**
      * Set the platform (UNIX or FAT).
+     *
      * @param platform an <code>int</code> value - 0 is FAT, 3 is UNIX
      */
     protected void setPlatform(int platform) {
@@ -163,6 +187,7 @@ public class ZipEntry extends java.util.zip.ZipEntry implements Cloneable {
 
     /**
      * Replaces all currently attached extra fields with the new array.
+     *
      * @param fields an array of extra fields
      */
     public void setExtraFields(ZipExtraField[] fields) {
@@ -175,6 +200,7 @@ public class ZipEntry extends java.util.zip.ZipEntry implements Cloneable {
 
     /**
      * Retrieves extra fields.
+     *
      * @return an array of the extra fields
      */
     public ZipExtraField[] getExtraFields() {
@@ -187,8 +213,8 @@ public class ZipEntry extends java.util.zip.ZipEntry implements Cloneable {
     }
 
     /**
-     * Adds an extra fields - replacing an already present extra field
-     * of the same type.
+     * Adds an extra fields - replacing an already present extra field of the same type.
+     *
      * @param ze an extra field
      */
     public void addExtraField(ZipExtraField ze) {
@@ -211,6 +237,7 @@ public class ZipEntry extends java.util.zip.ZipEntry implements Cloneable {
 
     /**
      * Remove an extra fields.
+     *
      * @param type the type of extra field to remove
      */
     public void removeExtraField(ZipShort type) {
@@ -231,10 +258,8 @@ public class ZipEntry extends java.util.zip.ZipEntry implements Cloneable {
     }
 
     /**
-     * Unfortunately {@link java.util.zip.ZipOutputStream
-     * java.util.zip.ZipOutputStream} seems to access the extra data
-     * directly, so overriding getExtra doesn't help - we need to
-     * modify super's data directly.
+     * Unfortunately {@link java.util.zip.ZipOutputStream} seems to access the extra data directly, so overriding
+     * getExtra doesn't help - we need to modify super's data directly.
      */
     protected void setExtra() {
         super.setExtra(ExtraFieldUtils.mergeLocalFileDataData(getExtraFields()));
@@ -242,6 +267,7 @@ public class ZipEntry extends java.util.zip.ZipEntry implements Cloneable {
 
     /**
      * Retrieves the extra data for the local file data.
+     *
      * @return the extra data for local file
      */
     public byte[] getLocalFileDataExtra() {
@@ -251,6 +277,7 @@ public class ZipEntry extends java.util.zip.ZipEntry implements Cloneable {
 
     /**
      * Retrieves the extra data for the central directory.
+     *
      * @return the central directory extra data
      */
     public byte[] getCentralDirectoryExtra() {
@@ -259,11 +286,36 @@ public class ZipEntry extends java.util.zip.ZipEntry implements Cloneable {
 
     /**
      * Set the name of the entry.
+     *
      * @param name the name to use
      */
     protected void setName(String name) {
         this.name = name;
     }
+
+    /**
+     * Returns this entry's date/time expressed in the DOS time format.
+     *
+     * @return this entry's date/time expressed in the DOS time format
+     */
+    protected long getDosTime() {
+        return dosTime;
+    }
+
+    /**
+     * Sets this entry's date/time to the specified one. The time must be expressed in the DOS time format.
+     *
+     * @param dosTime the new time of this entry, expressed in the DOS time format
+     */
+    protected void setDosTime(long dosTime) {
+        this.dosTime = dosTime;
+        this.javaTime = dosTime==-1?-1:dosToJavaTime(dosTime);
+
+        // Unfortunately, the 'time' field is private in java.util.zip.ZipEntry, so we must call the setter which
+        // converts the time to the DOS format again => unefficient
+        super.setTime(this.javaTime);
+    }
+
 
     /**
      * Returns the {@link ZipEntryInfo} instance that contains info about how this entry is stored in the zip file.
@@ -283,6 +335,49 @@ public class ZipEntry extends java.util.zip.ZipEntry implements Cloneable {
         this.entryInfo = entryInfo;
     }
 
+    /*
+     * Converts DOS time (Epoch=1980) to Java time (Epoch=1970).
+     *
+     * @param dosTime time expressed in the convoluted DOS time format
+     * @return time expressed as the number of milliseconds since the epoch
+     */
+    private static long dosToJavaTime(long dosTime) {
+        synchronized(CALENDAR) {
+            CALENDAR.set(Calendar.YEAR, (int) ((dosTime >> 25) & 0x7f) + 1980);
+            CALENDAR.set(Calendar.MONTH, (int) ((dosTime >> 21) & 0x0f) - 1);
+            CALENDAR.set(Calendar.DATE, (int) (dosTime >> 16) & 0x1f);
+            CALENDAR.set(Calendar.HOUR_OF_DAY, (int) (dosTime >> 11) & 0x1f);
+            CALENDAR.set(Calendar.MINUTE, (int) (dosTime >> 5) & 0x3f);
+            CALENDAR.set(Calendar.SECOND, (int) (dosTime << 1) & 0x3e);
+
+            return CALENDAR.getTimeInMillis();
+        }
+    }
+
+    /**
+     * Converts Java time (Epoch=1970) to DOS time (Epoch=1980).
+     *
+     * @param javaTime number of milliseconds since the epoch
+     * @return time expressed in the convoluted DOS time format
+     */
+    protected static long javaToDosTime(long javaTime) {
+        synchronized(CALENDAR) {
+            CALENDAR.setTimeInMillis(javaTime);
+
+            int year = CALENDAR.get(Calendar.YEAR);
+            if (year < 1980) {
+                return MIN_DOS_TIME;
+            }
+
+            return ((year - 1980) << 25)
+                |  ((CALENDAR.get(Calendar.MONTH)+1) << 21)
+                |  (CALENDAR.get(Calendar.DAY_OF_MONTH) << 16)
+                |  (CALENDAR.get(Calendar.HOUR_OF_DAY) << 11)
+                |  (CALENDAR.get(Calendar.MINUTE) << 5)
+                |  (CALENDAR.get(Calendar.SECOND) >> 1);
+        }
+    }
+
 
     ////////////////////////
     // Overridden methods //
@@ -290,6 +385,7 @@ public class ZipEntry extends java.util.zip.ZipEntry implements Cloneable {
 
     /**
      * Get the name of the entry.
+     *
      * @return the entry name
      */
     public String getName() {
@@ -298,6 +394,7 @@ public class ZipEntry extends java.util.zip.ZipEntry implements Cloneable {
 
     /**
      * Is this entry a directory?
+     *
      * @return true if the entry is a directory
      */
     public boolean isDirectory() {
@@ -305,10 +402,35 @@ public class ZipEntry extends java.util.zip.ZipEntry implements Cloneable {
     }
 
     /**
+     * Sets this entry's date/time to the specified one. The time must be expressed in the Java time format,
+     * i.e. as a number of milliseconds since the Epoch.
+     *
+     * @param javaTime the new time of this entry, expressed in the Java time format
+     */
+    public void setTime(long javaTime) {
+        this.javaTime = javaTime;
+        this.dosTime = javaTime==-1?-1:javaToDosTime(javaTime);
+
+        // Unfortunately, the 'time' field is private in java.util.zip.ZipEntry, so we must call the setter which
+        // converts the time to the DOS format again => unefficient
+        super.setTime(this.javaTime);
+    }
+
+    /**
+     * Returns this entry's date/time expressed in the Java time format, i.e. as a number of milliseconds since
+     * the Epoch.
+     *  
+     * @return this entry's date/time expressed in the Java time format
+     */
+    public long getTime() {
+        return javaTime;
+    }
+
+    /**
      * Throws an Exception if extra data cannot be parsed into extra fields.
+     *
      * @param extra an array of bytes to be parsed into extra fields
      * @throws RuntimeException if the bytes cannot be parsed
-     * @throws RuntimeException on error
      */
     public void setExtra(byte[] extra) throws RuntimeException {
         try {
@@ -320,6 +442,7 @@ public class ZipEntry extends java.util.zip.ZipEntry implements Cloneable {
 
     /**
      * Overwrite clone.
+     *
      * @return a cloned copy of this ZipEntry
      */
     public Object clone() {
@@ -333,15 +456,11 @@ public class ZipEntry extends java.util.zip.ZipEntry implements Cloneable {
     }
 
     /**
-     * Get the hashCode of the entry.
-     * This uses the name as the hashcode.
+     * Get the hashCode of the entry. This uses the name as the hashcode.
+     *
      * @return a hashcode.
      */
     public int hashCode() {
-        // this method has severe consequences on performance. We cannot rely
-        // on the super.hashCode() method since super.getName() always return
-        // the empty string in the current implemention (there's no setter)
-        // so it is basically draining the performance of a hashmap lookup
         return getName().hashCode();
     }
 

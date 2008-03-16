@@ -79,14 +79,36 @@ public final class ZipShort implements Cloneable {
     }
 
     /**
-     * Get value as two bytes in big endian byte order.
-     * @param value the Java int to convert to bytes
-     * @return the converted int as a byte array in big endian byte order
+     * Converts the given short value as two bytes in big endian byte order.
+     * @param value the short value (stored as an int) to convert
+     * @return the converted value as a byte array in big endian byte order
      */
     public static byte[] getBytes(int value) {
-        byte[] result = new byte[2];
-        result[0] = (byte) (value & 0xFF);
-        result[1] = (byte) ((value & 0xFF00) >> 8);
+        return getBytes(value, new byte[2], 0);
+    }
+
+    /**
+     * Converts the given short value as two bytes in big endian byte order. The specified byte array is used to store
+     * the result, starting at offset 0. The returned byte array is the same as the given one.
+     * @param value the short value (stored as an int) to convert
+     * @param result the byte array in which to store the value in big endian byte order
+     * @return the converted value as a byte array in big endian byte order
+     */
+    public static byte[] getBytes(int value, byte[] result) {
+        return getBytes(value, result, 0);
+    }
+
+    /**
+     * Converts the given short value as two bytes in big endian byte order. The specified byte array is used to store
+     * the result, starting at the given offset. The returned byte array is the same as the given one.
+     * @param value the short value (stored as an int) to convert
+     * @param result the byte array in which to store the value in big endian byte order
+     * @param off offset at which to start writing the result in the array
+     * @return the converted value as a byte array in big endian byte order
+     */
+    public static byte[] getBytes(int value, byte[] result, int off) {
+        result[off] = (byte) (value & 0xFF);
+        result[off+1] = (byte) ((value & 0xFF00) >> 8);
         return result;
     }
 
