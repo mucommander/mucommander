@@ -39,6 +39,6 @@ public class GoToHomeAction extends MuAction {
         // Changes the current folder to make it the user home folder
         AbstractFile homeFolder = LocalFile.getUserHome();
         if(homeFolder!=null)
-            mainFrame.getActiveTable().getFolderPanel().tryChangeCurrentFolder(homeFolder);
+            mainFrame.getActivePanel().tryChangeCurrentFolder(homeFolder);
     }
 }

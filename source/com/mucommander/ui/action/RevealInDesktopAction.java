@@ -44,6 +44,6 @@ public class RevealInDesktopAction extends MuAction {
     }
 
     public void performAction() {
-        PlatformManager.openInFileManager(mainFrame.getActiveTable().getFolderPanel().getCurrentFolder());
+        PlatformManager.openInFileManager(mainFrame.getActivePanel().getCurrentFolder());
     }
 }

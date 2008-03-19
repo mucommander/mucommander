@@ -41,7 +41,7 @@ public class GoToRootAction extends GoToParentAction {
     public void performAction() {
         // Changes the current folder to make it the current folder's root folder.
         // Does nothing if the current folder already is the root.
-        FolderPanel folderPanel = mainFrame.getActiveTable().getFolderPanel();
+        FolderPanel folderPanel = mainFrame.getActivePanel();
         AbstractFile currentFolder = folderPanel.getCurrentFolder();
         try {
             folderPanel.tryChangeCurrentFolder(currentFolder.getRoot());

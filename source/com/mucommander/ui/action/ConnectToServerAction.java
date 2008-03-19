@@ -35,6 +35,6 @@ public class ConnectToServerAction extends MuAction implements InvokesDialog {
     }
 
     public void performAction() {
-        new ServerConnectDialog(mainFrame.getActiveTable().getFolderPanel()).showDialog();
+        new ServerConnectDialog(mainFrame.getActivePanel()).showDialog();
     }
 }

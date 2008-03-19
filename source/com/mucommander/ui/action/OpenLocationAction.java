@@ -124,7 +124,7 @@ public class OpenLocationAction extends MuAction {
      * @return the currently active panel
      */
     protected FolderPanel getFolderPanel() {
-        return mainFrame.getActiveTable().getFolderPanel();
+        return mainFrame.getActivePanel();
     }
 
 

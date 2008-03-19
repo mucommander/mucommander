@@ -19,8 +19,8 @@
 package com.mucommander.ui.action;
 
 import com.mucommander.file.AbstractFile;
-import com.mucommander.ui.main.MainFrame;
 import com.mucommander.file.filter.AttributeFileFilter;
+import com.mucommander.ui.main.MainFrame;
 
 import java.util.Hashtable;
 
@@ -54,6 +54,6 @@ public class OpenInOtherPanelAction extends SelectedFileAction {
             return;
 
         // Opens the currently selected file in the inactive panel.
-        mainFrame.getInactiveTable().getFolderPanel().tryChangeCurrentFolder(file);
+        mainFrame.getInactivePanel().tryChangeCurrentFolder(file);
     }
 }

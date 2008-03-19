@@ -229,7 +229,7 @@ public class EditCredentialsDialog extends FocusDialog implements ActionListener
             // Dispose dialog first
             dispose();
             // Go to credentials' realm location
-            mainFrame.getActiveTable().getFolderPanel().tryChangeCurrentFolder(((CredentialsMapping)credentialsList.getSelectedValue()).getRealm());
+            mainFrame.getActivePanel().tryChangeCurrentFolder(((CredentialsMapping)credentialsList.getSelectedValue()).getRealm());
         }
     }
 

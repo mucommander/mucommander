@@ -35,7 +35,7 @@ public class GoBackAction extends GoToAction {
 
 
     public void performAction() {
-        mainFrame.getActiveTable().getFolderPanel().getFolderHistory().goBack();
+        mainFrame.getActivePanel().getFolderHistory().goBack();
     }
 
 
@@ -44,6 +44,6 @@ public class GoBackAction extends GoToAction {
      * folder in the history, this action will be enabled, if not it will be disabled.
      */
     protected void toggleEnabledState() {
-        setEnabled(mainFrame.getActiveTable().getFolderPanel().getFolderHistory().hasBackFolder());
+        setEnabled(mainFrame.getActivePanel().getFolderHistory().hasBackFolder());
     }
 }

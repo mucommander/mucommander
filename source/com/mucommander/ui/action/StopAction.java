@@ -44,7 +44,7 @@ public class StopAction extends MuAction implements LocationListener {
     }
 
     public void performAction() {
-        FolderPanel folderPanel = mainFrame.getActiveTable().getFolderPanel();
+        FolderPanel folderPanel = mainFrame.getActivePanel();
         FolderPanel.ChangeFolderThread changeFolderThread = folderPanel.getChangeFolderThread();
 
         if(changeFolderThread!=null)

@@ -376,7 +376,7 @@ public class EditBookmarksDialog extends FocusDialog implements ActionListener, 
             // Dispose dialog first
             dispose();
             // Change active panel's folder
-            mainFrame.getActiveTable().getFolderPanel().tryChangeCurrentFolder(((Bookmark)bookmarkList.getSelectedValue()).getLocation());
+            mainFrame.getActivePanel().tryChangeCurrentFolder(((Bookmark)bookmarkList.getSelectedValue()).getLocation());
         }
     }
 

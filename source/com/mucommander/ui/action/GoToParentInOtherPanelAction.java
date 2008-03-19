@@ -18,8 +18,6 @@
 
 package com.mucommander.ui.action;
 
-import com.mucommander.file.AbstractFile;
-import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.main.MainFrame;
 
 import java.util.Hashtable;
@@ -42,5 +40,5 @@ public class GoToParentInOtherPanelAction extends GoToParentAction {
     /**
      * Opens the active panel's parent in the inactive panel.
      */
-    public void performAction() {goToParent(mainFrame.getActiveTable().getFolderPanel(), mainFrame.getInactiveTable().getFolderPanel());}
+    public void performAction() {goToParent(mainFrame.getActivePanel(), mainFrame.getInactivePanel());}
 }

@@ -18,9 +18,8 @@
 
 package com.mucommander.ui.action;
 
-import com.mucommander.ui.event.LocationEvent;
-import com.mucommander.ui.main.MainFrame;
 import com.mucommander.file.AbstractFile;
+import com.mucommander.ui.main.MainFrame;
 
 import java.util.Hashtable;
 
@@ -62,19 +61,19 @@ public class GoToParentInBothPanelsAction extends GoToParentAction {
         AbstractFile parent;
 
         // If the current panel has a parent file, navigate to it.
-        if((parent = mainFrame.getActiveTable().getFolderPanel().getCurrentFolder().getParentSilently()) != null) {
-            openThread = mainFrame.getActiveTable().getFolderPanel().tryChangeCurrentFolder(parent);
+        if((parent = mainFrame.getActivePanel().getCurrentFolder().getParentSilently()) != null) {
+            openThread = mainFrame.getActivePanel().tryChangeCurrentFolder(parent);
 
             // If the inactive panel has a parent file, wait for the current panel change to be complete and navigate
             // to it.
-            if((parent = mainFrame.getInactiveTable().getFolderPanel().getCurrentFolder().getParentSilently()) != null) {
+            if((parent = mainFrame.getInactivePanel().getCurrentFolder().getParentSilently()) != null) {
                 if(openThread != null) {
                     while(openThread.isAlive()) {
                         try {openThread.join();}
                         catch(InterruptedException e) {}
                     }
                 }
-                mainFrame.getInactiveTable().getFolderPanel().tryChangeCurrentFolder(parent);
+                mainFrame.getInactivePanel().tryChangeCurrentFolder(parent);
             }
         }
     }

@@ -28,8 +28,8 @@ import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.main.MainFrame;
 
-import java.util.Hashtable;
 import java.io.IOException;
+import java.util.Hashtable;
 
 /**
  * This action 'opens' the currently selected file or folder in the active FileTable.
@@ -103,7 +103,7 @@ public class OpenAction extends MuAction {
             return;
 
         // Opens the currently selected file.
-        open(file, mainFrame.getActiveTable().getFolderPanel());
+        open(file, mainFrame.getActivePanel());
 
     }
 }

@@ -363,8 +363,8 @@ public class ToolBar extends JToolBar implements ConfigurationListener, MouseLis
 
         public JPopupMenu getPopupMenu() {
             FileURL history[] = action instanceof GoBackAction?
-                    mainFrame.getActiveTable().getFolderPanel().getFolderHistory().getBackFolders()
-                    :mainFrame.getActiveTable().getFolderPanel().getFolderHistory().getForwardFolders();
+                    mainFrame.getActivePanel().getFolderHistory().getBackFolders()
+                    :mainFrame.getActivePanel().getFolderHistory().getForwardFolders();
             int historyLen = history.length;        
 
             // If no back/forward folder, do not display popup menu

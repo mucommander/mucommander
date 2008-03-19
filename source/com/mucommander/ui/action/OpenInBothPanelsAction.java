@@ -19,8 +19,8 @@
 package com.mucommander.ui.action;
 
 import com.mucommander.file.AbstractFile;
-import com.mucommander.ui.main.MainFrame;
 import com.mucommander.file.filter.AttributeFileFilter;
+import com.mucommander.ui.main.MainFrame;
 
 import java.util.Hashtable;
 
@@ -93,7 +93,7 @@ public class OpenInBothPanelsAction extends SelectedFileAction {
         catch(Exception e) {otherFile = null;}
 
         // Opens 'file' in the active panel.
-        openThread = mainFrame.getActiveTable().getFolderPanel().tryChangeCurrentFolder(file);
+        openThread = mainFrame.getActivePanel().tryChangeCurrentFolder(file);
 
         // Opens 'otherFIle' in the inactive panel if necessary.
         if(otherFile != null) {
@@ -104,7 +104,7 @@ public class OpenInBothPanelsAction extends SelectedFileAction {
                     catch(InterruptedException e) {}
                 }
             }
-            mainFrame.getInactiveTable().getFolderPanel().tryChangeCurrentFolder(otherFile);
+            mainFrame.getInactivePanel().tryChangeCurrentFolder(otherFile);
         }
     }
 }

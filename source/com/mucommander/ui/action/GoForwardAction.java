@@ -35,7 +35,7 @@ public class GoForwardAction extends GoToAction {
 
 
     public void performAction() {
-        mainFrame.getActiveTable().getFolderPanel().getFolderHistory().goForward();
+        mainFrame.getActivePanel().getFolderHistory().goForward();
     }
 
 
@@ -44,7 +44,7 @@ public class GoForwardAction extends GoToAction {
      * folder in the history, this action will be enabled, if not it will be disabled.
      */
     protected void toggleEnabledState() {
-        setEnabled(mainFrame.getActiveTable().getFolderPanel().getFolderHistory().hasForwardFolder());
+        setEnabled(mainFrame.getActivePanel().getFolderHistory().hasForwardFolder());
     }
 
 }

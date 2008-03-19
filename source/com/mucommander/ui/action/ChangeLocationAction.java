@@ -35,6 +35,6 @@ public class ChangeLocationAction extends MuAction {
     }
 
     public void performAction() {
-        mainFrame.getActiveTable().getFolderPanel().changeCurrentLocation();
+        mainFrame.getActivePanel().changeCurrentLocation();
     }
 }

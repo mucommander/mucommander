@@ -187,7 +187,7 @@ public class ShowServerConnectionsDialog extends FocusDialog implements ActionLi
 
             int selectedIndex = connectionList.getSelectedIndex();
             if(selectedIndex>=0 && selectedIndex<connections.size())
-                mainFrame.getActiveTable().getFolderPanel().tryChangeCurrentFolder(((ConnectionHandler)connections.elementAt(selectedIndex)).getRealm());
+                mainFrame.getActivePanel().tryChangeCurrentFolder(((ConnectionHandler)connections.elementAt(selectedIndex)).getRealm());
         }
         // Dispose the dialog
         else if (source==closeButton)  {
