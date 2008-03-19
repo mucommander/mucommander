@@ -210,7 +210,10 @@ public class FileTableModel extends AbstractTableModel {
      * This method can return the parent folder file ('..') if a parent exists and rowIndex is 0.
      * 
      * <p>Returns <code>null</code> if rowIndex is lower than 0 or is greater than or equals
-     * {@link #getRowCount() getRowCount()}.
+     * {@link #getRowCount() getRowCount()}.</p>
+     *
+     * @param rowIndex a row index, comprised between 0 and #getRowCount()
+     * @return a CachedFile instance of the file located at the given row index
      */
     synchronized AbstractFile getCachedFileAtRow(int rowIndex) {
         if(rowIndex==0 && parent!=null)
@@ -233,7 +236,10 @@ public class FileTableModel extends AbstractTableModel {
      * This method can return the parent folder file ('..') if a parent exists and rowIndex is 0.
      *
      * <p>Returns <code>null</code> if rowIndex is lower than 0 or is greater than or equals
-     * {@link #getRowCount() getRowCount()}.
+     * {@link #getRowCount() getRowCount()}.</p>
+     *
+     * @param rowIndex a row index, comprised between 0 and #getRowCount()
+     * @return the file located at the given row index
      */
     public synchronized AbstractFile getFileAtRow(int rowIndex) {
         AbstractFile file = getCachedFileAtRow(rowIndex);
@@ -248,7 +254,12 @@ public class FileTableModel extends AbstractTableModel {
 	
 
     /**
-     * Returns the row at which the given file is located, <code>-1<code> if the file is not in the current folder.
+     * Returns the index of the row where the given file is located, <code>-1<code> if the file is not in the
+     * current folder.
+     *
+     * @param file the file for which to find the row index
+     * @return the index of the row where the given file is located, <code>-1<code> if the file is not in the
+     * current folder
      */
     public synchronized int getFileRow(AbstractFile file) {
         // Handle parent folder file
@@ -281,6 +292,9 @@ public class FileTableModel extends AbstractTableModel {
     /**
      * Returns the file located at the given index, not including the parent file.
      * Returns <code>null</code> if fileIndex is lower than 0 or is greater than or equals {@link #getFileCount() getFileCount()}.
+     *
+     * @param fileIndex index of a file, comprised between 0 and #getFileCount()
+     * @return the file located at the given index, not including the parent file
      */
     public synchronized AbstractFile getFileAt(int fileIndex) {
         // Need to check that row index is not larger than actual number of rows
@@ -294,8 +308,9 @@ public class FileTableModel extends AbstractTableModel {
 
 	
     /**
-     * Returns the actual number of files the current folder contains, excluding the parent '..' file
-     * from the returned count.
+     * Returns the actual number of files the current folder contains, excluding the parent '..' file (if any).
+     *
+     * @return the actual number of files the current folder contains, excluding the parent '..' file (if any)
      */
     public synchronized int getFileCount() {
         return cachedFiles.length;
@@ -303,8 +318,11 @@ public class FileTableModel extends AbstractTableModel {
 
 	
     /**
-     * Returns if the given row is marked (!= selected). If the specified row corresponds to the special '..' parent
-     * file, <code>false</code> will always be returned.
+     * Returns <code>true</code> if the given row is marked (/!\ not selected). If the specified row corresponds to the
+     * special '..' parent file, <code>false</code> is always returned.
+     *
+     * @param row index of a row to test
+     * @return <code>true</code> if the given row is marked
      */
     public synchronized boolean isRowMarked(int row) {
         if(row==0 && parent!=null)
@@ -315,7 +333,11 @@ public class FileTableModel extends AbstractTableModel {
 
 
     /**
-     * Marks the given row. If the specified row corresponds to the special '..' parent file, the row won't be marked.
+     * Marks/Unmarks the given row. If the specified row corresponds to the special '..' parent file, the row won't
+     * be marked.
+     *
+     * @param row the row to mark/unmark
+     * @param marked <code>true</code> to mark the row, <code>false</code> to unmark it
      */
     public synchronized void setRowMarked(int row, boolean marked) {
         if(row==0 && parent!=null)
@@ -370,7 +392,10 @@ public class FileTableModel extends AbstractTableModel {
 
 
     /**
-     * Marks/unmarks the given file.
+     * Marks/Unmarks the given file.
+     *
+     * @param file the file to mark/unmark
+     * @param marked <code>true</code> to mark the row, <code>false</code> to unmark it.
      */
     public synchronized void setFileMarked(AbstractFile file, boolean marked) {
         int row = getFileRow(file);
@@ -426,8 +451,10 @@ public class FileTableModel extends AbstractTableModel {
 
 
     /**
-     * Return the (already computed) number of marked files, much faster than retrieving marked files
-     * and counting them.
+     * Returns the number of marked files. This number is pre-calculated so calling this method is much faster than
+     * retrieving the list of marked files and counting them.
+     *
+     * @return the number of marked files
      */
     public int getNbMarkedFiles() {
         return markedFiles.size();
@@ -435,15 +462,19 @@ public class FileTableModel extends AbstractTableModel {
 
 	
     /**
-     * Return the (already computed) combined size of marked files, much faster than retrieving marked files
-     * and calculating the total size.
+     * Returns the combined size of marked files. This number is pre-calculated so calling this method is much faster
+     * than retrieving the list of marked files and calculating their combined size.
+     *
+     * @return the combined size of marked files
      */
     public long getTotalMarkedSize() {
         return markedTotalSize;
     }
 
     /**
-     * Makes name column temporarily editable, should only be called by FileTable.
+     * Makes the name column temporarily editable. This method should only be called by FileTable.
+     *
+     * @param editable <code>true</code> to make the name column editable, false to prevent it from being edited
      */
     void setNameColumnEditable(boolean editable) {
         this.nameColumnEditable = editable;
@@ -456,10 +487,13 @@ public class FileTableModel extends AbstractTableModel {
 
     /**
      * Translates {@link Columns} int values into {@link FileComparator} criteria.
+     *
+     * @param column index of a column, see {@link com.mucommander.ui.main.table.Columns} for allowed values
+     * @return a FileComparator criterion corresponding to the given Column
      */
-    private static int getComparatorCriterion(int sortByCriterion) {
+    private static int getComparatorCriterion(int column) {
         int comparatorCriterion;
-        switch(sortByCriterion) {
+        switch(column) {
             case Columns.NAME:
                 comparatorCriterion = FileComparator.NAME_CRITERION;
                 break;

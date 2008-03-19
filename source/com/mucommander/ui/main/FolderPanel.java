@@ -249,42 +249,54 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
 
 
     /**
-     * Returns the MainFrame instance that contains this panel.
+     * Returns the MainFrame that contains this panel.
+     *
+     * @return the MainFrame that contains this panel
      */
     public MainFrame getMainFrame() {
         return this.mainFrame;
     }
 
     /**
-     * Returns the FileTable component this panel contains.
+     * Returns the FileTable contained by this panel.
+     *
+     * @return the FileTable contained by this panel
      */
     public FileTable getFileTable() {
         return this.fileTable;
     }
 
     /**
-     * Returns the JScrollPane that contains the FileTable component.
+     * Returns the JScrollPane that contains the FileTable component and allows it to scroll.
+     *
+     * @return the JScrollPane that contains the FileTable component and allows it to scroll
      */
     public JScrollPane getScrollPane() {
         return scrollPane;
     }
 
     /**
-     * Returns the LocationComboBox component this panel contains.
+     * Returns the LocationComboBox contained by this panel.
+     *
+     * @return the LocationComboBox contained by this panel
      */
     public LocationComboBox getLocationComboBox() {
         return locationComboBox;
     }
 
     /**
-     * Returns the DrivePopupButton component this panel contains.
+     * Returns the DrivePopupButton contained by this panel.
+     *
+     * @return the DrivePopupButton contained by this panel
      */
     public DrivePopupButton getDriveButton() {
         return driveButton; 
     }
 
     /**
-     * Returns the visited folders history wrapped in a FolderHistory object.
+     * Returns the visited folders history, wrapped in a FolderHistory object.
+     *
+     * @return the visited folders history, wrapped in a FolderHistory object
      */
     public FolderHistory getFolderHistory() {
         return this.folderHistory;
@@ -292,7 +304,10 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
 
     /**
      * Returns the LocationManager instance that notifies registered listeners of location changes
-     * that occur in this FolderPanel. 
+     * that occur in this FolderPanel.
+     *
+     * @return the LocationManager instance that notifies registered listeners of location changes that occur in
+     * this FolderPanel
      */
     public LocationManager getLocationManager() {
         return locationManager;
@@ -309,7 +324,9 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
 	
 
     /**
-     * Returns the folder that is currently being displayed by this FolderPanel.
+     * Returns the folder that is currently being displayed by this panel.
+     *
+     * @return the folder that is currently being displayed by this panel
      */
     public synchronized AbstractFile getCurrentFolder() {
         return currentFolder;
@@ -326,6 +343,8 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
 
     /**
      * Displays a popup dialog informing the user that the requested folder couldn't be opened.
+     *
+     * @param e the Exception that was caught while changing the folder
      */
     private void showAccessErrorDialog(Exception e) {
         String exceptionMsg = e==null?null:e.getMessage();
@@ -351,8 +370,10 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
 
 
     /**
-     * Displays a download dialog box where the user can choose where to download the given file
-     * or cancel the operation.
+     * Displays a download dialog box where the user can choose where to download the given file or cancel
+     * the operation.
+     *
+     * @param file the file to download
      */
     private void showDownloadDialog(AbstractFile file) {
         FileSet fileSet = new FileSet(currentFolder);
@@ -534,13 +555,13 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
      * @param fileToSelect file to be selected after the folder has been refreshed (if it exists in the folder), can be null in which case FileTable rules will be used to select current file
      */
     private synchronized void setCurrentFolder(AbstractFile folder, AbstractFile children[], AbstractFile fileToSelect) {
+        this.currentFolder = folder;
+
         // Select given file if not null
         if(fileToSelect == null)
             fileTable.setCurrentFolder(folder, children);
         else
             fileTable.setCurrentFolder(folder, children, fileToSelect);
-
-        this.currentFolder = folder;
 
         // Add folder to history
         folderHistory.addToHistory(folder);
@@ -551,7 +572,9 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
 
 
     /**
-     * Returns true if the current folder is currently being changed, false otherwise.
+     * Returns <code>true</code> ´if the current folder is currently being changed, <code>false</code> otherwise.
+     *
+     * @return <code>true</code> ´if the current folder is currently being changed, <code>false</code> otherwise
      */
     public boolean isFolderChanging() {
         return changeFolderThread!=null;
@@ -559,7 +582,11 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
 
 
     /**
-     * Returns the thread that is currently changing the current folder, or null is the folder is not being changed.
+     * Returns the thread that is currently changing the current folder, <code>null</code> is the folder is not being
+     * changed.
+     *
+     * @return the thread that is currently changing the current folder, <code>null</code> is the folder is not being
+     * changed
      */
     public ChangeFolderThread getChangeFolderThread() {
         return changeFolderThread;
@@ -568,6 +595,8 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
 
     /**
      * Returns the FolderChangeMonitor which monitors changes in the current folder and automatically refreshes it.
+     *
+     * @return the FolderChangeMonitor which monitors changes in the current folder and automatically refreshes it
      */
     public FolderChangeMonitor getFolderChangeMonitor() {
         return folderChangeMonitor;
@@ -710,7 +739,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
      *
      * <p>A little note out of nowhere: never ever call JComponent.paintImmediately() from a thread
      * other than the Event Dispatcher Thread, as will create nasty repaint glitches that
-     * then become very hard to track. Sun's Javadoc doesn't make it clear enough... just don't!
+     * then become very hard to track. Sun's Javadoc doesn't make it clear enough... just don't!</p>
      *
      * @author Maxence Bernard
      */
@@ -767,11 +796,14 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
         }
 
         /**
-         * Returns true if the given file should have its canonical path followed. In that case, the AbstractFile
-         * instance must be resolved again.
+         * Returns <code>true</code> if the given file should have its canonical path followed. In that case, the
+         * AbstractFile instance must be resolved again.
          *
-         * <p>HTTP files MIST have their canonical path followed. For all other file protocols, this is an option in
-         * the preferences.
+         * <p>HTTP files MUST have their canonical path followed. For all other file protocols, this is an option in
+         * the preferences.</p>
+         *
+         * @param file the file to test
+         * @return <code>true</code> if the given file should have its canonical path followed
          */
         private boolean followCanonicalPath(AbstractFile file) {
             if((MuConfiguration.getVariable(MuConfiguration.CD_FOLLOWS_SYMLINKS, MuConfiguration.DEFAULT_CD_FOLLOWS_SYMLINKS)
