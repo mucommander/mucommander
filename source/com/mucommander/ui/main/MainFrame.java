@@ -222,10 +222,13 @@ public class MainFrame extends JFrame implements LocationListener {
     }
 
     /**
-     * Creates a new main frame, set to the given initial folders.
+     * Creates a new main frame set to the given initial folders.
+     *
+     * @param leftInitialFolder the initial folder to display in the left panel
+     * @param rightInitialFolder the initial folder to display in the right panel
      */
-    public MainFrame(AbstractFile initialFolder1, AbstractFile initialFolder2) {
-        init(new FolderPanel(this, initialFolder1, getFileTableConfiguration(true)), new FolderPanel(this, initialFolder2, getFileTableConfiguration(false)));
+    public MainFrame(AbstractFile leftInitialFolder, AbstractFile rightInitialFolder) {
+        init(new FolderPanel(this, leftInitialFolder, getFileTableConfiguration(true)), new FolderPanel(this, rightInitialFolder, getFileTableConfiguration(false)));
 
         leftTable.sortBy(columnNameToIndex(MuConfiguration.getVariable(MuConfiguration.LEFT_SORT_BY, MuConfiguration.DEFAULT_SORT_BY)),
                       !MuConfiguration.getVariable(MuConfiguration.LEFT_SORT_ORDER, MuConfiguration.DEFAULT_SORT_ORDER).equals(MuConfiguration.SORT_ORDER_DESCENDING));
@@ -260,21 +263,27 @@ public class MainFrame extends JFrame implements LocationListener {
     }
 
     /**
-     * Registers the given ActivePanelListener to receive events when current table changes.
+     * Registers the given ActivePanelListener to receive events when the active table changes.
+     *
+     * @param activePanelListener the ActivePanelListener to add
      */
     public void addActivePanelListener(ActivePanelListener activePanelListener) {
         activePanelListeners.put(activePanelListener, null);
     }
 
     /**
-     * Unregisters the given ActivePanelListener so that it will no longer receive events when current table changes.
+     * Unregisters the given ActivePanelListener so that it no longer receives events when the active table changes.
+     *
+     * @param activePanelListener the ActivePanelListener to remove
      */
     public void removeActivePanelListener(ActivePanelListener activePanelListener) {
         activePanelListeners.remove(activePanelListener);
     }
 
     /**
-     * Fires table change events on registered ActivePanelListener instances.
+     * Fires table change events on all registered ActivePanelListener instances.
+     *
+     * @param folderPanel the new active panel
      */
     private void fireActivePanelChanged(FolderPanel folderPanel) {
         Iterator iterator = activePanelListeners.keySet().iterator();
@@ -284,15 +293,19 @@ public class MainFrame extends JFrame implements LocationListener {
 
 
     /**
-     * Returns true if 'no events mode' is enabled.
+     * Returns <code>true</code> if 'no events mode' is currently enabled.
+     *
+     * @return <code>true</code> if 'no events mode' is currently enabled
      */
     public boolean getNoEventsMode() {
         return this.noEventsMode;
     }
 	
     /**
-     * Enables/disables 'no events mode' which prevents mouse and keyboard events from being received
-     * by the application (main frame and its subcomponents and menus).
+     * Enables/disables the 'no events mode' which prevents mouse and keyboard events from being received
+     * by the application (MainFrame, its subcomponents and the menu bar).
+     *
+     * @param enabled <code>true</code> to enable 'no events mode', <code>false</code> to disable it
      */
     public void setNoEventsMode(boolean enabled) {
         // Piece of code used in 0.8 beta1 and removed after because it's way too slow, kept here for the record 
@@ -309,6 +322,9 @@ public class MainFrame extends JFrame implements LocationListener {
 
     /**
      * Returns the toolbar where shortcut buttons (go back, go forward, ...) are.
+     * Note that a non-null instance of ToolBar is returned even if it is currently hidden.
+     *
+     * @return the toolbar component
      */
     public ToolBar getToolBar() {
         return toolbar;
@@ -316,8 +332,11 @@ public class MainFrame extends JFrame implements LocationListener {
 
 
     /**
-     * Returns the command bar, i.e. the panel that contains
-     * F3, F6... F10 buttons.
+     * Returns the command bar, i.e. the component that contains shortcuts to certains actions such as View, Edit, Copy,
+     * Move, etc...
+     * Note that a non-null instance of CommandBar is returned even if it is currently hidden.
+     *
+     * @return the command bar component
      */
     public CommandBar getCommandBar() {
         return commandBar;
@@ -325,7 +344,9 @@ public class MainFrame extends JFrame implements LocationListener {
 
 
     /**
-     * Returns the status bar where information about selected files and volume are displayed.
+     * Returns the status bar, where information about selected files and volume are displayed.
+     *
+     * @return the status bar
      */
     public StatusBar getStatusBar() {
         return this.statusBar;
@@ -333,13 +354,14 @@ public class MainFrame extends JFrame implements LocationListener {
 
 
     /**
-     * Returns the active FileTable in this MainFrame.
+     * Returns the currently active table.
      *
-     * The returned active table doesn't necessarily have focus, the focus can be in some other component
-     * of the active {@link FolderPanel}, or nowhere in the MainFrame if the window is not in the foreground.
+     * <p>The returned table doesn't necessarily have focus, the focus can be in some other component
+     * of the active {@link FolderPanel}, or nowhere in the MainFrame if it is currently not in the foreground.</p>
      *
-     * <p>Use {@link FileTable#hasFocus()} to test if the table currently has focus.
+     * <p>Use {@link FileTable#hasFocus()} to test if the table currently has focus.</p>
      *
+     * @return the currently active table
      * @see FileTable#isActiveTable()
      */
     public FileTable getActiveTable() {
@@ -347,7 +369,21 @@ public class MainFrame extends JFrame implements LocationListener {
     }
 
     /**
-     * Sets currently active FileTable (called by FolderPanel).
+     * Returns the currently active panel.
+     *
+     * <p>The returned panel doesn't necessarily have focus, for example if the MainFrame is currently not in the
+     * foreground.</p>
+     *
+     * @return the currently active panel
+     */
+    public FolderPanel getActivePanel() {
+        return activeTable.getFolderPanel();
+    }
+
+    /**
+     * Sets the currently active FileTable. This method is to be called by FolderPanel only.
+     *
+     * @param table the currently active FileTable
      */
     void setActiveTable(FileTable table) {
         boolean activeTableChanged = activeTable !=table;
@@ -365,21 +401,36 @@ public class MainFrame extends JFrame implements LocationListener {
 
 	
     /**
-     * Returns the complement to getActiveTable().
+     * Returns the inactive table, i.e. the complement of {@link #getActiveTable()}.
+     *
+     * @return the inactive table
      */
     public FileTable getInactiveTable() {
         return activeTable == leftTable ? rightTable : leftTable;
     }
     
     /**
-     * Returns left FolderPanel.
+     * Returns the inactive panel, i.e. the complement of {@link #getActivePanel()}.
+     *
+     * @return the inactive panel
+     */
+    public FolderPanel getInactivePanel() {
+        return getInactiveTable().getFolderPanel();
+    }
+
+    /**
+     * Returns the FolderPanel instance corresponding to the left panel.
+     *
+     * @return the FolderPanel instance corresponding to the left panel
      */
     public FolderPanel getLeftPanel() {
         return leftFolderPanel;
     }
 
     /**
-     * Returns right FolderPanel.
+     * Returns the FolderPanel instance corresponding to the right panel.
+     *
+     * @return the FolderPanel instance corresponding to the right panel
      */
     public FolderPanel getRightPanel() {
         return rightFolderPanel;
@@ -387,7 +438,9 @@ public class MainFrame extends JFrame implements LocationListener {
 
 
     /**
-     * Returns the {@link ProportionalSplitPane} component that manages how the two {@link FolderPanel} are split.   
+     * Returns the ProportionalSplitPane component that splits the two panels.
+     *
+     * @return the ProportionalSplitPane component that splits the two panels
      */
     public ProportionalSplitPane getSplitPane() {
         return splitPane;
@@ -408,8 +461,10 @@ public class MainFrame extends JFrame implements LocationListener {
     }
 
     /**
-     * Returns how folder panels are currently split: if true is passed, the folder panels are split vertically (default),
-     * horizontally otherwise.
+     * Returns how folder panels are currently split: if <code>true</code> is returned, panels are split vertically
+     * (default), horizontally otherwise.
+     *
+     * @return <code>true</code> if folder panels are split vertically
      */
     public boolean getSplitPaneOrientation() {
         // Note: the vertical/horizontal terminology used in muCommander is just the opposite of the one used
@@ -480,14 +535,19 @@ public class MainFrame extends JFrame implements LocationListener {
 
 
     /**
-     * Returns <code>true</code> if this MainFrame is active in the foreground.
+     * Returns <code>true</code> if this MainFrame is currently active in the foreground.
+     *
+     * @return <code>true</code> if this MainFrame is currently active in the foreground
      */
     public boolean isForegroundActive() {
         return foregroundActive;
     }
 
     /**
-     * Sets whether this MainFrame is active in the foreground. Method to be called solely by WindowManager.
+     * Sets whether this MainFrame is currently active in the foreground. This method is to be called by WindowManager
+     * only.
+     *
+     * @param foregroundActive true if this MainFrame is currently active in the foreground
      */
     void setForegroundActive(boolean foregroundActive) {
         this.foregroundActive = foregroundActive;
@@ -504,6 +564,8 @@ public class MainFrame extends JFrame implements LocationListener {
 
     /**
      * Returns <code>true</code> if this MainFrame is active, or is an ancestor of a Window that is currently active.
+     *
+     * @return <code>true</code> if this MainFrame is active, or is an ancestor of a Window that is currently active
      */
     public boolean isAncestorOfActiveWindow() {
         if(isActive())
