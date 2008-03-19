@@ -361,7 +361,9 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
      * @return the folder currently displayed by this FileTable
      */
     public AbstractFile getCurrentFolder() {
-        return tableModel.getCurrentFolder();
+        // Note: tableModel#getCurrentFolder() must not be returned because the folder is set asynchronously in the
+        // table model and this method would return null until it has been set, generating NPE in the application.
+        return folderPanel.getCurrentFolder();
     }
 
     /**
