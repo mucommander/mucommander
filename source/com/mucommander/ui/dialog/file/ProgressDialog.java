@@ -34,8 +34,6 @@ import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.layout.YBoxPanel;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.StatusBar;
-import com.mucommander.ui.theme.Theme;
-import com.mucommander.ui.theme.ThemeManager;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -91,7 +89,7 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
     private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(320,0);
 
     /** Height allocated to the 'speed graph' */
-    private final static int SPEED_GRAPH_HEIGHT = 100;
+    private final static int SPEED_GRAPH_HEIGHT = 80;
 
     /** Controls how often should progress information be refreshed (in ms) */
     private final static int MAIN_REFRESH_RATE = 1000;
@@ -160,6 +158,12 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
 
             YBoxPanel advancedPanel = new YBoxPanel();
 
+            this.speedGraph = new SpeedGraph();
+            speedGraph.setPreferredSize(new Dimension(0, SPEED_GRAPH_HEIGHT));
+            advancedPanel.add(speedGraph);
+
+            advancedPanel.addSpace(5);
+
             JPanel tempPanel2 = new JPanel(new BorderLayout());
             this.limitSpeedCheckBox = new JCheckBox(Translator.get("progress_dialog.limit_speed")+":", false);
             limitSpeedCheckBox.addItemListener(this);
@@ -173,10 +177,6 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
             tempPanel2.add(speedChooser, BorderLayout.EAST);
             advancedPanel.add(tempPanel2);
             advancedPanel.addSpace(5);
-
-            this.speedGraph = new SpeedGraph();
-            speedGraph.setPreferredSize(new Dimension(0, SPEED_GRAPH_HEIGHT));
-            advancedPanel.add(speedGraph);
 
             this.collapseExpandButton = new CollapseExpandButton(Translator.get("progress_dialog.advanced"), advancedPanel, true);
             collapseExpandButton.setExpandedState(MuConfiguration.getVariable(MuConfiguration.PROGRESS_DIALOG_EXPANDED,
@@ -577,17 +577,17 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
      */
     private class SpeedGraph extends JPanel {
 
-        private final Color BACKGROUND_COLOR = ThemeManager.getCurrentColor(Theme.FILE_TABLE_BACKGROUND_COLOR);
+        private final Color GRAPH_OUTLINE_COLOR = new Color(70, 70, 70);
 
-        private final Color GRAPH_COLOR = ThemeManager.getCurrentColor(Theme.FILE_TABLE_SELECTED_BACKGROUND_COLOR);
+        private final Color GRAPH_FILL_COLOR = new Color(215, 215, 215);
 
-        private final Color BPS_LIMIT_COLOR = ThemeManager.getCurrentColor(Theme.MARKED_FOREGROUND_COLOR);
+        private final Color BPS_LIMIT_COLOR = new Color(204, 0, 0);
 
         private static final int LINE_SPACING = 6;
 
         private static final int NB_SAMPLES_MAX = 320;
 
-        private static final int STROKE_WIDTH = 2;
+        private static final int STROKE_WIDTH = 1;
 
         private Vector samples = new Vector(NB_SAMPLES_MAX);
 
@@ -621,13 +621,11 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
             int width = getWidth();
             int height = getHeight();
 
-            // Fill background
-            g.setColor(BACKGROUND_COLOR);
+            // Fill the background with the panel's background color
+            g.setColor(getBackground());
             g.fillRect(0, 0, width, height);
 
-            g.setColor(ThemeManager.getCurrentColor(Theme.FILE_TABLE_BORDER_COLOR));
-            g.drawRect(0, 0, width - 1, height - 1);
-
+            g2d.setStroke(lineStroke);
 
             synchronized(samples) {     // Ensures that addSample() is not currently accessing the Vector
                 // Number of collected sample
@@ -635,13 +633,13 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
                 // Number of displayable samples based on their spacing
                 int nbDisplayableSamples = (width-2*STROKE_WIDTH)/LINE_SPACING;
                 // Index of the first sample
-                int sampleOffset = nbSamples>nbDisplayableSamples?nbSamples-nbDisplayableSamples:0;
+                int firstSample = nbSamples>nbDisplayableSamples?nbSamples-nbDisplayableSamples:0;
                 // Number of lines to be drawn
                 int nbLines = Math.min(nbSamples, nbDisplayableSamples);
 
                 // Calculate the maximum bytes per second of all the samples to be displayed
                 long maxBps = 0;
-                for(int i= sampleOffset; i<sampleOffset+nbLines; i++) {
+                for(int i=firstSample; i<firstSample+nbLines; i++) {
                     long sample = ((Long)samples.elementAt(i)).longValue();
                     if(sample>maxBps)
                         maxBps = sample;
@@ -652,22 +650,37 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
 
                 // Draw throughput limit as an horizontal line, only if there is a limit
                 long bpsLimit = transferFileJob.getThroughputLimit();
-                g.setColor(BPS_LIMIT_COLOR);
                 if(bpsLimit>0) {
+                    g.setColor(BPS_LIMIT_COLOR);
                     int y = height-STROKE_WIDTH-(int)(bpsLimit/yRatio);
                     g.drawLine(0, y, width, y);
                 }
 
-                // Set custom line stroke and color
-                g.setColor(GRAPH_COLOR);
-                g2d.setStroke(lineStroke);
-
-                // Draw the graph based on the collected samples
+                // Fill the graph
+                g.setColor(GRAPH_FILL_COLOR);
                 int x = STROKE_WIDTH;
+                Polygon p = new Polygon();
+                int sampleOffset = firstSample;
+                for(int l=0; l<nbLines; l++) {
+                    p.addPoint(x, height-STROKE_WIDTH-(int)(((Long)samples.elementAt(sampleOffset++)).longValue()/yRatio));
+                    x+=LINE_SPACING;
+                }
+                p.addPoint(x-LINE_SPACING, height-1);
+                p.addPoint(0, height-1);
+                g.fillPolygon(p);
+
+                // Draw the graph outline in a darker color
+                g.setColor(GRAPH_OUTLINE_COLOR);
+                x = STROKE_WIDTH;
+                sampleOffset = firstSample;
                 for(int l=0; l<nbLines-1; l++) {
                     g.drawLine(x, height-STROKE_WIDTH-(int)(((Long)samples.elementAt(sampleOffset)).longValue()/yRatio),
                               (x+=LINE_SPACING), height-STROKE_WIDTH-(int)(((Long)samples.elementAt(++sampleOffset)).longValue()/yRatio));
                 }
+
+                // Draw an horizontal line at the bottom of the graph
+                g.drawLine(0, height-1,
+                        width-1, height-1);
 
                 // Unsuccessful rendering test using curves
     //            GeneralPath gp = new GeneralPath();
