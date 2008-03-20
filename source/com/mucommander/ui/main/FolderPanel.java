@@ -328,7 +328,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
      *
      * @return the folder that is currently being displayed by this panel
      */
-    public synchronized AbstractFile getCurrentFolder() {
+    public AbstractFile getCurrentFolder() {
         return currentFolder;
     }
 
