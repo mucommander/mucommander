@@ -1347,6 +1347,7 @@ generic_error:FR:Une erreur est survenue pendant l'exécution de la tache demand
 generic_error:SV:Ett fel uppstod när åtgärden utfördes.
 generic_error:NL:Er heeft zich een fout voorgedaan bij het uitvoeren van de gevraagde taak.
 generic_error:PL:Wystąpił błąd podczas wykonywania operacji.
+generic_error:JA:要求された操作を行っている間にエラーが発生しています。
 # Translation missing (New!)
 
 
@@ -1980,6 +1981,7 @@ com.mucommander.ui.action.ExploreBookmarksAction.label:FR:Explorer les favoris
 com.mucommander.ui.action.ExploreBookmarksAction.label:NL:Bladwijzers verkennen
 com.mucommander.ui.action.ExploreBookmarksAction.label:SV:Visa bokmärken
 com.mucommander.ui.action.ExploreBookmarksAction.label:PL:Przeglądaj zakładki
+com.mucommander.ui.action.ExploreBookmarksAction.label:JA:ブックマークの検索
 # Translation missing (New!)
 
 
@@ -3275,6 +3277,7 @@ com.mucommander.ui.action.MarkExtensionAction.label:FR:Marquer l'extension
 com.mucommander.ui.action.MarkExtensionAction.label:NL:Markeer extensie
 com.mucommander.ui.action.MarkExtensionAction.label:SV:Markera ändelse
 com.mucommander.ui.action.MarkExtensionAction.label:PL:Zaznacz wg rozszerzenia
+com.mucommander.ui.action.MarkExtensionAction.label:JA:拡張子のマーク
 # Translation missing (New!)
 
 
@@ -3520,6 +3523,7 @@ com.mucommander.ui.action.OpenInOtherPanelAction.label:FR:Ouvrir dans l'autre pa
 com.mucommander.ui.action.OpenInOtherPanelAction.label:NL:Openen in nieuw scherm
 com.mucommander.ui.action.OpenInOtherPanelAction.label:SV:Öppna i andra vyn
 com.mucommander.ui.action.OpenInOtherPanelAction.label:PL:Otwórz w drugim panelu
+com.mucommander.ui.action.OpenInOtherPanelAction.label:JA:他のパネルで開く
 # Translation missing (New!)
 
 
@@ -3541,6 +3545,7 @@ com.mucommander.ui.action.OpenInBothPanelsAction.label:FR:Ouvrir dans les deux p
 com.mucommander.ui.action.OpenInBothPanelsAction.label:NL:Openen in beide schermen
 com.mucommander.ui.action.OpenInBothPanelsAction.label:SV:Öppna i båda vyerna
 com.mucommander.ui.action.OpenInBothPanelsAction.label:PL:Otwórz w dwóch panelach
+com.mucommander.ui.action.OpenInBothPanelsAction.label:JA:両方のパネルで開く
 # Translation missing (New!)
 
 
@@ -4467,6 +4472,7 @@ com.mucommander.ui.action.CalculateChecksumAction.label:FR:Calculer la checksum
 com.mucommander.ui.action.CalculateChecksumAction.label:NL:Checksum berekenen
 com.mucommander.ui.action.CalculateChecksumAction.label:SV:Beräkna checksum
 com.mucommander.ui.action.CalculateChecksumAction.label:PL:Oblicz sumę kontrolną
+com.mucommander.ui.action.CalculateChecksumAction.label:JA:チェックサムの計算
 # Translation missing (New!)
 
 
@@ -7043,6 +7049,7 @@ calculate_checksum_dialog.checksum_algorithm:FR:Algorithme de checksum
 calculate_checksum_dialog.checksum_algorithm:SV:Kontrollnummer algoritm
 calculate_checksum_dialog.checksum_algorithm:NL:Checksum algoritme
 calculate_checksum_dialog.checksum_algorithm:PL:Algorytm sumy kontrolnej
+calculate_checksum_dialog.checksum_algorithm:JA:チェックサムのアルゴリズム
 # Translation missing (New!)
 
 
@@ -7062,6 +7069,7 @@ calculate_checksum_dialog.temporary_file:FR:Fichier temporaire
 calculate_checksum_dialog.temporary_file:NL:Tijdelijk bestand
 calculate_checksum_dialog.temporary_file:SV:Temporär fil
 calculate_checksum_dialog.temporary_file:PL:Plik tymczasowy
+calculate_checksum_dialog.temporary_file:JA:一時ファイル
 # Translation missing (New!)
 
 
@@ -10373,6 +10381,7 @@ prefs_dialog.import_look_and_feel:EN:Import look & feel
 prefs_dialog.import_look_and_feel:FR:Importer un look & feel
 prefs_dialog.import_look_and_feel:NL:Importeer look and feel
 prefs_dialog.import_look_and_feel:SV:Importera utseende och känsla
+prefs_dialog.import_look_and_feel:JA:外観のインポート
 # Translation missing (New!)
 
 
@@ -10390,6 +10399,7 @@ prefs_dialog.no_look_and_feel:EN:No look & feel was found.
 prefs_dialog.no_look_and_feel:FR:Aucun look & feel n'a été trouvé.
 prefs_dialog.no_look_and_feel:SV:Inget utseende och känsla hittades.
 prefs_dialog.no_look_and_feel:NL:Geen look en feel gevonden.
+prefs_dialog.no_look_and_feel:JA:外観は見つかりませんでした。
 # Translation missing (New!)
 
 
@@ -10590,6 +10600,7 @@ prefs_dialog.delete_look_and_feel:EN:Permanently delete look & feel %1 ?
 prefs_dialog.delete_look_and_feel:FR:Supprimer définitivement le look & feel %1 ?
 prefs_dialog.delete_look_and_feel:NL:Voorgoed verwijderen van look and feel %1 ?
 prefs_dialog.delete_look_and_feel:SV:Radera utseende och känsla %1 ?
+prefs_dialog.delete_look_and_feel:JA:外観 %1 を永久に削除しますか?
 # Translation missing (New!)
 
 
