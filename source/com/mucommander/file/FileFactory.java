@@ -144,7 +144,7 @@ public class FileFactory {
         // TarArchiveFile must match 'tar.gz'/'tar.bz2' files before GzipArchiveFile/Bzip2ArchiveFile does.
         registerArchiveFormat(new com.mucommander.file.impl.zip.ZipFormatProvider(),     new ExtensionFilenameFilter(new String[] {".zip", ".jar", ".war", ".wal", ".wmz",
                                                                                                                                    ".xpi", ".ear", ".sar", ".odt", ".ods",
-                                                                                                                                   ".odp", ".odg", ".odf"}));
+                                                                                                                                   ".odp", ".odg", ".odf", ".egg"}));
         registerArchiveFormat(new com.mucommander.file.impl.tar.TarFormatProvider(),     new ExtensionFilenameFilter(new String[] {".tar", ".tar.gz", ".tgz",
                                                                                                                                    ".tar.bz2", ".tbz2"}));
         registerArchiveFormat(new com.mucommander.file.impl.gzip.GzipFormatProvider(),   new ExtensionFilenameFilter(".gz"));
