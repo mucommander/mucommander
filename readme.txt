@@ -152,6 +152,9 @@ Improvements:
 - HTTPS connections can now be established even if the SSL certificate is
   not trusted.
 - Added a dedicated icon for the root of remote locations.
+- jCIFS library upgraded to version 1.2.18e.
+- J2SSH library upgraded to version 0.2.9.
+- Commons-net library upgraded to version 1.5.0 (svn snapshot).
 
 Localization:
 - Japanese translation contributed by Nardog.
@@ -177,7 +180,6 @@ Bug fixes:
 - Mac OS X: fixed the 'Empty trash' option which would sometimes be enabled when 
   the trash was empty.
 - Fixed an encoding issue affecting SFTP filenames on some platforms.
-- J2SSH library upgraded to version 0.2.9 which fixes some bugs.
 - Fixed a bug in the text viewer and editor which prevented certain files from
   being opened.
 - Fixed a regression which prevented UNC paths from being listed properly
@@ -195,11 +197,12 @@ Bug fixes:
   with that other columns. 'ascending' order has also been made the default for 
   all columns.
 - Fixed 'Swap folders' not preserving the 'Show folders first' view options.
-- jCIFS library upgraded to version 1.2.18e.
 - Zip compression is now more efficient in terms of memory and CPU usage 
   (Bug #29).
 - Fixed an issue with 'Pack files' when creating a Zip archive that already 
   exists in the destination (Bug #30).
+- FTP files whose group name contains spaces are now properly displayed
+  (Bug #32).
 
 Known issues:
 - Korean translation is not up-to-date.
