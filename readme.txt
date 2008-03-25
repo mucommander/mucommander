@@ -140,6 +140,8 @@ New features:
 - Windows: the Recycle Bin can be opened and emptied from the status bar.
 
 Improvements:
+- Improved the throughput of FTP uploads dramatically.
+- Improved the throughput of transfers into a Zip file dramatically.
 - Added an 'Explore bookmarks' item to the 'Bookmarks' menu.
 - Job confirmation dialogs show the list of files to be processed.
 - All OK/cancel choices can be navigated with the arrow keys.
