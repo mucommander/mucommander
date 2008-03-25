@@ -24,8 +24,8 @@ import com.mucommander.file.ArchiveEntry;
 import com.mucommander.file.impl.zip.provider.ZipConstants;
 import com.mucommander.file.impl.zip.provider.ZipEntry;
 import com.mucommander.file.impl.zip.provider.ZipFile;
+import com.mucommander.io.FilteredOutputStream;
 
-import java.io.FilterOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -104,6 +104,7 @@ public class ZipArchiveFile extends AbstractRWArchiveFile {
         com.mucommander.file.impl.zip.provider.ZipEntry zipEntry = new com.mucommander.file.impl.zip.provider.ZipEntry(path);
         zipEntry.setMethod(ZipConstants.DEFLATED);
         zipEntry.setTime(System.currentTimeMillis());
+        // Todo: set permissions here
 
         return zipEntry;
     }
@@ -235,7 +236,7 @@ public class ZipArchiveFile extends AbstractRWArchiveFile {
             // Set the ZipEntry object into the ArchiveEntry
             entry.setEntryObject(zipEntry);
 
-            return new FilterOutputStream(zipFile.addEntry(zipEntry)) {
+            return new FilteredOutputStream(zipFile.addEntry(zipEntry)) {
                 public void close() throws IOException {
                     super.close();
 
