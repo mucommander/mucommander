@@ -941,7 +941,7 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
     }
 
 
-    private class FTPOutputStream extends FilterOutputStream {
+    private class FTPOutputStream extends FilteredOutputStream {
 
         private FTPConnectionHandler connHandler;
         private boolean isClosed;
