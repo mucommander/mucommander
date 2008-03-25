@@ -25,10 +25,7 @@ import com.mucommander.file.FileProtocols;
 import com.mucommander.file.FileURL;
 import com.mucommander.file.filter.FilenameFilter;
 import com.mucommander.file.util.Kernel32API;
-import com.mucommander.io.BufferPool;
-import com.mucommander.io.FileTransferException;
-import com.mucommander.io.RandomAccessInputStream;
-import com.mucommander.io.RandomAccessOutputStream;
+import com.mucommander.io.*;
 import com.mucommander.process.AbstractProcess;
 import com.mucommander.runtime.JavaVersions;
 import com.mucommander.runtime.OsFamilies;
@@ -939,20 +936,10 @@ public class LocalFile extends AbstractFile {
      * being used.</p>
      *
      */
-    public static class LocalOutputStream extends FilterOutputStream {
+    public static class LocalOutputStream extends FilteredOutputStream {
 
         public LocalOutputStream(FileChannel channel) {
             super(new LocalRandomAccessOutputStream(channel));
-        }
-
-        // Note: this method is not proxied by FilterOutputStream(!)
-        public void write(byte b[]) throws IOException {
-            out.write(b);
-        }
-
-        // Note: this method is not proxied by FilterOutputStream(!)
-         public void write(byte b[], int off, int len) throws IOException {
-            out.write(b, off, len);
         }
     }
 
