@@ -1339,33 +1339,17 @@ public abstract class AbstractFile implements FilePermissions {
      * @throws IOException if an I/O error occurred while calculating the checksum
      */
     public static String calculateChecksum(InputStream in, MessageDigest messageDigest) throws IOException {
-        // Use BufferPool to reuse any available buffer of the same size
-        byte buffer[] = BufferPool.getArrayBuffer(IO_BUFFER_SIZE);
-
+        ChecksumInputStream cin = new ChecksumInputStream(in, messageDigest);
         try {
-            int nbRead;
-            while(true) {
-                try {
-                    nbRead = in.read(buffer, 0, buffer.length);
-                }
-                catch(IOException e) {
-                    throw new FileTransferException(FileTransferException.READING_SOURCE);
-                }
-
-                if(nbRead==-1)
-                    break;
-
-                messageDigest.update(buffer, 0, nbRead);
-            }
-
-            return ByteUtils.toHexString(messageDigest.digest());
+            StreamUtils.readUntilEOF(cin);
+            return cin.getChecksum();
         }
-        finally {
-            // Make the buffer available for further use
-            BufferPool.releaseArrayBuffer(buffer);
+        catch(IOException e) {
+            throw new FileTransferException(FileTransferException.READING_SOURCE);
         }
     }
 
+    
     ////////////////////////
     // Overridden methods //
     ////////////////////////
