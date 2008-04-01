@@ -30,7 +30,6 @@ import com.mucommander.ui.main.MainFrame;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.security.DigestInputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -147,7 +146,7 @@ public abstract class TransferFileJob extends FileJob {
                     else {
                         in = sourceFile.getInputStream();
                         if(integrityCheckEnabled)
-                            in = new DigestInputStream(in, MessageDigest.getInstance(CHECKSUM_VERIFICATION_ALGORITHM));
+                            in = new ChecksumInputStream(in, MessageDigest.getInstance(CHECKSUM_VERIFICATION_ALGORITHM));
 
                         setCurrentInputStream(in);
                     }
@@ -190,10 +189,10 @@ public abstract class TransferFileJob extends FileJob {
             // Indicate that integrity is being checked, the value is reset when the next file starts
             isCheckingIntegrity = true;
 
-            if(in!=null && (in instanceof DigestInputStream)) {
-                // The file was copied with a DigestInputStream, the checksum is already calculated, simply
+            if(in!=null && (in instanceof ChecksumInputStream)) {
+                // The file was copied with a ChecksumInputStream, the checksum is already calculated, simply
                 // retrieve it
-                sourceChecksum = ByteUtils.toHexString(((DigestInputStream)in).getMessageDigest().digest());
+                sourceChecksum = ((ChecksumInputStream)in).getChecksum();
             }
             else {
                 // The file was copied using AbstractFile#copyTo(), or the transfer was resumed:
