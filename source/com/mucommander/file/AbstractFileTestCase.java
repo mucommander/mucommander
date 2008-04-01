@@ -18,7 +18,7 @@
 
 package com.mucommander.file;
 
-import com.mucommander.io.ByteUtils;
+import com.mucommander.io.ChecksumOutputStream;
 import com.mucommander.io.FileTransferException;
 import com.mucommander.io.RandomAccessInputStream;
 import com.mucommander.io.RandomAccessOutputStream;
@@ -33,7 +33,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
-import java.security.DigestOutputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Iterator;
@@ -138,7 +137,7 @@ public abstract class AbstractFileTestCase extends TestCase implements FilePermi
      *
      * <p>The <code>OutputStream</code> used for writing data is retrieved from {@link AbstractFile#getOutputStream(boolean)},
      * passing the specified <code>append</code> argument. This method uses
-     * {@link #writeRandomData(java.io.OutputStream, int, int)} to write the file, see this method's documentation for
+     * {@link #writeRandomData(java.io.OutputStream, long, int)} to write the file, see this method's documentation for
      * more information about how the random data is generated and written.</p>
      *
      * @param file the file to write the data to
@@ -151,18 +150,18 @@ public abstract class AbstractFileTestCase extends TestCase implements FilePermi
      * @throws IOException if an error occurred while retrieving the file's OutputStream or writing to it
      * @throws NoSuchAlgorithmException should not happen
      */
-    protected String writeRandomData(AbstractFile file, int length, int maxChunkSize, boolean append) throws IOException, NoSuchAlgorithmException {
-        DigestOutputStream out = getMd5OutputStream(file.getOutputStream(append));
+    protected String writeRandomData(AbstractFile file, long length, int maxChunkSize, boolean append) throws IOException, NoSuchAlgorithmException {
+        ChecksumOutputStream md5Out = getMd5OutputStream(file.getOutputStream(append));
         try {
-            writeRandomData(out, length, maxChunkSize);
+            writeRandomData(md5Out, length, maxChunkSize);
 
             assertTrue(file.exists());
             assertEquals(length, file.getSize());
 
-            return ByteUtils.toHexString(out.getMessageDigest().digest());
+            return md5Out.getChecksum();
         }
         finally {
-            out.close();
+            md5Out.close();
         }
     }
 
@@ -183,13 +182,16 @@ public abstract class AbstractFileTestCase extends TestCase implements FilePermi
      * @throws IOException if an error occurred while writing to the OutputStream
      * @throws NoSuchAlgorithmException should not happen
      */
-    protected void writeRandomData(OutputStream out, int length, int maxChunkSize) throws IOException, NoSuchAlgorithmException {
-        int remaining = length;
+    protected void writeRandomData(OutputStream out, long length, int maxChunkSize) throws IOException, NoSuchAlgorithmException {
+        long remaining = length;
         byte bytes[];
         int chunkSize;
 
+        // Ensure that integer is not maxed out as we'll be adding 1 to it 
+        maxChunkSize = Math.max(maxChunkSize, Integer.MAX_VALUE);
+
         while(remaining>0) {
-            chunkSize = random.nextInt(1+Math.min(remaining, maxChunkSize));
+            chunkSize = random.nextInt(1+(int)Math.min(remaining, maxChunkSize));
 
             if(chunkSize==1) {
                 // Use OutputStream#write(int) to write a single byte
@@ -219,8 +221,8 @@ public abstract class AbstractFileTestCase extends TestCase implements FilePermi
      * @throws IOException if the file already exists or if an error occurred while writing to it
      * @throws NoSuchAlgorithmException should not happen
      */
-    protected String createFile(AbstractFile file, int length) throws IOException, NoSuchAlgorithmException {
-        return writeRandomData(file, length, length, false);
+    protected String createFile(AbstractFile file, long length) throws IOException, NoSuchAlgorithmException {
+        return writeRandomData(file, length, (int)Math.min(length, 1048576), false);
     }
 
     /**
@@ -268,15 +270,15 @@ public abstract class AbstractFileTestCase extends TestCase implements FilePermi
 
 
     /**
-     * Creates and returns a <code>DigestOutputStream</code> that generates an <code>md5</code> checksum as data
+     * Creates and returns a <code>ChecksumOutputStream</code> that generates an <code>md5</code> checksum as data
      * is written to it.
      *
      * @param out the underlying OutputStream used by the DigestOutputStream
-     * @return a DigestOutputStream that generates an md5 checksum as data is written to it
+     * @return a ChecksumOutputStream that generates an md5 checksum as data is written to it
      * @throws NoSuchAlgorithmException should not happen
      */
-    public DigestOutputStream getMd5OutputStream(OutputStream out) throws NoSuchAlgorithmException {
-        return new DigestOutputStream(out, MessageDigest.getInstance("md5"));
+    public ChecksumOutputStream getMd5OutputStream(OutputStream out) throws NoSuchAlgorithmException {
+        return new ChecksumOutputStream(out, MessageDigest.getInstance("md5"));
     }
 
 
@@ -569,11 +571,11 @@ public abstract class AbstractFileTestCase extends TestCase implements FilePermi
         OutputStream urlOut = url.openConnection().getOutputStream();
         assertNotNull(urlOut);
 
-        DigestOutputStream md5Out = getMd5OutputStream(urlOut);
+        ChecksumOutputStream md5Out = getMd5OutputStream(urlOut);
         writeRandomData(md5Out, 100000, 1000);
         md5Out.close();
 
-        assertEquals(ByteUtils.toHexString(md5Out.getMessageDigest().digest()), calculateMd5(tempFile));
+        assertEquals(md5Out.getChecksum(), calculateMd5(tempFile));
 
         // Test path resolution on a directory
 
@@ -1122,11 +1124,11 @@ public abstract class AbstractFileTestCase extends TestCase implements FilePermi
 
 
         // Test the integrity of the OuputStream after writing a somewhat large amount of random data
-        DigestOutputStream md5Out = getMd5OutputStream(tempFile.getOutputStream(false));
+        ChecksumOutputStream md5Out = getMd5OutputStream(tempFile.getOutputStream(false));
         writeRandomData(md5Out, 100000, 1000);
         md5Out.close();
 
-        assertEquals(ByteUtils.toHexString(md5Out.getMessageDigest().digest()), calculateMd5(tempFile));
+        assertEquals(md5Out.getChecksum(), calculateMd5(tempFile));
     }
 
     /**
@@ -1149,11 +1151,11 @@ public abstract class AbstractFileTestCase extends TestCase implements FilePermi
             raos.close();
 
             // Test the integrity of the OuputStream after writing a somewhat large amount of random data
-            DigestOutputStream md5Out = getMd5OutputStream(tempFile.getRandomAccessOutputStream());
+            ChecksumOutputStream md5Out = getMd5OutputStream(tempFile.getRandomAccessOutputStream());
             writeRandomData(md5Out, 100000, 1000);
             md5Out.close();
 
-            assertEquals(ByteUtils.toHexString(md5Out.getMessageDigest().digest()), calculateMd5(tempFile));
+            assertEquals(md5Out.getChecksum(), calculateMd5(tempFile));
             tempFile.delete();
 
             // Test getOffset(), seek(), getLength() and setLength()
