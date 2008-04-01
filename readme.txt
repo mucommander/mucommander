@@ -121,7 +121,7 @@ New features:
 - New 'Verify data integrity' transfer option that ensures that the files are
   strictly identical on the source and destination after being transferred.
   This option slows down transfers significantly but can prevent data loss
-  caused by faulty mediums.
+  on unreliable mediums.
 - Files can be marked/unmarked using a Regexp.
 - Added 'Owner' and 'Group' columns (disabled by default). The owner and group
   information is available on FTP and SFTP folders and some TAR archives.
@@ -140,17 +140,16 @@ New features:
 - Windows: the Recycle Bin can be opened and emptied from the status bar.
 
 Improvements:
-- Improved the throughput of FTP uploads dramatically.
-- Improved the throughput of transfers into a Zip file dramatically.
+- Significantly improved the throughput of FTP uploads.
+- Significantly improved the throughput of transfers into Zip files.
 - Added an 'Explore bookmarks' item to the 'Bookmarks' menu.
 - Job confirmation dialogs show the list of files to be processed.
 - All OK/cancel choices can be navigated with the arrow keys.
 - Added keyboard shortcuts to 'Change date' and 'Change permissions' actions
   (Shift+Alt+D and Shift+Alt+P resp.).
-- Visual enhancements to the main window under Mac OS X Leopard which now uses
-  more native looking components.
-- Improved the file loading in the internal viewers and editors.
-- The file encoding can be changed in the internal text viewer and editor.
+- Visual enhancements made to the main window under Mac OS X 10.5 (Leopard).
+- Improved file loading in the internal viewers and editors.
+- File encoding can now be changed in the internal text viewer and editor.
 - HTTPS connections can now be established even if the SSL certificate is
   not trusted.
 - Added a dedicated icon for the root of remote locations.
