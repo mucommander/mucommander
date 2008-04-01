@@ -24,7 +24,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 /**
- * This class provides convience static methods that operate on streams.
+ * This class provides convience static methods that operate on streams. All read/write buffers are allocated using
+ * {@link BufferPool} for memory efficiency reasons.
  *
  * @author Maxence Bernard
  */
@@ -274,5 +275,43 @@ public class StreamUtils {
         }
 
         return totalRead;
+    }
+
+
+    /**
+     * This method is a shorthand for {@link #readUntilEOF(java.io.InputStream, int)} called with a
+     * {@link BufferPool#DEFAULT_BUFFER_SIZE default buffer size}.
+     *
+     * @param in the InputStream to read
+     * @throws IOException if an I/O error occurs
+     */
+    public static void readUntilEOF(InputStream in) throws IOException {
+        readUntilEOF(in, BufferPool.DEFAULT_BUFFER_SIZE);
+    }
+
+    /**
+     * This method reads the given InputStream until the End Of File is reached, discarding all the data that is read
+     * in the process. It is noteworthy that this method does <b>not</b> close the stream.
+     *
+     * @param in the InputStream to read
+     * @param bufferSize size of the read buffer
+     * @throws IOException if an I/O error occurs
+     */
+    public static void readUntilEOF(InputStream in, int bufferSize) throws IOException {
+        // Use BufferPool to avoid excessive memory allocation and garbage collection
+        byte buffer[] = BufferPool.getArrayBuffer(bufferSize);
+
+        try {
+            int nbRead;
+            while(true) {
+                nbRead = in.read(buffer, 0, buffer.length);
+
+                if(nbRead==-1)
+                    break;
+            }
+        }
+        finally {
+            BufferPool.releaseArrayBuffer(buffer);
+        }
     }
 }
