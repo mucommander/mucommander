@@ -5245,6 +5245,18 @@ file_collision_dialog.title:SV:Filen finns redan
 rename_dialog.new_name:EN:New name
 rename_dialog.new_name:FR:Nouveau nom
 rename_dialog.new_name:PL:Nowa nazwa
+# Translation missing (New!)
+
+
+
+
+
+
+
+
+
+
+
 
 
 ########
@@ -10671,7 +10683,7 @@ prefs_dialog.jar_file:FR:Fichier JAR
 prefs_dialog.jar_file:SV:JAR-fil
 prefs_dialog.jar_file:NL:JAR bestand
 prefs_dialog.jar_file:PL:Plik JAR
-# Translation missing
+# Translation missing (New!)
 
 
 
