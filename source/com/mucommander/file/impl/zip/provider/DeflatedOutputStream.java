@@ -123,18 +123,6 @@ public class DeflatedOutputStream extends ZipEntryOutputStream {
     }
 
     /**
-     * Writes a single byte to the Zip entry.
-     *
-     * @param b the byte to write
-     * @throws IOException on error
-     */
-    public void write(int b) throws IOException {
-        byte[] array = new byte[1];
-        array[0] = (byte) (b & 0xff);
-        write(array, 0, 1);
-    }
-
-    /**
      * Completes writing the entry <b>without</b> closing the underlying <code>OutputStream</code>.
      *
      * @throws IOException
