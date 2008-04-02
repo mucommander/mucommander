@@ -93,7 +93,7 @@ Translators:
 - Jioh L. Jung (Korean)
 - Andrzej Kosiński (Polish)
 - Tamás Balogh-Walder and György Varga (Hungarian)
-- XXXX Pro (Russian)
+- 4X_Pro (Russian)
 - Woodie (Simplified Chinese)
 - Joze Kovacic (Slovenian)
 - Catalin Hritcu (Romanian)
