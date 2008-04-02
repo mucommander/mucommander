@@ -1528,7 +1528,7 @@ cannot_read_file:KO:파일을 읽을수 없음 %1
 cannot_read_file:pt_BR:Não foi possível ler o arquivo %1
 cannot_read_file:NL:Kan bestand niet lezen %1
 cannot_read_file:SK:Súbor sa nedá čítať %1
-cannot_read_file:JA:ファイル %1 を読み込めません
+cannot_read_file:JA:ファイル %1 を読み取れません
 cannot_read_file:SV:Kan inte läsa filen %1
 
 cannot_write_file:EN:Cannot write file %1
@@ -1588,7 +1588,7 @@ cannot_read_folder:KO:폴더의 내용을 읽을수 없음 %1
 cannot_read_folder:pt_BR:Não foi possível ler o diretório %1
 cannot_read_folder:NL:Kan inhoud van de map niet lezen %1
 cannot_read_folder:SK:Obsah priečinku sa nedá čítať %1
-cannot_read_folder:JA:フォルダ %1 の内容を読み込むことができません
+cannot_read_folder:JA:フォルダ %1 の内容を読み取ることができません
 cannot_read_folder:SV:Kan inte läsa innehållet i mappen %1
 
 cannot_delete_file:EN:Unable to delete file %1
@@ -1730,7 +1730,7 @@ read_error:DE:Lesefehler
 read_error:CS:Chyba při čtení
 read_error:IT:Errore in lettura
 read_error:PL:Błąd odczytu
-read_error:JA:読み込みエラー
+read_error:JA:読み取りエラー
 read_error:SV:Läsfel
 # Translation missing (KO)
 
@@ -1783,7 +1783,7 @@ permissions.read:pt_BR:Leitura
 permissions.read:NL:Lezen
 permissions.read:SK:Čítanie
 permissions.read:HU:Olvasás
-permissions.read:JA:読み込み
+permissions.read:JA:読み取り
 permissions.read:SV:Läsbar
 
 permissions.write:EN:Write
@@ -1823,7 +1823,7 @@ permissions.executable:pt_BR:Execução
 permissions.executable:NL:Uitvoerbaar
 permissions.executable:SK:Spúšťanie
 permissions.executable:HU:Végrehajtás
-permissions.executable:JA:実行可能
+permissions.executable:JA:実行ファイル
 permissions.executable:SV:Exekverbar
 
 permissions.user:EN:User
@@ -2037,7 +2037,7 @@ com.mucommander.ui.action.ChangeLocationAction.label:pt_BR:Alterar localização
 com.mucommander.ui.action.ChangeLocationAction.label:NL:Huidige locatie veranderen
 com.mucommander.ui.action.ChangeLocationAction.label:SK:Zmeniť aktuálne umiestnenie
 com.mucommander.ui.action.ChangeLocationAction.label:HU:Az aktuális hely módosítása
-com.mucommander.ui.action.ChangeLocationAction.label:JA:現在の位置の変更
+com.mucommander.ui.action.ChangeLocationAction.label:JA:現在の位置を変更
 com.mucommander.ui.action.ChangeLocationAction.label:SV:Ändra aktuell sökväg
 
 com.mucommander.ui.action.ChangeDateAction.label:EN:Change date
@@ -3209,7 +3209,7 @@ com.mucommander.ui.action.MarkPageDownAction.label:pt_BR:Marcar página abaixo
 com.mucommander.ui.action.MarkPageDownAction.label:NL:Markeer bestanden tot volgende bladzijde 
 com.mucommander.ui.action.MarkPageDownAction.label:SK:Označiť po nasledujúcu stránku
 com.mucommander.ui.action.MarkPageDownAction.label:HU:Következő lap kijelölése
-com.mucommander.ui.action.MarkPageDownAction.label:JA:下にページをマーク
+com.mucommander.ui.action.MarkPageDownAction.label:JA:下へページをマーク
 com.mucommander.ui.action.MarkPageDownAction.label:SV:Markera sidan neråt
 
 com.mucommander.ui.action.MarkPageUpAction.label:EN:Mark page up
@@ -3229,7 +3229,7 @@ com.mucommander.ui.action.MarkPageUpAction.label:NL:Markeer bestanden tot vorige
 com.mucommander.ui.action.MarkPageUpAction.label:SK:Označiť po predchádzajúcu stránku
 com.mucommander.ui.action.MarkPageUpAction.label:HU:Előző lap kijelölése
 com.mucommander.ui.action.MarkPageUpAction.label:IT:Seleziona pagina su
-com.mucommander.ui.action.MarkPageUpAction.label:JA:上にページをマーク
+com.mucommander.ui.action.MarkPageUpAction.label:JA:上へページをマーク
 com.mucommander.ui.action.MarkPageUpAction.label:SV:Markera sidan uppåt
 
 com.mucommander.ui.action.MarkUpToFirstRowAction.label:EN:Mark files to the beginning
@@ -3474,7 +3474,7 @@ com.mucommander.ui.action.OpenAction.tooltip:KO:폴더 열기 / 압축파일 열
 com.mucommander.ui.action.OpenAction.tooltip:pt_BR:Abrir diretório / Abrir arquivo / Executar
 com.mucommander.ui.action.OpenAction.tooltip:NL:Open map/ Open archief / Uitvoeren
 com.mucommander.ui.action.OpenAction.tooltip:SK:Otvoriť priečinok / Otvoriť archív / Vykonať
-com.mucommander.ui.action.OpenAction.tooltip:JA:フォルダを入力 / アーカイブを入力 / 実行します
+com.mucommander.ui.action.OpenAction.tooltip:JA:フォルダの入力 / アーカイブの入力 / 実行
 com.mucommander.ui.action.OpenAction.tooltip:SV:Öppna mapp / Öppna arkiv / Kör
 
 # This action appears in the 'File' menu and opens the currently selected file using the native (OS) file associations
@@ -3881,7 +3881,7 @@ com.mucommander.ui.action.StopAction.label:pt_BR:Parar mudança de diretórios
 com.mucommander.ui.action.StopAction.label:NL:Verandering aan mappen afbreken
 com.mucommander.ui.action.StopAction.label:SK:Zastaviť zmenu priečinka
 com.mucommander.ui.action.StopAction.label:HU:Könyvtár váltás megállítása
-com.mucommander.ui.action.StopAction.label:JA:フォルダの変更の中止
+com.mucommander.ui.action.StopAction.label:JA:フォルダの変更を中止
 com.mucommander.ui.action.StopAction.label:SV:Stoppa mappbyte
 
 com.mucommander.ui.action.ToggleCommandBarAction.show:EN:Show command bar
@@ -4043,7 +4043,7 @@ com.mucommander.ui.action.PopupLeftDriveButtonAction.label:KO:왼쪽 폴더 변�
 com.mucommander.ui.action.PopupLeftDriveButtonAction.label:pt_BR:Mudar diretório esquerdo
 com.mucommander.ui.action.PopupLeftDriveButtonAction.label:NL:Linker map veranderen
 com.mucommander.ui.action.PopupLeftDriveButtonAction.label:SK:Zmeniť ľavý priečinok
-com.mucommander.ui.action.PopupLeftDriveButtonAction.label:JA:左のフォルダの変更
+com.mucommander.ui.action.PopupLeftDriveButtonAction.label:JA:左のフォルダを変更
 com.mucommander.ui.action.PopupLeftDriveButtonAction.label:SV:Ändra vänster vy
 
 com.mucommander.ui.action.PopupRightDriveButtonAction.label:EN:Change right folder
@@ -4063,7 +4063,7 @@ com.mucommander.ui.action.PopupRightDriveButtonAction.label:KO:오른쪽 폴더 
 com.mucommander.ui.action.PopupRightDriveButtonAction.label:pt_BR:Mudar diretório direito
 com.mucommander.ui.action.PopupRightDriveButtonAction.label:NL:Rechter map veranderen
 com.mucommander.ui.action.PopupRightDriveButtonAction.label:SK:Zmeniť pravý priečinok
-com.mucommander.ui.action.PopupRightDriveButtonAction.label:JA:右のフォルダの変更
+com.mucommander.ui.action.PopupRightDriveButtonAction.label:JA:右のフォルダを変更
 com.mucommander.ui.action.PopupRightDriveButtonAction.label:SV:Ändra höger vy
 
 com.mucommander.ui.action.RecallPreviousWindowAction.label:EN:Recall previous window
@@ -4083,7 +4083,7 @@ com.mucommander.ui.action.RecallPreviousWindowAction.label:KO:이전창 불러�
 com.mucommander.ui.action.RecallPreviousWindowAction.label:pt_BR:Recarregar janela anterior
 com.mucommander.ui.action.RecallPreviousWindowAction.label:NL:Terug naar vorige venster
 com.mucommander.ui.action.RecallPreviousWindowAction.label:SK:Prepnúť do predchádzajúceho okna
-com.mucommander.ui.action.RecallPreviousWindowAction.label:JA:前のウィンドウの呼び戻し
+com.mucommander.ui.action.RecallPreviousWindowAction.label:JA:前のウィンドウを呼び戻す
 com.mucommander.ui.action.RecallPreviousWindowAction.label:SV:Återkalla föregående fönster
 
 com.mucommander.ui.action.RecallNextWindowAction.label:EN:Recall next window
@@ -4103,7 +4103,7 @@ com.mucommander.ui.action.RecallNextWindowAction.label:KO:다음창 불러오기
 com.mucommander.ui.action.RecallNextWindowAction.label:pt_BR:Recarregar próxima janela
 com.mucommander.ui.action.RecallNextWindowAction.label:NL:Terug naar volgende venster
 com.mucommander.ui.action.RecallNextWindowAction.label:SK:Prepnúť do nasledujúceho okna
-com.mucommander.ui.action.RecallNextWindowAction.label:JA:次のウィンドウの呼び戻し
+com.mucommander.ui.action.RecallNextWindowAction.label:JA:次のウィンドウを呼び戻す
 com.mucommander.ui.action.RecallNextWindowAction.label:SV:Återkalla nästa fönster
 
 # Appears in the 'Window' menu. %1 is replaced by the window's number.
@@ -4185,7 +4185,7 @@ com.mucommander.ui.action.SwitchActiveTableAction.label:KO:좌우 판넬을 바�
 com.mucommander.ui.action.SwitchActiveTableAction.label:pt_BR:Alternar entre os paneis esquerdo e direito
 com.mucommander.ui.action.SwitchActiveTableAction.label:NL:Wissel tussen linker en rechter venster
 com.mucommander.ui.action.SwitchActiveTableAction.label:SK:Prepnúť medzi pravým a ľavým panelom
-com.mucommander.ui.action.SwitchActiveTableAction.label:JA:左右のパネル間の切り替え
+com.mucommander.ui.action.SwitchActiveTableAction.label:JA:左右のパネル間を切り替え
 com.mucommander.ui.action.SwitchActiveTableAction.label:SV:Växla mellan vänster och höger vy
 
 com.mucommander.ui.action.SelectFirstRowAction.label:EN:Select first file in current folder
@@ -4205,7 +4205,7 @@ com.mucommander.ui.action.SelectFirstRowAction.label:KO:현재 폴더에 처음 
 com.mucommander.ui.action.SelectFirstRowAction.label:pt_BR:Selecionar primeiro arquivo do diretório corrente
 com.mucommander.ui.action.SelectFirstRowAction.label:NL:Selecteer eerste bestand in huidige map
 com.mucommander.ui.action.SelectFirstRowAction.label:SK:Vybrať prvý súbor v aktuálnom priečinku
-com.mucommander.ui.action.SelectFirstRowAction.label:JA:現在のフォルダの最初のファイルの選択
+com.mucommander.ui.action.SelectFirstRowAction.label:JA:現在のフォルダの最初のファイルを選択
 com.mucommander.ui.action.SelectFirstRowAction.label:SV:Välj första filen i aktuell vy
 
 com.mucommander.ui.action.SelectLastRowAction.label:EN:Select last file in current folder
@@ -4225,7 +4225,7 @@ com.mucommander.ui.action.SelectLastRowAction.label:KO:현재 폴더에 마지�
 com.mucommander.ui.action.SelectLastRowAction.label:pt_BR:Selecionar último arquivo do diretório corrente
 com.mucommander.ui.action.SelectLastRowAction.label:NL:Selecteer laatste bestand in huidig directory
 com.mucommander.ui.action.SelectLastRowAction.label:SK:Vybrať posledný súbor v označenom priečinku
-com.mucommander.ui.action.SelectLastRowAction.label:JA:現在のフォルダの最後のファイルの選択
+com.mucommander.ui.action.SelectLastRowAction.label:JA:現在のフォルダの最後のファイルを選択
 com.mucommander.ui.action.SelectLastRowAction.label:SV:Välj sista filen i aktuell vy
 
 com.mucommander.ui.action.SplitEquallyAction.label:EN:Split equally
@@ -4601,7 +4601,7 @@ view_menu.show_hide_columns:pt_BR:Exibir/Ocultar colunas
 view_menu.show_hide_columns:NL:Kolommen tonen/verbergen
 view_menu.show_hide_columns:SK:Zobraziť/skryť stĺpce
 view_menu.show_hide_columns:HU:Oszlopok Mutatása/Elrejtése
-view_menu.show_hide_columns:JA:列の表示/非表示の切り替え
+view_menu.show_hide_columns:JA:列の表示/非表示を切り替え
 view_menu.show_hide_columns:SV:Visa/Dölj kolumner
 
 
@@ -4768,7 +4768,7 @@ status_bar.connecting_to_folder:pt_BR:Conectando ao diretório, tecle ESC para c
 status_bar.connecting_to_folder:NL:Verbinden met map, druk ESC om af te breken
 status_bar.connecting_to_folder:SK:Pripája sa na priečinok, stlač ESC pre zrušenie
 status_bar.connecting_to_folder:HU:Kapcsolódás a mappához... Mégse: [ESCAPE]
-status_bar.connecting_to_folder:JA:フォルダへ接続しています、キャンセルするには ESCAPE を押します。
+status_bar.connecting_to_folder:JA:フォルダへ接続しています、取り消すには ESCAPE を押します。
 status_bar.connecting_to_folder:SV:Ansluter till mapp, tryck ESC för att avbryta.
 
 # Displayed in the status bar to indicate free space on current volume
@@ -4875,7 +4875,7 @@ table.folder_access_error:KO:폴더의 내용을 읽을수 없음
 table.folder_access_error:pt_BR:Não foi possível ler conteúdo do diretório
 table.folder_access_error:NL:Kan mapinhoud niet lezen
 table.folder_access_error:SK:Obsah priečinka sa nedá čítať
-table.folder_access_error:JA:フォルダの内容を読み込むことができません
+table.folder_access_error:JA:フォルダの内容を読み取ることができません
 table.folder_access_error:SV:Det gick inte att läsa mappens innehåll
 
 table.download_or_browse:EN:Would you like to browse or download this file ?
@@ -5020,7 +5020,7 @@ version_dialog.not_available_title:KO:서버 접근 오류
 version_dialog.not_available_title:pt_BR:Servidor não disponível
 version_dialog.not_available_title:NL:Server niet berijkbaar
 version_dialog.not_available_title:SK:Server je nedostupný
-version_dialog.not_available_title:JA:サーバーが到達不可です
+version_dialog.not_available_title:JA:サーバーが到達できません
 version_dialog.not_available_title:SV:Servern är inte åtkomlig
 
 version_dialog.not_available:EN:Unable to get version information from server.
@@ -6117,7 +6117,7 @@ delete.symlink_warning:KO:이 파일은 심볼릭 링크로 보입니다:\n\n  �
 delete.symlink_warning:pt_BR:Este arquivo parece ser um link simbólico:\n\n Arquivo: %1\n Linkado ao: %2\n\nRemover somente o link simbólico or\nSeguir link simbólico e remover diretório (cuidado) ?
 delete.symlink_warning:NL:Dit bestand lijkt op een symbolische koppeling:\n\n Bestand: %1\n Verwijst naar: %2\n\nAlleen koppeling verwijderen of \nKoppeling volgen en map verwijderen (VOORZICHTIG)?
 delete.symlink_warning:SK:Tento súbor vyzerá ako symbolický odkaz:\n\n Súbor:%1\n Odkazuje na: %2\n\nOdstrániť iba symbolický odkaz, alebo\naj cieľ odkazu (UPOZORNENIE) ?
-delete.symlink_warning:JA:このファイルはシンボリック リンクのように見えます:\n\n  ファイル: %1\n  リンク先: %2\n\nシンボリック リンクを削除するか\nシンボリック リンクに追従してフォルダを削除しますか (注意) ?
+delete.symlink_warning:JA:このファイルはシンボリック リンクのようにみえます:\n\n  ファイル: %1\n  リンク先: %2\n\nシンボリック リンクを削除するか\nシンボリック リンクに追従してフォルダを削除しますか (注意) ?
 delete.symlink_warning:SV:Filen ser ut som en symbolisk länk:\n\n  Fil: %1\n  Länkar till: %2\n\nRadera bara symbolisk länk eller\nFölj symbolisk länk och radera mappen (VARNING) ?
 
 delete.delete_link_only:EN:Delete link
@@ -6222,7 +6222,7 @@ email_dialog.prefs_not_set:KO:메일 파라미터 설정을 해야 합니다
 email_dialog.prefs_not_set:pt_BR:Você deve primeiramente configurar sua conta de email.
 email_dialog.prefs_not_set:NL:U moet eerst uw emailvoorkeuren instellen
 email_dialog.prefs_not_set:SK:Najprv je potrebné nastaviť parametre elektronickej pošty
-email_dialog.prefs_not_set:JA:最初にメール パラメータを設定する必要があります。
+email_dialog.prefs_not_set:JA:まずメール パラメータを設定する必要があります。
 email_dialog.prefs_not_set:SV:Du måste ställa in din mejl först
 
 email_dialog.from:EN:From
@@ -6342,7 +6342,7 @@ email_dialog.read_error:KO:하위 폴더에서 파일을 읽을수 없습니다
 email_dialog.read_error:pt_BR:Não foi possível ler os arquivos no subdiretório
 email_dialog.read_error:NL:Kan bestanen in onderliggende mappen niet lezen
 email_dialog.read_error:SK:Súbory vo vnorených priečinkoch sa nedajú čítať.
-email_dialog.read_error:JA:サブフォルダのファイルを読み込むことができません。
+email_dialog.read_error:JA:サブフォルダのファイルを読み取ることができません。
 email_dialog.read_error:SV:Kunde inte läsa filer i undermappen
 
 email_dialog.sending:EN:Sending files
@@ -8578,7 +8578,7 @@ shortcuts_dialog.quick_search.cancel_search:pt_BR:Cancelar busca rápida
 shortcuts_dialog.quick_search.cancel_search:NL:Snelzoeken afbreken
 shortcuts_dialog.quick_search.cancel_search:SK:Zrušiť rýchle hľadanie
 shortcuts_dialog.quick_search.cancel_search:HU:Gyorskeresés befejezése
-shortcuts_dialog.quick_search.cancel_search:JA:クイック検索のキャンセル
+shortcuts_dialog.quick_search.cancel_search:JA:クイック検索の取り消し
 shortcuts_dialog.quick_search.cancel_search:SV:Avbryt snabbsök
 
 shortcuts_dialog.quick_search.remove_last_char:EN:Remove last character from quick search string
@@ -9045,7 +9045,7 @@ theme_editor.general:IT:Generale
 theme_editor.general:CS:Obecné
 theme_editor.general:pt_BR:Geral
 theme_editor.general:HU:Általános
-theme_editor.general:JA:一般
+theme_editor.general:JA:全般
 theme_editor.general:SK:Všeobecné
 theme_editor.general:SV:Allmänt
 # Translation missing (ES, zh_CN, RU, KO)
@@ -9623,7 +9623,7 @@ prefs_dialog.general_tab:KO:일반
 prefs_dialog.general_tab:pt_BR:Geral
 prefs_dialog.general_tab:NL:Algemeen
 prefs_dialog.general_tab:SK:Všeobecné
-prefs_dialog.general_tab:JA:一般
+prefs_dialog.general_tab:JA:全般
 prefs_dialog.general_tab:SV:Allmänt
 
 prefs_dialog.day:EN:Day
@@ -10331,7 +10331,7 @@ prefs_dialog.edit_current_theme:IT:Modifica il tema corrente...
 prefs_dialog.edit_current_theme:CS:Změnit stávající téma...
 prefs_dialog.edit_current_theme:pt_BR:Editar tema atual...
 prefs_dialog.edit_current_theme:HU:Jelenlegi téma javítása...
-prefs_dialog.edit_current_theme:JA:現在のテーマの編集...
+prefs_dialog.edit_current_theme:JA:現在のテーマを編集...
 prefs_dialog.edit_current_theme:SK:Upraviť aktuálnu tému...
 prefs_dialog.edit_current_theme:SV:Redigera aktuellt tema...
 # Translation missing (ES, zh_CN, RU, KO)
@@ -10470,7 +10470,7 @@ prefs_dialog.cannot_read_theme:DE:Kann Thema nicht aus Datei %1 laden
 prefs_dialog.cannot_read_theme:CS:Nelze načíst téma ze souboru %1
 prefs_dialog.cannot_read_theme:IT:Impossibile caricare il tema dal file %1
 prefs_dialog.cannot_read_theme:PL:Nie można załadować tematu z pliku %1
-prefs_dialog.cannot_read_theme:JA:ファイル %1 からテーマを読み込めません
+prefs_dialog.cannot_read_theme:JA:ファイル %1 からテーマを読み取れません
 prefs_dialog.cannot_read_theme:SV:Kunde inte ladda tema från filen %1
 # Translation missing (KO)
 
