@@ -637,7 +637,7 @@ pause:CS:Pauza
 pause:zh_TW:暫停
 pause:DE:Pause
 pause:zh_CN:暂停
-pause:RU:Пауза
+pause:RU:Приостановить
 pause:ES:Pausa
 pause:PL:Pauza
 pause:KO:일시중지
@@ -702,6 +702,7 @@ creating_file:FR:Création de %1 en cours
 creating_file:SV:Skapar %1
 creating_file:PL:Tworzenie %1
 creating_file:HU:%1 Létrehozása
+creating_file:RU:Создается %1
 # Translation missing (New!)
 
 
@@ -733,7 +734,8 @@ choose:PL:Wybierz
 choose:JA:選択
 choose:SK:Zvoliť
 choose:SV:Välj
-# Translation missing (ES, zh_CN, RU, KO)
+choose:RU:Выберите
+# Translation missing (ES, zh_CN, KO)
 
 
 
@@ -760,7 +762,8 @@ choose_folder:PL:Wybierz katalog
 choose_folder:JA:フォルダを選択します
 choose_folder:SK:Zvoliť priečinok
 choose_folder:SV:Välj mapp
-# Translation missing (ES, zh_CN, RU, KO)
+choose_folder:RU:Выберите каталог
+# Translation missing (ES, zh_CN, KO)
 
 
 
@@ -980,6 +983,7 @@ owner:NL:Eigenaar
 owner:SV:Ägare
 owner:PL:Właściciel
 owner:HU:Tulajdonos
+owner:RU:Владелец
 # Translation missing (New!)
 
 
@@ -1003,6 +1007,7 @@ group:NL:Groep
 group:SV:Grupp
 group:PL:Grupa
 group:HU:Csoport
+group:RU:Группа
 # Translation missing (New!)
 
 
@@ -1283,7 +1288,8 @@ loading:PL:Ładowanie...
 loading:JA:読み込んでいます...
 loading:SK:Načítavam obsah...
 loading:SV:Laddar...
-# Translation missing (ES, zh_CN, RU, KO)
+loading:RU:Загрузка...
+# Translation missing (ES, zh_CN, KO)
 
 
 
@@ -1352,6 +1358,7 @@ generic_error:NL:Er heeft zich een fout voorgedaan bij het uitvoeren van de gevr
 generic_error:PL:Wystąpił błąd podczas wykonywania operacji.
 generic_error:JA:要求された操作を行っている間にエラーが発生しています。
 generic_error:HU:Hiba történt a művelet elvégzése alatt.
+generic_error:RU:При выполнении запрошенной операции возникла ошибка
 # Translation missing (New!)
 
 
@@ -1751,6 +1758,7 @@ integrity_check_error:EN:Integrity check failed: source and destination don't ma
 integrity_check_error:FR:Echec du contrôle d'intégrité: les fichiers source et destination sont différents
 integrity_check_error:PL:Błąd integralności danych: plik źródlowy i docelowy nie zgadzają się
 integrity_check_error:HU:Hiba az ellenőrzéskor: A forrás és a cél nem azonos
+integrity_check_error:RU:Проверка целостности не прошла: файл-источник и файл-приемник не совпадают
 # Translation missing (New!)
 
 
@@ -1988,6 +1996,7 @@ com.mucommander.ui.action.ExploreBookmarksAction.label:SV:Visa bokmärken
 com.mucommander.ui.action.ExploreBookmarksAction.label:PL:Przeglądaj zakładki
 com.mucommander.ui.action.ExploreBookmarksAction.label:JA:ブックマークの検索
 com.mucommander.ui.action.ExploreBookmarksAction.label:HU:Könyvjelzők átvizsgálása
+com.mucommander.ui.action.ExploreBookmarksAction.label:RU:Просмотреть закладки
 # Translation missing (New!)
 
 
@@ -2998,6 +3007,7 @@ com.mucommander.ui.action.SortByOwnerAction.label:SV:Sortera efter Ägare
 com.mucommander.ui.action.SortByOwnerAction.label:NL:Sorteren op eigenaar
 com.mucommander.ui.action.SortByOwnerAction.label:PL:Sortuj po właścicielu
 com.mucommander.ui.action.SortByOwnerAction.label:HU:Rendezés tulajdonos szerint
+com.mucommander.ui.action.SortByOwnerAction.label:RU:Сортировать по владельцу
 # Translation missing (New!)
 
 
@@ -3023,6 +3033,7 @@ com.mucommander.ui.action.SortByGroupAction.label:NL:Sorteren op groep
 com.mucommander.ui.action.SortByGroupAction.label:SV:Sortera efter Grupp
 com.mucommander.ui.action.SortByGroupAction.label:PL:Sortuj po grupie
 com.mucommander.ui.action.SortByGroupAction.label:HU:Rendezés csoportok szerint
+com.mucommander.ui.action.SortByGroupAction.label:RU:Сортировать по группе
 # Translation missing (New!)
 
 
@@ -3287,6 +3298,7 @@ com.mucommander.ui.action.MarkExtensionAction.label:SV:Markera ändelse
 com.mucommander.ui.action.MarkExtensionAction.label:PL:Zaznacz wg rozszerzenia
 com.mucommander.ui.action.MarkExtensionAction.label:JA:拡張子のマーク
 com.mucommander.ui.action.MarkExtensionAction.label:HU:Kiterjesztés megjelölése
+com.mucommander.ui.action.MarkExtensionAction.label:RU:Отметить расширение
 # Translation missing (New!)
 
 
@@ -3534,6 +3546,7 @@ com.mucommander.ui.action.OpenInOtherPanelAction.label:SV:Öppna i andra vyn
 com.mucommander.ui.action.OpenInOtherPanelAction.label:PL:Otwórz w drugim panelu
 com.mucommander.ui.action.OpenInOtherPanelAction.label:JA:他のパネルで開く
 com.mucommander.ui.action.OpenInOtherPanelAction.label:HU:Megnyitás a másik panelen
+com.mucommander.ui.action.OpenInOtherPanelAction.label:RU:Открыть в другой панели
 # Translation missing (New!)
 
 
@@ -3557,6 +3570,7 @@ com.mucommander.ui.action.OpenInBothPanelsAction.label:SV:Öppna i båda vyerna
 com.mucommander.ui.action.OpenInBothPanelsAction.label:PL:Otwórz w dwóch panelach
 com.mucommander.ui.action.OpenInBothPanelsAction.label:JA:両方のパネルで開く
 com.mucommander.ui.action.OpenInBothPanelsAction.label:HU:Megnyitás mindkét panelen
+com.mucommander.ui.action.OpenInBothPanelsAction.label:RU:Открыть в обеих панелях
 # Translation missing (New!)
 
 
@@ -4485,6 +4499,7 @@ com.mucommander.ui.action.CalculateChecksumAction.label:SV:Beräkna checksum
 com.mucommander.ui.action.CalculateChecksumAction.label:PL:Oblicz sumę kontrolną
 com.mucommander.ui.action.CalculateChecksumAction.label:JA:チェックサムの計算
 com.mucommander.ui.action.CalculateChecksumAction.label:HU:Ellenőrző összeg számolása
+com.mucommander.ui.action.CalculateChecksumAction.label:RU:Расчет контрольной суммы
 # Translation missing (New!)
 
 
@@ -5065,6 +5080,7 @@ version_dialog.install_and_restart:JA:インストールと再起動
 version_dialog.install_and_restart:SV:Installera och starta om
 version_dialog.install_and_restart:PL:Instaluj i uruchom
 version_dialog.install_and_restart:HU:Telepítés és újraindítás
+version_dialog.install_and_restart:RU:Установить и перезапустить
 # Translation missing (New!)
 
 
@@ -5087,6 +5103,7 @@ version_dialog.preparing_for_update:SV:Förbereder uppdatering...
 version_dialog.preparing_for_update:NL:Update voorbereiden...
 version_dialog.preparing_for_update:PL:Przygotowanie do uaktualnienia...
 version_dialog.preparing_for_update:HU:A frissítés előkészítése...
+version_dialog.preparing_for_update:RU:Идет подготовка к обновлению...
 # Translation missing (New!)
 
 
@@ -5136,7 +5153,7 @@ quit_dialog.desc:CS:Chcete zavřít všechna otevřená okna (%1) a ukončit muC
 quit_dialog.desc:zh_TW:你有 %1 個開啟的視窗. 確定要離開 ?
 quit_dialog.desc:PL:Masz otwartych %1 okien. Zamknąć wszystkie okna i zakończyć pracę muCommandera ?
 quit_dialog.desc:HU:Biztos ki akar lépni? (%1 muCommander van megnyitva.)
-quit_dialog.desc:RU:Закрыть все окна и выйти из muCommander ?
+quit_dialog.desc:RU:Закрыть %1 окон и выйти из muCommander ?
 quit_dialog.desc:zh_CN:关闭所有窗口并退出 muCommander ?
 quit_dialog.desc:SL:Odprto/-ih je %1 okno/-en. Želite zapreti vsa okna? 
 quit_dialog.desc:RO:Aveți %1 ferestre deschise. Sunteți sigur ca doriti sa închideți muCommander?
@@ -5147,7 +5164,7 @@ quit_dialog.desc:NL:Er zijn %1 venster(s) geopend. Alle vensters sluiten en muCo
 quit_dialog.desc:SK:Chcete zatvoriť všetkých %1 okien a ukončiť muCommander?
 quit_dialog.desc:JA:%1 個のウィンドウを開いています。終了してもよろしいですか ? 
 quit_dialog.desc:SV:Du har %1 fönster öppna. Vill du avsluta ändå? 
-# Translation missing (ES, zh_CN, RU, KO) : this entry needs to be updated to take into account the number of windows
+# Translation missing (ES, zh_CN, KO) : this entry needs to be updated to take into account the number of windows
 
 
 
@@ -5206,6 +5223,7 @@ destination_dialog.verify_integrity:EN:Verify data integrity
 destination_dialog.verify_integrity:FR:Vérifier l'intégrité des données
 destination_dialog.verify_integrity:PL:Weryfikuj zgodność danych
 destination_dialog.verify_integrity:HU:Adatintegritás ellenőrzése
+destination_dialog.verify_integrity:RU:Проверить целостность данных
 # Translation missing (New!)
 
 
@@ -5261,6 +5279,7 @@ rename_dialog.new_name:EN:New name
 rename_dialog.new_name:FR:Nouveau nom
 rename_dialog.new_name:PL:Nowa nazwa
 rename_dialog.new_name:HU:Új név
+rename_dialog.new_name:RU:Новое имя
 # Translation missing (New!)
 
 
@@ -5684,7 +5703,8 @@ error_while_optimizing_archive:PL:Błąd podczas optymalizacji archiwum %1
 error_while_optimizing_archive:JA:アーカイブ %1 の最適化中のエラーです
 error_while_optimizing_archive:SK:Chyba pri optimalizácii archívu %1
 error_while_optimizing_archive:SV:Fel vid optimering av arkiv %1
-# Translation missing (ES, RU, KO)
+error_while_optimizing_archive:RU:Ошибка при оптимизации архива %1
+# Translation missing (ES, KO)
 
 
 
@@ -5897,6 +5917,7 @@ mkfile_dialog.allocate_space:EN:Allocate space
 mkfile_dialog.allocate_space:FR:Allouer de l'espace
 mkfile_dialog.allocate_space:PL:Ustaw wielkość
 mkfile_dialog.allocate_space:HU:Hely lefoglalása
+mkfile_dialog.allocate_space:RU:Выделить место
 # Translation missing (New!)
 
 
@@ -6729,6 +6750,7 @@ file_selection_dialog.matches_regexp:SV:Matchar reguljärt uttryck
 file_selection_dialog.matches_regexp:NL:Reguliere uitdrukking
 file_selection_dialog.matches_regexp:PL:Wyrażenie regularne
 file_selection_dialog.matches_regexp:HU:Egyező regurális kifejezés (Regexp)
+file_selection_dialog.matches_regexp:RU:Соотв. рег. выражению
 # Translation missing (New!)
 
 
@@ -6939,6 +6961,7 @@ progress_dialog.verifying_file:FR:Vérification de %1
 progress_dialog.verifying_file:SV:Verifierar %1
 progress_dialog.verifying_file:PL:Weryfikacja %1
 progress_dialog.verifying_file:HU:%1 Ellenőrzése
+progress_dialog.verifying_file:RU:Идет проверка %1
 # Translation missing (New!)
 
 
@@ -7082,6 +7105,7 @@ calculate_checksum_dialog.checksum_algorithm:NL:Checksum algoritme
 calculate_checksum_dialog.checksum_algorithm:PL:Algorytm sumy kontrolnej
 calculate_checksum_dialog.checksum_algorithm:JA:チェックサムのアルゴリズム
 calculate_checksum_dialog.checksum_algorithm:HU:Ellenőrző algoritmus
+calculate_checksum_dialog.checksum_algorithm:RU:Алгоритм расчета контр. суммы
 # Translation missing (New!)
 
 
@@ -7103,6 +7127,7 @@ calculate_checksum_dialog.temporary_file:SV:Temporär fil
 calculate_checksum_dialog.temporary_file:PL:Plik tymczasowy
 calculate_checksum_dialog.temporary_file:JA:一時ファイル
 calculate_checksum_dialog.temporary_file:HU:Ideiglenes fájl
+calculate_checksum_dialog.temporary_file:RU:Временный файл
 # Translation missing (New!)
 
 
@@ -8135,7 +8160,8 @@ text_viewer.find:HU:Keresés
 text_viewer.find:JA:検索
 text_viewer.find:SK:Nájsť
 text_viewer.find:SV:Sök
-# Translation missing (ES, zh_CN, RU, KO)
+text_viewer.find:RU:Поиск
+# Translation missing (ES, zh_CN, KO)
 
 
 
@@ -8164,7 +8190,8 @@ text_viewer.find_next:HU:Következő keresése
 text_viewer.find_next:JA:次を検索
 text_viewer.find_next:SK:Nájsť nasledujúce
 text_viewer.find_next:SV:Sök nästa
-# Translation missing (ES, zh_CN, RU, KO)
+text_viewer.find_next:RU:Искать далее
+# Translation missing (ES, zh_CN, KO)
 
 
 
@@ -8193,7 +8220,8 @@ text_viewer.find_previous:HU:Előző keresése
 text_viewer.find_previous:JA:前を検索
 text_viewer.find_previous:SK:Nájsť predchádzajúce
 text_viewer.find_previous:SV:Sök föregående
-# Translation missing (ES, zh_CN, RU, KO)
+text_viewer.find_previous:RU:Искать предыдущий
+# Translation missing (ES, zh_CN, KO)
 
 
 
@@ -8208,6 +8236,7 @@ text_viewer.find_previous:SV:Sök föregående
 text_viewer.binary_file_warning:EN:This appears to be a binary file
 text_viewer.binary_file_warning:FR:Ce fichier a l'air d'être un fichier binaire
 text_viewer.binary_file_warning:HU:Ez a fájl valószínűleg bináris fájl
+text_viewer.binary_file_warning:RU:Этот файл, скорее всего, двоичный
 # Translation missing (New!)
 
 
@@ -8801,7 +8830,8 @@ theme_editor.shell_history_tab:HU:Előzmények
 theme_editor.shell_history_tab:JA:シェルの履歴
 theme_editor.shell_history_tab:SK:História shellu
 theme_editor.shell_history_tab:SV:Shellhistorik
-# Translation missing (ES, zh_CN, RU, KO)
+theme_editor.shell_history_tab:RU:История команд
+# Translation missing (ES, zh_CN, KO)
 
 
 
@@ -9020,7 +9050,8 @@ theme_editor.active_panel:HU:Aktív
 theme_editor.active_panel:JA:アクティブ
 theme_editor.active_panel:SK:Aktívne
 theme_editor.active_panel:SV:Aktiv
-# Translation missing (ES, zh_CN, RU, KO)
+theme_editor.active_panel:RU:Активная
+# Translation missing (ES, zh_CN, KO)
 
 
 
@@ -9046,7 +9077,8 @@ theme_editor.inactive_panel:HU:Inaktív
 theme_editor.inactive_panel:JA:非アクティブ
 theme_editor.inactive_panel:SK:Neaktívne
 theme_editor.inactive_panel:SV:Inaktiv
-# Translation missing (ES, zh_CN, RU, KO)
+theme_editor.inactive_panel:RU:Неактивная
+# Translation missing (ES, zh_CN, KO)
 
 
 
@@ -9070,7 +9102,8 @@ theme_editor.general:HU:Általános
 theme_editor.general:JA:全般
 theme_editor.general:SK:Všeobecné
 theme_editor.general:SV:Allmänt
-# Translation missing (ES, zh_CN, RU, KO)
+theme_editor.general:RU:Общий
+# Translation missing (ES, zh_CN, KO)
 
 
 
@@ -9191,7 +9224,8 @@ theme_editor.alternate_background:HU:Alternatív háttér
 theme_editor.alternate_background:JA:代替の背景
 theme_editor.alternate_background:SK:Alternatívne pozadie
 theme_editor.alternate_background:SV:Skifta bakgrund
-# Translation missing (ES, zh_CN, RU, KO)
+theme_editor.alternate_background:RU:Другой фон
+# Translation missing (ES, zh_CN, KO)
 
 
 
@@ -10356,7 +10390,8 @@ prefs_dialog.edit_current_theme:HU:Jelenlegi téma javítása...
 prefs_dialog.edit_current_theme:JA:現在のテーマを編集...
 prefs_dialog.edit_current_theme:SK:Upraviť aktuálnu tému...
 prefs_dialog.edit_current_theme:SV:Redigera aktuellt tema...
-# Translation missing (ES, zh_CN, RU, KO)
+prefs_dialog.edit_current_theme:RU:Редактировать тему оформления...
+# Translation missing (ES, zh_CN, KO)
 
 
 
@@ -10417,6 +10452,7 @@ prefs_dialog.import_look_and_feel:NL:Importeer look and feel
 prefs_dialog.import_look_and_feel:SV:Importera utseende och känsla
 prefs_dialog.import_look_and_feel:JA:外観のインポート
 prefs_dialog.import_look_and_feel:HU:Kinézet importálása
+prefs_dialog.import_look_and_feel:RU:Импорт настроек внешнего вида
 # Translation missing (New!)
 
 
@@ -10436,6 +10472,7 @@ prefs_dialog.no_look_and_feel:SV:Inget utseende och känsla hittades.
 prefs_dialog.no_look_and_feel:NL:Geen look en feel gevonden.
 prefs_dialog.no_look_and_feel:JA:外観は見つかりませんでした。
 prefs_dialog.no_look_and_feel:HU:Nem található Kinézet.
+prefs_dialog.no_look_and_feel:RU:Настроек внешнего вида не найдено.
 # Translation missing (New!)
 
 
@@ -10638,6 +10675,7 @@ prefs_dialog.delete_look_and_feel:NL:Voorgoed verwijderen van look and feel %1 ?
 prefs_dialog.delete_look_and_feel:SV:Radera utseende och känsla %1 ?
 prefs_dialog.delete_look_and_feel:JA:外観 %1 を永久に削除しますか?
 prefs_dialog.delete_look_and_feel:HU:Folyamatosan töröljem a(z) %1 Kinézetet?
+prefs_dialog.delete_look_and_feel:RU:Удалить настройки %1 навсегда?
 # Translation missing (New!)
 
 
@@ -10709,6 +10747,7 @@ prefs_dialog.jar_file:SV:JAR-fil
 prefs_dialog.jar_file:NL:JAR bestand
 prefs_dialog.jar_file:PL:Plik JAR
 prefs_dialog.jar_file:HU:JAR fájl
+prefs_dialog.jar_file:RU:JAR-файл
 # Translation missing (New!)
 
 
@@ -10942,7 +10981,8 @@ prefs_dialog.shell_encoding:HU:Karakter kódolás
 prefs_dialog.shell_encoding:JA:シェルのエンコード
 prefs_dialog.shell_encoding:SK:Kódovanie textu shellu
 prefs_dialog.shell_encoding:SV:Shell teckenuppsättning
-# Translation missing (ES, zh_CN, RU, KO)
+prefs_dialog.shell_encoding:RU:Кодировка командной строки
+# Translation missing (ES, zh_CN, KO)
 
 
 
@@ -10967,7 +11007,8 @@ prefs_dialog.auto_detect_shell_encoding:PL:Auto-wybór
 prefs_dialog.auto_detect_shell_encoding:JA:自動検出
 prefs_dialog.auto_detect_shell_encoding:SK:Automatické rozpoznávanie
 prefs_dialog.auto_detect_shell_encoding:SV:Upptäck automatiskt
-# Translation missing (ES, zh_CN, RU, KO)
+prefs_dialog.auto_detect_shell_encoding:RU:Автоопределение
+# Translation missing (ES, zh_CN, KO)
 
 
 
