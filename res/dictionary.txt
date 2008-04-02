@@ -703,6 +703,7 @@ creating_file:SV:Skapar %1
 creating_file:PL:Tworzenie %1
 creating_file:HU:%1 Létrehozása
 creating_file:RU:Создается %1
+creating_file:NL:%1 wordt gemaakt
 # Translation missing (New!)
 
 
@@ -1759,6 +1760,7 @@ integrity_check_error:FR:Echec du contrôle d'intégrité: les fichiers source e
 integrity_check_error:PL:Błąd integralności danych: plik źródlowy i docelowy nie zgadzają się
 integrity_check_error:HU:Hiba az ellenőrzéskor: A forrás és a cél nem azonos
 integrity_check_error:RU:Проверка целостности не прошла: файл-источник и файл-приемник не совпадают
+integrity_check_error:NL:Integriteitscheck negatief: bron en doel komen niet overeen
 # Translation missing (New!)
 
 
@@ -3353,7 +3355,7 @@ com.mucommander.ui.action.SwapFoldersAction.label:RO:Interschimbă ferestrele
 com.mucommander.ui.action.SwapFoldersAction.label:IT:Scambia cartelle
 com.mucommander.ui.action.SwapFoldersAction.label:KO:폴더를 서로 바꾸기
 com.mucommander.ui.action.SwapFoldersAction.label:pt_BR:Trocar diretórios
-com.mucommander.ui.action.SwapFoldersAction.label:NL:Wissel vensters
+com.mucommander.ui.action.SwapFoldersAction.label:NL:Verwissel vensters
 com.mucommander.ui.action.SwapFoldersAction.label:SK:Vymeniť priečinky
 com.mucommander.ui.action.SwapFoldersAction.label:JA:フォルダの交換
 com.mucommander.ui.action.SwapFoldersAction.label:SV:Växla vyer
@@ -5224,6 +5226,7 @@ destination_dialog.verify_integrity:FR:Vérifier l'intégrité des données
 destination_dialog.verify_integrity:PL:Weryfikuj zgodność danych
 destination_dialog.verify_integrity:HU:Adatintegritás ellenőrzése
 destination_dialog.verify_integrity:RU:Проверить целостность данных
+destination_dialog.verify_integrity:NL:Verifieer data-integriteit
 # Translation missing (New!)
 
 
@@ -5280,6 +5283,7 @@ rename_dialog.new_name:FR:Nouveau nom
 rename_dialog.new_name:PL:Nowa nazwa
 rename_dialog.new_name:HU:Új név
 rename_dialog.new_name:RU:Новое имя
+rename_dialog.new_name:NL:Nieuwe naam
 # Translation missing (New!)
 
 
@@ -6962,6 +6966,7 @@ progress_dialog.verifying_file:SV:Verifierar %1
 progress_dialog.verifying_file:PL:Weryfikacja %1
 progress_dialog.verifying_file:HU:%1 Ellenőrzése
 progress_dialog.verifying_file:RU:Идет проверка %1
+progress_dialog.verifying_file:NL:%1 verifiëren
 # Translation missing (New!)
 
 
@@ -8237,6 +8242,7 @@ text_viewer.binary_file_warning:EN:This appears to be a binary file
 text_viewer.binary_file_warning:FR:Ce fichier a l'air d'être un fichier binaire
 text_viewer.binary_file_warning:HU:Ez a fájl valószínűleg bináris fájl
 text_viewer.binary_file_warning:RU:Этот файл, скорее всего, двоичный
+text_viewer.binary_file_warning:NL:Dit bestand lijkt een binair bestand te zijn
 # Translation missing (New!)
 
 
@@ -9757,7 +9763,7 @@ prefs_dialog.language:RO:Limbă (necesită repornirea programului)
 prefs_dialog.language:IT:Italiano (E' necessario il restart)
 prefs_dialog.language:KO:언어 (재시작 필요)
 prefs_dialog.language:pt_BR:Idioma (requer reiniciar programa)
-prefs_dialog.language:NL:Taal (vereist herstarten)
+prefs_dialog.language:NL:Taal (herstarten nodig)
 prefs_dialog.language:SK:Jazyk (vyžaduje reštart)
 prefs_dialog.language:JA:言語 (再起動を必要とします)
 prefs_dialog.language:SV:Språk (kräver omstart)
