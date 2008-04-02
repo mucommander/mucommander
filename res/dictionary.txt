@@ -701,6 +701,7 @@ creating_file:EN:Creating %1
 creating_file:FR:Création de %1 en cours
 creating_file:SV:Skapar %1
 creating_file:PL:Tworzenie %1
+creating_file:HU:%1 Létrehozása
 # Translation missing (New!)
 
 
@@ -978,6 +979,7 @@ owner:SK:Vlastník
 owner:NL:Eigenaar
 owner:SV:Ägare
 owner:PL:Właściciel
+owner:HU:Tulajdonos
 # Translation missing (New!)
 
 
@@ -1000,6 +1002,7 @@ group:SK:Skupina
 group:NL:Groep
 group:SV:Grupp
 group:PL:Grupa
+group:HU:Csoport
 # Translation missing (New!)
 
 
@@ -1348,6 +1351,7 @@ generic_error:SV:Ett fel uppstod när åtgärden utfördes.
 generic_error:NL:Er heeft zich een fout voorgedaan bij het uitvoeren van de gevraagde taak.
 generic_error:PL:Wystąpił błąd podczas wykonywania operacji.
 generic_error:JA:要求された操作を行っている間にエラーが発生しています。
+generic_error:HU:Hiba történt a művelet elvégzése alatt.
 # Translation missing (New!)
 
 
@@ -1746,6 +1750,7 @@ read_error:SV:Läsfel
 integrity_check_error:EN:Integrity check failed: source and destination don't match
 integrity_check_error:FR:Echec du contrôle d'intégrité: les fichiers source et destination sont différents
 integrity_check_error:PL:Błąd integralności danych: plik źródlowy i docelowy nie zgadzają się
+integrity_check_error:HU:Hiba az ellenőrzéskor: A forrás és a cél nem azonos
 # Translation missing (New!)
 
 
@@ -1982,6 +1987,7 @@ com.mucommander.ui.action.ExploreBookmarksAction.label:NL:Bladwijzers verkennen
 com.mucommander.ui.action.ExploreBookmarksAction.label:SV:Visa bokmärken
 com.mucommander.ui.action.ExploreBookmarksAction.label:PL:Przeglądaj zakładki
 com.mucommander.ui.action.ExploreBookmarksAction.label:JA:ブックマークの検索
+com.mucommander.ui.action.ExploreBookmarksAction.label:HU:Könyvjelzők átvizsgálása
 # Translation missing (New!)
 
 
@@ -2991,6 +2997,7 @@ com.mucommander.ui.action.SortByOwnerAction.label:SK:Zoradiť podľa vlastníka
 com.mucommander.ui.action.SortByOwnerAction.label:SV:Sortera efter Ägare
 com.mucommander.ui.action.SortByOwnerAction.label:NL:Sorteren op eigenaar
 com.mucommander.ui.action.SortByOwnerAction.label:PL:Sortuj po właścicielu
+com.mucommander.ui.action.SortByOwnerAction.label:HU:Rendezés tulajdonos szerint
 # Translation missing (New!)
 
 
@@ -3015,6 +3022,7 @@ com.mucommander.ui.action.SortByGroupAction.label:SK:Zoradiť podľa skupiny
 com.mucommander.ui.action.SortByGroupAction.label:NL:Sorteren op groep
 com.mucommander.ui.action.SortByGroupAction.label:SV:Sortera efter Grupp
 com.mucommander.ui.action.SortByGroupAction.label:PL:Sortuj po grupie
+com.mucommander.ui.action.SortByGroupAction.label:HU:Rendezés csoportok szerint
 # Translation missing (New!)
 
 
@@ -3278,6 +3286,7 @@ com.mucommander.ui.action.MarkExtensionAction.label:NL:Markeer extensie
 com.mucommander.ui.action.MarkExtensionAction.label:SV:Markera ändelse
 com.mucommander.ui.action.MarkExtensionAction.label:PL:Zaznacz wg rozszerzenia
 com.mucommander.ui.action.MarkExtensionAction.label:JA:拡張子のマーク
+com.mucommander.ui.action.MarkExtensionAction.label:HU:Kiterjesztés megjelölése
 # Translation missing (New!)
 
 
@@ -3524,6 +3533,7 @@ com.mucommander.ui.action.OpenInOtherPanelAction.label:NL:Openen in nieuw scherm
 com.mucommander.ui.action.OpenInOtherPanelAction.label:SV:Öppna i andra vyn
 com.mucommander.ui.action.OpenInOtherPanelAction.label:PL:Otwórz w drugim panelu
 com.mucommander.ui.action.OpenInOtherPanelAction.label:JA:他のパネルで開く
+com.mucommander.ui.action.OpenInOtherPanelAction.label:HU:Megnyitás a másik panelen
 # Translation missing (New!)
 
 
@@ -3546,6 +3556,7 @@ com.mucommander.ui.action.OpenInBothPanelsAction.label:NL:Openen in beide scherm
 com.mucommander.ui.action.OpenInBothPanelsAction.label:SV:Öppna i båda vyerna
 com.mucommander.ui.action.OpenInBothPanelsAction.label:PL:Otwórz w dwóch panelach
 com.mucommander.ui.action.OpenInBothPanelsAction.label:JA:両方のパネルで開く
+com.mucommander.ui.action.OpenInBothPanelsAction.label:HU:Megnyitás mindkét panelen
 # Translation missing (New!)
 
 
@@ -4473,6 +4484,7 @@ com.mucommander.ui.action.CalculateChecksumAction.label:NL:Checksum berekenen
 com.mucommander.ui.action.CalculateChecksumAction.label:SV:Beräkna checksum
 com.mucommander.ui.action.CalculateChecksumAction.label:PL:Oblicz sumę kontrolną
 com.mucommander.ui.action.CalculateChecksumAction.label:JA:チェックサムの計算
+com.mucommander.ui.action.CalculateChecksumAction.label:HU:Ellenőrző összeg számolása
 # Translation missing (New!)
 
 
@@ -5052,6 +5064,7 @@ version_dialog.install_and_restart:NL:Installeren en opnieuw opstarten
 version_dialog.install_and_restart:JA:インストールと再起動
 version_dialog.install_and_restart:SV:Installera och starta om
 version_dialog.install_and_restart:PL:Instaluj i uruchom
+version_dialog.install_and_restart:HU:Telepítés és újraindítás
 # Translation missing (New!)
 
 
@@ -5073,6 +5086,7 @@ version_dialog.preparing_for_update:JA:更新を準備しています...
 version_dialog.preparing_for_update:SV:Förbereder uppdatering...
 version_dialog.preparing_for_update:NL:Update voorbereiden...
 version_dialog.preparing_for_update:PL:Przygotowanie do uaktualnienia...
+version_dialog.preparing_for_update:HU:A frissítés előkészítése...
 # Translation missing (New!)
 
 
@@ -5191,6 +5205,7 @@ destination_dialog.file_exists_action:SV:Standardåtgärd om filen redan finns
 destination_dialog.verify_integrity:EN:Verify data integrity
 destination_dialog.verify_integrity:FR:Vérifier l'intégrité des données
 destination_dialog.verify_integrity:PL:Weryfikuj zgodność danych
+destination_dialog.verify_integrity:HU:Adatintegritás ellenőrzése
 # Translation missing (New!)
 
 
@@ -5245,6 +5260,7 @@ file_collision_dialog.title:SV:Filen finns redan
 rename_dialog.new_name:EN:New name
 rename_dialog.new_name:FR:Nouveau nom
 rename_dialog.new_name:PL:Nowa nazwa
+rename_dialog.new_name:HU:Új név
 # Translation missing (New!)
 
 
@@ -5880,6 +5896,7 @@ download_dialog.downloading_file:SV:Laddar ner %1
 mkfile_dialog.allocate_space:EN:Allocate space
 mkfile_dialog.allocate_space:FR:Allouer de l'espace
 mkfile_dialog.allocate_space:PL:Ustaw wielkość
+mkfile_dialog.allocate_space:HU:Hely lefoglalása
 # Translation missing (New!)
 
 
@@ -6711,6 +6728,7 @@ file_selection_dialog.matches_regexp:SK:Regulárny výraz
 file_selection_dialog.matches_regexp:SV:Matchar reguljärt uttryck
 file_selection_dialog.matches_regexp:NL:Reguliere uitdrukking
 file_selection_dialog.matches_regexp:PL:Wyrażenie regularne
+file_selection_dialog.matches_regexp:HU:Egyező regurális kifejezés (Regexp)
 # Translation missing (New!)
 
 
@@ -6920,6 +6938,7 @@ progress_dialog.verifying_file:EN:Verifying %1
 progress_dialog.verifying_file:FR:Vérification de %1
 progress_dialog.verifying_file:SV:Verifierar %1
 progress_dialog.verifying_file:PL:Weryfikacja %1
+progress_dialog.verifying_file:HU:%1 Ellenőrzése
 # Translation missing (New!)
 
 
@@ -7062,6 +7081,7 @@ calculate_checksum_dialog.checksum_algorithm:SV:Kontrollnummer algoritm
 calculate_checksum_dialog.checksum_algorithm:NL:Checksum algoritme
 calculate_checksum_dialog.checksum_algorithm:PL:Algorytm sumy kontrolnej
 calculate_checksum_dialog.checksum_algorithm:JA:チェックサムのアルゴリズム
+calculate_checksum_dialog.checksum_algorithm:HU:Ellenőrző algoritmus
 # Translation missing (New!)
 
 
@@ -7082,6 +7102,7 @@ calculate_checksum_dialog.temporary_file:NL:Tijdelijk bestand
 calculate_checksum_dialog.temporary_file:SV:Temporär fil
 calculate_checksum_dialog.temporary_file:PL:Plik tymczasowy
 calculate_checksum_dialog.temporary_file:JA:一時ファイル
+calculate_checksum_dialog.temporary_file:HU:Ideiglenes fájl
 # Translation missing (New!)
 
 
@@ -8186,6 +8207,7 @@ text_viewer.find_previous:SV:Sök föregående
 
 text_viewer.binary_file_warning:EN:This appears to be a binary file
 text_viewer.binary_file_warning:FR:Ce fichier a l'air d'être un fichier binaire
+text_viewer.binary_file_warning:HU:Ez a fájl valószínűleg bináris fájl
 # Translation missing (New!)
 
 
@@ -10394,6 +10416,7 @@ prefs_dialog.import_look_and_feel:FR:Importer un look & feel
 prefs_dialog.import_look_and_feel:NL:Importeer look and feel
 prefs_dialog.import_look_and_feel:SV:Importera utseende och känsla
 prefs_dialog.import_look_and_feel:JA:外観のインポート
+prefs_dialog.import_look_and_feel:HU:Kinézet importálása
 # Translation missing (New!)
 
 
@@ -10412,6 +10435,7 @@ prefs_dialog.no_look_and_feel:FR:Aucun look & feel n'a été trouvé.
 prefs_dialog.no_look_and_feel:SV:Inget utseende och känsla hittades.
 prefs_dialog.no_look_and_feel:NL:Geen look en feel gevonden.
 prefs_dialog.no_look_and_feel:JA:外観は見つかりませんでした。
+prefs_dialog.no_look_and_feel:HU:Nem található Kinézet.
 # Translation missing (New!)
 
 
@@ -10586,7 +10610,7 @@ prefs_dialog.theme_type:SV:Typ: %1
 # %1 will be replaced by the theme name.
 prefs_dialog.delete_theme:EN:Permanently delete theme %1 ?
 prefs_dialog.delete_theme:FR:Supprimer définitivement le thème %1 ?
-prefs_dialog.delete_theme:HU:Folyamatosan törli a %1 témát?
+prefs_dialog.delete_theme:HU:Folyamatosan törli a(z) %1 témát?
 prefs_dialog.delete_theme:zh_CN:永久删除主题 %1 ?
 prefs_dialog.delete_theme:zh_TW:永遠刪除佈景主題 %1 ?
 prefs_dialog.delete_theme:RO:Sterg definitiv tema %1 ?
@@ -10613,6 +10637,7 @@ prefs_dialog.delete_look_and_feel:FR:Supprimer définitivement le look & feel %1
 prefs_dialog.delete_look_and_feel:NL:Voorgoed verwijderen van look and feel %1 ?
 prefs_dialog.delete_look_and_feel:SV:Radera utseende och känsla %1 ?
 prefs_dialog.delete_look_and_feel:JA:外観 %1 を永久に削除しますか?
+prefs_dialog.delete_look_and_feel:HU:Folyamatosan töröljem a(z) %1 Kinézetet?
 # Translation missing (New!)
 
 
@@ -10683,6 +10708,7 @@ prefs_dialog.jar_file:FR:Fichier JAR
 prefs_dialog.jar_file:SV:JAR-fil
 prefs_dialog.jar_file:NL:JAR bestand
 prefs_dialog.jar_file:PL:Plik JAR
+prefs_dialog.jar_file:HU:JAR fájl
 # Translation missing (New!)
 
 
