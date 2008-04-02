@@ -5933,6 +5933,8 @@ download_dialog.downloading_file:SV:Laddar ner %1
 # Mkfile dialog #
 #################
 
+# Label for a text field where the size of the to-be-created-file can be 
+# entered. If this field is left empty, a zero-length file is created.
 mkfile_dialog.allocate_space:EN:Allocate space
 mkfile_dialog.allocate_space:FR:Allouer de l'espace
 mkfile_dialog.allocate_space:PL:Ustaw wielkość
