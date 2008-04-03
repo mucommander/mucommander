@@ -705,6 +705,7 @@ creating_file:HU:%1 Létrehozása
 creating_file:RU:Создается %1
 creating_file:NL:%1 wordt gemaakt
 creating_file:DE:Erzeugen %1
+creating_file:JA:%1 を作成しています
 # Translation missing (New!)
 
 
@@ -1766,6 +1767,7 @@ integrity_check_error:HU:Hiba az ellenőrzéskor: A forrás és a cél nem azono
 integrity_check_error:RU:Проверка целостности не прошла: файл-источник и файл-приемник не совпадают
 integrity_check_error:NL:Integriteitscheck negatief: bron en doel komen niet overeen
 integrity_check_error:DE:Integritätstest fehlgeschlagen: Quelle und Ziel stimmen nicht überein
+integrity_check_error:JA:整合性チェックが失敗しました: ソースと先が一致しません
 # Translation missing (New!)
 
 
@@ -5242,6 +5244,7 @@ destination_dialog.verify_integrity:HU:Adatintegritás ellenőrzése
 destination_dialog.verify_integrity:RU:Проверить целостность данных
 destination_dialog.verify_integrity:NL:Verifieer data-integriteit
 destination_dialog.verify_integrity:DE:Daten Integrität überprüfen
+destination_dialog.verify_integrity:JA:データの統合性を検証する
 # Translation missing (New!)
 
 
@@ -5300,6 +5303,7 @@ rename_dialog.new_name:HU:Új név
 rename_dialog.new_name:RU:Новое имя
 rename_dialog.new_name:NL:Nieuwe naam
 rename_dialog.new_name:DE:Neuer Name
+rename_dialog.new_name:JA:新しい名前
 # Translation missing (New!)
 
 
@@ -5941,6 +5945,7 @@ mkfile_dialog.allocate_space:PL:Ustaw wielkość
 mkfile_dialog.allocate_space:HU:Hely lefoglalása
 mkfile_dialog.allocate_space:RU:Выделить место
 mkfile_dialog.allocate_space:DE:Speicherplatz bereitstellen
+mkfile_dialog.allocate_space:JA:割り当てる領域
 # Translation missing (New!)
 
 
@@ -6988,6 +6993,7 @@ progress_dialog.verifying_file:HU:%1 Ellenőrzése
 progress_dialog.verifying_file:RU:Идет проверка %1
 progress_dialog.verifying_file:NL:%1 verifiëren
 progress_dialog.verifying_file:DE:Überprüfung %1
+progress_dialog.verifying_file:JA:%1 の検証中
 # Translation missing (New!)
 
 
@@ -8267,6 +8273,7 @@ text_viewer.binary_file_warning:HU:Ez a fájl valószínűleg bináris fájl
 text_viewer.binary_file_warning:RU:Этот файл, скорее всего, двоичный
 text_viewer.binary_file_warning:NL:Dit bestand lijkt een binair bestand te zijn
 text_viewer.binary_file_warning:DE:Dies scheint eine Binärdatei zu sein
+text_viewer.binary_file_warning:JA:これはバイナリ ファイルにみえます
 # Translation missing (New!)
 
 
@@ -10782,6 +10789,7 @@ prefs_dialog.jar_file:PL:Plik JAR
 prefs_dialog.jar_file:HU:JAR fájl
 prefs_dialog.jar_file:RU:JAR-файл
 prefs_dialog.jar_file:DE:JAR Datei
+prefs_dialog.jar_file:JA:JAR ファイル
 # Translation missing (New!)
 
 
