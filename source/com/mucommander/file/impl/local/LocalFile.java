@@ -433,13 +433,15 @@ public class LocalFile extends AbstractFile {
 	
 
     public boolean getPermission(int access, int permission) {
-        if(access!= USER_ACCESS)
+        // Only the 'user' permissions are supported
+        if(access!=USER_ACCESS)
             return false;
 
         if(permission==READ_PERMISSION)
             return file.canRead();
         else if(permission==WRITE_PERMISSION)
             return file.canWrite();
+        // Execute permission can only be retrieved under Java 1.6 and up
         else if(permission==EXECUTE_PERMISSION && JavaVersions.JAVA_1_6.isCurrentOrHigher())
             return file.canExecute();
 
@@ -447,27 +449,24 @@ public class LocalFile extends AbstractFile {
     }
 
     public boolean setPermission(int access, int permission, boolean enabled) {
-        if(access!= USER_ACCESS || JavaVersions.JAVA_1_6.isCurrentLower())
+        // Only the 'user' permissions under Java 1.6 are supported
+        if(access!=USER_ACCESS || JavaVersions.JAVA_1_6.isCurrentLower())
             return false;
 
         if(permission==READ_PERMISSION)
             return file.setReadable(enabled);
         else if(permission==WRITE_PERMISSION)
             return file.setWritable(enabled);
-        else if(permission==EXECUTE_PERMISSION && JavaVersions.JAVA_1_6.isCurrentOrHigher())
+        else if(permission==EXECUTE_PERMISSION)
             return file.setExecutable(enabled);
 
         return false;
     }
 
     public boolean canGetPermission(int access, int permission) {
-        // getPermission is limited to the user access type
+        // Only the 'user' permissions are supported
         if(access!=USER_ACCESS)
             return false;
-
-        // Windows only supports write permission: files are either read-only or read-write
-        if(IS_WINDOWS)
-            return permission==WRITE_PERMISSION;
 
         // Execute permission is supported only under Java 1.6 (and on platforms other than Windows)
         return permission!=EXECUTE_PERMISSION || JavaVersions.JAVA_1_6.isCurrentOrHigher();
@@ -768,9 +767,8 @@ public class LocalFile extends AbstractFile {
      * Overridden for performance reasons.
      */
     public int getPermissionGetMask() {
-        // Windows only supports write permission for user: files are either read-only or read-write
-        if(IS_WINDOWS)
-            return 128;
+        // Note: 'read' and 'execute' permissions have no meaning under Windows (files are either read-only or
+        // read-write), but we return default values.
 
         // Get permission support is limited to the user access type. Executable permission flag is only available under
         // Java 1.6 and up.
@@ -783,7 +781,7 @@ public class LocalFile extends AbstractFile {
      * Overridden for performance reasons.
      */
     public int getPermissionSetMask() {
-        // Windows only supports write permission for user: files are either read-only or read-write
+        // Under Windows, only the 'write' permissions can be changed: files are either read-only or read-write
         if(IS_WINDOWS)
             return 128;
 
@@ -791,6 +789,24 @@ public class LocalFile extends AbstractFile {
         return JavaVersions.JAVA_1_6.isCurrentOrHigher()?
                 448         // rwx------ (700 octal)
                 :0;         // --------- (0 octal)
+    }
+
+    /**
+     * Overridden for performance reasons.
+     */
+    public int getPermissions() {
+        int userPerms = 0;
+
+        if(getPermission(USER_ACCESS, READ_PERMISSION))
+            userPerms |= READ_PERMISSION;
+
+        if(getPermission(USER_ACCESS, WRITE_PERMISSION))
+            userPerms |= WRITE_PERMISSION;
+
+        if(canGetPermission(USER_ACCESS, EXECUTE_PERMISSION) && getPermission(USER_ACCESS, EXECUTE_PERMISSION))
+            userPerms |= EXECUTE_PERMISSION;
+
+        return userPerms<<6;
     }
 
     /**
