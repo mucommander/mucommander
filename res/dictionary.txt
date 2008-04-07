@@ -8317,6 +8317,7 @@ text_viewer.binary_file_warning:DE:Dies scheint eine Binärdatei zu sein
 text_viewer.binary_file_warning:JA:これはバイナリ ファイルにみえます
 text_viewer.binary_file_warning:CS:Toto je zřejmě binární soubor
 text_viewer.binary_file_warning:RO:Se pare că acest fișier este binar
+text_viewer.binary_file_warning:PL:Wygląda że jest to plik binarny nie tekstowy
 # Translation missing (New!)
 
 
@@ -10536,6 +10537,7 @@ prefs_dialog.import_look_and_feel:RU:Импорт настроек внешне�
 prefs_dialog.import_look_and_feel:DE:Look & Feel importieren
 prefs_dialog.import_look_and_feel:CS:Importovat vzhled & chování
 prefs_dialog.import_look_and_feel:RO:Importă look & feel
+prefs_dialog.import_look_and_feel:PL:Zaimportuj wygląd i zachowanie  (look & feel)
 # Translation missing (New!)
 
 
@@ -10559,6 +10561,7 @@ prefs_dialog.no_look_and_feel:RU:Настроек внешнего вида не
 prefs_dialog.no_look_and_feel:DE:Kein Look & Feel gefunden.
 prefs_dialog.no_look_and_feel:CS:Žádný vzhled & chování nebyl nalezen.
 prefs_dialog.no_look_and_feel:RO:Acest look & feel nu a fost gasit.
+prefs_dialog.no_look_and_feel:PL:Nie znaleziono pliku ustawień wyglądu i zachowania (look & feel).
 # Translation missing (New!)
 
 
@@ -10765,6 +10768,7 @@ prefs_dialog.delete_look_and_feel:RU:Удалить настройки %1 нав
 prefs_dialog.delete_look_and_feel:DE:Look & Feel %1 dauerhaft löschen?
 prefs_dialog.delete_look_and_feel:CS:Chcete trvale smazat vzhled & chování %1 ?
 prefs_dialog.delete_look_and_feel:RO:Șterge look & feel-ul %1 definitiv?
+prefs_dialog.delete_look_and_feel:PL:Definitywnie skasować ustawienia wyglądu i zachowania (look & feel) %1 ?
 # Translation missing (New!)
 
 
