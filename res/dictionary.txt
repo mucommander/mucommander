@@ -708,6 +708,7 @@ creating_file:DE:Erzeugen %1
 creating_file:JA:%1 を作成しています
 creating_file:CS:Vytváří se %1
 creating_file:RO:Creez %1
+creating_file:ES:Creando %1
 # Translation missing (New!)
 
 
@@ -740,7 +741,8 @@ choose:JA:選択
 choose:SK:Zvoliť
 choose:SV:Välj
 choose:RU:Выберите
-# Translation missing (ES, zh_CN, KO)
+choose:ES:Seleccionar
+# Translation missing (zh_CN, KO)
 
 
 
@@ -768,7 +770,8 @@ choose_folder:JA:フォルダを選択します
 choose_folder:SK:Zvoliť priečinok
 choose_folder:SV:Välj mapp
 choose_folder:RU:Выберите каталог
-# Translation missing (ES, zh_CN, KO)
+choose_folder:ES:Seleccionar un directorio
+# Translation missing (zh_CN, KO)
 
 
 
@@ -992,6 +995,7 @@ owner:RU:Владелец
 owner:DE:Eigentümer
 owner:CS:Vlastník
 owner:RO:Proprietar
+owner:ES:Propietario
 # Translation missing (New!)
 
 
@@ -1019,6 +1023,7 @@ group:RU:Группа
 group:DE:Gruppe
 group:CS:Skupina
 group:RO:Grup
+group:ES:Grupo
 # Translation missing (New!)
 
 
@@ -1300,7 +1305,8 @@ loading:JA:読み込んでいます...
 loading:SK:Načítavam obsah...
 loading:SV:Laddar...
 loading:RU:Загрузка...
-# Translation missing (ES, zh_CN, KO)
+loading:ES:Cargando...
+# Translation missing (zh_CN, KO)
 
 
 
@@ -1373,6 +1379,7 @@ generic_error:RU:При выполнении запрошенной операц
 generic_error:DE:Während der angeforderten Operation ist ein Fehler aufgetreten
 generic_error:CS:Při provádění požadované operace se vyskytla chyba.
 generic_error:RO:O eroare a apărut in timp ce executam operațiunea cerută
+generic_error:ES:Ha ocurrido un error mientras se realizaba la operación
 # Translation missing (New!)
 
 
@@ -1778,6 +1785,7 @@ integrity_check_error:DE:Integritätstest fehlgeschlagen: Quelle und Ziel stimme
 integrity_check_error:JA:整合性チェックが失敗しました: ソースと先が一致しません
 integrity_check_error:CS:Kontrola integrity se nezdařila: zdroj a cíl se neshodují
 integrity_check_error:RO:Controlul integrității a eșuat: sursa și destinația sunt diferite
+integrity_check_error:ES:Comprobación de integridad fallida: fuente y destino no coinciden
 # Translation missing (New!)
 
 
@@ -2019,6 +2027,7 @@ com.mucommander.ui.action.ExploreBookmarksAction.label:RU:Просмотреть
 com.mucommander.ui.action.ExploreBookmarksAction.label:DE:Untersuche Lesezeichen
 com.mucommander.ui.action.ExploreBookmarksAction.label:CS:Procházet záložky
 com.mucommander.ui.action.ExploreBookmarksAction.label:RO:Explorează favoritele
+com.mucommander.ui.action.ExploreBookmarksAction.label:ES:Explorar favoritos
 # Translation missing (New!)
 
 
@@ -3033,6 +3042,7 @@ com.mucommander.ui.action.SortByOwnerAction.label:RU:Сортировать по
 com.mucommander.ui.action.SortByOwnerAction.label:DE:Nach Eigentümer sortieren
 com.mucommander.ui.action.SortByOwnerAction.label:CS:Řadit dle vlastníka
 com.mucommander.ui.action.SortByOwnerAction.label:RO:Sortează după proprietar
+com.mucommander.ui.action.SortByOwnerAction.label:ES:Ordenar por Propietario
 # Translation missing (New!)
 
 
@@ -3062,6 +3072,7 @@ com.mucommander.ui.action.SortByGroupAction.label:RU:Сортировать по
 com.mucommander.ui.action.SortByGroupAction.label:DE:Nach Gruppe sortieren
 com.mucommander.ui.action.SortByGroupAction.label:CS:Řadit dle skupiny
 com.mucommander.ui.action.SortByGroupAction.label:RO:Sortează după grup
+com.mucommander.ui.action.SortByGroupAction.label:ES:Ordenar por Grupo
 # Translation missing (New!)
 
 
@@ -3330,6 +3341,7 @@ com.mucommander.ui.action.MarkExtensionAction.label:RU:Отметить расш
 com.mucommander.ui.action.MarkExtensionAction.label:DE:Erweiterung markieren
 com.mucommander.ui.action.MarkExtensionAction.label:CS:Označit příponu
 com.mucommander.ui.action.MarkExtensionAction.label:RO:Selectează aceeași extensie
+com.mucommander.ui.action.MarkExtensionAction.label:ES:Marcar extensión
 # Translation missing (New!)
 
 
@@ -3581,6 +3593,7 @@ com.mucommander.ui.action.OpenInOtherPanelAction.label:RU:Открыть в др
 com.mucommander.ui.action.OpenInOtherPanelAction.label:DE:In anderem Panel öffnen
 com.mucommander.ui.action.OpenInOtherPanelAction.label:CS:Otevřít ve druhém panelu
 com.mucommander.ui.action.OpenInOtherPanelAction.label:RO:Deschide în cealaltă fereastră
+com.mucommander.ui.action.OpenInOtherPanelAction.label:ES:Abrir en otro panel
 # Translation missing (New!)
 
 
@@ -3608,6 +3621,7 @@ com.mucommander.ui.action.OpenInBothPanelsAction.label:RU:Открыть в об
 com.mucommander.ui.action.OpenInBothPanelsAction.label:DE:In beiden Paneln öffnen
 com.mucommander.ui.action.OpenInBothPanelsAction.label:CS:Otevřít v obou panelech
 com.mucommander.ui.action.OpenInBothPanelsAction.label:RO:Deschide în ambele ferestre
+com.mucommander.ui.action.OpenInBothPanelsAction.label:ES:Abrir en ambos paneles
 # Translation missing (New!)
 
 
@@ -4540,6 +4554,7 @@ com.mucommander.ui.action.CalculateChecksumAction.label:RU:Расчет конт
 com.mucommander.ui.action.CalculateChecksumAction.label:DE:Prüfsumme berechnen
 com.mucommander.ui.action.CalculateChecksumAction.label:CS:Kontrolní součet
 com.mucommander.ui.action.CalculateChecksumAction.label:RO:Calculează suma de control
+com.mucommander.ui.action.CalculateChecksumAction.label:ES:Calcular checksum
 # Translation missing (New!)
 
 
@@ -5124,6 +5139,7 @@ version_dialog.install_and_restart:RU:Установить и перезапус
 version_dialog.install_and_restart:DE:Installieren und Neustart
 version_dialog.install_and_restart:CS:Nainstalovat a restartovat
 version_dialog.install_and_restart:RO:Instalează și repornește
+version_dialog.install_and_restart:ES:Instalar y reiniciar
 # Translation missing (New!)
 
 
@@ -5150,6 +5166,7 @@ version_dialog.preparing_for_update:RU:Идет подготовка к обно
 version_dialog.preparing_for_update:DE:Vorbereitungen für den Update...
 version_dialog.preparing_for_update:CS:Připravuji aktualizaci...
 version_dialog.preparing_for_update:RO:Pregătire pentru actualizare...
+version_dialog.preparing_for_update:ES:Preparando actualización...
 # Translation missing (New!)
 
 
@@ -5194,7 +5211,7 @@ quit_dialog.title:SV:Avsluta muCommander
 quit_dialog.desc:EN:You have %1 window(s) open. Are you sure you want to quit ? 
 quit_dialog.desc:FR:Il y a %1 fenêtre(s) ouverte(s). Etes-vous sûr de vouloir quitter ?
 quit_dialog.desc:DE:Sie haben %1 offene(s) Fenster. Alle Fenster schließen und muCommander beenden?
-quit_dialog.desc:ES:¿Desea cerrar todas las ventanas y salir de muCommander?
+quit_dialog.desc:ES:Tienes %1 ventana(s) abierta(s). ¿Estás seguro de que deseas salir?
 quit_dialog.desc:CS:Chcete zavřít všechna otevřená okna (%1) a ukončit muCommander ?
 quit_dialog.desc:zh_TW:你有 %1 個開啟的視窗. 確定要離開 ?
 quit_dialog.desc:PL:Masz otwartych %1 okien. Zamknąć wszystkie okna i zakończyć pracę muCommandera ?
@@ -5210,7 +5227,7 @@ quit_dialog.desc:NL:Er zijn %1 venster(s) geopend. Alle vensters sluiten en muCo
 quit_dialog.desc:SK:Chcete zatvoriť všetkých %1 okien a ukončiť muCommander?
 quit_dialog.desc:JA:%1 個のウィンドウを開いています。終了してもよろしいですか ? 
 quit_dialog.desc:SV:Du har %1 fönster öppna. Vill du avsluta ändå? 
-# Translation missing (ES, zh_CN, KO) : this entry needs to be updated to take into account the number of windows
+# Translation missing (zh_CN, KO) : this entry needs to be updated to take into account the number of windows
 
 
 
@@ -5275,6 +5292,7 @@ destination_dialog.verify_integrity:DE:Daten Integrität überprüfen
 destination_dialog.verify_integrity:JA:データの統合性を検証する
 destination_dialog.verify_integrity:CS:Ověřit integritu
 destination_dialog.verify_integrity:RO:Verifică integritatea datelor
+destination_dialog.verify_integrity:ES:Verificando integridad de datos
 # Translation missing (New!)
 
 
@@ -5336,6 +5354,7 @@ rename_dialog.new_name:DE:Neuer Name
 rename_dialog.new_name:JA:新しい名前
 rename_dialog.new_name:CS:Nové jméno
 rename_dialog.new_name:RO:Nume nou
+rename_dialog.new_name:ES:Nuevo nombre
 # Translation missing (New!)
 
 
@@ -5760,7 +5779,8 @@ error_while_optimizing_archive:JA:アーカイブ %1 の最適化中のエラー
 error_while_optimizing_archive:SK:Chyba pri optimalizácii archívu %1
 error_while_optimizing_archive:SV:Fel vid optimering av arkiv %1
 error_while_optimizing_archive:RU:Ошибка при оптимизации архива %1
-# Translation missing (ES, KO)
+error_while_optimizing_archive:ES:Error al comprimir el fichero %1
+# Translation missing (KO)
 
 
 
@@ -5981,6 +6001,7 @@ mkfile_dialog.allocate_space:JA:割り当てる領域
 mkfile_dialog.allocate_space:CS:Alokovaný prostor
 mkfile_dialog.allocate_space:NL:Bestandsruimte toewijzen
 mkfile_dialog.allocate_space:RO:Alocă spațiu
+mkfile_dialog.allocate_space:ES:Tamaño
 # Translation missing (New!)
 
 
@@ -6817,6 +6838,7 @@ file_selection_dialog.matches_regexp:RU:Соотв. рег. выражению
 file_selection_dialog.matches_regexp:DE:Übereinstimmung mit Regexp
 file_selection_dialog.matches_regexp:CS:Vyhovuje regulárnímu výrazu
 file_selection_dialog.matches_regexp:RO:Potrivește expresie regulată
+file_selection_dialog.matches_regexp:ES:Satisface la expresión regular
 # Translation missing (New!)
 
 
@@ -7033,6 +7055,7 @@ progress_dialog.verifying_file:DE:Überprüfung %1
 progress_dialog.verifying_file:JA:%1 の検証中
 progress_dialog.verifying_file:CS:Ověřuji %1
 progress_dialog.verifying_file:RO:Verificare %1
+progress_dialog.verifying_file:ES:Comprobando %1
 # Translation missing (New!)
 
 
@@ -7180,6 +7203,7 @@ calculate_checksum_dialog.checksum_algorithm:RU:Алгоритм расчета 
 calculate_checksum_dialog.checksum_algorithm:DE:Prüfsummen Algorithmus
 calculate_checksum_dialog.checksum_algorithm:CS:Algoritmus výpočtu
 calculate_checksum_dialog.checksum_algorithm:RO:Algoritm pentru suma de control
+calculate_checksum_dialog.checksum_algorithm:ES:Algoritmo de checksum
 # Translation missing (New!)
 
 
@@ -7205,6 +7229,7 @@ calculate_checksum_dialog.temporary_file:RU:Временный файл
 calculate_checksum_dialog.temporary_file:DE:Temporäre Datei
 calculate_checksum_dialog.temporary_file:CS:Dočasný soubor
 calculate_checksum_dialog.temporary_file:RO:Fișier temporar
+calculate_checksum_dialog.temporary_file:ES:Fichero temporal
 # Translation missing (New!)
 
 
@@ -8238,7 +8263,8 @@ text_viewer.find:JA:検索
 text_viewer.find:SK:Nájsť
 text_viewer.find:SV:Sök
 text_viewer.find:RU:Поиск
-# Translation missing (ES, zh_CN, KO)
+text_viewer.find:ES:Buscar
+# Translation missing (zh_CN, KO)
 
 
 
@@ -8268,7 +8294,8 @@ text_viewer.find_next:JA:次を検索
 text_viewer.find_next:SK:Nájsť nasledujúce
 text_viewer.find_next:SV:Sök nästa
 text_viewer.find_next:RU:Искать далее
-# Translation missing (ES, zh_CN, KO)
+text_viewer.find_next:ES:Buscar siguiente
+# Translation missing (zh_CN, KO)
 
 
 
@@ -8298,7 +8325,8 @@ text_viewer.find_previous:JA:前を検索
 text_viewer.find_previous:SK:Nájsť predchádzajúce
 text_viewer.find_previous:SV:Sök föregående
 text_viewer.find_previous:RU:Искать предыдущий
-# Translation missing (ES, zh_CN, KO)
+text_viewer.find_previous:ES:Buscar anterior
+# Translation missing (zh_CN, KO)
 
 
 
@@ -8320,6 +8348,7 @@ text_viewer.binary_file_warning:JA:これはバイナリ ファイルにみえ�
 text_viewer.binary_file_warning:CS:Toto je zřejmě binární soubor
 text_viewer.binary_file_warning:RO:Se pare că acest fișier este binar
 text_viewer.binary_file_warning:PL:Wygląda że jest to plik binarny nie tekstowy
+text_viewer.binary_file_warning:ES:Parece ser un fichero binario
 # Translation missing (New!)
 
 
@@ -8914,7 +8943,8 @@ theme_editor.shell_history_tab:JA:シェルの履歴
 theme_editor.shell_history_tab:SK:História shellu
 theme_editor.shell_history_tab:SV:Shellhistorik
 theme_editor.shell_history_tab:RU:История команд
-# Translation missing (ES, zh_CN, KO)
+theme_editor.shell_history_tab:ES:Historial de terminal
+# Translation missing (zh_CN, KO)
 
 
 
@@ -9134,7 +9164,8 @@ theme_editor.active_panel:JA:アクティブ
 theme_editor.active_panel:SK:Aktívne
 theme_editor.active_panel:SV:Aktiv
 theme_editor.active_panel:RU:Активная
-# Translation missing (ES, zh_CN, KO)
+theme_editor.active_panel:ES:Activo
+# Translation missing (zh_CN, KO)
 
 
 
@@ -9161,7 +9192,8 @@ theme_editor.inactive_panel:JA:非アクティブ
 theme_editor.inactive_panel:SK:Neaktívne
 theme_editor.inactive_panel:SV:Inaktiv
 theme_editor.inactive_panel:RU:Неактивная
-# Translation missing (ES, zh_CN, KO)
+theme_editor.inactive_panel:ES:Inactivo
+# Translation missing (zh_CN, KO)
 
 
 
@@ -9186,7 +9218,8 @@ theme_editor.general:JA:全般
 theme_editor.general:SK:Všeobecné
 theme_editor.general:SV:Allmänt
 theme_editor.general:RU:Общий
-# Translation missing (ES, zh_CN, KO)
+theme_editor.general:ES:General
+# Translation missing (zh_CN, KO)
 
 
 
@@ -9308,7 +9341,8 @@ theme_editor.alternate_background:JA:代替の背景
 theme_editor.alternate_background:SK:Alternatívne pozadie
 theme_editor.alternate_background:SV:Skifta bakgrund
 theme_editor.alternate_background:RU:Другой фон
-# Translation missing (ES, zh_CN, KO)
+theme_editor.alternate_background:ES:Alternar fondo
+# Translation missing (zh_CN, KO)
 
 
 
@@ -10474,7 +10508,8 @@ prefs_dialog.edit_current_theme:JA:現在のテーマを編集...
 prefs_dialog.edit_current_theme:SK:Upraviť aktuálnu tému...
 prefs_dialog.edit_current_theme:SV:Redigera aktuellt tema...
 prefs_dialog.edit_current_theme:RU:Редактировать тему оформления...
-# Translation missing (ES, zh_CN, KO)
+prefs_dialog.edit_current_theme:ES:Editar tema actual...
+# Translation missing (zh_CN, KO)
 
 
 
@@ -10540,6 +10575,7 @@ prefs_dialog.import_look_and_feel:DE:Look & Feel importieren
 prefs_dialog.import_look_and_feel:CS:Importovat vzhled & chování
 prefs_dialog.import_look_and_feel:RO:Importă look & feel
 prefs_dialog.import_look_and_feel:PL:Zaimportuj wygląd i zachowanie  (look & feel)
+prefs_dialog.import_look_and_feel:ES:Importar look & feel
 # Translation missing (New!)
 
 
@@ -10564,6 +10600,7 @@ prefs_dialog.no_look_and_feel:DE:Kein Look & Feel gefunden.
 prefs_dialog.no_look_and_feel:CS:Žádný vzhled & chování nebyl nalezen.
 prefs_dialog.no_look_and_feel:RO:Acest look & feel nu a fost gasit.
 prefs_dialog.no_look_and_feel:PL:Nie znaleziono pliku ustawień wyglądu i zachowania (look & feel).
+prefs_dialog.no_look_and_feel:ES:No se encontró look & feel alguno.
 # Translation missing (New!)
 
 
@@ -10771,6 +10808,7 @@ prefs_dialog.delete_look_and_feel:DE:Look & Feel %1 dauerhaft löschen?
 prefs_dialog.delete_look_and_feel:CS:Chcete trvale smazat vzhled & chování %1 ?
 prefs_dialog.delete_look_and_feel:RO:Șterge look & feel-ul %1 definitiv?
 prefs_dialog.delete_look_and_feel:PL:Definitywnie skasować ustawienia wyglądu i zachowania (look & feel) %1 ?
+prefs_dialog.delete_look_and_feel:ES:Eliminar permanentemente el look & feel %1 ?
 # Translation missing (New!)
 
 
@@ -10847,6 +10885,7 @@ prefs_dialog.jar_file:DE:JAR Datei
 prefs_dialog.jar_file:JA:JAR ファイル
 prefs_dialog.jar_file:CS:Soubor JAR
 prefs_dialog.jar_file:RO:Fișier JAR
+prefs_dialog.jar_file:ES:Fichero JAR
 # Translation missing (New!)
 
 
@@ -11081,7 +11120,8 @@ prefs_dialog.shell_encoding:JA:シェルのエンコード
 prefs_dialog.shell_encoding:SK:Kódovanie textu shellu
 prefs_dialog.shell_encoding:SV:Shell teckenuppsättning
 prefs_dialog.shell_encoding:RU:Кодировка командной строки
-# Translation missing (ES, zh_CN, KO)
+prefs_dialog.shell_encoding:ES:Codificación de terminal
+# Translation missing (zh_CN, KO)
 
 
 
@@ -11107,7 +11147,8 @@ prefs_dialog.auto_detect_shell_encoding:JA:自動検出
 prefs_dialog.auto_detect_shell_encoding:SK:Automatické rozpoznávanie
 prefs_dialog.auto_detect_shell_encoding:SV:Upptäck automatiskt
 prefs_dialog.auto_detect_shell_encoding:RU:Автоопределение
-# Translation missing (ES, zh_CN, KO)
+prefs_dialog.auto_detect_shell_encoding:ES:Detección automática
+# Translation missing (zh_CN, KO)
 
 
 
