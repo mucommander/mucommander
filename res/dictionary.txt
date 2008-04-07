@@ -991,6 +991,7 @@ owner:HU:Tulajdonos
 owner:RU:Владелец
 owner:DE:Eigentümer
 owner:CS:Vlastník
+owner:RO:Proprietar
 # Translation missing (New!)
 
 
@@ -1017,6 +1018,7 @@ group:HU:Csoport
 group:RU:Группа
 group:DE:Gruppe
 group:CS:Skupina
+group:RO:Grup
 # Translation missing (New!)
 
 
