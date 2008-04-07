@@ -707,6 +707,7 @@ creating_file:NL:%1 wordt gemaakt
 creating_file:DE:Erzeugen %1
 creating_file:JA:%1 を作成しています
 creating_file:CS:Vytváří se %1
+creating_file:RO:Creez %1
 # Translation missing (New!)
 
 
@@ -1369,6 +1370,7 @@ generic_error:HU:Hiba történt a művelet elvégzése alatt.
 generic_error:RU:При выполнении запрошенной операции возникла ошибка
 generic_error:DE:Während der angeforderten Operation ist ein Fehler aufgetreten
 generic_error:CS:Při provádění požadované operace se vyskytla chyba.
+generic_error:RO:O eroare a apărut in timp ce executam operațiunea cerută
 # Translation missing (New!)
 
 
@@ -1773,6 +1775,7 @@ integrity_check_error:NL:Integriteitscheck negatief: bron en doel komen niet ove
 integrity_check_error:DE:Integritätstest fehlgeschlagen: Quelle und Ziel stimmen nicht überein
 integrity_check_error:JA:整合性チェックが失敗しました: ソースと先が一致しません
 integrity_check_error:CS:Kontrola integrity se nezdařila: zdroj a cíl se neshodují
+integrity_check_error:RO:Controlul integrității a eșuat: sursa și destinația sunt diferite
 # Translation missing (New!)
 
 
@@ -2013,6 +2016,7 @@ com.mucommander.ui.action.ExploreBookmarksAction.label:HU:Könyvjelzők átvizsg
 com.mucommander.ui.action.ExploreBookmarksAction.label:RU:Просмотреть закладки
 com.mucommander.ui.action.ExploreBookmarksAction.label:DE:Untersuche Lesezeichen
 com.mucommander.ui.action.ExploreBookmarksAction.label:CS:Procházet záložky
+com.mucommander.ui.action.ExploreBookmarksAction.label:RO:Explorează favoritele
 # Translation missing (New!)
 
 
@@ -3026,6 +3030,7 @@ com.mucommander.ui.action.SortByOwnerAction.label:HU:Rendezés tulajdonos szerin
 com.mucommander.ui.action.SortByOwnerAction.label:RU:Сортировать по владельцу
 com.mucommander.ui.action.SortByOwnerAction.label:DE:Nach Eigentümer sortieren
 com.mucommander.ui.action.SortByOwnerAction.label:CS:Řadit dle vlastníka
+com.mucommander.ui.action.SortByOwnerAction.label:RO:Sortează după proprietar
 # Translation missing (New!)
 
 
@@ -3054,6 +3059,7 @@ com.mucommander.ui.action.SortByGroupAction.label:HU:Rendezés csoportok szerint
 com.mucommander.ui.action.SortByGroupAction.label:RU:Сортировать по группе
 com.mucommander.ui.action.SortByGroupAction.label:DE:Nach Gruppe sortieren
 com.mucommander.ui.action.SortByGroupAction.label:CS:Řadit dle skupiny
+com.mucommander.ui.action.SortByGroupAction.label:RO:Sortează după grup
 # Translation missing (New!)
 
 
@@ -3321,6 +3327,7 @@ com.mucommander.ui.action.MarkExtensionAction.label:HU:Kiterjesztés megjelölé
 com.mucommander.ui.action.MarkExtensionAction.label:RU:Отметить расширение
 com.mucommander.ui.action.MarkExtensionAction.label:DE:Erweiterung markieren
 com.mucommander.ui.action.MarkExtensionAction.label:CS:Označit příponu
+com.mucommander.ui.action.MarkExtensionAction.label:RO:Selectează aceeași extensie
 # Translation missing (New!)
 
 
@@ -3571,6 +3578,7 @@ com.mucommander.ui.action.OpenInOtherPanelAction.label:HU:Megnyitás a másik pa
 com.mucommander.ui.action.OpenInOtherPanelAction.label:RU:Открыть в другой панели
 com.mucommander.ui.action.OpenInOtherPanelAction.label:DE:In anderem Panel öffnen
 com.mucommander.ui.action.OpenInOtherPanelAction.label:CS:Otevřít ve druhém panelu
+com.mucommander.ui.action.OpenInOtherPanelAction.label:RO:Deschide în cealaltă fereastră
 # Translation missing (New!)
 
 
@@ -3597,6 +3605,7 @@ com.mucommander.ui.action.OpenInBothPanelsAction.label:HU:Megnyitás mindkét pa
 com.mucommander.ui.action.OpenInBothPanelsAction.label:RU:Открыть в обеих панелях
 com.mucommander.ui.action.OpenInBothPanelsAction.label:DE:In beiden Paneln öffnen
 com.mucommander.ui.action.OpenInBothPanelsAction.label:CS:Otevřít v obou panelech
+com.mucommander.ui.action.OpenInBothPanelsAction.label:RO:Deschide în ambele ferestre
 # Translation missing (New!)
 
 
@@ -4528,6 +4537,7 @@ com.mucommander.ui.action.CalculateChecksumAction.label:HU:Ellenőrző összeg s
 com.mucommander.ui.action.CalculateChecksumAction.label:RU:Расчет контрольной суммы
 com.mucommander.ui.action.CalculateChecksumAction.label:DE:Prüfsumme berechnen
 com.mucommander.ui.action.CalculateChecksumAction.label:CS:Kontrolní součet
+com.mucommander.ui.action.CalculateChecksumAction.label:RO:Calculează suma de control
 # Translation missing (New!)
 
 
@@ -5111,6 +5121,7 @@ version_dialog.install_and_restart:HU:Telepítés és újraindítás
 version_dialog.install_and_restart:RU:Установить и перезапустить
 version_dialog.install_and_restart:DE:Installieren und Neustart
 version_dialog.install_and_restart:CS:Nainstalovat a restartovat
+version_dialog.install_and_restart:RO:Instalează și repornește
 # Translation missing (New!)
 
 
@@ -5136,6 +5147,7 @@ version_dialog.preparing_for_update:HU:A frissítés előkészítése...
 version_dialog.preparing_for_update:RU:Идет подготовка к обновлению...
 version_dialog.preparing_for_update:DE:Vorbereitungen für den Update...
 version_dialog.preparing_for_update:CS:Připravuji aktualizaci...
+version_dialog.preparing_for_update:RO:Pregătire pentru actualizare...
 # Translation missing (New!)
 
 
@@ -5260,6 +5272,7 @@ destination_dialog.verify_integrity:NL:Verifieer data-integriteit
 destination_dialog.verify_integrity:DE:Daten Integrität überprüfen
 destination_dialog.verify_integrity:JA:データの統合性を検証する
 destination_dialog.verify_integrity:CS:Ověřit integritu
+destination_dialog.verify_integrity:RO:Verifică integritatea datelor
 # Translation missing (New!)
 
 
@@ -5320,6 +5333,7 @@ rename_dialog.new_name:NL:Nieuwe naam
 rename_dialog.new_name:DE:Neuer Name
 rename_dialog.new_name:JA:新しい名前
 rename_dialog.new_name:CS:Nové jméno
+rename_dialog.new_name:RO:Nume nou
 # Translation missing (New!)
 
 
@@ -5964,6 +5978,7 @@ mkfile_dialog.allocate_space:DE:Speicherplatz bereitstellen
 mkfile_dialog.allocate_space:JA:割り当てる領域
 mkfile_dialog.allocate_space:CS:Alokovaný prostor
 mkfile_dialog.allocate_space:NL:Bestandsruimte toewijzen
+mkfile_dialog.allocate_space:RO:Alocă spațiu
 # Translation missing (New!)
 
 
@@ -6799,6 +6814,7 @@ file_selection_dialog.matches_regexp:HU:Egyező regurális kifejezés (Regexp)
 file_selection_dialog.matches_regexp:RU:Соотв. рег. выражению
 file_selection_dialog.matches_regexp:DE:Übereinstimmung mit Regexp
 file_selection_dialog.matches_regexp:CS:Vyhovuje regulárnímu výrazu
+file_selection_dialog.matches_regexp:RO:Potrivește expresie regulată
 # Translation missing (New!)
 
 
@@ -7014,6 +7030,7 @@ progress_dialog.verifying_file:NL:%1 verifiëren
 progress_dialog.verifying_file:DE:Überprüfung %1
 progress_dialog.verifying_file:JA:%1 の検証中
 progress_dialog.verifying_file:CS:Ověřuji %1
+progress_dialog.verifying_file:RO:Verificare %1
 # Translation missing (New!)
 
 
@@ -7160,6 +7177,7 @@ calculate_checksum_dialog.checksum_algorithm:HU:Ellenőrző algoritmus
 calculate_checksum_dialog.checksum_algorithm:RU:Алгоритм расчета контр. суммы
 calculate_checksum_dialog.checksum_algorithm:DE:Prüfsummen Algorithmus
 calculate_checksum_dialog.checksum_algorithm:CS:Algoritmus výpočtu
+calculate_checksum_dialog.checksum_algorithm:RO:Algoritm pentru suma de control
 # Translation missing (New!)
 
 
@@ -7184,6 +7202,7 @@ calculate_checksum_dialog.temporary_file:HU:Ideiglenes fájl
 calculate_checksum_dialog.temporary_file:RU:Временный файл
 calculate_checksum_dialog.temporary_file:DE:Temporäre Datei
 calculate_checksum_dialog.temporary_file:CS:Dočasný soubor
+calculate_checksum_dialog.temporary_file:RO:Fișier temporar
 # Translation missing (New!)
 
 
@@ -8297,6 +8316,7 @@ text_viewer.binary_file_warning:NL:Dit bestand lijkt een binair bestand te zijn
 text_viewer.binary_file_warning:DE:Dies scheint eine Binärdatei zu sein
 text_viewer.binary_file_warning:JA:これはバイナリ ファイルにみえます
 text_viewer.binary_file_warning:CS:Toto je zřejmě binární soubor
+text_viewer.binary_file_warning:RO:Se pare că acest fișier este binar
 # Translation missing (New!)
 
 
@@ -8803,7 +8823,7 @@ theme_editor.title:HU:Témaszerkesztő
 theme_editor.title:NL:Themabewerker
 theme_editor.title:zh_CN:主题编辑器
 theme_editor.title:zh_TW:佈景主題編輯器
-theme_editor.title:RO:Editor temă vizuală
+theme_editor.title:RO:Editor de teme
 theme_editor.title:ES:Editor de tema
 theme_editor.title:pt_BR:Editor de tema
 theme_editor.title:SK:Editor témy
@@ -10515,6 +10535,7 @@ prefs_dialog.import_look_and_feel:HU:Kinézet importálása
 prefs_dialog.import_look_and_feel:RU:Импорт настроек внешнего вида
 prefs_dialog.import_look_and_feel:DE:Look & Feel importieren
 prefs_dialog.import_look_and_feel:CS:Importovat vzhled & chování
+prefs_dialog.import_look_and_feel:RO:Importă look & feel
 # Translation missing (New!)
 
 
@@ -10537,6 +10558,7 @@ prefs_dialog.no_look_and_feel:HU:Nem található Kinézet.
 prefs_dialog.no_look_and_feel:RU:Настроек внешнего вида не найдено.
 prefs_dialog.no_look_and_feel:DE:Kein Look & Feel gefunden.
 prefs_dialog.no_look_and_feel:CS:Žádný vzhled & chování nebyl nalezen.
+prefs_dialog.no_look_and_feel:RO:Acest look & feel nu a fost gasit.
 # Translation missing (New!)
 
 
@@ -10742,6 +10764,7 @@ prefs_dialog.delete_look_and_feel:HU:Folyamatosan töröljem a(z) %1 Kinézetet?
 prefs_dialog.delete_look_and_feel:RU:Удалить настройки %1 навсегда?
 prefs_dialog.delete_look_and_feel:DE:Look & Feel %1 dauerhaft löschen?
 prefs_dialog.delete_look_and_feel:CS:Chcete trvale smazat vzhled & chování %1 ?
+prefs_dialog.delete_look_and_feel:RO:Șterge look & feel-ul %1 definitiv?
 # Translation missing (New!)
 
 
@@ -10817,6 +10840,7 @@ prefs_dialog.jar_file:RU:JAR-файл
 prefs_dialog.jar_file:DE:JAR Datei
 prefs_dialog.jar_file:JA:JAR ファイル
 prefs_dialog.jar_file:CS:Soubor JAR
+prefs_dialog.jar_file:RO:Fișier JAR
 # Translation missing (New!)
 
 
