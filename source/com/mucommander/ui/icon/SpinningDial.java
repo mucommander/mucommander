@@ -339,6 +339,7 @@ public class SpinningDial extends AnimatedIcon {
             // it if not.
             if((frames[currentFrame = getFrame()]) == null) {
                 Image      frame;
+                GraphicsConfiguration gc;
                 Graphics2D g;
                 int        alpha;
                 double     cos;
@@ -346,10 +347,11 @@ public class SpinningDial extends AnimatedIcon {
                 int        radius;
 
                 // Initialises the frame.
-                if(c == null)
-                    frame = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+                // Note: getGraphicsConfiguration() returns null if the component has not yet been added to a container 
+                if(c!=null && (gc=c.getGraphicsConfiguration())!=null)
+                    frame = gc.createCompatibleImage(width, height, Transparency.TRANSLUCENT);
                 else
-                    frame = c.getGraphicsConfiguration().createCompatibleImage(width, height, Transparency.TRANSLUCENT);
+                    frame = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 
                 // Initialises the frame's g.
                 initialiseGraphics(g = (Graphics2D)frame.getGraphics());
