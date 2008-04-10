@@ -1039,7 +1039,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <mkdir dir="${portable.tmp}"/>
     <launch4j>
       <config outfile="${portable.exe}" jarpath="mucommander.jar" icon="${nsis.icon}" dontwrapjar="true" jarargs="-p .mucommander" chdir=".">
-        <jre minversion="${app.jvm}.0" args="Djava.system.class.loader=${app.loader}"/>
+        <jre minversion="${app.jvm}.0" args="-Djava.system.class.loader=${app.loader}"/>
       </config>
     </launch4j>
   </target>
