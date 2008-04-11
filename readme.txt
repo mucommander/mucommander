@@ -204,6 +204,8 @@ Bug fixes:
   exists in the destination (Bug #30).
 - FTP files whose group name contains spaces are now properly displayed
   (Bug #32).
+- On some FTP servers, FTP directories containing space characters could not
+  be listed (http://www.mucommander.com/forums/viewtopic.php?f=4&t=714).
 
 Known issues:
 - Korean translation is not up-to-date.

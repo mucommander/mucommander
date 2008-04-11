@@ -135,9 +135,9 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
 
     private org.apache.commons.net.ftp.FTPFile getFTPFile(FileURL fileURL) throws IOException {
         // Todo: this method is very ineffective as it lists the parent directory to retrieve the information about the
-        // requested file to workaround the fact that FTPClient#listFiles follows directories. Use 'ls -ld' or 'ls -ldH'
-        // to list only the file's information.
-
+        // requested file to workaround the fact that FTPClient#listFiles follows directories.
+        // => Use the MLST command if supported by the server (use FEAT command to find out if it is supported).
+        // See http://tools.ietf.org/html/draft-ietf-ftpext-mlst-16
         FileURL parentURL = fileURL.getParent();
         if(Debug.ON) Debug.trace("fileURL="+fileURL+" parent="+parentURL);
 
@@ -156,17 +156,7 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
 
                 // List files contained by this file's parent in order to retrieve the FTPFile instance corresponding
                 // to this file
-                files = connHandler.ftpClient.listFiles(parentURL.getPath());
-
-                // Throw an IOException if server replied with an error
-                connHandler.checkServerReply();
-            }
-            catch(IOException e) {
-                // Checks if the IOException corresponds to a socket error and in that case, closes the connection
-                connHandler.checkSocketException(e);
-
-                // Re-throw IOException
-                throw e;
+                files = listFiles(connHandler, parentURL.getPath());
             }
             finally {
                 // Release the lock on the ConnectionHandler
@@ -178,7 +168,7 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
             if(files==null || files.length==0)
                 return null;
 
-            // Find file from parent folder
+            // Find the file in the parent folder's contents
             int nbFiles = files.length;
             String wantedName = fileURL.getFilename();
             for(int i=0; i<nbFiles; i++) {
@@ -199,6 +189,65 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
         file.setTimestamp(java.util.Calendar.getInstance());
         file.setType(isDirectory?org.apache.commons.net.ftp.FTPFile.DIRECTORY_TYPE:org.apache.commons.net.ftp.FTPFile.FILE_TYPE);
         return file;
+    }
+
+
+    /**
+     * Lists and returns the contents of the given path on the server using the given connection handler.
+     * The directory contents is listed by issuing a CWD followed by a LIST so after this method is called, the current
+     * working directory is left to the specified path.
+     *
+     * @param connHandler the connection handler to use for communicating with the server
+     * @param absPath absolute path to the directory to list
+     * @return the directory's contents. The returned array may be empty but never null. The array may contain null
+     * individual entries as FTPClient#listFiles's Javadoc mentions.
+     * @throws IOException if an error occurred while communicating with the server
+     * @throws AuthException if the user is not allowed to access this directory
+     */
+    private static org.apache.commons.net.ftp.FTPFile[] listFiles(FTPConnectionHandler connHandler, String absPath) throws IOException, AuthException {
+        org.apache.commons.net.ftp.FTPFile files[];
+        try {
+            // Important: the folder is listed by changing the current working directory using the CWD command and then
+            // issuing a LIST to list the current directory, instead of issuing a LIST with the path as an argument.
+            // So we're sending:
+            //
+            //   CWD path
+            //   LIST
+            //
+            // Instead of:
+            //
+            //   LIST path
+            //
+            // The reason for that is that on some servers 'LIST path with spaces' fails whereas 'CWD path with spaces'
+            // succeeds. Most FTP clients seem to be doing this (CWD/LIST instead of LIST), there must be a reason.
+            //
+            // See:
+            // http://www.mucommander.com/forums/viewtopic.php?f=4&t=714
+            // http://issues.apache.org/jira/browse/NET-10
+
+            connHandler.ftpClient.changeWorkingDirectory(absPath);
+            files = connHandler.ftpClient.listFiles();
+
+            // Throw an IOException if server replied with an error
+            connHandler.checkServerReply();
+
+            if(files==null)     // In some rare conditions (bug) this method can return null
+                return new org.apache.commons.net.ftp.FTPFile[0];
+
+            return files;
+        }
+        // This exception is not an IOException and needs to be caught and thrown back as an IOException
+        catch(org.apache.commons.net.ftp.parser.ParserInitializationException e) {
+            if(Debug.ON) Debug.trace("ParserInitializationException caught");
+            throw new IOException();
+        }
+        catch(IOException e) {
+            // Checks if the IOException corresponds to a socket error and in that case, closes the connection
+            connHandler.checkSocketException(e);
+
+            // Throw back the IOException
+            throw e;
+        }
     }
 
 
@@ -459,40 +508,21 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
 
 
     public AbstractFile[] ls() throws IOException {
+        // Retrieve a ConnectionHandler and lock it
+        FTPConnectionHandler connHandler = (FTPConnectionHandler)ConnectionPool.getConnectionHandler(this, fileURL, true);
         org.apache.commons.net.ftp.FTPFile files[];
-        FTPConnectionHandler connHandler = null;
         try {
-            // Retrieve a ConnectionHandler and lock it
-            connHandler = (FTPConnectionHandler)ConnectionPool.getConnectionHandler(this, fileURL, true);
             // Makes sure the connection is started, if not starts it
             connHandler.checkConnection();
 
-            try {
-                files = connHandler.ftpClient.listFiles(absPath);
-            }
-            // This exception is not an IOException and needs to be caught and rethrown
-            catch(org.apache.commons.net.ftp.parser.ParserInitializationException e) {
-                if(Debug.ON) Debug.trace("ParserInitializationException caught");
-                throw new IOException();
-            }
-
-            // Throw an IOException if server replied with an error
-            connHandler.checkServerReply();
-        }
-        catch(IOException e) {
-            // Checks if the IOException corresponds to a socket error and in that case, closes the connection
-            connHandler.checkSocketException(e);
-
-            // Re-throw IOException
-            throw e;
+            files = listFiles(connHandler, absPath);
         }
         finally {
             // Release the lock on the ConnectionHandler
-            if(connHandler!=null)
-                connHandler.releaseLock();
+            connHandler.releaseLock();
         }
 
-        if(files==null)
+        if(files==null || files.length==0)
             return new AbstractFile[] {};
 
         AbstractFile children[] = new AbstractFile[files.length];
