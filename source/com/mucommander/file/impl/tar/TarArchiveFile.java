@@ -21,6 +21,7 @@ package com.mucommander.file.impl.tar;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.AbstractROArchiveFile;
 import com.mucommander.file.ArchiveEntry;
+import com.mucommander.io.StreamUtils;
 import com.mucommander.util.StringUtils;
 import org.apache.tools.bzip2.CBZip2InputStream;
 import org.apache.tools.tar.TarInputStream;
@@ -74,10 +75,7 @@ public class TarArchiveFile extends AbstractROArchiveFile {
                 // "Although BZip2 headers are marked with the magic 'Bz'. this constructor expects the next byte in the
                 // stream to be the first one after the magic.  Thus callers have to skip the first two bytes. Otherwise
                 // this constructor will throw an exception."
-                // Note: the return value of read() is unchecked. In the unlikely event that EOF is reached in the first
-                // 2 bytes, CBZip2InputStream will throw an IOException.
-                in.read();
-                in.read();
+                StreamUtils.skipFully(in, 2);
 
                 // Quoted from CBZip2InputStream's Javadoc:
                 // "CBZip2InputStream reads bytes from the compressed source stream via the single byte {@link java.io.InputStream#read()
