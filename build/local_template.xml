@@ -166,7 +166,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- = SMB file tests ====================================== -->
 
   <!-- Set this property to "true" to enable SMB tests,        -->
-  <!-- "false" to skip them                                    -->
+  <!-- "false" to skip them.                                   -->
   <property name="test_properties.smb_test.enabled"
             value="false"/>
 
@@ -174,12 +174,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- test files are created. This URI must contain valid     -->
   <!-- credentials.                                            -->
   <property name="test_properties.smb_test.temp_folder"
-            value="smb://login:password@localhost/share/folder"/>
+            value="smb://login:password@host/share/path/to/folder"/>
 
   <!-- = SFTP file tests ===================================== -->
 
   <!-- Set this property to "true" to enable SFTP tests,       -->
-  <!-- "false" to skip them                                    -->
+  <!-- "false" to skip them.                                   -->
   <property name="test_properties.sftp_test.enabled"
             value="false"/>
 
@@ -187,6 +187,19 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- test files are created. This URI must contain valid     -->
   <!-- credentials.                                            -->
   <property name="test_properties.sftp_test.temp_folder"
-            value="sftp://login:password@localhost/share/folder"/>
+            value="sftp://login:password@host/path/to/folder"/>
+
+  <!-- = FTP file tests ===================================== -->
+
+  <!-- Set this property to "true" to enable FTP tests,        -->
+  <!-- "false" to skip them.                                   -->
+  <property name="test_properties.ftp_test.enabled"
+            value="false"/>
+
+  <!-- Specifies the URI to the FTP folder where temporary     -->
+  <!-- test files are created. This URI must contain valid     -->
+  <!-- credentials.                                            -->
+  <property name="test_properties.ftp_test.temp_folder"
+            value="ftp://login:password@host/path/to/folder"/>
 
 </project>
