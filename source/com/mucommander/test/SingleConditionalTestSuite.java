@@ -23,7 +23,7 @@ import com.mucommander.Debug;
 /**
  * <code>SingleConditionalTestSuite</code> is a <code>ConditionalTestSuite</code> that operates on a single test case.
  * It implements {@link #populateTestSuite()} by adding the TestCase class returned by {@link #getTestCaseClass()} to
- * the the test suite, making subclassing a bit easier.
+ * the test suite, making subclassing a bit easier.
  *
  * @author Maxence Bernard
  */
@@ -50,6 +50,6 @@ public abstract class SingleConditionalTestSuite extends ConditionalTestSuite {
      * @return the TestCase class to be added to this test suite
      */
     protected abstract Class getTestCaseClass();
-//    protected abstract Class<? extends TestCase> getTestCaseClass();      // For the day we allow Java 1.5 code
+//    protected abstract Class<? extends TestCase> getTestCaseClass();      // For the day we start using Java 1.5 features
 
 }
