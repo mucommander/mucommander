@@ -193,7 +193,7 @@ public class StreamUtils {
 
 
     /**
-     * This method is a shorthand for {@link #readFully(java.io.InputStream, byte[], int, int) readFully(in, b, 0, b.length)}.
+     * This method is a shorthand for {@link #readFully(java.io.InputStream, byte[], int, int)}.
      *
      * @param in the InputStream to read from
      * @param b the buffer into which the stream data is copied
@@ -206,9 +206,11 @@ public class StreamUtils {
     }
 
     /**
-     * Reads <code>len</code> bytes from the <code>InputStream</code> into the byte array, starting at <code>off</code>.
-     * This method reads repeatedly from the stream until the requested number of bytes are read. It blocks
-     * until the requested number of bytes have been read or the end of file has been reached.
+     * Reads exactly <code>len</code> bytes from the <code>InputStream</code> and copies them into the byte array,
+     * starting at position <code>off</code>.
+     *
+     * <p>This method calls the <code>read()</code> method of the given stream until the requested number of bytes have
+     * been skipped, or throws an {@link EOFException} if the end of file has been reached prematurely.</p>
      *
      * @param in the InputStream to read from
      * @param b the buffer into which the stream data is copied
@@ -234,6 +236,30 @@ public class StreamUtils {
     }
 
     /**
+     * Skips exactly <code>n</code>bytes from the given InputStream.
+     *
+     * <p>This method calls the <code>skip()</code> method of the given stream until the requested number of bytes have
+     * been skipped, or throws an {@link EOFException} if the end of file has been reached prematurely.</p>
+     *
+     * @param in the InputStream to skip bytes from
+     * @param n the number of bytes to skip
+     * @throws java.io.EOFException if the EOF is reached before all bytes have been skipped
+     * @throws java.io.IOException if an I/O error occurs
+     */
+    public static void skipFully(InputStream in, long n) throws IOException {
+        if(n<=0)
+            return;
+
+        do {
+            long nbSkipped = in.skip(n);
+            if(nbSkipped<0)
+                throw new IOException();
+
+            n -= nbSkipped;
+        } while(n>0);
+    }
+
+    /**
      * This method is a shorthand for {@link #readUpTo(java.io.InputStream, byte[], int, int) readUpTo(in, b, 0, b.length)}.
      *
      * @param in the InputStream to read from
@@ -246,9 +272,8 @@ public class StreamUtils {
     }
 
     /**
-     * Read up to <code>len</code> bytes from the <code>InputStream</code> into the byte array, starting at
-     * <code>off</code>. This method reads repeatedly from the stream until the requested number of bytes are read.
-     * It blocks until the requested number of bytes have been read or the end of file has been reached.
+     * Reads up to <code>len</code> bytes from the <code>InputStream</code> and copies them into the byte array,
+     * starting at position <code>off</code>.
      *
      * <p>This method differs from {@link #readFully(java.io.InputStream, byte[], int, int)} in that it does not throw
      * a <code>java.io.EOFException</code> if the end of stream is reached before all bytes have been read. In that
