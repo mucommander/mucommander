@@ -22,6 +22,7 @@ import com.mucommander.file.AbstractFile;
 import com.mucommander.file.AbstractROArchiveFile;
 import com.mucommander.file.ArchiveEntry;
 import com.mucommander.io.RandomAccessInputStream;
+import com.mucommander.io.StreamUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -127,7 +128,7 @@ public class IsoArchiveFile extends AbstractROArchiveFile {
 
         while (len > 0) {
             rais.seek(sector(extent - sector_offset, cooked));
-            rais.read(buffer);
+            StreamUtils.readFully(rais, buffer);
             len -= buffer.length;
             extent++;
             i = 0;
@@ -294,7 +295,7 @@ public class IsoArchiveFile extends AbstractROArchiveFile {
                     ret = rais.read(b, cur, 2048);
                     if (ret != -1)
                         pos += ret;
-                    rais.skip(280 + 24);
+                    StreamUtils.skipFully(rais, 280 + 24);
                     cur += 2048;
                 }
                 ret = rais.read(b, cur, half);
