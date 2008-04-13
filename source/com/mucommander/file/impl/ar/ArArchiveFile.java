@@ -52,7 +52,7 @@ public class ArArchiveFile extends AbstractROArchiveFile {
      * Skips the global header: "!<arch>" string followed by LF char (8 characters in total).
      */
     private static void skipGlobalHeader(InputStream in) throws IOException {
-        skipFully(in, 8);
+        StreamUtils.skipFully(in, 8);
     }
 
 
@@ -105,7 +105,7 @@ public class ArArchiveFile extends AbstractROArchiveFile {
 
                 // Skip one padding byte if size is odd
                 if(size%2!=0)
-                    skipFully(in, 1);
+                    StreamUtils.skipFully(in, 1);
 
                 // Don't return this entry which should not be visible, but recurse to return next entry instead
                 return getNextEntry(in);
@@ -143,26 +143,10 @@ public class ArArchiveFile extends AbstractROArchiveFile {
         long size = entry.getSize();
 
         // Skip file's data, plus 1 padding byte if size is odd
-        skipFully(in, size + (size%2));
+        StreamUtils.skipFully(in, size + (size%2));
     }
 
-
-    /**
-     * Fully skips the given number of bytes in the given InputStream.
-     *
-     * @throws IOException if the bytes could not be skipped
-     */
-    private static void skipFully(InputStream in, long n) throws IOException {
-        do {
-            long nbSkipped = in.skip(n);
-            if(nbSkipped<0)
-                throw new IOException();
-
-            n -= nbSkipped;
-        } while(n>0);
-    }
-
-
+    
     ////////////////////////////////////////
     // AbstractArchiveFile implementation //
     ////////////////////////////////////////
