@@ -710,6 +710,7 @@ creating_file:CS:Vytváří se %1
 creating_file:RO:Creez %1
 creating_file:ES:Creando %1
 creating_file:zh_TW:正在建立 %1
+creating_file:IT:Creazione di %1 in corso
 # Translation missing (New!)
 
 
@@ -998,6 +999,7 @@ owner:CS:Vlastník
 owner:RO:Proprietar
 owner:ES:Propietario
 owner:zh_TW:擁有者
+owner:IT:Proprietario
 # Translation missing (New!)
 
 
@@ -1027,6 +1029,7 @@ group:CS:Skupina
 group:RO:Grup
 group:ES:Grupo
 group:zh_TW:群組
+group:IT:Gruppo
 # Translation missing (New!)
 
 
@@ -1384,6 +1387,7 @@ generic_error:CS:Při provádění požadované operace se vyskytla chyba.
 generic_error:RO:O eroare a apărut in timp ce executam operațiunea cerută
 generic_error:ES:Ha ocurrido un error mientras se realizaba la operación
 generic_error:zh_TW:當進行指定操作時, 發生錯誤.
+generic_error:IT:Errore durante l'esecuzione dell'operazione richiesta.
 # Translation missing (New!)
 
 
@@ -1791,6 +1795,7 @@ integrity_check_error:CS:Kontrola integrity se nezdařila: zdroj a cíl se nesho
 integrity_check_error:RO:Controlul integrității a eșuat: sursa și destinația sunt diferite
 integrity_check_error:ES:Comprobación de integridad fallida: fuente y destino no coinciden
 integrity_check_error:zh_TW:完整性檢查失敗: 來源及目的不一致
+integrity_check_error:IT:Verifica integrità fallita: sorgente e destinazione non corrispondono
 # Translation missing (New!)
 
 
@@ -2034,6 +2039,7 @@ com.mucommander.ui.action.ExploreBookmarksAction.label:CS:Procházet záložky
 com.mucommander.ui.action.ExploreBookmarksAction.label:RO:Explorează favoritele
 com.mucommander.ui.action.ExploreBookmarksAction.label:ES:Explorar favoritos
 com.mucommander.ui.action.ExploreBookmarksAction.label:zh_TW:檢視書籤
+com.mucommander.ui.action.ExploreBookmarksAction.label:IT:Esplora i bookmark
 # Translation missing (New!)
 
 
@@ -3050,6 +3056,7 @@ com.mucommander.ui.action.SortByOwnerAction.label:CS:Řadit dle vlastníka
 com.mucommander.ui.action.SortByOwnerAction.label:RO:Sortează după proprietar
 com.mucommander.ui.action.SortByOwnerAction.label:ES:Ordenar por Propietario
 com.mucommander.ui.action.SortByOwnerAction.label:zh_TW:依擁有者排序
+com.mucommander.ui.action.SortByOwnerAction.label:IT:Ordina per Propietario
 # Translation missing (New!)
 
 
@@ -3081,6 +3088,7 @@ com.mucommander.ui.action.SortByGroupAction.label:CS:Řadit dle skupiny
 com.mucommander.ui.action.SortByGroupAction.label:RO:Sortează după grup
 com.mucommander.ui.action.SortByGroupAction.label:ES:Ordenar por Grupo
 com.mucommander.ui.action.SortByGroupAction.label:zh_TW:依群組排序
+com.mucommander.ui.action.SortByGroupAction.label:IT:Ordina per Gruppo
 # Translation missing (New!)
 
 
@@ -3351,6 +3359,7 @@ com.mucommander.ui.action.MarkExtensionAction.label:CS:Označit příponu
 com.mucommander.ui.action.MarkExtensionAction.label:RO:Selectează aceeași extensie
 com.mucommander.ui.action.MarkExtensionAction.label:ES:Marcar extensión
 com.mucommander.ui.action.MarkExtensionAction.label:zh_TW:標記延伸檔名
+com.mucommander.ui.action.MarkExtensionAction.label:IT:Marca estensione
 # Translation missing (New!)
 
 
@@ -3604,6 +3613,7 @@ com.mucommander.ui.action.OpenInOtherPanelAction.label:CS:Otevřít ve druhém p
 com.mucommander.ui.action.OpenInOtherPanelAction.label:RO:Deschide în cealaltă fereastră
 com.mucommander.ui.action.OpenInOtherPanelAction.label:ES:Abrir en otro panel
 com.mucommander.ui.action.OpenInOtherPanelAction.label:zh_TW:開啟於其它面板
+com.mucommander.ui.action.OpenInOtherPanelAction.label:IT:Apri nell'altro pannello
 # Translation missing (New!)
 
 
@@ -3633,6 +3643,7 @@ com.mucommander.ui.action.OpenInBothPanelsAction.label:CS:Otevřít v obou panel
 com.mucommander.ui.action.OpenInBothPanelsAction.label:RO:Deschide în ambele ferestre
 com.mucommander.ui.action.OpenInBothPanelsAction.label:ES:Abrir en ambos paneles
 com.mucommander.ui.action.OpenInBothPanelsAction.label:zh_TW:開啟於兩邊面板
+com.mucommander.ui.action.OpenInBothPanelsAction.label:IT:Apri in entrambi i pannelli
 # Translation missing (New!)
 
 
@@ -4567,6 +4578,7 @@ com.mucommander.ui.action.CalculateChecksumAction.label:CS:Kontrolní součet
 com.mucommander.ui.action.CalculateChecksumAction.label:RO:Calculează suma de control
 com.mucommander.ui.action.CalculateChecksumAction.label:ES:Calcular checksum
 com.mucommander.ui.action.CalculateChecksumAction.label:zh_TW:計算驗證碼
+com.mucommander.ui.action.CalculateChecksumAction.label:IT:Calcola checksum
 # Translation missing (New!)
 
 
@@ -5153,6 +5165,7 @@ version_dialog.install_and_restart:CS:Nainstalovat a restartovat
 version_dialog.install_and_restart:RO:Instalează și repornește
 version_dialog.install_and_restart:ES:Instalar y reiniciar
 version_dialog.install_and_restart:zh_TW:安裝及重啟
+version_dialog.install_and_restart:IT:Installa e riparti
 # Translation missing (New!)
 
 
@@ -5181,6 +5194,7 @@ version_dialog.preparing_for_update:CS:Připravuji aktualizaci...
 version_dialog.preparing_for_update:RO:Pregătire pentru actualizare...
 version_dialog.preparing_for_update:ES:Preparando actualización...
 version_dialog.preparing_for_update:zh_TW:準備更新中...
+version_dialog.preparing_for_update:IT:Preparazione per aggiornamento...
 # Translation missing (New!)
 
 
@@ -5308,6 +5322,7 @@ destination_dialog.verify_integrity:CS:Ověřit integritu
 destination_dialog.verify_integrity:RO:Verifică integritatea datelor
 destination_dialog.verify_integrity:ES:Verificando integridad de datos
 destination_dialog.verify_integrity:zh_TW:檢查資料完整性
+destination_dialog.verify_integrity:IT:Verifica integrità dei dati
 # Translation missing (New!)
 
 
@@ -5371,6 +5386,7 @@ rename_dialog.new_name:CS:Nové jméno
 rename_dialog.new_name:RO:Nume nou
 rename_dialog.new_name:ES:Nuevo nombre
 rename_dialog.new_name:zh_TW:新名稱
+rename_dialog.new_name:IT:Nuovo nome
 # Translation missing (New!)
 
 
@@ -6019,6 +6035,7 @@ mkfile_dialog.allocate_space:NL:Bestandsruimte toewijzen
 mkfile_dialog.allocate_space:RO:Alocă spațiu
 mkfile_dialog.allocate_space:ES:Tamaño
 mkfile_dialog.allocate_space:zh_TW:分配空間
+mkfile_dialog.allocate_space:IT:Alloca spazio
 # Translation missing (New!)
 
 
@@ -6857,6 +6874,7 @@ file_selection_dialog.matches_regexp:CS:Vyhovuje regulárnímu výrazu
 file_selection_dialog.matches_regexp:RO:Potrivește expresie regulată
 file_selection_dialog.matches_regexp:ES:Satisface la expresión regular
 file_selection_dialog.matches_regexp:zh_TW:符合正規表達式
+file_selection_dialog.matches_regexp:IT:Controlla la Regexp
 # Translation missing (New!)
 
 
@@ -7075,6 +7093,7 @@ progress_dialog.verifying_file:CS:Ověřuji %1
 progress_dialog.verifying_file:RO:Verificare %1
 progress_dialog.verifying_file:ES:Comprobando %1
 progress_dialog.verifying_file:zh_TW:正在檢查 %1
+progress_dialog.verifying_file:IT:Verificando %1
 # Translation missing (New!)
 
 
@@ -7224,6 +7243,7 @@ calculate_checksum_dialog.checksum_algorithm:CS:Algoritmus výpočtu
 calculate_checksum_dialog.checksum_algorithm:RO:Algoritm pentru suma de control
 calculate_checksum_dialog.checksum_algorithm:ES:Algoritmo de checksum
 calculate_checksum_dialog.checksum_algorithm:zh_TW:驗證碼演算法
+calculate_checksum_dialog.checksum_algorithm:IT:Algoritmo di Checksum
 # Translation missing (New!)
 
 
@@ -7251,6 +7271,7 @@ calculate_checksum_dialog.temporary_file:CS:Dočasný soubor
 calculate_checksum_dialog.temporary_file:RO:Fișier temporar
 calculate_checksum_dialog.temporary_file:ES:Fichero temporal
 calculate_checksum_dialog.temporary_file:zh_TW:暫存檔
+calculate_checksum_dialog.temporary_file:IT:File Temporaneo
 # Translation missing (New!)
 
 
@@ -8371,6 +8392,7 @@ text_viewer.binary_file_warning:RO:Se pare că acest fișier este binar
 text_viewer.binary_file_warning:PL:Wygląda że jest to plik binarny nie tekstowy
 text_viewer.binary_file_warning:ES:Parece ser un fichero binario
 text_viewer.binary_file_warning:zh_TW:此為二進位檔案
+text_viewer.binary_file_warning:IT:Questo sembra essere un file binario
 # Translation missing (New!)
 
 
@@ -10599,6 +10621,7 @@ prefs_dialog.import_look_and_feel:RO:Importă look & feel
 prefs_dialog.import_look_and_feel:PL:Zaimportuj wygląd i zachowanie  (look & feel)
 prefs_dialog.import_look_and_feel:ES:Importar look & feel
 prefs_dialog.import_look_and_feel:zh_TW:匯入 look & feel
+prefs_dialog.import_look_and_feel:IT:Importa look & feel
 # Translation missing (New!)
 
 
@@ -10625,6 +10648,7 @@ prefs_dialog.no_look_and_feel:RO:Acest look & feel nu a fost gasit.
 prefs_dialog.no_look_and_feel:PL:Nie znaleziono pliku ustawień wyglądu i zachowania (look & feel).
 prefs_dialog.no_look_and_feel:ES:No se encontró look & feel alguno.
 prefs_dialog.no_look_and_feel:zh_TW:找不到 look & feel.
+prefs_dialog.no_look_and_feel:IT:Nessun look & feel trovato.
 # Translation missing (New!)
 
 
@@ -10834,6 +10858,7 @@ prefs_dialog.delete_look_and_feel:RO:Șterge look & feel-ul %1 definitiv?
 prefs_dialog.delete_look_and_feel:PL:Definitywnie skasować ustawienia wyglądu i zachowania (look & feel) %1 ?
 prefs_dialog.delete_look_and_feel:ES:Eliminar permanentemente el look & feel %1 ?
 prefs_dialog.delete_look_and_feel:zh_TW:永久刪除 look & feel %1 ?
+prefs_dialog.delete_look_and_feel:IT:Cancello definitivamente il look & feel %1 ?
 # Translation missing (New!)
 
 
@@ -10912,6 +10937,7 @@ prefs_dialog.jar_file:CS:Soubor JAR
 prefs_dialog.jar_file:RO:Fișier JAR
 prefs_dialog.jar_file:ES:Fichero JAR
 prefs_dialog.jar_file:zh_TW:JAR 檔案
+prefs_dialog.jar_file:IT:File JAR
 # Translation missing (New!)
 
 
