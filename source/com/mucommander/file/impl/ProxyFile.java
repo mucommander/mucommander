@@ -320,6 +320,14 @@ public abstract class ProxyFile extends AbstractFile {
         file.deleteRecursively();
     }
 
+    public void importPermissions(AbstractFile sourceFile) {
+        file.importPermissions(sourceFile);
+    }
+
+    public void importPermissions(AbstractFile sourceFile, int defaultPermissions) {
+        file.importPermissions(sourceFile, defaultPermissions);
+    }
+
     public boolean equals(Object f) {
         return file.equals(f);
     }
