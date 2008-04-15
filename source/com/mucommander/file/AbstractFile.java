@@ -305,9 +305,9 @@ public abstract class AbstractFile implements FilePermissions {
      * Returns an <code>InputStream</code> to read this file's contents, starting at the specified offset (in bytes).
      * A <code>java.io.IOException</code> is thrown if the file doesn't exist. 
      *
-     * <p>This method should be overridden whenever possible to provide a more efficient implementation, as this
-     * default implementation uses {@link java.io.InputStream#skip(long)} which may just read bytes and discards them, 
-     * which is very slow.</p>
+     * <p>This method should be overridden whenever possible to provide a more efficient implementation as this
+     * default implementation uses {@link java.io.InputStream#skip(long)} which, depending on the particular InputStream
+     * implementation may just read bytes and discards them, which is very slow.</p>
      *
      * @param offset the offset in bytes from the beginning of the file, must be >0
      * @throws IOException if this file cannot be read or is a folder.
@@ -316,14 +316,8 @@ public abstract class AbstractFile implements FilePermissions {
     public InputStream getInputStream(long offset) throws IOException {
         InputStream in = getInputStream();
 		
-        // Call InputStream.skip() until the specified number of bytes have been skipped
-        long nbSkipped = 0;
-        long n;
-        while(nbSkipped<offset) {
-            n = in.skip(offset-nbSkipped);
-            if(n>0)
-                nbSkipped += n;
-        }
+        // Skip exactly the specified number of bytes
+        StreamUtils.skipFully(in, offset);
 
         return in;
     }
@@ -682,6 +676,70 @@ public abstract class AbstractFile implements FilePermissions {
         }
 
         return success;
+    }
+
+
+    /**
+     * Pads the given file's permissions with the specified ones: the permission bits that are not supported by the
+     * file (as reported by {@link #getPermissionGetMask()} are replaced by those of the default permissions.
+     * That means:<br/>
+     *  - if the file has support for all permission bits (mask = 777 octal), the file's permissions will simply be
+     * returned, without using any of the default permissions<br/>
+     *  - if the file doesn't have support for any of the permission bits (mask = 0), the default permissions will be
+     * returned, without using any of the file's permissions<br/>
+     *
+     * @param file the file for which to retrieve the permissions and pad them
+     * @param defaultPermissions permissions to use for the bits that are not supported by the given file
+     * @return the given file's permissions padded with the default permissions
+     */
+    public static int padPermissions(AbstractFile file, int defaultPermissions) {
+        return padPermissions(file.getPermissions(), file.getPermissionGetMask(), defaultPermissions);
+    }
+
+    /**
+     * Pads the given permissions with the specified ones: the permission bits that are not supported by the
+     * file (as reported by the supplied permissions mask} are replaced by those of the default permissions.
+     * That means:<br/>
+     *  - if the mask indicates that all permission bits are supported (mask = 777 octal), the supplied permissions will
+     * simply be returned, without using any of the default permissions<br/>
+     *  - if the mask indicates that none of the permission bits are supported (mask = 0), the default permissions will
+     * be returned, without using any of the supplied permissions<br/>
+     *
+     * @param permissions the permissions to pad with default permissions for the bits that are not supported
+     * @param supportedPermissionsMask the bit mask that indicates which bits of the given permissions are supported
+     * @param defaultPermissions permissions to use for the bits that are not supported
+     * @return the given permissions padded with the default permissions
+     */
+    public static int padPermissions(int permissions, int supportedPermissionsMask, int defaultPermissions) {
+        return (permissions & supportedPermissionsMask) | (~supportedPermissionsMask & defaultPermissions);
+    }
+
+
+    /**
+     * This method is a shorthand for {@link #importPermissions(AbstractFile, int)} called with
+     * {@link #DEFAULT_DIRECTORY_PERMISSIONS} if this file is a directory or {@link #DEFAULT_FILE_PERMISSIONS} if this
+     * file is a regular file.
+     *
+     * @param sourceFile the file from which to import permissions
+     */
+    public void importPermissions(AbstractFile sourceFile) {
+        importPermissions(sourceFile,isDirectory()
+                ?DEFAULT_DIRECTORY_PERMISSIONS
+                :DEFAULT_FILE_PERMISSIONS);
+    }
+
+    /**
+     * Imports the given source file's permissions, overwriting this file's permissions. Only the bits that are
+     * supported by the source file (as reported by {@link #getPermissionGetMask()} are preserved. Other bits are be
+     * set to those of the specified default permissions. See {@link #padPermissions(AbstractFile, int)} for more
+     * information about permissions padding.
+     *
+     * @param sourceFile the file from which to import permissions
+     * @param defaultPermissions default permissions to use
+     * @see #padPermissions(AbstractFile, int)
+     */
+    public void importPermissions(AbstractFile sourceFile, int defaultPermissions) {
+        setPermissions(padPermissions(sourceFile, defaultPermissions));
     }
 
 
