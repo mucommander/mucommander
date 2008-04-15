@@ -38,4 +38,12 @@ public interface FilePermissions {
     public final static int GROUP_ACCESS = 1;
     /** Bit mask for 'owner' permissions. */
     public final static int USER_ACCESS = 2;
+
+    /** Default file permissions used by {@link AbstractFile#importPermissions(AbstractFile)} for permission bits that
+     * are not available in the source: rw-r--r-- (644 octal) */
+    public final static int DEFAULT_FILE_PERMISSIONS = 420;
+
+    /** Default directory permissions used by {@link AbstractFile#importPermissions(AbstractFile)} for permission bits that
+     * are not available in the source: rwxr-xr-x (755 octal) */
+    public final static int DEFAULT_DIRECTORY_PERMISSIONS = 493;
 }
