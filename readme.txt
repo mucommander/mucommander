@@ -5,7 +5,7 @@
 
 
 ------------------
-muCommander v0.8.2
+muCommander v0.8.3
 ------------------
 
 muCommander is a cross-platform file manager featuring a Norton Commander
@@ -109,106 +109,25 @@ Many thanks to all of you who suggested new features, reported bugs, sent warm
 emails or generously donated to the project !
 
 
-What's new since v0.8.1 ?
+What's new since v0.8.2 ?
 -------------------------
 
 New features:
-- New 'Calculate checksum' feature added to the 'File' menu (mapped onto 
-  Shift+Alt+K by default) which calculates the checksum of selected files and 
-  writes them to a file in a standard format. The following checksum algorithms 
-  are provided: Alder32, CRC32, MD2, MD4, MD5, SHA-1, SHA-256, SHA-384 
-  and SHA-512.
-- New 'Verify data integrity' transfer option that ensures that the files are
-  strictly identical on the source and destination after being transferred.
-  This option slows down transfers significantly but can prevent data loss
-  on unreliable mediums.
-- Files can be marked/unmarked using a Regexp.
-- Added 'Owner' and 'Group' columns (disabled by default). The owner and group
-  information is available on FTP and SFTP folders and some TAR archives.
-- Custom look&feels can now be imported from the preferences dialog.
-- New 'Mark selection' feature (mapped onto Shift+Add by default) that lets 
-  users mark all files whose extension match that of the current selection.
-- New 'Open in other panel' feature (mapped onto Shift+Alt+ENTER by default) 
-  that opens the current selection in the other panel.
-- New 'Open in both panels' and 'Go to parent in both panels' features
-  (mapped onto Meta+Enter and Meta+Backspace by default) that open browsable
-  files with a similar name in both panels.
-- 'Mkfile' can now allocate space to the newly created file.
-- New 'Rename' option added to file operations, allowing files that already 
-  exist in the destination to be renamed (contributed by Mariusz Jakubowski).
-- Windows: 'Delete' now moves files to the Recycle Bin by default.
-- Windows: the Recycle Bin can be opened and emptied from the status bar.
+- 
 
 Improvements:
-- Significantly improved the throughput of FTP uploads.
-- Significantly improved the throughput of transfers into Zip files.
-- Added an 'Explore bookmarks' item to the 'Bookmarks' menu.
-- Job confirmation dialogs show the list of files to be processed.
-- All OK/cancel choices can be navigated with the arrow keys.
-- Added keyboard shortcuts to 'Change date' and 'Change permissions' actions
-  (Shift+Alt+D and Shift+Alt+P resp.).
-- Visual enhancements made to the main window under Mac OS X 10.5 (Leopard).
-- Improved file loading in the internal viewers and editors.
-- File encoding can now be changed in the internal text viewer and editor.
-- HTTPS connections can now be established even if the SSL certificate is
-  not trusted.
-- Added a dedicated icon for the root of remote locations.
-- jCIFS library upgraded to version 1.2.18e.
-- J2SSH library upgraded to version 0.2.9.
-- Commons-net library upgraded to version 1.5.0 (svn snapshot).
+- 
 
 Localization:
-- Japanese translation contributed by Nardog.
-- Swedish translation contributed by Jakob Ekström.
+- 
 
 Bug fixes:
-- SMB passwords that contain '@' characters are now properly handled.
-- Fixed a bug that occurred when sorting the folder pane by an invisible column 
-  or when hiding the current column. This bug would leave the folder pane in an 
-  inconsistent sort order and could prevent the application from restarting.
-- Fixed a bug affecting custom associations.
-- Fixed a regression affecting the opening of files on non-local filesystems.
-- Fixed an issue with the drive button which would sometimes change the folder
-  on the opposite panel.
-- A proper error message is displayed when trying to open Zip files with an
-  unsupported compression method (e.g. IMPLODED or LZMA).
-- When multiple double-clicks were issues on the table, only the first one
-  was taken into account.
-- Fixed an issue under Linux causing the muCommander icon to sometimes stay in
-  the system tray after the application had quit.
-- Security fix: credentials.xml is no longer readable by 'group' and 'other'
-  under UNIX-based systems.
-- Mac OS X: fixed the 'Empty trash' option which would sometimes be enabled when 
-  the trash was empty.
-- Fixed an encoding issue affecting SFTP filenames on some platforms.
-- Fixed a bug in the text viewer and editor which prevented certain files from
-  being opened.
-- Fixed a regression which prevented UNC paths from being listed properly
-  (Bug #7).
-- Fixed system file icons which did not show the symlink indication for
-  non-local files (on all platforms), and for local files under Mac OS X 10.5.
-- Fixed password changes not properly taken into account (Bug #10).
-- Main menus can now be selected using their mnemonic (Bug #13).
-- Fixed a couple issues with 'Swap folders' (Bug #21).
-- A warning is now displayed when attempting to view or edit binary files
-  (Bug #20).
-- Symbolic links can now be viewed/edited (Bug #24).
-- Fixed potential 'No disk' error dialogs showing up under Windows (Bug #25).
-- Sort order (ascending/descending) of the 'Name' column was inconsistent 
-  with that other columns. 'ascending' order has also been made the default for 
-  all columns.
-- Fixed 'Swap folders' not preserving the 'Show folders first' view options.
-- Zip compression is now more efficient in terms of memory and CPU usage 
-  (Bug #29).
-- Fixed an issue with 'Pack files' when creating a Zip archive that already 
-  exists in the destination (Bug #30).
-- FTP files whose group name contains spaces are now properly displayed
-  (Bug #32).
-- On some FTP servers, FTP directories containing space characters could not
-  be listed (http://www.mucommander.com/forums/viewtopic.php?f=4&t=714).
+- 
 
 Known issues:
-- Korean translation is not up-to-date.
+- Korean, Simplified Chinese, Slovenian and Slovak translations are not 
+  up-to-date.
+- SFTP not working under Java 1.4 (regression).
 - Executable permissions are not preserved properly for local files prior to
   Java 1.6.
 - SMB support may not work properly on non multi-language JRE.
