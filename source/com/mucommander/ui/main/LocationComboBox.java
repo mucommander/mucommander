@@ -25,6 +25,7 @@ import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileProtocols;
 import com.mucommander.file.FileURL;
 import com.mucommander.file.RootFolders;
+import com.mucommander.file.util.FileToolkit;
 import com.mucommander.runtime.OsFamilies;
 import com.mucommander.ui.combobox.EditableComboBox;
 import com.mucommander.ui.combobox.EditableComboBoxListener;
@@ -153,8 +154,19 @@ public class LocationComboBox extends EditableComboBox implements LocationListen
         if(!folderChangeInitiatedByLocationField) {
             FileURL folderURL = e.getFolderURL();
 
+            String locationText;
             // Do not display the URL's protocol for local files
-            locationField.setText(folderURL.getProtocol().equals(FileProtocols.FILE)?folderURL.getPath():folderURL.toString(false));
+            if(folderURL.getProtocol().equals(FileProtocols.FILE)) {
+                locationText = folderURL.getPath();
+                // Under Windows, remove the leading '/' separator from the URL's path
+                if(OsFamilies.WINDOWS.isCurrent())
+                    locationText = FileToolkit.removeLeadingSeparator(locationText, "/");
+            }
+            // Display the full URL for protocols other than 'file'
+            else {
+                locationText = folderURL.toString(false);
+            }
+            locationField.setText(locationText);
         }
 
         // Disable component until the folder has been changed, cancelled or failed.
