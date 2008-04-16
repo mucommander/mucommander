@@ -29,7 +29,7 @@ import javax.swing.*;
 import java.net.MalformedURLException;
 
 
-class SFTPPanel extends ServerPanel {
+public class SFTPPanel extends ServerPanel {
 
     private JTextField serverField;
     private JTextField usernameField;

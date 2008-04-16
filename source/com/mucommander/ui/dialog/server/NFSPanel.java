@@ -29,7 +29,7 @@ import javax.swing.*;
 import java.net.MalformedURLException;
 
 
-class NFSPanel extends ServerPanel {
+public class NFSPanel extends ServerPanel {
 
     private JTextField serverField;
     private JTextField shareField;

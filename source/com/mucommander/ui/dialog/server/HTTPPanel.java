@@ -34,7 +34,7 @@ import java.net.MalformedURLException;
  *
  * @author Maxence Bernard
  */
-class HTTPPanel extends ServerPanel {
+public class HTTPPanel extends ServerPanel {
 
     private JTextField urlField;
     private JTextField portField;

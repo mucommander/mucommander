@@ -34,7 +34,7 @@ import java.net.MalformedURLException;
  *
  * @author Maxence Bernard
  */
-class SMBPanel extends ServerPanel {
+public class SMBPanel extends ServerPanel {
 
     private JTextField serverField;
     private JTextField shareField;

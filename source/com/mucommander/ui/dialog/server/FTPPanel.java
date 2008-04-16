@@ -39,7 +39,7 @@ import java.net.MalformedURLException;
  *
  * @author Maxence Bernard
  */
-class FTPPanel extends ServerPanel implements ActionListener {
+public class FTPPanel extends ServerPanel implements ActionListener {
 
     private JTextField serverField;
     private JTextField usernameField;
