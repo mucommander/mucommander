@@ -468,11 +468,20 @@ public class FileURL implements Cloneable {
     }
 
     /**
-     * Sets the path part of this FileURL. The specified path must not be <code>null</code>.
+     * Sets the path part of this FileURL. The specified path must not be <code>null</code> and should be absolute, i.e.
+     * start with a leading separator character ('/'). If the path does not start with a leading separator, one will be
+     * added.
+     *
      * @param path new path part for this <code>FileURL</code>.
      * @see        #getPath()
      */
     public void setPath(String path) {
+        if(path==null)
+            path = "/";
+
+        if(!path.startsWith("/"))
+            path = "/"+path;
+
         this.path = path;
         // Extract new filename from path
         this.filename = getFilenameFromPath(path, getPathSeparator());
