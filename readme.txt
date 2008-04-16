@@ -127,7 +127,7 @@ Bug fixes:
 Known issues:
 - Korean, Simplified Chinese, Slovenian and Slovak translations are not 
   up-to-date.
-- SFTP support not available under Java 1.4.
+- SFTP support not available under Java 1.4, requires Java 1.5 or higher.
 - Executable permissions are not preserved properly for local files prior to
   Java 1.6.
 - SMB support may not work properly on non multi-language JRE.
