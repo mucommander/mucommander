@@ -58,7 +58,7 @@ public class ServerConnectDialog extends FocusDialog implements ActionListener, 
     private ServerPanel currentServerPanel;
 
     private JTabbedPane tabbedPane;
-    private Vector serverPanels;
+    private Vector serverPanels = new Vector();
 
     private JLabel urlLabel;
     private JCheckBox saveCredentialsCheckBox;
@@ -66,13 +66,7 @@ public class ServerConnectDialog extends FocusDialog implements ActionListener, 
     // Dialog's width has to be at least 320
     private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(360,0);	
 	
-    public final static int SMB_INDEX = 0;
-    public final static int FTP_INDEX = 1;
-    public final static int SFTP_INDEX = 2;
-    public final static int HTTP_INDEX = 3;
-    public final static int NFS_INDEX = 4;
-
-    private static int lastPanelIndex = SMB_INDEX;
+    private static Class lastPanelClass = SMBPanel.class;
 
 
     /**
@@ -81,7 +75,7 @@ public class ServerConnectDialog extends FocusDialog implements ActionListener, 
      * @param folderPanel the panel on which to change the current folder
      */
     public ServerConnectDialog(FolderPanel folderPanel) {
-        this(folderPanel, lastPanelIndex);
+        this(folderPanel, lastPanelClass);
     }
 	
 		
@@ -90,27 +84,27 @@ public class ServerConnectDialog extends FocusDialog implements ActionListener, 
      * The specified panel is selected when the dialog appears.
      *
      * @param folderPanel the panel on which to change the current folder
-     * @param panelIndex the panel to select
+     * @param selectPanelClass class of the ServerPanel to select
      */
-    public ServerConnectDialog(FolderPanel folderPanel, int panelIndex) {
+    public ServerConnectDialog(FolderPanel folderPanel, Class selectPanelClass) {
         super(folderPanel.getMainFrame(), Translator.get(com.mucommander.ui.action.ConnectToServerAction.class.getName()+".label"), folderPanel.getMainFrame());
         this.folderPanel = folderPanel;
-        lastPanelIndex = panelIndex;
+        lastPanelClass = selectPanelClass;
 
         MainFrame mainFrame = folderPanel.getMainFrame();
         Container contentPane = getContentPane();
 		
         this.tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-        this.serverPanels = new Vector();
 
-        addTab("SMB", new SMBPanel(this, mainFrame));
-        addTab("FTP", new FTPPanel(this, mainFrame));
-        addTab("SFTP", new SFTPPanel(this, mainFrame));
-        addTab("HTTP", new HTTPPanel(this, mainFrame));
-        addTab("NFS", new NFSPanel(this, mainFrame));
+        addTab("SMB", new SMBPanel(this, mainFrame), selectPanelClass);
+        addTab("FTP", new FTPPanel(this, mainFrame), selectPanelClass);
+        // SFTP support is not compatible with all version of the Java runtime
+        if(com.mucommander.file.impl.sftp.SFTPProtocolProvider.isAvailable())
+            addTab("SFTP", new SFTPPanel(this, mainFrame), selectPanelClass);
+        addTab("HTTP", new HTTPPanel(this, mainFrame), selectPanelClass);
+        addTab("NFS", new NFSPanel(this, mainFrame), selectPanelClass);
 
-        tabbedPane.setSelectedIndex(panelIndex);
-        currentServerPanel = (ServerPanel)serverPanels.elementAt(panelIndex);
+        currentServerPanel = getCurrentServerPanel();
 
         // Listen to tab change events
         tabbedPane.addChangeListener(this);
@@ -145,10 +139,14 @@ public class ServerConnectDialog extends FocusDialog implements ActionListener, 
     }
 
 
-    public void addTab(String title, ServerPanel serverPanel) {
+    public void addTab(String title, ServerPanel serverPanel, Class selectPanelClass) {
         JPanel northPanel = new JPanel(new BorderLayout());
         northPanel.add(serverPanel, BorderLayout.NORTH);
         tabbedPane.addTab(title, northPanel);
+
+        if(selectPanelClass.equals(serverPanel.getClass()))
+            tabbedPane.setSelectedComponent(northPanel);
+
         serverPanels.add(serverPanel);
     }
 
@@ -161,6 +159,10 @@ public class ServerConnectDialog extends FocusDialog implements ActionListener, 
         catch(MalformedURLException ex) {
             urlLabel.setText(" ");
         }
+    }
+
+    private ServerPanel getCurrentServerPanel() {
+        return (ServerPanel)serverPanels.elementAt(tabbedPane.getSelectedIndex());
     }
 	
 	
@@ -207,8 +209,8 @@ public class ServerConnectDialog extends FocusDialog implements ActionListener, 
     ///////////////////////////
 	
     public void stateChanged(ChangeEvent e) {
-        lastPanelIndex = tabbedPane.getSelectedIndex();
-        currentServerPanel = (ServerPanel)serverPanels.elementAt(lastPanelIndex);
+        currentServerPanel = getCurrentServerPanel();
+        lastPanelClass = currentServerPanel.getClass();
 
         // Enables 'save credentials' checkbox only if server panel/protocol uses credentials
         saveCredentialsCheckBox.setEnabled(currentServerPanel.usesCredentials());
