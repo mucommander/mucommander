@@ -37,7 +37,7 @@ import com.mucommander.text.Translator;
 import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.action.OpenLocationAction;
 import com.mucommander.ui.button.PopupButton;
-import com.mucommander.ui.dialog.server.ServerConnectDialog;
+import com.mucommander.ui.dialog.server.*;
 import com.mucommander.ui.event.LocationEvent;
 import com.mucommander.ui.event.LocationListener;
 import com.mucommander.ui.helper.MnemonicHelper;
@@ -320,11 +320,13 @@ public class DrivePopupButton extends PopupButton implements LocationListener, B
         popupMenu.add(new JSeparator());
 
         // Add 'connect to server' shortcuts
-        setMnemonic(popupMenu.add(new ServerConnectAction("SMB...", ServerConnectDialog.SMB_INDEX)), mnemonicHelper);
-        setMnemonic(popupMenu.add(new ServerConnectAction("FTP...", ServerConnectDialog.FTP_INDEX)), mnemonicHelper);
-        setMnemonic(popupMenu.add(new ServerConnectAction("SFTP...", ServerConnectDialog.SFTP_INDEX)), mnemonicHelper);
-        setMnemonic(popupMenu.add(new ServerConnectAction("HTTP...", ServerConnectDialog.HTTP_INDEX)), mnemonicHelper);
-        setMnemonic(popupMenu.add(new ServerConnectAction("NFS...", ServerConnectDialog.NFS_INDEX)), mnemonicHelper);
+        setMnemonic(popupMenu.add(new ServerConnectAction("SMB...", SMBPanel.class)), mnemonicHelper);
+        setMnemonic(popupMenu.add(new ServerConnectAction("FTP...", FTPPanel.class)), mnemonicHelper);
+        // SFTP support is not compatible with all version of the Java runtime
+        if(com.mucommander.file.impl.sftp.SFTPProtocolProvider.isAvailable())
+            setMnemonic(popupMenu.add(new ServerConnectAction("SFTP...", SFTPPanel.class)), mnemonicHelper);
+        setMnemonic(popupMenu.add(new ServerConnectAction("HTTP...", HTTPPanel.class)), mnemonicHelper);
+        setMnemonic(popupMenu.add(new ServerConnectAction("NFS...", NFSPanel.class)), mnemonicHelper);
 
         return popupMenu;
     }
@@ -395,15 +397,15 @@ public class DrivePopupButton extends PopupButton implements LocationListener, B
      * protocol.
      */
     private class ServerConnectAction extends AbstractAction {
-        private int serverPanelIndex;
+        private Class serverPanelClass;
 
-        private ServerConnectAction(String label, int serverPanelIndex) {
+        private ServerConnectAction(String label, Class serverPanelClass) {
             super(label);
-            this.serverPanelIndex = serverPanelIndex;
+            this.serverPanelClass = serverPanelClass;
         }
 
         public void actionPerformed(ActionEvent actionEvent) {
-            new ServerConnectDialog(folderPanel, serverPanelIndex).showDialog();
+            new ServerConnectDialog(folderPanel, serverPanelClass).showDialog();
         }
     }
 
