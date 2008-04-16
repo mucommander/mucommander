@@ -135,9 +135,12 @@ public class FileFactory {
         registerProtocol(FileProtocols.HTTP,      protocolProvider = new com.mucommander.file.impl.http.HTTPProtocolProvider());
         registerProtocol(FileProtocols.HTTPS,     protocolProvider);
         registerProtocol(FileProtocols.FTP,       new com.mucommander.file.impl.ftp.FTPProtocolProvider());
-        registerProtocol(FileProtocols.SFTP,      new com.mucommander.file.impl.sftp.SFTPProtocolProvider());
         registerProtocol(FileProtocols.NFS,       new com.mucommander.file.impl.nfs.NFSProtocolProvider());
         registerProtocol(FileProtocols.BOOKMARKS, new com.mucommander.bookmark.file.BookmarkProtocolProvider());
+        // SFTP support is not compatible with all version of the Java runtime
+        if(com.mucommander.file.impl.sftp.SFTPProtocolProvider.isAvailable())
+            registerProtocol(FileProtocols.SFTP,      new com.mucommander.file.impl.sftp.SFTPProtocolProvider());
+
 //        registerProtocol(FileProtocols.S3,        new com.mucommander.file.impl.s3.S3Provider());
 
         // Register built-in archive file formats, order for TarArchiveFile and GzipArchiveFile/Bzip2ArchiveFile is important:
