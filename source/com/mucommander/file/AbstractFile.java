@@ -292,12 +292,12 @@ public abstract class AbstractFile implements FilePermissions {
      * @return <code>true</code> if this file is a root folder
      */
     public boolean isRoot() {
-        String path = getAbsolutePath();
-
-        if(fileURL.getProtocol().equals(FileProtocols.FILE))
+        if(fileURL.getProtocol().equals(FileProtocols.FILE)) {
+            String path = getAbsolutePath();
             return OsFamilies.WINDOWS.isCurrent()?windowsDriveRootPattern.matcher(path).matches():path.equals("/");
+        }
         else
-            return path.equals("/");
+            return getURL().getPath().equals("/");
     }
 
 
