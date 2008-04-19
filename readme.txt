@@ -81,6 +81,7 @@ Lead developers:
 - Nicolas Rinaudo
 
 Code contributors:
+- Vassil Dichev
 - Mariusz Jakubowski
 - Xavier Martin
 - Alejandro Scandroli
@@ -113,7 +114,8 @@ What's new since v0.8.2 ?
 -------------------------
 
 New features:
-- 
+- Added support for SFTP public key authentication, contributed by
+  Vassil Dichev.
 
 Improvements:
 - 
