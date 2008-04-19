@@ -101,6 +101,9 @@ class TextEditorImpl implements ThemeListener, ActionListener {
             searchString = searchString.toLowerCase();            
             doSearch(0, true);
         }
+
+        // Request the focus on the text area which could be lost after the Find dialog was disposed
+        textArea.requestFocus();
 	}
 
     private void findNext() {
@@ -125,8 +128,8 @@ class TextEditorImpl implements ThemeListener, ActionListener {
 			pos = getTextLC().lastIndexOf(searchString, startPos);
 		}
 		if (pos >= 0) {
-			textArea.select(pos, pos + searchString.length());
-		} else {
+            textArea.select(pos, pos + searchString.length());
+        } else {
             // Beep when no match has been found.
             // The beep method is called from a separate thread because this method seems to lock until the beep has
             // been played entirely. If the 'Find next' shortcut is left pressed, a series of beeps will be played when

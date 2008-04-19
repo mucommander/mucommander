@@ -124,7 +124,8 @@ Localization:
 - 
 
 Bug fixes:
-- 
+- Fixed keyboard focus issues in the text editor after the 'Find' dialog has
+  been invoked, contributed by Karel Tomáš. 
 
 Known issues:
 - Korean, Simplified Chinese, Slovenian and Slovak translations are not 
