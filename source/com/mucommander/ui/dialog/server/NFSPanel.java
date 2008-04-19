@@ -29,6 +29,11 @@ import javax.swing.*;
 import java.net.MalformedURLException;
 
 
+/**
+ * This ServerPanel helps initiate NFS connections.
+ *
+ * @author Maxence Bernard
+ */
 public class NFSPanel extends ServerPanel {
 
     private JTextField serverField;

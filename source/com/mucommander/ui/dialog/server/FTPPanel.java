@@ -35,7 +35,7 @@ import java.net.MalformedURLException;
 
 
 /**
- * 
+ * This ServerPanel helps initiate FTP connections.
  *
  * @author Maxence Bernard
  */

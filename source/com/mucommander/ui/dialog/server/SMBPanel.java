@@ -30,7 +30,7 @@ import java.net.MalformedURLException;
 
 
 /**
- * 
+ * This ServerPanel helps initiate SMB connections.
  *
  * @author Maxence Bernard
  */

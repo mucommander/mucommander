@@ -29,7 +29,9 @@ import java.net.MalformedURLException;
 
 
 /**
- * 
+ * This abstract class represents a panel that helps the user initiate a connection to a servers using a certain file
+ * protocol. This class is agnostic with respect to the file protocol used -- subclasses implement a specific file 
+ * protocol.
  *
  * @author Maxence Bernard
  */
@@ -59,15 +61,24 @@ abstract class ServerPanel extends XAlignedComponentPanel {
             textField.getDocument().addDocumentListener(dialog);
     }
 
-	
+
+    ///////////////////////
+    // Abstract methoods //
+    ///////////////////////
+
     /** 
-     * Returns the current server URL represented by this panel, or null if it is not available.
-     * This method can be called at any time by ServerConnectDialog.
+     * Returns the current server URL represented by this panel, <code>null</code> if it is not available.
+     * This method may be called at any time by {@link ServerConnectDialog}.
+     *
+     * @return the current server URL represented by this panel, <code>null</code> if it is not available
+     * @throws MalformedURLException if an exception was thrown while creating the FileURL instance
      */
     abstract FileURL getServerURL() throws MalformedURLException;
 
     /**
-     * Returns <code>true</code> if this panel allows the user to specify credentials for the connection protocol.
+     * Returns <code>true</code> if this panel allows the user to specify credentials for the file protocol.
+     *
+     * @return <code>true</code> if this panel allows the user to specify credentials for the file protocol
      */
     abstract boolean usesCredentials();
     
