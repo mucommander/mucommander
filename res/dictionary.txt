@@ -712,7 +712,7 @@ creating_file:ES:Creando %1
 creating_file:zh_TW:正在建立 %1
 creating_file:IT:Creazione di %1 in corso
 creating_file:pt_BR:Criando %1
-# Translation missing (New!)
+# Translation missing (KO, zh_CN, SK, SL)
 
 
 
@@ -1002,7 +1002,7 @@ owner:ES:Propietario
 owner:zh_TW:擁有者
 owner:IT:Proprietario
 owner:pt_BR:Proprietário
-# Translation missing (New!)
+# Translation missing (KO, zh_CN, SL)
 
 
 
@@ -1033,7 +1033,7 @@ group:ES:Grupo
 group:zh_TW:群組
 group:IT:Gruppo
 group:pt_BR:Grupo
-# Translation missing (New!)
+# Translation missing (KO, zh_CN, SL)
 
 
 
@@ -1392,7 +1392,7 @@ generic_error:ES:Ha ocurrido un error mientras se realizaba la operación
 generic_error:zh_TW:當進行指定操作時, 發生錯誤.
 generic_error:IT:Errore durante l'esecuzione dell'operazione richiesta.
 generic_error:pt_BR:Ocorreu um erro durante a operação
-# Translation missing (New!)
+# Translation missing (KO, zh_CN, SK, SL)
 
 
 
@@ -1801,7 +1801,7 @@ integrity_check_error:ES:Comprobación de integridad fallida: fuente y destino n
 integrity_check_error:zh_TW:完整性檢查失敗: 來源及目的不一致
 integrity_check_error:IT:Verifica integrità fallita: sorgente e destinazione non corrispondono
 integrity_check_error:pt_BR:Falha na checagem de integridade: fonte e destino estão diferentes
-# Translation missing (New!)
+# Translation missing (KO, zh_CN, SK, SL, SV)
 
 
 
@@ -2046,7 +2046,7 @@ com.mucommander.ui.action.ExploreBookmarksAction.label:ES:Explorar favoritos
 com.mucommander.ui.action.ExploreBookmarksAction.label:zh_TW:檢視書籤
 com.mucommander.ui.action.ExploreBookmarksAction.label:IT:Esplora i bookmark
 com.mucommander.ui.action.ExploreBookmarksAction.label:pt_BR:Explorar favoritos
-# Translation missing (New!)
+# Translation missing (KO, zh_CN, SK, SL)
 
 
 
@@ -3064,7 +3064,7 @@ com.mucommander.ui.action.SortByOwnerAction.label:ES:Ordenar por Propietario
 com.mucommander.ui.action.SortByOwnerAction.label:zh_TW:依擁有者排序
 com.mucommander.ui.action.SortByOwnerAction.label:IT:Ordina per Propietario
 com.mucommander.ui.action.SortByOwnerAction.label:pt_BR:Ordenar pelo proprietário
-# Translation missing (New!)
+# Translation missing (KO, zh_CN, SL)
 
 
 
@@ -3097,7 +3097,7 @@ com.mucommander.ui.action.SortByGroupAction.label:ES:Ordenar por Grupo
 com.mucommander.ui.action.SortByGroupAction.label:zh_TW:依群組排序
 com.mucommander.ui.action.SortByGroupAction.label:IT:Ordina per Gruppo
 com.mucommander.ui.action.SortByGroupAction.label:pt_BR:Ordenar pelo grupo
-# Translation missing (New!)
+# Translation missing (KO, zh_CN, SL)
 
 
 
@@ -3369,7 +3369,7 @@ com.mucommander.ui.action.MarkExtensionAction.label:ES:Marcar extensión
 com.mucommander.ui.action.MarkExtensionAction.label:zh_TW:標記延伸檔名
 com.mucommander.ui.action.MarkExtensionAction.label:IT:Marca estensione
 com.mucommander.ui.action.MarkExtensionAction.label:pt_BR:Marcar extensão
-# Translation missing (New!)
+# Translation missing (KO, zh_CN, SK, SL)
 
 
 
@@ -3624,7 +3624,7 @@ com.mucommander.ui.action.OpenInOtherPanelAction.label:ES:Abrir en otro panel
 com.mucommander.ui.action.OpenInOtherPanelAction.label:zh_TW:開啟於其它面板
 com.mucommander.ui.action.OpenInOtherPanelAction.label:IT:Apri nell'altro pannello
 com.mucommander.ui.action.OpenInOtherPanelAction.label:pt_BR:Abrir em um novo painel
-# Translation missing (New!)
+# Translation missing (KO, zh_CN, SK, SL)
 
 
 
@@ -3655,7 +3655,7 @@ com.mucommander.ui.action.OpenInBothPanelsAction.label:ES:Abrir en ambos paneles
 com.mucommander.ui.action.OpenInBothPanelsAction.label:zh_TW:開啟於兩邊面板
 com.mucommander.ui.action.OpenInBothPanelsAction.label:IT:Apri in entrambi i pannelli
 com.mucommander.ui.action.OpenInBothPanelsAction.label:pt_BR:Abrir em ambos os paineis
-# Translation missing (New!)
+# Translation missing (KO, zh_CN, SK, SL)
 
 
 
@@ -4591,7 +4591,7 @@ com.mucommander.ui.action.CalculateChecksumAction.label:ES:Calcular checksum
 com.mucommander.ui.action.CalculateChecksumAction.label:zh_TW:計算驗證碼
 com.mucommander.ui.action.CalculateChecksumAction.label:IT:Calcola checksum
 com.mucommander.ui.action.CalculateChecksumAction.label:pt_BR:Calcular checksum
-# Translation missing (New!)
+# Translation missing (KO, zh_CN, SK, SL)
 
 
 
@@ -5179,7 +5179,7 @@ version_dialog.install_and_restart:ES:Instalar y reiniciar
 version_dialog.install_and_restart:zh_TW:安裝及重啟
 version_dialog.install_and_restart:IT:Installa e riparti
 version_dialog.install_and_restart:pt_BR:Instalar e reiniciar
-# Translation missing (New!)
+# Translation missing (KO, zh_CN, SK, SL)
 
 
 
@@ -5209,7 +5209,7 @@ version_dialog.preparing_for_update:ES:Preparando actualización...
 version_dialog.preparing_for_update:zh_TW:準備更新中...
 version_dialog.preparing_for_update:IT:Preparazione per aggiornamento...
 version_dialog.preparing_for_update:pt_BR:Preparando atualização...
-# Translation missing (New!)
+# Translation missing (KO, zh_CN, SK, SL)
 
 
 
@@ -5338,7 +5338,7 @@ destination_dialog.verify_integrity:ES:Verificando integridad de datos
 destination_dialog.verify_integrity:zh_TW:檢查資料完整性
 destination_dialog.verify_integrity:IT:Verifica integrità dei dati
 destination_dialog.verify_integrity:pt_BR:Verificando integridade dos dados
-# Translation missing (New!)
+# Translation missing (KO, zh_CN, SK, SL, SV)
 
 
 
@@ -5403,7 +5403,7 @@ rename_dialog.new_name:ES:Nuevo nombre
 rename_dialog.new_name:zh_TW:新名稱
 rename_dialog.new_name:IT:Nuovo nome
 rename_dialog.new_name:pt_BR:Novo nome
-# Translation missing (New!)
+# Translation missing (KO, zh_CN, SK, SL, SV)
 
 
 
@@ -6053,7 +6053,7 @@ mkfile_dialog.allocate_space:ES:Tamaño
 mkfile_dialog.allocate_space:zh_TW:分配空間
 mkfile_dialog.allocate_space:IT:Alloca spazio
 mkfile_dialog.allocate_space:pt_BR:Tamanho
-# Translation missing (New!)
+# Translation missing (KO, zh_CN, SK, SL, SV)
 
 
 
@@ -6893,7 +6893,7 @@ file_selection_dialog.matches_regexp:ES:Satisface la expresión regular
 file_selection_dialog.matches_regexp:zh_TW:符合正規表達式
 file_selection_dialog.matches_regexp:IT:Controlla la Regexp
 file_selection_dialog.matches_regexp:pt_BR:expressão regular
-# Translation missing (New!)
+# Translation missing (KO, zh_CN, SL)
 
 
 
@@ -7113,7 +7113,7 @@ progress_dialog.verifying_file:ES:Comprobando %1
 progress_dialog.verifying_file:zh_TW:正在檢查 %1
 progress_dialog.verifying_file:IT:Verificando %1
 progress_dialog.verifying_file:pt_BR:Verificando %1
-# Translation missing (New!)
+# Translation missing (KO, zh_CN, SK, SL)
 
 
 
@@ -7264,7 +7264,7 @@ calculate_checksum_dialog.checksum_algorithm:ES:Algoritmo de checksum
 calculate_checksum_dialog.checksum_algorithm:zh_TW:驗證碼演算法
 calculate_checksum_dialog.checksum_algorithm:IT:Algoritmo di Checksum
 calculate_checksum_dialog.checksum_algorithm:pt_BR:Algorítimo de checksum
-# Translation missing (New!)
+# Translation missing (KO, zh_CN, SK, SL)
 
 
 
@@ -7293,7 +7293,7 @@ calculate_checksum_dialog.temporary_file:ES:Fichero temporal
 calculate_checksum_dialog.temporary_file:zh_TW:暫存檔
 calculate_checksum_dialog.temporary_file:IT:File Temporaneo
 calculate_checksum_dialog.temporary_file:pt_BR:Arquivo temporário
-# Translation missing (New!)
+# Translation missing (KO, zh_CN, SK, SL)
 
 
 
@@ -7533,7 +7533,6 @@ server_connect_dialog.share:SV:Dela
 
 
 
-
 server_connect_dialog.username:EN:Username
 server_connect_dialog.username:FR:Nom d'utilisateur
 server_connect_dialog.username:DE:Benutzername
@@ -7700,6 +7699,41 @@ server_connect_dialog.nfs_version:PL:Wersja NFS
 server_connect_dialog.nfs_version:JA:NFS のバージョン
 server_connect_dialog.nfs_version:SV:NFS-version
 # Translation missing (KO)
+
+
+
+
+
+# Used in the SFTP panel for (optional) public key authentication.
+server_connect_dialog.private_key:EN:Private key
+server_connect_dialog.private_key:FR:Clé privée
+# Translation missing (New!)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Used in the SFTP panel for (optional) public key authentication. The 
+# passphrase is used to decypher the private key ; the meaning of 'passphrase'
+# is pretty much equivalent to that of 'password'.
+server_connect_dialog.passphrase:EN:Passphrase
+server_connect_dialog.passphrase:FR:Phrase secrète
+# Translation missing (New!)
+
+
+
+
+
+
 
 
 
@@ -8415,7 +8449,7 @@ text_viewer.binary_file_warning:ES:Parece ser un fichero binario
 text_viewer.binary_file_warning:zh_TW:此為二進位檔案
 text_viewer.binary_file_warning:IT:Questo sembra essere un file binario
 text_viewer.binary_file_warning:pt_BR:Parece ser um arquivo binário
-# Translation missing (New!)
+# Translation missing (KO, zh_CN, SK, SL, SV)
 
 
 
@@ -9517,7 +9551,7 @@ theme_editor.progress:zh_CN:进度
 theme_editor.progress:zh_TW:進度
 theme_editor.progress:RO:Progres
 theme_editor.progress:ES:Progreso
-theme_editOr.progress:pt_BR:Progresso
+theme_editor.progress:pt_BR:Progresso
 theme_editor.progress:SK:Priebeh
 theme_editor.progress:SL:Napredek
 theme_editor.progress:RU:Индикатор выполнения
@@ -9527,7 +9561,7 @@ theme_editor.progress:PL:Postęp
 theme_editor.progress:IT:Progresso
 theme_editor.progress:JA:進行状況
 theme_editor.progress:SV:Pågående
-# Translatikn missing (KO)
+# Translation missing (KO)
 
 
 
@@ -9537,7 +9571,7 @@ theme_editor.progress:SV:Pågående
 
 
 theme_editor.normal:EN:Normal
-theme_edit/r.normal:FR:Normal
+theme_editor.normal:FR:Normal
 theme_editor.normal:HU:Normál
 theme_editor.normal:NL:Normaal
 theme_editor.normal:zh_CN:正常
@@ -9549,7 +9583,7 @@ theme_editor.normal:SK:Bežný
 theme_editor.normal:SL:Normalno
 theme_editor.normal:RU:Обычный
 theme_editor.normal:DE:Normal
-theme_editor*normal:CS:Normální
+theme_editor.normal:CS:Normální
 theme_editor.normal:PL:Zwykły
 theme_editor.normal:IT:Normale
 theme_editor.normal:JA:通常
@@ -10645,7 +10679,7 @@ prefs_dialog.import_look_and_feel:ES:Importar look & feel
 prefs_dialog.import_look_and_feel:zh_TW:匯入 look & feel
 prefs_dialog.import_look_and_feel:IT:Importa look & feel
 prefs_dialog.import_look_and_feel:pt_BR:Importar aparência (look & feel)
-# Translation missing (New!)
+# Translation missing (KO, zh_CN, SK, SL)
 
 
 
@@ -10673,7 +10707,7 @@ prefs_dialog.no_look_and_feel:ES:No se encontró look & feel alguno.
 prefs_dialog.no_look_and_feel:zh_TW:找不到 look & feel.
 prefs_dialog.no_look_and_feel:IT:Nessun look & feel trovato.
 prefs_dialog.no_look_and_feel:pt_BR:Nenhuma aparência (look & feel) foi encontrada.
-# Translation missing (New!)
+# Translation missing (KO, zh_CN, SK, SL)
 
 
 
@@ -10884,7 +10918,7 @@ prefs_dialog.delete_look_and_feel:ES:Eliminar permanentemente el look & feel %1 
 prefs_dialog.delete_look_and_feel:zh_TW:永久刪除 look & feel %1 ?
 prefs_dialog.delete_look_and_feel:IT:Cancello definitivamente il look & feel %1 ?
 prefs_dialog.delete_look_and_feel:pt_BR:Remover completamente a aparência (look & feel) %1 ?
-# Translation missing (New!)
+# Translation missing (KO, zh_CN, SK, SL)
 
 
 
@@ -10964,7 +10998,7 @@ prefs_dialog.jar_file:ES:Fichero JAR
 prefs_dialog.jar_file:zh_TW:JAR 檔案
 prefs_dialog.jar_file:IT:File JAR
 prefs_dialog.jar_file:pt_BR:Arquivo JAR
-# Translation missing (New!)
+# Translation missing (KO, zh_CN, SK, SL)
 
 
 
