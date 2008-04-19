@@ -22,30 +22,41 @@ package com.mucommander.ui.dialog.server;
 import com.mucommander.auth.Credentials;
 import com.mucommander.file.FileProtocols;
 import com.mucommander.file.FileURL;
+import com.mucommander.file.impl.sftp.SFTPFile;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.main.MainFrame;
 
 import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.net.MalformedURLException;
 
 
+/**
+ * This ServerPanel helps initiate SFTP connections.
+ *
+ * @author Maxence Bernard, Vassil Dichev
+ */
 public class SFTPPanel extends ServerPanel {
 
     private JTextField serverField;
+    private JTextField privateKeyPathField;
     private JTextField usernameField;
     private JPasswordField passwordField;
     private JTextField initialDirField;
     private JTextField portField;
-	
+
     private static String lastServer = "";
+    private static String lastKeyPath = "";
     private static String lastUsername = "";
     // Not static so that it is not saved (for security reasons)
     private String lastPassword = "";
     private static String lastInitialDir = "/";
     private static int lastPort = 22;
-	
-	
-    SFTPPanel(ServerConnectDialog dialog, MainFrame mainFrame) {
+
+
+    SFTPPanel(ServerConnectDialog dialog, final MainFrame mainFrame) {
         super(dialog, mainFrame);
 
         // Server field, initialized to last server entered
@@ -63,14 +74,37 @@ public class SFTPPanel extends ServerPanel {
         // Password field, initialized to ""
         passwordField = new JPasswordField();
         addTextFieldListeners(passwordField, false);
-        addRow(Translator.get("password"), passwordField, 15);
+        addRow(Translator.get("password")+"/"+Translator.get("server_connect_dialog.passphrase"), passwordField, 15);
+
+        // Key file field, initialized to last file
+        JPanel privateKeyChooser = new JPanel(new BorderLayout());
+
+        privateKeyPathField = new JTextField(lastKeyPath);
+        privateKeyPathField.selectAll();
+        addTextFieldListeners(privateKeyPathField, false);
+        privateKeyChooser.add(privateKeyPathField, BorderLayout.CENTER);
+
+        JButton chooseFileButton = new JButton("...");
+        chooseFileButton.addActionListener(new ActionListener() {
+                JFileChooser fc = new JFileChooser(System.getProperty("user.home") + System.getProperty("file.separator") + ".ssh");
+                public void actionPerformed(ActionEvent e) {
+                    int returnVal = fc.showOpenDialog(mainFrame);
+                    if (returnVal == JFileChooser.APPROVE_OPTION) {
+                        privateKeyPathField.setText(fc.getSelectedFile().getAbsolutePath());
+                    }
+                }
+            }
+        );
+        privateKeyChooser.add(chooseFileButton, BorderLayout.EAST);
+
+        addRow(Translator.get("server_connect_dialog.private_key"), privateKeyChooser, 15);
 
         // Initial directory field, initialized to "/"
         initialDirField = new JTextField(lastInitialDir);
         initialDirField.selectAll();
         addTextFieldListeners(initialDirField, true);
         addRow(Translator.get("server_connect_dialog.initial_dir"), initialDirField, 5);
-	
+
         // Port field, initialized to last port (default is 22)
         portField = new JTextField(""+lastPort, 5);
         portField.selectAll();
@@ -78,8 +112,9 @@ public class SFTPPanel extends ServerPanel {
         addRow(Translator.get("server_connect_dialog.port"), portField, 15);
     }
 
-	
+
     private void updateValues() {
+        lastKeyPath = privateKeyPathField.getText();
         lastServer = serverField.getText();
         lastUsername = usernameField.getText();
         lastPassword = new String(passwordField.getPassword());
@@ -93,20 +128,21 @@ public class SFTPPanel extends ServerPanel {
             // Port is a malformed number
         }
     }
-	
-	
+
+
     ////////////////////////////////
     // ServerPanel implementation //
     ////////////////////////////////
-	
+
     FileURL getServerURL() throws MalformedURLException {
         updateValues();
         if(!lastInitialDir.startsWith("/"))
             lastInitialDir = "/"+lastInitialDir;
-			
+
         FileURL url = new FileURL(FileProtocols.SFTP+"://"+lastServer+lastInitialDir);
 
         url.setCredentials(new Credentials(lastUsername, lastPassword));
+        if (!"".equals(lastKeyPath.trim())) url.setProperty(SFTPFile.PRIVATE_KEY_PATH_PROPERTY_NAME, lastKeyPath);
 
         // Set port
         if(lastPort>0 && lastPort!=22)

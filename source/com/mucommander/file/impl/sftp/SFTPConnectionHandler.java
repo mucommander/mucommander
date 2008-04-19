@@ -28,14 +28,18 @@ import com.sshtools.j2ssh.SshClient;
 import com.sshtools.j2ssh.authentication.*;
 import com.sshtools.j2ssh.sftp.SftpSubsystemClient;
 import com.sshtools.j2ssh.transport.IgnoreHostKeyVerification;
+import com.sshtools.j2ssh.transport.publickey.InvalidSshKeyException;
+import com.sshtools.j2ssh.transport.publickey.SshPrivateKey;
+import com.sshtools.j2ssh.transport.publickey.SshPrivateKeyFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
 /**
  * Handles connections to SFTP servers.
  *
- * @author Maxence Bernard
+ * @author Maxence Bernard, Vassil Dichev
  */
 class SFTPConnectionHandler extends ConnectionHandler {
 
@@ -96,11 +100,35 @@ class SFTPConnectionHandler extends ConnectionHandler {
 
             if(Debug.ON) Debug.trace("getAvailableAuthMethods()="+sshClient.getAvailableAuthMethods(credentials.getLogin()));
 
-            SshAuthenticationClient authClient;
+            SshAuthenticationClient authClient = null;
+            String privateKeyPath = realm.getProperty(SFTPFile.PRIVATE_KEY_PATH_PROPERTY_NAME);
 
+            // Try public key first. Don't try other methods if there's a key file defined
+            if (authMethods.contains(PUBLIC_KEY_AUTH_METHOD) && privateKeyPath != null) {
+                if(Debug.ON) Debug.trace("Using "+PUBLIC_KEY_AUTH_METHOD+" authentication method");
+
+                PublicKeyAuthenticationClient pk = new PublicKeyAuthenticationClient();
+                pk.setUsername(credentials.getLogin());
+
+                SshPrivateKey key = null;
+                // Throw an AuthException if problems with private key file
+                try {
+                    SshPrivateKeyFile file = SshPrivateKeyFile.parse(new File(privateKeyPath));
+                    key = file.toPrivateKey(credentials.getPassword());
+                } catch (InvalidSshKeyException iske) {
+                    throw new AuthException(realm, "Invalid private key file or passphrase");  // Todo: localize this entry
+                } catch (IOException ioe) {
+                    throw new AuthException(realm, "Error reading private key file");  // Todo: localize this entry
+                }
+
+                pk.setKey(key);
+
+                authClient = pk;
+            }
             // Use 'keyboard-interactive' method only if 'password' auth method is not available and
             // 'keyboard-interactive' is supported by the server
-            if(!authMethods.contains(PASSWORD_AUTH_METHOD) && authMethods.contains(KEYBOARD_INTERACTIVE_AUTH_METHOD)) {
+            else if(!authMethods.contains(PASSWORD_AUTH_METHOD) && authMethods.contains(KEYBOARD_INTERACTIVE_AUTH_METHOD) && 
+                    privateKeyPath == null) {
                 if(Debug.ON) Debug.trace("Using "+KEYBOARD_INTERACTIVE_AUTH_METHOD+" authentication method");
 
                 KBIAuthenticationClient kbi = new KBIAuthenticationClient();
@@ -126,7 +154,7 @@ class SFTPConnectionHandler extends ConnectionHandler {
                 authClient = kbi;
             }
             // Default to 'password' method, even if server didn't report as being supported
-            else {
+            else if (privateKeyPath == null) {
                 if(Debug.ON) Debug.trace("Using "+PASSWORD_AUTH_METHOD+" authentication method");
 
                 PasswordAuthenticationClient pwd = new PasswordAuthenticationClient();

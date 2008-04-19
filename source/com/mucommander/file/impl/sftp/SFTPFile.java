@@ -66,6 +66,10 @@ import java.util.List;
  */
 public class SFTPFile extends AbstractFile {
 
+    /** Name of the property that holds the path to a private key. This property is optional; if it is set, private key
+     * authentication is used. */
+    public final static String PRIVATE_KEY_PATH_PROPERTY_NAME = "privateKeyPath";
+
     /** The absolute path to the file on the remote server, without the file protocol */
     protected String absPath;
 
