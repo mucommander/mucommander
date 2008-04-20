@@ -566,11 +566,11 @@ public class SFTPFile extends AbstractFile {
     }
 
     public int getPermissionGetMask() {
-        return 511;     // Full permission get support (777 octal)
+        return FULL_PERMISSIONS;     // Full permission get support (777 octal)
     }
 
     public int getPermissionSetMask() {
-        return 511;     // Full permission set support (777 octal)
+        return FULL_PERMISSIONS;     // Full permission set support (777 octal)
     }
 
     /**
@@ -874,11 +874,11 @@ public class SFTPFile extends AbstractFile {
         private int getPermissions() {
             checkForExpiration();
 
-            return attrs.getPermissions().intValue() & 511;
+            return attrs.getPermissions().intValue() & FULL_PERMISSIONS;
         }
 
         private void setPermissions(int permissions) {
-            attrs.setPermissions(new UnsignedInteger32((attrs.getPermissions().intValue() & ~511) | (permissions & 511)));
+            attrs.setPermissions(new UnsignedInteger32((attrs.getPermissions().intValue() & ~FULL_PERMISSIONS) | (permissions & FULL_PERMISSIONS)));
         }
 
         private String getOwner() {

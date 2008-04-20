@@ -105,7 +105,7 @@ public class TarArchiveFile extends AbstractROArchiveFile {
     private ArchiveEntry createArchiveEntry(org.apache.tools.tar.TarEntry tarEntry) {
         ArchiveEntry entry = new ArchiveEntry(tarEntry.getName(), tarEntry.isDirectory(), tarEntry.getModTime().getTime(), tarEntry.getSize());
         entry.setPermissions(tarEntry.getMode());
-        entry.setPermissionMask(511);     // Full UNIX permissions (777 octal)
+        entry.setPermissionMask(FULL_PERMISSIONS);     // Full UNIX permissions (777 octal)
         entry.setOwner(tarEntry.getUserName());
         entry.setGroup(tarEntry.getGroupName());
         return entry;

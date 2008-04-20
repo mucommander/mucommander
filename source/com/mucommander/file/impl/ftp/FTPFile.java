@@ -680,15 +680,15 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
     }
 
     public int getPermissionGetMask() {
-        return 511;     // Full get permission support (777 octal)
+        return FULL_PERMISSIONS;     // Full get permission support (777 octal)
     }
 
     public int getPermissionSetMask() {
         // Return true if the server supports the 'site chmod' command, not all servers do.
         // Do not lock the connection handler, not needed.
         return ((FTPConnectionHandler)ConnectionPool.getConnectionHandler(this, fileURL, false)).chmodCommandSupported
-                ?511    // Full permission support (777 octal)
-                :0;     // No set permission support
+                ?FULL_PERMISSIONS    // Full permission support (777 octal)
+                :0;                  // No set permission support
     }
 
 
