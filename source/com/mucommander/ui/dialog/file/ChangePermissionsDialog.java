@@ -76,10 +76,10 @@ public class ChangePermissionsDialog extends JobDialog implements FilePermission
         permCheckBoxes = new JCheckBox[5][5];
         JCheckBox permCheckBox;
 
-        AbstractFile destFile = files.size()==1?files.fileAt(0):files.getBaseFolder();
-        int permSetMask = destFile.getPermissionSetMask();
+        AbstractFile firstFile = files.fileAt(0);
+        int permSetMask = firstFile.getPermissionSetMask();
         boolean canSetPermission = permSetMask!=0;
-        int defaultPerms = destFile.getPermissions();
+        int defaultPerms = firstFile.getPermissions();
 
         gridPanel.add(new JLabel());
         gridPanel.add(new JLabel(Translator.get("permissions.read")));
