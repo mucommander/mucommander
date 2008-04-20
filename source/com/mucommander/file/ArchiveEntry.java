@@ -40,10 +40,10 @@ public class ArchiveEntry {
     protected boolean isDirectory;
 
     /** This entry's permissions */
-    protected int permissions = 292;        // r--r--r--
+    protected int permissions;
 
     /** This entry's permission mask */
-    protected int permissionMask = 0;       // permissions should not be taken into acount
+    protected int permissionMask = 0;       // by default, permissions should not be taken into acount
 
     /** This entry's owner */
     protected String owner;
@@ -85,6 +85,7 @@ public class ArchiveEntry {
         this.date = date;
         this.size = size;
         this.isDirectory = isDirectory;
+        this.permissions = isDirectory?FilePermissions.DEFAULT_FILE_PERMISSIONS:FilePermissions.DEFAULT_DIRECTORY_PERMISSIONS;
     }
 
 
