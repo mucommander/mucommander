@@ -46,4 +46,7 @@ public interface FilePermissions {
     /** Default directory permissions used by {@link AbstractFile#importPermissions(AbstractFile)} for permission bits that
      * are not available in the source: rwxr-xr-x (755 octal) */
     public final static int DEFAULT_DIRECTORY_PERMISSIONS = 493;
+
+    /** Full read/write/execute permissions for user/group/other (777 octal) */
+    public final static int FULL_PERMISSIONS = 511;
 }
