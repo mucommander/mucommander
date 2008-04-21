@@ -520,6 +520,52 @@ public class ZipFile implements ZipConstants {
 
 
     /**
+     * Updates the date and permissions of the entry designated by the given ZipEntry object. The specified entry must
+     * exist in this Zip file.
+     *
+     * <p>The underlying {@link AbstractFile} must have random write access. If not, an <code>IOException</code> will be
+     * thrown.</p>
+     *
+     * @param entry the entry to update
+     * @throws IOException if the underlying AbstractFile does not have random write access or if an I/O error occurred
+     */
+    public void updateEntry(ZipEntry entry) throws IOException {
+        try {
+            // Open the zip file for write
+            openWrite();
+
+            ZipEntryInfo entryInfo = entry.getEntryInfo();
+
+            /* Local file header */
+
+            // Update time and date
+            raos.seek(entryInfo.headerOffset+10);
+            raos.write(ZipLong.getBytes(entry.getDosTime(), zipBuffer.longBuffer));
+
+            // Note: external attributes are not present in the local file header
+
+            /* Central file header */
+
+            // Update 'Version made by', platform might have changed if the Zip didn't contain Unix permissions
+            raos.seek(entryInfo.centralHeaderOffset+4);
+            ZipOutputStream.writeVersionMadeBy(entry, raos, zipBuffer);
+
+            // Update time and date
+            raos.seek(entryInfo.centralHeaderOffset+12);
+            raos.write(ZipLong.getBytes(entry.getDosTime(), zipBuffer.longBuffer));
+
+            // Update 'external attributes' for permissions
+            raos.seek(entryInfo.centralHeaderOffset+38);
+            raos.write(ZipLong.getBytes(entry.getExternalAttributes(), zipBuffer.longBuffer));
+        }
+        finally {
+            closeWrite();
+        }
+
+    }
+
+    
+    /**
      * Removes free space fragments from this zip file, thus reducing the size of the zip file. If this zip file does
      * not contain any free space fragments, the zip file is not modified.
      *
