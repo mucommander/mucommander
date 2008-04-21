@@ -29,11 +29,8 @@ import java.io.IOException;
  * as XML.
  *
  * <p><b>Disclaimer</b>: this obviously is weak encryption at most, the key used being static and public, and XOR
- * being easy to crack. This doesn't aim or pretend to be anything more than an easy way to scramble text
- * without requiring a user-generated password.
- *
- * <p>Note: SHA1/DES/MD5/... will probably be used instead of XOR whenever the support for Java 1.3 has been
- * dropped, Java Cryptography Extension (JCE) being available only on Java 1.4 and up.
+ * encryption being easy to crack. This doesn't aim or pretend to be anything more than a way to scramble text
+ * without requiring a master password in the application.</p>
  *
  * @author Maxence Bernard
  */
@@ -41,7 +38,7 @@ public class XORCipher {
 
 
     /** Long enough key (256 bytes) to avoid having too much redundancy in small text strings. */
-    public final static char NOT_SO_PRIVATE_KEY[] = {
+    public final static int NOT_SO_PRIVATE_KEY[] = {
         161, 220, 156, 76, 177, 174, 56, 37, 98, 93, 224, 19, 160, 95, 69, 140,
         91, 138, 33, 114, 248, 57, 179, 17, 54, 172, 249, 58, 26, 181, 167, 231,
         241, 185, 218, 174, 37, 102, 100, 26, 16, 214, 119, 29, 118, 151, 135, 175,
@@ -54,23 +51,21 @@ public class XORCipher {
 
 
     /**
-     * Cyphers the given String using XOR symmetrical encryption with a static hard-coded key.
+     * Cyphers the given byte array using XOR symmetrical encryption with a static hard-coded key.
      *
-     * @param s a String to encrypt/decrypt
-     * @return the encrypted/decrypted String
+     * @param b the byte array to encrypt/decrypt
+     * @return the encrypted/decrypted byte array
      */
-    private static String xor(String s) {
-        StringBuffer sb = new StringBuffer();
-
-        int len = s.length();
+    private static byte[] xor(byte[] b) {
+        int len = b.length;
         int keyLen = NOT_SO_PRIVATE_KEY.length;
 
+        byte[] result = new byte[len];
         for(int i=0; i<len; i++)
-            sb.append((char)(s.charAt(i)^NOT_SO_PRIVATE_KEY[i%keyLen]));
+            result[i] = (byte)(b[i]^NOT_SO_PRIVATE_KEY[i%keyLen]);
 
-        return(sb.toString());
+        return result;
     }
-
 
     /**
      * Encrypts the given String using XOR cipher followed by Base64 encoding. The returned String will only contain
@@ -80,7 +75,13 @@ public class XORCipher {
      * @return a XOR-Base64 encrypted String
      */
     public static String encryptXORBase64(String s) {
-        return Base64Encoder.encode(xor(s));
+        // Todo:
+        // Important: String.getBytes() returns bytes in the platform's default encoding, which might vary across
+        // platforms. This may potentially cause problems when decrypting a string on a different platform from the one
+        // which served to encrypt it.
+        // It is however too late to change as it could prevent existing encrypted strings (credentials file) from being
+        // loaded after the application is updated.
+        return Base64Encoder.encode(xor(s.getBytes()));
     }
 
 
@@ -93,6 +94,12 @@ public class XORCipher {
      * @throws IOException if the given String is not properly Base64-encoded
      */
     public static String decryptXORBase64(String s) throws IOException {
-        return xor(Base64Decoder.decode(s));
+        // Todo:
+        // Important: new String() creates a string using the platform's default encoding, which might vary across
+        // platforms. This may potentially cause problems when decrypting a string on a different platform from the one
+        // which served to encrypt it.
+        // It is however too late to change as it could prevent existing encrypted strings (credentials file) from being
+        // loaded after the application is updated.
+        return new String(xor(Base64Decoder.decodeAsBytes(s)));
     }
 }
