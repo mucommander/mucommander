@@ -1400,7 +1400,7 @@ public abstract class AbstractFile implements FilePermissions {
         ChecksumInputStream cin = new ChecksumInputStream(in, messageDigest);
         try {
             StreamUtils.readUntilEOF(cin);
-            return cin.getChecksum();
+            return cin.getChecksumString();
         }
         catch(IOException e) {
             throw new FileTransferException(FileTransferException.READING_SOURCE);

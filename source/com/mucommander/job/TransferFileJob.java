@@ -185,7 +185,7 @@ public abstract class TransferFileJob extends FileJob {
             if(in!=null && (in instanceof ChecksumInputStream)) {
                 // The file was copied with a ChecksumInputStream, the checksum is already calculated, simply
                 // retrieve it
-                sourceChecksum = ((ChecksumInputStream)in).getChecksum();
+                sourceChecksum = ((ChecksumInputStream)in).getChecksumString();
             }
             else {
                 // The file was copied using AbstractFile#copyTo(), or the transfer was resumed:
