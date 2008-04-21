@@ -20,10 +20,11 @@ package com.mucommander.io.base64;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 
 /**
- * <code>Base64Encoder</code> provides a convenience method, {@link #encode(String)}, which allows to easily
- * base64-encode a String using {@link Base64OutputStream} under the hood.
+ * <code>Base64Encoder</code> provides methods to ease the encoding of strings and byte arrays in base64.
+ * The {@link Base64OutputStream} class is used under the hood to perform the actual base64 encoding.
  *
  * @see Base64OutputStream
  * @author Maxence Bernard
@@ -31,20 +32,18 @@ import java.io.IOException;
 public abstract class Base64Encoder {
 
     /**
-     * Base64-encodes the given String and returns the encoded String.
+     * Base64-encodes the given byte array and returns the result. The specified encoding is used for tranforming
+     * the string into bytes.
      *
-     * @param s the String to encode as base64
+     * @param b the String to base64-encode
      * @return the base64-encoded String
      */
-    public static String encode(String s) {
+    public static String encode(byte[] b) {
         ByteArrayOutputStream bout = new ByteArrayOutputStream();
         Base64OutputStream out64 = new Base64OutputStream(bout, false);
 
         try {
-            int len = s.length();
-            for(int i=0; i<len; i++)
-                out64.write(s.charAt(i));
-
+            out64.write(b);
             out64.writePadding();
 
             return new String(bout.toByteArray());
@@ -55,7 +54,38 @@ public abstract class Base64Encoder {
         }
         finally {
             try { out64.close(); }
-            catch(IOException e) {}
+            catch(IOException e) {
+                // Should never happen
+            }
         }
+    }
+
+    /**
+     * Shorthand for {@link #encode(String, String)} invoked with UTF-8 encoding.
+     *
+     * @param s the String to base64-encode
+     * @return the base64-encoded String
+     */
+    public static String encode(String s) {
+        try {
+            return encode(s, "UTF-8");
+        }
+        catch(UnsupportedEncodingException e) {
+            // Should never happen, UTF-8 is necessarily supported by the Java runtime
+            return null;
+        }
+    }
+
+    /**
+     * Base64-encodes the given String and returns result. The specified encoding is used for tranforming
+     * the string into bytes.
+     *
+     * @param s the String to base64-encode
+     * @param encoding the character encoding to use for transforming the string into bytes
+     * @return the base64-encoded String
+     * @throws UnsupportedEncodingException if the specified encoding is not supported by the Java runtime
+     */
+    public static String encode(String s, String encoding) throws UnsupportedEncodingException {
+        return encode(s.getBytes(encoding));
     }
 }

@@ -18,12 +18,11 @@
 
 package com.mucommander.io.base64;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
+import java.io.*;
 
 /**
- * <code>Base64Decoder</code> provides a convenience method, {@link #decode(String)}, which allows to easily decode
- * a base64-encoded String using {@link Base64InputStream} under the hood.
+ * <code>Base64Decoder</code> provides methods to ease the decoding of strings and byte arrays in base64.
+ * The {@link Base64InputStream} class is used under the hood to perform the actual base64 decoding.
  *
  * @see Base64InputStream
  * @author Maxence Bernard
@@ -31,28 +30,71 @@ import java.io.IOException;
 public abstract class Base64Decoder {
 
     /**
-     * Decodes the given Base64-encoded String and returns it decoded.
-     * Throws an <code>IOException</code> if the given String wasn't properly Base64-encoded, or if an
-     * <code>IOException</code> occurred while reading the underlying InputStream.
+     * Decodes the given Base64-encoded string and returns the result as a byte array.
+     * Throws an <code>IOException</code> if the String isn't properly Base64-encoded.
      *
-     * @param  s a Base64-encoded String
-     * @return the decoded String
-     * @throws java.io.IOException if the given String wasn't properly Base64-encoded, or if an IOException occurred 
-     * while accessing the underlying InputStream.
+     * @param s a Base64-encoded String
+     * @return the decoded string as a byte array
+     * @throws java.io.IOException if the given String isn't properly Base64-encoded
      */
-    public static String decode(String s) throws IOException {
-        Base64InputStream in64 = new Base64InputStream(new ByteArrayInputStream(s.getBytes()));
+    public static byte[] decodeAsBytes(String s) throws IOException {
+        byte[] b = s.getBytes();
+
+        if(b.length%4 != 0) {
+            // Base64 encoded data must come in a multiple of 4 bytes, throw an IOException if it's not the case
+            throw new IOException("Byte array length is not a multiple of 4");
+        }
+
+        Base64InputStream bin = new Base64InputStream(new ByteArrayInputStream(b));
+        ByteArrayOutputStream bout = new ByteArrayOutputStream();
+        int i;
 
         try {
-            StringBuffer sb = new StringBuffer();
-            int i;
-            while((i=in64.read())!=-1)
+            while((i=bin.read())!=-1)
+                bout.write(i);
+
+            return bout.toByteArray();
+        }
+        finally {
+            bin.close();
+        }
+    }
+
+    /**
+     * Decodes the given Base64-encoded string and returns the result as a String. The specified encoding is used for
+     * transforming the decoded bytes into a String. Throws an <code>IOException</code> if the String isn't properly
+     * Base64-encoded, or if the encoding is not supported by the Java runtime.
+     *
+     * @param s a Base64-encoded String
+     * @param encoding the character encoding to use for transforming the decoded bytes into a String 
+     * @return the decoded String
+     * @throws UnsupportedEncodingException if the specified encoding is not supported by the Java runtime
+     * @throws java.io.IOException if the given String isn't properly Base64-encoded
+     */
+    public static String decode(String s, String encoding) throws UnsupportedEncodingException, IOException {
+        InputStreamReader isr = new InputStreamReader(new ByteArrayInputStream(decodeAsBytes(s)), encoding);
+        StringBuffer sb = new StringBuffer();
+        int i;
+
+        try {
+            while((i=isr.read())!=-1)
                 sb.append((char)i);
 
             return sb.toString();
         }
         finally {
-            in64.close();
+            isr.close();
         }
+    }
+
+    /**
+     * Shorthand for {@link #decode(String, String)} invoked with UTF-8 encoding.
+     *
+     * @param s a Base64-encoded String
+     * @return the decoded String
+     * @throws java.io.IOException if the given String isn't properly Base64-encoded
+     */
+    public static String decode(String s) throws IOException {
+        return decode(s, "UTF-8");
     }
 }
