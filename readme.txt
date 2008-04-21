@@ -118,8 +118,12 @@ New features:
   Vassil Dichev.
 
 Improvements:
-- Added support for Unix permissions in Zip files: entries' permissions are now
-  properly retrieved from and persisted into the archive.
+- Added Unix permissions support to Zip archives: entries' permissions are
+  now properly retrieved from and persisted into the archive, and can be changed
+  using the 'Change permissions' dialog.
+- When transferring files into a Zip archive, the source files' date is now 
+  properly preserved. The file entries' date can also be changed using the
+  'Change date' dialog.
 
 Localization:
 - 
