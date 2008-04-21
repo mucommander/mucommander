@@ -75,6 +75,9 @@ class ZipArchiver extends Archiver {
             entry.setSize(size);
 
         entry.setTime(file.getDate());
+        entry.setUnixMode(AbstractFile.padPermissions(file, isDirectory
+                    ?AbstractFile.DEFAULT_DIRECTORY_PERMISSIONS
+                    :AbstractFile.DEFAULT_FILE_PERMISSIONS));
 
         // Add the entry
         zos.putNextEntry(entry);
