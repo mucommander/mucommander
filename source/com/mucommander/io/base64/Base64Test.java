@@ -31,17 +31,32 @@ import java.util.Random;
 public class Base64Test extends TestCase {
 
     /**
-     * Tests base64 encoding and decoding on a known sequence, and ensures that the result are as expected.
+     * Tests base64 encoding and decoding on known sequences, ensuring that base 64 encoding and decoding produces
+     * the expected results.
      *
      * @throws IOException should not happen
      */
-    public void testKnownSequence() throws IOException {
-        String decodedSequence = "The quick brown fox jumps over the lazy dog.";
-        String encodedSequence = "VGhlIHF1aWNrIGJyb3duIGZveCBqdW1wcyBvdmVyIHRoZSBsYXp5IGRvZy4=";
+    public void testKnownSequences() throws IOException {
+        // On an ASCII sequence
+        testKnownSequence("The quick brown fox jumps over the lazy dog.", "VGhlIHF1aWNrIGJyb3duIGZveCBqdW1wcyBvdmVyIHRoZSBsYXp5IGRvZy4=");
 
-        assertEquals(encodedSequence, Base64Encoder.encode(decodedSequence));
-        assertEquals(decodedSequence, Base64Decoder.decode(encodedSequence));
+        // On a Unicode sequence. Note that the string has been encoded using UTF-8 bytes.
+        testKnownSequence("どうもありがとうミスターロボット", "44Gp44GG44KC44GC44KK44GM44Go44GG44Of44K544K/44O844Ot44Oc44OD44OI");
     }
+
+    /**
+     * Tests base64 encoding and decoding on a known sequence, ensuring that base 64 encoding and decoding produces
+     * the expected results.
+     *
+     * @param decodedSequence the base64-decoded string
+     * @param encodedSequence the base64-encoding string
+     * @throws IOException should not happen
+     */
+    private void testKnownSequence(String decodedSequence, String encodedSequence) throws IOException {
+        assertEquals(encodedSequence, Base64Encoder.encode(decodedSequence, "UTF-8"));
+        assertEquals(decodedSequence, Base64Decoder.decode(encodedSequence, "UTF-8"));
+    }
+
 
     /**
      * Successively encodes and decodes randomly-generated strings of varying length and content, and verifies that
@@ -68,7 +83,7 @@ public class Base64Test extends TestCase {
 
             s = sb.toString();
 
-            assertEquals(s, Base64Decoder.decode(Base64Encoder.encode(s)));
+            assertEquals(s, Base64Decoder.decode(Base64Encoder.encode(s, "UTF-8")));
         }
     }
 
