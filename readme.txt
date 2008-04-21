@@ -118,7 +118,8 @@ New features:
   Vassil Dichev.
 
 Improvements:
-- 
+- Added support for Unix permissions in Zip files: entries' permissions are now
+  properly retrieved from and persisted into the archive.
 
 Localization:
 - 
