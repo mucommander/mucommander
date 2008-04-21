@@ -158,7 +158,7 @@ public abstract class AbstractFileTestCase extends TestCase implements FilePermi
             assertTrue(file.exists());
             assertEquals(length, file.getSize());
 
-            return md5Out.getChecksum();
+            return md5Out.getChecksumString();
         }
         finally {
             md5Out.close();
@@ -575,7 +575,7 @@ public abstract class AbstractFileTestCase extends TestCase implements FilePermi
         writeRandomData(md5Out, 100000, 1000);
         md5Out.close();
 
-        assertEquals(md5Out.getChecksum(), calculateMd5(tempFile));
+        assertEquals(md5Out.getChecksumString(), calculateMd5(tempFile));
 
         // Test path resolution on a directory
 
@@ -1128,7 +1128,7 @@ public abstract class AbstractFileTestCase extends TestCase implements FilePermi
         writeRandomData(md5Out, 100000, 1000);
         md5Out.close();
 
-        assertEquals(md5Out.getChecksum(), calculateMd5(tempFile));
+        assertEquals(md5Out.getChecksumString(), calculateMd5(tempFile));
     }
 
     /**
@@ -1155,7 +1155,7 @@ public abstract class AbstractFileTestCase extends TestCase implements FilePermi
             writeRandomData(md5Out, 100000, 1000);
             md5Out.close();
 
-            assertEquals(md5Out.getChecksum(), calculateMd5(tempFile));
+            assertEquals(md5Out.getChecksumString(), calculateMd5(tempFile));
             tempFile.delete();
 
             // Test getOffset(), seek(), getLength() and setLength()
