@@ -412,12 +412,13 @@ public class ZipOutputStream extends OutputStream implements ZipConstants {
     /**
      * Writes the data descriptor, using the CRC, compressed and uncompressed size attributes contained in the
      * given ZipEntry.
+     * The length of the field is returned, it is always 16 bytes.
      *
      * @param ze the entry for which to write the data descriptor
-     * @param out the OutputStream to write the data descriptor to
+     * @param out the OutputStream where to write the data descriptor to
      * @param zipBuffer a ZipBuffer instance used to convert integer values to Zip variants
+     * @return the number of bytes that were written, i.e. the size of the data descriptor (16 bytes)
      * @throws IOException if an I/O error occurred
-     * @return the number of bytes that were written, i.e. the size of the data descriptor
      */
     protected static long writeDataDescriptor(ZipEntry ze, OutputStream out, ZipBuffer zipBuffer) throws IOException {
         out.write(DD_SIG);
@@ -426,6 +427,22 @@ public class ZipOutputStream extends OutputStream implements ZipConstants {
         out.write(ZipLong.getBytes(ze.getSize(), zipBuffer.longBuffer));
 
         return 16;
+    }
+
+    /**
+     * Writes central file header's 'Version made by' field, using the platform contained in the given ZipEntry.
+     * The length of the field is returned, it is always 2 bytes.
+     *
+     * @param ze the entry for which to write the 'Version made by' field
+     * @param out the OutputStream where to write the field
+     * @param zipBuffer a ZipBuffer instance used to convert integer values to Zip variants
+     * @return the number of bytes that were written, i.e. the size of the 'Version made by' field (2 bytes)
+     * @throws IOException if an I/O error occurred
+     */
+    protected static long writeVersionMadeBy(ZipEntry ze, OutputStream out, ZipBuffer zipBuffer) throws IOException {
+        out.write(ZipShort.getBytes((ze.getPlatform() << 8) | 20, zipBuffer.shortBuffer));
+
+        return 2;
     }
 
     /**
@@ -445,7 +462,7 @@ public class ZipOutputStream extends OutputStream implements ZipConstants {
         // nbWritten += 4;
 
         // version made by
-        out.write(ZipShort.getBytes((ze.getPlatform() << 8) | 20, zipBuffer.shortBuffer));
+        writeVersionMadeBy(ze, out, zipBuffer);
         // nbWritten += 2;
 
         // version needed to extract
