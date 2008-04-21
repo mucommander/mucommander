@@ -71,23 +71,33 @@ public abstract class AbstractRWArchiveFile extends AbstractArchiveFile {
     /**
      * Adds the given entry to the archive and returns an <code>OutputStream</code> to write the entry's contents
      * if the entry is a regular file, <code>null</code> if the entry is a directory.
-     * Throws an <code>IOException</code> if the entry already exists in the archive or if an error occurs.
+     * Throws an <code>IOException</code> if the entry already exists in the archive or if an I/O error occurs.
      *
      * @param entry the entry to add to the archive
      * @return an OutputStream to write the entry's contents if the entry is a regular file, null if the entry is a directory
-     * @throws IOException if the entry already exists in the archive or if an error occurs
+     * @throws IOException if the entry already exists in the archive or if an I/O error occurs
      */
     public abstract OutputStream addEntry(ArchiveEntry entry) throws IOException;
 
     /**
      * Deletes the specified entry from the archive. Throws an <code>IOException</code> if the entry doesn't exist
-     * in the archive or if an error occurs.
+     * in the archive or if an I/O error occurs.
      *
      * @param entry the entry to delete from the archive
-     * @throws IOException if the entry doesn't in the archive or if an error occurs
+     * @throws IOException if the entry doesn't exist in the archive or if an I/O error occurs
      */
     public abstract void deleteEntry(ArchiveEntry entry) throws IOException;
 
+    /**
+     * Updates the specified entry in the archive with the attributes containted in the {@link ArchiveEntry} object.
+     * Throws an <code>IOException</code> if the entry doesn't exist in the archive or if an I/O error occurs.
+     *
+     * <p>This methods can be used to update the entry's date and permissions for instance.</p>
+     *
+     * @param entry the entry to update in the archive
+     * @throws IOException if the entry doesn't exist in the archive or if an I/O error occurs
+     */
+    public abstract void updateEntry(ArchiveEntry entry) throws IOException;
 
     /**
      * Processes the archive file to leave it in an optimal form. This method should be called after a writable archive
@@ -98,7 +108,7 @@ public abstract class AbstractRWArchiveFile extends AbstractArchiveFile {
      * To illustrate, in the case of a {@link com.mucommander.file.impl.zip.ZipArchiveFile}, this method removes chunks
      * of free space that are left when entries are deleted.</p>
      *
-     * @throws IOException
+     * @throws IOException if an I/O error occurs
      */
     public abstract void optimizeArchive() throws IOException;
 }
