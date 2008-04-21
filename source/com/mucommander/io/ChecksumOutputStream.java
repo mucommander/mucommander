@@ -23,8 +23,8 @@ import java.security.DigestOutputStream;
 import java.security.MessageDigest;
 
 /**
- * This class extends <code>java.security.DigestOutputStream</code> and adds a convenience {@link #getChecksum()} method
- * that returns the digest expressed as an hexadecimal string.
+ * This class extends <code>java.security.DigestOutputStream</code> and adds convenience methods that return the
+ * digest/checksum expressed in various forms.
  *
  * @see com.mucommander.io.ChecksumInputStream
  * @author Maxence Bernard
@@ -37,11 +37,20 @@ public class ChecksumOutputStream extends DigestOutputStream {
 
 
     /**
+     * Returns this stream's digest, expressed as a byte array.
+     *
+     * @return this stream's digest, expressed as a byte array
+     */
+    public byte[] getChecksumBytes() {
+        return getMessageDigest().digest();
+    }
+
+    /**
      * Returns this stream's digest, expressed as an hexadecimal string.
      *
      * @return this stream's digest, expressed as an hexadecimal string
      */
-    public String getChecksum() {
-        return ByteUtils.toHexString(getMessageDigest().digest());
+    public String getChecksumString() {
+        return ByteUtils.toHexString(getChecksumBytes());
     }
 }
