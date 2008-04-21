@@ -20,10 +20,7 @@ package com.mucommander.file;
 
 import com.mucommander.file.filter.FileFilter;
 import com.mucommander.file.filter.FilenameFilter;
-import com.mucommander.io.ByteCounter;
-import com.mucommander.io.CounterOutputStream;
-import com.mucommander.io.RandomAccessInputStream;
-import com.mucommander.io.RandomAccessOutputStream;
+import com.mucommander.io.*;
 import com.mucommander.util.StringUtils;
 
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -117,6 +114,21 @@ public class ArchiveEntryFile extends AbstractFile {
         return path;
     }
 
+    /**
+     * Updates this entry's attributes in the archive and returns <code>true</code> if the update went OK.
+     *
+     * @return <code>true</code> if the attributes were successfully updated in the archive.  
+     */
+    private boolean updateEntryAttributes() {
+        try {
+            ((AbstractRWArchiveFile)archiveFile).updateEntry(entry);
+            return true;
+        }
+        catch(IOException e) {
+            return false;
+        }
+    }
+
 
     /////////////////////////////////
     // AbstractFile implementation //
@@ -127,17 +139,27 @@ public class ArchiveEntryFile extends AbstractFile {
     }
 
     /**
-     * Always returns <code>false</code>: date of entries cannot be modified.
+     * Returns <code>true</code> only if the archive file that contains this entry is writable.
      */
     public boolean canChangeDate() {
-        return false;
+        return archiveFile.isWritableArchive();
     }
 
     /**
-     * Always returns <code>false</code>: date of entries cannot be modified.
+     * Always returns <code>false</code> only if the archive file that contains this entry is not writable.
      */
     public boolean changeDate(long lastModified) {
-        return false;
+        if(!(exists && archiveFile.isWritableArchive()))
+            return false;
+
+        long oldDate = entry.getDate();
+        entry.setDate(lastModified);
+
+        boolean success = updateEntryAttributes();
+        if(!success)        // restore old date if attributes could not be updated
+            entry.setDate(oldDate);
+
+        return success;
     }
 
     public long getSize() {
@@ -182,10 +204,10 @@ public class ArchiveEntryFile extends AbstractFile {
     }
 
     /**
-     * Always returns <code>false</code>: permissions of entries cannot be changed.
+     * Always returns <code>false</code> only if the archive file that contains this entry is not writable.
      */
     public boolean setPermission(int access, int permission, boolean enabled) {
-        return false;
+        return setPermissions(ByteUtils.setBit(getPermissions(), (permission << (access*3)), enabled));
     }
 
     public boolean canGetPermission(int access, int permission) {
@@ -194,10 +216,11 @@ public class ArchiveEntryFile extends AbstractFile {
     }
 
     /**
-     * Always returns <code>false</code>: permissions of entries cannot be changed.
+     * Always returns <code>false</code> only if the archive file that contains this entry is not writable.
      */
     public boolean canSetPermission(int access, int permission) {
-        return false;
+        // Todo: some writable archive implementations may not have full 'set' permissions support, or even no notion of permissions
+        return archiveFile.isWritableArchive();
     }
 
     public String getOwner() {
@@ -428,6 +451,23 @@ public class ArchiveEntryFile extends AbstractFile {
     public int getPermissions() {
         // Return entry's permissions mask
         return entry.getPermissions();
+    }
+
+    /**
+     * Always returns <code>false</code> only if the archive file that contains this entry is not writable.
+     */
+    public boolean setPermissions(int permissions) {
+        if(!(exists && archiveFile.isWritableArchive()))
+            return false;
+
+        int oldPermissions = entry.getPermissions();
+        entry.setPermissions(permissions);
+
+        boolean success = updateEntryAttributes();
+        if(!success)        // restore old permissions if attributes could not be updated
+            entry.setPermissions(oldPermissions);
+
+        return success;
     }
 
     public int getMoveToHint(AbstractFile destFile) {
