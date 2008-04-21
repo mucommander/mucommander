@@ -36,14 +36,26 @@ import java.util.zip.ZipException;
  */
 public class ZipEntry extends java.util.zip.ZipEntry implements Cloneable {
 
-    protected static final int PLATFORM_UNIX = 3;
-    protected static final int PLATFORM_FAT  = 0;
-
-    protected int internalAttributes = 0;
-    protected int platform = PLATFORM_FAT;
-    protected long externalAttributes = 0;
-    protected Vector/*<ZipExtraField>*/ extraFields = null;
+    /** Name/path of this entry */
     protected String name = null;
+
+    /** Data/time of this entry, in the DOS time format */
+    protected long dosTime = -1;
+
+    /** Data/time of this entry, in the Java time format */
+    protected long javaTime = -1;
+
+    /** Platform, part of the 'version made by' central directory field */
+    protected int platform = PLATFORM_FAT;
+
+    /** Internal attributes (2 bytes) */
+    protected int internalAttributes = 0;
+
+    /** External attributes (4 bytes) */
+    protected long externalAttributes = 0;
+
+    /** List of extra fields, as ZipEntraField instances */
+    protected Vector/*<ZipExtraField>*/ extraFields = null;
 
     /** Contains info about how this entry is stored in the zip file */
     protected ZipEntryInfo entryInfo;
@@ -52,13 +64,25 @@ public class ZipEntry extends java.util.zip.ZipEntry implements Cloneable {
     protected final static Calendar CALENDAR = Calendar.getInstance();
 
     /** Smallest DOS time (Epoch 1980) */
-    protected static final long MIN_DOS_TIME = 0x00002100L;
+    protected final static long MIN_DOS_TIME = 0x00002100L;
 
-    /** Data/time of this entry, in the Java time format */
-    protected long javaTime = -1;
+    /** Value of the bit flag that denotes a Unix directory in the external attributes */
+    protected final static int UNIX_DIRECTORY_FLAG = 16384;
+    /** Value of the bit flag that denotes a Unix file in the external attributes */
+    protected final static int UNIX_FILE_FLAG = 32768;
 
-    /** Data/time of this entry, in the DOS time format */
-    protected long dosTime = -1;
+    /** Value of the bit flag that denotes an MS-DOS directory in the external attributes */
+    protected final static int MSDOS_DIRECTORY_FLAG = 0x10;
+    /** Value of the bit flag that denotes a read-only MS-DOS file in the external attributes */
+    protected final static int MSDOS_READ_ONLY_FLAG = 1;
+
+    /** Value of the user write permission bit */
+    protected final static int USER_WRITE_PERMISSION_BIT = 128;
+
+    /** Value of the Unix platform used in the 'version made by' central directory field */
+    protected static final int PLATFORM_UNIX = 3;
+    /** Value of the MSDOS/OS-2 platform (FAT filesystem) used in the 'version made by' central directory field */
+    protected static final int PLATFORM_FAT  = 0;
 
 
     /**
@@ -149,11 +173,18 @@ public class ZipEntry extends java.util.zip.ZipEntry implements Cloneable {
      * @param mode an <code>int</code> value
      */
     public void setUnixMode(int mode) {
-        setExternalAttributes((mode << 16)
-                              // MS-DOS read-only attribute
-                              | ((mode & 0200) == 0 ? 1 : 0)
-                              // MS-DOS directory flag
-                              | (isDirectory() ? 0x10 : 0));
+        boolean isDirectory = isDirectory();
+
+        setExternalAttributes(
+              // Unix directory flag
+              ((isDirectory ? UNIX_DIRECTORY_FLAG : UNIX_FILE_FLAG) << 16)
+              // Unix file permissions
+              | (mode << 16)
+              // MS-DOS read-only attribute
+              | ((mode & USER_WRITE_PERMISSION_BIT) == 0 ? MSDOS_READ_ONLY_FLAG : 0)
+              // MS-DOS directory flag
+              | (isDirectory ? MSDOS_DIRECTORY_FLAG : 0));
+
         platform = PLATFORM_UNIX;
     }
 
@@ -164,6 +195,16 @@ public class ZipEntry extends java.util.zip.ZipEntry implements Cloneable {
      */
     public int getUnixMode() {
         return (int) ((getExternalAttributes() >> 16) & 0xFFFF);
+    }
+
+    /**
+     * Returns <code>true</code> if this ZipEntry has Unix mode/permissions.
+     * If that's not the case, the value returned by {@link #getUnixMode()} has no meaning.
+     *
+     * @return <code>true</code> if this ZipEntry has Unix mode/permissions
+     */
+    public boolean hasUnixMode() {
+        return getPlatform()==PLATFORM_UNIX;
     }
 
     /**
