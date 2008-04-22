@@ -675,6 +675,15 @@ quick_search:SV:Snabbsök
 
 
 
+
+file_manager:EN:File manager
+file_manager:FR:Gestionnaire de fichiers
+# Translation missing (New!)
+
+
+
+
+
 # Used as a button label, in the 'Mkdir' dialog for instance
 create:EN:Create
 create:FR:Créer
