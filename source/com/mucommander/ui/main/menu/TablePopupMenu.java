@@ -19,7 +19,7 @@
 
 package com.mucommander.ui.main.menu;
 
-import com.mucommander.PlatformManager;
+import com.mucommander.desktop.DesktopManager;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileProtocols;
 import com.mucommander.file.util.FileSet;
@@ -85,7 +85,7 @@ public class TablePopupMenu extends JPopupMenu {
             addAction(com.mucommander.ui.action.RenameAction.class);
 
         // 'Reveal in desktop' displayed only if clicked file is a local file and the OS is capable of doing this
-        if(PlatformManager.canOpenInFileManager() && currentFolder.getURL().getProtocol().equals(FileProtocols.FILE))
+        if(DesktopManager.canOpenInFileManager(currentFolder))
             addAction(com.mucommander.ui.action.RevealInDesktopAction.class);
 
         add(new JSeparator());

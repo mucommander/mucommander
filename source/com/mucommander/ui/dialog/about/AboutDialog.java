@@ -18,7 +18,7 @@
 
 package com.mucommander.ui.dialog.about;
 
-import com.mucommander.PlatformManager;
+import com.mucommander.desktop.DesktopManager;
 import com.mucommander.RuntimeConstants;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.FocusDialog;
@@ -27,12 +27,18 @@ import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.theme.Theme;
 import com.mucommander.ui.theme.ThemeManager;
 
-import javax.swing.*;
+import javax.swing.JLabel;
+import javax.swing.JButton;
+import javax.swing.JPanel;
+import javax.swing.JTextPane;
+import javax.swing.JScrollPane;
+import javax.swing.SwingUtilities;
 import javax.swing.text.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.net.URL;
 import java.util.Locale;
 
 /**
@@ -256,7 +262,7 @@ public class AboutDialog extends FocusDialog implements ActionListener {
         mainPanel.add(tempPanel, BorderLayout.NORTH);
 
         tempPanel = new JPanel(new BorderLayout());
-        if(PlatformManager.canOpenUrl()) {
+        if(DesktopManager.canBrowse()) {
             tempPanel.add(homeButton = new JButton(Translator.get(com.mucommander.ui.action.GoToWebsiteAction.class.getName()+".label")), BorderLayout.NORTH);
             homeButton.addActionListener(this);
         }
@@ -420,7 +426,7 @@ public class AboutDialog extends FocusDialog implements ActionListener {
         if(e.getSource() == okButton)
             dispose();
         else if(e.getSource() == homeButton) {
-            try {PlatformManager.open(com.mucommander.file.FileFactory.getFile(RuntimeConstants.HOMEPAGE_URL));}
+            try {DesktopManager.browse(new URL(RuntimeConstants.HOMEPAGE_URL));}
             // Ignores errors here as there really isn't anything we can do.
             catch(IOException ignored) {}
         }

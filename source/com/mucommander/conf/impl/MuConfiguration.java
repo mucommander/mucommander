@@ -24,6 +24,7 @@ import com.mucommander.conf.ConfigurationException;
 import com.mucommander.conf.ConfigurationListener;
 import com.mucommander.conf.ValueList;
 import com.mucommander.file.FileFactory;
+import com.mucommander.file.AbstractFile;
 import com.mucommander.file.icon.CachedFileIconProvider;
 import com.mucommander.runtime.OsFamilies;
 import com.mucommander.ui.icon.FileIcons;
@@ -1033,6 +1034,15 @@ public class MuConfiguration {
      * Sets the path to the configuration file.
      * @param  file                  path to the file that should be used for configuration storage.
      * @throws FileNotFoundException if the specified file is not a valid file.
+     * @see                          #getConfigurationFile()
      */
     public static void setConfigurationFile(String file) throws FileNotFoundException {configuration.setSource(new MuConfigurationSource(file));}
+
+    /**
+     * Returns the path to the configuration file.
+     * @return             the path to the configuration file.
+     * @throws IOException if an error occured.
+     * @see                #setConfigurationFile(String)
+     */
+    public static AbstractFile getConfigurationFile() throws IOException {return MuConfigurationSource.getConfigurationFile();}
 }

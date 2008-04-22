@@ -18,7 +18,7 @@
 
 package com.mucommander.ui.main.table;
 
-import com.mucommander.PlatformManager;
+import com.mucommander.desktop.DesktopManager;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.*;
 
@@ -61,7 +61,7 @@ public class FileTableHeader extends JTableHeader implements MouseListener {
         table.requestFocus();
 
         // One of the table headers was left-clicked, sort the table by the clicked column's criterion
-        if(PlatformManager.isLeftMouseButton(e)) {
+        if(DesktopManager.isLeftMouseButton(e)) {
             // If the table was already sorted by this criteria, reverse order
             if (table.getSortInfo().getCriterion()==colNum)
                 table.reverseSortOrder();
@@ -69,7 +69,7 @@ public class FileTableHeader extends JTableHeader implements MouseListener {
                 table.sortBy(colNum);
         }
         // One of the table headers was right-clicked, popup a menu that offers to hide the column
-        else if(PlatformManager.isRightMouseButton(e)) {
+        else if(DesktopManager.isRightMouseButton(e)) {
             Class hideActionClass;
             switch(colNum) {
                 case Columns.EXTENSION:

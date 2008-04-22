@@ -19,7 +19,7 @@
 package com.mucommander.job;
 
 import com.mucommander.Debug;
-import com.mucommander.PlatformManager;
+import com.mucommander.desktop.DesktopManager;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
 import com.mucommander.file.filter.AttributeFileFilter;
@@ -228,7 +228,7 @@ public class SelfUpdateJob extends CopyJob {
 
                 // If a launcher file was found, execute it
                 if(launcherFile!=null && launcherFile.length==1) {
-                    PlatformManager.open(launcherFile[0]);
+                    DesktopManager.open(launcherFile[0]);
 
                     return;
                 }

@@ -18,8 +18,8 @@
 
 package com.mucommander.ui.main;
 
+import com.mucommander.desktop.DesktopManager;
 import com.mucommander.Debug;
-import com.mucommander.PlatformManager;
 import com.mucommander.auth.AuthException;
 import com.mucommander.auth.CredentialsManager;
 import com.mucommander.auth.CredentialsMapping;
@@ -202,11 +202,11 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
         scrollPane.addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
                 // Left-click requests focus on the FileTable
-                if (PlatformManager.isLeftMouseButton(e)) {
+                if (DesktopManager.isLeftMouseButton(e)) {
                     fileTable.requestFocus();
                 }
                 // Right-click brings a contextual popup menu
-                else if (PlatformManager.isRightMouseButton(e)) {
+                else if (DesktopManager.isRightMouseButton(e)) {
                     if(!fileTable.hasFocus())
                         fileTable.requestFocus();
                     AbstractFile currentFolder = getCurrentFolder();

@@ -18,7 +18,7 @@
 
 package com.mucommander.ui.action;
 
-import com.mucommander.PlatformManager;
+import com.mucommander.desktop.DesktopManager;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileProtocols;
 import com.mucommander.file.impl.local.LocalFile;
@@ -80,7 +80,7 @@ public class OpenAction extends MuAction {
 
         // Opens local files using their native associations.
         else if(file.getURL().getProtocol().equals(FileProtocols.FILE) && (file instanceof LocalFile)) {
-            try {PlatformManager.open(file);}
+            try {DesktopManager.open(file);}
             catch(IOException e) {reportGenericError();}
         }
 

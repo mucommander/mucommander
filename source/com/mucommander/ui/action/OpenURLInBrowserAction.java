@@ -18,13 +18,12 @@
 
 package com.mucommander.ui.action;
 
-import com.mucommander.PlatformManager;
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.FileFactory;
+import com.mucommander.desktop.DesktopManager;
 import com.mucommander.ui.main.MainFrame;
 
 import java.util.Hashtable;
 import javax.swing.JOptionPane;
+import java.net.URL;
 
 /**
  * This action opens a URL in the system's default browser. This action is enabled only if the OS/Window manager
@@ -44,7 +43,7 @@ public class OpenURLInBrowserAction extends MuAction {
         super(mainFrame, properties);
 
         // Enable this action only if the current platform is capable of opening URLs in the default browser.
-        setEnabled(PlatformManager.canOpenUrl());
+        setEnabled(DesktopManager.canBrowse());
     }
 
     
@@ -52,12 +51,8 @@ public class OpenURLInBrowserAction extends MuAction {
         Object url = getValue(URL_PROPERTY_KEY);
 
         if(url!=null && (url instanceof String)) {
-            AbstractFile file = FileFactory.getFile((String)url);
-
-            if(file != null) {
-                try {PlatformManager.openUrl(file);}
-                catch(Exception e) {reportGenericError();}
-            }
+            try {DesktopManager.browse(new URL((String)url));}
+            catch(Exception e) {reportGenericError();}
         }
     }
 }

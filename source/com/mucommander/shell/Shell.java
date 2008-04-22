@@ -19,7 +19,7 @@
 package com.mucommander.shell;
 
 import com.mucommander.Debug;
-import com.mucommander.PlatformManager;
+import com.mucommander.desktop.DesktopManager;
 import com.mucommander.command.Command;
 import com.mucommander.conf.ConfigurationEvent;
 import com.mucommander.conf.ConfigurationListener;
@@ -160,9 +160,9 @@ public class Shell implements ConfigurationListener {
 
         // Retrieves the configuration defined shell command.
         if(MuConfiguration.getVariable(MuConfiguration.USE_CUSTOM_SHELL, MuConfiguration.DEFAULT_USE_CUSTOM_SHELL))
-            shellCommand = MuConfiguration.getVariable(MuConfiguration.CUSTOM_SHELL, PlatformManager.getDefaultShellCommand());
+            shellCommand = MuConfiguration.getVariable(MuConfiguration.CUSTOM_SHELL, DesktopManager.getDefaultShell());
         else
-            shellCommand = PlatformManager.getDefaultShellCommand();
+            shellCommand = DesktopManager.getDefaultShell();
 
         // Splits the command into tokens, leaving room for the argument.
         buffer = Command.getTokens(shellCommand);

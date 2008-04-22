@@ -19,7 +19,7 @@
 
 package com.mucommander.ui.action;
 
-import com.mucommander.PlatformManager;
+import com.mucommander.desktop.DesktopManager;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.main.MainFrame;
 
@@ -36,14 +36,17 @@ public class RevealInDesktopAction extends MuAction {
 
     public RevealInDesktopAction(MainFrame mainFrame, Hashtable properties) {
         super(mainFrame, properties);
-        setLabel(Translator.get(getClass().getName()+".label", PlatformManager.getFileManagerName()));
-
-        // Disable this action if the platform is not capable of opening files in the default file manager
-        if(!PlatformManager.canOpenInFileManager())
+        if(DesktopManager.canOpenInFileManager())
+            setLabel(Translator.get(getClass().getName()+".label", DesktopManager.getFileManagerName()));
+        else {
+            // Disable this action if the platform is not capable of opening files in the default file manager
+            setLabel(Translator.get(getClass().getName()+".label", Translator.get("file_manager")));
             setEnabled(false);
+        }
     }
 
     public void performAction() {
-        PlatformManager.openInFileManager(mainFrame.getActivePanel().getCurrentFolder());
+        try {DesktopManager.openInFileManager(mainFrame.getActivePanel().getCurrentFolder());}
+        catch(Exception e) {reportGenericError();}
     }
 }

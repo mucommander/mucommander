@@ -18,7 +18,7 @@
 
 package com.mucommander.ui.dialog.pref.general;
 
-import com.mucommander.PlatformManager;
+import com.mucommander.desktop.DesktopManager;
 import com.mucommander.bonjour.BonjourDirectory;
 import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.text.Translator;
@@ -127,7 +127,7 @@ class MiscPanel extends PreferencesPanel implements ItemListener {
         customShellField = new JTextField(MuConfiguration.getVariable(MuConfiguration.CUSTOM_SHELL, ""));
         customShellField.setEnabled(useCustomShellRadioButton.isSelected());
 
-        shellPanel.addRow(useDefaultShellRadioButton, new JLabel(PlatformManager.getDefaultShellCommand()), 5);
+        shellPanel.addRow(useDefaultShellRadioButton, new JLabel(DesktopManager.getDefaultShell()), 5);
         shellPanel.addRow(useCustomShellRadioButton, customShellField, 10);
         shellPanel.addRow(Translator.get("prefs_dialog.shell_encoding"), createEncodingComboBox(), 5);
 

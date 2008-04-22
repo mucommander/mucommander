@@ -21,9 +21,10 @@ package com.mucommander.command;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
-
 import javax.xml.parsers.SAXParserFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.InputStream;
+import java.io.IOException;
 
 /**
  * Class used to parse custom associations XML files.
@@ -75,14 +76,16 @@ public class AssociationReader extends DefaultHandler implements AssociationsXml
      * however, so while the builder is guaranteed to receive correct messages, it might not receive all declared
      * associations.
      * </p>
-     * @param  in        where to read association data from.
-     * @param  b         where to send building events to.
-     * @throws Exception thrown if any error occurs.
-     * @see    #read(InputStream,AssociationBuilder)
+     * @param  in          where to read association data from.
+     * @param  b           where to send building events to.
+     * @throws IOException if any IO error occurs.
+     * @see                #read(InputStream,AssociationBuilder)
      */
-    public static void read(InputStream in, AssociationBuilder b) throws Exception {
+    public static void read(InputStream in, AssociationBuilder b) throws IOException, CommandException {
         b.startBuilding();
         try {SAXParserFactory.newInstance().newSAXParser().parse(in, new AssociationReader(b));}
+        catch(ParserConfigurationException e) {throw new CommandException(e);}
+        catch(SAXException e) {throw new CommandException(e);}
         finally {b.endBuilding();}
     }
 

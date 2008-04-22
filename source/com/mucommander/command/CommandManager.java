@@ -161,10 +161,15 @@ public class CommandManager implements CommandBuilder {
             if((association = (CommandAssociation)iterator.next()).accept(file))
                 return association.getCommand();
 
-        // If we've reached that point, no command has been found. Returns the default command
-        // if we're allowed.
+        // We haven't found a command explicitely associated with 'file',
+        // but we might have a generic file opener.
+        if(defaultCommand != null)
+            return defaultCommand;
+
+        // We don't have a generic file opener, return the 'self execute'
+        // command if we're allowed.
         if(allowDefault)
-            return (defaultCommand == null) ? RUN_AS_EXECUTABLE_COMMAND : defaultCommand;
+            return RUN_AS_EXECUTABLE_COMMAND;
         return null;
     }
 
@@ -199,106 +204,30 @@ public class CommandManager implements CommandBuilder {
         }
     }
 
+    private static void registerCommand(Command command, boolean mark) throws CommandException {
+        Command oldCommand;
+        // Registers the command and marks command as having been modified.
+        setDefaultCommand(command);
+
+        if(Debug.ON) Debug.trace("Registering '" + command.getCommand() + "' as '" + command.getAlias() + "'");
+        if((oldCommand = getCommandForAlias(command.getAlias())) != null)
+            oldCommand.setCommand(command.getCommand());
+        else
+            commands.add(command);
+
+        if(mark)
+            wereCommandsModified = true;
+    }
+
+    public static void registerDefaultCommand(Command command) throws CommandException {registerCommand(command, false);}
+
     /**
      * Registers the specified command at the end of the command list.
      * @param  command          command to register.
      * @throws CommandException if a command with same alias has already been registered.
      */
-    public static void registerCommand(Command command) throws CommandException {
-        // Checks whether a command with the same alias has already been registered.
-        if(getCommandForAlias(command.getAlias()) != null)
-            throw new CommandException("Duplicated command alias: " + command.getAlias());
+    public static void registerCommand(Command command) throws CommandException {registerCommand(command, true);}
 
-        // Registers the command and marks command as having been modified.
-        setDefaultCommand(command);
-        if(Debug.ON) Debug.trace("Registering '" + command.getCommand() + "' as '" + command.getAlias() + "' at the end of the list.");
-        commands.add(command);
-        wereCommandsModified = true;
-    }
-
-    /**
-     * Registers the specified command at the specified index.
-     * @param  i                index at which to register the command.
-     * @param  command          command to register.
-     * @throws CommandException if a command with same alias has already been registered.
-     */
-    public static void registerCommand(int i, Command command) throws CommandException {
-        // Checks whether a font with the same alias has already been registered.
-        if(getCommandForAlias(command.getAlias()) != null) {
-            if(Debug.ON) Debug.trace("Duplicated command alias: " + command.getAlias());
-            throw new CommandException("Duplicated command alias: " + command.getAlias());
-        }
-
-        // Registers the command and marks associations as having been modified.
-        setDefaultCommand(command);
-        if(Debug.ON) Debug.trace("Registering '" + command.getCommand() + "' as '" + command.getAlias() + "' at index " + i);
-        commands.add(i, command);
-        wereCommandsModified = true;
-    }
-
-    /**
-     * Checks whether the specified command is associated to any file name filter.
-     * @param  command command to check for.
-     * @return         <code>true</code> if the command is associated, <code>false</code> otherwise.
-     */
-    private static boolean isCommandAssociated(Command command) {
-        Iterator iterator;
-
-        // Goes through all the command associations looking for command.
-        iterator = associations.iterator();
-        while(iterator.hasNext())
-            if(((CommandAssociation)iterator.next()).getCommand() == command)
-                return true;
-
-        return false;
-    }
-
-    /**
-     * Removes the specified command from the list of registered commands.
-     * <p>
-     * This method might actually refuse to remove <code>command</code>: if it is associated to any
-     * file name filter, a command cannot be removed without, well, messing the system up quite baddly.<br>
-     * If the command is associated to any file name filter, this method will return <code>false</code> and not
-     * do anything.
-     * </p>
-     * @param  command command to remove from the list.
-     * @return         <code>false</code> if the command could not be removed, <code>true</code> otherwise.
-     */
-    public static boolean removeCommand(Command command) {
-        // If the command is associated to any file name filter, abort.
-        if(isCommandAssociated(command))
-            return false;
-
-        // If the operation actually changed the list, mark it as modified.
-        if(commands.remove(command))
-            wereCommandsModified = true;
-        return true;
-    }
-
-    /**
-     * Removes the command found at the specified index of the command list.
-     * <p>
-     * This method might actually not remove the command: if it is associated to any
-     * file name filter, a command cannot be removed without, well, messing the system up quite baddly.<br>
-     * If the command is associated to any file name filter, this method will return <code>false</code> and not
-     * do anything.
-     * </p>
-     * @param  i index of the command to remove.
-     * @return   <code>false</code> if the command could not be removed, <code>true</code> otherwise.
-     */
-    public static boolean removeCommandAt(int i) {
-        Command buffer;
-
-        // If the command is associated to any file name filter, abort.
-        buffer = (Command)commands.get(i);
-        if(isCommandAssociated(buffer))
-            return false;
-
-        // Removes the command and marks the list as modified.
-        commands.remove(i);
-        wereCommandsModified = true;
-        return true;
-    }
 
 
     // - Associations handling -------------------------------------------------
@@ -309,20 +238,15 @@ public class CommandManager implements CommandBuilder {
      */
     public static Iterator associations() {return associations.iterator();}
 
-    /**
-     * Registers the specified association.
-     * @param  command          command to execute when the association is matched.
-     * @param  filter           file filters that a file must match to be accepted by the association.
-     * @throws CommandException if an error occurs.
-     */
-    public static void registerAssociation(String command, ChainedFileFilter filter) throws CommandException {
+    private static void registerAssociation(String command, FileFilter filter, boolean flag) throws CommandException {
         Command cmd;
 
         // The specified alias is known, registers the association and marks associations as modified.
         if((cmd = getCommandForAlias(command)) != null) {
             if(Debug.ON) Debug.trace("Registering '" + command + "'.");
             associations.add(new CommandAssociation(cmd, filter));
-            wereAssociationsModified = true;
+            if(flag)
+                wereAssociationsModified = true;
         }
 
         // The specified alias is not known.
@@ -331,6 +255,16 @@ public class CommandManager implements CommandBuilder {
             throw new CommandException(command + " not found");
         }
     }
+
+    /**
+     * Registers the specified association.
+     * @param  command          command to execute when the association is matched.
+     * @param  filter           file filters that a file must match to be accepted by the association.
+     * @throws CommandException if an error occurs.
+     */
+    public static void registerAssociation(String command, FileFilter filter) throws CommandException {registerAssociation(command, filter, true);}
+
+    public static void registerDefaultAssociation(String command, FileFilter filter) throws CommandException {registerAssociation(command, filter, false);}
 
     /**
      * Removes the specified association from the list of registered associations.
@@ -358,7 +292,7 @@ public class CommandManager implements CommandBuilder {
     /**
      * This method is public as an implementation side effect and must not be called directly.
      */
-    public void addCommand(Command command) throws CommandException {registerCommand(command);}
+    public void addCommand(Command command) throws CommandException {registerCommand(command, false);}
 
     /**
      * Passes all known custom commands to the specified builder.
@@ -389,6 +323,49 @@ public class CommandManager implements CommandBuilder {
 
     // - Associations building -------------------------------------------------
     // -------------------------------------------------------------------------
+    private static void buildFilter(FileFilter filter, AssociationBuilder builder) throws CommandException {
+        // Filter on the file type.
+        if(filter instanceof AttributeFileFilter) {
+            AttributeFileFilter attributeFilter;
+
+            attributeFilter = (AttributeFileFilter)filter;
+            switch(attributeFilter.getAttribute()) {
+            case AttributeFileFilter.HIDDEN:
+                builder.setIsHidden(!attributeFilter.isInverted());
+                break;
+
+            case AttributeFileFilter.SYMLINK:
+                builder.setIsSymlink(!attributeFilter.isInverted());
+                break;
+            }
+        }
+        else if(filter instanceof PermissionsFileFilter) {
+            PermissionsFileFilter permissionFilter;
+
+            permissionFilter = (PermissionsFileFilter)filter;
+
+            switch(permissionFilter.getPermission()) {
+            case PermissionsFileFilter.READ_PERMISSION:
+                builder.setIsReadable(permissionFilter.getFilter());
+                break;
+
+            case PermissionsFileFilter.WRITE_PERMISSION:
+                builder.setIsWritable(permissionFilter.getFilter());
+                break;
+
+            case PermissionsFileFilter.EXECUTE_PERMISSION:
+                builder.setIsExecutable(permissionFilter.getFilter());
+                break;
+            }
+        }
+        else if(filter instanceof RegexpFilenameFilter) {
+            RegexpFilenameFilter regexpFilter;
+
+            regexpFilter = (RegexpFilenameFilter)filter;
+            builder.setMask(regexpFilter.getRegularExpression(), regexpFilter.isCaseSensitive());
+        }
+    }
+
     /**
      * Passes all known file associations to the specified builder.
      * <p>
@@ -415,51 +392,14 @@ public class CommandManager implements CommandBuilder {
                 current = (CommandAssociation)iterator.next();
                 builder.startAssociation(current.getCommand().getAlias());
 
-                filters = current.filters();
-                while(filters.hasNext()) {
-                    filter = (FileFilter)filters.next();
-
-                    // Filter on the file type.
-                    if(filter instanceof AttributeFileFilter) {
-                        AttributeFileFilter attributeFilter;
-
-                        attributeFilter = (AttributeFileFilter)filter;
-                        switch(attributeFilter.getAttribute()) {
-                        case AttributeFileFilter.HIDDEN:
-                            builder.setIsHidden(!attributeFilter.isInverted());
-                            break;
-
-                        case AttributeFileFilter.SYMLINK:
-                            builder.setIsSymlink(!attributeFilter.isInverted());
-                            break;
-                        }
-                    }
-                    else if(filter instanceof PermissionsFileFilter) {
-                        PermissionsFileFilter permissionFilter;
-
-                        permissionFilter = (PermissionsFileFilter)filter;
-
-                        switch(permissionFilter.getPermission()) {
-                        case PermissionsFileFilter.READ_PERMISSION:
-                            builder.setIsReadable(permissionFilter.getFilter());
-                            break;
-
-                        case PermissionsFileFilter.WRITE_PERMISSION:
-                            builder.setIsWritable(permissionFilter.getFilter());
-                            break;
-
-                        case PermissionsFileFilter.EXECUTE_PERMISSION:
-                            builder.setIsExecutable(permissionFilter.getFilter());
-                            break;
-                        }
-                    }
-                    else if(filter instanceof RegexpFilenameFilter) {
-                        RegexpFilenameFilter regexpFilter;
-
-                        regexpFilter = (RegexpFilenameFilter)filter;
-                        builder.setMask(regexpFilter.getRegularExpression(), regexpFilter.isCaseSensitive());
-                    }
+                filter = current.getFilter();
+                if(filter instanceof ChainedFileFilter) {
+                    filters = ((ChainedFileFilter)filter).getFileFilterIterator();
+                    while(filters.hasNext())
+                        buildFilter((FileFilter)filters.next(), builder);
                 }
+                else
+                    buildFilter(filter, builder);
 
                 builder.endAssociation();
             }
@@ -554,7 +494,7 @@ public class CommandManager implements CommandBuilder {
      * @see                #getAssociationFile()
      * @see                #setAssociationFile(String)
      */
-    public static void loadAssociations() throws IOException {
+    public static void loadAssociations() throws IOException, CommandException {
         AbstractFile file;
         InputStream  in;
 
@@ -565,43 +505,7 @@ public class CommandManager implements CommandBuilder {
         // Tries to load the associations file. If an error occurs, create default associations.
         in = null;
         try {AssociationReader.read(in = new BackupInputStream(file), new AssociationFactory());}
-        catch(Exception e) {
-            // The associations file is corrupt, discard anything we might have loaded from it.
-            if(Debug.ON) Debug.trace("Failed to load associations file: " + e.getMessage() + ". Using default associations");
-            associations = new Vector();
-
-            throw new IOException(e.getMessage());
-        }
-
         finally {
-            // If an 'openEXE' command was registered:
-            // - if the system has an association for that command, use it.
-            // - If we have a sure way of identifying executable files (Java >= 1.6), use it.
-            if(getCommandForAlias(EXE_OPENER_ALIAS) != null) {
-                AndFileFilter filter;
-
-                // Uses the 'executable' regexp if it exists.
-                if(PlatformManager.getExeAssociation() != null) {
-                    try {
-                        filter = new AndFileFilter();
-                        filter.addFileFilter(new RegexpFilenameFilter(PlatformManager.getExeAssociation(), PlatformManager.getDefaultRegexpCaseSensitivity()));
-                        registerAssociation(EXE_OPENER_ALIAS, filter);
-                    }
-                    catch(Exception e) {if(Debug.ON) Debug.trace("Failed to create default EXE opener association: " + e.getMessage());}
-                }
-
-                // Match executables if necessary and if running under java >= 1.6.
-                if(PlatformManager.runExecutables() && JavaVersions.JAVA_1_6.isCurrentOrHigher()) {
-                    try {
-                        filter = new AndFileFilter();
-                        filter.addFileFilter(new PermissionsFileFilter(PermissionsFileFilter.EXECUTE_PERMISSION, true));
-                        registerAssociation(EXE_OPENER_ALIAS, filter);
-                    }
-                    catch(Exception e) {if(Debug.ON) Debug.trace("Failed to create default EXE opener association: " + e.getMessage());}
-                }
-            }
-            wereAssociationsModified = false;
-
             // Makes sure the input stream is closed.
             if(in != null) {
                 try {in.close();}
@@ -779,7 +683,7 @@ public class CommandManager implements CommandBuilder {
      * @see                #getCommandFile()
      * @see                #setCommandFile(String)
      */
-    public static void loadCommands() throws IOException {
+    public static void loadCommands() throws IOException, CommandException {
         AbstractFile file;
         InputStream  in;
 
@@ -790,21 +694,7 @@ public class CommandManager implements CommandBuilder {
         // Tries to load the associations file. If an error occurs, create default associations.
         in = null;
         try {CommandReader.read(in = new BackupInputStream(file), new CommandManager());}
-        catch(Exception e) {
-            // Creates the default associations.
-            if(Debug.ON) Debug.trace("Failed to load commands file: " + e.getMessage() + ". Using default commands.");
-            commands = new Vector();
-            throw new IOException(e.getMessage());
-        }
-
         finally {
-            // Registers default commands if necessary.
-            registerDefaultCommand(FILE_OPENER_ALIAS,  PlatformManager.getDefaultFileOpenerCommand(), null);
-            registerDefaultCommand(URL_OPENER_ALIAS,   PlatformManager.getDefaultUrlOpenerCommand(), null);
-            registerDefaultCommand(EXE_OPENER_ALIAS,   PlatformManager.getDefaultExeOpenerCommand(), null);
-            registerDefaultCommand(FILE_MANAGER_ALIAS, PlatformManager.getDefaultFileManagerCommand(), PlatformManager.getDefaultFileManagerName());
-            wereCommandsModified = false;
-
             // Makes sure the input stream is closed.
             if(in != null) {
                 try {in.close();}
@@ -813,6 +703,7 @@ public class CommandManager implements CommandBuilder {
         }
     }
 
+    /*
     private static void registerDefaultCommand(String alias, String command, String display) {
         if(getCommandForAlias(alias) == null) {
             if(command != null) {
@@ -822,7 +713,7 @@ public class CommandManager implements CommandBuilder {
             }
         }
     }
-
+    */
 
 
     // - Unused methods --------------------------------------------------------

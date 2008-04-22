@@ -18,7 +18,7 @@
 
 package com.mucommander.ui.action;
 
-import com.mucommander.PlatformManager;
+import com.mucommander.desktop.DesktopManager;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.ArchiveEntryFile;
 import com.mucommander.file.FileProtocols;
@@ -56,7 +56,7 @@ public class OpenNativelyAction extends MuAction {
         }
         else {
             // Tries to execute file with native file associations
-            try {PlatformManager.open(selectedFile);}
+            try {DesktopManager.open(selectedFile);}
             catch(IOException e) {reportGenericError();}
         }
     }

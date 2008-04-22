@@ -18,14 +18,14 @@
 
 package com.mucommander.file.impl.trash;
 
-import com.mucommander.PlatformManager;
+import com.mucommander.desktop.DesktopManager;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.impl.local.LocalFile;
 import com.mucommander.file.impl.local.SpecialWindowsLocation;
 import com.mucommander.file.util.Shell32API;
 
+import java.io.IOException;
 import java.util.Vector;
-
 
 /**
  * WindowsTrash is an <code>AbstractTrash</code> implementation for the <i>Microsoft Windows' Recycle Bin</i>.
@@ -102,7 +102,8 @@ public class WindowsTrash extends QueuedTrash {
     }
 
     public void open() {
-        PlatformManager.openInFileManager(SpecialWindowsLocation.RECYCLE_BIN);
+        try {DesktopManager.openInFileManager(SpecialWindowsLocation.RECYCLE_BIN);}
+        catch(IOException e) {/* TODO: report error. */}
     }
 
 

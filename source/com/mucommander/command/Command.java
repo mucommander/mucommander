@@ -126,9 +126,10 @@ public class Command {
      */
     public Command(String alias, String command, int type, String displayName) {
         this.alias       = alias;
-        this.command     = command;
         this.type        = type;
         this.displayName = displayName;
+
+        setCommand(command);
     }
 
     /**
@@ -162,28 +163,28 @@ public class Command {
      * Returns this command's tokens without performing keyword substitution.
      * @return this command's tokens without performing keyword substitution.
      */
-    public String[] getTokens() {return getTokens(command, (AbstractFile[])null);}
+    public synchronized String[] getTokens() {return getTokens(command, (AbstractFile[])null);}
 
     /**
      * Returns this command's tokens, replacing keywords by the corresponding values from the specified file.
      * @param  file file from which to retrieve keyword substitution values.
      * @return      this command's tokens, replacing keywords by the corresponding values from the specified file.
      */
-    public String[] getTokens(AbstractFile file) {return getTokens(command, file);}
+    public synchronized String[] getTokens(AbstractFile file) {return getTokens(command, file);}
 
     /**
      * Returns this command's tokens, replacing keywords by the corresponding values from the specified fileset.
      * @param  files files from which to retrieve keyword substitution values.
      * @return       this command's tokens, replacing keywords by the corresponding values from the specified fileset.
      */
-    public String[] getTokens(FileSet files) {return getTokens(command, files);}
+    public synchronized String[] getTokens(FileSet files) {return getTokens(command, files);}
 
     /**
      * Returns this command's tokens, replacing keywords by the corresponding values from the specified files.
      * @param  files files from which to retrieve keyword substitution values.
      * @return       this command's tokens, replacing keywords by the corresponding values from the specified files.
      */
-    public String[] getTokens(AbstractFile[] files) {return getTokens(command, files);}
+    public synchronized String[] getTokens(AbstractFile[] files) {return getTokens(command, files);}
 
     /**
      * Returns the specified command's tokens without performing keyword substitution.
@@ -371,19 +372,19 @@ public class Command {
      * Returns the original, un-tokenised command.
      * @return the original, un-tokenised command.
      */
-    public String getCommand() {return command;}
+    public synchronized String getCommand() {return command;}
 
     /**
      * Returns this command's alias.
      * @return this command's alias.
      */
-    public String getAlias() {return alias;}
+    public synchronized String getAlias() {return alias;}
 
     /**
      * Returns the command's type.
      * @return the command's type.
      */
-    public int getType() {return type;}
+    public synchronized int getType() {return type;}
 
     /**
      * Returns the command's display name.
@@ -392,7 +393,7 @@ public class Command {
      * </p>
      * @return the command's display name.
      */
-    public String getDisplayName() {
+    public synchronized String getDisplayName() {
         if(displayName == null)
             return alias;
         return displayName;
@@ -402,6 +403,9 @@ public class Command {
      * Returns <code>true</code> if the command's display name has been set.
      * @return <code>true</code> if the command's display name has been set, <code>false</code> otherwise.
      */
-    boolean isDisplayNameSet() {return displayName != null;}
+    synchronized boolean isDisplayNameSet() {return displayName != null;}
 
+    synchronized void setCommand(String cmd) {command = cmd;}
+
+    public String toString() {return alias + (displayName == null ? "" : ":" + displayName) + ":" + command;}
 }

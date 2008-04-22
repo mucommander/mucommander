@@ -19,7 +19,7 @@
 package com.mucommander.ui.main.table;
 
 import com.mucommander.Debug;
-import com.mucommander.PlatformManager;
+import com.mucommander.desktop.DesktopManager;
 import com.mucommander.conf.ConfigurationEvent;
 import com.mucommander.conf.ConfigurationListener;
 import com.mucommander.conf.impl.MuConfiguration;
@@ -1118,7 +1118,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
         int clickCount = e.getClickCount();
 
         // If one of the table cells was left clicked...
-        if(source==this && PlatformManager.isLeftMouseButton(e)) {
+        if(source==this && DesktopManager.isLeftMouseButton(e)) {
             // Clicking on the selected row's ... :
             //  - 'name' label triggers the filename editor
             //  - 'date' label triggers the change date dialog
@@ -1200,7 +1200,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
             return;
 
         // Right-click brings a contextual popup menu
-        if(PlatformManager.isRightMouseButton(e)) {
+        if(DesktopManager.isRightMouseButton(e)) {
             // Find the row that was right-clicked
             int x = e.getX();
             int y = e.getY();
@@ -1221,14 +1221,14 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
         }
         // Middle-click on a row marks or unmarks it
         // Control left-click also works
-        else if (PlatformManager.isMiddleMouseButton(e)) {
+        else if (DesktopManager.isMiddleMouseButton(e)) {
             // Used by mouseDragged
             lastDraggedRow = rowAtPoint(e.getPoint());
             markOnRightClick = !tableModel.isRowMarked(lastDraggedRow);
 
             setRowMarked(lastDraggedRow, markOnRightClick);
         }
-        else if(PlatformManager.isLeftMouseButton(e)) {
+        else if(DesktopManager.isLeftMouseButton(e)) {
             // Marks a group of rows, from last current row to clicked row (current row)
             if(e.isShiftDown()) {
                 setRangeMarked(currentRow, lastRow, !tableModel.isRowMarked(currentRow));
@@ -1255,7 +1255,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
 
         // Marks or unmarks every row that was between the last mouseDragged point
         // and the current one
-        if (PlatformManager.isMiddleMouseButton(e) && lastDraggedRow!=-1) {
+        if (DesktopManager.isMiddleMouseButton(e) && lastDraggedRow!=-1) {
             int draggedRow = rowAtPoint(e.getPoint());
 
             // Mouse was dragged outside of the FileTable

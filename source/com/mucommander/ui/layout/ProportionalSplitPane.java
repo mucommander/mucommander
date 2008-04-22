@@ -18,7 +18,7 @@
 
 package com.mucommander.ui.layout;
 
-import com.mucommander.PlatformManager;
+import com.mucommander.desktop.DesktopManager;
 
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicSplitPaneDivider;
@@ -212,7 +212,7 @@ public class ProportionalSplitPane extends JSplitPane implements ComponentListen
     ///////////////////////////
 
     public void mouseClicked(MouseEvent mouseEvent) {
-        if(PlatformManager.isLeftMouseButton(mouseEvent) && mouseEvent.getClickCount()==2)
+        if(DesktopManager.isLeftMouseButton(mouseEvent) && mouseEvent.getClickCount()==2)
             setSplitRatio(0.5f);
     }
 

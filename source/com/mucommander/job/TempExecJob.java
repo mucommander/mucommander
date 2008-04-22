@@ -18,7 +18,7 @@
 
 package com.mucommander.job;
 
-import com.mucommander.PlatformManager;
+import com.mucommander.desktop.DesktopManager;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.util.FileSet;
 import com.mucommander.ui.dialog.file.ProgressDialog;
@@ -68,7 +68,7 @@ public class TempExecJob extends TempCopyJob {
             return false;
 
         // Try to open the file.
-        try {PlatformManager.open(currentDestFile);}
+        try {DesktopManager.open(currentDestFile);}
         catch(Exception e) {return false;}
 
         return true;

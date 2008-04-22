@@ -20,6 +20,7 @@ package com.mucommander.ui.main;
 
 import com.mucommander.Debug;
 import com.mucommander.PlatformManager;
+import com.mucommander.desktop.DesktopManager;
 import com.mucommander.conf.ConfigurationEvent;
 import com.mucommander.conf.ConfigurationListener;
 import com.mucommander.conf.impl.MuConfiguration;
@@ -319,7 +320,7 @@ public class ToolBar extends JToolBar implements ConfigurationListener, MouseLis
 
         // Right clicking on the toolbar brings up a popup menu
         if(source == this) {
-            if (PlatformManager.isRightMouseButton(e)) {
+            if (DesktopManager.isRightMouseButton(e)) {
                 //			if (e.isPopupTrigger()) {	// Doesn't work under Mac OS X (CTRL+click doesn't return true)
                 JPopupMenu popupMenu = new JPopupMenu();
                 popupMenu.add(ActionManager.getActionInstance(com.mucommander.ui.action.ToggleToolBarAction.class, mainFrame));

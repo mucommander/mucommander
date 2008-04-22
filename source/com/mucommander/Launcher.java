@@ -30,6 +30,7 @@ import com.mucommander.ui.main.ToolBar;
 import com.mucommander.ui.main.WindowManager;
 
 import java.lang.reflect.Constructor;
+import java.io.IOException;
 
 /**
  * muCommander launcher.
@@ -44,8 +45,6 @@ public class Launcher {
     // - Class fields -----------------------------------------------------------
     // --------------------------------------------------------------------------
     private static SplashScreen splashScreen;
-    /** Whether or not to show the setup dialog. */
-    private static boolean      showSetup;
     /** Whether or not to ignore warnings when booting. */
     private static boolean      fatalWarnings;
     /** Whether or not to display verbose error messages. */
@@ -362,6 +361,12 @@ public class Launcher {
                 break;
         }
 
+        // Attemps to guess whether this is the first time muCommander is booted
+        // or not.
+        boolean isFirstBoot;
+        try {isFirstBoot = !MuConfiguration.getConfigurationFile().exists();}
+        catch(IOException e) {isFirstBoot = true;}
+
 
 
         // - MAC OS init ----------------------------------------------
@@ -406,10 +411,15 @@ public class Launcher {
             catch(Exception e) {printFileError("Could not load configuration", e, fatalWarnings);}
         }
 
+        boolean showSetup;
         showSetup = MuConfiguration.getVariable(MuConfiguration.THEME_TYPE) == null;
 
         // Traps VM shutdown
         Runtime.getRuntime().addShutdownHook(new ShutdownHook());
+
+        // Initialises the desktop.
+        try {com.mucommander.desktop.DesktopManager.init(isFirstBoot);}
+        catch(Exception e) {printError("Could not initialise desktop", e, true);}
 
         // Loads dictionary
         printStartupMessage("Loading dictionary...");
