@@ -166,7 +166,9 @@ public class ShellComboBox extends EditableComboBox implements EditableComboBoxL
      */
     public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
         setComboSelectionUpdatesTextField(false);
-        setSelectedIndex(0);
+        if(getItemCount() > 0)
+            setSelectedIndex(0);
+
         setComboSelectionUpdatesTextField(true);
     }
 
