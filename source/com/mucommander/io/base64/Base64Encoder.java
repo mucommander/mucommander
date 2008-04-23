@@ -39,11 +39,24 @@ public abstract class Base64Encoder {
      * @return the base64-encoded String
      */
     public static String encode(byte[] b) {
+        return encode(b, 0, b.length);
+    }
+
+    /**
+     * Base64-encodes the given byte array, from off to len, and returns the result. The specified encoding is used
+     * for tranforming the string into bytes.
+     *
+     * @param b the String to base64-encode
+     * @param off position to the first byte in the array to be encoded
+     * @param len number of bytes in the array to encode
+     * @return the base64-encoded String
+     */
+    public static String encode(byte[] b, int off, int len) {
         ByteArrayOutputStream bout = new ByteArrayOutputStream();
         Base64OutputStream out64 = new Base64OutputStream(bout, false);
 
         try {
-            out64.write(b);
+            out64.write(b, off, len);
             out64.writePadding();
 
             return new String(bout.toByteArray());
