@@ -22,6 +22,8 @@ import com.mucommander.file.compat.CompatURLStreamHandler;
 import com.mucommander.file.filter.FileFilter;
 import com.mucommander.file.filter.FilenameFilter;
 import com.mucommander.file.impl.ProxyFile;
+import com.mucommander.file.impl.local.LocalFile;
+import com.mucommander.file.util.FileToolkit;
 import com.mucommander.io.*;
 import com.mucommander.process.AbstractProcess;
 import com.mucommander.runtime.OsFamilies;
@@ -175,8 +177,14 @@ public abstract class AbstractFile implements FilePermissions {
         FileURL fileURL = getURL();
 
         // For local files: return file's path 'sans' the protocol and host parts
-        if(fileURL.getProtocol().equals(FileProtocols.FILE))
-            return fileURL.getPath();
+        if(fileURL.getProtocol().equals(FileProtocols.FILE)) {
+            String path = fileURL.getPath();
+            // Under for OSes with 'root drives' (Windows, OS/2), remove the leading '/' character
+            if(LocalFile.hasRootDrives())
+                path = FileToolkit.removeLeadingSeparator(path, "/");
+
+            return path;
+        }
 
         // For any other file protocols: return the full URL that includes the protocol and host parts
         return fileURL.toString(false);
