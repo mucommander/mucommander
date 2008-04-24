@@ -48,6 +48,7 @@ public class TrashPopupButton extends PopupButton {
     public TrashPopupButton(MainFrame mainFrame) {
         this.mainFrame = mainFrame;
 
+        setContentAreaFilled(false);
         setIcon(IconManager.getIcon(IconManager.STATUS_BAR_ICON_SET, "trash.png"));
 
         // Rollover-enable the button and hold a reference to the RolloverButtonAdapter instance so that it doesn't

@@ -18,6 +18,8 @@
 
 package com.mucommander.ui.button;
 
+import com.mucommander.runtime.OsFamilies;
+
 import javax.swing.*;
 
 /**
@@ -28,30 +30,49 @@ import javax.swing.*;
 public class NonFocusableButton extends JButton {
 
     public NonFocusableButton() {
+        setLookAndFeelProperties();
     }
 
     public NonFocusableButton(Action a) {
         super(a);
+        setLookAndFeelProperties();
     }
 
     public NonFocusableButton(Icon icon) {
         super(icon);
+        setLookAndFeelProperties();
     }
 
     public NonFocusableButton(String text) {
         super(text);
+        setLookAndFeelProperties();
     }
 
     public NonFocusableButton(String text, Icon icon) {
         super(text, icon);
+        setLookAndFeelProperties();
     }
+
+
+    private void setLookAndFeelProperties() {
+        // Fill the content area under the Windows L&F only, required for the borders to be painted.
+        // Note: filing the content area under Metal L&F looks like absolute crap.
+        setContentAreaFilled(OsFamilies.WINDOWS.isCurrent() && "Windows".equals(UIManager.getLookAndFeel().getName()));
+    }
+
 
     ////////////////////////
     // Overridden methods //
     ////////////////////////
 
-    // For JDK 1.4 and up
     public boolean isFocusable() {
         return false;
+    }
+
+    public void updateUI() {
+        super.updateUI();
+
+        // Update L&F properties 
+        setLookAndFeelProperties();
     }
 }

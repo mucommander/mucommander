@@ -55,9 +55,6 @@ public class RolloverButtonAdapter implements MouseListener {
         button.setRolloverEnabled(true);
         button.setFocusPainted(false);
         button.setBorderPainted(false);
-        // Need to set that explicitely for Java 1.5 for which content area
-        // is filled if border is not painted
-        button.setContentAreaFilled(false);
     }
 
 
