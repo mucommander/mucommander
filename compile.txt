@@ -25,7 +25,7 @@ libraries and tools are installed.
   This is used to generate Win32 setup files.
   It can be retrieved from http://nsis.sourceforge.net/
 
-- Launch4J 2.1.5 or greater
+- Launch4J 3.0.0 or greater
   This is used to generate Win32 executable files.
   It can be retrieved from http://launch4j.sourceforge.net/
 
