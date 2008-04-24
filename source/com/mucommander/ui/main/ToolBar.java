@@ -20,10 +20,10 @@ package com.mucommander.ui.main;
 
 import com.mucommander.Debug;
 import com.mucommander.PlatformManager;
-import com.mucommander.desktop.DesktopManager;
 import com.mucommander.conf.ConfigurationEvent;
 import com.mucommander.conf.ConfigurationListener;
 import com.mucommander.conf.impl.MuConfiguration;
+import com.mucommander.desktop.DesktopManager;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
 import com.mucommander.file.FileURL;
@@ -74,6 +74,11 @@ public class ToolBar extends JToolBar implements ConfigurationListener, MouseLis
     /** Dimension of button separators */
     private final static Dimension SEPARATOR_DIMENSION = new Dimension(10, 16);
 
+    /** Whether to use the new JButton decorations introduced in Mac OS X 10.5 (Leopard) with Java 1.5 and up */
+    private final static boolean USE_MAC_OS_X_CLIENT_PROPERTIES =
+            OsFamilies.MAC_OS_X.isCurrent() &&
+            OsVersions.MAC_OS_X_10_5.isCurrentOrHigher() &&
+            JavaVersions.JAVA_1_5.isCurrentOrHigher();
 
     /** Current icon scale value */
     // The math.max(1.0f, ...) part is to workaround a bug which cause(d) this value to be set to 0.0 in the configuration file.
@@ -212,8 +217,7 @@ public class ToolBar extends JToolBar implements ConfigurationListener, MouseLis
             }
         }
 
-        // Use new JButton decorations introduced in Mac OS X 10.5 (Leopard) with Java 1.5 and up
-        if(OsFamilies.MAC_OS_X.isCurrent() && OsVersions.MAC_OS_X_10_5.isCurrentOrHigher() && JavaVersions.JAVA_1_5.isCurrentOrHigher()) {
+        if(USE_MAC_OS_X_CLIENT_PROPERTIES) {
             int nbComponents = getComponentCount();
             Component comp;
             boolean hasPrevious, hasNext;
@@ -264,12 +268,10 @@ public class ToolBar extends JToolBar implements ConfigurationListener, MouseLis
             toolTipText += " ("+acceleratorText+")";
         button.setToolTipText(toolTipText);
 
-        // Scale icon if scale factor is different from 1.0
-        if(scaleFactor!=1.0f)
-            button.setIcon(IconManager.getScaledIcon(action.getIcon(), scaleFactor));
+        // Sets the button icon, taking into account the icon scale factor
+        setButtonIcon(button);
 
-        // Use new JButton decorations introduced in Mac OS X 10.5 (Leopard) with Java 1.5 and up
-        if(OsFamilies.MAC_OS_X.isCurrent() && OsVersions.MAC_OS_X_10_5.isCurrentOrHigher() && JavaVersions.JAVA_1_5.isCurrentOrHigher()) {
+        if(USE_MAC_OS_X_CLIENT_PROPERTIES) {
             button.putClientProperty("JButton.buttonType", "segmentedTextured");
             button.setRolloverEnabled(true);
         }
@@ -281,6 +283,21 @@ public class ToolBar extends JToolBar implements ConfigurationListener, MouseLis
         }
 
         add(button);
+    }
+
+    /**
+     * Sets the specified button's icon to the proper scale.
+     *
+     * @param button the button to update
+     */
+    private void setButtonIcon(JButton button) {
+        // Note: the action's icon must not be changed and remain in its original, non-scaled size
+        ImageIcon icon = IconManager.getScaledIcon((ImageIcon)button.getAction().getValue(Action.SMALL_ICON), scaleFactor);
+
+        if(!USE_MAC_OS_X_CLIENT_PROPERTIES)     // Add padding around the icon so the button feels less crowded
+            icon = IconManager.getPaddedIcon(icon, new Insets(3, 4, 3, 4));
+
+        button.setIcon(icon);
     }
 
 
@@ -302,9 +319,7 @@ public class ToolBar extends JToolBar implements ConfigurationListener, MouseLis
 
             for(int i=0; i<nbComponents; i++) {
                 if(components[i] instanceof JButton) {
-                    JButton button = (JButton)components[i];
-                    // Change the button's icon but NOT the action's icon which has to remain in its original non-scaled size
-                    button.setIcon(IconManager.getScaledIcon((ImageIcon)button.getAction().getValue(Action.SMALL_ICON), scaleFactor));
+                    setButtonIcon((JButton)components[i]);
                 }
             }
         }
