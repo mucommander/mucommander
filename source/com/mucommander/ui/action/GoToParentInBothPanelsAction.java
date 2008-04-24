@@ -47,7 +47,12 @@ public class GoToParentInBothPanelsAction extends GoToParentAction {
      * @param mainFrame  frame to which the action is attached.
      * @param properties action's properties.
      */
-    public GoToParentInBothPanelsAction(MainFrame mainFrame, Hashtable properties) {super(mainFrame, properties);}
+    public GoToParentInBothPanelsAction(MainFrame mainFrame, Hashtable properties) {
+        super(mainFrame, properties);
+
+        // Perform this action in a separate thread, to avoid locking the event thread
+        setPerformActionInSeparateThread(true);
+    }
 
 
 
