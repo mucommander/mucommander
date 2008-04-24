@@ -196,6 +196,27 @@ public class IconManager {
 
 
     /**
+     * Returns an icon made of the specified icon and some transparent space around it.
+     *
+     * @param icon the original icon, will be painted at the center of the new icon
+     * @param insets specifies the dimensions of the transparent space around the returned icon
+     * @return an icon made of the specified icon and some transparent space around it
+     */
+    public static ImageIcon getPaddedIcon(ImageIcon icon, Insets insets) {
+        BufferedImage bi = new BufferedImage(
+                icon.getIconWidth()+insets.left+insets.right,
+                icon.getIconHeight()+insets.top+insets.bottom,
+                BufferedImage.TYPE_INT_ARGB);
+
+        Graphics g = bi.getGraphics();
+        g.drawImage(icon.getImage(), insets.left, insets.top, null);
+
+        return new ImageIcon(bi);
+    }
+
+
+
+    /**
      * Creates and returns an ImageIcon with the same content and dimensions. This method is useful when an ImageIcon
      * is needed and only an Icon is available.
      *
