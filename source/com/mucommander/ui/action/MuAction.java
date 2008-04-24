@@ -59,9 +59,15 @@ public abstract class MuAction extends AbstractAction {
     /** The MainFrame associated with this MuAction */
     protected MainFrame mainFrame;
 
+    /** if true, action events are ignored while the MainFrame is in 'no events mode'. Enabled by default. */
+    private boolean honourNoEventsMode = true;
+
+    /** if true, #performAction() is called from a separate thread (and not from the event thread) when this action is
+     * performed. Disabled by default. */
+    private boolean performActionInSeparateThread = false;
+
     /** Name of the alternate accelerator KeyStroke property */
     public final static String ALTERNATE_ACCELERATOR_PROPERTY_KEY = "alternate_accelerator";
-
 
     private final static String SHIFT_MODIFIER_STRING = KeyEvent.getKeyModifiersText(KeyEvent.SHIFT_MASK);
     private final static String CTRL_MODIFIER_STRING = KeyEvent.getKeyModifiersText(KeyEvent.CTRL_MASK);
@@ -403,19 +409,66 @@ public abstract class MuAction extends AbstractAction {
 
     /**
      * Return <code>true</code> if action events are ignored while the <code>MainFrame</code> associated with this
-     * action is in 'no events' mode (see {@link MainFrame} for an explanation of this mode).
+     * action is in 'no events mode' (see {@link MainFrame} for an explanation about this mode).
+     * By default, this method returns <code>true</code>.
      *
-     * <p>This method always returns <code>true</code> (action events are ignored) and should be overridden to change
-     * the default behavior.
+     * @return <code>true</code> if action events are ignored while the <code>MainFrame</code> associated with this
+     * action is in 'no events' mode
      */
-    public boolean ignoreEventsWhileInNoEventsMode() {
-        return true;
+    public boolean honourNoEventsMode() {
+        return honourNoEventsMode;
+    }
+
+    /**
+     * Sets whether action events are to be ignored while the <code>MainFrame</code> associated with this action is in
+     * 'no events mode' (see {@link MainFrame} for an explanation about this mode).
+     * By default (unless this method has been called), 'no events mode' is honoured.
+     *
+     * @param honourNoEventsMode if true, actions events will be ignored while the <code>MainFrame</code> associated
+     * with this action is in 'no events mode'
+     */
+    public void setHonourNoEventsMode(boolean honourNoEventsMode) {
+        this.honourNoEventsMode = honourNoEventsMode;
+    }
+
+
+    /**
+     * Returns <code>true</code> if {@link #performAction()} is called from a separate thread (and not from the event
+     * thread) when this action is performed. By default, <code>false</code> is returned, i.e. actions are performed
+     * from the main event thread.
+     *
+     * <p>Actions that have the potential to hold the caller thread for a substantial amount of time should perform the
+     * action in a separate thread, to avoid locking the event thread.</p>
+     *
+     * @return <code>true</code> if {@link #performAction()} is called from a separate thread (and not from the event
+     * thread) when this action is performed
+     */
+    public boolean performActionInSeparateThread() {
+        return performActionInSeparateThread;
+    }
+
+    /**
+     * Sets whether {@link #performAction()} is called from a separate thread (and not from the event thread) when this
+     * action is performed. By default (unless this method has been called), actions are performed from the main event
+     * thread.
+     *
+     * <p>Actions that have the potential to hold the caller thread for a substantial amount of time should perform the
+     * action in a separate thread, to avoid locking the event thread.</p>
+     *
+     * @param performActionInSeparateThread <code>true</code> to have {@link #performAction()} called from a separate
+     * thread (and not from the event thread) when this action is performed
+     */
+    public void setPerformActionInSeparateThread(boolean performActionInSeparateThread) {
+        this.performActionInSeparateThread = performActionInSeparateThread;
     }
 
 
     /////////////////////
     // Error reporting //
     /////////////////////
+
+    // Todo: remove those methods, they have nothing to do here
+
     /**
      * Opens a dialog with a generic error message.
      * <p>
@@ -456,13 +509,23 @@ public abstract class MuAction extends AbstractAction {
 
     /**
      * Intercepts action events and filters them out when the {@link MainFrame} associated with this action is in
-     * 'no events' mode and {@link #ignoreEventsWhileInNoEventsMode()} returns <code>true</code>.
+     * 'no events' mode and {@link #honourNoEventsMode()} returns <code>true</code>.
      * If the action event is not filtered out, {@link #performAction()} is called to provide a response to the action event.
      */
     public void actionPerformed(ActionEvent e) {
         // Discard this event while in 'no events mode'
-        if(!(mainFrame.getNoEventsMode() && ignoreEventsWhileInNoEventsMode()))
-            performAction();
+        if(!(mainFrame.getNoEventsMode() && honourNoEventsMode())) {
+            if(performActionInSeparateThread()) {
+                new Thread() {
+                    public void run() {
+                        performAction();
+                    }
+                }.start();
+            }
+            else {
+                performAction();
+            }
+        }
     }
 
 

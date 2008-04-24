@@ -41,6 +41,9 @@ public class StopAction extends MuAction implements LocationListener {
         // Listen to location change events
         mainFrame.getLeftPanel().getLocationManager().addLocationListener(this);
         mainFrame.getRightPanel().getLocationManager().addLocationListener(this);
+
+        // This action must be available while in 'no events mode', that's the whole point 
+        setHonourNoEventsMode(false);
     }
 
     public void performAction() {
@@ -49,10 +52,6 @@ public class StopAction extends MuAction implements LocationListener {
 
         if(changeFolderThread!=null)
             changeFolderThread.tryKill();
-    }
-
-    public boolean ignoreEventsWhileInNoEventsMode() {
-        return false;
     }
 
 
