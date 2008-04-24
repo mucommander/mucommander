@@ -23,8 +23,8 @@ import com.mucommander.conf.Configuration;
 import com.mucommander.conf.ConfigurationException;
 import com.mucommander.conf.ConfigurationListener;
 import com.mucommander.conf.ValueList;
-import com.mucommander.file.FileFactory;
 import com.mucommander.file.AbstractFile;
+import com.mucommander.file.FileFactory;
 import com.mucommander.file.icon.CachedFileIconProvider;
 import com.mucommander.runtime.OsFamilies;
 import com.mucommander.ui.icon.FileIcons;
@@ -514,6 +514,15 @@ public class MuConfiguration {
     /** Default value for {@link #LIST_HIDDEN_FILES}. */
     public static final boolean DEFAULT_LIST_HIDDEN_FILES         = false;
 
+
+    // - Tree variables ------------------------------------------------------
+    // -----------------------------------------------------------------------
+    /** Section describing the tree configuration. */
+    public static final String  TREE_SECTION                      = "tree";
+    public static final String  LEFT_TREE_VISIBLE                 = TREE_SECTION + "." + LEFT + "." + "visible";
+    public static final String  RIGHT_TREE_VISIBLE                = TREE_SECTION + "." + RIGHT + "." + "visible";
+    public static final String  LEFT_TREE_WIDTH                   = TREE_SECTION + "." + LEFT + "." + "width";
+    public static final String  RIGHT_TREE_WIDTH                  = TREE_SECTION + "." + RIGHT + "." + "width";
 
 
     // - Instance fields -----------------------------------------------------

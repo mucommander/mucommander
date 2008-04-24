@@ -58,89 +58,6 @@ public class FileTableCellRenderer implements TableCellRenderer, ThemeListener {
     /** Custom JLabel that render specific column cells */
     private CellLabel[] cellLabels = new CellLabel[Columns.COLUMN_COUNT];
 
-    // - Color definitions -----------------------------------------------------------
-    // -------------------------------------------------------------------------------
-    private static Color[][][] foregroundColors;
-    private static Color[][]   backgroundColors;
-    private static Color       unmatchedForeground;
-    private static Color       unmatchedBackground;
-    private static Color       activeOutlineColor;
-    private static Color       inactiveOutlineColor;
-    private static final int NORMAL               = 0;
-    private static final int SELECTED             = 1;
-    private static final int ALTERNATE            = 2;
-    private static final int SECONDARY            = 3;
-    private static final int INACTIVE             = 0;
-    private static final int ACTIVE               = 1;
-    private static final int HIDDEN_FILE          = 0;
-    private static final int FOLDER               = 1;
-    private static final int ARCHIVE              = 2;
-    private static final int SYMLINK              = 3;
-    private static final int MARKED               = 4;
-    private static final int PLAIN_FILE           = 5;
-
-    // - Font definitions ------------------------------------------------------------
-    // -------------------------------------------------------------------------------
-    private static Font font;
-
-    // - Initialisation --------------------------------------------------------------
-    // -------------------------------------------------------------------------------
-    static {
-        foregroundColors = new Color[2][2][6];
-        backgroundColors = new Color[2][4];
-
-        // Active background colors.
-        backgroundColors[ACTIVE][NORMAL]    = ThemeManager.getCurrentColor(Theme.FILE_TABLE_BACKGROUND_COLOR);
-        backgroundColors[ACTIVE][SELECTED]  = ThemeManager.getCurrentColor(Theme.FILE_TABLE_SELECTED_BACKGROUND_COLOR);
-        backgroundColors[ACTIVE][ALTERNATE] = ThemeManager.getCurrentColor(Theme.FILE_TABLE_ALTERNATE_BACKGROUND_COLOR);
-        backgroundColors[ACTIVE][SECONDARY] = ThemeManager.getCurrentColor(Theme.FILE_TABLE_SELECTED_SECONDARY_BACKGROUND_COLOR);
-
-        // Inactive background colors.
-        backgroundColors[INACTIVE][NORMAL]    = ThemeManager.getCurrentColor(Theme.FILE_TABLE_INACTIVE_BACKGROUND_COLOR);
-        backgroundColors[INACTIVE][SELECTED]  = ThemeManager.getCurrentColor(Theme.FILE_TABLE_INACTIVE_SELECTED_BACKGROUND_COLOR);
-        backgroundColors[INACTIVE][ALTERNATE] = ThemeManager.getCurrentColor(Theme.FILE_TABLE_INACTIVE_ALTERNATE_BACKGROUND_COLOR);
-        backgroundColors[INACTIVE][SECONDARY] = ThemeManager.getCurrentColor(Theme.FILE_TABLE_INACTIVE_SELECTED_SECONDARY_BACKGROUND_COLOR);
-
-        // Normal foreground foregroundColors.
-        foregroundColors[ACTIVE][NORMAL][HIDDEN_FILE]     = ThemeManager.getCurrentColor(Theme.HIDDEN_FILE_FOREGROUND_COLOR);
-        foregroundColors[ACTIVE][NORMAL][FOLDER]          = ThemeManager.getCurrentColor(Theme.FOLDER_FOREGROUND_COLOR);
-        foregroundColors[ACTIVE][NORMAL][ARCHIVE]         = ThemeManager.getCurrentColor(Theme.ARCHIVE_FOREGROUND_COLOR);
-        foregroundColors[ACTIVE][NORMAL][SYMLINK]         = ThemeManager.getCurrentColor(Theme.SYMLINK_FOREGROUND_COLOR);
-        foregroundColors[ACTIVE][NORMAL][MARKED]          = ThemeManager.getCurrentColor(Theme.MARKED_FOREGROUND_COLOR);
-        foregroundColors[ACTIVE][NORMAL][PLAIN_FILE]      = ThemeManager.getCurrentColor(Theme.FILE_FOREGROUND_COLOR);
-
-        // Normal unfocused foreground foregroundColors.
-        foregroundColors[INACTIVE][NORMAL][HIDDEN_FILE]    = ThemeManager.getCurrentColor(Theme.HIDDEN_FILE_INACTIVE_FOREGROUND_COLOR);
-        foregroundColors[INACTIVE][NORMAL][FOLDER]         = ThemeManager.getCurrentColor(Theme.FOLDER_INACTIVE_FOREGROUND_COLOR);
-        foregroundColors[INACTIVE][NORMAL][ARCHIVE]        = ThemeManager.getCurrentColor(Theme.ARCHIVE_INACTIVE_FOREGROUND_COLOR);
-        foregroundColors[INACTIVE][NORMAL][SYMLINK]        = ThemeManager.getCurrentColor(Theme.SYMLINK_INACTIVE_FOREGROUND_COLOR);
-        foregroundColors[INACTIVE][NORMAL][MARKED]         = ThemeManager.getCurrentColor(Theme.MARKED_INACTIVE_FOREGROUND_COLOR);
-        foregroundColors[INACTIVE][NORMAL][PLAIN_FILE]     = ThemeManager.getCurrentColor(Theme.FILE_INACTIVE_FOREGROUND_COLOR);
-
-        // Selected foreground foregroundColors.
-        foregroundColors[ACTIVE][SELECTED][HIDDEN_FILE]   = ThemeManager.getCurrentColor(Theme.HIDDEN_FILE_SELECTED_FOREGROUND_COLOR);
-        foregroundColors[ACTIVE][SELECTED][FOLDER]        = ThemeManager.getCurrentColor(Theme.FOLDER_SELECTED_FOREGROUND_COLOR);
-        foregroundColors[ACTIVE][SELECTED][ARCHIVE]       = ThemeManager.getCurrentColor(Theme.ARCHIVE_SELECTED_FOREGROUND_COLOR);
-        foregroundColors[ACTIVE][SELECTED][SYMLINK]       = ThemeManager.getCurrentColor(Theme.SYMLINK_SELECTED_FOREGROUND_COLOR);
-        foregroundColors[ACTIVE][SELECTED][MARKED]        = ThemeManager.getCurrentColor(Theme.MARKED_SELECTED_FOREGROUND_COLOR);
-        foregroundColors[ACTIVE][SELECTED][PLAIN_FILE]    = ThemeManager.getCurrentColor(Theme.FILE_SELECTED_FOREGROUND_COLOR);
-
-        // Selected unfocused foreground foregroundColors.
-        foregroundColors[INACTIVE][SELECTED][HIDDEN_FILE]  = ThemeManager.getCurrentColor(Theme.HIDDEN_FILE_INACTIVE_SELECTED_FOREGROUND_COLOR);
-        foregroundColors[INACTIVE][SELECTED][FOLDER]       = ThemeManager.getCurrentColor(Theme.FOLDER_INACTIVE_SELECTED_FOREGROUND_COLOR);
-        foregroundColors[INACTIVE][SELECTED][ARCHIVE]      = ThemeManager.getCurrentColor(Theme.ARCHIVE_INACTIVE_SELECTED_FOREGROUND_COLOR);
-        foregroundColors[INACTIVE][SELECTED][SYMLINK]      = ThemeManager.getCurrentColor(Theme.SYMLINK_INACTIVE_SELECTED_FOREGROUND_COLOR);
-        foregroundColors[INACTIVE][SELECTED][MARKED]       = ThemeManager.getCurrentColor(Theme.MARKED_INACTIVE_SELECTED_FOREGROUND_COLOR);
-        foregroundColors[INACTIVE][SELECTED][PLAIN_FILE]   = ThemeManager.getCurrentColor(Theme.FILE_INACTIVE_SELECTED_FOREGROUND_COLOR);
-
-        unmatchedForeground                                = ThemeManager.getCurrentColor(Theme.FILE_TABLE_UNMATCHED_FOREGROUND_COLOR);
-        unmatchedBackground                                = ThemeManager.getCurrentColor(Theme.FILE_TABLE_UNMATCHED_BACKGROUND_COLOR);
-        font                                               = ThemeManager.getCurrentFont(Theme.FILE_TABLE_FONT);
-
-        activeOutlineColor                                 = ThemeManager.getCurrentColor(Theme.FILE_TABLE_SELECTED_OUTLINE_COLOR);
-        inactiveOutlineColor                               = ThemeManager.getCurrentColor(Theme.FILE_TABLE_INACTIVE_SELECTED_OUTLINE_COLOR);
-    }
-
 
     public FileTableCellRenderer(FileTable table) {
     	this.table = table;
@@ -151,7 +68,7 @@ public class FileTableCellRenderer implements TableCellRenderer, ThemeListener {
             this.cellLabels[i] = new CellLabel();
 
         // Set labels' font.
-        setCellLabelsFont(font);
+        setCellLabelsFont(ThemeCache.tableFont);
 
         // Set labels' text alignment
         cellLabels[Columns.EXTENSION].setHorizontalAlignment(CellLabel.CENTER);
@@ -163,7 +80,7 @@ public class FileTableCellRenderer implements TableCellRenderer, ThemeListener {
         cellLabels[Columns.GROUP].setHorizontalAlignment(CellLabel.LEFT);
 
         // Listens to certain configuration variables
-        ThemeManager.addCurrentThemeListener(this);
+        ThemeCache.addThemeListener(this);
     }
 
 
@@ -171,7 +88,7 @@ public class FileTableCellRenderer implements TableCellRenderer, ThemeListener {
      * Returns the font used to render all table cells.
      */
     public static Font getCellFont() {
-        return font;
+        return ThemeCache.tableFont;
     }
 
 	
@@ -197,30 +114,30 @@ public class FileTableCellRenderer implements TableCellRenderer, ThemeListener {
     private static int getColorIndex(int row, AbstractFile file, FileTableModel tableModel) {
         // Parent directory.
         if(row==0 && tableModel.hasParentFolder())
-            return FOLDER;
+            return ThemeCache.FOLDER;
 
         // Marked file.
         if(tableModel.isRowMarked(row))
-            return MARKED;
+            return ThemeCache.MARKED;
 
         // Symlink.
         if(file.isSymlink())
-            return SYMLINK;
+            return ThemeCache.SYMLINK;
 
         // Hidden file.
         if(file.isHidden())
-            return HIDDEN_FILE;
+            return ThemeCache.HIDDEN_FILE;
 
         // Directory.
         if(file.isDirectory())
-            return FOLDER;
+            return ThemeCache.FOLDER;
 
         // Archive.
         if(file.isBrowsable())
-            return ARCHIVE;
+            return ThemeCache.ARCHIVE;
 
         // Plain file.
-        return PLAIN_FILE;
+        return ThemeCache.PLAIN_FILE;
     }
 
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
@@ -258,8 +175,8 @@ public class FileTableCellRenderer implements TableCellRenderer, ThemeListener {
 
         // Retrieves the various indexes of the colors to apply.
         // Selection only applies when the table is the active one
-        selectedIndex =  (isSelected && ((FileTable)table).isActiveTable()) ? SELECTED : NORMAL;
-        focusedIndex  = table.hasFocus() ? ACTIVE : INACTIVE;
+        selectedIndex =  (isSelected && ((FileTable)table).isActiveTable()) ? ThemeCache.SELECTED : ThemeCache.NORMAL;
+        focusedIndex  = table.hasFocus() ? ThemeCache.ACTIVE : ThemeCache.INACTIVE;
         colorIndex    = getColorIndex(row, file, tableModel);
 
         columnId = table.convertColumnIndexToModel(column);
@@ -278,9 +195,9 @@ public class FileTableCellRenderer implements TableCellRenderer, ThemeListener {
         else {
             String text = (String)value;
             if(matches || isSelected)
-                label.setForeground(foregroundColors[focusedIndex][selectedIndex][colorIndex]);
+                label.setForeground(ThemeCache.foregroundColors[focusedIndex][selectedIndex][colorIndex]);
             else
-                label.setForeground(unmatchedForeground);
+                label.setForeground(ThemeCache.unmatchedForeground);
 
             // If component's preferred width is bigger than column width then the component is not entirely
             // visible so we set a tooltip text that will display the whole text when mouse is over the 
@@ -298,19 +215,19 @@ public class FileTableCellRenderer implements TableCellRenderer, ThemeListener {
         }
 
         // Set background color depending on whether the row is selected or not, and whether the table has focus or not
-        if(selectedIndex == SELECTED)
-            label.setBackground(backgroundColors[focusedIndex][SELECTED], backgroundColors[focusedIndex][SECONDARY]);
+        if(selectedIndex == ThemeCache.SELECTED)
+            label.setBackground(ThemeCache.backgroundColors[focusedIndex][ThemeCache.SELECTED], ThemeCache.backgroundColors[focusedIndex][ThemeCache.SECONDARY]);
         else if(matches) {
             if(table.hasFocus() && search.isActive())
-                label.setBackground(backgroundColors[focusedIndex][NORMAL]);
+                label.setBackground(ThemeCache.backgroundColors[focusedIndex][ThemeCache.NORMAL]);
             else
-                label.setBackground(backgroundColors[focusedIndex][(row % 2 == 0) ? NORMAL : ALTERNATE]);
+                label.setBackground(ThemeCache.backgroundColors[focusedIndex][(row % 2 == 0) ? ThemeCache.NORMAL : ThemeCache.ALTERNATE]);
         }
         else
-            label.setBackground(unmatchedBackground);
+            label.setBackground(ThemeCache.unmatchedBackground);
 
-        if(selectedIndex == SELECTED)
-            label.setOutline(table.hasFocus() ? activeOutlineColor : inactiveOutlineColor);
+        if(selectedIndex == ThemeCache.SELECTED)
+            label.setOutline(table.hasFocus() ? ThemeCache.activeOutlineColor : ThemeCache.inactiveOutlineColor);
         else
             label.setOutline(null);
 
@@ -325,190 +242,6 @@ public class FileTableCellRenderer implements TableCellRenderer, ThemeListener {
      * Receives theme color changes notifications.
      */
     public void colorChanged(ColorChangedEvent event) {
-        switch(event.getColorId()) {
-            // Plain file color.
-        case Theme.FILE_FOREGROUND_COLOR:
-            foregroundColors[ACTIVE][NORMAL][PLAIN_FILE] = event.getColor();
-            break;
-
-            // Selected file color.
-        case Theme.FILE_SELECTED_FOREGROUND_COLOR:
-            foregroundColors[ACTIVE][SELECTED][PLAIN_FILE] = event.getColor();
-            break;
-
-            // Hidden files.
-        case Theme.HIDDEN_FILE_FOREGROUND_COLOR:
-            foregroundColors[ACTIVE][NORMAL][HIDDEN_FILE] = event.getColor();
-            break;
-
-            // Selected hidden files.
-        case Theme.HIDDEN_FILE_SELECTED_FOREGROUND_COLOR:
-            foregroundColors[ACTIVE][SELECTED][HIDDEN_FILE] = event.getColor();
-            break;
-
-            // Folders.
-        case Theme.FOLDER_FOREGROUND_COLOR:
-            foregroundColors[ACTIVE][NORMAL][FOLDER] = event.getColor();
-            break;
-
-            // Selected folders.
-        case Theme.FOLDER_SELECTED_FOREGROUND_COLOR:
-            foregroundColors[ACTIVE][SELECTED][FOLDER] = event.getColor();
-            break;
-
-            // Archives.
-        case Theme.ARCHIVE_FOREGROUND_COLOR:
-            foregroundColors[ACTIVE][NORMAL][ARCHIVE] = event.getColor();
-            break;
-
-            // Selected archives.
-        case Theme.ARCHIVE_SELECTED_FOREGROUND_COLOR:
-            foregroundColors[ACTIVE][SELECTED][ARCHIVE] = event.getColor();
-            break;
-
-            // Symlinks.
-        case Theme.SYMLINK_FOREGROUND_COLOR:
-            foregroundColors[ACTIVE][NORMAL][SYMLINK] = event.getColor();
-            break;
-
-            // Selected symlinks.
-        case Theme.SYMLINK_SELECTED_FOREGROUND_COLOR:
-            foregroundColors[ACTIVE][SELECTED][SYMLINK] = event.getColor();
-            break;
-
-            // Marked files.
-        case Theme.MARKED_FOREGROUND_COLOR:
-            foregroundColors[ACTIVE][NORMAL][MARKED] = event.getColor();
-            break;
-
-            // Selected marked files.
-        case Theme.MARKED_SELECTED_FOREGROUND_COLOR:
-            foregroundColors[ACTIVE][SELECTED][MARKED] = event.getColor();
-            break;
-
-            // Plain file color.
-        case Theme.FILE_INACTIVE_FOREGROUND_COLOR:
-            foregroundColors[INACTIVE][NORMAL][PLAIN_FILE] = event.getColor();
-            break;
-
-            // Selected file color.
-        case Theme.FILE_INACTIVE_SELECTED_FOREGROUND_COLOR:
-            foregroundColors[INACTIVE][SELECTED][PLAIN_FILE] = event.getColor();
-            break;
-
-            // Hidden files.
-        case Theme.HIDDEN_FILE_INACTIVE_FOREGROUND_COLOR:
-            foregroundColors[INACTIVE][NORMAL][HIDDEN_FILE] = event.getColor();
-            break;
-
-            // Selected hidden files.
-        case Theme.HIDDEN_FILE_INACTIVE_SELECTED_FOREGROUND_COLOR:
-            foregroundColors[INACTIVE][SELECTED][HIDDEN_FILE] = event.getColor();
-            break;
-
-            // Folders.
-        case Theme.FOLDER_INACTIVE_FOREGROUND_COLOR:
-            foregroundColors[INACTIVE][NORMAL][FOLDER] = event.getColor();
-            break;
-
-            // Selected folders.
-        case Theme.FOLDER_INACTIVE_SELECTED_FOREGROUND_COLOR:
-            foregroundColors[INACTIVE][SELECTED][FOLDER] = event.getColor();
-            break;
-
-            // Archives.
-        case Theme.ARCHIVE_INACTIVE_FOREGROUND_COLOR:
-            foregroundColors[INACTIVE][NORMAL][ARCHIVE] = event.getColor();
-            break;
-
-            // Selected archives.
-        case Theme.ARCHIVE_INACTIVE_SELECTED_FOREGROUND_COLOR:
-            foregroundColors[INACTIVE][SELECTED][ARCHIVE] = event.getColor();
-            break;
-
-            // Symlinks.
-        case Theme.SYMLINK_INACTIVE_FOREGROUND_COLOR:
-            foregroundColors[INACTIVE][NORMAL][SYMLINK] = event.getColor();
-            break;
-
-            // Selected symlinks.
-        case Theme.SYMLINK_INACTIVE_SELECTED_FOREGROUND_COLOR:
-            foregroundColors[INACTIVE][SELECTED][SYMLINK] = event.getColor();
-            break;
-
-            // Marked files.
-        case Theme.MARKED_INACTIVE_FOREGROUND_COLOR:
-            foregroundColors[INACTIVE][NORMAL][MARKED] = event.getColor();
-            break;
-
-            // Selected marked files.
-        case Theme.MARKED_INACTIVE_SELECTED_FOREGROUND_COLOR:
-            foregroundColors[INACTIVE][SELECTED][MARKED] = event.getColor();
-            break;
-
-            // Unmatched foreground
-        case Theme.FILE_TABLE_UNMATCHED_FOREGROUND_COLOR:
-            unmatchedForeground = event.getColor();
-            break;
-
-            // Unmached background
-        case Theme.FILE_TABLE_UNMATCHED_BACKGROUND_COLOR:
-            unmatchedBackground = event.getColor();
-            break;
-
-            // Active normal background.
-        case Theme.FILE_TABLE_BACKGROUND_COLOR:
-            backgroundColors[ACTIVE][NORMAL] = event.getColor();
-            break;
-
-            // Active selected background.
-        case Theme.FILE_TABLE_SELECTED_BACKGROUND_COLOR:
-            backgroundColors[ACTIVE][SELECTED] = event.getColor();
-            break;
-
-            // Active alternate background.
-        case Theme.FILE_TABLE_ALTERNATE_BACKGROUND_COLOR:
-            backgroundColors[ACTIVE][ALTERNATE] = event.getColor();
-            break;
-
-            // Inactive normal background.
-        case Theme.FILE_TABLE_INACTIVE_BACKGROUND_COLOR:
-            backgroundColors[INACTIVE][NORMAL] = event.getColor();
-            break;
-
-            // Inactive selected background.
-        case Theme.FILE_TABLE_INACTIVE_SELECTED_BACKGROUND_COLOR:
-            backgroundColors[INACTIVE][SELECTED] = event.getColor();
-            break;
-
-            // Inactive alternate background.
-        case Theme.FILE_TABLE_INACTIVE_ALTERNATE_BACKGROUND_COLOR:
-            backgroundColors[INACTIVE][ALTERNATE] = event.getColor();
-            break;
-
-            // Active selection outline.
-        case Theme.FILE_TABLE_SELECTED_OUTLINE_COLOR:
-            activeOutlineColor = event.getColor();
-            break;
-
-            // Inactive selection outline.
-        case Theme.FILE_TABLE_INACTIVE_SELECTED_OUTLINE_COLOR:
-            inactiveOutlineColor = event.getColor();
-            break;
-
-            // Secondary background color.
-        case Theme.FILE_TABLE_SELECTED_SECONDARY_BACKGROUND_COLOR:
-            backgroundColors[ACTIVE][SECONDARY] = event.getColor();
-            break;
-
-            // Inactive secondary background color.
-        case Theme.FILE_TABLE_INACTIVE_SELECTED_SECONDARY_BACKGROUND_COLOR:
-            backgroundColors[INACTIVE][SECONDARY] = event.getColor();
-            break;
-
-        default:
-            return;
-        }
         table.repaint();
     }
 
@@ -517,8 +250,7 @@ public class FileTableCellRenderer implements TableCellRenderer, ThemeListener {
      */
     public void fontChanged(FontChangedEvent event) {
         if(event.getFontId() == Theme.FILE_TABLE_FONT) {
-            font = event.getFont();
-            setCellLabelsFont(font);
+            setCellLabelsFont(ThemeCache.tableFont);
         }
     }
 }

@@ -18,7 +18,6 @@
 
 package com.mucommander.ui.main;
 
-import com.mucommander.desktop.DesktopManager;
 import com.mucommander.Debug;
 import com.mucommander.auth.AuthException;
 import com.mucommander.auth.CredentialsManager;
@@ -26,6 +25,7 @@ import com.mucommander.auth.CredentialsMapping;
 import com.mucommander.conf.ConfigurationEvent;
 import com.mucommander.conf.ConfigurationListener;
 import com.mucommander.conf.impl.MuConfiguration;
+import com.mucommander.desktop.DesktopManager;
 import com.mucommander.file.*;
 import com.mucommander.file.filter.AndFileFilter;
 import com.mucommander.file.filter.AttributeFileFilter;
@@ -44,6 +44,7 @@ import com.mucommander.ui.main.menu.TablePopupMenu;
 import com.mucommander.ui.main.table.FileTable;
 import com.mucommander.ui.main.table.FileTableConfiguration;
 import com.mucommander.ui.main.table.FolderChangeMonitor;
+import com.mucommander.ui.main.tree.FoldersTreePanel;
 import com.mucommander.ui.progress.ProgressTextField;
 import com.mucommander.ui.theme.*;
 
@@ -85,6 +86,8 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
     private ProgressTextField locationField;
     private FileTable fileTable;
     private JScrollPane scrollPane;
+    private FoldersTreePanel foldersTreePanel;
+    private JSplitPane treeSplitPane;
 	
     private FolderHistory folderHistory = new FolderHistory(this);
     
@@ -107,6 +110,15 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
     private final static String CANCEL_TEXT = Translator.get("cancel");
     private final static String BROWSE_TEXT = Translator.get("browse");
     private final static String DOWNLOAD_TEXT = Translator.get("download");
+    
+    /** Is directory tree visible */
+    private boolean treeVisible = false;
+
+    /** Saved width of a directory tree (when it's not visible) */ 
+    private int oldTreeWidth = 150;
+
+    /* TODO branch private boolean branchView; */
+
 
     FolderPanel(MainFrame mainFrame, AbstractFile initialFolder, FileTableConfiguration conf) {
         super(new BorderLayout());
@@ -215,8 +227,14 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
             }
         });
 
-        add(scrollPane, BorderLayout.CENTER);
-
+        // create folders tree on a JSplitPane 
+        foldersTreePanel = new FoldersTreePanel(this);
+        foldersTreePanel.setVisible(false);
+        treeSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, foldersTreePanel, scrollPane);
+        treeSplitPane.setDividerSize(0);
+        treeSplitPane.setDividerLocation(0);
+        add(treeSplitPane, BorderLayout.CENTER);        
+                
         // Listens to some configuration variables
         MuConfiguration.addConfigurationListener(this);
         ThemeManager.addCurrentThemeListener(this);
@@ -397,6 +415,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
      * @return the thread that performs the actual folder change, null if another folder change is already underway
      */
     public synchronized ChangeFolderThread tryChangeCurrentFolder(AbstractFile folder) {
+        /* TODO branch setBranchView(false); */
         return tryChangeCurrentFolder(folder, null);
     }
 
@@ -522,6 +541,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
      * @return the thread that performs the actual folder change, null if another folder change is already underway
      */
     public synchronized ChangeFolderThread tryRefreshCurrentFolder() {
+        foldersTreePanel.refreshFolder(currentFolder);
         return tryChangeCurrentFolder(currentFolder, null);
     }
 
@@ -539,6 +559,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
      * @return the thread that performs the actual folder change, null if another folder change is already underway
      */
     public synchronized ChangeFolderThread tryRefreshCurrentFolder(AbstractFile selectThisFileAfter) {
+        foldersTreePanel.refreshFolder(currentFolder);
         return tryChangeCurrentFolder(currentFolder, selectThisFileAfter);
     }
 		
@@ -763,6 +784,8 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
         private boolean disposed;
 
         private final Object lock = new Object();
+        
+        /* TODO branch private ArrayList childrenList; */
 
 
         public ChangeFolderThread(AbstractFile folder) {
@@ -1050,7 +1073,17 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
 
                         if(Debug.ON) Debug.trace("calling ls()");
 
-                        AbstractFile children[] = folder.ls(chainedFileFilter);
+                        /* TODO branch 
+                        AbstractFile children[] = new AbstractFile[0];
+                        if (branchView) {
+                            childrenList = new ArrayList();
+                            readBranch(folder);
+                            children = (AbstractFile[]) childrenList.toArray(children);
+                        } else {
+                            children = folder.ls(chainedFileFilter);                            
+                        } */
+                        AbstractFile children[] = folder.ls(chainedFileFilter);                            
+                        
 
                         synchronized(lock) {
                             if(killed) {
@@ -1084,6 +1117,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
                     }
                     catch(Exception e) {
                         if(Debug.ON) Debug.trace("Caught Exception: "+e);
+                        //e.printStackTrace();
 
                         if(killed) {
                             // If #tryKill() called #interrupt(), the exception we just caught was most likely
@@ -1130,6 +1164,28 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
             }
         }
 
+
+        /* TODO branch         
+        /**
+         * Reads all files in the current directory and all its subdirectories.
+         * @param parent
+         * /
+        private void readBranch(AbstractFile parent) {
+            AbstractFile[] children;
+            try {
+                children = parent.ls(chainedFileFilter);
+                for (int i=0; i<children.length; i++) {
+                    if (children[i].isDirectory()) {
+                        readBranch(children[i]);
+                    } else {
+                        childrenList.add(children[i]);
+                    }
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        */
 
         public void cleanup(boolean folderChangedSuccessfully) {
             // Ensures that this method is called only once
@@ -1223,4 +1279,84 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
      * Not used.
      */
     public void fontChanged(FontChangedEvent event) {}
+
+    
+    /**
+     * Returns true if a directory tree is visible.
+     */
+    public boolean isTreeVisible() {
+        return treeVisible;
+    }
+    
+    /**
+     * Returns width of a folders tree.
+     * @return a width of a folders tree
+     */
+    public int getTreeWidth() {
+        if (!treeVisible) {
+            return oldTreeWidth;
+        } else {
+        	return treeSplitPane.getDividerLocation();
+        }
+    }
+
+    /**
+     * Sets a width of a folders tree.
+     * @param width new width
+     */
+    public void setTreeWidth(int width) {
+        if (!treeVisible) {
+            oldTreeWidth = width;
+        } else {
+        	treeSplitPane.setDividerLocation(width);
+        	treeSplitPane.doLayout();
+        }
+    }
+
+    /**
+     * Returns a panel with a folders tree.
+     * @return a panel with a folders tree
+     */
+    public FoldersTreePanel getFoldersTreePanel() {
+        return foldersTreePanel;
+    }
+
+
+    /**
+     * Enables/disables a directory tree visibility. Invoked by {@link com.mucommander.ui.action.ToggleTreeAction}.
+     */
+    public void setTreeVisible(boolean treeVisible) {
+    	if (this.treeVisible != treeVisible) {
+	        this.treeVisible = treeVisible;
+	        if (!treeVisible) {
+	            // save width of a tree panel
+	            oldTreeWidth = treeSplitPane.getDividerLocation();
+	        }
+	        foldersTreePanel.setVisible(treeVisible);
+	        // hide completly divider if a tree isn't visible
+	        treeSplitPane.setDividerLocation(treeVisible ? oldTreeWidth : 0);
+	        treeSplitPane.setDividerSize(treeVisible ? 5 : 0);
+	        foldersTreePanel.requestFocus();
+    	}
+    }
+
+    /* TODO branch 
+    /**
+     * Returns true if branch view is enabled for this folder panel.
+     * @return
+     * /
+    public boolean isBranchView() {
+        return branchView;
+    }
+    
+    /**
+     * Enables/disables branch view.
+     * @see ToggleBranchViewAction
+     * @param branchView
+     * /
+    public void setBranchView(boolean branchView) {
+        this.branchView = branchView;
+    }
+    */
+
 }

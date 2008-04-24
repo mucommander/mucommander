@@ -245,4 +245,22 @@ public class StringUtils {
     public static boolean equals(String s1, String s2, Locale locale) {
         return Collator.getInstance(locale).equals(s1, s2);
     }
+    
+    
+    /**
+     * Parses the string argument as a signed decimal integer. If the string cannot be
+     * parsed a default value is returned.
+     * @param s a String containing the int representation to be parsed
+     * @param def a default value if string cannot be parsed
+     * @return the integer value represented by the argument or default value if it cannot be parsed 
+     */
+    public static int parseIntDef(String s, int def) {
+        try {
+            int i = Integer.parseInt(s);
+            return i;
+        } catch (NumberFormatException e) {
+            return def;
+        }
+    }
+
 }

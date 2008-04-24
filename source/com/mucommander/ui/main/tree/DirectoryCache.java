@@ -1,0 +1,96 @@
+/*
+ * This file is part of muCommander, http://www.mucommander.com
+ * Copyright (C) 2002-2008 Maxence Bernard
+ *
+ * muCommander is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * muCommander is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+package com.mucommander.ui.main.tree;
+
+import com.mucommander.file.filter.FileFilter;
+import com.mucommander.file.util.FileComparator;
+
+import javax.swing.event.EventListenerList;
+import java.util.HashMap;
+
+/**
+ * This class holds cached directories. 
+ * It maps AbstractFiles to DirectoryCache instances.
+ * @author Mariusz Jakubowski
+ *
+ */
+public class DirectoryCache extends HashMap {
+    
+    /** Comparator used to sort folders */
+    private FileComparator sort;
+
+    /** A file filter */
+    private FileFilter filter;
+
+    /** Listeners. */
+    protected EventListenerList listenerList = new EventListenerList();
+
+
+    /**
+     * Creates a new directory cache.
+     * @param filter filter used to filter children directories.
+     * @param sort a comparator used to sort children
+     */
+    public DirectoryCache(FileFilter filter, FileComparator sort) {
+        this.filter = filter;
+        this.sort = sort;
+    }
+
+    /**
+     * Returns current sort order.
+     */
+    public FileComparator getSort() {
+        return sort;
+    }
+
+    /**
+     * Returns current filter.
+     */
+    public FileFilter getFilter() {
+        return filter;
+    }
+
+    /**
+     * Fires a cachingStarted or cachingEnded event on all listeners.
+     * @param cachedDirectory a directory those children has been cached
+     * @param readingChildren 
+     */
+    public void fireChildrenCached(CachedDirectory cachedDirectory, boolean readingChildren) {
+        Object[] listeners = listenerList.getListenerList();
+        for (int i = listeners.length - 2; i >= 0; i -= 2) {
+            if (listeners[i] == CachedDirectoryListener.class) {
+                if (readingChildren) {
+                    ((CachedDirectoryListener) listeners[i + 1]).cachingStarted(cachedDirectory);
+                } else {
+                    ((CachedDirectoryListener) listeners[i + 1]).cachingEnded(cachedDirectory);
+                }
+            }
+        }
+    }
+    
+    public void addCachedDirectoryListener(CachedDirectoryListener l) {
+        listenerList.add(CachedDirectoryListener.class, l);
+    }
+
+    public void removeCachedDirectoryListener(CachedDirectoryListener l) {
+        listenerList.remove(CachedDirectoryListener.class, l);
+    }
+    
+
+}
