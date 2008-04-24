@@ -293,7 +293,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         <method access="public static" type="void" name="main" parameters="java.lang.String[]"/>
       </keep>
       <!-- Class loader                                        -->
-      <keep name="${app.loader}">
+      <keep name="com.mucommander.file.AbstractFileClassLoader">
         <field access="public,protected"/>
         <method access="public,protected"/>
         <constructor access="public,protected"/>
@@ -710,8 +710,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <target name="make-exe" depends="compress" if="launch4j.available">
     <echo>Creating Win32 executable...</echo>
     <launch4j>
-      <config outfile="${exe.file}" jarpath="mucommander.jar" icon="${nsis.icon}" dontwrapjar="true" chdir=".">
-        <jre minversion="${app.jvm}.0" args="-Djava.system.class.loader=${app.loader}"/>
+      <config headertype="gui" outfile="${exe.file}" jarpath="mucommander.jar" icon="${nsis.icon}" dontwrapjar="true" chdir="."
+              customprocname="true" supporturl="http://www.mucommander.com">
+        <jre minversion="${app.jvm}.0">
+          <opt>-Djava.system.class.loader=com.mucommander.file.AbstractFileClassLoader</opt>
+        </jre>
       </config>
     </launch4j>
   </target>
@@ -866,7 +869,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         <string name="MainClass"                      value="${app.main}"/>
         <string name="JVMVersion"                     value="${app.jvm}+"/>
         <dict name="Properties">
-          <string name="java.system.class.loader"     value="${app.loader}"/>
+          <string name="java.system.class.loader"     value="com.mucommander.file.AbstractFileClassLoader"/>
           <string name="com.apple.smallTabs"          value="true"/>
           <string name="com.apple.hwaccel"            value="true"/>
           <string name="apple.laf.useScreenMenuBar"   value="true"/>
@@ -1038,8 +1041,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <echo>Creating Win32 launcher...</echo>
     <mkdir dir="${portable.tmp}"/>
     <launch4j>
-      <config outfile="${portable.exe}" jarpath="mucommander.jar" icon="${nsis.icon}" dontwrapjar="true" jarargs="-p .mucommander" chdir=".">
-        <jre minversion="${app.jvm}.0" args="-Djava.system.class.loader=${app.loader}"/>
+      <config outfile="${portable.exe}" jarpath="mucommander.jar" icon="${nsis.icon}" dontwrapjar="true" cmdline="-p .mucommander" chdir=".">
+        <jre minversion="${app.jvm}.0">
+          <opt>-Djava.system.class.loader=com.mucommander.file.AbstractFileClassLoader</opt>
+        </jre>
       </config>
     </launch4j>
   </target>
@@ -1057,7 +1062,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
       <fileset file="${res}/mucommander.sh"/>
       <filterset>
         <filter token="ARGS" value="-p $0/../.mucommander"/>
-        <filter token="JAVA_ARGS" value="-Djava.system.class.loader=${app.loader}"/>
+        <filter token="JAVA_ARGS" value="-Djava.system.class.loader=com.mucommander.file.AbstractFileClassLoader"/>
       </filterset>
     </copy>
 
@@ -1090,7 +1095,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
       <fileset file="${res}/mucommander.sh"/>
       <filterset>
         <filter token="ARGS"      value=""/>
-        <filter token="JAVA_ARGS" value="-Djava.system.class.loader=${app.loader}"/>
+        <filter token="JAVA_ARGS" value="-Djava.system.class.loader=com.mucommander.file.AbstractFileClassLoader"/>
       </filterset>
     </copy>
 
@@ -1135,7 +1140,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
       <fileset file="${res}/mucommander.sh"/>
       <filterset>
         <filter token="ARGS"      value=""/>
-        <filter token="JAVA_ARGS" value="-Djava.system.class.loader=${app.loader}"/>
+        <filter token="JAVA_ARGS" value="-Djava.system.class.loader=com.mucommander.file.AbstractFileClassLoader"/>
       </filterset>
     </copy>
     <copy todir="${deb.data}/usr/share/mucommander" overwrite="true">
@@ -1268,7 +1273,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- to make sure it boots properly.                         -->
   <target name="all" depends="source,tools-release,conf-release,unit-test,tgz,setup-exe,deb,portable,version,sign,jnlp,app.tgz,api-doc-tgz">
     <java jar="${jar.cmp}" failonerror="true" fork="true">
-      <sysproperty key="java.system.class.loader" value="${app.loader}"/>
+      <sysproperty key="java.system.class.loader" value="com.mucommander.file.AbstractFileClassLoader"/>
       <arg value="--help"/>
     </java>
   </target>
@@ -1305,7 +1310,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- current folder every second or so.                      -->
   <target name="stress-test" depends="compile,resources">
     <java classname="com.mucommander.StressTester" fork="true">
-      <sysproperty key="java.system.class.loader" value="${app.loader}"/>
+      <sysproperty key="java.system.class.loader" value="com.mucommander.file.AbstractFileClassLoader"/>
       <classpath>
         <pathelement location="${classes.normal}"/>
          <fileset dir="lib">
@@ -1318,7 +1323,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- Runs the application from unpackaged binaries.          -->
   <target name="run" depends="compile,resources">
     <java classname="${app.main}" fork="true">
-      <sysproperty key="java.system.class.loader" value="${app.loader}"/>
+      <sysproperty key="java.system.class.loader" value="com.mucommander.file.AbstractFileClassLoader"/>
       <classpath>
         <pathelement location="${classes.normal}"/>
         <fileset dir="${lib}">
