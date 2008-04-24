@@ -31,7 +31,7 @@
   <action class="com.mucommander.ui.action.CopyAction"                   keystroke="F5"/>
 
   <!-- Action  : Copy selected file(s) name(s) to clipboard.                     -->
-  <!-- Default : shift control C                                                           -->
+  <!-- Default : shift control C                                                 -->
   <action class="com.mucommander.ui.action.CopyFileNamesAction"          keystroke="shift control C"/>
 
   <!-- Action  : Copy selected file(s) full path(s) to clipboard.                -->
@@ -208,8 +208,8 @@
   <!-- Default : control 9                                                       -->
   <action class="com.mucommander.ui.action.RecallWindow9Action"          keystroke="control 9"/>
 
-  <!-- Action  : Recalls window number 10.                                        -->
-  <!-- Default : control 10                                                       -->
+  <!-- Action  : Recalls window number 10.                                       -->
+  <!-- Default : control 10                                                      -->
   <action class="com.mucommander.ui.action.RecallWindow10Action"         keystroke="control 0"/>
 
   <!-- Action  : Rename the current file (ignores multiple selections).          -->
@@ -306,43 +306,44 @@
   <action class="com.mucommander.ui.action.ToggleHiddenFilesAction"      keystroke="shift alt H"/>
 
   <!-- Action  : Open the bookmark file system in the current folder panel.      -->
-  <!-- Default : shift control B                                                           -->
+  <!-- Default : shift control B                                                 -->
   <action class="com.mucommander.ui.action.ExploreBookmarksAction"       keystroke="shift control B"/>
 
   <!-- Action  : Change the selected files' date.                                -->
-  <!-- Default : shift alt D                                                           -->
+  <!-- Default : shift alt D                                                     -->
   <action class="com.mucommander.ui.action.ChangeDateAction"             keystroke="shift alt D"/>
 
   <!-- Action  : Change the selected files' permissions.                         -->
-  <!-- Default : shift alt P                                                           -->
+  <!-- Default : shift alt P                                                     -->
   <action class="com.mucommander.ui.action.ChangePermissionsAction"      keystroke="shift alt P"/>
 
   <!-- Action  : Calculate the checksum of the selected files'                   -->
-  <!-- Default : shift alt K                                                           -->
+  <!-- Default : shift alt K                                                     -->
   <action class="com.mucommander.ui.action.CalculateChecksumAction"      keystroke="shift alt K"/>
 
   <!-- Action  : Open files in the inactive panel.                               -->
-  <!-- Default : shift alt ENTER, shift alt RIGHT                                -->
-  <action class="com.mucommander.ui.action.OpenInOtherPanelAction"       keystroke="shift alt ENTER"
-                                                                         alt_keystroke="shift alt RIGHT"/>
+  <!-- Default : control ENTER                                                   -->
+  <action class="com.mucommander.ui.action.OpenInOtherPanelAction"       keystroke="control ENTER" />
 
   <!-- Action  : Go to the current selection's parent in the inactive panel.     -->
-  <!-- Default : shift alt BACK_SPACE, shift alt LEFT                            -->
-  <action class="com.mucommander.ui.action.GoToParentInOtherPanelAction" keystroke="shift alt BACK_SPACE"
-                                                                         alt_keystroke="shift alt LEFT"/>
+  <!-- Default : control BACK_SPACE                                              -->
+  <action class="com.mucommander.ui.action.GoToParentInOtherPanelAction" keystroke="control BACK_SPACE" />
 
   <!-- Action  : Mark all files whose extension match the current selection.     -->
   <!-- Default : shift ADD                                                       -->
   <action class="com.mucommander.ui.action.MarkExtensionAction"          keystroke="shift ADD"/>
 
   <!-- Action  : Open matching files in both the active and inactive panel.      -->
-  <!-- Default : meta ENTER, meta RIGHT                                          -->
-  <action class="com.mucommander.ui.action.OpenInBothPanelsAction"       keystroke="meta ENTER"
-                                                                         alt_keystroke="meta RIGHT"/>
+  <!-- Default : shift control ENTER                                             -->
+  <action class="com.mucommander.ui.action.OpenInBothPanelsAction"       keystroke="shift control ENTER"/>
 
   <!-- Action  : Go to the current directory's parent in both active and         -->
   <!--           inactive panels.                                                -->
-  <!-- Default : meta BACK_SPACE, meta LEFT                                      -->
-  <action class="com.mucommander.ui.action.GoToParentInBothPanelsAction" keystroke="meta BACK_SPACE"
-                                                                         alt_keystroke="meta LEFT"/>
+  <!-- Default : shift control BACK_SPACE                                        -->
+  <action class="com.mucommander.ui.action.GoToParentInBothPanelsAction" keystroke="shift control BACK_SPACE" />
+                                                                         
+  <!-- Action  : Show/Hide directory tree.                                       -->
+  <!-- Default : control H                                                       -->
+  <action class="com.mucommander.ui.action.ToggleTreeAction"             keystroke="control H"/>
+
 </keymap>
