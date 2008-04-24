@@ -233,7 +233,9 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
         treeSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, foldersTreePanel, scrollPane);
         treeSplitPane.setDividerSize(0);
         treeSplitPane.setDividerLocation(0);
-        add(treeSplitPane, BorderLayout.CENTER);        
+        // Remove default border
+        treeSplitPane.setBorder(null);
+        add(treeSplitPane, BorderLayout.CENTER);
                 
         // Listens to some configuration variables
         MuConfiguration.addConfigurationListener(this);
