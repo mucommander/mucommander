@@ -19,8 +19,8 @@
 package com.mucommander.ui.action;
 
 import com.mucommander.file.AbstractFile;
-import com.mucommander.file.filter.AttributeFileFilter;
 import com.mucommander.ui.main.MainFrame;
+import com.mucommander.ui.main.table.FileTable;
 
 import java.util.Hashtable;
 
@@ -40,7 +40,15 @@ public class OpenInOtherPanelAction extends SelectedFileAction {
      */
     public OpenInOtherPanelAction(MainFrame mainFrame, Hashtable properties) {
         super(mainFrame, properties);
-        setSelectedFileFilter(new AttributeFileFilter(AttributeFileFilter.BROWSABLE));
+    }
+
+    /**
+     * This method is overridden to enable this action when the parent folder is selected.
+     */
+    protected boolean getFileTableCondition(FileTable fileTable) {
+        AbstractFile selectedFile = fileTable.getSelectedFile(true, true);
+
+        return selectedFile!=null && selectedFile.isBrowsable();
     }
 
     /**
@@ -49,7 +57,7 @@ public class OpenInOtherPanelAction extends SelectedFileAction {
     public void performAction() {
         AbstractFile file;
 
-        // Retrieves the currently selected file, aborts if none.
+        // Retrieves the currently selected file, aborts if none (should not normally happen).
         if((file = mainFrame.getActiveTable().getSelectedFile(true)) == null || !file.isBrowsable())
             return;
 
