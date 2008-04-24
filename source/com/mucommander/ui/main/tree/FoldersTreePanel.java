@@ -79,12 +79,17 @@ public class FoldersTreePanel extends JPanel implements TreeSelectionListener,
         model = new FilesTreeModel(dirFilter, sort);
         tree = new JTree(model);
 		tree.setFont(ThemeCache.tableFont);
-        tree.setBackground(ThemeCache.backgroundColors[ThemeCache.ACTIVE][ThemeCache.NORMAL]);  
+        tree.setBackground(ThemeCache.backgroundColors[ThemeCache.INACTIVE][ThemeCache.NORMAL]);
+
         tree.getSelectionModel().setSelectionMode(
                 TreeSelectionModel.SINGLE_TREE_SELECTION);
         tree.setExpandsSelectedPaths(true);
         tree.getModel().addTreeModelListener(this);
+
         JScrollPane sp = new JScrollPane(tree);
+        // JScrollPane usually comes with a tiny border, remove it
+        sp.setBorder(null);
+
         add(sp, BorderLayout.CENTER);
 
         // Create tree renderer. We're not using default tree renderer, because
