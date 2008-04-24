@@ -18,12 +18,12 @@
 
 package com.mucommander.ui.main.menu;
 
-import com.mucommander.desktop.DesktopManager;
 import com.mucommander.bonjour.BonjourMenu;
 import com.mucommander.bonjour.BonjourService;
 import com.mucommander.bookmark.Bookmark;
 import com.mucommander.bookmark.BookmarkManager;
 import com.mucommander.conf.impl.MuConfiguration;
+import com.mucommander.desktop.DesktopManager;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.RootFolders;
 import com.mucommander.runtime.OsFamilies;
@@ -76,6 +76,9 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
     private JCheckBoxMenuItem[] toggleColumnItems = new JCheckBoxMenuItem[Columns.COLUMN_COUNT];
     private JCheckBoxMenuItem toggleShowFoldersFirstItem;
     private JCheckBoxMenuItem toggleShowHiddenFiles;
+//    private JCheckBoxMenuItem toggleShowTree;
+    /* TODO branch private JCheckBoxMenuItem toggleBranchView; */
+
 
     // Go menu
     private JMenu goMenu;
@@ -130,7 +133,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
         MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(OpenAction.class, mainFrame), menuItemMnemonicHelper);
         MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(OpenNativelyAction.class, mainFrame), menuItemMnemonicHelper);
         MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(OpenInOtherPanelAction.class, mainFrame), menuItemMnemonicHelper);
-//        MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(OpenInBothPanelsAction.class, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(OpenInBothPanelsAction.class, mainFrame), menuItemMnemonicHelper);
         fileMenu.add(new OpenWithMenu(mainFrame));
         MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(RevealInDesktopAction.class, mainFrame), menuItemMnemonicHelper);
 
@@ -205,6 +208,8 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
         viewMenu.add(new JSeparator());
         toggleShowFoldersFirstItem = MenuToolkit.addCheckBoxMenuItem(viewMenu, ActionManager.getActionInstance(ToggleShowFoldersFirstAction.class, mainFrame), menuItemMnemonicHelper);
         toggleShowHiddenFiles = MenuToolkit.addCheckBoxMenuItem(viewMenu, ActionManager.getActionInstance(ToggleHiddenFilesAction.class, mainFrame), menuItemMnemonicHelper);
+//        toggleShowTree = MenuToolkit.addCheckBoxMenuItem(viewMenu, ActionManager.getActionInstance(ToggleShowTreeAction.class, mainFrame), menuItemMnemonicHelper);
+        /* TODO branch toggleBranchView = MenuToolkit.addCheckBoxMenuItem(viewMenu, ActionManager.getActionInstance(ToggleBranchViewAction.class, mainFrame), menuItemMnemonicHelper); */ 
 
         viewMenu.add(new JSeparator());
         columnsMenu = MenuToolkit.addMenu(Translator.get("view_menu.show_hide_columns"), null, this);
@@ -230,11 +235,16 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
 
         MenuToolkit.addMenuItem(goMenu, ActionManager.getActionInstance(GoBackAction.class, mainFrame), menuItemMnemonicHelper);
         MenuToolkit.addMenuItem(goMenu, ActionManager.getActionInstance(GoForwardAction.class, mainFrame), menuItemMnemonicHelper);
-        MenuToolkit.addMenuItem(goMenu, ActionManager.getActionInstance(GoToParentAction.class, mainFrame), menuItemMnemonicHelper);
-        MenuToolkit.addMenuItem(goMenu, ActionManager.getActionInstance(GoToRootAction.class, mainFrame), menuItemMnemonicHelper);
-        MenuToolkit.addMenuItem(goMenu, ActionManager.getActionInstance(ChangeLocationAction.class, mainFrame), menuItemMnemonicHelper);
 
         goMenu.add(new JSeparator());
+
+        MenuToolkit.addMenuItem(goMenu, ActionManager.getActionInstance(GoToParentAction.class, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(goMenu, ActionManager.getActionInstance(GoToParentInOtherPanelAction.class, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(goMenu, ActionManager.getActionInstance(GoToParentInBothPanelsAction.class, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(goMenu, ActionManager.getActionInstance(GoToRootAction.class, mainFrame), menuItemMnemonicHelper);
+
+        goMenu.add(new JSeparator());
+        MenuToolkit.addMenuItem(goMenu, ActionManager.getActionInstance(ChangeLocationAction.class, mainFrame), menuItemMnemonicHelper);
         MenuToolkit.addMenuItem(goMenu, ActionManager.getActionInstance(ConnectToServerAction.class, mainFrame), menuItemMnemonicHelper);
         MenuToolkit.addMenuItem(goMenu, ActionManager.getActionInstance(ShowServerConnectionsAction.class, mainFrame), menuItemMnemonicHelper);
 
@@ -355,6 +365,8 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
 
             toggleShowFoldersFirstItem.setSelected(activeTable.getSortInfo().getFoldersFirst());
             toggleShowHiddenFiles.setSelected(MuConfiguration.getVariable(MuConfiguration.SHOW_HIDDEN_FILES, MuConfiguration.DEFAULT_SHOW_HIDDEN_FILES));
+//            toggleShowTree.setSelected(activeTable.getFolderPanel().isTreeVisible());
+            /* TODO branch toggleBranchView.setSelected(activeTable.getFolderPanel().isBranchView()); */ 
         }
         else if(source==columnsMenu) {
             // Update the selected and enabled state of each column menu item.
