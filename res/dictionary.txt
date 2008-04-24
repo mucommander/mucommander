@@ -2937,6 +2937,40 @@ com.mucommander.ui.action.GoToParentAction.tooltip:SK:Nadradený priečinok
 com.mucommander.ui.action.GoToParentAction.tooltip:JA:親フォルダへ移動します
 com.mucommander.ui.action.GoToParentAction.tooltip:SV:Till föregående mapp
 
+com.mucommander.ui.action.GoToParentInOtherPanelAction.label:EN:Go to parent in other panel
+com.mucommander.ui.action.GoToParentInOtherPanelAction.label:FR:Remonter dans l'autre panneau
+# Translation missing (New!)
+
+
+
+
+
+
+
+
+
+
+
+
+
+com.mucommander.ui.action.GoToParentInBothPanelsAction.label:EN:Go to parent in both panels
+com.mucommander.ui.action.GoToParentInBothPanelsAction.label:FR:Remonter dans les deux panneaux
+# Translation missing (New!)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 com.mucommander.ui.action.GoToRootAction.label:EN:Go to root
 com.mucommander.ui.action.GoToRootAction.label:FR:Aller à la racine
 com.mucommander.ui.action.GoToRootAction.label:zh_TW:跳至根目錄
@@ -4143,6 +4177,25 @@ com.mucommander.ui.action.ToggleShowFoldersFirstAction.label:PL:Pokazuj foldery 
 com.mucommander.ui.action.ToggleShowFoldersFirstAction.label:IT:Mostra le cartelle per prime
 com.mucommander.ui.action.ToggleShowFoldersFirstAction.label:JA:最初にフォルダを表示
 com.mucommander.ui.action.ToggleShowFoldersFirstAction.label:SV:Visa mappar först
+
+com.mucommander.ui.action.ToggleTreeAction.label:EN:Show directory tree
+com.mucommander.ui.action.ToggleTreeAction.label:PL:Pokaż drzewo katalogów
+# Translation missing (New!)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 com.mucommander.ui.action.PopupLeftDriveButtonAction.label:EN:Change left folder
 com.mucommander.ui.action.PopupLeftDriveButtonAction.label:FR:Changer le dossier de gauche
