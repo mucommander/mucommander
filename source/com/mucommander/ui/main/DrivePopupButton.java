@@ -295,7 +295,7 @@ public class DrivePopupButton extends PopupButton implements LocationListener, B
         // Add boookmarks
         Vector bookmarks = BookmarkManager.getBookmarks();
         int nbBookmarks = bookmarks.size();
-        Bookmark b;   
+        Bookmark b;
 
         if(nbBookmarks>0) {
             for(int i=0; i<nbBookmarks; i++) {

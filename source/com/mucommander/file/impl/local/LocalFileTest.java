@@ -59,12 +59,14 @@ public class LocalFileTest extends AbstractFileTestCase {
         deleteWhenFinished(destFile);
 
         assertTrue(tempFile.moveTo(destFile));
+        assertFalse(destFile.isSymlink());          // Leave me
 
         // Repeat the test with a directory
         destFile.delete();
         tempFile.mkdir();
 
         assertTrue(tempFile.moveTo(destFile));
+        assertFalse(destFile.isSymlink());          // Leave me
     }
 
     /**

@@ -376,6 +376,13 @@ public class LocalFile extends AbstractFile {
     /////////////////////////////////////////
 
     public boolean isSymlink() {
+        // At the moment symlinks under Windows (aka NTFS junction points) are not supported because java.io.File
+        // knows nothing about them and there is no way to discriminate them. So there is no need to waste time
+        // comparing canonical paths, just return false.
+        // Todo: add support for .lnk files (~hard links)
+        if(IS_WINDOWS)
+            return false;
+
         // Note: this value must not be cached as its value can change over time (canonical path can change)
         AbstractFile parent = getParent();
         String canonPath = getCanonicalPath(false);
@@ -383,7 +390,7 @@ public class LocalFile extends AbstractFile {
             return false;
         else {
             String parentCanonPath = parent.getCanonicalPath(true);
-            return !canonPath.equals(parentCanonPath+getName());
+            return !canonPath.equalsIgnoreCase(parentCanonPath+getName());
         }
     }
 

@@ -25,6 +25,7 @@ import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileProtocols;
 import com.mucommander.file.FileURL;
 import com.mucommander.file.RootFolders;
+import com.mucommander.file.impl.local.LocalFile;
 import com.mucommander.file.util.FileToolkit;
 import com.mucommander.runtime.OsFamilies;
 import com.mucommander.ui.combobox.EditableComboBox;
@@ -158,8 +159,8 @@ public class LocationComboBox extends EditableComboBox implements LocationListen
             // Do not display the URL's protocol for local files
             if(folderURL.getProtocol().equals(FileProtocols.FILE)) {
                 locationText = folderURL.getPath();
-                // Under Windows, remove the leading '/' separator from the URL's path
-                if(OsFamilies.WINDOWS.isCurrent())
+                // Under for OSes with 'root drives' (Windows, OS/2), remove the leading '/' character
+                if(LocalFile.hasRootDrives())
                     locationText = FileToolkit.removeLeadingSeparator(locationText, "/");
             }
             // Display the full URL for protocols other than 'file'

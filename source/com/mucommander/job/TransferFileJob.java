@@ -65,6 +65,10 @@ public abstract class TransferFileJob extends FileJob {
     /** Has the file currently being processed been skipped ? */
     private boolean currentFileSkipped;
 
+    /** Default file permissions used in destination if permissions are not set in source file */
+    private final static int DEFAULT_PERMISSIONS = 420;
+
+
     /** If true, all transfers will be checked for integrity: the checksum of the source and destination file will
      *  be calculated and compared to verify they match. */
     private boolean integrityCheckEnabled;
@@ -170,10 +174,13 @@ public abstract class TransferFileJob extends FileJob {
         // Preserve source file's date
         destFile.changeDate(sourceFile.getDate());
 
-        // Preserve source file's permissions: preserve only the permissions bits that are supported by the source file
-        // and use default permissions for the rest of them.
-        destFile.importPermissions(sourceFile, AbstractFile.DEFAULT_FILE_PERMISSIONS);  // use #importPermissions(AbstractFile, int) to avoid isDirectory test
-        
+        // Preserve source file's permissions: preserve only the bits that are in use by the source file. Other bits
+        // will be set to default permissions (rw-r--r-- , 644 octal). That means:
+        //  - a file without any permission will have default permissions in the destination.
+        //  - a file with all permission bits set (mask = 777 octal) will ignore the default permissions
+        int permMask = sourceFile.getPermissionGetMask();
+        destFile.setPermissions((sourceFile.getPermissions() & permMask) | (~permMask & DEFAULT_PERMISSIONS));
+
         // This block is executed only if integrity check has been enabled (disabled by default)
         if(integrityCheckEnabled) {
             String sourceChecksum;
