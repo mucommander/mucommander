@@ -390,7 +390,7 @@ public class LocalFile extends AbstractFile {
             return false;
         else {
             String parentCanonPath = parent.getCanonicalPath(true);
-            return !canonPath.equals(parentCanonPath+getName());
+            return !canonPath.equalsIgnoreCase(parentCanonPath+getName());
         }
     }
 
