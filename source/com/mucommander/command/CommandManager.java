@@ -22,10 +22,13 @@ import com.mucommander.Debug;
 import com.mucommander.PlatformManager;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
-import com.mucommander.file.filter.*;
+import com.mucommander.file.PermissionTypes;
+import com.mucommander.file.filter.AttributeFileFilter;
+import com.mucommander.file.filter.ChainedFileFilter;
+import com.mucommander.file.filter.FileFilter;
+import com.mucommander.file.filter.RegexpFilenameFilter;
 import com.mucommander.io.BackupInputStream;
 import com.mucommander.io.BackupOutputStream;
-import com.mucommander.runtime.JavaVersions;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -345,15 +348,15 @@ public class CommandManager implements CommandBuilder {
             permissionFilter = (PermissionsFileFilter)filter;
 
             switch(permissionFilter.getPermission()) {
-            case PermissionsFileFilter.READ_PERMISSION:
+            case PermissionTypes.READ_PERMISSION:
                 builder.setIsReadable(permissionFilter.getFilter());
                 break;
 
-            case PermissionsFileFilter.WRITE_PERMISSION:
+            case PermissionTypes.WRITE_PERMISSION:
                 builder.setIsWritable(permissionFilter.getFilter());
                 break;
 
-            case PermissionsFileFilter.EXECUTE_PERMISSION:
+            case PermissionTypes.EXECUTE_PERMISSION:
                 builder.setIsExecutable(permissionFilter.getFilter());
                 break;
             }

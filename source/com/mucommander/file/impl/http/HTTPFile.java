@@ -97,6 +97,9 @@ public class HTTPFile extends AbstractFile {
     /** True if the file could be successfully resolved on the remote HTTP server */
 	private boolean exists;
 
+    /** Permissions for HTTP files: r-- (400 octal). Only the 'user' permissions bits are supported. */
+    final static FilePermissions PERMISSIONS = new SimpleFilePermissions(256, 448);
+
 
     static {
         try {
@@ -349,19 +352,15 @@ public class HTTPFile extends AbstractFile {
         return exists;
     }
 
-    public boolean getPermission(int access, int permission) {
-        return permission==READ_PERMISSION;
+    public FilePermissions getPermissions() {
+        return PERMISSIONS;
     }
 
-    public boolean setPermission(int access, int permission, boolean enabled) {
-        return false;
+    public PermissionBits getChangeablePermissions() {
+        return PermissionBits.EMPTY_PERMISSION_BITS;
     }
 
-    public boolean canGetPermission(int access, int permission) {
-        return false;   // permissions should not be taken into acount
-    }
-
-    public boolean canSetPermission(int access, int permission) {
+    public boolean changePermission(int access, int permission, boolean enabled) {
         return false;
     }
 

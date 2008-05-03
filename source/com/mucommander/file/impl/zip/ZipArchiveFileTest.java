@@ -39,6 +39,9 @@ public class ZipArchiveFileTest extends AbstractFileTestCase {
     /** id of the last temporary entry generated, to avoid collisions */
     private int entryNum;
 
+    /** Maximum size of a Zip32 file entry, i.e. (2^32)-1 */
+    private long MAX_ZIP32_ENTRY_SIZE = 4294967295l;
+
 
     /////////////////////////////////////////
     // AbstractFileTestCase implementation //
@@ -81,4 +84,42 @@ public class ZipArchiveFileTest extends AbstractFileTestCase {
         // the change is made to the archive file denoted by its absolute path ; when accessed by the canonical path,
         // the archive file is another instance which isn't aware of the change, because the file date hasn't changed (?). 
     }
+
+//    /**
+//     * Tests the Zip32 4GB limit by asserting two things:
+//     * <ul>
+//     *  <li>that entries can be as large as 4GB minus one byte, preventing against unsigned java int issues amongst
+//     * other things.</li>
+//     *  <li>that entries cannot exceed 4GB and that an IOException is thrown if trying to write more than 4Gb, rather
+//     * than failing silently and leaving the Zip file corrupted.</li>
+//     * </ul>
+//     *
+//     * @throws IOException should not happen
+//     * @throws NoSuchAlgorithmException should not happen
+//     */
+//    public void testZip32Limit() throws IOException, NoSuchAlgorithmException {
+//        // Assert a 4GB minus one byte entry can be properly compressed and uncompressed
+//        ChecksumOutputStream md5Out = getMd5OutputStream(tempFile.getOutputStream(false));
+//        StreamUtils.fillWithConstant(md5Out, (byte)0, MAX_ZIP32_ENTRY_SIZE);
+//        md5Out.close();
+//
+//        assertEquals(md5Out.getChecksum(), calculateMd5(tempFile));
+//
+//        // Assert that an IOException is thrown if more than 4GB is written to an entry
+//        OutputStream out = tempFile.getOutputStream(false);
+//        boolean ioExceptionThrown = false;
+//        try {
+//            StreamUtils.fillWithConstant(out, (byte)0, MAX_ZIP32_ENTRY_SIZE+1);
+//        }
+//        catch(IOException e) {
+//            ioExceptionThrown = true;
+//        }
+//        finally {
+//            out.close();
+//        }
+//
+//        assertTrue(ioExceptionThrown);
+//
+//        // Todo: test Zip files larger than 4Gb as a whole (should fail gracefully)
+//    }
 }

@@ -50,7 +50,7 @@ import java.util.Vector;
  *
  * @author Maxence Bernard
  */
-public abstract class AbstractFileTestCase extends TestCase implements FilePermissions {
+public abstract class AbstractFileTestCase extends TestCase {
 
     /**
      * AbstractFile instances to be deleted if they exist when {@link #tearDown()} is called.
@@ -852,57 +852,54 @@ public abstract class AbstractFileTestCase extends TestCase implements FilePermi
     }
 
     /**
-     * Tests all <code>AbstractFile</code> permissions methods and asserts the following things for each access
-     * (user, group, other) and permission (read, write, execute) combination:
-     * <ul>
-     *  <li>that the information returned by {@link AbstractFile#getPermissionGetMask()}
-     * and {@link AbstractFile#canGetPermission(int, int)} are consistent</li>
-     *  <li>that the information returned by {@link AbstractFile#getPermissionSetMask()}
-     * and {@link AbstractFile#canSetPermission(int, int)} are consistent</li>
-     *  <li>that the values returned by {@link AbstractFile#getPermissions()}
-     * and {@link AbstractFile#getPermission(int, int)} are consistent for supported permission flags</li>
-     *  <li>{@link AbstractFile#setPermission(int, int, boolean)} and {@link AbstractFile#setPermissions(int)} work as
-     * they should for supported permission flags</li>
-     * </ul>
+     * Tests <code>AbstractFile</code> permission methods.
      *
      * @throws IOException should not happen
      * @throws NoSuchAlgorithmException should not happen
      */
     public void testPermissions() throws IOException, NoSuchAlgorithmException {
+        assertNotNull(tempFile.getPermissions());
+
         createFile(tempFile, 0);
 
-        int getPermMask = tempFile.getPermissionGetMask();
-        int setPermMask = tempFile.getPermissionSetMask();
+        FilePermissions permissions = tempFile.getPermissions();
+        PermissionBits getPermMask = permissions.getMask();
+        PermissionBits setPermMask = tempFile.getChangeablePermissions();
+
+        assertNotNull(permissions);
+
+        int getPermMaskInt = getPermMask.getIntValue();
+        int setPermMaskInt = tempFile.getChangeablePermissions().getIntValue();
 
         int bitShift = 0;
         int bitMask;
         boolean canGetPermission, canSetPermission;
 
-        for(int a=OTHER_ACCESS; a<= USER_ACCESS; a++) {
-            for(int p=EXECUTE_PERMISSION; p<=READ_PERMISSION; p=p<<1) {
+        for(int a=PermissionAccesses.OTHER_ACCESS; a<=PermissionAccesses.USER_ACCESS; a++) {
+            for(int p=PermissionTypes.EXECUTE_PERMISSION; p<=PermissionTypes.READ_PERMISSION; p=p<<1) {
                 bitMask = 1<<bitShift;
 
-                canGetPermission = (getPermMask & bitMask)!=0;
-                assertTrue("getPermissionGetMask() doesn't match canGetPermission("+a+", "+p+")",
-                        tempFile.canGetPermission(a, p)==canGetPermission);
+                canGetPermission = (getPermMaskInt & bitMask)!=0;
+                assertTrue("inconsistent bit and int value for ("+a+", "+p+")",
+                        getPermMask.getBitValue(a, p)==canGetPermission);
 
-                canSetPermission = (setPermMask & bitMask)!=0;
-                assertTrue("getPermissionSetMask() doesn't match canSetPermission("+a+", "+p+")",
-                        tempFile.canSetPermission(a, p)==canSetPermission);
+                canSetPermission = (setPermMaskInt & bitMask)!=0;
+                assertTrue("inconsistent bit and int value for ("+a+", "+p+")",
+                        setPermMask.getBitValue(a, p)==canSetPermission);
 
                 if(canGetPermission) {
-                    assertTrue("getPermissions() doesn't match getPermission("+a+", "+p+")",
-                            tempFile.getPermission(a, p)==((tempFile.getPermissions() & bitMask)!=0));
+                    assertTrue("inconsistent bit and int value for ("+a+", "+p+")",
+                            permissions.getBitValue(a, p)==((permissions.getIntValue() & bitMask)!=0));
                 }
 
                 if(canSetPermission) {
                     for(boolean enabled=true; ;) {
-                        assertTrue("setPermission("+a+", "+p+") failed", tempFile.setPermission(a, p, enabled));
-                        assertTrue("setPermissions("+(enabled?bitMask:(0777&~bitMask))+") failed", tempFile.setPermissions(enabled?bitMask:(0777&~bitMask)));
+                        assertTrue("changePermission("+a+", "+p+") failed", tempFile.changePermission(a, p, enabled));
+                        assertTrue("changePermissions("+(enabled?bitMask:(0777&~bitMask))+") failed", tempFile.changePermissions(enabled?bitMask:(0777&~bitMask)));
 
                         if(canGetPermission) {
-                            assertTrue("getPermission("+a+", "+p+") should be "+enabled, tempFile.getPermission(a, p)==enabled);
-                            assertTrue("permission bit "+bitShift+" should be "+enabled, ((tempFile.getPermissions() & bitMask)!=0)==enabled);
+                            assertTrue("permission bit ("+a+", "+p+") should be "+enabled, tempFile.getPermissions().getBitValue(a, p)==enabled);
+                            assertTrue("permission "+bitShift+" should be "+enabled, ((tempFile.getPermissions().getIntValue() & bitMask)!=0)==enabled);
                         }
 
                         if(!enabled)

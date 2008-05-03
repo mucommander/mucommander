@@ -21,7 +21,8 @@ package com.mucommander.job;
 import com.mucommander.Debug;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
-import com.mucommander.file.FilePermissions;
+import com.mucommander.file.PermissionAccesses;
+import com.mucommander.file.PermissionTypes;
 import com.mucommander.file.util.FileSet;
 import com.mucommander.ui.dialog.file.FileCollisionDialog;
 import com.mucommander.ui.dialog.file.ProgressDialog;
@@ -99,8 +100,8 @@ public class TempCopyJob extends CopyJob {
             return false;
 
         // Make the temporary file read only
-        if(currentDestFile.canSetPermission(FilePermissions.USER_ACCESS, FilePermissions.WRITE_PERMISSION))
-            currentDestFile.setPermission(FilePermissions.USER_ACCESS, FilePermissions.WRITE_PERMISSION, false);
+        if(currentDestFile.getChangeablePermissions().getBitValue(PermissionAccesses.USER_ACCESS, PermissionTypes.WRITE_PERMISSION))
+            currentDestFile.changePermission(PermissionAccesses.USER_ACCESS, PermissionTypes.WRITE_PERMISSION, false);
 
         tempFiles.add(currentDestFile);
 

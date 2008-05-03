@@ -20,6 +20,8 @@
 package com.mucommander.file.archiver;
 
 import com.mucommander.file.AbstractFile;
+import com.mucommander.file.FilePermissions;
+import com.mucommander.file.SimpleFilePermissions;
 import com.mucommander.file.impl.zip.provider.ZipEntry;
 import com.mucommander.file.impl.zip.provider.ZipOutputStream;
 
@@ -75,9 +77,9 @@ class ZipArchiver extends Archiver {
             entry.setSize(size);
 
         entry.setTime(file.getDate());
-        entry.setUnixMode(AbstractFile.padPermissions(file, isDirectory
-                    ?AbstractFile.DEFAULT_DIRECTORY_PERMISSIONS
-                    :AbstractFile.DEFAULT_FILE_PERMISSIONS));
+        entry.setUnixMode(SimpleFilePermissions.padPermissions(file.getPermissions(), isDirectory
+                    ? FilePermissions.DEFAULT_DIRECTORY_PERMISSIONS
+                    : FilePermissions.DEFAULT_FILE_PERMISSIONS).getIntValue());
 
         // Add the entry
         zos.putNextEntry(entry);

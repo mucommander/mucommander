@@ -19,7 +19,8 @@
 package com.mucommander.command;
 
 import com.mucommander.file.AbstractFile;
-import com.mucommander.file.FilePermissions;
+import com.mucommander.file.PermissionAccesses;
+import com.mucommander.file.PermissionTypes;
 import com.mucommander.file.filter.FileFilter;
 import com.mucommander.runtime.JavaVersions;
 
@@ -27,13 +28,13 @@ import com.mucommander.runtime.JavaVersions;
  * Filter on a file's permissions.
  * @author Nicolas Rinaudo
  */
-public class PermissionsFileFilter extends FileFilter implements FilePermissions {
+public class PermissionsFileFilter extends FileFilter implements PermissionTypes, PermissionAccesses {
     private int     permission;
     private boolean filter;
 
     /**
      * Creates a new <code>PermissionsFileFilter</code>.
-     * @param permission permission that will be checked against as defined in {@link FilePermissions}.
+     * @param permission permission that will be checked against as defined in {@link com.mucommander.file.FilePermissions}.
      * @param filter     whether or not the specified permission flag must be set for a file to be accepted.
      */
     public PermissionsFileFilter(int permission, boolean filter) {
@@ -42,10 +43,10 @@ public class PermissionsFileFilter extends FileFilter implements FilePermissions
     }
 
     public boolean accept(AbstractFile file) {
-        if(permission==EXECUTE_PERMISSION && JavaVersions.JAVA_1_5.isCurrentOrLower())
+        if(permission== EXECUTE_PERMISSION && JavaVersions.JAVA_1_5.isCurrentOrLower())
             return true;
 
-        return filter ? file.getPermission(USER_ACCESS, permission) : !file.getPermission(USER_ACCESS, permission);
+        return filter ? file.getPermissions().getBitValue(USER_ACCESS, permission) : !file.getPermissions().getBitValue(USER_ACCESS, permission);
     }
 
     /**

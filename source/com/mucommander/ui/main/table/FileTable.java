@@ -19,10 +19,10 @@
 package com.mucommander.ui.main.table;
 
 import com.mucommander.Debug;
-import com.mucommander.desktop.DesktopManager;
 import com.mucommander.conf.ConfigurationEvent;
 import com.mucommander.conf.ConfigurationListener;
 import com.mucommander.conf.impl.MuConfiguration;
+import com.mucommander.desktop.DesktopManager;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.util.FileSet;
 import com.mucommander.job.MoveJob;
@@ -1166,7 +1166,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
                                         ActionManager.performAction(com.mucommander.ui.action.ChangeDateAction.class, mainFrame);
                                     }
                                     else if(column==Columns.PERMISSIONS) {
-                                        if(getSelectedFile().getPermissionSetMask()!=0)
+                                        if(getSelectedFile().getChangeablePermissions().getIntValue()!=0)
                                             ActionManager.performAction(com.mucommander.ui.action.ChangePermissionsAction.class, mainFrame);
                                     }
                                 }

@@ -19,7 +19,8 @@
 package com.mucommander.ui.dialog.file;
 
 import com.mucommander.file.AbstractFile;
-import com.mucommander.file.FilePermissions;
+import com.mucommander.file.PermissionAccesses;
+import com.mucommander.file.PermissionTypes;
 import com.mucommander.file.util.FileSet;
 import com.mucommander.job.ChangeFileAttributesJob;
 import com.mucommander.text.Translator;
@@ -47,7 +48,8 @@ import java.awt.event.ItemListener;
  *
  * @author Maxence Bernard
  */
-public class ChangePermissionsDialog extends JobDialog implements FilePermissions, ActionListener, ItemListener, DocumentListener {
+public class ChangePermissionsDialog extends JobDialog
+        implements ActionListener, ItemListener, DocumentListener, PermissionTypes, PermissionAccesses {
 
     private JCheckBox permCheckBoxes[][];
 
@@ -77,17 +79,17 @@ public class ChangePermissionsDialog extends JobDialog implements FilePermission
         JCheckBox permCheckBox;
 
         AbstractFile firstFile = files.fileAt(0);
-        int permSetMask = firstFile.getPermissionSetMask();
+        int permSetMask = firstFile.getChangeablePermissions().getIntValue();
         boolean canSetPermission = permSetMask!=0;
-        int defaultPerms = firstFile.getPermissions();
+        int defaultPerms = firstFile.getPermissions().getIntValue();
 
         gridPanel.add(new JLabel());
         gridPanel.add(new JLabel(Translator.get("permissions.read")));
         gridPanel.add(new JLabel(Translator.get("permissions.write")));
         gridPanel.add(new JLabel(Translator.get("permissions.executable")));
 
-        for(int a= USER_ACCESS; a>=OTHER_ACCESS; a--) {
-            gridPanel.add(new JLabel(Translator.get(a== USER_ACCESS ?"permissions.user":a==GROUP_ACCESS?"permissions.group":"permissions.other")));
+        for(int a=USER_ACCESS; a>=OTHER_ACCESS; a--) {
+            gridPanel.add(new JLabel(Translator.get(a==USER_ACCESS ?"permissions.user":a==GROUP_ACCESS?"permissions.group":"permissions.other")));
 
             for(int p=READ_PERMISSION; p>=EXECUTE_PERMISSION; p=p>>1) {
                 permCheckBox = new JCheckBox();
@@ -176,7 +178,7 @@ public class ChangePermissionsDialog extends JobDialog implements FilePermission
         JCheckBox permCheckBox;
         int perms = 0;
 
-        for(int a= USER_ACCESS; a>=OTHER_ACCESS; a--) {
+        for(int a=USER_ACCESS; a>=OTHER_ACCESS; a--) {
             for(int p=READ_PERMISSION; p>=EXECUTE_PERMISSION; p=p>>1) {
                 permCheckBox = permCheckBoxes[a][p];
 
@@ -211,7 +213,7 @@ public class ChangePermissionsDialog extends JobDialog implements FilePermission
 
         int perms = octalStr.equals("")?0:Integer.parseInt(octalStr, 8);
 
-        for(int a= USER_ACCESS; a>=OTHER_ACCESS; a--) {
+        for(int a=USER_ACCESS; a>=OTHER_ACCESS; a--) {
             for(int p=READ_PERMISSION; p>=EXECUTE_PERMISSION; p=p>>1) {
                 permCheckBox = permCheckBoxes[a][p];
 

@@ -20,6 +20,8 @@
 package com.mucommander.file.archiver;
 
 import com.mucommander.file.AbstractFile;
+import com.mucommander.file.FilePermissions;
+import com.mucommander.file.SimpleFilePermissions;
 import org.apache.tools.tar.TarEntry;
 import org.apache.tools.tar.TarOutputStream;
 
@@ -66,9 +68,9 @@ class TarArchiver extends Archiver {
 
         // Set the entry's date and permissions
         entry.setModTime(file.getDate());
-        entry.setMode(AbstractFile.padPermissions(file, isDirectory
-                    ?AbstractFile.DEFAULT_DIRECTORY_PERMISSIONS
-                    :AbstractFile.DEFAULT_FILE_PERMISSIONS));
+        entry.setMode(SimpleFilePermissions.padPermissions(file.getPermissions(), isDirectory
+                    ? FilePermissions.DEFAULT_DIRECTORY_PERMISSIONS
+                    : FilePermissions.DEFAULT_FILE_PERMISSIONS).getIntValue());
 
         if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("creating entry, name="+entry.getName()+" isDirectory="+entry.isDirectory()+" size="+entry.getSize()+" modTime="+entry.getModTime());
 		

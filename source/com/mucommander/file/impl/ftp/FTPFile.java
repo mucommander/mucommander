@@ -23,10 +23,7 @@ import com.mucommander.Debug;
 import com.mucommander.auth.AuthException;
 import com.mucommander.auth.Credentials;
 import com.mucommander.conf.impl.MuConfiguration;
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.FileFactory;
-import com.mucommander.file.FileProtocols;
-import com.mucommander.file.FileURL;
+import com.mucommander.file.*;
 import com.mucommander.file.connection.ConnectionHandler;
 import com.mucommander.file.connection.ConnectionHandlerFactory;
 import com.mucommander.file.connection.ConnectionPool;
@@ -83,10 +80,11 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
 
     private org.apache.commons.net.ftp.FTPFile file;
 
-    protected String absPath;
+    private String absPath;
 
     private AbstractFile parent;
     private boolean parentValSet;
+    private FilePermissions permissions;
 
     private boolean fileExists;
 
@@ -113,6 +111,7 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
         super(fileURL);
 
         this.absPath = fileURL.getPath();
+        this.permissions = new FTPFilePermissions(file);
 
         if(file==null) {
             this.file = getFTPFile(fileURL);
@@ -370,45 +369,26 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
         return this.fileExists;
     }
 
-
-    public boolean getPermission(int access, int permission) {
-        int fAccess;
-        int fPermission;
-
-        if(access== USER_ACCESS)
-            fAccess = org.apache.commons.net.ftp.FTPFile.USER_ACCESS;
-        else if(access==GROUP_ACCESS)
-            fAccess = org.apache.commons.net.ftp.FTPFile.GROUP_ACCESS;
-        else if(access==OTHER_ACCESS)
-            fAccess = org.apache.commons.net.ftp.FTPFile.WORLD_ACCESS;
-        else
-            return false;
-
-        if(permission==READ_PERMISSION)
-            fPermission = org.apache.commons.net.ftp.FTPFile.READ_PERMISSION;
-        else if(permission==WRITE_PERMISSION)
-            fPermission = org.apache.commons.net.ftp.FTPFile.WRITE_PERMISSION;
-        else if(permission==EXECUTE_PERMISSION)
-            fPermission = org.apache.commons.net.ftp.FTPFile.EXECUTE_PERMISSION;
-        else
-            return false;
-
-        return file.hasPermission(fAccess, fPermission);
+    public FilePermissions getPermissions() {
+        return permissions;
     }
 
-
-    public boolean setPermission(int access, int permission, boolean enabled) {
-        return setPermissions(ByteUtils.setBit(getPermissions(), (permission << (access*3)), enabled));
+    public boolean changePermission(int access, int permission, boolean enabled) {
+        return changePermissions(ByteUtils.setBit(permissions.getIntValue(), (permission << (access*3)), enabled));
     }
 
-    public boolean canGetPermission(int access, int permission) {
-        return true;    // Full permission support
-    }
-
-    public boolean canSetPermission(int access, int permission) {
-        // Return true if the server supports the 'site chmod' command, not all servers do.
-        // Do not lock the connection handler, not needed.
-        return ((FTPConnectionHandler)ConnectionPool.getConnectionHandler(this, fileURL, false)).chmodCommandSupported;
+    /**
+     * Returns {@link PermissionBits#FULL_PERMISSION_BITS} if the server supports the 'site chmod' command (not all
+     * servers do), {@link PermissionBits#EMPTY_PERMISSION_BITS} otherwise.
+     *
+     * @return {@link PermissionBits#FULL_PERMISSION_BITS} if the server supports the 'site chmod' command (not all
+     * servers do), {@link PermissionBits#EMPTY_PERMISSION_BITS} otherwise
+     */
+    public PermissionBits getChangeablePermissions() {
+         // Do not lock the connection handler, not needed.
+        return ((FTPConnectionHandler)ConnectionPool.getConnectionHandler(this, fileURL, false)).chmodCommandSupported
+                ?PermissionBits.FULL_PERMISSION_BITS    // Full permission support (777 octal)
+                :PermissionBits.EMPTY_PERMISSION_BITS;  // Permissions can't be changed
     }
 
     public String getOwner() {
@@ -627,7 +607,7 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
     // Overridden methods //
     ////////////////////////
 
-    public boolean setPermissions(int permissions) {
+    public boolean changePermissions(int permissions) {
         // Changes permissions using the SITE CHMOD FTP command.
 
         // This command is optional but seems to be supported by modern FTP servers such as ProFTPd or PureFTP Server.
@@ -678,19 +658,6 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
                 connHandler.releaseLock();
         }
     }
-
-    public int getPermissionGetMask() {
-        return FULL_PERMISSIONS;     // Full get permission support (777 octal)
-    }
-
-    public int getPermissionSetMask() {
-        // Return true if the server supports the 'site chmod' command, not all servers do.
-        // Do not lock the connection handler, not needed.
-        return ((FTPConnectionHandler)ConnectionPool.getConnectionHandler(this, fileURL, false)).chmodCommandSupported
-                ?FULL_PERMISSIONS    // Full permission support (777 octal)
-                :0;                  // No set permission support
-    }
-
 
     /**
      * Overrides {@link AbstractFile#moveTo(AbstractFile)} to support server-to-server move if the destination file
@@ -1263,6 +1230,47 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
                     checkSocketException(e);
                 }
             }
+        }
+    }
+
+    /**
+     * A Permissions implementation for FTPFile.
+     */
+    private static class FTPFilePermissions extends IndividualPermissionBits implements FilePermissions {
+
+        private org.apache.commons.net.ftp.FTPFile file;
+
+        public FTPFilePermissions(org.apache.commons.net.ftp.FTPFile file) {
+            this.file = file;
+        }
+
+        public boolean getBitValue(int access, int type) {
+            int fAccess;
+            int fPermission;
+
+            if(access==USER_ACCESS)
+                fAccess = org.apache.commons.net.ftp.FTPFile.USER_ACCESS;
+            else if(access==GROUP_ACCESS)
+                fAccess = org.apache.commons.net.ftp.FTPFile.GROUP_ACCESS;
+            else if(access==OTHER_ACCESS)
+                fAccess = org.apache.commons.net.ftp.FTPFile.WORLD_ACCESS;
+            else
+                return false;
+
+            if(type==READ_PERMISSION)
+                fPermission = org.apache.commons.net.ftp.FTPFile.READ_PERMISSION;
+            else if(type==WRITE_PERMISSION)
+                fPermission = org.apache.commons.net.ftp.FTPFile.WRITE_PERMISSION;
+            else if(type==EXECUTE_PERMISSION)
+                fPermission = org.apache.commons.net.ftp.FTPFile.EXECUTE_PERMISSION;
+            else
+                return false;
+
+            return file.hasPermission(fAccess, fPermission);
+        }
+
+        public PermissionBits getMask() {
+            return FULL_PERMISSION_BITS;        
         }
     }
 }

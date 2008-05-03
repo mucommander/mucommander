@@ -21,10 +21,7 @@ package com.mucommander.bookmark.file;
 import com.mucommander.bookmark.Bookmark;
 import com.mucommander.bookmark.BookmarkBuilder;
 import com.mucommander.bookmark.BookmarkManager;
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.FileFactory;
-import com.mucommander.file.FileProtocols;
-import com.mucommander.file.FileURL;
+import com.mucommander.file.*;
 import com.mucommander.io.FileTransferException;
 import com.mucommander.io.RandomAccessInputStream;
 import com.mucommander.io.RandomAccessOutputStream;
@@ -44,6 +41,8 @@ public class BookmarkFile extends AbstractFile {
     /** Underlying abstract file. */
     private AbstractFile file;
 
+    /** Permissions for all bookmark files: rw- (600 octal). Only the 'user' permissions bits are supported. */
+    final static FilePermissions PERMISSIONS = new SimpleFilePermissions(384, 448);
 
 
     // - Initialisation --------------------------------------------------------
@@ -285,28 +284,13 @@ public class BookmarkFile extends AbstractFile {
     // - Permissions -----------------------------------------------------------
     // -------------------------------------------------------------------------
     /**
-     * Returns <code>true</code>.
-     * <p>
-     * Since bookmarks are always readable, writable and 'openable' by the current
-     * user, all permissions are always granted.
-     * </p>
-     * @param  access     ignored.
-     * @param  permission ignored.
-     * @return            <code>true</code>.
-     * @see               #setPermission(int,int,boolean)
-     */
-    public boolean getPermission(int access, int permission) {return true;}
+     * Returns the same permissions for all boookmark files: rw- (600 octal).
+     * Only the 'user' permissions bits are supported.
 
-    /**
-     * Returns <code>true</code>.
-     * <p>
-     * Bookmarks' permissions are fully retrievable.
-     * </p>
-     * @param  access     ignored.
-     * @param  permission ignored.
-     * @return            <code>true</code>.
+     * @return            this file's permissions.
+     * @see               #changePermission(int,int,boolean)
      */
-    public boolean canGetPermission(int access, int permission) {return true;}
+    public FilePermissions getPermissions() {return PERMISSIONS;}
 
     /**
      * Returns <code>false</code>.
@@ -318,21 +302,9 @@ public class BookmarkFile extends AbstractFile {
      * @param  permission ignored.
      * @param  enabled    ignored.
      * @return            <code>false</code>.
-     * @see               #getPermission(int,int)
+     * @see               #getPermissions()
      */
-    public boolean setPermission(int access, int permission, boolean enabled) {return false;}
-
-    /**
-     * Returns <code>false</code>.
-     * <p>
-     * Bookmarks always have all permissions, this is not changeable.
-     * </p>
-     * @param  access     ignored.
-     * @param  permission ignored.
-     * @return            <code>false</code>.
-     */
-    public boolean canSetPermission(int access, int permission) {return false;}
-
+    public boolean changePermission(int access, int permission, boolean enabled) {return false;}
 
 
     // - Import / export -------------------------------------------------------
@@ -378,6 +350,7 @@ public class BookmarkFile extends AbstractFile {
     public void mkdir() throws IOException {throw new IOException();}
     public long getDate() {return 0;}
     public boolean canChangeDate() {return false;}
+    public PermissionBits getChangeablePermissions() {return PermissionBits.EMPTY_PERMISSION_BITS;}
     public boolean changeDate(long lastModified) {return false;}
     public long getSize() {return -1;}
     public boolean hasRandomAccessInputStream() {return false;}

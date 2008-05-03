@@ -19,34 +19,40 @@
 package com.mucommander.file;
 
 /**
- * Contains file permissions and access types.
+ * FilePermissions is an interface that represents the permissions of an {@link com.mucommander.file.AbstractFile}.
+ * The actual permission values can be retrieved by the methods inherited from the
+ * {@link com.mucommander.file.PermissionBits} interface. The permissions mask returned by {@link #getMask()} allows
+ * to determine which permission bits are significant, i.e. should be taken into account. That way, certain
+ * {@link AbstractFile} implementations that have limited permissions support can set those supported permission bits
+ * while making it clear that other bits should be ignored, and not simply be considered as being disabled.
+ * For instance, a file implementation with support for the sole 'user' permissions (read/write/execute) will return a
+ * mask whose int value is 448 (700 octal).
  *
+ * <p>This interface also defines constants for commonly used file permissions.</p>
+ *
+ * @see com.mucommander.file.AbstractFile#getPermissions()
  * @author Maxence Bernard
  */
-public interface FilePermissions {
+public abstract interface FilePermissions extends PermissionBits {
 
-    /** Bit mask for 'execute' permission. */
-    public final static int EXECUTE_PERMISSION = 1;
-    /** Bit mask for 'write' permission. */
-    public final static int WRITE_PERMISSION = 2;
-    /** Bit mask for 'read' permission. */
-    public final static int READ_PERMISSION = 4;
-
-    /** Bit mask for 'other' permissions. */
-    public final static int OTHER_ACCESS = 0;
-    /** Bit mask for 'group' permissions. */
-    public final static int GROUP_ACCESS = 1;
-    /** Bit mask for 'owner' permissions. */
-    public final static int USER_ACCESS = 2;
+    /** Empty file permissions: read/write/execute permissions cleared for user/group/other (0), none of the permission
+     * bits are supported (mask is 0) */
+    public final static FilePermissions EMPTY_FILE_PERMISSIONS = new SimpleFilePermissions(0, 0);
 
     /** Default file permissions used by {@link AbstractFile#importPermissions(AbstractFile)} for permission bits that
-     * are not available in the source: rw-r--r-- (644 octal) */
-    public final static int DEFAULT_FILE_PERMISSIONS = 420;
+     * are not available in the source: rw-r--r-- (644 octal). All of the permission bits are marked as supported. */
+    public final static FilePermissions DEFAULT_FILE_PERMISSIONS = new SimpleFilePermissions(420, FULL_PERMISSION_BITS);
 
     /** Default directory permissions used by {@link AbstractFile#importPermissions(AbstractFile)} for permission bits that
-     * are not available in the source: rwxr-xr-x (755 octal) */
-    public final static int DEFAULT_DIRECTORY_PERMISSIONS = 493;
+     * are not available in the source: rwxr-xr-x (755 octal). All of the permission bits are marked as supported. */
+    public final static FilePermissions DEFAULT_DIRECTORY_PERMISSIONS = new SimpleFilePermissions(493, FULL_PERMISSION_BITS);
 
-    /** Full read/write/execute permissions for user/group/other (777 octal) */
-    public final static int FULL_PERMISSIONS = 511;
+
+    /**
+     * Returns the mask that indicates which permission bits are significant and should be taken into account.
+     * Permission bits that are unsupported have no meaning and their value should simply be ignored.
+     *
+     * @return the mask that indicates which permission bits are significant and should be taken into account.
+     */
+    public PermissionBits getMask();
 }

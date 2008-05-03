@@ -20,6 +20,7 @@ package com.mucommander.file.impl;
 
 import com.mucommander.Debug;
 import com.mucommander.file.AbstractFile;
+import com.mucommander.file.FilePermissions;
 import com.mucommander.file.FileProtocols;
 import com.mucommander.file.filter.FileFilter;
 import com.mucommander.file.filter.FilenameFilter;
@@ -98,10 +99,8 @@ public class CachedFile extends ProxyFile {
     private boolean exists;
     private boolean existsSet;
 
-    private int getPermissions;
+    private FilePermissions getPermissions;
     private boolean getPermissionsSet;
-
-    private int getPermissionsInt[][];
 
     private String getPermissionsString;
     private boolean getPermissionsStringSet;
@@ -373,26 +372,13 @@ public class CachedFile extends ProxyFile {
         return exists;
     }
 
-    public int getPermissions() {
+    public FilePermissions getPermissions() {
         if(!getPermissionsSet) {
             getPermissions = file.getPermissions();
             getPermissionsSet = true;
         }
 
         return getPermissions;
-    }
-
-    public boolean getPermission(int access, int permission) {
-        if(getPermissionsInt==null)
-            getPermissionsInt = new int[USER_ACCESS][READ_PERMISSION];
-
-        int val = getPermissionsInt[access][permission];
-        if(val==0) {
-            val = file.getPermission(access, permission)?1:-1;
-            getPermissionsInt[access][permission] = val;
-        }
-
-        return val==1;
     }
 
     public String getPermissionsString() {

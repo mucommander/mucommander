@@ -19,7 +19,9 @@
 package com.mucommander.file.impl;
 
 import com.mucommander.file.AbstractFile;
+import com.mucommander.file.FilePermissions;
 import com.mucommander.file.FileURL;
+import com.mucommander.file.PermissionBits;
 import com.mucommander.file.filter.FileFilter;
 import com.mucommander.file.filter.FilenameFilter;
 import com.mucommander.io.FileTransferException;
@@ -111,20 +113,8 @@ public abstract class ProxyFile extends AbstractFile {
         return file.exists();
     }
 
-    public boolean getPermission(int access, int permission) {
-        return file.getPermission(access, permission);
-    }
-
-    public boolean setPermission(int access, int permission, boolean enabled) {
-        return file.setPermission(access, permission, enabled);
-    }
-
-    public boolean canGetPermission(int access, int permission) {
-        return file.canGetPermission(access, permission);
-    }
-
-    public boolean canSetPermission(int access, int permission) {
-        return file.canSetPermission(access, permission);
+    public boolean changePermission(int access, int permission, boolean enabled) {
+        return file.changePermission(access, permission, enabled);
     }
 
     public String getOwner() {
@@ -252,20 +242,16 @@ public abstract class ProxyFile extends AbstractFile {
         return file.isHidden();
     }
 
-    public int getPermissions() {
+    public FilePermissions getPermissions() {
         return file.getPermissions();
     }
 
-    public boolean setPermissions(int permissions) {
-        return file.setPermissions(permissions);
+    public boolean changePermissions(int permissions) {
+        return file.changePermissions(permissions);
     }
 
-    public int getPermissionGetMask() {
-        return file.getPermissionGetMask();
-    }
-
-    public int getPermissionSetMask() {
-        return file.getPermissionSetMask();
+    public PermissionBits getChangeablePermissions() {
+        return file.getChangeablePermissions();
     }
 
     public String getPermissionsString() {
@@ -324,7 +310,7 @@ public abstract class ProxyFile extends AbstractFile {
         file.importPermissions(sourceFile);
     }
 
-    public void importPermissions(AbstractFile sourceFile, int defaultPermissions) {
+    public void importPermissions(AbstractFile sourceFile, FilePermissions defaultPermissions) {
         file.importPermissions(sourceFile, defaultPermissions);
     }
 

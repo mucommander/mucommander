@@ -40,10 +40,7 @@ public class ArchiveEntry {
     protected boolean isDirectory;
 
     /** This entry's permissions */
-    protected int permissions;
-
-    /** This entry's permission mask */
-    protected int permissionMask = 0;       // by default, permissions should not be taken into acount
+    protected FilePermissions permissions;
 
     /** This entry's owner */
     protected String owner;
@@ -85,7 +82,6 @@ public class ArchiveEntry {
         this.date = date;
         this.size = size;
         this.isDirectory = isDirectory;
-        this.permissions = isDirectory?FilePermissions.DEFAULT_FILE_PERMISSIONS:FilePermissions.DEFAULT_DIRECTORY_PERMISSIONS;
     }
 
 
@@ -213,42 +209,26 @@ public class ArchiveEntry {
     }
 
     /**
-     * Returns read/write/execute permissions for owner/group/other access, in a UNIX-style permission int.
-     * The default decimal value is <code>292</code>: <code>r--r--r--</code>.
+     * Returns the file permissions of this entry.
      *
-     * @return read/write/execute permissions for owner/group/other access
+     * @return the file permissions of this entry
      */
-    public int getPermissions() {
+    public FilePermissions getPermissions() {
+        if(permissions==null)
+            return isDirectory?FilePermissions.DEFAULT_DIRECTORY_PERMISSIONS:FilePermissions.DEFAULT_FILE_PERMISSIONS;
+        
         return permissions;
     }
 
     /**
-     * Sets the read/write/execute permissions for owner/group/other access, in a UNIX-style permission int.
+     * Sets the file permissions of this entry.
      *
-     * @param permissions read/write/execute permissions for owner/group/other access
+     * @param permissions the file permissions of this entry
      */
-    public void setPermissions(int permissions) {
+    public void setPermissions(FilePermissions permissions) {
         this.permissions = permissions;
     }
 
-    /**
-     * Returns a bit mask specifying which permission bits are supported.
-     * The default value is <code>0</code>: permissions should not be taken into acount.
-     *
-     * @return a bit mask specifying which permission bits are supported
-     */
-    public int getPermissionsMask() {
-        return permissionMask;
-    }
-
-    /**
-     * Sets the bit mask specifying which permission bits are supported.
-     *
-     * @param permissionMask a bit mask specifying which permission bits are supported
-     */
-    public void setPermissionMask(int permissionMask) {
-        this.permissionMask = permissionMask;
-    }
 
     /**
      * Returns the owner of this entry, <code>null</code> if this information is not available.

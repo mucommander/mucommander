@@ -21,10 +21,7 @@ package com.mucommander.file.impl.smb;
 import com.mucommander.Debug;
 import com.mucommander.auth.AuthException;
 import com.mucommander.auth.Credentials;
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.FileFactory;
-import com.mucommander.file.FileProtocols;
-import com.mucommander.file.FileURL;
+import com.mucommander.file.*;
 import com.mucommander.io.FileTransferException;
 import com.mucommander.io.RandomAccessInputStream;
 import com.mucommander.io.RandomAccessOutputStream;
@@ -61,10 +58,15 @@ import java.net.MalformedURLException;
  public class SMBFile extends AbstractFile {
 
     private SmbFile file;
+    private FilePermissions permissions;
 
     private AbstractFile parent;
     private boolean parentValSet;
 
+    /** Bit mask that indicates which permissions can be changed. Only the 'write' permission for 'user' access can
+     *  be changed. */
+    private final static PermissionBits CHANGEABLE_PERMISSIONS = new GroupedPermissionBits(128);   // -w------- (200 octal)
+    
 
     static {
         // Silence jCIFS's output if not in debug mode
@@ -122,6 +124,8 @@ import java.net.MalformedURLException;
         else {                      // The private constructor was called directly
             file = smbFile;
         }
+
+        permissions = new SMBFilePermissions(file);
     }
 
 
@@ -257,27 +261,16 @@ import java.net.MalformedURLException;
 
     }
 
-
-    public boolean getPermission(int access, int permission) {
-        if(access!= USER_ACCESS)
-            return false;
-
-        try {
-            if(permission==READ_PERMISSION)
-                return file.canRead();
-            else if(permission==WRITE_PERMISSION)
-                return file.canWrite();
-            else
-                return false;
-        }
-        // Unlike java.io.File, SmbFile#canRead() and SmbFile#canWrite() can throw an SmbException
-        catch(SmbException e) {
-            return false;
-        }
+    public FilePermissions getPermissions() {
+        return permissions;
     }
 
-    public boolean setPermission(int access, int permission, boolean enabled) {
-        if(access!= USER_ACCESS || permission!=WRITE_PERMISSION)
+    public PermissionBits getChangeablePermissions() {
+        return CHANGEABLE_PERMISSIONS;
+    }
+
+    public boolean changePermission(int access, int permission, boolean enabled) {
+        if(access!=USER_ACCESS || permission!=WRITE_PERMISSION)
             return false;
 
         try {
@@ -291,15 +284,6 @@ import java.net.MalformedURLException;
         catch(SmbException e) {
             return false;
         }
-    }
-
-    public boolean canGetPermission(int access, int permission) {
-        return access== USER_ACCESS;    // Get permission support is limited to the user access type.
-    }
-
-    public boolean canSetPermission(int access, int permission) {
-        // Set permission support is limited to the user access type, and only for the write permission flag.
-        return access== USER_ACCESS && permission==WRITE_PERMISSION;
     }
 
     /**
@@ -667,6 +651,43 @@ import java.net.MalformedURLException;
             // We have to do it ourselves to honour this method's contract.   
             if(getOffset()>newLength)
                 raf.seek(newLength);
+        }
+    }
+
+
+    /**
+     * A Permissions implementation for SMBFile.
+     */
+    private static class SMBFilePermissions extends IndividualPermissionBits implements FilePermissions {
+
+        private SmbFile file;
+
+        private final static PermissionBits MASK = new GroupedPermissionBits(384);  // rw------- (300 octal)
+
+        public SMBFilePermissions(SmbFile file) {
+            this.file = file;
+        }
+
+        public boolean getBitValue(int access, int type) {
+            if(access!=USER_ACCESS)
+                return false;
+
+            try {
+                if(type==READ_PERMISSION)
+                    return file.canRead();
+                else if(type==WRITE_PERMISSION)
+                    return file.canWrite();
+                else
+                    return false;
+            }
+            // Unlike java.io.File, SmbFile#canRead() and SmbFile#canWrite() can throw an SmbException
+            catch(SmbException e) {
+                return false;
+            }
+        }
+
+        public PermissionBits getMask() {
+            return MASK;
         }
     }
 }

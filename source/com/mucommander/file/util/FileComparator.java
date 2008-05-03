@@ -134,7 +134,7 @@ public class FileComparator implements Comparator {
             diff = f1.getDate()-f2.getDate();
         }
         else if (criterion == PERMISSIONS_CRITERION) {
-            diff = f1.getPermissions() - f2.getPermissions();
+            diff = f1.getPermissions().getIntValue() - f2.getPermissions().getIntValue();
         }
         else if (criterion == EXTENSION_CRITERION) {
             diff = compareStrings(f1.getExtension(), f2.getExtension());

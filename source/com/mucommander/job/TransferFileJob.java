@@ -21,6 +21,7 @@ package com.mucommander.job;
 
 import com.mucommander.Debug;
 import com.mucommander.file.AbstractFile;
+import com.mucommander.file.FilePermissions;
 import com.mucommander.file.util.FileSet;
 import com.mucommander.io.*;
 import com.mucommander.io.security.MuProvider;
@@ -172,7 +173,7 @@ public abstract class TransferFileJob extends FileJob {
 
         // Preserve source file's permissions: preserve only the permissions bits that are supported by the source file
         // and use default permissions for the rest of them.
-        destFile.importPermissions(sourceFile, AbstractFile.DEFAULT_FILE_PERMISSIONS);  // use #importPermissions(AbstractFile, int) to avoid isDirectory test
+        destFile.importPermissions(sourceFile, FilePermissions.DEFAULT_FILE_PERMISSIONS);  // use #importPermissions(AbstractFile, int) to avoid isDirectory test
         
         // This block is executed only if integrity check has been enabled (disabled by default)
         if(integrityCheckEnabled) {

@@ -21,9 +21,7 @@ package com.mucommander.bookmark.file;
 import com.mucommander.bookmark.Bookmark;
 import com.mucommander.bookmark.BookmarkListener;
 import com.mucommander.bookmark.BookmarkManager;
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.FileProtocols;
-import com.mucommander.file.FileURL;
+import com.mucommander.file.*;
 import com.mucommander.io.RandomAccessInputStream;
 import com.mucommander.io.RandomAccessOutputStream;
 import com.mucommander.process.AbstractProcess;
@@ -104,10 +102,9 @@ class BookmarkRoot extends AbstractFile implements BookmarkListener {
     public long getSize() {return -1;}
     public void setParent(AbstractFile parent) {}
     public boolean exists() {return true;}
-    public boolean getPermission(int access, int permission) {return false;}
-    public boolean setPermission(int access, int permission, boolean enabled) {return false;}
-    public boolean canGetPermission(int access, int permission) {return false;}
-    public boolean canSetPermission(int access, int permission) {return false;}
+    public FilePermissions getPermissions() {return BookmarkFile.PERMISSIONS;}
+    public boolean changePermission(int access, int permission, boolean enabled) {return false;}
+    public PermissionBits getChangeablePermissions() {return PermissionBits.EMPTY_PERMISSION_BITS;}
     public boolean isSymlink() {return false;}
     public void mkdir() throws IOException {throw new IOException();}
     public InputStream getInputStream() throws IOException {throw new IOException();}

@@ -96,30 +96,24 @@ public class DummyFile extends AbstractFile {
     }
 
     /**
-     * Implementation notes: always returns <code>false</code>.
+     * Implementation notes: always returns {@link FilePermissions#EMPTY_FILE_PERMISSIONS}.
      */
-    public boolean getPermission(int access, int permission) {
-        return false;
+    public FilePermissions getPermissions() {
+        return FilePermissions.EMPTY_FILE_PERMISSIONS;
+    }
+
+    /**
+     * Implementation notes: returns {@link PermissionBits#EMPTY_PERMISSION_BITS}, none of the permission bits can be
+     * changed.
+     */
+    public PermissionBits getChangeablePermissions() {
+        return PermissionBits.EMPTY_PERMISSION_BITS;
     }
 
     /**
      * Implementation notes: always returns <code>false</code>.
      */
-    public boolean setPermission(int access, int permission, boolean enabled) {
-        return false;
-    }
-
-    /**
-     * Implementation notes: always returns <code>false</code>.
-     */
-    public boolean canGetPermission(int access, int permission) {
-        return false;
-    }
-
-    /**
-     * Implementation notes: always returns <code>false</code>.
-     */
-    public boolean canSetPermission(int access, int permission) {
+    public boolean changePermission(int access, int permission, boolean enabled) {
         return false;
     }
 

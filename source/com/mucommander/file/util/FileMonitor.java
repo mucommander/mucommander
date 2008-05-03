@@ -250,7 +250,7 @@ public class FileMonitor implements FileMonitorConstants, Runnable {
 
         long lastDate = (attributes&DATE_ATTRIBUTE)!=0?file.getDate():0;
         long lastSize = (attributes&SIZE_ATTRIBUTE)!=0?file.getSize():0;
-        int lastPermissions = (attributes&PERMISSIONS_ATTRIBUTE)!=0?file.getPermissions():0;
+        int lastPermissions = (attributes&PERMISSIONS_ATTRIBUTE)!=0?file.getPermissions().getIntValue():0;
         boolean lastIsDirectory = (attributes&IS_DIRECTORY_ATTRIBUTE)!=0 && file.isDirectory();
         boolean lastExists = (attributes&EXISTS_ATTRIBUTE)!=0 && file.exists();
 
@@ -286,7 +286,7 @@ public class FileMonitor implements FileMonitorConstants, Runnable {
             }
 
             if(monitorThread ==thisThread && (attributes&PERMISSIONS_ATTRIBUTE)!=0) {
-                if((tempInt=file.getPermissions())!=lastPermissions) {
+                if((tempInt=file.getPermissions().getIntValue())!=lastPermissions) {
                     lastPermissions = tempInt;
                     changedAttributes |= PERMISSIONS_ATTRIBUTE;
                 }

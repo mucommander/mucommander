@@ -20,6 +20,7 @@ package com.mucommander.file.impl;
 
 import com.mucommander.Debug;
 import com.mucommander.file.AbstractFile;
+import com.mucommander.file.FilePermissions;
 
 import java.io.IOException;
 import java.util.Random;
@@ -215,7 +216,7 @@ public class DebugFile extends ProxyFile {
         return super.isHidden();
     }
 
-    public int getPermissions() {
+    public FilePermissions getPermissions() {
         if(Debug.ON) Debug.trace(getDebugString(), traceLevel);
         lag();
 

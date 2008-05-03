@@ -21,10 +21,7 @@ package com.mucommander.file.impl.sftp;
 
 import com.mucommander.Debug;
 import com.mucommander.auth.AuthException;
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.FileFactory;
-import com.mucommander.file.FileProtocols;
-import com.mucommander.file.FileURL;
+import com.mucommander.file.*;
 import com.mucommander.file.connection.ConnectionHandler;
 import com.mucommander.file.connection.ConnectionPool;
 import com.mucommander.io.*;
@@ -32,6 +29,7 @@ import com.mucommander.process.AbstractProcess;
 import com.sshtools.j2ssh.io.UnsignedInteger32;
 import com.sshtools.j2ssh.io.UnsignedInteger64;
 import com.sshtools.j2ssh.session.SessionChannelClient;
+import com.sshtools.j2ssh.sftp.FileAttributes;
 import com.sshtools.j2ssh.sftp.*;
 
 import java.io.IOException;
@@ -66,12 +64,11 @@ import java.util.List;
  */
 public class SFTPFile extends AbstractFile {
 
-    /** Name of the property that holds the path to a private key. This property is optional; if it is set, private key
-     * authentication is used. */
-    public final static String PRIVATE_KEY_PATH_PROPERTY_NAME = "privateKeyPath";
-
     /** The absolute path to the file on the remote server, without the file protocol */
-    protected String absPath;
+    private String absPath;
+
+    /** This file's permissions */
+    private FilePermissions permissions;
 
     /** Contains the file attribute values */
     private SFTPFileAttributes fileAttributes;
@@ -92,6 +89,10 @@ public class SFTPFile extends AbstractFile {
 
     /** a SFTPConnectionHandlerFactory instance */
     private final static SFTPConnectionHandlerFactory connHandlerFactory = new SFTPConnectionHandlerFactory();
+
+    /** Name of the property that holds the path to a private key. This property is optional; if it is set, private key
+     * authentication is used. */
+    public final static String PRIVATE_KEY_PATH_PROPERTY_NAME = "privateKeyPath";
 
     private final static String SEPARATOR = DEFAULT_SEPARATOR;
 
@@ -240,21 +241,19 @@ public class SFTPFile extends AbstractFile {
         return fileAttributes.exists();
     }
 
-
-    public boolean getPermission(int access, int permission) {
-        return (getPermissions() & (permission << (access*3))) != 0;
+    /**
+     * Implementation note: for symlinks, returns the permissions of the link's target.
+     */
+    public FilePermissions getPermissions() {
+        return ((SFTPFileAttributes)getCanonicalFile().getUnderlyingFileObject()).getPermissions();
     }
 
-    public boolean setPermission(int access, int permission, boolean enabled) {
-        return setPermissions(ByteUtils.setBit(getPermissions(), (permission << (access*3)), enabled));
+    public PermissionBits getChangeablePermissions() {
+        return PermissionBits.FULL_PERMISSION_BITS;     // Full permission support (777 octal)
     }
 
-    public boolean canGetPermission(int access, int permission) {
-        return true;    // Full permission support
-    }
-
-    public boolean canSetPermission(int access, int permission) {
-        return true;    // Full permission support
+    public boolean changePermission(int access, int permission, boolean enabled) {
+        return changePermissions(ByteUtils.setBit(getPermissions().getIntValue(), (permission << (access*3)), enabled));
     }
 
     public String getOwner() {
@@ -554,23 +553,8 @@ public class SFTPFile extends AbstractFile {
     ////////////////////////
 
 
-    /**
-     * Implementation note: for symlinks, returns the permissions of the link's target.
-     */
-    public int getPermissions() {
-        return ((SFTPFileAttributes)getCanonicalFile().getUnderlyingFileObject()).getPermissions();
-    }
-
-    public boolean setPermissions(int permissions) {
+    public boolean changePermissions(int permissions) {
         return changeFilePermissions(permissions);
-    }
-
-    public int getPermissionGetMask() {
-        return FULL_PERMISSIONS;     // Full permission get support (777 octal)
-    }
-
-    public int getPermissionSetMask() {
-        return FULL_PERMISSIONS;     // Full permission set support (777 octal)
     }
 
     /**
@@ -871,14 +855,16 @@ public class SFTPFile extends AbstractFile {
             attrs.setSize(new UnsignedInteger64(""+(attrs.getSize().longValue()+size)));
         }
 
-        private int getPermissions() {
+        private FilePermissions getPermissions() {
             checkForExpiration();
 
-            return attrs.getPermissions().intValue() & FULL_PERMISSIONS;
+            return new SimpleFilePermissions(
+                   attrs.getPermissions().intValue() & PermissionBits.FULL_PERMISSION_INT
+            );
         }
 
         private void setPermissions(int permissions) {
-            attrs.setPermissions(new UnsignedInteger32((attrs.getPermissions().intValue() & ~FULL_PERMISSIONS) | (permissions & FULL_PERMISSIONS)));
+            attrs.setPermissions(new UnsignedInteger32((attrs.getPermissions().intValue() & ~PermissionBits.FULL_PERMISSION_INT) | (permissions & PermissionBits.FULL_PERMISSION_INT)));
         }
 
         private String getOwner() {

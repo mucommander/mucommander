@@ -90,7 +90,7 @@ public class ChangeFileAttributesJob extends FileJob {
         }
 
         if(permissions!=-1)
-            return file.setPermissions(permissions);
+            return file.changePermissions(permissions);
 
 //        if(date!=-1)
         return file.changeDate(date);

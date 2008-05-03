@@ -18,10 +18,7 @@
 
 package com.mucommander.file.impl.zip;
 
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.AbstractRWArchiveFile;
-import com.mucommander.file.ArchiveEntry;
-import com.mucommander.file.FilePermissions;
+import com.mucommander.file.*;
 import com.mucommander.file.impl.zip.provider.ZipConstants;
 import com.mucommander.file.impl.zip.provider.ZipEntry;
 import com.mucommander.file.impl.zip.provider.ZipFile;
@@ -106,9 +103,9 @@ public class ZipArchiveFile extends AbstractRWArchiveFile {
         com.mucommander.file.impl.zip.provider.ZipEntry zipEntry = new com.mucommander.file.impl.zip.provider.ZipEntry(path);
         zipEntry.setMethod(ZipConstants.DEFLATED);
         zipEntry.setTime(System.currentTimeMillis());
-        zipEntry.setUnixMode(AbstractFile.padPermissions(entry.getPermissions(), entry.getPermissionsMask(), isDirectory
-                    ?FilePermissions.DEFAULT_DIRECTORY_PERMISSIONS
-                    :FilePermissions.DEFAULT_FILE_PERMISSIONS));
+        zipEntry.setUnixMode(SimpleFilePermissions.padPermissions(entry.getPermissions(), isDirectory
+                    ? FilePermissions.DEFAULT_DIRECTORY_PERMISSIONS
+                    : FilePermissions.DEFAULT_FILE_PERMISSIONS).getIntValue());
 
         return zipEntry;
     }
@@ -122,10 +119,8 @@ public class ZipArchiveFile extends AbstractRWArchiveFile {
     private ArchiveEntry createArchiveEntry(ZipEntry zipEntry) {
         ArchiveEntry entry = new ArchiveEntry(zipEntry.getName(), zipEntry.isDirectory(), zipEntry.getTime(), zipEntry.getSize());
 
-        if(zipEntry.hasUnixMode()) {
-            entry.setPermissions(zipEntry.getUnixMode());
-            entry.setPermissionMask(FULL_PERMISSIONS);
-        }
+        if(zipEntry.hasUnixMode())
+            entry.setPermissions(new SimpleFilePermissions(zipEntry.getUnixMode()));
 
         entry.setEntryObject(zipEntry);
 
@@ -296,7 +291,7 @@ public class ZipArchiveFile extends AbstractRWArchiveFile {
             checkZipFile();
 
             zipEntry.setTime(entry.getDate());
-            zipEntry.setUnixMode(entry.getPermissions());
+            zipEntry.setUnixMode(entry.getPermissions().getIntValue());
             
             // Physically update the entry's attributes in the Zip file
             zipFile.updateEntry(zipEntry);

@@ -20,6 +20,8 @@ package com.mucommander.file.util;
 
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
+import com.mucommander.file.PermissionAccesses;
+import com.mucommander.file.PermissionTypes;
 import com.mucommander.io.RandomAccessOutputStream;
 import junit.framework.TestCase;
 
@@ -96,7 +98,7 @@ public class FileMonitorTest extends TestCase implements FileMonitorConstants {
     public void testPermissionsAttribute() throws IOException {
         setUp(PERMISSIONS_ATTRIBUTE);
 
-        if(file.setPermission(AbstractFile.USER_ACCESS, AbstractFile.WRITE_PERMISSION, !file.getPermission(AbstractFile.USER_ACCESS, AbstractFile.WRITE_PERMISSION)))
+        if(file.changePermission(PermissionAccesses.USER_ACCESS, PermissionTypes.WRITE_PERMISSION, !file.getPermissions().getBitValue(PermissionAccesses.USER_ACCESS, PermissionTypes.WRITE_PERMISSION)))
             assertTrue(hasAttributeChanged(PERMISSIONS_ATTRIBUTE));
     }
 

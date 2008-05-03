@@ -18,17 +18,16 @@
 
 package com.mucommander.desktop.impl;
 
+import com.mucommander.command.Command;
+import com.mucommander.command.CommandException;
+import com.mucommander.command.CommandManager;
+import com.mucommander.command.PermissionsFileFilter;
 import com.mucommander.desktop.DefaultDesktopAdapter;
 import com.mucommander.desktop.DesktopInitialisationException;
-import com.mucommander.command.CommandManager;
-import com.mucommander.command.CommandException;
-import com.mucommander.command.PermissionsFileFilter;
-import com.mucommander.command.Command;
-import com.mucommander.runtime.JavaVersion;
+import com.mucommander.file.PermissionTypes;
 import com.mucommander.file.filter.FileFilter;
 import com.mucommander.file.filter.RegexpFilenameFilter;
-
-import java.awt.event.MouseEvent;
+import com.mucommander.runtime.JavaVersion;
 
 /**
  * @author Nicolas Rinaudo
@@ -50,7 +49,7 @@ abstract class GnomeDesktopAdapter extends DefaultDesktopAdapter {
             // Identifies which kind of filter should be used to match executable files.
             FileFilter filter;
             if(JavaVersion.JAVA_1_6.isCurrentOrHigher())
-                filter = new PermissionsFileFilter(PermissionsFileFilter.EXECUTE_PERMISSION, true);
+                filter = new PermissionsFileFilter(PermissionTypes.EXECUTE_PERMISSION, true);
             else
                 filter = new RegexpFilenameFilter("[^.]+", true);
 

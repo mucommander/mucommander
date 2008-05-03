@@ -199,28 +199,25 @@ public class ArchiveEntryFile extends AbstractFile {
         return exists;
     }
 	
-    public boolean getPermission(int access, int permission) {
-        return (getPermissions() & (permission << (access*3))) != 0;
+    public FilePermissions getPermissions() {
+        // Return the entry's permissions
+        return entry.getPermissions();
     }
 
     /**
-     * Always returns <code>false</code> only if the archive file that contains this entry is not writable.
+     * Returns {@link PermissionBits#FULL_PERMISSION_BITS} or {@link PermissionBits#EMPTY_PERMISSION_BITS}, depending
+     * on whether the archive that contains this entry is writable or not.
      */
-    public boolean setPermission(int access, int permission, boolean enabled) {
-        return setPermissions(ByteUtils.setBit(getPermissions(), (permission << (access*3)), enabled));
-    }
-
-    public boolean canGetPermission(int access, int permission) {
-        // Use entry's permissions mask
-        return (entry.getPermissionsMask() & (permission << (access*3))) != 0;
-    }
-
-    /**
-     * Always returns <code>false</code> only if the archive file that contains this entry is not writable.
-     */
-    public boolean canSetPermission(int access, int permission) {
+    public PermissionBits getChangeablePermissions() {
         // Todo: some writable archive implementations may not have full 'set' permissions support, or even no notion of permissions
-        return archiveFile.isWritableArchive();
+        return archiveFile.isWritableArchive()?PermissionBits.FULL_PERMISSION_BITS:PermissionBits.EMPTY_PERMISSION_BITS;
+    }
+
+    /**
+     * Always returns <code>false</code> only if the archive file that contains this entry is not writable.
+     */
+    public boolean changePermission(int access, int permission, boolean enabled) {
+        return changePermissions(ByteUtils.setBit(getPermissions().getIntValue(), (permission << (access*3)), enabled));
     }
 
     public String getOwner() {
@@ -448,20 +445,16 @@ public class ArchiveEntryFile extends AbstractFile {
         return archiveFile.getCanonicalPath(true)+getRelativeEntryPath();
     }
 
-    public int getPermissions() {
-        // Return entry's permissions mask
-        return entry.getPermissions();
-    }
-
     /**
      * Always returns <code>false</code> only if the archive file that contains this entry is not writable.
      */
-    public boolean setPermissions(int permissions) {
+    public boolean changePermissions(int permissions) {
         if(!(exists && archiveFile.isWritableArchive()))
             return false;
 
-        int oldPermissions = entry.getPermissions();
-        entry.setPermissions(permissions);
+        FilePermissions oldPermissions = entry.getPermissions();
+        FilePermissions newPermissions = new SimpleFilePermissions(permissions, oldPermissions.getMask());
+        entry.setPermissions(newPermissions);
 
         boolean success = updateEntryAttributes();
         if(!success)        // restore old permissions if attributes could not be updated

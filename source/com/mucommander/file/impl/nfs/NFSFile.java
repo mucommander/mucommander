@@ -18,10 +18,7 @@
 
 package com.mucommander.file.impl.nfs;
 
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.FileFactory;
-import com.mucommander.file.FileProtocols;
-import com.mucommander.file.FileURL;
+import com.mucommander.file.*;
 import com.mucommander.file.filter.FilenameFilter;
 import com.mucommander.io.FileTransferException;
 import com.mucommander.io.RandomAccessInputStream;
@@ -61,6 +58,8 @@ public class NFSFile extends AbstractFile {
     private XFile file;
 
     private String absPath;
+
+    private FilePermissions permissions;
 
     /** Caches the parent folder, initially null until getParent() gets called */
     private AbstractFile parent;
@@ -146,6 +145,8 @@ public class NFSFile extends AbstractFile {
         this.absPath = fileURL.toString();
         // Remove trailing separator (if any)
         this.absPath = absPath.endsWith(SEPARATOR)?absPath.substring(0,absPath.length()-1):absPath;
+
+        this.permissions = new NFSFilePermissions(file);
     }
 
 
@@ -197,30 +198,17 @@ public class NFSFile extends AbstractFile {
         return file.exists();
     }
 
-    public boolean getPermission(int access, int permission) {
-        if(access!=USER_ACCESS)
-            return false;
-
-        if(permission==READ_PERMISSION)
-            return file.canRead();
-        else if(permission==WRITE_PERMISSION)
-            return file.canWrite();
-
-        return false;
+    public FilePermissions getPermissions() {
+        return permissions;
     }
 
-    public boolean setPermission(int access, int permission, boolean enabled) {
-        // XFile has no method for that purpose
-        return false;
+    public PermissionBits getChangeablePermissions() {
+        // no permission can be changed
+        return PermissionBits.EMPTY_PERMISSION_BITS;
     }
 
-    public boolean canGetPermission(int access, int permission) {
-        // Read and write permissions for 'user' access
-        return access==USER_ACCESS && (permission==READ_PERMISSION || permission==WRITE_PERMISSION);
-    }
-
-    public boolean canSetPermission(int access, int permission) {
-        // XFile has no method for that purpose
+    public boolean changePermission(int access, int permission, boolean enabled) {
+        // XFile has no method for that unfortunately
         return false;
     }
 
@@ -419,21 +407,6 @@ public class NFSFile extends AbstractFile {
     }
 
 
-    /**
-     * Overridden for performance reasons.
-     */
-    public int getPermissionGetMask() {
-        return 384;       // rw------- (300 octal)
-    }
-
-    /**
-     * Overridden for performance reasons.
-     */
-    public int getPermissionSetMask() {
-        return 0;         // --------- (0 octal)
-    }
-
-
     ///////////////////
     // Inner classes //
     ///////////////////
@@ -536,6 +509,37 @@ public class NFSFile extends AbstractFile {
             // Extend the file's length by seeking to the end and writing a byte
             seek(newLength-1);
             write(0);
+        }
+    }
+
+
+    /**
+     * A Permissions implementation for NFSFile.
+     */
+    private static class NFSFilePermissions extends IndividualPermissionBits implements FilePermissions {
+
+        private XFile file;
+
+        private final static PermissionBits MASK = new GroupedPermissionBits(384);  // rw------- (300 octal)
+
+        public NFSFilePermissions(XFile file) {
+            this.file = file;
+        }
+
+        public boolean getBitValue(int access, int type) {
+            if(access!= USER_ACCESS)
+                return false;
+
+            if(type==READ_PERMISSION)
+                return file.canRead();
+            else if(type==WRITE_PERMISSION)
+                return file.canWrite();
+
+            return false;
+        }
+
+        public PermissionBits getMask() {
+            return MASK;
         }
     }
 }
