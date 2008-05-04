@@ -23,65 +23,47 @@ package com.mucommander.file;
  * This class represents a generic archive entry. It provides getters and setters for common archive entry attributes
  * and allows to encapsulate the entry object of a 3rd party library.
  *
+ * <p><b>Important</b>: the path of archive entries must use the '/' character as a path delimiter, and be relative
+ * to the archive's root, i.e. must not start with a leading '/'.</p>
+ *
  * @author Maxence Bernard 
  */
-public class ArchiveEntry {
-
-    /** This entry's path */
-    protected String path;
-
-    /** This entry's date */
-    protected long date;
-
-    /** This entry's size */
-    protected long size;
-
-    /** True if this entry is a directory */
-    protected boolean isDirectory;
-
-    /** This entry's permissions */
-    protected FilePermissions permissions;
-
-    /** This entry's owner */
-    protected String owner;
-
-    /** This entry's group */
-    protected String group;
+public class ArchiveEntry extends SimpleFileAttributes {
 
     /** Encapsulated entry object */
     protected Object entryObject;
 
 
     /**
-     * Creates a new ArchiveEntry with all attributes set to their default value. 
+     * Creates a new ArchiveEntry with all attributes set to their default value.
      */
-    protected ArchiveEntry() {
+    public ArchiveEntry() {
     }
 
     /**
-     * Creates a new ArchiveEntry using the supplied path and isDirectory attributes, with a date set to now and
-     * a size of 0.
+     * Creates a new ArchiveEntry using the supplied path and directory attributes.
      *
      * @param path the entry's path
-     * @param isDirectory true if the entry is a directory
+     * @param directory true if the entry is a directory
      */
-    public ArchiveEntry(String path, boolean isDirectory) {
-        this(path, isDirectory, System.currentTimeMillis(), 0);
+    public ArchiveEntry(String path, boolean directory) {
+        setPath(path);
+        setDirectory(directory);
     }
 
     /**
      * Creates a new ArchiveEntry using the values of the supplied attributes.
      *
      * @param path the entry's path
-     * @param isDirectory true if the entry is a directory
+     * @param directory true if the entry is a directory
      * @param date the entry's date
      * @param size the entry's size
      */
-    public ArchiveEntry(String path, boolean isDirectory, long date, long size) {
-        this.path = path;
-        this.date = date;
-        this.size = size;
-        this.isDirectory = isDirectory;
+    public ArchiveEntry(String path, boolean directory, long date, long size) {
+        setPath(path);
+        setDate(date);
+        setSize(size);
+        setDirectory(directory);
     }
 
 
@@ -135,138 +117,6 @@ public class ArchiveEntry {
     }
 
     /**
-     * Returns the path to this entry. The returned path uses the '/' character as the delimiter, and is relative to the
-     * archive's root, i.e. does not start with a leading '/'.
-     *
-     * @return this entry's path
-     */
-    public String getPath() {
-        return path;
-    }
-
-    /**
-     * Sets the path to this entry. The specified path must use the '/' character as the delimiter, and be relative
-     * to the archive's root, i.e. must not start with a leading '/'.
-     *
-     * @param path this entry's path
-     */
-    public void setPath(String path) {
-        this.path = path;
-    }
-
-    /**
-     * Returns the date of this entry, in milliseconds since the epoch (00:00:00 GMT, January 1, 1970).
-     *
-     * @return the date of this entry, in milliseconds since the epoch (00:00:00 GMT, January 1, 1970)
-     */
-    public long getDate() {
-        return date;
-    }
-
-    /**
-     * Sets the date of this entry, in milliseconds since the epoch (00:00:00 GMT, January 1, 1970).
-     *
-     * @param date the date of this entry, in milliseconds since the epoch (00:00:00 GMT, January 1, 1970)
-     */
-    public void setDate(long date) {
-        this.date = date;
-    }
-
-    /**
-     * Returns the size of this entry, in bytes.
-     *
-     * @return the size of this entry, in bytes
-     */
-    public long getSize() {
-        return size;
-    }
-
-    /**
-     * Sets the size of this entry, in bytes.
-     *
-     * @param size the size of this entry, in bytes
-     */
-    public void setSize(long size) {
-        this.size = size;
-    }
-
-    /**
-     * Returns <code>true</code> if the entry is a directory.
-     *
-     * @return true if the entry is a directory
-     */
-    public boolean isDirectory() {
-        return isDirectory;
-    }
-
-    /**
-     * Specifies whether this entry is a directory or a regular file.
-     *
-     * @param directory true for directory, false for regular file
-     */
-    public void setDirectory(boolean directory) {
-        isDirectory = directory;
-    }
-
-    /**
-     * Returns the file permissions of this entry.
-     *
-     * @return the file permissions of this entry
-     */
-    public FilePermissions getPermissions() {
-        if(permissions==null)
-            return isDirectory?FilePermissions.DEFAULT_DIRECTORY_PERMISSIONS:FilePermissions.DEFAULT_FILE_PERMISSIONS;
-        
-        return permissions;
-    }
-
-    /**
-     * Sets the file permissions of this entry.
-     *
-     * @param permissions the file permissions of this entry
-     */
-    public void setPermissions(FilePermissions permissions) {
-        this.permissions = permissions;
-    }
-
-
-    /**
-     * Returns the owner of this entry, <code>null</code> if this information is not available.
-     *
-     * @return the owner of this entry, null if this information is not available
-     */
-    public String getOwner() {
-        return owner;
-    }
-
-    /**
-     * Sets the owner of this entry, <code>null</code> if this information is not available.
-     *
-     * @param owner the owner of this entry, null if this information is not available
-     */
-    public void setOwner(String owner) {
-        this.owner = owner;
-    }
-
-    /**
-     * Returns the group this entry belongs to, <code>null</code> if this information is not available.
-     *
-     * @return the group this entry belongs to, null if this information is not available
-     */
-    public String getGroup() {
-        return group;
-    }
-
-    /**
-     * Sets the group of this entry, <code>null</code> if this information is not available.
-     *
-     * @param group the group this entry belongs to, null if this information is not available
-     */
-    public void setGroup(String group) {
-        this.group = group;
-    }
-
-    /**
      * Returns an archive format-dependent object providing extra information about this entry, typically an object from
      * a 3rd party library ; <code>null</code> if this entry has none.
      *
@@ -284,5 +134,25 @@ public class ArchiveEntry {
      */
     public void setEntryObject(Object entryObject) {
         this.entryObject = entryObject;
+    }
+
+
+    ////////////////////////
+    // Overridden methods //
+    ////////////////////////
+
+    /**
+     * Returns the file permissions of this entry. This method is overridden to return default permissions
+     * ({@link FilePermissions#DEFAULT_DIRECTORY_PERMISSIONS} for directories, {@link FilePermissions#DEFAULT_FILE_PERMISSIONS}
+     * for regular files), when none have been set.
+     *
+     * @return the file permissions of this entry
+     */
+    public FilePermissions getPermissions() {
+        FilePermissions permissions = super.getPermissions();
+        if(permissions==null)
+            return isDirectory()?FilePermissions.DEFAULT_DIRECTORY_PERMISSIONS:FilePermissions.DEFAULT_FILE_PERMISSIONS;
+
+        return permissions;
     }
 }
