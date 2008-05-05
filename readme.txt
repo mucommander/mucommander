@@ -125,6 +125,8 @@ Improvements:
   properly preserved. The file entries' date can also be changed using the
   'Change date' dialog.
 - SMTP server port can now be changed in the preferences, defaults to 25.
+- New action for deleting selected files without using the system trash
+  (mapped onto Shift+F8 and Shift+Delete by default). Contributed by Arik.
 
 Localization:
 - 

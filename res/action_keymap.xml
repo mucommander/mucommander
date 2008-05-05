@@ -42,10 +42,16 @@
   <!-- Default : meta C, control C                                               -->
   <action class="com.mucommander.ui.action.CopyFilesToClipboardAction"   keystroke="control C"
                                                                          alt_keystroke="meta C"/>
-  <!-- Action  : Delete selected file(s).                                        -->
+  <!-- Action  : Delete selected file(s), moving them to the trash if possible.  -->
   <!-- Default : F8, DELETE                                                      -->
   <action class="com.mucommander.ui.action.DeleteAction"                 keystroke="F8"
                                                                          alt_keystroke="DELETE"/>
+
+  <!-- Action  : Permanently delete selected file(s), bypassing the system trash.-->
+  <!-- Default : shift F8, shift DELETE                                          -->
+  <action class="com.mucommander.ui.action.PermanentDeleteAction"        keystroke="shift F8"
+                                                                         alt_keystroke="shift DELETE"/>
+
   <!-- Action  : Edit selected file using custom editor.                         -->
   <!-- Ignores multiple selection.                                               -->
   <!-- Default : F4                                                              -->

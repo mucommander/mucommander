@@ -2577,8 +2577,10 @@ com.mucommander.ui.action.DeleteAction.label:SK:Odstrániť
 com.mucommander.ui.action.DeleteAction.label:JA:削除
 com.mucommander.ui.action.DeleteAction.label:SV:Radera
 
-com.mucommander.ui.action.DeleteAction.tooltip:EN:Delete marked files
-com.mucommander.ui.action.DeleteAction.tooltip:FR:Supprimer les fichiers marqués
+# Note: the system trash is available on certain OS environments only (Windows, Mac OS X, KDE), and only for local files.
+com.mucommander.ui.action.DeleteAction.tooltip:EN:Delete marked files using the system trash when possible
+com.mucommander.ui.action.DeleteAction.tooltip:FR:Supprimer les fichiers marqués en utilisant la corbeille système si possible
+# The following entries need to be updated to indicate that the system trash is used when it is available
 com.mucommander.ui.action.DeleteAction.tooltip:DE:Markierte Dateien löschen
 com.mucommander.ui.action.DeleteAction.tooltip:ES:Elimiar los ficheros marcados
 com.mucommander.ui.action.DeleteAction.tooltip:CS:Smazat označené soubory
@@ -2596,6 +2598,54 @@ com.mucommander.ui.action.DeleteAction.tooltip:NL:Gemarkeerde bestanden verwijde
 com.mucommander.ui.action.DeleteAction.tooltip:SK:Odstrániť označené súbory
 com.mucommander.ui.action.DeleteAction.tooltip:JA:マークされたファイルを削除します
 com.mucommander.ui.action.DeleteAction.tooltip:SV:Radera markerade filer
+# Translation missing (Updated!)
+
+
+
+
+
+
+
+
+
+
+# Deletes without using the system trash
+com.mucommander.ui.action.PermanentDeleteAction.label:EN:Delete permanently
+com.mucommander.ui.action.PermanentDeleteAction.label:FR:Supprimer definitivement
+# Translation missing (New!)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+com.mucommander.ui.action.PermanentDeleteAction.tooltip:EN:Delete marked files without using the system trash
+com.mucommander.ui.action.PermanentDeleteAction.tooltip:FR:Supprimer les fichiers marqués sans utiliser la corbeille système
+# Translation missing (New!)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 com.mucommander.ui.action.RefreshAction.label:EN:Refresh
 com.mucommander.ui.action.RefreshAction.label:FR:Actualiser

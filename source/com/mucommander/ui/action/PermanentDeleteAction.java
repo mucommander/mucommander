@@ -25,17 +25,16 @@ import com.mucommander.ui.main.MainFrame;
 import java.util.Hashtable;
 
 /**
- * This action invokes a Delete confirmation dialog to delete currently the selected / marked files
- * in the currently active folder. Files are moved to the system trash when possible, i.e. if there is a trash available
- * on the current OS environment, and if the selected files are on a filesystem that allows it (usually only local files
- * can be moved to the trash).
+ * This action invokes a Delete confirmation dialog to delete the currently selected / marked files in the currently
+ * active folder. Unlike {@link com.mucommander.ui.action.DeleteAction}, the system trash is not used, files are
+ * permanently deleted.
  *
- * @see com.mucommander.ui.action.PermanentDeleteAction
+ * @see com.mucommander.ui.action.DeleteAction
  * @author Maxence Bernard
  */
-public class DeleteAction extends SelectedFilesAction {
+public class PermanentDeleteAction extends SelectedFilesAction {
 
-    public DeleteAction(MainFrame mainFrame, Hashtable properties) {
+    public PermanentDeleteAction(MainFrame mainFrame, Hashtable properties) {
         super(mainFrame, properties);
     }
 
@@ -43,6 +42,6 @@ public class DeleteAction extends SelectedFilesAction {
         FileSet files = mainFrame.getActiveTable().getSelectedFiles();
         // Invoke confirmation dialog only if at least one file is selected/marked
         if(files.size()>0)
-            new DeleteDialog(mainFrame, files, false);
+            new DeleteDialog(mainFrame, files, true);
     }
 }

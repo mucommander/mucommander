@@ -82,11 +82,6 @@ public class MuConfiguration {
      * enabled by default. */
     public static final boolean DEFAULT_ENABLE_SYSTEM_NOTIFICATIONS = com.mucommander.ui.notifier.AbstractNotifier.isAvailable()
         && (OsFamilies.MAC_OS_X.isCurrent() || OsFamilies.WINDOWS.isCurrent());
-    /** Controls whether files should be moved to trash or permanently erased. */
-    public static final String DELETE_TO_TRASH                    = "delete_to_trash";
-    /** Default 'delete to trash' behavior. */
-    public static final boolean DEFAULT_DELETE_TO_TRASH           = true;
-
 
 
     // - Shell variables -----------------------------------------------------
