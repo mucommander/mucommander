@@ -44,12 +44,10 @@ public class CopyFileNamesAction extends SelectedFilesAction {
             // Create a TransferableFileSet and make DataFlavour.stringFlavor (text) the only DataFlavour supported
             TransferableFileSet tfs = new TransferableFileSet(selectedFiles);
 
-            // Disable DataFlavor.javaFileListFlavor support
-            tfs.setJavaFileListDataFlavorSupported(true);
-
-            // Disable FileSetDataFlavor support because:
-            // a/ we don't want it
-            // b/ it would otherwise throw an exception because the data is not serializable
+            // Disable unwanted data flavors
+            tfs.setJavaFileListDataFlavorSupported(false);
+            tfs.setTextUriFlavorSupported(false);
+            // Note: not disabling this flavor would throw an exception because the flavor data is not serializable
             tfs.setFileSetDataFlavorSupported(false);
 
             // Transfer filenames, not file paths

@@ -21,6 +21,7 @@ package com.mucommander.ui.dnd;
 import com.mucommander.Debug;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
+import com.mucommander.file.FileProtocols;
 import com.mucommander.file.util.FileSet;
 
 import java.awt.datatransfer.DataFlavor;
@@ -38,18 +39,25 @@ import java.util.Vector;
  *
  * <p>The actual file set data can be fetched using one of those 3 DataFlavors :
  * <ul>
- * <li>FileSetDataFlavor (as returned by {@link #getFileSetDataFlavor()}): data returned as a {@link com.mucommander.file.util.FileSet}.
+ *   <li>FileSetDataFlavor (as returned by {@link #getFileSetDataFlavor()}): data returned as a {@link com.mucommander.file.util.FileSet}.
  * This flavor is used for local file transfers (within the application) only. In particular, this DataFlavor cannot
  * be used to transfer data to the clipboard because the data (FileSet) cannot be serialized.
  * In this case, the {@link #setFileSetDataFlavorSupported(boolean)} method should be used to disable FileSet DataFlavor.
- * <li>DataFlavor.javaFileListFlavor : data returned as a java.util.Vector of <code>java.io.File</code> files.
+ *   </li>
+ *   <li>DataFlavor.javaFileListFlavor : data returned as a java.util.Vector of <code>java.io.File</code> files.
  * This flavor is used for file transfers to and from external applications.
- * <li>DataFlavor.stringFlavor: data returned as a String representing file path(s) separated by \n characters.
- * This alternate flavor is used for file transfers to and from external applications that do not support
- * DataFlavor.javaFileListFlavor but text only (plain text editors for example)
+ *   </li>
+ *   <li>text/uri-list (RFC 2483): an alternative flavor supported by Gnome and KDE where the data is returned as
+ * a String containing file URIs separated by '\r\n'. This flavor is as of today the only one supported by GNOME and
+ * KDE. See bug #45 and http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4899516 .
+ *   </li>
+ *   <li>DataFlavor.stringFlavor: data returned as a String containing files paths separated by \n characters.
+ * This other alternative flavor is used for file transfers to and from external applications that do not support
+ * either of DataFlavor.javaFileListFlavor and text/uri-list but text only (plain text editors for example).
+ *   </li>
  * </ul>
  *
- * @author Maxence Bernard
+ * @author Maxence Bernard, Xavi Miró
  */
 public class TransferableFileSet implements Transferable {
 
@@ -65,9 +73,14 @@ public class TransferableFileSet implements Transferable {
     /** Is DataFlavor.stringFlavor supported ? */
     private boolean stringFlavorSupported = true;
 
+    /** Is text/uri-list (RFC 2483) flavor supported ? */
+    private boolean textUriFlavorSupported = true;
+
     /** Does DataFlavor.stringFlavor transfer the files' full paths or filenames only ? */
     private boolean stringFlavourTransfersFilename = false;
 
+    /** DataFlavor used for GNOME/KDE transfers */
+    private static DataFlavor TEXT_URI_FLAVOR;
 
     /** Custom FileSet DataFlavor used for local transfers */
     private static DataFlavor FILE_SET_DATA_FLAVOR;
@@ -76,6 +89,7 @@ public class TransferableFileSet implements Transferable {
         // Create a single custom DataFlavor instance that designates the FileSet class to transfer data
         try {
             FILE_SET_DATA_FLAVOR = new DataFlavor(DataFlavor.javaJVMLocalObjectMimeType+";class="+FileSet.class.getName());
+	        TEXT_URI_FLAVOR =  new DataFlavor("text/uri-list;class="+String.class.getName());
         }
         catch(ClassNotFoundException e) {
             // That should never happen
@@ -97,6 +111,8 @@ public class TransferableFileSet implements Transferable {
     /**
      * Sets whether or not the FileSet <code>DataFlavor</code> (as returned by {@link #getFileSetDataFlavor()}
      * should be supported by this Transferable (supported by default).
+     *
+     * @param supported <code>true</code> to support the flavor
      */
     public void setFileSetDataFlavorSupported(boolean supported) {
         this.fileSetFlavorSupported = supported;
@@ -105,6 +121,8 @@ public class TransferableFileSet implements Transferable {
     /**
      * Sets whether or not the <code>DataFlavor.javaFileListFlavor</code> should be supported by this Transferable
      * (supported by default).
+     *
+     * @param supported <code>true</code> to support the flavor
      */
     public void setJavaFileListDataFlavorSupported(boolean supported) {
         this.javaFileListFlavorSupported = supported;
@@ -113,11 +131,22 @@ public class TransferableFileSet implements Transferable {
     /**
      * Sets whether or not the <code>DataFlavor.stringFlavor</code> should be supported by this Transferable
      * (supported by default).
+     *
+     * @param supported <code>true</code> to support the flavor
      */
     public void setStringDataFlavorSupported(boolean supported) {
         this.stringFlavorSupported = supported;
     }
 
+    /**
+     * Sets whether or not the <code>text/uri-list</code> (RFC 2483) should be supported by this Transferable
+     * (supported by default).
+     *
+     * @param supported <code>true</code> to support the flavor
+     */
+    public void setTextUriFlavorSupported(boolean supported) {
+        this.textUriFlavorSupported = supported;
+    }
 
     /**
      * Sets whether the files' full path or just the filenames should be returned when
@@ -134,6 +163,9 @@ public class TransferableFileSet implements Transferable {
      * Returns whether the files' full path or just the filenames will be returned when
      * {@link #getTransferData(java.awt.datatransfer.DataFlavor)} is called with <code>DataFlavor.stringFlavor</code>.
      * Returns <code>false</code> unless {@link #setStringDataFlavourTransfersFilename(boolean)} has been called.
+     *
+     * @return whether the files' full path or just the filenames will be returned when
+     * {@link #getTransferData(java.awt.datatransfer.DataFlavor)} is called with <code>DataFlavor.stringFlavor</code>
      */
     public boolean getStringDataFlavourTransfersFilename() {
         return this.stringFlavourTransfersFilename;
@@ -142,6 +174,8 @@ public class TransferableFileSet implements Transferable {
 
     /**
      * Returns an instance of the custom FileSet DataFlavor used to transfer files locally.
+     *
+     * @return an instance of the custom FileSet DataFlavor used to transfer files locally
      */
     public static DataFlavor getFileSetDataFlavor() {
         return FILE_SET_DATA_FLAVOR;
@@ -250,6 +284,9 @@ public class TransferableFileSet implements Transferable {
         if(stringFlavorSupported)
             supportedDataFlavorsV.add(DataFlavor.stringFlavor);
 
+        if(textUriFlavorSupported)
+            supportedDataFlavorsV.add(TEXT_URI_FLAVOR);
+
         DataFlavor supportedDataFlavors[] = new DataFlavor[supportedDataFlavorsV.size()];
         supportedDataFlavorsV.toArray(supportedDataFlavors);
 
@@ -264,13 +301,14 @@ public class TransferableFileSet implements Transferable {
             return javaFileListFlavorSupported;
         else if(dataFlavor.equals(DataFlavor.stringFlavor))
             return stringFlavorSupported;
+        else if(dataFlavor.equals(TEXT_URI_FLAVOR))
+            return textUriFlavorSupported;
 
         return false;
     }
 
 
     public Object getTransferData(DataFlavor dataFlavor) throws UnsupportedFlavorException, IOException {
-//if(Debug.ON) Debug.trace("called, dataFlavor="+dataFlavor);
         int nbFiles = fileSet.size();
 
         // Return files stored in a FileSet instance (the one that was passed to the constructor)
@@ -283,8 +321,6 @@ public class TransferableFileSet implements Transferable {
 
             for(int i=0; i<nbFiles; i++) {
                 AbstractFile file = fileSet.fileAt(i);
-//                // Add the file only if it is a local file that is not an archive's entry
-//                if(file.getURL().getProtocol().equals(FileProtocols.FILE) && ((file instanceof LocalFile) || (file instanceof AbstractArchiveFile && ((AbstractArchiveFile)file).getProxiedFile() instanceof LocalFile)))
                 fileList.add(new File(file.getAbsolutePath()));
             }
             return fileList;
@@ -303,6 +339,7 @@ public class TransferableFileSet implements Transferable {
 //
 //            return new ByteArrayInputStream(sb.toString().getBytes(charset));
 //        }
+        // Return a String with file paths or names
         else if(dataFlavor.equals(DataFlavor.stringFlavor) && stringFlavorSupported) {
             StringBuffer sb = new StringBuffer();
             AbstractFile file;
@@ -311,6 +348,27 @@ public class TransferableFileSet implements Transferable {
                 sb.append(stringFlavourTransfersFilename?file.getName():file.getAbsolutePath());
                 if(i!=nbFiles-1)
                     sb.append('\n');
+            }
+
+            return sb.toString();
+        }
+        // Return a String with file URLs, as specified by RFC 2483
+        else if(dataFlavor.equals(TEXT_URI_FLAVOR) && textUriFlavorSupported) {
+            StringBuffer sb = new StringBuffer();
+            AbstractFile file;
+            for(int i=0; i<nbFiles; i++) {
+                file = fileSet.fileAt(i);
+                String url = file.getURL().getProtocol().equals(FileProtocols.FILE)
+                    // Use java.io.File.toURI() for local files (e.g. file:/mnt/music), this is the format expected by
+                    // Gnome/Nautilus.
+                    ?new File(file.getAbsolutePath()).toURI().toString()
+                    // Use standard URL format (e.g. smb://host/share/file) for other file types
+                    :file.getAbsolutePath();
+
+                sb.append(url);
+                if(i!=nbFiles-1){
+                    sb.append("\r\n");
+                }
             }
 
             return sb.toString();

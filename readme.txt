@@ -133,7 +133,9 @@ Localization:
 
 Bug fixes:
 - Fixed keyboard focus issues in the text editor after the 'Find' dialog has
-  been invoked, contributed by Karel Tomáš. 
+  been invoked, contributed by Karel Tomáš.
+- Fixed drag-and-drop issues from muCommander to other applications under Gnome
+  and KDE, contributed by Xavi Miró.
 
 Known issues:
 - Korean, Simplified Chinese, Slovenian and Slovak translations are not 
