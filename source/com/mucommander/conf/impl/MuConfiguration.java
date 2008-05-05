@@ -118,6 +118,10 @@ public class MuConfiguration {
     public static final String MAIL_SECTION                       = "mail";
     /** Address of the SMTP server that should be used when sending mails. */
     public static final String SMTP_SERVER                        = MAIL_SECTION + '.' + "smtp_server";
+    /** Outgoing TCP port to the SMTP server. */
+    public static final String SMTP_PORT                          = MAIL_SECTION + '.' + "smtp_port";
+    /** Default outgoing TCP port to the SMTP server. */
+    public static final int    DEFAULT_SMTP_PORT                   = 25;
     /** Name under which mails sent by muCommander should appear. */
     public static final String MAIL_SENDER_NAME                   = MAIL_SECTION + '.' + "sender_name";
     /** Address which mails sent by muCommander should be replied to. */

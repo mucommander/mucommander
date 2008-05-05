@@ -124,6 +124,7 @@ Improvements:
 - When transferring files into a Zip archive, the source files' date is now 
   properly preserved. The file entries' date can also be changed using the
   'Change date' dialog.
+- SMTP server port can now be changed in the preferences, defaults to 25.
 
 Localization:
 - 

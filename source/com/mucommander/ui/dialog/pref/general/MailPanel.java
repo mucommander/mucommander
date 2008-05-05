@@ -42,10 +42,13 @@ class MailPanel extends PreferencesPanel {
     /** Email address of the user */
     private JTextField emailField;
 	
-    /** SMTP used to send emails */
+    /** IP/hostname to the SMTP server */
     private JTextField smtpField;
 	
-	
+    /** TCP port to the SMTP server */
+    private JTextField portField;
+
+
     public MailPanel(PreferencesDialog parent) {
         super(parent, Translator.get("prefs_dialog.mail_tab"));
 
@@ -69,6 +72,10 @@ class MailPanel extends PreferencesPanel {
         smtpField = new JTextField(MuConfiguration.getVariable(MuConfiguration.SMTP_SERVER, ""));
         compPanel.addRow(Translator.get("prefs_dialog.mail_server"), smtpField, 10);
 
+        // SMTP port field
+        portField = new JTextField(""+MuConfiguration.getVariable(MuConfiguration.SMTP_PORT, MuConfiguration.DEFAULT_SMTP_PORT));
+        compPanel.addRow(Translator.get("server_connect_dialog.port"), portField, 10);
+
         mainPanel.add(compPanel, BorderLayout.NORTH);
         add(mainPanel, BorderLayout.NORTH);
     }
@@ -81,5 +88,6 @@ class MailPanel extends PreferencesPanel {
         MuConfiguration.setVariable(MuConfiguration.MAIL_SENDER_NAME, nameField.getText());
         MuConfiguration.setVariable(MuConfiguration.MAIL_SENDER_ADDRESS, emailField.getText());
         MuConfiguration.setVariable(MuConfiguration.SMTP_SERVER, smtpField.getText());
+        MuConfiguration.setVariable(MuConfiguration.SMTP_PORT, portField.getText());
     }
 }
