@@ -261,10 +261,10 @@ public class LocalFile extends AbstractFile {
                 }
             }
             else if(OsFamily.getCurrent().isUnixBased()) {
-                // Parses the output of 'df -k "filePath"' command on UNIX-based systems to retrieve free and total space information
+                // Parses the output of 'df -P -k "filePath"' command on UNIX-based systems to retrieve free and total space information
 
-                // 'df -k' returns totals in block of 1K = 1024 bytes
-                Process process = Runtime.getRuntime().exec(new String[]{"df", "-k", absPath}, null, file);
+                // 'df -P -k' returns totals in block of 1K = 1024 bytes, -P uses the POSIX output format, ensures that line won't break
+                Process process = Runtime.getRuntime().exec(new String[]{"df", "-P", "-k", absPath}, null, file);
 
                 // Check that the process was correctly started
                 if(process!=null) {
@@ -583,7 +583,7 @@ public class LocalFile extends AbstractFile {
 
     public long getFreeSpace() {
         if(JavaVersions.JAVA_1_6.isCurrentOrHigher())
-            return file.getFreeSpace();
+            return file.getUsableSpace();
 
         return getVolumeInfo()[1];
     }

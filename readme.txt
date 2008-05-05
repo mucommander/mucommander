@@ -126,7 +126,7 @@ Improvements:
   'Change date' dialog.
 - SMTP server port can now be changed in the preferences, defaults to 25.
 - New action for deleting selected files without using the system trash
-  (mapped onto Shift+F8 and Shift+Delete by default). Contributed by Arik.
+  (mapped onto Shift+F8 and Shift+Delete by default). Contributed by Arik Hadas.
 
 Localization:
 - 
@@ -136,6 +136,8 @@ Bug fixes:
   been invoked, contributed by Karel Tomáš.
 - Fixed drag-and-drop issues from muCommander to other applications under Gnome
   and KDE, contributed by Xavi Miró (bug #45).
+- Fixed a couple issues with the free space indicator, contributed by 
+  Karel Tomáš.
 
 Known issues:
 - Korean, Simplified Chinese, Slovenian and Slovak translations are not 
