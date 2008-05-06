@@ -172,13 +172,13 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
         mainPanel.add(createThemesPanel());
         mainPanel.add(Box.createRigidArea(new Dimension(0, 10)));
 
-        // Icon size.
-        mainPanel.add(createIconSizePanel());
-        mainPanel.add(Box.createRigidArea(new Dimension(0, 10)));
-
         // System icons.
         mainPanel.add(createSystemIconsPanel());
         mainPanel.add(Box.createVerticalGlue());
+
+        // Icon size.
+        mainPanel.add(createIconSizePanel());
+        mainPanel.add(Box.createRigidArea(new Dimension(0, 10)));
 
         setLayout(new BorderLayout());
         add(mainPanel, BorderLayout.NORTH);
@@ -417,7 +417,11 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
         String systemIconsPolicy = FileIcons.getSystemIconsPolicy();
         useSystemFileIconsComboBox.setSelectedIndex(FileIcons.USE_SYSTEM_ICONS_ALWAYS.equals(systemIconsPolicy)?2:FileIcons.USE_SYSTEM_ICONS_APPLICATIONS.equals(systemIconsPolicy)?1:0);
 
-        return createComboPanel("prefs_dialog.use_system_file_icons", useSystemFileIconsComboBox);
+        JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        panel.setBorder(BorderFactory.createTitledBorder(Translator.get("prefs_dialog.use_system_file_icons")));
+        panel.add(useSystemFileIconsComboBox);
+
+        return panel;
     }
 
     /**
@@ -445,14 +449,6 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
         iconSizeCombo.setSelectedIndex(index);
 
         return iconSizeCombo;
-    }
-
-    private JPanel createComboPanel(String labelKey, JComboBox comboBox) {
-        JPanel comboPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        comboPanel.add(new JLabel(Translator.get(labelKey)+": "));
-        comboPanel.add(comboBox);
-
-        return comboPanel;
     }
 
 
