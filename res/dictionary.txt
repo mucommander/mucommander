@@ -288,6 +288,25 @@ apply:SK:Použiť
 apply:JA:適用
 apply:SV:Utför
 
+# Used as a button label in the 'Change permissions' and 'Change date' dialogs
+change:EN:Change
+change:FR:Changer
+# Translation missing (New!)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 save:EN:Save
 save:FR:Enregistrer
 save:DE:Speichern
