@@ -127,6 +127,7 @@ Improvements:
 - SMTP server port can now be changed in the preferences, defaults to 25.
 - New action for deleting selected files without using the system trash
   (mapped onto Shift+F8 and Shift+Delete by default). Contributed by Arik Hadas.
+- Improved HTML parsing for HTTP documents, XHTML can now be parsed.
 
 Localization:
 - 

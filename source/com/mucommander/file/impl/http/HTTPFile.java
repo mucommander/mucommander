@@ -38,6 +38,8 @@ import java.security.cert.X509Certificate;
 import java.util.StringTokenizer;
 import java.util.TreeSet;
 import java.util.Vector;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 /**
@@ -45,7 +47,7 @@ import java.util.Vector;
  *
  * <p>The associated {@link FileURL} protocols are {@link FileProtocols#HTTP} and {@link FileProtocols#HTTPS}.
  * The host part of the URL designates the HTTP server. Credentials can be specified in the login and password parts
- * and will be used for HTTP Basic Authentication.
+ * and will be used for HTTP Basic Authentication.</p>
  *
  * <p>Here are a few examples of valid HTTP URLs:
  * <code>
@@ -53,25 +55,29 @@ import java.util.Vector;
  * http://www.mucommander.com/index.php?<br>
  * http://john:p4sswd@www.mucommander.com/restricted_area/<br>
  * </code>
+ * </p>
  *
- * A notable feature of HTTPFile is that it handles HTML files as archives: when any of the {@link #ls()} methods is
- * called, the HTML file is parsed and any link found in the code is considered as a file:
+ * <p>
+ * A notable feature of HTTPFile is that it handles HTML/XHTML files as archives: when any of the {@link #ls()} methods
+ * is called, the HTML file is parsed and any link found in the code is considered as a file:
  * <ul>
  *  <li>If the link looks like a link to an HTML file, the child HTTPFile will be 'browsable' ({@link #isBrowsable()}
  * will return <code>true</code>).
  *  <li>If not, the file will just be a regular file.
  * </ul>
+ * </p>
  *
  * <p>In order to avoid the cost of having to perform a HEAD request for each file, some guessing based on the URL and
- * its filename is performed to determine if the file is an HTML file (content-type text/html) or not.
+ * its filename is performed to determine if the file is an HTML/XHTML file or not.
  * In practice, this works quite well for most sites but the algorithm will be confused by some non-conventional
  * file naming, for instance if an HTML file ends with the '.gif' extension.
- * <br>A HEAD request is then issued only for non-HTML files, to determine their size and last modified date.
+ * <br>
+ * A HEAD request is then issued only for non-HTML files, to determine their size and last modified date.
  * HTML files will thus have a size returned by {@link #getSize()} of <code>-1</code> (undetermined), and a date
- * returned by {@link #getDate()} corresponding to 'now' (current time).
+ * returned by {@link #getDate()} corresponding to 'now' (current time).</p>
  *
  * <p>Access to HTTP files is provided by the <code>java.net</code> API. The {@link #getUnderlyingFileObject()} method
- * allows to retrieve a <code>java.net.URL</code> instance corresponding to this HTTPFile.
+ * allows to retrieve a <code>java.net.URL</code> instance corresponding to this HTTPFile.</p>
  *
  * @author Maxence Bernard
  */
@@ -88,8 +94,8 @@ public class HTTPFile extends AbstractFile {
     private boolean parentValSet;
     protected AbstractFile parent;
 	
-    /** True if the remote resource is browsable, i.e. is or seems to be an HTML file */
-    private boolean isHTML;
+    /** True if the remote resource is parsable/browsable, i.e. is or seems to be an HTML/XHTML file */
+    private boolean isParsable;
 
     /** True if file has been resolved on the remote HTTP server, either successfully or unsuccessfully */
     private boolean fileResolved;
@@ -99,6 +105,12 @@ public class HTTPFile extends AbstractFile {
 
     /** Permissions for HTTP files: r-- (400 octal). Only the 'user' permissions bits are supported. */
     final static FilePermissions PERMISSIONS = new SimpleFilePermissions(256, 448);
+
+    /** Matches HTML and XHTML attribute key/value pairs, where the value is surrounded by Single Quotes */
+    private final static Pattern linkAttributePatternSQ = Pattern.compile("(src|href|SRC|HREF)=\\\'.*?\\\'");
+
+    /** Matches HTML and XHTML attribute key/value pairs, where the value is surrounded by Double Quotes */
+    private final static Pattern linkAttributePatternDQ = Pattern.compile("(src|href|SRC|HREF)=\\\".*?\\\"");
 
 
     static {
@@ -139,10 +151,10 @@ public class HTTPFile extends AbstractFile {
         String mimeType;
         // Test if based on the URL, the file looks like an HTML file :
         //  - URL contains no path after hostname (e.g. http://google.com)
-        //  - URL points to dynamic content (e.g. http://lulu.superblog.com?param=hola&val=...), even though dynamic scripts do not always return HTML
+        //  - URL points to dynamic content (e.g. http://lulu.superblog.com?param=hola&val=...), even though dynamic scripts do not always return HTML/XHTML
         //  - No filename with a known mime type can be extracted from the last part of the URL (e.g. NOT http://mucommander.com/download/mucommander-0_7.tgz)
-        if(fileURL.getPath().equals("/")  || fileURL.getQuery()!=null || ((mimeType= MimeTypes.getMimeType(this))==null || mimeType.equals("text/html"))) {
-            isHTML = true;
+        if(fileURL.getPath().equals("/")  || fileURL.getQuery()!=null || ((mimeType=MimeTypes.getMimeType(this))==null || isParsableMimeType(mimeType))) {
+            isParsable = true;
             size = -1;
             date = System.currentTimeMillis();
         }
@@ -150,6 +162,19 @@ public class HTTPFile extends AbstractFile {
             resolveFile();
         }
     }
+
+
+    /**
+     * Returns <code>true</code> if the given mime type corresponds to HTML or XHTML and can be parsed.
+     *
+     * @param mimeType a MIME type / content type
+     * @return <code>true</code> if the given mime type corresponds to HTML or XHTML and can be parsed
+     */
+    private boolean isParsableMimeType(String mimeType) {
+        return mimeType!=null
+           && (mimeType.startsWith("text/html") || mimeType.startsWith("application/xhtml+xml") || mimeType.startsWith("application/xml"));
+    }
+
 
     /**
 	 * Installs a custom <code>javax.net.ssl.X509TrustManager</code> and <code>javax.net.ssl.HostnameVerifier</code>
@@ -234,8 +259,8 @@ public class HTTPFile extends AbstractFile {
 
             // Test if content is HTML
             String contentType = conn.getContentType();
-            if(contentType!=null && contentType.trim().startsWith("text/html"))
-                isHTML = true;
+            if(isParsableMimeType(contentType))
+                isParsable = true;
 
             // File was successfully resolved on the remote HTTP server and thus exists
             exists = true;
@@ -505,10 +530,10 @@ public class HTTPFile extends AbstractFile {
                 break;
             } while(true);
 
-            // Retrieve content type and throw an IOException if it is not text/html
+            // Retrieve content type and throw an IOException if doesn't correspond to a parsable type (HTML/XHTML)
             String contentType = conn.getContentType();
-            if(contentType==null || !contentType.trim().startsWith("text/html"))
-                throw new IOException("Content type is not text/html");  // Todo: localize this message
+            if(contentType==null || !isParsableMimeType(contentType))
+                throw new IOException("Document cannot be parsed (not HTML or XHTML)");  // Todo: localize this message
 			
             int pos;
             String enc = null;
@@ -537,10 +562,6 @@ public class HTTPFile extends AbstractFile {
             Vector children = new Vector();
             // List that contains children URL, a TreeSet for fast (log(n)) search operations
             TreeSet childrenURL = new TreeSet();
-            StreamTokenizer st = new StreamTokenizer(br);
-            String token;
-            String prevToken = "";
-            int tokenType;
             HTTPFile child;
             URL childURL;
             FileURL childFileURL;
@@ -554,57 +575,69 @@ public class HTTPFile extends AbstractFile {
 
             FileURL tempChildURL = (FileURL)fileURL.clone();
 
-            while((tokenType=st.nextToken())!=StreamTokenizer.TT_EOF) {
-                token = st.sval;
-                if(token==null)
-                    continue;
-				
-                if(tokenType=='\'' || tokenType=='"') {
-                    try {
-                        if((prevToken.equalsIgnoreCase("href") || prevToken.equalsIgnoreCase("src")) && !(token.startsWith("mailto") || token.startsWith("MAILTO") || token.startsWith("#"))) {
-                            if(!childrenURL.contains(token)) {
-                                if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("creating child "+token+" context="+contextURL);
-                                childURL = new URL(contextURL, token);
+            Pattern pattern;
+            String line, match, link;
+            while((line=br.readLine())!=null) {
+                for(pattern=linkAttributePatternSQ;; pattern=linkAttributePatternDQ) {
+                    Matcher matcher = pattern.matcher(line);
+                    while(matcher.find()) {
+                        match = matcher.group();
+                        link = match.substring(match.indexOf(pattern==linkAttributePatternSQ?'\'':'\"')+1, match.length()-1);
 
-                                // Extract the filename from the child URL
-                                PathTokenizer pt = new PathTokenizer(childURL.getPath(), "/", false);
-                                String filename = null;
-                                while(pt.hasMoreFilenames())
-                                    filename = pt.nextFilename();
+                        // These are not proper URLs, skip them
+                        if(link.startsWith("mailto") || link.startsWith("MAILTO")
+                        || link.startsWith("#")
+                        || link.startsWith("javascript:"))
+                            continue;
 
-                                // If filename is null (For example if path is '/'), use host instead
-                                if(filename==null)
-                                    filename = url.getHost();
+                        // Don't add the same link more than once
+                        if(childrenURL.contains(link))
+                            continue;
 
-                                // Create the child FileURL instance
-                                childFileURL = new FileURL(childURL.toExternalForm());
-                                // Keep the parent's credentials (HTTP basic authentication), only if the host is the same.
-                                // It would otherwise constitue a security issue.
-                                if(parentHost.equals(childFileURL.getHost()))
-                                    childFileURL.setCredentials(credentials);
+                        try {
+                            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("creating child "+link+" context="+contextURL);
+                            childURL = new URL(contextURL, link);
 
-                                // Important note: URL and absolute path may differ. If for instance,
-                                // http://mucommander.com contains a link to http://java.com, the child file's
-                                // absolute path will be http://mucommander.com/java.com whereas its URL (and canonical path)
-                                // will be http://java.com .
-                                // This is done to ensure that every children listed have this file as a parent.
-                                tempChildURL.setPath(parentPath+filename);
-                                child = new HTTPFile(childFileURL, childURL, tempChildURL.toString());
+                            // Extract the filename from the child URL
+                            PathTokenizer pt = new PathTokenizer(childURL.getPath(), "/", false);
+                            String filename = null;
+                            while(pt.hasMoreFilenames())
+                                filename = pt.nextFilename();
 
-                                if(Debug.ON) Debug.trace("childFileURL="+child.getURL()+" absPath="+child.getAbsolutePath()+" parent="+child.getParent());
+                            // If filename is null (For example if path is '/'), use host instead
+                            if(filename==null)
+                                filename = url.getHost();
 
-                                children.add(FileFactory.wrapArchive(child));
-                                childrenURL.add(token);
+                            // Create the child FileURL instance
+                            childFileURL = new FileURL(childURL.toExternalForm());
+                            // Keep the parent's credentials (HTTP basic authentication), only if the host is the same.
+                            // It would otherwise constitue a security issue.
+                            if(parentHost.equals(childFileURL.getHost()))
+                                childFileURL.setCredentials(credentials);
+
+                            // Important note: URL and absolute path may differ. If for instance,
+                            // http://mucommander.com contains a link to http://java.com, the child file's
+                            // absolute path will be http://mucommander.com/java.com whereas its URL (and canonical path)
+                            // will be http://java.com .
+                            // This is done to ensure that every children listed have this file as a parent.
+                            tempChildURL.setPath(parentPath+filename);
+                            child = new HTTPFile(childFileURL, childURL, tempChildURL.toString());
+
+                            if(Debug.ON) Debug.trace("childFileURL="+child.getURL()+" absPath="+child.getAbsolutePath()+" parent="+child.getParent());
+
+                            children.add(FileFactory.wrapArchive(child));
+                            childrenURL.add(link);
+                        }
+                        catch(IOException e) {
+                            if (com.mucommander.Debug.ON) {
+                                com.mucommander.Debug.trace("Cannot create child : "+link+" "+e);
                             }
                         }
                     }
-                    catch(IOException e) {
-                        if (com.mucommander.Debug.ON) {
-                            com.mucommander.Debug.trace("Cannot create child : "+token+" "+e);
-                        }
-                    }
+
+                    if(pattern==linkAttributePatternDQ)
+                        break;
                 }
-                prevToken = token==null?"":token.toLowerCase();
             }
 
             AbstractFile childrenArray[] = new AbstractFile[children.size()];
@@ -649,7 +682,7 @@ public class HTTPFile extends AbstractFile {
     }
 
     public boolean isBrowsable() {
-        return isHTML;
+        return isParsable;
     }
 
     public String getName() {
