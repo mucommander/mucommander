@@ -39,6 +39,7 @@ import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.IOException;
 
 /**
  * A panel which contains a directory tree. This panel is attached to the left
@@ -153,25 +154,32 @@ public class FoldersTreePanel extends JPanel implements TreeSelectionListener,
      * the current root of a tree.
      */
     private void updateSelectedFolder() {
-        AbstractFile currentFolder = folderPanel.getCurrentFolder();
-        while (currentFolder != null && !currentFolder.isDirectory()) {
-            currentFolder = currentFolder.getParentSilently();
+        AbstractFile tempFolder = folderPanel.getCurrentFolder();
+        while (tempFolder != null && !tempFolder.isDirectory()) {
+            tempFolder = tempFolder.getParentSilently();
         }
+        final AbstractFile currentFolder = tempFolder;
         TreePath selectionPath = tree.getSelectionPath();
         if (selectionPath != null) {
-            if (selectionPath.getLastPathComponent() == currentFolder)
+            if (selectionPath.getLastPathComponent() == tempFolder)
                 return;
         }
-        TreePath path = null;
         try {
-            AbstractFile currentRoot = currentFolder.getRoot();
-            model.setRoot(currentRoot);
-            path = new TreePath(model.getPathToRoot(currentFolder));
-            tree.expandPath(path);
-            tree.setSelectionPath(path);
-        } catch (Exception e) {
+            final AbstractFile currentRoot = currentFolder.getRoot();
+            SwingUtilities.invokeLater(new Runnable() {
+               public void run() {
+                   try {
+                       model.setRoot(currentRoot);
+                       TreePath path = new TreePath(model.getPathToRoot(currentFolder));
+                       tree.expandPath(path);
+                       tree.setSelectionPath(path);
+                   } catch (Exception e) {
+                       e.printStackTrace();
+                   }
+                } 
+            });
+        } catch (IOException e) {
             e.printStackTrace();
-            System.out.println(path);
         }
     }
 
@@ -309,6 +317,7 @@ public class FoldersTreePanel extends JPanel implements TreeSelectionListener,
     public void treeStructureChanged(TreeModelEvent e) {
         // ensures that a selection is repainted correctly
         // after nodes have been inserted
+        updateSelectedFolder();
         tree.repaint();
     }
 
