@@ -21,6 +21,7 @@ package com.mucommander.ui.action;
 import com.mucommander.desktop.DesktopManager;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileProtocols;
+import com.mucommander.file.impl.CachedFile;
 import com.mucommander.file.impl.local.LocalFile;
 import com.mucommander.job.TempExecJob;
 import com.mucommander.text.Translator;
@@ -76,10 +77,10 @@ public class OpenAction extends MuAction {
     protected void open(AbstractFile file, FolderPanel destination) {
         // Opens browsable files in the destination FolderPanel.
         if(file.isBrowsable())
-            destination.tryChangeCurrentFolder(file);
+            destination.tryChangeCurrentFolder(file instanceof CachedFile?((CachedFile)file).getProxiedFile():file);
 
         // Opens local files using their native associations.
-        else if(file.getURL().getProtocol().equals(FileProtocols.FILE) && (file instanceof LocalFile)) {
+        else if(file.getURL().getProtocol().equals(FileProtocols.FILE) && (file.hasAncestor(LocalFile.class))) {
             try {DesktopManager.open(file);}
             catch(IOException e) {reportGenericError();}
         }
@@ -99,7 +100,8 @@ public class OpenAction extends MuAction {
         AbstractFile file;
 
         // Retrieves the currently selected file, aborts if none.
-        if((file = mainFrame.getActiveTable().getSelectedFile(true)) == null)
+        // Note: a CachedFile instance is retrieved to avoid blocking the event thread.
+        if((file = mainFrame.getActiveTable().getSelectedFile(true, true)) == null)
             return;
 
         // Opens the currently selected file.
