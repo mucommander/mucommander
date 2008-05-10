@@ -70,10 +70,19 @@ import java.net.MalformedURLException;
 
     static {
         // Silence jCIFS's output if not in debug mode
-        // To quote jCIFS's documentation : "0 - No log messages are printed -- not even crticial exceptions."
+        // Quote from jCIFS's documentation : "0 - No log messages are printed -- not even crticial exceptions."
         if(!Debug.ON)
             System.setProperty("jcifs.util.loglevel", "0");
 
+        // Lower the timeout values
+
+        // "The time period in milliseconds that the client will wait for a response to a request from the server.
+        // The default value is 30000."
+        System.setProperty("jcifs.smb.client.responseTimeout", "10000");
+
+        // "To prevent the client from holding server resources unnecessarily, sockets are closed after this time period
+        // if there is no activity. This time is specified in milliseconds. The default is 35000."
+        System.setProperty("jcifs.smb.client.soTimeout", "15000");
     }
 
     public SMBFile(FileURL fileURL) throws IOException {
