@@ -1542,5 +1542,5 @@ public abstract class AbstractFileTestCase extends TestCase {
      * @return a temporary file that does not physically exist
      * @throws IOException if an error occurred while creating a temporary file
      */
-    protected abstract AbstractFile getTemporaryFile() throws IOException;
+    public abstract AbstractFile getTemporaryFile() throws IOException;
 }

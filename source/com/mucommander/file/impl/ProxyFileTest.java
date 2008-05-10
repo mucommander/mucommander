@@ -38,7 +38,7 @@ public class ProxyFileTest extends AbstractFileTestCase {
     // AbstractFileTestCase implementation //
     /////////////////////////////////////////
 
-    protected AbstractFile getTemporaryFile() throws IOException {
+    public AbstractFile getTemporaryFile() throws IOException {
         // Returns a ProxyFile instance proxying a LocalFile ; the kind of proxied file should not matter as long as it
         // passes AbstractFileTestCase.
         return new ProxyFile(FileFactory.getTemporaryFile(getClass().getName(), false)) {

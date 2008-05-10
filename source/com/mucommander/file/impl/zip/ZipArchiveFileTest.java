@@ -47,7 +47,7 @@ public class ZipArchiveFileTest extends AbstractFileTestCase {
     // AbstractFileTestCase implementation //
     /////////////////////////////////////////
     
-    protected AbstractFile getTemporaryFile() throws IOException {
+    public AbstractFile getTemporaryFile() throws IOException {
         // use a incremental id to avoid collisions
         return tempZipFile.getDirectChild("entry"+(++entryNum));
     }

@@ -53,7 +53,7 @@ public class SMBFileTestCase extends AbstractFileTestCase {
     // AbstractFileTestCase implementation //
     /////////////////////////////////////////
 
-    protected AbstractFile getTemporaryFile() throws IOException {
+    public AbstractFile getTemporaryFile() throws IOException {
         return tempFolder.getDirectChild(getPseudoUniqueFilename(SMBFileTestCase.class.getName()));
     }
 
