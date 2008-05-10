@@ -43,12 +43,18 @@ import java.awt.event.WindowListener;
  */
 public class FocusDialog extends JDialog implements WindowListener {
 
-    private JComponent initialFocusComponent;
-    private Dimension maximumDimension;
+    /** Minimum dimensions of this dialog, may be null */
     private Dimension minimumDimension;
 
+    /** Maximum dimensions of this dialog, may be null */
+    private Dimension maximumDimension;
+
+    /** Has this window been activated yet ? */
     private boolean firstTimeActivated;
-	
+
+    /** The component that will receive the focus when this window is activated for the first time, may be null */
+    private JComponent initialFocusComponent;
+
     private Component locationRelativeComp;
 
     private boolean keyboardDisposalEnabled = true;
@@ -107,7 +113,9 @@ public class FocusDialog extends JDialog implements WindowListener {
      * code before canceling the dialog.
      * </p>
      */
-    public void cancel() {dispose();}
+    public void cancel() {
+        dispose();
+    }
 
 
     /**
@@ -118,7 +126,11 @@ public class FocusDialog extends JDialog implements WindowListener {
      */
     public void setInitialFocusComponent(JComponent initialFocusComponent) {
         this.initialFocusComponent = initialFocusComponent;
-        addWindowListener(this);
+
+        if(initialFocusComponent==null)
+            removeWindowListener(this);
+        else
+            addWindowListener(this);
     }
 	
 	
@@ -179,6 +191,8 @@ public class FocusDialog extends JDialog implements WindowListener {
 
     /**
      * Return <code>true</code> if the dialog has been activated (see WindowListener.windowActivated()).
+     *
+     * @return <code>true</code> if the dialog has been activated
      */
     public boolean isActivated() {
         return firstTimeActivated;
@@ -190,18 +204,25 @@ public class FocusDialog extends JDialog implements WindowListener {
     ////////////////////////////
 
     public void windowOpened(WindowEvent e) {
-        // Requests focus first time the dialog is activated
-        // (this method is called first time the dialog is made visible)
-        if (!firstTimeActivated && initialFocusComponent!=null) {
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("requesting focus on initial focus component");
-
-            FocusRequester.requestFocus(initialFocusComponent);
-            firstTimeActivated = true;
-        }
     }
 
     public void windowActivated(WindowEvent e) {
         // (this method is called each time the dialog is activated)
+        if (!firstTimeActivated && initialFocusComponent!=null) {
+            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("requesting focus on initial focus component");
+
+            // First try using requestFocusInWindow() which is preferred over requestFocus(). If it fails
+            // (returns false), call requestFocus:
+            // "The focus behavior of this method can be implemented uniformly across platforms, and thus developers are
+            // strongly encouraged to use this method over requestFocus when possible. Code which relies on requestFocus
+            // may exhibit different focus behavior on different platforms."
+            if(!initialFocusComponent.requestFocusInWindow()) {
+                if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("requestFocusInWindow failed, calling requestFocus");
+                FocusRequester.requestFocus(initialFocusComponent);
+            }
+
+            firstTimeActivated = true;
+        }
     }
 
     public void windowClosing(WindowEvent e) {
