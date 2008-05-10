@@ -200,6 +200,12 @@ public class FileTableModel extends AbstractTableModel {
                 cellValuesCache[cellIndex][Columns.OWNER-1] = file.getOwner();
             if(canGetGroup)
                 cellValuesCache[cellIndex][Columns.GROUP-1] = file.getGroup();
+
+            // Pre-fetch those attributes as they are retrieved by the table renderer and some actions
+            // from the event thread.
+            file.isBrowsable();
+            file.isHidden();
+
             fileIndex++;
         }
     }
