@@ -57,6 +57,24 @@ public class SimpleFileAttributes implements FileAttributes {
     }
 
 
+    /**
+     * Creates a new SimpleFileAttributes instance whose attributes are set to those of the given AbstractFile.
+     * Note that the path attribute is set to the file's {@link com.mucommander.file.AbstractFile#getAbsolutePath() absolute path}.
+     *
+     * @param file the file from which to fetch the attribute values
+     */
+    public SimpleFileAttributes(AbstractFile file) {
+        setPath(file.getAbsolutePath());
+        setExists(file.exists());
+        setDate(file.getDate());
+        setSize(file.getSize());
+        setDirectory(file.isDirectory());
+        setPermissions(file.getPermissions());
+        setOwner(file.getOwner());
+        setGroup(file.getGroup());
+    }
+
+
     ///////////////////////////////////
     // FileAttributes implementation //
     ///////////////////////////////////
