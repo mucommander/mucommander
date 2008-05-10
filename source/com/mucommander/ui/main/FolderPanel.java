@@ -33,6 +33,10 @@ import com.mucommander.file.filter.DSStoreFileFilter;
 import com.mucommander.file.filter.SystemFileFilter;
 import com.mucommander.file.util.FileSet;
 import com.mucommander.text.Translator;
+import com.mucommander.ui.action.ActionKeymap;
+import com.mucommander.ui.action.ActionManager;
+import com.mucommander.ui.action.CycleBackwardThruFolderPanelAction;
+import com.mucommander.ui.action.CycleForwardThruFolderPanelAction;
 import com.mucommander.ui.border.MutableLineBorder;
 import com.mucommander.ui.dialog.QuestionDialog;
 import com.mucommander.ui.dialog.auth.AuthDialog;
@@ -52,12 +56,10 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.dnd.DropTarget;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.util.HashSet;
 import java.util.Iterator;
 
 /**
@@ -241,6 +243,14 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
         MuConfiguration.addConfigurationListener(this);
         ThemeManager.addCurrentThemeListener(this);
 
+        // Disable Ctrl+Tab and Shift+Ctrl+Tab focus traversal keys
+        disableCtrlFocusTraversalKeys(locationComboBox.getTextField());
+        disableCtrlFocusTraversalKeys(foldersTreePanel.getTree());
+        disableCtrlFocusTraversalKeys(fileTable);
+        registerCycleThruFolderPanelAction(locationComboBox.getTextField());
+        registerCycleThruFolderPanelAction(foldersTreePanel.getTree());
+        // No need to register cycle actions for FileTable, they already are 
+
         // Listen to focus event in order to notify MainFrame of changes of the current active panel/table
         fileTable.addFocusListener(this);
         locationField.addFocusListener(this);
@@ -260,6 +270,43 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
         dropTargetListener = new FileDropTargetListener(this, true);
         locationField.setDropTarget(new DropTarget(locationField, dropTargetListener));
         driveButton.setDropTarget(new DropTarget(driveButton, dropTargetListener));
+    }
+
+
+    /**
+     * Removes the Control+Tab and Shift+Control+Tab focus traversal keys from the given component so that those
+     * shortcuts can be used for other purposes.
+     *
+     * @param component the component for which to remove the Control+Tab and Shift+Control+Tab focus traversal keys
+     */
+    private void disableCtrlFocusTraversalKeys(Component component) {
+        // Remove Ctrl+Tab from forward focus traversal keys
+        HashSet keyStrokeSet = new HashSet();
+        keyStrokeSet.add(AWTKeyStroke.getAWTKeyStroke(KeyEvent.VK_TAB, 0));
+        component.setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, keyStrokeSet);
+
+        // Remove Shift+Ctrl+Tab from backward focus traversal keys
+        keyStrokeSet = new HashSet();
+        keyStrokeSet.add(AWTKeyStroke.getAWTKeyStroke(KeyEvent.VK_TAB, java.awt.event.InputEvent.SHIFT_DOWN_MASK));
+        component.setFocusTraversalKeys(KeyboardFocusManager.BACKWARD_TRAVERSAL_KEYS, keyStrokeSet);
+    }
+
+    /**
+     * Registers the {@link com.mucommander.ui.action.CycleForwardThruFolderPanelAction} and
+     * {@link com.mucommander.ui.action.CycleBackwardThruFolderPanelAction actions onto the given component's input map.
+     *  
+     * @param component the component for which to register the cycle actions
+     */
+    private void registerCycleThruFolderPanelAction(JComponent component) {
+        ActionKeymap.registerActionAccelerators(
+                ActionManager.getActionInstance(CycleForwardThruFolderPanelAction.class, mainFrame),
+                component,
+                JComponent.WHEN_FOCUSED);
+
+        ActionKeymap.registerActionAccelerators(
+                ActionManager.getActionInstance(CycleBackwardThruFolderPanelAction.class, mainFrame),
+                component,
+                JComponent.WHEN_FOCUSED);
     }
 
 

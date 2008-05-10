@@ -42,6 +42,17 @@
   <!-- Default : meta C, control C                                               -->
   <action class="com.mucommander.ui.action.CopyFilesToClipboardAction"   keystroke="control C"
                                                                          alt_keystroke="meta C"/>
+
+  <!-- Action  : Cycle forward through the folder panel's components.            -->
+  <!-- Default : control TAB                                                     -->
+  <action class="com.mucommander.ui.action.CycleForwardThruFolderPanelAction"
+                                                                         keystroke="control TAB"/>
+        
+  <!-- Action  : Cycle backward through the folder panel's components.           -->
+  <!-- Default : shift control TAB                                               -->
+  <action class="com.mucommander.ui.action.CycleBackwardThruFolderPanelAction"
+                                                                         keystroke="shift control TAB"/>
+
   <!-- Action  : Delete selected file(s), moving them to the trash if possible.  -->
   <!-- Default : F8, DELETE                                                      -->
   <action class="com.mucommander.ui.action.DeleteAction"                 keystroke="F8"
