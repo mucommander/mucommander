@@ -21,9 +21,8 @@ package com.mucommander.desktop;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.impl.local.LocalFile;
 
-import java.io.IOException;
 import java.io.File;
-import java.net.URL;
+import java.io.IOException;
 
 /**
  * {@link DesktopOperation} implementation meant for actions that involve <code>java.io.File</code>.
@@ -144,9 +143,9 @@ public abstract class LocalFileOperation implements DesktopOperation {
         if(target[0] instanceof File)
             return (File)target[0];
 
-        // Deals with instances of LocalFile.
-        if(target[0] instanceof LocalFile)
-            return (File)((AbstractFile)target[0]).getUnderlyingFileObject();
+        // Deals with instances of LocalFile: raw instances or wrapped in another AbstractFile container (e.g. archive files)
+        if(target[0] instanceof AbstractFile && ((AbstractFile)target[0]).hasAncestor(LocalFile.class))
+            return (File)((AbstractFile)target[0]).getAncestor(LocalFile.class).getUnderlyingFileObject();
 
         // Deals with instances of String.
         if(target[0] instanceof String)
