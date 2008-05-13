@@ -43,6 +43,9 @@ public class FileTableModel extends AbstractTableModel {
     /** The current folder */
     private AbstractFile currentFolder;
 
+    /** Date of the current folder when it was changed */
+    private long currentFolderDateSnapshot;
+
     /** The current folder's parent folder, may be null */
     private AbstractFile parent;
 
@@ -130,12 +133,24 @@ public class FileTableModel extends AbstractTableModel {
     public synchronized AbstractFile getCurrentFolder() {
         return currentFolder;
     }
+
+    /**
+     * Returns the date of the current folder, when it was set using {@link #setCurrentFolder(com.mucommander.file.AbstractFile, com.mucommander.file.AbstractFile[])}.
+     * In other words, the returned date is a snapshot of the current folder's date which is never updated.
+     *
+     * @return Returns the date of the current folder, when it was set using #setCurrentFolder(Abstract, Abstract[])
+     */
+    public synchronized long getCurrentFolderDateSnapshot() {
+        return currentFolderDateSnapshot;
+    }
 	
     public synchronized boolean hasParentFolder() {
         return parent!=null;
     }
 
-    public synchronized AbstractFile getParentFolder() {return parent;}
+    public synchronized AbstractFile getParentFolder() {
+        return parent;
+    }
 	
 	
     public synchronized void setCurrentFolder(AbstractFile folder, AbstractFile children[]) {	
@@ -176,7 +191,8 @@ public class FileTableModel extends AbstractTableModel {
         if(parent!=null) {
             cellValuesCache[0][Columns.NAME-1] = "..";
             cellValuesCache[0][Columns.SIZE-1] = DIRECTORY_SIZE_STRING;
-            cellValuesCache[0][Columns.DATE-1] =	CustomDateFormat.format(new Date(currentFolder.getDate()));
+            currentFolderDateSnapshot = currentFolder.getDate();
+            cellValuesCache[0][Columns.DATE-1] =	CustomDateFormat.format(new Date(currentFolderDateSnapshot));
             // Don't display parent's permissions as they can have a different format from the folder contents
             // (e.g. for archives) and this looks weird
             cellValuesCache[0][Columns.PERMISSIONS-1] =	"";
@@ -205,6 +221,9 @@ public class FileTableModel extends AbstractTableModel {
             // from the event thread.
             file.isBrowsable();
             file.isHidden();
+            // Pre-fetch isSymlink attribute and if the file is a symlink, pre-fetch the canonical file
+            if(file.isSymlink())
+                file.getCanonicalFile();
 
             fileIndex++;
         }
@@ -221,7 +240,7 @@ public class FileTableModel extends AbstractTableModel {
      * @param rowIndex a row index, comprised between 0 and #getRowCount()
      * @return a CachedFile instance of the file located at the given row index
      */
-    synchronized AbstractFile getCachedFileAtRow(int rowIndex) {
+    public synchronized AbstractFile getCachedFileAtRow(int rowIndex) {
         if(rowIndex==0 && parent!=null)
             return parent;
 		
@@ -234,6 +253,21 @@ public class FileTableModel extends AbstractTableModel {
         if(rowIndex>=0 && rowIndex<fileArrayIndex.length)
             return cachedFiles[fileArrayIndex[rowIndex]];
         return null;
+    }
+
+    /**
+     * Returns the current folder's children. The returned array contains {@link CachedFile} instances, where
+     * most attributes have already been fetched and cached.
+     *
+     * @return the current folder's children, as an array of CachedFile instances
+     * @see #getFiles()
+     */
+    public synchronized AbstractFile[] getCachedFiles() {
+        // Clone the array to make sure it can't be modified outside of this class
+        AbstractFile[] cachedFilesCopy = new AbstractFile[cachedFiles.length];
+        System.arraycopy(cachedFiles, 0, cachedFilesCopy, 0, cachedFiles.length);
+
+        return cachedFiles;
     }
 
 
@@ -258,6 +292,21 @@ public class FileTableModel extends AbstractTableModel {
             return file;
     }
 	
+    /**
+     * Returns the current folder's children. The returned array contains {@link AbstractFile} instances, and not
+     * CachedFile instances contrary to {@link #getCachedFiles()}.
+     *
+     * @return the current folder's children
+     * @see #getCachedFiles()
+     */
+    public synchronized AbstractFile[] getFiles() {
+        int nbFiles = cachedFiles.length;
+        AbstractFile[] files = new AbstractFile[nbFiles];
+        for(int i=0; i<nbFiles; i++)
+            files[i] = cachedFiles[i]==null?null:((CachedFile)cachedFiles[i]).getProxiedFile();
+
+        return files;
+    }
 
     /**
      * Returns the index of the row where the given file is located, <code>-1<code> if the file is not in the
