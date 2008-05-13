@@ -154,23 +154,32 @@ public class FoldersTreePanel extends JPanel implements TreeSelectionListener,
      * the current root of a tree.
      */
     private void updateSelectedFolder() {
-        AbstractFile tempFolder = folderPanel.getCurrentFolder();
-        while (tempFolder != null && !tempFolder.isDirectory()) {
-            tempFolder = tempFolder.getParentSilently();
+        final AbstractFile currentFolder = folderPanel.getCurrentFolder();
+
+        AbstractFile tempFolder = currentFolder;
+        AbstractFile tempParent;
+        while(!tempFolder.isDirectory()) {
+            tempParent = currentFolder.getParentSilently();
+            if(tempParent==null)
+                break;
+
+            tempFolder = tempParent;
         }
-        final AbstractFile currentFolder = tempFolder;
+
+        final AbstractFile selectedFolder = tempFolder;
+
         TreePath selectionPath = tree.getSelectionPath();
         if (selectionPath != null) {
-            if (selectionPath.getLastPathComponent() == tempFolder)
+            if (selectionPath.getLastPathComponent() == currentFolder)
                 return;
         }
         try {
-            final AbstractFile currentRoot = currentFolder.getRoot();
+            final AbstractFile currentRoot = selectedFolder.getRoot();
             SwingUtilities.invokeLater(new Runnable() {
                public void run() {
                    try {
                        model.setRoot(currentRoot);
-                       TreePath path = new TreePath(model.getPathToRoot(currentFolder));
+                       TreePath path = new TreePath(model.getPathToRoot(selectedFolder));
                        tree.expandPath(path);
                        tree.setSelectionPath(path);
                    } catch (Exception e) {
