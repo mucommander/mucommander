@@ -74,7 +74,7 @@ public class FoldersTreeRenderer extends DefaultTreeCellRenderer {
             boolean hasFocus) {
         // get file name and create default component (JLabel) to display it
         AbstractFile file = (AbstractFile) value;
-        String name = file.getName();
+        String name = file.isRoot()?file.getAbsolutePath():file.getName();
         super.getTreeCellRendererComponent(tree, name, sel, expanded, leaf,
                 row, hasFocus);
         setIcon(model.getCurrentIcon(file));
