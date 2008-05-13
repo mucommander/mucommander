@@ -429,9 +429,15 @@ public class Launcher {
         // Loads the file associations
         printStartupMessage("Loading file associations...");
         try {com.mucommander.command.CommandManager.loadCommands();}
-        catch(Exception e) {printFileError("Could not load custom commands", e, fatalWarnings);}
+        catch(Exception e) {
+            if(Debug.ON)
+                printFileError("Could not load custom commands", e, fatalWarnings);
+        }
         try {com.mucommander.command.CommandManager.loadAssociations();}
-        catch(Exception e) {printFileError("Could not load custom associations", e, fatalWarnings);}
+        catch(Exception e) {
+            if(Debug.ON)
+                printFileError("Could not load custom associations", e, fatalWarnings);
+        }
 
         // Loads bookmarks
         printStartupMessage("Loading bookmarks...");
