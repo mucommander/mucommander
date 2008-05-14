@@ -174,11 +174,14 @@ public abstract class FileJob implements Runnable {
         // Note: When cached methods are called, they no longer reflect changes in the underlying files. In particular,
         // changes of size or date could potentially not be reflected when files are being processed but this should
         // not really present a risk. 
-        for(int i=0; i<nbFiles; i++)
-            files.setElementAt(new CachedFile(files.fileAt(i), true), i);
+        AbstractFile tempFile;
+        for(int i=0; i<nbFiles; i++) {
+            tempFile = files.fileAt(i);
+            files.setElementAt((tempFile instanceof CachedFile)?tempFile:new CachedFile(tempFile, true), i);
+        }
 
         if(baseSourceFolder!=null)
-            baseSourceFolder = new CachedFile(baseSourceFolder, true);
+            baseSourceFolder = (baseSourceFolder instanceof CachedFile)?baseSourceFolder:new CachedFile(baseSourceFolder, true);
     }
 	
 	
