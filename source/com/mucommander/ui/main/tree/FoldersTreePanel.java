@@ -175,17 +175,20 @@ public class FoldersTreePanel extends JPanel implements TreeSelectionListener,
         }
         try {
             final AbstractFile currentRoot = selectedFolder.getRoot();
+            if (!currentRoot.equals(model.getRoot())) {
+                model.setRoot(currentRoot);
+            }
             SwingUtilities.invokeLater(new Runnable() {
                public void run() {
                    try {
-                       model.setRoot(currentRoot);
                        TreePath path = new TreePath(model.getPathToRoot(selectedFolder));
                        tree.expandPath(path);
                        tree.setSelectionPath(path);
+                       tree.scrollPathToVisible(path);
                    } catch (Exception e) {
                        e.printStackTrace();
                    }
-                } 
+                }
             });
         } catch (IOException e) {
             e.printStackTrace();

@@ -21,11 +21,14 @@ package com.mucommander.ui.main.tree;
 
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.impl.ProxyFile;
+import com.mucommander.ui.icon.FileIcons;
 
 import javax.swing.*;
+
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
+import java.util.Iterator;
 
 /**
  * A class that holds cached children of a directory.
@@ -45,6 +48,8 @@ public class CachedDirectory extends ProxyFile {
     
     /** a cache in which this object is stored */
     private DirectoryCache cache;
+
+    private Icon cachedIcon;
     
 
     /**
@@ -92,6 +97,11 @@ public class CachedDirectory extends ProxyFile {
         try {
             final AbstractFile[] children = file.ls(cache.getFilter());
             Arrays.sort(children, cache.getSort());
+            for (int i = 0; i < children.length; i++) {
+                CachedDirectory cachedChild = new CachedDirectory(children[i], cache);
+                cache.put(children[i], cachedChild);
+                cachedChild.setCachedIcon(FileIcons.getFileIcon(children[i]));
+            }
             try {
                 /*
                  * Set cache to new value. This is invoked in swing thread
@@ -147,6 +157,14 @@ public class CachedDirectory extends ProxyFile {
      */
     public synchronized AbstractFile[] get() {
         return cachedChildren;
+    }
+    
+    public Icon getCachedIcon() {
+        return cachedIcon;
+    }
+    
+    public void setCachedIcon(Icon cachedIcon) {
+        this.cachedIcon = cachedIcon;
     }
 
 }

@@ -72,14 +72,19 @@ public class FilesTreeModel implements TreeModel, CachedDirectoryListener {
      * @param newRoot the new root of a tree
      */
     public void setRoot(AbstractFile newRoot) {
-        if (!newRoot.equals(root)) {
-            this.root = newRoot;
-            cache.clear();
-            TreePath path = new TreePath(root);
-            fireTreeStructureChanged(this, path);
-        }
+        final CachedDirectory cachedRoot = new CachedDirectory(newRoot, cache);
+        cachedRoot.setCachedIcon(FileIcons.getFileIcon(newRoot));
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                root = cachedRoot.getProxiedFile();
+                cache.clear();
+                cache.put(root, cachedRoot);
+                TreePath path = new TreePath(root);
+                fireTreeStructureChanged(this, path);
+            }
+        });
     }
-
+    
     public Object getRoot() {
         return root;
     }
@@ -91,13 +96,13 @@ public class FilesTreeModel implements TreeModel, CachedDirectoryListener {
      * @return children folders
      */
     private AbstractFile[] getChildren(AbstractFile parent) {
-        CachedDirectory children = (CachedDirectory) cache.get(parent);
-        if (children == null) {
-            children = new CachedDirectory(parent, cache);
-            cache.put(parent, children);
+        CachedDirectory cachedDir = (CachedDirectory) cache.get(parent);
+        if (cachedDir == null) {
+            cachedDir = new CachedDirectory(parent, cache);
+            cache.put(parent, cachedDir);
         }
-        if (children.isCached())
-            return children.get();
+        if (cachedDir.isCached())
+            return cachedDir.get();
         else
             return null;
     }
@@ -127,7 +132,7 @@ public class FilesTreeModel implements TreeModel, CachedDirectoryListener {
     }
 
     public boolean isLeaf(Object node) {
-        return !((AbstractFile) node).isBrowsable();
+        return false;
     }
 
     public void valueForPathChanged(TreePath path, Object newValue) {
@@ -295,8 +300,9 @@ public class FilesTreeModel implements TreeModel, CachedDirectoryListener {
             if (cached.isReadingChildren()) {
                 return spinningIcon;
             }
+            return cached.getCachedIcon();
         }
-        return FileIcons.getFileIcon(file);
+        return spinningIcon;
     }
 
 
