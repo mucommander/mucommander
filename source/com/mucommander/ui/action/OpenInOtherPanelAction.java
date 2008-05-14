@@ -58,7 +58,7 @@ public class OpenInOtherPanelAction extends SelectedFileAction {
         AbstractFile file;
 
         // Retrieves the currently selected file, aborts if none (should not normally happen).
-        if((file = mainFrame.getActiveTable().getSelectedFile(true)) == null || !file.isBrowsable())
+        if((file = mainFrame.getActiveTable().getSelectedFile(true, true)) == null || !file.isBrowsable())
             return;
 
         // Opens the currently selected file in the inactive panel.

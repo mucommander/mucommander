@@ -21,7 +21,6 @@ package com.mucommander.ui.action;
 import com.mucommander.desktop.DesktopManager;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileProtocols;
-import com.mucommander.file.impl.CachedFile;
 import com.mucommander.file.impl.local.LocalFile;
 import com.mucommander.job.TempExecJob;
 import com.mucommander.text.Translator;
@@ -77,7 +76,7 @@ public class OpenAction extends MuAction {
     protected void open(AbstractFile file, FolderPanel destination) {
         // Opens browsable files in the destination FolderPanel.
         if(file.isBrowsable())
-            destination.tryChangeCurrentFolder(file instanceof CachedFile?((CachedFile)file).getProxiedFile():file);
+            destination.tryChangeCurrentFolder(file);
 
         // Opens local files using their native associations.
         else if(file.getURL().getProtocol().equals(FileProtocols.FILE) && (file.hasAncestor(LocalFile.class))) {

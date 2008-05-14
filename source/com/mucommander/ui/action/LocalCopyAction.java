@@ -22,6 +22,7 @@ import com.mucommander.file.AbstractFile;
 import com.mucommander.file.util.FileSet;
 import com.mucommander.ui.dialog.file.CopyDialog;
 import com.mucommander.ui.main.MainFrame;
+import com.mucommander.ui.main.table.FileTable;
 
 import java.util.Hashtable;
 
@@ -40,11 +41,12 @@ public class LocalCopyAction extends SelectedFileAction {
     }
 
     public void performAction() {
-        AbstractFile selectedFile = mainFrame.getActiveTable().getSelectedFile(false);
+        FileTable activeTable = mainFrame.getActiveTable();
+        AbstractFile selectedFile = activeTable.getSelectedFile(false, true);
 
         // Display local copy dialog only if a file other than '..' is currently selected
         if(selectedFile!=null) {
-            new CopyDialog(mainFrame, new FileSet(selectedFile.getParentSilently(), selectedFile), true).showDialog();
+            new CopyDialog(mainFrame, new FileSet(activeTable.getCurrentFolder(), selectedFile), true).showDialog();
         }
     }
 }

@@ -171,15 +171,15 @@ public class MarkExtensionAction extends MuAction {
 
         // Initialisation. Aborts if there is no selected file.
         fileTable  = mainFrame.getActiveTable();
-        if((filter = getFilter(fileTable.getSelectedFile())) == null)
+        if((filter = getFilter(fileTable.getSelectedFile(false, true))) == null)
             return;
         tableModel = fileTable.getFileTableModel();
         rowCount   = tableModel.getRowCount();
         mark       = !tableModel.isRowMarked(fileTable.getSelectedRow());
 
         // Goes through all files in the active table, marking all that match 'filter'.
-        for(int i = fileTable.getCurrentFolder().getParentSilently() == null ? 0 : 1; i < rowCount; i++)
-            if(filter.accept(tableModel.getFileAtRow(i)))
+        for(int i = tableModel.hasParentFolder() ? 1 : 0; i < rowCount; i++)
+            if(filter.accept(tableModel.getCachedFileAtRow(i)))
                 tableModel.setRowMarked(i, mark);
         fileTable.repaint();
 

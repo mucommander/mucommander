@@ -27,8 +27,8 @@ import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;
 
-import java.util.Hashtable;
 import java.io.IOException;
+import java.util.Hashtable;
 
 /**
  * This action opens the currently selected file or folder with native file associations.
@@ -42,7 +42,7 @@ public class OpenNativelyAction extends MuAction {
     }
 
     public void performAction() {
-        AbstractFile selectedFile = mainFrame.getActiveTable().getSelectedFile(true);
+        AbstractFile selectedFile = mainFrame.getActiveTable().getSelectedFile(true, true);
 
         if(selectedFile==null)
             return;
