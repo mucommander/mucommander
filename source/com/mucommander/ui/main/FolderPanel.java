@@ -31,6 +31,7 @@ import com.mucommander.file.filter.AndFileFilter;
 import com.mucommander.file.filter.AttributeFileFilter;
 import com.mucommander.file.filter.DSStoreFileFilter;
 import com.mucommander.file.filter.SystemFileFilter;
+import com.mucommander.file.impl.CachedFile;
 import com.mucommander.file.util.FileSet;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionKeymap;
@@ -838,7 +839,8 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
 
 
         public ChangeFolderThread(AbstractFile folder) {
-            this.folder = folder;
+            // Ensure that we work on a raw file instance and not a cached one
+            this.folder = (folder instanceof CachedFile)?((CachedFile)folder).getProxiedFile():folder;
             this.folderURL = folder.getURL();
 
             setPriority(Thread.MAX_PRIORITY);
