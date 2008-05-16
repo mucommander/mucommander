@@ -837,7 +837,7 @@ login:SV:Användarnamn
 
 password:EN:Password
 password:FR:Mot de passe
-password:DE:Paßwort
+password:DE:Passwort
 password:ES:Contraseña
 password:CS:Heslo
 password:zh_TW:密碼
@@ -2599,6 +2599,7 @@ com.mucommander.ui.action.DeleteAction.label:SV:Radera
 # Note: the system trash is available on certain OS environments only (Windows, Mac OS X, KDE), and only for local files.
 com.mucommander.ui.action.DeleteAction.tooltip:EN:Delete marked files using the system trash when possible
 com.mucommander.ui.action.DeleteAction.tooltip:FR:Supprimer les fichiers marqués en utilisant la corbeille système si possible
+com.mucommander.ui.action.DeleteAction.tooltip:DE:Markierte Dateien löschen
 # The following entries need to be updated to indicate that the system trash is used when it is available
 com.mucommander.ui.action.DeleteAction.tooltip:DE:Markierte Dateien löschen
 com.mucommander.ui.action.DeleteAction.tooltip:ES:Elimiar los ficheros marcados
@@ -4127,7 +4128,7 @@ com.mucommander.ui.action.ToggleCommandBarAction.show:SV:Visa kommandoraden
 
 com.mucommander.ui.action.ToggleCommandBarAction.hide:EN:Hide command bar
 com.mucommander.ui.action.ToggleCommandBarAction.hide:FR:Cacher la barre de commande
-com.mucommander.ui.action.ToggleCommandBarAction.hide:DE:Befehlsleiste verstecken
+com.mucommander.ui.action.ToggleCommandBarAction.hide:DE:Befehlsleiste verbergen
 com.mucommander.ui.action.ToggleCommandBarAction.hide:ES:Ocultar la barra de comandos
 com.mucommander.ui.action.ToggleCommandBarAction.hide:CS:Skrýt lištu příkazů
 com.mucommander.ui.action.ToggleCommandBarAction.hide:zh_TW:隱藏命令列
@@ -4209,7 +4210,7 @@ com.mucommander.ui.action.ToggleStatusBarAction.show:SV:Visa statuslisten
 
 com.mucommander.ui.action.ToggleStatusBarAction.hide:EN:Hide status bar
 com.mucommander.ui.action.ToggleStatusBarAction.hide:FR:Cacher la barre de status
-com.mucommander.ui.action.ToggleStatusBarAction.hide:DE:Statusleiste verstecken
+com.mucommander.ui.action.ToggleStatusBarAction.hide:DE:Statusleiste verbergen
 com.mucommander.ui.action.ToggleStatusBarAction.hide:ES:Ocultar la barra de estado
 com.mucommander.ui.action.ToggleStatusBarAction.hide:CS:Skrýt stavový řádek
 com.mucommander.ui.action.ToggleStatusBarAction.hide:zh_TW:隱藏狀態列
