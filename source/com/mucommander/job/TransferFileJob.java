@@ -19,12 +19,15 @@
 
 package com.mucommander.job;
 
+import com.apple.eio.FileManager;
 import com.mucommander.Debug;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FilePermissions;
+import com.mucommander.file.impl.local.LocalFile;
 import com.mucommander.file.util.FileSet;
 import com.mucommander.io.*;
 import com.mucommander.io.security.MuProvider;
+import com.mucommander.runtime.OsFamilies;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;
@@ -174,7 +177,22 @@ public abstract class TransferFileJob extends FileJob {
         // Preserve source file's permissions: preserve only the permissions bits that are supported by the source file
         // and use default permissions for the rest of them.
         destFile.importPermissions(sourceFile, FilePermissions.DEFAULT_FILE_PERMISSIONS);  // use #importPermissions(AbstractFile, int) to avoid isDirectory test
-        
+
+        // Under Mac OS X only, preserving the file type and creator
+        if(OsFamilies.MAC_OS_X.isCurrent()
+            && sourceFile.hasAncestor(LocalFile.class)
+            && destFile.hasAncestor(LocalFile.class)) {
+
+            String sourcePath = sourceFile.getAbsolutePath();
+            try {
+                FileManager.setFileTypeAndCreator(destFile.getAbsolutePath(), FileManager.getFileType(sourcePath), FileManager.getFileCreator(sourcePath));
+            }
+            catch(IOException e) {
+                // Swallow the exception and do not interrupt the transfer
+                if(Debug.ON) Debug.trace("Error while setting Mac OS X file type and creator on destination: "+e);
+            }
+        }
+
         // This block is executed only if integrity check has been enabled (disabled by default)
         if(integrityCheckEnabled) {
             String sourceChecksum;
