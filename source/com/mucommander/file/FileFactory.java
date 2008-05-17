@@ -94,6 +94,9 @@ public class FileFactory {
     /** All registered protocol providers. */
     private static Hashtable protocolProviders = new Hashtable();
 
+    /** Local file provider to avoid hashtable lookups (faster). */
+    private static ProtocolProvider localFileProvider;
+
     /** Vector of registered ArchiveFormatMapping instances */
     private static Vector archiveFormatProvidersV = new Vector();
 
@@ -122,12 +125,14 @@ public class FileFactory {
     private static FileIconProvider defaultFileIconProvider;
 
     static {
+        if(Debug.ON) Debug.trace("Registering file providers");
+
         // Initialize the LRUCache that caches frequently accessed AbstractFile instances
         setFileCacheCapacity(DEFAULT_FILE_CACHE_CAPACITY);
 
         // Register built-in file protocols.
-        // Local file protocol is hard-wired for performance reasons, no need to add it.
         ProtocolProvider protocolProvider;
+        registerProtocol(FileProtocols.FILE,      new com.mucommander.file.impl.local.LocalFileProvider());
         registerProtocol(FileProtocols.SMB,       new com.mucommander.file.impl.smb.SMBProtocolProvider());
         registerProtocol(FileProtocols.HTTP,      protocolProvider = new com.mucommander.file.impl.http.HTTPProtocolProvider());
         registerProtocol(FileProtocols.HTTPS,     protocolProvider);
@@ -177,7 +182,7 @@ public class FileFactory {
      * @see com.mucommander.cache.LRUCache
      */
     public static void setFileCacheCapacity(int capacity) {
-        if(fileCache==null || fileCache.getCapacity()!=capacity)   // Don't recreate an instance if the capacity is the same
+        if(fileCache==null || fileCache.getCapacity()!=capacity)   // Don't create a new instance if the capacity is the same
             fileCache = LRUCache.createInstance(DEFAULT_FILE_CACHE_CAPACITY);
     }
 
@@ -258,7 +263,14 @@ public class FileFactory {
      * @return          the previously registered protocol provider if any, <code>null</code> otherwise.
      */
     public static ProtocolProvider registerProtocol(String protocol, ProtocolProvider provider) {
-        return (ProtocolProvider)protocolProviders.put(protocol.toLowerCase(), provider);
+        protocol = protocol.toLowerCase();
+
+        // Special case for local file provider.
+        // Note that the local file provider is also added to the provider hashtable.
+        if(protocol.equals(FileProtocols.FILE))
+            localFileProvider = provider;
+
+        return (ProtocolProvider)protocolProviders.put(protocol, provider);
     }
 
     /**
@@ -268,6 +280,12 @@ public class FileFactory {
      * @return          the provider that has been unregistered, or <code>null</code> if none.
      */
     public static ProtocolProvider unregisterProtocol(String protocol) {
+        protocol = protocol.toLowerCase();
+
+        // Special case for local file provider
+        if(protocol.equals(FileProtocols.FILE))
+            localFileProvider = null;
+
         return (ProtocolProvider)protocolProviders.remove(protocol);
     }
 
@@ -560,14 +578,18 @@ public class FileFactory {
                 return file;
         }
 
-        // Special case for local files, do not use protocol registration mechanism to speed things up a bit
-        // (saves a hashtable lookup)
+        // Special case for local files to avoid provider hashtable lookup and other unnecessary checks
+        // (for performance reasons)
         if(protocol.equals(FileProtocols.FILE)) {
-            file = new LocalFile(fileURL);
+            if(localFileProvider == null)
+                throw new IOException("Unknown file protocol: " + protocol);
+
+            file = localFileProvider.getFile(fileURL);
+
             // Uncomment this line and comment the previous one to simulate a slow filesystem
-            //file = new DebugFile(new LocalFile(fileURL), 0, 50);
+            //file = new DebugFile(file, 0, 50);
         }
-        // Use the protocol map for any other file protocol
+        // Use the protocol hashtable for any other file protocol
         else {
             // If the specified FileURL doesn't contain any credentials, use CredentialsManager to find
             // any credentials matching the url and use them.
@@ -577,8 +599,8 @@ public class FileFactory {
 //            if(Debug.ON) Debug.trace("credentials="+fileURL.getCredentials());
 
             // Finds the right file protocol provider
-            ProtocolProvider provider;
-            if((provider = getProtocolProvider(protocol)) == null)
+            ProtocolProvider provider = getProtocolProvider(protocol);
+            if(provider == null)
                 throw new IOException("Unknown file protocol: " + protocol);
             file = provider.getFile(fileURL);
         }
