@@ -35,7 +35,8 @@ import java.util.Vector;
 /**
  * IsoArchiveFile provides read-only access to archives in the LST format made popular by Total Commander.
  *
- * <p>Entries are parsed from the .lst file and can be read (an InputStream can be opened) if the file exists locally.
+ * <p>Entries are parsed from the .lst file and can be read (an InputStream to them can be opened) if the file exists
+ * locally.</p>
  *
  * <p>For reference, here's a short LST file:
  * <pre>
@@ -51,7 +52,9 @@ import java.util.Vector;
  * ash.exe	74240	2004.1.27	2:14.20
  * awk.exe	19	2006.10.2	19:34.4
  * </pre>
+ * </p>
  *
+ * @see com.mucommander.file.impl.lst.LstFormatProvider
  * @author Maxence Bernard
  */
 public class LstArchiveFile extends AbstractROArchiveFile {

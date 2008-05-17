@@ -21,18 +21,32 @@ package com.mucommander.file.impl.bzip2;
 import com.mucommander.file.AbstractArchiveFile;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.ArchiveFormatProvider;
+import com.mucommander.file.filter.ExtensionFilenameFilter;
+import com.mucommander.file.filter.FilenameFilter;
 
 import java.io.IOException;
 
 /**
- * File provider used to create instances of {@link Bzip2ArchiveFile}.
- * @author Nicolas Rinaudo
+ * This class is the provider for the 'Bzip2' archive format implemented by {@link Bzip2ArchiveFile}.
+ *
+ * @see com.mucommander.file.impl.bzip2.Bzip2ArchiveFile
+ * @author Nicolas Rinaudo, Maxence Bernard
  */
 public class Bzip2FormatProvider implements ArchiveFormatProvider {
-    /**
-     * Creates a new instance of {@link Bzip2FormatProvider}.
-     * @param  file URL to map as an {@link Bzip2FormatProvider}.
-     * @return      a new instance of {@link Bzip2FormatProvider} that matches the specified URL.
-     */
-    public AbstractArchiveFile getFile(AbstractFile file) throws IOException {return new Bzip2ArchiveFile(file);}
+
+    /** Static instance of the filename filter that matches archive filenames */
+    private final static ExtensionFilenameFilter filenameFilter = new ExtensionFilenameFilter(".bz2");
+
+
+    //////////////////////////////////////////
+    // ArchiveFormatProvider implementation //
+    //////////////////////////////////////////
+
+    public AbstractArchiveFile getFile(AbstractFile file) throws IOException {
+        return new Bzip2ArchiveFile(file);
+    }
+
+    public FilenameFilter getFilenameFilter() {
+        return filenameFilter;
+    }
 }

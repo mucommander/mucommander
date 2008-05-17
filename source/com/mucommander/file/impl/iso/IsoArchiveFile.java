@@ -32,14 +32,19 @@ import java.util.Vector;
 /**
  * IsoArchiveFile provides read-only access to archives in the ISO and NRG formats.
  *
- * <p>Reference: http://www.ecma-international.org/publications/files/ECMA-ST/Ecma-119.pdf
+ * <p>
+ * <pre>
+ * Reference: http://www.ecma-international.org/publications/files/ECMA-ST/Ecma-119.pdf
  *
  * Todo:
  *      * test with more images
  *      * rewrite/sanitize InputStream for cooked
  *      * add RockRidge, UDF and others extensions
  *      * add DiscJuggler & other weirdo file formats
+ * </pre>
+ * </p>
  *
+ * @see com.mucommander.file.impl.iso.IsoFormatProvider
  * @author Xavier Martin 
  */
 public class IsoArchiveFile extends AbstractROArchiveFile {

@@ -32,10 +32,18 @@ import java.util.Vector;
 
 
 /**
- * ZipArchiveFile provides read-only access to archives in the Zip format.
+ * ZipArchiveFile provides read and write access (under certain conditions) to archives in the Zip format.
+ * <p>
+ * Two different packages that implement the actual Zip compression format are used: the homemade
+ * {@link com.mucommander.file.impl.zip.provider} package and Java's {@link java.util.zip}.
+ * <code>com.mucommander.file.impl.zip.provider</code> provides additional functionality and improved performance over
+ * <code>java.util.zip</code> but requires the underlying file to supply a <code>RandomAccessInputStream</code> for read
+ * access and a <code>RandomAccessOutputStream</code> for write access. If the underlying file can't provide at least a
+ * <code>RandomAccessInputStream</code>, the lesser <code>java.util.zip</code> package is used.
+ * </p>
  *
- * <p>Zip support is provided by the <code>java.util.zip</code> API.
- *
+ * @see com.mucommander.file.impl.zip.ZipFormatProvider
+ * @see com.mucommander.file.impl.zip.provider.ZipFile
  * @author Maxence Bernard
  */
 public class ZipArchiveFile extends AbstractRWArchiveFile {

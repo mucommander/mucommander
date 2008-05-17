@@ -29,9 +29,10 @@ import java.io.InputStream;
 import java.util.Vector;
 
 /**
- * ArArchiveFile provides read-only access to archives in the unix AR format.
- * Both the BSD and GNU variants which add support for extended filenames are supported.
+ * ArArchiveFile provides read-only access to archives in the unix AR format. Both the BSD and GNU variants (which adds
+ * support for extended filenames) are supported.
  *
+ * @see com.mucommander.file.impl.ar.ArFormatProvider
  * @author Maxence Bernard
  */
 public class ArArchiveFile extends AbstractROArchiveFile {

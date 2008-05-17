@@ -60,9 +60,10 @@ import java.util.Vector;
  * <br>From an implementation perspective, one only needs to deal with {@link ArchiveEntry} instances, all the nuts
  * and bolts are taken care of by this class.</p>
 
- * @see FileFactory
- * @see ArchiveEntry
- * @see ArchiveEntryFile
+ * @see com.mucommander.file.FileFactory
+ * @see com.mucommander.file.ArchiveFormatProvider
+ * @see com.mucommander.file.ArchiveEntry
+ * @see com.mucommander.file.ArchiveEntryFile
  * @see com.mucommander.file.archiver.Archiver
  * @author Maxence Bernard
  */

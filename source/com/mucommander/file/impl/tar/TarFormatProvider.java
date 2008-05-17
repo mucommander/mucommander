@@ -21,18 +21,34 @@ package com.mucommander.file.impl.tar;
 import com.mucommander.file.AbstractArchiveFile;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.ArchiveFormatProvider;
+import com.mucommander.file.filter.ExtensionFilenameFilter;
+import com.mucommander.file.filter.FilenameFilter;
 
 import java.io.IOException;
 
 /**
- * File provider used to create instances of {@link TarArchiveFile}.
- * @author Nicolas Rinaudo
+ * This class is the provider for the 'Tar' archive format implemented by {@link TarArchiveFile}.
+ *
+ * @see com.mucommander.file.impl.tar.TarArchiveFile
+ * @author Nicolas Rinaudo, Maxence Bernard
  */
 public class TarFormatProvider implements ArchiveFormatProvider {
-    /**
-     * Creates a new instance of {@link TarFormatProvider}.
-     * @param  file URL to map as an {@link TarFormatProvider}.
-     * @return      a new instance of {@link TarFormatProvider} that matches the specified URL.
-     */
-    public AbstractArchiveFile getFile(AbstractFile file) throws IOException {return new TarArchiveFile(file);}
+
+    /** Static instance of the filename filter that matches archive filenames */
+    private final static ExtensionFilenameFilter filenameFilter = new ExtensionFilenameFilter(new String[]
+        {".tar", ".tar.gz", ".tgz", ".tar.bz2", ".tbz2"}
+    );
+
+
+    //////////////////////////////////////////
+    // ArchiveFormatProvider implementation //
+    //////////////////////////////////////////
+
+    public AbstractArchiveFile getFile(AbstractFile file) throws IOException {
+        return new TarArchiveFile(file);
+    }
+
+    public FilenameFilter getFilenameFilter() {
+        return filenameFilter;
+    }
 }

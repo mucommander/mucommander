@@ -31,8 +31,10 @@ import java.util.Vector;
 /**
  * Bzip2ArchiveFile provides read-only access to archives in the Bzip2 format.
  *
- * <p>Bzip2 support is provided by the <code>Apache Ant</code> library distributed in the Apache Software License.
+ * <p>The actual decompression work is performed by the <code>Apache Ant</code> library under the terms of the
+ * Apache Software License.</p>
  *
+ * @see com.mucommander.file.impl.bzip2.Bzip2FormatProvider
  * @author Maxence Bernard
  */
 public class Bzip2ArchiveFile extends AbstractROArchiveFile {

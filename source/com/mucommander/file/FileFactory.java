@@ -22,8 +22,6 @@ import com.mucommander.Debug;
 import com.mucommander.auth.AuthException;
 import com.mucommander.auth.CredentialsManager;
 import com.mucommander.cache.LRUCache;
-import com.mucommander.file.filter.ExtensionFilenameFilter;
-import com.mucommander.file.filter.FilenameFilter;
 import com.mucommander.file.icon.FileIconProvider;
 import com.mucommander.file.icon.impl.SwingFileIconProvider;
 import com.mucommander.file.impl.local.LocalFile;
@@ -63,7 +61,7 @@ import java.util.*;
  * In order to allow the <code>com.mucommander.file</code> API to access new archive formats, developers must create
  * an implementation of {@link AbstractArchiveFile} that handles that format and register it to <code>FileFactory</code>.
  * This registration requires an implementation of {@link ArchiveFormatProvider}, an instance of which will be passed to
- * {@link #registerArchiveFormat(ArchiveFormatProvider,com.mucommander.file.filter.FilenameFilter) registerArchiveFormat}.
+ * {@link #registerArchiveFormat(ArchiveFormatProvider)}.
  * </p>
  * <p>
  * Built-in file file formats are:
@@ -97,10 +95,10 @@ public class FileFactory {
     private static Hashtable protocolProviders = new Hashtable();
 
     /** Vector of registered ArchiveFormatMapping instances */
-    private static Vector archiveFormatMappingsV = new Vector();
+    private static Vector archiveFormatProvidersV = new Vector();
 
     /** Array of registered FileProtocolMapping instances, for quicker access */
-    private static ArchiveFormatMapping[] archiveFormatMappings;
+    private static ArchiveFormatProvider[] archiveFormatProviders;
 
     /** Object used to create instances of {@link AbstractTrash}. */
     private static TrashProvider trashProvider;
@@ -111,18 +109,17 @@ public class FileFactory {
     /** Static LRUCache instance that caches frequently accessed AbstractFile instances */
     private static LRUCache fileCache;
 
+    /** Caches archive file instances */
+    private static WeakHashMap archiveFileCache = new WeakHashMap();
+
     /** Default capacity of the file cache */
     public final static int DEFAULT_FILE_CACHE_CAPACITY = 1000;
-
-    private static WeakHashMap archiveFileCache = new WeakHashMap();
 
     /** System temp directory */
     private final static AbstractFile TEMP_DIRECTORY;
 
     /** Default file icon provider, initialized in static block */
     private static FileIconProvider defaultFileIconProvider;
-
-
 
     static {
         // Initialize the LRUCache that caches frequently accessed AbstractFile instances
@@ -145,16 +142,13 @@ public class FileFactory {
 
         // Register built-in archive file formats, order for TarArchiveFile and GzipArchiveFile/Bzip2ArchiveFile is important:
         // TarArchiveFile must match 'tar.gz'/'tar.bz2' files before GzipArchiveFile/Bzip2ArchiveFile does.
-        registerArchiveFormat(new com.mucommander.file.impl.zip.ZipFormatProvider(),     new ExtensionFilenameFilter(new String[] {".zip", ".jar", ".war", ".wal", ".wmz",
-                                                                                                                                   ".xpi", ".ear", ".sar", ".odt", ".ods",
-                                                                                                                                   ".odp", ".odg", ".odf", ".egg"}));
-        registerArchiveFormat(new com.mucommander.file.impl.tar.TarFormatProvider(),     new ExtensionFilenameFilter(new String[] {".tar", ".tar.gz", ".tgz",
-                                                                                                                                   ".tar.bz2", ".tbz2"}));
-        registerArchiveFormat(new com.mucommander.file.impl.gzip.GzipFormatProvider(),   new ExtensionFilenameFilter(".gz"));
-        registerArchiveFormat(new com.mucommander.file.impl.bzip2.Bzip2FormatProvider(), new ExtensionFilenameFilter(".bz2"));
-        registerArchiveFormat(new com.mucommander.file.impl.iso.IsoFormatProvider(),     new ExtensionFilenameFilter(new String[] {".iso", ".nrg"}));
-        registerArchiveFormat(new com.mucommander.file.impl.ar.ArFormatProvider(),       new ExtensionFilenameFilter(new String[] {".ar", ".a", ".deb", ".udeb"}));
-        registerArchiveFormat(new com.mucommander.file.impl.lst.LstFormatProvider(),     new ExtensionFilenameFilter(".lst"));
+        registerArchiveFormat(new com.mucommander.file.impl.zip.ZipFormatProvider());
+        registerArchiveFormat(new com.mucommander.file.impl.tar.TarFormatProvider());
+        registerArchiveFormat(new com.mucommander.file.impl.gzip.GzipFormatProvider());
+        registerArchiveFormat(new com.mucommander.file.impl.bzip2.Bzip2FormatProvider());
+        registerArchiveFormat(new com.mucommander.file.impl.iso.IsoFormatProvider());
+        registerArchiveFormat(new com.mucommander.file.impl.ar.ArFormatProvider());
+        registerArchiveFormat(new com.mucommander.file.impl.lst.LstFormatProvider());
 
         // Set the default FileIconProvider instance
         defaultFileIconProvider = new SwingFileIconProvider();
@@ -289,10 +283,10 @@ public class FileFactory {
 
     /**
      * Returns an iterator on all known protocol names.
-     * <code>
-     * All objects returned by the iterator's <code>nextElement()</code> method will be instanced of string. These can then
-     * be passed to {@link #getProtocolProvider(String) getProtocolProvider} to retrieve the associated {@link ProtocolProvider}.
-     * </code>
+     *
+     * <p>All objects returned by the iterator's <code>nextElement()</code> method will be string instances. These can
+     * then be passed to {@link #getProtocolProvider(String) getProtocolProvider} to retrieve the associated
+     * {@link ProtocolProvider}.</p>
      *
      * @return an iterator on all known protocol names.
      */
@@ -300,55 +294,61 @@ public class FileFactory {
         return new Enumerator(protocolProviders.keys());
     }
 
-
     /**
-     * Registers a new archive format.
+     * Registers a new <code>ArchiveFormatProvider</code>.
      *
-     * @param mapping new mapping to register.
+     * @param provider the <code>ArchiveFormatProvider</code> to register.
      */
-    public static void registerArchiveFormat(ArchiveFormatMapping mapping) {
-            archiveFormatMappingsV.add(mapping);
-            updateArchiveFormatMappingsArray();
+    public static void registerArchiveFormat(ArchiveFormatProvider provider) {
+        archiveFormatProvidersV.add(provider);
+        updateArchiveFormatProviderArray();
     }
 
     /**
-     * Registers a new archive format.
+     * Removes a previously-registered <code>ArchiveFormatProvider</code>.
+     * <p>
+     * To unregister the provider of a particular archive format without knowing the associated provider instance, use
+     * {@link #getArchiveFormatProvider(String)} with a known archive filename to retrieve the provider instance.
+     * For example, <code>FileFactory.unregisterArchiveFormat(FileFactory.getArchiveFormatProvider("file.zip"))</code>
+     * will unregister the (first, if any) Zip provider.
+     * </p>
      *
-     * @param provider class used to create instances of the new archive format.
-     * @param filter   filter that files must match to be considered of the new format.
+     * @param provider the <code>ArchiveFormatProvider</code> to unregister.
+     * @see {@link #getArchiveFormatProvider(String)}
      */
-    public static void registerArchiveFormat(ArchiveFormatProvider provider, FilenameFilter filter) {
-        registerArchiveFormat(new ArchiveFormatMapping(provider, filter));
-    }
-
-    /**
-     * Removes any archive format that might have been registered to the specified extension.
-     *
-     * @param mapping archive format mapping to unregister.
-     */
-    public static void unregisterArchiveFileFormat(ArchiveFormatMapping mapping) {
-        int index = archiveFormatMappingsV.indexOf(mapping);
+    public static void unregisterArchiveFormat(ArchiveFormatProvider provider) {
+        int index = archiveFormatProvidersV.indexOf(provider);
 
         if(index!=-1) {
-            archiveFormatMappingsV.removeElementAt(index);
-            updateArchiveFormatMappingsArray();
+            archiveFormatProvidersV.removeElementAt(index);
+            updateArchiveFormatProviderArray();
         }
     }
 
     /**
-     * Updates the ArchiveFileFormat array to reflect the contents of the ArchiveFileFormat Vector.
+     * Updates the <code>ArchiveFormatProvider</code> array to reflect the contents of the Vector.
      */
-    private static void updateArchiveFormatMappingsArray() {
-        archiveFormatMappings = new ArchiveFormatMapping[archiveFormatMappingsV.size()];
-        archiveFormatMappingsV.toArray(archiveFormatMappings);
+    private static void updateArchiveFormatProviderArray() {
+        archiveFormatProviders = new ArchiveFormatProvider[archiveFormatProvidersV.size()];
+        archiveFormatProvidersV.toArray(archiveFormatProviders);
     }
 
-    public static ArchiveFormatProvider getArchiveFormatProvider(String name) {
-        if(name == null)
+    /**
+     * Returns the first <code>ArchiveFormatProvider</code> that matches the specified filename, <code>null</code>
+     * if there is none. Note that if a filename matches the {@link java.io.FilenameFilter} of several registered
+     * providers, the first provider matching the filename will be returned.
+     *
+     * @param filename an archive filename that potentially matches one of the registered <code>ArchiveFormatProvider</code>
+     * @return the first <code>ArchiveFormatProvider</code> that matches the specified filename, <code>null</code> if there is none
+     */
+    public static ArchiveFormatProvider getArchiveFormatProvider(String filename) {
+        if(filename == null)
             return null;
-        for(int i = 0; i < archiveFormatMappings.length; i++)
-            if(archiveFormatMappings[i].filter.accept(name))
-                return archiveFormatMappings[i].provider;
+
+        for(int i = 0; i < archiveFormatProviders.length; i++) {
+            if(archiveFormatProviders[i].getFilenameFilter().accept(filename))
+                return archiveFormatProviders[i];
+        }
         return null;
     }
 
@@ -358,7 +358,7 @@ public class FileFactory {
      * @return an iterator on all known archive formats.
      */
     public static Iterator archiveFormats() {
-        return archiveFormatMappingsV.iterator();
+        return archiveFormatProvidersV.iterator();
     }
 
 

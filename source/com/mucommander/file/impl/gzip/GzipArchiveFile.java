@@ -30,8 +30,9 @@ import java.util.zip.GZIPInputStream;
 /**
  * GzipArchiveFile provides read-only access to archives in the Gzip format.
  *
- * <p>Gzip support is provided by the <code>java.util.zip.GZIPInputStream</code> class.
+ * <p>The actual decompression work is performed by the {@link java.util.zip.GZIPInputStream} class.</p>
  *
+ * @see com.mucommander.file.impl.gzip.GzipFormatProvider
  * @author Maxence Bernard
  */
 public class GzipArchiveFile extends AbstractROArchiveFile {

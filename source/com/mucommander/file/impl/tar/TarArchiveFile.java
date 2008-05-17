@@ -34,8 +34,10 @@ import java.util.zip.GZIPInputStream;
 /**
  * TarArchiveFile provides read-only access to archives in the Tar/Tgz format.
  *
- * <p>Tar support is provided by the <code>Apache Ant</code> library distributed in the Apache Software License.
+ * <p>The actual decompression work is performed by the <code>Apache Ant</code> library under the terms of the
+ * Apache Software License.</p>
  *
+ * @see com.mucommander.file.impl.tar.TarFormatProvider
  * @author Maxence Bernard
  */
 public class TarArchiveFile extends AbstractROArchiveFile {

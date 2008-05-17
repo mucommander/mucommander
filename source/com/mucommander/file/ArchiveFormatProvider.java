@@ -18,23 +18,38 @@
 
 package com.mucommander.file;
 
+import com.mucommander.file.filter.FilenameFilter;
+
 import java.io.IOException;
 
 /**
- * Interface used to provide {@link FileFactory} with a way of creating instances of {@link AbstractFile} for a given archive format.
+ * This interface allows {@link FileFactory} to instanciate {@link AbstractArchiveFile} implementations and associate
+ * them with the filenames matched by a {@link FilenameFilter}.
  * <p>
- * Implementation of {@link AbstractFile} that implement an archive file format must create
- * an associated provider and register it to {@link FileFactory} in order to be recognised by the system.
+ * Implementations of {@link AbstractArchiveFile} need to implement this interface and register the class
+ * with {@link FileFactory} for this format's archive files to be automatically instanciated.
  * </p>
- * @author Nicolas Rinaudo
- * @see    FileFactory
+ *
+ * @author Nicolas Rinaudo, Maxence Bernard
+ * @see AbstractArchiveFile
+ * @see FileFactory
  */
 public interface ArchiveFormatProvider {
+
     /**
-     * Creates a new instance of <code>AbstractArchiveFile</code> that matches the specified URL.
+     * Creates a new instance of <code>AbstractArchiveFile</code> .
+     *
      * @param  file        file to map as an <code>AbstractArchiveFile</code>.
      * @return             a new instance of <code>AbstractArchiveFile</code> that matches the specified URL.
      * @throws IOException if an error occurs.
      */
     public AbstractArchiveFile getFile(AbstractFile file) throws IOException;
+
+
+    /**
+     * Returns the <code>FilenameFilter</code> that matches filenames to be associated with this archive format.
+     *
+     * @return the <code>FilenameFilter</code> that matches filenames to be associated with this archive format
+     */
+    public FilenameFilter getFilenameFilter();
 }
