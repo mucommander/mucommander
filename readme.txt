@@ -139,8 +139,9 @@ Bug fixes:
   been invoked, contributed by Karel Tomáš.
 - Fixed drag-and-drop issues from muCommander to other applications under Gnome
   and KDE, contributed by Xavi Miró (bug #45).
-- Fixed a couple issues with the free space indicator, contributed by 
-  Karel Tomáš.
+- A couple issues with the free space indicator were fixed by Karel Tomáš.
+- Mac OS X file type and creator are now properly preserved when copying files
+  from and to a local volume (bug #52).
 
 Known issues:
 - Korean, Simplified Chinese, Slovenian and Slovak translations are not 
