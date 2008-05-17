@@ -71,19 +71,19 @@ import java.util.regex.Matcher;
  */
 public class LocalFile extends AbstractFile {
 
-    private File file;
+    protected File file;
     private FilePermissions permissions;
 
-    private String parentFilePath;
-    private String absPath;
+    protected String parentFilePath;
+    protected String absPath;
 
     /** True if this file has a Windows-style UNC path. Can be true only under Windows. */
     private boolean isUNC;
 
     /** Caches the parent folder, initially null until getParent() gets called */
-    private AbstractFile parent;
+    protected AbstractFile parent;
     /** Indicates whether the parent folder instance has been retrieved and cached or not (parent can be null) */
-    private boolean parentValueSet;
+    protected boolean parentValueSet;
 	
     /** Underlying local filesystem's path separator: "/" under UNIX systems, "\" under Windows and OS/2 */
     public final static String SEPARATOR = File.separator;
