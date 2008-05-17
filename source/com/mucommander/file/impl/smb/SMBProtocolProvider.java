@@ -25,8 +25,14 @@ import com.mucommander.file.ProtocolProvider;
 import java.io.IOException;
 
 /**
+ * This class is the provider for the SMB filesystem implemented by {@link com.mucommander.file.impl.smb.SMBFile}.
+ *
  * @author Nicolas Rinaudo
+ * @see com.mucommander.file.impl.smb.SMBFile
  */
 public class SMBProtocolProvider implements ProtocolProvider {
-    public AbstractFile getFile(FileURL url) throws IOException {return new SMBFile(url);}
+
+    public AbstractFile getFile(FileURL url) throws IOException {
+        return new SMBFile(url);
+    }
 }

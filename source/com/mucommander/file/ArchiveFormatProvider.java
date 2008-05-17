@@ -26,8 +26,8 @@ import java.io.IOException;
  * This interface allows {@link FileFactory} to instanciate {@link AbstractArchiveFile} implementations and associate
  * them with the filenames matched by a {@link FilenameFilter}.
  * <p>
- * Implementations of {@link AbstractArchiveFile} need to implement this interface and register the class
- * with {@link FileFactory} for this format's archive files to be automatically instanciated.
+ * For {@link AbstractArchiveFile} implementations to be automatically instanciated by {@link FileFactory},
+ * this interface needs to be implemented and an instance registered with {@link FileFactory}.
  * </p>
  *
  * @author Nicolas Rinaudo, Maxence Bernard

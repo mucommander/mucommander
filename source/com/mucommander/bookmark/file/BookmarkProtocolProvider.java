@@ -28,10 +28,13 @@ import com.mucommander.file.ProtocolProvider;
 import java.io.IOException;
 
 /**
- * Used to create instances of {@link com.mucommander.file.AbstractFile} on the <code>bookmarks://</code> file system.
+ * This class is the provider for the bookmark filesystem implemented by {@link com.mucommander.bookmark.file.BookmarkFile}.
+ *
  * @author Nicolas Rinaudo
+ * @see com.mucommander.bookmark.file.BookmarkFile
  */
 public class BookmarkProtocolProvider implements ProtocolProvider {
+
     public AbstractFile getFile(FileURL url) throws IOException {
         // If the URL contains a path but no host, it's illegal.
         // If it contains neither host nor path, we're browsing bookmarks://

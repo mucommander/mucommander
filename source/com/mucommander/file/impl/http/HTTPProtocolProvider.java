@@ -25,8 +25,14 @@ import com.mucommander.file.ProtocolProvider;
 import java.io.IOException;
 
 /**
+ * This class is the provider for the HTTP/HTTPS filesystem implemented by {@link com.mucommander.file.impl.http.HTTPFile}.
+ *
  * @author Nicolas Rinaudo
+ * @see com.mucommander.file.impl.http.HTTPFile
  */
 public class HTTPProtocolProvider implements ProtocolProvider {
-    public AbstractFile getFile(FileURL url) throws IOException {return new HTTPFile(url);}
+
+    public AbstractFile getFile(FileURL url) throws IOException {
+        return new HTTPFile(url);
+    }
 }

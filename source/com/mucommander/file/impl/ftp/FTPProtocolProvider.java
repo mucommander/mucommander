@@ -25,8 +25,14 @@ import com.mucommander.file.ProtocolProvider;
 import java.io.IOException;
 
 /**
+ * This class is the provider for the FTP filesystem implemented by {@link com.mucommander.file.impl.ftp.FTPFile}.
+ *
  * @author Nicolas Rinaudo
+ * @see com.mucommander.file.impl.ftp.FTPFile
  */
 public class FTPProtocolProvider implements ProtocolProvider {
-    public AbstractFile getFile(FileURL url) throws IOException {return new FTPFile(url);}
+
+    public AbstractFile getFile(FileURL url) throws IOException {
+        return new FTPFile(url);
+    }
 }

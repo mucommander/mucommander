@@ -26,11 +26,16 @@ import com.mucommander.runtime.JavaVersions;
 import java.io.IOException;
 
 /**
+ * This class is the provider for the FTP filesystem implemented by {@link com.mucommander.file.impl.ftp.FTPFile}.
+ *
  * @author Nicolas Rinaudo, Maxence Bernard
+ * @see com.mucommander.file.impl.sftp.SFTPFile
  */
 public class SFTPProtocolProvider implements ProtocolProvider {
 
-    public AbstractFile getFile(FileURL url) throws IOException {return new SFTPFile(url);}
+    public AbstractFile getFile(FileURL url) throws IOException {
+        return new SFTPFile(url);
+    }
 
     /**
      * Returns <code>true</code> if SFTP support is available under the current runtime.

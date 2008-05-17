@@ -235,7 +235,7 @@ public class FileFactory {
     }
 
     /**
-     * Registers a new protocol.
+     * Registers a new file protocol.
      * <p>
      * If a {@link ProtocolProvider} was already registered to the specified protocol, it will automatically be
      * unregistered.
@@ -272,7 +272,7 @@ public class FileFactory {
     }
 
     /**
-     * Returns the protocol provider registered to the specified protocol identifer.
+     * Returns the protocol provider associated with the specified protocol identifer.
      *
      * @param  protocol identifier of the protocol whose provider should be retrieved.
      * @return          the protocol provider registered to the specified protocol identifer, or <code>null</code> if none.

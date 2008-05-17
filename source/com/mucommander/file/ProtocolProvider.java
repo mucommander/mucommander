@@ -21,13 +21,15 @@ package com.mucommander.file;
 import java.io.IOException;
 
 /**
- * Interface used to provide {@link FileFactory} with a way of creating instances of {@link AbstractFile} for a given protocol.
+ * This interface allows {@link FileFactory} to instanciate {@link AbstractFile} implementations.
  * <p>
- * Implementation of {@link AbstractFile} that implement a file protocol must create
- * an associated provider and register it to {@link FileFactory} in order to be recognised by the system.
+ * For {@link AbstractFile} implementations to be automatically instanciated by {@link FileFactory}, this interface
+ * needs to be implemented and an instance registered with {@link FileFactory} and binded to a protocol identifier.
  * </p>
+ *
  * @author Nicolas Rinaudo
- * @see    FileFactory
+ * @see FileFactory
+ * @see AbstractFile
  */
 public interface ProtocolProvider {
     /**
