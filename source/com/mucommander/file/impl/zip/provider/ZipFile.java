@@ -95,7 +95,7 @@ public class ZipFile implements ZipConstants {
     /** Holds byte buffer instance used to convert short and longs, avoids creating lots of small arrays */
     private ZipBuffer zipBuffer = new ZipBuffer();
 
-
+    
     /**
      * Opens the given Zip file and parses information about the entries it contains.
      *
@@ -755,7 +755,8 @@ public class ZipFile implements ZipConstants {
         long sig = ZipLong.getValue(signatureBytes);
         final long cfhSig = ZipLong.getValue(CFH_SIG);
 
-        ByteArrayOutputStream encodingAccumulator = new ByteArrayOutputStream();
+        boolean defaultEncodingSet = defaultEncoding!=null;
+        ByteArrayOutputStream encodingAccumulator = defaultEncodingSet?null:new ByteArrayOutputStream();
 
         while (sig == cfhSig) {
             ZipEntryInfo entryInfo = new ZipEntryInfo();
@@ -776,9 +777,17 @@ public class ZipFile implements ZipConstants {
             int gp = ZipShort.getValue(cfh, 4);   // General purpose bit flag
             boolean isUTF8 = (gp&0x800)!=0;         // Tests if bit 11 is set, signaling UTF-8 is used for filename and comment
 
-            if(isUTF8)
+            if(isUTF8) {
                 entryInfo.encoding = UTF_8;
-            // Else encoding will be guessed and set later
+                if(Debug.ON) Debug.trace("Entry declared as UTF-8");
+            }
+            else if(defaultEncodingSet) {
+                entryInfo.encoding = defaultEncoding;
+                if(Debug.ON) Debug.trace("Using default encoding: "+defaultEncoding);
+            }
+            else {
+                if(Debug.ON) Debug.trace("Encoding will be detected later");
+            }
 
             entryInfo.hasDataDescriptor = (gp&8)!=0;
             // off += 2;
@@ -827,9 +836,9 @@ public class ZipFile implements ZipConstants {
             byte[] filename = new byte[fileNameLen];
             rais.readFully(filename);
 
-            if(isUTF8) {
-                // We know the filename is encoded in UTF-8, set it now
-                ze.setName(getString(filename, UTF_8));
+            // If the encoding is known already, set the String now
+            if(entryInfo.encoding!=null) {
+                ze.setName(getString(filename, entryInfo.encoding));
             }
             else {
                 // Keep the filename bytes, String will be encoded after
@@ -851,9 +860,9 @@ public class ZipFile implements ZipConstants {
             byte[] comment = new byte[commentLen];
             rais.readFully(comment);
 
-            if(isUTF8) {
-                // We know the comment is encoded in UTF-8, set it now
-                ze.setComment(getString(comment, UTF_8));
+            // If the encoding is known already, set the String now
+            if(entryInfo.encoding!=null) {
+                ze.setComment(getString(comment, entryInfo.encoding));
             }
             else {
                 // Keep the comment bytes, String will be encoded after
@@ -874,9 +883,13 @@ public class ZipFile implements ZipConstants {
             sig = ZipLong.getValue(signatureBytes);
         }
 
-        if(encodingAccumulator.size()>0) {
+        if(encodingAccumulator!=null && encodingAccumulator.size()>0) {
             int nbEntries = entries.size();
+            // Note: guessedEncoding may be null if no encoding could be detected.
+            // In that case, the default system encoding will be used to create the string
             String guessedEncoding = EncodingDetector.detectEncoding(encodingAccumulator.toByteArray());
+
+            if(Debug.ON) Debug.trace("Guessed encoding: "+guessedEncoding);
 
             ZipEntry entry;
             ZipEntryInfo entryInfo;
@@ -884,6 +897,7 @@ public class ZipFile implements ZipConstants {
                 entry = (ZipEntry)entries.elementAt(i);
                 entryInfo = entry.getEntryInfo();
 
+                // Skip those entries for which we know the encoding already
                 if(entryInfo.encoding != null)
                     continue;
 
@@ -1014,9 +1028,11 @@ public class ZipFile implements ZipConstants {
         rais.readFully(commentLen);
         byte commentBytes[] = new byte[ZipShort.getValue(commentLen)];
         rais.readFully(commentBytes);
-        // Try to guess the comment's encoding, there is no other way of knowing the encoding as
-        // the Zip format doesn't provide any information other than the bytes themselves (not even a UTF-8 byte)
-        comment = getString(commentBytes, EncodingDetector.detectEncoding(commentBytes));
+
+        // If no default encoding has been specified, try to guess the comment's encoding.
+        // Note that the Zip format doesn't provide any way of knowing the encoding, not even a bit to indicate UTF-8
+        // like bit 11 in GPBF.
+        comment = getString(commentBytes, defaultEncoding!=null?defaultEncoding:EncodingDetector.detectEncoding(commentBytes));
 
         // Seek to the start of the central directory
         rais.seek(cdStart);
