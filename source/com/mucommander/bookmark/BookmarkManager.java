@@ -18,7 +18,6 @@
 
 package com.mucommander.bookmark;
 
-import com.mucommander.Debug;
 import com.mucommander.PlatformManager;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
@@ -335,8 +334,6 @@ public class BookmarkManager implements VectorChangeListener {
         // Do not fire event if events are currently disabled
         if(!fireEvents)
             return;
-
-        if(Debug.ON) Debug.trace("firing an event to registered listeners");
 
         synchronized(listeners) {
             // Iterate on all listeners
