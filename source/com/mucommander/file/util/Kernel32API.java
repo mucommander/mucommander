@@ -23,6 +23,8 @@ import com.sun.jna.Structure;
 import com.sun.jna.examples.win32.W32API;
 import com.sun.jna.ptr.LongByReference;
 
+import java.nio.CharBuffer;
+
 /**
  * Exposes parts of the Windows Kernel32 API using JNA (Java Native Access).
  *
@@ -198,4 +200,98 @@ public interface Kernel32API extends W32API {
      * zero (0). To get extended error information, call GetLastError.
      */
     boolean MoveFileEx(String lpExistingFileName, String lpNewFileName, int dwFlags);
+
+
+    ///////////////////////////////////
+    // GetVolumeInformation function //
+    ///////////////////////////////////
+
+    /** The file system preserves the case of file names when it places a name on disk. */
+    public final static int FILE_CASE_PRESERVED_NAMES = 0x00000002;
+
+    /** The file system supports case-sensitive file names. */
+    public final static int FILE_CASE_SENSITIVE_SEARCH = 0x00000001;
+
+    /** The file system supports file-based compression. */
+    public final static int FILE_FILE_COMPRESSION = 0x00000010;
+
+    /** The file system supports named streams. */
+    public final static int FILE_NAMED_STREAMS = 0x00040000;
+
+    /** The file system preserves and enforces access control lists (ACL). For example, the NTFS file system preserves
+     * and enforces ACLs, and the FAT file system does not. */
+    public final static int FILE_PERSISTENT_ACLS = 0x00000008;
+
+    /** The specified volume is read-only. Windows 2000:  This value is not supported.*/
+    public final static int FILE_READ_ONLY_VOLUME = 0x00080000;
+
+    /** The volume supports a single sequential write. */
+    public final static int FILE_SEQUENTIAL_WRITE_ONCE = 0x00100000;
+
+    /** The file system supports the Encrypted File System (EFS). */
+    public final static int FILE_SUPPORTS_ENCRYPTION = 0x00020000;
+
+    /** The file system supports object identifiers. */
+    public final static int FILE_SUPPORTS_OBJECT_IDS = 0x00010000;
+
+    /** The file system supports re-parse points. */
+    public final static int FILE_SUPPORTS_REPARSE_POINTS = 0x00000080;
+
+    /** The file system supports sparse files. */
+    public final static int FILE_SUPPORTS_SPARSE_FILES = 0x00000040;
+
+    /** The volume supports transactions. */
+    public final static int FILE_SUPPORTS_TRANSACTIONS = 0x00200000;
+
+    /** The file system supports Unicode in file names as they appear on disk. */
+    public final static int FILE_UNICODE_ON_DISK = 0x00000004;
+
+    /** The specified volume is a compressed volume, for example, a DoubleSpace volume. */
+    public final static int FILE_VOLUME_IS_COMPRESSED = 0x00008000;
+
+    /** The file system supports disk quotas. */
+    public final static int FILE_VOLUME_QUOTAS = 0x00000020;
+
+    /**
+     * Retrieves information about the file system and volume associated with the specified root directory.
+     *
+     * @param lpRootPathName A pointer to a string that contains the root directory of the volume to be described.
+     * If this parameter is NULL, the root of the current directory is used. A trailing backslash is required.
+     * For example, you specify \\MyServer\MyShare as "\\MyServer\MyShare\", or the C drive as "C:\".
+     * @param lpVolumeNameBuffer A pointer to a buffer that receives the name of a specified volume. The maximum buffer
+     * size is MAX_PATH+1.
+     * @param nVolumeNameSize The length of a volume name buffer, in TCHARs. The maximum buffer size is MAX_PATH+1.
+     * This parameter is ignored if the volume name buffer is not supplied.
+     * @param lpVolumeSerialNumber A pointer to a variable that receives the volume serial number.
+     * This parameter can be NULL if the serial number is not required.
+     * @param lpMaximumComponentLength A pointer to a variable that receives the maximum length, in TCHARs, of a file
+     * name component that a specified file system supports. A file name component is the portion of a file name between
+     * backslashes. The value that is stored in the variable that *lpMaximumComponentLength points to is used to
+     * indicate that a specified file system supports long names. For example, for a FAT file system that supports long
+     * names, the function stores the value 255, rather than the previous 8.3 indicator. Long names can also be
+     * supported on systems that use the NTFS file system.
+     * @param lpFileSystemFlags A pointer to a variable that receives flags associated with the specified file system.
+     * This parameter can be one or more of the following flags ; FS_FILE_COMPRESSION and FS_VOL_IS_COMPRESSED
+     * are mutually exclusive:
+     * FILE_CASE_PRESERVED_NAMES, FILE_CASE_SENSITIVE_SEARCH, FILE_FILE_COMPRESSION, FILE_NAMED_STREAMS,
+     * FILE_PERSISTENT_ACLS, FILE_READ_ONLY_VOLUME, FILE_SEQUENTIAL_WRITE_ONCE, FILE_SUPPORTS_ENCRYPTION,
+     * FILE_SUPPORTS_OBJECT_IDS, FILE_SUPPORTS_REPARSE_POINTS, FILE_SUPPORTS_SPARSE_FILES, FILE_SUPPORTS_TRANSACTIONS,
+     * FILE_UNICODE_ON_DISK, FILE_VOLUME_IS_COMPRESSED, FILE_VOLUME_QUOTAS.
+     * @param lpFileSystemNameBuffer A pointer to a buffer that receives the name of the file system, for example, the
+     * FAT file system or the NTFS file system. The maximum buffer size is MAX_PATH+1.
+     * @param nFileSystemNameSize The length of the file system name buffer, in TCHARs. The maximum buffer size is
+     * MAX_PATH+1. This parameter is ignored if the file system name buffer is not supplied.
+     * @return If all the requested information is retrieved, the return value is true. If not all the requested
+     * information is retrieved, the return value is false. To get extended error information, call GetLastError.
+     */
+    boolean GetVolumeInformation(
+            char[] lpRootPathName,
+            CharBuffer lpVolumeNameBuffer,
+            int nVolumeNameSize,
+            LongByReference lpVolumeSerialNumber,
+            LongByReference lpMaximumComponentLength,
+            LongByReference lpFileSystemFlags,
+            CharBuffer lpFileSystemNameBuffer,
+            int nFileSystemNameSize
+    );
 }
