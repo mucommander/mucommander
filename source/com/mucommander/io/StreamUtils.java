@@ -37,10 +37,11 @@ public class StreamUtils {
      *
      * @param in the InputStream to read from
      * @param out the OutputStream to write to
+     * @return the number of bytes that were copied
      * @throws FileTransferException if something went wrong while reading from or writing to one of the provided streams
      */
-    public static void copyStream(InputStream in, OutputStream out) throws FileTransferException {
-        copyStream(in, out, BufferPool.DEFAULT_BUFFER_SIZE);
+    public static long copyStream(InputStream in, OutputStream out) throws FileTransferException {
+        return copyStream(in, out, BufferPool.DEFAULT_BUFFER_SIZE);
     }
 
     /**
@@ -60,14 +61,16 @@ public class StreamUtils {
      * @param in the InputStream to read from
      * @param out the OutputStream to write to
      * @param bufferSize size of the buffer to use, in bytes
+     * @return the number of bytes that were copied
      * @throws FileTransferException if something went wrong while reading from or writing to one of the provided streams
      */
-    public static void copyStream(InputStream in, OutputStream out, int bufferSize) throws FileTransferException {
+    public static long copyStream(InputStream in, OutputStream out, int bufferSize) throws FileTransferException {
         // Use BufferPool to reuse any available buffer of the same size
         byte buffer[] = BufferPool.getArrayBuffer(bufferSize);
         try {
             // Copies the InputStream's content to the OutputStream chunks by chunks
             int nbRead;
+            long totalRead = 0;
 
             while(true) {
                 try {
@@ -86,7 +89,11 @@ public class StreamUtils {
                 catch(IOException e) {
                     throw new FileTransferException(FileTransferException.WRITING_DESTINATION);
                 }
+
+                totalRead += nbRead;
             }
+
+            return totalRead;
         }
         finally {
             // Make the buffer available for further use
