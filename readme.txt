@@ -16,7 +16,7 @@ Please use the muCommander forums (http://www.mucommander.com/forums)
 to post your questions, suggestions or bug reports.
 Your feedback is important and always welcome!
 
-Official website: http://www.mucommander.com
+Official website: http://www.mucommander.com.
 Copyright (C) 2002-2008 Maxence Bernard
 
 
