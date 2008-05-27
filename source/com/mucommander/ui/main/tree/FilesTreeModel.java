@@ -252,7 +252,12 @@ public class FilesTreeModel implements TreeModel, CachedDirectoryListener {
      */
     public void refresh(TreePath path) {
         AbstractFile folder = (AbstractFile) path.getLastPathComponent();
+        CachedDirectory cached = (CachedDirectory) cache.get(folder);
+        Icon cachedIcon = cached.getCachedIcon();        
         removeFromCache(folder);
+        cached = new CachedDirectory(folder, cache);
+        cached.setCachedIcon(cachedIcon);
+        cache.put(folder, cached);        
         fireTreeStructureChanged(this, path);
     }
 

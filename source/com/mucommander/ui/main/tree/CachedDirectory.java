@@ -44,7 +44,7 @@ public class CachedDirectory extends ProxyFile {
     private boolean readingChildren = false;
     
     /** a timestamp of last modification time of this directory */
-    private long lsTimeStamp = 0;
+    private long lsTimeStamp = -1;
     
     /** a cache in which this object is stored */
     private DirectoryCache cache;
