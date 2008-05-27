@@ -1219,12 +1219,44 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   </target>
 
 
-  <!-- = Interaction with the CVS repository ================= -->
+  <!-- = Interaction with the SVN repository ================= -->
   <!-- ======================================================= -->
+  <!-- The following targets are used to check whether         -->
+  <!-- SvnAnt is available and load it if so.                  -->
+  
+  <!-- Checks whether SvnAnt is available.                     -->
+  <!--                                                         -->
+  <!-- If SvnAnt is available, ${svnant.available} will be     -->
+  <!-- set to true.                                            -->
+  <!--                                                         -->
+  <!-- This is a 'private' target and should never be          -->
+  <!-- referenced directly outside of this file.               -->
+  <target name="check-svnant">
+    <!-- If the SvnAnt path is not set, uses default value.    -->
+    <property name="svnant.lib" value="${tools}/svnant.jar"/>
+  
+    <!-- Checks for SvnAnt availability.                       -->
+    <!-- If SvnAnt is available, the ${svnant.available}       -->
+    <!-- property will be set to true.                         -->
+    <condition property="svnant.available" value="true">
+      <available resource="svntask.properties" classpath="${svnant.lib}"/>
+    </condition>
+  </target>
+  
+  <!-- Tries to load SvnAnt.                                   -->
+  <!--                                                         -->
+  <!-- If SvnAnt is available, ${svnant.available} will be     -->
+  <!-- set to true.                                            -->
+  <target name="load-svnant" depends="check-svnant" if="svnant.available">
+    <taskdef resource="svntask.properties" classpath="${svnant.lib}"/>
+  </target>
+
   <!-- Brings the local project tree in sync with the          -->
   <!-- repository.                                             -->
-  <target name="update">
-    <cvs command="update -dP"/>
+  <target name="update" depends="load-svnant">
+    <svn>
+      <update dir="."/>
+    </svn>
   </target>
 
 
