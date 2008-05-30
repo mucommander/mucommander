@@ -114,6 +114,7 @@ What's new since v0.8.2 ?
 -------------------------
 
 New features:
+- Tree view, contributed by Mariusz Jakubowski.
 - Added support for SFTP public key authentication, contributed by
   Vassil Dichev.
 

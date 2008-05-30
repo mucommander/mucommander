@@ -4248,7 +4248,8 @@ com.mucommander.ui.action.ToggleShowFoldersFirstAction.label:IT:Mostra le cartel
 com.mucommander.ui.action.ToggleShowFoldersFirstAction.label:JA:最初にフォルダを表示
 com.mucommander.ui.action.ToggleShowFoldersFirstAction.label:SV:Visa mappar först
 
-com.mucommander.ui.action.ToggleTreeAction.label:EN:Show directory tree
+com.mucommander.ui.action.ToggleTreeAction.label:EN:Show tree view
+com.mucommander.ui.action.ToggleTreeAction.label:FR:Afficher la vue arborescente
 com.mucommander.ui.action.ToggleTreeAction.label:PL:Pokaż drzewo katalogów
 # Translation missing (New!)
 
