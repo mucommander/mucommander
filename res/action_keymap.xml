@@ -360,7 +360,7 @@
   <action class="com.mucommander.ui.action.GoToParentInBothPanelsAction" keystroke="shift control BACK_SPACE" />
                                                                          
   <!-- Action  : Show/Hide directory tree.                                       -->
-  <!-- Default : control H                                                       -->
-  <action class="com.mucommander.ui.action.ToggleTreeAction"             keystroke="control H"/>
+  <!-- Default : control J                                                       -->
+  <action class="com.mucommander.ui.action.ToggleTreeAction"             keystroke="control J"/>
 
 </keymap>
