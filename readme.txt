@@ -82,6 +82,7 @@ Lead developers:
 
 Code contributors:
 - Vassil Dichev
+- Arik Hadas
 - Mariusz Jakubowski
 - Xavier Martin
 - Alejandro Scandroli
@@ -115,6 +116,8 @@ What's new since v0.8.2 ?
 
 New features:
 - Tree view, contributed by Mariusz Jakubowski.
+- Added auto-completion capabilities to the location field and transfer
+  destination fields, contributed by Arik Hadas.
 - Added support for SFTP public key authentication, contributed by
   Vassil Dichev.
 

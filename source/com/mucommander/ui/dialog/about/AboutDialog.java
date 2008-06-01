@@ -18,8 +18,8 @@
 
 package com.mucommander.ui.dialog.about;
 
-import com.mucommander.desktop.DesktopManager;
 import com.mucommander.RuntimeConstants;
+import com.mucommander.desktop.DesktopManager;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.FocusDialog;
 import com.mucommander.ui.icon.IconManager;
@@ -27,12 +27,7 @@ import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.theme.Theme;
 import com.mucommander.ui.theme.ThemeManager;
 
-import javax.swing.JLabel;
-import javax.swing.JButton;
-import javax.swing.JPanel;
-import javax.swing.JTextPane;
-import javax.swing.JScrollPane;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 import javax.swing.text.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -132,6 +127,7 @@ public class AboutDialog extends FocusDialog implements ActionListener {
             // Contributors.
             insertHeader(doc,         "Code contributors");
             insertNormalString(doc,   "Vassil Dichev");
+            insertNormalString(doc,   "Arik Hadas");
             insertNormalString(doc,   "Mariusz Jakubowski");
             insertNormalString(doc,   "Xavier Martin");
             insertNormalString(doc,   "Alejandro Scandroli");
