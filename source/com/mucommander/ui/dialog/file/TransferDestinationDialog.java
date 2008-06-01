@@ -23,6 +23,9 @@ import com.mucommander.file.AbstractFile;
 import com.mucommander.file.util.FileSet;
 import com.mucommander.file.util.FileToolkit;
 import com.mucommander.text.Translator;
+import com.mucommander.ui.autocomplete.AutocompleterTextComponent;
+import com.mucommander.ui.autocomplete.CompleterFactory;
+import com.mucommander.ui.autocomplete.TextFieldCompleter;
 import com.mucommander.ui.dialog.DialogToolkit;
 import com.mucommander.ui.layout.YBoxPanel;
 import com.mucommander.ui.main.MainFrame;
@@ -31,6 +34,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 
 
 /**
@@ -101,6 +105,20 @@ public abstract class TransferDestinationDialog extends JobDialog implements Act
 
         // Create path textfield
         pathField = new JTextField();
+        
+        // Add auto-completion based on FileCompleter to pathField.
+        AutocompleterTextComponent pathFieldWithAutocompleteSupported = new AutocompleterTextComponent(pathField) {
+			
+			public void OnEnterPressed(KeyEvent keyEvent) {
+
+			}
+
+			public void OnEscPressed(KeyEvent keyEvent) {
+
+			}
+        };
+        new TextFieldCompleter(pathFieldWithAutocompleteSupported, CompleterFactory.getFileCompleter());
+        
         pathField.addActionListener(this);
         mainPanel.add(pathField);
         mainPanel.addSpace(10);

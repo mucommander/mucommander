@@ -27,7 +27,11 @@ import com.mucommander.file.FileURL;
 import com.mucommander.file.RootFolders;
 import com.mucommander.file.impl.local.LocalFile;
 import com.mucommander.file.util.FileToolkit;
+import com.mucommander.runtime.JavaVersions;
 import com.mucommander.runtime.OsFamilies;
+import com.mucommander.ui.autocomplete.AutocompleterEditableCombobox;
+import com.mucommander.ui.autocomplete.CompleterFactory;
+import com.mucommander.ui.autocomplete.EditableComboboxCompleter;
 import com.mucommander.ui.combobox.EditableComboBox;
 import com.mucommander.ui.combobox.EditableComboBoxListener;
 import com.mucommander.ui.combobox.SaneComboBox;
@@ -38,6 +42,7 @@ import com.mucommander.ui.theme.*;
 
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.KeyEvent;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -96,6 +101,46 @@ public class LocationComboBox extends EditableComboBox implements LocationListen
         // Not doing so would trigger unwanted menu bar actions when typing.
         locationField.addFocusListener(this);
         addFocusListener(this);
+        
+        // Add auto-completion based on LocationCompleter to this LocationComboBox.
+        AutocompleterEditableCombobox autocompletionSupportedVersionOfThis = new AutocompleterEditableCombobox(this) {
+        	
+			public void OnEnterPressed(KeyEvent keyEvent) {
+				// Combo popup menu is visible
+				if(isPopupVisible()) {
+					// Under Java 1.5 or under, we need to explicitely hide the popup.
+					if(JavaVersions.JAVA_1_5.isCurrentOrLower())
+                        hidePopup();
+					
+					// Note that since the event is not consumed, JComboBox will catch it and fire
+				}
+				// Combo popup menu is not visible, these events really belong to the text field
+				else {
+					// Notify listeners that the text field has been validated
+                    fireComboFieldValidated();
+                    
+                    // /!\ Consume the event so to prevent JComboBox from firing an ActionEvent (default JComboBox behavior)
+                    keyEvent.consume();
+				}			
+			}
+
+			public void OnEscPressed(KeyEvent keyEvent) {
+				// Combo popup menu is visible
+				if(isPopupVisible()) {
+					 // Explicitely hide popup menu, JComboBox does not seem do it automatically (at least under Mac OS X + Java 1.5 and Java 1.4)
+	                hidePopup();
+	                // Consume the event so that it is not propagated, since dialogs catch this event to close the window
+	                keyEvent.consume();
+				}
+				// Combo popup menu is not visible, these events really belong to the text field
+                else {
+                	// Notify listeners that the text field has been cancelled
+                	fireComboFieldCancelled();
+                }
+			}
+        	
+        };
+        new EditableComboboxCompleter(autocompletionSupportedVersionOfThis, CompleterFactory.getLocationCompleter());
 
         ThemeManager.addCurrentThemeListener(this);
     }
@@ -245,11 +290,20 @@ public class LocationComboBox extends EditableComboBox implements LocationListen
             }
         }
 
+        // Todo: replace this by env:// filesystem ?
+        // Look for a system variable which name is the entered string (case insensitive)
+        if (location.startsWith("$")) {
+        	String variableKey = location.substring(1);
+        	String variableValue = System.getenv(variableKey);
+        	if (variableValue != null)
+        		location = variableValue;        	
+        }
+
         // Remember that the folder change was initiated by the location field
         folderChangeInitiatedByLocationField = true;
         // Save the path that was entered in case the location change fails or is cancelled 
         locationFieldTextSave = location;
-
+        
         // Change folder
         folderPanel.tryChangeCurrentFolder(location);
     }
@@ -270,6 +324,11 @@ public class LocationComboBox extends EditableComboBox implements LocationListen
     }
 
     public void focusLost(FocusEvent e) {
+//    	// If we are not in the middle of a folder change, and focus has been
+//    	// lost then ensure location field's text is set to the current directory.
+//    	if (!folderPanel.isFolderChanging())
+//    		locationField.setText(folderPanel.getCurrentFolder().getAbsolutePath());
+    	
         // Enable menu bar when this component has lost focus
         folderPanel.getMainFrame().getJMenuBar().setEnabled(true);
     }
