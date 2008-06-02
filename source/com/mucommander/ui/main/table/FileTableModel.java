@@ -234,7 +234,8 @@ public class FileTableModel extends AbstractTableModel {
         // Pre-fetch isSymlink attribute and if the file is a symlink, pre-fetch the canonical file and its attributes
         if(cachedFile.isSymlink()) {
             AbstractFile canonicalFile = cachedFile.getCanonicalFile();
-            prefetchCachedFileAttributes(canonicalFile);
+            if(canonicalFile!=cachedFile)   // Cheap test to prevent infinite recursion on bogus file implementations
+                prefetchCachedFileAttributes(canonicalFile);
         }
     }
 
