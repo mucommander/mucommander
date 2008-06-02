@@ -88,6 +88,8 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
 
     private boolean fileExists;
 
+    private AbstractFile canonicalFile;
+
     private final static String SEPARATOR = "/";
 
     /** Name of the FTP passive mode property */
@@ -111,7 +113,6 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
         super(fileURL);
 
         this.absPath = fileURL.getPath();
-        this.permissions = new FTPFilePermissions(file);
 
         if(file==null) {
             this.file = getFTPFile(fileURL);
@@ -129,6 +130,8 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
             this.file = file;
             this.fileExists = true;
         }
+
+        this.permissions = new FTPFilePermissions(this.file);
     }
 
 
@@ -268,6 +271,9 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
     }
 
     public long getDate() {
+        if(isSymlink())
+            return ((org.apache.commons.net.ftp.FTPFile)getCanonicalFile().getUnderlyingFileObject()).getTimestamp().getTimeInMillis();
+
         return file.getTimestamp().getTimeInMillis();
     }
 
@@ -342,6 +348,9 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
     }
 
     public long getSize() {
+        if(isSymlink())
+            return ((org.apache.commons.net.ftp.FTPFile)getCanonicalFile().getUnderlyingFileObject()).getSize();
+
         return file.getSize();
     }
 
@@ -370,6 +379,9 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
     }
 
     public FilePermissions getPermissions() {
+        if(isSymlink())
+            return ((FTPFile)getCanonicalFile().getAncestor(FTPFile.class)).permissions;
+
         return permissions;
     }
 
@@ -419,6 +431,10 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
         // c) if this file is a symlink, retrieve the symlink's target using #getFTPFile(FileURL) with '-ldH' switches
         // and return the value of isDirectory(). This clearly is the least effective solution at it requires issuing
         // one 'ls' command per symlink.
+
+        if(isSymlink())
+            return ((org.apache.commons.net.ftp.FTPFile)getCanonicalFile().getUnderlyingFileObject()).isDirectory();
+
         return file.isDirectory();
     }
 
@@ -703,6 +719,31 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
 
     public InputStream getInputStream(long offset) throws IOException {
         return new FTPInputStream(offset);
+    }
+
+    public AbstractFile getCanonicalFile() {
+        if(!isSymlink())
+            return this;
+
+        // Create the canonical file instance and cache it
+        if(canonicalFile==null) {
+            // getLink() returns the raw symlink target which can either be an absolute or a relative path. If the path is
+            // relative, preprend the absolute path of the symlink's parent folder.
+            String symlinkTargetPath = file.getLink();
+            if(!symlinkTargetPath.startsWith("/")) {
+                String parentPath = fileURL.getParent().getPath();
+                if(!parentPath.endsWith("/"))
+                    parentPath += "/";
+                symlinkTargetPath = parentPath + symlinkTargetPath;
+            }
+
+            FileURL canonicalURL = (FileURL)fileURL.clone();
+            canonicalURL.setPath(symlinkTargetPath);
+
+            canonicalFile = FileFactory.getFile(canonicalURL);
+        }
+
+        return canonicalFile;
     }
 
 
