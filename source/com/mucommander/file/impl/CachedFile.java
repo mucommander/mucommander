@@ -447,8 +447,14 @@ public class CachedFile extends ProxyFile {
         if(!getCanonicalFileSet) {
             getCanonicalFile = file.getCanonicalFile();
             // Create a CachedFile instance around the file if recursion is enabled
-            if(recurseInstances)
-                getCanonicalFile = new CachedFile(getCanonicalFile, true);
+            if(recurseInstances) {
+                // AbstractFile#getCanonicalFile() may return 'this' if the file is not a symlink. In that case,
+                // no need to create a new CachedFile, simply use this one. 
+                if(getCanonicalFile==file)
+                    getCanonicalFile = this;
+                else
+                    getCanonicalFile = new CachedFile(getCanonicalFile, true);
+            }
 
             getCanonicalFileSet = true;
         }
