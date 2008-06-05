@@ -18,7 +18,6 @@
 
 package com.mucommander.file.util;
 
-import com.sun.jna.Native;
 import com.sun.jna.Structure;
 import com.sun.jna.examples.win32.W32API;
 import com.sun.jna.ptr.LongByReference;
@@ -26,8 +25,10 @@ import com.sun.jna.ptr.LongByReference;
 import java.nio.CharBuffer;
 
 /**
- * Exposes parts of the Windows Kernel32 API using JNA (Java Native Access).
+ * Exposes parts of the Windows Kernel32 API using the JNA (Java Native Access) library.
+ * The {@link Kernel32} class should be used to retrieve an instance of this interface.
  *
+ * @see Kernel32
  * @author Maxence Bernard
  */
 public interface Kernel32API extends W32API {
@@ -35,10 +36,7 @@ public interface Kernel32API extends W32API {
     /** Custom alignment of structures. */
     int STRUCTURE_ALIGNMENT = Structure.ALIGN_NONE;
 
-    /** An instance of the Kernel32 DLL */
-    Kernel32API INSTANCE = (Kernel32API) Native.loadLibrary("kernel32", Kernel32API.class, DEFAULT_OPTIONS);
 
-    
     ///////////////////////////
     // SetErrorMode Function //
     ///////////////////////////
