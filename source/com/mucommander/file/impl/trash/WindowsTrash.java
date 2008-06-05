@@ -22,6 +22,7 @@ import com.mucommander.desktop.DesktopManager;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.impl.local.LocalFile;
 import com.mucommander.file.impl.local.SpecialWindowsLocation;
+import com.mucommander.file.util.Shell32;
 import com.mucommander.file.util.Shell32API;
 
 import java.io.IOException;
@@ -34,6 +35,7 @@ import java.util.Vector;
  * invoking those methods (via JNA), so for performance reasons, this trash is implemented as a {@link com.mucommander.file.impl.trash.QueuedTrash}
  * in order to group calls to {@link #moveToTrash(com.mucommander.file.AbstractFile)}.</p> 
  *
+ * @see WindowsTrashProvider
  * @author Maxence Bernard
  */
 public class WindowsTrash extends QueuedTrash {
@@ -57,7 +59,7 @@ public class WindowsTrash extends QueuedTrash {
     }
 
     public boolean empty() {
-        return Shell32API.INSTANCE.SHEmptyRecycleBin(null, null, Shell32API.SHERB_NOCONFIRMATION) == 0;
+        return Shell32.isAvailable() && Shell32.getInstance().SHEmptyRecycleBin(null, null, Shell32API.SHERB_NOCONFIRMATION) == 0;
     }
 
     /**
@@ -81,12 +83,15 @@ public class WindowsTrash extends QueuedTrash {
      * available on certain versions of Windows such as <i>Windows 2000</i>.
      */
     public int getItemCount() {
+        if(!Shell32.isAvailable())
+            return -1;
+
         Shell32API.SHQUERYRBINFO queryRbInfo = new Shell32API.SHQUERYRBINFO();
 
         // pszRootPath is null to retrieve the information for all Recycle Bins on all drives. Microsoft's documentation
         // states that this fails on certain versions of Windows such as Windows 2000. If it does, we simply return -1.
 
-        int ret = Shell32API.INSTANCE.SHQueryRecycleBin(
+        int ret = Shell32.getInstance().SHQueryRecycleBin(
             null,
             queryRbInfo
         );
@@ -112,6 +117,9 @@ public class WindowsTrash extends QueuedTrash {
     ////////////////////////////////
 
     protected boolean moveToTrash(Vector queuedFiles) {
+        if(!Shell32.isAvailable())
+            return false;
+
         Shell32API.SHFILEOPSTRUCT fileop = new Shell32API.SHFILEOPSTRUCT();
 
         fileop.wFunc = Shell32API.FO_DELETE;
@@ -128,6 +136,6 @@ public class WindowsTrash extends QueuedTrash {
         // The encodePaths method takes care of encoding the paths in a special way.
         fileop.pFrom = fileop.encodePaths(paths);
 
-        return Shell32API.INSTANCE.SHFileOperation(fileop) == 0;
+        return Shell32.getInstance().SHFileOperation(fileop) == 0;
     }
 }
