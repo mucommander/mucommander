@@ -22,8 +22,9 @@ import com.mucommander.file.AbstractTrash;
 import com.mucommander.file.TrashProvider;
 
 /**
- * A TrashProvider that creates instance of the {@link WindowsTrash} trash implementation.
+ * This class is a trash provider for the {@link WindowsTrash Windows trash}.
  *
+ * @see WindowsTrash
  * @author Maxence Bernard
  */
 public class WindowsTrashProvider implements TrashProvider {

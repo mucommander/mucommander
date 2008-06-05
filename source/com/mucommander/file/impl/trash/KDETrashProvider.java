@@ -21,6 +21,15 @@ package com.mucommander.file.impl.trash;
 import com.mucommander.file.AbstractTrash;
 import com.mucommander.file.TrashProvider;
 
+/**
+ * This class is a trash provider for the {@link KDETrash KDE trash}.
+ *
+ * @see KDETrash
+ * @author Maxence Bernard
+ */
 public class KDETrashProvider implements TrashProvider {
-    public AbstractTrash getTrash() {return new KDETrash();}
+
+    public AbstractTrash getTrash() {
+        return new KDETrash();
+    }
 }

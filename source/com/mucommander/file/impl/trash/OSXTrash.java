@@ -47,6 +47,7 @@ import java.util.Vector;
  *   This class uses {@link com.mucommander.ui.macosx.AppleScript} to interact with the trash.
  * </p>
  *
+ * @see OSXTrashProvider
  * @author Maxence Bernard
  */
 public class OSXTrash extends QueuedTrash {

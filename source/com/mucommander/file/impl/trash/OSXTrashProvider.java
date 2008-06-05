@@ -21,6 +21,15 @@ package com.mucommander.file.impl.trash;
 import com.mucommander.file.AbstractTrash;
 import com.mucommander.file.TrashProvider;
 
+/**
+ * This class is a trash provider for the {@link OSXTrash Mac OS X trash}.
+ *
+ * @see OSXTrash
+ * @author Maxence Bernard
+ */
 public class OSXTrashProvider implements TrashProvider {
-    public AbstractTrash getTrash() {return new OSXTrash();}
+
+    public AbstractTrash getTrash() {
+        return new OSXTrash();
+    }
 }

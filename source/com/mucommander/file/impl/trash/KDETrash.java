@@ -37,6 +37,7 @@ import java.util.Vector;
  * The <code>ktrash</code> and <code>kfmclient</code> commands are used to interact with the Konqueror trash.
  * </p>
  *
+ * @see KDETrashProvider
  * @author Maxence Bernard
  */
 public class KDETrash extends QueuedTrash {
