@@ -29,6 +29,7 @@ package com.mucommander.file;
  * Also, some AbstractTrash subclasses may not be able to provide working implementations for all trash operations;
  * probe methods are provided to find out if a particular operation is available.</p>
  *
+ * @see com.mucommander.file.TrashProvider
  * @see com.mucommander.file.FileFactory#getTrash()
  * @author Maxence Bernard
  */
