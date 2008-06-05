@@ -19,8 +19,10 @@
 package com.mucommander.file.impl.local;
 
 import com.mucommander.Debug;
+import com.mucommander.desktop.DesktopManager;
 import com.mucommander.file.*;
 import com.mucommander.file.filter.FilenameFilter;
+import com.mucommander.file.util.Kernel32;
 import com.mucommander.file.util.Kernel32API;
 import com.mucommander.io.*;
 import com.mucommander.process.AbstractProcess;
@@ -120,8 +122,8 @@ public class LocalFile extends AbstractFile {
         // inserted.
         // This has been fixed in Java 1.6 b55 but this fixes previous versions of Java.
         // See http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4089199
-        if(IS_WINDOWS)
-            Kernel32API.INSTANCE.SetErrorMode(Kernel32API.SEM_NOOPENFILEERRORBOX|Kernel32API.SEM_FAILCRITICALERRORS);
+        if(IS_WINDOWS && Kernel32.isAvailable())
+            Kernel32.getInstance().SetErrorMode(Kernel32API.SEM_NOOPENFILEERRORBOX|Kernel32API.SEM_FAILCRITICALERRORS);
     }
 
 
@@ -206,58 +208,61 @@ public class LocalFile extends AbstractFile {
         try {
             // OS is Windows
             if(IS_WINDOWS) {
-//                // Parses the output of 'dir "filePath"' command to retrieve free space information
-//
-//                // 'dir' command returns free space on the last line
-//                //Process process = PlatformManager.execute("dir \""+absPath+"\"", this);
-//                //Process process = Runtime.getRuntime().exec(new String[] {"dir", absPath}, null, new File(getAbsolutePath()));
-//                Process process = Runtime.getRuntime().exec(PlatformManager.getDefaultShellCommand() + " dir \""+absPath+"\"");
-//
-//                // Check that the process was correctly started
-//                if(process!=null) {
-//                    br = new BufferedReader(new InputStreamReader(process.getInputStream()));
-//                    String line;
-//                    String lastLine = null;
-//                    // Retrieves last line of dir
-//                    while((line=br.readLine())!=null) {
-//                        if(!line.trim().equals(""))
-//                            lastLine = line;
-//                    }
-//
-//                    // Last dir line may look like something this (might vary depending on system's language, below in French):
-//                    // 6 Rep(s)  14 767 521 792 octets libres
-//                    if(lastLine!=null) {
-//                        StringTokenizer st = new StringTokenizer(lastLine, " \t\n\r\f,.");
-//                        // Discard first token
-//                        st.nextToken();
-//
-//                        // Concatenates as many contiguous groups of numbers
-//                        String token;
-//                        String freeSpace = "";
-//                        while(st.hasMoreTokens()) {
-//                            token = st.nextToken();
-//                            char c = token.charAt(0);
-//                            if(c>='0' && c<='9')
-//                                freeSpace += token;
-//                            else if(!freeSpace.equals(""))
-//                                break;
-//                        }
-//
-//                        dfInfo[1] = Long.parseLong(freeSpace);
-//                    }
-//                }
+                // Use the Kernel32 DLL if it is available
+                if(Kernel32.isAvailable()) {
+                    // Retrieves the total and free space information using the GetDiskFreeSpaceEx function of the
+                    // Kernel32 API.
+                    LongByReference totalSpaceLBR = new LongByReference();
+                    LongByReference freeSpaceLBR = new LongByReference();
 
-                // Retrieves the total and free space information using the GetDiskFreeSpaceEx function of the
-                // Kernel32 API.
-                LongByReference totalSpaceLBR = new LongByReference();
-                LongByReference freeSpaceLBR = new LongByReference();
-
-                if(Kernel32API.INSTANCE.GetDiskFreeSpaceEx(absPath, null, totalSpaceLBR, freeSpaceLBR)) {
-                    dfInfo[0] = totalSpaceLBR.getValue();
-                    dfInfo[1] = freeSpaceLBR.getValue();
+                    if(Kernel32.getInstance().GetDiskFreeSpaceEx(absPath, null, totalSpaceLBR, freeSpaceLBR)) {
+                        dfInfo[0] = totalSpaceLBR.getValue();
+                        dfInfo[1] = freeSpaceLBR.getValue();
+                    }
+                    else {
+                        if(Debug.ON) Debug.trace("Call to GetDiskFreeSpaceEx failed, absPath="+absPath);
+                    }
                 }
+                // Otherwise, parse the output of 'dir "filePath"' command to retrieve free space information
                 else {
-                    if(Debug.ON) Debug.trace("Call to GetDiskFreeSpaceEx failed, absPath="+absPath);
+                    // 'dir' command returns free space on the last line
+                    //Process process = Runtime.getRuntime().exec(new String[] {"dir", absPath}, null, new File(getAbsolutePath()));
+//                    Process process = Runtime.getRuntime().exec(PlatformManager.getDefaultShellCommand() + " dir \""+absPath+"\"");
+                    Process process = Runtime.getRuntime().exec(DesktopManager.getDefaultShell() + " dir \""+absPath+"\"");
+
+                    // Check that the process was correctly started
+                    if(process!=null) {
+                        br = new BufferedReader(new InputStreamReader(process.getInputStream()));
+                        String line;
+                        String lastLine = null;
+                        // Retrieves last line of dir
+                        while((line=br.readLine())!=null) {
+                            if(!line.trim().equals(""))
+                                lastLine = line;
+                        }
+
+                        // Last dir line may look like something this (might vary depending on system's language, below in French):
+                        // 6 Rep(s)  14 767 521 792 octets libres
+                        if(lastLine!=null) {
+                            StringTokenizer st = new StringTokenizer(lastLine, " \t\n\r\f,.");
+                            // Discard first token
+                            st.nextToken();
+
+                            // Concatenates as many contiguous groups of numbers
+                            String token;
+                            String freeSpace = "";
+                            while(st.hasMoreTokens()) {
+                                token = st.nextToken();
+                                char c = token.charAt(0);
+                                if(c>='0' && c<='9')
+                                    freeSpace += token;
+                                else if(!freeSpace.equals(""))
+                                    break;
+                            }
+
+                            dfInfo[1] = Long.parseLong(freeSpace);
+                        }
+                    }
                 }
             }
             else if(OsFamily.getCurrent().isUnixBased()) {
@@ -349,8 +354,8 @@ public class LocalFile extends AbstractFile {
      * @return <code>true</code> if this file is the root of a removable media drive (floppy, CD, DVD, USB drive...). 
      */
     public boolean guessRemovableDrive() {
-        if(IS_WINDOWS) {
-            int driveType = Kernel32API.INSTANCE.GetDriveType(getAbsolutePath(true));
+        if(IS_WINDOWS && Kernel32.isAvailable()) {
+            int driveType = Kernel32.getInstance().GetDriveType(getAbsolutePath(true));
             if(driveType!=Kernel32API.DRIVE_UNKNOWN)
                 return driveType==Kernel32API.DRIVE_REMOVABLE || driveType==Kernel32API.DRIVE_CDROM;
         }
@@ -737,19 +742,21 @@ public class LocalFile extends AbstractFile {
 
         if(IS_WINDOWS) {
             // Windows 9x or Windows Me: Kernel32's MoveFileEx function is NOT available
-            if(OsVersions.WINDOWS_ME.isCurrentOrLower() && destFile.exists()) {
+            if(OsVersions.WINDOWS_ME.isCurrentOrLower()) {
                 // The destination file is deleted before calling java.io.File#renameTo().
                 // Note that in this case, the atomicity of this method is not guaranteed anymore -- if
                 // java.io.File#renameTo() fails (for whatever reason), the destination file is deleted anyway.
-                destJavaIoFile.delete();
+                if(destFile.exists())
+                    destJavaIoFile.delete();
             }
-            // Windows NT: Kernel32's MoveFileEx function is available.
-            else {
+            // Windows NT: Kernel32's MoveFileEx can be used, if the Kernel32 DLL is available.
+            else if(Kernel32.isAvailable()) {
                 // Note: MoveFileEx is always used, even if the destination file does not exist, to avoid having to
                 // call #exists() on the destination file which has a cost.
-                return  Kernel32API.INSTANCE.MoveFileEx(absPath, destFile.getAbsolutePath(),
+                return  Kernel32.getInstance().MoveFileEx(absPath, destFile.getAbsolutePath(),
                         Kernel32API.MOVEFILE_REPLACE_EXISTING|Kernel32API.MOVEFILE_WRITE_THROUGH);
             }
+            // else fall back to java.io.File#renameTo
         }
 
         return file.renameTo(destJavaIoFile);
