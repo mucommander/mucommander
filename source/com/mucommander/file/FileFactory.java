@@ -106,9 +106,6 @@ public class FileFactory {
     /** Object used to create instances of {@link AbstractTrash}. */
     private static TrashProvider trashProvider;
 
-    /** Used to synchronise access to the trash provider. */
-    private final static Object trashLock = new Object();
-
     /** Static LRUCache instance that caches frequently accessed AbstractFile instances */
     private static LRUCache fileCache;
 
@@ -207,8 +204,9 @@ public class FileFactory {
     public static AbstractTrash getTrash() {
         TrashProvider provider;
 
-        if((provider = getTrashProvider()) == null)
+        if((provider = getTrashProvider())==null)
             return null;
+
         return provider.getTrash();
     }
 
@@ -218,25 +216,16 @@ public class FileFactory {
      * @return the object used to create instances of {@link AbstractTrash} if any, <code>null</code> otherwise.
      */
     public static TrashProvider getTrashProvider() {
-        synchronized(trashLock) {
-            return trashProvider;
-        }
+        return trashProvider;
     }
 
     /**
-     * Sets the object that will be used to create instances of {@link AbstractTrash}.
+     * Sets the object that is used to create instances of {@link AbstractTrash}.
      *
-     * @param  provider object that will be used to create instances of {@link AbstractTrash}.
-     * @return          the previous trash provider if any, <code>null</code> otherwise.
+     * @param provider object that will be used to create instances of {@link AbstractTrash}.
      */
-    public static TrashProvider setTrashProvider(TrashProvider provider) {
-        TrashProvider buffer;
-
-        synchronized(trashLock) {
-            buffer = trashProvider;
-            trashProvider = provider;
-            return buffer;
-        }
+    public static void setTrashProvider(TrashProvider provider) {
+        trashProvider = provider;
     }
 
     /**
