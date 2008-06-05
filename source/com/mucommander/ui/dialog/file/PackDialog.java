@@ -31,6 +31,7 @@ import com.mucommander.ui.dialog.QuestionDialog;
 import com.mucommander.ui.layout.YBoxPanel;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.table.FileTable;
+import com.mucommander.ui.text.FilePathField;
 
 import javax.swing.*;
 import java.awt.*;
@@ -109,7 +110,8 @@ public class PackDialog extends JobDialog implements ActionListener, ItemListene
         else
             fileName = "";
 
-        filePathField = new JTextField(initialPath + fileName + "." + Archiver.getFormatExtension(initialFormat));
+        // Create a path field with auto-completion capabilities
+        filePathField = new FilePathField(initialPath + fileName + "." + Archiver.getFormatExtension(initialFormat));
 
         // Selects the file name.
         filePathField.setSelectionStart(initialPath.length());

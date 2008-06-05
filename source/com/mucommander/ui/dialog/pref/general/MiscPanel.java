@@ -18,9 +18,9 @@
 
 package com.mucommander.ui.dialog.pref.general;
 
-import com.mucommander.desktop.DesktopManager;
 import com.mucommander.bonjour.BonjourDirectory;
 import com.mucommander.conf.impl.MuConfiguration;
+import com.mucommander.desktop.DesktopManager;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.combobox.SaneComboBox;
 import com.mucommander.ui.dialog.pref.PreferencesDialog;
@@ -28,6 +28,7 @@ import com.mucommander.ui.dialog.pref.PreferencesPanel;
 import com.mucommander.ui.layout.XAlignedComponentPanel;
 import com.mucommander.ui.layout.YBoxPanel;
 import com.mucommander.ui.notifier.AbstractNotifier;
+import com.mucommander.ui.text.FilePathField;
 
 import javax.swing.*;
 import java.awt.*;
@@ -124,7 +125,8 @@ class MiscPanel extends PreferencesPanel implements ItemListener {
         shellPanel.setLabelLeftAligned(true);
         shellPanel.setBorder(BorderFactory.createTitledBorder(Translator.get("prefs_dialog.shell")));
 
-        customShellField = new JTextField(MuConfiguration.getVariable(MuConfiguration.CUSTOM_SHELL, ""));
+        // Create a path field with auto-completion capabilities
+        customShellField = new FilePathField(MuConfiguration.getVariable(MuConfiguration.CUSTOM_SHELL, ""));
         customShellField.setEnabled(useCustomShellRadioButton.isSelected());
 
         shellPanel.addRow(useDefaultShellRadioButton, new JLabel(DesktopManager.getDefaultShell()), 5);

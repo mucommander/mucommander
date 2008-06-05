@@ -26,6 +26,7 @@ import com.mucommander.ui.dialog.pref.PreferencesPanel;
 import com.mucommander.ui.layout.XBoxPanel;
 import com.mucommander.ui.layout.YBoxPanel;
 import com.mucommander.ui.main.WindowManager;
+import com.mucommander.ui.text.FilePathField;
 
 import javax.swing.*;
 import java.awt.*;
@@ -94,7 +95,8 @@ class FoldersPanel extends PreferencesPanel implements ItemListener, KeyListener
         tempPanel.setAlignmentX(LEFT_ALIGNMENT);
         tempPanel.add(leftCustomFolderRadioButton);
         tempPanel.addSpace(5);
-        leftCustomFolderTextField = new JTextField(MuConfiguration.getVariable(MuConfiguration.LEFT_CUSTOM_FOLDER, ""));
+        // Create a path field with auto-completion capabilities
+        leftCustomFolderTextField = new FilePathField(MuConfiguration.getVariable(MuConfiguration.LEFT_CUSTOM_FOLDER, ""));
         leftCustomFolderTextField.addKeyListener(this);
         tempPanel.add(leftCustomFolderTextField);
 
@@ -135,7 +137,8 @@ class FoldersPanel extends PreferencesPanel implements ItemListener, KeyListener
         tempPanel.setAlignmentX(LEFT_ALIGNMENT);
         tempPanel.add(rightCustomFolderRadioButton);
         tempPanel.addSpace(5);
-        rightCustomFolderTextField = new JTextField(MuConfiguration.getVariable(MuConfiguration.RIGHT_CUSTOM_FOLDER, ""));
+        // Create a path field with auto-completion capabilities
+        rightCustomFolderTextField = new FilePathField(MuConfiguration.getVariable(MuConfiguration.RIGHT_CUSTOM_FOLDER, ""));
         rightCustomFolderTextField.addKeyListener(this);
         tempPanel.add(rightCustomFolderTextField);
 

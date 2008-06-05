@@ -29,6 +29,7 @@ import com.mucommander.ui.action.CalculateChecksumAction;
 import com.mucommander.ui.dialog.DialogToolkit;
 import com.mucommander.ui.layout.YBoxPanel;
 import com.mucommander.ui.main.MainFrame;
+import com.mucommander.ui.text.FilePathField;
 import com.mucommander.util.StringUtils;
 
 import javax.swing.*;
@@ -137,7 +138,8 @@ public class CalculateChecksumDialog extends JobDialog implements ActionListener
         tempPanel.add(specificLocationRadioButton, BorderLayout.WEST);
         specificLocationRadioButton.addItemListener(this);
         
-        specificLocationTextField = new JTextField(getChecksumFilename(lastUsedAlgorithm));
+        // Create a path field with auto-completion capabilities
+        specificLocationTextField = new FilePathField(getChecksumFilename(lastUsedAlgorithm));
         specificLocationTextField.setEnabled(false);
         tempPanel.add(specificLocationTextField, BorderLayout.CENTER);
 

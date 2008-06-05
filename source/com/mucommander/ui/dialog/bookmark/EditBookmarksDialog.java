@@ -29,6 +29,7 @@ import com.mucommander.ui.layout.YBoxPanel;
 import com.mucommander.ui.list.DynamicList;
 import com.mucommander.ui.list.SortableListPanel;
 import com.mucommander.ui.main.MainFrame;
+import com.mucommander.ui.text.FilePathField;
 import com.mucommander.util.AlteredVector;
 
 import javax.swing.*;
@@ -106,8 +107,8 @@ public class EditBookmarksDialog extends FocusDialog implements ActionListener, 
         nameField.getDocument().addDocumentListener(this);
         compPanel.addRow(Translator.get("name")+":", nameField, 5);
 
-        // Add bookmark location field
-        this.locationField = new JTextField();
+        // Create a path field with auto-completion capabilities
+        this.locationField = new FilePathField();
         locationField.getDocument().addDocumentListener(this);
         compPanel.addRow(Translator.get("location")+":", locationField, 10);
 
