@@ -19,8 +19,22 @@
 package com.mucommander.file;
 
 /**
+ * TrashProvider provides a way to instantiate {@link com.mucommander.file.AbstractTrash} implementations.
+ *
+ * <p>Trash providers can be registered with {@link FileFactory#setTrashProvider(TrashProvider)} for them to become
+ * the default trash one.</p>
+ *
+ * @see com.mucommander.file.AbstractTrash
+ * @see com.mucommander.file.FileFactory#setTrashProvider(TrashProvider)
  * @author Nicolas Rinaudo
  */
 public interface TrashProvider {
+
+    /**
+     * Returns a trash instance.
+     * 
+     * @return a trash instance
+     */
     public AbstractTrash getTrash();
+
 }
