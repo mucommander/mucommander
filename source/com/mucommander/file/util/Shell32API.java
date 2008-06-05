@@ -18,14 +18,15 @@
 
 package com.mucommander.file.util;
 
-import com.sun.jna.Native;
 import com.sun.jna.Pointer;
 import com.sun.jna.Structure;
 import com.sun.jna.examples.win32.W32API;
 
 /**
  * Exposes parts of the Windows Shell32 API using the JNA (Java Native Access) library.
+ * The {@link Shell32} class should be used to retrieve an instance of this interface.
  *
+ * @see Shell32
  * @author Maxence Bernard
  */
 public interface Shell32API extends W32API {
@@ -36,9 +37,6 @@ public interface Shell32API extends W32API {
 
     /** Custom alignment of structures. */
     int STRUCTURE_ALIGNMENT = Structure.ALIGN_NONE;
-
-    /** An instance of the Shell32 DLL */
-    Shell32API INSTANCE = (Shell32API) Native.loadLibrary("shell32", Shell32API.class, DEFAULT_OPTIONS);
 
 
     //////////////////////////////
