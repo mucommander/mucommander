@@ -125,11 +125,11 @@ public class EncodingDetector {
 
         // Debug info
         if(Debug.ON) Debug.trace("bestMatch getName()="+cm.getName()+" getConfidence()="+cm.getConfidence());
-        if(Debug.ON) {
-            CharsetMatch cms[] = cd.detectAll();
-            for(int i=0; i<cms.length; i++)
-                Debug.trace("getName()="+cms[i].getName()+" getConfidence()="+cms[i].getConfidence());
-        }
+//        if(Debug.ON) {
+//            CharsetMatch cms[] = cd.detectAll();
+//            for(int i=0; i<cms.length; i++)
+//                Debug.trace("getName()="+cms[i].getName()+" getConfidence()="+cms[i].getConfidence());
+//        }
 
         return cm==null?null:cm.getName();
     }

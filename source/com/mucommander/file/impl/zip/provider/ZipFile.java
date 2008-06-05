@@ -786,7 +786,7 @@ public class ZipFile implements ZipConstants {
                 if(Debug.ON) Debug.trace("Using default encoding: "+defaultEncoding);
             }
             else {
-                if(Debug.ON) Debug.trace("Encoding will be detected later");
+                // if(Debug.ON) Debug.trace("Encoding will be detected later");
             }
 
             entryInfo.hasDataDescriptor = (gp&8)!=0;
