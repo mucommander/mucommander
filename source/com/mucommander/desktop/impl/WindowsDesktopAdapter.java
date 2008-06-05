@@ -20,6 +20,7 @@ package com.mucommander.desktop.impl;
 
 import com.mucommander.desktop.DefaultDesktopAdapter;
 import com.mucommander.desktop.DesktopInitialisationException;
+import com.mucommander.file.util.Shell32;
 import com.mucommander.runtime.OsFamily;
 
 /**
@@ -31,7 +32,10 @@ class WindowsDesktopAdapter extends DefaultDesktopAdapter {
     public String toString() {return "Windows Desktop";}
 
     public void init(boolean install) throws DesktopInitialisationException {
-        com.mucommander.file.FileFactory.setTrashProvider(new com.mucommander.file.impl.trash.WindowsTrashProvider());
+        // the Windows trash requires access to the Shell32 DLL, register the provider only if the Shell32 DLL
+        // is available on the current runtime environment.
+        if(Shell32.isAvailable())
+            com.mucommander.file.FileFactory.setTrashProvider(new com.mucommander.file.impl.trash.WindowsTrashProvider());
     }
 
     public boolean isAvailable() {return OsFamily.getCurrent().equals(OsFamily.WINDOWS);}
