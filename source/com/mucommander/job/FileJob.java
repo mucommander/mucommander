@@ -39,19 +39,20 @@ import java.util.WeakHashMap;
  * FileJob is a container for a 'file task' : basically an operation that involves files and bytes.
  * The class extending FileJob is required to give some information about the status of the job that
  * will be used to display visual indications of the job's progress.
- *
- * <p>The actual processing is performed in a separate thread. A FileJob needs to be started explicitely using
- * {@link #start()}. The lifecycle of a FileJob is as follows:
- *
  * <p>
- * {@link #NOT_STARTED} -> {@link #RUNNING} -> {@link #FINISHED}      <br>
- *                         ^                |                         <br>
- *                         |                -> {@link #INTERRUPTED}   <br>
- *                         |                |                         <br>
- *                         |                -> {@link #PAUSED} -|     <br>
- *                         |                                    |     <br>
- *                         -------------------------------------|     <br>
- *
+ * The actual processing is performed in a separate thread. A FileJob needs to be started explicitely using
+ * {@link #start()}. The lifecycle of a FileJob is as follows:<br>
+ * <br>
+ * <pre>
+ * {@link #NOT_STARTED} -> {@link #RUNNING} -> {@link #FINISHED}
+ *                         ^                |
+ *                         |                -> {@link #INTERRUPTED}
+ *                         |                |                      
+ *                         |                -> {@link #PAUSED} -|
+ *                         |                                    |
+ *                         -------------------------------------|
+ * </pre>
+ * </p>
  *
  * @author Maxence Bernard
  */
