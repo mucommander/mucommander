@@ -19,17 +19,19 @@
 package com.mucommander.desktop;
 
 import com.mucommander.file.AbstractFile;
+import com.mucommander.file.FileFactory;
 import com.mucommander.file.impl.local.LocalFile;
+import com.mucommander.file.impl.local.SpecialWindowsLocation;
 
 import java.io.File;
 import java.io.IOException;
 
 /**
- * {@link DesktopOperation} implementation meant for actions that involve <code>java.io.File</code>.
+ * {@link DesktopOperation} implementation meant for actions that involve local files.
  * <p>
  * Instead of having to deal with the {@link DesktopOperation#canExecute(Object[])}
  * and {@link DesktopOperation#execute(Object[])}, instances of <code>LocalFileOperation</code>
- * can use {@link #canExecute(File)} and {@link #execute(File)} and ignore the complexity of
+ * can use {@link #canExecute(AbstractFile)} and {@link #execute(AbstractFile)} and ignore the complexity of
  * the desktop API's genericity.
  * </p>
  * @author Nicolas Rinaudo
@@ -50,7 +52,7 @@ public abstract class LocalFileOperation implements DesktopOperation {
      * @throws IOException                   if an error occurs.
      * @throws UnsupportedOperationException if the operation is not supported.
      */
-    public abstract void execute(File file) throws IOException, UnsupportedOperationException;
+    public abstract void execute(AbstractFile file) throws IOException, UnsupportedOperationException;
 
     /**
      * Checks whether the operation knows how to deal with the specified file.
@@ -63,7 +65,7 @@ public abstract class LocalFileOperation implements DesktopOperation {
      * @param  file file to check against.
      * @return      <code>true</code> if the operation is supported for the specified file, <code>false</code> otherwise.
      */
-    public boolean canExecute(File file) {return isAvailable();}
+    public boolean canExecute(AbstractFile file) {return isAvailable();}
 
 
 
@@ -85,7 +87,7 @@ public abstract class LocalFileOperation implements DesktopOperation {
      * @see           #extractTarget(Object[])
      */
     public boolean canExecute(Object[] target) {
-        File file;
+        AbstractFile file;
 
         if((file = extractTarget(target)) != null)
             return canExecute(file);
@@ -105,7 +107,7 @@ public abstract class LocalFileOperation implements DesktopOperation {
      * @see                                  #extractTarget(Object[])
      */
     public void execute(Object[] target) throws IOException, UnsupportedOperationException {
-        File file;
+        AbstractFile file;
 
         // Makes sure we received the right kind of parameters.
         if((file = extractTarget(target)) == null)
@@ -125,31 +127,37 @@ public abstract class LocalFileOperation implements DesktopOperation {
      * By default, this method will return <code>null</code> unless <code>target</code>:
      * <ul>
      *   <li>has a length of 1.</li>
-     *   <li>contains an instance of either <code>java.net.URL</code>, {@link com.mucommander.file.impl.http.HTTPFile} or <code>String</code>.</li>
+     *   <li>
+     *     contains an instance of either <code>java.io.File</code>, {@link com.mucommander.file.impl.local.LocalFile}, <code>String</code>
+     *     or {@link com.mucommander.file.impl.local.SpecialWindowsLocation}.
+     *   </li>
      * </ul>
      * </p>
      * <p>
      * This behaviour can be overridden by implementations to fit their own needs, although it's probably not a great idea.
      * </p>
      * @param  target operation parameters.
-     * @return        <code>null</code> if the parameters are not legal, a <code>java.net.URL</code> instance instead.
+     * @return        <code>null</code> if the parameters are not legal, a {@link com.mucommander.file.AbstractFile} instance instead.
      */
-    protected File extractTarget(Object[] target) {
+    protected AbstractFile extractTarget(Object[] target) {
         // We only deal with arrays containing 1 element.
         if(target.length != 1)
             return null;
 
         // If we find an instance of java.io.File, we can stop here.
         if(target[0] instanceof File)
-            return (File)target[0];
+            return FileFactory.getFile(((File)target[0]).getAbsolutePath());
+
+        if(target[0] instanceof SpecialWindowsLocation)
+            return (AbstractFile)target[0];
 
         // Deals with instances of LocalFile: raw instances or wrapped in another AbstractFile container (e.g. archive files)
         if(target[0] instanceof AbstractFile && ((AbstractFile)target[0]).hasAncestor(LocalFile.class))
-            return (File)((AbstractFile)target[0]).getAncestor(LocalFile.class).getUnderlyingFileObject();
+            return (AbstractFile)target[0];
 
         // Deals with instances of String.
         if(target[0] instanceof String)
-            return new File((String)target[0]);
+            return FileFactory.getFile((String)target[0]);
 
         // Illegal parameters.
         return null;

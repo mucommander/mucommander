@@ -62,9 +62,9 @@ class InternalOpen extends LocalFileOperation {
      */
     public boolean isAvailable() {return desktop != null && desktop.isSupported(Desktop.Action.OPEN);}
 
-    public void execute(File file) throws IOException {
+    public void execute(AbstractFile file) throws IOException {
         if(isAvailable())
-            desktop.open(file);
+            desktop.open(new File(file.getAbsolutePath()));
         else
             throw new UnsupportedOperationException();
     }

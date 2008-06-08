@@ -52,24 +52,22 @@ class CommandOpen extends LocalFileOperation {
         return CommandManager.getCommandForAlias(CommandManager.FILE_OPENER_ALIAS) != null;
     }
 
-    public boolean canExecute(File file) {
+    public boolean canExecute(AbstractFile file) {
         if(allowDefault)
             return true;
 
-        return CommandManager.getCommandForFile(FileFactory.getFile(file.getAbsolutePath()), false) != null;
+        return CommandManager.getCommandForFile(file, false) != null;
     }
 
-    public void execute(File file) throws IOException {
-        Command      command;
-        AbstractFile target;
+    public void execute(AbstractFile file) throws IOException {
+        Command command;
 
         // Attemps to find a command that matches the specified target.
-        target = FileFactory.getFile(file.getAbsolutePath());
-        if((command = CommandManager.getCommandForFile(target, allowDefault)) == null)
+        if((command = CommandManager.getCommandForFile(file, allowDefault)) == null)
             throw new UnsupportedOperationException();
 
         // If found, executes it.
-        ProcessRunner.execute(command.getTokens(target), target);
+        ProcessRunner.execute(command.getTokens(file), file);
     }
 
     /**

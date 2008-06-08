@@ -33,17 +33,13 @@ import java.io.IOException;
 class CommandOpenInFileManager extends LocalFileOperation {
     public boolean isAvailable() {return CommandManager.getCommandForAlias(CommandManager.FILE_MANAGER_ALIAS) != null;}
 
-    public boolean canExecute(File file) {return isAvailable();}
+    public void execute(AbstractFile file) throws IOException {
+        Command command;
 
-    public void execute(File file) throws IOException {
-        Command      command;
-
-        AbstractFile target;
         if((command = CommandManager.getCommandForAlias(CommandManager.FILE_MANAGER_ALIAS)) == null)
             throw new UnsupportedOperationException();
 
-        target = FileFactory.getFile(file.getAbsolutePath());
-        ProcessRunner.execute(command.getTokens(target), target);
+        ProcessRunner.execute(command.getTokens(file), file);
     }
 
     public String getName() {
