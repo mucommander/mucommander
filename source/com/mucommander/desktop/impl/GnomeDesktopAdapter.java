@@ -46,11 +46,15 @@ abstract class GnomeDesktopAdapter extends DefaultDesktopAdapter {
             CommandManager.registerDefaultCommand(new Command(CommandManager.EXE_OPENER_ALIAS,   EXE_OPENER,  Command.SYSTEM_COMMAND, null));
             CommandManager.registerDefaultCommand(new Command(CommandManager.FILE_MANAGER_ALIAS, FILE_OPENER, Command.SYSTEM_COMMAND, FILE_MANAGER_NAME));
 
-            // Identifies which kind of filter should be used to match executable files.
             FileFilter filter;
+            // Disabled actual permissions checking as this will break normal +x files.
+            // With this, a +x PDF file will not be opened.
+            /*
+            // Identifies which kind of filter should be used to match executable files.
             if(JavaVersion.JAVA_1_6.isCurrentOrHigher())
                 filter = new PermissionsFileFilter(PermissionTypes.EXECUTE_PERMISSION, true);
             else
+            */
                 filter = new RegexpFilenameFilter("[^.]+", true);
 
             CommandManager.registerDefaultAssociation(CommandManager.EXE_OPENER_ALIAS, filter);
