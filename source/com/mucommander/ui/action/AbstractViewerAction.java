@@ -126,7 +126,7 @@ abstract class AbstractViewerAction extends SelectedFileAction {
             // If we're using a custom editor...
             if(useCustomCommand && customCommand != null) {
                 // If it's local, run the custom editor on it.
-                if(file.getURL().getProtocol().equals(FileProtocols.FILE) && (file instanceof LocalFile)) {
+                if(file.hasAncestor(LocalFile.class)) {
                     try {ProcessRunner.execute(customCommand.getTokens(file), file);}
                     catch(Exception e) {reportGenericError();}
                 }
