@@ -317,6 +317,10 @@ public abstract class ProxyFile extends AbstractFile {
     public boolean equals(Object f) {
         return file.equals(f);
     }
+    
+    public int hashCode() {
+        return file.hashCode();
+    }
 
     public String toString() {
         return file.toString();
