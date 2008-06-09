@@ -22,6 +22,7 @@ import com.mucommander.desktop.AbstractTrash;
 import com.mucommander.file.AbstractArchiveFile;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
+import com.mucommander.desktop.DesktopManager;
 import com.mucommander.file.util.FileSet;
 import com.mucommander.job.DeleteJob;
 import com.mucommander.text.Translator;
@@ -82,7 +83,7 @@ public class DeleteDialog extends JobDialog implements ItemListener, ActionListe
         // - the base folder is not an archive
         // - the base folder of the to-be-deleted files is not a trash folder or one of its children
         // - the base folder can be moved to the trash (the eligibility conditions should be the same as the files to-be-deleted)
-        AbstractTrash trash = FileFactory.getTrash();
+        AbstractTrash trash = DesktopManager.getTrash();
         AbstractFile baseFolder = files.getBaseFolder();
         if(trash!=null && !(baseFolder instanceof AbstractArchiveFile) && !trash.isTrashFile(baseFolder) && trash.canMoveToTrash(baseFolder)) {
             moveToTrash = !deletePermanently;

@@ -26,6 +26,7 @@ import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
 import com.mucommander.file.FileProtocols;
+import com.mucommander.desktop.DesktopManager;
 import com.mucommander.file.impl.local.LocalFile;
 import com.mucommander.runtime.JavaVersions;
 import com.mucommander.text.SizeFormat;
@@ -162,7 +163,7 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
         add(Box.createHorizontalGlue());
 
         // Add a button for interacting with the trash, only if the current platform has a trash implementation
-        if(FileFactory.getTrash()!=null) {
+        if(DesktopManager.getTrash()!=null) {
             TrashPopupButton trashButton = new TrashPopupButton(mainFrame);
             // Reduce the button's default margin which is too large, at least under Mac OS X 
             trashButton.setMargin(new Insets(2, 2, 2, 2));

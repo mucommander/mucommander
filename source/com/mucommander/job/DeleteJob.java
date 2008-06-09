@@ -24,6 +24,7 @@ import com.mucommander.file.AbstractArchiveFile;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.AbstractRWArchiveFile;
 import com.mucommander.file.FileFactory;
+import com.mucommander.desktop.DesktopManager;
 import com.mucommander.file.util.FileSet;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.QuestionDialog;
@@ -38,7 +39,7 @@ import java.io.IOException;
  * This class is responsible for deleting a set of files. This job can operate in two modes, depending on the boolean
  * value specified in the construtor:
  * <ul>
- *  <li>moveToTrash enabled: files are moved to the trash returned by {@link FileFactory#getTrash()}.
+ *  <li>moveToTrash enabled: files are moved to the trash returned by {@link DesktopManager#getTrash()}.
  *  <li>moveToTrash disabled: files are permanently deleted, i.e deleted files cannot be recovered. In this mode,
  * folders are deleted recursively
  * </ul>
@@ -85,7 +86,7 @@ public class DeleteJob extends FileJob {
 
         this.moveToTrash = moveToTrash;
         if(moveToTrash)
-            trash = FileFactory.getTrash();
+            trash = DesktopManager.getTrash();
     }
 
     /**

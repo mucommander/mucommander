@@ -22,8 +22,6 @@ import com.mucommander.Debug;
 import com.mucommander.auth.AuthException;
 import com.mucommander.auth.CredentialsManager;
 import com.mucommander.cache.LRUCache;
-import com.mucommander.desktop.AbstractTrash;
-import com.mucommander.desktop.TrashProvider;
 import com.mucommander.file.icon.FileIconProvider;
 import com.mucommander.file.icon.impl.SwingFileIconProvider;
 import com.mucommander.file.impl.local.LocalFile;
@@ -77,18 +75,6 @@ import java.util.*;
  *   <li><code>LST</code>, registered to lst files.</li>
  * </ul>
  * </p>
- * <h3>Trash</h3>
- * <p>
- * <code>FileFactory</code> also provides support for {@link com.mucommander.desktop.AbstractTrash} registration.
- * Built-in implementations are:
- * <ul>
- *   <li>{@link com.mucommander.desktop.osx.OSXTrashProvider OS X} trash.</li>
- *   <li>{@link com.mucommander.desktop.linux.KDETrashProvider KDE} trash.</li>
- * </ul>
- * Note that <code>FileFactory</code> does not automatically register a trash provider, and application
- * writers must do so themselves depending on their own needs.
- * </p>
- *
  * @author Maxence Bernard, Nicolas Rinaudo
  */
 public class FileFactory {
@@ -104,9 +90,6 @@ public class FileFactory {
 
     /** Array of registered FileProtocolMapping instances, for quicker access */
     private static ArchiveFormatProvider[] archiveFormatProviders;
-
-    /** Object used to create instances of {@link AbstractTrash}. */
-    private static TrashProvider trashProvider;
 
     /** Static LRUCache instance that caches frequently accessed AbstractFile instances */
     private static LRUCache fileCache;
@@ -193,41 +176,6 @@ public class FileFactory {
      */
     public static int getFileCacheCapacity() {
         return fileCache.getCapacity();
-    }
-
-
-    /**
-     * Returns an instance of the {@link com.mucommander.desktop.AbstractTrash} implementation that can be used on the current platform,
-     * or <code>null</code if none is available.
-     *
-     * @return an instance of the AbstractTrash implementation that can be used on the current platform, or null if
-     * none is available. 
-     */
-    public static AbstractTrash getTrash() {
-        TrashProvider provider;
-
-        if((provider = getTrashProvider())==null)
-            return null;
-
-        return provider.getTrash();
-    }
-
-    /**
-     * Returns the object used to create instances of {@link com.mucommander.desktop.AbstractTrash}.
-     *
-     * @return the object used to create instances of {@link AbstractTrash} if any, <code>null</code> otherwise.
-     */
-    public static TrashProvider getTrashProvider() {
-        return trashProvider;
-    }
-
-    /**
-     * Sets the object that is used to create instances of {@link com.mucommander.desktop.AbstractTrash}.
-     *
-     * @param provider object that will be used to create instances of {@link com.mucommander.desktop.AbstractTrash}.
-     */
-    public static void setTrashProvider(TrashProvider provider) {
-        trashProvider = provider;
     }
 
     /**

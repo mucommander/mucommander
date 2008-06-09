@@ -19,7 +19,7 @@
 package com.mucommander.ui.main;
 
 import com.mucommander.desktop.AbstractTrash;
-import com.mucommander.file.FileFactory;
+import com.mucommander.desktop.DesktopManager;
 import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.action.EmptyTrashAction;
 import com.mucommander.ui.action.OpenTrashAction;
@@ -31,7 +31,7 @@ import javax.swing.*;
 
 /**
  * TrashPopupButton is a button that allows to interact with the current platform's trash, as returned by
- * {@link com.mucommander.file.FileFactory#getTrash()}.
+ * {@link com.mucommander.desktop.DesktopManager#getTrash()}.
  * When the button is clicked, a popup menu is displayed, allowing to perform a choice of actions such as opening
  * the trash or emptying it.
  * Note that this button will only be functional if a trash is avaiable on the current platform. 
@@ -61,7 +61,7 @@ public class TrashPopupButton extends PopupButton {
     public JPopupMenu getPopupMenu() {
         JPopupMenu popupMenu = new JPopupMenu();
 
-        AbstractTrash trash = FileFactory.getTrash();
+        AbstractTrash trash = DesktopManager.getTrash();
         if(trash!=null) {
             if(trash.canOpen())
                 popupMenu.add(ActionManager.getActionInstance(OpenTrashAction.class, mainFrame));

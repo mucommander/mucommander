@@ -19,7 +19,7 @@
 package com.mucommander.ui.action;
 
 import com.mucommander.desktop.AbstractTrash;
-import com.mucommander.file.FileFactory;
+import com.mucommander.desktop.DesktopManager;
 import com.mucommander.ui.main.MainFrame;
 
 import java.util.Hashtable;
@@ -36,11 +36,11 @@ public class OpenTrashAction extends MuAction {
     public OpenTrashAction(MainFrame mainFrame, Hashtable properties) {
         super(mainFrame, properties);
 
-        AbstractTrash trash = FileFactory.getTrash();
+        AbstractTrash trash = DesktopManager.getTrash();
         setEnabled(trash!=null && trash.canOpen());
     }
 
     public void performAction() {
-        FileFactory.getTrash().open();
+        DesktopManager.getTrash().open();
     }
 }
