@@ -62,9 +62,9 @@ public class FoldersTreePanel extends JPanel implements TreeSelectionListener,
     private FilesTreeModel model;
 
     /** A timer that fires a directory change */
-    private ChangeTimer changeTimer = null;
+    private ChangeTimer changeTimer = new ChangeTimer();
 
-    
+   
     /**
      * Creates a panel with directory tree attached to a specified folder panel.
      * @param folderPanel a folder panel to attach tree
@@ -259,9 +259,6 @@ public class FoldersTreePanel extends JPanel implements TreeSelectionListener,
         if (path != null) {
             AbstractFile f = (AbstractFile) path.getLastPathComponent();
             if (f != null && f.isBrowsable() && f != folderPanel.getCurrentFolder()) {
-                if (changeTimer == null) {
-                    changeTimer = new ChangeTimer();
-                }
                 changeTimer.folder = f;
                 changeTimer.restart();
             }
@@ -328,9 +325,11 @@ public class FoldersTreePanel extends JPanel implements TreeSelectionListener,
 
     public void treeStructureChanged(TreeModelEvent e) {
         // ensures that a selection is repainted correctly
-        // after nodes have been inserted
-        updateSelectedFolder();
-        tree.repaint();
+        // after nodes have been inserted                
+        if (!changeTimer.isRunning()) {        
+            updateSelectedFolder();
+            tree.repaint();
+        }
     }
 
 }
