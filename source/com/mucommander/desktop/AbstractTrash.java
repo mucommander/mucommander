@@ -26,13 +26,13 @@ import com.mucommander.file.AbstractFile;
  * to the trash, empty the trash, ...
  *
  * <p>Since AbstractTrash implementations are system-dependent, they should not be instanciated directly.
- * Use {@link com.mucommander.file.FileFactory#getTrash()} to retrieve an instance of a trash implementation that can
+ * Use {@link DesktopManager#getTrash()} to retrieve an instance of a trash implementation that can
  * be used on the current platform.<br>
  * Also, some AbstractTrash subclasses may not be able to provide working implementations for all trash operations;
  * probe methods are provided to find out if a particular operation is available.</p>
  *
  * @see TrashProvider
- * @see com.mucommander.file.FileFactory#getTrash()
+ * @see DesktopManager#getTrash()
  * @author Maxence Bernard
  */
 public abstract class AbstractTrash {

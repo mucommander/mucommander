@@ -56,8 +56,6 @@ public class CachedDirectory extends ProxyFile {
      * Creates a new instance.
      * 
      * @param directory a directory to cache
-     * @param filter a filter used to filter children
-     * @param sort a sort order
      */
     public CachedDirectory(AbstractFile directory, DirectoryCache cache) {
         super(directory);
@@ -153,7 +151,7 @@ public class CachedDirectory extends ProxyFile {
 
     /**
      * Gets cached children.
-     * @return
+     * @return cached children.
      */
     public synchronized AbstractFile[] get() {
         return cachedChildren;

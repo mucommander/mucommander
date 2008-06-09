@@ -75,15 +75,15 @@ public abstract class LocalFileOperation implements DesktopOperation {
      * Returns <code>true</code> if the operation is supported for the specified parameters.
      * <p>
      * By default, this method will call {@link #extractTarget(Object[])} on the specified parameters
-     * and pass the resulting <code>java.io.File</code> instance to {@link #canExecute(File)}.
+     * and pass the resulting {@link AbstractFile} instance to {@link #canExecute(AbstractFile)}.
      * </p>
      * <p>
      * This behaviour can be overriden by implementations, although most cases can be handled through
-     * {@link #canExecute(File)} instead.
+     * {@link #canExecute(AbstractFile)} instead.
      * </p>
      * @param  target operation parameters.
      * @return        <code>true</code> if the operation is supported for the specified parameters, <code>false</code> otherwise.
-     * @see           #canExecute(File)
+     * @see           #canExecute(AbstractFile)
      * @see           #extractTarget(Object[])
      */
     public boolean canExecute(Object[] target) {
@@ -95,15 +95,15 @@ public abstract class LocalFileOperation implements DesktopOperation {
     }
 
     /**
-     * Analyses the specified parameters and delegates the operation execution to {@link #execute(File)}.
+     * Analyses the specified parameters and delegates the operation execution to {@link #execute(AbstractFile)}.
      * <p>
-     * This method is a wrapper for {@link #extractTarget(Object[])} and {@link #execute(File)}. Most
+     * This method is a wrapper for {@link #extractTarget(Object[])} and {@link #execute(AbstractFile)}. Most
      * implementations should ignore it.
      * </p>
      * @param  target                        parameters of the operation.
      * @throws IOException                   if an error occurs.
      * @throws UnsupportedOperationException if the operation is not supported.
-     * @see                                  #execute(File)
+     * @see                                  #execute(AbstractFile)
      * @see                                  #extractTarget(Object[])
      */
     public void execute(Object[] target) throws IOException, UnsupportedOperationException {

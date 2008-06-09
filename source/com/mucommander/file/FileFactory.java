@@ -271,7 +271,7 @@ public class FileFactory {
      * </p>
      *
      * @param provider the <code>ArchiveFormatProvider</code> to unregister.
-     * @see {@link #getArchiveFormatProvider(String)}
+     * @see #getArchiveFormatProvider(String)
      */
     public static void unregisterArchiveFormat(ArchiveFormatProvider provider) {
         int index = archiveFormatProvidersV.indexOf(provider);

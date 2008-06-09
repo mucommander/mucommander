@@ -297,7 +297,8 @@ public class FilesTreeModel implements TreeModel, CachedDirectoryListener {
     /**
      * Returns an icon of this directory or spinning icon if this directory is
      * being cached.
-     * @return
+     * @return an icon of this directory or spinning icon if this directory is
+     *         being cached.
      */
     public Icon getCurrentIcon(AbstractFile file) {
         CachedDirectory cached = (CachedDirectory) cache.get(file);
