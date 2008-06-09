@@ -1327,6 +1327,10 @@ public abstract class AbstractFile implements PermissionTypes, PermissionAccesse
         return getCanonicalPath(false).equals(((AbstractFile)f).getCanonicalPath(false));
     }
 
+    public int hashCode() {
+        return getCanonicalPath(false).hashCode();
+    }
+    
 	
     /**
      * Returns a String representation of this file. The returned String is this file's path as returned by
