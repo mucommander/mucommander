@@ -258,7 +258,7 @@ public class FoldersTreePanel extends JPanel implements TreeSelectionListener,
         TreePath path = e.getNewLeadSelectionPath();
         if (path != null) {
             AbstractFile f = (AbstractFile) path.getLastPathComponent();
-            if (f != null && f.isBrowsable()) {
+            if (f != null && f.isBrowsable() && f != folderPanel.getCurrentFolder()) {
                 if (changeTimer == null) {
                     changeTimer = new ChangeTimer();
                 }

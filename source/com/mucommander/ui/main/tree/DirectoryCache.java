@@ -18,11 +18,14 @@
 
 package com.mucommander.ui.main.tree;
 
-import com.mucommander.file.filter.FileFilter;
-import com.mucommander.file.util.FileComparator;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.event.EventListenerList;
-import java.util.HashMap;
+
+import com.mucommander.file.AbstractFile;
+import com.mucommander.file.filter.FileFilter;
+import com.mucommander.file.util.FileComparator;
 
 /**
  * This class holds cached directories. 
@@ -30,7 +33,10 @@ import java.util.HashMap;
  * @author Mariusz Jakubowski
  *
  */
-public class DirectoryCache extends HashMap {
+public class DirectoryCache {
+    
+    /** a map that holds cached folders */
+    private Map cache;
     
     /** Comparator used to sort folders */
     private FileComparator sort;
@@ -48,6 +54,8 @@ public class DirectoryCache extends HashMap {
      * @param sort a comparator used to sort children
      */
     public DirectoryCache(FileFilter filter, FileComparator sort) {
+        //this.cache = Collections.synchronizedMap(new HashMap());
+        this.cache = new HashMap();
         this.filter = filter;
         this.sort = sort;
     }
@@ -91,6 +99,50 @@ public class DirectoryCache extends HashMap {
     public void removeCachedDirectoryListener(CachedDirectoryListener l) {
         listenerList.remove(CachedDirectoryListener.class, l);
     }
+
+    public synchronized void clear() {
+        cache.clear();
+    }
+
+    public synchronized CachedDirectory get(AbstractFile key) {
+        return (CachedDirectory) cache.get(key);
+    }
+
+    public synchronized void put(AbstractFile key, CachedDirectory value) {
+        cache.put(key, value);
+    }
     
+    /**
+     * Deletes entry and all children from the cache.
+     * @param folder
+     */
+    public synchronized void removeWithChildren(AbstractFile key) {
+        CachedDirectory cachedDir = (CachedDirectory) cache.get(key);
+        if (cachedDir != null) {
+            cache.remove(key);
+            AbstractFile[] children = cachedDir.get();
+            if (children != null) {
+                for (int i=0; i<children.length; i++) {
+                    removeWithChildren(children[i]);
+                }
+            }
+        }
+    }
+    
+    /**
+     * Gets a cached instance of a file. If the cached instance
+     * of the file doesn't exists it's added to the cache.
+     * @param key an AbstractFile instance
+     * @return a cached file instance
+     */
+    public synchronized CachedDirectory getOrAdd(AbstractFile key) {
+        CachedDirectory cachedDir = (CachedDirectory) cache.get(key);
+        if (cachedDir == null) {
+            cachedDir = new CachedDirectory(key, this);
+            cache.put(key, cachedDir);
+        }
+        return cachedDir;
+    }
+   
 
 }

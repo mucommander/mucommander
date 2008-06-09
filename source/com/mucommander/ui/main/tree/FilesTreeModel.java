@@ -96,11 +96,7 @@ public class FilesTreeModel implements TreeModel, CachedDirectoryListener {
      * @return children folders
      */
     private AbstractFile[] getChildren(AbstractFile parent) {
-        CachedDirectory cachedDir = (CachedDirectory) cache.get(parent);
-        if (cachedDir == null) {
-            cachedDir = new CachedDirectory(parent, cache);
-            cache.put(parent, cachedDir);
-        }
+        CachedDirectory cachedDir = cache.getOrAdd(parent);
         if (cachedDir.isCached())
             return cachedDir.get();
         else
@@ -156,13 +152,7 @@ public class FilesTreeModel implements TreeModel, CachedDirectoryListener {
                 // Lazily create the event:
                 if (e == null)
                     e = new TreeModelEvent(source, path);
-                try {
                     ((TreeModelListener) listeners[i + 1]).treeStructureChanged(e);
-                } catch (Exception e1) {
-                    e1.printStackTrace();
-                    System.out.println("path:" + path);
-                }
-                System.out.println("fired on " + listeners[i + 1].toString());
             }
         }
     }
@@ -228,16 +218,17 @@ public class FilesTreeModel implements TreeModel, CachedDirectoryListener {
         }
         else {
             depth++;
-            if(aNode == root)
+            if(aNode == root) {
                 retNodes = new AbstractFile[depth];
-            else
+            } else {
                 retNodes = getPathToRoot(aNode.getParentSilently(), depth);
+            }
             retNodes[retNodes.length - depth] = aNode;
+            cache.getOrAdd(aNode).isCached();       // ensures that a path is in cache
         }
         return retNodes;
     }
     
-
     public void addTreeModelListener(TreeModelListener l) {
         listenerList.add(TreeModelListener.class, l);
     }
@@ -248,36 +239,18 @@ public class FilesTreeModel implements TreeModel, CachedDirectoryListener {
 
     /**
      * Refreshes tree model from given path.
-     * @param path
+     * @param path a path to refresh
      */
     public void refresh(TreePath path) {
         AbstractFile folder = (AbstractFile) path.getLastPathComponent();
-        CachedDirectory cached = (CachedDirectory) cache.get(folder);
+        CachedDirectory cached = cache.get(folder);
         Icon cachedIcon = cached.getCachedIcon();        
-        removeFromCache(folder);
-        cached = new CachedDirectory(folder, cache);
+        cache.removeWithChildren(folder);
+        cached = cache.getOrAdd(folder);
         cached.setCachedIcon(cachedIcon);
-        cache.put(folder, cached);        
         fireTreeStructureChanged(this, path);
     }
 
-    /**
-     * Deletes entry from the cache.
-     * @param folder
-     */
-    private void removeFromCache(AbstractFile folder) {
-        CachedDirectory cachedDir = (CachedDirectory) cache.get(folder);
-        if (cachedDir != null) {
-            cache.remove(folder);
-            AbstractFile[] children = cachedDir.get();
-            if (children != null) {
-                for (int i=0; i<children.length; i++) {
-                    removeFromCache(children[i]);
-                }
-            }
-        }
-    }
-    
     public void cachingStarted(AbstractFile parent) {
         cachingNum++;
         if (cachingNum == 1) {

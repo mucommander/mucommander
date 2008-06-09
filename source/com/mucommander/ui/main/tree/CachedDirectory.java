@@ -37,6 +37,7 @@ import java.util.Iterator;
  * 
  */
 public class CachedDirectory extends ProxyFile {
+    
     /** an array of cached children */
     private AbstractFile[] cachedChildren = null;
     
@@ -49,6 +50,7 @@ public class CachedDirectory extends ProxyFile {
     /** a cache in which this object is stored */
     private DirectoryCache cache;
 
+    /** a cached icon */
     private Icon cachedIcon;
     
 
@@ -89,16 +91,19 @@ public class CachedDirectory extends ProxyFile {
 
     /**
      * Gets children of current directory. Files are filtered and then sorted. This
-     * method is executed by caching thread.
+     * method is executed in caching thread.
      */
     private void lsAsync() {
         try {
             final AbstractFile[] children = file.ls(cache.getFilter());
             Arrays.sort(children, cache.getSort());
-            for (int i = 0; i < children.length; i++) {
-                CachedDirectory cachedChild = new CachedDirectory(children[i], cache);
-                cache.put(children[i], cachedChild);
-                cachedChild.setCachedIcon(FileIcons.getFileIcon(children[i]));
+            if (getCachedIcon() == null)
+                setCachedIcon(FileIcons.getFileIcon(getProxiedFile()));
+            synchronized (cache) {
+                for (int i = 0; i < children.length; i++) {
+                    CachedDirectory cachedChild = cache.getOrAdd(children[i]);
+                    cachedChild.setCachedIcon(FileIcons.getFileIcon(children[i]));
+                }
             }
             try {
                 /*
@@ -157,10 +162,18 @@ public class CachedDirectory extends ProxyFile {
         return cachedChildren;
     }
     
+    /**
+     * Gets a cached icon for this folder. 
+     * @return a cached icon
+     */
     public Icon getCachedIcon() {
         return cachedIcon;
     }
     
+    /**
+     * Sets a cached icon for this folder.
+     * @param cachedIcon a cached icon
+     */
     public void setCachedIcon(Icon cachedIcon) {
         this.cachedIcon = cachedIcon;
     }
