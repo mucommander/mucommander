@@ -16,9 +16,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.mucommander.file.impl.trash;
+package com.mucommander.desktop.windows;
 
 import com.mucommander.desktop.DesktopManager;
+import com.mucommander.desktop.QueuedTrash;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.impl.local.LocalFile;
 import com.mucommander.file.impl.local.SpecialWindowsLocation;
@@ -32,7 +33,7 @@ import java.util.Vector;
  * WindowsTrash is an <code>AbstractTrash</code> implementation for the <i>Microsoft Windows' Recycle Bin</i>.
  *
  * <p>Native methods in the Shell32 Windows API are used to access the Recycle Bin. There is an overhead associated with
- * invoking those methods (via JNA), so for performance reasons, this trash is implemented as a {@link com.mucommander.file.impl.trash.QueuedTrash}
+ * invoking those methods (via JNA), so for performance reasons, this trash is implemented as a {@link com.mucommander.desktop.QueuedTrash}
  * in order to group calls to {@link #moveToTrash(com.mucommander.file.AbstractFile)}.</p> 
  *
  * @see WindowsTrashProvider

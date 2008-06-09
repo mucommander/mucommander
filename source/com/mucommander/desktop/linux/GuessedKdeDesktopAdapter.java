@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.mucommander.desktop.impl;
+package com.mucommander.desktop.linux;
 
 import com.mucommander.process.ProcessRunner;
 

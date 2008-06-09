@@ -16,9 +16,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.mucommander.file.impl.trash;
+package com.mucommander.desktop.linux;
 
 import com.mucommander.Debug;
+import com.mucommander.desktop.QueuedTrash;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.impl.local.LocalFile;
 import com.mucommander.process.ProcessRunner;
@@ -32,7 +33,7 @@ import java.util.Vector;
  * <p>
  * <b>Implementation notes:</b><br>
  * <br>
- * This trash is implemented as a {@link QueuedTrash} as it spawns a process to move a file to the trash and it
+ * This trash is implemented as a {@link com.mucommander.desktop.QueuedTrash} as it spawns a process to move a file to the trash and it
  * is thus more effective to group files to be moved instead of spawning multiple processes.<br>
  * The <code>ktrash</code> and <code>kfmclient</code> commands are used to interact with the Konqueror trash.
  * </p>

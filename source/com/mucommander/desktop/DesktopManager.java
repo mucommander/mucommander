@@ -19,17 +19,22 @@
 package com.mucommander.desktop;
 
 import com.mucommander.Debug;
+import com.mucommander.desktop.linux.ConfiguredGnomeDesktopAdapter;
+import com.mucommander.desktop.linux.ConfiguredKdeDesktopAdapter;
+import com.mucommander.desktop.linux.GuessedGnomeDesktopAdapter;
+import com.mucommander.desktop.linux.GuessedKdeDesktopAdapter;
+import com.mucommander.desktop.osx.OSXDesktopAdapter;
+import com.mucommander.desktop.windows.Win9xDesktopAdapter;
+import com.mucommander.desktop.windows.WinNtDesktopAdapter;
 import com.mucommander.file.AbstractFile;
-import com.mucommander.process.ProcessRunner;
 import com.mucommander.runtime.JavaVersion;
 
 import java.awt.event.MouseEvent;
-import java.util.Vector;
-import java.util.Hashtable;
-import java.util.Iterator;
-import java.io.IOException;
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
+import java.util.Hashtable;
+import java.util.Vector;
 
 /**
  * @author Nicolas Rinaudo
@@ -135,15 +140,15 @@ public class DesktopManager {
         // Unix desktops:
         // - check for Gnome before KDE, as it seems to be more popular.
         // - check for 'configured' before 'guessed', as guesses are less reliable and more expensive.
-        registerAdapter(new com.mucommander.desktop.impl.GuessedKdeDesktopAdapter());
-        registerAdapter(new com.mucommander.desktop.impl.GuessedGnomeDesktopAdapter());
-        registerAdapter(new com.mucommander.desktop.impl.ConfiguredKdeDesktopAdapter());
-        registerAdapter(new com.mucommander.desktop.impl.ConfiguredGnomeDesktopAdapter());
+        registerAdapter(new GuessedKdeDesktopAdapter());
+        registerAdapter(new GuessedGnomeDesktopAdapter());
+        registerAdapter(new ConfiguredKdeDesktopAdapter());
+        registerAdapter(new ConfiguredGnomeDesktopAdapter());
 
         // Known OS adapters.
-        registerAdapter(new com.mucommander.desktop.impl.OSXDesktopAdapter());
-        registerAdapter(new com.mucommander.desktop.impl.Win9xDesktopAdapter());
-        registerAdapter(new com.mucommander.desktop.impl.WinNtDesktopAdapter());
+        registerAdapter(new OSXDesktopAdapter());
+        registerAdapter(new Win9xDesktopAdapter());
+        registerAdapter(new WinNtDesktopAdapter());
 
 
 

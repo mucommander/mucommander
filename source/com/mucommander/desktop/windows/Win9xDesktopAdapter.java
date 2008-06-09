@@ -16,13 +16,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.mucommander.desktop.impl;
+package com.mucommander.desktop.windows;
 
+import com.mucommander.command.Command;
+import com.mucommander.command.CommandException;
+import com.mucommander.command.CommandManager;
 import com.mucommander.desktop.DesktopInitialisationException;
 import com.mucommander.runtime.OsVersion;
-import com.mucommander.command.CommandManager;
-import com.mucommander.command.CommandException;
-import com.mucommander.command.Command;
 
 /**
  * @author Nicolas Rinaudo

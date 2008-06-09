@@ -19,7 +19,11 @@
 
 package com.mucommander.job;
 
-import com.mucommander.file.*;
+import com.mucommander.desktop.AbstractTrash;
+import com.mucommander.file.AbstractArchiveFile;
+import com.mucommander.file.AbstractFile;
+import com.mucommander.file.AbstractRWArchiveFile;
+import com.mucommander.file.FileFactory;
 import com.mucommander.file.util.FileSet;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.QuestionDialog;

@@ -16,20 +16,25 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.mucommander.file.impl.trash;
+package com.mucommander.desktop.linux;
 
-import com.mucommander.file.AbstractTrash;
-import com.mucommander.file.TrashProvider;
+import com.mucommander.runtime.JavaVersion;
 
 /**
- * This class is a trash provider for the {@link OSXTrash Mac OS X trash}.
- *
- * @see OSXTrash
- * @author Maxence Bernard
+ * @author Nicolas Rinaudo
  */
-public class OSXTrashProvider implements TrashProvider {
+public class ConfiguredKdeDesktopAdapter extends KdeDesktopAdapter {
+    private static final String ENV_VAR = "KDE_FULL_SESSION";
 
-    public AbstractTrash getTrash() {
-        return new OSXTrash();
+    public String toString() {return "KDE Desktop";}
+
+    public boolean isAvailable() {
+        String var;
+        if(JavaVersion.JAVA_1_4.isCurrentOrLower())
+            var = System.getProperty(ENV_VAR);
+        else
+            var = System.getenv(ENV_VAR);
+
+        return var != null && !var.trim().equals("");
     }
 }

@@ -18,7 +18,7 @@
 
 package com.mucommander.ui.main;
 
-import com.mucommander.file.AbstractTrash;
+import com.mucommander.desktop.AbstractTrash;
 import com.mucommander.file.FileFactory;
 import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.action.EmptyTrashAction;

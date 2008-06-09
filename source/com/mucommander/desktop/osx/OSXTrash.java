@@ -16,9 +16,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.mucommander.file.impl.trash;
+package com.mucommander.desktop.osx;
 
 import com.mucommander.Debug;
+import com.mucommander.desktop.QueuedTrash;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
 import com.mucommander.file.impl.local.LocalFile;
@@ -35,7 +36,7 @@ import java.util.Vector;
  * <p>
  *   <b>Implementation notes:</b><br/>
  *   <br/>
- *   This trash is implemented as a {@link QueuedTrash} for several reasons:
+ *   This trash is implemented as a {@link com.mucommander.desktop.QueuedTrash} for several reasons:
  *   <ul>
  *    <li>the Finder plays a sound when it has been told to move a file to the trash and is done with it.
  *        Moving files to the trash repeatedly would play the sound as many times as the Finder has been told to move a

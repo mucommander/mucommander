@@ -16,20 +16,20 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.mucommander.file.impl.trash;
+package com.mucommander.desktop.osx;
 
-import com.mucommander.file.AbstractTrash;
-import com.mucommander.file.TrashProvider;
+import com.mucommander.desktop.AbstractTrash;
+import com.mucommander.desktop.TrashProvider;
 
 /**
- * This class is a trash provider for the {@link WindowsTrash Windows trash}.
+ * This class is a trash provider for the {@link OSXTrash Mac OS X trash}.
  *
- * @see WindowsTrash
+ * @see OSXTrash
  * @author Maxence Bernard
  */
-public class WindowsTrashProvider implements TrashProvider {
+public class OSXTrashProvider implements TrashProvider {
 
     public AbstractTrash getTrash() {
-        return new WindowsTrash();
+        return new OSXTrash();
     }
 }

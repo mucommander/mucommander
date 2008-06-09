@@ -16,20 +16,25 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.mucommander.file.impl.trash;
+package com.mucommander.desktop.linux;
 
-import com.mucommander.file.AbstractTrash;
-import com.mucommander.file.TrashProvider;
+import com.mucommander.runtime.JavaVersion;
 
 /**
- * This class is a trash provider for the {@link KDETrash KDE trash}.
- *
- * @see KDETrash
- * @author Maxence Bernard
+ * @author Nicolas Rinaudo
  */
-public class KDETrashProvider implements TrashProvider {
+public class ConfiguredGnomeDesktopAdapter extends GnomeDesktopAdapter {
+    private static final String ENV_VAR = "GNOME_DESKTOP_SESSION_ID";
 
-    public AbstractTrash getTrash() {
-        return new KDETrash();
+    public String toString() {return "Gnome Desktop";}
+
+    public boolean isAvailable() {
+        String var;
+        if(JavaVersion.JAVA_1_4.isCurrentOrLower())
+            var = System.getProperty(ENV_VAR);
+        else
+            var = System.getenv(ENV_VAR);
+
+        return var != null && !var.trim().equals("");
     }
 }

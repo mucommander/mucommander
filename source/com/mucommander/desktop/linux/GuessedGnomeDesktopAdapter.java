@@ -16,25 +16,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.mucommander.file;
+package com.mucommander.desktop.linux;
+
+import com.mucommander.process.ProcessRunner;
 
 /**
- * TrashProvider provides a way to instantiate {@link com.mucommander.file.AbstractTrash} implementations.
- *
- * <p>Trash providers can be registered with {@link FileFactory#setTrashProvider(TrashProvider)} for them to become
- * the default trash one.</p>
- *
- * @see com.mucommander.file.AbstractTrash
- * @see com.mucommander.file.FileFactory#setTrashProvider(TrashProvider)
  * @author Nicolas Rinaudo
  */
-public interface TrashProvider {
+public class GuessedGnomeDesktopAdapter extends GnomeDesktopAdapter {
+    public String toString() {return "Gnome Desktop (guess)";}
 
-    /**
-     * Returns a trash instance.
-     * 
-     * @return a trash instance
-     */
-    public AbstractTrash getTrash();
-
+    public boolean isAvailable() {
+        try {
+            ProcessRunner.execute("gnome-open");
+            return true;
+        }
+        catch(Exception e) {return false;}
+    }
 }

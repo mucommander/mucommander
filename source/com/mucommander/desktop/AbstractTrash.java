@@ -16,7 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.mucommander.file;
+package com.mucommander.desktop;
+
+import com.mucommander.file.AbstractFile;
 
 /**
  * AbstractTrash is an abstract representation of a file trash, i.e. a temporary place where deleted files are stored
@@ -29,7 +31,7 @@ package com.mucommander.file;
  * Also, some AbstractTrash subclasses may not be able to provide working implementations for all trash operations;
  * probe methods are provided to find out if a particular operation is available.</p>
  *
- * @see com.mucommander.file.TrashProvider
+ * @see TrashProvider
  * @see com.mucommander.file.FileFactory#getTrash()
  * @author Maxence Bernard
  */
@@ -37,7 +39,7 @@ public abstract class AbstractTrash {
 
     /**
      * Returns <code>true</code> if the specified file is eligible for being moved to the trash. This doesn't mean that
-     * a call to {@link #moveToTrash(AbstractFile)} will necessarily succeed, but it should at least ensure that basic
+     * a call to {@link #moveToTrash(com.mucommander.file.AbstractFile)} will necessarily succeed, but it should at least ensure that basic
      * prerequisites are met. 
      *
      * @param file the file to test

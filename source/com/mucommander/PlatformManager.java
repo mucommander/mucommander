@@ -18,17 +18,12 @@
 
 package com.mucommander;
 
-import com.mucommander.command.Command;
-import com.mucommander.command.CommandManager;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
-import com.mucommander.file.FileProtocols;
-import com.mucommander.file.impl.trash.WindowsTrashProvider;
-import com.mucommander.process.AbstractProcess;
-import com.mucommander.process.ProcessRunner;
-import com.mucommander.runtime.*;
+import com.mucommander.runtime.JavaVersions;
+import com.mucommander.runtime.OsFamilies;
+import com.mucommander.runtime.OsVersions;
 
-import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 

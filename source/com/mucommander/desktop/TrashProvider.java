@@ -16,25 +16,25 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.mucommander.desktop.impl;
-
-import com.mucommander.runtime.JavaVersion;
+package com.mucommander.desktop;
 
 /**
+ * TrashProvider provides a way to instantiate {@link com.mucommander.desktop.AbstractTrash} implementations.
+ *
+ * <p>Trash providers can be registered with {@link com.mucommander.file.FileFactory#setTrashProvider(TrashProvider)}
+ * for them to become the default trash one.</p>
+ *
+ * @see com.mucommander.desktop.AbstractTrash
+ * @see com.mucommander.file.FileFactory#setTrashProvider(TrashProvider)
  * @author Nicolas Rinaudo
  */
-public class ConfiguredKdeDesktopAdapter extends KdeDesktopAdapter {
-    private static final String ENV_VAR = "KDE_FULL_SESSION";
+public interface TrashProvider {
 
-    public String toString() {return "KDE Desktop";}
+    /**
+     * Returns a trash instance.
+     * 
+     * @return a trash instance
+     */
+    public AbstractTrash getTrash();
 
-    public boolean isAvailable() {
-        String var;
-        if(JavaVersion.JAVA_1_4.isCurrentOrLower())
-            var = System.getProperty(ENV_VAR);
-        else
-            var = System.getenv(ENV_VAR);
-
-        return var != null && !var.trim().equals("");
-    }
 }

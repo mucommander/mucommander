@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.mucommander.desktop.impl;
+package com.mucommander.desktop.windows;
 
 import com.mucommander.desktop.DefaultDesktopAdapter;
 import com.mucommander.desktop.DesktopInitialisationException;
@@ -35,7 +35,7 @@ class WindowsDesktopAdapter extends DefaultDesktopAdapter {
         // the Windows trash requires access to the Shell32 DLL, register the provider only if the Shell32 DLL
         // is available on the current runtime environment.
         if(Shell32.isAvailable())
-            com.mucommander.file.FileFactory.setTrashProvider(new com.mucommander.file.impl.trash.WindowsTrashProvider());
+            com.mucommander.file.FileFactory.setTrashProvider(new WindowsTrashProvider());
     }
 
     public boolean isAvailable() {return OsFamily.getCurrent().equals(OsFamily.WINDOWS);}

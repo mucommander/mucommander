@@ -16,10 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.mucommander.file.impl.trash;
+package com.mucommander.desktop;
 
 import com.mucommander.file.AbstractFile;
-import com.mucommander.file.AbstractTrash;
 
 import java.util.Vector;
 
@@ -119,9 +118,9 @@ public abstract class QueuedTrash extends AbstractTrash {
     /**
      * Performs the actual job of moving files to the trash.
      *
-     * <p>The thread starts by waiting {@link OSXTrash#QUEUE_PERIOD} milliseconds before moving them to give additional
+     * <p>The thread starts by waiting {@link com.mucommander.desktop.osx.OSXTrash#QUEUE_PERIOD} milliseconds before moving them to give additional
      * files a chance to be queued and regrouped as a single call to {@link QueuedTrash#moveToTrash(java.util.Vector)}.
-     * If more files were queued during that period, the thread will wait an additional {@link OSXTrash# QUEUE_PERIOD},
+     * If more files were queued during that period, the thread will wait an additional {@link com.mucommander.desktop.osx.OSXTrash# QUEUE_PERIOD},
      * and so on.<p>
      */
     private class MoveToTrashThread extends Thread {

@@ -22,6 +22,8 @@ import com.mucommander.Debug;
 import com.mucommander.auth.AuthException;
 import com.mucommander.auth.CredentialsManager;
 import com.mucommander.cache.LRUCache;
+import com.mucommander.desktop.AbstractTrash;
+import com.mucommander.desktop.TrashProvider;
 import com.mucommander.file.icon.FileIconProvider;
 import com.mucommander.file.icon.impl.SwingFileIconProvider;
 import com.mucommander.file.impl.local.LocalFile;
@@ -77,11 +79,11 @@ import java.util.*;
  * </p>
  * <h3>Trash</h3>
  * <p>
- * <code>FileFactory</code> also provides support for {@link AbstractTrash} registration.
+ * <code>FileFactory</code> also provides support for {@link com.mucommander.desktop.AbstractTrash} registration.
  * Built-in implementations are:
  * <ul>
- *   <li>{@link com.mucommander.file.impl.trash.OSXTrashProvider OS X} trash.</li>
- *   <li>{@link com.mucommander.file.impl.trash.KDETrashProvider KDE} trash.</li>
+ *   <li>{@link com.mucommander.desktop.osx.OSXTrashProvider OS X} trash.</li>
+ *   <li>{@link com.mucommander.desktop.linux.KDETrashProvider KDE} trash.</li>
  * </ul>
  * Note that <code>FileFactory</code> does not automatically register a trash provider, and application
  * writers must do so themselves depending on their own needs.
@@ -195,7 +197,7 @@ public class FileFactory {
 
 
     /**
-     * Returns an instance of the {@link AbstractTrash} implementation that can be used on the current platform,
+     * Returns an instance of the {@link com.mucommander.desktop.AbstractTrash} implementation that can be used on the current platform,
      * or <code>null</code if none is available.
      *
      * @return an instance of the AbstractTrash implementation that can be used on the current platform, or null if
@@ -211,7 +213,7 @@ public class FileFactory {
     }
 
     /**
-     * Returns the object used to create instances of {@link AbstractTrash}.
+     * Returns the object used to create instances of {@link com.mucommander.desktop.AbstractTrash}.
      *
      * @return the object used to create instances of {@link AbstractTrash} if any, <code>null</code> otherwise.
      */
@@ -220,9 +222,9 @@ public class FileFactory {
     }
 
     /**
-     * Sets the object that is used to create instances of {@link AbstractTrash}.
+     * Sets the object that is used to create instances of {@link com.mucommander.desktop.AbstractTrash}.
      *
-     * @param provider object that will be used to create instances of {@link AbstractTrash}.
+     * @param provider object that will be used to create instances of {@link com.mucommander.desktop.AbstractTrash}.
      */
     public static void setTrashProvider(TrashProvider provider) {
         trashProvider = provider;

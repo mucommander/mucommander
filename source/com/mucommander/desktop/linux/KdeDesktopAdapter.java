@@ -16,48 +16,33 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.mucommander.desktop.impl;
+package com.mucommander.desktop.linux;
 
 import com.mucommander.command.Command;
 import com.mucommander.command.CommandException;
 import com.mucommander.command.CommandManager;
-import com.mucommander.command.PermissionsFileFilter;
 import com.mucommander.desktop.DefaultDesktopAdapter;
 import com.mucommander.desktop.DesktopInitialisationException;
-import com.mucommander.file.PermissionTypes;
-import com.mucommander.file.filter.FileFilter;
-import com.mucommander.file.filter.RegexpFilenameFilter;
-import com.mucommander.runtime.JavaVersion;
 
 /**
  * @author Nicolas Rinaudo
  */
-abstract class GnomeDesktopAdapter extends DefaultDesktopAdapter {
-    private static final String FILE_MANAGER_NAME = "Nautilus";
-    private static final String FILE_OPENER       = "gnome-open $f";
-    private static final String EXE_OPENER        = "$f";
+abstract class KdeDesktopAdapter extends DefaultDesktopAdapter {
+    private static final String FILE_MANAGER_NAME = "Konqueror";
+    private static final String FILE_OPENER       = "kfmclient exec $f";
+    private static final String URL_OPENER        = "kfmclient openURL $f";
 
     public abstract boolean isAvailable();
 
     public void init(boolean install) throws DesktopInitialisationException {
+        // Initialises trash management.
+        com.mucommander.file.FileFactory.setTrashProvider(new KDETrashProvider());
+
+        // Registers KDE specific commands.
         try {
             CommandManager.registerDefaultCommand(new Command(CommandManager.FILE_OPENER_ALIAS,  FILE_OPENER, Command.SYSTEM_COMMAND, null));
-            CommandManager.registerDefaultCommand(new Command(CommandManager.URL_OPENER_ALIAS,   FILE_OPENER, Command.SYSTEM_COMMAND, null));
-            CommandManager.registerDefaultCommand(new Command(CommandManager.EXE_OPENER_ALIAS,   EXE_OPENER,  Command.SYSTEM_COMMAND, null));
+            CommandManager.registerDefaultCommand(new Command(CommandManager.URL_OPENER_ALIAS,   URL_OPENER,  Command.SYSTEM_COMMAND, null));
             CommandManager.registerDefaultCommand(new Command(CommandManager.FILE_MANAGER_ALIAS, FILE_OPENER, Command.SYSTEM_COMMAND, FILE_MANAGER_NAME));
-
-            FileFilter filter;
-            // Disabled actual permissions checking as this will break normal +x files.
-            // With this, a +x PDF file will not be opened.
-            /*
-            // Identifies which kind of filter should be used to match executable files.
-            if(JavaVersion.JAVA_1_6.isCurrentOrHigher())
-                filter = new PermissionsFileFilter(PermissionTypes.EXECUTE_PERMISSION, true);
-            else
-            */
-                filter = new RegexpFilenameFilter("[^.]+", true);
-
-            CommandManager.registerDefaultAssociation(CommandManager.EXE_OPENER_ALIAS, filter);
         }
         catch(CommandException e) {throw new DesktopInitialisationException(e);}
     }
