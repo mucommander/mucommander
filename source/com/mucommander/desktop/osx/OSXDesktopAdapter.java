@@ -22,6 +22,7 @@ import com.mucommander.command.Command;
 import com.mucommander.command.CommandException;
 import com.mucommander.command.CommandManager;
 import com.mucommander.desktop.DefaultDesktopAdapter;
+import com.mucommander.desktop.DesktopManager;
 import com.mucommander.desktop.DesktopInitialisationException;
 import com.mucommander.runtime.OsFamily;
 
@@ -41,7 +42,7 @@ public class OSXDesktopAdapter extends DefaultDesktopAdapter {
 
     public void init(boolean install) throws DesktopInitialisationException {
         // Initialises trash management.
-        com.mucommander.file.FileFactory.setTrashProvider(new OSXTrashProvider());
+        DesktopManager.setTrashProvider(new OSXTrashProvider());
 
         // Registers OS X specific commands.
         try {

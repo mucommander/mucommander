@@ -22,6 +22,7 @@ import com.mucommander.command.Command;
 import com.mucommander.command.CommandException;
 import com.mucommander.command.CommandManager;
 import com.mucommander.desktop.DefaultDesktopAdapter;
+import com.mucommander.desktop.DesktopManager;
 import com.mucommander.desktop.DesktopInitialisationException;
 
 /**
@@ -36,7 +37,7 @@ abstract class KdeDesktopAdapter extends DefaultDesktopAdapter {
 
     public void init(boolean install) throws DesktopInitialisationException {
         // Initialises trash management.
-        com.mucommander.file.FileFactory.setTrashProvider(new KDETrashProvider());
+        DesktopManager.setTrashProvider(new KDETrashProvider());
 
         // Registers KDE specific commands.
         try {

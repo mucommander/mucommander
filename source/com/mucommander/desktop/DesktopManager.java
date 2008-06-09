@@ -113,6 +113,8 @@ public class DesktopManager {
     private static Vector         desktops;
     /** Current desktop. */
     private static DesktopAdapter desktop;
+    /** Object used to create instances of {@link AbstractTrash}. */
+    private static TrashProvider  trashProvider;
 
 
 
@@ -424,6 +426,38 @@ public class DesktopManager {
     public static String getFileManagerName(AbstractFile file) throws UnsupportedOperationException {
         return getFileManagerName(getSupportedOperation(OPEN_IN_FILE_MANAGER, new Object[] {file}));
     }
+
+
+
+    // - Trash management ------------------------------------------------
+    // -------------------------------------------------------------------
+    /**
+     * Returns an instance of the {@link com.mucommander.desktop.AbstractTrash} implementation that can be used on the current platform.
+     * @return an instance of the AbstractTrash implementation that can be used on the current platform, or <code>null</code> if none is available.
+     */
+    public static AbstractTrash getTrash() {
+        TrashProvider provider;
+
+        if((provider = getTrashProvider()) == null)
+            return null;
+
+        return provider.getTrash();
+    }
+
+    /**
+     * Returns the object used to create instances of {@link com.mucommander.desktop.AbstractTrash}.
+     * @return the object used to create instances of {@link AbstractTrash} if any, <code>null</code> otherwise.
+     */
+    public static TrashProvider getTrashProvider() {
+        return trashProvider;
+    }
+
+    /**
+     * Sets the object that is used to create instances of {@link com.mucommander.desktop.AbstractTrash}.
+     * @param provider object that will be used to create instances of {@link com.mucommander.desktop.AbstractTrash}.
+     */
+    public static void setTrashProvider(TrashProvider provider) {trashProvider = provider;}
+
 
 
 
