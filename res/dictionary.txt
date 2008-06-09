@@ -291,6 +291,7 @@ apply:SV:Utför
 # Used as a button label in the 'Change permissions' and 'Change date' dialogs
 change:EN:Change
 change:FR:Changer
+change:PL:Zmień
 # Translation missing (New!)
 
 
@@ -7479,7 +7480,7 @@ change_date_dialog.specific_date:zh_CN:指定日期
 change_date_dialog.specific_date:RU:Указанная дата
 change_date_dialog.specific_date:SL:Določi datum
 change_date_dialog.specific_date:ES:Fecha específica
-change_date_dialog.specific_date:PL:Okrelona data
+change_date_dialog.specific_date:PL:Określona data
 change_date_dialog.specific_date:KO:지정날짜
 change_date_dialog.specific_date:pt_BR:Data específica
 change_date_dialog.specific_date:NL:Bepaalde datum
@@ -7840,6 +7841,7 @@ server_connect_dialog.nfs_version:SV:NFS-version
 # Used in the SFTP panel for (optional) public key authentication.
 server_connect_dialog.private_key:EN:Private key
 server_connect_dialog.private_key:FR:Clé privée
+server_connect_dialog.private_key:PL:Klucz prywatny
 # Translation missing (New!)
 
 
@@ -12369,6 +12371,72 @@ color_chooser.title:pt_BR:Escolha uma cor
 color_chooser.title:SK:Vyberte farbu
 color_chooser.title:JA:色の抽出
 color_chooser.title:SV:Välj en färg
+
+
+
+multi_rename_dialog.title:EN:Multi Rename
+multi_rename_dialog.title:PL:Zmiana nazw plików
+
+multi_rename_dialog.mask:EN:Mask
+multi_rename_dialog.mask:PL:Matryca
+
+multi_rename_dialog.file_name_mask:EN:File name mask
+multi_rename_dialog.file_name_mask:PL:Nazwa pliku
+
+multi_rename_dialog.extension_mask:EN:Extension mask
+multi_rename_dialog.extension_mask:PL:Rozszerzenie
+
+multi_rename_dialog.search_replace:EN:Search & replace
+multi_rename_dialog.search_replace:PL:Znajdź i zamień
+
+multi_rename_dialog.search_for:EN:Search for
+multi_rename_dialog.search_for:PL:Szukaj
+
+multi_rename_dialog.replace_with:EN:Replace with
+multi_rename_dialog.replace_with:PL:Zamień na
+
+multi_rename_dialog.counter:EN:Counter
+multi_rename_dialog.counter:PL:Licznik
+
+multi_rename_dialog.start_at:EN:Start at
+multi_rename_dialog.start_at:PL:Start
+
+multi_rename_dialog.step_by:EN:Step by
+multi_rename_dialog.step_by:PL:Krok
+
+multi_rename_dialog.digits:EN:Digits
+multi_rename_dialog.digits:PL:Liczba cyfr
+
+multi_rename_dialog.upper_lower_case:EN:Upper/LowerCase
+multi_rename_dialog.upper_lower_case:PL:Wielkość znaków
+
+multi_rename_dialog.no_change:EN:unchanged
+multi_rename_dialog.no_change:PL:bez zmian
+
+multi_rename_dialog.lower_case:EN:lowercase
+multi_rename_dialog.lower_case:PL:małe litery
+
+multi_rename_dialog.upper_case:EN:UPPERCASE
+multi_rename_dialog.upper_case:PL:DUŻE LITERY
+
+multi_rename_dialog.first_upper:EN:First letter uppercase
+multi_rename_dialog.first_upper:EN:Pierwsza litera duża
+
+multi_rename_dialog.word:EN:First Of Each Word
+multi_rename_dialog.word:PL:Pierwsza Każdego Słowa
+
+multi_rename_dialog.old_name:EN:Old name
+multi_rename_dialog.old_name:PL:Stara nazwa
+
+multi_rename_dialog.new_name:EN:New name
+multi_rename_dialog.new_name:PL:Nowa nazwa
+
+multi_rename_dialog.start:EN:Start
+multi_rename_dialog.start:PL:Start
+
+multi_rename_dialog.remove:EN:Remove
+multi_rename_dialog.remove:PL:Usuń
+
 
 
 ######################

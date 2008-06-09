@@ -362,5 +362,9 @@
   <!-- Action  : Show/Hide directory tree.                                       -->
   <!-- Default : control J                                                       -->
   <action class="com.mucommander.ui.action.ToggleTreeAction"             keystroke="control J"/>
+  
+  <!-- Action  : Invoke multi-rename dialog.                                     -->
+  <!-- Default : alt F6                                                          -->
+  <action class="com.mucommander.ui.action.MultiRenameAction"            keystroke="alt F6"/>
 
 </keymap>
