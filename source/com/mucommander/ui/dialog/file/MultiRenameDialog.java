@@ -28,6 +28,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
+import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -36,6 +38,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.KeyStroke;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.TableModelEvent;
@@ -90,6 +93,7 @@ public class MultiRenameDialog extends FocusDialog implements ActionListener,
     
     /** a list of parsed tokens */
     private List tokens = new ArrayList();
+    private AbstractAction actRemove;
 
     
     public MultiRenameDialog(MainFrame mainFrame, FileSet files) {
@@ -115,8 +119,7 @@ public class MultiRenameDialog extends FocusDialog implements ActionListener,
      */
     private JPanel getPnlButtons() {
         JPanel pnlButtons = new JPanel(new BorderLayout());
-        btnRemove = new JButton(Translator.get("multi_rename_dialog.remove"));
-        btnRemove.addActionListener(this);
+        btnRemove = new JButton(getActRemove());
         pnlButtons.add(btnRemove, BorderLayout.WEST);
         XBoxPanel pnlButtonsRight = new XBoxPanel();
         btnRename = new JButton(Translator.get("multi_rename_dialog.start"));
@@ -133,12 +136,29 @@ public class MultiRenameDialog extends FocusDialog implements ActionListener,
      * Creates a table with file names.
      */
     private JTable getTblNames() {
-        tableModel = new RenameTableModel();
-        tblNames = new JTable(tableModel);
-        // tblNames.getColumnModel().getColumn(1).setCellEditor(new
-        // DefaultCellEditor(new JTextField()));
-        // tblNames.set
+        if (tblNames == null) {
+            tableModel = new RenameTableModel();
+            tblNames = new JTable(tableModel);
+            tblNames.getActionMap().put("del", getActRemove());
+            tblNames.getInputMap().put((KeyStroke) getActRemove().getValue(Action.ACCELERATOR_KEY), "del");    
+            // tblNames.getColumnModel().getColumn(1).setCellEditor(new
+            // DefaultCellEditor(new JTextField()));
+            // tblNames.set
+        }
         return tblNames;
+    }
+    
+    public Action getActRemove() {
+        if (actRemove == null) {
+            actRemove = new AbstractAction() {
+                public void actionPerformed(ActionEvent e) {
+                    removeSelectedFiles();
+                }
+            };
+            actRemove.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke("DELETE"));
+            actRemove.putValue(Action.NAME, Translator.get("multi_rename_dialog.remove"));
+        }
+        return actRemove;
     }
 
     /**
@@ -150,10 +170,11 @@ public class MultiRenameDialog extends FocusDialog implements ActionListener,
         edtFileNameMask.setColumns(20);
         edtFileNameMask.getDocument().addDocumentListener(this);
         String tooltip = "<html><ul><li>[N] - whole name<li>[N2,3] - 3 characters starting from the 2nd character of a name" +
-        "<li>[N2-5] - characters 2 to 5<li>[N2-] - all characters starting from the 2nd character"+
-        "<li>[N-3,2] - two characters starting at 3rd character from the end of a name"+
-        "[N2--2] - characters from the 2nd to the 2nd-last character"+
-        "<li>[C10,2,3] - inserts counter starting at 10, step by 2, use 3 digits to display"+
+        "<li>[N2-5] - characters 2 to 5<li>[N2-] - all characters starting from the 2nd character" +
+        "<li>[N-3,2] - two characters starting at 3rd character from the end of a name" +
+        "<li>[N2--2] - characters from the 2nd to the 2nd-last character" +
+        "<li>[C] - inserts counter" +
+        "<li>[C10,2,3] - inserts counter starting at 10, step by 2, use 3 digits to display" +
         "<li>[YMD] - inserts file last modified year, month and day";       // TODO add to dictionary
         edtFileNameMask.setToolTipText(tooltip);
 
@@ -241,9 +262,9 @@ public class MultiRenameDialog extends FocusDialog implements ActionListener,
     private void removeSelectedFiles() {
         int[] sel = tblNames.getSelectedRows();
         for (int i = sel.length - 1; i >= 0; i--) {
-            files.remove(i);
-            newNames.remove(i);
-            tableModel.fireTableRowsDeleted(i, i);
+            files.remove(sel[i]);
+            newNames.remove(sel[i]);
+            tableModel.fireTableRowsDeleted(sel[i], sel[i]);
         }
         if (files.size() == 0)
             dispose();
@@ -521,9 +542,7 @@ public class MultiRenameDialog extends FocusDialog implements ActionListener,
             generateNewNames();
         } else if (source == cbCounterDigits) {
             generateNewNames();
-        } else if (source == btnRemove) {
-            removeSelectedFiles();
-        }
+        } 
     }
 
     // these methods are invoked when one of edit boxes changes
