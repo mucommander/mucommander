@@ -190,8 +190,9 @@ public class MultiRenameDialog extends FocusDialog implements ActionListener,
         edtCounterStep.setColumns(2);
 
         Vector digits = new Vector();
-        for (int i = 1; i <= 10; i++) {
-            digits.add(new Integer(i));
+        String zeros = "0000";
+        for (int i = 1; i <= 5; i++) {
+            digits.add(zeros.substring(0, i - 1) + Integer.toString(i));
         }
         cbCounterDigits = new JComboBox(digits);
         cbCounterDigits.addActionListener(this);
@@ -325,6 +326,12 @@ public class MultiRenameDialog extends FocusDialog implements ActionListener,
                     case 'm':
                     case 's':
                         t = new DateToken(strToken);
+                        break;
+                    case '[':
+                        t = new CopyChar("[");
+                        break;
+                    default:
+                        t = new CopyChar("[" + strToken + "]");
                         break;
                     }
                     if (t != null) {

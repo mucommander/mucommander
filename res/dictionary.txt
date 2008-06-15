@@ -12407,7 +12407,7 @@ multi_rename_dialog.step_by:PL:Krok
 multi_rename_dialog.digits:EN:Digits
 multi_rename_dialog.digits:PL:Liczba cyfr
 
-multi_rename_dialog.upper_lower_case:EN:Upper/LowerCase
+multi_rename_dialog.upper_lower_case:EN:Upper/Lower case
 multi_rename_dialog.upper_lower_case:PL:Wielkość znaków
 
 multi_rename_dialog.no_change:EN:unchanged
@@ -12420,7 +12420,7 @@ multi_rename_dialog.upper_case:EN:UPPERCASE
 multi_rename_dialog.upper_case:PL:DUŻE LITERY
 
 multi_rename_dialog.first_upper:EN:First letter uppercase
-multi_rename_dialog.first_upper:EN:Pierwsza litera duża
+multi_rename_dialog.first_upper:PL:Pierwsza litera duża
 
 multi_rename_dialog.word:EN:First Of Each Word
 multi_rename_dialog.word:PL:Pierwsza Każdego Słowa
