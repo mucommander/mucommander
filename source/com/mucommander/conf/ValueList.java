@@ -43,7 +43,7 @@ public class ValueList extends Vector {
      * @param data      data contained by the list.
      * @param separator string used to separate <code>data</code> in tokens.
      */
-    ValueList(String data, String separator) {
+    public ValueList(String data, String separator) {
         StringTokenizer tokenizer;
 
         tokenizer = new StringTokenizer(data, separator);
