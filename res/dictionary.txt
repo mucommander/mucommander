@@ -12437,6 +12437,9 @@ multi_rename_dialog.start:PL:Start
 multi_rename_dialog.remove:EN:Remove
 multi_rename_dialog.remove:PL:Usuń
 
+multi_rename_dialog.block_name:EN:Block
+multi_rename_dialog.block_name:PL:Zablokuj
+
 
 
 ######################

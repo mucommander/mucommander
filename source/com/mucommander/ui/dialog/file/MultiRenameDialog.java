@@ -21,16 +21,21 @@ package com.mucommander.ui.dialog.file;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.Vector;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.BorderFactory;
+import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -66,6 +71,10 @@ public class MultiRenameDialog extends FocusDialog implements ActionListener,
     private static final int CASE_UPPER = 2;
     private static final int CASE_FIRST_UPPER = 3;
     private static final int CASE_WORD_UPPER = 4;
+    
+    private static final int COL_ORIG_NAME = 0;
+    private static final int COL_CHANGED_NAME = 1;
+    private static final int COL_CHANGE_BLOCK = 2;    
 
     private MainFrame mainFrame;
     private JTextField edtFileNameMask;
@@ -81,25 +90,35 @@ public class MultiRenameDialog extends FocusDialog implements ActionListener,
     private JComboBox cbCase;
     private JButton btnRemove;
     private RenameTableModel tableModel;
+    private AbstractAction actRemove;
 
+    
     /** files to rename */
     private FileSet files;
     
     /** a list of generated names */
     private List newNames = new ArrayList();
-    
-    /** a flag indicating that there are duplicates in file names */
-    private boolean duplicates;
+
+    /** a list of flags to block file rename */
+    private List blockNames = new ArrayList();
     
     /** a list of parsed tokens */
     private List tokens = new ArrayList();
-    private AbstractAction actRemove;
-
     
+
+    /**
+     * Creates a new multi-rename dialog.
+     * @param mainFrame the main frame
+     * @param files a list of files to rename
+     */
     public MultiRenameDialog(MainFrame mainFrame, FileSet files) {
         super(mainFrame, Translator.get("multi_rename_dialog.title"), null);
         this.mainFrame = mainFrame;
         this.files = files;
+        for (int i=0; i<files.size(); i++) {
+            this.blockNames.add(Boolean.FALSE);
+            this.newNames.add("");
+        }
         initialize();
         generateNewNames();
     }
@@ -139,11 +158,28 @@ public class MultiRenameDialog extends FocusDialog implements ActionListener,
         if (tblNames == null) {
             tableModel = new RenameTableModel();
             tblNames = new JTable(tableModel);
-            tblNames.getActionMap().put("del", getActRemove());
-            tblNames.getInputMap().put((KeyStroke) getActRemove().getValue(Action.ACCELERATOR_KEY), "del");    
-            // tblNames.getColumnModel().getColumn(1).setCellEditor(new
-            // DefaultCellEditor(new JTextField()));
-            // tblNames.set
+            // add del key for remove action
+            tblNames.getActionMap().put("del", getActRemove());            
+            tblNames.getInputMap().put((KeyStroke) getActRemove().getValue(Action.ACCELERATOR_KEY), "del");
+            // add tab key
+            tblNames.getActionMap().put("tab", new AbstractAction() {
+                    public void actionPerformed(ActionEvent e) {
+                        tblNames.transferFocus();
+                    }
+            });
+            tblNames.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 0, false), "tab");
+            // add shift tab key
+            tblNames.getActionMap().put("shift tab", new AbstractAction() {
+                public void actionPerformed(ActionEvent e) {
+                    tblNames.transferFocusBackward();
+                }
+            });
+            tblNames.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 
+                    InputEvent.SHIFT_DOWN_MASK, false), "shift tab");
+            // 
+            tblNames.getColumnModel().getColumn(COL_CHANGED_NAME).setCellEditor(new
+                     DefaultCellEditor(new JTextField()));
+            tblNames.getColumnModel().getColumn(COL_CHANGE_BLOCK).setMaxWidth(60);
         }
         return tblNames;
     }
@@ -170,12 +206,12 @@ public class MultiRenameDialog extends FocusDialog implements ActionListener,
         edtFileNameMask.setColumns(20);
         edtFileNameMask.getDocument().addDocumentListener(this);
         String tooltip = "<html><ul><li>[N] - whole name<li>[N2,3] - 3 characters starting from the 2nd character of a name" +
-        "<li>[N2-5] - characters 2 to 5<li>[N2-] - all characters starting from the 2nd character" +
-        "<li>[N-3,2] - two characters starting at 3rd character from the end of a name" +
-        "<li>[N2--2] - characters from the 2nd to the 2nd-last character" +
-        "<li>[C] - inserts counter" +
-        "<li>[C10,2,3] - inserts counter starting at 10, step by 2, use 3 digits to display" +
-        "<li>[YMD] - inserts file last modified year, month and day";       // TODO add to dictionary
+            "<li>[N2-5] - characters 2 to 5<li>[N2-] - all characters starting from the 2nd character" +
+            "<li>[N-3,2] - two characters starting at 3rd character from the end of a name" +
+            "<li>[N2--2] - characters from the 2nd to the 2nd-last character" +
+            "<li>[C] - inserts counter" +
+            "<li>[C10,2,3] - inserts counter starting at 10, step by 2, use 3 digits to display" +
+            "<li>[YMD] - inserts file last modified year, month and day";       // TODO add to dictionary
         edtFileNameMask.setToolTipText(tooltip);
 
         edtExtensionMask = new JTextField("[E]");
@@ -264,36 +300,80 @@ public class MultiRenameDialog extends FocusDialog implements ActionListener,
         for (int i = sel.length - 1; i >= 0; i--) {
             files.remove(sel[i]);
             newNames.remove(sel[i]);
+            blockNames.remove(sel[i]);
             tableModel.fireTableRowsDeleted(sel[i], sel[i]);
         }
         if (files.size() == 0)
             dispose();
     }
+    
+    /**
+     * Checks if there are duplicates in new file names. 
+     */
+    private void checkForDuplicates() {
+        boolean duplicates = false;
+        Set names = new HashSet();
+        for (int i=0; i<newNames.size(); i++) {
+            String name = (String) newNames.get(i);
+            AbstractFile file = (AbstractFile) files.get(i);
+            AbstractFile parent = file.getParentSilently();
+            if (parent != null) {
+                name = parent.getAbsolutePath(true) + name;
+            }
+            if (names.contains(name)) {
+                duplicates = true;
+                break;
+            }
+            names.add(name);
+        }            
+        btnRename.setEnabled(!duplicates);      // TODO add warning about duplicates
+    }
+    
+    /**
+     * Generate a new name for a file.
+     * 
+     * @param file a file to change name to
+     * @return the new file name
+     */
+    private String generateNewName(AbstractFile file) {
+        // apply pattern
+        String newName = applyPattern(file);
 
+        // search & replace
+        if (edtSearchFor.getText().length() > 0) {
+            newName = newName.replace(edtSearchFor.getText(), edtReplaceWith
+                    .getText());
+        }
+
+        // remove trailing dot
+        if (newName.endsWith(".")) {
+            newName = newName.substring(0, newName.length() - 1);
+        }
+
+        // uppercase/lowercase
+        newName = changeCase(newName, cbCase.getSelectedIndex());
+
+        return newName;
+    }
+    
     /**
      * Generates new names for all files.
      */
     private void generateNewNames() {
         compilePattern(edtFileNameMask.getText() + "."
                 + edtExtensionMask.getText());
-        newNames.clear();
-        duplicates = false;
         for (int i = 0; i < files.size(); i++) {
-            AbstractFile file = (AbstractFile) files.get(i);
-            String newName = generateNewName(file);
-            if (newNames.contains(newName)) {
-                duplicates = true;
-                // TODO check if parent dir is the same
-                // (it has to be implemented when search or branch view will be
-                // available)
+            if (Boolean.FALSE.equals(blockNames.get(i))) {
+                AbstractFile file = (AbstractFile) files.get(i);
+                String newName = generateNewName(file);
+                newNames.set(i, newName);
             }
-            newNames.add(newName);
         }
-        btnRename.setEnabled(!duplicates);      // TODO add warning about duplicates
-        tableModel.fireTableChanged(new TableModelEvent(tableModel, 0, newNames
-                .size(), 1, TableModelEvent.UPDATE));
+        checkForDuplicates();
+        tableModel.fireTableChanged(new TableModelEvent(tableModel, 0, 
+                newNames.size(), 1, TableModelEvent.UPDATE));
     }
-
+    
     /**
      * Parses a pattern for a filename and it's extension and stores it in a
      * list. A pattern is a combination of file and extension masks that a user
@@ -305,8 +385,7 @@ public class MultiRenameDialog extends FocusDialog implements ActionListener,
      * for actual parts of a new file name.
      * 
      * @see AbstractToken
-     * @param pattern
-     *            a pattern for changing a file name and it's extension
+     * @param pattern a pattern for changing a file name and it's extension
      */
     private void compilePattern(String pattern) {
         tokens.clear();
@@ -365,34 +444,6 @@ public class MultiRenameDialog extends FocusDialog implements ActionListener,
                 tokens.add(new CopyChar(Character.toString(c)));
             }
         }
-    }
-
-    /**
-     * Generate a new name for a file.
-     * 
-     * @param file
-     *            a file to change name to
-     * @return the new file name
-     */
-    private String generateNewName(AbstractFile file) {
-        // apply pattern
-        String newName = applyPattern(file);
-
-        // search & replace
-        if (edtSearchFor.getText().length() > 0) {
-            newName = newName.replace(edtSearchFor.getText(), edtReplaceWith
-                    .getText());
-        }
-
-        // remove trailing dot
-        if (newName.endsWith(".")) {
-            newName = newName.substring(0, newName.length() - 1);
-        }
-
-        // uppercase/lowercase
-        newName = changeCase(newName, cbCase.getSelectedIndex());
-
-        return newName;
     }
 
     /**
@@ -479,54 +530,7 @@ public class MultiRenameDialog extends FocusDialog implements ActionListener,
             progressDialog.start(job);
         }
     }
-
-    /**
-     * Table model with old and new file names.
-     * @author Mariusz Jakubowski
-     * 
-     */
-    private class RenameTableModel extends AbstractTableModel {
-
-        public int getColumnCount() {
-            return 2;
-        }
-
-        public int getRowCount() {
-            return files.size();
-        }
-
-        public Object getValueAt(int rowIndex, int columnIndex) {
-            AbstractFile f = (AbstractFile) files.get(rowIndex);
-            switch (columnIndex) {
-            case 0:
-                return f.getName();
-            case 1:
-                return newNames.get(rowIndex);
-            }
-            return null;
-        }
-
-        public String getColumnName(int column) {
-            switch (column) {
-            case 0:
-                return Translator.get("multi_rename_dialog.old_name");
-            case 1:
-                return Translator.get("multi_rename_dialog.new_name");
-            }
-            return "";
-        }
-
-        public Class getColumnClass(int columnIndex) {
-            return String.class;
-        }
-
-        public boolean isCellEditable(int rowIndex, int columnIndex) {
-            // return columnIndex == 1; TODO make new name editable (don't
-            // forget about duplicates check)
-            return false;
-        }
-
-    }
+    
 
     // /////////////////////////////////
     // ActionListener implementation //
@@ -558,6 +562,89 @@ public class MultiRenameDialog extends FocusDialog implements ActionListener,
     public void removeUpdate(DocumentEvent e) {
         generateNewNames();
     }
+    
+
+    /**
+     * Table model with old and new file names.
+     * @author Mariusz Jakubowski
+     * 
+     */
+    private class RenameTableModel extends AbstractTableModel {
+
+        public int getColumnCount() {
+            return 3;
+        }
+
+        public int getRowCount() {
+            return files.size();
+        }
+
+        public Object getValueAt(int rowIndex, int columnIndex) {
+            AbstractFile f = (AbstractFile) files.get(rowIndex);
+            switch (columnIndex) {
+            case COL_ORIG_NAME:
+                return f.getName();
+            case COL_CHANGED_NAME:
+                return newNames.get(rowIndex);
+            case COL_CHANGE_BLOCK:
+                return blockNames.get(rowIndex);
+            }
+            return null;
+        }
+        
+        public void setValueAt(Object value, int rowIndex, int columnIndex) {
+            switch (columnIndex) {
+            case COL_CHANGED_NAME:
+                if (!newNames.get(rowIndex).equals(value)) {
+                    newNames.set(rowIndex, value);
+                    if (Boolean.FALSE.equals(blockNames.get(rowIndex))) {
+                        blockNames.set(rowIndex, Boolean.TRUE);
+                        fireTableCellUpdated(rowIndex, COL_CHANGE_BLOCK);
+                    }
+                    checkForDuplicates();
+                }
+                break;
+            case COL_CHANGE_BLOCK:
+                blockNames.set(rowIndex, value);
+                if (Boolean.FALSE.equals(value)) {
+                    AbstractFile file = (AbstractFile) files.get(rowIndex);
+                    String newName = generateNewName(file);
+                    newNames.set(rowIndex, newName);
+                    fireTableCellUpdated(rowIndex, COL_CHANGED_NAME);
+                }
+                checkForDuplicates();
+                break;
+            }
+        }
+
+        public String getColumnName(int column) {
+            switch (column) {
+            case COL_ORIG_NAME:
+                return Translator.get("multi_rename_dialog.old_name");
+            case COL_CHANGED_NAME:
+                return Translator.get("multi_rename_dialog.new_name");
+            case COL_CHANGE_BLOCK:
+                return Translator.get("multi_rename_dialog.block_name");
+            }
+            return "";
+        }
+
+        public Class getColumnClass(int columnIndex) {
+            if (columnIndex == COL_CHANGE_BLOCK) {
+                return Boolean.class;
+            } else {
+                return String.class;
+            }
+        }
+
+        public boolean isCellEditable(int rowIndex, int columnIndex) {
+            return columnIndex != COL_ORIG_NAME; 
+        }
+        
+        
+
+    }
+
 
     /**
      * Base class for handling tokens.
@@ -592,8 +679,7 @@ public class MultiRenameDialog extends FocusDialog implements ActionListener,
         /**
          * Applies this token to a file.
          * 
-         * @param file
-         *            a file
+         * @param file a file
          * @return a part of filename after applying this token
          */
         public abstract String apply(AbstractFile file);
@@ -665,11 +751,9 @@ public class MultiRenameDialog extends FocusDialog implements ActionListener,
      * <li>[N2-5] - characters 2 to 5
      * <li>[N2-] - all characters starting from the 2nd character
      * <li>[N-2] - 2nd character from the end of name
-     * <li>[N-3,2] - two characters starting at 3rd character from the end of a
-     * name
+     * <li>[N-3,2] - two characters starting at 3rd character from the end of a name
      * <li>[N2--2] - characters from the 2nd to the 2nd-last character
-     * <li>[N-5-10] - characters from 5th from end to 10th from beginning of
-     * name
+     * <li>[N-5-10] - characters from 5th from end to 10th from beginning of a name
      * </ul>
      * 
      * @author Mariusz Jakubowski
