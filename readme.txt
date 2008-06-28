@@ -106,6 +106,7 @@ Translators:
 - Jonathan Murphy (British English)
 - Nardog (Japanese)
 - Jakob Ekström (Swedish)
+- Jeppe Toustrup (Danish)
 
 Many thanks to all of you who suggested new features, reported bugs, sent warm
 emails or generously donated to the project !
@@ -138,7 +139,7 @@ Improvements:
 - jCIFS library upgraded to version 1.2.19 .
 
 Localization:
-- 
+- Danish translation, contributed by Jeppe Toustrup.
 
 Bug fixes:
 - Fixed keyboard focus issues in the text editor after the 'Find' dialog has
