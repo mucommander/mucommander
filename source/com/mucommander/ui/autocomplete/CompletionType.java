@@ -18,6 +18,8 @@
 
 package com.mucommander.ui.autocomplete;
 
+import com.mucommander.ui.autocomplete.completers.Completer;
+
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -37,7 +39,7 @@ import java.awt.event.MouseListener;
  * @author Arik Hadas, based on the code of Santhosh Kumar: http://www.jroller.com/santhosh/entry/file_path_autocompletion
  */
 
-public abstract class AutoCompletionType {
+public abstract class CompletionType {
 		
 	private Completer completer;
 	protected AutocompleterTextComponent autocompletedtextComp;
@@ -72,7 +74,7 @@ public abstract class AutoCompletionType {
 		
 		public void run() {
 			// Hide the auto-completion popup window.
-			hidePopup();
+			hideAutocompletionPopup();
 			
 			if (!autocompletedtextComp.isShowing() || !autocompletedtextComp.isEnabled())
 				return;
@@ -85,7 +87,7 @@ public abstract class AutoCompletionType {
 				return;
 			
 			// Show auto-completion popup window.
-			showPopup();						
+			showAutocompletionPopup();						
 	    }
 		
 		/**
@@ -106,10 +108,10 @@ public abstract class AutoCompletionType {
 	    	}
 	    }
 		
-		abstract void showPopup();
+		abstract void showAutocompletionPopup();
 	}    
     
-    public AutoCompletionType(AutocompleterTextComponent comp, Completer completer) {
+    public CompletionType(AutocompleterTextComponent comp, Completer completer) {
     	autocompletedtextComp = comp;
     	this.completer = completer;
 
@@ -139,7 +141,7 @@ public abstract class AutoCompletionType {
 			public void focusGained(FocusEvent e) { }
 
 			public void focusLost(FocusEvent e) {
-				hidePopup();
+				hideAutocompletionPopup();
 			}
         });
     }
@@ -153,7 +155,7 @@ public abstract class AutoCompletionType {
     /**
      * Hide the auto-completion popup window.
      */
-    protected abstract void hidePopup();
+    protected abstract void hideAutocompletionPopup();
     
     
     /**

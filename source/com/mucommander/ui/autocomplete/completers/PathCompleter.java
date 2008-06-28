@@ -24,32 +24,29 @@ import javax.swing.*;
 import java.util.Vector;
 
 /**
- * LocationCompleter is a Completer based on locations, meaning root folders, 
- * browsable file paths, bookmarks and system variables.
+ * FileCompleter is a Completer based on root folders and file paths. 
  * 
  * @author Arik Hadas, based on the code of Santhosh Kumar: http://www.jroller.com/santhosh/entry/file_path_autocompletion
  */
-
-public class LocationCompleter extends Completer {
-	
-	public LocationCompleter(){ 
-        registerService(ServiceFactory.getRootFoldersService());
-        registerService(ServiceFactory.getBrowsableFilesService());
-        registerService(ServiceFactory.getBookmarksService());
-        registerService(ServiceFactory.getSystemVariablesService());
+ 
+public class PathCompleter extends Completer { 
+    
+	public PathCompleter(){  
+		registerService(ServiceFactory.getRootFoldersService());
+		registerService(ServiceFactory.getAllFilesService());
     }
-
-    public synchronized boolean updateListData(final JList list, AutocompleterTextComponent comp) {
+ 
+    public synchronized boolean updateListData(final JList list, AutocompleterTextComponent comp){
     	final String path = comp.getText();    	
-    	Vector filteredFiles = getPossibleCompletionsFromServices(path);    	
+    	Vector filteredFiles = getPossibleCompletionsFromServices(path);
         list.setListData(filteredFiles);            
-        return list.getModel().getSize() > 0;        
-    }
+        return list.getModel().getSize() > 0;
+    } 
  
     public void updateTextComponent(final String selected, AutocompleterTextComponent comp){ 
         if(selected==null) 
             return;
-        
+                                 
         String location = tryToCompleteFromServices(selected);        
         if (comp.isEnabled() && location != null)
         	comp.setText(location);

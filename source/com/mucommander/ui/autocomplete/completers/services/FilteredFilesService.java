@@ -16,29 +16,28 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.mucommander.ui.autocomplete;
+package com.mucommander.ui.autocomplete.completers.services;
 
-import com.mucommander.ui.autocomplete.completers.ComboboxOptionsCompleter;
-import com.mucommander.ui.autocomplete.completers.Completer;
-import com.mucommander.ui.autocomplete.completers.LocationCompleter;
-import com.mucommander.ui.autocomplete.completers.PathCompleter;
+import com.mucommander.file.AbstractFile;
+import com.mucommander.file.filter.FileFilter;
+
+import java.io.IOException;
 
 /**
- * A factory class to produce completers.
+ * This <code>FilesService</code> returns filtered files in a given directory,
+ * according to a certain <code>FileFilter</code>.
  * 
  * @author Arik Hadas
  */
-public class CompleterFactory {
+
+public class FilteredFilesService extends FilesService {
+	private FileFilter fileFilter;
 	
-	public static Completer getComboboxOptionsCompleter() {
-		return new ComboboxOptionsCompleter();
+	public FilteredFilesService(FileFilter fileFilter) {
+		this.fileFilter = fileFilter;
 	}
-	
-	public static Completer getPathCompleter() {
-		return new PathCompleter();
-	}
-	
-	public static Completer getLocationCompleter() {
-		return new LocationCompleter();
+
+	protected AbstractFile[] getFiles(AbstractFile directory) throws IOException {
+		return fileFilter.filter(directory.ls());
 	}
 }

@@ -18,25 +18,27 @@
 
 package com.mucommander.ui.autocomplete;
 
+import com.mucommander.ui.autocomplete.completers.Completer;
+
 import javax.swing.text.BadLocationException;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 /**
- * TextFieldCompleter is a CompleterType which suite to text-field.
+ * EditableComboboxCompleter is a CompleterType which suite to editable combobox.
  * 
  * @author Arik Hadas, based on the code of Santhosh Kumar: http://www.jroller.com/santhosh/entry/file_path_autocompletion
  */
 
-public class TextFieldCompleter extends AutoCompletionType {
+public class EditableComboboxCompletion extends CompletionType {
 	
-    private class ShowingThreadImp extends ShowingThread {
+	private class ShowingThreadImp extends ShowingThread {
     	public ShowingThreadImp(int delay) {
     		super(delay);
     	}
 
-		void showPopup() {
-	        if (autocompletedtextComp.isShowing() && autocompletedtextComp.isEnabled() && updateListData(list) && list.getModel().getSize()!=0){
+		void showAutocompletionPopup() {
+	        if (autocompletedtextComp.isShowing() && autocompletedtextComp.isEnabled() && updateListData(list)){
 					            
 	            list.setVisibleRowCount(Math.min(list.getModel().getSize() ,VISIBLE_ROW_COUNT));
 	            
@@ -63,19 +65,18 @@ public class TextFieldCompleter extends AutoCompletionType {
 	        }
 		}
     }
-        
-    public TextFieldCompleter(AutocompleterTextComponent comp, Completer completer){
-    	super(comp, completer);
-
+	
+	public EditableComboboxCompletion(AutocompleterTextComponent comp, Completer completer){
+    	super(comp, completer);        
+    	
     	autocompletedtextComp.getDocument().addDocumentListener(documentListener);
-
+    	
         autocompletedtextComp.addKeyListener(new KeyAdapter() {
         	public void keyPressed(KeyEvent keyEvent) {        		
-                
-                switch (keyEvent.getKeyCode()) {
+                switch(keyEvent.getKeyCode()) {
                 case KeyEvent.VK_ENTER:
                 	if (isItemSelectedAtPopupList()) {
-                		hidePopup();
+                		hideAutocompletionPopup();
                 		acceptListItem((String)list.getSelectedValue());
                 		keyEvent.consume();
                 	}
@@ -85,7 +86,7 @@ public class TextFieldCompleter extends AutoCompletionType {
                 case KeyEvent.VK_ESCAPE:
                 	if (isPopupListShowing()) {
                 		if (autocompletedtextComp.isEnabled())
-                			hidePopup();
+                			hideAutocompletionPopup();
                 		keyEvent.consume();
                 	}
                 	else
@@ -103,11 +104,17 @@ public class TextFieldCompleter extends AutoCompletionType {
                             selectNextPossibleValue();
                             keyEvent.consume();
                         }
-                        else {                	
-                        	autocompletedtextComp.moveCarentToEndOfText();
-                    		createNewShowingThread(0);
-                        }
                     }
+                	break;
+                case KeyEvent.VK_SPACE:
+                	// The combination of cntrl+space makes open the auto-complete popup without delay.
+                	if (keyEvent.isControlDown()) {
+                		if (!popup.isVisible()) {
+                			autocompletedtextComp.setComponentsPopupUnvisibe();
+                    		autocompletedtextComp.moveCarentToEndOfText();
+                    		createNewShowingThread(0);
+                    	}
+                	}
                 	break;
                 case KeyEvent.VK_PAGE_DOWN:
                 	if(autocompletedtextComp.isEnabled() && isPopupListShowing()) {
@@ -134,22 +141,22 @@ public class TextFieldCompleter extends AutoCompletionType {
                 	}
                 	break;
                 case KeyEvent.VK_LEFT:
-                	hidePopup();
+                	hideAutocompletionPopup();
                 	break;
                 default:
                 }
-            }
+        	}
         });
     }
-            
-    protected void startNewShowingThread(int delay) {    	    	
-    	(showingThread = new ShowingThreadImp(delay)).start();
-    }
-        
-    protected void hidePopup() {
+	
+	protected void hideAutocompletionPopup() {
 		synchronized (popup) {
 			if (popup.isVisible())
         		popup.setVisible(false);
 		}
+	}
+	
+	protected void startNewShowingThread(int delay) {    			    	
+    	(showingThread = new ShowingThreadImp(delay)).start();
 	}
 }

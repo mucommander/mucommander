@@ -18,27 +18,30 @@
 
 package com.mucommander.ui.autocomplete;
 
-import com.mucommander.ui.autocomplete.completers.ComboboxOptionsCompleter;
-import com.mucommander.ui.autocomplete.completers.Completer;
-import com.mucommander.ui.autocomplete.completers.LocationCompleter;
-import com.mucommander.ui.autocomplete.completers.PathCompleter;
+import com.mucommander.ui.combobox.AutocompletedEditableCombobox;
+
+import java.awt.event.KeyEvent;
 
 /**
- * A factory class to produce completers.
+ * This <code>AutocompleterTextComponent</code> implements {@link #OnEnterPressed(java.awt.event.KeyEvent)}
+ * and {@link #OnEscPressed(java.awt.event.KeyEvent)} as the typical AutocompletedEditableCombobox's ops. 
  * 
  * @author Arik Hadas
  */
-public class CompleterFactory {
+
+public class TypicalAutocompleterEditableCombobox extends AutocompleterTextComponent {
+	protected AutocompletedEditableCombobox editableCombobox;
 	
-	public static Completer getComboboxOptionsCompleter() {
-		return new ComboboxOptionsCompleter();
+	public TypicalAutocompleterEditableCombobox(AutocompletedEditableCombobox editableCombobox) {
+		super(editableCombobox);		
+		this.editableCombobox = editableCombobox;		
 	}
-	
-	public static Completer getPathCompleter() {
-		return new PathCompleter();
+
+	public void OnEnterPressed(KeyEvent keyEvent) {
+		editableCombobox.respondToEnterKeyPressing(keyEvent);
 	}
-	
-	public static Completer getLocationCompleter() {
-		return new LocationCompleter();
+
+	public void OnEscPressed(KeyEvent keyEvent) {
+		editableCombobox.respondToEscapeKeyPressing(keyEvent);
 	}
 }

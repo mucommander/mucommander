@@ -18,29 +18,28 @@
 
 package com.mucommander.ui.autocomplete;
 
+import com.mucommander.ui.autocomplete.completers.Completer;
+
 import javax.swing.text.BadLocationException;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 /**
- * OtherTextComponentCompleter is a CompleterType which suite to text components
- * other than editable combobox and text-field (such as textArea for example).
- * 
- * This class was not tested.
+ * TextFieldCompleter is a CompleterType which suite to text-field.
  * 
  * @author Arik Hadas, based on the code of Santhosh Kumar: http://www.jroller.com/santhosh/entry/file_path_autocompletion
  */
 
-public class OtherTextComponentCompleter extends AutoCompletionType {	
+public class TextFieldCompletion extends CompletionType {
 	
-	private class ShowingThreadImp extends ShowingThread {
+    private class ShowingThreadImp extends ShowingThread {
     	public ShowingThreadImp(int delay) {
     		super(delay);
     	}
 
-		void showPopup() {
-	        if (autocompletedtextComp.isShowing() && autocompletedtextComp.isEnabled() && updateListData(list) && list.getModel().getSize()!=0){
-					         
+		void showAutocompletionPopup() {
+	        if (autocompletedtextComp.isShowing() && autocompletedtextComp.isEnabled() && updateListData(list)){
+					            
 	            list.setVisibleRowCount(Math.min(list.getModel().getSize() ,VISIBLE_ROW_COUNT));
 	            
 	            int x = 0; 
@@ -52,7 +51,7 @@ public class OtherTextComponentCompleter extends AutoCompletionType {
 	                return;
 	            }
 	            if (autocompletedtextComp.hasFocus()) {	            	
-	            	if (!isStopped) {	            		
+	            	if (!isStopped) {
 	            		list.ensureIndexIsVisible(0);
 	            		synchronized(popup) {
 		            		popup.show(autocompletedtextComp.getTextComponent(), x, autocompletedtextComp.getHeight());
@@ -61,25 +60,24 @@ public class OtherTextComponentCompleter extends AutoCompletionType {
 		            		// as a gray rectangle - repainting solves it.
 		            		popup.repaint();
 	            		}
-	            		autocompletedtextComp.getDocument().addDocumentListener(documentListener);
 	            	}
 	            }	            
 	        }
 		}
     }
-	
-	public OtherTextComponentCompleter(AutocompleterTextComponent comp, Completer completer){
-    	super(comp, completer);        
-    	
+        
+    public TextFieldCompletion(AutocompleterTextComponent comp, Completer completer){
+    	super(comp, completer);
+
+    	autocompletedtextComp.getDocument().addDocumentListener(documentListener);
+
         autocompletedtextComp.addKeyListener(new KeyAdapter() {
         	public void keyPressed(KeyEvent keyEvent) {        		
-                switch(keyEvent.getKeyCode()) {
+                
+                switch (keyEvent.getKeyCode()) {
                 case KeyEvent.VK_ENTER:
-                	boolean itemSelected = isItemSelectedAtPopupList();
-                	
-                    // Notify listeners that the text field has been validated
-                	if (itemSelected) {
-                		hidePopup();
+                	if (isItemSelectedAtPopupList()) {
+                		hideAutocompletionPopup();
                 		acceptListItem((String)list.getSelectedValue());
                 		keyEvent.consume();
                 	}
@@ -89,7 +87,7 @@ public class OtherTextComponentCompleter extends AutoCompletionType {
                 case KeyEvent.VK_ESCAPE:
                 	if (isPopupListShowing()) {
                 		if (autocompletedtextComp.isEnabled())
-                			hidePopup();
+                			hideAutocompletionPopup();
                 		keyEvent.consume();
                 	}
                 	else
@@ -101,21 +99,26 @@ public class OtherTextComponentCompleter extends AutoCompletionType {
                 		keyEvent.consume();
                 	}
                 	break;
-                case KeyEvent.VK_DOWN:
-                	if(autocompletedtextComp.isEnabled()){ 
-                        if(popup.isVisible()) {
-                            selectNextPossibleValue();
-                            keyEvent.consume();
-                        }
-                    }
-                	break;
                 case KeyEvent.VK_SPACE:
+                	// The combination of cntrl+space makes open the auto-complete popup without delay.
                 	if (keyEvent.isControlDown()) {
                 		if (!popup.isVisible()) {
                     		autocompletedtextComp.moveCarentToEndOfText();
                     		createNewShowingThread(0);
                     	}
                 	}
+                	break;
+                case KeyEvent.VK_DOWN:
+                	if(autocompletedtextComp.isEnabled()){ 
+                        if(popup.isVisible()) {
+                            selectNextPossibleValue();
+                            keyEvent.consume();
+                        }
+                        else {                	
+                        	autocompletedtextComp.moveCarentToEndOfText();
+                    		createNewShowingThread(0);
+                        }
+                    }
                 	break;
                 case KeyEvent.VK_PAGE_DOWN:
                 	if(autocompletedtextComp.isEnabled() && isPopupListShowing()) {
@@ -142,23 +145,22 @@ public class OtherTextComponentCompleter extends AutoCompletionType {
                 	}
                 	break;
                 case KeyEvent.VK_LEFT:
-                	hidePopup();
+                	hideAutocompletionPopup();
                 	break;
-            	default:
+                default:
                 }
-        	}
+            }
         });
     }
-	
-	protected void hidePopup() {
+            
+    protected void startNewShowingThread(int delay) {    	    	
+    	(showingThread = new ShowingThreadImp(delay)).start();
+    }
+        
+    protected void hideAutocompletionPopup() {
 		synchronized (popup) {
 			if (popup.isVisible())
         		popup.setVisible(false);
-			autocompletedtextComp.getDocument().removeDocumentListener(documentListener);
 		}
 	}
-	
-	protected void startNewShowingThread(int delay) {    	
-    	(showingThread = new ShowingThreadImp(delay)).start();
-    }
 }

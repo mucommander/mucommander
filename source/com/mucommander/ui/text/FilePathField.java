@@ -20,7 +20,7 @@ package com.mucommander.ui.text;
 
 import com.mucommander.ui.autocomplete.BasicAutocompleterTextComponent;
 import com.mucommander.ui.autocomplete.CompleterFactory;
-import com.mucommander.ui.autocomplete.TextFieldCompleter;
+import com.mucommander.ui.autocomplete.TextFieldCompletion;
 
 import javax.swing.*;
 import javax.swing.text.Document;
@@ -63,6 +63,6 @@ public class FilePathField extends JTextField {
      * Adds auto-completion capabilities to this text field.
      */
     private void enableAutoCompletion() {
-        new TextFieldCompleter(new BasicAutocompleterTextComponent(this), CompleterFactory.getFileCompleter());
+        new TextFieldCompletion(new BasicAutocompleterTextComponent(this), CompleterFactory.getPathCompleter());
     }
 }

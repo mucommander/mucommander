@@ -18,26 +18,31 @@
 
 package com.mucommander.ui.autocomplete;
 
+import com.mucommander.ui.autocomplete.completers.Completer;
+
 import javax.swing.text.BadLocationException;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 /**
- * EditableComboboxCompleter is a CompleterType which suite to editable combobox.
+ * OtherTextComponentCompleter is a CompleterType which suite to text components
+ * other than editable combobox and text-field (such as textArea for example).
+ * 
+ * This class was not tested.
  * 
  * @author Arik Hadas, based on the code of Santhosh Kumar: http://www.jroller.com/santhosh/entry/file_path_autocompletion
  */
 
-public class EditableComboboxCompleter extends AutoCompletionType {
+public class OtherTextComponentCompletion extends CompletionType {	
 	
 	private class ShowingThreadImp extends ShowingThread {
     	public ShowingThreadImp(int delay) {
     		super(delay);
     	}
 
-		void showPopup() {
-	        if (autocompletedtextComp.isShowing() && autocompletedtextComp.isEnabled() && updateListData(list) && list.getModel().getSize()!=0){
-					            
+		void showAutocompletionPopup() {
+	        if (autocompletedtextComp.isShowing() && autocompletedtextComp.isEnabled() && updateListData(list)){
+					         
 	            list.setVisibleRowCount(Math.min(list.getModel().getSize() ,VISIBLE_ROW_COUNT));
 	            
 	            int x = 0; 
@@ -49,7 +54,7 @@ public class EditableComboboxCompleter extends AutoCompletionType {
 	                return;
 	            }
 	            if (autocompletedtextComp.hasFocus()) {	            	
-	            	if (!isStopped) {
+	            	if (!isStopped) {	            		
 	            		list.ensureIndexIsVisible(0);
 	            		synchronized(popup) {
 		            		popup.show(autocompletedtextComp.getTextComponent(), x, autocompletedtextComp.getHeight());
@@ -58,23 +63,25 @@ public class EditableComboboxCompleter extends AutoCompletionType {
 		            		// as a gray rectangle - repainting solves it.
 		            		popup.repaint();
 	            		}
+	            		autocompletedtextComp.getDocument().addDocumentListener(documentListener);
 	            	}
 	            }	            
 	        }
 		}
     }
 	
-	public EditableComboboxCompleter(AutocompleterTextComponent comp, Completer completer){
+	public OtherTextComponentCompletion(AutocompleterTextComponent comp, Completer completer){
     	super(comp, completer);        
-    	
-    	autocompletedtextComp.getDocument().addDocumentListener(documentListener);
     	
         autocompletedtextComp.addKeyListener(new KeyAdapter() {
         	public void keyPressed(KeyEvent keyEvent) {        		
                 switch(keyEvent.getKeyCode()) {
                 case KeyEvent.VK_ENTER:
-                	if (isItemSelectedAtPopupList()) {
-                		hidePopup();
+                	boolean itemSelected = isItemSelectedAtPopupList();
+                	
+                    // Notify listeners that the text field has been validated
+                	if (itemSelected) {
+                		hideAutocompletionPopup();
                 		acceptListItem((String)list.getSelectedValue());
                 		keyEvent.consume();
                 	}
@@ -84,7 +91,7 @@ public class EditableComboboxCompleter extends AutoCompletionType {
                 case KeyEvent.VK_ESCAPE:
                 	if (isPopupListShowing()) {
                 		if (autocompletedtextComp.isEnabled())
-                			hidePopup();
+                			hideAutocompletionPopup();
                 		keyEvent.consume();
                 	}
                 	else
@@ -105,7 +112,6 @@ public class EditableComboboxCompleter extends AutoCompletionType {
                     }
                 	break;
                 case KeyEvent.VK_SPACE:
-                	// The combination of cntrl+space makes open the auto-complete popup without delay.
                 	if (keyEvent.isControlDown()) {
                 		if (!popup.isVisible()) {
                     		autocompletedtextComp.moveCarentToEndOfText();
@@ -138,22 +144,23 @@ public class EditableComboboxCompleter extends AutoCompletionType {
                 	}
                 	break;
                 case KeyEvent.VK_LEFT:
-                	hidePopup();
+                	hideAutocompletionPopup();
                 	break;
-                default:
+            	default:
                 }
         	}
         });
     }
 	
-	protected void hidePopup() {
+	protected void hideAutocompletionPopup() {
 		synchronized (popup) {
 			if (popup.isVisible())
         		popup.setVisible(false);
+			autocompletedtextComp.getDocument().removeDocumentListener(documentListener);
 		}
 	}
 	
-	protected void startNewShowingThread(int delay) {    			    	
+	protected void startNewShowingThread(int delay) {    	
     	(showingThread = new ShowingThreadImp(delay)).start();
-	}
+    }
 }

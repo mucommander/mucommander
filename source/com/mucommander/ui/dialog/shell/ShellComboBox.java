@@ -20,6 +20,8 @@ package com.mucommander.ui.dialog.shell;
 
 import com.mucommander.shell.ShellHistoryListener;
 import com.mucommander.shell.ShellHistoryManager;
+import com.mucommander.ui.autocomplete.CompleterFactory;
+import com.mucommander.ui.combobox.AutocompletedEditableCombobox;
 import com.mucommander.ui.combobox.EditableComboBox;
 import com.mucommander.ui.combobox.EditableComboBoxListener;
 import com.mucommander.ui.combobox.SaneComboBox;
@@ -44,7 +46,7 @@ import java.util.Iterator;
  * </p>
  * @author Maxence Bernard, Nicolas Rinaudo
  */
-public class ShellComboBox extends EditableComboBox implements EditableComboBoxListener, ShellHistoryListener, PopupMenuListener {
+public class ShellComboBox extends AutocompletedEditableCombobox implements EditableComboBoxListener, ShellHistoryListener, PopupMenuListener {
     // - Instance fields -----------------------------------------------------
     // -----------------------------------------------------------------------
     /** Input field used to type in commands. */
@@ -61,6 +63,8 @@ public class ShellComboBox extends EditableComboBox implements EditableComboBoxL
      * @param parent where to execute commands.
      */
     public ShellComboBox(RunDialog parent) {
+    	super(CompleterFactory.getComboboxOptionsCompleter());
+    	
         this.parent = parent;
 
         // Sets the combo box's editor.
@@ -146,7 +150,11 @@ public class ShellComboBox extends EditableComboBox implements EditableComboBoxL
     // - Shell listener code --------------------------------------------------------
     // ------------------------------------------------------------------------------
 
-    public void historyChanged(String command) {insertItemAt(command, 0);}
+    public void historyChanged(String command) {
+    	command = command.trim();
+		insertItemAt(command, 0);
+    }
+    
     public void historyCleared() {
         removeAllItems();
         input.setText("");

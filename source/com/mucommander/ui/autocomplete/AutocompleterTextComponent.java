@@ -18,6 +18,8 @@
 
 package com.mucommander.ui.autocomplete;
 
+import com.mucommander.ui.combobox.EditableComboBox;
+
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.JTextComponent;
@@ -25,6 +27,8 @@ import java.awt.*;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.util.Vector;
 
 /**
  * AutocompleterTextComponent convert any text component to auto-completion supported text component. 
@@ -39,10 +43,19 @@ import java.awt.event.KeyEvent;
 
 public abstract class AutocompleterTextComponent {
 	private JTextComponent textComponent;
+	private EditableComboBox editableComboBox = null;
 	
 	public AutocompleterTextComponent(JTextComponent textComp) {
 		this.textComponent = textComp;	
 	}
+	
+	protected AutocompleterTextComponent(EditableComboBox editableComboBox) {
+		this.textComponent = editableComboBox.getTextField();
+		this.editableComboBox = editableComboBox;
+		
+		// Remove all key listeners which are defined for the EditableCombobox
+		removeAllKeyListeners();
+	}	
 
 	// Abstract methods:
 	/**
@@ -56,6 +69,13 @@ public abstract class AutocompleterTextComponent {
 	 * pressed, while the auto-completion popup window is unvisible.
 	 */
 	public abstract void OnEscPressed(KeyEvent keyEvent);
+	
+	private void removeAllKeyListeners() {
+		KeyListener[] l = editableComboBox.getTextField().getKeyListeners();
+		int nbKeyListeners = l.length;
+		for (int i=0 ; i<nbKeyListeners; i++)
+			editableComboBox.getTextField().removeKeyListener(l[i]);
+	}
 	
 	// Methods of the text component which are used by the auto-completion mechanism:	
 	public Document getDocument() { return textComponent.getDocument(); }
@@ -89,4 +109,39 @@ public abstract class AutocompleterTextComponent {
 	public void addKeyListener(KeyAdapter adapter) { textComponent.addKeyListener(adapter); }
 	
 	public void addFocusListener(FocusListener listener) { textComponent.addFocusListener(listener); }
+	
+	
+	/**
+	 * 	getItemsNames
+	 * 
+	 * @return empty Vector if component is not an EditableComboBox,
+	 *  otherwise return Vector which contains the names of the combobox items.
+	 */
+	public Vector getItemNames() {
+		Vector result = new Vector();
+		if (editableComboBox != null) {
+			int nbItems = editableComboBox.getItemCount();
+			for (int i=0; i < nbItems; i++)
+				result.add(editableComboBox.getItemAt(i).toString());
+		}
+		return result;
+	}
+	
+	/**
+	 * isPopupVisible
+	 * 
+	 * @return false if component is not an EditableComboBox,
+	 * 	otherwise, true if the combo-box list of items is visible.
+	 */
+	public boolean isComponentsPopupVisible() {
+		return editableComboBox == null ? false : editableComboBox.isPopupVisible();
+	}
+	
+	/**
+	 * setPopupUnvisibe - make the combo-box list of items unvisible.
+	 */
+	public void setComponentsPopupUnvisibe() {
+		if (editableComboBox != null)
+			editableComboBox.setPopupVisible(false);
+	}
 }

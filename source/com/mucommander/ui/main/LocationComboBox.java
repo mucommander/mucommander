@@ -27,11 +27,9 @@ import com.mucommander.file.FileURL;
 import com.mucommander.file.RootFolders;
 import com.mucommander.file.impl.local.LocalFile;
 import com.mucommander.file.util.FileToolkit;
-import com.mucommander.runtime.JavaVersions;
 import com.mucommander.runtime.OsFamilies;
-import com.mucommander.ui.autocomplete.AutocompleterEditableCombobox;
 import com.mucommander.ui.autocomplete.CompleterFactory;
-import com.mucommander.ui.autocomplete.EditableComboboxCompleter;
+import com.mucommander.ui.combobox.AutocompletedEditableCombobox;
 import com.mucommander.ui.combobox.EditableComboBox;
 import com.mucommander.ui.combobox.EditableComboBoxListener;
 import com.mucommander.ui.combobox.SaneComboBox;
@@ -42,12 +40,11 @@ import com.mucommander.ui.theme.*;
 
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
-import java.awt.event.KeyEvent;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
-public class LocationComboBox extends EditableComboBox implements LocationListener, EditableComboBoxListener, FocusListener, ThemeListener {
+public class LocationComboBox extends AutocompletedEditableCombobox implements LocationListener, EditableComboBoxListener, FocusListener, ThemeListener {
     /** FolderPanel this combo box is displayed in */
     private FolderPanel folderPanel;
 
@@ -76,7 +73,7 @@ public class LocationComboBox extends EditableComboBox implements LocationListen
      */
     public LocationComboBox(FolderPanel folderPanel) {
         // Use a custom text field that can display loading progress when changing folders
-        super(new ProgressTextField(0, ThemeManager.getCurrentColor(Theme.LOCATION_BAR_PROGRESS_COLOR)));
+        super(new ProgressTextField(0, ThemeManager.getCurrentColor(Theme.LOCATION_BAR_PROGRESS_COLOR)), CompleterFactory.getLocationCompleter());
 
         this.folderPanel = folderPanel;
         this.locationField = (ProgressTextField)getTextField();
@@ -102,46 +99,6 @@ public class LocationComboBox extends EditableComboBox implements LocationListen
         locationField.addFocusListener(this);
         addFocusListener(this);
         
-        // Add auto-completion based on LocationCompleter to this LocationComboBox.
-        AutocompleterEditableCombobox autocompletionSupportedVersionOfThis = new AutocompleterEditableCombobox(this) {
-        	
-			public void OnEnterPressed(KeyEvent keyEvent) {
-				// Combo popup menu is visible
-				if(isPopupVisible()) {
-					// Under Java 1.5 or under, we need to explicitely hide the popup.
-					if(JavaVersions.JAVA_1_5.isCurrentOrLower())
-                        hidePopup();
-					
-					// Note that since the event is not consumed, JComboBox will catch it and fire
-				}
-				// Combo popup menu is not visible, these events really belong to the text field
-				else {
-					// Notify listeners that the text field has been validated
-                    fireComboFieldValidated();
-                    
-                    // /!\ Consume the event so to prevent JComboBox from firing an ActionEvent (default JComboBox behavior)
-                    keyEvent.consume();
-				}			
-			}
-
-			public void OnEscPressed(KeyEvent keyEvent) {
-				// Combo popup menu is visible
-				if(isPopupVisible()) {
-					 // Explicitely hide popup menu, JComboBox does not seem do it automatically (at least under Mac OS X + Java 1.5 and Java 1.4)
-	                hidePopup();
-	                // Consume the event so that it is not propagated, since dialogs catch this event to close the window
-	                keyEvent.consume();
-				}
-				// Combo popup menu is not visible, these events really belong to the text field
-                else {
-                	// Notify listeners that the text field has been cancelled
-                	fireComboFieldCancelled();
-                }
-			}
-        	
-        };
-        new EditableComboboxCompleter(autocompletionSupportedVersionOfThis, CompleterFactory.getLocationCompleter());
-
         ThemeManager.addCurrentThemeListener(this);
     }
 

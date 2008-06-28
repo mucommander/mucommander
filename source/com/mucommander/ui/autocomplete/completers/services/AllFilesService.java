@@ -16,29 +16,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.mucommander.ui.autocomplete;
+package com.mucommander.ui.autocomplete.completers.services;
 
-import com.mucommander.ui.autocomplete.completers.ComboboxOptionsCompleter;
-import com.mucommander.ui.autocomplete.completers.Completer;
-import com.mucommander.ui.autocomplete.completers.LocationCompleter;
-import com.mucommander.ui.autocomplete.completers.PathCompleter;
+import com.mucommander.file.AbstractFile;
+
+import java.io.IOException;
 
 /**
- * A factory class to produce completers.
+ * This <code>FilesService</code> returns all the files in a given directory.
  * 
  * @author Arik Hadas
  */
-public class CompleterFactory {
-	
-	public static Completer getComboboxOptionsCompleter() {
-		return new ComboboxOptionsCompleter();
-	}
-	
-	public static Completer getPathCompleter() {
-		return new PathCompleter();
-	}
-	
-	public static Completer getLocationCompleter() {
-		return new LocationCompleter();
-	}
+
+public class AllFilesService extends FilesService {
+
+	protected AbstractFile[] getFiles(AbstractFile directory) throws IOException {		                			
+		return directory.ls();
+	}	
 }
