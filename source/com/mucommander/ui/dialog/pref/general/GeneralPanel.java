@@ -131,23 +131,19 @@ class GeneralPanel extends PreferencesPanel implements ItemListener, ActionListe
         }
         languageComboBox.setRenderer(new LanguageComboBoxRenderer());
 		
-        // Default language index
-        int languageIndex = 0;
-        for(int i=0; i<languages.length; i++) {
-            if(languages[i].equalsIgnoreCase("en")) {
-                languageIndex = i;
-                break;
-            }
-        }
-        // Add combo items and select current language
+        // Add combo items and select current language (defaults to EN if current language can't be found)
+        int languageIndex = -1;
         for(int i=0; i<languages.length; i++) {
             lang = languages[i];
-//            languageComboBox.addItem(Translator.get("language."+lang));
             languageComboBox.addItem(lang);
+
             if(lang.equalsIgnoreCase(currentLang))
+                languageIndex = i;
+            else if(languageIndex==-1 && lang.equalsIgnoreCase("en"))
                 languageIndex = i;
         }
         languageComboBox.setSelectedIndex(languageIndex);
+
         languagePanel.add(languageComboBox);
         mainPanel.add(languagePanel);
         mainPanel.addSpace(10);
