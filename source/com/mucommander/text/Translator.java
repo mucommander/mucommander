@@ -24,10 +24,7 @@ import com.mucommander.file.util.ResourceLoader;
 import com.mucommander.io.bom.BOMReader;
 
 import java.io.*;
-import java.util.Hashtable;
-import java.util.Locale;
-import java.util.StringTokenizer;
-import java.util.Vector;
+import java.util.*;
 
 
 /**
@@ -203,12 +200,16 @@ public class Translator {
 	
 	
     /**
-     * Returns an array of available languages as language codes ("EN", "FR", "pt_BR"...).
+     * Returns an array of available languages, expressed as language codes ("EN", "FR", "pt_BR"...).
+     * The returned array is sorted by language codes in case insensitive order.
      *
      * @return an array of language codes.
      */
     public static String[] getAvailableLanguages() {
-        return (String[])availableLanguages.toArray(new String[availableLanguages.size()]);
+        String[] languages = (String[])availableLanguages.toArray(new String[availableLanguages.size()]);
+        Arrays.sort(languages, String.CASE_INSENSITIVE_ORDER);
+
+        return languages;
     }
 
 
