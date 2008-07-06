@@ -43,7 +43,9 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.JToggleButton;
 import javax.swing.KeyStroke;
+import javax.swing.border.EmptyBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.TableModelEvent;
@@ -91,6 +93,7 @@ public class MultiRenameDialog extends FocusDialog implements ActionListener,
     private JButton btnRemove;
     private RenameTableModel tableModel;
     private AbstractAction actRemove;
+    private JLabel lblHelp;
 
     
     /** files to rename */
@@ -128,7 +131,10 @@ public class MultiRenameDialog extends FocusDialog implements ActionListener,
      */
     private void initialize() {
         setLayout(new BorderLayout());
-        add(getPnlTop(), BorderLayout.NORTH);
+        JPanel top = new JPanel(new BorderLayout());
+        top.add(getPnlTop(), BorderLayout.CENTER);
+        top.add(getLblHelp(), BorderLayout.SOUTH);
+        add(top, BorderLayout.NORTH);
         add(new JScrollPane(getTblNames()), BorderLayout.CENTER);
         add(getPnlButtons(), BorderLayout.SOUTH);
     }
@@ -205,14 +211,7 @@ public class MultiRenameDialog extends FocusDialog implements ActionListener,
         edtFileNameMask = new JTextField("[N]");
         edtFileNameMask.setColumns(20);
         edtFileNameMask.getDocument().addDocumentListener(this);
-        String tooltip = "<html><ul><li>[N] - whole name<li>[N2,3] - 3 characters starting from the 2nd character of a name" +
-            "<li>[N2-5] - characters 2 to 5<li>[N2-] - all characters starting from the 2nd character" +
-            "<li>[N-3,2] - two characters starting at 3rd character from the end of a name" +
-            "<li>[N2--2] - characters from the 2nd to the 2nd-last character" +
-            "<li>[C] - inserts counter" +
-            "<li>[C10,2,3] - inserts counter starting at 10, step by 2, use 3 digits to display" +
-            "<li>[YMD] - inserts file last modified year, month and day";       // TODO add to dictionary
-        edtFileNameMask.setToolTipText(tooltip);
+        edtFileNameMask.setToolTipText(getLblHelp().getText());
 
         edtExtensionMask = new JTextField("[E]");
         edtExtensionMask.setColumns(20);
@@ -264,9 +263,18 @@ public class MultiRenameDialog extends FocusDialog implements ActionListener,
                 edtFileNameMask, 5);
         pnl1.addRow(Translator.get("multi_rename_dialog.extension_mask"),
                 edtExtensionMask, 5);
-        pnl1.addRow(new JLabel(" "), 5);
+        
+        JPanel pnlHelpBtn = new JPanel(new BorderLayout());
+        JToggleButton btnHelp = new JToggleButton(Translator.get("help_menu"));
+        pnlHelpBtn.add(btnHelp, BorderLayout.EAST);
+        btnHelp.addActionListener(new ActionListener() {
+           public void actionPerformed(ActionEvent e) {
+               getLblHelp().setVisible(!getLblHelp().isVisible());
+            } 
+        });
+        pnl1.addRow(" ", pnlHelpBtn, 5);
         pnlTop.add(pnl1);
-
+        
         XAlignedComponentPanel pnl2 = new XAlignedComponentPanel(5);
         pnl2.setBorder(BorderFactory.createTitledBorder(Translator
                 .get("multi_rename_dialog.search_replace")));
@@ -291,6 +299,30 @@ public class MultiRenameDialog extends FocusDialog implements ActionListener,
 
         return pnlTop;
     }
+
+    /**
+     * Creates a label with help.
+     * @return a label with help
+     */
+    private JLabel getLblHelp() {
+        if (lblHelp == null) {
+            String help = "<html>" +
+            "[N] - the whole name<br>" +
+            "[N2,3] - 3 characters starting from the 2nd character of the name<br>" +
+            "[N2-5] - characters 2 to 5<br>" +
+            "[N2-] - all characters starting from the 2nd character<br>" +
+            "[N-3,2] - two characters starting at 3rd character from the end of the name<br>" +
+            "[N2--2] - characters from the 2nd to the 2nd-last character<br>" +
+            "[C] - inserts a counter<br>" +
+            "[C10,2,3] - inserts a counter starting at 10, steps by 2, uses 3 digits<br>" +
+            "[YMD] - inserts a year, month and day when the file was last modified";       // TODO add to dictionary
+            lblHelp = new JLabel(help);
+            lblHelp.setBorder(new EmptyBorder(15, 15, 15, 15));
+            lblHelp.setVisible(false);
+        }
+        return lblHelp;
+    }
+    
 
     /**
      * Removes selected files from a list of files to rename.
