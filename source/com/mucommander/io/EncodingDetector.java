@@ -124,7 +124,7 @@ public class EncodingDetector {
         CharsetMatch cm = cd.detect();
 
         // Debug info
-        if(Debug.ON) Debug.trace("bestMatch getName()="+cm.getName()+" getConfidence()="+cm.getConfidence());
+        if(Debug.ON) Debug.trace("bestMatch getName()="+(cm==null?"null":cm.getName())+" getConfidence()="+(cm==null?"null":Integer.toString(cm.getConfidence())));
 //        if(Debug.ON) {
 //            CharsetMatch cms[] = cd.detectAll();
 //            for(int i=0; i<cms.length; i++)
