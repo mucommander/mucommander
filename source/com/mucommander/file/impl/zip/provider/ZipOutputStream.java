@@ -127,7 +127,7 @@ public class ZipOutputStream extends OutputStream implements ZipConstants {
         this.hasRandomAccess = out instanceof RandomAccessOutputStream;
 
         // Use BufferPool to avoid excessive memory allocation and garbage collection.
-        deflaterBuf = BufferPool.getArrayBuffer(DEFAULT_DEFLATER_BUFFER_SIZE);
+        deflaterBuf = BufferPool.getByteArray(DEFAULT_DEFLATER_BUFFER_SIZE);
     }
 
 
@@ -698,7 +698,7 @@ public class ZipOutputStream extends OutputStream implements ZipConstants {
         finish();
 
         if(deflaterBuf !=null) {         // Only if close() has not already been called already
-            BufferPool.releaseArrayBuffer(deflaterBuf);
+            BufferPool.releaseByteArray(deflaterBuf);
             deflaterBuf = null;
         }
 

@@ -152,13 +152,13 @@ public class EncodingDetector {
      * @throws IOException if an error occurred while reading the stream
      */
     public static String detectEncoding(InputStream in) throws IOException {
-        byte buf[] = BufferPool.getArrayBuffer(MAX_RECOMMENDED_BYTE_SIZE);
+        byte buf[] = BufferPool.getByteArray(MAX_RECOMMENDED_BYTE_SIZE);
 
         try {
             return detectEncoding(buf, 0, StreamUtils.readUpTo(in, buf));
         }
         finally {
-            BufferPool.releaseArrayBuffer(buf);
+            BufferPool.releaseByteArray(buf);
         }
     }
 

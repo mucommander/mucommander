@@ -66,7 +66,7 @@ public class StreamUtils {
      */
     public static long copyStream(InputStream in, OutputStream out, int bufferSize) throws FileTransferException {
         // Use BufferPool to reuse any available buffer of the same size
-        byte buffer[] = BufferPool.getArrayBuffer(bufferSize);
+        byte buffer[] = BufferPool.getByteArray(bufferSize);
         try {
             // Copies the InputStream's content to the OutputStream chunks by chunks
             int nbRead;
@@ -97,10 +97,9 @@ public class StreamUtils {
         }
         finally {
             // Make the buffer available for further use
-            BufferPool.releaseArrayBuffer(buffer);
+            BufferPool.releaseByteArray(buffer);
         }
     }
-
 
     /**
      * This method is a shorthand for {@link #fillWithConstant(java.io.OutputStream, byte, long, int)} called with a
@@ -127,7 +126,7 @@ public class StreamUtils {
      */
     public static void fillWithConstant(OutputStream out, byte value, long len, int bufferSize) throws IOException {
         // Use BufferPool to avoid excessive memory allocation and garbage collection
-        byte buffer[] = BufferPool.getArrayBuffer(bufferSize);
+        byte buffer[] = BufferPool.getByteArray(bufferSize);
 
         // Fill the buffer with the constant byte value, not necessary if the value is zero
         if(value!=0) {
@@ -145,7 +144,7 @@ public class StreamUtils {
             }
         }
         finally {
-            BufferPool.releaseArrayBuffer(buffer);
+            BufferPool.releaseByteArray(buffer);
         }
     }
 
@@ -181,7 +180,7 @@ public class StreamUtils {
         raos.seek(destOffset);
 
         // Use BufferPool to avoid excessive memory allocation and garbage collection
-        byte buffer[] = BufferPool.getArrayBuffer(bufferSize);
+        byte buffer[] = BufferPool.getByteArray(bufferSize);
 
         try {
             long remaining = length;
@@ -194,7 +193,7 @@ public class StreamUtils {
             }
         }
         finally {
-            BufferPool.releaseArrayBuffer(buffer);
+            BufferPool.releaseByteArray(buffer);
         }
     }
 
@@ -331,7 +330,7 @@ public class StreamUtils {
      */
     public static void readUntilEOF(InputStream in, int bufferSize) throws IOException {
         // Use BufferPool to avoid excessive memory allocation and garbage collection
-        byte buffer[] = BufferPool.getArrayBuffer(bufferSize);
+        byte buffer[] = BufferPool.getByteArray(bufferSize);
 
         try {
             int nbRead;
@@ -343,7 +342,7 @@ public class StreamUtils {
             }
         }
         finally {
-            BufferPool.releaseArrayBuffer(buffer);
+            BufferPool.releaseByteArray(buffer);
         }
     }
 }

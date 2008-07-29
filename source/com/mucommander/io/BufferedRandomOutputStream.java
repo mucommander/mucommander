@@ -63,7 +63,7 @@ public class BufferedRandomOutputStream extends RandomAccessOutputStream {
      */
     public BufferedRandomOutputStream(RandomAccessOutputStream raos, int size) {
         this.raos = raos;
-        this.buffer = BufferPool.getArrayBuffer(size);
+        this.buffer = BufferPool.getByteArray(size);
     }
 
     /**
@@ -193,7 +193,7 @@ public class BufferedRandomOutputStream extends RandomAccessOutputStream {
             }
 
             // Release the buffer
-            BufferPool.releaseArrayBuffer(buffer);
+            BufferPool.releaseByteArray(buffer);
             buffer = null;
         }
 
@@ -207,7 +207,7 @@ public class BufferedRandomOutputStream extends RandomAccessOutputStream {
     protected void finalize() throws Throwable {
         // If this stream hasn't been closed, release the buffer before finalizing the object
         if(buffer!=null)
-            BufferPool.releaseArrayBuffer(buffer);
+            BufferPool.releaseByteArray(buffer);
 
         super.finalize();
     }

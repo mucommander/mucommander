@@ -59,13 +59,13 @@ public class BufferPool {
 
 
     /**
-     * Convenience method that has the same effect as calling {@link #getArrayBuffer(int)} with
+     * Convenience method that has the same effect as calling {@link #getByteArray(int)} with
      * {@link #DEFAULT_BUFFER_SIZE}.
      *
      * @return a byte array with a length of DEFAULT_BUFFER_SIZE
      */
-    public static synchronized byte[] getArrayBuffer() {
-        return getArrayBuffer(DEFAULT_BUFFER_SIZE);
+    public static synchronized byte[] getByteArray() {
+        return getByteArray(DEFAULT_BUFFER_SIZE);
     }
 
     /**
@@ -74,16 +74,44 @@ public class BufferPool {
      * and returned.
      *
      * <p>This method won't return the same buffer instance until it has been released with
-     * {@link #releaseArrayBuffer(byte[])}.</p>
+     * {@link #releaseByteArray(byte[])}.</p>
      *
      * <p>This method is a shorthand for {@link #getBuffer(int, com.mucommander.io.BufferPool.BufferFactory)} called
-     * with a {@link com.mucommander.io.BufferPool.ArrayBufferFactory} instance.</p>.
+     * with a {@link com.mucommander.io.BufferPool.ByteArrayFactory} instance.</p>.
      *
      * @param size size of the byte array
      * @return a byte array of the specified size
      */
-    public static synchronized byte[] getArrayBuffer(int size) {
-        return (byte[])getBuffer(size, new ArrayBufferFactory());
+    public static synchronized byte[] getByteArray(int size) {
+        return (byte[])getBuffer(size, new ByteArrayFactory());
+    }
+
+    /**
+     * Convenience method that has the same effect as calling {@link #getCharArray(int)} with
+     * {@link #DEFAULT_BUFFER_SIZE}.
+     *
+     * @return a char array with a length of DEFAULT_BUFFER_SIZE
+     */
+    public static synchronized char[] getCharArray() {
+        return getCharArray(DEFAULT_BUFFER_SIZE);
+    }
+
+    /**
+     * Returns a char array of the specified size. This method first checks if a char array of the specified size
+     * exists in the pool. If one is found, it is removed from the pool and returned. If not, a new instance is created
+     * and returned.
+     *
+     * <p>This method won't return the same buffer instance until it has been released with
+     * {@link #releaseCharArray(char[])}.</p>
+     *
+     * <p>This method is a shorthand for {@link #getBuffer(int, com.mucommander.io.BufferPool.BufferFactory)} called
+     * with a {@link com.mucommander.io.BufferPool.CharArrayFactory} instance.</p>.
+     *
+     * @param size size of the char array
+     * @return a char array of the specified size
+     */
+    public static synchronized char[] getCharArray(int size) {
+        return (char[])getBuffer(size, new CharArrayFactory());
     }
 
     /**
@@ -105,7 +133,7 @@ public class BufferPool {
      * {@link #releaseByteBuffer(ByteBuffer)}.</p>
      *
      * <p>This method is a shorthand for {@link #getBuffer(int, com.mucommander.io.BufferPool.BufferFactory)} called
-     * with a {@link com.mucommander.io.BufferPool.ArrayBufferFactory} instance.</p>.
+     * with a {@link com.mucommander.io.BufferPool.ByteArrayFactory} instance.</p>.
 
      * @param capacity capacity of the ByteBuffer
      * @return a ByteBuffer with the specified capacity
@@ -152,15 +180,27 @@ public class BufferPool {
 
 
     /**
-     * Makes the given buffer available for further calls to {@link #getArrayBuffer(int)} with the same buffer size.
+     * Makes the given buffer available for further calls to {@link #getByteArray(int)} with the same buffer size.
      * Does nothing if the specified buffer already is in the pool. After calling this method, the given buffer
      * instance <b>must not be used</b>, otherwise it could get corrupted if some other threads use it.
      *
      * @param buffer the buffer instance to make available for further use
      * @throws IllegalArgumentException if specified buffer is null
      */
-    public static synchronized void releaseArrayBuffer(byte buffer[]) {
-        releaseBuffer(buffer, new ArrayBufferFactory());
+    public static synchronized void releaseByteArray(byte buffer[]) {
+        releaseBuffer(buffer, new ByteArrayFactory());
+    }
+
+    /**
+     * Makes the given buffer available for further calls to {@link #getCharArray(int)} with the same buffer size.
+     * Does nothing if the specified buffer already is in the pool. After calling this method, the given buffer
+     * instance <b>must not be used</b>, otherwise it could get corrupted if some other threads use it.
+     *
+     * @param buffer the buffer instance to make available for further use
+     * @throws IllegalArgumentException if specified buffer is null
+     */
+    public static synchronized void releaseCharArray(char buffer[]) {
+        releaseBuffer(buffer, new CharArrayFactory());
     }
 
     /**
@@ -323,7 +363,7 @@ public class BufferPool {
     /**
      * This class is a {@link BufferFactory} implementation for byte array (<code>byte[]</code>) buffers.
      */
-    public static class ArrayBufferFactory extends BufferFactory {
+    public static class ByteArrayFactory extends BufferFactory {
         protected Object newBuffer(int size) {
             return new byte[size];
         }
@@ -338,6 +378,27 @@ public class BufferPool {
 
         protected Class getBufferClass() {
             return byte[].class;
+        }
+    }
+
+    /**
+     * This class is a {@link BufferFactory} implementation for char array (<code>char[]</code>) buffers.
+     */
+    public static class CharArrayFactory extends BufferFactory {
+        protected Object newBuffer(int size) {
+            return new char[size];
+        }
+
+        protected BufferContainer newBufferContainer(Object buffer) {
+            return new BufferContainer(buffer) {
+                protected int getSize() {
+                    return ((char[])buffer).length;
+                }
+            };
+        }
+
+        protected Class getBufferClass() {
+            return char[].class;
         }
     }
 

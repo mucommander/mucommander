@@ -36,30 +36,30 @@ public class BufferPoolTest extends TestCase {
      * BufferPool is left is the same state as it was before the test.</p>
      */
     public void testArrayBuffer() {
-        BufferPool.BufferFactory bufferFactory = new BufferPool.ArrayBufferFactory();
+        BufferPool.BufferFactory bufferFactory = new BufferPool.ByteArrayFactory();
         // Number of array buffers before we started the test
         int originalPoolCount = BufferPool.getBufferCount(bufferFactory);
 
         // Create a new buffer with size=27
-        byte[] buffer1 = BufferPool.getArrayBuffer(27);
+        byte[] buffer1 = BufferPool.getByteArray(27);
         assertEquals(27, buffer1.length);
         assertBufferCount(originalPoolCount, bufferFactory);
 
         // Create a new buffer with size=27, assert that it is different from the first one
-        byte[] buffer2 = BufferPool.getArrayBuffer(27);
+        byte[] buffer2 = BufferPool.getByteArray(27);
         assertEquals(27, buffer2.length);
         assertFalse(buffer2==buffer1);
         assertBufferCount(originalPoolCount, bufferFactory);
 
         // Create a new buffer with size=28
-        byte[] buffer3 = BufferPool.getArrayBuffer(28);
+        byte[] buffer3 = BufferPool.getByteArray(28);
         assertEquals(28, buffer3.length);
         assertBufferCount(originalPoolCount, bufferFactory);
 
         // Assert that releasing buffer3 and requesting a buffer with size=28 brings back buffer3
-        BufferPool.releaseArrayBuffer(buffer3);
+        BufferPool.releaseByteArray(buffer3);
         assertBufferCount(originalPoolCount+1, bufferFactory);
-        assertTrue(buffer3==BufferPool.getArrayBuffer(28));
+        assertTrue(buffer3==BufferPool.getByteArray(28));
         assertBufferCount(originalPoolCount, bufferFactory);
 
         // Release all buffer instances and assert that the buffer count grows accordingly

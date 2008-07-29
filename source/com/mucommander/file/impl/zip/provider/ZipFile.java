@@ -458,7 +458,7 @@ public class ZipFile implements ZipConstants {
             // Create the ZipEntryOutputStream to write the entry's contents
 
             // Use BufferPool to avoid excessive memory allocation and garbage collection.
-            final byte[] deflaterBuf = BufferPool.getArrayBuffer(DEFAULT_DEFLATER_BUFFER_SIZE);
+            final byte[] deflaterBuf = BufferPool.getByteArray(DEFAULT_DEFLATER_BUFFER_SIZE);
             ZipEntryOutputStream zeos = new DeflatedOutputStream(raos, new Deflater(DEFAULT_DEFLATER_COMPRESSION, true), deflaterBuf) {
                 // Post-data file info and central directory get written when the stream is closed
                 public void close() throws IOException {
@@ -497,7 +497,7 @@ public class ZipFile implements ZipConstants {
                     raos.setLength(raos.getOffset());
 
                     // Release the buffer for reuse
-                    BufferPool.releaseArrayBuffer(deflaterBuf);
+                    BufferPool.releaseByteArray(deflaterBuf);
 
                     super.close();
                     closeWrite();
