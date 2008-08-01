@@ -23,6 +23,7 @@ import com.mucommander.file.FileURL;
 import com.mucommander.file.connection.ConnectionHandler;
 import com.mucommander.file.connection.ConnectionPool;
 import com.mucommander.text.Translator;
+import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.dialog.FocusDialog;
 import com.mucommander.ui.helper.MnemonicHelper;
 import com.mucommander.ui.layout.XBoxPanel;
@@ -58,7 +59,7 @@ public class ShowServerConnectionsDialog extends FocusDialog implements ActionLi
 
     
     public ShowServerConnectionsDialog(MainFrame mainFrame) {
-        super(mainFrame, Translator.get(com.mucommander.ui.action.ShowServerConnectionsAction.class.getName()+".label"), mainFrame);
+        super(mainFrame, MuAction.getStandardLabel(com.mucommander.ui.action.ShowServerConnectionsAction.class), mainFrame);
 
         this.mainFrame = mainFrame;
 

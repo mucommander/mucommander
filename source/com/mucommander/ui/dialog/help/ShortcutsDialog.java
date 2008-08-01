@@ -163,7 +163,7 @@ public class ShortcutsDialog extends FocusDialog implements ActionListener {
 
 
     public ShortcutsDialog(MainFrame mainFrame) {
-        super(mainFrame, Translator.get(com.mucommander.ui.action.ShowKeyboardShortcutsAction.class.getName()+".label"), mainFrame);
+        super(mainFrame, MuAction.getStandardLabel(com.mucommander.ui.action.ShowKeyboardShortcutsAction.class), mainFrame);
 
         this.mainFrame = mainFrame;
 

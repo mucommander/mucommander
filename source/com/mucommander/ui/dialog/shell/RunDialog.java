@@ -23,6 +23,7 @@ import com.mucommander.process.ProcessListener;
 import com.mucommander.shell.Shell;
 import com.mucommander.shell.ShellHistoryManager;
 import com.mucommander.text.Translator;
+import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.dialog.DialogToolkit;
 import com.mucommander.ui.dialog.FocusDialog;
 import com.mucommander.ui.icon.SpinningDial;
@@ -175,7 +176,7 @@ public class RunDialog extends FocusDialog implements ActionListener, ProcessLis
      * @param mainFrame the main frame this dialog is attached to.
      */
     public RunDialog(MainFrame mainFrame) {
-        super(mainFrame, Translator.get(com.mucommander.ui.action.RunCommandAction.class.getName()+".label"), mainFrame);
+        super(mainFrame, MuAction.getStandardLabel(com.mucommander.ui.action.RunCommandAction.class), mainFrame);
         this.mainFrame = mainFrame;
 		
         // Initialises the dialog's UI.

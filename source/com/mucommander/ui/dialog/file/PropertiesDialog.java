@@ -23,6 +23,7 @@ import com.mucommander.job.FileJob;
 import com.mucommander.job.PropertiesJob;
 import com.mucommander.text.SizeFormat;
 import com.mucommander.text.Translator;
+import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.dialog.DialogToolkit;
 import com.mucommander.ui.dialog.FocusDialog;
 import com.mucommander.ui.icon.SpinningDial;
@@ -63,7 +64,7 @@ public class PropertiesDialog extends FocusDialog implements Runnable, ActionLis
 	
     public PropertiesDialog(MainFrame mainFrame, FileSet files) {
         super(mainFrame,
-              files.size() > 1 ? Translator.get(com.mucommander.ui.action.ShowFilePropertiesAction.class.getName()+".label") :
+              files.size() > 1 ? MuAction.getStandardLabel(com.mucommander.ui.action.ShowFilePropertiesAction.class) :
               Translator.get("properties_dialog.file_properties", files.fileAt(0).getName()), mainFrame);
         this.mainFrame = mainFrame;
 

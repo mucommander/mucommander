@@ -23,6 +23,7 @@ import com.mucommander.auth.Credentials;
 import com.mucommander.auth.CredentialsMapping;
 import com.mucommander.file.FileURL;
 import com.mucommander.text.Translator;
+import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.dialog.DialogToolkit;
 import com.mucommander.ui.dialog.FocusDialog;
 import com.mucommander.ui.helper.FocusRequester;
@@ -87,7 +88,7 @@ public class ServerConnectDialog extends FocusDialog implements ActionListener, 
      * @param selectPanelClass class of the ServerPanel to select
      */
     public ServerConnectDialog(FolderPanel folderPanel, Class selectPanelClass) {
-        super(folderPanel.getMainFrame(), Translator.get(com.mucommander.ui.action.ConnectToServerAction.class.getName()+".label"), folderPanel.getMainFrame());
+        super(folderPanel.getMainFrame(), MuAction.getStandardLabel(com.mucommander.ui.action.ConnectToServerAction.class), folderPanel.getMainFrame());
         this.folderPanel = folderPanel;
         lastPanelClass = selectPanelClass;
 

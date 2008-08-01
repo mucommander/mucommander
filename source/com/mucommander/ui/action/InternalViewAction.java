@@ -18,14 +18,12 @@
 
 package com.mucommander.ui.action;
 
-import com.mucommander.conf.ConfigurationEvent;
-import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.viewer.ViewerRegistrar;
 
+import javax.swing.*;
 import java.util.Hashtable;
-import javax.swing.ImageIcon;
 
 /**
  * Opens the current file in view mode.
@@ -44,7 +42,7 @@ public class InternalViewAction extends AbstractViewerAction {
         super(mainFrame, properties);
 
         ImageIcon icon;
-        if((icon = getIcon(ViewAction.class)) != null)
+        if((icon = getStandardIcon(ViewAction.class)) != null)
             setIcon(icon);
     }
 
@@ -56,5 +54,7 @@ public class InternalViewAction extends AbstractViewerAction {
      * Opens the internal viewer on the specified file.
      * @param file file to view.
      */
-    public void performInternalAction(AbstractFile file) {ViewerRegistrar.createViewerFrame(mainFrame, file, getIcon().getImage());}
+    public void performInternalAction(AbstractFile file) {
+        ViewerRegistrar.createViewerFrame(mainFrame, file, getIcon().getImage());
+    }
 }

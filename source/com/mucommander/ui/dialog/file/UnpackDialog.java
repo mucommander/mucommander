@@ -23,6 +23,7 @@ import com.mucommander.file.AbstractFile;
 import com.mucommander.file.util.FileSet;
 import com.mucommander.job.CopyJob;
 import com.mucommander.text.Translator;
+import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.main.MainFrame;
 
 
@@ -42,7 +43,7 @@ public class UnpackDialog extends TransferDestinationDialog {
      */
     public UnpackDialog(MainFrame mainFrame, FileSet files, boolean isShiftDown) {
         super(mainFrame, files,
-              Translator.get(com.mucommander.ui.action.UnpackAction.class.getName()+".label"),
+              MuAction.getStandardLabel(com.mucommander.ui.action.UnpackAction.class),
               Translator.get("unpack_dialog.destination"),
               Translator.get("unpack_dialog.unpack"),
               Translator.get("unpack_dialog.error_title"));

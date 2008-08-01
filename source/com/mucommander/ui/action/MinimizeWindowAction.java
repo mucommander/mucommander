@@ -37,7 +37,7 @@ public class MinimizeWindowAction extends MuAction {
         super(mainFrame, properties, !OsFamilies.MAC_OS_X.isCurrent());
 
         if(OsFamilies.MAC_OS_X.isCurrent())
-            setLabel(Translator.get(MinimizeWindowAction.class.getName()+".label"+".mac_os_x"));
+            setLabel(Translator.get(getStandardLabelKey()+".mac_os_x"));
     }
 
     public void performAction() {

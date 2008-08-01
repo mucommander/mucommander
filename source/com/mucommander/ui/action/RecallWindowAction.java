@@ -72,7 +72,7 @@ public class RecallWindowAction extends MuAction implements PropertyChangeListen
      * Returns the window number contained by the {@link #WINDOW_NUMBER_PROPERTY_KEY} property or -1 if the property
      * doesn't contain any value, or a value that cannot be parsed as an int.
      *
-     * @returns the window number's property value or -1 if the property doesn't contain any value, or a value that cannot be parsed as an int.
+     * @return the window number's property value or -1 if the property doesn't contain any value, or a value that cannot be parsed as an int.
      */
     private int getWindowNumber() {
         try {
@@ -90,10 +90,12 @@ public class RecallWindowAction extends MuAction implements PropertyChangeListen
 
     /**
      * Updates the label using the given window number.
+     *
+     * @param windowNumber the window number to be used in the label
      */
     private void updateLabel(int windowNumber) {
         // Update the action's label
-        setLabel(Translator.get(getClass().getName()+".label", ""+windowNumber));
+        setLabel(Translator.get(getStandardLabelKey(), ""+windowNumber));
     }
 
 

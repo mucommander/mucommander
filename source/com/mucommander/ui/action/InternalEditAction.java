@@ -18,14 +18,12 @@
 
 package com.mucommander.ui.action;
 
-import com.mucommander.conf.ConfigurationEvent;
-import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.viewer.EditorRegistrar;
 
+import javax.swing.*;
 import java.util.Hashtable;
-import javax.swing.ImageIcon;
 
 /**
  * Opens the current file in edit mode.
@@ -43,7 +41,7 @@ public class InternalEditAction extends AbstractViewerAction {
         super(mainFrame, properties);
 
         ImageIcon icon;
-        if((icon = getIcon(EditAction.class)) != null)
+        if((icon = getStandardIcon(EditAction.class)) != null)
             setIcon(icon);
     }
 
@@ -55,6 +53,8 @@ public class InternalEditAction extends AbstractViewerAction {
      * Opens the internal editor on the specified file.
      * @param file file to edit.
      */
-    public void performInternalAction(AbstractFile file) {EditorRegistrar.createEditorFrame(mainFrame, file, getIcon().getImage());}
+    public void performInternalAction(AbstractFile file) {
+        EditorRegistrar.createEditorFrame(mainFrame, file, getIcon().getImage());
+    }
 
 }

@@ -22,6 +22,7 @@ import com.mucommander.bookmark.Bookmark;
 import com.mucommander.bookmark.BookmarkManager;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.text.Translator;
+import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.dialog.DialogToolkit;
 import com.mucommander.ui.dialog.FocusDialog;
 import com.mucommander.ui.layout.XAlignedComponentPanel;
@@ -59,7 +60,7 @@ public class AddBookmarkDialog extends FocusDialog implements ActionListener, Do
 
 
     public AddBookmarkDialog(MainFrame mainFrame) {
-        super(mainFrame, Translator.get(com.mucommander.ui.action.AddBookmarkAction.class.getName()+".label"), mainFrame);
+        super(mainFrame, MuAction.getStandardLabel(com.mucommander.ui.action.AddBookmarkAction.class), mainFrame);
 
         Container contentPane = getContentPane();
         YBoxPanel mainPanel = new YBoxPanel(5);

@@ -27,6 +27,7 @@ import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.action.MkdirAction;
 import com.mucommander.ui.action.MkfileAction;
+import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.chooser.SizeChooser;
 import com.mucommander.ui.dialog.DialogToolkit;
 import com.mucommander.ui.dialog.FocusDialog;
@@ -81,7 +82,7 @@ public class MkdirDialog extends FocusDialog implements ActionListener, ItemList
         Container contentPane = getContentPane();
 
         YBoxPanel mainPanel = new YBoxPanel();
-        mainPanel.add(new JLabel(Translator.get(mkfileMode?com.mucommander.ui.action.MkfileAction.class.getName()+".tooltip":com.mucommander.ui.action.MkdirAction.class.getName()+".tooltip")+" :"));
+        mainPanel.add(new JLabel(MuAction.getStandardTooltip(mkfileMode?com.mucommander.ui.action.MkfileAction.class:com.mucommander.ui.action.MkdirAction.class)+" :"));
 
         // Create a path field with auto-completion capabilities
         pathField = new FilePathField();

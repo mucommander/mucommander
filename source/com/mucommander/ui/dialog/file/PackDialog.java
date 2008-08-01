@@ -26,6 +26,7 @@ import com.mucommander.file.util.FileSet;
 import com.mucommander.file.util.FileToolkit;
 import com.mucommander.job.ArchiveJob;
 import com.mucommander.text.Translator;
+import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.dialog.DialogToolkit;
 import com.mucommander.ui.dialog.QuestionDialog;
 import com.mucommander.ui.layout.YBoxPanel;
@@ -73,7 +74,7 @@ public class PackDialog extends JobDialog implements ActionListener, ItemListene
 
 
     public PackDialog(MainFrame mainFrame, FileSet files, boolean isShiftDown) {
-        super(mainFrame, Translator.get(com.mucommander.ui.action.PackAction.class.getName()+".label"), files);
+        super(mainFrame, MuAction.getStandardLabel(com.mucommander.ui.action.PackAction.class), files);
 
         // Retrieve available formats for single file or many file archives
         int nbFiles = files.size();

@@ -21,6 +21,7 @@ package com.mucommander.ui.dialog.about;
 import com.mucommander.RuntimeConstants;
 import com.mucommander.desktop.DesktopManager;
 import com.mucommander.text.Translator;
+import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.dialog.FocusDialog;
 import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.main.MainFrame;
@@ -78,7 +79,7 @@ public class AboutDialog extends FocusDialog implements ActionListener {
      * @param mainFrame frame this dialog is relative to.
      */
     public AboutDialog(MainFrame mainFrame) {
-        super(mainFrame, Translator.get(com.mucommander.ui.action.ShowAboutAction.class.getName()+".label"), mainFrame);
+        super(mainFrame, MuAction.getStandardLabel(com.mucommander.ui.action.ShowAboutAction.class), mainFrame);
 
         // Initialises the dialog's content.
         Container contentPane = getContentPane();
@@ -260,7 +261,7 @@ public class AboutDialog extends FocusDialog implements ActionListener {
 
         tempPanel = new JPanel(new BorderLayout());
         if(DesktopManager.canBrowse()) {
-            tempPanel.add(homeButton = new JButton(Translator.get(com.mucommander.ui.action.GoToWebsiteAction.class.getName()+".label")), BorderLayout.NORTH);
+            tempPanel.add(homeButton = new JButton(MuAction.getStandardLabel(com.mucommander.ui.action.GoToWebsiteAction.class)), BorderLayout.NORTH);
             homeButton.addActionListener(this);
         }
         else {

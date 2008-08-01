@@ -23,6 +23,7 @@ import com.mucommander.file.util.FileSet;
 import com.mucommander.job.ChangeFileAttributesJob;
 import com.mucommander.text.CustomDateFormat;
 import com.mucommander.text.Translator;
+import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.dialog.DialogToolkit;
 import com.mucommander.ui.layout.YBoxPanel;
 import com.mucommander.ui.main.MainFrame;
@@ -54,11 +55,11 @@ public class ChangeDateDialog extends JobDialog implements ActionListener, ItemL
 
 
     public ChangeDateDialog(MainFrame mainFrame, FileSet files) {
-        super(mainFrame, Translator.get(com.mucommander.ui.action.ChangeDateAction.class.getName()+".label"), files);
+        super(mainFrame, MuAction.getStandardLabel(com.mucommander.ui.action.ChangeDateAction.class), files);
 
         YBoxPanel mainPanel = new YBoxPanel();
 
-        mainPanel.add(new JLabel(Translator.get(com.mucommander.ui.action.ChangeDateAction.class.getName()+".tooltip")+" :"));
+        mainPanel.add(new JLabel(MuAction.getStandardTooltip(com.mucommander.ui.action.ChangeDateAction.class)+" :"));
         mainPanel.addSpace(5);
 
         ButtonGroup buttonGroup = new ButtonGroup();

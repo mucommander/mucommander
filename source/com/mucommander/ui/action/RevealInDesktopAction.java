@@ -37,10 +37,10 @@ public class RevealInDesktopAction extends MuAction {
     public RevealInDesktopAction(MainFrame mainFrame, Hashtable properties) {
         super(mainFrame, properties);
         if(DesktopManager.canOpenInFileManager())
-            setLabel(Translator.get(getClass().getName()+".label", DesktopManager.getFileManagerName()));
+            setLabel(Translator.get(getStandardLabelKey(), DesktopManager.getFileManagerName()));
         else {
             // Disable this action if the platform is not capable of opening files in the default file manager
-            setLabel(Translator.get(getClass().getName()+".label", Translator.get("file_manager")));
+            setLabel(Translator.get(getStandardLabelKey(), Translator.get("file_manager")));
             setEnabled(false);
         }
     }

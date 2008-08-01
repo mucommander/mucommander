@@ -26,6 +26,7 @@ import com.mucommander.io.security.MuProvider;
 import com.mucommander.job.CalculateChecksumJob;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.CalculateChecksumAction;
+import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.dialog.DialogToolkit;
 import com.mucommander.ui.layout.YBoxPanel;
 import com.mucommander.ui.main.MainFrame;
@@ -80,7 +81,7 @@ public class CalculateChecksumDialog extends JobDialog implements ActionListener
 
 
     public CalculateChecksumDialog(MainFrame mainFrame, FileSet files) {
-        super(mainFrame, Translator.get(CalculateChecksumAction.class.getName()+".label"), files);
+        super(mainFrame, MuAction.getStandardLabel(CalculateChecksumAction.class), files);
 
         YBoxPanel mainPanel = new YBoxPanel();
 

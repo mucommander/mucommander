@@ -19,23 +19,22 @@
 package com.mucommander.ui.dialog.startup;
 
 import com.mucommander.Debug;
-import com.mucommander.desktop.DesktopManager;
 import com.mucommander.VersionChecker;
 import com.mucommander.conf.impl.MuConfiguration;
+import com.mucommander.desktop.DesktopManager;
 import com.mucommander.file.FileFactory;
 import com.mucommander.job.SelfUpdateJob;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.GoToWebsiteAction;
+import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.dialog.QuestionDialog;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;
 
-import javax.swing.JOptionPane;
-import javax.swing.JCheckBox;
-import javax.swing.JLabel;
+import javax.swing.*;
 import java.awt.*;
-import java.util.Vector;
 import java.net.URL;
+import java.util.Vector;
 
 /**
  * This class takes care of retrieving the information about the latest muCommander version from a remote server and
@@ -158,7 +157,7 @@ public class CheckVersionDialog extends QuestionDialog implements Runnable {
         // 'Go to website' choice (if available)
         if(downloadOption) {
             actionsV.add(new Integer(GO_TO_WEBSITE_ACTION));
-            labelsV.add(Translator.get(GoToWebsiteAction.class.getName()+".label"));
+            labelsV.add(MuAction.getStandardLabel(GoToWebsiteAction.class));
         }
 
 //        // 'Install and restart' choice (if available)
