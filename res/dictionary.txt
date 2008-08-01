@@ -4957,6 +4957,71 @@ com.mucommander.ui.action.CalculateChecksumAction.label:DA:Udregn kontrolsum
 
 
 
+com.mucommander.ui.action.MaximizeWindowAction.label:EN:Maximize
+com.mucommander.ui.action.MaximizeWindowAction.label:FR:Agrandir
+# Translation missing (New!)
+
+
+
+
+
+
+
+
+
+
+
+
+# Mac OS X uses a special terminology: 'Zoom' instead of 'Maximize'.
+# If you have no way of checking on a mac what the translation is or if the label
+# is the same, you can leave this entry undefined and the generic 'Maximize'
+# label will be used.
+com.mucommander.ui.action.MaximizeWindowAction.label.mac_os_x:EN:Zoom
+# Translation missing (New!)
+
+
+
+
+
+
+
+
+
+
+
+
+com.mucommander.ui.action.MinimizeWindowAction.label:EN:Minimize
+com.mucommander.ui.action.MinimizeWindowAction.label:FR:Réduire
+# Translation missing (New!)
+
+
+
+
+
+
+
+
+
+
+
+
+# Overrides the standard 'Minimize' label under Mac OS X.
+# If you have no way of checking on a mac what the translation is or if the label
+# is the same, you can leave this entry undefined and the generic 'Minimize'
+# label will be used.
+com.mucommander.ui.action.MinimizeWindowAction.label.mac_os_x:EN:$[com.mucommander.ui.action.MinimizeWindowAction.label]
+# Translation missing (New!)
+
+
+
+
+
+
+
+
+
+
+
 
 
 #############

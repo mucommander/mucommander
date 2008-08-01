@@ -284,6 +284,13 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
 
         windowMenu = MenuToolkit.addMenu(Translator.get("window_menu"), menuMnemonicHelper, this);
 
+        // If running Mac OS X, add 'Minimize' and 'Zoom' items
+        if(OsFamilies.MAC_OS_X.isCurrent()) {
+            MenuToolkit.addMenuItem(windowMenu, ActionManager.getActionInstance(MinimizeWindowAction.class, mainFrame), menuItemMnemonicHelper);
+            MenuToolkit.addMenuItem(windowMenu, ActionManager.getActionInstance(MaximizeWindowAction.class, mainFrame), menuItemMnemonicHelper);
+            windowMenu.add(new JSeparator());
+        }
+
         MenuToolkit.addMenuItem(windowMenu, ActionManager.getActionInstance(SplitEquallyAction.class, mainFrame), menuItemMnemonicHelper);
         buttonGroup = new ButtonGroup();
         buttonGroup.add(splitVerticallyItem = MenuToolkit.addCheckBoxMenuItem(windowMenu, ActionManager.getActionInstance(SplitVerticallyAction.class, mainFrame), menuItemMnemonicHelper));

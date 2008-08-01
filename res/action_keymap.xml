@@ -367,4 +367,8 @@
   <!-- Default : alt F6                                                          -->
   <action class="com.mucommander.ui.action.MultiRenameAction"            keystroke="alt F6"/>
 
+  <!-- Action  : Maximize the current window.                                    -->
+  <!-- Default : meta M                                                          -->
+  <action class="com.mucommander.ui.action.MinimizeWindowAction"            keystroke="meta M"/>
+
 </keymap>
