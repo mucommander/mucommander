@@ -151,6 +151,8 @@ Bug fixes:
   from and to a local volume (bug #52).
 - Moved 'Check for updates' from 'File' to 'Help' menu, kudos to Joshua Lebo 
   and Sergey Masyura (bug #59).
+- Mac OS X: added standard 'Minimize' and 'Zoom' items to 'Windows' menu 
+  (bug #37) .
 
 Known issues:
 - Korean, Simplified Chinese, Slovenian and Slovak translations are not 
