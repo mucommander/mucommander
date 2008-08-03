@@ -84,6 +84,7 @@ Code contributors:
 - Vassil Dichev
 - Arik Hadas
 - Mariusz Jakubowski
+- Joshua Lebo
 - Xavier Martin
 - Alejandro Scandroli
 
