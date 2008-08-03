@@ -303,6 +303,7 @@ change:EN:Change
 change:FR:Changer
 change:PL:Zmień
 change:DA:Ændre
+change:NL:veranderen
 # Translation missing (New!)
 
 
@@ -729,6 +730,7 @@ quick_search:DA:Hurtig søgning
 file_manager:EN:File manager
 file_manager:FR:Gestionnaire de fichiers
 file_manager:DA:Filhåndterer
+file_manager:NL:Bestansbeheerder
 # Translation missing (New!)
 
 
@@ -2718,6 +2720,7 @@ com.mucommander.ui.action.DeleteAction.tooltip:EN:Delete marked files using the 
 com.mucommander.ui.action.DeleteAction.tooltip:FR:Supprimer les fichiers marqués en utilisant la corbeille système si possible
 com.mucommander.ui.action.DeleteAction.tooltip:DE:Markierte Dateien löschen
 com.mucommander.ui.action.DeleteAction.tooltip:DA:Slet markerede filer via papirkurven når det er muligt
+com.mucommander.ui.action.DeleteAction.tooltip:NL:Gemarkeerde bestanden verwijderen
 # The following entries need to be updated to indicate that the system trash is used when it is available
 com.mucommander.ui.action.DeleteAction.tooltip:DE:Markierte Dateien löschen
 com.mucommander.ui.action.DeleteAction.tooltip:ES:Elimiar los ficheros marcados
@@ -2751,6 +2754,7 @@ com.mucommander.ui.action.DeleteAction.tooltip:SV:Radera markerade filer
 com.mucommander.ui.action.PermanentDeleteAction.label:EN:Delete permanently
 com.mucommander.ui.action.PermanentDeleteAction.label:FR:Supprimer definitivement
 com.mucommander.ui.action.PermanentDeleteAction.label:DA:Slet permanent
+com.mucommander.ui.action.PermanentDeleteAction.label:NL:Definitief verwijderen
 # Translation missing (New!)
 
 
@@ -2770,6 +2774,7 @@ com.mucommander.ui.action.PermanentDeleteAction.label:DA:Slet permanent
 com.mucommander.ui.action.PermanentDeleteAction.tooltip:EN:Delete marked files without using the system trash
 com.mucommander.ui.action.PermanentDeleteAction.tooltip:FR:Supprimer les fichiers marqués sans utiliser la corbeille système
 com.mucommander.ui.action.PermanentDeleteAction.tooltip:DA:Slet markerede filer uden at bruge papirkurven
+com.mucommander.ui.action.PermanentDeleteAction.tooltip:NL:Verwijder gemarkeerde bestanden zonder de prullenbak te gebruiken
 # Translation missing (New!)
 
 
@@ -3147,6 +3152,7 @@ com.mucommander.ui.action.GoToParentAction.tooltip:DA:Til forrige mappe
 com.mucommander.ui.action.GoToParentInOtherPanelAction.label:EN:Go to parent in other panel
 com.mucommander.ui.action.GoToParentInOtherPanelAction.label:FR:Remonter dans l'autre panneau
 com.mucommander.ui.action.GoToParentInOtherPanelAction.label:DA:Gå til forrige mappe i modsatte panel
+com.mucommander.ui.action.GoToParentInOtherPanelAction.label:NL:Ga naar bovenliggende map in het andere paneel
 # Translation missing (New!)
 
 
@@ -3164,6 +3170,7 @@ com.mucommander.ui.action.GoToParentInOtherPanelAction.label:DA:Gå til forrige 
 com.mucommander.ui.action.GoToParentInBothPanelsAction.label:EN:Go to parent in both panels
 com.mucommander.ui.action.GoToParentInBothPanelsAction.label:FR:Remonter dans les deux panneaux
 com.mucommander.ui.action.GoToParentInBothPanelsAction.label:DA:Gå til forrige mappe i begge paneler
+com.mucommander.ui.action.GoToParentInBothPanelsAction.label:NL:Ga naar bovenliggende map in beide panelen
 # Translation missing (New!)
 
 
@@ -4448,6 +4455,7 @@ com.mucommander.ui.action.ToggleTreeAction.label:EN:Show tree view
 com.mucommander.ui.action.ToggleTreeAction.label:FR:Afficher la vue arborescente
 com.mucommander.ui.action.ToggleTreeAction.label:PL:Pokaż drzewo katalogów
 com.mucommander.ui.action.ToggleTreeAction.label:DA:Træ visning
+com.mucommander.ui.action.ToggleTreeAction.label:NL:Boom weergave
 # Translation missing (New!)
 
 
@@ -8262,6 +8270,7 @@ server_connect_dialog.private_key:EN:Private key
 server_connect_dialog.private_key:FR:Clé privée
 server_connect_dialog.private_key:PL:Klucz prywatny
 server_connect_dialog.private_key:DA:Privat nøgle
+server_connect_dialog.private_key:NL:Private sleutel
 # Translation missing (New!)
 
 
@@ -8283,6 +8292,7 @@ server_connect_dialog.private_key:DA:Privat nøgle
 server_connect_dialog.passphrase:EN:Passphrase
 server_connect_dialog.passphrase:FR:Phrase secrète
 server_connect_dialog.passphrase:DA:Løsen
+server_connect_dialog.passphrase:NL:Wachtwoord
 # Translation missing (New!)
 
 
