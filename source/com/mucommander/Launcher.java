@@ -29,8 +29,8 @@ import com.mucommander.ui.main.SplashScreen;
 import com.mucommander.ui.main.ToolBar;
 import com.mucommander.ui.main.WindowManager;
 
-import java.lang.reflect.Constructor;
 import java.io.IOException;
+import java.lang.reflect.Constructor;
 
 /**
  * muCommander launcher.
@@ -104,12 +104,6 @@ public class Launcher {
 
         // Allows users to change the preferences folder.
         System.out.println(" -p FOLDER, --preferences FOLDER   Store configuration files in FOLDER");
-
-        // Disables the splash screen.
-        System.out.println(" --no-splash                       Disable splashscreen on startup");
-
-        // Enables the splashscreen.
-        System.out.println(" --splash                          Enable splashscreen on startup (default)");
 
         // muCommander will not print verbose error messages.
         System.out.println(" -S, --silent                      Do not print verbose error messages");
@@ -206,8 +200,8 @@ public class Launcher {
     private static void printStartupMessage(String message) {
         if(useSplash)
             splashScreen.setLoadingMessage(message);
-        else
-            System.out.println(message);
+
+        if(Debug.ON) Debug.trace(message);
     }
 
 
@@ -223,7 +217,6 @@ public class Launcher {
         // Initialises fields.
         fatalWarnings = false;
         verbose       = true;
-        useSplash     = true;
 
         // - Command line parsing -------------------------------------
         // ------------------------------------------------------------
@@ -235,14 +228,6 @@ public class Launcher {
             // Print help.
             else if(args[i].equals("-h") || args[i].equals("--help"))
                 printUsage();
-
-            // Disable splashscreen.
-            else if(args[i].equals("--no-splash"))
-                useSplash = false;
-
-            // Enables splashscreen.
-            else if(args[i].equals("--splash"))
-                useSplash = true;
 
             // Associations handling.
             else if(args[i].equals("-a") || args[i].equals("--assoc")) {
@@ -395,11 +380,7 @@ public class Launcher {
         // Adds all extensions to the classpath.
         try {ExtensionManager.addExtensionsToClasspath();}
         catch(Exception e) {if(Debug.ON) Debug.trace("Failed to add extensions to the classpath");}
-
-        // Shows the splash screen.
-        if(useSplash)
-            splashScreen = new SplashScreen(RuntimeConstants.VERSION, "Loading preferences...");
-
+       
         // This the property is supposed to have the java.net package use the proxy defined in the system settings
         // to establish HTTP connections. This property is supported only under Java 1.5 and up.
         // Note that Mac OS X already uses the system HTTP proxy, with or without this property being set.
@@ -410,6 +391,11 @@ public class Launcher {
             try {MuConfiguration.read();}
             catch(Exception e) {printFileError("Could not load configuration", e, fatalWarnings);}
         }
+
+        // Shows the splash screen, if enabled in the preferences
+        useSplash = MuConfiguration.getVariable(MuConfiguration.SHOW_SPLASH_SCREEN, MuConfiguration.DEFAULT_SHOW_SPLASH_SCREEN);
+        if(useSplash) {
+            splashScreen = new SplashScreen(RuntimeConstants.VERSION, "Loading preferences...");}
 
         boolean showSetup;
         showSetup = MuConfiguration.getVariable(MuConfiguration.THEME_TYPE) == null;

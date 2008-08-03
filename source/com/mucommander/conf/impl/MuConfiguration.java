@@ -69,6 +69,10 @@ public class MuConfiguration {
     public static final String  CONFIRM_ON_QUIT                   = "quit_confirmation";
     /** Default quitting behavior. */
     public static final boolean DEFAULT_CONFIRM_ON_QUIT           = true;
+    /** Whether or not to display splash screen when starting muCommander. */
+    public static final String  SHOW_SPLASH_SCREEN                = "show_splash_screen";
+    /** Default splash screen behavior. */
+    public static final boolean DEFAULT_SHOW_SPLASH_SCREEN        = true;
     /** Look and feel used by muCommander. */
     public static final String  LOOK_AND_FEEL                     = "lookAndFeel";
     /** All registered custom Look and feels. */

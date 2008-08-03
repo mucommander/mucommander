@@ -10820,6 +10820,26 @@ prefs_dialog.check_for_updates_on_startup:JA:起動時に更新をチェック�
 prefs_dialog.check_for_updates_on_startup:SV:Sök uppdateringar vid uppstart
 prefs_dialog.check_for_updates_on_startup:DA:Tjek for opdateringer ved opstart
 
+prefs_dialog.show_splash_screen:EN:Show splash screen
+prefs_dialog.show_splash_screen:FR:Afficher l'écran de chargement
+# Translation missing (New!)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # Folders tab
 
 prefs_dialog.folders_tab:EN:Folders

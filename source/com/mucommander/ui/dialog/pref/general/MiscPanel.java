@@ -55,6 +55,9 @@ class MiscPanel extends PreferencesPanel implements ItemListener {
 
     /** 'Show confirmation dialog on quit' checkbox */
     private JCheckBox quitConfirmationCheckBox;
+    
+    /** 'Show splash screen' checkbox */
+    private JCheckBox showSplashScreenCheckBox;
 
     /** 'Enable system notifications' checkbox */
     private JCheckBox systemNotificationsCheckBox;
@@ -137,6 +140,11 @@ class MiscPanel extends PreferencesPanel implements ItemListener {
 
         northPanel.addSpace(10);
 
+        // 'Show splash screen' option
+        showSplashScreenCheckBox = new JCheckBox(Translator.get("prefs_dialog.show_splash_screen"));
+        showSplashScreenCheckBox.setSelected(MuConfiguration.getVariable(MuConfiguration.SHOW_SPLASH_SCREEN, MuConfiguration.DEFAULT_SHOW_SPLASH_SCREEN));
+        northPanel.add(showSplashScreenCheckBox);
+
         // 'Check for updates on startup' option
         checkForUpdatesCheckBox = new JCheckBox(Translator.get("prefs_dialog.check_for_updates_on_startup"));
         checkForUpdatesCheckBox.setSelected(MuConfiguration.getVariable(MuConfiguration.CHECK_FOR_UPDATE, MuConfiguration.DEFAULT_CHECK_FOR_UPDATE));
@@ -196,6 +204,7 @@ class MiscPanel extends PreferencesPanel implements ItemListener {
             MuConfiguration.setVariable(MuConfiguration.SHELL_ENCODING, (String)shellEncoding.getSelectedItem());
 
         MuConfiguration.setVariable(MuConfiguration.CONFIRM_ON_QUIT, quitConfirmationCheckBox.isSelected());
+        MuConfiguration.setVariable(MuConfiguration.SHOW_SPLASH_SCREEN, showSplashScreenCheckBox.isSelected());
 
         boolean enabled;
         if(systemNotificationsCheckBox!=null) {
