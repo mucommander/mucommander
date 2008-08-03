@@ -152,7 +152,9 @@ Bug fixes:
 - Moved 'Check for updates' from 'File' to 'Help' menu, kudos to Joshua Lebo 
   and Sergey Masyura (bug #59).
 - Mac OS X: added standard 'Minimize' and 'Zoom' items to 'Windows' menu 
-  (bug #37) .
+  (bug #37).
+- New 'Show splash screen' preference added to the 'Misc' preferences, 
+  replacing existing command line options (bug #66). Contributed by Joshua Lebo.
 
 Known issues:
 - Korean, Simplified Chinese, Slovenian and Slovak translations are not 
