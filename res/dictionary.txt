@@ -10822,6 +10822,7 @@ prefs_dialog.check_for_updates_on_startup:DA:Tjek for opdateringer ved opstart
 
 prefs_dialog.show_splash_screen:EN:Show splash screen
 prefs_dialog.show_splash_screen:FR:Afficher l'écran de chargement
+prefs_dialog.show_splash_screen:DE:Zeige Startbild
 # Translation missing (New!)
 
 
