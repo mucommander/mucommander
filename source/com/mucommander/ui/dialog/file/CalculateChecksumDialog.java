@@ -27,6 +27,8 @@ import com.mucommander.job.CalculateChecksumJob;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.CalculateChecksumAction;
 import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.button.HelpButton;
+import com.mucommander.ui.button.HelpButtonPanel;
 import com.mucommander.ui.dialog.DialogToolkit;
 import com.mucommander.ui.layout.YBoxPanel;
 import com.mucommander.ui.main.MainFrame;
@@ -163,6 +165,8 @@ public class CalculateChecksumDialog extends JobDialog implements ActionListener
                 DialogToolkit.createOKCancelPanel(okButton, cancelButton, getRootPane(), this)));
 
         mainPanel.add(fileDetailsPanel);
+
+        mainPanel.add(new HelpButtonPanel(new HelpButton(mainFrame, "CalculateChecksum")));
         
         getContentPane().add(mainPanel);
 
