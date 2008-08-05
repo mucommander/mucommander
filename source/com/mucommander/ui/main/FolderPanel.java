@@ -1096,7 +1096,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
                                 FileURL newURL = new FileURL(folder.getCanonicalPath());
                                 // Keep the credentials and properties (if any)
                                 newURL.setCredentials(folderURL.getCredentials());
-                                newURL.copyProperties(folderURL);
+                                newURL.importProperties(folderURL);
                                 this.folderURL = newURL;
                                 // Invalidate the AbstractFile instance
                                 this.folder = null;

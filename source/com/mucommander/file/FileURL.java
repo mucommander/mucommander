@@ -233,6 +233,8 @@ public class FileURL implements Cloneable {
      * @throws MalformedURLException if the path is invalid
      */
     private static String canonizePath(String path, String separator, boolean localFile) throws MalformedURLException {
+        // Todo: use PathTokenizer
+
         if(!path.equals("/")) {
             int pos;	    // position of current path separator
             int pos2 = 0;	// position of next path separator
@@ -535,7 +537,7 @@ public class FileURL implements Cloneable {
     /**
      * Returns the realm of a given location, that is the URL to the host (if this URL contains one), port
      * (if this URL contains one) and share path (if the location's protocol has a notion of share, e.g. SMB).
-     * Properties contained by the give FileURL are copied, but Credentials aren't.
+     * Properties contained by the given FileURL are copied, but Credentials aren't.
      *
      * <p>A few examples:
      * <ul>
@@ -661,10 +663,11 @@ public class FileURL implements Cloneable {
     }
 
     /**
-     * Copies the properties of the given FileURL into this FileURL.
-     * @param url url whose properties should be copied.
+     * Copy the properties of the given FileURL into this FileURL.
+     *
+     * @param url url whose properties should be imported.
      */
-    public void copyProperties(FileURL url) {
+    public void importProperties(FileURL url) {
         Enumeration propertyKeys = url.getPropertyKeys();
         if(propertyKeys!=null) {
             String key;
@@ -674,7 +677,6 @@ public class FileURL implements Cloneable {
             }
         }
     }
-
 
     /**
      * Returns a String representation of this FileURL.
