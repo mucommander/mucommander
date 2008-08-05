@@ -21,24 +21,20 @@ package com.mucommander.ui.action;
 import com.mucommander.desktop.DesktopManager;
 import com.mucommander.ui.main.MainFrame;
 
-import java.util.Hashtable;
-import javax.swing.JOptionPane;
 import java.net.URL;
+import java.util.Hashtable;
 
 /**
  * This action opens a URL in the system's default browser. This action is enabled only if the OS/Window manager
  * is capable of doing do.
- * The URL to open must
- *
- *
  *
  * @author Maxence Bernard
  */
 public class OpenURLInBrowserAction extends MuAction {
 
+    /** Key to the URL property */
     public final static String URL_PROPERTY_KEY = "url";
 
-    
     public OpenURLInBrowserAction(MainFrame mainFrame, Hashtable properties) {
         super(mainFrame, properties);
 
@@ -46,7 +42,6 @@ public class OpenURLInBrowserAction extends MuAction {
         setEnabled(DesktopManager.canBrowse());
     }
 
-    
     public void performAction() {
         Object url = getValue(URL_PROPERTY_KEY);
 
