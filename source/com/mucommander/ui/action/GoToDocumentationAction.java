@@ -22,6 +22,8 @@ import com.mucommander.runtime.OsFamilies;
 import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.main.MainFrame;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.Hashtable;
 
 /**
@@ -31,7 +33,7 @@ import java.util.Hashtable;
  *
  * @author Maxence Bernard
  */
-public class GoToDocumentationAction extends OpenURLInBrowserAction {
+public class GoToDocumentationAction extends OpenURLInBrowserAction implements PropertyChangeListener {
 
     /** Key to the topic property */
     public final static String TOPIC_PROPERTY_KEY = "topic";
@@ -39,11 +41,24 @@ public class GoToDocumentationAction extends OpenURLInBrowserAction {
     public GoToDocumentationAction(MainFrame mainFrame, Hashtable properties) {
         super(mainFrame, properties);
 
-        // Construct the URL to sent the browser to, using the base URL defined in the runtime constants and
-        // the optional topic defined as a property
+        setIcon(IconManager.getIcon(IconManager.COMMON_ICON_SET,
+                OsFamilies.MAC_OS_X.isCurrent()?"help_mac.png":"help.png"));
 
+        // Set the URL
+        updateURL();
+
+        // Listen to changes made to the topic property
+        addPropertyChangeListener(this);
+    }
+
+    /**
+     * Sets the URL to sent the browser to, using the base URL defined in the runtime constants and
+     * the optional topic defined in the {@link #TOPIC_PROPERTY_KEY}. The URL is stored in the {@link #URL_PROPERTY_KEY}
+     * property.
+     */
+    private void updateURL() {
         String url = com.mucommander.RuntimeConstants.DOCUMENTATION_URL;
-        String topic = (String)properties.get(TOPIC_PROPERTY_KEY);
+        String topic = (String)getValue(TOPIC_PROPERTY_KEY);
 
         // If there is a topic, append it to the URL
         if(topic!=null) {
@@ -54,8 +69,17 @@ public class GoToDocumentationAction extends OpenURLInBrowserAction {
         }
 
         putValue(URL_PROPERTY_KEY, url);
+    }
 
-        setIcon(IconManager.getIcon(IconManager.COMMON_ICON_SET,
-                OsFamilies.MAC_OS_X.isCurrent()?"help_mac.png":"help.png"));
+
+    ///////////////////////////////////////////
+    // PropertyChangeListener implementation //
+    ///////////////////////////////////////////
+
+    public void propertyChange(PropertyChangeEvent propertyChangeEvent) {
+
+        if(propertyChangeEvent.getPropertyName().equals(TOPIC_PROPERTY_KEY)) {
+            updateURL();
+        }
     }
 }
