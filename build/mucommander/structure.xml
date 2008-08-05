@@ -75,6 +75,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- URL to the JAR file, set to the release value and       -->
   <!-- overridden when in nightly mode.                        -->
   <property name="url.jar"                value="${url.jar-release}/"/>
+  <!-- Base URL to the wiki-based, online documentation.                 -->
+  <property name="url.documentation"               value="${url.homepage}/documentation/"/>
 
   <!-- = Folder structure ==================================== -->
   <!-- ======================================================= -->
