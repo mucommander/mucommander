@@ -60,10 +60,10 @@ public class HelpButton extends JButton {
         Hashtable properties = new Hashtable();
 
         GoToDocumentationAction action = new GoToDocumentationAction(mainFrame, properties);
+        setAction(action);
+
         if(helpTopic!=null)
             setHelpTopic(helpTopic);
-
-        setAction(action);
 
         // Note: the button's text and icon must be set after the action otherwise they'll be replaced by the action's
 
