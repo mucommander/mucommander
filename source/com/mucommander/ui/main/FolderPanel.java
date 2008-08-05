@@ -106,6 +106,9 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
      * folder contents */
     private AndFileFilter chainedFileFilter;
 
+    /** The lock object used to prevent simultaneous folder change operations */
+    private final Object FOLDER_CHANGE_LOCK = new Object();
+
     private final static int CANCEL_ACTION = 0;
     private final static int BROWSE_ACTION = 1;
     private final static int DOWNLOAD_ACTION = 2;
@@ -464,7 +467,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
      * @param folder the folder to be made current folder
      * @return the thread that performs the actual folder change, null if another folder change is already underway
      */
-    public synchronized ChangeFolderThread tryChangeCurrentFolder(AbstractFile folder) {
+    public ChangeFolderThread tryChangeCurrentFolder(AbstractFile folder) {
         /* TODO branch setBranchView(false); */
         return tryChangeCurrentFolder(folder, null);
     }
@@ -484,22 +487,24 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
      * @param selectThisFileAfter the file to be selected after the folder has been changed (if it exists in the folder), can be null in which case FileTable rules will be used to select current file
      * @return the thread that performs the actual folder change, null if another folder change is already underway  
      */
-    public synchronized ChangeFolderThread tryChangeCurrentFolder(AbstractFile folder, AbstractFile selectThisFileAfter) {
+    public ChangeFolderThread tryChangeCurrentFolder(AbstractFile folder, AbstractFile selectThisFileAfter) {
         if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("folder="+folder+" selectThisFileAfter="+selectThisFileAfter, 3);
 
-        // Make sure there is not an existing thread running,
-        // this should not normally happen but if it does, report the error
-        if(changeFolderThread!=null) {
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(">>>>>>>>> THREAD NOT NULL = "+changeFolderThread, -1);
-            return null;
+        synchronized(FOLDER_CHANGE_LOCK) {
+            // Make sure there is not an existing thread running,
+            // this should not normally happen but if it does, report the error
+            if(changeFolderThread!=null) {
+                if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(">>>>>>>>> THREAD NOT NULL = "+changeFolderThread, -1);
+                return null;
+            }
+
+            this.changeFolderThread = new ChangeFolderThread(folder);
+            if(selectThisFileAfter!=null)
+                this.changeFolderThread.selectThisFileAfter(selectThisFileAfter);
+            changeFolderThread.start();
+
+            return changeFolderThread;
         }
-
-        this.changeFolderThread = new ChangeFolderThread(folder);
-        if(selectThisFileAfter!=null)
-            this.changeFolderThread.selectThisFileAfter(selectThisFileAfter);
-        changeFolderThread.start();
-
-        return changeFolderThread;
     }
 
     /**
@@ -516,7 +521,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
      * @param folderPath path to the new current folder. If this path does not resolve into a file, an error message will be displayed.
      * @return the thread that performs the actual folder change, null if another folder change is already underway or if the given path could not be resolved
      */
-    public synchronized ChangeFolderThread tryChangeCurrentFolder(String folderPath) {
+    public ChangeFolderThread tryChangeCurrentFolder(String folderPath) {
         try {
             return tryChangeCurrentFolder(new FileURL(folderPath), null);
         }
@@ -541,7 +546,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
      * @param folderURL location to the new current folder. If this URL does not resolve into a file, an error message will be displayed.
      * @return the thread that performs the actual folder change, null if another folder change is already underway
      */
-    public synchronized ChangeFolderThread tryChangeCurrentFolder(FileURL folderURL) {
+    public ChangeFolderThread tryChangeCurrentFolder(FileURL folderURL) {
         return tryChangeCurrentFolder(folderURL, null);
     }
 
@@ -561,21 +566,23 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
      * @param credentialsMapping the CredentialsMapping to use for authentication, can be null
      * @return the thread that performs the actual folder change, null if another folder change is already underway
      */
-    public synchronized ChangeFolderThread tryChangeCurrentFolder(FileURL folderURL, CredentialsMapping credentialsMapping) {
+    public ChangeFolderThread tryChangeCurrentFolder(FileURL folderURL, CredentialsMapping credentialsMapping) {
         if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("folderURL="+folderURL, 3);
 
-        // Make sure there is not an existing thread running,
-        // this should not normally happen but if it does, report the error
-        if(changeFolderThread!=null) {
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(">>>>>>>>> THREAD NOT NULL = "+changeFolderThread, -1);
-            return null;
+        synchronized(FOLDER_CHANGE_LOCK) {
+            // Make sure there is not an existing thread running,
+            // this should not normally happen but if it does, report the error
+            if(changeFolderThread!=null) {
+                if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(">>>>>>>>> THREAD NOT NULL = "+changeFolderThread, -1);
+                return null;
+            }
+
+            this.changeFolderThread = new ChangeFolderThread(folderURL);
+            changeFolderThread.setCredentialsMapping(credentialsMapping);
+            changeFolderThread.start();
+
+            return changeFolderThread;
         }
-
-        this.changeFolderThread = new ChangeFolderThread(folderURL);
-        changeFolderThread.setCredentialsMapping(credentialsMapping);
-        changeFolderThread.start();
-
-        return changeFolderThread;
     }
 
     /**
@@ -590,7 +597,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
      *
      * @return the thread that performs the actual folder change, null if another folder change is already underway
      */
-    public synchronized ChangeFolderThread tryRefreshCurrentFolder() {
+    public ChangeFolderThread tryRefreshCurrentFolder() {
         foldersTreePanel.refreshFolder(currentFolder);
         return tryChangeCurrentFolder(currentFolder, null);
     }
@@ -608,7 +615,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
      * @param selectThisFileAfter file to be selected after the folder has been refreshed (if it exists in the folder), can be null in which case FileTable rules will be used to select current file 
      * @return the thread that performs the actual folder change, null if another folder change is already underway
      */
-    public synchronized ChangeFolderThread tryRefreshCurrentFolder(AbstractFile selectThisFileAfter) {
+    public ChangeFolderThread tryRefreshCurrentFolder(AbstractFile selectThisFileAfter) {
         foldersTreePanel.refreshFolder(currentFolder);
         return tryChangeCurrentFolder(currentFolder, selectThisFileAfter);
     }
@@ -625,21 +632,23 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
      * @param children current folder's files (value of folder.ls())
      * @param fileToSelect file to be selected after the folder has been refreshed (if it exists in the folder), can be null in which case FileTable rules will be used to select current file
      */
-    private synchronized void setCurrentFolder(AbstractFile folder, AbstractFile children[], AbstractFile fileToSelect) {
-        // Change the current folder in the table and select the given file if not null
-        if(fileToSelect == null)
-            fileTable.setCurrentFolder(folder, children);
-        else
-            fileTable.setCurrentFolder(folder, children, fileToSelect);
+    private void setCurrentFolder(AbstractFile folder, AbstractFile children[], AbstractFile fileToSelect) {
+        synchronized(FOLDER_CHANGE_LOCK) {
+            // Change the current folder in the table and select the given file if not null
+            if(fileToSelect == null)
+                fileTable.setCurrentFolder(folder, children);
+            else
+                fileTable.setCurrentFolder(folder, children, fileToSelect);
 
-        // Update the current folder's value now that it is set
-        this.currentFolder = folder;
+            // Update the current folder's value now that it is set
+            this.currentFolder = folder;
 
-        // Add the folder to history
-        folderHistory.addToHistory(folder);
+            // Add the folder to history
+            folderHistory.addToHistory(folder);
 
-        // Notify listeners that the location has changed
-        locationManager.fireLocationChanged(folder.getURL());
+            // Notify listeners that the location has changed
+            locationManager.fireLocationChanged(folder.getURL());
+        }
     }
 
 
@@ -833,7 +842,8 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
 
         private boolean disposed;
 
-        private final Object lock = new Object();
+        /** Lock object used to ensure consistency and thread safeness when killing the thread */
+        private final Object KILL_LOCK = new Object();
         
         /* TODO branch private ArrayList childrenList; */
 
@@ -909,7 +919,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
          */
         public boolean tryKill() {
             if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called");
-            synchronized(lock) {
+            synchronized(KILL_LOCK) {
                 if(killedByStop) {
                     if(Debug.ON) Debug.trace("Thread already killed by #interrupt() and #stop(), there's nothing we can do, returning");
                     return false;
@@ -1009,7 +1019,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
 
                             AbstractFile file = FileFactory.getFile(folderURL, true);
 
-                            synchronized(lock) {
+                            synchronized(KILL_LOCK) {
                                 if(killed) {
                                     if(Debug.ON) Debug.trace("this thread has been killed, returning");
                                     break;
@@ -1112,7 +1122,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
                             }
                         }
                         
-                        synchronized(lock) {
+                        synchronized(KILL_LOCK) {
                             if(killed) {
                                 if(Debug.ON) Debug.trace("this thread has been killed, returning");
                                 break;
@@ -1136,7 +1146,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
                         AbstractFile children[] = folder.ls(chainedFileFilter);                            
                         
 
-                        synchronized(lock) {
+                        synchronized(KILL_LOCK) {
                             if(killed) {
                                 if(Debug.ON) Debug.trace("this thread has been killed, returning");
                                 break;
@@ -1209,7 +1219,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
                 while(true);
             }
 
-            synchronized(lock) {
+            synchronized(KILL_LOCK) {
                 // Clean things up
                 cleanup(folderChangedSuccessfully);
             }
@@ -1240,7 +1250,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
 
         public void cleanup(boolean folderChangedSuccessfully) {
             // Ensures that this method is called only once
-            synchronized(lock) {
+            synchronized(KILL_LOCK) {
                 if(disposed) {
                     if(Debug.ON) Debug.trace("already called, returning");
                     return;
