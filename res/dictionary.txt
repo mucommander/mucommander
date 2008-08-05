@@ -4455,7 +4455,7 @@ com.mucommander.ui.action.ToggleTreeAction.label:EN:Show tree view
 com.mucommander.ui.action.ToggleTreeAction.label:FR:Afficher la vue arborescente
 com.mucommander.ui.action.ToggleTreeAction.label:PL:Pokaż drzewo katalogów
 com.mucommander.ui.action.ToggleTreeAction.label:DA:Træ visning
-com.mucommander.ui.action.ToggleTreeAction.label:NL:Boom weergave
+com.mucommander.ui.action.ToggleTreeAction.label:NL:Toon boomweergave
 # Translation missing (New!)
 
 
@@ -5019,6 +5019,27 @@ com.mucommander.ui.action.MinimizeWindowAction.label:FR:Réduire
 # label will be used.
 com.mucommander.ui.action.MinimizeWindowAction.label.mac_os_x:EN:$[com.mucommander.ui.action.MinimizeWindowAction.label]
 # Translation missing (New!)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+com.mucommander.ui.action.GoToDocumentationAction.label:EN:Online documentation
+com.mucommander.ui.action.GoToDocumentationAction.label:FR:Documentation en ligne
+# Translation missing (New!)
+
+
+
+
 
 
 
