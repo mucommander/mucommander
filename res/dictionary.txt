@@ -1310,6 +1310,27 @@ preview:DA:Eksempel
 
 
 
+# Used for archive (e.g. Zip) and file comments (e.g. Mac OS X Finder comments)
+comment:EN:Comment
+comment:FR:Commentaire
+comment:DE:Kommentar
+comment:ES:Commentaire
+comment:CS:Komentář
+comment:zh_TW:備註
+comment:PL:Komentarz
+comment:HU:Megjegyzés
+comment:RU:Комментарий
+comment:zh_CN:注释
+comment:SL:Komentar
+comment:RO:Comentarii
+comment:IT:Commento
+comment:KO:설명추가
+comment:pt_BR:Comentário
+comment:NL:Commentaar
+comment:SK:Komentár
+comment:JA:コメント
+comment:SV:Kommentar
+comment:DA:Kommentar
 
 sample_text:EN:Sample text
 sample_text:FR:Texte d'exemple
@@ -6114,27 +6135,6 @@ pack_dialog_description:SK:Pridať vybrané súbory do
 pack_dialog_description:JA:選択されたファイルの追加先
 pack_dialog_description:SV:Lägg till markerade filer i
 pack_dialog_description:DA:Tilføj markerede filer til
-
-pack_dialog.comment:EN:Comment (optional)
-pack_dialog.comment:FR:Commentaire (optionnel)
-pack_dialog.comment:DE:Kommentar (optional)
-pack_dialog.comment:ES:Commentaire (optionnel)
-pack_dialog.comment:CS:Komentář (volitelný)
-pack_dialog.comment:zh_TW:備註 (非必要)
-pack_dialog.comment:PL:Komentarz (Opcjonalnie)
-pack_dialog.comment:HU:Megjegyzés (opciónális)
-pack_dialog.comment:RU:Комментарий (не обязателен)
-pack_dialog.comment:zh_CN:注释 (可选)
-pack_dialog.comment:SL:Komentar (neobvezno)
-pack_dialog.comment:RO:Comentarii (opțional)
-pack_dialog.comment:IT:Commento (opzionale)
-pack_dialog.comment:KO:설명추가 (선택사항)
-pack_dialog.comment:pt_BR:Comentário (opcional)
-pack_dialog.comment:NL:Commentaar (optioneel)
-pack_dialog.comment:SK:Komentár (voliteľný)
-pack_dialog.comment:JA:コメント (オプション)
-pack_dialog.comment:SV:Kommentar (frivilligt)
-pack_dialog.comment:DA:Kommentar (valgfrit)
 
 pack_dialog.archive_format:EN:Archive format
 pack_dialog.archive_format:FR:Format de l'archive

@@ -140,7 +140,7 @@ public class PackDialog extends JobDialog implements ActionListener, ItemListene
 		
         // Comment area, enabled only if selected archive format has comment support
 		
-        label = new JLabel(Translator.get("pack_dialog.comment"));
+        label = new JLabel(Translator.get("comment"));
         mainPanel.add(label);
         commentArea = new JTextArea();
         commentArea.setRows(4);
