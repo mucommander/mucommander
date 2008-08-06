@@ -91,18 +91,32 @@ public class FileIcons {
 
 
     /**
-     * Returns an icon for the given file. The returned icon will either a system icon, or one from the custom icon set,
-     * depending on the current system icons policy.
-     * This method <code>null</code> if an icon couldn't be retrieved, either because the file doesn't exist or for
-     * any other reason.
+     * Shorthand for {@link #getFileIcon(com.mucommander.file.AbstractFile, java.awt.Dimension)} called with the
+     * icon dimension returned by {@link #getIconDimension()}.
      *
      * @param file the AbstractFile instance for which an icon will be returned
      * @return an icon for the given file
      * @see #getSystemIconsPolicy()
      */
     public static Icon getFileIcon(AbstractFile file) {
+        return getFileIcon(file, iconDimension);
+    }
+
+    /**
+     * Returns an icon for the given file and of the specified dimension.
+     * The returned icon will either be a system icon, or one from the custom icon set, depending on the current
+     * {@link #getSystemIconsPolicy() system icons policy}.
+     * Returns <code>null</code> if the icon couldn't be retrieved, either because the file doesn't exist or for
+     * any other reason.
+     *
+     * @param file the AbstractFile instance for which an icon will be returned
+     * @param iconDimension the icon's dimension
+     * @return an icon for the given file
+     * @see #getSystemIconsPolicy()
+     */
+    public static Icon getFileIcon(AbstractFile file, Dimension iconDimension) {
         if(USE_SYSTEM_ICONS_ALWAYS.equals(systemIconsPolicy))
-            return getSystemFileIcon(file);
+            return getSystemFileIcon(file, iconDimension);
 
         if(USE_SYSTEM_ICONS_APPLICATIONS.equals(systemIconsPolicy)) {
             String extension = file.getExtension();
@@ -118,50 +132,75 @@ public class FileIcons {
                     systemIcon = false;
 
                 if(systemIcon)
-                    return getSystemFileIcon(file);
+                    return getSystemFileIcon(file, iconDimension);
             }
         }
 
-        return getCustomFileIcon(file);
+        return getCustomFileIcon(file, iconDimension);
     }
 
 
     /**
-     * Returns an icon for the given file from the custom icon set, using the custom {@link com.mucommander.file.icon.FileIconProvider}
-     * currently set. This method returns <code>null</code> if an icon couldn't be retrieved, either because the file
-     * doesn't exist or for any other reason.</br>
-     * The dimension of the returned icon is the one returned by {@link #getIconDimension()}.
+     * Shorthand for {@link #getCustomFileIcon(com.mucommander.file.AbstractFile, java.awt.Dimension)} called with the
+     * icon dimension returned by {@link #getIconDimension()}.
      *
      * @param file the file for which an icon is to be returned
-     * @return an icon from the custom icon set for the given file
+     * @return a custom icon for the given file
      */
     public static Icon getCustomFileIcon(AbstractFile file) {
-        return getFileProviderIcon(customFileIconProvider, file);
+        return getCustomFileIcon(file, iconDimension);
     }
 
+    /**
+     * Returns an icon of the specified dimension for the given file. The icon is provided by the
+     * {@link #getCustomFileIconProvider() custom file icon provider}.
+     * Returns <code>null</code> if the icon couldn't be retrieved, either because the file doesn't exist
+     * or for any other reason.
+     *
+     * @param file the file for which an icon is to be returned
+     * @param iconDimension the icon's dimension
+     * @return a custom icon for the given file
+     * @see #getCustomFileIconProvider()
+     */
+    public static Icon getCustomFileIcon(AbstractFile file, Dimension iconDimension) {
+        return getFileProviderIcon(customFileIconProvider, file, iconDimension);
+    }
 
     /**
-     * Returns a system icon for the given file (one provided by the underlying OS/desktop manager), using the {@link com.mucommander.file.icon.FileIconProvider}
-     * currently set. This method returns <code>null</code> if an icon couldn't be retrieved, either because the file
-     * doesn't exist or for any other reason.</br>
-     * The dimension of the returned icon is the one returned by {@link #getIconDimension()}.
+     * Shorthand for {@link #getSystemFileIcon(com.mucommander.file.AbstractFile, java.awt.Dimension)} called with the
+     * icon dimension returned by {@link #getIconDimension()}.
      *
      * @param file the file for which an icon is to be returned
      * @return a system icon for the given file
      */
     public static Icon getSystemFileIcon(AbstractFile file) {
-        return getFileProviderIcon(systemFileIconProvider, file);
+        return getSystemFileIcon(file, iconDimension);
     }
 
     /**
-     * Fetches the file icon for the specified file from the {@link FileIconProvider} and returns it. This method
-     * takes care of up/down-scaling the icon returned by the provider if it doesn't match the current icon dimension.
+     * Returns an icon of the specified dimension for the given file. The returned icon is provided by the
+     * underlying OS/desktop manager, using the {@link com.mucommander.file.icon.FileIconProvider} currently set.
+     * Returns <code>null</code> if the icon couldn't be retrieved, either because the file doesn't exist or for any other reason.
+     *
+     * @param file the file for which an icon is to be returned
+     * @param iconDimension the icon's dimension
+     * @return a system icon for the given file
+     */
+    public static Icon getSystemFileIcon(AbstractFile file, Dimension iconDimension) {
+        return getFileProviderIcon(systemFileIconProvider, file, iconDimension);
+    }
+
+    /**
+     * Returns an icon of the specified dimension for the given file. The return icon is provided by the specified
+     * {@link FileIconProvider}. This method takes care of up/down-scaling the icon returned by the provider if it
+     * doesn't match the specified dimension.
      *
      * @param fip the FileIconProvider from which to fetch the icon
      * @param file the file for which an icon is to be returned
-     * @return an icon for the specified file fetched from the FileIconProvider
+     * @param iconDimension the icon's dimension 
+     * @return an icon for the specified file
      */
-    private static Icon getFileProviderIcon(FileIconProvider fip, AbstractFile file) {
+    private static Icon getFileProviderIcon(FileIconProvider fip, AbstractFile file, Dimension iconDimension) {
         Icon icon = fip.getFileIcon(file, iconDimension);
         if(icon==null)
             return null;
