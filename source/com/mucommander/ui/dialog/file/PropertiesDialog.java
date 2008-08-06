@@ -18,9 +18,14 @@
 
 package com.mucommander.ui.dialog.file;
 
+import com.mucommander.file.AbstractFile;
+import com.mucommander.file.impl.local.LocalFile;
 import com.mucommander.file.util.FileSet;
+import com.mucommander.file.util.OSXFileUtils;
 import com.mucommander.job.FileJob;
 import com.mucommander.job.PropertiesJob;
+import com.mucommander.runtime.OsFamilies;
+import com.mucommander.runtime.OsVersions;
 import com.mucommander.text.SizeFormat;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.MuAction;
@@ -82,8 +87,10 @@ public class PropertiesDialog extends FocusDialog implements Runnable, ActionLis
         JPanel fileDetailsPanel = new JPanel(new BorderLayout());
 
         Icon icon;
-        if(files.size()==1) {
-            icon = FileIcons.getFileIcon(files.fileAt(0), ICON_DIMENSION);
+        boolean isSingleFile = files.size()==1;
+        AbstractFile singleFile = isSingleFile?files.fileAt(0):null;
+        if(isSingleFile) {
+            icon = FileIcons.getFileIcon(singleFile, ICON_DIMENSION);
         }
         else {
             ImageIcon imageIcon = IconManager.getIcon(IconManager.COMMON_ICON_SET, "many_files.png");
@@ -110,7 +117,17 @@ public class PropertiesDialog extends FocusDialog implements Runnable, ActionLis
         sizePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         sizePanel.add(sizeLabel = new JLabel(""));
         sizePanel.add(new JLabel(dial = new SpinningDial()));
-        labelPanel.addRow(Translator.get("size")+":", sizePanel, 5);
+        labelPanel.addRow(Translator.get("size")+":", sizePanel, 6);
+
+        if(OsFamilies.MAC_OS_X.isCurrent() && OsVersions.MAC_OS_X_10_4.isCurrentOrHigher()
+        && isSingleFile && singleFile.hasAncestor(LocalFile.class)) {
+            String comment = OSXFileUtils.getSpotlightComment(singleFile);
+
+//            JTextArea textArea = new JTextArea(comment);
+//            textArea.setEditable(false);
+//            textArea.setLineWrap(true);
+            labelPanel.addRow("Comment:", new JLabel(comment), 6);
+        }
 
         updateLabels();
 
@@ -119,7 +136,7 @@ public class PropertiesDialog extends FocusDialog implements Runnable, ActionLis
         YBoxPanel yPanel = new YBoxPanel(5);
         yPanel.add(fileDetailsPanel);
         contentPane.add(yPanel, BorderLayout.NORTH);
-		
+
         okCancelButton = new JButton(Translator.get("cancel"));
         contentPane.add(DialogToolkit.createOKPanel(okCancelButton, getRootPane(), this), BorderLayout.SOUTH);
 

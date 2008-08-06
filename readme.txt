@@ -138,7 +138,9 @@ Improvements:
   Control+Tab (forward) and Shift+Control+Tab (backward) by default.
 - JNA library upgraded to version 3.0.3.
 - jCIFS library upgraded to version 1.2.19.
-- The Properties window now sports a large file icon.
+- The Properties dialog now sports a large file icon.
+- Mac OS X 10.4 and up: the Properties dialog now displays
+  Spotlight/Finder comments.
 
 Localization:
 - Danish translation, contributed by Jeppe Toustrup.
