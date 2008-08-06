@@ -2742,12 +2742,12 @@ com.mucommander.ui.action.DeleteAction.tooltip:FR:Supprimer les fichiers marqué
 com.mucommander.ui.action.DeleteAction.tooltip:DE:Markierte Dateien löschen
 com.mucommander.ui.action.DeleteAction.tooltip:DA:Slet markerede filer via papirkurven når det er muligt
 com.mucommander.ui.action.DeleteAction.tooltip:NL:Gemarkeerde bestanden verwijderen
+com.mucommander.ui.action.DeleteAction.tooltip:PL:Usuwa zaznaczone pliki (przenosi do kosza, jeżeli możliwe)
 # The following entries need to be updated to indicate that the system trash is used when it is available
 com.mucommander.ui.action.DeleteAction.tooltip:DE:Markierte Dateien löschen
 com.mucommander.ui.action.DeleteAction.tooltip:ES:Elimiar los ficheros marcados
 com.mucommander.ui.action.DeleteAction.tooltip:CS:Smazat označené soubory
 com.mucommander.ui.action.DeleteAction.tooltip:zh_TW:刪除已標記檔案
-com.mucommander.ui.action.DeleteAction.tooltip:PL:Usuń zaznaczone pliki
 com.mucommander.ui.action.DeleteAction.tooltip:HU:A kijelölt fájlok törlése
 com.mucommander.ui.action.DeleteAction.tooltip:RU:Удаление выделенных файлов
 com.mucommander.ui.action.DeleteAction.tooltip:zh_CN:刪除已标记文件
@@ -2776,6 +2776,7 @@ com.mucommander.ui.action.PermanentDeleteAction.label:EN:Delete permanently
 com.mucommander.ui.action.PermanentDeleteAction.label:FR:Supprimer definitivement
 com.mucommander.ui.action.PermanentDeleteAction.label:DA:Slet permanent
 com.mucommander.ui.action.PermanentDeleteAction.label:NL:Definitief verwijderen
+com.mucommander.ui.action.PermanentDeleteAction.label:PL:Usuń trwale
 # Translation missing (New!)
 
 
@@ -2796,6 +2797,7 @@ com.mucommander.ui.action.PermanentDeleteAction.tooltip:EN:Delete marked files w
 com.mucommander.ui.action.PermanentDeleteAction.tooltip:FR:Supprimer les fichiers marqués sans utiliser la corbeille système
 com.mucommander.ui.action.PermanentDeleteAction.tooltip:DA:Slet markerede filer uden at bruge papirkurven
 com.mucommander.ui.action.PermanentDeleteAction.tooltip:NL:Verwijder gemarkeerde bestanden zonder de prullenbak te gebruiken
+com.mucommander.ui.action.PermanentDeleteAction.tooltip:PL:Trwale usuwa zaznaczone pliki (nie używa systemowego kosza)
 # Translation missing (New!)
 
 
@@ -2908,7 +2910,7 @@ com.mucommander.ui.action.CopyFileNamesAction.label:DE:Kopiere Name(n)
 com.mucommander.ui.action.CopyFileNamesAction.label:zh_CN:拷贝名称
 com.mucommander.ui.action.CopyFileNamesAction.label:RU:Копировать имена
 com.mucommander.ui.action.CopyFileNamesAction.label:ES:Copiar nombre(s)
-com.mucommander.ui.action.CopyFileNamesAction.label:PL:Kopjuj nazwę(y)
+com.mucommander.ui.action.CopyFileNamesAction.label:PL:Kopiuj nazwę(y)
 com.mucommander.ui.action.CopyFileNamesAction.label:KO:파일 이름 복사
 com.mucommander.ui.action.CopyFileNamesAction.label:pt_BR:Copiar nome(s)
 com.mucommander.ui.action.CopyFileNamesAction.label:NL:Naam kopiëren
