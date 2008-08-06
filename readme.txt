@@ -136,8 +136,9 @@ Improvements:
 - Improved HTML parsing for HTTP documents, XHTML can now be parsed.
 - New actions for cycling through the folder pane's components, mapped onto
   Control+Tab (forward) and Shift+Control+Tab (backward) by default.
-- JNA library upgraded to version 3.0.3 .
-- jCIFS library upgraded to version 1.2.19 .
+- JNA library upgraded to version 3.0.3.
+- jCIFS library upgraded to version 1.2.19.
+- The Properties window now sports a large file icon.
 
 Localization:
 - Danish translation, contributed by Jeppe Toustrup.
