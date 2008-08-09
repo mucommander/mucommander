@@ -51,7 +51,7 @@ public class CycleBackwardThruFolderPanelAction extends MuAction {
 
         FolderPanel folderPanel = mainFrame.getActivePanel();
         FileTable fileTable = folderPanel.getFileTable();
-        JTextField locationField = folderPanel.getLocationComboBox().getTextField();
+        JTextField locationField = folderPanel.getLocationTextField();
         JTree tree = folderPanel.getFoldersTreePanel().getTree();
 
         // Request focus on the 'previous' component, the cycle order being from right to left, bottom to top.

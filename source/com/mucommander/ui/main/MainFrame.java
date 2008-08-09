@@ -758,11 +758,11 @@ public class MainFrame extends JFrame implements LocationListener {
 		        return leftTable;
 		    } else if (component==rightFolderPanel.getFoldersTreePanel().getTree()) {
 		        return rightTable;
-		    } else if(component== leftFolderPanel.getLocationComboBox().getTextField() || component== leftFolderPanel.getLocationComboBox())
+		    } else if(component== leftFolderPanel.getLocationTextField())
                 return leftTable;
             else if(component== leftTable)
                 return rightTable;
-            if(component== rightFolderPanel.getLocationComboBox().getTextField() || component== rightFolderPanel.getLocationComboBox())
+            if(component== rightFolderPanel.getLocationTextField())
                 return rightTable;
             else    // component==table2
                 return leftTable;

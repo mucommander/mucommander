@@ -85,8 +85,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
         so there is no way to tell if it's the final selection (ENTER) or not.
     */
     private DrivePopupButton driveButton;
-    private LocationComboBox locationComboBox;
-    private ProgressTextField locationField;
+    private LocationTextField locationTextField;
     private FileTable fileTable;
     private JScrollPane scrollPane;
     private FoldersTreePanel foldersTreePanel;
@@ -146,16 +145,15 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
         c.gridx = 0;        
         locationPanel.add(driveButton, c);
 
-        // Create location combo box and retrieve location field instance
-        this.locationComboBox = new LocationComboBox(this);
-        this.locationField = (ProgressTextField)locationComboBox.getTextField();
+        // Create location text field
+        this.locationTextField = new LocationTextField(this);
 
         // Give location field all the remaining space
         c.weightx = 1;
         c.gridx = 1;
         // Add some space between drive button and location combo box (none by default)
         c.insets = new Insets(0, 4, 0, 0);
-        locationPanel.add(locationComboBox, c);
+        locationPanel.add(locationTextField, c);
 
         add(locationPanel, BorderLayout.NORTH);
 
@@ -248,16 +246,16 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
         ThemeManager.addCurrentThemeListener(this);
 
         // Disable Ctrl+Tab and Shift+Ctrl+Tab focus traversal keys
-        disableCtrlFocusTraversalKeys(locationComboBox.getTextField());
+        disableCtrlFocusTraversalKeys(locationTextField);
         disableCtrlFocusTraversalKeys(foldersTreePanel.getTree());
         disableCtrlFocusTraversalKeys(fileTable);
-        registerCycleThruFolderPanelAction(locationComboBox.getTextField());
+        registerCycleThruFolderPanelAction(locationTextField);
         registerCycleThruFolderPanelAction(foldersTreePanel.getTree());
         // No need to register cycle actions for FileTable, they already are 
 
         // Listen to focus event in order to notify MainFrame of changes of the current active panel/table
         fileTable.addFocusListener(this);
-        locationField.addFocusListener(this);
+        locationTextField.addFocusListener(this);
 
         // Drag and Drop support
 
@@ -272,7 +270,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
 
         // Allow the location field to change the current directory when a file/folder is dropped on it
         dropTargetListener = new FileDropTargetListener(this, true);
-        locationField.setDropTarget(new DropTarget(locationField, dropTargetListener));
+        locationTextField.setDropTarget(new DropTarget(locationTextField, dropTargetListener));
         driveButton.setDropTarget(new DropTarget(driveButton, dropTargetListener));
     }
 
@@ -347,12 +345,12 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
     }
 
     /**
-     * Returns the LocationComboBox contained by this panel.
+     * Returns the LocationTextField contained by this panel.
      *
-     * @return the LocationComboBox contained by this panel
+     * @return the LocationTextField contained by this panel
      */
-    public LocationComboBox getLocationComboBox() {
-        return locationComboBox;
+    public LocationTextField getLocationTextField() {
+        return locationTextField;
     }
 
     /**
@@ -389,8 +387,8 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
      * on the location field and selects the folder string.
      */
     public void changeCurrentLocation() {
-        locationField.selectAll();
-        locationField.requestFocus();
+    	locationTextField.selectAll();
+    	locationTextField.requestFocus();
     }
 	
 
@@ -975,7 +973,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
             boolean folderChangedSuccessfully = false;
 
             // Show some progress in the progress bar to give hope
-            locationField.setProgressValue(10);
+            locationTextField.setProgressValue(10);
 
             // If folder URL doesn't contain any credentials but CredentialsManager found credentials matching the URL,
             // popup the authentication dialog to avoid having to wait for an AuthException to be thrown
@@ -1027,7 +1025,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
                             }
 
                             // File resolved -> 25% complete
-                            locationField.setProgressValue(25);
+                            locationTextField.setProgressValue(25);
 
                             // Popup an error dialog and abort folder change if the file could not be resolved
                             // or doesn't exist
@@ -1130,7 +1128,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
                         }
 
                         // File tested -> 50% complete
-                        locationField.setProgressValue(50);
+                        locationTextField.setProgressValue(50);
 
                         if(Debug.ON) Debug.trace("calling ls()");
 
@@ -1156,7 +1154,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
                         }
 
                         // files listed -> 75% complete
-                        locationField.setProgressValue(75);
+                        locationTextField.setProgressValue(75);
 
                         if(Debug.ON) Debug.trace("calling setCurrentFolder");
 
@@ -1164,7 +1162,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
                         setCurrentFolder(folder, children, fileToSelect);
 
                         // folder set -> 95% complete
-                        locationField.setProgressValue(95);
+                        locationTextField.setProgressValue(95);
 
                         // If some new credentials were entered by the user, these can now be considered valid
                         // (folder was changed successfully) -> add them to the CredentialsManager.
@@ -1267,7 +1265,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
             interrupted();
 
             // Reset location field's progress bar
-            locationField.setProgressValue(0);
+            locationTextField.setProgressValue(0);
 
             // Restore normal mouse cursor
             mainFrame.setCursor(Cursor.getDefaultCursor());
