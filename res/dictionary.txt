@@ -13043,11 +13043,11 @@ color_chooser.title:DA:Vælg en farve
 
 
 
-multi_rename_dialog.title:EN:Multi Rename
+multi_rename_dialog.title:EN:Batch Rename
 multi_rename_dialog.title:PL:Zmiana nazw plików
 multi_rename_dialog.title:DA:Multi omdøbning
 
-multi_rename_dialog.mask:EN:Mask
+multi_rename_dialog.mask:EN:Renaming Pattern
 multi_rename_dialog.mask:PL:Matryca
 multi_rename_dialog.mask:DA:Maske
 
@@ -13130,6 +13130,8 @@ multi_rename_dialog.remove:DA:Fjern
 multi_rename_dialog.block_name:EN:Block
 multi_rename_dialog.block_name:PL:Zablokuj
 
+multi_rename_dialog.range:EN:Range
+multi_rename_dialog.range:PL:Zakres
 
 
 ######################

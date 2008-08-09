@@ -19,6 +19,7 @@
 package com.mucommander.ui.dialog.file;
 
 import java.awt.BorderLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
@@ -38,18 +39,18 @@ import javax.swing.BorderFactory;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.JToggleButton;
 import javax.swing.KeyStroke;
-import javax.swing.border.EmptyBorder;
+import javax.swing.SwingConstants;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableColumn;
+import javax.swing.text.BadLocationException;
 
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.util.FileSet;
@@ -58,6 +59,7 @@ import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.FocusDialog;
 import com.mucommander.ui.layout.XAlignedComponentPanel;
 import com.mucommander.ui.layout.XBoxPanel;
+import com.mucommander.ui.layout.YBoxPanel;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.util.StringUtils;
 
@@ -80,7 +82,6 @@ public class MultiRenameDialog extends FocusDialog implements ActionListener,
 
     private MainFrame mainFrame;
     private JTextField edtFileNameMask;
-    private JTextField edtExtensionMask;
     private JTable tblNames;
     private JButton btnRename;
     private JButton btnClose;
@@ -93,7 +94,6 @@ public class MultiRenameDialog extends FocusDialog implements ActionListener,
     private JButton btnRemove;
     private RenameTableModel tableModel;
     private AbstractAction actRemove;
-    private JLabel lblHelp;
 
     
     /** files to rename */
@@ -107,6 +107,12 @@ public class MultiRenameDialog extends FocusDialog implements ActionListener,
     
     /** a list of parsed tokens */
     private List tokens = new ArrayList();
+    
+    private JButton btnName;
+    private JButton btnNameRange;
+    private JButton btnExtension;
+    private JButton btnCounter;
+    private TableColumn colBlock;
     
 
     /**
@@ -131,10 +137,7 @@ public class MultiRenameDialog extends FocusDialog implements ActionListener,
      */
     private void initialize() {
         setLayout(new BorderLayout());
-        JPanel top = new JPanel(new BorderLayout());
-        top.add(getPnlTop(), BorderLayout.CENTER);
-        top.add(getLblHelp(), BorderLayout.SOUTH);
-        add(top, BorderLayout.NORTH);
+        add(getPnlTop(), BorderLayout.NORTH);
         add(new JScrollPane(getTblNames()), BorderLayout.CENTER);
         add(getPnlButtons(), BorderLayout.SOUTH);
     }
@@ -147,10 +150,10 @@ public class MultiRenameDialog extends FocusDialog implements ActionListener,
         btnRemove = new JButton(getActRemove());
         pnlButtons.add(btnRemove, BorderLayout.WEST);
         XBoxPanel pnlButtonsRight = new XBoxPanel();
-        btnRename = new JButton(Translator.get("multi_rename_dialog.start"));
+        btnRename = new JButton(Translator.get("rename"));
         btnRename.addActionListener(this);
         pnlButtonsRight.add(btnRename);
-        btnClose = new JButton(Translator.get("close"));
+        btnClose = new JButton(Translator.get("cancel"));
         btnClose.addActionListener(this);
         pnlButtonsRight.add(btnClose);
         pnlButtons.add(pnlButtonsRight, BorderLayout.EAST);
@@ -185,7 +188,9 @@ public class MultiRenameDialog extends FocusDialog implements ActionListener,
             // 
             tblNames.getColumnModel().getColumn(COL_CHANGED_NAME).setCellEditor(new
                      DefaultCellEditor(new JTextField()));
-            tblNames.getColumnModel().getColumn(COL_CHANGE_BLOCK).setMaxWidth(60);
+            colBlock = tblNames.getColumnModel().getColumn(COL_CHANGE_BLOCK); 
+            colBlock.setMaxWidth(60);
+            tblNames.removeColumn(colBlock);
         }
         return tblNames;
     }
@@ -208,14 +213,10 @@ public class MultiRenameDialog extends FocusDialog implements ActionListener,
      */
     private JPanel getPnlTop() {
         // file & extension mask
-        edtFileNameMask = new JTextField("[N]");
+        edtFileNameMask = new JTextField("[N].[E]");
         edtFileNameMask.setColumns(20);
         edtFileNameMask.getDocument().addDocumentListener(this);
-        edtFileNameMask.setToolTipText(getLblHelp().getText());
-
-        edtExtensionMask = new JTextField("[E]");
-        edtExtensionMask.setColumns(20);
-        edtExtensionMask.getDocument().addDocumentListener(this);
+        edtFileNameMask.setToolTipText(getPatternHelp());
 
         // search & replace
         edtSearchFor = new JTextField();
@@ -255,24 +256,36 @@ public class MultiRenameDialog extends FocusDialog implements ActionListener,
 
         // add controls
         XBoxPanel pnlTop = new XBoxPanel();
-
-        XAlignedComponentPanel pnl1 = new XAlignedComponentPanel(5);
-        pnl1.setBorder(BorderFactory.createTitledBorder(Translator
-                .get("multi_rename_dialog.mask")));
-        pnl1.addRow(Translator.get("multi_rename_dialog.file_name_mask"),
-                edtFileNameMask, 5);
-        pnl1.addRow(Translator.get("multi_rename_dialog.extension_mask"),
-                edtExtensionMask, 5);
         
-        JPanel pnlHelpBtn = new JPanel(new BorderLayout());
-        JToggleButton btnHelp = new JToggleButton(Translator.get("help_menu"));
-        pnlHelpBtn.add(btnHelp, BorderLayout.EAST);
-        btnHelp.addActionListener(new ActionListener() {
-           public void actionPerformed(ActionEvent e) {
-               getLblHelp().setVisible(!getLblHelp().isVisible());
-            } 
-        });
-        pnl1.addRow(" ", pnlHelpBtn, 5);
+        YBoxPanel pnl1 = new YBoxPanel();
+        pnl1.setBorder(BorderFactory.createTitledBorder(
+                Translator.get("multi_rename_dialog.mask")));
+        pnl1.add(edtFileNameMask);
+        
+        JPanel pnl1Btns = new JPanel(new GridLayout(3, 2));
+
+        btnName = new JButton("[N] - " + Translator.get("name"));
+        btnName.addActionListener(this);
+        btnName.setHorizontalAlignment(SwingConstants.LEFT);
+        pnl1Btns.add(btnName);
+        
+        btnExtension = new JButton("[E] - " + Translator.get("extension"));
+        btnExtension.addActionListener(this);
+        btnExtension.setHorizontalAlignment(SwingConstants.LEFT);
+        pnl1Btns.add(btnExtension);
+
+        btnNameRange = new JButton("[N#-#] - " + Translator.get("multi_rename_dialog.range"));
+        btnNameRange.addActionListener(this);
+        btnNameRange.setHorizontalAlignment(SwingConstants.LEFT);
+        pnl1Btns.add(btnNameRange);
+        
+        btnCounter = new JButton("[C] - " + Translator.get("multi_rename_dialog.counter"));
+        btnCounter.addActionListener(this);
+        btnCounter.setHorizontalAlignment(SwingConstants.LEFT);
+        pnl1Btns.add(btnCounter);
+
+        pnl1.add(pnl1Btns);
+        pnl1.add(new JPanel());
         pnlTop.add(pnl1);
         
         XAlignedComponentPanel pnl2 = new XAlignedComponentPanel(5);
@@ -288,7 +301,7 @@ public class MultiRenameDialog extends FocusDialog implements ActionListener,
 
         XAlignedComponentPanel pnl3 = new XAlignedComponentPanel(5);
         pnl3.setBorder(BorderFactory.createTitledBorder(Translator
-                .get("multi_rename_dialog.counter")));
+                .get("multi_rename_dialog.counter") + " [C]"));
         pnl3.addRow(Translator.get("multi_rename_dialog.start_at"),
                 edtCounterStart, 5);
         pnl3.addRow(Translator.get("multi_rename_dialog.step_by"),
@@ -303,10 +316,9 @@ public class MultiRenameDialog extends FocusDialog implements ActionListener,
     /**
      * Creates a label with help.
      * @return a label with help
-     */
-    private JLabel getLblHelp() {
-        if (lblHelp == null) {
-            String help = "<html>" +
+     */     
+    private String getPatternHelp() {
+        return "<html>" +
             "[N] - the whole name<br>" +
             "[N2,3] - 3 characters starting from the 2nd character of the name<br>" +
             "[N2-5] - characters 2 to 5<br>" +
@@ -316,11 +328,6 @@ public class MultiRenameDialog extends FocusDialog implements ActionListener,
             "[C] - inserts a counter<br>" +
             "[C10,2,3] - inserts a counter starting at 10, steps by 2, uses 3 digits<br>" +
             "[YMD] - inserts a year, month and day when the file was last modified";       // TODO add to dictionary
-            lblHelp = new JLabel(help);
-            lblHelp.setBorder(new EmptyBorder(15, 15, 15, 15));
-            lblHelp.setVisible(false);
-        }
-        return lblHelp;
     }
     
 
@@ -392,8 +399,7 @@ public class MultiRenameDialog extends FocusDialog implements ActionListener,
      * Generates new names for all files.
      */
     private void generateNewNames() {
-        compilePattern(edtFileNameMask.getText() + "."
-                + edtExtensionMask.getText());
+        compilePattern(edtFileNameMask.getText());
         for (int i = 0; i < files.size(); i++) {
             if (Boolean.FALSE.equals(blockNames.get(i))) {
                 AbstractFile file = (AbstractFile) files.get(i);
@@ -563,6 +569,19 @@ public class MultiRenameDialog extends FocusDialog implements ActionListener,
         }
     }
     
+    /**
+     * Inserts pattern into pattern edit field.
+     * @param pattern a text to insert
+     */
+    private void insertPattern(String pattern) {
+        int pos = edtFileNameMask.getSelectionStart();
+        try {
+            edtFileNameMask.getDocument().insertString(pos, pattern, null);
+        } catch (BadLocationException e) {
+            e.printStackTrace();
+        }
+    }
+    
 
     // /////////////////////////////////
     // ActionListener implementation //
@@ -578,7 +597,21 @@ public class MultiRenameDialog extends FocusDialog implements ActionListener,
             generateNewNames();
         } else if (source == cbCounterDigits) {
             generateNewNames();
-        } 
+        } else if (source == btnName) {
+            insertPattern("[N]");
+        } else if (source == btnExtension) {
+            insertPattern("[E]");
+        } else if (source == btnCounter) {
+            insertPattern("[C]");
+        } else if (source == btnNameRange) {
+            String firstFile = ((AbstractFile) files.get(0)).getNameWithoutExtension();
+            MultiRenameSelectRange dlg = new MultiRenameSelectRange(this, firstFile);
+            dlg.showDialog();
+            String range = dlg.getRange();
+            if (range != null) {
+                insertPattern(range);
+            }
+        }
     }
 
     // these methods are invoked when one of edit boxes changes
@@ -631,6 +664,9 @@ public class MultiRenameDialog extends FocusDialog implements ActionListener,
                     newNames.set(rowIndex, value);
                     if (Boolean.FALSE.equals(blockNames.get(rowIndex))) {
                         blockNames.set(rowIndex, Boolean.TRUE);
+                        if (tblNames.getColumnCount() == 2) {
+                            tblNames.addColumn(colBlock);
+                        }
                         fireTableCellUpdated(rowIndex, COL_CHANGE_BLOCK);
                     }
                     checkForDuplicates();
@@ -1029,5 +1065,6 @@ public class MultiRenameDialog extends FocusDialog implements ActionListener,
         }
 
     }
+    
 
 }
