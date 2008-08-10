@@ -140,6 +140,7 @@ public class MultiRenameDialog extends FocusDialog implements ActionListener,
         add(getPnlTop(), BorderLayout.NORTH);
         add(new JScrollPane(getTblNames()), BorderLayout.CENTER);
         add(getPnlButtons(), BorderLayout.SOUTH);
+        getRootPane().setDefaultButton(btnRename);
     }
 
     /**
@@ -542,23 +543,37 @@ public class MultiRenameDialog extends FocusDialog implements ActionListener,
         }
         return filename.toString();
     }
+    
+    /**
+     * Counts or removes unchanged files from change set.
+     * @param countOnly if true only counts files that are changing.
+     * @return number of changed files
+     */
+    private int removeUnchangedFiles(boolean countOnly) {
+        // remove non changed files
+        Iterator fi = files.iterator();
+        Iterator ni = newNames.iterator();
+        int changed = 0;
+        while (fi.hasNext()) {        
+            AbstractFile file = (AbstractFile) fi.next();
+            String nn = (String) ni.next();
+            if (file.getName().equals(nn)) {
+                    if (!countOnly) {
+                        fi.remove();
+                        ni.remove();
+                    }
+            } else {
+                changed++;
+            }
+        }
+        return changed;
+    }
 
     /**
      * Renames files.
      */
     private void doRename() {
-        dispose();
-        // remove non changed files
-        Iterator fi = files.iterator();
-        Iterator ni = newNames.iterator();
-        while (fi.hasNext()) {        
-            AbstractFile file = (AbstractFile) fi.next();
-            String nn = (String) ni.next();
-            if (file.getName().equals(nn)) {
-                fi.remove();
-                ni.remove();
-            }
-        }
+        removeUnchangedFiles(false);
         // start rename job
         if (files.size() > 0) {
             ProgressDialog progressDialog = new ProgressDialog(mainFrame,
@@ -592,7 +607,15 @@ public class MultiRenameDialog extends FocusDialog implements ActionListener,
         if (source == btnClose) {
             dispose();
         } else if (source == btnRename) {
-            doRename();
+            int unchanged = files.size();
+            int changed = removeUnchangedFiles(true);
+            if (changed > 0) {
+                MultiRenameConfirmationDialog dlg = new MultiRenameConfirmationDialog(mainFrame, files, changed, unchanged);
+                if (dlg.isProceedWithRename()) {
+                    dispose();
+                    doRename();
+                }
+            }
         } else if (source == cbCase) {
             generateNewNames();
         } else if (source == cbCounterDigits) {

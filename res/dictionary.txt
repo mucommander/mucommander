@@ -13133,6 +13133,10 @@ multi_rename_dialog.block_name:PL:Zablokuj
 multi_rename_dialog.range:EN:Range
 multi_rename_dialog.range:PL:Zakres
 
+multi_rename_dialog.proceed_renaming:EN:%1 files out of %2 will be renamed. Do you wish to proceed?
+
+multi_rename_dialog.confirmation_details:EN:This operation cannot be undone.
+
 
 ######################
 # Deprecated entries #
