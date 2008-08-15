@@ -16,17 +16,20 @@ import com.mucommander.ui.button.PopupButton;
  */
 public class PopupsPopupButton extends PopupButton {
 	private FolderPanel folderPanel;
+	private JPopupMenu popupMenu;
 	
 	public PopupsPopupButton(FolderPanel panel) {
 		folderPanel = panel;
 		setPopupMenuLocation(PopupButton.BUTTOM_LEFT_ORIENTED);
-	}
-	
-	public JPopupMenu getPopupMenu() {
-		final JPopupMenu popupMenu = new JPopupMenu();
+		
+		popupMenu = new JPopupMenu();
 		final MainFrame mainFrame = folderPanel.getMainFrame();
 		popupMenu.add(new ShowParentFoldersPopupAction(mainFrame, new Hashtable()));
 		popupMenu.add(new ShowRecentlyAccessedLocationsAction(mainFrame, new Hashtable()));
+	}
+	
+	public JPopupMenu getPopupMenu() {
+		folderPanel.getFileTable().requestFocus();
 		return popupMenu;
 	}
 	

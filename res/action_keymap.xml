@@ -5,6 +5,14 @@
 <!-- http://java.sun.com/j2se/1.4.2/docs/api/javax/swing/KeyStroke.html#getKeyStrokeForEvent(java.awt.event.KeyEvent) -->
 
 <keymap>
+  <!-- Action  : Show popup with parent folders of current location.     -->
+  <!-- Default : alt 1                                                       -->
+  <action class="com.mucommander.ui.action.ShowParentFoldersPopupAction"        keystroke="alt 1"/>
+  
+  <!-- Action  : Show popup with recently accessed locations,       -->
+  <!-- Default : alt 2                                                       -->
+  <action class="com.mucommander.ui.action.ShowRecentlyAccessedLocationsAction" keystroke="alt 2"/>
+
   <!-- Action  : Create a bookmark from the location of the current panel.       -->
   <!-- Default : control B                                                       -->
   <action class="com.mucommander.ui.action.AddBookmarkAction"            keystroke="control B"/>

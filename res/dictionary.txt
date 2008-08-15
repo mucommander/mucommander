@@ -5065,7 +5065,13 @@ com.mucommander.ui.action.GoToDocumentationAction.label:FR:Documentation en lign
 
 
 
+com.mucommander.ui.action.ShowParentFoldersPopupAction.label:EN:Parent folders of current location
+# Translation missing (New!)
 
+
+
+com.mucommander.ui.action.ShowRecentlyAccessedLocationsAction.label:EN:Recently accessed locations
+# Translation missing (New!)
 
 
 
@@ -13136,6 +13142,18 @@ multi_rename_dialog.range:PL:Zakres
 multi_rename_dialog.proceed_renaming:EN:%1 files out of %2 will be renamed. Do you wish to proceed?
 
 multi_rename_dialog.confirmation_details:EN:This operation cannot be undone.
+
+parent_folders_popup.title:EN:Parent folders
+# Translation missing (New!)
+
+parent_folders_popup.empty_message:EN:No parent folders to current location
+# Translation missing (New!)
+
+recently_accessed_locations.title:EN:Recently accessed locations
+# Translation missing (New!)
+
+recently_accessed_locations.empty_message:EN:No previous accessed locations
+# Translation missing (New!)
 
 
 ######################

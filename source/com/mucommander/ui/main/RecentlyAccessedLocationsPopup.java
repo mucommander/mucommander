@@ -21,6 +21,7 @@ import com.mucommander.text.Translator;
 public class RecentlyAccessedLocationsPopup extends FileTablePopupWithIcons implements LocationListener{
 	private static int MAX_ELEMENTS = 10;
 	private LinkedList linkedList;
+	private String previousLocation; 
 
 	public RecentlyAccessedLocationsPopup(FolderPanel panel) {
 		super(Translator.get("recently_accessed_locations.title"), Translator.get("recently_accessed_locations.empty_message"), panel);
@@ -45,12 +46,14 @@ public class RecentlyAccessedLocationsPopup extends FileTablePopupWithIcons impl
 	}
 
 	public void locationChanged(LocationEvent locationEvent) {
-		String currentFolder = folderPanel.getCurrentFolder().getAbsolutePath();
-		if (!linkedList.remove(currentFolder) && linkedList.size() > MAX_ELEMENTS)
-			linkedList.removeLast();
-		linkedList.addFirst(currentFolder);
+		if (previousLocation != null) {		
+			if (!linkedList.remove(previousLocation) && linkedList.size() > MAX_ELEMENTS)
+				linkedList.removeLast();
+			linkedList.addFirst(previousLocation);
+			setData(linkedList);
+		}
 		
-		setData(linkedList);
+		previousLocation = folderPanel.getCurrentFolder().getAbsolutePath();		
 	}
 
 	public void locationChanging(LocationEvent locationEvent) {
