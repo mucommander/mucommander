@@ -56,6 +56,11 @@ public abstract class PopupButton extends NonFocusableButton {
 
     /** Controls the number of milliseconds to hold down the mouse button on the button to display the popup menu */
     private final static int POPUP_DELAY = 300;
+    
+    /** 
+     * Box-orientation constant used to specify the buttom-left oriented side of a box.
+     */
+    public static final int BUTTOM_LEFT_ORIENTED = 5;
 
 
     /**
@@ -147,8 +152,8 @@ public abstract class PopupButton extends NonFocusableButton {
                 Dimension popupMenuSize = popupMenu.getPreferredSize();
 
                 popupMenu.show(PopupButton.this,
-                        popupMenuLocation==RIGHT?getWidth():popupMenuLocation==LEFT?-(int)popupMenuSize.getWidth():0,
-                        popupMenuLocation==BOTTOM?getHeight():popupMenuLocation==TOP?-(int)popupMenuSize.getHeight():0
+                		popupMenuLocation==RIGHT?getWidth():popupMenuLocation==LEFT?-(int)popupMenuSize.getWidth():popupMenuLocation==BUTTOM_LEFT_ORIENTED?getWidth()-(int)popupMenuSize.getWidth():0,
+                        popupMenuLocation==BOTTOM?getHeight():popupMenuLocation==TOP?-(int)popupMenuSize.getHeight():popupMenuLocation==BUTTOM_LEFT_ORIENTED?getHeight():0
                 );
 
             }

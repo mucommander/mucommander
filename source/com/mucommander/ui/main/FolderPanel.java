@@ -18,6 +18,33 @@
 
 package com.mucommander.ui.main;
 
+import java.awt.AWTKeyStroke;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Cursor;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.KeyboardFocusManager;
+import java.awt.dnd.DropTarget;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.util.HashSet;
+import java.util.Iterator;
+
+import javax.swing.JComponent;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
+import javax.swing.border.Border;
+
 import com.mucommander.Debug;
 import com.mucommander.auth.AuthException;
 import com.mucommander.auth.CredentialsManager;
@@ -26,7 +53,11 @@ import com.mucommander.conf.ConfigurationEvent;
 import com.mucommander.conf.ConfigurationListener;
 import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.desktop.DesktopManager;
-import com.mucommander.file.*;
+import com.mucommander.file.AbstractFile;
+import com.mucommander.file.FileFactory;
+import com.mucommander.file.FileProtocols;
+import com.mucommander.file.FileURL;
+import com.mucommander.file.RootFolders;
 import com.mucommander.file.filter.AndFileFilter;
 import com.mucommander.file.filter.AttributeFileFilter;
 import com.mucommander.file.filter.DSStoreFileFilter;
@@ -46,22 +77,16 @@ import com.mucommander.ui.dnd.FileDragSourceListener;
 import com.mucommander.ui.dnd.FileDropTargetListener;
 import com.mucommander.ui.event.LocationManager;
 import com.mucommander.ui.main.menu.TablePopupMenu;
+import com.mucommander.ui.main.popup.FileTablePopup;
 import com.mucommander.ui.main.table.FileTable;
 import com.mucommander.ui.main.table.FileTableConfiguration;
 import com.mucommander.ui.main.table.FolderChangeMonitor;
 import com.mucommander.ui.main.tree.FoldersTreePanel;
-import com.mucommander.ui.progress.ProgressTextField;
-import com.mucommander.ui.theme.*;
-
-import javax.swing.*;
-import javax.swing.border.Border;
-import java.awt.*;
-import java.awt.dnd.DropTarget;
-import java.awt.event.*;
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.util.HashSet;
-import java.util.Iterator;
+import com.mucommander.ui.theme.ColorChangedEvent;
+import com.mucommander.ui.theme.FontChangedEvent;
+import com.mucommander.ui.theme.Theme;
+import com.mucommander.ui.theme.ThemeListener;
+import com.mucommander.ui.theme.ThemeManager;
 
 /**
  * Folder pane that contains the table that displays the contents of the current directory and allows navigation, the
@@ -122,6 +147,12 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
     /** Saved width of a directory tree (when it's not visible) */ 
     private int oldTreeWidth = 150;
 
+    /** Array of all the existing pop ups for this panel's FileTable **/
+    private FileTablePopup[] fileTablePopups;
+    
+    public static final int PARENT_FOLDERS_POPUP_INDEX = 0;
+    public static final int RECENTLY_ACCESSED_LOCATIONS_POPUP_INDEX = 1;
+    
     /* TODO branch private boolean branchView; */
 
 
@@ -148,18 +179,27 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
         // Create location text field
         this.locationTextField = new LocationTextField(this);
 
-        // Give location field all the remaining space
+        // Give location field all the remaining space until the PoupupsButton
         c.weightx = 1;
         c.gridx = 1;
         // Add some space between drive button and location combo box (none by default)
         c.insets = new Insets(0, 4, 0, 0);
         locationPanel.add(locationTextField, c);
+        
+        c.weightx = 0;
+        c.gridx = 2;
+        locationPanel.add(new PopupsPopupButton(this), c);
 
         add(locationPanel, BorderLayout.NORTH);
 
         // Create the FileTable
         fileTable = new FileTable(mainFrame, this, conf);
 
+        // Init popups
+        fileTablePopups = new FileTablePopup[2];
+        fileTablePopups[PARENT_FOLDERS_POPUP_INDEX] = new ParentFoldersPopup(this);
+        fileTablePopups[RECENTLY_ACCESSED_LOCATIONS_POPUP_INDEX] = new RecentlyAccessedLocationsPopup(this);
+        
         // Init chained file filters used to filter out files in the current directory.
         // AndFileFilter is used, that means files must satisfy all the filters in order to be displayed.
         chainedFileFilter = new AndFileFilter();
@@ -1339,6 +1379,14 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
      */
     public void fontChanged(FontChangedEvent event) {}
 
+    /**
+     * Shows the pop up which is located the given index in fileTablePopups.
+     * 
+     * @param index - index of the FileTablePopup in fileTablePopups.
+     */
+    public void showPopup(int index) {
+    	fileTablePopups[index].show();
+    }
     
     /**
      * Returns true if a directory tree is visible.

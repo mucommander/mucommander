@@ -35,6 +35,7 @@ import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.layout.ProportionalSplitPane;
 import com.mucommander.ui.layout.YBoxPanel;
 import com.mucommander.ui.main.menu.MainMenuBar;
+import com.mucommander.ui.main.popup.FileTablePopupFocusableComponent;
 import com.mucommander.ui.main.table.Columns;
 import com.mucommander.ui.main.table.FileTable;
 import com.mucommander.ui.main.table.FileTableConfiguration;
@@ -754,7 +755,9 @@ public class MainFrame extends JFrame implements LocationListener {
     protected class CustomFocusTraversalPolicy extends FocusTraversalPolicy {
 
         public Component getComponentAfter(Container container, Component component) {
-			if (component==leftFolderPanel.getFoldersTreePanel().getTree()) {
+        	if (component instanceof FileTablePopupFocusableComponent) {
+        		return ((FileTablePopupFocusableComponent) component).getInvokerFileTable();
+        	} else if (component==leftFolderPanel.getFoldersTreePanel().getTree()) {
 		        return leftTable;
 		    } else if (component==rightFolderPanel.getFoldersTreePanel().getTree()) {
 		        return rightTable;
