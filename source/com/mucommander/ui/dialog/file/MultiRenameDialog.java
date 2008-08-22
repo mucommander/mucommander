@@ -19,6 +19,7 @@
 package com.mucommander.ui.dialog.file;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -39,6 +40,7 @@ import javax.swing.BorderFactory;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -94,6 +96,12 @@ public class MultiRenameDialog extends FocusDialog implements ActionListener,
     private JButton btnRemove;
     private RenameTableModel tableModel;
     private AbstractAction actRemove;
+    private JButton btnName;
+    private JButton btnNameRange;
+    private JButton btnExtension;
+    private JButton btnCounter;
+    private JLabel lblDuplicates;
+    private TableColumn colBlock;
 
     
     /** files to rename */
@@ -108,11 +116,6 @@ public class MultiRenameDialog extends FocusDialog implements ActionListener,
     /** a list of parsed tokens */
     private List tokens = new ArrayList();
     
-    private JButton btnName;
-    private JButton btnNameRange;
-    private JButton btnExtension;
-    private JButton btnCounter;
-    private TableColumn colBlock;
     
 
     /**
@@ -151,6 +154,10 @@ public class MultiRenameDialog extends FocusDialog implements ActionListener,
         btnRemove = new JButton(getActRemove());
         pnlButtons.add(btnRemove, BorderLayout.WEST);
         XBoxPanel pnlButtonsRight = new XBoxPanel();
+        lblDuplicates = new JLabel(Translator.get("multi_rename_dialog.duplicate_names"));
+        lblDuplicates.setForeground(Color.red);
+        lblDuplicates.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 15));
+        pnlButtonsRight.add(lblDuplicates);
         btnRename = new JButton(Translator.get("rename"));
         btnRename.addActionListener(this);
         pnlButtonsRight.add(btnRename);
@@ -343,8 +350,9 @@ public class MultiRenameDialog extends FocusDialog implements ActionListener,
             blockNames.remove(sel[i]);
             tableModel.fireTableRowsDeleted(sel[i], sel[i]);
         }
-        if (files.size() == 0)
+        if (files.size() == 0) {
             dispose();
+        }
     }
     
     /**
@@ -366,7 +374,8 @@ public class MultiRenameDialog extends FocusDialog implements ActionListener,
             }
             names.add(name);
         }            
-        btnRename.setEnabled(!duplicates);      // TODO add warning about duplicates
+        lblDuplicates.setVisible(duplicates);
+        btnRename.setEnabled(!duplicates);      
     }
     
     /**
@@ -558,10 +567,10 @@ public class MultiRenameDialog extends FocusDialog implements ActionListener,
             AbstractFile file = (AbstractFile) fi.next();
             String nn = (String) ni.next();
             if (file.getName().equals(nn)) {
-                    if (!countOnly) {
-                        fi.remove();
-                        ni.remove();
-                    }
+                if (!countOnly) {
+                    fi.remove();
+                    ni.remove();
+                }
             } else {
                 changed++;
             }

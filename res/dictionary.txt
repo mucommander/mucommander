@@ -13143,6 +13143,12 @@ multi_rename_dialog.proceed_renaming:EN:%1 files out of %2 will be renamed. Do y
 
 multi_rename_dialog.confirmation_details:EN:This operation cannot be undone.
 
+multi_rename_dialog.duplicate_names:EN:Duplicate names!
+multi_rename_dialog.duplicate_names:PL:Wykryto zduplikowane nazwy!
+
+
+
+
 parent_folders_popup.title:EN:Parent folders
 # Translation missing (New!)
 
