@@ -35,8 +35,6 @@ import com.mucommander.ui.main.MainFrame;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -51,7 +49,7 @@ import java.util.Vector;
  *
  * @author Maxence Bernard
  */
-public class ServerConnectDialog extends FocusDialog implements ActionListener, ChangeListener, DocumentListener {
+public class ServerConnectDialog extends FocusDialog implements ActionListener, ChangeListener {
 
     private FolderPanel folderPanel;
 	
@@ -152,7 +150,7 @@ public class ServerConnectDialog extends FocusDialog implements ActionListener, 
     }
 
 
-    private void updateURLLabel() {
+    protected void updateURLLabel() {
         try {
             FileURL url = currentServerPanel.getServerURL();
             urlLabel.setText(url==null?" ":url.toString(false));
@@ -218,22 +216,5 @@ public class ServerConnectDialog extends FocusDialog implements ActionListener, 
 
         updateURLLabel();
         FocusRequester.requestFocus(currentServerPanel);
-    }
-
-	
-    //////////////////////////////
-    // DocumentListener methods //
-    //////////////////////////////
-	
-    public void changedUpdate(DocumentEvent e) {
-        updateURLLabel();
-    }
-	
-    public void insertUpdate(DocumentEvent e) {
-        updateURLLabel();
-    }
-
-    public void removeUpdate(DocumentEvent e) {
-        updateURLLabel();
     }
 }
