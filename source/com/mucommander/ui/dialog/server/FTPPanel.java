@@ -46,6 +46,8 @@ public class FTPPanel extends ServerPanel implements ActionListener {
     private JPasswordField passwordField;
     private JTextField initialDirField;
     private JSpinner portSpinner;
+    private JSpinner nbRetriesSpinner;
+    private JSpinner retryDelaySpinner;
     private SaneComboBox encodingComboBox;
     private JCheckBox passiveCheckBox;
     private JCheckBox anonymousCheckBox;
@@ -93,7 +95,7 @@ public class FTPPanel extends ServerPanel implements ActionListener {
 	
         // Port field, initialized to last port (default is 21)
         portSpinner = createPortSpinner(lastPort);
-        addRow(Translator.get("server_connect_dialog.port"), portSpinner, 5);
+        addRow(Translator.get("server_connect_dialog.port"), portSpinner, 15);
 
         // Encoding combo box
         encodingComboBox = new EncodingComboBox();
@@ -101,15 +103,23 @@ public class FTPPanel extends ServerPanel implements ActionListener {
         encodingComboBox.addActionListener(this);
         addRow(Translator.get("encoding"), encodingComboBox, 15);
 
+        // Connection retries when server busy
+        nbRetriesSpinner = createIntSpinner(FTPFile.DEFAULT_NB_CONNECTION_RETRIES, 0, Integer.MAX_VALUE, 1);
+        addRow(Translator.get("ftp_connect.nb_retries_when_server_busy"), nbRetriesSpinner, 5);
+
+        // Delay between two retries
+        retryDelaySpinner = createIntSpinner(FTPFile.DEFAULT_CONNECTION_RETRY_DELAY, 0, Integer.MAX_VALUE, 1);
+        addRow(Translator.get("ftp_connect.retry_delay"), retryDelaySpinner, 15);
+
         // Anonymous user checkbox
         anonymousCheckBox = new JCheckBox(Translator.get("ftp_connect.anonymous_user"), anonymousUser);
         anonymousCheckBox.addActionListener(this);
-        addRow(anonymousCheckBox, 5);
+        addRow("", anonymousCheckBox, 5);
 
         // Passive mode checkbox
         passiveCheckBox = new JCheckBox(Translator.get("ftp_connect.passive_mode"), passiveMode);
         passiveCheckBox.addActionListener(this);
-        addRow(passiveCheckBox, 0);
+        addRow("", passiveCheckBox, 0);
     }
 
 	
@@ -150,6 +160,10 @@ public class FTPPanel extends ServerPanel implements ActionListener {
 
         // Set FTP encoding property
         url.setProperty(FTPFile.ENCODING_PROPERTY_NAME, (String)encodingComboBox.getSelectedItem());
+
+        // Set connection retry properties
+        url.setProperty(FTPFile.NB_CONNECTION_RETRIES_PROPERTY_NAME, ""+nbRetriesSpinner.getValue());
+        url.setProperty(FTPFile.CONNECTION_RETRY_DELAY_PROPERTY_NAME, ""+retryDelaySpinner.getValue());
 
         return url;
     }

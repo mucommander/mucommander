@@ -8386,6 +8386,39 @@ ftp_connect.anonymous_user:JA:匿名ユーザー
 ftp_connect.anonymous_user:SV:Anonym användare
 ftp_connect.anonymous_user:DA:Anonym bruger
 
+ftp_connect.nb_retries_when_server_busy:EN:Number of retries when server busy
+ftp_connect.nb_retries_when_server_busy:RU:Количество попыткок установления соединения
+# Translation missing (New!)
+
+
+
+
+
+
+
+
+
+
+
+
+ftp_connect.retry_delay:EN:Delay between retries (in seconds)
+ftp_connect.retry_delay:RU:Задержка между повторами (в секундах)
+# Translation missing (New!)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ################
 # HTTP connect #

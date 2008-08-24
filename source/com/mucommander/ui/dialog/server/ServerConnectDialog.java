@@ -63,7 +63,7 @@ public class ServerConnectDialog extends FocusDialog implements ActionListener, 
     private JCheckBox saveCredentialsCheckBox;
 
     // Dialog's width has to be at least 320
-    private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(420,0);	
+    private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(480,0);	
 	
     private static Class lastPanelClass = SMBPanel.class;
 

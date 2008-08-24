@@ -122,6 +122,8 @@ New features:
   destination fields, contributed by Arik Hadas.
 - Added support for SFTP public key authentication, contributed by
   Vassil Dichev.
+- Added new FTP connection properties allowing to retry when the server is busy, 
+  contributed by Ivan Baidakov.
 
 Improvements:
 - Added Unix permissions support to Zip archives: entries' permissions are
@@ -159,6 +161,7 @@ Bug fixes:
   (bug #37).
 - New 'Show splash screen' preference added to the 'Misc' preferences, 
   replacing existing command line options (bug #66). Contributed by Joshua Lebo.
+- Fixed a deadlock happening under Ubuntu (bug #67).
 
 Known issues:
 - Korean, Simplified Chinese, Slovenian and Slovak translations are not 

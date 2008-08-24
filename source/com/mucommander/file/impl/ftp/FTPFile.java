@@ -98,8 +98,21 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
     /** Name of the FTP encoding property */
     public final static String ENCODING_PROPERTY_NAME = "encoding";
 
-    /** Default FTP encoding */
+    /** Default FTP encoding if {@link #ENCODING_PROPERTY_NAME} is not set */
     public final static String DEFAULT_ENCODING = "UTF-8";
+
+    /** Name of the property that holds the number of connection retries when the FTP server is busy */
+    public final static String NB_CONNECTION_RETRIES_PROPERTY_NAME = "nbConnectionRetries";
+
+    /** Default value if {@link #NB_CONNECTION_RETRIES_PROPERTY_NAME} is not set */
+    public final static int DEFAULT_NB_CONNECTION_RETRIES = 0;
+
+    /** Name of the property that holds the amount of time (in seconds) to wait before retrying to connect after a
+     *  connection failure due to the server being busy */
+    public final static String CONNECTION_RETRY_DELAY_PROPERTY_NAME = "connectionRetryDelay";
+
+    /** Default value if {@link #CONNECTION_RETRY_DELAY_PROPERTY_NAME} is not set */
+    public final static int DEFAULT_CONNECTION_RETRY_DELAY = 15;
 
     /** Date format used by the SITE UTIME command */
     private final static SimpleDateFormat SITE_UTIME_DATE_FORMAT = new SimpleDateFormat("yyyyMMddHHmm");
@@ -1058,6 +1071,12 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
         /** Encoding used by the FTP control connection */
         private String encoding;
 
+        /** Number of connection retry attempts when the FTP server is busy */
+        private int nbConnectionRetries;
+
+        /** Amount of time (in seconds) to wait before retrying to connect after a connection failure due to the server being busy */
+        private int connectionRetryDelay;
+
         /** False if SITE UTIME command is not supported by the remote server (once tried and failed) */
         private boolean utimeCommandSupported = true;
 
@@ -1081,15 +1100,37 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
         private FTPConnectionHandler(FileURL location) {
             super(location);
 
-            // Determine if passive or active mode is to used
+            // Use the passive mode property if it is set
             String passiveModeProperty = location.getProperty(PASSIVE_MODE_PROPERTY_NAME);
             // Passive mode is enabled by default if property isn't specified
             this.passiveMode = passiveModeProperty==null || !passiveModeProperty.equals("false");
 
-            // Determine encoding to use based on the encoding URL property, UTF-8 if property is not set
+            // Use the encoding property if it is set
             this.encoding = location.getProperty(ENCODING_PROPERTY_NAME);
             if(encoding==null || encoding.equals(""))
                 encoding = DEFAULT_ENCODING;
+
+            // Use the property that controls the number of connection retries when the FTP server is busy,
+            // if the property is set
+            String prop = location.getProperty(NB_CONNECTION_RETRIES_PROPERTY_NAME);
+            if(prop==null) {
+                nbConnectionRetries = DEFAULT_NB_CONNECTION_RETRIES;
+            }
+            else {
+                try { nbConnectionRetries = Integer.parseInt(prop); }
+                catch(NumberFormatException e) { nbConnectionRetries = DEFAULT_NB_CONNECTION_RETRIES; }
+            }
+
+            // Use the property that controls the connection retry delay when the FTP server is busy,
+            // if the property is set
+            prop = location.getProperty(CONNECTION_RETRY_DELAY_PROPERTY_NAME);
+            if(prop==null) {
+                connectionRetryDelay = DEFAULT_CONNECTION_RETRY_DELAY;
+            }
+            else {
+                try { connectionRetryDelay = Integer.parseInt(prop); }
+                catch(NumberFormatException e) { connectionRetryDelay = DEFAULT_CONNECTION_RETRY_DELAY; }
+            }
 
             setKeepAlivePeriod(KEEP_ALIVE_PERIOD);
         }
@@ -1150,77 +1191,104 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
 //            this.ftpClient = new CustomFTPClient();
             this.ftpClient = new FTPClient();
 
-            try {
-                FileURL realm = getRealm();
+            int retriesLeft = nbConnectionRetries;
+            int retryDelay = connectionRetryDelay *1000;
+            do{
+	            try {
+	                FileURL realm = getRealm();
+	
+	                // Override default port (21) if a custom port was specified in the URL
+	                int port = realm.getPort();
+	                if(Debug.ON) Debug.trace("custom port="+port);
+	                if(port!=-1)
+	                    ftpClient.setDefaultPort(port);
+	
+	                // Sets the control encoding
+	                // - most modern FTP servers seem to default to UTF-8, but not all of them do.
+	                // - commons-ftp defaults to ISO-8859-1 which is not good
+	                // Note: this has to be done before the connection is established otherwise it won't be taken into account
+	                if(Debug.ON) Debug.trace("encoding="+encoding);
+	                ftpClient.setControlEncoding(encoding);
+	
+	                // Connect to the FTP server
+	                ftpClient.connect(realm.getHost());
+	
+	//                // Set a socket timeout: default value is 0 (no timeout)
+	//                ftpClient.setSoTimeout(CONNECTION_TIMEOUT*1000);
+	//                if(Debug.ON) Debug.trace("soTimeout="+ftpClient.getSoTimeout());
+	
+	                // Throw an IOException if server replied with an error
+	                checkServerReply();
 
-                // Override default port (21) if a custom port was specified in the URL
-                int port = realm.getPort();
-                if(Debug.ON) Debug.trace("custom port="+port);
-                if(port!=-1)
-                    ftpClient.setDefaultPort(port);
+	                Credentials credentials = getCredentials();
+	
+	                // Throw an AuthException if there are no credentials
+	                if(Debug.ON) Debug.trace("fileURL="+ realm.toString(true)+" credentials="+ credentials);
+	                if(credentials ==null)
+	                    throw new AuthException(realm);
+	
+	                // Login
+	                ftpClient.login(credentials.getLogin(), credentials.getPassword());
+	                // Throw an IOException (potentially an AuthException) if the server replied with an error
+	                checkServerReply();
+	
+	                // Enables/disables passive mode
+	                if(Debug.ON) Debug.trace("passiveMode="+passiveMode);
+	                if(passiveMode)
+	                    this.ftpClient.enterLocalPassiveMode();
+	                else
+	                    this.ftpClient.enterLocalActiveMode();
+	
+	                // Set file type to 'binary'
+	                ftpClient.setFileType(FTPClient.BINARY_FILE_TYPE);
+	
+	                // Issue 'LIST -al' command to list hidden files (instead of LIST -l), only if the corresponding
+	                // configuration variable has been manually enabled in the preferences.
+	                // The reason for not doing so by default is that the commons-net library will fail to properly parse
+	                // directory listings on some servers when 'LIST -al' is used (bug).
+	                // Note that by default, if 'LIST -l' is used, the decision to list hidden files is left to the
+	                // FTP server: some servers will choose to show them, some other will not. This behavior usually is a
+	                // configuration setting of the FTP server.
+	                // Todo: this should not be a configuration variable but rather a FileURL property
+	                ftpClient.setListHiddenFiles(MuConfiguration.getVariable(MuConfiguration.LIST_HIDDEN_FILES, MuConfiguration.DEFAULT_LIST_HIDDEN_FILES));
+	
+	                if(encoding.equalsIgnoreCase("UTF-8")) {
+	                    // This command enables UTF8 on the remote server... but only a few FTP servers currently support this command
+	                    ftpClient.sendCommand("OPTS UTF8 ON");
+	                }
 
-                // Sets the control encoding
-                // - most modern FTP servers seem to default to UTF-8, but not all of them do.
-                // - commons-ftp defaults to ISO-8859-1 which is not good
-                // Note: this has to be done before the connection is established otherwise it won't be taken into account
-                if(Debug.ON) Debug.trace("encoding="+encoding);
-                ftpClient.setControlEncoding(encoding);
+	                break;
+	            }
+	            catch(IOException e) {
+                    // If the server replied with code 421 (server busy)...
+	                if(ftpClient.getReplyCode()==421) {
+                        if(Debug.ON) Debug.trace("Server busy, retries left="+retriesLeft);
 
-                // Connect to the FTP server
-                ftpClient.connect(realm.getHost());
+                        // Retry to connect, if we have at least an attempt left
+                        if(retriesLeft>0) {
+                            retriesLeft--;
 
-//                // Set a socket timeout: default value is 0 (no timeout)
-//                ftpClient.setSoTimeout(CONNECTION_TIMEOUT*1000);
-//                if(Debug.ON) Debug.trace("soTimeout="+ftpClient.getSoTimeout());
+                            // Wait before retrying
+                            if(retryDelay>0) {
+                                if(Debug.ON) Debug.trace("waiting "+retryDelay+ "ms before retrying to connect");
 
-                // Throw an IOException if server replied with an error
-                checkServerReply();
+                                try { Thread.sleep(retryDelay); }
+                                catch(InterruptedException e2) {};
+                            }
 
-                Credentials credentials = getCredentials();
+                            continue;
+                        }
+                    }
 
-                // Throw an AuthException if there are no credentials
-                if(Debug.ON) Debug.trace("fileURL="+ realm.toString(true)+" credentials="+ credentials);
-                if(credentials ==null)
-                    throw new AuthException(realm);
+                    // Disconnect if the connection could not be established
+                    if(ftpClient.isConnected())
+                        try { ftpClient.disconnect(); } catch(IOException e2) {}
 
-                // Login
-                ftpClient.login(credentials.getLogin(), credentials.getPassword());
-                // Throw an IOException (potentially an AuthException) if the server replied with an error
-                checkServerReply();
-
-                // Enables/disables passive mode
-                if(Debug.ON) Debug.trace("passiveMode="+passiveMode);
-                if(passiveMode)
-                    this.ftpClient.enterLocalPassiveMode();
-                else
-                    this.ftpClient.enterLocalActiveMode();
-
-                // Set file type to 'binary'
-                ftpClient.setFileType(FTPClient.BINARY_FILE_TYPE);
-
-                // Issue 'LIST -al' command to list hidden files (instead of LIST -l), only if the corresponding
-                // configuration variable has been manually enabled in the preferences.
-                // The reason for not doing so by default is that the commons-net library will fail to properly parse
-                // directory listings on some servers when 'LIST -al' is used (bug).
-                // Note that by default, if 'LIST -l' is used, the decision to list hidden files is left to the
-                // FTP server: some servers will choose to show them, some other will not. This behavior usually is a
-                // configuration setting of the FTP server.
-                // Todo: this should not be a configuration variable but rather a FileURL property
-                ftpClient.setListHiddenFiles(MuConfiguration.getVariable(MuConfiguration.LIST_HIDDEN_FILES, MuConfiguration.DEFAULT_LIST_HIDDEN_FILES));
-
-                if(encoding.equalsIgnoreCase("UTF-8")) {
-                    // This command enables UTF8 on the remote server... but only a few FTP servers currently support this command
-                    ftpClient.sendCommand("OPTS UTF8 ON");
-                }
+                    // Re-throw the exception
+                    throw e;
+	            }
             }
-            catch(IOException e) {
-                // Disconnect if something went wrong
-                if(ftpClient.isConnected())
-                    try { ftpClient.disconnect(); } catch(IOException e2) {}
-
-                // Re-throw exception
-                throw e;
-            }
+            while(true);
         }
 
 
