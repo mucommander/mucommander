@@ -1652,7 +1652,7 @@ file_exists_in_destination:NL:Bestand bestaat al in het doel
 file_exists_in_destination:SK:Tento súbor už v cieli existuje
 file_exists_in_destination:JA:ファイルはすでに先にあります
 file_exists_in_destination:SV:Filen finns redan denna plats.
-file_exists_in_destination:DA:Findes findes allerede på denne lokation.
+file_exists_in_destination:DA:Filen findes allerede på denne lokation.
 
 source_parent_of_destination:EN:Attempt to transfer a folder to one of its subfolders
 source_parent_of_destination:FR:Tentative de déplacement d'un répertoire vers un de ses sous-répertoires
@@ -4990,6 +4990,7 @@ com.mucommander.ui.action.CalculateChecksumAction.label:DA:Udregn kontrolsum
 
 com.mucommander.ui.action.MaximizeWindowAction.label:EN:Maximize
 com.mucommander.ui.action.MaximizeWindowAction.label:FR:Agrandir
+com.mucommander.ui.action.MaximizeWindowAction.label:DA:Maksimer
 # Translation missing (New!)
 
 
@@ -5023,6 +5024,7 @@ com.mucommander.ui.action.MaximizeWindowAction.label.mac_os_x:EN:Zoom
 
 com.mucommander.ui.action.MinimizeWindowAction.label:EN:Minimize
 com.mucommander.ui.action.MinimizeWindowAction.label:FR:Réduire
+com.mucommander.ui.action.MinimizeWindowAction.label:DA:Minimer
 # Translation missing (New!)
 
 
@@ -5058,6 +5060,7 @@ com.mucommander.ui.action.MinimizeWindowAction.label.mac_os_x:EN:$[com.mucommand
 
 com.mucommander.ui.action.GoToDocumentationAction.label:EN:Online documentation
 com.mucommander.ui.action.GoToDocumentationAction.label:FR:Documentation en ligne
+com.mucommander.ui.action.GoToDocumentationAction.label:DA:Online dokumentation
 # Translation missing (New!)
 
 
@@ -10862,6 +10865,7 @@ prefs_dialog.check_for_updates_on_startup:DA:Tjek for opdateringer ved opstart
 prefs_dialog.show_splash_screen:EN:Show splash screen
 prefs_dialog.show_splash_screen:FR:Afficher l'écran de chargement
 prefs_dialog.show_splash_screen:DE:Zeige Startbild
+prefs_dialog.show_splash_screen:DA:Vis opstartsbillede
 # Translation missing (New!)
 
 
@@ -13135,6 +13139,7 @@ multi_rename_dialog.remove:DA:Fjern
 
 multi_rename_dialog.block_name:EN:Block
 multi_rename_dialog.block_name:PL:Zablokuj
+multi_rename_dialog.block_name:DA:Gruppe
 
 multi_rename_dialog.range:EN:Range
 multi_rename_dialog.range:PL:Zakres
