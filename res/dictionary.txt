@@ -13052,119 +13052,478 @@ color_chooser.title:SV:Välj en färg
 color_chooser.title:DA:Vælg en farve
 
 
+#######################
+# Batch-rename dialog #
+#######################
 
 multi_rename_dialog.title:EN:Batch Rename
 multi_rename_dialog.title:PL:Zmiana nazw plików
 multi_rename_dialog.title:DA:Multi omdøbning
+# Translation missing (New!)
+
+
+
+
+
+
+
+
+
+
+
 
 multi_rename_dialog.mask:EN:Renaming Pattern
 multi_rename_dialog.mask:PL:Matryca
 multi_rename_dialog.mask:DA:Maske
+# Translation missing (New!)
+
+
+
+
+
+
+
+
+
+
+
 
 multi_rename_dialog.file_name_mask:EN:File name mask
 multi_rename_dialog.file_name_mask:PL:Nazwa pliku
 multi_rename_dialog.file_name_mask:DA:Fil navn maske
+# Translation missing (New!)
+
+
+
+
+
+
+
+
+
+
+
 
 multi_rename_dialog.extension_mask:EN:Extension mask
 multi_rename_dialog.extension_mask:PL:Rozszerzenie
 multi_rename_dialog.extension_mask:DA:Filendelse maske
+# Translation missing (New!)
+
+
+
+
+
+
+
+
+
+
+
 
 multi_rename_dialog.search_replace:EN:Search & replace
 multi_rename_dialog.search_replace:PL:Znajdź i zamień
 multi_rename_dialog.search_replace:DA:Søg og erstat
+# Translation missing (New!)
+
+
+
+
+
+
+
+
+
+
+
 
 multi_rename_dialog.search_for:EN:Search for
 multi_rename_dialog.search_for:PL:Szukaj
 multi_rename_dialog.search_for:DA:Søg efter
+# Translation missing (New!)
+
+
+
+
+
+
+
+
+
+
+
 
 multi_rename_dialog.replace_with:EN:Replace with
 multi_rename_dialog.replace_with:PL:Zamień na
 multi_rename_dialog.replace_with:DA:Erstat med
+# Translation missing (New!)
+
+
+
+
+
+
+
+
+
+
+
 
 multi_rename_dialog.counter:EN:Counter
 multi_rename_dialog.counter:PL:Licznik
 multi_rename_dialog.counter:DA:Tæller
+# Translation missing (New!)
+
+
+
+
+
+
+
+
+
+
+
 
 multi_rename_dialog.start_at:EN:Start at
 multi_rename_dialog.start_at:PL:Start
 multi_rename_dialog.start_at:DA:Start på
+# Translation missing (New!)
+
+
+
+
+
+
+
+
+
+
+
 
 multi_rename_dialog.step_by:EN:Step by
 multi_rename_dialog.step_by:PL:Krok
 multi_rename_dialog.step_by:DA:Trin
+# Translation missing (New!)
+
+
+
+
+
+
+
+
+
+
+
 
 multi_rename_dialog.digits:EN:Digits
 multi_rename_dialog.digits:PL:Liczba cyfr
 multi_rename_dialog.digits:DA:Cifre
+# Translation missing (New!)
+
+
+
+
+
+
+
+
+
+
+
 
 multi_rename_dialog.upper_lower_case:EN:Upper/Lower case
 multi_rename_dialog.upper_lower_case:PL:Wielkość znaków
 multi_rename_dialog.upper_lower_case:DA:Store/små bogstaver
+# Translation missing (New!)
+
+
+
+
+
+
+
+
+
+
+
 
 multi_rename_dialog.no_change:EN:unchanged
 multi_rename_dialog.no_change:PL:bez zmian
 multi_rename_dialog.no_change:DA:uændret
+# Translation missing (New!)
+
+
+
+
+
+
+
+
+
+
+
 
 multi_rename_dialog.lower_case:EN:lowercase
 multi_rename_dialog.lower_case:PL:małe litery
 multi_rename_dialog.lower_case:DA:små bogstaver
+# Translation missing (New!)
+
+
+
+
+
+
+
+
+
+
+
 
 multi_rename_dialog.upper_case:EN:UPPERCASE
 multi_rename_dialog.upper_case:PL:DUŻE LITERY
 multi_rename_dialog.upper_case:DA:STORE BOGSTAVER
+# Translation missing (New!)
+
+
+
+
+
+
+
+
+
+
+
 
 multi_rename_dialog.first_upper:EN:First letter uppercase
 multi_rename_dialog.first_upper:PL:Pierwsza litera duża
 multi_rename_dialog.first_upper:DA:Første bogstaver stort
+# Translation missing (New!)
+
+
+
+
+
+
+
+
+
+
+
 
 multi_rename_dialog.word:EN:First Of Each Word
 multi_rename_dialog.word:PL:Pierwsza Każdego Słowa
 multi_rename_dialog.word:DA:Første Af Hvert Ord
+# Translation missing (New!)
+
+
+
+
+
+
+
+
+
+
+
 
 multi_rename_dialog.old_name:EN:Old name
 multi_rename_dialog.old_name:PL:Stara nazwa
 multi_rename_dialog.old_name:DA:Gammelt navn
+# Translation missing (New!)
+
+
+
+
+
+
+
+
+
+
+
 
 multi_rename_dialog.new_name:EN:New name
 multi_rename_dialog.new_name:PL:Nowa nazwa
 multi_rename_dialog.new_name:DA:Nyt navn
+# Translation missing (New!)
+
+
+
+
+
+
+
+
+
+
+
 
 multi_rename_dialog.start:EN:Start
 multi_rename_dialog.start:PL:Start
 multi_rename_dialog.start:DA:Start
+# Translation missing (New!)
+
+
+
+
+
+
+
+
+
+
+
 
 multi_rename_dialog.remove:EN:Remove
 multi_rename_dialog.remove:PL:Usuń
 multi_rename_dialog.remove:DA:Fjern
+# Translation missing (New!)
+
+
+
+
+
+
+
+
+
+
+
 
 multi_rename_dialog.block_name:EN:Block
 multi_rename_dialog.block_name:PL:Zablokuj
 multi_rename_dialog.block_name:DA:Gruppe
+# Translation missing (New!)
+
+
+
+
+
+
+
+
+
+
+
 
 multi_rename_dialog.range:EN:Range
 multi_rename_dialog.range:PL:Zakres
+# Translation missing (New!)
+
+
+
+
+
+
+
+
+
+
+
 
 multi_rename_dialog.proceed_renaming:EN:%1 files out of %2 will be renamed. Do you wish to proceed?
+# Translation missing (New!)
+
+
+
+
+
+
+
+
+
+
+
 
 multi_rename_dialog.confirmation_details:EN:This operation cannot be undone.
+# Translation missing (New!)
+
+
+
+
+
+
+
+
+
+
+
 
 multi_rename_dialog.duplicate_names:EN:Duplicate names!
 multi_rename_dialog.duplicate_names:PL:Wykryto zduplikowane nazwy!
+# Translation missing (New!)
 
 
 
+
+
+
+
+
+
+
+
+
+
+###############
+# List popups #
+###############
 
 parent_folders_popup.title:EN:Parent folders
 # Translation missing (New!)
 
+
+
+
+
+
+
+
+
+
+
+
 parent_folders_popup.empty_message:EN:No parent folders to current location
 # Translation missing (New!)
+
+
+
+
+
+
+
+
+
+
 
 recently_accessed_locations.title:EN:Recently accessed locations
 # Translation missing (New!)
 
+
+
+
+
+
+
+
+
+
+
 recently_accessed_locations.empty_message:EN:No previous accessed locations
 # Translation missing (New!)
+
+
+
+
+
+
+
+
+
+
+
 
 
 ######################
