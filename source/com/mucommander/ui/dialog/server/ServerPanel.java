@@ -24,6 +24,10 @@ import com.mucommander.ui.layout.XAlignedComponentPanel;
 import com.mucommander.ui.main.MainFrame;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.net.MalformedURLException;
 
@@ -53,12 +57,46 @@ abstract class ServerPanel extends XAlignedComponentPanel {
     public Insets getInsets() {
         return new Insets(8, 6, 8, 6);
     }
-	
+
+    protected JSpinner createPortSpinner(int portValue) {
+        return createIntSpinner(portValue, 1, 65535, 1);
+    }
+
+    protected JSpinner createIntSpinner(int value, int minValue, int maxValue, int step) {
+        JSpinner spinner = new JSpinner(new SpinnerNumberModel(value, minValue, maxValue, step));
+
+        // Left-aligns the text within the text field, and use a simple decimal format with no thousand separator
+        JSpinner.NumberEditor editor = new JSpinner.NumberEditor(spinner, "#####");
+        editor.getTextField().setHorizontalAlignment(JTextField.LEADING);
+        spinner.setEditor(editor);
+
+        // Any changes made to the spinner will update the URL label
+        spinner.addChangeListener(new ChangeListener(){
+            public void stateChanged(ChangeEvent e) {
+                dialog.updateURLLabel();
+            }
+        });
+
+        return spinner;
+    }
 	
     protected void addTextFieldListeners(JTextField textField, boolean updateLabel) {
         textField.addActionListener(dialog);
-        if(updateLabel)
-            textField.getDocument().addDocumentListener(dialog);
+        if(updateLabel) {
+            textField.getDocument().addDocumentListener(new DocumentListener() {
+                public void changedUpdate(DocumentEvent e) {
+                    dialog.updateURLLabel();
+                }
+
+                public void insertUpdate(DocumentEvent e) {
+                    dialog.updateURLLabel();
+                }
+
+                public void removeUpdate(DocumentEvent e) {
+                    dialog.updateURLLabel();
+                }
+            });
+        }
     }
 
 

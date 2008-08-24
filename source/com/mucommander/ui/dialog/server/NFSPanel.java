@@ -38,7 +38,7 @@ public class NFSPanel extends ServerPanel {
 
     private JTextField serverField;
     private JTextField shareField;
-    private JTextField portField;
+    private JSpinner portSpinner;
     private JComboBox nfsVersionComboBox;
     private JComboBox nfsProtocolComboBox;
 
@@ -65,10 +65,8 @@ public class NFSPanel extends ServerPanel {
         addRow(Translator.get("server_connect_dialog.share"), shareField, 15);
 
         // Port field, initialized to last value (default is 2049)
-        portField = new JTextField(""+lastPort, 5);
-        portField.selectAll();
-        addTextFieldListeners(portField, true);
-        addRow(Translator.get("server_connect_dialog.port"), portField, 15);
+        portSpinner = createPortSpinner(lastPort);
+        addRow(Translator.get("server_connect_dialog.port"), portSpinner, 15);
 
         // NFS version, initialized to last value (default is NFSFile's default)
         nfsVersionComboBox = new JComboBox();
@@ -91,13 +89,7 @@ public class NFSPanel extends ServerPanel {
         lastServer = serverField.getText();
         lastShare = shareField.getText();
 
-        lastPort = 2049;
-        try {
-            lastPort = Integer.parseInt(portField.getText());
-        }
-        catch(NumberFormatException e) {
-            // Port is a malformed number
-        }
+        lastPort = ((Integer)portSpinner.getValue()).intValue();
 
         lastNfsVersion = (String)nfsVersionComboBox.getSelectedItem();
         lastNfsProtocol = (String)nfsProtocolComboBox.getSelectedItem();
@@ -114,7 +106,7 @@ public class NFSPanel extends ServerPanel {
         FileURL url = new FileURL(FileProtocols.NFS+"://"+lastServer+(lastShare.startsWith("/")?"":"/")+lastShare);
 
         // Set port
-        if(lastPort>0 && lastPort!=2049)
+        if(lastPort!=2049)
             url.setPort(lastPort);
 
         // Set NFS version

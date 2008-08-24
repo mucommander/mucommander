@@ -45,7 +45,7 @@ public class FTPPanel extends ServerPanel implements ActionListener {
     private JTextField usernameField;
     private JPasswordField passwordField;
     private JTextField initialDirField;
-    private JTextField portField;
+    private JSpinner portSpinner;
     private SaneComboBox encodingComboBox;
     private JCheckBox passiveCheckBox;
     private JCheckBox anonymousCheckBox;
@@ -64,7 +64,7 @@ public class FTPPanel extends ServerPanel implements ActionListener {
     private static boolean anonymousUser;
 	
 	
-    FTPPanel(ServerConnectDialog dialog, MainFrame mainFrame) {
+    FTPPanel(final ServerConnectDialog dialog, MainFrame mainFrame) {
         super(dialog, mainFrame);
 
         // Server field, initialized to last server entered
@@ -92,10 +92,8 @@ public class FTPPanel extends ServerPanel implements ActionListener {
         addRow(Translator.get("server_connect_dialog.initial_dir"), initialDirField, 5);
 	
         // Port field, initialized to last port (default is 21)
-        portField = new JTextField(""+lastPort, 5);
-        portField.selectAll();
-        addTextFieldListeners(portField, true);
-        addRow(Translator.get("server_connect_dialog.port"), portField, 5);
+        portSpinner = createPortSpinner(lastPort);
+        addRow(Translator.get("server_connect_dialog.port"), portSpinner, 5);
 
         // Encoding combo box
         encodingComboBox = new EncodingComboBox();
@@ -123,14 +121,7 @@ public class FTPPanel extends ServerPanel implements ActionListener {
         }
 
         lastInitialDir = initialDirField.getText();
-		
-        lastPort = 21;
-        try {
-            lastPort = Integer.parseInt(portField.getText());
-        }
-        catch(NumberFormatException e) {
-            // Port is a malformed number
-        }
+        lastPort = ((Integer)portSpinner.getValue()).intValue();
     }
 	
 	
@@ -151,7 +142,7 @@ public class FTPPanel extends ServerPanel implements ActionListener {
             url.setCredentials(new Credentials(lastUsername, lastPassword));
 
         // Set port
-        if(lastPort!=21 && (lastPort>0 && lastPort<65536))
+        if(lastPort!=21)
             url.setPort(lastPort);
 
         // Set passiveMode property to true (default) or false

@@ -37,7 +37,7 @@ import java.net.MalformedURLException;
 public class HTTPPanel extends ServerPanel {
 
     private JTextField urlField;
-    private JTextField portField;
+    private JSpinner portSpinner;
     private JTextField usernameField;
     private JPasswordField passwordField;
 
@@ -58,10 +58,8 @@ public class HTTPPanel extends ServerPanel {
         addRow(Translator.get("server_connect_dialog.http_url"), urlField, 5);
 
         // Port field, initialized to last port (default is 80)
-        portField = new JTextField(""+lastPort, 5);
-        portField.selectAll();
-        addTextFieldListeners(portField, true);
-        addRow(Translator.get("server_connect_dialog.port"), portField, 20);
+        portSpinner = createPortSpinner(lastPort);
+        addRow(Translator.get("server_connect_dialog.port"), portSpinner, 20);
         
         // HTTP Basic authentication fields
         addRow(new JLabel(Translator.get("http_connect.basic_authentication")), 10);
@@ -84,13 +82,7 @@ public class HTTPPanel extends ServerPanel {
         lastUsername = usernameField.getText();
         lastPassword = new String(passwordField.getPassword());
 
-        lastPort = 80;
-        try {
-            lastPort = Integer.parseInt(portField.getText());
-        }
-        catch(NumberFormatException e) {
-            // Port is a malformed number
-        }
+        lastPort = ((Integer)portSpinner.getValue()).intValue();
     }
 
 
@@ -107,7 +99,7 @@ public class HTTPPanel extends ServerPanel {
         FileURL fileURL = new FileURL(lastURL);
 
         // Set port
-        if(lastPort!=80 && (lastPort>0 && lastPort<65536))
+        if(lastPort!=80)
             fileURL.setPort(lastPort);
 
         fileURL.setCredentials(new Credentials(lastUsername, lastPassword));

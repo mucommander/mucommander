@@ -45,7 +45,7 @@ public class SFTPPanel extends ServerPanel {
     private JTextField usernameField;
     private JPasswordField passwordField;
     private JTextField initialDirField;
-    private JTextField portField;
+    private JSpinner portSpinner;
 
     private static String lastServer = "";
     private static String lastKeyPath = "";
@@ -106,10 +106,8 @@ public class SFTPPanel extends ServerPanel {
         addRow(Translator.get("server_connect_dialog.initial_dir"), initialDirField, 5);
 
         // Port field, initialized to last port (default is 22)
-        portField = new JTextField(""+lastPort, 5);
-        portField.selectAll();
-        addTextFieldListeners(portField, true);
-        addRow(Translator.get("server_connect_dialog.port"), portField, 15);
+        portSpinner = createPortSpinner(lastPort);
+        addRow(Translator.get("server_connect_dialog.port"), portSpinner, 15);
     }
 
 
@@ -119,14 +117,7 @@ public class SFTPPanel extends ServerPanel {
         lastUsername = usernameField.getText();
         lastPassword = new String(passwordField.getPassword());
         lastInitialDir = initialDirField.getText();
-        lastPort = 22;
-
-        try {
-            lastPort = Integer.parseInt(portField.getText());
-        }
-        catch(NumberFormatException e) {
-            // Port is a malformed number
-        }
+        lastPort = ((Integer)portSpinner.getValue()).intValue();
     }
 
 
@@ -145,7 +136,7 @@ public class SFTPPanel extends ServerPanel {
         if (!"".equals(lastKeyPath.trim())) url.setProperty(SFTPFile.PRIVATE_KEY_PATH_PROPERTY_NAME, lastKeyPath);
 
         // Set port
-        if(lastPort>0 && lastPort!=22)
+        if(lastPort!=22)
             url.setPort(lastPort);
 
         return url;
