@@ -8386,8 +8386,8 @@ ftp_connect.anonymous_user:JA:匿名ユーザー
 ftp_connect.anonymous_user:SV:Anonym användare
 ftp_connect.anonymous_user:DA:Anonym bruger
 
-ftp_connect.nb_retries_when_server_busy:EN:Number of retries when server busy
-ftp_connect.nb_retries_when_server_busy:RU:Количество попыткок установления соединения
+ftp_connect.nb_connection_retries:EN:Number of connection retries
+ftp_connect.nb_connection_retries:RU:Количество попыткок установления соединения
 # Translation missing (New!)
 
 

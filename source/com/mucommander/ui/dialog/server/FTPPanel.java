@@ -105,7 +105,7 @@ public class FTPPanel extends ServerPanel implements ActionListener {
 
         // Connection retries when server busy
         nbRetriesSpinner = createIntSpinner(FTPFile.DEFAULT_NB_CONNECTION_RETRIES, 0, Integer.MAX_VALUE, 1);
-        addRow(Translator.get("ftp_connect.nb_retries_when_server_busy"), nbRetriesSpinner, 5);
+        addRow(Translator.get("ftp_connect.nb_connection_retries"), nbRetriesSpinner, 5);
 
         // Delay between two retries
         retryDelaySpinner = createIntSpinner(FTPFile.DEFAULT_CONNECTION_RETRY_DELAY, 0, Integer.MAX_VALUE, 1);

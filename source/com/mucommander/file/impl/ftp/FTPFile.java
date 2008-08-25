@@ -101,14 +101,15 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
     /** Default FTP encoding if {@link #ENCODING_PROPERTY_NAME} is not set */
     public final static String DEFAULT_ENCODING = "UTF-8";
 
-    /** Name of the property that holds the number of connection retries when the FTP server is busy */
+    /** Name of the property that holds the number of retries after a recoverable connection failure (connection error
+     * or temporary server error in the 4xx range) */
     public final static String NB_CONNECTION_RETRIES_PROPERTY_NAME = "nbConnectionRetries";
 
     /** Default value if {@link #NB_CONNECTION_RETRIES_PROPERTY_NAME} is not set */
     public final static int DEFAULT_NB_CONNECTION_RETRIES = 0;
 
     /** Name of the property that holds the amount of time (in seconds) to wait before retrying to connect after a
-     *  connection failure due to the server being busy */
+     *  temporary connection failure. */
     public final static String CONNECTION_RETRY_DELAY_PROPERTY_NAME = "connectionRetryDelay";
 
     /** Default value if {@link #CONNECTION_RETRY_DELAY_PROPERTY_NAME} is not set */
@@ -1071,10 +1072,10 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
         /** Encoding used by the FTP control connection */
         private String encoding;
 
-        /** Number of connection retry attempts when the FTP server is busy */
+        /** Number of connection retry attempts after a recoverable connection failure */
         private int nbConnectionRetries;
 
-        /** Amount of time (in seconds) to wait before retrying to connect after a connection failure due to the server being busy */
+        /** Amount of time (in seconds) to wait before retrying to connect after a recoverable connection failure */
         private int connectionRetryDelay;
 
         /** False if SITE UTIME command is not supported by the remote server (once tried and failed) */
@@ -1110,7 +1111,7 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
             if(encoding==null || encoding.equals(""))
                 encoding = DEFAULT_ENCODING;
 
-            // Use the property that controls the number of connection retries when the FTP server is busy,
+            // Use the property that controls the number of connection retries after a recoverable connection failure,
             // if the property is set
             String prop = location.getProperty(NB_CONNECTION_RETRIES_PROPERTY_NAME);
             if(prop==null) {
@@ -1121,7 +1122,7 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
                 catch(NumberFormatException e) { nbConnectionRetries = DEFAULT_NB_CONNECTION_RETRIES; }
             }
 
-            // Use the property that controls the connection retry delay when the FTP server is busy,
+            // Use the property that controls the connection retry delay after a recoverable connection failure,
             // if the property is set
             prop = location.getProperty(CONNECTION_RETRY_DELAY_PROPERTY_NAME);
             if(prop==null) {
@@ -1260,9 +1261,13 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
 	                break;
 	            }
 	            catch(IOException e) {
-                    // If the server replied with code 421 (server busy)...
-	                if(ftpClient.getReplyCode()==421) {
-                        if(Debug.ON) Debug.trace("Server busy, retries left="+retriesLeft);
+                    // Attempt to retry if the connection failed, or if the server reply corresponds to a temporary error.
+                    // Unlike 5xx errors which are permanent, 4xx errors are temporary and may be retried, quote from
+                    // RFC 959: "The command was not accepted and the requested action did not take place, but the error
+                    // condition is temporary and the action may be requested again."
+	                int replyCode = ftpClient.getReplyCode();
+                    if(!ftpClient.isConnected() || FTPReply.isNegativeTransient(replyCode)) {
+                        if(Debug.ON) Debug.trace((!ftpClient.isConnected()?"Connection error":"Temporary server error ("+replyCode+")")+", retries left="+retriesLeft);
 
                         // Retry to connect, if we have at least an attempt left
                         if(retriesLeft>0) {
