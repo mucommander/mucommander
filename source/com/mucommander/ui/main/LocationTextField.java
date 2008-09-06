@@ -115,7 +115,11 @@ public class LocationTextField extends ProgressTextField implements LocationList
     	new TextFieldCompletion(new AutocompleterTextComponent(this) {
 
 			public void OnEnterPressed(KeyEvent keyEvent) {
-				textFieldValidated();				
+				if (textFieldValidated()) // if a malformed url was entered.
+					folderChangeCompleted(false);		        
+				
+				// /!\ Consume the event so to prevent JTextField from firing an ActionEvent
+				keyEvent.consume();
 			}
 
 			public void OnEscPressed(KeyEvent keyEvent) {
@@ -203,7 +207,11 @@ public class LocationTextField extends ProgressTextField implements LocationList
         folderChangeCompleted(false);
     }
 
-    public void textFieldValidated() {
+    /**
+     * 
+     * @return true if a malformed url was entered, false otherwise.
+     */
+    public boolean textFieldValidated() {
         String location = getText();
 
         // Under Windows, trim the entered path for the following reason.
@@ -221,41 +229,46 @@ public class LocationTextField extends ProgressTextField implements LocationList
             if(matcher.find())
                 location = location.substring(0, matcher.start());
         }
+                
+        // Save the path that was entered in case the location change fails or is cancelled 
+        locationFieldTextSave = location;
+        
+        // Indicate we search for location corresponding to the given string. 
+        // it will be false we'll find one.
+        boolean tryToInterpretEnteredString = true;
 
         // Look for a bookmark which name is the entered string (case insensitive)
         Bookmark b = BookmarkManager.getBookmark(location);
         if(b!=null) {
-            // Change the current folder to the bookmark's location
-            folderPanel.tryChangeCurrentFolder(b.getLocation());
-            return;
+        	// Change the current folder to the bookmark's location
+        	setText(location = b.getLocation());
+        	tryToInterpretEnteredString = false;
         }
 
         // Look for a root folder which name is the entered string (case insensitive)
         AbstractFile rootFolders[] = RootFolders.getRootFolders();
-        for(int i=0; i<rootFolders.length; i++) {
+        for(int i=0; tryToInterpretEnteredString && i<rootFolders.length; i++) {
             if(rootFolders[i].getName().equalsIgnoreCase(location)) {
                 // Change the current folder to the root folder
-                folderPanel.tryChangeCurrentFolder(rootFolders[i]);
-                return;
+            	setText(location = rootFolders[i].getAbsolutePath());
+            	tryToInterpretEnteredString = false;
             }
         }
 
         // Todo: replace this by env:// filesystem ?
         // Look for a system variable which name is the entered string (case insensitive)
-        if (location.startsWith("$")) {
+        if (tryToInterpretEnteredString && location.startsWith("$")) {
         	String variableKey = location.substring(1);
         	String variableValue = System.getenv(variableKey);
         	if (variableValue != null)
-        		location = variableValue;        	
-        }
-
+        		setText(location = variableValue);        	
+        }        
+        
         // Remember that the folder change was initiated by the location field
         folderChangeInitiatedByLocationField = true;
-        // Save the path that was entered in case the location change fails or is cancelled 
-        locationFieldTextSave = location;
         
         // Change folder
-        folderPanel.tryChangeCurrentFolder(location);
+        return folderPanel.tryChangeCurrentFolder(location) == null;
     }
 
     public void textFieldCancelled() {
