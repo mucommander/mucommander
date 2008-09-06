@@ -27,24 +27,19 @@ public class PopupsPopupButton extends PopupButton {
 		setPopupMenuLocation(PopupButton.BUTTOM_LEFT_ORIENTED);
 		
 		popupMenu = new JPopupMenu();
-		final MainFrame mainFrame = folderPanel.getMainFrame();
-		// Add items to popupMenu:
-		JMenuItem item;
 		// add item for ShowParentFoldersPopupAction.
-		item = new JMenuItem(MuAction.getStandardLabel(ShowParentFoldersPopupAction.class));
+		addShowQuickListAction(popupMenu, ShowParentFoldersPopupAction.class);
+		// add item for ShowRecentlyAccessedLocationsAction.
+		addShowQuickListAction(popupMenu, ShowRecentlyAccessedLocationsAction.class);
+	}
+	
+	private void addShowQuickListAction(JPopupMenu menu, final Class action) {
+		JMenuItem item = new JMenuItem(MuAction.getStandardLabel(action));
 		item.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent arg0) {
-				ActionManager.performAction(ShowParentFoldersPopupAction.class, mainFrame);
+				ActionManager.performAction(action, folderPanel.getMainFrame());
 			}});
-		popupMenu.add(item);
-		// add item for ShowRecentlyAccessedLocationsAction.
-		item = new JMenuItem(MuAction.getStandardLabel(ShowRecentlyAccessedLocationsAction.class));
-		item.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				ActionManager.performAction(ShowRecentlyAccessedLocationsAction.class, mainFrame);
-			}
-		});
-		popupMenu.add(item);
+		menu.add(item);
 	}
 	
 	public JPopupMenu getPopupMenu() {
