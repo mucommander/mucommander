@@ -26,7 +26,7 @@ import java.awt.event.KeyEvent;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.swing.border.EtchedBorder;
+import javax.swing.border.BevelBorder;
 
 import com.mucommander.bookmark.Bookmark;
 import com.mucommander.bookmark.BookmarkManager;
@@ -323,10 +323,10 @@ public class LocationTextField extends ProgressTextField implements LocationList
             setFont(event.getFont());
     }
     
-    private class LocationTextFieldBorder extends EtchedBorder {
+    public static final class LocationTextFieldBorder extends BevelBorder {
     	
     	public LocationTextFieldBorder() {
-    		super(EtchedBorder.LOWERED);		
+    		super(BevelBorder.LOWERED);		
     	}
     	
     	public Insets getBorderInsets(Component c) {

@@ -33,6 +33,7 @@ import com.mucommander.ui.chooser.PreviewLabel;
 import com.mucommander.ui.dialog.pref.PreferencesDialog;
 import com.mucommander.ui.layout.ProportionalGridPanel;
 import com.mucommander.ui.layout.YBoxPanel;
+import com.mucommander.ui.main.LocationTextField;
 import com.mucommander.ui.progress.ProgressTextField;
 import com.mucommander.ui.theme.ThemeData;
 
@@ -106,12 +107,16 @@ class LocationBarPanel extends ThemeEditorPanel implements PropertyChangeListene
 
         //        panel.add(new JLabel(Translator.get("theme_editor.normal")));
         panel.add(createCaptionLabel("theme_editor.normal"));
-        panel.add(normalPreview = new ProgressTextField(0, themeData.getColor(ThemeData.LOCATION_BAR_PROGRESS_COLOR)));
+        normalPreview = new ProgressTextField(0, themeData.getColor(ThemeData.LOCATION_BAR_PROGRESS_COLOR));
+        normalPreview.setBorder(new LocationTextField.LocationTextFieldBorder());
+        panel.add(normalPreview);
         normalPreview.setText(System.getProperty("user.home"));
 
         panel.addSpace(10);
         panel.add(createCaptionLabel("theme_editor.progress"));
-        panel.add(progressPreview = new ProgressTextField(50, themeData.getColor(ThemeData.LOCATION_BAR_PROGRESS_COLOR)));
+        progressPreview = new ProgressTextField(50, themeData.getColor(ThemeData.LOCATION_BAR_PROGRESS_COLOR));
+        progressPreview.setBorder(new LocationTextField.LocationTextFieldBorder());
+        panel.add(progressPreview);
         progressPreview.setText(System.getProperty("user.home"));
         progressPreview.setEnabled(false);
 
