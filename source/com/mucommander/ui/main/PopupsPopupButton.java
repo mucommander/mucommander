@@ -1,10 +1,14 @@
 package com.mucommander.ui.main;
 
 import java.awt.Dimension;
-import java.util.Hashtable;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
+import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
+import com.mucommander.ui.action.ActionManager;
+import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.action.ShowParentFoldersPopupAction;
 import com.mucommander.ui.action.ShowRecentlyAccessedLocationsAction;
 import com.mucommander.ui.button.PopupButton;
@@ -24,8 +28,23 @@ public class PopupsPopupButton extends PopupButton {
 		
 		popupMenu = new JPopupMenu();
 		final MainFrame mainFrame = folderPanel.getMainFrame();
-		popupMenu.add(new ShowParentFoldersPopupAction(mainFrame, new Hashtable()));
-		popupMenu.add(new ShowRecentlyAccessedLocationsAction(mainFrame, new Hashtable()));
+		// Add items to popupMenu:
+		JMenuItem item;
+		// add item for ShowParentFoldersPopupAction.
+		item = new JMenuItem(MuAction.getStandardLabel(ShowParentFoldersPopupAction.class));
+		item.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent arg0) {
+				ActionManager.performAction(ShowParentFoldersPopupAction.class, mainFrame);
+			}});
+		popupMenu.add(item);
+		// add item for ShowRecentlyAccessedLocationsAction.
+		item = new JMenuItem(MuAction.getStandardLabel(ShowRecentlyAccessedLocationsAction.class));
+		item.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				ActionManager.performAction(ShowRecentlyAccessedLocationsAction.class, mainFrame);
+			}
+		});
+		popupMenu.add(item);
 	}
 	
 	public JPopupMenu getPopupMenu() {
