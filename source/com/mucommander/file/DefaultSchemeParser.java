@@ -190,6 +190,7 @@ public class DefaultSchemeParser implements SchemeParser {
                 // - a drive letter and OS uses root drives (Windows-style)
                 // - a ~ character (refers to the user home folder)
                 if((!LocalFile.USES_ROOT_DRIVES && url.startsWith("/")) || (LocalFile.USES_ROOT_DRIVES && url.indexOf(":\\")==1) || url.startsWith("~")) {
+                    fileURL.setHandler(FileURL.getRegisteredHandler(FileProtocols.FILE));
                     fileURL.setScheme(FileProtocols.FILE);
                     fileURL.setHost(LOCALHOST);
                     String separator = LocalFile.SEPARATOR;
