@@ -1,3 +1,21 @@
+/*
+ * This file is part of muCommander, http://www.mucommander.com
+ * Copyright (C) 2002-2008 Maxence Bernard
+ *
+ * muCommander is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * muCommander is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package com.mucommander.ui.main;
 
 import java.awt.Dimension;
@@ -9,28 +27,31 @@ import javax.swing.JPopupMenu;
 
 import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.action.MuAction;
-import com.mucommander.ui.action.ShowParentFoldersPopupAction;
-import com.mucommander.ui.action.ShowRecentlyAccessedLocationsAction;
+import com.mucommander.ui.action.ShowParentFoldersQLAction;
+import com.mucommander.ui.action.ShowRecentLocationsQLAction;
+import com.mucommander.ui.action.ShowRecentExecutedFilesQLAction;
 import com.mucommander.ui.button.PopupButton;
 
 /**
- * This button contains the existing pop ups for the FileTable.
+ * This button contains the existing quick lists for FileTable.
  * 
  * @author Arik Hadas
  */
-public class PopupsPopupButton extends PopupButton {
+public class QuickListsPopupButton extends PopupButton {
 	private FolderPanel folderPanel;
 	private JPopupMenu popupMenu;
 	
-	public PopupsPopupButton(FolderPanel panel) {
+	public QuickListsPopupButton(FolderPanel panel) {
 		folderPanel = panel;
 		setPopupMenuLocation(PopupButton.BUTTOM_LEFT_ORIENTED);
 		
 		popupMenu = new JPopupMenu();
 		// add item for ShowParentFoldersPopupAction.
-		addShowQuickListAction(popupMenu, ShowParentFoldersPopupAction.class);
+		addShowQuickListAction(popupMenu, ShowParentFoldersQLAction.class);
 		// add item for ShowRecentlyAccessedLocationsAction.
-		addShowQuickListAction(popupMenu, ShowRecentlyAccessedLocationsAction.class);
+		addShowQuickListAction(popupMenu, ShowRecentLocationsQLAction.class);
+		// add item for ShowRecentlyExecutedFilesAction.
+		addShowQuickListAction(popupMenu, ShowRecentExecutedFilesQLAction.class);
 	}
 	
 	private void addShowQuickListAction(JPopupMenu menu, final Class action) {

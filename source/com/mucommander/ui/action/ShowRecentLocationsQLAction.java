@@ -16,22 +16,26 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.mucommander.ui.main.popup;
+package com.mucommander.ui.action;
+
+import java.util.Hashtable;
 
 import com.mucommander.ui.main.FolderPanel;
+import com.mucommander.ui.main.MainFrame;
 
 /**
- * FileTablePopupWithoutIcons is a FileTablePopupWithDataList in which the data list 
- * 	doesn't contain icons.
+ * This action shows RecentLocationsQL on the current active FileTable.
  * 
  * @author Arik Hadas
  */
 
-public abstract class FileTablePopupWithoutIcons extends FileTablePopupWithDataList {
-
-	public FileTablePopupWithoutIcons(String header, String emptyPopupHeader, FolderPanel panel) {
-		super(header, emptyPopupHeader, panel);
+public class ShowRecentLocationsQLAction extends ShowFileTablePopupAction {
+	
+	public ShowRecentLocationsQLAction(MainFrame mainFrame, Hashtable properties) {
+		super(mainFrame, properties);
 	}
 	
-	protected FileTablePopupDataList getList() { return new FileTablePopupDataList(); }
+	public void performAction() {
+		openPopup(FolderPanel.RECENT_ACCESSED_LOCATIONS_QUICK_LIST_INDEX);
+	}
 }

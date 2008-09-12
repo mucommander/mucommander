@@ -27,6 +27,7 @@ import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.main.MainFrame;
+import com.mucommander.ui.main.quicklist.RecentExecutedFilesQL;
 
 import java.io.IOException;
 import java.util.Hashtable;
@@ -80,7 +81,10 @@ public class OpenAction extends MuAction {
 
         // Opens local files using their native associations.
         else if(file.getURL().getProtocol().equals(FileProtocols.FILE) && (file.hasAncestor(LocalFile.class))) {
-            try {DesktopManager.open(file);}
+            try {
+            	DesktopManager.open(file);
+            	RecentExecutedFilesQL.addFile(file.toString());
+    		}
             catch(IOException e) {reportGenericError();}
         }
 

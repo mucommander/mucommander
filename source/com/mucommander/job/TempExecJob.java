@@ -23,6 +23,7 @@ import com.mucommander.file.AbstractFile;
 import com.mucommander.file.util.FileSet;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;
+import com.mucommander.ui.main.quicklist.RecentExecutedFilesQL;
 
 /**
  * This job copies a file or a set of files to a temporary folder, makes the temporary file(s) read-only and
@@ -68,7 +69,10 @@ public class TempExecJob extends TempCopyJob {
             return false;
 
         // Try to open the file.
-        try {DesktopManager.open(currentDestFile);}
+        try {
+        	DesktopManager.open(currentDestFile);
+        	RecentExecutedFilesQL.addFile(file.toString());
+    	}
         catch(Exception e) {return false;}
 
         return true;

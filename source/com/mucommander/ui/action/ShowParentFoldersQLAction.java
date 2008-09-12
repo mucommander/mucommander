@@ -16,19 +16,26 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.mucommander.ui.main.popup;
+package com.mucommander.ui.action;
 
-import javax.swing.JMenuItem;
+import java.util.Hashtable;
+
+import com.mucommander.ui.main.FolderPanel;
+import com.mucommander.ui.main.MainFrame;
 
 /**
- * This abstract class represent menu item of FileTablePopup. 
+ * This action shows ParentFoldersQL on the current active FileTable.
+ * 
  * @author Arik Hadas
  */
 
-abstract class FileTablePopupMenuItem extends JMenuItem {	
+public class ShowParentFoldersQLAction extends ShowFileTablePopupAction {
 	
-	public FileTablePopupMenuItem(String text) {
-		super(text);
-		setEnabled(false);
-	}	
+	public ShowParentFoldersQLAction(MainFrame mainFrame, Hashtable properties) {
+		super(mainFrame, properties);
+	}
+	
+	public void performAction() {
+		openPopup(FolderPanel.PARENT_FOLDERS_QUICK_LIST_INDEX);
+	}
 }

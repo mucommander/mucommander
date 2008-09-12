@@ -16,25 +16,26 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.mucommander.ui.main.popup;
+package com.mucommander.ui.action;
 
-import com.mucommander.ui.main.table.FileTable;
+import java.util.Hashtable;
+
+import com.mucommander.ui.main.FolderPanel;
+import com.mucommander.ui.main.MainFrame;
 
 /**
- * Components which request focus in this package should implement this interface,
- * and return their invoker FileTable which is the next component, after them,
- * in the focus traversal. 
+ * This action shows RecentExecutedFilesQL on the current active FileTable.
  * 
  * @author Arik Hadas
  */
 
-public interface FileTablePopupFocusableComponent {
+public class ShowRecentExecutedFilesQLAction extends ShowFileTablePopupAction {
 	
-	/**
-	 * This function should return the invoker FileTable which is the next component
-	 * in the focus traversal.
-	 * 
-	 * @return invoker FileTable
-	 */
-	public FileTable getInvokerFileTable();
+	public ShowRecentExecutedFilesQLAction(MainFrame mainFrame, Hashtable properties) {
+		super(mainFrame, properties);
+	}
+	
+	public void performAction() {
+		openPopup(FolderPanel.RECENT_EXECUTED_FILES_QUICK_LIST_INDEX);
+	}
 }

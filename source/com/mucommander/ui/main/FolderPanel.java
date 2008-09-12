@@ -77,11 +77,14 @@ import com.mucommander.ui.dnd.FileDragSourceListener;
 import com.mucommander.ui.dnd.FileDropTargetListener;
 import com.mucommander.ui.event.LocationManager;
 import com.mucommander.ui.main.menu.TablePopupMenu;
-import com.mucommander.ui.main.popup.FileTablePopup;
+import com.mucommander.ui.main.quicklist.ParentFoldersQL;
+import com.mucommander.ui.main.quicklist.RecentLocationsQL;
+import com.mucommander.ui.main.quicklist.RecentExecutedFilesQL;
 import com.mucommander.ui.main.table.FileTable;
 import com.mucommander.ui.main.table.FileTableConfiguration;
 import com.mucommander.ui.main.table.FolderChangeMonitor;
 import com.mucommander.ui.main.tree.FoldersTreePanel;
+import com.mucommander.ui.quicklist.QuickList;
 import com.mucommander.ui.theme.ColorChangedEvent;
 import com.mucommander.ui.theme.FontChangedEvent;
 import com.mucommander.ui.theme.Theme;
@@ -148,11 +151,14 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
     private int oldTreeWidth = 150;
 
     /** Array of all the existing pop ups for this panel's FileTable **/
-    private FileTablePopup[] fileTablePopups;
+    private QuickList[] fileTablePopups;
+    protected static RecentLocationsQL recentLocationsQL = new RecentLocationsQL();
+    protected static RecentExecutedFilesQL recentExecutedFilesQL = new RecentExecutedFilesQL();
     
-    public static final int PARENT_FOLDERS_POPUP_INDEX = 0;
-    public static final int RECENTLY_ACCESSED_LOCATIONS_POPUP_INDEX = 1;
-    
+    public static final int PARENT_FOLDERS_QUICK_LIST_INDEX = 0;
+    public static final int RECENT_ACCESSED_LOCATIONS_QUICK_LIST_INDEX = 1;
+    public static final int RECENT_EXECUTED_FILES_QUICK_LIST_INDEX = 2;
+       
     /* TODO branch private boolean branchView; */
 
 
@@ -188,17 +194,19 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
         
         c.weightx = 0;
         c.gridx = 2;
-        locationPanel.add(new PopupsPopupButton(this), c);
+        locationPanel.add(new QuickListsPopupButton(this), c);
 
         add(locationPanel, BorderLayout.NORTH);
 
         // Create the FileTable
         fileTable = new FileTable(mainFrame, this, conf);
-
-        // Init popups
-        fileTablePopups = new FileTablePopup[2];
-        fileTablePopups[PARENT_FOLDERS_POPUP_INDEX] = new ParentFoldersPopup(this);
-        fileTablePopups[RECENTLY_ACCESSED_LOCATIONS_POPUP_INDEX] = new RecentlyAccessedLocationsPopup(this);
+        
+        // Init quick lists
+    	locationManager.addLocationListener(recentLocationsQL);
+    	fileTablePopups = new QuickList[]{
+    			new ParentFoldersQL(this),
+    			recentLocationsQL,
+    			recentExecutedFilesQL};
         
         // Init chained file filters used to filter out files in the current directory.
         // AndFileFilter is used, that means files must satisfy all the filters in order to be displayed.
@@ -1385,7 +1393,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
      * @param index - index of the FileTablePopup in fileTablePopups.
      */
     public void showPopup(int index) {
-    	fileTablePopups[index].show();
+    	fileTablePopups[index].show(this);
     }
     
     /**
