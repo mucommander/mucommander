@@ -7,12 +7,16 @@
 <keymap>
   <!-- Action  : Show popup with parent folders of current location.     -->
   <!-- Default : alt 1                                                       -->
-  <action class="com.mucommander.ui.action.ShowParentFoldersPopupAction"        keystroke="alt 1"/>
+  <action class="com.mucommander.ui.action.ShowParentFoldersQLAction"        keystroke="alt 1"/>
   
   <!-- Action  : Show popup with recently accessed locations,       -->
   <!-- Default : alt 2                                                       -->
-  <action class="com.mucommander.ui.action.ShowRecentlyAccessedLocationsAction" keystroke="alt 2"/>
+  <action class="com.mucommander.ui.action.ShowRecentLocationsQLAction" keystroke="alt 2"/>
 
+  <!-- Action  : Show popup with recently executed files,       -->
+  <!-- Default : alt 2                                                       -->
+  <action class="com.mucommander.ui.action.ShowRecentExecutedFilesQLAction" keystroke="alt 3"/>
+  
   <!-- Action  : Create a bookmark from the location of the current panel.       -->
   <!-- Default : control B                                                       -->
   <action class="com.mucommander.ui.action.AddBookmarkAction"            keystroke="control B"/>

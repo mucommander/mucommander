@@ -5068,18 +5068,19 @@ com.mucommander.ui.action.GoToDocumentationAction.label:DA:Online dokumentation
 
 
 
-com.mucommander.ui.action.ShowParentFoldersPopupAction.label:EN:Parent folders of current location
+com.mucommander.ui.action.ShowParentFoldersQLAction.label:EN:Parent folders
 # Translation missing (New!)
 
 
 
-com.mucommander.ui.action.ShowRecentlyAccessedLocationsAction.label:EN:Recently accessed locations
+com.mucommander.ui.action.ShowRecentLocationsQLAction.label:EN:Recent locations
 # Translation missing (New!)
 
 
 
 
-
+com.mucommander.ui.action.ShowRecentExecutedFilesQLAction.label:EN:Recent executed files
+# Translation missing (New!)
 
 
 
@@ -13518,7 +13519,7 @@ parent_folders_popup.title:EN:Parent folders
 
 
 
-parent_folders_popup.empty_message:EN:No parent folders to current location
+parent_folders_popup.empty_message:EN:No parent folder for current location
 # Translation missing (New!)
 
 
@@ -13531,7 +13532,7 @@ parent_folders_popup.empty_message:EN:No parent folders to current location
 
 
 
-recently_accessed_locations.title:EN:Recently accessed locations
+recently_accessed_locations.title:EN:Recent locations
 # Translation missing (New!)
 
 
@@ -13544,7 +13545,7 @@ recently_accessed_locations.title:EN:Recently accessed locations
 
 
 
-recently_accessed_locations.empty_message:EN:No previous accessed locations
+recently_accessed_locations.empty_message:EN:No recent location
 # Translation missing (New!)
 
 
@@ -13553,6 +13554,21 @@ recently_accessed_locations.empty_message:EN:No previous accessed locations
 
 
 
+
+
+recently_executed_files.title:EN:Recent executed files
+# Translation missing (New!)
+
+
+
+
+
+
+
+
+
+recently_executed_files.empty_message:EN:No recent executed file
+# Translation missing (New!)
 
 
 
