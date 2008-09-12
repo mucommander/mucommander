@@ -150,8 +150,8 @@ public class DrivePopupButton extends PopupButton implements LocationListener, B
 		
         // If no bookmark matched current folder
         if(newLabel == null) {
-            String protocol = currentURL.getProtocol();
-            // Remote file, use protocol's name
+            String protocol = currentURL.getScheme();
+            // Remote file, use the protocol's name
             if(!protocol.equals(FileProtocols.FILE)) {
                 newLabel = protocol.toUpperCase();
             }
