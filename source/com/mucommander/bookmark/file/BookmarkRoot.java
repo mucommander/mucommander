@@ -44,7 +44,7 @@ class BookmarkRoot extends AbstractFile implements BookmarkListener {
 
     // - Initialisation --------------------------------------------------------
     // -------------------------------------------------------------------------
-    public BookmarkRoot() throws IOException {this(new FileURL(FileProtocols.BOOKMARKS + "://"));}
+    public BookmarkRoot() throws IOException {this(FileURL.getFileURL(FileProtocols.BOOKMARKS + "://"));}
     public BookmarkRoot(FileURL url) {
         super(url);
         lastModified = System.currentTimeMillis();

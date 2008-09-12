@@ -20,7 +20,6 @@ package com.mucommander.ui.action;
 
 import com.mucommander.command.Command;
 import com.mucommander.file.AbstractFile;
-import com.mucommander.file.FileProtocols;
 import com.mucommander.file.filter.AttributeFileFilter;
 import com.mucommander.file.impl.local.LocalFile;
 import com.mucommander.job.TempOpenWithJob;

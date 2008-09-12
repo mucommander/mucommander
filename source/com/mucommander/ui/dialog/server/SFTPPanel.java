@@ -130,14 +130,15 @@ public class SFTPPanel extends ServerPanel {
         if(!lastInitialDir.startsWith("/"))
             lastInitialDir = "/"+lastInitialDir;
 
-        FileURL url = new FileURL(FileProtocols.SFTP+"://"+lastServer+lastInitialDir);
+        FileURL url = FileURL.getFileURL(FileProtocols.SFTP+"://"+lastServer+lastInitialDir);
 
+        // Set credentials
         url.setCredentials(new Credentials(lastUsername, lastPassword));
-        if (!"".equals(lastKeyPath.trim())) url.setProperty(SFTPFile.PRIVATE_KEY_PATH_PROPERTY_NAME, lastKeyPath);
+        if(!"".equals(lastKeyPath.trim()))
+            url.setProperty(SFTPFile.PRIVATE_KEY_PATH_PROPERTY_NAME, lastKeyPath);
 
         // Set port
-        if(lastPort!=22)
-            url.setPort(lastPort);
+        url.setPort(lastPort);
 
         return url;
     }

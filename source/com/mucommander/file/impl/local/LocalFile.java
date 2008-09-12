@@ -45,7 +45,7 @@ import java.util.regex.Matcher;
  * Note that despite the class' name, LocalFile instances may indifferently be residing on a local hard drive,
  * or on a remote server mounted locally by the operating system.
  *
- * <p>The associated {@link FileURL} protocol is {@link FileProtocols#FILE}. The host part should be {@link FileURL#LOCALHOST},
+ * <p>The associated {@link FileURL} scheme is {@link FileProtocols#FILE}. The host part should be {@link FileURL#LOCALHOST},
  * except for Windows UNC URLs (see below). Native path separators ('/' or '\\' depending on the OS) can be used
  * in the path part.
  *
@@ -128,7 +128,7 @@ public class LocalFile extends AbstractFile {
 
 
     /**
-     * Creates a new instance of LocalFile. The given FileURL's protocol should be {@link FileProtocols#FILE}, and the
+     * Creates a new instance of LocalFile. The given FileURL's scheme should be {@link FileProtocols#FILE}, and the
      * host {@link FileURL#LOCALHOST}.  
      */
     public LocalFile(FileURL fileURL) throws IOException {
@@ -715,7 +715,7 @@ public class LocalFile extends AbstractFile {
     public boolean moveTo(AbstractFile destFile) throws FileTransferException  {
         // If destination file is not a LocalFile nor has a LocalFile ancestor (for instance an archive entry),
         // renaming won't work so use the default moveTo() implementation instead
-        if(!destFile.getURL().getProtocol().equals(FileProtocols.FILE)) {
+        if(!destFile.getURL().getScheme().equals(FileProtocols.FILE)) {
             return super.moveTo(destFile);
         }
 

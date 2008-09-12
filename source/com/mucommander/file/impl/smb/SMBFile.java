@@ -36,7 +36,7 @@ import java.net.MalformedURLException;
 /**
  * SMBFile provides access to files located on an SMB/CIFS server.
  *
- * <p>The associated {@link FileURL} protocol is {@link FileProtocols#SMB}. The host part of the URL designates the
+ * <p>The associated {@link FileURL} scheme is {@link FileProtocols#SMB}. The host part of the URL designates the
  * SMB server. Credentials are specified in the login and password parts. The path separator is '/'.
  *
  * <p>Here are a few examples of valid SMB URLs:
@@ -484,7 +484,7 @@ import java.net.MalformedURLException;
 
     public boolean copyTo(AbstractFile destFile) throws FileTransferException {
         // File can only be copied by SMB if the destination is on an SMB share (but not necessarily on the same host)
-        if(!destFile.getURL().getProtocol().equals(FileProtocols.SMB)) {
+        if(!destFile.getURL().getScheme().equals(FileProtocols.SMB)) {
             return super.copyTo(destFile);
         }
 
@@ -526,9 +526,9 @@ import java.net.MalformedURLException;
     public boolean moveTo(AbstractFile destFile) throws FileTransferException  {
         // File can only be moved directly if the destination if it is on an SMB share
         // (but not necessarily on the same host).
-        // Use the default moveTo() implementation if the destination file doesn't use the same protocol (webdav/webdavs)
+        // Use the default moveTo() implementation if the destination file doesn't use the same scheme
         // or is not on the same host
-        if(!destFile.getURL().getProtocol().equals(FileProtocols.SMB)) {
+        if(!destFile.getURL().getScheme().equals(FileProtocols.SMB)) {
             return super.moveTo(destFile);
         }
 

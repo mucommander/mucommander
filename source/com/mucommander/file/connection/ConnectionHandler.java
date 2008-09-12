@@ -62,7 +62,7 @@ public abstract class ConnectionHandler {
      * Creates a new ConnectionHandler for the given server URL and using the Credentials included in the URL (if any).
      */
     public ConnectionHandler(FileURL serverURL) {
-        realm = FileURL.resolveRealm(serverURL);
+        realm = serverURL.getRealm();
         this.credentials = serverURL.getCredentials();
     }
 

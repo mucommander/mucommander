@@ -119,7 +119,7 @@ class BookmarkParser extends DefaultHandler implements BookmarkConstants {
             // Now bookmark locations are free of credentials, these are stored in a dedicated credentials file where
             // the password is encrypted.
             try {
-                FileURL url = new FileURL(characters.toString().trim());
+                FileURL url = FileURL.getFileURL(characters.toString().trim());
                 Credentials credentials = url.getCredentials();
 
                 // If the URL contains credentials, import them into CredentialsManager and remove credentials

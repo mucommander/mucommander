@@ -21,7 +21,6 @@ package com.mucommander.ui.main.menu;
 
 import com.mucommander.desktop.DesktopManager;
 import com.mucommander.file.AbstractFile;
-import com.mucommander.file.FileProtocols;
 import com.mucommander.file.util.FileSet;
 import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.main.MainFrame;

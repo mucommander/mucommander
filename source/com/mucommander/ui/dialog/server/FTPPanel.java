@@ -144,7 +144,7 @@ public class FTPPanel extends ServerPanel implements ActionListener {
         if(!lastInitialDir.startsWith("/"))
             lastInitialDir = "/"+lastInitialDir;
 			
-        FileURL url = new FileURL(FileProtocols.FTP+"://"+lastServer+lastInitialDir);
+        FileURL url = FileURL.getFileURL(FileProtocols.FTP+"://"+lastServer+lastInitialDir);
 
         if(anonymousUser)
             url.setCredentials(new Credentials("anonymous", new String(passwordField.getPassword())));
@@ -152,8 +152,7 @@ public class FTPPanel extends ServerPanel implements ActionListener {
             url.setCredentials(new Credentials(lastUsername, lastPassword));
 
         // Set port
-        if(lastPort!=21)
-            url.setPort(lastPort);
+        url.setPort(lastPort);
 
         // Set passiveMode property to true (default) or false
         url.setProperty(FTPFile.PASSIVE_MODE_PROPERTY_NAME, ""+passiveMode);

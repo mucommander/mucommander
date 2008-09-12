@@ -371,7 +371,7 @@ public class FileFactory {
      * @throws AuthException if additionnal authentication information is required to create the file
      */
     public static AbstractFile getFile(String absPath, AbstractFile parent) throws AuthException, IOException {
-        return getFile(new FileURL(absPath), parent);
+        return getFile(FileURL.getFileURL(absPath), parent);
     }
 
     /**
@@ -424,7 +424,7 @@ public class FileFactory {
     public static AbstractFile getFile(FileURL fileURL, AbstractFile parent) throws IOException {
         String filePath = fileURL.getPath();
         // For local paths under Windows (e.g. "/C:\temp"), remove the leading '/' character
-        if(OsFamilies.WINDOWS.isCurrent() && FileProtocols.FILE.equals(fileURL.getProtocol()))
+        if(OsFamilies.WINDOWS.isCurrent() && FileProtocols.FILE.equals(fileURL.getScheme()))
             filePath = FileToolkit.removeLeadingSeparator(filePath, "/");
 
         PathTokenizer pt = new PathTokenizer(filePath,
@@ -496,12 +496,12 @@ public class FileFactory {
 
 
     private static AbstractFile createRawFile(FileURL fileURL) throws IOException {
-        String protocol = fileURL.getProtocol().toLowerCase();
+        String scheme = fileURL.getScheme().toLowerCase();
 
         // Cache file instances only for certain protocols
-        boolean useFileCache = protocol.equals(FileProtocols.FILE)
-                || protocol.equals(FileProtocols.SMB)
-                || protocol.equals(FileProtocols.SFTP);
+        boolean useFileCache = scheme.equals(FileProtocols.FILE)
+                || scheme.equals(FileProtocols.SMB)
+                || scheme.equals(FileProtocols.SFTP);
 
         // This value is used twice, only if file caching is used
         String urlRep = useFileCache?fileURL.toString(true):null;
@@ -519,9 +519,9 @@ public class FileFactory {
 
         // Special case for local files to avoid provider hashtable lookup and other unnecessary checks
         // (for performance reasons)
-        if(protocol.equals(FileProtocols.FILE)) {
+        if(scheme.equals(FileProtocols.FILE)) {
             if(localFileProvider == null)
-                throw new IOException("Unknown file protocol: " + protocol);
+                throw new IOException("Unknown file protocol: " + scheme);
 
             file = localFileProvider.getFile(fileURL);
 
@@ -538,9 +538,9 @@ public class FileFactory {
 //            if(Debug.ON) Debug.trace("credentials="+fileURL.getCredentials());
 
             // Finds the right file protocol provider
-            ProtocolProvider provider = getProtocolProvider(protocol);
+            ProtocolProvider provider = getProtocolProvider(scheme);
             if(provider == null)
-                throw new IOException("Unknown file protocol: " + protocol);
+                throw new IOException("Unknown file protocol: " + scheme);
             file = provider.getFile(fileURL);
         }
 

@@ -100,7 +100,7 @@ public class FolderHistory {
         //  - it doesn't look like a removable media drive (cd/dvd/floppy), especially in order to prevent
         // Java from triggering that dreaded 'Drive not ready' popup.
         try {
-            if(folderURL.getProtocol().equals(FileProtocols.FILE) && folder.isDirectory() && (folder instanceof LocalFile) && !((LocalFile)folder.getRoot()).guessRemovableDrive()) {
+            if(folderURL.getScheme().equals(FileProtocols.FILE) && folder.isDirectory() && (folder instanceof LocalFile) && !((LocalFile)folder.getRoot()).guessRemovableDrive()) {
                 this.lastRecallableFolder = folder.getAbsolutePath();
                 if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("lastRecallableFolder= "+lastRecallableFolder);
             }

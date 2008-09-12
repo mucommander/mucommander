@@ -271,7 +271,7 @@ public class CachedFile extends ProxyFile {
     }
 
     public boolean isDirectory() {
-        if(!isDirectorySet && getFileAttributesAvailable && FileProtocols.FILE.equals(file.getURL().getProtocol()))
+        if(!isDirectorySet && getFileAttributesAvailable && FileProtocols.FILE.equals(file.getURL().getScheme()))
             getFileAttributes(file);
         // Note: getFileAttributes() might fail to retrieve file attributes, so we need to test isDirectorySet again
 
@@ -293,7 +293,7 @@ public class CachedFile extends ProxyFile {
     }
 
     public boolean isHidden() {
-        if(!isHiddenSet && getFileAttributesAvailable && FileProtocols.FILE.equals(file.getURL().getProtocol()))
+        if(!isHiddenSet && getFileAttributesAvailable && FileProtocols.FILE.equals(file.getURL().getScheme()))
             getFileAttributes(file);
         // Note: getFileAttributes() might fail to retrieve file attributes, so we need to test isDirectorySet again
 
@@ -360,7 +360,7 @@ public class CachedFile extends ProxyFile {
     }
 
     public boolean exists() {
-        if(!existsSet && getFileAttributesAvailable && FileProtocols.FILE.equals(file.getURL().getProtocol()))
+        if(!existsSet && getFileAttributesAvailable && FileProtocols.FILE.equals(file.getURL().getScheme()))
             getFileAttributes(file);
         // Note: getFileAttributes() might fail to retrieve file attributes, so we need to test isDirectorySet again
 

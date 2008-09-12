@@ -18,15 +18,13 @@
 
 package com.mucommander.ui.main;
 
-import com.mucommander.desktop.DesktopManager;
 import com.mucommander.cache.LRUCache;
 import com.mucommander.conf.ConfigurationEvent;
 import com.mucommander.conf.ConfigurationListener;
 import com.mucommander.conf.impl.MuConfiguration;
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.FileFactory;
-import com.mucommander.file.FileProtocols;
 import com.mucommander.desktop.DesktopManager;
+import com.mucommander.file.AbstractFile;
+import com.mucommander.file.FileProtocols;
 import com.mucommander.file.impl.local.LocalFile;
 import com.mucommander.runtime.JavaVersions;
 import com.mucommander.text.SizeFormat;
@@ -347,7 +345,7 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
             key = archive;
         }
         else {
-            if(FileProtocols.FILE.equals(folder.getURL().getProtocol())) {
+            if(FileProtocols.FILE.equals(folder.getURL().getScheme())) {
                 try {
                     key = LocalFile.hasRootDrives()?
                         folder.getRoot():

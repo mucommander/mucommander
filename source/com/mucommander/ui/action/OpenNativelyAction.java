@@ -49,7 +49,7 @@ public class OpenNativelyAction extends MuAction {
 
         // Copy file to a temporary local file and execute it with native file associations if
         // file is not on a local filesystem or file is an archive entry
-        if(!FileProtocols.FILE.equals(selectedFile.getURL().getProtocol()) || selectedFile.hasAncestor(ArchiveEntryFile.class)) {
+        if(!FileProtocols.FILE.equals(selectedFile.getURL().getScheme()) || selectedFile.hasAncestor(ArchiveEntryFile.class)) {
             ProgressDialog progressDialog = new ProgressDialog(mainFrame, Translator.get("copy_dialog.copying"));
             TempExecJob job = new TempExecJob(progressDialog, mainFrame, selectedFile);
             progressDialog.start(job);

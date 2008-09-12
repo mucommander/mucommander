@@ -78,7 +78,7 @@ public class SpecialWindowsLocation extends DummyFile {
      * @throws java.net.MalformedURLException should not happen
      */
     public SpecialWindowsLocation(String clsid) throws MalformedURLException {
-        super(new FileURL("file:///"));    // dummy URL, '/' corresponds to nothing under Windows
+        super(FileURL.getFileURL("file:///"));    // dummy URL, '/' corresponds to nothing under Windows
 
         this.clsid = clsid;
     }

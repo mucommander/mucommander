@@ -46,7 +46,7 @@ public class OpenLocationAction extends MuAction {
      * (with credentials stripped out) as label.
      */
     public OpenLocationAction(MainFrame mainFrame, Hashtable properties, FileURL url) {
-        this(mainFrame, properties, url, url.getProtocol().equals(FileProtocols.FILE)?url.getPath():url.toString(false));
+        this(mainFrame, properties, url, url.getScheme().equals(FileProtocols.FILE)?url.getPath():url.toString(false));
     }
 
     /**
@@ -57,7 +57,7 @@ public class OpenLocationAction extends MuAction {
 
         this.url = url;
         setLabel(label);
-        setToolTipText(url.getProtocol().equals(FileProtocols.FILE)?url.getPath():url.toString(false));
+        setToolTipText(url.getScheme().equals(FileProtocols.FILE)?url.getPath():url.toString(false));
     }
 
 

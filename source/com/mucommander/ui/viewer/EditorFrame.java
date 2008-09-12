@@ -188,7 +188,7 @@ public class EditorFrame extends JFrame implements ActionListener {
         JFileChooser fileChooser = new JFileChooser();
 		
         // Sets selected file in JFileChooser to current file
-        if(file.getURL().getProtocol().equals(FileProtocols.FILE))
+        if(file.getURL().getScheme().equals(FileProtocols.FILE))
             fileChooser.setSelectedFile(new java.io.File(file.getAbsolutePath()));
         fileChooser.setDialogType(JFileChooser.SAVE_DIALOG);
         int ret = fileChooser.showSaveDialog(this);

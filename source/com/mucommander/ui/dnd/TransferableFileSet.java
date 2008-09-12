@@ -358,7 +358,7 @@ public class TransferableFileSet implements Transferable {
             AbstractFile file;
             for(int i=0; i<nbFiles; i++) {
                 file = fileSet.fileAt(i);
-                String url = file.getURL().getProtocol().equals(FileProtocols.FILE)
+                String url = file.getURL().getScheme().equals(FileProtocols.FILE)
                     // Use java.io.File.toURI() for local files (e.g. file:/mnt/music), this is the format expected by
                     // Gnome/Nautilus.
                     ?new File(file.getAbsolutePath()).toURI().toString()

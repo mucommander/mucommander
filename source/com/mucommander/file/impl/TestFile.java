@@ -40,7 +40,7 @@ public class TestFile extends DummyFile {
     private AbstractFile parent;
 
     public TestFile(String name, boolean isdir, long size, long date, AbstractFile parent) throws MalformedURLException {
-        super(new FileURL(name));
+        super(FileURL.getFileURL(name));
         this.isDir = isdir;
         this.size = size;
         this.date = date;

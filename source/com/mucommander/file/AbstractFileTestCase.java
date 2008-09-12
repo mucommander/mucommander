@@ -376,7 +376,7 @@ public abstract class AbstractFileTestCase extends TestCase {
         // If the file is authenticated, test if the given path contains credentials and if it does not, add the
         // credentials to it.
         if(file.getURL().containsCredentials()) {
-            FileURL fileURL = new FileURL(path);
+            FileURL fileURL = FileURL.getFileURL(path);
 
             if(!fileURL.containsCredentials()) {
                 fileURL.setCredentials(file.getURL().getCredentials());

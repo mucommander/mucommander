@@ -80,7 +80,7 @@ public class OpenAction extends MuAction {
             destination.tryChangeCurrentFolder(file);
 
         // Opens local files using their native associations.
-        else if(file.getURL().getProtocol().equals(FileProtocols.FILE) && (file.hasAncestor(LocalFile.class))) {
+        else if(file.getURL().getScheme().equals(FileProtocols.FILE) && (file.hasAncestor(LocalFile.class))) {
             try {
             	DesktopManager.open(file);
             	RecentExecutedFilesQL.addFile(file.toString());

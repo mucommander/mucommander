@@ -143,7 +143,7 @@ class SwingFileIconProviderImpl extends LocalFileIconProvider implements Cacheab
 
     public Icon lookupCache(AbstractFile file, Dimension preferredResolution) {
         // Under Mac OS X, return the icon of /Network for the root of remote (non-local) locations. 
-        if(OsFamilies.MAC_OS_X.isCurrent() && !FileProtocols.FILE.equals(file.getURL().getProtocol()) && file.isRoot())
+        if(OsFamilies.MAC_OS_X.isCurrent() && !FileProtocols.FILE.equals(file.getURL().getScheme()) && file.isRoot())
             return getSwingIcon(new java.io.File("/Network"));
 
         // Look for an existing icon instance for the file's extension

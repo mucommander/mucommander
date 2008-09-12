@@ -18,16 +18,6 @@
 
 package com.mucommander.ui.main;
 
-import java.awt.Component;
-import java.awt.Insets;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.awt.event.KeyEvent;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import javax.swing.border.BevelBorder;
-
 import com.mucommander.bookmark.Bookmark;
 import com.mucommander.bookmark.BookmarkManager;
 import com.mucommander.file.AbstractFile;
@@ -43,11 +33,15 @@ import com.mucommander.ui.autocomplete.TextFieldCompletion;
 import com.mucommander.ui.event.LocationEvent;
 import com.mucommander.ui.event.LocationListener;
 import com.mucommander.ui.progress.ProgressTextField;
-import com.mucommander.ui.theme.ColorChangedEvent;
-import com.mucommander.ui.theme.FontChangedEvent;
-import com.mucommander.ui.theme.Theme;
-import com.mucommander.ui.theme.ThemeListener;
-import com.mucommander.ui.theme.ThemeManager;
+import com.mucommander.ui.theme.*;
+
+import javax.swing.border.BevelBorder;
+import java.awt.*;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.KeyEvent;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * 
@@ -169,8 +163,8 @@ public class LocationTextField extends ProgressTextField implements LocationList
             FileURL folderURL = e.getFolderURL();
 
             String locationText;
-            // Do not display the URL's protocol for local files
-            if(folderURL.getProtocol().equals(FileProtocols.FILE)) {
+            // Do not display the URL's scheme for local files
+            if(folderURL.getScheme().equals(FileProtocols.FILE)) {
                 locationText = folderURL.getPath();
                 // Under for OSes with 'root drives' (Windows, OS/2), remove the leading '/' character
                 if(LocalFile.hasRootDrives())

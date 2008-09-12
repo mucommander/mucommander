@@ -90,7 +90,7 @@ public class SMBPanel extends ServerPanel {
 	
     FileURL getServerURL() throws MalformedURLException {
         updateValues();
-        FileURL url = new FileURL(FileProtocols.SMB+"://"+lastServer+(lastShare.startsWith("/")?"":"/")+lastShare);
+        FileURL url = FileURL.getFileURL(FileProtocols.SMB+"://"+lastServer+(lastShare.startsWith("/")?"":"/")+lastShare);
 
         url.setCredentials(new Credentials(lastUsername, lastPassword));
 

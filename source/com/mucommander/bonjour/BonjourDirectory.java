@@ -133,7 +133,7 @@ public class BonjourDirectory implements ServiceListener {
             // Looks for the file protocol corresponding to the service type
             for(int i=0; i<nbServices; i++) {
                 if(KNOWN_SERVICE_TYPES[i][0].equals(type)) {
-                    return new BonjourService(serviceInfo.getName(), new FileURL(serviceInfo.getURL(KNOWN_SERVICE_TYPES[i][1])), serviceInfo.getQualifiedName());
+                    return new BonjourService(serviceInfo.getName(), FileURL.getFileURL(serviceInfo.getURL(KNOWN_SERVICE_TYPES[i][1])), serviceInfo.getQualifiedName());
                 }
             }
         }

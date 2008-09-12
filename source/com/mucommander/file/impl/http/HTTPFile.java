@@ -45,7 +45,7 @@ import java.util.regex.Pattern;
 /**
  * HTTPFile provides access to files located on an HTTP/HTTPS server.
  *
- * <p>The associated {@link FileURL} protocols are {@link FileProtocols#HTTP} and {@link FileProtocols#HTTPS}.
+ * <p>The associated {@link FileURL} schemes are {@link FileProtocols#HTTP} and {@link FileProtocols#HTTPS}.
  * The host part of the URL designates the HTTP server. Credentials can be specified in the login and password parts
  * and will be used for HTTP Basic Authentication.</p>
  *
@@ -131,8 +131,8 @@ public class HTTPFile extends AbstractFile {
     protected HTTPFile(FileURL fileURL, URL url, String absPath) throws IOException {
         super(fileURL);
 
-        String protocol = fileURL.getProtocol().toLowerCase();
-        if((!protocol.equals(FileProtocols.HTTP) && !protocol.equals(FileProtocols.HTTPS)) || fileURL.getHost()==null)
+        String scheme = fileURL.getScheme().toLowerCase();
+        if((!scheme.equals(FileProtocols.HTTP) && !scheme.equals(FileProtocols.HTTPS)) || fileURL.getHost()==null)
             throw new IOException();
 
         this.url = url;
@@ -609,7 +609,7 @@ public class HTTPFile extends AbstractFile {
                                 filename = url.getHost();
 
                             // Create the child FileURL instance
-                            childFileURL = new FileURL(childURL.toExternalForm());
+                            childFileURL = FileURL.getFileURL(childURL.toExternalForm());
                             // Keep the parent's credentials (HTTP basic authentication), only if the host is the same.
                             // It would otherwise constitue a security issue.
                             if(parentHost.equals(childFileURL.getHost()))

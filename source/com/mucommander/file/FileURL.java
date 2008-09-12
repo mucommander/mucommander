@@ -19,279 +19,287 @@
 
 package com.mucommander.file;
 
-import com.mucommander.Debug;
 import com.mucommander.auth.Credentials;
 import com.mucommander.file.compat.CompatURLStreamHandler;
-import com.mucommander.file.impl.local.LocalFile;
-import com.mucommander.runtime.OsFamilies;
+import com.mucommander.util.StringUtils;
 
-import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLDecoder;
 import java.util.Enumeration;
 import java.util.Hashtable;
-import java.util.Vector;
+import java.util.NoSuchElementException;
 
 /**
- * This class parses a file URL without any knowledge of the underlying protocol.
- * URL are expected to respect the following format :<br>
- * 	<code>protocol://[login[:password]@]host[:port][/path][?query]</code>
+ * This class represents a Uniform Resource Locator (URL). The general format of a URL is as follows:
+ * <pre>
+ * 	scheme://[login[:password]@]host[:port][/path][?query]
+ * </pre>
  *
+ * <h3>Instanciation</h3>
+ * <p>
+ * FileURL cannot be instanciated directly, instances can be created using {@link #FileURL#getFileURL(String)}.
+ * Unlike the <code>java.net.URL</code> and <code>java.net.URI</code> classes, FileURL instances are mutable --
+ * all URL parts can be freely modified. FileURL instances can also be cloned using the standard {@link #clone()} method.
+ * </p>
+ *
+ * <h3>Handlers and Scheme-specific attributes</h3>
+ * <p>
+ * In addition to standard URL features, FileURL gives access to scheme-specific attributes:
+ * <dl>
+ *  <dt>{@link #getStandardPort() standard port}</dt><dd>the standard port implied when no port is defined in the URL,
+ * e.g. 21 for FTP</dd>
+ *  <dt>{@link #getPathSeparator() path separator}</dt><dd>the character(s) that separates path fragments, e.g. '/' for
+ * most schemes, '\' for local paths under certain OSes like Windows.</dd>
+ *  <dt>{@link #getGuestCredentials() guest credentials}</dt><dd>credentials to authenticate as a guest, e.g. 'GUEST'
+ * for SMB, 'anonymous' for FTP.</dd>
+ *  <dt>{@link #getRealm() authentication realm}</dt><dd>the base URL throughout which a set of credentials can be used.
+ * </dd>
+ * </dl>
+ * These attribute values are provided by the {@link SchemeHandler} registered with the scheme, if any.
+ * </p>
+ * <p>
+ * In addition to providing those attributes, a SchemeHandler provides a {@link SchemeParser}
+ * instance which takes care of the actual parsing of URLs of a particular scheme when {@link #getFileURL(String)} is
+ * invoked. This allows for scheme-specific parsing, like for example for the query part which should only be parsed
+ * and considered as a separate part for certain schemes such as HTTP.
+ * </p>
+ * <p>
+ * This class registers a number of handlers for the schemes/protocols supported by the muCommander file API.
+ * Additional handlers can be registered dynamically using {@link #registerHandler(String, SchemeHandler)}. Likewise,
+ * existing handlers can be unregistered or replaced at runtime using <code>registerHandler</code> and
+ * <code>unregisterHandler</code>.
+ * </p>
+ * <p>
+ * A {@link #getDefaultHandler() default handler} is used for schemes that do not have a specific handler registered.
+ * It provides default values for the above-mentionned attributes and provides a parser that parses those scheme URLs.
+ * The default handler's parser is also used for parsing locations passed to {@link #getFileURL(String)} that do not
+ * contain a scheme (i.e. without the leading <code>scheme://</code>). Those locations can be system-dependent,
+ * local and absolute paths, or UNC paths. These paths are turned by the parser into an equivalent, fully-qualified URL. 
+ * </p>
+ *
+ * <h3>Properties</h3>
+ * <p>
+ * This class provides methods to attach properties to a FileURL instance. These properties are not part of the URL
+ * itself and are absent from its string representation. They allow protocol-specific properties like connection
+ * settings to be passed along, to {@link AbstractFile} instances in particular.
+ * </p>
+ *
+ * <h3>Limitations</h3>
+ * <p>
+ * This class has the several limitations that are worth noting:
+ * <ul>
+ *  <li>URL syntax is not strictly enforced: some invalid URLs (as per RFC) will be parsed without throwing an exception</li>
+ *  <li>relative URLs are not supported</li>
+ *  <li>no proper percent encoding/decoding </li>
+ *  <li>no support for the fragment part</li>
+ * </ul>
+ * Some of these limitations will be adressed in upcoming revisions of this class.
+ * </p>
+ *
+ * @see SchemeHandler
+ * @see SchemeParser
  * @author Maxence Bernard
  */
 public class FileURL implements Cloneable {
 
-    private String protocol;
-    private String host;
+    // Todo: add support for the fragment part
+    // Todo: add percent encoding/decoding
+
+    /** Handler instance that provides the scheme-specific features of this FileURL */
+    private SchemeHandler handler;
+
+    /** Scheme part */
+    private String scheme;
+    /** Credentials (login and password parts), null if this URL has none */
+    private Credentials credentials;
+    /** Port part, -1 if this URL has none */
     private int port = -1;
+    /** Host part, null if this URL has none */
+    private String host;
+    /** Path part */
     private String path;
+    /** Filename, extracted from the path, null if the path has none */
     private String filename;
+    /** Query part, null if this URL has none */
     private String query;
 
-    private Credentials credentials;
+    /** Properties, null if none have been set thus far */
     private Hashtable properties;
 
-    /** String designating the localhost. */
+    /** Default handler for schemes that do not have a specific handler */
+    private final static SchemeHandler DEFAULT_HANDLER = new DefaultSchemeHandler();
+
+    /** Maps schemes (String) onto SchemeHandler instances */
+    private final static Hashtable handlers = new Hashtable();
+
+    /** String designating the localhost */
     public final static String LOCALHOST = "localhost";
 
-    /** Charset used to encode and decode special characters in URL. */
+    /** Charset used to encode and decode special characters in URL */
     private final static String URL_CHARSET = "UTF-8";
 
+    static {
+        // Register custom handlers for known schemes
 
-    /**
-     * Protected constructor.
-     */
-    protected FileURL() {
+        String fileSeparator = System.getProperty("file.separator");
+        registerHandler(FileProtocols.FILE, new DefaultSchemeHandler(new DefaultSchemeParser(fileSeparator, false, System.getProperty("user.home")), -1, fileSeparator, null));
+
+        registerHandler(FileProtocols.FTP, new DefaultSchemeHandler(new DefaultSchemeParser(), 21, "/", new Credentials("anonymous", "someuser@mucommander.com")));
+        registerHandler(FileProtocols.SFTP, new DefaultSchemeHandler(new DefaultSchemeParser(), 22, "/", null));
+        registerHandler(FileProtocols.HTTP, new DefaultSchemeHandler(new DefaultSchemeParser("/", true, null), 80, "/", null));
+        registerHandler(FileProtocols.S3, new DefaultSchemeHandler(new DefaultSchemeParser("/", true, null), 80, "/", null));
+        registerHandler(FileProtocols.WEBDAV, new DefaultSchemeHandler(new DefaultSchemeParser("/", true, null), 80, "/", null));
+        registerHandler(FileProtocols.HTTPS, new DefaultSchemeHandler(new DefaultSchemeParser("/", true, null), 443, "/", null));
+        registerHandler(FileProtocols.WEBDAVS, new DefaultSchemeHandler(new DefaultSchemeParser("/", true, null), 443, "/", null));
+        registerHandler(FileProtocols.NFS, new DefaultSchemeHandler(new DefaultSchemeParser(), 2049, "/", null));
+
+        registerHandler(FileProtocols.SMB, new DefaultSchemeHandler(new DefaultSchemeParser(), -1, "/", new Credentials("GUEST", "")) {
+            public FileURL getRealm(FileURL location) {
+                FileURL realm = new FileURL(this);
+
+                String newPath = location.getPath();
+                // Find first path token (share)
+                int pos = newPath.indexOf('/', 1);
+                newPath = newPath.substring(0, pos==-1?newPath.length():pos+1);
+
+                realm.setPath(newPath);
+                realm.setScheme(location.getScheme());
+                realm.setHost(location.getHost());
+                realm.setPort(location.getPort());
+
+                // Copy properties (if any)
+                realm.importProperties(location);
+
+                return realm;
+            }
+        });
     }
 
 
     /**
-     * Creates a new FileURL from the given URL string.
-     * @param url the string to parse as <code>FileURL</code>.
-     * @throws MalformedURLException if the specified string isn't a valid URL.
-     */
-    public FileURL(String url) throws MalformedURLException {
-        //if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Parsing "+url);
-
-        try {
-            int pos;
-            int protocolDelimPos = url.indexOf("://");
-            int urlLen = url.length();
-
-            // If path contains no protocol, consider the file as a local file
-            if(protocolDelimPos==-1) {
-                // Treat the URL as local file path if it starts with:
-                // - '/' and OS doesn't use root drives (Unix-style path)
-                // - a drive letter and OS uses root drives (Windows-style)
-                // - a ~ character (refers to the user home folder)
-                if((!LocalFile.USES_ROOT_DRIVES && url.startsWith("/")) || (LocalFile.USES_ROOT_DRIVES && url.indexOf(":\\")==1) || url.startsWith("~")) {
-                    protocol = FileProtocols.FILE;
-                    host = LOCALHOST;
-                    String pathSeparator = getPathSeparator(FileProtocols.FILE);
-                    path = canonizePath(url, pathSeparator, true);
-                    filename = getFilenameFromPath(path, pathSeparator);
-
-                    // All done, return
-                    return;
-                }
-
-                // Handle Windows-style UNC network paths ( \\hostname\path ):
-                // - under Windows, transform it into a URL in the file://hostname/path form,
-                //   LocalFile constructor will translate it back into an UNC network path
-                // - under other OS, conveniently transform it into smb://hostname/path to be nice with folks
-                //   who've spent too much time using Windows
-                else if(url.startsWith("\\\\") && urlLen>2) {
-                    if(OsFamilies.WINDOWS.isCurrent()) {
-                        pos = url.indexOf('\\', 2);
-                        if(pos==-1)
-                            url =  FileProtocols.FILE+"://"+url.substring(2);
-                        else
-                            url = FileProtocols.FILE+"://"+url.substring(2, pos)+"/"+(pos==urlLen-1?"":url.substring(pos+1));
-
-                        // Update protocol delimiter position
-                        protocolDelimPos = FileProtocols.FILE.length();
-                    }
-                    else {
-                        url = FileProtocols.SMB+"://"+url.substring(2).replace('\\', '/');
-
-                        // Update protocol delimiter position
-                        protocolDelimPos = FileProtocols.SMB.length();
-                    }
-
-                    // Update URL's length
-                    urlLen = url.length();
-                }
-                // This doesn't look like a valid path, throw an MalformedURLException
-                else {
-                    // Todo: localize that message as it can be displayed back to the user
-                    throw new MalformedURLException("Path not absolute or malformed: "+url);
-                }
-            }
-
-            // Start URL parsing
-
-            protocol =  url.substring(0, protocolDelimPos);
-            // Advance string index
-            pos = protocolDelimPos+3;
-
-            int separatorPos = url.indexOf('/', pos);
-
-            // The question mark character (if any) marks the beginning of the query part, only for the http/https protocol.
-            // No other supported protocols have a use for the query part, and some protocols such as 'file' allow the '?'
-            // character in filenames which thus would be ambiguous.
-            int questionMarkPos = FileProtocols.HTTP.equals(protocol)||FileProtocols.HTTPS.equals(protocol)?url.indexOf('?', pos):-1;
-            int hostEndPos; // Contains the position of the beginning of the path/query part
-            if(separatorPos!=-1)    // Separator is necessarily before question mark
-                hostEndPos = separatorPos;
-            else if(questionMarkPos !=-1)
-                hostEndPos = questionMarkPos;
-            else
-                hostEndPos = urlLen;
-
-            // URL part before path/query part and without protocol://
-            String urlBP = url.substring(pos, hostEndPos);
-            pos = 0;
-
-            // Parse login and password if they have been specified in the URL
-            // Login/password may @ characters, so consider the last '@' occurrence (if any) as the host delimiter
-            // Note that filenames may contain @ characters, but that's OK here since path is not contained in the String
-            int atPos = urlBP.lastIndexOf('@');
-            int colonPos;
-            // Filenames may contain @ chars, so atPos must be lower than next separator's position (if any)
-            if(atPos!=-1 && (separatorPos==-1 || atPos<separatorPos)) {
-                colonPos = urlBP.indexOf(':');
-                String login = urlBP.substring(0, colonPos==-1?atPos:colonPos);
-                String password;
-                if(colonPos!=-1)
-                    password = urlBP.substring(colonPos+1, atPos);
-                else
-                    password = null;
-
-                if(!"".equals(login) || !(password==null || "".equals(password)))
-                    this.credentials = new Credentials(login, password);
-
-                // Advance string index
-                pos = atPos+1;
-            }
-
-            // Parse host and port (if specified)
-            colonPos = urlBP.indexOf(':', pos);
-
-            if(colonPos!=-1) {
-                host = urlBP.substring(pos, colonPos);
-                port = Integer.parseInt(urlBP.substring(colonPos+1));
-            }
-            else {
-                host = urlBP.substring(pos);
-            }
-			
-            if(host.equals(""))
-                host = null;
-				
-            // Parse path part excluding query part
-            pos = hostEndPos;
-            path = url.substring(pos, questionMarkPos==-1?urlLen:questionMarkPos);
-
-            // Empty path means '/'
-            if(path.equals(""))
-                path = "/";
-
-            String pathSeparator = getPathSeparator(protocol);
-
-            // Canonize path: factor out '.' and '..' and replace '~' by home folder for 'file' protocol
-            path = canonizePath(path, pathSeparator, protocol.equals(FileProtocols.FILE));
-
-            if(Debug.ON && path.trim().equals("")) Debug.trace("Warning: path should not be empty, url="+url);
-
-            // Parse query part (if any)
-            if(questionMarkPos !=-1)
-                query = url.substring(questionMarkPos);
-
-            // Extract filename from path
-            filename = getFilenameFromPath(path, pathSeparator);
-        }
-        catch(MalformedURLException e) {
-            throw e;
-        }
-        catch(Exception e2) {
-            if(com.mucommander.Debug.ON) {
-                com.mucommander.Debug.trace("Unexpected exception in FileURL() with "+url+" : "+e2);
-                e2.printStackTrace();
-            }
-            throw new MalformedURLException();
-        }
-    }
-
-
-    /**
-     * Canonize path: factor out '.' and '..' and replace '~' by home folder if the path corresponds to a local file.
+     * Private constructor. Creates an empty FileURL that uses the given handler, all parts have to be manually set.
      *
-     * @param path the path to canonize
-     * @param separator the path separator to use
-     * @return the canonized path
-     * @throws MalformedURLException if the path is invalid
+     * @param handler the handler to have this FileURL use
      */
-    private static String canonizePath(String path, String separator, boolean localFile) throws MalformedURLException {
-        // Todo: use PathTokenizer
-
-        if(!path.equals("/")) {
-            int pos;	    // position of current path separator
-            int pos2 = 0;	// position of next path separator
-            String dir;		// Current directory
-            String dirWS;	// Current directory without trailing slash
-            Vector pathV = new Vector();	// Will contain directory hierachy
-            while((pos=pos2)!=-1) {
-                // Get the index of the next path separator occurrence
-                pos2 = path.indexOf(separator, pos);
-
-                if(pos2==-1) {	// Last dir (or empty string)
-                    dir = path.substring(pos);
-                    dirWS = dir;
-                }
-                else {
-                    dir = path.substring(pos, ++pos2);		// Dir name includes trailing slash
-                    dirWS = dir.substring(0, dir.length()-1);
-                }
-
-                // Discard '.' and empty directories
-                if((dirWS.equals("") && pathV.size()>0) || dirWS.equals(".")) {
-                    continue;
-                }
-                // Remove last directory
-                else if(dirWS.equals("..")) {
-                    if(pathV.size()==0)
-                        throw new MalformedURLException();
-                    pathV.removeElementAt(pathV.size()-1);
-                    continue;
-                }
-                // Replace '~' by actual home directory if protocol is 'file' and '~' appears in the path
-                else if(dirWS.equals("~") && localFile) {
-                    path = path.substring(0, pos) + System.getProperty("user.home") + path.substring(pos+1);
-                    // Will perform another pass at the same position
-                    pos2 = pos;
-                    continue;
-                }
-
-                // Add directory to the end of the list
-                pathV.add(dir);
-            }
-
-            // Reconstruct path from directory list
-            path = "";
-            int nbDirs = pathV.size();
-            for(int i=0; i<nbDirs; i++)
-                path += pathV.elementAt(i);
-
-            // We now have a path free of '.' and '..'
-        }
-
-        return path;
+    private FileURL(SchemeHandler handler) {
+        this.handler = handler;
     }
 
 
     /**
-     * Extracts a filename from the given path and returns it, or null if the path does not contain a filename.
+     * Creates and returns a new FileURL instance from the given location, throws a <code>MalformedURLException</code>
+     * if the specified location is not a valid URL or path and cannot be resolved. The {@link SchemeParser parser}
+     * of the {@link SchemeHandler handler} registered for the location's scheme is used to parse the given location.
+     * If the scheme specified in the location does not have a specific handler, or if the location does not contain a
+     * scheme (i.e. is local or UNC path, not a URL) then the default handler's parser is used.
+     *
+     * @param location the URL or path for which to get a <code>FileURL</code> instance
+     * @throws MalformedURLException if the specified string isn't a valid URL, according to the scheme's parser used
+     * @return a FileURL corresponding to the given location
+     */
+    public static FileURL getFileURL(String location) throws MalformedURLException {
+        int schemeDelimPos = location.indexOf("://");
+        SchemeHandler handler;
+
+        if(schemeDelimPos==-1) {
+            // No scheme: the location is a local or UNC path, not a URL
+            handler = getDefaultHandler();
+        }
+        else {
+            handler = getSchemeHandler(location.substring(0, schemeDelimPos));
+        }
+
+        FileURL fileURL = new FileURL(handler);
+        handler.getParser().parse(location, fileURL);
+
+        return fileURL;
+    }
+
+    /**
+     * Returns the handler registered the specified scheme if there is one, the default handler otherwise.
+     *
+     * @param scheme the scheme for which to return a handler
+     * @return a handler for the specified scheme
+     */
+    private static SchemeHandler getSchemeHandler(String scheme) {
+        SchemeHandler handler = getRegisteredHandler(scheme);
+        if(handler==null)
+            return getDefaultHandler();
+
+        return handler;
+    }
+
+    /**
+     * Returns the <code>SchemeHandler</code> instance that provides the scheme-specific features of this FileURL.
+     *
+     * @return the <code>SchemeHandler</code> instance that provides the scheme-specific features of this FileURL
+     */
+    public SchemeHandler getHandler() {
+        return handler;
+    }
+
+    /**
+     * Sets the <code>SchemeHandler</code> that provides the scheme-specific features of this FileURL.
+     * <p>
+     * <b>Important:</b> after calling this method, the scheme should also be changed to match the new handler --
+     * changing the handler without changing the scheme to an appropriate one will result in inconsistent
+     * scheme-specific attributes to be returned.
+     * </p>
+     *
+     * @param handler the <code>SchemeHandler</code> instance that provides the scheme-specific features of this FileURL
+     */
+    public void setHandler(SchemeHandler handler) {
+        this.handler = handler;
+    }
+
+    /**
+     * Registers a handler for the specified scheme, replacing any handler previously registered
+     * for the same scheme.
+     *
+     * @param scheme the scheme to associate the handler with (case-insensitive)
+     * @param handler the new handler in charge of the scheme
+     */
+    public static void registerHandler(String scheme, SchemeHandler handler) {
+        handlers.put(scheme.toLowerCase(), handler);
+    }
+
+    /**
+     * Removes any handler associated with the specified scheme, leaving the default handler in charge of the scheme.
+     * This method has no effect if there is no handler registered for the scheme.
+     *
+     * @param scheme the scheme to remove the handler for
+     */
+    public static void unregisterHandler(String scheme) {
+        handlers.remove(scheme.toLowerCase());
+    }
+
+    /**
+     * Returns the handler registered for the specified scheme, <code>null</code> if there isn't any.
+     *
+     * @param scheme the scheme for which to return the handler
+     * @return the handler registered for the specified scheme
+     */
+    public static SchemeHandler getRegisteredHandler(String scheme) {
+        return (SchemeHandler)handlers.get(scheme.toLowerCase());
+    }
+
+    /**
+     * Returns the default handler, which handles schemes which do not have a specific handler.
+     * The returned instance is a {@link DefaultSchemeHandler} created with the no-arg constructor. 
+     *
+     * @return the default handler
+     */
+    public static SchemeHandler getDefaultHandler() {
+        return DEFAULT_HANDLER;
+    }
+
+    /**
+     * Extracts the filename from the given path and returns it, or <code>null</null> if the path does not contain
+     * a filename.
+     *
+     * @param path the path from which to extract a filename
+     * @param separator the path separator
+     * @return the filename extracted from the given path, <code>null</code> if the path doesn't contain any
      */
     private static String getFilenameFromPath(String path, String separator) {
         if(path.equals("") || path.equals("/"))
@@ -306,150 +314,141 @@ public class FileURL implements Cloneable {
 
 
     /**
-     * Returns the protocol part of this FileURL (e.g. smb). The returned protocol may never be <code>null</code>.
-     * @return the protocol part of this <code>FileURL</code>.
-     * @see    #setProtocol(String)
-     */
-    public String getProtocol() {
-        return protocol;
-    }
-
-    /**
-     * Sets the protocol part of this FileURL. The specified protocol must not be null.
-     * @param protocol new protocol part for this <code>FileURL</code>.
-     * @see            #getProtocol()
-     */
-    public void setProtocol(String protocol) {
-        this.protocol = protocol;
-    }
-
-
-    /**
-     * Returns the path separator for the given protocol. If the {@link FileProtocols#FILE} protocol is specified,
-     * the underlying local filesystem's separator as returned by {@link LocalFile#SEPARATOR} will be returned.
+     * Returns the scheme part of this URL. The returned scheme may never be <code>null</code>.
      *
-     * <p>By default, if the given protocol is not known (not one of the protocols listed in {@link FileProtocols}),
-     * "/" is returned.
-     * 
-     * @param protocol a protocol name
-     * @return the path separator for the given protocol
+     * @return the scheme part of this <code>FileURL</code>.
+     * @see #setScheme(String)
      */
-    public static String getPathSeparator(String protocol) {
-        if(FileProtocols.FILE.equals(protocol))
-            return LocalFile.SEPARATOR;
-
-        return "/";
+    public String getScheme() {
+        return scheme;
     }
 
-
     /**
-     * Returns the path separator used in this FileURL. Has the same effect as calling {@link #getPathSeparator(String)}
-     * with the value of {@link #getProtocol()}.
+     * Sets the scheme part of this URL. An <code>IllegalArgumentException</code> will be thrown if the specified scheme
+     * is <code>null</code> or an empty string.
+     * <p>
+     * <b>Important:</b> after calling this method, the handler should also be changed to match the new scheme --
+     * changing the scheme without changing the handler to an appropriate one will result in inconsistent
+     * scheme-specific attributes to be returned.
+     * </p>
      *
-     * @return the path separator used in this FileURL
+     * @param scheme new scheme part of this URL.
+     * @throws IllegalArgumentException if the specified is null or an empty string
+     * @see #getScheme()
      */
-    public String getPathSeparator() {
-        return getPathSeparator(protocol);
+    public void setScheme(String scheme) {
+        if(scheme==null)
+            throw new IllegalArgumentException();
+
+        this.scheme = scheme;
     }
 
-
     /**
-     * Returns the host part of this FileURL (e.g. google.com), <code>null</code> if this FileURL doesn't contain
-     * any host.
-     * @return the host part of this <code>FileURL</code>.
-     * @see    #setHost(String)
+     * Returns the host part of this URL, <code>null</code> if it doesn't contain any.
+     *
+     * @return the host part of this URL.
+     * @see #setHost(String)
      */
     public String getHost() {
         return host;
     }
 
     /**
-     * Sets the host part of this FileURL, <code>null</code> for no host.
-     * @param host new host part for this <code>FileURL</code>.
-     * @see        #getHost()
+     * Sets the host part of this URL, <code>null</code> for no host.
+     *
+     * @param host new host part of this URL.
+     * @see #getHost()
      */
     public void setHost(String host) {
         this.host = host;
     }
-    
-	
+
     /**
-     * Returns the port specified in this FileURL (e.g. 8080) if there is one, -1 otherwise.
-     * (-1 means the protocol's default port).
-     * @return the port specified in this <code>FileURL</code>.
-     * @see    #setPort(int)
+     * Returns the port part of this URL, <code>-1</code> if none was specified in the URL.
+     *
+     * @return the port part of this URL, -1 if there isn't any.
+     * @see #setPort(int)
+     * @see #getDefaultHandler()
      */
     public int getPort() {
         return port;
     }
 	
     /**
-     * Sets a custom port, -1 for no custom port (use the protocol's defaut port).
-     * @param port new port for this <code>FileURL</code>.
-     * @see        #getPort()
+     * Sets the port part of this URL, <code>-1</code> for no specific port.
+     *
+     * @param port new port part of this URL.
+     * @see #getPort()
+     * @see #getDefaultHandler()
      */
     public void setPort(int port) {
         this.port = port;
     }
-	
-	
+
     /**
-     * Returns the login specified in this FileURL (e.g. maxence for ftp://maxence@mucommander.com),
-     * <code>null</code> otherwise.
-     * @return the login specified in this <code>FileURL</code>.
+     * Returns this scheme's standard port, <code>-1</code> if the scheme doesn't have any.
+     * If this URL doesn't have a specific port part, the return value should be considered as being this URL's port.
+     *
+     * <p>Some file protocols may not have a notion of standard port or even no use for the port part at all, for
+     * example those that are not TCP or UDP based such as the local 'file' scheme.</p>
+     *
+     * <p>This method is just a shorthand for <code>getHandler().getStandardPort()</code>.</p>
+     *
+     * @return the scheme's standard port
+     * @see #getPort()
+     */
+    public int getStandardPort() {
+        return handler.getStandardPort();
+    }
+    
+
+    /**
+     * Returns the login part of this URL, <code>null</code> if there isn't any.
+     *
+     * @return the login part of this URL, <code>null</code> if there isn't any
+     * @see #getCredentials()
      */
     public String getLogin() {
         return credentials==null?null:credentials.getLogin();
     }
 
-
     /**
-     * Returns the password specified in this FileURL (e.g. blah for ftp://maxence:blah@mucommander.com),
-     * <code>null</code> otherwise.
-     * @return the password specified in this <code>FileURL</code>.
+     * Returns the password part of this URL, <code>null</code> if there isn't any.
+     *
+     * @return the password part of this URL, <code>null</code> if there isn't any
+     * @see #getCredentials()
      */
     public String getPassword() {
         return credentials==null?null:credentials.getPassword();
     }
 
-
     /**
-     * Convenience method that discards any credentials (login and password) contained by this FileURL.
-     * It has the same effect as calling {@link #setCredentials(com.mucommander.auth.Credentials)} with a null value.
+     * Returns true if this URL contains credentials, i.e. a login and/or password part. If <code>true</code> is
+     * returned, {@link #getCredentials()} will return a non-null value.
      *
-     */
-    public void discardCredentials() {
-        this.credentials = null;
-    }
-
-
-    /**
-     * Returns true if this FileURL contains credentials. If true is returned, {@link #getCredentials()}
-     * will return a non-null value.
-     * @return <code>true</code> if this <code>FileURL</code> contains credentials, <code>false</code> otherwise.
+     * @return <code>true</code> if this URL contains credentials, <code>false</code> otherwise.
      */
     public boolean containsCredentials() {
         return credentials!=null;
     }
 
-
     /**
-     * Returns the credentials (login and password) contained in this FileURL, wrapped in an {@link Credentials} object.
-     * Returns null if this FileURL doesn't contain any login or password.
-     * @return the credentials contained by this <code>FileURL</code>, <code>null</code> if none.
-     * @see    #setCredentials(Credentials)
+     * Returns the credentials (login and password) contained by this URL, wrapped in an {@link Credentials} object.
+     * Returns <code>null</code> if this URL doesn't have a login or password part.
+     *
+     * @return the credentials contained by this URL, <code>null</code> if this URL doesn't have a login or password part.
+     * @see #setCredentials(Credentials)
      */
     public Credentials getCredentials() {
         return credentials;
     }
 
-
     /**
-     * Sets the credentials (login and password) contained by this FileURL. Any credentials contained by this FileURL
-     * will be discarded. Null can be passed to discard existing credentials.
+     * Sets the login and password parts of this URL. Any credentials contained by this FileURL will be replaced.
+     *  <code>null</code> can be passed to discard existing credentials.
      *
-     * @param credentials the new credentials to use, replacing any existing credentials. If null is passed, existing
-     * credentials will be discarded. 
+     * @param credentials the new login and password parts, replacing any existing credentials. If null is passed,
+     * existing credentials will be discarded.
      * @see #getCredentials()
      */
     public void setCredentials(Credentials credentials) {
@@ -459,10 +458,29 @@ public class FileURL implements Cloneable {
             this.credentials = credentials;
     }
 
-	
     /**
-     * Returns the path part of this FileURL (e.g. /webstart/mucommander.jnlp for http://mucommander.com/webstart/mucommander.jnlp).
-     * @return the path part of this <code>FileURL</code>.
+     * Returns this scheme's guest credentials, <code>null</code> if the scheme doesn't have any.
+     * <p>
+     * Guest credentials offer a way to authenticate a URL as a 'guest' on file protocols that require a set of
+     * credentials to establish a connection. The returned credentials are provided with no guarantee that the fileystem
+     * will actually accept them and allow the request/connection. The notion of 'guest' credentials may or may not
+     * have a meaning depending on the underlying file protocol.
+     * </p>
+     *
+     * <p>This method is just a shorthand for <code>getHandler().getGuestCredentials()</code>.</p>
+     *
+     * @return the scheme's guest credentials, <code>null</code> if the scheme doesn't have any
+     */
+    public Credentials getGuestCredentials() {
+        return handler.getGuestCredentials();
+    }
+
+
+    /**
+     * Returns the path part of this URL. The returned value will never be <code>null</code> and always start with a
+     * leading '/' character.
+     *
+     * @return the path part of this URL.
      * @see    #setPath(String)
      */
     public String getPath() {
@@ -470,15 +488,15 @@ public class FileURL implements Cloneable {
     }
 
     /**
-     * Sets the path part of this FileURL. The specified path must not be <code>null</code> and should be absolute, i.e.
-     * start with a leading separator character ('/'). If the path does not start with a leading separator, one will be
-     * added.
+     * Sets the path part of this URL. The specified path cannot be <code>null</code> and must start with a leading 
+     * '/' character. If the specified path value is <code>null</code>, then the path will be set to "/".
+     * If the path does not start with a leading separator, one will be added.
      *
-     * @param path new path part for this <code>FileURL</code>.
-     * @see        #getPath()
+     * @param path new path part of this URL
+     * @see #getPath()
      */
     public void setPath(String path) {
-        if(path==null)
+        if(path==null || path.equals(""))
             path = "/";
 
         if(!path.startsWith("/"))
@@ -489,15 +507,29 @@ public class FileURL implements Cloneable {
         this.filename = getFilenameFromPath(path, getPathSeparator());
     }
 
-	
     /**
-     * Returns this FileURL's parent, or null if this FileURL has no parent (path is "/").
-     * The returned parent will have the same protocol, host, port, credentials and properties as this FileURL.
-     * The filename and query parts of this FileURL (if any) will not be set in the returned parent, both will be null.
+     * Returns this scheme's path separator, which serves as a delimiter for path fragments. For most schemes, this is
+     * the forward slash character.
      *
+     * <p>This method is just a shorthand for <code>getHandler().getPathSeparator()</code>.</p>
+     *
+     * @return this scheme's path separator
+     */
+    public String getPathSeparator() {
+        return handler.getPathSeparator();
+    }
+
+
+    /**
+     * Returns the parent of this URL according to its path, <code>null</code> if this URL has no parent (its path is "/").
+     * <p>
+     * The returned FileURL will have the same handler, scheme, host, port, credentials and properties as this one.
+     * The query part of the returned parent URL will always be <code>null</code>, even if this URL had one.
+     * </p>
      * <p>Note: this method returns a new FileURL instance everytime it is called, and all mutable fields of this FileURL
-     * are cloned. Therefore the returned parent can be safely modified without risking to modify other FileURL instances.</p>
-     * @return this <code>FileURL</code>'s parent, <code>null</code> if it doesn't have one.
+     * are cloned. Therefore, the returned URL can be safely modified without any risk of side effects.</p>
+     *
+     * @return this URL's parent, <code>null</code> if it doesn't have one.
      */
     public FileURL getParent() {
         // If path equals '/', url has no parent
@@ -510,9 +542,9 @@ public class FileURL implements Cloneable {
             // Resolve parent folder's path and reconstruct parent URL
             int lastSeparatorPos = parentPath.lastIndexOf(separator);
             if(lastSeparatorPos!=-1) {
-                FileURL parentURL = new FileURL();
+                FileURL parentURL = new FileURL(handler);
 
-                parentURL.protocol = protocol;
+                parentURL.scheme = scheme;
                 parentURL.host = host;
                 parentURL.port = port;
                 parentURL.path = parentPath.substring(0, lastSeparatorPos+1);  // Keep trailing slash
@@ -535,83 +567,40 @@ public class FileURL implements Cloneable {
 
 
     /**
-     * Returns the realm of a given location, that is the URL to the host (if this URL contains one), port
-     * (if this URL contains one) and share path (if the location's protocol has a notion of share, e.g. SMB).
-     * Properties contained by the given FileURL are copied, but Credentials aren't.
+     * Returns the authentication realm corresponding to this URL, i.e. the base location throughout which credentials
+     * can be used. Any property contained by the specified FileURL will be carried over in the returned FileURL.
      *
-     * <p>A few examples:
-     * <ul>
-     * <li>smb://somehost/someshare/somefolder/somefile -> smb://someserver/someshare/
-     * <li>ftp://somehost/somefolder/somefile -> ftp://someserver/
-     * <li>sftp://somehost:666/ -> sftp://someserver:666/
-     * <li>smb:// -> smb://
-     * </ul>
+     * <p>Note: this method returns a new FileURL instance everytime it is called. Therefore the returned FileURL can
+     * safely be modified without any risk of side effects.</p>
+
+     * <p>This method is just a shorthand for <code>getHandler().getRealm(this)</code>.</p>
      *
-     * <p>Note: this method returns a new FileURL instance everytime it is called.
-     * Therefore the returned parent can be safely modified without risking to modify other FileURL instances.
-     *
-     * @param location the location to a resource on a remote server
-     * @return the location's realm
+     * @return this url's authentication realm
      */
-    public static FileURL resolveRealm(FileURL location) {
-        String protocol = location.getProtocol();
-        String newPath = "/";
-
-        if(protocol.equals(FileProtocols.SMB)) {
-            newPath = location.getPath();
-            // Find first path token (share)
-            int pos = newPath.indexOf(1, '/');
-            newPath = newPath.substring(0, pos==-1?newPath.length():pos+1); 
-        }
-
-        FileURL realm = new FileURL();
-        realm.protocol = location.protocol;
-        realm.host = location.host;
-        realm.port = location.port;
-        realm.path = newPath;
-
-        if(location.properties!=null)   // Clone properties if lcoation contains any
-            realm.properties = (Hashtable)location.properties.clone();
-
-        return realm;
+    public FileURL getRealm() {
+        return handler.getRealm(this);
     }
 
 
     /**
-     * Returns the filename part of this FileURL (e.g. mucommander.jnlp for http://mucommander.com/webstart/mucommander.jnlp)
-     * <code>null</code> if this FileURL doesn't contain any URL (e.g. http://google.com)
-     * @return the filename part of this <code>FileURL</code>, <code>null</code> if none.
+     * Returns the filename of this URL , <code>null</code> if doesn't have one (e.g. if the path is "/").
+     * <p>
+     * There is no <code>setFilename</code> as the filename is simply extrapolated from the path.
+     * Use {@link #setPath(String)} to change the path and its filename.
+     * </p>
+     *
+     * @return the filename of this URL, <code>null</code> if it doesn't have one.
      * @see    #setPath(String)
-     * @see    #getFilename(boolean)
      */
     public String getFilename() {
         return filename;
     }
 
-    /**
-     * Returns the filename part of this FileURL, and if specified, decodes URL-encoded characters (e.g. %5D%35)
-     * @param  urlDecode whether to URL-decode the filename.
-     * @return the filename part of this <code>FileURL</code>, URL-decoded if necessary.
-     * @see    #setPath(String)
-     * @see    #getFilename()
-     */
-    public String getFilename(boolean urlDecode) {
-        try {
-            if(urlDecode && filename!=null)
-                return URLDecoder.decode(filename, URL_CHARSET);
-        }
-        catch(UnsupportedEncodingException e) {
-        }
-
-        return filename;
-    }
-
-    // Note: no setFilename method, setPath should be used for that purpose   
 
     /**
-     * Returns the query part of this FileURL if there is one (e.g. ?dummy=1&void=1 for http://mucommander.com/useless.php?dummy=1&void=1),
-     * <code>null</code> otherwise.
-     * @return the query part of this <code>FileURL</code> if present, <code>null</code> otherwise.
+     * Returns the query part of this URL if it has one, <code>null</code> otherwise.
+     *
+     * @return the query part of this URL if it has one, <code>null</code> otherwise
      * @see    #setQuery(String)
      */
     public String getQuery() {
@@ -619,9 +608,10 @@ public class FileURL implements Cloneable {
     }
 
     /**
-     * Sets the query part of this FileURL, <code>null</code> for no query part.
-     * @param query new query part for this <code>FileURL</code>.
-     * @see         #getQuery()
+     * Sets the query part of this URL, <code>null</code> for no query part.
+     *
+     * @param query new query part of this URL, <code>null</code> for no query part
+     * @see #getQuery()
      */
     public void setQuery(String query) {
         this.query = query;
@@ -629,92 +619,90 @@ public class FileURL implements Cloneable {
 
 	
     /**
-     * Returns the value corresponding to the given property's name, null if the property doesn't exist (has no value).
-     * @param  name name of the property whose value should be retrieved.
-     * @return      the value associated with the specified <code>name</code>, <code>null</code> if not found.
-     * @see         #setProperty(String,String)
+     * Returns the value corresponding to the given property name, <code>null</code> if the property has no value.
+     *
+     * @param name name of the property whose value is to be retrieved
+     * @return the value associated with the specified property name, <code>null</code> if it has no value
+     * @see #setProperty(String,String)
      */
     public String getProperty(String name) {
         return properties==null?null:(String)properties.get(name);
     }
 	
     /**
-     * Sets the given properties (name/value pair) to this FileURL.
-     * Properties can be used as a way to pass parameters to AbstractFile constructors.
-     * @param name  name of the property to set.
-     * @param value value for the property.
-     * @see         #getProperty(String)
+     * Sets the given property (name/value pair) in the FileURL instance. A <code>null</code> property value has the
+     * effect of removing the property.
+     *
+     * @param name name of the property to set
+     * @param value value of the property
+     * @see #getProperty(String)
      */
     public void setProperty(String name, String value) {
+        // Create the property hashtable only when a property is set for the first time
         if(properties==null)
             properties = new Hashtable();
 
-        properties.put(name, value);
+        if(value==null)
+            properties.remove(name);
+        else
+            properties.put(name, value);
     }
 
 
     /**
-     * Returns an Enumeration of property keys, or null if this FileURL contains no keys.
-     * @return an <code>Enumaration</code> on all available property names, <code>null</code> if none.
+     * Returns an <code>Enumeration</code> of all property names this FileURL contains.
+     *
+     * @return an <code>Enumeration</code> of all property names this FileURL contains
      */
-    public Enumeration getPropertyKeys() {
-        // NOTE: might be cleaner to return an empty enumeration?
-        return properties==null?null:properties.keys();
+    public Enumeration getPropertyNames() {
+        // Return an empty enumeration if the property hashtable is null
+        if(properties==null) {
+            return new Enumeration() {
+                public boolean hasMoreElements() {
+                    return false;
+                }
+
+                public Object nextElement() {
+                    throw new NoSuchElementException();
+                }
+            };
+        }
+
+        return properties.keys();
     }
 
     /**
      * Copy the properties of the given FileURL into this FileURL.
      *
-     * @param url url whose properties should be imported.
+     * @param url FileURL instance whose properties should be imported into this one.
      */
     public void importProperties(FileURL url) {
-        Enumeration propertyKeys = url.getPropertyKeys();
-        if(propertyKeys!=null) {
-            String key;
-            while(propertyKeys.hasMoreElements()) {
-                key = (String)propertyKeys.nextElement();
-                setProperty(key, url.getProperty(key));
-            }
+        // Slight optimization to avoid creating an enumeration if the FileURL doesn't have any property
+        if(url.properties==null)
+            return;
+
+        Enumeration propertyKeys = url.getPropertyNames();
+        String key;
+        while(propertyKeys.hasMoreElements()) {
+            key = (String)propertyKeys.nextElement();
+            setProperty(key, url.getProperty(key));
         }
     }
 
     /**
-     * Returns a String representation of this FileURL.
+     * Returns a String representation of this FileURL, including the login and password parts (credentials) only if
+     * specified, and masking the password as requested. 
      *
-     * @param includeCredentials if <code>true</code>, login and password (if any) will be included in the returned URL.
-     * Login and password in URLs should never be visible to the end user.
-     * @param maskPassword if <code>true</code> (and includeCredentials param too), password will be replaced by '*' characters. This
-     * can be used to display a full URL to the end user without displaying the actual password.
-     * @return a string representation of this <code>FileURL</code>.
+     * @param includeCredentials if <code>true</code>, the login and password parts (if any) will be included in the
+     * returned URL.
+     * @param maskPassword if <code>true</code> and the includeCredentials parameter is also true, the password's
+     * characters (if any) will be replaced by '*' characters. This allows a URL containing credentials to be displayed
+     * to the end user without revealing the actual password.
+     * @return a string representation of this <code>FileURL</code>
      */
     public String toString(boolean includeCredentials, boolean maskPassword) {
-        return reconstructURL(this.path, includeCredentials, maskPassword);
-    }
+        String s = scheme + "://";
 
-    /**
-     * Returns a String representation of this FileURL.
-     *
-     * @param includeCredentials if <code>true</code>, login and password (if any) will be included in the returned URL and not masked.
-     * Login and password in URLs should never be visible to the end user.
-     * @return a string representation of this <code>FileURL</code>.
-     */
-    public String toString(boolean includeCredentials) {
-        return toString(includeCredentials, false);
-    }
-
-
-    /**
-     * Reconstructs the URL with the given path and returns its String representation.
-     *
-     * @param path the file's path
-     * @param includeCredentials if <code>true</code>, login and password (if any) will be included in the returned URL.
-     * Login and password in URLs should never be visible to the end user.
-     * @param maskPassword if <code>true</code> (and includeCredentials param too), password will be replaced by '*' characters. This
-     * can be used to display a full URL to the end user without displaying the actual password.
-     */
-    private String reconstructURL(String path, boolean includeCredentials, boolean maskPassword) {
-        String s = protocol + "://";
-		
         if(includeCredentials && credentials!=null) {
             s += credentials.getLogin();
             String password = credentials.getPassword();
@@ -730,8 +718,9 @@ public class FileURL implements Cloneable {
 
         if(host!=null)
             s += host;
-		
-        if(port!=-1)
+
+        // Set the port only if it has a value that is different from the standard port
+        if(port!=-1 && port!=handler.getStandardPort())
             s += ":"+port;
 
         if(host!=null || !path.equals("/"))	// Test to avoid URLs like 'smb:///'
@@ -739,8 +728,20 @@ public class FileURL implements Cloneable {
 
         if(query!=null)
             s += query;
-		
+
         return s;
+    }
+
+    /**
+     * Returns a String representation of this FileURL, including the login and password parts (credentials) only if
+     * requested.
+     *
+     * @param includeCredentials if <code>true</code>, the login and password parts (if any) will be included in the
+     * returned URL.
+     * @return a string representation of this <code>FileURL</code>.
+     */
+    public String toString(boolean includeCredentials) {
+        return toString(includeCredentials, false);
     }
 
 
@@ -764,92 +765,12 @@ public class FileURL implements Cloneable {
     }
 
 
-    /**
-     * Test method.
-     * @param args command line arguments.
-     */
-    public static void main(String[] args) {
-        String urls[] = new String[]{
-            "http://google.com",
-            "http://mucommander.com",
-            "http://mucommander.com/",
-            "http://mucommander.com/webstart/",
-            "http://mucommander.com/webstart/index.html",
-            "http://mucommander.com/webstart/index.php?dummy=1&useless=true",
-            "http://login:pass@mucommander.com:8080/webstart/index.php?dummy=1&useless=true",
-            "smb://",
-            "smb://a",
-            "smb://a/b",
-            "smb://maxence@garfield",
-            "smb://maxence:yep@garfield",
-            "smb://maxence:yep@garfield/shared/music",
-            "ftp://mucommander.com",
-            "ftp://mucommander.com:21",
-            "ftp://mucommander.com:21/",
-            "ftp://mucommander.com:21/pub/incoming",
-            "ftp://mucommander.com:21/pub/incoming/",
-            "ftp://mucommander.com:21/pub/incoming/0day-warez.zip",
-            // @ characters in login or password are not valid
-            "ftp://anonymous:john.doe@somewhere.net@mucommander.com:21/pub/incoming/0d@y-warez.zip",
-            "sftp://maxence:yep@192.168.1.2",
-            "file://relative_path",
-            "file:///absolute_path",
-            "file://localhost/absolute_path",
-            "file://localhost/~/Projects/",
-            // Not valid (not absolute)
-            "file://localhost/C:",
-            "file://localhost/C:\\",
-            "file://localhost/C:\\Projects",
-            "file://localhost/C:\\Projects\\",
-            "file://localhost/C:\\Documents and Settings",
-            "file://localhost/~/../..",
-            "file://localhost/~/Projects/mucommander/../mucommander/./source/..",
-            "file://localhost/Users/maxence/Desktop/en@boldquot.header",
-            "\\\\somehost\\somepath",
-            "\\\\somehost\\somepath\\",
-            "\\\\somehost\\",
-            "\\\\somehost"
-        };
-
-        try {
-            FileURL f;
-            for(int i=0; i<urls.length; i++) {
-                System.out.println("Creating "+urls[i]);
-                f = new FileURL(urls[i]);
-                System.out.println(" - path= "+f.getPath());
-                System.out.println(" - host= "+f.getHost());
-                System.out.println(" - port= "+f.getPort());
-                if(f.getLogin()!=null)
-                    System.out.println(" - login/pass= "+f.getLogin()+"/"+f.getPassword());
-                System.out.println(" - filename= "+f.getFilename());
-                System.out.println(" - query= "+f.getQuery());
-                String stringRep = f.toString(true);
-                System.out.println("FileURL.toString(true)= "+stringRep+" "+(stringRep.equals(urls[i])?"EQUALS":"DIFFERS"));
-                System.out.println(" - parent= "+f.getParent());
-                if(f.getParent()!=null)
-                    System.out.println(" - parent path= "+f.getParent().getPath());
-
-                System.out.println("java.net.URL= "+f.getJavaNetURL().toString());
-
-                System.out.println();
-            }
-        }
-        catch(java.io.IOException e) {
-            if(com.mucommander.Debug.ON) {
-                System.out.println("Caught an unexcepted exception in FileURL()");
-                e.printStackTrace();
-            }
-        }
-
-    }
-
-
     ////////////////////////
     // Overridden methods //
     ////////////////////////
 
     /**
-     * Returns a String representation of this FileURL, without the credentials it may contain.
+     * Returns a String representation of this FileURL, without including the login and password parts it may have.
      */
     public String toString() {
         return toString(false);
@@ -857,15 +778,16 @@ public class FileURL implements Cloneable {
 
 
     /**
-     * Returns a clone of this FileURL. The returned instance can safely be modified without impacting this FileURL.
+     * Returns a clone of this FileURL. The returned instance can safely be modified without any impact on this FileURL
+     * or any previously cloned URL.
      */
     public Object clone() {
         // Create a new FileURL return it, instead of using Object.clone() which is probably way slower;
         // most FileURL fields are immutable and as such reused in cloned instance
-        FileURL clonedURL = new FileURL();
+        FileURL clonedURL = new FileURL(handler);
 
         // Immutable fields
-        clonedURL.protocol = protocol;
+        clonedURL.scheme = scheme;
         clonedURL.host = host;
         clonedURL.port = port;
         clonedURL.path = path;
@@ -882,40 +804,115 @@ public class FileURL implements Cloneable {
 
 
     /**
-     * Tests FileURL instances for equality.
+     * This method is equivalent to calling {@link #equals(Object, boolean, boolean)} with credentials and properties
+     * comparisons disabled.
+     *
+     * @param o object to compare against this FileURL instance.
+     * @return true if both FileURL instances are equal.
+     */
+    public boolean equals(Object o) {
+        return equals(o, false, false);
+    }
+
+    /**
+     * Tests the specified FileURL for equality with this FileURL. <code>false</code> is systematically returned if the
+     * specified object is not a FileURL instance or is <code>null</code>.
      * <p>
      * Two <code>FileURL</code> instances are said to be equal if:
      * <ul>
-     * <li>credentials (login and password) are not taken into account when testing equality
-     * <li>case is ignored
-     * <li>there can be a trailing slash or backslash difference in the path of 2 otherwise identical URLs,
-     * true will still be returned
+     *  <li>schemes are equal (case-insensitive)</li>
+     *  <li>hosts are equal (case-insensitive)</li>
+     *  <li>ports are equal. The default port is taken into account when comparing ports: a non specified port part (-1)
+     * is equivalent to the scheme's standard port. For instance, <code>http://mucommander.com:80/</code>
+     * and <code>http://mucommander.com/</code> are considered equal.</li>
+     *  <li>paths are equal (case-sensitive). There can be a trailing separator difference in the two paths, they will
+     * still be considered as equal. For example, <code>/path</code> and <code>/path/</code> are considered equal if the
+     * path separator is '/').</li>
+     *  <li>queries are equal (case-sensitive)</li>
      * </ul>
      * </p>
-     * @param  o object against which to compare this <code>FileURL</code>.
-     * @return   true if both FileURL instances are equal.
+     *
+     * <p>
+     * Credentials (login and password parts) are compared only if requested. The comparison for both the login and
+     * password is case-sensitive.</br>
+     * Likewise, properties are compared only if requested: the comparison of all properties is case-sentive.
+     * </p>
+     *
+     *
+     * @param o object to compare against this FileURL instance
+     * @param compareCredentials if <code>true</code>, the login and password parts of both FileURL need to be
+     * equal (case-sensitive) for the FileURL instances to be equal
+     * the FileURL instances to be equal
+     * @param compareProperties if <code>true</code>, all properties need to be equal (case-sensitive) in both
+     * FileURL for them to be equal
+     * @return true if both FileURL instances are equal
      */
-    public boolean equals(Object o) {
+    public boolean equals(Object o, boolean compareCredentials, boolean compareProperties) {
         if(o==null || !(o instanceof FileURL))
             return false;
 
-        // Do not take into account credentials (login and password) to test equality
-        String url1 = toString(false).toLowerCase();
-        String url2 = ((FileURL)o).toString(false).toLowerCase();
+        FileURL url = (FileURL)o;
 
-        // If strings are equal, return true
-        if(url1.equals(url2))
-            return true;
+        // Compare schemes (case-insensitive)
+        if(!this.scheme.equalsIgnoreCase(url.scheme))
+            return false;
 
-        // If difference between the 2 strings is just a trailing slash or backslash, then we consider them equal and return true
-        int len1 = url1.length();
-        int len2 = url2.length();
-        if(Math.abs(len1-len2)==1 && (len1>len2 ? url1.startsWith(url2) : url2.startsWith(url1))) {
-            char cdiff = len1>len2 ? url1.charAt(len1-1) : url2.charAt(len2-1);
-            if(cdiff=='/' || cdiff=='\\')
-                return true;
+        // Compare hosts ((case-insensitive)
+        // Note: hosts may be null
+        if(!StringUtils.equals(this.host, url.host, false))
+            return false;
+
+        // Compare ports
+        int port1 = this.port;
+        int port2 = url.port;
+        int standardPort = getStandardPort();
+        if(port1!=port2 && !((port1==-1 && port2==standardPort || (port2==-1 && port1==standardPort))))
+            return false;
+
+        // Compare query parts (case-sensitive)
+        // Note: query parts may be null
+        if(!StringUtils.equals(this.query, url.query, true))
+            return false;
+
+        // Compare paths (case-sensitive)
+        String path1 = this.getPath();
+        String path2 = url.getPath();
+        int len1 = path1.length();
+        int len2 = path2.length();
+        String separator = getPathSeparator();
+        int separatorLen = separator.length();
+        // If the difference between the 2 strings is just a trailing path separator, we consider the paths as equal
+        if(Math.abs(len1-len2)==separatorLen && (len1>len2 ? path1.startsWith(path2) : path2.startsWith(path1))) {
+            String diff = len1>len2 ? path1.substring(len1-separatorLen) : path2.substring(len2-separatorLen);
+            if(!separator.equals(diff))
+                return false;
+        }
+        else {
+            if(!path1.equals(path2))
+                return false;
         }
 
-        return false;
+        // Compare credentials, only if requested.
+        // Note: both credential instances may be null 
+        if(compareCredentials) {
+            Credentials creds1 = this.getCredentials();
+            Credentials creds2 = url.getCredentials();
+
+            if(!((creds1==null && creds2==null)
+                || (creds1!=null && creds1.equals(creds2, true))
+                || (creds2!=null && creds2.equals(creds1, true))))
+                return false;
+        }
+
+        // Compare properties (case-sensitive), only if requested.
+        if(compareProperties) {
+            if(!((this.properties==null && url.properties==null)
+               ||(this.properties!=null && this.properties.equals(url.properties))
+               ||(url.properties!=null && url.properties.equals(this.properties))
+            ))
+                return false;
+        }
+
+        return true;
     }
 }

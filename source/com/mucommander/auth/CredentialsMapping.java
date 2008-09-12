@@ -51,7 +51,7 @@ public final class CredentialsMapping {
     public CredentialsMapping(Credentials credentials, FileURL realm, boolean isPersistent) {
         this.credentials = credentials;
         this.isPersistent = isPersistent;
-        this.realm = FileURL.resolveRealm(realm);
+        this.realm = realm.getRealm();
     }
 
     /**

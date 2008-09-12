@@ -103,11 +103,10 @@ public class NFSPanel extends ServerPanel {
     FileURL getServerURL() throws MalformedURLException {
         updateValues();
 
-        FileURL url = new FileURL(FileProtocols.NFS+"://"+lastServer+(lastShare.startsWith("/")?"":"/")+lastShare);
+        FileURL url = FileURL.getFileURL(FileProtocols.NFS+"://"+lastServer+(lastShare.startsWith("/")?"":"/")+lastShare);
 
         // Set port
-        if(lastPort!=2049)
-            url.setPort(lastPort);
+        url.setPort(lastPort);
 
         // Set NFS version
         url.setProperty(NFSFile.NFS_VERSION_PROPERTY_NAME, lastNfsVersion);

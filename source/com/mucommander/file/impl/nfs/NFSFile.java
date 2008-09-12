@@ -37,7 +37,7 @@ import java.io.OutputStream;
 /**
  * NFSFile provides access to files located on an NFS/WebNFS server.
  *
- * <p>The associated {@link FileURL} protocol is {@link FileProtocols#NFS}. The host part of the URL designates the
+ * <p>The associated {@link FileURL} scheme is {@link FileProtocols#NFS}. The host part of the URL designates the
  * NFS server. The path separator is '/'.
  *
  * <p>Here are a few examples of valid NFS URLs:
@@ -391,7 +391,7 @@ public class NFSFile extends AbstractFile {
      * is also an NFSFile.
      */
     public boolean moveTo(AbstractFile destFile) throws FileTransferException {
-        if(!destFile.getURL().getProtocol().equals(FileProtocols.NFS)) {
+        if(!destFile.getURL().getScheme().equals(FileProtocols.NFS)) {
             return super.moveTo(destFile);
         }
 

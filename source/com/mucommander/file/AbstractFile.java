@@ -165,7 +165,7 @@ public abstract class AbstractFile implements PermissionTypes, PermissionAccesse
     /**
      * Returns the absolute path to this file:
      * <ul>
-     * <li>For local files, the path is returned without the protocol and host parts (i.e. without file://localhost)
+     * <li>For local files, the sole path is returned, and <b>not</b> a URL with the scheme and host parts (e.g. /path/to/file, not file://localhost/path/to/file)
      * <li>For any other file protocol, the full URL including the protocol and host parts is returned (e.g. smb://192.168.1.1/root/blah)
      * </ul>
      *
@@ -176,8 +176,8 @@ public abstract class AbstractFile implements PermissionTypes, PermissionAccesse
     public String getAbsolutePath() {
         FileURL fileURL = getURL();
 
-        // For local files: return file's path 'sans' the protocol and host parts
-        if(fileURL.getProtocol().equals(FileProtocols.FILE)) {
+        // For local files: return file's path 'sans' the scheme and host parts
+        if(fileURL.getScheme().equals(FileProtocols.FILE)) {
             String path = fileURL.getPath();
             // Under for OSes with 'root drives' (Windows, OS/2), remove the leading '/' character
             if(LocalFile.hasRootDrives())
@@ -186,7 +186,7 @@ public abstract class AbstractFile implements PermissionTypes, PermissionAccesse
             return path;
         }
 
-        // For any other file protocols: return the full URL that includes the protocol and host parts
+        // For any other file protocols: return the full URL that includes the scheme and host parts
         return fileURL.toString(false);
     }
 
@@ -218,7 +218,7 @@ public abstract class AbstractFile implements PermissionTypes, PermissionAccesse
             return this;
 
         try {
-            FileURL canonicalURL = new FileURL(canonicalPath);
+            FileURL canonicalURL = FileURL.getFileURL(canonicalPath);
             canonicalURL.setCredentials(fileURL.getCredentials());
 
             return FileFactory.getFile(canonicalURL);
@@ -300,7 +300,7 @@ public abstract class AbstractFile implements PermissionTypes, PermissionAccesse
      * @return <code>true</code> if this file is a root folder
      */
     public boolean isRoot() {
-        if(fileURL.getProtocol().equals(FileProtocols.FILE)) {
+        if(fileURL.getScheme().equals(FileProtocols.FILE)) {
             String path = getAbsolutePath();
             return OsFamilies.WINDOWS.isCurrent()?windowsDriveRootPattern.matcher(path).matches():path.equals("/");
         }
@@ -560,8 +560,8 @@ public abstract class AbstractFile implements PermissionTypes, PermissionAccesse
      * @return the hint int indicating whether the {@link #moveTo(AbstractFile)} method should be used
      */
     public int getMoveToHint(AbstractFile destFile) {
-        // Return SHOULD_NOT if protocols differ
-        if(!fileURL.getProtocol().equals(destFile.fileURL.getProtocol()))
+        // Return SHOULD_NOT if schemes differ
+        if(!fileURL.getScheme().equals(destFile.fileURL.getScheme()))
           return SHOULD_NOT_HINT;
 
         // Are both fileURL's hosts equal ?

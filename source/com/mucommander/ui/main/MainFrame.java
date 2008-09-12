@@ -618,7 +618,7 @@ public class MainFrame extends JFrame implements LocationListener {
             // Displays the document icon in the window title bar, works only for local files
             AbstractFile currentFolder = activeTable.getCurrentFolder();
             Object javaIoFile;
-            if(currentFolder.getURL().getProtocol().equals(FileProtocols.FILE)) {
+            if(currentFolder.getURL().getScheme().equals(FileProtocols.FILE)) {
                 // If the current folder is an archive entry, display the archive file, this is the closest we can get
                 // with a java.io.File
                 if(currentFolder.hasAncestor(ArchiveEntryFile.class))

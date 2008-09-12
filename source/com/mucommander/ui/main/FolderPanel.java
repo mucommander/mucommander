@@ -569,7 +569,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
      */
     public ChangeFolderThread tryChangeCurrentFolder(String folderPath) {
         try {
-            return tryChangeCurrentFolder(new FileURL(folderPath), null);
+            return tryChangeCurrentFolder(FileURL.getFileURL(folderPath), null);
         }
         catch(MalformedURLException e) {
             // FileURL could not be resolved, notify the user that the folder doesn't exist
@@ -938,7 +938,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
          */
         private boolean followCanonicalPath(AbstractFile file) {
             if((MuConfiguration.getVariable(MuConfiguration.CD_FOLLOWS_SYMLINKS, MuConfiguration.DEFAULT_CD_FOLLOWS_SYMLINKS)
-                || file.getURL().getProtocol().equals(FileProtocols.HTTP)) && !file.getAbsolutePath(false).equals(file.getCanonicalPath(false)))
+                || file.getURL().getScheme().equals(FileProtocols.HTTP)) && !file.getAbsolutePath(false).equals(file.getCanonicalPath(false)))
                 return true;
 
             return false;
@@ -1149,7 +1149,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
                         if(!canonicalPathFollowed && followCanonicalPath(folder)) {
                             try {
                                 // Recreate the FileURL using the file's canonical path
-                                FileURL newURL = new FileURL(folder.getCanonicalPath());
+                                FileURL newURL = FileURL.getFileURL(folder.getCanonicalPath());
                                 // Keep the credentials and properties (if any)
                                 newURL.setCredentials(folderURL.getCredentials());
                                 newURL.importProperties(folderURL);

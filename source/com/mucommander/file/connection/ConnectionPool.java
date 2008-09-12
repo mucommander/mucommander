@@ -50,7 +50,7 @@ public class ConnectionPool implements Runnable {
 
 
     public static synchronized ConnectionHandler getConnectionHandler(ConnectionHandlerFactory connectionHandlerFactory, FileURL url, boolean acquireLock) {
-        FileURL realm = FileURL.resolveRealm(url);
+        FileURL realm = url.getRealm();
 
         synchronized(connectionHandlers) {      // Ensures that monitor thread is not currently changing the list while we access it
             int nbConn = connectionHandlers.size();

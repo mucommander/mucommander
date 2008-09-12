@@ -43,7 +43,7 @@ import java.util.Date;
 /**
  * FTPFile provides access to files located on an FTP server.
  *
- * <p>The associated {@link FileURL} protocol is {@link FileProtocols#FTP}. The host part of the URL designates the
+ * <p>The associated {@link FileURL} scheme is {@link FileProtocols#FTP}. The host part of the URL designates the
  * FTP server. Credentials must be specified in the login and password parts as FTP servers require a login and
  * password. The path separator is '/'.
  *
@@ -698,7 +698,7 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
 
         // Use the default moveTo() implementation if the destination file doesn't use FTP
         // or is not on the same host
-        if(!destFile.getURL().getProtocol().equals(FileProtocols.FTP) || !destFile.getURL().getHost().equals(this.fileURL.getHost())) {
+        if(!destFile.getURL().getScheme().equals(FileProtocols.FTP) || !destFile.getURL().getHost().equals(this.fileURL.getHost())) {
             return super.moveTo(destFile);
         }
 

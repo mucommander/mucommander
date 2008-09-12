@@ -133,7 +133,7 @@ class CredentialsParser extends DefaultHandler implements CredentialsConstants {
             CredentialsManager.getPersistentCredentialMappings().add(new CredentialsMapping(new Credentials(login, password), url, true));
         }
         else if(qName.equals(ELEMENT_URL)) {
-            try {url = new FileURL(characters.toString().trim());}
+            try {url = FileURL.getFileURL(characters.toString().trim());}
             catch(MalformedURLException e) {if(Debug.ON) Debug.trace("Malformed URL: "+characters+", location will be ignored");}
         }
         else if(qName.equals(ELEMENT_LOGIN))

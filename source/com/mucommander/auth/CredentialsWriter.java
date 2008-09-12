@@ -86,16 +86,14 @@ public class CredentialsWriter implements CredentialsConstants {
             out.endElement(ELEMENT_PASSWORD);
 
             // Write properties, each property is stored in a separate 'property' element
-            propertyKeys = realm.getPropertyKeys();
-            if(propertyKeys!=null) {
-                while(propertyKeys.hasMoreElements()) {
-                    name = (String)propertyKeys.nextElement();
-                    attributes = new XmlAttributes();
-                    attributes.add(ATTRIBUTE_NAME, name);
-                    attributes.add(ATTRIBUTE_VALUE, realm.getProperty(name));
-                    out.startElement(ELEMENT_PROPERTY, attributes);
-                    out.endElement(ELEMENT_PROPERTY);
-                }
+            propertyKeys = realm.getPropertyNames();
+            while(propertyKeys.hasMoreElements()) {
+                name = (String)propertyKeys.nextElement();
+                attributes = new XmlAttributes();
+                attributes.add(ATTRIBUTE_NAME, name);
+                attributes.add(ATTRIBUTE_VALUE, realm.getProperty(name));
+                out.startElement(ELEMENT_PROPERTY, attributes);
+                out.endElement(ELEMENT_PROPERTY);
             }
 
             // End credentials element

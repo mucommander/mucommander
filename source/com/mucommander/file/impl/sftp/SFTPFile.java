@@ -41,7 +41,7 @@ import java.util.List;
 /**
  * SFTPFile provides access to files located on an SFTP server.
  *
- * <p>The associated {@link FileURL} protocol is {@link FileProtocols#SFTP}. The host part of the URL designates the
+ * <p>The associated {@link FileURL} scheme is {@link FileProtocols#SFTP}. The host part of the URL designates the
  * SFTP server. Credentials must be specified in the login and password parts as SFTP servers require a login and
  * password. The path separator is <code>'/'</code>.</p>
  *
@@ -63,7 +63,7 @@ import java.util.List;
  */
 public class SFTPFile extends AbstractFile {
 
-    /** The absolute path to the file on the remote server, without the file protocol */
+    /** The absolute path to the file on the remote server, not the full URL */
     private String absPath;
 
     /** This file's permissions */
@@ -444,7 +444,7 @@ public class SFTPFile extends AbstractFile {
             // Discard '.' and '..' files, dunno why these are returned
             if(filename.equals(".") || filename.equals(".."))
                 continue;
-            childURL = new FileURL(parentURL+filename);
+            childURL = FileURL.getFileURL(parentURL+filename);
             child = FileFactory.wrapArchive(new SFTPFile(childURL, new SFTPFileAttributes(childURL, sftpFile.getAttributes())));
             child.setParent(this);
 
@@ -556,7 +556,7 @@ public class SFTPFile extends AbstractFile {
 
         // Use the default moveTo() implementation if the destination file doesn't use the SFTP protocol
         // or is not on the same host
-        if(!destFile.getURL().getProtocol().equals(FileProtocols.SFTP) || !destFile.getURL().getHost().equals(this.fileURL.getHost())) {
+        if(!destFile.getURL().getScheme().equals(FileProtocols.SFTP) || !destFile.getURL().getHost().equals(this.fileURL.getHost())) {
             return super.moveTo(destFile);
         }
 

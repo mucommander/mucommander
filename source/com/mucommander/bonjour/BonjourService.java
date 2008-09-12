@@ -61,12 +61,12 @@ public class BonjourService {
     }
 
     /**
-     * Returns the name appended with the URL's protocol.
+     * Returns the name appended with the URL's scheme.
      *
-     * @return the name appended with the URL's protocol.
+     * @return the name appended with the URL's scheme.
      */
     public String getNameWithProtocol() {
-        return name+" ["+url.getProtocol().toUpperCase()+"]";
+        return name+" ["+url.getScheme().toUpperCase()+"]";
     }
 
     /**

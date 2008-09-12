@@ -96,12 +96,9 @@ public class HTTPPanel extends ServerPanel {
         if(!lastURL.toLowerCase().startsWith(FileProtocols.HTTP+"://"))
             lastURL = FileProtocols.HTTP+"://"+lastURL;
 
-        FileURL fileURL = new FileURL(lastURL);
+        FileURL fileURL = FileURL.getFileURL(lastURL);
 
-        // Set port
-        if(lastPort!=80)
-            fileURL.setPort(lastPort);
-
+        fileURL.setPort(lastPort);
         fileURL.setCredentials(new Credentials(lastUsername, lastPassword));
 
         return fileURL;
