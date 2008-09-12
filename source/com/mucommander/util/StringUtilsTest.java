@@ -155,4 +155,21 @@ public class StringUtilsTest extends TestCase {
         assertFalse(StringUtils.startsWithIgnoreCase("ThIs Is A tEsT", "TEST A IS THIS"));
         assertFalse(StringUtils.startsWithIgnoreCase("ThIs Is A tEsT", "TeSt A iS tHiS"));
     }
+
+    /**
+     * Tests {@link StringUtils#equals(String, String, boolean)}.
+     */
+    public void testEquals() {
+        assertTrue(StringUtils.equals("a", "a", true));
+        assertTrue(StringUtils.equals("A", "A", true));
+        assertTrue(StringUtils.equals("a", "a", false));
+        assertTrue(StringUtils.equals("A", "A", false));
+        assertTrue(StringUtils.equals("A", "a", false));
+        assertTrue(StringUtils.equals("a", "A", false));
+
+        assertFalse(StringUtils.equals("a", "A", true));
+        assertFalse(StringUtils.equals("A", "a", true));
+        assertFalse(StringUtils.equals("a", "z", false));
+        assertFalse(StringUtils.equals("a", "z", true));
+    }
 }
