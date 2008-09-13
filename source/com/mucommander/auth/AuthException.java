@@ -25,23 +25,21 @@ import java.io.IOException;
 
 
 /**
- * AuthException should be thrown whenever access to a remote file system was denied due to false or missing credentials.
- *
- * <p>AuthException is caught in different places of the application 
- * to provide a way for the user to authenticate (a dialog pops up).
+ * AuthException is an <code>IOException</code> that is thrown whenever an operation failed due to the lack of,
+ * invalid or insufficient credentials. An URL associated with the exception gives the location where the error
+ * occurred, and the set of credentials that were used (if any).
  *
  * @author Maxence Bernard
  */
 public class AuthException extends IOException {
 
-    private FileURL fileURL;
-    private String msg;
+    protected FileURL fileURL;
+    protected String msg;
 
-	
     /**
      * Creates a new AuthException instance, without any associated exception.
      *
-     * @param fileURL file URL for which authentication failed.
+     * @param fileURL the location where the error occurred, with the set of credentials that were used (if any).
      */
     public AuthException(FileURL fileURL) {
         this(fileURL, null);
@@ -50,10 +48,12 @@ public class AuthException extends IOException {
     /**
      * Creates a new AuthException instance that was caused by the given exception.
      *
-     * @param fileURL file URL for which authentication failed.
-     * @param msg a reason why the IOException was thrown if not <code>null</code>, in understandable terms.
+     * @param fileURL the location where the error occurred, with the set of credentials that were used (if any)
+     * @param msg a message describing the error, <code>null</code> if there is none
      */
     public AuthException(FileURL fileURL, String msg) {
+        super(msg);
+
         this.fileURL = fileURL;
         if(msg!=null)
             this.msg = msg.trim();
@@ -61,20 +61,11 @@ public class AuthException extends IOException {
 	
 
     /**
-     * Returns the URL of the file for which authentication failed.
-     * @return the URL of the file for which authentication failed.
+     * Returns the location where the error occurred, with the set of credentials that were used (if any).
+     *
+     * @return the location where the error occurred, with the set of credentials that were used (if any)
      */
-    public FileURL getFileURL() {
+    public FileURL getURL() {
         return fileURL;
     }
-
-	
-    /**
-     * Returns a message describing the exception.
-     * @return a message describing the exception.
-     */
-    public String getMessage() {
-        return msg;
-    }
-
 }
