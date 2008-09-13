@@ -10,13 +10,13 @@ import com.mucommander.ui.main.MainFrame;
  *
  * @author Arik Hadas
  */
-abstract class ShowFileTablePopupAction extends MuAction {
+abstract class ShowQuickListAction extends MuAction {
 
-	public ShowFileTablePopupAction(MainFrame mainFrame, Hashtable properties) {
+	public ShowQuickListAction(MainFrame mainFrame, Hashtable properties) {
 		super(mainFrame, properties);		
 	}
 	
-	public void openPopup(int index) {		
-		mainFrame.getActivePanel().showPopup(index);
+	public void openQuickList(int index) {		
+		mainFrame.getActivePanel().showQuickList(index);
 	}
 }

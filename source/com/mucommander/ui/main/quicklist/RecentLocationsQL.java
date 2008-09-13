@@ -20,15 +20,9 @@ package com.mucommander.ui.main.quicklist;
 
 import java.util.LinkedList;
 
-import javax.swing.ImageIcon;
-
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.FileFactory;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.event.LocationEvent;
 import com.mucommander.ui.event.LocationListener;
-import com.mucommander.ui.icon.FileIcons;
-import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.quicklist.QuickListWithIcons;
 
 /**
@@ -39,19 +33,11 @@ import com.mucommander.ui.quicklist.QuickListWithIcons;
 public class RecentLocationsQL extends QuickListWithIcons implements LocationListener{
 	private static int MAX_ELEMENTS = 11;
 	private LinkedList linkedList;
-	private String previousLocation; 
 
 	public RecentLocationsQL() {
-		super(Translator.get("recently_accessed_locations.title"), Translator.get("recently_accessed_locations.empty_message"));
+		super(Translator.get("recent_locations_quick_list.title"), Translator.get("recent_locations_quick_list.empty_message"));
 		
 		linkedList = new LinkedList();
-	}
-	
-	protected ImageIcon getImageIcon(String value) {
-		AbstractFile file = FileFactory.getFile(value);
-		if (file != null)
-			return IconManager.getImageIcon(FileIcons.getFileIcon(file));
-		return null;
 	}
 
 	protected void acceptListItem(String item) {

@@ -29,13 +29,13 @@ import com.mucommander.ui.main.MainFrame;
  * @author Arik Hadas
  */
 
-public class ShowParentFoldersQLAction extends ShowFileTablePopupAction {
+public class ShowParentFoldersQLAction extends ShowQuickListAction {
 	
 	public ShowParentFoldersQLAction(MainFrame mainFrame, Hashtable properties) {
 		super(mainFrame, properties);
 	}
 	
 	public void performAction() {
-		openPopup(FolderPanel.PARENT_FOLDERS_QUICK_LIST_INDEX);
+		openQuickList(FolderPanel.PARENT_FOLDERS_QUICK_LIST_INDEX);
 	}
 }

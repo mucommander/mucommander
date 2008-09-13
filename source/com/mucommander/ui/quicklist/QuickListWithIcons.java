@@ -26,6 +26,10 @@ import javax.swing.DefaultListCellRenderer;
 import javax.swing.ImageIcon;
 import javax.swing.JList;
 
+import com.mucommander.file.AbstractFile;
+import com.mucommander.file.FileFactory;
+import com.mucommander.ui.icon.FileIcons;
+import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.quicklist.item.DataList;
 
@@ -45,12 +49,20 @@ public abstract class QuickListWithIcons extends QuickListWithDataList {
 	protected DataList getList() { return new GenericPopupDataListWithIcons(); }
 	
 	/**
-	 * This function gets an item of the data list and should return a corresponding icon.
+	 * This function gets an item from the data list and return a corresponding icon.
+	 * This is the default implementation - if the given string is a valid path to existing
+	 * file, then the file's icon is returned. else, null is returned.
+	 * This function can be override to provide different implementation.
 	 *  
 	 * @param value - an item from the data list.
 	 * @return icon.
 	 */
-	protected abstract ImageIcon getImageIcon(String value);
+	protected ImageIcon getImageIcon(String value) {
+		AbstractFile file = FileFactory.getFile(value);
+		if (file != null)
+			return IconManager.getImageIcon(FileIcons.getFileIcon(file));
+		return null;
+	}
 	
 	private class GenericPopupDataListWithIcons extends DataList {		
 		public GenericPopupDataListWithIcons() {

@@ -27,6 +27,7 @@ import javax.swing.JPopupMenu;
 
 import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.action.ShowBookmarksQLAction;
 import com.mucommander.ui.action.ShowParentFoldersQLAction;
 import com.mucommander.ui.action.ShowRecentLocationsQLAction;
 import com.mucommander.ui.action.ShowRecentExecutedFilesQLAction;
@@ -46,12 +47,14 @@ public class QuickListsPopupButton extends PopupButton {
 		setPopupMenuLocation(PopupButton.BUTTOM_LEFT_ORIENTED);
 		
 		popupMenu = new JPopupMenu();
-		// add item for ShowParentFoldersPopupAction.
+		// add item for ShowParentFoldersQLAction.
 		addShowQuickListAction(popupMenu, ShowParentFoldersQLAction.class);
-		// add item for ShowRecentlyAccessedLocationsAction.
+		// add item for ShowRecentLocationsQLAction.
 		addShowQuickListAction(popupMenu, ShowRecentLocationsQLAction.class);
-		// add item for ShowRecentlyExecutedFilesAction.
+		// add item for ShowRecentExecutedFilesQLAction.
 		addShowQuickListAction(popupMenu, ShowRecentExecutedFilesQLAction.class);
+		// add item for ShowBookmarksQLAction.
+		addShowQuickListAction(popupMenu, ShowBookmarksQLAction.class);
 	}
 	
 	private void addShowQuickListAction(JPopupMenu menu, final Class action) {

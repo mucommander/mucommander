@@ -29,13 +29,13 @@ import com.mucommander.ui.main.MainFrame;
  * @author Arik Hadas
  */
 
-public class ShowRecentExecutedFilesQLAction extends ShowFileTablePopupAction {
+public class ShowRecentExecutedFilesQLAction extends ShowQuickListAction {
 	
 	public ShowRecentExecutedFilesQLAction(MainFrame mainFrame, Hashtable properties) {
 		super(mainFrame, properties);
 	}
 	
 	public void performAction() {
-		openPopup(FolderPanel.RECENT_EXECUTED_FILES_QUICK_LIST_INDEX);
+		openQuickList(FolderPanel.RECENT_EXECUTED_FILES_QUICK_LIST_INDEX);
 	}
 }

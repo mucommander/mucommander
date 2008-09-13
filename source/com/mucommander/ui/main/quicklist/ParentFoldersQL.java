@@ -20,17 +20,12 @@ package com.mucommander.ui.main.quicklist;
 
 import java.util.Vector;
 
-import javax.swing.ImageIcon;
-
 import com.mucommander.file.AbstractFile;
-import com.mucommander.file.FileFactory;
+import com.mucommander.text.Translator;
 import com.mucommander.ui.event.LocationEvent;
 import com.mucommander.ui.event.LocationListener;
-import com.mucommander.ui.icon.FileIcons;
-import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.quicklist.QuickListWithIcons;
-import com.mucommander.text.Translator;
 
 /**
  * This quick list shows the parent folders of the current location in the FileTable.
@@ -42,7 +37,7 @@ public class ParentFoldersQL extends QuickListWithIcons implements LocationListe
 	protected boolean updated = true;
 		
 	public ParentFoldersQL(FolderPanel folderPanel) {
-		super(Translator.get("parent_folders_popup.title"), Translator.get("parent_folders_popup.empty_message"));
+		super(Translator.get("parent_folders_quick_list.title"), Translator.get("parent_folders_quick_list.empty_message"));
 		
 		folderPanel.getLocationManager().addLocationListener(this);		
 	}
@@ -66,14 +61,7 @@ public class ParentFoldersQL extends QuickListWithIcons implements LocationListe
 
 	public void locationChanging(LocationEvent locationEvent) {}
 
-	public void locationFailed(LocationEvent locationEvent) {}
-
-	protected ImageIcon getImageIcon(String value) {
-		AbstractFile file = FileFactory.getFile(value);
-		if (file != null)
-			return IconManager.getImageIcon(FileIcons.getFileIcon(file));
-		return null;
-	}
+	public void locationFailed(LocationEvent locationEvent) {}	
 
 	public Object[] getData() {
 		if (!updated ? (updated = true) : false)

@@ -77,6 +77,7 @@ import com.mucommander.ui.dnd.FileDragSourceListener;
 import com.mucommander.ui.dnd.FileDropTargetListener;
 import com.mucommander.ui.event.LocationManager;
 import com.mucommander.ui.main.menu.TablePopupMenu;
+import com.mucommander.ui.main.quicklist.BookmarksQL;
 import com.mucommander.ui.main.quicklist.ParentFoldersQL;
 import com.mucommander.ui.main.quicklist.RecentLocationsQL;
 import com.mucommander.ui.main.quicklist.RecentExecutedFilesQL;
@@ -154,10 +155,12 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
     private QuickList[] fileTablePopups;
     protected static RecentLocationsQL recentLocationsQL = new RecentLocationsQL();
     protected static RecentExecutedFilesQL recentExecutedFilesQL = new RecentExecutedFilesQL();
+    protected static BookmarksQL bookmarksQL = new BookmarksQL();
     
     public static final int PARENT_FOLDERS_QUICK_LIST_INDEX = 0;
     public static final int RECENT_ACCESSED_LOCATIONS_QUICK_LIST_INDEX = 1;
     public static final int RECENT_EXECUTED_FILES_QUICK_LIST_INDEX = 2;
+    public static final int BOOKMARKS_QUICK_LIST_INDEX = 3;
        
     /* TODO branch private boolean branchView; */
 
@@ -206,7 +209,8 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
     	fileTablePopups = new QuickList[]{
     			new ParentFoldersQL(this),
     			recentLocationsQL,
-    			recentExecutedFilesQL};
+    			recentExecutedFilesQL,
+    			bookmarksQL};
         
         // Init chained file filters used to filter out files in the current directory.
         // AndFileFilter is used, that means files must satisfy all the filters in order to be displayed.
@@ -1392,7 +1396,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
      * 
      * @param index - index of the FileTablePopup in fileTablePopups.
      */
-    public void showPopup(int index) {
+    public void showQuickList(int index) {
     	fileTablePopups[index].show(this);
     }
     
