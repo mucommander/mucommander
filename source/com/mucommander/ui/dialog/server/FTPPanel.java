@@ -41,6 +41,9 @@ import java.net.MalformedURLException;
  */
 public class FTPPanel extends ServerPanel implements ActionListener {
 
+    private final static int STANDARD_PORT = FileURL.getRegisteredHandler(FileProtocols.FTP).getStandardPort();
+    private static Credentials ANONYMOUS_CREDENTIALS = FileURL.getRegisteredHandler(FileProtocols.FTP).getGuestCredentials();
+
     private JTextField serverField;
     private JTextField usernameField;
     private JPasswordField passwordField;
@@ -55,17 +58,16 @@ public class FTPPanel extends ServerPanel implements ActionListener {
     private static String lastServer = "";
     private static String lastUsername = "";
     private static String lastInitialDir = "/";
-    private static int lastPort = 21;
+    private static int lastPort = STANDARD_PORT;
     private static String lastEncoding = FTPFile.DEFAULT_ENCODING;
     // Not static so that it is not remembered (for security reasons)
     private String lastPassword = "";
-    private String lastAnonymousPassword = "";
 
     /** Passive mode is enabled by default because of firewall restrictions */
     private static boolean passiveMode = true;
     private static boolean anonymousUser;
-	
-	
+
+
     FTPPanel(final ServerConnectDialog dialog, MainFrame mainFrame) {
         super(dialog, mainFrame);
 
@@ -76,7 +78,7 @@ public class FTPPanel extends ServerPanel implements ActionListener {
         addRow(Translator.get("server_connect_dialog.server"), serverField, 15);
 
         // Username field, initialized to last username entered or 'anonymous' if anonymous user was previously selected
-        usernameField = new JTextField(anonymousUser?"anonymous":lastUsername);
+        usernameField = new JTextField(anonymousUser?ANONYMOUS_CREDENTIALS.getLogin():lastUsername);
         usernameField.selectAll();
         usernameField.setEditable(!anonymousUser);
         addTextFieldListeners(usernameField, false);
@@ -147,7 +149,7 @@ public class FTPPanel extends ServerPanel implements ActionListener {
         FileURL url = FileURL.getFileURL(FileProtocols.FTP+"://"+lastServer+lastInitialDir);
 
         if(anonymousUser)
-            url.setCredentials(new Credentials("anonymous", new String(passwordField.getPassword())));
+            url.setCredentials(new Credentials(ANONYMOUS_CREDENTIALS.getLogin(), new String(passwordField.getPassword())));
         else
             url.setCredentials(new Credentials(lastUsername, lastPassword));
 
@@ -188,16 +190,17 @@ public class FTPPanel extends ServerPanel implements ActionListener {
         }
         else if (source == anonymousCheckBox) {
             updateValues();
-            this.anonymousUser = anonymousCheckBox.isSelected();
+            anonymousUser = anonymousCheckBox.isSelected();
             if(anonymousUser) {
-                usernameField.setEditable(false);
-                usernameField.setText("anonymous");
-                passwordField.setText(lastAnonymousPassword);
+                usernameField.setEnabled(false);
+                usernameField.setText(ANONYMOUS_CREDENTIALS.getLogin());
+                passwordField.setEnabled(false);
+                passwordField.setText(ANONYMOUS_CREDENTIALS.getPassword());
             }
             else {
-                lastAnonymousPassword = new String(passwordField.getPassword());
-                usernameField.setEditable(true);
+                usernameField.setEnabled(true);
                 usernameField.setText(lastUsername);
+                passwordField.setEnabled(true);
                 passwordField.setText(lastPassword);
             }
         }
