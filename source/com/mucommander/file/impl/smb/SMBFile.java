@@ -93,7 +93,7 @@ import java.net.MalformedURLException;
         super(fileURL);
 
         if(!fileURL.containsCredentials())
-            throw new AuthException(fileURL);
+            throw new AuthException(fileURL, "Authentication required");
 
         if(smbFile==null) {
             while(true) {

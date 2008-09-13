@@ -1162,7 +1162,7 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
             // If not, throw an exception using the reply string
             if(!FTPReply.isPositiveCompletion(replyCode)) {
                 if(replyCode==FTPReply.CODE_503 || replyCode==FTPReply.NEED_PASSWORD || replyCode==FTPReply.NOT_LOGGED_IN)
-                    throw new AuthException(realm, ftpClient.getReplyString());
+                    throwAuthException(ftpClient.getReplyString());
                 else
                     throw new IOException(ftpClient.getReplyString());
             }
@@ -1226,7 +1226,7 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
 	                // Throw an AuthException if there are no credentials
 	                if(Debug.ON) Debug.trace("fileURL="+ realm.toString(true)+" credentials="+ credentials);
 	                if(credentials ==null)
-	                    throw new AuthException(realm);
+	                    throwAuthException(null);
 	
 	                // Login
 	                ftpClient.login(credentials.getLogin(), credentials.getPassword());

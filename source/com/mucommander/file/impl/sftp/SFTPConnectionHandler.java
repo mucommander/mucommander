@@ -76,7 +76,7 @@ class SFTPConnectionHandler extends ConnectionHandler {
 
             // Throw an AuthException if no auth information, required for SSH
             if(credentials ==null)
-                throw new AuthException(realm, "Login and password required");  // Todo: localize this entry
+                throwAuthException("Login and password required");  // Todo: localize this entry
 
             if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("creating SshClient");
 
@@ -116,9 +116,9 @@ class SFTPConnectionHandler extends ConnectionHandler {
                     SshPrivateKeyFile file = SshPrivateKeyFile.parse(new File(privateKeyPath));
                     key = file.toPrivateKey(credentials.getPassword());
                 } catch (InvalidSshKeyException iske) {
-                    throw new AuthException(realm, "Invalid private key file or passphrase");  // Todo: localize this entry
+                    throwAuthException("Invalid private key file or passphrase");  // Todo: localize this entry
                 } catch (IOException ioe) {
-                    throw new AuthException(realm, "Error reading private key file");  // Todo: localize this entry
+                    throwAuthException("Error reading private key file");  // Todo: localize this entry
                 }
 
                 pk.setKey(key);
@@ -169,7 +169,7 @@ class SFTPConnectionHandler extends ConnectionHandler {
 
                 // Throw an AuthException if authentication failed
                 if(authResult!=AuthenticationProtocolState.COMPLETE)
-                    throw new AuthException(realm, "Login or password rejected");   // Todo: localize this entry
+                    throwAuthException("Login or password rejected");   // Todo: localize this entry
 
                 if(Debug.ON) Debug.trace("authentication complete, authResult="+authResult);
             }
@@ -180,7 +180,7 @@ class SFTPConnectionHandler extends ConnectionHandler {
                 if(Debug.ON) {
                     Debug.trace("Caught exception while authenticating: "+e);
                     e.printStackTrace();
-                    throw new AuthException(realm, e.getMessage());
+                    throwAuthException(e.getMessage());
                 }
             }
 
