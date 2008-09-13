@@ -18,33 +18,6 @@
 
 package com.mucommander.ui.main;
 
-import java.awt.AWTKeyStroke;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Cursor;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.KeyboardFocusManager;
-import java.awt.dnd.DropTarget;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.util.HashSet;
-import java.util.Iterator;
-
-import javax.swing.JComponent;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JSplitPane;
-import javax.swing.border.Border;
-
 import com.mucommander.Debug;
 import com.mucommander.auth.AuthException;
 import com.mucommander.auth.CredentialsManager;
@@ -53,11 +26,7 @@ import com.mucommander.conf.ConfigurationEvent;
 import com.mucommander.conf.ConfigurationListener;
 import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.desktop.DesktopManager;
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.FileFactory;
-import com.mucommander.file.FileProtocols;
-import com.mucommander.file.FileURL;
-import com.mucommander.file.RootFolders;
+import com.mucommander.file.*;
 import com.mucommander.file.filter.AndFileFilter;
 import com.mucommander.file.filter.AttributeFileFilter;
 import com.mucommander.file.filter.DSStoreFileFilter;
@@ -79,18 +48,24 @@ import com.mucommander.ui.event.LocationManager;
 import com.mucommander.ui.main.menu.TablePopupMenu;
 import com.mucommander.ui.main.quicklist.BookmarksQL;
 import com.mucommander.ui.main.quicklist.ParentFoldersQL;
-import com.mucommander.ui.main.quicklist.RecentLocationsQL;
 import com.mucommander.ui.main.quicklist.RecentExecutedFilesQL;
+import com.mucommander.ui.main.quicklist.RecentLocationsQL;
 import com.mucommander.ui.main.table.FileTable;
 import com.mucommander.ui.main.table.FileTableConfiguration;
 import com.mucommander.ui.main.table.FolderChangeMonitor;
 import com.mucommander.ui.main.tree.FoldersTreePanel;
 import com.mucommander.ui.quicklist.QuickList;
-import com.mucommander.ui.theme.ColorChangedEvent;
-import com.mucommander.ui.theme.FontChangedEvent;
-import com.mucommander.ui.theme.Theme;
-import com.mucommander.ui.theme.ThemeListener;
-import com.mucommander.ui.theme.ThemeManager;
+import com.mucommander.ui.theme.*;
+
+import javax.swing.*;
+import javax.swing.border.Border;
+import java.awt.*;
+import java.awt.dnd.DropTarget;
+import java.awt.event.*;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.util.HashSet;
+import java.util.Iterator;
 
 /**
  * Folder pane that contains the table that displays the contents of the current directory and allows navigation, the
@@ -156,12 +131,12 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
     protected static RecentLocationsQL recentLocationsQL = new RecentLocationsQL();
     protected static RecentExecutedFilesQL recentExecutedFilesQL = new RecentExecutedFilesQL();
     protected static BookmarksQL bookmarksQL = new BookmarksQL();
-    
+
     public static final int PARENT_FOLDERS_QUICK_LIST_INDEX = 0;
     public static final int RECENT_ACCESSED_LOCATIONS_QUICK_LIST_INDEX = 1;
     public static final int RECENT_EXECUTED_FILES_QUICK_LIST_INDEX = 2;
     public static final int BOOKMARKS_QUICK_LIST_INDEX = 3;
-       
+
     /* TODO branch private boolean branchView; */
 
 
@@ -209,9 +184,9 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
     	fileTablePopups = new QuickList[]{
     			new ParentFoldersQL(this),
     			recentLocationsQL,
-    			recentExecutedFilesQL,
-    			bookmarksQL};
-        
+                recentExecutedFilesQL,
+                bookmarksQL};
+
         // Init chained file filters used to filter out files in the current directory.
         // AndFileFilter is used, that means files must satisfy all the filters in order to be displayed.
         chainedFileFilter = new AndFileFilter();
@@ -476,17 +451,19 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
 
 
     /**
-     * Pops up an {@link AuthDialog} where the user can enter credentials to grant him access to the file or folder
-     * represented by the given {@link FileURL}, and returns the credentials entered or null if the dialog was cancelled.
+     * Pops up an {@link AuthDialog authentication dialog} prompting the user to select or enter credentials in order to
+     * be granted the access to the file or folder represented by the given {@link FileURL}.
+     * The <code>AuthDialog</code> instance is returned, allowing to retrieve the credentials that were selected
+     * by the user (if any).
      *
      * @param fileURL the file or folder to ask credentials for
-     * @param errorMessage optional (can be null), an error message sent by the server to display to the user
-     * @return the credentials the user entered/chose and validated, null if he cancelled the dialog.
+     * @param errorMessage optional (can be null), an error message describing a prior authentication failure
+     * @return the AuthDialog that contains the credentials selected by the user (if any)
      */
-    private CredentialsMapping getCredentialsFromUser(FileURL fileURL, String errorMessage) {
-        AuthDialog authDialog = new AuthDialog(mainFrame, fileURL, errorMessage);
+    private AuthDialog popAuthDialog(FileURL fileURL, boolean authFailed, String errorMessage) {
+        AuthDialog authDialog = new AuthDialog(mainFrame, fileURL, authFailed, errorMessage);
         authDialog.showDialog();
-        return authDialog.getCredentialsMapping();
+        return authDialog;
     }
 
 
@@ -1027,16 +1004,22 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
             // Show some progress in the progress bar to give hope
             locationTextField.setProgressValue(10);
 
-            // If folder URL doesn't contain any credentials but CredentialsManager found credentials matching the URL,
-            // popup the authentication dialog to avoid having to wait for an AuthException to be thrown
             boolean userCancelled = false;
             CredentialsMapping newCredentialsMapping = null;
+            // True if Guest authentication was selected in the authentication dialog (guest credentials must not be
+            // added to CredentialsManager)
+            boolean guestCredentialsSelected = false;
+
+            // If the folder URL doesn't contain any credentials but CredentialsManager found credentials matching the
+            // URL, popup the authentication dialog to avoid having to wait for an AuthException to be thrown
             if(credentialsMapping!=null) {
                 newCredentialsMapping = credentialsMapping;
                 CredentialsManager.authenticate(folderURL, newCredentialsMapping);
             }
             else if(!folderURL.containsCredentials() && CredentialsManager.getMatchingCredentials(folderURL).length>0) {
-                newCredentialsMapping = getCredentialsFromUser(folderURL, null);
+                AuthDialog authDialog = popAuthDialog(folderURL, false, null);
+                newCredentialsMapping = authDialog.getCredentialsMapping();
+                guestCredentialsSelected = authDialog.guestCredentialsSelected();
 
                 // User cancelled the authentication dialog, stop
                 if(newCredentialsMapping ==null)
@@ -1216,9 +1199,10 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
                         // folder set -> 95% complete
                         locationTextField.setProgressValue(95);
 
-                        // If some new credentials were entered by the user, these can now be considered valid
-                        // (folder was changed successfully) -> add them to the CredentialsManager.
-                        if(newCredentialsMapping!=null)
+                        // If new credentials were entered by the user, these can now be considered valid
+                        // (folder was changed successfully), so we add them to the CredentialsManager.
+                        // Do not add the credentials if guest credentials were selected by the user.
+                        if(newCredentialsMapping!=null && !guestCredentialsSelected)
                             CredentialsManager.addCredentials(newCredentialsMapping);
 
                         // All good !
@@ -1249,8 +1233,11 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
                         if(e instanceof AuthException) {
                             AuthException authException = (AuthException)e;
                             // Retry (loop) if user provided new credentials, if not stop
-                            newCredentialsMapping = getCredentialsFromUser(authException.getFileURL(), authException.getMessage());
-                            if(newCredentialsMapping !=null) {
+                            AuthDialog authDialog = popAuthDialog(authException.getURL(), true, authException.getMessage());
+                            newCredentialsMapping = authDialog.getCredentialsMapping();
+                            guestCredentialsSelected = authDialog.guestCredentialsSelected();
+
+                            if(newCredentialsMapping!=null) {
                                 // Invalidate the existing AbstractFile instance
                                 folder = null;
                                 // Use the provided credentials

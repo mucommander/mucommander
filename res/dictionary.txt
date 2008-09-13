@@ -895,6 +895,27 @@ password:JA:パスワード
 password:SV:Lösenord
 password:DA:Kodeord
 
+user:EN:User
+user:FR:User
+user:zh_TW:使用者
+user:DE:Benutzer
+user:RO:Utilizator
+user:IT:Utente
+user:CS:Uživatel
+user:zh_CN:用户
+user:RU:Владелец
+user:SL:Uporabnik
+user:ES:Usuario
+user:PL:Właciciel
+user:KO:사용자
+user:pt_BR:Usuário
+user:NL:Gebruiker
+user:SK:Užívateľ
+user:HU:Felhasználó
+user:JA:ユーザー
+user:SV:Användare
+user:DA:Ejer
+
 # Character encoding (e.g. UTF-8, ISO-8859-1, ...), displayed for instance in the FTP panel of the 'Connect to server' dialog
 encoding:EN:Encoding
 encoding:FR:Encodage
@@ -2016,26 +2037,7 @@ permissions.executable:JA:実行ファイル
 permissions.executable:SV:Exekverbar
 permissions.executable:DA:Eksekverbar
 
-permissions.user:EN:User
-permissions.user:FR:User
-permissions.user:zh_TW:使用者
-permissions.user:DE:Benutzer
-permissions.user:RO:Utilizator
-permissions.user:IT:Utente
-permissions.user:CS:Uživatel
-permissions.user:zh_CN:用户
-permissions.user:RU:Владелец
-permissions.user:SL:Uporabnik
-permissions.user:ES:Usuario
-permissions.user:PL:Właciciel
-permissions.user:KO:사용자
-permissions.user:pt_BR:Usuário
-permissions.user:NL:Gebruiker
-permissions.user:SK:Užívateľ
-permissions.user:HU:Felhasználó
-permissions.user:JA:ユーザー
-permissions.user:SV:Användare
-permissions.user:DA:Ejer
+permissions.user:EN:$[user]
 
 permissions.group:EN:Group
 permissions.group:FR:Groupe
@@ -8654,27 +8656,6 @@ auth_dialog.server:JA:サーバー
 auth_dialog.server:SV:Server
 auth_dialog.server:DA:Server
 
-auth_dialog.error_was:EN:Error was: %1
-auth_dialog.error_was:FR:L'erreur était: %1
-auth_dialog.error_was:DE:Fehler war: %1
-auth_dialog.error_was:ES:El error era: %1
-auth_dialog.error_was:CS:Chyba: %1
-auth_dialog.error_was:zh_TW:錯誤為: %1
-auth_dialog.error_was:PL:Wystąpił błąd: %1
-auth_dialog.error_was:HU:Hiba történt: %1
-auth_dialog.error_was:RU:Ошибка: %1
-auth_dialog.error_was:zh_CN:错误: %1
-auth_dialog.error_was:SL:Napaka: %1
-auth_dialog.error_was:RO:Eroare: %1
-auth_dialog.error_was:IT:Errore: %1
-auth_dialog.error_was:KO:오류: %1
-auth_dialog.error_was:pt_BR:O erro foi: %1
-auth_dialog.error_was:NL:Fout was: %1
-auth_dialog.error_was:SK:Chyba: %1
-auth_dialog.error_was:JA:エラー: %1
-auth_dialog.error_was:SV:Felet var %1
-auth_dialog.error_was:DA:Fejlen var: %1
-
 # Passwords used to be stored in the clear, now they are encrypted with a weak encryption method
 auth_dialog.store_credentials:EN:Store login and password (weak encryption)
 auth_dialog.store_credentials:FR:Sauver les identifiants (encryption faible)
@@ -8696,6 +8677,47 @@ auth_dialog.store_credentials:RU:Сохранить логин и пароль (
 auth_dialog.store_credentials:JA:ログインとパスワードを格納する (弱い暗号化)
 auth_dialog.store_credentials:SV:Spara användarnamn och lösenord (lätt kryptering)
 auth_dialog.store_credentials:DA:Husk brugernavn og kodeord (svag kryptering)
+
+# Used as a label for the 'Guest' and 'User' radio buttons (Connect as Guest, Connect as User...)
+auth_dialog.connect_as:EN:Connect as
+auth_dialog.connect_as:FR:Se connecter en tant que
+# Translation missing (New!)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+auth_dialog.authentication_failed:EN:Authentication failed
+auth_dialog.authentication_failed:FR:L'authentification a échoué
+# Translation missing (New!)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 #################
@@ -13837,4 +13859,25 @@ bookmarks_quick_list.empty_message:EN:No bookmarks
 #com.mucommander.ui.action.ToggleHiddenFilesAction.hide:HU:Rejtett fájlok elrejtése
 #com.mucommander.ui.action.ToggleHiddenFilesAction.hide:ES:Ocultar ficheros ocultos
 #com.mucommander.ui.action.ToggleHiddenFilesAction.hide:IT:Non mostrare i file nascosti
+
+#auth_dialog.error_was:EN:Error was: %1
+#auth_dialog.error_was:FR:L'erreur était: %1
+#auth_dialog.error_was:DE:Fehler war: %1
+#auth_dialog.error_was:ES:El error era: %1
+#auth_dialog.error_was:CS:Chyba: %1
+#auth_dialog.error_was:zh_TW:錯誤為: %1
+#auth_dialog.error_was:PL:Wystąpił błąd: %1
+#auth_dialog.error_was:HU:Hiba történt: %1
+#auth_dialog.error_was:RU:Ошибка: %1
+#auth_dialog.error_was:zh_CN:错误: %1
+#auth_dialog.error_was:SL:Napaka: %1
+#auth_dialog.error_was:RO:Eroare: %1
+#auth_dialog.error_was:IT:Errore: %1
+#auth_dialog.error_was:KO:오류: %1
+#auth_dialog.error_was:pt_BR:O erro foi: %1
+#auth_dialog.error_was:NL:Fout was: %1
+#auth_dialog.error_was:SK:Chyba: %1
+#auth_dialog.error_was:JA:エラー: %1
+#auth_dialog.error_was:SV:Felet var %1
+#auth_dialog.error_was:DA:Fejlen var: %1
 

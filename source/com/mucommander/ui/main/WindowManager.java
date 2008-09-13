@@ -207,7 +207,7 @@ public class WindowManager implements WindowListener, ConfigurationListener {
                 if(e instanceof AuthException) {
                     // Prompts the user for a login and password.
                     AuthException authException = (AuthException)e;
-                    AuthDialog authDialog = new AuthDialog(currentMainFrame, authException.getFileURL(), authException.getMessage());
+                    AuthDialog authDialog = new AuthDialog(currentMainFrame, authException.getURL(), true, authException.getMessage());
                     authDialog.showDialog();
                     newCredentialsMapping = authDialog.getCredentialsMapping();
                     if(newCredentialsMapping !=null) {
