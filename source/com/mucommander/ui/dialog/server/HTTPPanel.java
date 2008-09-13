@@ -36,13 +36,15 @@ import java.net.MalformedURLException;
  */
 public class HTTPPanel extends ServerPanel {
 
+    private final static int STANDARD_PORT = FileURL.getRegisteredHandler(FileProtocols.HTTP).getStandardPort();
+
     private JTextField urlField;
     private JSpinner portSpinner;
     private JTextField usernameField;
     private JPasswordField passwordField;
 
     private static String lastURL = "http://";
-    private static int lastPort = 80;
+    private static int lastPort = STANDARD_PORT;
     private static String lastUsername = "";
     // Not static so that it is not saved (for security reasons)
     private String lastPassword = "";

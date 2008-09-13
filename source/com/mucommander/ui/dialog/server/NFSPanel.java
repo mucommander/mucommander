@@ -36,6 +36,8 @@ import java.net.MalformedURLException;
  */
 public class NFSPanel extends ServerPanel {
 
+    private final static int STANDARD_PORT = FileURL.getRegisteredHandler(FileProtocols.NFS).getStandardPort(); 
+
     private JTextField serverField;
     private JTextField shareField;
     private JSpinner portSpinner;
@@ -44,10 +46,9 @@ public class NFSPanel extends ServerPanel {
 
     private static String lastServer = "";
     private static String lastShare = "";
-    private static int lastPort = 2049;
+    private static int lastPort = STANDARD_PORT;
     private static String lastNfsVersion = NFSFile.DEFAULT_NFS_VERSION;
     private static String lastNfsProtocol = NFSFile.DEFAULT_NFS_PROTOCOL;
-
 
     NFSPanel(ServerConnectDialog dialog, MainFrame mainFrame) {
         super(dialog, mainFrame);

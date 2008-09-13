@@ -40,6 +40,8 @@ import java.net.MalformedURLException;
  */
 public class SFTPPanel extends ServerPanel {
 
+    private final static int STANDARD_PORT = FileURL.getRegisteredHandler(FileProtocols.SFTP).getStandardPort();
+
     private JTextField serverField;
     private JTextField privateKeyPathField;
     private JTextField usernameField;
@@ -53,7 +55,7 @@ public class SFTPPanel extends ServerPanel {
     // Not static so that it is not saved (for security reasons)
     private String lastPassword = "";
     private static String lastInitialDir = "/";
-    private static int lastPort = 22;
+    private static int lastPort = STANDARD_PORT;
 
 
     SFTPPanel(ServerConnectDialog dialog, final MainFrame mainFrame) {
