@@ -284,4 +284,23 @@ public class StringUtils {
             return def;
         }
     }
+
+    /**
+     * Capitalizes the given string, making its first character upper case, and the rest of them lower case.
+     * This method reeturns an empty string if <code>null</code> or an empty string is passed.
+     *
+     * @param s the string to capitalize
+     * @return the capitalized string
+     */
+    public static String capitalize(String s) {
+        if(s==null || s.equals(""))
+            return "";
+
+        String capedS = ""+Character.toUpperCase(s.charAt(0));
+        int len = s.length();
+        if(len>1)
+            capedS += s.substring(1, len).toLowerCase();
+
+        return capedS;
+    }
 }

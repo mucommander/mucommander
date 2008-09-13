@@ -172,4 +172,19 @@ public class StringUtilsTest extends TestCase {
         assertFalse(StringUtils.equals("a", "z", false));
         assertFalse(StringUtils.equals("a", "z", true));
     }
+
+    public void testCapitalize() {
+        assertEquals("Bob", StringUtils.capitalize("bob"));
+        assertEquals("Bob", StringUtils.capitalize("BOB"));
+        assertEquals("Bob", StringUtils.capitalize("bOB"));
+        assertEquals("Bob", StringUtils.capitalize("bOB"));
+        assertEquals("Bob servant", StringUtils.capitalize("Bob Servant"));
+
+        assertEquals("B", StringUtils.capitalize("b"));
+
+        assertEquals("", StringUtils.capitalize(""));
+        assertEquals("", StringUtils.capitalize(null));
+
+        assertEquals("7", StringUtils.capitalize("7"));
+    }
 }
