@@ -26,6 +26,10 @@ import com.mucommander.file.FileURL;
 import java.io.IOException;
 
 /**
+ * ConnectionHandler is a an abstract class that provides the basic operations for to interact with a server: establish
+ * the connection, keep it alive and close it.
+ *
+ * @see com.mucommander.file.connection.ConnectionPool
  * @author Maxence Bernard
  */
 public abstract class ConnectionHandler {
@@ -59,7 +63,10 @@ public abstract class ConnectionHandler {
 
 
     /**
-     * Creates a new ConnectionHandler for the given server URL and using the Credentials included in the URL (if any).
+     * Creates a new ConnectionHandler for the given server URL using the Credentials included in the URL (potentially
+     * <code>null</code>).
+     *
+     * @param serverURL URL of the server to connect to
      */
     public ConnectionHandler(FileURL serverURL) {
         realm = serverURL.getRealm();
@@ -69,6 +76,8 @@ public abstract class ConnectionHandler {
 
     /**
      * Returns the URL of the server this ConnectionHandler connects to.
+     *
+     * @return the URL of the server this ConnectionHandler connects to
      */
     public FileURL getRealm() {
         return realm;
@@ -76,7 +85,9 @@ public abstract class ConnectionHandler {
 
 
     /**
-     * Returns the Credentials that are used to connect to the server, may be null if no credentials are used.
+     * Returns the Credentials that are used to connect to the server, <code>null</code> if no credentials are used.
+     *
+     * @return the Credentials that are used to connect to the server, <code>null</code> if no credentials are used
      */
     public Credentials getCredentials() {
         return credentials;
@@ -134,7 +145,9 @@ public abstract class ConnectionHandler {
     }
 
     /**
-     * Returns true if this ConnectionHandler is currently locked.
+     * Returns <code>true</code> if this ConnectionHandler is currently locked.
+     *
+     * @return <code>true</code> if this ConnectionHandler is currently locked
      */
     public synchronized boolean isLocked() {
         return isLocked;
@@ -150,6 +163,8 @@ public abstract class ConnectionHandler {
 
     /**
      * Returns the time at which the connection managed by this ConnectionHandler was last used.
+     *
+     * @return the time at which the connection managed by this ConnectionHandler was last used
      */
     public long getLastActivityTimestamp() {
         return lastActivityTimestamp;
@@ -165,6 +180,8 @@ public abstract class ConnectionHandler {
 
     /**
      * Returns the time at which the connection managed by this ConnectionHandler was last kept alive.
+     *
+     * @return the time at which the connection managed by this ConnectionHandler was last kept alive
      */
     public long getLastKeepAliveTimestamp() {
         return lastKeepAliveTimestamp;
@@ -172,22 +189,27 @@ public abstract class ConnectionHandler {
 
 
     /**
-     * Returns the number of seconds of inactivity after which this ConnectionHandler's connection will be closed by
-     * {@link ConnectionPool} calling {@link #closeConnection()}, or -1 to indicate that the connection should not
-     * be automatically closed.
+     * Returns the number of seconds of inactivity after which {@link ConnectionPool} will close the connection by
+     * calling {@link #closeConnection()}, <code>-1</code> to indicate that the connection should not be automatically
+     * closed.
      *
-     * <p>By default, this value is 300 seconds (5 minutes).
+     * <p>By default, this value is 300 seconds (5 minutes).</p>
+     *
+     * @return the number of seconds of inactivity after which {@link ConnectionPool} will close the connection,
+     * <code>-1</code> to indicate that the connection should not be automatically closed
      */
     public long getCloseOnInactivityPeriod() {
         return closeOnInactivityPeriod;
     }
 
     /**
-     * Sets the number of seconds of inactivity after which this ConnectionHandler's connection will be closed by
-     * {@link ConnectionPool} calling {@link #closeConnection()}, or -1 to prevent the connection from being
-     * automatically closed.
+     * Sets the number of seconds of inactivity after which {@link ConnectionPool} will close the connection by calling
+     * {@link #closeConnection()}, <code>-1</code> to prevent the connection from being automatically closed.
      *
-     * <p>By default, this value is 300 seconds (5 minutes).
+     * <p>By default, this value is 300 seconds (5 minutes).</p>
+     *
+     * @param nbSeconds the number of seconds of inactivity after which {@link ConnectionPool} will close the connection,
+     * <code>-1</code> to indicate that the connection should not be automatically closed
      */
     public void setCloseOnInactivityPeriod(long nbSeconds) {
         closeOnInactivityPeriod = nbSeconds;
@@ -195,22 +217,26 @@ public abstract class ConnectionHandler {
 
 
     /**
-     * Returns the number of seconds of inactivity after which this ConnectionHandler's connection will be kept alive by
-     * {@link ConnectionPool} calling {@link #keepAlive()}, or -1 to indicate that this connection should not be kept
-     * alive.
+     * Returns the number of seconds of inactivity after which {@link ConnectionPool} will keep the connection alive
+     * by calling {@link #keepAlive()}, <code>-1</code> to indicate that this connection should not be kept alive.
      *
-     * <p>By default, this value is -1 (keep alive disabled).
+     * <p>By default, this value is -1 (keep alive disabled).</p>
+     *
+     * @return the number of seconds of inactivity after which {@link ConnectionPool} will keep the connection alive
+     * by calling {@link #keepAlive()}, <code>-1</code> to indicate that this connection should not be kept alive
      */
     public long getKeepAlivePeriod() {
         return keepAlivePeriod;
     }
 
     /**
-     * Sets the number of seconds of inactivity after which this ConnectionHandler's connection will be kept alive by
-     * {@link ConnectionPool} calling {@link #keepAlive()}, or -1 to indicate that this connection should not be kept
-     * alive.
+     * Returns the number of seconds of inactivity after which {@link ConnectionPool} will keep the connection alive
+     * by calling {@link #keepAlive()}, <code>-1</code> to indicate that this connection should not be kept alive.
      *
-     * <p>By default, this value is -1 (keep alive disabled).
+     * <p>By default, this value is -1 (keep alive disabled).</p>
+     *
+     * @param nbSeconds the number of seconds of inactivity after which {@link ConnectionPool} will keep the connection
+     * alive by calling {@link #keepAlive()}, <code>-1</code> to indicate that this connection should not be kept alive
      */
     public void setKeepAlivePeriod(long nbSeconds) {
         keepAlivePeriod = nbSeconds;
@@ -257,6 +283,21 @@ public abstract class ConnectionHandler {
     }
 
 
+    /**
+     * Throws an {@link AuthException} using this connection handler's realm, credentials and the message passed as
+     * an argument (can be <code>null</code>). The FileURL instance representing the realm that is used to create
+     * the <code>AuthException</code> is a clone of this realm, making it safe for modification.
+     *
+     * @param message the message to pass to AuthException's constructor, can be <code>null</code>
+     * @throws AuthException always throws the created AuthException
+     */
+    public void throwAuthException(String message) throws AuthException {
+        FileURL clonedRealm = (FileURL)realm.clone();
+        clonedRealm.setCredentials(credentials);
+
+        throw new AuthException(clonedRealm, message);
+    }
+
 
     //////////////////////
     // Abstract methods //
@@ -273,10 +314,12 @@ public abstract class ConnectionHandler {
     public abstract void startConnection() throws IOException, AuthException;
 
     /**
-     * Returns true if the connection managed by this ConnectionHandler is currently active/established, in an
-     * state where it can serve client requests.
+     * Returns <code>true</code> if the connection managed by this ConnectionHandler is currently active/established,
+     * in a state that makes it possible to serve client requests.
      *
-     * <p>Implementation note: This method must not perform any I/O which could block the calling thread.
+     * <p>Implementation note: This method must not perform any I/O which could block the calling thread.</p>
+     *
+     * @return <code>true</code> if the connection managed by this ConnectionHandler is currently active/established
      */
     public abstract boolean isConnected();
 
@@ -284,7 +327,7 @@ public abstract class ConnectionHandler {
      * Closes the connection managed by this ConnectionHandler.
      *
      * <p>Implementation note: the implementation must guarantee that any calls to {@link #isConnected()} after this
-     * method has been called return false.
+     * method has been called return false.</p>
      */
     public abstract void closeConnection();
 
@@ -292,7 +335,7 @@ public abstract class ConnectionHandler {
      * Keeps this connection alive.
      *
      * <p>Implementation note: if keep alive is not available in the underlying protocol or
-     * simply unnecessary, this method should be implemented as a no-op (do nothing).
+     * simply unnecessary, this method should be implemented as a no-op (do nothing).</p>
      */
     public abstract void keepAlive();
 }
