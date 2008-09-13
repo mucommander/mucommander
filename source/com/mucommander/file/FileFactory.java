@@ -136,6 +136,7 @@ public class FileFactory {
         registerArchiveFormat(new com.mucommander.file.impl.iso.IsoFormatProvider());
         registerArchiveFormat(new com.mucommander.file.impl.ar.ArFormatProvider());
         registerArchiveFormat(new com.mucommander.file.impl.lst.LstFormatProvider());
+        registerArchiveFormat(new com.mucommander.file.impl.rar.RarFormatProvider());
 
         // Set the default FileIconProvider instance
         defaultFileIconProvider = new SwingFileIconProvider();
