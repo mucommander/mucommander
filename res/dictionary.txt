@@ -5083,7 +5083,8 @@ com.mucommander.ui.action.ShowRecentExecutedFilesQLAction.label:EN:Recent execut
 # Translation missing (New!)
 
 
-
+com.mucommander.ui.action.ShowBookmarksQLAction.label:EN:Bookmarks
+# Translation missing (New!)
 
 
 #############
@@ -13505,7 +13506,7 @@ multi_rename_dialog.duplicate_names:PL:Wykryto zduplikowane nazwy!
 # List popups #
 ###############
 
-parent_folders_popup.title:EN:Parent folders
+parent_folders_quick_list.title:EN:Parent folders
 # Translation missing (New!)
 
 
@@ -13519,7 +13520,7 @@ parent_folders_popup.title:EN:Parent folders
 
 
 
-parent_folders_popup.empty_message:EN:No parent folder for current location
+parent_folders_quick_list.empty_message:EN:No parent folder for current location
 # Translation missing (New!)
 
 
@@ -13532,7 +13533,7 @@ parent_folders_popup.empty_message:EN:No parent folder for current location
 
 
 
-recently_accessed_locations.title:EN:Recent locations
+recent_locations_quick_list.title:EN:Recent locations
 # Translation missing (New!)
 
 
@@ -13545,7 +13546,7 @@ recently_accessed_locations.title:EN:Recent locations
 
 
 
-recently_accessed_locations.empty_message:EN:No recent location
+recent_locations_quick_list.empty_message:EN:No recent location
 # Translation missing (New!)
 
 
@@ -13556,7 +13557,7 @@ recently_accessed_locations.empty_message:EN:No recent location
 
 
 
-recently_executed_files.title:EN:Recent executed files
+recent_executed_files_quick_list.title:EN:Recent executed files
 # Translation missing (New!)
 
 
@@ -13567,12 +13568,23 @@ recently_executed_files.title:EN:Recent executed files
 
 
 
-recently_executed_files.empty_message:EN:No recent executed file
+recent_executed_files_quick_list.empty_message:EN:No recent executed file
 # Translation missing (New!)
 
 
 
 
+
+
+bookmarks_quick_list.title:EN:Bookmarks
+# Translation missing (New!)
+
+
+
+
+
+bookmarks_quick_list.empty_message:EN:No bookmarks
+# Translation missing (New!)
 
 
 ######################
