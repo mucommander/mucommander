@@ -26,6 +26,7 @@ import java.util.Vector;
 
 
 /**
+ * @see com.mucommander.file.connection.ConnectionHandler
  * @author Maxence Bernard
  */
 public class ConnectionPool implements Runnable {
