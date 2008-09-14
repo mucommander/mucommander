@@ -34,7 +34,8 @@ import com.mucommander.ui.helper.FocusRequester;
 import com.mucommander.ui.layout.XAlignedComponentPanel;
 import com.mucommander.ui.layout.YBoxPanel;
 import com.mucommander.ui.main.MainFrame;
-import com.mucommander.ui.text.BoldLabel;
+import com.mucommander.ui.text.FontUtils;
+import com.mucommander.ui.text.MultiLineLabel;
 import com.mucommander.util.StringUtils;
 
 import javax.swing.*;
@@ -76,7 +77,7 @@ public class AuthDialog extends FocusDialog implements ActionListener, EditableC
     private CredentialsMapping[] credentialsMappings;
 
     // Dialog size constraints
-    private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(320,0);	
+    private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(320,0);
     private final static Dimension MAXIMUM_DIALOG_DIMENSION = new Dimension(480,10000);
 
 
@@ -89,14 +90,11 @@ public class AuthDialog extends FocusDialog implements ActionListener, EditableC
         YBoxPanel yPanel = new YBoxPanel(5);
 
         if(authFailed) {
-            JPanel flowPanel = new JPanel(new FlowLayout(FlowLayout.LEADING, 0, 0));
-            flowPanel.add(new BoldLabel(Translator.get("auth_dialog.authentication_failed")+(errorMessage!=null?": ":"")));
+            JTextArea label = new MultiLineLabel(Translator.get("auth_dialog.authentication_failed")+(errorMessage==null||(errorMessage=errorMessage.trim()).equals("")?"":": "+errorMessage));
+            FontUtils.makeBold(label);
 
-            if(errorMessage!=null)
-                flowPanel.add(new JLabel(errorMessage));
-
-            yPanel.add(flowPanel);
-            yPanel.addSpace(15);
+            yPanel.add(label);
+            yPanel.addSpace(5);
         }
 
         this.fileURL = fileURL;
@@ -188,7 +186,7 @@ public class AuthDialog extends FocusDialog implements ActionListener, EditableC
         yPanel.add(saveCredentialsCheckBox);
 
         yPanel.addSpace(5);
-        contentPane.add(yPanel, BorderLayout.NORTH);
+        contentPane.add(yPanel, BorderLayout.CENTER);
 
         // If we have some existing credentials for this location...
         if(selectedCredentials!=null) {
@@ -222,7 +220,7 @@ public class AuthDialog extends FocusDialog implements ActionListener, EditableC
 
         // Set the component that will receive the initial focus
         setInitialFocusComponent(guestRadioButton==null?(JComponent)loginField:guestRadioButton.isSelected()?guestRadioButton:(JComponent)loginField);
-		
+
         // Set minimum dimension
         setMinimumSize(MINIMUM_DIALOG_DIMENSION);
 
