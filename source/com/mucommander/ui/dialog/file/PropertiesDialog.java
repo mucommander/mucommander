@@ -38,6 +38,7 @@ import com.mucommander.ui.layout.XAlignedComponentPanel;
 import com.mucommander.ui.layout.YBoxPanel;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.text.FileLabel;
+import com.mucommander.ui.text.MultiLineLabel;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -122,11 +123,11 @@ public class PropertiesDialog extends FocusDialog implements Runnable, ActionLis
         if(OsFamilies.MAC_OS_X.isCurrent() && OsVersions.MAC_OS_X_10_4.isCurrentOrHigher()
         && isSingleFile && singleFile.hasAncestor(LocalFile.class)) {
             String comment = OSXFileUtils.getSpotlightComment(singleFile);
+            JLabel commentLabel = new JLabel(Translator.get("comment")+":");
+            commentLabel.setAlignmentY(JLabel.TOP_ALIGNMENT);
+            commentLabel.setVerticalAlignment(SwingConstants.TOP);
 
-//            JTextArea textArea = new JTextArea(comment);
-//            textArea.setEditable(false);
-//            textArea.setLineWrap(true);
-            labelPanel.addRow("Comment:", new JLabel(comment), 6);
+            labelPanel.addRow(commentLabel, new MultiLineLabel(comment), 6);
         }
 
         updateLabels();
