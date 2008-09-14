@@ -23,8 +23,8 @@ import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.pref.PreferencesDialog;
 import com.mucommander.ui.main.WindowManager;
 
+import javax.swing.*;
 import java.awt.*;
-import javax.swing.JOptionPane;
 
 /**
  * This is the main preferences dialog that contains all preferences panels organized by tabs.

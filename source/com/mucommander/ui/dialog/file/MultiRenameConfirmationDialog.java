@@ -1,11 +1,5 @@
 package com.mucommander.ui.dialog.file;
 
-import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import javax.swing.JButton;
-
 import com.mucommander.file.util.FileSet;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.DialogToolkit;
@@ -13,6 +7,11 @@ import com.mucommander.ui.dialog.FocusDialog;
 import com.mucommander.ui.layout.InformationPane;
 import com.mucommander.ui.layout.YBoxPanel;
 import com.mucommander.ui.main.MainFrame;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class MultiRenameConfirmationDialog extends FocusDialog implements ActionListener {
 

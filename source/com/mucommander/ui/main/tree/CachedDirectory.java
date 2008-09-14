@@ -24,11 +24,9 @@ import com.mucommander.file.impl.ProxyFile;
 import com.mucommander.ui.icon.FileIcons;
 
 import javax.swing.*;
-
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
-import java.util.Iterator;
 
 /**
  * A class that holds cached children of a directory.

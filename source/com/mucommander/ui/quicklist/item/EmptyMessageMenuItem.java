@@ -18,15 +18,10 @@
 
 package com.mucommander.ui.quicklist.item;
 
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-
 import com.mucommander.ui.theme.Theme;
 import com.mucommander.ui.theme.ThemeManager;
+
+import java.awt.*;
 
 /**
  * This class represent an item that will be shown in a FileTablePopup which doesn't

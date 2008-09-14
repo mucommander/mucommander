@@ -18,17 +18,12 @@
 
 package com.mucommander.ui.dialog.file;
 
-import java.util.Date;
-
-import junit.framework.TestCase;
-
 import com.mucommander.file.FileFactory;
 import com.mucommander.file.impl.TestFile;
-import com.mucommander.ui.dialog.file.MultiRenameDialog.CounterToken;
-import com.mucommander.ui.dialog.file.MultiRenameDialog.DateToken;
-import com.mucommander.ui.dialog.file.MultiRenameDialog.ExtToken;
-import com.mucommander.ui.dialog.file.MultiRenameDialog.NameToken;
-import com.mucommander.ui.dialog.file.MultiRenameDialog.ParentDirToken;
+import com.mucommander.ui.dialog.file.MultiRenameDialog.*;
+import junit.framework.TestCase;
+
+import java.util.Date;
 
 /**
  * Multi rename dialog test case.

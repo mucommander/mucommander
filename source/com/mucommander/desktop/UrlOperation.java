@@ -22,8 +22,8 @@ import com.mucommander.file.AbstractFile;
 import com.mucommander.file.impl.http.HTTPFile;
 
 import java.io.IOException;
-import java.net.URL;
 import java.net.MalformedURLException;
+import java.net.URL;
 
 /**
  * {@link DesktopOperation} implementation meant for actions that involve <code>java.net.URL</code>.

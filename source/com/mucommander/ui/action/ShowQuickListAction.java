@@ -1,8 +1,8 @@
 package com.mucommander.ui.action;
 
-import java.util.Hashtable;
-
 import com.mucommander.ui.main.MainFrame;
+
+import java.util.Hashtable;
 
 /**
  * ShowFileTablePopupAction is an abstract action that shows pop up corresponding to the given

@@ -25,7 +25,6 @@ import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.layout.XBoxPanel;
 
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

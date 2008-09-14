@@ -18,14 +18,13 @@
 
 package com.mucommander.ui.main.tree;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.swing.event.EventListenerList;
-
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.filter.FileFilter;
 import com.mucommander.file.util.FileComparator;
+
+import javax.swing.event.EventListenerList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * This class holds cached directories. 

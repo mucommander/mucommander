@@ -18,12 +18,10 @@
 
 package com.mucommander.desktop;
 
-import com.mucommander.file.AbstractFile;
-
+import java.awt.*;
 import java.io.IOException;
-import java.awt.Desktop;
-import java.net.URL;
 import java.net.URISyntaxException;
+import java.net.URL;
 
 /**
  * @author Nicolas Rinaudo

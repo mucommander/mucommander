@@ -18,13 +18,12 @@
 
 package com.mucommander.ui.quicklist;
 
-import java.awt.Component;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-
-import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.main.table.FileTable;
 import com.mucommander.ui.quicklist.item.EmptyMessageMenuItem;
+
+import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 /**
  * FileTablePopupWithEmptyMsg is a FileTablePopup which contains EmptyMessageItem.

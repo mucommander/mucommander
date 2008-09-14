@@ -18,13 +18,13 @@
 
 package com.mucommander.job;
 
-import java.util.List;
-
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.util.FileSet;
 import com.mucommander.ui.dialog.file.FileCollisionDialog;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;
+
+import java.util.List;
 
 /**
  * This job renames a group of files to new names defined by Multi-Rename Dialog.

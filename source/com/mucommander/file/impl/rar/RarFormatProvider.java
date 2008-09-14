@@ -18,14 +18,13 @@
 
 package com.mucommander.file.impl.rar;
 
-import java.io.IOException;
-
 import com.mucommander.file.AbstractArchiveFile;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.ArchiveFormatProvider;
 import com.mucommander.file.filter.ExtensionFilenameFilter;
 import com.mucommander.file.filter.FilenameFilter;
-import com.mucommander.file.impl.tar.TarArchiveFile;
+
+import java.io.IOException;
 
 /**
  * This class is the provider for the 'Rar' archive format implemented by {@link RarArchiveFile}.

@@ -18,19 +18,17 @@
 
 package com.mucommander.ui.quicklist.item;
 
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-
-import javax.swing.JList;
-import javax.swing.SwingUtilities;
-
 import com.mucommander.ui.main.table.FileTable;
 import com.mucommander.ui.quicklist.QuickListFocusableComponent;
 import com.mucommander.ui.quicklist.QuickListWithDataList;
 import com.mucommander.ui.theme.Theme;
 import com.mucommander.ui.theme.ThemeManager;
+
+import javax.swing.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 /**
  * This class represent a data list for FileTablePopupWithDataList.

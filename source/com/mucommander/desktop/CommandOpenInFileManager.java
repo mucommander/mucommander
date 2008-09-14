@@ -18,13 +18,11 @@
 
 package com.mucommander.desktop;
 
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.FileFactory;
-import com.mucommander.command.CommandManager;
 import com.mucommander.command.Command;
+import com.mucommander.command.CommandManager;
+import com.mucommander.file.AbstractFile;
 import com.mucommander.process.ProcessRunner;
 
-import java.io.File;
 import java.io.IOException;
 
 /**

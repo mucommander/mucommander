@@ -21,10 +21,11 @@ package com.mucommander.command;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
-import javax.xml.parsers.SAXParserFactory;
+
 import javax.xml.parsers.ParserConfigurationException;
-import java.io.InputStream;
+import javax.xml.parsers.SAXParserFactory;
 import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * Class used to parse custom associations XML files.

@@ -18,7 +18,7 @@
 
 package com.mucommander.ui.quicklist.item;
 
-import javax.swing.JMenuItem;
+import javax.swing.*;
 
 /**
  * This abstract class represent menu item of FileTablePopup.

@@ -20,10 +20,10 @@ package com.mucommander.ui.main;
 
 import com.mucommander.Debug;
 import com.mucommander.PlatformManager;
-import com.mucommander.desktop.DesktopManager;
 import com.mucommander.conf.ConfigurationEvent;
 import com.mucommander.conf.ConfigurationListener;
 import com.mucommander.conf.impl.MuConfiguration;
+import com.mucommander.desktop.DesktopManager;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
 import com.mucommander.file.util.ResourceLoader;

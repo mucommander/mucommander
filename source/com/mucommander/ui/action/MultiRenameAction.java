@@ -18,11 +18,11 @@
 
 package com.mucommander.ui.action;
 
-import java.util.Hashtable;
-
 import com.mucommander.file.util.FileSet;
 import com.mucommander.ui.dialog.file.MultiRenameDialog;
 import com.mucommander.ui.main.MainFrame;
+
+import java.util.Hashtable;
 
 /**
  * This action invokes the 'Multi-Rename' dialog which allows to 

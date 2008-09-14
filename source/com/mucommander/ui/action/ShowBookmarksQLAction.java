@@ -1,9 +1,9 @@
 package com.mucommander.ui.action;
 
-import java.util.Hashtable;
-
 import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.main.MainFrame;
+
+import java.util.Hashtable;
 
 public class ShowBookmarksQLAction extends ShowQuickListAction {
 	

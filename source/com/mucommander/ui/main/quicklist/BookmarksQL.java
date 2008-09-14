@@ -18,16 +18,15 @@
 
 package com.mucommander.ui.main.quicklist;
 
-import java.util.Arrays;
-import java.util.Vector;
-
-import javax.swing.ImageIcon;
-
 import com.mucommander.bookmark.Bookmark;
 import com.mucommander.bookmark.BookmarkListener;
 import com.mucommander.bookmark.BookmarkManager;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.quicklist.QuickListWithIcons;
+
+import javax.swing.*;
+import java.util.Arrays;
+import java.util.Vector;
 
 /**
  * This quick list shows existing bookmarks.

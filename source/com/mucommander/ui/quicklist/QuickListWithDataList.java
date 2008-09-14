@@ -18,13 +18,11 @@
 
 package com.mucommander.ui.quicklist;
 
-import java.awt.Component;
-import java.util.Collection;
-
-import javax.swing.JScrollPane;
-
 import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.quicklist.item.DataList;
+
+import javax.swing.*;
+import java.awt.*;
 
 /**
  * FileTablePopupWithDataList is a FileTablePopup which contains FileTablePopupDataList.

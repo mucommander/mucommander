@@ -18,17 +18,14 @@
 
 package com.mucommander.ui.quicklist;
 
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Insets;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-
-import javax.swing.JPopupMenu;
-import javax.swing.border.LineBorder;
-
 import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.quicklist.item.HeaderMenuItem;
+
+import javax.swing.*;
+import javax.swing.border.LineBorder;
+import java.awt.*;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 
 /**
  * This abstract class contains some common features to all file table's popups:

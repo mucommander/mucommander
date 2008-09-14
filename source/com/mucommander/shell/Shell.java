@@ -19,11 +19,11 @@
 package com.mucommander.shell;
 
 import com.mucommander.Debug;
-import com.mucommander.desktop.DesktopManager;
 import com.mucommander.command.Command;
 import com.mucommander.conf.ConfigurationEvent;
 import com.mucommander.conf.ConfigurationListener;
 import com.mucommander.conf.impl.MuConfiguration;
+import com.mucommander.desktop.DesktopManager;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.impl.local.LocalFile;
 import com.mucommander.process.AbstractProcess;

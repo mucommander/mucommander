@@ -19,12 +19,9 @@
 package com.mucommander.ui.action;
 
 import com.mucommander.conf.ConfigurationEvent;
-import com.mucommander.conf.impl.MuConfiguration;
-import com.mucommander.file.AbstractFile;
-import com.mucommander.ui.main.MainFrame;
-import com.mucommander.ui.viewer.EditorRegistrar;
 import com.mucommander.conf.ConfigurationListener;
 import com.mucommander.conf.impl.MuConfiguration;
+import com.mucommander.ui.main.MainFrame;
 
 import java.util.Hashtable;
 

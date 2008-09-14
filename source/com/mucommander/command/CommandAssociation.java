@@ -21,8 +21,6 @@ package com.mucommander.command;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.filter.FileFilter;
 
-import java.util.Iterator;
-
 /**
  * Associates a command to a set of file filters.
  * @author Nicolas Rinaudo

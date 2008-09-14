@@ -18,7 +18,6 @@
 
 package com.mucommander.ui.quicklist;
 
-import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.quicklist.item.DataList;
 
 /**

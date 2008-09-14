@@ -18,18 +18,17 @@
 
 package com.mucommander.file.impl.rar;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Iterator;
-import java.util.Vector;
-
+import com.mucommander.file.AbstractFile;
+import com.mucommander.file.AbstractROArchiveFile;
+import com.mucommander.file.ArchiveEntry;
 import rar.ExternalFile;
 import rar.RarEntry;
 import rar.RarFile;
 
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.AbstractROArchiveFile;
-import com.mucommander.file.ArchiveEntry;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Iterator;
+import java.util.Vector;
 
 /**
  * RarArchiveFile provides read-only access to archives in the Rar format.
