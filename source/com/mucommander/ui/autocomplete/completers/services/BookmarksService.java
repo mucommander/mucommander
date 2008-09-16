@@ -33,7 +33,6 @@ import java.util.Vector;
 
 public class BookmarksService implements CompletionService, BookmarkListener {
 	private String[] sortedBookmarkNames;
-	private String[] bookmarkLocations;
 	private String[] sortedBookmarkLocations;
 	
 	public BookmarksService() {
@@ -54,9 +53,16 @@ public class BookmarksService implements CompletionService, BookmarkListener {
 	public String complete(String selectedCompletion) {
 		String result = null;
 		int nbBookmarks = sortedBookmarkNames.length;
-		for (int i = 0; i < nbBookmarks; i++)
-			if (sortedBookmarkNames[i].equalsIgnoreCase(selectedCompletion) || bookmarkLocations[i].equalsIgnoreCase(selectedCompletion)) {
+		int i;
+		for (i = 0; i < nbBookmarks; i++)
+			if (sortedBookmarkNames[i].equalsIgnoreCase(selectedCompletion)) {
 				result = sortedBookmarkNames[i];
+				break;
+			}
+
+		for (i = 0; i < nbBookmarks; i++)
+			if (sortedBookmarkLocations[i].equalsIgnoreCase(selectedCompletion)) {
+				result = sortedBookmarkLocations[i];
 				break;
 			}
 
@@ -89,17 +95,15 @@ public class BookmarksService implements CompletionService, BookmarkListener {
     	String[] result = new String[nbBookmarks];
     	for (int i=0; i<nbBookmarks; i++)
     		result[i] = BookmarkManager.getBookmark(sortedBookmarkNames[i]).getLocation();
+        Arrays.sort(result, String.CASE_INSENSITIVE_ORDER);
     	return result;
     }
     
     protected void fetchBookmarks() {
     	// get bookmarks names.
     	sortedBookmarkNames = getSortedBookmarkNames();
-    	// get corresponding bookmarks locations.
-    	bookmarkLocations = getLocationsOfBookmarks();
-    	// create sorted array of the above bookmarks location.
-    	sortedBookmarkLocations = (String[]) bookmarkLocations.clone();
-        Arrays.sort(sortedBookmarkLocations, String.CASE_INSENSITIVE_ORDER);    	
+    	// get bookmarks locations.
+    	sortedBookmarkLocations = getLocationsOfBookmarks();
     }
     
     // Bookmarks listening:

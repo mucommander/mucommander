@@ -18,12 +18,11 @@
 
 package com.mucommander.ui.autocomplete.completers.services;
 
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.FileFactory;
-import com.mucommander.file.RootFolders;
-
 import java.util.Arrays;
 import java.util.Vector;
+
+import com.mucommander.file.AbstractFile;
+import com.mucommander.file.RootFolders;
 
 /**
  * This <code>CompletionService</code> handles root folders completion.
@@ -32,6 +31,7 @@ import java.util.Vector;
  */
 
 public class RootFoldersService implements CompletionService {
+	private Vector lastReturnedCompletions = new Vector();
 	
 	public RootFoldersService() {}
 
@@ -42,22 +42,29 @@ public class RootFoldersService implements CompletionService {
      * @return a sorted array of root folder names
      */
 	public Vector getPossibleCompletions(String path) {
-		Vector result = new Vector();
+		lastReturnedCompletions.clear();
 		int index = Math.max(path.lastIndexOf('\\'), path.lastIndexOf('/'));
-		if (index == -1) {		
+		if (index == -1) {
 			AbstractFile[] fileRoots = RootFolders.getRootFolders();
 	    	int nbFolders = fileRoots.length;
 	    	String[] rootFolderNames = new String[nbFolders];
 	    	for (int i=0; i<nbFolders; i++)
 	    		rootFolderNames[i] = fileRoots[i].getAbsolutePath();
 	    	Arrays.sort(rootFolderNames, String.CASE_INSENSITIVE_ORDER);
-	    	result = PrefixFilter.createPrefixFilter(path).filter(rootFolderNames);
+	    	lastReturnedCompletions = PrefixFilter.createPrefixFilter(path).filter(rootFolderNames);
 		}
-		return result;
+		return lastReturnedCompletions;
 	}
 
 	public String complete(String selectedCompletion) {
-		AbstractFile file = FileFactory.getFile(selectedCompletion);
-		return file != null && file.exists() && file.isRoot() ? file.getName() : null;
+		String result = null;
+		int nbLastReturnedCompletions = lastReturnedCompletions.size();
+		for (int i=0; i < nbLastReturnedCompletions; i++)
+			if (((String)lastReturnedCompletions.elementAt(i)).equalsIgnoreCase(selectedCompletion)) {
+				result = (String) lastReturnedCompletions.elementAt(i);
+				break;
+			}
+		
+		return result;
 	}
 }
