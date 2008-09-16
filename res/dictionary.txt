@@ -5081,7 +5081,7 @@ com.mucommander.ui.action.ShowRecentLocationsQLAction.label:EN:Recent locations
 
 
 
-com.mucommander.ui.action.ShowRecentExecutedFilesQLAction.label:EN:Recent executed files
+com.mucommander.ui.action.ShowRecentExecutedFilesQLAction.label:EN:Recently executed files
 # Translation missing (New!)
 
 
@@ -5282,6 +5282,14 @@ bookmarks_menu.no_bookmark:HU:Nincsenek Könyvjelzők
 bookmarks_menu.no_bookmark:JA:ブックマークがありません
 bookmarks_menu.no_bookmark:SV:Det finns inga bokmärken
 bookmarks_menu.no_bookmark:DA:Ingen bogmærker
+
+####################
+# Quick-Lists menu #
+####################
+
+# Title of the Quick-Lists menu
+quick_lists_menu:EN:Quick-Lists
+# Translation missing (New!)
 
 
 ###############
@@ -13579,7 +13587,7 @@ recent_locations_quick_list.empty_message:EN:No recent location
 
 
 
-recent_executed_files_quick_list.title:EN:Recent executed files
+recent_executed_files_quick_list.title:EN:Recently executed files
 # Translation missing (New!)
 
 
