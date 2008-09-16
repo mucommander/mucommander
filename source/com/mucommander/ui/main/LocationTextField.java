@@ -77,9 +77,6 @@ public class LocationTextField extends ProgressTextField implements LocationList
         super(0, ThemeManager.getCurrentColor(Theme.LOCATION_BAR_PROGRESS_COLOR));
 
         this.folderPanel = folderPanel;
-        
-        // Set custom border to this text field
-        setBorder(new LocationTextFieldBorder());
 
     	// Applies theme values.
         setFont(ThemeManager.getCurrentFont(Theme.LOCATION_BAR_FONT));
@@ -328,20 +325,5 @@ public class LocationTextField extends ProgressTextField implements LocationList
     public void fontChanged(FontChangedEvent event) {
         if(event.getFontId() == Theme.LOCATION_BAR_FONT)
             setFont(event.getFont());
-    }
-    
-    public static final class LocationTextFieldBorder extends BevelBorder {
-    	
-    	public LocationTextFieldBorder() {
-    		super(BevelBorder.LOWERED);		
-    	}
-    	
-    	public Insets getBorderInsets(Component c) {
-    		return new Insets(3,3,3,3);
-    	}
-    	
-    	public Insets getBorderInsets(Component c, Insets i) {
-    		return new Insets(3,3,3,3);
-    	}
     }
 }
