@@ -169,10 +169,6 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
         // Add some space between drive button and location combo box (none by default)
         c.insets = new Insets(0, 4, 0, 0);
         locationPanel.add(locationTextField, c);
-        
-        c.weightx = 0;
-        c.gridx = 2;
-        locationPanel.add(new QuickListsPopupButton(this), c);
 
         add(locationPanel, BorderLayout.NORTH);
 

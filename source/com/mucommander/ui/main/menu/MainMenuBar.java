@@ -278,6 +278,16 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
         this.bookmarksOffset = bookmarksMenu.getItemCount();
 
         add(bookmarksMenu);
+        
+        // Quick lists menu.
+        menuItemMnemonicHelper.clear();        
+        JMenu quickListMenu = MenuToolkit.addMenu(Translator.get("quick_list_menu"), menuMnemonicHelper, this);
+        MenuToolkit.addMenuItem(quickListMenu, ActionManager.getActionInstance(ShowParentFoldersQLAction.class, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(quickListMenu, ActionManager.getActionInstance(ShowRecentLocationsQLAction.class, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(quickListMenu, ActionManager.getActionInstance(ShowRecentExecutedFilesQLAction.class, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(quickListMenu, ActionManager.getActionInstance(ShowBookmarksQLAction.class, mainFrame), menuItemMnemonicHelper);
+
+        add(quickListMenu);
 
         // Window menu
         menuItemMnemonicHelper.clear();
