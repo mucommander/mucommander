@@ -281,7 +281,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
         
         // Quick lists menu.
         menuItemMnemonicHelper.clear();        
-        JMenu quickListMenu = MenuToolkit.addMenu(Translator.get("quick_list_menu"), menuMnemonicHelper, this);
+        JMenu quickListMenu = MenuToolkit.addMenu(Translator.get("quick_lists_menu"), menuMnemonicHelper, this);
         MenuToolkit.addMenuItem(quickListMenu, ActionManager.getActionInstance(ShowParentFoldersQLAction.class, mainFrame), menuItemMnemonicHelper);
         MenuToolkit.addMenuItem(quickListMenu, ActionManager.getActionInstance(ShowRecentLocationsQLAction.class, mainFrame), menuItemMnemonicHelper);
         MenuToolkit.addMenuItem(quickListMenu, ActionManager.getActionInstance(ShowRecentExecutedFilesQLAction.class, mainFrame), menuItemMnemonicHelper);

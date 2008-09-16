@@ -26,6 +26,7 @@ import com.mucommander.job.TempExecJob;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;
+import com.mucommander.ui.main.quicklist.RecentExecutedFilesQL;
 
 import java.io.IOException;
 import java.util.Hashtable;
@@ -56,7 +57,10 @@ public class OpenNativelyAction extends MuAction {
         }
         else {
             // Tries to execute file with native file associations
-            try {DesktopManager.open(selectedFile);}
+            try {
+            	DesktopManager.open(selectedFile);
+            	RecentExecutedFilesQL.addFile(selectedFile.toString());
+        	}
             catch(IOException e) {reportGenericError();}
         }
     }
