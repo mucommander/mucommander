@@ -247,7 +247,11 @@ public class CommandBar extends JPanel implements ConfigurationListener, KeyList
         button.setAction(action);
 
         // Append the action's shortcut to the button's label
-        button.setText(action.getLabel()+" ["+action.getAcceleratorText()+"]");
+        String label;
+        label = action.getLabel();
+        if(action.getAcceleratorText() != null)
+            label += " [" + action.getAcceleratorText() + ']';
+        button.setText(label);
 
         // Scale icon if scale factor is different from 1.0
         if(scaleFactor!=1.0f)
