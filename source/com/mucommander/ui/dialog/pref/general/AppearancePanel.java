@@ -192,7 +192,6 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
     private void populateLookAndFeels() {
         int    currentIndex;
         String currentName;
-        String buffer;
 
         // Resets the content of the combo box and retrieves all available look&feels.
         lookAndFeelComboBox.removeAllItems();
@@ -200,21 +199,13 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
 
         // Populates the combo box.
         currentIndex = -1;
-        currentName  = UIManager.getLookAndFeel().getName();
+        currentName  = UIManager.getLookAndFeel().getClass().getName();
         for(int i = 0; i < lookAndFeels.length; i++) {
-            buffer = lookAndFeels[i].getName();
-			
-            // Tries to select current L&F
-            if(currentName.equals(buffer))
+            // Looks for the currently selected look&feel.
+            if(lookAndFeels[i].getClassName().equals(currentName))
                 currentIndex = i;
 
-            // Under Mac OS X, Mac L&F is either reported as 'MacOS' or 'MacOS Adaptative'
-            // so we need this test
-            else if(currentIndex == -1
-                    && (currentName.startsWith(buffer) || buffer.startsWith(currentName)))
-                currentIndex = i;
-
-            lookAndFeelComboBox.addItem(buffer);
+            lookAndFeelComboBox.addItem(lookAndFeels[i].getName());
         }
 
         // Sets the initial selection.
