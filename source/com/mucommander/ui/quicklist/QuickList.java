@@ -51,14 +51,14 @@ public abstract class QuickList extends JPopupMenu implements FocusListener {
 	
 	public void show(FolderPanel folderPanel) {
 		this.folderPanel = folderPanel;
-		int y = folderPanel.getLocationTextField().getHeight();
-		// the show function is called twice because I couln't find any other way to
-		// make the popup return it's real dimensions - only after calling show method
-		// the getWidth and getHeight return real values.
-		show(folderPanel, folderPanel.getWidth() / 2, y);
-		int x = (x  = ((folderPanel.getWidth() - getWidth()) / 2)) < 0 ? 0 : x;
-		y += (y = (folderPanel.getHeight() - getHeight()) / 3) < 0 ? 0 : y;
-		show(folderPanel, x, y);
+
+        // Note: the actual popup menu's size is not known at this stage so we use the component's preferred size  
+        Dimension dim = getPreferredSize();
+
+        int x = Math.max((folderPanel.getWidth() - (int)dim.getWidth()) / 2, 0);
+        int y = folderPanel.getLocationTextField().getHeight() + Math.max((folderPanel.getHeight() - (int)dim.getHeight()) / 3, 0);
+
+        show(folderPanel, x, y);
 	}
 	
 	public FolderPanel getPanel() {
