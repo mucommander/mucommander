@@ -5284,11 +5284,12 @@ bookmarks_menu.no_bookmark:SV:Det finns inga bokmärken
 bookmarks_menu.no_bookmark:DA:Ingen bogmærker
 
 ####################
-# Quick-Lists menu #
+# Quick lists menu #
 ####################
 
-# Title of the Quick-Lists menu
-quick_lists_menu:EN:Quick-Lists
+# Title of the Quick lists menu
+quick_lists_menu:EN:Quick lists
+quick_lists_menu:FR:Listes éclair 
 # Translation missing (New!)
 
 

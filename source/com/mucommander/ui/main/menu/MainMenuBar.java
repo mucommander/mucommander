@@ -124,6 +124,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
         MnemonicHelper menuMnemonicHelper = OsFamilies.MAC_OS_X.isCurrent()?null:new MnemonicHelper();
 
         MnemonicHelper menuItemMnemonicHelper = new MnemonicHelper();
+        MnemonicHelper menuItemMnemonicHelper2 = new MnemonicHelper();
 
         // File menu
         JMenu fileMenu = MenuToolkit.addMenu(Translator.get("file_menu"), menuMnemonicHelper, this);
@@ -210,12 +211,13 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
 
         viewMenu.add(new JSeparator());
         columnsMenu = MenuToolkit.addMenu(Translator.get("view_menu.show_hide_columns"), null, this);
-        toggleColumnItems[Columns.EXTENSION] = MenuToolkit.addCheckBoxMenuItem(columnsMenu, ActionManager.getActionInstance(ToggleExtensionColumnAction.class, mainFrame), null);
-        toggleColumnItems[Columns.SIZE] = MenuToolkit.addCheckBoxMenuItem(columnsMenu, ActionManager.getActionInstance(ToggleSizeColumnAction.class, mainFrame), null);
-        toggleColumnItems[Columns.DATE] = MenuToolkit.addCheckBoxMenuItem(columnsMenu, ActionManager.getActionInstance(ToggleDateColumnAction.class, mainFrame), null);
-        toggleColumnItems[Columns.PERMISSIONS] = MenuToolkit.addCheckBoxMenuItem(columnsMenu, ActionManager.getActionInstance(TogglePermissionsColumnAction.class, mainFrame), null);
-        toggleColumnItems[Columns.OWNER] = MenuToolkit.addCheckBoxMenuItem(columnsMenu, ActionManager.getActionInstance(ToggleOwnerColumnAction.class, mainFrame), null);
-        toggleColumnItems[Columns.GROUP] = MenuToolkit.addCheckBoxMenuItem(columnsMenu, ActionManager.getActionInstance(ToggleGroupColumnAction.class, mainFrame), null);
+        menuItemMnemonicHelper2.clear();
+        toggleColumnItems[Columns.EXTENSION] = MenuToolkit.addCheckBoxMenuItem(columnsMenu, ActionManager.getActionInstance(ToggleExtensionColumnAction.class, mainFrame), menuItemMnemonicHelper2);
+        toggleColumnItems[Columns.SIZE] = MenuToolkit.addCheckBoxMenuItem(columnsMenu, ActionManager.getActionInstance(ToggleSizeColumnAction.class, mainFrame), menuItemMnemonicHelper2);
+        toggleColumnItems[Columns.DATE] = MenuToolkit.addCheckBoxMenuItem(columnsMenu, ActionManager.getActionInstance(ToggleDateColumnAction.class, mainFrame), menuItemMnemonicHelper2);
+        toggleColumnItems[Columns.PERMISSIONS] = MenuToolkit.addCheckBoxMenuItem(columnsMenu, ActionManager.getActionInstance(TogglePermissionsColumnAction.class, mainFrame), menuItemMnemonicHelper2);
+        toggleColumnItems[Columns.OWNER] = MenuToolkit.addCheckBoxMenuItem(columnsMenu, ActionManager.getActionInstance(ToggleOwnerColumnAction.class, mainFrame), menuItemMnemonicHelper2);
+        toggleColumnItems[Columns.GROUP] = MenuToolkit.addCheckBoxMenuItem(columnsMenu, ActionManager.getActionInstance(ToggleGroupColumnAction.class, mainFrame), menuItemMnemonicHelper2);
         viewMenu.add(columnsMenu);
         MenuToolkit.addCheckBoxMenuItem(viewMenu, ActionManager.getActionInstance(ToggleAutoSizeAction.class, mainFrame), menuItemMnemonicHelper).setSelected(mainFrame.isAutoSizeColumnsEnabled());
 
@@ -244,6 +246,16 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
         MenuToolkit.addMenuItem(goMenu, ActionManager.getActionInstance(ChangeLocationAction.class, mainFrame), menuItemMnemonicHelper);
         MenuToolkit.addMenuItem(goMenu, ActionManager.getActionInstance(ConnectToServerAction.class, mainFrame), menuItemMnemonicHelper);
         MenuToolkit.addMenuItem(goMenu, ActionManager.getActionInstance(ShowServerConnectionsAction.class, mainFrame), menuItemMnemonicHelper);
+
+        // Quick lists
+        goMenu.add(new JSeparator());
+        JMenu quickListMenu = MenuToolkit.addMenu(Translator.get("quick_lists_menu"), menuMnemonicHelper, this);
+        menuItemMnemonicHelper2.clear();
+        MenuToolkit.addMenuItem(quickListMenu, ActionManager.getActionInstance(ShowParentFoldersQLAction.class, mainFrame), menuItemMnemonicHelper2);
+        MenuToolkit.addMenuItem(quickListMenu, ActionManager.getActionInstance(ShowRecentLocationsQLAction.class, mainFrame), menuItemMnemonicHelper2);
+        MenuToolkit.addMenuItem(quickListMenu, ActionManager.getActionInstance(ShowRecentExecutedFilesQLAction.class, mainFrame), menuItemMnemonicHelper2);
+        MenuToolkit.addMenuItem(quickListMenu, ActionManager.getActionInstance(ShowBookmarksQLAction.class, mainFrame), menuItemMnemonicHelper2);
+        goMenu.add(quickListMenu);
 
         // Add Bonjour services menu
         goMenu.add(new JSeparator());
@@ -279,16 +291,6 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
 
         add(bookmarksMenu);
         
-        // Quick lists menu.
-        menuItemMnemonicHelper.clear();        
-        JMenu quickListMenu = MenuToolkit.addMenu(Translator.get("quick_lists_menu"), menuMnemonicHelper, this);
-        MenuToolkit.addMenuItem(quickListMenu, ActionManager.getActionInstance(ShowParentFoldersQLAction.class, mainFrame), menuItemMnemonicHelper);
-        MenuToolkit.addMenuItem(quickListMenu, ActionManager.getActionInstance(ShowRecentLocationsQLAction.class, mainFrame), menuItemMnemonicHelper);
-        MenuToolkit.addMenuItem(quickListMenu, ActionManager.getActionInstance(ShowRecentExecutedFilesQLAction.class, mainFrame), menuItemMnemonicHelper);
-        MenuToolkit.addMenuItem(quickListMenu, ActionManager.getActionInstance(ShowBookmarksQLAction.class, mainFrame), menuItemMnemonicHelper);
-
-        add(quickListMenu);
-
         // Window menu
         menuItemMnemonicHelper.clear();
 
