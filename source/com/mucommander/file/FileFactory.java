@@ -166,7 +166,7 @@ public class FileFactory {
      */
     public static void setFileCacheCapacity(int capacity) {
         if(fileCache==null || fileCache.getCapacity()!=capacity)   // Don't create a new instance if the capacity is the same
-            fileCache = LRUCache.createInstance(DEFAULT_FILE_CACHE_CAPACITY);
+            fileCache = LRUCache.createInstance(capacity);
     }
 
     /**
