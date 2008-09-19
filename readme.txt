@@ -138,7 +138,7 @@ Improvements:
 - Improved HTML parsing for HTTP documents, XHTML can now be parsed.
 - New actions for cycling through the folder pane's components, mapped onto
   Control+Tab (forward) and Shift+Control+Tab (backward) by default.
-- JNA library upgraded to version 3.0.3.
+- JNA library upgraded to version 3.0.6.
 - jCIFS library upgraded to version 1.2.19.
 - The Properties dialog now sports a large file icon.
 - Mac OS X 10.4 and up: the Properties dialog now displays
@@ -162,6 +162,7 @@ Bug fixes:
 - New 'Show splash screen' preference added to the 'Misc' preferences, 
   replacing existing command line options (bug #66). Contributed by Joshua Lebo.
 - Fixed a deadlock happening under Ubuntu (bug #67).
+- Fixed a crash occurring on 64-bit versions of Windows (bug #57).
 
 Known issues:
 - Korean, Simplified Chinese, Slovenian and Slovak translations are not 

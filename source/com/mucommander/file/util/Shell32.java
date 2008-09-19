@@ -39,7 +39,6 @@ public class Shell32 {
         }
         catch(Throwable e) {
             // java.lang.UnsatisfiedLinkError is thrown if the CPU architecture is not supported.
-            // At the time of writing, that is the case for the AMD-64 architecture under Vista 64bit.
             INSTANCE = null;
         }
     }

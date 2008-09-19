@@ -11,7 +11,7 @@ include/jakarta-oro.jar	     -> Jakarta Oro 2.0.8
 include/jcifs.jar	         -> jCIFS 1.2.19 (patched and compiled for Java 1.4)
 include/jmdns.jar            -> jmdns 1.0 (with some sourceforge.net patches,
                                 compiled for Java 1.4)
-include/jna.jar              -> JNA (Java Native Access) 3.0.3, with some win32
+include/jna.jar              -> JNA (Java Native Access) 3.0.6, with some win32
                                 example classes.
 include/yanfs.jar            -> Yanfs (formerly WebNFS), version unknown but
                                 probably the same as WebNFS 1.2
