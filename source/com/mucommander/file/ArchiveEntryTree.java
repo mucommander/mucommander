@@ -18,7 +18,7 @@
 
 package com.mucommander.file;
 
-import com.mucommander.file.util.FileToolkit;
+import com.mucommander.file.util.PathUtils;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 
@@ -54,7 +54,7 @@ public class ArchiveEntryTree extends DefaultMutableTreeNode {
                 break;
             }
 
-            String subPath = FileToolkit.removeTrailingSeparator(d==entryDepth?entryPath:entryPath.substring(0, (slashPos=entryPath.indexOf('/', slashPos)+1)), "/");
+            String subPath = PathUtils.removeTrailingSeparator(d==entryDepth?entryPath:entryPath.substring(0, (slashPos=entryPath.indexOf('/', slashPos)+1)), "/");
 
             int nbChildren = node.getChildCount();
             DefaultMutableTreeNode childNode = null;
@@ -62,7 +62,7 @@ public class ArchiveEntryTree extends DefaultMutableTreeNode {
             for(int c=0; c<nbChildren; c++) {
                 childNode = (DefaultMutableTreeNode)node.getChildAt(c);
                 // Path comparison is 'trailing slash insensitive'
-                if(FileToolkit.removeTrailingSeparator(((ArchiveEntry)childNode.getUserObject()).getPath(), "/").equals(subPath)) {
+                if(PathUtils.removeTrailingSeparator(((ArchiveEntry)childNode.getUserObject()).getPath(), "/").equals(subPath)) {
                     // Found a match
                     matchFound = true;
                     break;
@@ -112,7 +112,7 @@ public class ArchiveEntryTree extends DefaultMutableTreeNode {
         DefaultMutableTreeNode currentNode = this;
         for(int d=0; d<=entryDepth; d++) {
             // Remove any trailing slash to compare paths without trailing slashs
-             String subPath = FileToolkit.removeTrailingSeparator(d==entryDepth?entryPath:entryPath.substring(0, (slashPos=entryPath.indexOf('/', slashPos)+1)), "/");
+             String subPath = PathUtils.removeTrailingSeparator(d==entryDepth?entryPath:entryPath.substring(0, (slashPos=entryPath.indexOf('/', slashPos)+1)), "/");
 
             int nbChildren = currentNode.getChildCount();
             DefaultMutableTreeNode matchNode = null;
@@ -120,7 +120,7 @@ public class ArchiveEntryTree extends DefaultMutableTreeNode {
                 DefaultMutableTreeNode childNode = (DefaultMutableTreeNode)currentNode.getChildAt(c);
 
                 // Remove any trailing slash to compare paths without trailing slashs
-                String childNodePath = FileToolkit.removeTrailingSeparator(((ArchiveEntry)childNode.getUserObject()).getPath(), "/");
+                String childNodePath = PathUtils.removeTrailingSeparator(((ArchiveEntry)childNode.getUserObject()).getPath(), "/");
 
                 if(childNodePath.equals(subPath)) {
                     // Found the node, let's return it

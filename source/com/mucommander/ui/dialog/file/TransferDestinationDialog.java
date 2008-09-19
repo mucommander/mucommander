@@ -21,7 +21,7 @@ package com.mucommander.ui.dialog.file;
 
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.util.FileSet;
-import com.mucommander.file.util.FileToolkit;
+import com.mucommander.file.util.PathUtils;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.DialogToolkit;
 import com.mucommander.ui.layout.YBoxPanel;
@@ -168,7 +168,7 @@ public abstract class TransferDestinationDialog extends JobDialog implements Act
 
         // Resolves destination folder
         // TODO: move those I/O bound calls to job as they can lock the main thread
-        Object ret[] = FileToolkit.resolvePath(destPath, mainFrame.getActiveTable().getCurrentFolder());
+        Object ret[] = PathUtils.resolvePath(destPath, mainFrame.getActiveTable().getCurrentFolder());
         // The path entered doesn't correspond to any existing folder
         if (ret==null || (files.size()>1 && ret[1]!=null)) {
             showErrorDialog(Translator.get("this_folder_does_not_exist", destPath), errorDialogTitle);

@@ -18,12 +18,6 @@
 
 package com.mucommander.ui.main;
 
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.awt.event.KeyEvent;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import com.mucommander.bookmark.Bookmark;
 import com.mucommander.bookmark.BookmarkManager;
 import com.mucommander.file.AbstractFile;
@@ -31,7 +25,7 @@ import com.mucommander.file.FileProtocols;
 import com.mucommander.file.FileURL;
 import com.mucommander.file.RootFolders;
 import com.mucommander.file.impl.local.LocalFile;
-import com.mucommander.file.util.FileToolkit;
+import com.mucommander.file.util.PathUtils;
 import com.mucommander.runtime.OsFamilies;
 import com.mucommander.ui.autocomplete.AutocompleterTextComponent;
 import com.mucommander.ui.autocomplete.CompleterFactory;
@@ -39,11 +33,13 @@ import com.mucommander.ui.autocomplete.TextFieldCompletion;
 import com.mucommander.ui.event.LocationEvent;
 import com.mucommander.ui.event.LocationListener;
 import com.mucommander.ui.progress.ProgressTextField;
-import com.mucommander.ui.theme.ColorChangedEvent;
-import com.mucommander.ui.theme.FontChangedEvent;
-import com.mucommander.ui.theme.Theme;
-import com.mucommander.ui.theme.ThemeListener;
-import com.mucommander.ui.theme.ThemeManager;
+import com.mucommander.ui.theme.*;
+
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.KeyEvent;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * 
@@ -167,7 +163,7 @@ public class LocationTextField extends ProgressTextField implements LocationList
                 locationText = folderURL.getPath();
                 // Under for OSes with 'root drives' (Windows, OS/2), remove the leading '/' character
                 if(LocalFile.hasRootDrives())
-                    locationText = FileToolkit.removeLeadingSeparator(locationText, "/");
+                    locationText = PathUtils.removeLeadingSeparator(locationText, "/");
             }
             // Display the full URL for protocols other than 'file'
             else {

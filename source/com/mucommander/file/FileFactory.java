@@ -25,8 +25,8 @@ import com.mucommander.cache.LRUCache;
 import com.mucommander.file.icon.FileIconProvider;
 import com.mucommander.file.icon.impl.SwingFileIconProvider;
 import com.mucommander.file.impl.local.LocalFile;
-import com.mucommander.file.util.FileToolkit;
 import com.mucommander.file.util.PathTokenizer;
+import com.mucommander.file.util.PathUtils;
 import com.mucommander.runtime.OsFamilies;
 import com.mucommander.util.Enumerator;
 
@@ -426,7 +426,7 @@ public class FileFactory {
         String filePath = fileURL.getPath();
         // For local paths under Windows (e.g. "/C:\temp"), remove the leading '/' character
         if(OsFamilies.WINDOWS.isCurrent() && FileProtocols.FILE.equals(fileURL.getScheme()))
-            filePath = FileToolkit.removeLeadingSeparator(filePath, "/");
+            filePath = PathUtils.removeLeadingSeparator(filePath, "/");
 
         PathTokenizer pt = new PathTokenizer(filePath,
                 fileURL.getPathSeparator(),
@@ -444,7 +444,7 @@ public class FileFactory {
             if(isArchiveFilename(pt.nextFilename())) {
                 // Remove trailing separator of file, some file protocols such as SFTP don't like trailing separators.
                 // On the contrary, directories without a trailing slash are fine.
-                String currentPath = FileToolkit.removeTrailingSeparator(pt.getCurrentPath());
+                String currentPath = PathUtils.removeTrailingSeparator(pt.getCurrentPath());
 
                 // Test if current file is an archive file and if it is, create an archive entry file instead of a raw
                 // protocol file
@@ -458,7 +458,7 @@ public class FileFactory {
                 }
                 else {          // currentFile is an AbstractArchiveFile
                     // Note: wrapArchive() is already called by AbstractArchiveFile#createArchiveEntryFile()
-                    AbstractFile tempEntryFile = ((AbstractArchiveFile)currentFile).getArchiveEntryFile(FileToolkit.removeLeadingSeparator(currentPath.substring(currentFile.getURL().getPath().length(), currentPath.length())));
+                    AbstractFile tempEntryFile = ((AbstractArchiveFile)currentFile).getArchiveEntryFile(PathUtils.removeLeadingSeparator(currentPath.substring(currentFile.getURL().getPath().length(), currentPath.length())));
                     if(tempEntryFile instanceof AbstractArchiveFile) {
                         currentFile = tempEntryFile;
                         lastFileResolved = true;
@@ -484,7 +484,7 @@ public class FileFactory {
                 currentFile = createRawFile(clonedURL);
             }
             else {          // currentFile is an AbstractArchiveFile
-                currentFile = ((AbstractArchiveFile)currentFile).getArchiveEntryFile(FileToolkit.removeLeadingSeparator(currentPath.substring(currentFile.getURL().getPath().length(), currentPath.length())));
+                currentFile = ((AbstractArchiveFile)currentFile).getArchiveEntryFile(PathUtils.removeLeadingSeparator(currentPath.substring(currentFile.getURL().getPath().length(), currentPath.length())));
             }
         }
 

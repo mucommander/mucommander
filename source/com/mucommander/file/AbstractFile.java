@@ -23,7 +23,7 @@ import com.mucommander.file.filter.FileFilter;
 import com.mucommander.file.filter.FilenameFilter;
 import com.mucommander.file.impl.ProxyFile;
 import com.mucommander.file.impl.local.LocalFile;
-import com.mucommander.file.util.FileToolkit;
+import com.mucommander.file.util.PathUtils;
 import com.mucommander.io.*;
 import com.mucommander.process.AbstractProcess;
 import com.mucommander.runtime.OsFamilies;
@@ -181,7 +181,7 @@ public abstract class AbstractFile implements PermissionTypes, PermissionAccesse
             String path = fileURL.getPath();
             // Under for OSes with 'root drives' (Windows, OS/2), remove the leading '/' character
             if(LocalFile.hasRootDrives())
-                path = FileToolkit.removeLeadingSeparator(path, "/");
+                path = PathUtils.removeLeadingSeparator(path, "/");
 
             return path;
         }

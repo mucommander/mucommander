@@ -21,7 +21,7 @@ package com.mucommander.ui.dialog.file;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
 import com.mucommander.file.util.FileSet;
-import com.mucommander.file.util.FileToolkit;
+import com.mucommander.file.util.PathUtils;
 import com.mucommander.io.security.MuProvider;
 import com.mucommander.job.CalculateChecksumJob;
 import com.mucommander.text.Translator;
@@ -241,7 +241,7 @@ public class CalculateChecksumDialog extends JobDialog implements ActionListener
                     // User-defined checksum file
                     String enteredPath = specificLocationTextField.getText();
 
-                    Object ret[] = FileToolkit.resolvePath(enteredPath, mainFrame.getActiveTable().getCurrentFolder());
+                    Object ret[] = PathUtils.resolvePath(enteredPath, mainFrame.getActiveTable().getCurrentFolder());
                     // The path entered doesn't correspond to any existing folder
                     if (ret==null) {
                         showErrorDialog(Translator.get("invalid_path", enteredPath));
