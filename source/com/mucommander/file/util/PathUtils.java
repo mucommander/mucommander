@@ -34,7 +34,7 @@ public class PathUtils {
      * to an AbstractFile (folder). The folder returned will always exist.
      * If the given path doesn't correspond to any existing folder, a null value will be returned.
      */
-    public static Object[] resolvePath(String destPath, AbstractFile currentFolder) {
+    public static Object[] resolveDestination(String destPath, AbstractFile currentFolder) {
         // Current path, including trailing separator
         String currentPath = currentFolder.getAbsolutePath(true);
         AbstractFile destFolder;
