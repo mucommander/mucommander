@@ -168,7 +168,7 @@ public abstract class TransferDestinationDialog extends JobDialog implements Act
 
         // Resolves destination folder
         // TODO: move those I/O bound calls to job as they can lock the main thread
-        Object ret[] = PathUtils.resolvePath(destPath, mainFrame.getActiveTable().getCurrentFolder());
+        Object ret[] = PathUtils.resolveDestination(destPath, mainFrame.getActiveTable().getCurrentFolder());
         // The path entered doesn't correspond to any existing folder
         if (ret==null || (files.size()>1 && ret[1]!=null)) {
             showErrorDialog(Translator.get("this_folder_does_not_exist", destPath), errorDialogTitle);

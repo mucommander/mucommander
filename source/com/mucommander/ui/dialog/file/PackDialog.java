@@ -185,7 +185,7 @@ public class PackDialog extends JobDialog implements ActionListener, ItemListene
             // Check that destination file can be resolved 
             String filePath = filePathField.getText();
             // TODO: move those I/O bound calls to job as they can lock the main thread
-            Object dest[] = PathUtils.resolvePath(filePath, mainFrame.getActiveTable().getCurrentFolder());
+            Object dest[] = PathUtils.resolveDestination(filePath, mainFrame.getActiveTable().getCurrentFolder());
             if (dest==null || dest[1]==null) {
                 // Incorrect destination
                 QuestionDialog dialog = new QuestionDialog(mainFrame, Translator.get("pack_dialog.error_title"), Translator.get("this_folder_does_not_exist", filePath), mainFrame,
