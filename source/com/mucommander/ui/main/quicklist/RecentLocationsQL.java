@@ -20,6 +20,8 @@ package com.mucommander.ui.main.quicklist;
 
 import java.util.LinkedList;
 
+import javax.swing.ImageIcon;
+
 import com.mucommander.text.Translator;
 import com.mucommander.ui.event.LocationEvent;
 import com.mucommander.ui.event.LocationListener;
@@ -65,5 +67,9 @@ public class RecentLocationsQL extends QuickListWithIcons implements LocationLis
 			list.removeLast();
 		
 		return list.toArray();
+	}
+
+	protected ImageIcon itemToIcon(String value) {
+		return getImageIconOfFile(value);
 	}
 }

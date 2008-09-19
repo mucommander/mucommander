@@ -21,6 +21,7 @@ package com.mucommander.ui.quicklist;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Image;
+import java.util.HashMap;
 
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.ImageIcon;
@@ -30,7 +31,7 @@ import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
 import com.mucommander.ui.icon.FileIcons;
 import com.mucommander.ui.icon.IconManager;
-import com.mucommander.ui.main.FolderPanel;
+import com.mucommander.ui.main.StatusBar;
 import com.mucommander.ui.quicklist.item.DataList;
 
 /**
@@ -41,7 +42,13 @@ import com.mucommander.ui.quicklist.item.DataList;
  */
 
 public abstract class QuickListWithIcons extends QuickListWithDataList {
-
+	// This HashMap's keys are items and its objects are the corresponding icon.
+	private HashMap itemToIconCacheMap = new HashMap();
+	// Maximum number of cached items.
+	private int MAX_ITEMS_NUM = 100;
+	// This icon will appear until the real item's icon is fetched.
+	static final ImageIcon waitingIcon = IconManager.getIcon(IconManager.STATUS_BAR_ICON_SET, StatusBar.WAITING_ICON);
+	
 	public QuickListWithIcons(String header, String emptyPopupHeader) {
 		super(header, emptyPopupHeader);
 	}
@@ -49,19 +56,49 @@ public abstract class QuickListWithIcons extends QuickListWithDataList {
 	protected DataList getList() { return new GenericPopupDataListWithIcons(); }
 	
 	/**
-	 * This function gets an item from the data list and return a corresponding icon.
-	 * This is the default implementation - if the given string is a valid path to existing
-	 * file, then the file's icon is returned. else, null is returned.
-	 * This function can be override to provide different implementation.
+	 * This function gets an item from the data list and return its icon.
 	 *  
 	 * @param value - an item from the data list.
 	 * @return icon.
 	 */
-	protected ImageIcon getImageIcon(String value) {
-		AbstractFile file = FileFactory.getFile(value);
-		if (file != null)
-			return IconManager.getImageIcon(FileIcons.getFileIcon(file));
-		return null;
+	protected abstract ImageIcon itemToIcon(String value);
+	
+	/**
+	 * This function gets a path, resolves the file it points to, and return the file's icon.
+	 * 
+	 * @param filepath - path.
+	 * @return icon.
+	 */
+	protected ImageIcon getImageIconOfFile(String filepath) {
+		AbstractFile file = FileFactory.getFile(filepath);
+		return IconManager.getImageIcon(FileIcons.getFileIcon(file));
+	}
+	
+	private ImageIcon getImageIconOfItem(final String item) {		
+		boolean found;
+		synchronized(itemToIconCacheMap) {
+			if (!(found = itemToIconCacheMap.containsKey(item)))
+				itemToIconCacheMap.put(item, waitingIcon);			
+		}
+		
+		if (!found)
+			new Thread() {
+				public void run() {
+					ImageIcon icon = itemToIcon(item);
+					synchronized(itemToIconCacheMap) {
+						if (itemToIconCacheMap.size() > MAX_ITEMS_NUM)
+							itemToIconCacheMap.clear();
+						itemToIconCacheMap.put(item, icon);
+					}
+					repaint();
+				}
+			}.start();
+		
+		ImageIcon result;
+		synchronized(itemToIconCacheMap) {
+			result = (ImageIcon) itemToIconCacheMap.get(item);			
+		}
+		return result;
 	}
 	
 	private class GenericPopupDataListWithIcons extends DataList {		
@@ -75,21 +112,22 @@ public abstract class QuickListWithIcons extends QuickListWithDataList {
 				// Let superclass deal with most of it...
 				super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
 
-				String val = (String) (getModel().getElementAt(index));
-				
-				final ImageIcon imageIcon = getImageIcon(val);
-				if (imageIcon != null) {
-					Image image = imageIcon.getImage();
-					final Dimension dimension = this.getPreferredSize();
-					final double height = dimension.getHeight();
-					final double width = (height / imageIcon.getIconHeight()) * imageIcon.getIconWidth();
-					image = image.getScaledInstance((int)width, (int)height, Image.SCALE_SMOOTH);
-					final ImageIcon finalIcon = new ImageIcon(image);
-					setIcon(finalIcon);
-				}
+				// Add its icon
+				String item = (String) (getModel().getElementAt(index));				
+				ImageIcon imageIcon = getImageIconOfItem(item);
+				setIcon(resizeIcon(imageIcon));
 
 				return this;
 			}
-		}	
+			
+			private ImageIcon resizeIcon(ImageIcon icon) {
+				Image image = icon.getImage();
+				final Dimension dimension = this.getPreferredSize();
+				final double height = dimension.getHeight();
+				final double width = (height / icon.getIconHeight()) * icon.getIconWidth();
+				image = image.getScaledInstance((int)width, (int)height, Image.SCALE_SMOOTH);
+				return new ImageIcon(image);
+			}
+		}
 	}
 }

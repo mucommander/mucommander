@@ -21,6 +21,8 @@ package com.mucommander.ui.main.quicklist;
 import java.io.IOException;
 import java.util.LinkedList;
 
+import javax.swing.ImageIcon;
+
 import com.mucommander.desktop.DesktopManager;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
@@ -72,5 +74,9 @@ public class RecentExecutedFilesQL extends QuickListWithIcons {
 
 	protected Object[] getData() {
 		return list.toArray();
+	}
+
+	protected ImageIcon itemToIcon(String value) {
+		return getImageIconOfFile(value);
 	}
 }

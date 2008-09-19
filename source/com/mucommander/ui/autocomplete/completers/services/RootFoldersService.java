@@ -31,7 +31,7 @@ import com.mucommander.file.RootFolders;
  */
 
 public class RootFoldersService implements CompletionService {
-	private Vector lastReturnedCompletions = new Vector();
+	private Vector lastSuggestedCompletions = new Vector();
 	
 	public RootFoldersService() {}
 
@@ -42,7 +42,7 @@ public class RootFoldersService implements CompletionService {
      * @return a sorted array of root folder names
      */
 	public Vector getPossibleCompletions(String path) {
-		lastReturnedCompletions.clear();
+		lastSuggestedCompletions.clear();
 		int index = Math.max(path.lastIndexOf('\\'), path.lastIndexOf('/'));
 		if (index == -1) {
 			AbstractFile[] fileRoots = RootFolders.getRootFolders();
@@ -51,17 +51,17 @@ public class RootFoldersService implements CompletionService {
 	    	for (int i=0; i<nbFolders; i++)
 	    		rootFolderNames[i] = fileRoots[i].getAbsolutePath();
 	    	Arrays.sort(rootFolderNames, String.CASE_INSENSITIVE_ORDER);
-	    	lastReturnedCompletions = PrefixFilter.createPrefixFilter(path).filter(rootFolderNames);
+	    	lastSuggestedCompletions = PrefixFilter.createPrefixFilter(path).filter(rootFolderNames);
 		}
-		return lastReturnedCompletions;
+		return lastSuggestedCompletions;
 	}
 
 	public String complete(String selectedCompletion) {
 		String result = null;
-		int nbLastReturnedCompletions = lastReturnedCompletions.size();
+		int nbLastReturnedCompletions = lastSuggestedCompletions.size();
 		for (int i=0; i < nbLastReturnedCompletions; i++)
-			if (((String)lastReturnedCompletions.elementAt(i)).equalsIgnoreCase(selectedCompletion)) {
-				result = (String) lastReturnedCompletions.elementAt(i);
+			if (((String)lastSuggestedCompletions.elementAt(i)).equalsIgnoreCase(selectedCompletion)) {
+				result = (String) lastSuggestedCompletions.elementAt(i);
 				break;
 			}
 		

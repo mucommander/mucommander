@@ -51,8 +51,8 @@ public class BookmarksQL extends QuickListWithIcons implements BookmarkListener 
 		return sortedBookmarkNames;
 	}
 	
-	protected ImageIcon getImageIcon(String value) {
-		return super.getImageIcon(BookmarkManager.getBookmark(value).getLocation());
+	protected ImageIcon itemToIcon(String value) {
+		return getImageIconOfFile(BookmarkManager.getBookmark(value).getLocation());
 	}
 
 	/**

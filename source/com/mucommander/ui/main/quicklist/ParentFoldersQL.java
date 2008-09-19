@@ -20,6 +20,8 @@ package com.mucommander.ui.main.quicklist;
 
 import java.util.Vector;
 
+import javax.swing.ImageIcon;
+
 import com.mucommander.file.AbstractFile;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.event.LocationEvent;
@@ -68,5 +70,9 @@ public class ParentFoldersQL extends QuickListWithIcons implements LocationListe
 			populateParentFolders(folderPanel.getCurrentFolder());
 		
 		return parents.toArray();
+	}
+
+	protected ImageIcon itemToIcon(String value) {
+		return getImageIconOfFile(value);
 	}
 }
