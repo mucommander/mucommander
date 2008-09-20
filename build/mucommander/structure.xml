@@ -37,7 +37,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- Targeted version of the JVM.                            -->
   <!-- Note that this has got to match the following format:   -->
   <!-- <MAJOR_VERSION>.<MINOR_VERSION>                         -->
-  <property name="app.jvm"                value="1.5"/>
+  <property name="app.jvm"                value="1.4"/>
   <!-- Fully qualified name of the application's main class.   -->
   <property name="app.main"               value="com.mucommander.Launcher"/>
 
