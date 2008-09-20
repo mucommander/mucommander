@@ -12,8 +12,8 @@ Name "muCommander @MU_VERSION@"
 OutFile @MU_OUT@
 
 ; Installer icon
-Icon @MU_ICON@
-UninstallIcon @MU_ICON@
+!define MUI_ICON @MU_ICON@
+!define MUI_UNICON @MU_ICON@
 
 ; The default installation directory
 InstallDir $PROGRAMFILES\muCommander
