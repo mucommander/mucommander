@@ -29,16 +29,15 @@ import java.awt.image.BufferedImage;
 public class HeaderMenuItem extends MenuItem {
 	private static Font HEADER_FONT = new Font("Arial", Font.BOLD, 13);
 	public static final Color mainMidColor = new Color(0, 64, 196);
+	private Dimension dim;
 	
 	public HeaderMenuItem(String text) {
 	   super(text);
+	   dim = new Dimension((int) Math.ceil(getFontMetrics(HEADER_FONT).stringWidth(text) * 1.1), (int) (HEADER_FONT.getSize() * 1.5));
 	}
 	
-	public void resize(Component invoker) {
-		Dimension invokerSize = invoker.getSize();
-		int itemWidth = Math.max(getFontMetrics(HEADER_FONT).stringWidth(getText()) + ((int)(invokerSize.width * 0.1)) , invokerSize.width/2);
-		setMinimumSize(new Dimension(itemWidth, 0));
-		setPreferredSize(new Dimension(itemWidth, (int) (HEADER_FONT.getSize() * 1.5)));
+	public Dimension getPreferredSize() {
+		return dim;
 	}
 	
 	protected final void paintComponent(Graphics g) {		

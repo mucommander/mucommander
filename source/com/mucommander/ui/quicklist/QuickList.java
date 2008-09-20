@@ -26,6 +26,7 @@ import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.util.Vector;
 
 /**
  * This abstract class contains some common features to all file table's popups:
@@ -38,8 +39,10 @@ import java.awt.event.FocusListener;
  */
 
 public abstract class QuickList extends JPopupMenu implements FocusListener {
+	private static final int PADDING = 2;
 	protected HeaderMenuItem headerMenuItem;
 	protected FolderPanel folderPanel;
+	private Vector items = new Vector();
 	
 	protected QuickList(String header) {
 		super();
@@ -49,16 +52,46 @@ public abstract class QuickList extends JPopupMenu implements FocusListener {
 		setFocusTraversalKeysEnabled(false);
 	}
 	
+	/**
+	 * This function is called before showing quick-list.
+	 * If the return value is true, the quick list will be shown. Otherwise, it won't be shown.
+	 * 
+	 * @return
+	 */
+	protected abstract boolean prepareForShowing();
+	
 	public void show(FolderPanel folderPanel) {
 		this.folderPanel = folderPanel;
-
-        // Note: the actual popup menu's size is not known at this stage so we use the component's preferred size  
-        Dimension dim = getPreferredSize();
-
-        int x = Math.max((folderPanel.getWidth() - (int)dim.getWidth()) / 2, 0);
-        int y = folderPanel.getLocationTextField().getHeight() + Math.max((folderPanel.getHeight() - (int)dim.getHeight()) / 3, 0);
-
-        show(folderPanel, x, y);
+        
+		if (prepareForShowing()) {
+	     // Note: the actual popup menu's size is not known at this stage so we use the component's preferred size
+	        Dimension dim = getPreferredSize(); //getPreferredSize();
+	
+	        int x = Math.max((folderPanel.getWidth() - (int)dim.getWidth()) / 2, 0);
+	        int y = folderPanel.getLocationTextField().getHeight() + Math.max((folderPanel.getHeight() - (int)dim.getHeight()) / 3, 0);
+	        
+	        show(folderPanel, x, y);
+		}
+	}
+	
+	public Component add(Component comp) {
+		items.add(comp);
+		return super.add(comp);
+	}
+	
+	public JMenuItem add(JMenuItem comp) {
+		items.add(comp);
+		return super.add(comp);
+	}
+	
+	public Dimension getPreferredSize() {
+		double width = PADDING, height = PADDING;
+		int nbItems = items.size();
+		for (int i=0; i<nbItems; i++) {
+			width = Math.max(width, ((Component) items.elementAt(i)).getPreferredSize().getWidth());
+			height += ((Component) items.elementAt(i)).getPreferredSize().getHeight();
+		}
+		return new Dimension((int) Math.ceil(Math.max(folderPanel.getWidth() / 2 ,width)), (int) Math.ceil(height));
 	}
 	
 	public FolderPanel getPanel() {

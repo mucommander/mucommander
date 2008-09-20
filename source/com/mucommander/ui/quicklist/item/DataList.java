@@ -48,12 +48,6 @@ public class DataList extends JList implements QuickListFocusableComponent {
 	}
 	
 	/**
-	 * Saves the given data and indicates that the list's data is not up-to-date.
-	 * Before showing the popup, it will be updated with the most up-to-date data.
-	 */
-	//public abstract Object[] getData();
-	
-	/**
 	 * This function is called before showing TablePopupWithDataList.
 	 * It does the required steps before the popup is shown.	
 	 * 

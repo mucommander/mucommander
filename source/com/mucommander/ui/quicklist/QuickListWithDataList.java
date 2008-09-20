@@ -18,11 +18,9 @@
 
 package com.mucommander.ui.quicklist;
 
-import com.mucommander.ui.main.FolderPanel;
-import com.mucommander.ui.quicklist.item.DataList;
+import javax.swing.JScrollPane;
 
-import javax.swing.*;
-import java.awt.*;
+import com.mucommander.ui.quicklist.item.DataList;
 
 /**
  * FileTablePopupWithDataList is a FileTablePopup which contains FileTablePopupDataList.
@@ -68,19 +66,21 @@ public abstract class QuickListWithDataList extends QuickList {
 		acceptListItem(item);
 	}		
 	
-	public void show(Component invoker, int x, int y) {
+	protected boolean prepareForShowing() {
+		boolean toShow = false;
 		// if data list contains at least 1 element, show this popup.
 		Object[] data;
 		if ((data = getData()).length > 0) {
 			dataList.setListData(data);
-			headerMenuItem.resize(invoker);
-			super.show(invoker,	x, y);
 			// transfer the focus to the data list.
 			dataList.getFocus();
+			toShow = true;
 		}
-		// else, show popup with a "no elements message".
+		// else, show popup with a "no elements" message.
 		else
-			emptyPopup.show((FolderPanel) invoker);
+			emptyPopup.show(folderPanel);
+		
+		return toShow;
 	}
 
 	/**
