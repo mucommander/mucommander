@@ -1,6 +1,9 @@
-;
+; -*- coding: utf-8 -*-
 ; mucommander install script
 ;
+
+; Include Modern UI
+!include MUI2.nsh
 
 ; The name of the installer
 Name "muCommander @MU_VERSION@"
@@ -12,23 +15,61 @@ OutFile @MU_OUT@
 Icon @MU_ICON@
 UninstallIcon @MU_ICON@
 
-; Discard NSIS' window when install is complete
-AutoCloseWindow true
-ShowInstDetails nevershow
-
 ; The default installation directory
 InstallDir $PROGRAMFILES\muCommander
 ; Registry key to check for directory (so if you install again, it will 
 ; overwrite the old one automatically)
 InstallDirRegKey HKLM SOFTWARE\muCommander "Install_Dir"
 
-; The text to prompt the user to enter a directory
-ComponentText "This will install muCommander on your computer."
-; The text to prompt the user to enter a directory
-DirText "Choose a directory to install muCommander in :"
+; Specifies the requested execution level for Windows Vista. 
+; Necessary for correct uninstallation of Start menu shortcuts.
+RequestExecutionLevel admin
+
+; Pages
+!insertmacro MUI_PAGE_WELCOME
+!insertmacro MUI_PAGE_DIRECTORY
+!define MUI_COMPONENTSPAGE_NODESC
+!insertmacro MUI_PAGE_COMPONENTS
+!insertmacro MUI_PAGE_INSTFILES
+!define MUI_FINISHPAGE_RUN "$INSTDIR\muCommander.exe"
+!define MUI_FINISHPAGE_SHOWREADME_NOTCHECKED
+!define MUI_FINISHPAGE_SHOWREADME "$INSTDIR\readme.txt"
+!insertmacro MUI_PAGE_FINISH
+!insertmacro MUI_UNPAGE_WELCOME
+!insertmacro MUI_UNPAGE_CONFIRM
+!insertmacro MUI_UNPAGE_INSTFILES
+!insertmacro MUI_UNPAGE_FINISH
+
+; Languages
+; Installer should support same languages as muCommander.
+!insertmacro MUI_LANGUAGE "English" ; first language is the default language
+!insertmacro MUI_LANGUAGE "French"
+!insertmacro MUI_LANGUAGE "Spanish"
+!insertmacro MUI_LANGUAGE "SpanishInternational"
+!insertmacro MUI_LANGUAGE "German"
+!insertmacro MUI_LANGUAGE "Czech"
+!insertmacro MUI_LANGUAGE "SimpChinese"
+!insertmacro MUI_LANGUAGE "TradChinese"
+!insertmacro MUI_LANGUAGE "Polish"
+!insertmacro MUI_LANGUAGE "Hungarian"
+!insertmacro MUI_LANGUAGE "Russian"
+!insertmacro MUI_LANGUAGE "Slovenian"
+!insertmacro MUI_LANGUAGE "Romanian"
+!insertmacro MUI_LANGUAGE "Italian"
+!insertmacro MUI_LANGUAGE "Korean"
+!insertmacro MUI_LANGUAGE "Portuguese"
+!insertmacro MUI_LANGUAGE "PortugueseBR"
+!insertmacro MUI_LANGUAGE "Dutch"
+!insertmacro MUI_LANGUAGE "Slovak"
+!insertmacro MUI_LANGUAGE "Japanese"
+!insertmacro MUI_LANGUAGE "Swedish"
+!insertmacro MUI_LANGUAGE "Danish"
 
 ; The stuff to install
 Section "muCommander @MU_VERSION@ (required)"
+  ; Read only section. It will always be set to install.
+  SectionIn RO
+
   ; Set output path to the installation directory.
   SetOutPath $INSTDIR
   ; Copy muCommander files
@@ -41,34 +82,29 @@ Section "muCommander @MU_VERSION@ (required)"
   ; Write the uninstall keys for Windows
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\muCommander" "DisplayName" "muCommander (remove only)"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\muCommander" "UninstallString" '"$INSTDIR\uninstall.exe"'
+  WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\muCommander" "NoModify" 1
+  WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\muCommander" "NoRepair" 1
   WriteUninstaller "uninstall.exe"
   
   ; Create Start Menu directory and shortcuts
   CreateDirectory "$SMPROGRAMS\muCommander"
-  CreateShortCut "$SMPROGRAMS\muCommander\muCommander.lnk" '$INSTDIR\muCommander.exe' "" "" 0 SW_SHOWMINIMIZED
+  CreateShortCut "$SMPROGRAMS\muCommander\muCommander.lnk" "$INSTDIR\muCommander.exe" "" "" 0 SW_SHOWMINIMIZED
   CreateShortCut "$SMPROGRAMS\muCommander\Read Me.lnk" "$INSTDIR\readme.txt" "" "" 0
   CreateShortCut "$SMPROGRAMS\muCommander\License.lnk" "$INSTDIR\license.txt" "" "" 0
   CreateShortCut "$SMPROGRAMS\muCommander\Uninstall.lnk" "$INSTDIR\uninstall.exe" "" "" 0 
-  
-  ; Open readme.txt
-  Exec "notepad.exe $INSTDIR\readme.txt"
 SectionEnd
 
 ; Quick launch shortcut (optional section)
 Section "Quick Launch shortcut"
-  CreateShortCut "$QUICKLAUNCH\muCommander.lnk" '$INSTDIR\muCommander.exe' "" "" 0 SW_SHOWMINIMIZED
+  CreateShortCut "$QUICKLAUNCH\muCommander.lnk" "$INSTDIR\muCommander.exe" "" "" 0 SW_SHOWMINIMIZED
 SectionEnd
 
 ; Desktop shortcut (optional section)
 Section "Desktop shortcut"
-  CreateShortCut "$DESKTOP\muCommander.lnk" '$INSTDIR\muCommander.exe' "" "" 0 SW_SHOWMINIMIZED
+  CreateShortCut "$DESKTOP\muCommander.lnk" "$INSTDIR\muCommander.exe" "" "" 0 SW_SHOWMINIMIZED
 SectionEnd
 
-; uninstall stuff
-
-UninstallText "This will uninstall muCommander. Hit next to continue."
-
-; special uninstall section.
+; Special uninstall section.
 Section "Uninstall"
   ; remove registry keys
   DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\muCommander"
