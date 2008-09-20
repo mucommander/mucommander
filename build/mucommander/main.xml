@@ -664,7 +664,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <target name="check-nsis">
     <condition property="nsis.available" value="true">
       <and>
-        <available file="${nsis.executable}" type="file"/>
+        <available file="${nsis.dir}" type="dir"/>
       </and>
     </condition>
 
@@ -756,7 +756,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <fixcrlf srcdir="." destdir="${nsis.tmp}" includes="readme.txt,license.txt" eol="crlf"/>
 
     <!-- Generates the NSIS script.                            -->
-   <copy file="${nsis.script}" tofile="${nsis.tmp}/mucommander.nsi">
+    <copy file="${nsis.script}" tofile="${nsis.tmp}/mucommander.nsi">
       <filterset>
         <filter token="MU_VERSION" value="${app.version}${app.subversion}"/>
         <filter token="MU_EXE"     value="muCommander.exe"/>
@@ -766,11 +766,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         <filter token="MU_README"  value="readme.txt"/>
         <filter token="MU_LICENSE" value="license.txt"/>
       </filterset>
-   </copy>
+    </copy>
 
     <!-- Generates the muCommander windows installer.          -->
-    <exec executable="${nsis.executable}" failonerror="true">
+    <exec executable="${nsis.dir}/makensis" failonerror="true">
       <arg value="${nsis.tmp}/mucommander.nsi"/>
+
+      <!-- Set the NSISDIR environment variable, required for includes to work properly -->
+      <env key="NSISDIR" value="${nsis.dir}"/>
     </exec>
 
     <!-- Copies the installer in the dist folder.              -->

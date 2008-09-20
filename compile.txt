@@ -104,8 +104,8 @@ editing it.
   The one used by muCommander can be found in ./tools/jdeb.jar, but you can
   modify that if you wish to try out other versions.
 
-- nsis.executable (non-required)
-  Path to the NSIS executable.
+- nsis.dir (non-required)
+  Path to the NSIS installation directory.
   This is used to generate a muCommander Win32 native setup.
   If this property is not set, you won't be able to generate Win32 setups.
 

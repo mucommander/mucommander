@@ -144,10 +144,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- then don't bother with this.                            -->
   <property name="store.pass"        value=""/>
 
-  <!-- Path to the makensis executable.                        -->
+  <!-- Path to the NSIS installation dir.                      -->
   <!--                                                         -->
   <!-- If not set, Windows executables won't be generated.     -->
-  <property name="nsis.executable"   location=""/>
+  <property name="nsis.dir"          location=""/>
 
   <!-- Path to the launch4j installation dir.                  -->
   <!--                                                         -->
