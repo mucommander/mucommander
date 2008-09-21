@@ -210,7 +210,17 @@ public class FileURL implements Cloneable {
         }
 
         FileURL fileURL = new FileURL(handler);
-        handler.getParser().parse(location, fileURL);
+        try {
+            handler.getParser().parse(location, fileURL);
+        }
+        catch(Exception e) {
+            // Catch any unexpected exception thrown by the SchemeParser and turn it into a MalformedURLException
+            // with a specific error message.
+            if(e instanceof MalformedURLException)
+                throw (MalformedURLException)e;
+
+            throw new MalformedURLException("URL parser error");
+        }
 
         return fileURL;
     }
