@@ -18,6 +18,7 @@
 
 package com.mucommander.file;
 
+import com.mucommander.file.util.PathUtilsTest;
 import com.mucommander.io.ChecksumOutputStream;
 import com.mucommander.io.FileTransferException;
 import com.mucommander.io.RandomAccessInputStream;
@@ -120,10 +121,13 @@ public abstract class AbstractFileTestCase extends TestCase {
      * This file will be deleted only if it exists, and any children file it contains will also be deleted.
      *
      * @param fileToDelete a file to be deleted when the test is finished
+     * @return the same file that as passed, allowing this method to be chained
      */
-    protected void deleteWhenFinished(AbstractFile fileToDelete) {
+    protected AbstractFile deleteWhenFinished(AbstractFile fileToDelete) {
         if(!filesToDelete.contains(fileToDelete))
             filesToDelete.add(fileToDelete);
+
+        return fileToDelete;
     }
 
 
@@ -1527,6 +1531,19 @@ public abstract class AbstractFileTestCase extends TestCase {
 
         children[0].delete();
         assertFalse(children[0].exists());
+    }
+
+
+    /**
+     * Tests {@link com.mucommander.file.util.PathUtils#resolveDestination(String, AbstractFile)} by calling
+     * {@link PathUtilsTest#testResolveDestination(AbstractFile)} with a temporary folder.
+     *
+     * @throws IOException should not happen
+     */
+    public void testDestinationResolution() throws IOException {
+        AbstractFile folder = deleteWhenFinished(getTemporaryFile());
+        folder.mkdir();
+        new PathUtilsTest().testResolveDestination(folder);
     }
 
 
