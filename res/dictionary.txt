@@ -5071,12 +5071,21 @@ com.mucommander.ui.action.GoToDocumentationAction.label:DA:Online dokumentation
 
 
 com.mucommander.ui.action.ShowParentFoldersQLAction.label:EN:Parent folders
+com.mucommander.ui.action.ShowParentFoldersQLAction.label:DA:Ovenliggende mapper til den nuværende placering
 # Translation missing (New!)
+
+
+
+
 
 
 
 com.mucommander.ui.action.ShowRecentLocationsQLAction.label:EN:Recent locations
+com.mucommander.ui.action.ShowRecentLocationsQLAction.label:DA:Nyeligt tilgåede placeringer
 # Translation missing (New!)
+
+
+
 
 
 
@@ -5085,8 +5094,16 @@ com.mucommander.ui.action.ShowRecentExecutedFilesQLAction.label:EN:Recently exec
 # Translation missing (New!)
 
 
+
+
+
+
+
 com.mucommander.ui.action.ShowBookmarksQLAction.label:EN:Bookmarks
 # Translation missing (New!)
+
+
+
 
 
 #############
@@ -8401,6 +8418,7 @@ ftp_connect.anonymous_user:DA:Anonym bruger
 
 ftp_connect.nb_connection_retries:EN:Number of connection retries
 ftp_connect.nb_connection_retries:RU:Количество попыткок установления соединения
+ftp_connect.nb_connection_retries:DA:Antal gentagende forbindelses forsøg
 # Translation missing (New!)
 
 
@@ -8416,6 +8434,7 @@ ftp_connect.nb_connection_retries:RU:Количество попыткок ус�
 
 ftp_connect.retry_delay:EN:Delay between retries (in seconds)
 ftp_connect.retry_delay:RU:Задержка между повторами (в секундах)
+ftp_connect.retry_delay:DA:Forsinkelse i mellem forsøg (i sekunder)
 # Translation missing (New!)
 
 
@@ -13476,6 +13495,7 @@ multi_rename_dialog.block_name:DA:Gruppe
 
 multi_rename_dialog.range:EN:Range
 multi_rename_dialog.range:PL:Zakres
+multi_rename_dialog.range:DA:Område
 # Translation missing (New!)
 
 
@@ -13490,6 +13510,7 @@ multi_rename_dialog.range:PL:Zakres
 
 
 multi_rename_dialog.proceed_renaming:EN:%1 files out of %2 will be renamed. Do you wish to proceed?
+multi_rename_dialog.proceed_renaming:DA:%1 filer ud af %2 vil blive omdøbt. Ønsker du at forsætte?
 # Translation missing (New!)
 
 
@@ -13504,6 +13525,7 @@ multi_rename_dialog.proceed_renaming:EN:%1 files out of %2 will be renamed. Do y
 
 
 multi_rename_dialog.confirmation_details:EN:This operation cannot be undone.
+multi_rename_dialog.confirmation_details:DA:Denne handling kan ikke fortrydes.
 # Translation missing (New!)
 
 
@@ -13519,6 +13541,7 @@ multi_rename_dialog.confirmation_details:EN:This operation cannot be undone.
 
 multi_rename_dialog.duplicate_names:EN:Duplicate names!
 multi_rename_dialog.duplicate_names:PL:Wykryto zduplikowane nazwy!
+multi_rename_dialog.duplicate_names:DA:Duplikerede navne!
 # Translation missing (New!)
 
 
@@ -13538,6 +13561,7 @@ multi_rename_dialog.duplicate_names:PL:Wykryto zduplikowane nazwy!
 ###############
 
 parent_folders_quick_list.title:EN:Parent folders
+parent_folders_quick_list.title:DA:Ovenliggende mapper
 # Translation missing (New!)
 
 
@@ -13552,6 +13576,7 @@ parent_folders_quick_list.title:EN:Parent folders
 
 
 parent_folders_quick_list.empty_message:EN:No parent folder for current location
+parent_folders_quick_list.empty_message:DA:Der er ikke nogle ovenliggende mapper til denne placering
 # Translation missing (New!)
 
 
@@ -13565,6 +13590,7 @@ parent_folders_quick_list.empty_message:EN:No parent folder for current location
 
 
 recent_locations_quick_list.title:EN:Recent locations
+recent_locations_quick_list.title:DA:Nyeligt tilgåede placeringer
 # Translation missing (New!)
 
 
@@ -13578,7 +13604,9 @@ recent_locations_quick_list.title:EN:Recent locations
 
 
 recent_locations_quick_list.empty_message:EN:No recent location
+recent_locations_quick_list.empty_message:DA:Der er ingen nyeligt tilgåede placeringer
 # Translation missing (New!)
+
 
 
 
@@ -13599,8 +13627,13 @@ recent_executed_files_quick_list.title:EN:Recently executed files
 
 
 
+
 recent_executed_files_quick_list.empty_message:EN:No recent executed file
 # Translation missing (New!)
+
+
+
+
 
 
 
@@ -13614,8 +13647,20 @@ bookmarks_quick_list.title:EN:Bookmarks
 
 
 
+
+
+
+
+
 bookmarks_quick_list.empty_message:EN:No bookmarks
 # Translation missing (New!)
+
+
+
+
+
+
+
 
 
 ######################
