@@ -141,33 +141,34 @@ public class MkdirDialog extends FocusDialog implements ActionListener, ItemList
         String enteredPath = pathField.getText();
 
         // Resolves destination folder
-        Object ret[] = PathUtils.resolveDestination(enteredPath, mainFrame.getActiveTable().getCurrentFolder());
+        PathUtils.ResolvedDestination resolvedDest = PathUtils.resolveDestination(enteredPath, mainFrame.getActiveTable().getCurrentFolder());
         // The path entered doesn't correspond to any existing folder
-        if (ret==null) {
+        if (resolvedDest==null) {
             showErrorDialog(Translator.get("invalid_path", enteredPath));
             return;
         }
 
         // Checks if the directory already exists and reports the error if that's the case
-        if(ret[1]==null) {
+        int destinationType = resolvedDest.getDestinationType();
+        if(destinationType==PathUtils.ResolvedDestination.EXISTING_FOLDER) {
             showErrorDialog(Translator.get("directory_already_exists", enteredPath));
             return;
         }
 
-        AbstractFile folder = (AbstractFile)ret[0];
-        String newName = (String)ret[1];
+        // Don't check for existing regular files, MkdirJob will take of it and popup a FileCollisionDialog 
+        AbstractFile destFile = resolvedDest.getDestinationFile();
 
-        FileSet fileSet = new FileSet(folder);
+        FileSet fileSet = new FileSet(destFile.getParentSilently());
         // Job's FileSet needs to contain at least one file
-        fileSet.add(folder);
+        fileSet.add(destFile);
 
         ProgressDialog progressDialog = new ProgressDialog(mainFrame, getTitle());
 
         MkdirJob job;
         if(mkfileMode)
-            job = new MkdirJob(progressDialog, mainFrame, fileSet, newName, allocateSpaceCheckBox.isSelected()?allocateSpaceChooser.getValue():-1);
+            job = new MkdirJob(progressDialog, mainFrame, fileSet, allocateSpaceCheckBox.isSelected()?allocateSpaceChooser.getValue():-1);
         else
-            job = new MkdirJob(progressDialog, mainFrame, fileSet, newName);
+            job = new MkdirJob(progressDialog, mainFrame, fileSet);
 
         progressDialog.start(job);
     }

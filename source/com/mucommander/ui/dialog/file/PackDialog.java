@@ -19,8 +19,6 @@
 
 package com.mucommander.ui.dialog.file;
 
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.FileFactory;
 import com.mucommander.file.archiver.Archiver;
 import com.mucommander.file.util.FileSet;
 import com.mucommander.file.util.PathUtils;
@@ -185,10 +183,10 @@ public class PackDialog extends JobDialog implements ActionListener, ItemListene
             // Check that destination file can be resolved 
             String filePath = filePathField.getText();
             // TODO: move those I/O bound calls to job as they can lock the main thread
-            Object dest[] = PathUtils.resolveDestination(filePath, mainFrame.getActiveTable().getCurrentFolder());
-            if (dest==null || dest[1]==null) {
+            PathUtils.ResolvedDestination resolvedDest = PathUtils.resolveDestination(filePath, mainFrame.getActiveTable().getCurrentFolder());
+            if (resolvedDest==null || resolvedDest.getDestinationType()==PathUtils.ResolvedDestination.EXISTING_FOLDER) {
                 // Incorrect destination
-                QuestionDialog dialog = new QuestionDialog(mainFrame, Translator.get("pack_dialog.error_title"), Translator.get("this_folder_does_not_exist", filePath), mainFrame,
+                QuestionDialog dialog = new QuestionDialog(mainFrame, Translator.get("pack_dialog.error_title"), Translator.get("invalid_path", filePath), mainFrame,
                                                            new String[] {Translator.get("ok")},
                                                            new int[]  {0},
                                                            0);
@@ -196,15 +194,11 @@ public class PackDialog extends JobDialog implements ActionListener, ItemListene
                 return;
             }
 
-            // TODO: move those I/O bound calls to job as they can lock the main thread
-            // TODO: destFile could potentially be null !
-            AbstractFile destFile = FileFactory.getFile(((AbstractFile)dest[0]).getAbsolutePath(true)+dest[1]);
-
             // Start packing
             ProgressDialog progressDialog = new ProgressDialog(mainFrame, Translator.get("pack_dialog.packing"));
             int format = formats[formatsComboBox.getSelectedIndex()];
 
-            ArchiveJob archiveJob = new ArchiveJob(progressDialog, mainFrame, files, destFile, format, Archiver.formatSupportsComment(format)?commentArea.getText():null);
+            ArchiveJob archiveJob = new ArchiveJob(progressDialog, mainFrame, files, resolvedDest.getDestinationFile(), format, Archiver.formatSupportsComment(format)?commentArea.getText():null);
             progressDialog.start(archiveJob);
         
             // Remember last format used, for next time this dialog is invoked

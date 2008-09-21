@@ -23,6 +23,7 @@ package com.mucommander.ui.dialog.file;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
 import com.mucommander.file.util.FileSet;
+import com.mucommander.file.util.PathUtils;
 import com.mucommander.job.MoveJob;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.main.MainFrame;
@@ -80,10 +81,18 @@ public class MoveDialog extends TransferDestinationDialog {
         showDialog();
     }
 
-    protected void startJob(AbstractFile destFolder, String newName, int defaultFileExistsAction, boolean verifyIntegrity) {
+    protected void startJob(PathUtils.ResolvedDestination resolvedDest, int defaultFileExistsAction, boolean verifyIntegrity) {
         ProgressDialog progressDialog = new ProgressDialog(mainFrame, Translator.get("move_dialog.moving"));
 
-        MoveJob moveJob = new MoveJob(progressDialog, mainFrame, files, destFolder, newName, defaultFileExistsAction, false);
+        MoveJob moveJob = new MoveJob(
+                progressDialog,
+                mainFrame,
+                files,
+                resolvedDest.getDestinationFolder(),
+                resolvedDest.getDestinationType()==PathUtils.ResolvedDestination.EXISTING_FOLDER?null:resolvedDest.getDestinationFile().getName(),
+                defaultFileExistsAction,
+                false);
+
         moveJob.setIntegrityCheckEnabled(verifyIntegrity);
 
         progressDialog.start(moveJob);

@@ -19,7 +19,6 @@
 
 package com.mucommander.ui.dialog.file;
 
-import com.mucommander.file.AbstractFile;
 import com.mucommander.file.util.FileSet;
 import com.mucommander.file.util.PathUtils;
 import com.mucommander.text.Translator;
@@ -39,7 +38,7 @@ import java.awt.event.ActionListener;
  * and control some options such as the default action to perform when a file already exists in the destination, or
  * if the files should be checked for integrity.
  *
- * <p>The {@link #startJob(com.mucommander.file.AbstractFile, String, int, boolean)} method is called to start the job when the
+ * <p>The {@link #startJob(com.mucommander.file.util.PathUtils.ResolvedDestination,int,boolean)} method is called to start the job when the
  * user has confirmed the operation, either by pressing the OK button or by pressing the Enter key.</p>
  *
  * @author Maxence Bernard
@@ -168,16 +167,13 @@ public abstract class TransferDestinationDialog extends JobDialog implements Act
 
         // Resolves destination folder
         // TODO: move those I/O bound calls to job as they can lock the main thread
-        Object ret[] = PathUtils.resolveDestination(destPath, mainFrame.getActiveTable().getCurrentFolder());
+        PathUtils.ResolvedDestination resolvedDest = PathUtils.resolveDestination(destPath, mainFrame.getActiveTable().getCurrentFolder());
         // The path entered doesn't correspond to any existing folder
-        if (ret==null || (files.size()>1 && ret[1]!=null)) {
-            showErrorDialog(Translator.get("this_folder_does_not_exist", destPath), errorDialogTitle);
+        if (resolvedDest==null || (files.size()>1 && resolvedDest.getDestinationType()!=PathUtils.ResolvedDestination.EXISTING_FOLDER)) {
+            showErrorDialog(Translator.get("invalid_path", destPath), errorDialogTitle);
             return;
         }
 
-        AbstractFile destFolder = (AbstractFile)ret[0];
-        String newName = (String)ret[1];
-		
         // Retrieve default action when a file exists in destination, default choice
         // (if not specified by the user) is 'Ask'
         int defaultFileExistsAction = fileExistsActionComboBox.getSelectedIndex();
@@ -188,7 +184,7 @@ public abstract class TransferDestinationDialog extends JobDialog implements Act
         // Note: we don't remember default action on purpose: we want the user to specify it each time,
         // it would be too dangerous otherwise.
 		
-        startJob(destFolder, newName, defaultFileExistsAction, verifyIntegrityCheckBox.isSelected());
+        startJob(resolvedDest, defaultFileExistsAction, verifyIntegrityCheckBox.isSelected());
     }
 
 
@@ -196,7 +192,7 @@ public abstract class TransferDestinationDialog extends JobDialog implements Act
     // Abstract methods //
     //////////////////////
 
-    protected abstract void startJob(AbstractFile destFolder, String newName, int defaultFileExistsAction, boolean verifyIntegrity);
+    protected abstract void startJob(PathUtils.ResolvedDestination resolvedDest, int defaultFileExistsAction, boolean verifyIntegrity);
 	
 
     ////////////////////////

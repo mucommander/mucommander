@@ -22,6 +22,7 @@ package com.mucommander.ui.dialog.file;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
 import com.mucommander.file.util.FileSet;
+import com.mucommander.file.util.PathUtils;
 import com.mucommander.job.CopyJob;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.main.MainFrame;
@@ -100,10 +101,18 @@ public class CopyDialog extends TransferDestinationDialog {
         setTextField(fieldText, startPosition, endPosition);
     }
 
-    protected void startJob(AbstractFile destFolder, String newName, int defaultFileExistsAction, boolean verifyIntegrity) {
+    protected void startJob(PathUtils.ResolvedDestination resolvedDest, int defaultFileExistsAction, boolean verifyIntegrity) {
         ProgressDialog progressDialog = new ProgressDialog(mainFrame, Translator.get("copy_dialog.copying"));
 
-        CopyJob job = new CopyJob(progressDialog, mainFrame, files, destFolder, newName, CopyJob.COPY_MODE, defaultFileExistsAction);
+        CopyJob job = new CopyJob(
+                progressDialog,
+                mainFrame,
+                files,
+                resolvedDest.getDestinationFolder(),
+                resolvedDest.getDestinationType()==PathUtils.ResolvedDestination.EXISTING_FOLDER?null:resolvedDest.getDestinationFile().getName(),
+                CopyJob.COPY_MODE,
+                defaultFileExistsAction);
+
         job.setIntegrityCheckEnabled(verifyIntegrity);
 
         progressDialog.start(job);

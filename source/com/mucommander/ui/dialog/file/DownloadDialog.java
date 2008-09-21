@@ -21,6 +21,7 @@ package com.mucommander.ui.dialog.file;
 
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.util.FileSet;
+import com.mucommander.file.util.PathUtils;
 import com.mucommander.job.CopyJob;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.main.MainFrame;
@@ -49,10 +50,18 @@ public class DownloadDialog extends TransferDestinationDialog {
         showDialog();
     }
 
-    protected void startJob(AbstractFile destFolder, String newName, int defaultFileExistsAction, boolean verifyIntegrity) {
+    protected void startJob(PathUtils.ResolvedDestination resolvedDest, int defaultFileExistsAction, boolean verifyIntegrity) {
         ProgressDialog progressDialog = new ProgressDialog(mainFrame, Translator.get("download_dialog.downloading"));
 
-        CopyJob downloadJob = new CopyJob(progressDialog, mainFrame, files, destFolder, newName, CopyJob.DOWNLOAD_MODE, defaultFileExistsAction);
+        CopyJob downloadJob = new CopyJob(
+                progressDialog,
+                mainFrame,
+                files,
+                resolvedDest.getDestinationFolder(),
+                resolvedDest.getDestinationType()==PathUtils.ResolvedDestination.EXISTING_FOLDER?null:resolvedDest.getDestinationFile().getName(),
+                CopyJob.DOWNLOAD_MODE,
+                defaultFileExistsAction);
+
         downloadJob.setIntegrityCheckEnabled(verifyIntegrity);
 
         progressDialog.start(downloadJob);

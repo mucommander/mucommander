@@ -241,20 +241,17 @@ public class CalculateChecksumDialog extends JobDialog implements ActionListener
                     // User-defined checksum file
                     String enteredPath = specificLocationTextField.getText();
 
-                    Object ret[] = PathUtils.resolveDestination(enteredPath, mainFrame.getActiveTable().getCurrentFolder());
+                    PathUtils.ResolvedDestination resolvedDest = PathUtils.resolveDestination(enteredPath, mainFrame.getActiveTable().getCurrentFolder());
                     // The path entered doesn't correspond to any existing folder
-                    if (ret==null) {
+                    if (resolvedDest==null) {
                         showErrorDialog(Translator.get("invalid_path", enteredPath));
                         return;
                     }
 
-                    AbstractFile destFolder = (AbstractFile)ret[0];
-                    String filename = (String)ret[1];
-
-                    if(filename==null)
-                        filename = getChecksumFilename(algorithm);
-
-                    checksumFile = destFolder.getDirectChild(filename);
+                    if(resolvedDest.getDestinationType()==PathUtils.ResolvedDestination.EXISTING_FOLDER)
+                        checksumFile = resolvedDest.getDestinationFile().getDirectChild(getChecksumFilename(algorithm));
+                    else
+                        checksumFile = resolvedDest.getDestinationFile();
                 }
                 else {
                     // Temporary file
