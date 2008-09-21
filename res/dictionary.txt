@@ -4774,7 +4774,7 @@ com.mucommander.ui.action.SplitHorizontallyAction.label:DA:Del vandret
 
 com.mucommander.ui.action.ShowKeyboardShortcutsAction.label:EN:Keyboard shortcuts
 com.mucommander.ui.action.ShowKeyboardShortcutsAction.label:FR:Raccourcis clavier
-com.mucommander.ui.action.ShowKeyboardShortcutsAction.label:DE:Tastaurkürzel
+com.mucommander.ui.action.ShowKeyboardShortcutsAction.label:DE:Tastaturkürzel
 com.mucommander.ui.action.ShowKeyboardShortcutsAction.label:ES:Atajos de teclado
 com.mucommander.ui.action.ShowKeyboardShortcutsAction.label:CS:Klávesové zkratky
 com.mucommander.ui.action.ShowKeyboardShortcutsAction.label:zh_TW:快捷鍵
