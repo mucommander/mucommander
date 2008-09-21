@@ -143,6 +143,7 @@ Improvements:
 - The Properties dialog now sports a large file icon.
 - Mac OS X 10.4 and up: the Properties dialog now displays
   Spotlight/Finder comments.
+- New and improved Windows installer, contributed by Karel Klic.
 
 Localization:
 - Danish translation, contributed by Jeppe Toustrup.
