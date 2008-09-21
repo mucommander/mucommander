@@ -283,7 +283,15 @@ public class DefaultSchemeParser implements SchemeParser {
             String host;
             if(colonPos!=-1) {
                 host = urlBP.substring(pos, colonPos);
-                fileURL.setPort(Integer.parseInt(urlBP.substring(colonPos+1)));
+                String portString = urlBP.substring(colonPos+1);
+                if(!portString.equals("")) {        // Tolerate an empty port part (e.g. http://mucommander.com:/)
+                    try {
+                        fileURL.setPort(Integer.parseInt(portString));
+                    }
+                    catch(NumberFormatException e) {
+                        throw new MalformedURLException("URL contains an invalid port");
+                    }
+                }
             }
             else {
                 host = urlBP.substring(pos);
