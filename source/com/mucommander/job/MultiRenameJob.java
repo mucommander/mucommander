@@ -34,9 +34,8 @@ public class MultiRenameJob extends MoveJob {
     private List newNames;
 
     public MultiRenameJob(ProgressDialog progressDialog, MainFrame mainFrame, FileSet files, List newNames) {
-        super(progressDialog, mainFrame, files, null, null, FileCollisionDialog.ASK_ACTION, true);
+        super(progressDialog, mainFrame, files, files.getBaseFolder(), null, FileCollisionDialog.ASK_ACTION, true);
         this.newNames = newNames;
-        this.baseDestFolder = ((AbstractFile) files.get(0)).getParentSilently();
     }
 
 
