@@ -258,7 +258,7 @@ public abstract class FileURLTestCase extends TestCase {
 
 
     /**
-     * Parses valid URLs and ensures that the getters return the proper part values.
+     * Parses some borderline but valid URLs and ensures that they parse and the getters return the proper part values.
      *
      * @throws MalformedURLException should not happen
      */
@@ -294,6 +294,17 @@ public abstract class FileURLTestCase extends TestCase {
         assertEquals("password", url.getPassword());
         assertEquals("host", url.getHost());
         assertEquals(10000, url.getPort());
+        assertEquals(isQueryParsed()?"/path@at/to@at":"/path@at/to@at?query", url.getPath());
+        assertEquals(isQueryParsed()?"to@at":"to@at?query", url.getFilename());
+        assertEquals(isQueryParsed()?"?query":null, url.getQuery());
+
+        // Ensure that empty port parts are tolerated
+        url = getSchemeURL("login:password@host:/path@at/to@at?query");
+        assertEquals(scheme, url.getScheme());
+        assertEquals("login", url.getLogin());
+        assertEquals("password", url.getPassword());
+        assertEquals("host", url.getHost());
+        assertEquals(-1, url.getPort());
         assertEquals(isQueryParsed()?"/path@at/to@at":"/path@at/to@at?query", url.getPath());
         assertEquals(isQueryParsed()?"to@at":"to@at?query", url.getFilename());
         assertEquals(isQueryParsed()?"?query":null, url.getQuery());
@@ -519,9 +530,13 @@ public abstract class FileURLTestCase extends TestCase {
      * @throws MalformedURLException should not happen
      */
     public void testInvalidURLs() throws MalformedURLException {
+        // relative URLs
         assertFalse(canParse("relative"));
         assertFalse(canParse("C:"));
         assertFalse(canParse("scheme:/"));
+
+        // Invalid port (non-numeric)
+        assertFalse(canParse(getScheme()+"://host:port/path"));
     }
     
 
