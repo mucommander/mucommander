@@ -41,7 +41,6 @@ import java.io.OutputStream;
 public class MkdirJob extends FileJob {
 
     private AbstractFile destFolder;
-    private String filename;
 
     private boolean mkfileMode;
     private long allocateSpace;
@@ -50,11 +49,10 @@ public class MkdirJob extends FileJob {
     /**
      * Creates a new MkdirJob which operates in 'mkdir' mode.
      */
-    public MkdirJob(ProgressDialog progressDialog, MainFrame mainFrame, FileSet fileSet, String filename) {
+    public MkdirJob(ProgressDialog progressDialog, MainFrame mainFrame, FileSet fileSet) {
         super(progressDialog, mainFrame, fileSet);
 
         this.destFolder = fileSet.getBaseFolder();
-        this.filename = filename;
         this.mkfileMode = false;
 		
         setAutoUnmark(false);
@@ -65,11 +63,10 @@ public class MkdirJob extends FileJob {
      *
      * @param allocateSpace number of bytes to allocate to the file, -1 for none (use AbstractFile#mkfile())
      */
-    public MkdirJob(ProgressDialog progressDialog, MainFrame mainFrame, FileSet fileSet, String filename, long allocateSpace) {
+    public MkdirJob(ProgressDialog progressDialog, MainFrame mainFrame, FileSet fileSet, long allocateSpace) {
         super(progressDialog, mainFrame, fileSet);
 
         this.destFolder = fileSet.getBaseFolder();
-        this.filename = filename;
         this.mkfileMode = true;
         this.allocateSpace = allocateSpace;
 
@@ -91,20 +88,19 @@ public class MkdirJob extends FileJob {
 
         do {
             try {
-                if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Creating "+destFolder+" "+ filename);
-
-                AbstractFile newFile = destFolder.getDirectChild(filename);
+                if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Creating "+file);
 
                 // Check for file collisions, i.e. if the file already exists in the destination
-                int collision = FileCollisionChecker.checkForCollision(null, newFile);
+                int collision = FileCollisionChecker.checkForCollision(null, file);
                 if(collision!=FileCollisionChecker.NO_COLLOSION) {
                     // File already exists in destination, ask the user what to do (cancel, overwrite,...) but
                     // do not offer the multiple files mode options such as 'skip' and 'apply to all'.
-                    int choice = waitForUserResponse(new FileCollisionDialog(mainFrame, mainFrame, collision, null, newFile, false, false));
+                    int choice = waitForUserResponse(new FileCollisionDialog(mainFrame, mainFrame, collision, null, file, false, false));
 
                     // Overwrite file
                     if (choice==FileCollisionDialog.OVERWRITE_ACTION) {
-                        // Do nothing, simply continue and file will be overwritten
+                        // Delete the file
+                        file.delete();
                     }
                     // Cancel or dialog close (return)
 //                    else if (choice==-1 || choice==FileCollisionDialog.CANCEL_ACTION) {
@@ -118,20 +114,20 @@ public class MkdirJob extends FileJob {
                 if(mkfileMode) {
                     // Use mkfile
                     if(allocateSpace==-1) {
-                        newFile.mkfile();
+                        file.mkfile();
                     }
                     // Allocate the requested number of bytes
                     else {
                         OutputStream mkfileOut = null;
                         try {
                             // using RandomAccessOutputStream if we can have one
-                            if(newFile.hasRandomAccessOutputStream()) {
-                                mkfileOut = newFile.getRandomAccessOutputStream();
+                            if(file.hasRandomAccessOutputStream()) {
+                                mkfileOut = file.getRandomAccessOutputStream();
                                 ((RandomAccessOutputStream)mkfileOut).setLength(allocateSpace);
                             }
                             // manually otherwise
                             else {
-                                mkfileOut = newFile.getOutputStream(false);
+                                mkfileOut = file.getOutputStream(false);
 
                                 // Use BufferPool to avoid excessive memory allocation and garbage collection
                                 byte buffer[] = BufferPool.getByteArray();
@@ -160,15 +156,15 @@ public class MkdirJob extends FileJob {
                 }
                 // Create directory
                 else {
-                    newFile.mkdir();
+                    file.mkdir();
                 }
 
                 // Resolve new file instance now that it exists: remote files do not update file attributes after
                 // creation, we need to get an instance that reflects the newly created file attributes
-                newFile = FileFactory.getFile(newFile.getURL());
+                file = FileFactory.getFile(file.getURL());
 
                 // Select newly created file when job is finished
-                selectFileWhenFinished(newFile);
+                selectFileWhenFinished(file);
 
                 return true;		// Return Success
             }
@@ -182,7 +178,7 @@ public class MkdirJob extends FileJob {
 
                 int action = showErrorDialog(
                      Translator.get("error"),
-                     Translator.get(mkfileMode?"cannot_write_file":"cannot_create_folder", destFolder.getAbsolutePath(true)+ filename),
+                     Translator.get(mkfileMode?"cannot_write_file":"cannot_create_folder", file.getAbsolutePath()),
                      new String[]{RETRY_TEXT, CANCEL_TEXT},
                      new int[]{RETRY_ACTION, CANCEL_ACTION}
                 );
@@ -210,6 +206,6 @@ public class MkdirJob extends FileJob {
     ////////////////////////
 
     public String getStatusString() {
-        return Translator.get("creating_file", filename);
+        return Translator.get("creating_file", getCurrentFilename());
     }
 }
