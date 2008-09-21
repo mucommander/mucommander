@@ -33,49 +33,115 @@ import java.io.IOException;
 public class PathUtilsTest extends TestCase {
 
     /**
-     * Tests {@link com.mucommander.file.util.PathUtils} by throwing a bunch of sample folders and paths corresponding
-     * to all possible situations. 
+     * Calls {@link #testResolveDestination(AbstractFile)} with the system's temporary folder.
      *
      * @throws IOException should not happen
      */
-    public void testResolveDestination() throws IOException {
-        AbstractFile folder = FileFactory.getTemporaryFolder();
-        AbstractFile root = folder.getRoot();
-        AbstractFile parent = folder.getParent();
-        String separator = folder.getSeparator();
-
-        // Test a bunch of destinations that don't contain a new filename in them
-
-        // Absolute path
-        assertResult(PathUtils.resolveDestination(folder.getAbsolutePath(), root), folder, null);
-        assertResult(PathUtils.resolveDestination(parent.getAbsolutePath(), root), parent, null);
-        // Relative path
-        assertResult(PathUtils.resolveDestination(".", folder), folder, null);
-        assertResult(PathUtils.resolveDestination("./", folder), folder, null);
-        assertResult(PathUtils.resolveDestination(folder.getName(), parent), folder, null);
-        assertResult(PathUtils.resolveDestination("."+separator+folder.getName(), parent), folder, null);
-
-        // Test a bunch of destinations that have a new filename in them
-
-        String nonExistentFolderName = "test_folder_that_cant_possibly_exist";
-        // Absolute path
-        assertResult(PathUtils.resolveDestination(folder.getAbsolutePath(true)+nonExistentFolderName, root), folder, nonExistentFolderName);
-        // Relative path
-        assertResult(PathUtils.resolveDestination(nonExistentFolderName, folder), folder, nonExistentFolderName);
-        assertResult(PathUtils.resolveDestination("."+separator+nonExistentFolderName, folder), folder, nonExistentFolderName);
-        assertResult(PathUtils.resolveDestination("."+separator+nonExistentFolderName, folder), folder, nonExistentFolderName);
+    public void testResolveLocalDestination() throws IOException {
+        testResolveDestination(FileFactory.getTemporaryFolder());
     }
 
     /**
-     * Assert that the results returned by {@link PathUtils#resolveDestination(String, com.mucommander.file.AbstractFile)}
-     * in an Object array match the specified folder and new filename values. 
+     * Tests {@link com.mucommander.file.util.PathUtils} by throwing at it a bunch of sample paths corresponding to all
+     * possible situations.
      *
-     * @param resolvePathResult the Object array to test
-     * @param folder should match the first array element
-     * @param newFilename should match the second array element
+     * @param baseFolder the base folder, used for relative paths
+     * @throws IOException should not happen
      */
-    private void assertResult(Object resolvePathResult[], AbstractFile folder, String newFilename) {
-        assertTrue(folder==null?resolvePathResult[0]==null:folder.equals(resolvePathResult[0]));
-        assertTrue(newFilename==null?resolvePathResult[1]==null:newFilename.equals(resolvePathResult[1]));
+    public void testResolveDestination(AbstractFile baseFolder) throws IOException {
+        AbstractFile baseRoot = baseFolder.getRoot();
+        AbstractFile baseParent = baseFolder.getParent();
+        String separator = baseFolder.getSeparator();
+        String nonExistentFilename = "non_existent_file";
+        AbstractFile nonExistentFile = baseFolder.getDirectChild(nonExistentFilename);
+        String existingFilename = "existing_file";
+        AbstractFile existingFile = baseFolder.getDirectChild(existingFilename);
+        existingFile.mkfile();
+        String existingArchiveFilename = "existing_archive.zip";
+        AbstractFile existingArchive = baseFolder.getDirectChild(existingArchiveFilename);
+        existingArchive.mkfile();
+
+        int expectedType;
+
+        // Test a bunch of destination paths that denote an existing folder
+
+        expectedType = PathUtils.ResolvedDestination.EXISTING_FOLDER;
+
+        // Absolute paths
+        assertResult(PathUtils.resolveDestination(baseFolder.getURL().toString(true), baseRoot), baseFolder, expectedType);
+        assertResult(PathUtils.resolveDestination(baseFolder.getURL().toString(true), null), baseFolder, expectedType);
+        assertResult(PathUtils.resolveDestination(baseRoot.getURL().toString(true), baseRoot), baseRoot, expectedType);
+        // Relative paths
+        assertResult(PathUtils.resolveDestination(".", baseFolder), baseFolder, expectedType);
+        assertResult(PathUtils.resolveDestination("./", baseFolder), baseFolder, expectedType);
+        assertResult(PathUtils.resolveDestination(baseFolder.getName(), baseParent), baseFolder, expectedType);
+        assertResult(PathUtils.resolveDestination(baseFolder.getName()+separator, baseParent), baseFolder, expectedType);
+        assertResult(PathUtils.resolveDestination("."+separator+baseFolder.getName(), baseParent), baseFolder, expectedType);
+        // Archive path as folder (with a trailing separator)
+        assertResult(PathUtils.resolveDestination(existingArchive.getURL().toString(true)+separator, baseFolder), existingArchive, expectedType);
+        assertResult(PathUtils.resolveDestination(existingArchiveFilename+separator, baseFolder), existingArchive, expectedType);
+        assertResult(PathUtils.resolveDestination("."+separator+existingArchiveFilename+separator, baseFolder), existingArchive, expectedType);
+
+        // Test a bunch of destination paths that denote an existing regular file
+
+        expectedType = PathUtils.ResolvedDestination.EXISTING_FILE;
+
+        // Absolute paths
+        assertResult(PathUtils.resolveDestination(existingFile.getURL().toString(true), baseRoot), existingFile, expectedType);
+        // Relative paths
+        assertResult(PathUtils.resolveDestination(existingFilename, baseFolder), existingFile, expectedType);
+        assertResult(PathUtils.resolveDestination("."+separator+existingFilename, baseFolder), existingFile, expectedType);
+        // Archive path as regular file (without a trailing separator)
+        assertResult(PathUtils.resolveDestination(existingArchive.getURL().toString(true), baseFolder), existingArchive, expectedType);
+        assertResult(PathUtils.resolveDestination(existingArchiveFilename, baseFolder), existingArchive, expectedType);
+        assertResult(PathUtils.resolveDestination("."+separator+existingArchiveFilename, baseFolder), existingArchive, expectedType);
+
+        // Test a bunch of destination paths that denote a new/non-existing regular file
+
+        expectedType = PathUtils.ResolvedDestination.NEW_FILE;
+
+        // Absolute paths
+        assertResult(PathUtils.resolveDestination(nonExistentFile.getURL().toString(true), baseRoot), nonExistentFile, expectedType);
+        // Relative paths
+        assertResult(PathUtils.resolveDestination(nonExistentFilename, baseFolder), nonExistentFile, expectedType);
+        assertResult(PathUtils.resolveDestination("."+separator+nonExistentFilename, baseFolder), nonExistentFile, expectedType);
+
+        // Test invalid destination paths
+
+        // neither the file nor its parent exist
+        assertNull(PathUtils.resolveDestination(nonExistentFilename+separator+nonExistentFilename, baseFolder));
+        assertNull(PathUtils.resolveDestination(nonExistentFilename, baseFolder.getChild(nonExistentFilename)));
+        // relative path and no base folder
+        assertNull(PathUtils.resolveDestination(nonExistentFilename, null));
+
+        // Delete the files we created when finished
+        existingFile.delete();
+        existingArchive.delete();
+    }
+
+    /**
+     * Asserts that the <code>ResolvedDestination</code> returned by {@link PathUtils#resolveDestination(String, com.mucommander.file.AbstractFile)}
+     * matches the expected destination file and type. This method asserts that the destination folder is not
+     * <code>null</code> and consistent with the destination file.
+     *
+     * @param resolvedDestination the ResolvedDestination to test
+     * @param expectedDestinationFile the expected destination file
+     * @param expectedDestinationType the expected destination type
+     */
+    private void assertResult(PathUtils.ResolvedDestination resolvedDestination, AbstractFile expectedDestinationFile, int expectedDestinationType) {
+        AbstractFile file = resolvedDestination.getDestinationFile();
+        int type = resolvedDestination.getDestinationType();
+        AbstractFile folder = resolvedDestination.getDestinationFolder();
+
+        assertNotNull(file);
+        assertNotNull(folder);
+
+        assertEquals(expectedDestinationFile, file);
+        assertEquals(expectedDestinationType, type);
+
+        if(type==PathUtils.ResolvedDestination.EXISTING_FOLDER)
+            assertEquals(file, folder);
+        else
+            assertEquals(file.getParentSilently(), folder);
     }
 }

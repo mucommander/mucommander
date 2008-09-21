@@ -19,8 +19,12 @@
 
 package com.mucommander.file.util;
 
+import com.mucommander.Debug;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
+import com.mucommander.file.FileURL;
+
+import java.net.MalformedURLException;
 
 /**
  * This class contains static helper methods that operate on file paths.
@@ -30,81 +34,184 @@ import com.mucommander.file.FileFactory;
 public class PathUtils {
 
     /**
-     * Matches a path typed by the user (which can be relative to the current folder or absolute)
-     * to an AbstractFile (folder). The folder returned will always exist.
-     * If the given path doesn't correspond to any existing folder, a null value will be returned.
+     * This class represents a destination entered by the user and resolved by {@link PathUtils#resolveDestination(String, com.mucommander.file.AbstractFile)}
+     * into an <code>AbstractFile</code> and a destination type.
+     *
+     * @see PathUtils#resolveDestination(String, com.mucommander.file.AbstractFile)
      */
-    public static Object[] resolveDestination(String destPath, AbstractFile currentFolder) {
-        // Current path, including trailing separator
-        String currentPath = currentFolder.getAbsolutePath(true);
-        AbstractFile destFolder;
+    public static class ResolvedDestination {
 
-        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("destPath="+destPath+" currentPath="+currentPath);
+        /** The destination AbstractFile, may be a regular file or a folder */
+        private AbstractFile file;
 
-        // If destination starts with './' or '.', replace '.' by current folder's path
-        if(destPath.startsWith(".\\") || destPath.startsWith("./"))
-            destPath = currentPath + destPath.substring(2, destPath.length());
-        else if(destPath.equals("."))
-            destPath = currentPath;
+        /** The destination's folder, the file itself for {@link #EXISTING_FOLDER}, the destination file's parent for
+         * other types */
+        private AbstractFile folder;
 
-        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("destPath ="+destPath);
+        /** The destination type, see constant values */
+        private int type;
 
-        String newName = null;
+        /** Designates a folder, either a directory or archive, that exists on the filesystem. */
+        public final static int EXISTING_FOLDER = 0;
+        /** Designates a regular file that exists on the filesystem. The file may be a browsable archive but that was
+         * refered to as a regular file, i.e. without a trailing separator character in the path. */
+        public final static int EXISTING_FILE = 1;
+        /** Designates a new file that doesn't exist on the filesystem. The file's parent however does always exist. */
+        public final static int NEW_FILE = 2;
 
-        // Level 0, folder exists, newName is null
-
-        // destPath points to an absolute and existing folder, or to an archive ending with a trailing separator
-        if ((destFolder= FileFactory.getFile(destPath))!=null
-         && destFolder.exists()
-            && (destFolder.isDirectory() || (destFolder.isBrowsable() && destPath.endsWith(destFolder.getSeparator())))) {
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("found existing folder for "+destPath+" destFolder="+destFolder.getAbsolutePath()+" destURL="+destFolder.getURL()+" URL filename="+destFolder.getURL().getFilename());
+        /**
+         * Creates a new <code>ResolvedDestination</code> with the specified destination file and type.
+         *
+         * @param destinationFile the destination file
+         * @param destinationType the destination type
+         * @param destinationFolder the destination folder
+         */
+        private ResolvedDestination(AbstractFile destinationFile, int destinationType, AbstractFile destinationFolder) {
+            this.file = destinationFile;
+            this.type = destinationType;
+            this.folder = destinationFolder;
         }
 
-        // destPath points to an existing folder (or to an archive ending with a trailing separator) relative to current folder
-        else if ((destFolder=FileFactory.getFile(currentPath+destPath))!=null
-         && destFolder.exists()
-           && (destFolder.isDirectory() || (destFolder.isBrowsable() && destPath.endsWith(destFolder.getSeparator())))) {
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("found existing folder "+currentPath+destPath);
+        /**
+         * Returns the resolved destination file. The returned file may or may not physically exist on the filesystem.
+         * If it exists, the returned file may be a folder (directory or browsable archive) or a regular file.
+         *
+         * @return the resolved destination file
+         * @see #getDestinationType()
+         */
+        public AbstractFile getDestinationFile() {
+            return file;
         }
 
-        // Level 1, path includes a new destination filename
-        else {
-            // Removes ending separator character (if any)
-            char c = destPath.charAt(destPath.length()-1);
-            // Separator characters can be mixed
-            if(c=='/' || c=='\\')
-                destPath = destPath.substring(0,destPath.length()-1);
+        /**
+         * Returns the resolved destination's folder. Depending on the {@link #getDestinationType() destination type},
+         * the destination folder is:
+         * <dl>
+         *  <dt>for {@link #EXISTING_FOLDER}</dt><dd>the {@link #getDestinationFile() destination file} itself</dd>
+         *  <dt>for {@link #EXISTING_FILE} or {@link #NEW_FILE}</dt><dd>the {@link #getDestinationFile() destination file}'s parent</dd>
+         * </dl>
+         *  The returned <code>AbstractFile</code> is always a folder that exists.
+         *
+         * @return the resolved destination file
+         * @see #getDestinationType()
+         */
+        public AbstractFile getDestinationFolder() {
+            return folder;
+        }
 
-            // Extracts the new destination filename
-            int pos = Math.max(destPath.lastIndexOf('/'), destPath.lastIndexOf('\\'));
-            if (pos!=-1) {
-                newName = destPath.substring(pos+1, destPath.length());
-                destPath = destPath.substring(0,pos+1);
-            }
-            else  {
-                newName = destPath;
-                destPath = "";
-            }
+        /**
+         * Returns the type of destination that was resolved. The returned value will be one of the following constant
+         * fields defined in this class:
+         * <dl>
+         *  <dt>{@link #EXISTING_FOLDER}</dt><dd>if the path denotes a folder, either a directory or a browsable
+         * archive.</dd>
+         *  <dt>{@link #EXISTING_FILE}</dt><dd>if the path denotes a regular file. The file may be a browsable archive,
+         * see below.</dd>
+         *  <dt>{@link #NEW_FILE}</dt><dd>if the path denotes a non-existing file whose parent exists.</dd>
+         * </dl>
+         * Paths to browsable archives are considered as denoting a folder only if they end with a trailing separator
+         * character. If they don't, they're considered as denoting a regular file. For example,
+         * <code>/existing_folder/existing_archive.zip/</code> refers to the archive as a folder where as
+         * <code>/existing_folder/existing_archive.zip</code> refers to the archive as a regular file.
+         *
+         * @return the type of destination that was resolved
+         */
+        public int getDestinationType() {
+            return type;
+        }
+    }
 
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("level1, destPath="+destPath+" newname="+newName);
-            // destPath points to an absolute and existing folder
-            if (!destPath.equals("") && (destFolder=FileFactory.getFile(destPath))!=null && destFolder.exists()) {
-                if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("found existing folder "+destPath+" newname="+newName);
-            }
+    /**
+     * Resolves a destination path entered by the user and returns a {@link ResolvedDestination} object that
+     * that contains a {@link AbstractFile} instance corresponding to the path and a type that describes the kind of
+     * destination that was resolved. <code>null</code> is returned if the path is not a valid destination (see below)
+     * or could not be resolved, for example becuase of I/O or authentication error.
+     * <p>
+     * The given path may be either absolute or relative to the specified base folder. If the base folder argument is
+     * <code>null</code> and the path is relative, <code>null</code> will always be returned.
+     * The path may contain '.', '..' and '~' tokens which will be left for the corresponding
+     * {@link com.mucommander.file.SchemeParser} to canonize.
+     * </p>
+     * <p>
+     * The path may refer to the following listed destination types. In all cases, the destination's parent folder must
+     * exist, if it doesn't <code>null</code> will always be returned. For example, <code>/non_existing_folder/file</code>
+     * is not a valid destination (provided that '/non_existing_folder' does not exist).
+     * <dl>
+     *  <dt>{@link ResolvedDestination#EXISTING_FOLDER}</dt><dd>if the path denotes a folder, either a directory or a
+     * browsable archive.</dd>
+     *  <dt>{@link ResolvedDestination#EXISTING_FILE}</dt><dd>if the path denotes a regular file. The file may be a browsable archive,
+     * see below.</dd>
+     *  <dt>{@link ResolvedDestination#NEW_FILE}</dt><dd>if the path denotes a non-existing file whose parent exists.</dd>
+     * </dl>
+     * Paths to browsable archives are considered as denoting a folder only if they end with a trailing separator
+     * character. If they don't, they're considered as denoting a regular file. For example,
+     * <code>/existing_folder/existing_archive.zip/</code> refers to the archive as a folder where as
+     * <code>/existing_folder/existing_archive.zip</code> refers to the archive as a regular file.
+     * </p>
+     *
+     * @param destPath the destination path to resolve
+     * @param baseFolder the base folder used for relative paths, <code>null</code> to accept only absolute paths
+     * @return the object that that contains a {@link AbstractFile} instance corresponding to the path and a type that
+     * describes the kind of destination that was resolved
+     */
+    public static ResolvedDestination resolveDestination(String destPath, AbstractFile baseFolder) {
+        AbstractFile destFile;
+        FileURL destURL;
 
-            // destPath points to an existing folder relative to current folder
-            else if ((destFolder=FileFactory.getFile(currentPath+destPath))!=null && destFolder.exists()) {
-                if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("found existing folder "+currentPath+destPath+" newname="+newName);
-            }
+        // Try to resolve the path as a URL
+        try {
+            destURL = FileURL.getFileURL(destPath);
+            // destPath is absolute
+        }
+        catch(MalformedURLException e) {
+            // destPath is relative (or malformed)
 
-            else {
-                if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("no match, returning null");
+            // Abort now if there is no base folder
+            if(baseFolder==null)
+                return null;
+
+            String separator = baseFolder.getSeparator();
+
+            // Start by cloning the base folder's URL, including credentials and properties
+            FileURL baseFolderURL = baseFolder.getURL();
+            destURL  = (FileURL)baseFolderURL.clone();
+            String basePath = destURL.getPath();
+            if(!destPath.equals(""))
+                destURL.setPath(basePath + (basePath.endsWith(separator)?"":separator) + destPath);
+
+            // At this point we have the proper URL, except that the path may contain '.', '..' or '~' tokens.
+            // => parse the URL from scratch to have the SchemeParser canonize them.
+            try {
+                destURL = FileURL.getFileURL(destURL.toString(true));
+                destURL.importProperties(baseFolderURL);
+            }
+            catch(MalformedURLException e2) {
                 return null;
             }
         }
 
-        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("destFolder="+(destFolder==null?null:destFolder.getAbsolutePath())+" newName="+newName);
-        return new Object[] {destFolder, newName};
+        // No point in going any further if the URL cannot be resolved into a file
+        destFile = FileFactory.getFile(destURL);
+        if(destFile ==null) {
+            if(Debug.ON) Debug.trace("could not resolve a file for "+destURL);
+            return null;
+        }
+
+        // Test if the destination file exists
+        boolean destFileExists = destFile.exists();
+        if(destFileExists) {
+            // Note: path to archives must end with a trailing separator character to refer to the archive as a folder,
+            //  if they don't, they'll refer to the archive as a file.
+            if(destFile.isDirectory() || (destPath.endsWith(destFile.getSeparator()) && destFile.isBrowsable()))
+                return new ResolvedDestination(destFile, ResolvedDestination.EXISTING_FOLDER, destFile);
+        }
+
+        // Test if the destination's parent exists, if not the path is not a valid destination
+        AbstractFile destParent = destFile.getParentSilently();
+        if(destParent==null || !destParent.exists())
+            return null;
+
+        return new ResolvedDestination(destFile, destFileExists?ResolvedDestination.EXISTING_FILE:ResolvedDestination.NEW_FILE, destParent);
     }
 
 
