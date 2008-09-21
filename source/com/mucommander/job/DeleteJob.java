@@ -270,6 +270,6 @@ public class DeleteJob extends FileJob {
         if(isOptimizingArchive)
             return Translator.get("optimizing_archive", archiveToOptimize.getName());
 
-        return Translator.get("delete.deleting_file", getCurrentFileInfo());
+        return Translator.get("delete.deleting_file", getCurrentFilename());
     }
 }

@@ -599,7 +599,7 @@ public abstract class TransferFileJob extends FileJob {
      */
     public String getStatusString() {
         if(isCheckingIntegrity())
-            return Translator.get("progress_dialog.verifying_file", getCurrentFileInfo());
+            return Translator.get("progress_dialog.verifying_file", getCurrentFilename());
 
         return super.getStatusString();
     }

@@ -243,6 +243,6 @@ public class CopyJob extends AbstractCopyJob {
         if(isOptimizingArchive)
             return Translator.get("optimizing_archive", archiveToOptimize.getName());
 
-        return Translator.get(mode==UNPACK_MODE?"unpack_dialog.unpacking_file":mode==DOWNLOAD_MODE?"download_dialog.downloading_file":"copy_dialog.copying_file", getCurrentFileInfo());
+        return Translator.get(mode==UNPACK_MODE?"unpack_dialog.unpacking_file":mode==DOWNLOAD_MODE?"download_dialog.downloading_file":"copy_dialog.copying_file", getCurrentFilename());
     }
 }

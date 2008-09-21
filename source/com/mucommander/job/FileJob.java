@@ -22,7 +22,6 @@ package com.mucommander.job;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.impl.CachedFile;
 import com.mucommander.file.util.FileSet;
-import com.mucommander.text.SizeFormat;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.QuestionDialog;
 import com.mucommander.ui.dialog.file.ProgressDialog;
@@ -98,8 +97,8 @@ public abstract class FileJob implements Runnable {
     /** File currently being processed */
     protected AbstractFile currentFile;
 
-    /** Info string about the file currently being processed */
-    protected String currentFileInfo = "";
+    /** Name of the file currently being processed */
+    protected String currentFilename = "";
 
     /** If set to true, processed files will be unmarked from current table */
     private boolean autoUnmark = true;
@@ -405,8 +404,8 @@ public abstract class FileJob implements Runnable {
     protected void nextFile(AbstractFile file) {
         this.currentFile = file;
 
-        // Update current file information returned by getCurrentFileInfo(), in the format "test.zip" (14KB)
-        this.currentFileInfo = "\""+currentFile.getName()+"\" ("+ SizeFormat.format(currentFile.getSize(), SizeFormat.DIGITS_MEDIUM| SizeFormat.UNIT_SHORT| SizeFormat.ROUND_TO_KB)+")";
+        // Update current file information returned by getCurrentFilename()
+        this.currentFilename = "'"+currentFile.getName()+"'";
 
 //        // Notify ProgressDialog (if any) that a new file is being processed
 //        if(progressDialog!=null)
@@ -447,12 +446,14 @@ public abstract class FileJob implements Runnable {
 //
 
     /**
-     * Returns a basic description of the file currently being processed, for example : "test.zip" (14KB)
+     * Returns the name of the file currently being processed surrounded by simple quotes (e.g. 'test.zip'), or an empty
+     * string if no file is currently being processed.
      *
-     * @return a basic description of the file currently being processed
+     * @return the name of the file currently being processed surrounded by simple quotes, or an empty string if no file
+     * is currently being processed
      */
-    protected String getCurrentFileInfo() {
-        return currentFileInfo;
+    protected String getCurrentFilename() {
+        return currentFilename;
     }
 	
 	
@@ -646,7 +647,7 @@ public abstract class FileJob implements Runnable {
      * @return a String describing what the job is currently doing
      */
     public String getStatusString() {
-        return Translator.get("progress_dialog.processing_file", getCurrentFileInfo());
+        return Translator.get("progress_dialog.processing_file", getCurrentFilename());
     }
 
 

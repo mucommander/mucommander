@@ -326,7 +326,7 @@ public class SendMailJob extends TransferFileJob {
 
     public String getStatusString() {
         if(connectedToMailServer)
-            return Translator.get("email.sending_file", getCurrentFileInfo());
+            return Translator.get("email.sending_file", getCurrentFilename());
         else
             return Translator.get("email.connecting_to_server", mailServer);
     }

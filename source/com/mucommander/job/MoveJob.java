@@ -294,6 +294,6 @@ public class MoveJob extends AbstractCopyJob {
         if(isOptimizingArchive)
             return Translator.get("optimizing_archive", archiveToOptimize.getName());
 
-        return Translator.get("move_dialog.moving_file", getCurrentFileInfo());
+        return Translator.get("move_dialog.moving_file", getCurrentFilename());
     }
 }

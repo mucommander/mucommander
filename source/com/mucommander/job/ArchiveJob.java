@@ -234,6 +234,6 @@ public class ArchiveJob extends TransferFileJob {
     }
 
     public String getStatusString() {
-        return Translator.get("pack_dialog.packing_file", getCurrentFileInfo());
+        return Translator.get("pack_dialog.packing_file", getCurrentFilename());
     }
 }
