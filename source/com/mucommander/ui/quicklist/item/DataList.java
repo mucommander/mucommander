@@ -44,7 +44,8 @@ public class DataList extends JList implements QuickListFocusableComponent {
 		setFocusTraversalKeysEnabled(false);
 		
         addMouseListenerToList();
-		addKeyListenerToList();		
+		addKeyListenerToList();
+		setFixedCellHeight((int) (getFontMetrics(getFont()).getHeight() * 1.5));
 	}
 	
 	/**

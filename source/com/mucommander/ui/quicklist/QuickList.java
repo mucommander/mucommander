@@ -91,7 +91,7 @@ public abstract class QuickList extends JPopupMenu implements FocusListener {
 			width = Math.max(width, ((Component) items.elementAt(i)).getPreferredSize().getWidth());
 			height += ((Component) items.elementAt(i)).getPreferredSize().getHeight();
 		}
-		return new Dimension((int) Math.ceil(Math.max(folderPanel.getWidth() / 2 ,width)), (int) Math.ceil(height));
+		return new Dimension((int) Math.ceil(Math.max(folderPanel.getWidth() / 2 ,width * 1.05)), (int) Math.ceil(height));
 	}
 	
 	public FolderPanel getPanel() {
