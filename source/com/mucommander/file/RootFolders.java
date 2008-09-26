@@ -106,12 +106,14 @@ public class RootFolders {
             String folderPath;
             while((line=br.readLine())!=null) {
                 // Skip comments
-                if(!line.startsWith("#")) {
+                // JS, 2008-09-25: Exclude empty lines too
+                line = line.trim();
+                if(line.length() > 0 && !line.startsWith("#")) {
                     st = new StringTokenizer(line);
                     // path is second token
                     st.nextToken();
                     folderPath = st.nextToken();
-                    if(!(folderPath.equals("/proc") || folderPath.equals("none"))) {
+                    if(!(folderPath.equals("/proc") || folderPath.equals("none") || folderPath.equals("/dev/shm"))) {
                         file = FileFactory.getFile(folderPath);
                         if(file!=null && !v.contains(file))
                             v.add(file);
