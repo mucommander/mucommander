@@ -164,6 +164,8 @@ Bug fixes:
   replacing existing command line options (bug #66). Contributed by Joshua Lebo.
 - Fixed a deadlock happening under Ubuntu (bug #67).
 - Fixed a crash occurring on 64-bit versions of Windows (bug #57).
+- Fixed volumes not appearing in the drive button on Unix-based OSes (other than
+  Mac OS X) under certain circumstances. Fix contributed by Johann Schmitz.
 
 Known issues:
 - Korean, Simplified Chinese, Slovenian and Slovak translations are not 
