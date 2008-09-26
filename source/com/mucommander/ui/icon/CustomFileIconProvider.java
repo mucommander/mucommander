@@ -63,6 +63,8 @@ public class CustomFileIconProvider implements FileIconProvider {
     /** Icon for the root of remote (non-local) locations */
     public final static String NETWORK_ICON_NAME = "network.png";
 
+    /** Icon for not accessible files (used for quick-lists) **/
+    public final static String NOT_ACCESSIBLE_FILE = "not_accessible.png";
 
     /** File icon <-> extensions association map. For information about specific file extensions, refer to:
      * <ul>

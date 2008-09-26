@@ -18,15 +18,16 @@
 
 package com.mucommander.ui.main.quicklist;
 
+import java.util.Arrays;
+import java.util.Vector;
+
+import javax.swing.Icon;
+
 import com.mucommander.bookmark.Bookmark;
 import com.mucommander.bookmark.BookmarkListener;
 import com.mucommander.bookmark.BookmarkManager;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.quicklist.QuickListWithIcons;
-
-import javax.swing.*;
-import java.util.Arrays;
-import java.util.Vector;
 
 /**
  * This quick list shows existing bookmarks.
@@ -51,8 +52,8 @@ public class BookmarksQL extends QuickListWithIcons implements BookmarkListener 
 		return sortedBookmarkNames;
 	}
 	
-	protected ImageIcon itemToIcon(String value) {
-		return getImageIconOfFile(BookmarkManager.getBookmark(value).getLocation());
+	protected Icon itemToIcon(String value) {
+		return getIconOfFile(BookmarkManager.getBookmark(value).getLocation());
 	}
 
 	/**

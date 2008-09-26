@@ -24,14 +24,18 @@ import java.awt.Image;
 import java.util.HashMap;
 
 import javax.swing.DefaultListCellRenderer;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JList;
+import javax.swing.event.PopupMenuEvent;
+import javax.swing.event.PopupMenuListener;
 
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
+import com.mucommander.ui.icon.CustomFileIconProvider;
 import com.mucommander.ui.icon.FileIcons;
 import com.mucommander.ui.icon.IconManager;
-import com.mucommander.ui.main.StatusBar;
+import com.mucommander.ui.icon.SpinningDial;
 import com.mucommander.ui.quicklist.item.DataList;
 
 /**
@@ -44,13 +48,45 @@ import com.mucommander.ui.quicklist.item.DataList;
 public abstract class QuickListWithIcons extends QuickListWithDataList {
 	// This HashMap's keys are items and its objects are the corresponding icon.
 	private HashMap itemToIconCacheMap = new HashMap();
-	// Maximum number of cached items.
-	private int MAX_ITEMS_NUM = 100;
-	// This icon will appear until the real item's icon is fetched.
-	static final ImageIcon waitingIcon = IconManager.getIcon(IconManager.STATUS_BAR_ICON_SET, StatusBar.WAITING_ICON);
+	// This SpinningDial will appear until the icon fetching of an item is over.
+	private static final SpinningDial waitingIcon = new SpinningDial();
+	// If the icon fetching fails for some item, the following icon will appear for it. 
+	private static final Icon notAvailableIcon = IconManager.getIcon(IconManager.FILE_ICON_SET, CustomFileIconProvider.NOT_ACCESSIBLE_FILE);
+	// Saves the number of waiting-icons (SpinningDials) appearing in the list.
+	private int numOfWaitingIconInList;
 	
 	public QuickListWithIcons(String header, String emptyPopupHeader) {
 		super(header, emptyPopupHeader);
+		numOfWaitingIconInList = 0;
+		addPopupMenuListener(new PopupMenuListener() {
+
+			public void popupMenuCanceled(PopupMenuEvent e) {}
+
+			public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {}
+
+			public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
+				// Clear icon-caching before opening popup-list in order to let the icons be fetched again.
+				itemToIconCacheMap.clear();
+			}			
+		});
+	}
+	
+	/**
+	 * Called when waitingIcon is added to the list.
+	 */
+	private synchronized void waitingIconAddedToList() {
+		// If there was no other waitingIcon in the list before current addition - start the spinning dial.
+		if (numOfWaitingIconInList++ == 0)
+			waitingIcon.setAnimated(true);
+	}
+	
+	/**
+	 * Called when waitingIcon is removed from the list.
+	 */
+	private synchronized void waitingIconRemovedFromList() {
+		// If after current remove operation, there will be no waitingIcon in the list - stop the spinning dial.
+		if (--numOfWaitingIconInList == 0)
+			waitingIcon.setAnimated(false);
 	}
 	
 	protected DataList getList() { return new GenericPopupDataListWithIcons(); }
@@ -61,42 +97,46 @@ public abstract class QuickListWithIcons extends QuickListWithDataList {
 	 * @param value - an item from the data list.
 	 * @return icon.
 	 */
-	protected abstract ImageIcon itemToIcon(String value);
+	protected abstract Icon itemToIcon(String value);
 	
 	/**
 	 * This function gets a path, resolves the file it points to, and return the file's icon.
 	 * 
 	 * @param filepath - path.
-	 * @return icon.
+	 * @return icon of the file in the given path. null is returned if a file in the given path
+	 *  does not exist or is not accessible. 
 	 */
-	protected ImageIcon getImageIconOfFile(String filepath) {
+	protected Icon getIconOfFile(String filepath) {
 		AbstractFile file = FileFactory.getFile(filepath);
-		return IconManager.getImageIcon(FileIcons.getFileIcon(file));
+		return (file != null && file.exists()) ?
+			IconManager.getImageIcon(FileIcons.getFileIcon(file)) : null; 
 	}
 	
-	private ImageIcon getImageIconOfItem(final String item) {		
+	private Icon getImageIconOfItem(final String item) {
 		boolean found;
 		synchronized(itemToIconCacheMap) {
-			if (!(found = itemToIconCacheMap.containsKey(item)))
-				itemToIconCacheMap.put(item, waitingIcon);			
+			if (!(found = itemToIconCacheMap.containsKey(item))) {
+				itemToIconCacheMap.put(item, waitingIcon);
+				waitingIconAddedToList();
+			}
 		}
 		
 		if (!found)
 			new Thread() {
 				public void run() {
-					ImageIcon icon = itemToIcon(item);
+					Icon icon = itemToIcon(item);
 					synchronized(itemToIconCacheMap) {
-						if (itemToIconCacheMap.size() > MAX_ITEMS_NUM)
-							itemToIconCacheMap.clear();
-						itemToIconCacheMap.put(item, icon);
+						// If the item does not exist or is not accessible, show notAvailableIcon for it.
+						itemToIconCacheMap.put(item, icon != null ? icon : notAvailableIcon);
 					}
+					waitingIconRemovedFromList();
 					repaint();
 				}
 			}.start();
 		
-		ImageIcon result;
+		Icon result;
 		synchronized(itemToIconCacheMap) {
-			result = (ImageIcon) itemToIconCacheMap.get(item);			
+			result = (Icon) itemToIconCacheMap.get(item);
 		}
 		return result;
 	}
@@ -114,19 +154,23 @@ public abstract class QuickListWithIcons extends QuickListWithDataList {
 
 				// Add its icon
 				String item = (String) (getModel().getElementAt(index));				
-				ImageIcon imageIcon = getImageIconOfItem(item);
-				setIcon(resizeIcon(imageIcon));
+				Icon icon = getImageIconOfItem(item);
+				setIcon(resizeIcon(icon));
 
 				return this;
 			}
 			
-			private ImageIcon resizeIcon(ImageIcon icon) {
-				Image image = icon.getImage();
-				final Dimension dimension = this.getPreferredSize();
-				final double height = dimension.getHeight();
-				final double width = (height / icon.getIconHeight()) * icon.getIconWidth();
-				image = image.getScaledInstance((int)width, (int)height, Image.SCALE_SMOOTH);
-				return new ImageIcon(image);
+			private Icon resizeIcon(Icon icon) {
+				if (icon instanceof ImageIcon) {
+					Image image = ((ImageIcon) icon).getImage();
+					final Dimension dimension = this.getPreferredSize();
+					final double height = dimension.getHeight();
+					final double width = (height / icon.getIconHeight()) * icon.getIconWidth();
+					image = image.getScaledInstance((int)width, (int)height, Image.SCALE_SMOOTH);
+					return new ImageIcon(image);
+				}
+
+				return icon;
 			}
 		}
 	}

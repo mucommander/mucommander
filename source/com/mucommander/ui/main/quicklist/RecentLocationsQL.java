@@ -20,7 +20,7 @@ package com.mucommander.ui.main.quicklist;
 
 import java.util.LinkedList;
 
-import javax.swing.ImageIcon;
+import javax.swing.Icon;
 
 import com.mucommander.text.Translator;
 import com.mucommander.ui.event.LocationEvent;
@@ -69,7 +69,7 @@ public class RecentLocationsQL extends QuickListWithIcons implements LocationLis
 		return list.toArray();
 	}
 
-	protected ImageIcon itemToIcon(String value) {
-		return getImageIconOfFile(value);
+	protected Icon itemToIcon(String value) {
+		return getIconOfFile(value);
 	}
 }
