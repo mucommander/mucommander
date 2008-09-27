@@ -18,6 +18,7 @@
 
 package com.mucommander.file;
 
+import com.mucommander.auth.AuthenticationTypes;
 import com.mucommander.auth.Credentials;
 
 /**
@@ -39,6 +40,7 @@ public class DefaultSchemeHandler implements SchemeHandler {
     protected SchemeParser parser;
     protected int standardPort;
     protected String pathSeparator;
+    protected int authenticationType;
     protected Credentials guestCredentials;
 
     /**
@@ -47,11 +49,12 @@ public class DefaultSchemeHandler implements SchemeHandler {
      *  <li>the parser is a DefaultSchemeParser instance created with the no-arg constructor</li>
      *  <li>the scheme's standard port is <code>-1</code></li>
      *  <li>the scheme's path separator is <code>"/"</code></li>
+     *  <li>authentication type is {@link com.mucommander.auth.AuthenticationTypes#NO_AUTHENTICATION}</li>
      *  <li>guest credentials are <code>null</code></li>
      * </ul>
      */
     public DefaultSchemeHandler() {
-        this(new DefaultSchemeParser(), -1, "/", null);
+        this(new DefaultSchemeParser(), -1, "/", AuthenticationTypes.NO_AUTHENTICATION, null);
     }
 
     /**
@@ -60,12 +63,14 @@ public class DefaultSchemeHandler implements SchemeHandler {
      * @param parser the parser that takes care of parsing URL strings and turning them into FileURL
      * @param standardPort the scheme's standard port, <code>-1</code> for none
      * @param pathSeparator the scheme's path separator, cannot be <code>null</code>
+     * @param authenticationType the type of authentication used by the scheme's file protocol
      * @param guestCredentials the scheme's guest credentials, <code>null</code> for none
      */
-    public DefaultSchemeHandler(SchemeParser parser, int standardPort, String pathSeparator, Credentials guestCredentials) {
+    public DefaultSchemeHandler(SchemeParser parser, int standardPort, String pathSeparator, int authenticationType, Credentials guestCredentials) {
         this.parser = parser;
         this.standardPort = standardPort;
         this.pathSeparator = pathSeparator;
+        this.authenticationType = authenticationType;
         this.guestCredentials = guestCredentials;
     }
 
@@ -81,6 +86,15 @@ public class DefaultSchemeHandler implements SchemeHandler {
      */
     public SchemeParser getParser() {
         return parser;
+    }
+
+    /**
+     * Returns the authentication type that was passed to the constructor.
+     *
+     * @return the authentication type that was passed to the constructor
+     */
+    public int getAuthenticationType() {
+        return authenticationType;
     }
 
     /**

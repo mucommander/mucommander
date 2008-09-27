@@ -18,6 +18,7 @@
 
 package com.mucommander.file.impl.smb;
 
+import com.mucommander.auth.AuthenticationTypes;
 import com.mucommander.auth.Credentials;
 import com.mucommander.file.FileURLTestCase;
 
@@ -40,6 +41,10 @@ public class SMBFileURLTest extends FileURLTestCase {
 
     protected int getDefaultPort() {
         return -1;
+    }
+
+    protected int getAuthenticationType() {
+        return AuthenticationTypes.AUTHENTICATION_REQUIRED;
     }
 
     protected Credentials getGuestCredentials() {

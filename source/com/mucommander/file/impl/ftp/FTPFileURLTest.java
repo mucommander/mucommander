@@ -18,6 +18,7 @@
 
 package com.mucommander.file.impl.ftp;
 
+import com.mucommander.auth.AuthenticationTypes;
 import com.mucommander.auth.Credentials;
 import com.mucommander.file.FileURLTestCase;
 
@@ -38,6 +39,10 @@ public class FTPFileURLTest extends FileURLTestCase {
 
     protected int getDefaultPort() {
         return 21;
+    }
+
+    protected int getAuthenticationType() {
+        return AuthenticationTypes.AUTHENTICATION_REQUIRED;
     }
 
     protected Credentials getGuestCredentials() {

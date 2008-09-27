@@ -18,6 +18,7 @@
 
 package com.mucommander.file.impl.local;
 
+import com.mucommander.auth.AuthenticationTypes;
 import com.mucommander.auth.Credentials;
 import com.mucommander.file.FileURL;
 import com.mucommander.file.FileURLTestCase;
@@ -122,6 +123,10 @@ public class LocalFileURLTest extends FileURLTestCase {
 
     protected int getDefaultPort() {
         return -1;
+    }
+
+    protected int getAuthenticationType() {
+        return AuthenticationTypes.NO_AUTHENTICATION;
     }
 
     protected Credentials getGuestCredentials() {

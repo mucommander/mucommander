@@ -18,6 +18,7 @@
 
 package com.mucommander.file.impl.http;
 
+import com.mucommander.auth.AuthenticationTypes;
 import com.mucommander.auth.Credentials;
 import com.mucommander.file.FileURLTestCase;
 
@@ -38,6 +39,10 @@ public class HTTPSFileURLTest extends FileURLTestCase {
 
     protected int getDefaultPort() {
         return 443;
+    }
+
+    protected int getAuthenticationType() {
+        return AuthenticationTypes.AUTHENTICATION_OPTIONAL;
     }
 
     protected Credentials getGuestCredentials() {

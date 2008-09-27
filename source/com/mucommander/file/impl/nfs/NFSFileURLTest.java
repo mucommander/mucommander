@@ -18,6 +18,7 @@
 
 package com.mucommander.file.impl.nfs;
 
+import com.mucommander.auth.AuthenticationTypes;
 import com.mucommander.auth.Credentials;
 import com.mucommander.file.FileURLTestCase;
 
@@ -38,6 +39,10 @@ public class NFSFileURLTest extends FileURLTestCase {
 
     protected int getDefaultPort() {
         return 2049;
+    }
+
+    protected int getAuthenticationType() {
+        return AuthenticationTypes.NO_AUTHENTICATION;
     }
 
     protected Credentials getGuestCredentials() {

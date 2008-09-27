@@ -18,6 +18,7 @@
 
 package com.mucommander.file;
 
+import com.mucommander.auth.AuthenticationTypes;
 import com.mucommander.auth.Credentials;
 
 /**
@@ -38,6 +39,10 @@ public class DefaultFileURLTest extends FileURLTestCase {
 
     protected int getDefaultPort() {
         return -1;
+    }
+
+    protected int getAuthenticationType() {
+        return AuthenticationTypes.NO_AUTHENTICATION;
     }
 
     protected Credentials getGuestCredentials() {

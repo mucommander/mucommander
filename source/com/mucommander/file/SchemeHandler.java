@@ -18,6 +18,7 @@
 
 package com.mucommander.file;
 
+import com.mucommander.auth.AuthenticationTypes;
 import com.mucommander.auth.Credentials;
 
 /**
@@ -89,6 +90,14 @@ public interface SchemeHandler {
      * @return the scheme's guest credentials, <code>null</code> if the scheme doesn't have any
      */
     public Credentials getGuestCredentials();
+
+    /**
+     * Returns the type of authentication used by the scheme's file protocol. The returned value is one of the constants
+     * defined in {@link AuthenticationTypes}.
+     *
+     * @return the type of authentication used by the scheme's file protocol
+     */
+    public int getAuthenticationType();
 
     /**
      * Returns the scheme's path separator, which serves as a delimiter for path fragments. For most schemes, this is

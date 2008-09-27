@@ -19,6 +19,7 @@
 
 package com.mucommander.file;
 
+import com.mucommander.auth.AuthenticationTypes;
 import com.mucommander.auth.Credentials;
 import com.mucommander.file.compat.CompatURLStreamHandler;
 import com.mucommander.util.StringUtils;
@@ -142,18 +143,18 @@ public class FileURL implements Cloneable {
         // Register custom handlers for known schemes
 
         String fileSeparator = System.getProperty("file.separator");
-        registerHandler(FileProtocols.FILE, new DefaultSchemeHandler(new DefaultSchemeParser(fileSeparator, false, System.getProperty("user.home")), -1, fileSeparator, null));
+        registerHandler(FileProtocols.FILE, new DefaultSchemeHandler(new DefaultSchemeParser(fileSeparator, false, System.getProperty("user.home")), -1, fileSeparator, AuthenticationTypes.NO_AUTHENTICATION, null));
 
-        registerHandler(FileProtocols.FTP, new DefaultSchemeHandler(new DefaultSchemeParser(), 21, "/", new Credentials("anonymous", "someuser@mucommander.com")));
-        registerHandler(FileProtocols.SFTP, new DefaultSchemeHandler(new DefaultSchemeParser(), 22, "/", null));
-        registerHandler(FileProtocols.HTTP, new DefaultSchemeHandler(new DefaultSchemeParser("/", true, null), 80, "/", null));
-        registerHandler(FileProtocols.S3, new DefaultSchemeHandler(new DefaultSchemeParser("/", true, null), 80, "/", null));
-        registerHandler(FileProtocols.WEBDAV, new DefaultSchemeHandler(new DefaultSchemeParser("/", true, null), 80, "/", null));
-        registerHandler(FileProtocols.HTTPS, new DefaultSchemeHandler(new DefaultSchemeParser("/", true, null), 443, "/", null));
-        registerHandler(FileProtocols.WEBDAVS, new DefaultSchemeHandler(new DefaultSchemeParser("/", true, null), 443, "/", null));
-        registerHandler(FileProtocols.NFS, new DefaultSchemeHandler(new DefaultSchemeParser(), 2049, "/", null));
+        registerHandler(FileProtocols.FTP, new DefaultSchemeHandler(new DefaultSchemeParser(), 21, "/", AuthenticationTypes.AUTHENTICATION_REQUIRED, new Credentials("anonymous", "someuser@mucommander.com")));
+        registerHandler(FileProtocols.SFTP, new DefaultSchemeHandler(new DefaultSchemeParser(), 22, "/", AuthenticationTypes.AUTHENTICATION_REQUIRED, null));
+        registerHandler(FileProtocols.HTTP, new DefaultSchemeHandler(new DefaultSchemeParser("/", true, null), 80, "/", AuthenticationTypes.AUTHENTICATION_OPTIONAL, null));
+        registerHandler(FileProtocols.S3, new DefaultSchemeHandler(new DefaultSchemeParser("/", true, null), 80, "/", AuthenticationTypes.AUTHENTICATION_REQUIRED, null));
+        registerHandler(FileProtocols.WEBDAV, new DefaultSchemeHandler(new DefaultSchemeParser("/", true, null), 80, "/", AuthenticationTypes.AUTHENTICATION_REQUIRED, null));
+        registerHandler(FileProtocols.HTTPS, new DefaultSchemeHandler(new DefaultSchemeParser("/", true, null), 443, "/", AuthenticationTypes.AUTHENTICATION_OPTIONAL, null));
+        registerHandler(FileProtocols.WEBDAVS, new DefaultSchemeHandler(new DefaultSchemeParser("/", true, null), 443, "/", AuthenticationTypes.AUTHENTICATION_REQUIRED, null));
+        registerHandler(FileProtocols.NFS, new DefaultSchemeHandler(new DefaultSchemeParser(), 2049, "/", AuthenticationTypes.NO_AUTHENTICATION, null));
 
-        registerHandler(FileProtocols.SMB, new DefaultSchemeHandler(new DefaultSchemeParser(), -1, "/", new Credentials("GUEST", "")) {
+        registerHandler(FileProtocols.SMB, new DefaultSchemeHandler(new DefaultSchemeParser(), -1, "/", AuthenticationTypes.AUTHENTICATION_REQUIRED, new Credentials("GUEST", "")) {
             public FileURL getRealm(FileURL location) {
                 FileURL realm = new FileURL(this);
 
@@ -433,6 +434,18 @@ public class FileURL implements Cloneable {
     }
 
     /**
+     * Returns the type of authentication used by the scheme's file protocol. The returned value is one of the constants
+     * defined in {@link AuthenticationTypes}.
+     *
+     * <p>This method is just a shorthand for <code>getHandler().getAuthenticationType()</code>.</p>
+     *
+     * @return the type of authentication used by the scheme's file protocol
+     */
+    public int getAuthenticationType() {
+        return handler.getAuthenticationType();
+    }
+
+    /**
      * Returns true if this URL contains credentials, i.e. a login and/or password part. If <code>true</code> is
      * returned, {@link #getCredentials()} will return a non-null value.
      *
@@ -446,8 +459,12 @@ public class FileURL implements Cloneable {
      * Returns the credentials (login and password) contained by this URL, wrapped in an {@link Credentials} object.
      * Returns <code>null</code> if this URL doesn't have a login or password part.
      *
+     * <p>The returned credentials may or may be of any use for the scheme's file protocol depending on the value
+     * returned by {@link #getAuthenticationType()}.</p>
+     *
      * @return the credentials contained by this URL, <code>null</code> if this URL doesn't have a login or password part.
      * @see #setCredentials(Credentials)
+     * @see #getAuthenticationType()
      */
     public Credentials getCredentials() {
         return credentials;
@@ -456,6 +473,9 @@ public class FileURL implements Cloneable {
     /**
      * Sets the login and password parts of this URL. Any credentials contained by this FileURL will be replaced.
      *  <code>null</code> can be passed to discard existing credentials.
+     *
+     * <p>Credentials may or may not be of any use for the scheme's file protocol depending on the value
+     * returned by {@link #getAuthenticationType()}.</p>
      *
      * @param credentials the new login and password parts, replacing any existing credentials. If null is passed,
      * existing credentials will be discarded.
