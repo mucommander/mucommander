@@ -2152,6 +2152,8 @@ com.mucommander.ui.action.AddBookmarkAction.tooltip:JA:現在のフォルダを�
 com.mucommander.ui.action.AddBookmarkAction.tooltip:SV:Lägg till aktuell mapp i bokmärkeslistan
 com.mucommander.ui.action.AddBookmarkAction.tooltip:DA:Tilføj den nuværende mappe til bogmærker
 
+com.mucommander.ui.action.BatchRenameAction.label:EN:$[batch_rename_dialog.title]
+
 com.mucommander.ui.action.EditBookmarksAction.label:EN:Edit bookmarks
 com.mucommander.ui.action.EditBookmarksAction.label:FR:Éditer les favoris
 com.mucommander.ui.action.EditBookmarksAction.label:ES:Editar favoritos
@@ -5101,6 +5103,8 @@ com.mucommander.ui.action.ShowRecentExecutedFilesQLAction.label:EN:Recently exec
 
 com.mucommander.ui.action.ShowBookmarksQLAction.label:EN:Bookmarks
 # Translation missing (New!)
+
+
 
 
 
@@ -13141,9 +13145,9 @@ color_chooser.title:DA:Vælg en farve
 # Batch-rename dialog #
 #######################
 
-multi_rename_dialog.title:EN:Batch Rename
-multi_rename_dialog.title:PL:Zmiana nazw plików
-multi_rename_dialog.title:DA:Multi omdøbning
+batch_rename_dialog.title:EN:Batch Rename
+batch_rename_dialog.title:PL:Zmiana nazw plików
+batch_rename_dialog.title:DA:Multi omdøbning
 # Translation missing (New!)
 
 
@@ -13157,9 +13161,9 @@ multi_rename_dialog.title:DA:Multi omdøbning
 
 
 
-multi_rename_dialog.mask:EN:Renaming Pattern
-multi_rename_dialog.mask:PL:Matryca
-multi_rename_dialog.mask:DA:Maske
+batch_rename_dialog.mask:EN:Renaming Pattern
+batch_rename_dialog.mask:PL:Matryca
+batch_rename_dialog.mask:DA:Maske
 # Translation missing (New!)
 
 
@@ -13173,9 +13177,9 @@ multi_rename_dialog.mask:DA:Maske
 
 
 
-multi_rename_dialog.file_name_mask:EN:File name mask
-multi_rename_dialog.file_name_mask:PL:Nazwa pliku
-multi_rename_dialog.file_name_mask:DA:Fil navn maske
+batch_rename_dialog.file_name_mask:EN:File name mask
+batch_rename_dialog.file_name_mask:PL:Nazwa pliku
+batch_rename_dialog.file_name_mask:DA:Fil navn maske
 # Translation missing (New!)
 
 
@@ -13189,9 +13193,9 @@ multi_rename_dialog.file_name_mask:DA:Fil navn maske
 
 
 
-multi_rename_dialog.extension_mask:EN:Extension mask
-multi_rename_dialog.extension_mask:PL:Rozszerzenie
-multi_rename_dialog.extension_mask:DA:Filendelse maske
+batch_rename_dialog.extension_mask:EN:Extension mask
+batch_rename_dialog.extension_mask:PL:Rozszerzenie
+batch_rename_dialog.extension_mask:DA:Filendelse maske
 # Translation missing (New!)
 
 
@@ -13205,9 +13209,9 @@ multi_rename_dialog.extension_mask:DA:Filendelse maske
 
 
 
-multi_rename_dialog.search_replace:EN:Search & replace
-multi_rename_dialog.search_replace:PL:Znajdź i zamień
-multi_rename_dialog.search_replace:DA:Søg og erstat
+batch_rename_dialog.search_replace:EN:Search & replace
+batch_rename_dialog.search_replace:PL:Znajdź i zamień
+batch_rename_dialog.search_replace:DA:Søg og erstat
 # Translation missing (New!)
 
 
@@ -13221,9 +13225,9 @@ multi_rename_dialog.search_replace:DA:Søg og erstat
 
 
 
-multi_rename_dialog.search_for:EN:Search for
-multi_rename_dialog.search_for:PL:Szukaj
-multi_rename_dialog.search_for:DA:Søg efter
+batch_rename_dialog.search_for:EN:Search for
+batch_rename_dialog.search_for:PL:Szukaj
+batch_rename_dialog.search_for:DA:Søg efter
 # Translation missing (New!)
 
 
@@ -13237,9 +13241,9 @@ multi_rename_dialog.search_for:DA:Søg efter
 
 
 
-multi_rename_dialog.replace_with:EN:Replace with
-multi_rename_dialog.replace_with:PL:Zamień na
-multi_rename_dialog.replace_with:DA:Erstat med
+batch_rename_dialog.replace_with:EN:Replace with
+batch_rename_dialog.replace_with:PL:Zamień na
+batch_rename_dialog.replace_with:DA:Erstat med
 # Translation missing (New!)
 
 
@@ -13253,9 +13257,9 @@ multi_rename_dialog.replace_with:DA:Erstat med
 
 
 
-multi_rename_dialog.counter:EN:Counter
-multi_rename_dialog.counter:PL:Licznik
-multi_rename_dialog.counter:DA:Tæller
+batch_rename_dialog.counter:EN:Counter
+batch_rename_dialog.counter:PL:Licznik
+batch_rename_dialog.counter:DA:Tæller
 # Translation missing (New!)
 
 
@@ -13269,9 +13273,9 @@ multi_rename_dialog.counter:DA:Tæller
 
 
 
-multi_rename_dialog.start_at:EN:Start at
-multi_rename_dialog.start_at:PL:Start
-multi_rename_dialog.start_at:DA:Start på
+batch_rename_dialog.start_at:EN:Start at
+batch_rename_dialog.start_at:PL:Start
+batch_rename_dialog.start_at:DA:Start på
 # Translation missing (New!)
 
 
@@ -13285,9 +13289,9 @@ multi_rename_dialog.start_at:DA:Start på
 
 
 
-multi_rename_dialog.step_by:EN:Step by
-multi_rename_dialog.step_by:PL:Krok
-multi_rename_dialog.step_by:DA:Trin
+batch_rename_dialog.step_by:EN:Step by
+batch_rename_dialog.step_by:PL:Krok
+batch_rename_dialog.step_by:DA:Trin
 # Translation missing (New!)
 
 
@@ -13301,9 +13305,9 @@ multi_rename_dialog.step_by:DA:Trin
 
 
 
-multi_rename_dialog.digits:EN:Digits
-multi_rename_dialog.digits:PL:Liczba cyfr
-multi_rename_dialog.digits:DA:Cifre
+batch_rename_dialog.digits:EN:Digits
+batch_rename_dialog.digits:PL:Liczba cyfr
+batch_rename_dialog.digits:DA:Cifre
 # Translation missing (New!)
 
 
@@ -13317,9 +13321,9 @@ multi_rename_dialog.digits:DA:Cifre
 
 
 
-multi_rename_dialog.upper_lower_case:EN:Upper/Lower case
-multi_rename_dialog.upper_lower_case:PL:Wielkość znaków
-multi_rename_dialog.upper_lower_case:DA:Store/små bogstaver
+batch_rename_dialog.upper_lower_case:EN:Upper/Lower case
+batch_rename_dialog.upper_lower_case:PL:Wielkość znaków
+batch_rename_dialog.upper_lower_case:DA:Store/små bogstaver
 # Translation missing (New!)
 
 
@@ -13333,9 +13337,9 @@ multi_rename_dialog.upper_lower_case:DA:Store/små bogstaver
 
 
 
-multi_rename_dialog.no_change:EN:unchanged
-multi_rename_dialog.no_change:PL:bez zmian
-multi_rename_dialog.no_change:DA:uændret
+batch_rename_dialog.no_change:EN:unchanged
+batch_rename_dialog.no_change:PL:bez zmian
+batch_rename_dialog.no_change:DA:uændret
 # Translation missing (New!)
 
 
@@ -13349,9 +13353,9 @@ multi_rename_dialog.no_change:DA:uændret
 
 
 
-multi_rename_dialog.lower_case:EN:lowercase
-multi_rename_dialog.lower_case:PL:małe litery
-multi_rename_dialog.lower_case:DA:små bogstaver
+batch_rename_dialog.lower_case:EN:lowercase
+batch_rename_dialog.lower_case:PL:małe litery
+batch_rename_dialog.lower_case:DA:små bogstaver
 # Translation missing (New!)
 
 
@@ -13365,9 +13369,9 @@ multi_rename_dialog.lower_case:DA:små bogstaver
 
 
 
-multi_rename_dialog.upper_case:EN:UPPERCASE
-multi_rename_dialog.upper_case:PL:DUŻE LITERY
-multi_rename_dialog.upper_case:DA:STORE BOGSTAVER
+batch_rename_dialog.upper_case:EN:UPPERCASE
+batch_rename_dialog.upper_case:PL:DUŻE LITERY
+batch_rename_dialog.upper_case:DA:STORE BOGSTAVER
 # Translation missing (New!)
 
 
@@ -13381,9 +13385,9 @@ multi_rename_dialog.upper_case:DA:STORE BOGSTAVER
 
 
 
-multi_rename_dialog.first_upper:EN:First letter uppercase
-multi_rename_dialog.first_upper:PL:Pierwsza litera duża
-multi_rename_dialog.first_upper:DA:Første bogstaver stort
+batch_rename_dialog.first_upper:EN:First letter uppercase
+batch_rename_dialog.first_upper:PL:Pierwsza litera duża
+batch_rename_dialog.first_upper:DA:Første bogstaver stort
 # Translation missing (New!)
 
 
@@ -13397,9 +13401,9 @@ multi_rename_dialog.first_upper:DA:Første bogstaver stort
 
 
 
-multi_rename_dialog.word:EN:First Of Each Word
-multi_rename_dialog.word:PL:Pierwsza Każdego Słowa
-multi_rename_dialog.word:DA:Første Af Hvert Ord
+batch_rename_dialog.word:EN:First Of Each Word
+batch_rename_dialog.word:PL:Pierwsza Każdego Słowa
+batch_rename_dialog.word:DA:Første Af Hvert Ord
 # Translation missing (New!)
 
 
@@ -13413,9 +13417,9 @@ multi_rename_dialog.word:DA:Første Af Hvert Ord
 
 
 
-multi_rename_dialog.old_name:EN:Old name
-multi_rename_dialog.old_name:PL:Stara nazwa
-multi_rename_dialog.old_name:DA:Gammelt navn
+batch_rename_dialog.old_name:EN:Old name
+batch_rename_dialog.old_name:PL:Stara nazwa
+batch_rename_dialog.old_name:DA:Gammelt navn
 # Translation missing (New!)
 
 
@@ -13429,9 +13433,9 @@ multi_rename_dialog.old_name:DA:Gammelt navn
 
 
 
-multi_rename_dialog.new_name:EN:New name
-multi_rename_dialog.new_name:PL:Nowa nazwa
-multi_rename_dialog.new_name:DA:Nyt navn
+batch_rename_dialog.new_name:EN:New name
+batch_rename_dialog.new_name:PL:Nowa nazwa
+batch_rename_dialog.new_name:DA:Nyt navn
 # Translation missing (New!)
 
 
@@ -13445,9 +13449,9 @@ multi_rename_dialog.new_name:DA:Nyt navn
 
 
 
-multi_rename_dialog.start:EN:Start
-multi_rename_dialog.start:PL:Start
-multi_rename_dialog.start:DA:Start
+batch_rename_dialog.start:EN:Start
+batch_rename_dialog.start:PL:Start
+batch_rename_dialog.start:DA:Start
 # Translation missing (New!)
 
 
@@ -13461,9 +13465,9 @@ multi_rename_dialog.start:DA:Start
 
 
 
-multi_rename_dialog.remove:EN:Remove
-multi_rename_dialog.remove:PL:Usuń
-multi_rename_dialog.remove:DA:Fjern
+batch_rename_dialog.remove:EN:Remove
+batch_rename_dialog.remove:PL:Usuń
+batch_rename_dialog.remove:DA:Fjern
 # Translation missing (New!)
 
 
@@ -13477,9 +13481,9 @@ multi_rename_dialog.remove:DA:Fjern
 
 
 
-multi_rename_dialog.block_name:EN:Block
-multi_rename_dialog.block_name:PL:Zablokuj
-multi_rename_dialog.block_name:DA:Gruppe
+batch_rename_dialog.block_name:EN:Block
+batch_rename_dialog.block_name:PL:Zablokuj
+batch_rename_dialog.block_name:DA:Gruppe
 # Translation missing (New!)
 
 
@@ -13493,9 +13497,9 @@ multi_rename_dialog.block_name:DA:Gruppe
 
 
 
-multi_rename_dialog.range:EN:Range
-multi_rename_dialog.range:PL:Zakres
-multi_rename_dialog.range:DA:Område
+batch_rename_dialog.range:EN:Range
+batch_rename_dialog.range:PL:Zakres
+batch_rename_dialog.range:DA:Område
 # Translation missing (New!)
 
 
@@ -13509,8 +13513,8 @@ multi_rename_dialog.range:DA:Område
 
 
 
-multi_rename_dialog.proceed_renaming:EN:%1 files out of %2 will be renamed. Do you wish to proceed?
-multi_rename_dialog.proceed_renaming:DA:%1 filer ud af %2 vil blive omdøbt. Ønsker du at forsætte?
+batch_rename_dialog.proceed_renaming:EN:%1 files out of %2 will be renamed. Do you wish to proceed?
+batch_rename_dialog.proceed_renaming:DA:%1 filer ud af %2 vil blive omdøbt. Ønsker du at forsætte?
 # Translation missing (New!)
 
 
@@ -13524,8 +13528,8 @@ multi_rename_dialog.proceed_renaming:DA:%1 filer ud af %2 vil blive omdøbt. Øn
 
 
 
-multi_rename_dialog.confirmation_details:EN:This operation cannot be undone.
-multi_rename_dialog.confirmation_details:DA:Denne handling kan ikke fortrydes.
+batch_rename_dialog.confirmation_details:EN:This operation cannot be undone.
+batch_rename_dialog.confirmation_details:DA:Denne handling kan ikke fortrydes.
 # Translation missing (New!)
 
 
@@ -13539,9 +13543,9 @@ multi_rename_dialog.confirmation_details:DA:Denne handling kan ikke fortrydes.
 
 
 
-multi_rename_dialog.duplicate_names:EN:Duplicate names!
-multi_rename_dialog.duplicate_names:PL:Wykryto zduplikowane nazwy!
-multi_rename_dialog.duplicate_names:DA:Duplikerede navne!
+batch_rename_dialog.duplicate_names:EN:Duplicate names!
+batch_rename_dialog.duplicate_names:PL:Wykryto zduplikowane nazwy!
+batch_rename_dialog.duplicate_names:DA:Duplikerede navne!
 # Translation missing (New!)
 
 

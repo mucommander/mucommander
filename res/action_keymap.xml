@@ -379,9 +379,9 @@
   <!-- Default : control J                                                       -->
   <action class="com.mucommander.ui.action.ToggleTreeAction"             keystroke="control J"/>
   
-  <!-- Action  : Invoke multi-rename dialog.                                     -->
+  <!-- Action  : Invoke batch-rename dialog.                                     -->
   <!-- Default : alt F6                                                          -->
-  <action class="com.mucommander.ui.action.MultiRenameAction"            keystroke="alt F6"/>
+  <action class="com.mucommander.ui.action.BatchRenameAction"            keystroke="alt F6"/>
 
   <!-- Action  : Maximize the current window.                                    -->
   <!-- Default : meta M                                                          -->
