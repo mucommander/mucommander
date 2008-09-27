@@ -303,17 +303,35 @@ public class CredentialsManager implements VectorChangeListener {
 
 
     /**
-     * Looks for the best implicit credentials matching the given location (if any) and use them to authenticate the
-     * location by calling {@link #authenticate(com.mucommander.file.FileURL, CredentialsMapping)}.
+     * Looks for the best set of credentials matching the given location (if any) and use it to authenticate the
+     * URL by calling {@link #authenticate(com.mucommander.file.FileURL, CredentialsMapping)}.
+     * Returns <code>true</code> if a set of credentials was found and used to authenticate the URL, <code>false</code>
+     * otherwise.
+     *
+     * <p>Credentials are first looked for using {@link #getMatchingCredentials(com.mucommander.file.FileURL)}.
+     * If there is no match, guest credentials are retrieved from the URL and used (if any).</p>
      *
      * @param location the FileURL to authenticate
+     * @return <code>true</code> if a set of credentials was found and used to authenticate the URL, <code>false</code>
+     * otherwise
      */
-    public static void authenticateImplicit(FileURL location) {
+    public static boolean authenticateImplicit(FileURL location) {
         if(Debug.ON) Debug.trace("called, fileURL="+ location +" containsCredentials="+ location.containsCredentials());
 
         CredentialsMapping creds[] = getMatchingCredentials(location);
-        if(creds.length>0)
+        if(creds.length>0) {
             authenticate(location, creds[0]);
+            return true;
+        }
+        else {
+            Credentials guestCredentials = location.getGuestCredentials();
+            if(guestCredentials!=null) {
+                authenticate(location, new CredentialsMapping(guestCredentials, location.getRealm(), false));
+                return true;
+            }
+        }
+
+        return false;
     }
 
 
