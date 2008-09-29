@@ -76,14 +76,16 @@ Furbelow can be found at http://sourceforge.net/projects/furbelow .
 Credits
 -------
 
-Lead developers: 
+Core developers: 
 - Maxence Bernard
 - Nicolas Rinaudo
-
-Code contributors:
-- Vassil Dichev
 - Arik Hadas
 - Mariusz Jakubowski
+
+Contributors:
+- Ivan Baidakov
+- Vassil Dichev
+- Karel Klic
 - Joshua Lebo
 - Xavier Martin
 - Alejandro Scandroli
@@ -142,8 +144,8 @@ Improvements:
 - JNA library upgraded to version 3.0.6.
 - jCIFS library upgraded to version 1.2.19.
 - The Properties dialog now sports a large file icon.
-- Mac OS X 10.4 and up: the Properties dialog now displays
-  Spotlight/Finder comments.
+- Mac OS X 10.4 and up: the Properties dialog now displays Spotlight/Finder 
+  comments.
 - New and improved Windows installer, contributed by Karel Klic.
 
 Localization:

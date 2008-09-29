@@ -119,17 +119,19 @@ public class AboutDialog extends FocusDialog implements ActionListener {
             // Team.
             insertTitle(doc,         "The muCommander team");
 
-            // Lead developers.
-            insertHeader(doc,         "Lead developers");
+            // Core developers.
+            insertHeader(doc,         "Core developers");
             insertNormalString(doc,   "Maxence Bernard");
             insertNormalString(doc,   "Nicolas Rinaudo");
+            insertNormalString(doc,   "Arik Hadas");
+            insertNormalString(doc,   "Mariusz Jakubowski");
             insertLineBreak(doc);
 
             // Contributors.
-            insertHeader(doc,         "Code contributors");
+            insertHeader(doc,         "Contributors");
+            insertNormalString(doc,   "Ivan Baidakov");
             insertNormalString(doc,   "Vassil Dichev");
-            insertNormalString(doc,   "Arik Hadas");
-            insertNormalString(doc,   "Mariusz Jakubowski");
+            insertNormalString(doc,   "Karel Klic");
             insertNormalString(doc,   "Joshua Lebo");
             insertNormalString(doc,   "Xavier Martin");
             insertNormalString(doc,   "Alejandro Scandroli");
