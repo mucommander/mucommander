@@ -28,6 +28,7 @@ import com.mucommander.ui.button.RolloverButtonAdapter;
 import com.mucommander.ui.icon.IconManager;
 
 import javax.swing.*;
+import java.awt.*;
 
 /**
  * TrashPopupButton is a button that allows to interact with the current platform's trash, as returned by
@@ -86,5 +87,17 @@ public class TrashPopupButton extends PopupButton {
         }
 
         return popupMenu;
+    }
+
+
+    ////////////////////////
+    // Overridden methods //
+    ////////////////////////
+
+    /**
+     * Replace the default insets to be exactly (2,2,2,2).
+     */
+    public Insets getInsets() {
+        return new Insets(2, 2, 2, 2);
     }
 }

@@ -163,8 +163,6 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
         // Add a button for interacting with the trash, only if the current platform has a trash implementation
         if(DesktopManager.getTrash()!=null) {
             TrashPopupButton trashButton = new TrashPopupButton(mainFrame);
-            // Reduce the button's default margin which is too large, at least under Mac OS X 
-            trashButton.setMargin(new Insets(2, 2, 2, 2));
             trashButton.setPopupMenuLocation(SwingConstants.TOP);
 
             add(trashButton);

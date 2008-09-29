@@ -220,7 +220,6 @@ public class CommandBar extends JPanel implements ConfigurationListener, KeyList
 
             // Use new JButton decorations introduced in Mac OS X 10.5 (Leopard) with Java 1.5 and up
             if(OsFamilies.MAC_OS_X.isCurrent() && OsVersions.MAC_OS_X_10_5.isCurrentOrHigher() && JavaVersions.JAVA_1_5.isCurrentOrHigher()) {
-                button.setMargin(new Insets(6,8,6,8));
                 button.putClientProperty("JComponent.sizeVariant", "small");
                 button.putClientProperty("JButton.buttonType", "textured");
             }
