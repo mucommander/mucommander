@@ -18,16 +18,27 @@
 
 package com.mucommander.ui.dialog.pref.theme;
 
-import com.mucommander.ui.chooser.*;
-import com.mucommander.ui.dialog.pref.PreferencesDialog;
-import com.mucommander.ui.theme.ThemeData;
-
-import javax.swing.*;
-import javax.swing.border.Border;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Vector;
+
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JPanel;
+import javax.swing.border.Border;
+
+import com.mucommander.ui.chooser.ColorChangeEvent;
+import com.mucommander.ui.chooser.ColorChangeListener;
+import com.mucommander.ui.chooser.ColorChooser;
+import com.mucommander.ui.chooser.ColorPicker;
+import com.mucommander.ui.chooser.PreviewLabel;
+import com.mucommander.ui.dialog.pref.PreferencesDialog;
+import com.mucommander.ui.theme.ThemeData;
 
 /**
  * @author Maxence Bernard, Nicolas Rinaudo
@@ -115,7 +126,7 @@ class ColorButton extends JPanel implements ActionListener, ColorChangeListener 
             add(colorPicker);
         }
 
-        setCurrentColor(themeData.getColor(colorId));
+        setCurrentColor(themeData.getColor(colorId), false);
     }
 
 
@@ -131,10 +142,10 @@ class ColorButton extends JPanel implements ActionListener, ColorChangeListener 
         previewComponent.putClientProperty(previewColorPropertyName, currentColor);
     }
 
-    private void setCurrentColor(Color color) {
+    private void setCurrentColor(Color color, boolean initiatedByUser) {
         currentColor = color;
         if(themeData.isColorDifferent(colorId, currentColor))
-            themeData.setColor(colorId, currentColor);
+        	initiatedByUser &= themeData.setColor(colorId, currentColor);
         button.repaint();
 
         if(updatedPreviewComponents != null && previewColorPropertyName != null) {
@@ -142,6 +153,9 @@ class ColorButton extends JPanel implements ActionListener, ColorChangeListener 
             for(int i = 0; i < nbPreviewComponents; i++)
                 ((JComponent)updatedPreviewComponents.elementAt(i)).putClientProperty(previewColorPropertyName, color);
         }
+        
+        if (initiatedByUser)
+        	parent.componentChanged(null);
     }
 
 
@@ -162,7 +176,7 @@ class ColorButton extends JPanel implements ActionListener, ColorChangeListener 
         ColorChooser chooser;
         ColorChooser.createDialog(parent, chooser = createColorChooser()).showDialog();
 
-        setCurrentColor(chooser.getColor());
+        setCurrentColor(chooser.getColor(), true);
     }
 
 
@@ -170,5 +184,5 @@ class ColorButton extends JPanel implements ActionListener, ColorChangeListener 
     // ColorChangeListener implementation //
     ////////////////////////////////////////
 
-    public void colorChanged(ColorChangeEvent event) {setCurrentColor(event.getColor());}
+    public void colorChanged(ColorChangeEvent event) {setCurrentColor(event.getColor(), true);}
 }

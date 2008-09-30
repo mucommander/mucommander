@@ -18,15 +18,19 @@
 
 package com.mucommander.ui.dialog.pref.theme;
 
+import java.awt.Dialog;
+import java.awt.Dimension;
+import java.awt.Frame;
+
+import javax.swing.JOptionPane;
+
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.QuestionDialog;
 import com.mucommander.ui.dialog.pref.PreferencesDialog;
+import com.mucommander.ui.dialog.pref.component.PrefComponent;
 import com.mucommander.ui.theme.Theme;
 import com.mucommander.ui.theme.ThemeData;
 import com.mucommander.ui.theme.ThemeManager;
-
-import javax.swing.*;
-import java.awt.*;
 
 /**
  * Main dialog for the theme editor.
@@ -138,4 +142,8 @@ public class ThemeEditorDialog extends PreferencesDialog {
             }
         }
     }
+    
+    public void componentChanged(PrefComponent component) {
+		setCommitButtonsEnabled(!theme.isIdentical(data));
+	}
 }

@@ -23,15 +23,28 @@ import com.mucommander.text.CustomDateFormat;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.pref.PreferencesDialog;
 import com.mucommander.ui.dialog.pref.PreferencesPanel;
+import com.mucommander.ui.dialog.pref.component.PrefCheckBox;
+import com.mucommander.ui.dialog.pref.component.PrefComboBox;
+import com.mucommander.ui.dialog.pref.component.PrefRadioButton;
+import com.mucommander.ui.dialog.pref.component.PrefTextField;
 import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.layout.YBoxPanel;
 
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.ButtonGroup;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JPanel;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.plaf.basic.BasicComboBoxRenderer;
 import javax.swing.text.PlainDocument;
-import java.awt.*;
+
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -50,15 +63,15 @@ class GeneralPanel extends PreferencesPanel implements ItemListener, ActionListe
 
     // Language
     private String languages[];
-    private JComboBox languageComboBox;
+    private PrefComboBox languageComboBox;
 	
     // Date/time format
-    private JRadioButton time12RadioButton;
-    private JRadioButton time24RadioButton;
-    private JComboBox dateFormatComboBox;
-    private JTextField dateSeparatorField;
-    private JCheckBox showSecondsCheckBox;
-    private JCheckBox showCenturyCheckBox;
+    private PrefRadioButton time12RadioButton;
+    private PrefRadioButton time24RadioButton;
+    private PrefComboBox dateFormatComboBox;
+    private PrefTextField dateSeparatorField;
+    private PrefCheckBox showSecondsCheckBox;
+    private PrefCheckBox showCenturyCheckBox;
     private JLabel previewLabel;
     private Date exampleDate;
 
@@ -114,7 +127,11 @@ class GeneralPanel extends PreferencesPanel implements ItemListener, ActionListe
         this.languages = Translator.getAvailableLanguages();
         String currentLang = MuConfiguration.getVariable(MuConfiguration.LANGUAGE);
         String lang;
-        languageComboBox = new JComboBox();
+        languageComboBox = new PrefComboBox() {
+			public boolean hasChanged() {
+				return !languages[getSelectedIndex()].equals(MuConfiguration.getVariable(MuConfiguration.LANGUAGE));
+			}
+        };
 
         // Use a custom combo box renderer to display language icons 
         class LanguageComboBoxRenderer extends BasicComboBoxRenderer {
@@ -158,7 +175,11 @@ class GeneralPanel extends PreferencesPanel implements ItemListener, ActionListe
         dateFormatPanel.setBorder(BorderFactory.createTitledBorder(Translator.get("prefs_dialog.date")));
 
         // Date format combo
-        dateFormatComboBox = new JComboBox();
+        dateFormatComboBox = new PrefComboBox() {
+			public boolean hasChanged() {
+				return !getDateFormatString().equals(MuConfiguration.getVariable(MuConfiguration.DATE_FORMAT));
+			}
+        };
         String dateFormat = MuConfiguration.getVariable(MuConfiguration.DATE_FORMAT);
         String separator = MuConfiguration.getVariable(MuConfiguration.DATE_SEPARATOR, MuConfiguration.DEFAULT_DATE_SEPARATOR);
         int dateFormatIndex = 0;
@@ -179,7 +200,11 @@ class GeneralPanel extends PreferencesPanel implements ItemListener, ActionListe
         // Date separator field
         tempPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         tempPanel.add(new JLabel(Translator.get("prefs_dialog.date_separator")+": "));
-        dateSeparatorField = new JTextField(1);
+        dateSeparatorField = new PrefTextField(1) {
+			public boolean hasChanged() {
+				return !getText().equals(MuConfiguration.getVariable(MuConfiguration.DATE_SEPARATOR));
+			}
+        };
         // Limit the number of characters in the text field to 1 and enforces only non-alphanumerical characters
         PlainDocument doc = new PlainDocument() {
                 public void insertString(int param, String str, javax.swing.text.AttributeSet attributeSet) throws javax.swing.text.BadLocationException {
@@ -207,7 +232,11 @@ class GeneralPanel extends PreferencesPanel implements ItemListener, ActionListe
         tempPanel.add(Box.createHorizontalGlue());
         dateFormatPanel.add(tempPanel);
 
-        showCenturyCheckBox = new JCheckBox(Translator.get("prefs_dialog.show_century"));
+        showCenturyCheckBox = new PrefCheckBox(Translator.get("prefs_dialog.show_century")) {
+			public boolean hasChanged() {
+				return isSelected() != (MuConfiguration.getVariable(MuConfiguration.DATE_FORMAT).indexOf("yyyy")!=-1);
+			}
+        };
         showCenturyCheckBox.setSelected(dateFormat.indexOf("yyyy")!=-1);
         showCenturyCheckBox.addItemListener(this);
         dateFormatPanel.add(showCenturyCheckBox);
@@ -218,9 +247,19 @@ class GeneralPanel extends PreferencesPanel implements ItemListener, ActionListe
         YBoxPanel timeFormatPanel = new YBoxPanel();
         timeFormatPanel.setBorder(BorderFactory.createTitledBorder(Translator.get("prefs_dialog.time")));
 
-        time12RadioButton = new JRadioButton(Translator.get("prefs_dialog.time_12_hour"));
+        time12RadioButton = new PrefRadioButton(Translator.get("prefs_dialog.time_12_hour")) {
+			public boolean hasChanged() {
+				String timeFormat = MuConfiguration.getVariable(MuConfiguration.TIME_FORMAT);
+		        return isSelected() != (timeFormat.equals(HOUR_12_TIME_FORMAT) || timeFormat.equals(HOUR_12_TIME_FORMAT_WITH_SECONDS)); 
+			}
+        };
         time12RadioButton.addActionListener(this);
-        time24RadioButton = new JRadioButton(Translator.get("prefs_dialog.time_24_hour"));
+        time24RadioButton = new PrefRadioButton(Translator.get("prefs_dialog.time_24_hour")) {
+			public boolean hasChanged() {
+				String timeFormat = MuConfiguration.getVariable(MuConfiguration.TIME_FORMAT);
+		        return isSelected() != (timeFormat.equals(HOUR_24_TIME_FORMAT) || timeFormat.equals(HOUR_24_TIME_FORMAT_WITH_SECONDS));
+			}
+        };
         time24RadioButton.addActionListener(this);
         
         String timeFormat = MuConfiguration.getVariable(MuConfiguration.TIME_FORMAT);
@@ -237,7 +276,11 @@ class GeneralPanel extends PreferencesPanel implements ItemListener, ActionListe
         timeFormatPanel.add(time24RadioButton);
         timeFormatPanel.addSpace(10);
 
-        showSecondsCheckBox = new JCheckBox(Translator.get("prefs_dialog.show_seconds"));
+        showSecondsCheckBox = new PrefCheckBox(Translator.get("prefs_dialog.show_seconds")) {
+			public boolean hasChanged() {
+				return isSelected() != (MuConfiguration.getVariable(MuConfiguration.TIME_FORMAT).indexOf(":ss")!=-1);
+			}
+        };
         showSecondsCheckBox.setSelected(timeFormat.indexOf(":ss")!=-1);
         showSecondsCheckBox.addItemListener(this);
         timeFormatPanel.add(showSecondsCheckBox);
@@ -261,6 +304,14 @@ class GeneralPanel extends PreferencesPanel implements ItemListener, ActionListe
         mainPanel.add(dateTimeFormatPanel);
 
         add(mainPanel, BorderLayout.NORTH);
+        
+        languageComboBox.addDialogListener(parent);
+        time12RadioButton.addDialogListener(parent);
+        time24RadioButton.addDialogListener(parent);
+        dateFormatComboBox.addDialogListener(parent);
+        dateSeparatorField.addDialogListener(parent);
+        showSecondsCheckBox.addDialogListener(parent);
+        showCenturyCheckBox.addDialogListener(parent);
     }
 
     private String getTimeFormatString() {

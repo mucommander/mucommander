@@ -18,24 +18,31 @@
 
 package com.mucommander.ui.dialog.pref.general;
 
-import com.mucommander.bonjour.BonjourDirectory;
-import com.mucommander.conf.impl.MuConfiguration;
-import com.mucommander.desktop.DesktopManager;
-import com.mucommander.text.Translator;
-import com.mucommander.ui.combobox.SaneComboBox;
-import com.mucommander.ui.dialog.pref.PreferencesDialog;
-import com.mucommander.ui.dialog.pref.PreferencesPanel;
-import com.mucommander.ui.layout.XAlignedComponentPanel;
-import com.mucommander.ui.layout.YBoxPanel;
-import com.mucommander.ui.notifier.AbstractNotifier;
-import com.mucommander.ui.text.FilePathField;
-
-import javax.swing.*;
-import java.awt.*;
+import java.awt.BorderLayout;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.nio.charset.Charset;
 import java.util.Iterator;
+
+import javax.swing.BorderFactory;
+import javax.swing.ButtonGroup;
+import javax.swing.JLabel;
+import javax.swing.JRadioButton;
+
+import com.mucommander.bonjour.BonjourDirectory;
+import com.mucommander.conf.impl.MuConfiguration;
+import com.mucommander.desktop.DesktopManager;
+import com.mucommander.text.Translator;
+import com.mucommander.ui.dialog.pref.PreferencesDialog;
+import com.mucommander.ui.dialog.pref.PreferencesPanel;
+import com.mucommander.ui.dialog.pref.component.PrefCheckBox;
+import com.mucommander.ui.dialog.pref.component.PrefFilePathField;
+import com.mucommander.ui.dialog.pref.component.PrefRadioButton;
+import com.mucommander.ui.dialog.pref.component.PrefSaneComboBox;
+import com.mucommander.ui.dialog.pref.component.PrefTextField;
+import com.mucommander.ui.layout.XAlignedComponentPanel;
+import com.mucommander.ui.layout.YBoxPanel;
+import com.mucommander.ui.notifier.AbstractNotifier;
 
 /**
  * 'Misc' preferences panel.
@@ -45,37 +52,43 @@ import java.util.Iterator;
 class MiscPanel extends PreferencesPanel implements ItemListener {
 
     /** Custom shell command text field */
-    private JTextField customShellField;
+    private PrefTextField customShellField;
 	
     /** 'Use custom shell' radio button */
-    private JRadioButton useCustomShellRadioButton;
+    private PrefRadioButton useCustomShellRadioButton;
 
     /** 'Check for updates on startup' checkbox */
-    private JCheckBox checkForUpdatesCheckBox;
+    private PrefCheckBox checkForUpdatesCheckBox;
 
     /** 'Show confirmation dialog on quit' checkbox */
-    private JCheckBox quitConfirmationCheckBox;
+    private PrefCheckBox quitConfirmationCheckBox;
     
     /** 'Show splash screen' checkbox */
-    private JCheckBox showSplashScreenCheckBox;
+    private PrefCheckBox showSplashScreenCheckBox;
 
     /** 'Enable system notifications' checkbox */
-    private JCheckBox systemNotificationsCheckBox;
+    private PrefCheckBox systemNotificationsCheckBox;
 
     /** 'Enable Bonjour services discovery' checkbox */
-    private JCheckBox bonjourDiscoveryCheckBox;
+    private PrefCheckBox bonjourDiscoveryCheckBox;
 
     /** Shell encoding combo box. */
-    private JComboBox shellEncoding;
+    private PrefSaneComboBox shellEncoding;
 
-    private JComboBox createEncodingComboBox() {
+    private PrefSaneComboBox createEncodingComboBox() {
         Iterator availableEncodings;
         int      index;
         String   encoding;
         String   currentEncoding;
         int      selectedIndex;
 
-        shellEncoding = new SaneComboBox();
+        shellEncoding = new PrefSaneComboBox() {
+			public boolean hasChanged() {
+				return (shellEncoding.getSelectedIndex() == 0) /* is auto-detect? */ ? 
+						!(String.valueOf(true).equals(MuConfiguration.getVariable(MuConfiguration.AUTODETECT_SHELL_ENCODING))) :
+						!((String)shellEncoding.getSelectedItem()).equals(MuConfiguration.getVariable(MuConfiguration.SHELL_ENCODING));
+			}
+        };
         shellEncoding.addItem(Translator.get("prefs_dialog.auto_detect_shell_encoding"));
 
         // Otherwise, look for the selected character encoding as we add it.
@@ -109,7 +122,11 @@ class MiscPanel extends PreferencesPanel implements ItemListener {
         YBoxPanel northPanel = new YBoxPanel();
 
         JRadioButton useDefaultShellRadioButton = new JRadioButton(Translator.get("prefs_dialog.default_shell") + ':');
-        useCustomShellRadioButton = new JRadioButton(Translator.get("prefs_dialog.custom_shell") + ':');
+        useCustomShellRadioButton = new PrefRadioButton(Translator.get("prefs_dialog.custom_shell") + ':') {
+			public boolean hasChanged() {
+				return isSelected() != MuConfiguration.getVariable(MuConfiguration.USE_CUSTOM_SHELL, MuConfiguration.DEFAULT_USE_CUSTOM_SHELL);
+			}
+        };
 
         // Use sytem default or custom shell ?
         if(MuConfiguration.getVariable(MuConfiguration.USE_CUSTOM_SHELL, MuConfiguration.DEFAULT_USE_CUSTOM_SHELL))
@@ -129,7 +146,11 @@ class MiscPanel extends PreferencesPanel implements ItemListener {
         shellPanel.setBorder(BorderFactory.createTitledBorder(Translator.get("prefs_dialog.shell")));
 
         // Create a path field with auto-completion capabilities
-        customShellField = new FilePathField(MuConfiguration.getVariable(MuConfiguration.CUSTOM_SHELL, ""));
+        customShellField = new PrefFilePathField(MuConfiguration.getVariable(MuConfiguration.CUSTOM_SHELL, "")) {
+			public boolean hasChanged() {
+				return isEnabled() && !getText().equals(MuConfiguration.getVariable(MuConfiguration.CUSTOM_SHELL));
+			}
+        };
         customShellField.setEnabled(useCustomShellRadioButton.isSelected());
 
         shellPanel.addRow(useDefaultShellRadioButton, new JLabel(DesktopManager.getDefaultShell()), 5);
@@ -141,35 +162,66 @@ class MiscPanel extends PreferencesPanel implements ItemListener {
         northPanel.addSpace(10);
 
         // 'Show splash screen' option
-        showSplashScreenCheckBox = new JCheckBox(Translator.get("prefs_dialog.show_splash_screen"));
+        showSplashScreenCheckBox = new PrefCheckBox(Translator.get("prefs_dialog.show_splash_screen")) {
+			public boolean hasChanged() {
+				return isSelected() != MuConfiguration.getVariable(MuConfiguration.SHOW_SPLASH_SCREEN, MuConfiguration.DEFAULT_SHOW_SPLASH_SCREEN);
+			}
+        };
         showSplashScreenCheckBox.setSelected(MuConfiguration.getVariable(MuConfiguration.SHOW_SPLASH_SCREEN, MuConfiguration.DEFAULT_SHOW_SPLASH_SCREEN));
         northPanel.add(showSplashScreenCheckBox);
 
         // 'Check for updates on startup' option
-        checkForUpdatesCheckBox = new JCheckBox(Translator.get("prefs_dialog.check_for_updates_on_startup"));
+        checkForUpdatesCheckBox = new PrefCheckBox(Translator.get("prefs_dialog.check_for_updates_on_startup")) {
+			public boolean hasChanged() {
+				return isSelected() != MuConfiguration.getVariable(MuConfiguration.CHECK_FOR_UPDATE, MuConfiguration.DEFAULT_CHECK_FOR_UPDATE);
+			}
+        };
         checkForUpdatesCheckBox.setSelected(MuConfiguration.getVariable(MuConfiguration.CHECK_FOR_UPDATE, MuConfiguration.DEFAULT_CHECK_FOR_UPDATE));
         northPanel.add(checkForUpdatesCheckBox);
 
         // 'Show confirmation dialog on quit' option
-        quitConfirmationCheckBox = new JCheckBox(Translator.get("prefs_dialog.confirm_on_quit"));
+        quitConfirmationCheckBox = new PrefCheckBox(Translator.get("prefs_dialog.confirm_on_quit")) {
+			public boolean hasChanged() {
+				return isSelected() != MuConfiguration.getVariable(MuConfiguration.CONFIRM_ON_QUIT, MuConfiguration.DEFAULT_CONFIRM_ON_QUIT);
+			}
+        };
         quitConfirmationCheckBox.setSelected(MuConfiguration.getVariable(MuConfiguration.CONFIRM_ON_QUIT, MuConfiguration.DEFAULT_CONFIRM_ON_QUIT));
         northPanel.add(quitConfirmationCheckBox);
 
         // 'Enable system notifications' option, displayed only if current platform supports system notifications
         if(AbstractNotifier.isAvailable()) {
-            systemNotificationsCheckBox = new JCheckBox(Translator.get("prefs_dialog.enable_system_notifications")+" ("+AbstractNotifier.getNotifier().getPrettyName()+")");
+            systemNotificationsCheckBox = new PrefCheckBox(Translator.get("prefs_dialog.enable_system_notifications")+" ("+AbstractNotifier.getNotifier().getPrettyName()+")") {
+				public boolean hasChanged() {
+					return isSelected() != MuConfiguration.getVariable(MuConfiguration.ENABLE_SYSTEM_NOTIFICATIONS,
+                            								MuConfiguration.DEFAULT_ENABLE_SYSTEM_NOTIFICATIONS);
+				}
+            };
             systemNotificationsCheckBox.setSelected(MuConfiguration.getVariable(MuConfiguration.ENABLE_SYSTEM_NOTIFICATIONS,
                                                                                      MuConfiguration.DEFAULT_ENABLE_SYSTEM_NOTIFICATIONS));
             northPanel.add(systemNotificationsCheckBox);
         }
 
         // 'Enable Bonjour services discovery' option
-        bonjourDiscoveryCheckBox = new JCheckBox(Translator.get("prefs_dialog.enable_bonjour_discovery"));
+        bonjourDiscoveryCheckBox = new PrefCheckBox(Translator.get("prefs_dialog.enable_bonjour_discovery")) {
+			public boolean hasChanged() {
+				return isSelected() != MuConfiguration.getVariable(MuConfiguration.ENABLE_BONJOUR_DISCOVERY,
+                        									MuConfiguration.DEFAULT_ENABLE_BONJOUR_DISCOVERY);
+			}
+        };
         bonjourDiscoveryCheckBox.setSelected(MuConfiguration.getVariable(MuConfiguration.ENABLE_BONJOUR_DISCOVERY,
                                                                               MuConfiguration.DEFAULT_ENABLE_BONJOUR_DISCOVERY));
         northPanel.add(bonjourDiscoveryCheckBox);
 
         add(northPanel, BorderLayout.NORTH);
+        
+        customShellField.addDialogListener(parent);
+    	useCustomShellRadioButton.addDialogListener(parent);
+    	checkForUpdatesCheckBox.addDialogListener(parent);
+    	quitConfirmationCheckBox.addDialogListener(parent);
+        showSplashScreenCheckBox.addDialogListener(parent);
+        systemNotificationsCheckBox.addDialogListener(parent);
+        bonjourDiscoveryCheckBox.addDialogListener(parent);
+        shellEncoding.addDialogListener(parent);
     }
 
 

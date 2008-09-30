@@ -26,10 +26,16 @@ import com.mucommander.ui.dialog.pref.PreferencesPanel;
 import com.mucommander.ui.layout.ProportionalGridPanel;
 import com.mucommander.ui.theme.ThemeData;
 
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import java.awt.*;
+
+import java.awt.Color;
+import java.awt.Font;
 import java.util.Vector;
 
 /**
@@ -145,7 +151,7 @@ abstract class ThemeEditorPanel extends PreferencesPanel {
         // Initialises the font chooser.
         fontChooser = new FontChooser(themeData.getFont(fontId));
         fontChooser.setBorder(BorderFactory.createTitledBorder(Translator.get("theme_editor.font")));
-        fontChooser.addChangeListener(listener = new ThemeFontChooserListener(themeData, fontId));
+        fontChooser.addChangeListener(listener = new ThemeFontChooserListener(themeData, fontId, parent));
 
         // Hold a reference to this listener to prevent garbage collection
         listenerReferences.add(listener);
@@ -268,7 +274,8 @@ abstract class ThemeEditorPanel extends PreferencesPanel {
         private ThemeData data;
         /** Identifier of the font we're listening on. */
         private int       fontId;
-
+        /** Parent dialog of this panel **/
+        private PreferencesDialog dialog;
 
 
         // - Initialisation --------------------------------------------------------------
@@ -278,9 +285,10 @@ abstract class ThemeEditorPanel extends PreferencesPanel {
          * @param data   theme data to modify when change events are received.
          * @param fontId identifier of the font that is being listened on.
          */
-        public ThemeFontChooserListener(ThemeData data, int fontId) {
+        public ThemeFontChooserListener(ThemeData data, int fontId, PreferencesDialog dialog) {
             this.data   = data;
             this.fontId = fontId;
+            this.dialog = dialog;
         }
 
 
@@ -290,7 +298,11 @@ abstract class ThemeEditorPanel extends PreferencesPanel {
         /**
          * Updates the theme data with the new font value.
          */
-        public void stateChanged(ChangeEvent event) {data.setFont(fontId, ((FontChooser)event.getSource()).getCurrentFont());}
+        public void stateChanged(ChangeEvent event) {
+        	data.setFont(fontId, ((FontChooser)event.getSource()).getCurrentFont());
+        	// Inform the panel's parent dialog that a component in it was changed.
+        	dialog.componentChanged(null);
+    	}
     }
 
     /**

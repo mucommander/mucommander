@@ -18,16 +18,17 @@
 
 package com.mucommander.ui.dialog.pref.general;
 
+import java.awt.BorderLayout;
+
+import javax.swing.BorderFactory;
+
 import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.pref.PreferencesDialog;
 import com.mucommander.ui.dialog.pref.PreferencesPanel;
+import com.mucommander.ui.dialog.pref.component.PrefTextField;
 import com.mucommander.ui.layout.XAlignedComponentPanel;
 import com.mucommander.ui.layout.YBoxPanel;
-
-import javax.swing.*;
-import java.awt.*;
-
 
 /**
  * 'Mail' preferences panel.
@@ -37,16 +38,16 @@ import java.awt.*;
 class MailPanel extends PreferencesPanel {
 
     /** Name of the user */
-    private JTextField nameField;
+    private PrefTextField nameField;
 	
     /** Email address of the user */
-    private JTextField emailField;
+    private PrefTextField emailField;
 	
     /** IP/hostname to the SMTP server */
-    private JTextField smtpField;
+    private PrefTextField smtpField;
 	
     /** TCP port to the SMTP server */
-    private JTextField portField;
+    private PrefTextField portField;
 
 
     public MailPanel(PreferencesDialog parent) {
@@ -61,23 +62,44 @@ class MailPanel extends PreferencesPanel {
         XAlignedComponentPanel compPanel = new XAlignedComponentPanel();
 
         // Name field
-        nameField = new JTextField(MuConfiguration.getVariable(MuConfiguration.MAIL_SENDER_NAME, ""));
+        nameField = new PrefTextField(MuConfiguration.getVariable(MuConfiguration.MAIL_SENDER_NAME, "")) {
+			public boolean hasChanged() {
+				return !nameField.getText().equals(MuConfiguration.getVariable(MuConfiguration.MAIL_SENDER_NAME, ""));
+			}
+        };
         compPanel.addRow(Translator.get("prefs_dialog.mail_name"), nameField, 10);
 		
         // Email field
-        emailField = new JTextField(MuConfiguration.getVariable(MuConfiguration.MAIL_SENDER_ADDRESS, ""));
+        emailField = new PrefTextField(MuConfiguration.getVariable(MuConfiguration.MAIL_SENDER_ADDRESS, "")) {
+			public boolean hasChanged() {
+				return !emailField.getText().equals(MuConfiguration.getVariable(MuConfiguration.MAIL_SENDER_ADDRESS, ""));
+			}
+        };
         compPanel.addRow(Translator.get("prefs_dialog.mail_address"), emailField, 10);
 
         // SMTP field
-        smtpField = new JTextField(MuConfiguration.getVariable(MuConfiguration.SMTP_SERVER, ""));
+        smtpField = new PrefTextField(MuConfiguration.getVariable(MuConfiguration.SMTP_SERVER, "")) {
+			public boolean hasChanged() {
+				return !smtpField.getText().equals(MuConfiguration.getVariable(MuConfiguration.SMTP_SERVER, ""));
+			}
+        };
         compPanel.addRow(Translator.get("prefs_dialog.mail_server"), smtpField, 10);
 
         // SMTP port field
-        portField = new JTextField(""+MuConfiguration.getVariable(MuConfiguration.SMTP_PORT, MuConfiguration.DEFAULT_SMTP_PORT));
+        portField = new PrefTextField(""+MuConfiguration.getVariable(MuConfiguration.SMTP_PORT, MuConfiguration.DEFAULT_SMTP_PORT)) {
+			public boolean hasChanged() {
+				return !portField.getText().equals(String.valueOf(MuConfiguration.getVariable(MuConfiguration.SMTP_PORT, MuConfiguration.DEFAULT_SMTP_PORT)));
+			}
+        };
         compPanel.addRow(Translator.get("server_connect_dialog.port"), portField, 10);
 
         mainPanel.add(compPanel, BorderLayout.NORTH);
         add(mainPanel, BorderLayout.NORTH);
+        
+        nameField.addDialogListener(parent);
+    	emailField.addDialogListener(parent);
+    	smtpField.addDialogListener(parent);
+    	portField.addDialogListener(parent);
     }
 
 

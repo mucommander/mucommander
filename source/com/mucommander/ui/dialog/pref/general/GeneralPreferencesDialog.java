@@ -21,10 +21,14 @@ package com.mucommander.ui.dialog.pref.general;
 import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.pref.PreferencesDialog;
+import com.mucommander.ui.dialog.pref.component.PrefComponent;
 import com.mucommander.ui.main.WindowManager;
 
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Dimension;
+import java.util.LinkedHashSet;
+import java.util.Set;
+
+import javax.swing.JOptionPane;
 
 /**
  * This is the main preferences dialog that contains all preferences panels organized by tabs.
@@ -35,7 +39,9 @@ public class GeneralPreferencesDialog extends PreferencesDialog {
     // --------------------------------------------------------------------------
     /** Used to ensure we only have the one preferences dialog open at any given time. */
     private static GeneralPreferencesDialog singleton;
-
+    /** Stores the components in the dialog that were changed and their current value is different 
+     *  then their saved value at MuConfiguration **/
+    private Set modifiedComponents;
 
 
     // - Dimensions -------------------------------------------------------------
@@ -93,6 +99,7 @@ public class GeneralPreferencesDialog extends PreferencesDialog {
      */
     private GeneralPreferencesDialog() {
         super(WindowManager.getCurrentMainFrame(), Translator.get("prefs_dialog.title"));
+        modifiedComponents = new LinkedHashSet();
         listenToChanges = false;
 
         // Adds the preference tabs.
@@ -166,4 +173,20 @@ public class GeneralPreferencesDialog extends PreferencesDialog {
         lastTabIndex = lastTab;
     }
 
+    public void componentChanged(PrefComponent component) {
+		if (component.hasChanged())
+			modifiedComponents.add(component);
+		else
+			modifiedComponents.remove(component);
+		
+		setCommitButtonsEnabled(modifiedComponents.size() != 0);
+	}
+    
+    protected void setCommitButtonsEnabled(boolean enable) {
+    	super.setCommitButtonsEnabled(enable);
+    	// if "commit buttons" are disabled that's mean that there is no change in any component
+    	// located in this dialog => we can clear the list of modified components in this dialog.
+    	if (!enable)
+    		modifiedComponents.clear();
+    }
 }
