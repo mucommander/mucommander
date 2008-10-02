@@ -794,6 +794,112 @@ public class FileURL implements Cloneable {
         return new URL(null, toString(true), new CompatURLStreamHandler());
     }
 
+    /**
+     * Returns <code>true</code> if the scheme part of this URL and the given URL are equal.
+     * The comparison is case-sensitive.
+     *
+     * @param url the URL to test for scheme equality
+     * @return <code>true</code> if the scheme part of this URL and the given URL are equal
+     */
+    public boolean schemeEquals(FileURL url) {
+        return this.scheme.equalsIgnoreCase(url.scheme);
+    }
+
+    /**
+     * Returns <code>true</code> if the host part of this URL and the given URL are equal.
+     * The comparison is case-insensitive.
+     *
+     * @param url the URL to test for host equality
+     * @return <code>true</code> if the host part of this URL and the given URL are equal
+     */
+    public boolean hostEquals(FileURL url) {
+        return StringUtils.equals(this.host, url.host, false);
+    }
+
+    /**
+     * Returns <code>true</code> if the port of this URL and the given URL's are equal. Ports are said to be equal if
+     * the values returned by {@link #getPort()} are equal, or if both URLs have the same standard port
+     * (as returned by {@link #getStandardPort()} and one of the port value is <code>-1</code> (undefined) and the other
+     * is the standard port.
+     *
+     * @param url the URL to test for port equality
+     * @return <code>true</code> if the port of this URL and the given one are equal
+     */
+    public boolean portEquals(FileURL url) {
+        int port1 = this.port;
+        int port2 = url.port;
+        int standardPort = getStandardPort();
+
+        return port1==port2 ||
+            (standardPort==url.getStandardPort() && ((port1==-1 && port2==standardPort || (port2==-1 && port1==standardPort))));
+    }
+
+    /**
+     * Returns <code>true</code> if the path of this URL and the given URL are equal. The comparison is case-sensitive.
+     * If the sole difference between two paths is a trailing path separator, they will be considered as equal.
+     * For example, <code>/path</code> and <code>/path/</code> are considered equal (assuming the path separator is '/').
+     *
+     * @param url the URL to test for path equality
+     * @return <code>true</code> if the path of this URL and the given URL are equal
+     */
+    public boolean pathEquals(FileURL url) {
+        String path1 = this.getPath();
+        String path2 = url.getPath();
+        int len1 = path1.length();
+        int len2 = path2.length();
+        String separator = getPathSeparator();
+        int separatorLen = separator.length();
+
+        // If the difference between the 2 strings is just a trailing path separator, we consider the paths as equal
+        if(Math.abs(len1-len2)==separatorLen && (len1>len2 ? path1.startsWith(path2) : path2.startsWith(path1))) {
+            String diff = len1>len2 ? path1.substring(len1-separatorLen) : path2.substring(len2-separatorLen);
+            return separator.equals(diff);
+        }
+        else {
+            return path1.equals(path2);
+        }
+    }
+
+    /**
+     * Returns <code>true</code> if the query part of this URL and the given URL are equal.
+     * The comparison is case-sensitive.
+     *
+     * @param url the URL to test for query equality
+     * @return <code>true</code> if the query part of this URL and the given URL are equal
+     */
+    public boolean queryEquals(FileURL url) {
+        return StringUtils.equals(this.query, url.query, true);
+    }
+
+    /**
+     * Returns <code>true</code> if the credentials (login and password) of this URL and the given URL are equal.
+     * The comparison is case-sensitive.
+     *
+     * @param url the URL to test for credentials equality
+     * @return <code>true</code> if the credentials of this URL and the given URL are equal
+     */
+    public boolean credentialsEquals(FileURL url) {
+        Credentials creds1 = this.credentials;
+        Credentials creds2 = url.credentials;
+
+        return (creds1==null && creds2==null)
+            || (creds1!=null && creds1.equals(creds2, true))
+            || (creds2!=null && creds2.equals(creds1, true));
+    }
+
+    /**
+     * Returns <code>true</code> if the properties contained by this URL and the given URL are equal.
+     * The comparison of each property is case-sensitive.
+     *
+     * @param url the URL to test for properties equality
+     * @return <code>true</code> if the properties contained by this URL and the given URL are equal
+     */
+    public boolean propertiesEquals(FileURL url) {
+        return (this.properties==null && url.properties==null)
+           ||  (this.properties!=null && this.properties.equals(url.properties))
+           ||  (url.properties!=null && url.properties.equals(this.properties));
+    }
+
 
     ////////////////////////
     // Overridden methods //
@@ -832,7 +938,6 @@ public class FileURL implements Cloneable {
         return clonedURL;
     }
 
-
     /**
      * This method is equivalent to calling {@link #equals(Object, boolean, boolean)} with credentials and properties
      * comparisons disabled.
@@ -856,18 +961,16 @@ public class FileURL implements Cloneable {
      * is equivalent to the scheme's standard port. For instance, <code>http://mucommander.com:80/</code>
      * and <code>http://mucommander.com/</code> are considered equal.</li>
      *  <li>paths are equal (case-sensitive). There can be a trailing separator difference in the two paths, they will
-     * still be considered as equal. For example, <code>/path</code> and <code>/path/</code> are considered equal if the
-     * path separator is '/').</li>
+     * still be considered as equal. For example, <code>/path</code> and <code>/path/</code> are considered equal
+     * (assuming the path separator is '/').</li>
      *  <li>queries are equal (case-sensitive)</li>
      * </ul>
      * </p>
-     *
      * <p>
      * Credentials (login and password parts) are compared only if requested. The comparison for both the login and
      * password is case-sensitive.</br>
      * Likewise, properties are compared only if requested: the comparison of all properties is case-sentive.
      * </p>
-     *
      *
      * @param o object to compare against this FileURL instance
      * @param compareCredentials if <code>true</code>, the login and password parts of both FileURL need to be
@@ -883,66 +986,12 @@ public class FileURL implements Cloneable {
 
         FileURL url = (FileURL)o;
 
-        // Compare schemes (case-insensitive)
-        if(!this.scheme.equalsIgnoreCase(url.scheme))
-            return false;
-
-        // Compare hosts ((case-insensitive)
-        // Note: hosts may be null
-        if(!StringUtils.equals(this.host, url.host, false))
-            return false;
-
-        // Compare ports
-        int port1 = this.port;
-        int port2 = url.port;
-        int standardPort = getStandardPort();
-        if(port1!=port2 && !((port1==-1 && port2==standardPort || (port2==-1 && port1==standardPort))))
-            return false;
-
-        // Compare query parts (case-sensitive)
-        // Note: query parts may be null
-        if(!StringUtils.equals(this.query, url.query, true))
-            return false;
-
-        // Compare paths (case-sensitive)
-        String path1 = this.getPath();
-        String path2 = url.getPath();
-        int len1 = path1.length();
-        int len2 = path2.length();
-        String separator = getPathSeparator();
-        int separatorLen = separator.length();
-        // If the difference between the 2 strings is just a trailing path separator, we consider the paths as equal
-        if(Math.abs(len1-len2)==separatorLen && (len1>len2 ? path1.startsWith(path2) : path2.startsWith(path1))) {
-            String diff = len1>len2 ? path1.substring(len1-separatorLen) : path2.substring(len2-separatorLen);
-            if(!separator.equals(diff))
-                return false;
-        }
-        else {
-            if(!path1.equals(path2))
-                return false;
-        }
-
-        // Compare credentials, only if requested.
-        // Note: both credential instances may be null 
-        if(compareCredentials) {
-            Credentials creds1 = this.getCredentials();
-            Credentials creds2 = url.getCredentials();
-
-            if(!((creds1==null && creds2==null)
-                || (creds1!=null && creds1.equals(creds2, true))
-                || (creds2!=null && creds2.equals(creds1, true))))
-                return false;
-        }
-
-        // Compare properties (case-sensitive), only if requested.
-        if(compareProperties) {
-            if(!((this.properties==null && url.properties==null)
-               ||(this.properties!=null && this.properties.equals(url.properties))
-               ||(url.properties!=null && url.properties.equals(this.properties))
-            ))
-                return false;
-        }
-
-        return true;
+        return schemeEquals(url)
+            && hostEquals(url)
+            && portEquals(url)
+            && queryEquals(url)
+            && pathEquals(url)
+            && (!compareCredentials || credentialsEquals(url))
+            && (!compareProperties || propertiesEquals(url));
     }
 }
