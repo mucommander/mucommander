@@ -344,11 +344,7 @@ public class CredentialsManager implements VectorChangeListener {
      * @param matches the Vector where matching CredentialsMapping instances will be added
      */
     private static void findMatches(FileURL location, Vector credentials, Vector matches) {
-        String scheme = location.getScheme();
-        int port = location.getPort();
-        String host = location.getHost();
         CredentialsMapping tempCredentialsMapping;
-        String tempHost;
         FileURL tempRealm;
 
         int nbEntries = credentials.size();
@@ -356,18 +352,10 @@ public class CredentialsManager implements VectorChangeListener {
             tempCredentialsMapping = (CredentialsMapping)credentials.elementAt(i);
             tempRealm = tempCredentialsMapping.getRealm();
 
-            if(tempRealm.equals(location)) {
+            if(location.schemeEquals(tempRealm)
+            && location.portEquals(tempRealm)
+            && location.hostEquals(tempRealm))
                 matches.add(tempCredentialsMapping);
-            }
-            else {
-                tempHost = tempRealm.getHost();
-
-                if(tempRealm.getScheme().equals(scheme)
-                        && (tempRealm.getPort()==port)
-                        && ((host!=null && tempHost!=null && host.equalsIgnoreCase(tempHost)) || (host!=null && host.equalsIgnoreCase(tempHost)) || (tempHost!=null && tempHost.equalsIgnoreCase(host)))) {
-                    matches.add(tempCredentialsMapping);
-                }
-            }
         }
 
         if(Debug.ON) Debug.trace("returning matches="+matches);
