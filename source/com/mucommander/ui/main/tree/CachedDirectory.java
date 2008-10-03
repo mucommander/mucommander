@@ -76,7 +76,7 @@ public class CachedDirectory extends ProxyFile {
         if (lsTimeStamp != file.getDate()) {
             // start new caching thread
             setReadingChildren(true);
-            Thread lsThread = new Thread() {
+            Thread lsThread = new Thread("CachedDirectory.lsAsync") {
                 public void run() {
                     lsAsync();
                 }
@@ -95,12 +95,17 @@ public class CachedDirectory extends ProxyFile {
         try {
             final AbstractFile[] children = file.ls(cache.getFilter());
             Arrays.sort(children, cache.getSort());
-            if (getCachedIcon() == null)
+            if (getCachedIcon() == null) {
                 setCachedIcon(FileIcons.getFileIcon(getProxiedFile()));
+            }
+            Icon icons[] = new Icon[children.length];
+            for (int i = 0; i < children.length; i++) {
+                icons[i] = FileIcons.getFileIcon(children[i]);
+            }
             synchronized (cache) {
                 for (int i = 0; i < children.length; i++) {
                     CachedDirectory cachedChild = cache.getOrAdd(children[i]);
-                    cachedChild.setCachedIcon(FileIcons.getFileIcon(children[i]));
+                    cachedChild.setCachedIcon(icons[i]);
                 }
             }
             try {
