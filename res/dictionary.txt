@@ -1051,7 +1051,7 @@ extension:RO:Extensie
 extension:zh_CN:扩展名
 extension:RU:Расширение
 extension:ES:Extensión
-extension:PL:Rozszeżenie
+extension:PL:Rozszerzenie
 extension:KO:확장자
 extension:pt_BR:Extensão
 extension:NL:Extensie
