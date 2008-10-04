@@ -18,25 +18,18 @@
 
 package com.mucommander.ui.quicklist;
 
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.Image;
-import java.util.HashMap;
-
-import javax.swing.DefaultListCellRenderer;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
-import javax.swing.JList;
-import javax.swing.event.PopupMenuEvent;
-import javax.swing.event.PopupMenuListener;
-
 import com.mucommander.file.AbstractFile;
-import com.mucommander.file.FileFactory;
 import com.mucommander.ui.icon.CustomFileIconProvider;
 import com.mucommander.ui.icon.FileIcons;
 import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.icon.SpinningDial;
 import com.mucommander.ui.quicklist.item.DataList;
+
+import javax.swing.*;
+import javax.swing.event.PopupMenuEvent;
+import javax.swing.event.PopupMenuListener;
+import java.awt.*;
+import java.util.HashMap;
 
 /**
  * FileTablePopupWithIcons is a FileTablePopupWithDataList in which the data list 
@@ -94,25 +87,23 @@ public abstract class QuickListWithIcons extends QuickListWithDataList {
 	/**
 	 * This function gets an item from the data list and return its icon.
 	 *  
-	 * @param value - an item from the data list.
-	 * @return icon.
+	 * @param item a list item
+     * @return an icon for the specified item
 	 */
-	protected abstract Icon itemToIcon(String value);
+	protected abstract Icon itemToIcon(Object item);
 	
 	/**
-	 * This function gets a path, resolves the file it points to, and return the file's icon.
+	 * This function return an icon for the specified file.
 	 * 
-	 * @param filepath - path.
-	 * @return icon of the file in the given path. null is returned if a file in the given path
-	 *  does not exist or is not accessible. 
+	 * @param file the file for which to return an icon
+	 * @return the specified file's icon. null is returned if the file does not exist
 	 */
-	protected Icon getIconOfFile(String filepath) {
-		AbstractFile file = FileFactory.getFile(filepath);
+	protected Icon getIconOfFile(AbstractFile file) {
 		return (file != null && file.exists()) ?
 			IconManager.getImageIcon(FileIcons.getFileIcon(file)) : null; 
 	}
 	
-	private Icon getImageIconOfItem(final String item) {
+	private Icon getImageIconOfItem(final Object item) {
 		boolean found;
 		synchronized(itemToIconCacheMap) {
 			if (!(found = itemToIconCacheMap.containsKey(item))) {
@@ -153,7 +144,7 @@ public abstract class QuickListWithIcons extends QuickListWithDataList {
 				super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
 
 				// Add its icon
-				String item = (String) (getModel().getElementAt(index));				
+				Object item = getModel().getElementAt(index);
 				Icon icon = getImageIconOfItem(item);
 				setIcon(resizeIcon(icon));
 

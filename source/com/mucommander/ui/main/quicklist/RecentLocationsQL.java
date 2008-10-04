@@ -18,14 +18,14 @@
 
 package com.mucommander.ui.main.quicklist;
 
-import java.util.LinkedList;
-
-import javax.swing.Icon;
-
+import com.mucommander.file.AbstractFile;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.event.LocationEvent;
 import com.mucommander.ui.event.LocationListener;
 import com.mucommander.ui.quicklist.QuickListWithIcons;
+
+import javax.swing.*;
+import java.util.LinkedList;
 
 /**
  * This quick list shows recently accessed locations.
@@ -42,18 +42,18 @@ public class RecentLocationsQL extends QuickListWithIcons implements LocationLis
 		linkedList = new LinkedList();
 	}
 
-	protected void acceptListItem(String item) {
-		folderPanel.tryChangeCurrentFolder(item);
+	protected void acceptListItem(Object item) {
+		folderPanel.tryChangeCurrentFolder((AbstractFile)item);
 	}
 
 	public void locationCancelled(LocationEvent locationEvent) {}
 
 	public void locationChanged(LocationEvent locationEvent) {
-		String currentLocation = locationEvent.getFolderPanel().getCurrentFolder().getAbsolutePath();
+		AbstractFile currentFolder = locationEvent.getFolderPanel().getCurrentFolder();
 			
-		if (!linkedList.remove(currentLocation) && linkedList.size() >= MAX_ELEMENTS)
+		if (!linkedList.remove(currentFolder) && linkedList.size() >= MAX_ELEMENTS)
 			linkedList.removeLast();
-		linkedList.addFirst(currentLocation);
+		linkedList.addFirst(currentFolder);
 	}
 
 	public void locationChanging(LocationEvent locationEvent) {}
@@ -63,13 +63,13 @@ public class RecentLocationsQL extends QuickListWithIcons implements LocationLis
 	public Object[] getData() {
 		LinkedList list = (LinkedList) linkedList.clone();
 
-		if (!list.remove(folderPanel.getCurrentFolder().getAbsolutePath()))
+		if (!list.remove(folderPanel.getCurrentFolder()))
 			list.removeLast();
 		
 		return list.toArray();
 	}
 
-	protected Icon itemToIcon(String value) {
-		return getIconOfFile(value);
+	protected Icon itemToIcon(Object item) {
+		return getIconOfFile((AbstractFile)item);
 	}
 }

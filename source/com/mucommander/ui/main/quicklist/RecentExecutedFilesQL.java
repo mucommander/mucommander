@@ -18,14 +18,8 @@
 
 package com.mucommander.ui.main.quicklist;
 
-import java.io.IOException;
-import java.util.LinkedList;
-
-import javax.swing.Icon;
-
 import com.mucommander.desktop.DesktopManager;
 import com.mucommander.file.AbstractFile;
-import com.mucommander.file.FileFactory;
 import com.mucommander.file.FileProtocols;
 import com.mucommander.file.impl.local.LocalFile;
 import com.mucommander.job.TempExecJob;
@@ -34,6 +28,10 @@ import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.WindowManager;
 import com.mucommander.ui.quicklist.QuickListWithIcons;
+
+import javax.swing.*;
+import java.io.IOException;
+import java.util.LinkedList;
 
 /**
  * This quick list shows recently executed files.
@@ -49,8 +47,8 @@ public class RecentExecutedFilesQL extends QuickListWithIcons {
 		super(Translator.get("recent_executed_files_quick_list.title"), Translator.get("recent_executed_files_quick_list.empty_message"));
 	}
 	
-	protected void acceptListItem(String item) {
-		AbstractFile file = FileFactory.getFile(item);
+	protected void acceptListItem(Object item) {
+		AbstractFile file = (AbstractFile)item;
 		MainFrame mainFrame = WindowManager.getCurrentMainFrame();
 
 		if(file.getURL().getScheme().equals(FileProtocols.FILE) && (file.hasAncestor(LocalFile.class))) {
@@ -66,17 +64,17 @@ public class RecentExecutedFilesQL extends QuickListWithIcons {
         }
 	}
 	
-	public static void addFile(String string) {		
-		if (!list.remove(string) && list.size() > MAX_NUM_OF_ELEMENTS)
+	public static void addFile(AbstractFile file) {
+		if (!list.remove(file) && list.size() > MAX_NUM_OF_ELEMENTS)
 			list.removeLast();
-		list.addFirst(string);
+		list.addFirst(file);
 	}
 
 	protected Object[] getData() {
 		return list.toArray();
 	}
 
-	protected Icon itemToIcon(String value) {
-		return getIconOfFile(value);
+	protected Icon itemToIcon(Object item) {
+		return getIconOfFile((AbstractFile)item);
 	}
 }

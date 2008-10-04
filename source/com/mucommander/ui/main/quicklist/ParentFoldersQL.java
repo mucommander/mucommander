@@ -18,16 +18,15 @@
 
 package com.mucommander.ui.main.quicklist;
 
-import java.util.Vector;
-
-import javax.swing.Icon;
-
 import com.mucommander.file.AbstractFile;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.event.LocationEvent;
 import com.mucommander.ui.event.LocationListener;
 import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.quicklist.QuickListWithIcons;
+
+import javax.swing.*;
+import java.util.Vector;
 
 /**
  * This quick list shows the parent folders of the current location in the FileTable.
@@ -44,8 +43,8 @@ public class ParentFoldersQL extends QuickListWithIcons implements LocationListe
 		folderPanel.getLocationManager().addLocationListener(this);		
 	}
 	
-	protected void acceptListItem(String item) {
-		folderPanel.tryChangeCurrentFolder(item);
+	protected void acceptListItem(Object item) {
+		folderPanel.tryChangeCurrentFolder((AbstractFile)item);
 	}
 	
 	public void locationChanged(LocationEvent locationEvent) {
@@ -56,7 +55,7 @@ public class ParentFoldersQL extends QuickListWithIcons implements LocationListe
 		parents = new Vector();
 				
 		while((folder=folder.getParentSilently())!=null)
-            parents.add(folder.getAbsolutePath());
+            parents.add(folder);
     }
 	
 	public void locationCancelled(LocationEvent locationEvent) {}
@@ -72,7 +71,7 @@ public class ParentFoldersQL extends QuickListWithIcons implements LocationListe
 		return parents.toArray();
 	}
 
-	protected Icon itemToIcon(String value) {
-		return getIconOfFile(value);
+	protected Icon itemToIcon(Object item) {
+		return getIconOfFile((AbstractFile)item);
 	}
 }

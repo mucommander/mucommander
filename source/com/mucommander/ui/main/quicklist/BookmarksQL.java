@@ -18,16 +18,17 @@
 
 package com.mucommander.ui.main.quicklist;
 
-import java.util.Arrays;
-import java.util.Vector;
-
-import javax.swing.Icon;
-
 import com.mucommander.bookmark.Bookmark;
 import com.mucommander.bookmark.BookmarkListener;
 import com.mucommander.bookmark.BookmarkManager;
+import com.mucommander.file.FileFactory;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.quicklist.QuickListWithIcons;
+
+import javax.swing.*;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.Vector;
 
 /**
  * This quick list shows existing bookmarks.
@@ -35,7 +36,7 @@ import com.mucommander.ui.quicklist.QuickListWithIcons;
  * @author Arik Hadas
  */
 public class BookmarksQL extends QuickListWithIcons implements BookmarkListener {
-	protected String[] sortedBookmarkNames; 
+	protected Bookmark[] sortedBookmarks;
 
 	public BookmarksQL() {
 		super(Translator.get("bookmarks_quick_list.title"), Translator.get("bookmarks_quick_list.empty_message"));
@@ -44,34 +45,37 @@ public class BookmarksQL extends QuickListWithIcons implements BookmarkListener 
 		BookmarkManager.addBookmarkListener(this);
 	}
 
-	protected void acceptListItem(String item) {
-		folderPanel.tryChangeCurrentFolder(BookmarkManager.getBookmark(item).getLocation()); //change with text validate
+	protected void acceptListItem(Object item) {
+		folderPanel.tryChangeCurrentFolder(((Bookmark)item).getLocation()); //change with text validate
 	}
 
 	protected Object[] getData() {
-		return sortedBookmarkNames;
+		return sortedBookmarks;
 	}
 	
-	protected Icon itemToIcon(String value) {
-		return getIconOfFile(BookmarkManager.getBookmark(value).getLocation());
+	protected Icon itemToIcon(Object item) {
+		return getIconOfFile(FileFactory.getFile(((Bookmark)item).getLocation()));
 	}
 
 	/**
-     * Returns a sorted array of bookmarks names.
+     * Returns a sorted array of bookmarks.
      *
-     * @return a sorted array of bookmarks names
+     * @return a sorted array of bookmarks
      */
-    private String[] getSortedBookmarkNames() {
+    private Bookmark[] getSortedBookmarks() {
     	Vector bookmarks = BookmarkManager.getBookmarks();
-        int nbBookmarks = bookmarks.size();
-    	String[] result = new String[nbBookmarks];
-    	for (int i=0; i<nbBookmarks; i++)
-    		result[i] = ((Bookmark) bookmarks.elementAt(i)).getName();
-    	Arrays.sort(result, String.CASE_INSENSITIVE_ORDER);
-    	return result;
+        Bookmark[] bookmarkArray = new Bookmark[bookmarks.size()];
+        bookmarks.toArray(bookmarkArray);
+        Arrays.sort(bookmarkArray, new Comparator() {
+            public int compare(Object o1, Object o2) {
+                return String.CASE_INSENSITIVE_ORDER.compare(((Bookmark)o1).getName(), ((Bookmark)o2).getName());
+            }
+        });
+
+    	return bookmarkArray;
     }
 	
 	public void bookmarksChanged() {
-		sortedBookmarkNames = getSortedBookmarkNames();
+		sortedBookmarks = getSortedBookmarks();
 	}
 }

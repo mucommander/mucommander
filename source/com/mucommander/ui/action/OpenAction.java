@@ -83,7 +83,7 @@ public class OpenAction extends MuAction {
         else if(file.getURL().getScheme().equals(FileProtocols.FILE) && (file.hasAncestor(LocalFile.class))) {
             try {
             	DesktopManager.open(file);
-            	RecentExecutedFilesQL.addFile(file.toString());
+            	RecentExecutedFilesQL.addFile(file);
     		}
             catch(IOException e) {reportGenericError();}
         }

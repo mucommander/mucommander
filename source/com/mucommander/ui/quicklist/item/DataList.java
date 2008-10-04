@@ -72,7 +72,7 @@ public class DataList extends JList implements QuickListFocusableComponent {
 			public void keyPressed(KeyEvent e) {			
 				switch(e.getKeyCode()) {
 				case KeyEvent.VK_ENTER:
-					((QuickListWithDataList)(getParent().getParent().getParent())).itemSelected((String) getSelectedValue());
+					((QuickListWithDataList)(getParent().getParent().getParent())).itemSelected(getSelectedValue());
 					break;
 				case KeyEvent.VK_UP:
 					{
@@ -117,7 +117,7 @@ public class DataList extends JList implements QuickListFocusableComponent {
 				if (e.getClickCount() == 2) {
 		             int index = locationToIndex(e.getPoint());
 		             setSelectedIndex(index);
-		             ((QuickListWithDataList)(getParent().getParent().getParent())).itemSelected((String) getSelectedValue());
+		             ((QuickListWithDataList)(getParent().getParent().getParent())).itemSelected(getSelectedValue());
 				}
 			}
 

@@ -59,7 +59,7 @@ public class OpenNativelyAction extends MuAction {
             // Tries to execute file with native file associations
             try {
             	DesktopManager.open(selectedFile);
-            	RecentExecutedFilesQL.addFile(selectedFile.toString());
+            	RecentExecutedFilesQL.addFile(selectedFile);
         	}
             catch(IOException e) {reportGenericError();}
         }

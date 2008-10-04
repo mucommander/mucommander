@@ -71,7 +71,7 @@ public class TempExecJob extends TempCopyJob {
         // Try to open the file.
         try {
         	DesktopManager.open(currentDestFile);
-        	RecentExecutedFilesQL.addFile(file.toString());
+        	RecentExecutedFilesQL.addFile(file);
     	}
         catch(Exception e) {return false;}
 

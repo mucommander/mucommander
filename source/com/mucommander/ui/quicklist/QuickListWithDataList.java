@@ -18,9 +18,9 @@
 
 package com.mucommander.ui.quicklist;
 
-import javax.swing.JScrollPane;
-
 import com.mucommander.ui.quicklist.item.DataList;
+
+import javax.swing.*;
 
 /**
  * FileTablePopupWithDataList is a FileTablePopup which contains FileTablePopupDataList.
@@ -61,7 +61,7 @@ public abstract class QuickListWithDataList extends QuickList {
 	 * 
 	 * @param item - The selected item from the data list.
 	 */
-	public void itemSelected(String item) {
+	public void itemSelected(Object item) {
 		setVisible(false);
 		acceptListItem(item);
 	}		
@@ -88,7 +88,7 @@ public abstract class QuickListWithDataList extends QuickList {
 	 * 
 	 * @param item - The selected item from the data list.
 	 */
-	protected abstract void acceptListItem(String item);
+	protected abstract void acceptListItem(Object item);
 	
 	protected abstract DataList getList();
 }
