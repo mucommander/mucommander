@@ -24,6 +24,8 @@ import com.mucommander.file.FileProtocols;
 import com.mucommander.file.impl.local.LocalFile;
 import com.mucommander.job.TempExecJob;
 import com.mucommander.text.Translator;
+import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.action.ShowRecentExecutedFilesQLAction;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.WindowManager;
@@ -44,7 +46,7 @@ public class RecentExecutedFilesQL extends QuickListWithIcons {
 	private static final int MAX_NUM_OF_ELEMENTS = 10;
 
 	public RecentExecutedFilesQL() {
-		super(Translator.get("recent_executed_files_quick_list.title"), Translator.get("recent_executed_files_quick_list.empty_message"));
+		super(MuAction.getStandardLabel(ShowRecentExecutedFilesQLAction.class), Translator.get("recent_executed_files_quick_list.empty_message"));
 	}
 	
 	protected void acceptListItem(Object item) {

@@ -237,7 +237,7 @@ public class BatchRenameDialog extends FocusDialog implements ActionListener,
         Vector digits = new Vector();
         String zeros = "0000";
         for (int i = 1; i <= 5; i++) {
-            digits.add(zeros.substring(0, i - 1) + Integer.toString(i));
+            digits.add(zeros.substring(0, i - 1) + "1");
         }
         cbCounterDigits = new JComboBox(digits);
         cbCounterDigits.addActionListener(this);
@@ -294,7 +294,7 @@ public class BatchRenameDialog extends FocusDialog implements ActionListener,
                 edtCounterStart, 5);
         pnl3.addRow(Translator.get("batch_rename_dialog.step_by"),
                 edtCounterStep, 5);
-        pnl3.addRow(Translator.get("batch_rename_dialog.digits"),
+        pnl3.addRow(Translator.get("batch_rename_dialog.format"),
                 cbCounterDigits, 5);
         pnlTop.add(pnl3);
 

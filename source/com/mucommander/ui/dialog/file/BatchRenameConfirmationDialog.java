@@ -27,7 +27,7 @@ public class BatchRenameConfirmationDialog extends FocusDialog implements Action
         YBoxPanel mainPanel = new YBoxPanel();
         String msg = Translator.get("batch_rename_dialog.proceed_renaming", Integer.toString(changed), Integer.toString(unchanged));
         informationPane = new InformationPane(msg,
-                Translator.get("delete_dialog.permanently_delete.confirmation_details"),
+                Translator.get("this_operation_cannot_be_undone"),
                 Font.BOLD, InformationPane.getPredefinedIcon(InformationPane.WARNING_ICON));
         mainPanel.add(informationPane);
         mainPanel.addSpace(10);

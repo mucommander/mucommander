@@ -727,11 +727,21 @@ quick_search:DA:Hurtig søgning
 
 
 
+
+
+
 file_manager:EN:File manager
 file_manager:FR:Gestionnaire de fichiers
 file_manager:DA:Filhåndterer
 file_manager:NL:Bestansbeheerder
 # Translation missing (New!)
+
+
+
+
+
+
+
 
 
 
@@ -1460,6 +1470,26 @@ loading:DA:Indlæser...
 
 
 
+this_operation_cannot_be_undone:EN:This operation cannot be undone.
+this_operation_cannot_be_undone:FR:Cette opération ne peut pas être annulée.
+this_operation_cannot_be_undone:zh_CN:此操作不能还原.
+this_operation_cannot_be_undone:zh_TW:此操作無法回復
+this_operation_cannot_be_undone:RO:Această operațiune este definitivă și irevocabilă.
+this_operation_cannot_be_undone:ES:Esta operación no puede ser deshecha.
+this_operation_cannot_be_undone:pt_BR:Esta operação não poderá ser desfeita
+this_operation_cannot_be_undone:SK:Túto operáciu nie je možné vrátiť späť.
+this_operation_cannot_be_undone:SL:Ta operacija ne more biti razveljavljena.
+this_operation_cannot_be_undone:RU:Эта операция не может быть отменена
+this_operation_cannot_be_undone:DE:Diese Operation kann nicht rückgängig gemacht werden.
+this_operation_cannot_be_undone:CS:Tato operace je nevratná.
+this_operation_cannot_be_undone:HU:A művelet nem vonható vissza.
+this_operation_cannot_be_undone:IT:Questa operazione non puo' essere annullata.
+this_operation_cannot_be_undone:NL:Deze bewerking kan niet ongedaan gemaakt worden.
+this_operation_cannot_be_undone:PL:Operacja nie może być cofnięta.
+this_operation_cannot_be_undone:JA:この操作は元に戻せません。
+this_operation_cannot_be_undone:SV:Du kan inte ångra denna åtgärd. 
+this_operation_cannot_be_undone:DA:Du kan ikke fortryde denne handling.
+# Translation missing (KO)
 
 
 ##########################
@@ -2764,7 +2794,7 @@ com.mucommander.ui.action.DeleteAction.tooltip:NL:Gemarkeerde bestanden verwijde
 com.mucommander.ui.action.DeleteAction.tooltip:SK:Odstrániť označené súbory
 com.mucommander.ui.action.DeleteAction.tooltip:JA:マークされたファイルを削除します
 com.mucommander.ui.action.DeleteAction.tooltip:SV:Radera markerade filer
-# Translation missing (Updated!)
+# Translation missing (New!)
 
 
 
@@ -2777,7 +2807,7 @@ com.mucommander.ui.action.DeleteAction.tooltip:SV:Radera markerade filer
 
 # Deletes without using the system trash
 com.mucommander.ui.action.PermanentDeleteAction.label:EN:Delete permanently
-com.mucommander.ui.action.PermanentDeleteAction.label:FR:Supprimer definitivement
+com.mucommander.ui.action.PermanentDeleteAction.label:FR:Supprimer définitivement
 com.mucommander.ui.action.PermanentDeleteAction.label:DA:Slet permanent
 com.mucommander.ui.action.PermanentDeleteAction.label:NL:Definitief verwijderen
 com.mucommander.ui.action.PermanentDeleteAction.label:PL:Usuń trwale
@@ -4479,7 +4509,7 @@ com.mucommander.ui.action.ToggleShowFoldersFirstAction.label:SV:Visa mappar för
 com.mucommander.ui.action.ToggleShowFoldersFirstAction.label:DA:Vis mapper først
 
 com.mucommander.ui.action.ToggleTreeAction.label:EN:Show tree view
-com.mucommander.ui.action.ToggleTreeAction.label:FR:Afficher la vue arborescente
+com.mucommander.ui.action.ToggleTreeAction.label:FR:Vue arborescente
 com.mucommander.ui.action.ToggleTreeAction.label:PL:Pokaż drzewo katalogów
 com.mucommander.ui.action.ToggleTreeAction.label:DA:Træ visning
 com.mucommander.ui.action.ToggleTreeAction.label:NL:Toon boomweergave
@@ -5008,9 +5038,9 @@ com.mucommander.ui.action.MaximizeWindowAction.label:DA:Maksimer
 
 
 
+# This entry overrides the standard 'Maximize' label under Mac OS X.
 # Mac OS X uses a special terminology: 'Zoom' instead of 'Maximize'.
-# If you have no way of checking on a mac what the translation is or if the label
-# is the same, you can leave this entry undefined and the generic 'Maximize'
+# If this entry is not defined for a particular language, the generic 'Maximize' 
 # label will be used.
 com.mucommander.ui.action.MaximizeWindowAction.label.mac_os_x:EN:Zoom
 # Translation missing (New!)
@@ -5042,15 +5072,11 @@ com.mucommander.ui.action.MinimizeWindowAction.label:DA:Minimer
 
 
 
-# Overrides the standard 'Minimize' label under Mac OS X.
-# If you have no way of checking on a mac what the translation is or if the label
-# is the same, you can leave this entry undefined and the generic 'Minimize'
+# This entry overrides the standard 'Minimize' label under Mac OS X.
+# If this entry is not defined for a particular language, the generic 'Maximize' 
 # label will be used.
 com.mucommander.ui.action.MinimizeWindowAction.label.mac_os_x:EN:$[com.mucommander.ui.action.MinimizeWindowAction.label]
 # Translation missing (New!)
-
-
-
 
 
 
@@ -5072,7 +5098,11 @@ com.mucommander.ui.action.GoToDocumentationAction.label:DA:Online dokumentation
 
 
 
+
+
+
 com.mucommander.ui.action.ShowParentFoldersQLAction.label:EN:Parent folders
+com.mucommander.ui.action.ShowParentFoldersQLAction.label:FR:Dossiers parents
 com.mucommander.ui.action.ShowParentFoldersQLAction.label:DA:Ovenliggende mapper til den nuværende placering
 # Translation missing (New!)
 
@@ -5082,7 +5112,11 @@ com.mucommander.ui.action.ShowParentFoldersQLAction.label:DA:Ovenliggende mapper
 
 
 
+
+
+
 com.mucommander.ui.action.ShowRecentLocationsQLAction.label:EN:Recent locations
+com.mucommander.ui.action.ShowRecentLocationsQLAction.label:FR:Dossiers récents
 com.mucommander.ui.action.ShowRecentLocationsQLAction.label:DA:Nyeligt tilgåede placeringer
 # Translation missing (New!)
 
@@ -5092,7 +5126,11 @@ com.mucommander.ui.action.ShowRecentLocationsQLAction.label:DA:Nyeligt tilgåede
 
 
 
+
+
+
 com.mucommander.ui.action.ShowRecentExecutedFilesQLAction.label:EN:Recently executed files
+com.mucommander.ui.action.ShowRecentExecutedFilesQLAction.label:FR:Fichiers récemment exécutés
 # Translation missing (New!)
 
 
@@ -5101,18 +5139,15 @@ com.mucommander.ui.action.ShowRecentExecutedFilesQLAction.label:EN:Recently exec
 
 
 
-com.mucommander.ui.action.ShowBookmarksQLAction.label:EN:Bookmarks
-# Translation missing (New!)
 
 
 
+com.mucommander.ui.action.ShowBookmarksQLAction.label:EN:$[bookmarks_menu]
 
 
-
-
-#############
-# File menu #
-#############
+############
+# Menu bar #
+############
 
 file_menu:EN:File
 file_menu:FR:Fichier
@@ -5156,11 +5191,6 @@ file_menu.open_with:JA:開く...
 file_menu.open_with:SV:Öppna med...
 file_menu.open_with:DA:Åben med...
 
-
-#############
-# Mark menu #
-#############
-
 mark_menu:EN:Mark
 mark_menu:FR:Marquer
 mark_menu:DE:Markieren
@@ -5181,11 +5211,6 @@ mark_menu:SK:Označiť
 mark_menu:JA:マーク
 mark_menu:SV:Markera
 mark_menu:DA:Marker
-
-
-#############
-# View menu #
-#############
 
 view_menu:EN:View
 view_menu:FR:Vue
@@ -5229,11 +5254,6 @@ view_menu.show_hide_columns:JA:列の表示/非表示を切り替え
 view_menu.show_hide_columns:SV:Visa/Dölj kolumner
 view_menu.show_hide_columns:DA:Vis/skjul kolonner
 
-
-###########
-# Go menu #
-###########
-
 go_menu:EN:Go
 go_menu:FR:Go
 go_menu:zh_TW:跳至
@@ -5254,11 +5274,6 @@ go_menu:HU:Ugrás
 go_menu:JA:移動
 go_menu:SV:Gå
 go_menu:DA:Gå
-
-
-##################
-# Bookmarks menu #
-##################
 
 # Title of the Bookmarks menu
 bookmarks_menu:EN:Bookmarks
@@ -5282,7 +5297,7 @@ bookmarks_menu:JA:ブックマーク
 bookmarks_menu:SV:Bokmärken
 bookmarks_menu:DA:Bogmærker
 
-# Displayed in the Bookmarks menu when user hasn't defined any bookmark
+# Displayed in the Bookmarks menu when there is no bookmark
 bookmarks_menu.no_bookmark:EN:No bookmark
 bookmarks_menu.no_bookmark:FR:Pas de favori
 bookmarks_menu.no_bookmark:ES:No existe favorito
@@ -5304,19 +5319,25 @@ bookmarks_menu.no_bookmark:JA:ブックマークがありません
 bookmarks_menu.no_bookmark:SV:Det finns inga bokmärken
 bookmarks_menu.no_bookmark:DA:Ingen bogmærker
 
-####################
-# Quick lists menu #
-####################
-
 # Title of the Quick lists menu
 quick_lists_menu:EN:Quick lists
 quick_lists_menu:FR:Listes éclair 
 # Translation missing (New!)
 
 
-###############
-# Window menu #
-###############
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 window_menu:EN:Window
 window_menu:FR:Fenêtre
@@ -5338,10 +5359,6 @@ window_menu:SK:Okno
 window_menu:JA:ウィンドウ
 window_menu:SV:Fönster
 window_menu:DA:Vindue
-
-#############
-# Help menu #
-#############
 
 help_menu:EN:Help
 help_menu:FR:Aide
@@ -6646,36 +6663,6 @@ delete_dialog.permanently_delete.confirmation:SK:Natrvalo odstrániť vybraný s
 delete_dialog.permanently_delete.confirmation:JA:選択されたファイルを永久に削除しますか ?
 delete_dialog.permanently_delete.confirmation:SV:Radera markerade fil(er) permanent?
 delete_dialog.permanently_delete.confirmation:DA:Slet makerede fil(er) permanent?
-
-delete_dialog.permanently_delete.confirmation_details:EN:This operation cannot be undone.
-delete_dialog.permanently_delete.confirmation_details:FR:Cette opération ne peut pas être annulée.
-delete_dialog.permanently_delete.confirmation_details:zh_CN:此操作不能还原.
-delete_dialog.permanently_delete.confirmation_details:zh_TW:此操作無法回復
-delete_dialog.permanently_delete.confirmation_details:RO:Această operațiune este definitivă și irevocabilă.
-delete_dialog.permanently_delete.confirmation_details:ES:Esta operación no puede ser deshecha.
-delete_dialog.permanently_delete.confirmation_details:pt_BR:Esta operação não poderá ser desfeita
-delete_dialog.permanently_delete.confirmation_details:SK:Túto operáciu nie je možné vrátiť späť.
-delete_dialog.permanently_delete.confirmation_details:SL:Ta operacija ne more biti razveljavljena.
-delete_dialog.permanently_delete.confirmation_details:RU:Эта операция не может быть отменена
-delete_dialog.permanently_delete.confirmation_details:DE:Diese Operation kann nicht rückgängig gemacht werden.
-delete_dialog.permanently_delete.confirmation_details:CS:Tato operace je nevratná.
-delete_dialog.permanently_delete.confirmation_details:HU:A művelet nem vonható vissza.
-delete_dialog.permanently_delete.confirmation_details:IT:Questa operazione non puo' essere annullata.
-delete_dialog.permanently_delete.confirmation_details:NL:Deze bewerking kan niet ongedaan gemaakt worden.
-delete_dialog.permanently_delete.confirmation_details:PL:Operacja nie może być cofnięta.
-delete_dialog.permanently_delete.confirmation_details:JA:この操作は元に戻せません。
-delete_dialog.permanently_delete.confirmation_details:SV:Du kan inte ångra denna åtgärd. 
-delete_dialog.permanently_delete.confirmation_details:DA:Du kan ikke fortryde denne handling.
-# Translation missing (KO)
-
-
-
-
-
-
-
-
-
 
 delete_dialog.move_to_trash.confirmation:EN:Delete selected file(s) ?
 delete_dialog.move_to_trash.confirmation:FR:Supprimer les fichiers sélectionnés ?
@@ -8421,6 +8408,7 @@ ftp_connect.anonymous_user:SV:Anonym användare
 ftp_connect.anonymous_user:DA:Anonym bruger
 
 ftp_connect.nb_connection_retries:EN:Number of connection retries
+ftp_connect.nb_connection_retries:FR:Nombre de re-tentatives de connexion
 ftp_connect.nb_connection_retries:RU:Количество попыткок установления соединения
 ftp_connect.nb_connection_retries:DA:Antal gentagende forbindelses forsøg
 # Translation missing (New!)
@@ -8437,6 +8425,7 @@ ftp_connect.nb_connection_retries:DA:Antal gentagende forbindelses forsøg
 
 
 ftp_connect.retry_delay:EN:Delay between retries (in seconds)
+ftp_connect.retry_delay:FR:Délai entre tentatives de connexion (en secondes)
 ftp_connect.retry_delay:RU:Задержка между повторами (в секундах)
 ftp_connect.retry_delay:DA:Forsinkelse i mellem forsøg (i sekunder)
 # Translation missing (New!)
@@ -13146,6 +13135,7 @@ color_chooser.title:DA:Vælg en farve
 #######################
 
 batch_rename_dialog.title:EN:Batch Rename
+batch_rename_dialog.title:FR:Renommage Multiple
 batch_rename_dialog.title:PL:Zmiana nazw plików
 batch_rename_dialog.title:DA:Multi omdøbning
 # Translation missing (New!)
@@ -13161,7 +13151,8 @@ batch_rename_dialog.title:DA:Multi omdøbning
 
 
 
-batch_rename_dialog.mask:EN:Renaming Pattern
+batch_rename_dialog.mask:EN:Rename pattern
+batch_rename_dialog.mask:FR:Modèle de renommage
 batch_rename_dialog.mask:PL:Matryca
 batch_rename_dialog.mask:DA:Maske
 # Translation missing (New!)
@@ -13177,39 +13168,8 @@ batch_rename_dialog.mask:DA:Maske
 
 
 
-batch_rename_dialog.file_name_mask:EN:File name mask
-batch_rename_dialog.file_name_mask:PL:Nazwa pliku
-batch_rename_dialog.file_name_mask:DA:Fil navn maske
-# Translation missing (New!)
-
-
-
-
-
-
-
-
-
-
-
-
-batch_rename_dialog.extension_mask:EN:Extension mask
-batch_rename_dialog.extension_mask:PL:Rozszerzenie
-batch_rename_dialog.extension_mask:DA:Filendelse maske
-# Translation missing (New!)
-
-
-
-
-
-
-
-
-
-
-
-
-batch_rename_dialog.search_replace:EN:Search & replace
+batch_rename_dialog.search_replace:EN:Search & Replace
+batch_rename_dialog.search_replace:FR:Chercher & Remplacer
 batch_rename_dialog.search_replace:PL:Znajdź i zamień
 batch_rename_dialog.search_replace:DA:Søg og erstat
 # Translation missing (New!)
@@ -13226,6 +13186,7 @@ batch_rename_dialog.search_replace:DA:Søg og erstat
 
 
 batch_rename_dialog.search_for:EN:Search for
+batch_rename_dialog.search_for:FR:Chercher
 batch_rename_dialog.search_for:PL:Szukaj
 batch_rename_dialog.search_for:DA:Søg efter
 # Translation missing (New!)
@@ -13242,6 +13203,7 @@ batch_rename_dialog.search_for:DA:Søg efter
 
 
 batch_rename_dialog.replace_with:EN:Replace with
+batch_rename_dialog.replace_with:FR:Remplacer par
 batch_rename_dialog.replace_with:PL:Zamień na
 batch_rename_dialog.replace_with:DA:Erstat med
 # Translation missing (New!)
@@ -13258,6 +13220,7 @@ batch_rename_dialog.replace_with:DA:Erstat med
 
 
 batch_rename_dialog.counter:EN:Counter
+batch_rename_dialog.counter:FR:Compteur
 batch_rename_dialog.counter:PL:Licznik
 batch_rename_dialog.counter:DA:Tæller
 # Translation missing (New!)
@@ -13274,6 +13237,7 @@ batch_rename_dialog.counter:DA:Tæller
 
 
 batch_rename_dialog.start_at:EN:Start at
+batch_rename_dialog.start_at:FR:Commencer à
 batch_rename_dialog.start_at:PL:Start
 batch_rename_dialog.start_at:DA:Start på
 # Translation missing (New!)
@@ -13290,6 +13254,7 @@ batch_rename_dialog.start_at:DA:Start på
 
 
 batch_rename_dialog.step_by:EN:Step by
+batch_rename_dialog.step_by:FR:Incrément
 batch_rename_dialog.step_by:PL:Krok
 batch_rename_dialog.step_by:DA:Trin
 # Translation missing (New!)
@@ -13305,9 +13270,8 @@ batch_rename_dialog.step_by:DA:Trin
 
 
 
-batch_rename_dialog.digits:EN:Digits
-batch_rename_dialog.digits:PL:Liczba cyfr
-batch_rename_dialog.digits:DA:Cifre
+batch_rename_dialog.format:EN:Format
+batch_rename_dialog.format:FR:Format
 # Translation missing (New!)
 
 
@@ -13321,7 +13285,8 @@ batch_rename_dialog.digits:DA:Cifre
 
 
 
-batch_rename_dialog.upper_lower_case:EN:Upper/Lower case
+batch_rename_dialog.upper_lower_case:EN:Upper/Lowercase
+batch_rename_dialog.upper_lower_case:FR:Casse
 batch_rename_dialog.upper_lower_case:PL:Wielkość znaków
 batch_rename_dialog.upper_lower_case:DA:Store/små bogstaver
 # Translation missing (New!)
@@ -13337,9 +13302,10 @@ batch_rename_dialog.upper_lower_case:DA:Store/små bogstaver
 
 
 
-batch_rename_dialog.no_change:EN:unchanged
-batch_rename_dialog.no_change:PL:bez zmian
-batch_rename_dialog.no_change:DA:uændret
+batch_rename_dialog.no_change:EN:Unchanged
+batch_rename_dialog.no_change:FR:Inchangée
+batch_rename_dialog.no_change:PL:Bez zmian
+batch_rename_dialog.no_change:DA:Uændret
 # Translation missing (New!)
 
 
@@ -13354,6 +13320,7 @@ batch_rename_dialog.no_change:DA:uændret
 
 
 batch_rename_dialog.lower_case:EN:lowercase
+batch_rename_dialog.lower_case:FR:minuscule
 batch_rename_dialog.lower_case:PL:małe litery
 batch_rename_dialog.lower_case:DA:små bogstaver
 # Translation missing (New!)
@@ -13370,6 +13337,7 @@ batch_rename_dialog.lower_case:DA:små bogstaver
 
 
 batch_rename_dialog.upper_case:EN:UPPERCASE
+batch_rename_dialog.upper_case:FR:MAJUSCULE
 batch_rename_dialog.upper_case:PL:DUŻE LITERY
 batch_rename_dialog.upper_case:DA:STORE BOGSTAVER
 # Translation missing (New!)
@@ -13386,6 +13354,7 @@ batch_rename_dialog.upper_case:DA:STORE BOGSTAVER
 
 
 batch_rename_dialog.first_upper:EN:First letter uppercase
+batch_rename_dialog.first_upper:FR:Première lettre majuscule
 batch_rename_dialog.first_upper:PL:Pierwsza litera duża
 batch_rename_dialog.first_upper:DA:Første bogstaver stort
 # Translation missing (New!)
@@ -13402,6 +13371,7 @@ batch_rename_dialog.first_upper:DA:Første bogstaver stort
 
 
 batch_rename_dialog.word:EN:First Of Each Word
+batch_rename_dialog.word:FR:Première De Chaque Mot
 batch_rename_dialog.word:PL:Pierwsza Każdego Słowa
 batch_rename_dialog.word:DA:Første Af Hvert Ord
 # Translation missing (New!)
@@ -13418,6 +13388,7 @@ batch_rename_dialog.word:DA:Første Af Hvert Ord
 
 
 batch_rename_dialog.old_name:EN:Old name
+batch_rename_dialog.old_name:FR:Ancien nom
 batch_rename_dialog.old_name:PL:Stara nazwa
 batch_rename_dialog.old_name:DA:Gammelt navn
 # Translation missing (New!)
@@ -13434,6 +13405,7 @@ batch_rename_dialog.old_name:DA:Gammelt navn
 
 
 batch_rename_dialog.new_name:EN:New name
+batch_rename_dialog.new_name:FR:Nouveau nom
 batch_rename_dialog.new_name:PL:Nowa nazwa
 batch_rename_dialog.new_name:DA:Nyt navn
 # Translation missing (New!)
@@ -13449,23 +13421,8 @@ batch_rename_dialog.new_name:DA:Nyt navn
 
 
 
-batch_rename_dialog.start:EN:Start
-batch_rename_dialog.start:PL:Start
-batch_rename_dialog.start:DA:Start
-# Translation missing (New!)
-
-
-
-
-
-
-
-
-
-
-
-
 batch_rename_dialog.remove:EN:Remove
+batch_rename_dialog.remove:FR:Retirer
 batch_rename_dialog.remove:PL:Usuń
 batch_rename_dialog.remove:DA:Fjern
 # Translation missing (New!)
@@ -13479,9 +13436,11 @@ batch_rename_dialog.remove:DA:Fjern
 
 
 
-
-
-batch_rename_dialog.block_name:EN:Block
+# This label corresponds to a feature that is currently not used. 
+# The 'block name' feature allows selected file names to be preserved, i.e. not
+# modified by the batch renaming operation.
+batch_rename_dialog.block_name:EN:Preserve
+batch_rename_dialog.block_name:FR:Conserver
 batch_rename_dialog.block_name:PL:Zablokuj
 batch_rename_dialog.block_name:DA:Gruppe
 # Translation missing (New!)
@@ -13498,6 +13457,7 @@ batch_rename_dialog.block_name:DA:Gruppe
 
 
 batch_rename_dialog.range:EN:Range
+batch_rename_dialog.range:FR:Intervalle
 batch_rename_dialog.range:PL:Zakres
 batch_rename_dialog.range:DA:Område
 # Translation missing (New!)
@@ -13514,6 +13474,7 @@ batch_rename_dialog.range:DA:Område
 
 
 batch_rename_dialog.proceed_renaming:EN:%1 files out of %2 will be renamed. Do you wish to proceed?
+batch_rename_dialog.proceed_renaming:FR:%1 fichiers sur %2 vont être renommés. Etes-vous sûr?
 batch_rename_dialog.proceed_renaming:DA:%1 filer ud af %2 vil blive omdøbt. Ønsker du at forsætte?
 # Translation missing (New!)
 
@@ -13528,22 +13489,8 @@ batch_rename_dialog.proceed_renaming:DA:%1 filer ud af %2 vil blive omdøbt. Øn
 
 
 
-batch_rename_dialog.confirmation_details:EN:This operation cannot be undone.
-batch_rename_dialog.confirmation_details:DA:Denne handling kan ikke fortrydes.
-# Translation missing (New!)
-
-
-
-
-
-
-
-
-
-
-
-
 batch_rename_dialog.duplicate_names:EN:Duplicate names!
+batch_rename_dialog.duplicate_names:FR:Doublons de noms!
 batch_rename_dialog.duplicate_names:PL:Wykryto zduplikowane nazwy!
 batch_rename_dialog.duplicate_names:DA:Duplikerede navne!
 # Translation missing (New!)
@@ -13561,25 +13508,11 @@ batch_rename_dialog.duplicate_names:DA:Duplikerede navne!
 
 
 ###############
-# List popups #
+# Quick lists #
 ###############
 
-parent_folders_quick_list.title:EN:Parent folders
-parent_folders_quick_list.title:DA:Ovenliggende mapper
-# Translation missing (New!)
-
-
-
-
-
-
-
-
-
-
-
-
-parent_folders_quick_list.empty_message:EN:No parent folder for current location
+parent_folders_quick_list.empty_message:EN:Current location has no parent
+parent_folders_quick_list.empty_message:FR:Le dossier courant n'a pas de parent
 parent_folders_quick_list.empty_message:DA:Der er ikke nogle ovenliggende mapper til denne placering
 # Translation missing (New!)
 
@@ -13592,22 +13525,8 @@ parent_folders_quick_list.empty_message:DA:Der er ikke nogle ovenliggende mapper
 
 
 
-
-recent_locations_quick_list.title:EN:Recent locations
-recent_locations_quick_list.title:DA:Nyeligt tilgåede placeringer
-# Translation missing (New!)
-
-
-
-
-
-
-
-
-
-
-
 recent_locations_quick_list.empty_message:EN:No recent location
+recent_locations_quick_list.empty_message:FR:Pas de dossier récent
 recent_locations_quick_list.empty_message:DA:Der er ingen nyeligt tilgåede placeringer
 # Translation missing (New!)
 
@@ -13620,44 +13539,12 @@ recent_locations_quick_list.empty_message:DA:Der er ingen nyeligt tilgåede plac
 
 
 
-recent_executed_files_quick_list.title:EN:Recently executed files
+recent_executed_files_quick_list.empty_message:EN:No recently executed file
+recent_executed_files_quick_list.empty_message:FR:Pas de fichier récemment exécuté
 # Translation missing (New!)
 
 
 
-
-
-
-
-
-
-
-recent_executed_files_quick_list.empty_message:EN:No recent executed file
-# Translation missing (New!)
-
-
-
-
-
-
-
-
-
-
-bookmarks_quick_list.title:EN:Bookmarks
-# Translation missing (New!)
-
-
-
-
-
-
-
-
-
-
-bookmarks_quick_list.empty_message:EN:No bookmarks
-# Translation missing (New!)
 
 
 

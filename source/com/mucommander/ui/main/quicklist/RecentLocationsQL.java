@@ -20,6 +20,8 @@ package com.mucommander.ui.main.quicklist;
 
 import com.mucommander.file.AbstractFile;
 import com.mucommander.text.Translator;
+import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.action.ShowRecentLocationsQLAction;
 import com.mucommander.ui.event.LocationEvent;
 import com.mucommander.ui.event.LocationListener;
 import com.mucommander.ui.quicklist.QuickListWithIcons;
@@ -37,7 +39,7 @@ public class RecentLocationsQL extends QuickListWithIcons implements LocationLis
 	private LinkedList linkedList;
 
 	public RecentLocationsQL() {
-		super(Translator.get("recent_locations_quick_list.title"), Translator.get("recent_locations_quick_list.empty_message"));
+		super(MuAction.getStandardLabel(ShowRecentLocationsQLAction.class), Translator.get("recent_locations_quick_list.empty_message"));
 		
 		linkedList = new LinkedList();
 	}

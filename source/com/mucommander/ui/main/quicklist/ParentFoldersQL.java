@@ -20,6 +20,8 @@ package com.mucommander.ui.main.quicklist;
 
 import com.mucommander.file.AbstractFile;
 import com.mucommander.text.Translator;
+import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.action.ShowParentFoldersQLAction;
 import com.mucommander.ui.event.LocationEvent;
 import com.mucommander.ui.event.LocationListener;
 import com.mucommander.ui.main.FolderPanel;
@@ -38,7 +40,7 @@ public class ParentFoldersQL extends QuickListWithIcons implements LocationListe
 	protected boolean updated = true;
 		
 	public ParentFoldersQL(FolderPanel folderPanel) {
-		super(Translator.get("parent_folders_quick_list.title"), Translator.get("parent_folders_quick_list.empty_message"));
+		super(MuAction.getStandardLabel(ShowParentFoldersQLAction.class), Translator.get("parent_folders_quick_list.empty_message"));
 		
 		folderPanel.getLocationManager().addLocationListener(this);		
 	}

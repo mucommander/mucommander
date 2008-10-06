@@ -131,7 +131,7 @@ public class DeleteDialog extends JobDialog implements ItemListener, ActionListe
      */
     private void updateDialog() {
         informationPane.getMainLabel().setText(Translator.get(moveToTrash?"delete_dialog.move_to_trash.confirmation":"delete_dialog.permanently_delete.confirmation"));
-        informationPane.getCaptionLabel().setText(Translator.get(moveToTrash?"delete_dialog.move_to_trash.confirmation_details":"delete_dialog.permanently_delete.confirmation_details"));
+        informationPane.getCaptionLabel().setText(Translator.get(moveToTrash?"delete_dialog.move_to_trash.confirmation_details":"this_operation_cannot_be_undone"));
         informationPane.setIcon(moveToTrash?null: InformationPane.getPredefinedIcon(InformationPane.WARNING_ICON));
         setTitle(ActionManager.getActionInstance(moveToTrash?DeleteAction.class:PermanentDeleteAction.class, mainFrame).getLabel());
     }

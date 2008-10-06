@@ -23,6 +23,8 @@ import com.mucommander.bookmark.BookmarkListener;
 import com.mucommander.bookmark.BookmarkManager;
 import com.mucommander.file.FileFactory;
 import com.mucommander.text.Translator;
+import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.action.ShowBookmarksQLAction;
 import com.mucommander.ui.quicklist.QuickListWithIcons;
 
 import javax.swing.*;
@@ -39,7 +41,7 @@ public class BookmarksQL extends QuickListWithIcons implements BookmarkListener 
 	protected Bookmark[] sortedBookmarks;
 
 	public BookmarksQL() {
-		super(Translator.get("bookmarks_quick_list.title"), Translator.get("bookmarks_quick_list.empty_message"));
+		super(MuAction.getStandardLabel(ShowBookmarksQLAction.class), Translator.get("bookmarks_menu.no_bookmark"));
 		
 		bookmarksChanged();
 		BookmarkManager.addBookmarkListener(this);
