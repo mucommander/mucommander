@@ -18,11 +18,10 @@
 
 package com.mucommander.ui.autocomplete.completers;
 
+import java.util.Vector;
+
 import com.mucommander.ui.autocomplete.AutocompleterTextComponent;
 import com.mucommander.ui.autocomplete.completers.services.PrefixFilter;
-
-import javax.swing.*;
-import java.util.Vector;
 
 /**
  * ComboboxOptionsCompleter is a Completer based on the items of combo-box.
@@ -34,12 +33,8 @@ public class ComboboxOptionsCompleter extends Completer {
 
 	public ComboboxOptionsCompleter() {	}
 
-	public boolean updateListData(final JList list, AutocompleterTextComponent comp) {
-		final String value = comp.getText();    	
-    	Vector filteredFiles = PrefixFilter.createPrefixFilter(value).filter(comp.getItemNames());    	
-    	
-    	list.setListData(filteredFiles);
-		return list.getModel().getSize() > 0;
+	protected Vector getUpdatedSuggestions(AutocompleterTextComponent component) { 	
+    	return PrefixFilter.createPrefixFilter(component.getText()).filter(component.getItemNames());
 	}
 	
 	public void updateTextComponent(final String selected, AutocompleterTextComponent comp) {

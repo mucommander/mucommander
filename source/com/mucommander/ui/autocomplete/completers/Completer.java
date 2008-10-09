@@ -18,10 +18,13 @@
 
 package com.mucommander.ui.autocomplete.completers;
 
+import com.mucommander.file.FileURL;
 import com.mucommander.ui.autocomplete.AutocompleterTextComponent;
 import com.mucommander.ui.autocomplete.completers.services.CompletionService;
 
 import javax.swing.*;
+
+import java.net.MalformedURLException;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -46,13 +49,37 @@ public abstract class Completer {
 	}
 	
 	/**
+	 * This function gets an AutocompleterTextComponent and returns a Vector of suggestions for
+	 * completion, for the component's value.
+	 * 
+	 * @param component - an AutocompleterTextComponent.
+	 * @return Vector of suggestions for completion.
+	 */
+	protected abstract Vector getUpdatedSuggestions(AutocompleterTextComponent component);
+    
+	/**
 	 * update list model depending on the data in text component
 	 * 
-	 * @param list - auto-completion popup's list.
+	 * @param list - auto-completion popup's list that should be updated.
 	 * @param comp - text component
-	 * @return true if list model was updated successfully, false otherwise.
+	 * @return true if an auto-completion popup with the updated list should be shown, false otherwise.
 	 */
-    public abstract boolean updateListData(final JList list, AutocompleterTextComponent comp); 
+    public boolean updateListData(final JList list, AutocompleterTextComponent comp) {
+    	list.setListData(getUpdatedSuggestions(comp));
+
+    	if (list.getModel().getSize() == 1) {
+    		try {
+				String typedFilename = FileURL.getFileURL(comp.getText()).getFilename();
+
+				// in case the suggestions-list contains only one suggestion and it 
+				// match the typed path - do not show an auto-completion popup.
+				if (typedFilename.equalsIgnoreCase((String) list.getModel().getElementAt(0)))
+					return false;
+			} catch (MalformedURLException e) { }
+    	}
+    	
+    	return list.getModel().getSize() > 0;
+    }
  
     /**
      * update text component according to the given string.
