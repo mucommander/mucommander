@@ -303,7 +303,7 @@ change:EN:Change
 change:FR:Changer
 change:PL:Zmień
 change:DA:Ændre
-change:NL:veranderen
+change:NL:Veranderen
 # Translation missing (New!)
 
 
@@ -2773,9 +2773,7 @@ com.mucommander.ui.action.DeleteAction.label:DA:Slet
 # Note: the system trash is available on certain OS environments only (Windows, Mac OS X, KDE), and only for local files.
 com.mucommander.ui.action.DeleteAction.tooltip:EN:Delete marked files using the system trash when possible
 com.mucommander.ui.action.DeleteAction.tooltip:FR:Supprimer les fichiers marqués en utilisant la corbeille système si possible
-com.mucommander.ui.action.DeleteAction.tooltip:DE:Markierte Dateien löschen
 com.mucommander.ui.action.DeleteAction.tooltip:DA:Slet markerede filer via papirkurven når det er muligt
-com.mucommander.ui.action.DeleteAction.tooltip:NL:Gemarkeerde bestanden verwijderen
 com.mucommander.ui.action.DeleteAction.tooltip:PL:Usuwa zaznaczone pliki (przenosi do kosza, jeżeli możliwe)
 # The following entries need to be updated to indicate that the system trash is used when it is available
 com.mucommander.ui.action.DeleteAction.tooltip:DE:Markierte Dateien löschen
@@ -5025,6 +5023,7 @@ com.mucommander.ui.action.CalculateChecksumAction.label:DA:Udregn kontrolsum
 com.mucommander.ui.action.MaximizeWindowAction.label:EN:Maximize
 com.mucommander.ui.action.MaximizeWindowAction.label:FR:Agrandir
 com.mucommander.ui.action.MaximizeWindowAction.label:DA:Maksimer
+com.mucommander.ui.action.MaximizeWindowAction.label:NL:Maximaliseren
 # Translation missing (New!)
 
 
@@ -5059,6 +5058,7 @@ com.mucommander.ui.action.MaximizeWindowAction.label.mac_os_x:EN:Zoom
 com.mucommander.ui.action.MinimizeWindowAction.label:EN:Minimize
 com.mucommander.ui.action.MinimizeWindowAction.label:FR:Réduire
 com.mucommander.ui.action.MinimizeWindowAction.label:DA:Minimer
+com.mucommander.ui.action.MinimizeWindowAction.label:NL:Minimaliseren
 # Translation missing (New!)
 
 
@@ -5091,6 +5091,7 @@ com.mucommander.ui.action.MinimizeWindowAction.label.mac_os_x:EN:$[com.mucommand
 com.mucommander.ui.action.GoToDocumentationAction.label:EN:Online documentation
 com.mucommander.ui.action.GoToDocumentationAction.label:FR:Documentation en ligne
 com.mucommander.ui.action.GoToDocumentationAction.label:DA:Online dokumentation
+com.mucommander.ui.action.GoToDocumentationAction.label:NL:Online dokumentatie
 # Translation missing (New!)
 
 
@@ -5104,6 +5105,7 @@ com.mucommander.ui.action.GoToDocumentationAction.label:DA:Online dokumentation
 com.mucommander.ui.action.ShowParentFoldersQLAction.label:EN:Parent folders
 com.mucommander.ui.action.ShowParentFoldersQLAction.label:FR:Dossiers parents
 com.mucommander.ui.action.ShowParentFoldersQLAction.label:DA:Ovenliggende mapper til den nuværende placering
+com.mucommander.ui.action.ShowParentFoldersQLAction.label:NL:Bovenliggende mappen
 # Translation missing (New!)
 
 
@@ -5118,6 +5120,7 @@ com.mucommander.ui.action.ShowParentFoldersQLAction.label:DA:Ovenliggende mapper
 com.mucommander.ui.action.ShowRecentLocationsQLAction.label:EN:Recent locations
 com.mucommander.ui.action.ShowRecentLocationsQLAction.label:FR:Dossiers récents
 com.mucommander.ui.action.ShowRecentLocationsQLAction.label:DA:Nyeligt tilgåede placeringer
+com.mucommander.ui.action.ShowRecentLocationsQLAction.label:NL:Recente locaties
 # Translation missing (New!)
 
 
@@ -5131,6 +5134,7 @@ com.mucommander.ui.action.ShowRecentLocationsQLAction.label:DA:Nyeligt tilgåede
 
 com.mucommander.ui.action.ShowRecentExecutedFilesQLAction.label:EN:Recently executed files
 com.mucommander.ui.action.ShowRecentExecutedFilesQLAction.label:FR:Fichiers récemment exécutés
+com.mucommander.ui.action.ShowRecentExecutedFilesQLAction.label:NL:Recent uitgevoerde bestanden
 # Translation missing (New!)
 
 
@@ -5143,6 +5147,7 @@ com.mucommander.ui.action.ShowRecentExecutedFilesQLAction.label:FR:Fichiers réc
 
 
 com.mucommander.ui.action.ShowBookmarksQLAction.label:EN:$[bookmarks_menu]
+com.mucommander.ui.action.ShowBookmarksQLAction.label:NL:Bladwijzers
 
 
 ############
@@ -5322,6 +5327,7 @@ bookmarks_menu.no_bookmark:DA:Ingen bogmærker
 # Title of the Quick lists menu
 quick_lists_menu:EN:Quick lists
 quick_lists_menu:FR:Listes éclair 
+quick_lists_menu:NL:Snellijsten
 # Translation missing (New!)
 
 
@@ -8411,6 +8417,7 @@ ftp_connect.nb_connection_retries:EN:Number of connection retries
 ftp_connect.nb_connection_retries:FR:Nombre de re-tentatives de connexion
 ftp_connect.nb_connection_retries:RU:Количество попыткок установления соединения
 ftp_connect.nb_connection_retries:DA:Antal gentagende forbindelses forsøg
+ftp_connect.nb_connection_retries:NL:Hoeveelheid pogingen tot verbinden
 # Translation missing (New!)
 
 
@@ -8428,6 +8435,7 @@ ftp_connect.retry_delay:EN:Delay between retries (in seconds)
 ftp_connect.retry_delay:FR:Délai entre tentatives de connexion (en secondes)
 ftp_connect.retry_delay:RU:Задержка между повторами (в секундах)
 ftp_connect.retry_delay:DA:Forsinkelse i mellem forsøg (i sekunder)
+ftp_connect.retry_delay:NL:Tijd tussen pogingen (in seconden)
 # Translation missing (New!)
 
 
@@ -8702,6 +8710,7 @@ auth_dialog.store_credentials:DA:Husk brugernavn og kodeord (svag kryptering)
 # Used as a label for the 'Guest' and 'User' radio buttons (Connect as Guest, Connect as User...)
 auth_dialog.connect_as:EN:Connect as
 auth_dialog.connect_as:FR:Se connecter en tant que
+auth_dialog.connect_as:NL:Verbinden als
 # Translation missing (New!)
 
 
@@ -8721,6 +8730,7 @@ auth_dialog.connect_as:FR:Se connecter en tant que
 
 auth_dialog.authentication_failed:EN:Authentication failed
 auth_dialog.authentication_failed:FR:L'authentification a échoué
+auth_dialog.authentication_failed:NL:Autentificatie mislukt
 # Translation missing (New!)
 
 
@@ -10944,6 +10954,7 @@ prefs_dialog.show_splash_screen:EN:Show splash screen
 prefs_dialog.show_splash_screen:FR:Afficher l'écran de chargement
 prefs_dialog.show_splash_screen:DE:Zeige Startbild
 prefs_dialog.show_splash_screen:DA:Vis opstartsbillede
+prefs_dialog.show_splash_screen:NL:Toon opstartscherm
 # Translation missing (New!)
 
 
@@ -13138,6 +13149,7 @@ batch_rename_dialog.title:EN:Batch Rename
 batch_rename_dialog.title:FR:Renommage Multiple
 batch_rename_dialog.title:PL:Zmiana nazw plików
 batch_rename_dialog.title:DA:Multi omdøbning
+batch_rename_dialog.title:NL:Multi hernoemen
 # Translation missing (New!)
 
 
@@ -13155,6 +13167,7 @@ batch_rename_dialog.mask:EN:Rename pattern
 batch_rename_dialog.mask:FR:Modèle de renommage
 batch_rename_dialog.mask:PL:Matryca
 batch_rename_dialog.mask:DA:Maske
+batch_rename_dialog.mask:NL:Patroon nieuwe naam
 # Translation missing (New!)
 
 
@@ -13172,6 +13185,7 @@ batch_rename_dialog.search_replace:EN:Search & Replace
 batch_rename_dialog.search_replace:FR:Chercher & Remplacer
 batch_rename_dialog.search_replace:PL:Znajdź i zamień
 batch_rename_dialog.search_replace:DA:Søg og erstat
+batch_rename_dialog.search_replace:NL:Zoek en vervang
 # Translation missing (New!)
 
 
@@ -13189,6 +13203,7 @@ batch_rename_dialog.search_for:EN:Search for
 batch_rename_dialog.search_for:FR:Chercher
 batch_rename_dialog.search_for:PL:Szukaj
 batch_rename_dialog.search_for:DA:Søg efter
+batch_rename_dialog.search_for:NL:Zoeken
 # Translation missing (New!)
 
 
@@ -13206,6 +13221,7 @@ batch_rename_dialog.replace_with:EN:Replace with
 batch_rename_dialog.replace_with:FR:Remplacer par
 batch_rename_dialog.replace_with:PL:Zamień na
 batch_rename_dialog.replace_with:DA:Erstat med
+batch_rename_dialog.replace_with:NL:Vervang door
 # Translation missing (New!)
 
 
@@ -13223,6 +13239,7 @@ batch_rename_dialog.counter:EN:Counter
 batch_rename_dialog.counter:FR:Compteur
 batch_rename_dialog.counter:PL:Licznik
 batch_rename_dialog.counter:DA:Tæller
+batch_rename_dialog.counter:NL:Teller
 # Translation missing (New!)
 
 
@@ -13240,6 +13257,7 @@ batch_rename_dialog.start_at:EN:Start at
 batch_rename_dialog.start_at:FR:Commencer à
 batch_rename_dialog.start_at:PL:Start
 batch_rename_dialog.start_at:DA:Start på
+batch_rename_dialog.start_at:NL:Start bij
 # Translation missing (New!)
 
 
@@ -13257,6 +13275,7 @@ batch_rename_dialog.step_by:EN:Step by
 batch_rename_dialog.step_by:FR:Incrément
 batch_rename_dialog.step_by:PL:Krok
 batch_rename_dialog.step_by:DA:Trin
+batch_rename_dialog.step_by:NL:Verhoog met
 # Translation missing (New!)
 
 
@@ -13272,6 +13291,7 @@ batch_rename_dialog.step_by:DA:Trin
 
 batch_rename_dialog.format:EN:Format
 batch_rename_dialog.format:FR:Format
+batch_rename_dialog.format:NL:Voorloopnullen
 # Translation missing (New!)
 
 
@@ -13289,6 +13309,7 @@ batch_rename_dialog.upper_lower_case:EN:Upper/Lowercase
 batch_rename_dialog.upper_lower_case:FR:Casse
 batch_rename_dialog.upper_lower_case:PL:Wielkość znaków
 batch_rename_dialog.upper_lower_case:DA:Store/små bogstaver
+batch_rename_dialog.upper_lower_case:NL:Hoofdletters/kleine letters
 # Translation missing (New!)
 
 
@@ -13306,6 +13327,7 @@ batch_rename_dialog.no_change:EN:Unchanged
 batch_rename_dialog.no_change:FR:Inchangée
 batch_rename_dialog.no_change:PL:Bez zmian
 batch_rename_dialog.no_change:DA:Uændret
+batch_rename_dialog.no_change:NL:onveranderd
 # Translation missing (New!)
 
 
@@ -13323,6 +13345,7 @@ batch_rename_dialog.lower_case:EN:lowercase
 batch_rename_dialog.lower_case:FR:minuscule
 batch_rename_dialog.lower_case:PL:małe litery
 batch_rename_dialog.lower_case:DA:små bogstaver
+batch_rename_dialog.lower_case:NL:kleine letters
 # Translation missing (New!)
 
 
@@ -13340,6 +13363,7 @@ batch_rename_dialog.upper_case:EN:UPPERCASE
 batch_rename_dialog.upper_case:FR:MAJUSCULE
 batch_rename_dialog.upper_case:PL:DUŻE LITERY
 batch_rename_dialog.upper_case:DA:STORE BOGSTAVER
+batch_rename_dialog.upper_case:NL:HOOFDLETTERS
 # Translation missing (New!)
 
 
@@ -13357,6 +13381,7 @@ batch_rename_dialog.first_upper:EN:First letter uppercase
 batch_rename_dialog.first_upper:FR:Première lettre majuscule
 batch_rename_dialog.first_upper:PL:Pierwsza litera duża
 batch_rename_dialog.first_upper:DA:Første bogstaver stort
+batch_rename_dialog.first_upper:NL:Eerste letter hoofdletter
 # Translation missing (New!)
 
 
@@ -13374,6 +13399,7 @@ batch_rename_dialog.word:EN:First Of Each Word
 batch_rename_dialog.word:FR:Première De Chaque Mot
 batch_rename_dialog.word:PL:Pierwsza Każdego Słowa
 batch_rename_dialog.word:DA:Første Af Hvert Ord
+batch_rename_dialog.word:NL:Eerste Van Ieder Woord
 # Translation missing (New!)
 
 
@@ -13391,6 +13417,7 @@ batch_rename_dialog.old_name:EN:Old name
 batch_rename_dialog.old_name:FR:Ancien nom
 batch_rename_dialog.old_name:PL:Stara nazwa
 batch_rename_dialog.old_name:DA:Gammelt navn
+batch_rename_dialog.old_name:NL:Oude naam
 # Translation missing (New!)
 
 
@@ -13408,6 +13435,7 @@ batch_rename_dialog.new_name:EN:New name
 batch_rename_dialog.new_name:FR:Nouveau nom
 batch_rename_dialog.new_name:PL:Nowa nazwa
 batch_rename_dialog.new_name:DA:Nyt navn
+batch_rename_dialog.new_name:NL:Nieuwe naam
 # Translation missing (New!)
 
 
@@ -13425,6 +13453,7 @@ batch_rename_dialog.remove:EN:Remove
 batch_rename_dialog.remove:FR:Retirer
 batch_rename_dialog.remove:PL:Usuń
 batch_rename_dialog.remove:DA:Fjern
+batch_rename_dialog.remove:NL:Verwijder
 # Translation missing (New!)
 
 
@@ -13443,6 +13472,7 @@ batch_rename_dialog.block_name:EN:Preserve
 batch_rename_dialog.block_name:FR:Conserver
 batch_rename_dialog.block_name:PL:Zablokuj
 batch_rename_dialog.block_name:DA:Gruppe
+batch_rename_dialog.block_name:NL:Groep
 # Translation missing (New!)
 
 
@@ -13476,6 +13506,7 @@ batch_rename_dialog.range:DA:Område
 batch_rename_dialog.proceed_renaming:EN:%1 files out of %2 will be renamed. Do you wish to proceed?
 batch_rename_dialog.proceed_renaming:FR:%1 fichiers sur %2 vont être renommés. Etes-vous sûr?
 batch_rename_dialog.proceed_renaming:DA:%1 filer ud af %2 vil blive omdøbt. Ønsker du at forsætte?
+batch_rename_dialog.proceed_renaming:NL:%1 bestanden van %2 zullen hernoemd worden. Doorgaan?
 # Translation missing (New!)
 
 
@@ -13514,6 +13545,7 @@ batch_rename_dialog.duplicate_names:DA:Duplikerede navne!
 parent_folders_quick_list.empty_message:EN:Current location has no parent
 parent_folders_quick_list.empty_message:FR:Le dossier courant n'a pas de parent
 parent_folders_quick_list.empty_message:DA:Der er ikke nogle ovenliggende mapper til denne placering
+parent_folders_quick_list.empty_message:NL:Er is geen bovenliggende map bij huidige locatie
 # Translation missing (New!)
 
 
@@ -13528,6 +13560,7 @@ parent_folders_quick_list.empty_message:DA:Der er ikke nogle ovenliggende mapper
 recent_locations_quick_list.empty_message:EN:No recent location
 recent_locations_quick_list.empty_message:FR:Pas de dossier récent
 recent_locations_quick_list.empty_message:DA:Der er ingen nyeligt tilgåede placeringer
+recent_locations_quick_list.empty_message:NL:Geen recente locaties
 # Translation missing (New!)
 
 
@@ -13541,6 +13574,7 @@ recent_locations_quick_list.empty_message:DA:Der er ingen nyeligt tilgåede plac
 
 recent_executed_files_quick_list.empty_message:EN:No recently executed file
 recent_executed_files_quick_list.empty_message:FR:Pas de fichier récemment exécuté
+recent_executed_files_quick_list.empty_message:NL:Geen recent uitgevoerde bestanden
 # Translation missing (New!)
 
 
