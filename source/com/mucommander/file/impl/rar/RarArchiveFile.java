@@ -18,17 +18,17 @@
 
 package com.mucommander.file.impl.rar;
 
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.AbstractROArchiveFile;
-import com.mucommander.file.ArchiveEntry;
-import rar.ExternalFile;
-import rar.RarEntry;
-import rar.RarFile;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Iterator;
 import java.util.Vector;
+
+import com.mucommander.file.AbstractFile;
+import com.mucommander.file.AbstractROArchiveFile;
+import com.mucommander.file.ArchiveEntry;
+import com.mucommander.file.impl.rar.provider.RarFile;
+import com.mucommander.file.impl.rar.provider.de.innosystec.unrar.rarfile.FileHeader;
+
 
 /**
  * RarArchiveFile provides read-only access to archives in the Rar format.
@@ -37,40 +37,76 @@ import java.util.Vector;
  * @author Arik Hadas
  */
 public class RarArchiveFile extends AbstractROArchiveFile {
-	private RarFile m_rar;
 
+	/** The RarFile object that actually reads the entries in the Rar file */
+	private RarFile rarFile;
+	
+	/** The date at which the current RarFile object was created */
+	private long lastRarFileDate;
+	
+    
 	public RarArchiveFile(AbstractFile file) throws IOException {		
 		super(file);
+	}
+	
+	/**
+     * Checks if the underlying Rar file is up-to-date, i.e. exists and has not changed without this archive file
+     * being aware of it. If one of those 2 conditions are not met, (re)load the RipFile instance (parse the entries)
+     * and declare the Rar file as up-to-date.
+     *
+     * @throws IOException if an error occurred while reloading
+     */
+    private void checkRarFile() throws IOException {
+        long currentDate = file.getDate();
+        
+        if (rarFile==null || currentDate != lastRarFileDate) {
+        	rarFile = new RarFile(file);
+            declareRarFileUpToDate(currentDate);
+        }
+    }
+    
+    /**
+     * Declare the underlying Rar file as up-to-date. Calling this method after the Rar file has been
+     * modified prevents {@link #checkRarFile()} from being reloaded.
+     */
+    private void declareRarFileUpToDate(long currentFileDate) {
+        lastRarFileDate = currentFileDate;
+    }
+    
+    /**
+     * Creates and return an {@link ArchiveEntry()} whose attributes are fetched from the given {@link com.mucommander.file.impl.rar.provider.de.innosystec.unrar.rarfile.FileHeader}
+     *
+     * @param FileHeader the object that serves to initialize the attributes of the returned ArchiveEntry
+     * @return an ArchiveEntry whose attributes are fetched from the given FileHeader
+     */
+    private ArchiveEntry createArchiveEntry(FileHeader header) {
+    	return new ArchiveEntry(
+    			header.getFileNameString().replace('\\', '/'),
+    			header.isDirectory(),
+    			header.getMTime().getTime(),
+    			header.getFullUnpackSize()
+    	);
+    }
 
-		final AbstractFile f = file;
-		m_rar = new RarFile(new ExternalFile(){
-
-			public InputStream getInputStream() throws IOException {
-				return f.getInputStream();
-			}
-			
-		});
-	}
+    
+    //////////////////////////////////////////
+    // AbstractROArchiveFile implementation //
+    //////////////////////////////////////////
+    
+	public synchronized Vector getEntries() throws IOException {
+		checkRarFile();
+		
+		Vector entries = new Vector();
+		Iterator rarEntriesIterator = rarFile.getEntries().iterator();
+		while(rarEntriesIterator.hasNext())
+			entries.add(createArchiveEntry((FileHeader) rarEntriesIterator.next()));
+		
+		return entries;
+	}	
 	
-	public Vector getEntries() throws IOException {
-		Vector result = new Vector();
-		Iterator iter = m_rar.getEntries().iterator();
-		while (iter.hasNext()) {
-			RarEntry file = (RarEntry) iter.next();
-			//System.out.println("adding: " + file.getPath());
-			result.add(convertRarEntryToArchiveEntry(file));
-		}
-		return result;
-	}
-	
-	private ArchiveEntry convertRarEntryToArchiveEntry(RarEntry rarEntry) {
-		return new ArchiveEntry(rarEntry.getPath().replace('\\', '/'), rarEntry.isDirectory(), rarEntry.getDate().getTime(), rarEntry.getSize());
-	}
-	
-	public InputStream getEntryInputStream(ArchiveEntry entry)
-			throws IOException {
-		//System.out.println("arik path = " + entry.getPath());
-		//System.out.println("arik name = " + entry.getName());
-		return m_rar.extract(entry.getPath().replace('/', '\\'));	
+	public synchronized InputStream getEntryInputStream(ArchiveEntry entry) throws IOException {
+		checkRarFile();
+		
+		return rarFile.getEntryInputStream(entry.getPath().replace('/', '\\'));
 	}
 }
