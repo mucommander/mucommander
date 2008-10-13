@@ -134,7 +134,7 @@ public class Archive {
         byte[] buff = BufferPool.getByteArray();
         BaseBlock block;
 
-        while((read = in.read(baseBlockBuffer)) != 0) {
+        while((read = in.read(baseBlockBuffer)) > 0) {
 //            logger.info("\n--------reading header--------");
             block = new BaseBlock(baseBlockBuffer);            
             block.setPositionInFile(position);
@@ -300,13 +300,13 @@ public class Archive {
                         default:
                             logger.warning("Unknown Header " + blockHead.getHeaderType());
                             throw new RarException(RarExceptionType.notRarArchive);
-                            
                     }
-                    
-                    BufferPool.releaseByteArray(buff);
             }
 //            logger.info("\n--------end header--------");
         }
+        BufferPool.releaseByteArray(buff);
+        if (read == -1)
+        	throw new RarException(RarExceptionType.badRarArchive);
     }
     
     private void parseHeaders(InputStream in) throws IOException {
