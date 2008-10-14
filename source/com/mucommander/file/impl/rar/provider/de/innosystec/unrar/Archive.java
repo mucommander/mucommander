@@ -26,8 +26,8 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
-import java.util.logging.Logger;
 
+import com.mucommander.file.impl.rar.provider.RarDebug;
 import com.mucommander.file.impl.rar.provider.de.innosystec.unrar.exception.RarException;
 import com.mucommander.file.impl.rar.provider.de.innosystec.unrar.exception.RarExceptionType;
 import com.mucommander.file.impl.rar.provider.de.innosystec.unrar.rarfile.AVHeader;
@@ -58,8 +58,6 @@ import com.mucommander.io.BufferPool;
  */
 public class Archive {
     
-    private static Logger logger = Logger.getLogger(Archive.class.getName());
-
     private final ComprDataIO dataIO;
 
     private final List headers = new ArrayList();
@@ -97,7 +95,7 @@ public class Archive {
      */
     public Archive(InputStream in) throws RarException, IOException {
     	parseHeaders(in);
-    	
+
         dataIO = new ComprDataIO(this);
     }
 
@@ -125,9 +123,7 @@ public class Archive {
     private void readHeaders(InputStream in) throws IOException, RarException{
         markHead = null;
         newMhd = null;
-//        endHeader = null;
         headers.clear();
-//        currentHeaderIndex = 0;
         long position = 0;
         long read = 0;
         byte[] baseBlockBuffer = new byte[BaseBlock.BaseBlockSize];
@@ -140,11 +136,9 @@ public class Archive {
             block.setPositionInFile(position);
             position += read;
             
-            logger.info("block.getHeaderType() = " + block.getHeaderType());
             switch(block.getHeaderType()) {
-                
                 case UnrarHeadertype.MarkHeaderCode:
-    				logger.info("--MarkHeader--");
+    				RarDebug.trace("RAR: found --MarkHeader--");
                     markHead = new MarkHeader(block);
                     if (!markHead.isSignature()) {
                         throw new RarException(RarExceptionType.badRarArchive);
@@ -154,7 +148,7 @@ public class Archive {
                     break;
                     
                 case UnrarHeadertype.MainHeaderCode:
-                	logger.info("--MainHeader--");
+                	RarDebug.trace("RAR: found --MainHeader--");
                 	buff = realloc(buff, block.hasEncryptVersion() ? MainHeader.mainHeaderSizeWithEnc : MainHeader.mainHeaderSize);
                 	//buff = new byte[block.hasEncryptVersion() ? MainHeader.mainHeaderSizeWithEnc : MainHeader.mainHeaderSize];
                 	position += in.read(buff);
@@ -169,7 +163,7 @@ public class Archive {
                     break;
                     
                 case UnrarHeadertype.SignHeaderCode:
-                	logger.info("--SignHeader--");
+                	RarDebug.trace("RAR: found --SignHeader--");
                 	buff = realloc(buff, SignHeader.signHeaderSize);
                 	//buff = new byte[SignHeader.signHeaderSize];
     				position += in.read(buff);
@@ -178,7 +172,7 @@ public class Archive {
                     break;
                     
                 case UnrarHeadertype.AvHeaderCode:
-                	logger.info("--AvHeader--");
+                	RarDebug.trace("RAR: found --AvHeader--");
 //                	buff = new byte[AVHeader.avHeaderSize];
                 	buff = realloc(buff, AVHeader.avHeaderSize);
     				position += in.read(buff);
@@ -186,7 +180,7 @@ public class Archive {
                     break;
                     
                 case UnrarHeadertype.CommHeaderCode:
-                	logger.info("--CommHeader--");
+                	RarDebug.trace("RAR: found --CommHeader--");
 //                	buff = new byte[CommentHeader.commentHeaderSize];
                 	buff = realloc(buff, CommentHeader.commentHeaderSize);
     				position += in.read(buff);
@@ -196,7 +190,7 @@ public class Archive {
                     break;
                     
                 case UnrarHeadertype.EndArcHeaderCode:
-                	logger.info("--EndArcHeader--");
+                	RarDebug.trace("RAR: found --EndArcHeader--");
     				int toRead = 0;
     				toRead += block.hasArchiveDataCRC() ? EndArcHeader.endArcArchiveDataCrcSize : 0;
     				toRead += block.hasVolumeNumber() ? EndArcHeader.endArcVolumeNumberSize : 0;
@@ -206,11 +200,11 @@ public class Archive {
     					buff = realloc(buff, toRead);
     				    position += in.read(buff);
     				    endArcHead = new EndArcHeader(block, buff);
-    				    logger.info("--endArc with data--");
+    				    RarDebug.trace("RAR: found --endArc with data--");
     				}
     				else {
     				    endArcHead = new EndArcHeader(block, null);
-    				    logger.info("--endArc without data--");
+    				    RarDebug.trace("RAR: found --endArc without data--");
     				}
     				headers.add(endArcHead);
     				return;
@@ -221,11 +215,10 @@ public class Archive {
                 	position += in.read(buff);
                 	BlockHeader blockHead = new BlockHeader(block, buff);
                     
-                	logger.info("blockHead.getHeaderType() = " + blockHead.getHeaderType());
                     switch(blockHead.getHeaderType()) {
                         case UnrarHeadertype.NewSubHeaderCode:
                         case UnrarHeadertype.FileHeaderCode:
-                        	logger.info("--NewSubHeader/FileHeader--");
+                        	RarDebug.trace("RAR: found --NewSubHeader/FileHeader--");
 //                        	buff = new byte[blockHead.getHeaderSize() - BlockHeader.blockHeaderSize - BaseBlock.BaseBlockSize];
                         	buff = realloc(buff, blockHead.getHeaderSize() - BlockHeader.blockHeaderSize - BaseBlock.BaseBlockSize);
         				    position += in.read(buff);
@@ -235,7 +228,7 @@ public class Archive {
                             break;
                             
                         case UnrarHeadertype.ProtectHeaderCode:
-                        	logger.info("--ProtectHeader--");
+                        	RarDebug.trace("RAR: found --ProtectHeader--");
 //                        	buff = new byte[blockHead.getHeaderSize() - BaseBlock.BaseBlockSize - BlockHeader.blockHeaderSize];
                         	buff= realloc(buff, blockHead.getHeaderSize() - BaseBlock.BaseBlockSize - BlockHeader.blockHeaderSize);
         				    position += in.read(buff);
@@ -245,7 +238,7 @@ public class Archive {
                             
                         case UnrarHeadertype.SubHeaderCode:
 						{
-							logger.info("--SubHeader--");
+							RarDebug.trace("RAR: found --SubHeader--");
 //							buff = new byte[SubBlockHeader.subBlockHeaderSize];
 							buff = realloc(buff, SubBlockHeader.subBlockHeaderSize);
 							position += in.read(buff);
@@ -298,23 +291,20 @@ public class Archive {
 							break;
 						}
                         default:
-                            logger.warning("Unknown Header " + blockHead.getHeaderType());
-                            throw new RarException(RarExceptionType.notRarArchive);
+                        	RarDebug.trace("RAR: error: Unknown Header " + blockHead.getHeaderType());
+                            throw new RarException(RarExceptionType.wrongHeaderType);
                     }
             }
-//            logger.info("\n--------end header--------");
         }
         BufferPool.releaseByteArray(buff);
-        if (read == -1)
+        if (read == -1) {
+        	RarDebug.trace("RAR: error: buttomless archive file");
         	throw new RarException(RarExceptionType.badRarArchive);
+        }
     }
     
     private void parseHeaders(InputStream in) throws IOException {
-    	try {
-    		readHeaders(in);
-    	} catch (RarException e) {
-    		throw new IOException("exception in archive constructor maybe file is encrypted or currupt");
-    	}
+    	readHeaders(in);
     	
     	entries.clear();
     	nameMap.clear();
@@ -335,33 +325,50 @@ public class Archive {
     /**
 	 * @return returns all file headers (entries) of the archive
 	 */
-	public List getFileHeaders() throws IOException {
-		return entries;
-	}
+	public List getFileHeaders() { return entries; }
 	
+	/**
+	 * @param path - a path.
+	 * @return FileHeader of a file corresponding to the given path.
+	 * @throws IOException
+	 */
 	public FileHeader getFileHeader(String path) throws IOException {
 		FileHeader header = (FileHeader) nameMap.get(path);
-		if (header == null)
-			throw new IOException("ERROR: entry \"" + path + "\" does not exist in archive file");
+		if (header == null) {
+			RarDebug.trace("RAR: error: entry \"" + path + "\" does not exist");			
+			throw new RarException(RarExceptionType.headerNotInArchive);
+		}
 		else
 			return header;
 	}
 	
-	public void extractEntry(boolean isSolid, FileHeader hd, InputStream in1, OutputStream os, InputStream in2) throws Exception {
-		if (isSolid) {
-			int headerIndex = ((Integer) indexMap.get(hd.getFileNameString())).intValue();        	
+	/**
+	 * Extract the file specified by the given header and write it to the supplied output stream.
+	 * 
+	 * @param isHeaderSolid - true if the given header represent a solid entry.
+	 * @param header - given FileHeader.
+	 * @param in1 - input stream to the archive file.
+	 * @param os 
+	 * @param in2 - if isSolid==true, is an input stream to the archive file. null otherwise.
+	 * @throws Exception.
+	 */
+	public void extractEntry(boolean isHeaderSolid, FileHeader header, InputStream in1, OutputStream os, InputStream in2) throws Exception {
+		if (isHeaderSolid) {
+			int headerIndex = ((Integer) indexMap.get(header.getFileNameString())).intValue();        	
         	FileHeader entry = null;
         	for (int i = headerIndex - 1; i >= 0 ; --i)
         		if (!(entry = (FileHeader) entries.get(i)).isSolid())
         			break;
-        	extractSolidEntry(entry, hd, os, in1, in2);
+        	extractSolidEntry(entry, header, os, in1, in2);
 		}
 		else {
-			extractNotSolidEntry(hd, os, in1);
+			extractNotSolidEntry(header, os, in1);
 		}
 	}
 
 	private void extractSolidEntry(FileHeader prev, FileHeader hd, OutputStream os, InputStream in1, InputStream in2) throws Exception{
+		// Make extraction-like operation to the non-solid file header in the same window as the window
+		// of the file header which we want to extract in order to read all the needed tables.
 		dataIO.init(null);
         dataIO.init(prev, in1);
         dataIO.setUnpFileCRC(this.isOldFormat()?0:0xffFFffFF);
@@ -369,44 +376,34 @@ public class Archive {
         unpack.init(null);        
         unpack.setDestSize(prev.getFullUnpackSize());
         unpack.doUnpack(prev.getUnpVersion(), prev.isSolid());
-       	//dataIO.setTestMode(false);
-            // Verify file CRC
-            /*prev = dataIO.getSubHeader();
-            long actualCRC1 = prev.isSplitAfter() ?
-                    ~dataIO.getPackedCRC() : ~dataIO.getUnpFileCRC();
-            int expectedCRC1 = prev.getFileCRC();
-            
-            if(actualCRC1 != expectedCRC1){            	
-                throw new RarException(RarExceptionType.crcError);
-            }*/ 
-       	unpack.cleanUp();
-            
-            
+        unpack.cleanUp();
+        // Don't need to verify CRC as the above FileHeader wan't really extracted. 
+        /*// Verify file CRC
+	    prev = dataIO.getSubHeader();
+	    long actualCRC1 = prev.isSplitAfter() ?
+	            ~dataIO.getPackedCRC() : ~dataIO.getUnpFileCRC();
+	    int expectedCRC1 = prev.getFileCRC();
+	
+	    if(actualCRC1 != expectedCRC1){            	
+	        throw new RarException(RarExceptionType.crcError);
+	    }*/
+
+        // Now we can extract the requested file header.
         dataIO.init(os);
         dataIO.init(hd, in2);
         dataIO.setUnpFileCRC(this.isOldFormat()?0:0xffFFffFF);
         unpack.setDestSize(hd.getFullUnpackSize());
-        //try {
-            unpack.doUnpack(hd.getUnpVersion(), hd.isSolid());
-            // Verify file CRC
-            hd = dataIO.getSubHeader();
-            long actualCRC = hd.isSplitAfter() ?
-                    ~dataIO.getPackedCRC() : ~dataIO.getUnpFileCRC();
-            long expectedCRC = hd.getFileCRC();
-            unpack.cleanUp();
-            if(actualCRC != expectedCRC){            	
-                throw new RarException(RarExceptionType.crcError);
-            }
+        unpack.doUnpack(hd.getUnpVersion(), hd.isSolid());
+        // Verify file CRC
+        hd = dataIO.getSubHeader();
+        long actualCRC = hd.isSplitAfter() ? ~dataIO.getPackedCRC() : ~dataIO.getUnpFileCRC();
+        long expectedCRC = hd.getFileCRC();
+        unpack.cleanUp();
+        if(actualCRC != expectedCRC){            	
+        	throw new RarException(RarExceptionType.crcError);
+        }
     }
 	
-    /**
-     * Extract the file specified by the given header and write it
-     * to the supplied output stream
-     *
-     * @param header the header to be extracted
-     * @param os the outputstream
-     * @throws RarException
-     */
     private void extractNotSolidEntry(FileHeader hd, OutputStream os, InputStream in) throws Exception{
     	dataIO.init(os);
         dataIO.init(hd, in);

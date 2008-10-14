@@ -17,6 +17,8 @@
  */
 package com.mucommander.file.impl.rar.provider.de.innosystec.unrar.exception;
 
+import java.io.IOException;
+
 
 /**
  * DOCUMENT ME
@@ -24,7 +26,7 @@ package com.mucommander.file.impl.rar.provider.de.innosystec.unrar.exception;
  * @author $LastChangedBy$
  * @version $LastChangedRevision$
  */
-public class RarException extends Exception
+public class RarException extends IOException
 {
 	
 	private RarExceptionType type;

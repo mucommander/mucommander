@@ -17,7 +17,7 @@ public class AnalyzeHeapDump {
     public AnalyzeHeapDump() {
     }
 
-    public static void main(String[] argv) {
+    /*public static void main(String[] argv) {
         File cfile = new File("P:\\test\\heapdumpc");
         File jfile = new File("P:\\test\\heapdumpj");
         if (!cfile.exists()) {
@@ -84,11 +84,11 @@ public class AnalyzeHeapDump {
 				e.printStackTrace();
 			}
         }
-    }
+    } 
 
     private static void printMismatch(long startOff, long bytesRead) {
         System.out.println("Mismatch: off=" + startOff +
                 "(0x" + Long.toHexString(startOff) +
                 "), len=" + (bytesRead - startOff));
-    }
+    }*/
 }

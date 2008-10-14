@@ -22,9 +22,9 @@ import com.mucommander.file.impl.rar.provider.de.innosystec.unrar.unsigned.Unsig
 
 public class FileNameDecoder {
 	
-	private static int getChar(byte [] name,int pos){ 
+	/*private static int getChar(byte [] name,int pos){ 
 		return name[pos]&0xff; 
-	} 
+	}*/
 
 	public static String decode(String name, byte[] encName){
 		UnsignedByte flags = null;
@@ -39,35 +39,35 @@ public class FileNameDecoder {
 		while(encPos < encName.length) {
 		    if (flagsBits == 0) {
 		    	flags =  new UnsignedByte(encName[encPos++]); 
-		    	System.out.println("flags = " + flags);
+//		    	System.out.println("flags = " + flags);
 		    	flagsBits = 8;
 		    }
 	
 		    switch (flags.getValue() >> 6) {
 		    case 0:
-		    	System.out.println("case 0");
-			nameW += (char) (encName[encPos++] & 0xff);
+//		    	System.out.println("case 0");
+			nameW += byteToChar(encName[encPos++]); //(char) (encName[encPos++] & 0xff);
 			decPos++;
 			break;
 		    case 1:
 		    {
-		    	System.out.println("case 1");
+//		    	System.out.println("case 1");
 		    	UnsignedByte ubyte = new UnsignedByte(encName[encPos++]);
 		    	ubyte.add((short) (highByte.getValue()<<8));
-		    	System.out.println("ubyte = " + ubyte.getValue());		    	
+//		    	System.out.println("ubyte = " + ubyte.getValue());		    	
 		    	nameW += ubyte.toChar();
 		    	decPos++;
 		    }
 				break;
 		    case 2:
-		    	System.out.println("case 2");
-			nameW += (char) ((encName[encPos] + (encName[encPos+1] << 8)) & 0xff);
-			decPos++;
-			encPos += 2;
-			break;
+//		    	System.out.println("case 2");
+		    	nameW += (char) ((encName[encPos] + (encName[encPos+1] << 8)) & 0xff);
+		    	decPos++;
+		    	encPos += 2;
+		    	break;
 		    case 3:		    
 			{
-				System.out.println("case 3");
+//				System.out.println("case 3");
 			    int length = encName[encPos++];
 			    if ((length & 0x80) != 0) {
 			    	byte correction = encName[encPos++];

@@ -29,9 +29,9 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
 
+import com.mucommander.Debug;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.impl.rar.provider.de.innosystec.unrar.Archive;
-import com.mucommander.file.impl.rar.provider.de.innosystec.unrar.exception.RarException;
 import com.mucommander.file.impl.rar.provider.de.innosystec.unrar.rarfile.FileHeader;
 
 /**
@@ -43,12 +43,13 @@ public class RarFile {
 	/** The underlying archive file */
     private AbstractFile file;
         
-    /** The interface to junrar library */
+    /** Interface to junrar library */
     private Archive archive;
     
+    /** Executor that performs the extraction process from junrar package */
     private static final Executor threadPool = Executors.newSingleThreadExecutor(new ThreadFactory() {
         public Thread newThread(Runnable r) {
-            Thread t = new Thread(r, "rar extractor");
+            Thread t = new Thread(r, "RAR extractor thread");
             t.setDaemon(true);
             return t;
         }
@@ -56,35 +57,24 @@ public class RarFile {
     
     public RarFile(AbstractFile file) throws IOException {
     	this.file = file;
-    	
-		try {
-			archive = new Archive(file.getInputStream());
-		} catch (RarException e) {
-			throw new IOException();
-		}
-		
-		parseFile();
+    	RarDebug.trace("RAR: creating rar archive for \"" + file.getAbsolutePath() +"\"");
+    	archive = new Archive(file.getInputStream());
     }
-    
-    private void parseFile() throws IOException {
-    	
-    }
-    
-    public Collection getEntries() throws IOException {    	
-		return archive.getFileHeaders();
+
+    /**
+     * 
+     * @return
+     * @throws IOException
+     */
+    public Collection getEntries() {
+    	return archive.getFileHeaders();
     }
     
     public InputStream getEntryInputStream(String path) throws IOException {
-    	final FileHeader header = archive.getFileHeader(path); //(FileHeader) nameMap.get(path);
+    	final FileHeader header = archive.getFileHeader(path);
     	
 		final PipedInputStream in = new PipedInputStream();
-		final PipedOutputStream out;
-
-		try {
-		    out = new PipedOutputStream(in);
-		} catch (IOException ex) {
-		    throw new IOException("ERROR: Couldn't connect the pipes");
-		}
+		final PipedOutputStream out = new PipedOutputStream(in);
 
 		//Each inner runnable holds a reference to this so the rarArchiveFile is only
 		//finallzed when all of them are gc - close the ArchiveFile then
@@ -97,10 +87,9 @@ public class RarFile {
 		            archive.extractEntry(isSolid, header, file.getInputStream(), bufferStream, isSolid ? file.getInputStream() : null);
 		            //flush remaining output
 		            bufferStream.flush();
-		            
 		        } catch (Exception ex) {
-		        	System.out.println("exception: " + ex.getMessage() + " for " + header.getFileNameString());
-		        	ex.printStackTrace();		        	
+		        	RarDebug.trace("RAR: got error while extracting entry \"" + header.getFileNameString() +"\": " + ex.getMessage());
+		        	// close the input-stream - it would raise an error at muCommander level.		        	
 		        	close(in);
 					
 		            //Its expected for the reader to close the stream...
@@ -117,12 +106,17 @@ public class RarFile {
 		return in;
     }
 
+    /**    
+     * Convenient way to close a Closeable object.
+     *  
+     * @param closeable object.
+     */
     private void close(Closeable closeable) {
         if (closeable != null) {
             try {
                 closeable.close();
             } catch (Exception ex) {
-            	System.out.println("error closing closable");
+            	if(Debug.ON) Debug.trace("Warning: couldn't close a closable object of type \"" + closeable.getClass().getName() + "\"");
             }
         }
     }

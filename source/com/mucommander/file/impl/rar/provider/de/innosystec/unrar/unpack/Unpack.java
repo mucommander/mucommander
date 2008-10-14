@@ -42,7 +42,6 @@ public final class Unpack extends Unpack20
 {
 
 	private final ModelPPM ppm = new ModelPPM();
-	//private ModelPPM ppm; // = new ModelPPM();
 
 	private int ppmEscChar;
 
@@ -80,8 +79,8 @@ public final class Unpack extends Unpack20
 
 	private int lowDistRepCount;
 
-	public static int[] DBitLengthCounts = { 4, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-		2, 2, 2, 2, 2, 14, 0, 12 };
+	public static int[] DBitLengthCounts = 
+	{ 4, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 14, 0, 12 };
 
 	public Unpack(ComprDataIO DataIO)
 	{
@@ -183,7 +182,6 @@ public final class Unpack extends Unpack20
 					break;
 				}
 			}
-			//System.out.println(((wrPtr - unpPtr) & Compress.MAXWINMASK)+":"+wrPtr+":"+unpPtr);
 			if (((wrPtr - unpPtr) & Compress.MAXWINMASK) < 260
 					&& wrPtr != unpPtr) {
 
@@ -576,10 +574,7 @@ public final class Unpack extends Unpack20
 
 	private void copyString(int length, int distance)
 	{
-//		System.out.println("copyString(" + length + ", " + distance + ")");
-
 		int destPtr = unpPtr - distance;
-		//System.out.println(unpPtr+":"+distance);
 		if (destPtr>=0&&destPtr < Compress.MAXWINSIZE - 260
 				&& unpPtr < Compress.MAXWINSIZE - 260) {
 

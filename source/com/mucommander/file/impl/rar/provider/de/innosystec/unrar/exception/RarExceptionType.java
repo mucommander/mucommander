@@ -4,7 +4,7 @@ public class RarExceptionType {
 	private static final String notImplementedYetCode     = "Not implemented yet";
 	private static final String crcErrorCode              = "CRC error";
 	private static final String notRarArchiveCode         = "Not rar archive";
-	private static final String badRarArchiveCode         = "Bad rar archive";
+	private static final String badRarArchiveCode         = "Corrupted rar archive";
 	private static final String unkownErrorCode           = "Unknown error";
 	private static final String headerNotInArchiveCode    = "Header not in archive";
 	private static final String wrongHeaderTypeCode       = "Wrong header type";

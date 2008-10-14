@@ -155,18 +155,11 @@ public class SubAllocator
 		// adding space for an additional memblock
 		tempMemBlockPos = realAllocSize;
 		realAllocSize += RarMemBlock.size;
-			
-		//if (heap != null)
-		//	BufferPool.releaseByteArray(heap);
-		//heap = BufferPool.getByteArray(realAllocSize);
-		System.out.println("arik!!!!!!!!!!!!!: realAllocSize = " + realAllocSize);
-		// BufferPool??
+
 		if (heap != null)
 			BufferPool.releaseByteArray(heap);
-		heap = BufferPool.getByteArray(realAllocSize);
-		
+		heap = BufferPool.getByteArray(realAllocSize);		
 		//heap = new byte[realAllocSize];
-		
 		
 		heapStart = 1;
 		heapEnd = heapStart + allocSize - UNIT_SIZE;
