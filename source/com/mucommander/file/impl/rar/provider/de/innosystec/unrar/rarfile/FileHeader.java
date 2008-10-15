@@ -85,7 +85,7 @@ public class FileHeader extends BlockHeader {
 	private int subFlags; // same as fileAttr (in header)
 
 	private int recoverySectors = -1;
-
+	
 	public FileHeader(BlockHeader bh, byte[] fileHeader) {
 		super(bh);
 
@@ -144,34 +144,20 @@ public class FileHeader extends BlockHeader {
 
 		if(isFileHeader()){ 
 			if(isUnicode()){
-//				System.out.println("is unicode: " + new String(fileName));
-				int length = strlen(fileName);
-				if (length == nameSize) {
-/*					System.out.println("nameSize = " + nameSize);
-					System.out.println("string: " + new String(fileName));
-					try {
-						System.out.println("utf-8: " + new String(fileName, "UTF-8"));
-						System.out.println("utf-16: " + new String(fileName, "UTF-16"));
-						System.out.println("unicode: " + FileNameDecoder.UtfToWide(new String(fileName)));
-					} catch (UnsupportedEncodingException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}*/
+				int length = 0; 
+//				fileName = "";
+				fileNameW = ""; 
+				while(length<fileName.length && fileName[length]!=0){
+					length++; 					
 				}
-				else {
-//					System.out.println("No length = " + length + " nameSize = " + nameSize);
-					byte[] buff1 = new byte[length];
-					int j=0;
-					for (; j < length; j++)
-						buff1[j] = fileName[j];
-					++length;
-					byte[] buff2 = new byte[nameSize - length];
-					int k = 0;
-					for (j = length; j < nameSize; k++, j++)
-						buff2[k] = fileName[j];
-											
-					fileNameW = FileNameDecoder.decode(new String(buff1), buff2);
+				byte[] name = new byte[length];
+				System.arraycopy(fileName, 0, name, 0, name.length);				
+				if(length!=nameSize){
+					length++;
+					fileNameW = FileNameDecoder.decode(fileName, length);
 				}
+				else
+					fileNameW = new String(name);
 			}
 			else {
 				fileNameW = new String(fileName);

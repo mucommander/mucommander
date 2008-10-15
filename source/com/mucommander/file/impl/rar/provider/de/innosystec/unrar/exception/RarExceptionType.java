@@ -10,6 +10,8 @@ public class RarExceptionType {
 	private static final String wrongHeaderTypeCode       = "Wrong header type";
 	private static final String ioErrorCode               = "IO error";
 	private static final String rarEncryptedExceptionCode = "Rar encrypted exception";
+	private static final String mvNotImplementedCode      = "Multi-volume not implemented yet";
+	private static final String buttomlessArchiveCode     = "Unexpected end of archive";
 	
 	public static final RarExceptionType notImplementedYet     = new RarExceptionType(notImplementedYetCode);
 	public static final RarExceptionType crcError              = new RarExceptionType(crcErrorCode);
@@ -20,6 +22,8 @@ public class RarExceptionType {
 	public static final RarExceptionType wrongHeaderType       = new RarExceptionType(wrongHeaderTypeCode);
 	public static final RarExceptionType ioError               = new RarExceptionType(ioErrorCode);
 	public static final RarExceptionType rarEncryptedException = new RarExceptionType(rarEncryptedExceptionCode);
+	public static final RarExceptionType mvNotImplemented	   = new RarExceptionType(mvNotImplementedCode);
+	public static final RarExceptionType buttomlessArchive	   = new RarExceptionType(buttomlessArchiveCode);
 	
 	private static final RarExceptionType[] exceptions = {notImplementedYet, crcError, notRarArchive,
 		badRarArchive, unkownError, headerNotInArchive, wrongHeaderType, ioError, rarEncryptedException};	

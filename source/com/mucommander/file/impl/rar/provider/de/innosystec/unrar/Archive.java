@@ -155,10 +155,8 @@ public class Archive {
                     MainHeader mainhead =new MainHeader(block, buff);
                     headers.add(mainhead);
                     this.newMhd = mainhead;
-                    if(newMhd.isEncrypted()){
-                        throw new RarException(
-                                RarExceptionType.rarEncryptedException);
-                    }
+                    if(newMhd.isEncrypted())
+                        throw new RarException(RarExceptionType.rarEncryptedException);                    
 //                    mainhead.print();
                     break;
                     
@@ -299,7 +297,7 @@ public class Archive {
         BufferPool.releaseByteArray(buff);
         if (read == -1) {
         	RarDebug.trace("RAR: error: buttomless archive file");
-        	throw new RarException(RarExceptionType.badRarArchive);
+        	throw new RarException(RarExceptionType.buttomlessArchive);
         }
     }
     

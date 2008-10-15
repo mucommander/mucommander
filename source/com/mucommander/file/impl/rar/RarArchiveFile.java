@@ -42,7 +42,7 @@ public class RarArchiveFile extends AbstractROArchiveFile {
 	private RarFile rarFile;
 	
 	/** The date at which the current RarFile object was created */
-	private long lastRarFileDate;
+	private long lastRarFileDate;	
 	
     
 	public RarArchiveFile(AbstractFile file) throws IOException {		

@@ -32,6 +32,8 @@ import java.util.concurrent.ThreadFactory;
 import com.mucommander.Debug;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.impl.rar.provider.de.innosystec.unrar.Archive;
+import com.mucommander.file.impl.rar.provider.de.innosystec.unrar.exception.RarException;
+import com.mucommander.file.impl.rar.provider.de.innosystec.unrar.exception.RarExceptionType;
 import com.mucommander.file.impl.rar.provider.de.innosystec.unrar.rarfile.FileHeader;
 
 /**
@@ -72,16 +74,19 @@ public class RarFile {
     
     public InputStream getEntryInputStream(String path) throws IOException {
     	final FileHeader header = archive.getFileHeader(path);
+
+    	// If the file that is going to be extracted is divided and continued in another archive 
+        // part - don't extract it and throw corresponding exception to raise an error. 
+        if (header.isSplitAfter())
+    		throw new RarException(RarExceptionType.mvNotImplemented);
     	
 		final PipedInputStream in = new PipedInputStream();
 		final PipedOutputStream out = new PipedOutputStream(in);
 
-		//Each inner runnable holds a reference to this so the rarArchiveFile is only
-		//finallzed when all of them are gc - close the ArchiveFile then
 		threadPool.execute(new Runnable() {
 			public void run() {
 		        BufferedOutputStream bufferStream = null;
-		        try {
+		        try {		        	
 		            bufferStream = new BufferedOutputStream(out);
 		            boolean isSolid = header.isSolid();
 		            archive.extractEntry(isSolid, header, file.getInputStream(), bufferStream, isSolid ? file.getInputStream() : null);
@@ -89,6 +94,7 @@ public class RarFile {
 		            bufferStream.flush();
 		        } catch (Exception ex) {
 		        	RarDebug.trace("RAR: got error while extracting entry \"" + header.getFileNameString() +"\": " + ex.getMessage());
+		        	
 		        	// close the input-stream - it would raise an error at muCommander level.		        	
 		        	close(in);
 					

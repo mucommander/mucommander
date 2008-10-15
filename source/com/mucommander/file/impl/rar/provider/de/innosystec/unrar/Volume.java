@@ -1,5 +1,7 @@
 package com.mucommander.file.impl.rar.provider.de.innosystec.unrar;
 
+import com.mucommander.file.impl.rar.provider.de.innosystec.unrar.exception.RarException;
+import com.mucommander.file.impl.rar.provider.de.innosystec.unrar.exception.RarExceptionType;
 import com.mucommander.file.impl.rar.provider.de.innosystec.unrar.rarfile.FileHeader;
 import com.mucommander.file.impl.rar.provider.de.innosystec.unrar.unpack.*;
 
@@ -15,8 +17,7 @@ public class Volume {
     private Volume() {
     }
 
-    public static boolean mergeArchive(Archive archive, ComprDataIO dataIO)
-            throws IOException {
+    public static boolean mergeArchive(Archive archive, ComprDataIO dataIO) throws IOException {
   /* arik      FileHeader hd = dataIO.getSubHeader();
         if (hd.getUnpVersion()>=20 &&
                 hd.getFileCRC()!=0xffffffff &&
@@ -42,7 +43,7 @@ public class Volume {
             return false;
         }
         dataIO.init(hd); */
-        return true;
+        throw new RarException(RarExceptionType.mvNotImplemented);
     }
 
     public static String nextVolumeName(String arcName,
