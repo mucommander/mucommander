@@ -47,4 +47,16 @@ public class SwingFileIconProvider extends CachedFileIconProvider {
     public SwingFileIconProvider() {
         super(new SwingFileIconProviderImpl());
     }
+
+    /**
+     * This method forces the initialization of the Swing object that is used to retrieve file icons the first time it
+     * is called, does nothing on subsequent calls.
+     * <p>
+     * The initialization must be triggered by a thread other than the EventDispatchThread, or a deadlock may happen
+     * on platforms where JFileChooser is used. This method provides to control when and where the initialization occurs.
+     * </p>
+     */
+    public static void forceInit() {
+        SwingFileIconProviderImpl.checkInit();
+    }
 }
