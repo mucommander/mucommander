@@ -63,14 +63,21 @@ class SwingFileIconProviderImpl extends LocalFileIconProvider implements Cacheab
 
 
     /**
-     * Initializes the Swing object used to retrieve the icon.
+     * Initializes the Swing object used to retrieve icons the first time this method is called, does nothing
+     * subsequent calls.
      * Note: instanciating this object is expensive (I/O bound) so we want to do that only if needed, and only once.
      */
-    private static void init() {
+    synchronized static void checkInit() {
+        // This method is synchronized to ensure that the initialization happens only once
+        if(initialized)
+            return;
+
         if(OsFamilies.MAC_OS_X.isCurrent())
             fileChooser = new JFileChooser();
         else
             fileSystemView = FileSystemView.getFileSystemView();
+
+        initialized = true;
     }
 
 
@@ -160,11 +167,8 @@ class SwingFileIconProviderImpl extends LocalFileIconProvider implements Cacheab
      * <code>preferredResolution</code> argument is simply ignored.
      */
     public Icon getLocalFileIcon(LocalFile localFile, AbstractFile originalFile, Dimension preferredResolution) {
-        if(!initialized) {
-            // init() will be called once at most
-            init();
-            initialized = true;
-        }
+        // Initialize the Swing object the first time this method is called
+        checkInit();
 
         // Retrieve the icon using the Swing provider component
         Icon icon = getSwingIcon((java.io.File)localFile.getUnderlyingFileObject());
