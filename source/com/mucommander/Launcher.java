@@ -20,6 +20,7 @@ package com.mucommander;
 
 import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.extension.ExtensionManager;
+import com.mucommander.file.icon.impl.SwingFileIconProvider;
 import com.mucommander.runtime.OsFamilies;
 import com.mucommander.shell.ShellHistoryManager;
 import com.mucommander.ui.dialog.startup.CheckVersionDialog;
@@ -444,8 +445,10 @@ public class Launcher {
         // before FileTable, so CustomDateFormat gets notified of date format changes first
         com.mucommander.text.CustomDateFormat.init();
 
-        // Preload icons
+        // Initialize file icons
         printStartupMessage("Loading icons...");
+        // Initialize the SwingFileIconProvider from the main thread, see method Javadoc for an explanation on why we do this now
+        SwingFileIconProvider.forceInit();
         // The math.max(1.0f, ...) part is to workaround a bug which cause(d) this value to be set to 0.0 in the configuration file.
         com.mucommander.ui.icon.FileIcons.setScaleFactor(Math.max(1.0f, MuConfiguration.getVariable(MuConfiguration.TABLE_ICON_SCALE,
                                                                                           MuConfiguration.DEFAULT_TABLE_ICON_SCALE)));
