@@ -18,6 +18,30 @@
 
 package com.mucommander.ui.main.tree;
 
+import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.IOException;
+
+import javax.swing.JMenuItem;
+import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+import javax.swing.JScrollPane;
+import javax.swing.JTree;
+import javax.swing.SwingUtilities;
+import javax.swing.Timer;
+import javax.swing.event.TreeModelEvent;
+import javax.swing.event.TreeModelListener;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
+import javax.swing.tree.TreePath;
+import javax.swing.tree.TreeSelectionModel;
+
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.filter.AttributeFileFilter;
 import com.mucommander.file.util.FileComparator;
@@ -29,17 +53,6 @@ import com.mucommander.ui.theme.ColorChangedEvent;
 import com.mucommander.ui.theme.FontChangedEvent;
 import com.mucommander.ui.theme.ThemeCache;
 import com.mucommander.ui.theme.ThemeListener;
-
-import javax.swing.*;
-import javax.swing.event.TreeModelEvent;
-import javax.swing.event.TreeModelListener;
-import javax.swing.event.TreeSelectionEvent;
-import javax.swing.event.TreeSelectionListener;
-import javax.swing.tree.TreePath;
-import javax.swing.tree.TreeSelectionModel;
-import java.awt.*;
-import java.awt.event.*;
-import java.io.IOException;
 
 /**
  * A panel which contains a directory tree. This panel is attached to the left
@@ -131,7 +144,7 @@ public class FoldersTreePanel extends JPanel implements TreeSelectionListener,
             }
         });
         
-        ThemeCache.addThemeListener(this);
+        ThemeCache.addThemeListener(this);        
     }
 
     /**
@@ -149,16 +162,19 @@ public class FoldersTreePanel extends JPanel implements TreeSelectionListener,
         }
     }
 
-    /**
+
+	/**
      * Updates selection in a tree to the current folder. When necessary updates
-     * the current root of a tree.
+     * the current root of a tree. Invoked when location on folder pane has changed or 
+     * when a tree has been updated (when directories have been loaded).
      */
     private void updateSelectedFolder() {
         final AbstractFile currentFolder = folderPanel.getCurrentFolder();
 
+        // get selected directory (ignore archives - TODO make archives browsable (option))
         AbstractFile tempFolder = currentFolder;
         AbstractFile tempParent;
-        while(!tempFolder.isDirectory()) {
+        while (!tempFolder.isDirectory()) {
             tempParent = currentFolder.getParentSilently();
             if(tempParent==null)
                 break;
@@ -166,18 +182,20 @@ public class FoldersTreePanel extends JPanel implements TreeSelectionListener,
             tempFolder = tempParent;
         }
 
+        // compare selection on tree and panel
         final AbstractFile selectedFolder = tempFolder;
-
         TreePath selectionPath = tree.getSelectionPath();
         if (selectionPath != null) {
             if (selectionPath.getLastPathComponent() == currentFolder)
                 return;
         }
         try {
+            // check if root has changed
             final AbstractFile currentRoot = selectedFolder.getRoot();
             if (!currentRoot.equals(model.getRoot())) {
                 model.setRoot(currentRoot);
             }
+            // refresh selection on tree
             SwingUtilities.invokeLater(new Runnable() {
                public void run() {
                    try {
@@ -197,7 +215,7 @@ public class FoldersTreePanel extends JPanel implements TreeSelectionListener,
 
     /**
      * Refreshes folder after a change (e.g. mkdir).
-     * @param folder
+     * @param folder a folder to refresh on the tree
      */
     public void refreshFolder(AbstractFile folder) {
         if (!isVisible())

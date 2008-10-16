@@ -21,9 +21,12 @@ package com.mucommander.ui.main.tree;
 
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.impl.ProxyFile;
+import com.mucommander.ui.icon.CustomFileIconProvider;
 import com.mucommander.ui.icon.FileIcons;
+import com.mucommander.ui.icon.IconManager;
 
 import javax.swing.*;
+
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
@@ -92,41 +95,47 @@ public class CachedDirectory extends ProxyFile {
      * method is executed in caching thread.
      */
     private void lsAsync() {
-        try {
-            final AbstractFile[] children = file.ls(cache.getFilter());
-            Arrays.sort(children, cache.getSort());
-            if (getCachedIcon() == null) {
-                setCachedIcon(FileIcons.getFileIcon(getProxiedFile()));
-            }
-            Icon icons[] = new Icon[children.length];
-            for (int i = 0; i < children.length; i++) {
-                icons[i] = FileIcons.getFileIcon(children[i]);
-            }
-            synchronized (cache) {
-                for (int i = 0; i < children.length; i++) {
-                    CachedDirectory cachedChild = cache.getOrAdd(children[i]);
-                    cachedChild.setCachedIcon(icons[i]);
-                }
-            }
-            try {
-                /*
-                 * Set cache to new value. This is invoked in swing thread
-                 * so event listeners are called from right thread. 
-                 */
-                SwingUtilities.invokeAndWait(new Runnable() {
-                    public void run() {
-                        setLsCache(children, file.getDate());
-                    }
-                });
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (InvocationTargetException e) {
-                e.printStackTrace();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (getCachedIcon() == null) {
+            setCachedIcon(FileIcons.getFileIcon(getProxiedFile()));
         }
 
+        AbstractFile[] children = null;
+        try {
+            children = file.ls(cache.getFilter());
+        } catch (Exception e) {
+            e.printStackTrace();
+            children = new AbstractFile[0];
+            cachedIcon = IconManager.getIcon(IconManager.FILE_ICON_SET, CustomFileIconProvider.NOT_ACCESSIBLE_FILE);
+        }
+
+        Arrays.sort(children, cache.getSort());
+        Icon icons[] = new Icon[children.length];
+        for (int i = 0; i < children.length; i++) {
+            icons[i] = FileIcons.getFileIcon(children[i]);
+        }
+        synchronized (cache) {
+            for (int i = 0; i < children.length; i++) {
+                CachedDirectory cachedChild = cache.getOrAdd(children[i]);
+                cachedChild.setCachedIcon(icons[i]);
+            }
+        }
+        
+        final AbstractFile[] children2 = children;
+        try {
+            /*
+             * Set cache to new value. This is invoked in swing thread
+             * so event listeners are called from right thread. 
+             */
+            SwingUtilities.invokeAndWait(new Runnable() {
+                public void run() {
+                    setLsCache(children2, file.getDate());
+                }
+            });
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
