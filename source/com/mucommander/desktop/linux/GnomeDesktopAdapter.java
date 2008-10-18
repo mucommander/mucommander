@@ -25,6 +25,7 @@ import com.mucommander.desktop.DefaultDesktopAdapter;
 import com.mucommander.desktop.DesktopInitialisationException;
 import com.mucommander.desktop.DesktopManager;
 import com.mucommander.file.filter.FileFilter;
+import com.mucommander.file.filter.RegexpFilenameFilter;
 
 /**
  * @author Nicolas Rinaudo
