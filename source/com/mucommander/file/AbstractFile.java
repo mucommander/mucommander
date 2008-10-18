@@ -835,6 +835,22 @@ public abstract class AbstractFile implements PermissionTypes, PermissionAccesse
     }
 
     /**
+     * Convenience method that acts as {@link #getChild(String)} except that it does not throw {@link IOException} but
+     * returns <code>null</code> if the child could not be instantiated.
+     *
+     * @param relativePath the child's path, relative to this file's path
+     * @return an AbstractFile representing the requested child file, <code>null</code> if it could not be instantiated
+     */
+    public final AbstractFile getChildSilently(String relativePath) {
+        try {
+            return getChild(relativePath);
+        }
+        catch(IOException e) {
+            return null;
+        }
+    }
+
+    /**
      * Returns a direct child of this file, whose path is the concatenation of this file's path and the given filename.
      * An <code>IOException</code> will be thrown in any of the following cases:
      * <ul>
@@ -1264,6 +1280,11 @@ public abstract class AbstractFile implements PermissionTypes, PermissionAccesse
      * - it contains at least one <code>.</code> character<br/>
      * - the last <code>.</code> is not the last character of the filename<br/>
      * - the last <code>.</code> is not the first character of the filename</p>
+     *
+     * <p>
+     * The returned extension (if any) is free of any extension separator character (<code>.</code>). For instance,
+     * this method will return <code>"ext"</code> for a file named <code>"name.ext"</code>, <b>not</b> <code>".ext"</code>.
+     * </p>
      *
      * @param filename a filename, not a full path
      * @return the given filename's extension, <code>null</code> if the filename doesn't have an extension
