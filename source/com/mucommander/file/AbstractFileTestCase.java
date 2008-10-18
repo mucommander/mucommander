@@ -506,6 +506,43 @@ public abstract class AbstractFileTestCase extends TestCase {
         assertFalse(tempFile.getCanonicalPath(false).endsWith(tempFile.getSeparator()));
     }
 
+    /**
+     * Tests {@link AbstractFile#getName()}, {@link AbstractFile#getExtension()} and {@link AbstractFile#getNameWithoutExtension()}
+     * on a bunch of filenames.
+     *
+     * @throws IOException should not happen
+     */
+    public void testNameAndExtension() throws IOException {
+        AbstractFile baseFolder = getTemporaryFile();
+
+        assertNameAndExtension(baseFolder, "name", null, "name");
+        assertNameAndExtension(baseFolder, ".name", null, ".name");
+        assertNameAndExtension(baseFolder, ".name", null, ".name");
+        assertNameAndExtension(baseFolder, "name.ext", "ext", "name");
+        assertNameAndExtension(baseFolder, "name.ext.", null, "name.ext.");
+        assertNameAndExtension(baseFolder, "name.with.dots.ext", "ext", "name.with.dots");
+        assertNameAndExtension(baseFolder, "name.with.dots.ext", "ext", "name.with.dots");
+        assertNameAndExtension(baseFolder, "name with spaces.ext", "ext", "name");
+    }
+
+    /**
+     * Resolves an AbstractFile instance corresponding to the file named <code>filename</code> within the temporary
+     * folder and asserts its {@link AbstractFile#getName() name}, {@link AbstractFile#getExtension() extension} and
+     * {@link AbstractFile#getNameWithoutExtension() name without extension} match the specified values.
+     *
+     * @param tempFolder the temporary folder which will be the parent of the resolved AbstractFile instance
+     * @param filename filename of the AbstractFile to resolved
+     * @param expectedExtension the expected file's extension
+     * @param expectedNameWOExt the expected file's name without extension
+     * @throws IOException if an error occurred while resolving the file
+     */
+    private void assertNameAndExtension(AbstractFile tempFolder, String filename, String expectedExtension, String expectedNameWOExt) throws IOException {
+        AbstractFile file = tempFolder.getChild(filename);
+
+        assertEquals(filename, file.getName());
+        assertTrue(StringUtils.equals(expectedExtension, file.getExtension(), true));
+        assertTrue(StringUtils.equals(expectedNameWOExt, expectedNameWOExt, true));
+    }
 
     /**
      * Tests {@link AbstractFile#getURL()} by asserting that it returns a non-null value, that the file can
