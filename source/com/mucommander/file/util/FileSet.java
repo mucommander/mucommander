@@ -81,4 +81,17 @@ public class FileSet extends Vector {
     public AbstractFile fileAt(int i) {
         return (AbstractFile)super.elementAt(i);
     }
+
+    /**
+     * Adds all the files in the given array to this FileSet. Does nothing if the specified array is <code>null</code.
+     *
+     * @param files the files to add to this FileSet.
+     */
+    public void addFiles(AbstractFile[] files) {
+        if(files==null)
+            return;
+
+        for(int i=0; i<files.length; i++)
+            add(files[i]);
+    }
 }
