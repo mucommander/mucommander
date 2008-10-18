@@ -117,7 +117,7 @@ public class AboutDialog extends FocusDialog implements ActionListener {
         text.setEditable(false);
         try {
             // Team.
-            insertTitle(doc,         "The muCommander team");
+            insertTitle(doc,          "The muCommander team");
 
             // Core developers.
             insertHeader(doc,         "Core developers");
@@ -131,6 +131,7 @@ public class AboutDialog extends FocusDialog implements ActionListener {
             insertHeader(doc,         "Contributors");
             insertNormalString(doc,   "Ivan Baidakov");
             insertNormalString(doc,   "Vassil Dichev");
+            insertNormalString(doc,   "David Kovar");
             insertNormalString(doc,   "Karel Klic");
             insertNormalString(doc,   "Joshua Lebo");
             insertNormalString(doc,   "Xavier Martin");

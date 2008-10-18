@@ -86,6 +86,7 @@ Contributors:
 - Ivan Baidakov
 - Vassil Dichev
 - Karel Klic
+- David Kovar
 - Joshua Lebo
 - Xavier Martin
 - Alejandro Scandroli
@@ -121,12 +122,14 @@ What's new since v0.8.2 ?
 New features:
 - Tree view, contributed by Mariusz Jakubowski.
 - Batch renamer, contributed by Mariusz Jakubowski.
-- Added auto-completion capabilities to the location field and transfer
+- Auto-completion capabilities added to the location field and transfer
   destination fields, contributed by Arik Hadas.
+- Native RAR archive support, contributed by Arik Hadas.
 - Added support for SFTP public key authentication, contributed by
   Vassil Dichev.
 - Added new FTP connection properties allowing to retry when the server is busy, 
   contributed by Ivan Baidakov.
+- Added support for the GNOME trash, contributed by David Kovar.
 
 Improvements:
 - Added Unix permissions support to Zip archives: entries' permissions are
