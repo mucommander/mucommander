@@ -23,8 +23,8 @@ import com.mucommander.command.CommandException;
 import com.mucommander.command.CommandManager;
 import com.mucommander.desktop.DefaultDesktopAdapter;
 import com.mucommander.desktop.DesktopInitialisationException;
+import com.mucommander.desktop.DesktopManager;
 import com.mucommander.file.filter.FileFilter;
-import com.mucommander.file.filter.RegexpFilenameFilter;
 
 /**
  * @author Nicolas Rinaudo
@@ -37,6 +37,9 @@ abstract class GnomeDesktopAdapter extends DefaultDesktopAdapter {
     public abstract boolean isAvailable();
 
     public void init(boolean install) throws DesktopInitialisationException {
+        // Initialises trash management.
+        DesktopManager.setTrashProvider(new GnomeTrashProvider());
+        
         try {
             CommandManager.registerDefaultCommand(new Command(CommandManager.FILE_OPENER_ALIAS,  FILE_OPENER, Command.SYSTEM_COMMAND, null));
             CommandManager.registerDefaultCommand(new Command(CommandManager.URL_OPENER_ALIAS,   FILE_OPENER, Command.SYSTEM_COMMAND, null));
