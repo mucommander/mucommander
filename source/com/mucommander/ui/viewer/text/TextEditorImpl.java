@@ -90,16 +90,13 @@ class TextEditorImpl implements ThemeListener, ActionListener {
     }
 
     private void find() {
-		searchString = (String)JOptionPane.showInputDialog(null,
-				Translator.get("text_viewer.find") + ":",
-				Translator.get("text_viewer.find"),
-				JOptionPane.PLAIN_MESSAGE, null, null, searchString);
+        FindDialog findDialog = new FindDialog(frame);
 
-        // Note: JOptionPane.showInputDialog() returns null when the user cancels the dialog
+        if(findDialog.wasValidated()) {
+            searchString = findDialog.getSearchString().toLowerCase();
 
-        if(searchString!=null) {
-            searchString = searchString.toLowerCase();            
-            doSearch(0, true);
+            if(!searchString.equals(""))
+                doSearch(0, true);
         }
 
         // Request the focus on the text area which could be lost after the Find dialog was disposed
