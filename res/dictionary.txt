@@ -744,6 +744,7 @@ file_manager:DE:Dateimanager
 file_manager:HU:Fájlkezelő
 file_manager:zh_TW:檔案管理員
 file_manager:JA:ファイル マネージャー
+file_manager:PL:Menedżer plików
 # Translation missing (New!)
 
 
@@ -3233,6 +3234,7 @@ com.mucommander.ui.action.GoToParentInOtherPanelAction.label:DE:Im anderen Panel
 com.mucommander.ui.action.GoToParentInOtherPanelAction.label:HU:Ugrás a másik panel elejére
 com.mucommander.ui.action.GoToParentInOtherPanelAction.label:zh_TW:另一個面板回到上一層
 com.mucommander.ui.action.GoToParentInOtherPanelAction.label:JA:他のパネルで親へ移動
+com.mucommander.ui.action.GoToParentInOtherPanelAction.label:PL:Idź do katalogu nadrzędnego w drugim panelu
 # Translation missing (New!)
 
 
@@ -3256,6 +3258,7 @@ com.mucommander.ui.action.GoToParentInBothPanelsAction.label:DE:Im beiden Paneln
 com.mucommander.ui.action.GoToParentInBothPanelsAction.label:HU:Ugrás mindkét panel elejére
 com.mucommander.ui.action.GoToParentInBothPanelsAction.label:zh_TW:兩邊面板同時回到上一層
 com.mucommander.ui.action.GoToParentInBothPanelsAction.label:JA:両方のパネルで親へ移動
+com.mucommander.ui.action.GoToParentInBothPanelsAction.label:PL:Idź do katalogu nadrzędnego w obu panelach
 # Translation missing (New!)
 
 
@@ -5065,6 +5068,7 @@ com.mucommander.ui.action.MaximizeWindowAction.label:DE:Maximieren
 com.mucommander.ui.action.MaximizeWindowAction.label:HU:Nagyítás
 com.mucommander.ui.action.MaximizeWindowAction.label:zh_TW:最大化
 com.mucommander.ui.action.MaximizeWindowAction.label:JA:最大化
+com.mucommander.ui.action.MaximizeWindowAction.label:PL:Maksymalizuj
 # Translation missing (New!)
 
 
@@ -5109,6 +5113,7 @@ com.mucommander.ui.action.MinimizeWindowAction.label:DE:Minimieren
 com.mucommander.ui.action.MinimizeWindowAction.label:HU:Kicsinyítés
 com.mucommander.ui.action.MinimizeWindowAction.label:zh_TW:最小化
 com.mucommander.ui.action.MinimizeWindowAction.label:JA:最小化
+com.mucommander.ui.action.MinimizeWindowAction.label:PL:Minimalizuj
 # Translation missing (New!)
 
 
@@ -5149,6 +5154,7 @@ com.mucommander.ui.action.GoToDocumentationAction.label:DE:Online Dokumentation
 com.mucommander.ui.action.GoToDocumentationAction.label:HU:Online dokumentáció
 com.mucommander.ui.action.GoToDocumentationAction.label:zh_TW:線上文件
 com.mucommander.ui.action.GoToDocumentationAction.label:JA:オンライン ドキュメント
+com.mucommander.ui.action.GoToDocumentationAction.label:PL:Dokumentacja online
 # Translation missing (New!)
 
 
@@ -5168,6 +5174,7 @@ com.mucommander.ui.action.ShowParentFoldersQLAction.label:DE:Übergeordnetes Ver
 com.mucommander.ui.action.ShowParentFoldersQLAction.label:HU:Felsőbb alkönyvtárak
 com.mucommander.ui.action.ShowParentFoldersQLAction.label:zh_TW:上層目錄
 com.mucommander.ui.action.ShowParentFoldersQLAction.label:JA:親フォルダー
+com.mucommander.ui.action.ShowParentFoldersQLAction.label:PL:Katalogi nadrzędne
 # Translation missing (New!)
 
 
@@ -5188,6 +5195,7 @@ com.mucommander.ui.action.ShowRecentLocationsQLAction.label:DE:Kürzlich besucht
 com.mucommander.ui.action.ShowRecentLocationsQLAction.label:HU:Legutóbbi helyek
 com.mucommander.ui.action.ShowRecentLocationsQLAction.label:zh_TW:最近開啟位置
 com.mucommander.ui.action.ShowRecentLocationsQLAction.label:JA:最近の場所
+com.mucommander.ui.action.ShowRecentLocationsQLAction.label:PL:Ostatnie lokalizacje
 # Translation missing (New!)
 
 
@@ -5207,6 +5215,7 @@ com.mucommander.ui.action.ShowRecentExecutedFilesQLAction.label:DE:Kürzlich aus
 com.mucommander.ui.action.ShowRecentExecutedFilesQLAction.label:HU:Legutóbbi futtatott fájlok
 com.mucommander.ui.action.ShowRecentExecutedFilesQLAction.label:zh_TW:最近執行檔案
 com.mucommander.ui.action.ShowRecentExecutedFilesQLAction.label:JA:最近実行したファイル
+com.mucommander.ui.action.ShowRecentExecutedFilesQLAction.label:PL:Ostatnio wykonywane pliki
 # Translation missing (New!)
 
 
@@ -5405,6 +5414,7 @@ quick_lists_menu:DE:Quick Listen
 quick_lists_menu:HU:Gyorslista
 quick_lists_menu:zh_TW:快速列表
 quick_lists_menu:JA:クイック リスト
+quick_lists_menu:PL:Szybkie listy
 # Translation missing (New!)
 
 
@@ -8439,6 +8449,7 @@ server_connect_dialog.passphrase:DE:Passwort
 server_connect_dialog.passphrase:HU:Jelmondat
 server_connect_dialog.passphrase:zh_TW:密碼
 server_connect_dialog.passphrase:JA:パスフレーズ
+server_connect_dialog.passphrase:PL:Hasło
 # Translation missing (New!)
 
 
@@ -8510,6 +8521,7 @@ ftp_connect.nb_connection_retries:DE:Maximale Anzahl Verbindungsversuche
 ftp_connect.nb_connection_retries:HU:Próbálkozások száma
 ftp_connect.nb_connection_retries:zh_TW:連線重試次數
 ftp_connect.nb_connection_retries:JA:接続の再試行の数
+ftp_connect.nb_connection_retries:PL:Liczba ponowień połączenia
 # Translation missing (New!)
 
 
@@ -8533,6 +8545,7 @@ ftp_connect.retry_delay:DE:Wartezeit zwischen Verbindungsversuchen (in Sekunden)
 ftp_connect.retry_delay:HU:Várakozás a próbálkozások között (másodpercben)
 ftp_connect.retry_delay:zh_TW:重試延遲時間(秒)
 ftp_connect.retry_delay:JA:再試行間の遅延 (秒)
+ftp_connect.retry_delay:PL:Opóźnienie między ponowieniem połączenia (w sekundach)
 # Translation missing (New!)
 
 
@@ -8813,6 +8826,7 @@ auth_dialog.connect_as:DE:Verbinde als
 auth_dialog.connect_as:HU:Csatlakozás mint
 auth_dialog.connect_as:zh_TW:連線為
 auth_dialog.connect_as:JA:名義
+auth_dialog.connect_as:PL:Połącz jako
 # Translation missing (New!)
 
 
@@ -8838,6 +8852,7 @@ auth_dialog.authentication_failed:DE:Authentifizierung fehlgeschlagen
 auth_dialog.authentication_failed:HU:A hitelesítés sikertelen
 auth_dialog.authentication_failed:zh_TW:驗證失敗
 auth_dialog.authentication_failed:JA:認証が失敗しました
+auth_dialog.authentication_failed:PL:Autentykacja nieudana
 # Translation missing (New!)
 
 
@@ -11066,6 +11081,7 @@ prefs_dialog.show_splash_screen:RO:Arată ecran de pornire
 prefs_dialog.show_splash_screen:HU:Indítóképernyő megjelenítése
 prefs_dialog.show_splash_screen:zh_TW:顯示啟動歡迎畫面
 prefs_dialog.show_splash_screen:JA:スプラッシュ画面を表示する
+prefs_dialog.show_splash_screen:PL:Pokaż ekran powitalny
 # Translation missing (New!)
 
 
@@ -13448,6 +13464,7 @@ batch_rename_dialog.format:DE:Format
 batch_rename_dialog.format:HU:Formátum
 batch_rename_dialog.format:zh_TW:格式
 batch_rename_dialog.format:JA:フォーマット
+batch_rename_dialog.format:PL:Format
 # Translation missing (New!)
 
 
@@ -13724,6 +13741,7 @@ batch_rename_dialog.proceed_renaming:DE:%1 Dateien von %2 werden umbenannt. Woll
 batch_rename_dialog.proceed_renaming:HU:%1 fájl átnevezve (összesen: %2). Folytassam?
 batch_rename_dialog.proceed_renaming:zh_TW:%1 個檔案(全部 %2 個)將會被重新命名. 請確認要執行 ?
 batch_rename_dialog.proceed_renaming:JA:%2 中 %1 個のファイルの名前が変更されます。続行しますか?
+batch_rename_dialog.proceed_renaming:PL:%1 nazw plików z %2 będzie zmienionych. Czy kontynuować?
 # Translation missing (New!)
 
 
@@ -13773,6 +13791,7 @@ parent_folders_quick_list.empty_message:DE:Aktuelles Verzeichnis hat kein überg
 parent_folders_quick_list.empty_message:HU:A jelenlegi helynek nincs felsőbb alkönyvtára
 parent_folders_quick_list.empty_message:zh_TW:目前位置沒有上一層
 parent_folders_quick_list.empty_message:JA:現在の場所には親がありません
+parent_folders_quick_list.empty_message:PL:Bieżąca lokalizacja nie posiada katalogu nadrzędnego
 # Translation missing (New!)
 
 
@@ -13793,6 +13812,7 @@ recent_locations_quick_list.empty_message:DE:Kein jüngstes Verzeichnis
 recent_locations_quick_list.empty_message:HU:Nincsenek legutóbbi helyek
 recent_locations_quick_list.empty_message:zh_TW:沒有最近開啟位置
 recent_locations_quick_list.empty_message:JA:最近の場所がありません
+recent_locations_quick_list.empty_message:PL:Brak ostanich lokalizacji
 # Translation missing (New!)
 
 
@@ -13812,6 +13832,7 @@ recent_executed_files_quick_list.empty_message:DE:Keine jüngst ausgeführten Pr
 recent_executed_files_quick_list.empty_message:HU:Nincsenek legutóbbi futtatott fájlok
 recent_executed_files_quick_list.empty_message:zh_TW:沒有最近執行檔案
 recent_executed_files_quick_list.empty_message:JA:最近実行したファイルがありません
+recent_executed_files_quick_list.empty_message:PL:Brak ostatnio uruchamianych plików
 # Translation missing (New!)
 
 
