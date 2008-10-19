@@ -18,31 +18,23 @@
 
 package com.mucommander.ui.dialog.pref.general;
 
-import java.awt.BorderLayout;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.nio.charset.Charset;
-import java.util.Iterator;
-
-import javax.swing.BorderFactory;
-import javax.swing.ButtonGroup;
-import javax.swing.JLabel;
-import javax.swing.JRadioButton;
-
 import com.mucommander.bonjour.BonjourDirectory;
 import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.desktop.DesktopManager;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.pref.PreferencesDialog;
 import com.mucommander.ui.dialog.pref.PreferencesPanel;
-import com.mucommander.ui.dialog.pref.component.PrefCheckBox;
-import com.mucommander.ui.dialog.pref.component.PrefFilePathField;
-import com.mucommander.ui.dialog.pref.component.PrefRadioButton;
-import com.mucommander.ui.dialog.pref.component.PrefSaneComboBox;
-import com.mucommander.ui.dialog.pref.component.PrefTextField;
+import com.mucommander.ui.dialog.pref.component.*;
 import com.mucommander.ui.layout.XAlignedComponentPanel;
 import com.mucommander.ui.layout.YBoxPanel;
 import com.mucommander.ui.notifier.AbstractNotifier;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.nio.charset.Charset;
+import java.util.Iterator;
 
 /**
  * 'Misc' preferences panel.
@@ -219,9 +211,10 @@ class MiscPanel extends PreferencesPanel implements ItemListener {
     	checkForUpdatesCheckBox.addDialogListener(parent);
     	quitConfirmationCheckBox.addDialogListener(parent);
         showSplashScreenCheckBox.addDialogListener(parent);
-        systemNotificationsCheckBox.addDialogListener(parent);
         bonjourDiscoveryCheckBox.addDialogListener(parent);
         shellEncoding.addDialogListener(parent);
+        if(systemNotificationsCheckBox!=null)
+            systemNotificationsCheckBox.addDialogListener(parent);
     }
 
 
