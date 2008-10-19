@@ -305,6 +305,7 @@ change:PL:Zmień
 change:DA:Ændre
 change:NL:Veranderen
 change:RO:Schimbă
+change:DE:Verändern
 # Translation missing (New!)
 
 
@@ -736,6 +737,7 @@ file_manager:FR:Gestionnaire de fichiers
 file_manager:DA:Filhåndterer
 file_manager:NL:Bestansbeheerder
 file_manager:RO:Manager de fișiere
+file_manager:DE:Dateimanager
 # Translation missing (New!)
 
 
@@ -2271,7 +2273,7 @@ com.mucommander.ui.action.ChangeLocationAction.label:SL:Spremeni trenutno lokaci
 com.mucommander.ui.action.ChangeLocationAction.label:IT:Cambia percorso corrente
 com.mucommander.ui.action.ChangeLocationAction.label:CS:Změnit stávající umístění
 com.mucommander.ui.action.ChangeLocationAction.label:zh_TW:變更目前位置
-com.mucommander.ui.action.ChangeLocationAction.label:DE:Ändere aktuellen Ort
+com.mucommander.ui.action.ChangeLocationAction.label:DE:Ändere aktuelles Verzeichnis
 com.mucommander.ui.action.ChangeLocationAction.label:zh_CN:改变当前位置
 com.mucommander.ui.action.ChangeLocationAction.label:RU:Перемещение
 com.mucommander.ui.action.ChangeLocationAction.label:ES:Cambiar localización actual
@@ -2777,8 +2779,8 @@ com.mucommander.ui.action.DeleteAction.tooltip:EN:Delete marked files using the 
 com.mucommander.ui.action.DeleteAction.tooltip:FR:Supprimer les fichiers marqués en utilisant la corbeille système si possible
 com.mucommander.ui.action.DeleteAction.tooltip:DA:Slet markerede filer via papirkurven når det er muligt
 com.mucommander.ui.action.DeleteAction.tooltip:PL:Usuwa zaznaczone pliki (przenosi do kosza, jeżeli możliwe)
+com.mucommander.ui.action.DeleteAction.tooltip:DE:Markierte Dateien in den Papierkorb verschieben (falls möglich) 
 # The following entries need to be updated to indicate that the system trash is used when it is available
-com.mucommander.ui.action.DeleteAction.tooltip:DE:Markierte Dateien löschen
 com.mucommander.ui.action.DeleteAction.tooltip:ES:Elimiar los ficheros marcados
 com.mucommander.ui.action.DeleteAction.tooltip:CS:Smazat označené soubory
 com.mucommander.ui.action.DeleteAction.tooltip:zh_TW:刪除已標記檔案
@@ -2812,6 +2814,7 @@ com.mucommander.ui.action.PermanentDeleteAction.label:DA:Slet permanent
 com.mucommander.ui.action.PermanentDeleteAction.label:NL:Definitief verwijderen
 com.mucommander.ui.action.PermanentDeleteAction.label:PL:Usuń trwale
 com.mucommander.ui.action.PermanentDeleteAction.label:RO:Șterge definitiv
+com.mucommander.ui.action.PermanentDeleteAction.label:DE:unwiderruflich löschen
 # Translation missing (New!)
 
 
@@ -2834,6 +2837,7 @@ com.mucommander.ui.action.PermanentDeleteAction.tooltip:DA:Slet markerede filer 
 com.mucommander.ui.action.PermanentDeleteAction.tooltip:NL:Verwijder gemarkeerde bestanden zonder de prullenbak te gebruiken
 com.mucommander.ui.action.PermanentDeleteAction.tooltip:PL:Trwale usuwa zaznaczone pliki (nie używa systemowego kosza)
 com.mucommander.ui.action.PermanentDeleteAction.tooltip:RO:Șterge definitiv fișierele selectate fără a folosi coșul de gunoi
+com.mucommander.ui.action.PermanentDeleteAction.tooltip:DE:Markierte Dateien unwiderruflich löschen
 # Translation missing (New!)
 
 
@@ -3213,6 +3217,7 @@ com.mucommander.ui.action.GoToParentInOtherPanelAction.label:FR:Remonter dans l'
 com.mucommander.ui.action.GoToParentInOtherPanelAction.label:DA:Gå til forrige mappe i modsatte panel
 com.mucommander.ui.action.GoToParentInOtherPanelAction.label:NL:Ga naar bovenliggende map in het andere paneel
 com.mucommander.ui.action.GoToParentInOtherPanelAction.label:RO:Mergi în directorul părinte în cealaltă fereastră
+com.mucommander.ui.action.GoToParentInOtherPanelAction.label:DE:Im anderen Panel zum übergeordneten Ordner gehen
 # Translation missing (New!)
 
 
@@ -3232,6 +3237,7 @@ com.mucommander.ui.action.GoToParentInBothPanelsAction.label:FR:Remonter dans le
 com.mucommander.ui.action.GoToParentInBothPanelsAction.label:DA:Gå til forrige mappe i begge paneler
 com.mucommander.ui.action.GoToParentInBothPanelsAction.label:NL:Ga naar bovenliggende map in beide panelen
 com.mucommander.ui.action.GoToParentInBothPanelsAction.label:RO:Mergi în directorul părinte în ambele ferestre
+com.mucommander.ui.action.GoToParentInBothPanelsAction.label:DE:Im beiden Paneln zum übergeordneten Ordner gehen
 # Translation missing (New!)
 
 
@@ -4518,6 +4524,7 @@ com.mucommander.ui.action.ToggleTreeAction.label:PL:Pokaż drzewo katalogów
 com.mucommander.ui.action.ToggleTreeAction.label:DA:Træ visning
 com.mucommander.ui.action.ToggleTreeAction.label:NL:Toon boomweergave
 com.mucommander.ui.action.ToggleTreeAction.label:RO:Arată arbore directoare
+com.mucommander.ui.action.ToggleTreeAction.label:DE:Zeige Baumansicht
 # Translation missing (New!)
 
 
@@ -5032,6 +5039,7 @@ com.mucommander.ui.action.MaximizeWindowAction.label:FR:Agrandir
 com.mucommander.ui.action.MaximizeWindowAction.label:DA:Maksimer
 com.mucommander.ui.action.MaximizeWindowAction.label:NL:Maximaliseren
 com.mucommander.ui.action.MaximizeWindowAction.label:RO:Maximizează
+com.mucommander.ui.action.MaximizeWindowAction.label:DE:Maximieren
 # Translation missing (New!)
 
 
@@ -5050,6 +5058,7 @@ com.mucommander.ui.action.MaximizeWindowAction.label:RO:Maximizează
 # If this entry is not defined for a particular language, the generic 'Maximize' 
 # label will be used.
 com.mucommander.ui.action.MaximizeWindowAction.label.mac_os_x:EN:Zoom
+com.mucommander.ui.action.MaximizeWindowAction.label.mac_os_x:DE:Zoomen
 # Translation missing (New!)
 
 
@@ -5068,6 +5077,7 @@ com.mucommander.ui.action.MinimizeWindowAction.label:FR:Réduire
 com.mucommander.ui.action.MinimizeWindowAction.label:DA:Minimer
 com.mucommander.ui.action.MinimizeWindowAction.label:NL:Minimaliseren
 com.mucommander.ui.action.MinimizeWindowAction.label:RO:Minimizează
+com.mucommander.ui.action.MinimizeWindowAction.label:DE:Minimieren
 # Translation missing (New!)
 
 
@@ -5085,6 +5095,7 @@ com.mucommander.ui.action.MinimizeWindowAction.label:RO:Minimizează
 # If this entry is not defined for a particular language, the generic 'Maximize' 
 # label will be used.
 com.mucommander.ui.action.MinimizeWindowAction.label.mac_os_x:EN:$[com.mucommander.ui.action.MinimizeWindowAction.label]
+com.mucommander.ui.action.MinimizeWindowAction.label.mac_os_x:DE:Im Dock ablegen
 # Translation missing (New!)
 
 
@@ -5102,6 +5113,7 @@ com.mucommander.ui.action.GoToDocumentationAction.label:FR:Documentation en lign
 com.mucommander.ui.action.GoToDocumentationAction.label:DA:Online dokumentation
 com.mucommander.ui.action.GoToDocumentationAction.label:NL:Online dokumentatie
 com.mucommander.ui.action.GoToDocumentationAction.label:RO:Documentație online
+com.mucommander.ui.action.GoToDocumentationAction.label:DE:Online Dokumentation
 # Translation missing (New!)
 
 
@@ -5117,6 +5129,7 @@ com.mucommander.ui.action.ShowParentFoldersQLAction.label:FR:Dossiers parents
 com.mucommander.ui.action.ShowParentFoldersQLAction.label:DA:Ovenliggende mapper til den nuværende placering
 com.mucommander.ui.action.ShowParentFoldersQLAction.label:NL:Bovenliggende mappen
 com.mucommander.ui.action.ShowParentFoldersQLAction.label:RO:Directoarele părinte
+com.mucommander.ui.action.ShowParentFoldersQLAction.label:DE:Übergeordnetes Verzeichnis
 # Translation missing (New!)
 
 
@@ -5133,6 +5146,7 @@ com.mucommander.ui.action.ShowRecentLocationsQLAction.label:FR:Dossiers récents
 com.mucommander.ui.action.ShowRecentLocationsQLAction.label:DA:Nyeligt tilgåede placeringer
 com.mucommander.ui.action.ShowRecentLocationsQLAction.label:NL:Recente locaties
 com.mucommander.ui.action.ShowRecentLocationsQLAction.label:RO:Locații recente
+com.mucommander.ui.action.ShowRecentLocationsQLAction.label:DE:Kürzlich besuchte Ordner
 # Translation missing (New!)
 
 
@@ -5148,6 +5162,7 @@ com.mucommander.ui.action.ShowRecentExecutedFilesQLAction.label:EN:Recently exec
 com.mucommander.ui.action.ShowRecentExecutedFilesQLAction.label:FR:Fichiers récemment exécutés
 com.mucommander.ui.action.ShowRecentExecutedFilesQLAction.label:NL:Recent uitgevoerde bestanden
 com.mucommander.ui.action.ShowRecentExecutedFilesQLAction.label:RO:Fișiere executate recent
+com.mucommander.ui.action.ShowRecentExecutedFilesQLAction.label:DE:Kürzlich ausgeführte Programme
 # Translation missing (New!)
 
 
@@ -5342,6 +5357,7 @@ quick_lists_menu:EN:Quick lists
 quick_lists_menu:FR:Listes éclair 
 quick_lists_menu:NL:Snellijsten
 quick_lists_menu:RO:Liste rapide
+quick_lists_menu:DE:Quick Listen
 # Translation missing (New!)
 
 
@@ -8345,6 +8361,7 @@ server_connect_dialog.private_key:PL:Klucz prywatny
 server_connect_dialog.private_key:DA:Privat nøgle
 server_connect_dialog.private_key:NL:Private sleutel
 server_connect_dialog.private_key:RO:Cheia privată
+server_connect_dialog.private_key:DE:Privater Schlüssel
 # Translation missing (New!)
 
 
@@ -8368,6 +8385,7 @@ server_connect_dialog.passphrase:FR:Phrase secrète
 server_connect_dialog.passphrase:DA:Løsen
 server_connect_dialog.passphrase:NL:Wachtwoord
 server_connect_dialog.passphrase:RO:Frază secretă
+server_connect_dialog.passphrase:DE:Passwort
 # Translation missing (New!)
 
 
@@ -8435,6 +8453,7 @@ ftp_connect.nb_connection_retries:RU:Количество попыткок ус�
 ftp_connect.nb_connection_retries:DA:Antal gentagende forbindelses forsøg
 ftp_connect.nb_connection_retries:NL:Hoeveelheid pogingen tot verbinden
 ftp_connect.nb_connection_retries:RO:Numărul de încercări de conectare
+ftp_connect.nb_connection_retries:DE:Maximale Anzahl Verbindungsversuche
 # Translation missing (New!)
 
 
@@ -8454,6 +8473,7 @@ ftp_connect.retry_delay:RU:Задержка между повторами (в с
 ftp_connect.retry_delay:DA:Forsinkelse i mellem forsøg (i sekunder)
 ftp_connect.retry_delay:NL:Tijd tussen pogingen (in seconden)
 ftp_connect.retry_delay:RO:Durata între încercări (în secunde)
+ftp_connect.retry_delay:DE:Wartezeit zwischen Verbindungsversuchen (in Sekunden)
 # Translation missing (New!)
 
 
@@ -8730,6 +8750,7 @@ auth_dialog.connect_as:EN:Connect as
 auth_dialog.connect_as:FR:Se connecter en tant que
 auth_dialog.connect_as:NL:Verbinden als
 auth_dialog.connect_as:RO:Connectează ca
+auth_dialog.connect_as:DE:Verbinde als
 # Translation missing (New!)
 
 
@@ -8751,6 +8772,7 @@ auth_dialog.authentication_failed:EN:Authentication failed
 auth_dialog.authentication_failed:FR:L'authentification a échoué
 auth_dialog.authentication_failed:NL:Autentificatie mislukt
 auth_dialog.authentication_failed:RO:Autentificare nereușită
+auth_dialog.authentication_failed:DE:Authentifizierung fehlgeschlagen
 # Translation missing (New!)
 
 
@@ -13172,6 +13194,7 @@ batch_rename_dialog.title:PL:Zmiana nazw plików
 batch_rename_dialog.title:DA:Multi omdøbning
 batch_rename_dialog.title:NL:Multi hernoemen
 batch_rename_dialog.title:RO:Redenumire multiplă
+batch_rename_dialog.title:DE:Mehrfach Umbenennung
 # Translation missing (New!)
 
 
@@ -13191,6 +13214,7 @@ batch_rename_dialog.mask:PL:Matryca
 batch_rename_dialog.mask:DA:Maske
 batch_rename_dialog.mask:NL:Patroon nieuwe naam
 batch_rename_dialog.mask:RO:Șablon redenumire
+batch_rename_dialog.mask:DE:Umbenennungs Muster
 # Translation missing (New!)
 
 
@@ -13210,6 +13234,7 @@ batch_rename_dialog.search_replace:PL:Znajdź i zamień
 batch_rename_dialog.search_replace:DA:Søg og erstat
 batch_rename_dialog.search_replace:NL:Zoek en vervang
 batch_rename_dialog.search_replace:RO:Caută & Înlocuiește
+batch_rename_dialog.search_replace:DE:Suchen & Ersetzen
 # Translation missing (New!)
 
 
@@ -13229,6 +13254,7 @@ batch_rename_dialog.search_for:PL:Szukaj
 batch_rename_dialog.search_for:DA:Søg efter
 batch_rename_dialog.search_for:NL:Zoeken
 batch_rename_dialog.search_for:RO:Caută
+batch_rename_dialog.search_for:DE:Suche nach
 # Translation missing (New!)
 
 
@@ -13248,6 +13274,7 @@ batch_rename_dialog.replace_with:PL:Zamień na
 batch_rename_dialog.replace_with:DA:Erstat med
 batch_rename_dialog.replace_with:NL:Vervang door
 batch_rename_dialog.replace_with:RO:Înlocuiește cu
+batch_rename_dialog.replace_with:DE:Ersetze durch
 # Translation missing (New!)
 
 
@@ -13267,6 +13294,7 @@ batch_rename_dialog.counter:PL:Licznik
 batch_rename_dialog.counter:DA:Tæller
 batch_rename_dialog.counter:NL:Teller
 batch_rename_dialog.counter:RO:Numără
+batch_rename_dialog.counter:DE:Zähler
 # Translation missing (New!)
 
 
@@ -13286,6 +13314,7 @@ batch_rename_dialog.start_at:PL:Start
 batch_rename_dialog.start_at:DA:Start på
 batch_rename_dialog.start_at:NL:Start bij
 batch_rename_dialog.start_at:RO:Începe la
+batch_rename_dialog.start_at:DE:Starte mit
 # Translation missing (New!)
 
 
@@ -13305,6 +13334,7 @@ batch_rename_dialog.step_by:PL:Krok
 batch_rename_dialog.step_by:DA:Trin
 batch_rename_dialog.step_by:NL:Verhoog met
 batch_rename_dialog.step_by:RO:Increment
+batch_rename_dialog.step_by:DE:Schrittweite
 # Translation missing (New!)
 
 
@@ -13322,6 +13352,7 @@ batch_rename_dialog.format:EN:Format
 batch_rename_dialog.format:FR:Format
 batch_rename_dialog.format:NL:Voorloopnullen
 batch_rename_dialog.format:RO:Format
+batch_rename_dialog.format:DE:Format
 # Translation missing (New!)
 
 
@@ -13341,6 +13372,7 @@ batch_rename_dialog.upper_lower_case:PL:Wielkość znaków
 batch_rename_dialog.upper_lower_case:DA:Store/små bogstaver
 batch_rename_dialog.upper_lower_case:NL:Hoofdletters/kleine letters
 batch_rename_dialog.upper_lower_case:RO:Capitalizare
+batch_rename_dialog.upper_lower_case:DE:Groß/Kleinschreibung
 # Translation missing (New!)
 
 
@@ -13360,6 +13392,7 @@ batch_rename_dialog.no_change:PL:Bez zmian
 batch_rename_dialog.no_change:DA:Uændret
 batch_rename_dialog.no_change:NL:onveranderd
 batch_rename_dialog.no_change:RO:Neschimbat
+batch_rename_dialog.no_change:DE:Unverändert
 # Translation missing (New!)
 
 
@@ -13379,6 +13412,7 @@ batch_rename_dialog.lower_case:PL:małe litery
 batch_rename_dialog.lower_case:DA:små bogstaver
 batch_rename_dialog.lower_case:NL:kleine letters
 batch_rename_dialog.lower_case:RO:minuscule
+batch_rename_dialog.lower_case:DE:kleinschreibung
 # Translation missing (New!)
 
 
@@ -13398,6 +13432,7 @@ batch_rename_dialog.upper_case:PL:DUŻE LITERY
 batch_rename_dialog.upper_case:DA:STORE BOGSTAVER
 batch_rename_dialog.upper_case:NL:HOOFDLETTERS
 batch_rename_dialog.upper_case:RO:MAJUSCULE
+batch_rename_dialog.upper_case:DE:GROSSSCHREIBUNG
 # Translation missing (New!)
 
 
@@ -13417,6 +13452,7 @@ batch_rename_dialog.first_upper:PL:Pierwsza litera duża
 batch_rename_dialog.first_upper:DA:Første bogstaver stort
 batch_rename_dialog.first_upper:NL:Eerste letter hoofdletter
 batch_rename_dialog.first_upper:RO:Prima literă majusculă
+batch_rename_dialog.first_upper:DE:Erster buchstabe gross
 # Translation missing (New!)
 
 
@@ -13436,6 +13472,7 @@ batch_rename_dialog.word:PL:Pierwsza Każdego Słowa
 batch_rename_dialog.word:DA:Første Af Hvert Ord
 batch_rename_dialog.word:NL:Eerste Van Ieder Woord
 batch_rename_dialog.word:RO:Prima Literă Din Fiecare Cuvânt
+batch_rename_dialog.word:DE:Erster Buchstabe Pro Wort Gross
 # Translation missing (New!)
 
 
@@ -13455,6 +13492,7 @@ batch_rename_dialog.old_name:PL:Stara nazwa
 batch_rename_dialog.old_name:DA:Gammelt navn
 batch_rename_dialog.old_name:NL:Oude naam
 batch_rename_dialog.old_name:RO:Numele vechi
+batch_rename_dialog.old_name:DE:Alter Name
 # Translation missing (New!)
 
 
@@ -13474,6 +13512,7 @@ batch_rename_dialog.new_name:PL:Nowa nazwa
 batch_rename_dialog.new_name:DA:Nyt navn
 batch_rename_dialog.new_name:NL:Nieuwe naam
 batch_rename_dialog.new_name:RO:Numele nou
+batch_rename_dialog.new_name:DE:Neuer Name
 # Translation missing (New!)
 
 
@@ -13493,6 +13532,7 @@ batch_rename_dialog.remove:PL:Usuń
 batch_rename_dialog.remove:DA:Fjern
 batch_rename_dialog.remove:NL:Verwijder
 batch_rename_dialog.remove:RO:Elimină
+batch_rename_dialog.remove:DE:Entfernen
 # Translation missing (New!)
 
 
@@ -13513,6 +13553,7 @@ batch_rename_dialog.block_name:PL:Zablokuj
 batch_rename_dialog.block_name:DA:Gruppe
 batch_rename_dialog.block_name:NL:Groep
 batch_rename_dialog.block_name:RO:Păstrează
+batch_rename_dialog.block_name:DE:Beibehalten
 # Translation missing (New!)
 
 
@@ -13531,6 +13572,7 @@ batch_rename_dialog.range:FR:Intervalle
 batch_rename_dialog.range:PL:Zakres
 batch_rename_dialog.range:DA:Område
 batch_rename_dialog.range:RO:Interval
+batch_rename_dialog.range:DE:Bereich
 # Translation missing (New!)
 
 
@@ -13549,6 +13591,7 @@ batch_rename_dialog.proceed_renaming:FR:%1 fichiers sur %2 vont être renommés.
 batch_rename_dialog.proceed_renaming:DA:%1 filer ud af %2 vil blive omdøbt. Ønsker du at forsætte?
 batch_rename_dialog.proceed_renaming:NL:%1 bestanden van %2 zullen hernoemd worden. Doorgaan?
 batch_rename_dialog.proceed_renaming:RO:%1 din %2 fișiere vor fi redenumite. Vreți să continuați?
+batch_rename_dialog.proceed_renaming:DE:%1 Dateien von %2 werden umbenannt. Wollen Sie fortfahren?
 # Translation missing (New!)
 
 
@@ -13567,6 +13610,7 @@ batch_rename_dialog.duplicate_names:FR:Doublons de noms!
 batch_rename_dialog.duplicate_names:PL:Wykryto zduplikowane nazwy!
 batch_rename_dialog.duplicate_names:DA:Duplikerede navne!
 batch_rename_dialog.duplicate_names:RO:Nume care se repetă!
+batch_rename_dialog.duplicate_names:DE:Doppelte Namen!
 # Translation missing (New!)
 
 
@@ -13590,6 +13634,7 @@ parent_folders_quick_list.empty_message:FR:Le dossier courant n'a pas de parent
 parent_folders_quick_list.empty_message:DA:Der er ikke nogle ovenliggende mapper til denne placering
 parent_folders_quick_list.empty_message:NL:Er is geen bovenliggende map bij huidige locatie
 parent_folders_quick_list.empty_message:RO:Locația curentă nu are părinte
+parent_folders_quick_list.empty_message:DE:Aktuelles Verzeichnis hat kein übergeordnetes Verzeichnis
 # Translation missing (New!)
 
 
@@ -13606,6 +13651,7 @@ recent_locations_quick_list.empty_message:FR:Pas de dossier récent
 recent_locations_quick_list.empty_message:DA:Der er ingen nyeligt tilgåede placeringer
 recent_locations_quick_list.empty_message:NL:Geen recente locaties
 recent_locations_quick_list.empty_message:RO:Nici o locație recentă
+recent_locations_quick_list.empty_message:DE:Kein jüngstes Verzeichnis
 # Translation missing (New!)
 
 
@@ -13621,6 +13667,7 @@ recent_executed_files_quick_list.empty_message:EN:No recently executed file
 recent_executed_files_quick_list.empty_message:FR:Pas de fichier récemment exécuté
 recent_executed_files_quick_list.empty_message:NL:Geen recent uitgevoerde bestanden
 recent_executed_files_quick_list.empty_message:RO:Nici un fișier executat recent
+recent_executed_files_quick_list.empty_message:DE:Keine jüngst ausgeführten Programme
 # Translation missing (New!)
 
 
