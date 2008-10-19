@@ -19,6 +19,7 @@
 package com.mucommander.ui.dialog.file;
 
 import com.mucommander.text.Translator;
+import com.mucommander.ui.dialog.DialogToolkit;
 import com.mucommander.ui.dialog.FocusDialog;
 
 import javax.swing.*;
@@ -40,12 +41,12 @@ public class BatchRenameSelectRange extends FocusDialog implements ActionListene
 
     private JTextField edtRange;
     private JButton btnCancel;
-    private AbstractButton btnOK;
+    private JButton btnOK;
     private String range = null;
     
 
     public BatchRenameSelectRange(Dialog owner, String filename) {
-        super(owner, Translator.get("batch_rename_dialog.title"), owner);
+        super(owner, Translator.get("batch_rename_dialog.range"), owner);
         edtRange = new JTextField();
         ReadOnlyDocument doc = new ReadOnlyDocument();
         edtRange.setDocument(doc);
@@ -56,14 +57,10 @@ public class BatchRenameSelectRange extends FocusDialog implements ActionListene
         doc.setReadOnly(true);
         setLayout(new BorderLayout());            
         add(edtRange, BorderLayout.CENTER);
-        JPanel btns = new JPanel(new FlowLayout());
+
         btnOK = new JButton(Translator.get("ok"));
-        btnOK.addActionListener(this);
-        btns.add(btnOK);
         btnCancel = new JButton(Translator.get("cancel"));
-        btnCancel.addActionListener(this);
-        btns.add(btnCancel);
-        add(btns, BorderLayout.SOUTH);
+        add(DialogToolkit.createOKCancelPanel(btnOK, btnCancel, getRootPane(), this), BorderLayout.SOUTH);
     }
 
 
