@@ -2786,6 +2786,7 @@ com.mucommander.ui.action.DeleteAction.tooltip:PL:Usuwa zaznaczone pliki (przeno
 com.mucommander.ui.action.DeleteAction.tooltip:DE:Markierte Dateien in den Papierkorb verschieben (falls möglich) 
 com.mucommander.ui.action.DeleteAction.tooltip:HU:A kijelölt fájlok lomtárba helyezése, ha lehetséges
 com.mucommander.ui.action.DeleteAction.tooltip:zh_TW:刪除已標記檔案
+com.mucommander.ui.action.DeleteAction.tooltip:NL:Gemarkeerde bestanden verwijderen met gebruik van de prullenbak indien mogelijk
 # The following entries need to be updated to indicate that the system trash is used when it is available
 com.mucommander.ui.action.DeleteAction.tooltip:ES:Elimiar los ficheros marcados
 com.mucommander.ui.action.DeleteAction.tooltip:CS:Smazat označené soubory
@@ -2796,7 +2797,6 @@ com.mucommander.ui.action.DeleteAction.tooltip:RO:Șterge fișierele selectate
 com.mucommander.ui.action.DeleteAction.tooltip:IT:Elimina i file selezionati
 com.mucommander.ui.action.DeleteAction.tooltip:KO:선택된 파일 삭제
 com.mucommander.ui.action.DeleteAction.tooltip:pt_BR:Apagar arquivos selecionados
-com.mucommander.ui.action.DeleteAction.tooltip:NL:Gemarkeerde bestanden verwijderen
 com.mucommander.ui.action.DeleteAction.tooltip:SK:Odstrániť označené súbory
 com.mucommander.ui.action.DeleteAction.tooltip:JA:マークされたファイルを削除します
 com.mucommander.ui.action.DeleteAction.tooltip:SV:Radera markerade filer
@@ -13657,6 +13657,7 @@ batch_rename_dialog.range:RO:Interval
 batch_rename_dialog.range:DE:Bereich
 batch_rename_dialog.range:HU:Tartomány
 batch_rename_dialog.range:zh_TW:範圍
+batch_rename_dialog.range:NL:Gebied
 # Translation missing (New!)
 
 
