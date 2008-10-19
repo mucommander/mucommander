@@ -63,6 +63,9 @@ muCommander uses the following great third party works :
 - the JNA library released under the GNU LGPL license.
  JmDNS can be found at http://jna.dev.java.net .
 
+- the JUnRar library released as Freeware.
+ JUnRar can be found at http://sourceforge.net/projects/java-unrar .
+
 - the Yanfs library released under the BSD license.
  Yanfs can be found at http://yanfs.dev.java.net .
 
@@ -124,6 +127,8 @@ New features:
 - Batch renamer, contributed by Mariusz Jakubowski.
 - Auto-completion capabilities added to the location field and transfer
   destination fields, contributed by Arik Hadas.
+- New 'Quick lists' that allow to quickly recall parent folders, recent
+  locations, recently executed files and bookmarks. Contributed by Arik Hadas.
 - Native RAR archive support, contributed by Arik Hadas.
 - Added support for SFTP public key authentication, contributed by
   Vassil Dichev.
