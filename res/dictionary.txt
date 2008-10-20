@@ -309,6 +309,7 @@ change:DE:Verändern
 change:HU:Csere
 change:zh_TW:變更
 change:JA:変更
+change:CS:Změnit
 # Translation missing (New!)
 
 
@@ -745,6 +746,7 @@ file_manager:HU:Fájlkezelő
 file_manager:zh_TW:檔案管理員
 file_manager:JA:ファイル マネージャー
 file_manager:PL:Menedżer plików
+file_manager:CS:Správce souborů
 # Translation missing (New!)
 
 
@@ -2791,9 +2793,9 @@ com.mucommander.ui.action.DeleteAction.tooltip:HU:A kijelölt fájlok lomtárba 
 com.mucommander.ui.action.DeleteAction.tooltip:zh_TW:刪除已標記檔案
 com.mucommander.ui.action.DeleteAction.tooltip:NL:Gemarkeerde bestanden verwijderen met gebruik van de prullenbak indien mogelijk
 com.mucommander.ui.action.DeleteAction.tooltip:JA:マークされたファイルを削除します
+com.mucommander.ui.action.DeleteAction.tooltip:CS:Je-li možné, označené přesunout do Koše
 # The following entries need to be updated to indicate that the system trash is used when it is available
 com.mucommander.ui.action.DeleteAction.tooltip:ES:Elimiar los ficheros marcados
-com.mucommander.ui.action.DeleteAction.tooltip:CS:Smazat označené soubory
 com.mucommander.ui.action.DeleteAction.tooltip:RU:Удаление выделенных файлов
 com.mucommander.ui.action.DeleteAction.tooltip:zh_CN:刪除已标记文件
 com.mucommander.ui.action.DeleteAction.tooltip:SL:Izbriši označene datoteke
@@ -2825,6 +2827,7 @@ com.mucommander.ui.action.PermanentDeleteAction.label:DE:unwiderruflich löschen
 com.mucommander.ui.action.PermanentDeleteAction.label:HU:Végleges törlés
 com.mucommander.ui.action.PermanentDeleteAction.label:zh_TW:永久刪除
 com.mucommander.ui.action.PermanentDeleteAction.label:JA:永久に削除
+com.mucommander.ui.action.PermanentDeleteAction.label:CS:Smazat přímo
 # Translation missing (New!)
 
 
@@ -2851,6 +2854,7 @@ com.mucommander.ui.action.PermanentDeleteAction.tooltip:DE:Markierte Dateien unw
 com.mucommander.ui.action.PermanentDeleteAction.tooltip:HU:A kijelölt fájlok végleges törlése a Lomtár használata nélkül
 com.mucommander.ui.action.PermanentDeleteAction.tooltip:zh_TW:永久刪除標記檔案
 com.mucommander.ui.action.PermanentDeleteAction.tooltip:JA:システムのごみ箱を使用せずにマークされたファイルを削除します
+com.mucommander.ui.action.PermanentDeleteAction.tooltip:CS:Smazat označené soubory bez použití systémového Koše
 # Translation missing (New!)
 
 
@@ -3235,6 +3239,7 @@ com.mucommander.ui.action.GoToParentInOtherPanelAction.label:HU:Ugrás a másik 
 com.mucommander.ui.action.GoToParentInOtherPanelAction.label:zh_TW:另一個面板回到上一層
 com.mucommander.ui.action.GoToParentInOtherPanelAction.label:JA:他のパネルで親へ移動
 com.mucommander.ui.action.GoToParentInOtherPanelAction.label:PL:Idź do katalogu nadrzędnego w drugim panelu
+com.mucommander.ui.action.GoToParentInOtherPanelAction.label:CS:O úroveň výš ve druhém panelu
 # Translation missing (New!)
 
 
@@ -3259,6 +3264,7 @@ com.mucommander.ui.action.GoToParentInBothPanelsAction.label:HU:Ugrás mindkét 
 com.mucommander.ui.action.GoToParentInBothPanelsAction.label:zh_TW:兩邊面板同時回到上一層
 com.mucommander.ui.action.GoToParentInBothPanelsAction.label:JA:両方のパネルで親へ移動
 com.mucommander.ui.action.GoToParentInBothPanelsAction.label:PL:Idź do katalogu nadrzędnego w obu panelach
+com.mucommander.ui.action.GoToParentInBothPanelsAction.label:CS:O úroveň výš v obou panelech
 # Translation missing (New!)
 
 
@@ -4549,6 +4555,7 @@ com.mucommander.ui.action.ToggleTreeAction.label:DE:Zeige Baumansicht
 com.mucommander.ui.action.ToggleTreeAction.label:HU:Könyvtárfa
 com.mucommander.ui.action.ToggleTreeAction.label:zh_TW:樹狀檢視
 com.mucommander.ui.action.ToggleTreeAction.label:JA:ツリー ビューの表示
+com.mucommander.ui.action.ToggleTreeAction.label:CS:Zobrazit strom složek
 # Translation missing (New!)
 
 
@@ -5069,6 +5076,7 @@ com.mucommander.ui.action.MaximizeWindowAction.label:HU:Nagyítás
 com.mucommander.ui.action.MaximizeWindowAction.label:zh_TW:最大化
 com.mucommander.ui.action.MaximizeWindowAction.label:JA:最大化
 com.mucommander.ui.action.MaximizeWindowAction.label:PL:Maksymalizuj
+com.mucommander.ui.action.MaximizeWindowAction.label:CS:Maximalizovat
 # Translation missing (New!)
 
 
@@ -5090,6 +5098,7 @@ com.mucommander.ui.action.MaximizeWindowAction.label.mac_os_x:EN:Zoom
 com.mucommander.ui.action.MaximizeWindowAction.label.mac_os_x:DE:Zoomen
 com.mucommander.ui.action.MaximizeWindowAction.label.mac_os_x:HU:Nagyítás
 com.mucommander.ui.action.MaximizeWindowAction.label.mac_os_x:JA:ズーム
+com.mucommander.ui.action.MaximizeWindowAction.label.mac_os_x:CS:Měřítko
 # Translation missing (New!)
 
 
@@ -5114,6 +5123,7 @@ com.mucommander.ui.action.MinimizeWindowAction.label:HU:Kicsinyítés
 com.mucommander.ui.action.MinimizeWindowAction.label:zh_TW:最小化
 com.mucommander.ui.action.MinimizeWindowAction.label:JA:最小化
 com.mucommander.ui.action.MinimizeWindowAction.label:PL:Minimalizuj
+com.mucommander.ui.action.MinimizeWindowAction.label:CS:Minimalizovat
 # Translation missing (New!)
 
 
@@ -5133,6 +5143,7 @@ com.mucommander.ui.action.MinimizeWindowAction.label:PL:Minimalizuj
 com.mucommander.ui.action.MinimizeWindowAction.label.mac_os_x:EN:$[com.mucommander.ui.action.MinimizeWindowAction.label]
 com.mucommander.ui.action.MinimizeWindowAction.label.mac_os_x:DE:Im Dock ablegen
 com.mucommander.ui.action.MinimizeWindowAction.label.mac_os_x:HU:Kicsinyítés
+com.mucommander.ui.action.MinimizeWindowAction.label.mac_os_x:CS:$[com.mucommander.ui.action.MinimizeWindowAction.label]
 # Translation missing (New!)
 
 
@@ -5155,6 +5166,7 @@ com.mucommander.ui.action.GoToDocumentationAction.label:HU:Online dokumentáció
 com.mucommander.ui.action.GoToDocumentationAction.label:zh_TW:線上文件
 com.mucommander.ui.action.GoToDocumentationAction.label:JA:オンライン ドキュメント
 com.mucommander.ui.action.GoToDocumentationAction.label:PL:Dokumentacja online
+com.mucommander.ui.action.GoToDocumentationAction.label:CS:Dokumentace na webu
 # Translation missing (New!)
 
 
@@ -5175,6 +5187,7 @@ com.mucommander.ui.action.ShowParentFoldersQLAction.label:HU:Felsőbb alkönyvt�
 com.mucommander.ui.action.ShowParentFoldersQLAction.label:zh_TW:上層目錄
 com.mucommander.ui.action.ShowParentFoldersQLAction.label:JA:親フォルダー
 com.mucommander.ui.action.ShowParentFoldersQLAction.label:PL:Katalogi nadrzędne
+com.mucommander.ui.action.ShowParentFoldersQLAction.label:CS:Nadřazené složky
 # Translation missing (New!)
 
 
@@ -5196,6 +5209,7 @@ com.mucommander.ui.action.ShowRecentLocationsQLAction.label:HU:Legutóbbi helyek
 com.mucommander.ui.action.ShowRecentLocationsQLAction.label:zh_TW:最近開啟位置
 com.mucommander.ui.action.ShowRecentLocationsQLAction.label:JA:最近の場所
 com.mucommander.ui.action.ShowRecentLocationsQLAction.label:PL:Ostatnie lokalizacje
+com.mucommander.ui.action.ShowRecentLocationsQLAction.label:CS:Dříve navštívená umístění
 # Translation missing (New!)
 
 
@@ -5216,6 +5230,7 @@ com.mucommander.ui.action.ShowRecentExecutedFilesQLAction.label:HU:Legutóbbi fu
 com.mucommander.ui.action.ShowRecentExecutedFilesQLAction.label:zh_TW:最近執行檔案
 com.mucommander.ui.action.ShowRecentExecutedFilesQLAction.label:JA:最近実行したファイル
 com.mucommander.ui.action.ShowRecentExecutedFilesQLAction.label:PL:Ostatnio wykonywane pliki
+com.mucommander.ui.action.ShowRecentExecutedFilesQLAction.label:CS:Dříve spuštěné soubory
 # Translation missing (New!)
 
 
@@ -5415,6 +5430,7 @@ quick_lists_menu:HU:Gyorslista
 quick_lists_menu:zh_TW:快速列表
 quick_lists_menu:JA:クイック リスト
 quick_lists_menu:PL:Szybkie listy
+quick_lists_menu:CS:Rychlé přehledy
 # Translation missing (New!)
 
 
@@ -7287,7 +7303,7 @@ email.goodbye_failed:EN:Error while closing connection, mail may not have been s
 email.goodbye_failed:FR:Erreur lors de la fermeture de connexion, le message n'a peut-être pas été envoyé.
 email.goodbye_failed:DE:Fehler beim Schließen der Verbindung, etvl. wurde die eMail nicht gesendet.
 email.goodbye_failed:ES:Error al cerrar la conexión, el mensaje no ha sido enviado.
-email.goodbye_failed:CS:Chyba při ukončování připojení, pošta nemusela být odeslána.
+email.goodbye_failed:CS:Chyba při ukončování připojení, pošta pravděpodobně nebyla odeslána.
 email.goodbye_failed:zh_TW:當關閉連線時發生錯誤, 郵件可能尚未寄出.
 email.goodbye_failed:PL:Błąd podczas zamykania połączenia, poczta może zostać niewysłana.
 email.goodbye_failed:HU:Kapcsolatbontás közben hiba történt, így a levél nem biztos, hogy elment.
@@ -7871,7 +7887,7 @@ properties_dialog.file_properties:EN:%1 Properties
 properties_dialog.file_properties:FR:Propriétés de %1
 properties_dialog.file_properties:DE:Eigenschaften von %1
 properties_dialog.file_properties:ES:%1 Propiedades
-properties_dialog.file_properties:CS:Vlastnosti objektu %1 
+properties_dialog.file_properties:CS:Vlastnosti objektu "%1" 
 properties_dialog.file_properties:zh_TW:%1 屬性
 properties_dialog.file_properties:PL:%1 Właściwości
 properties_dialog.file_properties:HU:%1 tulajdonságok
@@ -8422,6 +8438,7 @@ server_connect_dialog.private_key:DE:Privater Schlüssel
 server_connect_dialog.private_key:HU:Privát kulcs
 server_connect_dialog.private_key:zh_TW:私鑰
 server_connect_dialog.private_key:JA:プライベート キー
+server_connect_dialog.private_key:CS:Soukromý klíč
 # Translation missing (New!)
 
 
@@ -8450,6 +8467,7 @@ server_connect_dialog.passphrase:HU:Jelmondat
 server_connect_dialog.passphrase:zh_TW:密碼
 server_connect_dialog.passphrase:JA:パスフレーズ
 server_connect_dialog.passphrase:PL:Hasło
+server_connect_dialog.passphrase:CS:Heslo
 # Translation missing (New!)
 
 
@@ -8522,6 +8540,7 @@ ftp_connect.nb_connection_retries:HU:Próbálkozások száma
 ftp_connect.nb_connection_retries:zh_TW:連線重試次數
 ftp_connect.nb_connection_retries:JA:接続の再試行の数
 ftp_connect.nb_connection_retries:PL:Liczba ponowień połączenia
+ftp_connect.nb_connection_retries:CS:Počet opakování pokusů o připojení
 # Translation missing (New!)
 
 
@@ -8546,6 +8565,7 @@ ftp_connect.retry_delay:HU:Várakozás a próbálkozások között (másodpercbe
 ftp_connect.retry_delay:zh_TW:重試延遲時間(秒)
 ftp_connect.retry_delay:JA:再試行間の遅延 (秒)
 ftp_connect.retry_delay:PL:Opóźnienie między ponowieniem połączenia (w sekundach)
+ftp_connect.retry_delay:CS:Prodleva mezi pokusy (v sekundách)
 # Translation missing (New!)
 
 
@@ -8827,6 +8847,7 @@ auth_dialog.connect_as:HU:Csatlakozás mint
 auth_dialog.connect_as:zh_TW:連線為
 auth_dialog.connect_as:JA:名義
 auth_dialog.connect_as:PL:Połącz jako
+auth_dialog.connect_as:CS:Připojit jako 
 # Translation missing (New!)
 
 
@@ -8853,6 +8874,7 @@ auth_dialog.authentication_failed:HU:A hitelesítés sikertelen
 auth_dialog.authentication_failed:zh_TW:驗證失敗
 auth_dialog.authentication_failed:JA:認証が失敗しました
 auth_dialog.authentication_failed:PL:Autentykacja nieudana
+auth_dialog.authentication_failed:CS:Ověření se nezdařilo
 # Translation missing (New!)
 
 
@@ -9337,7 +9359,7 @@ image_viewer.zoom_in:EN:Zoom in
 image_viewer.zoom_in:FR:Zoomer
 image_viewer.zoom_in:DE:Hinein zoomen
 image_viewer.zoom_in:ES:Acercar
-image_viewer.zoom_in:CS:Zvětšit
+image_viewer.zoom_in:CS:Přiblížit
 image_viewer.zoom_in:zh_TW:放大
 image_viewer.zoom_in:PL:Powiększ
 image_viewer.zoom_in:HU:Nagyít
@@ -9358,7 +9380,7 @@ image_viewer.zoom_out:EN:Zoom out
 image_viewer.zoom_out:FR:Dézoomer
 image_viewer.zoom_out:DE:Heraus zoomen
 image_viewer.zoom_out:ES:Alejar
-image_viewer.zoom_out:CS:Zmenšit
+image_viewer.zoom_out:CS:Oddálit
 image_viewer.zoom_out:zh_TW:縮小
 image_viewer.zoom_out:PL:Pomniejsz
 image_viewer.zoom_out:HU:Kicsinyít
@@ -9663,7 +9685,7 @@ shortcuts_dialog.quick_search.start_search:FR:Entrez un caractère pour commence
 shortcuts_dialog.quick_search.start_search:RO:Introduceți orice caracter pentru a începe o căutare rapidă
 shortcuts_dialog.quick_search.start_search:SL:Vnesi kateri koli znak za začetek hitrega iskanja
 shortcuts_dialog.quick_search.start_search:IT:Batti un tasto per iniziare una ricerca rapida
-shortcuts_dialog.quick_search.start_search:CS:Vepsáním libovolného znaku spustíte rychlé hledání
+shortcuts_dialog.quick_search.start_search:CS:Vepsáním libovolného znaku zahájíte rychlé hledání
 shortcuts_dialog.quick_search.start_search:zh_TW:輸入任何字元來啟用快速搜尋
 shortcuts_dialog.quick_search.start_search:DE:Geben Sie ein beliebiges Zeichen ein um die Schnellsuche zu starten
 shortcuts_dialog.quick_search.start_search:zh_CN:键入任何字符启用快速搜索
@@ -11082,6 +11104,7 @@ prefs_dialog.show_splash_screen:HU:Indítóképernyő megjelenítése
 prefs_dialog.show_splash_screen:zh_TW:顯示啟動歡迎畫面
 prefs_dialog.show_splash_screen:JA:スプラッシュ画面を表示する
 prefs_dialog.show_splash_screen:PL:Pokaż ekran powitalny
+prefs_dialog.show_splash_screen:CS:Zobrazit uvítací obrázek
 # Translation missing (New!)
 
 
@@ -13202,7 +13225,7 @@ color_chooser.recent:SK:Naposledy použité
 color_chooser.recent:SL:Nedaven
 color_chooser.recent:RU:Предыдущий
 color_chooser.recent:DE:Bisherige
-color_chooser.recent:CS:Poslední použité
+color_chooser.recent:CS:Naposledy použité
 color_chooser.recent:IT:Recente
 color_chooser.recent:PL:Ostatnie
 color_chooser.recent:JA:最近
@@ -13282,6 +13305,7 @@ batch_rename_dialog.title:DE:Mehrfach Umbenennung
 batch_rename_dialog.title:HU:Csoportos átnevezés
 batch_rename_dialog.title:zh_TW:批次改名
 batch_rename_dialog.title:JA:名前の一括変更
+batch_rename_dialog.title:CS:Dávkové přejmenování
 # Translation missing (New!)
 
 
@@ -13305,6 +13329,7 @@ batch_rename_dialog.mask:DE:Umbenennungs Muster
 batch_rename_dialog.mask:HU:Átnevezési minta
 batch_rename_dialog.mask:zh_TW:改名樣式
 batch_rename_dialog.mask:JA:名前の変更パターン
+batch_rename_dialog.mask:CS:Maska pro přejmenování
 # Translation missing (New!)
 
 
@@ -13328,6 +13353,7 @@ batch_rename_dialog.search_replace:DE:Suchen & Ersetzen
 batch_rename_dialog.search_replace:HU:Keresés és Csere
 batch_rename_dialog.search_replace:zh_TW:尋找並取代
 batch_rename_dialog.search_replace:JA:検索と置換
+batch_rename_dialog.search_replace:CS:Najít & nahradit
 # Translation missing (New!)
 
 
@@ -13351,6 +13377,7 @@ batch_rename_dialog.search_for:DE:Suche nach
 batch_rename_dialog.search_for:HU:Keresett szöveg
 batch_rename_dialog.search_for:zh_TW:尋找
 batch_rename_dialog.search_for:JA:検索する文字列
+batch_rename_dialog.search_for:CS:Hledaný výraz
 # Translation missing (New!)
 
 
@@ -13374,6 +13401,7 @@ batch_rename_dialog.replace_with:DE:Ersetze durch
 batch_rename_dialog.replace_with:HU:Csere erre
 batch_rename_dialog.replace_with:zh_TW:取代為
 batch_rename_dialog.replace_with:JA:置換する文字列
+batch_rename_dialog.replace_with:CS:Bude nahrazen
 # Translation missing (New!)
 
 
@@ -13397,6 +13425,7 @@ batch_rename_dialog.counter:DE:Zähler
 batch_rename_dialog.counter:HU:Számláló
 batch_rename_dialog.counter:zh_TW:計數器
 batch_rename_dialog.counter:JA:カウンター
+batch_rename_dialog.counter:CS:Počítadlo
 # Translation missing (New!)
 
 
@@ -13420,6 +13449,7 @@ batch_rename_dialog.start_at:DE:Starte mit
 batch_rename_dialog.start_at:HU:Kezdés ennél
 batch_rename_dialog.start_at:zh_TW:開始於
 batch_rename_dialog.start_at:JA:開始
+batch_rename_dialog.start_at:CS:Počítat od
 # Translation missing (New!)
 
 
@@ -13443,6 +13473,7 @@ batch_rename_dialog.step_by:DE:Schrittweite
 batch_rename_dialog.step_by:HU:Növekmény
 batch_rename_dialog.step_by:zh_TW:每次漸增
 batch_rename_dialog.step_by:JA:増加
+batch_rename_dialog.step_by:CS:Přírůstek
 # Translation missing (New!)
 
 
@@ -13465,6 +13496,7 @@ batch_rename_dialog.format:HU:Formátum
 batch_rename_dialog.format:zh_TW:格式
 batch_rename_dialog.format:JA:フォーマット
 batch_rename_dialog.format:PL:Format
+batch_rename_dialog.format:CS:Formát
 # Translation missing (New!)
 
 
@@ -13488,6 +13520,7 @@ batch_rename_dialog.upper_lower_case:DE:Groß/Kleinschreibung
 batch_rename_dialog.upper_lower_case:HU:Kisbetű - Nagybetű
 batch_rename_dialog.upper_lower_case:zh_TW:大小寫
 batch_rename_dialog.upper_lower_case:JA:大文字と小文字
+batch_rename_dialog.upper_lower_case:CS:Velikost písmen
 # Translation missing (New!)
 
 
@@ -13511,6 +13544,7 @@ batch_rename_dialog.no_change:DE:Unverändert
 batch_rename_dialog.no_change:HU:Változatlan
 batch_rename_dialog.no_change:zh_TW:無變更
 batch_rename_dialog.no_change:JA:変更しない
+batch_rename_dialog.no_change:CS:Beze změny
 # Translation missing (New!)
 
 
@@ -13534,6 +13568,7 @@ batch_rename_dialog.lower_case:DE:kleinschreibung
 batch_rename_dialog.lower_case:HU:kisbetű
 batch_rename_dialog.lower_case:zh_TW:小寫
 batch_rename_dialog.lower_case:JA:小文字にする
+batch_rename_dialog.lower_case:CS:malá písmena
 # Translation missing (New!)
 
 
@@ -13557,6 +13592,7 @@ batch_rename_dialog.upper_case:DE:GROSSSCHREIBUNG
 batch_rename_dialog.upper_case:HU:NAGYBETŰ
 batch_rename_dialog.upper_case:zh_TW:大寫
 batch_rename_dialog.upper_case:JA:大文字にする
+batch_rename_dialog.upper_case:CS:VELKÁ PÍSMENA
 # Translation missing (New!)
 
 
@@ -13580,6 +13616,7 @@ batch_rename_dialog.first_upper:DE:Erster buchstabe gross
 batch_rename_dialog.first_upper:HU:Mondatkezdő nagybetű
 batch_rename_dialog.first_upper:zh_TW:首字大寫
 batch_rename_dialog.first_upper:JA:最初の文字を大文字にする
+batch_rename_dialog.first_upper:CS:První písmeno velké
 # Translation missing (New!)
 
 
@@ -13603,6 +13640,7 @@ batch_rename_dialog.word:DE:Erster Buchstabe Pro Wort Gross
 batch_rename_dialog.word:HU:Szókezdő nagybetű
 batch_rename_dialog.word:zh_TW:每個詞的首字
 batch_rename_dialog.word:JA:単語の最初の文字を大文字にする
+batch_rename_dialog.word:CS:První Písmena Velká
 # Translation missing (New!)
 
 
@@ -13626,6 +13664,7 @@ batch_rename_dialog.old_name:DE:Alter Name
 batch_rename_dialog.old_name:HU:Régi név
 batch_rename_dialog.old_name:zh_TW:原名稱
 batch_rename_dialog.old_name:JA:古い名前
+batch_rename_dialog.old_name:CS:Původní jméno
 # Translation missing (New!)
 
 
@@ -13649,6 +13688,7 @@ batch_rename_dialog.new_name:DE:Neuer Name
 batch_rename_dialog.new_name:HU:Új név
 batch_rename_dialog.new_name:zh_TW:新名稱
 batch_rename_dialog.new_name:JA:新しい名前
+batch_rename_dialog.new_name:CS:Nové jméno
 # Translation missing (New!)
 
 
@@ -13672,6 +13712,7 @@ batch_rename_dialog.remove:DE:Entfernen
 batch_rename_dialog.remove:HU:Mozgat
 batch_rename_dialog.remove:zh_TW:移除
 batch_rename_dialog.remove:JA:削除
+batch_rename_dialog.remove:CS:Odstranit
 # Translation missing (New!)
 
 
@@ -13696,6 +13737,7 @@ batch_rename_dialog.block_name:DE:Beibehalten
 batch_rename_dialog.block_name:HU:Megtart
 batch_rename_dialog.block_name:zh_TW:保留
 batch_rename_dialog.block_name:JA:除外
+batch_rename_dialog.block_name:CS:Zachovat
 # Translation missing (New!)
 
 
@@ -13719,6 +13761,7 @@ batch_rename_dialog.range:HU:Tartomány
 batch_rename_dialog.range:zh_TW:範圍
 batch_rename_dialog.range:NL:Gebied
 batch_rename_dialog.range:JA:範囲
+batch_rename_dialog.range:CS:Rozsah
 # Translation missing (New!)
 
 
@@ -13742,6 +13785,7 @@ batch_rename_dialog.proceed_renaming:HU:%1 fájl átnevezve (összesen: %2). Fol
 batch_rename_dialog.proceed_renaming:zh_TW:%1 個檔案(全部 %2 個)將會被重新命名. 請確認要執行 ?
 batch_rename_dialog.proceed_renaming:JA:%2 中 %1 個のファイルの名前が変更されます。続行しますか?
 batch_rename_dialog.proceed_renaming:PL:%1 nazw plików z %2 będzie zmienionych. Czy kontynuować?
+batch_rename_dialog.proceed_renaming:CS:%1 z %2 souborů bude přejmenováno. Chcete pokračovat?
 # Translation missing (New!)
 
 
@@ -13764,6 +13808,7 @@ batch_rename_dialog.duplicate_names:DE:Doppelte Namen!
 batch_rename_dialog.duplicate_names:HU:Azonos megnevezések!
 batch_rename_dialog.duplicate_names:zh_TW:重覆的名稱 !
 batch_rename_dialog.duplicate_names:JA:重複する名前です!
+batch_rename_dialog.duplicate_names:CS:Stejné jméno se již vyskytuje!
 # Translation missing (New!)
 
 
@@ -13792,6 +13837,7 @@ parent_folders_quick_list.empty_message:HU:A jelenlegi helynek nincs felsőbb al
 parent_folders_quick_list.empty_message:zh_TW:目前位置沒有上一層
 parent_folders_quick_list.empty_message:JA:現在の場所には親がありません
 parent_folders_quick_list.empty_message:PL:Bieżąca lokalizacja nie posiada katalogu nadrzędnego
+parent_folders_quick_list.empty_message:CS:Stávající umístění nemá nadřazenou složku
 # Translation missing (New!)
 
 
@@ -13813,6 +13859,7 @@ recent_locations_quick_list.empty_message:HU:Nincsenek legutóbbi helyek
 recent_locations_quick_list.empty_message:zh_TW:沒有最近開啟位置
 recent_locations_quick_list.empty_message:JA:最近の場所がありません
 recent_locations_quick_list.empty_message:PL:Brak ostanich lokalizacji
+recent_locations_quick_list.empty_message:CS:Dříve navštívená umístění nebyla nalezena
 # Translation missing (New!)
 
 
@@ -13833,6 +13880,7 @@ recent_executed_files_quick_list.empty_message:HU:Nincsenek legutóbbi futtatott
 recent_executed_files_quick_list.empty_message:zh_TW:沒有最近執行檔案
 recent_executed_files_quick_list.empty_message:JA:最近実行したファイルがありません
 recent_executed_files_quick_list.empty_message:PL:Brak ostatnio uruchamianych plików
+recent_executed_files_quick_list.empty_message:CS:Dříve spuštěné soubory nebyly nalezeny
 # Translation missing (New!)
 
 
