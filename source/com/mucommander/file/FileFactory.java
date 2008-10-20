@@ -27,6 +27,7 @@ import com.mucommander.file.icon.impl.SwingFileIconProvider;
 import com.mucommander.file.impl.local.LocalFile;
 import com.mucommander.file.util.PathTokenizer;
 import com.mucommander.file.util.PathUtils;
+import com.mucommander.runtime.JavaVersions;
 import com.mucommander.runtime.OsFamilies;
 import com.mucommander.util.Enumerator;
 
@@ -136,7 +137,10 @@ public class FileFactory {
         registerArchiveFormat(new com.mucommander.file.impl.iso.IsoFormatProvider());
         registerArchiveFormat(new com.mucommander.file.impl.ar.ArFormatProvider());
         registerArchiveFormat(new com.mucommander.file.impl.lst.LstFormatProvider());
-        registerArchiveFormat(new com.mucommander.file.impl.rar.RarFormatProvider());
+
+        // Register this provider only if running Java 1.5 or up as it uses the Java 1.5 API
+        if(JavaVersions.JAVA_1_5.isCurrentOrHigher())
+            registerArchiveFormat(new com.mucommander.file.impl.rar.RarFormatProvider());
 
         // Set the default FileIconProvider instance
         defaultFileIconProvider = new SwingFileIconProvider();
