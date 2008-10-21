@@ -177,6 +177,8 @@ Bug fixes:
 - Fixed a crash occurring on 64-bit versions of Windows (bug #57).
 - Fixed volumes not appearing in the drive button on Unix-based OSes (other than
   Mac OS X) under certain circumstances. Fix contributed by Johann Schmitz.
+- Fixed the main menu bar which could get selected when pressing Alt+Tab
+  (bug #89). 
 
 Known issues:
 - Korean, Simplified Chinese, Slovenian and Slovak translations are not 
