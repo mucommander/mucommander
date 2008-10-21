@@ -181,27 +181,25 @@ Bug fixes:
   (bug #89). 
 
 Known issues:
-- Korean, Simplified Chinese, Slovenian and Slovak translations are not 
-  up-to-date.
-- SFTP support not available under Java 1.4, requires Java 1.5 or higher.
+- Some translations are not up-to-date. For more information, see:
+  http://www.mucommander.com/forums/viewtopic.php?f=6&t=442 .
+- RAR and SFTP support are only available under Java 1.5 or higher.
 - Executable permissions are not preserved properly for local files prior to
   Java 1.6.
 - SMB support may not work properly on non multi-language JRE.
-- Access to public SMB shares require credentials.
 - 'Copy files to clipboard' not working with some applications (files are not
   pasted).
-- Mac OS X : 'Sort by' keyboard shortcuts in menu show Command modifier instead
-  of Ctrl, OS X's keyboard navigation shortcuts must be disabled in 'System
-  Preferences' for them to work properly.
-- Mac OS X : text fields don't work correctly when using a fractionally-scaled
+- Mac OS X: some keyboard shortcuts are displayed in the menu as ⌘+KEY
+  where it's actually Ctrl+KEY (see bug #3)
+- Mac OS X: some keyboard shortcuts may conflict with global system shortcuts.
+- Mac OS X: text fields don't work correctly when using a fractionally-scaled
   font (known Java bug,
    http://lists.apple.com/archives/Java-dev/2005/May/msg00670.html).
-- Editable combo boxes have keyboard navigation issues under Java 1.6.
 - The bookmark file system doesn't allow users to specify which credentials
   they wish to use when selecting a bookmark that needs authentification, it
   will default to the first in the list.
 - Authentication issues when using several sets of credentials (login/password)
-  on the same server.
+  for the same server (see bug #76).
 - Untrusted HTTPS connections are allowed without a warning.
 
 
