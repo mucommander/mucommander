@@ -18,23 +18,19 @@
 
 package com.mucommander.file.impl.rar.provider;
 
-import java.io.BufferedOutputStream;
-import java.io.Closeable;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.PipedInputStream;
-import java.io.PipedOutputStream;
-import java.util.Collection;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadFactory;
-
 import com.mucommander.Debug;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.impl.rar.provider.de.innosystec.unrar.Archive;
 import com.mucommander.file.impl.rar.provider.de.innosystec.unrar.exception.RarException;
 import com.mucommander.file.impl.rar.provider.de.innosystec.unrar.exception.RarExceptionType;
 import com.mucommander.file.impl.rar.provider.de.innosystec.unrar.rarfile.FileHeader;
+import com.mucommander.io.FailSafePipedInputStream;
+
+import java.io.*;
+import java.util.Collection;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadFactory;
 
 /**
  * 
@@ -60,7 +56,13 @@ public class RarFile {
     public RarFile(AbstractFile file) throws IOException {
     	this.file = file;
     	RarDebug.trace("RAR: creating rar archive for \"" + file.getAbsolutePath() +"\"");
-    	archive = new Archive(file.getInputStream());
+    	InputStream fileIn = file.getInputStream();
+        try {
+            archive = new Archive(fileIn);
+        }
+        finally {
+            fileIn.close();
+        }
     }
 
     /**
@@ -80,32 +82,44 @@ public class RarFile {
         if (header.isSplitAfter())
     		throw new RarException(RarExceptionType.mvNotImplemented);
     	
-		final PipedInputStream in = new PipedInputStream();
+		final FailSafePipedInputStream in = new FailSafePipedInputStream();
 		final PipedOutputStream out = new PipedOutputStream(in);
 
 		threadPool.execute(new Runnable() {
 			public void run() {
 		        BufferedOutputStream bufferStream = null;
-		        try {		        	
+                InputStream fileIn1 = null;
+                InputStream fileIn2 = null;
+                try {
 		            bufferStream = new BufferedOutputStream(out);
 		            boolean isSolid = header.isSolid();
-		            archive.extractEntry(isSolid, header, file.getInputStream(), bufferStream, isSolid ? file.getInputStream() : null);
-		            //flush remaining output
+		            fileIn1 = file.getInputStream();
+                    fileIn2 = isSolid ? file.getInputStream() : null;
+
+                    archive.extractEntry(isSolid, header, fileIn1, bufferStream, fileIn2);
+		            // flush remaining output
 		            bufferStream.flush();
 		        } catch (Exception ex) {
 		        	RarDebug.trace("RAR: got error while extracting entry \"" + header.getFileNameString() +"\": " + ex.getMessage());
-		        	
-		        	// close the input-stream - it would raise an error at muCommander level.		        	
-		        	close(in);
-					
-		            //Its expected for the reader to close the stream...
-		            //wrap and throw (the executor creates a new thread on error)
+
+                    // Have the PipedInputStream throw this exception when returning from a blocking method (e.g. read() or close())
+                    // or the next time one is called.
+                    // If the Exception is an IOException instance, use it directly. If it isn't, create a new
+                    // IOException with the original message.
+                    in.setExternalFailure(ex instanceof IOException?(IOException)ex:new IOException(ex.getMessage()));
+
+                    // Its expected for the reader to close the stream...
+		            // wrap and throw (the executor creates a new thread on error)
 		            if(ex.getCause() != null && !ex.getCause().getLocalizedMessage().equals("Pipe closed"))
 		                throw new RuntimeException(ex);
 		        } finally {
-		            //Close this stream otherwise the reader can await eternally
+		            // Close this stream otherwise the reader can await eternally
 		            close(bufferStream);
-		        }
+
+                    // Close the file inputstream(s)
+                    close(fileIn1);
+                    close(fileIn2);
+                }
 		    }
 		});
 		
@@ -126,4 +140,6 @@ public class RarFile {
             }
         }
     }
+
+
 }
