@@ -475,11 +475,11 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
      * @param defaultValue the default value for the icon scale factor if the configuration variable has no value
      * @return a combo box that allows to choose a size for a certain type of icon
      */
-    private PrefComboBox createIconSizeCombo(String confVar, float defaultValue) {
+    private PrefComboBox createIconSizeCombo(final String confVar, float defaultValue) {
     	PrefComboBox iconSizeCombo = new PrefComboBox() {
 			public boolean hasChanged() {
 				return !String.valueOf(ICON_SCALE_FACTORS[getSelectedIndex()]).equals(
-						MuConfiguration.getVariable(MuConfiguration.TOOLBAR_ICON_SCALE));
+						MuConfiguration.getVariable(confVar));
 			}
     	};
 
