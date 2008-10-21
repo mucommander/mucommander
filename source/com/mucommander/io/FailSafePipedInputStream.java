@@ -33,6 +33,7 @@ import java.io.PipedOutputStream;
  * throw an <code>IOException</code> when the stream is closed from another thread in the midst of their execution.
  * </p>
  *
+ * @author Maxence Bernard
  */
 public class FailSafePipedInputStream extends PipedInputStream {
 
