@@ -58,11 +58,11 @@ public class FailSafePipedInputStream extends PipedInputStream {
     }
 
     /**
-     * Sets the external IOException to be subsequently thrown by <code>read</code>, <code>skip</code> and
+     * Sets an IOException to be subsequently thrown by <code>read</code>, <code>skip</code> and
      * <code>available</code> methods. This method calls {@link #close()} to have any other thread blocked in a
      * read/skip/available return immediately and throw the specified exception.
      *
-     * @param failure the IOException to be thrown by read, skip and available methods, null for none
+     * @param failure the IOException to be thrown by read, skip and available methods, <code>null</code> for none
      */
     public void setExternalFailure(IOException failure) {
         this.failure = failure;
