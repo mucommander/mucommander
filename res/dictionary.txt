@@ -11126,6 +11126,7 @@ prefs_dialog.show_splash_screen:zh_TW:顯示啟動歡迎畫面
 prefs_dialog.show_splash_screen:JA:スプラッシュ画面を表示する
 prefs_dialog.show_splash_screen:PL:Pokaż ekran powitalny
 prefs_dialog.show_splash_screen:CS:Zobrazit uvítací obrázek
+prefs_dialog.show_splash_screen:IT:Mostra pannello di apertura
 # Translation missing (New!)
 
 
