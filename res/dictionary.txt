@@ -13927,6 +13927,7 @@ recent_executed_files_quick_list.empty_message:zh_TW:沒有最近執行檔案
 recent_executed_files_quick_list.empty_message:JA:最近実行したファイルがありません
 recent_executed_files_quick_list.empty_message:PL:Brak ostatnio uruchamianych plików
 recent_executed_files_quick_list.empty_message:CS:Dříve spuštěné soubory nebyly nalezeny
+recent_executed_files_quick_list.empty_message:IT:Nessun file eseguibile recente
 # Translation missing (New!)
 
 
