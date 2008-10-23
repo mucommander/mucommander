@@ -311,6 +311,7 @@ change:zh_TW:變更
 change:JA:変更
 change:CS:Změnit
 change:IT:Cambia
+change:pt_BR:Alterar
 # Translation missing (New!)
 
 
@@ -2797,6 +2798,7 @@ com.mucommander.ui.action.DeleteAction.tooltip:NL:Gemarkeerde bestanden verwijde
 com.mucommander.ui.action.DeleteAction.tooltip:JA:マークされたファイルを削除します
 com.mucommander.ui.action.DeleteAction.tooltip:CS:Je-li možné, označené přesunout do Koše
 com.mucommander.ui.action.DeleteAction.tooltip:IT:Elimina file selezionati usando il cestino quando possibile
+com.mucommander.ui.action.DeleteAction.tooltip:pt_BR:Apagar arquivos selecionados
 # The following entries need to be updated to indicate that the system trash is used when it is available
 com.mucommander.ui.action.DeleteAction.tooltip:ES:Elimiar los ficheros marcados
 com.mucommander.ui.action.DeleteAction.tooltip:RU:Удаление выделенных файлов
@@ -2831,6 +2833,7 @@ com.mucommander.ui.action.PermanentDeleteAction.label:zh_TW:永久刪除
 com.mucommander.ui.action.PermanentDeleteAction.label:JA:永久に削除
 com.mucommander.ui.action.PermanentDeleteAction.label:CS:Smazat přímo
 com.mucommander.ui.action.PermanentDeleteAction.label:IT:Elimina definitivamente
+com.mucommander.ui.action.PermanentDeleteAction.label:pt_BR:Remover definitivamente
 # Translation missing (New!)
 
 
@@ -2859,6 +2862,7 @@ com.mucommander.ui.action.PermanentDeleteAction.tooltip:zh_TW:永久刪除標記
 com.mucommander.ui.action.PermanentDeleteAction.tooltip:JA:システムのごみ箱を使用せずにマークされたファイルを削除します
 com.mucommander.ui.action.PermanentDeleteAction.tooltip:CS:Smazat označené soubory bez použití systémového Koše
 com.mucommander.ui.action.PermanentDeleteAction.tooltip:IT:Elimina file selezionati senza usare il cestino
+com.mucommander.ui.action.PermanentDeleteAction.tooltip:pt_BR:Remover arquivos marcados definitivamente
 # Translation missing (New!)
 
 
@@ -3245,6 +3249,7 @@ com.mucommander.ui.action.GoToParentInOtherPanelAction.label:JA:他のパネル�
 com.mucommander.ui.action.GoToParentInOtherPanelAction.label:PL:Idź do katalogu nadrzędnego w drugim panelu
 com.mucommander.ui.action.GoToParentInOtherPanelAction.label:CS:O úroveň výš ve druhém panelu
 com.mucommander.ui.action.GoToParentInOtherPanelAction.label:IT:Vai su superiore nell'altro pannello
+com.mucommander.ui.action.GoToParentInOtherPanelAction.label:pt_BR:Exibir o nível superior em outro painel
 # Translation missing (New!)
 
 
@@ -3271,6 +3276,7 @@ com.mucommander.ui.action.GoToParentInBothPanelsAction.label:JA:両方のパネ�
 com.mucommander.ui.action.GoToParentInBothPanelsAction.label:PL:Idź do katalogu nadrzędnego w obu panelach
 com.mucommander.ui.action.GoToParentInBothPanelsAction.label:CS:O úroveň výš v obou panelech
 com.mucommander.ui.action.GoToParentInBothPanelsAction.label:IT:Vai su superiore in entrambi i pannelli
+com.mucommander.ui.action.GoToParentInBothPanelsAction.label:pt_BR:Exibir o nível superior em ambos os paineis
 # Translation missing (New!)
 
 
@@ -4563,6 +4569,7 @@ com.mucommander.ui.action.ToggleTreeAction.label:zh_TW:樹狀檢視
 com.mucommander.ui.action.ToggleTreeAction.label:JA:ツリー ビューの表示
 com.mucommander.ui.action.ToggleTreeAction.label:CS:Zobrazit strom složek
 com.mucommander.ui.action.ToggleTreeAction.label:IT:Visualizza struttura
+com.mucommander.ui.action.ToggleTreeAction.label:pt_BR:Visualização em árvore
 # Translation missing (New!)
 
 
@@ -5085,6 +5092,7 @@ com.mucommander.ui.action.MaximizeWindowAction.label:JA:最大化
 com.mucommander.ui.action.MaximizeWindowAction.label:PL:Maksymalizuj
 com.mucommander.ui.action.MaximizeWindowAction.label:CS:Maximalizovat
 com.mucommander.ui.action.MaximizeWindowAction.label:IT:Massimizza
+com.mucommander.ui.action.MaximizeWindowAction.label:pt_BR:Maximizar
 # Translation missing (New!)
 
 
@@ -5108,6 +5116,7 @@ com.mucommander.ui.action.MaximizeWindowAction.label.mac_os_x:HU:Nagyítás
 com.mucommander.ui.action.MaximizeWindowAction.label.mac_os_x:JA:ズーム
 com.mucommander.ui.action.MaximizeWindowAction.label.mac_os_x:CS:Měřítko
 com.mucommander.ui.action.MaximizeWindowAction.label.mac_os_x:IT:Zoom
+com.mucommander.ui.action.MaximizeWindowAction.label.mac_os_x:pt_BR:Zoom
 # Translation missing (New!)
 
 
@@ -5134,6 +5143,7 @@ com.mucommander.ui.action.MinimizeWindowAction.label:JA:最小化
 com.mucommander.ui.action.MinimizeWindowAction.label:PL:Minimalizuj
 com.mucommander.ui.action.MinimizeWindowAction.label:CS:Minimalizovat
 com.mucommander.ui.action.MinimizeWindowAction.label:IT:Minimizza
+com.mucommander.ui.action.MinimizeWindowAction.label:pt_BR:Minimizar
 # Translation missing (New!)
 
 
@@ -5178,6 +5188,7 @@ com.mucommander.ui.action.GoToDocumentationAction.label:JA:オンライン ド�
 com.mucommander.ui.action.GoToDocumentationAction.label:PL:Dokumentacja online
 com.mucommander.ui.action.GoToDocumentationAction.label:CS:Dokumentace na webu
 com.mucommander.ui.action.GoToDocumentationAction.label:IT:Documentazione in linea
+com.mucommander.ui.action.GoToDocumentationAction.label:pt_BR:Documentação online
 # Translation missing (New!)
 
 
@@ -5200,6 +5211,7 @@ com.mucommander.ui.action.ShowParentFoldersQLAction.label:JA:親フォルダー
 com.mucommander.ui.action.ShowParentFoldersQLAction.label:PL:Katalogi nadrzędne
 com.mucommander.ui.action.ShowParentFoldersQLAction.label:CS:Nadřazené složky
 com.mucommander.ui.action.ShowParentFoldersQLAction.label:IT:Cartelle superiori
+com.mucommander.ui.action.ShowParentFoldersQLAction.label:pt_BR:Diretório superior
 # Translation missing (New!)
 
 
@@ -5223,6 +5235,7 @@ com.mucommander.ui.action.ShowRecentLocationsQLAction.label:JA:最近の場所
 com.mucommander.ui.action.ShowRecentLocationsQLAction.label:PL:Ostatnie lokalizacje
 com.mucommander.ui.action.ShowRecentLocationsQLAction.label:CS:Dříve navštívená umístění
 com.mucommander.ui.action.ShowRecentLocationsQLAction.label:IT:Percorsi recenti
+com.mucommander.ui.action.ShowRecentLocationsQLAction.label:pt_BR:Locais recentes
 # Translation missing (New!)
 
 
@@ -5245,6 +5258,7 @@ com.mucommander.ui.action.ShowRecentExecutedFilesQLAction.label:JA:最近実行�
 com.mucommander.ui.action.ShowRecentExecutedFilesQLAction.label:PL:Ostatnio wykonywane pliki
 com.mucommander.ui.action.ShowRecentExecutedFilesQLAction.label:CS:Dříve spuštěné soubory
 com.mucommander.ui.action.ShowRecentExecutedFilesQLAction.label:IT:File eseguibili recenti
+com.mucommander.ui.action.ShowRecentExecutedFilesQLAction.label:pt_BR:Arquivos executados recentemente
 # Translation missing (New!)
 
 
@@ -5446,6 +5460,7 @@ quick_lists_menu:JA:クイック リスト
 quick_lists_menu:PL:Szybkie listy
 quick_lists_menu:CS:Rychlé přehledy
 quick_lists_menu:IT:Liste rapide
+quick_lists_menu:pt_BR:Quick lists
 # Translation missing (New!)
 
 
@@ -8455,6 +8470,7 @@ server_connect_dialog.private_key:zh_TW:私鑰
 server_connect_dialog.private_key:JA:プライベート キー
 server_connect_dialog.private_key:CS:Soukromý klíč
 server_connect_dialog.private_key:IT:Chiave privata
+server_connect_dialog.private_key:pt_BR:Chave privada
 # Translation missing (New!)
 
 
@@ -8485,6 +8501,7 @@ server_connect_dialog.passphrase:JA:パスフレーズ
 server_connect_dialog.passphrase:PL:Hasło
 server_connect_dialog.passphrase:CS:Heslo
 server_connect_dialog.passphrase:IT:Password
+server_connect_dialog.passphrase:pt_BR:Frase secreta
 # Translation missing (New!)
 
 
@@ -8559,6 +8576,7 @@ ftp_connect.nb_connection_retries:JA:接続の再試行の数
 ftp_connect.nb_connection_retries:PL:Liczba ponowień połączenia
 ftp_connect.nb_connection_retries:CS:Počet opakování pokusů o připojení
 ftp_connect.nb_connection_retries:IT:Numero di tentativi di connessione
+ftp_connect.nb_connection_retries:pt_BR:Numero de tentativas de conexão
 # Translation missing (New!)
 
 
@@ -8585,6 +8603,7 @@ ftp_connect.retry_delay:JA:再試行間の遅延 (秒)
 ftp_connect.retry_delay:PL:Opóźnienie między ponowieniem połączenia (w sekundach)
 ftp_connect.retry_delay:CS:Prodleva mezi pokusy (v sekundách)
 ftp_connect.retry_delay:IT:Ritardo tra tentativi (in secondi)
+ftp_connect.retry_delay:pt_BR:Tempo de espera entre as tentativas (segundos)
 # Translation missing (New!)
 
 
@@ -8868,6 +8887,7 @@ auth_dialog.connect_as:JA:名義
 auth_dialog.connect_as:PL:Połącz jako
 auth_dialog.connect_as:CS:Připojit jako 
 auth_dialog.connect_as:IT:Connetti come
+auth_dialog.connect_as:pt_BR:Conectar como
 # Translation missing (New!)
 
 
@@ -8896,6 +8916,7 @@ auth_dialog.authentication_failed:JA:認証が失敗しました
 auth_dialog.authentication_failed:PL:Autentykacja nieudana
 auth_dialog.authentication_failed:CS:Ověření se nezdařilo
 auth_dialog.authentication_failed:IT:Autenticazione fallita
+auth_dialog.authentication_failed:pt_BR:Falha na autenticação
 # Translation missing (New!)
 
 
@@ -11127,6 +11148,7 @@ prefs_dialog.show_splash_screen:JA:スプラッシュ画面を表示する
 prefs_dialog.show_splash_screen:PL:Pokaż ekran powitalny
 prefs_dialog.show_splash_screen:CS:Zobrazit uvítací obrázek
 prefs_dialog.show_splash_screen:IT:Mostra pannello di apertura
+prefs_dialog.show_splash_screen:pt_BR:Show splash screen
 # Translation missing (New!)
 
 
@@ -13329,6 +13351,7 @@ batch_rename_dialog.title:zh_TW:批次改名
 batch_rename_dialog.title:JA:名前の一括変更
 batch_rename_dialog.title:CS:Dávkové přejmenování
 batch_rename_dialog.title:IT:Multi rinomina
+batch_rename_dialog.title:pt_BR:Multipla renomeação
 # Translation missing (New!)
 
 
@@ -13354,6 +13377,7 @@ batch_rename_dialog.mask:zh_TW:改名樣式
 batch_rename_dialog.mask:JA:名前の変更パターン
 batch_rename_dialog.mask:CS:Maska pro přejmenování
 batch_rename_dialog.mask:IT:Maschera di rinomina
+batch_rename_dialog.mask:pt_BR:Modelo de renomeação
 # Translation missing (New!)
 
 
@@ -13379,6 +13403,7 @@ batch_rename_dialog.search_replace:zh_TW:尋找並取代
 batch_rename_dialog.search_replace:JA:検索と置換
 batch_rename_dialog.search_replace:CS:Najít & nahradit
 batch_rename_dialog.search_replace:IT:Cerca & Sostituisci
+batch_rename_dialog.search_replace:pt_BR:Pesquisar e Substituir
 # Translation missing (New!)
 
 
@@ -13404,6 +13429,7 @@ batch_rename_dialog.search_for:zh_TW:尋找
 batch_rename_dialog.search_for:JA:検索する文字列
 batch_rename_dialog.search_for:CS:Hledaný výraz
 batch_rename_dialog.search_for:IT:Cerca
+batch_rename_dialog.search_for:pt_BR:Pesquisar por
 # Translation missing (New!)
 
 
@@ -13429,6 +13455,7 @@ batch_rename_dialog.replace_with:zh_TW:取代為
 batch_rename_dialog.replace_with:JA:置換する文字列
 batch_rename_dialog.replace_with:CS:Bude nahrazen
 batch_rename_dialog.replace_with:IT:Sostituisci con
+batch_rename_dialog.replace_with:pt_BR:Substituir por
 # Translation missing (New!)
 
 
@@ -13454,6 +13481,7 @@ batch_rename_dialog.counter:zh_TW:計數器
 batch_rename_dialog.counter:JA:カウンター
 batch_rename_dialog.counter:CS:Počítadlo
 batch_rename_dialog.counter:IT:Contatore
+batch_rename_dialog.counter:pt_BR:Contador
 # Translation missing (New!)
 
 
@@ -13479,6 +13507,7 @@ batch_rename_dialog.start_at:zh_TW:開始於
 batch_rename_dialog.start_at:JA:開始
 batch_rename_dialog.start_at:CS:Počítat od
 batch_rename_dialog.start_at:IT:Inizia da
+batch_rename_dialog.start_at:pt_BR:Começar
 # Translation missing (New!)
 
 
@@ -13504,6 +13533,7 @@ batch_rename_dialog.step_by:zh_TW:每次漸增
 batch_rename_dialog.step_by:JA:増加
 batch_rename_dialog.step_by:CS:Přírůstek
 batch_rename_dialog.step_by:IT:Incremento
+batch_rename_dialog.step_by:pt_BR:Incrementar
 # Translation missing (New!)
 
 
@@ -13528,6 +13558,7 @@ batch_rename_dialog.format:JA:フォーマット
 batch_rename_dialog.format:PL:Format
 batch_rename_dialog.format:CS:Formát
 batch_rename_dialog.format:IT:Formato
+batch_rename_dialog.format:pt_BR:Formatar
 # Translation missing (New!)
 
 
@@ -13553,6 +13584,7 @@ batch_rename_dialog.upper_lower_case:zh_TW:大小寫
 batch_rename_dialog.upper_lower_case:JA:大文字と小文字
 batch_rename_dialog.upper_lower_case:CS:Velikost písmen
 batch_rename_dialog.upper_lower_case:IT:Maiuscolo/Minuscolo
+batch_rename_dialog.upper_lower_case:pt_BR:Maiúsculo/Minúsculo
 # Translation missing (New!)
 
 
@@ -13578,6 +13610,7 @@ batch_rename_dialog.no_change:zh_TW:無變更
 batch_rename_dialog.no_change:JA:変更しない
 batch_rename_dialog.no_change:CS:Beze změny
 batch_rename_dialog.no_change:IT:Invariato
+batch_rename_dialog.no_change:pt_BR:Inalterado
 # Translation missing (New!)
 
 
@@ -13603,6 +13636,7 @@ batch_rename_dialog.lower_case:zh_TW:小寫
 batch_rename_dialog.lower_case:JA:小文字にする
 batch_rename_dialog.lower_case:CS:malá písmena
 batch_rename_dialog.lower_case:IT:minuscolo
+batch_rename_dialog.lower_case:pt_BR:minúsculo
 # Translation missing (New!)
 
 
@@ -13628,6 +13662,7 @@ batch_rename_dialog.upper_case:zh_TW:大寫
 batch_rename_dialog.upper_case:JA:大文字にする
 batch_rename_dialog.upper_case:CS:VELKÁ PÍSMENA
 batch_rename_dialog.upper_case:IT:MAIUSCOLO
+batch_rename_dialog.upper_case:pt_BR:MAIÚSCULO
 # Translation missing (New!)
 
 
@@ -13653,6 +13688,7 @@ batch_rename_dialog.first_upper:zh_TW:首字大寫
 batch_rename_dialog.first_upper:JA:最初の文字を大文字にする
 batch_rename_dialog.first_upper:CS:První písmeno velké
 batch_rename_dialog.first_upper:IT:Prima lettera maiuscola
+batch_rename_dialog.first_upper:pt_BR:Primeira letra em maiúsculo
 # Translation missing (New!)
 
 
@@ -13678,6 +13714,7 @@ batch_rename_dialog.word:zh_TW:每個詞的首字
 batch_rename_dialog.word:JA:単語の最初の文字を大文字にする
 batch_rename_dialog.word:CS:První Písmena Velká
 batch_rename_dialog.word:IT:Prima Lettera Di Ogni Parola
+batch_rename_dialog.word:pt_BR:Primeira de cada palavra
 # Translation missing (New!)
 
 
@@ -13703,6 +13740,7 @@ batch_rename_dialog.old_name:zh_TW:原名稱
 batch_rename_dialog.old_name:JA:古い名前
 batch_rename_dialog.old_name:CS:Původní jméno
 batch_rename_dialog.old_name:IT:Vecchio nome
+batch_rename_dialog.old_name:pt_BR:Nome antigo
 # Translation missing (New!)
 
 
@@ -13728,6 +13766,7 @@ batch_rename_dialog.new_name:zh_TW:新名稱
 batch_rename_dialog.new_name:JA:新しい名前
 batch_rename_dialog.new_name:CS:Nové jméno
 batch_rename_dialog.new_name:IT:Nuovo nome
+batch_rename_dialog.new_name:pt_BR:Novo nome
 # Translation missing (New!)
 
 
@@ -13753,6 +13792,7 @@ batch_rename_dialog.remove:zh_TW:移除
 batch_rename_dialog.remove:JA:削除
 batch_rename_dialog.remove:CS:Odstranit
 batch_rename_dialog.remove:IT:Elimina
+batch_rename_dialog.remove:pt_BR:Remover
 # Translation missing (New!)
 
 
@@ -13779,6 +13819,7 @@ batch_rename_dialog.block_name:zh_TW:保留
 batch_rename_dialog.block_name:JA:除外
 batch_rename_dialog.block_name:CS:Zachovat
 batch_rename_dialog.block_name:IT:Conserva
+batch_rename_dialog.block_name:pt_BR:Preservar
 # Translation missing (New!)
 
 
@@ -13804,6 +13845,7 @@ batch_rename_dialog.range:NL:Gebied
 batch_rename_dialog.range:JA:範囲
 batch_rename_dialog.range:CS:Rozsah
 batch_rename_dialog.range:IT:Intervallo
+batch_rename_dialog.range:pt_BR:Intervalo
 # Translation missing (New!)
 
 
@@ -13829,6 +13871,7 @@ batch_rename_dialog.proceed_renaming:JA:%2 中 %1 個のファイルの名前が
 batch_rename_dialog.proceed_renaming:PL:%1 nazw plików z %2 będzie zmienionych. Czy kontynuować?
 batch_rename_dialog.proceed_renaming:CS:%1 z %2 souborů bude přejmenováno. Chcete pokračovat?
 batch_rename_dialog.proceed_renaming:IT:%1 file di %2 verranno rinominati. Vuoi continuare?
+batch_rename_dialog.proceed_renaming:pt_BR:%1 arquivos de %2 serão renomeados. Continuar?
 # Translation missing (New!)
 
 
@@ -13853,6 +13896,7 @@ batch_rename_dialog.duplicate_names:zh_TW:重覆的名稱 !
 batch_rename_dialog.duplicate_names:JA:重複する名前です!
 batch_rename_dialog.duplicate_names:CS:Stejné jméno se již vyskytuje!
 batch_rename_dialog.duplicate_names:IT:Nomi duplicati!
+batch_rename_dialog.duplicate_names:pt_BR:Nomes duplicados!
 # Translation missing (New!)
 
 
@@ -13883,6 +13927,7 @@ parent_folders_quick_list.empty_message:JA:現在の場所には親がありま�
 parent_folders_quick_list.empty_message:PL:Bieżąca lokalizacja nie posiada katalogu nadrzędnego
 parent_folders_quick_list.empty_message:CS:Stávající umístění nemá nadřazenou složku
 parent_folders_quick_list.empty_message:IT:Il percorso corrente non ha un livello superiore
+parent_folders_quick_list.empty_message:pt_BR:Localização atual não possue superior
 # Translation missing (New!)
 
 
@@ -13906,6 +13951,7 @@ recent_locations_quick_list.empty_message:JA:最近の場所がありません
 recent_locations_quick_list.empty_message:PL:Brak ostanich lokalizacji
 recent_locations_quick_list.empty_message:CS:Dříve navštívená umístění nebyla nalezena
 recent_locations_quick_list.empty_message:IT:Nessun percorso recente
+recent_locations_quick_list.empty_message:pt_BR:Nenhum local recente
 # Translation missing (New!)
 
 
@@ -13927,6 +13973,8 @@ recent_executed_files_quick_list.empty_message:zh_TW:沒有最近執行檔案
 recent_executed_files_quick_list.empty_message:JA:最近実行したファイルがありません
 recent_executed_files_quick_list.empty_message:PL:Brak ostatnio uruchamianych plików
 recent_executed_files_quick_list.empty_message:CS:Dříve spuštěné soubory nebyly nalezeny
+recent_executed_files_quick_list.empty_message:IT:Nessun file eseguibile recente
+recent_executed_files_quick_list.empty_message:pt_BR:Nenhum arquivo executado recentemente
 # Translation missing (New!)
 
 
