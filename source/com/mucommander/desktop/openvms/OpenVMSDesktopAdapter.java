@@ -16,21 +16,22 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.mucommander.desktop.linux;
+package com.mucommander.desktop.openvms;
 
-import com.mucommander.process.ProcessRunner;
+import com.mucommander.desktop.DefaultDesktopAdapter;
+import com.mucommander.runtime.OsFamilies;
 
 /**
- * @author Nicolas Rinaudo
+ * A desktop adapter for OpenVMS.
+ *
+ * <p>This adapter currently doesn't bring any improvement over {@link com.mucommander.desktop.DefaultDesktopAdapter} 
+ * -- its purpose is simply to bypass other desktop adapters tests, some of which are costly.</p>
+ *
+ * @author Maxence Bernard
  */
-public class GuessedKdeDesktopAdapter extends KdeDesktopAdapter {
-    public String toString() {return "KDE Desktop (guess)";}
+public class OpenVMSDesktopAdapter extends DefaultDesktopAdapter {
 
     public boolean isAvailable() {
-        try {
-            ProcessRunner.execute("kfmclient");
-            return true;
-        }
-        catch(Exception e) {return false;}
+        return OsFamilies.OPENVMS.isCurrent();
     }
 }
