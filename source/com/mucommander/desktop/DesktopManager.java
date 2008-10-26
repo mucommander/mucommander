@@ -23,6 +23,7 @@ import com.mucommander.desktop.linux.ConfiguredGnomeDesktopAdapter;
 import com.mucommander.desktop.linux.ConfiguredKdeDesktopAdapter;
 import com.mucommander.desktop.linux.GuessedGnomeDesktopAdapter;
 import com.mucommander.desktop.linux.GuessedKdeDesktopAdapter;
+import com.mucommander.desktop.openvms.OpenVMSDesktopAdapter;
 import com.mucommander.desktop.osx.OSXDesktopAdapter;
 import com.mucommander.desktop.windows.Win9xDesktopAdapter;
 import com.mucommander.desktop.windows.WinNtDesktopAdapter;
@@ -148,6 +149,7 @@ public class DesktopManager {
         registerAdapter(new ConfiguredGnomeDesktopAdapter());
 
         // Known OS adapters.
+        registerAdapter(new OpenVMSDesktopAdapter());
         registerAdapter(new OSXDesktopAdapter());
         registerAdapter(new Win9xDesktopAdapter());
         registerAdapter(new WinNtDesktopAdapter());
