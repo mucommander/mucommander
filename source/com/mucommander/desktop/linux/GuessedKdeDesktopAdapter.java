@@ -28,7 +28,7 @@ public class GuessedKdeDesktopAdapter extends KdeDesktopAdapter {
 
     public boolean isAvailable() {
         try {
-            ProcessRunner.execute("kmfclient");
+            ProcessRunner.execute("kfmclient");
             return true;
         }
         catch(Exception e) {return false;}
