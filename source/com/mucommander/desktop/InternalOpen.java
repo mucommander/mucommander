@@ -18,11 +18,11 @@
 
 package com.mucommander.desktop;
 
-import com.mucommander.file.AbstractFile;
-
-import java.awt.*;
+import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
+
+import com.mucommander.file.AbstractFile;
 
 /**
  * @author Nicolas Rinaudo
@@ -32,6 +32,7 @@ class InternalOpen extends LocalFileOperation {
     // -----------------------------------------------------------------------
     /** Underlying desktop instance. */
     private Desktop desktop;
+    private boolean initialized = false;
 
 
 
@@ -41,10 +42,16 @@ class InternalOpen extends LocalFileOperation {
      * Creates a new <code>InternalOpen</code> instance.
      */
     public InternalOpen() {
-        if(Desktop.isDesktopSupported())
-            desktop = Desktop.getDesktop();
     }
 
+    private Desktop getDesktop() {
+        if (!initialized) {
+            if(Desktop.isDesktopSupported())
+                desktop = Desktop.getDesktop();
+            initialized = true;
+        }
+        return desktop;
+    }
 
 
     // - DesktopOperation implementation -------------------------------------
@@ -60,11 +67,11 @@ class InternalOpen extends LocalFileOperation {
      * </p>
      * @return <code>true</code> if this operations is available, <code>false</code> otherwise.
      */
-    public boolean isAvailable() {return desktop != null && desktop.isSupported(Desktop.Action.OPEN);}
+    public boolean isAvailable() {return getDesktop() != null && getDesktop().isSupported(Desktop.Action.OPEN);}
 
     public void execute(AbstractFile file) throws IOException {
         if(isAvailable())
-            desktop.open(new File(file.getAbsolutePath()));
+            getDesktop().open(new File(file.getAbsolutePath()));
         else
             throw new UnsupportedOperationException();
     }

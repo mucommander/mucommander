@@ -26,6 +26,7 @@ import com.mucommander.conf.ValueList;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
 import com.mucommander.file.icon.CachedFileIconProvider;
+import com.mucommander.runtime.JavaVersions;
 import com.mucommander.runtime.OsFamilies;
 import com.mucommander.ui.icon.FileIcons;
 import com.mucommander.ui.main.table.Columns;
@@ -84,9 +85,8 @@ public class MuConfiguration {
     /** System notifications are enabled by default on platforms where a notifier is available and works well enough.
      * In particular, the system tray notifier is available under Linux+Java 1.6, but it doesn't work well so it is not
      * enabled by default. */
-    public static final boolean DEFAULT_ENABLE_SYSTEM_NOTIFICATIONS = com.mucommander.ui.notifier.AbstractNotifier.isAvailable()
-        && (OsFamilies.MAC_OS_X.isCurrent() || OsFamilies.WINDOWS.isCurrent());
-
+    public static final boolean DEFAULT_ENABLE_SYSTEM_NOTIFICATIONS = OsFamilies.MAC_OS_X.isCurrent() ||
+            (OsFamilies.WINDOWS.isCurrent() && JavaVersions.JAVA_1_6.isCurrentOrHigher());
 
     // - Shell variables -----------------------------------------------------
     // -----------------------------------------------------------------------

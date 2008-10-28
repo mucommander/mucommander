@@ -18,7 +18,7 @@
 
 package com.mucommander.desktop;
 
-import java.awt.*;
+import java.awt.Desktop;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -31,6 +31,7 @@ class InternalBrowse extends UrlOperation {
     // -----------------------------------------------------------------------
     /** Underlying desktop instance. */
     private Desktop desktop;
+    private boolean initialized = false;
 
 
 
@@ -40,11 +41,16 @@ class InternalBrowse extends UrlOperation {
      * Creates a new <code>InternalOpenUrl</code> instance.
      */
     public InternalBrowse() {
-        if(Desktop.isDesktopSupported())
-            desktop = Desktop.getDesktop();
     }
 
-
+    private Desktop getDesktop() {
+        if (!initialized) {
+            if(Desktop.isDesktopSupported())
+                desktop = Desktop.getDesktop();
+            initialized = true;
+        }
+        return desktop;
+    }
 
     // - BrowseOperation implementation --------------------------------------
     // -----------------------------------------------------------------------
@@ -59,7 +65,7 @@ class InternalBrowse extends UrlOperation {
      * </p>
      * @return <code>true</code> if this operations is available, <code>false</code> otherwise.
      */
-    public boolean isAvailable() {return desktop != null && desktop.isSupported(Desktop.Action.BROWSE);}
+    public boolean isAvailable() {return getDesktop() != null && getDesktop().isSupported(Desktop.Action.BROWSE);}
 
     /**
      * Opens the specified URL in the system's default browser.
@@ -69,7 +75,7 @@ class InternalBrowse extends UrlOperation {
     public void execute(URL url) throws IOException {
         // If java.awt.Desktop browsing is available, use it.
         if(isAvailable()) {
-            try {desktop.browse(url.toURI());}
+            try {getDesktop().browse(url.toURI());}
             catch(URISyntaxException e) {throw new IOException(e);}
         }
 
