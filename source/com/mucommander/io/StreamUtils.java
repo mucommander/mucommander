@@ -30,7 +30,7 @@ public class StreamUtils {
 
     /**
      * This method is a shorthand for {@link #copyStream(java.io.InputStream, java.io.OutputStream, int)} called with a
-     * {@link BufferPool#DEFAULT_BUFFER_SIZE default buffer size}.
+     * {@link BufferPool#getDefaultBufferSize() default buffer size}.
      *
      * @param in the InputStream to read from
      * @param out the OutputStream to write to
@@ -38,7 +38,7 @@ public class StreamUtils {
      * @throws FileTransferException if something went wrong while reading from or writing to one of the provided streams
      */
     public static long copyStream(InputStream in, OutputStream out) throws FileTransferException {
-        return copyStream(in, out, BufferPool.DEFAULT_BUFFER_SIZE);
+        return copyStream(in, out, BufferPool.getDefaultBufferSize());
     }
 
     /**
@@ -101,7 +101,7 @@ public class StreamUtils {
 
     /**
      * This method is a shorthand for {@link #transcode(java.io.InputStream, String, java.io.OutputStream, String, int)}
-     * called with a {@link BufferPool#DEFAULT_BUFFER_SIZE default buffer size}.
+     * called with a {@link BufferPool#getDefaultBufferSize() default buffer size}.
      *
      * @param in the InputStream to read from
      * @param inCharset the source charset
@@ -112,7 +112,7 @@ public class StreamUtils {
      * @throws UnsupportedEncodingException if any of the two charsets are not supported by the JVM
      */
     public static long transcode(InputStream in, String inCharset, OutputStream out, String outCharset) throws FileTransferException, UnsupportedEncodingException {
-        return transcode(in, inCharset, out, outCharset, BufferPool.DEFAULT_BUFFER_SIZE);
+        return transcode(in, inCharset, out, outCharset, BufferPool.getDefaultBufferSize());
     }
 
     /**
@@ -178,7 +178,7 @@ public class StreamUtils {
 
     /**
      * This method is a shorthand for {@link #fillWithConstant(java.io.OutputStream, byte, long, int)} called with a
-     * {@link BufferPool#DEFAULT_BUFFER_SIZE default buffer size}.
+     * {@link BufferPool#getDefaultBufferSize default buffer size}.
      *
      * @param out the OutputStream to write to
      * @param value the byte constant to write len times
@@ -186,7 +186,7 @@ public class StreamUtils {
      * @throws java.io.IOException if an error occurred while writing
      */
     public static void fillWithConstant(OutputStream out, byte value, long len) throws IOException {
-        fillWithConstant(out, value, len, BufferPool.DEFAULT_BUFFER_SIZE);
+        fillWithConstant(out, value, len, BufferPool.getDefaultBufferSize());
     }
 
     /**
@@ -225,7 +225,7 @@ public class StreamUtils {
 
     /**
      * This method is a shorthand for {@link #copyChunk(RandomAccessInputStream, RandomAccessOutputStream, long, long, long, int)}
-     * called with a {@link BufferPool#DEFAULT_BUFFER_SIZE default buffer size}.
+     * called with a {@link BufferPool#getDefaultBufferSize default buffer size}.
      *
      * @param rais the source stream
      * @param raos the destination stream
@@ -235,7 +235,7 @@ public class StreamUtils {
      * @throws java.io.IOException if an error occurred while copying data
      */
     public static void copyChunk(RandomAccessInputStream rais, RandomAccessOutputStream raos, long srcOffset, long destOffset, long length) throws IOException {
-        copyChunk(rais, raos, srcOffset, destOffset, length, BufferPool.DEFAULT_BUFFER_SIZE);
+        copyChunk(rais, raos, srcOffset, destOffset, length, BufferPool.getDefaultBufferSize());
     }
 
     /**
@@ -386,13 +386,13 @@ public class StreamUtils {
 
     /**
      * This method is a shorthand for {@link #readUntilEOF(java.io.InputStream, int)} called with a
-     * {@link BufferPool#DEFAULT_BUFFER_SIZE default buffer size}.
+     * {@link BufferPool#getDefaultBufferSize default buffer size}.
      *
      * @param in the InputStream to read
      * @throws IOException if an I/O error occurs
      */
     public static void readUntilEOF(InputStream in) throws IOException {
-        readUntilEOF(in, BufferPool.DEFAULT_BUFFER_SIZE);
+        readUntilEOF(in, BufferPool.getDefaultBufferSize());
     }
 
     /**

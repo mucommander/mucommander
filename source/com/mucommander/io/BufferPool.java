@@ -54,74 +54,86 @@ public class BufferPool {
     /** List of BufferContainer instances that wraps available buffers */
     private static Vector bufferContainers = new Vector();
 
-    /** The default buffer size when not specified */
-    public final static int DEFAULT_BUFFER_SIZE = 65536;
+    /** The initial default buffer size */
+    public final static int INITIAL_DEFAULT_BUFFER_SIZE = 65536;
+
+    /** Size of buffers returned by get*Buffer methods without a size argument */
+    public static int defaultBufferSize = INITIAL_DEFAULT_BUFFER_SIZE;
+
+    /** The initial max pool size */
+    public final static long INITIAL_POOL_LIMIT = 10485760;
+
+    /** Maximum combined size of all pooled buffers, in bytes */
+    public static long maxPoolSize = INITIAL_POOL_LIMIT;
+
+    /** Current combined size of all pooled buffers, in bytes */
+    public static long poolSize;
 
 
     /**
      * Convenience method that has the same effect as calling {@link #getByteArray(int)} with
-     * {@link #DEFAULT_BUFFER_SIZE}.
+     * a length equal to {@link #getDefaultBufferSize()}.
      *
-     * @return a byte array with a length of DEFAULT_BUFFER_SIZE
+     * @return a byte array with a length of {@link # getDefaultBufferSize ()}
      */
     public static synchronized byte[] getByteArray() {
-        return getByteArray(DEFAULT_BUFFER_SIZE);
+        return getByteArray(getDefaultBufferSize());
     }
 
     /**
-     * Returns a byte array of the specified size. This method first checks if a byte array of the specified size
+     * Returns a byte array of the specified length. This method first checks if a byte array of the specified length
      * exists in the pool. If one is found, it is removed from the pool and returned. If not, a new instance is created
      * and returned.
      *
      * <p>This method won't return the same buffer instance until it has been released with
      * {@link #releaseByteArray(byte[])}.</p>
      *
-     * <p>This method is a shorthand for {@link #getBuffer(int, com.mucommander.io.BufferPool.BufferFactory)} called
+     * <p>This method is a shorthand for {@link #getBuffer(com.mucommander.io.BufferPool.BufferFactory,int)} called
      * with a {@link com.mucommander.io.BufferPool.ByteArrayFactory} instance.</p>.
      *
-     * @param size size of the byte array
+     * @param length length of the byte array
      * @return a byte array of the specified size
      */
-    public static synchronized byte[] getByteArray(int size) {
-        return (byte[])getBuffer(size, new ByteArrayFactory());
+    public static synchronized byte[] getByteArray(int length) {
+        return (byte[])getBuffer(new ByteArrayFactory(), length);
     }
 
     /**
      * Convenience method that has the same effect as calling {@link #getCharArray(int)} with
-     * {@link #DEFAULT_BUFFER_SIZE}.
+     * a length equal to {@link #getDefaultBufferSize()}.
      *
-     * @return a char array with a length of DEFAULT_BUFFER_SIZE
+     * @return a char array with a length of {@link # getDefaultBufferSize}
      */
     public static synchronized char[] getCharArray() {
-        return getCharArray(DEFAULT_BUFFER_SIZE);
+        return getCharArray(getDefaultBufferSize());
     }
 
     /**
-     * Returns a char array of the specified size. This method first checks if a char array of the specified size
+     * Returns a char array of the specified length. This method first checks if a char array of the specified length
      * exists in the pool. If one is found, it is removed from the pool and returned. If not, a new instance is created
      * and returned.
      *
      * <p>This method won't return the same buffer instance until it has been released with
      * {@link #releaseCharArray(char[])}.</p>
      *
-     * <p>This method is a shorthand for {@link #getBuffer(int, com.mucommander.io.BufferPool.BufferFactory)} called
+     * <p>This method is a shorthand for {@link #getBuffer(com.mucommander.io.BufferPool.BufferFactory,int)} called
      * with a {@link com.mucommander.io.BufferPool.CharArrayFactory} instance.</p>.
      *
-     * @param size size of the char array
-     * @return a char array of the specified size
+     * @param length length of the char array
+     * @return a char array of the specified length
      */
-    public static synchronized char[] getCharArray(int size) {
-        return (char[])getBuffer(size, new CharArrayFactory());
+    public static synchronized char[] getCharArray(int length) {
+        return (char[])getBuffer(new CharArrayFactory(), length);
     }
 
     /**
      * Convenience method that has the same effect as calling {@link #getByteBuffer(int)} with
-     * {@link #DEFAULT_BUFFER_SIZE}.
+     * a buffer capacity of {@link #getDefaultBufferSize()}.
      *
-     * @return a ByteBuffer with a capacity of DEFAULT_BUFFER_SIZE bytes
+     * @return a ByteBuffer with a capacity equal to {@link # getDefaultBufferSize}
      */
     public static synchronized ByteBuffer getByteBuffer() {
-        return getByteBuffer(DEFAULT_BUFFER_SIZE);
+        return getByteBuffer(getDefaultBufferSize());
     }
 
     /**
@@ -132,14 +144,26 @@ public class BufferPool {
      * <p>This method won't return the same buffer instance until it has been released with
      * {@link #releaseByteBuffer(ByteBuffer)}.</p>
      *
-     * <p>This method is a shorthand for {@link #getBuffer(int, com.mucommander.io.BufferPool.BufferFactory)} called
+     * <p>This method is a shorthand for {@link #getBuffer(com.mucommander.io.BufferPool.BufferFactory,int)} called
      * with a {@link com.mucommander.io.BufferPool.ByteArrayFactory} instance.</p>.
 
      * @param capacity capacity of the ByteBuffer
      * @return a ByteBuffer with the specified capacity
      */
     public static synchronized ByteBuffer getByteBuffer(int capacity) {
-        return (ByteBuffer)getBuffer(capacity, new ByteBufferFactory());
+        return (ByteBuffer)getBuffer(new ByteBufferFactory(), capacity);
+    }
+
+
+    /**
+     * Convenience method that has the same effect as calling {@link #getBuffer(com.mucommander.io.BufferPool.BufferFactory, int)}
+     * with a size equal to {@link #getDefaultBufferSize()}.
+     *
+     * @param factory BufferFactory used to identify the target buffer class and create a new buffer (if necessary)
+     * @return a buffer with a size equal to {@link # getDefaultBufferSize}
+     */
+    public static synchronized Object getBuffer(BufferFactory factory) {
+        return getBuffer(factory, getDefaultBufferSize());
     }
 
     /**
@@ -151,11 +175,11 @@ public class BufferPool {
      * <p>This method won't return the same buffer instance until it has been released with
      * {@link #releaseBuffer(Object, BufferFactory)}.</p>
      *
-     * @param size size of the buffer
      * @param factory BufferFactory used to identify the target buffer class and create a new buffer (if necessary)
+     * @param size size of the buffer
      * @return a buffer of the specified size
      */
-    public static synchronized Object getBuffer(int size, BufferFactory factory) {
+    public static synchronized Object getBuffer(BufferFactory factory, int size) {
         int nbBuffers = bufferContainers.size();
         BufferContainer bufferContainer;
         Object buffer;
@@ -165,8 +189,10 @@ public class BufferPool {
             bufferContainer = (BufferContainer) bufferContainers.elementAt(i);
             buffer = bufferContainer.getBuffer();
 
-            if(bufferContainer.getSize()==size && (factory.matchesBufferClass(buffer.getClass()))) {
+            // Caution: mind the difference between BufferContainer#getLength() and BufferContainer#getSize()
+            if(bufferContainer.getLength()==size && (factory.matchesBufferClass(buffer.getClass()))) {
                 bufferContainers.removeElementAt(i);
+                poolSize -= bufferContainer.getSize();
 //                if(Debug.ON) Debug.trace("Returning buffer "+buffer+", size="+size);
                 return buffer;
             }
@@ -180,52 +206,68 @@ public class BufferPool {
 
 
     /**
-     * Makes the given buffer available for further calls to {@link #getByteArray(int)} with the same buffer size.
-     * Does nothing if the specified buffer already is in the pool. After calling this method, the given buffer
-     * instance <b>must not be used</b>, otherwise it could get corrupted if some other threads use it.
+     * Makes the given buffer available for further calls to {@link #getByteArray(int)} with the same buffer length.
+     * Returns <code>true</code> if the buffer was added to the pool, <code>false</code> if the buffer was already in
+     * the pool.
+     *
+     * <p>After calling this method, the given buffer instance <b>must not be used</b>, otherwise it could get
+     * corrupted if other threads were using it.</p>
      *
      * @param buffer the buffer instance to make available for further use
+     * @return <code>true</code> if the buffer was added to the pool, <code>false</code> if the buffer was already in the pool
      * @throws IllegalArgumentException if specified buffer is null
      */
-    public static synchronized void releaseByteArray(byte buffer[]) {
-        releaseBuffer(buffer, new ByteArrayFactory());
+    public static synchronized boolean releaseByteArray(byte buffer[]) {
+        return releaseBuffer(buffer, new ByteArrayFactory());
     }
 
     /**
-     * Makes the given buffer available for further calls to {@link #getCharArray(int)} with the same buffer size.
-     * Does nothing if the specified buffer already is in the pool. After calling this method, the given buffer
-     * instance <b>must not be used</b>, otherwise it could get corrupted if some other threads use it.
+     * Makes the given buffer available for further calls to {@link #getCharArray(int)} with the same buffer length.
+     * Returns <code>true</code> if the buffer was added to the pool, <code>false</code> if the buffer was already in
+     * the pool.
+     *
+     * <p>After calling this method, the given buffer instance <b>must not be used</b>, otherwise it could get
+     * corrupted if other threads were using it.</p>
      *
      * @param buffer the buffer instance to make available for further use
+     * @return <code>true</code> if the buffer was added to the pool, <code>false</code> if the buffer was already in the pool
      * @throws IllegalArgumentException if specified buffer is null
      */
-    public static synchronized void releaseCharArray(char buffer[]) {
-        releaseBuffer(buffer, new CharArrayFactory());
+    public static synchronized boolean releaseCharArray(char buffer[]) {
+        return releaseBuffer(buffer, new CharArrayFactory());
     }
 
     /**
-     * Makes the given buffer available for further calls to {@link #getByteBuffer(int)} with the same buffer size.
-     * Does nothing if the specified buffer already is in the pool. After calling this method, the given buffer
-     * instance <b>must not be used</b>, otherwise it could get corrupted if some other threads use it.
+     * Makes the given buffer available for further calls to {@link #getByteBuffer(int)} with the same buffer capacity.
+     * Returns <code>true</code> if the buffer was added to the pool, <code>false</code> if the buffer was already in
+     * the pool.
+     *
+     * <p>After calling this method, the given buffer instance <b>must not be used</b>, otherwise it could get
+     * corrupted if other threads were using it.</p>
      *
      * @param buffer the buffer instance to make available for further use
+     * @return <code>true</code> if the buffer was added to the pool, <code>false</code> if the buffer was already in the pool
      * @throws IllegalArgumentException if specified buffer is null
      */
-    public static synchronized void releaseByteBuffer(ByteBuffer buffer) {
-        releaseBuffer(buffer, new ByteBufferFactory());
+    public static synchronized boolean releaseByteBuffer(ByteBuffer buffer) {
+        return releaseBuffer(buffer, new ByteBufferFactory());
     }
 
     /**
-     * Makes the given buffer available for further calls to {@link #getBuffer(int, BufferFactory)} with the same buffer
-     * size and factory. Does nothing if the specified buffer already is in the pool.
-     * After calling this method, the given buffer instance <b>must not be used</b>, otherwise it could get
-     * corrupted if some other threads use it.
+     * Makes the given buffer available for further calls to {@link #getBuffer(com.mucommander.io.BufferPool.BufferFactory,int)} with the same buffer
+     * size and factory.
+     * Returns <code>true</code> if the buffer was added to the pool, <code>false</code> if the buffer was already in 
+     * the pool or the pool size limit has been reached.
+     *
+     * <p>After calling this method, the given buffer instance <b>must not be used</b>, otherwise it could get
+     * corrupted if other threads were using it.</p>
      *
      * @param buffer the buffer instance to make available for further use
-     * @param factory BufferFactory used create a buffer container
+     * @param factory the BufferFactory that was used to create the buffer
+     * @return <code>true</code> if the buffer was added to the pool, <code>false</code> if the buffer was already in the pool or the pool size limit has been reached
      * @throws IllegalArgumentException if specified buffer is null
      */
-    public static synchronized void releaseBuffer(Object buffer, BufferFactory factory) {
+    public static synchronized boolean releaseBuffer(Object buffer, BufferFactory factory) {
         if(buffer==null)
             throw new IllegalArgumentException("specified buffer is null");
 
@@ -233,32 +275,57 @@ public class BufferPool {
 
         if(bufferContainers.contains(bufferContainer)) {
             if(Debug.ON) Debug.trace("Warning: specified buffer is already in the pool: "+buffer, -1);
-            return;
+            return false;
+        }
+
+        long bufferSize = bufferContainer.getSize();        // size in bytes (!= length)
+
+        if(maxPoolSize!=-1 && poolSize+bufferSize>maxPoolSize) {
+            if(Debug.ON) Debug.trace("Warning: maximum pool size reached, buffer not added to the pool"+buffer);
+            return false;
         }
 
 //        if(Debug.ON) Debug.trace("Adding buffer to pool: "+buffer);
 
         bufferContainers.add(bufferContainer);
+        poolSize += bufferSize;
+
+        return true;
     }
 
     /**
-     * Returns the number of buffers that currently are in the pool. This method is provided only for debugging
+     * Returns <code>true</code> if the specified buffer is currently in the pool.
+     *
+     * <p>Note that it is not necessary (and thus not recommended for performance reasons) to call this method before
+     * calling <code>release*Buffer</code> as it already performs this test before adding a buffer to the pool.</p>
+     *
+     * @param buffer the buffer to look for in the pool
+     * @param factory the BufferFactory that was used to create the buffer
+     * @return <code>true</code> if the specified buffer is already in the pool
+     */
+    public static boolean containsBuffer(Object buffer, BufferFactory factory) {
+        return bufferContainers.contains(factory.newBufferContainer(buffer));
+    }
+
+
+    /**
+     * Returns the number of buffers that currently are in the pool. This method is provided for debugging
      * purposes only.
      *
      * @return the number of buffers currently in the pool
      */
-    static int getBufferCount() {
+    public static int getBufferCount() {
         return bufferContainers.size();
     }
 
     /**
-     * Returns the number of buffers that currently are in the pool and whose Class are the same as the provided
-     * factory's. This method is provided only for debugging purposes only.
+     * Returns the number of buffers that currently are in the pool and whose Class are the same as the specified
+     * factory's. This method is provided for debugging purposes only.
      *
      * @param factory the BufferFactory
      * @return the number of buffers currently in the pool
      */
-    static int getBufferCount(BufferFactory factory) {
+    public static int getBufferCount(BufferFactory factory) {
         int count = 0;        
         int nbBuffers = bufferContainers.size();
         for(int i=0; i<nbBuffers; i++) {
@@ -268,6 +335,61 @@ public class BufferPool {
         }
 
         return count;
+    }
+
+    /**
+     * Returns the default size of buffers returned by <code>get*Buffer</code> methods without a <code>size</code>
+     * argument.
+     *
+     * <p>The default buffer size is initially set to {@link #INITIAL_DEFAULT_BUFFER_SIZE}.</p>
+     *
+     * @return the default size of buffers returned by <code>get*Buffer</code> methods without a <code>size</code> argument
+     */
+    public static int getDefaultBufferSize() {
+        return defaultBufferSize;
+    }
+
+    /**
+     * Sets the default size of buffers returned by <code>get*Buffer</code> methods without a <code>size</code> argument.
+     *
+     * @param bufferSize the new buffer size
+     */
+    public static synchronized void setDefaultBufferSize(int bufferSize) {
+        BufferPool.defaultBufferSize = bufferSize;
+    }
+
+
+    /**
+     * Returns the combined size in bytes of all buffers that are currently in the pool.
+     *
+     * @return the combined size in bytes of all buffers that are currenty in the pool
+     */
+    public static long getPoolSize() {
+        return poolSize;
+    }
+
+    /**
+     * Returns the maximum combined size in bytes for all buffers in the pool, <code>-1</code> for no limit.
+     * Before adding a buffer to the pool, <code>release*Buffer</code> methods ensure that the pool size will
+     * not be exceeded. If and only if that is the case, the buffer is added to the pool.
+     *
+     * <p>The max pool size is initially set to {@link #INITIAL_POOL_LIMIT}.</p>
+     *
+     * @return the maximum combined size in bytes for all buffers in the pool
+     */
+    public static long getMaxPoolSize() {
+        return maxPoolSize;
+    }
+
+    /**
+     * Sets the maximum combined size in bytes for all buffers in the pool, <code>-1</code> for no limit.
+     * Before adding a buffer to the pool, <code>release*Buffer</code> methods ensure that the pool size will
+     * not be exceeded. If and only if that is the case, the buffer is added to the pool.
+     *
+     * @param maxPoolSize the maximum combined size in bytes for all buffers in the pool
+     */
+    public static synchronized void setMaxPoolSize(long maxPoolSize) {
+        BufferPool.maxPoolSize = maxPoolSize;
     }
 
 
@@ -310,9 +432,16 @@ public class BufferPool {
         }
 
         /**
-         * Returns the size of the wrapped buffer instance.
+         * Returns the length of the wrapped buffer instance.
          *
-         * @return the size of the wrapped buffer instance
+         * @return the length of the wrapped buffer instance
+         */
+        protected abstract int getLength();
+
+        /**
+         * Returns the size of the wrapped buffer instance, expressed in bytes.
+         *
+         * @return the size of the wrapped buffer instance, expressed in bytes
          */
         protected abstract int getSize();
     }
@@ -332,7 +461,7 @@ public class BufferPool {
          * @return true if the class returned by <code>#getBufferClass()</code> is equal or a superclass/superinterface
          * of the specified buffer class
          */
-        protected boolean matchesBufferClass(Class bufferClass) {
+        public boolean matchesBufferClass(Class bufferClass) {
             return getBufferClass().isAssignableFrom(bufferClass);
         }
 
@@ -342,7 +471,7 @@ public class BufferPool {
          * @param size size of the buffer to create
          * @return a buffer instance of the specified size
          */
-        protected abstract Object newBuffer(int size);
+        public abstract Object newBuffer(int size);
 
         /**
          * Creates and returns a {@link BufferContainer} for the specified buffer instance.
@@ -350,33 +479,37 @@ public class BufferPool {
          * @param buffer the buffer to wrap in a BufferContainer
          * @return returns a BufferContainer for the specified buffer instance
          */
-        protected abstract BufferContainer newBufferContainer(Object buffer);
+        public abstract BufferContainer newBufferContainer(Object buffer);
 
         /**
          * Returns the Class of buffer instances this factory creates. 
          *
          * @return the Class of buffer instances this factory creates
          */
-        protected abstract Class getBufferClass();
+        public abstract Class getBufferClass();
     }
 
     /**
      * This class is a {@link BufferFactory} implementation for byte array (<code>byte[]</code>) buffers.
      */
     public static class ByteArrayFactory extends BufferFactory {
-        protected Object newBuffer(int size) {
+        public Object newBuffer(int size) {
             return new byte[size];
         }
 
-        protected BufferContainer newBufferContainer(Object buffer) {
+        public BufferContainer newBufferContainer(Object buffer) {
             return new BufferContainer(buffer) {
-                protected int getSize() {
+                protected int getLength() {
                     return ((byte[])buffer).length;
+                }
+
+                protected int getSize() {
+                    return getLength();
                 }
             };
         }
 
-        protected Class getBufferClass() {
+        public Class getBufferClass() {
             return byte[].class;
         }
     }
@@ -385,19 +518,23 @@ public class BufferPool {
      * This class is a {@link BufferFactory} implementation for char array (<code>char[]</code>) buffers.
      */
     public static class CharArrayFactory extends BufferFactory {
-        protected Object newBuffer(int size) {
+        public Object newBuffer(int size) {
             return new char[size];
         }
 
-        protected BufferContainer newBufferContainer(Object buffer) {
+        public BufferContainer newBufferContainer(Object buffer) {
             return new BufferContainer(buffer) {
-                protected int getSize() {
+                protected int getLength() {
                     return ((char[])buffer).length;
+                }
+
+                protected int getSize() {
+                    return 2*getLength();
                 }
             };
         }
 
-        protected Class getBufferClass() {
+        public Class getBufferClass() {
             return char[].class;
         }
     }
@@ -409,21 +546,25 @@ public class BufferPool {
      * {@link #getBufferClass()}.
      */
     public static class ByteBufferFactory extends BufferFactory {
-        protected Object newBuffer(int size) {
+        public Object newBuffer(int size) {
             // Note: the returned instance is actually a java.nio.DirectByteBuffer, this is why it's important to
             // compare classes using Class#isAssignableFrom(Class)
             return ByteBuffer.allocateDirect(size);
         }
 
-        protected BufferContainer newBufferContainer(Object buffer) {
+        public BufferContainer newBufferContainer(Object buffer) {
             return new BufferContainer(buffer) {
-                protected int getSize() {
+                protected int getLength() {
                     return ((ByteBuffer)buffer).capacity();
+                }
+
+                protected int getSize() {
+                    return getLength();
                 }
             };
         }
 
-        protected Class getBufferClass() {
+        public Class getBufferClass() {
             return ByteBuffer.class;
         }
     }
