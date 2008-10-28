@@ -107,21 +107,15 @@ public class BoundedInputStream extends FilterInputStream {
     }
 
     public synchronized int read(byte b[]) throws IOException {
-        if(b.length>getRemainingBytes())
-            throw outOfBoundException;
-
-        int nbRead = in.read(b);
-        if(nbRead>0)
-            totalRead += nbRead;
-
-        return nbRead;
+        return read(b, 0, b.length);
     }
 
     public synchronized int read(byte b[], int off, int len) throws IOException {
-        if(len>getRemainingBytes())
+        int canRead = (int)Math.min(getRemainingBytes(), len);
+        if(canRead==0)
             throw outOfBoundException;
 
-        int nbRead = in.read(b, off, len);
+        int nbRead = in.read(b, off, canRead);
         if(nbRead>0)
             totalRead += nbRead;
 

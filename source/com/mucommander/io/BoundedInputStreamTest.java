@@ -91,6 +91,10 @@ public class BoundedInputStreamTest extends TestCase {
         assertEquals(4, bin.getReadCounter());
         assertEquals(0, bin.getRemainingBytes());
         assertEquals(4, bin.getAllowedBytes());
+
+        // Attempt to read a chunk larger than the remaining bytes and assert that it does not throw a StreamOutOfBoundException
+        bin = new BoundedInputStream(new ByteArrayInputStream(TEST_BYTES), 4);
+        assertTrue(bin.read(new byte[6])!=-1);
     }
 
     /**
