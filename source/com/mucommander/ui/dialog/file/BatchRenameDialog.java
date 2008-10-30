@@ -119,10 +119,11 @@ public class BatchRenameDialog extends FocusDialog implements ActionListener,
      * Initializes the dialog.
      */
     private void initialize() {
-        setLayout(new BorderLayout());
-        add(getPnlTop(), BorderLayout.NORTH);
-        add(new JScrollPane(getTblNames()), BorderLayout.CENTER);
-        add(getPnlButtons(), BorderLayout.SOUTH);
+        Container content = getContentPane();
+        content.setLayout(new BorderLayout());
+        content.add(getPnlTop(), BorderLayout.NORTH);
+        content.add(new JScrollPane(getTblNames()), BorderLayout.CENTER);
+        content.add(getPnlButtons(), BorderLayout.SOUTH);
         getRootPane().setDefaultButton(btnRename);
     }
 
