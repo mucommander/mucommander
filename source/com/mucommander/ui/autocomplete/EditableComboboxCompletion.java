@@ -80,8 +80,13 @@ public class EditableComboboxCompletion extends CompletionType {
                 		acceptListItem((String)list.getSelectedValue());
                 		keyEvent.consume();
                 	}
-                	else
+                	else {
+						// Stop the active showing-thread to prevent suggestions-popup 
+                    	// opening after the operation was initiated.
+                    	showingThread.done();
+					
                 		autocompletedtextComp.OnEnterPressed(keyEvent);
+					}
                 	break;
                 case KeyEvent.VK_ESCAPE:
                 	if (isPopupListShowing()) {
