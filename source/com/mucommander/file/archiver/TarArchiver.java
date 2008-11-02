@@ -22,8 +22,8 @@ package com.mucommander.file.archiver;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FilePermissions;
 import com.mucommander.file.SimpleFilePermissions;
-import org.apache.tools.tar.TarEntry;
-import org.apache.tools.tar.TarOutputStream;
+import com.mucommander.file.impl.tar.provider.TarEntry;
+import com.mucommander.file.impl.tar.provider.TarOutputStream;
 
 import java.io.IOException;
 import java.io.OutputStream;

@@ -19,10 +19,11 @@
 package com.mucommander.file.impl.tar;
 
 import com.mucommander.file.*;
+import com.mucommander.file.impl.tar.provider.TarEntry;
+import com.mucommander.file.impl.tar.provider.TarInputStream;
 import com.mucommander.io.StreamUtils;
 import com.mucommander.util.StringUtils;
 import org.apache.tools.bzip2.CBZip2InputStream;
-import org.apache.tools.tar.TarInputStream;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -102,7 +103,7 @@ public class TarArchiveFile extends AbstractROArchiveFile {
      * @param tarEntry the object that serves to initialize the attributes of the returned ArchiveEntry
      * @return an ArchiveEntry whose attributes are fetched from the given org.apache.tools.tar.TarEntry
      */
-    private ArchiveEntry createArchiveEntry(org.apache.tools.tar.TarEntry tarEntry) {
+    private ArchiveEntry createArchiveEntry(TarEntry tarEntry) {
         ArchiveEntry entry = new ArchiveEntry(tarEntry.getName(), tarEntry.isDirectory(), tarEntry.getModTime().getTime(), tarEntry.getSize());
         entry.setPermissions(new SimpleFilePermissions(tarEntry.getMode() & PermissionBits.FULL_PERMISSION_INT));
         entry.setOwner(tarEntry.getUserName());
@@ -123,7 +124,7 @@ public class TarArchiveFile extends AbstractROArchiveFile {
 
         // Load TAR entries
         Vector entries = new Vector();
-        org.apache.tools.tar.TarEntry entry;
+        TarEntry entry;
         while ((entry=tin.getNextEntry())!=null) {
             entries.add(createArchiveEntry(entry));
         }
@@ -135,7 +136,7 @@ public class TarArchiveFile extends AbstractROArchiveFile {
 
     public InputStream getEntryInputStream(ArchiveEntry entry) throws IOException {
         TarInputStream tin = createTarStream();
-        org.apache.tools.tar.TarEntry tempEntry;
+        TarEntry tempEntry;
         String entryPath = entry.getPath();
         while ((tempEntry=tin.getNextEntry())!=null) {
             if (tempEntry.getName().equals(entryPath))

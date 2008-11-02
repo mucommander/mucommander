@@ -1,5 +1,4 @@
 include/ant-bzip2.jar	     -> from Ant 1.7.0 (compiled for Java 1.4)
-include/ant-tar.jar	         -> from Ant 1.7.0 (compiled for Java 1.4)
 include/commons-logging.jar  -> Commons-logging (custom-made JAR, empty stubs)
 include/commons-net.jar	     -> Commons-net 1.5.0 SVN updated on June 2nd, 2008
                                 (with 'allow listing of hidden files' patch,
