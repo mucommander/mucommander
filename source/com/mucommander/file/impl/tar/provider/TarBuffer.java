@@ -23,6 +23,8 @@
 
 package com.mucommander.file.impl.tar.provider;
 
+import com.mucommander.io.BufferPool;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -38,9 +40,13 @@ import java.util.Arrays;
  * <p>
  * You should never have a need to access this class directly.
  * TarBuffers are created by Tar IO Streams.
- *
+ * <p>-----------------------------------</p>
+ * <p>This class is based off the <code>org.apache.tools.tar</code> package of the <i>Apache Ant</i> project. The Ant
+ * code has been modified under the terms of the Apache License which you can find in the bundled muCommander license
+ * file. It was forked at version 1.7.1 of Ant.</p>
+ * 
+ * @author Apache Ant, Maxence Bernard
  */
-
 public class TarBuffer {
 
     /** Default record size */
@@ -64,16 +70,7 @@ public class TarBuffer {
      * @param inStream the input stream to use
      */
     public TarBuffer(InputStream inStream) {
-        this(inStream, TarBuffer.DEFAULT_BLKSIZE);
-    }
-
-    /**
-     * Constructor for a TarBuffer on an input stream.
-     * @param inStream the input stream to use
-     * @param blockSize the block size to use
-     */
-    public TarBuffer(InputStream inStream, int blockSize) {
-        this(inStream, blockSize, TarBuffer.DEFAULT_RCDSIZE);
+        this(inStream, TarBuffer.DEFAULT_BLKSIZE, TarBuffer.DEFAULT_RCDSIZE);
     }
 
     /**
@@ -94,16 +91,7 @@ public class TarBuffer {
      * @param outStream the output stream to use
      */
     public TarBuffer(OutputStream outStream) {
-        this(outStream, TarBuffer.DEFAULT_BLKSIZE);
-    }
-
-    /**
-     * Constructor for a TarBuffer on an output stream.
-     * @param outStream the output stream to use
-     * @param blockSize the block size to use
-     */
-    public TarBuffer(OutputStream outStream, int blockSize) {
-        this(outStream, blockSize, TarBuffer.DEFAULT_RCDSIZE);
+        this(outStream, TarBuffer.DEFAULT_BLKSIZE, TarBuffer.DEFAULT_RCDSIZE);
     }
 
     /**
@@ -121,13 +109,16 @@ public class TarBuffer {
 
     /**
      * Initialization common to all constructors.
+     *
+     * @param blockSize the block size to use
+     * @param recordSize the record size to use
      */
     private void initialize(int blockSize, int recordSize) {
         this.debug = false;
         this.blockSize = blockSize;
         this.recordSize = recordSize;
         this.recsPerBlock = (this.blockSize / this.recordSize);
-        this.blockBuffer = new byte[this.blockSize];
+        this.blockBuffer = BufferPool.getByteArray(this.blockSize);
 
         if (this.inStream != null) {
             this.currBlkIdx = -1;
@@ -182,9 +173,11 @@ public class TarBuffer {
 
     /**
      * Skip over a record on the input stream.
+     *
+     * @return <code>true</code> if the record has been skipped, <code>false</code> if EOF has been reached
      * @throws IOException on error
      */
-    public void skipRecord() throws IOException {
+    public boolean skipRecord() throws IOException {
         if (debug) {
             System.err.println("SkipRecord: recIdx = " + currRecIdx
                                + " blkIdx = " + currBlkIdx);
@@ -196,24 +189,30 @@ public class TarBuffer {
 
         if (currRecIdx >= recsPerBlock) {
             if (!readBlock()) {
-                return;    // UNDONE
+                return false;
             }
         }
 
         currRecIdx++;
+        return true;
     }
 
+
     /**
-     * Read a record from the input stream and return the data.
+     * Read a record from the input stream and stores it into the specified buffer.
      *
-     * @return The record data.
+     * @param recordBuf the buffer into which the record will be stored. Its length must be {@link #getRecordSize()}.
+     * @return <code>true</code> if the record has been read, <code>false</code> if EOF has been reached
      * @throws IOException on error
      */
-    public byte[] readRecord() throws IOException {
+    public boolean readRecord(byte[] recordBuf) throws IOException {
         if (debug) {
             System.err.println("ReadRecord: recIdx = " + currRecIdx
                                + " blkIdx = " + currBlkIdx);
         }
+
+        if(recordBuf.length!=recordSize)
+            throw new IOException("specified record buffer doesn't match record size: "+recordSize);
 
         if (inStream == null) {
             throw new IOException("reading from an output buffer");
@@ -221,23 +220,24 @@ public class TarBuffer {
 
         if (currRecIdx >= recsPerBlock) {
             if (!readBlock()) {
-                return null;
+                return false;
             }
         }
 
-        byte[] result = new byte[recordSize];
-
         System.arraycopy(blockBuffer,
-                         (currRecIdx * recordSize), result, 0,
+                         (currRecIdx * recordSize), recordBuf, 0,
                          recordSize);
 
         currRecIdx++;
 
-        return result;
+        return true;
     }
 
     /**
-     * @return false if End-Of-File, else true
+     * Read a block from the input stream and stores it into the block buffer.
+     *
+     * @return true if a block was read, false if EOF was reached
+     * @throws IOException on error
      */
     private boolean readBlock() throws IOException {
         if (debug) {
@@ -306,12 +306,48 @@ public class TarBuffer {
     }
 
     /**
+     * Skip over a block on the input stream.
+     *
+     * @return true if a block was read, false if EOF was reached
+     * @throws IOException on error
+     */
+    public boolean skipBlock() throws IOException {
+        int bytesToSkip = blockSize;
+
+        while (bytesToSkip > 0) {
+            long numBytes = inStream.skip(bytesToSkip);
+            // Adopt the same 'generous' behavior as #readBlock(), i.e. allow a premature EOF only if at least
+            // a byte was properly skipped.
+            if(numBytes==-1) {
+                return bytesToSkip != blockSize;
+            }
+
+            bytesToSkip -= numBytes;
+        }
+
+        currBlkIdx++;
+        currRecIdx = recsPerBlock;
+
+        return true;
+    }
+
+
+    /**
      * Get the current block number, zero based.
      *
      * @return The current zero based block number.
      */
     public int getCurrentBlockNum() {
         return currBlkIdx;
+    }
+
+    /**
+     * Sets the current block number, zero based.
+     *
+     * @param blockNum the current block number, zero based
+     */
+    public void setCurrentBlockNum(int blockNum) {
+        this.currBlkIdx = blockNum;
     }
 
     /**
@@ -322,6 +358,16 @@ public class TarBuffer {
      */
     public int getCurrentRecordNum() {
         return currRecIdx - 1;
+    }
+
+
+    /**
+     * Returns the number of records per block.
+     *
+     * @return the number of records per block
+     */
+    public int getRecordsPerBlock() {
+        return recsPerBlock;
     }
 
     /**
@@ -441,20 +487,28 @@ public class TarBuffer {
             System.err.println("TarBuffer.closeBuffer().");
         }
 
-        if (outStream != null) {
-            flushBlock();
+        try {
+            if (outStream != null) {
+                flushBlock();
 
-            if (outStream != System.out
-                    && outStream != System.err) {
-                outStream.close();
+                if (outStream != System.out
+                        && outStream != System.err) {
+                    outStream.close();
 
-                outStream = null;
+                    outStream = null;
+                }
+            } else if (inStream != null) {
+                if (inStream != System.in) {
+                    inStream.close();
+
+                    inStream = null;
+                }
             }
-        } else if (inStream != null) {
-            if (inStream != System.in) {
-                inStream.close();
-
-                inStream = null;
+        }
+        finally {
+            if(blockBuffer!=null) {
+                BufferPool.releaseByteArray(blockBuffer);
+                blockBuffer = null;
             }
         }
     }

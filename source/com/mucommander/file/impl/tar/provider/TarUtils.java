@@ -26,8 +26,13 @@ package com.mucommander.file.impl.tar.provider;
 /**
  * This class provides static utility methods to work with byte streams.
  *
+ * <p>-----------------------------------</p>
+ * <p>This class is based off the <code>org.apache.tools.tar</code> package of the <i>Apache Ant</i> project. The Ant
+ * code has been modified under the terms of the Apache License which you can find in the bundled muCommander license
+ * file. It was forked at version 1.7.1 of Ant.</p>
+ *
+ * @author Apache Ant
  */
-// CheckStyle:HideUtilityClassConstructorCheck OFF (bc)
 public class TarUtils {
 
     private static final int BYTE_MASK = 255;
@@ -62,9 +67,7 @@ public class TarUtils {
             }
 
             stillPadding = false;
-            // CheckStyle:MagicNumber OFF
             result = (result << 3) + (header[i] - '0');
-            // CheckStyle:MagicNumber ON
         }
 
         return result;
@@ -138,10 +141,8 @@ public class TarUtils {
             --idx;
         } else {
             for (long val = value; idx >= 0 && val > 0; --idx) {
-                // CheckStyle:MagicNumber OFF
                 buf[offset + idx] = (byte) ((byte) '0' + (byte) (val & 7));
                 val = val >> 3;
-                // CheckStyle:MagicNumber ON
             }
         }
 

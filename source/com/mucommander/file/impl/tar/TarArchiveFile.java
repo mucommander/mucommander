@@ -56,10 +56,12 @@ public class TarArchiveFile extends AbstractROArchiveFile {
     /**
      * Returns a TarInputStream which can be used to read TAR entries.
      *
+     * @param entryOffset offset from the start of the archive to an entry. Must be a multiple of recordSize, or
+     * <code>0</code> to start at the first entry.
      * @return a TarInputStream which can be used to read TAR entries
      * @throws IOException if an error occurred while create the stream
      */
-    private TarInputStream createTarStream() throws IOException {
+    private TarInputStream createTarStream(long entryOffset) throws IOException {
         InputStream in = file.getInputStream();
 
         String name = getName();
@@ -93,7 +95,7 @@ public class TarArchiveFile extends AbstractROArchiveFile {
             }
         }
 
-        return new TarInputStream(in);
+        return new TarInputStream(in, entryOffset);
     }
 
     /**
@@ -108,6 +110,8 @@ public class TarArchiveFile extends AbstractROArchiveFile {
         entry.setPermissions(new SimpleFilePermissions(tarEntry.getMode() & PermissionBits.FULL_PERMISSION_INT));
         entry.setOwner(tarEntry.getUserName());
         entry.setGroup(tarEntry.getGroupName());
+        entry.setEntryObject(tarEntry);
+
         return entry;
     }
 
@@ -117,10 +121,7 @@ public class TarArchiveFile extends AbstractROArchiveFile {
     ////////////////////////////////////////
 	
     public Vector getEntries() throws IOException {
-        // Note: JavaTar's FastTarStream can unfortunately not be used
-        // because it fails on many tar files that TarInputStream can read
-        // without any problem.
-        TarInputStream tin = createTarStream();
+        TarInputStream tin = createTarStream(0);
 
         // Load TAR entries
         Vector entries = new Vector();
@@ -135,12 +136,21 @@ public class TarArchiveFile extends AbstractROArchiveFile {
 
 
     public InputStream getEntryInputStream(ArchiveEntry entry) throws IOException {
-        TarInputStream tin = createTarStream();
-        TarEntry tempEntry;
-        String entryPath = entry.getPath();
-        while ((tempEntry=tin.getNextEntry())!=null) {
-            if (tempEntry.getName().equals(entryPath))
-                return tin;
+        TarEntry tarEntry = (TarEntry)entry.getEntryObject();
+        if(tarEntry!=null) {
+            TarInputStream tin = createTarStream(tarEntry.getOffset());
+            tin.getNextEntry();
+
+            return tin;
+        }
+        else {      // Should not normally happen
+            TarInputStream tin = createTarStream(0);
+
+            String entryPath = entry.getPath();
+            while ((tarEntry=tin.getNextEntry())!=null) {
+                if (tarEntry.getName().equals(entryPath))
+                    return tin;
+            }
         }
 
         return null;

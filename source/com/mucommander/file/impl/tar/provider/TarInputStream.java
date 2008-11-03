@@ -23,7 +23,9 @@
 
 package com.mucommander.file.impl.tar.provider;
 
-import java.io.FilterInputStream;
+import com.mucommander.io.BufferPool;
+
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -33,21 +35,28 @@ import java.io.InputStream;
  * the archive, and the read each entry as a normal input stream
  * using read().
  *
+ * <p>-----------------------------------</p>
+ * <p>This class is based off the <code>org.apache.tools.tar</code> package of the <i>Apache Ant</i> project. The Ant
+ * code has been modified under the terms of the Apache License which you can find in the bundled muCommander license
+ * file. It was forked at version 1.7.1 of Ant.</p>
+ * 
+ * @author Apache Ant, Maxence Bernard
  */
-public class TarInputStream extends FilterInputStream {
-    private static final int SMALL_BUFFER_SIZE = 256;
-    private static final int BUFFER_SIZE = 8 * 1024;
-    private static final int LARGE_BUFFER_SIZE = 32 * 1024;
+public class TarInputStream extends InputStream {
+    private static final int NAME_BUFFER_SIZE = 256;
     private static final int BYTE_MASK = 0xFF;
 
-    // CheckStyle:VisibilityModifier OFF - bc
     protected boolean debug;
     protected boolean hasHitEOF;
     protected long entrySize;
     protected long entryOffset;
-    protected byte[] readBuf;
+    protected byte[] recordBuf;
+    protected byte[] nameBuf;
+    protected int recordBufPos;
+    protected int recordBufLeft;
     protected TarBuffer buffer;
     protected TarEntry currEntry;
+    protected boolean closed;
 
     /**
      * This contents of this array is not used at all in this class,
@@ -56,39 +65,58 @@ public class TarInputStream extends FilterInputStream {
      */
     protected byte[] oneBuf;
 
-    // CheckStyle:VisibilityModifier ON
-
     /**
-     * Constructor for TarInputStream.
-     * @param is the input stream to use
+     * Creates a new <code>TarInputStream</code> over the specified input stream using the default block size and
+     * record size and starting at the first entry.
+     *
+     * @param is the input stream providing the actual TAR data
+     * @throws IOException if an error ocurred while initializing the stream
      */
-    public TarInputStream(InputStream is) {
-        this(is, TarBuffer.DEFAULT_BLKSIZE, TarBuffer.DEFAULT_RCDSIZE);
+    public TarInputStream(InputStream is) throws IOException  {
+        this(is, TarBuffer.DEFAULT_BLKSIZE, TarBuffer.DEFAULT_RCDSIZE, 0);
     }
 
-    /**
-     * Constructor for TarInputStream.
-     * @param is the input stream to use
-     * @param blockSize the block size to use
-     */
-    public TarInputStream(InputStream is, int blockSize) {
-        this(is, blockSize, TarBuffer.DEFAULT_RCDSIZE);
-    }
 
     /**
-     * Constructor for TarInputStream.
+     * Creates a new <code>TarInputStream</code> over the specified input stream, starting at the specified
+     * entry offset.
+     *
+     * @param is the input stream providing the actual TAR data
+     * @param entryOffset offset from the start of the archive to an entry. Must be a multiple of recordSize, or
+     * <code>0</code> to start at the first entry.
+     * @throws IOException if an error ocurred while initializing the stream
+     */
+    public TarInputStream(InputStream is, long entryOffset) throws IOException {
+        this(is, TarBuffer.DEFAULT_BLKSIZE, TarBuffer.DEFAULT_RCDSIZE, entryOffset);
+    }
+
+
+    /**
+     * Creates a new <code>TarInputStream</code> over the specified input stream, using the specified
+     * block size, record size and start offset.
+     *
      * @param is the input stream to use
      * @param blockSize the block size to use
      * @param recordSize the record size to use
+     * @param entryOffset offset from the start of the archive to an entry. Must be a multiple of recordSize, or
+     * <code>0</code> to start at the first entry.
+     * @throws IOException if an error ocurred while initializing the stream
      */
-    public TarInputStream(InputStream is, int blockSize, int recordSize) {
-        super(is);
-
+    public TarInputStream(InputStream is, int blockSize, int recordSize, long entryOffset) throws IOException {
         this.buffer = new TarBuffer(is, blockSize, recordSize);
-        this.readBuf = null;
-        this.oneBuf = new byte[1];
+        this.recordBuf = BufferPool.getByteArray(buffer.getRecordSize());
+        this.nameBuf = BufferPool.getByteArray(NAME_BUFFER_SIZE);
+        this.oneBuf = BufferPool.getByteArray(1);
         this.debug = false;
         this.hasHitEOF = false;
+
+        if(entryOffset>0) {
+            if((entryOffset%recordSize)!=0)
+                throw new IllegalArgumentException("entryOffset ("+entryOffset+") is not a multiple of recordSize ("+recordSize+")");
+
+            skipBytes(entryOffset);
+        }
+
     }
 
     /**
@@ -106,7 +134,18 @@ public class TarInputStream extends FilterInputStream {
      * @throws IOException on error
      */
     public void close() throws IOException {
-        buffer.close();
+        if (!closed) {
+            try {
+                buffer.close();
+            }
+            finally {
+                BufferPool.releaseByteArray(recordBuf);
+                BufferPool.releaseByteArray(nameBuf);
+                BufferPool.releaseByteArray(oneBuf);
+
+                closed = true;
+            }
+        }
     }
 
     /**
@@ -138,34 +177,6 @@ public class TarInputStream extends FilterInputStream {
     }
 
     /**
-     * Skip bytes in the input buffer. This skips bytes in the
-     * current entry's data, not the entire archive, and will
-     * stop at the end of the current entry's data if the number
-     * to skip extends beyond that point.
-     *
-     * @param numToSkip The number of bytes to skip.
-     * @return the number actually skipped
-     * @throws IOException on error
-     */
-    public long skip(long numToSkip) throws IOException {
-        // REVIEW
-        // This is horribly inefficient, but it ensures that we
-        // properly skip over bytes via the TarBuffer...
-        //
-        byte[] skipBuf = new byte[BUFFER_SIZE];
-        long skip = numToSkip;
-        while (skip > 0) {
-            int realSkip = (int) (skip > skipBuf.length ? skipBuf.length : skip);
-            int numRead = read(skipBuf, 0, realSkip);
-            if (numRead == -1) {
-                break;
-            }
-            skip -= numRead;
-        }
-        return (numToSkip - skip);
-    }
-
-    /**
      * Since we do not support marking just yet, we return false.
      *
      * @return False.
@@ -186,6 +197,23 @@ public class TarInputStream extends FilterInputStream {
      * Since we do not support marking just yet, we do nothing.
      */
     public void reset() {
+    }
+
+
+    /**
+     * Reads a whole new record from the {@link TarBuffer} into the {@link #recordBuf record buffer} and resets
+     * {@link #recordBufPos} and {@link #recordBufLeft} fields accordingly.
+     *
+     * @return <code>true</code> if the record has been read, <code>false</code> if EOF has been reached
+     * @throws IOException on error
+     */
+    public boolean readRecord() throws IOException {
+        boolean ret = buffer.readRecord(recordBuf);
+
+        recordBufPos = 0;
+        recordBufLeft = ret?recordBuf.length:0;
+
+        return ret;
     }
 
     /**
@@ -218,20 +246,17 @@ public class TarInputStream extends FilterInputStream {
             }
 
             if (numToSkip > 0) {
-                skip(numToSkip);
+                skipBytes(numToSkip);
             }
-
-            readBuf = null;
         }
 
-        byte[] headerBuf = buffer.readRecord();
-
-        if (headerBuf == null) {
+        // Read the header record
+        if (!readRecord()) {
             if (debug) {
                 System.err.println("READ NULL RECORD");
             }
             hasHitEOF = true;
-        } else if (buffer.isEOFRecord(headerBuf)) {
+        } else if (buffer.isEOFRecord(recordBuf)) {
             if (debug) {
                 System.err.println("READ EOF RECORD");
             }
@@ -241,7 +266,12 @@ public class TarInputStream extends FilterInputStream {
         if (hasHitEOF) {
             currEntry = null;
         } else {
-            currEntry = new TarEntry(headerBuf);
+            currEntry = new TarEntry(recordBuf);
+
+            // Offset of the current entry from the start of the archive,
+            // allows to reposition the stream at the start of the entry
+            currEntry.setOffset(buffer.getCurrentBlockNum()*buffer.getBlockSize()
+                               + buffer.getCurrentRecordNum()*buffer.getRecordSize());
 
             if (debug) {
                 System.err.println("TarInputStream: SET CURRENTRY '"
@@ -250,18 +280,21 @@ public class TarInputStream extends FilterInputStream {
                         + currEntry.getSize());
             }
 
+            // Update the current entry offset and size
             entryOffset = 0;
-
             entrySize = currEntry.getSize();
+
+            // Consume the rest of the record
+            recordBufPos = 0;
+            recordBufLeft = 0;
         }
 
         if (currEntry != null && currEntry.isGNULongNameEntry()) {
             // read in the name
             StringBuffer longName = new StringBuffer();
-            byte[] buf = new byte[SMALL_BUFFER_SIZE];
             int length;
-            while ((length = read(buf)) >= 0) {
-                longName.append(new String(buf, 0, length));
+            while ((length = read(nameBuf)) >= 0) {
+                longName.append(new String(nameBuf, 0, length));
             }
             getNextEntry();
             if (currEntry == null) {
@@ -293,6 +326,8 @@ public class TarInputStream extends FilterInputStream {
         return num == -1 ? -1 : ((int) oneBuf[0]) & BYTE_MASK;
     }
 
+
+
     /**
      * Reads bytes from the current tar archive entry.
      *
@@ -309,67 +344,129 @@ public class TarInputStream extends FilterInputStream {
     public int read(byte[] buf, int offset, int numToRead) throws IOException {
         int totalRead = 0;
 
+        // Have we already reached the end of file/entry ?
         if (entryOffset >= entrySize) {
             return -1;
         }
 
+        // Can't read more than the entry's size
         if ((numToRead + entryOffset) > entrySize) {
             numToRead = (int) (entrySize - entryOffset);
         }
 
-        if (readBuf != null) {
-            int sz = (numToRead > readBuf.length) ? readBuf.length
+        // Read data one record (at most) at a time. The record buffer is first emptied before reading a new record.
+        while (numToRead > 0) {
+            // If there is no more data left to read from the current record buffer,
+            // read a new record  
+            if(recordBufLeft<=0) {
+                if (!readRecord()) {
+                    // Unexpected EOF!
+                    throw new EOFException("unexpected EOF with " + numToRead + " bytes unread");
+                }
+            }
+
+            int sz = (numToRead > recordBufLeft)
+                    ? recordBufLeft
                     : numToRead;
 
-            System.arraycopy(readBuf, 0, buf, offset, sz);
+            System.arraycopy(recordBuf, recordBufPos, buf, offset, sz);
 
-            if (sz >= readBuf.length) {
-                readBuf = null;
-            } else {
-                int newLen = readBuf.length - sz;
-                byte[] newBuf = new byte[newLen];
-
-                System.arraycopy(readBuf, sz, newBuf, 0, newLen);
-
-                readBuf = newBuf;
-            }
+            recordBufPos += sz;
+            recordBufLeft -= sz;
 
             totalRead += sz;
             numToRead -= sz;
             offset += sz;
+            entryOffset += sz;
         }
-
-        while (numToRead > 0) {
-            byte[] rec = buffer.readRecord();
-
-            if (rec == null) {
-                // Unexpected EOF!
-                throw new IOException("unexpected EOF with " + numToRead
-                        + " bytes unread");
-            }
-
-            int sz = numToRead;
-            int recLen = rec.length;
-
-            if (recLen > sz) {
-                System.arraycopy(rec, 0, buf, offset, sz);
-
-                readBuf = new byte[recLen - sz];
-
-                System.arraycopy(rec, sz, readBuf, 0, recLen - sz);
-            } else {
-                sz = recLen;
-
-                System.arraycopy(rec, 0, buf, offset, recLen);
-            }
-
-            totalRead += sz;
-            numToRead -= sz;
-            offset += sz;
-        }
-
-        entryOffset += totalRead;
 
         return totalRead;
+    }
+
+    /**
+     * Skip bytes in the input buffer. This skips bytes in the
+     * current entry's data, not the entire archive, and will
+     * stop at the end of the current entry's data if the number
+     * to skip extends beyond that point.
+     *
+     * @param numToSkip the number of bytes to skip.
+     * @return the number actually skipped
+     * @throws IOException on error
+     */
+    public long skip(long numToSkip) throws IOException {
+        // Have we already reached the end of file/entry ?
+        if (entryOffset >= entrySize) {
+            return -1;
+        }
+
+        // Can't read more than the entry's size
+        if ((numToSkip + entryOffset) > entrySize) {
+            numToSkip = (int) (entrySize - entryOffset);
+        }
+
+        return skipBytes(numToSkip);
+    }
+
+    /**
+     * Skips the specified number of bytes, without checking for the current entry's boundaries.
+     *
+     * @param numToSkip the number of bytes to skip.
+     * @return the number actually skipped
+     * @throws IOException on error
+     */
+    private long skipBytes(long numToSkip) throws IOException {
+        int totalSkipped = 0;
+
+        int recordSize = buffer.getRecordSize();
+        int blockSize = buffer.getBlockSize();
+
+        while (numToSkip > 0) {
+            // If the record buffer has some data left, empty it
+            if(recordBufLeft>0) {
+                int sz = (numToSkip > recordBufLeft)
+                        ? recordBufLeft
+                        : (int)numToSkip;
+
+                recordBufPos += sz;
+                recordBufLeft -= sz;
+
+                totalSkipped += sz;
+                numToSkip -= sz;
+                entryOffset += sz;
+            }
+            // Skip a whole block if there are enough bytes left to skip, and if we are at the end of the current block
+            else if(numToSkip>=blockSize && buffer.getCurrentRecordNum()==buffer.getRecordsPerBlock()-1) {
+                if (!buffer.skipBlock()) {
+                    // Unexpected EOF!
+                    throw new EOFException("unexpected EOF with " + numToSkip + " bytes unskipped");
+                }
+
+                totalSkipped += blockSize;
+                numToSkip -= blockSize;
+                entryOffset += blockSize;
+            }
+            // Skip a whole record if there are enough bytes left to skip
+            else if(numToSkip>=recordSize) {
+                if (!buffer.skipRecord()) {
+                    // Unexpected EOF!
+                    throw new EOFException("unexpected EOF with " + numToSkip + " bytes unskipped");
+                }
+
+                totalSkipped += recordSize;
+                numToSkip -= recordSize;
+                entryOffset += recordSize;
+            }
+            // There is less than a record to skip -> read the record and skip
+            else {
+                if (!readRecord()) {
+                    // Unexpected EOF!
+                    throw new EOFException("unexpected EOF with " + numToSkip + " bytes unskipped");
+                }
+
+                // if(recordBufLeft>0) will be matched on the next loop
+            }
+        }
+
+        return totalSkipped;
     }
 }

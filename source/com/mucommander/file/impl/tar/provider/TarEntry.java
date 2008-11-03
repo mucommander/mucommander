@@ -23,9 +23,7 @@
 
 package com.mucommander.file.impl.tar.provider;
 
-import java.io.File;
 import java.util.Date;
-import java.util.Locale;
 
 /**
  * This class represents an entry in a Tar archive. It consists
@@ -74,8 +72,13 @@ import java.util.Locale;
  * } header;
  * </pre>
  *
+ * <p>-----------------------------------</p>
+ * <p>This class is based off the <code>org.apache.tools.tar</code> package of the <i>Apache Ant</i> project. The Ant
+ * code has been modified under the terms of the Apache License which you can find in the bundled muCommander license
+ * file. It was forked at version 1.7.1 of Ant.</p>
+ * 
+ * @author Apache Ant, Maxence Bernard
  */
-
 public class TarEntry implements TarConstants {
     /** The entry's name. */
     private StringBuffer name;
@@ -116,8 +119,8 @@ public class TarEntry implements TarConstants {
     /** The entry's minor device number. */
     private int devMinor;
 
-    /** The entry's file reference */
-    private File file;
+    /** The entry's offset from the start of the archive */
+    private long offset;
 
     /** Maximum length of a user's name in the tar file */
     public static final int MAX_NAMELEN = 31;
@@ -149,7 +152,6 @@ public class TarEntry implements TarConstants {
         this.groupId = 0;
         this.userName = new StringBuffer(user);
         this.groupName = new StringBuffer("");
-        this.file = null;
     }
 
     /**
@@ -189,74 +191,6 @@ public class TarEntry implements TarConstants {
     public TarEntry(String name, byte linkFlag) {
         this(name);
         this.linkFlag = linkFlag;
-    }
-
-    /**
-     * Construct an entry for a file. File is set to file, and the
-     * header is constructed from information from the file.
-     *
-     * @param file The file that the entry represents.
-     */
-    public TarEntry(File file) {
-        this();
-
-        this.file = file;
-
-        String fileName = file.getPath();
-        String osname = System.getProperty("os.name").toLowerCase(Locale.US);
-
-        if (osname != null) {
-
-            // Strip off drive letters!
-            // REVIEW Would a better check be "(File.separator == '\')"?
-
-            if (osname.startsWith("windows")) {
-                if (fileName.length() > 2) {
-                    char ch1 = fileName.charAt(0);
-                    char ch2 = fileName.charAt(1);
-
-                    if (ch2 == ':'
-                            && ((ch1 >= 'a' && ch1 <= 'z')
-                                || (ch1 >= 'A' && ch1 <= 'Z'))) {
-                        fileName = fileName.substring(2);
-                    }
-                }
-            } else if (osname.indexOf("netware") > -1) {
-                int colon = fileName.indexOf(':');
-                if (colon != -1) {
-                    fileName = fileName.substring(colon + 1);
-                }
-            }
-        }
-
-        fileName = fileName.replace(File.separatorChar, '/');
-
-        // No absolute pathnames
-        // Windows (and Posix?) paths can start with "\\NetworkDrive\",
-        // so we loop on starting /'s.
-        while (fileName.startsWith("/")) {
-            fileName = fileName.substring(1);
-        }
-
-        this.linkName = new StringBuffer("");
-        this.name = new StringBuffer(fileName);
-
-        if (file.isDirectory()) {
-            this.mode = DEFAULT_DIR_MODE;
-            this.linkFlag = LF_DIR;
-
-            if (this.name.charAt(this.name.length() - 1) != '/') {
-                this.name.append("/");
-            }
-        } else {
-            this.mode = DEFAULT_FILE_MODE;
-            this.linkFlag = LF_NORMAL;
-        }
-
-        this.size = file.length();
-        this.modTime = file.lastModified() / MILLIS_PER_SECOND;
-        this.devMajor = 0;
-        this.devMinor = 0;
     }
 
     /**
@@ -475,15 +409,6 @@ public class TarEntry implements TarConstants {
     }
 
     /**
-     * Get this entry's file.
-     *
-     * @return This entry's file.
-     */
-    public File getFile() {
-        return file;
-    }
-
-    /**
      * Get this entry's mode.
      *
      * @return This entry's mode.
@@ -510,6 +435,23 @@ public class TarEntry implements TarConstants {
         this.size = size;
     }
 
+    /**
+     * Returns this entry's offset from the start of the archive.
+     *
+     * @return this entry's offset from the start of the archive
+     */
+    public long getOffset() {
+        return offset;
+    }
+
+    /**
+     * Sets this entry's offset from the start of the archive.
+     *
+     * @param offset this entry's offset from the start of the archive
+     */
+    public void setOffset(long offset) {
+        this.offset = offset;
+    }
 
     /**
      * Indicate if this entry is a GNU long name block
@@ -527,40 +469,11 @@ public class TarEntry implements TarConstants {
      * @return True if this entry is a directory.
      */
     public boolean isDirectory() {
-        if (file != null) {
-            return file.isDirectory();
-        }
-
         if (linkFlag == LF_DIR) {
             return true;
         }
 
-        if (getName().endsWith("/")) {
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * If this entry represents a file, and the file is a directory, return
-     * an array of TarEntries for this entry's children.
-     *
-     * @return An array of TarEntry's for this entry's children.
-     */
-    public TarEntry[] getDirectoryEntries() {
-        if (file == null || !file.isDirectory()) {
-            return new TarEntry[0];
-        }
-
-        String[]   list = file.list();
-        TarEntry[] result = new TarEntry[list.length];
-
-        for (int i = 0; i < list.length; ++i) {
-            result[i] = new TarEntry(new File(file, list[i]));
-        }
-
-        return result;
+        return getName().endsWith("/");
     }
 
     /**

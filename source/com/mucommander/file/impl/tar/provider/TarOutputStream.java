@@ -23,6 +23,8 @@
 
 package com.mucommander.file.impl.tar.provider;
 
+import com.mucommander.io.BufferPool;
+
 import java.io.FilterOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -32,6 +34,12 @@ import java.io.OutputStream;
  * Methods are provided to put entries, and then write their contents
  * by writing to this stream using write().
  *
+ * <p>-----------------------------------</p>
+ * <p>This class is based off the <code>org.apache.tools.tar</code> package of the <i>Apache Ant</i> project. The Ant
+ * code has been modified under the terms of the Apache License which you can find in the bundled muCommander license
+ * file. It was forked at version 1.7.1 of Ant.</p>
+ * 
+ * @author Apache Ant, Maxence Bernard
  */
 public class TarOutputStream extends FilterOutputStream {
     /** Fail if a long file name is required in the archive. */
@@ -43,7 +51,6 @@ public class TarOutputStream extends FilterOutputStream {
     /** GNU tar extensions are used to store long file names in the archive. */
     public static final int LONGFILE_GNU = 2;
 
-    // CheckStyle:VisibilityModifier OFF - bc
     protected boolean   debug;
     protected long      currSize;
     protected String    currName;
@@ -54,7 +61,6 @@ public class TarOutputStream extends FilterOutputStream {
     protected byte[]    assemBuf;
     protected TarBuffer buffer;
     protected int       longFileMode = LONGFILE_ERROR;
-    // CheckStyle:VisibilityModifier ON
 
     private boolean closed = false;
 
@@ -87,9 +93,9 @@ public class TarOutputStream extends FilterOutputStream {
         this.buffer = new TarBuffer(os, blockSize, recordSize);
         this.debug = false;
         this.assemLen = 0;
-        this.assemBuf = new byte[recordSize];
-        this.recordBuf = new byte[recordSize];
-        this.oneBuf = new byte[1];
+        this.assemBuf = BufferPool.getByteArray(recordSize);
+        this.recordBuf = BufferPool.getByteArray(recordSize);
+        this.oneBuf = BufferPool.getByteArray(1);
     }
 
     /**
@@ -142,10 +148,18 @@ public class TarOutputStream extends FilterOutputStream {
      */
     public void close() throws IOException {
         if (!closed) {
-            finish();
-            buffer.close();
-            out.close();
-            closed = true;
+            try {
+                finish();
+            
+                buffer.close();
+            }
+            finally {
+                BufferPool.releaseByteArray(assemBuf);
+                BufferPool.releaseByteArray(recordBuf);
+                BufferPool.releaseByteArray(oneBuf);
+
+                closed = true;
+            }
         }
     }
 
