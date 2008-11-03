@@ -334,7 +334,7 @@ public class StreamUtils {
         do {
             long nbSkipped = in.skip(n);
             if(nbSkipped<0)
-                throw new IOException();
+                throw new EOFException();
 
             n -= nbSkipped;
         } while(n>0);
