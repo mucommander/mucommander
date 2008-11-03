@@ -23,6 +23,7 @@ import com.mucommander.bookmark.BookmarkManager;
 import com.mucommander.command.CommandManager;
 import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.shell.ShellHistoryManager;
+import com.mucommander.ui.main.tree.TreeIOThreadManager;
 import com.mucommander.ui.theme.ThemeManager;
 
 /**
@@ -75,6 +76,8 @@ public class ShutdownHook extends Thread {
         // Return if shutdown tasks have already been performed
         if(shutdownTasksPerformed)
             return;
+        
+        TreeIOThreadManager.getInstance().interrupt();
 
         // Save preferences
         try {MuConfiguration.write();}

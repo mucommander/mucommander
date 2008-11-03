@@ -76,6 +76,10 @@ public class FoldersTreePanel extends JPanel implements TreeSelectionListener,
 
     /** A timer that fires a directory change */
     private ChangeTimer changeTimer = new ChangeTimer();
+    
+    static {
+        TreeIOThreadManager.getInstance().start();
+    }
 
    
     /**

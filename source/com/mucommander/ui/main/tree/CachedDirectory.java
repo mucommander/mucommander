@@ -19,17 +19,18 @@
 
 package com.mucommander.ui.main.tree;
 
+import java.lang.reflect.InvocationTargetException;
+import java.util.Arrays;
+
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.SwingUtilities;
+
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.impl.ProxyFile;
 import com.mucommander.ui.icon.CustomFileIconProvider;
 import com.mucommander.ui.icon.FileIcons;
 import com.mucommander.ui.icon.IconManager;
-
-import javax.swing.*;
-
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.util.Arrays;
 
 /**
  * A class that holds cached children of a directory.
@@ -39,6 +40,8 @@ import java.util.Arrays;
  */
 public class CachedDirectory extends ProxyFile {
     
+    private static final ImageIcon NOT_ACCESSIBLE_ICON = IconManager.getIcon(IconManager.FILE_ICON_SET, CustomFileIconProvider.NOT_ACCESSIBLE_FILE);
+
     /** an array of cached children */
     private AbstractFile[] cachedChildren = null;
     
@@ -77,14 +80,13 @@ public class CachedDirectory extends ProxyFile {
         }
         // check if directory contents changed
         if (lsTimeStamp != file.getDate()) {
-            // start new caching thread
             setReadingChildren(true);
-            Thread lsThread = new Thread("CachedDirectory.lsAsync") {
+            // read children in caching thread
+            TreeIOThreadManager.getInstance().addTask(new Runnable() {
                 public void run() {
                     lsAsync();
                 }
-            };
-            lsThread.start();
+            });
             return false;
         }
         return true;
@@ -95,7 +97,7 @@ public class CachedDirectory extends ProxyFile {
      * method is executed in caching thread.
      */
     private void lsAsync() {
-        if (getCachedIcon() == null) {
+        if (getCachedIcon() == null || getCachedIcon() == NOT_ACCESSIBLE_ICON) {
             setCachedIcon(FileIcons.getFileIcon(getProxiedFile()));
         }
 
@@ -105,7 +107,7 @@ public class CachedDirectory extends ProxyFile {
         } catch (Exception e) {
             e.printStackTrace();
             children = new AbstractFile[0];
-            cachedIcon = IconManager.getIcon(IconManager.FILE_ICON_SET, CustomFileIconProvider.NOT_ACCESSIBLE_FILE);
+            setCachedIcon(NOT_ACCESSIBLE_ICON);
         }
 
         Arrays.sort(children, cache.getSort());
