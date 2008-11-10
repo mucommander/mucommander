@@ -312,6 +312,7 @@ change:JA:変更
 change:CS:Změnit
 change:IT:Cambia
 change:pt_BR:Alterar
+change:SL:Spremeni
 # Translation missing (New!)
 
 
@@ -750,6 +751,7 @@ file_manager:JA:ファイル マネージャー
 file_manager:PL:Menedżer plików
 file_manager:CS:Správce souborů
 file_manager:IT:Gestione File
+file_manager:SL:Urejevalnik datotek
 # Translation missing (New!)
 
 
@@ -802,6 +804,7 @@ creating_file:zh_TW:正在建立 %1
 creating_file:IT:Creazione di %1 in corso
 creating_file:pt_BR:Criando %1
 creating_file:DA:Opret %1
+creating_file:SL:Kreiram %1
 # Translation missing (KO, zh_CN, SK, SL)
 
 
@@ -1125,6 +1128,7 @@ owner:zh_TW:擁有者
 owner:IT:Proprietario
 owner:pt_BR:Proprietário
 owner:DA:Ejer
+owner:SL:Lastnik
 # Translation missing (KO, zh_CN, SL)
 
 
@@ -1157,6 +1161,7 @@ group:zh_TW:群組
 group:IT:Gruppo
 group:pt_BR:Grupo
 group:DA:Gruppe
+group:SL:Skupina
 # Translation missing (KO, zh_CN, SL)
 
 
@@ -1572,6 +1577,7 @@ generic_error:zh_TW:當進行指定操作時, 發生錯誤.
 generic_error:IT:Errore durante l'esecuzione dell'operazione richiesta.
 generic_error:pt_BR:Ocorreu um erro durante a operação
 generic_error:DA:En fejl opstod under den ønskede handling
+generic_error:SL:Med izvajanjem zahtevane operacije se je zgodila napaka.
 # Translation missing (KO, zh_CN, SK, SL)
 
 
@@ -2000,6 +2006,7 @@ integrity_check_error:zh_TW:完整性檢查失敗: 來源及目的不一致
 integrity_check_error:IT:Verifica integrità fallita: sorgente e destinazione non corrispondono
 integrity_check_error:pt_BR:Falha na checagem de integridade: fonte e destino estão diferentes
 integrity_check_error:DA:Integritetstjek fejlede: kilden og destinationen stemmer ikke overens
+integrity_check_error:SL:Napaka pri preverjanju integritete: izvor in cilj se ne ujemata
 # Translation missing (KO, zh_CN, SK, SL, SV)
 
 
@@ -2239,6 +2246,7 @@ com.mucommander.ui.action.ExploreBookmarksAction.label:zh_TW:檢視書籤
 com.mucommander.ui.action.ExploreBookmarksAction.label:IT:Esplora i bookmark
 com.mucommander.ui.action.ExploreBookmarksAction.label:pt_BR:Explorar favoritos
 com.mucommander.ui.action.ExploreBookmarksAction.label:DA:Vis bogmærker
+com.mucommander.ui.action.ExploreBookmarksAction.label:SL:Razišči Priljubljene
 # Translation missing (KO, zh_CN, SK, SL)
 
 
@@ -2799,11 +2807,12 @@ com.mucommander.ui.action.DeleteAction.tooltip:JA:マークされたファイル
 com.mucommander.ui.action.DeleteAction.tooltip:CS:Je-li možné, označené přesunout do Koše
 com.mucommander.ui.action.DeleteAction.tooltip:IT:Elimina file selezionati usando il cestino quando possibile
 com.mucommander.ui.action.DeleteAction.tooltip:pt_BR:Apagar arquivos selecionados
+com.mucommander.ui.action.DeleteAction.tooltip:SL:Izbriši označene datoteke z uporabo koša
 # The following entries need to be updated to indicate that the system trash is used when it is available
 com.mucommander.ui.action.DeleteAction.tooltip:ES:Elimiar los ficheros marcados
 com.mucommander.ui.action.DeleteAction.tooltip:RU:Удаление выделенных файлов
 com.mucommander.ui.action.DeleteAction.tooltip:zh_CN:刪除已标记文件
-com.mucommander.ui.action.DeleteAction.tooltip:SL:Izbriši označene datoteke
+com.mucommander.ui.action.DeleteAction.tooltip:SL:Izbriši označene datoteke z uporabo koša
 com.mucommander.ui.action.DeleteAction.tooltip:RO:Șterge fișierele selectate
 com.mucommander.ui.action.DeleteAction.tooltip:KO:선택된 파일 삭제
 com.mucommander.ui.action.DeleteAction.tooltip:pt_BR:Apagar arquivos selecionados
@@ -2834,6 +2843,7 @@ com.mucommander.ui.action.PermanentDeleteAction.label:JA:永久に削除
 com.mucommander.ui.action.PermanentDeleteAction.label:CS:Smazat přímo
 com.mucommander.ui.action.PermanentDeleteAction.label:IT:Elimina definitivamente
 com.mucommander.ui.action.PermanentDeleteAction.label:pt_BR:Remover definitivamente
+com.mucommander.ui.action.PermanentDeleteAction.label:SL:Trajno brisanje
 # Translation missing (New!)
 
 
@@ -2863,6 +2873,7 @@ com.mucommander.ui.action.PermanentDeleteAction.tooltip:JA:システムのごみ
 com.mucommander.ui.action.PermanentDeleteAction.tooltip:CS:Smazat označené soubory bez použití systémového Koše
 com.mucommander.ui.action.PermanentDeleteAction.tooltip:IT:Elimina file selezionati senza usare il cestino
 com.mucommander.ui.action.PermanentDeleteAction.tooltip:pt_BR:Remover arquivos marcados definitivamente
+com.mucommander.ui.action.PermanentDeleteAction.tooltip:SL:Izbriši označene datoteke brez uporabe koša
 # Translation missing (New!)
 
 
@@ -3250,6 +3261,7 @@ com.mucommander.ui.action.GoToParentInOtherPanelAction.label:PL:Idź do katalogu
 com.mucommander.ui.action.GoToParentInOtherPanelAction.label:CS:O úroveň výš ve druhém panelu
 com.mucommander.ui.action.GoToParentInOtherPanelAction.label:IT:Vai su superiore nell'altro pannello
 com.mucommander.ui.action.GoToParentInOtherPanelAction.label:pt_BR:Exibir o nível superior em outro painel
+com.mucommander.ui.action.GoToParentInOtherPanelAction.label:SL:Pojdi v izvorno mapo v drugem oknu
 # Translation missing (New!)
 
 
@@ -3277,6 +3289,7 @@ com.mucommander.ui.action.GoToParentInBothPanelsAction.label:PL:Idź do katalogu
 com.mucommander.ui.action.GoToParentInBothPanelsAction.label:CS:O úroveň výš v obou panelech
 com.mucommander.ui.action.GoToParentInBothPanelsAction.label:IT:Vai su superiore in entrambi i pannelli
 com.mucommander.ui.action.GoToParentInBothPanelsAction.label:pt_BR:Exibir o nível superior em ambos os paineis
+com.mucommander.ui.action.GoToParentInBothPanelsAction.label:SL:Pojdi v izvorno mapo v obeh oknih
 # Translation missing (New!)
 
 
@@ -3436,6 +3449,7 @@ com.mucommander.ui.action.SortByOwnerAction.label:zh_TW:依擁有者排序
 com.mucommander.ui.action.SortByOwnerAction.label:IT:Ordina per Propietario
 com.mucommander.ui.action.SortByOwnerAction.label:pt_BR:Ordenar pelo proprietário
 com.mucommander.ui.action.SortByOwnerAction.label:DA:Sorter efter ejer
+com.mucommander.ui.action.SortByOwnerAction.label:SL:Razvrsti po lastniku
 # Translation missing (KO, zh_CN, SL)
 
 
@@ -3470,6 +3484,7 @@ com.mucommander.ui.action.SortByGroupAction.label:zh_TW:依群組排序
 com.mucommander.ui.action.SortByGroupAction.label:IT:Ordina per Gruppo
 com.mucommander.ui.action.SortByGroupAction.label:pt_BR:Ordenar pelo grupo
 com.mucommander.ui.action.SortByGroupAction.label:DA:Sorter efter gruppe
+com.mucommander.ui.action.SortByGroupAction.label:SL:Razvrsti po skupini
 # Translation missing (KO, zh_CN, SL)
 
 
@@ -3755,6 +3770,7 @@ com.mucommander.ui.action.MarkExtensionAction.label:zh_TW:標記延伸檔名
 com.mucommander.ui.action.MarkExtensionAction.label:IT:Marca estensione
 com.mucommander.ui.action.MarkExtensionAction.label:pt_BR:Marcar extensão
 com.mucommander.ui.action.MarkExtensionAction.label:DA:Marker filendelse
+com.mucommander.ui.action.MarkExtensionAction.label:SL:Označi končnico
 # Translation missing (KO, zh_CN, SK, SL)
 
 
@@ -4022,6 +4038,7 @@ com.mucommander.ui.action.OpenInOtherPanelAction.label:zh_TW:開啟於其它面�
 com.mucommander.ui.action.OpenInOtherPanelAction.label:IT:Apri nell'altro pannello
 com.mucommander.ui.action.OpenInOtherPanelAction.label:pt_BR:Abrir em um novo painel
 com.mucommander.ui.action.OpenInOtherPanelAction.label:DA:Åben i andet panel
+com.mucommander.ui.action.OpenInOtherPanelAction.label:SL:Odpri v drugem oknu
 # Translation missing (KO, zh_CN, SK, SL)
 
 
@@ -4054,6 +4071,7 @@ com.mucommander.ui.action.OpenInBothPanelsAction.label:zh_TW:開啟於兩邊面�
 com.mucommander.ui.action.OpenInBothPanelsAction.label:IT:Apri in entrambi i pannelli
 com.mucommander.ui.action.OpenInBothPanelsAction.label:pt_BR:Abrir em ambos os paineis
 com.mucommander.ui.action.OpenInBothPanelsAction.label:DA:Åben i begge paneler
+com.mucommander.ui.action.OpenInBothPanelsAction.label:SL:Odpri v obeh oknih
 # Translation missing (KO, zh_CN, SK, SL)
 
 
@@ -4570,6 +4588,7 @@ com.mucommander.ui.action.ToggleTreeAction.label:JA:ツリー ビューの表示
 com.mucommander.ui.action.ToggleTreeAction.label:CS:Zobrazit strom složek
 com.mucommander.ui.action.ToggleTreeAction.label:IT:Visualizza struttura
 com.mucommander.ui.action.ToggleTreeAction.label:pt_BR:Visualização em árvore
+com.mucommander.ui.action.ToggleTreeAction.label:SL:Prikaži drevesno strukturo
 # Translation missing (New!)
 
 
@@ -5064,6 +5083,7 @@ com.mucommander.ui.action.CalculateChecksumAction.label:zh_TW:計算驗證碼
 com.mucommander.ui.action.CalculateChecksumAction.label:IT:Calcola checksum
 com.mucommander.ui.action.CalculateChecksumAction.label:pt_BR:Calcular checksum
 com.mucommander.ui.action.CalculateChecksumAction.label:DA:Udregn kontrolsum
+com.mucommander.ui.action.CalculateChecksumAction.label:SL:Izračunaj vsoto
 # Translation missing (KO, zh_CN, SK, SL)
 
 
@@ -5093,6 +5113,7 @@ com.mucommander.ui.action.MaximizeWindowAction.label:PL:Maksymalizuj
 com.mucommander.ui.action.MaximizeWindowAction.label:CS:Maximalizovat
 com.mucommander.ui.action.MaximizeWindowAction.label:IT:Massimizza
 com.mucommander.ui.action.MaximizeWindowAction.label:pt_BR:Maximizar
+com.mucommander.ui.action.MaximizeWindowAction.label:SL:Povečaj
 # Translation missing (New!)
 
 
@@ -5117,6 +5138,7 @@ com.mucommander.ui.action.MaximizeWindowAction.label.mac_os_x:JA:ズーム
 com.mucommander.ui.action.MaximizeWindowAction.label.mac_os_x:CS:Měřítko
 com.mucommander.ui.action.MaximizeWindowAction.label.mac_os_x:IT:Zoom
 com.mucommander.ui.action.MaximizeWindowAction.label.mac_os_x:pt_BR:Zoom
+com.mucommander.ui.action.MaximizeWindowAction.label.mac_os_x:SL:Povečaj
 # Translation missing (New!)
 
 
@@ -5144,6 +5166,7 @@ com.mucommander.ui.action.MinimizeWindowAction.label:PL:Minimalizuj
 com.mucommander.ui.action.MinimizeWindowAction.label:CS:Minimalizovat
 com.mucommander.ui.action.MinimizeWindowAction.label:IT:Minimizza
 com.mucommander.ui.action.MinimizeWindowAction.label:pt_BR:Minimizar
+com.mucommander.ui.action.MinimizeWindowAction.label:SL:Minimiziraj
 # Translation missing (New!)
 
 
@@ -5164,6 +5187,7 @@ com.mucommander.ui.action.MinimizeWindowAction.label.mac_os_x:EN:$[com.mucommand
 com.mucommander.ui.action.MinimizeWindowAction.label.mac_os_x:DE:Im Dock ablegen
 com.mucommander.ui.action.MinimizeWindowAction.label.mac_os_x:HU:Kicsinyítés
 com.mucommander.ui.action.MinimizeWindowAction.label.mac_os_x:CS:$[com.mucommander.ui.action.MinimizeWindowAction.label]
+com.mucommander.ui.action.MinimizeWindowAction.label.mac_os_x:SL:$[com.mucommander.ui.action.MinimizeWindowAction.label]
 # Translation missing (New!)
 
 
@@ -5189,6 +5213,7 @@ com.mucommander.ui.action.GoToDocumentationAction.label:PL:Dokumentacja online
 com.mucommander.ui.action.GoToDocumentationAction.label:CS:Dokumentace na webu
 com.mucommander.ui.action.GoToDocumentationAction.label:IT:Documentazione in linea
 com.mucommander.ui.action.GoToDocumentationAction.label:pt_BR:Documentação online
+com.mucommander.ui.action.GoToDocumentationAction.label:SL:Dokumentacija na spletu
 # Translation missing (New!)
 
 
@@ -5212,6 +5237,7 @@ com.mucommander.ui.action.ShowParentFoldersQLAction.label:PL:Katalogi nadrzędne
 com.mucommander.ui.action.ShowParentFoldersQLAction.label:CS:Nadřazené složky
 com.mucommander.ui.action.ShowParentFoldersQLAction.label:IT:Cartelle superiori
 com.mucommander.ui.action.ShowParentFoldersQLAction.label:pt_BR:Diretório superior
+com.mucommander.ui.action.ShowParentFoldersQLAction.label:SL:Izvorne mape
 # Translation missing (New!)
 
 
@@ -5236,6 +5262,7 @@ com.mucommander.ui.action.ShowRecentLocationsQLAction.label:PL:Ostatnie lokaliza
 com.mucommander.ui.action.ShowRecentLocationsQLAction.label:CS:Dříve navštívená umístění
 com.mucommander.ui.action.ShowRecentLocationsQLAction.label:IT:Percorsi recenti
 com.mucommander.ui.action.ShowRecentLocationsQLAction.label:pt_BR:Locais recentes
+com.mucommander.ui.action.ShowRecentLocationsQLAction.label:SL:Nedavne lokacije
 # Translation missing (New!)
 
 
@@ -5259,6 +5286,7 @@ com.mucommander.ui.action.ShowRecentExecutedFilesQLAction.label:PL:Ostatnio wyko
 com.mucommander.ui.action.ShowRecentExecutedFilesQLAction.label:CS:Dříve spuštěné soubory
 com.mucommander.ui.action.ShowRecentExecutedFilesQLAction.label:IT:File eseguibili recenti
 com.mucommander.ui.action.ShowRecentExecutedFilesQLAction.label:pt_BR:Arquivos executados recentemente
+com.mucommander.ui.action.ShowRecentExecutedFilesQLAction.label:SL:Nedavno izvršene datoteke
 # Translation missing (New!)
 
 
@@ -5272,6 +5300,7 @@ com.mucommander.ui.action.ShowRecentExecutedFilesQLAction.label:pt_BR:Arquivos e
 
 com.mucommander.ui.action.ShowBookmarksQLAction.label:EN:$[bookmarks_menu]
 com.mucommander.ui.action.ShowBookmarksQLAction.label:NL:Bladwijzers
+com.mucommander.ui.action.ShowBookmarksQLAction.label:SL:$[bookmarks_menu]
 
 
 ############
@@ -5461,6 +5490,7 @@ quick_lists_menu:PL:Szybkie listy
 quick_lists_menu:CS:Rychlé přehledy
 quick_lists_menu:IT:Liste rapide
 quick_lists_menu:pt_BR:Quick lists
+quick_lists_menu:SL:Hitri seznam
 # Translation missing (New!)
 
 
@@ -5872,6 +5902,7 @@ version_dialog.install_and_restart:zh_TW:安裝及重啟
 version_dialog.install_and_restart:IT:Installa e riparti
 version_dialog.install_and_restart:pt_BR:Instalar e reiniciar
 version_dialog.install_and_restart:DA:Installer og genstart
+version_dialog.install_and_restart:SL:Namesti in ponovno zaženi
 # Translation missing (KO, zh_CN, SK, SL)
 
 
@@ -5903,6 +5934,7 @@ version_dialog.preparing_for_update:zh_TW:準備更新中...
 version_dialog.preparing_for_update:IT:Preparazione per aggiornamento...
 version_dialog.preparing_for_update:pt_BR:Preparando atualização...
 version_dialog.preparing_for_update:DA:Forbereder opdatering...
+version_dialog.preparing_for_update:SL:Pripravljam za nadgradnjo...
 # Translation missing (KO, zh_CN, SK, SL)
 
 
@@ -6037,6 +6069,7 @@ destination_dialog.verify_integrity:zh_TW:檢查資料完整性
 destination_dialog.verify_integrity:IT:Verifica integrità dei dati
 destination_dialog.verify_integrity:pt_BR:Verificando integridade dos dados
 destination_dialog.verify_integrity:DA:Verificer data integritet
+destination_dialog.verify_integrity:SL:Preverjanje integritete podatkov
 # Translation missing (KO, zh_CN, SK, SL, SV)
 
 
@@ -6104,6 +6137,7 @@ rename_dialog.new_name:zh_TW:新名稱
 rename_dialog.new_name:IT:Nuovo nome
 rename_dialog.new_name:pt_BR:Novo nome
 rename_dialog.new_name:DA:Nyt navn
+rename_dialog.new_name:SL:Novo ime
 # Translation missing (KO, zh_CN, SK, SL, SV)
 
 
@@ -7611,6 +7645,7 @@ file_selection_dialog.matches_regexp:zh_TW:符合正規表達式
 file_selection_dialog.matches_regexp:IT:Controlla la Regexp
 file_selection_dialog.matches_regexp:pt_BR:expressão regular
 file_selection_dialog.matches_regexp:DA:Regulært udtryk
+file_selection_dialog.matches_regexp:SL:Enakovreden Regexp
 # Translation missing (KO, zh_CN, SL)
 
 
@@ -7841,6 +7876,7 @@ progress_dialog.verifying_file:zh_TW:正在檢查 %1
 progress_dialog.verifying_file:IT:Verificando %1
 progress_dialog.verifying_file:pt_BR:Verificando %1
 progress_dialog.verifying_file:DA:Verificerer %1
+progress_dialog.verifying_file:SL:Preverjam %1
 # Translation missing (KO, zh_CN, SK, SL)
 
 
@@ -7998,6 +8034,7 @@ calculate_checksum_dialog.checksum_algorithm:zh_TW:驗證碼演算法
 calculate_checksum_dialog.checksum_algorithm:IT:Algoritmo di Checksum
 calculate_checksum_dialog.checksum_algorithm:pt_BR:Algorítimo de checksum
 calculate_checksum_dialog.checksum_algorithm:DA:Kontrolsum algoritme
+calculate_checksum_dialog.checksum_algorithm:SL:Algoritem
 # Translation missing (KO, zh_CN, SK, SL)
 
 
@@ -8028,6 +8065,7 @@ calculate_checksum_dialog.temporary_file:zh_TW:暫存檔
 calculate_checksum_dialog.temporary_file:IT:File Temporaneo
 calculate_checksum_dialog.temporary_file:pt_BR:Arquivo temporário
 calculate_checksum_dialog.temporary_file:DA:Midlertidig fil
+calculate_checksum_dialog.temporary_file:SL:Začasna datoteka
 # Translation missing (KO, zh_CN, SK, SL)
 
 
@@ -8471,6 +8509,7 @@ server_connect_dialog.private_key:JA:プライベート キー
 server_connect_dialog.private_key:CS:Soukromý klíč
 server_connect_dialog.private_key:IT:Chiave privata
 server_connect_dialog.private_key:pt_BR:Chave privada
+server_connect_dialog.private_key:SL:Zasebni ključ
 # Translation missing (New!)
 
 
@@ -8502,6 +8541,7 @@ server_connect_dialog.passphrase:PL:Hasło
 server_connect_dialog.passphrase:CS:Heslo
 server_connect_dialog.passphrase:IT:Password
 server_connect_dialog.passphrase:pt_BR:Frase secreta
+server_connect_dialog.passphrase:SL:Geslo
 # Translation missing (New!)
 
 
@@ -8577,6 +8617,7 @@ ftp_connect.nb_connection_retries:PL:Liczba ponowień połączenia
 ftp_connect.nb_connection_retries:CS:Počet opakování pokusů o připojení
 ftp_connect.nb_connection_retries:IT:Numero di tentativi di connessione
 ftp_connect.nb_connection_retries:pt_BR:Numero de tentativas de conexão
+ftp_connect.nb_connection_retries:SL:Število poskusov povezave
 # Translation missing (New!)
 
 
@@ -8604,6 +8645,7 @@ ftp_connect.retry_delay:PL:Opóźnienie między ponowieniem połączenia (w seku
 ftp_connect.retry_delay:CS:Prodleva mezi pokusy (v sekundách)
 ftp_connect.retry_delay:IT:Ritardo tra tentativi (in secondi)
 ftp_connect.retry_delay:pt_BR:Tempo de espera entre as tentativas (segundos)
+ftp_connect.retry_delay:SL:Zamik med poskusi (v sekundah)
 # Translation missing (New!)
 
 
@@ -8888,6 +8930,7 @@ auth_dialog.connect_as:PL:Połącz jako
 auth_dialog.connect_as:CS:Připojit jako 
 auth_dialog.connect_as:IT:Connetti come
 auth_dialog.connect_as:pt_BR:Conectar como
+auth_dialog.connect_as:SL:Poveži kot
 # Translation missing (New!)
 
 
@@ -8917,6 +8960,7 @@ auth_dialog.authentication_failed:PL:Autentykacja nieudana
 auth_dialog.authentication_failed:CS:Ověření se nezdařilo
 auth_dialog.authentication_failed:IT:Autenticazione fallita
 auth_dialog.authentication_failed:pt_BR:Falha na autenticação
+auth_dialog.authentication_failed:SL:Avtentikacija neuspešna
 # Translation missing (New!)
 
 
@@ -9352,6 +9396,7 @@ text_viewer.binary_file_warning:zh_TW:此為二進位檔案
 text_viewer.binary_file_warning:IT:Questo sembra essere un file binario
 text_viewer.binary_file_warning:pt_BR:Parece ser um arquivo binário
 text_viewer.binary_file_warning:DA:Dette lader til at være en binær fil
+text_viewer.binary_file_warning:SL:Kaže se kot binarna datoteka
 # Translation missing (KO, zh_CN, SK, SL, SV)
 
 
@@ -11149,6 +11194,7 @@ prefs_dialog.show_splash_screen:PL:Pokaż ekran powitalny
 prefs_dialog.show_splash_screen:CS:Zobrazit uvítací obrázek
 prefs_dialog.show_splash_screen:IT:Mostra pannello di apertura
 prefs_dialog.show_splash_screen:pt_BR:Show splash screen
+prefs_dialog.show_splash_screen:SL:Prikaži brizgana okna
 # Translation missing (New!)
 
 
@@ -11711,6 +11757,7 @@ prefs_dialog.import_look_and_feel:zh_TW:匯入 look & feel
 prefs_dialog.import_look_and_feel:IT:Importa look & feel
 prefs_dialog.import_look_and_feel:pt_BR:Importar aparência (look & feel)
 prefs_dialog.import_look_and_feel:DA:Importer udseende (udseende og følelse)
+prefs_dialog.import_look_and_feel:SL:Uvozi "Look & feel"
 # Translation missing (KO, zh_CN, SK, SL)
 
 
@@ -11740,6 +11787,7 @@ prefs_dialog.no_look_and_feel:zh_TW:找不到 look & feel.
 prefs_dialog.no_look_and_feel:IT:Nessun look & feel trovato.
 prefs_dialog.no_look_and_feel:pt_BR:Nenhuma aparência (look & feel) foi encontrada.
 prefs_dialog.no_look_and_feel:DA:Intet udseende blev fundet.
+prefs_dialog.no_look_and_feel:SL:Ne najdem "Look & feel"
 # Translation missing (KO, zh_CN, SK, SL)
 
 
@@ -11959,6 +12007,7 @@ prefs_dialog.delete_look_and_feel:zh_TW:永久刪除 look & feel %1 ?
 prefs_dialog.delete_look_and_feel:IT:Cancello definitivamente il look & feel %1 ?
 prefs_dialog.delete_look_and_feel:pt_BR:Remover completamente a aparência (look & feel) %1 ?
 prefs_dialog.delete_look_and_feel:DA:Vil du permanent slette udseenet %1 ?
+prefs_dialog.delete_look_and_feel:SL:Trajno izbrišem "look & feel" %1 ?
 # Translation missing (KO, zh_CN, SK, SL)
 
 
@@ -12042,6 +12091,7 @@ prefs_dialog.jar_file:zh_TW:JAR 檔案
 prefs_dialog.jar_file:IT:File JAR
 prefs_dialog.jar_file:pt_BR:Arquivo JAR
 prefs_dialog.jar_file:DA:JAR-fil
+prefs_dialog.jar_file:SL:JAR datoteka
 # Translation missing (KO, zh_CN, SK, SL)
 
 
@@ -13352,6 +13402,7 @@ batch_rename_dialog.title:JA:名前の一括変更
 batch_rename_dialog.title:CS:Dávkové přejmenování
 batch_rename_dialog.title:IT:Multi rinomina
 batch_rename_dialog.title:pt_BR:Multipla renomeação
+batch_rename_dialog.title:SL:Preimenuj sveženj
 # Translation missing (New!)
 
 
@@ -13378,6 +13429,7 @@ batch_rename_dialog.mask:JA:名前の変更パターン
 batch_rename_dialog.mask:CS:Maska pro přejmenování
 batch_rename_dialog.mask:IT:Maschera di rinomina
 batch_rename_dialog.mask:pt_BR:Modelo de renomeação
+batch_rename_dialog.mask:SL:Preimenuj vzorec
 # Translation missing (New!)
 
 
@@ -13404,6 +13456,7 @@ batch_rename_dialog.search_replace:JA:検索と置換
 batch_rename_dialog.search_replace:CS:Najít & nahradit
 batch_rename_dialog.search_replace:IT:Cerca & Sostituisci
 batch_rename_dialog.search_replace:pt_BR:Pesquisar e Substituir
+batch_rename_dialog.search_replace:SL:Išči in zamenjaj
 # Translation missing (New!)
 
 
@@ -13430,6 +13483,7 @@ batch_rename_dialog.search_for:JA:検索する文字列
 batch_rename_dialog.search_for:CS:Hledaný výraz
 batch_rename_dialog.search_for:IT:Cerca
 batch_rename_dialog.search_for:pt_BR:Pesquisar por
+batch_rename_dialog.search_for:SL:Iskanje za
 # Translation missing (New!)
 
 
@@ -13456,6 +13510,7 @@ batch_rename_dialog.replace_with:JA:置換する文字列
 batch_rename_dialog.replace_with:CS:Bude nahrazen
 batch_rename_dialog.replace_with:IT:Sostituisci con
 batch_rename_dialog.replace_with:pt_BR:Substituir por
+batch_rename_dialog.replace_with:SL:Zamenjaj z
 # Translation missing (New!)
 
 
@@ -13482,6 +13537,7 @@ batch_rename_dialog.counter:JA:カウンター
 batch_rename_dialog.counter:CS:Počítadlo
 batch_rename_dialog.counter:IT:Contatore
 batch_rename_dialog.counter:pt_BR:Contador
+batch_rename_dialog.counter:SL:Števec
 # Translation missing (New!)
 
 
@@ -13508,6 +13564,7 @@ batch_rename_dialog.start_at:JA:開始
 batch_rename_dialog.start_at:CS:Počítat od
 batch_rename_dialog.start_at:IT:Inizia da
 batch_rename_dialog.start_at:pt_BR:Começar
+batch_rename_dialog.start_at:SL:Začni v
 # Translation missing (New!)
 
 
@@ -13534,6 +13591,7 @@ batch_rename_dialog.step_by:JA:増加
 batch_rename_dialog.step_by:CS:Přírůstek
 batch_rename_dialog.step_by:IT:Incremento
 batch_rename_dialog.step_by:pt_BR:Incrementar
+batch_rename_dialog.step_by:SL:Korak po
 # Translation missing (New!)
 
 
@@ -13559,6 +13617,7 @@ batch_rename_dialog.format:PL:Format
 batch_rename_dialog.format:CS:Formát
 batch_rename_dialog.format:IT:Formato
 batch_rename_dialog.format:pt_BR:Formatar
+batch_rename_dialog.format:SL:Formatiraj
 # Translation missing (New!)
 
 
@@ -13585,6 +13644,7 @@ batch_rename_dialog.upper_lower_case:JA:大文字と小文字
 batch_rename_dialog.upper_lower_case:CS:Velikost písmen
 batch_rename_dialog.upper_lower_case:IT:Maiuscolo/Minuscolo
 batch_rename_dialog.upper_lower_case:pt_BR:Maiúsculo/Minúsculo
+batch_rename_dialog.upper_lower_case:SL:Velike/Male črke
 # Translation missing (New!)
 
 
@@ -13611,6 +13671,7 @@ batch_rename_dialog.no_change:JA:変更しない
 batch_rename_dialog.no_change:CS:Beze změny
 batch_rename_dialog.no_change:IT:Invariato
 batch_rename_dialog.no_change:pt_BR:Inalterado
+batch_rename_dialog.no_change:SL:Nespremenjeno
 # Translation missing (New!)
 
 
@@ -13637,6 +13698,7 @@ batch_rename_dialog.lower_case:JA:小文字にする
 batch_rename_dialog.lower_case:CS:malá písmena
 batch_rename_dialog.lower_case:IT:minuscolo
 batch_rename_dialog.lower_case:pt_BR:minúsculo
+batch_rename_dialog.lower_case:SL:male črke
 # Translation missing (New!)
 
 
@@ -13663,6 +13725,7 @@ batch_rename_dialog.upper_case:JA:大文字にする
 batch_rename_dialog.upper_case:CS:VELKÁ PÍSMENA
 batch_rename_dialog.upper_case:IT:MAIUSCOLO
 batch_rename_dialog.upper_case:pt_BR:MAIÚSCULO
+batch_rename_dialog.upper_case:SL:VELIKE ČRKE
 # Translation missing (New!)
 
 
@@ -13689,6 +13752,7 @@ batch_rename_dialog.first_upper:JA:最初の文字を大文字にする
 batch_rename_dialog.first_upper:CS:První písmeno velké
 batch_rename_dialog.first_upper:IT:Prima lettera maiuscola
 batch_rename_dialog.first_upper:pt_BR:Primeira letra em maiúsculo
+batch_rename_dialog.first_upper:SL:Velika začetnica
 # Translation missing (New!)
 
 
@@ -13715,6 +13779,7 @@ batch_rename_dialog.word:JA:単語の最初の文字を大文字にする
 batch_rename_dialog.word:CS:První Písmena Velká
 batch_rename_dialog.word:IT:Prima Lettera Di Ogni Parola
 batch_rename_dialog.word:pt_BR:Primeira de cada palavra
+batch_rename_dialog.word:SL:Velika Začetnica Vsake Besede
 # Translation missing (New!)
 
 
@@ -13741,6 +13806,7 @@ batch_rename_dialog.old_name:JA:古い名前
 batch_rename_dialog.old_name:CS:Původní jméno
 batch_rename_dialog.old_name:IT:Vecchio nome
 batch_rename_dialog.old_name:pt_BR:Nome antigo
+batch_rename_dialog.old_name:SL:Staro ime
 # Translation missing (New!)
 
 
@@ -13767,6 +13833,7 @@ batch_rename_dialog.new_name:JA:新しい名前
 batch_rename_dialog.new_name:CS:Nové jméno
 batch_rename_dialog.new_name:IT:Nuovo nome
 batch_rename_dialog.new_name:pt_BR:Novo nome
+batch_rename_dialog.new_name:SL:Novo ime
 # Translation missing (New!)
 
 
@@ -13793,6 +13860,7 @@ batch_rename_dialog.remove:JA:削除
 batch_rename_dialog.remove:CS:Odstranit
 batch_rename_dialog.remove:IT:Elimina
 batch_rename_dialog.remove:pt_BR:Remover
+batch_rename_dialog.remove:SL:Odstrani
 # Translation missing (New!)
 
 
@@ -13820,6 +13888,7 @@ batch_rename_dialog.block_name:JA:除外
 batch_rename_dialog.block_name:CS:Zachovat
 batch_rename_dialog.block_name:IT:Conserva
 batch_rename_dialog.block_name:pt_BR:Preservar
+batch_rename_dialog.block_name:SL:Ohrani
 # Translation missing (New!)
 
 
@@ -13846,6 +13915,7 @@ batch_rename_dialog.range:JA:範囲
 batch_rename_dialog.range:CS:Rozsah
 batch_rename_dialog.range:IT:Intervallo
 batch_rename_dialog.range:pt_BR:Intervalo
+batch_rename_dialog.range:SL:Razpon
 # Translation missing (New!)
 
 
@@ -13872,6 +13942,7 @@ batch_rename_dialog.proceed_renaming:PL:%1 nazw plików z %2 będzie zmienionych
 batch_rename_dialog.proceed_renaming:CS:%1 z %2 souborů bude přejmenováno. Chcete pokračovat?
 batch_rename_dialog.proceed_renaming:IT:%1 file di %2 verranno rinominati. Vuoi continuare?
 batch_rename_dialog.proceed_renaming:pt_BR:%1 arquivos de %2 serão renomeados. Continuar?
+batch_rename_dialog.proceed_renaming:SL:%1 datotek od %2 bo preimenovanih. Nadaljujem?
 # Translation missing (New!)
 
 
@@ -13897,6 +13968,7 @@ batch_rename_dialog.duplicate_names:JA:重複する名前です!
 batch_rename_dialog.duplicate_names:CS:Stejné jméno se již vyskytuje!
 batch_rename_dialog.duplicate_names:IT:Nomi duplicati!
 batch_rename_dialog.duplicate_names:pt_BR:Nomes duplicados!
+batch_rename_dialog.duplicate_names:SL:Podvojena imena!
 # Translation missing (New!)
 
 
@@ -13928,6 +14000,7 @@ parent_folders_quick_list.empty_message:PL:Bieżąca lokalizacja nie posiada kat
 parent_folders_quick_list.empty_message:CS:Stávající umístění nemá nadřazenou složku
 parent_folders_quick_list.empty_message:IT:Il percorso corrente non ha un livello superiore
 parent_folders_quick_list.empty_message:pt_BR:Localização atual não possue superior
+parent_folders_quick_list.empty_message:SL:Trenutna lokacija nima izvora
 # Translation missing (New!)
 
 
@@ -13952,6 +14025,7 @@ recent_locations_quick_list.empty_message:PL:Brak ostanich lokalizacji
 recent_locations_quick_list.empty_message:CS:Dříve navštívená umístění nebyla nalezena
 recent_locations_quick_list.empty_message:IT:Nessun percorso recente
 recent_locations_quick_list.empty_message:pt_BR:Nenhum local recente
+recent_locations_quick_list.empty_message:SL:Ni nedavne lokacije
 # Translation missing (New!)
 
 
@@ -13975,6 +14049,7 @@ recent_executed_files_quick_list.empty_message:PL:Brak ostatnio uruchamianych pl
 recent_executed_files_quick_list.empty_message:CS:Dříve spuštěné soubory nebyly nalezeny
 recent_executed_files_quick_list.empty_message:IT:Nessun file eseguibile recente
 recent_executed_files_quick_list.empty_message:pt_BR:Nenhum arquivo executado recentemente
+recent_executed_files_quick_list.empty_message:SL:Ni nedavno zagnanih datotek
 # Translation missing (New!)
 
 
