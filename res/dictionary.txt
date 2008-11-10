@@ -839,7 +839,7 @@ creating_file:pt_BR:Criando %1
 creating_file:DA:Opret %1
 creating_file:SL:Kreiram %1
 creating_file:UA:Створюється %1
-# Translation missing (KO, zh_CN, SK, SL)
+# Translation missing (KO, zh_CN, SK)
 
 
 
@@ -1176,7 +1176,7 @@ owner:pt_BR:Proprietário
 owner:DA:Ejer
 owner:SL:Lastnik
 owner:UA:Власник
-# Translation missing (KO, zh_CN, SL)
+# Translation missing (KO, zh_CN)
 
 
 
@@ -1210,7 +1210,7 @@ group:pt_BR:Grupo
 group:DA:Gruppe
 group:SL:Skupina
 group:UA:Група
-# Translation missing (KO, zh_CN, SL)
+# Translation missing (KO, zh_CN)
 
 
 
@@ -1643,7 +1643,7 @@ generic_error:pt_BR:Ocorreu um erro durante a operação
 generic_error:DA:En fejl opstod under den ønskede handling
 generic_error:SL:Med izvajanjem zahtevane operacije se je zgodila napaka.
 generic_error:UA:При виконанні операції сталася помилка
-# Translation missing (KO, zh_CN, SK, SL)
+# Translation missing (KO, zh_CN, SK)
 
 
 
@@ -2092,7 +2092,7 @@ integrity_check_error:DA:Integritetstjek fejlede: kilden og destinationen stemme
 integrity_check_error:SL:Napaka pri preverjanju integritete: izvor in cilj se ne ujemata
 integrity_check_error:SV:Integritetscheck fel: källan och målet överensstämmer inte
 integrity_check_error:UA:Не пройдено перевірки цілісності: початковий та кінцевий файли відрізняються
-# Translation missing (KO, zh_CN, SK, SL, SV)
+# Translation missing (KO, zh_CN, SK)
 
 
 
@@ -2342,7 +2342,7 @@ com.mucommander.ui.action.ExploreBookmarksAction.label:pt_BR:Explorar favoritos
 com.mucommander.ui.action.ExploreBookmarksAction.label:DA:Vis bogmærker
 com.mucommander.ui.action.ExploreBookmarksAction.label:SL:Razišči Priljubljene
 com.mucommander.ui.action.ExploreBookmarksAction.label:UA:Переглянути закладки
-# Translation missing (KO, zh_CN, SK, SL)
+# Translation missing (KO, zh_CN, SK)
 
 
 
@@ -3601,7 +3601,7 @@ com.mucommander.ui.action.SortByOwnerAction.label:pt_BR:Ordenar pelo proprietár
 com.mucommander.ui.action.SortByOwnerAction.label:DA:Sorter efter ejer
 com.mucommander.ui.action.SortByOwnerAction.label:SL:Razvrsti po lastniku
 com.mucommander.ui.action.SortByOwnerAction.label:UA:Сортувати за власником
-# Translation missing (KO, zh_CN, SL)
+# Translation missing (KO, zh_CN)
 
 
 
@@ -3637,7 +3637,7 @@ com.mucommander.ui.action.SortByGroupAction.label:pt_BR:Ordenar pelo grupo
 com.mucommander.ui.action.SortByGroupAction.label:DA:Sorter efter gruppe
 com.mucommander.ui.action.SortByGroupAction.label:SL:Razvrsti po skupini
 com.mucommander.ui.action.SortByGroupAction.label:UA:Сортувати за групою
-# Translation missing (KO, zh_CN, SL)
+# Translation missing (KO, zh_CN)
 
 
 
@@ -3936,7 +3936,7 @@ com.mucommander.ui.action.MarkExtensionAction.label:pt_BR:Marcar extensão
 com.mucommander.ui.action.MarkExtensionAction.label:DA:Marker filendelse
 com.mucommander.ui.action.MarkExtensionAction.label:SL:Označi končnico
 com.mucommander.ui.action.MarkExtensionAction.label:UA:Відмітити розширення
-# Translation missing (KO, zh_CN, SK, SL)
+# Translation missing (KO, zh_CN, SK)
 
 
 
@@ -4216,7 +4216,7 @@ com.mucommander.ui.action.OpenInOtherPanelAction.label:pt_BR:Abrir em um novo pa
 com.mucommander.ui.action.OpenInOtherPanelAction.label:DA:Åben i andet panel
 com.mucommander.ui.action.OpenInOtherPanelAction.label:SL:Odpri v drugem oknu
 com.mucommander.ui.action.OpenInOtherPanelAction.label:UA:Відкрити в іншій панелі
-# Translation missing (KO, zh_CN, SK, SL)
+# Translation missing (KO, zh_CN, SK)
 
 
 
@@ -4250,7 +4250,7 @@ com.mucommander.ui.action.OpenInBothPanelsAction.label:pt_BR:Abrir em ambos os p
 com.mucommander.ui.action.OpenInBothPanelsAction.label:DA:Åben i begge paneler
 com.mucommander.ui.action.OpenInBothPanelsAction.label:SL:Odpri v obeh oknih
 com.mucommander.ui.action.OpenInBothPanelsAction.label:UA:Відкрити в обох панелях
-# Translation missing (KO, zh_CN, SK, SL)
+# Translation missing (KO, zh_CN, SK)
 
 
 
@@ -5308,7 +5308,7 @@ com.mucommander.ui.action.CalculateChecksumAction.label:pt_BR:Calcular checksum
 com.mucommander.ui.action.CalculateChecksumAction.label:DA:Udregn kontrolsum
 com.mucommander.ui.action.CalculateChecksumAction.label:SL:Izračunaj vsoto
 com.mucommander.ui.action.CalculateChecksumAction.label:UA:Порахувати контрольну суму
-# Translation missing (KO, zh_CN, SK, SL)
+# Translation missing (KO, zh_CN, SK)
 
 
 
@@ -6169,7 +6169,7 @@ version_dialog.install_and_restart:pt_BR:Instalar e reiniciar
 version_dialog.install_and_restart:DA:Installer og genstart
 version_dialog.install_and_restart:SL:Namesti in ponovno zaženi
 version_dialog.install_and_restart:UA:Встановити та перезапустити
-# Translation missing (KO, zh_CN, SK, SL)
+# Translation missing (KO, zh_CN, SK)
 
 
 
@@ -6202,7 +6202,7 @@ version_dialog.preparing_for_update:pt_BR:Preparando atualização...
 version_dialog.preparing_for_update:DA:Forbereder opdatering...
 version_dialog.preparing_for_update:SL:Pripravljam za nadgradnjo...
 version_dialog.preparing_for_update:UA:Готуюсь до оновлення...
-# Translation missing (KO, zh_CN, SK, SL)
+# Translation missing (KO, zh_CN, SK)
 
 
 
@@ -6343,7 +6343,7 @@ destination_dialog.verify_integrity:DA:Verificer data integritet
 destination_dialog.verify_integrity:SL:Preverjanje integritete podatkov
 destination_dialog.verify_integrity:SV:Verifierar data integritet
 destination_dialog.verify_integrity:UA:Перевірити цілісність даних
-# Translation missing (KO, zh_CN, SK, SL, SV)
+# Translation missing (KO, zh_CN, SK)
 
 
 
@@ -6414,7 +6414,7 @@ rename_dialog.new_name:DA:Nyt navn
 rename_dialog.new_name:SL:Novo ime
 rename_dialog.new_name:SV:Nytt namn
 rename_dialog.new_name:UA:Нове ім'я
-# Translation missing (KO, zh_CN, SK, SL, SV)
+# Translation missing (KO, zh_CN, SK)
 
 
 
@@ -7101,7 +7101,7 @@ mkfile_dialog.allocate_space:pt_BR:Tamanho
 mkfile_dialog.allocate_space:DA:Alloker plads
 mkfile_dialog.allocate_space:SV:Tilldela utrymme
 mkfile_dialog.allocate_space:UA:Виділити місце
-# Translation missing (KO, zh_CN, SK, SL, SV)
+# Translation missing (KO, zh_CN, SK, SL)
 
 
 
@@ -7989,7 +7989,7 @@ file_selection_dialog.matches_regexp:pt_BR:expressão regular
 file_selection_dialog.matches_regexp:DA:Regulært udtryk
 file_selection_dialog.matches_regexp:SL:Enakovreden Regexp
 file_selection_dialog.matches_regexp:UA:Відповідає регулярному виразові
-# Translation missing (KO, zh_CN, SL)
+# Translation missing (KO, zh_CN)
 
 
 
@@ -8230,7 +8230,7 @@ progress_dialog.verifying_file:pt_BR:Verificando %1
 progress_dialog.verifying_file:DA:Verificerer %1
 progress_dialog.verifying_file:SL:Preverjam %1
 progress_dialog.verifying_file:UA:Перевірка %1
-# Translation missing (KO, zh_CN, SK, SL)
+# Translation missing (KO, zh_CN, SK)
 
 
 
@@ -8394,7 +8394,7 @@ calculate_checksum_dialog.checksum_algorithm:pt_BR:Algorítimo de checksum
 calculate_checksum_dialog.checksum_algorithm:DA:Kontrolsum algoritme
 calculate_checksum_dialog.checksum_algorithm:SL:Algoritem
 calculate_checksum_dialog.checksum_algorithm:UA:Алгоритм підрахунку контрольної суми
-# Translation missing (KO, zh_CN, SK, SL)
+# Translation missing (KO, zh_CN, SK)
 
 
 
@@ -8426,7 +8426,7 @@ calculate_checksum_dialog.temporary_file:pt_BR:Arquivo temporário
 calculate_checksum_dialog.temporary_file:DA:Midlertidig fil
 calculate_checksum_dialog.temporary_file:SL:Začasna datoteka
 calculate_checksum_dialog.temporary_file:UA:Тимчасовий файл
-# Translation missing (KO, zh_CN, SK, SL)
+# Translation missing (KO, zh_CN, SK)
 
 
 
@@ -9818,7 +9818,7 @@ text_viewer.binary_file_warning:DA:Dette lader til at være en binær fil
 text_viewer.binary_file_warning:SL:Kaže se kot binarna datoteka
 text_viewer.binary_file_warning:SV:Detta verkar vara en binär fil
 text_viewer.binary_file_warning:UA:Файл, скоріш за все, двійковий
-# Translation missing (KO, zh_CN, SK, SL, SV)
+# Translation missing (KO, zh_CN, SK)
 
 
 
@@ -12279,7 +12279,7 @@ prefs_dialog.import_look_and_feel:pt_BR:Importar aparência (look & feel)
 prefs_dialog.import_look_and_feel:DA:Importer udseende (udseende og følelse)
 prefs_dialog.import_look_and_feel:SL:Uvozi "Look & feel"
 prefs_dialog.import_look_and_feel:UA:Імпортувати налаштування вигляду
-# Translation missing (KO, zh_CN, SK, SL)
+# Translation missing (KO, zh_CN, SK)
 
 
 
@@ -12310,7 +12310,7 @@ prefs_dialog.no_look_and_feel:pt_BR:Nenhuma aparência (look & feel) foi encontr
 prefs_dialog.no_look_and_feel:DA:Intet udseende blev fundet.
 prefs_dialog.no_look_and_feel:SL:Ne najdem "Look & feel"
 prefs_dialog.no_look_and_feel:UA:Не знайдено налаштувань вигляду
-# Translation missing (KO, zh_CN, SK, SL)
+# Translation missing (KO, zh_CN, SK)
 
 
 
@@ -12538,7 +12538,7 @@ prefs_dialog.delete_look_and_feel:pt_BR:Remover completamente a aparência (look
 prefs_dialog.delete_look_and_feel:DA:Vil du permanent slette udseenet %1 ?
 prefs_dialog.delete_look_and_feel:SL:Trajno izbrišem "look & feel" %1 ?
 prefs_dialog.delete_look_and_feel:UA:Видалити налаштування вигляду %1 безвідновно ?
-# Translation missing (KO, zh_CN, SK, SL)
+# Translation missing (KO, zh_CN, SK)
 
 
 
@@ -12625,7 +12625,7 @@ prefs_dialog.jar_file:pt_BR:Arquivo JAR
 prefs_dialog.jar_file:DA:JAR-fil
 prefs_dialog.jar_file:SL:JAR datoteka
 prefs_dialog.jar_file:UA:JAR файл
-# Translation missing (KO, zh_CN, SK, SL)
+# Translation missing (KO, zh_CN, SK)
 
 
 
