@@ -838,7 +838,7 @@ public class ZipFile implements ZipConstants {
 
             // If the encoding is known already, set the String now
             if(entryInfo.encoding!=null) {
-                ze.setName(getString(filename, entryInfo.encoding));
+                setFilename(ze, getString(filename, entryInfo.encoding));
             }
             else {
                 // Keep the filename bytes, String will be encoded after
@@ -903,13 +903,32 @@ public class ZipFile implements ZipConstants {
 
                 entryInfo.encoding = guessedEncoding;
 
-                entry.setName(getString(entryInfo.filename, guessedEncoding));
+                setFilename(entry, getString(entryInfo.filename, guessedEncoding));
                 entryInfo.filename = null;
 
                 entry.setComment(getString(entryInfo.comment, guessedEncoding));
                 entryInfo.comment = null;
             }
         }
+    }
+
+    /**
+     * Sets the given filename in the ZipEntry.
+     *
+     * <p>This method detects filenames that use '\' as a path separator and replaces occurrences of '\' to '/'.
+     * Zip specifications make it clear that '/' should always be used, even under FAT platforms, but some packers
+     * (IZArc for instance) don't comply with the specs and use '/' anyway. We handle those paths only if the archive
+     * was created under a FAT platform ; '\' is an allowed character under UNIX platforms: replacing them
+     * would be a bad idea.</p>
+     *
+     * @param ze the ZipEntry object in which to set the filename
+     * @param filename the filename to set 
+     */
+    private static void setFilename(ZipEntry ze, String filename) {
+        if(ze.getPlatform()==ZipEntry.PLATFORM_FAT)
+            filename = filename.replace('\\', '/');
+
+        ze.setName(filename);
     }
 
     /**
