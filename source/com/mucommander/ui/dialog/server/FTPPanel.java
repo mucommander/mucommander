@@ -32,6 +32,7 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.MalformedURLException;
+import java.text.ParseException;
 
 
 /**
@@ -173,7 +174,12 @@ public class FTPPanel extends ServerPanel implements ActionListener {
         return true;
     }
 
-    public void dispose() {
+    public void dialogValidated() {
+        // Commits the current spinner value in case it was being edited and 'enter' was pressed
+        // (the spinner value would otherwise not be committed)
+        try { portSpinner.commitEdit(); }
+        catch(ParseException e) { }
+
         updateValues();
     }
 
@@ -208,5 +214,5 @@ public class FTPPanel extends ServerPanel implements ActionListener {
             lastEncoding = (String)encodingComboBox.getSelectedItem();
         }
     }
-	
+
 }

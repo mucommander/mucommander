@@ -114,6 +114,7 @@ Translators:
 - Nardog (Japanese)
 - Jakob Ekström (Swedish)
 - Jeppe Toustrup (Danish)
+- Mykola Bilovus (Ukrainian)
 
 Many thanks to all of you who suggested new features, reported bugs, sent warm
 emails or generously donated to the project !
@@ -158,6 +159,7 @@ Improvements:
 
 Localization:
 - Danish translation, contributed by Jeppe Toustrup.
+- Ukrainian translation, contributed by Mykola Bilovus
 
 Bug fixes:
 - Fixed keyboard focus issues in the text editor after the 'Find' dialog has

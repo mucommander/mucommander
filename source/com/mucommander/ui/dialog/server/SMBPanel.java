@@ -100,7 +100,7 @@ public class SMBPanel extends ServerPanel {
     boolean usesCredentials() {
         return true;
     }
-    public void dispose() {
+    public void dialogValidated() {
         updateValues();
     }
 }

@@ -55,12 +55,13 @@ public class BatchRenameSelectRange extends FocusDialog implements ActionListene
         edtRange.setSelectionStart(0);
         edtRange.setSelectionEnd(filename.length());
         doc.setReadOnly(true);
-        setLayout(new BorderLayout());            
-        add(edtRange, BorderLayout.CENTER);
+        Container content = getContentPane();
+        content.setLayout(new BorderLayout());            
+        content.add(edtRange, BorderLayout.CENTER);
 
         btnOK = new JButton(Translator.get("ok"));
         btnCancel = new JButton(Translator.get("cancel"));
-        add(DialogToolkit.createOKCancelPanel(btnOK, btnCancel, getRootPane(), this), BorderLayout.SOUTH);
+        content.add(DialogToolkit.createOKCancelPanel(btnOK, btnCancel, getRootPane(), this), BorderLayout.SOUTH);
     }
 
 
