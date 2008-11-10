@@ -114,6 +114,7 @@ Translators:
 - Nardog (Japanese)
 - Jakob Ekström (Swedish)
 - Jeppe Toustrup (Danish)
+- Mykola Bilovus (Ukrainian)
 
 Many thanks to all of you who suggested new features, reported bugs, sent warm
 emails or generously donated to the project !
