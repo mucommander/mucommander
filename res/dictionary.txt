@@ -766,7 +766,7 @@ file_manager:IT:Gestione File
 # Used as a button label, in the 'Mkdir' dialog for instance
 create:EN:Create
 create:FR:Créer
-create:DE:Erstelle
+create:DE:Erstellen
 create:ES:Crear
 create:CS:Vytvořit
 create:zh_TW:新增
