@@ -4,9 +4,9 @@
 |_|_|_|___|_____|___|_|_|_|_|_|_|__,|_|_|___|___|_| 
 
 
-------------------
-muCommander v0.8.3
-------------------
+----------------------------
+muCommander v0.8.4 (nightly)
+----------------------------
 
 muCommander is a cross-platform file manager featuring a Norton Commander
 style interface and running on any operating system with Java support
@@ -119,66 +119,20 @@ Many thanks to all of you who suggested new features, reported bugs, sent warm
 emails or generously donated to the project !
 
 
-What's new since v0.8.2 ?
+What's new since v0.8.3 ?
 -------------------------
 
 New features:
-- Tree view, contributed by Mariusz Jakubowski.
-- Batch renamer, contributed by Mariusz Jakubowski.
-- Auto-completion capabilities added to the location field and transfer
-  destination fields, contributed by Arik Hadas.
-- New 'Quick lists' that allow to quickly recall parent folders, recent
-  locations, recently executed files and bookmarks. Contributed by Arik Hadas.
-- Native RAR archive support, contributed by Arik Hadas.
-- Added support for SFTP public key authentication, contributed by
-  Vassil Dichev.
-- Added new FTP connection properties allowing to retry when the server is busy, 
-  contributed by Ivan Baidakov.
-- Added support for the GNOME trash, contributed by David Kovar.
+- 
 
 Improvements:
-- Added Unix permissions support to Zip archives: entries' permissions are
-  now properly retrieved from and persisted into the archive, and can be changed
-  using the 'Change permissions' dialog.
-- When transferring files into a Zip archive, the source files' date is now 
-  properly preserved. The file entries' date can also be changed using the
-  'Change date' dialog.
-- SMTP server port can now be changed in the preferences, defaults to 25.
-- New action for deleting selected files without using the system trash
-  (mapped onto Shift+F8 and Shift+Delete by default). Contributed by Arik Hadas.
-- Improved HTML parsing for HTTP documents, XHTML can now be parsed.
-- New actions for cycling through the folder pane's components, mapped onto
-  Control+Tab (forward) and Shift+Control+Tab (backward) by default.
-- JNA library upgraded to version 3.0.6.
-- jCIFS library upgraded to version 1.2.19.
-- The Properties dialog now sports a large file icon.
-- Mac OS X 10.4 and up: the Properties dialog now displays Spotlight/Finder 
-  comments.
-- New and improved Windows installer, contributed by Karel Klic.
+- 
 
 Localization:
-- Danish translation, contributed by Jeppe Toustrup.
+- 
 
 Bug fixes:
-- Fixed keyboard focus issues in the text editor after the 'Find' dialog has
-  been invoked, contributed by Karel Tomáš.
-- Fixed drag-and-drop issues from muCommander to other applications under Gnome
-  and KDE, contributed by Xavi Miró (bug #45).
-- A couple issues with the free space indicator were fixed by Karel Tomáš.
-- Mac OS X file type and creator are now properly preserved when copying files
-  from and to a local volume (bug #52).
-- Moved 'Check for updates' from 'File' to 'Help' menu, kudos to Joshua Lebo 
-  and Sergey Masyura (bug #59).
-- Mac OS X: added standard 'Minimize' and 'Zoom' items to 'Windows' menu 
-  (bug #37).
-- New 'Show splash screen' preference added to the 'Misc' preferences, 
-  replacing existing command line options (bug #66). Contributed by Joshua Lebo.
-- Fixed a deadlock happening under Ubuntu (bug #67).
-- Fixed a crash occurring on 64-bit versions of Windows (bug #57).
-- Fixed volumes not appearing in the drive button on Unix-based OSes (other than
-  Mac OS X) under certain circumstances. Fix contributed by Johann Schmitz.
-- Fixed the main menu bar which could get selected when pressing Alt+Tab
-  (bug #89). 
+- 
 
 Known issues:
 - Some translations are not up-to-date. For more information, see:
