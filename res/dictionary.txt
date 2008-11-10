@@ -324,6 +324,7 @@ change:IT:Cambia
 change:pt_BR:Alterar
 change:SL:Spremeni
 change:UA:Змінити
+change:SV:Ändra
 # Translation missing (New!)
 
 
