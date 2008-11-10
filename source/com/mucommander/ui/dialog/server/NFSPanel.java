@@ -27,6 +27,7 @@ import com.mucommander.ui.main.MainFrame;
 
 import javax.swing.*;
 import java.net.MalformedURLException;
+import java.text.ParseException;
 
 
 /**
@@ -122,7 +123,12 @@ public class NFSPanel extends ServerPanel {
         return false;
     }
 
-    public void dispose() {
+    public void dialogValidated() {
+        // Commits the current spinner value in case it was being edited and 'enter' was pressed
+        // (the spinner value would otherwise not be committed)
+        try { portSpinner.commitEdit(); }
+        catch(ParseException e) { }
+
         updateValues();
     }
 }

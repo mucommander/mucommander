@@ -119,10 +119,11 @@ abstract class ServerPanel extends XAlignedComponentPanel {
      * @return <code>true</code> if this panel allows the user to specify credentials for the file protocol
      */
     abstract boolean usesCredentials();
-    
+
     /**
-     * This method is called by ServerConnectDialog when this panel is no longer displayed and used. This is where
-     * current text field values should be saved for later when a new instance is created.
+     * This method is called by {@link ServerConnectDialog} when the dialog has been validated by the user
+     * ('OK' button or 'Enter' key pressed). This is where component values should be saved for when a
+     * new instance of the panel is created.
      */
-    abstract void dispose();
+    abstract void dialogValidated();
 }
