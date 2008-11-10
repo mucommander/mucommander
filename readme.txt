@@ -132,7 +132,8 @@ Localization:
 - 
 
 Bug fixes:
-- 
+- Zip entries using '\' as a path separator are now tolerated and handled
+  appropriately (bug #98).
 
 Known issues:
 - Some translations are not up-to-date. For more information, see:
