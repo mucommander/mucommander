@@ -752,6 +752,7 @@ file_manager:PL:Menedżer plików
 file_manager:CS:Správce souborů
 file_manager:IT:Gestione File
 file_manager:SL:Urejevalnik datotek
+file_manager:SV:Filhanterare
 # Translation missing (New!)
 
 
@@ -963,7 +964,7 @@ encoding:DE:Kodierung
 encoding:IT:Codifica
 encoding:PL:Kodowanie
 encoding:JA:エンコード
-encoding:SV:Teckenuppsättning
+encoding:SV:Teckenkodning
 encoding:DA:Tegnkodning
 # Translation missing (KO)
 
@@ -1087,7 +1088,7 @@ extension:NL:Extensie
 extension:SK:Prípona
 extension:HU:Típus
 extension:JA:拡張子
-extension:SV:Ändelse
+extension:SV:Filtyp
 extension:DA:Filtype
 
 permissions:EN:Permissions
@@ -1282,7 +1283,7 @@ recurse_directories:NL:Toepassen op onderliggende mappen
 recurse_directories:SK:Použiť aj pre vnorené zložky
 recurse_directories:HU:A kiválasztott könyvtárakra rekurzívan alkalmaz
 recurse_directories:JA:再帰的に選択されたディレクトリを処理する
-recurse_directories:SV:Behandla markerade mappvyer lika
+recurse_directories:SV:Behandla markerade mappar rekursivt
 recurse_directories:DA:Behandel markerede mapper rekursivt
 
 # Used in the 'Edit bookmarks' and 'Edit credentials' dialogs to go to the selected location
@@ -1508,7 +1509,7 @@ this_operation_cannot_be_undone:IT:Questa operazione non puo' essere annullata.
 this_operation_cannot_be_undone:NL:Deze bewerking kan niet ongedaan gemaakt worden.
 this_operation_cannot_be_undone:PL:Operacja nie może być cofnięta.
 this_operation_cannot_be_undone:JA:この操作は元に戻せません。
-this_operation_cannot_be_undone:SV:Du kan inte ångra denna åtgärd. 
+this_operation_cannot_be_undone:SV:Du kan inte ångra denna handling.
 this_operation_cannot_be_undone:DA:Du kan ikke fortryde denne handling.
 # Translation missing (KO)
 
@@ -1563,7 +1564,7 @@ error:DA:Fejl
 # Generic error message, usually used as the content of error dialogs
 generic_error:EN:An error has occurred while performing the requested operation.
 generic_error:FR:Une erreur est survenue pendant l'exécution de la tache demandée.
-generic_error:SV:Ett fel uppstod när åtgärden utfördes.
+generic_error:SV:Ett fel uppstod när handlingen utfördes.
 generic_error:NL:Er heeft zich een fout voorgedaan bij het uitvoeren van de gevraagde taak.
 generic_error:PL:Wystąpił błąd podczas wykonywania operacji.
 generic_error:JA:要求された操作を行っている間にエラーが発生しています。
@@ -1724,7 +1725,7 @@ file_exists_in_destination:pt_BR:Existe um arquivo com mesmo nome neste caminho
 file_exists_in_destination:NL:Bestand bestaat al in het doel
 file_exists_in_destination:SK:Tento súbor už v cieli existuje
 file_exists_in_destination:JA:ファイルはすでに先にあります
-file_exists_in_destination:SV:Filen finns redan denna plats.
+file_exists_in_destination:SV:Filen finns redan på denna plats.
 file_exists_in_destination:DA:Filen findes allerede på denne lokation.
 
 source_parent_of_destination:EN:Attempt to transfer a folder to one of its subfolders
@@ -2007,6 +2008,7 @@ integrity_check_error:IT:Verifica integrità fallita: sorgente e destinazione no
 integrity_check_error:pt_BR:Falha na checagem de integridade: fonte e destino estão diferentes
 integrity_check_error:DA:Integritetstjek fejlede: kilden og destinationen stemmer ikke overens
 integrity_check_error:SL:Napaka pri preverjanju integritete: izvor in cilj se ne ujemata
+integrity_check_error:SV:Integritetscheck fel: källan och målet överensstämmer inte
 # Translation missing (KO, zh_CN, SK, SL, SV)
 
 
@@ -2202,7 +2204,7 @@ com.mucommander.ui.action.AddBookmarkAction.tooltip:NL:Voeg huidige map aan blad
 com.mucommander.ui.action.AddBookmarkAction.tooltip:SK:Pridať aktuálny priečinok do zoznamu záložiek
 com.mucommander.ui.action.AddBookmarkAction.tooltip:HU:Az aktuális könyvtár hozzáadása a Könyvjelzőkhöz
 com.mucommander.ui.action.AddBookmarkAction.tooltip:JA:現在のフォルダーをブックマークの一覧に追加します
-com.mucommander.ui.action.AddBookmarkAction.tooltip:SV:Lägg till aktuell mapp i bokmärkeslistan
+com.mucommander.ui.action.AddBookmarkAction.tooltip:SV:Lägg till aktuell mapp i bokmärken
 com.mucommander.ui.action.AddBookmarkAction.tooltip:DA:Tilføj den nuværende mappe til bogmærker
 
 com.mucommander.ui.action.BatchRenameAction.label:EN:$[batch_rename_dialog.title]
@@ -2283,7 +2285,7 @@ com.mucommander.ui.action.EditCredentialsAction.label:NL:Toegangsgegevens bewerk
 com.mucommander.ui.action.EditCredentialsAction.label:SK:Editovať účty
 com.mucommander.ui.action.EditCredentialsAction.label:HU:Megbízólevél javítása
 com.mucommander.ui.action.EditCredentialsAction.label:JA:信任状の編集
-com.mucommander.ui.action.EditCredentialsAction.label:SV:Redigera betyg
+com.mucommander.ui.action.EditCredentialsAction.label:SV:Redigera referenser
 com.mucommander.ui.action.EditCredentialsAction.label:DA:Rediger akkreditiver
 
 com.mucommander.ui.action.ChangeLocationAction.label:EN:Change current location
@@ -2808,6 +2810,7 @@ com.mucommander.ui.action.DeleteAction.tooltip:CS:Je-li možné, označené pře
 com.mucommander.ui.action.DeleteAction.tooltip:IT:Elimina file selezionati usando il cestino quando possibile
 com.mucommander.ui.action.DeleteAction.tooltip:pt_BR:Apagar arquivos selecionados
 com.mucommander.ui.action.DeleteAction.tooltip:SL:Izbriši označene datoteke z uporabo koša
+com.mucommander.ui.action.DeleteAction.tooltip:SV:Radera markerade filer via papperskorgen när det är möjligt
 # The following entries need to be updated to indicate that the system trash is used when it is available
 com.mucommander.ui.action.DeleteAction.tooltip:ES:Elimiar los ficheros marcados
 com.mucommander.ui.action.DeleteAction.tooltip:RU:Удаление выделенных файлов
@@ -2816,7 +2819,6 @@ com.mucommander.ui.action.DeleteAction.tooltip:RO:Șterge fișierele selectate
 com.mucommander.ui.action.DeleteAction.tooltip:KO:선택된 파일 삭제
 com.mucommander.ui.action.DeleteAction.tooltip:pt_BR:Apagar arquivos selecionados
 com.mucommander.ui.action.DeleteAction.tooltip:SK:Odstrániť označené súbory
-com.mucommander.ui.action.DeleteAction.tooltip:SV:Radera markerade filer
 # Translation missing (New!)
 
 
@@ -2843,6 +2845,7 @@ com.mucommander.ui.action.PermanentDeleteAction.label:CS:Smazat přímo
 com.mucommander.ui.action.PermanentDeleteAction.label:IT:Elimina definitivamente
 com.mucommander.ui.action.PermanentDeleteAction.label:pt_BR:Remover definitivamente
 com.mucommander.ui.action.PermanentDeleteAction.label:SL:Trajno brisanje
+com.mucommander.ui.action.PermanentDeleteAction.label:SV:Ta bort permanent
 # Translation missing (New!)
 
 
@@ -2873,6 +2876,7 @@ com.mucommander.ui.action.PermanentDeleteAction.tooltip:CS:Smazat označené sou
 com.mucommander.ui.action.PermanentDeleteAction.tooltip:IT:Elimina file selezionati senza usare il cestino
 com.mucommander.ui.action.PermanentDeleteAction.tooltip:pt_BR:Remover arquivos marcados definitivamente
 com.mucommander.ui.action.PermanentDeleteAction.tooltip:SL:Izbriši označene datoteke brez uporabe koša
+com.mucommander.ui.action.PermanentDeleteAction.tooltip:SV:Ta bort markerade filer utan att använda papperskorgen
 # Translation missing (New!)
 
 
@@ -3097,7 +3101,7 @@ com.mucommander.ui.action.EmailAction.tooltip:pt_BR:Enviar arquivos selecionados
 com.mucommander.ui.action.EmailAction.tooltip:NL:Verstuur gemarkeerde bestanden als bijlagen in een email
 com.mucommander.ui.action.EmailAction.tooltip:SK:Poslať označené súbory ako prílohu e-mailu
 com.mucommander.ui.action.EmailAction.tooltip:JA:電子メールの添付としてマークされたファイルを送信します
-com.mucommander.ui.action.EmailAction.tooltip:SV:Bifoga markerade filer i mejl
+com.mucommander.ui.action.EmailAction.tooltip:SV:Mejla markerade filer
 com.mucommander.ui.action.EmailAction.tooltip:DA:Send de markerede filer i en mail
 
 com.mucommander.ui.action.GoBackAction.label:EN:Go back
@@ -3223,7 +3227,7 @@ com.mucommander.ui.action.GoToParentAction.label:pt_BR:Ir para o diretório supe
 com.mucommander.ui.action.GoToParentAction.label:NL:Naar bovenliggende
 com.mucommander.ui.action.GoToParentAction.label:SK:O úroveň vyššie
 com.mucommander.ui.action.GoToParentAction.label:JA:親へ移動
-com.mucommander.ui.action.GoToParentAction.label:SV:Föregående
+com.mucommander.ui.action.GoToParentAction.label:SV:Överordnad
 com.mucommander.ui.action.GoToParentAction.label:DA:Forrige
 
 com.mucommander.ui.action.GoToParentAction.tooltip:EN:Go to parent folder
@@ -3244,7 +3248,7 @@ com.mucommander.ui.action.GoToParentAction.tooltip:pt_BR:Ir para o diretório su
 com.mucommander.ui.action.GoToParentAction.tooltip:NL:Naar bovenliggende map
 com.mucommander.ui.action.GoToParentAction.tooltip:SK:Nadradený priečinok
 com.mucommander.ui.action.GoToParentAction.tooltip:JA:親フォルダーへ移動します
-com.mucommander.ui.action.GoToParentAction.tooltip:SV:Till föregående mapp
+com.mucommander.ui.action.GoToParentAction.tooltip:SV:Till överordnad mapp
 com.mucommander.ui.action.GoToParentAction.tooltip:DA:Til forrige mappe
 
 com.mucommander.ui.action.GoToParentInOtherPanelAction.label:EN:Go to parent in other panel
@@ -3261,6 +3265,7 @@ com.mucommander.ui.action.GoToParentInOtherPanelAction.label:CS:O úroveň výš
 com.mucommander.ui.action.GoToParentInOtherPanelAction.label:IT:Vai su superiore nell'altro pannello
 com.mucommander.ui.action.GoToParentInOtherPanelAction.label:pt_BR:Exibir o nível superior em outro painel
 com.mucommander.ui.action.GoToParentInOtherPanelAction.label:SL:Pojdi v izvorno mapo v drugem oknu
+com.mucommander.ui.action.GoToParentInOtherPanelAction.label:SV:Gå till överordnad mapp i andra vyn
 # Translation missing (New!)
 
 
@@ -3289,6 +3294,7 @@ com.mucommander.ui.action.GoToParentInBothPanelsAction.label:CS:O úroveň výš
 com.mucommander.ui.action.GoToParentInBothPanelsAction.label:IT:Vai su superiore in entrambi i pannelli
 com.mucommander.ui.action.GoToParentInBothPanelsAction.label:pt_BR:Exibir o nível superior em ambos os paineis
 com.mucommander.ui.action.GoToParentInBothPanelsAction.label:SL:Pojdi v izvorno mapo v obeh oknih
+com.mucommander.ui.action.GoToParentInBothPanelsAction.label:SV:Gå till överordnad mapp i båda vyerna
 # Translation missing (New!)
 
 
@@ -3407,7 +3413,7 @@ com.mucommander.ui.action.SortByExtensionAction.label:pt_BR:Ordenar pelo extens�
 com.mucommander.ui.action.SortByExtensionAction.label:NL:Sorteren op extensie
 com.mucommander.ui.action.SortByExtensionAction.label:SK:Zoradiť podľa prípony
 com.mucommander.ui.action.SortByExtensionAction.label:JA:拡張子で整列
-com.mucommander.ui.action.SortByExtensionAction.label:SV:Sortera efter Ändelse
+com.mucommander.ui.action.SortByExtensionAction.label:SV:Sortera efter Filtyp
 com.mucommander.ui.action.SortByExtensionAction.label:DA:Sorter efter filendelse
 
 com.mucommander.ui.action.SortByPermissionsAction.label:EN:Sort by Permissions
@@ -3540,7 +3546,7 @@ com.mucommander.ui.action.MarkGroupAction.tooltip:pt_BR:Marcar um grupo de arqui
 com.mucommander.ui.action.MarkGroupAction.tooltip:NL:Een groep bestanden markeren
 com.mucommander.ui.action.MarkGroupAction.tooltip:SK:Označiť skupinu súborov
 com.mucommander.ui.action.MarkGroupAction.tooltip:JA:ファイルのグループをマークします
-com.mucommander.ui.action.MarkGroupAction.tooltip:SV:Gruppmarkera filer
+com.mucommander.ui.action.MarkGroupAction.tooltip:SV:Markera en grupp filer
 com.mucommander.ui.action.MarkGroupAction.tooltip:DA:Marker en gruppe filer
 
 com.mucommander.ui.action.UnmarkGroupAction.label:EN:Unmark files
@@ -3582,7 +3588,7 @@ com.mucommander.ui.action.UnmarkGroupAction.tooltip:pt_BR:Desmarcar um grupo de 
 com.mucommander.ui.action.UnmarkGroupAction.tooltip:NL:Demarkeer groep bestanden
 com.mucommander.ui.action.UnmarkGroupAction.tooltip:SK:Odznačiť skupinu súborov
 com.mucommander.ui.action.UnmarkGroupAction.tooltip:JA:ファイルのグループをマーク解除します
-com.mucommander.ui.action.UnmarkGroupAction.tooltip:SV:Avmarkera en grupp av filer
+com.mucommander.ui.action.UnmarkGroupAction.tooltip:SV:Avmarkera en grupp filer
 com.mucommander.ui.action.UnmarkGroupAction.tooltip:DA:Afmarker en gruppe filer
 
 com.mucommander.ui.action.MarkAllAction.label:EN:Mark all
@@ -3756,7 +3762,7 @@ com.mucommander.ui.action.MarkUpToLastRowAction.label:DA:Marker filer til enden
 com.mucommander.ui.action.MarkExtensionAction.label:EN:Mark extension
 com.mucommander.ui.action.MarkExtensionAction.label:FR:Marquer l'extension
 com.mucommander.ui.action.MarkExtensionAction.label:NL:Markeer extensie
-com.mucommander.ui.action.MarkExtensionAction.label:SV:Markera ändelse
+com.mucommander.ui.action.MarkExtensionAction.label:SV:Markera filtyp
 com.mucommander.ui.action.MarkExtensionAction.label:PL:Zaznacz wg rozszerzenia
 com.mucommander.ui.action.MarkExtensionAction.label:JA:拡張子のマーク
 com.mucommander.ui.action.MarkExtensionAction.label:HU:Kiterjesztés megjelölése
@@ -4018,7 +4024,7 @@ com.mucommander.ui.action.OpenNativelyAction.tooltip:pt_BR:Executar o arquivo co
 com.mucommander.ui.action.OpenNativelyAction.tooltip:NL:Uitvoeren met systeem-geassocieerd programma
 com.mucommander.ui.action.OpenNativelyAction.tooltip:SK:Otvoriť vybraný súbor s asociovanou aplikáciou
 com.mucommander.ui.action.OpenNativelyAction.tooltip:JA:システムのファイルの関連付けで選択されたファイルを実行します
-com.mucommander.ui.action.OpenNativelyAction.tooltip:SV:Öppna markerad filen med systemets förvalda filassociation
+com.mucommander.ui.action.OpenNativelyAction.tooltip:SV:Öppna markerad filen med systemets förvalda filanknytning
 com.mucommander.ui.action.OpenNativelyAction.tooltip:DA:Åben markeret fil med systemets predefinerede filtilknytning
 
 com.mucommander.ui.action.OpenInOtherPanelAction.label:EN:Open in other panel
@@ -4275,7 +4281,7 @@ com.mucommander.ui.action.ShowFilePropertiesAction.tooltip:pt_BR:Exibir propried
 com.mucommander.ui.action.ShowFilePropertiesAction.tooltip:NL:Toon eigenschappen van gemarkeerde bestanden
 com.mucommander.ui.action.ShowFilePropertiesAction.tooltip:SK:Zobraziť vlastnosti označených súborov
 com.mucommander.ui.action.ShowFilePropertiesAction.tooltip:JA:マークされたファイルのプロパティを表示します
-com.mucommander.ui.action.ShowFilePropertiesAction.tooltip:SV:Visa egenskaper på markerade filer
+com.mucommander.ui.action.ShowFilePropertiesAction.tooltip:SV:Visa egenskaper för markerade filer
 com.mucommander.ui.action.ShowFilePropertiesAction.tooltip:DA:Vis egenskaber for markerede filer
 
 com.mucommander.ui.action.ShowPreferencesAction.label:EN:Preferences
@@ -4588,6 +4594,7 @@ com.mucommander.ui.action.ToggleTreeAction.label:CS:Zobrazit strom složek
 com.mucommander.ui.action.ToggleTreeAction.label:IT:Visualizza struttura
 com.mucommander.ui.action.ToggleTreeAction.label:pt_BR:Visualização em árvore
 com.mucommander.ui.action.ToggleTreeAction.label:SL:Prikaži drevesno strukturo
+com.mucommander.ui.action.ToggleTreeAction.label:SV:Visa trädvy
 # Translation missing (New!)
 
 
@@ -4834,7 +4841,7 @@ com.mucommander.ui.action.SplitEquallyAction.label:NL:Splits in gelijke delen
 com.mucommander.ui.action.SplitEquallyAction.label:SK:Rozdeliť rovnomerne
 com.mucommander.ui.action.SplitEquallyAction.label:HU:Felosztás egyenlő részekre
 com.mucommander.ui.action.SplitEquallyAction.label:JA:均等に分割
-com.mucommander.ui.action.SplitEquallyAction.label:SV:Dela vyerna lika
+com.mucommander.ui.action.SplitEquallyAction.label:SV:Dela lika
 com.mucommander.ui.action.SplitEquallyAction.label:DA:Del ligeligt
 
 com.mucommander.ui.action.SplitVerticallyAction.label:EN:Split vertically
@@ -4960,7 +4967,7 @@ com.mucommander.ui.action.ReportBugAction.label:NL:Een bug melden
 com.mucommander.ui.action.ReportBugAction.label:SK:Ohlásiť chybu
 com.mucommander.ui.action.ReportBugAction.label:HU:Hibajelentés
 com.mucommander.ui.action.ReportBugAction.label:JA:バグの報告
-com.mucommander.ui.action.ReportBugAction.label:SV:Rapportera programfel
+com.mucommander.ui.action.ReportBugAction.label:SV:Rapportera en bugg
 com.mucommander.ui.action.ReportBugAction.label:DA:Rapporter en fejl
 
 com.mucommander.ui.action.DonateAction.label:EN:Make a donation
@@ -5051,7 +5058,7 @@ com.mucommander.ui.action.EmptyTrashAction.label:CS:Vyprázdnit Koš
 com.mucommander.ui.action.EmptyTrashAction.label:IT:Vuota il cestino
 com.mucommander.ui.action.EmptyTrashAction.label:PL:Opróżnij kosz
 com.mucommander.ui.action.EmptyTrashAction.label:JA:ごみ箱を空にする
-com.mucommander.ui.action.EmptyTrashAction.label:SV:Töm papperskorgen
+com.mucommander.ui.action.EmptyTrashAction.label:SV:Töm papperskorg
 com.mucommander.ui.action.EmptyTrashAction.label:DA:Tøm papirkurv
 # Translation missing (KO)
 
@@ -5069,7 +5076,7 @@ com.mucommander.ui.action.EmptyTrashAction.label:DA:Tøm papirkurv
 com.mucommander.ui.action.CalculateChecksumAction.label:EN:Calculate checksum
 com.mucommander.ui.action.CalculateChecksumAction.label:FR:Calculer la checksum
 com.mucommander.ui.action.CalculateChecksumAction.label:NL:Checksum berekenen
-com.mucommander.ui.action.CalculateChecksumAction.label:SV:Beräkna checksum
+com.mucommander.ui.action.CalculateChecksumAction.label:SV:Beräkna kontrollsumma
 com.mucommander.ui.action.CalculateChecksumAction.label:PL:Oblicz sumę kontrolną
 com.mucommander.ui.action.CalculateChecksumAction.label:JA:チェックサムの計算
 com.mucommander.ui.action.CalculateChecksumAction.label:HU:Ellenőrző összeg számolása
@@ -5113,6 +5120,7 @@ com.mucommander.ui.action.MaximizeWindowAction.label:CS:Maximalizovat
 com.mucommander.ui.action.MaximizeWindowAction.label:IT:Massimizza
 com.mucommander.ui.action.MaximizeWindowAction.label:pt_BR:Maximizar
 com.mucommander.ui.action.MaximizeWindowAction.label:SL:Povečaj
+com.mucommander.ui.action.MaximizeWindowAction.label:SV:Maximera
 # Translation missing (New!)
 
 
@@ -5138,6 +5146,7 @@ com.mucommander.ui.action.MaximizeWindowAction.label.mac_os_x:CS:Měřítko
 com.mucommander.ui.action.MaximizeWindowAction.label.mac_os_x:IT:Zoom
 com.mucommander.ui.action.MaximizeWindowAction.label.mac_os_x:pt_BR:Zoom
 com.mucommander.ui.action.MaximizeWindowAction.label.mac_os_x:SL:Povečaj
+com.mucommander.ui.action.MaximizeWindowAction.label.mac_os_x:SV:Zooma
 # Translation missing (New!)
 
 
@@ -5166,6 +5175,7 @@ com.mucommander.ui.action.MinimizeWindowAction.label:CS:Minimalizovat
 com.mucommander.ui.action.MinimizeWindowAction.label:IT:Minimizza
 com.mucommander.ui.action.MinimizeWindowAction.label:pt_BR:Minimizar
 com.mucommander.ui.action.MinimizeWindowAction.label:SL:Minimiziraj
+com.mucommander.ui.action.MinimizeWindowAction.label:SV:Minimera
 # Translation missing (New!)
 
 
@@ -5187,6 +5197,7 @@ com.mucommander.ui.action.MinimizeWindowAction.label.mac_os_x:DE:Im Dock ablegen
 com.mucommander.ui.action.MinimizeWindowAction.label.mac_os_x:HU:Kicsinyítés
 com.mucommander.ui.action.MinimizeWindowAction.label.mac_os_x:CS:$[com.mucommander.ui.action.MinimizeWindowAction.label]
 com.mucommander.ui.action.MinimizeWindowAction.label.mac_os_x:SL:$[com.mucommander.ui.action.MinimizeWindowAction.label]
+com.mucommander.ui.action.MinimizeWindowAction.label.mac_os_x:SV:$[com.mucommander.ui.action.MinimizeWindowAction.label]
 # Translation missing (New!)
 
 
@@ -5213,6 +5224,7 @@ com.mucommander.ui.action.GoToDocumentationAction.label:CS:Dokumentace na webu
 com.mucommander.ui.action.GoToDocumentationAction.label:IT:Documentazione in linea
 com.mucommander.ui.action.GoToDocumentationAction.label:pt_BR:Documentação online
 com.mucommander.ui.action.GoToDocumentationAction.label:SL:Dokumentacija na spletu
+com.mucommander.ui.action.GoToDocumentationAction.label:SV:Online dokumentation
 # Translation missing (New!)
 
 
@@ -5237,6 +5249,7 @@ com.mucommander.ui.action.ShowParentFoldersQLAction.label:CS:Nadřazené složky
 com.mucommander.ui.action.ShowParentFoldersQLAction.label:IT:Cartelle superiori
 com.mucommander.ui.action.ShowParentFoldersQLAction.label:pt_BR:Diretório superior
 com.mucommander.ui.action.ShowParentFoldersQLAction.label:SL:Izvorne mape
+com.mucommander.ui.action.ShowParentFoldersQLAction.label:SV:Överordnade mappar
 # Translation missing (New!)
 
 
@@ -5262,6 +5275,7 @@ com.mucommander.ui.action.ShowRecentLocationsQLAction.label:CS:Dříve navštív
 com.mucommander.ui.action.ShowRecentLocationsQLAction.label:IT:Percorsi recenti
 com.mucommander.ui.action.ShowRecentLocationsQLAction.label:pt_BR:Locais recentes
 com.mucommander.ui.action.ShowRecentLocationsQLAction.label:SL:Nedavne lokacije
+com.mucommander.ui.action.ShowRecentLocationsQLAction.label:SV:Nyligen besökta platser
 # Translation missing (New!)
 
 
@@ -5286,6 +5300,7 @@ com.mucommander.ui.action.ShowRecentExecutedFilesQLAction.label:CS:Dříve spuš
 com.mucommander.ui.action.ShowRecentExecutedFilesQLAction.label:IT:File eseguibili recenti
 com.mucommander.ui.action.ShowRecentExecutedFilesQLAction.label:pt_BR:Arquivos executados recentemente
 com.mucommander.ui.action.ShowRecentExecutedFilesQLAction.label:SL:Nedavno izvršene datoteke
+com.mucommander.ui.action.ShowRecentExecutedFilesQLAction.label:SV:Nyligen öppnade filer
 # Translation missing (New!)
 
 
@@ -5490,6 +5505,7 @@ quick_lists_menu:CS:Rychlé přehledy
 quick_lists_menu:IT:Liste rapide
 quick_lists_menu:pt_BR:Quick lists
 quick_lists_menu:SL:Hitri seznam
+quick_lists_menu:SV:Snabblista
 # Translation missing (New!)
 
 
@@ -5616,7 +5632,7 @@ status_bar.volume_free:NL:Vrij: %1
 status_bar.volume_free:SK:Voľné miesto: %1
 status_bar.volume_free:HU:Szabad: %1
 status_bar.volume_free:JA:空き: %1
-status_bar.volume_free:SV:Tillgängligt: %1
+status_bar.volume_free:SV:Ledigt: %1
 status_bar.volume_free:DA:Ledigt: %1
 
 # Displayed in the status bar to indicate total space on current volume (not available under Windows)
@@ -5706,7 +5722,7 @@ table.folder_access_error:pt_BR:Não foi possível ler conteúdo do diretório
 table.folder_access_error:NL:Kan mapinhoud niet lezen
 table.folder_access_error:SK:Obsah priečinka sa nedá čítať
 table.folder_access_error:JA:フォルダーの内容を読み取ることができません
-table.folder_access_error:SV:Det gick inte att läsa mappens innehåll
+table.folder_access_error:SV:Mappens innehåll kan inte läsas
 table.folder_access_error:DA:Mappens indhold kunne ikke læses
 
 table.download_or_browse:EN:Would you like to browse or download this file ?
@@ -5816,7 +5832,7 @@ version_dialog.new_version:pt_BR:Uma nova versão do muCommander está disponív
 version_dialog.new_version:NL:Een nieuwe versie van muCommander is beschikbaar.
 version_dialog.new_version:SK:Nová verzia muCommander-a je k dispozícii.
 version_dialog.new_version:JA:muCommander の新しいバージョンは利用可能です。
-version_dialog.new_version:SV:Det finns en ny version av muCommander tillgänglig.
+version_dialog.new_version:SV:En ny version av muCommander finns tillgänglig.
 version_dialog.new_version:DA:En ny version af muCommander er tilgængelig.
 
 version_dialog.new_version_url:EN:A new version of muCommander is available at %1.
@@ -5858,7 +5874,7 @@ version_dialog.not_available_title:pt_BR:Servidor não disponível
 version_dialog.not_available_title:NL:Server niet berijkbaar
 version_dialog.not_available_title:SK:Server je nedostupný
 version_dialog.not_available_title:JA:サーバーが到達できません
-version_dialog.not_available_title:SV:Servern är inte åtkomlig
+version_dialog.not_available_title:SV:Servern är inte tillgänglig
 version_dialog.not_available_title:DA:Serveren er ikke tilgængelig
 
 version_dialog.not_available:EN:Unable to get version information from server.
@@ -5879,7 +5895,7 @@ version_dialog.not_available:pt_BR:Não foi possível obter informação de vers
 version_dialog.not_available:NL:Kan geen versie-informatie van server krijgen
 version_dialog.not_available:SK:Nie je možné získať informácie o verzii zo serveru.
 version_dialog.not_available:JA:サーバーからバージョン情報を取得することができません。
-version_dialog.not_available:SV:Det går inte att få information om version från servern.
+version_dialog.not_available:SV:Kan inte få information om version från servern.
 version_dialog.not_available:DA:Det er ikke muligt at få versions information fra serveren.
 
 # This entry is used as a button label in the 'Check for updates' dialog.
@@ -5994,7 +6010,7 @@ quit_dialog.desc:pt_BR:Você tem %1 janela(s) aberta(s). Deseja realmente sair?
 quit_dialog.desc:NL:Er zijn %1 venster(s) geopend. Alle vensters sluiten en muCommander afsluiten?
 quit_dialog.desc:SK:Chcete zatvoriť všetkých %1 okien a ukončiť muCommander?
 quit_dialog.desc:JA:%1 個のウィンドウを開いています。終了してもよろしいですか ? 
-quit_dialog.desc:SV:Du har %1 fönster öppna. Vill du avsluta ändå? 
+quit_dialog.desc:SV:Du har %1 fönster öppna. Vill du avsluta ändå?
 quit_dialog.desc:DA:Du har %1 vinduer åbne. Er du sikker på du vil afslutte? 
 # Translation missing (zh_CN, KO) : this entry needs to be updated to take into account the number of windows
 
@@ -6047,7 +6063,7 @@ destination_dialog.file_exists_action:pt_BR:Ação padrão quando o arquivo exis
 destination_dialog.file_exists_action:NL:Voorkeursactie wanneer bestand er is
 destination_dialog.file_exists_action:SK:Predvolená akcia pre existujúci súbor
 destination_dialog.file_exists_action:JA:ファイルが存在するときの既定の動作
-destination_dialog.file_exists_action:SV:Standardåtgärd om filen redan finns
+destination_dialog.file_exists_action:SV:Standardåtgärd när filen redan finns
 destination_dialog.file_exists_action:DA:Standardhandling når filen allerede findes
 
 # This option New 'Verify data integrity' transfer option that ensures that the
@@ -6069,6 +6085,7 @@ destination_dialog.verify_integrity:IT:Verifica integrità dei dati
 destination_dialog.verify_integrity:pt_BR:Verificando integridade dos dados
 destination_dialog.verify_integrity:DA:Verificer data integritet
 destination_dialog.verify_integrity:SL:Preverjanje integritete podatkov
+destination_dialog.verify_integrity:SV:Verifierar data integritet
 # Translation missing (KO, zh_CN, SK, SL, SV)
 
 
@@ -6137,6 +6154,7 @@ rename_dialog.new_name:IT:Nuovo nome
 rename_dialog.new_name:pt_BR:Novo nome
 rename_dialog.new_name:DA:Nyt navn
 rename_dialog.new_name:SL:Novo ime
+rename_dialog.new_name:SV:Nytt namn
 # Translation missing (KO, zh_CN, SK, SL, SV)
 
 
@@ -6795,6 +6813,7 @@ mkfile_dialog.allocate_space:zh_TW:分配空間
 mkfile_dialog.allocate_space:IT:Alloca spazio
 mkfile_dialog.allocate_space:pt_BR:Tamanho
 mkfile_dialog.allocate_space:DA:Alloker plads
+mkfile_dialog.allocate_space:SV:Tilldela utrymme
 # Translation missing (KO, zh_CN, SK, SL, SV)
 
 
@@ -7012,7 +7031,7 @@ delete.symlink_warning:pt_BR:Este arquivo parece ser um link simbólico:\n\n Arq
 delete.symlink_warning:NL:Dit bestand lijkt op een symbolische koppeling:\n\n Bestand: %1\n Verwijst naar: %2\n\nAlleen koppeling verwijderen of \nKoppeling volgen en map verwijderen (VOORZICHTIG)?
 delete.symlink_warning:SK:Tento súbor vyzerá ako symbolický odkaz:\n\n Súbor:%1\n Odkazuje na: %2\n\nOdstrániť iba symbolický odkaz, alebo\naj cieľ odkazu (UPOZORNENIE) ?
 delete.symlink_warning:JA:このファイルはシンボリック リンクのようにみえます:\n\n  ファイル: %1\n  リンク先: %2\n\nシンボリック リンクを削除するか\nシンボリック リンクに追従してフォルダーを削除しますか (注意) ?
-delete.symlink_warning:SV:Filen ser ut som en symbolisk länk:\n\n  Fil: %1\n  Länkar till: %2\n\nRadera bara symbolisk länk eller\nFölj symbolisk länk och radera mappen (VARNING) ?
+delete.symlink_warning:SV:Filen ser ut som en symbolisk länk:\n\n  Fil: %1\n  Länkar till: %2\n\nRadera bara länken eller\nFölj länken och radera mappen (VARNING) ?
 delete.symlink_warning:DA:Filen ligner en symbolsk henvisning:\n\n  Fil: %1\n  Henviser til: %2\n\nSlet kun henvisningen eller\nfølg henvisningen og slet mappen (ADVARSEL)?
 
 delete.delete_link_only:EN:Delete link
@@ -7603,7 +7622,7 @@ file_selection_dialog.case_sensitive:pt_BR:Diferenciar maiúsculas de minúscula
 file_selection_dialog.case_sensitive:NL:Hoofdlettergevoelig
 file_selection_dialog.case_sensitive:SK:Rozlišovať veľké/malé písmená
 file_selection_dialog.case_sensitive:JA:大文字と小文字を区別する
-file_selection_dialog.case_sensitive:SV:Skilj på STORA/små bokstäver
+file_selection_dialog.case_sensitive:SV:Skiftlägeskänslig
 file_selection_dialog.case_sensitive:DA:Forskel på store og små bogstaver
 
 file_selection_dialog.include_folders:EN:Include folders
@@ -7631,7 +7650,7 @@ file_selection_dialog.matches_regexp:EN:Matches Regexp
 file_selection_dialog.matches_regexp:FR:Satisfait la Regexp
 file_selection_dialog.matches_regexp:JA:正規表現に一致する
 file_selection_dialog.matches_regexp:SK:Regulárny výraz
-file_selection_dialog.matches_regexp:SV:Matchar reguljärt uttryck
+file_selection_dialog.matches_regexp:SV:Reguljärt uttryck
 file_selection_dialog.matches_regexp:NL:Reguliere uitdrukking
 file_selection_dialog.matches_regexp:PL:Wyrażenie regularne
 file_selection_dialog.matches_regexp:HU:Egyező regurális kifejezés (Regexp)
@@ -8019,7 +8038,7 @@ properties_dialog.calculating:DA:Udregner...
 # Checksum algorithms include MD5, SHA, CRC32, ...
 calculate_checksum_dialog.checksum_algorithm:EN:Checksum algorithm
 calculate_checksum_dialog.checksum_algorithm:FR:Algorithme de checksum
-calculate_checksum_dialog.checksum_algorithm:SV:Kontrollnummer algoritm
+calculate_checksum_dialog.checksum_algorithm:SV:Kontrollsumma algoritm
 calculate_checksum_dialog.checksum_algorithm:NL:Checksum algoritme
 calculate_checksum_dialog.checksum_algorithm:PL:Algorytm sumy kontrolnej
 calculate_checksum_dialog.checksum_algorithm:JA:チェックサムのアルゴリズム
@@ -8509,6 +8528,7 @@ server_connect_dialog.private_key:CS:Soukromý klíč
 server_connect_dialog.private_key:IT:Chiave privata
 server_connect_dialog.private_key:pt_BR:Chave privada
 server_connect_dialog.private_key:SL:Zasebni ključ
+server_connect_dialog.private_key:SV:Privat nyckel
 # Translation missing (New!)
 
 
@@ -8541,6 +8561,7 @@ server_connect_dialog.passphrase:CS:Heslo
 server_connect_dialog.passphrase:IT:Password
 server_connect_dialog.passphrase:pt_BR:Frase secreta
 server_connect_dialog.passphrase:SL:Geslo
+server_connect_dialog.passphrase:SV:Lösenfras
 # Translation missing (New!)
 
 
@@ -8617,6 +8638,7 @@ ftp_connect.nb_connection_retries:CS:Počet opakování pokusů o připojení
 ftp_connect.nb_connection_retries:IT:Numero di tentativi di connessione
 ftp_connect.nb_connection_retries:pt_BR:Numero de tentativas de conexão
 ftp_connect.nb_connection_retries:SL:Število poskusov povezave
+ftp_connect.nb_connection_retries:SV:Antal försök att återansluta
 # Translation missing (New!)
 
 
@@ -8645,6 +8667,7 @@ ftp_connect.retry_delay:CS:Prodleva mezi pokusy (v sekundách)
 ftp_connect.retry_delay:IT:Ritardo tra tentativi (in secondi)
 ftp_connect.retry_delay:pt_BR:Tempo de espera entre as tentativas (segundos)
 ftp_connect.retry_delay:SL:Zamik med poskusi (v sekundah)
+ftp_connect.retry_delay:SV:Fördröjning mellan försöken (i sekunder)
 # Translation missing (New!)
 
 
@@ -8930,6 +8953,7 @@ auth_dialog.connect_as:CS:Připojit jako
 auth_dialog.connect_as:IT:Connetti come
 auth_dialog.connect_as:pt_BR:Conectar como
 auth_dialog.connect_as:SL:Poveži kot
+auth_dialog.connect_as:SV:Anslut som
 # Translation missing (New!)
 
 
@@ -8960,6 +8984,7 @@ auth_dialog.authentication_failed:CS:Ověření se nezdařilo
 auth_dialog.authentication_failed:IT:Autenticazione fallita
 auth_dialog.authentication_failed:pt_BR:Falha na autenticação
 auth_dialog.authentication_failed:SL:Avtentikacija neuspešna
+auth_dialog.authentication_failed:SV:Autentisering misslyckades
 # Translation missing (New!)
 
 
@@ -9396,6 +9421,7 @@ text_viewer.binary_file_warning:IT:Questo sembra essere un file binario
 text_viewer.binary_file_warning:pt_BR:Parece ser um arquivo binário
 text_viewer.binary_file_warning:DA:Dette lader til at være en binær fil
 text_viewer.binary_file_warning:SL:Kaže se kot binarna datoteka
+text_viewer.binary_file_warning:SV:Detta verkar vara en binär fil
 # Translation missing (KO, zh_CN, SK, SL, SV)
 
 
@@ -9438,7 +9464,7 @@ image_viewer.controls_menu:pt_BR:Controles
 image_viewer.controls_menu:NL:Bediening
 image_viewer.controls_menu:SK:Ovládanie
 image_viewer.controls_menu:JA:制御
-image_viewer.controls_menu:SV:Kontroller
+image_viewer.controls_menu:SV:Funktioner
 image_viewer.controls_menu:DA:Funktioner
 
 image_viewer.zoom_in:EN:Zoom in
@@ -9527,7 +9553,7 @@ file_editor.edit_error:pt_BR:Não foi possível editar o arquivo.
 file_editor.edit_error:NL:Kan bestand niet bewerken
 file_editor.edit_error:SK:Súbor sa nedá upraviť.
 file_editor.edit_error:JA:ファイルを編集することができません。
-file_editor.edit_error:SV:Kunde inte redigera filen
+file_editor.edit_error:SV:Kunde inte redigera filen.
 file_editor.edit_error:DA:Kunne ikke redigere filen.
 
 file_editor.save:EN:Save
@@ -9826,7 +9852,7 @@ shortcuts_dialog.quick_search.remove_last_char:NL:Verwijder laatste teken uit sn
 shortcuts_dialog.quick_search.remove_last_char:SK:Odstrániť z hľadaného reťazca posledný znak
 shortcuts_dialog.quick_search.remove_last_char:HU:A gyorkeresési karakterlánc utolsó betűjének törlése
 shortcuts_dialog.quick_search.remove_last_char:JA:クイック検索の文字列から最後の文字を削除
-shortcuts_dialog.quick_search.remove_last_char:SV:Ta bort sista tecknet från snabbsöktråden
+shortcuts_dialog.quick_search.remove_last_char:SV:Ta bort sista tecknet från snabbsökstråden
 shortcuts_dialog.quick_search.remove_last_char:DA:Fjern det sidste tegn fra hurtig-søg strengen
 
 shortcuts_dialog.quick_search.jump_to_previous:EN:Jump to previous quick search result
@@ -9986,7 +10012,7 @@ theme_editor.shell_tab:CS:Shell
 theme_editor.shell_tab:IT:Shell
 theme_editor.shell_tab:PL:Shell
 theme_editor.shell_tab:JA:シェル
-theme_editor.shell_tab:SV:Shell
+theme_editor.shell_tab:SV:Terminal
 theme_editor.shell_tab:DA:Terminal
 # Translation missing (KO)
 
@@ -10013,7 +10039,7 @@ theme_editor.shell_history_tab:pt_BR:Histórico do Shell
 theme_editor.shell_history_tab:HU:Előzmények
 theme_editor.shell_history_tab:JA:シェルの履歴
 theme_editor.shell_history_tab:SK:História shellu
-theme_editor.shell_history_tab:SV:Shellhistorik
+theme_editor.shell_history_tab:SV:Terminalhistorik
 theme_editor.shell_history_tab:RU:История команд
 theme_editor.shell_history_tab:ES:Historial de terminal
 theme_editor.shell_history_tab:DA:Terminal historik
@@ -10427,7 +10453,7 @@ theme_editor.alternate_background:pt_BR:Cor de fundo alternativa
 theme_editor.alternate_background:HU:Alternatív háttér
 theme_editor.alternate_background:JA:代替の背景
 theme_editor.alternate_background:SK:Alternatívne pozadie
-theme_editor.alternate_background:SV:Skifta bakgrund
+theme_editor.alternate_background:SV:Alternativ bakgrund
 theme_editor.alternate_background:RU:Другой фон
 theme_editor.alternate_background:ES:Alternar fondo
 theme_editor.alternate_background:DA:Alternativ baggrund
@@ -10552,7 +10578,7 @@ theme_editor.progress:CS:Průběh
 theme_editor.progress:PL:Postęp
 theme_editor.progress:IT:Progresso
 theme_editor.progress:JA:進行状況
-theme_editor.progress:SV:Pågående
+theme_editor.progress:SV:Förlopp
 theme_editor.progress:DA:Fremskridt
 # Translation missing (KO)
 
@@ -10749,7 +10775,7 @@ theme_editor.plain_file:pt_BR:Arquivo normal
 theme_editor.plain_file:NL:Normaal bestand
 theme_editor.plain_file:SK:Bežný súbor
 theme_editor.plain_file:JA:プレーン ファイル
-theme_editor.plain_file:SV:Normal fil
+theme_editor.plain_file:SV:Enkel fil
 theme_editor.plain_file:DA:Simple fil
 
 theme_editor.marked_file:EN:Marked file
@@ -11029,7 +11055,7 @@ prefs_dialog.time:pt_BR:Hora
 prefs_dialog.time:NL:Tijd
 prefs_dialog.time:SK:Čas
 prefs_dialog.time:JA:時間
-prefs_dialog.time:SV:Klocka
+prefs_dialog.time:SV:Tid
 prefs_dialog.time:DA:Tid
 
 prefs_dialog.date:EN:Date
@@ -11194,6 +11220,7 @@ prefs_dialog.show_splash_screen:CS:Zobrazit uvítací obrázek
 prefs_dialog.show_splash_screen:IT:Mostra pannello di apertura
 prefs_dialog.show_splash_screen:pt_BR:Show splash screen
 prefs_dialog.show_splash_screen:SL:Prikaži brizgana okna
+prefs_dialog.show_splash_screen:SV:Visa startbild
 # Translation missing (New!)
 
 
@@ -11253,7 +11280,7 @@ prefs_dialog.startup_folders:pt_BR:Diretórios de início
 prefs_dialog.startup_folders:NL:Opstartmappen
 prefs_dialog.startup_folders:SK:Priečinky pri štarte
 prefs_dialog.startup_folders:JA:スタートアップ フォルダー
-prefs_dialog.startup_folders:SV:Startmapp
+prefs_dialog.startup_folders:SV:Startvyer
 prefs_dialog.startup_folders:DA:Startmappe
 
 prefs_dialog.left_folder:EN:Left folder
@@ -11422,7 +11449,7 @@ prefs_dialog.compact_file_size:pt_BR:Arendondar o tamanho dos arquivos exibidos
 prefs_dialog.compact_file_size:NL:Getoonde bestandsgroottes afronden
 prefs_dialog.compact_file_size:SK:Zaokrúhliť zobrazenú veľkosť súborov
 prefs_dialog.compact_file_size:JA:表示されるファイル サイズを四捨五入する
-prefs_dialog.compact_file_size:SV:Visa filstorlek avrundad
+prefs_dialog.compact_file_size:SV:Avrunda filstorlek
 prefs_dialog.compact_file_size:DA:Afrund filstørrelser
 
 # When enabled and 'entering' a symlink which points to a directory, the
@@ -12294,7 +12321,7 @@ prefs_dialog.default_shell:NL:Gebruik voorkeursshell van het systeem
 prefs_dialog.default_shell:SK:Použiť preddefinovaný systémový shell
 prefs_dialog.default_shell:HU:Az alapértelmezett végrehajtás használata
 prefs_dialog.default_shell:JA:既定のシステム シェルを使用する
-prefs_dialog.default_shell:SV:Använd standard system shell
+prefs_dialog.default_shell:SV:Använd systemets standard kommandotolk
 prefs_dialog.default_shell:DA:Anvend systemets standard kommandofortolker
 
 prefs_dialog.custom_shell:EN:Use custom shell
@@ -12333,7 +12360,7 @@ prefs_dialog.shell_encoding:pt_BR:Codificação do Shell
 prefs_dialog.shell_encoding:HU:Karakter kódolás
 prefs_dialog.shell_encoding:JA:シェルのエンコード
 prefs_dialog.shell_encoding:SK:Kódovanie textu shellu
-prefs_dialog.shell_encoding:SV:Shell teckenuppsättning
+prefs_dialog.shell_encoding:SV:Terminal teckenuppsättning
 prefs_dialog.shell_encoding:RU:Кодировка командной строки
 prefs_dialog.shell_encoding:ES:Codificación de terminal
 prefs_dialog.shell_encoding:DA:Kommandofortolker indkodning
@@ -12361,7 +12388,7 @@ prefs_dialog.auto_detect_shell_encoding:HU:Automatikus felismerés
 prefs_dialog.auto_detect_shell_encoding:PL:Auto-wybór
 prefs_dialog.auto_detect_shell_encoding:JA:自動検出
 prefs_dialog.auto_detect_shell_encoding:SK:Automatické rozpoznávanie
-prefs_dialog.auto_detect_shell_encoding:SV:Upptäck automatiskt
+prefs_dialog.auto_detect_shell_encoding:SV:Välj automatiskt
 prefs_dialog.auto_detect_shell_encoding:RU:Автоопределение
 prefs_dialog.auto_detect_shell_encoding:ES:Detección automática
 prefs_dialog.auto_detect_shell_encoding:DA:Vælg automatisk
@@ -13213,7 +13240,7 @@ color_chooser.swatches:CS:Barevný mixér
 color_chooser.swatches:IT:Palette dei colori
 color_chooser.swatches:PL:Próbki
 color_chooser.swatches:JA:色見本
-color_chooser.swatches:SV:Provkarta
+color_chooser.swatches:SV:Färgkarta
 color_chooser.swatches:DA:Farveprøver
 # Translation missing (KO)
 
@@ -13402,6 +13429,7 @@ batch_rename_dialog.title:CS:Dávkové přejmenování
 batch_rename_dialog.title:IT:Multi rinomina
 batch_rename_dialog.title:pt_BR:Multipla renomeação
 batch_rename_dialog.title:SL:Preimenuj sveženj
+batch_rename_dialog.title:SV:Döp om filer
 # Translation missing (New!)
 
 
@@ -13429,6 +13457,7 @@ batch_rename_dialog.mask:CS:Maska pro přejmenování
 batch_rename_dialog.mask:IT:Maschera di rinomina
 batch_rename_dialog.mask:pt_BR:Modelo de renomeação
 batch_rename_dialog.mask:SL:Preimenuj vzorec
+batch_rename_dialog.mask:SV:Mönster
 # Translation missing (New!)
 
 
@@ -13456,6 +13485,7 @@ batch_rename_dialog.search_replace:CS:Najít & nahradit
 batch_rename_dialog.search_replace:IT:Cerca & Sostituisci
 batch_rename_dialog.search_replace:pt_BR:Pesquisar e Substituir
 batch_rename_dialog.search_replace:SL:Išči in zamenjaj
+batch_rename_dialog.search_replace:SV:Sök och Ersätt
 # Translation missing (New!)
 
 
@@ -13483,6 +13513,7 @@ batch_rename_dialog.search_for:CS:Hledaný výraz
 batch_rename_dialog.search_for:IT:Cerca
 batch_rename_dialog.search_for:pt_BR:Pesquisar por
 batch_rename_dialog.search_for:SL:Iskanje za
+batch_rename_dialog.search_for:SV:Sök efter
 # Translation missing (New!)
 
 
@@ -13510,6 +13541,7 @@ batch_rename_dialog.replace_with:CS:Bude nahrazen
 batch_rename_dialog.replace_with:IT:Sostituisci con
 batch_rename_dialog.replace_with:pt_BR:Substituir por
 batch_rename_dialog.replace_with:SL:Zamenjaj z
+batch_rename_dialog.replace_with:SV:Ersätt med
 # Translation missing (New!)
 
 
@@ -13537,6 +13569,7 @@ batch_rename_dialog.counter:CS:Počítadlo
 batch_rename_dialog.counter:IT:Contatore
 batch_rename_dialog.counter:pt_BR:Contador
 batch_rename_dialog.counter:SL:Števec
+batch_rename_dialog.counter:SV:Räknare
 # Translation missing (New!)
 
 
@@ -13564,6 +13597,7 @@ batch_rename_dialog.start_at:CS:Počítat od
 batch_rename_dialog.start_at:IT:Inizia da
 batch_rename_dialog.start_at:pt_BR:Começar
 batch_rename_dialog.start_at:SL:Začni v
+batch_rename_dialog.start_at:SV:Börja vid
 # Translation missing (New!)
 
 
@@ -13591,6 +13625,7 @@ batch_rename_dialog.step_by:CS:Přírůstek
 batch_rename_dialog.step_by:IT:Incremento
 batch_rename_dialog.step_by:pt_BR:Incrementar
 batch_rename_dialog.step_by:SL:Korak po
+batch_rename_dialog.step_by:SV:Öka med
 # Translation missing (New!)
 
 
@@ -13617,6 +13652,7 @@ batch_rename_dialog.format:CS:Formát
 batch_rename_dialog.format:IT:Formato
 batch_rename_dialog.format:pt_BR:Formatar
 batch_rename_dialog.format:SL:Formatiraj
+batch_rename_dialog.format:SV:Format
 # Translation missing (New!)
 
 
@@ -13644,6 +13680,7 @@ batch_rename_dialog.upper_lower_case:CS:Velikost písmen
 batch_rename_dialog.upper_lower_case:IT:Maiuscolo/Minuscolo
 batch_rename_dialog.upper_lower_case:pt_BR:Maiúsculo/Minúsculo
 batch_rename_dialog.upper_lower_case:SL:Velike/Male črke
+batch_rename_dialog.upper_lower_case:SV:Skiftläge
 # Translation missing (New!)
 
 
@@ -13671,6 +13708,7 @@ batch_rename_dialog.no_change:CS:Beze změny
 batch_rename_dialog.no_change:IT:Invariato
 batch_rename_dialog.no_change:pt_BR:Inalterado
 batch_rename_dialog.no_change:SL:Nespremenjeno
+batch_rename_dialog.no_change:SV:Oförändrad
 # Translation missing (New!)
 
 
@@ -13698,6 +13736,7 @@ batch_rename_dialog.lower_case:CS:malá písmena
 batch_rename_dialog.lower_case:IT:minuscolo
 batch_rename_dialog.lower_case:pt_BR:minúsculo
 batch_rename_dialog.lower_case:SL:male črke
+batch_rename_dialog.lower_case:SV:små bokstäver
 # Translation missing (New!)
 
 
@@ -13725,6 +13764,7 @@ batch_rename_dialog.upper_case:CS:VELKÁ PÍSMENA
 batch_rename_dialog.upper_case:IT:MAIUSCOLO
 batch_rename_dialog.upper_case:pt_BR:MAIÚSCULO
 batch_rename_dialog.upper_case:SL:VELIKE ČRKE
+batch_rename_dialog.upper_case:SV:STORA BOKSTÄVER
 # Translation missing (New!)
 
 
@@ -13752,6 +13792,7 @@ batch_rename_dialog.first_upper:CS:První písmeno velké
 batch_rename_dialog.first_upper:IT:Prima lettera maiuscola
 batch_rename_dialog.first_upper:pt_BR:Primeira letra em maiúsculo
 batch_rename_dialog.first_upper:SL:Velika začetnica
+batch_rename_dialog.first_upper:SV:Första bokstaven stor
 # Translation missing (New!)
 
 
@@ -13779,6 +13820,7 @@ batch_rename_dialog.word:CS:První Písmena Velká
 batch_rename_dialog.word:IT:Prima Lettera Di Ogni Parola
 batch_rename_dialog.word:pt_BR:Primeira de cada palavra
 batch_rename_dialog.word:SL:Velika Začetnica Vsake Besede
+batch_rename_dialog.word:SV:Fösta Bokstaven I Varje Ord
 # Translation missing (New!)
 
 
@@ -13806,6 +13848,7 @@ batch_rename_dialog.old_name:CS:Původní jméno
 batch_rename_dialog.old_name:IT:Vecchio nome
 batch_rename_dialog.old_name:pt_BR:Nome antigo
 batch_rename_dialog.old_name:SL:Staro ime
+batch_rename_dialog.old_name:SV:Gammalt namn
 # Translation missing (New!)
 
 
@@ -13833,6 +13876,7 @@ batch_rename_dialog.new_name:CS:Nové jméno
 batch_rename_dialog.new_name:IT:Nuovo nome
 batch_rename_dialog.new_name:pt_BR:Novo nome
 batch_rename_dialog.new_name:SL:Novo ime
+batch_rename_dialog.new_name:SV:Nytt namn
 # Translation missing (New!)
 
 
@@ -13860,6 +13904,7 @@ batch_rename_dialog.remove:CS:Odstranit
 batch_rename_dialog.remove:IT:Elimina
 batch_rename_dialog.remove:pt_BR:Remover
 batch_rename_dialog.remove:SL:Odstrani
+batch_rename_dialog.remove:SV:Ta bort
 # Translation missing (New!)
 
 
@@ -13888,6 +13933,7 @@ batch_rename_dialog.block_name:CS:Zachovat
 batch_rename_dialog.block_name:IT:Conserva
 batch_rename_dialog.block_name:pt_BR:Preservar
 batch_rename_dialog.block_name:SL:Ohrani
+batch_rename_dialog.block_name:SV:Bevara
 # Translation missing (New!)
 
 
@@ -13915,6 +13961,7 @@ batch_rename_dialog.range:CS:Rozsah
 batch_rename_dialog.range:IT:Intervallo
 batch_rename_dialog.range:pt_BR:Intervalo
 batch_rename_dialog.range:SL:Razpon
+batch_rename_dialog.range:SV:Område
 # Translation missing (New!)
 
 
@@ -13942,6 +13989,7 @@ batch_rename_dialog.proceed_renaming:CS:%1 z %2 souborů bude přejmenováno. Ch
 batch_rename_dialog.proceed_renaming:IT:%1 file di %2 verranno rinominati. Vuoi continuare?
 batch_rename_dialog.proceed_renaming:pt_BR:%1 arquivos de %2 serão renomeados. Continuar?
 batch_rename_dialog.proceed_renaming:SL:%1 datotek od %2 bo preimenovanih. Nadaljujem?
+batch_rename_dialog.proceed_renaming:SV:%1 av %2 filer kommer döpas om. Vill du fortsätta?
 # Translation missing (New!)
 
 
@@ -13968,6 +14016,7 @@ batch_rename_dialog.duplicate_names:CS:Stejné jméno se již vyskytuje!
 batch_rename_dialog.duplicate_names:IT:Nomi duplicati!
 batch_rename_dialog.duplicate_names:pt_BR:Nomes duplicados!
 batch_rename_dialog.duplicate_names:SL:Podvojena imena!
+batch_rename_dialog.duplicate_names:SV:Duplicera namn!
 # Translation missing (New!)
 
 
@@ -14000,6 +14049,7 @@ parent_folders_quick_list.empty_message:CS:Stávající umístění nemá nadřa
 parent_folders_quick_list.empty_message:IT:Il percorso corrente non ha un livello superiore
 parent_folders_quick_list.empty_message:pt_BR:Localização atual não possue superior
 parent_folders_quick_list.empty_message:SL:Trenutna lokacija nima izvora
+parent_folders_quick_list.empty_message:SV:Det finns ingen överodnad mapp till denna plats
 # Translation missing (New!)
 
 
@@ -14025,6 +14075,7 @@ recent_locations_quick_list.empty_message:CS:Dříve navštívená umístění n
 recent_locations_quick_list.empty_message:IT:Nessun percorso recente
 recent_locations_quick_list.empty_message:pt_BR:Nenhum local recente
 recent_locations_quick_list.empty_message:SL:Ni nedavne lokacije
+recent_locations_quick_list.empty_message:SV:Inga nyligen besökta platser
 # Translation missing (New!)
 
 
@@ -14049,6 +14100,7 @@ recent_executed_files_quick_list.empty_message:CS:Dříve spuštěné soubory ne
 recent_executed_files_quick_list.empty_message:IT:Nessun file eseguibile recente
 recent_executed_files_quick_list.empty_message:pt_BR:Nenhum arquivo executado recentemente
 recent_executed_files_quick_list.empty_message:SL:Ni nedavno zagnanih datotek
+recent_executed_files_quick_list.empty_message:SV:Inga nyligen öppnade filer
 # Translation missing (New!)
 
 
