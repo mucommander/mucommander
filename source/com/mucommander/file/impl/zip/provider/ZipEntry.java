@@ -208,19 +208,19 @@ public class ZipEntry extends java.util.zip.ZipEntry implements Cloneable {
     }
 
     /**
-     * Platform specification to put into the 'version made by' part of the central file header.
+     * Returns the platform specification to put into the 'version made by' part of the central file header.
      *
-     * @return 0 (MS-DOS FAT) unless {@link #setUnixMode setUnixMode}
-     * has been called, in which case 3 (Unix) will be returned.
+     * @return {@link #PLATFORM_FAT} unless {@link #setUnixMode setUnixMode} has been called,
+     * in which case {@link #PLATFORM_UNIX} will be returned.
      */
     public int getPlatform() {
         return platform;
     }
 
     /**
-     * Set the platform (UNIX or FAT).
+     * Sets the platform: {@link #PLATFORM_FAT} or {@link #PLATFORM_UNIX}.
      *
-     * @param platform an <code>int</code> value - 0 is FAT, 3 is UNIX
+     * @param platform {@link #PLATFORM_FAT} or {@link #PLATFORM_UNIX}
      */
     protected void setPlatform(int platform) {
         this.platform = platform;
