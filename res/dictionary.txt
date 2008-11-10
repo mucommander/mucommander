@@ -2812,7 +2812,6 @@ com.mucommander.ui.action.DeleteAction.tooltip:SL:Izbriši označene datoteke z 
 com.mucommander.ui.action.DeleteAction.tooltip:ES:Elimiar los ficheros marcados
 com.mucommander.ui.action.DeleteAction.tooltip:RU:Удаление выделенных файлов
 com.mucommander.ui.action.DeleteAction.tooltip:zh_CN:刪除已标记文件
-com.mucommander.ui.action.DeleteAction.tooltip:SL:Izbriši označene datoteke z uporabo koša
 com.mucommander.ui.action.DeleteAction.tooltip:RO:Șterge fișierele selectate
 com.mucommander.ui.action.DeleteAction.tooltip:KO:선택된 파일 삭제
 com.mucommander.ui.action.DeleteAction.tooltip:pt_BR:Apagar arquivos selecionados
