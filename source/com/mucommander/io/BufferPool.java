@@ -21,6 +21,7 @@ package com.mucommander.io;
 import com.mucommander.Debug;
 
 import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
 import java.util.Vector;
 
 /**
@@ -145,13 +146,42 @@ public class BufferPool {
      * {@link #releaseByteBuffer(ByteBuffer)}.</p>
      *
      * <p>This method is a shorthand for {@link #getBuffer(com.mucommander.io.BufferPool.BufferFactory,int)} called
-     * with a {@link com.mucommander.io.BufferPool.ByteArrayFactory} instance.</p>.
+     * with a {@link com.mucommander.io.BufferPool.ByteBufferFactory} instance.</p>.
 
      * @param capacity capacity of the ByteBuffer
      * @return a ByteBuffer with the specified capacity
      */
     public static synchronized ByteBuffer getByteBuffer(int capacity) {
         return (ByteBuffer)getBuffer(new ByteBufferFactory(), capacity);
+    }
+
+
+    /**
+     * Convenience method that has the same effect as calling {@link #getCharBuffer(int)} with
+     * a buffer capacity of {@link #getDefaultBufferSize()}.
+     *
+     * @return a CharBuffer with a capacity equal to {@link # getDefaultBufferSize}
+     */
+    public static synchronized CharBuffer getCharBuffer() {
+        return getCharBuffer(getDefaultBufferSize());
+    }
+
+    /**
+     * Returns a CharBuffer of the specified capacity. This method first checks if a CharBuffer instance of the
+     * specified capacity exists in the pool. If one is found, it is removed from the pool and returned. If not,
+     * a new instance is created and returned.
+     *
+     * <p>This method won't return the same buffer instance until it has been released with
+     * {@link #releaseCharBuffer(CharBuffer)}.</p>
+     *
+     * <p>This method is a shorthand for {@link #getBuffer(com.mucommander.io.BufferPool.BufferFactory,int)} called
+     * with a {@link com.mucommander.io.BufferPool.CharBufferFactory} instance.</p>.
+
+     * @param capacity capacity of the CharBuffer
+     * @return a CharBuffer with the specified capacity
+     */
+    public static synchronized CharBuffer getCharBuffer(int capacity) {
+        return (CharBuffer)getBuffer(new CharBufferFactory(), capacity);
     }
 
 
@@ -251,6 +281,22 @@ public class BufferPool {
      */
     public static synchronized boolean releaseByteBuffer(ByteBuffer buffer) {
         return releaseBuffer(buffer, new ByteBufferFactory());
+    }
+
+    /**
+     * Makes the given buffer available for further calls to {@link #getCharBuffer(int)} with the same buffer capacity.
+     * Returns <code>true</code> if the buffer was added to the pool, <code>false</code> if the buffer was already in
+     * the pool.
+     *
+     * <p>After calling this method, the given buffer instance <b>must not be used</b>, otherwise it could get
+     * corrupted if other threads were using it.</p>
+     *
+     * @param buffer the buffer instance to make available for further use
+     * @return <code>true</code> if the buffer was added to the pool, <code>false</code> if the buffer was already in the pool
+     * @throws IllegalArgumentException if specified buffer is null
+     */
+    public static synchronized boolean releaseCharBuffer(CharBuffer buffer) {
+        return releaseBuffer(buffer, new CharBufferFactory());
     }
 
     /**
@@ -540,8 +586,8 @@ public class BufferPool {
     }
 
     /**
-     * This class is a {@link BufferFactory} implementation for <code>java.nio.ByteBuffer</code> buffers. The ByteBuffer
-     * instances created by {@link #newBuffer(int)} are direct ; the actually Class of those instances may be actually
+     * This class is a {@link BufferFactory} implementation for <code>java.nio.ByteBuffer</code> buffers.
+     * ByteBuffer instances created by {@link #newBuffer(int)} are direct ; the actually Class of those instances may be actually
      * be <code>java.nio.DirectByteBuffer</code> and not <code>java.nio.ByteBuffer</code> as returned by
      * {@link #getBufferClass()}.
      */
@@ -566,6 +612,31 @@ public class BufferPool {
 
         public Class getBufferClass() {
             return ByteBuffer.class;
+        }
+    }
+
+    /**
+     * This class is a {@link BufferFactory} implementation for <code>java.nio.CharBuffer</code> buffers.
+     */
+    public static class CharBufferFactory extends BufferFactory {
+        public Object newBuffer(int size) {
+            return CharBuffer.allocate(size);
+        }
+
+        public BufferContainer newBufferContainer(Object buffer) {
+            return new BufferContainer(buffer) {
+                protected int getLength() {
+                    return ((CharBuffer)buffer).capacity();
+                }
+
+                protected int getSize() {
+                    return 2*getLength();
+                }
+            };
+        }
+
+        public Class getBufferClass() {
+            return CharBuffer.class;
         }
     }
 }

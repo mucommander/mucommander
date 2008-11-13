@@ -62,6 +62,16 @@ public class BufferPoolTest extends TestCase {
     }
 
     /**
+     * Tests <code>BufferPool</code> with <code>CharBuffer</code> buffers.
+     *
+     * <p>This method invokes {@link #testBuffer(com.mucommander.io.BufferPool.BufferFactory)} with a
+     * {@link BufferPool.CharBufferFactory} instance.</p>
+     */
+    public void testCharBuffer() {
+        testBuffer(new BufferPool.CharBufferFactory());
+    }
+
+    /**
      * Tests <code>BufferPool</code> with <code>ByteBuffer</code> buffers.
      *
      * <p>This test assumes that no buffer with size=={@link #TEST_BUFFER_SIZE_1} or size=={@link #TEST_BUFFER_SIZE_2}
