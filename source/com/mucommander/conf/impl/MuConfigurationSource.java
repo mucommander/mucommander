@@ -18,15 +18,18 @@
 
 package com.mucommander.conf.impl;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+
 import com.mucommander.PlatformManager;
-import com.mucommander.RuntimeConstants;
 import com.mucommander.conf.ConfigurationSource;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
 import com.mucommander.io.BackupInputStream;
 import com.mucommander.io.BackupOutputStream;
-
-import java.io.*;
 
 /**
  * @author Nicolas Rinaudo

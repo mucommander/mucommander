@@ -18,7 +18,6 @@
  */
 package com.mucommander.file.impl.rar.provider.de.innosystec.unrar.rarfile;
 
-import java.io.UnsupportedEncodingException;
 import java.util.Calendar;
 import java.util.Date;
 

@@ -1,12 +1,10 @@
 package com.mucommander.file.impl.rar.provider.de.innosystec.unrar;
 
+import java.io.IOException;
+
 import com.mucommander.file.impl.rar.provider.de.innosystec.unrar.exception.RarException;
 import com.mucommander.file.impl.rar.provider.de.innosystec.unrar.exception.RarExceptionType;
-import com.mucommander.file.impl.rar.provider.de.innosystec.unrar.rarfile.FileHeader;
-import com.mucommander.file.impl.rar.provider.de.innosystec.unrar.unpack.*;
-
-import java.io.File;
-import java.io.IOException;
+import com.mucommander.file.impl.rar.provider.de.innosystec.unrar.unpack.ComprDataIO;
 
 /**
  *
@@ -18,7 +16,7 @@ public class Volume {
     }
 
     public static boolean mergeArchive(Archive archive, ComprDataIO dataIO) throws IOException {
-  /* arik      FileHeader hd = dataIO.getSubHeader();
+  /* FileHeader hd = dataIO.getSubHeader();
         if (hd.getUnpVersion()>=20 &&
                 hd.getFileCRC()!=0xffffffff &&
                 dataIO.getPackedCRC()!=~hd.getFileCRC()) {

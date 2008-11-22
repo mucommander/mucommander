@@ -18,18 +18,18 @@
 
 package com.mucommander.ui.quicklist;
 
+import java.util.HashMap;
+
+import javax.swing.Icon;
+import javax.swing.event.PopupMenuEvent;
+import javax.swing.event.PopupMenuListener;
+
 import com.mucommander.file.AbstractFile;
 import com.mucommander.ui.icon.CustomFileIconProvider;
 import com.mucommander.ui.icon.FileIcons;
 import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.icon.SpinningDial;
 import com.mucommander.ui.quicklist.item.DataList;
-
-import javax.swing.*;
-import javax.swing.event.PopupMenuEvent;
-import javax.swing.event.PopupMenuListener;
-import java.awt.*;
-import java.util.HashMap;
 
 /**
  * FileTablePopupWithIcons is a FileTablePopupWithDataList in which the data list 

@@ -18,8 +18,6 @@
 
 package com.mucommander.ant.jnlp;
 
-import org.apache.tools.ant.BuildException;
-
 import java.util.Iterator;
 import java.util.Vector;
 

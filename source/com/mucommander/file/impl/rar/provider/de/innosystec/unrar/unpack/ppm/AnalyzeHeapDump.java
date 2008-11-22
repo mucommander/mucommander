@@ -1,10 +1,5 @@
 package com.mucommander.file.impl.rar.provider.de.innosystec.unrar.unpack.ppm;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 
 /**
  * For debugging purposes only.
