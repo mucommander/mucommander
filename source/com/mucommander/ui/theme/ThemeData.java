@@ -80,7 +80,7 @@ public class ThemeData {
      * by an instance of theme data by looping from 0 to {@link #FONT_COUNT}.
      * </p>
      */
-    public static final int FONT_COUNT  = 6;
+    public static final int FONT_COUNT  = 8;
 
     /**
      * Number of known colors.
@@ -89,7 +89,7 @@ public class ThemeData {
      * by an instance of theme data by looping from 0 to {@link #COLOR_COUNT}.
      * </p>
      */
-    public static final int COLOR_COUNT = 61;
+    public static final int COLOR_COUNT = 68;
 
 
 
@@ -143,6 +143,21 @@ public class ThemeData {
      */
     public static final int STATUS_BAR_FONT = 5;
 
+    /**
+     * Font used in the quick list header.
+     * <p>
+     * This defaults to a similar font of the current <code>JTable</code> font, but a little bigger.
+     * </p>
+     */
+    public static final int QUICK_LIST_HEADER_FONT = 6;
+    
+    /**
+     * Font used in the quick list item.
+     * <p>
+     * This defaults to the current <code>JTable</code> font.
+     * </p>
+     */
+    public static final int QUICK_LIST_ITEM_FONT = 7;
 
 
     // - Color definitions ---------------------------------------------------------------
@@ -628,6 +643,42 @@ public class ThemeData {
      * Color used to paint the outline of selected files in an inactive table.
      */
     public static final int FILE_TABLE_INACTIVE_SELECTED_OUTLINE_COLOR = 58;
+    
+    /**
+     * Color used to paint the main background of a quick list header.
+     */
+    public static final int QUICK_LIST_HEADER_BACKGROUND_COLOR = 61;
+    
+    /**
+     * Color used to paint the secondary background of a quick list header.
+     */
+    public static final int QUICK_LIST_HEADER_SECONDARY_BACKGROUND_COLOR = 62;
+    
+    /**
+     * Color used to paint the text of a quick list header.
+     */
+    public static final int QUICK_LIST_HEADER_FOREGROUND_COLOR = 63;
+    
+    /**
+     * Color used to paint the background of a quick list item.
+     */
+    public static final int QUICK_LIST_ITEM_BACKGROUND_COLOR = 64;
+    
+    /**
+     * Color used to paint the text of a quick list item.
+     */
+    public static final int QUICK_LIST_ITEM_FOREGROUND_COLOR = 65;
+
+    /**
+     * Color used to paint the background of a selected quick list item.
+     */
+    public static final int QUICK_LIST_SELECTED_ITEM_BACKGROUND_COLOR = 66;
+    
+    /**
+     * Color used to paint the text of a selected quick list item.
+     */
+    public static final int QUICK_LIST_SELECTED_ITEM_FOREGROUND_COLOR = 67;
+
 
 
 
@@ -644,6 +695,8 @@ public class ThemeData {
     private static Font  DEFAULT_LABEL_FONT;
     /** Default font for table components. */
     private static Font  DEFAULT_TABLE_FONT;
+    /** Default font for quick list header. */
+    private static Font  DEFAULT_QUICK_LIST_FONT;
 
 
 
@@ -950,6 +1003,7 @@ public class ThemeData {
         case FILE_TABLE_INACTIVE_BACKGROUND_COLOR:
         case FILE_TABLE_ALTERNATE_BACKGROUND_COLOR:
         case FILE_TABLE_INACTIVE_ALTERNATE_BACKGROUND_COLOR:
+        case QUICK_LIST_ITEM_BACKGROUND_COLOR:
 	    return getTableBackgroundColor();
 
             // File table foreground colors (everything except marked
@@ -964,6 +1018,7 @@ public class ThemeData {
         case ARCHIVE_INACTIVE_FOREGROUND_COLOR:
         case SYMLINK_INACTIVE_FOREGROUND_COLOR:
         case FILE_FOREGROUND_COLOR:
+        case QUICK_LIST_ITEM_FOREGROUND_COLOR:
 	    return getTableColor();
 
             // Marked files foreground colors (they have to be different
@@ -998,11 +1053,13 @@ public class ThemeData {
             // The location bar progress color is a bit of a special case,
             // as it requires alpha transparency.
         case LOCATION_BAR_PROGRESS_COLOR:
+        case QUICK_LIST_HEADER_BACKGROUND_COLOR:
             return getTextFieldProgressColor();
 
             // Selected table background colors.
         case FILE_TABLE_SELECTED_BACKGROUND_COLOR:
         case FILE_TABLE_INACTIVE_SELECTED_BACKGROUND_COLOR:
+        case QUICK_LIST_SELECTED_ITEM_BACKGROUND_COLOR:
 	    return getTableSelectionBackgroundColor();
 
             // The secondary background and outline colors default to the current
@@ -1032,6 +1089,7 @@ public class ThemeData {
         case SYMLINK_INACTIVE_SELECTED_FOREGROUND_COLOR:
         case FILE_INACTIVE_SELECTED_FOREGROUND_COLOR:
         case FILE_SELECTED_FOREGROUND_COLOR:
+        case QUICK_LIST_SELECTED_ITEM_FOREGROUND_COLOR:
 	    return getTableSelectionColor();
 
             // Foreground color for selected text area elements.
@@ -1075,6 +1133,11 @@ public class ThemeData {
             return getTableUnmatchedBackgroundColor();
         case FILE_TABLE_UNMATCHED_FOREGROUND_COLOR:
             return getTableUnmatchedColor();
+            
+        case QUICK_LIST_HEADER_SECONDARY_BACKGROUND_COLOR:
+        	return Color.BLACK;
+        case QUICK_LIST_HEADER_FOREGROUND_COLOR:
+        	return Color.WHITE;
         }
 
         // This should never happen.
@@ -1098,6 +1161,7 @@ public class ThemeData {
 	switch(id) {
             // Table font.
         case FILE_TABLE_FONT:
+        case QUICK_LIST_ITEM_FONT:
             return getTableFont();
 
 	    // Text Area font.
@@ -1110,9 +1174,13 @@ public class ThemeData {
         case SHELL_HISTORY_FONT:
 	    return getTextFieldFont();
 
-            // Label fonts.
+        // Label fonts.
         case STATUS_BAR_FONT:
 	    return getLabelFont();
+	    
+	    // Quick list header font.
+        case QUICK_LIST_HEADER_FONT:
+    	return getQuickListHeaderFont();
         }
 
         // This should never happen.
@@ -1376,7 +1444,21 @@ public class ThemeData {
             if((DEFAULT_TABLE_FONT = UIManager.getDefaults().getFont("Table.font")) == null)
                 DEFAULT_TABLE_FONT = new JTable().getFont();
         }
-	return DEFAULT_TABLE_FONT;
+        return DEFAULT_TABLE_FONT;
+    }
+    
+    /**
+     * @return the default quick list header font.
+     */
+    private static Font getQuickListHeaderFont() {
+    	if (DEFAULT_QUICK_LIST_FONT == null) {
+    		if(DEFAULT_TABLE_FONT == null) {
+    			if((DEFAULT_TABLE_FONT = UIManager.getDefaults().getFont("Table.font")) == null)
+    				DEFAULT_TABLE_FONT = new JTable().getFont();
+    		}
+    		DEFAULT_QUICK_LIST_FONT = new Font(DEFAULT_TABLE_FONT.getFontName(), DEFAULT_TABLE_FONT.getStyle(), DEFAULT_TABLE_FONT.getSize() + 2);
+    	}
+        return DEFAULT_QUICK_LIST_FONT;
     }
 
     /**
@@ -1392,7 +1474,7 @@ public class ThemeData {
             if((DEFAULT_TEXT_AREA_FONT = UIManager.getDefaults().getFont("TextArea.font")) == null)
                 DEFAULT_TEXT_AREA_FONT = new JTable().getFont();
         }
-	return DEFAULT_TEXT_AREA_FONT;
+        return DEFAULT_TEXT_AREA_FONT;
     }
 
     /**
@@ -1408,7 +1490,7 @@ public class ThemeData {
             if((DEFAULT_TEXT_FIELD_FONT = UIManager.getDefaults().getFont("TextField.font")) == null)
                 DEFAULT_TEXT_FIELD_FONT = new JTable().getFont();
         }
-	return DEFAULT_TEXT_FIELD_FONT;
+        return DEFAULT_TEXT_FIELD_FONT;
     }
 
     /**
@@ -1424,7 +1506,7 @@ public class ThemeData {
             if((DEFAULT_LABEL_FONT = UIManager.getDefaults().getFont("Label.font")) == null)
                 DEFAULT_LABEL_FONT = new JTable().getFont();
         }
-	return DEFAULT_LABEL_FONT;
+        return DEFAULT_LABEL_FONT;
     }
 
     /**
@@ -1443,7 +1525,7 @@ public class ThemeData {
             DEFAULT_TEXT_FIELD_PROGRESS_COLOR = escapeColor(new Color(buffer.getRed(), buffer.getGreen(), buffer.getBlue(), 64));
         }
 
-	return DEFAULT_TEXT_FIELD_PROGRESS_COLOR;
+        return DEFAULT_TEXT_FIELD_PROGRESS_COLOR;
     }
 
     /**
@@ -1460,7 +1542,7 @@ public class ThemeData {
                 DEFAULT_TEXT_AREA_COLOR = new JTextArea().getForeground();
             DEFAULT_TEXT_AREA_COLOR = escapeColor(DEFAULT_TEXT_AREA_COLOR);
         }
-	return DEFAULT_TEXT_AREA_COLOR;
+        return DEFAULT_TEXT_AREA_COLOR;
     }
 
     /**
@@ -1477,7 +1559,7 @@ public class ThemeData {
                 DEFAULT_TEXT_AREA_BACKGROUND_COLOR = new JTextArea().getBackground();
             DEFAULT_TEXT_AREA_BACKGROUND_COLOR = escapeColor(DEFAULT_TEXT_AREA_BACKGROUND_COLOR);
         }
-	return DEFAULT_TEXT_AREA_BACKGROUND_COLOR;
+        return DEFAULT_TEXT_AREA_BACKGROUND_COLOR;
     }
 
     /**
@@ -1494,7 +1576,7 @@ public class ThemeData {
                 DEFAULT_TEXT_AREA_SELECTION_COLOR = new JTextArea().getSelectionColor();
             DEFAULT_TEXT_AREA_SELECTION_COLOR = escapeColor(DEFAULT_TEXT_AREA_SELECTION_COLOR);
         }
-	return DEFAULT_TEXT_AREA_SELECTION_COLOR;
+        return DEFAULT_TEXT_AREA_SELECTION_COLOR;
     }
 
     /**
@@ -1511,7 +1593,7 @@ public class ThemeData {
             DEFAULT_TEXT_AREA_SELECTION_BACKGROUND_COLOR = new JTextArea().getSelectedTextColor();
             DEFAULT_TEXT_AREA_SELECTION_BACKGROUND_COLOR = escapeColor(DEFAULT_TEXT_AREA_SELECTION_BACKGROUND_COLOR);
         }
-	return DEFAULT_TEXT_AREA_SELECTION_BACKGROUND_COLOR;
+        return DEFAULT_TEXT_AREA_SELECTION_BACKGROUND_COLOR;
     }
 
     /**
@@ -1528,7 +1610,7 @@ public class ThemeData {
                 DEFAULT_TEXT_FIELD_COLOR = new JTextField().getForeground();
             DEFAULT_TEXT_FIELD_COLOR = escapeColor(DEFAULT_TEXT_FIELD_COLOR);
         }
-	return DEFAULT_TEXT_FIELD_COLOR;
+        return DEFAULT_TEXT_FIELD_COLOR;
     }
 
     /**
@@ -1545,7 +1627,7 @@ public class ThemeData {
                 DEFAULT_TEXT_FIELD_BACKGROUND_COLOR = new JTextField().getBackground();
             DEFAULT_TEXT_FIELD_BACKGROUND_COLOR = escapeColor(DEFAULT_TEXT_FIELD_BACKGROUND_COLOR);
         }
-	return DEFAULT_TEXT_FIELD_BACKGROUND_COLOR;
+        return DEFAULT_TEXT_FIELD_BACKGROUND_COLOR;
     }
 
     /**
@@ -1562,7 +1644,7 @@ public class ThemeData {
                 DEFAULT_TEXT_FIELD_SELECTION_COLOR = new JTextField().getSelectionColor();
             DEFAULT_TEXT_FIELD_SELECTION_COLOR = escapeColor(DEFAULT_TEXT_FIELD_SELECTION_COLOR);
         }
-	return DEFAULT_TEXT_FIELD_SELECTION_COLOR;
+        return DEFAULT_TEXT_FIELD_SELECTION_COLOR;
     }
 
     /**
@@ -1579,7 +1661,7 @@ public class ThemeData {
                 DEFAULT_TEXT_FIELD_SELECTION_BACKGROUND_COLOR = new JTextField().getSelectedTextColor();
             DEFAULT_TEXT_FIELD_SELECTION_BACKGROUND_COLOR = escapeColor(DEFAULT_TEXT_FIELD_SELECTION_BACKGROUND_COLOR);
         }
-	return DEFAULT_TEXT_FIELD_SELECTION_BACKGROUND_COLOR;
+        return DEFAULT_TEXT_FIELD_SELECTION_BACKGROUND_COLOR;
     }
 
     /**
@@ -1596,7 +1678,7 @@ public class ThemeData {
                 DEFAULT_TABLE_COLOR = new JTable().getForeground();
             DEFAULT_TABLE_COLOR = escapeColor(DEFAULT_TABLE_COLOR);
         }
-	return DEFAULT_TABLE_COLOR;
+        return DEFAULT_TABLE_COLOR;
     }
 
     /**
@@ -1627,7 +1709,7 @@ public class ThemeData {
     private static synchronized Color getTableUnmatchedColor() {
         if(DEFAULT_TABLE_UNMATCHED_COLOR == null)
             DEFAULT_TABLE_UNMATCHED_COLOR = escapeColor(getTableColor().darker());
-	return DEFAULT_TABLE_UNMATCHED_COLOR;
+        return DEFAULT_TABLE_UNMATCHED_COLOR;
     }
 
     /**
@@ -1641,7 +1723,7 @@ public class ThemeData {
     private static synchronized Color getTableUnmatchedBackgroundColor() {
         if(DEFAULT_TABLE_UNMATCHED_BACKGROUND_COLOR == null)
             DEFAULT_TABLE_UNMATCHED_BACKGROUND_COLOR = escapeColor(getTableBackgroundColor().darker());
-	return DEFAULT_TABLE_UNMATCHED_BACKGROUND_COLOR;
+        return DEFAULT_TABLE_UNMATCHED_BACKGROUND_COLOR;
     }
 
     /**
@@ -1658,7 +1740,7 @@ public class ThemeData {
                 DEFAULT_TABLE_SELECTION_COLOR = new JTable().getSelectionForeground();
             DEFAULT_TABLE_SELECTION_COLOR = escapeColor(DEFAULT_TABLE_SELECTION_COLOR);
         }
-	return DEFAULT_TABLE_SELECTION_COLOR;
+        return DEFAULT_TABLE_SELECTION_COLOR;
     }
 
     /**
@@ -1675,7 +1757,7 @@ public class ThemeData {
                 DEFAULT_TABLE_SELECTION_BACKGROUND_COLOR = new JTable().getSelectionBackground();
             DEFAULT_TABLE_SELECTION_BACKGROUND_COLOR = escapeColor(DEFAULT_TABLE_SELECTION_BACKGROUND_COLOR);
         }
-	return DEFAULT_TABLE_SELECTION_BACKGROUND_COLOR;
+        return DEFAULT_TABLE_SELECTION_BACKGROUND_COLOR;
     }
 
     /**

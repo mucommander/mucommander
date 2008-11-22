@@ -39,6 +39,8 @@ interface ThemeXmlConstants {
     public static final String ELEMENT_SHELL_HISTORY        = "shell_history";
     /** Volume label description element. */
     public static final String ELEMENT_STATUS_BAR           = "status_bar";
+    /** Quick list label description element. */
+    public static final String ELEMENT_QUICK_LIST           = "quick_list";
 
 
 
@@ -52,6 +54,15 @@ interface ThemeXmlConstants {
     public static final String ELEMENT_ALTERNATE            = "alternate";
     /** Item unmatched state description element. */
     public static final String ELEMENT_UNMATCHED            = "unmatched";
+    
+    
+    
+    // - Quick list element ------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------
+    /** Quick list header state description element. */
+    public static final String ELEMENT_HEADER               = "header";
+    /** Quick list item state description element. */
+    public static final String ELEMENT_ITEM		            = "item";
 
 
 

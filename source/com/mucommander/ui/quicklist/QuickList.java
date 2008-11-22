@@ -65,7 +65,7 @@ public abstract class QuickList extends JPopupMenu implements FocusListener {
         
 		if (prepareForShowing()) {
 	     // Note: the actual popup menu's size is not known at this stage so we use the component's preferred size
-	        Dimension dim = getPreferredSize(); //getPreferredSize();
+	        Dimension dim = getPreferredSize();
 	
 	        int x = Math.max((folderPanel.getWidth() - (int)dim.getWidth()) / 2, 0);
 	        int y = folderPanel.getLocationTextField().getHeight() + Math.max((folderPanel.getHeight() - (int)dim.getHeight()) / 3, 0);
@@ -91,7 +91,9 @@ public abstract class QuickList extends JPopupMenu implements FocusListener {
 			width = Math.max(width, ((Component) items.elementAt(i)).getPreferredSize().getWidth());
 			height += ((Component) items.elementAt(i)).getPreferredSize().getHeight();
 		}
-		return new Dimension((int) Math.ceil(Math.max(folderPanel.getWidth() / 2 ,width * 1.05)), (int) Math.ceil(height));
+		return new Dimension((int) Math.ceil(
+				Math.max(folderPanel == null ? 0 : folderPanel.getWidth() / 2, width * 1.05))
+				, (int) Math.ceil(height));
 	}
 	
 	public FolderPanel getPanel() {
@@ -104,7 +106,7 @@ public abstract class QuickList extends JPopupMenu implements FocusListener {
 		setVisible(false);		
 	}
 	
-	private class PopupsBorder extends LineBorder {		
+	public static class PopupsBorder extends LineBorder {
 		public PopupsBorder() {
 			super(Color.gray);		
 		}

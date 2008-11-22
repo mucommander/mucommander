@@ -21,24 +21,34 @@ package com.mucommander.ui.quicklist.item;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
+import com.mucommander.ui.theme.ColorChangedEvent;
+import com.mucommander.ui.theme.FontChangedEvent;
+import com.mucommander.ui.theme.ThemeData;
+import com.mucommander.ui.theme.ThemeListener;
+import com.mucommander.ui.theme.ThemeManager;
+
 /**
  * HeaderItem is a custom menu item that shown as the first item in every GenericTablePopup.
  * 
  * @author Arik Hadas
  */
-public class HeaderMenuItem extends MenuItem {
-	private static Font HEADER_FONT = new Font("Arial", Font.BOLD, 13);
-	public static final Color mainMidColor = new Color(0, 64, 196);
-	private Dimension dim;
+public class HeaderMenuItem extends MenuItem implements ThemeListener {
+	private Font HEADER_FONT;
+	protected Color TEXT_COLOR;
+	protected Color BACKGROUND_COLOR;
+	protected Color SECONDARY_BACKGROUND_COLOR;
+	protected Dimension dimension;
 	
 	public HeaderMenuItem(String text) {
 	   super(text);
-	   dim = new Dimension((int) Math.ceil(getFontMetrics(HEADER_FONT).stringWidth(text) * 1.1), (int) (HEADER_FONT.getSize() * 1.5));
+	   TEXT_COLOR = ThemeManager.getCurrentColor(ThemeData.QUICK_LIST_HEADER_FOREGROUND_COLOR);
+	   BACKGROUND_COLOR = ThemeManager.getCurrentColor(ThemeData.QUICK_LIST_HEADER_BACKGROUND_COLOR);
+	   SECONDARY_BACKGROUND_COLOR = ThemeManager.getCurrentColor(ThemeData.QUICK_LIST_HEADER_SECONDARY_BACKGROUND_COLOR);
+	   setFont(ThemeManager.getCurrentFont(ThemeData.QUICK_LIST_HEADER_FONT));
+	   ThemeManager.addCurrentThemeListener(this);
 	}
 	
-	public Dimension getPreferredSize() {
-		return dim;
-	}
+	public Dimension getPreferredSize() { return dimension; }
 	
 	protected final void paintComponent(Graphics g) {		
 		Graphics old = g.create();
@@ -49,7 +59,7 @@ public class HeaderMenuItem extends MenuItem {
 		
 		// paint background image	
 		graphics.drawImage(getBackgroundImage(getWidth(), getHeight(),
-				graphics, mainMidColor, Color.black), 				
+				graphics, BACKGROUND_COLOR, SECONDARY_BACKGROUND_COLOR), 				
 				0, 0, null);
 		
 		// draw text:
@@ -58,9 +68,9 @@ public class HeaderMenuItem extends MenuItem {
 		int x = (getWidth() - graphics.getFontMetrics().stringWidth(getText())) / 4;
 		int y = (int)(graphics.getFontMetrics().getLineMetrics(
 				getText(), graphics).getHeight());
-		graphics.setColor(Color.black);
+		graphics.setColor(Color.BLACK);
 		graphics.drawString(getText(), x+1, y+1);
-		graphics.setColor(Color.white);
+		graphics.setColor(TEXT_COLOR);
 		graphics.drawString(getText(), x, y);
 		
 		g = old;
@@ -68,6 +78,10 @@ public class HeaderMenuItem extends MenuItem {
 	
 	public BufferedImage getBackgroundImage(int width, int height, 
 			Graphics2D graphics, Color leftColor, Color rightColor) {
+		
+		//clear previous painting:
+		graphics.setColor(Color.white);
+		graphics.fillRect(0, 0, getWidth(), getHeight());
 		
 		BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 		graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
@@ -93,5 +107,38 @@ public class HeaderMenuItem extends MenuItem {
 		graphics.fillRect(transitionEnd, 0, width - transitionEnd, height);
 				
 		return image;
+	}
+	
+	public void setForegroundColor(Color foreground) {
+		TEXT_COLOR = foreground;
+		repaint();
+	}
+
+	public void setBackgroundColors(Color background, Color secondaryBackground) {		
+		BACKGROUND_COLOR = background;
+		SECONDARY_BACKGROUND_COLOR = secondaryBackground;
+		repaint();
+	}
+	
+	public void colorChanged(ColorChangedEvent event) {
+		if (event.getColorId() == ThemeData.QUICK_LIST_HEADER_BACKGROUND_COLOR)
+			BACKGROUND_COLOR = event.getColor();
+
+		else if (event.getColorId() == ThemeData.QUICK_LIST_HEADER_FOREGROUND_COLOR)
+			TEXT_COLOR = event.getColor();
+		
+		else if (event.getColorId() == ThemeData.QUICK_LIST_HEADER_SECONDARY_BACKGROUND_COLOR)
+			SECONDARY_BACKGROUND_COLOR = event.getColor();
+	}
+	
+	public void setFont(Font font) {
+		HEADER_FONT = font;
+		dimension = new Dimension((int) Math.ceil(getFontMetrics(HEADER_FONT).stringWidth(getText()) * 1.1), (int) (HEADER_FONT.getSize() * 1.5));
+		setPreferredSize(dimension);
+		setSize(dimension);
+	}
+
+	public void fontChanged(FontChangedEvent event) {
+		setFont(ThemeManager.getCurrentFont(ThemeData.QUICK_LIST_HEADER_FONT));
 	}
 }

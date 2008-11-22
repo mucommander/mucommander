@@ -36,60 +36,67 @@ class ThemeReader extends DefaultHandler implements ThemeXmlConstants {
     // - XML parser states ---------------------------------------------------------------
     // -----------------------------------------------------------------------------------
     /** Parsing hasn't started yet. */
-    private static final int STATE_UNKNOWN                = 0;
+    private static final int STATE_UNKNOWN                  = 0;
     /** Parsing the root element. */
-    private static final int STATE_ROOT                   = 1;
+    private static final int STATE_ROOT                     = 1;
     /** Parsing the table element.*/
-    private static final int STATE_TABLE                  = 2;
+    private static final int STATE_TABLE                    = 2;
     /** Parsing the shell element. */
-    private static final int STATE_SHELL                  = 3;
+    private static final int STATE_SHELL                    = 3;
     /** Parsing the editor element. */
-    private static final int STATE_EDITOR                 = 4;
+    private static final int STATE_EDITOR                   = 4;
     /** Parsing the location bar element. */
-    private static final int STATE_LOCATION_BAR           = 5;
+    private static final int STATE_LOCATION_BAR             = 5;
     /** Parsing the shell.normal element. */
-    private static final int STATE_SHELL_NORMAL           = 6;
+    private static final int STATE_SHELL_NORMAL             = 6;
     /** Parsing the shell.selected element. */
-    private static final int STATE_SHELL_SELECTED         = 7;
+    private static final int STATE_SHELL_SELECTED           = 7;
     /** Parsing the editor.normal element. */
-    private static final int STATE_EDITOR_NORMAL          = 8;
+    private static final int STATE_EDITOR_NORMAL            = 8;
     /** Parsing the location bar.normal element. */
-    private static final int STATE_LOCATION_BAR_NORMAL    = 9;
+    private static final int STATE_LOCATION_BAR_NORMAL      = 9;
     /** Parsing the editor.selected element. */
-    private static final int STATE_EDITOR_SELECTED        = 10;
+    private static final int STATE_EDITOR_SELECTED          = 10;
     /** Parsing the location bar.selected element. */
-    private static final int STATE_LOCATION_BAR_SELECTED  = 11;
+    private static final int STATE_LOCATION_BAR_SELECTED    = 11;
     /** Parsing the shell_history element. */
-    private static final int STATE_SHELL_HISTORY          = 12;
+    private static final int STATE_SHELL_HISTORY            = 12;
     /** Parsing the shell_history.normal element. */
-    private static final int STATE_SHELL_HISTORY_NORMAL   = 13;
+    private static final int STATE_SHELL_HISTORY_NORMAL     = 13;
     /** Parsing the shell_history.selected element. */
-    private static final int STATE_SHELL_HISTORY_SELECTED = 14;
+    private static final int STATE_SHELL_HISTORY_SELECTED   = 14;
     /** Parsing the volume_label element. */
-    private static final int STATE_STATUS_BAR             = 15;
-    private static final int STATE_HIDDEN                 = 16;
-    private static final int STATE_HIDDEN_NORMAL          = 17;
-    private static final int STATE_HIDDEN_SELECTED        = 18;
-    private static final int STATE_FOLDER                 = 19;
-    private static final int STATE_FOLDER_NORMAL          = 20;
-    private static final int STATE_FOLDER_SELECTED        = 21;
-    private static final int STATE_ARCHIVE                = 22;
-    private static final int STATE_ARCHIVE_NORMAL         = 23;
-    private static final int STATE_ARCHIVE_SELECTED       = 24;
-    private static final int STATE_SYMLINK                = 25;
-    private static final int STATE_SYMLINK_NORMAL         = 26;
-    private static final int STATE_SYMLINK_SELECTED       = 27;
-    private static final int STATE_MARKED                 = 28;
-    private static final int STATE_MARKED_NORMAL          = 29;
-    private static final int STATE_MARKED_SELECTED        = 30;
-    private static final int STATE_FILE                   = 31;
-    private static final int STATE_FILE_NORMAL            = 32;
-    private static final int STATE_FILE_SELECTED          = 33;
-    private static final int STATE_TABLE_NORMAL           = 34;
-    private static final int STATE_TABLE_SELECTED         = 35;
-    private static final int STATE_TABLE_ALTERNATE        = 36;
-    private static final int STATE_TABLE_UNMATCHED        = 37;
-
+    private static final int STATE_STATUS_BAR               = 15;
+    private static final int STATE_HIDDEN                   = 16;
+    private static final int STATE_HIDDEN_NORMAL            = 17;
+    private static final int STATE_HIDDEN_SELECTED          = 18;
+    private static final int STATE_FOLDER                   = 19;
+    private static final int STATE_FOLDER_NORMAL            = 20;
+    private static final int STATE_FOLDER_SELECTED          = 21;
+    private static final int STATE_ARCHIVE                  = 22;
+    private static final int STATE_ARCHIVE_NORMAL           = 23;
+    private static final int STATE_ARCHIVE_SELECTED         = 24;
+    private static final int STATE_SYMLINK                  = 25;
+    private static final int STATE_SYMLINK_NORMAL           = 26;
+    private static final int STATE_SYMLINK_SELECTED         = 27;
+    private static final int STATE_MARKED                   = 28;
+    private static final int STATE_MARKED_NORMAL            = 29;
+    private static final int STATE_MARKED_SELECTED          = 30;
+    private static final int STATE_FILE                     = 31;
+    private static final int STATE_FILE_NORMAL              = 32;
+    private static final int STATE_FILE_SELECTED            = 33;
+    private static final int STATE_TABLE_NORMAL             = 34;
+    private static final int STATE_TABLE_SELECTED           = 35;
+    private static final int STATE_TABLE_ALTERNATE          = 36;
+    private static final int STATE_TABLE_UNMATCHED          = 37;
+    /** Parsing the quick list element. */
+    private static final int STATE_QUICK_LIST               = 38;
+    /** Parsing the quick list header element. */
+    private static final int STATE_QUICK_LIST_HEADER        = 39;
+    /** Parsing the quick list item element. */
+    private static final int STATE_QUICK_LIST_ITEM          = 40;
+    private static final int STATE_QUICK_LIST_ITEM_NORMAL   = 41;
+    private static final int STATE_QUICK_LIST_ITEM_SELECTED = 42;
 
 
     // - Instance variables --------------------------------------------------------------
@@ -168,6 +175,13 @@ class ThemeReader extends DefaultHandler implements ThemeXmlConstants {
                 traceIllegalDeclaration(qName);
             state = STATE_LOCATION_BAR;
         }
+        
+        // Quick list declaration.
+        else if(qName.equals(ELEMENT_QUICK_LIST)) {
+            if(state != STATE_ROOT)
+                traceIllegalDeclaration(qName);
+            state = STATE_QUICK_LIST;
+        }
 
         // Shell history declaration.
         else if(qName.equals(ELEMENT_SHELL_HISTORY)) {
@@ -224,6 +238,22 @@ class ThemeReader extends DefaultHandler implements ThemeXmlConstants {
                 traceIllegalDeclaration(qName);
             state = STATE_TABLE_ALTERNATE;
         }
+        
+        // Header declaration.
+        else if(qName.equals(ELEMENT_HEADER)) {
+        	if(state == STATE_QUICK_LIST)
+                state = STATE_QUICK_LIST_HEADER;
+            else
+                traceIllegalDeclaration(qName);
+        }
+        
+        // Item declaration.
+        else if(qName.equals(ELEMENT_ITEM)) {
+        	if(state == STATE_QUICK_LIST)
+                state = STATE_QUICK_LIST_ITEM;
+            else
+                traceIllegalDeclaration(qName);
+        }
 
         // Normal element declaration.
         else if(qName.equals(ELEMENT_NORMAL)) {
@@ -249,6 +279,8 @@ class ThemeReader extends DefaultHandler implements ThemeXmlConstants {
                 state = STATE_FILE_NORMAL;
             else if(state == STATE_TABLE)
                 state = STATE_TABLE_NORMAL;
+            else if(state == STATE_QUICK_LIST_ITEM)
+            	state = STATE_QUICK_LIST_ITEM_NORMAL;
             else
                 traceIllegalDeclaration(qName);
         }
@@ -277,6 +309,8 @@ class ThemeReader extends DefaultHandler implements ThemeXmlConstants {
                 state = STATE_FILE_SELECTED;
             else if(state == STATE_TABLE)
                 state = STATE_TABLE_SELECTED;
+            else if(state == STATE_QUICK_LIST_ITEM)
+            	state = STATE_QUICK_LIST_ITEM_SELECTED;
             else
                 traceIllegalDeclaration(qName);
         }
@@ -295,6 +329,10 @@ class ThemeReader extends DefaultHandler implements ThemeXmlConstants {
                 template.setFont(ThemeData.STATUS_BAR_FONT, createFont(attributes));
             else if(state == STATE_TABLE)
                 template.setFont(ThemeData.FILE_TABLE_FONT, createFont(attributes));
+            else if(state == STATE_QUICK_LIST_HEADER)
+            	template.setFont(ThemeData.QUICK_LIST_HEADER_FONT, createFont(attributes));
+            else if(state == STATE_QUICK_LIST_ITEM)
+            	template.setFont(ThemeData.QUICK_LIST_ITEM_FONT, createFont(attributes));
             else
                 traceIllegalDeclaration(qName);
         }
@@ -315,6 +353,8 @@ class ThemeReader extends DefaultHandler implements ThemeXmlConstants {
         else if(qName.equals(ELEMENT_SECONDARY_BACKGROUND)) {
             if(state == STATE_TABLE_SELECTED)
                 template.setColor(ThemeData.FILE_TABLE_SELECTED_SECONDARY_BACKGROUND_COLOR, createColor(attributes));
+            else if(state == STATE_QUICK_LIST_HEADER)
+            	template.setColor(ThemeData.QUICK_LIST_HEADER_SECONDARY_BACKGROUND_COLOR, createColor(attributes));
             else
                 traceIllegalDeclaration(qName);
         }
@@ -434,6 +474,13 @@ class ThemeReader extends DefaultHandler implements ThemeXmlConstants {
 
             else if(state == STATE_STATUS_BAR)
                 template.setColor(ThemeData.STATUS_BAR_BACKGROUND_COLOR, createColor(attributes));
+            
+            else if(state == STATE_QUICK_LIST_HEADER)
+            	template.setColor(ThemeData.QUICK_LIST_HEADER_BACKGROUND_COLOR, createColor(attributes));
+            else if(state == STATE_QUICK_LIST_ITEM_NORMAL)
+            	template.setColor(ThemeData.QUICK_LIST_ITEM_BACKGROUND_COLOR, createColor(attributes));
+            else if(state == STATE_QUICK_LIST_ITEM_SELECTED)
+            	template.setColor(ThemeData.QUICK_LIST_SELECTED_ITEM_BACKGROUND_COLOR, createColor(attributes));
 
             else
                 traceIllegalDeclaration(qName);
@@ -528,6 +575,13 @@ class ThemeReader extends DefaultHandler implements ThemeXmlConstants {
 
             else if(state == STATE_STATUS_BAR)
                 template.setColor(ThemeData.STATUS_BAR_FOREGROUND_COLOR, createColor(attributes));
+            
+            else if(state == STATE_QUICK_LIST_HEADER)
+            	template.setColor(ThemeData.QUICK_LIST_HEADER_FOREGROUND_COLOR, createColor(attributes));
+            else if(state == STATE_QUICK_LIST_ITEM_NORMAL)
+            	template.setColor(ThemeData.QUICK_LIST_ITEM_FOREGROUND_COLOR, createColor(attributes));
+            else if(state == STATE_QUICK_LIST_ITEM_SELECTED)
+            	template.setColor(ThemeData.QUICK_LIST_SELECTED_ITEM_FOREGROUND_COLOR, createColor(attributes));
 
             else
                 traceIllegalDeclaration(qName);
@@ -598,10 +652,26 @@ class ThemeReader extends DefaultHandler implements ThemeXmlConstants {
         // Location bar declaration.
         else if(qName.equals(ELEMENT_LOCATION_BAR))
             state = STATE_ROOT;
+        
+        // Quick list declaration.
+        else if(qName.equals(ELEMENT_QUICK_LIST))
+            state = STATE_ROOT;
 
         // Volume label declaration
         else if(qName.equals(ELEMENT_STATUS_BAR))
             state = STATE_ROOT;
+        
+        // Header declaration.
+        else if(qName.equals(ELEMENT_HEADER)) {
+        	if(state == STATE_QUICK_LIST_HEADER)
+                state = STATE_QUICK_LIST;
+        }
+        
+        // Item declaration.
+        else if(qName.equals(ELEMENT_ITEM)) {
+        	if(state == STATE_QUICK_LIST_ITEM)
+                state = STATE_QUICK_LIST;
+        }
 
         // Normal element declaration.
         else if(qName.equals(ELEMENT_NORMAL)) {
@@ -627,6 +697,8 @@ class ThemeReader extends DefaultHandler implements ThemeXmlConstants {
                 state = STATE_LOCATION_BAR;
             else if(state == STATE_TABLE_NORMAL)
                 state = STATE_TABLE;
+            else if(state == STATE_QUICK_LIST_ITEM_NORMAL)
+            	state = STATE_QUICK_LIST_ITEM;
         }
 
         // Selected element declaration.
@@ -653,6 +725,8 @@ class ThemeReader extends DefaultHandler implements ThemeXmlConstants {
                 state = STATE_LOCATION_BAR;
             else if(state == STATE_TABLE_SELECTED)
                 state = STATE_TABLE;
+            else if(state == STATE_QUICK_LIST_ITEM_SELECTED)
+            	state = STATE_QUICK_LIST_ITEM;
         }
     }
 

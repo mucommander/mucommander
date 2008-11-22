@@ -82,7 +82,13 @@ public abstract class QuickListWithIcons extends QuickListWithDataList {
 			waitingIcon.setAnimated(false);
 	}
 	
-	protected DataList getList() { return new GenericPopupDataListWithIcons(); }
+	protected DataList getList() {
+		return new GenericPopupDataListWithIcons() {
+			public Icon getImageIconOfItem(Object item) {
+				return getImageIconOfItemImp(item);
+			}
+		};
+	}
 	
 	/**
 	 * This function gets an item from the data list and return its icon.
@@ -103,7 +109,7 @@ public abstract class QuickListWithIcons extends QuickListWithDataList {
 			IconManager.getImageIcon(FileIcons.getFileIcon(file)) : null; 
 	}
 	
-	private Icon getImageIconOfItem(final Object item) {
+	private Icon getImageIconOfItemImp(final Object item) {
 		boolean found;
 		synchronized(itemToIconCacheMap) {
 			if (!(found = itemToIconCacheMap.containsKey(item))) {
@@ -130,39 +136,5 @@ public abstract class QuickListWithIcons extends QuickListWithDataList {
 			result = (Icon) itemToIconCacheMap.get(item);
 		}
 		return result;
-	}
-	
-	private class GenericPopupDataListWithIcons extends DataList {		
-		public GenericPopupDataListWithIcons() {
-			super();
-			setCellRenderer(new CellWithIconRenderer());
-		}
-
-		private class CellWithIconRenderer extends DefaultListCellRenderer {
-			public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-				// Let superclass deal with most of it...
-				super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-
-				// Add its icon
-				Object item = getModel().getElementAt(index);
-				Icon icon = getImageIconOfItem(item);
-				setIcon(resizeIcon(icon));
-
-				return this;
-			}
-			
-			private Icon resizeIcon(Icon icon) {
-				if (icon instanceof ImageIcon) {
-					Image image = ((ImageIcon) icon).getImage();
-					final Dimension dimension = this.getPreferredSize();
-					final double height = dimension.getHeight();
-					final double width = (height / icon.getIconHeight()) * icon.getIconWidth();
-					image = image.getScaledInstance((int)width, (int)height, Image.SCALE_SMOOTH);
-					return new ImageIcon(image);
-				}
-
-				return icon;
-			}
-		}
 	}
 }

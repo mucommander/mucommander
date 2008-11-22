@@ -32,15 +32,15 @@ import java.awt.*;
 
 public class EmptyMessageMenuItem extends MenuItem {
 	private static Font FONT = new Font(ThemeManager.getCurrentFont(Theme.FILE_TABLE_FONT).getFontName(), Font.BOLD, 16);
-	private Dimension dim;
+	private Dimension dimension;
 	
 	public EmptyMessageMenuItem(String text) {
 		super(text);
-		dim = new Dimension((int) Math.ceil(getFontMetrics(FONT).stringWidth(text) * 1.1), FONT.getSize() * 2);
+		dimension = new Dimension((int) Math.ceil(getFontMetrics(FONT).stringWidth(text) * 1.1), FONT.getSize() * 2);
 	}
 	
 	public Dimension getPreferredSize() {
-		return dim;
+		return dimension;
 	}
 	
 	protected final void paintComponent(Graphics g) {

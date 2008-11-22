@@ -78,6 +78,7 @@ public class ThemeEditorDialog extends PreferencesDialog {
         addPreferencesPanel(new StatusBarPanel(this, data));
         addPreferencesPanel(new ShellPanel(this, data));
         addPreferencesPanel(new FileEditorPanel(this, data));
+        addPreferencesPanel(new QuickListPanel(this, data));
 
         // Sets the dialog's size.
         setMinimumSize(MINIMUM_DIALOG_DIMENSION);

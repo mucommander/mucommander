@@ -365,6 +365,54 @@ class ThemeWriter implements ThemeXmlConstants {
             out.writeStandAloneElement(ELEMENT_CRITICAL, getColorAttributes(theme.getColor(Theme.STATUS_BAR_CRITICAL_COLOR)));
         out.endElement(ELEMENT_STATUS_BAR);
 
+
+        
+        // - Quick list label description ----------------------------------------------------
+        // -------------------------------------------------------------------------------
+        out.startElement(ELEMENT_QUICK_LIST);
+        out.println();
+        
+        // Quick list header
+        out.startElement(ELEMENT_HEADER);
+        out.println();
+        // Font.
+        if(theme.isFontSet(Theme.QUICK_LIST_HEADER_FONT))
+            out.writeStandAloneElement(ELEMENT_FONT, getFontAttributes(theme.getFont(Theme.QUICK_LIST_HEADER_FONT)));
+        // Colors.
+        if(theme.isColorSet(Theme.QUICK_LIST_HEADER_FOREGROUND_COLOR))
+            out.writeStandAloneElement(ELEMENT_FOREGROUND, getColorAttributes(theme.getColor(Theme.QUICK_LIST_HEADER_FOREGROUND_COLOR)));
+        if(theme.isColorSet(Theme.QUICK_LIST_HEADER_BACKGROUND_COLOR))
+            out.writeStandAloneElement(ELEMENT_BACKGROUND, getColorAttributes(theme.getColor(Theme.QUICK_LIST_HEADER_BACKGROUND_COLOR)));
+        if(theme.isColorSet(Theme.QUICK_LIST_HEADER_SECONDARY_BACKGROUND_COLOR))
+            out.writeStandAloneElement(ELEMENT_SECONDARY_BACKGROUND, getColorAttributes(theme.getColor(Theme.QUICK_LIST_HEADER_SECONDARY_BACKGROUND_COLOR)));
+        out.endElement(ELEMENT_HEADER);
+        
+        // Quick list item
+        out.startElement(ELEMENT_ITEM);
+        out.println();
+        // Font.
+        if(theme.isFontSet(Theme.QUICK_LIST_ITEM_FONT))
+            out.writeStandAloneElement(ELEMENT_FONT, getFontAttributes(theme.getFont(Theme.QUICK_LIST_ITEM_FONT)));
+        // Colors.
+        // Normal colors.
+        out.startElement(ELEMENT_NORMAL);
+        out.println();
+        if(theme.isColorSet(Theme.QUICK_LIST_ITEM_FOREGROUND_COLOR))
+            out.writeStandAloneElement(ELEMENT_FOREGROUND, getColorAttributes(theme.getColor(Theme.QUICK_LIST_ITEM_FOREGROUND_COLOR)));
+        if(theme.isColorSet(Theme.QUICK_LIST_ITEM_BACKGROUND_COLOR))
+            out.writeStandAloneElement(ELEMENT_BACKGROUND, getColorAttributes(theme.getColor(Theme.QUICK_LIST_ITEM_BACKGROUND_COLOR)));
+        out.endElement(ELEMENT_NORMAL);
+        // Selected colors.
+        out.startElement(ELEMENT_SELECTED);
+        out.println();
+        if(theme.isColorSet(Theme.QUICK_LIST_SELECTED_ITEM_FOREGROUND_COLOR))
+            out.writeStandAloneElement(ELEMENT_FOREGROUND, getColorAttributes(theme.getColor(Theme.QUICK_LIST_SELECTED_ITEM_FOREGROUND_COLOR)));
+        if(theme.isColorSet(Theme.QUICK_LIST_SELECTED_ITEM_BACKGROUND_COLOR))
+            out.writeStandAloneElement(ELEMENT_BACKGROUND, getColorAttributes(theme.getColor(Theme.QUICK_LIST_SELECTED_ITEM_BACKGROUND_COLOR)));
+        out.endElement(ELEMENT_SELECTED);
+        out.endElement(ELEMENT_ITEM);
+        out.endElement(ELEMENT_QUICK_LIST);
+
         out.endElement(ELEMENT_ROOT);
     }
 

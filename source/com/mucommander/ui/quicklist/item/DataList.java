@@ -21,10 +21,17 @@ package com.mucommander.ui.quicklist.item;
 import com.mucommander.ui.main.table.FileTable;
 import com.mucommander.ui.quicklist.QuickListFocusableComponent;
 import com.mucommander.ui.quicklist.QuickListWithDataList;
+import com.mucommander.ui.theme.ColorChangedEvent;
+import com.mucommander.ui.theme.FontChangedEvent;
 import com.mucommander.ui.theme.Theme;
+import com.mucommander.ui.theme.ThemeData;
+import com.mucommander.ui.theme.ThemeListener;
 import com.mucommander.ui.theme.ThemeManager;
 
 import javax.swing.*;
+
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -36,16 +43,28 @@ import java.awt.event.MouseListener;
  * @author Arik Hadas
  */
 
-public class DataList extends JList implements QuickListFocusableComponent {	
+public class DataList extends JList implements QuickListFocusableComponent, ThemeListener {	
 	private final static int VISIBLE_ROWS_COUNT = 10;
 	
 	public DataList(){
-		setFont(ThemeManager.getCurrentFont(Theme.FILE_TABLE_FONT));
+		setFont(ThemeManager.getCurrentFont(ThemeData.QUICK_LIST_ITEM_FONT));
 		setFocusTraversalKeysEnabled(false);
 		
         addMouseListenerToList();
 		addKeyListenerToList();
-		setFixedCellHeight((int) (getFontMetrics(getFont()).getHeight() * 1.5));
+
+		setBackground(ThemeManager.getCurrentColor(ThemeData.QUICK_LIST_ITEM_BACKGROUND_COLOR));
+		setSelectionBackground(ThemeManager.getCurrentColor(ThemeData.QUICK_LIST_SELECTED_ITEM_BACKGROUND_COLOR));
+		
+		setForeground(ThemeManager.getCurrentColor(ThemeData.QUICK_LIST_ITEM_FOREGROUND_COLOR));
+		setSelectionForeground(ThemeManager.getCurrentColor(ThemeData.QUICK_LIST_SELECTED_ITEM_FOREGROUND_COLOR));
+		
+		ThemeManager.addCurrentThemeListener(this);
+	}
+	
+	public DataList(Object[] data) {
+		this();
+		setListData(data);
 	}
 	
 	/**
@@ -66,7 +85,7 @@ public class DataList extends JList implements QuickListFocusableComponent {
 		}
 	}
 	
-	private void addKeyListenerToList() {
+	protected void addKeyListenerToList() {
 		addKeyListener(new KeyListener() {
 
 			public void keyPressed(KeyEvent e) {			
@@ -108,7 +127,7 @@ public class DataList extends JList implements QuickListFocusableComponent {
 		});
 	}
 	
-	private void addMouseListenerToList() {
+	protected void addMouseListenerToList() {
     	addMouseListener(new MouseListener() {
         		
 			public void mouseClicked(MouseEvent e) {
@@ -141,5 +160,38 @@ public class DataList extends JList implements QuickListFocusableComponent {
 
 	public FileTable getInvokerFileTable() {
 		return ((QuickListWithDataList)(getParent().getParent().getParent())).getPanel().getFileTable(); 
-	}	
+	}
+	
+	public void colorChanged(ColorChangedEvent event) {		
+		if (event.getColorId() == ThemeData.QUICK_LIST_ITEM_BACKGROUND_COLOR)
+			setBackground(ThemeManager.getCurrentColor(ThemeData.QUICK_LIST_ITEM_BACKGROUND_COLOR));
+		
+		else if (event.getColorId() == ThemeData.QUICK_LIST_ITEM_FOREGROUND_COLOR)
+			setForeground(ThemeManager.getCurrentColor(ThemeData.QUICK_LIST_ITEM_FOREGROUND_COLOR));
+		
+		else if (event.getColorId() == ThemeData.QUICK_LIST_SELECTED_ITEM_BACKGROUND_COLOR)
+			setSelectionBackground(ThemeManager.getCurrentColor(ThemeData.QUICK_LIST_SELECTED_ITEM_BACKGROUND_COLOR));
+					
+		else if (event.getColorId() == ThemeData.QUICK_LIST_SELECTED_ITEM_FOREGROUND_COLOR)
+			setSelectionForeground(ThemeManager.getCurrentColor(ThemeData.QUICK_LIST_SELECTED_ITEM_FOREGROUND_COLOR));
+	}
+	
+	public void setFont(Font font) {
+		super.setFont(font);
+		setFixedCellHeight((int) (getFontMetrics(getFont()).getHeight() * 1.5));
+	}
+
+	public void fontChanged(FontChangedEvent event) {
+		setFont(ThemeManager.getCurrentFont(ThemeData.QUICK_LIST_ITEM_FONT));		
+	}
+	
+	public void setForegroundColors(Color foreground, Color selectedForeground) {
+		setForeground(foreground);
+		setSelectionForeground(selectedForeground);
+	}
+
+	public void setBackgroundColors(Color background, Color selectedBackground) {
+		setBackground(background);
+		setSelectionBackground(selectedBackground);
+	}
 }
