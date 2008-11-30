@@ -128,7 +128,7 @@ public class ExtraFieldUtils {
      * @param data an array of ExtraFiles
      * @return an array of bytes
      */
-    public static byte[] mergeLocalFileDataData(ZipExtraField[] data) {
+    public static byte[] mergeLocalExtraFields(ZipExtraField[] data) {
         int sum = 4 * data.length;
         for (int i = 0; i < data.length; i++) {
             sum += data[i].getLocalFileDataLength().getValue();
@@ -152,7 +152,7 @@ public class ExtraFieldUtils {
      * @param data an array of ExtraFields
      * @return an array of bytes
      */
-    public static byte[] mergeCentralDirectoryData(ZipExtraField[] data) {
+    public static byte[] mergeCentralExtraFields(ZipExtraField[] data) {
         int sum = 4 * data.length;
         for (int i = 0; i < data.length; i++) {
             sum += data[i].getCentralDirectoryLength().getValue();

@@ -272,9 +272,9 @@ public class ZipFile implements ZipConstants {
         BoundedInputStream bis =
             new BoundedInputStream(entryIn, start, ze.getCompressedSize());
         switch (ze.getMethod()) {
-            case ZipEntry.STORED:
+            case ZipConstants.STORED:
                 return bis;
-            case ZipEntry.DEFLATED:
+            case ZipConstants.DEFLATED:
                 bis.addDummy();
                 return new InflaterInputStream(bis, new Inflater(true));
             default:
