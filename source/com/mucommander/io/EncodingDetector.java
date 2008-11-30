@@ -103,19 +103,17 @@ public class EncodingDetector {
         if(len<4)
             return null;
 
+        // Trim the array if it is too long, detecting the charset is an expensive operation and past a certain point,
+        // having more bytes won't help any further        
+        if(len > MAX_RECOMMENDED_BYTE_SIZE)
+                len = MAX_RECOMMENDED_BYTE_SIZE;
+
         // CharsetDetector will process the array fully, so if the data does not start at 0 or ends before the array's
         // length, create a new array that fits the data exactly
         if(off>0 || len<bytes.length) {
             byte tmp[] = new byte[len];
             System.arraycopy(bytes, off, tmp, 0, len);
             bytes = tmp;
-        }
-
-        // Trim the array if it is too long, detecting the charset is an expensive operation and past a certain point,
-        // having more bytes won't help any further
-        if(bytes.length>MAX_RECOMMENDED_BYTE_SIZE) {
-            byte tmp[] = new byte[MAX_RECOMMENDED_BYTE_SIZE];
-            System.arraycopy(bytes, 0, tmp, 0, MAX_RECOMMENDED_BYTE_SIZE);
         }
         
         CharsetDetector cd = new CharsetDetector();
@@ -174,6 +172,7 @@ public class EncodingDetector {
 
     /**
      * Lists all detectable encodings as returned by {@link #getDetectableEncodings()} to the standard output.
+     * @param args command line arguments.
      */
     public static void main(String args[]) {
         String encodings[] = getDetectableEncodings();
