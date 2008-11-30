@@ -136,7 +136,9 @@ Bug fixes:
 - Zip entries using '\' as a path separator are now tolerated and handled
   appropriately (bug #98).
 - Fixed image viewer not updating the zoom level in the window title
-  (bug #102).
+  (bug #102). Contributed by Joshua Lebo.
+- Fixed date of Zip entries incorrectly displayed under certain conditions
+  (bug #107). Contributed by Oliver Burgmaier.
 
 Known issues:
 - Some translations are not up-to-date. For more information, see:

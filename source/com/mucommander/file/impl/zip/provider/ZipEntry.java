@@ -111,6 +111,9 @@ public class ZipEntry extends java.util.zip.ZipEntry implements Cloneable {
             // initializes extra data to an empty byte array
             setExtra();
         }
+
+        // Time fields of this class must be initialized
+        setTime(entry.getTime(), false);
     }
 
     /**
@@ -419,6 +422,29 @@ public class ZipEntry extends java.util.zip.ZipEntry implements Cloneable {
         }
     }
 
+    /**
+     * Sets this entry's date/time to the specified one. The time must be expressed in the Java time format,
+     * i.e. as a number of milliseconds since the Epoch.
+     * <p>
+     * If the <code>updateSuper</code> parameter is <code>true</code>,
+     * java.util.zip's {@link java.util.zip.ZipEntry#setTime(long)} is called to update its time field with the
+     * new one. Since the former method must perform java to DOS time conversion, it must be called only when needed.
+     * </p>
+     *
+     * @param javaTime the new time of this entry, expressed in the Java time format
+     * @param updateSuper <code>true</code>, to update java.util.zip's time value with the new one
+     */
+    protected void setTime(long javaTime, boolean updateSuper) {
+        this.javaTime = javaTime;
+        this.dosTime = javaTime==-1?-1:javaToDosTime(javaTime);
+
+        // Unfortunately, the 'time' field is private in java.util.zip.ZipEntry, so we must call the setter which
+        // converts the time to DOS format again => inefficient
+        // Todo: do away with this class extending java.util.zip.ZipEntry ?
+        if(updateSuper)
+            super.setTime(this.javaTime);
+    }
+
 
     ////////////////////////
     // Overridden methods //
@@ -449,12 +475,7 @@ public class ZipEntry extends java.util.zip.ZipEntry implements Cloneable {
      * @param javaTime the new time of this entry, expressed in the Java time format
      */
     public void setTime(long javaTime) {
-        this.javaTime = javaTime;
-        this.dosTime = javaTime==-1?-1:javaToDosTime(javaTime);
-
-        // Unfortunately, the 'time' field is private in java.util.zip.ZipEntry, so we must call the setter which
-        // converts the time to the DOS format again => unefficient
-        super.setTime(this.javaTime);
+        setTime(javaTime, true);
     }
 
     /**
