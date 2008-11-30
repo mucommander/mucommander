@@ -135,6 +135,8 @@ Localization:
 Bug fixes:
 - Zip entries using '\' as a path separator are now tolerated and handled
   appropriately (bug #98).
+- Fixed image viewer not updating the zoom level in the window title
+  (bug #102).
 
 Known issues:
 - Some translations are not up-to-date. For more information, see:

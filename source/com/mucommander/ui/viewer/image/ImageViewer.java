@@ -120,6 +120,7 @@ class ImageViewer extends FileViewer implements ActionListener, ThemeListener {
 
     private void updateFrame() {
         // Revalidate, pack and repaint should be called in this order
+        frame.setTitle(this.getTitle());
         revalidate();
         frame.pack();
         frame.getContentPane().repaint();
