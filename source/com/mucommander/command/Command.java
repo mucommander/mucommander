@@ -105,13 +105,13 @@ public class Command {
     // - Instance variables ----------------------------------------------------
     // -------------------------------------------------------------------------
     /** Command's alias. */
-    private String    alias;
+    private final String    alias;
     /** Original command. */
-    private String    command;
+    private final String    command;
     /** Name used to display the command to users. */
-    private String    displayName;
+    private final String    displayName;
     /** Command type. */
-    private int       type;
+    private final int       type;
 
 
 
@@ -128,8 +128,7 @@ public class Command {
         this.alias       = alias;
         this.type        = type;
         this.displayName = displayName;
-
-        setCommand(command);
+        this.command     = command;
     }
 
     /**
@@ -368,6 +367,27 @@ public class Command {
 
     // - Misc. -----------------------------------------------------------------
     // -------------------------------------------------------------------------
+    public int hashCode() {
+        int hashCode;
+
+        hashCode = alias.hashCode();
+        hashCode = hashCode * 31 + command.hashCode();
+        hashCode = hashCode * 31 + getDisplayName().hashCode();
+        hashCode = hashCode * 31 + type;
+
+        return hashCode;
+    }
+
+    public boolean equals(Object object) {
+        if(object == null || !(object instanceof Command))
+            return false;
+
+        Command cmd;
+        cmd = (Command)object;
+        return command.equals(cmd.command) && alias.equals(cmd.alias) && type == cmd.type &&
+               getDisplayName().equals(cmd.getDisplayName());
+    }
+
     /**
      * Returns the original, un-tokenised command.
      * @return the original, un-tokenised command.
@@ -404,8 +424,6 @@ public class Command {
      * @return <code>true</code> if the command's display name has been set, <code>false</code> otherwise.
      */
     synchronized boolean isDisplayNameSet() {return displayName != null;}
-
-    synchronized void setCommand(String cmd) {command = cmd;}
 
     public String toString() {return alias + (displayName == null ? "" : ":" + displayName) + ":" + command;}
 }
