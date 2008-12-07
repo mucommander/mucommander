@@ -127,7 +127,7 @@ New features:
 - 
 
 Improvements:
-- 
+- jCIFS library (used for SMB support) upgraded to version 1.2.19. 
 
 Localization:
 - 
