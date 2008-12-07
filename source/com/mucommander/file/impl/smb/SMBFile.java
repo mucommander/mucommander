@@ -83,6 +83,11 @@ import java.net.MalformedURLException;
         // "To prevent the client from holding server resources unnecessarily, sockets are closed after this time period
         // if there is no activity. This time is specified in milliseconds. The default is 35000."
         System.setProperty("jcifs.smb.client.soTimeout", "15000");
+
+        // Leaving this option enabled has a serious impact on performance (observed with jCIFS 1.2.25).
+        // "If this property is true, domain based DFS referrals will be disabled. The default value is false. This property " +
+        // "can be important in non-domain environments where domain-based DFS referrals that normally run when JCIFS first tries to resolve a path would timeout causing a long startup delay (e.g. running JCIFS only on the local machine without a network like on a laptop)."
+        System.setProperty("jcifs.smb.client.dfs.disabled", "true");
     }
 
     public SMBFile(FileURL fileURL) throws IOException {
