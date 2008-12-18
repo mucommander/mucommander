@@ -42,8 +42,13 @@ import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
+import com.mucommander.conf.ConfigurationEvent;
+import com.mucommander.conf.ConfigurationListener;
+import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.file.AbstractFile;
+import com.mucommander.file.filter.AndFileFilter;
 import com.mucommander.file.filter.AttributeFileFilter;
+import com.mucommander.file.filter.FileFilterHelper;
 import com.mucommander.file.util.FileComparator;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.event.LocationEvent;
@@ -63,7 +68,7 @@ import com.mucommander.ui.theme.ThemeListener;
  * 
  */
 public class FoldersTreePanel extends JPanel implements TreeSelectionListener, 
-							LocationListener, FocusListener, ThemeListener, TreeModelListener {
+							LocationListener, FocusListener, ThemeListener, TreeModelListener, ConfigurationListener {
 
     /** Directory tree */
     private JTree tree;
@@ -76,6 +81,10 @@ public class FoldersTreePanel extends JPanel implements TreeSelectionListener,
 
     /** A timer that fires a directory change */
     private ChangeTimer changeTimer = new ChangeTimer();
+
+    private AndFileFilter chainedFileFilter;
+
+    private FileFilterHelper filterHelper;
     
     static {
         TreeIOThreadManager.getInstance().start();
@@ -92,9 +101,14 @@ public class FoldersTreePanel extends JPanel implements TreeSelectionListener,
         
         setLayout(new BorderLayout());
 
+        chainedFileFilter = new AndFileFilter();       
         AttributeFileFilter dirFilter = new AttributeFileFilter(AttributeFileFilter.DIRECTORY);
+        chainedFileFilter.addFileFilter(dirFilter);
+        filterHelper = new FileFilterHelper(chainedFileFilter);
+        
+        
         FileComparator sort = new FileComparator(FileComparator.NAME_CRITERION, true, true);
-        model = new FilesTreeModel(dirFilter, sort);
+        model = new FilesTreeModel(chainedFileFilter, sort);
         tree = new JTree(model);
 		tree.setFont(ThemeCache.tableFont);
         tree.setBackground(ThemeCache.backgroundColors[ThemeCache.INACTIVE][ThemeCache.NORMAL]);
@@ -148,7 +162,27 @@ public class FoldersTreePanel extends JPanel implements TreeSelectionListener,
             }
         });
         
-        ThemeCache.addThemeListener(this);        
+        ThemeCache.addThemeListener(this);
+        
+        MuConfiguration.addConfigurationListener(this);
+    }
+
+    
+    
+    /** 
+     * Listens to certain configuration variables.
+     */
+    public void configurationChanged(ConfigurationEvent event) {
+        String var = event.getVariable();
+        if (var.equals(MuConfiguration.SHOW_HIDDEN_FILES) ||
+                var.equals(MuConfiguration.SHOW_DS_STORE_FILES) ||
+                var.equals(MuConfiguration.SHOW_SYSTEM_FOLDERS)) {
+            Object root = model.getRoot();
+            if (root != null) {
+                TreePath path = new TreePath(root);
+                model.refresh(path);
+            }
+        }
     }
 
     /**
