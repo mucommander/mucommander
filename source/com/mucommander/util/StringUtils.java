@@ -303,4 +303,51 @@ public class StringUtils {
 
         return capedS;
     }
+
+
+    /**
+     * Shorthand for {@link #flatten(String[], String)} invoked with a <code>" "</code> separator.
+     *
+     * @param s the string array to flatten
+     * @return the flattened string array
+     */
+    public static String flatten(String s[]) {
+        return flatten(s, " ");
+    }
+
+
+    /**
+     * Concatenates all of the given string array's elements into a single string, separating each element
+     * by the specified separator string. <code>null</code> and empty string values are simply skipped and not
+     * reflected in the returned string. If the string array is <code>null</code>, the returned string will also be
+     * <code>null</code>.
+     *
+     * @param s the string array to flatten
+     * @param separator the String that separates each
+     * @return the flattened string array
+     */
+    public static String flatten(String s[], String separator) {
+        if(s==null)
+            return null;
+
+        StringBuffer sb = new StringBuffer();
+        int sLen = s.length;
+        boolean first = true;
+        String el;
+
+        for(int i=0; i<sLen; i++) {
+            el = s[i];
+            if(el==null || el.equals(""))
+                continue;
+
+            if(first)
+                first = false;
+            else
+                sb.append(separator);
+
+            sb.append(el);
+        }
+
+        return sb.toString();
+    }
 }
