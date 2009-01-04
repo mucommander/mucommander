@@ -127,7 +127,8 @@ New features:
 - 
 
 Improvements:
-- jCIFS library (used for SMB support) upgraded to version 1.2.25.
+- jCIFS library upgraded to version 1.2.25.
+- JNA library upgraded to version 3.0.9.  
 
 Localization:
 - 
@@ -139,7 +140,7 @@ Bug fixes:
   (bug #102). Contributed by Joshua Lebo.
 - Fixed date of Zip entries incorrectly displayed under certain conditions
   (bug #107). Contributed by Oliver Burgmaier.
-- Fixed SMB connection issues (bug #106). 
+- Fixed SMB connection issues (bug #106).
 
 Known issues:
 - Some translations are not up-to-date. For more information, see:
