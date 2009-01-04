@@ -39,9 +39,6 @@ public class ZipArchiveFileTest extends AbstractFileTestCase {
     /** id of the last temporary entry generated, to avoid collisions */
     private int entryNum;
 
-    /** Maximum size of a Zip32 file entry, i.e. (2^32)-1 */
-    private long MAX_ZIP32_ENTRY_SIZE = 4294967295l;
-
 
     /////////////////////////////////////////
     // AbstractFileTestCase implementation //

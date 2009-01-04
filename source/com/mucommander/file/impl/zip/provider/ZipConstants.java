@@ -49,6 +49,11 @@ public interface ZipConstants {
     public static final int DEFAULT_DEFLATER_BUFFER_SIZE = 512;
 
     /**
+     * Maximum size of a Zip32 entry or a Zip32 file as a whole, i.e. (2^32)-1.
+     * */
+    public static final long MAX_ZIP32_SIZE = 4294967295l;
+
+    /**
      * Size of write buffers
      */
     final static int WRITE_BUFFER_SIZE = 65536;
