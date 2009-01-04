@@ -19,26 +19,21 @@
 package com.mucommander.file.util;
 
 import com.sun.jna.Library;
-import com.sun.jna.Native;
 import com.sun.jna.Structure;
 
 /**
- * Exposes parts of the POSIX standard library using JNA (Java Native Access).
+ * Exposes parts of the C standard library using JNA (Java Native Access).
  *
  * @author Maxence Bernard
  */
-public interface POSIX extends Library {
-
-    /** Singleton instance */
-    public POSIX INSTANCE = (POSIX) Native.loadLibrary("c", POSIX.class);
-
+public interface CLibrary extends Library {
 
     //////////////////////
     // statvfs function //
     //////////////////////
     
     /**
-     * Structure that holds the information returned by {@link POSIX#statvfs(String, com.mucommander.file.util.POSIX.STATVFSSTRUCT)}.
+     * Structure that holds the information returned by {@link CLibrary#statvfs(String, CLibrary.STATVFSSTRUCT)}.
      */
     public static class STATVFSSTRUCT extends Structure {
         /* file system block size */

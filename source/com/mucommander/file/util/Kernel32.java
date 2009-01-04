@@ -18,13 +18,16 @@
 
 package com.mucommander.file.util;
 
+import com.mucommander.runtime.OsFamilies;
 import com.sun.jna.Native;
 
 /**
  * This class provides access to a static instance of the {@link com.mucommander.file.util.Kernel32API} interface,
- * allowing to invoke some Kernel32 Windows DLL functions. Access to the Kernel32 DLL is provided by the JNA library,
- * which may not be available on certain OS/CPU architectures: {@link #isAvailable()} can be used to determine that.
+ * allowing to invoke selected Kernel32 Windows DLL functions.
  *
+ * <p>The Kernel32 DLL and the JNA library (which is used to access native libraries) may not be available on
+ * all OS/CPU architectures: {@link #isAvailable()} can be used to determine that at runtime.</p>
+
  * @see Kernel32API
  * @author Maxence Bernard
  */
@@ -34,13 +37,14 @@ public class Kernel32 {
     private static Kernel32API INSTANCE;
 
     static {
-        try {
-            INSTANCE = (Kernel32API)Native.loadLibrary("Kernel32", Kernel32API.class, Kernel32API.DEFAULT_OPTIONS);
-        }
-        catch(Throwable e) {
-            // java.lang.UnsatisfiedLinkError is thrown if the CPU architecture is not supported.
-            // At the time of writing, that is the case for the AMD-64 architecture under Vista 64bit.
-            INSTANCE = null;
+        if(OsFamilies.WINDOWS.isCurrent()) {        // Don't even bother if we're not running Windows
+            try {
+                INSTANCE = (Kernel32API)Native.loadLibrary("Kernel32", Kernel32API.class, Kernel32API.DEFAULT_OPTIONS);
+            }
+            catch(Throwable e) {
+                // java.lang.UnsatisfiedLinkError is thrown if the CPU architecture is not supported by JNA.
+                INSTANCE = null;
+            }
         }
     }
 
@@ -58,8 +62,8 @@ public class Kernel32 {
      * some Kernel32 Windows DLL functions. <code>null</code> will be returned if {@link #isAvailable()} returned
      * <code>false</code>.
      *
-     * @return a static instance of the {@link com.mucommander.file.util.Kernel32API} interface, <code>null</code> if
-     * the current OS/CPU architecture is not supported
+     * @return a static instance of the {@link com.mucommander.file.util.Kernel32API} interface, <code>null</code>
+     * if it is not available on the current OS/CPU architecture
      */
     public static Kernel32API getInstance() {
         return INSTANCE;
