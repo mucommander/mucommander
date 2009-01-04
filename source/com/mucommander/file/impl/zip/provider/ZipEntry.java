@@ -380,7 +380,7 @@ public class ZipEntry implements Cloneable {
      * @throws IllegalArgumentException if the specified size is less than 0 or greater than 0xFFFFFFFF bytes
      */
     public void setSize(long size) {
-        if (size < 0 || size > 0xFFFFFFFFL)
+        if(!isValidUnsignedInt(size))
 	        throw new IllegalArgumentException("Invalid entry size");
 
 	    this.size = size;
@@ -402,6 +402,9 @@ public class ZipEntry implements Cloneable {
      * @param csize the compressed size to set to
      */
     public void setCompressedSize(long csize) {
+        if(!isValidUnsignedInt(csize))
+	        throw new IllegalArgumentException("Invalid entry size");
+
         this.compressedSize = csize;
     }
 
@@ -421,7 +424,7 @@ public class ZipEntry implements Cloneable {
      * @throws IllegalArgumentException if the specified CRC-32 value is less than 0 or greater than 0xFFFFFFFF
      */
     public void setCrc(long crc) {
-        if (crc < 0 || crc > 0xFFFFFFFFL)
+        if(!isValidUnsignedInt(crc))
             throw new IllegalArgumentException("invalid entry crc-32");
 
         this.crc = crc;
@@ -597,6 +600,16 @@ public class ZipEntry implements Cloneable {
         return count;
     }
 
+    /**
+     * Returns <code>true</code> if the given long is a valid unsigned int value, i.e. comprised between 0 and 2^32-1.
+     *
+     * @param l the long value to test
+     * @return <code>true</code> if the given long is a valid unsigned int value, i.e. comprised between 0 and 2^32-1
+     */
+    protected boolean isValidUnsignedInt(long l) {
+        return l>=0 && l<=0xFFFFFFFFL;
+    }
+
 
     ////////////////////////
     // Overridden methods //
@@ -633,6 +646,6 @@ public class ZipEntry implements Cloneable {
      * @return <code>true</code> if the given object is a <code>ZipEntry</code> that has the same name as this one
      */
     public boolean equals(Object o) {
-        return (o instanceof ZipEntry) && getName().equals(getName());
+        return (o instanceof ZipEntry) && ((ZipEntry) o).getName().equals(getName());
     }
 }
