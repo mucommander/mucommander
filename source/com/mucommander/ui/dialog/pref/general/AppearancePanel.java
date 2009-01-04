@@ -26,6 +26,7 @@ import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
 import com.mucommander.job.FileCollisionChecker;
 import com.mucommander.runtime.OsFamilies;
+import com.mucommander.runtime.OsVersions;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.QuestionDialog;
 import com.mucommander.ui.dialog.file.FileCollisionDialog;
@@ -43,23 +44,9 @@ import com.mucommander.ui.main.WindowManager;
 import com.mucommander.ui.theme.Theme;
 import com.mucommander.ui.theme.ThemeManager;
 
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JFileChooser;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
+import javax.swing.*;
 import javax.swing.plaf.basic.BasicComboBoxRenderer;
-
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
@@ -205,7 +192,7 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
         toolbarIconsSizeComboBox.addDialogListener(parent);
         commandBarIconsSizeComboBox.addDialogListener(parent);
         fileIconsSizeComboBox.addDialogListener(parent);
-        if(OsFamilies.MAC_OS_X.isCurrent())
+        if(brushedMetalCheckBox!=null)
         	brushedMetalCheckBox.addDialogListener(parent);
     }
 
@@ -300,7 +287,10 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
         lnfPanel.add(flowPanel);
 
         // For Mac OS X only, creates the 'brushed metal' checkbox.
-        if(OsFamilies.MAC_OS_X.isCurrent()) {
+        // At the time of writing, the 'brushed metal' look causes the JVM to crash randomly under Leopard (10.5)
+        // so we disable brushed metal on that OS version but leave it for earlier versions where it works fine.
+        // See http://www.mucommander.com/forums/viewtopic.php?f=4&t=746 for more info about this issue.
+        if(OsFamilies.MAC_OS_X.isCurrent() && OsVersions.MAC_OS_X_10_4.isCurrentOrLower()) {
             // 'Use brushed metal look' option
             brushedMetalCheckBox = new PrefCheckBox(Translator.get("prefs_dialog.use_brushed_metal")) {
             	public boolean hasChanged() {
@@ -510,7 +500,7 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
             SwingUtilities.updateComponentTreeUI(parent);
         }
 
-        if(OsFamilies.MAC_OS_X.isCurrent())
+        if(brushedMetalCheckBox!=null)
             MuConfiguration.setVariable(MuConfiguration.USE_BRUSHED_METAL,  brushedMetalCheckBox.isSelected());
 
         // Set ToolBar's icon size
