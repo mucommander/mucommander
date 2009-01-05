@@ -168,6 +168,13 @@ public class MuConfiguration {
     public static final float   DEFAULT_TOOLBAR_ICON_SCALE        = 1.0f;
 
 
+    // - Volume list ---------------------------------------------------------
+    // -----------------------------------------------------------------------
+    /** Section describing the volume list configuration. */
+    public static final String VOLUME_LIST_SECTION                 = "volume_list";
+    /** Regexp that allows volumes to be excluded from the list. */
+    public static final String VOLUME_EXCLUDE_REGEXP               = VOLUME_LIST_SECTION + '.' + "exclude_regexp";
+
 
     // - FileTable variables ---------------------------------------------------
     // -----------------------------------------------------------------------
