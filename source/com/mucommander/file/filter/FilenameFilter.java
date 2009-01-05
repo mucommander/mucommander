@@ -28,7 +28,8 @@ import java.util.Vector;
  * <code>FilenameFilter</code> is a {@link FileFilter} that operates on filenames. It can be used to match filenames
  * without having to deal with {@link AbstractFile} instances.
  *
- * <p><code>FilenameFilter</code> implements {@link #accept(AbstractFile)} by delegating it to {@link #accept(String)}.
+ * <p><code>FilenameFilter</code> implements {@link #accept(AbstractFile)} by delegating to {@link #accept(String)}
+ * with the file's name (or path if this FilenameFilter {@link #getOperateOnPath() operates on paths}).
  * By extending <code>FileFilter</code>, this class can be used everywhere a <code>FileFilter</code> is accepted.</p>
  *
  * <p>Several convenience methods are provided to operate this filter on a set of filenames, and filter out filenames
@@ -41,6 +42,9 @@ public abstract class FilenameFilter extends FileFilter {
 
     /** True if this FilenameFilter is case-sensitive. */
     protected boolean caseSensitive;
+
+    /** True if this FilenameFilter operates on file paths rather than file names. */
+    protected boolean operateOnPath;
 
     /**
      * Creates a new <code>FilenameFilter</code> that operates in normal, non-inverted mode, and that is case-insensitive.
@@ -86,6 +90,32 @@ public abstract class FilenameFilter extends FileFilter {
      */
     public void setCaseSensitive(boolean caseSensitive) {
         this.caseSensitive = caseSensitive;
+    }
+
+    /**
+     * Returns <code>true</code> if this <code>FilenameFilter</code> operates on file paths rather than filenames.
+     * By default, FilenameFilters operate on filenames.
+     *
+     * <p>Depending on the returned value, {@link #accept(com.mucommander.file.AbstractFile)} will either retrieve the
+     * given file's name or its path.</p>
+     *
+     * @return <code>true</code> if this <code>FilenameFilter</code> operates on file paths rather than filenames
+     */
+    public boolean getOperateOnPath() {
+        return operateOnPath;
+    }
+
+    /**
+     * Sets whether this <code>FilenameFilter</code> operates on file paths (<code>true</code>) or on filenames
+     * (<code>false</code>). By default, FilenameFilters operate on filenames.
+     *
+     * <p>Depending on the specified value, {@link #accept(com.mucommander.file.AbstractFile)} will either retrieve the
+     * given file's name or its path.</p>
+     *
+     * @param operateOnPath <code>true</code> to operate on file paths, <code>false</code> to operate on filenames
+     */
+    public void setOperateOnPath(boolean operateOnPath) {
+        this.operateOnPath = operateOnPath;
     }
 
 
@@ -199,14 +229,15 @@ public abstract class FilenameFilter extends FileFilter {
     ///////////////////////////////
 
     /**
-     * Implements FileFilter by calling {@link #accept(String)} with the filename of the given file (as returned by
-     * {@link AbstractFile#getName()}) and returning its value.
+     * This method is implemented by calling {@link #accept(String)} with the given file's name or absolute path,
+     * depending on the value of {@link #getOperateOnPath()}.
      *
      * @param file the file to be tested
      * @return true if the file was accepted
+     * @see #getOperateOnPath()
      */
     public boolean accept(AbstractFile file) {
-        return accept(file.getName());
+        return accept(getOperateOnPath()?file.getAbsolutePath():file.getName());
     }
 
 
