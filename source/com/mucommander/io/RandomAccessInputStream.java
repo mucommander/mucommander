@@ -42,7 +42,7 @@ import java.io.InputStream;
 public abstract class RandomAccessInputStream extends InputStream implements RandomAccess {
 
     /** The last offset set by {@link #mark(int)} */
-    private int markOffset;
+    private long markOffset;
 
 
     /**
@@ -141,7 +141,11 @@ public abstract class RandomAccessInputStream extends InputStream implements Ran
      * @param readLimit this parameter has no effect and is simply ignored
      */
     public synchronized void mark(int readLimit) {
-        this.markOffset = readLimit;
+        try {
+			this.markOffset = getOffset();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
     }
 
     /**
