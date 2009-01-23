@@ -18,7 +18,13 @@
 
 package com.mucommander.io;
 
-import java.io.*;
+import java.io.EOFException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 
 /**
  * This class provides convience static methods that operate on streams. All read/write buffers are allocated using
@@ -98,6 +104,56 @@ public class StreamUtils {
             BufferPool.releaseByteArray(buffer);
         }
     }
+    
+    public static long copyStream(InputStream in, OutputStream out, int bufferSize, int length) throws FileTransferException {
+        // Use BufferPool to reuse any available buffer of the same size
+        byte buffer[] = BufferPool.getByteArray(bufferSize);
+        try {
+            // Copies the InputStream's content to the OutputStream chunk by chunk
+            int nbRead;
+            long totalRead = 0;
+
+            while(length>0) {
+                try {
+                	if (in.markSupported()) {
+                		in.mark(buffer.length);
+                	}
+                    nbRead = in.read(buffer, 0, Math.min(buffer.length, length));
+                    length-=nbRead;
+                }
+                catch(IOException e) {
+                    throw new FileTransferException(FileTransferException.READING_SOURCE);
+                }
+
+                if(nbRead==-1)
+                    break;
+
+                try {
+                    out.write(buffer, 0, nbRead);
+                }
+                catch(IOException e) {
+                	try {
+						in.reset();
+	                    //nbRead = in.read(buffer, 0, Math.min(buffer.length, length));
+					} catch (IOException e1) {
+						e1.printStackTrace();
+	                	throw new FileTransferException(FileTransferException.WRITING_DESTINATION);
+					}
+                	return -totalRead;
+                	//throw new FileTransferException(FileTransferException.WRITING_DESTINATION);
+                }
+
+                totalRead += nbRead;
+            }
+
+            return totalRead;
+        }
+        finally {
+            // Make the buffer available for further use
+            BufferPool.releaseByteArray(buffer);
+        }
+    }
+    
 
     /**
      * This method is a shorthand for {@link #transcode(java.io.InputStream, String, java.io.OutputStream, String, int)}
