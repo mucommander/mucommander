@@ -1146,7 +1146,7 @@ public abstract class AbstractFile implements PermissionTypes, PermissionAccesse
      * @param path the path for which to add a trailing separator
      * @return the path with a trailing separator
      */
-    protected final String addTrailingSeparator(String path) {
+    public final String addTrailingSeparator(String path) {
         // Even though getAbsolutePath() is not supposed to return a trailing separator, root folders ('/', 'c:\' ...)
         // are exceptions that's why we still have to test if path ends with a separator
         String separator = getSeparator();
