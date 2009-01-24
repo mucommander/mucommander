@@ -49,6 +49,7 @@ import javax.swing.*;
 import javax.swing.filechooser.FileSystemView;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Vector;
 import java.util.regex.PatternSyntaxException;
@@ -73,6 +74,10 @@ public class DrivePopupButton extends PopupButton implements LocationListener, B
 
     /** Caches extended drive names, has a (non-null) value only under Windows */
     private static Hashtable extendedNameCache;
+    
+    /** Caches drive icons */
+    private static Hashtable iconCache = new Hashtable();
+    
 
     /** Filters out volumes from the list based on the exclude regexp defined in the configuration, null if the regexp
      * is not defined. */
@@ -259,27 +264,27 @@ public class DrivePopupButton extends PopupButton implements LocationListener, B
     ////////////////////////////////
 
     public JPopupMenu getPopupMenu() {
-        final JPopupMenu popupMenu = new JPopupMenu();
+        JPopupMenu popupMenu = new JPopupMenu();
 
         // Update the list of volumes in case new ones were mounted
         volumes = getDisplayableVolumes();
 
         // Add volumes
-        final int nbVolumes = volumes.length;
+        int nbVolumes = volumes.length;
         final MainFrame mainFrame = folderPanel.getMainFrame();
 
         MnemonicHelper mnemonicHelper = new MnemonicHelper();   // Provides mnemonics and ensures uniqueness
         JMenuItem item;
 
         boolean useExtendedDriveNames = fileSystemView!=null;
-        final Vector itemsV = useExtendedDriveNames?new Vector():null;
+        ArrayList itemsV = new ArrayList();
 
         for(int i=0; i<nbVolumes; i++) {
             item = popupMenu.add(new CustomOpenLocationAction(mainFrame, new Hashtable(), volumes[i]));
             setMnemonic(item, mnemonicHelper);
 
-            // Set system icon for volumes, only if system icons are available on the current platform
-            item.setIcon(FileIcons.hasProperSystemIcons()?FileIcons.getSystemFileIcon(volumes[i]):null);
+            // Set icon from cache
+            item.setIcon((Icon) iconCache.get(volumes[i]));
 
             if(useExtendedDriveNames) {
                 // Use the last known value (if any) while we update it in a separate thread
@@ -287,37 +292,11 @@ public class DrivePopupButton extends PopupButton implements LocationListener, B
                 if(previousExtendedName!=null)
                     item.setText(previousExtendedName);
 
-                itemsV.add(item);   // JMenu offers no way to retrieve a particular JMenuItem, so we have to keep them
             }
+            itemsV.add(item);   // JMenu offers no way to retrieve a particular JMenuItem, so we have to keep them
         }
 
-        if(useExtendedDriveNames) {
-            // Calls to getExtendedDriveName(String) are very slow, so they are performed in a separate thread so as
-            // to not lock the main even thread. The popup menu gets first displayed with the short drive names, and
-            // then refreshed with the extended names as they are retrieved.
-
-            new Thread() {
-                public void run() {
-                    for(int i=0; i<nbVolumes; i++) {
-                        // Under Windows, show the extended drive name (e.g. "Local Disk (C:)" instead of just "C:") but use
-                        // the simple drive name for the mnemonic (i.e. 'C' instead of 'L').
-                        String extendedName = getExtendedDriveName(volumes[i]);
-                        ((JMenuItem)itemsV.elementAt(i)).setText(extendedName);
-
-                        // Keep the extended name for later (see above)
-                        extendedNameCache.put(volumes[i], extendedName);
-                    }
-
-                    // Re-calculate the popup menu's dimensions
-                    SwingUtilities.invokeLater(new Runnable() {
-                        public void run() {
-                                popupMenu.pack();
-                        }
-                    });
-                }
-
-            }.start();
-        }
+        new RefreshDriveNamesAndIcons(popupMenu, itemsV).start();
 
         popupMenu.add(new JSeparator());
 
@@ -358,6 +337,63 @@ public class DrivePopupButton extends PopupButton implements LocationListener, B
         setMnemonic(popupMenu.add(new ServerConnectAction("NFS...", NFSPanel.class)), mnemonicHelper);
 
         return popupMenu;
+    }
+    
+    /**
+     *  Calls to getExtendedDriveName(String) are very slow, so they are performed in a separate thread so as
+     *  to not lock the main even thread. The popup menu gets first displayed with the short drive names, and
+     * then refreshed with the extended names as they are retrieved.        
+     */
+    private class RefreshDriveNamesAndIcons extends Thread {
+        
+        private JPopupMenu popupMenu;
+        private ArrayList items;
+
+        public RefreshDriveNamesAndIcons(JPopupMenu popupMenu, ArrayList items) {
+            super("RefreshDriveNamesAndIcons");
+            this.popupMenu = popupMenu;
+            this.items = items;
+        }
+        
+        public void run() {
+            final boolean useExtendedDriveNames = fileSystemView!=null;
+            for(int i=0; i<items.size(); i++) {
+                final JMenuItem item = ((JMenuItem)items.get(i));
+
+                String extendedName = null;
+                if (useExtendedDriveNames) {
+                    // Under Windows, show the extended drive name (e.g. "Local Disk (C:)" instead of just "C:") but use
+                    // the simple drive name for the mnemonic (i.e. 'C' instead of 'L').
+                    extendedName = getExtendedDriveName(volumes[i]);
+
+                    // Keep the extended name for later (see above)
+                    extendedNameCache.put(volumes[i], extendedName);
+                }
+                final String extendedNameFinal = extendedName;
+
+                // Set system icon for volumes, only if system icons are available on the current platform
+                final Icon icon = FileIcons.hasProperSystemIcons()?FileIcons.getSystemFileIcon(volumes[i]):null;
+                iconCache.put(volumes[i], icon);
+
+                SwingUtilities.invokeLater(new Runnable() {
+                    public void run() {
+                        if (useExtendedDriveNames) {
+                            item.setText(extendedNameFinal);
+                        }
+                        item.setIcon(icon);
+                    }
+                });
+                
+            }
+
+            // Re-calculate the popup menu's dimensions
+            SwingUtilities.invokeLater(new Runnable() {
+                public void run() {
+                    popupMenu.pack();
+                }
+            });
+        }
+        
     }
 
 
