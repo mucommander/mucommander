@@ -143,6 +143,7 @@ Bug fixes:
 - Fixed SMB connection issues (bug #106).
 - Fixed connection issues with FTP servers not supporting the SYST command ;
   those are now considered as Unix servers (bug #121).
+- Fixed credentials ignored when setting a remote startup folder (bug #108).
 
 Known issues:
 - Some translations are not up-to-date. For more information, see:

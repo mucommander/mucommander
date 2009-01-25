@@ -21,6 +21,7 @@ package com.mucommander.ui.main;
 import com.mucommander.Debug;
 import com.mucommander.ShutdownHook;
 import com.mucommander.auth.AuthException;
+import com.mucommander.auth.CredentialsManager;
 import com.mucommander.auth.CredentialsMapping;
 import com.mucommander.conf.ConfigurationEvent;
 import com.mucommander.conf.ConfigurationListener;
@@ -28,6 +29,7 @@ import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.extension.ExtensionManager;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
+import com.mucommander.file.FileURL;
 import com.mucommander.ui.dialog.auth.AuthDialog;
 
 import javax.swing.*;
@@ -207,11 +209,14 @@ public class WindowManager implements WindowListener, ConfigurationListener {
                 if(e instanceof AuthException) {
                     // Prompts the user for a login and password.
                     AuthException authException = (AuthException)e;
-                    AuthDialog authDialog = new AuthDialog(currentMainFrame, authException.getURL(), true, authException.getMessage());
+                    FileURL url = authException.getURL();
+                    AuthDialog authDialog = new AuthDialog(currentMainFrame, url, true, authException.getMessage());
                     authDialog.showDialog();
                     newCredentialsMapping = authDialog.getCredentialsMapping();
                     if(newCredentialsMapping !=null) {
-                        path = newCredentialsMapping.getRealm().toString(true);
+                        // Use the provided credentials
+                        CredentialsManager.authenticate(url, newCredentialsMapping);
+                        path = url.toString(true);
                     }
                     // If the user cancels, we fall back to the default path.
                     else {
