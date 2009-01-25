@@ -23,6 +23,11 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
+ * An InputStream that has a set limit to the number of bytes that can be read from it before the EOF is reached.
+ * The limit has no effect if it is set higher than the number of bytes remaining in the underlying stream.
+ *
+ * <p>This class is particularly useful for reading archives that are a concatenation of files, tarballs for instance.</p>
+ *
  * @author Maxence Bernard
  */
 public class BoundedInputStream extends FilterInputStream {
@@ -33,9 +38,9 @@ public class BoundedInputStream extends FilterInputStream {
 
     /**
      * Equivalent to {@link #BoundedInputStream(java.io.InputStream, long, java.io.IOException)} called with a
-     * {@link com.mucommander.io.BoundedInputStream.StreamOutOfBoundException}.
+     * {@link StreamOutOfBoundException}.
      *
-     * @param in the stream to bound
+     * @param in the stream to bind
      * @param allowedBytes the total number of bytes this stream allows to be read or skipped, <code>-1</code> for no limitation
      */
     public BoundedInputStream(InputStream in, long allowedBytes) {
@@ -48,7 +53,7 @@ public class BoundedInputStream extends FilterInputStream {
      * an attempt to read or skip beyond that is made.
      * If <code>allowedBytes</code> is equal to <code>-1</code>, this stream is not bounded and acts as a normal stream.
      *
-     * @param in the stream to bound
+     * @param in the stream to bind
      * @param allowedBytes the total number of bytes this stream allows to be read or skipped, <code>-1</code> for no limitation
      * @param streamOutOfBoundException the IOException to throw when an attempt to read or skip beyond <code>allowedBytes</code> is made
      */
@@ -161,16 +166,5 @@ public class BoundedInputStream extends FilterInputStream {
     public synchronized void reset() throws IOException {
         // Todo: in theory we could support mark/reset
         // No-op
-    }
-
-
-    ///////////////////
-    // Inner classes //
-    ///////////////////
-
-    public static class StreamOutOfBoundException extends IOException {
-        public StreamOutOfBoundException(long limit) {
-            super("Attempt to read out of bounds, limit="+limit);
-        }
     }
 }

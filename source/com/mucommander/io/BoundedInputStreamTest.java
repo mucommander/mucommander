@@ -24,7 +24,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
 /**
- * A test case for {@link com.mucommander.io.BoundedInputStream}
+ * A test case for {@link com.mucommander.io.BoundedInputStream}.
  *
  * @see com.mucommander.io.BoundedInputStream 
  * @author Maxence Bernard
@@ -66,25 +66,25 @@ public class BoundedInputStreamTest extends TestCase {
 
         boolean exceptionThrown = false;
         try { bin.read(); }
-        catch(BoundedInputStream.StreamOutOfBoundException e) { exceptionThrown = true; }
+        catch(StreamOutOfBoundException e) { exceptionThrown = true; }
 
         assertTrue(exceptionThrown);
 
         exceptionThrown = false;
         try { bin.read(new byte[1]); }
-        catch(BoundedInputStream.StreamOutOfBoundException e) { exceptionThrown = true; }
+        catch(StreamOutOfBoundException e) { exceptionThrown = true; }
 
         assertTrue(exceptionThrown);
 
         exceptionThrown = false;
         try { bin.read(new byte[1], 0, 1); }
-        catch(BoundedInputStream.StreamOutOfBoundException e) { exceptionThrown = true; }
+        catch(StreamOutOfBoundException e) { exceptionThrown = true; }
 
         assertTrue(exceptionThrown);
 
         exceptionThrown = false;
         try { bin.skip(1); }
-        catch(BoundedInputStream.StreamOutOfBoundException e) { exceptionThrown = true; }
+        catch(StreamOutOfBoundException e) { exceptionThrown = true; }
 
         assertTrue(exceptionThrown);
         
