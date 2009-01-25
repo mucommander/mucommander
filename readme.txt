@@ -141,6 +141,8 @@ Bug fixes:
 - Fixed date of Zip entries incorrectly displayed under certain conditions
   (bug #107). Contributed by Oliver Burgmaier.
 - Fixed SMB connection issues (bug #106).
+- Fixed connection issues with FTP servers not supporting the SYST command ;
+  those are now considered as Unix servers (bug #121).
 
 Known issues:
 - Some translations are not up-to-date. For more information, see:

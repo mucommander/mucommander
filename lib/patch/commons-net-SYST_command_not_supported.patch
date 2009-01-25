@@ -1,0 +1,21 @@
+Index: src/java/org/apache/commons/net/ftp/FTPClient.java
+===================================================================
+--- src/java/org/apache/commons/net/ftp/FTPClient.java	(revision 721933)
++++ src/java/org/apache/commons/net/ftp/FTPClient.java	(working copy)
+@@ -2359,8 +2361,13 @@
+                     // if a parserKey hasn't been supplied, and a configuration
+                     // hasn't been supplied, then autodetect by calling
+                     // the SYST command and use that to choose the parser.
+-                    __entryParser = 
+-                        __parserFactory.createFileEntryParser(getSystemName());
++
++                    // Maxence: getSystemName() returns null if the SYST command is not supported by the remote server.
++                    // In that case, we default to UNIX ; DefaultFTPFileEntryParserFactory will otherwise NPE.
++                    String systemName = getSystemName();
++                    __entryParser = __parserFactory.createFileEntryParser(
++                        systemName==null?FTPClientConfig.SYST_UNIX:systemName
++                    );
+                 }
+             }
+         }
+
