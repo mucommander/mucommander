@@ -27,7 +27,7 @@ import com.mucommander.io.FilteredOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.Vector;
 
 
@@ -154,22 +154,35 @@ public class ZipArchiveFile extends AbstractRWArchiveFile {
     //////////////////////////////////////////
     // AbstractROArchiveFile implementation //
     //////////////////////////////////////////
-	
-    public synchronized Vector getEntries() throws IOException {
-        Vector entries = new Vector();
 
+    public synchronized ArchiveEntryIterator getEntryIterator() throws IOException {
         // If the underlying AbstractFile has random read access, use our own ZipFile implementation to read entries
         if (file.hasRandomAccessInputStream()) {
             checkZipFile();
 
-            Enumeration entriesEnum = zipFile.getEntries();
-            while(entriesEnum.hasMoreElements())
-                entries.add(createArchiveEntry((ZipEntry)entriesEnum.nextElement()));
+            final Iterator iterator = zipFile.getEntries();
+
+            return new ArchiveEntryIterator() {
+                public boolean hasNextEntry() throws IOException {
+                    return iterator.hasNext();
+                }
+
+                public ArchiveEntry nextEntry() throws IOException {
+                    if(!iterator.hasNext())
+                        return null;
+
+                    return createArchiveEntry((ZipEntry)iterator.next());
+                }
+
+                public void close() throws IOException {
+                }
+            };
         }
         // If the underlying AbstractFile doesn't have random read access, use java.util.InputStream to
         // read the entries. This is much slower than the former method as the file cannot be seeked and needs
         // to be traversed.
         else {
+            Vector entries = new Vector();
             java.util.zip.ZipInputStream zin = null;
             try {
                 zin = new java.util.zip.ZipInputStream(file.getInputStream());
@@ -184,7 +197,7 @@ public class ZipArchiveFile extends AbstractRWArchiveFile {
                 throw new IOException();
             }
             catch(Error e) {
-                // ZipInpustStream#getNextEntry() will throw a java.lang.InternalError ("invalid compression method")
+                // ZipInputStream#getNextEntry() will throw a java.lang.InternalError ("invalid compression method")
                 // if the compression method is different from DEFLATED or STORED (happens with IMPLODED for example).
                 throw new IOException();
             }
@@ -192,9 +205,9 @@ public class ZipArchiveFile extends AbstractRWArchiveFile {
                 if(zin!=null)
                     zin.close();
             }
-        }
 
-        return entries;
+            return new WrapperArchiveEntryIterator(entries.iterator());
+        }
     }
 
 
@@ -354,4 +367,11 @@ public class ZipArchiveFile extends AbstractRWArchiveFile {
             out.close();
         }
     }
+
+
+    ///////////////////
+    // Inner classes //
+    ///////////////////
+
+    
 }

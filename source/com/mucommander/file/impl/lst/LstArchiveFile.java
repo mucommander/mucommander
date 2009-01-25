@@ -18,19 +18,10 @@
 
 package com.mucommander.file.impl.lst;
 
-import com.mucommander.Debug;
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.AbstractROArchiveFile;
-import com.mucommander.file.ArchiveEntry;
-import com.mucommander.file.FileFactory;
+import com.mucommander.file.*;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.text.SimpleDateFormat;
-import java.util.StringTokenizer;
-import java.util.Vector;
 
 /**
  * IsoArchiveFile provides read-only access to archives in the LST format made popular by Total Commander.
@@ -58,76 +49,22 @@ import java.util.Vector;
  * @author Maxence Bernard
  */
 public class LstArchiveFile extends AbstractROArchiveFile {
-
-    private String baseFolder;
-
     
     public LstArchiveFile(AbstractFile file) {
         super(file);
     }
 
 
-    public Vector getEntries() throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(file.getInputStream()));
-        Vector entries = new Vector();
+    ////////////////////////////////////////
+    // AbstractArchiveFile implementation //
+    ////////////////////////////////////////
 
-        try {
-            baseFolder = br.readLine();
-
-            if(baseFolder==null)
-                return entries;
-
-            String line;
-            StringTokenizer st;
-            String name;
-            String path;
-            String currentDir = "";
-            long size;
-            long date;
-            boolean isDirectory;
-            SimpleDateFormat lstDateFormat = new SimpleDateFormat("yyyy.MM.dd HH:mm.ss");
-
-            while((line=br.readLine())!=null) {
-                try {
-                    st = new StringTokenizer(line, "\t");
-                    name = st.nextToken().replace('\\', '/');
-                    size = Long.parseLong(st.nextToken());
-                    date = lstDateFormat.parse((st.nextToken()+" "+st.nextToken())).getTime();
-
-                    if(name.endsWith("/")) {
-                        isDirectory = true;
-                        currentDir = name;
-                        path = currentDir;
-                    }
-                    else {
-                        isDirectory = false;
-                        path = currentDir+name;
-                    }
-
-                    entries.add(new ArchiveEntry(path, isDirectory, date, size));
-                }
-                catch(Exception e) {    // Catches exceptions thrown by StringTokenizer and SimpleDateFormat
-                    if(Debug.ON) {
-                        Debug.trace("Exception caught while parsing LST file:");
-                        e.printStackTrace();
-                    }
-
-                    throw new IOException();
-                }
-            }
-
-            return entries;
-        }
-        finally {
-            if(br!=null)
-                try { br.close(); }
-                catch(IOException e) {}
-        }
+    public ArchiveEntryIterator getEntryIterator() throws IOException {
+        return new LstArchiveEntryIterator(getInputStream());
     }
 
-    
     public InputStream getEntryInputStream(ArchiveEntry entry) throws IOException {
         // Will throw an IOException if the file designated by the entry doesn't exist 
-        return FileFactory.getFile(baseFolder+entry.getPath(), true).getInputStream();
+        return FileFactory.getFile(((LstArchiveEntry)entry).getBaseFolder()+entry.getPath(), true).getInputStream();
     }
 }

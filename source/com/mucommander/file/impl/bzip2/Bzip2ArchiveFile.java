@@ -18,15 +18,12 @@
 
 package com.mucommander.file.impl.bzip2;
 
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.AbstractROArchiveFile;
-import com.mucommander.file.ArchiveEntry;
+import com.mucommander.file.*;
 import org.apache.tools.bzip2.CBZip2InputStream;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Vector;
 
 /**
  * Bzip2ArchiveFile provides read-only access to archives in the Bzip2 format.
@@ -41,6 +38,8 @@ public class Bzip2ArchiveFile extends AbstractROArchiveFile {
 
     /**
      * Creates a BzipArchiveFile on top of the given file.
+     *
+     * @param file the underlying file to wrap this archive file around
      */
     public Bzip2ArchiveFile(AbstractFile file) {
         super(file);
@@ -50,8 +49,8 @@ public class Bzip2ArchiveFile extends AbstractROArchiveFile {
     ////////////////////////////////////////
     // AbstractArchiveFile implementation //
     ////////////////////////////////////////
-	
-    public Vector getEntries() throws IOException {
+
+    public ArchiveEntryIterator getEntryIterator() throws IOException {
         String extension = getExtension();
         String name = getName();
 		
@@ -65,11 +64,8 @@ public class Bzip2ArchiveFile extends AbstractROArchiveFile {
                 name = name.substring(0, name.length()-4);
         }
 
-        Vector entries = new Vector();
-        entries.add(new ArchiveEntry("/"+name, false, getDate(), -1));
-        return entries;
+        return new SingleArchiveEntryIterator(new ArchiveEntry("/"+name, false, getDate(), -1));
     }
-
 
     public InputStream getEntryInputStream(ArchiveEntry entry) throws IOException {
         try {

@@ -18,7 +18,10 @@
 
 package com.mucommander.file.impl.tar;
 
-import com.mucommander.file.*;
+import com.mucommander.file.AbstractFile;
+import com.mucommander.file.AbstractROArchiveFile;
+import com.mucommander.file.ArchiveEntry;
+import com.mucommander.file.ArchiveEntryIterator;
 import com.mucommander.file.impl.tar.provider.TarEntry;
 import com.mucommander.file.impl.tar.provider.TarInputStream;
 import com.mucommander.io.StreamUtils;
@@ -28,7 +31,6 @@ import org.apache.tools.bzip2.CBZip2InputStream;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Vector;
 import java.util.zip.GZIPInputStream;
 
 
@@ -42,6 +44,8 @@ import java.util.zip.GZIPInputStream;
  * @author Maxence Bernard
  */
 public class TarArchiveFile extends AbstractROArchiveFile {
+
+    protected ThreadLocal iterators = new ThreadLocal();
 
     /**
      * Creates a TarArchiveFile on of the given file.
@@ -98,44 +102,46 @@ public class TarArchiveFile extends AbstractROArchiveFile {
         return new TarInputStream(in, entryOffset);
     }
 
-    /**
-     * Creates and return an {@link ArchiveEntry()} whose attributes are fetched from the given
-     * <code>org.apache.tools.tar.TarEntry</code>.
-     *
-     * @param tarEntry the object that serves to initialize the attributes of the returned ArchiveEntry
-     * @return an ArchiveEntry whose attributes are fetched from the given org.apache.tools.tar.TarEntry
-     */
-    private ArchiveEntry createArchiveEntry(TarEntry tarEntry) {
-        ArchiveEntry entry = new ArchiveEntry(tarEntry.getName(), tarEntry.isDirectory(), tarEntry.getModTime().getTime(), tarEntry.getSize());
-        entry.setPermissions(new SimpleFilePermissions(tarEntry.getMode() & PermissionBits.FULL_PERMISSION_INT));
-        entry.setOwner(tarEntry.getUserName());
-        entry.setGroup(tarEntry.getGroupName());
-        entry.setEntryObject(tarEntry);
-
-        return entry;
-    }
-
 
     ////////////////////////////////////////
     // AbstractArchiveFile implementation //
     ////////////////////////////////////////
-	
-    public Vector getEntries() throws IOException {
-        TarInputStream tin = createTarStream(0);
 
-        // Load TAR entries
-        Vector entries = new Vector();
-        TarEntry entry;
-        while ((entry=tin.getNextEntry())!=null) {
-            entries.add(createArchiveEntry(entry));
-        }
-        tin.close();
+    public ArchiveEntryIterator getEntryIterator() throws IOException {
+        TarArchiveEntryIterator iterator = new TarArchiveEntryIterator(createTarStream(0)) {
+            public void close() throws IOException {
+                if(iterators.get()==this)
+                    iterators.set(null);
+            }
+        };
 
-        return entries;
+        iterators.set(iterator);
+
+        return iterator;
     }
 
-
     public InputStream getEntryInputStream(ArchiveEntry entry) throws IOException {
+        // Optimization: first try to see if there isn't an open (i.e. not closed) iterator that is positionned
+        // at the beginning of the entry. This will typically be the case if an iterator is being used to read all
+        // the archive's entries (unpack operation). In that case, we save the cost of looking for the entry from the
+        // beginning of the archive, which is especially expensive if the TAR archive is GZipped.
+        TarArchiveEntryIterator iterator = (TarArchiveEntryIterator)iterators.get();
+        if(iterator!=null) {
+            ArchiveEntry currentEntry = iterator.peek();
+            if(currentEntry.getPath().equals(entry.getPath()))
+                return iterator.getTarInputStream();
+
+            // OK, the iterator's next entry is not the one we're looking for. But it may be one of the subsequent
+            // entries, in case the archive is being iterated and one of the entries was skipped.
+            ArchiveEntry ae;
+            while ((ae = iterator.nextEntry())!=null && ae!=currentEntry) {     // Avoid infinite loops
+                if (ae.getName().equals(entry.getPath()))
+                    return iterator.getTarInputStream();
+            }
+
+            // If it wasn't found, start from the beginning of the archive
+        }
+
         TarEntry tarEntry = (TarEntry)entry.getEntryObject();
         if(tarEntry!=null) {
             TarInputStream tin = createTarStream(tarEntry.getOffset());
@@ -143,16 +149,7 @@ public class TarArchiveFile extends AbstractROArchiveFile {
 
             return tin;
         }
-        else {      // Should not normally happen
-            TarInputStream tin = createTarStream(0);
 
-            String entryPath = entry.getPath();
-            while ((tarEntry=tin.getNextEntry())!=null) {
-                if (tarEntry.getName().equals(entryPath))
-                    return tin;
-            }
-        }
-
-        return null;
+        throw new IOException("Unknown TAR entry: "+entry.getName());
     }
 }

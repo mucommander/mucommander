@@ -23,8 +23,8 @@ import com.mucommander.file.AbstractFile;
 import com.mucommander.io.*;
 
 import java.io.*;
-import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.Vector;
 import java.util.zip.Deflater;
 import java.util.zip.Inflater;
@@ -53,7 +53,8 @@ import java.util.zip.ZipException;
  *   <li>There is no <code>getName</code> method.</li>
  *   <li>There is no <code>close</code> method: underlying input and output streams are opened and closed automatically
  *    as they are needed.</li>
- *   <li><code>entries</code> has been renamed to {@link #getEntries()}.</li>
+ *   <li><code>entries</code> has been renamed to {@link #getEntries()} and returns an <code>Iterator</code> instead of
+ * an <code>Enumeration</code>.</li>
  *   <li><code>size</code> has been renamed to {@link #getNbEntries()}.</li>
  * </ul>
  * </p>
@@ -218,12 +219,12 @@ public class ZipFile implements ZipConstants {
     }
 
     /**
-     * Returns all entries as an enumeration of {@link ZipEntry} instances.
+     * Returns all entries as an <code>Iterator</code> of {@link ZipEntry} instances.
      *
-     * @return Returns all entries as an enumeration of ZipEntry instances.
+     * @return Returns all entries as an <code>Iterator</code> of ZipEntry instances.
      */
-    public Enumeration getEntries() {
-        return entries.elements();
+    public Iterator getEntries() {
+        return entries.iterator();
     }
 
     /**

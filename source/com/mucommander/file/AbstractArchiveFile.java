@@ -47,12 +47,12 @@ import java.util.Vector;
  * should be subclassed, but not this class.
  * </p>
  *
- * <p>The first time one of the <code>ls()</code> methods is called to list the archive's contents, the
- * {@link #getEntries()} method is called to retrieve a list of *all* the entries contained by the archive, not only the
+ * <p>The first time one of the <code>ls()</code> methods is called to list the archive's contents,
+ * {@link #getEntryIterator()} is called to retrieve a list of *all* the entries contained by the archive, not only the
  * ones at the top level but also the ones nested one of several levels below. Using this list of entries, it creates
  * a tree to map the structure of the archive and list the content of any particular directory within the archive.
- * This tree is recreated (<code>getEntries()</code> is called again) only if the archive file has changed, i.e. its
- * date has changed since the tree was created.</p>
+ * This tree is recreated (<code>getEntryIterator()</code> is called again) only if the archive file has changed, i.e.
+ * if its date has changed since the tree was created.</p>
  *
  * <p>Files returned by the <code>ls()</code> are {@link ArchiveEntryFile} instances which use an {@link ArchiveEntry}
  * object to retrieve the entry's attributes. In turn, these <code>ArchiveEntryFile</code> instances query the
@@ -97,15 +97,10 @@ public abstract class AbstractArchiveFile extends ProxyFile {
 
         long start = System.currentTimeMillis();
 
-        Vector entries = getEntries();
-
-        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("entries loaded in "+(System.currentTimeMillis()-start)+" ms, nbEntries="+entries.size());
-        start = System.currentTimeMillis();
-
-        int nbEntries = entries.size();
-        for(int i=0; i<nbEntries; i++) {
-            treeRoot.addArchiveEntry((ArchiveEntry)entries.elementAt(i));
-        }
+        ArchiveEntryIterator entries = getEntryIterator();
+        ArchiveEntry entry;
+        while((entry=entries.nextEntry())!=null)
+            treeRoot.addArchiveEntry(entry);
 
         if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("entries tree created in "+(System.currentTimeMillis()-start)+" ms");
 		
@@ -312,17 +307,32 @@ public abstract class AbstractArchiveFile extends ProxyFile {
     //////////////////////
 	
     /**
-     * Returns a Vector of {@link ArchiveEntry}, representing all the entries this archive file contains.
-     * This method will be called the first time one of the <code>ls()</code> is called. If will not be further called,
+     * Returns an iterator of {@link ArchiveEntry} that iterates through all the entries of this archive.
+     * Implementations of this method should as much as possible return entries in their "natural order", i.e. the order
+     * in which they are stored in the archive.
+     * <p>
+     * This method is called the first time one of the <code>ls()</code> is called. It will not be called anymore,
      * unless the file's date has changed since the last time one of the <code>ls()</code> methods was called.
+     * </p>
+     *
+     * @return an iterator of {@link ArchiveEntry} that iterates through all the entries of this archive
+     * @throws IOException if an error occurred while reading the archive, either because the archive is corrupt or
+     * because of an I/O error
      */
-    public abstract Vector getEntries() throws IOException;
+    public abstract ArchiveEntryIterator getEntryIterator() throws IOException;
 
     /**
-     * Returns an InputStream to read from the given archive entry. The specified {@link ArchiveEntry} instance is
-     * necessarily one of the entries that were returned by {@link #getEntries()}. 
+     * Returns an <code>InputStream</code> to read from the given archive entry. The specified {@link ArchiveEntry}
+     * instance must be one of the entries that were contained by the {@link ArchiveEntryIterator} returned by
+     * {@link #getEntryIterator()}.
+     *
+     * @param entry the archive entry to read
+     * @return an <code>InputStream</code> to read from the given archive entry
+     * @throws IOException if an error occurred while reading the archive, either because the archive is corrupt or
+     * because of an I/O error, or if the given entry wasn't found in the archive
      */
     public abstract InputStream getEntryInputStream(ArchiveEntry entry) throws IOException;
+
 
     /**
      * Returns <code>true</code> if this archive file is writable, i.e. is capable of adding and deleting entries to

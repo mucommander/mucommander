@@ -18,9 +18,7 @@
 
 package com.mucommander.file.impl.iso;
 
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.AbstractROArchiveFile;
-import com.mucommander.file.ArchiveEntry;
+import com.mucommander.file.*;
 import com.mucommander.io.RandomAccessInputStream;
 import com.mucommander.io.StreamUtils;
 
@@ -63,7 +61,7 @@ public class IsoArchiveFile extends AbstractROArchiveFile {
         }
     }
 
-    public Vector getEntries() throws IOException {
+    public ArchiveEntryIterator getEntryIterator() throws IOException {
         Vector entries = new Vector();
 
         try {
@@ -110,7 +108,8 @@ public class IsoArchiveFile extends AbstractROArchiveFile {
 
             throw new IOException();
         }
-        return entries;
+
+        return new WrapperArchiveEntryIterator(entries.iterator());
     }
 
 
