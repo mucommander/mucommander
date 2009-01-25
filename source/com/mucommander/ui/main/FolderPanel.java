@@ -1212,8 +1212,10 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
                         break;
                     }
                     catch(Exception e) {
-                        if(Debug.ON) Debug.trace("Caught Exception: "+e);
-                        //e.printStackTrace();
+                        if(Debug.ON) {
+                            Debug.trace("Caught Exception: "+e);
+                            e.printStackTrace();
+                        }
 
                         if(killed) {
                             // If #tryKill() called #interrupt(), the exception we just caught was most likely
