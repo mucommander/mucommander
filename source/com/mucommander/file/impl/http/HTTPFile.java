@@ -290,7 +290,7 @@ public class HTTPFile extends AbstractFile {
         if(credentials!=null)
             conn.setRequestProperty(
                 "Authorization",
-                "Basic "+ Base64Encoder.encode(credentials.getLogin()+":"+credentials.getPassword(), "UTF-8")
+                "Basic "+ Base64Encoder.encode(credentials.getLogin()+":"+credentials.getPassword())
             );
 
         // Set user-agent header

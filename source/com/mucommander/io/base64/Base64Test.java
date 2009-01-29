@@ -53,8 +53,8 @@ public class Base64Test extends TestCase {
      * @throws IOException should not happen
      */
     private void testKnownSequence(String decodedSequence, String encodedSequence) throws IOException {
-        assertEquals(encodedSequence, Base64Encoder.encode(decodedSequence, "UTF-8"));
-        assertEquals(decodedSequence, Base64Decoder.decode(encodedSequence, "UTF-8"));
+        assertEquals(encodedSequence, Base64Encoder.encode(decodedSequence, "UTF-8", Base64Table.STANDARD_TABLE));
+        assertEquals(decodedSequence, Base64Decoder.decode(encodedSequence, "UTF-8", Base64Table.STANDARD_TABLE));
     }
 
 
@@ -83,7 +83,7 @@ public class Base64Test extends TestCase {
 
             s = sb.toString();
 
-            assertEquals(s, Base64Decoder.decode(Base64Encoder.encode(s, "UTF-8")));
+            assertEquals(s, Base64Decoder.decode(Base64Encoder.encode(s, "UTF-8", Base64Table.STANDARD_TABLE)));
         }
     }
 
@@ -139,5 +139,84 @@ public class Base64Test extends TestCase {
 
             assertTrue(exceptionCaught);
         }
+    }
+
+
+    /**
+     * Tests {@link Base64Table} preset instances.
+     *
+     * @throws IOException should not happen
+     */
+    public void testPresetTables() throws IOException {
+        Base64Table[] tables = new Base64Table[] {
+            Base64Table.STANDARD_TABLE,
+            Base64Table.URL_SAFE_TABLE,
+            Base64Table.FILENAME_SAFE_TABLE,
+            Base64Table.REGEXP_SAFE_TABLE,
+        };
+
+        String sample = "The quick brown fox jumps over the lazy dog.";
+        Base64Table table;
+        for(int i=0; i<tables.length; i++) {
+            table = tables[i];
+
+            // Ensure that the table passes Base64Table constructor's tests
+            new Base64Table(table.getEncodingTable(), table.getPaddingChar());
+
+            // Ensures that encoding followed by decoding yields the original string
+            assertEquals(sample, Base64Decoder.decode(Base64Encoder.encode(sample, "UTF-8", table), "UTF-8", table));
+        }
+
+    }
+
+    /**
+     * Tests {@link Base64Table#Base64Table(byte[], byte)} with invalid parameter values.
+     */
+    public void testCustomBase64Table()  {
+        testInvalidBase64Table(null, (byte)'a');
+        testInvalidBase64Table(new byte[]{}, (byte)'a');
+
+        byte[] validEncodingTable = Base64Table.STANDARD_TABLE.getEncodingTable();
+
+        testInvalidBase64Table(validEncodingTable, (byte)'a');
+
+        byte[] invalidEncodingTable = new byte[63];
+        System.arraycopy(validEncodingTable, 0, invalidEncodingTable, 0, 63);
+
+        testInvalidBase64Table(invalidEncodingTable, (byte)'a');
+
+        invalidEncodingTable = new byte[64];
+        System.arraycopy(validEncodingTable, 0, invalidEncodingTable, 0, 64);
+        invalidEncodingTable[63] = 'b';
+
+        testInvalidBase64Table(invalidEncodingTable, (byte)'a');
+
+        // Test a valid custom Base64 table
+        new Base64Table(new byte[]{
+                'g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v',
+                'Q','R','S','T','U','V','W','X','Y','Z','a','b','c','d','e','f',
+                'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P',
+                'w','x','y','z','0','1','2','3','4','5','6','7','8','9','@','!'
+        }, (byte)'%');
+    }
+
+
+    /**
+     * Tries to create a <code>Base64Table</code> with the specified parameters and asserts that it throws
+     * an {@link IllegalArgumentException}.
+     *
+     * @param table the base64 character table. The array must be 64 bytes long and must not contain any duplicate values.
+         * @param paddingChar the ASCII character used for padding. This character must not already be used in the table.
+         */
+    private void testInvalidBase64Table(byte[] table, byte paddingChar) {
+        boolean exceptionThrown = false;
+        try {
+            new Base64Table(table, paddingChar);
+        }
+        catch(IllegalArgumentException e) {
+            exceptionThrown = true;
+        }
+
+        assertTrue(exceptionThrown);
     }
 }

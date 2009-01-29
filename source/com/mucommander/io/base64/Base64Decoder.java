@@ -30,14 +30,26 @@ import java.io.*;
 public abstract class Base64Decoder {
 
     /**
-     * Decodes the given Base64-encoded string and returns the result as a byte array.
-     * Throws an <code>IOException</code> if the String isn't properly Base64-encoded.
+     * Shorthand for {@link #decodeAsBytes(String, Base64Table)} invoked with {@link Base64Table#STANDARD_TABLE}.
      *
      * @param s a Base64-encoded String
      * @return the decoded string as a byte array
      * @throws java.io.IOException if the given String isn't properly Base64-encoded
      */
     public static byte[] decodeAsBytes(String s) throws IOException {
+        return decodeAsBytes(s, Base64Table.STANDARD_TABLE);
+    }
+
+    /**
+     * Decodes the given Base64-encoded string and returns the result as a byte array.
+     * Throws an <code>IOException</code> if the String isn't properly Base64-encoded.
+     *
+     * @param s a Base64-encoded String
+     * @param table the table to use to decode data
+     * @return the decoded string as a byte array
+     * @throws java.io.IOException if the given String isn't properly Base64-encoded
+     */
+    public static byte[] decodeAsBytes(String s, Base64Table table) throws IOException {
         byte[] b = s.getBytes();
 
         if(b.length%4 != 0) {
@@ -45,7 +57,7 @@ public abstract class Base64Decoder {
             throw new IOException("Byte array length is not a multiple of 4");
         }
 
-        Base64InputStream bin = new Base64InputStream(new ByteArrayInputStream(b));
+        Base64InputStream bin = new Base64InputStream(new ByteArrayInputStream(b), table);
         ByteArrayOutputStream bout = new ByteArrayOutputStream();
         int i;
 
@@ -66,13 +78,14 @@ public abstract class Base64Decoder {
      * Base64-encoded, or if the encoding is not supported by the Java runtime.
      *
      * @param s a Base64-encoded String
-     * @param encoding the character encoding to use for transforming the decoded bytes into a String 
+     * @param encoding the character encoding to use for transforming the decoded bytes into a String
+     * @param table the table to use to decode data
      * @return the decoded String
      * @throws UnsupportedEncodingException if the specified encoding is not supported by the Java runtime
      * @throws java.io.IOException if the given String isn't properly Base64-encoded
      */
-    public static String decode(String s, String encoding) throws UnsupportedEncodingException, IOException {
-        InputStreamReader isr = new InputStreamReader(new ByteArrayInputStream(decodeAsBytes(s)), encoding);
+    public static String decode(String s, String encoding, Base64Table table) throws UnsupportedEncodingException, IOException {
+        InputStreamReader isr = new InputStreamReader(new ByteArrayInputStream(decodeAsBytes(s, table)), encoding);
         StringBuffer sb = new StringBuffer();
         int i;
 
@@ -88,13 +101,14 @@ public abstract class Base64Decoder {
     }
 
     /**
-     * Shorthand for {@link #decode(String, String)} invoked with UTF-8 encoding.
+     * Shorthand for {@link #decode(String, String, Base64Table)} invoked with <code>UTF-8</code> encoding and
+     * {@link Base64Table#STANDARD_TABLE}.
      *
      * @param s a Base64-encoded String
      * @return the decoded String
      * @throws java.io.IOException if the given String isn't properly Base64-encoded
      */
     public static String decode(String s) throws IOException {
-        return decode(s, "UTF-8");
+        return decode(s, "UTF-8", Base64Table.STANDARD_TABLE);
     }
 }

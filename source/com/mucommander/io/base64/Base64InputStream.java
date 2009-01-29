@@ -23,8 +23,8 @@ import java.io.InputStream;
 
 /**
  * <code>Base64InputStream</code> is an <code>InputStream</code> that decodes Base64-encoded data provided by
- * an underlying <code>InputStream</code>. The underlying data must be valid base64-encoded data, if not,
- * <code>IOException</code> will be thrown when illegal data is encountered.
+ * an underlying <code>InputStream</code>. The underlying data must be valid base64-encoded data with respect to
+ * the character table in use. If not, an <code>IOException</code> will be thrown when illegal data is encountered.
  *
  * @see Base64Decoder
  * @author Maxence Bernard
@@ -33,6 +33,12 @@ public class Base64InputStream extends InputStream {
 
     /** Underlying stream data is read from */
     private InputStream in;
+
+    /** The Base64 decoding table */
+    private final int[] decodingTable;
+
+    /** The character used for padding */
+    private final byte paddingChar;
 
     /** Decoded bytes available for reading */
     private int readBuffer[] = new int[3];
@@ -46,41 +52,28 @@ public class Base64InputStream extends InputStream {
     /** Buffer used temporarily for decoding */
     private int decodeBuffer[] = new int[4];
 
-    /** Decoding table */
-    private final static int BASE64_DECODING_TABLE[];
-    
-
-    // Create the base 64 decoding table
-    static {
-        BASE64_DECODING_TABLE = new int[256];
-        int offset;
-        char c;
-
-        for(c=0; c<256; c++)
-            BASE64_DECODING_TABLE[c] = -1;
-
-        offset = 0;
-        for(c='A'; c<='Z'; c++)
-            BASE64_DECODING_TABLE[c] = offset++;
-
-        for(c='a'; c<='z'; c++)
-            BASE64_DECODING_TABLE[c] = offset++;
-
-        for(c='0'; c<='9'; c++)
-            BASE64_DECODING_TABLE[c] = offset++;
-
-        BASE64_DECODING_TABLE['+'] = 62;
-        BASE64_DECODING_TABLE['/'] = 63;
-    }
-
 
     /**
-     * Creates a new Base64InputStream that allows to decode Base64-encoded from the provided InputStream.
+     * Equivalent to calling {@link #Base64InputStream(java.io.InputStream, Base64Table)} with
+     * a {@link Base64Table#STANDARD_TABLE} table.
      *
      * @param in underlying InputStream the Base64-encoded data is read from
      */
     public Base64InputStream(InputStream in) {
+        this(in, Base64Table.STANDARD_TABLE);
+    }
+
+    /**
+     * Creates a new <code>Base64InputStream</code> that allows to decode data that has been Base64-encoded using the
+     * given table, from the provided <code>InputStream</code>.
+     *
+     * @param in underlying InputStream the Base64-encoded data is read from
+     * @param table the table to use for Base64 decoding
+     */
+    public Base64InputStream(InputStream in, Base64Table table) {
         this.in = in;
+        this.decodingTable = table.getDecodingTable();
+        this.paddingChar = table.getPaddingChar();
     }
 
 
@@ -109,11 +102,11 @@ public class Base64InputStream extends InputStream {
                         break;
                 }
 
-                decodeBuffer[nbRead] = BASE64_DECODING_TABLE[read];
+                decodeBuffer[nbRead] = decodingTable[read];
 
                 // Discard any character that's not a base64 character, without throwing an IOException.
                 // In particular, '\r' and '\n' characters that are usually found in email attachments are simply ignored.
-                if(decodeBuffer[nbRead]==-1 && read!='=') {
+                if(decodeBuffer[nbRead]==-1 && read!=paddingChar) {
                     continue;
                 }
 
@@ -123,12 +116,12 @@ public class Base64InputStream extends InputStream {
             // Decode byte 0
             readBuffer[bytesLeft++] = ((decodeBuffer[0]<<2)&0xFC | ((decodeBuffer[1]>>4)&0x03));
 
-            // Test if the character is not padding ('=')
+            // Test if the character is not a padding character
             if(decodeBuffer[2]!=-1) {
                 // Decode byte 1
                 readBuffer[bytesLeft++] = (decodeBuffer[1]<<4)&0xF0 | ((decodeBuffer[2]>>2)&0x0F);
 
-                // Test if the character is not padding ('=')
+                // Test if the character is a padding character
                 if(decodeBuffer[3]!=-1)
                     // Decode byte 2
                     readBuffer[bytesLeft++] = ((decodeBuffer[2]<<6)&0xC0) | (decodeBuffer[3]&0x3F);
