@@ -35,7 +35,7 @@ public class VMStandardFilters {
 	public static final int VMSF_UPCASE_CODE  = 7;
 	
 	public static final VMStandardFilters VMSF_NONE    = new VMStandardFilters(VMSF_NONE_CODE);
-	public static final VMStandardFilters VMSF_E8      = new VMStandardFilters(VMSF_E8E9_CODE);
+	public static final VMStandardFilters VMSF_E8      = new VMStandardFilters(VMSF_E8_CODE);
 	public static final VMStandardFilters VMSF_E8E9    = new VMStandardFilters(VMSF_E8E9_CODE);
 	public static final VMStandardFilters VMSF_ITANIUM = new VMStandardFilters(VMSF_ITANIUM_CODE); 
 	public static final VMStandardFilters VMSF_RGB     = new VMStandardFilters(VMSF_RGB_CODE); 
