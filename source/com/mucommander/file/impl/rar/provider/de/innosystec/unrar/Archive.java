@@ -156,7 +156,9 @@ public class Archive {
                     headers.add(mainhead);
                     this.newMhd = mainhead;
                     if(newMhd.isEncrypted())
-                        throw new RarException(RarExceptionType.rarEncryptedException);                    
+                        throw new RarException(RarExceptionType.rarEncryptedException);
+                    if (newMhd.isMultiVolume())
+                    	throw new RarException(RarExceptionType.mvNotImplemented);
 //                    mainhead.print();
                     break;
                     
