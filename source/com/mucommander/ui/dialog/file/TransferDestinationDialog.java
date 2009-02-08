@@ -158,6 +158,14 @@ public abstract class TransferDestinationDialog extends JobDialog implements Act
         pathField.setSelectionEnd(selEnd);
     }
 	
+	protected boolean verifyPath(PathUtils.ResolvedDestination resolvedDest, String destPath) {
+        // The path entered doesn't correspond to any existing folder
+        if (resolvedDest==null || (files.size()>1 && resolvedDest.getDestinationType()!=PathUtils.ResolvedDestination.EXISTING_FOLDER)) {
+            showErrorDialog(Translator.get("invalid_path", destPath), errorDialogTitle);
+            return false;
+        }
+        return true;
+	}
 	
     /**
      * This method is invoked when the OK button is pressed.
@@ -168,11 +176,8 @@ public abstract class TransferDestinationDialog extends JobDialog implements Act
         // Resolves destination folder
         // TODO: move those I/O bound calls to job as they can lock the main thread
         PathUtils.ResolvedDestination resolvedDest = PathUtils.resolveDestination(destPath, mainFrame.getActiveTable().getCurrentFolder());
-        // The path entered doesn't correspond to any existing folder
-        if (resolvedDest==null || (files.size()>1 && resolvedDest.getDestinationType()!=PathUtils.ResolvedDestination.EXISTING_FOLDER)) {
-            showErrorDialog(Translator.get("invalid_path", destPath), errorDialogTitle);
-            return;
-        }
+        if (!verifyPath(resolvedDest, destPath))
+        	return;
 
         // Retrieve default action when a file exists in destination, default choice
         // (if not specified by the user) is 'Ask'
