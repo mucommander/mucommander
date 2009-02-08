@@ -48,10 +48,7 @@ public class SplitFileJob extends AbstractCopyJob {
 	private InputStream origFileStream;
 	private AbstractFile destFolder;
 	private long sizeLeft;
-	
-    protected final static int OK_ACTION = 4;
-    protected final static String OK_TEXT = Translator.get("ok");
-	
+		
 
 	/**
 	 * A class for holding file name and size of one part.
@@ -79,6 +76,7 @@ public class SplitFileJob extends AbstractCopyJob {
         this.nbFiles = parts;
         this.sourceFile = file;
         this.destFolder = destFolder;
+        this.errorDialogTitle = Translator.get("split_file_dialog.error_title");
         createInputStream();
         sizeLeft = sourceFile.getSize();
         for (int i=1; i<=parts; i++) {

@@ -136,11 +136,13 @@ public abstract class FileJob implements Runnable {
     protected final static int RETRY_ACTION = 1;
     protected final static int CANCEL_ACTION = 2;
     protected final static int APPEND_ACTION = 3;
+    protected final static int OK_ACTION = 4;
 
     protected final static String SKIP_TEXT = Translator.get("skip");
     protected final static String RETRY_TEXT = Translator.get("retry");
     protected final static String CANCEL_TEXT = Translator.get("cancel");
     protected final static String APPEND_TEXT = Translator.get("resume");
+    protected final static String OK_TEXT = Translator.get("ok");
 	
 	
     /**
@@ -382,7 +384,7 @@ public abstract class FileJob implements Runnable {
                 setState(RUNNING);
             }
             // Pause job if it not paused already
-            else if(paused && jobState!=PAUSED) {
+            else if(paused && jobState!=PAUSED && jobState!=INTERRUPTED && jobState!=FINISHED) {
                 // Memorize pause time in order to calculate pause time when the job is resumed
                 this.pauseStartDate = System.currentTimeMillis();
                 // Call the jobPaused method to notify of the new job's state
