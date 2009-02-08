@@ -14700,6 +14700,9 @@ com.mucommander.ui.action.SplitFileAction.label:PL:Podziel plik
 split_file_dialog.title:EN:Split file
 split_file_dialog.title:PL:Podział pliku
 
+split_file_dialog.error_title:EN:Split file error
+split_file_dialog.error_title:PL:Błąd podziału pliku
+
 split_file_dialog.file_to_split:EN:File to split
 split_file_dialog.file_to_split:PL:Plik do podziału
 
@@ -14739,14 +14742,23 @@ com.mucommander.ui.action.MergeFileAction.select_files_only:PL:Proszę wybrać t
 merge_file_dialog.title:EN:Combine file
 merge_file_dialog.title:PL:Scal plik
 
+merge_file_dialog.error_title:EN:Merge files error
+merge_file_dialog.error_title:PL:Błąd łączenia plików
+
 merge_file_dialog.merge:EN:Combine
 merge_file_dialog.merge:PL:Scal
 
+merge_job.no_crc_file:EN:Combine succeeded. No CRC file.
+merge_job.no_crc_file:PL:Scalanie zakończone pomyślnie. Brak pliku CRC.
 
+merge_job.crc_read_error:EN:Error while reading CRC file.
+merge_job.crc_read_error:PL:Błąd podczas odczytywania pliku CRC.
 
+merge_job.crc_check_failed:EN:CRC files doesn't match %1 <> %2
+merge_job.crc_check_failed:EN:Pliki CRC nie zgadzają się %1 <> %2
 
-
-
+merge_job.crc_ok:EN:Combine succeeded. CRC checksum ok.
+merge_job.crc_ok:PL:Scalanie zakończone pomyślnie. Plik CRC zweryfikowany.
 
 ######################
 # Deprecated entries #
