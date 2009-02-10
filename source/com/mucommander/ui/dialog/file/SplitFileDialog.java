@@ -22,14 +22,12 @@ import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
-import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
@@ -147,7 +145,7 @@ public class SplitFileDialog extends JobDialog implements ActionListener {
 		pnlSize.add(new JLabel(Translator.get("split_file_dialog.parts") + ":"));
 		pnlSize.addSpace(5);
 		spnParts = new JSpinner(new SpinnerNumberModel(1, 1, file.getSize(), 1));
-		//spnParts.addChangeListener(this);
+		//spnParts.addChangeListener(this);   // TODO make editable
 		spnParts.setEnabled(false);
 		pnlSize.add(spnParts);
 		pnlControls.add(pnlSize);

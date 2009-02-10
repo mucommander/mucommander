@@ -1,3 +1,21 @@
+/*
+ * This file is part of muCommander, http://www.mucommander.com
+ * Copyright (C) 2002-2009 Maxence Bernard
+ *
+ * muCommander is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * muCommander is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package com.mucommander.job;
 
 import java.io.BufferedReader;
@@ -5,16 +23,18 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.security.NoSuchAlgorithmException;
 
 import com.mucommander.file.AbstractFile;
-import com.mucommander.file.FileFactory;
 import com.mucommander.file.util.FileSet;
 import com.mucommander.io.StreamUtils;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;
 
+/**
+ * This job combines files into one file, optionally checking the CRC of the merged file.
+ * @author Mariusz Jakubowski
+ */
 public class MergeFileJob extends AbstractCopyJob {
 	AbstractFile destFile = null;
 	private OutputStream out;
@@ -164,6 +184,9 @@ public class MergeFileJob extends AbstractCopyJob {
 		}
 	}
 
+	/**
+	 * Closes the output stream.
+	 */
 	private void closeOutputStream() {
 		if (out != null) {
 			try {

@@ -21,8 +21,6 @@ package com.mucommander.ui.action;
 import java.util.Hashtable;
 
 import com.mucommander.file.AbstractFile;
-import com.mucommander.file.util.FileSet;
-import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.file.SplitFileDialog;
 import com.mucommander.ui.main.MainFrame;
 
