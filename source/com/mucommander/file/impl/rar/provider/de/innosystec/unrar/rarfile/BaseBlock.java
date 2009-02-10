@@ -102,7 +102,21 @@ public class BaseBlock{
     	this.positionInFile = bb.getPositionInFile();
 	}
 	
-	public BaseBlock(byte[] baseBlockHeader){
+	/*public BaseBlock(byte[] baseBlockHeader){
+		int pos = 0;
+		this.headCRC = Raw.readShortLittleEndian(baseBlockHeader, pos);
+		pos+=2;
+		this.headerType |= baseBlockHeader[pos]&0xff;
+		pos++;
+		this.flags = Raw.readShortLittleEndian(baseBlockHeader, pos);
+		pos+=2;
+		this.headerSize = Raw.readShortLittleEndian(baseBlockHeader, pos);
+	}*/
+	
+	public void init(byte[] baseBlockHeader, long position) {
+		positionInFile = position;
+		headerType = 0;
+		
 		int pos = 0;
 		this.headCRC = Raw.readShortLittleEndian(baseBlockHeader, pos);
 		pos+=2;

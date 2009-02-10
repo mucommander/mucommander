@@ -58,6 +58,8 @@ import com.mucommander.io.BufferPool;
  */
 public class Archive {
     
+	private final int EOF = -978263412;
+	
     private final ComprDataIO dataIO;
 
     private final List headers = new ArrayList();
@@ -120,20 +122,18 @@ public class Archive {
      * Read the headers of the archive
      * @throws RarException
      */
-    private void readHeaders(InputStream in) throws IOException, RarException{
+    private void readHeaders(InputStream in, byte[] buff) throws IOException {
         markHead = null;
         newMhd = null;
         headers.clear();
         long position = 0;
         long read = 0;
         byte[] baseBlockBuffer = new byte[BaseBlock.BaseBlockSize];
-        byte[] buff = BufferPool.getByteArray();
-        BaseBlock block;
+        BaseBlock block = new BaseBlock();
 
         while((read = in.read(baseBlockBuffer)) > 0) {
 //            logger.info("\n--------reading header--------");
-            block = new BaseBlock(baseBlockBuffer);            
-            block.setPositionInFile(position);
+            block.init(baseBlockBuffer, position);
             position += read;
             
             switch(block.getHeaderType()) {
@@ -207,7 +207,8 @@ public class Archive {
     				    RarDebug.trace("RAR: found --endArc without data--");
     				}
     				headers.add(endArcHead);
-    				return;
+    				position = EOF;
+    				break;
                     
                 default:
 //                	buff = new byte[BlockHeader.blockHeaderSize];
@@ -296,15 +297,17 @@ public class Archive {
                     }
             }
         }
-        BufferPool.releaseByteArray(buff);
-        if (read == -1) {
+        
+        if (position != EOF) {
         	RarDebug.trace("RAR: error: buttomless archive file");
         	throw new RarException(RarExceptionType.buttomlessArchive);
         }
     }
     
     private void parseHeaders(InputStream in) throws IOException {
-    	readHeaders(in);
+    	byte[] buff = BufferPool.getByteArray();
+    	try { readHeaders(in, buff); }
+    	finally { BufferPool.releaseByteArray(buff); }
     	
     	entries.clear();
     	nameMap.clear();
