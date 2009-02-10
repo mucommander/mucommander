@@ -54,7 +54,6 @@ public class MergeFileDialog extends TransferDestinationDialog {
                 Translator.get("copy_dialog.error_title"));
         String path = destFolder.getAbsolutePath(true) + files.fileAt(0).getNameWithoutExtension();
         setTextField(path);
-        this.files = files;
         if (files.size() == 1) {
         	searchParts(files.fileAt(0));
         }
@@ -101,6 +100,7 @@ public class MergeFileDialog extends TransferDestinationDialog {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		setFiles(files);
 	}
 
 	/**

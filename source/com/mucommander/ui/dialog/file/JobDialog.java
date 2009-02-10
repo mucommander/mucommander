@@ -42,6 +42,8 @@ public abstract class JobDialog extends FocusDialog {
     protected MainFrame mainFrame;
     protected FileSet files;
 
+    protected CollapseExpandButton collapseExpandButton;
+
     public JobDialog(MainFrame mainFrame, String title, FileSet files) {
         super(mainFrame, title, mainFrame);
 
@@ -95,7 +97,8 @@ public abstract class JobDialog extends FocusDialog {
      * @return a button that expands/collapses the specified 'File details' panel
      */
     protected CollapseExpandButton createFileDetailsButton(JPanel detailsPanel) {
-        return new CollapseExpandButton(Translator.get("nb_files", ""+files.size()), detailsPanel, false);
+        collapseExpandButton = new CollapseExpandButton(Translator.get("nb_files", ""+files.size()), detailsPanel, false);
+        return collapseExpandButton;
     }
 
     /**
@@ -115,6 +118,17 @@ public abstract class JobDialog extends FocusDialog {
         panel.add(buttonsPanel);
 
         return panel;
+    }
+    
+    /**
+     * Sets the list of files used by this job.
+     * @param files
+     */
+    protected void setFiles(FileSet files) {
+        this.files = files;
+        if (collapseExpandButton != null) {
+            collapseExpandButton.setText(Translator.get("nb_files", Integer.toString(files.size())));
+        }
     }
 
 }
