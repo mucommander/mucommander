@@ -19,7 +19,6 @@
 
 package com.mucommander.job;
 
-import com.mucommander.Debug;
 import com.mucommander.file.AbstractArchiveFile;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.AbstractRWArchiveFile;
@@ -33,7 +32,7 @@ import java.io.IOException;
 
 
 /**
- * This job recursively copies (or unpacks) a group of files.
+ * This job recursively copies a set of files. Directories are copied recursively.
  *
  * @author Maxence Bernard
  */
@@ -43,12 +42,11 @@ public class CopyJob extends AbstractCopyJob {
      * The value can be used by subclasses that override processFile should they need to work on the destination file. */
     protected AbstractFile currentDestFile;
 
-    /** Operating mode : COPY_MODE, UNPACK_MODE or DOWNLOAD_MODE */
+    /** Operating mode : COPY_MODE or DOWNLOAD_MODE */
     private int mode;
 
     public final static int COPY_MODE = 0;
-    public final static int UNPACK_MODE = 1;
-    public final static int DOWNLOAD_MODE = 2;
+    public final static int DOWNLOAD_MODE = 1;
 
 	
 	
@@ -60,14 +58,14 @@ public class CopyJob extends AbstractCopyJob {
      * @param files files which are going to be copied
      * @param destFolder destination folder where the files will be copied
      * @param newName the new filename in the destination folder, can be <code>null</code> in which case the original filename will be used.
-     * @param mode mode in which CopyJob is to operate: COPY_MODE, UNPACK_MODE or DOWNLOAD_MODE.
+     * @param mode mode in which CopyJob is to operate: {@link #COPY_MODE} or {@link #DOWNLOAD_MODE}.
      * @param fileExistsAction default action to be performed when a file already exists in the destination, see {@link com.mucommander.ui.dialog.file.FileCollisionDialog} for allowed values
      */
     public CopyJob(ProgressDialog progressDialog, MainFrame mainFrame, FileSet files, AbstractFile destFolder, String newName, int mode, int fileExistsAction) {
         super(progressDialog, mainFrame, files, destFolder, newName, fileExistsAction);
 
         this.mode = mode;
-        this.errorDialogTitle = Translator.get(mode==UNPACK_MODE?"unpack_dialog.error_title":mode==DOWNLOAD_MODE?"download_dialog.error_title":"copy_dialog.error_title");
+        this.errorDialogTitle = Translator.get(mode==DOWNLOAD_MODE?"download_dialog.error_title":"copy_dialog.error_title");
     }
 
 
@@ -95,36 +93,6 @@ public class CopyJob extends AbstractCopyJob {
         // Is current file in base folder ?
         boolean isFileInBaseFolder = files.indexOf(file)!=-1;
 
-        // If in unpack mode, copy files contained by the archive file
-        if(mode==UNPACK_MODE && isFileInBaseFolder) {
-            // Recursively unpack files
-            do {		// Loop for retries
-                try {
-                    // List files inside archive file (can throw an IOException)
-                    AbstractFile archiveFiles[] = currentFile.ls();
-                    // Recurse on zip's contents
-                    for(int j=0; j<archiveFiles.length && getState()!=INTERRUPTED; j++) {
-                        // Notify job that we're starting to process this file (needed for recursive calls to processFile)
-                        nextFile(archiveFiles[j]);
-                        // Recurse
-                        processFile(archiveFiles[j], destFolder);
-                    }
-                    // Return true when complete
-                    return true;
-                }
-                catch(IOException e) {
-                    // File could not be uncompressed properly
-                    int ret = showErrorDialog(errorDialogTitle, Translator.get("cannot_read_file", currentFile.getName()));
-                    // Retry loops
-                    if(ret==RETRY_ACTION)
-                        continue;
-                    // cancel, skip or close dialog will simply return false
-                    return false;
-                }
-            } while(true);
-        }
-		
-		
         // Determine filename in destination
         String originalName = file.getName();
         String destFileName;
@@ -209,8 +177,6 @@ public class CopyJob extends AbstractCopyJob {
 
     // This job modifies baseDestFolder and its subfolders
     protected boolean hasFolderChanged(AbstractFile folder) {
-        if(Debug.ON) Debug.trace("folder="+folder+" returning "+baseDestFolder.isParentOf(folder));
-
         return baseDestFolder.isParentOf(folder);
     }
 
@@ -243,6 +209,6 @@ public class CopyJob extends AbstractCopyJob {
         if(isOptimizingArchive)
             return Translator.get("optimizing_archive", archiveToOptimize.getName());
 
-        return Translator.get(mode==UNPACK_MODE?"unpack_dialog.unpacking_file":mode==DOWNLOAD_MODE?"download_dialog.downloading_file":"copy_dialog.copying_file", getCurrentFilename());
+        return Translator.get(mode==DOWNLOAD_MODE?"download_dialog.downloading_file":"copy_dialog.copying_file", getCurrentFilename());
     }
 }

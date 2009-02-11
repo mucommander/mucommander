@@ -19,6 +19,7 @@
 package com.mucommander.ui.action;
 
 import com.mucommander.file.filter.AttributeFileFilter;
+import com.mucommander.file.filter.OrFileFilter;
 import com.mucommander.file.util.FileSet;
 import com.mucommander.ui.dialog.file.UnpackDialog;
 import com.mucommander.ui.main.MainFrame;
@@ -35,7 +36,11 @@ public class UnpackAction extends SelectedFilesAction implements InvokesDialog {
     public UnpackAction(MainFrame mainFrame, Hashtable properties) {
         super(mainFrame, properties);
 
-        setSelectedFileFilter(new AttributeFileFilter(AttributeFileFilter.ARCHIVE));
+        // Unpack job operates on archives and directories
+        OrFileFilter filter = new OrFileFilter();
+        filter.addFileFilter(new AttributeFileFilter(AttributeFileFilter.ARCHIVE));
+        filter.addFileFilter(new AttributeFileFilter(AttributeFileFilter.DIRECTORY));
+        setSelectedFileFilter(filter);
     }
 
     public void performAction() {
