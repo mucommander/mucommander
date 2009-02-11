@@ -127,7 +127,7 @@ New features:
 - 
 
 Improvements:
-- Tar/TGZ unpacking speed has been improved significantly (bug #74).
+- Tar/TGZ and Zip unpacking speed has been improved significantly (bug #74).
 - jCIFS library upgraded to version 1.2.25.
 - JNA library upgraded to version 3.0.9.  
 
