@@ -28,11 +28,11 @@ import com.mucommander.file.impl.tar.provider.TarInputStream;
 import java.io.IOException;
 
 /**
- * An <code>ArchiveEntryIterator</code> that iterates through a TAR archive.
+ * An <code>ArchiveEntryIterator</code> that iterates through a {@link TarInputStream}.
  *
  * @author Maxence Bernard
  */
-class TarArchiveEntryIterator implements ArchiveEntryIterator {
+class TarEntryIterator implements ArchiveEntryIterator {
 
     /** InputStream to the archive file */
     private TarInputStream tin;
@@ -43,18 +43,24 @@ class TarArchiveEntryIterator implements ArchiveEntryIterator {
     /** The current entry, where the TarInputStream is currently positionned */
     private ArchiveEntry currentEntry;
 
-    TarArchiveEntryIterator(TarInputStream tin) throws IOException {
+
+    /**
+     * Creates a new TarEntryIterator that iterates through the entries of the given {@link TarInputStream}.
+     *
+     * @param tin the TarInputStream to iterate through
+     * @throws IOException if an error occurred while fetching the first entry
+     */
+    TarEntryIterator(TarInputStream tin) throws IOException {
         this.tin = tin;
 
         // Prefetch the first entry
         nextEntry = getNextEntry();
     }
 
-
     /**
-     * Returns the {@link TarInputStream} instance that was used to create this <code>TarArchiveEntryIterator</code>.
+     * Returns the {@link TarInputStream} instance that was used to create this object.
      *
-     * @return the {@link TarInputStream} instance that was used to create this <code>TarArchiveEntryIterator</code>
+     * @return the {@link TarInputStream} instance that was used to create this object.
      */
     TarInputStream getTarInputStream() {
         return tin;
@@ -87,7 +93,7 @@ class TarArchiveEntryIterator implements ArchiveEntryIterator {
     }
 
     /**
-     * Advance the TarInputStream to the next entry and returns the corresponding {@link ArchiveEntry}.
+     * Advances the {@link TarInputStream} to the next entry and returns the corresponding {@link ArchiveEntry}.
      *
      * @return the next ArchiveEntry
      * @throws IOException if an I/O error occurred

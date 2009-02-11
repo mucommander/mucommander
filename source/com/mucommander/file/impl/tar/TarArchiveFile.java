@@ -107,7 +107,7 @@ public class TarArchiveFile extends AbstractROArchiveFile {
     ////////////////////////////////////////
 
     public ArchiveEntryIterator getEntryIterator() throws IOException {
-        return new TarArchiveEntryIterator(createTarStream(0));
+        return new TarEntryIterator(createTarStream(0));
     }
 
 
@@ -119,22 +119,22 @@ public class TarArchiveFile extends AbstractROArchiveFile {
         // This will typically be the case if an iterator is being used to read all the archive's entries
         // (unpack operation). In that case, we save the cost of looking for the entry in the archive, which is all
         // the more expensive if the TAR archive is GZipped.
-        if(entryIterator!=null && (entryIterator instanceof TarArchiveEntryIterator)) {
-            ArchiveEntry currentEntry = ((TarArchiveEntryIterator)entryIterator).getCurrentEntry();
+        if(entryIterator!=null && (entryIterator instanceof TarEntryIterator)) {
+            ArchiveEntry currentEntry = ((TarEntryIterator)entryIterator).getCurrentEntry();
             if(currentEntry.getPath().equals(entry.getPath())) {
                 // The entry/tar stream is wrapped in a FilterInputStream where #close is implemented as a no-op:
                 // we don't want the TarInputStream to be closed when the caller closes the entry's stream.
-                return new FilterInputStream(((TarArchiveEntryIterator)entryIterator).getTarInputStream()) {
+                return new FilterInputStream(((TarEntryIterator)entryIterator).getTarInputStream()) {
                     public void close() throws IOException {
                         // No-op
                     }
                 };
             }
 
-            // If it wasn't found, look for the entry from the beginning of the archive
+            // This is not the one, look for the entry from the beginning of the archive
         }
 
-        // Iterator through the archive until we've found the entry
+        // Iterate through the archive until we've found the entry
         TarEntry tarEntry = (TarEntry)entry.getEntryObject();
         if(tarEntry!=null) {
             TarInputStream tin = createTarStream(tarEntry.getOffset());
