@@ -285,7 +285,7 @@ public abstract class TransferFileJob extends FileJob {
                         break;
                     // Could not open destination file for write
                     case FileTransferException.OPENING_DESTINATION:
-                        choice = showErrorDialog(errorDialogTitle, Translator.get("cannot_write_file", sourceFile.getName()));
+                        choice = showErrorDialog(errorDialogTitle, Translator.get("cannot_write_file", destFile.getName()));
                         break;
                     // Source and destination files are identical
                     case FileTransferException.SOURCE_AND_DESTINATION_IDENTICAL:
