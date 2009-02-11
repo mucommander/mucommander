@@ -96,16 +96,23 @@ public abstract class AbstractArchiveFile extends ProxyFile {
         ArchiveEntryTree treeRoot = new ArchiveEntryTree();
 
         long start = System.currentTimeMillis();
-
         ArchiveEntryIterator entries = getEntryIterator();
-        ArchiveEntry entry;
-        while((entry=entries.nextEntry())!=null)
-            treeRoot.addArchiveEntry(entry);
+        try {
+            ArchiveEntry entry;
+            while((entry=entries.nextEntry())!=null)
+                treeRoot.addArchiveEntry(entry);
 
-        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("entries tree created in "+(System.currentTimeMillis()-start)+" ms");
-		
-        this.entryTreeRoot = treeRoot;
-        declareEntriesTreeUpToDate();
+            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("entries tree created in "+(System.currentTimeMillis()-start)+" ms");
+
+            this.entryTreeRoot = treeRoot;
+            declareEntriesTreeUpToDate();
+        }
+        finally {
+            try { entries.close(); }
+            catch(IOException e) {
+                // Not much we can do about it
+            }
+        }
     }
 
     /**
@@ -252,6 +259,18 @@ public abstract class AbstractArchiveFile extends ProxyFile {
         return entryFile;
     }
 
+
+    /**
+     * Shorthand for {@link #getArchiveEntryFile(String)} called with the given entry's path.
+     *
+     * @param entry an entry contained by this archive
+     * @return an AbstractFile that corresponds to the given entry
+     * @throws IOException if neither the entry nor its parent exist within the archive
+     */
+    public AbstractFile getArchiveEntryFile(ArchiveEntry entry) throws IOException {
+        return getArchiveEntryFile(entry.getPath());
+    }
+
     /**
      * Creates and returns an AbstractFile that corresponds to the given entry path within the archive.
      * The requested entry may or may not exist in the archive, the {@link #exists()} method of the returned entry file
@@ -323,15 +342,18 @@ public abstract class AbstractArchiveFile extends ProxyFile {
 
     /**
      * Returns an <code>InputStream</code> to read from the given archive entry. The specified {@link ArchiveEntry}
-     * instance must be one of the entries that were contained by the {@link ArchiveEntryIterator} returned by
+     * instance must be one of the entries that were returned by the {@link ArchiveEntryIterator} returned by
      * {@link #getEntryIterator()}.
      *
      * @param entry the archive entry to read
+     * @param entryIterator the iterator that is used to iterate through entries by the caller (if any). This parameter
+     * may be <code>null</code>, but when it is known, specifying may improve the performance of this method
+     * by an order of magnitude.
      * @return an <code>InputStream</code> to read from the given archive entry
      * @throws IOException if an error occurred while reading the archive, either because the archive is corrupt or
      * because of an I/O error, or if the given entry wasn't found in the archive
      */
-    public abstract InputStream getEntryInputStream(ArchiveEntry entry) throws IOException;
+    public abstract InputStream getEntryInputStream(ArchiveEntry entry, ArchiveEntryIterator entryIterator) throws IOException;
 
 
     /**
