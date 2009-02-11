@@ -40,6 +40,8 @@ class TarArchiveEntryIterator implements ArchiveEntryIterator {
     /** The next entry to be returned by #nextEntry(), null if there is no more entry */
     private ArchiveEntry nextEntry;
 
+    /** The current entry, where the TarInputStream is currently positionned */
+    private ArchiveEntry currentEntry;
 
     TarArchiveEntryIterator(TarInputStream tin) throws IOException {
         this.tin = tin;
@@ -59,13 +61,12 @@ class TarArchiveEntryIterator implements ArchiveEntryIterator {
     }
 
     /**
-     * Returns the next entry which would be returned by {@link #nextEntry()}, without 'consuming' it and advancing
-     * to the next one.
+     * Returns the current entry, where the <code>TarInputStream</code> is currently positionned.
      *
-     * @return the next entry without 'consuming' it and advancing to the next one
+     * @return the current entry, where the <code>TarInputStream</code> is currently positionned.
      */
-    ArchiveEntry peek() {
-        return nextEntry;
+    ArchiveEntry getCurrentEntry() {
+        return currentEntry;
     }
 
     /**
@@ -113,7 +114,7 @@ class TarArchiveEntryIterator implements ArchiveEntryIterator {
         if(nextEntry==null)
             return null;
 
-        ArchiveEntry currentEntry = nextEntry;
+        this.currentEntry = nextEntry;
 
         // Get the next entry, if any
         nextEntry = getNextEntry();
