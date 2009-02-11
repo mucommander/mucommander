@@ -29,6 +29,7 @@ import com.mucommander.util.StringUtils;
 import org.apache.tools.bzip2.CBZip2InputStream;
 
 import java.io.BufferedInputStream;
+import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.zip.GZIPInputStream;
@@ -44,8 +45,6 @@ import java.util.zip.GZIPInputStream;
  * @author Maxence Bernard
  */
 public class TarArchiveFile extends AbstractROArchiveFile {
-
-    protected ThreadLocal iterators = new ThreadLocal();
 
     /**
      * Creates a TarArchiveFile on of the given file.
@@ -108,40 +107,34 @@ public class TarArchiveFile extends AbstractROArchiveFile {
     ////////////////////////////////////////
 
     public ArchiveEntryIterator getEntryIterator() throws IOException {
-        TarArchiveEntryIterator iterator = new TarArchiveEntryIterator(createTarStream(0)) {
-            public void close() throws IOException {
-                if(iterators.get()==this)
-                    iterators.set(null);
-            }
-        };
-
-        iterators.set(iterator);
-
-        return iterator;
+        return new TarArchiveEntryIterator(createTarStream(0));
     }
 
-    public InputStream getEntryInputStream(ArchiveEntry entry) throws IOException {
-        // Optimization: first try to see if there isn't an open (i.e. not closed) iterator that is positionned
-        // at the beginning of the entry. This will typically be the case if an iterator is being used to read all
-        // the archive's entries (unpack operation). In that case, we save the cost of looking for the entry from the
-        // beginning of the archive, which is especially expensive if the TAR archive is GZipped.
-        TarArchiveEntryIterator iterator = (TarArchiveEntryIterator)iterators.get();
-        if(iterator!=null) {
-            ArchiveEntry currentEntry = iterator.peek();
-            if(currentEntry.getPath().equals(entry.getPath()))
-                return iterator.getTarInputStream();
 
-            // OK, the iterator's next entry is not the one we're looking for. But it may be one of the subsequent
-            // entries, in case the archive is being iterated and one of the entries was skipped.
-            ArchiveEntry ae;
-            while ((ae = iterator.nextEntry())!=null && ae!=currentEntry) {     // Avoid infinite loops
-                if (ae.getName().equals(entry.getPath()))
-                    return iterator.getTarInputStream();
+    public InputStream getEntryInputStream(ArchiveEntry entry, ArchiveEntryIterator entryIterator) throws IOException {
+        if(entry.isDirectory())
+            throw new IOException();
+
+        // Optimization: first check if the specified iterator is positionned at the beginning of the entry.
+        // This will typically be the case if an iterator is being used to read all the archive's entries
+        // (unpack operation). In that case, we save the cost of looking for the entry in the archive, which is all
+        // the more expensive if the TAR archive is GZipped.
+        if(entryIterator!=null && (entryIterator instanceof TarArchiveEntryIterator)) {
+            ArchiveEntry currentEntry = ((TarArchiveEntryIterator)entryIterator).getCurrentEntry();
+            if(currentEntry.getPath().equals(entry.getPath())) {
+                // The entry/tar stream is wrapped in a FilterInputStream where #close is implemented as a no-op:
+                // we don't want the TarInputStream to be closed when the caller closes the entry's stream.
+                return new FilterInputStream(((TarArchiveEntryIterator)entryIterator).getTarInputStream()) {
+                    public void close() throws IOException {
+                        // No-op
+                    }
+                };
             }
 
-            // If it wasn't found, start from the beginning of the archive
+            // If it wasn't found, look for the entry from the beginning of the archive
         }
 
+        // Iterator through the archive until we've found the entry
         TarEntry tarEntry = (TarEntry)entry.getEntryObject();
         if(tarEntry!=null) {
             TarInputStream tin = createTarStream(tarEntry.getOffset());
