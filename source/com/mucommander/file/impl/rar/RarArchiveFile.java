@@ -102,7 +102,7 @@ public class RarArchiveFile extends AbstractROArchiveFile {
         return new WrapperArchiveEntryIterator(entries.iterator());
     }
 
-    public synchronized InputStream getEntryInputStream(ArchiveEntry entry) throws IOException {
+    public synchronized InputStream getEntryInputStream(ArchiveEntry entry, ArchiveEntryIterator entryIterator) throws IOException {
 		checkRarFile();
 		
 		return rarFile.getEntryInputStream(entry.getPath().replace('/', '\\'));

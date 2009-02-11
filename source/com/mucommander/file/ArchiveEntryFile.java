@@ -324,10 +324,11 @@ public class ArchiveEntryFile extends AbstractFile {
     }
 
     /**
-     * Delegates to the archive file's {@link AbstractArchiveFile#getEntryInputStream(ArchiveEntry)}} method.
+     * Delegates to the archive file's {@link AbstractArchiveFile#getEntryInputStream(ArchiveEntry,ArchiveEntryIterator)}}
+     * method.
      */
     public InputStream getInputStream() throws IOException {
-        return archiveFile.getEntryInputStream(entry);
+        return archiveFile.getEntryInputStream(entry, null);
     }
 
     /**

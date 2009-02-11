@@ -211,7 +211,7 @@ public class ZipArchiveFile extends AbstractRWArchiveFile {
     }
 
 
-    public synchronized InputStream getEntryInputStream(ArchiveEntry entry) throws IOException {
+    public synchronized InputStream getEntryInputStream(ArchiveEntry entry, ArchiveEntryIterator entryIterator) throws IOException {
         // If the underlying AbstractFile has random read access, use our own ZipFile implementation to read the entry
         if (file.hasRandomAccessInputStream()) {
             checkZipFile();
@@ -367,11 +367,4 @@ public class ZipArchiveFile extends AbstractRWArchiveFile {
             out.close();
         }
     }
-
-
-    ///////////////////
-    // Inner classes //
-    ///////////////////
-
-    
 }

@@ -67,7 +67,7 @@ public class Bzip2ArchiveFile extends AbstractROArchiveFile {
         return new SingleArchiveEntryIterator(new ArchiveEntry("/"+name, false, getDate(), -1));
     }
 
-    public InputStream getEntryInputStream(ArchiveEntry entry) throws IOException {
+    public InputStream getEntryInputStream(ArchiveEntry entry, ArchiveEntryIterator entryIterator) throws IOException {
         try {
             InputStream in = getInputStream();
 

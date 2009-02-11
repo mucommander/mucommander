@@ -63,7 +63,7 @@ public class LstArchiveFile extends AbstractROArchiveFile {
         return new LstArchiveEntryIterator(getInputStream());
     }
 
-    public InputStream getEntryInputStream(ArchiveEntry entry) throws IOException {
+    public InputStream getEntryInputStream(ArchiveEntry entry, ArchiveEntryIterator entryIterator) throws IOException {
         // Will throw an IOException if the file designated by the entry doesn't exist 
         return FileFactory.getFile(((LstArchiveEntry)entry).getBaseFolder()+entry.getPath(), true).getInputStream();
     }

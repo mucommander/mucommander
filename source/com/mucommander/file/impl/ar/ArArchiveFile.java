@@ -54,7 +54,7 @@ public class ArArchiveFile extends AbstractROArchiveFile {
         return new ArArchiveEntryIterator(getInputStream());
     }
 
-    public InputStream getEntryInputStream(ArchiveEntry entry) throws IOException {
+    public InputStream getEntryInputStream(ArchiveEntry entry, ArchiveEntryIterator entryIterator) throws IOException {
         InputStream in = getInputStream();
         ArchiveEntryIterator iterator = new ArArchiveEntryIterator(getInputStream());
 

@@ -66,7 +66,7 @@ public class GzipArchiveFile extends AbstractROArchiveFile {
     }
 
 
-    public InputStream getEntryInputStream(ArchiveEntry entry) throws IOException {
+    public InputStream getEntryInputStream(ArchiveEntry entry, ArchiveEntryIterator entryIterator) throws IOException {
         return new GZIPInputStream(getInputStream());
     }
 }
