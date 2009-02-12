@@ -440,26 +440,26 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
 
                 totalProgressBar.setValue(totalPercentInt);
 
-                progressText = totalPercentInt+"%";
+                String totalProgressText = totalPercentInt+"%";
 
                 // Add a rough estimate of the total remaining time (ETA):
                 // total remaining time is based on the total job percent completed which itself is based on the *number*
                 // of files remaining, not their actual size. So this is very approximate.
                 // Do not add ETA if job is already finished (100%)
                 if(totalPercentFloat<1) {
-                    progressText += " - ";
+                	totalProgressText += " - ";
 
                     // Avoid potential divisions by zero
                     if(totalPercentFloat==0)
-                        progressText += "?";
+                    	totalProgressText += "?";
                     else {
                         // Make sure that total ETA is never smaller than current file ETA
                         totalRemainingTime = (long)((1-totalPercentFloat)*(effectiveJobTime/totalPercentFloat));
                         totalRemainingTime = Math.max(totalRemainingTime, currentFileRemainingTime);
-                        progressText += DurationFormat.format(totalRemainingTime);
+                        totalProgressText += DurationFormat.format(totalRemainingTime);
                     }
                 }
-                totalProgressBar.setString(progressText);
+                totalProgressBar.setString(totalProgressText);
 
 //                // Update current file label
 //                currentFileLabel.setText(job.getStatusString());
