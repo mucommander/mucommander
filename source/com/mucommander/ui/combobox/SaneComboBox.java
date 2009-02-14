@@ -67,8 +67,9 @@ public class SaneComboBox extends JComboBox {
         // Prevent up/down keys from firing ActionEvents
         // for Java 1.3
         putClientProperty("JComboBox.lightweightKeyboardNavigation","Lightweight");
-        // for Java 1.4 and up
-        putClientProperty("JComboBox.isTableCellEditor", Boolean.TRUE);
+// Commented as it causes rendering issues under Mac OS X Leopard (does not render like a native combo box)
+//        // for Java 1.4 and up
+//        putClientProperty("JComboBox.isTableCellEditor", Boolean.TRUE);
 
         // Listen to combo box action events, these are fired each time an item is selected when the popup menu
         // is visible, either by pressing 'Enter' on an item or by clicking on it.
