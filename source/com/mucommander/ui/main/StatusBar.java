@@ -489,6 +489,7 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
     /////////////////////////////////////
 	
     public void locationChanged(LocationEvent e) {
+        dial.setAnimated(false);
         updateStatusInfo();
     }
 
@@ -500,10 +501,12 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
     }
 	
     public void locationCancelled(LocationEvent e) {
+        dial.setAnimated(false);
         updateStatusInfo();
     }
 
     public void locationFailed(LocationEvent e) {
+        dial.setAnimated(false);
         updateStatusInfo();
     }
 
@@ -638,7 +641,7 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
             else {
                 volumeInfo = "";
             }
-            setText(volumeInfo);
+                setText(volumeInfo);
 
             // Set tooltip
             if(freeSpace==-1 || totalSpace==-1)
