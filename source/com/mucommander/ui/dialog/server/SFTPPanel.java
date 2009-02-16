@@ -23,6 +23,7 @@ import com.mucommander.auth.Credentials;
 import com.mucommander.file.FileProtocols;
 import com.mucommander.file.FileURL;
 import com.mucommander.file.impl.sftp.SFTPFile;
+import com.mucommander.runtime.OsFamilies;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.main.MainFrame;
 
@@ -88,6 +89,10 @@ public class SFTPPanel extends ServerPanel {
         privateKeyChooser.add(privateKeyPathField, BorderLayout.CENTER);
 
         JButton chooseFileButton = new JButton("...");
+        // Mac OS X: small component size
+        if(OsFamilies.MAC_OS_X.isCurrent())
+            chooseFileButton.putClientProperty("JComponent.sizeVariant", "small");
+
         chooseFileButton.addActionListener(new ActionListener() {
                 JFileChooser fc = new JFileChooser(System.getProperty("user.home") + System.getProperty("file.separator") + ".ssh");
                 public void actionPerformed(ActionEvent e) {
