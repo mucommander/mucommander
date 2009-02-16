@@ -22,6 +22,7 @@ import com.mucommander.bonjour.BonjourDirectory;
 import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.desktop.DesktopManager;
 import com.mucommander.text.Translator;
+import com.mucommander.ui.dialog.DialogOwner;
 import com.mucommander.ui.dialog.pref.PreferencesDialog;
 import com.mucommander.ui.dialog.pref.PreferencesPanel;
 import com.mucommander.ui.dialog.pref.component.*;
@@ -33,8 +34,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.nio.charset.Charset;
-import java.util.Iterator;
 
 /**
  * 'Misc' preferences panel.
@@ -64,45 +63,37 @@ class MiscPanel extends PreferencesPanel implements ItemListener {
     /** 'Enable Bonjour services discovery' checkbox */
     private PrefCheckBox bonjourDiscoveryCheckBox;
 
-    /** Shell encoding combo box. */
-    private PrefSaneComboBox shellEncoding;
+    /** Shell encoding auto-detect checkbox */
+    private PrefCheckBox shellEncodingautoDetectCheckbox;
 
-    private PrefSaneComboBox createEncodingComboBox() {
-        Iterator availableEncodings;
-        int      index;
-        String   encoding;
-        String   currentEncoding;
-        int      selectedIndex;
+    /** Shell encoding select box. */
+    private PrefEncodingSelectBox shellEncodingSelectBox;
 
-        shellEncoding = new PrefSaneComboBox() {
-			public boolean hasChanged() {
-				return (shellEncoding.getSelectedIndex() == 0) /* is auto-detect? */ ? 
-						!(String.valueOf(true).equals(MuConfiguration.getVariable(MuConfiguration.AUTODETECT_SHELL_ENCODING))) :
-						!((String)shellEncoding.getSelectedItem()).equals(MuConfiguration.getVariable(MuConfiguration.SHELL_ENCODING));
-			}
+
+    private JPanel createShellEncodingPanel(PreferencesDialog parent) {
+        JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEADING));
+
+        shellEncodingautoDetectCheckbox = new PrefCheckBox(Translator.get("prefs_dialog.auto_detect_shell_encoding")) {
+            public boolean hasChanged() {
+                return isSelected() != MuConfiguration.getVariable(MuConfiguration.AUTODETECT_SHELL_ENCODING, MuConfiguration.DEFAULT_AUTODETECT_SHELL_ENCODING);
+            }
         };
-        shellEncoding.addItem(Translator.get("prefs_dialog.auto_detect_shell_encoding"));
+        boolean autoDetect = MuConfiguration.getVariable(MuConfiguration.AUTODETECT_SHELL_ENCODING, MuConfiguration.DEFAULT_AUTODETECT_SHELL_ENCODING);
+        shellEncodingautoDetectCheckbox.setSelected(autoDetect);
+        shellEncodingautoDetectCheckbox.addItemListener(this);
 
-        // Otherwise, look for the selected character encoding as we add it.
-        availableEncodings = Charset.availableCharsets().keySet().iterator();
-        index              = 1;
-        selectedIndex      = 0;
-        currentEncoding    = MuConfiguration.getVariable(MuConfiguration.SHELL_ENCODING);
-        while(availableEncodings.hasNext()) {
-            encoding = (String)availableEncodings.next();
+        panel.add(shellEncodingautoDetectCheckbox);
 
-            shellEncoding.addItem(encoding);
-            if(encoding.equals(currentEncoding))
-                selectedIndex = index;
+        shellEncodingSelectBox = new PrefEncodingSelectBox(new DialogOwner(parent), MuConfiguration.getVariable(MuConfiguration.SHELL_ENCODING)) {
+            public boolean hasChanged() {
+                return !MuConfiguration.getVariable(MuConfiguration.SHELL_ENCODING).equals(getSelectedEncoding());
+            }
+        };
+        shellEncodingSelectBox.setEnabled(!autoDetect); 
 
-            index++;
-        }
+        panel.add(shellEncodingSelectBox);
 
-        if(MuConfiguration.getVariable(MuConfiguration.AUTODETECT_SHELL_ENCODING, MuConfiguration.DEFAULT_AUTODETECT_SHELL_ENCODING))
-            selectedIndex = 0;
-        shellEncoding.setSelectedIndex(selectedIndex);
-
-        return shellEncoding;
+        return panel;
     }
 
 
@@ -147,7 +138,7 @@ class MiscPanel extends PreferencesPanel implements ItemListener {
 
         shellPanel.addRow(useDefaultShellRadioButton, new JLabel(DesktopManager.getDefaultShell()), 5);
         shellPanel.addRow(useCustomShellRadioButton, customShellField, 10);
-        shellPanel.addRow(Translator.get("prefs_dialog.shell_encoding"), createEncodingComboBox(), 5);
+        shellPanel.addRow(Translator.get("prefs_dialog.shell_encoding"), createShellEncodingPanel(parent), 5);
 
         northPanel.add(shellPanel, 5);
 
@@ -212,7 +203,8 @@ class MiscPanel extends PreferencesPanel implements ItemListener {
     	quitConfirmationCheckBox.addDialogListener(parent);
         showSplashScreenCheckBox.addDialogListener(parent);
         bonjourDiscoveryCheckBox.addDialogListener(parent);
-        shellEncoding.addDialogListener(parent);
+        shellEncodingautoDetectCheckbox.addDialogListener(parent);
+        shellEncodingSelectBox.addDialogListener(parent);
         if(systemNotificationsCheckBox!=null)
             systemNotificationsCheckBox.addDialogListener(parent);
     }
@@ -226,6 +218,9 @@ class MiscPanel extends PreferencesPanel implements ItemListener {
         Object source = e.getSource();
         if(source==useCustomShellRadioButton) {
             customShellField.setEnabled(useCustomShellRadioButton.isSelected());
+        }
+        else if(source==shellEncodingautoDetectCheckbox) {
+            shellEncodingSelectBox.setEnabled(!shellEncodingautoDetectCheckbox.isSelected());
         }
     }
 
@@ -242,11 +237,10 @@ class MiscPanel extends PreferencesPanel implements ItemListener {
         MuConfiguration.setVariable(MuConfiguration.CUSTOM_SHELL, customShellField.getText());
 
         // Saves the shell encoding data.
-        boolean isAutoDetect;
-        isAutoDetect = shellEncoding.getSelectedIndex() == 0;
+        boolean isAutoDetect = shellEncodingautoDetectCheckbox.isSelected();
         MuConfiguration.setVariable(MuConfiguration.AUTODETECT_SHELL_ENCODING, isAutoDetect);
         if(!isAutoDetect)
-            MuConfiguration.setVariable(MuConfiguration.SHELL_ENCODING, (String)shellEncoding.getSelectedItem());
+            MuConfiguration.setVariable(MuConfiguration.SHELL_ENCODING, (String)shellEncodingSelectBox.getSelectedEncoding());
 
         MuConfiguration.setVariable(MuConfiguration.CONFIRM_ON_QUIT, quitConfirmationCheckBox.isSelected());
         MuConfiguration.setVariable(MuConfiguration.SHOW_SPLASH_SCREEN, showSplashScreenCheckBox.isSelected());
