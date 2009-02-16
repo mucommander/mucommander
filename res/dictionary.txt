@@ -884,6 +884,23 @@ choose:UA:Вибрати
 
 
 
+# Used for instance in the 'misc' preference panel
+customize:EN:Customize
+customize:FR:Personnaliser
+# Translation missing (New!)
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 # Used as a button label in the file chooser of the 'Folders' preferences
@@ -1007,6 +1024,25 @@ encoding:SV:Teckenkodning
 encoding:DA:Tegnkodning
 encoding:UA:Кодування
 # Translation missing (KO)
+
+
+
+
+
+
+
+# Used in the dialog that allows to customize the list of preferred encodings
+preferred_encodings:EN:Preferred encodings
+preferred_encodings:FR:Encodages préférés
+# Translation missing (New!)
+
+
+
+
+
+
+
+
 
 
 
