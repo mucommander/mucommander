@@ -87,6 +87,8 @@ public class MuConfiguration {
      * enabled by default. */
     public static final boolean DEFAULT_ENABLE_SYSTEM_NOTIFICATIONS = OsFamilies.MAC_OS_X.isCurrent() ||
             (OsFamilies.WINDOWS.isCurrent() && JavaVersions.JAVA_1_6.isCurrentOrHigher());
+    /** List of encodings that are displayed in encoding selection components. */
+    public static final String  PREFERRED_ENCODINGS               = "preferred_encodings";
 
     // - Shell variables -----------------------------------------------------
     // -----------------------------------------------------------------------

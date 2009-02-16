@@ -24,8 +24,9 @@ import com.mucommander.file.FileProtocols;
 import com.mucommander.file.FileURL;
 import com.mucommander.file.impl.ftp.FTPFile;
 import com.mucommander.text.Translator;
-import com.mucommander.ui.combobox.EncodingComboBox;
-import com.mucommander.ui.combobox.SaneComboBox;
+import com.mucommander.ui.dialog.DialogOwner;
+import com.mucommander.ui.encoding.EncodingListener;
+import com.mucommander.ui.encoding.EncodingSelectBox;
 import com.mucommander.ui.main.MainFrame;
 
 import javax.swing.*;
@@ -40,7 +41,7 @@ import java.text.ParseException;
  *
  * @author Maxence Bernard
  */
-public class FTPPanel extends ServerPanel implements ActionListener {
+public class FTPPanel extends ServerPanel implements ActionListener, EncodingListener {
 
     private final static int STANDARD_PORT = FileURL.getRegisteredHandler(FileProtocols.FTP).getStandardPort();
     private static Credentials ANONYMOUS_CREDENTIALS = FileURL.getRegisteredHandler(FileProtocols.FTP).getGuestCredentials();
@@ -52,7 +53,7 @@ public class FTPPanel extends ServerPanel implements ActionListener {
     private JSpinner portSpinner;
     private JSpinner nbRetriesSpinner;
     private JSpinner retryDelaySpinner;
-    private SaneComboBox encodingComboBox;
+    private EncodingSelectBox encodingSelectBox;
     private JCheckBox passiveCheckBox;
     private JCheckBox anonymousCheckBox;
 	
@@ -101,10 +102,9 @@ public class FTPPanel extends ServerPanel implements ActionListener {
         addRow(Translator.get("server_connect_dialog.port"), portSpinner, 15);
 
         // Encoding combo box
-        encodingComboBox = new EncodingComboBox();
-        encodingComboBox.setSelectedItem(lastEncoding);
-        encodingComboBox.addActionListener(this);
-        addRow(Translator.get("encoding"), encodingComboBox, 15);
+        encodingSelectBox = new EncodingSelectBox(new DialogOwner(mainFrame), lastEncoding);
+        encodingSelectBox.addEncodingListener(this);
+        addRow(Translator.get("encoding"), encodingSelectBox, 15);
 
         // Connection retries when server busy
         nbRetriesSpinner = createIntSpinner(FTPFile.DEFAULT_NB_CONNECTION_RETRIES, 0, Integer.MAX_VALUE, 1);
@@ -161,7 +161,7 @@ public class FTPPanel extends ServerPanel implements ActionListener {
         url.setProperty(FTPFile.PASSIVE_MODE_PROPERTY_NAME, ""+passiveMode);
 
         // Set FTP encoding property
-        url.setProperty(FTPFile.ENCODING_PROPERTY_NAME, (String)encodingComboBox.getSelectedItem());
+        url.setProperty(FTPFile.ENCODING_PROPERTY_NAME, encodingSelectBox.getSelectedEncoding());
 
         // Set connection retry properties
         url.setProperty(FTPFile.NB_CONNECTION_RETRIES_PROPERTY_NAME, ""+nbRetriesSpinner.getValue());
@@ -210,9 +210,14 @@ public class FTPPanel extends ServerPanel implements ActionListener {
                 passwordField.setText(lastPassword);
             }
         }
-        else if (source == encodingComboBox) {
-            lastEncoding = (String)encodingComboBox.getSelectedItem();
-        }
     }
 
+
+    /////////////////////////////////////
+    // EncodingListener implementation //
+    /////////////////////////////////////
+
+    public void encodingChanged(Object source, String oldEncoding, String newEncoding) {
+        lastEncoding = newEncoding;
+    }
 }

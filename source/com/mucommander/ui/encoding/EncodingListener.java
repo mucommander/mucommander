@@ -16,21 +16,23 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.mucommander.ui.combobox;
-
-import java.nio.charset.Charset;
-import java.util.Iterator;
+package com.mucommander.ui.encoding;
 
 /**
- * EncodingComboBox is a combo box that contains all available encodings/charsets (UTF-8, ISO-8859-1, ...).
+ * Interface to be implemented by classes that wish to be notified of character encoding selections that occurred
+ * in an {@link EncodingMenu}.
  *
  * @author Maxence Bernard
+ * @see EncodingMenu
  */
-public class EncodingComboBox extends SaneComboBox {
+public interface EncodingListener {
 
-    public EncodingComboBox() {
-        Iterator availableEncodings = Charset.availableCharsets().keySet().iterator();
-        while(availableEncodings.hasNext())
-            addItem(availableEncodings.next());
-    }
+    /**
+     * Called when the currently selected encoding has changed.
+     *
+     * @param source component in which the event occurred
+     * @param oldEncoding previously selected encoding
+     * @param newEncoding newly selected encoding
+     */
+    public void encodingChanged(Object source, String oldEncoding, String newEncoding);
 }
