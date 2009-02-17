@@ -146,6 +146,8 @@ Bug fixes:
 - Fixed connection issues with FTP servers not supporting the SYST command ;
   those are now considered as Unix servers (bug #121).
 - Fixed credentials ignored when setting a remote startup folder (bug #108).
+- Fixed unconsistent handling of destination when unpacking an archive 
+  (bug #93).
 
 Known issues:
 - Some translations are not up-to-date. For more information, see:
