@@ -271,4 +271,83 @@ public class PathUtils {
 
         return path;
     }
+
+
+    /**
+     * Removes the specified number of fragments from the beginning of the given path and returns the modified path,
+     * free of a leading separator. Returns an empty string (<code>""</code>) if the path does not contain less or
+     * exactly that many fragments.
+     *
+     * <p>
+     * For instance, calling this method with
+     * <ul>
+     *   <li><code>("/home/maxence/, "/", 0)</code> will return "home/maxence/"</li>
+     *   <li><code>("/home/maxence/, "/", 1)</code> will return "maxence/"</li>
+     *   <li><code>("/home/maxence/, "/", 2)</code> will return ""</li>
+     *   <li><code>("/home/maxence/, "/", 3)</code> will return ""</li>
+     * </ul>
+     * </p>
+     *
+     * @param path the path to modify
+     * @param separator the path separator, usually "/" or "\\"
+     * @param nbFragments number of path fragments to remove from the path
+     * @return the modified path, free of any leading separator
+     */
+    public static String removeLeadingFragments(String path, String separator, int nbFragments) {
+        path = removeLeadingSeparator(path, separator);
+
+        if(nbFragments==0)
+            return path;
+
+        int pos=-1;
+        for(int i=0; i<nbFragments && (pos=path.indexOf(separator, pos+1))!=-1; i++);
+
+        if(pos==-1 || pos==path.length()-1)
+            return "";
+
+        return path.substring(pos+1, path.length());
+    }
+
+
+    /**
+     * Returns the depth of the specified path, based on the number of path separators it contains, excluding those
+     * occurring at the beginning and at the end. The minimum depth of a path is 0.<br/>
+     * Here are a few examples when the path separator is <code>"/"</code>:
+     * <dl>
+     *   <dt>/</dt><dd>0</dd>
+     *   <dt>/home</dt><dd>1</dd>
+     *   <dt>/home/maxence</dt><dd>2</dd>
+     * </dl>
+     *
+     * <p>
+     * It is worth noting that this method relies strictly on the occurences of path separators and nothing else.
+     * Therefore, Windows-like paths that start with a drive letter will always have a minimum depth
+     * of 1.<br/>
+     * Here are a few examples when the path separator is <code>"\\"</code>:
+     * <dl>
+     *   <dt>C:\\</dt><dd>1</dd>
+     *   <dt>C:\\home</dt><dd>2</dd>
+     *   <dt>C:\\home\\maxence</dt><dd>1</dd>
+     * </dl>
+     * </p>
+     *
+     * @param path the path for which to calculate the depth
+     * @param separator the path separator, usually "/" or "\\"
+     * @return the depth of the given path
+     */
+    public static int getDepth(String path, String separator) {
+        if(path.equals("") || path.equals(separator))
+            return 0;
+
+        int depth = 1;
+        int pos = path.startsWith(separator)?1:0;
+
+        while ((pos=path.indexOf(separator, pos+1))!=-1)
+            depth++;
+
+        if(path.endsWith(separator))
+            depth--;
+
+        return depth;
+    }
 }

@@ -144,4 +144,35 @@ public class PathUtilsTest extends TestCase {
         else
             assertEquals(file.getParentSilently(), folder);
     }
+
+    /**
+     * Tests {@link PathUtils#removeLeadingFragments(String, String, int)}.
+     */
+    public void testRemoveLeadingFragments() {
+        assertEquals("home/maxence/", PathUtils.removeLeadingFragments("/home/maxence/", "/", 0));
+        assertEquals("maxence/", PathUtils.removeLeadingFragments("/home/maxence/", "/", 1));
+        assertEquals("", PathUtils.removeLeadingFragments("/home/maxence/", "/", 2));
+        assertEquals("", PathUtils.removeLeadingFragments("/home/maxence/", "/", 3));
+        assertEquals("", PathUtils.removeLeadingFragments("/home/maxence/", "\\", 1));
+    }
+
+    /**
+     * Tests {@link PathUtils#getDepth(String, String)}.
+     */
+    public void testGetDepth() {
+        assertEquals(0, PathUtils.getDepth("/", "/"));
+        assertEquals(0, PathUtils.getDepth("", "/"));
+        assertEquals(1, PathUtils.getDepth("/home", "/"));
+        assertEquals(1, PathUtils.getDepth("/home/", "/"));
+        assertEquals(2, PathUtils.getDepth("/home/maxence", "/"));
+        assertEquals(2, PathUtils.getDepth("/home/maxence/", "/"));
+
+        assertEquals(1, PathUtils.getDepth("/home/maxence", "\\"));
+        assertEquals(1, PathUtils.getDepth("C:", "\\")); 
+        assertEquals(1, PathUtils.getDepth("C:\\", "\\"));
+        assertEquals(2, PathUtils.getDepth("C:\\home", "\\"));
+        assertEquals(2, PathUtils.getDepth("C:\\home\\", "\\"));
+        assertEquals(3, PathUtils.getDepth("C:\\home\\maxence", "\\"));
+        assertEquals(3, PathUtils.getDepth("C:\\home\\maxence\\", "\\"));
+    }
 }
