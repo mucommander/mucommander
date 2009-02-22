@@ -94,13 +94,12 @@ public class CopyJob extends AbstractCopyJob {
         boolean isFileInBaseFolder = files.indexOf(file)!=-1;
 
         // Determine filename in destination
-        String originalName = file.getName();
         String destFileName;
         if(isFileInBaseFolder && newName!=null)
             destFileName = newName;
        	else
-            destFileName = originalName;
-		
+            destFileName = file.getName();
+
         // Create destination AbstractFile instance
         AbstractFile destFile = createDestinationFile(destFolder, destFileName);
         if (destFile == null)
