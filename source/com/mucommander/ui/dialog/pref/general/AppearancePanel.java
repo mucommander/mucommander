@@ -721,7 +721,7 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
         try {
             // Identifies all the look&feels contained by the new library and adds them to the list of custom
             // If no look&feel was found, notifies the user.
-            if((newLookAndFeels = new ClassFinder().find(lookAndFeelLibrary, new LookAndFeelFilter())).isEmpty())
+            if((newLookAndFeels = new ClassFinder().find(lookAndFeelLibrary, new LookAndFeelFilter(), ClassFinder.CLASSES_NAMES)).isEmpty())
                 JOptionPane.showMessageDialog(this, Translator.get("prefs_dialog.no_look_and_feel"), Translator.get("warning"), JOptionPane.WARNING_MESSAGE);
             else if(importLookAndFeelLibrary(lookAndFeelLibrary)) {
                 String currentName;
