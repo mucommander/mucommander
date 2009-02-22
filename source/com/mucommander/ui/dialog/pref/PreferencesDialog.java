@@ -52,7 +52,7 @@ public abstract class PreferencesDialog extends FocusDialog implements ActionLis
 
 
 
-    // - Initialisation ---------------------------------------------------------
+    // - Initialization ---------------------------------------------------------
     // --------------------------------------------------------------------------
     /**
      * Creates a new preferences dialog.
@@ -79,14 +79,14 @@ public abstract class PreferencesDialog extends FocusDialog implements ActionLis
     // - UI code ----------------------------------------------------------------
     // --------------------------------------------------------------------------
     /**
-     * Initialises the tabbed panel's UI.
+     * Initializes the tabbed panel's UI.
      */
     private void initUI() {
         Container contentPane;
         XBoxPanel buttonsPanel;
         JPanel    tempPanel;
 
-        // Initialises the tabbed pane.
+        // Initializes the tabbed pane.
         prefPanels = new Vector();
         tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 
@@ -143,7 +143,7 @@ public abstract class PreferencesDialog extends FocusDialog implements ActionLis
     }
 
     /**
-     * Adds a new prefences panel and creates a new tab with an icon.
+     * Adds a new preferences panel and creates a new tab with an icon.
      * @param prefPanel panel to add.
      * @param iconName  name of the icon that represents this dialog.
      */

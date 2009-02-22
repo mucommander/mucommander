@@ -42,10 +42,10 @@ public class CommandAction extends MuAction {
 
 
 
-    // - Initialisation --------------------------------------------------------
+    // - Initialization --------------------------------------------------------
     // -------------------------------------------------------------------------
     /**
-     * Creates a new <code>CommandAction</code> initialised with the specified parameters.
+     * Creates a new <code>CommandAction</code> initialized with the specified parameters.
      * @param mainFrame  frame that will be affected by this action.
      * @param properties ignored.
      * @param command    command to run when this action is called.
