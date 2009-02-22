@@ -18,6 +18,7 @@
 
 package com.mucommander.file;
 
+import java.io.IOException;
 import java.util.Iterator;
 
 /**
@@ -60,6 +61,6 @@ public class WrapperArchiveEntryIterator implements ArchiveEntryIterator {
     /**
      * Implemented as a no-op (nothing to close).
      */
-    public void close() {
+    public void close() throws IOException {
     }
 }
