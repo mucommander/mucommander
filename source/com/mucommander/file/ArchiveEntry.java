@@ -19,6 +19,8 @@
 
 package com.mucommander.file;
 
+import com.mucommander.file.util.PathUtils;
+
 /**
  * This class represents a generic archive entry. It provides getters and setters for common archive entry attributes
  * and allows to encapsulate the entry object of a 3rd party library.
@@ -69,7 +71,7 @@ public class ArchiveEntry extends SimpleFileAttributes {
 
     /**
      * Returns the depth of this entry based on the number of path delimiters ('/') its path contains.
-     * Top-level entries have a depth of 0 (minimum depth).
+     * Top-level entries have a depth of 1.
      *
      * @return the depth of this entry
      */
@@ -79,23 +81,13 @@ public class ArchiveEntry extends SimpleFileAttributes {
 
     /**
      * Returns the depth of the specified entry path, based on the number of path delimiters ('/') it contains.
-     * Top-level entries have a depth of 0 (minimum depth).
+     * Top-level entries have a depth of 1.
      *
      * @param entryPath the path for which to calculate the depth
      * @return the depth of the given entry path
      */
     public static int getDepth(String entryPath) {
-        int depth = 0;
-        int pos=0;
-
-        while ((pos=entryPath.indexOf('/', pos+1))!=-1)
-            depth++;
-
-        // Directories in archives end with a '/'
-        if(entryPath.charAt(entryPath.length()-1)=='/')
-            depth--;
-
-        return depth;
+        return PathUtils.getDepth(entryPath, "/");
     }
 
     /**

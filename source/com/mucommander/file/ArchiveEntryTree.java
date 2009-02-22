@@ -47,7 +47,7 @@ public class ArchiveEntryTree extends DefaultMutableTreeNode {
         int entryDepth = entry.getDepth();
         int slashPos = 0;
         DefaultMutableTreeNode node = this;
-        for(int d=0; d<=entryDepth; d++) {
+        for(int d=1; d<=entryDepth; d++) {
             if(d==entryDepth && !entry.isDirectory()) {
                 // Create a leaf node for the entry
                 node.add(new DefaultMutableTreeNode(entry, true));
@@ -110,7 +110,7 @@ public class ArchiveEntryTree extends DefaultMutableTreeNode {
         int entryDepth = ArchiveEntry.getDepth(entryPath);
         int slashPos = 0;
         DefaultMutableTreeNode currentNode = this;
-        for(int d=0; d<=entryDepth; d++) {
+        for(int d=1; d<=entryDepth; d++) {
             // Remove any trailing slash to compare paths without trailing slashs
              String subPath = PathUtils.removeTrailingSeparator(d==entryDepth?entryPath:entryPath.substring(0, (slashPos=entryPath.indexOf('/', slashPos)+1)), "/");
 

@@ -298,7 +298,7 @@ public abstract class AbstractArchiveFile extends ProxyFile {
             int depth = ArchiveEntry.getDepth(entryPath);
 
             AbstractFile parentFile;
-            if(depth==0)
+            if(depth==1)
                 parentFile = this;
             else {
                 String parentPath = entryPath;
