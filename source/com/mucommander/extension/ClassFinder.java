@@ -77,9 +77,10 @@ public class ClassFinder {
      * Explores the specified file for classes that match {@link #classFilter}.
      * @param  currentPackage package we're currently exploring (with a trailing '.').
      * @param  currentFile    file we're currently exploring.
+     * @return a vector containing all the classes that were found and matched <code>classFilter</code>.
      * @throws IOException    if an error occurs while exploring <code>currentFile</code>.
      */
-    private Vector find(String currentPackage, AbstractFile currentFile, int resultType) throws IOException {
+    private Vector find(String currentPackage, AbstractFile currentFile) throws IOException {
         AbstractFile[] files;        // All subfolders or child class files of currentFile.
         Class          currentClass; // Buffer for the current class.
         Vector result = new Vector();
@@ -89,15 +90,14 @@ public class ClassFinder {
         for(int i = 0; i < files.length; i++) {
             // Explores subdirectories recursively.
             if(files[i].isDirectory())
-                result.addAll(find(currentPackage + files[i].getName() + '.', files[i], resultType));
+                result.addAll(find(currentPackage + files[i].getName() + '.', files[i]));
 
             // Passes each class through the class filter.
             // Errors are treated as 'this class is not wanted'.
             else {
                 try {
                     if(classFilter.accept(currentClass = Class.forName(currentPackage + files[i].getNameWithoutExtension(), false, loader)))
-                        result.add(resultType == CLASSES_NAMES ? (Object) currentClass.getName() :
-                        		   resultType == CLASSES ? (Object) currentClass : null);                    
+                        result.add(currentClass);                    
                 }
                 catch(Throwable e) {}
             }
@@ -118,11 +118,11 @@ public class ClassFinder {
      * @param  browsable   file in which to look for classes.
      * @param  classFilter how to decide which classes should be kept.
      * @param  classLoader used to load each class found in <code>browsable</code>.
-     * @return             a vector containing the names of all the classes that were found and matched <code>classFilter</code>.
+     * @return             a vector containing all the classes that were found and matched <code>classFilter</code>.
      * @throws IOException if an error occurs while exploring <code>browsable</code>.
      * @see                #find(AbstractFile,ClassFilter)
      */
-    public Vector find(AbstractFile browsable, ClassFilter classFilter, ClassLoader classLoader, int resultType) throws IOException {
+    public Vector find(AbstractFile browsable, ClassFilter classFilter, ClassLoader classLoader) throws IOException {
         // Ignore non-browsable files.
         if(!browsable.isBrowsable())
             return new Vector();
@@ -134,7 +134,7 @@ public class ClassFinder {
         // Looks for all matched classes in browsable.        
         String rootPath = ResourceLoader.getRootPackageAsFile(browsable.getClass()).getAbsolutePath(true);
         String relativePath = browsable.getAbsolutePath(true).replaceFirst(rootPath.replaceAll("\\\\", "\\\\\\\\"), "");
-        return find(relativePath.replace(browsable.getSeparator(), "."), browsable, resultType);
+        return find(relativePath.replace(browsable.getSeparator(), "."), browsable);
     }
 
     /**
@@ -151,10 +151,10 @@ public class ClassFinder {
      * </p>
      * @param  browsable   file in which to look for classes.
      * @param  classFilter how to decide which classes should be kept.
-     * @return             a vector containing the names of all the classes that were found and matched <code>classFilter</code>.
+     * @return             a vector containing all the classes that were found and matched <code>classFilter</code>.
      * @throws IOException if an error occurs while exploring <code>browsable</code>.
      */
-    public Vector find(AbstractFile browsable, ClassFilter classFilter, int resultType) throws IOException {
+    public Vector find(AbstractFile browsable, ClassFilter classFilter) throws IOException {
         AbstractFileClassLoader classLoader; // Default class loader.
 
         // Initializes the default class loader.
@@ -162,6 +162,6 @@ public class ClassFinder {
         classLoader.addFile(browsable);
 
         // Explores browsable.
-        return find(browsable, classFilter, classLoader, resultType);
+        return find(browsable, classFilter, classLoader);
     }
 }
