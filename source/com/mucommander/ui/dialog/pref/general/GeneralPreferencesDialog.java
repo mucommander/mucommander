@@ -24,11 +24,10 @@ import com.mucommander.ui.dialog.pref.PreferencesDialog;
 import com.mucommander.ui.dialog.pref.component.PrefComponent;
 import com.mucommander.ui.main.WindowManager;
 
-import java.awt.Dimension;
+import javax.swing.*;
+import java.awt.*;
 import java.util.LinkedHashSet;
 import java.util.Set;
-
-import javax.swing.JOptionPane;
 
 /**
  * This is the main preferences dialog that contains all preferences panels organized by tabs.
@@ -80,6 +79,8 @@ public class GeneralPreferencesDialog extends PreferencesDialog {
     private final static String MAIL_ICON       = "mail.png";
     /** Name of the icon used by the 'misc' tab. */
     private final static String MISC_ICON       = "misc.png";
+    /** Name of the icon used by the 'shortucts' tab. */
+    private final static String SHORTCUTS_ICON  = "shortcuts.png";
 
 
 
@@ -108,7 +109,7 @@ public class GeneralPreferencesDialog extends PreferencesDialog {
         addPreferencesPanel(new AppearancePanel(this), APPEARANCE_ICON);
         addPreferencesPanel(new MailPanel(this),       MAIL_ICON);
         addPreferencesPanel(new MiscPanel(this),       MISC_ICON);
-        addPreferencesPanel(new KeymapsPanel(this),    MISC_ICON);
+        addPreferencesPanel(new KeymapsPanel(this),    SHORTCUTS_ICON);
 
         // Sets the dialog's size.
         setMinimumSize(MINIMUM_DIALOG_DIMENSION);
