@@ -24,8 +24,12 @@ import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
 import com.mucommander.file.util.ResourceLoader;
 import com.mucommander.io.BackupInputStream;
+import com.mucommander.io.BackupOutputStream;
 import com.mucommander.io.StreamUtils;
 import com.mucommander.ui.main.MainFrame;
+import com.mucommander.xml.XmlAttributes;
+import com.mucommander.xml.XmlWriter;
+
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -122,7 +126,7 @@ public class ActionKeymap extends DefaultHandler {
     /**
      * Returns the path to the action keymap file.
      * @return             the path to the action keymap file.
-     * @throws IOException if an error occured while locating the default action keymap file.
+     * @throws IOException if an error occurred while locating the default action keymap file.
      */
     public static AbstractFile getActionKeyMapFile() throws IOException {
         if(actionKeyMapFile == null)
@@ -215,64 +219,64 @@ public class ActionKeymap extends DefaultHandler {
 
 
     public static void registerActionAccelerators(MuAction action, JComponent comp, int condition) {
-        KeyStroke accelerator = action.getAccelerator();
-        if(accelerator!=null)
-            registerActionAccelerator(action, accelerator, comp, condition);
+    	KeyStroke accelerator = action.getAccelerator();
+    	if(accelerator!=null)
+    		registerActionAccelerator(action, accelerator, comp, condition);
 
-        accelerator = action.getAlternateAccelerator();
-        if(accelerator!=null)
-            registerActionAccelerator(action, accelerator, comp, condition);
+    	accelerator = action.getAlternateAccelerator();
+    	if(accelerator!=null)
+    		registerActionAccelerator(action, accelerator, comp, condition);
     }
 
     public static void unregisterActionAccelerators(MuAction action, JComponent comp, int condition) {
-        KeyStroke accelerator = action.getAccelerator();
-        if(accelerator!=null)
-            unregisterActionAccelerator(action, accelerator, comp, condition);
+    	KeyStroke accelerator = action.getAccelerator();
+    	if(accelerator!=null)
+    		unregisterActionAccelerator(action, accelerator, comp, condition);
 
-        accelerator = action.getAlternateAccelerator();
-        if(accelerator!=null)
-            unregisterActionAccelerator(action, accelerator, comp, condition);
+    	accelerator = action.getAlternateAccelerator();
+    	if(accelerator!=null)
+    		unregisterActionAccelerator(action, accelerator, comp, condition);
     }
 
 
     public static void changeActionAccelerators(Class muActionClass, KeyStroke accelerator, KeyStroke alternateAccelerator) {
-        // Remove old accelerators (primary and alternate) from accelerators map
-        KeyStroke oldAccelator = (KeyStroke)primaryActionKeymap.get(muActionClass);
-        if(oldAccelator!=null)
-            acceleratorMap.remove(oldAccelator);
+    	// Remove old accelerators (primary and alternate) from accelerators map
+    	KeyStroke oldAccelator = (KeyStroke)primaryActionKeymap.get(muActionClass);
+    	if(oldAccelator!=null)
+    		acceleratorMap.remove(oldAccelator);
 
-        oldAccelator = (KeyStroke)alternateActionKeymap.get(muActionClass);
-        if(oldAccelator!=null)
-            acceleratorMap.remove(oldAccelator);
+    	oldAccelator = (KeyStroke)alternateActionKeymap.get(muActionClass);
+    	if(oldAccelator!=null)
+    		acceleratorMap.remove(oldAccelator);
 
-        // Register new accelerators
-        if(accelerator!=null) {
-            primaryActionKeymap.put(muActionClass, accelerator);
-            acceleratorMap.put(accelerator, muActionClass);
-        }
+    	// Register new accelerators
+    	if(accelerator!=null) {
+    		primaryActionKeymap.put(muActionClass, accelerator);
+    		acceleratorMap.put(accelerator, muActionClass);
+    	}
 
-        if(alternateAccelerator!=null) {
-            alternateActionKeymap.put(muActionClass, alternateAccelerator);
-            acceleratorMap.put(alternateAccelerator, muActionClass);
-        }
-        
-        // Update each MainFrame's action instance and input map
-        Vector actionInstances = ActionManager.getActionInstances(muActionClass);
-        int nbActionInstances = actionInstances.size();
-        for(int i=0; i<nbActionInstances; i++) {
-            MuAction action = (MuAction)actionInstances.elementAt(i);
-            MainFrame mainFrame = action.getMainFrame();
+    	if(alternateAccelerator!=null) {
+    		alternateActionKeymap.put(muActionClass, alternateAccelerator);
+    		acceleratorMap.put(alternateAccelerator, muActionClass);
+    	}
 
-            // Remove action from MainFrame's action and input maps
-            unregisterAction(mainFrame, action);
+    	// Update each MainFrame's action instance and input map
+    	Vector actionInstances = ActionManager.getActionInstances(muActionClass);
+    	int nbActionInstances = actionInstances.size();
+    	for(int i=0; i<nbActionInstances; i++) {
+    		MuAction action = (MuAction)actionInstances.elementAt(i);
+    		MainFrame mainFrame = action.getMainFrame();
 
-            // Change action's accelerators
-            action.setAccelerator(accelerator);
-            action.setAlternateAccelerator(alternateAccelerator);
+    		// Remove action from MainFrame's action and input maps
+    		unregisterAction(mainFrame, action);
 
-            // Add updated action to MainFrame's action and input maps
-            registerAction(mainFrame, action);
-        }
+    		// Change action's accelerators
+    		action.setAccelerator(accelerator);
+    		action.setAlternateAccelerator(alternateAccelerator);
+
+    		// Add updated action to MainFrame's action and input maps
+    		registerAction(mainFrame, action);
+    	}
     }
 
 
@@ -283,55 +287,55 @@ public class ActionKeymap extends DefaultHandler {
      * the ones from the JAR action keymap.
      */
     private ActionKeymap() throws Exception {
-        try {
-            AbstractFile file;
+    	try {
+    		AbstractFile file;
 
-            // If the user hasn't yet defined an action keymap, copies the default one.
-            file = getActionKeyMapFile();
-            if(!file.exists()) {
-                InputStream in = null;
-                OutputStream out = null;
+    		// If the user hasn't yet defined an action keymap, copies the default one.
+    		file = getActionKeyMapFile();
+    		if(!file.exists()) {
+    			InputStream in = null;
+    			OutputStream out = null;
 
-                if(Debug.ON) Debug.trace("Copying "+ACTION_KEYMAP_RESOURCE_PATH+" JAR resource to "+file);
+    			if(Debug.ON) Debug.trace("Copying "+ACTION_KEYMAP_RESOURCE_PATH+" JAR resource to "+file);
 
-                try {
-                    in = ResourceLoader.getResourceAsStream(ACTION_KEYMAP_RESOURCE_PATH);
-                    out = file.getOutputStream(false);
+    			try {
+    				in = ResourceLoader.getResourceAsStream(ACTION_KEYMAP_RESOURCE_PATH);
+    				out = file.getOutputStream(false);
 
-                    StreamUtils.copyStream(in, out);
-                }
-                catch(IOException e) {
-                    if(Debug.ON) Debug.trace("Error: unable to copy "+ACTION_KEYMAP_RESOURCE_PATH+" resource to "+actionKeyMapFile+": "+e);
-                }
-                finally {
-                    if(in != null) {
-                        try {in.close();}
-                        catch(IOException e) {}
-                    }
+    				StreamUtils.copyStream(in, out);
+    			}
+    			catch(IOException e) {
+    				if(Debug.ON) Debug.trace("Error: unable to copy "+ACTION_KEYMAP_RESOURCE_PATH+" resource to "+actionKeyMapFile+": "+e);
+    			}
+    			finally {
+    				if(in != null) {
+    					try {in.close();}
+    					catch(IOException e) {}
+    				}
 
-                    if(out != null) {
-                        try {out.close();}
-                        catch(IOException e) {}
-                    }
-                }
+    				if(out != null) {
+    					try {out.close();}
+    					catch(IOException e) {}
+    				}
+    			}
 
-                // No need to load the user action keymap here as it is the same as the default keymap
-            }
-            else {
-                // Load the user's custom action keymap file.
-                if(Debug.ON) Debug.trace("Loading user action keymap at " + file.getAbsolutePath());
-                parseActionKeymapFile(new BackupInputStream(file));
-            }
+    			// No need to load the user action keymap here as it is the same as the default keymap
+    		}
+    		else {
+    			// Load the user's custom action keymap file.
+    			if(Debug.ON) Debug.trace("Loading user action keymap at " + file.getAbsolutePath());
+    			parseActionKeymapFile(new BackupInputStream(file));
+    		}
 
-            isParsingDefaultActionKeymap = true;
+    		isParsingDefaultActionKeymap = true;
 
-            // Loads the default action keymap.
-            if(Debug.ON) Debug.trace("Loading default JAR action keymap at "+ACTION_KEYMAP_RESOURCE_PATH);
-            parseActionKeymapFile(ResourceLoader.getResourceAsStream(ACTION_KEYMAP_RESOURCE_PATH));
-        }
-        finally {
-            definedUserActionClasses = null;
-        }
+    		// Loads the default action keymap.
+    		if(Debug.ON) Debug.trace("Loading default JAR action keymap at "+ACTION_KEYMAP_RESOURCE_PATH);
+    		parseActionKeymapFile(ResourceLoader.getResourceAsStream(ACTION_KEYMAP_RESOURCE_PATH));
+    	}
+    	finally {
+    		definedUserActionClasses = null;
+    	}
     }
 
 
@@ -341,14 +345,14 @@ public class ActionKeymap extends DefaultHandler {
      * @throws Exception if an error was caught while parsing the file
      */
     private void parseActionKeymapFile(InputStream in) throws Exception {
-        // Parse action keymap file
-        try {SAXParserFactory.newInstance().newSAXParser().parse(in, this);}
-        finally {
-            if(in!=null) {
-                try { in.close(); }
-                catch(IOException e) {}
-            }
-        }
+    	// Parse action keymap file
+    	try {SAXParserFactory.newInstance().newSAXParser().parse(in, this);}
+    	finally {
+    		if(in!=null) {
+    			try { in.close(); }
+    			catch(IOException e) {}
+    		}
+    	}
     }
 
 
@@ -366,31 +370,31 @@ public class ActionKeymap extends DefaultHandler {
      * @param alternate true to process the alternate keystroke attribute, false for the primary one
      */
     private void processKeystrokeAttribute(Class actionClass, Attributes attributes, boolean alternate) {
-        String keyStrokeString = attributes.getValue(alternate?ALTERNATE_KEYSTROKE_ATTRIBUTE:KEYSTROKE_ATTRIBUTE);
-        KeyStroke keyStroke = null;
+    	String keyStrokeString = attributes.getValue(alternate?ALTERNATE_KEYSTROKE_ATTRIBUTE:KEYSTROKE_ATTRIBUTE);
+    	KeyStroke keyStroke = null;
 
-        // Parse the keystroke and retrieve the corresponding KeyStroke instance and return if the attribute's value
-        // is invalid.
-        if(keyStrokeString!=null) {
-            keyStroke = KeyStroke.getKeyStroke(keyStrokeString);
-            if(keyStroke==null)
-                System.out.println("Error: action keymap file contains a keystroke which could not be resolved: "+keyStrokeString);
-        }
+    	// Parse the keystroke and retrieve the corresponding KeyStroke instance and return if the attribute's value
+    	// is invalid.
+    	if(keyStrokeString!=null) {
+    		keyStroke = KeyStroke.getKeyStroke(keyStrokeString);
+    		if(keyStroke==null)
+    			System.out.println("Error: action keymap file contains a keystroke which could not be resolved: "+keyStrokeString);
+    	}
 
-        // Return if keystroke attribute is not defined or KeyStroke instance could not be resolved
-        if(keyStroke==null)
-            return;
+    	// Return if keystroke attribute is not defined or KeyStroke instance could not be resolved
+    	if(keyStroke==null)
+    		return;
 
-        // Discard the mapping if the keystroke is already associated with an action
-        Class existingActionClass = (Class)acceleratorMap.get(keyStroke);
-        if(existingActionClass!=null) {
-            System.out.println("Warning: action keymap file contains multiple associations for keystroke: "+keyStrokeString+", preserving association with action: "+existingActionClass.getName());
-            return;
-        }
+    	// Discard the mapping if the keystroke is already associated with an action
+    	Class existingActionClass = (Class)acceleratorMap.get(keyStroke);
+    	if(existingActionClass!=null) {
+    		System.out.println("Warning: action keymap file contains multiple associations for keystroke: "+keyStrokeString+", preserving association with action: "+existingActionClass.getName());
+    		return;
+    	}
 
-        // Add the action/keystroke mapping
-        (alternate?alternateActionKeymap:primaryActionKeymap).put(actionClass, keyStroke);
-        acceleratorMap.put(keyStroke, actionClass);
+    	// Add the action/keystroke mapping
+    	(alternate?alternateActionKeymap:primaryActionKeymap).put(actionClass, keyStroke);
+    	acceleratorMap.put(keyStroke, actionClass);
     }
 
     
@@ -436,5 +440,86 @@ public class ActionKeymap extends DefaultHandler {
                 definedUserActionClasses.add(actionClass);
             }
        }
+    }
+
+    /**
+     * Writes the current action keymaps to the action_keymaps.xml file
+     * @throws IOException
+     */
+    public static void writeActionKeymap() throws IOException {
+    	Hashtable combinedMapping = new Hashtable();
+    	Enumeration enumeration = primaryActionKeymap.keys();
+    	while (enumeration.hasMoreElements()) {
+    		Class actionClass = (Class) enumeration.nextElement();
+    		KeyStroke[] keyStrokes = new KeyStroke[2];
+    		keyStrokes[0] = (KeyStroke) primaryActionKeymap.get(actionClass);
+    		keyStrokes[1] = (KeyStroke) alternateActionKeymap.get(actionClass); // adds null if there is no alt keystroke
+
+    		if (keyStrokes[0] != null) {
+    			combinedMapping.put(actionClass, keyStrokes);
+    		}
+    	}
+
+    	enumeration = alternateActionKeymap.keys();
+    	while (enumeration.hasMoreElements()) {
+    		Class actionClass = (Class) enumeration.nextElement();
+    		// alternate mapping without primary mapping?!?
+    		if (!combinedMapping.contains(actionClass)) {
+    			KeyStroke[] keyStrokes = (KeyStroke[]) combinedMapping.get(actionClass);
+    			keyStrokes[1] = (KeyStroke) alternateActionKeymap.get(actionClass);
+    		}
+    	}
+
+    	BackupOutputStream bos = null;
+
+    	try {
+    		bos = new BackupOutputStream(getActionKeyMapFile());
+    		new ActionKeyMapWriter(bos).writeKeyMap(combinedMapping);
+    	} catch (Exception e) {
+    		e.printStackTrace();
+    	} finally {
+    		bos.close();
+    	}
+    }
+
+    private static class ActionKeyMapWriter {
+    	private static final String ROOT = "keymap";
+    	private XmlWriter writer = null;
+
+    	private ActionKeyMapWriter(OutputStream stream) throws IOException {
+    		this.writer = new XmlWriter(stream);
+    	}
+
+    	private void writeKeyMap(Hashtable actionMap) throws IOException {
+    		try {
+    			writer.startElement(ROOT);
+    			writer.println();
+
+    			Enumeration enumeration = actionMap.keys();
+    			while (enumeration.hasMoreElements()) {
+    				Class clazz = (Class) enumeration.nextElement();
+    				addMapping(clazz, (KeyStroke[]) actionMap.get(clazz));
+    			}    				
+
+    		} finally {
+    			writer.endElement(ROOT);
+    		}
+    	}
+
+    	private void addMapping(Class actionClass, KeyStroke[] keyStrokes) throws IOException {
+    		XmlAttributes attributes = new XmlAttributes();
+    		attributes.add(CLASS_ATTRIBUTE, actionClass.getCanonicalName());
+
+    		if (Debug.ON)
+    			Debug.trace("     Writing mapping of "  + actionClass.getSimpleName() + " to " + keyStrokes[0] + " and " + keyStrokes[1]);
+
+    		if (keyStrokes[0] != null)
+    			attributes.add(KEYSTROKE_ATTRIBUTE, keyStrokes[0].toString());
+
+    		if (keyStrokes[1] != null)
+    			attributes.add(ALTERNATE_KEYSTROKE_ATTRIBUTE, keyStrokes[1].toString());
+
+    		writer.writeStandAloneElement(ACTION_ELEMENT, attributes);
+    	}
     }
 }
