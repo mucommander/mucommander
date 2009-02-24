@@ -46,8 +46,6 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 
-import sun.swing.table.DefaultTableCellHeaderRenderer;
-
 import com.mucommander.Debug;
 import com.mucommander.extension.ClassFilter;
 import com.mucommander.extension.ClassFinder;
@@ -107,7 +105,7 @@ public class KeymapTable extends PrefTable implements KeyListener  {
 		setCellSelectionEnabled(false);
 		setColumnSelectionAllowed(false);
 		setDragEnabled(false);
-		getTableHeader().setDefaultRenderer(new DefaultTableCellHeaderRenderer() {
+		getTableHeader().setDefaultRenderer(new DefaultTableCellRenderer() {
 			{
 				setHorizontalAlignment(SwingConstants.CENTER);
 			}
