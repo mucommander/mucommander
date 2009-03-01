@@ -109,7 +109,7 @@ public class GeneralPreferencesDialog extends PreferencesDialog {
         addPreferencesPanel(new AppearancePanel(this), APPEARANCE_ICON);
         addPreferencesPanel(new MailPanel(this),       MAIL_ICON);
         addPreferencesPanel(new MiscPanel(this),       MISC_ICON);
-        addPreferencesPanel(new KeymapsPanel(this),    SHORTCUTS_ICON);
+        addPreferencesPanel(new ShortcutsPanel(this),  SHORTCUTS_ICON);
 
         // Sets the dialog's size.
         setMinimumSize(MINIMUM_DIALOG_DIMENSION);

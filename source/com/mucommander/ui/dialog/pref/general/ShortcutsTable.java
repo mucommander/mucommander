@@ -18,9 +18,15 @@
 
 package com.mucommander.ui.dialog.pref.general;
 
+import java.awt.Color;
 import java.awt.Component;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.font.TextLayout.CaretPolicy;
 import java.io.IOException;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
@@ -32,41 +38,58 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.Vector;
 
+import javax.swing.BorderFactory;
+import javax.swing.ComboBoxModel;
 import javax.swing.DefaultCellEditor;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
+import javax.swing.ListCellRenderer;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
+import javax.swing.border.Border;
+import javax.swing.border.LineBorder;
+import javax.swing.event.CaretEvent;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumn;
+import javax.swing.text.Caret;
 
 import com.mucommander.Debug;
 import com.mucommander.extension.ClassFilter;
 import com.mucommander.extension.ClassFinder;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.util.ResourceLoader;
+import com.mucommander.runtime.JavaVersions;
+import com.mucommander.runtime.OsFamilies;
+import com.mucommander.runtime.OsVersions;
 import com.mucommander.ui.action.ActionKeymap;
 import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.dialog.pref.component.PrefTable;
+import com.mucommander.ui.dialog.pref.general.ShortcutsPanel.TooltipBar;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.WindowManager;
+import com.mucommander.ui.table.EditableHeader;
+import com.mucommander.ui.table.EditableHeaderTableColumn;
+import com.sun.java.swing.plaf.motif.MotifBorders.BevelBorder;
 
 /**
  * 
  * @author Johann Schmitz (johann@j-schmitz.net), Arik Hadas
  */
-public class KeymapTable extends PrefTable implements KeyListener  {
+public class ShortcutsTable extends PrefTable implements KeyListener, ListSelectionListener, FocusListener {
 
-	// Cell renderer for the action-name column cells
-	private static final DefaultTableCellRenderer ACTION_NAME_RENDERER = new ActionCellRenderer();
-	
 	// Column indexes
 	private static final int ACTION_DESCRIPTION_COLUMN_INDEX     = 0;
 	private static final int ACCELERATOR_COLUMN_INDEX            = 1;
@@ -75,9 +98,17 @@ public class KeymapTable extends PrefTable implements KeyListener  {
 	// Number of columns in the table
 	private static final int NUM_OF_COLUMNS = 3;
 	
+	// Row number to action class map
 	private HashMap rowToAction;
+	
+	// Row number to accelerator keystroke map
 	private HashMap rowToAccelerator;
+	
+	// Row number to alternate accelerator keystroke map
 	private HashMap rowToAlternateAccelerator;
+	
+	// Row number to action tooltip map
+	private HashMap actionToTooltipText;
 	
 	// Set that holds the row indexes the user may have changed 
 	private Set touchedRows;
@@ -87,34 +118,68 @@ public class KeymapTable extends PrefTable implements KeyListener  {
 	
 	// Saved copy of the table data, before any change was made by the user
 	private Object[][] data;
+	
+	private TooltipBar inforBar;
 
-	public KeymapTable() {
+	public ShortcutsTable(TooltipBar inforBar) {
 		super();
+		
+		this.inforBar = inforBar;
 		
 		touchedRows = new HashSet();
 		rowToAction = new HashMap();
 		rowToAccelerator = new HashMap();
 		rowToAlternateAccelerator = new HashMap();
+		actionToTooltipText = new HashMap();
+		
 		data = buildTableData();
 		
 		setModel(new KeymapTableModel(copy(data)));
 
+		setTableHeader(new EditableHeader(getColumnModel()));
+		
 		getTableHeader().setReorderingAllowed(false);
 		setRowSelectionAllowed(false);
 		setAutoCreateColumnsFromModel(false);
 		setCellSelectionEnabled(false);
 		setColumnSelectionAllowed(false);
-		setDragEnabled(false);
-		getTableHeader().setDefaultRenderer(new DefaultTableCellRenderer() {
-			{
-				setHorizontalAlignment(SwingConstants.CENTER);
-			}
-		});
+		setDragEnabled(false);		
+
+		String[] items = { "All actions", "File operations actions" };
+		JComboBox combo = new JComboBox();
+	    for (int i = 0; i < items.length; i++) {
+	      combo.addItem(items[i]);
+	    }
+	    
+	    EditableHeaderTableColumn col = (EditableHeaderTableColumn) getColumnModel().getColumn(ACTION_DESCRIPTION_COLUMN_INDEX);
+	    col.setHeaderValue(combo.getItemAt(0));
+	    col.setHeaderRenderer(new ComboRenderer(combo.getModel()));
+	    col.setHeaderEditor(new DefaultCellEditor(combo));
+		
+		if (!usesTableHeaderRenderingProperties()) {
+			getColumnModel().getColumn(ACCELERATOR_COLUMN_INDEX).setHeaderRenderer(new CenteredTableHeaderRenderer());
+			getColumnModel().getColumn(ALTERNATE_ACCELERATOR_COLUMN_INDEX).setHeaderRenderer(new CenteredTableHeaderRenderer());
+		}
 
 		putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
 		
 		addKeyListener(this);
+		addFocusListener(this);
+		
+		getSelectionModel().addListSelectionListener(this);
+		getColumnModel().getSelectionModel().addListSelectionListener(this);
 	}
+	
+
+	public void valueChanged(ListSelectionEvent e) {
+		super.valueChanged(e);
+		// Selection might be changed so update to tooltip
+		inforBar.showActionTooltip(getTooltipForRow(getSelectedRow()));
+	}
+	
+	private static boolean usesTableHeaderRenderingProperties() {
+        return OsFamilies.MAC_OS_X.isCurrent() && OsVersions.MAC_OS_X_10_5.isCurrentOrHigher() && JavaVersions.JAVA_1_5.isCurrentOrHigher();
+    }	
 	
 	private boolean compareData() {
 		Object[][] model = ((KeymapTableModel) getModel()).getData();
@@ -148,7 +213,7 @@ public class KeymapTable extends PrefTable implements KeyListener  {
 	
 	public TableCellRenderer getCellRenderer(int row, int col) {
 		if (col == ACTION_DESCRIPTION_COLUMN_INDEX)
-			return ACTION_NAME_RENDERER;
+			return new ActionCellRenderer();
 		return new DefaultTableCellRenderer();
 	}	
 	
@@ -168,17 +233,6 @@ public class KeymapTable extends PrefTable implements KeyListener  {
 		}
 	}
 	
-	public void updateActions() {
-		data = copy(((KeymapTableModel) getModel()).getData());
-		Iterator iterator = touchedRows.iterator();
-		while(iterator.hasNext()) {
-			Integer row = (Integer) iterator.next();
-			ActionKeymap.changeActionAccelerators((Class) rowToAction.get(row), (KeyStroke) rowToAccelerator.get(row), 
-					(KeyStroke) rowToAlternateAccelerator.get(row));
-		}
-		touchedRows.clear();
-	}
-	
 	private void setAlternativeAccelerator(KeyStroke keyStroke, int row, Object[][] model) {
 		if (keyStroke != null) {
 			rowToAlternateAccelerator.put(Integer.valueOf(row), keyStroke);
@@ -188,6 +242,17 @@ public class KeymapTable extends PrefTable implements KeyListener  {
 			rowToAlternateAccelerator.remove(Integer.valueOf(row));
 			model[row][ALTERNATE_ACCELERATOR_COLUMN_INDEX] = null;
 		}
+	}
+
+	public void updateActions() {
+		data = copy(((KeymapTableModel) getModel()).getData());
+		Iterator iterator = touchedRows.iterator();
+		while(iterator.hasNext()) {
+			Integer row = (Integer) iterator.next();
+			ActionKeymap.changeActionAccelerators((Class) rowToAction.get(row), (KeyStroke) rowToAccelerator.get(row), 
+					(KeyStroke) rowToAlternateAccelerator.get(row));
+		}
+		touchedRows.clear();
 	}
 	
 	/**
@@ -240,6 +305,7 @@ public class KeymapTable extends PrefTable implements KeyListener  {
 				setActionName(action, row, tableData);
 				setAccelerator(action.getAccelerator(), row, tableData);
 				setAlternativeAccelerator(action.getAlternateAccelerator(), row, tableData);
+				actionToTooltipText.put(action.getClass(), action.getToolTipText());
 				++row;
 			}			
 		}
@@ -247,14 +313,25 @@ public class KeymapTable extends PrefTable implements KeyListener  {
 		return tableData;
 	}
 	
+	public String getTooltipForRow(int row) {
+		return (String) actionToTooltipText.get(rowToAction.get(Integer.valueOf(getSelectedRow())));
+	}
+
+	///////////////////////////
+    // FocusListener methods //
+    ///////////////////////////
+	public void focusGained(FocusEvent e) {
+		inforBar.showActionTooltip(getTooltipForRow(getSelectedRow()));
+	}
+
+	public void focusLost(FocusEvent e) { inforBar.clear(); }
 	
 	/////////////////////////////
 	//// KeyListener methods ////
 	/////////////////////////////
 	public void keyPressed(KeyEvent e) {
 		int keyCode = e.getKeyCode();
-		if (keyCode == KeyEvent.VK_ENTER) {				
-			editCellAt(getSelectedRow(), getSelectedColumn());				
+		if (keyCode == KeyEvent.VK_ENTER && editCellAt(getSelectedRow(), getSelectedColumn())) {
 			getEditorComponent().requestFocusInWindow();
 			e.consume();
 		}
@@ -278,18 +355,26 @@ public class KeymapTable extends PrefTable implements KeyListener  {
 	 * Helper Classes
 	 */
 	private class KeyStrokeCellEditor extends DefaultCellEditor implements TableCellEditor {
+		
+		private final int NUM_OF_CLICK_TO_EDIT = 2;
+		
 		RecordingKeyStrokeField rec;
 		
 		public KeyStrokeCellEditor(RecordingKeyStrokeField rec) {
 			super(rec);
 			this.rec = rec;
+			rec.setSelectionColor(rec.getBackground());
+			rec.setSelectedTextColor(rec.getForeground());
 			rec.getDocument().addDocumentListener(new DocumentListener() {
-				public void changedUpdate(DocumentEvent e) {}
+				/**
+				 * 
+				 */
 				public void insertUpdate(DocumentEvent e) {	stopCellEditing(); }
+				public void changedUpdate(DocumentEvent e) {}
 				public void removeUpdate(DocumentEvent e) {}
 			});
 			
-			setClickCountToStart(2);
+			setClickCountToStart(NUM_OF_CLICK_TO_EDIT);
 		}
 
 		public Component getTableCellEditorComponent(JTable table, Object value,
@@ -307,10 +392,8 @@ public class KeymapTable extends PrefTable implements KeyListener  {
 			super();
 			setHorizontalAlignment(SwingConstants.LEFT);
 			setOpaque(true);
-			setBorder(UIManager.getBorder("TableHeader.cellBorder"));
 			setForeground(UIManager.getColor("TableHeader.foreground"));
 			setBackground(UIManager.getColor("TableHeader.background"));
-			setFont(UIManager.getFont("TableHeader.font"));
 		}
 	}
 	
@@ -319,7 +402,7 @@ public class KeymapTable extends PrefTable implements KeyListener  {
 
 		private KeymapTableModel(Object[][] data) {
 			//TODO: use translator
-			super(data, new String[] { "Action Description", "Keystroke", "Alternative Keystroke" });
+			super(data, new String[] { null, "Keystroke", "Alternative Keystroke" });
 			this.tableData = data;
 		}
 
@@ -349,7 +432,7 @@ public class KeymapTable extends PrefTable implements KeyListener  {
 				setAlternativeAccelerator((KeyStroke) value, row, tableData);
 				break;
 			default:
-				if (Debug.ON) { Debug.trace("ERROR1"); }
+				if (Debug.ON) { Debug.trace("No such column index: " + column); }
 			}
 			
 			fireTableCellUpdated(row, column);
@@ -364,12 +447,12 @@ public class KeymapTable extends PrefTable implements KeyListener  {
 		private KeyStroke lastKeyStroke;
 		
 		public RecordingKeyStrokeField(String initialText) {
-			super(initialText);		
+			super("Type in a shortcut");		
 			
-			// Make caret invisible
-			setCaretColor(getBackground());
-			
-			this.addKeyListener(this);
+			setHorizontalAlignment(JTextField.CENTER);
+			setEditable(false);
+			setBackground(Color.lightGray);			
+			addKeyListener(this);
 		}
 		
 		/**
@@ -389,9 +472,16 @@ public class KeymapTable extends PrefTable implements KeyListener  {
 	            return;
 
 	        KeyStroke pressedKeyStroke = KeyStroke.getKeyStrokeForEvent(keyEvent);
-	        if (!ActionKeymap.isKeyStrokeRegistered(pressedKeyStroke)) {
+	        Class action = ActionKeymap.getRegisteredActionClassForKeystroke(pressedKeyStroke);
+	        if (action == null || action.equals(rowToAction.get(Integer.valueOf(getSelectedRow())))) {
 	        	lastKeyStroke = pressedKeyStroke;
 	        	setText(MuAction.getKeyStrokeRepresentation(lastKeyStroke));
+	        }
+	        else {
+	        	inforBar.showKeystrokeAlreadyInUseMsg("This shortcut [" + MuAction.getKeyStrokeRepresentation(pressedKeyStroke)
+	        			+ "] is already assigned to '" + 
+	        			ActionManager.getActionInstance(action , WindowManager.getCurrentMainFrame()).getLabel()
+	        			+ "'");
 	        }
 	        keyEvent.consume();
 		}
@@ -399,5 +489,47 @@ public class KeymapTable extends PrefTable implements KeyListener  {
 		public void keyReleased(KeyEvent e) {e.consume();}
 
 		public void keyTyped(KeyEvent e) {e.consume();}
+	}
+	
+	private class CenteredTableHeaderRenderer extends JLabel implements TableCellRenderer {
+
+		public CenteredTableHeaderRenderer() {
+			setHorizontalAlignment(JLabel.CENTER);
+	        setBorder(UIManager.getBorder("TableHeader.cellBorder"));
+		}
+				
+        public Component getTableCellRendererComponent(JTable table, Object value,
+                boolean isSelected, boolean hasFocus, int rowIndex, int vColIndex) {
+
+        	// Configure the component with the specified value
+            setText(value.toString());
+    
+            // Since the renderer is a component, return itself
+            return this;
+        }
+    
+        // The following methods override the defaults for performance reasons
+        public void validate() {}
+        public void revalidate() {}
+        protected void firePropertyChange(String propertyName, Object oldValue, Object newValue) {}
+        public void firePropertyChange(String propertyName, boolean oldValue, boolean newValue) {}
+    }
+	
+	private class ComboRenderer extends JComboBox implements TableCellRenderer {
+
+		ComboRenderer(ComboBoxModel model) {
+			super(model);
+
+			setBorder(UIManager.getBorder("TableHeader.cellBorder"));
+			setForeground(UIManager.getColor("TableHeader.foreground"));
+			setEditable(false);
+			setOpaque(true);
+		}
+
+		public Component getTableCellRendererComponent(JTable table, Object value, 
+				boolean isSelected, boolean hasFocus, int row, int column) {
+			setSelectedItem(value);
+			return this;
+		}
 	}
 }
