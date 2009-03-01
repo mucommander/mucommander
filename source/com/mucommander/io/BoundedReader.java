@@ -28,6 +28,7 @@ import java.io.Reader;
  * underlying reader.
  *
  * @author Maxence Bernard
+ * @see StreamOutOfBoundException
  */
 public class BoundedReader extends FilterReader {
 
@@ -37,28 +38,32 @@ public class BoundedReader extends FilterReader {
 
     /**
      * Equivalent to {@link #BoundedReader(java.io.Reader, long, java.io.IOException)} called with a
-     * {@link com.mucommander.io.StreamOutOfBoundException}.
+     * <code>null</code> <code>IOException</code>.
      *
      * @param reader the reader to limit
      * @param allowedCharacters the total number of characters this reader allows to be read or skipped, <code>-1</code>
      * for no limitation
      */
     public BoundedReader(Reader reader, long allowedCharacters) {
-        this(reader, allowedCharacters, new StreamOutOfBoundException(allowedCharacters));
+        this(reader, allowedCharacters, null);
     }
 
     /**
      * Creates a new <code>BounderReader</code> over the specified reader, allowing a maximum of
-     * <code>allowedCharacters</code> to be read or skipped and throwing the specified <code>IOException</code> when
-     * an attempt to read or skip beyond that is made.
-     * If <code>allowedCharacters</code> is equal to <code>-1</code>, this reader is not bounded and acts as a normal
-     * reader.
+     * <code>allowedCharacters</code> to be read or skipped. If <code>allowedCharacters</code> is equal to <code>-1</code>,
+     * this reader is not bounded and acts as a normal stream.
+     * <p>
+     * The specified <code>IOException</code> will be thrown when an attempt to read or skip beyond that is made.
+     * If it is <code>null</code>, read and skip methods will return <code>-1</code> instead of throwing an
+     * <code>IOException</code>.
+     * </p>
      *
      * @param reader the reader to bind
      * @param allowedCharacters the total number of characters this reader allows to be read or skipped, <code>-1</code>
      * for no limitation
-     * @param outOfBoundException the IOException to throw when an attempt to read or skip beyond
-     * <code>allowedCharacters</code> is made
+     * @param outOfBoundException the IOException to throw when an attempt to read or skip beyond <code>allowedBytes</code>
+     * is made, <code>null</code> to return -1 instead
+     * @see StreamOutOfBoundException
      */
     public BoundedReader(Reader reader, long allowedCharacters, IOException outOfBoundException) {
         super(reader);
@@ -106,8 +111,12 @@ public class BoundedReader extends FilterReader {
 
     public synchronized int read(char[] cbuf, int off, int len) throws IOException {
         int canRead = (int)Math.min(getRemainingCharacters(), len);
-        if(canRead==0)
+        if(canRead==0) {
+            if(outOfBoundException==null)
+                return -1;
+
             throw outOfBoundException;
+        }
 
         int nbRead = in.read(cbuf, off, canRead);
         if(nbRead>0)
@@ -123,8 +132,12 @@ public class BoundedReader extends FilterReader {
     ////////////////////////
 
     public synchronized int read() throws IOException {
-        if(getRemainingCharacters()==0)
+        if(getRemainingCharacters()==0) {
+            if(outOfBoundException==null)
+                return -1;
+
             throw outOfBoundException;
+        }
 
         int i = in.read();
         totalRead++;
@@ -133,10 +146,15 @@ public class BoundedReader extends FilterReader {
     }
 
     public synchronized long skip(long n) throws IOException {
-        if(n>getRemainingCharacters())
-            throw outOfBoundException;
+        int canSkip = (int)Math.min(getRemainingCharacters(), n);
+        if(canSkip==0) {
+            if(outOfBoundException==null)
+                return -1;
 
-        long nbSkipped = in.skip(n);
+            throw outOfBoundException;
+        }
+
+        long nbSkipped = in.skip(canSkip);
         if(nbSkipped>0)
             totalRead += nbSkipped;
 

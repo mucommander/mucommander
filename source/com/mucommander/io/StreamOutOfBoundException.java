@@ -21,7 +21,7 @@ package com.mucommander.io;
 import java.io.IOException;
 
 /**
- * This <code>IOException</code> is thrown by when an attempting to read from a {@link BoundedInputStream} or
+ * This <code>IOException</code> can be used when attempting to read from a {@link BoundedInputStream} or
  * {@link BoundedReader} beyond the byte or character limit set.
  *
  * @see com.mucommander.io.BoundedInputStream

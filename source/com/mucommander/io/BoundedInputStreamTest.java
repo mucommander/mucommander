@@ -33,13 +33,15 @@ public class BoundedInputStreamTest extends TestCase {
 
     private final static byte[] TEST_BYTES = new byte[]{0x6d, 0x75, 0x63, 0x6f, 0x6d, 0x6d, 0x61, 0x6e, 0x64, 0x65, 0x72};
 
+
     /**
-     * Tests a <code>BoundedInputStream</code> operating in bounded mode.
+     * Performs some tests that are common to {@link #testBoundedStreamWithException()} and
+     * {@link #testBoundedStreamWithoutException()}.
      *
+     * @param bin the BoundedInputStream to prepare
      * @throws IOException should not happen
      */
-    public void testBoundedStream() throws IOException {
-        BoundedInputStream bin = new BoundedInputStream(new ByteArrayInputStream(TEST_BYTES), 4);
+    private void prepareBoundedStream(BoundedInputStream bin) throws IOException {
         assertEquals(0, bin.getReadCounter());
         assertEquals(4, bin.getRemainingBytes());
         assertEquals(4, bin.getAllowedBytes());
@@ -63,6 +65,16 @@ public class BoundedInputStreamTest extends TestCase {
         assertEquals(4, bin.getReadCounter());
         assertEquals(0, bin.getRemainingBytes());
         assertEquals(4, bin.getAllowedBytes());
+    }
+
+    /**
+     * Tests a <code>BoundedInputStream</code> operating in bounded mode, created with a {@link StreamOutOfBoundException}.
+     *
+     * @throws IOException should not happen
+     */
+    public void testBoundedStreamWithException() throws IOException {
+        BoundedInputStream bin = new BoundedInputStream(new ByteArrayInputStream(TEST_BYTES), 4, new StreamOutOfBoundException(4));
+        prepareBoundedStream(bin);
 
         boolean exceptionThrown = false;
         try { bin.read(); }
@@ -93,6 +105,29 @@ public class BoundedInputStreamTest extends TestCase {
         assertEquals(4, bin.getAllowedBytes());
 
         // Attempt to read a chunk larger than the remaining bytes and assert that it does not throw a StreamOutOfBoundException
+        bin = new BoundedInputStream(new ByteArrayInputStream(TEST_BYTES), 4);
+        assertTrue(bin.read(new byte[6])!=-1);
+    }
+
+    /**
+     * Tests a <code>BoundedInputStream</code> operating in bounded mode, created with a {@link StreamOutOfBoundException}.
+     *
+     * @throws IOException should not happen
+     */
+    public void testBoundedStreamWithoutException() throws IOException {
+        BoundedInputStream bin = new BoundedInputStream(new ByteArrayInputStream(TEST_BYTES), 4);
+        prepareBoundedStream(bin);
+
+        assertEquals(-1, bin.read());
+        assertEquals(-1, bin.read(new byte[1]));
+        assertEquals(-1, bin.read(new byte[1], 0, 1));
+        assertEquals(-1, bin.skip(1));
+
+        assertEquals(4, bin.getReadCounter());
+        assertEquals(0, bin.getRemainingBytes());
+        assertEquals(4, bin.getAllowedBytes());
+
+        // Attempt to read a chunk larger than the remaining bytes and assert that it does not return -1
         bin = new BoundedInputStream(new ByteArrayInputStream(TEST_BYTES), 4);
         assertTrue(bin.read(new byte[6])!=-1);
     }
