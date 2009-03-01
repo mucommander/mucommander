@@ -211,6 +211,16 @@ public class TarInputStream extends InputStream {
         return ret;
     }
 
+
+    /**
+     * Returns the current entry where this <code>TarInputStream</code> is currently positionned.
+     *
+     * @return the current entry where this <code>TarInputStream</code> is currently positionned
+     */
+    public TarEntry getCurrentEntry() {
+        return currEntry;
+    }
+
     /**
      * Get the next entry in this tar archive. This will skip
      * over any remaining data in the current entry, if there
