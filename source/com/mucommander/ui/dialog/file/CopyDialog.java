@@ -19,11 +19,16 @@
 
 package com.mucommander.ui.dialog.file;
 
+import com.mucommander.file.AbstractArchiveFile;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
+import com.mucommander.file.filter.OrFileFilter;
+import com.mucommander.file.filter.StartsFilenameFilter;
 import com.mucommander.file.util.FileSet;
 import com.mucommander.file.util.PathUtils;
 import com.mucommander.job.CopyJob;
+import com.mucommander.job.TransferFileJob;
+import com.mucommander.job.UnpackJob;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.main.MainFrame;
 
@@ -104,14 +109,45 @@ public class CopyDialog extends TransferDestinationDialog {
     protected void startJob(PathUtils.ResolvedDestination resolvedDest, int defaultFileExistsAction, boolean verifyIntegrity) {
         ProgressDialog progressDialog = new ProgressDialog(mainFrame, Translator.get("copy_dialog.copying"));
 
-        CopyJob job = new CopyJob(
+        AbstractFile baseFolder = files.getBaseFolder();
+        AbstractArchiveFile parentArchiveFile = baseFolder.getParentArchive();
+        TransferFileJob job;
+        String newName = resolvedDest.getDestinationType()==PathUtils.ResolvedDestination.EXISTING_FOLDER?null:resolvedDest.getDestinationFile().getName();
+
+        // If the source files are located inside an archive, use UnpackJob instead of CopyJob to unpack archives in
+        // their natural order (more efficient)
+        if(parentArchiveFile!=null) {
+            // Create a filter that accepts select archive entries
+            OrFileFilter orFilter = new OrFileFilter();
+            StartsFilenameFilter filenameFilter;
+            int nbFiles = files.size();
+            for(int i=0; i<nbFiles; i++) {
+                filenameFilter = new StartsFilenameFilter(files.fileAt(i).getAbsolutePath(), true);
+                filenameFilter.setOperateOnPath(true);
+                orFilter.addFileFilter(filenameFilter);
+            }
+
+            job = new UnpackJob(
+                progressDialog,
+                mainFrame,
+                parentArchiveFile,
+                PathUtils.getDepth(baseFolder.getAbsolutePath(), baseFolder.getSeparator()) - PathUtils.getDepth(parentArchiveFile.getAbsolutePath(), parentArchiveFile.getSeparator()),
+                resolvedDest.getDestinationFolder(),
+                newName,
+                defaultFileExistsAction,
+                orFilter
+            );
+        }
+        else {
+            job = new CopyJob(
                 progressDialog,
                 mainFrame,
                 files,
                 resolvedDest.getDestinationFolder(),
-                resolvedDest.getDestinationType()==PathUtils.ResolvedDestination.EXISTING_FOLDER?null:resolvedDest.getDestinationFile().getName(),
+                newName,
                 CopyJob.COPY_MODE,
                 defaultFileExistsAction);
+        }
 
         job.setIntegrityCheckEnabled(verifyIntegrity);
 

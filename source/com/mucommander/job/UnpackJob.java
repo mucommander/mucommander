@@ -20,11 +20,14 @@
 package com.mucommander.job;
 
 import com.mucommander.file.*;
+import com.mucommander.file.filter.FileFilter;
 import com.mucommander.file.impl.ProxyFile;
 import com.mucommander.file.util.FileSet;
+import com.mucommander.file.util.PathUtils;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;
+import com.mucommander.ui.main.table.FileTable;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -39,12 +42,19 @@ import java.io.InputStream;
  */
 public class UnpackJob extends AbstractCopyJob {
 
+    /** Filters the archive entries to be unpacked */
+    protected FileFilter entryFilter;
+
+    /** Depth of the folder in which the top entries are located. 0 is the highest depth (archive's root folder) */
+    protected int baseArchiveDepth;
+
+
     /**
      * Creates a new UnpackJob without starting it.
      *
      * @param progressDialog dialog which shows this job's progress
      * @param mainFrame mainFrame this job has been triggered by
-     * @param files files which are going to be unpacking
+     * @param files files which are going to be unpacked
      * @param destFolder destination folder where the files will be copied
      * @param fileExistsAction default action to be performed when a file already exists in the destination, see {@link com.mucommander.ui.dialog.file.FileCollisionDialog} for allowed values
      */
@@ -52,8 +62,28 @@ public class UnpackJob extends AbstractCopyJob {
         super(progressDialog, mainFrame, files, destFolder, null, fileExistsAction);
 
         this.errorDialogTitle = Translator.get("unpack_dialog.error_title");
+        this.baseArchiveDepth = 0;
     }
 
+    /**
+     * Creates a new UnpackJob without starting it.
+     *
+     * @param progressDialog dialog which shows this job's progress
+     * @param mainFrame mainFrame this job has been triggered by
+     * @param archiveFile the archive file which is going to be unpacked
+     * @param destFolder destination folder where the files will be copied
+     * @param newName the new filename in the destination folder, if <code>null</code> the original filename will be used
+     * @param fileExistsAction default action to be performed when a file already exists in the destination, see {@link com.mucommander.ui.dialog.file.FileCollisionDialog} for allowed values
+     * @param entryFilter filters the archive entries to be unpacked
+     * @param baseArchiveDepth depth of the folder in which the top entries are located. 0 is the highest depth (archive's root folder)
+     */
+    public UnpackJob(ProgressDialog progressDialog, MainFrame mainFrame, AbstractArchiveFile archiveFile, int baseArchiveDepth, AbstractFile destFolder, String newName, int fileExistsAction, FileFilter entryFilter) {
+        super(progressDialog, mainFrame, new FileSet(archiveFile.getParentSilently(), archiveFile), destFolder, newName, fileExistsAction);
+
+        this.errorDialogTitle = Translator.get("unpack_dialog.error_title");
+        this.baseArchiveDepth = baseArchiveDepth;
+        this.entryFilter = entryFilter;
+    }
 
 
     ////////////////////////////////////
@@ -116,20 +146,39 @@ public class UnpackJob extends AbstractCopyJob {
         ArchiveEntry entry;
         AbstractFile entryFile;
         AbstractFile destFile;
+        String destSeparator = destFolder.getSeparator();
+        String relDestPath;
+        FileTable activeTable = mainFrame.getActiveTable();
+        AbstractFile activeFolder = activeTable.getCurrentFolder();
+        int activeFolderDepth = PathUtils.getDepth(activeFolder.getAbsolutePath(), activeFolder.getSeparator());
 
         // Unpack the archive, copying entries one by one, in the iterator's order
         try {
             iterator = archiveFile.getEntryIterator();
 
-            while(iterator.hasNextEntry() && getState()!=INTERRUPTED) {
-                entry = iterator.nextEntry();
+            while((entry = iterator.nextEntry())!=null && getState()!=INTERRUPTED) {
                 entryFile = archiveFile.getArchiveEntryFile(entry);
+
+                // Run the file through the filter (if any) to decide whether or not to unpack it
+                if(entryFilter!=null && entryFilter.reject(entryFile))
+                    continue;
 
                 // Notify the job that we're starting to process this file
                 nextFile(entryFile);
 
+                // Figure out the destination file's path, relatively to the base destination folder
+                relDestPath = baseArchiveDepth==0
+                        ?entry.getPath()
+                        :PathUtils.removeLeadingFragments(entry.getPath(), "/", baseArchiveDepth);
+
+                if(newName!=null)
+                    relDestPath = newName+(PathUtils.getDepth(relDestPath, "/")<=1?"":"/"+PathUtils.removeLeadingFragments(relDestPath, "/", 1));
+
+                if(!"/".equals(destSeparator))
+                    relDestPath = relDestPath.replace("/", destSeparator);
+
                 // Create destination AbstractFile instance
-                destFile = destFolder.getChild(entry.getPath());
+                destFile = destFolder.getChild(relDestPath);
 
                 // Do nothing if the file is a symlink (skip file and return)
                 if(entryFile.isSymlink())
@@ -185,6 +234,11 @@ public class UnpackJob extends AbstractCopyJob {
                     if(!tryCopyFile(new ProxiedEntryFile(entryFile, entry, archiveFile, iterator), destFile, append, errorDialogTitle))
                        return false;
                 }
+
+                // Unselect the entry file in the active table
+                // Todo: this is horribly ineffective and slows the whole transfer down when there are lots of files to be unselected   
+                if(activeFolderDepth == PathUtils.getDepth(entryFile.getParent().getAbsolutePath(), entryFile.getSeparator()))
+                    activeTable.setFileMarked(entryFile, false);
             }
         }
         catch(IOException e) {
