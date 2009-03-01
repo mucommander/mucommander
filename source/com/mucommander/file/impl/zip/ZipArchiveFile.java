@@ -164,15 +164,13 @@ public class ZipArchiveFile extends AbstractRWArchiveFile {
             final Iterator iterator = zipFile.getEntries();
 
             return new ArchiveEntryIterator() {
-                public boolean hasNextEntry() throws IOException {
-                    return iterator.hasNext();
-                }
-
                 public ArchiveEntry nextEntry() throws IOException {
-                    if(!iterator.hasNext())
+                    ZipEntry entry;
+
+                    if(!iterator.hasNext() || (entry = (ZipEntry)iterator.next())==null)
                         return null;
 
-                    return createArchiveEntry((ZipEntry)iterator.next());
+                    return createArchiveEntry(entry);
                 }
 
                 public void close() throws IOException {

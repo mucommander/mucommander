@@ -66,9 +66,6 @@ class LstArchiveEntryIterator implements ArchiveEntryIterator {
         baseFolder = br.readLine();
         if(baseFolder==null)
             throw new IOException();
-
-        // Prefetch the first entry
-        nextEntry = getNextEntry();
     }
 
     /**
@@ -119,20 +116,9 @@ class LstArchiveEntryIterator implements ArchiveEntryIterator {
     // ArchiveEntryIterator implementation //
     /////////////////////////////////////////
 
-    public boolean hasNextEntry() {
-        return nextEntry!=null;
-    }
-
     public ArchiveEntry nextEntry() throws IOException {
-        if(nextEntry==null)
-            return null;
-
-        ArchiveEntry currentEntry = nextEntry;
-
-        // Get the next entry, if any
-        nextEntry = getNextEntry();
-
-        return currentEntry;
+        // Return the next entry, if any
+        return getNextEntry();
     }
 
     public void close() throws IOException {

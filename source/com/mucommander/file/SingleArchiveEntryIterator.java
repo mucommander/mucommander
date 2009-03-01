@@ -39,10 +39,6 @@ public class SingleArchiveEntryIterator implements ArchiveEntryIterator {
     // ArchiveEntryIterator implementation //
     /////////////////////////////////////////
 
-    public boolean hasNextEntry() {
-        return entry!=null;
-    }
-
     public ArchiveEntry nextEntry() {
         if(entry==null)
             return null;

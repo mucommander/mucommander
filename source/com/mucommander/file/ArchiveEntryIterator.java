@@ -21,28 +21,22 @@ package com.mucommander.file;
 import java.io.IOException;
 
 /**
- * This class allows to iterate the entries of an archive. It mimics the behavior of an <code>Iterator</code> and
- * provides similar hasNext/next methods.
- * <br>
- * The biggest difference over <code>Iterator</code> is that its methods are allowed to throw <code>IOException</code>.
- * This allows implementations to traverse the archive one entry after the other report errors as they occur.
- * <br>
- * It also adds a {@link #close()} method that needs to be called when the iterator is not needed anymore.
+ * This class allows to iterate the entries of an archive. It mimics the behavior of an <code>Iterator</code>, with
+ * several differences:
+ *
+ * <ul>
+ *   <li>its methods are allowed to throw <code>IOException</code></li>
+ *   <li>there is no <code>hasNext</code> method, because it wouldn't map very well onto certain formats that don't know
+ * if there is a next entry until the current entry has been consumed.</li>
+ *   <li>{@link #close()} needs to be called when the Iterator is not needed anymore, alowing implementations to release
+ * any resources that they hold.</li>
+ * </ul>
  *
  * @see com.mucommander.file.SingleArchiveEntryIterator
  * @see com.mucommander.file.WrapperArchiveEntryIterator
  * @author Maxence Bernard
  */
 public interface ArchiveEntryIterator {
-
-    /**
-     * Returns <code>true</code> if this iterator has a next entry.
-     *
-     * @return <code>true</code> if this iterator has a next entry
-     * @throws IOException if an error occurred while reading the archive, either because the archive is corrupt or
-     * because of an I/O error
-     */
-    public boolean hasNextEntry() throws IOException;
 
     /**
      * Returns the next entry in this iterator, <code>null</code> if this iterator has no more entries.

@@ -35,9 +35,6 @@ public class JavaUtilZipEntryIterator implements ArchiveEntryIterator  {
     /** InputStream to the archive file */
     private ZipInputStream zin;
 
-    /** The next entry to be returned by #nextEntry(), null if there is no more entry */
-    private ArchiveEntry nextEntry;
-
     /** The current entry, where the ZipInputStream is currently positionned */
     private ArchiveEntry currentEntry;
 
@@ -50,9 +47,6 @@ public class JavaUtilZipEntryIterator implements ArchiveEntryIterator  {
      */
     JavaUtilZipEntryIterator(ZipInputStream zin) throws IOException {
         this.zin = zin;
-
-        // Prefetch the first entry
-        nextEntry = getNextEntry();
     }
 
     /**
@@ -106,18 +100,9 @@ public class JavaUtilZipEntryIterator implements ArchiveEntryIterator  {
     // ArchiveEntryIterator implementation //
     /////////////////////////////////////////
 
-    public boolean hasNextEntry() throws IOException {
-        return nextEntry!=null;
-    }
-
     public ArchiveEntry nextEntry() throws IOException {
-        if(nextEntry==null)
-            return null;
-
-        this.currentEntry = nextEntry;
-
         // Get the next entry, if any
-        nextEntry = getNextEntry();
+        this.currentEntry = getNextEntry();
 
         return currentEntry;
     }

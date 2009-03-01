@@ -35,8 +35,8 @@ class ArArchiveEntryIterator implements ArchiveEntryIterator {
     /** InputStream to the the archive file */
     private InputStream in;
 
-    /** The next entry to be returned by #nextEntry(), null if there is no more entry */
-    private ArchiveEntry nextEntry;
+    /** The current entry, where the stream is currently positionned */
+    private ArchiveEntry currentEntry;
 
     /** GNU variant: extended filenames contained in the special // entry's data */
     private byte gnuExtendedNames[];
@@ -54,9 +54,6 @@ class ArArchiveEntryIterator implements ArchiveEntryIterator {
 
         // Skip the global header: "!<arch>" string followed by LF char (8 characters in total).
         StreamUtils.skipFully(in, 8);
-
-        // Prefetch the first entry
-        nextEntry = getNextEntry();
     }
 
 
@@ -147,22 +144,15 @@ class ArArchiveEntryIterator implements ArchiveEntryIterator {
     // ArchiveEntryIterator implementation //
     /////////////////////////////////////////
 
-    public boolean hasNextEntry() {
-        return nextEntry!=null;
-    }
-
     public ArchiveEntry nextEntry() throws IOException {
-        if(nextEntry==null)
-            return null;
-
-        ArchiveEntry currentEntry = nextEntry;
-
-        // Skip the current entry's data, plus 1 padding byte if size is odd
-        long size = currentEntry.getSize();
-        StreamUtils.skipFully(in, size + (size%2));
+        if(currentEntry!=null) {
+            // Skip the current entry's data, plus 1 padding byte if size is odd
+            long size = currentEntry.getSize();
+            StreamUtils.skipFully(in, size + (size%2));
+        }
 
         // Get the next entry, if any
-        nextEntry = getNextEntry();
+        currentEntry = getNextEntry();
 
         return currentEntry;
     }
