@@ -51,6 +51,9 @@ public class UnpackJob extends AbstractCopyJob {
 
     /**
      * Creates a new UnpackJob without starting it.
+     * <p>
+     * The base destination folder will be created if it doesn't exist.
+     * </p>
      *
      * @param progressDialog dialog which shows this job's progress
      * @param mainFrame mainFrame this job has been triggered by
@@ -89,6 +92,31 @@ public class UnpackJob extends AbstractCopyJob {
     ////////////////////////////////////
     // TransferFileJob implementation //
     ////////////////////////////////////
+
+    protected void jobStarted() {
+        super.jobStarted();
+
+        // Create the base destination folder if it doesn't exist yet
+        if(!baseDestFolder.exists()) {
+            // Loop for retry
+            do {
+                try {
+                    baseDestFolder.mkdir();
+                }
+                catch(IOException e) {
+                    // Unable to create folder
+                    int ret = showErrorDialog(errorDialogTitle, Translator.get("cannot_create_folder", baseDestFolder.getName()));
+                    // Retry loops
+                    if(ret==RETRY_ACTION)
+                        continue;
+                    // Cancel or close dialog interrupts the job
+                    interrupt();
+                    // Skip continues
+                }
+                break;
+            } while(true);
+        }
+    }
 
     /**
      * Unpacks the given archive file. If the file is a directory, its children will be processed recursively.

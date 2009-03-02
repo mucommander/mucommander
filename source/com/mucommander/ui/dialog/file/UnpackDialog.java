@@ -64,7 +64,8 @@ public class UnpackDialog extends TransferDestinationDialog {
     protected void startJob(PathUtils.ResolvedDestination resolvedDest, int defaultFileExistsAction, boolean verifyIntegrity) {
         ProgressDialog progressDialog = new ProgressDialog(mainFrame, Translator.get("unpack_dialog.unpacking"));
 
-        if(resolvedDest.getDestinationType()!=PathUtils.ResolvedDestination.EXISTING_FOLDER) {
+        int destinationType = resolvedDest.getDestinationType();
+        if(destinationType==PathUtils.ResolvedDestination.EXISTING_FILE) {
             showErrorDialog(Translator.get("invalid_path", resolvedDest.getDestinationFile().getAbsolutePath()));
             return;
         }
@@ -73,7 +74,7 @@ public class UnpackDialog extends TransferDestinationDialog {
                 progressDialog,
                 mainFrame,
                 files,
-                resolvedDest.getDestinationFolder(),
+                destinationType==PathUtils.ResolvedDestination.NEW_FILE?resolvedDest.getDestinationFile():resolvedDest.getDestinationFolder(),
                 defaultFileExistsAction);
 
         job.setIntegrityCheckEnabled(verifyIntegrity);
