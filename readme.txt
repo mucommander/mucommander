@@ -131,6 +131,7 @@ Improvements:
 - jCIFS library upgraded to version 1.2.25.
 - JNA library upgraded to version 3.0.9.
 - Character encodings can be more easily selected (bug #15).
+- Added icon mappings for Office 2007 file extensions.
 
 Localization:
 - 

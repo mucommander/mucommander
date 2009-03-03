@@ -80,7 +80,7 @@ public class CustomFileIconProvider implements FileIconProvider {
         {"cd_image.png", "iso", "nrg"},	// CD/DVD image
         {"certificate.png", "cer", "crt", "key"},	// Certificate file
         {"configuration.png", "cnf", "conf", "config", "inf", "ini", "pif", "prefs", "prf"},	// Configuration file
-        {"database.png", "myi", "myd", "frm", "sql", "sqc", "sqr"},	// Database file
+        {"database.png", "myi", "myd", "frm", "sql", "sqc", "sqr", "mdb", "mde", "mdn", "mdt", "accdb", "accde", "accdr", "accdt"},	// Database file
         {"executable_windows.png", "bat", "com", "exe"},	// Windows executables
         {"executable_osx.png", "app"},	// Mac OS X executables
         {"feed.png", "rdf", "rss"},	// RSS/RDF feed
@@ -93,9 +93,9 @@ public class CustomFileIconProvider implements FileIconProvider {
         {"macromedia_actionscript.png", "as"},	// Macromedia Actionscript
         {"macromedia_flash.png", "swf", "swd", "swa", "swc", "fla", "flv", "flp", "jsfl"},	// Macromedia Flash
         {"macromedia_freehand.png", "fh", "fhd"},	// Macromedia Freehand
-        {"ms_excel.png", "xls", "xla", "xlb", "xlc", "xld", "xlk", "xll", "xlm", "xlr", "xlt", "xlv", "xlw", "xlshtml", "xlsmhtml", "xlsx", "xlthtml"},	// Microsoft Excel
-        {"ms_word.png", "doc", "wbk", "wiz", "wpg", "wpk", "wpm", "wpt", "wrs", "wwl"},	// Microsoft Word
-        {"ms_powerpoint.png", "pcb", "pot", "ppa", "ppi", "pps", "ppt", "pwz"},	// Microsoft Office (Powerpoint)
+        {"ms_excel.png", "xls", "xla", "xlb", "xlc", "xld", "xlk", "xll", "xlm", "xlr", "xlt", "xlv", "xlw", "xlshtml", "xlsmhtml", "xlthtml", "xlsx", "xltx", "xlsm", "xltm", "xlam", "xlsb"},	// Microsoft Excel
+        {"ms_word.png", "doc", "wbk", "wiz", "wpg", "wpk", "wpm", "wpt", "wrs", "wwl", "docx", "dotx", "docm", "dotm"},	// Microsoft Word
+        {"ms_powerpoint.png", "pcb", "pot", "ppa", "ppi", "pps", "ppt", "pwz", "pptx", "potx", "ppsx", "pptm", "potm", "ppsm"},	// Microsoft Office (Powerpoint)
         {"ms_visualstudio.png",	"atp", "dbp", "hxc", "ncb", "pch", "pdb", "sln", "suo", "srf", "vaf", "vam", "vbg", "vbp", "vbproj", "vcproj", "vdp", "vdproj", "vip", "vmx", "vsdir", "vsmacros",	"vsmproj", "vup"},	// Microsoft Visual Studio
         {"ms_windows_shortcut.png", "lnk"},	// MS Windows .lnk shortcut files
         {"pdf.png", "pdf"},		// Adobe Acrobat / PDF
