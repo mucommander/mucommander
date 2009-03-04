@@ -235,7 +235,7 @@ public class ProgressDialog extends FocusDialog implements ActionListener, ItemL
 
         initUI();
         
-        repaintThread = new Thread(new ProgressThread(), ProgressThread.class.getName());
+        repaintThread = new Thread(new ProgressThread(job), ProgressThread.class.getName());
         repaintThread.start();
 
         showDialog();
@@ -329,6 +329,15 @@ public class ProgressDialog extends FocusDialog implements ActionListener, ItemL
     /////////////////////////////
     
     class ProgressThread implements Runnable {
+    	
+    	private FileJob job;
+		private TransferFileJob transferFileJob;
+    	
+    	public ProgressThread(FileJob job) {
+    		this.job = job;
+            if (job instanceof TransferFileJob)
+                this.transferFileJob = (TransferFileJob) job;    		
+    	}
 
 	    public void run() {
 	        String progressText;
