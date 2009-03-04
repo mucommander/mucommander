@@ -333,13 +333,16 @@ public class ProgressDialog extends FocusDialog implements ActionListener, ItemL
     	private FileJob job;
 		private TransferFileJob transferFileJob;
 		
+		private long effectiveJobTime;
+		private long lastTime;
+		private boolean lastLoop;
 		private int totalPercentInt;
 		private String totalProgressText;
-
 		private int filePercentInt;
 		private String fileProgressText;
-		
 		private long currentBps;
+		private long bytesTotal;
+		private long totalBps;
     	
     	public ProgressThread(FileJob job) {
     		this.job = job;
@@ -349,8 +352,8 @@ public class ProgressDialog extends FocusDialog implements ActionListener, ItemL
 
 	    public void run() {
 	        long lastBytesTotal = 0;
-	        long lastTime = System.currentTimeMillis();
-	        boolean lastLoop = false;
+	        lastTime = System.currentTimeMillis();
+	        lastLoop = false;
 	
 	        // Refresh current file label in a separate thread, more frequently than other components to give a sense
 	        // of speed when small files are being transferred.
@@ -390,14 +393,13 @@ public class ProgressDialog extends FocusDialog implements ActionListener, ItemL
 	                long currentFileRemainingTime = 0;
 	                long totalRemainingTime;
 	
-	                long effectiveJobTime = job.getEffectiveJobTime();
+	                effectiveJobTime = job.getEffectiveJobTime();
 	                if(effectiveJobTime==0)
 	                    effectiveJobTime = 1;   // To avoid potential zero divisions
 	
 	                if (transferFileJob !=null) {
-	                    // Do not count bytes that are skipped when files are resumed
-	                    long bytesTotal = transferFileJob.getTotalByteCounter().getByteCount() - transferFileJob.getTotalSkippedByteCounter().getByteCount();
-	                    long totalBps = (long)(bytesTotal*1000d/effectiveJobTime);
+	                    bytesTotal = transferFileJob.getTotalByteCounter().getByteCount() - transferFileJob.getTotalSkippedByteCounter().getByteCount();
+	                    totalBps = (long)(bytesTotal*1000d/effectiveJobTime);
 	                    if(now-lastTime>0)  // To avoid divisions by zero
 	                        currentBps = (long)((bytesTotal-lastBytesTotal)*1000d/(now-lastTime));
 	                    else
@@ -426,24 +428,7 @@ public class ProgressDialog extends FocusDialog implements ActionListener, ItemL
 	                            fileProgressText += DurationFormat.format(currentFileRemainingTime);
 	                        }
 	                    }
-	
-	                    currentFileProgressBar.setValue(filePercentInt);
-	                    currentFileProgressBar.setString(fileProgressText);
-	
-	                    // Update total transferred label
-	                    totalTransferredLabel.setText(
-	                       Translator.get("progress_dialog.transferred",
-	                                      SizeFormat.format(bytesTotal, SizeFormat.DIGITS_MEDIUM| SizeFormat.UNIT_LONG| SizeFormat.ROUND_TO_KB),
-	                                      SizeFormat.format(totalBps, SizeFormat.UNIT_SPEED| SizeFormat.DIGITS_MEDIUM| SizeFormat.UNIT_SHORT| SizeFormat.ROUND_TO_KB))
-	                    );
-	
-	                    // Add new immediate bytes per second speed sample to speed graph and label and repaint it
-	                    // Skip this sample if job was paused and resumed, speed would not be accurate
-	                    if(lastTime>job.getPauseStartDate() && !lastLoop) {
-	                        speedGraph.addSample(currentBps);
-	                        updateCurrentSpeedLabel(SizeFormat.format(currentBps, SizeFormat.UNIT_SPEED| SizeFormat.DIGITS_MEDIUM| SizeFormat.UNIT_SHORT));
-	                    }
-	
+		
 	                    lastBytesTotal = bytesTotal;
 	                    lastTime = now;
 	                }
@@ -475,14 +460,8 @@ public class ProgressDialog extends FocusDialog implements ActionListener, ItemL
 	                    }
 	                }
 
-	                totalProgressBar.setValue(totalPercentInt);
-	                totalProgressBar.setString(totalProgressText);
-	
-	//                // Update current file label
-	//                currentFileLabel.setText(job.getStatusString());
-	
-	                // Update elapsed time label
-	                elapsedTimeLabel.setText(Translator.get("progress_dialog.elapsed_time")+": "+DurationFormat.format(effectiveJobTime));
+	                updateUI();
+	                
 	            }
 	
 	            if(lastLoop) {
@@ -500,6 +479,35 @@ public class ProgressDialog extends FocusDialog implements ActionListener, ItemL
 	            }
 	            catch(InterruptedException e) {}
 	        }
+	    }
+	    
+	    private void updateUI() {
+            if (transferFileJob !=null) {
+                currentFileProgressBar.setValue(filePercentInt);
+                currentFileProgressBar.setString(fileProgressText);
+
+                // Update total transferred label
+                totalTransferredLabel.setText(
+                   Translator.get("progress_dialog.transferred",
+                                  SizeFormat.format(bytesTotal, SizeFormat.DIGITS_MEDIUM| SizeFormat.UNIT_LONG| SizeFormat.ROUND_TO_KB),
+                                  SizeFormat.format(totalBps, SizeFormat.UNIT_SPEED| SizeFormat.DIGITS_MEDIUM| SizeFormat.UNIT_SHORT| SizeFormat.ROUND_TO_KB))
+                );
+                
+                // Add new immediate bytes per second speed sample to speed graph and label and repaint it
+                // Skip this sample if job was paused and resumed, speed would not be accurate
+                if(lastTime>job.getPauseStartDate() && !lastLoop) {
+                    speedGraph.addSample(currentBps);
+                    updateCurrentSpeedLabel(SizeFormat.format(currentBps, SizeFormat.UNIT_SPEED| SizeFormat.DIGITS_MEDIUM| SizeFormat.UNIT_SHORT));
+                }
+                
+            }
+            
+            totalProgressBar.setValue(totalPercentInt);
+            totalProgressBar.setString(totalProgressText);
+
+            // Update elapsed time label
+            elapsedTimeLabel.setText(Translator.get("progress_dialog.elapsed_time")+": "+DurationFormat.format(effectiveJobTime));
+	    	
 	    }
     }
 
