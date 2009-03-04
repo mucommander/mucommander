@@ -332,6 +332,14 @@ public class ProgressDialog extends FocusDialog implements ActionListener, ItemL
     	
     	private FileJob job;
 		private TransferFileJob transferFileJob;
+		
+		private int totalPercentInt;
+		private String totalProgressText;
+
+		private int filePercentInt;
+		private String fileProgressText;
+		
+		private long currentBps;
     	
     	public ProgressThread(FileJob job) {
     		this.job = job;
@@ -340,7 +348,6 @@ public class ProgressDialog extends FocusDialog implements ActionListener, ItemL
     	}
 
 	    public void run() {
-	        String progressText;
 	        long lastBytesTotal = 0;
 	        long lastTime = System.currentTimeMillis();
 	        boolean lastLoop = false;
@@ -391,8 +398,6 @@ public class ProgressDialog extends FocusDialog implements ActionListener, ItemL
 	                    // Do not count bytes that are skipped when files are resumed
 	                    long bytesTotal = transferFileJob.getTotalByteCounter().getByteCount() - transferFileJob.getTotalSkippedByteCounter().getByteCount();
 	                    long totalBps = (long)(bytesTotal*1000d/effectiveJobTime);
-	                    long currentBps;
-	
 	                    if(now-lastTime>0)  // To avoid divisions by zero
 	                        currentBps = (long)((bytesTotal-lastBytesTotal)*1000d/(now-lastTime));
 	                    else
@@ -400,30 +405,30 @@ public class ProgressDialog extends FocusDialog implements ActionListener, ItemL
 	
 	                    // Update current file progress bar
 	                    float filePercentFloat = transferFileJob.getFilePercentDone();
-	                    int filePercentInt = (int)(100*filePercentFloat);
-	                    currentFileProgressBar.setValue(filePercentInt);
+	                    filePercentInt = (int)(100*filePercentFloat);
 	
-	                    progressText = filePercentInt+"%";
+	                    fileProgressText = filePercentInt+"%";
 	                    // Append estimated remaining time (ETA) if current file transfer is not already finished (100%)
 	                    if(filePercentFloat<1) {
-	                        progressText += " - ";
+	                        fileProgressText += " - ";
 	
 	                        long currentFileSize = transferFileJob.getCurrentFileSize();
 	                        // If current file size is not available, ETA cannot be calculated
 	                        if(currentFileSize==-1)
-	                            progressText += "?";
+	                            fileProgressText += "?";
 	                        // Avoid potential divisions by zero
 	                        else if(totalBps==0) {
 	                            currentFileRemainingTime = -1;
-	                            progressText += DurationFormat.getInfiniteSymbol();
+	                            fileProgressText += DurationFormat.getInfiniteSymbol();
 	                        }
 	                        else {
 	                            currentFileRemainingTime = (long)((1000*(currentFileSize - transferFileJob.getCurrentFileByteCounter().getByteCount()))/(float)totalBps);
-	                            progressText += DurationFormat.format(currentFileRemainingTime);
+	                            fileProgressText += DurationFormat.format(currentFileRemainingTime);
 	                        }
 	                    }
 	
-	                    currentFileProgressBar.setString(progressText);
+	                    currentFileProgressBar.setValue(filePercentInt);
+	                    currentFileProgressBar.setString(fileProgressText);
 	
 	                    // Update total transferred label
 	                    totalTransferredLabel.setText(
@@ -447,11 +452,10 @@ public class ProgressDialog extends FocusDialog implements ActionListener, ItemL
 	                // Total job percent is based on the *number* of files remaining, not their actual size.
 	                // So this is very approximate.
 	                float totalPercentFloat = job.getTotalPercentDone();
-	                int totalPercentInt = (int)(100*totalPercentFloat);
+	                totalPercentInt = (int)(100*totalPercentFloat);
 	
-	                totalProgressBar.setValue(totalPercentInt);
 	
-	                String totalProgressText = totalPercentInt+"%";
+	                totalProgressText = totalPercentInt+"%";
 	
 	                // Add a rough estimate of the total remaining time (ETA):
 	                // total remaining time is based on the total job percent completed which itself is based on the *number*
@@ -470,6 +474,8 @@ public class ProgressDialog extends FocusDialog implements ActionListener, ItemL
 	                        totalProgressText += DurationFormat.format(totalRemainingTime);
 	                    }
 	                }
+
+	                totalProgressBar.setValue(totalPercentInt);
 	                totalProgressBar.setString(totalProgressText);
 	
 	//                // Update current file label
