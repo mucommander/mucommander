@@ -20,15 +20,21 @@ package com.mucommander.ui.dialog.pref.general;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.KeyStroke;
 import javax.swing.UIManager;
 
+import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.dialog.pref.PreferencesDialog;
 import com.mucommander.ui.dialog.pref.PreferencesPanel;
 
@@ -43,7 +49,7 @@ public class ShortcutsPanel extends PreferencesPanel {
 	private ShortcutsTable shortcutsTable;
 	
 	// Area in which tooltip texts and error messages are shown below the table
-	private TooltipBar informationBar;
+	private TooltipBar tooltipBar;
 	
 	public ShortcutsPanel(PreferencesDialog parent) {
 		//TODO: use translator
@@ -59,11 +65,42 @@ public class ShortcutsPanel extends PreferencesPanel {
 	private void initUI() {
 		setLayout(new BorderLayout());
 
-		informationBar = new TooltipBar();
-		shortcutsTable = new ShortcutsTable(informationBar);
+		tooltipBar = new TooltipBar();
+		shortcutsTable = new ShortcutsTable(tooltipBar);
 		
+		add(createCategoriesPanel(), BorderLayout.NORTH);
 		add(createTablePanel(), BorderLayout.CENTER);
-		add(informationBar, BorderLayout.SOUTH);
+		add(tooltipBar, BorderLayout.SOUTH);
+	}
+	
+	private JPanel createCategoriesPanel() {
+		JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		
+		panel.setBorder(BorderFactory.createEmptyBorder());
+		panel.add(new JLabel("Show: "));
+		
+		String[] items = { "", "A", "B", "C" }; //"All actions", "File operations actions" };
+		final JComboBox combo = new JComboBox();
+	    for (int i = 0; i < items.length; i++) {
+	      combo.addItem(items[i]);
+	    }
+	    combo.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				final String st = (String) combo.getSelectedItem();
+				shortcutsTable.updateModel(new ShortcutsTable.ActionFilter() {
+
+					public boolean accept(MuAction action) {
+						return action.getLabel().startsWith(st);
+					}
+				});
+			}
+	    });
+		combo.setSelectedIndex(0);
+		
+		panel.add(combo);
+		
+		return panel;
 	}
 	
 	private JPanel createTablePanel() {
@@ -101,8 +138,14 @@ public class ShortcutsPanel extends PreferencesPanel {
 			setText(EMPTY_MESSAGE);
 		}
 		
-		public void showKeystrokeAlreadyInUseMsg(String text) {
-			setText(text);
+		public void showKeystrokeAlreadyInUseMsg(KeyStroke pressedKeyStroke, MuAction assignedAction) {
+			setText("This shortcut [" + MuAction.getKeyStrokeRepresentation(pressedKeyStroke)
+			+ "] is already assigned to '" + assignedAction.getLabel() + "'");
+			new Thread(this).start();
+		}
+		
+		public void showRegularKeystrokeMustBeAssignedFirstMsg() {
+			setText("Regular keystoke must be assigned to action first");
 			new Thread(this).start();
 		}
 

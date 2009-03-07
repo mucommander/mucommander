@@ -33,6 +33,8 @@ import com.mucommander.ui.dialog.pref.PreferencesDialog;
  * @author Arik Hadas
  */
 public abstract class PrefTable extends JTable implements PrefComponent {
+	
+	private TableModelListener dialogListener;
 
 	public PrefTable() { super(); }
 	
@@ -59,10 +61,16 @@ public abstract class PrefTable extends JTable implements PrefComponent {
 
 	public void addDialogListener(final PreferencesDialog dialog) {
 		final PrefComponent component = this;		
-		getModel().addTableModelListener(new TableModelListener() {			
+		getModel().addTableModelListener(dialogListener = new TableModelListener() {			
 			public void tableChanged(TableModelEvent e) {
 				dialog.componentChanged(component);
 			}
 		});
+	}
+	
+	public void setModel(TableModel model) {
+		if (dialogListener != null)
+			model.addTableModelListener(dialogListener);
+		super.setModel(model);
 	}
 }
