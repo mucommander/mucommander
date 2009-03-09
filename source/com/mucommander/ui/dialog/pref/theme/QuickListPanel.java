@@ -18,24 +18,6 @@
 
 package com.mucommander.ui.dialog.pref.theme;
 
-import java.awt.BorderLayout;
-import java.awt.FlowLayout;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-
-import javax.swing.BorderFactory;
-import javax.swing.Icon;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTabbedPane;
-
 import com.mucommander.text.Translator;
 import com.mucommander.ui.chooser.FontChooser;
 import com.mucommander.ui.chooser.PreviewLabel;
@@ -50,6 +32,12 @@ import com.mucommander.ui.quicklist.item.DataList;
 import com.mucommander.ui.quicklist.item.HeaderMenuItem;
 import com.mucommander.ui.theme.ColorChangedEvent;
 import com.mucommander.ui.theme.ThemeData;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 /**
  * @author Arik Hadas
@@ -187,16 +175,16 @@ public class QuickListPanel extends ThemeEditorPanel implements PropertyChangeLi
         label = new PreviewLabel();
         
         // Color buttons.
-        addColorButtons(gridPanel, fontChooser, "quick_list.normal",
+        addColorButtons(gridPanel, fontChooser, "theme_editor.normal",
                         ThemeData.QUICK_LIST_ITEM_FOREGROUND_COLOR, ThemeData.QUICK_LIST_ITEM_BACKGROUND_COLOR, label).addPropertyChangeListener(this);
-        addColorButtons(gridPanel, fontChooser, "quick_list.selected",
+        addColorButtons(gridPanel, fontChooser, "theme_editor.selected",
                 ThemeData.QUICK_LIST_SELECTED_ITEM_FOREGROUND_COLOR, ThemeData.QUICK_LIST_SELECTED_ITEM_BACKGROUND_COLOR, label).addPropertyChangeListener(this);
         label.addPropertyChangeListener(this);
         
         // Wraps everything in a flow layout.
         colorsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         colorsPanel.add(gridPanel);
-        colorsPanel.setBorder(BorderFactory.createTitledBorder(Translator.get("quick_list.colors")));
+        colorsPanel.setBorder(BorderFactory.createTitledBorder(Translator.get("theme_editor.colors")));
 
         return colorsPanel;
     }
@@ -236,7 +224,7 @@ public class QuickListPanel extends ThemeEditorPanel implements PropertyChangeLi
         // Wraps everything in a flow layout.
         colorsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         colorsPanel.add(gridPanel);
-        colorsPanel.setBorder(BorderFactory.createTitledBorder(Translator.get("quick_list.colors")));
+        colorsPanel.setBorder(BorderFactory.createTitledBorder(Translator.get("theme_editor.colors")));
 
         return colorsPanel;
     }
@@ -286,8 +274,8 @@ public class QuickListPanel extends ThemeEditorPanel implements PropertyChangeLi
         
         // Create the tabbed pane.
         tabbedPane = new JTabbedPane();
-        tabbedPane.add(Translator.get("quick_list.header"), headerConfigurationPanel);
-        tabbedPane.add(Translator.get("quick_list.item"), itemConfigurationPanel);
+        tabbedPane.add(Translator.get("theme_editor.header"), headerConfigurationPanel);
+        tabbedPane.add(Translator.get("theme_editor.item"), itemConfigurationPanel);
         
         // Main layout.
         mainPanel   = new JPanel(new BorderLayout());

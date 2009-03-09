@@ -11374,6 +11374,47 @@ theme_editor.symbolic_link:SV:Symbolisk länk
 theme_editor.symbolic_link:DA:Symbolsk henvisning
 theme_editor.symbolic_link:UA:Символьний лінк
 
+# Used in the 'Quick lists' panel of the theme editor
+theme_editor.header:EN:Header
+theme_editor.header:FR:En-tête
+# Translation missing (New!)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Used in the 'Quick lists' panel of the theme editor
+theme_editor.item:EN:Item
+theme_editor.item:FR:Élément
+# Translation missing (New!)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ######################
 # Preferences dialog #
