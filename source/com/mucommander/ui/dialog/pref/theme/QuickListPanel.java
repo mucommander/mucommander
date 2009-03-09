@@ -49,16 +49,21 @@ public class QuickListPanel extends ThemeEditorPanel implements PropertyChangeLi
 	private JPanel quickListPreviewPanel;
 	
 	/** The header of the sample quick list */
-    private HeaderMenuItem header = new HeaderMenuItem("Sample quick-list");
-    
+    private HeaderMenuItem header = new HeaderMenuItem(Translator.get("sample_text"));
+
     /** The items of the sample quick list */
-    private static Object[] sampleData = new Object[]{"Sample item 1", "Sample item 2", "Sample item 3", "Sample item 4"
-		, "Sample item 5", "Sample item 6", "Sample item 7", "Sample item 8", "Sample item 9",
-		"Sample item 10", "Sample item 11", "Sample item 12", "Sample item 13", "Sample item 14",};
+    private final static Object[] sampleData;
     
     /** The icon of the sample items */
     private final Icon sampleIcon = IconManager.getIcon(IconManager.FILE_ICON_SET, CustomFileIconProvider.FOLDER_ICON_NAME);
-    
+
+    static {
+        String sampleText = Translator.get("sample_text");
+        sampleData = new Object[10];
+        for(int i=0; i<sampleData.length; i++)
+            sampleData[i] = sampleText + " " + (i+1)+"   ";
+    }
+
     /** The list of items of the sample quick list */
     private DataList list = new GenericPopupDataListWithIcons(sampleData) {
 		public Icon getImageIconOfItem(Object item) {
