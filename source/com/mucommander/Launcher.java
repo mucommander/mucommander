@@ -274,7 +274,7 @@ public class Launcher {
             else if(args[i].equals("-k") || args[i].equals("--keymap")) {
                 if(i >= args.length - 1)
                     printError("Missing FILE parameter to " + args[i], null, true);
-                try {com.mucommander.ui.action.ActionKeymap.setActionKeyMapFile(args[++i]);}
+                try {com.mucommander.ui.action.ActionIO.setActionsFile(args[++i]);}
                 catch(Exception e) {printError("Could not set keymap file", e, fatalWarnings);}
             }
 
@@ -455,9 +455,9 @@ public class Launcher {
         com.mucommander.ui.icon.FileIcons.setSystemIconsPolicy(MuConfiguration.getVariable(MuConfiguration.USE_SYSTEM_FILE_ICONS, MuConfiguration.DEFAULT_USE_SYSTEM_FILE_ICONS));
 
         // Loads the ActionKeymap file
-        printStartupMessage("Loading action keymap...");
-        try {com.mucommander.ui.action.ActionKeymap.loadActionKeyMap();}
-        catch(Exception e) {printFileError("Could not load action keyamp", e, fatalWarnings);}
+        printStartupMessage("Loading actions...");
+        try {com.mucommander.ui.action.ActionReader.loadActions();}
+        catch(Exception e) {printFileError("Could not load actions", e, fatalWarnings);}
 
         // Loads the ToolBar's description file
         printStartupMessage("Loading toolbar description...");

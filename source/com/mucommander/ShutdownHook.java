@@ -23,9 +23,9 @@ import com.mucommander.bookmark.BookmarkManager;
 import com.mucommander.command.CommandManager;
 import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.shell.ShellHistoryManager;
+import com.mucommander.ui.action.ActionWriter;
 import com.mucommander.ui.main.tree.TreeIOThreadManager;
 import com.mucommander.ui.theme.ThemeManager;
-import com.mucommander.ui.action.ActionKeymap;
 
 /**
  * The run method of this thread is called when the program shuts down, either because
@@ -107,7 +107,7 @@ public class ShutdownHook extends Thread {
         catch(Exception e) {if(Debug.ON) Debug.trace("Failed to save associations: " + e);}
         
         // Saves the action keymap.
-        try { ActionKeymap.writeActionKeymap(); }
+        try { ActionWriter.writeActions(); }
         catch(Exception e) {if(Debug.ON) Debug.trace("Failed to save action keymap: " + e);}
         
 
