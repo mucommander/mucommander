@@ -18,18 +18,52 @@
 
 package com.mucommander.ui.quicklist.item;
 
-import javax.swing.*;
+import java.awt.Dimension;
+import java.awt.Font;
+
+import javax.swing.JMenuItem;
+
+import com.mucommander.ui.theme.ColorChangedEvent;
+import com.mucommander.ui.theme.FontChangedEvent;
+import com.mucommander.ui.theme.ThemeListener;
+import com.mucommander.ui.theme.ThemeManager;
 
 /**
- * This abstract class represent menu item of FileTablePopup.
+ * This abstract class represent menu item of QuickList.
  *
  * @author Arik Hadas
  */
 
-abstract class MenuItem extends JMenuItem {	
+abstract class MenuItem extends JMenuItem implements ThemeListener {	
+	
+	protected static final int X_AXIS_OFFSET = 5;
+	
+	protected Font FONT;
+	protected Dimension dimension;
 	
 	public MenuItem(String text) {
 		super(text);
 		setEnabled(false);
-	}	
+		
+		ThemeManager.addCurrentThemeListener(this);
+	}
+	
+	public void setFont(Font font) {
+		FONT = font;
+		dimension = new Dimension((int) Math.ceil(getFontMetrics(font).stringWidth(getText()) * 1.1), (int) (font.getSize() * 1.5));
+		setPreferredSize(dimension);
+		setSize(dimension);
+	}
+	
+	/**
+	 * This function returns the item's dimension which is based on the item's font.
+	 */
+	public Dimension getPreferredSize() { return dimension; }
+	
+	/////////////////////////////
+	/// ThemeListener methods ///
+	/////////////////////////////
+	abstract public void colorChanged(ColorChangedEvent event);
+	
+	abstract public void fontChanged(FontChangedEvent event);
 }
