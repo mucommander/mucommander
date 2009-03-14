@@ -141,6 +141,8 @@ public class FileFactory {
         // Register this provider only if running Java 1.5 or up as it uses the Java 1.5 API
         if(JavaVersions.JAVA_1_5.isCurrentOrHigher())
             registerArchiveFormat(new com.mucommander.file.impl.rar.RarFormatProvider());
+        
+        registerArchiveFormat(new com.mucommander.file.impl.sevenzip.SevenZipFormatProvider());
 
         // Set the default FileIconProvider instance
         defaultFileIconProvider = new SwingFileIconProvider();
