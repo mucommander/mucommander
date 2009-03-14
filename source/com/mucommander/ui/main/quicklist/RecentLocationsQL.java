@@ -35,7 +35,7 @@ import java.util.LinkedList;
  * @author Arik Hadas
  */
 public class RecentLocationsQL extends QuickListWithIcons implements LocationListener{
-	private static int MAX_ELEMENTS = 11;
+	private static int MAX_ELEMENTS = 15;
 	private LinkedList linkedList;
 
 	public RecentLocationsQL() {
@@ -53,7 +53,7 @@ public class RecentLocationsQL extends QuickListWithIcons implements LocationLis
 	public void locationChanged(LocationEvent locationEvent) {
 		AbstractFile currentFolder = locationEvent.getFolderPanel().getCurrentFolder();
 			
-		if (!linkedList.remove(currentFolder) && linkedList.size() >= MAX_ELEMENTS)
+		if (!linkedList.remove(currentFolder) && linkedList.size() > MAX_ELEMENTS)
 			linkedList.removeLast();
 		linkedList.addFirst(currentFolder);
 	}
