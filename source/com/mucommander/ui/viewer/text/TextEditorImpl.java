@@ -23,6 +23,7 @@ import com.mucommander.io.EncodingDetector;
 import com.mucommander.io.RandomAccessInputStream;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.DialogOwner;
+import com.mucommander.ui.dialog.ErrorDialog;
 import com.mucommander.ui.encoding.EncodingListener;
 import com.mucommander.ui.encoding.EncodingMenu;
 import com.mucommander.ui.helper.MenuToolkit;
@@ -291,7 +292,7 @@ class TextEditorImpl implements ThemeListener, ActionListener, EncodingListener 
             loadDocument(file.getInputStream(), newEncoding);
         }
         catch(IOException ex) {
-            JOptionPane.showMessageDialog(frame, Translator.get("file_editor.cannot_read_file", file.getName()), Translator.get("read_error"), JOptionPane.ERROR_MESSAGE);
+            ErrorDialog.showErrorDialog(frame, Translator.get("read_error"), Translator.get("file_editor.cannot_read_file", file.getName()));
         }
     }
 

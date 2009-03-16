@@ -27,6 +27,7 @@ import com.mucommander.job.SelfUpdateJob;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.GoToWebsiteAction;
 import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.dialog.ErrorDialog;
 import com.mucommander.ui.dialog.QuestionDialog;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;
@@ -191,8 +192,12 @@ public class CheckVersionDialog extends QuestionDialog implements Runnable {
         int action = getActionValue();
 
         if(action==GO_TO_WEBSITE_ACTION) {
-            try {DesktopManager.executeOperation(DesktopManager.BROWSE, new Object[] {downloadURL});}
-            catch(Exception e) {JOptionPane.showMessageDialog(this, Translator.get("generic_error"), Translator.get("error"), JOptionPane.ERROR_MESSAGE);}
+            try {
+                DesktopManager.executeOperation(DesktopManager.BROWSE, new Object[] {downloadURL});
+            }
+            catch(Exception e) {
+                ErrorDialog.showErrorDialog(this);
+            }
         }
         else if(action==INSTALL_AND_RESTART_ACTION) {
             ProgressDialog progressDialog = new ProgressDialog(mainFrame, Translator.get("Installing new version"));

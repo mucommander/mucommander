@@ -26,6 +26,7 @@ import com.mucommander.job.FileCollisionChecker;
 import com.mucommander.runtime.OsFamilies;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.DialogToolkit;
+import com.mucommander.ui.dialog.ErrorDialog;
 import com.mucommander.ui.dialog.QuestionDialog;
 import com.mucommander.ui.dialog.file.FileCollisionDialog;
 import com.mucommander.ui.helper.FocusRequester;
@@ -170,7 +171,7 @@ public class EditorFrame extends JFrame implements ActionListener {
     }
 
     public void showGenericEditErrorDialog() {
-        JOptionPane.showMessageDialog(mainFrame, Translator.get("file_editor.edit_error"), Translator.get("file_editor.edit_error_title"), JOptionPane.ERROR_MESSAGE);
+        ErrorDialog.showErrorDialog(mainFrame, Translator.get("file_editor.edit_error_title"), Translator.get("file_editor.edit_error"));
     }
 
 
@@ -199,7 +200,7 @@ public class EditorFrame extends JFrame implements ActionListener {
                 destFile = FileFactory.getFile(fileChooser.getSelectedFile().getAbsolutePath(), true);
             }
             catch(IOException e) {
-                JOptionPane.showMessageDialog(this, Translator.get("file_editor.cannot_write"), Translator.get("write_error"), JOptionPane.ERROR_MESSAGE);
+                ErrorDialog.showErrorDialog(this, Translator.get("write_error"), Translator.get("file_editor.cannot_write"));
                 return;
             }
 
@@ -235,7 +236,7 @@ public class EditorFrame extends JFrame implements ActionListener {
             return true;
         }
         catch(IOException e) {
-            JOptionPane.showMessageDialog(this, Translator.get("file_editor.cannot_write"), Translator.get("write_error"), JOptionPane.ERROR_MESSAGE);
+            ErrorDialog.showErrorDialog(this, Translator.get("write_error"), Translator.get("file_editor.cannot_write"));
             return false;
         }
     }

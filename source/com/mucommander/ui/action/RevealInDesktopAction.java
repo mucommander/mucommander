@@ -21,6 +21,7 @@ package com.mucommander.ui.action;
 
 import com.mucommander.desktop.DesktopManager;
 import com.mucommander.text.Translator;
+import com.mucommander.ui.dialog.ErrorDialog;
 import com.mucommander.ui.main.MainFrame;
 
 import java.util.Hashtable;
@@ -46,7 +47,11 @@ public class RevealInDesktopAction extends MuAction {
     }
 
     public void performAction() {
-        try {DesktopManager.openInFileManager(mainFrame.getActivePanel().getCurrentFolder());}
-        catch(Exception e) {reportGenericError();}
+        try {
+            DesktopManager.openInFileManager(mainFrame.getActivePanel().getCurrentFolder());
+        }
+        catch(Exception e) {
+            ErrorDialog.showErrorDialog(mainFrame);
+        }
     }
 }

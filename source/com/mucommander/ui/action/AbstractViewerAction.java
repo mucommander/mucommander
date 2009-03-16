@@ -25,6 +25,7 @@ import com.mucommander.file.impl.local.LocalFile;
 import com.mucommander.job.TempOpenWithJob;
 import com.mucommander.process.ProcessRunner;
 import com.mucommander.text.Translator;
+import com.mucommander.ui.dialog.ErrorDialog;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;
 
@@ -126,8 +127,12 @@ abstract class AbstractViewerAction extends SelectedFileAction {
             if(useCustomCommand && customCommand != null) {
                 // If it's local, run the custom editor on it.
                 if(file.hasAncestor(LocalFile.class)) {
-                    try {ProcessRunner.execute(customCommand.getTokens(file), file);}
-                    catch(Exception e) {reportGenericError();}
+                    try {
+                        ProcessRunner.execute(customCommand.getTokens(file), file);
+                    }
+                    catch(Exception e) {
+                        ErrorDialog.showErrorDialog(mainFrame);
+                    }
                 }
                 // If it's distant, copies it locally before running the custom editor on it.
                 else {

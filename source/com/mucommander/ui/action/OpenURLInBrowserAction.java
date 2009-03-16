@@ -19,6 +19,7 @@
 package com.mucommander.ui.action;
 
 import com.mucommander.desktop.DesktopManager;
+import com.mucommander.ui.dialog.ErrorDialog;
 import com.mucommander.ui.main.MainFrame;
 
 import java.net.URL;
@@ -46,8 +47,12 @@ public class OpenURLInBrowserAction extends MuAction {
         Object url = getValue(URL_PROPERTY_KEY);
 
         if(url!=null && (url instanceof String)) {
-            try {DesktopManager.browse(new URL((String)url));}
-            catch(Exception e) {reportGenericError();}
+            try {
+                DesktopManager.browse(new URL((String)url));
+            }
+            catch(Exception e) {
+                ErrorDialog.showErrorDialog(mainFrame);
+            }
         }
     }
 }

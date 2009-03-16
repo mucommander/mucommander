@@ -20,11 +20,11 @@ package com.mucommander.ui.dialog.pref.general;
 
 import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.text.Translator;
+import com.mucommander.ui.dialog.ErrorDialog;
 import com.mucommander.ui.dialog.pref.PreferencesDialog;
 import com.mucommander.ui.dialog.pref.component.PrefComponent;
 import com.mucommander.ui.main.WindowManager;
 
-import javax.swing.*;
 import java.awt.*;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -129,8 +129,12 @@ public class GeneralPreferencesDialog extends PreferencesDialog {
      */
     public void commit() {
         super.commit();
-        try {MuConfiguration.write();}
-        catch(Exception e) {JOptionPane.showMessageDialog(this, Translator.get("generic_error"), Translator.get("error"), JOptionPane.ERROR_MESSAGE);}
+        try {
+            MuConfiguration.write();
+        }
+        catch(Exception e) {
+            ErrorDialog.showErrorDialog(this);
+        }
     }
 
     /**

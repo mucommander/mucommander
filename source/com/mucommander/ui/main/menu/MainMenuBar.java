@@ -29,6 +29,7 @@ import com.mucommander.file.RootFolders;
 import com.mucommander.runtime.OsFamilies;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.*;
+import com.mucommander.ui.dialog.ErrorDialog;
 import com.mucommander.ui.dialog.pref.theme.ThemeEditorDialog;
 import com.mucommander.ui.helper.MenuToolkit;
 import com.mucommander.ui.helper.MnemonicHelper;
@@ -552,9 +553,11 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
         }
 
         public void actionPerformed(ActionEvent actionEvent) {
-            try {ThemeManager.setCurrentTheme(theme);}
+            try {
+                ThemeManager.setCurrentTheme(theme);
+            }
             catch(IllegalArgumentException e) {
-                JOptionPane.showMessageDialog(mainFrame, Translator.get("theme_could_not_be_loaded"), Translator.get("error"), JOptionPane.ERROR_MESSAGE);
+                ErrorDialog.showErrorDialog(mainFrame, Translator.get("theme_could_not_be_loaded"));
             }
         }
     }
@@ -563,7 +566,10 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
      * Actions that edits the current theme.
      */
     private class EditCurrentThemeAction extends AbstractAction {
-        public EditCurrentThemeAction() {super(Translator.get("prefs_dialog.edit_current_theme"));}
+        public EditCurrentThemeAction() {
+            super(Translator.get("prefs_dialog.edit_current_theme"));
+        }
+
         public void actionPerformed(ActionEvent actionEvent) {
             new ThemeEditorDialog(mainFrame, ThemeManager.getCurrentTheme()).editTheme();
         }

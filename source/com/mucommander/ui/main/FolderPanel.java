@@ -40,6 +40,7 @@ import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.action.CycleBackwardThruFolderPanelAction;
 import com.mucommander.ui.action.CycleForwardThruFolderPanelAction;
 import com.mucommander.ui.border.MutableLineBorder;
+import com.mucommander.ui.dialog.ErrorDialog;
 import com.mucommander.ui.dialog.QuestionDialog;
 import com.mucommander.ui.dialog.auth.AuthDialog;
 import com.mucommander.ui.dialog.file.DownloadDialog;
@@ -430,7 +431,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
      * Displays a popup dialog informing the user that the requested folder doesn't exist or isn't available.
      */
     private void showFolderDoesNotExistDialog() {
-        JOptionPane.showMessageDialog(mainFrame, Translator.get("folder_does_not_exist"), Translator.get("table.folder_access_error_title"), JOptionPane.ERROR_MESSAGE);
+        ErrorDialog.showErrorDialog(mainFrame, Translator.get("table.folder_access_error_title"), Translator.get("folder_does_not_exist"));
     }
 
 
@@ -443,7 +444,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
         String exceptionMsg = e==null?null:e.getMessage();
         String errorMsg = Translator.get("table.folder_access_error")+(exceptionMsg==null?"":": "+exceptionMsg);
 
-        JOptionPane.showMessageDialog(mainFrame, errorMsg, Translator.get("table.folder_access_error_title"), JOptionPane.ERROR_MESSAGE);
+        ErrorDialog.showErrorDialog(mainFrame, Translator.get("table.folder_access_error_title"), errorMsg);
     }
 
 

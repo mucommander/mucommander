@@ -25,6 +25,7 @@ import com.mucommander.file.FileURL;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.dialog.DialogToolkit;
+import com.mucommander.ui.dialog.ErrorDialog;
 import com.mucommander.ui.dialog.FocusDialog;
 import com.mucommander.ui.helper.FocusRequester;
 import com.mucommander.ui.layout.XBoxPanel;
@@ -199,7 +200,7 @@ public class ServerConnectDialog extends FocusDialog implements ActionListener, 
             folderPanel.tryChangeCurrentFolder(serverURL, credentialsMapping);
         }
         catch(IOException ex) {
-            JOptionPane.showMessageDialog(this, Translator.get("folder_does_not_exist"), Translator.get("table.folder_access_error_title"), JOptionPane.ERROR_MESSAGE);
+            ErrorDialog.showErrorDialog(this, Translator.get("table.folder_access_error_title"), Translator.get("folder_does_not_exist"));
         }
     }
 	

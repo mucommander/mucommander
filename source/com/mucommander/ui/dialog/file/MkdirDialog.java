@@ -30,6 +30,7 @@ import com.mucommander.ui.action.MkfileAction;
 import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.chooser.SizeChooser;
 import com.mucommander.ui.dialog.DialogToolkit;
+import com.mucommander.ui.dialog.ErrorDialog;
 import com.mucommander.ui.dialog.FocusDialog;
 import com.mucommander.ui.layout.YBoxPanel;
 import com.mucommander.ui.main.MainFrame;
@@ -144,14 +145,14 @@ public class MkdirDialog extends FocusDialog implements ActionListener, ItemList
         PathUtils.ResolvedDestination resolvedDest = PathUtils.resolveDestination(enteredPath, mainFrame.getActiveTable().getCurrentFolder());
         // The path entered doesn't correspond to any existing folder
         if (resolvedDest==null) {
-            showErrorDialog(Translator.get("invalid_path", enteredPath));
+            ErrorDialog.showErrorDialog(mainFrame, Translator.get("invalid_path", enteredPath));
             return;
         }
 
         // Checks if the directory already exists and reports the error if that's the case
         int destinationType = resolvedDest.getDestinationType();
         if(destinationType==PathUtils.ResolvedDestination.EXISTING_FOLDER) {
-            showErrorDialog(Translator.get("directory_already_exists", enteredPath));
+            ErrorDialog.showErrorDialog(mainFrame, Translator.get("directory_already_exists", enteredPath));
             return;
         }
 
@@ -171,11 +172,6 @@ public class MkdirDialog extends FocusDialog implements ActionListener, ItemList
             job = new MkdirJob(progressDialog, mainFrame, fileSet);
 
         progressDialog.start(job);
-    }
-
-	
-    private void showErrorDialog(String msg) {
-        JOptionPane.showMessageDialog(mainFrame, msg, Translator.get("error"), JOptionPane.ERROR_MESSAGE);
     }
 
 

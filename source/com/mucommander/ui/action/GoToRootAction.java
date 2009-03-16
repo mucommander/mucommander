@@ -20,6 +20,7 @@ package com.mucommander.ui.action;
 
 import com.mucommander.Debug;
 import com.mucommander.file.AbstractFile;
+import com.mucommander.ui.dialog.ErrorDialog;
 import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.main.MainFrame;
 
@@ -47,7 +48,7 @@ public class GoToRootAction extends GoToParentAction {
             folderPanel.tryChangeCurrentFolder(currentFolder.getRoot());
         }
         catch(IOException e) {
-            reportGenericError();
+            ErrorDialog.showErrorDialog(mainFrame);
             if(Debug.ON) Debug.trace("Failed to retrieve root folder for : "+currentFolder+" :"+e);
         }
     }

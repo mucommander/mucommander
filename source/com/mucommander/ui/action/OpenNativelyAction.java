@@ -24,6 +24,7 @@ import com.mucommander.file.ArchiveEntryFile;
 import com.mucommander.file.FileProtocols;
 import com.mucommander.job.TempExecJob;
 import com.mucommander.text.Translator;
+import com.mucommander.ui.dialog.ErrorDialog;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.quicklist.RecentExecutedFilesQL;
@@ -61,7 +62,9 @@ public class OpenNativelyAction extends MuAction {
             	DesktopManager.open(selectedFile);
             	RecentExecutedFilesQL.addFile(selectedFile);
         	}
-            catch(IOException e) {reportGenericError();}
+            catch(IOException e) {
+                ErrorDialog.showErrorDialog(mainFrame);
+            }
         }
     }
 }

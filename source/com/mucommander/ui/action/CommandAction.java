@@ -26,6 +26,7 @@ import com.mucommander.file.util.FileSet;
 import com.mucommander.job.TempOpenWithJob;
 import com.mucommander.process.ProcessRunner;
 import com.mucommander.text.Translator;
+import com.mucommander.ui.dialog.ErrorDialog;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;
 
@@ -74,7 +75,7 @@ public class CommandAction extends MuAction {
         if(selectedFiles.getBaseFolder().getURL().getScheme().equals(FileProtocols.FILE) && (selectedFiles.getBaseFolder() instanceof LocalFile)) {
             try {ProcessRunner.execute(command.getTokens(selectedFiles), selectedFiles.getBaseFolder());}
             catch(Exception e) {
-                reportGenericError();
+                ErrorDialog.showErrorDialog(mainFrame);
                 if(Debug.ON) {
                     Debug.trace("Failed to execute command: " + command.getCommand());
                     Debug.trace(e);

@@ -28,7 +28,9 @@ import com.mucommander.job.FileCollisionChecker;
 import com.mucommander.runtime.OsFamilies;
 import com.mucommander.runtime.OsVersions;
 import com.mucommander.text.Translator;
+import com.mucommander.ui.dialog.ErrorDialog;
 import com.mucommander.ui.dialog.QuestionDialog;
+import com.mucommander.ui.dialog.WarningDialog;
 import com.mucommander.ui.dialog.file.FileCollisionDialog;
 import com.mucommander.ui.dialog.pref.PreferencesDialog;
 import com.mucommander.ui.dialog.pref.PreferencesPanel;
@@ -195,8 +197,6 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
         if(brushedMetalCheckBox!=null)
         	brushedMetalCheckBox.addDialogListener(parent);
     }
-
-    private void showGenericError() {JOptionPane.showMessageDialog(this, Translator.get("generic_error"), Translator.get("error"), JOptionPane.ERROR_MESSAGE);}
 
     /**
      * Populates the look&feel combo box will all available look&feels.
@@ -722,7 +722,7 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
             // Identifies all the look&feels contained by the new library and adds them to the list of custom
             // If no look&feel was found, notifies the user.
             if((newLookAndFeels = new ClassFinder().find(lookAndFeelLibrary, new LookAndFeelFilter())).isEmpty())
-                JOptionPane.showMessageDialog(this, Translator.get("prefs_dialog.no_look_and_feel"), Translator.get("warning"), JOptionPane.WARNING_MESSAGE);
+                WarningDialog.showWarningDialog(this, Translator.get("prefs_dialog.no_look_and_feel"));
             else if(importLookAndFeelLibrary(lookAndFeelLibrary)) {
                 String currentName;
 
@@ -747,7 +747,9 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
                 populateLookAndFeels();
             }
         }
-        catch(Exception e) {showGenericError();}
+        catch(Exception e) {
+            ErrorDialog.showErrorDialog(this);
+        }
         setLookAndFeelsLoading(false);
     }
 
@@ -768,7 +770,7 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
 
             // Makes sure the file actually exists - JFileChooser apparently doesn't enforce that properly in all look&feels.
             if(!file.exists()) {
-                JOptionPane.showMessageDialog(this, Translator.get("this_file_does_not_exist", file.getName()), Translator.get("error"), JOptionPane.ERROR_MESSAGE);
+                ErrorDialog.showErrorDialog(this, Translator.get("this_file_does_not_exist", file.getName()));
                 return;
             }
 
@@ -832,7 +834,7 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
             }
             catch(Exception e) {}
             // Otherwise, notifies the user.
-            JOptionPane.showMessageDialog(this, Translator.get("prefs_dialog.rename_failed", theme.getName()), Translator.get("error"), JOptionPane.ERROR_MESSAGE);
+            ErrorDialog.showErrorDialog(this, Translator.get("prefs_dialog.rename_failed", theme.getName()));
         }
     }
 
@@ -853,7 +855,9 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
             ThemeManager.deleteCustomTheme(theme.getName());
             themeComboBox.removeItem(theme);
         }
-        catch(Exception e) {showGenericError();}
+        catch(Exception e) {
+            ErrorDialog.showErrorDialog(this);
+        }
     }
 
     /**
@@ -910,7 +914,7 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
             file               = FileFactory.getFile(chooser.getSelectedFile().getAbsolutePath());
             lastSelectedFolder = file.getParentSilently();
             if(!file.exists()) {
-                JOptionPane.showMessageDialog(this, Translator.get("this_file_does_not_exist", file.getName()), Translator.get("error"), JOptionPane.ERROR_MESSAGE);
+                ErrorDialog.showErrorDialog(this, Translator.get("this_file_does_not_exist", file.getName()));
                 return;
             }
 
@@ -918,8 +922,7 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
             try {insertTheme(ThemeManager.importTheme((java.io.File)file.getUnderlyingFileObject()));}
             // Notifies the user that something went wrong.
             catch(Exception ex) {
-                JOptionPane.showMessageDialog(this, Translator.get("prefs_dialog.error_in_import", file.getName()),
-                                              Translator.get("error"), JOptionPane.ERROR_MESSAGE);
+                ErrorDialog.showErrorDialog(this, Translator.get("prefs_dialog.error_in_import", file.getName()));
             }
         }
     }
@@ -972,7 +975,7 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
             }
             // Notifies users of errors.
             catch(Exception exception) {
-                JOptionPane.showMessageDialog(this, Translator.get("cannot_write_file", file.getName()), Translator.get("write_error"), JOptionPane.ERROR_MESSAGE);
+                ErrorDialog.showErrorDialog(this, Translator.get("write_error"), Translator.get("cannot_write_file", file.getName()));
             }
         }
     }
@@ -982,7 +985,9 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
      */
     private void duplicateTheme(Theme theme) {
         try {insertTheme(ThemeManager.duplicateTheme(theme));}
-        catch(Exception e) {showGenericError();}
+        catch(Exception e) {
+            ErrorDialog.showErrorDialog(this);
+        }
     }
 
 

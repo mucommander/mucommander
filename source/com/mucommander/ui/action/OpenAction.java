@@ -24,6 +24,7 @@ import com.mucommander.file.FileProtocols;
 import com.mucommander.file.impl.local.LocalFile;
 import com.mucommander.job.TempExecJob;
 import com.mucommander.text.Translator;
+import com.mucommander.ui.dialog.ErrorDialog;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.main.MainFrame;
@@ -85,7 +86,9 @@ public class OpenAction extends MuAction {
             	DesktopManager.open(file);
             	RecentExecutedFilesQL.addFile(file);
     		}
-            catch(IOException e) {reportGenericError();}
+            catch(IOException e) {
+                ErrorDialog.showErrorDialog(mainFrame);
+            }
         }
 
         // Copies non-local file in a temporary local file and opens them using their native association.

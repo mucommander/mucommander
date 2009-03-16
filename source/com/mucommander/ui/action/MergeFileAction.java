@@ -18,16 +18,15 @@
 
 package com.mucommander.ui.action;
 
-import java.util.Hashtable;
-import java.util.Iterator;
-
-import javax.swing.JOptionPane;
-
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.util.FileSet;
 import com.mucommander.text.Translator;
+import com.mucommander.ui.dialog.ErrorDialog;
 import com.mucommander.ui.dialog.file.MergeFileDialog;
 import com.mucommander.ui.main.MainFrame;
+
+import java.util.Hashtable;
+import java.util.Iterator;
 
 /**
  * This action invokes the merge file dialog which allows to
@@ -49,10 +48,10 @@ public class MergeFileAction extends SelectedFilesAction implements InvokesDialo
     	for (Iterator iterator = files.iterator(); iterator.hasNext();) {
 			AbstractFile file = (AbstractFile) iterator.next();
 			if (file.isDirectory() || file.isSymlink()) {
-				JOptionPane.showMessageDialog(mainFrame, 
-						Translator.get("com.mucommander.ui.action.MergeFileAction.select_files_only"), 
-						Translator.get("com.mucommander.ui.action.MergeFileAction.wrong_selection"), 
-						JOptionPane.ERROR_MESSAGE);
+				ErrorDialog.showErrorDialog(mainFrame,
+						Translator.get("com.mucommander.ui.action.MergeFileAction.wrong_selection"),
+						Translator.get("com.mucommander.ui.action.MergeFileAction.select_files_only")); 
+
 				return;
 			}
 		}
