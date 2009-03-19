@@ -38,6 +38,7 @@ import com.mucommander.ui.main.StatusBar;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.util.Vector;
@@ -346,6 +347,8 @@ public class ProgressDialog extends FocusDialog implements ActionListener, ItemL
 		private String jobStatusString;
 		private int jobState;
 		private int loopCount;
+		private long jobPauseStartDate;
+		
     	
     	public JobProgress(FileJob job) {
     		this.job = job;
@@ -359,6 +362,7 @@ public class ProgressDialog extends FocusDialog implements ActionListener, ItemL
 
         public void actionPerformed(ActionEvent e) {
             jobState = job.getState();
+            jobPauseStartDate = job.getPauseStartDate();
             if (jobState==FileJob.FINISHED || jobState==FileJob.INTERRUPTED) {
                 jobStatusString = Translator.get("progress_dialog.job_finished");
                 // Job just finished, let's loop one more time to ensure that components (progress bar in particular)
@@ -453,42 +457,92 @@ public class ProgressDialog extends FocusDialog implements ActionListener, ItemL
         	}
         	updateProgressLabel();
 	    }
-	    
+        
+        public String getJobStatusString() {
+			return jobStatusString;
+		}
+        
+        public boolean isTransferFileJob() {
+        	return transferFileJob != null;
+        }
+        
+        
+        public int getFilePercentInt() {
+			return filePercentInt;
+		}
+        
+        public String getFileProgressText() {
+			return fileProgressText;
+		}
+        
+        public long getBytesTotal() {
+			return bytesTotal;
+		}
+        
+        public long getTotalBps() {
+			return totalBps;
+		}
+        
+        public long getLastTime() {
+			return lastTime;
+		}
+        
+        public long getCurrentBps() {
+			return currentBps;
+		}
+        
+        public int getTotalPercentInt() {
+			return totalPercentInt;
+		}
+        
+        public String getTotalProgressText() {
+			return totalProgressText;
+		}
+        
+        public long getEffectiveJobTime() {
+			return effectiveJobTime;
+		}
+        
+        public long getJobPauseStartDate() {
+			return jobPauseStartDate;
+		}
+        
+        
         // Refresh current file label in a separate thread, more frequently than other components to give a sense
         // of speed when small files are being transferred.
         // This 'pull' approach allows to throttle the number label updates which have a cost VS updating the label
         // for each file being processed (job notifications) which can hog the CPU when lots of small files
         // are being transferred.
 	    private void updateProgressLabel() {
-	    	currentFileLabel.setText(jobStatusString);
+	    	currentFileLabel.setText(getJobStatusString());
 	    }
 	    
 	    private void updateProgressUI() {
-            if (transferFileJob != null) {
-                currentFileProgressBar.setValue(filePercentInt);
-                currentFileProgressBar.setString(fileProgressText);
+            if (isTransferFileJob()) {
+                currentFileProgressBar.setValue(getFilePercentInt());
+                currentFileProgressBar.setString(getFileProgressText());
 
                 // Update total transferred label
                 totalTransferredLabel.setText(
                    Translator.get("progress_dialog.transferred",
-                                  SizeFormat.format(bytesTotal, SizeFormat.DIGITS_MEDIUM| SizeFormat.UNIT_LONG| SizeFormat.ROUND_TO_KB),
-                                  SizeFormat.format(totalBps, SizeFormat.UNIT_SPEED| SizeFormat.DIGITS_MEDIUM| SizeFormat.UNIT_SHORT| SizeFormat.ROUND_TO_KB))
+                                  SizeFormat.format(getBytesTotal(), SizeFormat.DIGITS_MEDIUM| SizeFormat.UNIT_LONG| SizeFormat.ROUND_TO_KB),
+                                  SizeFormat.format(getTotalBps(), SizeFormat.UNIT_SPEED| SizeFormat.DIGITS_MEDIUM| SizeFormat.UNIT_SHORT| SizeFormat.ROUND_TO_KB))
                 );
                 
                 // Add new immediate bytes per second speed sample to speed graph and label and repaint it
                 // Skip this sample if job was paused and resumed, speed would not be accurate
-                if(lastTime>job.getPauseStartDate() && !lastLoop) {
-                    speedGraph.addSample(currentBps);
-                    updateCurrentSpeedLabel(SizeFormat.format(currentBps, SizeFormat.UNIT_SPEED| SizeFormat.DIGITS_MEDIUM| SizeFormat.UNIT_SHORT));
+                if (getLastTime()>getJobPauseStartDate()) {
+                    speedGraph.addSample(getCurrentBps());
+                    updateCurrentSpeedLabel(SizeFormat.format(getCurrentBps(), SizeFormat.UNIT_SPEED| SizeFormat.DIGITS_MEDIUM| SizeFormat.UNIT_SHORT));
                 }
                 
             }
             
-            totalProgressBar.setValue(totalPercentInt);
-            totalProgressBar.setString(totalProgressText);
+            totalProgressBar.setValue(getTotalPercentInt());
+            totalProgressBar.setString(getTotalProgressText());
 
             // Update elapsed time label
-            elapsedTimeLabel.setText(Translator.get("progress_dialog.elapsed_time")+": "+DurationFormat.format(effectiveJobTime));
+            elapsedTimeLabel.setText(Translator.get("progress_dialog.elapsed_time")+": "+DurationFormat.format(getEffectiveJobTime()));
 	    	
 	    }
 
