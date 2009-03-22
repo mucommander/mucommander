@@ -266,6 +266,10 @@ public abstract class ProxyFile extends AbstractFile {
         return file.isRoot();
     }
 
+    public AbstractFile getVolume() throws IOException {
+        return file.getVolume();
+    }
+
     public InputStream getInputStream(long offset) throws IOException {
         return file.getInputStream(offset);
     }

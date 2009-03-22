@@ -439,11 +439,42 @@ public class ArchiveEntryFile extends AbstractFile {
     }
 
     /**
+     * This method is overridden to use the archive file's absolute path as the base path of this entry file.
+     */
+    public String getAbsolutePath() {
+        // Use the archive file's absolute path and append the entry's relative path to it
+        return archiveFile.getAbsolutePath(true)+getRelativeEntryPath();
+    }
+
+    /**
      * This method is overridden to use the archive file's canonical path as the base path of this entry file.
      */
     public String getCanonicalPath() {
-        // Use the archive file's canonical path and append it with the entry's relative path
+        // Use the archive file's canonical path and append the entry's relative path to it
         return archiveFile.getCanonicalPath(true)+getRelativeEntryPath();
+    }
+
+    /**
+     * This method is overridden to return the archive's root folder.
+     */
+    public AbstractFile getRoot() throws IOException {
+        return archiveFile.getRoot();
+    }
+
+    /**
+     * This method is overridden to blindly return <code>false</code>, an archive entry cannot be a root folder.
+     *
+     * @return <code>false</code>, always
+     */
+    public boolean isRoot() {
+        return false;
+    }
+
+    /**
+     * This method is overridden to return the archive's volume folder.
+     */
+    public AbstractFile getVolume() throws IOException {
+        return archiveFile.getVolume();
     }
 
     /**

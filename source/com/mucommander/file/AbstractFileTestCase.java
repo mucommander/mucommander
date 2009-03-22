@@ -399,6 +399,24 @@ public abstract class AbstractFileTestCase extends TestCase {
             assertContentsEquals(file, resolvedFile);       // Deep equals (compares contents)
     }
 
+    /**
+     * Tests the given volume folder and assert certain properties that a volume folder should have.
+     *
+     * @param volume a volume folder
+     * @throws IOException should not happen
+     */
+    protected void testVolume(AbstractFile volume) throws IOException {
+        // Test basic volume properties
+        assertNotNull(volume);
+        assertTrue(volume.isDirectory());
+        assertEquals(volume, volume.getVolume());
+
+        // Assert that children of the volume are located on the volume (test the first children only)
+        AbstractFile[] children = volume.ls();
+        if(children.length>0)
+            assertEquals(volume, children[0].getVolume());
+    }
+
 
     //////////////////
     // Test methods //
@@ -642,12 +660,14 @@ public abstract class AbstractFileTestCase extends TestCase {
     public void testRoot() throws IOException {
         AbstractFile root = tempFile.getRoot();
 
-        // Returned root file may not be null
+        // The returned root folder may not be null
         assertNotNull(root);
 
-        // Test basic properties of a root file
+        // Test basic root file properties
         assertTrue(root.isRoot());
         assertTrue(root.isParentOf(tempFile));
+        assertTrue(root.isBrowsable());
+        assertNull(root.getParent());
 
         if(!tempFile.equals(root))
             assertFalse(tempFile.isRoot());
@@ -656,6 +676,35 @@ public abstract class AbstractFileTestCase extends TestCase {
         AbstractFile rootRoot = root.getRoot();
         assertNotNull(rootRoot);
         assertTrue(rootRoot.equals(root));
+
+        // Assert that another temporary file yields the same root folder
+        assertEquals(root, getTemporaryFile().getRoot());
+
+        // Assert that children of the root folder yield the same root folder and are not root folder themselves
+        // (test the first children only)
+        AbstractFile[] children = root.ls();
+        if(children.length>0) {
+            assertEquals(root, children[0].getRoot());
+            assertFalse(children[0].isRoot());
+        }
+    }
+
+
+    /**
+     * Tests {@link AbstractFile#getVolume()}.
+     *
+     * @throws IOException should not happen
+     */
+    public void testVolume() throws IOException {
+        AbstractFile volume = tempFile.getVolume();
+
+        testVolume(volume);
+
+        // Test the relationship between the temporary file and its volume
+        assertTrue(volume.isParentOf(tempFile));
+        // Another temporary file should yield the same volume
+        assertEquals(volume, getTemporaryFile().getVolume());
+
     }
 
 
@@ -1589,11 +1638,13 @@ public abstract class AbstractFileTestCase extends TestCase {
     //////////////////////
 
     /**
-     * Returns a temporary file that can be used for testing purposes.
-     * The implementation should return a file that does not exist, i.e. for which {@link AbstractFile#exists()}
-     * returns <code>false</code>.
+     * Returns a temporary file that can be used for testing purposes. Implementation of this method must guarantee that:
+     * <ul>
+     *   <li>the returned file does not exist, i.e. that {@link AbstractFile#exists()} returns <code>false</code>.</li>
+     *   <li>a new file is returned each time this method is called.</li>
+     * </ul>
      *
-     * @return a temporary file that does not physically exist
+     * @return a temporary file that does not exist
      * @throws IOException if an error occurred while creating a temporary file
      */
     public abstract AbstractFile getTemporaryFile() throws IOException;

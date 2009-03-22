@@ -25,7 +25,7 @@ import com.mucommander.bookmark.BookmarkManager;
 import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.desktop.DesktopManager;
 import com.mucommander.file.AbstractFile;
-import com.mucommander.file.RootFolders;
+import com.mucommander.file.impl.local.LocalFile;
 import com.mucommander.runtime.OsFamilies;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.*;
@@ -83,7 +83,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
 
     // Go menu
     private JMenu goMenu;
-    private int rootFoldersOffset;
+    private int volumeOffset;
 
     // Bookmark menu
     private JMenu bookmarksMenu;
@@ -274,9 +274,9 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
         bonjourMenu.setIcon(null);
         goMenu.add(bonjourMenu);
 
-        // Root folders will be added when the menu is selected
+        // Volumes will be added when the menu is selected
         goMenu.add(new JSeparator());
-        rootFoldersOffset = goMenu.getItemCount();
+        volumeOffset = goMenu.getItemCount();
 
         add(goMenu);
 
@@ -403,16 +403,16 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
             }
         }
         else if(source==goMenu) {
-            // Remove any previous root folders from Go menu
+            // Remove any previous volumes from the Go menu
             // as they might have changed since menu was last selected
-            for(int i=goMenu.getItemCount(); i>rootFoldersOffset; i--)
-                goMenu.remove(rootFoldersOffset);
+            for(int i=goMenu.getItemCount(); i> volumeOffset; i--)
+                goMenu.remove(volumeOffset);
 
-            AbstractFile rootFolders[] = RootFolders.getRootFolders();
-            int nbFolders = rootFolders.length;
+            AbstractFile volumes[] = LocalFile.getVolumes();
+            int nbFolders = volumes.length;
 
             for(int i=0; i<nbFolders; i++)
-                goMenu.add(new OpenLocationAction(mainFrame, new Hashtable(), rootFolders[i]));
+                goMenu.add(new OpenLocationAction(mainFrame, new Hashtable(), volumes[i]));
         }
         else if(source==bookmarksMenu) {
             // Remove any previous bookmarks menu items from menu

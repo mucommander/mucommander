@@ -27,12 +27,16 @@ import com.mucommander.conf.ConfigurationEvent;
 import com.mucommander.conf.ConfigurationListener;
 import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.desktop.DesktopManager;
-import com.mucommander.file.*;
+import com.mucommander.file.AbstractFile;
+import com.mucommander.file.FileFactory;
+import com.mucommander.file.FileProtocols;
+import com.mucommander.file.FileURL;
 import com.mucommander.file.filter.AndFileFilter;
 import com.mucommander.file.filter.AttributeFileFilter;
 import com.mucommander.file.filter.DSStoreFileFilter;
 import com.mucommander.file.filter.SystemFileFilter;
 import com.mucommander.file.impl.CachedFile;
+import com.mucommander.file.impl.local.LocalFile;
 import com.mucommander.file.util.FileSet;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionKeymap;
@@ -207,7 +211,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
             setCurrentFolder(initialFolder, initialFolder.ls(chainedFileFilter), null);
         }
         catch(Exception e) {
-            AbstractFile rootFolders[] = RootFolders.getRootFolders();
+            AbstractFile rootFolders[] = LocalFile.getVolumes();
             // If that failed, try to read any other drive
             for(int i=0; i<rootFolders.length; i++) {
                 try  {

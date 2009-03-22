@@ -18,11 +18,11 @@
 
 package com.mucommander.ui.autocomplete.completers.services;
 
+import com.mucommander.file.AbstractFile;
+import com.mucommander.file.impl.local.LocalFile;
+
 import java.util.Arrays;
 import java.util.Vector;
-
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.RootFolders;
 
 /**
  * This <code>CompletionService</code> handles root folders completion.
@@ -45,7 +45,7 @@ public class RootFoldersService implements CompletionService {
 		lastSuggestedCompletions.clear();
 		int index = Math.max(path.lastIndexOf('\\'), path.lastIndexOf('/'));
 		if (index == -1) {
-			AbstractFile[] fileRoots = RootFolders.getRootFolders();
+			AbstractFile[] fileRoots = LocalFile.getVolumes();
 	    	int nbFolders = fileRoots.length;
 	    	String[] rootFolderNames = new String[nbFolders];
 	    	for (int i=0; i<nbFolders; i++)

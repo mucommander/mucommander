@@ -24,6 +24,7 @@ import com.mucommander.file.FileFactory;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
+import java.util.regex.Matcher;
 
 /**
  * An {@link com.mucommander.file.AbstractFileTestCase} implementation for {@link LocalFile}.
@@ -102,5 +103,40 @@ public class LocalFileTest extends AbstractFileTestCase {
         assertNotNull(volumeInfo);
         assertEquals(volumeInfo[0], tempFile.getTotalSpace());
         assertEquals(volumeInfo[1], tempFile.getFreeSpace());
+    }
+
+    /**
+     * Tests the volumes returned by {@link LocalFile#getVolumes()} by calling {@link #testVolume(AbstractFile)} for
+     * each of them.
+     *
+     * @throws IOException should not happen
+     */
+    public void testVolumes() throws IOException {
+        AbstractFile[] volumes = LocalFile.getVolumes();
+
+        assertNotNull(volumes);
+        assertTrue(volumes.length>0);
+
+        for(int i=0; i<volumes.length; i++)
+            testVolume(volumes[i]);
+    }
+
+    /**
+     * Tests the regex pattern
+     */
+    public void testDrivePattern() {
+        Matcher matcher = LocalFile.driveRootPattern.matcher("C:\\");
+        assertTrue(matcher.matches());
+
+        matcher = LocalFile.driveRootPattern.matcher("C:");
+        assertFalse(matcher.matches());
+
+        matcher = LocalFile.driveRootPattern.matcher("C:\\blah");
+        assertFalse(matcher.matches());
+        matcher.reset();
+        assertTrue(matcher.find());
+
+        matcher = LocalFile.driveRootPattern.matcher("/blah/C:\\");
+        assertFalse(matcher.matches());
     }
 }

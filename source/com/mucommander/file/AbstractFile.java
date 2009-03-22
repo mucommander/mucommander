@@ -22,11 +22,8 @@ import com.mucommander.file.compat.CompatURLStreamHandler;
 import com.mucommander.file.filter.FileFilter;
 import com.mucommander.file.filter.FilenameFilter;
 import com.mucommander.file.impl.ProxyFile;
-import com.mucommander.file.impl.local.LocalFile;
-import com.mucommander.file.util.PathUtils;
 import com.mucommander.io.*;
 import com.mucommander.process.AbstractProcess;
-import com.mucommander.runtime.OsFamilies;
 
 import javax.swing.*;
 import java.awt.*;
@@ -37,7 +34,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.regex.Pattern;
 
 /**
  * <code>AbstractFile</code> is the superclass of all files.
@@ -70,9 +66,6 @@ public abstract class AbstractFile implements PermissionTypes, PermissionAccesse
     // Note: raising buffer size from 8192 to 65536 makes a huge difference in SFTP read transfer rates but beyond
     // 65536, no more gain (not sure why).
     public final static int IO_BUFFER_SIZE = 65536;
-
-    /** Pattern matching Windows drive root folders, e.g. C:\ */
-    protected final static Pattern windowsDriveRootPattern = Pattern.compile("^[a-zA-Z]{1}[:]{1}[\\\\]{1}$");
 
 
     /**
@@ -165,29 +158,22 @@ public abstract class AbstractFile implements PermissionTypes, PermissionAccesse
     /**
      * Returns the absolute path to this file:
      * <ul>
-     * <li>For local files, the sole path is returned, and <b>not</b> a URL with the scheme and host parts (e.g. /path/to/file, not file://localhost/path/to/file)
-     * <li>For any other file protocol, the full URL including the protocol and host parts is returned (e.g. smb://192.168.1.1/root/blah)
+     * <li>For local filesystems, the local file's path should be returned, and <b>not</b> a full URL with the scheme
+     * and host parts (e.g. /path/to/file, not file://localhost/path/to/file)</li>
+     * <li>For any other filesystems, the full URL including the protocol and host parts should be returned
+     * (e.g. smb://192.168.1.1/root/blah)</li>
      * </ul>
-     *
-     * <p>The returned path will always be free of any login and password and thus can be safely displayed or stored.</p>
+     * <p>
+     * This default implementation returns the string representation of this file's {@link #getURL() url}, without
+     * the login and password parts. File implementations overridding this method should always return a path free of
+     * any login and password, so that it can safely be displayed to the end user or stored, without risking to
+     * compromise sensitive information.
+     * </p>
      *
      * @return the absolute path to this file
      */
     public String getAbsolutePath() {
-        FileURL fileURL = getURL();
-
-        // For local files: return file's path 'sans' the scheme and host parts
-        if(fileURL.getScheme().equals(FileProtocols.FILE)) {
-            String path = fileURL.getPath();
-            // Under for OSes with 'root drives' (Windows, OS/2), remove the leading '/' character
-            if(LocalFile.hasRootDrives())
-                path = PathUtils.removeLeadingSeparator(path, "/");
-
-            return path;
-        }
-
-        // For any other file protocols: return the full URL that includes the scheme and host parts
-        return fileURL.toString(false);
+        return getURL().toString(false);
     }
 
 
@@ -269,45 +255,58 @@ public abstract class AbstractFile implements PermissionTypes, PermissionAccesse
 
 
     /**
-     * Returns the root folder that contains this file either as a direct or an indirect child. If this file is already
-     * a root folder (has no parent), <code>this</code> is returned.
+     * Returns the root folder of this file, i.e. the top-level parent folder that has no parent folder. The returned
+     * folder necessarily contains this file, directly or indirectly. If this file already is a root folder, the same
+     * file will be returned.
+     * <p>
+     * This default implementation returns the file whose URL has the same scheme as this one, same credentials (if any),
+     * and a path equal to <code>/</code>.
+     * </p>
      *
      * @return the root folder that contains this file
-     * @throws IOException if the root file or one parent file could not be instanciated
+     * @throws IOException if the root folder could not be resolved
      */
     public AbstractFile getRoot() throws IOException {
-        AbstractFile parent;
-        AbstractFile child = this; 
-        while((parent=child.getParent())!=null && !parent.equals(child)) {
-            child = parent;
-        }
-		
-        return child;
-    }
+        FileURL rootURL = (FileURL)getURL().clone();
+        rootURL.setPath("/");
 
+        return FileFactory.getFile(rootURL, true);
+    }
 
     /**
      * Returns <code>true</code> if this file is a root folder.
-     *
-     * <p>This default implementation characterizes root folders in the following way:
-     * <ul>
-     *  <li>For local files under Windows: if the path corresponds a drive's root ('C:\' for instance)
-     *  <li>For local files under other OS: if the path is "/"
-     *  <li>For any other file kinds: if the FileURL's path is '/'
-     * </ul>
+     * <p>
+     * This default implementation returns <code>true</code> if this file's URL path is <code>/</code>.
      * </p>
      *
      * @return <code>true</code> if this file is a root folder
      */
     public boolean isRoot() {
-        if(fileURL.getScheme().equals(FileProtocols.FILE)) {
-            String path = getAbsolutePath();
-            return OsFamilies.WINDOWS.isCurrent()?windowsDriveRootPattern.matcher(path).matches():path.equals("/");
-        }
-        else
-            return getURL().getPath().equals("/");
+        return getURL().getPath().equals("/");
     }
 
+    /**
+     * Returns the volume on which this file is located, or <code>this</code> if this file is itself a volume.
+     * The returned file may never be <code>null</code>, and must always be a directory. In other words, archive files
+     * may not be considered as volumes.
+     * <p>
+     * The notion of volume may or may not have a meaning depending on the kind of fileystem. On local filesystems,
+     * the notion of volume can be assimilated into that of <i>mount point</i> for UNIX-based OSes, or <i>drive</i>
+     * for the Windows platform. Volumes may also have a meaning for certain network filesystems such as SMB, for which
+     * shares can be considered as volumes. Filesystems that don't have a notion of volume should return the
+     * {@link #getRoot() root folder}.
+     * </p>
+     * <p>
+     * This default implementation returns this file's {@link #getRoot() root folder}. This method should be overridden
+     * if this is not adequate.
+     * </p>
+     *
+     * @return the volume on which this file is located.
+     * @throws IOException if the volume could not be resolved
+     */
+    public AbstractFile getVolume() throws IOException {
+        return getRoot();
+    }
 
     /**
      * Returns an <code>InputStream</code> to read this file's contents, starting at the specified offset (in bytes).

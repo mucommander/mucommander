@@ -24,6 +24,7 @@ import com.mucommander.file.*;
 import com.mucommander.file.filter.FilenameFilter;
 import com.mucommander.file.util.Kernel32;
 import com.mucommander.file.util.Kernel32API;
+import com.mucommander.file.util.PathUtils;
 import com.mucommander.io.*;
 import com.mucommander.process.AbstractProcess;
 import com.mucommander.runtime.JavaVersions;
@@ -38,6 +39,7 @@ import java.nio.channels.FileChannel;
 import java.util.StringTokenizer;
 import java.util.Vector;
 import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 /**
@@ -93,10 +95,12 @@ public class LocalFile extends AbstractFile {
     /** Are we running Windows ? */
     private final static boolean IS_WINDOWS =  OsFamilies.WINDOWS.isCurrent();
 
-    /** true if the underlying local filesystem uses drives assigned to letters (e.g. A:\, C:\, ...) instead
+    /** True if the underlying local filesystem uses drives assigned to letters (e.g. A:\, C:\, ...) instead
      * of having single a root folder '/' */
     public final static boolean USES_ROOT_DRIVES = IS_WINDOWS || OsFamilies.OS_2.isCurrent();
 
+    /** Pattern matching Windows-like drives' root, e.g. C:\ */
+    final static Pattern driveRootPattern = Pattern.compile("^[a-zA-Z]{1}[:]{1}[\\\\]{1}");
 
     // Permissions can only be changed under Java 1.6 and up and are limited to 'user' access.
     // Note: 'read' and 'execute' permissions have no meaning under Windows (files are either read-only or
@@ -159,6 +163,10 @@ public class LocalFile extends AbstractFile {
     }
 
 
+    ////////////////////////////////
+    // LocalFile-specific methods //
+    ////////////////////////////////
+
     /**
      * Returns the user home folder. Most if not all OSes have one, but in the unlikely event that the OS doesn't have
      * one or that the folder cannot be resolved, <code>null</code> will be returned.
@@ -198,7 +206,8 @@ public class LocalFile extends AbstractFile {
     /**
      * Uses platform dependant functions to retrieve the total and free space on the volume where this file resides.
      *
-     * @return a {totalSpace, freeSpace} long array, both values can be null if the information could not be retrieved
+     * @return a {totalSpace, freeSpace} long array, both values can be <code>null</code> if the information could not
+     * be retrieved.
      */
     protected long[] getNativeVolumeInfo() {
         BufferedReader br = null;
@@ -387,16 +396,158 @@ public class LocalFile extends AbstractFile {
 
 
     /**
+     * Resolves and returns all local volumes:
+     * <ul>
+     *   <li>On UNIX-based OSes, these are the mount points declared in <code>/etc/ftab</code></li>
+     *   <li>On the Windows platform, these are active drives</li>
+     * </ul>
+     * <p>
+     * The return list of volumes is purposively not cached so that new volumes will be returned as soon as they are
+     * mounted.
+     * </p>
+     *
+     * @return all local volumes
+     */
+    public static AbstractFile[] getVolumes() {
+        Vector volumesV = new Vector();
+
+        // Add Mac OS X's /Volumes subfolders and not file roots ('/') since Volumes already contains a named link
+        // (like 'Hard drive' or whatever silly name the user gave his primary hard disk) to /
+        if(OsFamilies.MAC_OS_X.isCurrent()) {
+            addMacOSXVolumes(volumesV);
+        }
+        else {
+            // Add java.io.File's root folders
+            addJavaIoFileRoots(volumesV);
+
+            // Add /etc/fstab folders under UNIX-based systems.
+            if(OsFamily.getCurrent().isUnixBased())
+                addFstabEntries(volumesV);
+        }
+
+        // Add home folder, if it is not already present in the list
+        AbstractFile homeFolder = getUserHome();
+        if(!(homeFolder==null || volumesV.contains(homeFolder)))
+            volumesV.add(homeFolder);
+
+        AbstractFile volumes[] = new AbstractFile[volumesV.size()];
+        volumesV.toArray(volumes);
+
+        return volumes;
+    }
+
+
+    ////////////////////
+    // Helper methods //
+    ////////////////////
+
+    /**
+     * Resolves the root folders returned by {@link File#listRoots()} and adds them to the given <code>Vector</code>.
+     *
+     * @param v the <code>Vector</code> to add root folders to
+     */
+    private static void addJavaIoFileRoots(Vector v) {
+        // Warning : No file operation should be performed on the resolved folders as under Win32, this would cause a
+        // dialog to appear for removable drives such as A:\ if no disk is present.
+        File fileRoots[] = File.listRoots();
+
+        int nbFolders = fileRoots.length;
+        for(int i=0; i<nbFolders; i++)
+            try {
+                v.add(FileFactory.getFile(fileRoots[i].getAbsolutePath(), true));
+            }
+            catch(IOException e) {}
+    }
+
+    /**
+     * Parses <code>/etc/fstab</code>, resolves all the mount points it contains and adds them to the given
+     * <code>Vector</code>.
+     *
+     * @param v the <code>Vector</code> to add mount points to
+     */
+    private static void addFstabEntries(Vector v) {
+        BufferedReader br;
+
+        br = null;
+        try {
+            br = new BufferedReader(new InputStreamReader(new FileInputStream("/etc/fstab")));
+            StringTokenizer st;
+            String line;
+            AbstractFile file;
+            String folderPath;
+            while((line=br.readLine())!=null) {
+                // Skip comments
+                // JS, 2008-09-25: Exclude empty lines too
+                // JS, 2009-03-21: Exclude mount destination "swap" too
+                line = line.trim();
+                if(line.length() > 0 && !line.startsWith("#")) {
+                    st = new StringTokenizer(line);
+                    // path is second token
+                    st.nextToken();
+                    folderPath = st.nextToken();
+                    if(!(folderPath.equals("/proc") || folderPath.equals("none") || folderPath.equals("/dev/shm") || folderPath.equals("swap"))) {
+                        file = FileFactory.getFile(folderPath);
+                        if(file!=null && !v.contains(file))
+                            v.add(file);
+                    }
+                }
+            }
+        }
+        catch(Exception e) {
+            if(Debug.ON) Debug.trace("Error reading /etc/fstab entries: "+ e);
+        }
+        finally {
+            if(br != null) {
+                try {
+                    br.close();
+                }
+                catch(IOException e) {}
+            }
+        }
+    }
+
+    /**
+     * Adds all <code>/Volumes</code> subfolders to the given <code>Vector</code>.
+     *
+     * @param v the <code>Vector</code> to add the volumes to
+     */
+    private static void addMacOSXVolumes(Vector v) {
+        // /Volumes not resolved for some reason, giving up
+        AbstractFile volumesFolder = FileFactory.getFile("/Volumes");
+        if(volumesFolder==null)
+            return;
+
+        // Adds subfolders
+        try {
+            AbstractFile volumesFiles[] = volumesFolder.ls();
+            int nbFiles = volumesFiles.length;
+            AbstractFile folder;
+            for(int i=0; i<nbFiles; i++)
+                if((folder=volumesFiles[i]).isDirectory()) {
+                    // The primary hard drive (the one corresponding to '/') is listed under Volumes and should be
+                    // returned as the first volume
+                    if(folder.getCanonicalPath().equals("/"))
+                        v.insertElementAt(folder, 0);
+                    else
+                        v.add(folder);
+                }
+        }
+        catch(IOException e) {
+            if(Debug.ON) Debug.trace("Can't get /Volumes subfolders: "+ e);
+        }
+    }
+
+
+    /////////////////////////////////
+    // AbstractFile implementation //
+    /////////////////////////////////
+
+    /**
      * Returns a <code>java.io.File</code> instance corresponding to this file.
      */
     public Object getUnderlyingFileObject() {
         return file;
     }
-    
-	
-    /////////////////////////////////////////
-    // AbstractFile methods implementation //
-    /////////////////////////////////////////
 
     public boolean isSymlink() {
         // At the moment symlinks under Windows (aka NTFS junction points) are not supported because java.io.File
@@ -603,6 +754,7 @@ public class LocalFile extends AbstractFile {
 
     /**
      * Always returns <code>true</code>.
+     *
      * @return <code>true</code>
      */
     public boolean canRunProcess() {
@@ -611,6 +763,7 @@ public class LocalFile extends AbstractFile {
 
     /**
      * Returns a process executing the specied local command.
+     * 
      * @param  tokens      describes the command and its arguments.
      * @throws IOException if an error occured while creating the process.
      */
@@ -768,21 +921,74 @@ public class LocalFile extends AbstractFile {
     }
 
     /**
-     * Overridden for performance reasons. This method doesn't iterate like {@link AbstractFile#getRoot()} to resolve
-     * the root file.
+     * Overridden to play nice with platforms that have root drives -- for those, the drive's root (e.g. <code>C:\</code>)
+     * is returned instead of <code>/</code>.
      */
     public AbstractFile getRoot() throws IOException {
-        if(IS_WINDOWS) {
-            // Extract drive letter from the path
-            Matcher matcher = windowsDriveRootPattern.matcher(absPath);
+        if(USES_ROOT_DRIVES) {
+            Matcher matcher = driveRootPattern.matcher(getAbsolutePath(true));
+
+            // Test if this file already is the root folder
             if(matcher.matches())
-                return FileFactory.getFile(absPath.substring(matcher.start(), matcher.end()));
-        }
-        else if(SEPARATOR.equals("/")) {
-            return FileFactory.getFile("/");
+                return this;
+
+            // Extract the drive from the path
+            matcher.reset();
+            if(matcher.find())
+                return FileFactory.getFile(matcher.group());
         }
 
         return super.getRoot();
+    }
+
+    /**
+     * Overridden to play nice with platforms that have root drives -- for those, <code>true</code> is returned if
+     * this file's path matches the drive root's (e.g. <code>C:\</code>).
+     */
+    public boolean isRoot() {
+        if(USES_ROOT_DRIVES)
+            return driveRootPattern.matcher(getAbsolutePath()).matches();
+
+        return super.isRoot();
+    }
+
+    /**
+     * Overridden to return the local volum on which this file is located. The returned volume is one of the volumes
+     * returned by {@link #getVolumes()}.
+     */
+    public AbstractFile getVolume() throws IOException {
+        AbstractFile[] volumes = LocalFile.getVolumes();
+
+        // Looks for the volume that best matches this file, i.e. the volume that is the deepest parent of this file.
+        // If this file is itself a volume, return it.
+        int bestDepth = -1;
+        int bestMatch = -1;
+        int depth;
+        AbstractFile volume;
+        String volumePath;
+        String thisPath = getAbsolutePath(true);
+
+        for(int i=0; i<volumes.length; i++) {
+            volume = volumes[i];
+            volumePath = volume.getAbsolutePath(true);
+
+            if(thisPath.equals(volumePath)) {
+                return this;
+            }
+            else if(thisPath.startsWith(volumePath)) {
+                depth = PathUtils.getDepth(volumePath, volume.getSeparator());
+                if(depth>bestDepth) {
+                    bestDepth = depth;
+                    bestMatch = i;
+                }
+            }
+        }
+
+        if(bestMatch!=-1)
+            return volumes[bestMatch];
+
+        // If no volume matched this file (shouldn't normally happen), return the root folder
+        return getRoot();
     }
 
     /**

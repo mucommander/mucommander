@@ -23,7 +23,6 @@ import com.mucommander.bookmark.BookmarkManager;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileProtocols;
 import com.mucommander.file.FileURL;
-import com.mucommander.file.RootFolders;
 import com.mucommander.file.impl.local.LocalFile;
 import com.mucommander.file.util.PathUtils;
 import com.mucommander.runtime.OsFamilies;
@@ -234,12 +233,12 @@ public class LocationTextField extends ProgressTextField implements LocationList
         	tryToInterpretEnteredString = false;
         }
 
-        // Look for a root folder which name is the entered string (case insensitive)
-        AbstractFile rootFolders[] = RootFolders.getRootFolders();
-        for(int i=0; tryToInterpretEnteredString && i<rootFolders.length; i++) {
-            if(rootFolders[i].getName().equalsIgnoreCase(location)) {
-                // Change the current folder to the root folder
-            	setText(location = rootFolders[i].getAbsolutePath());
+        // Look for a volume whose name is the entered string (case insensitive)
+        AbstractFile volumes[] = LocalFile.getVolumes();
+        for(int i=0; tryToInterpretEnteredString && i<volumes.length; i++) {
+            if(volumes[i].getName().equalsIgnoreCase(location)) {
+                // Change the current folder to the volume folder
+            	setText(location = volumes[i].getAbsolutePath());
             	tryToInterpretEnteredString = false;
             }
         }
