@@ -24,7 +24,6 @@ import com.mucommander.conf.ConfigurationListener;
 import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.desktop.DesktopManager;
 import com.mucommander.file.AbstractFile;
-import com.mucommander.file.FileProtocols;
 import com.mucommander.file.impl.local.LocalFile;
 import com.mucommander.runtime.JavaVersions;
 import com.mucommander.text.SizeFormat;
@@ -93,9 +92,8 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
     /** Number of milliseconds between each volume info update by auto-update thread */
     private final static int AUTO_UPDATE_PERIOD = 6000;
 
-    /** Caches volume info strings (free/total space) for a while, since it is quite costly and we don't want
-     * to recalculate it each time this information is requested.
-     * Each cache item maps a path to a volume info string */
+    /** Caches volume info strings (free/total space) for a while, since this information is expensive to retrieve
+     * (I/O bound). This map uses folders' volume path as its key. */
     private static LRUCache volumeInfoCache = LRUCache.createInstance(VOLUME_INFO_CACHE_CAPACITY);
 	
     /** Icon that is displayed when folder is changing */
@@ -282,10 +280,18 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
             return;
 
         final AbstractFile currentFolder = mainFrame.getActiveTable().getCurrentFolder();
+        final String volumePath;
 
-        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called, currentFolder="+currentFolder);
+        // Resolve the current folder's volume and use its path as a key for the volume info cache
+        try {
+            volumePath = currentFolder.getVolume().getAbsolutePath(true);
+        }
+        catch(IOException e) {
+            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("caught exception while retrieving volume for "+currentFolder);
+            return;
+        }
 
-        long cachedVolumeInfo[] = (long[])volumeInfoCache.get(getVolumeInfoCacheKey(currentFolder));
+        long cachedVolumeInfo[] = (long[])volumeInfoCache.get(volumePath);
         if(cachedVolumeInfo!=null) {
             if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Cache hit!");
             volumeSpaceLabel.setVolumeSpace(cachedVolumeInfo[0], cachedVolumeInfo[1]);
@@ -317,48 +323,10 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
                     volumeSpaceLabel.setVolumeSpace(volumeTotal, volumeFree);
 
                     if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Adding to cache");
-                    volumeInfoCache.add(getVolumeInfoCacheKey(currentFolder), new long[]{volumeTotal, volumeFree}, VOLUME_INFO_TIME_TO_LIVE);
+                    volumeInfoCache.add(volumePath, new long[]{volumeTotal, volumeFree}, VOLUME_INFO_TIME_TO_LIVE);
                 }
             }.start();
         }
-    }
-
-    /**
-     * Returns the 'volume info cache' key for the specified folder.
-     *
-     * @param folder the folder for which to retrieve a key
-     * @return the 'volume info cache' key for the specified folder
-     */
-    private String getVolumeInfoCacheKey(AbstractFile folder) {
-        // - for archive entries or archive files on any file protocol, use the archive file as the key
-        // - for local file on platforms that use root drives (e.g. C:\), use the the drive's root
-        // - for local file on platforms that do not use root drives (Unix-based platforms), use the exact folder
-        //   as any folder could potentially be a mount point and have a different volume info
-        // - for non-local files, use the exact folder as any folder could have a different volume info
-
-        AbstractFile archive = folder.getParentArchive();
-        AbstractFile key;
-
-        if(archive!=null) {
-            key = archive;
-        }
-        else {
-            if(FileProtocols.FILE.equals(folder.getURL().getScheme())) {
-                try {
-                    key = LocalFile.hasRootDrives()?
-                        folder.getRoot():
-                        folder;
-                }
-                catch(IOException e) {
-                    key = folder;
-                }
-            }
-            else {
-                key = folder;
-            }
-        }
-
-        return key.getAbsolutePath(false);
     }
 
 
@@ -495,7 +463,6 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
 
     public void locationChanging(LocationEvent e) {
         // Show a message in the status bar saying that folder is being changed
-//        setStatusInfo(Translator.get("status_bar.connecting_to_folder"), IconManager.getIcon(IconManager.STATUS_BAR_ICON_SET, WAITING_ICON), true);
         setStatusInfo(Translator.get("status_bar.connecting_to_folder"), dial, true);
         dial.setAnimated(true);
     }
