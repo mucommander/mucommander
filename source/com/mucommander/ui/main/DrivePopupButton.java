@@ -29,9 +29,9 @@ import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileProtocols;
 import com.mucommander.file.FileURL;
-import com.mucommander.file.RootFolders;
 import com.mucommander.file.filter.FilenameFilter;
 import com.mucommander.file.filter.RegexpFilenameFilter;
+import com.mucommander.file.impl.local.LocalFile;
 import com.mucommander.runtime.JavaVersions;
 import com.mucommander.runtime.OsFamilies;
 import com.mucommander.runtime.OsVersions;
@@ -243,14 +243,14 @@ public class DrivePopupButton extends PopupButton implements LocationListener, B
     /**
      * Returns the list of volumes to be displayed in the popup menu.
      *
-     * <p>The raw list of volumes is fetched using {@link com.mucommander.file.RootFolders#getRootFolders()} and then
+     * <p>The raw list of volumes is fetched using {@link LocalFile#getVolumes()} and then
      * filtered using the regexp defined in the {@link MuConfiguration#VOLUME_EXCLUDE_REGEXP} configuration variable
      * (if defined).</p>
      *
      * @return the list of volumes to be displayed in the popup menu
      */
     public static AbstractFile[] getDisplayableVolumes() {
-        AbstractFile[] volumes = RootFolders.getRootFolders();
+        AbstractFile[] volumes = LocalFile.getVolumes();
 
         if(volumeFilter!=null)
             return volumeFilter.filter(volumes);
@@ -275,12 +275,26 @@ public class DrivePopupButton extends PopupButton implements LocationListener, B
 
         MnemonicHelper mnemonicHelper = new MnemonicHelper();   // Provides mnemonics and ensures uniqueness
         JMenuItem item;
+        MuAction action;
+        String volumeName;
 
         boolean useExtendedDriveNames = fileSystemView!=null;
         ArrayList itemsV = new ArrayList();
 
         for(int i=0; i<nbVolumes; i++) {
-            item = popupMenu.add(new CustomOpenLocationAction(mainFrame, new Hashtable(), volumes[i]));
+            action = new CustomOpenLocationAction(mainFrame, new Hashtable(), volumes[i]);
+            volumeName = volumes[i].getName();
+
+            // If several volumes have the same filename, use the volume's path for the action's label instead of the
+            // volume's path, to disambiguate
+            for(int j=0; j<nbVolumes; j++) {
+                if(j!=i && volumes[j].getName().equalsIgnoreCase(volumeName)) {
+                    action.setLabel(volumes[i].getAbsolutePath());
+                    break;
+                }
+            }
+
+            item = popupMenu.add(action);
             setMnemonic(item, mnemonicHelper);
 
             // Set icon from cache
