@@ -149,6 +149,9 @@ Bug fixes:
 - Fixed credentials ignored when setting a remote startup folder (bug #108).
 - Fixed unconsistent handling of destination when unpacking an archive 
   (bug #93).
+- Fixed the display of homonymous volumes in the drive popup button (bug #138).
+- Swap partitions declared in /etc/fstab are now properly handled (bug #139).
+  Contributed by Johann Schmitz.
 
 Known issues:
 - Some translations are not up-to-date. For more information, see:
