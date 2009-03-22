@@ -37,8 +37,8 @@ public class ServiceFactory {
 		return new FilteredFilesService(new AttributeFileFilter(AttributeFileFilter.BROWSABLE));
 	}
 	
-	public static CompletionService getRootFoldersService() {
-		return new RootFoldersService();
+	public static CompletionService getVolumesService() {
+		return new VolumesService();
 	}
 	
 	public static CompletionService getBookmarksService() {

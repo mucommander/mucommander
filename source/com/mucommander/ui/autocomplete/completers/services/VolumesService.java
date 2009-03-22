@@ -30,10 +30,10 @@ import java.util.Vector;
  * @author Arik Hadas
  */
 
-public class RootFoldersService implements CompletionService {
+public class VolumesService implements CompletionService {
 	private Vector lastSuggestedCompletions = new Vector();
 	
-	public RootFoldersService() {}
+	public VolumesService() {}
 
     /**
      * Resolves and returns a sorted array of root (top level) folder names. Those folders are purposively not cached

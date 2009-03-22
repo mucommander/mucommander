@@ -33,7 +33,7 @@ import java.util.Vector;
 public class LocationCompleter extends Completer {
 	
 	public LocationCompleter(){ 
-        registerService(ServiceFactory.getRootFoldersService());
+        registerService(ServiceFactory.getVolumesService());
         registerService(ServiceFactory.getBrowsableFilesService());
         registerService(ServiceFactory.getBookmarksService());
 

@@ -18,9 +18,9 @@
 
 package com.mucommander.ui.autocomplete.completers;
 
-import java.util.Vector;
-
 import com.mucommander.ui.autocomplete.AutocompleterTextComponent;
+
+import java.util.Vector;
 
 /**
  * FileCompleter is a Completer based on root folders and file paths. 
@@ -31,7 +31,7 @@ import com.mucommander.ui.autocomplete.AutocompleterTextComponent;
 public class PathCompleter extends Completer { 
     
 	public PathCompleter(){  
-		registerService(ServiceFactory.getRootFoldersService());
+		registerService(ServiceFactory.getVolumesService());
 		registerService(ServiceFactory.getAllFilesService());
     }
  
