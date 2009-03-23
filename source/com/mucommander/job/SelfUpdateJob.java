@@ -73,7 +73,7 @@ public class SelfUpdateJob extends CopyJob {
 
 
     public SelfUpdateJob(ProgressDialog progressDialog, MainFrame mainFrame, AbstractFile remoteJarFile) {
-        this(progressDialog, mainFrame, new FileSet(remoteJarFile.getParentSilently(), remoteJarFile), getDestJarFile());
+        this(progressDialog, mainFrame, new FileSet(remoteJarFile.getParent(), remoteJarFile), getDestJarFile());
     }
 
     private SelfUpdateJob(ProgressDialog progressDialog, MainFrame mainFrame, FileSet files, AbstractFile destJar) {
@@ -81,7 +81,7 @@ public class SelfUpdateJob extends CopyJob {
     }
 
     private SelfUpdateJob(ProgressDialog progressDialog, MainFrame mainFrame, FileSet files, AbstractFile destJar, AbstractFile tempDestJar) {
-        super(progressDialog, mainFrame, files, tempDestJar.getParentSilently(), tempDestJar.getName(), CopyJob.DOWNLOAD_MODE, FileCollisionDialog.OVERWRITE_ACTION);
+        super(progressDialog, mainFrame, files, tempDestJar.getParent(), tempDestJar.getName(), CopyJob.DOWNLOAD_MODE, FileCollisionDialog.OVERWRITE_ACTION);
 
         this.destJar = destJar;
         this.tempDestJar = tempDestJar;

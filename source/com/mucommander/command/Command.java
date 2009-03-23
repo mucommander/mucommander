@@ -344,7 +344,7 @@ public class Command {
             return file.getName();
 
         case KEYWORD_PARENT:
-            AbstractFile parentFile = file.getParentSilently();
+            AbstractFile parentFile = file.getParent();
             return parentFile==null?"":parentFile.getAbsolutePath();
 
         case KEYWORD_VM_PATH:

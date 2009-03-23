@@ -81,7 +81,7 @@ public class UnpackJob extends AbstractCopyJob {
      * @param baseArchiveDepth depth of the folder in which the top entries are located. 0 is the highest depth (archive's root folder)
      */
     public UnpackJob(ProgressDialog progressDialog, MainFrame mainFrame, AbstractArchiveFile archiveFile, int baseArchiveDepth, AbstractFile destFolder, String newName, int fileExistsAction, FileFilter entryFilter) {
-        super(progressDialog, mainFrame, new FileSet(archiveFile.getParentSilently(), archiveFile), destFolder, newName, fileExistsAction);
+        super(progressDialog, mainFrame, new FileSet(archiveFile.getParent(), archiveFile), destFolder, newName, fileExistsAction);
 
         this.errorDialogTitle = Translator.get("unpack_dialog.error_title");
         this.baseArchiveDepth = baseArchiveDepth;

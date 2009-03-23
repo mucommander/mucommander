@@ -18,30 +18,6 @@
 
 package com.mucommander.ui.main.tree;
 
-import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.io.IOException;
-
-import javax.swing.JMenuItem;
-import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
-import javax.swing.JScrollPane;
-import javax.swing.JTree;
-import javax.swing.SwingUtilities;
-import javax.swing.Timer;
-import javax.swing.event.TreeModelEvent;
-import javax.swing.event.TreeModelListener;
-import javax.swing.event.TreeSelectionEvent;
-import javax.swing.event.TreeSelectionListener;
-import javax.swing.tree.TreePath;
-import javax.swing.tree.TreeSelectionModel;
-
 import com.mucommander.conf.ConfigurationEvent;
 import com.mucommander.conf.ConfigurationListener;
 import com.mucommander.conf.impl.MuConfiguration;
@@ -58,6 +34,16 @@ import com.mucommander.ui.theme.ColorChangedEvent;
 import com.mucommander.ui.theme.FontChangedEvent;
 import com.mucommander.ui.theme.ThemeCache;
 import com.mucommander.ui.theme.ThemeListener;
+
+import javax.swing.*;
+import javax.swing.event.TreeModelEvent;
+import javax.swing.event.TreeModelListener;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
+import javax.swing.tree.TreePath;
+import javax.swing.tree.TreeSelectionModel;
+import java.awt.*;
+import java.awt.event.*;
 
 /**
  * A panel which contains a directory tree. This panel is attached to the left
@@ -213,7 +199,7 @@ public class FoldersTreePanel extends JPanel implements TreeSelectionListener,
         AbstractFile tempFolder = currentFolder;
         AbstractFile tempParent;
         while (!tempFolder.isDirectory()) {
-            tempParent = currentFolder.getParentSilently();
+            tempParent = currentFolder.getParent();
             if(tempParent==null)
                 break;
 
@@ -227,28 +213,25 @@ public class FoldersTreePanel extends JPanel implements TreeSelectionListener,
             if (selectionPath.getLastPathComponent() == currentFolder)
                 return;
         }
-        try {
-            // check if root has changed
-            final AbstractFile currentRoot = selectedFolder.getRoot();
-            if (!currentRoot.equals(model.getRoot())) {
-                model.setRoot(currentRoot);
-            }
-            // refresh selection on tree
-            SwingUtilities.invokeLater(new Runnable() {
-               public void run() {
-                   try {
-                       TreePath path = new TreePath(model.getPathToRoot(selectedFolder));
-                       tree.expandPath(path);
-                       tree.setSelectionPath(path);
-                       tree.scrollPathToVisible(path);
-                   } catch (Exception e) {
-                       e.printStackTrace();
-                   }
-                }
-            });
-        } catch (IOException e) {
-            e.printStackTrace();
+
+        // check if root has changed
+        final AbstractFile currentRoot = selectedFolder.getRoot();
+        if (!currentRoot.equals(model.getRoot())) {
+            model.setRoot(currentRoot);
         }
+        // refresh selection on tree
+        SwingUtilities.invokeLater(new Runnable() {
+           public void run() {
+               try {
+                   TreePath path = new TreePath(model.getPathToRoot(selectedFolder));
+                   tree.expandPath(path);
+                   tree.setSelectionPath(path);
+                   tree.scrollPathToVisible(path);
+               } catch (Exception e) {
+                   e.printStackTrace();
+               }
+            }
+        });
     }
 
     /**

@@ -241,7 +241,7 @@ public class WindowManager implements WindowListener, ConfigurationListener {
         if(!file.isBrowsable())
             // This is just playing things safe, as I doubt there might ever be a case of
             // a file without a parent directory.
-            if((file = file.getParentSilently()) == null)
+            if((file = file.getParent()) == null)
                 return getInitialPath(frame);
 
         return file;

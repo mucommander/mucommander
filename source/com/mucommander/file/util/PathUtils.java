@@ -207,7 +207,7 @@ public class PathUtils {
         }
 
         // Test if the destination's parent exists, if not the path is not a valid destination
-        AbstractFile destParent = destFile.getParentSilently();
+        AbstractFile destParent = destFile.getParent();
         if(destParent==null || !destParent.exists())
             return null;
 

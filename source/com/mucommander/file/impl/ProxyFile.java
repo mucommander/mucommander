@@ -101,7 +101,7 @@ public abstract class ProxyFile extends AbstractFile {
         return file.getSize();
     }
 
-    public AbstractFile getParent() throws IOException {
+    public AbstractFile getParent() {
         return file.getParent();
     }
 
@@ -258,7 +258,7 @@ public abstract class ProxyFile extends AbstractFile {
         return file.getPermissionsString();
     }
 
-    public AbstractFile getRoot() throws IOException {
+    public AbstractFile getRoot() {
         return file.getRoot();
     }
 
@@ -266,7 +266,7 @@ public abstract class ProxyFile extends AbstractFile {
         return file.isRoot();
     }
 
-    public AbstractFile getVolume() throws IOException {
+    public AbstractFile getVolume() {
         return file.getVolume();
     }
 

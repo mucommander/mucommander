@@ -457,7 +457,7 @@ public class ArchiveEntryFile extends AbstractFile {
     /**
      * This method is overridden to return the archive's root folder.
      */
-    public AbstractFile getRoot() throws IOException {
+    public AbstractFile getRoot() {
         return archiveFile.getRoot();
     }
 
@@ -473,7 +473,7 @@ public class ArchiveEntryFile extends AbstractFile {
     /**
      * This method is overridden to return the archive's volume folder.
      */
-    public AbstractFile getVolume() throws IOException {
+    public AbstractFile getVolume() {
         return archiveFile.getVolume();
     }
 

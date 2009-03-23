@@ -107,8 +107,13 @@ public class BookmarkFile extends AbstractFile {
      * @throws IOException if an IO error occurs.
      * @see                #setParent(AbstractFile)
      */
-    public AbstractFile getParent() throws IOException {
-        return new BookmarkRoot();
+    public AbstractFile getParent() {
+        try {
+            return new BookmarkRoot();
+        }
+        catch(IOException e) {
+            return null;
+        }
     }
 
     /**
@@ -152,7 +157,7 @@ public class BookmarkFile extends AbstractFile {
     /**
      * Sets the wrapped file's parent.
      * @param parent object to use as the wrapped file's parent.
-     * @see          #getParent()
+     * @see          AbstractFile#getParent()
      */
     public void setParent(AbstractFile parent) {
         getUnderlyingFile().setParent(parent);}

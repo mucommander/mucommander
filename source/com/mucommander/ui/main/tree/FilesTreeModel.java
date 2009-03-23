@@ -221,7 +221,7 @@ public class FilesTreeModel implements TreeModel, CachedDirectoryListener {
             if(aNode == root) {
                 retNodes = new AbstractFile[depth];
             } else {
-                retNodes = getPathToRoot(aNode.getParentSilently(), depth);
+                retNodes = getPathToRoot(aNode.getParent(), depth);
             }
             retNodes[retNodes.length - depth] = aNode;
             cache.getOrAdd(aNode).isCached();       // ensures that a path is in cache

@@ -49,7 +49,7 @@ public class TempCopyJob extends CopyJob {
      * @param fileToCopy the file to copy to a temporary location
      */
     public TempCopyJob(ProgressDialog progressDialog, MainFrame mainFrame, AbstractFile fileToCopy) {
-        super(progressDialog, mainFrame, new FileSet(fileToCopy.getParentSilently(), fileToCopy), FileFactory.getTemporaryFolder(), getTemporaryFileName(fileToCopy), COPY_MODE, FileCollisionDialog.OVERWRITE_ACTION);
+        super(progressDialog, mainFrame, new FileSet(fileToCopy.getParent(), fileToCopy), FileFactory.getTemporaryFolder(), getTemporaryFileName(fileToCopy), COPY_MODE, FileCollisionDialog.OVERWRITE_ACTION);
         tempFiles = new FileSet(baseDestFolder);
     }
 

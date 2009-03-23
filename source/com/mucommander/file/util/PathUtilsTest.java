@@ -142,7 +142,7 @@ public class PathUtilsTest extends TestCase {
         if(type==PathUtils.ResolvedDestination.EXISTING_FOLDER)
             assertEquals(file, folder);
         else
-            assertEquals(file.getParentSilently(), folder);
+            assertEquals(file.getParent(), folder);
     }
 
     /**

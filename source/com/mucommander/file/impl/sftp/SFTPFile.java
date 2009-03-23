@@ -214,16 +214,22 @@ public class SFTPFile extends AbstractFile {
     }
 	
 	
-    public AbstractFile getParent() throws IOException {
+    public AbstractFile getParent() {
         if(!parentValSet) {
             FileURL parentFileURL = this.fileURL.getParent();
-            if(parentFileURL!=null)
-                this.parent = new SFTPFile(parentFileURL);
+            if(parentFileURL!=null) {
+                try {
+                    parent = new SFTPFile(parentFileURL);
+                }
+                catch(IOException e) {
+                    // No parent, that's all
+                }
+            }
 
-            this.parentValSet = true;
+            parentValSet = true;
         }
 		
-        return this.parent;
+        return parent;
     }
 	
 	

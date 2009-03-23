@@ -46,7 +46,7 @@ public class GoToParentAction extends GoToAction {
      * has a parent, this action will be enabled, if not it will be disabled.
      */
     protected void toggleEnabledState() {
-        setEnabled(mainFrame.getActivePanel().getCurrentFolder().getParentSilently()!=null);
+        setEnabled(mainFrame.getActivePanel().getCurrentFolder().getParent()!=null);
     }
 
 
@@ -67,7 +67,7 @@ public class GoToParentAction extends GoToAction {
     protected boolean goToParent(FolderPanel sourcePanel, FolderPanel destPanel) {
         AbstractFile parent;
 
-        if((parent = sourcePanel.getCurrentFolder().getParentSilently()) != null) {
+        if((parent = sourcePanel.getCurrentFolder().getParent()) != null) {
             destPanel.tryChangeCurrentFolder(parent);
             return true;
         }

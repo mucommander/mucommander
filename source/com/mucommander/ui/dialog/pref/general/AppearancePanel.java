@@ -766,7 +766,7 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
 
         if(chooser.showDialog(parent, Translator.get("prefs_dialog.import")) == JFileChooser.APPROVE_OPTION) {
             file               = FileFactory.getFile(chooser.getSelectedFile().getAbsolutePath());
-            lastSelectedFolder = file.getParentSilently();
+            lastSelectedFolder = file.getParent();
 
             // Makes sure the file actually exists - JFileChooser apparently doesn't enforce that properly in all look&feels.
             if(!file.exists()) {
@@ -912,7 +912,7 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
         if(chooser.showDialog(parent, Translator.get("prefs_dialog.import")) == JFileChooser.APPROVE_OPTION) {
             // Makes sure the file actually exists - JFileChooser apparently doesn't enforce that properly in all look&feels.
             file               = FileFactory.getFile(chooser.getSelectedFile().getAbsolutePath());
-            lastSelectedFolder = file.getParentSilently();
+            lastSelectedFolder = file.getParent();
             if(!file.exists()) {
                 ErrorDialog.showErrorDialog(this, Translator.get("this_file_does_not_exist", file.getName()));
                 return;
@@ -943,7 +943,7 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
         if(chooser.showDialog(parent, Translator.get("prefs_dialog.export")) == JFileChooser.APPROVE_OPTION) {
 
             file               = FileFactory.getFile(chooser.getSelectedFile().getAbsolutePath());
-            lastSelectedFolder = file.getParentSilently();
+            lastSelectedFolder = file.getParent();
 
             // Makes sure the file's extension is .xml.
             try {

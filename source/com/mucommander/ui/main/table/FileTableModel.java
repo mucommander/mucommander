@@ -188,7 +188,7 @@ public class FileTableModel extends AbstractTableModel {
 
         this.currentFolder = (folder instanceof CachedFile)?folder:new CachedFile(folder, true);
 
-        this.parent = currentFolder.getParentSilently();    // Note: the returned parent is a CachedFile instance
+        this.parent = currentFolder.getParent();    // Note: the returned parent is a CachedFile instance
         if(parent!=null) {
             // Pre-fetch the attributes that are used by the table renderer and some actions.
             prefetchCachedFileAttributes(parent);

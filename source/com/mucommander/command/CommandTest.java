@@ -97,7 +97,7 @@ public class CommandTest extends TestCase {
     private String getParent(AbstractFile file) {
         AbstractFile parent;
 
-        if((parent = file.getParentSilently()) == null)
+        if((parent = file.getParent()) == null)
             return "";
         return parent.getAbsolutePath();
     }

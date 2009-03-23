@@ -78,7 +78,7 @@ public class DummyFile extends AbstractFile {
     /**
      * Implementation notes: always returns <code>null</code>.
      */
-    public AbstractFile getParent() throws IOException {
+    public AbstractFile getParent() {
         return null;
     }
 

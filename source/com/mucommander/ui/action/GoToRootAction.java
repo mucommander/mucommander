@@ -18,13 +18,10 @@
 
 package com.mucommander.ui.action;
 
-import com.mucommander.Debug;
 import com.mucommander.file.AbstractFile;
-import com.mucommander.ui.dialog.ErrorDialog;
 import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.main.MainFrame;
 
-import java.io.IOException;
 import java.util.Hashtable;
 
 /**
@@ -44,12 +41,6 @@ public class GoToRootAction extends GoToParentAction {
         // Does nothing if the current folder already is the root.
         FolderPanel folderPanel = mainFrame.getActivePanel();
         AbstractFile currentFolder = folderPanel.getCurrentFolder();
-        try {
-            folderPanel.tryChangeCurrentFolder(currentFolder.getRoot());
-        }
-        catch(IOException e) {
-            ErrorDialog.showErrorDialog(mainFrame);
-            if(Debug.ON) Debug.trace("Failed to retrieve root folder for : "+currentFolder+" :"+e);
-        }
+        folderPanel.tryChangeCurrentFolder(currentFolder.getRoot());
     }
 }

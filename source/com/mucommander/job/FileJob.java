@@ -601,7 +601,7 @@ public abstract class FileJob implements Runnable {
 
         if(hasFolderChanged(activeTable.getCurrentFolder())) {
             // Select file specified by selectFileWhenFinished (if any) only if the file exists in the active table's folder
-            if(fileToSelect!=null && activeTable.getCurrentFolder().equals(fileToSelect.getParentSilently()) && fileToSelect.exists())
+            if(fileToSelect!=null && activeTable.getCurrentFolder().equals(fileToSelect.getParent()) && fileToSelect.exists())
                 activeTable.getFolderPanel().tryRefreshCurrentFolder(fileToSelect);
             else
                 activeTable.getFolderPanel().tryRefreshCurrentFolder();

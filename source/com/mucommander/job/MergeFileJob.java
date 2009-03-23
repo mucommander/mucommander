@@ -18,18 +18,14 @@
 
 package com.mucommander.job;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.util.FileSet;
 import com.mucommander.io.StreamUtils;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;
+
+import java.io.*;
 
 /**
  * This job combines files into one file, optionally checking the CRC of the merged file.
@@ -88,7 +84,7 @@ public class MergeFileJob extends AbstractCopyJob {
 	 */
 	protected void createDestFile(AbstractFile file) {
 		destFile = baseDestFolder;
-		baseDestFolder = baseDestFolder.getParentSilently();
+		baseDestFolder = baseDestFolder.getParent();
         destFile = checkForCollision(file, baseDestFolder, destFile, false);
         if (destFile == null) {
             interrupt();
@@ -113,7 +109,7 @@ public class MergeFileJob extends AbstractCopyJob {
 	 * @param file firts part
 	 */
 	private void findCRCFile(AbstractFile file) {
-		AbstractFile f = file.getParentSilently();
+		AbstractFile f = file.getParent();
 		if (f != null) {
 			try {
 				crcFile = f.getDirectChild(file.getNameWithoutExtension() + ".sfv");

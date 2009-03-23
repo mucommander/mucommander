@@ -22,7 +22,6 @@ import com.mucommander.file.AbstractFile;
 import com.mucommander.file.DummyFile;
 import com.mucommander.file.FileURL;
 
-import java.io.IOException;
 import java.net.MalformedURLException;
 
 /**
@@ -59,7 +58,7 @@ public class TestFile extends DummyFile {
         return date;
     }
     
-    public AbstractFile getParent() throws IOException {
+    public AbstractFile getParent() {
         return parent;
     }
     

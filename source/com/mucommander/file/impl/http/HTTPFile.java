@@ -352,8 +352,12 @@ public class HTTPFile extends AbstractFile {
             if(parentURL==null)
                 this.parent = null;
             else {
-                try { this.parent = new HTTPFile(parentURL); }
-                catch(IOException e) {} // No problem, no parent that's all
+                try {
+                    this.parent = new HTTPFile(parentURL);
+                }
+                catch(IOException e) {
+                    // No parent, that's all
+                }
             }
             this.parentValSet = true;
         }

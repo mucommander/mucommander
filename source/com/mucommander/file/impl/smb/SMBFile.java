@@ -244,11 +244,17 @@ import java.net.MalformedURLException;
         }
     }
 
-    public AbstractFile getParent() throws IOException {
+    public AbstractFile getParent() {
         if(!parentValSet) {
             FileURL parentURL = fileURL.getParent();
-            if(parentURL!=null)
-                parent = new SMBFile(parentURL, null);
+            if(parentURL!=null) {
+                try {
+                    parent = new SMBFile(parentURL, null);
+                }
+                catch(IOException e) {
+                    // No parent, that's all
+                }
+            }
             // Note: do not make the special smb:// file a parent of smb://host/, this would cause parent unit tests to fail
 
             parentValSet = true;

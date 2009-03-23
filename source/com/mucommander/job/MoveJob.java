@@ -280,7 +280,7 @@ public class MoveJob extends AbstractCopyJob {
 
         // If this job correponds to a file renaming in the same directory, select the renamed file
         // in the active table after this job has finished (and hasn't been cancelled)
-        if(files.size()==1 && newName!=null && baseDestFolder.equals(files.fileAt(0).getParentSilently())) {
+        if(files.size()==1 && newName!=null && baseDestFolder.equals(files.fileAt(0).getParent())) {
             // Resolve new file instance now that it exists: some remote files do not immediately update file attributes
             // after creation, we need to get an instance that reflects the newly created file attributes
             selectFileWhenFinished(FileFactory.getFile(baseDestFolder.getAbsolutePath(true)+newName));

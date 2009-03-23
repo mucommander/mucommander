@@ -345,7 +345,7 @@ public class BatchRenameDialog extends FocusDialog implements ActionListener,
         for (int i=0; i<newNames.size(); i++) {
             String name = (String) newNames.get(i);
             AbstractFile file = (AbstractFile) files.get(i);
-            AbstractFile parent = file.getParentSilently();
+            AbstractFile parent = file.getParent();
             if (parent != null) {
                 name = parent.getAbsolutePath(true) + name;
             }
@@ -1009,7 +1009,7 @@ public class BatchRenameDialog extends FocusDialog implements ActionListener,
         }
 
         public String apply(AbstractFile file) {
-            AbstractFile parent = file.getParentSilently();
+            AbstractFile parent = file.getParent();
             if (parent != null)
                 return extractNamePart(parent.getName());
             return "";

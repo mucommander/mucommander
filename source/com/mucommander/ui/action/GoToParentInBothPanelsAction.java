@@ -66,12 +66,12 @@ public class GoToParentInBothPanelsAction extends GoToParentAction {
         AbstractFile parent;
 
         // If the current panel has a parent file, navigate to it.
-        if((parent = mainFrame.getActivePanel().getCurrentFolder().getParentSilently()) != null) {
+        if((parent = mainFrame.getActivePanel().getCurrentFolder().getParent()) != null) {
             openThread = mainFrame.getActivePanel().tryChangeCurrentFolder(parent);
 
             // If the inactive panel has a parent file, wait for the current panel change to be complete and navigate
             // to it.
-            if((parent = mainFrame.getInactivePanel().getCurrentFolder().getParentSilently()) != null) {
+            if((parent = mainFrame.getInactivePanel().getCurrentFolder().getParent()) != null) {
                 if(openThread != null) {
                     while(openThread.isAlive()) {
                         try {openThread.join();}

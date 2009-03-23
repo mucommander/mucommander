@@ -264,13 +264,12 @@ public abstract class AbstractFile implements PermissionTypes, PermissionAccesse
      * </p>
      *
      * @return the root folder that contains this file
-     * @throws IOException if the root folder could not be resolved
      */
-    public AbstractFile getRoot() throws IOException {
+    public AbstractFile getRoot() {
         FileURL rootURL = (FileURL)getURL().clone();
         rootURL.setPath("/");
 
-        return FileFactory.getFile(rootURL, true);
+        return FileFactory.getFile(rootURL);
     }
 
     /**
@@ -302,9 +301,8 @@ public abstract class AbstractFile implements PermissionTypes, PermissionAccesse
      * </p>
      *
      * @return the volume on which this file is located.
-     * @throws IOException if the volume could not be resolved
      */
-    public AbstractFile getVolume() throws IOException {
+    public AbstractFile getVolume() {
         return getRoot();
     }
 
@@ -879,23 +877,6 @@ public abstract class AbstractFile implements PermissionTypes, PermissionAccesse
 
 
     /**
-     * Convience method that returns this file's parent, <code>null</code> if it doesn't have one or if it couldn't
-     * be instanciated. This method is less granular than {@link #getParent} but is convenient in cases where no
-     * distinction is made between having no parent and not being able to instanciate it.
-     *
-     * @return this file's parent, <code>null</code> if it doesn't have one or if it couldn't be instanciated
-     */
-    public final AbstractFile getParentSilently() {
-        try {
-            return getParent();
-        }
-        catch(IOException e) {
-            return null;
-        }
-    }
-
-
-    /**
      * Convenience method that creates a directory as a direct child of this directory.
      * This method will fail if this file is not a directory.
      *
@@ -1404,9 +1385,8 @@ public abstract class AbstractFile implements PermissionTypes, PermissionAccesse
      * Returns this file's parent, <code>null</code> if it doesn't have one.
      *
      * @return this file's parent, <code>null</code> if it doesn't have one
-     * @throws IOException if the parent file could not be instanciated
      */
-    public abstract AbstractFile getParent() throws IOException;
+    public abstract AbstractFile getParent();
 	
     /**
      * Sets this file's parent. <code>null</code> can be specified if this file doesn't have a parent.

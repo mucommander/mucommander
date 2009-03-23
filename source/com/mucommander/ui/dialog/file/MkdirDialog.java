@@ -159,7 +159,7 @@ public class MkdirDialog extends FocusDialog implements ActionListener, ItemList
         // Don't check for existing regular files, MkdirJob will take of it and popup a FileCollisionDialog 
         AbstractFile destFile = resolvedDest.getDestinationFile();
 
-        FileSet fileSet = new FileSet(destFile.getParentSilently());
+        FileSet fileSet = new FileSet(destFile.getParent());
         // Job's FileSet needs to contain at least one file
         fileSet.add(destFile);
 

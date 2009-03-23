@@ -56,7 +56,7 @@ public class ParentFoldersQL extends QuickListWithIcons implements LocationListe
 	protected void populateParentFolders(AbstractFile folder) {
 		parents = new Vector();
 				
-		while((folder=folder.getParentSilently())!=null)
+		while((folder=folder.getParent())!=null)
             parents.add(folder);
     }
 	

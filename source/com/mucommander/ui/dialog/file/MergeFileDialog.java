@@ -18,20 +18,16 @@
 
 package com.mucommander.ui.dialog.file;
 
-import java.io.IOException;
-
 import com.mucommander.file.AbstractFile;
-import com.mucommander.file.filter.AndFileFilter;
-import com.mucommander.file.filter.AttributeFileFilter;
-import com.mucommander.file.filter.EqualsFilenameFilter;
-import com.mucommander.file.filter.FilenameFilter;
-import com.mucommander.file.filter.StartsFilenameFilter;
+import com.mucommander.file.filter.*;
 import com.mucommander.file.util.FileSet;
 import com.mucommander.file.util.PathUtils;
 import com.mucommander.file.util.PathUtils.ResolvedDestination;
 import com.mucommander.job.MergeFileJob;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.main.MainFrame;
+
+import java.io.IOException;
 
 /**
  * Dialog used to merge parts of a file.
@@ -65,7 +61,7 @@ public class MergeFileDialog extends TransferDestinationDialog {
      * @param part1 first part of a file
      */
     private void searchParts(AbstractFile part1) {
-		AbstractFile parent = part1.getParentSilently();
+		AbstractFile parent = part1.getParent();
 		if (parent == null) {
 			return;
 		}

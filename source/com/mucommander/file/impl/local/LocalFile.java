@@ -924,7 +924,7 @@ public class LocalFile extends AbstractFile {
      * Overridden to play nice with platforms that have root drives -- for those, the drive's root (e.g. <code>C:\</code>)
      * is returned instead of <code>/</code>.
      */
-    public AbstractFile getRoot() throws IOException {
+    public AbstractFile getRoot() {
         if(USES_ROOT_DRIVES) {
             Matcher matcher = driveRootPattern.matcher(getAbsolutePath(true));
 
@@ -956,7 +956,7 @@ public class LocalFile extends AbstractFile {
      * Overridden to return the local volum on which this file is located. The returned volume is one of the volumes
      * returned by {@link #getVolumes()}.
      */
-    public AbstractFile getVolume() throws IOException {
+    public AbstractFile getVolume() {
         AbstractFile[] volumes = LocalFile.getVolumes();
 
         // Looks for the volume that best matches this file, i.e. the volume that is the deepest parent of this file.
@@ -1007,13 +1007,8 @@ public class LocalFile extends AbstractFile {
         // allow the transfer to be monitored.
         // Note that Windows UNC paths are handled by the super method when comparing hosts for equality.  
         if(IS_WINDOWS) {
-            try {
-                if(!getRoot().equals(destFile.getRoot()))
-                    return SHOULD_NOT_HINT; 
-            }
-            catch(IOException e) {
+            if(!getRoot().equals(destFile.getRoot()))
                 return SHOULD_NOT_HINT;
-            }
         }
 
         return moveHint;
