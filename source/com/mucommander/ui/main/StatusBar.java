@@ -46,7 +46,6 @@ import java.awt.event.ComponentListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 
 
 /**
@@ -280,16 +279,8 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
             return;
 
         final AbstractFile currentFolder = mainFrame.getActiveTable().getCurrentFolder();
-        final String volumePath;
-
         // Resolve the current folder's volume and use its path as a key for the volume info cache
-        try {
-            volumePath = currentFolder.getVolume().getAbsolutePath(true);
-        }
-        catch(IOException e) {
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("caught exception while retrieving volume for "+currentFolder);
-            return;
-        }
+        final String volumePath = currentFolder.getVolume().getAbsolutePath(true);
 
         long cachedVolumeInfo[] = (long[])volumeInfoCache.get(volumePath);
         if(cachedVolumeInfo!=null) {
