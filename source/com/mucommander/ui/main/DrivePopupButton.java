@@ -298,7 +298,10 @@ public class DrivePopupButton extends PopupButton implements LocationListener, B
             setMnemonic(item, mnemonicHelper);
 
             // Set icon from cache
-            item.setIcon((Icon) iconCache.get(volumes[i]));
+            Icon icon = (Icon) iconCache.get(volumes[i]);
+            if (icon!=null) {
+                item.setIcon(icon);
+            }
 
             if(useExtendedDriveNames) {
                 // Use the last known value (if any) while we update it in a separate thread
@@ -387,14 +390,18 @@ public class DrivePopupButton extends PopupButton implements LocationListener, B
 
                 // Set system icon for volumes, only if system icons are available on the current platform
                 final Icon icon = FileIcons.hasProperSystemIcons()?FileIcons.getSystemFileIcon(volumes[i]):null;
-                iconCache.put(volumes[i], icon);
+                if (icon!=null) {
+                    iconCache.put(volumes[i], icon);
+                }
 
                 SwingUtilities.invokeLater(new Runnable() {
                     public void run() {
                         if (useExtendedDriveNames) {
                             item.setText(extendedNameFinal);
                         }
-                        item.setIcon(icon);
+                        if (icon!=null) {
+                            item.setIcon(icon);
+                        }
                     }
                 });
                 
@@ -403,6 +410,7 @@ public class DrivePopupButton extends PopupButton implements LocationListener, B
             // Re-calculate the popup menu's dimensions
             SwingUtilities.invokeLater(new Runnable() {
                 public void run() {
+                    popupMenu.invalidate();
                     popupMenu.pack();
                 }
             });
