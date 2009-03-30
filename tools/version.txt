@@ -7,4 +7,4 @@ javancss.jar   -> 28.49
 jdepend.jar    -> 2.9
 doccheck.jar   -> 1.2b2
 antcontrib.jar -> 1.0b3
-svnant.jar     -> 1.0.0 (svnant.jar, svnClientAdapter.jar and svnjavahl.jar combined into a single JAR file)
+svnant.jar     -> 1.2.1 (svnant.jar, svnClientAdapter.jar and svnjavahl.jar combined into a single JAR file)
