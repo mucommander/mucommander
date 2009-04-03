@@ -36,43 +36,35 @@ import com.mucommander.xml.XmlWriter;
  * 
  * @author Maxence Bernard, Arik Hadas
  */
-public class ActionWriter extends ActionIO {
+class ActionKeymapWriter extends ActionKeymapIO {
 	
-	/**
-     * Writes the current action keymaps to the user's actions file.
-     * @throws IOException
-     */
-    public static void writeActions() throws IOException {
-    	if (wereActionsModified) {
-    		Hashtable combinedMapping = new Hashtable();
-    		Enumeration actionClassesEnumeration = ActionKeymap.getCustomizedActions();
+	ActionKeymapWriter() throws IOException {
+		Hashtable combinedMapping = new Hashtable();
+		Enumeration actionClassesEnumeration = ActionKeymap.getCustomizedActions();
 
-    		while(actionClassesEnumeration.hasMoreElements()) {
-    			Class actionClass = (Class) actionClassesEnumeration.nextElement();
-    			KeyStroke[] keyStrokes = new KeyStroke[2];
-    			keyStrokes[0] = ActionKeymap.getAccelerator(actionClass);
-    			keyStrokes[1] = ActionKeymap.getAlternateAccelerator(actionClass); // adds null if there is no alt keystroke
+		while(actionClassesEnumeration.hasMoreElements()) {
+			Class actionClass = (Class) actionClassesEnumeration.nextElement();
+			KeyStroke[] keyStrokes = new KeyStroke[2];
+			keyStrokes[0] = ActionKeymap.getAccelerator(actionClass);
+			keyStrokes[1] = ActionKeymap.getAlternateAccelerator(actionClass); // adds null if there is no alt keystroke
 
-    			combinedMapping.put(actionClass, keyStrokes);
-    		}
-    		
-    		BackupOutputStream bos = null;
+			combinedMapping.put(actionClass, keyStrokes);
+		}
+		
+		BackupOutputStream bos = null;
 
-    		try {
-    			bos = new BackupOutputStream(getActionsFile());
-    			new ActionKeyMapWriter(bos).writeKeyMap(combinedMapping);
-    			wereActionsModified = false;
-    		} catch (Exception e) {
-    			e.printStackTrace();
-    		} finally {
-    			bos.close();
-    		}
-    	}
-    	else if(Debug.ON) Debug.trace("Action keymap not modified, skip saving.");
-    }
-
+		try {
+			bos = new BackupOutputStream(getActionsFile());
+			new ActionKeyMapWriter(bos).writeKeyMap(combinedMapping);
+			wereActionsModified = false;
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			bos.close();
+		}
+	}
+	
     private static class ActionKeyMapWriter {
-    	private static final String ROOT = "keymap";
     	private XmlWriter writer = null;
 
     	private ActionKeyMapWriter(OutputStream stream) throws IOException {
@@ -81,7 +73,7 @@ public class ActionWriter extends ActionIO {
 
     	private void writeKeyMap(Hashtable actionMap) throws IOException {
     		try {
-    			writer.startElement(ROOT);
+    			writer.startElement(ROOT_ELEMENT);
     			writer.println();
 
     			Enumeration enumeration = actionMap.keys();
@@ -91,7 +83,7 @@ public class ActionWriter extends ActionIO {
     			}    				
 
     		} finally {
-    			writer.endElement(ROOT);
+    			writer.endElement(ROOT_ELEMENT);
     		}
     	}
 

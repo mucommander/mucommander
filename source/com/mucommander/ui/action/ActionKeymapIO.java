@@ -24,6 +24,7 @@ import java.io.IOException;
 
 import org.xml.sax.helpers.DefaultHandler;
 
+import com.mucommander.Debug;
 import com.mucommander.PlatformManager;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
@@ -33,15 +34,16 @@ import com.mucommander.file.FileFactory;
  * 
  * @author Maxence Bernard, Arik Hadas
  */
-public abstract class ActionIO extends DefaultHandler  {
+public abstract class ActionKeymapIO extends DefaultHandler  {
 	
 	/* Variables used for XML parsing */
+	protected final static String ROOT_ELEMENT = "keymap";
     protected final static String ACTION_ELEMENT = "action";
     protected final static String CLASS_ATTRIBUTE = "class";
     protected final static String PRIMARY_KEYSTROKE_ATTRIBUTE = "keystroke";
     protected final static String ALTERNATE_KEYSTROKE_ATTRIBUTE = "alt_keystroke";
     
-    /** Actions file used when calling {@link #loadActions()} */
+    /** Actions file used when calling {@link #loadActionKeymap()} */
     private static AbstractFile actionsFile;
 	
     /** Default actions filename */
@@ -53,7 +55,7 @@ public abstract class ActionIO extends DefaultHandler  {
     protected static boolean wereActionsModified;
     
 	/**
-     * Sets the path to the user actions file to be loaded when calling {@link #loadActions()}.
+     * Sets the path to the user actions file to be loaded when calling {@link #loadActionKeymap()}.
      * By default, this file is {@link #DEFAULT_ACTIONS_FILE_NAME} within the preferences folder.
      * <p>
      * This is a convenience method and is strictly equivalent to calling <code>setActionsFile(FileFactory.getFile(file))</code>.
@@ -71,7 +73,7 @@ public abstract class ActionIO extends DefaultHandler  {
     }
     
     /**
-     * Sets the path to the user actions file to be loaded when calling {@link #loadActions()}.
+     * Sets the path to the user actions file to be loaded when calling {@link #loadActionKeymap()}.
      * By default, this file is {@link #DEFAULT_ACTIONS_FILE_NAME} within the preferences folder.
      * <p>
      * This is a convenience method and is strictly equivalent to calling <code>setActionsFile(FileFactory.getFile(file.getAbsolutePath()))</code>.
@@ -82,7 +84,7 @@ public abstract class ActionIO extends DefaultHandler  {
     private static void setActionsFile(File file) throws FileNotFoundException {setActionsFile(FileFactory.getFile(file.getAbsolutePath()));}
 
     /**
-     * Sets the path to the user actions file to be loaded when calling {@link #loadActions()}.
+     * Sets the path to the user actions file to be loaded when calling {@link #loadActionKeymap()}.
      * By default, this file is {@link #DEFAULT_ACTIONS_FILE_NAME} within the preferences folder.
      * @param  file                  path to the actions file
      * @throws FileNotFoundException if <code>file</code> is not accessible.
@@ -106,8 +108,31 @@ public abstract class ActionIO extends DefaultHandler  {
     }
     
     /**
-     * Mark that actions were modified and therfore should be saved.
+     * Mark that actions were modified and therefore should be saved.
      */
     public static void setModified() { wereActionsModified = true; }
+    
+    /**
+     * Writes the current action keymaps to the user's actions file.
+     * @throws IOException 
+     * @throws IOException
+     */
+    public static void saveActionKeymap() throws IOException {
+    	if (wereActionsModified)
+    		new ActionKeymapWriter();
+    	else if(Debug.ON) Debug.trace("Action keymap not modified, skip saving.");
+    }
+    
+    /**
+     * Loads the action files: loads the one contained in the JAR file first, and then the user's one.
+     * This means any new action in the JAR action keymap (when a new version is released) will have the default
+     * keyboard mapping, but the keyboard mappings customized by the user in the user's action keymap will override
+     * the ones from the JAR action keymap.
+     *
+     * <p>This method must be called before requesting and registering any action.
+     */
+    public static void loadActionKeymap() throws Exception {
+        new ActionKeymapReader();
+    }
 }
 

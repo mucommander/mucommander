@@ -187,7 +187,7 @@ public class ActionKeymap {
     		registerAction(mainFrame, action);
     	}
     	
-    	ActionIO.setModified();
+    	ActionKeymapIO.setModified();
     }
     
     public static Enumeration getCustomizedActions() { return primaryActionKeymap.keys(); }

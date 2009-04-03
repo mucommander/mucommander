@@ -23,7 +23,7 @@ import com.mucommander.bookmark.BookmarkManager;
 import com.mucommander.command.CommandManager;
 import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.shell.ShellHistoryManager;
-import com.mucommander.ui.action.ActionWriter;
+import com.mucommander.ui.action.ActionKeymapIO;
 import com.mucommander.ui.main.tree.TreeIOThreadManager;
 import com.mucommander.ui.theme.ThemeManager;
 
@@ -107,7 +107,7 @@ public class ShutdownHook extends Thread {
         catch(Exception e) {if(Debug.ON) Debug.trace("Failed to save associations: " + e);}
         
         // Saves the action keymap.
-        try { ActionWriter.writeActions(); }
+        try { ActionKeymapIO.saveActionKeymap(); }
         catch(Exception e) {if(Debug.ON) Debug.trace("Failed to save action keymap: " + e);}
         
 

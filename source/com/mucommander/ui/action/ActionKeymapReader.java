@@ -42,7 +42,7 @@ import com.mucommander.io.StreamUtils;
  * 
  * @author Maxence Bernard, Arik Hadas
  */
-public class ActionReader extends ActionIO {
+class ActionKeymapReader extends ActionKeymapIO {
 	
     /** True when default/JAR action keymap is being parsed */
     private static boolean isParsingDefaultActionKeymap;
@@ -51,24 +51,12 @@ public class ActionReader extends ActionIO {
     private static HashSet definedUserActionClasses = new HashSet();
     
     /**
-     * Loads the action files: loads the one contained in the JAR file first, and then the user's one.
-     * This means any new action in the JAR action keymap (when a new version is released) will have the default
-     * keyboard mapping, but the keyboard mappings customized by the user in the user's action keymap will override
-     * the ones from the JAR action keymap.
-     *
-     * <p>This method must be called before requesting and registering any action.
-     */
-    public static void loadActions() throws Exception {
-        new ActionReader();
-    }
-    
-    /**
      * Loads the action file: loads the one contained in the JAR file first, and then the user's one.
      * This means any new action in the JAR action keymap (when a new version gets released) will have the default
      * keyboard mapping, but the keyboard mappings customized by the user in the user's action keymap will override
      * the ones from the JAR action keymap.
      */
-    private ActionReader() throws Exception {
+    ActionKeymapReader() throws Exception {
     	try {
     		AbstractFile actionsfile;
 

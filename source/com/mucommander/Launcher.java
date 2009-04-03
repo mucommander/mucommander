@@ -18,6 +18,9 @@
 
 package com.mucommander;
 
+import java.io.IOException;
+import java.lang.reflect.Constructor;
+
 import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.extension.ExtensionManager;
 import com.mucommander.file.icon.impl.SwingFileIconProvider;
@@ -29,9 +32,6 @@ import com.mucommander.ui.main.CommandBar;
 import com.mucommander.ui.main.SplashScreen;
 import com.mucommander.ui.main.ToolBar;
 import com.mucommander.ui.main.WindowManager;
-
-import java.io.IOException;
-import java.lang.reflect.Constructor;
 
 /**
  * muCommander launcher.
@@ -274,7 +274,7 @@ public class Launcher {
             else if(args[i].equals("-k") || args[i].equals("--keymap")) {
                 if(i >= args.length - 1)
                     printError("Missing FILE parameter to " + args[i], null, true);
-                try {com.mucommander.ui.action.ActionIO.setActionsFile(args[++i]);}
+                try {com.mucommander.ui.action.ActionKeymapIO.setActionsFile(args[++i]);}
                 catch(Exception e) {printError("Could not set keymap file", e, fatalWarnings);}
             }
 
@@ -456,7 +456,7 @@ public class Launcher {
 
         // Loads the ActionKeymap file
         printStartupMessage("Loading actions...");
-        try {com.mucommander.ui.action.ActionReader.loadActions();}
+        try {com.mucommander.ui.action.ActionKeymapIO.loadActionKeymap();}
         catch(Exception e) {printFileError("Could not load actions", e, fatalWarnings);}
 
         // Loads the ToolBar's description file
