@@ -146,8 +146,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
   <!-- Path to the NSIS installation dir.                      -->
   <!--                                                         -->
-  <!-- If not set, Windows executables won't be generated.     -->
+  <!-- If not set, Windows installers won't be generated.      -->
   <property name="nsis.dir"          location=""/>
+
+  <!-- Path to the NSIS 'makensis' executable.                 -->
+  <!--                                                         -->
+  <!-- Defaults to ${nsis.dir}/makensis.                       -->
+  <!-- If not set, Windows installers won't be generated.      -->
+  <property name="nsis.bin"          location="${nsis.dir}/makensis"/>
 
   <!-- Path to the launch4j installation dir.                  -->
   <!--                                                         -->

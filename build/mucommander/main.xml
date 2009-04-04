@@ -665,6 +665,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <condition property="nsis.available" value="true">
       <and>
         <available file="${nsis.dir}" type="dir"/>
+        <available file="${nsis.bin}" type="file"/>
       </and>
     </condition>
 
@@ -769,7 +770,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     </copy>
 
     <!-- Generates the muCommander windows installer.          -->
-    <exec executable="${nsis.dir}/makensis" failonerror="true">
+    <exec executable="${nsis.bin}" failonerror="true">
       <arg value="${nsis.tmp}/mucommander.nsi"/>
 
       <!-- Set the NSISDIR environment variable, required for includes to work properly -->
