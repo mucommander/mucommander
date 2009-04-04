@@ -151,7 +151,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
   <!-- Path to the NSIS 'makensis' executable.                 -->
   <!--                                                         -->
-  <!-- Defaults to ${nsis.dir}/makensis.                       -->
   <!-- If not set, Windows installers won't be generated.      -->
   <property name="nsis.bin"          location="${nsis.dir}/makensis"/>
 
