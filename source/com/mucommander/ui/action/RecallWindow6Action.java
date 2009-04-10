@@ -34,4 +34,11 @@ public class RecallWindow6Action extends RecallWindowAction {
 
         putValue(WINDOW_NUMBER_PROPERTY_KEY, "6");
     }
+    
+    public static class Factory implements MuActionFactory {
+
+		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+			return new RecallWindow6Action(mainFrame, properties);
+		}
+    }
 }

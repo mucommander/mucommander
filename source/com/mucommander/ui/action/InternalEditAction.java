@@ -57,4 +57,10 @@ public class InternalEditAction extends AbstractViewerAction {
         EditorRegistrar.createEditorFrame(mainFrame, file, getIcon().getImage());
     }
 
+    public static class Factory implements MuActionFactory {
+
+		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+			return new InternalEditAction(mainFrame, properties);
+		}
+    }
 }

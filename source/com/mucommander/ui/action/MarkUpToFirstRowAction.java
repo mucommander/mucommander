@@ -46,4 +46,11 @@ public class MarkUpToFirstRowAction extends MuAction {
         fileTable.setRangeMarked(selectedRow, 0, !fileTable.getFileTableModel().isRowMarked(selectedRow));
         fileTable.selectRow(0);
     }
+    
+    public static class Factory implements MuActionFactory {
+
+		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+			return new MarkUpToFirstRowAction(mainFrame, properties);
+		}
+    }
 }

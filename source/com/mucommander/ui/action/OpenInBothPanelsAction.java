@@ -130,4 +130,11 @@ public class OpenInBothPanelsAction extends SelectedFileAction {
             mainFrame.getInactivePanel().tryChangeCurrentFolder(otherFile);
         }
     }
+    
+    public static class Factory implements MuActionFactory {
+
+		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+			return new OpenInBothPanelsAction(mainFrame, properties);
+		}
+    }
 }

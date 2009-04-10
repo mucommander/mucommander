@@ -43,4 +43,11 @@ public class GoToRootAction extends GoToParentAction {
         AbstractFile currentFolder = folderPanel.getCurrentFolder();
         folderPanel.tryChangeCurrentFolder(currentFolder.getRoot());
     }
+    
+    public static class Factory implements MuActionFactory {
+
+		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+			return new GoToRootAction(mainFrame, properties);
+		}
+    }
 }

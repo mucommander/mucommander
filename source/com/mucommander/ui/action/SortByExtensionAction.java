@@ -34,4 +34,11 @@ public class SortByExtensionAction extends SortByAction {
     public SortByExtensionAction(MainFrame mainFrame, Hashtable properties) {
         super(mainFrame, properties, Columns.EXTENSION);
     }
+    
+    public static class Factory implements MuActionFactory {
+
+		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+			return new SortByExtensionAction(mainFrame, properties);
+		}
+    }
 }

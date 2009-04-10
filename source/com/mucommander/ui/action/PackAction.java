@@ -40,4 +40,11 @@ public class PackAction extends SelectedFilesAction implements InvokesDialog {
         if(files.size()>0)
             new PackDialog(mainFrame, files, false);
     }
+    
+    public static class Factory implements MuActionFactory {
+
+		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+			return new PackAction(mainFrame, properties);
+		}
+    }
 }

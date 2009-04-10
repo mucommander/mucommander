@@ -44,4 +44,11 @@ public class PermanentDeleteAction extends SelectedFilesAction {
         if(files.size()>0)
             new DeleteDialog(mainFrame, files, true);
     }
+    
+    public static class Factory implements MuActionFactory {
+
+		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+			return new PermanentDeleteAction(mainFrame, properties);
+		}
+    }
 }

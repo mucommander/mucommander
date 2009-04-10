@@ -48,4 +48,11 @@ public class UnpackAction extends SelectedFilesAction implements InvokesDialog {
         if(files.size()>0)
             new UnpackDialog(mainFrame, files, false);
     }
+    
+    public static class Factory implements MuActionFactory {
+
+		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+			return new UnpackAction(mainFrame, properties);
+		}
+    }
 }

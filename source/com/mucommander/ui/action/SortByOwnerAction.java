@@ -34,4 +34,11 @@ public class SortByOwnerAction extends SortByAction {
     public SortByOwnerAction(MainFrame mainFrame, Hashtable properties) {
         super(mainFrame, properties, Columns.OWNER);
     }
+    
+    public static class Factory implements MuActionFactory {
+
+		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+			return new SortByOwnerAction(mainFrame, properties);
+		}
+    }
 }

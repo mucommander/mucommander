@@ -38,4 +38,11 @@ public class ShowParentFoldersQLAction extends ShowQuickListAction {
 	public void performAction() {
 		openQuickList(FolderPanel.PARENT_FOLDERS_QUICK_LIST_INDEX);
 	}
+	
+	public static class Factory implements MuActionFactory {
+
+		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+			return new ShowParentFoldersQLAction(mainFrame, properties);
+		}
+    }
 }

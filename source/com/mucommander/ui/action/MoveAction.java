@@ -43,4 +43,11 @@ public class MoveAction extends SelectedFilesAction {
         if(files.size()>0)
             new MoveDialog(mainFrame, files);
     }
+    
+    public static class Factory implements MuActionFactory {
+
+		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+			return new MoveAction(mainFrame, properties);
+		}
+    }
 }

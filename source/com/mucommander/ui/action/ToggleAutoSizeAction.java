@@ -41,4 +41,11 @@ public class ToggleAutoSizeAction extends MuAction {
         mainFrame.setAutoSizeColumnsEnabled(enabled = !mainFrame.isAutoSizeColumnsEnabled());
         MuConfiguration.setVariable(MuConfiguration.AUTO_SIZE_COLUMNS, enabled);
     }
+    
+    public static class Factory implements MuActionFactory {
+
+		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+			return new ToggleAutoSizeAction(mainFrame, properties);
+		}
+    }
 }

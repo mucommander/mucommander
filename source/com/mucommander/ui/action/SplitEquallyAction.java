@@ -36,4 +36,11 @@ public class SplitEquallyAction extends MuAction {
     public void performAction() {
         mainFrame.getSplitPane().setSplitRatio(0.5f);
     }
+    
+    public static class Factory implements MuActionFactory {
+
+		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+			return new SplitEquallyAction(mainFrame, properties);
+		}
+    }
 }

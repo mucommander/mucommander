@@ -42,4 +42,11 @@ public class CopyAction extends SelectedFilesAction {
         if(files.size()>0)
             new CopyDialog(mainFrame, files, false).showDialog();
     }
+    
+    public static class Factory implements MuActionFactory {
+
+		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+			return new CopyAction(mainFrame, properties);
+		}
+    }
 }

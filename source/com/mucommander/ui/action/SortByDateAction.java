@@ -34,4 +34,11 @@ public class SortByDateAction extends SortByAction {
     public SortByDateAction(MainFrame mainFrame, Hashtable properties) {
         super(mainFrame, properties, Columns.DATE);
     }
+    
+    public static class Factory implements MuActionFactory {
+
+		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+			return new SortByDateAction(mainFrame, properties);
+		}
+    }
 }

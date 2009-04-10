@@ -37,4 +37,11 @@ public class ShowAboutAction extends MuAction {
     public void performAction() {
         new AboutDialog(mainFrame).showDialog();
     }
+    
+    public static class Factory implements MuActionFactory {
+
+		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+			return new ShowAboutAction(mainFrame, properties);
+		}
+    }
 }

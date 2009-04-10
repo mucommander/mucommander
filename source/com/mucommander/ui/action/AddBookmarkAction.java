@@ -37,4 +37,11 @@ public class AddBookmarkAction extends MuAction implements InvokesDialog {
     public void performAction() {
         new AddBookmarkDialog(mainFrame);
     }
+    
+    public static class Factory implements MuActionFactory {
+
+		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+			return new AddBookmarkAction(mainFrame, properties);
+		}
+    }
 }

@@ -36,4 +36,11 @@ public class SplitHorizontallyAction extends MuAction {
     public void performAction() {
         mainFrame.setSplitPaneOrientation(false);
     }
+    
+    public static class Factory implements MuActionFactory {
+
+		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+			return new SplitHorizontallyAction(mainFrame, properties);
+		}
+    }
 }

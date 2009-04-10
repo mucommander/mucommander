@@ -37,4 +37,11 @@ public class ExploreBookmarksAction extends MuAction {
     public void performAction() {
         mainFrame.getActivePanel().tryChangeCurrentFolder("bookmark://");
     }
+    
+    public static class Factory implements MuActionFactory {
+
+		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+			return new ExploreBookmarksAction(mainFrame, properties);
+		}
+    }
 }

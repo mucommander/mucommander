@@ -37,4 +37,11 @@ public class ShowServerConnectionsAction extends MuAction implements InvokesDial
     public void performAction() {
         new ShowServerConnectionsDialog(mainFrame);
     }
+    
+    public static class Factory implements MuActionFactory {
+
+		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+			return new ShowServerConnectionsAction(mainFrame, properties);
+		}
+    }
 }

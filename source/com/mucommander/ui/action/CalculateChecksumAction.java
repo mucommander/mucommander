@@ -43,4 +43,11 @@ public class CalculateChecksumAction extends SelectedFilesAction implements Invo
         if(files.size()>0)
             new CalculateChecksumDialog(mainFrame, files);
     }
+    
+    public static class Factory implements MuActionFactory {
+
+		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+			return new CalculateChecksumAction(mainFrame, properties);
+		}
+    }
 }

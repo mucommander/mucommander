@@ -36,4 +36,11 @@ public class SelectFirstRowAction extends MuAction {
     public void performAction() {
         mainFrame.getActiveTable().selectRow(0);
     }
+    
+    public static class Factory implements MuActionFactory {
+
+		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+			return new SelectFirstRowAction(mainFrame, properties);
+		}
+    }
 }

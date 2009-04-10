@@ -43,4 +43,11 @@ public class OpenTrashAction extends MuAction {
     public void performAction() {
         DesktopManager.getTrash().open();
     }
+    
+    public static class Factory implements MuActionFactory {
+
+		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+			return new OpenTrashAction(mainFrame, properties);
+		}
+    }
 }

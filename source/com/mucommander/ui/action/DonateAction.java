@@ -34,4 +34,11 @@ public class DonateAction extends OpenURLInBrowserAction {
 
         putValue(URL_PROPERTY_KEY, com.mucommander.RuntimeConstants.DONATION_URL);
     }
+    
+    public static class Factory implements MuActionFactory {
+
+		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+			return new DonateAction(mainFrame, properties);
+		}
+    }
 }

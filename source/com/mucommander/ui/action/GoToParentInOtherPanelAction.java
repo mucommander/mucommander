@@ -41,4 +41,11 @@ public class GoToParentInOtherPanelAction extends GoToParentAction {
      * Opens the active panel's parent in the inactive panel.
      */
     public void performAction() {goToParent(mainFrame.getActivePanel(), mainFrame.getInactivePanel());}
+    
+    public static class Factory implements MuActionFactory {
+
+		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+			return new GoToParentInOtherPanelAction(mainFrame, properties);
+		}
+    }
 }

@@ -34,4 +34,11 @@ public class SortBySizeAction extends SortByAction {
     public SortBySizeAction(MainFrame mainFrame, Hashtable properties) {
         super(mainFrame, properties, Columns.SIZE);
     }
+    
+    public static class Factory implements MuActionFactory {
+
+		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+			return new SortBySizeAction(mainFrame, properties);
+		}
+    }
 }

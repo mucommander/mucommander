@@ -34,4 +34,11 @@ public class ReportBugAction extends OpenURLInBrowserAction {
 
         putValue(URL_PROPERTY_KEY, com.mucommander.RuntimeConstants.BUG_REPOSITORY_URL);
     }
+    
+    public static class Factory implements MuActionFactory {
+
+		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+			return new ReportBugAction(mainFrame, properties);
+		}
+    }
 }

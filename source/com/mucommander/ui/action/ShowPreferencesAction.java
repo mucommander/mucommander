@@ -35,4 +35,11 @@ public class ShowPreferencesAction extends MuAction implements InvokesDialog {
     }
 
     public void performAction() {GeneralPreferencesDialog.getDialog().showDialog();}
+    
+    public static class Factory implements MuActionFactory {
+
+		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+			return new ShowPreferencesAction(mainFrame, properties);
+		}
+    }
 }

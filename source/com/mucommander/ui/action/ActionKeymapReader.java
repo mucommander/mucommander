@@ -180,11 +180,8 @@ class ActionKeymapReader extends ActionKeymapIO {
             }
 
             // Resolve the action Class
-            Class actionClass;
-            try {
-                actionClass = Class.forName(actionClassName);
-            }
-            catch(ClassNotFoundException e) {
+            Class actionClass = ActionManager.getActionClass(actionClassName);;
+            if (actionClass == null) {
                 if(Debug.ON) Debug.trace("Error in action keymap file: could not resolve class "+actionClassName);
                 return;
             }

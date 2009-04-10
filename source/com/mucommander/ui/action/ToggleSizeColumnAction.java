@@ -34,4 +34,11 @@ public class ToggleSizeColumnAction extends ToggleColumnAction {
     public ToggleSizeColumnAction(MainFrame mainFrame, Hashtable properties) {
         super(mainFrame, properties, Columns.SIZE);
     }
+    
+    public static class Factory implements MuActionFactory {
+
+		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+			return new ToggleSizeColumnAction(mainFrame, properties);
+		}
+    }
 }

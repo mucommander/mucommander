@@ -46,4 +46,11 @@ public class GoBackAction extends GoToAction {
     protected void toggleEnabledState() {
         setEnabled(mainFrame.getActivePanel().getFolderHistory().hasBackFolder());
     }
+    
+    public static class Factory implements MuActionFactory {
+
+		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+			return new GoBackAction(mainFrame, properties);
+		}
+    }
 }

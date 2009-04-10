@@ -54,4 +54,11 @@ public class RevealInDesktopAction extends MuAction {
             ErrorDialog.showErrorDialog(mainFrame);
         }
     }
+    
+    public static class Factory implements MuActionFactory {
+
+		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+			return new RevealInDesktopAction(mainFrame, properties);
+		}
+    }
 }

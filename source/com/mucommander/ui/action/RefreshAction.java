@@ -37,4 +37,11 @@ public class RefreshAction extends MuAction {
         // Refresh current folder in a separate thread
         mainFrame.getActivePanel().tryRefreshCurrentFolder();
     }
+    
+    public static class Factory implements MuActionFactory {
+
+		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+			return new RefreshAction(mainFrame, properties);
+		}
+    }
 }

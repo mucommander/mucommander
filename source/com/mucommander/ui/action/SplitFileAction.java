@@ -46,5 +46,10 @@ public class SplitFileAction extends SelectedFilesAction implements InvokesDialo
 
     }
 
+    public static class Factory implements MuActionFactory {
 
+		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+			return new SplitFileAction(mainFrame, properties);
+		}
+    }
 }

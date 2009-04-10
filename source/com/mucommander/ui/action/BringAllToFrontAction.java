@@ -60,4 +60,11 @@ public class BringAllToFrontAction extends MuAction {
 
         currentMainFrame.toFront();
     }
+    
+    public static class Factory implements MuActionFactory {
+
+		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+			return new BringAllToFrontAction(mainFrame, properties);
+		}
+    }
 }

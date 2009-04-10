@@ -45,4 +45,11 @@ public class CloseWindowAction extends MuAction {
         else
             mainFrame.dispose();
     }
+    
+    public static class Factory implements MuActionFactory {
+
+		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+			return new CloseWindowAction(mainFrame, properties);
+		}
+    }
 }

@@ -37,4 +37,11 @@ public class SplitVerticallyAction extends MuAction {
     public void performAction() {
         mainFrame.setSplitPaneOrientation(true);
     }
+    
+    public static class Factory implements MuActionFactory {
+
+		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+			return new SplitVerticallyAction(mainFrame, properties);
+		}
+    }
 }

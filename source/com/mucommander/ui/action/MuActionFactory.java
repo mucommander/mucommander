@@ -20,29 +20,14 @@ package com.mucommander.ui.action;
 
 import java.util.Hashtable;
 
-import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.main.MainFrame;
 
 /**
- * This action shows RecentExecutedFilesQL on the current active FileTable.
- * 
+ *  Each MuAction's factory should implements this interface.
+ *
  * @author Arik Hadas
  */
-
-public class ShowRecentExecutedFilesQLAction extends ShowQuickListAction {
+public interface MuActionFactory {
 	
-	public ShowRecentExecutedFilesQLAction(MainFrame mainFrame, Hashtable properties) {
-		super(mainFrame, properties);
-	}
-	
-	public void performAction() {
-		openQuickList(FolderPanel.RECENT_EXECUTED_FILES_QUICK_LIST_INDEX);
-	}
-	
-	public static class Factory implements MuActionFactory {
-
-		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
-			return new ShowRecentExecutedFilesQLAction(mainFrame, properties);
-		}
-    }
+	public MuAction createAction(MainFrame mainFrame, Hashtable properties);
 }

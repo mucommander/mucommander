@@ -57,4 +57,11 @@ public class ToggleCommandBarAction extends MuAction {
         commandBar.setVisible(visible);
         mainFrame.validate();
     }
+    
+    public static class Factory implements MuActionFactory {
+
+		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+			return new ToggleCommandBarAction(mainFrame, properties);
+		}
+    }
 }

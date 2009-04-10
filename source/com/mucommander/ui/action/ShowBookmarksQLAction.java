@@ -32,4 +32,11 @@ public class ShowBookmarksQLAction extends ShowQuickListAction {
 	public void performAction() {
 		openQuickList(FolderPanel.BOOKMARKS_QUICK_LIST_INDEX);
 	}
+	
+	public static class Factory implements MuActionFactory {
+
+		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+			return new ShowBookmarksQLAction(mainFrame, properties);
+		}
+    }
 }

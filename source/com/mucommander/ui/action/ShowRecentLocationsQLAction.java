@@ -38,4 +38,11 @@ public class ShowRecentLocationsQLAction extends ShowQuickListAction {
 	public void performAction() {
 		openQuickList(FolderPanel.RECENT_ACCESSED_LOCATIONS_QUICK_LIST_INDEX);
 	}
+	
+	public static class Factory implements MuActionFactory {
+
+		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+			return new ShowRecentLocationsQLAction(mainFrame, properties);
+		}
+    }
 }

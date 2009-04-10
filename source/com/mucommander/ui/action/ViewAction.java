@@ -64,4 +64,11 @@ public class ViewAction extends InternalViewAction implements ConfigurationListe
         else if(event.getVariable().equals(MuConfiguration.CUSTOM_VIEWER))
             setCustomCommand(event.getValue());
     }
+    
+    public static class Factory implements MuActionFactory {
+
+		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+			return new ViewAction(mainFrame, properties);
+		}
+    }
 }

@@ -47,4 +47,11 @@ public class MarkUpToLastRowAction extends MuAction {
         fileTable.setRangeMarked(selectedRow, lastRow, !fileTable.getFileTableModel().isRowMarked(selectedRow));
         fileTable.selectRow(lastRow);
     }
+    
+    public static class Factory implements MuActionFactory {
+
+		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+			return new MarkUpToLastRowAction(mainFrame, properties);
+		}
+    }
 }

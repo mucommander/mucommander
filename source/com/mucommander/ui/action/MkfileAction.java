@@ -37,4 +37,11 @@ public class MkfileAction extends MuAction {
     public void performAction() {
         new MkdirDialog(mainFrame, true);
     }
+    
+    public static class Factory implements MuActionFactory {
+
+		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+			return new MkfileAction(mainFrame, properties);
+		}
+    }
 }

@@ -49,4 +49,11 @@ public class LocalCopyAction extends SelectedFileAction {
             new CopyDialog(mainFrame, new FileSet(activeTable.getCurrentFolder(), selectedFile), true).showDialog();
         }
     }
+    
+    public static class Factory implements MuActionFactory {
+
+		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+			return new LocalCopyAction(mainFrame, properties);
+		}
+    }
 }

@@ -67,4 +67,11 @@ public class CycleBackwardThruFolderPanelAction extends MuAction {
 
         FocusRequester.requestFocusInWindow(previousComponent);
     }
+    
+    public static class Factory implements MuActionFactory {
+
+		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+			return new CycleBackwardThruFolderPanelAction(mainFrame, properties);
+		}
+    }
 }

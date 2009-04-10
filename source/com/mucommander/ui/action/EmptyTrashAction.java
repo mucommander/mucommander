@@ -43,4 +43,11 @@ public class EmptyTrashAction extends MuAction {
     public void performAction() {
         DesktopManager.getTrash().empty();
     }
+    
+    public static class Factory implements MuActionFactory {
+
+		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+			return new EmptyTrashAction(mainFrame, properties);
+		}
+    }
 }

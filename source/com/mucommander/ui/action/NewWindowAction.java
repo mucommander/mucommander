@@ -37,4 +37,11 @@ public class NewWindowAction extends MuAction {
     public void performAction() {
         WindowManager.createNewMainFrame();
     }
+    
+    public static class Factory implements MuActionFactory {
+
+		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+			return new NewWindowAction(mainFrame, properties);
+		}
+    }
 }

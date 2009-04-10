@@ -41,4 +41,10 @@ public class ToggleTreeAction extends MuAction {
         folderPanel.setTreeVisible(!folderPanel.isTreeVisible());
     }
 
+    public static class Factory implements MuActionFactory {
+
+		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+			return new ToggleTreeAction(mainFrame, properties);
+		}
+    }
 }

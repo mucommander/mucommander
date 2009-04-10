@@ -57,4 +57,11 @@ public class InternalViewAction extends AbstractViewerAction {
     public void performInternalAction(AbstractFile file) {
         ViewerRegistrar.createViewerFrame(mainFrame, file, getIcon().getImage());
     }
+    
+    public static class Factory implements MuActionFactory {
+
+		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+			return new InternalViewAction(mainFrame, properties);
+		}
+    }
 }

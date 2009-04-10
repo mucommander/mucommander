@@ -64,4 +64,11 @@ public class PasteClipboardFilesAction extends MuAction {
         CopyJob job = new CopyJob(progressDialog, mainFrame, clipboardFiles, destFolder, null, CopyJob.COPY_MODE, FileCollisionDialog.ASK_ACTION);
         progressDialog.start(job);
     }
+    
+    public static class Factory implements MuActionFactory {
+
+		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+			return new PasteClipboardFilesAction(mainFrame, properties);
+		}
+    }
 }

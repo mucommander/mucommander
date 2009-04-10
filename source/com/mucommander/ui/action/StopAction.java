@@ -74,4 +74,11 @@ public class StopAction extends MuAction implements LocationListener {
     public void locationFailed(LocationEvent e) {
         setEnabled(false);
     }
+    
+    public static class Factory implements MuActionFactory {
+
+		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+			return new StopAction(mainFrame, properties);
+		}
+    }
 }

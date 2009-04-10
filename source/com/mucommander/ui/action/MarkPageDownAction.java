@@ -45,4 +45,11 @@ public class MarkPageDownAction extends MuAction {
         fileTable.setRangeMarked(currentRow, endRow, !fileTable.getFileTableModel().isRowMarked(currentRow));
         fileTable.selectRow(Math.min(lastRow, endRow+1));
     }
+    
+    public static class Factory implements MuActionFactory {
+
+		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+			return new MarkPageDownAction(mainFrame, properties);
+		}
+    }
 }

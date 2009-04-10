@@ -34,4 +34,11 @@ public class ToggleDateColumnAction extends ToggleColumnAction {
     public ToggleDateColumnAction(MainFrame mainFrame, Hashtable properties) {
         super(mainFrame, properties, Columns.DATE);
     }
+    
+    public static class Factory implements MuActionFactory {
+
+		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+			return new ToggleDateColumnAction(mainFrame, properties);
+		}
+    }
 }

@@ -43,4 +43,11 @@ public class MaximizeWindowAction extends MuAction {
     public void performAction() {
         mainFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
+    
+    public static class Factory implements MuActionFactory {
+
+		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+			return new MaximizeWindowAction(mainFrame, properties);
+		}
+    }
 }

@@ -114,4 +114,11 @@ public class OpenAction extends MuAction {
         open(file, mainFrame.getActivePanel());
 
     }
+    
+    public static class Factory implements MuActionFactory {
+
+		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+			return new OpenAction(mainFrame, properties);
+		}
+    }
 }

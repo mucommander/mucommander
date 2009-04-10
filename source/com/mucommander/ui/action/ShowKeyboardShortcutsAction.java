@@ -37,4 +37,11 @@ public class ShowKeyboardShortcutsAction extends MuAction {
     public void performAction() {
         new ShortcutsDialog(mainFrame).showDialog();
     }
+    
+    public static class Factory implements MuActionFactory {
+
+		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+			return new ShowKeyboardShortcutsAction(mainFrame, properties);
+		}
+    }
 }

@@ -43,4 +43,11 @@ public class ChangeDateAction extends SelectedFilesAction implements InvokesDial
         if(files.size()>0)
             new ChangeDateDialog(mainFrame, files).showDialog();
     }
+    
+    public static class Factory implements MuActionFactory {
+
+		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+			return new ChangeDateAction(mainFrame, properties);
+		}
+    }
 }

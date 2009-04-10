@@ -100,4 +100,11 @@ public class GoToParentAction extends GoToAction {
         // Does nothing if the current folder doesn't have a parent.
         goToParent(mainFrame.getActivePanel());
     }
+    
+    public static class Factory implements MuActionFactory {
+
+		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+			return new GoToParentAction(mainFrame, properties);
+		}
+    }
 }

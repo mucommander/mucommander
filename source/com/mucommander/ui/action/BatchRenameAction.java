@@ -45,5 +45,10 @@ public class BatchRenameAction extends SelectedFilesAction implements InvokesDia
 
     }
 
+    public static class Factory implements MuActionFactory {
 
+		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+			return new BatchRenameAction(mainFrame, properties);
+		}
+    }
 }

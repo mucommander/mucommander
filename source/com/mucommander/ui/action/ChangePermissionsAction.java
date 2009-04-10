@@ -43,4 +43,11 @@ public class ChangePermissionsAction extends SelectedFilesAction implements Invo
         if(files.size()>0)
             new ChangePermissionsDialog(mainFrame, files).showDialog();        
     }
+    
+    public static class Factory implements MuActionFactory {
+
+		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+			return new ChangePermissionsAction(mainFrame, properties);
+		}
+    }
 }

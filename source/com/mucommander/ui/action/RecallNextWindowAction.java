@@ -37,4 +37,11 @@ public class RecallNextWindowAction extends MuAction {
     public void performAction() {
         WindowManager.switchToNextWindow();
     }
+    
+    public static class Factory implements MuActionFactory {
+
+		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+			return new RecallNextWindowAction(mainFrame, properties);
+		}
+    }
 }

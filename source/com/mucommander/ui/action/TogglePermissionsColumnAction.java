@@ -34,4 +34,11 @@ public class TogglePermissionsColumnAction extends ToggleColumnAction {
     public TogglePermissionsColumnAction(MainFrame mainFrame, Hashtable properties) {
         super(mainFrame, properties, Columns.PERMISSIONS);
     }
+    
+    public static class Factory implements MuActionFactory {
+
+		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+			return new TogglePermissionsColumnAction(mainFrame, properties);
+		}
+    }
 }

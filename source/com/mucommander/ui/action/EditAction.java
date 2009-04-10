@@ -63,4 +63,11 @@ public class EditAction extends InternalEditAction implements ConfigurationListe
         else if(event.getVariable().equals(MuConfiguration.CUSTOM_EDITOR))
             setCustomCommand(event.getValue());
     }
+    
+    public static class Factory implements MuActionFactory {
+
+		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+			return new EditAction(mainFrame, properties);
+		}
+    }
 }

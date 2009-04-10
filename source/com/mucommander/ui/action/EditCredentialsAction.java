@@ -38,4 +38,11 @@ public class EditCredentialsAction extends MuAction implements InvokesDialog {
     public void performAction() {
         new EditCredentialsDialog(mainFrame);
     }
+    
+    public static class Factory implements MuActionFactory {
+
+		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+			return new EditCredentialsAction(mainFrame, properties);
+		}
+    }
 }

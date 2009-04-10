@@ -37,4 +37,11 @@ public class ConnectToServerAction extends MuAction implements InvokesDialog {
     public void performAction() {
         new ServerConnectDialog(mainFrame.getActivePanel()).showDialog();
     }
+    
+    public static class Factory implements MuActionFactory {
+
+		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+			return new ConnectToServerAction(mainFrame, properties);
+		}
+    }
 }

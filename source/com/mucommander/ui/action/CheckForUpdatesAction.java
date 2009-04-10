@@ -37,4 +37,11 @@ public class CheckForUpdatesAction extends MuAction implements InvokesDialog {
     public void performAction() {
         new CheckVersionDialog(mainFrame, true);
     }
+    
+    public static class Factory implements MuActionFactory {
+
+		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+			return new CheckForUpdatesAction(mainFrame, properties);
+		}
+    }
 }

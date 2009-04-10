@@ -40,4 +40,11 @@ public class QuitAction extends MuAction {
         if(QuitDialog.confirmQuit())
             WindowManager.quit();
     }
+    
+    public static class Factory implements MuActionFactory {
+
+		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+			return new QuitAction(mainFrame, properties);
+		}
+    }
 }

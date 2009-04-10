@@ -64,4 +64,11 @@ public class OpenInOtherPanelAction extends SelectedFileAction {
         // Opens the currently selected file in the inactive panel.
         mainFrame.getInactivePanel().tryChangeCurrentFolder(file);
     }
+    
+    public static class Factory implements MuActionFactory {
+
+		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+			return new OpenInOtherPanelAction(mainFrame, properties);
+		}
+    }
 }

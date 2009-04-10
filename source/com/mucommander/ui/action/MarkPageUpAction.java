@@ -44,4 +44,11 @@ public class MarkPageUpAction extends MuAction {
         fileTable.setRangeMarked(currentRow, endRow, !fileTable.getFileTableModel().isRowMarked(currentRow));
         fileTable.selectRow(Math.max(0, endRow-1));
     }
+    
+    public static class Factory implements MuActionFactory {
+
+		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+			return new MarkPageUpAction(mainFrame, properties);
+		}
+    }
 }

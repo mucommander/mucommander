@@ -45,4 +45,11 @@ public class DeleteAction extends SelectedFilesAction {
         if(files.size()>0)
             new DeleteDialog(mainFrame, files, false);
     }
+    
+    public static class Factory implements MuActionFactory {
+
+		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+			return new DeleteAction(mainFrame, properties);
+		}
+    }
 }

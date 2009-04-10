@@ -40,4 +40,11 @@ public class ShowFilePropertiesAction extends SelectedFilesAction {
         if(files.size()>0)
             new PropertiesDialog(mainFrame, files).showDialog();
     }
+    
+    public static class Factory implements MuActionFactory {
+
+		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+			return new ShowFilePropertiesAction(mainFrame, properties);
+		}
+    }
 }

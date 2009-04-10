@@ -42,4 +42,11 @@ public class CopyFilesToClipboardAction extends SelectedFilesAction {
         if(selectedFiles.size()>0)
             ClipboardSupport.setClipboardFiles(selectedFiles);
     }
+    
+    public static class Factory implements MuActionFactory {
+
+		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+			return new CopyFilesToClipboardAction(mainFrame, properties);
+		}
+    }
 }

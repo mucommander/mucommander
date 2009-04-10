@@ -42,4 +42,11 @@ public class ToggleShowFoldersFirstAction extends MuAction {
         activeTable.setFoldersFirst(showFoldersFirst);
         MuConfiguration.setVariable(MuConfiguration.SHOW_FOLDERS_FIRST, showFoldersFirst);
     }
+    
+    public static class Factory implements MuActionFactory {
+
+		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+			return new ToggleShowFoldersFirstAction(mainFrame, properties);
+		}
+    }
 }

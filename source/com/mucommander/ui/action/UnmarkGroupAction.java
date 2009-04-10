@@ -37,4 +37,11 @@ public class UnmarkGroupAction extends MuAction implements InvokesDialog {
     public void performAction() {
         new FileSelectionDialog(mainFrame, false).showDialog();
     }
+    
+    public static class Factory implements MuActionFactory {
+
+		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+			return new UnmarkGroupAction(mainFrame, properties);
+		}
+    }
 }

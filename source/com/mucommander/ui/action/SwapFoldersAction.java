@@ -37,4 +37,11 @@ public class SwapFoldersAction extends MuAction {
     public void performAction() {
         mainFrame.swapFolders();
     }
+    
+    public static class Factory implements MuActionFactory {
+
+		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+			return new SwapFoldersAction(mainFrame, properties);
+		}
+    }
 }

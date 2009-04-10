@@ -40,4 +40,11 @@ public class EmailAction extends SelectedFilesAction implements InvokesDialog {
         if(files.size()>0)
             new EmailFilesDialog(mainFrame, files);
     }
+    
+    public static class Factory implements MuActionFactory {
+
+		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+			return new EmailAction(mainFrame, properties);
+		}
+    }
 }

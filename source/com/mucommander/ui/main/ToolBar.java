@@ -445,10 +445,11 @@ public class ToolBar extends JToolBar implements ConfigurationListener, MouseLis
         public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
             if(qName.equals("button")) {
                 String actionClassName = attributes.getValue("action");
-                try {
-                    actionsV.add(Class.forName(actionClassName));
-                }
-                catch(Exception e) {if(Debug.ON) Debug.trace("Error in "+TOOLBAR_RESOURCE_PATH+": action class "+actionClassName+" not found: "+e);}
+                Class actionClass = ActionManager.getActionClass(actionClassName);
+                if (actionClass != null)
+                    actionsV.add(actionClass);
+                else 
+                	if(Debug.ON) Debug.trace("Error in "+TOOLBAR_RESOURCE_PATH+": action class "+actionClassName+" not found");
             }
             else if(qName.equals("separator")) {
                 actionsV.add(null);

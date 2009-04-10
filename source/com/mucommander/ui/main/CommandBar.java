@@ -408,16 +408,20 @@ public class CommandBar extends JPanel implements ConfigurationListener, KeyList
             if(qName.equals("button")) {
                 // Resolve action class
                 String actionClassName = attributes.getValue("action");
-                try {actionsV.add(Class.forName(actionClassName));}
-                catch(Exception e) {if(Debug.ON) Debug.trace("Error in "+COMMAND_BAR_RESOURCE_PATH+": action class "+actionClassName+" not found: "+e);}
+                Class actionClass = ActionManager.getActionClass(actionClassName);
+                if (actionClass != null)
+                	actionsV.add(actionClass);
+                else
+                	if(Debug.ON) Debug.trace("Error in "+COMMAND_BAR_RESOURCE_PATH+": action class "+actionClassName+" not found");
 
                 // Resolve alternate action class (if any)
                 actionClassName = attributes.getValue("alt_action");
                 if(actionClassName==null)
                     alternateActionsV.add(null);
                 else
-                    try {alternateActionsV.add(Class.forName(actionClassName));}
-                    catch(Exception e) {if(Debug.ON) Debug.trace("Error in "+COMMAND_BAR_RESOURCE_PATH+": action class "+actionClassName+" not found: "+e);}
+                    if ((actionClass = ActionManager.getActionClass(actionClassName)) != null)
+                    	alternateActionsV.add(actionClass);
+                    else if(Debug.ON) Debug.trace("Error in "+COMMAND_BAR_RESOURCE_PATH+": action class "+actionClassName+" not found");
             }
             else if(qName.equals("command_bar")) {
                 // Retrieve modifier key (shift by default)

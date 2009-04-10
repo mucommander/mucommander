@@ -56,4 +56,11 @@ public class CopyFileNamesAction extends SelectedFilesAction {
             ClipboardSupport.setClipboardContents(tfs);
         }
     }
+    
+    public static class Factory implements MuActionFactory {
+
+		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+			return new CopyFileNamesAction(mainFrame, properties);
+		}
+    }
 }

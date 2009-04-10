@@ -37,4 +37,11 @@ public class PopupLeftDriveButtonAction extends MuAction {
     public void performAction() {
         mainFrame.getLeftPanel().getDriveButton().popupMenu();
     }
+    
+    public static class Factory implements MuActionFactory {
+
+		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+			return new PopupLeftDriveButtonAction(mainFrame, properties);
+		}
+    }
 }

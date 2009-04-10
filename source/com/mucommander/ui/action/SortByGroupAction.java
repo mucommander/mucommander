@@ -34,4 +34,11 @@ public class SortByGroupAction extends SortByAction {
     public SortByGroupAction(MainFrame mainFrame, Hashtable properties) {
         super(mainFrame, properties, Columns.GROUP);
     }
+    
+    public static class Factory implements MuActionFactory {
+
+		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+			return new SortByGroupAction(mainFrame, properties);
+		}
+    }
 }

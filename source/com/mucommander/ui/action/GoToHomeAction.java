@@ -41,4 +41,11 @@ public class GoToHomeAction extends MuAction {
         if(homeFolder!=null)
             mainFrame.getActivePanel().tryChangeCurrentFolder(homeFolder);
     }
+    
+    public static class Factory implements MuActionFactory {
+
+		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+			return new GoToHomeAction(mainFrame, properties);
+		}
+    }
 }

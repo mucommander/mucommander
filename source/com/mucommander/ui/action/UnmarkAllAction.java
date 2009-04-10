@@ -32,4 +32,11 @@ public class UnmarkAllAction extends MarkAllAction {
     public UnmarkAllAction(MainFrame mainFrame, Hashtable properties) {
         super(mainFrame, properties, false);
     }
+    
+    public static class Factory implements MuActionFactory {
+
+		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+			return new UnmarkAllAction(mainFrame, properties);
+		}
+    }
 }

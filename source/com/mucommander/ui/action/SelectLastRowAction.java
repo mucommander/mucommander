@@ -38,4 +38,11 @@ public class SelectLastRowAction extends MuAction {
         FileTable fileTable = mainFrame.getActiveTable();
         fileTable.selectRow(fileTable.getFileTableModel().getRowCount()-1);
     }
+    
+    public static class Factory implements MuActionFactory {
+
+		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+			return new SelectLastRowAction(mainFrame, properties);
+		}
+    }
 }

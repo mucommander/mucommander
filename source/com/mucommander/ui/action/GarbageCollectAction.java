@@ -40,4 +40,11 @@ public class GarbageCollectAction extends MuAction {
 
         if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("freeMemory="+Runtime.getRuntime().freeMemory()+" totalMemory="+Runtime.getRuntime().totalMemory());
     }
+    
+    public static class Factory implements MuActionFactory {
+
+		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+			return new GarbageCollectAction(mainFrame, properties);
+		}
+    }
 }

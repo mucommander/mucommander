@@ -34,4 +34,11 @@ public class GoToForumsAction extends OpenURLInBrowserAction {
 
         putValue(URL_PROPERTY_KEY, com.mucommander.RuntimeConstants.FORUMS_URL);
     }
+    
+    public static class Factory implements MuActionFactory {
+
+		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+			return new GoToForumsAction(mainFrame, properties);
+		}
+    }
 }

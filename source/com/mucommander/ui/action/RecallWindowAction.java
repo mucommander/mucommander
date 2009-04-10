@@ -115,4 +115,11 @@ public class RecallWindowAction extends MuAction implements PropertyChangeListen
             }
         }
     }
+    
+    public static class Factory implements MuActionFactory {
+
+		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+			return new RecallWindowAction(mainFrame, properties);
+		}
+    }
 }

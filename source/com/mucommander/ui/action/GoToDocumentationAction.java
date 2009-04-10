@@ -82,4 +82,11 @@ public class GoToDocumentationAction extends OpenURLInBrowserAction implements P
             updateURL();
         }
     }
+    
+    public static class Factory implements MuActionFactory {
+
+		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+			return new GoToDocumentationAction(mainFrame, properties);
+		}
+    }
 }

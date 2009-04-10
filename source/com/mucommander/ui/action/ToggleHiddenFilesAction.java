@@ -47,4 +47,11 @@ public class ToggleHiddenFilesAction extends MuAction {
                                     !MuConfiguration.getVariable(MuConfiguration.SHOW_HIDDEN_FILES, MuConfiguration.DEFAULT_SHOW_HIDDEN_FILES));
         WindowManager.tryRefreshCurrentFolders();
     }
+    
+    public static class Factory implements MuActionFactory {
+
+		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+			return new ToggleHiddenFilesAction(mainFrame, properties);
+		}
+    }
 }

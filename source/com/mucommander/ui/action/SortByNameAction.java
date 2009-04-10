@@ -34,4 +34,11 @@ public class SortByNameAction extends SortByAction {
     public SortByNameAction(MainFrame mainFrame, Hashtable properties) {
         super(mainFrame, properties, Columns.NAME);
     }
+    
+    public static class Factory implements MuActionFactory {
+
+		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+			return new SortByNameAction(mainFrame, properties);
+		}
+    }
 }

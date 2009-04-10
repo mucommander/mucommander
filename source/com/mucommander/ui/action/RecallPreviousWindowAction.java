@@ -37,4 +37,11 @@ public class RecallPreviousWindowAction extends MuAction {
     public void performAction() {
         WindowManager.switchToPreviousWindow();
     }
+    
+    public static class Factory implements MuActionFactory {
+
+		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+			return new RecallPreviousWindowAction(mainFrame, properties);
+		}
+    }
 }

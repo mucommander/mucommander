@@ -53,4 +53,11 @@ public class MarkAllAction extends MuAction {
         // Notify registered listeners that currently marked files have changed on the FileTable
         fileTable.fireMarkedFilesChangedEvent();
     }
+    
+    public static class Factory implements MuActionFactory {
+
+		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+			return new MarkAllAction(mainFrame, properties);
+		}
+    }
 }

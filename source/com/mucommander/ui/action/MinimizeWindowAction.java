@@ -43,4 +43,11 @@ public class MinimizeWindowAction extends MuAction {
     public void performAction() {
         mainFrame.setExtendedState(JFrame.ICONIFIED);
     }
+    
+    public static class Factory implements MuActionFactory {
+
+		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+			return new MinimizeWindowAction(mainFrame, properties);
+		}
+    }
 }

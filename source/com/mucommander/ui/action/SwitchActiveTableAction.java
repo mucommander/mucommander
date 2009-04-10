@@ -44,4 +44,11 @@ public class SwitchActiveTableAction extends MuAction {
         else if(activeTable == rightTable)
             leftTable.requestFocus();
     }
+    
+    public static class Factory implements MuActionFactory {
+
+		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+			return new SwitchActiveTableAction(mainFrame, properties);
+		}
+    }
 }

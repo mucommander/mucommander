@@ -47,4 +47,10 @@ public class GoForwardAction extends GoToAction {
         setEnabled(mainFrame.getActivePanel().getFolderHistory().hasForwardFolder());
     }
 
+    public static class Factory implements MuActionFactory {
+
+		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+			return new GoForwardAction(mainFrame, properties);
+		}
+    }
 }

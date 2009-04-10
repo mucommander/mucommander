@@ -44,4 +44,11 @@ public class MarkSelectedFileAction extends MuAction {
     public void performAction() {
         mainFrame.getActiveTable().markSelectedFile();
     }
+    
+    public static class Factory implements MuActionFactory {
+
+		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+			return new MarkSelectedFileAction(mainFrame, properties);
+		}
+    }
 }

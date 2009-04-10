@@ -37,4 +37,11 @@ public class ChangeLocationAction extends MuAction {
     public void performAction() {
         mainFrame.getActivePanel().changeCurrentLocation();
     }
+    
+    public static class Factory implements MuActionFactory {
+
+		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+			return new ChangeLocationAction(mainFrame, properties);
+		}
+    }
 }

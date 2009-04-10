@@ -34,4 +34,11 @@ public class GoToWebsiteAction extends OpenURLInBrowserAction {
 
         putValue(URL_PROPERTY_KEY, com.mucommander.RuntimeConstants.HOMEPAGE_URL);
     }
+    
+    public static class Factory implements MuActionFactory {
+
+		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+			return new GoToWebsiteAction(mainFrame, properties);
+		}
+    }
 }
