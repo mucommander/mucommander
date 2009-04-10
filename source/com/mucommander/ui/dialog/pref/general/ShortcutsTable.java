@@ -30,6 +30,7 @@ import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -234,31 +235,17 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 		// Get all action-classes from the action package
 		AbstractFile actionPackageFile = ResourceLoader.getResourceAsFile((MuAction.class.getPackage().getName().replace('.', File.separatorChar)));
 
-		Vector actions = null;
-		try {
-			actions = new ClassFinder().find(actionPackageFile, new ClassFilter() {
-				public boolean accept(Class c) {
-					return !c.isInterface() && !c.isAnonymousClass() 
-						&& !(Modifier.toString(c.getModifiers()).toLowerCase().contains("abstract")) && MuAction.class.isAssignableFrom(c);
-				}
-			});
-		} catch (IOException e) {
-			if (Debug.ON) { Debug.trace(e); }
-			actions = new Vector();
-		}
+		Enumeration actionClasses = null;
+		actionClasses = ActionManager.getActionClasses();
 
 		final MainFrame mainFrame = WindowManager.getCurrentMainFrame();
+		Vector actions = new Vector();
 		// Convert the action-classes to MuAction instances
-		int nbClasses = actions.size();
-		for (int i=0; i<nbClasses; ++i) {
+		while(actionClasses.hasMoreElements()) {
 			MuAction action;
-			try {				
-				if ((action = ActionManager.getActionInstance((Class) actions.remove(0), mainFrame)) != null
-						&& filter.accept(action))
-					actions.add(action);
-			}
-			// Ignore exceptions - move on
-			catch(Exception e) {  }
+			if ((action = ActionManager.getActionInstance((Class) actionClasses.nextElement(), mainFrame)) != null
+					&& filter.accept(action))
+				actions.add(action);
 		}
 
 		// Sort actions by their labels

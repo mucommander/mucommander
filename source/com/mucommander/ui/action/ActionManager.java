@@ -18,6 +18,7 @@
 
 package com.mucommander.ui.action;
 
+import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Vector;
@@ -189,6 +190,9 @@ public class ActionManager {
     	registerAction(ViewAction.class,              			 new ViewAction.Factory());
     }
     
+    public static Enumeration getActionClasses() {
+    	return actionClasses.elements();
+    }
     
     public static void registerAction(Class actionClass, MuActionFactory actionFactory) {
     	actionFactories.put(actionClass, actionFactory);
