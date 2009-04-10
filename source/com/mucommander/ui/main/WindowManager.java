@@ -31,6 +31,7 @@ import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
 import com.mucommander.file.FileURL;
 import com.mucommander.ui.dialog.auth.AuthDialog;
+import com.mucommander.ui.main.commandbar.CommandBar;
 
 import javax.swing.*;
 import java.awt.*;

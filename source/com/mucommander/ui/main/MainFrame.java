@@ -34,11 +34,13 @@ import com.mucommander.ui.event.LocationListener;
 import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.layout.ProportionalSplitPane;
 import com.mucommander.ui.layout.YBoxPanel;
+import com.mucommander.ui.main.commandbar.CommandBar;
 import com.mucommander.ui.main.menu.MainMenuBar;
 import com.mucommander.ui.main.table.Columns;
 import com.mucommander.ui.main.table.FileTable;
 import com.mucommander.ui.main.table.FileTableConfiguration;
 import com.mucommander.ui.main.table.SortInfo;
+import com.mucommander.ui.main.toolbar.ToolBar;
 import com.mucommander.ui.quicklist.QuickListFocusableComponent;
 
 import javax.swing.*;
@@ -114,7 +116,7 @@ public class MainFrame extends JFrame implements LocationListener {
 
         // Create toolbar and show it only if it hasn't been disabled in the preferences
         // Note: Toolbar.setVisible() has to be called no matter if Toolbar is visible or not, in order for it to be properly initialized
-        this.toolbar = new ToolBar(this);
+        this.toolbar = ToolBar.createToolBar(this);
         this.toolbar.setVisible(MuConfiguration.getVariable(MuConfiguration.TOOLBAR_VISIBLE, MuConfiguration.DEFAULT_TOOLBAR_VISIBLE));
         contentPane.add(toolbar, BorderLayout.NORTH);
 
@@ -164,7 +166,7 @@ public class MainFrame extends JFrame implements LocationListener {
         southPanel.add(statusBar);
 		
         // Show command bar only if it hasn't been disabled in the preferences
-        this.commandBar = new CommandBar(this);
+        this.commandBar = CommandBar.createCommandBar(this);
         // Note: CommandBar.setVisible() has to be called no matter if CommandBar is visible or not, in order for it to be properly initialized
         this.commandBar.setVisible(MuConfiguration.getVariable(MuConfiguration.COMMAND_BAR_VISIBLE, MuConfiguration.DEFAULT_COMMAND_BAR_VISIBLE));
         southPanel.add(commandBar);

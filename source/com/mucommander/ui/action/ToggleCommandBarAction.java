@@ -20,13 +20,13 @@ package com.mucommander.ui.action;
 
 import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.text.Translator;
-import com.mucommander.ui.main.CommandBar;
 import com.mucommander.ui.main.MainFrame;
+import com.mucommander.ui.main.commandbar.CommandBar;
 
 import java.util.Hashtable;
 
 /**
- * This action shows/hides the current MainFrame's {@link com.mucommander.ui.main.CommandBar} depending on its
+ * This action shows/hides the current MainFrame's {@link com.mucommander.ui.main.commandbar.CommandBar} depending on its
  * current visible state: if it is visible, hides it, if not shows it.
  *
  * <p>This action's label will be updated to reflect the current visible state.

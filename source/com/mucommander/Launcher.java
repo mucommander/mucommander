@@ -28,10 +28,10 @@ import com.mucommander.runtime.OsFamilies;
 import com.mucommander.shell.ShellHistoryManager;
 import com.mucommander.ui.dialog.startup.CheckVersionDialog;
 import com.mucommander.ui.dialog.startup.InitialSetupDialog;
-import com.mucommander.ui.main.CommandBar;
 import com.mucommander.ui.main.SplashScreen;
-import com.mucommander.ui.main.ToolBar;
 import com.mucommander.ui.main.WindowManager;
+import com.mucommander.ui.main.commandbar.CommandBarIO;
+import com.mucommander.ui.main.toolbar.ToolBarIO;
 
 /**
  * muCommander launcher.
@@ -283,7 +283,7 @@ public class Launcher {
                 if(i >= args.length - 1)
                     printError("Missing FILE parameter to " + args[i], null, true);
                 try {
-                    ToolBar.setDescriptionFile(args[++i]);}
+                    ToolBarIO.setDescriptionFile(args[++i]);}
                 catch(Exception e) {printError("Could not set keymap file", e, fatalWarnings);}
             }
 
@@ -292,7 +292,7 @@ public class Launcher {
                 if(i >= args.length - 1)
                     printError("Missing FILE parameter to " + args[i], null, true);
                 try {
-                    CommandBar.setDescriptionFile(args[++i]);}
+                    CommandBarIO.setDescriptionFile(args[++i]);}
                 catch(Exception e) {printError("Could not set commandbar description file", e, fatalWarnings);}
             }
 
@@ -461,12 +461,12 @@ public class Launcher {
 
         // Loads the ToolBar's description file
         printStartupMessage("Loading toolbar description...");
-        try {ToolBar.loadDescriptionFile();}
+        try {ToolBarIO.loadDescriptionFile();}
         catch(Exception e) {printFileError("Could not load toolbar description", e, fatalWarnings);}
 
         // Loads the CommandBar's description file
         printStartupMessage("Loading command bar description...");
-        try {CommandBar.loadDescriptionFile();}
+        try {CommandBarIO.loadDescriptionFile();}
         catch(Exception e) {printFileError("Could not load commandbar description", e, fatalWarnings);}
 
         // Loads the themes.

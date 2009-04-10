@@ -18,29 +18,16 @@
 
 package com.mucommander.ui.action;
 
-import com.mucommander.Debug;
-import com.mucommander.PlatformManager;
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.FileFactory;
-import com.mucommander.file.util.ResourceLoader;
-import com.mucommander.io.BackupInputStream;
-import com.mucommander.io.BackupOutputStream;
-import com.mucommander.io.StreamUtils;
-import com.mucommander.ui.main.MainFrame;
-import com.mucommander.xml.XmlAttributes;
-import com.mucommander.xml.XmlWriter;
-
-import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
-import org.xml.sax.helpers.DefaultHandler;
-
-import javax.swing.*;
-import javax.xml.parsers.SAXParserFactory;
-import java.io.*;
 import java.util.Enumeration;
-import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Vector;
+
+import javax.swing.ActionMap;
+import javax.swing.InputMap;
+import javax.swing.JComponent;
+import javax.swing.KeyStroke;
+
+import com.mucommander.ui.main.MainFrame;
 
 
 /**
