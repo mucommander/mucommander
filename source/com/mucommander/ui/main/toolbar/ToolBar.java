@@ -24,7 +24,6 @@ import java.awt.Insets;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.Hashtable;
-import java.util.LinkedList;
 
 import javax.swing.Action;
 import javax.swing.ImageIcon;
@@ -41,31 +40,11 @@ import com.mucommander.runtime.JavaVersions;
 import com.mucommander.runtime.OsFamilies;
 import com.mucommander.runtime.OsVersions;
 import com.mucommander.ui.action.ActionManager;
-import com.mucommander.ui.action.AddBookmarkAction;
-import com.mucommander.ui.action.ConnectToServerAction;
-import com.mucommander.ui.action.EditBookmarksAction;
-import com.mucommander.ui.action.EditCredentialsAction;
-import com.mucommander.ui.action.EmailAction;
 import com.mucommander.ui.action.GoBackAction;
 import com.mucommander.ui.action.GoForwardAction;
-import com.mucommander.ui.action.GoToHomeAction;
-import com.mucommander.ui.action.GoToParentAction;
-import com.mucommander.ui.action.MarkGroupAction;
 import com.mucommander.ui.action.MuAction;
-import com.mucommander.ui.action.NewWindowAction;
 import com.mucommander.ui.action.OpenLocationAction;
-import com.mucommander.ui.action.PackAction;
-import com.mucommander.ui.action.RevealInDesktopAction;
-import com.mucommander.ui.action.RunCommandAction;
-import com.mucommander.ui.action.SetSameFolderAction;
-import com.mucommander.ui.action.ShowFilePropertiesAction;
-import com.mucommander.ui.action.ShowPreferencesAction;
-import com.mucommander.ui.action.ShowServerConnectionsAction;
-import com.mucommander.ui.action.StopAction;
-import com.mucommander.ui.action.SwapFoldersAction;
 import com.mucommander.ui.action.ToggleToolBarAction;
-import com.mucommander.ui.action.UnmarkGroupAction;
-import com.mucommander.ui.action.UnpackAction;
 import com.mucommander.ui.button.NonFocusableButton;
 import com.mucommander.ui.button.PopupButton;
 import com.mucommander.ui.button.RolloverButtonAdapter;
@@ -77,7 +56,7 @@ import com.mucommander.ui.main.MainFrame;
  *
  * @author Maxence Bernard
  */
-public class ToolBar extends JToolBar implements ConfigurationListener, MouseListener {
+public class ToolBar extends JToolBar implements ConfigurationListener, MouseListener, ToolBarAttributesListener {
 
     private MainFrame mainFrame;
 
@@ -98,20 +77,11 @@ public class ToolBar extends JToolBar implements ConfigurationListener, MouseLis
     private static float scaleFactor = Math.max(1.0f, MuConfiguration.getVariable(MuConfiguration.TOOLBAR_ICON_SCALE,
                                                                         MuConfiguration.DEFAULT_TOOLBAR_ICON_SCALE));
 
-    /** Command bar actions: Class instances or null to signify a separator */
-    private static Class actions[];
 
-    public static ToolBar createToolBar(MainFrame mainFrame) {
-    	// If toolbar's action were not loaded from a file, create default toolbar
-        if (actions == null)
-        	createDefaultToolbar();
-        return new ToolBar(mainFrame);
-    }
-    
     /**
      * Creates a new toolbar and attaches it to the given frame.
      */
-    private ToolBar(MainFrame mainFrame) {
+    public ToolBar(MainFrame mainFrame) {
         this.mainFrame = mainFrame;
 
         // Decoration properties
@@ -130,7 +100,13 @@ public class ToolBar extends JToolBar implements ConfigurationListener, MouseLis
         rolloverButtonAdapter = new RolloverButtonAdapter();
 
         // Create buttons for each actions and add them to the toolbar
-        int nbActions = actions.length;
+        addButtons(ToolBarAttributes.getActions());
+        
+        ToolBarAttributes.addToolBarAttributesListener(this);
+    }
+    
+    private void addButtons(Class[] actions) {
+    	int nbActions = actions.length;
         for(int i=0; i<nbActions; i++) {
             Class actionClass = actions[i];
             if(actionClass==null)
@@ -171,13 +147,6 @@ public class ToolBar extends JToolBar implements ConfigurationListener, MouseLis
                 ((JButton)comp).putClientProperty("JButton.segmentPosition", segmentPosition);
              }
         }
-    }
-
-    /**
-     * Sets the toolbar's actions to the given action classes.
-     */
-    static void setToolBarActions(Class[] newActions) {
-    	actions = newActions;
     }
 
     /**
@@ -233,47 +202,7 @@ public class ToolBar extends JToolBar implements ConfigurationListener, MouseLis
         button.setIcon(icon);
     }
 
-    /**
-     * Sets the toolbar's actions to default values.
-     * This function is called when the toolbar items could not be loaded from external file.
-     */
-    private static void createDefaultToolbar() {
-    	LinkedList toolBarItems = new LinkedList();
-    	toolBarItems.add(NewWindowAction.class);
-    	toolBarItems.add(GoBackAction.class);
-    	toolBarItems.add(GoForwardAction.class);
-    	toolBarItems.add(null);
-    	toolBarItems.add(GoToParentAction.class);
-    	toolBarItems.add(GoToHomeAction.class);
-    	toolBarItems.add(null);
-    	toolBarItems.add(StopAction.class);
-    	toolBarItems.add(null);
-    	toolBarItems.add(MarkGroupAction.class);
-    	toolBarItems.add(UnmarkGroupAction.class);
-    	toolBarItems.add(null);
-    	toolBarItems.add(SwapFoldersAction.class);
-    	toolBarItems.add(SetSameFolderAction.class);
-    	toolBarItems.add(null);
-    	toolBarItems.add(PackAction.class);
-    	toolBarItems.add(UnpackAction.class);
-    	toolBarItems.add(null);
-    	toolBarItems.add(AddBookmarkAction.class);
-    	toolBarItems.add(EditBookmarksAction.class);
-    	toolBarItems.add(EditCredentialsAction.class);
-    	toolBarItems.add(null);
-    	toolBarItems.add(ConnectToServerAction.class);
-    	toolBarItems.add(ShowServerConnectionsAction.class);
-    	toolBarItems.add(RunCommandAction.class);
-    	toolBarItems.add(EmailAction.class);
-    	toolBarItems.add(null);
-    	toolBarItems.add(RevealInDesktopAction.class);
-    	toolBarItems.add(ShowFilePropertiesAction.class);
-    	toolBarItems.add(null);
-    	toolBarItems.add(ShowPreferencesAction.class);
-    	toolBarItems.add(null);
-    	actions = new Class[toolBarItems.size()];
-    	toolBarItems.toArray(actions);
-    }
+    
 
     ///////////////////////////////////
     // ConfigurationListener methods //
@@ -337,6 +266,15 @@ public class ToolBar extends JToolBar implements ConfigurationListener, MouseLis
     public void mousePressed(MouseEvent e) {
     }
 
+    
+    ///////////////////////////////////////
+    // ToolBarAttributesListener methods //
+    ///////////////////////////////////////
+    
+	public void ToolBarActionsChanged() {
+		removeAll();
+		addButtons(ToolBarAttributes.getActions());
+	}
 
     /**
      * PopupButton used for 'Go back' and 'Go forward' actions which displays the list of back/forward folders in the

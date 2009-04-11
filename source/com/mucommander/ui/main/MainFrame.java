@@ -18,6 +18,28 @@
 
 package com.mucommander.ui.main;
 
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.FocusTraversalPolicy;
+import java.awt.Frame;
+import java.awt.Insets;
+import java.awt.Rectangle;
+import java.awt.Toolkit;
+import java.awt.Window;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.util.Iterator;
+import java.util.Vector;
+import java.util.WeakHashMap;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JSplitPane;
+import javax.swing.WindowConstants;
+import javax.swing.table.TableColumnModel;
+
 import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.ArchiveEntryFile;
@@ -42,15 +64,6 @@ import com.mucommander.ui.main.table.FileTableConfiguration;
 import com.mucommander.ui.main.table.SortInfo;
 import com.mucommander.ui.main.toolbar.ToolBar;
 import com.mucommander.ui.quicklist.QuickListFocusableComponent;
-
-import javax.swing.*;
-import javax.swing.table.TableColumnModel;
-import java.awt.*;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.util.Iterator;
-import java.util.Vector;
-import java.util.WeakHashMap;
 
 /**
  * This is the main frame, which contains all other UI components visible on a mucommander window.
@@ -116,7 +129,7 @@ public class MainFrame extends JFrame implements LocationListener {
 
         // Create toolbar and show it only if it hasn't been disabled in the preferences
         // Note: Toolbar.setVisible() has to be called no matter if Toolbar is visible or not, in order for it to be properly initialized
-        this.toolbar = ToolBar.createToolBar(this);
+        this.toolbar = new ToolBar(this);
         this.toolbar.setVisible(MuConfiguration.getVariable(MuConfiguration.TOOLBAR_VISIBLE, MuConfiguration.DEFAULT_TOOLBAR_VISIBLE));
         contentPane.add(toolbar, BorderLayout.NORTH);
 
@@ -166,7 +179,7 @@ public class MainFrame extends JFrame implements LocationListener {
         southPanel.add(statusBar);
 		
         // Show command bar only if it hasn't been disabled in the preferences
-        this.commandBar = CommandBar.createCommandBar(this);
+        this.commandBar = new CommandBar(this);
         // Note: CommandBar.setVisible() has to be called no matter if CommandBar is visible or not, in order for it to be properly initialized
         this.commandBar.setVisible(MuConfiguration.getVariable(MuConfiguration.COMMAND_BAR_VISIBLE, MuConfiguration.DEFAULT_COMMAND_BAR_VISIBLE));
         southPanel.add(commandBar);

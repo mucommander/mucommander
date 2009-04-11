@@ -18,7 +18,6 @@
 
 package com.mucommander.ui.main.commandbar;
 
-import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Vector;
@@ -84,8 +83,7 @@ public class CommandBarReader extends CommandBarIO {
         alternateActionsV.toArray(alternateActions);
         alternateActionsV = null;
         
-        CommandBar.setActions(actions);
-        CommandBar.setAlternateActions(alternateActions);
+        CommandBarAttributes.setActions(actions, alternateActions);
         if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(COMMAND_BAR_RESOURCE_PATH+" parsing finished");
     }
 
@@ -114,9 +112,8 @@ public class CommandBarReader extends CommandBarIO {
             String modifierString = attributes.getValue(MODIFIER_ATTRIBUTE);
 
             KeyStroke modifier;
-            if(modifierString==null || (modifier=KeyStroke.getKeyStroke(modifierString))==null)
-                modifier = KeyStroke.getKeyStroke(KeyEvent.VK_SHIFT, 0);
-            CommandBar.setModifier(modifier);
+            if(modifierString!=null && (modifier=KeyStroke.getKeyStroke(modifierString))!=null)
+            	CommandBarAttributes.setModifier(modifier);
         }
     }
 }

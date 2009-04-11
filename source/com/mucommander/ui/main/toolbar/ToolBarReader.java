@@ -75,7 +75,7 @@ public class ToolBarReader extends ToolBarIO {
         actionsV.toArray(actions);        
         actionsV = null;
 
-        ToolBar.setToolBarActions(actions);
+        ToolBarAttributes.setActions(actions);
         if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(TOOLBAR_RESOURCE_PATH+" parsing finished");
     }
 

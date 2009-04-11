@@ -25,7 +25,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.LinkedList;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -36,24 +35,11 @@ import com.mucommander.conf.ConfigurationEvent;
 import com.mucommander.conf.ConfigurationListener;
 import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.desktop.DesktopManager;
-import com.mucommander.file.AbstractFile;
 import com.mucommander.runtime.JavaVersions;
 import com.mucommander.runtime.OsFamilies;
 import com.mucommander.runtime.OsVersions;
 import com.mucommander.ui.action.ActionManager;
-import com.mucommander.ui.action.CloseWindowAction;
-import com.mucommander.ui.action.CopyAction;
-import com.mucommander.ui.action.DeleteAction;
-import com.mucommander.ui.action.EditAction;
-import com.mucommander.ui.action.LocalCopyAction;
-import com.mucommander.ui.action.MkdirAction;
-import com.mucommander.ui.action.MkfileAction;
-import com.mucommander.ui.action.MoveAction;
 import com.mucommander.ui.action.MuAction;
-import com.mucommander.ui.action.PermanentDeleteAction;
-import com.mucommander.ui.action.RefreshAction;
-import com.mucommander.ui.action.RenameAction;
-import com.mucommander.ui.action.ViewAction;
 import com.mucommander.ui.button.NonFocusableButton;
 import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.main.MainFrame;
@@ -64,79 +50,35 @@ import com.mucommander.ui.main.MainFrame;
  *
  * @author Maxence Bernard
  */
-public class CommandBar extends JPanel implements ConfigurationListener, KeyListener, MouseListener {
+public class CommandBar extends JPanel implements ConfigurationListener, KeyListener, MouseListener, CommandBarAttributesListener {
 
     /** Parent MainFrame instance */
     private MainFrame mainFrame;
 
-    /** Command bar actions */
-    static Class actions[] = null;
-    /** Command bar alternate actions */
-    static Class alternateActions[] = null;
-    /** Modifier key that triggers the display of alternate actions when pressed */
-    static KeyStroke modifier = KeyStroke.getKeyStroke(KeyEvent.VK_SHIFT, 0);
-    
     /** True when modifier key is pressed */
     private boolean modifierDown;
 
     /** Command bar buttons */
     private JButton buttons[];
 
-
-    /** Default command bar descriptor filename */
-    private final static String DEFAULT_COMMAND_BAR_FILE_NAME = "command_bar.xml";
-
-    /** Path to the command bar descriptor resource file within the application JAR file */
-    private final static String COMMAND_BAR_RESOURCE_PATH = "/" + DEFAULT_COMMAND_BAR_FILE_NAME;
-
-    /** Command bar descriptor file used when calling {@link #loadDescriptionFile()} */
-    private static AbstractFile commandBarFile;
-
-
     /** Current icon scale factor */
     // The math.max(1.0f, ...) part is to workaround a bug which cause(d) this value to be set to 0.0 in the configuration file.
     private static float scaleFactor = Math.max(1.0f, MuConfiguration.getVariable(MuConfiguration.COMMAND_BAR_ICON_SCALE,
                                                                         MuConfiguration.DEFAULT_COMMAND_BAR_ICON_SCALE));
+    
+    /** Command bar actions */
+    private static Class actions[];
+    
+    /** Command bar alternate actions */
+    private static Class alternateActions[];
+    
+    /** Modifier key that triggers the display of alternate actions when pressed */
+    private static KeyStroke modifier;
 
     /**
      * Creates a new CommandBar instance associated with the given MainFrame.
      */
-    public static CommandBar createCommandBar(MainFrame mainFrame) {
-    	if (actions == null)
-    		createDefaultCommandBar();
-    	return new CommandBar(mainFrame);
-    }
-    
-    private static void createDefaultCommandBar() {
-    	LinkedList list = new LinkedList();
-    	list.add(ViewAction.class);
-    	list.add(EditAction.class);
-    	list.add(CopyAction.class);
-    	list.add(MoveAction.class);
-    	list.add(MkdirAction.class);
-    	list.add(DeleteAction.class);
-    	list.add(RefreshAction.class);
-    	list.add(CloseWindowAction.class);
-    	actions = new Class[list.size()];
-    	list.toArray(actions);
-    	
-    	list = new LinkedList();
-    	list.add(null);
-    	list.add(null);
-    	list.add(LocalCopyAction.class);
-    	list.add(RenameAction.class);
-    	list.add(MkfileAction.class);
-    	list.add(PermanentDeleteAction.class);
-    	list.add(null);
-    	list.add(null);
-    	alternateActions = new Class[list.size()];
-    	list.toArray(alternateActions);
-    	
-    	modifier = KeyStroke.getKeyStroke(KeyEvent.VK_SHIFT, 0);
-    }
-    
-    private CommandBar(MainFrame mainFrame) {
-        super(new GridLayout(0,actions.length));
+    public CommandBar(MainFrame mainFrame) {
         this.mainFrame = mainFrame;
 
         // Listen to modifier key events to display alternate actions
@@ -148,8 +90,25 @@ public class CommandBar extends JPanel implements ConfigurationListener, KeyList
 
         // Listen to configuration changes to reload command bar buttons when icon size has changed
         MuConfiguration.addConfigurationListener(this);
-
-        // Create buttons and add them to this command bar
+        
+        actions = CommandBarAttributes.getActions();
+		alternateActions = CommandBarAttributes.getAlternateActions();
+        modifier = CommandBarAttributes.getModifier();
+        
+        addButtons();
+        
+        CommandBarAttributes.addCommandBarAttributesListener(this);
+    }
+    
+    /**
+     * Add buttons and separators to the command-bar panel according to the actions array.
+     * 
+     * actions array must be initialized before this function is called.
+     */
+    private void addButtons() {
+    	setLayout(new GridLayout(0,actions.length));
+    	
+    	// Create buttons and add them to this command bar
         int nbButtons = actions.length;
         buttons = new JButton[nbButtons];
         for(int i=0; i<nbButtons; i++) {
@@ -210,21 +169,10 @@ public class CommandBar extends JPanel implements ConfigurationListener, KeyList
 
             int nbButtons = buttons.length;
             for(int i=0; i<nbButtons; i++)
-                setButtonAction(buttons[i], ActionManager.getActionInstance(on && alternateActions[i]!=null?alternateActions[i]:actions[i], mainFrame));
+                setButtonAction(buttons[i], 
+                		ActionManager.getActionInstance(on && alternateActions[i]!=null?alternateActions[i]:actions[i], mainFrame));
         }
     }
-
-    public static void setActions(Class[] actions) {
-    	CommandBar.actions = actions;
-    }
-    
-    public static void setAlternateActions(Class[] alternateActions) {
-    	CommandBar.alternateActions = alternateActions;
-    }
-    
-    public static void setModifier(KeyStroke modifier) {
-		CommandBar.modifier = modifier;
-	}
 
     /////////////////////////
     // KeyListener methods //
@@ -297,4 +245,20 @@ public class CommandBar extends JPanel implements ConfigurationListener, KeyList
 
     public void mouseExited(MouseEvent e) {
     }
+
+    
+    //////////////////////////////////////////
+    // CommandBarAttributesListener methods //
+    //////////////////////////////////////////
+    
+	public void CommandBarActionsChanged() {
+		actions = CommandBarAttributes.getActions();
+		alternateActions = CommandBarAttributes.getAlternateActions();
+		removeAll();
+		addButtons();
+	}
+
+	public void CommandBarModifierChanged() {
+		modifier = CommandBarAttributes.getModifier();
+	}
 }
