@@ -23,6 +23,9 @@ import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.job.FileJob;
 import com.mucommander.job.FileJobListener;
 import com.mucommander.job.TransferFileJob;
+import com.mucommander.job.progress.JobProgress;
+import com.mucommander.job.progress.JobProgressListener;
+import com.mucommander.job.progress.JobProgressMonitor;
 import com.mucommander.text.DurationFormat;
 import com.mucommander.text.SizeFormat;
 import com.mucommander.text.Translator;
@@ -49,7 +52,7 @@ import java.util.Vector;
  *
  * @author Maxence Bernard
  */
-public class ProgressDialog extends FocusDialog implements ActionListener, ItemListener, ChangeListener, FileJobListener {
+public class ProgressDialog extends FocusDialog implements ActionListener, ItemListener, ChangeListener, FileJobListener, JobProgressListener {
 
     private JLabel currentFileLabel;
     private JLabel totalTransferredLabel;
@@ -75,7 +78,6 @@ public class ProgressDialog extends FocusDialog implements ActionListener, ItemL
     private FileJob job;
     private TransferFileJob transferFileJob;
 
-    private Timer repaintTimer;
     private boolean firstTimeActivated = true;
 
     // Button icons
@@ -230,8 +232,8 @@ public class ProgressDialog extends FocusDialog implements ActionListener, ItemL
 
         initUI();
         
-        repaintTimer = new Timer(JobProgress.CURRENT_FILE_LABEL_REFRESH_RATE, new JobProgress(job));
-        repaintTimer.start();
+		JobProgressMonitor.getInstance().addJob(job);
+        JobProgressMonitor.getInstance().addJobProgressListener(this);
 
         showDialog();
     }
@@ -241,7 +243,7 @@ public class ProgressDialog extends FocusDialog implements ActionListener, ItemL
      * Stops repaint thread.
      */
     public void stop() {
-        repaintTimer.stop();
+    	JobProgressMonitor.getInstance().removeJobProgressListener(this);
     }
 
 
@@ -318,215 +320,6 @@ public class ProgressDialog extends FocusDialog implements ActionListener, ItemL
         }
     }
 
-
-    /////////////////////////////
-    // Timer action listener   //
-    /////////////////////////////
-    
-    class JobProgress implements ActionListener {
-        /** Controls how often should current file label be refreshed (in ms) */
-        public final static int CURRENT_FILE_LABEL_REFRESH_RATE = 100;
-
-    	/** Controls how often should progress information be refreshed */
-        private final static int MAIN_REFRESH_RATE = 10;
-
-    	private FileJob job;
-		private TransferFileJob transferFileJob;
-		
-		private long effectiveJobTime;
-		private long lastTime;
-		private int totalPercentInt;
-		private String totalProgressText;
-		private int filePercentInt;
-		private String fileProgressText;
-		private long currentBps;
-		private long bytesTotal;
-		private long totalBps;
-		private long lastBytesTotal;
-		private String jobStatusString;
-		private int jobState;
-		private long jobPauseStartDate;
-		
-        private int loopCount;
-    	
-    	public JobProgress(FileJob job) {
-    		this.job = job;
-            if (job instanceof TransferFileJob) {
-                this.transferFileJob = (TransferFileJob) job;
-            }
-	        lastBytesTotal = 0;
-	        lastTime = System.currentTimeMillis();
-	        loopCount = 0;	        
-    	}
-    	
-    	public void actionPerformed(ActionEvent e) {
-            loopCount++;
-            boolean updateFullUI = false;
-            if (loopCount >= MAIN_REFRESH_RATE) {
-                updateFullUI = calcJobProgress(false);
-                loopCount = 0; 
-            } else {
-                updateFullUI = calcJobProgress(true);                
-            }
-            updateProgressLabel(this);
-            if (updateFullUI) {
-                updateProgressUI(this);
-            }
-    	}
-
-    	/**
-    	 * Calculates the job progress status.
-    	 * This method calculates variables used to show job progress information.
-    	 * It can update information only on a processed file (when <code>labelOnly</code> 
-    	 * is <code>true</code>). If <code>labelOnly</code> is false it will try to update
-    	 * full information on a job progress (e.g. percent completed, bytes per second, etc.).
-    	 * @param labelOnly update only label of a processed file. Note that if a job has 
-    	 *        just finished this flag is ignored and all variables are recalulated.
-    	 * @return <code>true</code> if full job progress has been updated, 
-    	 *         <code>false</code> if only label has been updated. 
-    	 */
-        public boolean calcJobProgress(boolean labelOnly) {
-            jobState = job.getState();
-            jobPauseStartDate = job.getPauseStartDate();
-            if (jobState==FileJob.FINISHED || jobState==FileJob.INTERRUPTED) {
-                jobStatusString = Translator.get("progress_dialog.job_finished");
-                // Job just finished, let's loop one more time to ensure that components (progress bar in particular)
-                // reflect job completion
-                labelOnly = false;
-            } else {
-            	jobStatusString = job.getStatusString();
-            }
-        	if (labelOnly)
-        	    return false;
-        	// Do not refresh progress information is job is paused, simply sleep
-	        if (jobState==FileJob.PAUSED)
-	            return false;
-            // Now is updated with current time, or job end date if job has finished already.
-            long now = job.getEndDate();
-            if(now==0)  // job hasn't finished yet
-                now = System.currentTimeMillis(); 
-
-            long currentFileRemainingTime = 0;
-            long totalRemainingTime;
-
-            effectiveJobTime = job.getEffectiveJobTime();
-            if(effectiveJobTime==0)
-                effectiveJobTime = 1;   // To avoid potential zero divisions
-
-            if (transferFileJob != null) {
-                bytesTotal = transferFileJob.getTotalByteCounter().getByteCount() - transferFileJob.getTotalSkippedByteCounter().getByteCount();
-                totalBps = (long)(bytesTotal*1000d/effectiveJobTime);
-                if(now-lastTime>0)  // To avoid divisions by zero
-                    currentBps = (long)((bytesTotal-lastBytesTotal)*1000d/(now-lastTime));
-                else
-                    currentBps = 0;
-
-                // Update current file progress bar
-                float filePercentFloat = transferFileJob.getFilePercentDone();
-                filePercentInt = (int)(100*filePercentFloat);
-
-                fileProgressText = filePercentInt+"%";
-                // Append estimated remaining time (ETA) if current file transfer is not already finished (100%)
-                if(filePercentFloat<1) {
-                    fileProgressText += " - ";
-
-                    long currentFileSize = transferFileJob.getCurrentFileSize();
-                    // If current file size is not available, ETA cannot be calculated
-                    if(currentFileSize==-1)
-                        fileProgressText += "?";
-                    // Avoid potential divisions by zero
-                    else if(totalBps==0) {
-                        currentFileRemainingTime = -1;
-                        fileProgressText += DurationFormat.getInfiniteSymbol();
-                    }
-                    else {
-                        currentFileRemainingTime = (long)((1000*(currentFileSize - transferFileJob.getCurrentFileByteCounter().getByteCount()))/(float)totalBps);
-                        fileProgressText += DurationFormat.format(currentFileRemainingTime);
-                    }
-                }
-
-                lastBytesTotal = bytesTotal;
-                lastTime = now;
-            }
-
-            // Update total progress bar
-            // Total job percent is based on the *number* of files remaining, not their actual size.
-            // So this is very approximate.
-            float totalPercentFloat = job.getTotalPercentDone();
-            totalPercentInt = (int)(100*totalPercentFloat);
-
-            totalProgressText = totalPercentInt+"%";
-
-            // Add a rough estimate of the total remaining time (ETA):
-            // total remaining time is based on the total job percent completed which itself is based on the *number*
-            // of files remaining, not their actual size. So this is very approximate.
-            // Do not add ETA if job is already finished (100%)
-            if(totalPercentFloat<1) {
-            	totalProgressText += " - ";
-
-                // Avoid potential divisions by zero
-                if(totalPercentFloat==0)
-                	totalProgressText += "?";
-                else {
-                    // Make sure that total ETA is never smaller than current file ETA
-                    totalRemainingTime = (long)((1-totalPercentFloat)*(effectiveJobTime/totalPercentFloat));
-                    totalRemainingTime = Math.max(totalRemainingTime, currentFileRemainingTime);
-                    totalProgressText += DurationFormat.format(totalRemainingTime);
-                }
-            }
-            return true;
-	    }
-        
-        public String getJobStatusString() {
-			return jobStatusString;
-		}
-        
-        public boolean isTransferFileJob() {
-        	return transferFileJob != null;
-        }
-        
-        
-        public int getFilePercentInt() {
-			return filePercentInt;
-		}
-        
-        public String getFileProgressText() {
-			return fileProgressText;
-		}
-        
-        public long getBytesTotal() {
-			return bytesTotal;
-		}
-        
-        public long getTotalBps() {
-			return totalBps;
-		}
-        
-        public long getLastTime() {
-			return lastTime;
-		}
-        
-        public long getCurrentBps() {
-			return currentBps;
-		}
-        
-        public int getTotalPercentInt() {
-			return totalPercentInt;
-		}
-        
-        public String getTotalProgressText() {
-			return totalProgressText;
-		}
-        
-        public long getEffectiveJobTime() {
-			return effectiveJobTime;
-		}
-        
-        public long getJobPauseStartDate() {
-			return jobPauseStartDate;
-		}
-        
-    }
     
     // Refresh current file label in a separate thread, more frequently than other components to give a sense
     // of speed when small files are being transferred.
@@ -566,7 +359,29 @@ public class ProgressDialog extends FocusDialog implements ActionListener, ItemL
     	
     }
     
+    /////////////////////////////
+    // JobProgress listener    //
+    /////////////////////////////
+    
 
+	public void jobAdded(FileJob source, int idx) {
+		// nothing here		
+	}
+
+
+	public void jobRemoved(FileJob source, int idx) {
+		// nothing here		
+	}
+
+	public void jobProgress(FileJob source, int idx, boolean fullUpdate) {
+		if (job.equals(source)) {
+			updateProgressLabel(source.getJobProgress());
+			if (fullUpdate) {
+				updateProgressUI(source.getJobProgress());
+			}
+		}
+		
+	}
 
     ///////////////////////////////////
     // ActionListener implementation //
@@ -783,4 +598,6 @@ public class ProgressDialog extends FocusDialog implements ActionListener, ItemL
             }
         }
     }
+
+
 }

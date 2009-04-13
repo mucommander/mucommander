@@ -22,6 +22,7 @@ package com.mucommander.job;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.impl.CachedFile;
 import com.mucommander.file.util.FileSet;
+import com.mucommander.job.progress.JobProgress;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.QuestionDialog;
 import com.mucommander.ui.dialog.file.ProgressDialog;
@@ -128,6 +129,10 @@ public abstract class FileJob implements Runnable {
 
     /** List of registered FileJobListener stored as weak references */
     private WeakHashMap listeners = new WeakHashMap();
+    
+    /** Information about this job progress */
+    private JobProgress jobProgress;
+        
 
 //    private int nbFilesProcessed;
 //    private int nbFilesDiscovered;
@@ -184,6 +189,8 @@ public abstract class FileJob implements Runnable {
 
         if(baseSourceFolder!=null)
             baseSourceFolder = (baseSourceFolder instanceof CachedFile)?baseSourceFolder:new CachedFile(baseSourceFolder, true);
+
+    	this.jobProgress = new JobProgress(this);    
     }
 	
 	
@@ -652,6 +659,13 @@ public abstract class FileJob implements Runnable {
         return Translator.get("progress_dialog.processing_file", getCurrentFilename());
     }
 
+    /**
+     * Returns information about the job progress.
+     * @return the job progress
+     */
+	public JobProgress getJobProgress() {
+		return jobProgress;		
+	}
 
     /////////////////////////////
     // Runnable implementation //
@@ -730,5 +744,6 @@ public abstract class FileJob implements Runnable {
      * @return <code>true</code> if the operation was sucessful
      */
     protected abstract boolean processFile(AbstractFile file, Object recurseParams);
+
 
 }
