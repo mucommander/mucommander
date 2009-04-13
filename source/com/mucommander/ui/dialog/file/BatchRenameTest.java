@@ -18,12 +18,13 @@
 
 package com.mucommander.ui.dialog.file;
 
+import java.util.Calendar;
+
 import com.mucommander.file.FileFactory;
 import com.mucommander.file.impl.TestFile;
 import com.mucommander.ui.dialog.file.BatchRenameDialog.*;
 import junit.framework.TestCase;
 
-import java.util.Date;
 
 /**
  * Batch rename dialog test case.
@@ -40,7 +41,9 @@ public class BatchRenameTest extends TestCase {
     protected void setUp() throws Exception {
         super.setUp();
         TestFile parent = new TestFile(FileFactory.getTemporaryFolder() + "parent", false, 0, 0, null);
-        long date = new Date(108, 2, 10, 13, 5, 37).getTime();        
+        Calendar c = Calendar.getInstance();
+        c.set(2008, 2, 10, 13, 5, 37);
+        long date = c.getTimeInMillis();        
         abcdef = new TestFile(FileFactory.getTemporaryFolder() + "abcdef", false, 0, date, parent);
         abcdef_ghi = new TestFile(FileFactory.getTemporaryFolder() + "abcdef.ghi", false, 0, date, parent);
         abcdef_ghi_jkl = new TestFile(FileFactory.getTemporaryFolder() + "abcdef.ghi.jkl", false, 0, date, parent);
