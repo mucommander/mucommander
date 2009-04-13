@@ -454,7 +454,7 @@ public abstract class TransferFileJob extends FileJob {
      * @return the size of the file currently being processed, -1 if this information is not available.
      */
     public long getCurrentFileSize() {
-        return currentFile==null?-1:currentFile.getSize();
+        return getCurrentFile()==null?-1:getCurrentFile().getSize();
     }
 
 
@@ -583,9 +583,9 @@ public abstract class TransferFileJob extends FileJob {
         int nbFiles = getNbFiles();
 
         // If file is in base folder and is not a directory...
-        if(currentFile!=null && nbFilesProcessed!=nbFiles && files.indexOf(currentFile)!=-1 && !currentFile.isDirectory()) {
+        if(getCurrentFile()!=null && nbFilesProcessed!=nbFiles && files.indexOf(getCurrentFile())!=-1 && !getCurrentFile().isDirectory()) {
             // Add current file's progress
-            long currentFileSize = currentFile.getSize();
+            long currentFileSize = getCurrentFile().getSize();
             if(currentFileSize>0)
                 nbFilesProcessed += getCurrentFileByteCounter().getByteCount()/(float)currentFileSize;
         }

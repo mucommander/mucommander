@@ -73,7 +73,7 @@ public class SplitFileJob extends AbstractCopyJob {
 			AbstractFile file, AbstractFile destFolder, int partSize, int parts) {
         super(progressDialog, mainFrame, new FileSet(), destFolder, null, FileCollisionDialog.ASK_ACTION);
         this.partSize = partSize;
-        this.nbFiles = parts;
+        this.setNbFiles(parts);
         this.sourceFile = file;
         this.destFolder = destFolder;
         this.errorDialogTitle = Translator.get("split_file_dialog.error_title");
@@ -181,8 +181,8 @@ public class SplitFileJob extends AbstractCopyJob {
 				}
 				// create new output file if necessary
 				if ((sizeLeft>0) && (getCurrentFileIndex() == getNbFiles()-1)) {
-					this.nbFiles++;
-					addDummyFile(this.nbFiles, sizeLeft);
+					setNbFiles(getNbFiles() + 1);
+					addDummyFile(getNbFiles(), sizeLeft);
 				}
 			} else {
 				sizeLeft -= written;

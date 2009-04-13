@@ -139,7 +139,7 @@ public class UnpackJob extends AbstractCopyJob {
             do {    // Loop for retries
                 try {
                     // List files inside archive file (can throw an IOException)
-                    AbstractFile[] archiveFiles = currentFile.ls();
+                    AbstractFile[] archiveFiles = getCurrentFile().ls();
 
                     // Recurse on zip's contents
                     for(int j=0; j<archiveFiles.length && getState()!=INTERRUPTED; j++) {
@@ -153,7 +153,7 @@ public class UnpackJob extends AbstractCopyJob {
                 }
                 catch(IOException e) {
                     // File could not be uncompressed properly
-                    int ret = showErrorDialog(errorDialogTitle, Translator.get("cannot_read_file", currentFile.getName()));
+                    int ret = showErrorDialog(errorDialogTitle, Translator.get("cannot_read_file", getCurrentFilename()));
                     // Retry loops
                     if(ret==RETRY_ACTION)
                         continue;

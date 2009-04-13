@@ -90,16 +90,16 @@ public abstract class FileJob implements Runnable {
     protected FileSet files;
 
     /** Number of files that this job contains */
-    protected int nbFiles;
+    private int nbFiles;
 
     /** Index of file currently being processed, see {@link #getCurrentFileIndex()} */
-    protected int currentFileIndex = -1;
+    private int currentFileIndex = -1;
 
     /** File currently being processed */
-    protected AbstractFile currentFile;
+    private AbstractFile currentFile;
 
     /** Name of the file currently being processed */
-    protected String currentFilename = "";
+    private String currentFilename = "";
 
     /** If set to true, processed files will be unmarked from current table */
     private boolean autoUnmark = true;
@@ -638,6 +638,14 @@ public abstract class FileJob implements Runnable {
     public int getCurrentFileIndex() {
         return currentFileIndex==-1?0:currentFileIndex;
     }
+    
+    /**
+     * Returns the file currently being processed.
+     * @return the file currently being processed.
+     */
+    public AbstractFile getCurrentFile() {
+    	return currentFile;
+    }
 
     /**
      * Returns the number of file that this job contains.
@@ -646,6 +654,15 @@ public abstract class FileJob implements Runnable {
      */
     public int getNbFiles() {
         return nbFiles;
+    }
+    
+    /**
+     * Sets the number of files that this job contains.
+     * 
+     * @param nbFiles the number of files that this job contains.
+     */
+    protected void setNbFiles(int nbFiles) {
+    	this.nbFiles = nbFiles;
     }
 
     /**
