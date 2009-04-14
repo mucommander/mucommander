@@ -69,7 +69,7 @@ public class ArchiveJob extends TransferFileJob {
         this.archiveFormat = archiveFormat;
         this.archiveComment = archiveComment;
 
-        this.baseFolderPath = baseSourceFolder.getAbsolutePath(false);
+        this.baseFolderPath = getBaseSourceFolder().getAbsolutePath(false);
     }
 
 

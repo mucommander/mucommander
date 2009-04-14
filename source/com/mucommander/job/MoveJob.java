@@ -255,7 +255,7 @@ public class MoveJob extends AbstractCopyJob {
 
     // This job modifies baseDestFolder and its subfolders
     protected boolean hasFolderChanged(AbstractFile folder) {
-        return (baseSourceFolder!=null && baseSourceFolder.isParentOf(folder)) || baseDestFolder.isParentOf(folder);
+        return (getBaseSourceFolder()!=null && getBaseSourceFolder().isParentOf(folder)) || baseDestFolder.isParentOf(folder);
     }
 
 
@@ -267,7 +267,7 @@ public class MoveJob extends AbstractCopyJob {
         super.jobCompleted();
 
         // If the source files are located inside an archive, optimize the archive file
-        AbstractArchiveFile sourceArchiveFile = baseSourceFolder==null?null:baseSourceFolder.getParentArchive();
+        AbstractArchiveFile sourceArchiveFile = getBaseSourceFolder()==null?null:getBaseSourceFolder().getParentArchive();
         if(sourceArchiveFile!=null && sourceArchiveFile.isWritableArchive())
             optimizeArchive((AbstractRWArchiveFile)sourceArchiveFile);
 

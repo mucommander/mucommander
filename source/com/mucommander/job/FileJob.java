@@ -84,7 +84,7 @@ public abstract class FileJob implements Runnable {
     protected MainFrame mainFrame;
 	
     /** Base source folder */
-    protected AbstractFile baseSourceFolder;
+    private AbstractFile baseSourceFolder;
 	
     /** Files which are going to be processed */
     protected FileSet files;
@@ -187,8 +187,8 @@ public abstract class FileJob implements Runnable {
             files.setElementAt((tempFile instanceof CachedFile)?tempFile:new CachedFile(tempFile, true), i);
         }
 
-        if(baseSourceFolder!=null)
-            baseSourceFolder = (baseSourceFolder instanceof CachedFile)?baseSourceFolder:new CachedFile(baseSourceFolder, true);
+        if (this.baseSourceFolder!=null)
+            this.baseSourceFolder = (getBaseSourceFolder() instanceof CachedFile)?getBaseSourceFolder():new CachedFile(getBaseSourceFolder(), true);
 
     	this.jobProgress = new JobProgress(this);    
     }
@@ -684,6 +684,15 @@ public abstract class FileJob implements Runnable {
 		return jobProgress;		
 	}
 
+    /**
+     * Returns the base source folder.
+     * @return the baseSourceFolder
+     */
+    public AbstractFile getBaseSourceFolder() {
+        return baseSourceFolder;
+    }
+	
+	
     /////////////////////////////
     // Runnable implementation //
     /////////////////////////////

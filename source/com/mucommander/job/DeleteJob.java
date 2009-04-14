@@ -143,7 +143,7 @@ public class DeleteJob extends FileJob {
             // If folder is a symlink, asks the user what to do
             boolean isSymlink = file.isSymlink();
             String filePath = file.getAbsolutePath();
-            filePath = filePath.substring(baseSourceFolder.getAbsolutePath(false).length()+1, filePath.length());
+            filePath = filePath.substring(getBaseSourceFolder().getAbsolutePath(false).length()+1, filePath.length());
             if(isSymlink) {
                 ret = showSymlinkDialog(filePath, file.getCanonicalPath());
                 if(ret==-1 || ret==CANCEL_ACTION) {
@@ -222,7 +222,7 @@ public class DeleteJob extends FileJob {
 
     // This job modifies baseFolder and subfolders
     protected boolean hasFolderChanged(AbstractFile folder) {
-        return baseSourceFolder.isParentOf(folder);
+        return getBaseSourceFolder().isParentOf(folder);
     }
 
 
@@ -241,7 +241,7 @@ public class DeleteJob extends FileJob {
         super.jobCompleted();
 
         // If the source files are located inside an archive, optimize the archive file
-        AbstractArchiveFile archiveFile = baseSourceFolder.getParentArchive();
+        AbstractArchiveFile archiveFile = getBaseSourceFolder().getParentArchive();
 
         if(archiveFile!=null && archiveFile.isWritableArchive()) {
             while(true) {
