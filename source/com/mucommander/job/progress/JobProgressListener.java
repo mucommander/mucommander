@@ -21,7 +21,6 @@ package com.mucommander.job.progress;
 import java.util.EventListener;
 
 import com.mucommander.job.FileJob;
-import com.mucommander.job.FileJobListener;
 
 /**
  * Interface to be implemented by classes that wish to be notified of progress changes on a particular

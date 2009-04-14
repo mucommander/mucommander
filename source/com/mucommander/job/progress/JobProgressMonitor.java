@@ -21,14 +21,12 @@ package com.mucommander.job.progress;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 import javax.swing.event.EventListenerList;
-import javax.swing.event.TableModelEvent;
 
 import com.mucommander.job.FileJob;
 import com.mucommander.job.FileJobListener;
