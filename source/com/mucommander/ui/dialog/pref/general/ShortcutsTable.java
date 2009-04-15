@@ -32,6 +32,7 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 import java.util.Vector;
 
@@ -68,6 +69,7 @@ import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.WindowManager;
 
 /**
+ * This class is the table in which the actions and their shortcuts are present in the ShortcutsPanel.
  * 
  * @author Johann Schmitz (johann@j-schmitz.net), Arik Hadas
  */
@@ -186,9 +188,9 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 		return new KeyStrokeCellEditor(new RecordingKeyStrokeField((String) getValueAt(row, column)));
 	}
 	
-	private void setActionName(MuAction action, int row, Object[][] model) {
-		rowToAction.put(Integer.valueOf(row), action.getClass());
-		model[row][ACTION_DESCRIPTION_COLUMN_INDEX] = action.getLabel();
+	private void setActionName(Class action, String label, int row, Object[][] model) {
+		rowToAction.put(Integer.valueOf(row), action);
+		model[row][ACTION_DESCRIPTION_COLUMN_INDEX] = label;
 	}
 
 	private void setAccelerator(KeyStroke keyStroke, int row, Object[][] model) {
@@ -228,42 +230,33 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 	 * Builds the table data based of all actions with their associated keystrokes
 	 */
 	private Object[][] buildTableData(ActionFilter filter) {
-		// Get all action-classes from the action package
-		AbstractFile actionPackageFile = ResourceLoader.getResourceAsFile((MuAction.class.getPackage().getName().replace('.', File.separatorChar)));
-
-		Enumeration actionClasses = null;
-		actionClasses = ActionManager.getActionClasses();
-
-		final MainFrame mainFrame = WindowManager.getCurrentMainFrame();
-		Vector actions = new Vector();
+		Enumeration actionClasses = ActionManager.getActionClasses();
+		
 		// Convert the action-classes to MuAction instances
-		while(actionClasses.hasMoreElements()) {
-			MuAction action;
-			if ((action = ActionManager.getActionInstance((Class) actionClasses.nextElement(), mainFrame)) != null
-					&& filter.accept(action))
-				actions.add(action);
-		}
-
+		List list = Collections.list(actionClasses);
+		
 		// Sort actions by their labels
-		Collections.sort(actions, new Comparator() {
+		Collections.sort(list, new Comparator() {
 			public int compare(Object o1, Object o2) {
-				return ((MuAction) o1).getLabel().compareTo(((MuAction)o2).getLabel());
+				// TODO: remove actions without a standard label?
+				if (MuAction.getStandardLabel((Class) o1) == null)
+					return 1;
+				if (MuAction.getStandardLabel((Class) o2) == null)
+					return -1;
+				return MuAction.getStandardLabel((Class) o1).compareTo(MuAction.getStandardLabel((Class) o2));
 			}
 		});
 
 		// Build the table data
-		Object[][] tableData = new Object[actions.size()][NUM_OF_COLUMNS];
-		Iterator it = actions.iterator();
-		int row = 0;		
-		while (it.hasNext()) {
-			MuAction action = (MuAction) it.next();
-			if (action != null) {
-				setActionName(action, row, tableData);
-				setAccelerator(action.getAccelerator(), row, tableData);
-				setAlternativeAccelerator(action.getAlternateAccelerator(), row, tableData);
-				actionToTooltipText.put(action.getClass(), action.getToolTipText());
-				++row;
-			}			
+		Object[][] tableData = new Object[list.size()][NUM_OF_COLUMNS];
+		for (int row = 0, i = 0; i < list.size(); ++i) {
+			Class actionClass = (Class) list.get(i);
+
+			setActionName(actionClass, MuAction.getStandardLabel(actionClass), row, tableData);
+			setAccelerator(ActionKeymap.getAccelerator(actionClass), row, tableData);
+			setAlternativeAccelerator(ActionKeymap.getAlternateAccelerator(actionClass), row, tableData);
+			actionToTooltipText.put(actionClass, MuAction.getStandardTooltip(actionClass));
+			++row;
 		}
 
 		return tableData;
@@ -380,9 +373,6 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 				value = null;
 				
 			switch(column){
-			case ACTION_DESCRIPTION_COLUMN_INDEX:
-				setActionName((MuAction) value, row, tableData);
-				break;
 			case ACCELERATOR_COLUMN_INDEX:
 				setAccelerator((KeyStroke) value, row, tableData);
 				break;
@@ -390,7 +380,7 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 				setAlternativeAccelerator((KeyStroke) value, row, tableData);
 				break;
 			default:
-				if (Debug.ON) { Debug.trace("No such column index: " + column); }
+				if (Debug.ON) { Debug.trace("Unexpected column index: " + column); }
 			}
 			
 			fireTableCellUpdated(row, column);
