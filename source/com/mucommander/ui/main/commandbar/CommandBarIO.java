@@ -27,7 +27,6 @@ import org.xml.sax.helpers.DefaultHandler;
 import com.mucommander.PlatformManager;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
-import com.sun.org.apache.bcel.internal.generic.GETSTATIC;
 
 /**
  * 

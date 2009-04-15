@@ -38,6 +38,8 @@ import com.mucommander.ui.action.RenameAction;
 import com.mucommander.ui.action.ViewAction;
 
 /**
+ * This class is responsible to handle the attributes of CommandBars - their actions, alternate actions and modifier.
+ * Every CommandBar should get its attributes from this class, and register in it for receiving attributes modifications.  
  * 
  * @author Arik Hadas
  */

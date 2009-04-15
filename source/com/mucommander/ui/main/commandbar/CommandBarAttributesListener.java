@@ -19,6 +19,7 @@
 package com.mucommander.ui.main.commandbar;
 
 /**
+ * This is an interface that each class that should listen to CommandBar's attributes modifications need to implement.
  * 
  * @author Arik Hadas
  */

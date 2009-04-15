@@ -42,7 +42,7 @@ import com.mucommander.ui.main.MainFrame;
  * @see MuAction
  * @see ActionDescriptor
  * @see ActionKeymap
- * @author Maxence Bernard
+ * @author Maxence Bernard, Arik Hadas
  */
 public class ActionManager {
 

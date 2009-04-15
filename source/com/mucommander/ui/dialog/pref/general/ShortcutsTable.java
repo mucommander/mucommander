@@ -25,8 +25,6 @@ import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
-import java.io.IOException;
-import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
@@ -56,8 +54,6 @@ import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 
 import com.mucommander.Debug;
-import com.mucommander.extension.ClassFilter;
-import com.mucommander.extension.ClassFinder;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.util.ResourceLoader;
 import com.mucommander.runtime.JavaVersions;

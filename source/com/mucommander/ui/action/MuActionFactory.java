@@ -23,11 +23,18 @@ import java.util.Hashtable;
 import com.mucommander.ui.main.MainFrame;
 
 /**
- *  Each MuAction's factory should implements this interface.
+ *  Each MuAction's factory should implement this interface.
  *
  * @author Arik Hadas
  */
 public interface MuActionFactory {
 	
+	/**
+	 * This is an initiation method that returns an instance of MuAction subclass.
+	 * 
+	 * @param mainFrame - MainFrame.
+	 * @param properties - a hashtable of arguments for the action. 
+	 * @return an instance of MuAction subclass.
+	 */
 	public MuAction createAction(MainFrame mainFrame, Hashtable properties);
 }

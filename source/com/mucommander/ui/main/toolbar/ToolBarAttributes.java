@@ -21,7 +21,6 @@ package com.mucommander.ui.main.toolbar;
 import java.util.Iterator;
 import java.util.WeakHashMap;
 
-import com.mucommander.bookmark.BookmarkListener;
 import com.mucommander.ui.action.AddBookmarkAction;
 import com.mucommander.ui.action.ConnectToServerAction;
 import com.mucommander.ui.action.EditBookmarksAction;
@@ -46,6 +45,8 @@ import com.mucommander.ui.action.UnmarkGroupAction;
 import com.mucommander.ui.action.UnpackAction;
 
 /**
+ * This class is responsible to handle the attributes of ToolBars - their actions and separators.
+ * Every ToolBar should get its attributes from this class, and register in it for receiving attributes modifications.
  * 
  * @author Arik Hadas
  */

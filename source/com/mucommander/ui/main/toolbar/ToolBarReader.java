@@ -35,7 +35,7 @@ import com.mucommander.ui.action.ActionManager;
 /**
  * This class parses the XML file describing the toolbar's buttons and associated actions.
  *
- * @author Maxence Bernard
+ * @author Maxence Bernard, Arik Hadas
  */
 public class ToolBarReader extends ToolBarIO {
 

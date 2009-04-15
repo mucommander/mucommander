@@ -48,7 +48,7 @@ import com.mucommander.ui.main.MainFrame;
  * CommandBar is the button bar that sits at the bottom of the main window and provides access to
  * main commander actions (view, edit, copy, move...).
  *
- * @author Maxence Bernard
+ * @author Maxence Bernard, Arik Hadas
  */
 public class CommandBar extends JPanel implements ConfigurationListener, KeyListener, MouseListener, CommandBarAttributesListener {
 

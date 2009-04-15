@@ -54,7 +54,7 @@ import com.mucommander.ui.main.MainFrame;
 /**
  * This class is the icon toolbar attached to a MainFrame, triggering events when buttons are clicked.
  *
- * @author Maxence Bernard
+ * @author Maxence Bernard, Arik Hadas
  */
 public class ToolBar extends JToolBar implements ConfigurationListener, MouseListener, ToolBarAttributesListener {
 
