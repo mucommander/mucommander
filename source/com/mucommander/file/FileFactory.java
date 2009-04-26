@@ -115,16 +115,16 @@ public class FileFactory {
 
         // Register built-in file protocols.
         ProtocolProvider protocolProvider;
-        registerProtocol(FileProtocols.FILE,      new com.mucommander.file.impl.local.LocalFileProvider());
+        registerProtocol(FileProtocols.FILE, new com.mucommander.file.impl.local.LocalFileProvider());
         registerProtocol(FileProtocols.SMB,       new com.mucommander.file.impl.smb.SMBProtocolProvider());
-        registerProtocol(FileProtocols.HTTP,      protocolProvider = new com.mucommander.file.impl.http.HTTPProtocolProvider());
-        registerProtocol(FileProtocols.HTTPS,     protocolProvider);
-        registerProtocol(FileProtocols.FTP,       new com.mucommander.file.impl.ftp.FTPProtocolProvider());
-        registerProtocol(FileProtocols.NFS,       new com.mucommander.file.impl.nfs.NFSProtocolProvider());
+        registerProtocol(FileProtocols.HTTP, protocolProvider = new com.mucommander.file.impl.http.HTTPProtocolProvider());
+        registerProtocol(FileProtocols.HTTPS, protocolProvider);
+        registerProtocol(FileProtocols.FTP, new com.mucommander.file.impl.ftp.FTPProtocolProvider());
+        registerProtocol(FileProtocols.NFS, new com.mucommander.file.impl.nfs.NFSProtocolProvider());
         registerProtocol(FileProtocols.BOOKMARKS, new com.mucommander.bookmark.file.BookmarkProtocolProvider());
         // SFTP support is not compatible with all version of the Java runtime
         if(com.mucommander.file.impl.sftp.SFTPProtocolProvider.isAvailable())
-            registerProtocol(FileProtocols.SFTP,      new com.mucommander.file.impl.sftp.SFTPProtocolProvider());
+            registerProtocol(FileProtocols.SFTP, new com.mucommander.file.impl.sftp.SFTPProtocolProvider());
 
 //        registerProtocol(FileProtocols.S3,        new com.mucommander.file.impl.s3.S3Provider());
 
@@ -236,13 +236,24 @@ public class FileFactory {
     }
 
     /**
-     * Returns the protocol provider associated with the specified protocol identifer.
+     * Returns the protocol provider associated with the specified protocol identifer, or <code>null</code> if there
+     * is none.
      *
      * @param  protocol identifier of the protocol whose provider should be retrieved.
      * @return          the protocol provider registered to the specified protocol identifer, or <code>null</code> if none.
      */
     public static ProtocolProvider getProtocolProvider(String protocol) {
         return (ProtocolProvider)protocolProviders.get(protocol.toLowerCase());
+    }
+
+    /**
+     * Returns <code>true</code> if the given protocol has a registered {@link ProtocolProvider}.
+     *
+     * @param protocol identifier of the protocol to test
+     * @return <code>true</code> if the given protocol has a registered {@link ProtocolProvider}.
+     */
+    public static boolean isRegisteredProtocol(String protocol) {
+        return getProtocolProvider(protocol)!=null;
     }
 
     /**
