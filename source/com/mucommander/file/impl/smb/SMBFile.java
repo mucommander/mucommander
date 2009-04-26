@@ -18,7 +18,6 @@
 
 package com.mucommander.file.impl.smb;
 
-import com.mucommander.Debug;
 import com.mucommander.auth.AuthException;
 import com.mucommander.auth.Credentials;
 import com.mucommander.file.*;
@@ -35,23 +34,27 @@ import java.net.MalformedURLException;
 
 /**
  * SMBFile provides access to files located on an SMB/CIFS server.
- *
- * <p>The associated {@link FileURL} scheme is {@link FileProtocols#SMB}. The host part of the URL designates the
+ * <p>
+ * The associated {@link FileURL} scheme is {@link FileProtocols#SMB}. The host part of the URL designates the
  * SMB server. Credentials are specified in the login and password parts. The path separator is '/'.
- *
- * <p>Here are a few examples of valid SMB URLs:
+ * </p>
+ * <p>
+ * Here are a few examples of valid SMB URLs:
  * <code>
- * smb://garfield/stuff/somefile<br>
- * smb://john:p4sswd@garfield/stuff/somefile<br>
+ * smb://server/path/to/file<br>
+ * smb://domain;username:password@server/path/to/file<br>
  * smb://workgroup/<br>
  * </code>
- *
- * <p>The special 'smb://' URL represents the SMB root and lists all workgroups that are available on the network,
+ * </p>
+ * <p>
+ * The special 'smb://' URL represents the SMB root and lists all workgroups that are available on the network,
  * akin to Windows' network neighborhood.
- *
- * <p>Access to SMB files is provided by the <code>jCIFS</code> library distributed under the LGPL license.
+ * </p>
+ * <p>
+ * Access to SMB files is provided by the <code>jCIFS</code> library distributed under the LGPL license.
  * The {@link #getUnderlyingFileObject()} method allows to retrieve a <code>jcifs.smb.SmbFile</code> instance
- * corresponding to this SMBFile.
+ * corresponding to this <code>SMBFile</code>.
+ * </p>
  *
  * @author Maxence Bernard
  */
@@ -66,35 +69,13 @@ import java.net.MalformedURLException;
     /** Bit mask that indicates which permissions can be changed. Only the 'write' permission for 'user' access can
      *  be changed. */
     private final static PermissionBits CHANGEABLE_PERMISSIONS = new GroupedPermissionBits(128);   // -w------- (200 octal)
+
     
-
-    static {
-        // Silence jCIFS's output if not in debug mode
-        // Quote from jCIFS's documentation : "0 - No log messages are printed -- not even crticial exceptions."
-        if(!Debug.ON)
-            System.setProperty("jcifs.util.loglevel", "0");
-
-        // Lower the timeout values
-
-        // "The time period in milliseconds that the client will wait for a response to a request from the server.
-        // The default value is 30000."
-        System.setProperty("jcifs.smb.client.responseTimeout", "10000");
-
-        // "To prevent the client from holding server resources unnecessarily, sockets are closed after this time period
-        // if there is no activity. This time is specified in milliseconds. The default is 35000."
-        System.setProperty("jcifs.smb.client.soTimeout", "15000");
-
-        // Leaving this option enabled has a serious impact on performance (observed with jCIFS 1.2.25).
-        // "If this property is true, domain based DFS referrals will be disabled. The default value is false. This property " +
-        // "can be important in non-domain environments where domain-based DFS referrals that normally run when JCIFS first tries to resolve a path would timeout causing a long startup delay (e.g. running JCIFS only on the local machine without a network like on a laptop)."
-        System.setProperty("jcifs.smb.client.dfs.disabled", "true");
-    }
-
-    public SMBFile(FileURL fileURL) throws IOException {
+    protected SMBFile(FileURL fileURL) throws IOException {
         this(fileURL, null);
     }
 
-    private SMBFile(FileURL fileURL, SmbFile smbFile) throws IOException {
+    protected SMBFile(FileURL fileURL, SmbFile smbFile) throws IOException {
         super(fileURL);
 
         if(!fileURL.containsCredentials())
@@ -156,11 +137,23 @@ import java.net.MalformedURLException;
         if(credentials==null)
             return new SmbFile(url.toString(false));
 
+        // Extract the domain (if any) from the username
+        String login = credentials.getLogin();
+        String domain;
+        int domainStart = login.indexOf(";");
+        if(domainStart!=-1) {
+            domain = login.substring(0, domainStart);
+            login = login.substring(domainStart+1, login.length());
+        }
+        else {
+            domain = null;
+        }
+
         // A NtlmPasswordAuthentication is created from the FileURL credentials and passed to a specific SmbFile constructor.
         // The reason for doing this rather than using the SmbFile(String) constructor is that SmbFile uses java.net.URL
         // for the URL parsing which is unable to properly parse urls where the password contains a '@' character,
         // such as smb://user:p@ssword@host/path . 
-        return new SmbFile(url.toString(false), new NtlmPasswordAuthentication(null, credentials.getLogin(), credentials.getPassword()));
+        return new SmbFile(url.toString(false), new NtlmPasswordAuthentication(domain, login, credentials.getPassword()));
     }
 
 

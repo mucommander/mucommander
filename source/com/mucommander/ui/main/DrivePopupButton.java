@@ -27,6 +27,7 @@ import com.mucommander.conf.ConfigurationEvent;
 import com.mucommander.conf.ConfigurationListener;
 import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.file.AbstractFile;
+import com.mucommander.file.FileFactory;
 import com.mucommander.file.FileProtocols;
 import com.mucommander.file.FileURL;
 import com.mucommander.file.filter.FilenameFilter;
@@ -43,7 +44,9 @@ import com.mucommander.ui.dialog.server.*;
 import com.mucommander.ui.event.LocationEvent;
 import com.mucommander.ui.event.LocationListener;
 import com.mucommander.ui.helper.MnemonicHelper;
+import com.mucommander.ui.icon.CustomFileIconProvider;
 import com.mucommander.ui.icon.FileIcons;
+import com.mucommander.ui.icon.IconManager;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileSystemView;
@@ -335,6 +338,13 @@ public class DrivePopupButton extends PopupButton implements LocationListener, B
         }
 
         popupMenu.add(new JSeparator());
+
+        // Add 'Network shares' shortcut
+        if(FileFactory.isRegisteredProtocol(FileProtocols.SMB)) {
+            action = new CustomOpenLocationAction(mainFrame, new Hashtable(), new Bookmark("Network shares", "smb:///"));
+            action.setIcon(IconManager.getIcon(IconManager.FILE_ICON_SET, CustomFileIconProvider.NETWORK_ICON_NAME));
+            setMnemonic(popupMenu.add(action), mnemonicHelper);
+        }
 
         // Add Bonjour services menu
         setMnemonic(popupMenu.add(new BonjourMenu() {

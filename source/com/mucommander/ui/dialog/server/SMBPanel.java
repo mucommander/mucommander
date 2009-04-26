@@ -36,11 +36,13 @@ import java.net.MalformedURLException;
  */
 public class SMBPanel extends ServerPanel {
 
+    private JTextField domainField;
     private JTextField serverField;
     private JTextField shareField;
     private JTextField usernameField;
     private JPasswordField passwordField;
 
+    private static String lastDomain = "";
     private static String lastServer = "";
     private static String lastShare = "";
     private static String lastUsername = "";
@@ -57,11 +59,17 @@ public class SMBPanel extends ServerPanel {
         addTextFieldListeners(serverField, true);
         addRow(Translator.get("server_connect_dialog.server"), serverField, 5);
 
-        // NFS share, initialized to ""
+        // Share field
         shareField = new JTextField(lastShare);
         shareField.selectAll();
         addTextFieldListeners(shareField, true);
         addRow(Translator.get("server_connect_dialog.share"), shareField, 15);
+
+        // Domain field
+        domainField = new JTextField(lastDomain);
+        domainField.selectAll();
+        addTextFieldListeners(domainField, true);
+        addRow(Translator.get("server_connect_dialog.domain"), domainField, 15);
 
         // Username field
         usernameField = new JTextField(lastUsername);
@@ -79,6 +87,7 @@ public class SMBPanel extends ServerPanel {
     private void updateValues() {
         lastServer = serverField.getText();
         lastShare = shareField.getText();
+        lastDomain = domainField.getText();
         lastUsername = usernameField.getText();
         lastPassword = new String(passwordField.getPassword());
     }
@@ -92,7 +101,12 @@ public class SMBPanel extends ServerPanel {
         updateValues();
         FileURL url = FileURL.getFileURL(FileProtocols.SMB+"://"+lastServer+(lastShare.startsWith("/")?"":"/")+lastShare);
 
-        url.setCredentials(new Credentials(lastUsername, lastPassword));
+        // Insert the domain (if any) before the username, separated by a semicolon
+        String userInfo = lastUsername;
+        if(!lastDomain.equals(""))
+            userInfo = lastDomain+";"+userInfo;
+
+        url.setCredentials(new Credentials(userInfo, lastPassword));
 
         return url;
     }

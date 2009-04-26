@@ -18,12 +18,11 @@
 
 package com.mucommander;
 
-import java.io.IOException;
-import java.lang.reflect.Constructor;
-
 import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.extension.ExtensionManager;
 import com.mucommander.file.icon.impl.SwingFileIconProvider;
+import com.mucommander.file.impl.ftp.FTPProtocolProvider;
+import com.mucommander.file.impl.smb.SMBProtocolProvider;
 import com.mucommander.runtime.OsFamilies;
 import com.mucommander.shell.ShellHistoryManager;
 import com.mucommander.ui.dialog.startup.CheckVersionDialog;
@@ -32,6 +31,9 @@ import com.mucommander.ui.main.SplashScreen;
 import com.mucommander.ui.main.WindowManager;
 import com.mucommander.ui.main.commandbar.CommandBarIO;
 import com.mucommander.ui.main.toolbar.ToolBarIO;
+
+import java.io.IOException;
+import java.lang.reflect.Constructor;
 
 /**
  * muCommander launcher.
@@ -404,6 +406,9 @@ public class Launcher {
         // Traps VM shutdown
         Runtime.getRuntime().addShutdownHook(new ShutdownHook());
 
+        // Configure filesystems
+        configureFilesystems();
+
         // Initialises the desktop.
         try {com.mucommander.desktop.DesktopManager.init(isFirstBoot);}
         catch(Exception e) {printError("Could not initialise desktop", e, true);}
@@ -509,5 +514,18 @@ public class Launcher {
         // If no theme is configured in the preferences, ask for an initial theme.
         if(showSetup)
             new InitialSetupDialog(WindowManager.getCurrentMainFrame()).showDialog();
+    }
+
+    private static void configureFilesystems() {
+        // Configure the SMB subsystem (backed by jCIFS) to maintain compatibility with SMB servers that don't support
+        // NTLM v2 authentication such as Samba 3.0.x, which still is widely used and comes pre-installed on
+        // Mac OS X Leopard.
+        // Since jCIFS 1.3.0, the default is to use NTLM v2 authentication and extended security.
+        SMBProtocolProvider.setLmCompatibility(MuConfiguration.getVariable(MuConfiguration.SMB_LM_COMPATIBILITY, MuConfiguration.DEFAULT_SMB_LM_COMPATIBILITY));
+        SMBProtocolProvider.setExtendedSecurity(MuConfiguration.getVariable(MuConfiguration.SMB_USE_EXTENDED_SECURITY, MuConfiguration.DEFAULT_SMB_USE_EXTENDED_SECURITY));
+
+        // Use the FTP configuration option that controls whether to force the display of hidden files, or leave it for
+        // the servers to decide whether to show them.
+        FTPProtocolProvider.setForceHiddenFilesListing(MuConfiguration.getVariable(MuConfiguration.LIST_HIDDEN_FILES, MuConfiguration.DEFAULT_LIST_HIDDEN_FILES));        
     }
 }

@@ -128,7 +128,9 @@ New features:
 
 Improvements:
 - Tar/TGZ and Zip unpacking speed has been improved significantly (bug #74).
-- jCIFS library upgraded to version 1.2.25.
+- jCIFS library upgraded to version 1.3.8.
+- SMB domain-based authentication is now supported.
+- Added shortcuts to browse nearby SMB network shares.
 - JNA library upgraded to version 3.0.9.
 - Character encodings can be more easily selected (bug #15).
 - Added icon mappings for Office 2007 file extensions.

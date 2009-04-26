@@ -530,6 +530,19 @@ public class MuConfiguration {
     public static final boolean DEFAULT_LIST_HIDDEN_FILES         = false;
 
 
+    // - Variables used for SMB ----------------------------------------------
+    // -----------------------------------------------------------------------
+    /** Section containing all SMB variables. */
+    public static final String SMB_SECTION                        = "smb";
+    /** Controls the authentication protocol to use when connecting to SMB servers. */
+    public static final String SMB_LM_COMPATIBILITY               = SMB_SECTION + '.' + "lm_compatibility";
+    /** Default value for {@link #SMB_LM_COMPATIBILITY}. */
+    public static final int DEFAULT_SMB_LM_COMPATIBILITY          = 0;
+    /** Controls the authentication protocol to use when connecting to SMB servers. */
+    public static final String SMB_USE_EXTENDED_SECURITY          = SMB_SECTION + '.' + "use_extended_security";
+    /** Default value for {@link #SMB_USE_EXTENDED_SECURITY}. */
+    public static final boolean DEFAULT_SMB_USE_EXTENDED_SECURITY = false;
+
     // - Tree variables ------------------------------------------------------
     // -----------------------------------------------------------------------
     /** Section describing the tree configuration. */
