@@ -90,7 +90,7 @@ public class AuthDialog extends FocusDialog implements ActionListener, EditableC
         YBoxPanel yPanel = new YBoxPanel(5);
 
         if(authFailed) {
-            JTextArea label = new MultiLineLabel(Translator.get("auth_dialog.authentication_failed")+(errorMessage==null||(errorMessage=errorMessage.trim()).equals("")?"":": "+errorMessage));
+            JTextArea label = new MultiLineLabel(Translator.get("auth_dialog.authentication_failed")+(errorMessage==null||(errorMessage=errorMessage.trim()).equals("")?"":" : "+errorMessage));
             FontUtils.makeBold(label);
 
             yPanel.add(label);
@@ -126,12 +126,12 @@ public class AuthDialog extends FocusDialog implements ActionListener, EditableC
         }
         // If not display an introductive label ("please enter a login and password")
         else {
-            yPanel.add(new JLabel(Translator.get("auth_dialog.desc")+" :"));
+            yPanel.add(new JLabel(Translator.get("auth_dialog.desc")));
             yPanel.addSpace(15);
         }
 
         // Server URL for which the user has to authenticate
-        compPanel.addRow(Translator.get("auth_dialog.server")+":", new JLabel(fileURL.toString(false)), 10);
+        compPanel.addRow(Translator.get("auth_dialog.server"), new JLabel(fileURL.toString(false)), 10);
 
         // Login field: create either a text field or an editable combo box, depending on whether
         // CredentialsManager returned matches (-> combo box) or not (-> text field).
@@ -156,12 +156,12 @@ public class AuthDialog extends FocusDialog implements ActionListener, EditableC
             loginComponent = loginField;
         }
 
-        compPanel.addRow(Translator.get("login")+":", loginComponent, 5);
+        compPanel.addRow(Translator.get("login"), loginComponent, 5);
 
         // Create password field
         this.passwordField = new JPasswordField();
         passwordField.addActionListener(this);
-        compPanel.addRow(Translator.get("password")+":", passwordField, 10);
+        compPanel.addRow(Translator.get("password"), passwordField, 10);
 
         // Contains the credentials to set in the login and password text fields
         Credentials selectedCredentials = null;
