@@ -135,7 +135,7 @@ public class LocalFile extends AbstractFile {
      * Creates a new instance of LocalFile. The given FileURL's scheme should be {@link FileProtocols#FILE}, and the
      * host {@link FileURL#LOCALHOST}.  
      */
-    public LocalFile(FileURL fileURL) throws IOException {
+    protected LocalFile(FileURL fileURL) throws IOException {
         super(fileURL);
 
         String path = fileURL.getPath();

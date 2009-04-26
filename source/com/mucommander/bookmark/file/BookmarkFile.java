@@ -52,7 +52,7 @@ public class BookmarkFile extends AbstractFile {
      * @param  bookmark    bookmark to wrap.
      * @throws IOException if the specified bookmark's URL cannot be resolved.
      */
-    public BookmarkFile(Bookmark bookmark) throws IOException {
+    protected BookmarkFile(Bookmark bookmark) throws IOException {
         super(FileURL.getFileURL(FileProtocols.BOOKMARKS + "://" + java.net.URLEncoder.encode(bookmark.getName(), "UTF-8")));
         this.bookmark = bookmark;
     }

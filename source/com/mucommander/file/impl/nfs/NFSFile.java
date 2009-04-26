@@ -99,7 +99,7 @@ public class NFSFile extends AbstractFile {
     /**
      * Creates a new instance of NFSFile.
      */
-    public NFSFile(FileURL fileURL) {
+    protected NFSFile(FileURL fileURL) {
         super(fileURL);
 
         // Create the NFS URL used by XFile.

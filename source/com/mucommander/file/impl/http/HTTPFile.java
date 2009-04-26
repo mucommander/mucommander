@@ -123,7 +123,7 @@ public class HTTPFile extends AbstractFile {
     }
 
 
-    public HTTPFile(FileURL fileURL) throws IOException {
+    protected HTTPFile(FileURL fileURL) throws IOException {
         this(fileURL, new URL(fileURL.toString(false)), fileURL.toString(false));
     }
 

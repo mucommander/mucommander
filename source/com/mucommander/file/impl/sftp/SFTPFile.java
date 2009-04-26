@@ -99,12 +99,12 @@ public class SFTPFile extends AbstractFile {
     /**
      * Creates a new instance of SFTPFile and initializes the SSH/SFTP connection to the server.
      */
-    public SFTPFile(FileURL fileURL) throws IOException {
+    protected SFTPFile(FileURL fileURL) throws IOException {
         this(fileURL, null);
     }
 
     
-    private SFTPFile(FileURL fileURL, SFTPFileAttributes fileAttributes) throws IOException {
+    protected SFTPFile(FileURL fileURL, SFTPFileAttributes fileAttributes) throws IOException {
         super(fileURL);
 
 //        // Throw an AuthException if the url doesn't contain any credentials
