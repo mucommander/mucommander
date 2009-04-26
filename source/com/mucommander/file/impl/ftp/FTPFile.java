@@ -22,7 +22,6 @@ package com.mucommander.file.impl.ftp;
 import com.mucommander.Debug;
 import com.mucommander.auth.AuthException;
 import com.mucommander.auth.Credentials;
-import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.file.*;
 import com.mucommander.file.connection.ConnectionHandler;
 import com.mucommander.file.connection.ConnectionHandlerFactory;
@@ -119,11 +118,11 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
     private final static SimpleDateFormat SITE_UTIME_DATE_FORMAT = new SimpleDateFormat("yyyyMMddHHmm");
 
 
-    public FTPFile(FileURL fileURL) throws IOException {
+    protected FTPFile(FileURL fileURL) throws IOException {
         this(fileURL, null);
     }
 
-    public FTPFile(FileURL fileURL, org.apache.commons.net.ftp.FTPFile file) throws IOException {
+    protected FTPFile(FileURL fileURL, org.apache.commons.net.ftp.FTPFile file) throws IOException {
         super(fileURL);
 
         this.absPath = fileURL.getPath();
@@ -1250,14 +1249,13 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
 	                ftpClient.setFileType(FTPClient.BINARY_FILE_TYPE);
 	
 	                // Issue 'LIST -al' command to list hidden files (instead of LIST -l), only if the corresponding
-	                // configuration variable has been manually enabled in the preferences.
+	                // configuration option has been manually enabled in the preferences.
 	                // The reason for not doing so by default is that the commons-net library will fail to properly parse
 	                // directory listings on some servers when 'LIST -al' is used (bug).
 	                // Note that by default, if 'LIST -l' is used, the decision to list hidden files is left to the
-	                // FTP server: some servers will choose to show them, some other will not. This behavior usually is a
+	                // FTP server: some servers will choose to show them, some will not. This behavior is usually a
 	                // configuration setting of the FTP server.
-	                // Todo: this should not be a configuration variable but rather a FileURL property
-	                ftpClient.setListHiddenFiles(MuConfiguration.getVariable(MuConfiguration.LIST_HIDDEN_FILES, MuConfiguration.DEFAULT_LIST_HIDDEN_FILES));
+	                ftpClient.setListHiddenFiles(FTPProtocolProvider.getForceHiddenFilesListing());
 	
 	                if(encoding.equalsIgnoreCase("UTF-8")) {
 	                    // This command enables UTF8 on the remote server... but only a few FTP servers currently support this command
