@@ -1249,6 +1249,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <property name="is-debug" value="false"/>
   </target>
 
+  <!-- Disables debug instructions in the generated binaries.  -->
+  <target name="enable-debug">
+    <echo>Enabling debug...</echo>
+    <property name="is-debug" value="true"/>
+  </target>
+
   <!-- Sets the current build as a 'nightly' one.              -->
   <!-- This will impact:                                       -->
   <!-- - archive and package prefixes, which won't include the -->
