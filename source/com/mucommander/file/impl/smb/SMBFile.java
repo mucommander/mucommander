@@ -18,6 +18,7 @@
 
 package com.mucommander.file.impl.smb;
 
+import com.mucommander.Debug;
 import com.mucommander.auth.AuthException;
 import com.mucommander.auth.Credentials;
 import com.mucommander.file.*;
@@ -267,6 +268,9 @@ import java.net.MalformedURLException;
             return file.exists();
         }
         catch(IOException e) {
+            if(Debug.ON)
+                Debug.trace(e);
+
             if(e instanceof SmbAuthException)
                 return true;
             return false;
