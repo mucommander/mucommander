@@ -18,6 +18,7 @@
 
 package com.mucommander.ui.dialog.pref.general;
 
+import com.mucommander.Debug;
 import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.extension.ClassFinder;
 import com.mucommander.extension.ExtensionManager;
@@ -157,7 +158,7 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
         initUI();
 
         // Initialises the known custom look and feels
-        initialiseCustomLookAndFeels();
+        initializeCustomLookAndFeels();
     }
 
 
@@ -199,15 +200,14 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
     }
 
     /**
-     * Populates the look&feel combo box will all available look&feels.
+     * Populates the look&feel combo box with all available look&feels.
      */
     private void populateLookAndFeels() {
         int    currentIndex;
         String currentName;
 
-        // Resets the content of the combo box and retrieves all available look&feels.
         lookAndFeelComboBox.removeAllItems();
-        initialiseAvailableLookAndFeels();
+        initializeAvailableLookAndFeels();
 
         // Populates the combo box.
         currentIndex = -1;
@@ -241,7 +241,11 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
         // Creates the look and feel combo box.
         lookAndFeelComboBox = new PrefComboBox() {
 			public boolean hasChanged() {
-				return !lookAndFeels[getSelectedIndex()].getClassName().equals(MuConfiguration.getVariable(MuConfiguration.LOOK_AND_FEEL));
+				int selectedIndex = getSelectedIndex();
+                if(selectedIndex<0)
+                    return false;                
+
+                return !lookAndFeels[selectedIndex].getClassName().equals(MuConfiguration.getVariable(MuConfiguration.LOOK_AND_FEEL));
 			}
         };
         lookAndFeelComboBox.setRenderer(new BasicComboBoxRenderer() {
@@ -250,12 +254,8 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
 
                     label = (JLabel)super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
 
-                    // Works around a strange JComboBox issue: index is often set to -1, which really doesn't make any sense.
-                    if(index < 0) {
-                        for(index = 0; index < lookAndFeels.length; index++)
-                            if(lookAndFeels[index].getName().equals(value))
-                                break;
-                    }
+                    if(index < 0)
+                        return label;
 
                     // All look and feels that are not modifiable must be flagged with a lock icon.
                     if(isLookAndFeelModifiable(lookAndFeels[index]))
@@ -538,14 +538,14 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
     /**
      * Initialises the list of custom look&feels.
      */
-    private void initialiseCustomLookAndFeels() {
+    private void initializeCustomLookAndFeels() {
         customLookAndFeels = MuConfiguration.getListVariable(MuConfiguration.CUSTOM_LOOK_AND_FEELS, MuConfiguration.CUSTOM_LOOK_AND_FEELS_SEPARATOR);
     }
 
     /**
      * Initialises the list of available look&feels.
      */
-    private void initialiseAvailableLookAndFeels() {
+    private void initializeAvailableLookAndFeels() {
         // Loads all available look and feels.
         lookAndFeels = UIManager.getInstalledLookAndFeels();
 
@@ -584,8 +584,11 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
      */
     private void resetLookAndFeelButtons() {
         // If the dial is animated, we're currently loading look&feels and should ignore this call.
-        if(dial == null || !dial.isAnimated())
-            deleteLookAndFeelButton.setEnabled(isLookAndFeelModifiable(lookAndFeels[lookAndFeelComboBox.getSelectedIndex()]));
+        if(dial == null || !dial.isAnimated()) {
+            int selectedIndex = lookAndFeelComboBox.getSelectedIndex();
+            if(selectedIndex!=-1)
+                deleteLookAndFeelButton.setEnabled(isLookAndFeelModifiable(lookAndFeels[selectedIndex]));
+        }
     }
 
     /**
@@ -748,6 +751,9 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
             }
         }
         catch(Exception e) {
+            if(Debug.ON)
+                Debug.trace(e);
+
             ErrorDialog.showErrorDialog(this);
         }
         setLookAndFeelsLoading(false);
@@ -1043,7 +1049,6 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
         else if(e.getSource() == duplicateThemeButton)
             duplicateTheme(theme);
     }
-
 
 
     // - File filter ------------------------------------------------------------
