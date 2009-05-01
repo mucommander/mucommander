@@ -18,15 +18,14 @@
 
 package com.mucommander.extension;
 
-import java.io.IOException;
-import java.util.Vector;
-
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.AbstractFileClassLoader;
 import com.mucommander.file.filter.AttributeFileFilter;
 import com.mucommander.file.filter.ExtensionFilenameFilter;
 import com.mucommander.file.filter.OrFileFilter;
-import com.mucommander.file.util.ResourceLoader;
+
+import java.io.IOException;
+import java.util.Vector;
 
 /**
  * Finds specific classes within a browsable file.
@@ -132,9 +131,7 @@ public class ClassFinder {
         this.classFilter = classFilter;
 
         // Looks for all matched classes in browsable.        
-        String rootPath = ResourceLoader.getRootPackageAsFile(browsable.getClass()).getAbsolutePath(true);
-        String relativePath = browsable.getAbsolutePath(true).replaceFirst(rootPath.replaceAll("\\\\", "\\\\\\\\"), "");
-        return find(relativePath.replace(browsable.getSeparator(), "."), browsable);
+        return find("", browsable);
     }
 
     /**
