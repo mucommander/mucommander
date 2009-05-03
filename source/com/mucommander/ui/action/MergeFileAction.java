@@ -19,14 +19,13 @@
 package com.mucommander.ui.action;
 
 import com.mucommander.file.AbstractFile;
+import com.mucommander.file.filter.AttributeFileFilter;
+import com.mucommander.file.filter.FileFilter;
 import com.mucommander.file.util.FileSet;
-import com.mucommander.text.Translator;
-import com.mucommander.ui.dialog.ErrorDialog;
 import com.mucommander.ui.dialog.file.MergeFileDialog;
 import com.mucommander.ui.main.MainFrame;
 
 import java.util.Hashtable;
-import java.util.Iterator;
 
 /**
  * This action invokes the merge file dialog which allows to
@@ -36,25 +35,20 @@ import java.util.Iterator;
  */
 public class MergeFileAction extends SelectedFilesAction implements InvokesDialog {
 	
-
     public MergeFileAction(MainFrame mainFrame, Hashtable properties) {
         super(mainFrame, properties);
     }
 
     public void performAction() {
     	FileSet files = mainFrame.getActiveTable().getSelectedFiles();
+
+        // Filter out files that are not regular files
+        FileFilter filter = new AttributeFileFilter(AttributeFileFilter.FILE);
+        filter.filter(files);
+
     	if (files.size()==0)
     		return;
-    	for (Iterator iterator = files.iterator(); iterator.hasNext();) {
-			AbstractFile file = (AbstractFile) iterator.next();
-			if (file.isDirectory() || file.isSymlink()) {
-				ErrorDialog.showErrorDialog(mainFrame,
-						Translator.get("com.mucommander.ui.action.MergeFileAction.wrong_selection"),
-						Translator.get("com.mucommander.ui.action.MergeFileAction.select_files_only")); 
 
-				return;
-			}
-		}
         AbstractFile destFolder = mainFrame.getInactivePanel().getCurrentFolder();
         new MergeFileDialog(mainFrame, files, destFolder).showDialog();
     }
