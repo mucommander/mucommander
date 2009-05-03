@@ -18,11 +18,11 @@
 
 package com.mucommander.ui.action;
 
-import java.util.Hashtable;
-
-import com.mucommander.file.AbstractFile;
+import com.mucommander.file.filter.AttributeFileFilter;
 import com.mucommander.ui.dialog.file.SplitFileDialog;
 import com.mucommander.ui.main.MainFrame;
+
+import java.util.Hashtable;
 
 /**
  * This action invokes the split file dialog which allows to
@@ -31,19 +31,19 @@ import com.mucommander.ui.main.MainFrame;
  * @author Mariusz Jakubowski
  */
 public class SplitFileAction extends SelectedFilesAction implements InvokesDialog {
-	
+
 
     public SplitFileAction(MainFrame mainFrame, Hashtable properties) {
         super(mainFrame, properties);
+
+        setSelectedFileFilter(new AttributeFileFilter(AttributeFileFilter.DIRECTORY, true));
     }
 
     public void performAction() {
-        AbstractFile selectedFile = mainFrame.getActiveTable().getSelectedFile();
-        if (selectedFile != null && !selectedFile.isDirectory() && selectedFile.getSize() > 0) {
-            AbstractFile destFolder = mainFrame.getInactivePanel().getCurrentFolder();
-            new SplitFileDialog(mainFrame, selectedFile, destFolder).showDialog();
-        }
-
+        new SplitFileDialog(mainFrame,
+                mainFrame.getActiveTable().getSelectedFile(),
+                mainFrame.getInactivePanel().getCurrentFolder()
+        ).showDialog();
     }
 
     public static class Factory implements MuActionFactory {
