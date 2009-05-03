@@ -24,7 +24,6 @@ import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.filter.AndFileFilter;
 import com.mucommander.file.filter.AttributeFileFilter;
-import com.mucommander.file.filter.FileFilterHelper;
 import com.mucommander.file.util.FileComparator;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.event.LocationEvent;
