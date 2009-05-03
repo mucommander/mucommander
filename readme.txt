@@ -282,3 +282,4 @@ http://www.mucommander.com/forums/viewtopic.php?t=420
 This file controls custom command / file associations.
 Documentation on how to customise those associations can be found here:
 http://www.mucommander.com/forums/viewtopic.php?t=634
+
