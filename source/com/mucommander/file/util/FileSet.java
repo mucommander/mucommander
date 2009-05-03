@@ -94,4 +94,16 @@ public class FileSet extends Vector {
         for(int i=0; i<files.length; i++)
             add(files[i]);
     }
+
+    /**
+     * Returns the files contained by this set as an {@link AbstractFile} array.
+     *
+     * @return the files contained by this set as an {@link AbstractFile} array.
+     */
+    public AbstractFile[] toFileArray() {
+        AbstractFile[] files = new AbstractFile[size()];
+        toArray(files);
+
+        return files;
+    }
 }
