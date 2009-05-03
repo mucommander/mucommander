@@ -20,6 +20,7 @@
 package com.mucommander.file.filter;
 
 import com.mucommander.file.AbstractFile;
+import com.mucommander.file.util.FileSet;
 
 import java.util.Vector;
 
@@ -122,8 +123,8 @@ public abstract class FileFilter {
      * Convenience method that filters out files that do not {@link #match(AbstractFile) match} this filter and
      * returns a file array of matched <code>AbstractFile</code> instances.
      *
-     * @param files files to be test against {@link #match(com.mucommander.file.AbstractFile)}
-     * @return a file array of files that were matches by this filter
+     * @param files files to be tested against {@link #match(com.mucommander.file.AbstractFile)}
+     * @return a file array of files that were matched by this filter
      */
     public AbstractFile[] filter(AbstractFile files[]) {
         Vector filteredFilesV = new Vector();
@@ -141,11 +142,26 @@ public abstract class FileFilter {
     }
 
     /**
-     * Convenience method that returns <code>true</code> if all the files containted in the specified file
-     * array were matched by {@link #match(AbstractFile)}, <code>false</code> if one of the files wasn't.
+     * Convenience method that filters out files that do not {@link #match(AbstractFile) match} this filter
+     * and removes them from the given {@link FileSet}.
+     *
+     * @param files files to be tested against {@link #match(com.mucommander.file.AbstractFile)}
+     */
+    public void filter(FileSet files) {
+        for(int i=0; i<files.size();) {
+            if(reject(files.fileAt(i)))
+                files.removeElementAt(i);
+            else
+                i++;
+        }
+    }
+
+    /**
+     * Convenience method that returns <code>true</code> if all the files contained in the specified file array
+     * were matched by {@link #match(AbstractFile)}, <code>false</code> if one of the files wasn't.
      *
      * @param files the files to test against this FileFilter
-     * @return true if all the files containted in the specified file array were matched by this filter
+     * @return true if all the files contained in the specified file array were matched by this filter
      */
     public boolean match(AbstractFile files[]) {
         int nbFiles = files.length;
@@ -157,11 +173,27 @@ public abstract class FileFilter {
     }
 
     /**
-     * Convenience method that returns <code>true</code> if all the files containted in the specified file
-     * array were accepted by {@link #accept(AbstractFile)}, <code>false</code> if one of the files wasn't.
+     * Convenience method that returns <code>true</code> if all the files contained in the specified {@link FileSet}
+     * were matched by {@link #match(AbstractFile)}, <code>false</code> if one of the files wasn't.
      *
      * @param files the files to test against this FileFilter
-     * @return true if all the files containted in the specified file array were accepted by this filter
+     * @return true if all the files contained in the specified {@link FileSet} were matched by this filter
+     */
+    public boolean match(FileSet files) {
+        int nbFiles = files.size();
+        for(int i=0; i<nbFiles; i++)
+            if(!match(files.fileAt(i)))
+                return false;
+
+        return true;
+    }
+
+    /**
+     * Convenience method that returns <code>true</code> if all the files contained in the specified file array
+     * were accepted by {@link #accept(AbstractFile)}, <code>false</code> if one of the files wasn't.
+     *
+     * @param files the files to test against this FileFilter
+     * @return true if all the files contained in the specified file array were accepted by this filter
      */
     public boolean accept(AbstractFile files[]) {
         int nbFiles = files.length;
@@ -173,16 +205,48 @@ public abstract class FileFilter {
     }
 
     /**
-     * Convenience method that returns <code>true</code> if all the files containted in the specified file
-     * array were rejected by {@link #reject(AbstractFile)}, <code>false</code> if one of the files wasn't.
+     * Convenience method that returns <code>true</code> if all the files contained in the specified {@link FileSet}
+     * were accepted by {@link #accept(AbstractFile)}, <code>false</code> if one of the files wasn't.
      *
      * @param files the files to test against this FileFilter
-     * @return true if all the files containted in the specified file array were rejected by this filter
+     * @return true if all the files contained in the specified {@link FileSet} were accepted by this filter
+     */
+    public boolean accept(FileSet files) {
+        int nbFiles = files.size();
+        for(int i=0; i<nbFiles; i++)
+            if(!accept(files.fileAt(i)))
+                return false;
+
+        return true;
+    }
+
+    /**
+     * Convenience method that returns <code>true</code> if all the files contained in the specified file array
+     * were rejected by {@link #reject(AbstractFile)}, <code>false</code> if one of the files wasn't.
+     *
+     * @param files the files to test against this FileFilter
+     * @return true if all the files contained in the specified file array were rejected by this filter
      */
     public boolean reject(AbstractFile files[]) {
         int nbFiles = files.length;
         for(int i=0; i<nbFiles; i++)
             if(!reject(files[i]))
+                return false;
+
+        return true;
+    }
+
+    /**
+     * Convenience method that returns <code>true</code> if all the files contained in the specified {@link FileSet}
+     * were rejected by {@link #reject(AbstractFile)}, <code>false</code> if one of the files wasn't.
+     *
+     * @param files the files to test against this FileFilter
+     * @return true if all the files contained in the specified {@link FileSet} were rejected by this filter
+     */
+    public boolean reject(FileSet files) {
+        int nbFiles = files.size();
+        for(int i=0; i<nbFiles; i++)
+            if(!reject(files.fileAt(i)))
                 return false;
 
         return true;
