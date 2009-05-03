@@ -5575,6 +5575,43 @@ com.mucommander.ui.action.ShowRecentExecutedFilesQLAction.label:UA:Останн�
 
 
 
+
+
+
+
+
+
+
+com.mucommander.ui.action.SplitFileAction.label:EN:Split File
+com.mucommander.ui.action.SplitFileAction.label:PL:Podziel plik
+# Translation missing (New!)
+
+
+
+
+
+
+
+
+
+
+
+
+
+com.mucommander.ui.action.MergeFileAction.label:EN:Combine files
+com.mucommander.ui.action.MergeFileAction.label:PL:Scalaj pliki
+# Translation missing (New!)
+
+
+
+
+
+
+
+
+
+
+
 com.mucommander.ui.action.ShowBookmarksQLAction.label:EN:$[bookmarks_menu]
 
 
@@ -7775,6 +7812,88 @@ email.send_file_error:DA:Kunne ikke sende filen %1, mailen er ikke sendt.
 email.send_file_error:UA:Не вдалося надіслати файл %1, пошта не відіслана
 
 
+##############
+# Split file #
+##############
+
+split_file_dialog.title:EN:Split file
+split_file_dialog.title:PL:Podział pliku
+# Translation missing (New!)
+
+split_file_dialog.error_title:EN:Split file error
+split_file_dialog.error_title:PL:Błąd podziału pliku
+# Translation missing (New!)
+
+split_file_dialog.file_to_split:EN:File to split
+split_file_dialog.file_to_split:PL:Plik do podziału
+# Translation missing (New!)
+
+split_file_dialog.target_directory:EN:Target directory
+split_file_dialog.target_directory:PL:Katalog docelowy
+# Translation missing (New!)
+
+split_file_dialog.part_size:EN:Size of one part
+split_file_dialog.part_size:PL:Wielkość jednej części
+# Translation missing (New!)
+
+split_file_dialog.parts:EN:Number of parts
+split_file_dialog.parts:PL:Liczba części
+# Translation missing (New!)
+
+split_file_dialog.generate_CRC:EN:Generate CRC file
+split_file_dialog.generate_CRC:PL:Wygeneruj plik CRC
+# Translation missing (New!)
+
+split_file_dialog.split:EN:Split
+split_file_dialog.split:PL:Podziel
+# Translation missing (New!)
+
+split_file_dialog.max_parts:EN:Maximum number of parts is %1
+split_file_dialog.max_parts:PL:Maksymalna liczba części wynosi %1
+# Translation missing (New!)
+
+split_file_dialog.auto:EN:Auto
+split_file_dialog.auto:PL:Automatycznie
+# Translation missing (New!)
+
+split_file_dialog.insert_new_media:EN:Insert new media
+split_file_dialog.insert_new_media:PL:Włóż kolejny dysk
+# Translation missing (New!)
+
+
+##############
+# Merge file #
+##############
+
+merge_file_dialog.title:EN:Combine file
+merge_file_dialog.title:PL:Scal plik
+# Translation missing (New!)
+
+merge_file_dialog.error_title:EN:Merge files error
+merge_file_dialog.error_title:PL:Błąd łączenia plików
+# Translation missing (New!)
+
+merge_file_dialog.merge:EN:Combine
+merge_file_dialog.merge:PL:Scal
+# Translation missing (New!)
+
+merge_job.no_crc_file:EN:Combine succeeded. No CRC file.
+merge_job.no_crc_file:PL:Scalanie zakończone pomyślnie. Brak pliku CRC.
+# Translation missing (New!)
+
+merge_job.crc_read_error:EN:Error while reading CRC file.
+merge_job.crc_read_error:PL:Błąd podczas odczytywania pliku CRC.
+# Translation missing (New!)
+
+merge_job.crc_check_failed:EN:CRC mismatch: expected %2, found %1
+merge_job.crc_check_failed:PL:Pliki CRC nie zgadzają się %1 <> %2
+# Translation missing (New!)
+
+merge_job.crc_ok:EN:Combine succeeded. CRC checksum ok.
+merge_job.crc_ok:PL:Scalanie zakończone pomyślnie. Plik CRC zweryfikowany.
+# Translation missing (New!)
+
+
 #########################
 # File selection dialog #
 #########################
@@ -8716,6 +8835,30 @@ server_connect_dialog.share:SV:Dela
 server_connect_dialog.share:DA:Del
 server_connect_dialog.share:UA:Спільний ресурс
 # Translation missing (KO)
+
+
+
+
+
+
+
+# Used for SMB connection properties
+server_connect_dialog.domain:EN:Domain
+server_connect_dialog.domain:FR:Domaine
+# Translation missing (New!)
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -14770,72 +14913,6 @@ recent_executed_files_quick_list.empty_message:UA:Нема попередньо�
 
 
 
-
-com.mucommander.ui.action.SplitFileAction.label:EN:Split File
-com.mucommander.ui.action.SplitFileAction.label:PL:Podziel plik
-
-split_file_dialog.title:EN:Split file
-split_file_dialog.title:PL:Podział pliku
-
-split_file_dialog.error_title:EN:Split file error
-split_file_dialog.error_title:PL:Błąd podziału pliku
-
-split_file_dialog.file_to_split:EN:File to split
-split_file_dialog.file_to_split:PL:Plik do podziału
-
-split_file_dialog.target_directory:EN:Target directory
-split_file_dialog.target_directory:PL:Katalog docelowy
-
-split_file_dialog.part_size:EN:Size of one part
-split_file_dialog.part_size:PL:Wielkość jednej części
-
-split_file_dialog.parts:EN:Number of parts
-split_file_dialog.parts:PL:Liczba części
-
-split_file_dialog.generate_CRC:EN:Generate CRC file
-split_file_dialog.generate_CRC:PL:Wygeneruj plik CRC
-
-split_file_dialog.split:EN:Split
-split_file_dialog.split:PL:Podziel
-
-split_file_dialog.max_parts:EN:Maximum number of parts is %1
-split_file_dialog.max_parts:PL:Maksymalna liczba części wynosi %1
-
-split_file_dialog.auto:EN:Auto
-split_file_dialog.auto:PL:Automatycznie
-
-split_file_dialog.insert_new_media:EN:Insert new media
-split_file_dialog.insert_new_media:PL:Włóż kolejny dysk
-
-com.mucommander.ui.action.MergeFileAction.label:EN:Combine files
-com.mucommander.ui.action.MergeFileAction.label:PL:Scalaj pliki
-
-com.mucommander.ui.action.MergeFileAction.wrong_selection:EN:Wrong selection
-com.mucommander.ui.action.MergeFileAction.wrong_selection:PL:Niepoprawny wybór
-
-com.mucommander.ui.action.MergeFileAction.select_files_only:EN:Please select files only
-com.mucommander.ui.action.MergeFileAction.select_files_only:PL:Proszę wybrać tylko pliki
-
-merge_file_dialog.title:EN:Combine file
-merge_file_dialog.title:PL:Scal plik
-
-merge_file_dialog.error_title:EN:Merge files error
-merge_file_dialog.error_title:PL:Błąd łączenia plików
-
-merge_file_dialog.merge:EN:Combine
-merge_file_dialog.merge:PL:Scal
-
-merge_job.no_crc_file:EN:Combine succeeded. No CRC file.
-merge_job.no_crc_file:PL:Scalanie zakończone pomyślnie. Brak pliku CRC.
-
-merge_job.crc_read_error:EN:Error while reading CRC file.
-merge_job.crc_read_error:PL:Błąd podczas odczytywania pliku CRC.
-
-merge_job.crc_check_failed:EN:CRC files doesn't match %1 <> %2
-merge_job.crc_check_failed:EN:Pliki CRC nie zgadzają się %1 <> %2
-
-merge_job.crc_ok:EN:Combine succeeded. CRC checksum ok.
-merge_job.crc_ok:PL:Scalanie zakończone pomyślnie. Plik CRC zweryfikowany.
 
 ######################
 # Deprecated entries #
