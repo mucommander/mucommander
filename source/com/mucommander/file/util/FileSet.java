@@ -51,6 +51,18 @@ public class FileSet extends Vector {
     }
 
     /**
+     * Creates a new empty FileSet with the specified base folder.
+     *
+     * @param baseFolder the folder containing the files
+     * @param initialCapacity initial capacity of the vector
+     */
+    public FileSet(AbstractFile baseFolder, int initialCapacity) {
+        super(initialCapacity);
+
+        this.baseFolder = baseFolder;
+    }
+
+    /**
      * Creates a new empty FileSet with the specified base folder, and adds the given file.
      *
      * @param baseFolder the folder containing the files
