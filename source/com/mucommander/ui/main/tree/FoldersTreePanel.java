@@ -28,6 +28,7 @@ import com.mucommander.file.util.FileComparator;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.event.LocationEvent;
 import com.mucommander.ui.event.LocationListener;
+import com.mucommander.ui.main.ConfigurableFolderFilter;
 import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.theme.ColorChangedEvent;
 import com.mucommander.ui.theme.FontChangedEvent;
@@ -67,10 +68,6 @@ public class FoldersTreePanel extends JPanel implements TreeSelectionListener,
     /** A timer that fires a directory change */
     private ChangeTimer changeTimer = new ChangeTimer();
 
-    private AndFileFilter chainedFileFilter;
-
-    private FileFilterHelper filterHelper;
-    
     static {
         TreeIOThreadManager.getInstance().start();
     }
@@ -86,14 +83,13 @@ public class FoldersTreePanel extends JPanel implements TreeSelectionListener,
         
         setLayout(new BorderLayout());
 
-        chainedFileFilter = new AndFileFilter();       
-        AttributeFileFilter dirFilter = new AttributeFileFilter(AttributeFileFilter.DIRECTORY);
-        chainedFileFilter.addFileFilter(dirFilter);
-        filterHelper = new FileFilterHelper(chainedFileFilter);
-        
-        
+        // Filters out the files that should not be displayed in the tree view
+        AndFileFilter treeFileFilter = new AndFileFilter();
+        treeFileFilter.addFileFilter(new AttributeFileFilter(AttributeFileFilter.DIRECTORY));
+        treeFileFilter.addFileFilter(new ConfigurableFolderFilter());
+
         FileComparator sort = new FileComparator(FileComparator.NAME_CRITERION, true, true);
-        model = new FilesTreeModel(chainedFileFilter, sort);
+        model = new FilesTreeModel(treeFileFilter, sort);
         tree = new JTree(model);
 		tree.setFont(ThemeCache.tableFont);
         tree.setBackground(ThemeCache.backgroundColors[ThemeCache.INACTIVE][ThemeCache.NORMAL]);
