@@ -850,14 +850,16 @@ public class FileURL implements Cloneable {
         String separator = getPathSeparator();
         int separatorLen = separator.length();
 
+        if(path1.equals(path2))
+            return true;
+
         // If the difference between the 2 strings is just a trailing path separator, we consider the paths as equal
         if(Math.abs(len1-len2)==separatorLen && (len1>len2 ? path1.startsWith(path2) : path2.startsWith(path1))) {
             String diff = len1>len2 ? path1.substring(len1-separatorLen) : path2.substring(len2-separatorLen);
             return separator.equals(diff);
         }
-        else {
-            return path1.equals(path2);
-        }
+
+        return false;
     }
 
     /**
@@ -986,11 +988,11 @@ public class FileURL implements Cloneable {
 
         FileURL url = (FileURL)o;
 
-        return schemeEquals(url)
+        return pathEquals(url)      // Compare the path first as it is the most likely to be different
+            && schemeEquals(url)
             && hostEquals(url)
             && portEquals(url)
             && queryEquals(url)
-            && pathEquals(url)
             && (!compareCredentials || credentialsEquals(url))
             && (!compareProperties || propertiesEquals(url));
     }
