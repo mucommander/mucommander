@@ -272,6 +272,32 @@ public class PathUtils {
         return path;
     }
 
+    /**
+     * Returns <code>true</code> if both specified paths are equal. The comparison is case-sensitive.
+     * If the sole difference between two paths is a trailing path separator, they will be considered as equal.
+     * For example, <code>/path</code> and <code>/path/</code> are considered equal, assuming the path separator is '/'.
+     *
+     * @param path1 first path to test
+     * @param path2 second path to test
+     * @param separator path separator for both paths
+     * @return <code>true</code> if both paths are equal
+     */
+    public static boolean pathEquals(String path1, String path2, String separator) {
+        if(path1.equals(path2))
+            return true;
+
+        int len1 = path1.length();
+        int len2 = path2.length();
+        int separatorLen = separator.length();
+
+        // If the difference between the 2 strings is just a trailing path separator, we consider the paths as equal
+        if(Math.abs(len1-len2)==separatorLen && (len1>len2 ? path1.startsWith(path2) : path2.startsWith(path1))) {
+            String diff = len1>len2 ? path1.substring(len1-separatorLen) : path2.substring(len2-separatorLen);
+            return separator.equals(diff);
+        }
+
+        return false;
+    }
 
     /**
      * Removes the specified number of fragments from the beginning of the given path and returns the modified path,
