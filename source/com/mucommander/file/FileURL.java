@@ -836,8 +836,9 @@ public class FileURL implements Cloneable {
 
     /**
      * Returns <code>true</code> if the path of this URL and the given URL are equal. The comparison is case-sensitive.
-     * If the sole difference between two paths is a trailing path separator, they will be considered as equal.
-     * For example, <code>/path</code> and <code>/path/</code> are considered equal (assuming the path separator is '/').
+     * If the sole difference between two paths is a trailing path separator (and both URLs have the same path separator),
+     * they will be considered as equal.
+     * For example, <code>/path</code> and <code>/path/</code> are considered equal, assuming the path separator is '/'.
      *
      * @param url the URL to test for path equality
      * @return <code>true</code> if the path of this URL and the given URL are equal
@@ -845,18 +846,22 @@ public class FileURL implements Cloneable {
     public boolean pathEquals(FileURL url) {
         String path1 = this.getPath();
         String path2 = url.getPath();
-        int len1 = path1.length();
-        int len2 = path2.length();
-        String separator = getPathSeparator();
-        int separatorLen = separator.length();
 
         if(path1.equals(path2))
             return true;
 
-        // If the difference between the 2 strings is just a trailing path separator, we consider the paths as equal
-        if(Math.abs(len1-len2)==separatorLen && (len1>len2 ? path1.startsWith(path2) : path2.startsWith(path1))) {
-            String diff = len1>len2 ? path1.substring(len1-separatorLen) : path2.substring(len2-separatorLen);
-            return separator.equals(diff);
+        String separator = getPathSeparator();
+
+        if(separator.equals(url.getPathSeparator())) {
+            int separatorLen = separator.length();
+            int len1 = path1.length();
+            int len2 = path2.length();
+
+            // If the difference between the 2 strings is just a trailing path separator, we consider the paths as equal
+            if(Math.abs(len1-len2)==separatorLen && (len1>len2 ? path1.startsWith(path2) : path2.startsWith(path1))) {
+                String diff = len1>len2 ? path1.substring(len1-separatorLen) : path2.substring(len2-separatorLen);
+                return separator.equals(diff);
+            }
         }
 
         return false;
