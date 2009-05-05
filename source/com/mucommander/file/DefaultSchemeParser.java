@@ -121,8 +121,9 @@ public class DefaultSchemeParser implements SchemeParser {
         if(!path.equals("/")) {
             int pos;	    // position of current path separator
             int pos2 = 0;	// position of next path separator
+            int separatorLen = separator.length();
             String dir;		// Current directory
-            String dirWS;	// Current directory without trailing slash
+            String dirWS;	// Current directory without trailing separator
             Vector pathV = new Vector();	// Will contain directory hierachy
             while((pos=pos2)!=-1) {
                 // Get the index of the next path separator occurrence
@@ -133,8 +134,9 @@ public class DefaultSchemeParser implements SchemeParser {
                     dirWS = dir;
                 }
                 else {
-                    dir = path.substring(pos, ++pos2);		// Dir name includes trailing slash
-                    dirWS = dir.substring(0, dir.length()-1);
+                    pos2 += separatorLen;
+                    dir = path.substring(pos, separatorLen);		// Dir name includes trailing separator
+                    dirWS = dir.substring(0, dir.length()-separatorLen);
                 }
 
                 // Discard '.' and empty directories
@@ -149,7 +151,7 @@ public class DefaultSchemeParser implements SchemeParser {
                     continue;
                 }
                 // Replace '~' by the provided replacement string, only if one was specified
-                else if(dirWS.equals("~") && (tildeReplacement!=null)) {
+                else if(tildeReplacement!=null && dirWS.equals("~")) {
                     path = path.substring(0, pos) + tildeReplacement + path.substring(pos+1);
                     // Will perform another pass at the same position
                     pos2 = pos;
