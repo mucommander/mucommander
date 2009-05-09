@@ -135,7 +135,7 @@ public class DefaultSchemeParser implements SchemeParser {
                 }
                 else {
                     pos2 += separatorLen;
-                    dir = path.substring(pos, separatorLen);		// Dir name includes trailing separator
+                    dir = path.substring(pos, pos2);		// Dir name includes trailing separator
                     dirWS = dir.substring(0, dir.length()-separatorLen);
                 }
 
