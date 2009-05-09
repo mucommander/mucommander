@@ -26,7 +26,6 @@ import javax.swing.JRadioButton;
 import com.mucommander.ui.dialog.pref.PreferencesDialog;
 
 /**
- * 
  * @author Arik Hadas
  */
 public abstract class PrefRadioButton extends JRadioButton implements PrefComponent {
@@ -36,11 +35,10 @@ public abstract class PrefRadioButton extends JRadioButton implements PrefCompon
 	}
 	
 	public void addDialogListener(final PreferencesDialog dialog) {
-		final PrefComponent component = this;
 		addItemListener(new ItemListener() {
 
 			public void itemStateChanged(ItemEvent e) {
-				dialog.componentChanged(component);
+				dialog.componentChanged(PrefRadioButton.this);
 			}
 		});		
 	}

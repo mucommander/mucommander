@@ -25,7 +25,6 @@ import javax.swing.event.DocumentListener;
 import com.mucommander.ui.dialog.pref.PreferencesDialog;
 
 /**
- * 
  * @author Arik Hadas
  */
 public abstract class PrefTextField extends JTextField implements PrefComponent {
@@ -39,19 +38,18 @@ public abstract class PrefTextField extends JTextField implements PrefComponent 
 	}
 	
 	public void addDialogListener(final PreferencesDialog dialog) {
-		final PrefComponent component = this;
 		getDocument().addDocumentListener(new DocumentListener() {
 
 			public void changedUpdate(DocumentEvent e) {
-				dialog.componentChanged(component);	
+				dialog.componentChanged(PrefTextField.this);	
 			}
 
 			public void insertUpdate(DocumentEvent e) {
-				dialog.componentChanged(component);
+				dialog.componentChanged(PrefTextField.this);
 			}
 
 			public void removeUpdate(DocumentEvent e) {
-				dialog.componentChanged(component);	
+				dialog.componentChanged(PrefTextField.this);	
 			}
 		});
 	}

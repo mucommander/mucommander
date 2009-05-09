@@ -96,6 +96,7 @@ public class CommandBarAttributes {
     	CommandBarAttributes.actions = actions;
     	CommandBarAttributes.alternateActions = alternateActions;
     	useDefaultActions = false;
+    	fireActionsChanged();
     }
     
     public static void setModifier(KeyStroke modifier) {

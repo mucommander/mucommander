@@ -26,7 +26,6 @@ import javax.swing.JComboBox;
 import com.mucommander.ui.dialog.pref.PreferencesDialog;
 
 /**
- * 
  * @author Arik Hadas
  */
 public abstract class PrefComboBox extends JComboBox implements PrefComponent {
@@ -36,11 +35,10 @@ public abstract class PrefComboBox extends JComboBox implements PrefComponent {
 	}
 	
 	public void addDialogListener(final PreferencesDialog dialog) {
-		final PrefComponent component = this;
 		addItemListener(new ItemListener() {
 
 			public void itemStateChanged(ItemEvent e) {
-				dialog.componentChanged(component);
+				dialog.componentChanged(PrefComboBox.this);
 			}
 		});		
 	}
