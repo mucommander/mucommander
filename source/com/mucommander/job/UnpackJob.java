@@ -20,17 +20,18 @@
 package com.mucommander.job;
 
 import com.mucommander.file.*;
-import com.mucommander.file.filter.FileFilter;
 import com.mucommander.file.impl.ProxyFile;
 import com.mucommander.file.util.FileSet;
 import com.mucommander.file.util.PathUtils;
 import com.mucommander.text.Translator;
+import com.mucommander.ui.action.ActionManager;
+import com.mucommander.ui.action.UnmarkAllAction;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;
-import com.mucommander.ui.main.table.FileTable;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Vector;
 
 
 /**
@@ -42,8 +43,8 @@ import java.io.InputStream;
  */
 public class UnpackJob extends AbstractCopyJob {
 
-    /** Filters the archive entries to be unpacked */
-    protected FileFilter entryFilter;
+    /** Archive entries to be unpacked */
+    protected Vector selectedEntries;
 
     /** Depth of the folder in which the top entries are located. 0 is the highest depth (archive's root folder) */
     protected int baseArchiveDepth;
@@ -77,15 +78,15 @@ public class UnpackJob extends AbstractCopyJob {
      * @param destFolder destination folder where the files will be copied
      * @param newName the new filename in the destination folder, if <code>null</code> the original filename will be used
      * @param fileExistsAction default action to be performed when a file already exists in the destination, see {@link com.mucommander.ui.dialog.file.FileCollisionDialog} for allowed values
-     * @param entryFilter filters the archive entries to be unpacked
+     * @param selectedEntries entries to be unpacked
      * @param baseArchiveDepth depth of the folder in which the top entries are located. 0 is the highest depth (archive's root folder)
      */
-    public UnpackJob(ProgressDialog progressDialog, MainFrame mainFrame, AbstractArchiveFile archiveFile, int baseArchiveDepth, AbstractFile destFolder, String newName, int fileExistsAction, FileFilter entryFilter) {
+    public UnpackJob(ProgressDialog progressDialog, MainFrame mainFrame, AbstractArchiveFile archiveFile, int baseArchiveDepth, AbstractFile destFolder, String newName, int fileExistsAction, Vector selectedEntries) {
         super(progressDialog, mainFrame, new FileSet(archiveFile.getParent(), archiveFile), destFolder, newName, fileExistsAction);
 
         this.errorDialogTitle = Translator.get("unpack_dialog.error_title");
         this.baseArchiveDepth = baseArchiveDepth;
-        this.entryFilter = entryFilter;
+        this.selectedEntries = selectedEntries;
     }
 
 
@@ -172,24 +173,51 @@ public class UnpackJob extends AbstractCopyJob {
         ArchiveEntryIterator iterator = null;
 
         ArchiveEntry entry;
+        String entryPath;
         AbstractFile entryFile;
         AbstractFile destFile;
         String destSeparator = destFolder.getSeparator();
         String relDestPath;
-        FileTable activeTable = mainFrame.getActiveTable();
-        AbstractFile activeFolder = activeTable.getCurrentFolder();
-        int activeFolderDepth = PathUtils.getDepth(activeFolder.getAbsolutePath(), activeFolder.getSeparator());
 
         // Unpack the archive, copying entries one by one, in the iterator's order
         try {
             iterator = archiveFile.getEntryIterator();
-
             while((entry = iterator.nextEntry())!=null && getState()!=INTERRUPTED) {
-                entryFile = archiveFile.getArchiveEntryFile(entry);
+                entryPath = entry.getPath();
 
-                // Run the file through the filter (if any) to decide whether or not to unpack it
-                if(entryFilter!=null && entryFilter.reject(entryFile))
+                boolean processEntry = false;
+                if(selectedEntries ==null) {    // Entries are processed
+                    processEntry = true;
+                }
+                else {                          // We need to determine if the entry should be processed or not
+                    // Process this entry if the selectedEntries set contains this entry, or a parent of this entry
+                    int nbSelectedEntries = selectedEntries.size();
+                    for(int i=0; i<nbSelectedEntries; i++) {
+                        ArchiveEntry selectedEntry = (ArchiveEntry)selectedEntries.elementAt(i);
+                        // Note: paths of directory entries must end with '/', so this compares whether
+                        // selectedEntry is a parent of the current entry.
+                        if(selectedEntry.isDirectory()) {
+                            if(entryPath.startsWith(selectedEntry.getPath())) {
+                                processEntry = true;
+                                break;
+                                // Note: we can't remove selectedEntryPath from the set, we still need it
+                            }
+                        }
+                        else if(entryPath.equals(selectedEntry.getPath())) {
+                            // If the (regular file) entry is in the set, remove it as we no longer need it (will speed up
+                            // subsequent searches)
+                            processEntry = true;
+                            selectedEntries.removeElementAt(i);
+                            break;
+                        }
+                    }
+                }
+
+                if(!processEntry)
                     continue;
+
+                // Resolve the entry file
+                entryFile = archiveFile.getArchiveEntryFile(entryPath);
 
                 // Notify the job that we're starting to process this file
                 nextFile(entryFile);
@@ -262,12 +290,9 @@ public class UnpackJob extends AbstractCopyJob {
                     if(!tryCopyFile(new ProxiedEntryFile(entryFile, entry, archiveFile, iterator), destFile, append, errorDialogTitle))
                        return false;
                 }
-
-                // Unselect the entry file in the active table
-                // Todo: this is horribly ineffective and slows the whole transfer down when there are lots of files to be unselected   
-                if(activeFolderDepth == PathUtils.getDepth(entryFile.getParent().getAbsolutePath(), entryFile.getSeparator()))
-                    activeTable.setFileMarked(entryFile, false);
             }
+
+            return true;
         }
         catch(IOException e) {
             showErrorDialog(errorDialogTitle, Translator.get("cannot_read_file", archiveFile.getName()));
@@ -302,6 +327,11 @@ public class UnpackJob extends AbstractCopyJob {
         AbstractArchiveFile archiveFile = baseDestFolder.getParentArchive();
         if(archiveFile!=null && archiveFile.isWritableArchive())
             optimizeArchive((AbstractRWArchiveFile)archiveFile);
+
+        // Unselect all files in the active table upon successful completion
+        if(selectedEntries!=null) {
+            ActionManager.performAction(UnmarkAllAction.class, mainFrame);
+        }
     }
 
     public String getStatusString() {

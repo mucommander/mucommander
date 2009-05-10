@@ -21,9 +21,8 @@ package com.mucommander.ui.dialog.file;
 
 import com.mucommander.file.AbstractArchiveFile;
 import com.mucommander.file.AbstractFile;
+import com.mucommander.file.ArchiveEntryFile;
 import com.mucommander.file.FileFactory;
-import com.mucommander.file.filter.OrFileFilter;
-import com.mucommander.file.filter.StartsFilenameFilter;
 import com.mucommander.file.util.FileSet;
 import com.mucommander.file.util.PathUtils;
 import com.mucommander.job.CopyJob;
@@ -31,6 +30,8 @@ import com.mucommander.job.TransferFileJob;
 import com.mucommander.job.UnpackJob;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.main.MainFrame;
+
+import java.util.Vector;
 
 
 /**
@@ -117,14 +118,11 @@ public class CopyDialog extends TransferDestinationDialog {
         // If the source files are located inside an archive, use UnpackJob instead of CopyJob to unpack archives in
         // their natural order (more efficient)
         if(parentArchiveFile!=null) {
-            // Create a filter that accepts select archive entries
-            OrFileFilter orFilter = new OrFileFilter();
-            StartsFilenameFilter filenameFilter;
+            // Add all selected archive entries to a vector
             int nbFiles = files.size();
+            Vector selectedEntries = new Vector();
             for(int i=0; i<nbFiles; i++) {
-                filenameFilter = new StartsFilenameFilter(files.fileAt(i).getAbsolutePath(), true);
-                filenameFilter.setOperateOnPath(true);
-                orFilter.addFileFilter(filenameFilter);
+                selectedEntries.add((files.fileAt(i).getAncestor(ArchiveEntryFile.class).getUnderlyingFileObject()));
             }
 
             job = new UnpackJob(
@@ -135,7 +133,7 @@ public class CopyDialog extends TransferDestinationDialog {
                 resolvedDest.getDestinationFolder(),
                 newName,
                 defaultFileExistsAction,
-                orFilter
+                selectedEntries
             );
         }
         else {
