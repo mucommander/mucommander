@@ -272,7 +272,7 @@ public class ResourceLoader {
      * @return the path without a leading slash
      */
     private static String removeLeadingSlash(String path) {
-        return path.startsWith("/")?path.substring(1, path.length()):path;
+        return PathUtils.removeLeadingSeparator(path, "/");
     }
 
     /**
