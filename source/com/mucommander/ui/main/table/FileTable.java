@@ -506,6 +506,15 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
         changeSelection(row, 0, false, false);
     }
 
+    /**
+     * Equivalent to calling {@link #setRowMarked(int, boolean, boolean)} with <code>repaint</code> enabled.
+     *
+     * @param row index of the row to mark/unmark
+     * @param marked true to mark the row, false to unmark it
+     */
+    public void setRowMarked(int row, boolean marked) {
+        setRowMarked(row, marked, true);
+    }
 
     /**
      * Sets the given row as marked/unmarked in the table model, repaints the row to reflect the change,
@@ -514,34 +523,47 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
      *
      * <p>This method has no effect if the row corresponds to the parent folder row '..' .</p>
      *
-     * @param row index of the row to select
+     * @param row index of the row to mark/unmark
      * @param marked true to mark the row, false to unmark it
+     * @param repaint true to repaint the row after it has been marked/unmarked
      */
-    public void setRowMarked(int row, boolean marked) {
+    public void setRowMarked(int row, boolean marked, boolean repaint) {
         if(isParentFolder(row))
             return;
 
         tableModel.setRowMarked(row, marked);
-        repaintRow(row);
+        
+        if(repaint)
+            repaintRow(row);
 
         // Notify registered listeners that currently marked files have changed on this FileTable
         fireMarkedFilesChangedEvent();
     }
 
+    /**
+     * Equivalent to calling {@link #setFileMarked(AbstractFile, boolean, boolean)} with <code>repaint</code> enabled.
+     *
+     * @param file file to mark/unmark
+     * @param marked true to mark the file, false to unmark it
+     */
+    public void setFileMarked(AbstractFile file, boolean marked) {
+        setFileMarked(file, marked, true);
+    }
 
     /**
      * Sets the given file as marked/unmarked in the table model, repaints the corresponding row to reflect the change,
      * and notifies registered {@link com.mucommander.ui.event.TableSelectionListener} that currently marked files
      * have changed on this FileTable.
      *
-     * @param file file to select
+     * @param file file to mark/unmark
      * @param marked true to mark the file, false to unmark it
+     * @param repaint true to repaint the file's row after it has been marked/unmarked
      */
-    public void setFileMarked(AbstractFile file, boolean marked) {
+    public void setFileMarked(AbstractFile file, boolean marked, boolean repaint) {
         int row = tableModel.getFileRow(file);
 
         if(row!=-1)
-            setRowMarked(row, marked);
+            setRowMarked(row, marked, repaint);
     }
 
 

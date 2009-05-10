@@ -614,6 +614,9 @@ public abstract class FileJob implements Runnable {
                 activeTable.getFolderPanel().tryRefreshCurrentFolder();
         }
 
+        // Repaint the status bar as marked files have changed
+        mainFrame.getStatusBar().updateSelectedFilesInfo();
+
         // Resume current folders auto-refresh
         mainFrame.getLeftPanel().getFolderChangeMonitor().setPaused(false);
         mainFrame.getRightPanel().getFolderChangeMonitor().setPaused(false);
@@ -727,8 +730,8 @@ public abstract class FileJob implements Runnable {
             // Unmark file in active table if 'auto unmark' is enabled
             // and file was processed successfully
             if(autoUnmark && success) {
-                // Todo: this is horribly ineffective and slows the whole transfer down when there are lots of files to be unselected
-                 activeTable.setFileMarked(currentFile, false);
+                // Do not repaint rows individually as it would be too expensive
+                activeTable.setFileMarked(currentFile, false, false);
             }
 
             // If last file was reached without any user interruption, all files have been processed with or
