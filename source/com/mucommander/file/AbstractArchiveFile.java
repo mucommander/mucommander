@@ -274,7 +274,7 @@ public abstract class AbstractArchiveFile extends ProxyFile {
     /**
      * Creates and returns an AbstractFile that corresponds to the given entry path within the archive.
      * The requested entry may or may not exist in the archive, the {@link #exists()} method of the returned entry file
-     * can be used used to get this information. However, if the requested entry does not exist in the archive and is
+     * can be used to find this out. However, if the requested entry does not exist in the archive and is
      * not located at the top level (i.e. is located in a subfolder), its parent folder must exist in the archive or
      * else an <code>IOException</code> will be thrown.
      *
@@ -289,6 +289,7 @@ public abstract class AbstractArchiveFile extends ProxyFile {
         // Make sure the entries tree is created and up-to-date
         checkEntriesTree();
 
+        // Todo: check if that's really necessary / if there is a way to remove this
         entryPath = entryPath.replace('\\', '/');
 
         // Find the entry node corresponding to the given path
@@ -315,9 +316,25 @@ public abstract class AbstractArchiveFile extends ProxyFile {
             return getArchiveEntryFile(new ArchiveEntry(entryPath, false), parentFile, false);
         }
 
+        return getArchiveEntryFile(entryNode);
+    }
+
+    /**
+     * Creates and returns an {@link AbstractFile} instance corresponding to the given entry node.
+     * This method recurses to resolve the entry's parent file.
+     *
+     * @param entryNode tree node corresponding to the entry for which to return a file
+     * @return an {@link AbstractFile} instance corresponding to the given entry node
+     */
+    protected AbstractFile getArchiveEntryFile(DefaultMutableTreeNode entryNode) throws IOException {
         DefaultMutableTreeNode parentNode = (DefaultMutableTreeNode)entryNode.getParent();
-        // Todo: suboptimal recursion, findEntryNode() is called each time
-        return getArchiveEntryFile((ArchiveEntry)entryNode.getUserObject(), parentNode== entryTreeRoot?this: getArchiveEntryFile(((ArchiveEntry)parentNode.getUserObject()).getPath()), true);
+        return getArchiveEntryFile(
+                (ArchiveEntry)entryNode.getUserObject(),
+                parentNode==entryTreeRoot
+                    ?this
+                    :getArchiveEntryFile(parentNode),
+                true
+        );
     }
 
 
