@@ -760,7 +760,7 @@ public class FolderPanel extends JPanel implements FocusListener, ThemeListener 
             scrollPane.getViewport().setBackground(unfocusedBackgroundColor);
             fileTable.setBackground(unfocusedBackgroundColor);
         }
-        fileTable.getQuickSearch().cancel();
+        fileTable.getQuickSearch().stop();
     }
 
 

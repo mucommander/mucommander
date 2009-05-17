@@ -390,7 +390,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
         AbstractFile selectedFile; // Buffer for the previously selected file.
 
         // Stop quick search in case it was being used before folder change
-        quickSearch.cancel();
+        quickSearch.stop();
 
         currentFolder = getCurrentFolder();
 
@@ -1520,9 +1520,10 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
     }
 
     /**
-     * This inner class enables quick search functionality on the FileTable, which allows to
+     * This inner class adds 'quick search' functionality to the FileTable, selecting file rows that match the
+     * user's keyboard input.
      */
-    public class QuickSearch implements Runnable, KeyListener {
+    public class QuickSearch implements KeyListener, Runnable {
 
         /** Quick search string */
         private String searchString;
@@ -1532,7 +1533,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
 
         /** Thread that's responsible for cancelling the quick search on timeout,
          * has a null value when quick search is not active */
-        private Thread timerThread;
+        private Thread timeoutThread;
 
         /** Quick search timeout in ms */
         private final static int QUICK_SEARCH_TIMEOUT = 2000;
@@ -1553,28 +1554,31 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
         }
 
         /**
-         * Turns on quick search mode, {@link #isActive() isActive()} will return <code>true</code>
-         * after this call, and until the quick search has timed out or has been cancelled by user.
+         * Turns on quick search mode. This method has no effect if the quick search is already active.
+         * {@link #isActive() isActive()} will return <code>true</code> after this call, and until the quick search has
+         * timed out or has been cancelled by user.
          */
-        public void start() {
-            // Reset search string
-            searchString = "";
-            // Start the thread that's responsible for cancelling the quick search on timeout
-            timerThread = new Thread(this);
-            timerThread.start();
+        private synchronized void start() {
+            if(!isActive()) {
+                // Reset search string
+                searchString = "";
+                // Start the thread that's responsible for cancelling the quick search on timeout
+                timeoutThread = new Thread(this, "QuickSearch timeout thread");
+                timeoutThread.start();
+                lastSearchStringChange = System.currentTimeMillis();
 
-            // Repaint the table to add the 'dim' effect on non-matching files
-            FileTable.this.folderPanel.dimBackground();
+                // Repaint the table to add the 'dim' effect on non-matching files
+                FileTable.this.folderPanel.dimBackground();
+            }
         }
 
         /**
-         * Cancels (stops) the current quick search. This method has no effect if quick search is not
-         * currently active.
+         * Stops the current quick search. This method has no effect if the quick search is not currently active.
          */
-        public void cancel() {
-            if(timerThread != null) {
+        public synchronized void stop() {
+            if(isActive()) {
                 mainFrame.getStatusBar().updateSelectedFilesInfo();
-                timerThread = null;
+                timeoutThread = null;
 
                 // Removes the 'dim' effect on non-matching files.
                 FileTable.this.folderPanel.undimBackground();
@@ -1586,8 +1590,8 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
          *
          * @return true if a quick search is being performed
          */
-        public boolean isActive() {
-            return timerThread != null;
+        public synchronized boolean isActive() {
+            return timeoutThread != null;
         }
 
         /**
@@ -1598,7 +1602,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
          * @param findBestMatch if <code>true</code>, all rows will be tested in the specified order, looking for the best match. If not, it will stop to the first match (not necessarily the best).
          */
         private void findMatch(int startRow, boolean descending, boolean findBestMatch) {
-//            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("startRow="+startRow+" descending="+descending+" findMatch="+findBestMatch);
+            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("startRow="+startRow+" descending="+descending+" findMatch="+findBestMatch);
 
             int searchStringLen = searchString.length();
 
@@ -1689,8 +1693,8 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
                 :containsNoCaseMatch!=-1?containsNoCaseMatch
                 :-1;
 
-//            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("startsWithCaseMatch="+startsWithCaseMatch+" containsCaseMatch="+containsCaseMatch+" startsWithNoCaseMatch="+startsWithNoCaseMatch+" containsNoCaseMatch="+containsNoCaseMatch);
-//            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("bestMatch="+bestMatch);
+            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("startsWithCaseMatch="+startsWithCaseMatch+" containsCaseMatch="+containsCaseMatch+" startsWithNoCaseMatch="+startsWithNoCaseMatch+" containsNoCaseMatch="+containsNoCaseMatch);
+            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("bestMatch="+bestMatch);
 
             if(bestMatch!=-1) {
                 // Select best match's row
@@ -1749,26 +1753,27 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
         //////////////////////
 
         public void run() {
-            while(true) {
-                try { timerThread.sleep(100); }
-                catch(InterruptedException e) {}
+            do {
+                try { Thread.sleep(100); }
+                catch(InterruptedException e) {
+                    // No problemo
+                }
 
-                if(System.currentTimeMillis()-lastSearchStringChange >= QUICK_SEARCH_TIMEOUT) {
-                    cancel();
-                    return;
+                synchronized(this) {
+                    if(timeoutThread!=null && System.currentTimeMillis()-lastSearchStringChange >= QUICK_SEARCH_TIMEOUT) {
+                        stop();
+                    }
                 }
             }
+            while(timeoutThread!=null);
         }
 
 
-        ///////////////////////////////////
-        // Overridden KeyAdapter methods //
-        ///////////////////////////////////
+        ///////////////////////////////
+        // KeyAdapter implementation //
+        ///////////////////////////////
 
-        public void keyTyped(KeyEvent e) {
-        }
-
-        public void keyPressed(KeyEvent e) {
+        public synchronized void keyPressed(KeyEvent e) {
             // Discard key events while in 'no events mode'
             if(mainFrame.getNoEventsMode())
                 return;
@@ -1815,7 +1820,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
             }
             // Escape immediately cancels the quick search
             else if(keyCode==KeyEvent.VK_ESCAPE) {
-                cancel();
+                stop();
             }
             // Up/Down jumps to previous/next match
             // Shift+Up/Shift+Down marks currently selected file and jumps to previous/next match
@@ -1856,7 +1861,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
                     e.consume();
 
                     // Cancel quicksearch
-                    cancel();
+                    stop();
 
                     // Perform the action
                     ActionManager.getActionInstance(muActionClass, mainFrame).performAction();
@@ -1870,18 +1875,21 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
             lastSearchStringChange = System.currentTimeMillis();
         }
 
-
-        public void keyReleased(KeyEvent e) {
+        public synchronized void keyReleased(KeyEvent e) {
             // Cancel quick search if backspace key has been pressed and search string is empty.
             // This check is done on key release, so that if backspace key is maintained pressed
             // to remove all the search string, it does not trigger FileTable's back action which is
             // mapped on backspace too
             if(isActive() && e.getKeyCode()==KeyEvent.VK_BACK_SPACE && searchString.equals("")) {
                 e.consume();
-                cancel();
+                stop();
             }
         }
+
+        public void keyTyped(KeyEvent e) {
+        }
     }
+    // End of QuickSearch class
 
 
 
