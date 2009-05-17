@@ -111,8 +111,6 @@ public class FileURL implements Cloneable {
 
     /** Scheme part */
     private String scheme;
-    /** Credentials (login and password parts), null if this URL has none */
-    private Credentials credentials;
     /** Port part, -1 if this URL has none */
     private int port = -1;
     /** Host part, null if this URL has none */
@@ -126,6 +124,11 @@ public class FileURL implements Cloneable {
 
     /** Properties, null if none have been set thus far */
     private Hashtable properties;
+    /** Credentials (login and password parts), null if this URL has none */
+    private Credentials credentials;
+
+    /** Caches the value returned by #hashCode() for as long as this instance is not modified */
+    private int hashCode;
 
     /** Default handler for schemes that do not have a specific handler */
     private final static SchemeHandler DEFAULT_HANDLER = new DefaultSchemeHandler();
@@ -184,6 +187,12 @@ public class FileURL implements Cloneable {
         this.handler = handler;
     }
 
+    /**
+     * This method is called whenever this instance is modified to invalidate caches.
+     */
+    private void urlModified() {
+        hashCode = 0;
+    }
 
     /**
      * Creates and returns a new FileURL instance from the given location, throws a <code>MalformedURLException</code>
@@ -350,6 +359,8 @@ public class FileURL implements Cloneable {
             throw new IllegalArgumentException();
 
         this.scheme = scheme;
+
+        urlModified();
     }
 
     /**
@@ -370,6 +381,8 @@ public class FileURL implements Cloneable {
      */
     public void setHost(String host) {
         this.host = host;
+
+        urlModified();
     }
 
     /**
@@ -392,6 +405,8 @@ public class FileURL implements Cloneable {
      */
     public void setPort(int port) {
         this.port = port;
+
+        urlModified();
     }
 
     /**
@@ -484,6 +499,8 @@ public class FileURL implements Cloneable {
             this.credentials = null;
         else
             this.credentials = credentials;
+
+        urlModified();
     }
 
     /**
@@ -533,6 +550,8 @@ public class FileURL implements Cloneable {
         this.path = path;
         // Extract new filename from path
         this.filename = getFilenameFromPath(path, getPathSeparator());
+
+        urlModified();
     }
 
     /**
@@ -644,6 +663,8 @@ public class FileURL implements Cloneable {
      */
     public void setQuery(String query) {
         this.query = query;
+
+        urlModified();
     }
 
 	
@@ -675,6 +696,8 @@ public class FileURL implements Cloneable {
             properties.remove(name);
         else
             properties.put(name, value);
+
+        urlModified();
     }
 
 
@@ -941,6 +964,9 @@ public class FileURL implements Cloneable {
         if(properties!=null)    // Copy properties (if any)
             clonedURL.properties = new Hashtable(properties);
 
+        // Caches
+        clonedURL.hashCode = hashCode;
+
         return clonedURL;
     }
 
@@ -981,7 +1007,6 @@ public class FileURL implements Cloneable {
      * @param o object to compare against this FileURL instance
      * @param compareCredentials if <code>true</code>, the login and password parts of both FileURL need to be
      * equal (case-sensitive) for the FileURL instances to be equal
-     * the FileURL instances to be equal
      * @param compareProperties if <code>true</code>, all properties need to be equal (case-sensitive) in both
      * FileURL for them to be equal
      * @return true if both FileURL instances are equal
@@ -999,5 +1024,40 @@ public class FileURL implements Cloneable {
             && queryEquals(url)
             && (!compareCredentials || credentialsEquals(url))
             && (!compareProperties || propertiesEquals(url));
+    }
+
+    /**
+     * This method is overridden to return a hash code that takes into account the behavior of {@link FileURL#equals(Object)},
+     * so that <code>url1.equals(url2)</code> implies <code>url1.hashCode()==url2.hashCode()</code>.
+     */
+    public int hashCode() {
+        if(hashCode==0) {
+            String separator = handler.getPathSeparator();
+
+            // #equals(Object) is trailing separator insensitive, so the hashCode must be trailing separator invariant
+            int h = path.endsWith(separator)
+                    ?path.substring(0, path.length()-separator.length()).hashCode()
+                    :path.hashCode();
+
+            h = 31* h + scheme.toLowerCase().hashCode();
+            h = 31* h + (port==-1?handler.getStandardPort():port);
+
+            if(host!=null)
+                h = 31* h + host.toLowerCase().hashCode();
+
+            if(query!=null)
+                h = 31* h + query.hashCode();
+
+            if(credentials!=null)
+                h = 31* h + credentials.hashCode();
+
+            if(properties!=null)
+                h = 31* h + properties.hashCode();
+
+            // Cache the value until for as long as this instance is not modified
+            hashCode = h;
+        }
+
+        return hashCode;
     }
 }

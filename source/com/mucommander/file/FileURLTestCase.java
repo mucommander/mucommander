@@ -81,6 +81,65 @@ public abstract class FileURLTestCase extends TestCase {
         }
     }
 
+    /**
+     * Asserts that both URLs are equal, and that their hashcodes are the same.
+     *
+     * @param url1 first url to test
+     * @param url2 second url to test
+     */
+    protected void assertEquals(FileURL url1, FileURL url2) {
+        assertTrue(url1.equals(url2));
+        assertTrue(url2.equals(url1));
+        assertTrue(url1.hashCode()==url2.hashCode());
+    }
+
+    /**
+     * Asserts that both URLs are equal, comparing credentials and properties as requested. If both the
+     * <code>compareCredentials</code> and <code>compareProperties</code> parameters are <code>true</code>, this method
+     * asserts that the hashcode of both URLs are the same.
+     *
+     * @param url1 first url to test
+     * @param url2 second url to test
+     * @param compareCredentials if <code>true</code>, the login and password parts of both FileURL need to be
+     * equal (case-sensitive) for the FileURL instances to be equal
+     * @param compareProperties if <code>true</code>, all properties need to be equal (case-sensitive) in both
+     * FileURL for them to be equal
+     */
+    protected void assertEquals(FileURL url1, FileURL url2, boolean compareCredentials, boolean compareProperties) {
+        assertTrue(url1.equals(url2, compareCredentials, compareProperties));
+        assertTrue(url2.equals(url1, compareCredentials, compareProperties));
+
+        // Compare hash codes only if both flags are true.
+        if(compareCredentials && compareProperties)
+            assertTrue(url1.hashCode()==url2.hashCode());
+    }
+
+    /**
+     * Asserts that both URLs are not equal.
+     *
+     * @param url1 first url to test
+     * @param url2 second url to test
+     */
+    protected void assertNotEquals(FileURL url1, FileURL url2) {
+        assertFalse(url1.equals(url2));
+        assertFalse(url2.equals(url1));
+    }
+
+    /**
+     * Asserts that both URLs are not equal, comparing credentials and properties as requested.
+     *
+     * @param url1 first url to test
+     * @param url2 second url to test
+     * @param compareCredentials if <code>true</code>, the login and password parts of both FileURL need to be
+     * equal (case-sensitive) for the FileURL instances to be equal
+     * @param compareProperties if <code>true</code>, all properties need to be equal (case-sensitive) in both
+     * FileURL for them to be equal
+     */
+    protected void assertNotEquals(FileURL url1, FileURL url2, boolean compareCredentials, boolean compareProperties) {
+        assertFalse(url1.equals(url2, compareCredentials, compareProperties));
+        assertFalse(url2.equals(url1, compareCredentials, compareProperties));
+    }
+
 
     //////////////////
     // Test methods //
@@ -428,99 +487,102 @@ public abstract class FileURLTestCase extends TestCase {
      * @throws MalformedURLException should not happen
      */
     public void testEquals() throws MalformedURLException {
-        FileURL url1 = getSchemeURL("login:password@host:10000/path/to?query&param=value");
+        // No query part, as it is not parsed by all schemes
+        String baseUrlString = "login:password@host:10000/path/to";
+
+        FileURL url1 = getSchemeURL(baseUrlString);
         url1.setProperty("name", "value");
-        FileURL url2 = getSchemeURL("login:password@host:10000/path/to?query&param=value");
+        FileURL url2 = getSchemeURL(baseUrlString);
         url2.setProperty("name", "value");
 
         // Assert that both URLs are equal
-        assertTrue(url1.equals(url2));
-        assertTrue(url2.equals(url1));
-        assertTrue(url1.equals(url2, true, true));
-        assertTrue(url2.equals(url1, true, true));
+        assertEquals(url1, url2);
+        assertEquals(url1, url2, true, true);
 
         // Add a trailing path separator to one of the URL's path and assert they are still equal
         url1.setPath(url1.getPath()+url1.getPathSeparator());
-        assertTrue(url1.equals(url2));
-        assertTrue(url1.equals(url2, true, true));
+        assertEquals(url1, url2);
+        assertEquals(url1, url2, true, true);
 
         // Assert that having the port part set to the standart port is equivalent to not having a port part (-1)
         url1.setPort(url1.getStandardPort());
         url2.setPort(-1);
-        assertTrue(url1.equals(url2));
-        assertTrue(url1.equals(url2, true, true));
+        assertEquals(url1, url2);
+        assertEquals(url1, url2, true, true);
 
         // Assert that the scheme comparison is case-insensitive
         url1.setScheme(url1.getScheme().toUpperCase());
-        assertTrue(url1.equals(url2));
-        assertTrue(url1.equals(url2, true, true));
+        assertEquals(url1, url2);
+        assertEquals(url1, url2, true, true);
 
         // Assert that the host comparison is case-insensitive
         url1.setHost(url1.getHost().toUpperCase());
-        assertTrue(url1.equals(url2));
-        assertTrue(url1.equals(url2, true, true));
+        assertEquals(url1, url2);
+        assertEquals(url1, url2, true, true);
 
         // Assert that the path comparison is case-sensitive
         url1.setPath(url1.getPath().toUpperCase());
-        assertFalse(url1.equals(url2));
-        assertFalse(url1.equals(url2, true, true));
+        assertNotEquals(url1, url2);
+        assertNotEquals(url1, url2, true, true);
 
         // Make both URLs equal again
         url1.setPath(url2.getPath());
-        assertTrue(url1.equals(url2, true, true));
+        assertEquals(url1, url2);
+        assertEquals(url1, url2, true, true);
 
         // Assert that the query comparison is case-sensitive
         url1.setQuery("?query");
         url2.setQuery("?QUERY");
-        assertFalse(url1.equals(url2));
-        assertFalse(url1.equals(url2, true, true));
+        assertNotEquals(url1, url2);
+        assertNotEquals(url1, url2, true, true);
 
         // Make both URLs equal again
         url1.setQuery(url2.getQuery());
-        assertTrue(url1.equals(url2, true, true));
+        assertEquals(url1, url2);
+        assertEquals(url1, url2, true, true);
 
         // Assert that the credentials comparison is case-sensitive
         url1.setCredentials(new Credentials("LOGIN", "password"));
-        assertTrue(url1.equals(url2, false, false));
-        assertFalse(url1.equals(url2, true, true));
+        assertEquals(url1, url2, false, false);
+        assertNotEquals(url1, url2, true, true);
         url1.setCredentials(new Credentials("login", "PASSWORD"));
-        assertTrue(url1.equals(url2, false, false));
-        assertFalse(url1.equals(url2, true, true));
+        assertEquals(url1, url2, false, false);
+        assertNotEquals(url1, url2, true, true);
 
         // Assert that URLs are equal if credentials comparison is disabled
-        assertTrue(url1.equals(url2, false, true));
+        assertEquals(url1, url2, false, true);
 
         // Make both URLs equal again
         url1.setCredentials(new Credentials("login", "password"));
-        assertTrue(url1.equals(url2, true, true));
+        assertEquals(url1, url2, true, true);
 
         // Assert that the properties comparison is case-sensitive
         url1.setProperty("name", null);
         url1.setProperty("NAME", "value");
-        assertTrue(url1.equals(url2, false, false));
-        assertFalse(url1.equals(url2, true, true));
+        assertEquals(url1, url2, false, false);
+        assertNotEquals(url1, url2, true, true);
         url1.setProperty("name", "VALUE");
-        assertTrue(url1.equals(url2, false, false));
-        assertFalse(url1.equals(url2, true, true));
+        assertEquals(url1, url2, false, false);
+        assertNotEquals(url1, url2, true, true);
 
         // Assert that URLs are equal if properties comparison is disabled
-        assertTrue(url1.equals(url2, true, false));
+        assertEquals(url1, url2, true, false);
 
         // Make both URLs equal again
         url1.setProperty("NAME", null);
         url1.setProperty("name", "value");
-        assertTrue(url1.equals(url2, true, true));
+        assertEquals(url1, url2, true, true);
 
         // Assert that the properties comparison fails if an extra property is added to one of the URLs
         url1.setProperty("name2", "value2");
-        assertFalse(url1.equals(url2, true, true));
+        assertNotEquals(url1, url2, true, true);
 
         // Assert that URLs are equal if properties comparison is disabled
-        assertTrue(url1.equals(url2, true, false));
+        assertEquals(url1, url2, true, false);
 
         // Make both URLs equal again
         url1.setProperty("name2", null);
-        assertTrue(url1.equals(url2, true, true));
+        assertEquals(url1, url2, true, true);
     }
 
 
