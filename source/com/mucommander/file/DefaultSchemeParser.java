@@ -28,7 +28,7 @@ import java.util.Vector;
 
 /**
  * This class provides a default {@link SchemeParser} implementation. Certain scheme-specific features of the parser
- * can be turned on or off in the constructor, allowing to use this parser to be used most schemes.
+ * can be turned on or off in the constructor, allowing this parser to be used with most schemes.
  *
  * <p>This parser can not only parse URLs but also local absolute paths and UNC paths. Upon parsing, these paths are
  * turned into equivalent, fully qualified URLs.</p>
@@ -61,6 +61,7 @@ import java.util.Vector;
  * </p>
  *
  * @author Maxence Bernard
+ *
  */
 public class DefaultSchemeParser implements SchemeParser {
 
@@ -180,6 +181,19 @@ public class DefaultSchemeParser implements SchemeParser {
     /////////////////////////////////
 
     public void parse(String url, FileURL fileURL) throws MalformedURLException {
+        // The general form of a URI is:
+
+        //      foo://example.com:8042/over/there?name=ferret#nose
+        //      \_/   \______________/\_________/ \_________/ \__/
+        //       |           |            |            |        |
+        //    scheme     authority       path        query   fragment
+        //       |   _____________________|__
+        //      / \ /                        \
+        //      urn:example:animal:ferret:nose
+
+
+        // See http://labs.apache.org/webarch/uri/rfc/rfc3986.html for full specs
+
         try {
             int pos;
             int schemeDelimPos = url.indexOf("://");
@@ -253,22 +267,23 @@ public class DefaultSchemeParser implements SchemeParser {
             else
                 hostEndPos = urlLen;
 
-            // URL part before path/query part and without scheme://
-            String urlBP = url.substring(pos, hostEndPos);
+            // The authority part is the one between scheme:// and the path/query. It includes the user information
+            // (login/password), host and port. 
+            String authority = url.substring(pos, hostEndPos);
             pos = 0;
 
-            // Parse login and password if they have been specified in the URL
-            // Login/password may @ characters, so consider the last '@' occurrence (if any) as the host delimiter
+            // Parse login and password (if specified)
+            // Login/password may contain @ characters, so consider the last '@' occurrence (if any) as the host delimiter.
             // Note that filenames may contain @ characters, but that's OK here since path is not contained in the String
-            int atPos = urlBP.lastIndexOf('@');
+            int atPos = authority.lastIndexOf('@');
             int colonPos;
             // Filenames may contain @ chars, so atPos must be lower than next separator's position (if any)
             if(atPos!=-1 && (separatorPos==-1 || atPos<separatorPos)) {
-                colonPos = urlBP.indexOf(':');
-                String login = urlBP.substring(0, colonPos==-1?atPos:colonPos);
+                colonPos = authority.indexOf(':');
+                String login = authority.substring(0, colonPos==-1?atPos:colonPos);
                 String password;
                 if(colonPos!=-1)
-                    password = urlBP.substring(colonPos+1, atPos);
+                    password = authority.substring(colonPos+1, atPos);
                 else
                     password = null;
 
@@ -280,12 +295,12 @@ public class DefaultSchemeParser implements SchemeParser {
             }
 
             // Parse host and port (if specified)
-            colonPos = urlBP.indexOf(':', pos);
+            colonPos = authority.indexOf(':', pos);
 
             String host;
             if(colonPos!=-1) {
-                host = urlBP.substring(pos, colonPos);
-                String portString = urlBP.substring(colonPos+1);
+                host = authority.substring(pos, colonPos);
+                String portString = authority.substring(colonPos+1);
                 if(!portString.equals("")) {        // Tolerate an empty port part (e.g. http://mucommander.com:/)
                     try {
                         fileURL.setPort(Integer.parseInt(portString));
@@ -296,7 +311,7 @@ public class DefaultSchemeParser implements SchemeParser {
                 }
             }
             else {
-                host = urlBP.substring(pos);
+                host = authority.substring(pos);
             }
 
             if(host.equals(""))
