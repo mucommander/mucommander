@@ -431,16 +431,15 @@ public class SFTPFile extends AbstractFile {
         if(nbFiles==0)
             return new AbstractFile[] {};
 
-        String parentURL = fileURL.toString(true);
-        if(!parentURL.endsWith(SEPARATOR))
-            parentURL += SEPARATOR;
-
         AbstractFile children[] = new AbstractFile[nbFiles];
         AbstractFile child;
         FileURL childURL;
         SftpFile sftpFile;
         String filename;
         int fileCount = 0;
+        String parentPath = fileURL.getPath();
+        if(!parentPath .endsWith(SEPARATOR))
+            parentPath  += SEPARATOR;
 
         // Fill AbstractFile array and discard '.' and '..' files
         Iterator iterator = files.iterator();
@@ -450,7 +449,10 @@ public class SFTPFile extends AbstractFile {
             // Discard '.' and '..' files, dunno why these are returned
             if(filename.equals(".") || filename.equals(".."))
                 continue;
-            childURL = FileURL.getFileURL(parentURL+filename);
+
+            childURL = (FileURL)fileURL.clone();
+            childURL.setPath(parentPath+filename);
+
             child = FileFactory.wrapArchive(new SFTPFile(childURL, new SFTPFileAttributes(childURL, sftpFile.getAttributes())));
             child.setParent(this);
 
