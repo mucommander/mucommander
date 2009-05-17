@@ -136,8 +136,6 @@ public class FileURL implements Cloneable {
     /** String designating the localhost */
     public final static String LOCALHOST = "localhost";
 
-    /** Charset used to encode and decode special characters in URL */
-    private final static String URL_CHARSET = "UTF-8";
 
     static {
         // Register custom handlers for known schemes
@@ -599,6 +597,7 @@ public class FileURL implements Cloneable {
     /**
      * Returns the authentication realm corresponding to this URL, i.e. the base location throughout which credentials
      * can be used. Any property contained by the specified FileURL will be carried over in the returned FileURL.
+     * On the contrary, credentials will not be copied, the returned URL always has no credentials.
      *
      * <p>Note: this method returns a new FileURL instance everytime it is called. Therefore the returned FileURL can
      * safely be modified without any risk of side effects.</p>
@@ -947,13 +946,13 @@ public class FileURL implements Cloneable {
 
     /**
      * This method is equivalent to calling {@link #equals(Object, boolean, boolean)} with credentials and properties
-     * comparisons disabled.
+     * comparisons enabled.
      *
      * @param o object to compare against this FileURL instance.
      * @return true if both FileURL instances are equal.
      */
     public boolean equals(Object o) {
-        return equals(o, false, false);
+        return equals(o, true, true);
     }
 
     /**

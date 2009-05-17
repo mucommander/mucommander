@@ -271,7 +271,7 @@ public abstract class ConnectionHandler {
      */
     public boolean equals(FileURL realm, Credentials credentials) {
 
-        if(!this.realm.equals(realm))
+        if(!this.realm.equals(realm, false, true))
             return false;
 
         // Compare credentials. One or both Credentials instances may be null.

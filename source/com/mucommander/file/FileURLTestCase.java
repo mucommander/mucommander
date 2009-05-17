@@ -481,10 +481,10 @@ public abstract class FileURLTestCase extends TestCase {
 
         // Assert that the credentials comparison is case-sensitive
         url1.setCredentials(new Credentials("LOGIN", "password"));
-        assertTrue(url1.equals(url2));
+        assertTrue(url1.equals(url2, false, false));
         assertFalse(url1.equals(url2, true, true));
         url1.setCredentials(new Credentials("login", "PASSWORD"));
-        assertTrue(url1.equals(url2));
+        assertTrue(url1.equals(url2, false, false));
         assertFalse(url1.equals(url2, true, true));
 
         // Assert that URLs are equal if credentials comparison is disabled
@@ -497,10 +497,10 @@ public abstract class FileURLTestCase extends TestCase {
         // Assert that the properties comparison is case-sensitive
         url1.setProperty("name", null);
         url1.setProperty("NAME", "value");
-        assertTrue(url1.equals(url2));
+        assertTrue(url1.equals(url2, false, false));
         assertFalse(url1.equals(url2, true, true));
         url1.setProperty("name", "VALUE");
-        assertTrue(url1.equals(url2));
+        assertTrue(url1.equals(url2, false, false));
         assertFalse(url1.equals(url2, true, true));
 
         // Assert that URLs are equal if properties comparison is disabled

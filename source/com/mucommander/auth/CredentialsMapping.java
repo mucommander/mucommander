@@ -102,7 +102,7 @@ public final class CredentialsMapping {
 
         CredentialsMapping cm = (CredentialsMapping)o;
 
-        return cm.credentials.equals(this.credentials) && cm.realm.equals(this.realm);
+        return cm.credentials.equals(this.credentials, false) && cm.realm.equals(this.realm, false, true);
     }
 
     public String toString() {

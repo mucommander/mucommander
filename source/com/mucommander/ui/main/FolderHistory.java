@@ -74,7 +74,7 @@ public class FolderHistory {
         FileURL folderURL = folder.getURL();
 
         // Do not add folder to history if new current folder is the same as previous folder
-        if (historyIndex<0 || !folderURL.equals(history.elementAt(historyIndex))) {
+        if (historyIndex<0 || !folderURL.equals(history.elementAt(historyIndex), false, false)) {
             historyIndex++;
 
             // Delete 'forward' history items if any
