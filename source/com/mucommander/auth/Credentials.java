@@ -171,5 +171,10 @@ public final class Credentials {
     public String toString() {
         return login;
     }
+
+    public int hashCode() {
+        // Do not take into account the password, as #equals(Object) is password-insensitive
+        return login.hashCode();
+    }
 }
 
