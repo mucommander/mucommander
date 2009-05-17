@@ -523,14 +523,12 @@ public class FileFactory {
                 || scheme.equals(FileProtocols.SMB)
                 || scheme.equals(FileProtocols.SFTP);
 
-        // This value is used twice, only if file caching is used
-        String urlRep = useFileCache?fileURL.toString(true):null;
-
         AbstractFile file;
 
         if(useFileCache) {
             // Lookup the cache for an existing AbstractFile instance
-            file = (AbstractFile)fileCache.get(urlRep);
+            // Note: FileURL#equals(Object) and #hashCode() take into account credentials and properties
+            file = (AbstractFile)fileCache.get(fileURL);
 //            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("file cache hits/misses: "+fileCache.getHitCount()+"/"+fileCache.getMissCount());
 
             if(file!=null)
@@ -568,7 +566,7 @@ public class FileFactory {
             // Note: Creating an archive file on top of the file must be done after adding the file to the LRU cache,
             // this could otherwise lead to weird behaviors, for example if a directory with the same filename
             // of a former archive was created, the directory would be considered as an archive
-            fileCache.add(urlRep, file);
+            fileCache.add(fileURL, file);
 //                            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Added to file cache: "+file);
         }
 
