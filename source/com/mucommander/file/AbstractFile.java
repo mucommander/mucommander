@@ -1324,15 +1324,21 @@ public abstract class AbstractFile implements PermissionTypes, PermissionAccesse
     public boolean equals(Object f) {
         if(f==null || !(f instanceof AbstractFile))
             return false;
-		
+
+//        return getURL().equals(((AbstractFile)f).getURL(), true, true);
+
         return getCanonicalPath(false).equals(((AbstractFile)f).getCanonicalPath(false));
     }
 
+    /**
+     * Returns the hashCode of this file's {@link #getURL() URL}.
+     *
+     * @return the hashCode of this file's {@link #getURL() URL}.
+     */
     public int hashCode() {
-        return getCanonicalPath(false).hashCode();
+        return getURL().hashCode();
     }
-    
-	
+
     /**
      * Returns a String representation of this file. The returned String is this file's path as returned by
      * {@link #getAbsolutePath()}.
