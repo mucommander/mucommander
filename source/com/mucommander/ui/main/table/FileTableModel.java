@@ -176,6 +176,16 @@ public class FileTableModel extends AbstractTableModel {
     }
 
     /**
+     * Returns the index of the first row that can be marked/unmarked : <code>1</code> if the current folder has a
+     * parent folder, <code>0</code> otherwise (parent folder row '..' cannot be marked).
+     *
+     * @return the index of the first row that can be marked/unmarked
+     */
+    public int getFirstMarkableRow() {
+        return parent==null?0:1;
+    }
+
+    /**
      * Sets the current folder and its children.
      *
      * @param folder the current folder

@@ -103,7 +103,7 @@ public class OpenInBothPanelsAction extends SelectedFileAction {
                 // Look for a file in the other table with the same name as the selected one (case insensitive)
                 int fileCount = otherTableModel.getFileCount();
                 String targetFilename = selectedFile.getName();
-                for(int i=otherTableModel.hasParentFolder()?1:0; i<fileCount; i++) {
+                for(int i=otherTableModel.getFirstMarkableRow(); i<fileCount; i++) {
                     otherFile = otherTableModel.getCachedFileAtRow(i);
                     if(otherFile.getName().equalsIgnoreCase(targetFilename))
                         break;

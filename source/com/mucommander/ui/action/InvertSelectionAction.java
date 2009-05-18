@@ -43,7 +43,7 @@ public class InvertSelectionAction extends MuAction {
         // Starts at 1 if current folder is not root so that '..' is not marked
         AbstractFile file;
         int nbRows = tableModel.getRowCount();
-        for(int i=fileTable.getParent()==null?0:1; i<nbRows; i++) {
+        for(int i=tableModel.getFirstMarkableRow(); i<nbRows; i++) {
             file = tableModel.getFileAtRow(i);
             if(!file.isDirectory())
                 tableModel.setRowMarked(i, !tableModel.isRowMarked(i));

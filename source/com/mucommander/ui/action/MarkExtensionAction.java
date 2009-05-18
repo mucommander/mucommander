@@ -178,7 +178,7 @@ public class MarkExtensionAction extends MuAction {
         mark       = !tableModel.isRowMarked(fileTable.getSelectedRow());
 
         // Goes through all files in the active table, marking all that match 'filter'.
-        for(int i = tableModel.hasParentFolder() ? 1 : 0; i < rowCount; i++)
+        for(int i = tableModel.getFirstMarkableRow(); i < rowCount; i++)
             if(filter.accept(tableModel.getCachedFileAtRow(i)))
                 tableModel.setRowMarked(i, mark);
         fileTable.repaint();
