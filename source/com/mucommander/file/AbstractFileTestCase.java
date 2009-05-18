@@ -408,7 +408,8 @@ public abstract class AbstractFileTestCase extends TestCase {
     protected void testVolume(AbstractFile volume) throws IOException {
         // Test basic volume properties
         assertNotNull(volume);
-        assertTrue(volume.isDirectory());
+        // If the volume exists, it must be a directory
+        assertTrue(!volume.exists() || volume.isDirectory());
         assertEquals(volume, volume.getVolume());
 
         // Assert that children of the volume are located on the volume (test the first children only)

@@ -286,8 +286,10 @@ public abstract class AbstractFile implements PermissionTypes, PermissionAccesse
 
     /**
      * Returns the volume on which this file is located, or <code>this</code> if this file is itself a volume.
-     * The returned file may never be <code>null</code>, and must always be a directory. In other words, archive files
-     * may not be considered as volumes.
+     * The returned file may never be <code>null</code>. Furthermore, the returned file may not always
+     * {@link #exists() exist}, for instance if the returned volume corresponds to a removable drive that's currently
+     * unavailable. If the returned file does exist, it must always be a {@link #isDirectory() directory}.
+     * In other words, archive files may not be considered as volumes.
      * <p>
      * The notion of volume may or may not have a meaning depending on the kind of fileystem. On local filesystems,
      * the notion of volume can be assimilated into that of <i>mount point</i> for UNIX-based OSes, or <i>drive</i>

@@ -398,8 +398,10 @@ public class LocalFile extends AbstractFile {
     /**
      * Resolves and returns all local volumes:
      * <ul>
-     *   <li>On UNIX-based OSes, these are the mount points declared in <code>/etc/ftab</code></li>
-     *   <li>On the Windows platform, these are active drives</li>
+     *   <li>On UNIX-based OSes, these are the mount points declared in <code>/etc/ftab</code>.</li>
+     *   <li>On the Windows platform, these are the drives displayed in Explorer. Some of the returned volumes may
+     * correspond to removable drives and thus may not always be available -- if they aren't, {@link #exists()} will
+     * return <code>false</code>.</li>
      * </ul>
      * <p>
      * The return list of volumes is purposively not cached so that new volumes will be returned as soon as they are
