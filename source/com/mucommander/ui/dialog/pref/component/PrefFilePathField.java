@@ -23,7 +23,6 @@ import com.mucommander.ui.autocomplete.CompleterFactory;
 import com.mucommander.ui.autocomplete.TextFieldCompletion;
 
 /**
- * 
  * @author Arik Hadas
  */
 public abstract class PrefFilePathField  extends PrefTextField {
