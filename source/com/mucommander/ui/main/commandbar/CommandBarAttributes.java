@@ -102,6 +102,7 @@ public class CommandBarAttributes {
     public static void setModifier(KeyStroke modifier) {
     	CommandBarAttributes.modifier = modifier;
     	useDefaultModifier = false;
+    	fireModifierChanged();
     }
     
     public static Class[] getActions() {
