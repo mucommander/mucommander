@@ -20,6 +20,7 @@ package com.mucommander.file;
 
 import com.mucommander.auth.AuthenticationTypes;
 import com.mucommander.auth.Credentials;
+import com.mucommander.util.StringUtils;
 import junit.framework.TestCase;
 
 import java.net.MalformedURLException;
@@ -49,6 +50,10 @@ public abstract class FileURLTestCase extends TestCase {
      * @throws MalformedURLException if the FileURL could not be created because the specified URL is invalid
      */
     protected FileURL getSchemeURL(String url) throws MalformedURLException {
+        String pathSeparator = getPathSeparator();
+        if(!pathSeparator.equals("/"))
+            url = StringUtils.replaceCompat(url, "/", pathSeparator);
+
         return FileURL.getFileURL(getScheme()+"://"+url);
     }
 
