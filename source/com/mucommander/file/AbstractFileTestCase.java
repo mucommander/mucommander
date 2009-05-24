@@ -853,15 +853,27 @@ public abstract class AbstractFileTestCase extends TestCase {
         // Assert that a directory can be created when the file doesn't already exist (without throwing an IOException)
         AbstractFile dir1 = tempFile.getDirectChild("dir1");
         AbstractFile dir2 = dir1.getDirectChild("dir2");
+        AbstractFile dir2b = dir1.getChild("dir2"+dir1.getSeparator());     // Same file with a trailing separator
         dir2.mkdirs();
 
         // Assert that the file exists after the directory has been created
         assertTrue(dir2.exists());
+        assertTrue(dir2.isDirectory());
+        assertTrue(dir2b.exists());
+        assertTrue(dir2b.isDirectory());
 
         // Delete 'dir2' and perform the same test. The difference with the previous test is that 'temp' and 'dir1' exist.
         dir2.delete();
+        assertFalse(dir2.exists());
+        assertFalse(dir2.isDirectory());
+        assertFalse(dir2b.exists());
+        assertFalse(dir2b.isDirectory());
+
         dir2.mkdirs();
         assertTrue(dir2.exists());
+        assertTrue(dir2.isDirectory());
+        assertTrue(dir2b.exists());
+        assertTrue(dir2b.isDirectory());
 
         // Assert that an IOException is thrown when the directory already exists
         boolean ioExceptionThrown = false;
@@ -933,17 +945,34 @@ public abstract class AbstractFileTestCase extends TestCase {
      * @throws IOException should not happen
      */
     public void testIsDirectory() throws IOException {
+        // Same file with a trailing separator
+        AbstractFile tempFileB = FileFactory.getFile(tempFile.getAbsolutePath(true));
+
         // Assert that isDirectory() returns false when the file does not exist
+        assertFalse(tempFile.exists());
         assertFalse(tempFile.isDirectory());
+        assertFalse(tempFileB.exists());
+        assertFalse(tempFileB.isDirectory());
 
         // Assert that isDirectory() returns true for directories
         tempFile.mkdir();
+        assertTrue(tempFile.exists());
         assertTrue(tempFile.isDirectory());
+        assertTrue(tempFileB.exists());
+        assertTrue(tempFileB.isDirectory());
 
         // Assert that isDirectory() returns false for regular files
         tempFile.delete();
-        tempFile.mkfile();
+        assertFalse(tempFile.exists());
         assertFalse(tempFile.isDirectory());
+        assertFalse(tempFileB.exists());
+        assertFalse(tempFileB.isDirectory());
+
+        tempFile.mkfile();
+        assertTrue(tempFile.exists());
+        assertFalse(tempFile.isDirectory());
+        assertTrue(tempFile.exists());
+        assertFalse(tempFileB.isDirectory());
     }
 
     /**
@@ -1647,6 +1676,7 @@ public abstract class AbstractFileTestCase extends TestCase {
      * <ul>
      *   <li>the returned file does not exist, i.e. that {@link AbstractFile#exists()} returns <code>false</code>.</li>
      *   <li>a new file is returned each time this method is called.</li>
+     *   <li>the return file's path does not end with a trailing path separator</li>
      * </ul>
      *
      * @return a temporary file that does not exist
