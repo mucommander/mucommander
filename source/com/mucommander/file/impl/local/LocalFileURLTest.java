@@ -134,12 +134,7 @@ public class LocalFileURLTest extends FileURLTestCase {
     }
 
     protected String getPathSeparator() {
-//        return System.getProperty("file.separator");
-        return "\\";
-    }
-
-    protected String getTildeReplacement() {
-        return System.getProperty("user.home");
+        return System.getProperty("file.separator");
     }
 
     protected boolean isQueryParsed() {

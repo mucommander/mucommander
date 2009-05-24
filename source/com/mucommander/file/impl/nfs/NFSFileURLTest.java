@@ -53,10 +53,6 @@ public class NFSFileURLTest extends FileURLTestCase {
         return "/";
     }
 
-    protected String getTildeReplacement() {
-        return null;
-    }
-
     protected boolean isQueryParsed() {
         return false;
     }

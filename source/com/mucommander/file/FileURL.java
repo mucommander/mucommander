@@ -22,6 +22,7 @@ package com.mucommander.file;
 import com.mucommander.auth.AuthenticationTypes;
 import com.mucommander.auth.Credentials;
 import com.mucommander.file.compat.CompatURLStreamHandler;
+import com.mucommander.file.util.PathUtils;
 import com.mucommander.util.StringUtils;
 
 import java.net.MalformedURLException;
@@ -144,15 +145,15 @@ public class FileURL implements Cloneable {
         // Register custom handlers for known schemes
 
         String fileSeparator = System.getProperty("file.separator");
-        registerHandler(FileProtocols.FILE, new DefaultSchemeHandler(new DefaultSchemeParser(fileSeparator, false, System.getProperty("user.home")), -1, fileSeparator, AuthenticationTypes.NO_AUTHENTICATION, null));
+        registerHandler(FileProtocols.FILE, new DefaultSchemeHandler(new DefaultSchemeParser(DefaultSchemeParser.LOCAL_PATH_CANONIZER, false), -1, fileSeparator, AuthenticationTypes.NO_AUTHENTICATION, null));
 
         registerHandler(FileProtocols.FTP, new DefaultSchemeHandler(new DefaultSchemeParser(), 21, "/", AuthenticationTypes.AUTHENTICATION_REQUIRED, new Credentials("anonymous", "someuser@mucommander.com")));
         registerHandler(FileProtocols.SFTP, new DefaultSchemeHandler(new DefaultSchemeParser(), 22, "/", AuthenticationTypes.AUTHENTICATION_REQUIRED, null));
-        registerHandler(FileProtocols.HTTP, new DefaultSchemeHandler(new DefaultSchemeParser("/", true, null), 80, "/", AuthenticationTypes.AUTHENTICATION_OPTIONAL, null));
-        registerHandler(FileProtocols.S3, new DefaultSchemeHandler(new DefaultSchemeParser("/", true, null), 80, "/", AuthenticationTypes.AUTHENTICATION_REQUIRED, null));
-        registerHandler(FileProtocols.WEBDAV, new DefaultSchemeHandler(new DefaultSchemeParser("/", true, null), 80, "/", AuthenticationTypes.AUTHENTICATION_REQUIRED, null));
-        registerHandler(FileProtocols.HTTPS, new DefaultSchemeHandler(new DefaultSchemeParser("/", true, null), 443, "/", AuthenticationTypes.AUTHENTICATION_OPTIONAL, null));
-        registerHandler(FileProtocols.WEBDAVS, new DefaultSchemeHandler(new DefaultSchemeParser("/", true, null), 443, "/", AuthenticationTypes.AUTHENTICATION_REQUIRED, null));
+        registerHandler(FileProtocols.HTTP, new DefaultSchemeHandler(new DefaultSchemeParser(true), 80, "/", AuthenticationTypes.AUTHENTICATION_OPTIONAL, null));
+        registerHandler(FileProtocols.S3, new DefaultSchemeHandler(new DefaultSchemeParser(true), 80, "/", AuthenticationTypes.AUTHENTICATION_REQUIRED, null));
+        registerHandler(FileProtocols.WEBDAV, new DefaultSchemeHandler(new DefaultSchemeParser(true), 80, "/", AuthenticationTypes.AUTHENTICATION_REQUIRED, null));
+        registerHandler(FileProtocols.HTTPS, new DefaultSchemeHandler(new DefaultSchemeParser(true), 443, "/", AuthenticationTypes.AUTHENTICATION_OPTIONAL, null));
+        registerHandler(FileProtocols.WEBDAVS, new DefaultSchemeHandler(new DefaultSchemeParser(true), 443, "/", AuthenticationTypes.AUTHENTICATION_REQUIRED, null));
         registerHandler(FileProtocols.NFS, new DefaultSchemeHandler(new DefaultSchemeParser(), 2049, "/", AuthenticationTypes.NO_AUTHENTICATION, null));
 
         registerHandler(FileProtocols.SMB, new DefaultSchemeHandler(new DefaultSchemeParser(), -1, "/", AuthenticationTypes.AUTHENTICATION_REQUIRED, new Credentials("GUEST", "")) {
@@ -319,15 +320,22 @@ public class FileURL implements Cloneable {
      * @param separator the path separator
      * @return the filename extracted from the given path, <code>null</code> if the path doesn't contain any
      */
-    private static String getFilenameFromPath(String path, String separator) {
+    public static String getFilenameFromPath(String path, String separator) {
         if(path.equals("") || path.equals("/"))
             return null;
 
         // Remove any trailing separator
-        String filename = path.endsWith(separator)?path.substring(0, path.length()-separator.length()):path;
+        path = PathUtils.removeTrailingSeparator(path, separator);
+
+        if(!separator.equals("/"))
+            path = PathUtils.removeLeadingSeparator(path, "/");
 
         // Extract filename
-        return filename.substring(filename.lastIndexOf(separator)+1);
+        int pos = path.lastIndexOf(separator);
+        if(pos==-1)
+            return null;
+
+        return path.substring(pos+1);
     }
 
 
@@ -753,35 +761,49 @@ public class FileURL implements Cloneable {
      * @return a string representation of this <code>FileURL</code>
      */
     public String toString(boolean includeCredentials, boolean maskPassword) {
-        String s = scheme + "://";
+        StringBuffer sb = new StringBuffer(scheme);
+        sb.append("://");
 
         if(includeCredentials && credentials!=null) {
-            s += credentials.getLogin();
+            sb.append(credentials.getLogin());
             String password = credentials.getPassword();
             if(!"".equals(password)) {
-                s += ":";
+                sb.append(':');
                 if(maskPassword)
-                    s += credentials.getMaskedPassword();
+                    sb.append(credentials.getMaskedPassword());
                 else
-                    s += password;
+                    sb.append(password);
             }
-            s += "@";
+            sb.append('@');
         }
 
         if(host!=null)
-            s += host;
+            sb.append(host);
 
         // Set the port only if it has a value that is different from the standard port
-        if(port!=-1 && port!=handler.getStandardPort())
-            s += ":"+port;
+        if(port!=-1 && port!=handler.getStandardPort()) {
+            sb.append(':');
+            sb.append(port);
+        }
 
-        if(host!=null || !path.equals("/"))	// Test to avoid URLs like 'smb:///'
-            s += path.startsWith("/")?path:"/"+path;    // Add a leading '/' if path doesn't already start with one, needed in particular for Windows paths
+        if(host!=null || !path.equals("/"))	{ // Test to avoid URLs like 'smb:///'
+            if(path.startsWith("/")) {
+                sb.append(path);
+            }
+            else {
+                // Add a leading '/' if path doesn't already start with one, needed for scheme paths that are not
+                // forward slash-separated
+                sb.append('/');
+                sb.append(path);
+            }
+        }
 
-        if(query!=null)
-            s += query;
+        if(query!=null) {
+            sb.append('?');
+            sb.append(query);
+        }
 
-        return s;
+        return sb.toString();
     }
 
     /**

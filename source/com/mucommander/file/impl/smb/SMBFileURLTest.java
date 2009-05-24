@@ -55,10 +55,6 @@ public class SMBFileURLTest extends FileURLTestCase {
         return "/";
     }
 
-    protected String getTildeReplacement() {
-        return null;
-    }
-
     protected boolean isQueryParsed() {
         return false;
     }
@@ -72,6 +68,6 @@ public class SMBFileURLTest extends FileURLTestCase {
      * This method is overridden to test SMB's specific notion of realm. 
      */
     public void testRealm() throws MalformedURLException {
-        assertEquals(getSchemeURL("host/share"), getSchemeURL("host/share/path/to/file").getRealm());
+        assertEquals(getURL("host", "/share"), getURL("host", "/share/path/to/file").getRealm());
     }
 }

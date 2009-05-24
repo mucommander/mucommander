@@ -53,10 +53,6 @@ public class FTPFileURLTest extends FileURLTestCase {
         return "/";
     }
 
-    protected String getTildeReplacement() {
-        return null;
-    }
-
     protected boolean isQueryParsed() {
         return false;
     }
