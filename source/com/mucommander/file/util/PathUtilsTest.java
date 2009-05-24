@@ -73,7 +73,7 @@ public class PathUtilsTest extends TestCase {
         assertResult(PathUtils.resolveDestination(baseRoot.getURL().toString(true), baseRoot), baseRoot, expectedType);
         // Relative paths
         assertResult(PathUtils.resolveDestination(".", baseFolder), baseFolder, expectedType);
-        assertResult(PathUtils.resolveDestination("./", baseFolder), baseFolder, expectedType);
+        assertResult(PathUtils.resolveDestination("."+baseFolder.getSeparator(), baseFolder), baseFolder, expectedType);
         assertResult(PathUtils.resolveDestination(baseFolder.getName(), baseParent), baseFolder, expectedType);
         assertResult(PathUtils.resolveDestination(baseFolder.getName()+separator, baseParent), baseFolder, expectedType);
         assertResult(PathUtils.resolveDestination("."+separator+baseFolder.getName(), baseParent), baseFolder, expectedType);
