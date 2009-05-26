@@ -864,6 +864,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <mkapp jar="${jar.cmp}" dest="${app.folder}" type="APPL" creator="MUCO" icon="${res}/icons/icon.icns"
            infoversion="0.9" classpath="/System/Library/Java">
       <string  name="CFBundleName"                    value="muCommander"/>
+      <string  name="CFBundleIdentifier"              value="com.mucommander.muCommander"/>
       <string  name="CFBundleVersion"                 value="${app.version}${app.subversion}"/>
       <boolean name="CFBundleAllowMixedLocalizations" value="true"/>
       <string  name="CFBundleDevelopmentRegion"       value="English"/>
