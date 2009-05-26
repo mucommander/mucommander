@@ -124,7 +124,7 @@ What's new since v0.8.3 ?
 -------------------------
 
 New features:
-- 
+- Added native support for 7z archives.
 
 Improvements:
 - Tar/TGZ and Zip unpacking speed has been improved significantly (bug #74).
@@ -134,6 +134,7 @@ Improvements:
 - JNA library upgraded to version 3.0.9.
 - Character encodings can be more easily selected (bug #15).
 - Added icon mappings for Office 2007 file extensions.
+- 'Mark/Unmark files' is no longer case-sensitive by default.
 
 Localization:
 - 

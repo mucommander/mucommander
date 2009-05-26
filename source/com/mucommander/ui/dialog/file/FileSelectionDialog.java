@@ -64,10 +64,10 @@ public class FileSelectionDialog extends FocusDialog implements ActionListener {
     private MainFrame mainFrame;
 	
     /** 
-     * Is selection case sensitive? (initially true)
+     * Is selection case sensitive? (initially false)
      * <br>Note: this field is static so the value is kept after the dialog is OKed.
      */ 
-    private static boolean caseSensitive = true;
+    private static boolean caseSensitive = false;
 
     /** 
      * Does the selection include folders? (initially false)
