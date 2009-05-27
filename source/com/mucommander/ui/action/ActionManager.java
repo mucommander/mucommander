@@ -18,14 +18,18 @@
 
 package com.mucommander.ui.action;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Vector;
 import java.util.WeakHashMap;
 
 import com.mucommander.Debug;
 import com.mucommander.ui.main.MainFrame;
+import com.mucommander.ui.main.WindowManager;
 
 /**
  * ActionManager provides methods to retrieve {@link MuAction} instances and invoke them. It keeps track of all the
@@ -194,6 +198,30 @@ public class ActionManager {
     	return actionClasses.elements();
     }
     
+    /**
+     * This method is used to fetch all the action classes sorted by their labels.
+     * 
+     * @return sorted list of the action classes.
+     */
+    public static List getSortedActionClasses() {
+    	// Convert the action-classes to MuAction instances
+		List list = Collections.list(actionClasses.elements());
+		
+		// Sort actions by their labels
+		Collections.sort(list, new Comparator() {
+			public int compare(Object o1, Object o2) {
+				// TODO: remove actions without a standard label?
+				if (MuAction.getStandardLabel((Class) o1) == null)
+					return 1;
+				if (MuAction.getStandardLabel((Class) o2) == null)
+					return -1;
+				return MuAction.getStandardLabel((Class) o1).compareTo(MuAction.getStandardLabel((Class) o2));
+			}
+		});
+		
+		return list;
+    }
+    
     public static void registerAction(Class actionClass, MuActionFactory actionFactory) {
     	actionFactories.put(actionClass, actionFactory);
     	actionClasses.put(actionClass.getName(), actionClass);
@@ -217,6 +245,15 @@ public class ActionManager {
         return getActionInstance(new ActionDescriptor(actionClass), mainFrame);
     }
 
+    /**
+     * Helper method to get action instance in the current MainFrame.
+     * 
+     * @param actionClass - MuAction class.
+     * @return the corresponding MuAction instance for the given action class.
+     */
+    public static MuAction getActionInstance(Class actionClass) {
+        return getActionInstance(new ActionDescriptor(actionClass), WindowManager.getCurrentMainFrame());
+    }
 
     /**
      * Returns an instance of the MuAction class denoted by the given ActionDescriptor, for the specified MainFrame.
