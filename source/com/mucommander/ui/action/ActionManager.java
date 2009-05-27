@@ -153,6 +153,7 @@ public class ActionManager {
     	registerAction(SetSameFolderAction.class,                new SetSameFolderAction.Factory());
     	registerAction(ShowAboutAction.class,          		     new ShowAboutAction.Factory());
     	registerAction(ShowBookmarksQLAction.class,              new ShowBookmarksQLAction.Factory());
+    	registerAction(ShowCommandBarCustomizationAction.class,  new ShowCommandBarCustomizationAction.Factory());
     	registerAction(ShowFilePropertiesAction.class,           new ShowFilePropertiesAction.Factory());
     	registerAction(ShowKeyboardShortcutsAction.class,        new ShowKeyboardShortcutsAction.Factory());
     	registerAction(ShowParentFoldersQLAction.class,          new ShowParentFoldersQLAction.Factory());
@@ -246,10 +247,10 @@ public class ActionManager {
     }
 
     /**
-     * Helper method to get action instance in the current MainFrame.
+     * Helper method to get action instance of the given MuAction class in the current MainFrame.
      * 
      * @param actionClass - MuAction class.
-     * @return the corresponding MuAction instance for the given action class.
+     * @return the corresponding MuAction instance for the given MuAction class in the current MainFrame.
      */
     public static MuAction getActionInstance(Class actionClass) {
         return getActionInstance(new ActionDescriptor(actionClass), WindowManager.getCurrentMainFrame());

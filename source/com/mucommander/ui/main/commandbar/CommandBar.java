@@ -113,35 +113,42 @@ public class CommandBar extends JPanel implements ConfigurationListener, KeyList
         buttons = new JButton[nbButtons];
         for(int i=0; i<nbButtons; i++) {
             MuAction action = ActionManager.getActionInstance(actions[i], mainFrame);
-            JButton button = new NonFocusableButton();
-
-            // Use new JButton decorations introduced in Mac OS X 10.5 (Leopard) with Java 1.5 and up
-            if(OsFamilies.MAC_OS_X.isCurrent() && OsVersions.MAC_OS_X_10_5.isCurrentOrHigher() && JavaVersions.JAVA_1_5.isCurrentOrHigher()) {
-                button.putClientProperty("JComponent.sizeVariant", "small");
-                button.putClientProperty("JButton.buttonType", "textured");
-            }
-            else {
-                button.setMargin(new Insets(3,4,3,4));
-            }
-
-            setButtonAction(button, action);
-
-            // For Mac OS X whose default minimum width for buttons is enormous
-            button.setMinimumSize(new Dimension(40, (int)button.getPreferredSize().getHeight()));
+            JButton button = createCommandBarButton(action);
             button.addMouseListener(this);
             add(button);
-
             buttons[i] = button;
         }
     }
 
+    /**
+     * A method to create command-bar button.
+     */
+    public static JButton createCommandBarButton(MuAction action) {
+    	JButton button = new NonFocusableButton();
+
+        // Use new JButton decorations introduced in Mac OS X 10.5 (Leopard) with Java 1.5 and up
+        if(OsFamilies.MAC_OS_X.isCurrent() && OsVersions.MAC_OS_X_10_5.isCurrentOrHigher() && JavaVersions.JAVA_1_5.isCurrentOrHigher()) {
+            button.putClientProperty("JComponent.sizeVariant", "small");
+            button.putClientProperty("JButton.buttonType", "textured");
+        }
+        else {
+            button.setMargin(new Insets(3,4,3,4));
+        }
+
+        setButtonAction(button, action);
+        
+        // For Mac OS X whose default minimum width for buttons is enormous
+        button.setMinimumSize(new Dimension(40, (int)button.getPreferredSize().getHeight()));
+        
+    	return button;
+    }
 
     /**
-     * Sets the given button's action, custom label showing the accelerator, and icon taking into account the scale factor.
+     * Sets the given button's action, custom label showing the accelerator and icon taking into account the scale factor.
      */
-    private void setButtonAction(JButton button, MuAction action) {
-        button.setAction(action);
-
+    private static void setButtonAction(JButton button, MuAction action) {
+    	button.setAction(action);
+    	
         // Append the action's shortcut to the button's label
         String label;
         label = action.getLabel();
@@ -229,6 +236,7 @@ public class CommandBar extends JPanel implements ConfigurationListener, KeyList
             //		if (e.isPopupTrigger()) {	// Doesn't work under Mac OS X (CTRL+click doesn't return true)
             JPopupMenu popupMenu = new JPopupMenu();
             popupMenu.add(ActionManager.getActionInstance(com.mucommander.ui.action.ToggleCommandBarAction.class, mainFrame));
+            popupMenu.add(ActionManager.getActionInstance(com.mucommander.ui.action.ShowCommandBarCustomizationAction.class, mainFrame));
             popupMenu.show(this, e.getX(), e.getY());
             popupMenu.setVisible(true);
         }
@@ -256,6 +264,7 @@ public class CommandBar extends JPanel implements ConfigurationListener, KeyList
 		alternateActions = CommandBarAttributes.getAlternateActions();
 		removeAll();
 		addButtons();
+		doLayout();
 	}
 
 	public void CommandBarModifierChanged() {
