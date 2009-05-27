@@ -18,6 +18,9 @@
 
 package com.mucommander;
 
+import com.mucommander.command.Command;
+import com.mucommander.command.CommandException;
+import com.mucommander.command.CommandManager;
 import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.extension.ExtensionManager;
 import com.mucommander.file.icon.impl.SwingFileIconProvider;
@@ -210,6 +213,26 @@ public class Launcher {
 
     // - Boot code --------------------------------------------------------------
     // --------------------------------------------------------------------------
+    /**
+     * Method used to migrate commands that used to be defined in the configuration but were moved to <code>commands.xml</code>.
+     * @param useName     name of the <code>use custom command</code> configuration variable.
+     * @param commandName name of the <code>custom command</code> configuration variable.
+     */
+    private static void migrateCommand(String useName, String commandName, String alias) {
+        String command;
+
+        if(MuConfiguration.getBooleanVariable(useName) && (command = MuConfiguration.getVariable(commandName)) != null) {
+            try {
+                CommandManager.registerCommand(new Command(alias, command, Command.SYSTEM_COMMAND));}
+            catch(CommandException e) {
+                // Ignore this: the command didn't work in the first place, we might as well get rid of it.
+            }
+            MuConfiguration.removeVariable(useName);
+            MuConfiguration.removeVariable(commandName);
+        }
+    }
+
+
     /**
      * Main method used to startup muCommander.
      * @param args command line arguments.
@@ -420,7 +443,16 @@ public class Launcher {
 
         // Loads the file associations
         printStartupMessage("Loading file associations...");
-        try {com.mucommander.command.CommandManager.loadCommands();}
+        try {
+            com.mucommander.command.CommandManager.loadCommands();
+            migrateCommand("viewer.use_custom", "viewer.custom_command", CommandManager.VIEWER_ALIAS);
+            migrateCommand("editor.use_custom", "editor.custom_command", CommandManager.EDITOR_ALIAS);
+            try {CommandManager.writeCommands();}
+            catch(CommandException e) {
+                // There's really nothing we can do about this...
+            }
+
+        }
         catch(Exception e) {
             if(Debug.ON)
                 printFileError("Could not load custom commands", e, fatalWarnings);

@@ -18,6 +18,7 @@
 
 package com.mucommander.ui.action;
 
+import com.mucommander.command.Command;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.viewer.ViewerRegistrar;
@@ -27,12 +28,11 @@ import java.util.Hashtable;
 
 /**
  * Opens the current file in view mode.
- *
  * @author Maxence Bernard, Nicolas Rinaudo
  */
 public class InternalViewAction extends AbstractViewerAction {
-    // - Initialisation ------------------------------------------------------------------
-    // -----------------------------------------------------------------------------------
+    // - Initialisation ------------------------------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------------
     /**
      * Creates a new instance of <code>InternalViewAction</code>.
      * @param mainFrame  frame to which the action is attached.
@@ -48,18 +48,21 @@ public class InternalViewAction extends AbstractViewerAction {
 
 
 
-    // - AbstractViewerAction implementation ---------------------------------------------
-    // -----------------------------------------------------------------------------------
-    /**
-     * Opens the internal viewer on the specified file.
-     * @param file file to view.
-     */
-    public void performInternalAction(AbstractFile file) {
+    // - AbstractViewerAction implementation ---------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------------
+    protected void performInternalAction(AbstractFile file) {
         ViewerRegistrar.createViewerFrame(mainFrame, file, getIcon().getImage());
     }
-    
-    public static class Factory implements MuActionFactory {
 
+    protected Command getCustomCommand() {
+        return null;
+    }
+
+
+
+    // - Factory -------------------------------------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------------
+    public static class Factory implements MuActionFactory {
 		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
 			return new InternalViewAction(mainFrame, properties);
 		}

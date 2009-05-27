@@ -18,6 +18,7 @@
 
 package com.mucommander.ui.action;
 
+import com.mucommander.command.Command;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.viewer.EditorRegistrar;
@@ -30,8 +31,8 @@ import java.util.Hashtable;
  * @author Maxence Bernard, Nicolas Rinaudo
  */
 public class InternalEditAction extends AbstractViewerAction {
-    // - Initialisation ------------------------------------------------------------------
-    // -----------------------------------------------------------------------------------
+    // - Initialisation ------------------------------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------------
     /**
      * Creates a new instance of <code>EditAction</code>.
      * @param mainFrame  frame to which the action is attached.
@@ -47,18 +48,25 @@ public class InternalEditAction extends AbstractViewerAction {
 
 
 
-    // - AbstractViewerAction implementation ---------------------------------------------
-    // -----------------------------------------------------------------------------------
+    // - AbstractViewerAction implementation ---------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------------
     /**
      * Opens the internal editor on the specified file.
      * @param file file to edit.
      */
-    public void performInternalAction(AbstractFile file) {
+    protected void performInternalAction(AbstractFile file) {
         EditorRegistrar.createEditorFrame(mainFrame, file, getIcon().getImage());
     }
 
-    public static class Factory implements MuActionFactory {
+    protected Command getCustomCommand() {
+        return null;
+    }
 
+
+
+    // - Factory -------------------------------------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------------
+    public static class Factory implements MuActionFactory {
 		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
 			return new InternalEditAction(mainFrame, properties);
 		}

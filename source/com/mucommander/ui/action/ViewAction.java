@@ -18,9 +18,8 @@
 
 package com.mucommander.ui.action;
 
-import com.mucommander.conf.ConfigurationEvent;
-import com.mucommander.conf.ConfigurationListener;
-import com.mucommander.conf.impl.MuConfiguration;
+import com.mucommander.command.Command;
+import com.mucommander.command.CommandManager;
 import com.mucommander.ui.main.MainFrame;
 
 import java.util.Hashtable;
@@ -29,9 +28,9 @@ import java.util.Hashtable;
  * User configurable variant of {@link InternalViewAction}.
  * @author Maxence Bernard, Nicolas Rinaudo
  */
-public class ViewAction extends InternalViewAction implements ConfigurationListener {
-    // - Initialisation ------------------------------------------------------------------
-    // -----------------------------------------------------------------------------------
+public class ViewAction extends InternalViewAction {
+    // - Initialisation ------------------------------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------------
     /**
      * Creates a new instance of <code>ViewAction</code>.
      * @param mainFrame  frame to which the action is attached.
@@ -39,32 +38,18 @@ public class ViewAction extends InternalViewAction implements ConfigurationListe
      */
     public ViewAction(MainFrame mainFrame, Hashtable properties) {
         super(mainFrame, properties);
-
-        // Initialises configuration.
-        setUseCustomCommand(MuConfiguration.getVariable(MuConfiguration.USE_CUSTOM_VIEWER, MuConfiguration.DEFAULT_USE_CUSTOM_VIEWER));
-        setCustomCommand(MuConfiguration.getVariable(MuConfiguration.CUSTOM_VIEWER));
-
-        // Listens to configuration.
-        MuConfiguration.addConfigurationListener(this);
     }
 
 
-
-    // - Configuration listening ---------------------------------------------------------
-    // -----------------------------------------------------------------------------------
-    /**
-     * Reacts to configuration changed events.
-     * @param event describes the configuration change.
-     */
-    public synchronized void configurationChanged(ConfigurationEvent event) {
-        // Sets the custom command.
-        if(event.getVariable().equals(MuConfiguration.USE_CUSTOM_VIEWER))
-            setUseCustomCommand(event.getBooleanValue());
-        // Sets the 'use custom command' flag.
-        else if(event.getVariable().equals(MuConfiguration.CUSTOM_VIEWER))
-            setCustomCommand(event.getValue());
+    // - AbstractViewerAction implementation ---------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------------
+    protected Command getCustomCommand() {
+        return CommandManager.getCommandForAlias(CommandManager.VIEWER_ALIAS);
     }
-    
+
+
+    // - Factory -------------------------------------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------------
     public static class Factory implements MuActionFactory {
 
 		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {

@@ -53,6 +53,10 @@ public class CommandManager implements CommandBuilder {
     public static final String FILE_MANAGER_ALIAS          = "openFM";
     /** Alias for the system executable file opener. */
     public static final String EXE_OPENER_ALIAS            = "openEXE";
+    /** Alias for the default text viewer. */
+    public static final String VIEWER_ALIAS                = "view";
+    /** Alias for the default text editor. */ 
+    public static final String EDITOR_ALIAS                = "edit";
 
 
 

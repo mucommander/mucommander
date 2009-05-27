@@ -61,50 +61,6 @@ abstract class AbstractViewerAction extends SelectedFileAction {
 
 
 
-    // - Property retrieval --------------------------------------------------------------
-    // -----------------------------------------------------------------------------------
-    /**
-     * Returns <code>true</code> if this action should use custom command.
-     * @return <code>true</code> if this action should use custom command, <code>false</code> otherwise.
-     */
-    protected boolean useCustomCommand() {
-        Object o;
-
-        if((o = getValue(USE_CUSTOM_COMMAND_PROPERTY_KEY)) == null)
-            return false;
-        if(o instanceof Boolean)
-            return ((Boolean)o).booleanValue();
-        return false;
-    }
-
-    /**
-     * Returns the command that should be used to open files.
-     * @return the command that should be used to open files, or <code>false</code> if none.
-     */
-    protected Command getCustomCommand() {
-        Object o;
-
-        if((o = getValue(CUSTOM_COMMAND_PROPERTY_KEY)) == null)
-            return null;
-        if(o instanceof Command)
-            return (Command)o;
-        return null;
-    }
-
-    /**
-     * Sets the command to use to open files.
-     * @param command command that will be used to open files.
-     */
-    protected void setCustomCommand(String command) {putValue(CUSTOM_COMMAND_PROPERTY_KEY, command == null ? null : new Command(getClass().getName(), command));}
-
-    /**
-     * Sets whether or not to use custom commands to open files.
-     * @param use whether or not to use custom commands.
-     */
-    protected void setUseCustomCommand(boolean use) {putValue(USE_CUSTOM_COMMAND_PROPERTY_KEY, new Boolean(use));}
-
-
-
     // - AbstractAction implementation ---------------------------------------------------
     // -----------------------------------------------------------------------------------
     /**
@@ -112,28 +68,24 @@ abstract class AbstractViewerAction extends SelectedFileAction {
      */
     public synchronized void performAction() {
         AbstractFile file;
-        boolean      useCustomCommand;
         Command      customCommand;
 
         file = mainFrame.getActiveTable().getSelectedFile(false, true);
 
         // At this stage, no assumption should be made on the type of file that is allowed to be viewed/edited:
         // viewer/editor implementations will decide whether they allow a particular file or not.
-        if(file!=null) {
-            useCustomCommand = useCustomCommand();
-            customCommand    = getCustomCommand();
+        if(file != null) {
+            customCommand = getCustomCommand();
 
-            // If we're using a custom editor...
-            if(useCustomCommand && customCommand != null) {
+
+            // If we're using a custom command...
+            if(customCommand != null) {
                 // If it's local, run the custom editor on it.
                 if(file.hasAncestor(LocalFile.class)) {
-                    try {
-                        ProcessRunner.execute(customCommand.getTokens(file), file);
-                    }
-                    catch(Exception e) {
-                        ErrorDialog.showErrorDialog(mainFrame);
-                    }
+                    try {ProcessRunner.execute(customCommand.getTokens(file), file);}
+                    catch(Exception e) {ErrorDialog.showErrorDialog(mainFrame);}
                 }
+                
                 // If it's distant, copies it locally before running the custom editor on it.
                 else {
                     ProgressDialog progressDialog = new ProgressDialog(mainFrame, Translator.get("copy_dialog.copying"));
@@ -155,5 +107,7 @@ abstract class AbstractViewerAction extends SelectedFileAction {
      * Opens the specified file without a custom command.
      * @param file file to open.
      */
-    public abstract void performInternalAction(AbstractFile file);
+    protected abstract void performInternalAction(AbstractFile file);
+
+    protected abstract Command getCustomCommand();
 }

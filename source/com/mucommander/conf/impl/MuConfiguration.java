@@ -494,32 +494,6 @@ public class MuConfiguration {
 
 
 
-    // - Variables used for the custom editor --------------------------------
-    // -----------------------------------------------------------------------
-    /** Section describing the editor configuration. */
-    public static final String  EDITOR_SECTION                    = "editor";
-    /** Command to use as custom editor. */
-    public static final String  CUSTOM_EDITOR                     = EDITOR_SECTION + '.' + "custom_command";
-    /** Whether or not to use the custom editor. */
-    public static final String  USE_CUSTOM_EDITOR                 = EDITOR_SECTION + '.' + "use_custom";
-    /** Default value for {@link #USE_CUSTOM_EDITOR}. */
-    public static final boolean DEFAULT_USE_CUSTOM_EDITOR         = false;
-
-
-
-    // - Variables used for the custom viewer --------------------------------
-    // -----------------------------------------------------------------------
-    /** Section describing the viewer configuration. */
-    public static final String  VIEWER_SECTION                    = "viewer";
-    /** Command to use as custom viewer. */
-    public static final String  CUSTOM_VIEWER                     = VIEWER_SECTION + '.' + "custom_command";
-    /** Whether or not to use the custom viewer. */
-    public static final String  USE_CUSTOM_VIEWER                 = VIEWER_SECTION + '.' + "use_custom";
-    /** Default value for {@link #USE_CUSTOM_VIEWER}. */
-    public static final boolean DEFAULT_USE_CUSTOM_VIEWER         = false;
-
-
-
     // - Variables used for FTP ----------------------------------------------
     // -----------------------------------------------------------------------
     /** Section containing all FTP variables. */
