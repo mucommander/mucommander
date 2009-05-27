@@ -60,7 +60,6 @@ import javax.swing.Box.Filler;
 
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionManager;
-import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.layout.YBoxPanel;
 import com.mucommander.ui.list.DynamicHorizontalWrapList;
 import com.mucommander.ui.list.DynamicList;
@@ -124,7 +123,7 @@ public class CommandBarDialog extends CustomizeDialog {
 	private boolean canImport = false;
 	
 	private CommandBarDialog() {
-		super(WindowManager.getCurrentMainFrame(), Translator.get("title"));
+		super(WindowManager.getCurrentMainFrame(), Translator.get("command_bar_customize_dialog.title"));
 	}
 	
 	// - Singleton management ---------------------------------------------------
@@ -215,7 +214,7 @@ public class CommandBarDialog extends CustomizeDialog {
 			Class actionClass = commandBarActionClasses[i];
 			if (actionClass == null) {
 				Component c = Box.createHorizontalGlue();
-				c.setPreferredSize(new Dimension(130, 30));
+				c.setPreferredSize(BUTTON_PREFERRED_SIZE);
 				commandBarAlternativeButtons.add(c);
 			}
 			else {
@@ -292,7 +291,7 @@ public class CommandBarDialog extends CustomizeDialog {
 			}
 		}
 
-		commandBarAvailableButtonsList = new DynamicHorizontalWrapList(commandBarAvailableButtons, 130, 6);
+		commandBarAvailableButtonsList = new DynamicHorizontalWrapList(commandBarAvailableButtons, BUTTON_PREFERRED_SIZE.width, 6);
 		
 		commandBarAvailableButtonsList.setCellRenderer(new AvailableButtonCellListRenderer());
 		commandBarAvailableButtonsList.setDragEnabled(true);
@@ -303,8 +302,7 @@ public class CommandBarDialog extends CustomizeDialog {
 	
 	protected JPanel createAvailableButtonsPanel() {
 		JPanel panel = new JPanel(new GridLayout(1,0));
-		// TODO: translator
-		panel.setBorder(BorderFactory.createTitledBorder("Available Actions"));
+		panel.setBorder(BorderFactory.createTitledBorder(Translator.get("command_bar_customize_dialog.available_actions")));
 		
 		JScrollPane scrollPane = new JScrollPane(commandBarAvailableButtonsList, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollPane.setBorder(null);
@@ -315,10 +313,9 @@ public class CommandBarDialog extends CustomizeDialog {
 	
 	protected JPanel createCommandBarPanel() {
 		YBoxPanel panel = new YBoxPanel();
-		panel.setBorder(BorderFactory.createTitledBorder("Command Bar"));
+		panel.setBorder(BorderFactory.createTitledBorder(Translator.get("command_bar_customize_dialog.command_bar")));
 		
-		panel.add(new JLabel("drag buttons from\to the above buttons-pool to customize the command bar:"));
-		panel.add(Box.createRigidArea(new Dimension(0, 10)));
+		panel.add(Box.createRigidArea(new Dimension(0, 5)));
 		
 		YBoxPanel listsPanel = new YBoxPanel();
 		listsPanel.add(commandBarButtonsList);
@@ -328,7 +325,12 @@ public class CommandBarDialog extends CustomizeDialog {
 		scrollPane.setBorder(null);
 		panel.add(scrollPane);
 
-		panel.add(Box.createRigidArea(new Dimension(0, 10)));
+		panel.add(Box.createRigidArea(new Dimension(0, 5)));
+		
+		// TODO: translator\remove
+		panel.add(new JLabel("(Drag buttons to customize the command bar)"));
+		
+		panel.add(Box.createRigidArea(new Dimension(0, 5)));
 		
 		JPanel modifierPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		modifierField = new RecordingKeyStrokeTextField(MODIFIER_FIELD_MAX_LENGTH, CommandBarAttributes.getModifier()) {
@@ -343,7 +345,7 @@ public class CommandBarDialog extends CustomizeDialog {
 			}
 		};
 		
-		modifierPanel.add(new JLabel("Modifier"));
+		modifierPanel.add(new JLabel(Translator.get("command_bar_customize_dialog.modifier")));
 		modifierPanel.add(modifierField);
 		panel.add(modifierPanel);
 		
@@ -506,7 +508,7 @@ public class CommandBarDialog extends CustomizeDialog {
 			}
 			else {
 				Box.Filler filler = (Filler) value;
-				filler.setPreferredSize(new Dimension(130, 30));
+				filler.setPreferredSize(BUTTON_PREFERRED_SIZE);
 				filler.setBorder(BorderFactory.createLineBorder(JBUTTON_BACKGROUND_COLOR , 0));
 				filler.setBorder(BorderFactory.createCompoundBorder(
 						BorderFactory.createMatteBorder(2, 2, 2, 2, index == selectedCommandBarAlternateButtonIndex ? PAINTED_BORDER_COLOR : JBUTTON_BACKGROUND_COLOR ),
@@ -642,7 +644,7 @@ public class CommandBarDialog extends CustomizeDialog {
 				transferedButton = (JButton) commandBarAlternativeButtons.remove(transferedIndex);
 				
 				Component c = Box.createHorizontalGlue();
-				c.setPreferredSize(new Dimension(130, 30));
+				c.setPreferredSize(BUTTON_PREFERRED_SIZE);
 				commandBarAlternativeButtons.add(transferedIndex, c);
 			}
 			
@@ -679,7 +681,7 @@ public class CommandBarDialog extends CustomizeDialog {
 				transferedButton = (JButton) commandBarAlternativeButtons.remove(transferedIndex);
 				
 				Component c = Box.createHorizontalGlue();
-				c.setPreferredSize(new Dimension(130, 30));
+				c.setPreferredSize(BUTTON_PREFERRED_SIZE);
 				commandBarAlternativeButtons.add(transferedIndex, c);
 			}
 			
@@ -725,7 +727,7 @@ public class CommandBarDialog extends CustomizeDialog {
 						insertionPlace = insertInOrder(commandBarAvailableButtons, (JButton) component);
 						
 						Component c = Box.createHorizontalGlue();
-						c.setPreferredSize(new Dimension(130, 30));
+						c.setPreferredSize(BUTTON_PREFERRED_SIZE);
 						commandBarAlternativeButtons.add(transferedIndex, c);
 					}
 				}
