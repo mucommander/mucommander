@@ -11550,13 +11550,17 @@ theme_editor.item:FR:Élément
 
 
 
+#####################################
+# Command-bar customization dialog #
+#####################################
 
+command_bar_customize_dialog.title:EN:Command Bar Customizing
 
+command_bar_customize_dialog.available_actions:EN:Available Actions
 
+command_bar_customize_dialog.command_bar:EN:Command Bar
 
-
-
-
+command_bar_customize_dialog.modifier:EN:Modifier
 
 
 ######################
