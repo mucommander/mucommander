@@ -18,30 +18,18 @@
 
 package com.mucommander.ui.main.commandbar;
 
-import java.awt.Dimension;
 import java.awt.GridLayout;
-import java.awt.Insets;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.KeyStroke;
 
-import com.mucommander.conf.ConfigurationEvent;
-import com.mucommander.conf.ConfigurationListener;
-import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.desktop.DesktopManager;
-import com.mucommander.runtime.JavaVersions;
-import com.mucommander.runtime.OsFamilies;
-import com.mucommander.runtime.OsVersions;
 import com.mucommander.ui.action.ActionManager;
-import com.mucommander.ui.action.MuAction;
-import com.mucommander.ui.button.NonFocusableButton;
-import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.main.MainFrame;
 
 /**
@@ -50,7 +38,7 @@ import com.mucommander.ui.main.MainFrame;
  *
  * @author Maxence Bernard, Arik Hadas
  */
-public class CommandBar extends JPanel implements ConfigurationListener, KeyListener, MouseListener, CommandBarAttributesListener {
+public class CommandBar extends JPanel implements KeyListener, MouseListener, CommandBarAttributesListener {
 
     /** Parent MainFrame instance */
     private MainFrame mainFrame;
@@ -59,12 +47,7 @@ public class CommandBar extends JPanel implements ConfigurationListener, KeyList
     private boolean modifierDown;
 
     /** Command bar buttons */
-    private JButton buttons[];
-
-    /** Current icon scale factor */
-    // The math.max(1.0f, ...) part is to workaround a bug which cause(d) this value to be set to 0.0 in the configuration file.
-    private static float scaleFactor = Math.max(1.0f, MuConfiguration.getVariable(MuConfiguration.COMMAND_BAR_ICON_SCALE,
-                                                                        MuConfiguration.DEFAULT_COMMAND_BAR_ICON_SCALE));
+    private CommandBarButton buttons[];
     
     /** Command bar actions */
     private static Class actions[];
@@ -88,9 +71,6 @@ public class CommandBar extends JPanel implements ConfigurationListener, KeyList
         // Listen to mouse events to popup a menu when command bar is right clicked
         addMouseListener(this);
 
-        // Listen to configuration changes to reload command bar buttons when icon size has changed
-        MuConfiguration.addConfigurationListener(this);
-        
         actions = CommandBarAttributes.getActions();
 		alternateActions = CommandBarAttributes.getAlternateActions();
         modifier = CommandBarAttributes.getModifier();
@@ -110,57 +90,13 @@ public class CommandBar extends JPanel implements ConfigurationListener, KeyList
     	
     	// Create buttons and add them to this command bar
         int nbButtons = actions.length;
-        buttons = new JButton[nbButtons];
+        buttons = new CommandBarButton[nbButtons];
         for(int i=0; i<nbButtons; i++) {
-            MuAction action = ActionManager.getActionInstance(actions[i], mainFrame);
-            JButton button = createCommandBarButton(action);
-            button.addMouseListener(this);
-            add(button);
-            buttons[i] = button;
+        	buttons[i] = CommandBarButton.create(ActionManager.getActionInstance(actions[i], mainFrame));
+        	buttons[i].addMouseListener(this);
+            add(buttons[i]);
         }
     }
-
-    /**
-     * A method to create command-bar button.
-     */
-    public static JButton createCommandBarButton(MuAction action) {
-    	JButton button = new NonFocusableButton();
-
-        // Use new JButton decorations introduced in Mac OS X 10.5 (Leopard) with Java 1.5 and up
-        if(OsFamilies.MAC_OS_X.isCurrent() && OsVersions.MAC_OS_X_10_5.isCurrentOrHigher() && JavaVersions.JAVA_1_5.isCurrentOrHigher()) {
-            button.putClientProperty("JComponent.sizeVariant", "small");
-            button.putClientProperty("JButton.buttonType", "textured");
-        }
-        else {
-            button.setMargin(new Insets(3,4,3,4));
-        }
-
-        setButtonAction(button, action);
-        
-        // For Mac OS X whose default minimum width for buttons is enormous
-        button.setMinimumSize(new Dimension(40, (int)button.getPreferredSize().getHeight()));
-        
-    	return button;
-    }
-
-    /**
-     * Sets the given button's action, custom label showing the accelerator and icon taking into account the scale factor.
-     */
-    private static void setButtonAction(JButton button, MuAction action) {
-    	button.setAction(action);
-    	
-        // Append the action's shortcut to the button's label
-        String label;
-        label = action.getLabel();
-        if(action.getAcceleratorText() != null)
-            label += " [" + action.getAcceleratorText() + ']';
-        button.setText(label);
-
-        // Scale icon if scale factor is different from 1.0
-        if(scaleFactor!=1.0f)
-            button.setIcon(IconManager.getScaledIcon(action.getIcon(), scaleFactor));
-    }
-
 
     /**
      * Displays/hides alternate actions: buttons that have an alternate action show it when the command bar's
@@ -176,8 +112,7 @@ public class CommandBar extends JPanel implements ConfigurationListener, KeyList
 
             int nbButtons = buttons.length;
             for(int i=0; i<nbButtons; i++)
-                setButtonAction(buttons[i], 
-                		ActionManager.getActionInstance(on && alternateActions[i]!=null?alternateActions[i]:actions[i], mainFrame));
+                buttons[i].setButtonAction(ActionManager.getActionInstance(on && alternateActions[i]!=null?alternateActions[i]:actions[i], mainFrame));
         }
     }
 
@@ -199,32 +134,6 @@ public class CommandBar extends JPanel implements ConfigurationListener, KeyList
 
     public void keyTyped(KeyEvent e) {
     }
-
-
-
-    ///////////////////////////////////
-    // ConfigurationListener methods //
-    ///////////////////////////////////
-
-    /**
-     * Listens to certain configuration variables.
-     */
-    public void configurationChanged(ConfigurationEvent event) {
-        String var = event.getVariable();
-
-        // Reload butons icon if the icon scale factor has changed
-        if (var.equals(MuConfiguration.COMMAND_BAR_ICON_SCALE)) {
-            scaleFactor = event.getFloatValue();
-
-            int nbButtons = buttons.length;
-            for(int i=0; i<nbButtons; i++) {
-                JButton button = buttons[i];
-                // Change the button's icon but NOT the action's icon which has to remain in its original non-scaled size
-                button.setIcon(IconManager.getScaledIcon(((MuAction)button.getAction()).getIcon(), scaleFactor));
-            }
-        }
-    }
-
 
     ///////////////////////////
     // MouseListener methods //

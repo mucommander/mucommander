@@ -57,6 +57,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.TransferHandler;
 import javax.swing.UIManager;
 import javax.swing.Box.Filler;
+import javax.swing.border.Border;
 
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionManager;
@@ -64,8 +65,8 @@ import com.mucommander.ui.layout.YBoxPanel;
 import com.mucommander.ui.list.DynamicHorizontalWrapList;
 import com.mucommander.ui.list.DynamicList;
 import com.mucommander.ui.main.WindowManager;
-import com.mucommander.ui.main.commandbar.CommandBar;
 import com.mucommander.ui.main.commandbar.CommandBarAttributes;
+import com.mucommander.ui.main.commandbar.CommandBarButton;
 import com.mucommander.ui.text.RecordingKeyStrokeTextField;
 import com.mucommander.util.AlteredVector;
 
@@ -94,9 +95,11 @@ public class CommandBarDialog extends CustomizeDialog {
 	public static final Dimension BUTTON_PREFERRED_SIZE = new Dimension(130, 30);
 	
 	/** The color that is used to paint highlighted button's border */
-	private final Color PAINTED_BORDER_COLOR = Color.gray;
+	private static final Color PAINTED_BORDER_COLOR = Color.gray;
 	/** The default color of button's border */
-	private final Color JBUTTON_BACKGROUND_COLOR = UIManager.getColor("jbutton.background");
+	private static final Color JBUTTON_BACKGROUND_COLOR = UIManager.getColor("button.background");
+	
+	private static final Border JBUTTON_BORDER = UIManager.getBorder("button.border");
 	
 	/** List that contains all available buttons, i.e buttons that are not used by the command bar */
 	private DynamicHorizontalWrapList commandBarAvailableButtonsList;
@@ -164,9 +167,15 @@ public class CommandBarDialog extends CustomizeDialog {
     	// Fetch command-bar actions
     	Class[] commandBarActions = CommandBarAttributes.getActions();
     	int nbActions = commandBarActions.length;
-    	for (int i=0; i<nbActions; ++i)
-    		if (!((JButton) commandBarButtons.get(i)).getAction().getClass().equals(commandBarActions[i]))
+    	for (int i=0; i<nbActions; ++i) {
+    		JButton buttonI = (JButton) commandBarButtons.get(i);
+    		if (buttonI == null) {
+    			if (commandBarActions[i] != null)
+    				return true;
+    		}
+    		else if (!buttonI.getAction().getClass().equals(commandBarActions[i]))
     			return true;
+    	}
     	return false;
     }
     
@@ -175,12 +184,12 @@ public class CommandBarDialog extends CustomizeDialog {
     	Class[] commandBarAlternativeActions = CommandBarAttributes.getAlternateActions();
     	int nbActions = commandBarAlternativeActions.length;
     	for (int i=0; i<nbActions; ++i) {
-    		Object component = commandBarAlternativeButtons.get(i);
-    		if (!(component instanceof JButton)) {
+    		JButton buttonI = (JButton) commandBarAlternativeButtons.get(i);
+    		if (buttonI == null) {
     			if (commandBarAlternativeActions[i] != null)
     				return true;
     		}
-    		else if (!((JButton) component).getAction().getClass().equals(commandBarAlternativeActions[i]))
+    		else if (!buttonI.getAction().getClass().equals(commandBarAlternativeActions[i]))
     			return true;
     	}
     	return false;
@@ -227,30 +236,114 @@ public class CommandBarDialog extends CustomizeDialog {
 		return panel;
 	}
 	
-	/**
-	 * Create command-bar alternative element (JButton\Filler) according to the given action class.
-	 */
-	private static Object createCommandBarAlternativeElementForAction(Class actionClass) {
-		return actionClass == null ?
-				Box.createHorizontalGlue() :
-				CommandBar.createCommandBarButton(ActionManager.getActionInstance(actionClass));
+	private Collection initCommandBarActionsList() {
+		Class[] commandBarActionClasses = CommandBarAttributes.getActions();
+		int nbCommandBarActionClasses = commandBarActionClasses.length;
+		for (int i=0; i<nbCommandBarActionClasses; ++i)
+			commandBarButtons.add(createDisplayableCommandBarButton(commandBarActionClasses[i]));
+		
+		commandBarButtonsList = new DynamicList(commandBarButtons); 
+		
+		// Set lists cells renderer
+		commandBarButtonsList.setCellRenderer(new CommandBarButtonListCellRenderer());
+		// Horizontal layout
+		commandBarButtonsList.setLayoutOrientation(JList.HORIZONTAL_WRAP);
+		// All buttons appear in one row
+		commandBarButtonsList.setVisibleRowCount(1);
+		// Drag operations are supported
+		commandBarButtonsList.setDragEnabled(true);
+		// Can select only button at a time
+		commandBarButtonsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		// Set transfer handler
+		commandBarButtonsList.setTransferHandler(new CommandBarActionsListTransferHandler());
+		// Set list's background color
+		commandBarButtonsList.setBackground(JBUTTON_BACKGROUND_COLOR);
+
+		// Add drop-target-listener to the list.
+		try {
+			commandBarButtonsList.getDropTarget().addDropTargetListener(new DropTargetListener() {
+
+				public void dragEnter(DropTargetDragEvent dtde) { }
+
+				public void dragExit(DropTargetEvent dte) {
+					selectedCommandBarButtonIndex = -2;
+					commandBarButtonsList.repaint();
+				}
+
+				public void dragOver(DropTargetDragEvent dtde) {
+					int index;
+					int newSide = 0;
+					
+					if (canImport) {
+						Point dropLocation = dtde.getLocation();
+						index = commandBarButtonsList.locationToIndex(dropLocation);
+						Point cellLocation = commandBarButtonsList.indexToLocation(index);
+						newSide = cellLocation.x + BUTTON_PREFERRED_SIZE.width / 2 > dropLocation.x ? LEFT : RIGHT;
+					}
+					else
+						index = -2;
+					
+					if (index != selectedCommandBarButtonIndex || selectedCommandBarButtonSide != newSide) {
+						selectedCommandBarButtonIndex = index;
+						selectedCommandBarButtonSide = newSide;
+						commandBarButtonsList.repaint();
+					}
+				}
+
+				public void drop(DropTargetDropEvent dtde) {
+					if (!isImported)
+						return;
+					
+					// get the mouse position when the drop operation happened
+					Point dropLocation = dtde.getLocation();
+					// convert the above mouse position to the corresponding cell index in the command bar regular buttons list
+					int index = commandBarButtonsList.locationToIndex(dropLocation);
+					// get the cell position 
+					Point cellLocation = commandBarButtonsList.indexToLocation(index);
+					if (cellLocation.x + BUTTON_PREFERRED_SIZE.width / 2 < dropLocation.x)
+						index++;
+
+					commandBarButtons.add(index, transferedButton);
+					commandBarAlternativeButtons.add(index, transferedButtonProperties.getSource() == COMMAND_BAR_BUTTONS_LIST_ID ?
+																commandBarAlternativeButtons.remove(transferedButtonProperties.getIndex()) :
+																null);
+					
+					commandBarButtonsList.ensureIndexIsVisible(index);
+				}
+
+				public void dropActionChanged(DropTargetDragEvent dtde) { }
+				
+			});
+		} catch (TooManyListenersException e) {
+			// Should never happen
+			e.printStackTrace();
+		}
+		
+		return Arrays.asList(commandBarActionClasses);
 	}
 	
 	private Collection initCommandBarAlternateActionsList() {
 		Class[] commandBarActionClasses = CommandBarAttributes.getAlternateActions();
 		int nbCommandBarActionClasses = commandBarActionClasses.length;
 		for (int i=0; i<nbCommandBarActionClasses; ++i)
-			commandBarAlternativeButtons.add(createCommandBarAlternativeElementForAction(commandBarActionClasses[i]));
+			commandBarAlternativeButtons.add(createDisplayableCommandBarButton(commandBarActionClasses[i]));
 		
 		commandBarAlternativeButtonsList = new DynamicList(commandBarAlternativeButtons);
 		
+		// Set lists cells renderer
 		commandBarAlternativeButtonsList.setCellRenderer(new CommandBarAlternativeButtonListRenderer());
+		// Horizontal layout
 		commandBarAlternativeButtonsList.setLayoutOrientation(JList.HORIZONTAL_WRAP);
+		// All buttons appear in one row
 		commandBarAlternativeButtonsList.setVisibleRowCount(1);
+		// Drag operations are supported
 		commandBarAlternativeButtonsList.setDragEnabled(true);
+		// Can select only button at a time
 		commandBarAlternativeButtonsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		// Set transfer handler
 		commandBarAlternativeButtonsList.setTransferHandler(new CommandBarAlternateActionsListTransferHandler());
-		commandBarAlternativeButtonsList.setBackground(UIManager.getColor("jbutton.background"));
+		// Set list's background color
+		commandBarAlternativeButtonsList.setBackground(JBUTTON_BACKGROUND_COLOR);
 		
 		try {
 			commandBarAlternativeButtonsList.getDropTarget().addDropTargetListener((new DropTargetListener() {
@@ -303,7 +396,7 @@ public class CommandBarDialog extends CustomizeDialog {
 		while(sortedActionClassesIterator.hasNext()) {
 			Class actionClass = (Class) sortedActionClassesIterator.next();
 			if (!usedActions.contains(actionClass))
-				insertInOrder(commandBarAvailableButtons, CommandBar.createCommandBarButton(ActionManager.getActionInstance(actionClass)));			
+				insertInOrder(commandBarAvailableButtons, createDisplayableCommandBarButton(actionClass));			
 		}
 
 		commandBarAvailableButtonsList = new DynamicHorizontalWrapList(commandBarAvailableButtons, BUTTON_PREFERRED_SIZE.width, 6);
@@ -349,13 +442,17 @@ public class CommandBarDialog extends CustomizeDialog {
 		
 		JPanel modifierPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		modifierField = new RecordingKeyStrokeTextField(MODIFIER_FIELD_MAX_LENGTH, CommandBarAttributes.getModifier()) {
+			
 			public void setText(String t) {
 				super.setText(t);
 				componentChanged();
 			}
 			
 			public void keyPressed(KeyEvent e) {
-				if (e.getKeyCode() != KeyEvent.VK_ENTER)
+				int pressedKeyCode = e.getKeyCode();
+				// Accept modifier keys only
+				if (pressedKeyCode == KeyEvent.VK_CONTROL || pressedKeyCode == KeyEvent.VK_ALT
+						|| pressedKeyCode == KeyEvent.VK_META || pressedKeyCode == KeyEvent.VK_SHIFT)
 					super.keyPressed(e);
 			}
 		};
@@ -367,128 +464,43 @@ public class CommandBarDialog extends CustomizeDialog {
 		return panel;
 	}
 	
-	private Collection initCommandBarActionsList() {
-		Class[] commandBarActionClasses = CommandBarAttributes.getActions();
-		int nbCommandBarActionClasses = commandBarActionClasses.length;
-		for (int i=0; i<nbCommandBarActionClasses; ++i)
-			commandBarButtons.add(CommandBar.createCommandBarButton(ActionManager.getActionInstance(commandBarActionClasses[i])));
-		
-		commandBarButtonsList = new DynamicList(commandBarButtons); 
-		
-		// Set lists cells renderer
-		commandBarButtonsList.setCellRenderer(new CommandBarButtonListCellRenderer());
-		// Horizontal layout
-		commandBarButtonsList.setLayoutOrientation(JList.HORIZONTAL_WRAP);
-		// All buttons appear in one row
-		commandBarButtonsList.setVisibleRowCount(1);
-		// Drag operations are supported
-		commandBarButtonsList.setDragEnabled(true);
-		// Can select only button at a time
-		commandBarButtonsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		// Set transfer handler
-		commandBarButtonsList.setTransferHandler(new CommandBarActionsListTransferHandler());
-
-		// Add drop-target-listener to the list.
-		try {
-			commandBarButtonsList.getDropTarget().addDropTargetListener(new DropTargetListener() {
-
-				public void dragEnter(DropTargetDragEvent dtde) { }
-
-				public void dragExit(DropTargetEvent dte) {
-					selectedCommandBarButtonIndex = -2;
-					commandBarButtonsList.repaint();
-				}
-
-				public void dragOver(DropTargetDragEvent dtde) {
-					int index;
-					int newSide = 0;
-					
-					if (canImport) {
-						Point dropLocation = dtde.getLocation();
-						index = commandBarButtonsList.locationToIndex(dropLocation);
-						Point cellLocation = commandBarButtonsList.indexToLocation(index);
-						newSide = cellLocation.x + BUTTON_PREFERRED_SIZE.width / 2 > dropLocation.x ? LEFT : RIGHT;
-					}
-					else
-						index = -2;
-					
-					if (index != selectedCommandBarButtonIndex || selectedCommandBarButtonSide != newSide) {
-						selectedCommandBarButtonIndex = index;
-						selectedCommandBarButtonSide = newSide;
-						commandBarButtonsList.repaint();
-					}
-				}
-
-				public void drop(DropTargetDropEvent dtde) {
-					if (!isImported)
-						return;
-					
-					// get the mouse position when the drop operation happened
-					Point dropLocation = dtde.getLocation();
-					// convert the above mouse position to the corresponding cell index in the command bar regular buttons list
-					int index = commandBarButtonsList.locationToIndex(dropLocation);
-					// get the cell position 
-					Point cellLocation = commandBarButtonsList.indexToLocation(index);
-					if (cellLocation.x + BUTTON_PREFERRED_SIZE.width / 2 < dropLocation.x)
-						index++;
-
-					commandBarButtons.add(index, transferedButton);
-					commandBarAlternativeButtons.add(index, transferedButtonProperties.getSource() == COMMAND_BAR_BUTTONS_LIST_ID ?
-																commandBarAlternativeButtons.remove(transferedButtonProperties.getIndex()) :
-																Box.createHorizontalGlue());
-					
-					commandBarButtonsList.ensureIndexIsVisible(index);
-				}
-
-				public void dropActionChanged(DropTargetDragEvent dtde) { }
-				
-			});
-		} catch (TooManyListenersException e) {
-			// Should never happen
-			e.printStackTrace();
-		}
-		
-		return Arrays.asList(commandBarActionClasses);
-	}
-	
 	private class CommandBarButtonListCellRenderer implements ListCellRenderer {
 		
 		public Component getListCellRendererComponent(JList list, Object value,
 				int index, boolean isSelected, boolean cellHasFocus) {
-			JButton button = createDisplayableButton((JButton) value);
 
+			Border insertionIndicatingBorder;
 			if (selectedCommandBarButtonSide == LEFT ) {
 				if (index == selectedCommandBarButtonIndex)
-					button.setBorder(BorderFactory.createCompoundBorder(
-							BorderFactory.createCompoundBorder(
-									BorderFactory.createMatteBorder(0, 2, 0, 0, PAINTED_BORDER_COLOR),
-									BorderFactory.createMatteBorder(0, 0, 0, 2, JBUTTON_BACKGROUND_COLOR)),
-									button.getBorder()));
+					insertionIndicatingBorder = (BorderFactory.createCompoundBorder(
+							BorderFactory.createMatteBorder(0, 2, 0, 0, PAINTED_BORDER_COLOR),
+							BorderFactory.createMatteBorder(0, 0, 0, 2, JBUTTON_BACKGROUND_COLOR)));
 				else 
-					button.setBorder(BorderFactory.createCompoundBorder(
-							BorderFactory.createMatteBorder(0, 2, 0, 2, JBUTTON_BACKGROUND_COLOR),
-							button.getBorder()));
+					insertionIndicatingBorder = (BorderFactory.createMatteBorder(0, 2, 0, 2, JBUTTON_BACKGROUND_COLOR));
 			}
 			else { // side == RIGHT
 				if (index == selectedCommandBarButtonIndex + 1)
-					button.setBorder(BorderFactory.createCompoundBorder(
-							BorderFactory.createCompoundBorder(
-									BorderFactory.createMatteBorder(0, 2, 0, 0, PAINTED_BORDER_COLOR),
-									BorderFactory.createMatteBorder(0, 0, 0, 2, JBUTTON_BACKGROUND_COLOR)),
-									button.getBorder()));
+					insertionIndicatingBorder = (BorderFactory.createCompoundBorder(
+							BorderFactory.createMatteBorder(0, 2, 0, 0, PAINTED_BORDER_COLOR),
+							BorderFactory.createMatteBorder(0, 0, 0, 2, JBUTTON_BACKGROUND_COLOR)));
 				else if (index == selectedCommandBarButtonIndex && selectedCommandBarButtonIndex == commandBarButtons.size() - 1)
-					button.setBorder(BorderFactory.createCompoundBorder(
-							BorderFactory.createCompoundBorder(
-									BorderFactory.createMatteBorder(0, 2, 0, 0, JBUTTON_BACKGROUND_COLOR),
-									BorderFactory.createMatteBorder(0, 0, 0, 2, PAINTED_BORDER_COLOR)),
-									button.getBorder()));
+					insertionIndicatingBorder = (BorderFactory.createCompoundBorder(
+							BorderFactory.createMatteBorder(0, 2, 0, 0, JBUTTON_BACKGROUND_COLOR),
+							BorderFactory.createMatteBorder(0, 0, 0, 2, PAINTED_BORDER_COLOR)));
 				else 
-					button.setBorder(BorderFactory.createCompoundBorder(
-							BorderFactory.createMatteBorder(0, 2, 0, 2, JBUTTON_BACKGROUND_COLOR),
-							button.getBorder()));
+					insertionIndicatingBorder = (BorderFactory.createMatteBorder(0, 2, 0, 2, JBUTTON_BACKGROUND_COLOR));
 			}
-			
-			return button;
+
+			if (value == null) {
+				Box.Filler filler = createBoxFiller();
+				filler.setBorder(insertionIndicatingBorder);
+				return filler;
+			}
+			else {
+				CommandBarButton button = (CommandBarButton) value;
+				button.setBorder(BorderFactory.createCompoundBorder(insertionIndicatingBorder, JBUTTON_BORDER));
+				return button;
+			}
 		}
 	}
 	
@@ -497,22 +509,17 @@ public class CommandBarDialog extends CustomizeDialog {
 		public Component getListCellRendererComponent(JList list, Object value,
 				int index, boolean isSelected, boolean cellHasFocus) {
 			
-			if (value instanceof JButton) {
-				JButton button = createDisplayableButton(((JButton) value));
+			if (value == null) {
+				Box.Filler filler = createBoxFiller();
+				filler.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, index == selectedCommandBarAlternateButtonIndex ? PAINTED_BORDER_COLOR : JBUTTON_BACKGROUND_COLOR ));
+				return filler;
+			}
+			else {	
+				CommandBarButton button = (CommandBarButton) value;
 				button.setBorder(BorderFactory.createCompoundBorder(
 						BorderFactory.createMatteBorder(2, 2, 2, 2, index == selectedCommandBarAlternateButtonIndex ? PAINTED_BORDER_COLOR : JBUTTON_BACKGROUND_COLOR),
-						button.getBorder()));
-				
+						JBUTTON_BORDER));
 				return button;
-			}
-			else {
-				Box.Filler filler = (Filler) value;
-				filler.setPreferredSize(BUTTON_PREFERRED_SIZE);
-				filler.setBorder(BorderFactory.createLineBorder(JBUTTON_BACKGROUND_COLOR , 0));
-				filler.setBorder(BorderFactory.createCompoundBorder(
-						BorderFactory.createMatteBorder(2, 2, 2, 2, index == selectedCommandBarAlternateButtonIndex ? PAINTED_BORDER_COLOR : JBUTTON_BACKGROUND_COLOR ),
-						filler.getBorder()));
-				return filler;
 			}
 		}
 	}
@@ -521,11 +528,11 @@ public class CommandBarDialog extends CustomizeDialog {
 
 		public Component getListCellRendererComponent(JList list, Object value,
 				int index, boolean isSelected, boolean cellHasFocus) {
+			
 			JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-			JButton button = createDisplayableButton((JButton) value);
+			CommandBarButton button = (CommandBarButton) value;
 			panel.add(button);
 			panel.setToolTipText(button.getToolTipText());
-			
 			return panel;
 		}
 	}	
@@ -546,12 +553,13 @@ public class CommandBarDialog extends CustomizeDialog {
 	protected static class TransferableListData implements Transferable {
 		
 		private DataIndexAndSource data;
-		private DataFlavor flavor;
+		private DataFlavor[] transferDataFlavors;
 		
 		public TransferableListData(int index, JComponent selectedValue, int source) {
 			try {
-				flavor = new DataFlavor(DataFlavor.javaJVMLocalObjectMimeType +
-						";class=\"" + selectedValue.getClass().getName() + "\"");
+				transferDataFlavors = selectedValue == null ?
+						new DataFlavor[0] :
+						new DataFlavor[]{new DataFlavor(DataFlavor.javaJVMLocalObjectMimeType + ";class=\"" + selectedValue.getClass().getName() + "\"")};
 			} catch (ClassNotFoundException e) {
 				e.printStackTrace();
 			}
@@ -561,9 +569,9 @@ public class CommandBarDialog extends CustomizeDialog {
 
 		public Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException, IOException { return data; }
 
-		public DataFlavor[] getTransferDataFlavors() { return new DataFlavor[] {flavor}; }
+		public DataFlavor[] getTransferDataFlavors() { return transferDataFlavors; }
 
-		public boolean isDataFlavorSupported(DataFlavor flavor) { return this.flavor.equals(flavor); }
+		public boolean isDataFlavorSupported(DataFlavor flavor) { return transferDataFlavors.length > 0 && transferDataFlavors[0].equals(flavor); }
 	}
 
 	
@@ -574,7 +582,7 @@ public class CommandBarDialog extends CustomizeDialog {
 		public ActionListTransferHandler() {
 			try {
 				flavor = new DataFlavor(DataFlavor.javaJVMLocalObjectMimeType +
-				           ";class=\"" + com.mucommander.ui.button.NonFocusableButton.class.getName() + "\"");
+				           ";class=\"" + CommandBarButton.class.getName() + "\"");
 			} catch (ClassNotFoundException e) {
 				e.printStackTrace();
 			}
@@ -594,6 +602,8 @@ public class CommandBarDialog extends CustomizeDialog {
 		}
 		
 		protected Transferable createTransferable(JComponent component) {
+			if (component == null)
+				return null;
 			JList list = (JList) component;
 			return new TransferableListData(list.getSelectedIndex(), (JComponent) list.getSelectedValue(), getListId());
 		}
@@ -641,7 +651,7 @@ public class CommandBarDialog extends CustomizeDialog {
 				int transferedIndex = transferedButtonProperties.getIndex();
 				transferedButton = (JButton) commandBarAlternativeButtons.remove(transferedIndex);
 				
-				commandBarAlternativeButtons.add(transferedIndex, Box.createHorizontalGlue());
+				commandBarAlternativeButtons.add(transferedIndex, null);
 			}
 			
 			return isImported = true;
@@ -676,7 +686,7 @@ public class CommandBarDialog extends CustomizeDialog {
 				int transferedIndex = transferedButtonProperties.getIndex();
 				transferedButton = (JButton) commandBarAlternativeButtons.remove(transferedIndex);
 				
-				commandBarAlternativeButtons.add(transferedIndex, Box.createHorizontalGlue());
+				commandBarAlternativeButtons.add(transferedIndex, null);
 			}
 			
 			return isImported = true;
@@ -720,14 +730,13 @@ public class CommandBarDialog extends CustomizeDialog {
 					if (component instanceof JButton) {
 						insertionPlace = insertInOrder(commandBarAvailableButtons, (JButton) component);
 						
-						commandBarAlternativeButtons.add(transferedIndex, Box.createHorizontalGlue());
+						commandBarAlternativeButtons.add(transferedIndex, null);
 					}
 				}
 				
 				commandBarAvailableButtonsList.ensureIndexIsVisible(insertionPlace);
 				isImported = true;
 			}
-			
 			
 			return isImported;
 		}
@@ -739,11 +748,21 @@ public class CommandBarDialog extends CustomizeDialog {
 	///// Helper methods /////
 	//////////////////////////
 	
-	private static JButton createDisplayableButton(JButton button) {
-		JButton displayableButton = new JButton(button.getText(), button.getIcon());
-		displayableButton.setToolTipText(button.getToolTipText());
-		displayableButton.setPreferredSize(BUTTON_PREFERRED_SIZE);
-		return displayableButton;
+	private static CommandBarButton createDisplayableCommandBarButton(Class actionClass) {
+		CommandBarButton button = null;
+		if (actionClass != null) {
+			button = CommandBarButton.create(ActionManager.getActionInstance(actionClass));
+			button.setEnabled(true);
+			button.setPreferredSize(BUTTON_PREFERRED_SIZE);
+		}
+		
+		return button;
+	}
+	
+	private static Filler createBoxFiller() {
+		Box.Filler filler = (Filler) Box.createHorizontalGlue();
+		filler.setPreferredSize(BUTTON_PREFERRED_SIZE);		
+		return filler;
 	}
 	
 	private static int insertInOrder(Vector vector, JButton element) {
