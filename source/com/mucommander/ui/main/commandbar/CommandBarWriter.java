@@ -95,12 +95,14 @@ class CommandBarWriter extends CommandBarIO implements CommandBarAttributesListe
 		
 		private void write(Class[] actions, Class[] alternativeActions, KeyStroke modifier) throws IOException {
 			try {
+				writer.writeCommentLine("See http://trac.mucommander.com/wiki/CommandBar for information on how to customize this file");
+				
 				XmlAttributes rootElementAttributes = new XmlAttributes();
 				rootElementAttributes.add(MODIFIER_ATTRIBUTE, KeyStrokeUtils.getKeyStrokeRepresentation(modifier));
-				rootElementAttributes.add(VERSION_ATTRIBUTE, RuntimeConstants.VERSION);
+				rootElementAttributes.add(VERSION_ATTRIBUTE, "0.8.3"); // TODO: "0.8.3" <=> RuntimeConstants.VERSION
 
-    			writer.startElement(ROOT_ELEMENT, rootElementAttributes, true);
-
+    			writer.startElement(ROOT_ELEMENT, rootElementAttributes, true);    			
+    			
     			int nbCommandBarActions = actions.length;
     			for (int i=0; i<nbCommandBarActions; ++i)
     				write(actions[i], alternativeActions[i]);

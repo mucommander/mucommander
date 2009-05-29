@@ -182,7 +182,7 @@ public class XmlWriter {
      * @see                #writeStandAloneElement(String,XmlAttributes)
      */
     public void startElement(String name) throws IOException {startElement(name, false, null, false);}
-
+    
     /**
      * Writes an element opening sequence.
      * <p>
@@ -215,6 +215,17 @@ public class XmlWriter {
      */
     public void writeStandAloneElement(String name) throws IOException {startElement(name, true, null, true);}
 
+    /**
+     * Writes a one-line comment.
+     * 
+     * @param comment      comment description.
+     * @throws IOException if an I/O error occurs.
+     */
+    public void writeCommentLine(String comment) throws IOException {
+        out.print("<!-- " + comment + " -->");
+        println();
+    }
+    
     /**
      * Writes an element opening sequence.
      * <p>
