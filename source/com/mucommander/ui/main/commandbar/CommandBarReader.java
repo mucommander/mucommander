@@ -37,7 +37,7 @@ import com.mucommander.ui.action.ActionManager;
  *
  * @author Maxence Bernard, Arik Hadas
  */
-public class CommandBarReader extends CommandBarIO {
+class CommandBarReader extends CommandBarIO {
 
     /** Temporarily used for XML parsing */
     private Vector actionsV;

@@ -32,9 +32,9 @@ import com.mucommander.runtime.OsFamilies;
 public class KeyStrokeUtils {
 
 	private final static String SHIFT_MODIFIER_STRING = KeyEvent.getKeyModifiersText(KeyEvent.SHIFT_MASK);
-    private final static String CTRL_MODIFIER_STRING = KeyEvent.getKeyModifiersText(KeyEvent.CTRL_MASK);
-    private final static String ALT_MODIFIER_STRING = KeyEvent.getKeyModifiersText(KeyEvent.ALT_MASK);
-    private final static String META_MODIFIER_STRING = KeyEvent.getKeyModifiersText(KeyEvent.META_MASK);
+    private final static String CTRL_MODIFIER_STRING  = KeyEvent.getKeyModifiersText(KeyEvent.CTRL_MASK);
+    private final static String ALT_MODIFIER_STRING   = KeyEvent.getKeyModifiersText(KeyEvent.ALT_MASK);
+    private final static String META_MODIFIER_STRING  = KeyEvent.getKeyModifiersText(KeyEvent.META_MASK);
     
 	
     /**

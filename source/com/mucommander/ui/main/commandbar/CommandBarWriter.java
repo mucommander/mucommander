@@ -31,27 +31,59 @@ import com.mucommander.xml.XmlAttributes;
 import com.mucommander.xml.XmlWriter;
 
 /**
+ * This class is responsible for writing the command-bar attributes (actions and modifier).
  * 
  * @author Arik Hadas
  */
-public class CommandBarWriter extends CommandBarIO {
+class CommandBarWriter extends CommandBarIO implements CommandBarAttributesListener {
 
-	CommandBarWriter() throws IOException {
-		Class[] commandBarActions = CommandBarAttributes.getActions();
-		Class[] commandBarAlterativeActions = CommandBarAttributes.getAlternateActions();
-		KeyStroke commandBarModifier = CommandBarAttributes.getModifier();
-		
-		BackupOutputStream bos = null;
+	/** Flag that indicates if are there unsaved command-bar changes */
+	protected boolean isCommandBarChanged = false;
+	
+	////// Singleton
+	private static CommandBarWriter instance;
+	
+	public static CommandBarWriter create() {
+		if (instance == null)
+			instance = new CommandBarWriter();
+		return instance;
+	}
+	
+	private CommandBarWriter() {
+		CommandBarAttributes.addCommandBarAttributesListener(this);
+	}
+	
+	public void write() throws IOException {
+		if (isCommandBarChanged) {
+			Class[] commandBarActions = CommandBarAttributes.getActions();
+			Class[] commandBarAlterativeActions = CommandBarAttributes.getAlternateActions();
+			KeyStroke commandBarModifier = CommandBarAttributes.getModifier();
+			
+			BackupOutputStream bos = null;
 
-		try {
-			bos = new BackupOutputStream(getDescriptionFile());
-			new Writer(bos).write(commandBarActions, commandBarAlterativeActions, commandBarModifier);
-			isCommandBarChanged = false;
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			bos.close();
+			try {
+				bos = new BackupOutputStream(getDescriptionFile());
+				new Writer(bos).write(commandBarActions, commandBarAlterativeActions, commandBarModifier);
+				isCommandBarChanged = false;
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				bos.close();
+			}
 		}
+		else if(Debug.ON) Debug.trace("Command bar not modified, skip saving.");
+	}
+	
+	////////////////////////////////////////////////
+    ///// CommandBarAttributesListener methods /////
+    ////////////////////////////////////////////////
+    
+    public void CommandBarActionsChanged() {
+    	isCommandBarChanged = true;
+	}
+
+	public void CommandBarModifierChanged() {
+		isCommandBarChanged = true;
 	}
 	
 	private static class Writer {

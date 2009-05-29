@@ -30,10 +30,11 @@ import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
 
 /**
+ * This class contains the common things for reading and writing the command-bar actions and modifier.
  * 
  * @author Arik Hadas
  */
-public abstract class CommandBarIO extends DefaultHandler implements CommandBarAttributesListener {
+public abstract class CommandBarIO extends DefaultHandler {
 	
 	/* Variables used for XML parsing */
 	/** Root element */
@@ -57,12 +58,8 @@ public abstract class CommandBarIO extends DefaultHandler implements CommandBarA
     /** Command bar descriptor file used when calling {@link #loadCommandBar()} */
 	protected static AbstractFile commandBarFile;
 	
-	/** Flag that indicates if are there unsaved command-bar changes */
-	protected static boolean isCommandBarChanged = false;
-	
-	protected CommandBarIO() {
-		CommandBarAttributes.addCommandBarAttributesListener(this);
-	}
+	/** CommandBarWriter instance */
+	private static CommandBarWriter commandBarWriter;
 	
 	/**
      * Parses the XML file describing the command bar's buttons and associated actions.
@@ -76,6 +73,9 @@ public abstract class CommandBarIO extends DefaultHandler implements CommandBarA
     		new CommandBarReader();
     	else
     		if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(COMMAND_BAR_RESOURCE_PATH + " was not found");
+    	
+    	// initialize the writer after setting the command-bar initial attributes:
+    	commandBarWriter = CommandBarWriter.create();
     }
     
     /**
@@ -84,9 +84,10 @@ public abstract class CommandBarIO extends DefaultHandler implements CommandBarA
      * @throws IOException
      */
     public static void saveCommandBar() throws IOException {
-    	if (isCommandBarChanged)
-    		new CommandBarWriter();
-    	else if(Debug.ON) Debug.trace("Command bar not modified, skip saving.");
+    	if (commandBarWriter != null)
+    		commandBarWriter.write();
+    	else
+    		Debug.trace("Error: Could not save command-bar. writer is null");
     }
 	
 	/**
@@ -130,17 +131,5 @@ public abstract class CommandBarIO extends DefaultHandler implements CommandBarA
             return PlatformManager.getPreferencesFolder().getChild(DEFAULT_COMMAND_BAR_FILE_NAME);
         return commandBarFile;
     }
-    
-    ////////////////////////////////////////////////
-    ///// CommandBarAttributesListener methods /////
-    ////////////////////////////////////////////////
-    
-    public void CommandBarActionsChanged() {
-    	isCommandBarChanged = true;
-	}
-
-	public void CommandBarModifierChanged() {
-		isCommandBarChanged = true;
-	}
 }
 
