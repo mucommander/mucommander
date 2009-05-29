@@ -153,7 +153,7 @@ public class ActionManager {
     	registerAction(SetSameFolderAction.class,                new SetSameFolderAction.Factory());
     	registerAction(ShowAboutAction.class,          		     new ShowAboutAction.Factory());
     	registerAction(ShowBookmarksQLAction.class,              new ShowBookmarksQLAction.Factory());
-    	registerAction(ShowCommandBarCustomizationAction.class,  new ShowCommandBarCustomizationAction.Factory());
+    	registerAction(CustomizeCommandBarAction.class,  new CustomizeCommandBarAction.Factory());
     	registerAction(ShowFilePropertiesAction.class,           new ShowFilePropertiesAction.Factory());
     	registerAction(ShowKeyboardShortcutsAction.class,        new ShowKeyboardShortcutsAction.Factory());
     	registerAction(ShowParentFoldersQLAction.class,          new ShowParentFoldersQLAction.Factory());

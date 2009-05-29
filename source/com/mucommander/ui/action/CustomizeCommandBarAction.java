@@ -28,9 +28,9 @@ import com.mucommander.ui.main.MainFrame;
  * 
  * @author Arik Hadas
  */
-public class ShowCommandBarCustomizationAction extends MuAction implements InvokesDialog {
+public class CustomizeCommandBarAction extends MuAction implements InvokesDialog {
 	
-	public ShowCommandBarCustomizationAction(MainFrame mainFrame, Hashtable properties) {
+	public CustomizeCommandBarAction(MainFrame mainFrame, Hashtable properties) {
         super(mainFrame, properties);
     }
 
@@ -39,7 +39,7 @@ public class ShowCommandBarCustomizationAction extends MuAction implements Invok
     public static class Factory implements MuActionFactory {
 
 		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
-			return new ShowCommandBarCustomizationAction(mainFrame, properties);
+			return new CustomizeCommandBarAction(mainFrame, properties);
 		}
     }
 }

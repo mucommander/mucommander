@@ -24,7 +24,6 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.io.File;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
@@ -34,7 +33,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import java.util.Vector;
 
 import javax.swing.BorderFactory;
 import javax.swing.ComboBoxModel;
@@ -55,8 +53,6 @@ import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 
 import com.mucommander.Debug;
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.util.ResourceLoader;
 import com.mucommander.runtime.JavaVersions;
 import com.mucommander.runtime.OsFamilies;
 import com.mucommander.runtime.OsVersions;
@@ -65,8 +61,8 @@ import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.dialog.pref.component.PrefTable;
 import com.mucommander.ui.dialog.pref.general.ShortcutsPanel.TooltipBar;
-import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.WindowManager;
+import com.mucommander.ui.text.KeyStrokeUtils;
 
 /**
  * This class is the table in which the actions and their shortcuts are present in the ShortcutsPanel.
@@ -196,7 +192,7 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 	private void setAccelerator(KeyStroke keyStroke, int row, Object[][] model) {
 		if (keyStroke != null) {
 			rowToAccelerator.put(Integer.valueOf(row), keyStroke);
-			model[row][ACCELERATOR_COLUMN_INDEX] = MuAction.getKeyStrokeRepresentation(keyStroke);
+			model[row][ACCELERATOR_COLUMN_INDEX] = KeyStrokeUtils.getKeyStrokeDisplayableRepresentation(keyStroke);
 		}
 		else {
 			rowToAccelerator.remove(Integer.valueOf(row));
@@ -207,7 +203,7 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 	private void setAlternativeAccelerator(KeyStroke keyStroke, int row, Object[][] model) {
 		if (keyStroke != null) {
 			rowToAlternateAccelerator.put(Integer.valueOf(row), keyStroke);
-			model[row][ALTERNATE_ACCELERATOR_COLUMN_INDEX] = MuAction.getKeyStrokeRepresentation(keyStroke);
+			model[row][ALTERNATE_ACCELERATOR_COLUMN_INDEX] = KeyStrokeUtils.getKeyStrokeDisplayableRepresentation(keyStroke);
 		}
 		else {
 			rowToAlternateAccelerator.remove(Integer.valueOf(row));
@@ -425,7 +421,7 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 	        Class action = ActionKeymap.getRegisteredActionClassForKeystroke(pressedKeyStroke);
 	        if (action == null || action.equals(rowToAction.get(Integer.valueOf(getSelectedRow())))) {
 	        	lastKeyStroke = pressedKeyStroke;
-	        	setText(MuAction.getKeyStrokeRepresentation(lastKeyStroke));
+	        	setText(KeyStrokeUtils.getKeyStrokeDisplayableRepresentation(lastKeyStroke));
 	        }
 	        else {
 	        	tooltipBar.showKeystrokeAlreadyInUseMsg(pressedKeyStroke, ActionManager.getActionInstance(action , WindowManager.getCurrentMainFrame()));

@@ -19,6 +19,19 @@
 
 package com.mucommander.ui.dialog.help;
 
+import java.awt.BorderLayout;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
+import javax.swing.KeyStroke;
+
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.action.MuAction;
@@ -26,11 +39,7 @@ import com.mucommander.ui.dialog.DialogToolkit;
 import com.mucommander.ui.dialog.FocusDialog;
 import com.mucommander.ui.layout.XAlignedComponentPanel;
 import com.mucommander.ui.main.MainFrame;
-
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import com.mucommander.ui.text.KeyStrokeUtils;
 
 
 /**
@@ -232,11 +241,11 @@ public class ShortcutsDialog extends FocusDialog implements ActionListener {
             if(shortcut==null)
                 continue;
 
-            shortcutsRep = MuAction.getKeyStrokeRepresentation(shortcut);
+            shortcutsRep = KeyStrokeUtils.getKeyStrokeDisplayableRepresentation(shortcut);
 
             shortcut = action.getAlternateAccelerator();
             if(shortcut!=null)
-                shortcutsRep += " / "+ MuAction.getKeyStrokeRepresentation(shortcut);
+                shortcutsRep += " / "+ KeyStrokeUtils.getKeyStrokeDisplayableRepresentation(shortcut);
 
             desc = action.getToolTipText();
             if(desc==null)

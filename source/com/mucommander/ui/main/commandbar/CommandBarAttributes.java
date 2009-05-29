@@ -127,7 +127,7 @@ public class CommandBarAttributes {
     	synchronized(listeners) {listeners.remove(listener);}
     }
     
-    public static void fireActionsChanged() {
+    protected static void fireActionsChanged() {
     	synchronized(listeners) {
             // Iterate on all listeners
             Iterator iterator = listeners.keySet().iterator();
@@ -136,7 +136,7 @@ public class CommandBarAttributes {
         }
     }
     
-    public static void fireModifierChanged() {
+    protected static void fireModifierChanged() {
     	synchronized(listeners) {
             // Iterate on all listeners
             Iterator iterator = listeners.keySet().iterator();

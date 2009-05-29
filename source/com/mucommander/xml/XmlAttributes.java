@@ -20,6 +20,7 @@ package com.mucommander.xml;
 
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.LinkedList;
 
 /**
  * Container for XML attributes.
@@ -29,23 +30,26 @@ import java.util.Iterator;
  * the {@link com.mucommander.xml.XmlWriter#startElement(String,XmlAttributes) element opening}
  * methods.
  * </p>
- * @author Nicolas Rinaudo
+ * @author Nicolas Rinaudo, Arik Hadas
  */
 public class XmlAttributes {
     // - Instance fields -------------------------------------------------
     // -------------------------------------------------------------------
     /** Contains the XML attributes. */
     private Hashtable attributes;
+    /** Contains the XML attribute names in the order they were added */
+    private LinkedList names;
+    
 
-
-
-    // - Initialisation --------------------------------------------------
+    // - Initialization --------------------------------------------------
     // -------------------------------------------------------------------
     /**
      * Builds a new, empty XmlAttributes instance.
      */
-    public XmlAttributes() {attributes = new Hashtable();}
-
+    public XmlAttributes() {
+    	attributes = new Hashtable();
+    	names = new LinkedList();
+    }
 
 
     // - Content handling ------------------------------------------------
@@ -61,18 +65,18 @@ public class XmlAttributes {
     /**
      * Clears the list of all previously defined attributes.
      */
-    public void clear() {attributes.clear();}
+    public void clear() {names.clear(); attributes.clear();}
 
     /**
      * Adds the specified attribute to this container.
      * @param name  name of the attribute to whose value should be set.
      * @param value value to which the attribute should be set.
      */
-    public void add(String name, String value) {attributes.put(name, value);}
+    public void add(String name, String value) {names.add(name); attributes.put(name, value);}
 
     /**
      * Returns an iterator on the attributes contained by this instance.
      * @return an iterator on the attributes contained by this instance.
      */
-    public Iterator names() {return attributes.keySet().iterator();}
+    public Iterator names() {return names.iterator();}
 }

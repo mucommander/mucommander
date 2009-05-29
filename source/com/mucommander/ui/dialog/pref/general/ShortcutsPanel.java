@@ -37,6 +37,7 @@ import javax.swing.UIManager;
 import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.dialog.pref.PreferencesDialog;
 import com.mucommander.ui.dialog.pref.PreferencesPanel;
+import com.mucommander.ui.text.KeyStrokeUtils;
 
 /**
  * 'Shortcuts' preferences panel.
@@ -139,7 +140,7 @@ public class ShortcutsPanel extends PreferencesPanel {
 		}
 		
 		public void showKeystrokeAlreadyInUseMsg(KeyStroke pressedKeyStroke, MuAction assignedAction) {
-			setText("This shortcut [" + MuAction.getKeyStrokeRepresentation(pressedKeyStroke)
+			setText("This shortcut [" + KeyStrokeUtils.getKeyStrokeDisplayableRepresentation(pressedKeyStroke)
 			+ "] is already assigned to '" + assignedAction.getLabel() + "'");
 			new Thread(this).start();
 		}

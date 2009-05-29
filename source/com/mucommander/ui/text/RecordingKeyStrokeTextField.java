@@ -30,8 +30,6 @@ import javax.swing.KeyStroke;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
 
-import com.mucommander.ui.action.MuAction;
-
 /**
  * <code>RecordingKeyStrokeTextField</code> is a text field that record a KeyStroke entered by the user.
  * 
@@ -56,7 +54,7 @@ public class RecordingKeyStrokeTextField extends JTextField implements FocusList
 		setSelectionColor(UIManager.getColor("jtextfield.background"));
 		setSelectedTextColor(getForeground());
 		// Use JTextField's "setText" method to set the initial KeyStroke in the text field
-		super.setText(MuAction.getKeyStrokeRepresentation(lastKeyStroke = keyStroke));
+		super.setText(KeyStrokeUtils.getKeyStrokeDisplayableRepresentation(lastKeyStroke = keyStroke));
 		
 		// Add listeners:
 		addFocusListener(this);
@@ -94,7 +92,7 @@ public class RecordingKeyStrokeTextField extends JTextField implements FocusList
 	public void keyPressed(KeyEvent e) {
 //		if(Debug.ON) Debug.trace("keyModifiers="+e.getModifiers()+" keyCode="+e.getKeyCode());
 		if (e.getKeyCode() != e.VK_ESCAPE)
-			setText(MuAction.getKeyStrokeRepresentation(lastKeyStroke = KeyStroke.getKeyStroke(e.getKeyCode(), 0)));
+			setText(KeyStrokeUtils.getKeyStrokeDisplayableRepresentation(lastKeyStroke = KeyStroke.getKeyStroke(e.getKeyCode(), 0)));
 		e.consume();
 	}
 

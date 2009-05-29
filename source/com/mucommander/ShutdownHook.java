@@ -24,6 +24,7 @@ import com.mucommander.command.CommandManager;
 import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.shell.ShellHistoryManager;
 import com.mucommander.ui.action.ActionKeymapIO;
+import com.mucommander.ui.main.commandbar.CommandBarIO;
 import com.mucommander.ui.main.tree.TreeIOThreadManager;
 import com.mucommander.ui.theme.ThemeManager;
 
@@ -109,6 +110,10 @@ public class ShutdownHook extends Thread {
         // Saves the action keymap.
         try { ActionKeymapIO.saveActionKeymap(); }
         catch(Exception e) {if(Debug.ON) Debug.trace("Failed to save action keymap: " + e);}
+        
+        // Saves the command bar.
+        try { CommandBarIO.saveCommandBar(); }
+        catch(Exception e) {if(Debug.ON) Debug.trace("Failed to save command bar: " + e); }
         
 
         // Shutdown tasks should only be performed once

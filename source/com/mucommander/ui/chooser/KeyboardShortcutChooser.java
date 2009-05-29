@@ -23,6 +23,7 @@ import com.mucommander.text.Translator;
 import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.combobox.ComboBoxListener;
 import com.mucommander.ui.combobox.SaneComboBox;
+import com.mucommander.ui.text.KeyStrokeUtils;
 
 import javax.swing.*;
 import javax.swing.text.AttributeSet;
@@ -144,7 +145,7 @@ if(Debug.ON) Debug.trace("keyCode="+ (currentKeyStroke==null?"null":""+currentKe
         if(currentKeyStroke==null || currentKeyStroke.getKeyCode()==0)
             textField.setText(noneString);
         else
-            textField.setText(MuAction.getKeyStrokeRepresentation(currentKeyStroke));
+            textField.setText(KeyStrokeUtils.getKeyStrokeDisplayableRepresentation(currentKeyStroke));
 
         updatingTextField = false;
     }

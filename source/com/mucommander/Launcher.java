@@ -503,7 +503,7 @@ public class Launcher {
 
         // Loads the CommandBar's description file
         printStartupMessage("Loading command bar description...");
-        try {CommandBarIO.loadDescriptionFile();}
+        try {CommandBarIO.loadCommandBar();}
         catch(Exception e) {printFileError("Could not load commandbar description", e, fatalWarnings);}
 
         // Loads the themes.

@@ -24,6 +24,7 @@ import java.io.IOException;
 
 import org.xml.sax.helpers.DefaultHandler;
 
+import com.mucommander.Debug;
 import com.mucommander.PlatformManager;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
@@ -32,7 +33,7 @@ import com.mucommander.file.FileFactory;
  * 
  * @author Arik Hadas
  */
-public abstract class CommandBarIO extends DefaultHandler {
+public abstract class CommandBarIO extends DefaultHandler implements CommandBarAttributesListener {
 	
 	/* Variables used for XML parsing */
 	/** Root element */
@@ -53,25 +54,43 @@ public abstract class CommandBarIO extends DefaultHandler {
     /** Path to the command bar descriptor resource file within the application JAR file */
 	protected final static String COMMAND_BAR_RESOURCE_PATH = "/" + DEFAULT_COMMAND_BAR_FILE_NAME;
 
-    /** Command bar descriptor file used when calling {@link #loadDescriptionFile()} */
+    /** Command bar descriptor file used when calling {@link #loadCommandBar()} */
 	protected static AbstractFile commandBarFile;
+	
+	/** Flag that indicates if are there unsaved command-bar changes */
+	protected static boolean isCommandBarChanged = false;
+	
+	protected CommandBarIO() {
+		CommandBarAttributes.addCommandBarAttributesListener(this);
+	}
 	
 	/**
      * Parses the XML file describing the command bar's buttons and associated actions.
      * If the file doesn't exist yet, it is copied from the default resource file within the JAR.
      *
-     * This method must be called before instanciating CommandBar for the first time.
+     * This method must be called before instantiating CommandBar for the first time.
      */
-    public static void loadDescriptionFile() throws Exception {
+    public static void loadCommandBar() throws Exception {
     	AbstractFile commandBarFile = getDescriptionFile();
     	if(commandBarFile.exists())
     		new CommandBarReader();
     	else
     		if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(COMMAND_BAR_RESOURCE_PATH + " was not found");
     }
+    
+    /**
+     * Writes the current command bar to the user's command bar file.
+     * @throws IOException 
+     * @throws IOException
+     */
+    public static void saveCommandBar() throws IOException {
+    	if (isCommandBarChanged)
+    		new CommandBarWriter();
+    	else if(Debug.ON) Debug.trace("Command bar not modified, skip saving.");
+    }
 	
 	/**
-     * Sets the path to the command bar description file to be loaded when calling {@link #loadDescriptionFile()}.
+     * Sets the path to the command bar description file to be loaded when calling {@link #loadCommandBar()}.
      * By default, this file is {@link #DEFAULT_COMMAND_BAR_FILE_NAME} within the preferences folder.
      * @param  path                  path to the command bar descriptor file
      * @throws FileNotFoundException if the specified file is not accessible.
@@ -86,7 +105,7 @@ public abstract class CommandBarIO extends DefaultHandler {
     }
 
     /**
-     * Sets the path to the command bar description file to be loaded when calling {@link #loadDescriptionFile()}.
+     * Sets the path to the command bar description file to be loaded when calling {@link #loadCommandBar()}.
      * By default, this file is {@link #DEFAULT_COMMAND_BAR_FILE_NAME} within the preferences folder.
      * @param  file                  path to the command bar descriptor file
      * @throws FileNotFoundException if the specified file is not accessible.
@@ -94,7 +113,7 @@ public abstract class CommandBarIO extends DefaultHandler {
     public static void setDescriptionFile(File file) throws FileNotFoundException {setDescriptionFile(FileFactory.getFile(file.getAbsolutePath()));}
 
     /**
-     * Sets the path to the command bar description file to be loaded when calling {@link #loadDescriptionFile()}.
+     * Sets the path to the command bar description file to be loaded when calling {@link #loadCommandBar()}.
      * By default, this file is {@link #DEFAULT_COMMAND_BAR_FILE_NAME} within the preferences folder.
      * @param  file                  path to the command bar descriptor file
      * @throws FileNotFoundException if the specified file is not accessible.
@@ -111,5 +130,17 @@ public abstract class CommandBarIO extends DefaultHandler {
             return PlatformManager.getPreferencesFolder().getChild(DEFAULT_COMMAND_BAR_FILE_NAME);
         return commandBarFile;
     }
+    
+    ////////////////////////////////////////////////
+    ///// CommandBarAttributesListener methods /////
+    ////////////////////////////////////////////////
+    
+    public void CommandBarActionsChanged() {
+    	isCommandBarChanged = true;
+	}
+
+	public void CommandBarModifierChanged() {
+		isCommandBarChanged = true;
+	}
 }
 

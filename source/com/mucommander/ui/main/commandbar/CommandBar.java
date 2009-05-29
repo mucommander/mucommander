@@ -145,7 +145,7 @@ public class CommandBar extends JPanel implements KeyListener, MouseListener, Co
             //		if (e.isPopupTrigger()) {	// Doesn't work under Mac OS X (CTRL+click doesn't return true)
             JPopupMenu popupMenu = new JPopupMenu();
             popupMenu.add(ActionManager.getActionInstance(com.mucommander.ui.action.ToggleCommandBarAction.class, mainFrame));
-            popupMenu.add(ActionManager.getActionInstance(com.mucommander.ui.action.ShowCommandBarCustomizationAction.class, mainFrame));
+            popupMenu.add(ActionManager.getActionInstance(com.mucommander.ui.action.CustomizeCommandBarAction.class, mainFrame));
             popupMenu.show(this, e.getX(), e.getY());
             popupMenu.setVisible(true);
         }
