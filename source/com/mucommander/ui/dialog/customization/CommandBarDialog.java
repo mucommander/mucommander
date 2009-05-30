@@ -74,6 +74,8 @@ public class CommandBarDialog extends CustomizeDialog {
 	/** The default color of button's border */
 	private static final Color JBUTTON_BACKGROUND_COLOR = UIManager.getColor("button.background");
 	
+	private static final Border JBUTTON_BORDER = UIManager.getBorder("button.border");
+
 	/** List that contains all available buttons, i.e buttons that are not used by the command bar */
 	private DynamicHorizontalWrapList commandBarAvailableButtonsList;
 	/** List that contains the command-bar regular buttons (i.e, not alternative buttons) */
@@ -470,11 +472,14 @@ public class CommandBarDialog extends CustomizeDialog {
 				filler.setBorder(insertionIndicatingBorder);
 				return filler;
 			}
-
-            return (CommandBarButton)value;
-		}
+			else {
+				CommandBarButton button = (CommandBarButton) value;
+				button.setBorder(BorderFactory.createCompoundBorder(insertionIndicatingBorder, JBUTTON_BORDER));
+				return button;
+            }
+        }
 	}
-	
+
 	private class CommandBarAlternativeButtonListRenderer implements ListCellRenderer {
 
 		public Component getListCellRendererComponent(JList list, Object value,
@@ -485,11 +490,16 @@ public class CommandBarDialog extends CustomizeDialog {
 				filler.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, index == selectedCommandBarAlternateButtonIndex ? PAINTED_BORDER_COLOR : JBUTTON_BACKGROUND_COLOR ));
 				return filler;
 			}
-
-            return (CommandBarButton) value;
-		}
+			else {
+				CommandBarButton button = (CommandBarButton) value;
+				button.setBorder(BorderFactory.createCompoundBorder(
+						BorderFactory.createMatteBorder(2, 2, 2, 2, index == selectedCommandBarAlternateButtonIndex ? PAINTED_BORDER_COLOR : JBUTTON_BACKGROUND_COLOR),
+						JBUTTON_BORDER));
+				return button;
+            }
+        }
 	}
-	
+
 	private static class AvailableButtonCellListRenderer implements ListCellRenderer {
 
 		public Component getListCellRendererComponent(JList list, Object value,
