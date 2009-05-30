@@ -474,8 +474,16 @@ public class CommandBarDialog extends CustomizeDialog {
 			}
 			else {
 				CommandBarButton button = (CommandBarButton) value;
-				button.setBorder(BorderFactory.createCompoundBorder(insertionIndicatingBorder, JBUTTON_BORDER));
-				return button;
+
+                // Note: we wrap the button inside a panel and decorate the panel's border. The reason for decorating
+                // the panel and not directly the button is because JButton stops rendering correctly under Mac OS X if
+                // the button's border is changed.
+                JPanel panel = new JPanel(new BorderLayout());
+
+                panel.add(button, BorderLayout.CENTER);
+				panel.setBorder(BorderFactory.createCompoundBorder(insertionIndicatingBorder, JBUTTON_BORDER));
+
+                return panel;
             }
         }
 	}
@@ -491,11 +499,18 @@ public class CommandBarDialog extends CustomizeDialog {
 				return filler;
 			}
 			else {
-				CommandBarButton button = (CommandBarButton) value;
-				button.setBorder(BorderFactory.createCompoundBorder(
-						BorderFactory.createMatteBorder(2, 2, 2, 2, index == selectedCommandBarAlternateButtonIndex ? PAINTED_BORDER_COLOR : JBUTTON_BACKGROUND_COLOR),
-						JBUTTON_BORDER));
-				return button;
+                CommandBarButton button = (CommandBarButton) value;
+
+                // Note: we wrap the button inside a panel and decorate the panel's border. The reason for decorating
+                // the panel and not directly the button is because JButton stops rendering correctly under Mac OS X if
+                // the button's border is changed.
+                JPanel panel = new JPanel(new BorderLayout());
+                panel.add(button, BorderLayout.CENTER);
+                panel.setBorder(BorderFactory.createCompoundBorder(
+                        BorderFactory.createMatteBorder(2, 2, 2, 2, index == selectedCommandBarAlternateButtonIndex ? PAINTED_BORDER_COLOR : JBUTTON_BACKGROUND_COLOR),
+                        JBUTTON_BORDER));
+
+                return panel;
             }
         }
 	}
@@ -505,12 +520,12 @@ public class CommandBarDialog extends CustomizeDialog {
 		public Component getListCellRendererComponent(JList list, Object value,
 				int index, boolean isSelected, boolean cellHasFocus) {
 			
-			JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+			JPanel panel = new JPanel(new BorderLayout());
 			CommandBarButton button = (CommandBarButton) value;
-			panel.add(button);
+			panel.add(button, BorderLayout.CENTER);
 			panel.setToolTipText(button.getToolTipText());
 			return panel;
-		}
+        }
 	}	
 
 	private static class DataIndexAndSource {
