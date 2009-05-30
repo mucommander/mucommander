@@ -221,7 +221,7 @@ public abstract class FileJob implements Runnable {
      */
     public void start() {
         // Return if job has already been started
-        if(jobState!=NOT_STARTED)
+        if(getState()!=NOT_STARTED)
             return;
 
         // Pause auto-refresh during file job as it potentially modifies the current folders contents
@@ -329,6 +329,13 @@ public abstract class FileJob implements Runnable {
     public long getPauseStartDate() {
         return pauseStartDate;
     }
+    
+    /**
+     * Sets the timestamp in miliseconds when this job is paused.
+     */
+    private void setPauseStartDate() {
+        this.pauseStartDate = System.currentTimeMillis();
+    }
 
     
     /**
@@ -342,6 +349,13 @@ public abstract class FileJob implements Runnable {
         return pausedTime;
     }
 
+    /**
+     * Adds a time of last pause to this job pause time counter. 
+     */
+    public void calcPausedTime() {
+        this.pausedTime += System.currentTimeMillis() - this.getPauseStartDate();
+    }
+
 
     /**
      * Returns the number of milliseconds this job effectively spent processing files, exclusing any pause time.
@@ -350,10 +364,10 @@ public abstract class FileJob implements Runnable {
      */
     public long getEffectiveJobTime() {
         // If job hasn't start yet, return 0
-        if(startDate==0)
+        if(getStartDate()==0)
             return 0;
         
-        return (endDate==0?System.currentTimeMillis():endDate)-startDate-pausedTime;
+        return (getEndDate()==0?System.currentTimeMillis():getEndDate())-getStartDate()-getPausedTime();
     }
 
     
@@ -361,10 +375,11 @@ public abstract class FileJob implements Runnable {
      * Interrupts this job, changes the job state to {@link #INTERRUPTED} and notifies listeners.
      */	
     public void interrupt() {
-        if(jobState==INTERRUPTED || jobState==FINISHED)
+        int state = getState();
+        if(state==INTERRUPTED || state==FINISHED)
             return;
 
-        if(jobState==PAUSED)
+        if(state==PAUSED)
             setPaused(false);
 
         // Set state before calling stop() so that state is INTERRUPTED when jobStopped() is called
@@ -398,9 +413,9 @@ public abstract class FileJob implements Runnable {
         // Lock the pause lock while updating paused status
         synchronized(pauseLock) {
             // Resume job if it was paused
-            if(!paused && jobState==PAUSED) {
+            if(!paused && getState()==PAUSED) {
                 // Calculate pause time
-                this.pausedTime += System.currentTimeMillis() - this.pauseStartDate;
+                calcPausedTime();                
                 // Call the jobResumed method to notify of the new job's state
                 jobResumed();
 
@@ -411,9 +426,9 @@ public abstract class FileJob implements Runnable {
                 setState(RUNNING);
             }
             // Pause job if it not paused already
-            else if(paused && jobState!=PAUSED && jobState!=INTERRUPTED && jobState!=FINISHED) {
+            else if(paused && getState()!=PAUSED && getState()!=INTERRUPTED && getState()!=FINISHED) {
                 // Memorize pause time in order to calculate pause time when the job is resumed
-                this.pauseStartDate = System.currentTimeMillis();
+                setPauseStartDate();
                 // Call the jobPaused method to notify of the new job's state
                 jobPaused();
 
@@ -431,10 +446,7 @@ public abstract class FileJob implements Runnable {
      * ({#nextFile(AbstractFile) nextFile()} is automatically called for files in base folder).
      */
     protected void nextFile(AbstractFile file) {
-        this.currentFile = file;
-
-        // Update current file information returned by getCurrentFilename()
-        this.currentFilename = "'"+currentFile.getName()+"'";
+        this.setCurrentFile(file);
 
 //        // Notify ProgressDialog (if any) that a new file is being processed
 //        if(progressDialog!=null)
@@ -443,7 +455,7 @@ public abstract class FileJob implements Runnable {
         // Lock the pause lock
         synchronized(pauseLock) {
             // Loop while job is paused, there shouldn't normally be more than one loop
-            while(jobState==PAUSED) {
+            while(getState()==PAUSED) {
                 try {
                     // Wait for a call to notify()
                     pauseLock.wait();
@@ -484,8 +496,8 @@ public abstract class FileJob implements Runnable {
     protected String getCurrentFilename() {
         return currentFilename;
     }
-	
-	
+
+
     /**
      * This method is called when this job starts, before the first call to {@link #processFile(AbstractFile,Object)} is made.
      * This method implementation does nothing but it can be overriden by subclasses to perform some first-time initializations.
@@ -677,6 +689,16 @@ public abstract class FileJob implements Runnable {
      */
     public AbstractFile getCurrentFile() {
     	return currentFile;
+    }
+    
+    /**
+     * Sets the file currently being processed.
+     * @param file the file currently being processed.
+     */
+    private void setCurrentFile(AbstractFile file) {
+        this.currentFile = file;
+        // Update current file information returned by getCurrentFilename()
+        this.currentFilename = "'" + file.getName() + "'";
     }
 
     /**
