@@ -19,7 +19,6 @@
 package com.mucommander.file.impl.local;
 
 import com.mucommander.Debug;
-import com.mucommander.desktop.DesktopManager;
 import com.mucommander.file.*;
 import com.mucommander.file.filter.FilenameFilter;
 import com.mucommander.file.util.Kernel32;
@@ -27,10 +26,7 @@ import com.mucommander.file.util.Kernel32API;
 import com.mucommander.file.util.PathUtils;
 import com.mucommander.io.*;
 import com.mucommander.process.AbstractProcess;
-import com.mucommander.runtime.JavaVersions;
-import com.mucommander.runtime.OsFamilies;
-import com.mucommander.runtime.OsFamily;
-import com.mucommander.runtime.OsVersions;
+import com.mucommander.runtime.*;
 import com.sun.jna.ptr.LongByReference;
 
 import java.io.*;
@@ -235,9 +231,9 @@ public class LocalFile extends AbstractFile {
                 // Otherwise, parse the output of 'dir "filePath"' command to retrieve free space information
                 else {
                     // 'dir' command returns free space on the last line
-                    //Process process = Runtime.getRuntime().exec(new String[] {"dir", absPath}, null, new File(getAbsolutePath()));
-//                    Process process = Runtime.getRuntime().exec(PlatformManager.getDefaultShellCommand() + " dir \""+absPath+"\"");
-                    Process process = Runtime.getRuntime().exec(DesktopManager.getDefaultShell() + " dir \""+absPath+"\"");
+                    Process process = Runtime.getRuntime().exec(
+                            (OsVersion.getCurrent().compareTo(OsVersion.WINDOWS_NT)>=0 ? "cmd /c" : "command.com /c")
+                            + " dir \""+absPath+"\"");
 
                     // Check that the process was correctly started
                     if(process!=null) {
