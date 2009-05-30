@@ -26,13 +26,15 @@ import com.mucommander.file.icon.CacheableFileIconProvider;
 import com.mucommander.file.icon.CachedFileIconProvider;
 import com.mucommander.file.icon.LocalFileIconProvider;
 import com.mucommander.file.impl.local.LocalFile;
+import com.mucommander.file.util.ResourceLoader;
 import com.mucommander.runtime.OsFamilies;
 import com.mucommander.runtime.OsVersion;
-import com.mucommander.ui.icon.IconManager;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileSystemView;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.net.URL;
 
 /**
  * Package-protected class which provides the {@link com.mucommander.file.icon.LocalFileIconProvider} and
@@ -59,7 +61,10 @@ class SwingFileIconProviderImpl extends LocalFileIconProvider implements Cacheab
     protected static boolean initialized;
 
     /** Transparent icon symbolizing symlinks, painted over an existing icon */
-    public final static String SYMLINK_ICON_NAME = "link.png";
+    private final static String SYMLINK_ICON_NAME = "link.png";
+
+    /** Icon that is painted over a symlink's target file icon to symbolize a symlink to the target file. */
+    protected static ImageIcon SYMLINK_OVERLAY_ICON;
 
 
     /**
@@ -76,6 +81,14 @@ class SwingFileIconProviderImpl extends LocalFileIconProvider implements Cacheab
             fileChooser = new JFileChooser();
         else
             fileSystemView = FileSystemView.getFileSystemView();
+
+        // Loads the symlink overlay icon
+        String iconPath = ResourceLoader.getRelativePackagePath(SwingFileIconProviderImpl.class.getPackage())+"/"+SYMLINK_ICON_NAME;
+        URL iconURL = ResourceLoader.getResourceAsURL(iconPath);
+        if(iconURL==null)
+            throw new RuntimeException("Could not locate required symlink icon: "+iconPath);
+
+        SYMLINK_OVERLAY_ICON = new ImageIcon(iconURL);
 
         initialized = true;
     }
@@ -121,13 +134,20 @@ class SwingFileIconProviderImpl extends LocalFileIconProvider implements Cacheab
 
 
     /**
-     * Returns an icon symbolizing a symlink to the given target icon.
+     * Returns an icon symbolizing a symlink to the given target icon. The returned icon uses the specified icon as
+     * its background and overlays a 'link' icon on top of it.
      *
-     * @param targetIcon the icon representing the symlink's target
+     * @param targetFileIcon the icon representing the symlink's target
      * @return an icon symbolizing a symlink to the given target
      */
-    private static ImageIcon getSymlinkIcon(Icon targetIcon) {
-        return IconManager.getCompositeIcon(targetIcon, IconManager.getIcon(IconManager.FILE_ICON_SET, SYMLINK_ICON_NAME));
+    private static ImageIcon getSymlinkIcon(Icon targetFileIcon) {
+        BufferedImage bi = new BufferedImage(targetFileIcon.getIconWidth(), targetFileIcon.getIconHeight(), BufferedImage.TYPE_INT_ARGB);
+
+        Graphics g = bi.getGraphics();
+        targetFileIcon.paintIcon(null, g, 0, 0);
+        SYMLINK_OVERLAY_ICON.paintIcon(null, g, 0, 0);
+
+        return new ImageIcon(bi);
     }
 
 

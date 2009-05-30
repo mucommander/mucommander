@@ -51,6 +51,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <copy file="${res}/command_bar.xml"   todir="${classes.normal}" overwrite="true"/>
     <copy file="${res}/action_keymap.xml" todir="${classes.normal}" overwrite="true"/>
     <copy file="${res.license}"           tofile="${classes.normal}/license.txt" overwrite="true"/>
+    <copy file="${source}/com/mucommander/file/icon/impl/link.png" tofile="${classes.normal}/com/mucommander/file/icon/impl/link.png" overwrite="true"/>
 
     <!-- Copies themes.                                        -->
     <mkdir dir="${themes.out}"/>
