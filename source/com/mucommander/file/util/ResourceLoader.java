@@ -213,7 +213,7 @@ public class ResourceLoader {
         if(classLoader==null)
             classLoader = getDefaultClassLoader();
 
-        String aClassRelPath = aClass.getName().replace('.', '/')+".class";
+        String aClassRelPath = getRelativeClassPath(aClass);
         URL aClassURL = getResourceAsURL(aClassRelPath, classLoader);
 
         if(aClassURL==null)
@@ -226,7 +226,30 @@ public class ResourceLoader {
         return FileFactory.getFile(aClassPath.substring(0, aClassPath.length()-aClassRelPath.length()));
     }
 
+    /**
+     * Returns a path to the given package. The returned path is relative, forward slash-separated and does not end
+     * with a trailing separator. For example, if the package <code>com.mucommander.file</code> is passed, the returned
+     * path will be <code>com/mucommander/file</code>.
+     *
+     * @param ppackage the package for which to return a path
+     * @return a path to the given package
+     */
+    public static String getRelativePackagePath(Package ppackage) {
+        return ppackage.getName().replace('.', '/');
+    }
 
+    /**
+     * Returns a path to the given class. The returned path is relative, forward slash-separated. For example, if the
+     * class <code>com.mucommander.file.AbstractFile</code> is passed,  the returned path will be
+     * <code>com/mucommander/file/AbstractFile.class</code>.
+     *
+     * @param cclass the class for which to return a path
+     * @return a path to the given package
+     */
+    public static String getRelativeClassPath(Class cclass) {
+        return cclass.getName().replace('.', '/')+".class";
+    }
+    
     /**
      * Extracts and returns the path to the JAR file from a URL that points to a resource inside a JAR file.
      * The returned path is in a format that {@link FileFactory} can turn into an {@link AbstractFile}.
