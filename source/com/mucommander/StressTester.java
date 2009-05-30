@@ -85,7 +85,7 @@ public class StressTester implements Runnable, ActionListener {
             }
 
             if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Sleeping for a bit...");
-            try {Thread.currentThread().sleep(100+random.nextInt(200)); }
+            try {Thread.sleep(100+random.nextInt(200)); }
             catch(InterruptedException e) { if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Caught InterruptedException "+e);}
         }
     }

@@ -67,7 +67,7 @@ public class Shell implements ConfigurationListener {
         // confListener is not taken out, and the ConfigurationListener instance removed
         // instantly as there is only a WeakReference on it.
         // The things we have to do...
-        confListener.setShellCommand();
+        Shell.setShellCommand();
 
         remoteTokens = new String[1];
     }
