@@ -182,8 +182,8 @@ public abstract class AbstractCopyJob extends TransferFileJob {
                 } else if (choice == FileCollisionDialog.RENAME_ACTION) {
                     setPaused(true);
                     RenameDialog dlg = new RenameDialog(getMainFrame(), destFile);
+                    String destFileName = (String) waitForUserResponseObject(dlg);
                     setPaused(false);
-                    String destFileName = dlg.getNewName();
                     if (destFileName != null) {
                         destFile = createDestinationFile(destFolder, destFileName);
                     } else {

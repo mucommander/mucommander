@@ -19,10 +19,14 @@
 
 package com.mucommander.job;
 
+import java.util.Iterator;
+import java.util.WeakHashMap;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.impl.CachedFile;
 import com.mucommander.file.util.FileSet;
 import com.mucommander.job.progress.JobProgress;
+import com.mucommander.job.ui.DialogResult;
+import com.mucommander.job.ui.UserInputHelper;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.QuestionDialog;
 import com.mucommander.ui.dialog.file.ProgressDialog;
@@ -31,8 +35,6 @@ import com.mucommander.ui.main.table.FileTable;
 import com.mucommander.ui.notifier.AbstractNotifier;
 import com.mucommander.ui.notifier.NotificationTypes;
 
-import java.util.Iterator;
-import java.util.WeakHashMap;
 
 
 /**
@@ -148,7 +150,7 @@ public abstract class FileJob implements Runnable {
     protected final static String CANCEL_TEXT = Translator.get("cancel");
     protected final static String APPEND_TEXT = Translator.get("resume");
     protected final static String OK_TEXT = Translator.get("ok");
-	
+    
 	
     /**
      * Creates a new FileJob without starting it.
@@ -604,14 +606,23 @@ public abstract class FileJob implements Runnable {
      * Waits for the user's answer to the given question dialog, putting this
      * job in pause mode while waiting for the user.
      */
-    protected int waitForUserResponse(QuestionDialog dialog) {
+    protected int waitForUserResponse(DialogResult dialog) {
+        Object userInput = waitForUserResponseObject(dialog);
+        return ((Integer)userInput).intValue();
+    }
+    
+    protected Object waitForUserResponseObject(DialogResult dialog) {
         // Put this job in pause mode while waiting for user response
         setPaused(true);
-        int retValue = dialog.getActionValue();
+        
+        UserInputHelper jobUserInput = new UserInputHelper(this, dialog);
+        Object userInput = jobUserInput.getUserInput();
+        
         // Back to work
         setPaused(false);
-        return retValue;
+        return userInput;
     }
+    
 	
 	
     /**

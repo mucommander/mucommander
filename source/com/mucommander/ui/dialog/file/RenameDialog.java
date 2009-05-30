@@ -21,6 +21,7 @@ package com.mucommander.ui.dialog.file;
 
 import com.mucommander.file.AbstractFile;
 import com.mucommander.job.CopyJob;
+import com.mucommander.job.ui.DialogResult;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.DialogToolkit;
 import com.mucommander.ui.dialog.FocusDialog;
@@ -40,7 +41,7 @@ import java.awt.event.ActionListener;
  * @see CopyJob
  * @author Mariusz Jakubowski
  */
-public class RenameDialog extends FocusDialog implements ActionListener {
+public class RenameDialog extends FocusDialog implements ActionListener, DialogResult {
 	
     private JTextField edtNewName;
 
@@ -86,12 +87,8 @@ public class RenameDialog extends FocusDialog implements ActionListener {
 
         setMinimumSize(MINIMUM_DIALOG_DIMENSION);
         setMaximumSize(MAXIMUM_DIALOG_DIMENSION);
-        showDialog();
     }
 
-    public String getNewName() {
-    	return newName;
-    }
 
     ///////////////////////////////////
     // ActionListener implementation //
@@ -107,6 +104,11 @@ public class RenameDialog extends FocusDialog implements ActionListener {
             newName = null;
         }
         dispose();
+    }
+
+    public Object getUserInput() {
+        showDialog();
+        return newName;
     }
     
 }

@@ -19,6 +19,7 @@
 
 package com.mucommander.ui.dialog;
 
+import com.mucommander.job.ui.DialogResult;
 import com.mucommander.ui.button.ButtonChoicePanel;
 import com.mucommander.ui.layout.YBoxPanel;
 
@@ -33,7 +34,7 @@ import java.awt.event.ActionListener;
  *
  * @author Maxence Bernard
  */
-public class QuestionDialog extends FocusDialog implements ActionListener {
+public class QuestionDialog extends FocusDialog implements ActionListener, DialogResult {
 	
     /** Dialog owner */
     private JButton buttons[];
@@ -168,5 +169,10 @@ public class QuestionDialog extends FocusDialog implements ActionListener {
             }
 	
         dispose();
+    }
+
+    public Object getUserInput() {
+        super.showDialog();
+        return new Integer(retValue);
     }
 }
