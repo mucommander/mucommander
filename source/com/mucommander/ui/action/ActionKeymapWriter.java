@@ -74,8 +74,12 @@ class ActionKeymapWriter extends ActionKeymapIO {
 
     	private void writeKeyMap(Hashtable actionMap) throws IOException {
     		try {
-    			writer.startElement(ROOT_ELEMENT);
-    			writer.println();
+    			writer.writeCommentLine("See http://trac.mucommander.com/wiki/ActionKeyMap for information on how to customize this file");
+    			
+    			XmlAttributes rootElementAttributes = new XmlAttributes();
+				rootElementAttributes.add(VERSION_ATTRIBUTE, "0.8.3"); // TODO: "0.8.3" <=> RuntimeConstants.VERSION
+    			
+    			writer.startElement(ROOT_ELEMENT, rootElementAttributes, true);
 
     			Enumeration enumeration = actionMap.keys();
     			while (enumeration.hasMoreElements()) {

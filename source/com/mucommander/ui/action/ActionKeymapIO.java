@@ -42,6 +42,8 @@ public abstract class ActionKeymapIO extends DefaultHandler  {
     protected final static String CLASS_ATTRIBUTE = "class";
     protected final static String PRIMARY_KEYSTROKE_ATTRIBUTE = "keystroke";
     protected final static String ALTERNATE_KEYSTROKE_ATTRIBUTE = "alt_keystroke";
+    /** Attribute containing the last muCommander version that was used to create the file */
+	protected static final String VERSION_ATTRIBUTE  = "version";
     
     /** Actions file used when calling {@link #loadActionKeymap()} */
     private static AbstractFile actionsFile;
