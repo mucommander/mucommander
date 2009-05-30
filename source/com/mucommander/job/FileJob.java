@@ -211,7 +211,7 @@ public abstract class FileJob implements Runnable {
      *
      * @param file the file to be selected in the active table after this job has finished
      */
-    public void selectFileWhenFinished(AbstractFile file) {
+    protected void selectFileWhenFinished(AbstractFile file) {
         this.fileToSelect = file;
     }
 	
@@ -352,7 +352,7 @@ public abstract class FileJob implements Runnable {
     /**
      * Adds a time of last pause to this job pause time counter. 
      */
-    public void calcPausedTime() {
+    private void calcPausedTime() {
         this.pausedTime += System.currentTimeMillis() - this.getPauseStartDate();
     }
 
