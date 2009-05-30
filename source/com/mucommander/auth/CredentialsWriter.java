@@ -18,6 +18,7 @@
 
 package com.mucommander.auth;
 
+import com.mucommander.bookmark.XORCipher;
 import com.mucommander.file.FileURL;
 import com.mucommander.xml.XmlAttributes;
 import com.mucommander.xml.XmlWriter;
@@ -80,9 +81,9 @@ public class CredentialsWriter implements CredentialsConstants {
             out.writeCData(credentials.getLogin());
             out.endElement(ELEMENT_LOGIN);
 
-            // Write password
+            // Write password (XOR encrypted)
             out.startElement(ELEMENT_PASSWORD);
-            out.writeCData(credentials.getEncryptedPassword());
+            out.writeCData(XORCipher.encryptXORBase64(credentials.getPassword()));
             out.endElement(ELEMENT_PASSWORD);
 
             // Write properties, each property is stored in a separate 'property' element
