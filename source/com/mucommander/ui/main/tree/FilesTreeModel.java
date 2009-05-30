@@ -150,9 +150,10 @@ public class FilesTreeModel implements TreeModel, CachedDirectoryListener {
         for (int i = listeners.length - 2; i >= 0; i -= 2) {
             if (listeners[i] == TreeModelListener.class) {
                 // Lazily create the event:
-                if (e == null)
+                if (e == null) {
                     e = new TreeModelEvent(source, path);
-                    ((TreeModelListener) listeners[i + 1]).treeStructureChanged(e);
+                }
+                ((TreeModelListener) listeners[i + 1]).treeStructureChanged(e);
             }
         }
     }
