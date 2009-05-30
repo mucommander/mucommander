@@ -48,8 +48,7 @@ public class KeyStrokeUtils {
      * @return a String representation of the given KeyStroke for display, in the <code>[modifier]+[modifier]+...+key</code> format
      */
 	public static String getKeyStrokeRepresentation(KeyStroke ks) {
-		String toString = ks.toString();
-		return toString.replaceAll("(released )|(pressed )|(typed )", "");
+		return ks.toString().replaceFirst("(released )|(pressed )|(typed )", "");
 	}
 	
 	/**

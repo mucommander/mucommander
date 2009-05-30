@@ -27,6 +27,7 @@ import javax.swing.KeyStroke;
 
 import com.mucommander.Debug;
 import com.mucommander.io.BackupOutputStream;
+import com.mucommander.ui.text.KeyStrokeUtils;
 import com.mucommander.xml.XmlAttributes;
 import com.mucommander.xml.XmlWriter;
 
@@ -95,10 +96,10 @@ class ActionKeymapWriter extends ActionKeymapIO {
     			Debug.trace("     Writing mapping of "  + actionClass.getSimpleName() + " to " + keyStrokes[0] + " and " + keyStrokes[1]);
 
     		if (keyStrokes[0] != null)
-    			attributes.add(PRIMARY_KEYSTROKE_ATTRIBUTE, keyStrokes[0].toString());
+    			attributes.add(PRIMARY_KEYSTROKE_ATTRIBUTE, KeyStrokeUtils.getKeyStrokeRepresentation(keyStrokes[0]));
 
     		if (keyStrokes[1] != null)
-    			attributes.add(ALTERNATE_KEYSTROKE_ATTRIBUTE, keyStrokes[1].toString());
+    			attributes.add(ALTERNATE_KEYSTROKE_ATTRIBUTE, KeyStrokeUtils.getKeyStrokeRepresentation(keyStrokes[1]));
     		
     		writer.writeStandAloneElement(ACTION_ELEMENT, attributes);
     	}
