@@ -145,7 +145,7 @@ public abstract class AbstractCopyJob extends TransferFileJob {
                 int choice;
                 // Use default action if one has been set, if not show up a dialog
                 if(defaultFileExistsAction==FileCollisionDialog.ASK_ACTION) {
-                    FileCollisionDialog dialog = new FileCollisionDialog(progressDialog, mainFrame, collision, file, destFile, true, true);
+                    FileCollisionDialog dialog = new FileCollisionDialog(getProgressDialog(), getMainFrame(), collision, file, destFile, true, true);
                     choice = waitForUserResponse(dialog);
                     // If 'apply to all' was selected, this choice will be used for any other files (user will not be asked again)
                     if(dialog.applyToAllSelected())
@@ -181,7 +181,7 @@ public abstract class AbstractCopyJob extends TransferFileJob {
                     break;
                 } else if (choice == FileCollisionDialog.RENAME_ACTION) {
                     setPaused(true);
-                    RenameDialog dlg = new RenameDialog(mainFrame, destFile);
+                    RenameDialog dlg = new RenameDialog(getMainFrame(), destFile);
                     setPaused(false);
                     String destFileName = dlg.getNewName();
                     if (destFileName != null) {

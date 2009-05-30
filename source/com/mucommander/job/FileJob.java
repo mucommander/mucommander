@@ -78,10 +78,10 @@ public abstract class FileJob implements Runnable {
     private long pauseStartDate;
 
     /** Associated dialog showing job progression */
-    protected ProgressDialog progressDialog;
+    private ProgressDialog progressDialog;
 
     /** Main frame on which the job is to be performed */ 
-    protected MainFrame mainFrame;
+    private MainFrame mainFrame;
 	
     /** Base source folder */
     private AbstractFile baseSourceFolder;
@@ -224,8 +224,8 @@ public abstract class FileJob implements Runnable {
 
         // Pause auto-refresh during file job as it potentially modifies the current folders contents
         // and would potentially cause folder panel to auto-refresh
-        mainFrame.getLeftPanel().getFolderChangeMonitor().setPaused(true);
-        mainFrame.getRightPanel().getFolderChangeMonitor().setPaused(true);
+        getMainFrame().getLeftPanel().getFolderChangeMonitor().setPaused(true);
+        getMainFrame().getRightPanel().getFolderChangeMonitor().setPaused(true);
 
         setState(RUNNING);
         startDate = System.currentTimeMillis();
@@ -235,7 +235,25 @@ public abstract class FileJob implements Runnable {
     }
 
 
-    /**
+	/**
+	 * Returns the dialog showing progress of this job.
+	 * @return the progressDialog
+	 */
+	protected ProgressDialog getProgressDialog() {
+		return progressDialog;
+	}
+
+
+	/**
+	 * Returns the main frame.
+	 * @return the mainFrame
+	 */
+	protected MainFrame getMainFrame() {
+		return mainFrame;
+	}
+
+
+	/**
      * Returns the current state of this FileJob. See constant fields for possible return values.
      *
      * @return the current state of this FileJob. See constant fields for possible return values.
@@ -490,7 +508,7 @@ public abstract class FileJob implements Runnable {
         // Send a system notification if a notifier is available and enabled
         if(AbstractNotifier.isAvailable() && AbstractNotifier.getNotifier().isEnabled())
             AbstractNotifier.getNotifier().displayBackgroundNotification(NotificationTypes.NOTIFICATION_TYPE_JOB_COMPLETED,
-                    progressDialog==null?"":progressDialog.getTitle(),
+                    getProgressDialog()==null?"":getProgressDialog().getTitle(),
                     Translator.get("progress_dialog.job_finished"));
     }
 
@@ -556,19 +574,19 @@ public abstract class FileJob implements Runnable {
     protected int showErrorDialog(String title, String message, String actionTexts[], int actionValues[]) {
         QuestionDialog dialog;
 		
-        if(progressDialog==null)
-            dialog = new QuestionDialog(mainFrame, 
+        if(getProgressDialog()==null)
+            dialog = new QuestionDialog(getMainFrame(), 
                                         title,
                                         message,
-                                        mainFrame,
+                                        getMainFrame(),
                                         actionTexts,
                                         actionValues,
                                         0);
         else
-            dialog = new QuestionDialog(progressDialog, 
+            dialog = new QuestionDialog(getProgressDialog(), 
                                         title,
                                         message,
-                                        mainFrame,
+                                        getMainFrame(),
                                         actionTexts,
                                         actionValues,
                                         0);
@@ -600,8 +618,8 @@ public abstract class FileJob implements Runnable {
      * Check and if needed, refreshes both file tables's current folders, based on the job's refresh policy.
      */
     protected void refreshTables() {
-        FileTable activeTable = mainFrame.getActiveTable();
-        FileTable inactiveTable = mainFrame.getInactiveTable();
+        FileTable activeTable = getMainFrame().getActiveTable();
+        FileTable inactiveTable = getMainFrame().getInactiveTable();
 
         if(hasFolderChanged(inactiveTable.getCurrentFolder()))
             inactiveTable.getFolderPanel().tryRefreshCurrentFolder();
@@ -618,8 +636,8 @@ public abstract class FileJob implements Runnable {
         mainFrame.getStatusBar().updateSelectedFilesInfo();
 
         // Resume current folders auto-refresh
-        mainFrame.getLeftPanel().getFolderChangeMonitor().setPaused(false);
-        mainFrame.getRightPanel().getFolderChangeMonitor().setPaused(false);
+        getMainFrame().getLeftPanel().getFolderChangeMonitor().setPaused(false);
+        getMainFrame().getRightPanel().getFolderChangeMonitor().setPaused(false);
     }
 	
 
@@ -691,7 +709,7 @@ public abstract class FileJob implements Runnable {
      * Returns the base source folder.
      * @return the baseSourceFolder
      */
-    public AbstractFile getBaseSourceFolder() {
+    protected AbstractFile getBaseSourceFolder() {
         return baseSourceFolder;
     }
 	
@@ -704,7 +722,7 @@ public abstract class FileJob implements Runnable {
      * This method is public as a side-effect of this class implementing <code>Runnable</code>.
      */
     public final void run() {
-        FileTable activeTable = mainFrame.getActiveTable();
+        FileTable activeTable = getMainFrame().getActiveTable();
         AbstractFile currentFile;
 
         // Notify that this job has started

@@ -110,7 +110,7 @@ public class DeleteJob extends FileJob {
 
         panel.add(new MultiLineLabel(Translator.get("delete.symlink_warning", relativePath, canonicalPath)));
 
-        QuestionDialog dialog = new QuestionDialog(progressDialog, Translator.get("delete.symlink_warning_title"), panel, mainFrame,
+        QuestionDialog dialog = new QuestionDialog(getProgressDialog(), Translator.get("delete.symlink_warning_title"), panel, getMainFrame(),
                                                    new String[] {DELETE_LINK_TEXT, DELETE_FOLDER_TEXT, SKIP_TEXT, CANCEL_TEXT},
                                                    new int[]  {DELETE_LINK_ACTION, DELETE_FOLDER_ACTION, SKIP_ACTION, CANCEL_ACTION},
                                                    2);
