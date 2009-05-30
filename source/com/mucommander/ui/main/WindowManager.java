@@ -251,6 +251,8 @@ public class WindowManager implements WindowListener, ConfigurationListener {
     
     /**
      * Returns the sole instance of WindowManager.
+     *
+     * @return the sole instance of WindowManager
      */
     public static WindowManager getInstance() {
         return instance;
@@ -258,15 +260,19 @@ public class WindowManager implements WindowListener, ConfigurationListener {
     
 	
     /**
-     * Returns the last MainFrame instance that was active. Note that the returned MainFrame may or may not be
-     * currently active.
+     * Returns the <code>MainFrame</code> instance that was last active. Note that the returned <code>MainFrame</code>
+     * may or may not be currently active.
+     *
+     * @return the <code>MainFrame</code> instance that was last active
      */
     public static MainFrame getCurrentMainFrame() {
         return currentMainFrame;
     }
 	
     /**
-     * Returns a Vector of all MainFrame instances the application has.
+     * Returns a <code>Vector</code> of all <code>MainFrame</code> instances currently displaying.
+     *
+     * @return a <code>Vector</code> of all <code>MainFrame</code> instances currently displaying
      */
     public static Vector getMainFrames() {
         return mainFrames;
@@ -319,8 +325,10 @@ public class WindowManager implements WindowListener, ConfigurationListener {
 
     /**
      * Creates a new MainFrame and makes it visible on the screen, on top of any other frames.
+     *
      * @param folder1 initial path for the left frame.
      * @param folder2 initial path for the right frame.
+     * @return the newly created MainFrame.
      */
     public static synchronized MainFrame createNewMainFrame(AbstractFile folder1, AbstractFile folder2) {
         MainFrame newMainFrame; // New MainFrame.
@@ -455,19 +463,22 @@ public class WindowManager implements WindowListener, ConfigurationListener {
      * or the last one which was activated.
      */
     public static synchronized void quit() {
-        // Retrieve current MainFrame's index
-        int currentMainFrameIndex = mainFrames.indexOf(currentMainFrame);
-		
-        // Dispose all MainFrames but the current one
+        // Dispose all MainFrames, ending with the currently active one.
         int nbFrames = mainFrames.size();
-        for(int i=0; i<nbFrames; i++) {
-            if(i!=currentMainFrameIndex)
-                ((MainFrame)mainFrames.elementAt(i)).dispose();
+        if(nbFrames>0) {            // If an uncaught exception occurred in the startup sequence, there is no MainFrame to dispose
+            // Retrieve current MainFrame's index
+            int currentMainFrameIndex = mainFrames.indexOf(currentMainFrame);
+            
+            // Dispose all MainFrames but the current one
+            for(int i=0; i<nbFrames; i++) {
+                if(i!=currentMainFrameIndex)
+                    ((MainFrame)mainFrames.elementAt(i)).dispose();
+            }
+
+            // Dispose current MainFrame last so that its attributes (last folders, window position...) are saved last
+            // in the preferences
+            ((MainFrame)mainFrames.elementAt(currentMainFrameIndex)).dispose();
         }
-        
-        // Dispose current MainFrame last so that its attributes (last folders, window position...) are saved last
-        // in the preferences
-        ((MainFrame)mainFrames.elementAt(currentMainFrameIndex)).dispose();
 
         // Dispose all other frames (viewers, editors...)
         Frame frames[] = Frame.getFrames();
@@ -518,6 +529,8 @@ public class WindowManager implements WindowListener, ConfigurationListener {
 
     /**
      * Changes LooknFeel to the given one, updating the UI of each MainFrame.
+     *
+     * @param lnfName name of the new LooknFeel to use
      */
     private static void setLookAndFeel(String lnfName) {
         try {
@@ -581,16 +594,7 @@ public class WindowManager implements WindowListener, ConfigurationListener {
     }
 
     public void windowClosing(WindowEvent e) {
-  //      Object source = e.getSource();
-
-//        // Return if event doesn't originate from a MainFrame (e.g. ViewerFrame or EditorFrame)
-//        if(!(source instanceof MainFrame))
-//            return;
-
-//        if(source instanceof MainFrame)
-//            disposeMainFrame((MainFrame)source);
     }
- 
     
     /**
      * windowClosed is synchronized so that it doesn't get called while quit() is executing.
@@ -677,7 +681,7 @@ public class WindowManager implements WindowListener, ConfigurationListener {
     // - Screen handling --------------------------------------------------------
     // --------------------------------------------------------------------------
     /**
-     * Computes the screen's insets for the specified window.
+     * Computes the screen's insets for the specified window and returns them.
      * <p>
      * While this might seem strange, screen insets can change from one window
      * to another. For example, on X11 windowing systems, there is no guarantee that
@@ -685,6 +689,7 @@ public class WindowManager implements WindowListener, ConfigurationListener {
      * the application is running on.
      * </p>
      * @param window the window for which screen insets should be computed.
+     * @return the screen's insets for the specified window
      */
     public static Insets getScreenInsets(Window window) {
         return Toolkit.getDefaultToolkit().getScreenInsets(window.getGraphicsConfiguration());
@@ -720,6 +725,7 @@ public class WindowManager implements WindowListener, ConfigurationListener {
      * Returns the maximum dimensions for a full-screen window.
      *
      * @param window window who's full screen size should be computed.
+     * @return the maximum dimensions for a full-screen window
      */
     public static Rectangle getFullScreenBounds(Window window) {
         Toolkit   toolkit;

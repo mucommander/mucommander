@@ -81,7 +81,9 @@ public class QuitDialog extends QuestionDialog {
     
     
     /**
-     * Returns <code>true</code> if the user confirmed and pressed the Quit button. 
+     * Returns <code>true</code> if the user confirmed and pressed the Quit button.
+     *
+     * @return <code>true</code> if the user confirmed and pressed the Quit button
      */
     public boolean quitConfirmed() {
         return quitConfirmed;
@@ -89,10 +91,14 @@ public class QuitDialog extends QuestionDialog {
     
     
     /**
-     * Returns <code>true</code> if quit confirmation hasn't been disabled in the preferences. 
+     * Returns <code>true</code> if quit confirmation hasn't been disabled in the preferences, and if there is at least
+     * one window to close.
+     *
+     * @return <code>true</code> if quit confirmation hasn't been disabled in the preferences
      */
     public static boolean confirmationRequired() {
-        return MuConfiguration.getVariable(MuConfiguration.CONFIRM_ON_QUIT, MuConfiguration.DEFAULT_CONFIRM_ON_QUIT);
+        return  WindowManager.getMainFrames().size() > 0     // May happen after an uncaught exception in the startup sequence
+             && MuConfiguration.getVariable(MuConfiguration.CONFIRM_ON_QUIT, MuConfiguration.DEFAULT_CONFIRM_ON_QUIT);
     }
     
     
@@ -100,6 +106,8 @@ public class QuitDialog extends QuestionDialog {
      * Shows up a QuitDialog asking the user for confirmation to quit, and returns <code>true</code> if user confirmed
      * the operation. The dialog will not be shown if quit confirmation has been disabled in the preferences.
      * In this case, <code>true</code> will simply be returned.
+     *
+     * @return <code>true</code> if user confirmed the quit operation
      */
     public static boolean confirmQuit() {
         // Show confirmation dialog only if it hasn't been disabled in the preferences
