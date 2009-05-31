@@ -50,6 +50,7 @@ public class ArchiveEntryTree extends DefaultMutableTreeNode {
         for(int d=1; d<=entryDepth; d++) {
             if(d==entryDepth && !entry.isDirectory()) {
                 // Create a leaf node for the entry
+                entry.setExists(true);      // the entry has to exist
                 node.add(new DefaultMutableTreeNode(entry, true));
                 break;
             }
@@ -82,11 +83,12 @@ public class ArchiveEntryTree extends DefaultMutableTreeNode {
             else {
                 if(d==entryDepth) {
                     // Create a leaf node for the entry
+                    entry.setExists(true);      // the entry has to exist
                     node.add(new DefaultMutableTreeNode(entry, true));
                 }
                 else {
                     // if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Creating node for "+subPath);
-                    childNode = new DefaultMutableTreeNode(new ArchiveEntry(subPath, true, entry.getDate(), 0), true);
+                    childNode = new DefaultMutableTreeNode(new ArchiveEntry(subPath, true, entry.getDate(), 0, true), true);
                     node.add(childNode);
                     node = childNode;
                 }

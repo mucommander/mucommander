@@ -1,5 +1,11 @@
 package com.mucommander.file.impl.sevenzip;
 
+import com.mucommander.file.*;
+import com.mucommander.file.impl.sevenzip.provider.SevenZip.Archive.IInArchive;
+import com.mucommander.file.impl.sevenzip.provider.SevenZip.Archive.SevenZip.Handler;
+import com.mucommander.file.impl.sevenzip.provider.SevenZip.Archive.SevenZipEntry;
+import com.mucommander.io.FailSafePipedInputStream;
+
 import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -9,16 +15,6 @@ import java.util.Vector;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
-
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.AbstractROArchiveFile;
-import com.mucommander.file.ArchiveEntry;
-import com.mucommander.file.ArchiveEntryIterator;
-import com.mucommander.file.WrapperArchiveEntryIterator;
-import com.mucommander.file.impl.sevenzip.provider.SevenZip.Archive.IInArchive;
-import com.mucommander.file.impl.sevenzip.provider.SevenZip.Archive.SevenZipEntry;
-import com.mucommander.file.impl.sevenzip.provider.SevenZip.Archive.SevenZip.Handler;
-import com.mucommander.io.FailSafePipedInputStream;
 
 public class SevenZipArchiveFile extends AbstractROArchiveFile {
 	
@@ -76,7 +72,7 @@ public class SevenZipArchiveFile extends AbstractROArchiveFile {
      */
     private ArchiveEntry createArchiveEntry(SevenZipEntry entry) {
 		return new ArchiveEntry(
-				entry.getName(), entry.isDirectory(), entry.getTime(), entry.getSize()
+				entry.getName(), entry.isDirectory(), entry.getTime(), entry.getSize(), true
 				);
 	}
     

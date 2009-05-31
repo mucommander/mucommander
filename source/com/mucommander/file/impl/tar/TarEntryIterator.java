@@ -78,7 +78,7 @@ class TarEntryIterator implements ArchiveEntryIterator {
      * @return an ArchiveEntry whose attributes are fetched from the given org.apache.tools.tar.TarEntry
      */
     private ArchiveEntry createArchiveEntry(TarEntry tarEntry) {
-        ArchiveEntry entry = new ArchiveEntry(tarEntry.getName(), tarEntry.isDirectory(), tarEntry.getModTime().getTime(), tarEntry.getSize());
+        ArchiveEntry entry = new ArchiveEntry(tarEntry.getName(), tarEntry.isDirectory(), tarEntry.getModTime().getTime(), tarEntry.getSize(), true);
         entry.setPermissions(new SimpleFilePermissions(tarEntry.getMode() & PermissionBits.FULL_PERMISSION_INT));
         entry.setOwner(tarEntry.getUserName());
         entry.setGroup(tarEntry.getGroupName());

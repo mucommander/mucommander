@@ -82,7 +82,8 @@ public class RarArchiveFile extends AbstractROArchiveFile {
     			header.getFileNameString().replace('\\', '/'),
     			header.isDirectory(),
     			header.getMTime().getTime(),
-    			header.getFullUnpackSize()
+    			header.getFullUnpackSize(),
+                true
     	);
     }
 

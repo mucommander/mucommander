@@ -120,13 +120,14 @@ public class ZipArchiveFile extends AbstractRWArchiveFile {
     }
 
     /**
-     * Creates and return an {@link ArchiveEntry()} whose attributes are fetched from the given {@link com.mucommander.file.impl.zip.provider.ZipEntry}
+     * Creates and return an {@link ArchiveEntry()} whose attributes are fetched from the given {@link com.mucommander.file.impl.zip.provider.ZipEntry}.
+     * It is worth noting that the returned entry has the {@link ArchiveEntry#exists exists} flag set to <code>true</code>.
      *
      * @param zipEntry the object that serves to initialize the attributes of the returned ArchiveEntry
      * @return an ArchiveEntry whose attributes are fetched from the given ZipEntry
      */
     static ArchiveEntry createArchiveEntry(ZipEntry zipEntry) {
-        ArchiveEntry entry = new ArchiveEntry(zipEntry.getName(), zipEntry.isDirectory(), zipEntry.getTime(), zipEntry.getSize());
+        ArchiveEntry entry = new ArchiveEntry(zipEntry.getName(), zipEntry.isDirectory(), zipEntry.getTime(), zipEntry.getSize(), true);
 
         if(zipEntry.hasUnixMode())
             entry.setPermissions(new SimpleFilePermissions(zipEntry.getUnixMode()));

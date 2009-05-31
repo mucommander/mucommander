@@ -123,7 +123,7 @@ class ArArchiveEntryIterator implements ArchiveEntryIterator {
                     name += (char)b;
             }
 
-            return new ArchiveEntry(name, false, date, size);
+            return new ArchiveEntry(name, false, date, size, true);
         }
         // Re-throw IOException
         catch(IOException e) {

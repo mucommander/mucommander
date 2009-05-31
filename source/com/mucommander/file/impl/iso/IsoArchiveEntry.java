@@ -31,7 +31,7 @@ class IsoArchiveEntry extends ArchiveEntry {
     private boolean cooked;
 
     IsoArchiveEntry(String path, boolean directory, long date, long size, long index, boolean cooked) {
-        super(path, directory, date, size);
+        super(path, directory, date, size, true);
 
         this.index = index;
         this.cooked = cooked;

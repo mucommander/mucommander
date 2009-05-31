@@ -204,7 +204,7 @@ public abstract class AbstractArchiveFile extends ProxyFile {
             files = new AbstractFile[nbChildren];
 
             for(int c=0; c<nbChildren; c++) {
-                files[c] = getArchiveEntryFile((ArchiveEntry)(((DefaultMutableTreeNode)treeNode.getChildAt(c)).getUserObject()), parentFile, true);
+                files[c] = getArchiveEntryFile((ArchiveEntry)(((DefaultMutableTreeNode)treeNode.getChildAt(c)).getUserObject()), parentFile);
             }
         }
         // Use provided FilenameFilter and temporarily store created entry files that match the filter in a Vector
@@ -215,7 +215,7 @@ public abstract class AbstractArchiveFile extends ProxyFile {
                 if(!filenameFilter.accept(entry.getName()))
                     continue;
 
-                filesV.add(getArchiveEntryFile(entry, parentFile, true));
+                filesV.add(getArchiveEntryFile(entry, parentFile));
             }
 
             files = new AbstractFile[filesV.size()];
@@ -232,7 +232,7 @@ public abstract class AbstractArchiveFile extends ProxyFile {
      * That means entries paths of archives located on Windows local filesystems will use '\' as a separator, and
      * '/' for Unix local archives.
      */
-    protected AbstractFile getArchiveEntryFile(ArchiveEntry entry, AbstractFile parentFile, boolean exists) throws IOException {
+    protected AbstractFile getArchiveEntryFile(ArchiveEntry entry, AbstractFile parentFile) throws IOException {
 
         String entryPath = entry.getPath();
 
@@ -250,8 +250,7 @@ public abstract class AbstractArchiveFile extends ProxyFile {
           new ArchiveEntryFile(
             entryURL,
             this,
-            entry,
-            exists            
+            entry
           )
         );
         entryFile.setParent(parentFile);
@@ -313,7 +312,7 @@ public abstract class AbstractArchiveFile extends ProxyFile {
                     throw new IOException();
             }
 
-            return getArchiveEntryFile(new ArchiveEntry(entryPath, false), parentFile, false);
+            return getArchiveEntryFile(new ArchiveEntry(entryPath, false, 0, 0, false), parentFile);
         }
 
         return getArchiveEntryFile(entryNode);
@@ -332,8 +331,7 @@ public abstract class AbstractArchiveFile extends ProxyFile {
                 (ArchiveEntry)entryNode.getUserObject(),
                 parentNode==entryTreeRoot
                     ?this
-                    :getArchiveEntryFile(parentNode),
-                true
+                    :getArchiveEntryFile(parentNode)
         );
     }
 

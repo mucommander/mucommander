@@ -34,7 +34,7 @@ public class LstArchiveEntry extends ArchiveEntry {
     protected String baseFolder;
 
     public LstArchiveEntry(String path, boolean directory, long date, long size, String baseFolder) {
-        super(path, directory, date, size);
+        super(path, directory, date, size, true);
 
         this.baseFolder = baseFolder;
     }

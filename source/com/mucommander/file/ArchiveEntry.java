@@ -43,29 +43,20 @@ public class ArchiveEntry extends SimpleFileAttributes {
     }
 
     /**
-     * Creates a new ArchiveEntry using the supplied path and directory attributes.
-     *
-     * @param path the entry's path
-     * @param directory true if the entry is a directory
-     */
-    public ArchiveEntry(String path, boolean directory) {
-        setPath(path);
-        setDirectory(directory);
-    }
-
-    /**
      * Creates a new ArchiveEntry using the values of the supplied attributes.
      *
      * @param path the entry's path
      * @param directory true if the entry is a directory
      * @param date the entry's date
      * @param size the entry's size
+     * @param exists <code>true</code> if the entry exists in the archive
      */
-    public ArchiveEntry(String path, boolean directory, long date, long size) {
+    public ArchiveEntry(String path, boolean directory, long date, long size, boolean exists) {
         setPath(path);
         setDate(date);
         setSize(size);
         setDirectory(directory);
+        setExists(exists);
     }
 
 

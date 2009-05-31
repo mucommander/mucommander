@@ -62,7 +62,7 @@ public class GzipArchiveFile extends AbstractROArchiveFile {
                 name = name.substring(0, name.length()-3);
         }
 
-        return new SingleArchiveEntryIterator(new ArchiveEntry("/"+name, false, getDate(), -1));
+        return new SingleArchiveEntryIterator(new ArchiveEntry("/"+name, false, getDate(), -1, true));
     }
 
 
