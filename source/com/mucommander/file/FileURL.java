@@ -1057,9 +1057,7 @@ public class FileURL implements Cloneable {
             String separator = handler.getPathSeparator();
 
             // #equals(Object) is trailing separator insensitive, so the hashCode must be trailing separator invariant
-            int h = path.endsWith(separator)
-                    ?path.substring(0, path.length()-separator.length()).hashCode()
-                    :path.hashCode();
+            int h = PathUtils.getPathHashCode(path, separator);
 
             h = 31* h + scheme.toLowerCase().hashCode();
             h = 31* h + (port==-1?handler.getStandardPort():port);
