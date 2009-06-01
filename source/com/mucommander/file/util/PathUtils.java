@@ -182,7 +182,10 @@ public class PathUtils {
             // At this point we have the proper URL, except that the path may contain '.', '..' or '~' tokens.
             // => parse the URL from scratch to have the SchemeParser canonize them.
             try {
-                destURL = FileURL.getFileURL(destURL.toString(true));
+                destURL = FileURL.getFileURL(destURL.toString(false));
+                // Import credentials separately, so that login and passwords that contain URI-unsafe characters
+                // such as '/' are properly parsed.
+                destURL.setCredentials(baseFolderURL.getCredentials());
                 destURL.importProperties(baseFolderURL);
             }
             catch(MalformedURLException e2) {
@@ -273,16 +276,29 @@ public class PathUtils {
     }
 
     /**
-     * Returns <code>true</code> if both specified paths are equal. The comparison is case-sensitive.
-     * If the sole difference between two paths is a trailing path separator, they will be considered as equal.
-     * For example, <code>/path</code> and <code>/path/</code> are considered equal, assuming the path separator is '/'.
+     * Returns <code>true</code> if both specified paths are equal. The path comparison is case-sensitive but trailing
+     * separator-insensitive: if the sole difference between two paths is a trailing path separator, they will be
+     * considered as equal. For example, <code>/path</code> and <code>/path/</code> are considered equal, assuming the
+     * path separator is '/'.
+     * <p>
+     * If any of the two specified paths is <code>null</code>, then the other one must also be <code>null</code> for
+     * this method to return <code>true</code>. The given <code>separator</code> must never be <code>null</code> or
+     * a {@link NullPointerException} will be thrown.
+     * </p>
      *
      * @param path1 first path to test
      * @param path2 second path to test
      * @param separator path separator for both paths
+     * @throws NullPointerException if the given separator is <code>null</code>
      * @return <code>true</code> if both paths are equal
      */
     public static boolean pathEquals(String path1, String path2, String separator) {
+        if(path1==null)
+            return path2==null;
+
+        if(path2==null)
+            return path1==null;
+        
         if(path1.equals(path2))
             return true;
 
@@ -298,6 +314,24 @@ public class PathUtils {
 
         return false;
     }
+
+    /**
+     * Returns a hashcode for the given path. The returned hashcode is consistent with
+     * {@link #pathEquals(String, String, String)} in that hashcodes are trailing separator-invariant:
+     * <code>path1.equals(path2)</code> implies <code>path1Hashcode==path2Hashcode.hashCode()</code>, even if path1
+     * ends with a separator and path2 does not or vice-versa.
+     * 
+     * @param path the path for which to return a hashcode
+     * @param separator separator of the given path
+     * @return a trailing separator-insensitive hashcode
+     */
+    public static int getPathHashCode(String path, String separator) {
+        // #equals(Object) is trailing separator insensitive, so the hashCode must be trailing separator invariant
+        return path.endsWith(separator)
+                ?path.substring(0, path.length()-separator.length()).hashCode()
+                :path.hashCode();
+    }
+
 
     /**
      * Removes the specified number of fragments from the beginning of the given path and returns the modified path,
