@@ -27,6 +27,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Vector;
+import java.util.WeakHashMap;
 
 /**
  * <code>AbstractArchiveFile</code> is the superclass of all archive files. It allows archive file to be browsed as if
@@ -76,6 +77,9 @@ public abstract class AbstractArchiveFile extends ProxyFile {
      * need to be reloaded */
     protected long entryTreeDate;
 
+    /** Caches ArchiveEntryFile instances so that there is only one ArchiveEntryFile corresponding to the same entry
+     * at any given time, to avoid attribute inconsistencies. The key is the corresponding ArchiveEntry. */
+    protected WeakHashMap archiveEntryFiles;
 
     /**
      * Creates an AbstractArchiveFile on top of the given file.
@@ -93,7 +97,9 @@ public abstract class AbstractArchiveFile extends ProxyFile {
      * @throws IOException if an error occured while retrieving this archive's entries
      */
     protected void createEntriesTree() throws IOException {
+        // TODO: this method is not thread-safe and must be synchronized
         ArchiveEntryTree treeRoot = new ArchiveEntryTree();
+        archiveEntryFiles = new WeakHashMap();
 
         long start = System.currentTimeMillis();
         ArchiveEntryIterator entries = getEntryIterator();
@@ -242,20 +248,25 @@ public abstract class AbstractArchiveFile extends ProxyFile {
         if(!fileSeparator.equals("/"))
             entryPath = StringUtils.replaceCompat(entryPath, "/", fileSeparator);
 
-        FileURL archiveURL = getURL();
-        FileURL entryURL = (FileURL)archiveURL.clone();
-        entryURL.setPath(addTrailingSeparator(archiveURL.getPath()) + entryPath);
-        
-        AbstractFile entryFile = FileFactory.wrapArchive(
-          new ArchiveEntryFile(
-            entryURL,
-            this,
-            entry
-          )
-        );
-        entryFile.setParent(parentFile);
+        // Cache ArchiveEntryFile instances so that there is only one ArchiveEntryFile corresponding to the same entry
+        // at any given time, to avoid attribute inconsistencies.
 
-        return entryFile;
+        AbstractFile entryFile = (ArchiveEntryFile)archiveEntryFiles.get(entry);
+        if(entryFile==null) {
+            FileURL archiveURL = getURL();
+            FileURL entryURL = (FileURL)archiveURL.clone();
+            entryURL.setPath(addTrailingSeparator(archiveURL.getPath()) + entryPath);
+
+            entryFile = new ArchiveEntryFile(
+              entryURL,
+              this,
+              entry
+            );
+            entryFile.setParent(parentFile);
+
+            archiveEntryFiles.put(entry, entryFile);
+        }
+        return FileFactory.wrapArchive(entryFile);
     }
 
 
