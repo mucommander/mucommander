@@ -35,6 +35,9 @@ public class ArchiveEntry extends SimpleFileAttributes {
     /** Encapsulated entry object */
     protected Object entryObject;
 
+    /** Caches the computed hashcode */
+    private int hashCode;
+
 
     /**
      * Creates a new ArchiveEntry with all attributes set to their default value.
@@ -137,5 +140,50 @@ public class ArchiveEntry extends SimpleFileAttributes {
             return isDirectory()?FilePermissions.DEFAULT_DIRECTORY_PERMISSIONS:FilePermissions.DEFAULT_FILE_PERMISSIONS;
 
         return permissions;
+    }
+
+    /**
+     * Overriden to invalidates any previously computed hash code.
+     *
+     * @param path new path to set
+     */
+    public void setPath(String path) {
+        super.setPath(path);
+
+        // Invalidate any previously
+        hashCode = 0;
+    }
+
+    /**
+     * Returns <code>true</code> if the given object is an <code>ArchiveEntry</code> whose path is equal to this one,
+     * according to {@link PathUtils#pathEquals(String, String, String)} (trailing slash-insensitive comparison).
+     *
+     * @param o the object to test
+     * @return <code>true</code> if the given object is an <code>ArchiveEntry</code> whose path is equal to this one
+     * @see PathUtils#pathEquals(String, String, String)
+     */
+    public boolean equals(Object o) {
+        if(!(o instanceof ArchiveEntry))
+            return false;
+
+        return PathUtils.pathEquals(getPath(), ((ArchiveEntry)o).getPath(), "/");
+    }
+
+    /**
+     * This method is overridden to return a hash code that is consistent with {@link #equals(Object)},
+     * so that <code>url1.equals(url2)</code> implies <code>url1.hashCode()==url2.hashCode()</code>.
+     */
+    public int hashCode() {
+        if(hashCode!=0)         // Return any previously computed hashCode. Note that setPath invalidates the hashCode.
+            return hashCode;
+
+        String path = getPath();
+
+        // #equals(Object) is trailing separator insensitive, so the hashCode must be trailing separator invariant
+        hashCode = path.endsWith("/")
+                ?path.substring(0, path.length()-1).hashCode()
+                :path.hashCode();
+
+        return hashCode;
     }
 }
