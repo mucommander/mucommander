@@ -441,22 +441,24 @@ public class Launcher {
         try {com.mucommander.text.Translator.loadDictionaryFile();}
         catch(Exception e) {printError("Could not load dictionary", e, true);}
 
-        // Loads the file associations
+        // Loads custom commands
         printStartupMessage("Loading file associations...");
-        try {
-            com.mucommander.command.CommandManager.loadCommands();
-            migrateCommand("viewer.use_custom", "viewer.custom_command", CommandManager.VIEWER_ALIAS);
-            migrateCommand("editor.use_custom", "editor.custom_command", CommandManager.EDITOR_ALIAS);
-            try {CommandManager.writeCommands();}
-            catch(CommandException e) {
-                // There's really nothing we can do about this...
-            }
-
-        }
+        try {com.mucommander.command.CommandManager.loadCommands();}
         catch(Exception e) {
             if(Debug.ON)
                 printFileError("Could not load custom commands", e, fatalWarnings);
         }
+
+        // Migrates the custom editor and custom viewer if necessary.
+        migrateCommand("viewer.use_custom", "viewer.custom_command", CommandManager.VIEWER_ALIAS);
+        migrateCommand("editor.use_custom", "editor.custom_command", CommandManager.EDITOR_ALIAS);
+        try {CommandManager.writeCommands();}
+        catch(Exception e) {
+            System.out.println("###############################");
+            e.printStackTrace();
+            // There's really nothing we can do about this...
+        }
+
         try {com.mucommander.command.CommandManager.loadAssociations();}
         catch(Exception e) {
             if(Debug.ON)
