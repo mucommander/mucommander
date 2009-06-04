@@ -4459,7 +4459,7 @@ com.mucommander.ui.action.UnpackAction.tooltip:SV:Extrahera markerade filarkiv
 com.mucommander.ui.action.UnpackAction.tooltip:DA:Udpak markerede filarkiver
 com.mucommander.ui.action.UnpackAction.tooltip:UA:Розпакувати відмічені файли-архіви
 
-com.mucommander.ui.action.CustomizeCommandBarAction.label:EN:Customize...
+com.mucommander.ui.action.CustomizeCommandBarAction.label:EN:Customize
 
 com.mucommander.ui.action.CustomizeCommandBarAction.tooltip:EN:Customize command-bar
 
