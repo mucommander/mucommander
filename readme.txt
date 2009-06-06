@@ -155,7 +155,9 @@ Bug fixes:
 - Fixed the display of homonymous volumes in the drive popup button (bug #138).
 - Swap partitions declared in /etc/fstab are now properly handled (bug #139).
   Contributed by Johann Schmitz.
-- Fixed issues with Look & Feel (bug #145). 
+- Fixed issues with Look & Feel (bug #145).
+- Fixed slow downs affecting the drive popup button under Windows (bug #122).
+  Contributed by Alexander Yerenkow. 
 
 Known issues:
 - Some translations are not up-to-date. For more information, see:
