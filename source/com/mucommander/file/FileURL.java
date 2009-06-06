@@ -884,6 +884,11 @@ public class FileURL implements Cloneable {
      * they will be considered as equal.
      * For example, <code>/path</code> and <code>/path/</code> are considered equal, assuming the path separator is '/'.
      *
+     * <p>It is noteworthy that this method uses <code>java.lang.String#equals(Object)</code> to compare URL paths,
+     * which in some rare cases may return <code>false</code> for non-ascii/Unicode paths that have the same written
+     * representation but are not equal according to <code>java.lang.String#equals(Object)</code>. Handling such cases
+     * would require a locale-aware String comparison which is not an option here.</p>
+     *
      * @param url the URL to test for path equality
      * @return <code>true</code> if the path of this URL and the given URL are equal
      */
