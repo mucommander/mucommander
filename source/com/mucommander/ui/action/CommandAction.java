@@ -72,7 +72,7 @@ public class CommandAction extends MuAction {
             return;
 
         // If we're working with local files, go ahead and runs the command.
-        if(selectedFiles.getBaseFolder().getURL().getScheme().equals(FileProtocols.FILE) && (selectedFiles.getBaseFolder() instanceof LocalFile)) {
+        if(selectedFiles.getBaseFolder().getURL().getScheme().equals(FileProtocols.FILE) && (selectedFiles.getBaseFolder().getTopAncestor() instanceof LocalFile)) {
             try {ProcessRunner.execute(command.getTokens(selectedFiles), selectedFiles.getBaseFolder());}
             catch(Exception e) {
                 ErrorDialog.showErrorDialog(mainFrame);
