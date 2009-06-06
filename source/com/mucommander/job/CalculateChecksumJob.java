@@ -186,7 +186,7 @@ public class CalculateChecksumJob extends TransferFileJob {
 
     protected boolean hasFolderChanged(AbstractFile folder) {
         // This job modifies the folder where the checksum file is
-        return folder.equals(checksumFile.getParent());     // Note: parent may be null
+        return folder.equalsCanonical(checksumFile.getParent());     // Note: parent may be null
     }
 
 

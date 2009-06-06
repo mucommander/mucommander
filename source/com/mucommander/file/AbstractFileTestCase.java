@@ -517,12 +517,12 @@ public abstract class AbstractFileTestCase extends TestCase {
     public void testCanonicalPath() throws IOException, NoSuchAlgorithmException {
         // Regular file
         createFile(tempFile, 1);
-        testPathResolution(tempFile, tempFile.getCanonicalPath());
+        testPathResolution(tempFile.getCanonicalFile(), tempFile.getCanonicalPath());
 
         // Directory file
         tempFile.delete();
         tempFile.mkdir();
-        testPathResolution(tempFile, tempFile.getCanonicalPath());
+        testPathResolution(tempFile.getCanonicalFile(), tempFile.getCanonicalPath());
 
         // Test getCanonicalPath(boolean) on the directory file
         assertTrue(tempFile.getCanonicalPath(true).endsWith(tempFile.getSeparator()));
@@ -946,7 +946,9 @@ public abstract class AbstractFileTestCase extends TestCase {
      */
     public void testIsDirectory() throws IOException {
         // Same file with a trailing separator
-        AbstractFile tempFileB = FileFactory.getFile(tempFile.getAbsolutePath(true));
+        FileURL tempFileURLB = (FileURL)tempFile.getURL().clone();
+        tempFileURLB.setPath(tempFile.addTrailingSeparator(tempFileURLB.getPath()));
+        AbstractFile tempFileB = FileFactory.getFile(tempFileURLB, true);
 
         // Assert that isDirectory() returns false when the file does not exist
         assertFalse(tempFile.exists());

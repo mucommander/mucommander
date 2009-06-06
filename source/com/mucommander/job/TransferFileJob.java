@@ -110,7 +110,7 @@ public abstract class TransferFileJob extends FileJob {
         isCheckingIntegrity = false;
 
         // Throw a specific FileTransferException if source and destination files are identical
-        if(sourceFile.equals(destFile))
+        if(sourceFile.equalsCanonical(destFile))
             throw new FileTransferException(FileTransferException.SOURCE_AND_DESTINATION_IDENTICAL);
 
         // Determine whether AbstractFile.copyTo() should be used to copy file or streams should be copied manually.

@@ -398,7 +398,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
         // in order to restore them properly.
         markedFiles  = null;
         selectedFile = null;
-        if(currentFolder != null && folder.equals(currentFolder)) {
+        if(currentFolder != null && folder.equalsCanonical(currentFolder)) {
             markedFiles = tableModel.getMarkedFiles();
             selectedFile = getSelectedFile();
         }

@@ -388,8 +388,8 @@ public abstract class AbstractFile implements PermissionTypes, PermissionAccesse
     protected final void checkCopyPrerequisites(AbstractFile destFile, boolean allowCaseVariations) throws FileTransferException {
         boolean isAllowedCaseVariation = false;
 
-        // Throw an exception of a specific kind if the source and destination files are identical
-        boolean filesEqual = this.equals(destFile);
+        // Throw an exception of a specific kind if the source and destination files refer to the same file
+        boolean filesEqual = this.equalsCanonical(destFile);
         if(filesEqual) {
             // If case variations are allowed and the destination filename is a case variation of the source,
             // do not throw an exception.
@@ -1312,24 +1312,53 @@ public abstract class AbstractFile implements PermissionTypes, PermissionAccesse
     ////////////////////////
 
     /**
-     * Tests a file for equality: returns <code>true</code> if the given file has the same canonical path,
-     * as returned by {@link #getCanonicalPath()}.
+     * Tests a file for equality by comparing both files' {@link #getURL() URL}. Returns <code>true</code> if the URL
+     * of this file and the specified one are equal according to {@link FileURL#equals(Object, boolean, boolean)} called
+     * with credentials and properties comparison enabled.
+     *
+     * <p>
+     * Unlike {@link #equalsCanonical(Object)}, this method <b>is not</b> allowed to perform I/O operations and block
+     * the caller thread.
+     * </p>
+     *
+     * @param o the object to compare against this instance
+     * @return Returns <code>true</code> if the URL of this file and the specified one are equal
+     * @see FileURL#equals(Object, boolean, boolean)
+     * @see #equalsCanonical(Object)
+     */
+    public boolean equals(Object o) {
+        if(o==null || !(o instanceof AbstractFile))
+            return false;
+
+        return getURL().equals(((AbstractFile)o).getURL(), true, true);
+    }
+
+    /**
+     * Tests a file for equality by comparing both files' {@link #getCanonicalPath() canonical path}.
+     * Returns <code>true</code> if the canonical path of this file and the specified one are equal.
      *
      * <p>It is noteworthy that this method uses <code>java.lang.String#equals(Object)</code> to compare paths, which
      * in some rare cases may return <code>false</code> for non-ascii/Unicode paths that have the same written
      * representation but are not equal according to <code>java.lang.String#equals(Object)</code>. Handling such cases
      * would require a locale-aware String comparison which is not an option here.</p>
      *
-     * <p>This method should be overriden for network-based filesystems for which a host can have multiple
-     * path representations (hostname and IP address).</p>
+     * <p>It is also worth noting that hostnames are not resolved, which means this method does not consider
+     * a hostname and its corresponding IP address as being equal.</p>
+     *
+     * <p>Unlike {@link #equals(Object)}, this method <b>is</b> allowed to perform I/O operations and block
+     * the caller thread.</p>
+     *
+     * @param o the object to compare against this instance
+     * @return <code>true</code> if the canonical path of this file and the specified one are equal.
+     * @see #equals(Object)
      */
-    public boolean equals(Object f) {
-        if(f==null || !(f instanceof AbstractFile))
+    public boolean equalsCanonical(Object o) {
+        if(o==null || !(o instanceof AbstractFile))
             return false;
 
-//        return getURL().equals(((AbstractFile)f).getURL(), true, true);
+        // TODO: resolve hostnames ?
 
-        return getCanonicalPath(false).equals(((AbstractFile)f).getCanonicalPath(false));
+        return getCanonicalPath(false).equals(((AbstractFile)o).getCanonicalPath(false));
     }
 
     /**

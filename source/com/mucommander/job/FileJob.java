@@ -19,8 +19,6 @@
 
 package com.mucommander.job;
 
-import java.util.Iterator;
-import java.util.WeakHashMap;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.impl.CachedFile;
 import com.mucommander.file.util.FileSet;
@@ -34,6 +32,9 @@ import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.table.FileTable;
 import com.mucommander.ui.notifier.AbstractNotifier;
 import com.mucommander.ui.notifier.NotificationTypes;
+
+import java.util.Iterator;
+import java.util.WeakHashMap;
 
 
 
@@ -649,7 +650,7 @@ public abstract class FileJob implements Runnable {
 
         if(hasFolderChanged(activeTable.getCurrentFolder())) {
             // Select file specified by selectFileWhenFinished (if any) only if the file exists in the active table's folder
-            if(fileToSelect!=null && activeTable.getCurrentFolder().equals(fileToSelect.getParent()) && fileToSelect.exists())
+            if(fileToSelect!=null && activeTable.getCurrentFolder().equalsCanonical(fileToSelect.getParent()) && fileToSelect.exists())
                 activeTable.getFolderPanel().tryRefreshCurrentFolder(fileToSelect);
             else
                 activeTable.getFolderPanel().tryRefreshCurrentFolder();

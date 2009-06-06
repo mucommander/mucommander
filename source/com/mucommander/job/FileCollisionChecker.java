@@ -26,7 +26,7 @@ import com.mucommander.file.AbstractFile;
  * <p>Currently, 3 collision types are detected:
  * <ul>
  * <li>{@link #DESTINATION_FILE_ALREADY_EXISTS}: the destination file already exists
- * <li>{@link #SAME_SOURCE_AND_DESTINATION}: source and destination files are the same, according to {@link AbstractFile#equals(Object)}
+ * <li>{@link #SAME_SOURCE_AND_DESTINATION}: source and destination files are the same, according to {@link AbstractFile#equalsCanonical(Object)}
  * <li>{@link #SOURCE_PARENT_OF_DESTINATION}: source is a folder (as returned by {@link com.mucommander.file.AbstractFile#isBrowsable()}
  * and a parent of destination.
  * </ul>
@@ -62,7 +62,7 @@ public class FileCollisionChecker {
 
         if(sourceFile!=null) {
             // Source and destination are equal
-            if(destFile.equals(sourceFile))
+            if(destFile.equalsCanonical(sourceFile))
                 return SAME_SOURCE_AND_DESTINATION;
 
             // Both source and destination are folders and destination is a subfolder of source

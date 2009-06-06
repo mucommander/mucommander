@@ -250,7 +250,7 @@ public class DebugFile extends ProxyFile {
         return super.isRoot();
     }
 
-    public boolean equals(Object f) {
+    public boolean equalsCanonical(Object f) {
         if(Debug.ON) Debug.trace(getDebugString(), traceLevel);
         lag();
 
@@ -270,4 +270,5 @@ public class DebugFile extends ProxyFile {
 
         return super.getParent();
     }
+
 }

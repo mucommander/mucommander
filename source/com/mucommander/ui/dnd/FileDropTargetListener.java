@@ -156,7 +156,7 @@ public class FileDropTargetListener implements DropTargetListener {
         if(dragAccepted && DnDContext.isDragInitiatedByMucommander()) {
             FolderPanel dragInitiator = DnDContext.getDragInitiator();
 
-            if(dragInitiator==folderPanel || dragInitiator.getCurrentFolder().equals(folderPanel.getCurrentFolder())) {
+            if(dragInitiator==folderPanel || dragInitiator.getCurrentFolder().equalsCanonical(folderPanel.getCurrentFolder())) {
                 // Refuse drag if the drag was initiated by the same FolderPanel, or if its current folder is the same
                 // as this one
                 this.dragAccepted = false;
