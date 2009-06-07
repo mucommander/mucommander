@@ -34,6 +34,7 @@ import javax.swing.JScrollPane;
 import javax.swing.KeyStroke;
 import javax.swing.UIManager;
 
+import com.mucommander.ui.action.ActionKeymapIO;
 import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.dialog.pref.PreferencesDialog;
 import com.mucommander.ui.dialog.pref.PreferencesPanel;
@@ -116,6 +117,7 @@ public class ShortcutsPanel extends PreferencesPanel {
     ///////////////////////
 	protected void commit() {
 		shortcutsTable.updateActions();
+		ActionKeymapIO.setModified();
 	}
 	
 	

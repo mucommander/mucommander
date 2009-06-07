@@ -173,8 +173,6 @@ public class ActionKeymap {
     		// Add updated action to MainFrame's action and input maps
     		registerAction(mainFrame, action);
     	}
-    	
-    	ActionKeymapIO.setModified();
     }
     
     public static Enumeration getCustomizedActions() { return primaryActionKeymap.keys(); }
