@@ -35,6 +35,9 @@ import java.io.IOException;
  */
 public class BookmarkProtocolProvider implements ProtocolProvider {
 
+    /** Protocol for the virtual bookmarks file system. */
+    public static final String BOOKMARK = "bookmark";
+
     public AbstractFile getFile(FileURL url) throws IOException {
         // If the URL contains a path but no host, it's illegal.
         // If it contains neither host nor path, we're browsing bookmarks://

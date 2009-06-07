@@ -18,11 +18,13 @@
 
 package com.mucommander;
 
+import com.mucommander.bookmark.file.BookmarkProtocolProvider;
 import com.mucommander.command.Command;
 import com.mucommander.command.CommandException;
 import com.mucommander.command.CommandManager;
 import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.extension.ExtensionManager;
+import com.mucommander.file.FileFactory;
 import com.mucommander.file.icon.impl.SwingFileIconProvider;
 import com.mucommander.file.impl.ftp.FTPProtocolProvider;
 import com.mucommander.file.impl.smb.SMBProtocolProvider;
@@ -561,5 +563,8 @@ public class Launcher {
         // Use the FTP configuration option that controls whether to force the display of hidden files, or leave it for
         // the servers to decide whether to show them.
         FTPProtocolProvider.setForceHiddenFilesListing(MuConfiguration.getVariable(MuConfiguration.LIST_HIDDEN_FILES, MuConfiguration.DEFAULT_LIST_HIDDEN_FILES));        
+
+        // Register the application-specific 'bookmark' protocol. 
+        FileFactory.registerProtocol(BookmarkProtocolProvider.BOOKMARK, new com.mucommander.bookmark.file.BookmarkProtocolProvider());
     }
 }

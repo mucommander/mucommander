@@ -57,7 +57,6 @@ import java.util.Vector;
  *   <li>{@link FileProtocols#HTTPS HTTPS}.</li>
  *   <li>{@link FileProtocols#NFS NFS}.</li>
  *   <li>{@link FileProtocols#SMB SMB}.</li>
- *   <li>{@link FileProtocols#BOOKMARKS Bookmarks}.</li>
  * </ul>
  * </p>
  * <h3>Archive formats</h3>
@@ -118,7 +117,6 @@ public class FileFactory {
         registerProtocol(FileProtocols.HTTPS, protocolProvider);
         registerProtocol(FileProtocols.FTP, new com.mucommander.file.impl.ftp.FTPProtocolProvider());
         registerProtocol(FileProtocols.NFS, new com.mucommander.file.impl.nfs.NFSProtocolProvider());
-        registerProtocol(FileProtocols.BOOKMARKS, new com.mucommander.bookmark.file.BookmarkProtocolProvider());
         // SFTP support is not compatible with all version of the Java runtime
         if(com.mucommander.file.impl.sftp.SFTPProtocolProvider.isAvailable())
             registerProtocol(FileProtocols.SFTP, new com.mucommander.file.impl.sftp.SFTPProtocolProvider());

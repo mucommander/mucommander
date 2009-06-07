@@ -55,6 +55,4 @@ public interface FileProtocols {
     /** Protocol for files served by a web server using Webdav/HTTPS. */
     public final static String WEBDAVS   = "webdavs";
 
-    /** Protocol for the virtual bookmarks file system. */
-    public static final String BOOKMARKS = "bookmark";
 }

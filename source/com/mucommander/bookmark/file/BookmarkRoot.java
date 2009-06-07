@@ -21,7 +21,10 @@ package com.mucommander.bookmark.file;
 import com.mucommander.bookmark.Bookmark;
 import com.mucommander.bookmark.BookmarkListener;
 import com.mucommander.bookmark.BookmarkManager;
-import com.mucommander.file.*;
+import com.mucommander.file.AbstractFile;
+import com.mucommander.file.FilePermissions;
+import com.mucommander.file.FileURL;
+import com.mucommander.file.PermissionBits;
 import com.mucommander.io.RandomAccessInputStream;
 import com.mucommander.io.RandomAccessOutputStream;
 import com.mucommander.process.AbstractProcess;
@@ -44,7 +47,7 @@ class BookmarkRoot extends AbstractFile implements BookmarkListener {
 
     // - Initialisation --------------------------------------------------------
     // -------------------------------------------------------------------------
-    public BookmarkRoot() throws IOException {this(FileURL.getFileURL(FileProtocols.BOOKMARKS + "://"));}
+    public BookmarkRoot() throws IOException {this(FileURL.getFileURL(BookmarkProtocolProvider.BOOKMARK + "://"));}
     public BookmarkRoot(FileURL url) {
         super(url);
         lastModified = System.currentTimeMillis();
