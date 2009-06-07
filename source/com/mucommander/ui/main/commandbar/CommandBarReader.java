@@ -23,12 +23,14 @@ import java.io.InputStream;
 import java.util.Vector;
 
 import javax.swing.KeyStroke;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParserFactory;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 
 import com.mucommander.Debug;
+import com.mucommander.file.AbstractFile;
 import com.mucommander.io.BackupInputStream;
 import com.mucommander.ui.action.ActionManager;
 
@@ -43,16 +45,24 @@ class CommandBarReader extends CommandBarIO {
     private Vector actionsV;
     /** Temporarily used for XML parsing */
     private Vector alternateActionsV;
-
+    /** Temporarily used for XML parsing */
+    private KeyStroke modifier;
+    
+    /** Parsed file */
+    private AbstractFile file;
 
     /**
      * Starts parsing the XML description file.
+     * 
+     * @throws SAXException
+     * @throws IOException
+     * @throws ParserConfigurationException
      */
-    CommandBarReader() throws Exception {
-        InputStream in;
-
-        in = null;
-        try {SAXParserFactory.newInstance().newSAXParser().parse(in = new BackupInputStream(getDescriptionFile()), this);}
+    CommandBarReader(AbstractFile file) throws SAXException, IOException, ParserConfigurationException {
+    	this.file = file;
+    	
+    	InputStream in = null;
+        try {SAXParserFactory.newInstance().newSAXParser().parse(in = new BackupInputStream(file), this);}
         finally {
             if(in!=null)
                 try { in.close(); }
@@ -60,31 +70,42 @@ class CommandBarReader extends CommandBarIO {
         }
     }
 
+    ////////////////////
+    ///// getters //////
+    ////////////////////
+    
+    public Class[] getActionsRead() {
+    	int nbActions = actionsV.size();
+        Class[] actions = new Class[nbActions];
+        actionsV.toArray(actions);
+        return actions;
+    }
+    
+    public Class[] getAlternateActionsRead() {
+    	int nbActions = alternateActionsV.size();
+    	Class[] alternateActions = new Class[nbActions];
+        alternateActionsV.toArray(alternateActions);
+        return alternateActions;
+    }
+    
+    public KeyStroke getModifierRead() {
+    	return modifier;
+    }
+    
     ////////////////////////////
     // ContentHandler methods //
     ////////////////////////////
 
     public void startDocument() {
-        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(COMMAND_BAR_RESOURCE_PATH+" parsing started");
+        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(file.getAbsolutePath()+" parsing started");
 
         actionsV = new Vector();
-        /** Temporarily used for alternate actions parsing */
         alternateActionsV = new Vector();
+        modifier = null;
     }
 
     public void endDocument() {
-        int nbActions = actionsV.size();
-
-        Class[] actions = new Class[nbActions];
-        actionsV.toArray(actions);
-        actionsV = null;
-
-        Class[] alternateActions = new Class[nbActions];
-        alternateActionsV.toArray(alternateActions);
-        alternateActionsV = null;
-        
-        CommandBarAttributes.setActions(actions, alternateActions);
-        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(COMMAND_BAR_RESOURCE_PATH+" parsing finished");
+        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(file.getAbsolutePath()+" parsing finished");
     }
 
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
@@ -111,9 +132,7 @@ class CommandBarReader extends CommandBarIO {
             // Note: early 0.8 beta3 nightly builds did not have this attribute, so the attribute may be null
             String modifierString = attributes.getValue(MODIFIER_ATTRIBUTE);
 
-            KeyStroke modifier;
-            if(modifierString!=null && (modifier=KeyStroke.getKeyStroke(modifierString))!=null)
-            	CommandBarAttributes.setModifier(modifier);
+            modifier = KeyStroke.getKeyStroke(modifierString);
         }
     }
 }

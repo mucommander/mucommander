@@ -28,6 +28,7 @@ import com.mucommander.Debug;
 import com.mucommander.PlatformManager;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
+import com.mucommander.file.util.ResourceLoader;
 
 /**
  * This class contains the common things for reading and writing the command-bar actions and modifier.
@@ -68,11 +69,18 @@ public abstract class CommandBarIO extends DefaultHandler {
      * This method must be called before instantiating CommandBar for the first time.
      */
     public static void loadCommandBar() throws Exception {
+    	// Load command-bar resource file:
+    	CommandBarReader resourceFileReader = new CommandBarReader(ResourceLoader.getResourceAsFile(COMMAND_BAR_RESOURCE_PATH));
+    	CommandBarAttributes.setDefaultAttributes(resourceFileReader.getActionsRead(), resourceFileReader.getAlternateActionsRead(), resourceFileReader.getModifierRead());
+    	
+    	// Load user's file if exist
     	AbstractFile commandBarFile = getDescriptionFile();
-    	if(commandBarFile.exists())
-    		new CommandBarReader();
+    	if(commandBarFile != null && commandBarFile.exists()) {
+    		CommandBarReader reader = new CommandBarReader(commandBarFile);
+    		CommandBarAttributes.setAttributes(reader.getActionsRead(), reader.getAlternateActionsRead(), reader.getModifierRead());
+    	}
     	else
-    		if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(COMMAND_BAR_RESOURCE_PATH + " was not found");
+    		if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(DEFAULT_COMMAND_BAR_FILE_NAME + " was not found");
     	
     	// initialize the writer after setting the command-bar initial attributes:
     	commandBarWriter = CommandBarWriter.create();

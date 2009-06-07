@@ -18,24 +18,10 @@
 
 package com.mucommander.ui.main.commandbar;
 
-import java.awt.event.KeyEvent;
 import java.util.Iterator;
 import java.util.WeakHashMap;
 
 import javax.swing.KeyStroke;
-
-import com.mucommander.ui.action.CloseWindowAction;
-import com.mucommander.ui.action.CopyAction;
-import com.mucommander.ui.action.DeleteAction;
-import com.mucommander.ui.action.EditAction;
-import com.mucommander.ui.action.LocalCopyAction;
-import com.mucommander.ui.action.MkdirAction;
-import com.mucommander.ui.action.MkfileAction;
-import com.mucommander.ui.action.MoveAction;
-import com.mucommander.ui.action.PermanentDeleteAction;
-import com.mucommander.ui.action.RefreshAction;
-import com.mucommander.ui.action.RenameAction;
-import com.mucommander.ui.action.ViewAction;
 
 /**
  * This class is responsible to handle the attributes of CommandBars - their actions, alternate actions and modifier.
@@ -45,77 +31,100 @@ import com.mucommander.ui.action.ViewAction;
  */
 public class CommandBarAttributes {
 
-	/** Default command bar actions */
-	private static Class[] defaultActions;
-	
 	/** Command bar actions */
     private static Class actions[];
-    
-    /** Default command bar alternate actions */
-    private static Class defaultAlternateActions[];
-    
     /** Command bar alternate actions */
     private static Class alternateActions[];
-    
-    private static boolean useDefaultActions = true;
-    
-    /** Default modifier key that triggers the display of alternate actions when pressed */
-    private static KeyStroke defaultModifier = KeyStroke.getKeyStroke(KeyEvent.VK_SHIFT, 0);
-    
     /** Modifier key that triggers the display of alternate actions when pressed */
     private static KeyStroke modifier;
     
-    private static boolean useDefaultModifier = true;
+    /** Command bar default actions */
+    private static Class defaultActions[];
+    /** Command bar default alternate actions */
+    private static Class defaultAlternateActions[];
+    /** Default modifier key that triggers the display of alternate actions when pressed */
+    private static KeyStroke defaultModifier;
     
     /** Contains all registered command-bar attributes listeners, stored as weak references */
     private static WeakHashMap listeners = new WeakHashMap();
 
-    static {
-    	defaultActions = new Class[8];
-    	defaultActions[0] = ViewAction.class;
-    	defaultActions[1] = EditAction.class;
-    	defaultActions[2] = CopyAction.class;
-    	defaultActions[3] = MoveAction.class;
-    	defaultActions[4] = MkdirAction.class;
-    	defaultActions[5] = DeleteAction.class;
-    	defaultActions[6] = RefreshAction.class;
-    	defaultActions[7] = CloseWindowAction.class;
-
-    	defaultAlternateActions = new Class[8];
-    	defaultAlternateActions[0] = null;
-    	defaultAlternateActions[1] = null;
-    	defaultAlternateActions[2] = LocalCopyAction.class;
-    	defaultAlternateActions[3] = RenameAction.class;
-    	defaultAlternateActions[4] = MkfileAction.class;
-    	defaultAlternateActions[5] = PermanentDeleteAction.class;
-    	defaultAlternateActions[6] = null;
-    	defaultAlternateActions[7] = null;
+    /**
+     * This method restore the default command-bar attributes.
+     * The attributes are updated only if they are not already equal to the default attributes.
+     */
+    public static void restoreDefault() {
+    	if (!isDefault())
+    		setAttributes(defaultActions, defaultAlternateActions, defaultModifier);
     }
     
-    public static void setActions(Class[] actions, Class[] alternateActions) {
+    /**
+     * 
+     * @return true if command-bar attributes equal to the default attributes.
+     */
+    public static boolean isDefault() {
+    	if (actions != defaultActions) {
+    		int nbActions = actions.length;
+    		for (int i=0; i<nbActions; ++i)
+    			if (!equals(actions[i], defaultActions[i]))
+    				return false;
+    	}
+    	
+    	if (alternateActions != defaultAlternateActions) {
+    		int nbAlternateActions = alternateActions.length;
+    		for (int i=0; i<nbAlternateActions; ++i)
+    			if (!equals(alternateActions[i], defaultAlternateActions[i]))
+    				return false;
+    	}
+    	
+    	return defaultModifier == modifier || defaultModifier.equals(modifier);
+    }
+    
+    private static boolean equals(Class action1, Class action2) {
+    	if (action1 == null)
+    		return action2 == null;
+    	return action1.equals(action2);
+    }
+    
+    ///////////////
+    /// setters ///
+    ///////////////
+    
+    /**
+     * This method is used to set the default attributes of command-bar.
+     * This method should be called only once, when parsing the command-bar resource file, as it 
+     * updates the command-bar with the given default values.
+     */
+    static void setDefaultAttributes(Class[] defaultActions, Class[] defaultAlternateActions, KeyStroke defaultModifier) {
+    	CommandBarAttributes.defaultActions = defaultActions;
+    	CommandBarAttributes.defaultAlternateActions = defaultAlternateActions;
+    	CommandBarAttributes.defaultModifier = defaultModifier;
+    	setAttributes(defaultActions, defaultAlternateActions, defaultModifier);
+    }
+    
+    /**
+     * This method is used to set
+     * 
+     * @param actions          standard command-bar actions.
+     * @param alternateActions alternate command-bar actions.
+     * @param modifier         command-bar modifier.
+     */
+    public static void setAttributes(Class[] actions, Class[] alternateActions, KeyStroke modifier) {
     	CommandBarAttributes.actions = actions;
     	CommandBarAttributes.alternateActions = alternateActions;
-    	useDefaultActions = false;
-    	fireAttributesChanged();
-    }
-    
-    public static void setModifier(KeyStroke modifier) {
     	CommandBarAttributes.modifier = modifier;
-    	useDefaultModifier = false;
     	fireAttributesChanged();
     }
     
-    public static Class[] getActions() {
-    	return useDefaultActions ? defaultActions : actions;
-    }
+    ///////////////
+    /// getters ///
+    ///////////////
+        
+    public static Class[] getActions() {return actions;}
     
-    public static Class[] getAlternateActions() {
-    	return useDefaultActions ? defaultAlternateActions : alternateActions;
-    }
+    public static Class[] getAlternateActions() {return alternateActions;}
     
-    public static KeyStroke getModifier() {
-    	return useDefaultModifier ? defaultModifier : modifier;
-    }
+    public static KeyStroke getModifier() {return modifier;}
+    
     
     // - Listeners -------------------------------------------------------------
     // -------------------------------------------------------------------------

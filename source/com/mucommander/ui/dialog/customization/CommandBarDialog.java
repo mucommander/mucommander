@@ -18,6 +18,47 @@
 
 package com.mucommander.ui.dialog.customization;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
+import java.awt.Point;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.awt.dnd.DropTargetDragEvent;
+import java.awt.dnd.DropTargetDropEvent;
+import java.awt.dnd.DropTargetEvent;
+import java.awt.dnd.DropTargetListener;
+import java.awt.event.KeyEvent;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+import java.util.TooManyListenersException;
+import java.util.Vector;
+
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.ListCellRenderer;
+import javax.swing.ListSelectionModel;
+import javax.swing.TransferHandler;
+import javax.swing.UIManager;
+import javax.swing.Box.Filler;
+import javax.swing.border.Border;
+
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.layout.YBoxPanel;
@@ -28,22 +69,6 @@ import com.mucommander.ui.main.commandbar.CommandBarAttributes;
 import com.mucommander.ui.main.commandbar.CommandBarButton;
 import com.mucommander.ui.text.RecordingKeyStrokeTextField;
 import com.mucommander.util.AlteredVector;
-
-import javax.swing.*;
-import javax.swing.Box.Filler;
-import javax.swing.border.Border;
-import java.awt.*;
-import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.Transferable;
-import java.awt.datatransfer.UnsupportedFlavorException;
-import java.awt.dnd.DropTargetDragEvent;
-import java.awt.dnd.DropTargetDropEvent;
-import java.awt.dnd.DropTargetEvent;
-import java.awt.dnd.DropTargetListener;
-import java.awt.event.KeyEvent;
-import java.io.IOException;
-import java.util.*;
-import java.util.List;
 
 /**
  * Dialog used to customize the command-bar.
@@ -189,8 +214,7 @@ public class CommandBarDialog extends CustomizeDialog {
 										((JButton) button).getAction().getClass() : null;
 		}
 		
-		CommandBarAttributes.setActions(newActions, newAlternativeActions);
-		CommandBarAttributes.setModifier(modifierField.getKeyStroke());
+		CommandBarAttributes.setAttributes(newActions, newAlternativeActions, modifierField.getKeyStroke());
 	}
 
 	protected JPanel createCustomizationPanel() {
