@@ -25,12 +25,7 @@ package com.mucommander.ui.main.commandbar;
  */
 public interface CommandBarAttributesListener {
 	/**
-     * This method is invoked when command-bar's actions\alternate actions have been modified.
+     * This method is invoked when command-bar's actions\alternate actions\modifier have been modified.
      */
-    public void CommandBarActionsChanged();
-    
-    /**
-     * This method is invoked when command-bar's modifier has been modified.
-     */
-    public void CommandBarModifierChanged();
+    public void commandBarAttributeChanged();
 }

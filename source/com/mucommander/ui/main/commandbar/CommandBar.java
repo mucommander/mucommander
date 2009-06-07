@@ -173,15 +173,12 @@ public class CommandBar extends JPanel implements KeyListener, MouseListener, Co
     // CommandBarAttributesListener methods //
     //////////////////////////////////////////
     
-	public void CommandBarActionsChanged() {
+    public void commandBarAttributeChanged() {
 		actions = CommandBarAttributes.getActions();
 		alternateActions = CommandBarAttributes.getAlternateActions();
+		modifier = CommandBarAttributes.getModifier();
 		removeAll();
 		addButtons();
 		doLayout();
-	}
-
-	public void CommandBarModifierChanged() {
-		modifier = CommandBarAttributes.getModifier();
 	}
 }

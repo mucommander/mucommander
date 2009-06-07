@@ -96,13 +96,13 @@ public class CommandBarAttributes {
     	CommandBarAttributes.actions = actions;
     	CommandBarAttributes.alternateActions = alternateActions;
     	useDefaultActions = false;
-    	fireActionsChanged();
+    	fireAttributesChanged();
     }
     
     public static void setModifier(KeyStroke modifier) {
     	CommandBarAttributes.modifier = modifier;
     	useDefaultModifier = false;
-    	fireModifierChanged();
+    	fireAttributesChanged();
     }
     
     public static Class[] getActions() {
@@ -127,21 +127,12 @@ public class CommandBarAttributes {
     	synchronized(listeners) {listeners.remove(listener);}
     }
     
-    protected static void fireActionsChanged() {
+    protected static void fireAttributesChanged() {
     	synchronized(listeners) {
             // Iterate on all listeners
             Iterator iterator = listeners.keySet().iterator();
             while(iterator.hasNext())
-                ((CommandBarAttributesListener)iterator.next()).CommandBarActionsChanged();
-        }
-    }
-    
-    protected static void fireModifierChanged() {
-    	synchronized(listeners) {
-            // Iterate on all listeners
-            Iterator iterator = listeners.keySet().iterator();
-            while(iterator.hasNext())
-                ((CommandBarAttributesListener)iterator.next()).CommandBarModifierChanged();
+                ((CommandBarAttributesListener)iterator.next()).commandBarAttributeChanged();
         }
     }
 }

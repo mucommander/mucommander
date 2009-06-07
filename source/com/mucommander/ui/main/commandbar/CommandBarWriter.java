@@ -24,7 +24,6 @@ import java.io.OutputStream;
 import javax.swing.KeyStroke;
 
 import com.mucommander.Debug;
-import com.mucommander.RuntimeConstants;
 import com.mucommander.io.BackupOutputStream;
 import com.mucommander.ui.text.KeyStrokeUtils;
 import com.mucommander.xml.XmlAttributes;
@@ -40,7 +39,8 @@ class CommandBarWriter extends CommandBarIO implements CommandBarAttributesListe
 	/** Flag that indicates if are there unsaved command-bar changes */
 	protected boolean isCommandBarChanged = false;
 	
-	////// Singleton
+	// - Singleton -------------------------------------------------------
+    // -------------------------------------------------------------------
 	private static CommandBarWriter instance;
 	
 	public static CommandBarWriter create() {
@@ -78,12 +78,8 @@ class CommandBarWriter extends CommandBarIO implements CommandBarAttributesListe
     ///// CommandBarAttributesListener methods /////
     ////////////////////////////////////////////////
     
-    public void CommandBarActionsChanged() {
+	public void commandBarAttributeChanged() {
     	isCommandBarChanged = true;
-	}
-
-	public void CommandBarModifierChanged() {
-		isCommandBarChanged = true;
 	}
 	
 	private static class Writer {
