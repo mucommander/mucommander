@@ -147,7 +147,7 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 		rowToAlternateAccelerator = new HashMap();
 		actionToTooltipText = new HashMap();
 
-		setModel(new KeymapTableModel(copy(data = buildTableData(filter))));
+		setModel(new KeymapTableModel(takeSnapshot(data = buildTableData(filter))));
 	}
 	
 	private static boolean usesTableHeaderRenderingProperties() {
@@ -172,7 +172,7 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 			dirtyRows.add(Integer.valueOf(row));
 	}
 	
-	private Object[][] copy(Object[][] data) {
+	private Object[][] takeSnapshot(Object[][] data) {
 		Object[][] c = new Object[data.length][data[0].length];
 		for (int i=0; i<data.length; i++) {
 			System.arraycopy(data[i], 0, c[i], 0, data[0].length);
@@ -212,7 +212,7 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 	}
 
 	public void updateActions() {
-		data = copy(((KeymapTableModel) getModel()).getData());
+		data = takeSnapshot(((KeymapTableModel) getModel()).getData());
 		Iterator iterator = dirtyRows.iterator();
 		while(iterator.hasNext()) {
 			Integer row = (Integer) iterator.next();
