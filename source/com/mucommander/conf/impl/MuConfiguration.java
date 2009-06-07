@@ -24,8 +24,6 @@ import com.mucommander.conf.ConfigurationException;
 import com.mucommander.conf.ConfigurationListener;
 import com.mucommander.conf.ValueList;
 import com.mucommander.file.AbstractFile;
-import com.mucommander.file.FileFactory;
-import com.mucommander.file.icon.CachedFileIconProvider;
 import com.mucommander.runtime.JavaVersions;
 import com.mucommander.runtime.OsFamilies;
 import com.mucommander.ui.icon.FileIcons;
@@ -447,21 +445,6 @@ public class MuConfiguration {
 
 
 
-    // - Variables used for caches -------------------------------------------
-    // -----------------------------------------------------------------------
-    /** Section controlling the caching mechanisms used throughout the application. */
-    public static final String  CACHE_SECTION                      = "cache";
-    /** Capacity of the AbstractFile instances cache. */
-    public static final String  FILE_CACHE_CAPACITY                = CACHE_SECTION + '.' + "file_cache_capacity";
-    /** Default capacity of the AbstractFile instances cache. */
-    public static final int     DEFAULT_FILE_CACHE_CAPACITY        = 1000;
-    /** Capacity of the system file icon cache. */
-    public static final String  SYSTEM_ICON_CACHE_CAPACITY         = CACHE_SECTION + '.' + "system_icon_cache_capacity";
-    /** Default capacity of the system file icon cache. */
-    public static final int     DEFAULT_SYSTEM_ICON_CACHE_CAPACITY = 100;
-
-
-
     // - Variables used for themes -------------------------------------------
     // -----------------------------------------------------------------------
     /** Section controlling which theme should be applied to muCommander. */
@@ -563,15 +546,6 @@ public class MuConfiguration {
                 renameVariable("show_command_bar",  COMMAND_BAR_VISIBLE);
                 setVariable(VERSION, RuntimeConstants.VERSION);
             }
-
-            // Initialises core API variables
-            FileFactory.setFileCacheCapacity(MuConfiguration.getVariable(
-                    MuConfiguration.FILE_CACHE_CAPACITY,
-                    MuConfiguration.DEFAULT_FILE_CACHE_CAPACITY));
-
-            CachedFileIconProvider.setCacheCapacity(MuConfiguration.getVariable(
-                    MuConfiguration.SYSTEM_ICON_CACHE_CAPACITY,
-                    MuConfiguration.DEFAULT_SYSTEM_ICON_CACHE_CAPACITY));
 
             // Initialises mac os x specific values
             if(OsFamilies.MAC_OS_X.isCurrent()) {

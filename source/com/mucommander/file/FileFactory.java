@@ -21,10 +21,10 @@ package com.mucommander.file;
 import com.mucommander.Debug;
 import com.mucommander.auth.AuthException;
 import com.mucommander.auth.CredentialsManager;
-import com.mucommander.cache.LRUCache;
 import com.mucommander.file.icon.FileIconProvider;
 import com.mucommander.file.icon.impl.SwingFileIconProvider;
 import com.mucommander.file.impl.local.LocalFile;
+import com.mucommander.file.util.FileCache;
 import com.mucommander.file.util.PathTokenizer;
 import com.mucommander.file.util.PathUtils;
 import com.mucommander.runtime.JavaVersions;
@@ -32,7 +32,10 @@ import com.mucommander.runtime.OsFamilies;
 import com.mucommander.util.Enumerator;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.Random;
+import java.util.Vector;
 
 /**
  * FileFactory is an abstract class that provides static methods to get a {@link AbstractFile} instance for
@@ -92,14 +95,11 @@ public class FileFactory {
     /** Array of registered FileProtocolMapping instances, for quicker access */
     private static ArchiveFormatProvider[] archiveFormatProviders;
 
-    /** Static LRUCache instance that caches frequently accessed AbstractFile instances */
-    private static LRUCache fileCache;
+    /** Caches raw (as opposed to archives) file instances */
+    private final static FileCache rawFileCache = new FileCache();
 
     /** Caches archive file instances */
-    private static WeakHashMap archiveFileCache = new WeakHashMap();
-
-    /** Default capacity of the file cache */
-    public final static int DEFAULT_FILE_CACHE_CAPACITY = 1000;
+    private final static FileCache archiveFileCache = new FileCache();
 
     /** System temp directory */
     private final static AbstractFile TEMP_DIRECTORY;
@@ -109,9 +109,6 @@ public class FileFactory {
 
     static {
         if(Debug.ON) Debug.trace("Registering file providers");
-
-        // Initialize the LRUCache that caches frequently accessed AbstractFile instances
-        setFileCacheCapacity(DEFAULT_FILE_CACHE_CAPACITY);
 
         // Register built-in file protocols.
         ProtocolProvider protocolProvider;
@@ -158,32 +155,6 @@ public class FileFactory {
     private FileFactory() {
     }
 
-
-    /**
-     * Sets the capacity of the {@link LRUCache} that caches frequently accessed file instances. The more the capacity,
-     * the more frequent the cache is hit but the higher the memory usage. By default, the capacity is
-     * {@link #DEFAULT_FILE_CACHE_CAPACITY}.
-     *
-     * <p>If the specified capacity is different from the current one, a new cache instance will be created, thus clearing
-     * all previously cached files.</p>
-     *
-     * @param capacity the capacity of the LRU cache that caches frequently accessed file instances
-     * @see com.mucommander.cache.LRUCache
-     */
-    public static void setFileCacheCapacity(int capacity) {
-        if(fileCache==null || fileCache.getCapacity()!=capacity)   // Don't create a new instance if the capacity is the same
-            fileCache = LRUCache.createInstance(capacity);
-    }
-
-    /**
-     * Returns the capacity of the {@link LRUCache} that caches frequently accessed file instances. By default, the
-     * capacity is {@link #DEFAULT_FILE_CACHE_CAPACITY}.
-     *
-     * @return capacity of the LRU cache that caches frequently accessed file instances
-     */
-    public static int getFileCacheCapacity() {
-        return fileCache.getCapacity();
-    }
 
     /**
      * Registers a new file protocol.
@@ -528,8 +499,8 @@ public class FileFactory {
         if(useFileCache) {
             // Lookup the cache for an existing AbstractFile instance
             // Note: FileURL#equals(Object) and #hashCode() take into account credentials and properties
-            file = (AbstractFile)fileCache.get(fileURL);
-//            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("file cache hits/misses: "+fileCache.getHitCount()+"/"+fileCache.getMissCount());
+            file = rawFileCache.get(fileURL);
+            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("file cache "+(file==null?"miss":"hit"));
 
             if(file!=null)
                 return file;
@@ -566,7 +537,7 @@ public class FileFactory {
             // Note: Creating an archive file on top of the file must be done after adding the file to the LRU cache,
             // this could otherwise lead to weird behaviors, for example if a directory with the same filename
             // of a former archive was created, the directory would be considered as an archive
-            fileCache.add(fileURL, file);
+            rawFileCache.put(fileURL, file);
 //                            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Added to file cache: "+file);
         }
 
@@ -680,7 +651,7 @@ public class FileFactory {
             boolean useCache = !(file instanceof ArchiveEntryFile);
 
             if(useCache) {
-                archiveFile = (AbstractFile)archiveFileCache.get(file.getAbsolutePath());
+                archiveFile = archiveFileCache.get(file.getURL());
                 if(archiveFile!=null) {
 //                    if(Debug.ON) Debug.trace("Found cached archive file for: "+file.getAbsolutePath());
                     return archiveFile;
@@ -694,7 +665,7 @@ public class FileFactory {
                 archiveFile = provider.getFile(file);
                 if(useCache) {
                     if(Debug.ON) Debug.trace("Adding archive file to cache: "+file.getAbsolutePath());
-                    archiveFileCache.put(file.getAbsolutePath(), archiveFile);
+                    archiveFileCache.put(file.getURL(), archiveFile);
                 }
                 return archiveFile;
             }

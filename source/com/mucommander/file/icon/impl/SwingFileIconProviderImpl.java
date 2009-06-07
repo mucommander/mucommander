@@ -19,11 +19,11 @@
 package com.mucommander.file.icon.impl;
 
 import com.mucommander.Debug;
-import com.mucommander.cache.LRUCache;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileProtocols;
 import com.mucommander.file.icon.CacheableFileIconProvider;
 import com.mucommander.file.icon.CachedFileIconProvider;
+import com.mucommander.file.icon.IconCache;
 import com.mucommander.file.icon.LocalFileIconProvider;
 import com.mucommander.file.impl.local.LocalFile;
 import com.mucommander.file.util.ResourceLoader;
@@ -52,10 +52,10 @@ class SwingFileIconProviderImpl extends LocalFileIconProvider implements Cacheab
     private static JFileChooser fileChooser;
 
     /** Caches icons for directories, used only for non-local files */
-    protected static LRUCache directoryIconCache = CachedFileIconProvider.createCache();
+    protected static IconCache directoryIconCache = CachedFileIconProvider.createCache();
 
     /** Caches icons for regular files, used only for non-local files */
-    protected static LRUCache fileIconCache = CachedFileIconProvider.createCache();
+    protected static IconCache fileIconCache = CachedFileIconProvider.createCache();
 
     /** True if init has been called */
     protected static boolean initialized;
@@ -150,6 +150,19 @@ class SwingFileIconProviderImpl extends LocalFileIconProvider implements Cacheab
         return new ImageIcon(bi);
     }
 
+    /**
+     * Returns the extension of the given file using {@link AbstractFile#getExtension()}. If the extension is
+     * <code>null</code>, the empty string <code>""</code> is returned, making the returned extension safe for use
+     * in a hash map where null keys are forbidden.
+     *
+     * @param file file on which to call {@link AbstractFile#getExtension}
+     * @return the file's extension, may be the empty string but never <code>null</code>
+     */
+    private static String getCheckedExtension(AbstractFile file) {
+        String extension = file.getExtension();
+        return extension==null?"":extension;
+    }
+
 
     //////////////////////////////////////////
     // LocalFileIconProvider implementation //
@@ -174,12 +187,12 @@ class SwingFileIconProviderImpl extends LocalFileIconProvider implements Cacheab
             return getSwingIcon(new java.io.File("/Network"));
 
         // Look for an existing icon instance for the file's extension
-        return (Icon)(file.isDirectory()? directoryIconCache : fileIconCache).get(file.getExtension());
+        return (file.isDirectory()? directoryIconCache : fileIconCache).get(getCheckedExtension(file));
     }
 
     public void addToCache(AbstractFile file, Icon icon, Dimension preferredResolution) {
         // Map the extension onto the given icon
-        (file.isDirectory()? directoryIconCache : fileIconCache).add(file.getExtension(), icon);
+        (file.isDirectory()? directoryIconCache : fileIconCache).put(getCheckedExtension(file), icon);
     }
 
     /**
