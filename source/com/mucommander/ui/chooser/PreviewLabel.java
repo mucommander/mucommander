@@ -103,13 +103,19 @@ public class PreviewLabel extends JLabel implements PropertyChangeListener, Clon
         putClientProperty(BACKGROUND_COLOR_PROPERTY_NAME, color);
     }
 
-    public Object clone() throws CloneNotSupportedException {return super.clone();}
+    public Object clone() throws CloneNotSupportedException {
+        PreviewLabel label;
+
+        label = (PreviewLabel)super.clone();
+        label.addPropertyChangeListener(label);
+        
+        return label;
+    }
 
     /**
      * Paints the preview label.
      */
     public void paint(Graphics g) {
-
         int width = getWidth();
         int height = getHeight();
 
@@ -138,7 +144,7 @@ public class PreviewLabel extends JLabel implements PropertyChangeListener, Clon
         return dimension;
     }
 
-///////////////////////////////////////////
+    ///////////////////////////////////////////
     // PropertyChangeListener implementation //
     ///////////////////////////////////////////
 
