@@ -28,6 +28,7 @@ import com.mucommander.Debug;
 import com.mucommander.PlatformManager;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
+import com.mucommander.file.util.ResourceLoader;
 
 /**
  * This class contains the common things to the actions reading and writing.
@@ -55,6 +56,8 @@ public abstract class ActionKeymapIO extends DefaultHandler  {
     
     /** Whether the actions have been modified since the last time they were saved */
     protected static boolean wereActionsModified;
+    
+    private static ActionKeymapWriter writer = new ActionKeymapWriter();
     
 	/**
      * Sets the path to the user actions file to be loaded when calling {@link #loadActionKeymap()}.
@@ -121,8 +124,12 @@ public abstract class ActionKeymapIO extends DefaultHandler  {
      */
     public static void saveActionKeymap() throws IOException {
     	if (wereActionsModified)
-    		new ActionKeymapWriter();
+    		writer.write();
     	else if(Debug.ON) Debug.trace("Action keymap not modified, skip saving.");
+    }
+    
+    protected static void createEmptyFile() throws IOException {
+    	writer.create();
     }
     
     /**
@@ -134,7 +141,20 @@ public abstract class ActionKeymapIO extends DefaultHandler  {
      * <p>This method must be called before requesting and registering any action.
      */
     public static void loadActionKeymap() throws Exception {
-        new ActionKeymapReader();
+    	// Load actions keymap resource file:
+    	ActionKeymapReader resourceFileReader = new ActionKeymapReader(ResourceLoader.getResourceAsFile(ACTION_KEYMAP_RESOURCE_PATH));
+    	ActionKeymap.setDefaultKeymap(resourceFileReader.getPrimaryActionsKeymap(), resourceFileReader.getAlternateActionsKeymap());
+    	
+    	// Load user's file if exist
+    	AbstractFile actionKeymapFile = getActionsFile();
+    	if (actionKeymapFile != null && actionKeymapFile.exists()) {
+    		ActionKeymapReader reader = new ActionKeymapReader(actionKeymapFile);
+    		ActionKeymap.registerActions(reader.getPrimaryActionsKeymap(), reader.getAlternateActionsKeymap());
+    	}
+    	else {
+    		createEmptyFile();
+    		if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(DEFAULT_ACTIONS_FILE_NAME + " was not found, created empty file");
+    	}
     }
 }
 

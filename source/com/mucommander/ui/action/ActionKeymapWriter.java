@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.Iterator;
 
 import javax.swing.KeyStroke;
 
@@ -39,15 +40,30 @@ import com.mucommander.xml.XmlWriter;
  */
 class ActionKeymapWriter extends ActionKeymapIO {
 	
-	ActionKeymapWriter() throws IOException {
-		Hashtable combinedMapping = new Hashtable();
-		Enumeration actionClassesEnumeration = ActionKeymap.getCustomizedActions();
+	ActionKeymapWriter() {}
+	
+	public void create() throws IOException {
+		BackupOutputStream bos = null;
 
-		while(actionClassesEnumeration.hasMoreElements()) {
-			Class actionClass = (Class) actionClassesEnumeration.nextElement();
+		try {
+			bos = new BackupOutputStream(getActionsFile());
+			new ActionKeyMapWriter(bos).writeKeyMap(null);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			bos.close();
+		}
+	}
+	
+	public void write() throws IOException {
+		Hashtable combinedMapping = new Hashtable();
+		Iterator modifiedActionsIterator = ActionKeymap.getCustomizedActions();
+
+		while(modifiedActionsIterator.hasNext()) {
+			Class actionClass = (Class) modifiedActionsIterator.next();
 			KeyStroke[] keyStrokes = new KeyStroke[2];
 			keyStrokes[0] = ActionKeymap.getAccelerator(actionClass);
-			keyStrokes[1] = ActionKeymap.getAlternateAccelerator(actionClass); // adds null if there is no alt keystroke
+			keyStrokes[1] = ActionKeymap.getAlternateAccelerator(actionClass);
 
 			combinedMapping.put(actionClass, keyStrokes);
 		}
@@ -71,7 +87,7 @@ class ActionKeymapWriter extends ActionKeymapIO {
     	private ActionKeyMapWriter(OutputStream stream) throws IOException {
     		this.writer = new XmlWriter(stream);
     	}
-
+    	
     	private void writeKeyMap(Hashtable actionMap) throws IOException {
     		try {
     			writer.writeCommentLine("See http://trac.mucommander.com/wiki/ActionKeyMap for information on how to customize this file");
@@ -81,11 +97,13 @@ class ActionKeymapWriter extends ActionKeymapIO {
     			
     			writer.startElement(ROOT_ELEMENT, rootElementAttributes, true);
 
-    			Enumeration enumeration = actionMap.keys();
-    			while (enumeration.hasMoreElements()) {
-    				Class clazz = (Class) enumeration.nextElement();
-    				addMapping(clazz, (KeyStroke[]) actionMap.get(clazz));
-    			}    				
+    			if (actionMap != null) {
+    				Enumeration enumeration = actionMap.keys();
+    				while (enumeration.hasMoreElements()) {
+    					Class clazz = (Class) enumeration.nextElement();
+    					addMapping(clazz, (KeyStroke[]) actionMap.get(clazz));
+    				}
+    			}
 
     		} finally {
     			writer.endElement(ROOT_ELEMENT);
