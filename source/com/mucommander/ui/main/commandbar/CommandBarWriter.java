@@ -24,6 +24,7 @@ import java.io.OutputStream;
 import javax.swing.KeyStroke;
 
 import com.mucommander.Debug;
+import com.mucommander.RuntimeConstants;
 import com.mucommander.io.BackupOutputStream;
 import com.mucommander.ui.text.KeyStrokeUtils;
 import com.mucommander.xml.XmlAttributes;
@@ -95,7 +96,7 @@ class CommandBarWriter extends CommandBarIO implements CommandBarAttributesListe
 				
 				XmlAttributes rootElementAttributes = new XmlAttributes();
 				rootElementAttributes.add(MODIFIER_ATTRIBUTE, KeyStrokeUtils.getKeyStrokeRepresentation(modifier));
-				rootElementAttributes.add(VERSION_ATTRIBUTE, "0.8.3"); // TODO: "0.8.3" <=> RuntimeConstants.VERSION
+				rootElementAttributes.add(VERSION_ATTRIBUTE, RuntimeConstants.VERSION);
 
     			writer.startElement(ROOT_ELEMENT, rootElementAttributes, true);    			
     			

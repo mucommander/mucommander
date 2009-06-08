@@ -27,6 +27,7 @@ import java.util.Iterator;
 import javax.swing.KeyStroke;
 
 import com.mucommander.Debug;
+import com.mucommander.RuntimeConstants;
 import com.mucommander.io.BackupOutputStream;
 import com.mucommander.ui.text.KeyStrokeUtils;
 import com.mucommander.xml.XmlAttributes;
@@ -47,7 +48,7 @@ class ActionKeymapWriter extends ActionKeymapIO {
 
 		try {
 			bos = new BackupOutputStream(getActionsFile());
-			new ActionKeyMapWriter(bos).writeKeyMap(null);
+			new Writer(bos).writeKeyMap(null);
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -72,7 +73,7 @@ class ActionKeymapWriter extends ActionKeymapIO {
 
 		try {
 			bos = new BackupOutputStream(getActionsFile());
-			new ActionKeyMapWriter(bos).writeKeyMap(combinedMapping);
+			new Writer(bos).writeKeyMap(combinedMapping);
 			wereActionsModified = false;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -81,10 +82,10 @@ class ActionKeymapWriter extends ActionKeymapIO {
 		}
 	}
 	
-    private static class ActionKeyMapWriter {
+    private static class Writer {
     	private XmlWriter writer = null;
 
-    	private ActionKeyMapWriter(OutputStream stream) throws IOException {
+    	private Writer(OutputStream stream) throws IOException {
     		this.writer = new XmlWriter(stream);
     	}
     	
@@ -93,7 +94,7 @@ class ActionKeymapWriter extends ActionKeymapIO {
     			writer.writeCommentLine("See http://trac.mucommander.com/wiki/ActionKeyMap for information on how to customize this file");
     			
     			XmlAttributes rootElementAttributes = new XmlAttributes();
-				rootElementAttributes.add(VERSION_ATTRIBUTE, "0.8.3"); // TODO: "0.8.3" <=> RuntimeConstants.VERSION
+				rootElementAttributes.add(VERSION_ATTRIBUTE, RuntimeConstants.VERSION);
     			
     			writer.startElement(ROOT_ELEMENT, rootElementAttributes, true);
 
