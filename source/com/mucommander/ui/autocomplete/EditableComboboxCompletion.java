@@ -83,7 +83,8 @@ public class EditableComboboxCompletion extends CompletionType {
                 	else {
 						// Stop the active showing-thread to prevent suggestions-popup 
                     	// opening after the operation was initiated.
-                    	showingThread.done();
+                    	if(showingThread!=null)
+                            showingThread.done();
 					
                 		autocompletedtextComp.OnEnterPressed(keyEvent);
 					}
