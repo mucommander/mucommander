@@ -46,6 +46,7 @@ class ActionKeymapReader extends ActionKeymapIO {
     private HashMap primaryActionsReadKeymap;
     /** Maps action Class instances onto Keystroke instances*/
     private HashMap alternateActionsReadKeymap;
+    private String fileVersion;
     
     /** Parsed file */
     private AbstractFile file;
@@ -141,23 +142,27 @@ class ActionKeymapReader extends ActionKeymapIO {
     }
     
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
-        if(qName.equals(ACTION_ELEMENT)) {
-            // Retrieve the action classname
-            String actionClassName = attributes.getValue(CLASS_ATTRIBUTE);
-            if(actionClassName==null) {
-                if(Debug.ON) Debug.trace("Error in action keymap file: no 'class' attribute specified in 'action' element");
-                return;
-            }
+    	if(qName.equals(ACTION_ELEMENT)) {
+    		// Retrieve the action classname
+    		String actionClassName = attributes.getValue(CLASS_ATTRIBUTE);
+    		if(actionClassName==null) {
+    			if(Debug.ON) Debug.trace("Error in action keymap file: no 'class' attribute specified in 'action' element");
+    			return;
+    		}
 
-            // Resolve the action Class
-            Class actionClass = ActionManager.getActionClass(actionClassName);;
-            if (actionClass == null) {
-                if(Debug.ON) Debug.trace("Error in action keymap file: could not resolve class "+actionClassName);
-                return;
-            }
+    		// Resolve the action Class
+    		Class actionClass = ActionManager.getActionClass(actionClassName, fileVersion);
+    		if (actionClass == null) {
+    			if(Debug.ON) Debug.trace("Error in action keymap file: could not resolve class "+actionClassName);
+    			return;
+    		}
 
-            // Load the action's accelerators (if any)
-            processKeystrokeAttribute(actionClass, attributes);
-       }
+    		// Load the action's accelerators (if any)
+    		processKeystrokeAttribute(actionClass, attributes);
+    	}
+    	else if (qName.equals(ROOT_ELEMENT)) {
+    		// Note: early 0.8 beta3 nightly builds did not have version attribute, so the attribute may be null
+    		fileVersion = attributes.getValue(VERSION_ATTRIBUTE);
+    	}
     }
 }

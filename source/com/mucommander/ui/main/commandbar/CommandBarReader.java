@@ -47,6 +47,8 @@ class CommandBarReader extends CommandBarIO {
     private Vector alternateActionsV;
     /** Temporarily used for XML parsing */
     private KeyStroke modifier;
+    /** Temporarily used for XML parsing */
+    private String fileVersion;
     
     /** Parsed file */
     private AbstractFile file;
@@ -112,7 +114,7 @@ class CommandBarReader extends CommandBarIO {
         if(qName.equals(BUTTON_ELEMENT)) {
         	// Resolve action class
             String actionClassName = attributes.getValue(ACTION_ATTRIBUTE);
-            Class actionClass = ActionManager.getActionClass(actionClassName);
+            Class actionClass = ActionManager.getActionClass(actionClassName, fileVersion);
             if (actionClass != null)
             	actionsV.add(actionClass);
             else
@@ -123,16 +125,16 @@ class CommandBarReader extends CommandBarIO {
             if(actionClassName==null)
                 alternateActionsV.add(null);
             else
-                if ((actionClass = ActionManager.getActionClass(actionClassName)) != null)
+                if ((actionClass = ActionManager.getActionClass(actionClassName, fileVersion)) != null)
                 	alternateActionsV.add(actionClass);
                 else if(Debug.ON) Debug.trace("Error in "+COMMAND_BAR_RESOURCE_PATH+": action class "+actionClassName+" not found");
         }
         else if(qName.equals(ROOT_ELEMENT)) {
-            // Retrieve modifier key (shift by default)
-            // Note: early 0.8 beta3 nightly builds did not have this attribute, so the attribute may be null
-            String modifierString = attributes.getValue(MODIFIER_ATTRIBUTE);
-
-            modifier = KeyStroke.getKeyStroke(modifierString);
+        	// Retrieve modifier key (shift by default)
+        	modifier = KeyStroke.getKeyStroke(attributes.getValue(MODIFIER_ATTRIBUTE));
+            
+        	// Note: early 0.8 beta3 nightly builds did not have version attribute, so the attribute may be null
+            fileVersion = attributes.getValue(VERSION_ATTRIBUTE);
         }
     }
 }

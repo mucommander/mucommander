@@ -229,8 +229,10 @@ public class ActionManager {
     	actionClasses.put(actionClass.getName(), actionClass);
     }
     
-    public static Class getActionClass(String actionClassName) {
-    	return (Class) actionClasses.get(actionClassName);
+    public static Class getActionClass(String actionClassName, String version) {
+    	Class actionClass = (Class) actionClasses.get(actionClassName);
+    	return actionClass != null ? actionClass :
+    								 (Class) actionClasses.get(actionClassName.replaceFirst("com.mucommander.ui.action", "com.mucommander.ui.action.impl"));
     }
 
     /**

@@ -41,7 +41,9 @@ public class ToolBarReader extends ToolBarIO {
 
     /** Temporarily used for XML parsing */
     private Vector actionsV;
-
+    /** Temporarily used for XML parsing */
+    private String fileVersion;
+    
     /**
      * Starts parsing the XML description file.
      */
@@ -82,13 +84,17 @@ public class ToolBarReader extends ToolBarIO {
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
         if(qName.equals(BUTTON_ELEMENT)) {
             String actionClassName = attributes.getValue(ACTION_ATTRIBUTE);
-            Class actionClass = ActionManager.getActionClass(actionClassName);
+            Class actionClass = ActionManager.getActionClass(actionClassName, fileVersion);
             if (actionClass != null)
             	actionsV.add(actionClass);
             else if(Debug.ON) Debug.trace("Error in "+TOOLBAR_RESOURCE_PATH+": action class "+actionClassName+" not found");
         }
         else if(qName.equals(SEPARATOR_ELEMENT)) {
             actionsV.add(null);
+        }
+        else if (qName.equals(ROOT_ELEMENT)) {
+        	// Note: early 0.8 beta3 nightly builds did not have version attribute, so the attribute may be null
+            fileVersion = attributes.getValue(VERSION_ATTRIBUTE);
         }
     }
 }
