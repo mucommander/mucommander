@@ -180,7 +180,8 @@ Known issues:
 - Authentication issues when using several sets of credentials (login/password)
   for the same server (see bug #76).
 - Untrusted HTTPS connections are allowed without a warning.
-
+- Fixed an exception occuring in the 'Run dialog' when pressing Enter 
+  repeatedly (bug #212).
 
 Command Line Interface
 ----------------------
