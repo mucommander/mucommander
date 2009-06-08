@@ -1,36 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <toolbar>
-    <button action="com.mucommander.ui.action.NewWindowAction"/>
+    <button action="com.mucommander.ui.action.impl.NewWindowAction"/>
     <separator/>
-    <button action="com.mucommander.ui.action.GoBackAction"/>
-    <button action="com.mucommander.ui.action.GoForwardAction"/>
+    <button action="com.mucommander.ui.action.impl.GoBackAction"/>
+    <button action="com.mucommander.ui.action.impl.GoForwardAction"/>
     <separator/>
-    <button action="com.mucommander.ui.action.GoToParentAction"/>
-    <button action="com.mucommander.ui.action.GoToHomeAction"/>
+    <button action="com.mucommander.ui.action.impl.GoToParentAction"/>
+    <button action="com.mucommander.ui.action.impl.GoToHomeAction"/>
     <separator/>
-    <button action="com.mucommander.ui.action.StopAction"/>
+    <button action="com.mucommander.ui.action.impl.StopAction"/>
     <separator/>
-    <button action="com.mucommander.ui.action.MarkGroupAction"/>
-    <button action="com.mucommander.ui.action.UnmarkGroupAction"/>
+    <button action="com.mucommander.ui.action.impl.MarkGroupAction"/>
+    <button action="com.mucommander.ui.action.impl.UnmarkGroupAction"/>
     <separator/>
-    <button action="com.mucommander.ui.action.SwapFoldersAction"/>
-    <button action="com.mucommander.ui.action.SetSameFolderAction"/>
+    <button action="com.mucommander.ui.action.impl.SwapFoldersAction"/>
+    <button action="com.mucommander.ui.action.impl.SetSameFolderAction"/>
     <separator/>
-    <button action="com.mucommander.ui.action.PackAction"/>
-    <button action="com.mucommander.ui.action.UnpackAction"/>
+    <button action="com.mucommander.ui.action.impl.PackAction"/>
+    <button action="com.mucommander.ui.action.impl.UnpackAction"/>
     <separator/>
-    <button action="com.mucommander.ui.action.AddBookmarkAction"/>
-    <button action="com.mucommander.ui.action.EditBookmarksAction"/>
-    <button action="com.mucommander.ui.action.EditCredentialsAction"/>
+    <button action="com.mucommander.ui.action.impl.AddBookmarkAction"/>
+    <button action="com.mucommander.ui.action.impl.EditBookmarksAction"/>
+    <button action="com.mucommander.ui.action.impl.EditCredentialsAction"/>
     <separator/>
-    <button action="com.mucommander.ui.action.ConnectToServerAction"/>
-    <button action="com.mucommander.ui.action.ShowServerConnectionsAction"/>
-    <button action="com.mucommander.ui.action.RunCommandAction"/>
-    <button action="com.mucommander.ui.action.EmailAction"/>
+    <button action="com.mucommander.ui.action.impl.ConnectToServerAction"/>
+    <button action="com.mucommander.ui.action.impl.ShowServerConnectionsAction"/>
+    <button action="com.mucommander.ui.action.impl.RunCommandAction"/>
+    <button action="com.mucommander.ui.action.impl.EmailAction"/>
     <separator/>
-    <button action="com.mucommander.ui.action.RevealInDesktopAction"/>
-    <button action="com.mucommander.ui.action.ShowFilePropertiesAction"/>
+    <button action="com.mucommander.ui.action.impl.RevealInDesktopAction"/>
+    <button action="com.mucommander.ui.action.impl.ShowFilePropertiesAction"/>
     <separator/>
-    <button action="com.mucommander.ui.action.ShowPreferencesAction"/>
+    <button action="com.mucommander.ui.action.impl.ShowPreferencesAction"/>
     <separator/>
 </toolbar>

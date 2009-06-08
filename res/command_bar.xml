@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <command_bar modifier="SHIFT">
-    <button action="com.mucommander.ui.action.ViewAction"/>
-    <button action="com.mucommander.ui.action.EditAction"/>
-    <button action="com.mucommander.ui.action.CopyAction" alt_action="com.mucommander.ui.action.LocalCopyAction"/>
-    <button action="com.mucommander.ui.action.MoveAction" alt_action="com.mucommander.ui.action.RenameAction"/>
-    <button action="com.mucommander.ui.action.MkdirAction" alt_action="com.mucommander.ui.action.MkfileAction"/>
-    <button action="com.mucommander.ui.action.DeleteAction" alt_action="com.mucommander.ui.action.PermanentDeleteAction"/>
-    <button action="com.mucommander.ui.action.RefreshAction"/>
-    <button action="com.mucommander.ui.action.CloseWindowAction"/>
+    <button action="com.mucommander.ui.action.impl.ViewAction"/>
+    <button action="com.mucommander.ui.action.impl.EditAction"/>
+    <button action="com.mucommander.ui.action.impl.CopyAction" alt_action="com.mucommander.ui.action.impl.LocalCopyAction"/>
+    <button action="com.mucommander.ui.action.impl.MoveAction" alt_action="com.mucommander.ui.action.impl.RenameAction"/>
+    <button action="com.mucommander.ui.action.impl.MkdirAction" alt_action="com.mucommander.ui.action.impl.MkfileAction"/>
+    <button action="com.mucommander.ui.action.impl.DeleteAction" alt_action="com.mucommander.ui.action.impl.PermanentDeleteAction"/>
+    <button action="com.mucommander.ui.action.impl.RefreshAction"/>
+    <button action="com.mucommander.ui.action.impl.CloseWindowAction"/>
 </command_bar>
