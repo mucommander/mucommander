@@ -21,7 +21,7 @@ package com.mucommander.ui.button;
 import com.mucommander.runtime.JavaVersions;
 import com.mucommander.runtime.OsFamilies;
 import com.mucommander.runtime.OsVersions;
-import com.mucommander.ui.action.GoToDocumentationAction;
+import com.mucommander.ui.action.impl.GoToDocumentationAction;
 import com.mucommander.ui.main.MainFrame;
 
 import javax.swing.*;
@@ -36,7 +36,7 @@ import java.util.Hashtable;
  * <p>Unless explicitely set, this button has a standard help icon but no text label. A tooltip is displayed when
  * hovering over the button.</p>
  *
- * @see com.mucommander.ui.action.GoToDocumentationAction
+ * @see com.mucommander.ui.action.impl.GoToDocumentationAction
  * @author Maxence Bernard
  */
 public class HelpButton extends JButton {

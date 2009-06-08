@@ -87,7 +87,7 @@ public class ServerConnectDialog extends FocusDialog implements ActionListener, 
      * @param selectPanelClass class of the ServerPanel to select
      */
     public ServerConnectDialog(FolderPanel folderPanel, Class selectPanelClass) {
-        super(folderPanel.getMainFrame(), MuAction.getStandardLabel(com.mucommander.ui.action.ConnectToServerAction.class), folderPanel.getMainFrame());
+        super(folderPanel.getMainFrame(), MuAction.getStandardLabel(com.mucommander.ui.action.impl.ConnectToServerAction.class), folderPanel.getMainFrame());
         this.folderPanel = folderPanel;
         lastPanelClass = selectPanelClass;
 

@@ -38,7 +38,7 @@ import com.mucommander.runtime.OsFamilies;
 import com.mucommander.runtime.OsVersions;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.MuAction;
-import com.mucommander.ui.action.OpenLocationAction;
+import com.mucommander.ui.action.impl.OpenLocationAction;
 import com.mucommander.ui.button.PopupButton;
 import com.mucommander.ui.dialog.server.*;
 import com.mucommander.ui.event.LocationEvent;

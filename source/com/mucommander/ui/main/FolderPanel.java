@@ -35,8 +35,8 @@ import com.mucommander.file.util.FileSet;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionKeymap;
 import com.mucommander.ui.action.ActionManager;
-import com.mucommander.ui.action.CycleBackwardThruFolderPanelAction;
-import com.mucommander.ui.action.CycleForwardThruFolderPanelAction;
+import com.mucommander.ui.action.impl.CycleBackwardThruFolderPanelAction;
+import com.mucommander.ui.action.impl.CycleForwardThruFolderPanelAction;
 import com.mucommander.ui.border.MutableLineBorder;
 import com.mucommander.ui.dialog.ErrorDialog;
 import com.mucommander.ui.dialog.QuestionDialog;
@@ -297,8 +297,8 @@ public class FolderPanel extends JPanel implements FocusListener, ThemeListener 
     }
 
     /**
-     * Registers the {@link com.mucommander.ui.action.CycleForwardThruFolderPanelAction} and
-     * {@link com.mucommander.ui.action.CycleBackwardThruFolderPanelAction actions onto the given component's input map.
+     * Registers the {@link com.mucommander.ui.action.impl.CycleForwardThruFolderPanelAction} and
+     * {@link com.mucommander.ui.action.impl.CycleBackwardThruFolderPanelAction actions onto the given component's input map.
      *  
      * @param component the component for which to register the cycle actions
      */
@@ -1362,7 +1362,7 @@ public class FolderPanel extends JPanel implements FocusListener, ThemeListener 
 
 
     /**
-     * Enables/disables a directory tree visibility. Invoked by {@link com.mucommander.ui.action.ToggleTreeAction}.
+     * Enables/disables a directory tree visibility. Invoked by {@link com.mucommander.ui.action.impl.ToggleTreeAction}.
      */
     public void setTreeVisible(boolean treeVisible) {
     	if (this.treeVisible != treeVisible) {

@@ -44,7 +44,7 @@ public class UnpackDialog extends TransferDestinationDialog {
      */
     public UnpackDialog(MainFrame mainFrame, FileSet files, boolean isShiftDown) {
         super(mainFrame, files,
-              MuAction.getStandardLabel(com.mucommander.ui.action.UnpackAction.class),
+              MuAction.getStandardLabel(com.mucommander.ui.action.impl.UnpackAction.class),
               Translator.get("unpack_dialog.destination"),
               Translator.get("unpack_dialog.unpack"),
               Translator.get("unpack_dialog.error_title"));

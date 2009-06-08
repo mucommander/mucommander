@@ -89,7 +89,7 @@ public class OSXIntegration {
         if(mainFrame.getNoEventsMode())
             return;
 
-        ActionManager.performAction(com.mucommander.ui.action.ShowPreferencesAction.class, mainFrame);
+        ActionManager.performAction(com.mucommander.ui.action.impl.ShowPreferencesAction.class, mainFrame);
     }
 
     /**

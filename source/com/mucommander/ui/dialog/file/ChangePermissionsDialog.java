@@ -68,11 +68,11 @@ public class ChangePermissionsDialog extends JobDialog
 
 
     public ChangePermissionsDialog(MainFrame mainFrame, FileSet files) {
-        super(mainFrame, MuAction.getStandardLabel(com.mucommander.ui.action.ChangePermissionsAction.class), files);
+        super(mainFrame, MuAction.getStandardLabel(com.mucommander.ui.action.impl.ChangePermissionsAction.class), files);
 
         YBoxPanel mainPanel = new YBoxPanel();
 
-        mainPanel.add(new JLabel(MuAction.getStandardTooltip(com.mucommander.ui.action.ChangePermissionsAction.class)+" :"));
+        mainPanel.add(new JLabel(MuAction.getStandardTooltip(com.mucommander.ui.action.impl.ChangePermissionsAction.class)+" :"));
         mainPanel.addSpace(10);
 
         JPanel gridPanel = new JPanel(new GridLayout(4, 4));

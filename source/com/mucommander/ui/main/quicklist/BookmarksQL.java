@@ -24,7 +24,7 @@ import com.mucommander.bookmark.BookmarkManager;
 import com.mucommander.file.FileFactory;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.MuAction;
-import com.mucommander.ui.action.ShowBookmarksQLAction;
+import com.mucommander.ui.action.impl.ShowBookmarksQLAction;
 import com.mucommander.ui.quicklist.QuickListWithIcons;
 
 import javax.swing.*;

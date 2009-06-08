@@ -26,8 +26,8 @@ import com.mucommander.file.util.FileSet;
 import com.mucommander.job.DeleteJob;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionManager;
-import com.mucommander.ui.action.DeleteAction;
-import com.mucommander.ui.action.PermanentDeleteAction;
+import com.mucommander.ui.action.impl.DeleteAction;
+import com.mucommander.ui.action.impl.PermanentDeleteAction;
 import com.mucommander.ui.dialog.DialogToolkit;
 import com.mucommander.ui.layout.InformationPane;
 import com.mucommander.ui.layout.YBoxPanel;
@@ -47,7 +47,7 @@ import java.awt.event.ItemListener;
  * if a trash is available on the current platform and capable of moving the selected files.
  * The choice (use trash or not) is saved in the preferences and reused next time this dialog is invoked.   
  *
- * @see com.mucommander.ui.action.DeleteAction
+ * @see com.mucommander.ui.action.impl.DeleteAction
  * @author Maxence Bernard
  */
 public class DeleteDialog extends JobDialog implements ItemListener, ActionListener {

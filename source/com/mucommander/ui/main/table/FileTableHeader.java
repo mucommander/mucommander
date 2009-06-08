@@ -21,6 +21,12 @@ package com.mucommander.ui.main.table;
 import com.mucommander.desktop.DesktopManager;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.*;
+import com.mucommander.ui.action.impl.ToggleDateColumnAction;
+import com.mucommander.ui.action.impl.ToggleExtensionColumnAction;
+import com.mucommander.ui.action.impl.ToggleGroupColumnAction;
+import com.mucommander.ui.action.impl.ToggleOwnerColumnAction;
+import com.mucommander.ui.action.impl.TogglePermissionsColumnAction;
+import com.mucommander.ui.action.impl.ToggleSizeColumnAction;
 
 import javax.swing.*;
 import javax.swing.table.JTableHeader;

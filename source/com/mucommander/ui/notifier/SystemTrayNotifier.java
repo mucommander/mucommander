@@ -21,6 +21,8 @@ package com.mucommander.ui.notifier;
 import com.mucommander.Debug;
 import com.mucommander.runtime.JavaVersions;
 import com.mucommander.ui.action.*;
+import com.mucommander.ui.action.impl.BringAllToFrontAction;
+import com.mucommander.ui.action.impl.QuitAction;
 import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.main.WindowManager;
 

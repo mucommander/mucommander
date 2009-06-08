@@ -81,7 +81,7 @@ public class EditBookmarksDialog extends FocusDialog implements ActionListener, 
 
 
     public EditBookmarksDialog(MainFrame mainFrame) {
-        super(mainFrame, MuAction.getStandardLabel(com.mucommander.ui.action.EditBookmarksAction.class), mainFrame);
+        super(mainFrame, MuAction.getStandardLabel(com.mucommander.ui.action.impl.EditBookmarksAction.class), mainFrame);
 
         this.mainFrame = mainFrame;
 

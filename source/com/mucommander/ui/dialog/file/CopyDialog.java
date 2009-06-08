@@ -37,7 +37,7 @@ import java.util.Vector;
 /**
  * Dialog invoked when the user wants to copy currently selected files.
  *
- * @see com.mucommander.ui.action.CopyAction
+ * @see com.mucommander.ui.action.impl.CopyAction
  * @author Maxence Bernard
  */
 public class CopyDialog extends TransferDestinationDialog {

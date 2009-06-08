@@ -49,7 +49,7 @@ import com.mucommander.runtime.OsFamilies;
 import com.mucommander.runtime.OsVersions;
 import com.mucommander.ui.action.ActionKeymap;
 import com.mucommander.ui.action.ActionManager;
-import com.mucommander.ui.action.CloseWindowAction;
+import com.mucommander.ui.action.impl.CloseWindowAction;
 import com.mucommander.ui.event.ActivePanelListener;
 import com.mucommander.ui.event.LocationEvent;
 import com.mucommander.ui.event.LocationListener;

@@ -21,7 +21,7 @@ package com.mucommander.ui.main.quicklist;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.MuAction;
-import com.mucommander.ui.action.ShowRecentLocationsQLAction;
+import com.mucommander.ui.action.impl.ShowRecentLocationsQLAction;
 import com.mucommander.ui.event.LocationEvent;
 import com.mucommander.ui.event.LocationListener;
 import com.mucommander.ui.quicklist.QuickListWithIcons;

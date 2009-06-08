@@ -74,7 +74,7 @@ public class EditCredentialsDialog extends FocusDialog implements ActionListener
 
 
     public EditCredentialsDialog(MainFrame mainFrame) {
-        super(mainFrame, MuAction.getStandardLabel(com.mucommander.ui.action.EditCredentialsAction.class), mainFrame);
+        super(mainFrame, MuAction.getStandardLabel(com.mucommander.ui.action.impl.EditCredentialsAction.class), mainFrame);
 
         this.mainFrame = mainFrame;
 

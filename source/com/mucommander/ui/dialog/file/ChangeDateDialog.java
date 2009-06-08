@@ -55,11 +55,11 @@ public class ChangeDateDialog extends JobDialog implements ActionListener, ItemL
 
 
     public ChangeDateDialog(MainFrame mainFrame, FileSet files) {
-        super(mainFrame, MuAction.getStandardLabel(com.mucommander.ui.action.ChangeDateAction.class), files);
+        super(mainFrame, MuAction.getStandardLabel(com.mucommander.ui.action.impl.ChangeDateAction.class), files);
 
         YBoxPanel mainPanel = new YBoxPanel();
 
-        mainPanel.add(new JLabel(MuAction.getStandardTooltip(com.mucommander.ui.action.ChangeDateAction.class)+" :"));
+        mainPanel.add(new JLabel(MuAction.getStandardTooltip(com.mucommander.ui.action.impl.ChangeDateAction.class)+" :"));
         mainPanel.addSpace(5);
 
         ButtonGroup buttonGroup = new ButtonGroup();

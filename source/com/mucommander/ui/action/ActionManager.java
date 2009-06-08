@@ -28,6 +28,7 @@ import java.util.Vector;
 import java.util.WeakHashMap;
 
 import com.mucommander.Debug;
+import com.mucommander.ui.action.impl.*;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.WindowManager;
 

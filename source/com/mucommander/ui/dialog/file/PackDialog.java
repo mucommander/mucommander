@@ -72,7 +72,7 @@ public class PackDialog extends JobDialog implements ActionListener, ItemListene
 
 
     public PackDialog(MainFrame mainFrame, FileSet files, boolean isShiftDown) {
-        super(mainFrame, MuAction.getStandardLabel(com.mucommander.ui.action.PackAction.class), files);
+        super(mainFrame, MuAction.getStandardLabel(com.mucommander.ui.action.impl.PackAction.class), files);
 
         // Retrieve available formats for single file or many file archives
         int nbFiles = files.size();

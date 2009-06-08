@@ -32,8 +32,8 @@ import com.mucommander.ui.main.MainFrame;
 /**
  * Dialog invoked when the user wants to move or rename currently selected files.
  *
- * @see com.mucommander.ui.action.MoveAction
- * @see com.mucommander.ui.action.RenameAction
+ * @see com.mucommander.ui.action.impl.MoveAction
+ * @see com.mucommander.ui.action.impl.RenameAction
  * @author Maxence Bernard
  */
 public class MoveDialog extends TransferDestinationDialog {

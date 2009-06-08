@@ -60,7 +60,7 @@ public class AddBookmarkDialog extends FocusDialog implements ActionListener, Do
 
 
     public AddBookmarkDialog(MainFrame mainFrame) {
-        super(mainFrame, MuAction.getStandardLabel(com.mucommander.ui.action.AddBookmarkAction.class), mainFrame);
+        super(mainFrame, MuAction.getStandardLabel(com.mucommander.ui.action.impl.AddBookmarkAction.class), mainFrame);
 
         Container contentPane = getContentPane();
         YBoxPanel mainPanel = new YBoxPanel(5);

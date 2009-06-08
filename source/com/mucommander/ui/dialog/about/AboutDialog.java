@@ -79,7 +79,7 @@ public class AboutDialog extends FocusDialog implements ActionListener {
      * @param mainFrame frame this dialog is relative to.
      */
     public AboutDialog(MainFrame mainFrame) {
-        super(mainFrame, MuAction.getStandardLabel(com.mucommander.ui.action.ShowAboutAction.class), mainFrame);
+        super(mainFrame, MuAction.getStandardLabel(com.mucommander.ui.action.impl.ShowAboutAction.class), mainFrame);
 
         // Initialises the dialog's content.
         Container contentPane = getContentPane();
@@ -273,7 +273,7 @@ public class AboutDialog extends FocusDialog implements ActionListener {
 
         tempPanel = new JPanel(new BorderLayout());
         if(DesktopManager.canBrowse()) {
-            tempPanel.add(homeButton = new JButton(MuAction.getStandardLabel(com.mucommander.ui.action.GoToWebsiteAction.class)), BorderLayout.NORTH);
+            tempPanel.add(homeButton = new JButton(MuAction.getStandardLabel(com.mucommander.ui.action.impl.GoToWebsiteAction.class)), BorderLayout.NORTH);
             homeButton.addActionListener(this);
         }
         else {

@@ -136,7 +136,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
     private final static int EDIT_NAME_CLICK_DELAY = 500;
 
     /** 'Mark/unmark selected file' action */
-    private final static Class MARK_ACTION_CLASS = com.mucommander.ui.action.MarkSelectedFileAction.class;
+    private final static Class MARK_ACTION_CLASS = com.mucommander.ui.action.impl.MarkSelectedFileAction.class;
 
 
     public FileTable(MainFrame mainFrame, FolderPanel folderPanel, FileTableConfiguration conf) {
@@ -573,12 +573,12 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
      * <ul>
      * <li>if quick search is active, this method does nothing
      * <li>if '..' file is selected, file is not marked but current row is still advanced to the next one
-     * <li>if the {@link com.mucommander.ui.action.MarkSelectedFileAction} key event is repeated and the last file has already
+     * <li>if the {@link com.mucommander.ui.action.impl.MarkSelectedFileAction} key event is repeated and the last file has already
      * been marked/unmarked since the key was last released, the file is not marked in order to avoid
      * marked/unmarked flaps when the mark key is kept pressed.
      * </ul>
      *
-     * @see com.mucommander.ui.action.MarkSelectedFileAction
+     * @see com.mucommander.ui.action.impl.MarkSelectedFileAction
      */
     public void markSelectedFile() {
         // Avoids repeated mark/unmark on last row: return if last row has already been marked/unmarked
@@ -1185,11 +1185,11 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
                                             editCurrentFilename();
                                     }
                                     else if(column==Columns.DATE) {
-                                        ActionManager.performAction(com.mucommander.ui.action.ChangeDateAction.class, mainFrame);
+                                        ActionManager.performAction(com.mucommander.ui.action.impl.ChangeDateAction.class, mainFrame);
                                     }
                                     else if(column==Columns.PERMISSIONS) {
                                         if(getSelectedFile().getChangeablePermissions().getIntValue()!=0)
-                                            ActionManager.performAction(com.mucommander.ui.action.ChangePermissionsAction.class, mainFrame);
+                                            ActionManager.performAction(com.mucommander.ui.action.impl.ChangePermissionsAction.class, mainFrame);
                                     }
                                 }
                             }
@@ -1200,7 +1200,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
             // Double-clicking on a row opens the file/folder
             else if(clickCount%2==0 && clickCount>0) {      // allow successive double-clicks: clickCount==2, 4, 6, 8, ...
                 this.lastDoubleClickTimestamp = System.currentTimeMillis();
-                ActionManager.performAction(e.isShiftDown()?com.mucommander.ui.action.OpenNativelyAction.class:com.mucommander.ui.action.OpenAction.class
+                ActionManager.performAction(e.isShiftDown()?com.mucommander.ui.action.impl.OpenNativelyAction.class:com.mucommander.ui.action.impl.OpenAction.class
                     , mainFrame);
             }
 

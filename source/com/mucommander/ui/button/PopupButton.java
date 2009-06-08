@@ -18,7 +18,7 @@
 
 package com.mucommander.ui.button;
 
-import com.mucommander.ui.action.MuteProxyAction;
+import com.mucommander.ui.action.impl.MuteProxyAction;
 
 import javax.swing.*;
 import javax.swing.event.PopupMenuEvent;

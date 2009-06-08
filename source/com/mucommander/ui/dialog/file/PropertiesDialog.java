@@ -77,7 +77,7 @@ public class PropertiesDialog extends FocusDialog implements Runnable, ActionLis
 	
     public PropertiesDialog(MainFrame mainFrame, FileSet files) {
         super(mainFrame,
-              files.size() > 1 ? MuAction.getStandardLabel(com.mucommander.ui.action.ShowFilePropertiesAction.class) :
+              files.size() > 1 ? MuAction.getStandardLabel(com.mucommander.ui.action.impl.ShowFilePropertiesAction.class) :
               Translator.get("properties_dialog.file_properties", files.fileAt(0).getName()), mainFrame);
         this.mainFrame = mainFrame;
 
