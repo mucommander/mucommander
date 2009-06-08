@@ -1507,12 +1507,21 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
             // The editing row has to be saved as it could change after row editing has been started
             this.editingRow = row;
 
-            // Select filename without extension, only if filename is not empty (unlike '.DS_Store' for example)
             String fieldText = filenameField.getText();
-            int extPos = fieldText.lastIndexOf('.');
-            // Text is selected so that user can directly type and replace path
             filenameField.setSelectionStart(0);
-            filenameField.setSelectionEnd(extPos>0?extPos:fieldText.length());
+
+            // If the current file is a directory, select the whole file name.
+            if(tableModel.getFileAtRow(editingRow).isDirectory())
+                filenameField.setSelectionEnd(fieldText.length());
+
+            // Otherwise, select the file name without its extension, except when empty ('.DS_Store', for example).
+            else {
+                int extPos = fieldText.lastIndexOf('.');
+            
+                // Text is selected so that user can directly type and replace path
+                filenameField.setSelectionStart(0);
+                filenameField.setSelectionEnd(extPos>0?extPos:fieldText.length());
+            }
 
             // Request focus on text field
             filenameField.requestFocus();
