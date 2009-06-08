@@ -489,15 +489,6 @@ public class HTTPFile extends AbstractFile {
         return url;
     }
 
-    public boolean canRunProcess() {
-        return false;
-    }
-
-    public com.mucommander.process.AbstractProcess runProcess(String[] tokens) throws IOException {
-        throw new IOException();
-    }
-
-
     public AbstractFile[] ls() throws IOException {
         // Implementation note: javax.swing.text.html.HTMLEditorKit isn't quite powerful enough to be used
 

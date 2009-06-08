@@ -467,15 +467,6 @@ import java.net.MalformedURLException;
     }
 
 
-    public boolean canRunProcess() {
-        return false;
-    }
-
-    public com.mucommander.process.AbstractProcess runProcess(String[] tokens) throws IOException {
-        throw new IOException();
-    }
-
-
     ////////////////////////
     // Overridden methods //
     ////////////////////////

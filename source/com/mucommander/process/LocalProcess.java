@@ -16,10 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.mucommander.file.impl.local;
+package com.mucommander.process;
 
 import com.mucommander.Debug;
-import com.mucommander.process.AbstractProcess;
 import com.mucommander.runtime.JavaVersions;
 
 import java.io.File;

@@ -26,13 +26,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 /**
- * muCommander specific version of a process.
- * <p>
- * Implementations of this class are used to execute various types of processes.
- * It can be a {@link com.mucommander.file.impl.local.LocalProcess}, but some types of
- * {@link com.mucommander.file.AbstractFile abstract files}, such as SFTP files,
- * allow for commands to be executed.
- * </p>
+ * muCommander specific version of a process, allowing various types of processes to be executed.
  * <p>
  * Unlike normal instances of <code>java.lang.Process</code>, abstract processes
  * will empty their own streams, preventing deadlocks from occuring on some systems.

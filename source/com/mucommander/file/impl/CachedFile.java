@@ -63,9 +63,6 @@ public class CachedFile extends ProxyFile {
     private long getDate;
     private boolean getDateSet;
 
-    private boolean canRunProcess;
-    private boolean canRunProcessSet;
-
     private boolean isSymlink;
     private boolean isSymlinkSet;
 
@@ -250,15 +247,6 @@ public class CachedFile extends ProxyFile {
         }
 
         return getDate;
-    }
-
-    public boolean canRunProcess() {
-        if(!canRunProcessSet) {
-            canRunProcess = file.canRunProcess();
-            canRunProcessSet = true;
-        }
-
-        return canRunProcess;
     }
 
     public boolean isSymlink() {

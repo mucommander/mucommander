@@ -477,18 +477,4 @@ public abstract class AbstractArchiveFile extends ProxyFile {
         else
             return 0;
     }
-
-    /**
-     * Always returns <code>false</code>.
-     */
-    public boolean canRunProcess() {
-        return false;
-    }
-
-    /**
-     * Always throws an <code>IOException</code>.
-     */
-    public com.mucommander.process.AbstractProcess runProcess(String[] tokens) throws IOException {
-        throw new IOException();
-    }
 }

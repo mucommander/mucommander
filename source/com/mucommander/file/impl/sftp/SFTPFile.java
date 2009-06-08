@@ -25,9 +25,7 @@ import com.mucommander.file.*;
 import com.mucommander.file.connection.ConnectionHandler;
 import com.mucommander.file.connection.ConnectionPool;
 import com.mucommander.io.*;
-import com.mucommander.process.AbstractProcess;
 import com.sshtools.j2ssh.io.UnsignedInteger32;
-import com.sshtools.j2ssh.session.SessionChannelClient;
 import com.sshtools.j2ssh.sftp.FileAttributes;
 import com.sshtools.j2ssh.sftp.*;
 
@@ -518,16 +516,6 @@ public class SFTPFile extends AbstractFile {
     }
 
 
-    public boolean canRunProcess() {
-//        return true;
-        return false;
-    }
-
-    public AbstractProcess runProcess(String[] tokens) throws IOException {
-        return new SFTPProcess(tokens);
-    }
-
-
     ////////////////////////
     // Overridden methods //
     ////////////////////////
@@ -874,90 +862,90 @@ public class SFTPFile extends AbstractFile {
     }
 
 
-    private class SFTPProcess extends AbstractProcess {
-
-        private boolean success;
-        private SessionChannelClient sessionClient;
-        private SFTPConnectionHandler connHandler;
-
-        private SFTPProcess(String tokens[]) throws IOException {
-
-            try {
-                // Retrieve a ConnectionHandler and lock it
-                connHandler = (SFTPConnectionHandler)ConnectionPool.getConnectionHandler(connHandlerFactory, fileURL, true);
-                // Makes sure the connection is started, if not starts it
-                connHandler.checkConnection();
-
-                sessionClient = connHandler.sshClient.openSessionChannel();
-//                sessionClient.startShell();
-
-//                success = sessionClient.executeCommand("cd "+(isDirectory()?fileURL.getPath():fileURL.getParent().getPath()));
-//if(Debug.ON) Debug.trace("commmand="+("cd "+(isDirectory()?fileURL.getPath():fileURL.getParent().getPath()))+" returned "+success);
-
-                // Environment variables are refused by most servers for security reasons  
-//                sessionClient.setEnvironmentVariable("cd", isDirectory()?fileURL.getPath():fileURL.getParent().getPath());
-
-                // No way to set the current working directory:
-                // 1/ when executing a single command:
-                //  + environment variables are ignored by most server, so can't use PWD for that.
-                //  + could send 'cd dir ; command' but it's not platform independant and prevents the command from being
-                //    executed under Windows
-                // 2/ when starting a shell, no problem to change the current working directory (cd dir\n is sent before
-                // the command), but there is no reliable way to detect the end of the command execution, as confirmed
-                // by one of the J2SSH developers : http://sourceforge.net/forum/message.php?msg_id=1826569
-
-                // Concatenates all tokens to create the command string
-                StringBuffer command = new StringBuffer();
-                int nbTokens = tokens.length;
-                for(int i=0; i<nbTokens; i++) {
-                    command.append(tokens[i]);
-                    if(i!=nbTokens-1)
-                        command.append(" ");
-                }
-
-                success = sessionClient.executeCommand(command.toString());
-                if(Debug.ON) Debug.trace("commmand="+command+" returned "+success);
-            }
-            catch(IOException e) {
-                // Release the lock on the ConnectionHandler
-                connHandler.releaseLock();
-
-                sessionClient.close();
-
-                // Re-throw exception
-                throw e;
-            }
-        }
-
-        public boolean usesMergedStreams() {
-            return false;
-        }
-
-        public int waitFor() throws InterruptedException, IOException {
-            return sessionClient.getExitCode().intValue();
-        }
-
-        protected void destroyProcess() throws IOException {
-            // Release the lock on the ConnectionHandler
-            connHandler.releaseLock();
-
-            sessionClient.close();
-        }
-
-        public int exitValue() {
-            return sessionClient.getExitCode().intValue();
-        }
-
-        public OutputStream getOutputStream() throws IOException {
-            return sessionClient.getOutputStream();
-        }
-
-        public InputStream getInputStream() throws IOException {
-            return sessionClient.getInputStream();
-        }
-
-        public InputStream getErrorStream() throws IOException {
-            return sessionClient.getStderrInputStream();
-        }
-    }
+//    private class SFTPProcess extends AbstractProcess {
+//
+//        private boolean success;
+//        private SessionChannelClient sessionClient;
+//        private SFTPConnectionHandler connHandler;
+//
+//        private SFTPProcess(String tokens[]) throws IOException {
+//
+//            try {
+//                // Retrieve a ConnectionHandler and lock it
+//                connHandler = (SFTPConnectionHandler)ConnectionPool.getConnectionHandler(connHandlerFactory, fileURL, true);
+//                // Makes sure the connection is started, if not starts it
+//                connHandler.checkConnection();
+//
+//                sessionClient = connHandler.sshClient.openSessionChannel();
+////                sessionClient.startShell();
+//
+////                success = sessionClient.executeCommand("cd "+(isDirectory()?fileURL.getPath():fileURL.getParent().getPath()));
+////if(Debug.ON) Debug.trace("commmand="+("cd "+(isDirectory()?fileURL.getPath():fileURL.getParent().getPath()))+" returned "+success);
+//
+//                // Environment variables are refused by most servers for security reasons
+////                sessionClient.setEnvironmentVariable("cd", isDirectory()?fileURL.getPath():fileURL.getParent().getPath());
+//
+//                // No way to set the current working directory:
+//                // 1/ when executing a single command:
+//                //  + environment variables are ignored by most server, so can't use PWD for that.
+//                //  + could send 'cd dir ; command' but it's not platform independant and prevents the command from being
+//                //    executed under Windows
+//                // 2/ when starting a shell, no problem to change the current working directory (cd dir\n is sent before
+//                // the command), but there is no reliable way to detect the end of the command execution, as confirmed
+//                // by one of the J2SSH developers : http://sourceforge.net/forum/message.php?msg_id=1826569
+//
+//                // Concatenates all tokens to create the command string
+//                StringBuffer command = new StringBuffer();
+//                int nbTokens = tokens.length;
+//                for(int i=0; i<nbTokens; i++) {
+//                    command.append(tokens[i]);
+//                    if(i!=nbTokens-1)
+//                        command.append(" ");
+//                }
+//
+//                success = sessionClient.executeCommand(command.toString());
+//                if(Debug.ON) Debug.trace("commmand="+command+" returned "+success);
+//            }
+//            catch(IOException e) {
+//                // Release the lock on the ConnectionHandler
+//                connHandler.releaseLock();
+//
+//                sessionClient.close();
+//
+//                // Re-throw exception
+//                throw e;
+//            }
+//        }
+//
+//        public boolean usesMergedStreams() {
+//            return false;
+//        }
+//
+//        public int waitFor() throws InterruptedException, IOException {
+//            return sessionClient.getExitCode().intValue();
+//        }
+//
+//        protected void destroyProcess() throws IOException {
+//            // Release the lock on the ConnectionHandler
+//            connHandler.releaseLock();
+//
+//            sessionClient.close();
+//        }
+//
+//        public int exitValue() {
+//            return sessionClient.getExitCode().intValue();
+//        }
+//
+//        public OutputStream getOutputStream() throws IOException {
+//            return sessionClient.getOutputStream();
+//        }
+//
+//        public InputStream getInputStream() throws IOException {
+//            return sessionClient.getInputStream();
+//        }
+//
+//        public InputStream getErrorStream() throws IOException {
+//            return sessionClient.getStderrInputStream();
+//        }
+//    }
 }

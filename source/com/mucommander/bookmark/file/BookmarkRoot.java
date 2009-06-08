@@ -27,7 +27,6 @@ import com.mucommander.file.FileURL;
 import com.mucommander.file.PermissionBits;
 import com.mucommander.io.RandomAccessInputStream;
 import com.mucommander.io.RandomAccessOutputStream;
-import com.mucommander.process.AbstractProcess;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -119,8 +118,6 @@ class BookmarkRoot extends AbstractFile implements BookmarkListener {
     public long getFreeSpace() {return -1;}
     public long getTotalSpace() {return -1;}
     public Object getUnderlyingFileObject() {return null;}
-    public boolean canRunProcess() {return false;}
-    public AbstractProcess runProcess(String[] tokens) throws IOException {throw new IOException();}
     public String getOwner() {return null;}
     public boolean canGetOwner() {return false;}
     public String getGroup() {return null;}

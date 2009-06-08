@@ -25,7 +25,6 @@ import com.mucommander.file.*;
 import com.mucommander.io.FileTransferException;
 import com.mucommander.io.RandomAccessInputStream;
 import com.mucommander.io.RandomAccessOutputStream;
-import com.mucommander.process.AbstractProcess;
 
 import java.io.*;
 
@@ -115,20 +114,6 @@ public class BookmarkFile extends AbstractFile {
             return null;
         }
     }
-
-    /**
-     * Returns <code>true</code> if the wrapped file knows how to create processes.
-     * @return <code>true</code> if the wrapped file knows how to create processes.
-     */
-    public boolean canRunProcess() {return getUnderlyingFile().canRunProcess();}
-
-    /**
-     * Runs the specified command on the wrapped file.
-     * @param  tokens      command to run.
-     * @return             a process running the specified command.
-     * @throws IOException if an IO error occurs.
-     */
-    public AbstractProcess runProcess(String[] tokens) throws IOException {return getUnderlyingFile().runProcess(tokens);}
 
     /**
      * Returns the result of the wrapped file's <code>getFreeSpace()</code> methods.

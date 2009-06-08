@@ -23,7 +23,6 @@ import com.mucommander.file.filter.FileFilter;
 import com.mucommander.file.filter.FilenameFilter;
 import com.mucommander.file.impl.ProxyFile;
 import com.mucommander.io.*;
-import com.mucommander.process.AbstractProcess;
 
 import javax.swing.*;
 import java.awt.*;
@@ -1687,19 +1686,4 @@ public abstract class AbstractFile implements PermissionTypes, PermissionAccesse
      * is none
      */
     public abstract Object getUnderlyingFileObject();
-
-
-    /**
-     * Returns <code>true</code> if it's possible to run processes on the underlying file system.
-     * @return <code>true</code> if it's possible to run processes on the underlying file system, <code>false</code> otherwise.
-     */
-    public abstract boolean canRunProcess();
-
-    /**
-     * Creates a process executing the specified command tokens using this file as a working directory.
-     * @param  tokens                        command and its arguments for the process to create.
-     * @return                               a process executing the specified command tokens using this file as a working directory.
-     * @throws IOException                   thrown if an error occured while creating the process, if the current file is not a directory or if the operation is not supported.
-     */
-    public abstract AbstractProcess runProcess(String[] tokens) throws IOException;
 }

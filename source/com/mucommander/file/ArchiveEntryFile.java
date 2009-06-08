@@ -404,20 +404,6 @@ public class ArchiveEntryFile extends AbstractFile {
         return entry;
     }
 
-    /**
-     * Always returns <code>false</code>: archive entries cannot run processes.
-     */
-    public boolean canRunProcess() {
-        return false;
-    }
-
-    /**
-     * Always throws an <code>IOException</code>: archive entries cannot run processes.
-     */
-    public com.mucommander.process.AbstractProcess runProcess(String[] tokens) throws IOException {
-        throw new IOException();
-    }
-
     
     ////////////////////////
     // Overridden methods //

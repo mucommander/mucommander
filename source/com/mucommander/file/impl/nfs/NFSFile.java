@@ -23,7 +23,6 @@ import com.mucommander.file.filter.FilenameFilter;
 import com.mucommander.io.FileTransferException;
 import com.mucommander.io.RandomAccessInputStream;
 import com.mucommander.io.RandomAccessOutputStream;
-import com.mucommander.process.AbstractProcess;
 import com.sun.xfile.XFile;
 import com.sun.xfile.XFileInputStream;
 import com.sun.xfile.XFileOutputStream;
@@ -332,20 +331,6 @@ public class NFSFile extends AbstractFile {
      */
     public Object getUnderlyingFileObject() {
         return file;
-    }
-
-    /**
-     * Always returns <code>false</code>.
-     */
-    public boolean canRunProcess() {
-        return false;
-    }
-
-    /**
-     * Always throws an <code>IOException</code>.
-     */
-    public AbstractProcess runProcess(String[] tokens) throws IOException {
-        throw new IOException();
     }
 
 

@@ -27,12 +27,14 @@ import com.mucommander.file.connection.ConnectionHandler;
 import com.mucommander.file.connection.ConnectionHandlerFactory;
 import com.mucommander.file.connection.ConnectionPool;
 import com.mucommander.io.*;
-import com.mucommander.process.AbstractProcess;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPConnectionClosedException;
 import org.apache.commons.net.ftp.FTPReply;
 
-import java.io.*;
+import java.io.FilterInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.text.SimpleDateFormat;
@@ -629,14 +631,6 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
         return file;
     }
 
-    public boolean canRunProcess() {
-        return true;
-    }
-
-    public AbstractProcess runProcess(String[] tokens) throws IOException {
-        return new FTPProcess(tokens);
-    }
-
 
     ////////////////////////
     // Overridden methods //
@@ -770,101 +764,100 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
     // Inner classes //
     ///////////////////
 
-    private class FTPProcess extends AbstractProcess {
-
-        /** True if the command returned a positive FTP reply code */
-        private boolean success;
-
-        /** Allows to read the command's output */
-        private ByteArrayInputStream bais;
-
-
-        public FTPProcess(String tokens[]) throws IOException {
-
-            // Concatenates all tokens to create the command string
-            String command = "";
-            int nbTokens = tokens.length;
-            for(int i=0; i<nbTokens; i++) {
-                command += tokens[i];
-                if(i!=nbTokens-1)
-                    command += " ";
-            }
-
-            FTPConnectionHandler connHandler = null;
-            try {
-                // Retrieve a ConnectionHandler and lock it
-                connHandler = (FTPConnectionHandler)ConnectionPool.getConnectionHandler(FTPFile.this, fileURL, true);
-                // Makes sure the connection is started, if not starts it
-                connHandler.checkConnection();
-
-                // Change the current directory on the remote server to :
-                //  - this file's path if this file is a directory
-                //  - to the parent folder's path otherwise
-                if(!connHandler.ftpClient.changeWorkingDirectory(isDirectory()?fileURL.getPath():fileURL.getParent().getPath()))
-                    throw new IOException();
-
-                // Has the command been successfully completed by the server ?
-                success = FTPReply.isPositiveCompletion(connHandler.ftpClient.sendCommand(command));
-
-                // Retrieves the command's output and create an InputStream for getInputStream()
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                PrintWriter pw = new PrintWriter(baos, true);
-                String replyStrings[] = connHandler.ftpClient.getReplyStrings();
-                for(int i=0; i<replyStrings.length; i++)
-                    pw.println(replyStrings[i]);
-                pw.close();
-
-                bais = new ByteArrayInputStream(baos.toByteArray());
-                // No need to close the ByteArrayOutputStream
-            }
-            catch(IOException e) {
-               // Checks if the IOException corresponds to a socket error and in that case, closes the connection
-                connHandler.checkSocketException(e);
-
-                // Re-throw IOException
-                throw e;
-            }
-            finally {
-                // Release the lock on the ConnectionHandler
-                if(connHandler!=null)
-                    connHandler.releaseLock();
-            }
-        }
-
-        public boolean usesMergedStreams() {
-            // No specific stream for errors
-            return true;
-        }
-
-        public int waitFor() throws InterruptedException, IOException {
-            return success?0:1;
-        }
-
-        protected void destroyProcess() throws IOException {
-            // No-op, command has already been executed
-        }
-
-        public int exitValue() {
-            return success?0:1;
-        }
-
-        public OutputStream getOutputStream() throws IOException {
-            // FTP commands are not interactive, the returned OutputStream simply ignores data that's fed to it
-            return new SinkOutputStream();
-        }
-
-        public InputStream getInputStream() throws IOException {
-            if(bais==null)
-                throw new IOException();
-
-            return bais;
-        }
-
-        public InputStream getErrorStream() throws IOException {
-            return getInputStream();
-        }
-    }
-
+//    private class FTPProcess extends AbstractProcess {
+//
+//        /** True if the command returned a positive FTP reply code */
+//        private boolean success;
+//
+//        /** Allows to read the command's output */
+//        private ByteArrayInputStream bais;
+//
+//
+//        public FTPProcess(String tokens[]) throws IOException {
+//
+//            // Concatenates all tokens to create the command string
+//            String command = "";
+//            int nbTokens = tokens.length;
+//            for(int i=0; i<nbTokens; i++) {
+//                command += tokens[i];
+//                if(i!=nbTokens-1)
+//                    command += " ";
+//            }
+//
+//            FTPConnectionHandler connHandler = null;
+//            try {
+//                // Retrieve a ConnectionHandler and lock it
+//                connHandler = (FTPConnectionHandler)ConnectionPool.getConnectionHandler(FTPFile.this, fileURL, true);
+//                // Makes sure the connection is started, if not starts it
+//                connHandler.checkConnection();
+//
+//                // Change the current directory on the remote server to :
+//                //  - this file's path if this file is a directory
+//                //  - to the parent folder's path otherwise
+//                if(!connHandler.ftpClient.changeWorkingDirectory(isDirectory()?fileURL.getPath():fileURL.getParent().getPath()))
+//                    throw new IOException();
+//
+//                // Has the command been successfully completed by the server ?
+//                success = FTPReply.isPositiveCompletion(connHandler.ftpClient.sendCommand(command));
+//
+//                // Retrieves the command's output and create an InputStream for getInputStream()
+//                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+//                PrintWriter pw = new PrintWriter(baos, true);
+//                String replyStrings[] = connHandler.ftpClient.getReplyStrings();
+//                for(int i=0; i<replyStrings.length; i++)
+//                    pw.println(replyStrings[i]);
+//                pw.close();
+//
+//                bais = new ByteArrayInputStream(baos.toByteArray());
+//                // No need to close the ByteArrayOutputStream
+//            }
+//            catch(IOException e) {
+//               // Checks if the IOException corresponds to a socket error and in that case, closes the connection
+//                connHandler.checkSocketException(e);
+//
+//                // Re-throw IOException
+//                throw e;
+//            }
+//            finally {
+//                // Release the lock on the ConnectionHandler
+//                if(connHandler!=null)
+//                    connHandler.releaseLock();
+//            }
+//        }
+//
+//        public boolean usesMergedStreams() {
+//            // No specific stream for errors
+//            return true;
+//        }
+//
+//        public int waitFor() throws InterruptedException, IOException {
+//            return success?0:1;
+//        }
+//
+//        protected void destroyProcess() throws IOException {
+//            // No-op, command has already been executed
+//        }
+//
+//        public int exitValue() {
+//            return success?0:1;
+//        }
+//
+//        public OutputStream getOutputStream() throws IOException {
+//            // FTP commands are not interactive, the returned OutputStream simply ignores data that's fed to it
+//            return new SinkOutputStream();
+//        }
+//
+//        public InputStream getInputStream() throws IOException {
+//            if(bais==null)
+//                throw new IOException();
+//
+//            return bais;
+//        }
+//
+//        public InputStream getErrorStream() throws IOException {
+//            return getInputStream();
+//        }
+//    }
 
     private class FTPInputStream extends FilterInputStream {
 

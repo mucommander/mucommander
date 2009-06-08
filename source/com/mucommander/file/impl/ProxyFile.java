@@ -27,7 +27,6 @@ import com.mucommander.file.filter.FilenameFilter;
 import com.mucommander.io.FileTransferException;
 import com.mucommander.io.RandomAccessInputStream;
 import com.mucommander.io.RandomAccessOutputStream;
-import com.mucommander.process.AbstractProcess;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -187,14 +186,6 @@ public abstract class ProxyFile extends AbstractFile {
 
     public Object getUnderlyingFileObject() {
         return file.getUnderlyingFileObject();
-    }
-
-    public boolean canRunProcess() {
-        return file.canRunProcess();
-    }
-
-    public AbstractProcess runProcess(String[] tokens) throws IOException {
-        return file.runProcess(tokens);
     }
 
     

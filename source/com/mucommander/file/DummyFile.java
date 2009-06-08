@@ -20,7 +20,6 @@ package com.mucommander.file;
 
 import com.mucommander.io.RandomAccessInputStream;
 import com.mucommander.io.RandomAccessOutputStream;
-import com.mucommander.process.AbstractProcess;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -241,19 +240,5 @@ public class DummyFile extends AbstractFile {
      */
     public Object getUnderlyingFileObject() {
         return null;
-    }
-
-    /**
-     * Implementation notes: always returns <code>false</code>.
-     */
-    public boolean canRunProcess() {
-        return false;
-    }
-
-    /**
-     * Implementation notes: always throws an exception.
-     */
-    public AbstractProcess runProcess(String[] tokens) throws IOException {
-        throw new IOException();
     }
 }

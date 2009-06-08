@@ -25,7 +25,6 @@ import com.mucommander.file.util.Kernel32;
 import com.mucommander.file.util.Kernel32API;
 import com.mucommander.file.util.PathUtils;
 import com.mucommander.io.*;
-import com.mucommander.process.AbstractProcess;
 import com.mucommander.runtime.*;
 import com.sun.jna.ptr.LongByReference;
 
@@ -750,30 +749,6 @@ public class LocalFile extends AbstractFile {
     }	
 
 
-    /**
-     * Always returns <code>true</code>.
-     *
-     * @return <code>true</code>
-     */
-    public boolean canRunProcess() {
-        return true;
-    }
-
-    /**
-     * Returns a process executing the specied local command.
-     * 
-     * @param  tokens      describes the command and its arguments.
-     * @throws IOException if an error occured while creating the process.
-     */
-    public AbstractProcess runProcess(String[] tokens) throws IOException {
-        if(!isDirectory()) {
-            if(Debug.ON) Debug.trace("Tried to create a process using a file as a working directory.");
-            throw new IOException(file + " is not a directory");
-        }
-        return new LocalProcess(tokens, file);
-    }
-
-    
     ////////////////////////
     // Overridden methods //
     ////////////////////////

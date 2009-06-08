@@ -21,6 +21,7 @@ package com.mucommander.process;
 import com.mucommander.Debug;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
+import com.mucommander.file.impl.local.LocalFile;
 
 import java.io.IOException;
 import java.util.StringTokenizer;
@@ -54,7 +55,10 @@ public class ProcessRunner {
      * <p>
      * Note that both <code>currentDirectory</code> and <code>listener</code> can be set to <code>null</code>.<br>
      * If no current directory is specified, the VM's current directory will be used. Moreover, if the current directory
-     * is not on a file system that supports process running, the user's home directory will be used instead.<br>
+     * is not on residing on local file system, the user's home directory will be used instead. Finally, if the current
+     * directory is on a local file system but is actually not a {@link AbstractFile#isDirectory() directory}
+     * (an archive entry for instance), the first file's parent that is an actual directory will be used.
+     * <br>
      * If <code>listener</code> is set to <code>null</code>, nobody will be notified of the process' state. Its streams
      * will still be emptied to prevent deadlocks.
      * </p>
@@ -69,21 +73,31 @@ public class ProcessRunner {
         AbstractProcess process;
 
         // If currentDirectory is null, use the VM's current directory.
-        if(currentDirectory == null)
-            currentDirectory = FileFactory.getFile(new java.io.File(System.getProperty("user.dir")).getAbsolutePath());
-        // If currentDirectory cannot run processes, use the user's home.
-        else if(!currentDirectory.canRunProcess())
-            currentDirectory = FileFactory.getFile(new java.io.File(System.getProperty("user.home")).getAbsolutePath());
-        // If currentDirectory is not a directory, use its parent.
-        else if(!currentDirectory.isDirectory())
-            currentDirectory = currentDirectory.getParent();
+        if(currentDirectory == null) {
+            currentDirectory = FileFactory.getFile(System.getProperty("user.dir"), true);
+        }
+        else {
+            // If currentDirectory is not on a local filesytem, use the user's home.
+            if(!currentDirectory.hasAncestor(LocalFile.class)) {
+                currentDirectory = FileFactory.getFile(System.getProperty("user.home"), true);
+            }
+            // If currentDirectory is not a directory (e.g. an archive entry)
+            else {
+                while(currentDirectory!=null && !currentDirectory.isDirectory())
+                    currentDirectory = currentDirectory.getParent();
+
+                // This shouldn't normally happen
+                if(currentDirectory==null)
+                    currentDirectory = FileFactory.getFile(System.getProperty("user.dir"), true);
+            }
+        }
 
         // If we're in debug mode, register a debug process listener.
         if(Debug.ON && listener == null)
             listener = new DebugProcessListener(tokens);
 
         // Starts the process.
-        process = currentDirectory.runProcess(tokens);
+        process = new LocalProcess(tokens, (java.io.File)currentDirectory.getUnderlyingFileObject());
         process.startMonitoring(listener, encoding);
 
         return process;
