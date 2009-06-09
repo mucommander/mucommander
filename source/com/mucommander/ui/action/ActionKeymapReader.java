@@ -30,6 +30,7 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 
 import com.mucommander.Debug;
+import com.mucommander.RuntimeConstants;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.io.BackupInputStream;
 
@@ -50,6 +51,9 @@ class ActionKeymapReader extends ActionKeymapIO {
     
     /** Parsed file */
     private AbstractFile file;
+    /** true => the parsed file is the resource file (the one inside the jar)
+     *  false => the parsed file is the user's file */
+    private boolean isResourceFile;
     
     /**
      * Loads the action file: loads the one contained in the JAR file first, and then the user's one.
@@ -63,8 +67,9 @@ class ActionKeymapReader extends ActionKeymapIO {
      * @throws IOException 
      * @throws SAXException 
      */
-    ActionKeymapReader(AbstractFile file) throws SAXException, IOException, ParserConfigurationException {
+    ActionKeymapReader(AbstractFile file, boolean isResourceFile) throws SAXException, IOException, ParserConfigurationException {
     	this.file = file;
+    	this.isResourceFile = isResourceFile;
     	
     	InputStream in = null;
     	try {SAXParserFactory.newInstance().newSAXParser().parse(in = new BackupInputStream(file), this);}
@@ -163,6 +168,11 @@ class ActionKeymapReader extends ActionKeymapIO {
     	else if (qName.equals(ROOT_ELEMENT)) {
     		// Note: early 0.8 beta3 nightly builds did not have version attribute, so the attribute may be null
     		fileVersion = attributes.getValue(VERSION_ATTRIBUTE);
+    		
+    		// if it's the user's customization file and its version is not up-to-date,
+    		// update the file to the current version at quitting.
+    		if (!isResourceFile && !RuntimeConstants.VERSION.equals(fileVersion))
+    			setModified();
     	}
     }
 }

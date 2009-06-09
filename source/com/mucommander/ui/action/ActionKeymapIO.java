@@ -142,13 +142,13 @@ public abstract class ActionKeymapIO extends DefaultHandler  {
      */
     public static void loadActionKeymap() throws Exception {
     	// Load actions keymap resource file:
-    	ActionKeymapReader resourceFileReader = new ActionKeymapReader(ResourceLoader.getResourceAsFile(ACTION_KEYMAP_RESOURCE_PATH));
+    	ActionKeymapReader resourceFileReader = new ActionKeymapReader(ResourceLoader.getResourceAsFile(ACTION_KEYMAP_RESOURCE_PATH), true);
     	ActionKeymap.setDefaultKeymap(resourceFileReader.getPrimaryActionsKeymap(), resourceFileReader.getAlternateActionsKeymap());
     	
     	// Load user's file if exist
     	AbstractFile actionKeymapFile = getActionsFile();
     	if (actionKeymapFile != null && actionKeymapFile.exists()) {
-    		ActionKeymapReader reader = new ActionKeymapReader(actionKeymapFile);
+    		ActionKeymapReader reader = new ActionKeymapReader(actionKeymapFile, false);
     		ActionKeymap.registerActions(reader.getPrimaryActionsKeymap(), reader.getAlternateActionsKeymap());
     	}
     	else {
