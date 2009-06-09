@@ -498,7 +498,7 @@ public class FileFactory {
             // Lookup the cache for an existing AbstractFile instance
             // Note: FileURL#equals(Object) and #hashCode() take into account credentials and properties
             file = rawFileCache.get(fileURL);
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("file cache "+(file==null?"miss":"hit"));
+//            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("file cache "+(file==null?"miss":"hit"));
 
             if(file!=null)
                 return file;
