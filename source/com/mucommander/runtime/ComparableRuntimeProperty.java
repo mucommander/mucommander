@@ -31,7 +31,7 @@ package com.mucommander.runtime;
 public abstract class ComparableRuntimeProperty extends RuntimeProperty implements Comparable {
 
     /** The descriminator set at creation time */
-    protected final int discriminator;
+    protected final Comparable discriminator;
 
     /**
      * Creates a new RuntimeProperty using the specified String representation and order discriminator.
@@ -39,7 +39,7 @@ public abstract class ComparableRuntimeProperty extends RuntimeProperty implemen
      * @param stringRepresentation a String representation of this property
      * @param discriminator the descriminator that serves to compare an instance with another against
      */
-    protected ComparableRuntimeProperty(String stringRepresentation, int discriminator) {
+    protected ComparableRuntimeProperty(String stringRepresentation, Comparable discriminator) {
         super(stringRepresentation);
 
         this.discriminator = discriminator;
@@ -94,6 +94,6 @@ public abstract class ComparableRuntimeProperty extends RuntimeProperty implemen
         if(!(o instanceof ComparableRuntimeProperty))
             throw new IllegalArgumentException();
 
-        return discriminator - ((ComparableRuntimeProperty)o).discriminator;
+        return discriminator.compareTo(((ComparableRuntimeProperty)o).discriminator);
     }
 }
