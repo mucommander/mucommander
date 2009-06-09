@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<toolbar>
+<toolbar version="0.8.4">
     <button action="com.mucommander.ui.action.impl.NewWindowAction"/>
     <separator/>
     <button action="com.mucommander.ui.action.impl.GoBackAction"/>

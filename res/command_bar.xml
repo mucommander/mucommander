@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<command_bar modifier="SHIFT">
+<command_bar modifier="SHIFT" version="0.8.4">
     <button action="com.mucommander.ui.action.impl.ViewAction"/>
     <button action="com.mucommander.ui.action.impl.EditAction"/>
     <button action="com.mucommander.ui.action.impl.CopyAction" alt_action="com.mucommander.ui.action.impl.LocalCopyAction"/>
