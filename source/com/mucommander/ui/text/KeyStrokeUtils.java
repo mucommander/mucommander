@@ -62,13 +62,15 @@ public class KeyStrokeUtils {
      * @return a String representation of the given KeyStroke <bold>for display</bold>, in the <code>[modifier]+[modifier]+...+key</code> format
      */
     public static String getKeyStrokeDisplayableRepresentation(KeyStroke ks) {
+    	if (ks == null)
+    		return null;
+    	
         int modifiers = ks.getModifiers();
         String keyText = KeyEvent.getKeyText(ks.getKeyCode());
 
         if(modifiers!=0) {
             return getModifiersDisplayableRepresentation(modifiers)+"+"+keyText;
         }
-
         return keyText;
     }
 

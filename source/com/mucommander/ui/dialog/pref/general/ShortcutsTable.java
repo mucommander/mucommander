@@ -35,14 +35,10 @@ import java.util.List;
 import java.util.Set;
 
 import javax.swing.BorderFactory;
-import javax.swing.ComboBoxModel;
 import javax.swing.DefaultCellEditor;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
-import javax.swing.UIManager;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
@@ -50,7 +46,6 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
-import javax.swing.table.TableCellRenderer;
 
 import com.mucommander.Debug;
 import com.mucommander.runtime.JavaVersions;
@@ -62,6 +57,7 @@ import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.dialog.pref.component.PrefTable;
 import com.mucommander.ui.dialog.pref.general.ShortcutsPanel.TooltipBar;
 import com.mucommander.ui.main.WindowManager;
+import com.mucommander.ui.table.CenteredTableHeaderRenderer;
 import com.mucommander.ui.text.KeyStrokeUtils;
 
 /**
@@ -71,12 +67,12 @@ import com.mucommander.ui.text.KeyStrokeUtils;
  */
 public class ShortcutsTable extends PrefTable implements KeyListener, ListSelectionListener, FocusListener {
 
-	// Column indexes
+	/** Column indexes */
 	private static final int ACTION_DESCRIPTION_COLUMN_INDEX     = 0;
 	private static final int ACCELERATOR_COLUMN_INDEX            = 1;
 	private static final int ALTERNATE_ACCELERATOR_COLUMN_INDEX  = 2;
 	
-	// Number of columns in the table
+	/** Number of columns in the table */
 	private static final int NUM_OF_COLUMNS = 3;
 	
 	// Row number to action class map
@@ -91,16 +87,21 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 	// Row number to action tooltip map
 	private HashMap actionToTooltipText;
 	
-	// Set that holds the row indexes the user may have changed 
+	/** Set that holds the row indexes the user may have changed */
 	private Set dirtyRows;
 	
-	// Private object used to indicate that a delete operation was made
+	/** Private object used to indicate that a delete operation was made */
 	private final Object DELETE = new Object();
 	
 	// Saved copy of the table data, before any change was made by the user
 	private Object[][] data;
 	
+	private int lastSelectedRow = -1;
+	
 	private TooltipBar tooltipBar;
+	
+	private final int NUM_OF_CLICK_TO_ENTER_EDITING_STATE = 2;
+	private final int MAX_TIME_OF_EDITING_STATE = 2000;
 
 	public ShortcutsTable(TooltipBar tooltipBar) {
 		super();
@@ -136,7 +137,7 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 	
 	public void valueChanged(ListSelectionEvent e) {
 		super.valueChanged(e);
-		// Selection might be changed so update to tooltip
+		// Selection might be changed, update to tooltip
 		tooltipBar.showActionTooltip(getTooltipForRow(getSelectedRow()));
 	}
 	
@@ -190,25 +191,21 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 	}
 
 	private void setAccelerator(KeyStroke keyStroke, int row, Object[][] model) {
-		if (keyStroke != null) {
+		if (keyStroke != null)
 			rowToAccelerator.put(Integer.valueOf(row), keyStroke);
-			model[row][ACCELERATOR_COLUMN_INDEX] = KeyStrokeUtils.getKeyStrokeDisplayableRepresentation(keyStroke);
-		}
-		else {
+		else
 			rowToAccelerator.remove(Integer.valueOf(row));
-			model[row][ACCELERATOR_COLUMN_INDEX] = null;
-		}
+		
+		model[row][ACCELERATOR_COLUMN_INDEX] = KeyStrokeUtils.getKeyStrokeDisplayableRepresentation(keyStroke);
 	}
 	
 	private void setAlternativeAccelerator(KeyStroke keyStroke, int row, Object[][] model) {
-		if (keyStroke != null) {
+		if (keyStroke != null)
 			rowToAlternateAccelerator.put(Integer.valueOf(row), keyStroke);
-			model[row][ALTERNATE_ACCELERATOR_COLUMN_INDEX] = KeyStrokeUtils.getKeyStrokeDisplayableRepresentation(keyStroke);
-		}
-		else {
+		else
 			rowToAlternateAccelerator.remove(Integer.valueOf(row));
-			model[row][ALTERNATE_ACCELERATOR_COLUMN_INDEX] = null;
-		}
+		
+		model[row][ALTERNATE_ACCELERATOR_COLUMN_INDEX] = KeyStrokeUtils.getKeyStrokeDisplayableRepresentation(keyStroke);
 	}
 
 	public void updateActions() {
@@ -266,7 +263,10 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
     // FocusListener methods //
     ///////////////////////////
 	public void focusGained(FocusEvent e) {
-		tooltipBar.showActionTooltip(getTooltipForRow(getSelectedRow()));
+		int currentSelectedRow = getSelectedRow();
+		if (lastSelectedRow != currentSelectedRow)
+			tooltipBar.showActionTooltip(getTooltipForRow(getSelectedRow()));
+		lastSelectedRow = currentSelectedRow;
 	}
 
 	public void focusLost(FocusEvent e) { tooltipBar.clear(); }
@@ -279,8 +279,6 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 		if (keyCode == KeyEvent.VK_ENTER) {
 			if (editCellAt(getSelectedRow(), getSelectedColumn()))
 				getEditorComponent().requestFocusInWindow();
-			else
-				tooltipBar.showRegularKeystrokeMustBeAssignedFirstMsg();
 			e.consume();
 		}
 		else if (keyCode == KeyEvent.VK_DELETE || keyCode == KeyEvent.VK_BACK_SPACE) {
@@ -289,8 +287,8 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 			e.consume();
 		}
 		else if (keyCode != KeyEvent.VK_LEFT && keyCode != KeyEvent.VK_RIGHT && keyCode != KeyEvent.VK_UP &&
-				keyCode != KeyEvent.VK_DOWN && keyCode != KeyEvent.VK_HOME  && keyCode != KeyEvent.VK_END &&
-				keyCode != KeyEvent.VK_F2   && keyCode != KeyEvent.VK_ESCAPE)
+			     keyCode != KeyEvent.VK_DOWN && keyCode != KeyEvent.VK_HOME  && keyCode != KeyEvent.VK_END &&
+			     keyCode != KeyEvent.VK_F2   && keyCode != KeyEvent.VK_ESCAPE)
 			e.consume();
 	}
 
@@ -302,11 +300,11 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 	/**
 	 * Helper Classes
 	 */
-	private class KeyStrokeCellEditor extends DefaultCellEditor implements TableCellEditor {
-		
-		private final int NUM_OF_CLICK_TO_EDIT = 2;
+	private class KeyStrokeCellEditor extends DefaultCellEditor implements TableCellEditor, Runnable {
 		
 		RecordingKeyStrokeField rec;
+		/** Pointer to the canceling-thread used to prevent him from being garbage-collected */
+		Thread canclingThread;
 		
 		public KeyStrokeCellEditor(RecordingKeyStrokeField rec) {
 			super(rec);
@@ -314,15 +312,18 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 			rec.setSelectionColor(rec.getBackground());
 			rec.setSelectedTextColor(rec.getForeground());
 			rec.getDocument().addDocumentListener(new DocumentListener() {
-				/**
-				 * 
-				 */
-				public void insertUpdate(DocumentEvent e) {	stopCellEditing(); }
+				public void insertUpdate(DocumentEvent e) {
+					// quit editing state after text is written to the text field.
+					stopCellEditing();
+				}
 				public void changedUpdate(DocumentEvent e) {}
 				public void removeUpdate(DocumentEvent e) {}
 			});
 			
-			setClickCountToStart(NUM_OF_CLICK_TO_EDIT);
+			setClickCountToStart(NUM_OF_CLICK_TO_ENTER_EDITING_STATE);
+			
+			canclingThread = new Thread(this);
+			canclingThread.start();
 		}
 
 		public Component getTableCellEditorComponent(JTable table, Object value,
@@ -332,6 +333,19 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
  
         public Object getCellEditorValue() {
         	return rec.getLastKeyStroke();
+        }
+        
+        //////////////////
+        //// Runnable ////
+        //////////////////
+        
+        public void run() {
+        	try {
+				Thread.sleep(MAX_TIME_OF_EDITING_STATE);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+        	stopCellEditing();
         }
 	}
 	
@@ -348,10 +362,11 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 		
 		public boolean isCellEditable(int row, int column) {
 			switch(column) {
-			case 1:
+			case ACTION_DESCRIPTION_COLUMN_INDEX:
+				return false;
+			case ACCELERATOR_COLUMN_INDEX:
+			case ALTERNATE_ACCELERATOR_COLUMN_INDEX:
 				return true;
-			case 2:
-				return data[row][1] != null;
 			default:
 				return false;
 			}			
@@ -409,7 +424,7 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 
 		/////////////////////////////
 		//// KeyListener methods ////
-		/////////////////////////////		
+		/////////////////////////////
 		public void keyPressed(KeyEvent keyEvent) {
 			if(Debug.ON) Debug.trace("keyModifiers="+keyEvent.getModifiers()+" keyCode="+keyEvent.getKeyCode());
 
@@ -432,48 +447,6 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 		public void keyReleased(KeyEvent e) {e.consume();}
 
 		public void keyTyped(KeyEvent e) {e.consume();}
-	}
-	
-	private class CenteredTableHeaderRenderer extends JLabel implements TableCellRenderer {
-
-		public CenteredTableHeaderRenderer() {
-			setHorizontalAlignment(JLabel.CENTER);
-	        setBorder(UIManager.getBorder("TableHeader.cellBorder"));
-		}
-				
-        public Component getTableCellRendererComponent(JTable table, Object value,
-                boolean isSelected, boolean hasFocus, int rowIndex, int vColIndex) {
-
-        	// Configure the component with the specified value
-            setText(value.toString());
-    
-            // Since the renderer is a component, return itself
-            return this;
-        }
-    
-        // The following methods override the defaults for performance reasons
-        public void validate() {}
-        public void revalidate() {}
-        protected void firePropertyChange(String propertyName, Object oldValue, Object newValue) {}
-        public void firePropertyChange(String propertyName, boolean oldValue, boolean newValue) {}
-    }
-	
-	private class ComboRenderer extends JComboBox implements TableCellRenderer {
-
-		ComboRenderer(ComboBoxModel model) {
-			super(model);
-
-			setBorder(UIManager.getBorder("TableHeader.cellBorder"));
-			setForeground(UIManager.getColor("TableHeader.foreground"));
-			setEditable(false);
-			setOpaque(true);
-		}
-
-		public Component getTableCellRendererComponent(JTable table, Object value, 
-				boolean isSelected, boolean hasFocus, int row, int column) {
-			setSelectedItem(value);
-			return this;
-		}
 	}
 	
 	public static abstract class ActionFilter {

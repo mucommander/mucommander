@@ -123,7 +123,8 @@ public class ShortcutsPanel extends PreferencesPanel {
 	
 	class TooltipBar extends JLabel implements Runnable {
 		private String lastActionTooltipShown;
-		private final String EMPTY_MESSAGE = " "; 
+		private static final String EMPTY_MESSAGE = " ";
+		private static final int MESSAGE_SHOWING_TIME = 3000;
 		
 		public TooltipBar() {
 			Font tableFont = UIManager.getFont("TableHeader.font");
@@ -147,14 +148,9 @@ public class ShortcutsPanel extends PreferencesPanel {
 			new Thread(this).start();
 		}
 		
-		public void showRegularKeystrokeMustBeAssignedFirstMsg() {
-			setText("Regular keystoke must be assigned to action first");
-			new Thread(this).start();
-		}
-
 		public void run() {
 			try {
-				Thread.sleep(2000);
+				Thread.sleep(MESSAGE_SHOWING_TIME);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
