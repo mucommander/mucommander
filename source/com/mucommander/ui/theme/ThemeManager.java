@@ -25,6 +25,7 @@ import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
 import com.mucommander.file.filter.ExtensionFilenameFilter;
+import com.mucommander.file.util.PathUtils;
 import com.mucommander.file.util.ResourceLoader;
 import com.mucommander.io.BackupInputStream;
 import com.mucommander.io.BackupOutputStream;
@@ -98,7 +99,7 @@ public class ThemeManager {
         if(type != Theme.USER_THEME) {
             wasUserThemeLoaded = false;
             name               = MuConfiguration.getVariable(MuConfiguration.THEME_NAME, MuConfiguration.DEFAULT_THEME_NAME);
-	}
+        }
         else {
             name               = null;
             wasUserThemeLoaded = true;
@@ -136,7 +137,10 @@ public class ThemeManager {
     // - Themes access -------------------------------------------------------------------
     // -----------------------------------------------------------------------------------
     private static Iterator predefinedThemeNames() {
-        return getThemeNames(ResourceLoader.getResourceAsFile(RuntimeConstants.THEMES_PATH));
+        try {
+            return getThemeNames(ResourceLoader.getRootPackageAsFile(ThemeManager.class).getChild(PathUtils.removeLeadingSeparator(RuntimeConstants.THEMES_PATH, "/")));
+        }
+        catch(IOException e) {return Collections.emptyList().iterator();}
     }
 
     private static Iterator customThemeNames() throws IOException {
@@ -154,9 +158,7 @@ public class ThemeManager {
                 names.add(getThemeName(files[i]));
             return names.iterator();
         }
-        catch(Exception e) {
-            return new Vector().iterator();
-        }
+        catch(Exception e) {return new Vector().iterator();}
     }
 
     public static Vector getAvailableThemes() {
