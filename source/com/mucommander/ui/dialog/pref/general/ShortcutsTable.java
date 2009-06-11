@@ -24,7 +24,6 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Enumeration;
@@ -43,9 +42,9 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.event.TableModelEvent;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
+import javax.swing.table.TableModel;
 
 import com.mucommander.Debug;
 import com.mucommander.runtime.JavaVersions;
@@ -67,11 +66,6 @@ import com.mucommander.ui.text.KeyStrokeUtils;
  */
 public class ShortcutsTable extends PrefTable implements KeyListener, ListSelectionListener, FocusListener {
 
-	/** Column indexes */
-	private static final int ACTION_DESCRIPTION_COLUMN_INDEX     = 0;
-	private static final int ACCELERATOR_COLUMN_INDEX            = 1;
-	private static final int ALTERNATE_ACCELERATOR_COLUMN_INDEX  = 2;
-	
 	/** Number of columns in the table */
 	private static final int NUM_OF_COLUMNS = 3;
 	
@@ -87,20 +81,23 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 	// Row number to action tooltip map
 	private HashMap actionToTooltipText;
 	
-	/** Set that holds the row indexes the user may have changed */
-	private Set dirtyRows;
-	
 	/** Private object used to indicate that a delete operation was made */
 	private final Object DELETE = new Object();
 	
-	// Saved copy of the table data, before any change was made by the user
-	private Object[][] data;
+	private State state;
 	
 	private int lastSelectedRow = -1;
 	
 	private TooltipBar tooltipBar;
 	
+	//Constants:
+	/** Column indexes */
+	private static final int ACTION_DESCRIPTION_COLUMN_INDEX     = 0;
+	private static final int ACCELERATOR_COLUMN_INDEX            = 1;
+	private static final int ALTERNATE_ACCELERATOR_COLUMN_INDEX  = 2;
+	/** */
 	private final int NUM_OF_CLICK_TO_ENTER_EDITING_STATE = 2;
+	/** */
 	private final int MAX_TIME_OF_EDITING_STATE = 2000;
 
 	public ShortcutsTable(TooltipBar tooltipBar) {
@@ -142,44 +139,32 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 	}
 	
 	public void updateModel(ActionFilter filter) {
-		dirtyRows = new HashSet();
 		rowToAction = new HashMap();
 		rowToAccelerator = new HashMap();
 		rowToAlternateAccelerator = new HashMap();
 		actionToTooltipText = new HashMap();
 
-		setModel(new KeymapTableModel(takeSnapshot(data = buildTableData(filter))));
+		setModel(new KeymapTableModel(createTableData(filter)));
+	}
+
+	/**
+	 * Override this method so that calls for SetModel function outside this class
+	 * won't get to setModel(KeymapTableModel model) function.
+	 */
+	public void setModel(TableModel model) {
+		super.setModel(model);
+	}
+	
+	public void setModel(KeymapTableModel model) {
+		super.setModel(model);
+		state = new State(((KeymapTableModel) model).getData());
 	}
 	
 	private static boolean usesTableHeaderRenderingProperties() {
         return OsFamilies.MAC_OS_X.isCurrent() && OsVersions.MAC_OS_X_10_5.isCurrentOrHigher() && JavaVersions.JAVA_1_5.isCurrentOrHigher();
     }	
 	
-	private boolean compareData() {
-		Object[][] model = ((KeymapTableModel) getModel()).getData();
-		int nbRows = data.length;
-		for (int i=0; i<nbRows; i++)
-			if (!Arrays.equals(data[i], model[i]))
-				return false;
-		return true;
-	}
-
-	public boolean hasChanged() { return !compareData(); }
-	
-	public void tableChanged(TableModelEvent e) {
-		super.tableChanged(e);
-		int row = e.getFirstRow();
-		if (row >= 0)
-			dirtyRows.add(Integer.valueOf(row));
-	}
-	
-	private Object[][] takeSnapshot(Object[][] data) {
-		Object[][] c = new Object[data.length][data[0].length];
-		for (int i=0; i<data.length; i++) {
-			System.arraycopy(data[i], 0, c[i], 0, data[0].length);
-		}
-		return c;
-	}
+	public boolean hasChanged() { return state.isTableBeenModified(); }
 	
 	public TableCellEditor getCellEditor(int row, int column) {
 		return new KeyStrokeCellEditor(new RecordingKeyStrokeField((String) getValueAt(row, column)));
@@ -209,20 +194,19 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 	}
 
 	public void updateActions() {
-		data = takeSnapshot(((KeymapTableModel) getModel()).getData());
-		Iterator iterator = dirtyRows.iterator();
+		Iterator iterator = state.getDirtyRowsIterator();
 		while(iterator.hasNext()) {
 			Integer row = (Integer) iterator.next();
 			ActionKeymap.changeActionAccelerators((Class) rowToAction.get(row), (KeyStroke) rowToAccelerator.get(row), 
 					(KeyStroke) rowToAlternateAccelerator.get(row));
 		}
-		dirtyRows.clear();
+		state = new State(((KeymapTableModel) getModel()).getData());
 	}
 	
 	/**
 	 * Builds the table data based of all actions with their associated keystrokes
 	 */
-	private Object[][] buildTableData(ActionFilter filter) {
+	private Object[][] createTableData(ActionFilter filter) {
 		Enumeration actionClasses = ActionManager.getActionClasses();
 		
 		// Convert the action-classes to MuAction instances
@@ -262,18 +246,20 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 	///////////////////////////
     // FocusListener methods //
     ///////////////////////////
+	
 	public void focusGained(FocusEvent e) {
 		int currentSelectedRow = getSelectedRow();
 		if (lastSelectedRow != currentSelectedRow)
-			tooltipBar.showActionTooltip(getTooltipForRow(getSelectedRow()));
+			tooltipBar.showActionTooltip(getTooltipForRow(currentSelectedRow));
 		lastSelectedRow = currentSelectedRow;
 	}
 
-	public void focusLost(FocusEvent e) { tooltipBar.clear(); }
+	public void focusLost(FocusEvent e) { }
 	
 	/////////////////////////////
 	//// KeyListener methods ////
 	/////////////////////////////
+	
 	public void keyPressed(KeyEvent e) {
 		int keyCode = e.getKeyCode();
 		if (keyCode == KeyEvent.VK_ENTER) {
@@ -296,6 +282,9 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 	
 	public void keyTyped(KeyEvent e) {}
 	
+	public static abstract class ActionFilter {
+		public abstract boolean accept(MuAction action);
+	}
 	
 	/**
 	 * Helper Classes
@@ -369,7 +358,7 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 				return true;
 			default:
 				return false;
-			}			
+			}
 		}
 		
 		public Object getValueAt(int row, int column) { return tableData[row][column]; }
@@ -378,8 +367,8 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 			// if no keystroke was pressed
 			if (value == null)
 				return;
-			// if the user pressed a keystroke that is used to indicate a delete operation
-			// should be made
+			// if the user pressed a keystroke that is used to indicate 
+			// a delete operation should be made
 			else if (value == DELETE)
 				value = null;
 				
@@ -393,7 +382,9 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 			default:
 				if (Debug.ON) { Debug.trace("Unexpected column index: " + column); }
 			}
-			
+
+			state.rowHasBeenUpdated(row);
+
 			fireTableCellUpdated(row, column);
 			
 			if (Debug.ON) { Debug.trace("Value: " + value + ", row: " + row + ", col: " + column); }
@@ -425,6 +416,7 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 		/////////////////////////////
 		//// KeyListener methods ////
 		/////////////////////////////
+
 		public void keyPressed(KeyEvent keyEvent) {
 			if(Debug.ON) Debug.trace("keyModifiers="+keyEvent.getModifiers()+" keyCode="+keyEvent.getKeyCode());
 
@@ -449,7 +441,46 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 		public void keyTyped(KeyEvent e) {e.consume();}
 	}
 	
-	public static abstract class ActionFilter {
-		public abstract boolean accept(MuAction action);
+	private class State {
+		/** Saved copy of the table data, before any change was made by the user */
+		private Object[][] originalTableData;
+		/** Set that holds the row indexes the user may have changed */
+		private Set dirtyRows;
+		
+		public State(Object[][] tableData) {
+			dirtyRows = new HashSet();
+			int nbRows = tableData.length;
+			int nbCol = tableData[0].length;
+			originalTableData = new Object[nbRows][nbCol];
+			for (int i=0; i<nbRows; ++i)
+				for (int j=0; j<nbCol; ++j)
+					originalTableData[i][j] = tableData[i][j];
+		}
+		
+		public void rowHasBeenUpdated(int row) {
+			Object[][] currentTableData = ((KeymapTableModel) getModel()).getData();
+			if (equals(originalTableData[row][ACCELERATOR_COLUMN_INDEX], currentTableData[row][ACCELERATOR_COLUMN_INDEX]) &&
+				equals(originalTableData[row][ALTERNATE_ACCELERATOR_COLUMN_INDEX], currentTableData[row][ALTERNATE_ACCELERATOR_COLUMN_INDEX]))
+				dirtyRows.remove(Integer.valueOf(row));
+			else
+				dirtyRows.add(Integer.valueOf(row));
+		}
+
+		public boolean isTableBeenModified() {
+			return !dirtyRows.isEmpty();
+		}
+		
+		public Iterator getDirtyRowsIterator() {
+			return dirtyRows.iterator();
+		}
+		
+		/**
+		 * helper function to compare two Objects for equality, that supports null values.
+		 */
+		private boolean equals(Object first, Object second) {
+			if (first == null)
+				return second == null;
+			return first.equals(second);
+		}
 	}
 }
