@@ -18,7 +18,6 @@
 
 package com.mucommander.ui.action.impl;
 
-import com.mucommander.runtime.OsFamilies;
 import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.action.MuActionFactory;
 import com.mucommander.ui.icon.IconManager;
@@ -43,8 +42,7 @@ public class GoToDocumentationAction extends OpenURLInBrowserAction implements P
     public GoToDocumentationAction(MainFrame mainFrame, Hashtable properties) {
         super(mainFrame, properties);
 
-        setIcon(IconManager.getIcon(IconManager.COMMON_ICON_SET,
-                OsFamilies.MAC_OS_X.isCurrent()?"help_mac.png":"help.png"));
+        setIcon(IconManager.getIcon(IconManager.COMMON_ICON_SET, "help.png"));
 
         // Set the URL
         updateURL();
