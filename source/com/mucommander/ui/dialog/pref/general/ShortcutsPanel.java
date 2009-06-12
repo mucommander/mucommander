@@ -62,7 +62,7 @@ public class ShortcutsPanel extends PreferencesPanel {
 		shortcutsTable.addDialogListener(parent);
 	}
 	
-	// - UI initialisation ------------------------------------------------------
+	// - UI initialization ------------------------------------------------------
     // --------------------------------------------------------------------------
 	private void initUI() {
 		setLayout(new BorderLayout());
@@ -120,11 +120,11 @@ public class ShortcutsPanel extends PreferencesPanel {
 		ActionKeymapIO.setModified();
 	}
 	
-	
-	class TooltipBar extends JLabel implements Runnable {
+	class TooltipBar extends JLabel {
 		private String lastActionTooltipShown;
 		private static final String EMPTY_MESSAGE = " ";
 		private static final int MESSAGE_SHOWING_TIME = 3000;
+		private MessageRemoverThread currentRemoverThread;
 		
 		public TooltipBar() {
 			Font tableFont = UIManager.getFont("TableHeader.font");
@@ -143,19 +143,32 @@ public class ShortcutsPanel extends PreferencesPanel {
 		}
 		
 		public void showKeystrokeAlreadyInUseMsg(KeyStroke pressedKeyStroke, MuAction assignedAction) {
-			setText("This shortcut [" + KeyStrokeUtils.getKeyStrokeDisplayableRepresentation(pressedKeyStroke)
+			setText("The shortcut [" + KeyStrokeUtils.getKeyStrokeDisplayableRepresentation(pressedKeyStroke)
 			+ "] is already assigned to '" + assignedAction.getLabel() + "'");
-			new Thread(this).start();
+			createMessageRemoverThread();
 		}
 		
-		public void run() {
-			try {
-				Thread.sleep(MESSAGE_SHOWING_TIME);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
+		private void createMessageRemoverThread() {
+			if (currentRemoverThread != null)
+				currentRemoverThread.neutralize();
+			(currentRemoverThread = new MessageRemoverThread()).start();
+		}
+		
+		private class MessageRemoverThread extends Thread {
+			private boolean stopped = false;
 			
-			showActionTooltip(lastActionTooltipShown);
+			public void neutralize() {
+				stopped = true;
+			}
+		
+			public void run() {
+				try {
+					Thread.sleep(MESSAGE_SHOWING_TIME);
+				} catch (InterruptedException e) {}
+				
+				if (!stopped)
+					showActionTooltip(lastActionTooltipShown);
+			}
 		}
 	}
 }

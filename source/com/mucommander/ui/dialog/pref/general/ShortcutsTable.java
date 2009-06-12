@@ -55,54 +55,74 @@ import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.dialog.pref.component.PrefTable;
 import com.mucommander.ui.dialog.pref.general.ShortcutsPanel.TooltipBar;
-import com.mucommander.ui.main.WindowManager;
 import com.mucommander.ui.table.CenteredTableHeaderRenderer;
 import com.mucommander.ui.text.KeyStrokeUtils;
 
 /**
- * This class is the table in which the actions and their shortcuts are present in the ShortcutsPanel.
+ * This class is the table in which the actions and their shortcuts are
+ * present in the ShortcutsPanel.
  * 
  * @author Johann Schmitz (johann@j-schmitz.net), Arik Hadas
  */
 public class ShortcutsTable extends PrefTable implements KeyListener, ListSelectionListener, FocusListener {
 
-	/** Number of columns in the table */
-	private static final int NUM_OF_COLUMNS = 3;
-	
-	// Row number to action class map
+	/** Row index to action class map */
 	private HashMap rowToAction;
 	
-	// Row number to accelerator keystroke map
+	/** Row index to accelerator keystroke map */
 	private HashMap rowToAccelerator;
 	
-	// Row number to alternate accelerator keystroke map
+	/** Row index to alternate accelerator keystroke map */
 	private HashMap rowToAlternateAccelerator;
 	
-	// Row number to action tooltip map
+	/** Row index to action tooltip map */
 	private HashMap actionToTooltipText;
 	
 	/** Private object used to indicate that a delete operation was made */
 	private final Object DELETE = new Object();
 	
+	/** Comparator of actions according to their labels */
+	private static final Comparator ACTIONS_COMPARATOR = new Comparator() {
+		public int compare(Object o1, Object o2) {
+			// TODO: remove actions without a standard label?
+			if (MuAction.getStandardLabel((Class) o1) == null)
+				return 1;
+			if (MuAction.getStandardLabel((Class) o2) == null)
+				return -1;
+			return MuAction.getStandardLabel((Class) o1).compareTo(MuAction.getStandardLabel((Class) o2));
+		}
+	};
+	
+	/** Object that manage the state of the table (whether it was change, and which rows were modified) */
 	private State state;
 	
+	/** Last selected row in the table */
 	private int lastSelectedRow = -1;
 	
+	/** The bar below the table in which messages can be displayed */
 	private TooltipBar tooltipBar;
 	
-	//Constants:
+	/** Number of mouse clicks required to enter cell's editing state */
+	private static final int NUM_OF_CLICKS_TO_ENTER_EDITING_STATE = 2;
+	
 	/** Column indexes */
 	private static final int ACTION_DESCRIPTION_COLUMN_INDEX     = 0;
 	private static final int ACCELERATOR_COLUMN_INDEX            = 1;
 	private static final int ALTERNATE_ACCELERATOR_COLUMN_INDEX  = 2;
-	/** */
-	private final int NUM_OF_CLICK_TO_ENTER_EDITING_STATE = 2;
-	/** */
-	private final int MAX_TIME_OF_EDITING_STATE = 2000;
+
+	/** Number of columns in the table */
+	private static final int NUM_OF_COLUMNS = 3;
+	
+	/** After the following time (msec) that cell is being in editing state 
+	 *  and no pressing was made, the editing state is canceled */
+	private static final int CELL_EDITING_STATE_PERIOD = 2000;
+	
+	/** Thread that cancel cell's editing state after CELL_EDITING_STATE_PERIOD time */
+	private CancelEditingStateThread cancelEditingStateThread;
 
 	public ShortcutsTable(TooltipBar tooltipBar) {
 		super();
-		
+
 		this.tooltipBar = tooltipBar;
 		
 		updateModel(new ActionFilter() {
@@ -132,9 +152,19 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 		getColumnModel().getSelectionModel().addListSelectionListener(this);
 	}
 	
+	/**
+	 * Create thread that will cancel the editing state of the given TableCellEditor
+	 * after CELL_EDITING_STATE_PERIOD time in which with no pressing was made.
+	 */
+	public void createCancelEditingStateThread(TableCellEditor cellEditor) {
+		if (cancelEditingStateThread != null)
+			cancelEditingStateThread.neutralize();
+		(cancelEditingStateThread = new CancelEditingStateThread(cellEditor)).start();
+	}
+	
 	public void valueChanged(ListSelectionEvent e) {
 		super.valueChanged(e);
-		// Selection might be changed, update to tooltip
+		// Selection might be changed, update tooltip
 		tooltipBar.showActionTooltip(getTooltipForRow(getSelectedRow()));
 	}
 	
@@ -157,7 +187,8 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 	
 	public void setModel(KeymapTableModel model) {
 		super.setModel(model);
-		state = new State(((KeymapTableModel) model).getData());
+		// the data in the table was changed- update the state object.
+		state = new State(model.getData());
 	}
 	
 	private static boolean usesTableHeaderRenderingProperties() {
@@ -170,37 +201,37 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 		return new KeyStrokeCellEditor(new RecordingKeyStrokeField((String) getValueAt(row, column)));
 	}
 	
-	private void setActionName(Class action, String label, int row, Object[][] model) {
+	private void setActionClass(Class action, int row) {
 		rowToAction.put(Integer.valueOf(row), action);
-		model[row][ACTION_DESCRIPTION_COLUMN_INDEX] = label;
 	}
 
-	private void setAccelerator(KeyStroke keyStroke, int row, Object[][] model) {
+	private void setAccelerator(KeyStroke keyStroke, int row) {
 		if (keyStroke != null)
 			rowToAccelerator.put(Integer.valueOf(row), keyStroke);
 		else
 			rowToAccelerator.remove(Integer.valueOf(row));
-		
-		model[row][ACCELERATOR_COLUMN_INDEX] = KeyStrokeUtils.getKeyStrokeDisplayableRepresentation(keyStroke);
 	}
 	
-	private void setAlternativeAccelerator(KeyStroke keyStroke, int row, Object[][] model) {
+	private void setAlternativeAccelerator(KeyStroke keyStroke, int row) {
 		if (keyStroke != null)
 			rowToAlternateAccelerator.put(Integer.valueOf(row), keyStroke);
 		else
 			rowToAlternateAccelerator.remove(Integer.valueOf(row));
-		
-		model[row][ALTERNATE_ACCELERATOR_COLUMN_INDEX] = KeyStrokeUtils.getKeyStrokeDisplayableRepresentation(keyStroke);
 	}
 
+	/**
+	 * This method updates ActionKeymap with the modified shortcuts.
+	 */
 	public void updateActions() {
 		Iterator iterator = state.getDirtyRowsIterator();
 		while(iterator.hasNext()) {
 			Integer row = (Integer) iterator.next();
-			ActionKeymap.changeActionAccelerators((Class) rowToAction.get(row), (KeyStroke) rowToAccelerator.get(row), 
-					(KeyStroke) rowToAlternateAccelerator.get(row));
+			ActionKeymap.changeActionAccelerators((Class) rowToAction.get(row),
+												  (KeyStroke) rowToAccelerator.get(row), 
+												  (KeyStroke) rowToAlternateAccelerator.get(row));
 		}
-		state = new State(((KeymapTableModel) getModel()).getData());
+		// After the update above, the table contains up-to-date data - clear the dirty rows indexes
+		state.resetDirtyRows();
 	}
 	
 	/**
@@ -213,27 +244,26 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 		List list = Collections.list(actionClasses);
 		
 		// Sort actions by their labels
-		Collections.sort(list, new Comparator() {
-			public int compare(Object o1, Object o2) {
-				// TODO: remove actions without a standard label?
-				if (MuAction.getStandardLabel((Class) o1) == null)
-					return 1;
-				if (MuAction.getStandardLabel((Class) o2) == null)
-					return -1;
-				return MuAction.getStandardLabel((Class) o1).compareTo(MuAction.getStandardLabel((Class) o2));
-			}
-		});
+		Collections.sort(list, ACTIONS_COMPARATOR);
 
 		// Build the table data
 		Object[][] tableData = new Object[list.size()][NUM_OF_COLUMNS];
-		for (int row = 0, i = 0; i < list.size(); ++i) {
-			Class actionClass = (Class) list.get(i);
+		for (int row = 0; row < list.size(); ++row) {
+			Class actionClass = (Class) list.get(row);
 
-			setActionName(actionClass, MuAction.getStandardLabel(actionClass), row, tableData);
-			setAccelerator(ActionKeymap.getAccelerator(actionClass), row, tableData);
-			setAlternativeAccelerator(ActionKeymap.getAlternateAccelerator(actionClass), row, tableData);
+			String actionLabel = MuAction.getStandardLabel(actionClass);
+			setActionClass(actionClass, row);
+			tableData[row][ACTION_DESCRIPTION_COLUMN_INDEX] = actionLabel;
+			
+			KeyStroke accelerator = ActionKeymap.getAccelerator(actionClass);
+			setAccelerator(accelerator, row);
+			tableData[row][ACCELERATOR_COLUMN_INDEX] = KeyStrokeUtils.getKeyStrokeDisplayableRepresentation(accelerator);
+			
+			KeyStroke alternativeAccelerator = ActionKeymap.getAlternateAccelerator(actionClass);
+			setAlternativeAccelerator(alternativeAccelerator, row);
+			tableData[row][ALTERNATE_ACCELERATOR_COLUMN_INDEX] = KeyStrokeUtils.getKeyStrokeDisplayableRepresentation(alternativeAccelerator);
+			
 			actionToTooltipText.put(actionClass, MuAction.getStandardTooltip(actionClass));
-			++row;
 		}
 
 		return tableData;
@@ -289,11 +319,9 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 	/**
 	 * Helper Classes
 	 */
-	private class KeyStrokeCellEditor extends DefaultCellEditor implements TableCellEditor, Runnable {
+	private class KeyStrokeCellEditor extends DefaultCellEditor implements TableCellEditor {
 		
 		RecordingKeyStrokeField rec;
-		/** Pointer to the canceling-thread used to prevent him from being garbage-collected */
-		Thread canclingThread;
 		
 		public KeyStrokeCellEditor(RecordingKeyStrokeField rec) {
 			super(rec);
@@ -309,10 +337,9 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 				public void removeUpdate(DocumentEvent e) {}
 			});
 			
-			setClickCountToStart(NUM_OF_CLICK_TO_ENTER_EDITING_STATE);
+			setClickCountToStart(NUM_OF_CLICKS_TO_ENTER_EDITING_STATE);
 			
-			canclingThread = new Thread(this);
-			canclingThread.start();
+			createCancelEditingStateThread(this);
 		}
 
 		public Component getTableCellEditorComponent(JTable table, Object value,
@@ -323,18 +350,27 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
         public Object getCellEditorValue() {
         	return rec.getLastKeyStroke();
         }
-        
-        //////////////////
-        //// Runnable ////
-        //////////////////
-        
-        public void run() {
+	}
+	
+	private class CancelEditingStateThread extends Thread {
+		private boolean stopped = false;
+		private TableCellEditor cellEditor;
+
+		public CancelEditingStateThread(TableCellEditor cellEditor) {
+			this.cellEditor = cellEditor;
+		}
+		
+		public void neutralize() {
+			stopped = true;
+		}
+		
+		public void run() {
         	try {
-				Thread.sleep(MAX_TIME_OF_EDITING_STATE);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-        	stopCellEditing();
+				Thread.sleep(CELL_EDITING_STATE_PERIOD);
+			} catch (InterruptedException e) {}
+			
+			if (!stopped && cellEditor != null)
+				cellEditor.stopCellEditing();
         }
 	}
 	
@@ -372,12 +408,15 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 			else if (value == DELETE)
 				value = null;
 				
+			KeyStroke typedKeyStroke = (KeyStroke) value;
 			switch(column){
 			case ACCELERATOR_COLUMN_INDEX:
-				setAccelerator((KeyStroke) value, row, tableData);
+				setAccelerator(typedKeyStroke, row);
+				tableData[row][column] = KeyStrokeUtils.getKeyStrokeDisplayableRepresentation(typedKeyStroke);
 				break;
 			case ALTERNATE_ACCELERATOR_COLUMN_INDEX:
-				setAlternativeAccelerator((KeyStroke) value, row, tableData);
+				setAlternativeAccelerator(typedKeyStroke, row);
+				tableData[row][column] = KeyStrokeUtils.getKeyStrokeDisplayableRepresentation(typedKeyStroke);
 				break;
 			default:
 				if (Debug.ON) { Debug.trace("Unexpected column index: " + column); }
@@ -425,13 +464,41 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 	            return;
 
 	        KeyStroke pressedKeyStroke = KeyStroke.getKeyStrokeForEvent(keyEvent);
-	        Class action = ActionKeymap.getRegisteredActionClassForKeystroke(pressedKeyStroke);
-	        if (action == null || action.equals(rowToAction.get(Integer.valueOf(getSelectedRow())))) {
-	        	lastKeyStroke = pressedKeyStroke;
-	        	setText(KeyStrokeUtils.getKeyStrokeDisplayableRepresentation(lastKeyStroke));
+	        boolean isAlternativeActionCellSelected = getSelectedColumn() == ALTERNATE_ACCELERATOR_COLUMN_INDEX;
+	        boolean isKeyStrokeRegisteredToAlternatuveAction = false;
+	        boolean isAlreadyExist = rowToAccelerator.containsValue(pressedKeyStroke) || 
+	        						 (isKeyStrokeRegisteredToAlternatuveAction = rowToAlternateAccelerator.containsValue(pressedKeyStroke));
+
+	        if (isAlreadyExist) {
+	        	// Will contain the index of the row in which the keystroke is already located
+	        	int row;
+	        	// Represent the above index as an Integer
+	        	Integer rowAsInteger = null;
+	        	
+	        	int nbRows = getRowCount();
+	        	// Search for the row that contains the keystroke
+	        	for (row=0; row<nbRows; ++row) {
+	        		rowAsInteger = Integer.valueOf(row);
+	        		// If accelerator or alternative accelerator at row i is equal to the
+	        		// pressed keystroke, stop the search (row field holds index i)
+	        		if (pressedKeyStroke.equals(rowToAccelerator.get(rowAsInteger)) ||
+	        			pressedKeyStroke.equals(rowToAlternateAccelerator.get(rowAsInteger)))
+	        			break;
+	        	}
+	        	
+	        	if (isAlternativeActionCellSelected != isKeyStrokeRegisteredToAlternatuveAction || row != getSelectedRow()) {
+	        		tooltipBar.showKeystrokeAlreadyInUseMsg(pressedKeyStroke, ActionManager.getActionInstance((Class) rowToAction.get(rowAsInteger)));
+	        		createCancelEditingStateThread(getCellEditor());
+	        	}
+	        	else {
+	        		TableCellEditor activeCellEditor = getCellEditor();
+	        		if (activeCellEditor!= null)
+	        			activeCellEditor.stopCellEditing();
+	        	}
 	        }
 	        else {
-	        	tooltipBar.showKeystrokeAlreadyInUseMsg(pressedKeyStroke, ActionManager.getActionInstance(action , WindowManager.getCurrentMainFrame()));
+	        	lastKeyStroke = pressedKeyStroke;
+	        	setText(KeyStrokeUtils.getKeyStrokeDisplayableRepresentation(lastKeyStroke));
 	        }
 	        keyEvent.consume();
 		}
@@ -441,12 +508,18 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 		public void keyTyped(KeyEvent e) {e.consume();}
 	}
 	
+	/**
+	 * This class tracks the table's state - whether it was changed and which rows were modified.
+	 */
 	private class State {
 		/** Saved copy of the table data, before any change was made by the user */
 		private Object[][] originalTableData;
 		/** Set that holds the row indexes the user may have changed */
 		private Set dirtyRows;
 		
+		/**
+		 * @param tableData - table's data before any modification was made.
+		 */
 		public State(Object[][] tableData) {
 			dirtyRows = new HashSet();
 			int nbRows = tableData.length;
@@ -457,8 +530,16 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 					originalTableData[i][j] = tableData[i][j];
 		}
 		
+		/**
+		 * This method is called to inform that a change was made to one of the table's rows.
+		 * 
+		 * @param row - row's number in the table.
+		 */
 		public void rowHasBeenUpdated(int row) {
 			Object[][] currentTableData = ((KeymapTableModel) getModel()).getData();
+			// if the row's data (accelerator + alternative accelerator) is identical to 
+			// its original data (=> the row is not modified), then remove it from the
+			// set of dirty rows. otherwise, add the row to the set.
 			if (equals(originalTableData[row][ACCELERATOR_COLUMN_INDEX], currentTableData[row][ACCELERATOR_COLUMN_INDEX]) &&
 				equals(originalTableData[row][ALTERNATE_ACCELERATOR_COLUMN_INDEX], currentTableData[row][ALTERNATE_ACCELERATOR_COLUMN_INDEX]))
 				dirtyRows.remove(Integer.valueOf(row));
@@ -466,13 +547,22 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 				dirtyRows.add(Integer.valueOf(row));
 		}
 
-		public boolean isTableBeenModified() {
-			return !dirtyRows.isEmpty();
-		}
+		/**
+		 * @return true if the table was modified such that its current data is 
+		 * 		   different from the saved data, else otherwise.
+		 */
+		public boolean isTableBeenModified() { return !dirtyRows.isEmpty(); }
 		
-		public Iterator getDirtyRowsIterator() {
-			return dirtyRows.iterator();
-		}
+		/**
+		 * @return Iterator that points to the indexes of the rows in the table
+		 *			which contain data that is different from their original data.
+		 */
+		public Iterator getDirtyRowsIterator() { return dirtyRows.iterator(); }
+		
+		/**
+		 * Clear the set of dirty rows indexes.
+		 */
+		public void resetDirtyRows() { dirtyRows.clear(); }
 		
 		/**
 		 * helper function to compare two Objects for equality, that supports null values.
