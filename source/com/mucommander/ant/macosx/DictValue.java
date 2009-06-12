@@ -28,7 +28,7 @@ import java.util.Vector;
 /**
  *
  */
-class DictValue implements InfoElement {
+public class DictValue implements InfoElement {
     private static final String ELEMENT_DICT = "dict";
     private Vector keys;
 

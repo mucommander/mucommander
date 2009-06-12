@@ -28,7 +28,7 @@ import java.util.Vector;
 /**
  *
  */
-class ArrayValue implements InfoElement {
+public class ArrayValue implements InfoElement {
     public static final String ELEMENT_ARRAY     = "array";
     private Vector keys;
 

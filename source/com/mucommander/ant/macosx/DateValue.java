@@ -28,7 +28,7 @@ import java.util.Calendar;
  * Represents the value part of a date property.
  * @author Nicolas Rinaudo
  */
-class DateValue implements InfoElement {
+public class DateValue implements InfoElement {
     // - Class fields ----------------------------------------------------
     // -------------------------------------------------------------------
     /** Label of the 'date' XML element. */

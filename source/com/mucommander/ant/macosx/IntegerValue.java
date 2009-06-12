@@ -71,7 +71,7 @@ import java.io.IOException;
  * @author Nicolas Rinaudo
  * @see    com.mucommander.ant.macosx.IntegerKey
  */
-class IntegerValue implements InfoElement {
+public class IntegerValue implements InfoElement {
     // - Fields ----------------------------------------------------------
     // -------------------------------------------------------------------
     /** Label of the 'integer' XML element. */

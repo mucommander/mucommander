@@ -23,7 +23,7 @@ import org.apache.tools.ant.BuildException;
 
 import java.io.IOException;
 
-class DataValue implements InfoElement {
+public class DataValue implements InfoElement {
     private static final String DATA_ELEMENT = "data";
 
     private StringBuffer data;

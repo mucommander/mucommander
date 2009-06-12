@@ -26,7 +26,7 @@ import java.io.IOException;
 /**
  * @author Nicolas Rinaudo
  */
-class StringValue implements InfoElement {
+public class StringValue implements InfoElement {
     private static final String ELEMENT_STRING    = "string";
     private String value;
 

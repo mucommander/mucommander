@@ -71,7 +71,7 @@ import java.io.IOException;
  * @author Nicolas Rinaudo
  * @see    com.mucommander.ant.macosx.RealKey
  */
-class RealValue implements InfoElement {
+public class RealValue implements InfoElement {
     // - Fields ----------------------------------------------------------
     // -------------------------------------------------------------------
     /** Label of the 'real' XML element. */

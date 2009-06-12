@@ -26,7 +26,7 @@ import java.io.IOException;
 /**
  *
  */
-class BooleanValue implements InfoElement {
+public class BooleanValue implements InfoElement {
     public static final String ELEMENT_TRUE      = "true";
     public static final String ELEMENT_FALSE     = "false";
     private boolean value;
