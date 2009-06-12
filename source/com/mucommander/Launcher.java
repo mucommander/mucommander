@@ -52,14 +52,15 @@ public class Launcher {
 
     // - Class fields -----------------------------------------------------------
     // --------------------------------------------------------------------------
-    private static SplashScreen splashScreen;
-    /** Whether or not to ignore warnings when booting. */
-    private static boolean      fatalWarnings;
-    /** Whether or not to display verbose error messages. */
-    private static boolean      verbose;
+    private static SplashScreen  splashScreen;
     /** Whether or not to display the splashscreen. */
-    private static boolean      useSplash;
-
+    private static boolean       useSplash;
+    /** Whether or not to display verbose error messages. */
+    private static boolean       verbose;
+    /** true while the application is launching, false after it has finished launching */
+    public static boolean isLaunching = true;
+    /** Launch lock. */
+    public static final Object LAUNCH_LOCK = new Object();
 
 
     // - Initialisation ---------------------------------------------------------
@@ -68,6 +69,27 @@ public class Launcher {
      * Prevents initialisation of the <code>Launcher</code>.
      */
     private Launcher() {}
+
+
+    /**
+     * This method can be called to wait until the application has been launched. The caller thread will be blocked
+     * until the application has been launched.
+     * This method will return immediately if the application has already been launched when it is called.
+     */
+    public static void waitUntilLaunched() {
+        if(Debug.ON) Debug.trace("called, thread="+Thread.currentThread());
+        synchronized(LAUNCH_LOCK) {
+            while(isLaunching) {
+                try {
+                    if(Debug.ON) Debug.trace("waiting");
+                    LAUNCH_LOCK.wait();
+                }
+                catch(InterruptedException e) {
+                    // will loop
+                }
+            }
+        }
+    }
 
 
     // - Commandline handling methods -------------------------------------------
@@ -243,8 +265,9 @@ public class Launcher {
         int i; // Index in the command line arguments.
 
         // Initialises fields.
-        fatalWarnings = false;
-        verbose       = true;
+        // Whether or not to ignore warnings when booting.
+        boolean fatalWarnings = false;
+        verbose               = true;
 
         // - Command line parsing -------------------------------------
         // ------------------------------------------------------------
@@ -531,6 +554,14 @@ public class Launcher {
         if(WindowManager.getCurrentMainFrame() == null)
     	    WindowManager.createNewMainFrame();
 
+        // Done launching, wake up threads waiting for the application being launched.
+        // Important: this must be done before disposing the splash screen, as this would otherwise create a deadlock
+        // if the AWT event thread were waiting in #waitUntilLaunched .
+        synchronized(LAUNCH_LOCK) {
+            isLaunching = false;
+            LAUNCH_LOCK.notifyAll();
+        }
+
         // Enable system nofifications, only after MainFrame is created as SystemTrayNotifier needs to retrieve
         // a MainFrame instance
         if(MuConfiguration.getVariable(MuConfiguration.ENABLE_SYSTEM_NOTIFICATIONS, MuConfiguration.DEFAULT_ENABLE_SYSTEM_NOTIFICATIONS)) {
@@ -542,7 +573,7 @@ public class Launcher {
         // Dispose splash screen.
         if(useSplash)
             splashScreen.dispose();
-
+        
         // Check for newer version unless it was disabled
         if(MuConfiguration.getVariable(MuConfiguration.CHECK_FOR_UPDATE, MuConfiguration.DEFAULT_CHECK_FOR_UPDATE))
             new CheckVersionDialog(WindowManager.getCurrentMainFrame(), false);

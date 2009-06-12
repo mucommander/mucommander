@@ -127,39 +127,41 @@ New features:
 - Added native support for 7z archives.
 
 Improvements:
-- Tar/TGZ and Zip unpacking speed has been improved significantly (bug #74).
+- Tar/TGZ and Zip unpacking speed has been improved significantly (ticket #74).
 - jCIFS library upgraded to version 1.3.8.
 - SMB domain-based authentication is now supported.
 - Added shortcuts to browse nearby SMB network shares.
 - JNA library upgraded to version 3.0.9.
-- Character encodings can be more easily selected (bug #15).
+- Character encodings can be more easily selected (ticket #15).
 - Added icon mappings for Office 2007 file extensions.
 - 'Mark/Unmark files' is no longer case-sensitive by default.
+- Mac OS X: muCommander can now be interacted with from the Finder (Open with)
+  or by dragging file/folders to the Dock icon (ticket #153).
 
 Localization:
 - 
 
 Bug fixes:
 - Zip entries using '\' as a path separator are now tolerated and handled
-  appropriately (bug #98).
+  appropriately (ticket #98).
 - Fixed image viewer not updating the zoom level in the window title
-  (bug #102). Contributed by Joshua Lebo.
+  (ticket #102). Contributed by Joshua Lebo.
 - Fixed date of Zip entries incorrectly displayed under certain conditions
-  (bug #107). Contributed by Oliver Burgmaier.
-- Fixed SMB connection issues (bug #106).
+  (ticket #107). Contributed by Oliver Burgmaier.
+- Fixed SMB connection issues (ticket #106).
 - Fixed connection issues with FTP servers not supporting the SYST command ;
-  those are now considered as Unix servers (bug #121).
-- Fixed credentials ignored when setting a remote startup folder (bug #108).
+  those are now considered as Unix servers (ticket #121).
+- Fixed credentials ignored when setting a remote startup folder (ticket #108).
 - Fixed unconsistent handling of destination when unpacking an archive 
-  (bug #93).
-- Fixed the display of homonymous volumes in the drive popup button (bug #138).
-- Swap partitions declared in /etc/fstab are now properly handled (bug #139).
+  (ticket #93).
+- Fixed the display of homonymous volumes in the drive popup button (ticket #138).
+- Swap partitions declared in /etc/fstab are now properly handled (ticket #139).
   Contributed by Johann Schmitz.
-- Fixed issues with Look & Feel (bug #145).
-- Fixed slow downs affecting the drive popup button under Windows (bug #122).
+- Fixed issues with Look & Feel (ticket #145).
+- Fixed slow downs affecting the drive popup button under Windows (ticket #122).
   Contributed by Alexander Yerenkow. 
 - Fixed an exception occuring in the 'Run dialog' when pressing Enter
-  repeatedly (bug #212).
+  repeatedly (ticket #212).
 
 Known issues:
 - Some translations are not up-to-date. For more information, see:
@@ -171,7 +173,7 @@ Known issues:
 - 'Copy files to clipboard' not working with some applications (files are not
   pasted).
 - Mac OS X: some keyboard shortcuts are displayed in the menu as ⌘+KEY
-  where it's actually Ctrl+KEY (see bug #3)
+  where it's actually Ctrl+KEY (see ticket #3)
 - Mac OS X: some keyboard shortcuts may conflict with global system shortcuts.
 - Mac OS X: text fields don't work correctly when using a fractionally-scaled
   font (known Java bug,
@@ -180,7 +182,7 @@ Known issues:
   they wish to use when selecting a bookmark that needs authentification, it
   will default to the first in the list.
 - Authentication issues when using several sets of credentials (login/password)
-  for the same server (see bug #76).
+  for the same server (see ticket #76).
 - Untrusted HTTPS connections are allowed without a warning.
 
 
