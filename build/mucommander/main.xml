@@ -872,6 +872,21 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
       <string  name="CFBundleShortVersionString"      value="${app.version}${app.subversion}"/>
       <string  name="CFBundleGetInfoString"           value="muCommander ${app.version}${app.subversion}, (c) ${app.copyright} Maxence Bernard, ${url.homepage}"/>
       <string  name="CFBundleInfoDictionaryVersion"   value="6.0"/>
+      <array name="CFBundleDocumentTypes">
+        <dict>
+          <array name="CFBundleTypeExtensions">
+            <string value="*"/>
+          </array>
+          <array name="CFBundleTypeMIMETypes">
+            <string value="*/*"/>
+          </array>
+          <array name="CFBundleTypeOSTypes">
+            <string value="****"/>
+          </array>
+          <string name="CFBundleTypeName" value="All"/>
+          <string name="CFBundleTypeRole" value="Viewer"/>
+        </dict>
+      </array>
       <dict    name="Java">
         <string name="MainClass"                      value="${app.main}"/>
         <string name="JVMVersion"                     value="${app.jvm}+"/>
