@@ -116,6 +116,10 @@ Translators:
 - Jeppe Toustrup (Danish)
 - Mykola Bilovus (Ukrainian)
 
+Special thanks:
+- Semyon Filippov (muCommander icon)
+- Stefano Perelli (former muCommander icon)
+
 Many thanks to all of you who suggested new features, reported bugs, sent warm
 emails or generously donated to the project !
 
@@ -137,6 +141,7 @@ Improvements:
 - 'Mark/Unmark files' is no longer case-sensitive by default.
 - Mac OS X: muCommander can now be interacted with from the Finder (Open with)
   or by dragging file/folders to the Dock icon (ticket #153).
+- New and improved application icon, contributed by Semyon Filippov.
 
 Localization:
 - 
@@ -180,9 +185,6 @@ Known issues:
 - Mac OS X: text fields don't work correctly when using a fractionally-scaled
   font (known Java bug,
    http://lists.apple.com/archives/Java-dev/2005/May/msg00670.html).
-- The bookmark file system doesn't allow users to specify which credentials
-  they wish to use when selecting a bookmark that needs authentification, it
-  will default to the first in the list.
 - Authentication issues when using several sets of credentials (login/password)
   for the same server (see ticket #76).
 - Untrusted HTTPS connections are allowed without a warning.

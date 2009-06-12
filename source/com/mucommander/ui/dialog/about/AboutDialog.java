@@ -172,7 +172,8 @@ public class AboutDialog extends FocusDialog implements ActionListener {
 
             // Special thanks.
             insertHeader(doc,         "Special thanks");
-            insertDetailedString(doc, "Stefano Perelli",    "muCommander icon");
+            insertDetailedString(doc, "Semyon Filippov",    "muCommander icon");
+            insertDetailedString(doc, "Stefano Perelli",    "Former muCommander icon");
             insertLineBreak(doc);
             insertLineBreak(doc);
 

@@ -18,28 +18,6 @@
 
 package com.mucommander.ui.main;
 
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.FocusTraversalPolicy;
-import java.awt.Frame;
-import java.awt.Insets;
-import java.awt.Rectangle;
-import java.awt.Toolkit;
-import java.awt.Window;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.util.Iterator;
-import java.util.Vector;
-import java.util.WeakHashMap;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JSplitPane;
-import javax.swing.WindowConstants;
-import javax.swing.table.TableColumnModel;
-
 import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.ArchiveEntryFile;
@@ -64,6 +42,15 @@ import com.mucommander.ui.main.table.FileTableConfiguration;
 import com.mucommander.ui.main.table.SortInfo;
 import com.mucommander.ui.main.toolbar.ToolBar;
 import com.mucommander.ui.quicklist.QuickListFocusableComponent;
+
+import javax.swing.*;
+import javax.swing.table.TableColumnModel;
+import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.util.Iterator;
+import java.util.Vector;
+import java.util.WeakHashMap;
 
 /**
  * This is the main frame, which contains all other UI components visible on a mucommander window.
@@ -104,9 +91,50 @@ public class MainFrame extends JFrame implements LocationListener {
     /** Split pane orientation */
     private final static String SPLIT_ORIENTATION = MuConfiguration.SPLIT_ORIENTATION;
 
+
+    /**
+     * Sets the window icon, using the best method (Java 1.6's Window#setIconImages when available, Window#setIconImage
+     * otherwise) and icon resolution(s) (OS-dependent).
+     */
+    private void setWindowIcon() {
+        // TODO: this code should probably be moved to the desktop API
+
+        // Mac OS X completely ignores calls to #setIconImage/setIconImages, no need to waste time
+        if(OsFamilies.MAC_OS_X.isCurrent())
+            return;
+
+        // Use Java 1.6 's new Window#setIconImages(List<Image>)  
+        if(JavaVersions.JAVA_1_6.isCurrentOrHigher()) {
+            Vector icons = new Vector();
+
+            // Any OS should support 16x16 icons with 1-bit transparency
+            icons.add(IconManager.getIcon("/icon16_8.png").getImage());
+
+            // Windows Vista supports 8-bit transparency and icon resolutions up to 256x256
+            if(OsFamilies.WINDOWS.isCurrent() && OsVersions.WINDOWS_VISTA.isCurrentOrHigher()) {
+                icons.add(IconManager.getIcon("/icon48_24.png").getImage());
+                icons.add(IconManager.getIcon("/icon128_24.png").getImage());
+                icons.add(IconManager.getIcon("/icon256_24.png").getImage());
+            }
+            else {      // Windows XP or any other OS
+                // Windows XP does not support 8-bit alpha transparency, only 1-bit transparency.
+                // Err on the safe side for any other OS by not assuming that 8-bit transparency is supported.
+                icons.add(IconManager.getIcon("/icon48_8.png").getImage());
+
+                // TODO: GNOME and KDE should be able to do better than this -> test
+            }
+
+            setIconImages(icons);
+        }
+        else {
+            // Err on the safe side by not assuming that 8-bit transparency is supported.
+            setIconImage(IconManager.getIcon("/icon48_8.png").getImage());
+        }
+    }
+
     private void init(FolderPanel leftFolderPanel, FolderPanel rightFolderPanel) {
-        // Set frame icon fetched in an image inside the JAR file
-        setIconImage(IconManager.getIcon("/icon16.gif").getImage());
+        // Set the window icon
+        setWindowIcon();
 
         // Enable window resize
         setResizable(true);

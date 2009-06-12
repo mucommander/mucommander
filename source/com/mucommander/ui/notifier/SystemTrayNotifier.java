@@ -20,7 +20,9 @@ package com.mucommander.ui.notifier;
 
 import com.mucommander.Debug;
 import com.mucommander.runtime.JavaVersions;
-import com.mucommander.ui.action.*;
+import com.mucommander.ui.action.AWTActionProxy;
+import com.mucommander.ui.action.ActionManager;
+import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.action.impl.BringAllToFrontAction;
 import com.mucommander.ui.action.impl.QuitAction;
 import com.mucommander.ui.icon.IconManager;
@@ -49,7 +51,7 @@ public class SystemTrayNotifier extends AbstractNotifier implements ActionListen
     private boolean isEnabled;
 
     /** Path to the tray icon image */
-    private final static String TRAY_ICON_PATH = "/icon16.gif";
+    private final static String TRAY_ICON_PATH = "/icon16_8.png";
 
     /** Width of the muCommander tray icon */
     private final static int TRAY_ICON_WIDTH = 16;
