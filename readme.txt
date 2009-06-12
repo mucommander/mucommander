@@ -162,6 +162,8 @@ Bug fixes:
   Contributed by Alexander Yerenkow. 
 - Fixed an exception occuring in the 'Run dialog' when pressing Enter
   repeatedly (ticket #212).
+- Fixed an issue with the panel separator being set incorrectly after a resize
+  of the main window (ticket #163).
 
 Known issues:
 - Some translations are not up-to-date. For more information, see:
