@@ -379,7 +379,7 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 
 		private KeymapTableModel(Object[][] data) {
 			//TODO: use translator
-			super(data, new String[] { "Action Descriptions", "Keystroke", "Alternative Keystroke" });
+			super(data, new String[] {"Action Description", "Shortcut", "Alternate Shortcut"});
 			this.tableData = data;
 		}
 
