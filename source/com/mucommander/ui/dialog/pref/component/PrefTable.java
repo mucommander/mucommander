@@ -46,8 +46,7 @@ public abstract class PrefTable extends JTable implements PrefComponent {
 	 * 	from the width of the whole table.
 	 */
 	public void setPreferredColumnWidths(double[] percentages) {
-		Dimension tableDim = this.getPreferredSize();
-		
+		final Dimension tableDim = this.getPreferredSize();
 		double total = 0;
 		int nbColumns = getColumnModel().getColumnCount();
 		
