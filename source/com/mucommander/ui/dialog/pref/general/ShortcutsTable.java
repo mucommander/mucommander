@@ -62,7 +62,7 @@ import com.mucommander.ui.text.KeyStrokeUtils;
  * This class is the table in which the actions and their shortcuts are
  * present in the ShortcutsPanel.
  * 
- * @author Johann Schmitz (johann@j-schmitz.net), Arik Hadas
+ * @author Arik Hadas, Johann Schmitz (johann@j-schmitz.net)
  */
 public class ShortcutsTable extends PrefTable implements KeyListener, ListSelectionListener, FocusListener {
 
@@ -76,7 +76,7 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 	private HashMap rowToAlternateAccelerator;
 	
 	/** Row index to action tooltip map */
-	private HashMap actionToTooltipText;
+	private HashMap rowToactionTooltip;
 	
 	/** Private object used to indicate that a delete operation was made */
 	private final Object DELETE = new Object();
@@ -172,7 +172,7 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 		rowToAction = new HashMap();
 		rowToAccelerator = new HashMap();
 		rowToAlternateAccelerator = new HashMap();
-		actionToTooltipText = new HashMap();
+		rowToactionTooltip = new HashMap();
 
 		setModel(new KeymapTableModel(createTableData(filter)));
 	}
@@ -263,14 +263,18 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 			setAlternativeAccelerator(alternativeAccelerator, row);
 			tableData[row][ALTERNATE_ACCELERATOR_COLUMN_INDEX] = KeyStrokeUtils.getKeyStrokeDisplayableRepresentation(alternativeAccelerator);
 			
-			actionToTooltipText.put(actionClass, MuAction.getStandardTooltip(actionClass));
+			String actionTooltip = MuAction.getStandardTooltip(actionClass);
+			if (actionTooltip == null)
+				actionTooltip = MuAction.getStandardLabel(actionClass);
+			rowToactionTooltip.put(actionClass, actionTooltip);
+		
 		}
 
 		return tableData;
 	}
 	
-	public String getTooltipForRow(int row) {
-		return (String) actionToTooltipText.get(rowToAction.get(Integer.valueOf(getSelectedRow())));
+	private String getTooltipForRow(int row) {
+		return (String) rowToactionTooltip.get(rowToAction.get(Integer.valueOf(getSelectedRow())));
 	}
 
 	///////////////////////////
