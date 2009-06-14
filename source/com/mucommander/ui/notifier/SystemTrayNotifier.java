@@ -24,6 +24,7 @@ import com.mucommander.ui.action.AWTActionProxy;
 import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.action.impl.BringAllToFrontAction;
+import com.mucommander.ui.action.impl.NewWindowAction;
 import com.mucommander.ui.action.impl.QuitAction;
 import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.main.WindowManager;
@@ -115,6 +116,7 @@ public class SystemTrayNotifier extends AbstractNotifier implements ActionListen
             // Create the popup (AWT!) menu. Note there is no way with java.awt.Menu to know when the menu is selected
             // and thus it makes it hard to have contextual menu items such as the list of open windows.
             PopupMenu menu = new PopupMenu();
+            addMenuItem(menu, NewWindowAction.class);
             addMenuItem(menu, BringAllToFrontAction.class);
             menu.addSeparator();
             addMenuItem(menu, QuitAction.class);

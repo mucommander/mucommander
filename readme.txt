@@ -142,6 +142,7 @@ Improvements:
 - Mac OS X: muCommander can now be interacted with from the Finder (Open with)
   or by dragging file/folders to the Dock icon (ticket #153).
 - New and improved application icon, contributed by Semyon Filippov.
+- Added a 'New window' item to the system tray menu. 
 
 Localization:
 - 
