@@ -64,19 +64,19 @@ public class CellLabel extends JLabel {
     // - Instance fields -----------------------------------------------------------------
     // -----------------------------------------------------------------------------------
     /** Last text set by the setText method */
-    private String    lastText;
+    protected String    lastText;
     /** Last icon set by the setIcon method */
-    private ImageIcon lastIcon;
+    protected ImageIcon lastIcon;
     /** Last tooltip text set by the setToolTipText method */
-    private String    lastTooltip;
+    protected String    lastTooltip;
     /** Last foreground color set by the setForeground method */
-    private Color     lastForegroundColor;
+    protected Color     lastForegroundColor;
     /** Last background color set by the setBackground method */
-    private Color     lastBackgroundColor;
+    protected Color     lastBackgroundColor;
     /** Outline color (top and bottom). */
-    private Color     outlineColor;
+    protected Color     outlineColor;
     /** Gradient color for the background. */
-    private Color     gradientColor;
+    protected Color     gradientColor;
 
 
 
