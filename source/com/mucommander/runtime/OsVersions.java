@@ -94,6 +94,9 @@ public interface OsVersions {
     /** Mac OS X 10.5 */
     public static final OsVersion MAC_OS_X_10_5   = new OsVersion("10.5", 5);
 
+    /** Mac OS X 10.6 */
+    public static final OsVersion MAC_OS_X_10_6   = new OsVersion("10.6", 6);
+
 
     /** Unknown OS version */
     public static final OsVersion UNKNOWN_VERSION = new OsVersion("Unknown", -1);
