@@ -125,7 +125,7 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 	
 	/** After the following time (msec) that cell is being in editing state 
 	 *  and no pressing was made, the editing state is canceled */
-	private static final int CELL_EDITING_STATE_PERIOD = 4000;
+	private static final int CELL_EDITING_STATE_PERIOD = 3000;
 	
 	/** Thread that cancel cell's editing state after CELL_EDITING_STATE_PERIOD time */
 	private CancelEditingStateThread cancelEditingStateThread;
