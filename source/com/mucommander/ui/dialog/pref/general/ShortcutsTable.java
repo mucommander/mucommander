@@ -85,6 +85,9 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
     /** Foreground color of the {@link RecordingKeyStrokeField} */
     public static final Color RECORDING_KEYSTROKE_FIELD_FOREGROUND_COLOR = Color.white;
 
+    /** Border color of the {@link RecordingKeyStrokeField} */
+    public static final Color RECORDING_KEYSTROKE_FIELD_BORDER_COLOR = Color.white;
+
 	/** Private object used to indicate that a delete operation was made */
 	private final Object DELETE = new Object();
 
@@ -165,7 +168,32 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 		getSelectionModel().addListSelectionListener(this);
 		getColumnModel().getSelectionModel().addListSelectionListener(this);
 	}
-	
+
+    /**
+     * Paints a dotted border of the specified width, height and {@link Color}, and using the given {@link Graphics}
+     * object.
+     *
+     * @param g Graphics object to use for painting
+     * @param width border width
+     * @param height border height
+     * @param color border color
+     */
+    private static void paintDottedBorder(Graphics g, int width, int height, Color color) {
+        Graphics2D g2 = (Graphics2D) g;
+        g2.setStroke(new BasicStroke(1.0f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_MITER,
+                2.0f, new float[]{2.0f}, 0));
+        g2.setColor(color);
+
+        g2.drawLine(0, 0, width, 0);
+        g2.drawLine(0, height - 1, width, height - 1);
+        g2.drawLine(0, 0, 0, height - 1);
+        g2.drawLine(width-1, 0, width-1, height - 1);
+    }
+
+    private static boolean usesTableHeaderRenderingProperties() {
+        return OsFamilies.MAC_OS_X.isCurrent() && OsVersions.MAC_OS_X_10_5.isCurrentOrHigher() && JavaVersions.JAVA_1_5.isCurrentOrHigher();
+    }
+
 	/**
 	 * Create thread that will cancel the editing state of the given TableCellEditor
 	 * after CELL_EDITING_STATE_PERIOD time in which with no pressing was made.
@@ -213,10 +241,6 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 		// the data in the table was changed- update the state object.
 		state = new State(model.getData());
 	}
-	
-	private static boolean usesTableHeaderRenderingProperties() {
-        return OsFamilies.MAC_OS_X.isCurrent() && OsVersions.MAC_OS_X_10_5.isCurrentOrHigher() && JavaVersions.JAVA_1_5.isCurrentOrHigher();
-    }	
 	
 	public boolean hasChanged() { return state.isTableBeenModified(); }
 	
@@ -478,12 +502,22 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 			setForeground(RECORDING_KEYSTROKE_FIELD_FOREGROUND_COLOR);
 			addKeyListener(this);
 		}
-		
+
 		/**
 		 * 
 		 * @return the last KeyStroke the user entered to the field.
 		 */
 		public KeyStroke getLastKeyStroke() { return lastKeyStroke; }
+
+
+        ////////////////////////
+        // Overridden methods //
+        ////////////////////////
+
+        protected void paintBorder(Graphics g) {
+            paintDottedBorder(g, getWidth(), getHeight(), RECORDING_KEYSTROKE_FIELD_BORDER_COLOR);
+        }
+
 
 		/////////////////////////////
 		//// KeyListener methods ////
@@ -672,15 +706,7 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 	private class CustomCellLabel extends CellLabel {
 		
 		protected void paintOutline(Graphics g) {
-			Graphics2D g2 = (Graphics2D) g;
-        	g2.setStroke(new BasicStroke(1.0f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_MITER,
-        			2.0f, new float[]{2.0f}, 0));
-        	g2.setColor(outlineColor);
-
-        	g2.drawLine(0, 0, getWidth(), 0);
-        	g2.drawLine(0, getHeight() - 1, getWidth(), getHeight() - 1);
-        	g2.drawLine(0, 0, 0, getHeight() - 1);
-        	g2.drawLine(getWidth()-1, 0, getWidth()-1, getHeight() - 1);
+            paintDottedBorder(g, getWidth(), getHeight(), outlineColor);
 		}
 	}
 }
