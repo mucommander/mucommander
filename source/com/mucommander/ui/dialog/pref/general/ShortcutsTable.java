@@ -134,7 +134,7 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 	
 	/** After the following time (msec) that cell is being in editing state 
 	 *  and no pressing was made, the editing state is canceled */
-	private static final int CELL_EDITING_STATE_PERIOD = 2000;
+	private static final int CELL_EDITING_STATE_PERIOD = 4000;
 	
 	/** Thread that cancel cell's editing state after CELL_EDITING_STATE_PERIOD time */
 	private CancelEditingStateThread cancelEditingStateThread;
@@ -632,7 +632,7 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 	    public ShortcutsTableCellRenderer() {
 	    	for(int i=0; i<NUM_OF_COLUMNS; ++i)
 	            cellLabels[i] = new CustomCellLabel();
-	    	
+
 	    	cellLabels[ACTION_DESCRIPTION_COLUMN_INDEX].setHorizontalAlignment(CellLabel.LEFT);
 	    	cellLabels[ACCELERATOR_COLUMN_INDEX].setHorizontalAlignment(CellLabel.CENTER);
 	    	cellLabels[ALTERNATE_ACCELERATOR_COLUMN_INDEX].setHorizontalAlignment(CellLabel.CENTER);
