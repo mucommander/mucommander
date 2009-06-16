@@ -22,11 +22,9 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
-import java.awt.Paint;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
@@ -44,7 +42,6 @@ import java.util.Set;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultCellEditor;
 import javax.swing.ImageIcon;
-import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
@@ -489,7 +486,8 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 			setBorder(BorderFactory.createEmptyBorder());
 			setHorizontalAlignment(JTextField.CENTER);
 			setEditable(false);
-			setBackground(Color.lightGray);			
+			setBackground(Color.blue);
+			setForeground(Color.white);
 			addKeyListener(this);
 		}
 		
