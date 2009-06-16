@@ -180,8 +180,6 @@ Known issues:
 - SMB support may not work properly on non multi-language JRE.
 - 'Copy files to clipboard' not working with some applications (files are not
   pasted).
-- Mac OS X: some keyboard shortcuts are displayed in the menu as ⌘+KEY
-  where it's actually Ctrl+KEY (see ticket #3)
 - Mac OS X: some keyboard shortcuts may conflict with global system shortcuts.
 - Mac OS X: text fields don't work correctly when using a fractionally-scaled
   font (known Java bug,
