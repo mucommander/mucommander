@@ -220,15 +220,17 @@ public class CellLabel extends JLabel {
         super.paint(g);
 
         // If necessary, paints the outline color.
-        if(doOutline) {
-            g.setColor(outlineColor);
-            g.drawLine(0, 0, getWidth(), 0);
-            g.drawLine(0, getHeight() - 1, getWidth(), getHeight() - 1);
-        }
+        if(doOutline)
+        	paintOutline(g);
     }	
 
+    protected void paintOutline(Graphics g) {
+    	g.setColor(outlineColor);
+        g.drawLine(0, 0, getWidth(), 0);
+        g.drawLine(0, getHeight() - 1, getWidth(), getHeight() - 1);
+    }
 
-
+    
     // - DefaultTableCellRenderer implementation -----------------------------------------
     // -----------------------------------------------------------------------------------
     /*

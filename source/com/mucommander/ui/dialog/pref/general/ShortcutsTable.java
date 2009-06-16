@@ -18,12 +18,20 @@
 
 package com.mucommander.ui.dialog.pref.general;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.GradientPaint;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Insets;
+import java.awt.Paint;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.image.BufferedImage;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Enumeration;
@@ -35,6 +43,8 @@ import java.util.Set;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultCellEditor;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
@@ -44,6 +54,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
+import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableModel;
 
 import com.mucommander.Debug;
@@ -55,6 +66,8 @@ import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.dialog.pref.component.PrefTable;
 import com.mucommander.ui.dialog.pref.general.ShortcutsPanel.TooltipBar;
+import com.mucommander.ui.icon.IconManager;
+import com.mucommander.ui.main.table.CellLabel;
 import com.mucommander.ui.table.CenteredTableHeaderRenderer;
 import com.mucommander.ui.text.KeyStrokeUtils;
 
@@ -77,6 +90,15 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 	
 	/** Row index to action tooltip map */
 	private HashMap rowToactionTooltip;
+	
+	/** Row index to action icon map */
+	private HashMap rowToIcon;
+	
+	/** Base width and height of icons for a scale factor of 1 */
+    private final static int BASE_ICON_DIMENSION = 16;
+	
+	/** Transparent icon used to align non-locked themes with the others. */
+    private static ImageIcon transparentIcon = new ImageIcon(new BufferedImage(BASE_ICON_DIMENSION, BASE_ICON_DIMENSION, BufferedImage.TYPE_INT_ARGB));
 	
 	/** Private object used to indicate that a delete operation was made */
 	private final Object DELETE = new Object();
@@ -120,6 +142,8 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 	/** Thread that cancel cell's editing state after CELL_EDITING_STATE_PERIOD time */
 	private CancelEditingStateThread cancelEditingStateThread;
 
+	private ShortcutsTableCellRenderer cellRenderer;
+	
 	public ShortcutsTable(TooltipBar tooltipBar) {
 		super();
 
@@ -131,6 +155,10 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 			}
 		});
 		
+		cellRenderer = new ShortcutsTableCellRenderer();
+		setShowGrid(false);
+		setIntercellSpacing(new Dimension(0,0));
+		setRowHeight(Math.max(getRowHeight(), BASE_ICON_DIMENSION + 2 * CellLabel.CELL_BORDER_HEIGHT));
 		getTableHeader().setReorderingAllowed(false);
 		setRowSelectionAllowed(false);
 		setAutoCreateColumnsFromModel(false);
@@ -139,9 +167,10 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 		setDragEnabled(false);		
 		
 		if (!usesTableHeaderRenderingProperties()) {
-			getColumnModel().getColumn(ACTION_DESCRIPTION_COLUMN_INDEX).setHeaderRenderer(new CenteredTableHeaderRenderer());
-			getColumnModel().getColumn(ACCELERATOR_COLUMN_INDEX).setHeaderRenderer(new CenteredTableHeaderRenderer());
-			getColumnModel().getColumn(ALTERNATE_ACCELERATOR_COLUMN_INDEX).setHeaderRenderer(new CenteredTableHeaderRenderer());
+			CenteredTableHeaderRenderer renderer = new CenteredTableHeaderRenderer();
+			getColumnModel().getColumn(ACTION_DESCRIPTION_COLUMN_INDEX).setHeaderRenderer(renderer);
+			getColumnModel().getColumn(ACCELERATOR_COLUMN_INDEX).setHeaderRenderer(renderer);
+			getColumnModel().getColumn(ALTERNATE_ACCELERATOR_COLUMN_INDEX).setHeaderRenderer(renderer);
 		}
 
 		putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
@@ -162,10 +191,18 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 		(cancelEditingStateThread = new CancelEditingStateThread(cellEditor)).start();
 	}
 	
+	public TableCellRenderer getCellRenderer(int row, int column) {
+		return cellRenderer;
+	}
+	
 	public void valueChanged(ListSelectionEvent e) {
 		super.valueChanged(e);
 		// Selection might be changed, update tooltip
-		tooltipBar.showActionTooltip(getTooltipForRow(getSelectedRow()));
+		int selectetRow = getSelectedRow();
+		if (selectetRow == -1) // no row is selected
+			tooltipBar.showDefaultMessage();
+		else
+			tooltipBar.showActionTooltip(getTooltipForRow(selectetRow));
 	}
 	
 	public void updateModel(ActionFilter filter) {
@@ -173,6 +210,7 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 		rowToAccelerator = new HashMap();
 		rowToAlternateAccelerator = new HashMap();
 		rowToactionTooltip = new HashMap();
+		rowToIcon = new HashMap();
 
 		setModel(new KeymapTableModel(createTableData(filter)));
 	}
@@ -251,6 +289,11 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 		for (int row = 0; row < list.size(); ++row) {
 			Class actionClass = (Class) list.get(row);
 
+			ImageIcon actionIcon = MuAction.getStandardIcon(actionClass);
+			if (actionIcon == null)
+				actionIcon = transparentIcon;			
+			rowToIcon.put(Integer.valueOf(row), IconManager.getPaddedIcon(actionIcon, new Insets(0, 4, 0, 4)));
+			
 			String actionLabel = MuAction.getStandardLabel(actionClass);
 			setActionClass(actionClass, row);
 			tableData[row][ACTION_DESCRIPTION_COLUMN_INDEX] = actionLabel;
@@ -491,7 +534,9 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 	        	}
 	        	
 	        	if (isAlternativeActionCellSelected != isKeyStrokeRegisteredToAlternatuveAction || row != getSelectedRow()) {
-	        		tooltipBar.showKeystrokeAlreadyInUseMsg(pressedKeyStroke, ActionManager.getActionInstance((Class) rowToAction.get(rowAsInteger)));
+	        		String errorMessage = "The shortcut [" + KeyStrokeUtils.getKeyStrokeDisplayableRepresentation(pressedKeyStroke)
+	    			+ "] is already assigned to '" + ActionManager.getActionInstance((Class) rowToAction.get(rowAsInteger)).getLabel() + "'";
+	        		tooltipBar.showErrorMessage(errorMessage);
 	        		createCancelEditingStateThread(getCellEditor());
 	        	}
 	        	else {
@@ -575,6 +620,81 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 			if (first == null)
 				return second == null;
 			return first.equals(second);
+		}
+	}
+	
+	private class ShortcutsTableCellRenderer implements TableCellRenderer {
+		/** Custom JLabel that render specific column cells */
+	    private CustomCellLabel[] cellLabels = new CustomCellLabel[NUM_OF_COLUMNS];
+	    
+	    private final Color REGULAR_CELL_BACKGROUND_COLOR = Color.white;
+	    private final Color ALTERNATE_CELL_BACKGROUND_COLOR = new Color(238, 238, 238);
+	    private final Color OUTLINE_COLOR = Color.gray;
+	    
+	    public ShortcutsTableCellRenderer() {
+	    	for(int i=0; i<NUM_OF_COLUMNS; ++i)
+	            cellLabels[i] = new CustomCellLabel();
+	    	
+	    	cellLabels[ACTION_DESCRIPTION_COLUMN_INDEX].setHorizontalAlignment(CellLabel.LEFT);
+	    	cellLabels[ACCELERATOR_COLUMN_INDEX].setHorizontalAlignment(CellLabel.CENTER);
+	    	cellLabels[ALTERNATE_ACCELERATOR_COLUMN_INDEX].setHorizontalAlignment(CellLabel.CENTER);
+	    }
+		
+		public Component getTableCellRendererComponent(JTable table, Object value,
+	            boolean isSelected, boolean hasFocus, int rowIndex, int vColIndex) {
+			CustomCellLabel label;
+			int       columnId;
+			
+			columnId = convertColumnIndexToModel(vColIndex);
+			label = cellLabels[columnId];
+			
+			// action's icon column: return ImageIcon instance
+			if(columnId == ACTION_DESCRIPTION_COLUMN_INDEX) {
+				label.setIcon((ImageIcon) rowToIcon.get(Integer.valueOf(convertRowIndexToModel(rowIndex))));
+				label.setText("" + (value!=null ? value : ""));
+			}
+			// Any other column
+			else {
+				String text = value == null ? "" : (String) value;
+				
+				// If component's preferred width is bigger than column width then the component is not entirely
+	            // visible so we set a tooltip text that will display the whole text when mouse is over the 
+	            // component
+	            if (table.getColumnModel().getColumn(vColIndex).getWidth() < label.getPreferredSize().getWidth())
+	                label.setToolTipText(text);
+	            // Have to set it to null otherwise the defaultRender sets the tooltip text to the last one
+	            // specified
+	            else
+	                label.setToolTipText(null);
+	            
+	            // Set label's text
+				label.setText(text);
+			}
+			
+			label.setOutline(hasFocus ? OUTLINE_COLOR : null);
+			
+			// set cell's background color
+			label.setBackground(rowIndex % 2 == 0 ? REGULAR_CELL_BACKGROUND_COLOR : ALTERNATE_CELL_BACKGROUND_COLOR);
+			
+			return label;
+		}
+	}
+	
+	/**
+	 * CellLabel with a different outline than the default outline.
+	 */
+	private class CustomCellLabel extends CellLabel {
+		
+		protected void paintOutline(Graphics g) {
+			Graphics2D g2 = (Graphics2D) g;
+        	g2.setStroke(new BasicStroke(1.0f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_MITER,
+        			2.0f, new float[]{2.0f}, 0));
+        	g2.setColor(outlineColor);
+
+        	g2.drawLine(0, 0, getWidth(), 0);
+        	g2.drawLine(0, getHeight() - 1, getWidth(), getHeight() - 1);
+        	g2.drawLine(0, 0, 0, getHeight() - 1);
+        	g2.drawLine(getWidth()-1, 0, getWidth()-1, getHeight() - 1);
 		}
 	}
 }

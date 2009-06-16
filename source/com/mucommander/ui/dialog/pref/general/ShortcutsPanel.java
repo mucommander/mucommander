@@ -107,7 +107,7 @@ public class ShortcutsPanel extends PreferencesPanel {
 	
 	private JPanel createTablePanel() {
 		JPanel panel = new JPanel(new GridLayout(1,0));
-		shortcutsTable.setPreferredColumnWidths(new double[] {0.4, 0.2, 0.2});
+		shortcutsTable.setPreferredColumnWidths(new double[] {0.6, 0.2, 0.2});
 		panel.add(new JScrollPane(shortcutsTable));
 		return panel;
 	}
@@ -122,7 +122,7 @@ public class ShortcutsPanel extends PreferencesPanel {
 	
 	class TooltipBar extends JLabel {
 		private String lastActionTooltipShown;
-		private static final String EMPTY_MESSAGE = " ";
+		private static final String DEFAULT_MESSAGE = "Press Enter\\double click on the shortcut you'd like to edit";
 		private static final int MESSAGE_SHOWING_TIME = 3000;
 		private MessageRemoverThread currentRemoverThread;
 		
@@ -131,20 +131,19 @@ public class ShortcutsPanel extends PreferencesPanel {
 			setFont(new Font(tableFont.getName(), Font.BOLD, tableFont.getSize()));
 			setHorizontalAlignment(JLabel.LEFT);
 			setBorder(BorderFactory.createEmptyBorder(3, 5, 3, 5));
-			setText(EMPTY_MESSAGE);
+			setText(DEFAULT_MESSAGE);
 		}
 		
 		public void showActionTooltip(String text) {
-			setText(lastActionTooltipShown = text == null ? EMPTY_MESSAGE : text);
+			setText(lastActionTooltipShown = text == null ? " " : text);
 		}
 		
-		public void clear() {
-			setText(EMPTY_MESSAGE);
+		public void showDefaultMessage() {
+			setText(DEFAULT_MESSAGE);
 		}
 		
-		public void showKeystrokeAlreadyInUseMsg(KeyStroke pressedKeyStroke, MuAction assignedAction) {
-			setText("The shortcut [" + KeyStrokeUtils.getKeyStrokeDisplayableRepresentation(pressedKeyStroke)
-			+ "] is already assigned to '" + assignedAction.getLabel() + "'");
+		public void showErrorMessage(String text) {
+			setText(text);
 			createMessageRemoverThread();
 		}
 		
