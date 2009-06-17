@@ -177,6 +177,8 @@ class TextEditorImpl implements ThemeListener, ActionListener, EncodingListener 
             ((RandomAccessInputStream)in).seek(0);
         }
         else {
+            // TODO: it would be more efficient to use some sort of PushBackInputStream, though we can't use PushBackInputStream because we don't want to keep pushing back for the whole InputStream lifetime
+
             // Close the InputStream and open a new one
             // Note: we could use mark/reset if the InputStream supports it, but it is almost never implemented by
             // InputStream subclasses and a broken by design anyway.

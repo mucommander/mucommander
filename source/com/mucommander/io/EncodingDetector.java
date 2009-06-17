@@ -66,10 +66,16 @@ import java.io.InputStream;
  * </p>
  *
  * @author Maxence Bernard
+ * @see <a href="http://philip.html5.org/data/charsets.html">ICU charset detection accuracy</a>
  */
 public class EncodingDetector {
 
-    /** Maximum number of bytes that the detectEncoding methods will process */
+    /** Maximum number of bytes that the detectEncoding methods will process.
+     * <p>
+     * See http://philip.html5.org/data/charsets.html and http://philip.html5.org/data/encoding-detection.svg
+     * for why 4096 is the recommended size.
+     * </p>
+     *  */
     public final static int MAX_RECOMMENDED_BYTE_SIZE = 4096;
 
 
