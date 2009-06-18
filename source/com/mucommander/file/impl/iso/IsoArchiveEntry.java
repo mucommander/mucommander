@@ -28,20 +28,33 @@ import com.mucommander.file.ArchiveEntry;
 class IsoArchiveEntry extends ArchiveEntry {
 
     private long index;
-    private boolean cooked;
+    private int sectSize;
+    private long shiftOffset;
+    private boolean audio;
 
-    IsoArchiveEntry(String path, boolean directory, long date, long size, long index, boolean cooked) {
+    IsoArchiveEntry(String path, boolean directory, long date, long size, long index, int sectSize, long shiftOffset, boolean audio) {
         super(path, directory, date, size, true);
 
         this.index = index;
-        this.cooked = cooked;
+        this.sectSize = sectSize;
+        this.shiftOffset = shiftOffset;
+        this.audio = audio;
     }
 
     long getIndex() {
         return index;
     }
 
-    boolean isCooked() {
-        return cooked;
+    public int getSectSize() {
+        return sectSize;
     }
+
+    public long getShiftOffset() {
+        return shiftOffset;
+    }
+
+    public boolean getAudio() {
+        return audio;
+    }
+
 }

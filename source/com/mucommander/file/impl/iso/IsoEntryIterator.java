@@ -33,7 +33,9 @@ import java.util.Iterator;
  */
 class IsoEntryIterator extends WrapperArchiveEntryIterator {
 
-    /** The ISO file's InputStream */
+    /**
+     * The ISO file's InputStream
+     */
     private RandomAccessInputStream rais;
 
     public IsoEntryIterator(Iterator iterator, RandomAccessInputStream rais) {
@@ -57,6 +59,6 @@ class IsoEntryIterator extends WrapperArchiveEntryIterator {
      * @throws IOException if an I/O error occurs while closing the stream
      */
     public void close() throws IOException {
-        rais.close();                                                           
+        rais.close();
     }
 }

@@ -32,7 +32,7 @@ import java.util.Vector;
  * <p>
  * <pre>
  * Reference: http://www.ecma-international.org/publications/files/ECMA-ST/Ecma-119.pdf
- *
+ * <p/>
  * Todo:
  *      * test with more images
  *      * rewrite/sanitize InputStream for cooked
@@ -44,6 +44,45 @@ import java.util.Vector;
  * @author Xavier Martin
  */
 class IsoParser {
+    public static Vector getEntries(byte[] buffer, RandomAccessInputStream rais, int sectSize, long sector_offset, long shiftOffset) throws Exception {
+        Vector entries = new Vector();
+
+        Calendar calendar = Calendar.getInstance();
+        int start = 16;
+        isoPvd pvd = null;
+        todo todo_idr = null;
+
+        int level = 0;
+        for (int i = 1; i < 17; i++) {  // fuzzy search, can have type=0 (bootable el torito), type=2 (svd)
+            pvd = new isoPvd(buffer, rais, start + i, sectSize, shiftOffset);
+            if (pvd.type[0] == 2 && pvd.id[0] == 'C' && pvd.id[1] == 'D' && pvd.id[2] == '0' && pvd.id[3] == '0' && pvd.id[4] == '1') {
+                // gotta read docs a little more about those UCS-2 Escape Sequences
+                switch (pvd.unused3[2]) {
+                    case 0x40:
+                        level = 1;
+                        break;
+                    case 0x43:
+                        level = 2;
+                        break;
+                    case 0x45:
+                        level = 3;
+                }
+                break;
+            }
+        }
+
+        if (level == 0) // if no SVD with Joliet, fallback to plain-old ISO9660
+            pvd = new isoPvd(buffer, rais, start, sectSize, shiftOffset);
+
+        isoDr idr = new isoDr(pvd.root_directory_record, 0);
+        todo_idr = parse_dir(todo_idr, "", isonum_733(idr.extent), isonum_733(idr.size), rais, buffer, entries, sectSize, level, shiftOffset, sector_offset, calendar);
+        while (todo_idr != null) {
+            todo_idr = parse_dir(todo_idr, todo_idr.name, todo_idr.extent, todo_idr.length, rais, buffer, entries, sectSize, level, shiftOffset, sector_offset, calendar);
+            todo_idr = todo_idr.next;
+        }
+
+        return entries;
+    }
 
     /**
      * Parses the given ISO file and returns the list of entries it contains. The specified stream will *not* be closed
@@ -55,56 +94,42 @@ class IsoParser {
      * @throws IOException if an I/O error occurs
      */
     static Vector getEntries(AbstractFile file, RandomAccessInputStream rais) throws IOException {
-        Vector entries = new Vector();
-
-        byte[] buffer = BufferPool.getByteArray(2048);
-        Calendar calendar = Calendar.getInstance();
-        boolean cooked = file.getSize() % 2048 != 0;
-        long sector_offset = 0;
-        todo todo_idr = null;
+        byte[] buffer = BufferPool.getByteArray(IsoUtil.MODE1_2048);
 
         try {
-            int start = 16;
             if ("nrg".equals(file.getExtension())) {
-                start += 150;
-                sector_offset = -150;
+                return NrgParser.getEntries(buffer, file, rais);
             }
 
-            isoPvd pvd = null;
+            int sectSize = IsoUtil.guessSectorSize(file);
 
-            int level = 0;
-            for (int i = 1; i < 17; i++) {  // fuzzy search, can have type=0 (bootable el torito), type=2 (svd)
-                pvd = new isoPvd(rais, start + i, cooked);
-                if (pvd.type[0] == 2 && pvd.id[0] == 'C' && pvd.id[1] == 'D' && pvd.id[2] == '0' && pvd.id[3] == '0' && pvd.id[4] == '1')
-                {
-                    // gotta read docs a little more about those UCS-2 Escape Sequences
-                    switch (pvd.unused3[2]) {
-                        case 0x40:
-                            level = 1;
-                            break;
-                        case 0x43:
-                            level = 2;
-                            break;
-                        case 0x45:
-                            level = 3;
-                    }
-                    break;
-                }
+            // sector shift : 0 most of the time
+            long sector_offset = 0;
+
+            // bytes : depend if there's earlier track we discard
+            long shiftOffset = 0;
+
+            return getEntries(buffer, rais, sectSize, sector_offset, shiftOffset);
+
+            /*
+            if ("cdi".equals(file.getExtension())) {
+                // WIP
+                // http://cvs.berlios.de/cgi-bin/viewcvs.cgi/libdiscmage/libdiscmage/src/filter/cdi.c?revision=1.3&view=markup
+                int len = rais.available();
+                long offset = -1;
+
+                rais.seek(len - 7);
+                rais.read(buffer, 0, 8);
+                long version = IsoUtil.toDwordBE(buffer, 0);
+                offset = IsoUtil.toDwordBE(buffer, 4);
+                com.mucommander.Debug.trace("cdi root " + Long.toHexString(offset) + " version " + Long.toHexString(version));
+
             }
-            if (level == 0) // if no SVD with Joliet, fallback to plain-old ISO9660
-                pvd = new isoPvd(rais, start, cooked);
-
-            isoDr idr = new isoDr(pvd.root_directory_record, 0);
-            todo_idr = parse_dir(todo_idr, "", isonum_733(idr.extent), isonum_733(idr.size), rais, buffer, entries, cooked, level, sector_offset, calendar);
-            while (todo_idr != null) {
-                todo_idr = parse_dir(todo_idr, todo_idr.name, todo_idr.extent, todo_idr.length, rais, buffer, entries, cooked, level, sector_offset, calendar);
-                todo_idr = todo_idr.next;
-            }
-
-            return entries;
+            */
         }
         catch (Exception e) {
-            if (com.mucommander.Debug.ON) com.mucommander.Debug.trace("Exception caught while parsing iso:"+e+", throwing IOException");
+            if (com.mucommander.Debug.ON)
+                com.mucommander.Debug.trace("Exception caught while parsing iso:" + e + ", throwing IOException");
 
             throw new IOException();
         }
@@ -119,13 +144,13 @@ class IsoParser {
         name.append((level == 0) ? new String(b, 0, len) : new String(b, 0, len, "UnicodeBigUnmarked"));
     }
 
-    private static todo parse_dir(todo todo_idr, String rootname, int extent, int len, RandomAccessInputStream rais, byte[] buffer, Vector entries, boolean cooked, int level, long sector_offset, Calendar calendar) throws Exception {
+    public static todo parse_dir(todo todo_idr, String rootname, int extent, int len, RandomAccessInputStream rais, byte[] buffer, Vector entries, int sectSize, int level, long shiftOffset, long sector_offset, Calendar calendar) throws Exception {
         todo td;
         int i;
         isoDr idr;
 
         while (len > 0) {
-            rais.seek(sector(extent - sector_offset, cooked));
+            rais.seek(IsoUtil.offsetInSector(extent - sector_offset, sectSize, false) + shiftOffset);
             StreamUtils.readFully(rais, buffer);
             len -= buffer.length;
             extent++;
@@ -146,17 +171,17 @@ class IsoParser {
                     name_buf.append("..");
                 else {
                     newString(idr.name, idr.name_len[0] & 0xff, level, name_buf);
-                    if (level == 0) { // strip ;VERSION
-                        int p = name_buf.lastIndexOf(";");
-                        if (p != -1)
-                            name_buf.setLength(p);
-                        p = name_buf.lastIndexOf("."); // strip empty extension
-                        if (p != -1) {
-                            int s = name_buf.length() - 1;
-                            if (p == s)
-                                name_buf.setLength(s);
-                        }
+                    //if (level == 0) { // strip ;VERSION
+                    int p = name_buf.lastIndexOf(";");
+                    if (p != -1)
+                        name_buf.setLength(p);
+                    p = name_buf.lastIndexOf("."); // strip empty extension
+                    if (p != -1) {
+                        int s = name_buf.length() - 1;
+                        if (p == s)
+                            name_buf.setLength(s);
                     }
+                    //}
                 }
 
                 if ((idr.flags[0] & 2) != 0
@@ -174,8 +199,6 @@ class IsoParser {
                     td.extent = isonum_733(idr.extent);
                     td.length = isonum_733(idr.size);
                     td.name = rootname + name_buf + "/";
-                } else {
-                    // file only
                 }
                 boolean dir = false;
                 String n = name_buf.toString();
@@ -194,20 +217,21 @@ class IsoParser {
                     // offset from Greenwich Mean Time, in 15-minute intervals, as a twos complement signed number,
                     // positive for time zones east of Greenwich, and negative for time zones
                     calendar.setTimeZone(new java.util.SimpleTimeZone(15 * 60 * 1000 * idr.date[6], ""));
-
                     entries.add(
-                        new IsoArchiveEntry(
-                            name.toString(),
-                            dir,
-                            calendar.getTimeInMillis(),
-                            fstat_buf.st_size,
-                            isonum_733(idr.extent) - sector_offset
-                            , cooked)
+                            new IsoArchiveEntry(
+                                    name.toString(),
+                                    dir,
+                                    calendar.getTimeInMillis(),
+                                    fstat_buf.st_size,
+                                    isonum_733(idr.extent) - sector_offset,
+                                    sectSize,
+                                    shiftOffset,
+                                    false)
                     );
                 }
 
                 i += (buffer[i] & 0xff);
-                if (i > 2048 - idr.s_length) break;
+                if (i > IsoUtil.MODE1_2048 - idr.s_length) break;
             }
         }
 
@@ -220,22 +244,15 @@ class IsoParser {
     }
 
     private static int isonum_731(byte p[]) {
-        return ((p[0] & 0xff)
-                | ((p[1] & 0xff) << 8)
-                | ((p[2] & 0xff) << 16)
-                | ((p[3] & 0xff) << 24));
+        return IsoUtil.toDwordBE(p, 0);
     }
 
-    private static int isonum_733(byte p[]) {
+    public static int isonum_733(byte p[]) {
         return (isonum_731(p));
     }
 
     private static boolean S_ISDIR(int m) {
         return ((m & S_IFDIR) == S_IFDIR);
-    }
-
-    public static long sector(long index, boolean cooked) {
-        return (cooked) ? (index * 2352) + 24 : index << 11;
     }
 
     // ======================================
@@ -247,14 +264,14 @@ class IsoParser {
         int st_mode;
     }
 
-    private static class todo {
-        private todo next;
-        private String name;
-        private int extent;
-        private int length;
+    public static class todo {
+        public todo next;
+        public String name;
+        public int extent;
+        public int length;
     }
 
-    private static class isoDr {
+    public static class isoDr {
         public byte[] length = new byte[ISODCL(1, 1)];
         public byte[] ext_attr_length = new byte[ISODCL(2, 2)];
         public byte[] extent = new byte[ISODCL(3, 10)];
@@ -284,7 +301,7 @@ class IsoParser {
         }
     }
 
-    private static class isoPvd {
+    public static class isoPvd {
         public byte[] type = new byte[ISODCL(1, 1)];
         public byte[] id = new byte[ISODCL(2, 6)];
         public byte[] version = new byte[ISODCL(7, 7)];
@@ -317,7 +334,7 @@ class IsoParser {
         public byte[] file_structure_version = new byte[ISODCL(882, 882)];
         public byte[] unused4 = new byte[ISODCL(883, 883)];
         public byte[] application_data = new byte[ISODCL(884, 1395)];
-        public byte[] unused5 = new byte[ISODCL(1396, 2048)];
+        public byte[] unused5 = new byte[ISODCL(1396, IsoUtil.MODE1_2048)];
 
         byte dataPvr[][] = {type, id, version, unused1,
                 system_id, volume_id, unused2, volume_space_size,
@@ -329,12 +346,10 @@ class IsoParser {
                 effective_date, file_structure_version, unused4, application_data,
                 unused5};
 
-        //        boolean cooked;
-
-        public isoPvd(RandomAccessInputStream rais, int start, boolean cooked) throws Exception {
-            byte[] pvd = new byte[2048];
-            rais.seek(sector(start, cooked));
-            rais.read(pvd);
+        public isoPvd(byte[] pvd, RandomAccessInputStream rais, int start, int sectSize, long shiftOffset) throws IOException {
+            rais.seek(IsoUtil.offsetInSector(start, sectSize, false) + shiftOffset);
+            if (rais.read(pvd) == -1)
+                throw new IOException("unable to read PVD");
             load(pvd);
         }
 
