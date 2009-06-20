@@ -10,19 +10,18 @@ permits use of the libraries in proprietary programs under certain
 conditions.
 
 Additionally, muCommander uses the following third party works:
-- the jCIFS library under the terms of the GNU Lesser General Public
-  License
-- the Jakarta Commons Net library under the terms of the Apache License
-- the J2SSH library under the terms of the GNU Lesser General Public
-  License
 - the Ant library under the terms of the Apache License
-- the JmDNS library under the terms of the GNU Lesser General Public
-  License
-- the Yanfs library under the terms of the Berkeley Software
-  Distribution License
-- Icons by Mark James under the terms of the Creative Commons
-  Attribution License
+- the Furbelow library under the terms of the GNU Lesser General Public License
 - the ICU4J library under the terms of the ICU License
+- the Jakarta Commons Net library under the terms of the Apache License
+- the J2SSH library under the terms of the GNU Lesser General Public License
+- the jCIFS library under the terms of the GNU Lesser General Public License
+- the JmDNS library under the terms of the GNU Lesser General Public License
+- the JNA library under the terms of the GNU Lesser General Public License
+- the JUnRar library under the terms of the GNU Lesser General Public License
+- Mark James' icons under the terms of the Creative Commons Attribution License
+- the p7zip library under the terms of the GNU Lesser General Public License
+- the Yanfs library under the terms of the Berkeley Software Distribution License
 
 All the above mentioned licenses are included in this file.
 
