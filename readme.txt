@@ -145,6 +145,8 @@ Improvements:
 - Added a 'New window' item to the system tray menu.
 - Improved support for NRG images ; audio tracks can now be dumped as WAV files.
   Contributed by Xavier Martin.
+- Improved the toolbar's behavior when the window is too small for all buttons
+  to be displayed (ticket #165). Contributed by Leo Welsch.
 
 Localization:
 - 

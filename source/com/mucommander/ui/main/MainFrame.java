@@ -28,6 +28,7 @@ import com.mucommander.runtime.OsVersions;
 import com.mucommander.ui.action.ActionKeymap;
 import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.action.impl.CloseWindowAction;
+import com.mucommander.ui.button.ToolbarMoreButton;
 import com.mucommander.ui.event.ActivePanelListener;
 import com.mucommander.ui.event.LocationEvent;
 import com.mucommander.ui.event.LocationListener;
@@ -157,7 +158,8 @@ public class MainFrame extends JFrame implements LocationListener {
         // Note: Toolbar.setVisible() has to be called no matter if Toolbar is visible or not, in order for it to be properly initialized
         this.toolbar = new ToolBar(this);
         this.toolbar.setVisible(MuConfiguration.getVariable(MuConfiguration.TOOLBAR_VISIBLE, MuConfiguration.DEFAULT_TOOLBAR_VISIBLE));
-        contentPane.add(toolbar, BorderLayout.NORTH);
+        // contentPane.add(toolbar, BorderLayout.NORTH);
+        contentPane.add(ToolbarMoreButton.wrapToolBar(toolbar), BorderLayout.NORTH);
 
         // Lister to location change events to display the current folder in the window's title
         leftFolderPanel.getLocationManager().addLocationListener(this);
