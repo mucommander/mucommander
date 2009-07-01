@@ -62,8 +62,8 @@ public class ClipboardNotifier implements FlavorListener {
             action.setEnabled(ClipboardSupport.getClipboard().isDataFlavorAvailable(DataFlavor.javaFileListFlavor));
         }
         catch(Exception e) {
-            // Works around "java.lang.IllegalStateException: cannot open system clipboard" thrown without
-            // an apparent reason (ticket #164).
+            // Works around "java.lang.IllegalStateException: cannot open system clipboard" thrown when the clipboard
+            // is currently unavailable (ticket #164).
 
             if(Debug.ON)
                 Debug.trace("Caught an exception while querying the clipboard for files: "+ e);

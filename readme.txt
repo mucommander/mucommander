@@ -180,7 +180,7 @@ Bug fixes:
 - The authentication dialog's login field is now prefilled with the current
   user's name (ticket #185). Contributed by Leo Welsch.
 - Fixed exceptions occurring while copying text to the clipboard from an external
-  application (ticket #164).
+  application under certain conditions (ticket #164).
 
 Known issues:
 - Some translations are not up-to-date. For more information, see:
