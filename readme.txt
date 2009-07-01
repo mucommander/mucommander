@@ -174,7 +174,11 @@ Bug fixes:
   repeatedly (ticket #212).
 - Fixed an issue with the panel separator being set incorrectly after a resize
   of the main window (ticket #163).
+- Improved the toolbar's behavior when the window is too small for all buttons
+  to be displayed (ticket #165). Contributed by Leo Welsch.
 - Fixed flashing command windows under Windows 95/98/Me (ticket #63).
+- The authentication dialog's login field is now prefilled with the current
+  user's name (ticket #185). Contributed by Leo Welsch.
 
 Known issues:
 - Some translations are not up-to-date. For more information, see:

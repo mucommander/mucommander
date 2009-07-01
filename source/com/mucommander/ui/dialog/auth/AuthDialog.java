@@ -203,6 +203,9 @@ public class AuthDialog extends FocusDialog implements ActionListener, EditableC
                 userRadioButton.setSelected(true);
         }
         else {
+            // Prefill the login field with the current user's name (ticket #185)
+            loginField.setText(System.getProperty("user.name"));
+
             // Select the 'Connect as Guest' radio button if there is one
             if(guestRadioButton!=null) {
                 guestRadioButton.setSelected(true);
