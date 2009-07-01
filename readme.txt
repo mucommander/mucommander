@@ -179,6 +179,8 @@ Bug fixes:
 - Fixed flashing command windows under Windows 95/98/Me (ticket #63).
 - The authentication dialog's login field is now prefilled with the current
   user's name (ticket #185). Contributed by Leo Welsch.
+- Fixed exceptions occurring while copying text to the clipboard from an external
+  application (ticket #164).
 
 Known issues:
 - Some translations are not up-to-date. For more information, see:

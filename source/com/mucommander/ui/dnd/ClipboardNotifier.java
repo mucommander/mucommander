@@ -18,6 +18,8 @@
 
 package com.mucommander.ui.dnd;
 
+import com.mucommander.Debug;
+
 import javax.swing.*;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.FlavorEvent;
@@ -56,7 +58,16 @@ public class ClipboardNotifier implements FlavorListener {
      * Toggle the action depending on the clipboard contents.
      */
     private void toggleActionState() {
-        action.setEnabled(ClipboardSupport.getClipboard().isDataFlavorAvailable(DataFlavor.javaFileListFlavor));
+        try {
+            action.setEnabled(ClipboardSupport.getClipboard().isDataFlavorAvailable(DataFlavor.javaFileListFlavor));
+        }
+        catch(Exception e) {
+            // Works around "java.lang.IllegalStateException: cannot open system clipboard" thrown without
+            // an apparent reason (ticket #164).
+
+            if(Debug.ON)
+                Debug.trace("Caught an exception while querying the clipboard for files: "+ e);
+        }
     }
 
     ///////////////////////////////////
