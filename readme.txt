@@ -181,6 +181,8 @@ Bug fixes:
   user's name (ticket #185). Contributed by Leo Welsch.
 - Fixed exceptions occurring while copying text to the clipboard from an external
   application under certain conditions (ticket #164).
+- Added support for forward slash-separated paths on backslash-separated OSes
+  (Windows, OS/2) (ticket #94).
 
 Known issues:
 - Some translations are not up-to-date. For more information, see:

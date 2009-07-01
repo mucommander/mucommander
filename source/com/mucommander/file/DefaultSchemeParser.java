@@ -116,13 +116,12 @@ public class DefaultSchemeParser implements SchemeParser {
     }
 
     /**
-     * Handles the parsing of the given local file url, using the given {@link PathCanonizer} to canonize the path.
+     * Handles the parsing of the given local file url.
      *
      * @param url the URL to parse
      * @param fileURL the FileURL instance in which to set the different parsed parts
-     * @param pathCanonizer path tokenizer to use for canonizing the path
      */
-    private void handleLocalFileURL(String url, FileURL fileURL, PathCanonizer pathCanonizer) {
+    private void handleLocalFilePath(String url, FileURL fileURL) {
         fileURL.setHandler(FileURL.getRegisteredHandler(FileProtocols.FILE));
         fileURL.setScheme(FileProtocols.FILE);
         fileURL.setHost(LOCALHOST);
@@ -160,15 +159,17 @@ public class DefaultSchemeParser implements SchemeParser {
                 // - a drive letter and OS uses root drives (Windows-style) [support both C:\ and C:/ style]
                 // - a ~ character (refers to the user home folder)
                 if((!LocalFile.USES_ROOT_DRIVES && url.startsWith("/")) || url.startsWith("~")) {
-                    handleLocalFileURL(url, fileURL, LOCAL_PATH_CANONIZER);
+                    handleLocalFilePath(url, fileURL);
 
                     // All done, return
                     return;
                 }
                 else if (LocalFile.USES_ROOT_DRIVES && (url.indexOf(":\\")==1 || url.indexOf(":/")==1)) {
-                    // Choose the parser to use depending on whether the path is backslash (default) or 
-                    // forward slash-separated
-                    handleLocalFileURL(url, fileURL, url.charAt(2)=='\\'?LOCAL_PATH_CANONIZER:FORWARD_SLASH_CANONIZER);
+                    // Turn forward slash-separated paths into their backslash-separated counterparts.
+                    if(url.charAt(2)=='/')
+                        url = url.replace('/', '\\');
+
+                    handleLocalFilePath(url, fileURL);
 
                     // All done, return
                     return;
