@@ -218,18 +218,6 @@ public class ArchiveJob extends TransferFileJob {
                 try { archiver.close(); }
                 catch(IOException e) {}
             }
-
-            // Todo: the check below was made when using java.util.zip. Since java.util.zip is not used anymore,
-            // check if this is still necessary
-
-            // Makes sure the file OutputStream has been properly closed. Archive.close() normally closes the archive
-            // OutputStream which in turn should close the underlying file OutputStream, but for some strange reason,
-            // if no entry has been added to a Zip archive and the job is interrupted (e.g. the first file could not be read),
-            // ZipOutputStream.close() does not close the underlying OutputStream.
-            if(out!=null) {
-                try { out.close(); }
-                catch(IOException e) {}
-            }
         }
     }
 
