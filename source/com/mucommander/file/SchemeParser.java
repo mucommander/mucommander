@@ -40,7 +40,7 @@ public interface SchemeParser {
      * path part.</p>
      *
      * @param url the URL to parse
-     * @param fileURL the FileURL instance to
+     * @param fileURL the FileURL instance in which to set the different parsed parts
      * @throws MalformedURLException if the specified string is not a valid URL and cannot be parsed
      */
     public void parse(String url, FileURL fileURL) throws MalformedURLException;
