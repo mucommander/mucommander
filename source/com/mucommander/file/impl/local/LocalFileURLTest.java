@@ -70,6 +70,31 @@ public class LocalFileURLTest extends FileURLTestCase {
             assertEquals("localhost", url.getHost());
             assertEquals("/C:\\direc/tory", url.getPath());
             assertEquals("direc/tory", url.getFilename());
+
+            // Test forward-separated paths which are also supported
+
+            url = FileURL.getFileURL("C:/");
+            assertEquals("file", url.getScheme());
+            assertEquals("localhost", url.getHost());
+            assertEquals("/C:/", url.getPath());
+
+            url = FileURL.getFileURL("C:/dir/file");
+            assertEquals("file", url.getScheme());
+            assertEquals("localhost", url.getHost());
+            assertEquals("/C:/dir/file", url.getPath());
+            assertEquals("file", url.getFilename());
+
+            url = url.getParent();
+            assertEquals("file", url.getScheme());
+            assertEquals("localhost", url.getHost());
+            assertEquals("/C:/dir/", url.getPath());
+            assertEquals("dir", url.getFilename());
+
+            url = FileURL.getFileURL("C:/direc\\tory");
+            assertEquals("file", url.getScheme());
+            assertEquals("localhost", url.getHost());
+            assertEquals("/C:/direc\\tory", url.getPath());
+            assertEquals("direc\\tory", url.getFilename());
         }
         // For OSes that use forward slash as a path separator
         else {

@@ -73,8 +73,11 @@ public class DefaultSchemeParser implements SchemeParser {
     /** String designating the localhost. */
     protected final static String LOCALHOST = "localhost";
 
-    /** Path canonizer used for local paths: uses the local path separator and user home for tilde replacement */
+    /** Default path canonizer to use for local paths: uses the local path separator and user home for tilde replacement */
     public final static PathCanonizer LOCAL_PATH_CANONIZER = new DefaultPathCanonizer(LocalFile.SEPARATOR, System.getProperty("user.home"));
+
+    /** Secondary path canonizer to use for forward slash-separated local paths on backslash-separated OSes (Windows, OS/2) */
+    public final static PathCanonizer FORWARD_SLASH_CANONIZER = new DefaultPathCanonizer("/", System.getProperty("user.home"));
 
 
     /**
@@ -112,6 +115,20 @@ public class DefaultSchemeParser implements SchemeParser {
         this.pathCanonizer = pathCanonizer;
     }
 
+    /**
+     * Handles the parsing of the given local file url, using the given {@link PathCanonizer} to canonize the path.
+     *
+     * @param url the URL to parse
+     * @param fileURL the FileURL instance in which to set the different parsed parts
+     * @param pathCanonizer path tokenizer to use for canonizing the path
+     */
+    private void handleLocalFileURL(String url, FileURL fileURL, PathCanonizer pathCanonizer) {
+        fileURL.setHandler(FileURL.getRegisteredHandler(FileProtocols.FILE));
+        fileURL.setScheme(FileProtocols.FILE);
+        fileURL.setHost(LOCALHOST);
+        fileURL.setPath(pathCanonizer.canonize(url));
+    }
+
 
     /////////////////////////////////
     // SchemeParser implementation //
@@ -140,13 +157,18 @@ public class DefaultSchemeParser implements SchemeParser {
             if(schemeDelimPos==-1) {
                 // Treat the URL as local file path if it starts with:
                 // - '/' and OS doesn't use root drives (Unix-style path)
-                // - a drive letter and OS uses root drives (Windows-style)
+                // - a drive letter and OS uses root drives (Windows-style) [support both C:\ and C:/ style]
                 // - a ~ character (refers to the user home folder)
-                if((!LocalFile.USES_ROOT_DRIVES && url.startsWith("/")) || (LocalFile.USES_ROOT_DRIVES && url.indexOf(":\\")==1) || url.startsWith("~")) {
-                    fileURL.setHandler(FileURL.getRegisteredHandler(FileProtocols.FILE));
-                    fileURL.setScheme(FileProtocols.FILE);
-                    fileURL.setHost(LOCALHOST);
-                    fileURL.setPath(LOCAL_PATH_CANONIZER.canonize(url));
+                if((!LocalFile.USES_ROOT_DRIVES && url.startsWith("/")) || url.startsWith("~")) {
+                    handleLocalFileURL(url, fileURL, LOCAL_PATH_CANONIZER);
+
+                    // All done, return
+                    return;
+                }
+                else if (LocalFile.USES_ROOT_DRIVES && (url.indexOf(":\\")==1 || url.indexOf(":/")==1)) {
+                    // Choose the parser to use depending on whether the path is backslash (default) or 
+                    // forward slash-separated
+                    handleLocalFileURL(url, fileURL, url.charAt(2)=='\\'?LOCAL_PATH_CANONIZER:FORWARD_SLASH_CANONIZER);
 
                     // All done, return
                     return;
