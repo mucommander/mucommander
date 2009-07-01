@@ -174,6 +174,7 @@ Bug fixes:
   repeatedly (ticket #212).
 - Fixed an issue with the panel separator being set incorrectly after a resize
   of the main window (ticket #163).
+- Fixed flashing command windows under Windows 95/98/Me (ticket #63).
 
 Known issues:
 - Some translations are not up-to-date. For more information, see:

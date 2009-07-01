@@ -227,8 +227,11 @@ public class LocalFile extends AbstractFile {
                         if(Debug.ON) Debug.trace("Call to GetDiskFreeSpaceEx failed, absPath="+absPath);
                     }
                 }
-                // Otherwise, parse the output of 'dir "filePath"' command to retrieve free space information
-                else {
+                // Otherwise, parse the output of 'dir "filePath"' command to retrieve free space information, if
+                // running Window NT or higher.
+                // Note: no command invocation under Windows 95/98/Me, because it causes a shell window to
+                // appear briefly every time this method is called (See ticket #63).
+                else if(OsVersions.WINDOWS_NT.isCurrentOrHigher()) {
                     // 'dir' command returns free space on the last line
                     Process process = Runtime.getRuntime().exec(
                             (OsVersion.getCurrent().compareTo(OsVersion.WINDOWS_NT)>=0 ? "cmd /c" : "command.com /c")
