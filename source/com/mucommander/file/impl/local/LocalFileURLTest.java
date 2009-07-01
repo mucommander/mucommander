@@ -93,7 +93,7 @@ public class LocalFileURLTest extends FileURLTestCase {
             url = FileURL.getFileURL("C:/direc\\tory");
             assertEquals("file", url.getScheme());
             assertEquals("localhost", url.getHost());
-            assertEquals("C:\\direc\\tory", url.getPath());
+            assertEquals("/C:\\direc\\tory", url.getPath());
             assertEquals("tory", url.getFilename());
         }
         // For OSes that use forward slash as a path separator
