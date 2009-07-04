@@ -84,15 +84,17 @@ abstract class GnomeDesktopAdapter extends DefaultDesktopAdapter {
     }
 
     /**
-     * Parses the value returned by the <code>gconftool -p /desktop/gnome/peripherals/mouse/double_click</code> command.
-     * If the returned value could not be parsed successfully, the value of {@link DefaultDesktopAdapter#getMultiClickInterval()}
-     * is returned. The value is retrieved on initialization and never updated thereafter.
+     * Returns the <code>/desktop/gnome/peripherals/mouse/double_click</code> GNOME configuration value.
+     * If the returned value is not defined or could not be retrieved, the value of
+     * {@link DefaultDesktopAdapter#getMultiClickInterval()} is returned.<br/>
+     * The value is retrieved on initialization and never updated thereafter.
      * <p>
      * Note under Java 1.6 or below, the returned value does not match the one used by Java for generating multi-clicks
      * (see {@link DefaultDesktopAdapter#getMultiClickInterval()}, as Java uses the multi-click speed declared in
-     * X Window's configuration, not in GNOME's.
+     * X Window's configuration, not in GNOME's. See <a href="http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=5076635">
+     * Java Bug 5076635</a> for more information.
      * </p>
-     * @return the value returned by the <code>gconftool -p /desktop/gnome/peripherals/mouse/double_click</code> command.
+     * @return the <code>/desktop/gnome/peripherals/mouse/double_click</code> GNOME configuration value.
      */
     public int getMultiClickInterval() {
         return multiClickInterval;
