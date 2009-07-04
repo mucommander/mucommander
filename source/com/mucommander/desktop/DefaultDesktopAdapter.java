@@ -18,6 +18,9 @@
 
 package com.mucommander.desktop;
 
+import com.mucommander.Debug;
+
+import java.awt.*;
 import java.awt.event.MouseEvent;
 
 /**
@@ -31,9 +34,17 @@ import java.awt.event.MouseEvent;
  * Moreover, an instance of <code>DefaultDesktopAdapter</code> will be used by the
  * {@link DesktopManager} if no valid desktop could be identifier.
  * </p>
- * @author Nicolas Rinaudo
+ * @author Nicolas Rinaudo, Maxence Bernard
  */
 public class DefaultDesktopAdapter implements DesktopAdapter {
+
+    /** Default multi-click interval when the desktop property cannot be retrieved. */
+    public int DEFAULT_MULTICLICK_INTERVAL = 500;
+
+    /** Multi-click interval, cached to avoid polling the value every time {@link #getMultiClickInterval()} is called */
+    private int multiClickInterval;
+
+
     public String toString() {return "Default Desktop";}
 
     /**
@@ -51,7 +62,20 @@ public class DefaultDesktopAdapter implements DesktopAdapter {
      * @param  install                        <code>true</code> if this is the application's first boot, <code>false</code> otherwise.
      * @throws DesktopInitialisationException if any error occurs.
      */
-    public void init(boolean install) throws DesktopInitialisationException {}
+    public void init(boolean install) throws DesktopInitialisationException {
+        try {
+            Integer value = ((Integer)Toolkit.getDefaultToolkit().getDesktopProperty("awt.multiClickInterval"));
+            if(value==null)
+                multiClickInterval = DEFAULT_MULTICLICK_INTERVAL;
+            else
+                multiClickInterval = value.intValue();
+        }
+        catch(Exception e) {
+            if(Debug.ON) Debug.trace("Error while retrieving multi-click interval value desktop property: "+e);
+
+            multiClickInterval = DEFAULT_MULTICLICK_INTERVAL;
+        }
+    }
 
     /**
      * Returns <code>true</code> if the specified mouse event describes a left click.
@@ -91,6 +115,20 @@ public class DefaultDesktopAdapter implements DesktopAdapter {
      * @see      #isMiddleMouseButton(MouseEvent)
      */
     public boolean isMiddleMouseButton(MouseEvent e) {return (e.getModifiers() & MouseEvent.BUTTON2_MASK) != 0;}
+
+    /**
+     * Returns the value of the <code>"awt.multiClickInterval"</code> desktop property that AWT/Swing uses internally
+     * for generating the {@link MouseEvent#getClickCount() click count} returned by <code>MouseListener</code>
+     * mouse events. If the property is not set, {@link #DEFAULT_MULTICLICK_INTERVAL} is returned.
+     * @see    MouseEvent#getClickCount()
+     * @see    java.awt.Toolkit#getDesktopProperty(String) 
+     * @return the value of the <code>"awt.multiClickInterval"</code> desktop property that AWT/Swing uses internally
+     * for generating the {@link MouseEvent#getClickCount() click count} returned by <code>MouseListener</code>
+     * mouse events
+     */
+    public int getMultiClickInterval() {
+        return multiClickInterval;
+    }
 
     /**
      * Returns <code>/bin/sh -l -c"</code>.

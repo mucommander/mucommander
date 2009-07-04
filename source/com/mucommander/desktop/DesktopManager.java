@@ -19,10 +19,10 @@
 package com.mucommander.desktop;
 
 import com.mucommander.Debug;
-import com.mucommander.desktop.linux.ConfiguredGnomeDesktopAdapter;
-import com.mucommander.desktop.linux.ConfiguredKdeDesktopAdapter;
-import com.mucommander.desktop.linux.GuessedGnomeDesktopAdapter;
-import com.mucommander.desktop.linux.GuessedKdeDesktopAdapter;
+import com.mucommander.desktop.gnome.ConfiguredGnomeDesktopAdapter;
+import com.mucommander.desktop.gnome.GuessedGnomeDesktopAdapter;
+import com.mucommander.desktop.kde.ConfiguredKdeDesktopAdapter;
+import com.mucommander.desktop.kde.GuessedKdeDesktopAdapter;
 import com.mucommander.desktop.openvms.OpenVMSDesktopAdapter;
 import com.mucommander.desktop.osx.OSXDesktopAdapter;
 import com.mucommander.desktop.windows.Win9xDesktopAdapter;
@@ -483,5 +483,10 @@ public class DesktopManager {
     public static boolean isMiddleMouseButton(MouseEvent e) {
         checkInit();
         return desktop.isMiddleMouseButton(e);
+    }
+
+    public static int getMultiClickInterval() {
+        checkInit();
+        return desktop.getMultiClickInterval();
     }
 }

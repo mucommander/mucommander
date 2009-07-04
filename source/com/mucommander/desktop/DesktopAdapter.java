@@ -45,7 +45,7 @@ import java.awt.event.MouseEvent;
  * {@link com.mucommander.command.Command commands},
  * {@link com.mucommander.command.CommandManager#registerDefaultAssociation(String,FileFilter) associations}...<br>
  * </p>
- * @author Nicolas Rinaudo
+ * @author Nicolas Rinaudo, Maxence Bernard
  */
 public interface DesktopAdapter {
     // - Detection / Initialisation --------------------------------------
@@ -121,6 +121,13 @@ public interface DesktopAdapter {
      */
     public boolean isMiddleMouseButton(MouseEvent e);
 
+    /**
+     * Returns the maximum interval in milliseconds between mouse clicks for them to be considered as 'multi-clicks'
+     * (e.g. double-clicks). The returned value should reflects the desktop's multi (or double click) interval, which
+     * may or may not correspond to the one Java uses for double-clicks.
+     * @return the maximum interval in milliseconds between mouse clicks for them to be considered as 'multi-clicks'.
+     */
+    public int getMultiClickInterval();
 
 
     // - Misc. -----------------------------------------------------------

@@ -16,19 +16,20 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.mucommander.desktop.linux;
+package com.mucommander.desktop.kde;
 
 import com.mucommander.desktop.AbstractTrash;
 import com.mucommander.desktop.TrashProvider;
 
 /**
- * Provider for the Trash in GNOME Desktop Environment
- * 
- * @see GnomeTrash
- * @author David Kovar (kowy)
+ * This class is a trash provider for the {@link KDETrash KDE trash}.
+ *
+ * @see KDETrash
+ * @author Maxence Bernard
  */
-public class GnomeTrashProvider implements TrashProvider {
+public class KDETrashProvider implements TrashProvider {
+
     public AbstractTrash getTrash() {
-        return new GnomeTrash();
+        return new KDETrash();
     }
 }

@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.mucommander.desktop.linux;
+package com.mucommander.desktop.kde;
 
 import com.mucommander.runtime.JavaVersion;
 

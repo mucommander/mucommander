@@ -16,21 +16,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.mucommander.desktop.linux;
+package com.mucommander.desktop.gnome;
 
-import com.mucommander.process.ProcessRunner;
+import com.mucommander.desktop.AbstractTrash;
+import com.mucommander.desktop.TrashProvider;
 
 /**
- * @author Nicolas Rinaudo
+ * Provider for the Trash in GNOME Desktop Environment
+ * 
+ * @see GnomeTrash
+ * @author David Kovar (kowy)
  */
-public class GuessedGnomeDesktopAdapter extends GnomeDesktopAdapter {
-    public String toString() {return "Gnome Desktop (guess)";}
-
-    public boolean isAvailable() {
-        try {
-            ProcessRunner.execute("gnome-open");
-            return true;
-        }
-        catch(Exception e) {return false;}
+public class GnomeTrashProvider implements TrashProvider {
+    public AbstractTrash getTrash() {
+        return new GnomeTrash();
     }
 }

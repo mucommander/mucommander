@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.mucommander.desktop.linux;
+package com.mucommander.desktop.gnome;
 
 import com.mucommander.Debug;
 import com.mucommander.desktop.QueuedTrash;
@@ -66,6 +66,9 @@ public class GnomeTrash extends QueuedTrash {
     /** "files" subfolder of the user trash folder */
     private final static AbstractFile TRASH_FILES_SUBFOLDER;
 
+    /** Volume on which the trash folder resides, used for checking whether a file can be moved to the trash or not */
+    private final static AbstractFile TRASH_VOLUME;
+
     /** Formats dates in trash info files */
     private final static SimpleDateFormat INFO_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 
@@ -78,10 +81,12 @@ public class GnomeTrash extends QueuedTrash {
         if(TRASH_FOLDER!=null) {
             TRASH_INFO_SUBFOLDER = TRASH_FOLDER.getChildSilently("info");
             TRASH_FILES_SUBFOLDER = TRASH_FOLDER.getChildSilently("files");
+            TRASH_VOLUME = TRASH_FOLDER.getVolume();
         }
         else {
             TRASH_INFO_SUBFOLDER = null;
             TRASH_FILES_SUBFOLDER = null;
+            TRASH_VOLUME = null;
         }
     }
 
@@ -107,7 +112,7 @@ public class GnomeTrash extends QueuedTrash {
         // No existing user trash was found: create the folder, only if it doesn't already exist.
         if(!primaryTrashDir.exists()) {
             try {
-                primaryTrashDir.mkdir();
+                primaryTrashDir.mkdirs();
                 primaryTrashDir.getChild("info").mkdir();
                 primaryTrashDir.getChild("files").mkdir();
 
@@ -227,10 +232,13 @@ public class GnomeTrash extends QueuedTrash {
     }
 
     /**
-     * Implementation notes: returns <code>true</code> only for local files that are not archive entries.
+     * Implementation notes: returns <code>true</code> only for local files that are not archive entries and that
+     * reside on the same volume as the trash folder.
      */
     public boolean canMoveToTrash(AbstractFile file) {
-        return TRASH_FOLDER!=null && file.getTopAncestor() instanceof LocalFile;
+        return TRASH_FOLDER!=null
+            && file.getTopAncestor() instanceof LocalFile
+            && file.getVolume().equals(TRASH_VOLUME);
     }
 
     /**

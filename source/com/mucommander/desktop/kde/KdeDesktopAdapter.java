@@ -16,8 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.mucommander.desktop.linux;
+package com.mucommander.desktop.kde;
 
+import com.mucommander.Debug;
 import com.mucommander.command.Command;
 import com.mucommander.command.CommandException;
 import com.mucommander.command.CommandManager;
@@ -26,12 +27,18 @@ import com.mucommander.desktop.DesktopInitialisationException;
 import com.mucommander.desktop.DesktopManager;
 
 /**
- * @author Nicolas Rinaudo
+ * @author Nicolas Rinaudo, Maxence Bernard
  */
 abstract class KdeDesktopAdapter extends DefaultDesktopAdapter {
     private static final String FILE_MANAGER_NAME = "Konqueror";
     private static final String FILE_OPENER       = "kfmclient exec $f";
     private static final String URL_OPENER        = "kfmclient openURL $f";
+
+    /** Multi-click interval, cached to avoid polling the value every time {@link #getMultiClickInterval()} is called */
+    private int multiClickInterval;
+
+    /** Key to the double-click interval value in the KDE configuration */
+    private String DOUBLE_CLICK_CONFIG_KEY = "DoubleClickInterval";
 
     public abstract boolean isAvailable();
 
@@ -46,5 +53,22 @@ abstract class KdeDesktopAdapter extends DefaultDesktopAdapter {
             CommandManager.registerDefaultCommand(new Command(CommandManager.FILE_MANAGER_ALIAS, FILE_OPENER, Command.SYSTEM_COMMAND, FILE_MANAGER_NAME));
         }
         catch(CommandException e) {throw new DesktopInitialisationException(e);}
+
+        // Multi-click interval retrieval
+        try {
+            String value = KdeConfig.getValue(DOUBLE_CLICK_CONFIG_KEY);
+            if(value==null)
+                multiClickInterval = super.getMultiClickInterval();
+
+            multiClickInterval = Integer.parseInt(value);
+        }
+        catch(Exception e) {
+            if(Debug.ON) Debug.trace("Error while retrieving double-click interval from gconftool: "+e);
+            multiClickInterval = super.getMultiClickInterval();
+        }
+    }
+
+    public int getMultiClickInterval() {
+        return multiClickInterval;
     }
 }

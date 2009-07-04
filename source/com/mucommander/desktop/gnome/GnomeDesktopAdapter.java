@@ -16,8 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.mucommander.desktop.linux;
+package com.mucommander.desktop.gnome;
 
+import com.mucommander.Debug;
 import com.mucommander.command.Command;
 import com.mucommander.command.CommandException;
 import com.mucommander.command.CommandManager;
@@ -28,12 +29,18 @@ import com.mucommander.file.filter.FileFilter;
 import com.mucommander.file.filter.RegexpFilenameFilter;
 
 /**
- * @author Nicolas Rinaudo
+ * @author Nicolas Rinaudo, Maxence Bernard
  */
 abstract class GnomeDesktopAdapter extends DefaultDesktopAdapter {
     private static final String FILE_MANAGER_NAME = "Nautilus";
     private static final String FILE_OPENER       = "gnome-open $f";
     private static final String EXE_OPENER        = "$f";
+
+    /** Multi-click interval, cached to avoid polling the value every time {@link #getMultiClickInterval()} is called */
+    private int multiClickInterval;
+
+    /** Key to the double-click interval value in the GNOME configuration */
+    private String DOUBLE_CLICK_CONFIG_KEY = "/desktop/gnome/peripherals/mouse/double_click";
 
     public abstract boolean isAvailable();
 
@@ -59,7 +66,35 @@ abstract class GnomeDesktopAdapter extends DefaultDesktopAdapter {
                 filter = new RegexpFilenameFilter("[^.]+", true);
 
             CommandManager.registerDefaultAssociation(CommandManager.EXE_OPENER_ALIAS, filter);
+
+            // Multi-click interval retrieval
+            try {
+                String value = GnomeConfig.getValue(DOUBLE_CLICK_CONFIG_KEY);
+                if(value==null)
+                    multiClickInterval = super.getMultiClickInterval();
+                
+                multiClickInterval = Integer.parseInt(value);
+            }
+            catch(Exception e) {
+                if(Debug.ON) Debug.trace("Error while retrieving double-click interval from gconftool: "+e);
+                multiClickInterval = super.getMultiClickInterval();
+            }
         }
         catch(CommandException e) {throw new DesktopInitialisationException(e);}
+    }
+
+    /**
+     * Parses the value returned by the <code>gconftool -p /desktop/gnome/peripherals/mouse/double_click</code> command.
+     * If the returned value could not be parsed successfully, the value of {@link DefaultDesktopAdapter#getMultiClickInterval()}
+     * is returned. The value is retrieved on initialization and never updated thereafter.
+     * <p>
+     * Note under Java 1.6 or below, the returned value does not match the one used by Java for generating multi-clicks
+     * (see {@link DefaultDesktopAdapter#getMultiClickInterval()}, as Java uses the multi-click speed declared in
+     * X Window's configuration, not in GNOME's.
+     * </p>
+     * @return the value returned by the <code>gconftool -p /desktop/gnome/peripherals/mouse/double_click</code> command.
+     */
+    public int getMultiClickInterval() {
+        return multiClickInterval;
     }
 }

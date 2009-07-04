@@ -16,25 +16,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.mucommander.desktop.linux;
+package com.mucommander.desktop.gnome;
 
-import com.mucommander.runtime.JavaVersion;
+import com.mucommander.process.ProcessRunner;
 
 /**
  * @author Nicolas Rinaudo
  */
-public class ConfiguredGnomeDesktopAdapter extends GnomeDesktopAdapter {
-    private static final String ENV_VAR = "GNOME_DESKTOP_SESSION_ID";
-
-    public String toString() {return "Gnome Desktop";}
+public class GuessedGnomeDesktopAdapter extends GnomeDesktopAdapter {
+    public String toString() {return "Gnome Desktop (guess)";}
 
     public boolean isAvailable() {
-        String var;
-        if(JavaVersion.JAVA_1_4.isCurrentOrLower())
-            var = System.getProperty(ENV_VAR);
-        else
-            var = System.getenv(ENV_VAR);
-
-        return var != null && !var.trim().equals("");
+        try {
+            ProcessRunner.execute("gnome-open");
+            return true;
+        }
+        catch(Exception e) {return false;}
     }
 }
