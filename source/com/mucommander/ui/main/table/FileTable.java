@@ -138,6 +138,15 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
     /** 'Mark/unmark selected file' action */
     private final static Class MARK_ACTION_CLASS = com.mucommander.ui.action.impl.MarkSelectedFileAction.class;
 
+    /** Timestamp of last double click - workaround for MouseEvent.getClickCount() */
+    private long doubleClickTime;
+
+    /** Counts the number of clicks within the double-click interval */
+    private int doubleClickCounter = 1;
+
+    /** Interval to wait for the double-click */
+    private static int DOUBLE_CLICK_INTERVAL = DesktopManager.getMultiClickInterval();
+
 
     public FileTable(MainFrame mainFrame, FolderPanel folderPanel, FileTableConfiguration conf) {
         super(new FileTableModel(), new FileTableColumnModel(conf));
@@ -1133,58 +1142,74 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
 
     public void mouseClicked(MouseEvent e) {
         // Discard mouse events while in 'no events mode'
-        if(mainFrame.getNoEventsMode())
+        if (mainFrame.getNoEventsMode())
             return;
 
         Object source = e.getSource();
-        int clickCount = e.getClickCount();
+
+        // Under Linux with GNOME and KDE, Java does not honour the  multi/double-click speed preferences
+        // (see http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=5076635) and defaults to a 200ms double-click
+        // interval, which for most people is too low. Therefore, we cannot rely on MouseEvent#getClickCount() and
+        // MouseEvent#getMultiClickInterval() to always work properly and have to detect double-clicks using the
+        // proper system multi-click interval returned by DefaultManager#getMultiClickInterval().
+        if ((System.currentTimeMillis() - doubleClickTime) < DOUBLE_CLICK_INTERVAL) {
+            if (doubleClickCounter == 1) {
+                doubleClickCounter = 2; // increase only once
+                e.consume(); // and make sure this event is not sent anywhere else
+            }
+        }
+        else {
+            /* reset the counter for the double click count */
+            doubleClickTime = System.currentTimeMillis();
+            doubleClickCounter = 1;
+        }
 
         // If one of the table cells was left clicked...
-        if(source==this && DesktopManager.isLeftMouseButton(e)) {
+        if (source == this && DesktopManager.isLeftMouseButton(e)) {
             // Clicking on the selected row's ... :
-            //  - 'name' label triggers the filename editor
-            //  - 'date' label triggers the change date dialog
-            //  - 'permissions' label triggers the change permissions dialog, only if permissions can be changed
+            // - 'name' label triggers the filename editor
+            // - 'date' label triggers the change date dialog
+            // - 'permissions' label triggers the change permissions dialog, only if permissions can be changed
             // Timestamp check is used to make sure that this mouse click did not trigger current row selection
-            //com.mucommander.Debug.trace("clickCount="+clickCount+" timeDiff="+(System.currentTimeMillis()-selectionChangedTimestamp));
-            if (clickCount == 1 && (System.currentTimeMillis()-selectionChangedTimestamp)>EDIT_NAME_CLICK_DELAY) {
+            // com.mucommander.Debug.trace("clickCount="+clickCount+" timeDiff="+(System.currentTimeMillis()-selectionChangedTimestamp));
+            if ((doubleClickCounter == 1) && (System.currentTimeMillis() - selectionChangedTimestamp) > EDIT_NAME_CLICK_DELAY) {
                 int clickX = e.getX();
                 Point p = new Point(clickX, e.getY());
                 final int row = rowAtPoint(p);
                 final int viewColumn = columnAtPoint(p);
                 final int column = convertColumnIndexToModel(viewColumn);
                 // Test if the clicked row is current row, if column is name column, and if current row is not '..' file
-                //com.mucommander.Debug.trace("row="+row+" currentRow="+currentRow);
-                if(row==currentRow && !isParentFolderSelected() && (column==Columns.NAME || column==Columns.DATE || column==Columns.PERMISSIONS)) {
+                // com.mucommander.Debug.trace("row="+row+" currentRow="+currentRow);
+                if (row == currentRow && !isParentFolderSelected() && (column == Columns.NAME || column == Columns.DATE || column == Columns.PERMISSIONS)) {
                     // Test if clicked point is inside the label and abort if not
-                    FontMetrics fm = getFontMetrics(cellRenderer.getCellFont());
-                    int labelWidth = fm.stringWidth((String)tableModel.getValueAt(row, column));
-                    int columnX = (int)getTableHeader().getHeaderRect(viewColumn).getX();
-                    //com.mucommander.Debug.trace("x="+clickX+" columnX="+columnX+" labelWidth="+labelWidth);
-                    if(clickX<columnX+CellLabel.CELL_BORDER_WIDTH || clickX>columnX+labelWidth+CellLabel.CELL_BORDER_WIDTH)
+                    FontMetrics fm = getFontMetrics(FileTableCellRenderer.getCellFont());
+                    int labelWidth = fm.stringWidth((String) tableModel.getValueAt(row, column));
+                    int columnX = (int) getTableHeader().getHeaderRect(viewColumn).getX();
+                    // com.mucommander.Debug.trace("x="+clickX+" columnX="+columnX+" labelWidth="+labelWidth);
+                    if (clickX<columnX+CellLabel.CELL_BORDER_WIDTH || clickX>columnX+labelWidth+CellLabel.CELL_BORDER_WIDTH)
                         return;
 
                     // The following test ensures that this mouse click is not the one that gave the focus to this table.
                     // Not checking for this would cause a single click on the inactive table's current row to trigger
                     // the filename/date/permission editor
-                    if(hasFocus() && System.currentTimeMillis()-focusGainedTime>100) {
+                    if (hasFocus() && System.currentTimeMillis() - focusGainedTime > 100) {
                         // Create a new thread and sleep long enough to ensure that this click was not the first of a double click
                         new Thread() {
                             public void run() {
                                 try { sleep(800); }
-                                catch(InterruptedException e) {}
+                                catch (InterruptedException e) {}
 
                                 // Do not execute this block (cancel editing) if:
                                 // - a double click was made in the last second
                                 // - current row changed
                                 // - isEditing() is true which could happen if multiple clicks were made
-    //                            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("row= "+row+" currentRow="+currentRow);
-                                if((System.currentTimeMillis()-lastDoubleClickTimestamp)>1000 && row==currentRow) {
-                                    if(column==Columns.NAME) {
+                                // if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("row= "+row+" currentRow="+currentRow);
+                                if ((System.currentTimeMillis() - lastDoubleClickTimestamp) > 1000 && row == currentRow) {
+                                    if (column == Columns.NAME) {
                                         if(!isEditing())
                                             editCurrentFilename();
                                     }
-                                    else if(column==Columns.DATE) {
+                                    else if(column == Columns.DATE) {
                                         ActionManager.performAction(com.mucommander.ui.action.impl.ChangeDateAction.class, mainFrame);
                                     }
                                     else if(column==Columns.PERMISSIONS) {
@@ -1198,9 +1223,10 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
                 }
             }
             // Double-clicking on a row opens the file/folder
-            else if(clickCount%2==0 && clickCount>0) {      // allow successive double-clicks: clickCount==2, 4, 6, 8, ...
-                this.lastDoubleClickTimestamp = System.currentTimeMillis();
-                ActionManager.performAction(e.isShiftDown()?com.mucommander.ui.action.impl.OpenNativelyAction.class:com.mucommander.ui.action.impl.OpenAction.class
+            else if (doubleClickCounter == 2) { // Note: user can double-click multiple times
+                ActionManager.performAction(e.isShiftDown()
+                        ?com.mucommander.ui.action.impl.OpenNativelyAction.class
+                        :com.mucommander.ui.action.impl.OpenAction.class
                     , mainFrame);
             }
 

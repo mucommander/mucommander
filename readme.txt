@@ -183,6 +183,8 @@ Bug fixes:
   application under certain conditions (ticket #164).
 - Added support for forward slash-separated paths on backslash-separated OSes
   (Windows, OS/2) (ticket #94).
+- Double-click speed system preference is now honoured under GNOME and KDE
+  (ticket #221). Contributed by Leo Welsch.
 
 Known issues:
 - Some translations are not up-to-date. For more information, see:
