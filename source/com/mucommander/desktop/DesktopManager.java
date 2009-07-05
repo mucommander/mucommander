@@ -461,6 +461,69 @@ public class DesktopManager {
     public static void setTrashProvider(TrashProvider provider) {trashProvider = provider;}
 
 
+    // - Mouse management ------------------------------------------------
+    // -------------------------------------------------------------------
+    /**
+     * Checks whether the specified <code>MouseEvent</code> is a left-click for this destop.
+     * <p>
+     * There are some cases where Java doesn't detect mouse events properly - for example,
+     * <i>CONTROL + LEFT CLICK</i> is a <i>RIGHT CLICK</i> under Mac OS X.<br>
+     * The goal of this method is to allow desktop to check for such non-standard behaviours.
+     * </p>
+     * @param  e event to check.
+     * @return   <code>true</code> if the specified event is a left-click for this desktop, <code>false</code> otherwise.
+     * @see      #isRightMouseButton(MouseEvent)
+     * @see      #isMiddleMouseButton(MouseEvent)
+     */
+    public static boolean isLeftMouseButton(MouseEvent e) {
+        checkInit();
+        return desktop.isLeftMouseButton(e);
+    }
+
+    /**
+     * Checks whether the specified <code>MouseEvent</code> is a left-click for this destop.
+     * <p>
+     * There are some cases where Java doesn't detect mouse events properly - for example,
+     * <i>CONTROL + LEFT CLICK</i> is a <i>RIGHT CLICK</i> under Mac OS X.<br>
+     * The goal of this method is to allow desktop to check for such non-standard behaviours.
+     * </p>
+     * @param  e event to check.
+     * @return   <code>true</code> if the specified event is a left-click for this desktop, <code>false</code> otherwise.
+     * @see      #isMiddleMouseButton(MouseEvent)
+     * @see      #isLeftMouseButton(MouseEvent)
+     */
+    public static boolean isRightMouseButton(MouseEvent e) {
+        checkInit();
+        return desktop.isRightMouseButton(e);
+    }
+
+    /**
+     * Checks whether the specified <code>MouseEvent</code> is a left-click for this destop.
+     * <p>
+     * There are some cases where Java doesn't detect mouse events properly - for example,
+     * <i>CONTROL + LEFT CLICK</i> is a <i>RIGHT CLICK</i> under Mac OS X.<br>
+     * The goal of this method is to allow desktop to check for such non-standard behaviours.
+     * </p>
+     * @param  e event to check.
+     * @return   <code>true</code> if the specified event is a left-click for this desktop, <code>false</code> otherwise.
+     * @see      #isRightMouseButton(MouseEvent)
+     * @see      #isLeftMouseButton(MouseEvent)
+     */
+    public static boolean isMiddleMouseButton(MouseEvent e) {
+        checkInit();
+        return desktop.isMiddleMouseButton(e);
+    }
+
+    /**
+     * Returns the maximum interval in milliseconds between mouse clicks for them to be considered as 'multi-clicks'
+     * (e.g. double-clicks). The returned value should reflects the desktop's multi (or double click) interval, which
+     * may or may not correspond to the one Java uses for double-clicks.
+     * @return the maximum interval in milliseconds between mouse clicks for them to be considered as 'multi-clicks'.
+     */
+    public static int getMultiClickInterval() {
+        checkInit();
+        return desktop.getMultiClickInterval();
+    }
 
 
     // - Misc. -----------------------------------------------------------
@@ -468,25 +531,5 @@ public class DesktopManager {
     public static String getDefaultShell() {
         checkInit();
         return desktop.getDefaultShell();
-    }
-
-    public static boolean isLeftMouseButton(MouseEvent e) {
-        checkInit();
-        return desktop.isLeftMouseButton(e);
-    }
-
-    public static boolean isRightMouseButton(MouseEvent e) {
-        checkInit();
-        return desktop.isRightMouseButton(e);
-    }
-
-    public static boolean isMiddleMouseButton(MouseEvent e) {
-        checkInit();
-        return desktop.isMiddleMouseButton(e);
-    }
-
-    public static int getMultiClickInterval() {
-        checkInit();
-        return desktop.getMultiClickInterval();
     }
 }
