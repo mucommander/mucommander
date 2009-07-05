@@ -39,11 +39,25 @@ import java.awt.event.MouseEvent;
 public class DefaultDesktopAdapter implements DesktopAdapter {
 
     /** Default multi-click interval when the desktop property cannot be retrieved. */
-    public int DEFAULT_MULTICLICK_INTERVAL = 500;
+    public final static int DEFAULT_MULTICLICK_INTERVAL = 500;
 
     /** Multi-click interval, cached to avoid polling the value every time {@link #getMultiClickInterval()} is called */
-    private int multiClickInterval;
+    private static int multiClickInterval;
 
+    static {
+        try {
+            Integer value = ((Integer)Toolkit.getDefaultToolkit().getDesktopProperty("awt.multiClickInterval"));
+            if(value==null)
+                multiClickInterval = DEFAULT_MULTICLICK_INTERVAL;
+            else
+                multiClickInterval = value.intValue();
+        }
+        catch(Exception e) {
+            if(Debug.ON) Debug.trace("Error while retrieving multi-click interval value desktop property: "+e);
+
+            multiClickInterval = DEFAULT_MULTICLICK_INTERVAL;
+        }
+    }
 
     public String toString() {return "Default Desktop";}
 
@@ -63,18 +77,6 @@ public class DefaultDesktopAdapter implements DesktopAdapter {
      * @throws DesktopInitialisationException if any error occurs.
      */
     public void init(boolean install) throws DesktopInitialisationException {
-        try {
-            Integer value = ((Integer)Toolkit.getDefaultToolkit().getDesktopProperty("awt.multiClickInterval"));
-            if(value==null)
-                multiClickInterval = DEFAULT_MULTICLICK_INTERVAL;
-            else
-                multiClickInterval = value.intValue();
-        }
-        catch(Exception e) {
-            if(Debug.ON) Debug.trace("Error while retrieving multi-click interval value desktop property: "+e);
-
-            multiClickInterval = DEFAULT_MULTICLICK_INTERVAL;
-        }
     }
 
     /**
