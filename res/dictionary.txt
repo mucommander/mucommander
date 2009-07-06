@@ -7342,94 +7342,6 @@ delete.deleting_file:SV:Raderar %1
 delete.deleting_file:DA:Sletter %1
 delete.deleting_file:UA:Видалення %1
 
-delete.symlink_warning_title:EN:Symlink found
-delete.symlink_warning_title:FR:Lien symbolique
-delete.symlink_warning_title:DE:Verknüpfung gefunden
-delete.symlink_warning_title:ES:Enlace simbólico encontrado
-delete.symlink_warning_title:CS:Nalezen symbolický odkaz
-delete.symlink_warning_title:zh_TW:發現符號連結
-delete.symlink_warning_title:PL:Znaleziono łącze symboliczne
-delete.symlink_warning_title:HU:Parancsikont találtam
-delete.symlink_warning_title:RU:Обнаружена символьная ссылка
-delete.symlink_warning_title:zh_CN:发现符号连接
-delete.symlink_warning_title:SL:Najdena simbolična povezava
-delete.symlink_warning_title:RO:Am găsit o legătură
-delete.symlink_warning_title:IT:Trovato link simbolico
-delete.symlink_warning_title:KO:심볼릭링크 발견됨
-delete.symlink_warning_title:pt_BR:Link simbólico encontrado
-delete.symlink_warning_title:NL:Symbolische koppeling
-delete.symlink_warning_title:SK:Nájdený symbolický odkaz
-delete.symlink_warning_title:JA:シンボリック リンクが見つかりました
-delete.symlink_warning_title:SV:Symbolisk länk hittad
-delete.symlink_warning_title:DA:Symbolsk henvisning fundet
-delete.symlink_warning_title:UA:Знайдено символьне посилання
-
-delete.symlink_warning:EN:This file looks like a symbolic link:\n\n  File: %1\n  Links to: %2\n\nDelete symlink only or\nFollow symlink and delete folder (CAUTION) ?
-delete.symlink_warning:FR:Ce fichier a l'air d'être un lien symbolique:\n\n  Fichier: %1\n  Pointe vers: %2\n\nSupprimer le lien seulement ou\nSuivre le lien symbolique et supprimer le répertoire (ATTENTION) ?
-delete.symlink_warning:DE:Diese Datei scheint ein symbolischer Link zu sein:\n\n  Datei: %1\n  Verlinktt nach: %2\n\nLink löschen oder dem \nLink folgen und Ordner löschen (VORSICHT) ?
-delete.symlink_warning:ES:El fichero parece un enlace simbólico:\n\n Fichero: %1\n Enlace a: %2\n\n¿Eliminar enlace simbólico sólo o\nseguir el enlace y elimiar el directorio (PRECAUCIÓN)?
-delete.symlink_warning:CS:Tento soubor vypadá jako symbolický odkaz:\n\n Soubor: %1\n odkazujuje na: %2\n\nChcete smazat jen odkaz nebo\ni cíl odkazu (UPOZORNĚNÍ) ?
-delete.symlink_warning:zh_TW:此檔案可能為符號連結:\n\n 檔案: %1\n 連結至: %2\n\n只刪除符號連結或\n根據連結來刪除資料夾 (小心使用) ?
-delete.symlink_warning:PL:Ten plik wygląda jak łącze symboliczne:\n\n Plik: %1\n wskazuje na: %2\n\nSkasuj łącze symboliczne tylko lub\npodąż za dowiązaniem i skasuj katalog (UWAGA) ?
-delete.symlink_warning:HU:Ez a fájl egy parancsikonnak néz ki:\n\n  Fájl: %1\n  Link: %2\n\nCsak a parancsikon törlése vagy\nkövesse a parancsikont és törölje a könyvtárat (VIGYÁZAT)?
-delete.symlink_warning:RU:Этот файл представляет собой символьную ссылку:\n\n  Файл: %1\n  Ссылается на: %2\n\nУдалить только символьную ссылку или\nПерейти по ссылке и удалить весь каталог (ВНИМАНИЕ - ОПАСНОЕ ДЕЙСТВИЕ)?
-delete.symlink_warning:zh_CN:此文件像是為符号连接:\n\n 文件: %1\n 连接到: %2\n\n只刪除符号连接或\n跟随连接刪除文件夹 (小心使用) ?
-delete.symlink_warning:SL:Datoteka jo podobna simbolični povezavi:\n\n  File: %1\n  Povezava z: %2\n\nIzbriši simbolično povezavo ali\nSledi simbolični povezavi in izbriši mapo?
-delete.symlink_warning:RO:Acest fișier pare a fi o legătură simbolică (symbolic link):\n\n  Fișierul: %1\n  Arată spre: %2\n\nȘterg doar legătura sau \nUrmez legătura și șterg directorul destinație (ATENȚIE) ?
-delete.symlink_warning:IT:Questo file sembra un link simbolico:\n\n  File: %1\n  Link a: %2\n\nElimina solo link oppure\nSegio link e cancella la cartella (ATTENZIONE) ?
-delete.symlink_warning:KO:이 파일은 심볼릭 링크로 보입니다:\n\n  파일: %1\n  연결됨: %2\n\n심볼릭 링크만 삭제하겠습니까\n심볼릭 링크를 따라가서 폴더를 지우겠습니까 (주의) ?
-delete.symlink_warning:pt_BR:Este arquivo parece ser um link simbólico:\n\n Arquivo: %1\n Linkado ao: %2\n\nRemover somente o link simbólico or\nSeguir link simbólico e remover diretório (cuidado) ?
-delete.symlink_warning:NL:Dit bestand lijkt op een symbolische koppeling:\n\n Bestand: %1\n Verwijst naar: %2\n\nAlleen koppeling verwijderen of \nKoppeling volgen en map verwijderen (VOORZICHTIG)?
-delete.symlink_warning:SK:Tento súbor vyzerá ako symbolický odkaz:\n\n Súbor:%1\n Odkazuje na: %2\n\nOdstrániť iba symbolický odkaz, alebo\naj cieľ odkazu (UPOZORNENIE) ?
-delete.symlink_warning:JA:このファイルはシンボリック リンクのようにみえます:\n\n  ファイル: %1\n  リンク先: %2\n\nシンボリック リンクを削除するか\nシンボリック リンクに追従してフォルダーを削除しますか (注意) ?
-delete.symlink_warning:SV:Filen ser ut som en symbolisk länk:\n\n  Fil: %1\n  Länkar till: %2\n\nRadera bara länken eller\nFölj länken och radera mappen (VARNING) ?
-delete.symlink_warning:DA:Filen ligner en symbolsk henvisning:\n\n  Fil: %1\n  Henviser til: %2\n\nSlet kun henvisningen eller\nfølg henvisningen og slet mappen (ADVARSEL)?
-delete.symlink_warning:UA:Даний файл є символьним посиланням:\n\n Файл: %1 посилається на: %2\n\nВидалити тільки символьне посилання чи\n\nПерейти за посиланням і видалити папку (УВАГА) ?
-
-delete.delete_link_only:EN:Delete link
-delete.delete_link_only:FR:Supprimer le lien
-delete.delete_link_only:DE:Link löschen
-delete.delete_link_only:ES:Eliminar enlace
-delete.delete_link_only:CS:Smazat odkaz
-delete.delete_link_only:zh_TW:刪除連結
-delete.delete_link_only:PL:Usuń dowiązanie (link)
-delete.delete_link_only:HU:Hivatkozás törlése
-delete.delete_link_only:RU:Удалить ссылку
-delete.delete_link_only:zh_CN:刪除连接
-delete.delete_link_only:SL:Izbriši povezavo
-delete.delete_link_only:RO:Șterge legătura
-delete.delete_link_only:IT:Elimina link
-delete.delete_link_only:KO:링크삭제
-delete.delete_link_only:pt_BR:Remover link
-delete.delete_link_only:NL:Verwijder koppeling
-delete.delete_link_only:SK:Odstrániť odkaz
-delete.delete_link_only:JA:リンクの削除
-delete.delete_link_only:SV:Radera länk
-delete.delete_link_only:DA:Slet henvisning
-delete.delete_link_only:UA:Видалити посилання
-
-delete.delete_linked_folder:EN:Delete folder
-delete.delete_linked_folder:FR:Supprimer le répertoire
-delete.delete_linked_folder:DE:Ordner löschen
-delete.delete_linked_folder:ES:Eliminar directorio
-delete.delete_linked_folder:CS:Smazat cíl odkazu
-delete.delete_linked_folder:zh_TW:刪除資料夾
-delete.delete_linked_folder:PL:Usuń katalog
-delete.delete_linked_folder:HU:Könyvtár törlése
-delete.delete_linked_folder:RU:Удалить каталог
-delete.delete_linked_folder:zh_CN:刪除文件夹
-delete.delete_linked_folder:SL:Izbriši mapo
-delete.delete_linked_folder:RO:Șterge directorul
-delete.delete_linked_folder:IT:Elimina directory
-delete.delete_linked_folder:KO:폴더삭제
-delete.delete_linked_folder:pt_BR:Remover diretório
-delete.delete_linked_folder:NL:Map verwijderen
-delete.delete_linked_folder:SK:Odstrániť priečinok
-delete.delete_linked_folder:JA:フォルダーの削除
-delete.delete_linked_folder:SV:Radera mapp
-delete.delete_linked_folder:DA:Slet mappe
-delete.delete_linked_folder:UA:Видалати папку
-
 
 #########
 # Email #
@@ -15193,3 +15105,91 @@ recent_executed_files_quick_list.empty_message:UA:Нема попередньо�
 #table.hide_column:SV:Dölj kolumn
 #table.hide_column:DA:Skjul kolonne
 #table.hide_column:UA:Сховати колонку
+
+#delete.symlink_warning_title:EN:Symlink found
+#delete.symlink_warning_title:FR:Lien symbolique
+#delete.symlink_warning_title:DE:Verknüpfung gefunden
+#delete.symlink_warning_title:ES:Enlace simbólico encontrado
+#delete.symlink_warning_title:CS:Nalezen symbolický odkaz
+#delete.symlink_warning_title:zh_TW:發現符號連結
+#delete.symlink_warning_title:PL:Znaleziono łącze symboliczne
+#delete.symlink_warning_title:HU:Parancsikont találtam
+#delete.symlink_warning_title:RU:Обнаружена символьная ссылка
+#delete.symlink_warning_title:zh_CN:发现符号连接
+#delete.symlink_warning_title:SL:Najdena simbolična povezava
+#delete.symlink_warning_title:RO:Am găsit o legătură
+#delete.symlink_warning_title:IT:Trovato link simbolico
+#delete.symlink_warning_title:KO:심볼릭링크 발견됨
+#delete.symlink_warning_title:pt_BR:Link simbólico encontrado
+#delete.symlink_warning_title:NL:Symbolische koppeling
+#delete.symlink_warning_title:SK:Nájdený symbolický odkaz
+#delete.symlink_warning_title:JA:シンボリック リンクが見つかりました
+#delete.symlink_warning_title:SV:Symbolisk länk hittad
+#delete.symlink_warning_title:DA:Symbolsk henvisning fundet
+#delete.symlink_warning_title:UA:Знайдено символьне посилання
+
+#delete.symlink_warning:EN:This file looks like a symbolic link:\n\n  File: %1\n  Links to: %2\n\nDelete symlink only or\nFollow symlink and delete folder (CAUTION) ?
+#delete.symlink_warning:FR:Ce fichier a l'air d'être un lien symbolique:\n\n  Fichier: %1\n  Pointe vers: %2\n\nSupprimer le lien seulement ou\nSuivre le lien symbolique et supprimer le répertoire (ATTENTION) ?
+#delete.symlink_warning:DE:Diese Datei scheint ein symbolischer Link zu sein:\n\n  Datei: %1\n  Verlinktt nach: %2\n\nLink löschen oder dem \nLink folgen und Ordner löschen (VORSICHT) ?
+#delete.symlink_warning:ES:El fichero parece un enlace simbólico:\n\n Fichero: %1\n Enlace a: %2\n\n¿Eliminar enlace simbólico sólo o\nseguir el enlace y elimiar el directorio (PRECAUCIÓN)?
+#delete.symlink_warning:CS:Tento soubor vypadá jako symbolický odkaz:\n\n Soubor: %1\n odkazujuje na: %2\n\nChcete smazat jen odkaz nebo\ni cíl odkazu (UPOZORNĚNÍ) ?
+#delete.symlink_warning:zh_TW:此檔案可能為符號連結:\n\n 檔案: %1\n 連結至: %2\n\n只刪除符號連結或\n根據連結來刪除資料夾 (小心使用) ?
+#delete.symlink_warning:PL:Ten plik wygląda jak łącze symboliczne:\n\n Plik: %1\n wskazuje na: %2\n\nSkasuj łącze symboliczne tylko lub\npodąż za dowiązaniem i skasuj katalog (UWAGA) ?
+#delete.symlink_warning:HU:Ez a fájl egy parancsikonnak néz ki:\n\n  Fájl: %1\n  Link: %2\n\nCsak a parancsikon törlése vagy\nkövesse a parancsikont és törölje a könyvtárat (VIGYÁZAT)?
+#delete.symlink_warning:RU:Этот файл представляет собой символьную ссылку:\n\n  Файл: %1\n  Ссылается на: %2\n\nУдалить только символьную ссылку или\nПерейти по ссылке и удалить весь каталог (ВНИМАНИЕ - ОПАСНОЕ ДЕЙСТВИЕ)?
+#delete.symlink_warning:zh_CN:此文件像是為符号连接:\n\n 文件: %1\n 连接到: %2\n\n只刪除符号连接或\n跟随连接刪除文件夹 (小心使用) ?
+#delete.symlink_warning:SL:Datoteka jo podobna simbolični povezavi:\n\n  File: %1\n  Povezava z: %2\n\nIzbriši simbolično povezavo ali\nSledi simbolični povezavi in izbriši mapo?
+#delete.symlink_warning:RO:Acest fișier pare a fi o legătură simbolică (symbolic link):\n\n  Fișierul: %1\n  Arată spre: %2\n\nȘterg doar legătura sau \nUrmez legătura și șterg directorul destinație (ATENȚIE) ?
+#delete.symlink_warning:IT:Questo file sembra un link simbolico:\n\n  File: %1\n  Link a: %2\n\nElimina solo link oppure\nSegio link e cancella la cartella (ATTENZIONE) ?
+#delete.symlink_warning:KO:이 파일은 심볼릭 링크로 보입니다:\n\n  파일: %1\n  연결됨: %2\n\n심볼릭 링크만 삭제하겠습니까\n심볼릭 링크를 따라가서 폴더를 지우겠습니까 (주의) ?
+#delete.symlink_warning:pt_BR:Este arquivo parece ser um link simbólico:\n\n Arquivo: %1\n Linkado ao: %2\n\nRemover somente o link simbólico or\nSeguir link simbólico e remover diretório (cuidado) ?
+#delete.symlink_warning:NL:Dit bestand lijkt op een symbolische koppeling:\n\n Bestand: %1\n Verwijst naar: %2\n\nAlleen koppeling verwijderen of \nKoppeling volgen en map verwijderen (VOORZICHTIG)?
+#delete.symlink_warning:SK:Tento súbor vyzerá ako symbolický odkaz:\n\n Súbor:%1\n Odkazuje na: %2\n\nOdstrániť iba symbolický odkaz, alebo\naj cieľ odkazu (UPOZORNENIE) ?
+#delete.symlink_warning:JA:このファイルはシンボリック リンクのようにみえます:\n\n  ファイル: %1\n  リンク先: %2\n\nシンボリック リンクを削除するか\nシンボリック リンクに追従してフォルダーを削除しますか (注意) ?
+#delete.symlink_warning:SV:Filen ser ut som en symbolisk länk:\n\n  Fil: %1\n  Länkar till: %2\n\nRadera bara länken eller\nFölj länken och radera mappen (VARNING) ?
+#delete.symlink_warning:DA:Filen ligner en symbolsk henvisning:\n\n  Fil: %1\n  Henviser til: %2\n\nSlet kun henvisningen eller\nfølg henvisningen og slet mappen (ADVARSEL)?
+#delete.symlink_warning:UA:Даний файл є символьним посиланням:\n\n Файл: %1 посилається на: %2\n\nВидалити тільки символьне посилання чи\n\nПерейти за посиланням і видалити папку (УВАГА) ?
+
+#delete.delete_link_only:EN:Delete link
+#delete.delete_link_only:FR:Supprimer le lien
+#delete.delete_link_only:DE:Link löschen
+#delete.delete_link_only:ES:Eliminar enlace
+#delete.delete_link_only:CS:Smazat odkaz
+#delete.delete_link_only:zh_TW:刪除連結
+#delete.delete_link_only:PL:Usuń dowiązanie (link)
+#delete.delete_link_only:HU:Hivatkozás törlése
+#delete.delete_link_only:RU:Удалить ссылку
+#delete.delete_link_only:zh_CN:刪除连接
+#delete.delete_link_only:SL:Izbriši povezavo
+#delete.delete_link_only:RO:Șterge legătura
+#delete.delete_link_only:IT:Elimina link
+#delete.delete_link_only:KO:링크삭제
+#delete.delete_link_only:pt_BR:Remover link
+#delete.delete_link_only:NL:Verwijder koppeling
+#delete.delete_link_only:SK:Odstrániť odkaz
+#delete.delete_link_only:JA:リンクの削除
+#delete.delete_link_only:SV:Radera länk
+#delete.delete_link_only:DA:Slet henvisning
+#delete.delete_link_only:UA:Видалити посилання
+
+#delete.delete_linked_folder:EN:Delete folder
+#delete.delete_linked_folder:FR:Supprimer le répertoire
+#delete.delete_linked_folder:DE:Ordner löschen
+#delete.delete_linked_folder:ES:Eliminar directorio
+#delete.delete_linked_folder:CS:Smazat cíl odkazu
+#delete.delete_linked_folder:zh_TW:刪除資料夾
+#delete.delete_linked_folder:PL:Usuń katalog
+#delete.delete_linked_folder:HU:Könyvtár törlése
+#delete.delete_linked_folder:RU:Удалить каталог
+#delete.delete_linked_folder:zh_CN:刪除文件夹
+#delete.delete_linked_folder:SL:Izbriši mapo
+#delete.delete_linked_folder:RO:Șterge directorul
+#delete.delete_linked_folder:IT:Elimina directory
+#delete.delete_linked_folder:KO:폴더삭제
+#delete.delete_linked_folder:pt_BR:Remover diretório
+#delete.delete_linked_folder:NL:Map verwijderen
+#delete.delete_linked_folder:SK:Odstrániť priečinok
+#delete.delete_linked_folder:JA:フォルダーの削除
+#delete.delete_linked_folder:SV:Radera mapp
+#delete.delete_linked_folder:DA:Slet mappe
+#delete.delete_linked_folder:UA:Видалати папку

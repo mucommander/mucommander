@@ -146,7 +146,12 @@ Improvements:
 - Improved support for NRG images ; audio tracks can now be dumped as WAV files.
   Contributed by Xavier Martin.
 - Improved the toolbar's behavior when the window is too small for all buttons
-  to be displayed (ticket #165). Contributed by Leo Welsch.
+  to be displayed (ticket #165). Contributed by LeO.
+- File table's right-click menu now has visibility toggles for all columns
+  instead of just the current one, and one for Auto-Size columns (ticket #226).
+- Leading and trailing toolbar separators are no longer displayed (ticket #166).
+- 'Permanent delete' no longer asks whether symlinks should be followed, they
+  are now silenty deleted without being followed (easier and safer).
 
 Localization:
 - 
@@ -175,18 +180,16 @@ Bug fixes:
 - Fixed an issue with the panel separator being set incorrectly after a resize
   of the main window (ticket #163).
 - Improved the toolbar's behavior when the window is too small for all buttons
-  to be displayed (ticket #165). Contributed by Leo Welsch.
+  to be displayed (ticket #165). Contributed by LeO.
 - Fixed flashing command windows under Windows 95/98/Me (ticket #63).
 - The authentication dialog's login field is now prefilled with the current
-  user's name (ticket #185). Contributed by Leo Welsch.
+  user's name (ticket #185). Contributed by LeO.
 - Fixed exceptions occurring while copying text to the clipboard from an external
   application under certain conditions (ticket #164).
 - Added support for forward slash-separated paths on backslash-separated OSes
   (Windows, OS/2) (ticket #94).
 - Double-click speed system preference is now honoured under GNOME and KDE
-  (ticket #221). Contributed by Leo Welsch.
-- File table's right-click menu now has visibility toggles for all columns
-  instead of just the current one, and one for Auto-Size columns (ticket #226).
+  (ticket #221). Contributed by LeO.
 
 Known issues:
 - Some translations are not up-to-date. For more information, see:

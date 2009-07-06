@@ -24,16 +24,11 @@ import com.mucommander.desktop.DesktopManager;
 import com.mucommander.file.AbstractArchiveFile;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.AbstractRWArchiveFile;
-import com.mucommander.file.FileFactory;
 import com.mucommander.file.util.FileSet;
 import com.mucommander.text.Translator;
-import com.mucommander.ui.dialog.QuestionDialog;
 import com.mucommander.ui.dialog.file.ProgressDialog;
-import com.mucommander.ui.layout.YBoxPanel;
 import com.mucommander.ui.main.MainFrame;
-import com.mucommander.ui.text.MultiLineLabel;
 
-import java.awt.*;
 import java.io.IOException;
 
 /**
@@ -64,13 +59,7 @@ public class DeleteJob extends FileJob {
     /** True when an archive is being optimized */
     private boolean isOptimizingArchive;
 
-    private final static int DELETE_LINK_ACTION = 100;
-    private final static int DELETE_FOLDER_ACTION = 101;
 
-    private final static String DELETE_LINK_TEXT = Translator.get("delete.delete_link_only");
-    private final static String DELETE_FOLDER_TEXT = Translator.get("delete.delete_linked_folder");
-
-	
     /**
      * Creates a new DeleteJob without starting it.
      *
@@ -105,21 +94,6 @@ public class DeleteJob extends FileJob {
     }
 
 
-    private int showSymlinkDialog(String relativePath, String canonicalPath) {
-        YBoxPanel panel = new YBoxPanel();
-
-        panel.add(new MultiLineLabel(Translator.get("delete.symlink_warning", relativePath, canonicalPath)));
-
-        QuestionDialog dialog = new QuestionDialog(getProgressDialog(), Translator.get("delete.symlink_warning_title"), panel, getMainFrame(),
-                                                   new String[] {DELETE_LINK_TEXT, DELETE_FOLDER_TEXT, SKIP_TEXT, CANCEL_TEXT},
-                                                   new int[]  {DELETE_LINK_ACTION, DELETE_FOLDER_ACTION, SKIP_ACTION, CANCEL_ACTION},
-                                                   2);
-        dialog.setMinimumSize(new Dimension(320, 0));
-
-        return waitForUserResponse(dialog);
-    }
-
-
     ////////////////////////////
     // FileJob implementation //
     ////////////////////////////
@@ -136,30 +110,14 @@ public class DeleteJob extends FileJob {
         if(getState()==INTERRUPTED)
             return false;
 
-        int ret;
-        boolean followSymlink = false;
         // Delete files recursively, only if trash is not used.
+        int ret;
         if(!moveToTrash && file.isDirectory()) {
-            // If folder is a symlink, asks the user what to do
-            boolean isSymlink = file.isSymlink();
             String filePath = file.getAbsolutePath();
             filePath = filePath.substring(getBaseSourceFolder().getAbsolutePath(false).length()+1, filePath.length());
-            if(isSymlink) {
-                ret = showSymlinkDialog(filePath, file.getCanonicalPath());
-                if(ret==-1 || ret==CANCEL_ACTION) {
-                    interrupt();
-                    return false;
-                }
-                else if(ret==SKIP_ACTION) {
-                    return false;
-                }
-                // Delete file only
-                else if(ret==DELETE_FOLDER_ACTION) {
-                    followSymlink = true;
-                }
-            }
-			
-            if(!isSymlink || followSymlink) {
+
+            // Important: symlinks must *not* be followed -- following symlinks could have disastrous effects.
+            if(!file.isSymlink()) {
                 do {		// Loop for retry
                     // Delete each file in this folder
                     try {
@@ -190,14 +148,6 @@ public class DeleteJob extends FileJob {
 
         do {		// Loop for retry
             try {
-                // If file is a symlink to a folder and the user asked to follow the symlink,
-                // delete the empty folder
-                if(followSymlink) {
-                    AbstractFile canonicalFile = FileFactory.getFile(file.getCanonicalPath());
-                    if(canonicalFile!=null)
-                        deleteFile(canonicalFile);
-                }
-	
                 deleteFile(file);
 
                 return true;
