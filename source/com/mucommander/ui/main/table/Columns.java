@@ -19,6 +19,7 @@
 package com.mucommander.ui.main.table;
 
 import com.mucommander.text.Translator;
+import com.mucommander.ui.action.impl.*;
 
 /**
  * Defines columns related constants.
@@ -109,6 +110,28 @@ public class Columns {
         STANDARD_MINIMUM_WIDTH,         // Owner
         STANDARD_MINIMUM_WIDTH,         // Group 
     };
+
+    /** Array of actions that allow columns to be shown/hidden, ordered by their identifier. */
+    private final static Class TOGGLE_COLUMN_ACTIONS[] = {
+        ToggleExtensionColumnAction.class,
+        null,
+        ToggleSizeColumnAction.class,
+        ToggleDateColumnAction.class,
+        TogglePermissionsColumnAction.class,
+        ToggleOwnerColumnAction.class,
+        ToggleGroupColumnAction.class
+    };
+
+    /**
+     * Returns an arrray of actions that allow columns to be shown/hidden, ordered by their identifier.
+     * Caution: the {@link #NAME} column cannot be toggled, therefore the corresponding array element is
+     * <code>null</code>.
+     * @return an arrray of actions that allow columns to be shown/hidden, ordered by their identifier.
+     */
+    public static Class[] getToggleColumnActions() {
+        return TOGGLE_COLUMN_ACTIONS;
+    }
+
 
     /**
      * Prevents instanciations of the class.

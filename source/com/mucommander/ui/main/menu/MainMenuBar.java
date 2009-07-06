@@ -28,97 +28,10 @@ import com.mucommander.file.AbstractFile;
 import com.mucommander.file.impl.local.LocalFile;
 import com.mucommander.runtime.OsFamilies;
 import com.mucommander.text.Translator;
-import com.mucommander.ui.action.*;
-import com.mucommander.ui.action.impl.AddBookmarkAction;
-import com.mucommander.ui.action.impl.BatchRenameAction;
-import com.mucommander.ui.action.impl.BringAllToFrontAction;
-import com.mucommander.ui.action.impl.CalculateChecksumAction;
-import com.mucommander.ui.action.impl.ChangeDateAction;
-import com.mucommander.ui.action.impl.ChangeLocationAction;
-import com.mucommander.ui.action.impl.ChangePermissionsAction;
-import com.mucommander.ui.action.impl.CheckForUpdatesAction;
-import com.mucommander.ui.action.impl.CloseWindowAction;
-import com.mucommander.ui.action.impl.CompareFoldersAction;
-import com.mucommander.ui.action.impl.ConnectToServerAction;
-import com.mucommander.ui.action.impl.CopyFileNamesAction;
-import com.mucommander.ui.action.impl.CopyFilePathsAction;
-import com.mucommander.ui.action.impl.CopyFilesToClipboardAction;
-import com.mucommander.ui.action.impl.DonateAction;
-import com.mucommander.ui.action.impl.EditBookmarksAction;
-import com.mucommander.ui.action.impl.EditCredentialsAction;
-import com.mucommander.ui.action.impl.EmailAction;
-import com.mucommander.ui.action.impl.ExploreBookmarksAction;
-import com.mucommander.ui.action.impl.GoBackAction;
-import com.mucommander.ui.action.impl.GoForwardAction;
-import com.mucommander.ui.action.impl.GoToDocumentationAction;
-import com.mucommander.ui.action.impl.GoToForumsAction;
-import com.mucommander.ui.action.impl.GoToParentAction;
-import com.mucommander.ui.action.impl.GoToParentInBothPanelsAction;
-import com.mucommander.ui.action.impl.GoToParentInOtherPanelAction;
-import com.mucommander.ui.action.impl.GoToRootAction;
-import com.mucommander.ui.action.impl.GoToWebsiteAction;
-import com.mucommander.ui.action.impl.InvertSelectionAction;
-import com.mucommander.ui.action.impl.MarkAllAction;
-import com.mucommander.ui.action.impl.MarkExtensionAction;
-import com.mucommander.ui.action.impl.MarkGroupAction;
-import com.mucommander.ui.action.impl.MarkSelectedFileAction;
-import com.mucommander.ui.action.impl.MaximizeWindowAction;
-import com.mucommander.ui.action.impl.MergeFileAction;
-import com.mucommander.ui.action.impl.MinimizeWindowAction;
-import com.mucommander.ui.action.impl.NewWindowAction;
-import com.mucommander.ui.action.impl.OpenAction;
-import com.mucommander.ui.action.impl.OpenInBothPanelsAction;
-import com.mucommander.ui.action.impl.OpenInOtherPanelAction;
-import com.mucommander.ui.action.impl.OpenLocationAction;
-import com.mucommander.ui.action.impl.OpenNativelyAction;
-import com.mucommander.ui.action.impl.PackAction;
-import com.mucommander.ui.action.impl.PasteClipboardFilesAction;
-import com.mucommander.ui.action.impl.QuitAction;
-import com.mucommander.ui.action.impl.RecallNextWindowAction;
-import com.mucommander.ui.action.impl.RecallPreviousWindowAction;
-import com.mucommander.ui.action.impl.RecallWindowAction;
-import com.mucommander.ui.action.impl.ReportBugAction;
-import com.mucommander.ui.action.impl.RevealInDesktopAction;
-import com.mucommander.ui.action.impl.ReverseSortOrderAction;
-import com.mucommander.ui.action.impl.RunCommandAction;
-import com.mucommander.ui.action.impl.SetSameFolderAction;
-import com.mucommander.ui.action.impl.ShowAboutAction;
-import com.mucommander.ui.action.impl.ShowBookmarksQLAction;
-import com.mucommander.ui.action.impl.ShowFilePropertiesAction;
-import com.mucommander.ui.action.impl.ShowKeyboardShortcutsAction;
-import com.mucommander.ui.action.impl.ShowParentFoldersQLAction;
-import com.mucommander.ui.action.impl.ShowPreferencesAction;
-import com.mucommander.ui.action.impl.ShowRecentExecutedFilesQLAction;
-import com.mucommander.ui.action.impl.ShowRecentLocationsQLAction;
-import com.mucommander.ui.action.impl.ShowServerConnectionsAction;
-import com.mucommander.ui.action.impl.SortByDateAction;
-import com.mucommander.ui.action.impl.SortByExtensionAction;
-import com.mucommander.ui.action.impl.SortByGroupAction;
-import com.mucommander.ui.action.impl.SortByNameAction;
-import com.mucommander.ui.action.impl.SortByOwnerAction;
-import com.mucommander.ui.action.impl.SortByPermissionsAction;
-import com.mucommander.ui.action.impl.SortBySizeAction;
-import com.mucommander.ui.action.impl.SplitEquallyAction;
-import com.mucommander.ui.action.impl.SplitFileAction;
-import com.mucommander.ui.action.impl.SplitHorizontallyAction;
-import com.mucommander.ui.action.impl.SplitVerticallyAction;
-import com.mucommander.ui.action.impl.SwapFoldersAction;
-import com.mucommander.ui.action.impl.ToggleAutoSizeAction;
-import com.mucommander.ui.action.impl.ToggleCommandBarAction;
-import com.mucommander.ui.action.impl.ToggleDateColumnAction;
-import com.mucommander.ui.action.impl.ToggleExtensionColumnAction;
-import com.mucommander.ui.action.impl.ToggleGroupColumnAction;
-import com.mucommander.ui.action.impl.ToggleHiddenFilesAction;
-import com.mucommander.ui.action.impl.ToggleOwnerColumnAction;
-import com.mucommander.ui.action.impl.TogglePermissionsColumnAction;
-import com.mucommander.ui.action.impl.ToggleShowFoldersFirstAction;
-import com.mucommander.ui.action.impl.ToggleSizeColumnAction;
-import com.mucommander.ui.action.impl.ToggleStatusBarAction;
-import com.mucommander.ui.action.impl.ToggleToolBarAction;
-import com.mucommander.ui.action.impl.ToggleTreeAction;
-import com.mucommander.ui.action.impl.UnmarkAllAction;
-import com.mucommander.ui.action.impl.UnmarkGroupAction;
-import com.mucommander.ui.action.impl.UnpackAction;
+import com.mucommander.ui.action.ActionDescriptor;
+import com.mucommander.ui.action.ActionManager;
+import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.action.impl.*;
 import com.mucommander.ui.dialog.ErrorDialog;
 import com.mucommander.ui.dialog.pref.theme.ThemeEditorDialog;
 import com.mucommander.ui.helper.MenuToolkit;
@@ -165,9 +78,10 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
     private JCheckBoxMenuItem[] sortByItems = new JCheckBoxMenuItem[Columns.COLUMN_COUNT];
     private JMenu columnsMenu;
     private JCheckBoxMenuItem[] toggleColumnItems = new JCheckBoxMenuItem[Columns.COLUMN_COUNT];
+    private JCheckBoxMenuItem toggleToggleAutoSizeItem;
     private JCheckBoxMenuItem toggleShowFoldersFirstItem;
-    private JCheckBoxMenuItem toggleShowHiddenFiles;
-    private JCheckBoxMenuItem toggleTree;
+    private JCheckBoxMenuItem toggleShowHiddenFilesItem;
+    private JCheckBoxMenuItem toggleTreeItem;
     /* TODO branch private JCheckBoxMenuItem toggleBranchView; */
 
 
@@ -288,8 +202,8 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
 
         viewMenu.add(new JSeparator());
         toggleShowFoldersFirstItem = MenuToolkit.addCheckBoxMenuItem(viewMenu, ActionManager.getActionInstance(ToggleShowFoldersFirstAction.class, mainFrame), menuItemMnemonicHelper);
-        toggleShowHiddenFiles = MenuToolkit.addCheckBoxMenuItem(viewMenu, ActionManager.getActionInstance(ToggleHiddenFilesAction.class, mainFrame), menuItemMnemonicHelper);
-        toggleTree = MenuToolkit.addCheckBoxMenuItem(viewMenu, ActionManager.getActionInstance(ToggleTreeAction.class, mainFrame), menuItemMnemonicHelper);
+        toggleShowHiddenFilesItem = MenuToolkit.addCheckBoxMenuItem(viewMenu, ActionManager.getActionInstance(ToggleHiddenFilesAction.class, mainFrame), menuItemMnemonicHelper);
+        toggleTreeItem = MenuToolkit.addCheckBoxMenuItem(viewMenu, ActionManager.getActionInstance(ToggleTreeAction.class, mainFrame), menuItemMnemonicHelper);
         /* TODO branch toggleBranchView = MenuToolkit.addCheckBoxMenuItem(viewMenu, ActionManager.getActionInstance(ToggleBranchViewAction.class, mainFrame), menuItemMnemonicHelper); */
 
         viewMenu.add(new JSeparator());
@@ -304,16 +218,21 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
         MenuToolkit.addMenuItem(viewMenu, ActionManager.getActionInstance(ReverseSortOrderAction.class, mainFrame), menuItemMnemonicHelper);
 
         viewMenu.add(new JSeparator());
+
+        // Toggle columns submenu
         columnsMenu = MenuToolkit.addMenu(Translator.get("view_menu.show_hide_columns"), null, this);
         menuItemMnemonicHelper2.clear();
-        toggleColumnItems[Columns.EXTENSION] = MenuToolkit.addCheckBoxMenuItem(columnsMenu, ActionManager.getActionInstance(ToggleExtensionColumnAction.class, mainFrame), menuItemMnemonicHelper2);
-        toggleColumnItems[Columns.SIZE] = MenuToolkit.addCheckBoxMenuItem(columnsMenu, ActionManager.getActionInstance(ToggleSizeColumnAction.class, mainFrame), menuItemMnemonicHelper2);
-        toggleColumnItems[Columns.DATE] = MenuToolkit.addCheckBoxMenuItem(columnsMenu, ActionManager.getActionInstance(ToggleDateColumnAction.class, mainFrame), menuItemMnemonicHelper2);
-        toggleColumnItems[Columns.PERMISSIONS] = MenuToolkit.addCheckBoxMenuItem(columnsMenu, ActionManager.getActionInstance(TogglePermissionsColumnAction.class, mainFrame), menuItemMnemonicHelper2);
-        toggleColumnItems[Columns.OWNER] = MenuToolkit.addCheckBoxMenuItem(columnsMenu, ActionManager.getActionInstance(ToggleOwnerColumnAction.class, mainFrame), menuItemMnemonicHelper2);
-        toggleColumnItems[Columns.GROUP] = MenuToolkit.addCheckBoxMenuItem(columnsMenu, ActionManager.getActionInstance(ToggleGroupColumnAction.class, mainFrame), menuItemMnemonicHelper2);
+        Class toggleColumnActions[] = Columns.getToggleColumnActions();
+
+        for(int i=0; i<toggleColumnActions.length; i++) {
+            if(i==Columns.NAME)
+                continue;
+
+            toggleColumnItems[i] = MenuToolkit.addCheckBoxMenuItem(columnsMenu, ActionManager.getActionInstance(toggleColumnActions[i], mainFrame), menuItemMnemonicHelper2);
+        }
         viewMenu.add(columnsMenu);
-        MenuToolkit.addCheckBoxMenuItem(viewMenu, ActionManager.getActionInstance(ToggleAutoSizeAction.class, mainFrame), menuItemMnemonicHelper).setSelected(mainFrame.isAutoSizeColumnsEnabled());
+
+        toggleToggleAutoSizeItem = MenuToolkit.addCheckBoxMenuItem(viewMenu, ActionManager.getActionInstance(ToggleAutoSizeAction.class, mainFrame), menuItemMnemonicHelper);
 
         viewMenu.add(new JSeparator());
         MenuToolkit.addMenuItem(viewMenu, ActionManager.getActionInstance(ToggleToolBarAction.class, mainFrame), menuItemMnemonicHelper);
@@ -478,8 +397,9 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
             sortByItems[activeTable.getSortInfo().getCriterion()].setSelected(true);
 
             toggleShowFoldersFirstItem.setSelected(activeTable.getSortInfo().getFoldersFirst());
-            toggleShowHiddenFiles.setSelected(MuConfiguration.getVariable(MuConfiguration.SHOW_HIDDEN_FILES, MuConfiguration.DEFAULT_SHOW_HIDDEN_FILES));
-            toggleTree.setSelected(activeTable.getFolderPanel().isTreeVisible());
+            toggleShowHiddenFilesItem.setSelected(MuConfiguration.getVariable(MuConfiguration.SHOW_HIDDEN_FILES, MuConfiguration.DEFAULT_SHOW_HIDDEN_FILES));
+            toggleTreeItem.setSelected(activeTable.getFolderPanel().isTreeVisible());
+            toggleToggleAutoSizeItem.setSelected(mainFrame.isAutoSizeColumnsEnabled());
             /* TODO branch toggleBranchView.setSelected(activeTable.getFolderPanel().isBranchView()); */ 
         }
         else if(source==columnsMenu) {

@@ -185,6 +185,8 @@ Bug fixes:
   (Windows, OS/2) (ticket #94).
 - Double-click speed system preference is now honoured under GNOME and KDE
   (ticket #221). Contributed by Leo Welsch.
+- File table's right-click menu now has visibility toggles for all columns
+  instead of just the current one, and one for Auto-Size columns (ticket #226).
 
 Known issues:
 - Some translations are not up-to-date. For more information, see:

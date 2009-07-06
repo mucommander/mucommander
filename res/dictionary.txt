@@ -5979,28 +5979,6 @@ status_bar.volume_capacity:UA:Ємність %1
 # Table #
 #########
 
-table.hide_column:EN:Hide column
-table.hide_column:FR:Cacher la colonne
-table.hide_column:SL:Skrij stolpec
-table.hide_column:IT:Nascondi colonna
-table.hide_column:CS:Skrýt sloupec
-table.hide_column:zh_TW:隱藏欄位
-table.hide_column:DE:Spalte ausblenden
-table.hide_column:RO:Ascunde coloană
-table.hide_column:zh_CN:隐藏栏位
-table.hide_column:RU:Скрыть столбец
-table.hide_column:ES:Ocultar columna
-table.hide_column:PL:Ukryj kolumny
-table.hide_column:KO:컬럼 숨김
-table.hide_column:pt_BR:Ocultar colunas
-table.hide_column:NL:Kolom verbergen
-table.hide_column:SK:Skryť stĺpec
-table.hide_column:HU:Oszlop elrejtése
-table.hide_column:JA:列を非表示にする
-table.hide_column:SV:Dölj kolumn
-table.hide_column:DA:Skjul kolonne
-table.hide_column:UA:Сховати колонку
-
 table.folder_access_error_title:EN:Folder access error
 table.folder_access_error_title:FR:Folder access error
 table.folder_access_error_title:DE:Fehler beim Ordnerzugriff
@@ -15194,3 +15172,24 @@ recent_executed_files_quick_list.empty_message:UA:Нема попередньо�
 #auth_dialog.error_was:SV:Felet var %1
 #auth_dialog.error_was:DA:Fejlen var: %1
 
+#table.hide_column:EN:Hide column
+#table.hide_column:FR:Cacher la colonne
+#table.hide_column:SL:Skrij stolpec
+#table.hide_column:IT:Nascondi colonna
+#table.hide_column:CS:Skrýt sloupec
+#table.hide_column:zh_TW:隱藏欄位
+#table.hide_column:DE:Spalte ausblenden
+#table.hide_column:RO:Ascunde coloană
+#table.hide_column:zh_CN:隐藏栏位
+#table.hide_column:RU:Скрыть столбец
+#table.hide_column:ES:Ocultar columna
+#table.hide_column:PL:Ukryj kolumny
+#table.hide_column:KO:컬럼 숨김
+#table.hide_column:pt_BR:Ocultar colunas
+#table.hide_column:NL:Kolom verbergen
+#table.hide_column:SK:Skryť stĺpec
+#table.hide_column:HU:Oszlop elrejtése
+#table.hide_column:JA:列を非表示にする
+#table.hide_column:SV:Dölj kolumn
+#table.hide_column:DA:Skjul kolonne
+#table.hide_column:UA:Сховати колонку
