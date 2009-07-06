@@ -32,5 +32,4 @@
     <button action="com.mucommander.ui.action.impl.ShowFilePropertiesAction"/>
     <separator/>
     <button action="com.mucommander.ui.action.impl.ShowPreferencesAction"/>
-    <separator/>
 </toolbar>

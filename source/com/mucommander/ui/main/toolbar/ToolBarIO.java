@@ -18,15 +18,14 @@
 
 package com.mucommander.ui.main.toolbar;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-
-import org.xml.sax.helpers.DefaultHandler;
-
 import com.mucommander.PlatformManager;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
+import org.xml.sax.helpers.DefaultHandler;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 /**
  * 
@@ -48,22 +47,20 @@ public abstract class ToolBarIO extends DefaultHandler {
 
 	/** Default toolbar descriptor filename */
     protected final static String DEFAULT_TOOLBAR_FILE_NAME = "toolbar.xml";
-    /** Path to the toolbar descriptor resource file within the application JAR file */
-    protected final static String TOOLBAR_RESOURCE_PATH = "/"+DEFAULT_TOOLBAR_FILE_NAME;
 
     /** Toolbar descriptor file used when calling {@link #loadDescriptionFile()} */
     private static AbstractFile descriptionFile;
     
     /**
      * Parses the XML file describing the toolbar's buttons and associated actions.
-     * If the file doesn't exist yet, it is copied from the default resource file within the JAR.
+     * If the file doesn't exist, default toolbar elements will be used.
      */
     public static void loadDescriptionFile() throws Exception {
     	AbstractFile descriptionFile = getDescriptionFile();
         if(descriptionFile.exists())
         	new ToolBarReader(descriptionFile);
         else
-        	if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(TOOLBAR_RESOURCE_PATH+" was not found");
+        	if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("User toolbar.xml was not found, using default toolbar");
     }
     
     /**

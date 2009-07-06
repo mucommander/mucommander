@@ -18,31 +18,10 @@
 
 package com.mucommander.ui.main.toolbar;
 
+import com.mucommander.ui.action.impl.*;
+
 import java.util.Iterator;
 import java.util.WeakHashMap;
-
-import com.mucommander.ui.action.impl.AddBookmarkAction;
-import com.mucommander.ui.action.impl.ConnectToServerAction;
-import com.mucommander.ui.action.impl.EditBookmarksAction;
-import com.mucommander.ui.action.impl.EditCredentialsAction;
-import com.mucommander.ui.action.impl.EmailAction;
-import com.mucommander.ui.action.impl.GoBackAction;
-import com.mucommander.ui.action.impl.GoForwardAction;
-import com.mucommander.ui.action.impl.GoToHomeAction;
-import com.mucommander.ui.action.impl.GoToParentAction;
-import com.mucommander.ui.action.impl.MarkGroupAction;
-import com.mucommander.ui.action.impl.NewWindowAction;
-import com.mucommander.ui.action.impl.PackAction;
-import com.mucommander.ui.action.impl.RevealInDesktopAction;
-import com.mucommander.ui.action.impl.RunCommandAction;
-import com.mucommander.ui.action.impl.SetSameFolderAction;
-import com.mucommander.ui.action.impl.ShowFilePropertiesAction;
-import com.mucommander.ui.action.impl.ShowPreferencesAction;
-import com.mucommander.ui.action.impl.ShowServerConnectionsAction;
-import com.mucommander.ui.action.impl.StopAction;
-import com.mucommander.ui.action.impl.SwapFoldersAction;
-import com.mucommander.ui.action.impl.UnmarkGroupAction;
-import com.mucommander.ui.action.impl.UnpackAction;
 
 /**
  * This class is responsible to handle the attributes of ToolBars - their actions and separators.
@@ -52,70 +31,96 @@ import com.mucommander.ui.action.impl.UnpackAction;
  */
 public class ToolBarAttributes {
 	
-	/** Default command bar actions: Class instances or null to signify a separator */
-    private static Class defaultActions[];
-	
 	/** Command bar actions: Class instances or null to signify a separator */
     private static Class actions[];
     
     private static boolean useDefaultActions = true;
     
     /** Contains all registered toolbar-attributes listeners, stored as weak references */
-    private static WeakHashMap listeners = new WeakHashMap();
+    private final static WeakHashMap listeners = new WeakHashMap();
     
+    /** Default command bar actions: Class instances or null to signify a separator */
+    private final static Class[] DEFAULT_TOOLBAR_ACTIONS = new Class[] {
+            NewWindowAction.class,
+            GoBackAction.class,
+            GoForwardAction.class,
+            GoToParentAction.class,
+            null,
+            GoToHomeAction.class,
+            null,
+            StopAction.class,
+            null,
+            MarkGroupAction.class,
+            UnmarkGroupAction.class,
+            null,
+            SwapFoldersAction.class,
+            SetSameFolderAction.class,
+            null,
+            PackAction.class,
+            UnpackAction.class,
+            null,
+            AddBookmarkAction.class,
+            EditBookmarksAction.class,
+            EditCredentialsAction.class,
+            null,
+            ConnectToServerAction.class,
+            ShowServerConnectionsAction.class,
+            RunCommandAction.class,
+            EmailAction.class,
+            null,
+            RevealInDesktopAction.class,
+            ShowFilePropertiesAction.class,
+            null,
+            ShowPreferencesAction.class
+    };
+
     /**
-     * create toolbar's default actions.
+     * Removes leading and trailing separators (<code>null</code> elements) from the given action Class array, and
+     * returns the trimmed action array.
+     *
+     * @param actions the action Class array to trim.
+     * @return the trimmed action Class array, free of leading and trailing separators.
      */
-    static {
-    	defaultActions = new Class[32];
-    	defaultActions[0]  = NewWindowAction.class;
-    	defaultActions[1]  = GoBackAction.class;
-    	defaultActions[2]  = GoForwardAction.class;
-    	defaultActions[3]  = GoToParentAction.class;
-    	defaultActions[4]  = null;
-    	defaultActions[5]  = GoToHomeAction.class;
-    	defaultActions[6]  = null;
-    	defaultActions[7]  = StopAction.class;
-    	defaultActions[8]  = null;
-    	defaultActions[9]  = MarkGroupAction.class;
-    	defaultActions[10] = UnmarkGroupAction.class;
-    	defaultActions[11] = null;
-    	defaultActions[12] = SwapFoldersAction.class;
-    	defaultActions[13] = SetSameFolderAction.class;
-    	defaultActions[14] = null;
-    	defaultActions[15] = PackAction.class;
-    	defaultActions[16] = UnpackAction.class;
-    	defaultActions[17] = null;
-    	defaultActions[18] = AddBookmarkAction.class;
-    	defaultActions[19] = EditBookmarksAction.class;
-    	defaultActions[20] = EditCredentialsAction.class;
-    	defaultActions[21] = null;
-    	defaultActions[22] = ConnectToServerAction.class;
-    	defaultActions[23] = ShowServerConnectionsAction.class;
-    	defaultActions[24] = RunCommandAction.class;
-    	defaultActions[25] = EmailAction.class;
-    	defaultActions[26] = null;
-    	defaultActions[27] = RevealInDesktopAction.class;
-    	defaultActions[28] = ShowFilePropertiesAction.class;
-    	defaultActions[29] = null;
-    	defaultActions[30] = ShowPreferencesAction.class;
-    	defaultActions[31] = null;
+    private static Class[] trimActionsArray(Class[] actions) {
+        int start = 0;
+        int end = actions.length;
+
+        while(start<end && actions[start]==null)
+            start++;
+
+        if(start==end)
+            return new Class[]{};
+
+        while(end>start && actions[end-1]==null)
+            end--;
+
+        int newLen = end-start;
+        Class newActions[] = new Class[newLen];
+        System.arraycopy(actions, start, newActions, 0, newLen);
+
+        return newActions;
     }
-    
+
     /**
-     * Sets the toolbar's actions to the given action classes.
+     * Sets the toolbar actions to the given action classes. <code>null</code> elements are used to insert a separator
+     * between buttons.
+     *
+     * @param actions the new toolbar actions classes
      */
     public static void setActions(Class[] actions) {
-    	ToolBarAttributes.actions = actions;
+        ToolBarAttributes.actions = trimActionsArray(actions);
     	useDefaultActions = false;
     	fireActionsChanged();
     }
     
     /**
-     * Returns toolbar's actions.
+     * Returns the actions classes that constitue the toolbar. <code>null</code> elements are used to insert a separator
+     * between buttons.
+     *
+     * @return the actions classes that constitue the toolbar.
      */
     public static Class[] getActions() {
-    	return useDefaultActions ? defaultActions : actions;
+    	return useDefaultActions ? DEFAULT_TOOLBAR_ACTIONS : actions;
     }
     
     // - Listeners -------------------------------------------------------------

@@ -18,19 +18,17 @@
 
 package com.mucommander.ui.main.toolbar;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Vector;
-
-import javax.xml.parsers.SAXParserFactory;
-
-import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
-
 import com.mucommander.Debug;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.io.BackupInputStream;
 import com.mucommander.ui.action.ActionManager;
+import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
+
+import javax.xml.parsers.SAXParserFactory;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Vector;
 
 /**
  * This class parses the XML file describing the toolbar's buttons and associated actions.
@@ -66,8 +64,6 @@ public class ToolBarReader extends ToolBarIO {
     ////////////////////////////
 
     public void startDocument() {
-        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(TOOLBAR_RESOURCE_PATH+" parsing started");
-
         actionsV = new Vector();
     }
 
@@ -78,7 +74,6 @@ public class ToolBarReader extends ToolBarIO {
         actionsV = null;
 
         ToolBarAttributes.setActions(actions);
-        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(TOOLBAR_RESOURCE_PATH+" parsing finished");
     }
 
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
@@ -87,7 +82,7 @@ public class ToolBarReader extends ToolBarIO {
             Class actionClass = ActionManager.getActionClass(actionClassName, fileVersion);
             if (actionClass != null)
             	actionsV.add(actionClass);
-            else if(Debug.ON) Debug.trace("Error in "+TOOLBAR_RESOURCE_PATH+": action class "+actionClassName+" not found");
+            else if(Debug.ON) Debug.trace("Error in toolbar file: action class "+actionClassName+" not found");
         }
         else if(qName.equals(SEPARATOR_ELEMENT)) {
             actionsV.add(null);

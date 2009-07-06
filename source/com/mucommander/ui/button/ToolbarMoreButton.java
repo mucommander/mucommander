@@ -78,7 +78,6 @@ public class ToolbarMoreButton extends JToggleButton implements ActionListener {
     setMargin(new Insets(0, 0, 0, 0));
     setContentAreaFilled(false);
     setBorderPainted(false);
-//    setMinimumSize(new Dimension(getIcon().getIconWidth(), getIcon().getIconHeight()));
     // Use new JButton decorations introduced in Mac OS X 10.5 (Leopard) with
     // Java 1.5 and up
     if (OsFamilies.MAC_OS_X.isCurrent()
@@ -104,8 +103,9 @@ public class ToolbarMoreButton extends JToggleButton implements ActionListener {
     toolbar.addComponentListener(new ComponentAdapter() {
 
       public void componentResized(ComponentEvent e) {
-        final boolean aFlag = !isVisible(toolbar.getComponent(toolbar.getComponentCount() - 1),
-                              null);
+        int nbToolbarComponents = toolbar.getComponentCount();
+
+        final boolean aFlag = nbToolbarComponents>0 && !isVisible(toolbar.getComponent(nbToolbarComponents-1), null);
         setVisible(aFlag);
         moreToolbar.setVisible(aFlag);
       }
