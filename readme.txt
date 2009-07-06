@@ -151,7 +151,7 @@ Improvements:
   instead of just the current one, and one for Auto-Size columns (ticket #226).
 - Leading and trailing toolbar separators are no longer displayed (ticket #166).
 - 'Permanent delete' no longer asks whether symlinks should be followed, they
-  are now silenty deleted without being followed (easier and safer).
+  are now silently deleted without being followed (easier and safer).
 
 Localization:
 - 
