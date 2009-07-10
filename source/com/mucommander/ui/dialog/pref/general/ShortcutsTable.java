@@ -31,6 +31,11 @@ import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.main.table.CellLabel;
 import com.mucommander.ui.table.CenteredTableHeaderRenderer;
 import com.mucommander.ui.text.KeyStrokeUtils;
+import com.mucommander.ui.theme.ColorChangedEvent;
+import com.mucommander.ui.theme.FontChangedEvent;
+import com.mucommander.ui.theme.Theme;
+import com.mucommander.ui.theme.ThemeCache;
+import com.mucommander.ui.theme.ThemeListener;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -78,15 +83,6 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 	
 	/** Transparent icon used to align non-locked themes with the others. */
     private static ImageIcon transparentIcon = new ImageIcon(new BufferedImage(BASE_ICON_DIMENSION, BASE_ICON_DIMENSION, BufferedImage.TYPE_INT_ARGB));
-
-    /** Background color of the {@link RecordingKeyStrokeField} */
-    private static final Color RECORDING_KEYSTROKE_FIELD_BACKGROUND_COLOR = new Color(60, 126, 231);
-
-    /** Foreground color of the {@link RecordingKeyStrokeField} */
-    public static final Color RECORDING_KEYSTROKE_FIELD_FOREGROUND_COLOR = Color.white;
-
-    /** Border color of the {@link RecordingKeyStrokeField} */
-    public static final Color RECORDING_KEYSTROKE_FIELD_BORDER_COLOR = Color.white;
 
 	/** Private object used to indicate that a delete operation was made */
 	private final Object DELETE = new Object();
@@ -498,8 +494,8 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 			setBorder(BorderFactory.createEmptyBorder());
 			setHorizontalAlignment(JTextField.CENTER);
 			setEditable(false);
-			setBackground(RECORDING_KEYSTROKE_FIELD_BACKGROUND_COLOR);
-			setForeground(RECORDING_KEYSTROKE_FIELD_FOREGROUND_COLOR);
+			setBackground(ThemeCache.backgroundColors[ThemeCache.ACTIVE][ThemeCache.SELECTED]);
+			setForeground(ThemeCache.foregroundColors[ThemeCache.ACTIVE][ThemeCache.SELECTED][ThemeCache.PLAIN_FILE]);
 			addKeyListener(this);
 		}
 
@@ -515,9 +511,8 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
         ////////////////////////
 
         protected void paintBorder(Graphics g) {
-            paintDottedBorder(g, getWidth(), getHeight(), RECORDING_KEYSTROKE_FIELD_BORDER_COLOR);
+            paintDottedBorder(g, getWidth(), getHeight(), ThemeCache.backgroundColors[ThemeCache.ACTIVE][ThemeCache.NORMAL]);
         }
-
 
 		/////////////////////////////
 		//// KeyListener methods ////
@@ -643,23 +638,34 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 		}
 	}
 	
-	private class ShortcutsTableCellRenderer implements TableCellRenderer {
+	private class ShortcutsTableCellRenderer implements TableCellRenderer, ThemeListener {
 		/** Custom JLabel that render specific column cells */
 	    private CustomCellLabel[] cellLabels = new CustomCellLabel[NUM_OF_COLUMNS];
-	    
-	    private final Color REGULAR_CELL_BACKGROUND_COLOR = Color.white;
-	    private final Color ALTERNATE_CELL_BACKGROUND_COLOR = new Color(238, 238, 238);
-	    private final Color OUTLINE_COLOR = Color.gray;
 	    
 	    public ShortcutsTableCellRenderer() {
 	    	for(int i=0; i<NUM_OF_COLUMNS; ++i)
 	            cellLabels[i] = new CustomCellLabel();
 
+	    	// Set labels' font.
+	        setCellLabelsFont(ThemeCache.tableFont);
+	    	
 	    	cellLabels[ACTION_DESCRIPTION_COLUMN_INDEX].setHorizontalAlignment(CellLabel.LEFT);
 	    	cellLabels[ACCELERATOR_COLUMN_INDEX].setHorizontalAlignment(CellLabel.CENTER);
 	    	cellLabels[ALTERNATE_ACCELERATOR_COLUMN_INDEX].setHorizontalAlignment(CellLabel.CENTER);
+	    	
+	    	// Listens to certain configuration variables
+	        ThemeCache.addThemeListener(this);
 	    }
 		
+	    /**
+	     * Sets CellLabels' font to the current one.
+	     */
+	    private void setCellLabelsFont(Font newFont) {
+	        // Set custom font
+	        for(int i=0; i<NUM_OF_COLUMNS; ++i)
+	        	cellLabels[i].setFont(newFont);
+	    }
+	    
 		public Component getTableCellRendererComponent(JTable table, Object value,
 	            boolean isSelected, boolean hasFocus, int rowIndex, int vColIndex) {
 			CustomCellLabel label;
@@ -691,13 +697,31 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 				label.setText(text);
 			}
 			
-			label.setOutline(hasFocus ? OUTLINE_COLOR : null);
-			
+			// set outline for the focused cell
+			label.setOutline(hasFocus ? ThemeCache.backgroundColors[ThemeCache.ACTIVE][ThemeCache.SELECTED] : null);
+			// set cell's foreground color
+			label.setForeground(ThemeCache.foregroundColors[ThemeCache.ACTIVE][ThemeCache.NORMAL][ThemeCache.PLAIN_FILE]);
 			// set cell's background color
-			label.setBackground(rowIndex % 2 == 0 ? REGULAR_CELL_BACKGROUND_COLOR : ALTERNATE_CELL_BACKGROUND_COLOR);
+			label.setBackground(ThemeCache.backgroundColors[ThemeCache.ACTIVE][rowIndex % 2 == 0 ? ThemeCache.NORMAL : ThemeCache.ALTERNATE]);
 			
 			return label;
 		}
+		
+		// - Theme listening -------------------------------------------------------------
+	    // -------------------------------------------------------------------------------
+	    /**
+	     * Receives theme color changes notifications.
+	     */
+	    public void colorChanged(ColorChangedEvent event) { }
+
+	    /**
+	     * Receives theme font changes notifications.
+	     */
+	    public void fontChanged(FontChangedEvent event) {
+	        if(event.getFontId() == Theme.FILE_TABLE_FONT) {
+	            setCellLabelsFont(ThemeCache.tableFont);
+	        }
+	    }
 	}
 	
 	/**
