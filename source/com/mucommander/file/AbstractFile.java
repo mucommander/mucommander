@@ -44,7 +44,7 @@ import java.security.NoSuchAlgorithmException;
  * @see com.mucommander.file.impl.ProxyFile
  * @author Maxence Bernard
  */
-public abstract class AbstractFile implements PermissionTypes, PermissionAccesses {
+public abstract class AbstractFile implements FileAttributes, PermissionTypes, PermissionAccesses {
 
     /** URL representing this file */
     protected FileURL fileURL;
@@ -787,6 +787,14 @@ public abstract class AbstractFile implements PermissionTypes, PermissionAccesse
         return name.substring(0, position);
     }
 
+    /**
+     * Shorthand for {@link #getAbsolutePath()}.
+     *
+     * @return the value returned by {@link #getAbsolutePath()}.
+     */
+    public final String getPath() {
+        return getAbsolutePath();
+    }
 
     /**
      * Returns the absolute path to this file.

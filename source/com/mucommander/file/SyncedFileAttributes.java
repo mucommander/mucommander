@@ -188,10 +188,10 @@ public abstract class SyncedFileAttributes extends SimpleFileAttributes {
     /**
      * Overridden to trigger attributes update if the expiration date has been reached.
      */
-    public boolean getExists() {
+    public boolean exists() {
         checkForExpiration(false);
 
-        return super.getExists();
+        return super.exists();
     }
 
     /**

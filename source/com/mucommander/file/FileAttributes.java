@@ -19,10 +19,11 @@
 package com.mucommander.file;
 
 /**
- * This interface defines JavaBean-compliant getter and setter methods for common file attributes:
+ * This interface defines getters for the following file attributes:
  * <dl>
  *   <dt>path</dt>
- *   <dd>the file's path, <code>null</code> by default. The format and separator character of the path are filesystem-dependent.</dd>
+ *   <dd>the file's path, <code>null</code> by default. The type of path (relative or absolute) separator character
+ * are unspecified and context-dependant.</dd>
  *
  *   <dt>exists</dt>
  *   <dd>specifies whether the file exists physically on the underlying filesystem, <code>false</code> by default</dd>
@@ -48,9 +49,10 @@ package com.mucommander.file;
  *   <dd>the file's group, <code>null</code> by default</dd>
  * </dl>
  *
- * <p>See the {@link com.mucommander.file.SimpleFileAttributes} class for a basic implementation of this interface.</p>
+ * <p>See the {@link MutableFileAttributes} for an extended interface that include file attribute setters.</p>
  *
- * @see com.mucommander.file.SimpleFileAttributes
+ * @see MutableFileAttributes
+ * @see SimpleFileAttributes
  * @author Maxence Bernard
  */
 public interface FileAttributes {
@@ -65,30 +67,12 @@ public interface FileAttributes {
     public String getPath();
 
     /**
-     * Sets the file's path.
-     *
-     * <p>The format and separator character of the path are filesystem-dependent.</p>
-     *
-     * @param path the file's path
-     */
-    public void setPath(String path);
-
-
-    /**
      * Returns <code>true</code> if the file exists physically on the underlying filesystem, <code>false</code>
      * by default.
      *
      * @return <code>true</code> if the file exists physically on the underlying filesystem, <code>false</code> by default
      */
-    public boolean getExists();
-
-    /**
-     * Sets whether the file exists physically on the underlying filesystem.
-     *
-     * @param exists <code>true</code> if the file exists physically on the underlying filesystem
-     */
-    public void setExists(boolean exists);
-
+    public boolean exists();
 
     /**
      * Returns the file's date in milliseconds since the epoch (00:00:00 GMT, January 1, 1970), <code>0</code> by default
@@ -98,27 +82,11 @@ public interface FileAttributes {
     public long getDate();
 
     /**
-     * Sets the file's date in milliseconds since the epoch (00:00:00 GMT, January 1, 1970).
-     *
-     * @param date the file's date in milliseconds since the epoch (00:00:00 GMT, January 1, 1970)
-     */
-    public void setDate(long date);
-
-
-    /**
      * Returns the file's size in bytes.
      *
      * @return the file's size in bytes
      */
     public long getSize();
-
-    /**
-     * Sets the file's size in bytes.
-     *
-     * @param size the file's size in bytes
-     */
-    public void setSize(long size);
-
 
     /**
      * Returns <code>true</code> if the file is a directory, <code>false</code> if it is a regular file
@@ -129,27 +97,11 @@ public interface FileAttributes {
     public boolean isDirectory();
 
     /**
-     * Specifies whether the file is a directory or a regular file.
-     *
-     * @param directory <code>true</code> for directory, <code>false</code> for regular file
-     */
-    public void setDirectory(boolean directory);
-
-
-    /**
      * Returns the file's permissions, <code>null</code> by default.
      *
      * @return the file's permissions, <code>null</code> by default
      */
     public FilePermissions getPermissions();
-
-    /**
-     * Sets the file's permissions.
-     *
-     * @param permissions the file's permissions
-     */
-    public void setPermissions(FilePermissions permissions);
-
 
     /**
      * Returns the file's owner, <code>null</code> by default.
@@ -159,24 +111,9 @@ public interface FileAttributes {
     public String getOwner();
 
     /**
-     * Sets the file's owner.
-     *
-     * @param owner the file's owner
-     */
-    public void setOwner(String owner);
-
-
-    /**
      * Returns the file's group, <code>null</code> by default.
      *
      * @return the file's group, <code>null</code> by default
      */
     public String getGroup();
-
-    /**
-     * Sets the file's group.
-     *
-     * @param group the file's owner
-     */
-    public void setGroup(String group);
 }

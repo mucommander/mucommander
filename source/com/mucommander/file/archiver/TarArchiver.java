@@ -19,7 +19,7 @@
 
 package com.mucommander.file.archiver;
 
-import com.mucommander.file.AbstractFile;
+import com.mucommander.file.FileAttributes;
 import com.mucommander.file.FilePermissions;
 import com.mucommander.file.SimpleFilePermissions;
 import com.mucommander.file.impl.tar.provider.TarEntry;
@@ -52,23 +52,23 @@ class TarArchiver extends Archiver {
     // Archiver implementation //
     /////////////////////////////
 
-    public OutputStream createEntry(String entryPath, AbstractFile file) throws IOException {
+    public OutputStream createEntry(String entryPath, FileAttributes attributes) throws IOException {
         // Start by closing current entry
         if(!firstEntry)
             tos.closeEntry();
 
-        boolean isDirectory = file.isDirectory();
+        boolean isDirectory = attributes.isDirectory();
 		
         // Create the entry
         TarEntry entry = new TarEntry(normalizePath(entryPath, isDirectory));
         // Use provided file's size (required by TarOutputStream) and date
-        long size = file.getSize();
+        long size = attributes.getSize();
         if(!isDirectory && size>=0)		// Do not set size if file is directory or file size is unknown!
             entry.setSize(size);
 
         // Set the entry's date and permissions
-        entry.setModTime(file.getDate());
-        entry.setMode(SimpleFilePermissions.padPermissions(file.getPermissions(), isDirectory
+        entry.setModTime(attributes.getDate());
+        entry.setMode(SimpleFilePermissions.padPermissions(attributes.getPermissions(), isDirectory
                     ? FilePermissions.DEFAULT_DIRECTORY_PERMISSIONS
                     : FilePermissions.DEFAULT_FILE_PERMISSIONS).getIntValue());
 

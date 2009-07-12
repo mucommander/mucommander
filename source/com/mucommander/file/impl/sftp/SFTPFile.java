@@ -64,9 +64,6 @@ public class SFTPFile extends AbstractFile {
     /** The absolute path to the file on the remote server, not the full URL */
     private String absPath;
 
-    /** This file's permissions */
-    private FilePermissions permissions;
-
     /** Contains the file attribute values */
     private SFTPFileAttributes fileAttributes;
 
@@ -241,7 +238,7 @@ public class SFTPFile extends AbstractFile {
      * Implementation note: for symlinks, returns the value of the link's target.
      */
     public boolean exists() {
-        return fileAttributes.getExists();
+        return fileAttributes.exists();
     }
 
     /**

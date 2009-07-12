@@ -19,7 +19,7 @@
 
 package com.mucommander.file.archiver;
 
-import com.mucommander.file.AbstractFile;
+import com.mucommander.file.FileAttributes;
 import com.mucommander.file.FilePermissions;
 import com.mucommander.file.SimpleFilePermissions;
 import com.mucommander.file.impl.zip.provider.ZipEntry;
@@ -62,22 +62,22 @@ class ZipArchiver extends Archiver {
     // Archiver implementation //
     /////////////////////////////
 
-    public OutputStream createEntry(String entryPath, AbstractFile file) throws IOException {
+    public OutputStream createEntry(String entryPath, FileAttributes attributes) throws IOException {
         // Start by closing current entry
         if(!firstEntry)
             zos.closeEntry();
 
-        boolean isDirectory = file.isDirectory();
+        boolean isDirectory = attributes.isDirectory();
 		
         // Create the entry and use the provided file's date
         ZipEntry entry = new ZipEntry(normalizePath(entryPath, isDirectory));
         // Use provided file's size and date
-        long size = file.getSize();
+        long size = attributes.getSize();
         if(!isDirectory && size>=0) 	// Do not set size if file is directory or file size is unknown!
             entry.setSize(size);
 
-        entry.setTime(file.getDate());
-        entry.setUnixMode(SimpleFilePermissions.padPermissions(file.getPermissions(), isDirectory
+        entry.setTime(attributes.getDate());
+        entry.setUnixMode(SimpleFilePermissions.padPermissions(attributes.getPermissions(), isDirectory
                     ? FilePermissions.DEFAULT_DIRECTORY_PERMISSIONS
                     : FilePermissions.DEFAULT_FILE_PERMISSIONS).getIntValue());
 

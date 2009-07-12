@@ -144,7 +144,7 @@ public class ArchiveEntryFile extends AbstractFile {
      * Always returns <code>false</code> only if the archive file that contains this entry is not writable.
      */
     public boolean changeDate(long lastModified) {
-        if(!(entry.getExists() && archiveFile.isWritableArchive()))
+        if(!(entry.exists() && archiveFile.isWritableArchive()))
             return false;
 
         long oldDate = entry.getDate();
@@ -191,7 +191,7 @@ public class ArchiveEntryFile extends AbstractFile {
      * @return true if this entry exists within the archive file
      */
     public boolean exists() {
-        return entry.getExists();
+        return entry.exists();
     }
 	
     public FilePermissions getPermissions() {
@@ -252,7 +252,7 @@ public class ArchiveEntryFile extends AbstractFile {
      * @throws IOException in any of the cases listed above.
      */
     public void delete() throws IOException {
-        if(entry.getExists() && archiveFile.isWritableArchive()) {
+        if(entry.exists() && archiveFile.isWritableArchive()) {
             AbstractRWArchiveFile rwArchiveFile = (AbstractRWArchiveFile)archiveFile;
 
             // Throw an IOException if this entry is a non-empty directory
@@ -287,7 +287,7 @@ public class ArchiveEntryFile extends AbstractFile {
      * or if an I/O error occurred
      */
     public void mkdir() throws IOException {
-        if(!entry.getExists() && archiveFile.isWritableArchive()) {
+        if(!entry.exists() && archiveFile.isWritableArchive()) {
             AbstractRWArchiveFile rwArchivefile = (AbstractRWArchiveFile)archiveFile;
             // Update the ArchiveEntry
             entry.setDirectory(true);
@@ -344,7 +344,7 @@ public class ArchiveEntryFile extends AbstractFile {
             if(append)
                 throw new IOException("Can't append to an existing archive entry");
 
-            if(entry.getExists()) {
+            if(entry.exists()) {
                 try {
                     delete();
                 }
@@ -462,7 +462,7 @@ public class ArchiveEntryFile extends AbstractFile {
      * Always returns <code>false</code> only if the archive file that contains this entry is not writable.
      */
     public boolean changePermissions(int permissions) {
-        if(!(entry.getExists() && archiveFile.isWritableArchive()))
+        if(!(entry.exists() && archiveFile.isWritableArchive()))
             return false;
 
         FilePermissions oldPermissions = entry.getPermissions();

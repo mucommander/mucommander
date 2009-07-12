@@ -24,7 +24,7 @@ package com.mucommander.file;
  *
  * @author Maxence Bernard
  */
-public class SimpleFileAttributes implements FileAttributes {
+public class SimpleFileAttributes implements MutableFileAttributes {
 
     /** Path attribute */
     private String path;
@@ -75,9 +75,9 @@ public class SimpleFileAttributes implements FileAttributes {
     }
 
 
-    ///////////////////////////////////
-    // FileAttributes implementation //
-    ///////////////////////////////////
+    //////////////////////////////////////////
+    // MutableFileAttributes implementation //
+    //////////////////////////////////////////
 
     public String getPath() {
         return path;
@@ -87,7 +87,7 @@ public class SimpleFileAttributes implements FileAttributes {
         this.path = path;
     }
 
-    public boolean getExists() {
+    public boolean exists() {
         return exists;
     }
 
