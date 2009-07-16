@@ -21,7 +21,7 @@ package com.mucommander.ui.action.impl;
 import com.mucommander.runtime.OsFamilies;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.MuAction;
-import com.mucommander.ui.action.MuActionFactory;
+import com.mucommander.ui.action.ActionFactory;
 import com.mucommander.ui.main.MainFrame;
 
 import javax.swing.*;
@@ -46,7 +46,7 @@ public class MaximizeWindowAction extends MuAction {
         mainFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
     
-    public static class Factory implements MuActionFactory {
+    public static class Factory implements ActionFactory {
 
 		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
 			return new MaximizeWindowAction(mainFrame, properties);

@@ -20,7 +20,7 @@ package com.mucommander.ui.action.impl;
 
 import com.mucommander.ui.action.InvokesDialog;
 import com.mucommander.ui.action.MuAction;
-import com.mucommander.ui.action.MuActionFactory;
+import com.mucommander.ui.action.ActionFactory;
 import com.mucommander.ui.dialog.auth.EditCredentialsDialog;
 import com.mucommander.ui.main.MainFrame;
 
@@ -42,7 +42,7 @@ public class EditCredentialsAction extends MuAction implements InvokesDialog {
         new EditCredentialsDialog(mainFrame);
     }
     
-    public static class Factory implements MuActionFactory {
+    public static class Factory implements ActionFactory {
 
 		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
 			return new EditCredentialsAction(mainFrame, properties);

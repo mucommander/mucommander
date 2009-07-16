@@ -19,7 +19,7 @@
 package com.mucommander.ui.action.impl;
 
 import com.mucommander.ui.action.MuAction;
-import com.mucommander.ui.action.MuActionFactory;
+import com.mucommander.ui.action.ActionFactory;
 import com.mucommander.ui.dialog.about.AboutDialog;
 import com.mucommander.ui.main.MainFrame;
 
@@ -40,7 +40,7 @@ public class ShowAboutAction extends MuAction {
         new AboutDialog(mainFrame).showDialog();
     }
     
-    public static class Factory implements MuActionFactory {
+    public static class Factory implements ActionFactory {
 
 		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
 			return new ShowAboutAction(mainFrame, properties);

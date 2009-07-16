@@ -27,7 +27,7 @@ import com.mucommander.ui.main.MainFrame;
  *
  * @author Arik Hadas
  */
-public interface MuActionFactory {
+public interface ActionFactory {
 	
 	/**
 	 * This is an initiation method that returns an instance of MuAction subclass.

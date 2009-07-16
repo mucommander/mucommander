@@ -19,7 +19,7 @@
 package com.mucommander.ui.action.impl;
 
 import com.mucommander.ui.action.MuAction;
-import com.mucommander.ui.action.MuActionFactory;
+import com.mucommander.ui.action.ActionFactory;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.table.FileTable;
 import com.mucommander.ui.main.table.FileTableModel;
@@ -56,7 +56,7 @@ public class MarkAllAction extends MuAction {
         fileTable.fireMarkedFilesChangedEvent();
     }
     
-    public static class Factory implements MuActionFactory {
+    public static class Factory implements ActionFactory {
 
 		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
 			return new MarkAllAction(mainFrame, properties);

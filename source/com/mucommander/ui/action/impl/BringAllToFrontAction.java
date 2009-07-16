@@ -19,7 +19,7 @@
 package com.mucommander.ui.action.impl;
 
 import com.mucommander.ui.action.MuAction;
-import com.mucommander.ui.action.MuActionFactory;
+import com.mucommander.ui.action.ActionFactory;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.WindowManager;
 
@@ -63,7 +63,7 @@ public class BringAllToFrontAction extends MuAction {
         currentMainFrame.toFront();
     }
     
-    public static class Factory implements MuActionFactory {
+    public static class Factory implements ActionFactory {
 
 		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
 			return new BringAllToFrontAction(mainFrame, properties);

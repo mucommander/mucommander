@@ -19,7 +19,7 @@
 package com.mucommander.ui.action.impl;
 
 import com.mucommander.ui.action.MuAction;
-import com.mucommander.ui.action.MuActionFactory;
+import com.mucommander.ui.action.ActionFactory;
 import com.mucommander.ui.event.LocationEvent;
 import com.mucommander.ui.event.LocationListener;
 import com.mucommander.ui.main.FolderPanel;
@@ -77,7 +77,7 @@ public class StopAction extends MuAction implements LocationListener {
         setEnabled(false);
     }
     
-    public static class Factory implements MuActionFactory {
+    public static class Factory implements ActionFactory {
 
 		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
 			return new StopAction(mainFrame, properties);

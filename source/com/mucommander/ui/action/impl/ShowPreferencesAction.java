@@ -20,7 +20,7 @@ package com.mucommander.ui.action.impl;
 
 import com.mucommander.ui.action.InvokesDialog;
 import com.mucommander.ui.action.MuAction;
-import com.mucommander.ui.action.MuActionFactory;
+import com.mucommander.ui.action.ActionFactory;
 import com.mucommander.ui.dialog.pref.general.GeneralPreferencesDialog;
 import com.mucommander.ui.main.MainFrame;
 
@@ -39,7 +39,7 @@ public class ShowPreferencesAction extends MuAction implements InvokesDialog {
 
     public void performAction() {GeneralPreferencesDialog.getDialog().showDialog();}
     
-    public static class Factory implements MuActionFactory {
+    public static class Factory implements ActionFactory {
 
 		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
 			return new ShowPreferencesAction(mainFrame, properties);

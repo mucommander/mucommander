@@ -21,7 +21,7 @@ package com.mucommander.ui.action.impl;
 import com.mucommander.command.Command;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.ui.action.MuAction;
-import com.mucommander.ui.action.MuActionFactory;
+import com.mucommander.ui.action.ActionFactory;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.viewer.ViewerRegistrar;
 
@@ -64,7 +64,7 @@ public class InternalViewAction extends AbstractViewerAction {
 
     // - Factory -------------------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
-    public static class Factory implements MuActionFactory {
+    public static class Factory implements ActionFactory {
 		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
 			return new InternalViewAction(mainFrame, properties);
 		}

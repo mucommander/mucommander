@@ -22,7 +22,7 @@ import java.util.Hashtable;
 
 import com.mucommander.ui.action.InvokesDialog;
 import com.mucommander.ui.action.MuAction;
-import com.mucommander.ui.action.MuActionFactory;
+import com.mucommander.ui.action.ActionFactory;
 import com.mucommander.ui.dialog.customization.CommandBarDialog;
 import com.mucommander.ui.main.MainFrame;
 
@@ -39,7 +39,7 @@ public class CustomizeCommandBarAction extends MuAction implements InvokesDialog
 
     public void performAction() {CommandBarDialog.getDialog().showDialog();}
     
-    public static class Factory implements MuActionFactory {
+    public static class Factory implements ActionFactory {
 
 		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
 			return new CustomizeCommandBarAction(mainFrame, properties);

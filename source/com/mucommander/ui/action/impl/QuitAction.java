@@ -19,7 +19,7 @@
 package com.mucommander.ui.action.impl;
 
 import com.mucommander.ui.action.MuAction;
-import com.mucommander.ui.action.MuActionFactory;
+import com.mucommander.ui.action.ActionFactory;
 import com.mucommander.ui.dialog.shutdown.QuitDialog;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.WindowManager;
@@ -43,7 +43,7 @@ public class QuitAction extends MuAction {
             WindowManager.quit();
     }
     
-    public static class Factory implements MuActionFactory {
+    public static class Factory implements ActionFactory {
 
 		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
 			return new QuitAction(mainFrame, properties);

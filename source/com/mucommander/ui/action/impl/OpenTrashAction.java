@@ -21,7 +21,7 @@ package com.mucommander.ui.action.impl;
 import com.mucommander.desktop.AbstractTrash;
 import com.mucommander.desktop.DesktopManager;
 import com.mucommander.ui.action.MuAction;
-import com.mucommander.ui.action.MuActionFactory;
+import com.mucommander.ui.action.ActionFactory;
 import com.mucommander.ui.main.MainFrame;
 
 import java.util.Hashtable;
@@ -46,7 +46,7 @@ public class OpenTrashAction extends MuAction {
         DesktopManager.getTrash().open();
     }
     
-    public static class Factory implements MuActionFactory {
+    public static class Factory implements ActionFactory {
 
 		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
 			return new OpenTrashAction(mainFrame, properties);

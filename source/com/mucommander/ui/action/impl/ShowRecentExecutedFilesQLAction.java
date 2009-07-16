@@ -21,7 +21,7 @@ package com.mucommander.ui.action.impl;
 import java.util.Hashtable;
 
 import com.mucommander.ui.action.MuAction;
-import com.mucommander.ui.action.MuActionFactory;
+import com.mucommander.ui.action.ActionFactory;
 import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.main.MainFrame;
 
@@ -41,7 +41,7 @@ public class ShowRecentExecutedFilesQLAction extends ShowQuickListAction {
 		openQuickList(FolderPanel.RECENT_EXECUTED_FILES_QUICK_LIST_INDEX);
 	}
 	
-	public static class Factory implements MuActionFactory {
+	public static class Factory implements ActionFactory {
 
 		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
 			return new ShowRecentExecutedFilesQLAction(mainFrame, properties);

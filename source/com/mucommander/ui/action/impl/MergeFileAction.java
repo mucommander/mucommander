@@ -24,7 +24,7 @@ import com.mucommander.file.filter.FileFilter;
 import com.mucommander.file.util.FileSet;
 import com.mucommander.ui.action.InvokesDialog;
 import com.mucommander.ui.action.MuAction;
-import com.mucommander.ui.action.MuActionFactory;
+import com.mucommander.ui.action.ActionFactory;
 import com.mucommander.ui.dialog.file.MergeFileDialog;
 import com.mucommander.ui.main.MainFrame;
 
@@ -56,7 +56,7 @@ public class MergeFileAction extends SelectedFilesAction implements InvokesDialo
         new MergeFileDialog(mainFrame, files, destFolder).showDialog();
     }
 
-    public static class Factory implements MuActionFactory {
+    public static class Factory implements ActionFactory {
 
 		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
 			return new MergeFileAction(mainFrame, properties);

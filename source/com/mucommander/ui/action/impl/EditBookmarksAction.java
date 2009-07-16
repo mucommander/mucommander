@@ -20,7 +20,7 @@ package com.mucommander.ui.action.impl;
 
 import com.mucommander.ui.action.InvokesDialog;
 import com.mucommander.ui.action.MuAction;
-import com.mucommander.ui.action.MuActionFactory;
+import com.mucommander.ui.action.ActionFactory;
 import com.mucommander.ui.dialog.bookmark.EditBookmarksDialog;
 import com.mucommander.ui.main.MainFrame;
 
@@ -42,7 +42,7 @@ public class EditBookmarksAction extends MuAction implements InvokesDialog {
         new EditBookmarksDialog(mainFrame);
     }
     
-    public static class Factory implements MuActionFactory {
+    public static class Factory implements ActionFactory {
 
 		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
 			return new EditBookmarksAction(mainFrame, properties);

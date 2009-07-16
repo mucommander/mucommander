@@ -22,7 +22,7 @@ import com.mucommander.file.AbstractFile;
 import com.mucommander.file.filter.ExtensionFilenameFilter;
 import com.mucommander.file.filter.FilenameFilter;
 import com.mucommander.ui.action.MuAction;
-import com.mucommander.ui.action.MuActionFactory;
+import com.mucommander.ui.action.ActionFactory;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.table.FileTable;
 import com.mucommander.ui.main.table.FileTableModel;
@@ -189,7 +189,7 @@ public class MarkExtensionAction extends MuAction {
         fileTable.fireMarkedFilesChangedEvent();
     }
     
-    public static class Factory implements MuActionFactory {
+    public static class Factory implements ActionFactory {
 
 		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
 			return new MarkExtensionAction(mainFrame, properties);

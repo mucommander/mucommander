@@ -25,7 +25,7 @@ import com.mucommander.file.impl.local.LocalFile;
 import com.mucommander.job.TempExecJob;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.MuAction;
-import com.mucommander.ui.action.MuActionFactory;
+import com.mucommander.ui.action.ActionFactory;
 import com.mucommander.ui.dialog.ErrorDialog;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.FolderPanel;
@@ -117,7 +117,7 @@ public class OpenAction extends MuAction {
 
     }
     
-    public static class Factory implements MuActionFactory {
+    public static class Factory implements ActionFactory {
 
 		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
 			return new OpenAction(mainFrame, properties);

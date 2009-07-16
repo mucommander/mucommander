@@ -21,7 +21,7 @@ package com.mucommander.ui.action.impl;
 import com.mucommander.file.util.FileSet;
 import com.mucommander.ui.action.InvokesDialog;
 import com.mucommander.ui.action.MuAction;
-import com.mucommander.ui.action.MuActionFactory;
+import com.mucommander.ui.action.ActionFactory;
 import com.mucommander.ui.dialog.file.PackDialog;
 import com.mucommander.ui.main.MainFrame;
 
@@ -44,7 +44,7 @@ public class PackAction extends SelectedFilesAction implements InvokesDialog {
             new PackDialog(mainFrame, files, false);
     }
     
-    public static class Factory implements MuActionFactory {
+    public static class Factory implements ActionFactory {
 
 		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
 			return new PackAction(mainFrame, properties);

@@ -23,7 +23,7 @@ import com.mucommander.file.filter.OrFileFilter;
 import com.mucommander.file.util.FileSet;
 import com.mucommander.ui.action.InvokesDialog;
 import com.mucommander.ui.action.MuAction;
-import com.mucommander.ui.action.MuActionFactory;
+import com.mucommander.ui.action.ActionFactory;
 import com.mucommander.ui.dialog.file.UnpackDialog;
 import com.mucommander.ui.main.MainFrame;
 
@@ -52,7 +52,7 @@ public class UnpackAction extends SelectedFilesAction implements InvokesDialog {
             new UnpackDialog(mainFrame, files, false);
     }
     
-    public static class Factory implements MuActionFactory {
+    public static class Factory implements ActionFactory {
 
 		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
 			return new UnpackAction(mainFrame, properties);

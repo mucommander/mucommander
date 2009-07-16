@@ -21,7 +21,7 @@ package com.mucommander.ui.action.impl;
 import com.mucommander.file.util.FileSet;
 import com.mucommander.ui.action.InvokesDialog;
 import com.mucommander.ui.action.MuAction;
-import com.mucommander.ui.action.MuActionFactory;
+import com.mucommander.ui.action.ActionFactory;
 import com.mucommander.ui.dialog.file.ChangeDateDialog;
 import com.mucommander.ui.main.MainFrame;
 
@@ -47,7 +47,7 @@ public class ChangeDateAction extends SelectedFilesAction implements InvokesDial
             new ChangeDateDialog(mainFrame, files).showDialog();
     }
     
-    public static class Factory implements MuActionFactory {
+    public static class Factory implements ActionFactory {
 
 		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
 			return new ChangeDateAction(mainFrame, properties);

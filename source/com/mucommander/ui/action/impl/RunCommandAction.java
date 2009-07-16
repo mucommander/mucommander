@@ -20,7 +20,7 @@ package com.mucommander.ui.action.impl;
 
 import com.mucommander.ui.action.InvokesDialog;
 import com.mucommander.ui.action.MuAction;
-import com.mucommander.ui.action.MuActionFactory;
+import com.mucommander.ui.action.ActionFactory;
 import com.mucommander.ui.dialog.shell.RunDialog;
 import com.mucommander.ui.main.MainFrame;
 
@@ -41,7 +41,7 @@ public class RunCommandAction extends MuAction implements InvokesDialog {
         new RunDialog(mainFrame).showDialog();
     }
     
-    public static class Factory implements MuActionFactory {
+    public static class Factory implements ActionFactory {
 
 		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
 			return new RunCommandAction(mainFrame, properties);

@@ -21,7 +21,7 @@ package com.mucommander.ui.action.impl;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.impl.local.LocalFile;
 import com.mucommander.ui.action.MuAction;
-import com.mucommander.ui.action.MuActionFactory;
+import com.mucommander.ui.action.ActionFactory;
 import com.mucommander.ui.main.MainFrame;
 
 import java.util.Hashtable;
@@ -44,7 +44,7 @@ public class GoToHomeAction extends MuAction {
             mainFrame.getActivePanel().tryChangeCurrentFolder(homeFolder);
     }
     
-    public static class Factory implements MuActionFactory {
+    public static class Factory implements ActionFactory {
 
 		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
 			return new GoToHomeAction(mainFrame, properties);

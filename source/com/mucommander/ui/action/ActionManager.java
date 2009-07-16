@@ -224,7 +224,7 @@ public class ActionManager {
 		return list;
     }
     
-    public static void registerAction(Class actionClass, MuActionFactory actionFactory) {
+    public static void registerAction(Class actionClass, ActionFactory actionFactory) {
     	actionFactories.put(actionClass, actionFactory);
     	actionClasses.put(actionClass.getName(), actionClass);
     }
@@ -289,7 +289,7 @@ public class ActionManager {
             Class actionClass = actionParameters.getActionClass();
 
             // Looks for the action's factory
-            MuActionFactory actionFactory = (MuActionFactory) actionFactories.get(actionClass);
+            ActionFactory actionFactory = (ActionFactory) actionFactories.get(actionClass);
             if(actionFactory == null) {
             	if(Debug.ON) Debug.trace("couldn't initiate action: " + actionClass.getName() + ", its factory wasn't found");
             	return null;
