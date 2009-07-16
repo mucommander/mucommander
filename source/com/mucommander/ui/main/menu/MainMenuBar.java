@@ -28,7 +28,7 @@ import com.mucommander.file.AbstractFile;
 import com.mucommander.file.impl.local.LocalFile;
 import com.mucommander.runtime.OsFamilies;
 import com.mucommander.text.Translator;
-import com.mucommander.ui.action.ActionDescriptor;
+import com.mucommander.ui.action.ActionParameters;
 import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.action.impl.*;
@@ -481,7 +481,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
                     Hashtable actionProps = new Hashtable();
                     // Specify the window number using the dedicated property
                     actionProps.put(RecallWindowAction.WINDOW_NUMBER_PROPERTY_KEY, ""+(i+1));
-                    recallWindowAction = ActionManager.getActionInstance(new ActionDescriptor(RecallWindowAction.class, actionProps), this.mainFrame);
+                    recallWindowAction = ActionManager.getActionInstance(new ActionParameters(RecallWindowAction.class, actionProps), this.mainFrame);
                 }
 
                 checkBoxMenuItem.setAction(recallWindowAction);

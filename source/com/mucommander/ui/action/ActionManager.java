@@ -45,7 +45,7 @@ import com.mucommander.ui.main.WindowManager;
  * their state accordingly.</p>
  *
  * @see MuAction
- * @see ActionDescriptor
+ * @see ActionParameters
  * @see ActionKeymap
  * @author Maxence Bernard, Arik Hadas
  */
@@ -237,8 +237,8 @@ public class ActionManager {
 
     /**
      * Convenience method that returns an instance of the given MuAction class, and associated with the specified
-     * MainFrame. This method creates an ActionDescriptor with no initial property, passes it to
-     * {@link #getActionInstance(ActionDescriptor, MainFrame)} and returns the MuAction instance.
+     * MainFrame. This method creates an ActionParameters with no initial property, passes it to
+     * {@link #getActionInstance(ActionParameters, MainFrame)} and returns the MuAction instance.
      *
      * @param actionClass the MuAction class to instantiate
      * @param mainFrame the MainFrame instance the action belongs to
@@ -246,7 +246,7 @@ public class ActionManager {
      * class could not be found or could not be instantiated.
      */
     public static MuAction getActionInstance(Class actionClass, MainFrame mainFrame) {
-        return getActionInstance(new ActionDescriptor(actionClass), mainFrame);
+        return getActionInstance(new ActionParameters(actionClass), mainFrame);
     }
 
     /**
@@ -256,24 +256,24 @@ public class ActionManager {
      * @return the corresponding MuAction instance for the given MuAction class in the current MainFrame.
      */
     public static MuAction getActionInstance(Class actionClass) {
-        return getActionInstance(new ActionDescriptor(actionClass), WindowManager.getCurrentMainFrame());
+        return getActionInstance(new ActionParameters(actionClass), WindowManager.getCurrentMainFrame());
     }
 
     /**
-     * Returns an instance of the MuAction class denoted by the given ActionDescriptor, for the specified MainFrame.
-     * If an existing instance corresponding to the same ActionDescriptor and MainFrame is found, it is simply returned.
+     * Returns an instance of the MuAction class denoted by the given ActionParameters, for the specified MainFrame.
+     * If an existing instance corresponding to the same ActionParameters and MainFrame is found, it is simply returned.
      * If no matching instance could be found, a new instance is created, added to the internal action instances map
      * (for further use) and returned.
-     * If the MuAction denoted by the specified ActionDescriptor cannot be found or cannot be instantiated,
+     * If the MuAction denoted by the specified ActionParameters cannot be found or cannot be instantiated,
      * <code>null</code> is returned.
      *
-     * @param actionDescriptor a descriptor of the action class to instantiate with initial properties
+     * @param actionParameters a descriptor of the action class to instantiate with initial properties
      * @param mainFrame the MainFrame instance the action belongs to
-     * @return a MuAction instance matching the given ActionDescriptor and MainFrame, <code>null</code> if the
-     * MuAction class denoted by the ActionDescriptor could not be found or could not be instantiated.
+     * @return a MuAction instance matching the given ActionParameters and MainFrame, <code>null</code> if the
+     * MuAction class denoted by the ActionParameters could not be found or could not be instantiated.
      */
-    public static MuAction getActionInstance(ActionDescriptor actionDescriptor, MainFrame mainFrame) {
-//      if(Debug.ON) Debug.trace("called, actionDescriptor = "+actionDescriptor, 5);
+    public static MuAction getActionInstance(ActionParameters actionParameters, MainFrame mainFrame) {
+//      if(Debug.ON) Debug.trace("called, actionParameters = "+actionParameters, 5);
 
         Hashtable mainFrameActions = (Hashtable)mainFrameActionsMap.get(mainFrame);
         if(mainFrameActions==null) {
@@ -284,9 +284,9 @@ public class ActionManager {
         }
 
         // Looks for an existing MuAction instance used by the specified MainFrame
-        MuAction action = (MuAction)mainFrameActions.get(actionDescriptor);
+        MuAction action = (MuAction)mainFrameActions.get(actionParameters);
         if(action==null) {
-            Class actionClass = actionDescriptor.getActionClass();
+            Class actionClass = actionParameters.getActionClass();
 
             // Looks for the action's factory
             MuActionFactory actionFactory = (MuActionFactory) actionFactories.get(actionClass);
@@ -297,7 +297,7 @@ public class ActionManager {
 
 //          if(Debug.ON) Debug.trace("creating instance");
 
-            Hashtable properties = actionDescriptor.getInitProperties();
+            Hashtable properties = actionParameters.getInitProperties();
             // If no properties hashtable is specified in the action descriptor
             if(properties==null) {
             	properties = new Hashtable();
@@ -310,7 +310,7 @@ public class ActionManager {
 
             // Instanciate the MuAction class
             action = actionFactory.createAction(mainFrame, properties);
-            mainFrameActions.put(actionDescriptor, action);
+            mainFrameActions.put(actionParameters, action);
 
 //          if(Debug.ON) Debug.trace("nb action instances = "+mainFrameActions.size());
         }
@@ -363,22 +363,22 @@ public class ActionManager {
      * @return true if the action instance could be retrieved and the action performed, false otherwise 
      */
     public static boolean performAction(Class actionClass, MainFrame mainFrame) {
-        return performAction(new ActionDescriptor(actionClass), mainFrame);
+        return performAction(new ActionParameters(actionClass), mainFrame);
     }
 
 
     /**
-     * Convenience method that retrieves an instance of the MuAction denoted by the given {@link ActionDescriptor}
+     * Convenience method that retrieves an instance of the MuAction denoted by the given {@link ActionParameters}
      * and associated with the given {@link com.mucommander.ui.main.MainFrame} and calls {@link MuAction#performAction()} on it.
      * Returns <code>true</code> if an instance of the action could be retrieved and performed, <code>false</code>
      * if the MuAction could not be found or could not be instantiated.
      *
-     * @param actionDescriptor the ActionDescriptor of the action to perform
+     * @param actionParameters the ActionParameters of the action to perform
      * @param mainFrame the MainFrame the action belongs to
      * @return true if the action instance could be retrieved and the action performed, false otherwise
      */
-    public static boolean performAction(ActionDescriptor actionDescriptor, MainFrame mainFrame) {
-        MuAction action = getActionInstance(actionDescriptor, mainFrame);
+    public static boolean performAction(ActionParameters actionParameters, MainFrame mainFrame) {
+        MuAction action = getActionInstance(actionParameters, mainFrame);
 
         if(action==null)
             return false;
