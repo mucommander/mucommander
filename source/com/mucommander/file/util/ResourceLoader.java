@@ -77,7 +77,7 @@ public class ResourceLoader {
      * is interpreted.</p>
      *
      * @param path a path to the resource, relative to the default ClassLoader's classpath
-     * @return a URL pointing to the resource, or null if the resource couldn't be located
+     * @return a URL pointing to the resource, or <code>null</code> if the resource couldn't be located
      */
     public static URL getResourceAsURL(String path) {
         return getResourceAsURL(path, null);
@@ -88,14 +88,13 @@ public class ResourceLoader {
      * if the resource couldn't be located.
      * The given <code>ClassLoader</code> is used for locating the resource. If it is <code>null</code>, the
      * <code>ClassLoader</code> returned by {@link #getDefaultClassLoader()} is used.
-
      *
      * <p>The given path may or may not start with a leading slash character ('/'), this doesn't affect the way it
      * is interpreted.</p>
      *
      * @param path a path to the resource, relative to the given ClassLoader's classpath
      * @param classLoader the ClassLoader used for locating the resource
-     * @return a URL pointing to the resource, or null if the resource couldn't be located
+     * @return a URL pointing to the resource, or <code>null</code> if the resource couldn't be located
      */
     public static URL getResourceAsURL(String path, ClassLoader classLoader) {
         if(classLoader==null)
@@ -114,7 +113,7 @@ public class ResourceLoader {
      * is interpreted.</p>
 
      * @param path a path to the resource, relative to the default ClassLoader's classpath
-     * @return an InputStream that allows to read from the resource, or null if the resource couldn't be located
+     * @return an InputStream that allows to read from the resource, or <code>null</code> if the resource couldn't be located
      */
     public static InputStream getResourceAsStream(String path) {
         return getResourceAsStream(path, null);
@@ -122,6 +121,7 @@ public class ResourceLoader {
 
     /**
      * Finds the resource with the given path and returns an <code>InputStream</code> to read from it, or <code>null</code>
+     * if the resource couldn't be located.
      * The given <code>ClassLoader</code> is used for locating the resource. If it is <code>null</code>, the
      * <code>ClassLoader</code> returned by {@link #getDefaultClassLoader()} is used.
      *
@@ -130,7 +130,7 @@ public class ResourceLoader {
 
      * @param path a path to the resource, relative to the given ClassLoader's classpath
      * @param classLoader the Class whose ClassLoader is used for locating the resource
-     * @return an InputStream that allows to read from the resource, or null if the resource couldn't be located
+     * @return an InputStream that allows to read from the resource, or <code>null</code> if the resource couldn't be located
      */
     public static InputStream getResourceAsStream(String path, ClassLoader classLoader) {
         if(classLoader==null)
@@ -152,7 +152,7 @@ public class ResourceLoader {
      * resource.</p>
      *
      * @param path a path to the resource, relative to the default ClassLoader's classpath
-     * @return an AbstractFile that allows to access the resource, or null if the resource couldn't be located
+     * @return an AbstractFile that allows to access the resource, or <code>null</code> if the resource couldn't be located
      */
     public static AbstractFile getResourceAsFile(String path) {
         return getResourceAsFile(removeLeadingSlash(path), null);
@@ -172,7 +172,7 @@ public class ResourceLoader {
 
      * @param path a path to the resource, relative to the given ClassLoader's classpath
      * @param classLoader the ClassLoader is used for locating the resource
-     * @return an AbstractFile that allows to access the resource, or null if the resource couldn't be located
+     * @return an AbstractFile that allows to access the resource, or <code>null</code> if the resource couldn't be located
      */
     public static AbstractFile getResourceAsFile(String path, ClassLoader classLoader) {
         if(classLoader==null)
