@@ -96,7 +96,7 @@ public class MuConfiguration {
     /** Log level. */
     public static final String  LOG_LEVEL                         = LOG_SECTION + '.' + "level";
     /** Default log level. */
-    public static final String  DEFAULT_LOG_LEVEL                 = "SEVERE";
+    public static final String  DEFAULT_LOG_LEVEL                 = "WARNING";
 
 
     // - Shell variables -----------------------------------------------------
