@@ -106,8 +106,6 @@ public class FileFactory {
     private static FileIconProvider defaultFileIconProvider;
 
     static {
-        FileLogger.info("Registering file providers");
-
         // Register built-in file protocols.
         ProtocolProvider protocolProvider;
         registerProtocol(FileProtocols.FILE, new com.mucommander.file.impl.local.LocalFileProvider());
