@@ -266,6 +266,7 @@ public class Launcher {
     /**
      * Main method used to startup muCommander.
      * @param args command line arguments.
+     * @throws IOException if an unrecoverable error occurred during startup 
      */
     public static void main(String args[]) throws IOException {
         int i; // Index in the command line arguments.

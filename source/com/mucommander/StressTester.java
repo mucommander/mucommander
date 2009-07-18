@@ -29,6 +29,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.Random;
 
 /**
@@ -97,8 +98,9 @@ public class StressTester implements Runnable, ActionListener {
     /**
      * Method used to start the stress tester.
      * @param args command line arguments.
+     * @throws IOException if an unrecoverable error occurred during startup
      */
-    public static void main(String args[]) {
+    public static void main(String args[]) throws IOException {
         Launcher.main(args);
 
         StressTester instance = new StressTester();
