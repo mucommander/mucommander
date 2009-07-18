@@ -25,9 +25,11 @@ import com.mucommander.command.CommandManager;
 import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.extension.ExtensionManager;
 import com.mucommander.file.FileFactory;
+import com.mucommander.file.FileLogger;
 import com.mucommander.file.icon.impl.SwingFileIconProvider;
 import com.mucommander.file.impl.ftp.FTPProtocolProvider;
 import com.mucommander.file.impl.smb.SMBProtocolProvider;
+import com.mucommander.file.util.ResourceLoader;
 import com.mucommander.runtime.OsFamilies;
 import com.mucommander.shell.ShellHistoryManager;
 import com.mucommander.ui.dialog.startup.CheckVersionDialog;
@@ -39,6 +41,10 @@ import com.mucommander.ui.main.toolbar.ToolBarIO;
 
 import java.io.IOException;
 import java.lang.reflect.Constructor;
+import java.util.logging.Handler;
+import java.util.logging.Level;
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
 
 /**
  * muCommander launcher.
@@ -261,7 +267,7 @@ public class Launcher {
      * Main method used to startup muCommander.
      * @param args command line arguments.
      */
-    public static void main(String args[]) {
+    public static void main(String args[]) throws IOException {
         int i; // Index in the command line arguments.
 
         // Initialises fields.
@@ -397,25 +403,31 @@ public class Launcher {
                 break;
         }
 
-        // Attemps to guess whether this is the first time muCommander is booted
-        // or not.
+        // - Configuration init ---------------------------------------
+        // ------------------------------------------------------------
+
+
+        // Attempts to guess whether this is the first time muCommander is booted or not.
         boolean isFirstBoot;
         try {isFirstBoot = !MuConfiguration.getConfigurationFile().exists();}
         catch(IOException e) {isFirstBoot = true;}
 
+        // Configuration needs to be loaded before any sort of GUI creation is performed : under Mac OS X, if we're
+        // to use the metal look, we need to know about it right about now.
+        try {MuConfiguration.read();}
+        catch(Exception e) {printFileError("Could not load configuration", e, fatalWarnings);}
 
 
-        // - MAC OS init ----------------------------------------------
+        // - Logging configuration ------------------------------------
         // ------------------------------------------------------------
-        // If muCommander is running under Mac OS X (how lucky!), add some
-        // glue for the main menu bar and other OS X specifics.
-        if(OsFamilies.MAC_OS_X.isCurrent()) {
-            // Configuration needs to be loaded before any sort of GUI creation
-            // is performed - if we're to use the metal look, we need to know about
-            // it right about now.
-            try {MuConfiguration.read();}
-            catch(Exception e) {printFileError("Could not load configuration", e, fatalWarnings);}
+        configureLogging();
 
+
+        // - MAC OS X specific init -----------------------------------
+        // ------------------------------------------------------------
+        // If muCommander is running under Mac OS X (how lucky!), add some glue for the main menu bar and other OS X
+        // specifics.
+        if(OsFamilies.MAC_OS_X.isCurrent()) {
             // Use reflection to create an OSXIntegration instance so that ClassLoader
             // doesn't throw an NoClassDefFoundException under platforms other than Mac OS X
             try {
@@ -425,6 +437,7 @@ public class Launcher {
             }
             catch(Exception e) {if(Debug.ON) Debug.trace("Exception thrown while initializing Mac OS X integration");}
         }
+
 
         // - muCommander boot -----------------------------------------
         // ------------------------------------------------------------
@@ -436,12 +449,6 @@ public class Launcher {
         // to establish HTTP connections. This property is supported only under Java 1.5 and up.
         // Note that Mac OS X already uses the system HTTP proxy, with or without this property being set.
         System.setProperty("java.net.useSystemProxies", "true");
-
-        // If we're not running under OS_X, preferences haven't been loaded yet.
-        if(!OsFamilies.MAC_OS_X.isCurrent()) {
-            try {MuConfiguration.read();}
-            catch(Exception e) {printFileError("Could not load configuration", e, fatalWarnings);}
-        }
 
         // Shows the splash screen, if enabled in the preferences
         useSplash = MuConfiguration.getVariable(MuConfiguration.SHOW_SPLASH_SCREEN, MuConfiguration.DEFAULT_SHOW_SPLASH_SCREEN);
@@ -597,5 +604,38 @@ public class Launcher {
 
         // Register the application-specific 'bookmark' protocol. 
         FileFactory.registerProtocol(BookmarkProtocolProvider.BOOKMARK, new com.mucommander.bookmark.file.BookmarkProtocolProvider());
+    }
+
+    private static void configureLogging() throws IOException {
+        // Set the path to the java.util.logging configuration file, before loggers get a chance to be instantiated.
+        LogManager.getLogManager().readConfiguration(ResourceLoader.getResourceAsStream("com/mucommander/logging.properties"));
+
+        // Read the log level defined in the configuration
+        Level level = Level.parse(MuConfiguration.getVariable(MuConfiguration.LOG_LEVEL, MuConfiguration.DEFAULT_LOG_LEVEL));
+
+        // Set the level of muCommander loggers.
+        // Note: non-muCommander loggers default to the level defined in the bundled logging.properties.
+        FileLogger.getLogger().setLevel(level);
+
+        // Set the level of log handlers to ALL, to let the logging level be defined solely by loggers.
+        Logger rootLogger = LogManager.getLogManager().getLogger("");
+        Handler handlers[] = rootLogger.getHandlers();
+        for(int i=0; i<handlers.length; i++)
+            handlers[i].setLevel(Level.ALL);
+
+//        Logger fileLogger = FileLogger.getLogger();
+//        fileLogger.finest("fileLogger finest");
+//        fileLogger.finer("fileLogger finer");
+//        fileLogger.fine("fileLogger fine");
+//        fileLogger.info("fileLogger info");
+//        fileLogger.warning("fileLogger warning");
+//        fileLogger.severe("fileLogger severe");
+//
+//        rootLogger.finest("rootLogger finest");
+//        rootLogger.finer("rootLogger finer");
+//        rootLogger.fine("rootLogger fine");
+//        rootLogger.info("rootLogger info");
+//        rootLogger.warning("rootLogger warning");
+//        rootLogger.severe("rootLogger severe");
     }
 }

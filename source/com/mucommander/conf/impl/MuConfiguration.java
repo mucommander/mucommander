@@ -88,6 +88,17 @@ public class MuConfiguration {
     /** List of encodings that are displayed in encoding selection components. */
     public static final String  PREFERRED_ENCODINGS               = "preferred_encodings";
 
+
+    // - Log variables -------------------------------------------------------
+    // -----------------------------------------------------------------------
+    /** Section describing the log configuration. */
+    public static final String  LOG_SECTION                       = "log";
+    /** Log level. */
+    public static final String  LOG_LEVEL                         = LOG_SECTION + '.' + "level";
+    /** Default log level. */
+    public static final String  DEFAULT_LOG_LEVEL                 = "SEVERE";
+
+
     // - Shell variables -----------------------------------------------------
     // -----------------------------------------------------------------------
     /** Section describing the shell configuration. */
