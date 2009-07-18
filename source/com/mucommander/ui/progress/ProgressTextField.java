@@ -19,8 +19,7 @@
 
 package com.mucommander.ui.progress;
 
-import com.mucommander.ui.combobox.ComboTextField;
-
+import javax.swing.*;
 import java.awt.*;
 
 
@@ -28,12 +27,9 @@ import java.awt.*;
  * A text fields which can display progress information, a la Mac OS X Safari's location bar, filling a portion of the
  * text field's background with a specified color.
  *
-// * <p>Since ProgressTextField extends {@link ComboTextField}, it can be also be used with
-// * {@link com.mucommander.ui.combobox.EditableComboBox} to form an improved editable combo box with progress information.
- *
  * @author Maxence Bernard
  */
-public class ProgressTextField extends ComboTextField {
+public class ProgressTextField extends JTextField {
 
     /** Progress value, between 0 and 100 */
     private int progressValue;
