@@ -22,6 +22,7 @@ import com.mucommander.bookmark.file.BookmarkProtocolProvider;
 import com.mucommander.command.Command;
 import com.mucommander.command.CommandException;
 import com.mucommander.command.CommandManager;
+import com.mucommander.commons.CommonsLogger;
 import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.extension.ExtensionManager;
 import com.mucommander.file.FileFactory;
@@ -612,22 +613,13 @@ public class Launcher {
         LogManager.getLogManager().readConfiguration(ResourceLoader.getResourceAsStream("com/mucommander/logging.properties"));
 
         // Read the log level defined in the configuration
-        Level level = Level.parse(MuConfiguration.getVariable(MuConfiguration.LOG_LEVEL, MuConfiguration.DEFAULT_LOG_LEVEL));
-
-        // Set the level of muCommander loggers.
-        // Note: non-muCommander loggers default to the level defined in the bundled logging.properties.
-        FileLogger.getLogger().setLevel(level);
-
-        // Set the level of log handlers to ALL, to let the logging level be defined solely by loggers.
-        Logger rootLogger = LogManager.getLogManager().getLogger("");
-        Handler handlers[] = rootLogger.getHandlers();
-        for(int i=0; i<handlers.length; i++)
-            handlers[i].setLevel(Level.ALL);
+        setLogLevel(Level.parse(MuConfiguration.getVariable(MuConfiguration.LOG_LEVEL, MuConfiguration.DEFAULT_LOG_LEVEL)));
 
 //        Logger fileLogger = FileLogger.getLogger();
 //        fileLogger.finest("fileLogger finest");
 //        fileLogger.finer("fileLogger finer");
 //        fileLogger.fine("fileLogger fine");
+//        fileLogger.config("fileLogger config");
 //        fileLogger.info("fileLogger info");
 //        fileLogger.warning("fileLogger warning");
 //        fileLogger.severe("fileLogger severe");
@@ -635,8 +627,30 @@ public class Launcher {
 //        rootLogger.finest("rootLogger finest");
 //        rootLogger.finer("rootLogger finer");
 //        rootLogger.fine("rootLogger fine");
+//        rootLogger.config("rootLogger config");
 //        rootLogger.info("rootLogger info");
 //        rootLogger.warning("rootLogger warning");
 //        rootLogger.severe("rootLogger severe");
+    }
+
+    /**
+     * Sets the level of all muCommander loggers, namely {@link AppLogger}, {@link FileLogger} and
+     * {@link CommonsLogger}.
+     *
+     * @param level the new log level
+     */
+    public static void setLogLevel(Level level) {
+        // Set the level of muCommander loggers.
+        // Note: non-muCommander loggers default to the level defined in the bundled logging.properties.
+        CommonsLogger.getLogger().setLevel(level);
+        FileLogger.getLogger().setLevel(level);
+        AppLogger.getLogger().setLevel(level);
+
+        // Set the level of log handlers to ALL, to let the logging level be defined solely by loggers.
+        Logger rootLogger = LogManager.getLogManager().getLogger("");
+        Handler handlers[] = rootLogger.getHandlers();
+        for(int i=0; i<handlers.length; i++)
+            handlers[i].setLevel(Level.ALL);
+
     }
 }
