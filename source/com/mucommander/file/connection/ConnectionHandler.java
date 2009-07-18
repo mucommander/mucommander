@@ -18,9 +18,9 @@
 
 package com.mucommander.file.connection;
 
-import com.mucommander.Debug;
 import com.mucommander.auth.AuthException;
 import com.mucommander.auth.Credentials;
+import com.mucommander.file.FileLogger;
 import com.mucommander.file.FileURL;
 
 import java.io.IOException;
@@ -104,7 +104,7 @@ public abstract class ConnectionHandler {
      */
     public boolean checkConnection() throws IOException {
         if(!isConnected()) {
-            if(Debug.ON) Debug.trace("not connected, starting connection, this="+this);
+            FileLogger.finer("not connected, starting connection, this="+this);
             startConnection();
             return true;
         }
@@ -120,7 +120,7 @@ public abstract class ConnectionHandler {
      */
     public synchronized boolean acquireLock() {
         if(isLocked) {
-            if(Debug.ON) Debug.trace("!!!!! acquireLock() returning false, should not happen !!!!!", -1);
+            FileLogger.fine("!!!!! acquireLock() returning false, should not happen !!!!!", new Throwable());
             return false;
         }
 
@@ -136,7 +136,7 @@ public abstract class ConnectionHandler {
      */
     public synchronized boolean releaseLock() {
         if(!isLocked) {
-            if(Debug.ON) Debug.trace("!!!!! releaseLock() returning false, should not happen !!!!!", -1);
+            FileLogger.fine("!!!!! releaseLock() returning false, should not happen !!!!!", new Throwable());
             return false;
         }
 

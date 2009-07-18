@@ -20,6 +20,7 @@ package com.mucommander.file.impl.ar;
 
 import com.mucommander.file.ArchiveEntry;
 import com.mucommander.file.ArchiveEntryIterator;
+import com.mucommander.file.FileLogger;
 import com.mucommander.io.StreamUtils;
 
 import java.io.IOException;
@@ -127,13 +128,13 @@ class ArArchiveEntryIterator implements ArchiveEntryIterator {
         }
         // Re-throw IOException
         catch(IOException e) {
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Caught IOException: "+e);
+            FileLogger.fine("Caught IOException", e);
 
             throw e;
         }
         // Catch any other exceptions (NumberFormatException for instance) and throw an IOException instead
         catch(Exception e2) {
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Caught Exception: "+e2);
+            FileLogger.fine("Caught Exception", e2);
 
             throw new IOException();
         }

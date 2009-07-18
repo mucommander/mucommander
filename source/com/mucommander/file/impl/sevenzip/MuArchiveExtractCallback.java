@@ -1,12 +1,12 @@
 package com.mucommander.file.impl.sevenzip;
 
-import java.io.File;
-
-import com.mucommander.Debug;
-import com.mucommander.file.impl.sevenzip.provider.SevenZip.ArchiveExtractCallback;
-import com.mucommander.file.impl.sevenzip.provider.SevenZip.HRESULT;
+import com.mucommander.file.FileLogger;
 import com.mucommander.file.impl.sevenzip.provider.SevenZip.Archive.IInArchive;
 import com.mucommander.file.impl.sevenzip.provider.SevenZip.Archive.SevenZipEntry;
+import com.mucommander.file.impl.sevenzip.provider.SevenZip.ArchiveExtractCallback;
+import com.mucommander.file.impl.sevenzip.provider.SevenZip.HRESULT;
+
+import java.io.File;
 
 public class MuArchiveExtractCallback extends ArchiveExtractCallback {
 	private java.io.OutputStream out;
@@ -18,7 +18,7 @@ public class MuArchiveExtractCallback extends ArchiveExtractCallback {
 	}
 	
 	public void PrintString(String str) {
-		if (Debug.ON) { Debug.trace(str); }
+		FileLogger.finest(str);
     }
 	
 	public int GetStream(int index,

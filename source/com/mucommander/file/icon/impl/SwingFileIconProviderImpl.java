@@ -20,6 +20,7 @@ package com.mucommander.file.icon.impl;
 
 import com.mucommander.Debug;
 import com.mucommander.file.AbstractFile;
+import com.mucommander.file.FileLogger;
 import com.mucommander.file.FileProtocols;
 import com.mucommander.file.icon.CacheableFileIconProvider;
 import com.mucommander.file.icon.CachedFileIconProvider;
@@ -123,7 +124,7 @@ class SwingFileIconProviderImpl extends LocalFileIconProvider implements Cacheab
             }
         }
         catch(Exception e) {
-            if(Debug.ON) Debug.trace("Caught exception while retrieving system icon for file "+ javaIoFile.getAbsolutePath()+" :"+e);
+            FileLogger.fine("Caught exception while retrieving system icon for file "+ javaIoFile.getAbsolutePath(), e);
             return null;
         }
         finally {

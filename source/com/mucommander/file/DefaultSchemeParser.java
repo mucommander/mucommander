@@ -18,12 +18,12 @@
 
 package com.mucommander.file;
 
-import com.mucommander.Debug;
 import com.mucommander.auth.Credentials;
 import com.mucommander.file.impl.local.LocalFile;
 import com.mucommander.runtime.OsFamilies;
 
 import java.net.MalformedURLException;
+import java.util.logging.Level;
 
 /**
  * This class provides a default {@link SchemeParser} implementation. Certain scheme-specific features of the parser
@@ -289,7 +289,8 @@ public class DefaultSchemeParser implements SchemeParser {
             // Canonize path: factor out '.' and '..' and replace '~' by the replacement string (if any)
             fileURL.setPath(pathCanonizer.canonize(path));
 
-            if(Debug.ON && path.trim().equals("")) Debug.trace("Warning: path should not be empty, url="+url);
+            if(FileLogger.isLoggable(Level.FINE) && path.trim().equals(""))
+                FileLogger.fine("Warning: path should not be empty, url="+url);
 
             // Parse query part (if any)
             if(questionMarkPos!=-1)
@@ -299,10 +300,8 @@ public class DefaultSchemeParser implements SchemeParser {
             throw e;
         }
         catch(Exception e2) {
-            if(com.mucommander.Debug.ON) {
-                com.mucommander.Debug.trace("Unexpected exception in FileURL() with "+url+" : "+e2);
-                e2.printStackTrace();
-            }
+            FileLogger.info("Unexpected exception in FileURL() with "+url, e2);
+
             throw new MalformedURLException();
         }
     }

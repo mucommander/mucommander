@@ -18,9 +18,9 @@
 
 package com.mucommander.file.impl.sftp;
 
-import com.mucommander.Debug;
 import com.mucommander.auth.AuthException;
 import com.mucommander.auth.Credentials;
+import com.mucommander.file.FileLogger;
 import com.mucommander.file.FileURL;
 import com.mucommander.file.connection.ConnectionHandler;
 import com.sshtools.j2ssh.SftpClient;
@@ -67,7 +67,7 @@ class SFTPConnectionHandler extends ConnectionHandler {
     //////////////////////////////////////
 
     public synchronized void startConnection() throws IOException {
-        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("starting connection to "+realm);
+        FileLogger.finer("starting connection to "+realm);
         try {
             FileURL realm = getRealm();
 
@@ -78,7 +78,7 @@ class SFTPConnectionHandler extends ConnectionHandler {
             if(credentials ==null)
                 throwAuthException("Login and password required");  // Todo: localize this entry
 
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("creating SshClient");
+            FileLogger.finest("creating SshClient");
 
             // Init SSH client
             sshClient = new SshClient();
@@ -98,14 +98,14 @@ class SFTPConnectionHandler extends ConnectionHandler {
             if(authMethods==null)   // this can happen
                 throw new IOException();
 
-            if(Debug.ON) Debug.trace("getAvailableAuthMethods()="+sshClient.getAvailableAuthMethods(credentials.getLogin()));
+            FileLogger.finer("getAvailableAuthMethods()="+sshClient.getAvailableAuthMethods(credentials.getLogin()));
 
             SshAuthenticationClient authClient = null;
             String privateKeyPath = realm.getProperty(SFTPFile.PRIVATE_KEY_PATH_PROPERTY_NAME);
 
             // Try public key first. Don't try other methods if there's a key file defined
             if (authMethods.contains(PUBLIC_KEY_AUTH_METHOD) && privateKeyPath != null) {
-                if(Debug.ON) Debug.trace("Using "+PUBLIC_KEY_AUTH_METHOD+" authentication method");
+                FileLogger.finer("Using "+PUBLIC_KEY_AUTH_METHOD+" authentication method");
 
                 PublicKeyAuthenticationClient pk = new PublicKeyAuthenticationClient();
                 pk.setUsername(credentials.getLogin());
@@ -129,7 +129,7 @@ class SFTPConnectionHandler extends ConnectionHandler {
             // 'keyboard-interactive' is supported by the server
             else if(!authMethods.contains(PASSWORD_AUTH_METHOD) && authMethods.contains(KEYBOARD_INTERACTIVE_AUTH_METHOD) && 
                     privateKeyPath == null) {
-                if(Debug.ON) Debug.trace("Using "+KEYBOARD_INTERACTIVE_AUTH_METHOD+" authentication method");
+                FileLogger.finer("Using "+KEYBOARD_INTERACTIVE_AUTH_METHOD+" authentication method");
 
                 KBIAuthenticationClient kbi = new KBIAuthenticationClient();
                 kbi.setUsername(credentials.getLogin());
@@ -140,12 +140,12 @@ class SFTPConnectionHandler extends ConnectionHandler {
                         // Workaround for what seems to be a bug in J2SSH: this method is called twice, first time
                         // with a valid KBIPrompt array, second time with null
                         if(prompts==null) {
-                            if(Debug.ON) Debug.trace("prompts is null!");
+                            FileLogger.finest("prompts is null!");
                             return;
                         }
 
                         for(int i=0; i<prompts.length; i++) {
-                            if(Debug.ON) Debug.trace("prompts["+i+"]="+prompts[i].getPrompt());
+                            FileLogger.finest("prompts["+i+"]="+prompts[i].getPrompt());
                             prompts[i].setResponse(credentials.getPassword());
                         }
                     }
@@ -155,7 +155,7 @@ class SFTPConnectionHandler extends ConnectionHandler {
             }
             // Default to 'password' method, even if server didn't report as being supported
             else if (privateKeyPath == null) {
-                if(Debug.ON) Debug.trace("Using "+PASSWORD_AUTH_METHOD+" authentication method");
+                FileLogger.finer("Using "+PASSWORD_AUTH_METHOD+" authentication method");
 
                 PasswordAuthenticationClient pwd = new PasswordAuthenticationClient();
                 pwd.setUsername(credentials.getLogin());
@@ -171,17 +171,14 @@ class SFTPConnectionHandler extends ConnectionHandler {
                 if(authResult!=AuthenticationProtocolState.COMPLETE)
                     throwAuthException("Login or password rejected");   // Todo: localize this entry
 
-                if(Debug.ON) Debug.trace("authentication complete, authResult="+authResult);
+                FileLogger.finer("authentication complete, authResult="+authResult);
             }
             catch(IOException e) {
                 if(e instanceof AuthException)
                     throw e;
 
-                if(Debug.ON) {
-                    Debug.trace("Caught exception while authenticating: "+e);
-                    e.printStackTrace();
-                    throwAuthException(e.getMessage());
-                }
+                FileLogger.fine("Caught exception while authenticating", e);
+                throwAuthException(e.getMessage());
             }
 
 
@@ -190,8 +187,7 @@ class SFTPConnectionHandler extends ConnectionHandler {
             sftpSubsystem = sshClient.openSftpChannel();
         }
         catch(IOException e) {
-            if(com.mucommander.Debug.ON)
-                com.mucommander.Debug.trace("IOException thrown while starting connection: "+e);
+            FileLogger.fine("IOException thrown while starting connection", e);
 
             // Disconnect if something went wrong
             if(sshClient!=null && sshClient.isConnected())
@@ -217,12 +213,12 @@ class SFTPConnectionHandler extends ConnectionHandler {
     public synchronized void closeConnection() {
         if(sftpClient!=null) {
             try { sftpClient.quit(); }
-            catch(IOException e) { if(Debug.ON) Debug.trace("IOException thrown while calling sftpClient.quit()"); }
+            catch(IOException e) { FileLogger.fine("IOException caught while calling sftpClient.quit()", e); }
         }
 
         if(sftpSubsystem !=null) {
             try { sftpSubsystem.close(); }
-            catch(IOException e) { if(Debug.ON) Debug.trace("IOException thrown while calling sftpChannel.close ()"); }
+            catch(IOException e) { FileLogger.fine("IOException caught while calling sftpChannel.close ()"); }
         }
 
         if(sshClient!=null)

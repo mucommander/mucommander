@@ -72,8 +72,6 @@ class TarArchiver extends Archiver {
                     ? FilePermissions.DEFAULT_DIRECTORY_PERMISSIONS
                     : FilePermissions.DEFAULT_FILE_PERMISSIONS).getIntValue());
 
-        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("creating entry, name="+entry.getName()+" isDirectory="+entry.isDirectory()+" size="+entry.getSize()+" modTime="+entry.getModTime());
-		
         // Add the entry
         tos.putNextEntry(entry);
 

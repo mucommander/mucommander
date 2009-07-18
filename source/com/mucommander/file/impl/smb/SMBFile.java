@@ -18,7 +18,6 @@
 
 package com.mucommander.file.impl.smb;
 
-import com.mucommander.Debug;
 import com.mucommander.auth.AuthException;
 import com.mucommander.auth.Credentials;
 import com.mucommander.file.*;
@@ -224,7 +223,7 @@ import java.net.MalformedURLException;
             return true;
         }
         catch(SmbException e) {
-            if(com.mucommander.Debug.ON) { com.mucommander.Debug.trace("Exception caught while changing date, returning false: "+e);}
+            FileLogger.fine("Exception caught while changing date, returning false", e);
             return false;
         }
     }
@@ -268,14 +267,10 @@ import java.net.MalformedURLException;
             return file.exists();
         }
         catch(IOException e) {
-            if(Debug.ON)
-                Debug.trace(e);
+            FileLogger.fine("Exception caught while calling SmbFile#exists()", e);
 
-            if(e instanceof SmbAuthException)
-                return true;
-            return false;
+            return e instanceof SmbAuthException;
         }
-
     }
 
     public FilePermissions getPermissions() {

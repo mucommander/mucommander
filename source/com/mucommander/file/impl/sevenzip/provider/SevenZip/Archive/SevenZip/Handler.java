@@ -1,16 +1,17 @@
 package com.mucommander.file.impl.sevenzip.provider.SevenZip.Archive.SevenZip;
 
-import java.io.IOException;
-
+import com.mucommander.file.FileLogger;
 import com.mucommander.file.impl.sevenzip.provider.Common.ObjectVector;
-import com.mucommander.file.impl.sevenzip.provider.SevenZip.HRESULT;
-import com.mucommander.file.impl.sevenzip.provider.SevenZip.ICompressProgressInfo;
-import com.mucommander.file.impl.sevenzip.provider.SevenZip.IInStream;
 import com.mucommander.file.impl.sevenzip.provider.SevenZip.Archive.IArchiveExtractCallback;
 import com.mucommander.file.impl.sevenzip.provider.SevenZip.Archive.IInArchive;
 import com.mucommander.file.impl.sevenzip.provider.SevenZip.Archive.SevenZipEntry;
 import com.mucommander.file.impl.sevenzip.provider.SevenZip.Common.LocalCompressProgressInfo;
 import com.mucommander.file.impl.sevenzip.provider.SevenZip.Common.LocalProgress;
+import com.mucommander.file.impl.sevenzip.provider.SevenZip.HRESULT;
+import com.mucommander.file.impl.sevenzip.provider.SevenZip.ICompressProgressInfo;
+import com.mucommander.file.impl.sevenzip.provider.SevenZip.IInStream;
+
+import java.io.IOException;
 
 
 public class Handler implements com.mucommander.file.impl.sevenzip.provider.SevenZip.Archive.IInArchive {
@@ -268,8 +269,7 @@ public class Handler implements com.mucommander.file.impl.sevenzip.provider.Seve
                     continue;
                 }
             } catch(Exception e) {
-                System.out.println("IOException : " + e);
-                e.printStackTrace();
+                FileLogger.finest("Caught IOException", e);
                 result = folderOutStream.FlushCorrupted(IInArchive.NExtract_NOperationResult_kDataError);
                 if (result != HRESULT.S_OK) return result;
                 continue;

@@ -18,7 +18,6 @@
 
 package com.mucommander.file.impl.http;
 
-import com.mucommander.Debug;
 import com.mucommander.auth.AuthException;
 import com.mucommander.auth.Credentials;
 import com.mucommander.file.*;
@@ -118,7 +117,7 @@ public class HTTPFile extends AbstractFile {
             disableCertificateVerifications();
         }
         catch(Exception e) {
-            if(Debug.ON) Debug.trace("Failed to install a custom TrustManager: "+e);
+            FileLogger.fine("Failed to install a custom TrustManager: "+e);
         }
     }
 
@@ -138,8 +137,6 @@ public class HTTPFile extends AbstractFile {
         this.url = url;
         this.absPath = absPath;
 
-        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(url.toExternalForm());
-		
 //        // Determine file name (URL-decoded)
 //        this.name = fileURL.getFilename(true);
 //        // Name may contain '/' or '\' characters once decoded, let's remove them
@@ -313,7 +310,7 @@ public class HTTPFile extends AbstractFile {
      */
     private void checkHTTPResponse(HttpURLConnection conn) throws AuthException, IOException {
         int responseCode = conn.getResponseCode();
-        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("response code = "+responseCode);
+        FileLogger.finer("response code = "+responseCode);
 
         // If we got a 401 (Unauthorized) response, throw an AuthException to ask for credentials
         if(responseCode==401)
@@ -497,7 +494,6 @@ public class HTTPFile extends AbstractFile {
             URL contextURL = this.url;
             HttpURLConnection conn;
             do {
-                if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("contextURL="+contextURL+" hostname="+contextURL.getHost());
                 // Get a connection instance
                 conn = getHttpURLConnection(contextURL);
 
@@ -516,7 +512,7 @@ public class HTTPFile extends AbstractFile {
                 String locationHeader = conn.getHeaderField("Location");
                 if(responseCode>=300 && responseCode<400 && locationHeader!=null) {
                     // Redirect to Location field and remember context url
-                    if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Location header = "+conn.getHeaderField("Location"));
+                    FileLogger.finer("Location header = "+conn.getHeaderField("Location"));
                     contextURL = new URL(contextURL, locationHeader);
                     // One more time
                     continue;
@@ -590,7 +586,7 @@ public class HTTPFile extends AbstractFile {
                             continue;
 
                         try {
-                            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("creating child "+link+" context="+contextURL);
+                            FileLogger.finest("creating child "+link+" context="+contextURL);
                             childURL = new URL(contextURL, link);
 
                             // Extract the filename from the child URL
@@ -618,15 +614,13 @@ public class HTTPFile extends AbstractFile {
                             tempChildURL.setPath(parentPath+filename);
                             child = new HTTPFile(childFileURL, childURL, tempChildURL.toString());
 
-                            if(Debug.ON) Debug.trace("childFileURL="+child.getURL()+" absPath="+child.getAbsolutePath()+" parent="+child.getParent());
+                            FileLogger.finest("childFileURL="+child.getURL()+" absPath="+child.getAbsolutePath()+" parent="+child.getParent());
 
                             children.add(FileFactory.wrapArchive(child));
                             childrenURL.add(link);
                         }
                         catch(IOException e) {
-                            if (com.mucommander.Debug.ON) {
-                                com.mucommander.Debug.trace("Cannot create child : "+link+" "+e);
-                            }
+                            FileLogger.fine("Cannot create child: "+link, e);
                         }
                     }
 
@@ -640,7 +634,7 @@ public class HTTPFile extends AbstractFile {
             return childrenArray;
         }
         catch (Exception e) {
-            if (com.mucommander.Debug.ON) com.mucommander.Debug.trace("Exception caught while parsing HTML:"+e+", throwing IOException");
+            FileLogger.fine("Exception caught while parsing HTML, throwing IOException", e);
 
             if(e instanceof IOException)
                 throw (IOException)e;
@@ -648,8 +642,6 @@ public class HTTPFile extends AbstractFile {
             throw new IOException();
         }
         finally {
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("ends");
-
             try {
                 // Try and close URL connection
                 if(br!=null)

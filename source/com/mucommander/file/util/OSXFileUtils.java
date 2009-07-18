@@ -18,8 +18,8 @@
 
 package com.mucommander.file.util;
 
-import com.mucommander.Debug;
 import com.mucommander.file.AbstractFile;
+import com.mucommander.file.FileLogger;
 import com.mucommander.io.StreamUtils;
 import com.mucommander.runtime.OsFamilies;
 import com.mucommander.runtime.OsVersions;
@@ -90,7 +90,7 @@ public class OSXFileUtils {
             return null;
         }
         catch(Exception e) {
-            if(Debug.ON) Debug.trace("Caught exception: "+e);
+            FileLogger.fine("Caught exception", e);
 
             return null;
         }

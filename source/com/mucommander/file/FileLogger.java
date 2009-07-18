@@ -60,7 +60,7 @@ public class FileLogger {
     // Methods deletegated to the Logger singleton //
     /////////////////////////////////////////////////
 
-    public boolean isLoggable(Level level) {
+    public static boolean isLoggable(Level level) {
         return logger.isLoggable(level);
     }
 

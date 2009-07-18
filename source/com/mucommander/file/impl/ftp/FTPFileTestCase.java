@@ -18,7 +18,6 @@
 
 package com.mucommander.file.impl.ftp;
 
-import com.mucommander.Debug;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.AbstractFileTestCase;
 import com.mucommander.file.FileFactory;
@@ -46,7 +45,6 @@ public class FTPFileTestCase extends AbstractFileTestCase {
 //        FTPFile.setAttributeCachingPeriod(5000);
 
         tempFolder = FileFactory.getFile(System.getProperty(TEMP_FOLDER_PROPERTY));
-        if(Debug.ON) Debug.trace("Temp folder="+tempFolder);
     }
 
 

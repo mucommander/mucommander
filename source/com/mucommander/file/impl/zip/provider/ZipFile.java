@@ -18,8 +18,8 @@
 
 package com.mucommander.file.impl.zip.provider;
 
-import com.mucommander.Debug;
 import com.mucommander.file.AbstractFile;
+import com.mucommander.file.FileLogger;
 import com.mucommander.io.*;
 
 import java.io.*;
@@ -128,7 +128,7 @@ public class ZipFile implements ZipConstants {
      */
     private void openRead() throws IOException {
         if(rais!=null) {
-            if(Debug.ON) Debug.trace("Warning: an existing RandomAccessInputStream was found, closing it now");
+            FileLogger.fine("Warning: an existing RandomAccessInputStream was found, closing it now");
             rais.close();
         }
 
@@ -158,7 +158,7 @@ public class ZipFile implements ZipConstants {
      */
     private void openWrite() throws IOException{
         if(raos!=null) {
-            if(Debug.ON) Debug.trace("Warning: an existing RandomAccessOutputStream was found, closing it now");
+            FileLogger.fine("Warning: an existing RandomAccessOutputStream was found, closing it now");
             raos.close();
         }
 
@@ -780,14 +780,14 @@ public class ZipFile implements ZipConstants {
 
             if(isUTF8) {
                 entryInfo.encoding = UTF_8;
-                if(Debug.ON) Debug.trace("Entry declared as UTF-8");
+                FileLogger.finest("Entry declared as UTF-8");
             }
             else if(defaultEncodingSet) {
                 entryInfo.encoding = defaultEncoding;
-                if(Debug.ON) Debug.trace("Using default encoding: "+defaultEncoding);
+                FileLogger.finest("Using default encoding: "+defaultEncoding);
             }
             else {
-                // if(Debug.ON) Debug.trace("Encoding will be detected later");
+//                FileLogger.finest("Encoding will be detected later");
             }
 
             entryInfo.hasDataDescriptor = (gp&8)!=0;
@@ -890,7 +890,7 @@ public class ZipFile implements ZipConstants {
             // In that case, the default system encoding will be used to create the string
             String guessedEncoding = EncodingDetector.detectEncoding(encodingAccumulator.toByteArray());
 
-            if(Debug.ON) Debug.trace("Guessed encoding: "+guessedEncoding);
+            FileLogger.finest("Guessed encoding: "+guessedEncoding);
 
             ZipEntry entry;
             ZipEntryInfo entryInfo;
@@ -1075,7 +1075,7 @@ public class ZipFile implements ZipConstants {
                 return new String(bytes, encoding);
             }
             catch(UnsupportedEncodingException e) {
-                if(Debug.ON) Debug.trace("Error: unsupported encoding: "+encoding+" , falling back to default encoding");
+                FileLogger.fine("Error: unsupported encoding: "+encoding+" , falling back to default encoding");
             }
         }
 

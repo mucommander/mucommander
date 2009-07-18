@@ -72,7 +72,7 @@ public class ArchiveEntryTree extends DefaultMutableTreeNode {
 
             if(matchFound) {
                 if(d==entryDepth) {
-                    // if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Replacing entry for node "+childNode);
+                    FileLogger.finest("Replacing entry for node "+childNode);
                     // Replace existing entry
                     childNode.setUserObject(entry);
                 }
@@ -87,7 +87,7 @@ public class ArchiveEntryTree extends DefaultMutableTreeNode {
                     node.add(new DefaultMutableTreeNode(entry, true));
                 }
                 else {
-                    // if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Creating node for "+subPath);
+                    FileLogger.finest("Creating node for "+subPath);
                     childNode = new DefaultMutableTreeNode(new ArchiveEntry(subPath, true, entry.getDate(), 0, true), true);
                     node.add(childNode);
                     node = childNode;

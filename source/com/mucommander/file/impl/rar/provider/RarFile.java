@@ -18,8 +18,8 @@
 
 package com.mucommander.file.impl.rar.provider;
 
-import com.mucommander.Debug;
 import com.mucommander.file.AbstractFile;
+import com.mucommander.file.FileLogger;
 import com.mucommander.file.impl.rar.provider.de.innosystec.unrar.Archive;
 import com.mucommander.file.impl.rar.provider.de.innosystec.unrar.exception.RarException;
 import com.mucommander.file.impl.rar.provider.de.innosystec.unrar.exception.RarExceptionType;
@@ -136,7 +136,7 @@ public class RarFile {
             try {
                 closeable.close();
             } catch (Exception ex) {
-            	if(Debug.ON) Debug.trace("Warning: couldn't close a closable object of type \"" + closeable.getClass().getName() + "\"");
+            	FileLogger.fine("couldn't close a closable object of type \"" + closeable.getClass().getName() + "\"");
             }
         }
     }

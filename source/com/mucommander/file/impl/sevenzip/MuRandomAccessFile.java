@@ -1,10 +1,11 @@
 package com.mucommander.file.impl.sevenzip;
 
+import com.mucommander.file.AbstractFile;
+import com.mucommander.file.FileLogger;
+import com.mucommander.file.impl.sevenzip.provider.SevenZip.IInStream;
+
 import java.io.IOException;
 import java.io.InputStream;
-
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.impl.sevenzip.provider.SevenZip.IInStream;
 
 public class MuRandomAccessFile  extends IInStream {
 	
@@ -22,7 +23,7 @@ public class MuRandomAccessFile  extends IInStream {
 			stream = file.getInputStream();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			FileLogger.finest(null, e);
 		}
 	}
 
@@ -66,7 +67,7 @@ public class MuRandomAccessFile  extends IInStream {
 			return stream.skip(offset);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+            FileLogger.finest(null, e);
 			return 0;
 		}
     }
@@ -76,7 +77,7 @@ public class MuRandomAccessFile  extends IInStream {
 			return stream.available();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+            FileLogger.finest(null, e);
 			return 0;
 		}
     }

@@ -18,9 +18,9 @@
 
 package com.mucommander.file.impl.lst;
 
-import com.mucommander.Debug;
 import com.mucommander.file.ArchiveEntry;
 import com.mucommander.file.ArchiveEntryIterator;
+import com.mucommander.file.FileLogger;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -102,10 +102,7 @@ class LstArchiveEntryIterator implements ArchiveEntryIterator {
             return new LstArchiveEntry(path, isDirectory, date, size, baseFolder);
         }
         catch(Exception e) {    // Catches exceptions thrown by StringTokenizer and SimpleDateFormat
-            if(Debug.ON) {
-                Debug.trace("Exception caught while parsing LST file:");
-                e.printStackTrace();
-            }
+            FileLogger.fine("Exception caught while parsing LST file", e);
 
             throw new IOException();
         }

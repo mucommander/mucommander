@@ -18,8 +18,8 @@
 
 package com.mucommander.file.impl;
 
-import com.mucommander.Debug;
 import com.mucommander.file.AbstractFile;
+import com.mucommander.file.FileLogger;
 import com.mucommander.file.FilePermissions;
 import com.mucommander.file.FileProtocols;
 import com.mucommander.file.filter.FileFilter;
@@ -163,10 +163,10 @@ public class CachedFile extends ProxyFile {
             fs = fFs.get(null);
 
             getFileAttributesAvailable = true;
-            if(Debug.ON) Debug.trace("Access to java.io.FileSystem granted");
+            FileLogger.finest("Access to java.io.FileSystem granted");
         }
         catch(Exception e) {
-            if(Debug.ON) Debug.trace("Error while allowing access to java.io.FileSystem: "+e);
+            FileLogger.fine("Error while allowing access to java.io.FileSystem", e);
         }
     }
 
@@ -221,7 +221,7 @@ public class CachedFile extends ProxyFile {
                 isHiddenSet = true;
             }
             catch(Exception e) {
-                if(Debug.ON) Debug.trace("Could not retrieve file attributes for "+file+": "+e);
+                FileLogger.fine("Could not retrieve file attributes for "+file, e);
             }
         }
     }

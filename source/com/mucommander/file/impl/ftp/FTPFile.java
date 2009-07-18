@@ -19,7 +19,6 @@
 
 package com.mucommander.file.impl.ftp;
 
-import com.mucommander.Debug;
 import com.mucommander.auth.AuthException;
 import com.mucommander.auth.Credentials;
 import com.mucommander.file.*;
@@ -156,7 +155,7 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
         // => Use the MLST command if supported by the server (use FEAT command to find out if it is supported).
         // See http://tools.ietf.org/html/draft-ietf-ftpext-mlst-16
         FileURL parentURL = fileURL.getParent();
-        if(Debug.ON) Debug.trace("fileURL="+fileURL+" parent="+parentURL);
+        FileLogger.finest("fileURL="+fileURL+" parent="+parentURL);
 
         // Parent is null, create '/' file
         if(parentURL==null) {
@@ -255,7 +254,7 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
         }
         // This exception is not an IOException and needs to be caught and thrown back as an IOException
         catch(org.apache.commons.net.ftp.parser.ParserInitializationException e) {
-            if(Debug.ON) Debug.trace("ParserInitializationException caught");
+            FileLogger.fine("ParserInitializationException caught", e);
             throw new IOException();
         }
         catch(IOException e) {
@@ -329,9 +328,9 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
                 sdate = SITE_UTIME_DATE_FORMAT.format(new Date(lastModified));
             }
 
-            if(Debug.ON) Debug.trace("sending SITE UTIME "+sdate+" "+absPath);
+            FileLogger.finer("sending SITE UTIME "+sdate+" "+absPath);
             boolean success = connHandler.ftpClient.sendSiteCommand("UTIME "+sdate+" "+absPath);
-            if(Debug.ON) Debug.trace("server reply: "+connHandler.ftpClient.getReplyString());
+            FileLogger.finer("server reply: "+connHandler.ftpClient.getReplyString());
 
             if(!success) {
                 int replyCode = connHandler.ftpClient.getReplyCode();
@@ -342,7 +341,7 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
                         || replyCode==FTPReply.COMMAND_NOT_IMPLEMENTED 
                         || replyCode==FTPReply.COMMAND_NOT_IMPLEMENTED_FOR_PARAMETER) {
 
-                    if(Debug.ON) Debug.trace("marking UTIME command as unsupported");
+                    FileLogger.fine("marking UTIME command as unsupported");
                     connHandler.utimeCommandSupported = false;
                 }
             }
@@ -655,9 +654,9 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
             // Makes sure the connection is started, if not starts it
             connHandler.checkConnection();
 
-            if(Debug.ON) Debug.trace("sending SITE CHMOD "+Integer.toOctalString(permissions)+" "+absPath);
+            FileLogger.finer("sending SITE CHMOD "+Integer.toOctalString(permissions)+" "+absPath);
             boolean success = connHandler.ftpClient.sendSiteCommand("CHMOD "+Integer.toOctalString(permissions)+" "+absPath);
-            if(Debug.ON) Debug.trace("server reply: "+connHandler.ftpClient.getReplyString());
+            FileLogger.finer("server reply: "+connHandler.ftpClient.getReplyString());
 
             if(!success) {
                 int replyCode = connHandler.ftpClient.getReplyCode();
@@ -668,7 +667,7 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
                         || replyCode==FTPReply.COMMAND_NOT_IMPLEMENTED
                         || replyCode==FTPReply.COMMAND_NOT_IMPLEMENTED_FOR_PARAMETER) {
 
-                    if(Debug.ON) Debug.trace("marking CHMOD command as unsupported");
+                    FileLogger.fine("marking CHMOD command as unsupported");
                     connHandler.chmodCommandSupported = false;
                 }
             }
@@ -909,9 +908,9 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
             try {
                 super.close();
 
-                if(Debug.ON) Debug.trace("complete pending commands");
+                FileLogger.finer("complete pending commands");
                 connHandler.ftpClient.completePendingCommand();
-                if(Debug.ON) Debug.trace("commands completed");
+                FileLogger.finer("commands completed");
 
                 // Todo: An IOException will be thrown by completePendingCommand if the transfer has not finished before calling close.
                 // An 'abort' command should be issued to the server before closing if the transfer is not finished yet.
@@ -919,7 +918,7 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
                 // FTPClient#abort() is difficult to use to say the least. This post gives some insight: http://mail-archives.apache.org/mod_mbox/commons-user/200604.mbox/%3c78A73ABD8DB470439179DB682EA990B3025B87DF@mtlex02.NEXXLINK.INT%3e
             }
             catch(IOException e) {
-                if(Debug.ON) Debug.trace("exception in completePendingCommands(): "+e);
+                FileLogger.fine("exception in completePendingCommands()", e);
 
                 // Checks if the IOException corresponds to a socket error and in that case, closes the connection
                 connHandler.checkSocketException(e);
@@ -1035,12 +1034,12 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
             try {
                 super.close();
 
-                if(Debug.ON) Debug.trace("complete pending commands");
+                FileLogger.finest("complete pending commands");
                 connHandler.ftpClient.completePendingCommand();
-                if(Debug.ON) Debug.trace("commands completed");
+                FileLogger.finest("commands completed");
             }
             catch(IOException e) {
-                if(Debug.ON) Debug.trace("exception in completePendingCommands(): "+e);
+                FileLogger.fine("exception in completePendingCommands()", e);
 
                 // Checks if the IOException corresponds to a socket error and in that case, closes the connection
                 connHandler.checkSocketException(e);
@@ -1151,7 +1150,7 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
         private void checkServerReply() throws IOException, AuthException {
             // Check that connection went ok
             int replyCode = ftpClient.getReplyCode();
-            if(Debug.ON) Debug.trace("server reply="+ftpClient.getReplyString());
+            FileLogger.finest("server reply="+ftpClient.getReplyString());
 
             // Close connection if the connection dropped prematurely so that isConnected() returns false
             if(replyCode==FTPReply.SERVICE_NOT_AVAILABLE)
@@ -1174,7 +1173,7 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
          */
         private void checkSocketException(IOException e) {
             if(((e instanceof FTPConnectionClosedException) || (e instanceof SocketException) || (e instanceof SocketTimeoutException)) && isConnected()) {
-                if(Debug.ON) Debug.trace("socket exception detected, closing connection: "+e);
+                FileLogger.fine("socket exception detected, closing connection", e);
                 closeConnection();
             }
         }
@@ -1185,7 +1184,7 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
         //////////////////////////////////////
 
         public void startConnection() throws IOException {
-            if(Debug.ON) Debug.trace("connecting to "+getRealm().getHost());
+            FileLogger.fine("connecting to "+getRealm().getHost());
 
 //            this.ftpClient = new CustomFTPClient();
             this.ftpClient = new FTPClient();
@@ -1198,7 +1197,7 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
 	
 	                // Override default port (21) if a custom port was specified in the URL
 	                int port = realm.getPort();
-	                if(Debug.ON) Debug.trace("custom port="+port);
+	                FileLogger.finer("custom port="+port);
 	                if(port!=-1)
 	                    ftpClient.setDefaultPort(port);
 	
@@ -1206,7 +1205,7 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
 	                // - most modern FTP servers seem to default to UTF-8, but not all of them do.
 	                // - commons-ftp defaults to ISO-8859-1 which is not good
 	                // Note: this has to be done before the connection is established otherwise it won't be taken into account
-	                if(Debug.ON) Debug.trace("encoding="+encoding);
+	                FileLogger.finer("encoding="+encoding);
 	                ftpClient.setControlEncoding(encoding);
 	
 	                // Connect to the FTP server
@@ -1214,7 +1213,7 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
 	
 	//                // Set a socket timeout: default value is 0 (no timeout)
 	//                ftpClient.setSoTimeout(CONNECTION_TIMEOUT*1000);
-	//                if(Debug.ON) Debug.trace("soTimeout="+ftpClient.getSoTimeout());
+	//                FileLogger.finer("soTimeout="+ftpClient.getSoTimeout());
 	
 	                // Throw an IOException if server replied with an error
 	                checkServerReply();
@@ -1222,7 +1221,7 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
 	                Credentials credentials = getCredentials();
 	
 	                // Throw an AuthException if there are no credentials
-	                if(Debug.ON) Debug.trace("fileURL="+ realm.toString(true)+" credentials="+ credentials);
+	                FileLogger.finer("fileURL="+ realm.toString(true)+" credentials="+ credentials);
 	                if(credentials ==null)
 	                    throwAuthException(null);
 	
@@ -1232,7 +1231,7 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
 	                checkServerReply();
 	
 	                // Enables/disables passive mode
-	                if(Debug.ON) Debug.trace("passiveMode="+passiveMode);
+	                FileLogger.finer("passiveMode="+passiveMode);
 	                if(passiveMode)
 	                    this.ftpClient.enterLocalPassiveMode();
 	                else
@@ -1264,7 +1263,7 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
                     // condition is temporary and the action may be requested again."
 	                int replyCode = ftpClient.getReplyCode();
                     if(!ftpClient.isConnected() || FTPReply.isNegativeTransient(replyCode)) {
-                        if(Debug.ON) Debug.trace((!ftpClient.isConnected()?"Connection error":"Temporary server error ("+replyCode+")")+", retries left="+retriesLeft);
+                        FileLogger.fine((!ftpClient.isConnected()?"Connection error":"Temporary server error ("+replyCode+")")+", retries left="+retriesLeft, e);
 
                         // Retry to connect, if we have at least an attempt left
                         if(retriesLeft>0) {
@@ -1272,7 +1271,7 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
 
                             // Wait before retrying
                             if(retryDelay>0) {
-                                if(Debug.ON) Debug.trace("waiting "+retryDelay+ "ms before retrying to connect");
+                                FileLogger.fine("waiting "+retryDelay+ "ms before retrying to connect");
 
                                 try { Thread.sleep(retryDelay); }
                                 catch(InterruptedException e2) {};
@@ -1308,7 +1307,7 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
 //                return false;
 //
 //            Socket socket = ftpClient.getSocket();
-//            if(Debug.ON) Debug.trace("socket="+socket+" socket.isConnected()"+socket.isConnected()+" socket.isClosed()="+socket.isClosed());
+//            FileLogger.finest("socket="+socket+" socket.isConnected()"+socket.isConnected()+" socket.isClosed()="+socket.isClosed());
 //
 //            return socket!=null && socket.isConnected() && !socket.isClosed();
         }

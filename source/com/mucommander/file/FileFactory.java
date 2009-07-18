@@ -18,7 +18,6 @@
 
 package com.mucommander.file;
 
-import com.mucommander.Debug;
 import com.mucommander.auth.AuthException;
 import com.mucommander.auth.CredentialsManager;
 import com.mucommander.file.icon.FileIconProvider;
@@ -107,7 +106,7 @@ public class FileFactory {
     private static FileIconProvider defaultFileIconProvider;
 
     static {
-        if(Debug.ON) Debug.trace("Registering file providers");
+        FileLogger.info("Registering file providers");
 
         // Register built-in file protocols.
         ProtocolProvider protocolProvider;
@@ -318,7 +317,7 @@ public class FileFactory {
     public static AbstractFile getFile(String absPath) {
         try {return getFile(absPath, null);}
         catch(IOException e) {
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Caught exception: "+e);
+            FileLogger.fine("Caught an exception", e);
             return null;
         }
     }
@@ -337,9 +336,8 @@ public class FileFactory {
     public static AbstractFile getFile(String absPath, boolean throwException) throws AuthException, IOException {
         try {return getFile(absPath, null);}
         catch(IOException e) {
-            if(com.mucommander.Debug.ON) {
-                com.mucommander.Debug.trace("Caught exception: "+e);
-            }
+            FileLogger.fine("Caught an exception", e);
+
             if(throwException)
                 throw e;
             return null;
@@ -370,7 +368,7 @@ public class FileFactory {
     public static AbstractFile getFile(FileURL fileURL) {
         try {return getFile(fileURL, null);}
         catch(IOException e) {
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Caught exception: "+e);
+            FileLogger.fine("Caught an exception", e);
             return null;
         }
     }
@@ -386,10 +384,8 @@ public class FileFactory {
     public static AbstractFile getFile(FileURL fileURL, boolean throwException) throws IOException {
         try {return getFile(fileURL, null);}
         catch(IOException e) {
-            if(com.mucommander.Debug.ON) {
-                com.mucommander.Debug.trace("Caught exception: "+e);
-                e.printStackTrace();
-            }
+            FileLogger.fine("Caught an exception", e);
+
             if(throwException)
                 throw e;
             return null;
@@ -498,7 +494,6 @@ public class FileFactory {
             // Lookup the cache for an existing AbstractFile instance
             // Note: FileURL#equals(Object) and #hashCode() take into account credentials and properties
             file = rawFileCache.get(fileURL);
-//            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("file cache "+(file==null?"miss":"hit"));
 
             if(file!=null)
                 return file;
@@ -519,10 +514,8 @@ public class FileFactory {
         else {
             // If the specified FileURL doesn't contain any credentials, use CredentialsManager to find
             // any credentials matching the url and use them.
-//            if(Debug.ON) Debug.trace("fileURL.containsCredentials() "+fileURL.containsCredentials());
             if(!fileURL.containsCredentials())
                 CredentialsManager.authenticateImplicit(fileURL);
-//            if(Debug.ON) Debug.trace("credentials="+fileURL.getCredentials());
 
             // Finds the right file protocol provider
             ProtocolProvider provider = getProtocolProvider(scheme);
@@ -536,7 +529,7 @@ public class FileFactory {
             // this could otherwise lead to weird behaviors, for example if a directory with the same filename
             // of a former archive was created, the directory would be considered as an archive
             rawFileCache.put(fileURL, file);
-//                            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Added to file cache: "+file);
+            FileLogger.finest("Added to file cache: "+file);
         }
 
         return file;
@@ -651,18 +644,18 @@ public class FileFactory {
             if(useCache) {
                 archiveFile = archiveFileCache.get(file.getURL());
                 if(archiveFile!=null) {
-//                    if(Debug.ON) Debug.trace("Found cached archive file for: "+file.getAbsolutePath());
+                    FileLogger.finest("Found cached archive file for: "+file.getAbsolutePath());
                     return archiveFile;
                 }
 
-//                if(Debug.ON) Debug.trace("No cached archive file found for: "+file.getAbsolutePath());
+                FileLogger.finest("No cached archive file found for: "+file.getAbsolutePath());
             }
 
             ArchiveFormatProvider provider;
             if((provider = getArchiveFormatProvider(filename)) != null) {
                 archiveFile = provider.getFile(file);
                 if(useCache) {
-                    if(Debug.ON) Debug.trace("Adding archive file to cache: "+file.getAbsolutePath());
+                    FileLogger.finest("Adding archive file to cache: "+file.getAbsolutePath());
                     archiveFileCache.put(file.getURL(), archiveFile);
                 }
                 return archiveFile;

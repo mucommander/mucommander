@@ -18,7 +18,6 @@
 
 package com.mucommander.file.impl.local;
 
-import com.mucommander.Debug;
 import com.mucommander.file.*;
 import com.mucommander.file.filter.FilenameFilter;
 import com.mucommander.file.util.Kernel32;
@@ -224,7 +223,7 @@ public class LocalFile extends AbstractFile {
                         dfInfo[1] = freeSpaceLBR.getValue();
                     }
                     else {
-                        if(Debug.ON) Debug.trace("Call to GetDiskFreeSpaceEx failed, absPath="+absPath);
+                        FileLogger.warning("Call to GetDiskFreeSpaceEx failed, absPath="+absPath);
                     }
                 }
                 // Otherwise, parse the output of 'dir "filePath"' command to retrieve free space information, if
@@ -309,7 +308,7 @@ public class LocalFile extends AbstractFile {
                     int nbTokens = tokenV.size();
                     if(nbTokens<6) {
                         // This shouldn't normally happen
-                        if(Debug.ON) Debug.trace("Failed to parse output of df -k "+absPath+" line="+line);
+                        FileLogger.warning("Failed to parse output of df -k "+absPath+" line="+line);
                         return dfInfo;
                     }
 
@@ -318,7 +317,7 @@ public class LocalFile extends AbstractFile {
                     while(!((String)tokenV.elementAt(pos)).startsWith("/")) {
                         if(pos==0) {
                             // This shouldn't normally happen
-                            if(Debug.ON) Debug.trace("Failed to parse output of df -k "+absPath+" line="+line);
+                            FileLogger.warning("Failed to parse output of df -k "+absPath+" line="+line);
                             return dfInfo;
                         }
 
@@ -340,10 +339,7 @@ public class LocalFile extends AbstractFile {
             }
         }
         catch(Throwable e) {	// JNA throws a java.lang.UnsatisfiedLinkError if the native can't be found
-            if(com.mucommander.Debug.ON) {
-                com.mucommander.Debug.trace("Exception thrown while retrieving volume info: "+e);
-                e.printStackTrace();
-            }
+            FileLogger.fine("Exception thrown while retrieving volume info", e);
         }
         finally {
             if(br!=null)
@@ -494,7 +490,7 @@ public class LocalFile extends AbstractFile {
             }
         }
         catch(Exception e) {
-            if(Debug.ON) Debug.trace("Error reading /etc/fstab entries: "+ e);
+            FileLogger.warning("Error reading /etc/fstab entries", e);
         }
         finally {
             if(br != null) {
@@ -533,7 +529,7 @@ public class LocalFile extends AbstractFile {
                 }
         }
         catch(IOException e) {
-            if(Debug.ON) Debug.trace("Can't get /Volumes subfolders: "+ e);
+            FileLogger.warning("Can't get /Volumes subfolders", e);
         }
     }
 

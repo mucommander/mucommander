@@ -18,7 +18,7 @@
 
 package com.mucommander.file.util;
 
-import com.mucommander.Debug;
+import com.mucommander.file.FileLogger;
 import com.sun.jna.Native;
 
 /**
@@ -41,7 +41,7 @@ public class C {
             INSTANCE = (CLibrary)Native.loadLibrary("c", CLibrary.class);
         }
         catch(Throwable e) {
-            Debug.trace(e);
+            FileLogger.fine("Unable to load C library", e);
 
             // java.lang.UnsatisfiedLinkError is thrown if the CPU architecture is not supported by JNA.
             INSTANCE = null;

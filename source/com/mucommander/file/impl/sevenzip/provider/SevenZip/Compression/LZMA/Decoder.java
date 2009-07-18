@@ -1,13 +1,13 @@
 package com.mucommander.file.impl.sevenzip.provider.SevenZip.Compression.LZMA;
 
 
-import java.io.IOException;
-
+import com.mucommander.file.FileLogger;
+import com.mucommander.file.impl.sevenzip.provider.SevenZip.Compression.LZ.OutWindow;
+import com.mucommander.file.impl.sevenzip.provider.SevenZip.Compression.RangeCoder.BitTreeDecoder;
 import com.mucommander.file.impl.sevenzip.provider.SevenZip.HRESULT;
 import com.mucommander.file.impl.sevenzip.provider.SevenZip.ICompressProgressInfo;
-import com.mucommander.file.impl.sevenzip.provider.SevenZip.Compression.LZ.OutWindow;
-import com.mucommander.file.impl.sevenzip.provider.SevenZip.Compression.LZMA.Base;
-import com.mucommander.file.impl.sevenzip.provider.SevenZip.Compression.RangeCoder.BitTreeDecoder;
+
+import java.io.IOException;
 
 
 /*
@@ -320,7 +320,7 @@ public class Decoder
         try {
             ret = CodeReal(inStream,outStream,outSize,progress);
         } catch (IOException e) {
-            e.printStackTrace(); // TBD
+            FileLogger.finest(null, e);
             this.Flush();
             this.ReleaseStreams();
             throw e;

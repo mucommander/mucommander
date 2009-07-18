@@ -18,8 +18,8 @@
 
 package com.mucommander.file.impl.local;
 
-import com.mucommander.Debug;
 import com.mucommander.file.DummyFile;
+import com.mucommander.file.FileLogger;
 import com.mucommander.file.FileURL;
 
 import java.net.MalformedURLException;
@@ -62,7 +62,7 @@ public class SpecialWindowsLocation extends DummyFile {
             return new SpecialWindowsLocation(clsid);
         }
         catch(MalformedURLException e) {
-            if(Debug.ON) Debug.trace("Unable to creation location "+clsid+" : "+e);
+            FileLogger.warning("Unable to creation location "+clsid, e);
         }
 
         return null;

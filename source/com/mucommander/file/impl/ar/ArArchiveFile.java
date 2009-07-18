@@ -18,10 +18,7 @@
 
 package com.mucommander.file.impl.ar;
 
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.AbstractROArchiveFile;
-import com.mucommander.file.ArchiveEntry;
-import com.mucommander.file.ArchiveEntryIterator;
+import com.mucommander.file.*;
 import com.mucommander.io.BoundedInputStream;
 
 import java.io.IOException;
@@ -60,17 +57,14 @@ public class ArArchiveFile extends AbstractROArchiveFile {
 
         ArchiveEntry currentEntry;
         while((currentEntry = iterator.nextEntry())!=null) {
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("currentEntry="+currentEntry.getName()+" entry="+entry.getName());
-
             if(currentEntry.getName().equals(entry.getName())) {
-                if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("found entry "+entry.getName());
+                FileLogger.finest("found entry "+entry.getName());
                 return new BoundedInputStream(in, entry.getSize());
             }
         }
 
-        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("entry not found, throwing IOException");
-
         // Entry not found, should not normally happen
+        FileLogger.fine("Warning: entry not found, throwing IOException");
         throw new IOException();
     }
 }

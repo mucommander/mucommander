@@ -19,6 +19,7 @@
 package com.mucommander.file.impl.iso;
 
 import com.mucommander.file.AbstractFile;
+import com.mucommander.file.FileLogger;
 import com.mucommander.io.BufferPool;
 import com.mucommander.io.RandomAccessInputStream;
 import com.mucommander.io.StreamUtils;
@@ -122,14 +123,13 @@ class IsoParser {
                 rais.read(buffer, 0, 8);
                 long version = IsoUtil.toDwordBE(buffer, 0);
                 offset = IsoUtil.toDwordBE(buffer, 4);
-                com.mucommander.Debug.trace("cdi root " + Long.toHexString(offset) + " version " + Long.toHexString(version));
+                FileLogger.finest("cdi root " + Long.toHexString(offset) + " version " + Long.toHexString(version));
 
             }
             */
         }
         catch (Exception e) {
-            if (com.mucommander.Debug.ON)
-                com.mucommander.Debug.trace("Exception caught while parsing iso:" + e + ", throwing IOException");
+            FileLogger.fine("Exception caught while parsing iso, throwing IOException", e);
 
             throw new IOException();
         }

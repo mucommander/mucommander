@@ -19,7 +19,6 @@
 
 package com.mucommander.file.impl.sftp;
 
-import com.mucommander.Debug;
 import com.mucommander.auth.AuthException;
 import com.mucommander.file.*;
 import com.mucommander.file.connection.ConnectionHandler;
@@ -187,7 +186,7 @@ public class SFTPFile extends AbstractFile {
             return true;
         }
         catch(IOException e) {
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Failed to change date: "+e);
+            FileLogger.fine("Failed to change date", e);
             return false;
         }
         finally {
@@ -289,8 +288,6 @@ public class SFTPFile extends AbstractFile {
         try {
             // Makes sure the connection is started, if not starts it
             connHandler.checkConnection();
-
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("using ConnectionHandler="+connHandler);
 
             SftpFile sftpFile;
             if(exists()) {
@@ -398,16 +395,12 @@ public class SFTPFile extends AbstractFile {
 
 
     public AbstractFile[] ls() throws IOException {
-        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("starts, absPath="+absPath+" currentThread="+Thread.currentThread());
-
         // Retrieve a ConnectionHandler and lock it
         SFTPConnectionHandler connHandler = (SFTPConnectionHandler)ConnectionPool.getConnectionHandler(connHandlerFactory, fileURL, true);
         List files;
         try {
             // Makes sure the connection is started, if not starts it
             connHandler.checkConnection();
-
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("using ConnectionHandler="+connHandler+" currentThread="+Thread.currentThread());
 
     //        connHandler.sftpSubsystem.listChildren(file, files);        // Modified J2SSH method to remove the 100 files limitation
 
@@ -420,7 +413,6 @@ public class SFTPFile extends AbstractFile {
         }
 
         int nbFiles = files.size();
-        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("nbFiles="+nbFiles);
 
         // File doesn't exist, return an empty file array
         if(nbFiles==0)
@@ -454,8 +446,6 @@ public class SFTPFile extends AbstractFile {
             children[fileCount++] = child;
         }
 
-        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("ends, currentThread="+Thread.currentThread());
-        
         // Create new array of the exact file count
         if(fileCount<nbFiles) {
             AbstractFile newChildren[] = new AbstractFile[fileCount];
@@ -532,7 +522,7 @@ public class SFTPFile extends AbstractFile {
             return true;
         }
         catch(IOException e) {
-            if(Debug.ON) Debug.trace("Failed to change permissions: "+e);
+            FileLogger.fine("Failed to change permissions", e);
             return false;
         }
         finally {
@@ -589,7 +579,7 @@ public class SFTPFile extends AbstractFile {
             return true;
         }
         catch(IOException e) {
-            if(Debug.ON) Debug.trace("Failed to rename file "+absPath+" : "+e);
+            FileLogger.fine("Failed to rename file "+absPath, e);
 
             // Re-throw an exception
             throw new FileTransferException(FileTransferException.UNKNOWN_REASON);
@@ -607,8 +597,6 @@ public class SFTPFile extends AbstractFile {
         try {
             // Makes sure the connection is started, if not starts it
             connHandler.checkConnection();
-
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("using ConnectionHandler="+connHandler);
 
             SftpFile sftpFile = connHandler.sftpSubsystem.openFile(absPath, SftpSubsystemClient.OPEN_READ);
 
@@ -814,7 +802,7 @@ public class SFTPFile extends AbstractFile {
                 fetchAttributes();
             }
             catch(Exception e) {        // AuthException
-                if(Debug.ON) Debug.trace("Failed to refresh attributes: "+e);
+                FileLogger.fine("Failed to refresh attributes", e);
             }
         }
     }
@@ -877,7 +865,7 @@ public class SFTPFile extends AbstractFile {
 ////                sessionClient.startShell();
 //
 ////                success = sessionClient.executeCommand("cd "+(isDirectory()?fileURL.getPath():fileURL.getParent().getPath()));
-////if(Debug.ON) Debug.trace("commmand="+("cd "+(isDirectory()?fileURL.getPath():fileURL.getParent().getPath()))+" returned "+success);
+////FileLogger.finest("commmand="+("cd "+(isDirectory()?fileURL.getPath():fileURL.getParent().getPath()))+" returned "+success);
 //
 //                // Environment variables are refused by most servers for security reasons
 ////                sessionClient.setEnvironmentVariable("cd", isDirectory()?fileURL.getPath():fileURL.getParent().getPath());
@@ -901,7 +889,7 @@ public class SFTPFile extends AbstractFile {
 //                }
 //
 //                success = sessionClient.executeCommand(command.toString());
-//                if(Debug.ON) Debug.trace("commmand="+command+" returned "+success);
+//                FileLogger.finest("commmand="+command+" returned "+success);
 //            }
 //            catch(IOException e) {
 //                // Release the lock on the ConnectionHandler

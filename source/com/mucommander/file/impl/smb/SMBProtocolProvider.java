@@ -18,7 +18,6 @@
 
 package com.mucommander.file.impl.smb;
 
-import com.mucommander.Debug;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileURL;
 import com.mucommander.file.ProtocolProvider;
@@ -36,8 +35,7 @@ public class SMBProtocolProvider implements ProtocolProvider {
     static {
         // Silence jCIFS's output if not in debug mode
         // Quote from jCIFS's documentation : "0 - No log messages are printed -- not even crticial exceptions."
-        if(!Debug.ON)
-            System.setProperty("jcifs.util.loglevel", "0");
+        System.setProperty("jcifs.util.loglevel", "0");
 
         // Lower the timeout values
 

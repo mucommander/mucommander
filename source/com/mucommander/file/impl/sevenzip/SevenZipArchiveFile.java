@@ -99,7 +99,7 @@ public class SevenZipArchiveFile extends AbstractROArchiveFile {
 					bufferStream.flush();
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
-					e.printStackTrace();
+                    FileLogger.finest(null, e);
 				}
 		        
 			}

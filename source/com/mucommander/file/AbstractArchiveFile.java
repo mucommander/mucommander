@@ -108,7 +108,7 @@ public abstract class AbstractArchiveFile extends ProxyFile {
             while((entry=entries.nextEntry())!=null)
                 treeRoot.addArchiveEntry(entry);
 
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("entries tree created in "+(System.currentTimeMillis()-start)+" ms");
+            FileLogger.fine("entries tree created in "+(System.currentTimeMillis()-start)+" ms");
 
             this.entryTreeRoot = treeRoot;
             declareEntriesTreeUpToDate();

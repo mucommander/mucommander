@@ -18,8 +18,8 @@
 
 package com.mucommander.file.connection;
 
-import com.mucommander.Debug;
 import com.mucommander.auth.Credentials;
+import com.mucommander.file.FileLogger;
 import com.mucommander.file.FileURL;
 
 import java.util.Vector;
@@ -66,7 +66,7 @@ public class ConnectionPool implements Runnable {
 
                         // Try to acquire lock if a lock was requested
                         if(!acquireLock || connHandler.acquireLock()) {
-                            if(Debug.ON) Debug.trace("returning ConnectionHandler "+connHandler+", realm ="+realm);
+                            FileLogger.finer("returning ConnectionHandler "+connHandler+", realm ="+realm);
 
                             // Update last activity timestamp to now
                             connHandler.updateLastActivityTimestamp();
@@ -84,14 +84,14 @@ public class ConnectionPool implements Runnable {
             if(acquireLock)
                 connHandler.acquireLock();
 
-            if(Debug.ON) Debug.trace("adding new ConnectionHandler "+connHandler+", realm="+connHandler.getRealm());
+            FileLogger.finer("adding new ConnectionHandler "+connHandler+", realm="+connHandler.getRealm());
 
             // Insert new ConnectionHandler at first position as if it has more chances to be accessed again soon
             connectionHandlers.insertElementAt(connHandler, 0);
 
             // Start monitor thread if it is not currently running (if there previously was no registered ConnectionHandler) 
             if(monitorThread==null) {
-                if(Debug.ON) Debug.trace("starting monitor thread");
+                FileLogger.finer("starting monitor thread");
                 monitorThread = new Thread(instance);
                 monitorThread.start();
             }
@@ -197,7 +197,7 @@ public class ConnectionPool implements Runnable {
 
                 // Stop monitor thread if there are no more ConnectionHandler
                 if(connectionHandlers.size()==0) {
-                    if(Debug.ON) Debug.trace("No more ConnectionHandler, stopping monitor thread");
+                    FileLogger.finer("No more ConnectionHandler, stopping monitor thread");
                     monitorThread = null;
                 }
             }
@@ -224,7 +224,7 @@ public class ConnectionPool implements Runnable {
         }
 
         public void run() {
-            if(Debug.ON) Debug.trace("closing connection: "+connHandler);
+            FileLogger.finer("closing connection: "+connHandler);
 
             // Try to close connection, only if it is connected
             if(connHandler.isConnected())
@@ -246,7 +246,7 @@ public class ConnectionPool implements Runnable {
         }
 
         public void run() {
-            if(Debug.ON) Debug.trace("keeping connection alive: "+connHandler);
+            FileLogger.finer("keeping connection alive: "+connHandler);
 
             synchronized(connHandler) {
                 // Ensures that lock was not grabbed in the meantime

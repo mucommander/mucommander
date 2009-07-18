@@ -19,9 +19,9 @@
 
 package com.mucommander.file.util;
 
-import com.mucommander.Debug;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
+import com.mucommander.file.FileLogger;
 import com.mucommander.file.FileURL;
 
 import java.net.MalformedURLException;
@@ -196,7 +196,7 @@ public class PathUtils {
         // No point in going any further if the URL cannot be resolved into a file
         destFile = FileFactory.getFile(destURL);
         if(destFile ==null) {
-            if(Debug.ON) Debug.trace("could not resolve a file for "+destURL);
+            FileLogger.fine("could not resolve a file for "+destURL);
             return null;
         }
 

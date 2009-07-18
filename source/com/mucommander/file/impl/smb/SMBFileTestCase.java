@@ -18,7 +18,6 @@
 
 package com.mucommander.file.impl.smb;
 
-import com.mucommander.Debug;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.AbstractFileTestCase;
 import com.mucommander.file.FileFactory;
@@ -49,7 +48,6 @@ public class SMBFileTestCase extends AbstractFileTestCase {
         SMBFile.setAttributeCachingPeriod(0);
 
         tempFolder = FileFactory.getFile(System.getProperty(TEMP_FOLDER_PROPERTY));
-        if(Debug.ON) Debug.trace("Temp folder="+tempFolder);
     }
 
 
