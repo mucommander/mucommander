@@ -18,6 +18,7 @@
 
 package com.mucommander.ui.dialog.shell;
 
+import com.mucommander.AppLogger;
 import com.mucommander.file.FileProtocols;
 import com.mucommander.process.AbstractProcess;
 import com.mucommander.process.ProcessListener;
@@ -213,7 +214,7 @@ public class RunDialog extends FocusDialog implements ActionListener, ProcessLis
      * @param retValue process' return code (not used).
      */	
     public void processDied(int retValue) {
-        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("process exit, return value= "+retValue);
+        AppLogger.finer("process exit, return value= "+retValue);
         currentProcess = null;
         if(processInput!=null) {
             processInput.close();

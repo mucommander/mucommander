@@ -18,7 +18,7 @@
 
 package com.mucommander.ui.dialog.pref.general;
 
-import com.mucommander.Debug;
+import com.mucommander.AppLogger;
 import com.mucommander.runtime.JavaVersions;
 import com.mucommander.runtime.OsFamilies;
 import com.mucommander.runtime.OsVersions;
@@ -31,11 +31,7 @@ import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.main.table.CellLabel;
 import com.mucommander.ui.table.CenteredTableHeaderRenderer;
 import com.mucommander.ui.text.KeyStrokeUtils;
-import com.mucommander.ui.theme.ColorChangedEvent;
-import com.mucommander.ui.theme.FontChangedEvent;
-import com.mucommander.ui.theme.Theme;
-import com.mucommander.ui.theme.ThemeCache;
-import com.mucommander.ui.theme.ThemeListener;
+import com.mucommander.ui.theme.*;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -471,14 +467,14 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 				tableData[row][column] = KeyStrokeUtils.getKeyStrokeDisplayableRepresentation(typedKeyStroke);
 				break;
 			default:
-				if (Debug.ON) { Debug.trace("Unexpected column index: " + column); }
+				AppLogger.fine("Unexpected column index: " + column);
 			}
 
 			state.rowHasBeenUpdated(row);
 
 			fireTableCellUpdated(row, column);
 			
-			if (Debug.ON) { Debug.trace("Value: " + value + ", row: " + row + ", col: " + column); }
+			AppLogger.finest("Value: " + value + ", row: " + row + ", col: " + column);
 		}
 	}
 	
@@ -519,7 +515,7 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 		/////////////////////////////
 
 		public void keyPressed(KeyEvent keyEvent) {
-			if(Debug.ON) Debug.trace("keyModifiers="+keyEvent.getModifiers()+" keyCode="+keyEvent.getKeyCode());
+			AppLogger.finest("keyModifiers="+keyEvent.getModifiers()+" keyCode="+keyEvent.getKeyCode());
 
 	        int keyCode = keyEvent.getKeyCode();
 	        if(keyCode==KeyEvent.VK_SHIFT || keyCode==KeyEvent.VK_CONTROL || keyCode==KeyEvent.VK_ALT || keyCode==KeyEvent.VK_META)

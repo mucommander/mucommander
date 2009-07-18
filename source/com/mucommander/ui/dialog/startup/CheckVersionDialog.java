@@ -18,7 +18,7 @@
 
 package com.mucommander.ui.dialog.startup;
 
-import com.mucommander.Debug;
+import com.mucommander.AppLogger;
 import com.mucommander.VersionChecker;
 import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.desktop.DesktopManager;
@@ -93,12 +93,12 @@ public class CheckVersionDialog extends QuestionDialog implements Runnable {
         String         jarURL = null;
 
         try {
-            if(Debug.ON) Debug.trace("Checking for new version...");            
+            AppLogger.fine("Checking for new version...");
 
             version = VersionChecker.getInstance();
             // A newer version is available
             if(version.isNewVersionAvailable()) {
-                if(Debug.ON) Debug.trace("A new version is available!");            
+                AppLogger.info("A new version is available!");
 
                 title = Translator.get("version_dialog.new_version_title");
 
@@ -119,7 +119,7 @@ public class CheckVersionDialog extends QuestionDialog implements Runnable {
             }
             // We're already running latest version
             else {
-                if(Debug.ON) Debug.trace("No new version.");            
+                AppLogger.fine("No new version.");
 
                 // If the version check was not iniated by the user (i.e. was automatic),
                 // we do not need to inform the user that he already has the latest version

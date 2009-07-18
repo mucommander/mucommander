@@ -19,18 +19,15 @@
 
 package com.mucommander.ui.main.tree;
 
-import java.lang.reflect.InvocationTargetException;
-import java.util.Arrays;
-
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
-import javax.swing.SwingUtilities;
-
+import com.mucommander.AppLogger;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.impl.ProxyFile;
 import com.mucommander.ui.icon.CustomFileIconProvider;
 import com.mucommander.ui.icon.FileIcons;
 import com.mucommander.ui.icon.IconManager;
+
+import javax.swing.*;
+import java.util.Arrays;
 
 /**
  * A class that holds cached children of a directory.
@@ -105,7 +102,7 @@ public class CachedDirectory extends ProxyFile {
         try {
             children = file.ls(cache.getFilter());
         } catch (Exception e) {
-            e.printStackTrace();
+            AppLogger.fine("Caught exception", e);
             children = new AbstractFile[0];
             setCachedIcon(NOT_ACCESSIBLE_ICON);
         }
@@ -133,10 +130,8 @@ public class CachedDirectory extends ProxyFile {
                     setLsCache(children2, file.getDate());
                 }
             });
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            AppLogger.fine("Caught exception", e);
         }
     }
 

@@ -18,17 +18,13 @@
 
 package com.mucommander.ui.text;
 
-import java.awt.Color;
+import javax.swing.*;
+import javax.swing.border.Border;
+import java.awt.*;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-
-import javax.swing.BorderFactory;
-import javax.swing.JTextField;
-import javax.swing.KeyStroke;
-import javax.swing.UIManager;
-import javax.swing.border.Border;
 
 /**
  * <code>RecordingKeyStrokeTextField</code> is a text field that record a KeyStroke entered by the user.
@@ -90,8 +86,7 @@ public class RecordingKeyStrokeTextField extends JTextField implements FocusList
 	////////////////////////////////
 	
 	public void keyPressed(KeyEvent e) {
-//		if(Debug.ON) Debug.trace("keyModifiers="+e.getModifiers()+" keyCode="+e.getKeyCode());
-		if (e.getKeyCode() != e.VK_ESCAPE)
+		if (e.getKeyCode() != KeyEvent.VK_ESCAPE)
 			setText(KeyStrokeUtils.getKeyStrokeDisplayableRepresentation(lastKeyStroke = KeyStroke.getKeyStroke(e.getKeyCode(), 0)));
 		e.consume();
 	}

@@ -19,6 +19,7 @@
 
 package com.mucommander.ui.dialog;
 
+import com.mucommander.AppLogger;
 import com.mucommander.runtime.OsFamilies;
 import com.mucommander.ui.helper.FocusRequester;
 
@@ -209,7 +210,7 @@ public class FocusDialog extends JDialog implements WindowListener {
     public void windowActivated(WindowEvent e) {
         // (this method is called each time the dialog is activated)
         if (!firstTimeActivated && initialFocusComponent!=null) {
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("requesting focus on initial focus component");
+            AppLogger.finest("requesting focus on initial focus component");
 
             // First try using requestFocusInWindow() which is preferred over requestFocus(). If it fails
             // (returns false), call requestFocus:
@@ -217,7 +218,7 @@ public class FocusDialog extends JDialog implements WindowListener {
             // strongly encouraged to use this method over requestFocus when possible. Code which relies on requestFocus
             // may exhibit different focus behavior on different platforms."
             if(!initialFocusComponent.requestFocusInWindow()) {
-                if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("requestFocusInWindow failed, calling requestFocus");
+                AppLogger.finest("requestFocusInWindow failed, calling requestFocus");
                 FocusRequester.requestFocus(initialFocusComponent);
             }
 

@@ -18,7 +18,7 @@
 
 package com.mucommander.ui.main.table;
 
-import com.mucommander.Debug;
+import com.mucommander.AppLogger;
 import com.mucommander.conf.ConfigurationEvent;
 import com.mucommander.conf.ConfigurationListener;
 import com.mucommander.conf.impl.MuConfiguration;
@@ -1035,7 +1035,6 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
         // Ensures that current row is visible (within current viewport), and if not adjusts viewport to center it
         Rectangle visibleRect = getVisibleRect();
         final Rectangle cellRect = getCellRect(currentRow, 0, false);
-//        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("visibleRect="+visibleRect+" cellRect="+cellRect);
         if(cellRect.y<visibleRect.y || cellRect.y+getRowHeight()>visibleRect.y+visibleRect.height) {
             final JScrollPane scrollPane = folderPanel.getScrollPane();
             if(scrollPane!=null) {
@@ -1046,7 +1045,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
                 // UI events (including JViewport revalidation) have been processed.
                 SwingUtilities.invokeLater(new Runnable() {
                     public void run() {
-                        if(Debug.ON) Debug.trace("calling viewPort.setViewPostion(0, "+(cellRect.y-scrollPane.getHeight()/2-getRowHeight()/2)+")");
+                        AppLogger.finest("calling viewPort.setViewPostion(0, "+(cellRect.y-scrollPane.getHeight()/2-getRowHeight()/2)+")");
                         scrollPane.getViewport().setViewPosition(new java.awt.Point(0, Math.max(0, cellRect.y-scrollPane.getHeight()/2-getRowHeight()/2)));
                         //                        scrollPane.repaint();
                     }
@@ -1171,7 +1170,6 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
             // - 'date' label triggers the change date dialog
             // - 'permissions' label triggers the change permissions dialog, only if permissions can be changed
             // Timestamp check is used to make sure that this mouse click did not trigger current row selection
-            // com.mucommander.Debug.trace("clickCount="+clickCount+" timeDiff="+(System.currentTimeMillis()-selectionChangedTimestamp));
             if ((doubleClickCounter == 1) && (System.currentTimeMillis() - selectionChangedTimestamp) > EDIT_NAME_CLICK_DELAY) {
                 int clickX = e.getX();
                 Point p = new Point(clickX, e.getY());
@@ -1179,13 +1177,11 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
                 final int viewColumn = columnAtPoint(p);
                 final int column = convertColumnIndexToModel(viewColumn);
                 // Test if the clicked row is current row, if column is name column, and if current row is not '..' file
-                // com.mucommander.Debug.trace("row="+row+" currentRow="+currentRow);
                 if (row == currentRow && !isParentFolderSelected() && (column == Columns.NAME || column == Columns.DATE || column == Columns.PERMISSIONS)) {
                     // Test if clicked point is inside the label and abort if not
                     FontMetrics fm = getFontMetrics(FileTableCellRenderer.getCellFont());
                     int labelWidth = fm.stringWidth((String) tableModel.getValueAt(row, column));
                     int columnX = (int) getTableHeader().getHeaderRect(viewColumn).getX();
-                    // com.mucommander.Debug.trace("x="+clickX+" columnX="+columnX+" labelWidth="+labelWidth);
                     if (clickX<columnX+CellLabel.CELL_BORDER_WIDTH || clickX>columnX+labelWidth+CellLabel.CELL_BORDER_WIDTH)
                         return;
 
@@ -1203,7 +1199,6 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
                                 // - a double click was made in the last second
                                 // - current row changed
                                 // - isEditing() is true which could happen if multiple clicks were made
-                                // if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("row= "+row+" currentRow="+currentRow);
                                 if ((System.currentTimeMillis() - lastDoubleClickTimestamp) > 1000 && row == currentRow) {
                                     if (column == Columns.NAME) {
                                         if(!isEditing())
@@ -1637,7 +1632,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
          * @param findBestMatch if <code>true</code>, all rows will be tested in the specified order, looking for the best match. If not, it will stop to the first match (not necessarily the best).
          */
         private void findMatch(int startRow, boolean descending, boolean findBestMatch) {
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("startRow="+startRow+" descending="+descending+" findMatch="+findBestMatch);
+            AppLogger.finest("startRow="+startRow+" descending="+descending+" findMatch="+findBestMatch);
 
             int searchStringLen = searchString.length();
 
@@ -1728,8 +1723,8 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
                 :containsNoCaseMatch!=-1?containsNoCaseMatch
                 :-1;
 
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("startsWithCaseMatch="+startsWithCaseMatch+" containsCaseMatch="+containsCaseMatch+" startsWithNoCaseMatch="+startsWithNoCaseMatch+" containsNoCaseMatch="+containsNoCaseMatch);
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("bestMatch="+bestMatch);
+            AppLogger.finest("startsWithCaseMatch="+startsWithCaseMatch+" containsCaseMatch="+containsCaseMatch+" startsWithNoCaseMatch="+startsWithNoCaseMatch+" containsNoCaseMatch="+containsNoCaseMatch);
+            AppLogger.finest("bestMatch="+bestMatch);
 
             if(bestMatch!=-1) {
                 // Select best match's row

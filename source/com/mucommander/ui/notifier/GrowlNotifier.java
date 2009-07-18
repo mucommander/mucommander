@@ -18,7 +18,7 @@
 
 package com.mucommander.ui.notifier;
 
-import com.mucommander.Debug;
+import com.mucommander.AppLogger;
 import com.mucommander.runtime.OsFamilies;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.macosx.AppleScript;
@@ -104,7 +104,7 @@ public class GrowlNotifier extends AbstractNotifier {
             // Test if Growl is currently running and abort if it is not
             StringBuffer outputBuffer = new StringBuffer();
             if(!(AppleScript.execute(IS_GROWL_RUNNING_APPLESCRIPT, outputBuffer) && outputBuffer.toString().equals("true"))) {
-                if(Debug.ON) Debug.trace("Growl is not running, aborting");
+                AppLogger.fine("Growl is not running, aborting");
 
                 return false;
             }
@@ -125,7 +125,7 @@ public class GrowlNotifier extends AbstractNotifier {
                 " default notifications "+notificationTypes+
                 " icon of application \""+APP_NAME+"\"");
 
-            if(Debug.ON) Debug.trace(isRegistered?
+            AppLogger.info(isRegistered?
                 "Successfully registered "+APP_NAME+" with Growl":
                 "Error while registering "+APP_NAME+" with Growl");
 
@@ -141,10 +141,10 @@ public class GrowlNotifier extends AbstractNotifier {
     }
 
     public boolean displayNotification(int notificationType, String title, String description) {
-        if(Debug.ON) Debug.trace("notificationType="+notificationType+" title="+title+" description="+description);
+        AppLogger.finer("notificationType="+notificationType+" title="+title+" description="+description);
 
         if(!isEnabled()) {
-            if(Debug.ON) Debug.trace("Ignoring notification, this notifier is not enabled");
+            AppLogger.finer("Ignoring notification, this notifier is not enabled");
 
             return false;
         }
@@ -156,7 +156,7 @@ public class GrowlNotifier extends AbstractNotifier {
             " description \""+description+"\""+
             " application name \""+APP_NAME+"\"");
 
-        if(Debug.ON) Debug.trace(success?
+        AppLogger.finer(success?
             "Notification sent successfully":
             "Error while sending notification");
 
@@ -238,7 +238,7 @@ public class GrowlNotifier extends AbstractNotifier {
 //        catch(Exception e) {
 //            if(Debug.ON) {
 //                Debug.trace("Exception thrown while sending notification:");
-//                e.printStackTrace();
+//                AppLogger.fine("Caught exception", e);
 //            }
 //
 //            return false;

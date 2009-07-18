@@ -18,7 +18,7 @@
 
 package com.mucommander.ui.dialog.auth;
 
-import com.mucommander.Debug;
+import com.mucommander.AppLogger;
 import com.mucommander.auth.Credentials;
 import com.mucommander.auth.CredentialsManager;
 import com.mucommander.auth.CredentialsMapping;
@@ -240,7 +240,7 @@ public class EditCredentialsDialog extends FocusDialog implements ActionListener
     ///////////////////////////////////
 
     public void valueChanged(ListSelectionEvent e) {
-        if(Debug.ON) Debug.trace("called, e.getValueIsAdjusting="+e.getValueIsAdjusting()+" getSelectedIndex="+ credentialsList.getSelectedIndex());
+        AppLogger.finest("called, e.getValueIsAdjusting="+e.getValueIsAdjusting()+" getSelectedIndex="+ credentialsList.getSelectedIndex());
 
         if(e.getValueIsAdjusting())
             return;

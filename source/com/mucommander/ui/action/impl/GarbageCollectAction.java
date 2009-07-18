@@ -18,8 +18,8 @@
 
 package com.mucommander.ui.action.impl;
 
-import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.action.ActionFactory;
+import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.main.MainFrame;
 
 import java.util.Hashtable;
@@ -36,11 +36,7 @@ public class GarbageCollectAction extends MuAction {
     }
 
     public void performAction() {
-        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("calling System.gc()");
-
         System.gc();
-
-        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("freeMemory="+Runtime.getRuntime().freeMemory()+" totalMemory="+Runtime.getRuntime().totalMemory());
     }
     
     public static class Factory implements ActionFactory {

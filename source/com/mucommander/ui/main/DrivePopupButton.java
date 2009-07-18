@@ -18,6 +18,7 @@
 
 package com.mucommander.ui.main;
 
+import com.mucommander.AppLogger;
 import com.mucommander.bonjour.BonjourMenu;
 import com.mucommander.bonjour.BonjourService;
 import com.mucommander.bookmark.Bookmark;
@@ -102,7 +103,7 @@ public class DrivePopupButton extends PopupButton implements LocationListener, B
             }
         }
         catch(PatternSyntaxException e) {
-            System.err.println("Invalid regexp for conf variable "+MuConfiguration.VOLUME_EXCLUDE_REGEXP);
+            AppLogger.info("Invalid regexp for conf variable "+MuConfiguration.VOLUME_EXCLUDE_REGEXP, e);
         }
 
         // Initialize the volumes list

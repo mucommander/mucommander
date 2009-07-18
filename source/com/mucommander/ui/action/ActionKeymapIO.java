@@ -18,17 +18,16 @@
 
 package com.mucommander.ui.action;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-
-import org.xml.sax.helpers.DefaultHandler;
-
-import com.mucommander.Debug;
+import com.mucommander.AppLogger;
 import com.mucommander.PlatformManager;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
 import com.mucommander.file.util.ResourceLoader;
+import org.xml.sax.helpers.DefaultHandler;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 /**
  * This class contains the common things to the actions reading and writing.
@@ -125,7 +124,7 @@ public abstract class ActionKeymapIO extends DefaultHandler  {
     public static void saveActionKeymap() throws IOException {
     	if (wereActionsModified)
     		writer.write();
-    	else if(Debug.ON) Debug.trace("Action keymap not modified, skip saving.");
+    	else AppLogger.fine("Action keymap not modified, not saving");
     }
     
     protected static void createEmptyFile() throws IOException {
@@ -153,7 +152,7 @@ public abstract class ActionKeymapIO extends DefaultHandler  {
     	}
     	else {
     		createEmptyFile();
-    		if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(DEFAULT_ACTIONS_FILE_NAME + " was not found, created empty file");
+    		AppLogger.fine(DEFAULT_ACTIONS_FILE_NAME + " was not found, created empty file");
     	}
     }
 }

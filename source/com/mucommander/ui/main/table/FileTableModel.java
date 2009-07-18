@@ -192,7 +192,6 @@ public class FileTableModel extends AbstractTableModel {
      * @param children the current folder's children
      */
     synchronized void setCurrentFolder(AbstractFile folder, AbstractFile children[]) {
-        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(""+folder);
         int nbFiles = children.length;
 
         this.currentFolder = (folder instanceof CachedFile)?folder:new CachedFile(folder, true);

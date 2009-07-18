@@ -18,21 +18,19 @@
 
 package com.mucommander.ui.action;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.HashMap;
-
-import javax.swing.KeyStroke;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParserFactory;
-
-import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
-
-import com.mucommander.Debug;
+import com.mucommander.AppLogger;
 import com.mucommander.RuntimeConstants;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.io.BackupInputStream;
+import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
+
+import javax.swing.*;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParserFactory;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.HashMap;
 
 /**
  * This class is responsible for reading the actions.
@@ -102,9 +100,9 @@ class ActionKeymapReader extends ActionKeymapIO {
     	
     	if(keyStrokeString!=null) {
     		if ((primaryKeyStroke = KeyStroke.getKeyStroke(keyStrokeString)) == null)
-    			System.out.println("Error: action keymap file contains a keystroke which could not be resolved: "+keyStrokeString);
+    			AppLogger.warning("action keymap file contains a keystroke which could not be resolved: "+keyStrokeString);
     		else if (ActionKeymap.isKeyStrokeRegistered(primaryKeyStroke))
-    			System.out.println("Warning: action keymap file contains multiple associations for keystroke: "+keyStrokeString+" canceling mapping to "+actionClass.getName());
+    			AppLogger.warning("action keymap file contains multiple associations for keystroke: "+keyStrokeString+" canceling mapping to "+actionClass.getName());
     	}
 
     	// Parse the alternate keystroke and retrieve the corresponding KeyStroke instance
@@ -114,9 +112,9 @@ class ActionKeymapReader extends ActionKeymapIO {
     	// and return if the attribute's value is invalid.
     	if(keyStrokeString!=null) {
     		if ((alternateKeyStroke = KeyStroke.getKeyStroke(keyStrokeString)) == null)
-    			System.out.println("Error: action keymap file contains a keystroke which could not be resolved: "+keyStrokeString);
+    			AppLogger.warning("action keymap file contains a keystroke which could not be resolved: "+keyStrokeString);
     		else if (ActionKeymap.isKeyStrokeRegistered(alternateKeyStroke))
-    			System.out.println("Warning: action keymap file contains multiple associations for keystroke: "+keyStrokeString+" canceling mapping to "+actionClass.getName());
+    			AppLogger.warning("action keymap file contains multiple associations for keystroke: "+keyStrokeString+" canceling mapping to "+actionClass.getName());
     	}
 
     	primaryActionsReadKeymap.put(actionClass, primaryKeyStroke);
@@ -136,14 +134,14 @@ class ActionKeymapReader extends ActionKeymapIO {
     ///////////////////////////////////
 
     public void startDocument() {
-    	if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(file.getAbsolutePath()+" parsing started");
+    	AppLogger.finest(file.getAbsolutePath()+" parsing started");
     	
     	primaryActionsReadKeymap = new HashMap();
     	alternateActionsReadKeymap = new HashMap();
     }
     
     public void endDocument() {
-        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(file.getAbsolutePath()+" parsing finished");
+        AppLogger.finest(file.getAbsolutePath()+" parsing finished");
     }
     
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
@@ -151,14 +149,14 @@ class ActionKeymapReader extends ActionKeymapIO {
     		// Retrieve the action classname
     		String actionClassName = attributes.getValue(CLASS_ATTRIBUTE);
     		if(actionClassName==null) {
-    			if(Debug.ON) Debug.trace("Error in action keymap file: no 'class' attribute specified in 'action' element");
+    			AppLogger.warning("Error in action keymap file: no 'class' attribute specified in 'action' element");
     			return;
     		}
 
     		// Resolve the action Class
     		Class actionClass = ActionManager.getActionClass(actionClassName, fileVersion);
     		if (actionClass == null) {
-    			if(Debug.ON) Debug.trace("Error in action keymap file: could not resolve class "+actionClassName);
+    			AppLogger.warning("Error in action keymap file: could not resolve class "+actionClassName);
     			return;
     		}
 

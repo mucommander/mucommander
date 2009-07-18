@@ -19,6 +19,7 @@
  
 package com.mucommander.ui.viewer;
 
+import com.mucommander.AppLogger;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.runtime.OsFamilies;
 import com.mucommander.text.Translator;
@@ -104,7 +105,7 @@ public class ViewerFrame extends JFrame implements ActionListener {
                     viewer.view(file);
                 }
                 catch(Exception e) {
-                    if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Exception caught: "+e);
+                    AppLogger.fine("Exception caught", e);
 
                     // May be a UserCancelledException if the user cancelled (refused to confirm the operation after a warning)
                     if(!(e instanceof UserCancelledException))

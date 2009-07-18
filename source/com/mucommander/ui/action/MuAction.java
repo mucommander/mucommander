@@ -18,21 +18,17 @@
 
 package com.mucommander.ui.action;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
-import java.util.Enumeration;
-import java.util.Hashtable;
-
-import javax.swing.AbstractAction;
-import javax.swing.Action;
-import javax.swing.ImageIcon;
-import javax.swing.KeyStroke;
-
-import com.mucommander.Debug;
+import com.mucommander.AppLogger;
 import com.mucommander.file.util.ResourceLoader;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.main.MainFrame;
+
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import java.util.Enumeration;
+import java.util.Hashtable;
 
 
 /**
@@ -129,7 +125,7 @@ public abstract class MuAction extends AbstractAction {
             if(key instanceof String)
                 putValue((String)key, properties.get(key));
             else
-                if(Debug.ON) Debug.trace("Key is not a String, property ignored for key="+key);
+                AppLogger.fine("Key is not a String, property ignored for key="+key);
         }
 
         if(useStandardLabels) {

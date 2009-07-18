@@ -18,6 +18,7 @@
 
 package com.mucommander.ui.main.toolbar;
 
+import com.mucommander.AppLogger;
 import com.mucommander.PlatformManager;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
@@ -60,7 +61,7 @@ public abstract class ToolBarIO extends DefaultHandler {
         if(descriptionFile.exists())
         	new ToolBarReader(descriptionFile);
         else
-        	if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("User toolbar.xml was not found, using default toolbar");
+        	AppLogger.fine("User toolbar.xml was not found, using default toolbar");
     }
     
     /**

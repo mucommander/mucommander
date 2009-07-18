@@ -18,21 +18,19 @@
 
 package com.mucommander.ui.main.commandbar;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Vector;
-
-import javax.swing.KeyStroke;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParserFactory;
-
-import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
-
-import com.mucommander.Debug;
+import com.mucommander.AppLogger;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.io.BackupInputStream;
 import com.mucommander.ui.action.ActionManager;
+import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
+
+import javax.swing.*;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParserFactory;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Vector;
 
 /**
  * This class parses the XML file describing the command bar's buttons and associated actions.
@@ -99,7 +97,7 @@ class CommandBarReader extends CommandBarIO {
     ////////////////////////////
 
     public void startDocument() {
-        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(file.getAbsolutePath()+" parsing started");
+        AppLogger.finest(file.getAbsolutePath()+" parsing started");
 
         actionsV = new Vector();
         alternateActionsV = new Vector();
@@ -107,7 +105,7 @@ class CommandBarReader extends CommandBarIO {
     }
 
     public void endDocument() {
-        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(file.getAbsolutePath()+" parsing finished");
+        AppLogger.finest(file.getAbsolutePath()+" parsing finished");
     }
 
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
@@ -118,7 +116,7 @@ class CommandBarReader extends CommandBarIO {
             if (actionClass != null)
             	actionsV.add(actionClass);
             else
-            	if(Debug.ON) Debug.trace("Error in "+COMMAND_BAR_RESOURCE_PATH+": action class "+actionClassName+" not found");
+            	AppLogger.warning("Error in "+DEFAULT_COMMAND_BAR_FILE_NAME+": action class "+actionClassName+" not found");
 
             // Resolve alternate action class (if any)
             actionClassName = attributes.getValue(ALT_ACTION_ATTRIBUTE);
@@ -127,7 +125,7 @@ class CommandBarReader extends CommandBarIO {
             else
                 if ((actionClass = ActionManager.getActionClass(actionClassName, fileVersion)) != null)
                 	alternateActionsV.add(actionClass);
-                else if(Debug.ON) Debug.trace("Error in "+COMMAND_BAR_RESOURCE_PATH+": action class "+actionClassName+" not found");
+                AppLogger.warning("Error in "+DEFAULT_COMMAND_BAR_FILE_NAME+": action class "+actionClassName+" not found");
         }
         else if(qName.equals(ROOT_ELEMENT)) {
         	// Retrieve modifier key (shift by default)

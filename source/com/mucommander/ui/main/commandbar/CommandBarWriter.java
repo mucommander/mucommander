@@ -18,17 +18,16 @@
 
 package com.mucommander.ui.main.commandbar;
 
-import java.io.IOException;
-import java.io.OutputStream;
-
-import javax.swing.KeyStroke;
-
-import com.mucommander.Debug;
+import com.mucommander.AppLogger;
 import com.mucommander.RuntimeConstants;
 import com.mucommander.io.BackupOutputStream;
 import com.mucommander.ui.text.KeyStrokeUtils;
 import com.mucommander.xml.XmlAttributes;
 import com.mucommander.xml.XmlWriter;
+
+import javax.swing.*;
+import java.io.IOException;
+import java.io.OutputStream;
 
 /**
  * This class is responsible for writing the command-bar attributes (actions and modifier).
@@ -67,12 +66,12 @@ class CommandBarWriter extends CommandBarIO implements CommandBarAttributesListe
 				new Writer(bos).write(commandBarActions, commandBarAlterativeActions, commandBarModifier);
 				isCommandBarChanged = false;
 			} catch (Exception e) {
-				e.printStackTrace();
+                AppLogger.fine("Caught exception", e);
 			} finally {
 				bos.close();
 			}
 		}
-		else if(Debug.ON) Debug.trace("Command bar not modified, skip saving.");
+		AppLogger.fine("Command bar not modified, not saving.");
 	}
 	
 	////////////////////////////////////////////////
@@ -115,8 +114,7 @@ class CommandBarWriter extends CommandBarIO implements CommandBarAttributesListe
 			if (alternativeAction != null)
 				attributes.add(ALT_ACTION_ATTRIBUTE, alternativeAction.getCanonicalName());
 			
-			if (Debug.ON)
-    			Debug.trace(" Writing button: action = "  + attributes.getValue(ACTION_ATTRIBUTE) + ", alt_action = " + attributes.getValue(ALT_ACTION_ATTRIBUTE));
+            AppLogger.finest("Writing button: action = "  + attributes.getValue(ACTION_ATTRIBUTE) + ", alt_action = " + attributes.getValue(ALT_ACTION_ATTRIBUTE));
 			
 			writer.writeStandAloneElement(BUTTON_ELEMENT, attributes);
 		}

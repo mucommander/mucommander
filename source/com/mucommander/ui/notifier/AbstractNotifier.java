@@ -18,7 +18,7 @@
 
 package com.mucommander.ui.notifier;
 
-import com.mucommander.Debug;
+import com.mucommander.AppLogger;
 import com.mucommander.runtime.JavaVersions;
 import com.mucommander.runtime.OsFamilies;
 import com.mucommander.ui.main.WindowManager;
@@ -111,12 +111,12 @@ public abstract class AbstractNotifier implements NotificationTypes {
             new Thread() {
                 public void run() {
                     if(WindowManager.getCurrentMainFrame().isAncestorOfActiveWindow()) {
-                        if(Debug.ON) Debug.trace("Ignoring notification, application is in foreground");
+                        AppLogger.fine("Ignoring notification, application is in foreground");
                         return;
                     }
 
                     if(!displayNotification(notificationType, title, description))
-                        if(Debug.ON) Debug.trace("Notification failed to be displayed");
+                        AppLogger.fine("Notification failed to be displayed");
                 }
             }
         );

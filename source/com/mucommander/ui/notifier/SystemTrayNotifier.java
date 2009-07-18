@@ -18,7 +18,7 @@
 
 package com.mucommander.ui.notifier;
 
-import com.mucommander.Debug;
+import com.mucommander.AppLogger;
 import com.mucommander.runtime.JavaVersions;
 import com.mucommander.ui.action.AWTActionProxy;
 import com.mucommander.ui.action.ActionManager;
@@ -156,10 +156,10 @@ public class SystemTrayNotifier extends AbstractNotifier implements ActionListen
     }
 
     public boolean displayNotification(int notificationType, String title, String description) {
-        if(Debug.ON) Debug.trace("notificationType="+notificationType+" title="+title+" description="+description);
+        AppLogger.finer("notificationType="+notificationType+" title="+title+" description="+description);
 
         if(!isEnabled()) {
-            if(Debug.ON) Debug.trace("Ignoring notification, this notifier is not enabled");
+            AppLogger.finer("Ignoring notification, this notifier is not enabled");
 
             return false;
         }
@@ -178,7 +178,7 @@ public class SystemTrayNotifier extends AbstractNotifier implements ActionListen
     ///////////////////////////////////
 
     public void actionPerformed(ActionEvent actionEvent) {
-        if(Debug.ON) Debug.trace("caught SystemTray ActionEvent");
+        AppLogger.finest("caught SystemTray ActionEvent");
 
         WindowManager.getCurrentMainFrame().toFront();
     }

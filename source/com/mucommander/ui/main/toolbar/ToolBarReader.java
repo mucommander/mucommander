@@ -18,7 +18,7 @@
 
 package com.mucommander.ui.main.toolbar;
 
-import com.mucommander.Debug;
+import com.mucommander.AppLogger;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.io.BackupInputStream;
 import com.mucommander.ui.action.ActionManager;
@@ -82,7 +82,7 @@ public class ToolBarReader extends ToolBarIO {
             Class actionClass = ActionManager.getActionClass(actionClassName, fileVersion);
             if (actionClass != null)
             	actionsV.add(actionClass);
-            else if(Debug.ON) Debug.trace("Error in toolbar file: action class "+actionClassName+" not found");
+            AppLogger.warning("Error in "+DEFAULT_TOOLBAR_FILE_NAME+": action class "+actionClassName+" not found");
         }
         else if(qName.equals(SEPARATOR_ELEMENT)) {
             actionsV.add(null);

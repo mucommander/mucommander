@@ -19,6 +19,7 @@
 
 package com.mucommander.ui.main.table;
 
+import com.mucommander.AppLogger;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.ui.icon.CustomFileIconProvider;
 import com.mucommander.ui.icon.FileIcons;
@@ -159,7 +160,7 @@ public class FileTableCellRenderer implements TableCellRenderer, ThemeListener {
         // Sanity check.
         file = tableModel.getCachedFileAtRow(row);
         if(file==null) {
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("tableModel.getCachedFileAtRow("+row+") RETURNED NULL !"); 
+            AppLogger.fine("tableModel.getCachedFileAtRow("+row+") RETURNED NULL !");
             return null;
         }
 

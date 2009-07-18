@@ -18,10 +18,10 @@
 
 package com.mucommander.ui.action.impl;
 
-import com.mucommander.Debug;
+import com.mucommander.AppLogger;
 import com.mucommander.text.Translator;
-import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.action.ActionFactory;
+import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.WindowManager;
 
@@ -61,7 +61,7 @@ public class RecallWindowAction extends MuAction implements PropertyChangeListen
         // Checks that the window number currently exists
         int windowNumber = getWindowNumber();
         if(windowNumber<=0 || windowNumber>mainFrames.size()) {
-            if(Debug.ON) Debug.trace("Specified window does not exist: "+getValue(WINDOW_NUMBER_PROPERTY_KEY));
+            AppLogger.fine("Specified window does not exist: "+getValue(WINDOW_NUMBER_PROPERTY_KEY));
             return;
         }
 
@@ -110,7 +110,7 @@ public class RecallWindowAction extends MuAction implements PropertyChangeListen
         if(propertyChangeEvent.getPropertyName().equals(WINDOW_NUMBER_PROPERTY_KEY)) {
             int windowNumber = getWindowNumber();
             if(windowNumber==-1) {
-                if(Debug.ON) Debug.trace("Invalid "+WINDOW_NUMBER_PROPERTY_KEY+" property="+getValue(WINDOW_NUMBER_PROPERTY_KEY));
+                AppLogger.fine("Invalid "+WINDOW_NUMBER_PROPERTY_KEY+" property="+getValue(WINDOW_NUMBER_PROPERTY_KEY));
             }
             else {
                 updateLabel(windowNumber);

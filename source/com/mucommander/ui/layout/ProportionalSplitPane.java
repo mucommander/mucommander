@@ -172,8 +172,6 @@ public class ProportionalSplitPane extends JSplitPane implements ComponentListen
 
 
         if(source==window) {
-//            if(Debug.ON) Debug.trace("called on MainFrame ratio="+splitRatio);
-
             // Note: the window/split pane may not be visible when this method is called for the first time
 
             // Makes sure that windowWidth is never 0 in #componentMoved.
@@ -204,7 +202,6 @@ public class ProportionalSplitPane extends JSplitPane implements ComponentListen
             // Divider has been moved, calculate new split ratio
             lastDividerLocation = getDividerLocation();
             splitRatio = lastDividerLocation / (float)(getOrientation()==HORIZONTAL_SPLIT?getWidth():getHeight());
-//            if(Debug.ON) Debug.trace("new ratio="+splitRatio);
         }
     }
 

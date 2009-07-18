@@ -18,7 +18,7 @@
 
 package com.mucommander.ui.dialog.file;
 
-import com.mucommander.Debug;
+import com.mucommander.AppLogger;
 import com.mucommander.file.filter.*;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.DialogToolkit;
@@ -205,7 +205,7 @@ public class FileSelectionDialog extends FocusDialog implements ActionListener {
                     }
                     catch(PatternSyntaxException ex) {
                         // Todo: let the user know the regexp is invalid
-                        if(Debug.ON) Debug.trace("Invalid regexp: "+e);
+                        AppLogger.fine("Invalid regexp", ex);
 
                         // This filter does match any file
                         filter = new PassThroughFileFilter(false);

@@ -18,6 +18,7 @@
 
 package com.mucommander.ui.main;
 
+import com.mucommander.AppLogger;
 import com.mucommander.cache.LRUCache;
 import com.mucommander.conf.ConfigurationEvent;
 import com.mucommander.conf.ConfigurationListener;
@@ -284,7 +285,7 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
 
         long cachedVolumeInfo[] = (long[])volumeInfoCache.get(volumePath);
         if(cachedVolumeInfo!=null) {
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Cache hit!");
+            AppLogger.finer("Cache hit!");
             volumeSpaceLabel.setVolumeSpace(cachedVolumeInfo[0], cachedVolumeInfo[1]);
         }
         else {
@@ -313,7 +314,7 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
 
                     volumeSpaceLabel.setVolumeSpace(volumeTotal, volumeFree);
 
-                    if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Adding to cache");
+                    AppLogger.finer("Adding to cache");
                     volumeInfoCache.add(volumePath, new long[]{volumeTotal, volumeFree}, VOLUME_INFO_TIME_TO_LIVE);
                 }
             }.start();

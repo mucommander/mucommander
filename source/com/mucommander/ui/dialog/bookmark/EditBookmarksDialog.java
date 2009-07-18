@@ -225,9 +225,6 @@ public class EditBookmarksDialog extends FocusDialog implements ActionListener, 
      * @param sourceDocument the javax.swing.text.Document of the JTextField that was modified
      */
     private void modifyBookmark(Document sourceDocument) {
-//if(Debug.ON) Debug.trace("starts, currentBookmarkSave="+currentBookmarkSave+" currentListIndex="+currentListIndex+" ignoreDocumentListenerEvents="+ignoreDocumentListenerEvents+", selectedIndex="+bookmarkList.getSelectedIndex());
-
-
         if(ignoreDocumentListenerEvents || bookmarks.size()==0)
             return;
 
@@ -261,8 +258,6 @@ public class EditBookmarksDialog extends FocusDialog implements ActionListener, 
         else {
             selectedBookmark.setLocation(locationField.getText());
         }
-
-//if(Debug.ON) Debug.trace("ends, currentBookmarkSave="+currentBookmarkSave+" currentListIndex="+currentListIndex);
     }
 
 
@@ -319,8 +314,6 @@ public class EditBookmarksDialog extends FocusDialog implements ActionListener, 
 
         // Rollback current bookmark's modifications if the dialog was cancelled
         if(currentBookmarkSave!=null) {
-//if(Debug.ON) Debug.trace("currentBookmarkSave="+currentBookmarkSave+" currentListIndex="+currentListIndex);
-
             bookmarks.setElementAt(currentBookmarkSave, currentListIndex);
             currentBookmarkSave = null;
         }

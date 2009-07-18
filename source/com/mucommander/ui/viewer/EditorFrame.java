@@ -19,6 +19,7 @@
 
 package com.mucommander.ui.viewer;
 
+import com.mucommander.AppLogger;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
 import com.mucommander.file.FileProtocols;
@@ -121,7 +122,7 @@ public class EditorFrame extends JFrame implements ActionListener {
                     editor.edit(file);
                 }
                 catch(Exception e) {
-                    if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Exception caught: "+e);
+                    AppLogger.fine("Exception caught", e);
 
                     // May be a UserCancelledException if the user cancelled (refused to confirm the operation after a warning)
                     if(!(e instanceof UserCancelledException))

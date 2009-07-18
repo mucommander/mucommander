@@ -18,7 +18,7 @@
 
 package com.mucommander.ui.dialog.pref.general;
 
-import com.mucommander.Debug;
+import com.mucommander.AppLogger;
 import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.extension.ClassFinder;
 import com.mucommander.extension.ExtensionManager;
@@ -751,8 +751,7 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
             }
         }
         catch(Exception e) {
-            if(Debug.ON)
-                Debug.trace(e);
+            AppLogger.fine("Exception caught", e);
 
             ErrorDialog.showErrorDialog(this);
         }

@@ -18,6 +18,7 @@
 
 package com.mucommander.ui.dialog.file;
 
+import com.mucommander.AppLogger;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.util.FileSet;
 import com.mucommander.job.BatchRenameJob;
@@ -583,7 +584,7 @@ public class BatchRenameDialog extends FocusDialog implements ActionListener,
         try {
             edtFileNameMask.getDocument().insertString(pos, pattern, null);
         } catch (BadLocationException e) {
-            e.printStackTrace();
+            AppLogger.fine("Caught exception", e);
         }
     }
     
@@ -905,9 +906,7 @@ public class BatchRenameDialog extends FocusDialog implements ActionListener,
                         name = name.substring(currentStartIndex - 1, Math.min(
                                 currentEndIndex, targetLen));
                     } catch (Exception e) {
-                        System.err.println(e.getMessage());
-                        System.err.println(currentStartIndex);
-                        System.err.println(currentEndIndex);
+                        AppLogger.info("currentStartIndex="+currentStartIndex+", currentEndIndex="+currentEndIndex, e);
                     }
                 } else {
                     name = "";

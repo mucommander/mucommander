@@ -18,17 +18,16 @@
 
 package com.mucommander.ui.main.commandbar;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-
-import org.xml.sax.helpers.DefaultHandler;
-
-import com.mucommander.Debug;
+import com.mucommander.AppLogger;
 import com.mucommander.PlatformManager;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
 import com.mucommander.file.util.ResourceLoader;
+import org.xml.sax.helpers.DefaultHandler;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 /**
  * This class contains the common things for reading and writing the command-bar actions and modifier.
@@ -80,7 +79,7 @@ public abstract class CommandBarIO extends DefaultHandler {
     		CommandBarAttributes.setAttributes(reader.getActionsRead(), reader.getAlternateActionsRead(), reader.getModifierRead());
     	}
     	else
-    		if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(DEFAULT_COMMAND_BAR_FILE_NAME + " was not found");
+    		AppLogger.fine(DEFAULT_COMMAND_BAR_FILE_NAME + " was not found");
     	
     	// initialize the writer after setting the command-bar initial attributes:
     	commandBarWriter = CommandBarWriter.create();
@@ -95,7 +94,7 @@ public abstract class CommandBarIO extends DefaultHandler {
     	if (commandBarWriter != null)
     		commandBarWriter.write();
     	else
-    		Debug.trace("Error: Could not save command-bar. writer is null");
+    		AppLogger.warning("Could not save command bar. writer is null");
     }
 	
 	/**

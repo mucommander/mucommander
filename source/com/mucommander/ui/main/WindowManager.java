@@ -18,7 +18,7 @@
 
 package com.mucommander.ui.main;
 
-import com.mucommander.Debug;
+import com.mucommander.AppLogger;
 import com.mucommander.ShutdownHook;
 import com.mucommander.auth.AuthException;
 import com.mucommander.auth.CredentialsManager;
@@ -99,9 +99,13 @@ public class WindowManager implements WindowListener, ConfigurationListener {
         // Goes through the list and install every custom look and feel we could find.
         // Look and feels that aren't supported under the current platform are ignored.
         plafsIterator = plafs.iterator();
+        String plaf;
         while(plafsIterator.hasNext()) {
-            try {installLookAndFeel((String)plafsIterator.next());}
-            catch(Throwable e) {if(Debug.ON) Debug.trace(e);}
+            plaf = (String)plafsIterator.next();
+            try {installLookAndFeel(plaf);}
+            catch(Throwable e) {
+                AppLogger.info("Failed to install Look&Feel "+plaf, e);
+            }
         }
     }
 
@@ -123,10 +127,8 @@ public class WindowManager implements WindowListener, ConfigurationListener {
         if(lnfName!=null && !lnfName.equals(UIManager.getLookAndFeel().getName()))
             setLookAndFeel(lnfName);
 
-        // In debug mode, trace un-initialised preference files.
-        if(Debug.ON)
-            if(lnfName == null)
-                Debug.trace("Could load look'n feel from preferences");
+        if(lnfName == null)
+            AppLogger.fine("Could load look'n feel from preferences");
     }
 
     /**
@@ -168,7 +170,7 @@ public class WindowManager implements WindowListener, ConfigurationListener {
         if(folderPath == null || (folder = FileFactory.getFile(folderPath)) == null || !folder.exists())
             folder = FileFactory.getFile(System.getProperty("user.home"));
 
-        if(Debug.ON) Debug.trace("initial folder= "+folder);
+        AppLogger.finer("initial folder= "+folder);
         return folder;
     }
 
@@ -486,9 +488,8 @@ public class WindowManager implements WindowListener, ConfigurationListener {
         Frame frame;
         for(int i=0; i<nbFrames; i++) {
             frame = frames[i];
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("frame#"+i+"= "+frame);
             if(frame.isShowing()) {
-                if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("disposing frame#"+i);
+                AppLogger.finer("disposing frame#"+i);
                 frame.dispose();
             }
         }
@@ -552,7 +553,9 @@ public class WindowManager implements WindowListener, ConfigurationListener {
             for(int i=0; i<mainFrames.size(); i++)
                 SwingUtilities.updateComponentTreeUI((MainFrame)(mainFrames.elementAt(i)));
         }
-        catch(Throwable e) {if(Debug.ON) Debug.trace(e);}
+        catch(Throwable e) {
+            AppLogger.fine("Exception caught", e);
+        }
     }
 
 
@@ -600,7 +603,7 @@ public class WindowManager implements WindowListener, ConfigurationListener {
      * windowClosed is synchronized so that it doesn't get called while quit() is executing.
      */
     public synchronized void windowClosed(WindowEvent e) {
-        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called");
+        AppLogger.finest("called");
 
         Object source = e.getSource();
 
@@ -635,9 +638,8 @@ public class WindowManager implements WindowListener, ConfigurationListener {
         Frame frame;
         for(int i=0; i<nbFrames; i++) {
             frame = frames[i];
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("frame#"+i+"= "+frame);
             if(frame.isShowing()) {
-                if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("found active frame#"+i);
+                AppLogger.finer("found active frame#"+i);
                 return;
             }
         }

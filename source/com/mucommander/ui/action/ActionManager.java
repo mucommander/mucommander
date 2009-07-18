@@ -18,19 +18,12 @@
 
 package com.mucommander.ui.action;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Enumeration;
-import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Vector;
-import java.util.WeakHashMap;
-
-import com.mucommander.Debug;
+import com.mucommander.AppLogger;
 import com.mucommander.ui.action.impl.*;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.WindowManager;
+
+import java.util.*;
 
 /**
  * ActionManager provides methods to retrieve {@link MuAction} instances and invoke them. It keeps track of all the
@@ -273,12 +266,8 @@ public class ActionManager {
      * MuAction class denoted by the ActionParameters could not be found or could not be instantiated.
      */
     public static MuAction getActionInstance(ActionParameters actionParameters, MainFrame mainFrame) {
-//      if(Debug.ON) Debug.trace("called, actionParameters = "+actionParameters, 5);
-
         Hashtable mainFrameActions = (Hashtable)mainFrameActionsMap.get(mainFrame);
         if(mainFrameActions==null) {
-//            if(Debug.ON) Debug.trace("creating MainFrame action map");
-
             mainFrameActions = new Hashtable();
             mainFrameActionsMap.put(mainFrame, mainFrameActions);
         }
@@ -291,11 +280,9 @@ public class ActionManager {
             // Looks for the action's factory
             ActionFactory actionFactory = (ActionFactory) actionFactories.get(actionClass);
             if(actionFactory == null) {
-            	if(Debug.ON) Debug.trace("couldn't initiate action: " + actionClass.getName() + ", its factory wasn't found");
+            	AppLogger.fine("couldn't initiate action: " + actionClass.getName() + ", its factory wasn't found");
             	return null;
             }
-
-//          if(Debug.ON) Debug.trace("creating instance");
 
             Hashtable properties = actionParameters.getInitProperties();
             // If no properties hashtable is specified in the action descriptor
@@ -311,12 +298,7 @@ public class ActionManager {
             // Instanciate the MuAction class
             action = actionFactory.createAction(mainFrame, properties);
             mainFrameActions.put(actionParameters, action);
-
-//          if(Debug.ON) Debug.trace("nb action instances = "+mainFrameActions.size());
         }
-//      else {
-//      	if(Debug.ON) Debug.trace("found existing action instance: "+action);
-//      }
 
         return action;
     }
@@ -347,7 +329,6 @@ public class ActionManager {
             }
         }
 
-// if(Debug.ON) Debug.trace("returning "+actionInstances);
         return actionInstances;
     }
 

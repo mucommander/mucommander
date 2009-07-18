@@ -18,7 +18,7 @@
 
 package com.mucommander.ui.dnd;
 
-import com.mucommander.Debug;
+import com.mucommander.AppLogger;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
 import com.mucommander.file.FileProtocols;
@@ -93,7 +93,7 @@ public class TransferableFileSet implements Transferable {
         }
         catch(ClassNotFoundException e) {
             // That should never happen
-            if(Debug.ON) Debug.trace("Error: FileSet DataFlavor could not be instanciated "+e);
+            AppLogger.fine("FileSet DataFlavor could not be instanciated", e);
         }
     }
 
@@ -259,7 +259,7 @@ public class TransferableFileSet implements Transferable {
         }
         catch(Exception e) {
             // Catch UnsupportedFlavorException, IOException
-            if(Debug.ON) Debug.trace("Caught exception while processing transferable: "+e);
+            AppLogger.fine("Caught exception while processing transferable", e);
 
             return  null;
         }

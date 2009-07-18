@@ -18,6 +18,7 @@
 
 package com.mucommander.ui.dialog.file;
 
+import com.mucommander.AppLogger;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.filter.*;
 import com.mucommander.file.util.FileSet;
@@ -94,7 +95,7 @@ public class MergeFileDialog extends TransferDestinationDialog {
 				}
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
+            AppLogger.fine("Caught exception", e);
 		}
 		setFiles(files);
 	}

@@ -18,7 +18,6 @@
 
 package com.mucommander.ui.icon;
 
-import com.mucommander.Debug;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileProtocols;
 import com.mucommander.file.icon.FileIconProvider;
@@ -130,7 +129,6 @@ public class CustomFileIconProvider implements FileIconProvider {
                  extensionMap.put(ICON_EXTENSIONS[i][j], iconName);
         }
 
-        if(Debug.ON) Debug.trace("done");
         initialized = true;
     }
 

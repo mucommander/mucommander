@@ -18,7 +18,7 @@
 
 package com.mucommander.ui.theme;
 
-import com.mucommander.Debug;
+import com.mucommander.AppLogger;
 import com.mucommander.PlatformManager;
 import com.mucommander.RuntimeConstants;
 import com.mucommander.conf.impl.MuConfiguration;
@@ -177,7 +177,9 @@ public class ThemeManager {
         while(iterator.hasNext()) {
             name = (String)iterator.next();
             try {themes.add(readTheme(Theme.PREDEFINED_THEME, name));}
-            catch(Exception e) {if(Debug.ON) Debug.trace("Failed to load predefined theme " + name + ": " + e);}
+            catch(Exception e) {
+                AppLogger.warning("Failed to load predefined theme " + name, e);
+            }
         }
 
         // Loads custom themes.
@@ -186,10 +188,14 @@ public class ThemeManager {
             while(iterator.hasNext()) {
                 name = (String)iterator.next();
                 try {themes.add(readTheme(Theme.CUSTOM_THEME, name));}
-                catch(Exception e) {if(Debug.ON) Debug.trace("Failed to load custom theme " + name + ": " + e);}
+                catch(Exception e) {
+                    AppLogger.warning("Failed to load custom theme " + name, e);
+                }
             }
         }
-        catch(Exception e) {if(Debug.ON) Debug.trace("Failed to load custom themes: " + e);}
+        catch(Exception e) {
+            AppLogger.warning("Failed to load custom themes", e);
+        }
 
         // Sorts the themes by name.
         Collections.sort(themes, new Comparator() {
@@ -219,7 +225,9 @@ public class ThemeManager {
             while(iterator.hasNext())
                 themes.add(iterator.next());
         }
-        catch(Exception e) {if(Debug.ON) Debug.trace("Failed to load custom theme names: " + e);}
+        catch(Exception e) {
+            AppLogger.fine("Failed to load custom theme names", e);
+        }
 
         // Sorts the theme names.
         Collections.sort(themes);
@@ -866,7 +874,9 @@ public class ThemeManager {
 
         // Saves the current theme if necessary.
         try {saveCurrentTheme();}
-        catch(IOException e) {if(Debug.ON) Debug.trace("Couldn't save current theme: " + e);}
+        catch(IOException e) {
+            AppLogger.warning("Couldn't save current theme", e);
+        }
 
         // Updates muCommander's configuration.
         oldTheme = currentTheme;

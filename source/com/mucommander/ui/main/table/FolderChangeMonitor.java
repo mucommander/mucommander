@@ -18,7 +18,7 @@
 
 package com.mucommander.ui.main.table;
 
-import com.mucommander.Debug;
+import com.mucommander.AppLogger;
 import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.ui.event.LocationEvent;
@@ -222,8 +222,6 @@ public class FolderChangeMonitor implements Runnable, WindowListener, LocationLi
         long date;
         long timeStamp;
 
-        // if(Debug.ON) Debug.trace("("+currentFolder.getName()+" "+instances.indexOf(this)+"/"+instances.size()+") checking if current folder changed");
-		
         // Has current folder changed ?
         folder = folderPanel.getCurrentFolder();
         if(!folder.equals(currentFolder)) {
@@ -245,15 +243,13 @@ public class FolderChangeMonitor implements Runnable, WindowListener, LocationLi
         totalCheckTime += System.currentTimeMillis()-timeStamp;
         nbSamples++;
 		
-        // if(Debug.ON) com.mucommander.Debug.trace("("+currentFolder.getName()+") checking current folder date "+date+" / "+currentFolderDate);
-
         // Has date changed ?
         if(date!=currentFolderDate) {
             // Checks if current folder still exists, could have become unavailable (returned date would be 0 i.e. different)
             if(!currentFolder.exists())
                 return true;	// Folder could not be refreshed but still return true so we don't keep on trying
 			
-            if(Debug.ON) Debug.trace(this+" ("+currentFolder.getName()+") Detected changes in current folder, refreshing table!");
+            AppLogger.fine(this+" ("+currentFolder.getName()+") Detected changes in current folder, refreshing table!");
 			
             // Try and refresh current folder in a separate thread as to not lock monitor thread
             folderPanel.tryRefreshCurrentFolder();
@@ -306,7 +302,7 @@ public class FolderChangeMonitor implements Runnable, WindowListener, LocationLi
     public void windowClosed(WindowEvent e) {
         // Remove the MainFrame from the list of monitored instances
         instances.remove(this);
-        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("nbInstances="+instances.size());
+        AppLogger.finer("nbInstances="+instances.size());
     }	
 	
 }

@@ -18,6 +18,7 @@
 
 package com.mucommander.ui.autocomplete;
 
+import com.mucommander.AppLogger;
 import com.mucommander.ui.autocomplete.completers.Completer;
 
 import javax.swing.text.BadLocationException;
@@ -50,7 +51,7 @@ public class OtherTextComponentCompletion extends CompletionType {
 	                x = autocompletedtextComp.modelToView().x;
 	            } catch(BadLocationException e){ 
 	                // this should never happen!!! 
-	                e.printStackTrace(); 
+                    AppLogger.fine("Caught exception", e);
 	                return;
 	            }
 	            if (autocompletedtextComp.hasFocus()) {	            	

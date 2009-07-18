@@ -18,6 +18,8 @@
 
 package com.mucommander.ui.main.tree;
 
+import com.mucommander.AppLogger;
+
 import java.util.List;
 
 /**
@@ -59,7 +61,7 @@ public class IOThread extends Thread {
                 try {
                     task.run();
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    AppLogger.fine("Caught exception", e);
                 }
                 lastActionTime = System.currentTimeMillis(); 
             }

@@ -18,7 +18,7 @@
 
 package com.mucommander.ui.dnd;
 
-import com.mucommander.Debug;
+import com.mucommander.AppLogger;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.util.FileSet;
 import com.mucommander.job.CopyJob;
@@ -169,13 +169,13 @@ public class FileDropTargetListener implements DropTargetListener {
                 if(currentDropAction==DnDConstants.ACTION_MOVE
                         && (dragModifiers&MOVE_ACTION_MODIFIERS_EX)==0
                         && (event.getSourceActions()&DnDConstants.ACTION_COPY)!=0) {
-                    if(Debug.ON) Debug.trace("changing default action, was: DnDConstants.ACTION_MOVE, now: DnDConstants.ACTION_COPY");
+                    AppLogger.finer("changing default action, was: DnDConstants.ACTION_MOVE, now: DnDConstants.ACTION_COPY");
                     currentDropAction = DnDConstants.ACTION_COPY;
                 }
             }
         }
 
-if(Debug.ON) Debug.trace("dragAccepted="+dragAccepted+" dropAction="+currentDropAction);
+        AppLogger.finest("dragAccepted="+dragAccepted+" dropAction="+currentDropAction);
 
         if(dragAccepted) {
             // Accept the drag event with our drop action
@@ -186,7 +186,7 @@ if(Debug.ON) Debug.trace("dragAccepted="+dragAccepted+" dropAction="+currentDrop
             event.rejectDrag();
         }
 
-if(Debug.ON) Debug.trace("cursor="+getDragActionCursor(currentDropAction, dragAccepted));
+        AppLogger.finest("cursor="+getDragActionCursor(currentDropAction, dragAccepted));
 
         // Change the mouse cursor on this FolderPanel and child components
         folderPanel.setCursor(getDragActionCursor(currentDropAction, dragAccepted));

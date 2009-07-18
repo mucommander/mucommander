@@ -18,7 +18,7 @@
 
 package com.mucommander.ui.action.impl;
 
-import com.mucommander.Debug;
+import com.mucommander.AppLogger;
 import com.mucommander.command.Command;
 import com.mucommander.file.FileProtocols;
 import com.mucommander.file.impl.local.LocalFile;
@@ -77,10 +77,8 @@ public class CommandAction extends MuAction {
             try {ProcessRunner.execute(command.getTokens(selectedFiles), selectedFiles.getBaseFolder());}
             catch(Exception e) {
                 ErrorDialog.showErrorDialog(mainFrame);
-                if(Debug.ON) {
-                    Debug.trace("Failed to execute command: " + command.getCommand());
-                    Debug.trace(e);
-                }
+
+                AppLogger.fine("Failed to execute command: " + command.getCommand(), e);
             }
         }
         // Otherwise, copies the files locally before running the command.

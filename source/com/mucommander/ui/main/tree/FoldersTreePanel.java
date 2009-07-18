@@ -18,6 +18,7 @@
 
 package com.mucommander.ui.main.tree;
 
+import com.mucommander.AppLogger;
 import com.mucommander.conf.ConfigurationEvent;
 import com.mucommander.conf.ConfigurationListener;
 import com.mucommander.conf.impl.MuConfiguration;
@@ -223,7 +224,7 @@ public class FoldersTreePanel extends JPanel implements TreeSelectionListener,
                    tree.setSelectionPath(path);
                    tree.scrollPathToVisible(path);
                } catch (Exception e) {
-                   e.printStackTrace();
+                   AppLogger.fine("Caught exception", e);
                }
             }
         });

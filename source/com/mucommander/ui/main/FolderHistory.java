@@ -19,6 +19,7 @@
 
 package com.mucommander.ui.main;
 
+import com.mucommander.AppLogger;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileProtocols;
 import com.mucommander.file.FileURL;
@@ -92,15 +93,13 @@ public class FolderHistory {
             history.add(folderURL);
         }
 
-        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("history= "+history+" historyIndex="+historyIndex);
-
         // Save last recallable folder on startup, only if :
         //  - it is a directory on a local filesytem
         //  - it doesn't look like a removable media drive (cd/dvd/floppy), especially in order to prevent
         // Java from triggering that dreaded 'Drive not ready' popup.
         if(folderURL.getScheme().equals(FileProtocols.FILE) && folder.isDirectory() && (folder instanceof LocalFile) && !((LocalFile)folder.getRoot()).guessRemovableDrive()) {
             this.lastRecallableFolder = folder.getAbsolutePath();
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("lastRecallableFolder= "+lastRecallableFolder);
+            AppLogger.finest("lastRecallableFolder= "+lastRecallableFolder);
         }
     }
 
