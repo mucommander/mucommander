@@ -18,7 +18,7 @@
 
 package com.mucommander.test;
 
-import com.mucommander.Debug;
+import com.mucommander.commons.CommonsLogger;
 import junit.framework.TestSuite;
 
 /**
@@ -37,11 +37,11 @@ public abstract class ConditionalTestSuite extends TestSuite {
 
     public ConditionalTestSuite() {
         if(isEnabled()) {
-            if(Debug.ON) Debug.trace("Test suite enabled, populating test suite.");
+            CommonsLogger.config("Test suite enabled, populating test suite.");
             populateTestSuite();
         }
         else {
-            if(Debug.ON) Debug.trace("Test suite disabled, tests not performed.");
+            CommonsLogger.config("Test suite disabled, tests not performed.");
         }
     }
 

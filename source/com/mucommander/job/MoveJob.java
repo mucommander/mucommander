@@ -19,6 +19,7 @@
 
 package com.mucommander.job;
 
+import com.mucommander.AppLogger;
 import com.mucommander.file.AbstractArchiveFile;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.AbstractRWArchiveFile;
@@ -106,7 +107,7 @@ public class MoveJob extends AbstractCopyJob {
                     return true;
                 }
                 catch(IOException e) {
-                    if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("IOException caught: "+e);
+                    AppLogger.fine("IOException caught", e);
 
                     int ret = showErrorDialog(errorDialogTitle, Translator.get("cannot_delete_file", file.getAbsolutePath()));
                     // Retry loops
@@ -237,7 +238,7 @@ public class MoveJob extends AbstractCopyJob {
                         return true;
                     }
                     catch(IOException e) {
-                        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("IOException caught: "+e);
+                        AppLogger.fine("IOException caught", e);
 
                         int ret = showErrorDialog(errorDialogTitle, Translator.get("cannot_delete_file", file.getAbsolutePath()));
                         // Retry loops

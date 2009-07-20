@@ -18,7 +18,6 @@
 
 package com.mucommander.process;
 
-import com.mucommander.Debug;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
 import com.mucommander.file.impl.local.LocalFile;
@@ -92,9 +91,9 @@ public class ProcessRunner {
             }
         }
 
-        // If we're in debug mode, register a debug process listener.
-        if(Debug.ON && listener == null)
-            listener = new DebugProcessListener(tokens);
+//        // Register a debug process listener.
+//        if(listener == null)
+//            listener = new DebugProcessListener(tokens);
 
         // Starts the process.
         process = new LocalProcess(tokens, (java.io.File)currentDirectory.getUnderlyingFileObject());

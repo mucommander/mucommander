@@ -18,7 +18,7 @@
 
 package com.mucommander.runtime;
 
-import com.mucommander.Debug;
+import com.mucommander.commons.CommonsLogger;
 
 /**
  * This class represents a major version of Java, like <code>Java 1.5</code> for instance. The current runtime instance
@@ -56,7 +56,7 @@ public class JavaVersion extends ComparableRuntimeProperty implements JavaVersio
         // Note: performing the initialization outside of the class static block avoids cyclic dependency problems.
         if(currentValue==null) {
             currentValue = parseSystemProperty(getRawSystemProperty());
-            if(Debug.ON) Debug.trace("Current Java version: "+ currentValue);
+            CommonsLogger.config("Current Java version: "+ currentValue);
         }
     }
 

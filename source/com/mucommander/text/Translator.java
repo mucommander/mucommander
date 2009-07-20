@@ -18,7 +18,7 @@
 
 package com.mucommander.text;
 
-import com.mucommander.Debug;
+import com.mucommander.AppLogger;
 import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.file.util.ResourceLoader;
 import com.mucommander.io.bom.BOMReader;
@@ -75,10 +75,10 @@ public class Translator {
             // Try to match language with the system's language, only if the system's language
             // has values in dictionary, otherwise use default language (English).
             lang = Locale.getDefault().getLanguage();
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Language not set in preferences, trying to match system's language ("+lang+")");
+            AppLogger.info("Language not set in preferences, trying to match system's language ("+lang+")");
         }
         else {
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Language in prefs: "+lang);
+            AppLogger.info("Using language set in preferences: "+lang);
         }
 
         // Determines if the list of available languages contains the language (case-insensitive)
@@ -96,18 +96,18 @@ public class Translator {
         if(containsLanguage) {
             // Language is available
             Translator.language = lang;
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Language "+lang+" is available.");
+            AppLogger.fine("Language "+lang+" is available.");
         }
         else {
             // Language is not available, fall back to default language (English)
             Translator.language = DEFAULT_LANGUAGE;
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Language "+lang+" is not available, falling back to default language "+DEFAULT_LANGUAGE);
+            AppLogger.fine("Language "+lang+" is not available, falling back to default language "+DEFAULT_LANGUAGE);
         }
 		
         // Set preferred language in configuration file
         MuConfiguration.setVariable(MuConfiguration.LANGUAGE, Translator.language);
 
-        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Current language has been set to "+Translator.language);
+        AppLogger.config("Current language has been set to "+Translator.language);
     }
 
     /**
@@ -147,7 +147,7 @@ public class Translator {
                         while(st.hasMoreTokens())
                             availableLanguages.add(st.nextToken().trim());
 
-                        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Available languages= "+availableLanguages);
+                        AppLogger.finer("Available languages= "+availableLanguages);
 
                         // Determines current language based on available languages and preferred language (if set) or sytem's language 
                         determineCurrentLanguage(availableLanguages);
@@ -178,11 +178,8 @@ public class Translator {
                         put(key, text);
                 }
                 catch(Exception e) {
-                    if(com.mucommander.Debug.ON) {
-                        e.printStackTrace();
-                        com.mucommander.Debug.trace("error in line " + line + " (" + e + ")");
-                    }
-                    throw new IOException("Syntax error line " + line);
+                    AppLogger.info("error in line " + line + " (" + e + ")");
+                    throw new IOException("Syntax error in line " + line);
                 }
             }
         }
@@ -246,7 +243,7 @@ public class Translator {
         String text = (String)dictionary.get(key.toLowerCase());
 
         if (text==null) {
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Unknown key "+key, -1);
+            AppLogger.fine("Unknown key "+key);
             return key;
         }
 
@@ -501,7 +498,7 @@ public class Translator {
                 lineNum++;
             }
             catch(Exception e) {
-                if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("caught "+e+" at line "+lineNum);
+                AppLogger.warning("caught "+e+" at line "+lineNum);
                 return;
             }
         }
@@ -516,7 +513,7 @@ public class Translator {
                     String newLanguageValue = (String)newLanguageEntries.get(currentKey);
                     if(newLanguageValue!=null) {
                         // Insert new language's entry in resulting file
-                        if(Debug.ON) Debug.trace("New language entry for key="+currentKey+" value="+newLanguageValue);
+                        AppLogger.info("New language entry for key="+currentKey+" value="+newLanguageValue);
                         pw.println(currentKey+":"+newLanguage+":"+newLanguageValue);
                     }
 
@@ -545,12 +542,12 @@ public class Translator {
 
                     if(newLanguageValue!=null) {
                         if(!existingNewLanguageValue.equals(newLanguageValue))
-                            if(Debug.ON) Debug.trace("Warning: found an updated value for key="+currentKey+", using new value="+newLanguageValue+" existing value="+existingNewLanguageValue);
+                            AppLogger.warning("Warning: found an updated value for key="+currentKey+", using new value="+newLanguageValue+" existing value="+existingNewLanguageValue);
 
                         pw.println(currentKey+":"+newLanguage+":"+newLanguageValue);
                     }
                     else {
-                        if(Debug.ON) Debug.trace("Warning: existing dictionary has a value for key="+currentKey+" that is missing in the new dictionary file, using existing value= "+existingNewLanguageValue);
+                        AppLogger.warning("Existing dictionary has a value for key="+currentKey+" that is missing in the new dictionary file, using existing value= "+existingNewLanguageValue);
                         pw.println(currentKey+":"+newLanguage+":"+existingNewLanguageValue);
                     }
 

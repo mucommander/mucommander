@@ -18,7 +18,7 @@
 
 package com.mucommander.desktop.kde;
 
-import com.mucommander.Debug;
+import com.mucommander.AppLogger;
 import com.mucommander.command.Command;
 import com.mucommander.command.CommandException;
 import com.mucommander.command.CommandManager;
@@ -63,7 +63,7 @@ abstract class KdeDesktopAdapter extends DefaultDesktopAdapter {
             multiClickInterval = Integer.parseInt(value);
         }
         catch(Exception e) {
-            if(Debug.ON) Debug.trace("Error while retrieving double-click interval from gconftool: "+e);
+            AppLogger.fine("Error while retrieving double-click interval from gconftool", e);
             multiClickInterval = super.getMultiClickInterval();
         }
     }

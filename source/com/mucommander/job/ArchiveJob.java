@@ -19,6 +19,7 @@
 
 package com.mucommander.job;
 
+import com.mucommander.AppLogger;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.archiver.Archiver;
 import com.mucommander.file.util.FileSet;
@@ -123,7 +124,7 @@ public class ArchiveJob extends TransferFileJob {
                 if(getState()==INTERRUPTED)
                     return false;
 
-                if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Caught IOException: "+e);
+                AppLogger.fine("Caught IOException", e);
                 
                 int ret = showErrorDialog(Translator.get("pack_dialog.error_title"), Translator.get("error_while_transferring", file.getAbsolutePath()));
                 // Retry loops

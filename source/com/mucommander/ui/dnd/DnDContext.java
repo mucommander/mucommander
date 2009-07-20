@@ -86,11 +86,11 @@ public class DnDContext {
     static void setDragGestureModifiersEx(int modifiersEx) {
         dragGestureModifiersEx = modifiersEx;
 
-//        if(Debug.ON) Debug.trace("gestureModifiersEx="+modifiersEx);
-//        if(Debug.ON) Debug.trace("getModifiersExText="+ InputEvent.getModifiersExText(modifiersEx));
-//        if(Debug.ON) Debug.trace("is shift down="+((modifiersEx&InputEvent.SHIFT_DOWN_MASK)!=0));
-//        if(Debug.ON) Debug.trace("is ctrl down="+((modifiersEx&InputEvent.CTRL_DOWN_MASK)!=0));
-//        if(Debug.ON) Debug.trace("is alt down="+((modifiersEx&InputEvent.ALT_DOWN_MASK)!=0));
-//        if(Debug.ON) Debug.trace("is meta down="+((modifiersEx&InputEvent.META_DOWN_MASK)!=0));
+//        AppLogger.finest("gestureModifiersEx="+modifiersEx);
+//        AppLogger.finest("getModifiersExText="+ InputEvent.getModifiersExText(modifiersEx));
+//        AppLogger.finest("is shift down="+((modifiersEx&InputEvent.SHIFT_DOWN_MASK)!=0));
+//        AppLogger.finest("is ctrl down="+((modifiersEx&InputEvent.CTRL_DOWN_MASK)!=0));
+//        AppLogger.finest("is alt down="+((modifiersEx&InputEvent.ALT_DOWN_MASK)!=0));
+//        AppLogger.finest("is meta down="+((modifiersEx&InputEvent.META_DOWN_MASK)!=0));
     }
 }

@@ -18,7 +18,7 @@
 
 package com.mucommander.io;
 
-import com.mucommander.Debug;
+import com.mucommander.commons.CommonsLogger;
 
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
@@ -223,12 +223,11 @@ public class BufferPool {
             if(bufferContainer.getLength()==size && (factory.matchesBufferClass(buffer.getClass()))) {
                 bufferContainers.removeElementAt(i);
                 poolSize -= bufferContainer.getSize();
-//                if(Debug.ON) Debug.trace("Returning buffer "+buffer+", size="+size);
                 return buffer;
             }
         }
 
-        if(Debug.ON) Debug.trace("Creating new buffer with "+factory+" size="+size, 3);
+        CommonsLogger.finer("Creating new buffer with "+factory+" size="+size);
 
         // No buffer with the same class and size found in the pool, create a new one and return it
         return factory.newBuffer(size);
@@ -320,18 +319,16 @@ public class BufferPool {
         BufferContainer bufferContainer = factory.newBufferContainer(buffer);
 
         if(bufferContainers.contains(bufferContainer)) {
-            if(Debug.ON) Debug.trace("Warning: specified buffer is already in the pool: "+buffer, -1);
+            CommonsLogger.fine("Warning: specified buffer is already in the pool: "+buffer, new Throwable());
             return false;
         }
 
         long bufferSize = bufferContainer.getSize();        // size in bytes (!= length)
 
         if(maxPoolSize!=-1 && poolSize+bufferSize>maxPoolSize) {
-            if(Debug.ON) Debug.trace("Warning: maximum pool size reached, buffer not added to the pool"+buffer);
+            CommonsLogger.fine("Warning: maximum pool size reached, buffer not added to the pool: "+buffer);
             return false;
         }
-
-//        if(Debug.ON) Debug.trace("Adding buffer to pool: "+buffer);
 
         bufferContainers.add(bufferContainer);
         poolSize += bufferSize;

@@ -20,7 +20,7 @@
 package com.mucommander.job;
 
 import com.apple.eio.FileManager;
-import com.mucommander.Debug;
+import com.mucommander.AppLogger;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FilePermissions;
 import com.mucommander.file.impl.local.LocalFile;
@@ -121,7 +121,6 @@ public abstract class TransferFileJob extends FileJob {
         // copyTo() should or must be used
         boolean copied = false;
         if(copyToHint==AbstractFile.SHOULD_HINT || copyToHint==AbstractFile.MUST_HINT) {
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("calling copyTo()");
             copied = sourceFile.copyTo(destFile);
         }
 
@@ -152,10 +151,7 @@ public abstract class TransferFileJob extends FileJob {
                     }
                 }
                 catch(Exception e) {
-                    if(com.mucommander.Debug.ON) {
-                        com.mucommander.Debug.trace("IOException caught: "+e+", throwing FileTransferException");
-                        e.printStackTrace();
-                    }
+                    AppLogger.fine("IOException caught, throwing FileTransferException", e);
                     throw new FileTransferException(FileTransferException.OPENING_SOURCE);
                 }
 
@@ -189,7 +185,7 @@ public abstract class TransferFileJob extends FileJob {
             }
             catch(IOException e) {
                 // Swallow the exception and do not interrupt the transfer
-                if(Debug.ON) Debug.trace("Error while setting Mac OS X file type and creator on destination: "+e);
+                AppLogger.fine("Error while setting Mac OS X file type and creator on destination", e);
             }
         }
 
@@ -217,7 +213,7 @@ public abstract class TransferFileJob extends FileJob {
                 }
             }
 
-            if(Debug.ON) Debug.trace("Source checksum= "+sourceChecksum);
+            AppLogger.finer("Source checksum= "+sourceChecksum);
 
             // Calculate the destination file's checksum
             try {
@@ -227,7 +223,7 @@ public abstract class TransferFileJob extends FileJob {
                 throw new FileTransferException(FileTransferException.READING_DESTINATION);
             }
 
-            if(Debug.ON) Debug.trace("Destination checksum= "+destinationChecksum);
+            AppLogger.finer("Destination checksum= "+destinationChecksum);
 
             // Compare both checksums and throw an exception if they don't match
             if(!sourceChecksum.equals(destinationChecksum)) {
@@ -270,11 +266,8 @@ public abstract class TransferFileJob extends FileJob {
                 if(getState()==INTERRUPTED || wasCurrentFileSkipped())
                     return false;
 
-                // Print the exception's stack trace when in debug mode
-                if(com.mucommander.Debug.ON) {
-                    com.mucommander.Debug.trace("Copy failed: "+e);
-                    e.printStackTrace();
-                }
+                // Print the exception's stack trace
+                AppLogger.fine("Copy failed", e);
 
                 int reason = e.getReason();
                 int choice;
@@ -392,7 +385,7 @@ public abstract class TransferFileJob extends FileJob {
      */
     public synchronized void skipCurrentFile() {
         if(tlin !=null) {
-            if(Debug.ON) Debug.trace("skipping current file, closing "+ tlin);
+            AppLogger.finer("skipping current file, closing "+ tlin);
 
             // Prevents an error from being reported when the current InputStream is closed
             currentFileSkipped = true;
@@ -523,7 +516,7 @@ public abstract class TransferFileJob extends FileJob {
 
         synchronized(this) {
             if(tlin !=null) {
-                if(Debug.ON) Debug.trace("closing current InputStream "+ tlin);
+                AppLogger.finer("closing current InputStream "+ tlin);
 
                 closeCurrentInputStream();
             }
@@ -619,7 +612,7 @@ public abstract class TransferFileJob extends FileJob {
 //                nbFilesProcessed += getCurrentFileByteCounter().getByteCount()/(float)currentFileSize;
 //        }
 //
-////if(Debug.ON) Debug.trace("nbFilesProcessed="+(int)nbFilesProcessed+" nbFilesDiscovered="+getNbFilesDiscovered()+" %="+((int)100*nbFilesProcessed/getNbFilesDiscovered()));
+////AppLogger.finest("nbFilesProcessed="+(int)nbFilesProcessed+" nbFilesDiscovered="+getNbFilesDiscovered()+" %="+((int)100*nbFilesProcessed/getNbFilesDiscovered()));
 //
 //        return nbFilesProcessed/getNbFilesDiscovered();
 //    }

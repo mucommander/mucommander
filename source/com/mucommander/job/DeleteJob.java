@@ -19,6 +19,7 @@
 
 package com.mucommander.job;
 
+import com.mucommander.AppLogger;
 import com.mucommander.desktop.AbstractTrash;
 import com.mucommander.desktop.DesktopManager;
 import com.mucommander.file.AbstractArchiveFile;
@@ -130,7 +131,7 @@ public class DeleteJob extends FileJob {
                         break;
                     }
                     catch(IOException e) {
-                        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("IOException caught: "+e);
+                        AppLogger.fine("IOException caught", e);
 
                         ret = showErrorDialog(errorDialogTitle, Translator.get("cannot_read_file", filePath));
                         // Retry loops
@@ -153,10 +154,7 @@ public class DeleteJob extends FileJob {
                 return true;
             }
             catch(IOException e) {
-                if(com.mucommander.Debug.ON) {
-                    com.mucommander.Debug.trace("IOException caught: "+e);
-                    e.printStackTrace();
-                }
+                AppLogger.fine("IOException caught", e);
 
                 ret = showErrorDialog(errorDialogTitle,
                                       Translator.get(file.isDirectory()?"cannot_delete_folder":"cannot_delete_file", file.getName())

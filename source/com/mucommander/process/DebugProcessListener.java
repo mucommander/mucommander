@@ -18,7 +18,7 @@
 
 package com.mucommander.process;
 
-import com.mucommander.Debug;
+import com.mucommander.AppLogger;
 
 /**
  * Listener used while in debug mode.
@@ -63,15 +63,21 @@ class DebugProcessListener implements ProcessListener {
      * Prints out information about the way the process died.
      * @param returnValue process' return value.
      */
-    public void processDied(int returnValue) {if(Debug.ON) Debug.trace(command + ": died with return code " + returnValue);}
+    public void processDied(int returnValue) {
+        AppLogger.finer(command + ": died with return code " + returnValue);
+    }
 
     /**
      * Ignored.
      */
-    public void processOutput(byte[] buffer, int offset, int length) {if(Debug.ON) Debug.trace(command + ": " + new String(buffer, offset, length));}
+    public void processOutput(byte[] buffer, int offset, int length) {
+        AppLogger.finest(command + ": " + new String(buffer, offset, length));
+    }
 
     /**
      * Prints out the process output.
      */
-    public void processOutput(String output) {if(Debug.ON) Debug.trace(command + ": " + output);}
+    public void processOutput(String output) {
+        AppLogger.finest(command + ": " + output);
+    }
 }

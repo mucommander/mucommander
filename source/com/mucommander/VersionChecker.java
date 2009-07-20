@@ -131,8 +131,7 @@ public class VersionChecker extends DefaultHandler {
         InputStream    in;     // Input stream on the remote XML file.
         VersionChecker instance;
 
-        if(Debug.ON)
-            Debug.trace("Opening connection to " + RuntimeConstants.VERSION_URL);
+        AppLogger.fine("Opening connection to " + RuntimeConstants.VERSION_URL);
 
         // Initialisation.
         conn   = new URL(RuntimeConstants.VERSION_URL).openConnection();
@@ -266,11 +265,9 @@ public class VersionChecker extends DefaultHandler {
         releaseDate   = releaseDate.trim();
 
         // Logs the data if in debug mode.
-        if(com.mucommander.Debug.ON) {
-            com.mucommander.Debug.trace("download URL: "  + downloadURL);
-            com.mucommander.Debug.trace("jar URL: "       + jarURL);
-            com.mucommander.Debug.trace("latestVersion: " + latestVersion);
-            com.mucommander.Debug.trace("releaseDate:   " + releaseDate);
-        }
+        AppLogger.finer("download URL: "  + downloadURL);
+        AppLogger.finer("jar URL: "       + jarURL);
+        AppLogger.finer("latestVersion: " + latestVersion);
+        AppLogger.finer("releaseDate:   " + releaseDate);
     }
 }

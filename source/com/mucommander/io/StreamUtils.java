@@ -18,13 +18,9 @@
 
 package com.mucommander.io;
 
-import java.io.EOFException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
+import com.mucommander.commons.CommonsLogger;
+
+import java.io.*;
 
 /**
  * This class provides convience static methods that operate on streams. All read/write buffers are allocated using
@@ -136,7 +132,7 @@ public class StreamUtils {
 						in.reset();
 	                    //nbRead = in.read(buffer, 0, Math.min(buffer.length, length));
 					} catch (IOException e1) {
-						e1.printStackTrace();
+						CommonsLogger.fine("Caught exception", e1);
 	                	throw new FileTransferException(FileTransferException.WRITING_DESTINATION);
 					}
                 	return -totalRead;

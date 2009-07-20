@@ -19,6 +19,7 @@
 
 package com.mucommander.job;
 
+import com.mucommander.AppLogger;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
 import com.mucommander.file.util.FileSet;
@@ -88,7 +89,7 @@ public class MkdirJob extends FileJob {
 
         do {
             try {
-                if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Creating "+file);
+                AppLogger.finer("Creating "+file);
 
                 // Check for file collisions, i.e. if the file already exists in the destination
                 int collision = FileCollisionChecker.checkForCollision(null, file);
@@ -174,7 +175,7 @@ public class MkdirJob extends FileJob {
                 if(mkfileMode && getState()==INTERRUPTED)
                     return false;
 
-                if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("IOException caught: "+e);
+                AppLogger.fine("IOException caught", e);
 
                 int action = showErrorDialog(
                      Translator.get("error"),

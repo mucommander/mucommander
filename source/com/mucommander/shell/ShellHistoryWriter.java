@@ -18,6 +18,7 @@
 
 package com.mucommander.shell;
 
+import com.mucommander.AppLogger;
 import com.mucommander.xml.XmlWriter;
 
 import java.io.OutputStream;
@@ -53,6 +54,8 @@ class ShellHistoryWriter implements ShellHistoryConstants {
             }
             out.endElement(ROOT_ELEMENT);
         }
-        catch(Exception e) {if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Failed to write shell history: " + e);}
+        catch(Exception e) {
+            AppLogger.fine("Failed to write shell history", e);
+        }
     }
 }

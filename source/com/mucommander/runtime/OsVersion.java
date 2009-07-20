@@ -18,7 +18,7 @@
 
 package com.mucommander.runtime;
 
-import com.mucommander.Debug;
+import com.mucommander.commons.CommonsLogger;
 
 /**
  * This class represents a major version of an operating system, like <code>Mac OS X 10.5</code> or
@@ -58,7 +58,7 @@ public class OsVersion extends ComparableRuntimeProperty implements OsVersions {
         // Note: performing the initialization outside of the class static block avoids cyclic dependency problems.
         if(currentValue==null) {
             currentValue = parseSystemProperty(getRawSystemProperty(), OsFamily.getRawSystemProperty(), OsFamily.getCurrent());
-            if(Debug.ON) Debug.trace("Current OS version: "+ currentValue);
+            CommonsLogger.config("Current OS version: "+ currentValue);
         }
     }
 

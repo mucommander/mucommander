@@ -18,7 +18,7 @@
 
 package com.mucommander.auth;
 
-import com.mucommander.Debug;
+import com.mucommander.AppLogger;
 import com.mucommander.PlatformManager;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
@@ -130,12 +130,13 @@ public class CredentialsManager implements VectorChangeListener {
     public static void loadCredentials() throws Exception {
         AbstractFile credentialsFile = getCredentialsFile();
         if(credentialsFile.exists()) {
-            if(Debug.ON) Debug.trace("Found credentials file: "+credentialsFile.getAbsolutePath());
+            AppLogger.fine("Found credentials file: "+credentialsFile.getAbsolutePath());
             // Parse the credentials file
             new CredentialsParser().parse(credentialsFile);
-            if(Debug.ON) Debug.trace("Credentials file loaded.");
+            AppLogger.fine("Credentials file loaded.");
         }
-        else if(Debug.ON) Debug.trace("No credentials file found at "+credentialsFile.getAbsolutePath());
+        else
+            AppLogger.fine("No credentials file found at "+credentialsFile.getAbsolutePath());
     }
 
     /**
@@ -146,7 +147,7 @@ public class CredentialsManager implements VectorChangeListener {
      *  since last write, if true the file will always be written.
      * @throws IOException if an I/O error occurs.
      */
-    public static void writeCredentials(boolean forceWrite) throws IOException{
+    public static void writeCredentials(boolean forceWrite) throws IOException {
         // Write credentials file only if changes were made to persistent entries since last write, or if write is forced
         if(!(forceWrite || saveNeeded))
             return;
@@ -168,12 +169,10 @@ public class CredentialsManager implements VectorChangeListener {
         // 'group' and 'other'.
         boolean fileSecured = !OsFamily.getCurrent().isUnixBased() || Chmod.chmod(credentialsFile, 0600);     // rw-------
 
-        if(Debug.ON) {
-            if(fileSecured)
-                Debug.trace("Credentials file saved successfully.");
-            else
-                Debug.trace("Warning: credentials file could not be chmod.");
-        }
+        if(fileSecured)
+            AppLogger.fine("Credentials file saved successfully.");
+        else
+            AppLogger.warning("Credentials file could not be chmod!");
     }
 
 
@@ -248,9 +247,9 @@ public class CredentialsManager implements VectorChangeListener {
 
         boolean persist = credentialsMapping.isPersistent();
 
-        if(Debug.ON) Debug.trace("called, realm="+ credentialsMapping.getRealm()+" isPersistent="+ credentialsMapping.isPersistent());
-        if(Debug.ON) Debug.trace("before, persistentCredentials="+ persistentCredentialMappings);
-        if(Debug.ON) Debug.trace("before, volatileCredentials="+ volatileCredentialMappings);
+        AppLogger.finest("called, realm="+ credentialsMapping.getRealm()+" isPersistent="+ credentialsMapping.isPersistent());
+        AppLogger.finest("before, persistentCredentials="+ persistentCredentialMappings);
+        AppLogger.finest("before, volatileCredentials="+ volatileCredentialMappings);
 
         int index = persistentCredentialMappings.indexOf(credentialsMapping);
         if(persist || index!=-1) {
@@ -271,8 +270,8 @@ public class CredentialsManager implements VectorChangeListener {
                 volatileCredentialMappings.setElementAt(credentialsMapping, index);
         }
 
-        if(Debug.ON) Debug.trace("after, persistentCredentials="+ persistentCredentialMappings);
-        if(Debug.ON) Debug.trace("after, volatileCredentials="+ volatileCredentialMappings);
+        AppLogger.finest("after, persistentCredentials="+ persistentCredentialMappings);
+        AppLogger.finest("after, volatileCredentials="+ volatileCredentialMappings);
     }
 
 
@@ -316,7 +315,7 @@ public class CredentialsManager implements VectorChangeListener {
      * otherwise
      */
     public static boolean authenticateImplicit(FileURL location) {
-        if(Debug.ON) Debug.trace("called, fileURL="+ location +" containsCredentials="+ location.containsCredentials());
+        AppLogger.finest("called, fileURL="+ location +" containsCredentials="+ location.containsCredentials());
 
         CredentialsMapping creds[] = getMatchingCredentials(location);
         if(creds.length>0) {
@@ -358,7 +357,7 @@ public class CredentialsManager implements VectorChangeListener {
                 matches.add(tempCredentialsMapping);
         }
 
-        if(Debug.ON) Debug.trace("returning matches="+matches);
+        AppLogger.finest("returning matches="+matches);
     }
 
     /**
@@ -426,7 +425,7 @@ public class CredentialsManager implements VectorChangeListener {
             }
         }
 
-        if(Debug.ON) Debug.trace("returning bestMatchIndex="+bestMatchIndex);
+        AppLogger.finest("returning bestMatchIndex="+bestMatchIndex);
 
         return bestMatchIndex;
     }

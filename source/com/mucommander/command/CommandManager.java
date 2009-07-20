@@ -18,7 +18,7 @@
 
 package com.mucommander.command;
 
-import com.mucommander.Debug;
+import com.mucommander.AppLogger;
 import com.mucommander.PlatformManager;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
@@ -213,7 +213,7 @@ public class CommandManager implements CommandBuilder {
 
     private static void setDefaultCommand(Command command) {
         if(defaultCommand == null && command.getAlias().equals(FILE_OPENER_ALIAS)) {
-            if(Debug.ON) Debug.trace("Registering '" + command.getCommand() + "' as default command.");
+            AppLogger.fine("Registering '" + command.getCommand() + "' as default command.");
             defaultCommand = command;
         }
     }
@@ -224,7 +224,7 @@ public class CommandManager implements CommandBuilder {
         // Registers the command and marks command as having been modified.
         setDefaultCommand(command);
 
-        if(Debug.ON) Debug.trace("Registering '" + command.getCommand() + "' as '" + command.getAlias() + "'");
+        AppLogger.fine("Registering '" + command.getCommand() + "' as '" + command.getAlias() + "'");
 
         oldCommand = (Command)commands.put(command.getAlias(), command);
         if(mark && !command.equals(oldCommand))
@@ -264,7 +264,7 @@ public class CommandManager implements CommandBuilder {
         Command command;
 
         if((command = getCommandForAlias(cmd)) == null) {
-            if(Debug.ON) Debug.trace("Failed to create association as '" + command + "' is not known.");
+            AppLogger.fine("Failed to create association as '" + command + "' is not known.");
             throw new CommandException(command + " not found");
         }
 
@@ -489,8 +489,7 @@ public class CommandManager implements CommandBuilder {
         InputStream  in;
 
         file = getAssociationFile();
-        if(Debug.ON)
-            Debug.trace("Loading associations from file: " + file.getAbsolutePath());
+        AppLogger.fine("Loading associations from file: " + file.getAbsolutePath());
 
         // Tries to load the associations file.
         // Associations are not considered to be modified by this. 
@@ -530,7 +529,7 @@ public class CommandManager implements CommandBuilder {
         if(wereAssociationsModified) {
             BackupOutputStream out;    // Where to write the associations.
 
-            if(Debug.ON) Debug.trace("Writing associations to file: " + getAssociationFile());
+            AppLogger.fine("Writing associations to file: " + getAssociationFile());
 
             // Writes the associations.
             out = null;
@@ -547,7 +546,8 @@ public class CommandManager implements CommandBuilder {
                 }
             }
         }
-        else if(Debug.ON) Debug.trace("Custom file associations not modified, skip saving.");
+        else
+            AppLogger.fine("Custom file associations not modified, skip saving.");
     }
 
 
@@ -650,7 +650,7 @@ public class CommandManager implements CommandBuilder {
         if(wereCommandsModified) {
             BackupOutputStream out;    // Where to write the associations.
 
-            if(Debug.ON) Debug.trace("Writing custom commands to file: " + getCommandFile());
+            AppLogger.fine("Writing custom commands to file: " + getCommandFile());
 
             // Writes the commands.
             out = null;
@@ -667,7 +667,8 @@ public class CommandManager implements CommandBuilder {
                 }
             }
         }
-        else if(Debug.ON) Debug.trace("Custom commands not modified, skip saving.");
+        else
+            AppLogger.fine("Custom commands not modified, skip saving.");
     }
 
     /**
@@ -686,8 +687,7 @@ public class CommandManager implements CommandBuilder {
         InputStream  in;
 
         file = getCommandFile();
-        if(Debug.ON)
-            Debug.trace("Loading custom commands from: " + file.getAbsolutePath());
+        AppLogger.fine("Loading custom commands from: " + file.getAbsolutePath());
 
         // Tries to load the commands file.
         // Commands are not considered to be modified by this.
@@ -712,7 +712,7 @@ public class CommandManager implements CommandBuilder {
             if(command != null) {
                 //                try {registerCommand(CommandParser.getCommand(alias, command, Command.SYSTEM_COMMAND, display));}
                 try {registerCommand(new Command(alias, command, Command.SYSTEM_COMMAND, display));}
-                catch(Exception e) {if(Debug.ON) Debug.trace("Failed to register " + command + ": " + e.getMessage());}
+                catch(Exception e) {AppLogger.fine("Failed to register " + command + ": " + e.getMessage());}
             }
         }
     }

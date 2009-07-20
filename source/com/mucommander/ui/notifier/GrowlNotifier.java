@@ -196,16 +196,15 @@ public class GrowlNotifier extends AbstractNotifier {
 //                // Commit everything
 //                growl.register();
 //
-//                if(Debug.ON)
-//                    Debug.trace("Application registered OK");
+//                AppLogger.fine("Application registered OK");
 //
 //                return (isEnabled = true);
 //            }
 //            catch(Exception e) {
-//                if(Debug.ON) Debug.trace("Exception thrown while initializing Growl support (Growl not running?): "+e);
+//                AppLogger.fine("Exception thrown while initializing Growl support (Growl not running?)", e);
 //            }
 //            catch(Error e) {
-//                if(Debug.ON) Debug.trace("Error while initializing Growl support (cocoa-java not available?): "+e);
+//                AppLogger.fine("Error while initializing Growl support (cocoa-java not available?)", e);
 //            }
 //
 //            growl = null;
@@ -221,25 +220,22 @@ public class GrowlNotifier extends AbstractNotifier {
 //    }
 //
 //    public boolean displayNotification(int notificationType, String title, String description) {
-//        if(Debug.ON) Debug.trace("notificationType="+notificationType+" title="+title+" description="+description);
+//        AppLogger.finer("notificationType="+notificationType+" title="+title+" description="+description);
 //
 //        if(!isEnabled()) {
-//            if(Debug.ON) Debug.trace("Ignoring notification, this notifier is not enabled");
+//            AppLogger.fine("Ignoring notification, this notifier is not enabled");
 //
 //            return false;
 //        }
 //
 //        try {
 //            growl.notifyGrowlOf(Translator.get(NOTIFICATION_KEYS[notificationType]), title, description);
-//            if(Debug.ON) Debug.trace("Notification sent OK");
+//            AppLogger.finer("Notification sent OK");
 //
 //            return true;
 //        }
 //        catch(Exception e) {
-//            if(Debug.ON) {
-//                Debug.trace("Exception thrown while sending notification:");
-//                AppLogger.fine("Caught exception", e);
-//            }
+//            AppLogger.fine("Exception thrown while sending notification", e);
 //
 //            return false;
 //        }

@@ -18,7 +18,7 @@
 
 package com.mucommander.shell;
 
-import com.mucommander.Debug;
+import com.mucommander.AppLogger;
 import com.mucommander.PlatformManager;
 import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.file.AbstractFile;
@@ -150,7 +150,7 @@ public class ShellHistoryManager {
                 return;
         }
 
-        if(Debug.ON) Debug.trace("Adding  " + command + " to shell history.");
+        AppLogger.finer("Adding  " + command + " to shell history.");
 
         // Updates the history buffer.
         history[historyEnd] = command;

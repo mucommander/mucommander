@@ -18,7 +18,7 @@
 
 package com.mucommander.desktop;
 
-import com.mucommander.Debug;
+import com.mucommander.AppLogger;
 import com.mucommander.desktop.gnome.ConfiguredGnomeDesktopAdapter;
 import com.mucommander.desktop.gnome.GuessedGnomeDesktopAdapter;
 import com.mucommander.desktop.kde.ConfiguredKdeDesktopAdapter;
@@ -200,7 +200,7 @@ public class DesktopManager {
             current = (DesktopAdapter)desktops.elementAt(i);
             if(current.isAvailable()) {
                 desktop = current;
-                if(Debug.ON) Debug.trace("Using desktop: " + desktop);
+                AppLogger.fine("Using desktop: " + desktop);
                 desktop.init(install);
                 return;
             }

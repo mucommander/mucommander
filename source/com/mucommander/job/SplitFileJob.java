@@ -18,12 +18,7 @@
 
 package com.mucommander.job;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-
+import com.mucommander.AppLogger;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.DummyFile;
 import com.mucommander.file.FilePermissions;
@@ -36,6 +31,12 @@ import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.file.FileCollisionDialog;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 /**
  * This job split the file into parts with given size.
@@ -118,8 +119,9 @@ public class SplitFileJob extends AbstractCopyJob {
 	private void createInputStream() {
         try {
 			origFileStream = sourceFile.getInputStream();
-		} catch (IOException e) {
-			e.printStackTrace();
+		}
+        catch (IOException e) {
+            AppLogger.fine("Caught exception", e);
             showErrorDialog(errorDialogTitle,
                     Translator.get("error_while_transferring", sourceFile.getName()),
                     new String[]{CANCEL_TEXT},
@@ -135,7 +137,7 @@ public class SplitFileJob extends AbstractCopyJob {
 				origFileStream = new ChecksumInputStream(origFileStream, MessageDigest.getInstance("CRC32"));
 			} catch (NoSuchAlgorithmException e) {
 				setIntegrityCheckEnabled(false);
-				e.printStackTrace();
+                AppLogger.fine("Caught exception", e);
 			}
         }
 	}
@@ -189,8 +191,8 @@ public class SplitFileJob extends AbstractCopyJob {
 			}
 			
 		} catch (IOException e) {
-			e.printStackTrace();
-			
+            AppLogger.fine("Caught exception", e);
+
             showErrorDialog(errorDialogTitle,
                     Translator.get("error_while_transferring", destFile.getName()),
                     new String[]{CANCEL_TEXT},
@@ -229,7 +231,8 @@ public class SplitFileJob extends AbstractCopyJob {
 					crcStream.write(line.getBytes("utf-8"));
 					crcStream.close();
 				} catch (IOException e) {
-					e.printStackTrace();
+                    AppLogger.fine("Caught exception", e);
+					
 		            showErrorDialog(errorDialogTitle,
 		                    Translator.get("error_while_transferring", crcFileName),
 		                    new String[]{CANCEL_TEXT},

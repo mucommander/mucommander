@@ -18,7 +18,7 @@
 
 package com.mucommander.job;
 
-import com.mucommander.Debug;
+import com.mucommander.AppLogger;
 import com.mucommander.command.Command;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.util.FileSet;
@@ -76,7 +76,7 @@ public class TempOpenWithJob extends TempCopyJob {
             ProcessRunner.execute(command.getTokens(tempFiles), baseDestFolder);
         }
         catch(Exception e) {
-            if(Debug.ON) Debug.trace("Caught exception executing "+command+" "+tempFiles);
+            AppLogger.fine("Caught exception executing "+command+" "+tempFiles, e);
         }
     }
 }

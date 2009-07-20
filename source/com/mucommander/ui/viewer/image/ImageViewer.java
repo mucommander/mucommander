@@ -99,13 +99,13 @@ class ImageViewer extends FileViewer implements ActionListener, ThemeListener {
 
 	
     private void waitForImage(Image image) {
-        //if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Waiting for image to load "+image);
+        //AppLogger.finest("Waiting for image to load "+image);
         MediaTracker tracker = new MediaTracker(this);
         tracker.addImage(image, 0);
         try { tracker.waitForID(0); }
         catch(InterruptedException e) {}
         tracker.removeImage(image);
-        //if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Image loaded "+image);
+        //AppLogger.finest("Image loaded "+image);
     }
 	
 	

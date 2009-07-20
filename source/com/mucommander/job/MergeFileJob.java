@@ -18,6 +18,7 @@
 
 package com.mucommander.job;
 
+import com.mucommander.AppLogger;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.util.FileSet;
 import com.mucommander.io.StreamUtils;
@@ -63,7 +64,7 @@ public class MergeFileJob extends AbstractCopyJob {
 			setCurrentInputStream(in);
 			StreamUtils.copyStream(in, out);
 		} catch (IOException e) {
-			e.printStackTrace();
+            AppLogger.fine("Caught exception", e);
             showErrorDialog(errorDialogTitle,
                     Translator.get("error_while_transferring", destFile.getName()),
                     new String[]{CANCEL_TEXT},
@@ -94,7 +95,7 @@ public class MergeFileJob extends AbstractCopyJob {
         try {
     		out = destFile.getOutputStream(false);
         } catch(IOException e) {
-        	e.printStackTrace();
+        	AppLogger.fine("Caught exception", e);
             showErrorDialog(errorDialogTitle,
                     Translator.get("error_while_transferring", destFile.getName()),
                     new String[]{CANCEL_TEXT},
@@ -114,7 +115,7 @@ public class MergeFileJob extends AbstractCopyJob {
 			try {
 				crcFile = f.getDirectChild(file.getNameWithoutExtension() + ".sfv");
 			} catch (IOException e) {
-				e.printStackTrace();
+				AppLogger.fine("Caught exception", e);
 			}
 		}
 	}
@@ -163,7 +164,7 @@ public class MergeFileJob extends AbstractCopyJob {
 	                    );
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+            AppLogger.fine("Caught exception", e);
             showErrorDialog(errorDialogTitle,
                     Translator.get("merge_job.crc_read_error"),
                     new String[]{CANCEL_TEXT},
@@ -174,7 +175,7 @@ public class MergeFileJob extends AbstractCopyJob {
 				try {
 					crcIn.close();
 				} catch (IOException e) {
-					e.printStackTrace();
+                    AppLogger.fine("Caught exception", e);
 				}
 			}
 		}
@@ -187,8 +188,9 @@ public class MergeFileJob extends AbstractCopyJob {
 		if (out != null) {
 			try {
 				out.close();
-			} catch (IOException e) {
-				e.printStackTrace();
+			}
+            catch (IOException e) {
+                AppLogger.fine("Caught exception", e);
 	            showErrorDialog(errorDialogTitle,
 	                    Translator.get("error_while_transferring", destFile.getName()),
 	                    new String[]{CANCEL_TEXT},

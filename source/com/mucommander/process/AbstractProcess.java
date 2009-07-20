@@ -19,7 +19,7 @@
 package com.mucommander.process;
 
 
-import com.mucommander.Debug;
+import com.mucommander.AppLogger;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -62,14 +62,18 @@ public abstract class AbstractProcess {
         new Thread() {
             public void run() {
                 // Closes the process' streams.
-		if(Debug.ON) Debug.trace("Destroying process...");
-		stdoutMonitor.stopMonitoring();
-		if(stderrMonitor != null)
-		    stderrMonitor.stopMonitoring();
+                AppLogger.finer("Destroying process...");
+                stdoutMonitor.stopMonitoring();
+                if(stderrMonitor != null)
+                    stderrMonitor.stopMonitoring();
 
                 // Destroys the process.
-                try {destroyProcess();}
-                catch(IOException e) {if(Debug.ON) Debug.trace(e);}
+                try {
+                    destroyProcess();
+                }
+                catch(IOException e) {
+                    AppLogger.fine("IOException caught", e);
+                }
             }
         }.start();
     }
@@ -82,12 +86,12 @@ public abstract class AbstractProcess {
     final void startMonitoring(ProcessListener listener, String encoding) throws IOException {
         // Only monitors stdout if the process uses merged streams.
         if(usesMergedStreams()) {
-            if(Debug.ON) Debug.trace("Starting process merged output monitor...");
+            AppLogger.finer("Starting process merged output monitor...");
             new Thread(stdoutMonitor = new ProcessOutputMonitor(getInputStream(), encoding, listener, this), "Process sdtout/stderr monitor").start();
         }
         // Monitors both stdout and stderr.
         else {
-            if(Debug.ON) Debug.trace("Starting process stdout and stderr monitors...");
+            AppLogger.finer("Starting process stdout and stderr monitors...");
             new Thread(stdoutMonitor = new ProcessOutputMonitor(getInputStream(), encoding, listener, this), "Process stdout monitor").start();
             new Thread(stderrMonitor = new ProcessOutputMonitor(getErrorStream(), encoding, listener), "Process stderr monitor").start();
         }

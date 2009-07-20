@@ -18,9 +18,10 @@
 
 package com.mucommander.job.ui;
 
-import java.lang.reflect.InvocationTargetException;
-import javax.swing.SwingUtilities;
+import com.mucommander.AppLogger;
 import com.mucommander.job.FileJob;
+
+import javax.swing.*;
 
 /**
  * This class is used to show a dialog for user and get a response from
@@ -44,10 +45,8 @@ public class UserInputHelper {
                     userInput = dialog.getUserInput();
                 }
             });
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            AppLogger.fine("Caught exception", e);
         }
         return userInput;
     }

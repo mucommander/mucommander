@@ -18,7 +18,7 @@
 
 package com.mucommander.desktop.osx;
 
-import com.mucommander.Debug;
+import com.mucommander.AppLogger;
 import com.mucommander.desktop.QueuedTrash;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
@@ -133,7 +133,7 @@ public class OSXTrash extends QueuedTrash {
             return Integer.parseInt(output.toString().trim());
         }
         catch(NumberFormatException e) {
-            if(Debug.ON) Debug.trace("Caught an exception: "+e);
+            AppLogger.fine("Caught an exception", e);
             return -1;
         }
     }
@@ -220,7 +220,7 @@ public class OSXTrash extends QueuedTrash {
                 return success;
             }
             catch(IOException e) {
-                if(Debug.ON) Debug.trace("Caught IOException: "+e);
+                AppLogger.fine("Caught IOException", e);
 
                 if(tmpOut!=null) {
                     try { tmpOut.close(); }

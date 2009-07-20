@@ -18,6 +18,8 @@
 
 package com.mucommander.extension;
 
+import com.mucommander.AppLogger;
+
 import javax.swing.*;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Modifier;
@@ -74,7 +76,10 @@ public class LookAndFeelFilter implements ClassFilter {
             // c is a LookAndFeel, makes sure it's supported.
             if(buffer.equals(LookAndFeel.class)) {
                 try {return ((LookAndFeel)c.newInstance()).isSupportedLookAndFeel();}
-                catch(Throwable e) {e.printStackTrace();return false;}
+                catch(Throwable e) {
+                    AppLogger.fine("Caught exception", e);
+                    return false;
+                }
             }
             buffer = buffer.getSuperclass();
         }

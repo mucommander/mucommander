@@ -18,7 +18,7 @@
 
 package com.mucommander.auth;
 
-import com.mucommander.Debug;
+import com.mucommander.AppLogger;
 import com.mucommander.bookmark.XORCipher;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileURL;
@@ -108,7 +108,7 @@ class CredentialsParser extends DefaultHandler implements CredentialsConstants {
     public void endElement(String uri, String localName, String qName) throws SAXException {
         if(qName.equals(ELEMENT_CREDENTIALS)) {
             if(url ==null || login ==null || password ==null) {
-                if(Debug.ON) Debug.trace("Missing value, credentials ignored: url="+ url +" login="+ login +" password="+ password);
+                AppLogger.info("Missing value, credentials ignored: url="+ url +" login="+ login);
                 return;
             }
 
@@ -125,7 +125,7 @@ class CredentialsParser extends DefaultHandler implements CredentialsConstants {
             // Decrypt password
             try {password = XORCipher.decryptXORBase64(password);}
             catch(IOException e) {
-                if(Debug.ON) Debug.trace("Password could not be decrypted: "+ password +", credentials will be ignored");
+                AppLogger.info("Password could not be decrypted: "+ password +", credentials will be ignored");
                 return;
             }
 
@@ -134,7 +134,9 @@ class CredentialsParser extends DefaultHandler implements CredentialsConstants {
         }
         else if(qName.equals(ELEMENT_URL)) {
             try {url = FileURL.getFileURL(characters.toString().trim());}
-            catch(MalformedURLException e) {if(Debug.ON) Debug.trace("Malformed URL: "+characters+", location will be ignored");}
+            catch(MalformedURLException e) {
+                AppLogger.info("Malformed URL: "+characters+", location will be ignored");
+            }
         }
         else if(qName.equals(ELEMENT_LOGIN))
             login = characters.toString().trim();

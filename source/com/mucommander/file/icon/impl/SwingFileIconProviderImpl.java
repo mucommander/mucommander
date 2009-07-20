@@ -18,7 +18,6 @@
 
 package com.mucommander.file.icon.impl;
 
-import com.mucommander.Debug;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileLogger;
 import com.mucommander.file.FileProtocols;
@@ -28,6 +27,7 @@ import com.mucommander.file.icon.IconCache;
 import com.mucommander.file.icon.LocalFileIconProvider;
 import com.mucommander.file.impl.local.LocalFile;
 import com.mucommander.file.util.ResourceLoader;
+import com.mucommander.io.SilenceablePrintStream;
 import com.mucommander.runtime.OsFamilies;
 import com.mucommander.runtime.OsVersion;
 
@@ -67,6 +67,9 @@ class SwingFileIconProviderImpl extends LocalFileIconProvider implements Cacheab
     /** Icon that is painted over a symlink's target file icon to symbolize a symlink to the target file. */
     protected static ImageIcon SYMLINK_OVERLAY_ICON;
 
+    /** Allows stderr to be 'silenced' when needed */
+    protected static SilenceablePrintStream errSps;
+
 
     /**
      * Initializes the Swing object used to retrieve icons the first time this method is called, does nothing
@@ -91,6 +94,9 @@ class SwingFileIconProviderImpl extends LocalFileIconProvider implements Cacheab
 
         SYMLINK_OVERLAY_ICON = new ImageIcon(iconURL);
 
+        // Replace stderr with a SilenceablePrintStream that can be 'silenced' when needed
+        System.setErr(errSps = new SilenceablePrintStream(System.err, false));
+
         initialized = true;
     }
 
@@ -113,9 +119,9 @@ class SwingFileIconProviderImpl extends LocalFileIconProvider implements Cacheab
                 // A way to workaround this odd behavior would be to test if the file exists when it is requested,
                 // but a/ this is an expensive operation (especially under Windows) and b/ it wouldn't guarantee that
                 // the file effectively exists when the icon is requested.
-                // So the workaround here is to catch exceptions and disable System.err output during the call.
+                // So the workaround here is to catch exceptions and 'silence' System.err output during the call.
 
-                Debug.setSystemErrEnabled(false);
+                errSps.setSilenced(true);
 
                 return fileSystemView.getSystemIcon(javaIoFile);
             }
@@ -129,7 +135,7 @@ class SwingFileIconProviderImpl extends LocalFileIconProvider implements Cacheab
         }
         finally {
             if(fileSystemView!=null)
-                Debug.setSystemErrEnabled(true);
+                errSps.setSilenced(false);
         }
     }
 

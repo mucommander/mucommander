@@ -18,7 +18,7 @@
 
 package com.mucommander.bonjour;
 
-import com.mucommander.Debug;
+import com.mucommander.AppLogger;
 import com.mucommander.file.FileProtocols;
 import com.mucommander.file.FileURL;
 
@@ -87,7 +87,7 @@ public class BonjourDirectory implements ServiceListener {
                     jmDNS.addServiceListener(KNOWN_SERVICE_TYPES[i][0], instance);
             }
             catch(IOException e) {
-                if(Debug.ON) Debug.trace("Could not instanciate jmDNS, BonjourDirectory not active: "+e);
+                AppLogger.warning("Could not instanciate jmDNS, Bonjour not enabled", e);
             }
         }
         else if(!enabled && jmDNS!=null) {
@@ -150,7 +150,7 @@ public class BonjourDirectory implements ServiceListener {
     ////////////////////////////////////
 
     public void serviceAdded(final ServiceEvent serviceEvent) {
-        if(Debug.ON) Debug.trace("name="+serviceEvent.getName()+" type="+serviceEvent.getType());
+        AppLogger.finest("name="+serviceEvent.getName()+" type="+serviceEvent.getType());
         
         // Ignore if Bonjour has been disabled
         if(!isActive())
@@ -166,7 +166,7 @@ public class BonjourDirectory implements ServiceListener {
     }
 
     public void serviceResolved(ServiceEvent serviceEvent) {
-        if(Debug.ON) Debug.trace("name="+serviceEvent.getName()+" type="+serviceEvent.getType()+" info="+serviceEvent.getInfo());
+        AppLogger.finest("name="+serviceEvent.getName()+" type="+serviceEvent.getType()+" info="+serviceEvent.getInfo());
 
         // Ignore if Bonjour has been disabled
         if(!isActive())
@@ -177,7 +177,7 @@ public class BonjourDirectory implements ServiceListener {
         if(serviceInfo!=null) {
             if(serviceInfo.getInetAddress() instanceof Inet6Address) {
                 // IPv6 addresses not supported at this time + they seem not to be correctly handled by ServiceInfo
-                if(Debug.ON) Debug.trace("ignoring IPv6 service");
+                AppLogger.fine("ignoring IPv6 service");
                 return;
             }
 
@@ -185,7 +185,7 @@ public class BonjourDirectory implements ServiceListener {
             // Synchronized to properly handle duplicate calls
             synchronized(instance) {
                 if(bs!=null && !services.contains(bs)) {
-                    if(Debug.ON) Debug.trace("BonjourService "+bs+" added");
+                    AppLogger.fine("BonjourService "+bs+" added");
                     services.add(bs);
                 }
             }
@@ -193,7 +193,7 @@ public class BonjourDirectory implements ServiceListener {
     }
 
     public void serviceRemoved(ServiceEvent serviceEvent) {
-        if(Debug.ON) Debug.trace("name="+serviceEvent.getName()+" type="+serviceEvent.getType());
+        AppLogger.finest("name="+serviceEvent.getName()+" type="+serviceEvent.getType());
 
         // Ignore if Bonjour has been disabled
         if(!isActive())
@@ -206,7 +206,7 @@ public class BonjourDirectory implements ServiceListener {
         if(serviceInfo!=null) {
             if(serviceInfo.getInetAddress() instanceof Inet6Address) {
                 // IPv6 addresses not supported at this time + they seem not to be correctly handled by ServiceInfo
-                if(Debug.ON) Debug.trace("ignoring IPv6 service");
+                AppLogger.fine("ignoring IPv6 service");
                 return;
             }
 
@@ -215,7 +215,7 @@ public class BonjourDirectory implements ServiceListener {
             synchronized(instance) {
                 // Note: BonjourService#equals() uses the service's fully qualified name as the discriminator.
                 if(bs!=null && services.contains(bs)) {
-                    if(Debug.ON) Debug.trace("BonjourService "+bs+" removed");
+                    AppLogger.fine("BonjourService "+bs+" removed");
                     services.remove(bs);
                 }
             }

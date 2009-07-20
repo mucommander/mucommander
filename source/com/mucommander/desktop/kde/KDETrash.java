@@ -18,7 +18,7 @@
 
 package com.mucommander.desktop.kde;
 
-import com.mucommander.Debug;
+import com.mucommander.AppLogger;
 import com.mucommander.desktop.QueuedTrash;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.impl.local.LocalFile;
@@ -63,7 +63,7 @@ public class KDETrash extends QueuedTrash {
             return true;
         }
         catch(Exception e) {    // IOException, InterruptedException
-            if(Debug.ON) Debug.trace("Caught exception: "+e);
+            AppLogger.fine("Caught exception", e);
             return false;
         }
     }
@@ -81,7 +81,7 @@ public class KDETrash extends QueuedTrash {
             return true;
         }
         catch(Exception e) {    // IOException, InterruptedException
-            if(Debug.ON) Debug.trace("Caught exception: "+e);
+            AppLogger.fine("Caught exception", e);
             return false;
         }
     }

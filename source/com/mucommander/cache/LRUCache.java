@@ -19,7 +19,7 @@
 
 package com.mucommander.cache;
 
-import com.mucommander.Debug;
+import com.mucommander.commons.CommonsLogger;
 import com.mucommander.runtime.JavaVersions;
 
 
@@ -63,7 +63,7 @@ public abstract class LRUCache {
     protected long eldestExpirationDate = Long.MAX_VALUE;
 
     /** Specifies whether cache hit/miss counters should be updated (should be enabled for Debug purposes only) */ 
-    protected final static boolean UPDATE_CACHE_COUNTERS = com.mucommander.Debug.ON;	
+    protected final static boolean UPDATE_CACHE_COUNTERS = false;	
     /** Number of cache hits since this LRUCache was created */
     protected int nbHits;
     /** Number of cache misses since this LRUCache was created */
@@ -247,7 +247,7 @@ public abstract class LRUCache {
                 cache.testCorruption();
             }
             catch(RuntimeException e) {
-                if(Debug.ON) Debug.trace("Cache corrupted after "+i+" iterations, cache state="+cache);
+                CommonsLogger.fine("Cache corrupted after "+i+" iterations, cache state="+cache);
                 return;
             }
 
@@ -255,7 +255,7 @@ public abstract class LRUCache {
             //			System.out.println(cache.toString());
         }
 
-        if(Debug.ON) Debug.trace("Stress test took "+(System.currentTimeMillis()-timeStamp)+" ms.\n");
+        CommonsLogger.fine("Stress test took "+(System.currentTimeMillis()-timeStamp)+" ms.\n");
 
         // Print the cache's state
         System.out.println(cache.toString());

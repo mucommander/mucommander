@@ -18,7 +18,7 @@
 
 package com.mucommander.desktop.gnome;
 
-import com.mucommander.Debug;
+import com.mucommander.AppLogger;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -50,7 +50,7 @@ public class GnomeConfig {
             br = new BufferedReader(new InputStreamReader(process.getInputStream()));
             String line = br.readLine();
 
-            if(Debug.ON) Debug.trace(CONFIG_COMMAND+" returned '"+line+"' for "+key);
+            AppLogger.fine(CONFIG_COMMAND+" returned '"+line+"' for "+key);
 
             if(line==null || (line=line.trim()).equals("") || line.startsWith("No value set for"))
                 return null;
@@ -58,7 +58,7 @@ public class GnomeConfig {
             return line;
         }
         catch(IOException e) {
-            if(Debug.ON) Debug.trace("Error while retrieving value for "+key+": "+e);
+            AppLogger.fine("Error while retrieving value for "+key, e);
 
             throw e;
         }

@@ -18,6 +18,8 @@
 
 package com.mucommander.io;
 
+import com.mucommander.commons.CommonsLogger;
+
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -144,7 +146,7 @@ public abstract class RandomAccessInputStream extends InputStream implements Ran
         try {
 			this.markOffset = getOffset();
 		} catch (IOException e) {
-			e.printStackTrace();
+			CommonsLogger.fine("Caught exception", e);
 		}
     }
 

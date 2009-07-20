@@ -18,7 +18,7 @@
 
 package com.mucommander.job;
 
-import com.mucommander.Debug;
+import com.mucommander.AppLogger;
 import com.mucommander.desktop.DesktopManager;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
@@ -148,10 +148,10 @@ public class SelfUpdateJob extends CopyJob {
             try {
                 classLoader.loadClass(classname);
 
-                if(Debug.ON) Debug.trace("Loaded class "+classname);
+                AppLogger.finest("Loaded class "+classname);
             }
             catch(java.lang.NoClassDefFoundError e) {
-                if(Debug.ON) Debug.trace("Caught an error while loading class "+classname+" : "+e);
+                AppLogger.fine("Caught an error while loading class "+classname, e);
             }
         }
     }
@@ -179,7 +179,7 @@ public class SelfUpdateJob extends CopyJob {
             loadingClasses = false;
         }
         catch(Exception e) {
-            if(Debug.ON) Debug.trace("Caught exception: "+e);
+            AppLogger.fine("Caught exception", e);
 
             // Todo: display an error message
             interrupt();
@@ -199,9 +199,10 @@ public class SelfUpdateJob extends CopyJob {
                 &&(parent=parent.getParent())!=null && parent.getName().equals("Contents")
                 &&(parent=parent.getParent())!=null && "app".equals(parent.getExtension())) {
 
-                    if(Debug.ON) Debug.trace("Executing open "+parent.getAbsolutePath());
-
                     String appPath = parent.getAbsolutePath();
+
+                    AppLogger.finer("Opening "+appPath);
+
                     // Open -W wait for the current muCommander .app to terminate, before re-opening it
                     ProcessRunner.execute(new String[]{"/bin/sh", "-c", "open -W "+appPath+" && open "+appPath});
 
@@ -238,7 +239,7 @@ public class SelfUpdateJob extends CopyJob {
             ProcessRunner.execute(new String[]{"java", "-jar", destJar.getAbsolutePath()});
         }
         catch(IOException e) {
-            if(Debug.ON) Debug.trace("Caught exception: "+e);
+            AppLogger.fine("Caught exception", e);
             // Todo: we might want to do something about this
         }
         finally {

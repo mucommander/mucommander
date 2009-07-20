@@ -19,6 +19,7 @@
 
 package com.mucommander.job;
 
+import com.mucommander.AppLogger;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.impl.CachedFile;
 import com.mucommander.file.util.FileSet;
@@ -504,7 +505,7 @@ public abstract class FileJob implements Runnable {
      * This method implementation does nothing but it can be overriden by subclasses to perform some first-time initializations.
      */
     protected void jobStarted() {
-        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called");
+        AppLogger.finer("called");
     }
 	
 
@@ -518,7 +519,7 @@ public abstract class FileJob implements Runnable {
      * <p>Note that this method will NOT be called if a call to {@link #interrupt()} was made before all files were processed.</p>
      */
     protected void jobCompleted() {
-        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called");
+        AppLogger.finer("called");
 
         // Send a system notification if a notifier is available and enabled
         if(AbstractNotifier.isAvailable() && AbstractNotifier.getNotifier().isEnabled())
@@ -535,7 +536,7 @@ public abstract class FileJob implements Runnable {
      * when the job has been paused.
      */
     protected void jobPaused() {
-        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called");
+        AppLogger.finer("called");
     }
 
 
@@ -546,7 +547,7 @@ public abstract class FileJob implements Runnable {
      * when the job has returned from pause.
      */
     protected void jobResumed() {
-        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called");
+        AppLogger.finer("called");
     }
 
 
@@ -560,7 +561,7 @@ public abstract class FileJob implements Runnable {
      * files were processed) or has been interrupted in the middle.</p>
      */
     protected void jobStopped() {
-        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called");
+        AppLogger.finer("called");
     }
 	
 	

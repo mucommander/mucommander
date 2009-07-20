@@ -20,7 +20,7 @@ package com.mucommander.io;
 
 import com.ibm.icu.text.CharsetDetector;
 import com.ibm.icu.text.CharsetMatch;
-import com.mucommander.Debug;
+import com.mucommander.commons.CommonsLogger;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -128,12 +128,10 @@ public class EncodingDetector {
         CharsetMatch cm = cd.detect();
 
         // Debug info
-        if(Debug.ON) Debug.trace("bestMatch getName()="+(cm==null?"null":cm.getName())+" getConfidence()="+(cm==null?"null":Integer.toString(cm.getConfidence())));
-//        if(Debug.ON) {
+        CommonsLogger.finer("bestMatch getName()="+(cm==null?"null":cm.getName())+" getConfidence()="+(cm==null?"null":Integer.toString(cm.getConfidence())));
 //            CharsetMatch cms[] = cd.detectAll();
 //            for(int i=0; i<cms.length; i++)
-//                Debug.trace("getName()="+cms[i].getName()+" getConfidence()="+cms[i].getConfidence());
-//        }
+//                CommonsLogger.finest("getName()="+cms[i].getName()+" getConfidence()="+cms[i].getConfidence());
 
         return cm==null?null:cm.getName();
     }

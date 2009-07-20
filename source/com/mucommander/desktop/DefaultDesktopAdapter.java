@@ -18,7 +18,7 @@
 
 package com.mucommander.desktop;
 
-import com.mucommander.Debug;
+import com.mucommander.AppLogger;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -53,7 +53,7 @@ public class DefaultDesktopAdapter implements DesktopAdapter {
                 multiClickInterval = value.intValue();
         }
         catch(Exception e) {
-            if(Debug.ON) Debug.trace("Error while retrieving multi-click interval value desktop property: "+e);
+            AppLogger.fine("Error while retrieving multi-click interval value desktop property", e);
 
             multiClickInterval = DEFAULT_MULTICLICK_INTERVAL;
         }

@@ -18,7 +18,7 @@
 
 package com.mucommander.process;
 
-import com.mucommander.Debug;
+import com.mucommander.AppLogger;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -107,13 +107,10 @@ class ProcessOutputMonitor implements Runnable {
         // Ignore this exception: either there's nothing we can do about it anyway,
         // or it's 'normal' (the process has been killed).
         catch(IOException e) {
-            if(Debug.ON) {
-                Debug.trace("IO error while monitoring process: " + e);
-                e.printStackTrace(System.err);
-            }
+            AppLogger.finer("IOException thrown while monitoring process", e);
         }
 
-        if(Debug.ON) Debug.trace("Process output stream emptied, closing");
+        AppLogger.finer("Process output stream emptied, closing");
 
         // Closes the stream.
         try {
@@ -121,10 +118,7 @@ class ProcessOutputMonitor implements Runnable {
 		in.close();
 	}
         catch(IOException e) {
-            if(Debug.ON) {
-                Debug.trace("IO error while closing process stream: " + e);
-                e.printStackTrace(System.err);
-            }
+            AppLogger.finer("IOException thrown while closing process stream", e);
         }
 
         // If a process was set, perform 'cleanup' tasks.
@@ -132,10 +126,7 @@ class ProcessOutputMonitor implements Runnable {
             // Waits for the process to die.
             try {process.waitFor();}
             catch(Exception e) {
-                if(Debug.ON) {
-                    Debug.trace("Error while waiting on process: " + e);
-                    e.printStackTrace(System.err);
-                }
+                AppLogger.fine("Caught Exception while waiting for process "+process, e);
             }
             // If this process is still being monitored, notifies its
             // listener that it has exited.

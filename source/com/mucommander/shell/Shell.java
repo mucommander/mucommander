@@ -18,7 +18,7 @@
 
 package com.mucommander.shell;
 
-import com.mucommander.Debug;
+import com.mucommander.AppLogger;
 import com.mucommander.command.Command;
 import com.mucommander.conf.ConfigurationEvent;
 import com.mucommander.conf.ConfigurationListener;
@@ -114,7 +114,7 @@ public class Shell implements ConfigurationListener {
     public static synchronized AbstractProcess execute(String command, AbstractFile currentFolder, ProcessListener listener) throws IOException {
         String[] commandTokens;
 
-        if(Debug.ON) Debug.trace("Executing " + command);
+        AppLogger.finer("Executing " + command);
 
         // Adds the command to history.
         ShellHistoryManager.add(command);

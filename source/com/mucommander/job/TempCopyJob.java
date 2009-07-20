@@ -18,7 +18,7 @@
 
 package com.mucommander.job;
 
-import com.mucommander.Debug;
+import com.mucommander.AppLogger;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
 import com.mucommander.file.PermissionAccesses;
@@ -85,7 +85,7 @@ public class TempCopyJob extends CopyJob {
         }
         catch(IOException e) {
             // Should never happen under normal circumstances.
-            if(Debug.ON) Debug.trace("Caught exception instanciating temporary file, this should not happen!");
+            AppLogger.warning("Caught exception instanciating temporary file, this should not happen!");
             return fileToExecute.getName();
         }
     }

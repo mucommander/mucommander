@@ -18,7 +18,6 @@
 
 package com.mucommander.file.impl;
 
-import com.mucommander.Debug;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileLogger;
 import com.mucommander.file.FilePermissions;
@@ -30,7 +29,6 @@ import java.util.Random;
  * {@link com.mucommander.file.AbstractFile} methods that are commonly I/O-bound, by logging calls to each of those
  * methods. It also allows to slow those methods down to simulate a slow filesytem.
  *
- * @see Debug
  * @author Maxence Bernard
  */
 public class DebugFile extends ProxyFile {

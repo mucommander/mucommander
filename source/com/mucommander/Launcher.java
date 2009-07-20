@@ -84,11 +84,11 @@ public class Launcher {
      * This method will return immediately if the application has already been launched when it is called.
      */
     public static void waitUntilLaunched() {
-        if(Debug.ON) Debug.trace("called, thread="+Thread.currentThread());
+        AppLogger.finer("called, thread="+Thread.currentThread());
         synchronized(LAUNCH_LOCK) {
             while(isLaunching) {
                 try {
-                    if(Debug.ON) Debug.trace("waiting");
+                    AppLogger.finer("waiting");
                     LAUNCH_LOCK.wait();
                 }
                 catch(InterruptedException e) {
@@ -131,13 +131,6 @@ public class Launcher {
 
         // Allows users to tweak how keymaps are loaded.
         System.out.println(" -k FILE, --keymap FILE            Load keymap from FILE");
-
-        // If debug is turned on, -n and -d are used to control whether debug
-        // text is printed out or not.
-        if(Debug.ON) {
-            System.out.println(" -n, --no-debug                    Disable debug output to stdout");
-            System.out.println(" -d, --debug                       Enable debug output to stdout (default)");
-        }
 
         // Allows users to change the preferences folder.
         System.out.println(" -p FOLDER, --preferences FOLDER   Store configuration files in FOLDER");
@@ -238,7 +231,7 @@ public class Launcher {
         if(useSplash)
             splashScreen.setLoadingMessage(message);
 
-        if(Debug.ON) Debug.trace(message);
+        AppLogger.finest(message);
     }
 
 
@@ -362,12 +355,6 @@ public class Launcher {
                 catch(Exception e) {printError("Could not set credentials file", e, fatalWarnings);}
             }
 
-            // Debug options.
-            else if(Debug.ON && (args[i].equals("-n") || args[i].equals("--no-debug")))
-                Debug.setEnabled(false);
-            else if(Debug.ON && (args[i].equals("-d") || args[i].equals("--debug")))
-                Debug.setEnabled(true);
-
             // Preference folder.
             else if((args[i].equals("-p") || args[i].equals("--preferences"))) {
                 if(i >= args.length - 1)
@@ -437,15 +424,21 @@ public class Launcher {
                 Constructor constructor   = osxIntegrationClass.getConstructor(new Class[]{});
                 constructor.newInstance(new Object[]{});
             }
-            catch(Exception e) {if(Debug.ON) Debug.trace("Exception thrown while initializing Mac OS X integration");}
+            catch(Exception e) {
+                AppLogger.fine("Exception thrown while initializing Mac OS X integration", e);
+            }
         }
 
 
         // - muCommander boot -----------------------------------------
         // ------------------------------------------------------------
         // Adds all extensions to the classpath.
-        try {ExtensionManager.addExtensionsToClasspath();}
-        catch(Exception e) {if(Debug.ON) Debug.trace("Failed to add extensions to the classpath");}
+        try {
+            ExtensionManager.addExtensionsToClasspath();
+        }
+        catch(Exception e) {
+            AppLogger.fine("Failed to add extensions to the classpath", e);
+        }
        
         // This the property is supposed to have the java.net package use the proxy defined in the system settings
         // to establish HTTP connections. This property is supported only under Java 1.5 and up.
@@ -479,8 +472,7 @@ public class Launcher {
         printStartupMessage("Loading file associations...");
         try {com.mucommander.command.CommandManager.loadCommands();}
         catch(Exception e) {
-            if(Debug.ON)
-                printFileError("Could not load custom commands", e, fatalWarnings);
+            printFileError("Could not load custom commands", e, fatalWarnings);
         }
 
         // Migrates the custom editor and custom viewer if necessary.
@@ -489,14 +481,13 @@ public class Launcher {
         try {CommandManager.writeCommands();}
         catch(Exception e) {
             System.out.println("###############################");
-            e.printStackTrace();
+            AppLogger.fine("Caught exception", e);
             // There's really nothing we can do about this...
         }
 
         try {com.mucommander.command.CommandManager.loadAssociations();}
         catch(Exception e) {
-            if(Debug.ON)
-                printFileError("Could not load custom associations", e, fatalWarnings);
+            printFileError("Could not load custom associations", e, fatalWarnings);
         }
 
         // Loads bookmarks

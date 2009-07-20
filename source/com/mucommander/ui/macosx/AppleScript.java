@@ -210,7 +210,7 @@ public class AppleScript {
 //     * @return the script's output, null if an error occurred while compiling or executing the script
 //     */
 //    private static String executeAppleScript(String appleScript) {
-//        if(Debug.ON) Debug.trace("Executing AppleScript "+appleScript);
+//        AppLogger.finer("Executing AppleScript "+appleScript);
 //
 //        int pool = -1;
 //
@@ -226,26 +226,25 @@ public class AppleScript {
 //            NSMutableDictionary errorInfo = new NSMutableDictionary();
 //            NSAppleEventDescriptor eventDescriptor = new NSAppleScript(appleScript).execute(errorInfo);
 //            if(eventDescriptor==null) {
-//                if(Debug.ON)
-//                    Debug.trace("Caught AppleScript error: "+errorInfo.objectForKey(NSAppleScript.AppleScriptErrorMessage));
+//                AppLogger.fine("Caught AppleScript error: "+errorInfo.objectForKey(NSAppleScript.AppleScriptErrorMessage));
 //
 //                return null;
 //            }
 //
 //            String output = eventDescriptor.stringValue();  // Returns null if the script didn't output anything
-//            if(Debug.ON) Debug.trace("AppleScript output="+output);
+//            AppLogger.finer("AppleScript output="+output);
 //
 //            return output==null?"":output;
 //        }
 //        catch(Error e) {
 //            // Can happen if Cocoa-java is not in the classpath
-//            if(Debug.ON) Debug.trace("Unexcepted error while executing AppleScript (cocoa-java not available?): "+e);
+//            AppLogger.fine("Unexcepted error while executing AppleScript (cocoa-java not available?)", e);
 //
 //            return null;
 //        }
 //        catch(Exception e) {
 //            // Try block is not supposed to throw any exception, but this is low-level stuff so just to be safe
-//            if(Debug.ON) Debug.trace("Unexcepted exception while executing AppleScript: "+e);
+//            AppLogger.fine("Unexcepted exception while executing AppleScript", e);
 //
 //            return null;
 //        }
