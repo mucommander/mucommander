@@ -430,7 +430,7 @@ public class MuConfiguration {
     // -----------------------------------------------------------------------
     /** Section describing the automatic folder refresh behavior. */
     public static final String REFRESH_SECTION                    = "auto_refresh";
-    /** Frequency at which the current folder is checked for updates. */
+    /** Frequency at which the current folder is checked for updates, -1 to disable auto refresh. */
     public static final String REFRESH_CHECK_PERIOD               = REFRESH_SECTION + '.' + "check_period";
     /** Default folder refresh frequency. */
     public static final long   DEFAULT_REFRESH_CHECK_PERIOD       = 3000;

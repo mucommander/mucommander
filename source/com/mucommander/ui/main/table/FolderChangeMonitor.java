@@ -41,6 +41,7 @@ import java.util.Vector;
  * one after another. Current folder refreshes are performed in a separate thread.
  *
  * @author Maxence Bernard
+ * @see <a href="http://trac.mucommander.com/wiki/FolderAutoRefresh">FolderAutoRefresh wiki entry</a>
  */
 public class FolderChangeMonitor implements Runnable, WindowListener, LocationListener {
 
@@ -125,7 +126,7 @@ public class FolderChangeMonitor implements Runnable, WindowListener, LocationLi
         instances.add(this);
 		
         // Create and start the monitor thread on first FolderChangeMonitor instance
-        if(monitorThread==null) {
+        if(monitorThread==null && checkPeriod>=0) {
             monitorThread = new Thread(this, getClass().getName());
             monitorThread.setDaemon(true);
             monitorThread.start();
