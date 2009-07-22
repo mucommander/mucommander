@@ -143,7 +143,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- referenced directly outside of this file.               -->
   <target name="release-prefix" depends="load-antcontrib" unless="is-nightly">
     <echo>Creating release package name prefix...</echo>
-    <propertyregex property="package-prefix" input="mucommander-${app.version}${app.subversion}" regexp="[ .]" replace="_"/>
+    <propertyregex property="package-prefix" input="mucommander-${app.version}" regexp="[ .]" replace="_"/>
   </target>
 
   <!-- Generates the current build's package prefix.           -->
@@ -165,7 +165,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <target name="archive-prefix" depends="load-antcontrib">
     <echo>Creating archive prefix...</echo>
     <!-- Escapes the version number for the TGZ prefix.        -->
-    <propertyregex property="archive-prefix" input="muCommander-${app.version}${app.subversion}" regexp="[ .]" replace="_"/>
+    <propertyregex property="archive-prefix" input="muCommander-${app.version}" regexp="[ .]" replace="_"/>
   </target>
 
 
@@ -174,58 +174,19 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- ======================================================= -->
   <!-- The following targets are used to generate the clear    -->
   <!-- muCommander JAR file.                                   -->
- 
-
-  <!-- Creates the runtime constant class.                     -->
-  <!--                                                         -->
-  <!-- Output will be stored in ${tmp.source}.                 -->
-  <!--                                                         -->
-  <!-- This is a 'private' target and should never be          -->
-  <!-- referenced directly outside of this file.               -->
-  <target name="constants" depends="load-anttools">
-    <tstamp/>
-    <echo>Creating runtime constants...</echo>
-    <mkdir dir="${tmp.source}"/>
-
-    <!-- Sets runtime properties to their default values if    -->
-    <!-- they haven't already been set.                        -->
-    <property name="is-debug"    value="true"/>
-    <property name="version-url" value="${url.app-version}"/>
-
-    <!-- Creates the RuntimeConstants class.                   -->
-    <javaw name="${tmp.source}/com.mucommander.RuntimeConstants">
-      <field name="DEBUG"               value="${is-debug}"    type="boolean"/>
-      <field name="VERSION"             value="${app.version}${app.subversion}"/>
-      <field name="COPYRIGHT"           value="${app.copyright}"/>
-      <field name="LICENSE"             value="/license.txt"/>
-      <field name="APP_STRING"          value="muCommander v${app.version}${app.subversion}"/>
-      <field name="VERSION_URL"         value="${version-url}"/>
-      <field name="RELEASE_DATE"        value="${DSTAMP}" type="String"/>
-      <field name="HOMEPAGE_URL"        value="${url.homepage}"/>
-      <field name="FORUMS_URL"          value="${url.forums}"/>
-      <field name="DONATION_URL"        value="${url.donation}"/>
-      <field name="DICTIONARY_FILE"     value="/dictionary.txt"/>
-      <field name="THEMES_PATH"         value="/themes"/>
-      <field name="BUG_REPOSITORY_URL"  value="${url.bug-repository}"/>
-      <field name="DOCUMENTATION_URL"   value="${url.documentation}"/>
-      <field name="DEFAULT_THEME"       value="Native"/>
-    </javaw>
-  </target>
-
-  <!-- Compiles all java files found in ${source} and          -->
-  <!-- ${tmp.source}.                                          -->
+    
+  <!-- Compiles all java files found in ${source}.             -->
   <!--                                                         -->
   <!-- Compilation output will be stored in ${classes.normal}. -->
   <!--                                                         -->
   <!-- This is a 'private' target and should never be          -->
   <!-- referenced directly outside of this file.               -->
-  <target name="compile" depends="constants">
+  <target name="compile">
     <echo>Compiling sources...</echo>
     <mkdir dir="${classes.normal}"/>
     <javac destdir="${classes.normal}" debug="on" deprecation="on"
            encoding="utf-8" source="${app.jvm}" target="${app.jvm}" excludes="com/mucommander/ant/**">
       <src path="${source}"/>
-      <src path="${tmp.source}"/>
       <!-- Includes the application's libraries in the         -->
       <!-- classpath.                                          -->
       <classpath>
@@ -241,7 +202,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!--                                                         -->
   <!-- Output will be stored in {$jar.normal}.                 -->
   <target name="jar" depends="compile,include-libs,resources">
+    <!-- Retrieves the current date. -->
     <tstamp/>
+
+    <!-- Retrieves the implementation version.                -->
+    <exec executable="svnversion" failifexecutionfails="no" outputproperty="svn.version">
+        <arg value="."/>
+        <arg value="-n"/>
+    </exec>
+
+    <property name="version-url" value="${url.app-version}"/>
     <echo>Creating JAR file...</echo>
     <jar jarfile="${jar.normal}" basedir="${classes.normal}" excludes="**/*Test.class">
       <manifest>
@@ -251,7 +221,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         <attribute name="Specification-Version"  value="${app.version}"/>
         <attribute name="Implementation-Title"   value="muCommander"/>
         <attribute name="Implementation-Vendor"  value="Maxence Bernard"/>
-        <attribute name="Implementation-Version" value="${app.version}${app.subversion} ${DSTAMP}"/>
+        <attribute name="Implementation-Version" value="${svn.version}"/>
+        <attribute name="Build-Date"             value="${DSTAMP}"/>
+        <attribute name="Build-URL"              value="${version-url}"/> 
       </manifest>
     </jar>
   </target>
@@ -420,11 +392,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         <include name="com/mucommander/**"/>
         <patternset refid="non-test-sources"/>
         <exclude name="com/mucommander/ant/**"/>
-      </packageset>
-
-      <!-- Dynamically generated sources.                      -->
-      <packageset dir="${tmp.source}" defaultexcludes="yes">
-        <include name="com/mucommander/**"/>
       </packageset>
     </javadoc>
   </target>
@@ -763,7 +730,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Generates the NSIS script.                            -->
     <copy file="${nsis.script}" tofile="${nsis.tmp}/mucommander.nsi">
       <filterset>
-        <filter token="MU_VERSION" value="${app.version}${app.subversion}"/>
+        <filter token="MU_VERSION" value="${app.version}"/>
         <filter token="MU_EXE"     value="muCommander.exe"/>
         <filter token="MU_JAR"     value="mucommander.jar"/>
         <filter token="MU_ICON"    value="mucommander.ico"/>
@@ -869,11 +836,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
            infoversion="0.9" classpath="/System/Library/Java">
       <string  name="CFBundleName"                    value="muCommander"/>
       <string  name="CFBundleIdentifier"              value="com.mucommander.muCommander"/>
-      <string  name="CFBundleVersion"                 value="${app.version}${app.subversion}"/>
+      <string  name="CFBundleVersion"                 value="${app.version}"/>
       <boolean name="CFBundleAllowMixedLocalizations" value="true"/>
       <string  name="CFBundleDevelopmentRegion"       value="English"/>
-      <string  name="CFBundleShortVersionString"      value="${app.version}${app.subversion}"/>
-      <string  name="CFBundleGetInfoString"           value="muCommander ${app.version}${app.subversion}, (c) ${app.copyright} Maxence Bernard, ${url.homepage}"/>
+      <string  name="CFBundleShortVersionString"      value="${app.version}"/>
+      <string  name="CFBundleGetInfoString"           value="muCommander ${app.version}, (c) ${app.copyright} Maxence Bernard, ${url.homepage}"/>
       <string  name="CFBundleInfoDictionaryVersion"   value="6.0"/>
       <array name="CFBundleDocumentTypes">
         <dict>
@@ -959,7 +926,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <property name="url.jnlp" value="${url.jnlp.normal}"/>
 
     <!-- Generates the JNLP file.                              -->
-    <mkjnlp out="${dist}/${jnlp.file}" spec="1.0+" version="${app.version}${app.subversion}" codebase="${url.jnlp}" href="${jnlp.file}" allpermissions="true">
+    <mkjnlp out="${dist}/${jnlp.file}" spec="1.0+" version="${app.version}" codebase="${url.jnlp}" href="${jnlp.file}" allpermissions="true">
       <information homepage="${url.homepage}" title="muCommander" vendor="Maxence Bernard" offline="true">
         <description>A cross-platform file manager.</description>
         <description kind="short">A cross-platform file manager.</description>
@@ -1020,7 +987,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
   <!-- Generates muCommander's API javadoc.                    -->
   <!-- Output is stored in ${doc.api}.                         -->
-  <target name="api-doc" depends="constants">
+  <target name="api-doc">
     <echo>Creating API javadoc...</echo>
     <mkdir dir="${doc.api}"/>
     <!-- Set the linksource property to "yes" only when in nightly mode -->
@@ -1044,9 +1011,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         <patternset refid="non-test-sources"/>
         <exclude name="com/mucommander/ant/**"/>
       </fileset>
-
-      <!-- Dynamically generated sources.                      -->
-      <fileset dir="${tmp.source}"/>
     </javadoc>
   </target>
 
@@ -1137,14 +1101,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- nightly builds.                                         -->
   <target name="nightly-debian-names" depends="load-antcontrib" if="is-nightly">
     <tstamp/>
-    <propertyregex property="deb.version" input="${app.version}${app.subversion} ${DSTAMP}" regexp="[ .]" replace="_"/>
+    <propertyregex property="deb.version" input="${app.version} ${DSTAMP}" regexp="[ .]" replace="_"/>
     <property name="deb.name" value="mucommander_current_all.deb"/>
   </target>
 
   <!-- Generates the debian version and file name for          -->
   <!-- non-nightly builds.                                     -->
   <target name="release-debian-names" depends="load-antcontrib" unless="is-nightly">
-    <propertyregex property="deb.version" input="${app.version}${app.subversion}" regexp="[ .]" replace="_"/>
+    <propertyregex property="deb.version" input="${app.version}" regexp="[ .]" replace="_"/>
     <property name="deb.name" value="mucommander_${deb.version}_all.deb"/>
   </target>
 
@@ -1235,7 +1199,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <tstamp/>
     <copy file="${res.version}" tofile="${version-file}">
       <filterset>
-        <filter token="VERSION"      value="${app.version}${app.subversion}"/>
+        <filter token="VERSION"      value="${app.version}"/>
         <filter token="DATE"         value="${DSTAMP}"/>
         <filter token="DOWNLOAD_URL" value="${url.app-download}"/>
         <filter token="JAR_URL"      value="${url.jar}"/>
@@ -1342,15 +1306,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   </target>
 
   <!-- Runs the application from unpackaged binaries.          -->
-  <target name="run" depends="compile,resources">
-    <java classname="${app.main}" fork="true">
+  <target name="run" depends="jar">
+    <java jar="${jar.normal}" fork="true">
       <sysproperty key="java.system.class.loader" value="com.mucommander.file.AbstractFileClassLoader"/>
-      <classpath>
-        <pathelement location="${classes.normal}"/>
-        <fileset dir="${lib}">
-          <include name="**/*.jar"/>
-        </fileset>
-      </classpath>
     </java>
   </target>
 </project>

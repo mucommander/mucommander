@@ -24,7 +24,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 <antlib>
   <taskdef name="mksize"  classname="com.mucommander.ant.util.SizeTask"            onerror="ignore"/>
   <taskdef name="libpath" classname="com.mucommander.ant.util.SystemClasspathTask" onerror="ignore"/>
-  <taskdef name="javaw"   classname="com.mucommander.ant.java.JavaTask"            onerror="ignore"/>
   <taskdef name="mkapp"   classname="com.mucommander.ant.macosx.AppTask"           onerror="ignore"/>
   <taskdef name="mkjnlp"  classname="com.mucommander.ant.jnlp.JnlpTask"            onerror="ignore"/>
 </antlib>

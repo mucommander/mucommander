@@ -26,11 +26,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- The following properties define application specific    -->
   <!-- constants, such as the current version number.          -->
 
-  <!-- Major version number of the application.                -->
-  <property name="app.version"            value="0.8"/>
-  <!-- Minor version number of the application.                -->
-  <!-- Note that this should be empty for major releases.      -->
-  <property name="app.subversion"         value=".4"/>
+  <!-- Version number of the application.                      -->
+  <property name="app.version"            value="0.8.4"/>
   <!-- Copyright line of the application.                      -->
   <!-- This should typically be 2002-<current-year>            -->
   <property name="app.copyright"          value="2002-2009"/>
@@ -59,15 +56,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- URL to which users should be directed in order to       -->
   <!-- download the latest version of muCommander.             -->
   <property name="url.app-download"       value="${url.homepage}/#download"/>
-  <!-- URL to which users should be directed in order to       -->
-  <!-- browse the muCommander forums.                          -->
-  <property name="url.forums"             value="${url.homepage}/forums/"/>
-  <!-- URL to which users should be directed in order to       -->
-  <!-- report a bug in the application.                        -->
-  <property name="url.bug-repository"     value="${url.homepage}/bugs/"/>
-  <!-- URL to which users should be directed in the unlikely   -->
-  <!-- event that they'd want to donate money to the project.  -->
-  <property name="url.donation"           value="${url.homepage}/#donate"/>
   <!-- URL to the JAR file of the current release              -->
   <property name="url.jar-release"        value="${url.homepage}/download/mucommander.jar"/>
   <!-- URL to the JAR file of the latest nightly build         -->
@@ -75,9 +63,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- URL to the JAR file, set to the release value and       -->
   <!-- overridden when in nightly mode.                        -->
   <property name="url.jar"                value="${url.jar-release}/"/>
-  <!-- Base URL to the wiki-based, online documentation.                 -->
-  <property name="url.documentation"               value="${url.homepage}/documentation/"/>
 
+
+    
   <!-- = Folder structure ==================================== -->
   <!-- ======================================================= -->
   <!-- Where to store compilation files.                       -->
@@ -96,7 +84,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <property name="findbugs.reports"       location="${reports.main}/findbugs"/>
   <property name="simian.reports"         location="${reports.main}/simian"/>
   <property name="proguard.reports"       location="${reports.main}/proguard"/>
-  <property name="tmp.source"             location="${tmp}/source"/>
   <property name="doc.api"                location="${doc}/api"/>
   <property name="version-file"           location="${dist}/version.xml"/>
 
