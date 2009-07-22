@@ -20,11 +20,11 @@ package com.mucommander.ui.action.impl;
 
 import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.text.Translator;
-import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.action.ActionFactory;
+import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.main.MainFrame;
-import com.mucommander.ui.main.toolbar.ToolBar;
 
+import javax.swing.*;
 import java.util.Hashtable;
 
 /**
@@ -48,14 +48,14 @@ public class ToggleToolBarAction extends MuAction {
     }
 
     public void performAction() {
-        ToolBar toolBar = mainFrame.getToolBar();
-        boolean visible = !toolBar.isVisible();
+        JPanel toolBarPanel = mainFrame.getToolBarPanel();
+        boolean visible = !toolBarPanel.isVisible();
         // Save the last toolbar visible state in the configuration, this will become the default for new MainFrame windows.
         MuConfiguration.setVariable(MuConfiguration.TOOLBAR_VISIBLE, visible);
         // Change the label to reflect the new toolbar state
         setLabel(Translator.get(visible?com.mucommander.ui.action.impl.ToggleToolBarAction.class.getName()+".hide":com.mucommander.ui.action.impl.ToggleToolBarAction.class.getName()+".show"));
         // Show/hide the toolbar
-        toolBar.setVisible(visible);
+        toolBarPanel.setVisible(visible);
         mainFrame.validate();
     }
     

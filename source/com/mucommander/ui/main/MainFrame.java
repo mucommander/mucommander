@@ -71,7 +71,10 @@ public class MainFrame extends JFrame implements LocationListener {
     /** Active table in the MainFrame */
     private FileTable activeTable;
 
-    /** Tool bar instance */
+    /** Toolbar panel */
+    private JPanel toolbarPanel;
+
+    /** Toolbar component */
     private ToolBar toolbar;
 
     /** Status bar instance */
@@ -154,12 +157,14 @@ public class MainFrame extends JFrame implements LocationListener {
         rightTable = rightFolderPanel.getFileTable();
         activeTable  = leftTable;
 
-        // Create toolbar and show it only if it hasn't been disabled in the preferences
-        // Note: Toolbar.setVisible() has to be called no matter if Toolbar is visible or not, in order for it to be properly initialized
+        // Create the toolbar and corresponding panel wrapping it, and show it only if it hasn't been disabled in the
+        // preferences.
+        // Note: Toolbar.setVisible() has to be called no matter if Toolbar is visible or not, in order for it to be
+        // properly initialized
         this.toolbar = new ToolBar(this);
-        this.toolbar.setVisible(MuConfiguration.getVariable(MuConfiguration.TOOLBAR_VISIBLE, MuConfiguration.DEFAULT_TOOLBAR_VISIBLE));
-        // contentPane.add(toolbar, BorderLayout.NORTH);
-        contentPane.add(ToolbarMoreButton.wrapToolBar(toolbar), BorderLayout.NORTH);
+        this.toolbarPanel = ToolbarMoreButton.wrapToolBar(toolbar);
+        this.toolbarPanel.setVisible(MuConfiguration.getVariable(MuConfiguration.TOOLBAR_VISIBLE, MuConfiguration.DEFAULT_TOOLBAR_VISIBLE));
+        contentPane.add(toolbarPanel, BorderLayout.NORTH);
 
         // Lister to location change events to display the current folder in the window's title
         leftFolderPanel.getLocationManager().addLocationListener(this);
@@ -374,8 +379,8 @@ public class MainFrame extends JFrame implements LocationListener {
 
 
     /**
-     * Returns the toolbar where shortcut buttons (go back, go forward, ...) are.
-     * Note that a non-null instance of ToolBar is returned even if it is currently hidden.
+     * Returns the {@link ToolBar} where shortcut buttons (go back, go forward, ...) are.
+     * Note that a non-null instance of {@link ToolBar} is returned even if it is currently hidden.
      *
      * @return the toolbar component
      */
@@ -383,11 +388,20 @@ public class MainFrame extends JFrame implements LocationListener {
         return toolbar;
     }
 
+    /**
+     * Returns the panel where the {@link ToolBar} component is.
+     * Note that a non-null instance of {@link ToolBar} is returned even if it is currently hidden.
+     *
+     * @return the toolbar component
+     */
+    public JPanel getToolBarPanel() {
+        return toolbarPanel;
+    }
 
     /**
-     * Returns the command bar, i.e. the component that contains shortcuts to certains actions such as View, Edit, Copy,
-     * Move, etc...
-     * Note that a non-null instance of CommandBar is returned even if it is currently hidden.
+     * Returns the {@link CommandBar}, i.e. the component that contains shortcuts to certains actions such as
+     * View, Edit, Copy, Move, etc...
+     * Note that a non-null instance of {@link CommandBar} is returned even if it is currently hidden.
      *
      * @return the command bar component
      */
@@ -398,6 +412,7 @@ public class MainFrame extends JFrame implements LocationListener {
 
     /**
      * Returns the status bar, where information about selected files and volume are displayed.
+     * Note that a non-null instance of {@link StatusBar} is returned even if it is currently hidden.
      *
      * @return the status bar
      */
