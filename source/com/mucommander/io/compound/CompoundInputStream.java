@@ -32,7 +32,7 @@ import java.io.InputStream;
  *   <dt>Unmerged</dt>
  *   <dd>the compound stream has be advanced manually. EOF are signaled individually for each underlying stream.
  * After EOF is reached, the current stream has to be advanced to the next one using {@link #advanceInputStream()}.</dd>
- * <dl>
+ * </dl>
  *
  * <p>
  * This class is abstract, with a single method to implement: {@link #getNextInputStream()}.
