@@ -18,11 +18,13 @@
 
 package com.mucommander;
 
+import com.mucommander.file.util.ResourceLoader;
+
 import java.io.IOException;
-import java.net.URL;
+import java.io.InputStream;
 import java.util.Calendar;
 import java.util.jar.Attributes;
-import java.util.jar.JarFile;
+import java.util.jar.Manifest;
 
 /**
  * Defines various generic muCommander constants.
@@ -81,14 +83,33 @@ public class RuntimeConstants {
     // - Initialisation ------------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
     static {
-        JarFile    jar;        // Path to the muCommander JAR file.
-        Attributes attributes; // JAR file's manifest's attributes.
+        Attributes  attributes; // JAR file's manifest's attributes.
+        InputStream in;
 
-        // Attempts to retrieve the MANIFEST.MF file.
-        jar = getJarFile();
-        try {attributes = jar == null ? null : jar.getManifest().getMainAttributes();}
-        catch(IOException e) {attributes = null;}
+        in         = null;
+        attributes = null;
+        try {
+            if((in = ResourceLoader.getRootPackageAsFile(RuntimeConstants.class).getChild("META-INF/MANIFEST.MF").getInputStream()) != null) {
+                Manifest manifest;
 
+                manifest = new Manifest();
+                manifest.read(in);
+                attributes = manifest.getMainAttributes();
+            }
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+            // Ignore this, attributes is already set to null.
+        }
+        finally {
+            if(in != null) {
+                try {in.close();}
+                catch(IOException e) {
+                    // Ignore this, we don't really care if we can't close this stream.
+                }
+            }
+        }
+        
         // No MANIFEST.MF found, use default values.
         if(attributes == null) {
             VERSION = "?";
@@ -109,46 +130,6 @@ public class RuntimeConstants {
 
         }
         APP_STRING = "muCommander v" + VERSION;
-    }
-
-    
-    
-    // - JAR file parsing ----------------------------------------------------------------------------------------------
-    // -----------------------------------------------------------------------------------------------------------------
-    /**
-     * Returns the application's jar file.
-     * <p>
-     * This code is also present in muCommander file API, but there's no guarantee that it has been properly initialised
-     * at this point.
-     * </p>
-     * @return the application's jar file if found, <code>null</code> otherwise.
-     */
-    private static JarFile getJarFile() {
-        URL url;
-
-        // Retrieves the path to this class. If it's within a JAR, we're good.
-        url = RuntimeConstants.class.getResource("/com/mucommander/RuntimeConstants.class");
-        if(url.getProtocol().equals("jar")) {
-            int    pos;
-            String path;
-
-            // Removes the bits of the path that are 'in' the jar.
-            path = url.getPath();
-            pos  = path.indexOf("!");
-            if(pos == -1)
-                return null;
-            path = path.substring(0, pos);
-
-            // Removes the file: bit of the URL.
-            if(path.startsWith("file:"))
-                path = path.substring(5);
-
-            // Creates the actual JAR file instance.
-            try {return new JarFile(path);}
-            catch(IOException e) {return null;}
-        }
-        else
-            return null;
     }
 
     /**
