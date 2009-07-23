@@ -169,7 +169,7 @@ class TextEditorImpl implements ThemeListener, ActionListener, EncodingListener 
 
         String encoding = EncodingDetector.detectEncoding(in);
         // If the encoding could not be detected or the detected encoding is not supported, default to UTF-8
-        if(encoding==null || Charset.isSupported(encoding))
+        if(encoding==null || !Charset.isSupported(encoding))
             encoding = "UTF-8";
 
         if(in instanceof RandomAccessInputStream) {

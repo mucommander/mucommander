@@ -194,6 +194,7 @@ Bug fixes:
   prefs.auto_refresh.check_period value to -1 (requested in ticket #233).
 - Fixed viewer/editor menus not appearing since Java for Mac OS X 10.5 Update 4
   (ticket #243).
+- Fixed malfunctioning encoding detection in text viewer/editor (ticket #244).
 
 Known issues:
 - Some translations are not up-to-date. For more information, see:
