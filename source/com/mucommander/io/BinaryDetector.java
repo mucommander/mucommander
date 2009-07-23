@@ -18,6 +18,11 @@
 
 package com.mucommander.io;
 
+import com.mucommander.io.bom.BOM;
+import com.mucommander.io.bom.BOMConstants;
+import com.mucommander.io.bom.BOMInputStream;
+
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -60,12 +65,28 @@ public class BinaryDetector {
      * @return true if BinaryDetector thinks that the specified data is binary
      */
     public static boolean guessBinary(byte b[], int off, int len) {
-        // Returns true if any of the bytes are the NUL character. The NUL character is usually never found in a text
-        // file, no matter what character encoding is used.
-        int end = off+len;
-        for(int i=off; i<end; i++) {
-            if(b[i]==0x00)
-                return true;
+        try {
+            // Returns true if any of the bytes are the NUL character. The NUL character is usually not found in a text
+            // file, except for UTF-16 and UTF-32 streams.
+            // So first, we try and look for a BOM (byte-order mark) to see if the stream is UTF-16 or UTF-32 encoded.
+            BOMInputStream bin = new BOMInputStream(new ByteArrayInputStream(b, off, len));
+            BOM bom = bin.getBOM();
+
+            if(bom!=null) {
+                if(bom.equals(BOMConstants.UTF16_BE_BOM) || bom.equals(BOMConstants.UTF16_LE_BOM)
+                || bom.equals(BOMConstants.UTF32_BE_BOM) || bom.equals(BOMConstants.UTF32_LE_BOM)) {
+                    return false;
+                }
+            }
+            // No BOM, start looking for zeros
+
+            int i;
+            while((i=bin.read())!=-1)
+                if(i==0x00)
+                    return true;
+        }
+        catch(IOException e) {
+            // Can never happen in practice with a ByteArrayInputStream.
         }
 
         return false;
