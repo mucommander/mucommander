@@ -21,6 +21,7 @@ package com.mucommander.ui.viewer.text;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.io.EncodingDetector;
 import com.mucommander.io.RandomAccessInputStream;
+import com.mucommander.io.bom.BOMInputStream;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.DialogOwner;
 import com.mucommander.ui.dialog.ErrorDialog;
@@ -195,8 +196,14 @@ class TextEditorImpl implements ThemeListener, ActionListener, EncodingListener 
     }
 
     void loadDocument(InputStream in, String encoding) throws IOException {
-        InputStreamReader isr = new InputStreamReader(in, encoding);
         this.encoding = encoding;
+
+        // If the encoding is UTF-something, wrap the stream in a BOMInputStream to filter out the byte-order mark
+        // (see ticket #245)
+        if(encoding.toLowerCase().startsWith("utf"))
+            in = new BOMInputStream(in);
+
+        InputStreamReader isr = new InputStreamReader(in, encoding);
 
         try {
             // Feed the file's contents to text area

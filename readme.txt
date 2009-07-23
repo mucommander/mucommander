@@ -195,6 +195,8 @@ Bug fixes:
 - Fixed viewer/editor menus not appearing since Java for Mac OS X 10.5 Update 4
   (ticket #243).
 - Fixed malfunctioning encoding detection in text viewer/editor (ticket #244).
+- Text viewer/editor no longer treats the Unicode BOM as an editable character
+  (ticket #245).
 
 Known issues:
 - Some translations are not up-to-date. For more information, see:
