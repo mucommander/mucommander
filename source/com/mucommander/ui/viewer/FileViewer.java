@@ -34,10 +34,13 @@ import java.io.IOException;
 public abstract class FileViewer extends JPanel implements ThemeListener {
 	
     /** ViewerFrame instance that contains this viewer (may be null). */
-    protected ViewerFrame frame;
+    private ViewerFrame frame;
+
+    /** Menu bar that controls the viewer's frame */
+    private JMenuBar menuBar;
 	
     /** File currently being viewed. */
-    protected AbstractFile file;
+    private AbstractFile file;
 	
     /**
      * Creates a new FileViewer.
@@ -49,16 +52,6 @@ public abstract class FileViewer extends JPanel implements ThemeListener {
 	
 
     /**
-     * Sets the ViewerFrame (separate window) that contains this FileViewer.
-     * @param frame frame that contains this <code>FileViewer</code>.
-     * @see         #getFrame()
-     */
-    public void setFrame(ViewerFrame frame) {
-        this.frame = frame;
-    }
-	
-	
-    /**
      * Returns the frame which contains this viewer.
      * <p>
      * This method may return <code>null</code>if the viewer is not inside a ViewerFrame.
@@ -66,11 +59,40 @@ public abstract class FileViewer extends JPanel implements ThemeListener {
      * @return the frame which contains this viewer.
      * @see    #setFrame(ViewerFrame)
      */
-    protected ViewerFrame getFrame() {
+    public ViewerFrame getFrame() {
         return frame;
     }
-	
-	
+
+    /**
+     * Sets the ViewerFrame (separate window) that contains this FileViewer.
+     * @param frame frame that contains this <code>FileViewer</code>.
+     * @see         #getFrame()
+     */
+    final void setFrame(ViewerFrame frame) {
+        this.frame = frame;
+    }
+
+
+    /**
+     * Returns the menu bar that controls the viewer's frame. The menu bar should be retrieved using this method and
+     * not by calling {@link JFrame#getJMenuBar()}, which may return <code>null</code>.
+     *
+     * @return the menu bar that controls the viewer's frame.
+     */
+	public JMenuBar getMenuBar() {
+        return menuBar;
+    }
+
+    /**
+     * Sets the menu bar that controls the viewer's frame.
+     *
+     * @param menuBar the menu bar that controls the viewer's frame.
+     */
+    final void setMenuBar(JMenuBar menuBar) {
+        this.menuBar = menuBar;
+    }
+
+
     /**
      * Returns a description of the file currently being viewed which will be used as a window title.
      * This method returns the file's name but it can be overridden to provide more information.
@@ -82,11 +104,20 @@ public abstract class FileViewer extends JPanel implements ThemeListener {
 	
 
     /**
+     * Returns the file that is being viewed.
+     *
+     * @return the file that is being viewed.
+     */
+    public AbstractFile getCurrentFile() {
+        return file;
+    }
+
+    /**
      * Sets the file that is to be viewed.
      * This method will automatically be called after a file viewer is created and should not be called directly.
      * @param file file that is to be viewed.
      */
-    public final void setCurrentFile(AbstractFile file) {
+    final void setCurrentFile(AbstractFile file) {
         this.file = file;
     }
 

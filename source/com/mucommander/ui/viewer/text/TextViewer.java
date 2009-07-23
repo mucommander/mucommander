@@ -52,7 +52,7 @@ class TextViewer extends FileViewer {
 
         ViewerFrame frame = getFrame();
         if(frame!=null)
-            textEditorImpl.populateMenus(frame);
+            textEditorImpl.populateMenus(frame, getMenuBar());
     }
 
 

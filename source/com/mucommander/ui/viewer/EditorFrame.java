@@ -85,12 +85,25 @@ public class EditorFrame extends JFrame implements ActionListener {
         this.mainFrame = mainFrame;
         this.file = file;
 		
-        // Create default menu
+        // Call #dispose() on close (default is hide)
+        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+
+        setResizable(true);
+
+        initContentPane();
+    }
+
+    /**
+     * Creates a minimalist menu bar that allows to close the frame, and returns it.
+     *
+     * @return a minimalist menu bar that allows to close the frame
+     */
+    private JMenuBar createMenuBar() {
+        JMenuBar menuBar = new JMenuBar();
         MnemonicHelper menuMnemonicHelper = new MnemonicHelper();
         MnemonicHelper menuItemMnemonicHelper = new MnemonicHelper();
 
         // File menu
-        JMenuBar menuBar = new JMenuBar();
         JMenu menu = MenuToolkit.addMenu(Translator.get("file_editor.file_menu"), menuMnemonicHelper, null);
         saveItem = MenuToolkit.addMenuItem(menu, Translator.get("file_editor.save"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_MASK), this);
         saveAsItem = MenuToolkit.addMenuItem(menu, Translator.get("file_editor.save_as"), menuItemMnemonicHelper, null, this);
@@ -98,14 +111,7 @@ public class EditorFrame extends JFrame implements ActionListener {
         closeItem = MenuToolkit.addMenuItem(menu, Translator.get("file_editor.close"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), this);
 		menuBar.add(menu);
 
-        setJMenuBar(menuBar);
-        
-        // Call #dispose() on close (default is hide)
-        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-
-        setResizable(true);
-
-        initContentPane();
+        return menuBar;
     }
 
     private void initContentPane() {
@@ -116,10 +122,17 @@ public class EditorFrame extends JFrame implements ActionListener {
                     if(editor==null)
                         throw new Exception("No suitable editor found");
 
+                    // Set the editor's fields
                     editor.setFrame(EditorFrame.this);
+                    JMenuBar menuBar = createMenuBar();
+                    editor.setMenuBar(menuBar);
                     editor.setCurrentFile(file);
 
+                    // Ask the editor to edit the file
                     editor.edit(file);
+
+                    // Set the menu bar, only when it has been fully populated (see ticket #243)
+                    EditorFrame.this.setJMenuBar(menuBar);
                 }
                 catch(Exception e) {
                     AppLogger.fine("Exception caught", e);

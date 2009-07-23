@@ -35,10 +35,13 @@ import java.io.IOException;
 public abstract class FileEditor extends JPanel implements ThemeListener {
 	
     /** EditorFrame instance that contains this editor (may be null). */
-    protected EditorFrame frame;
-	
+    private EditorFrame frame;
+
+    /** Menu bar that controls the editor's frame */
+    private JMenuBar menuBar;
+
     /** File currently being edited. */
-    protected AbstractFile file;
+    private AbstractFile file;
 
     /**
      * Creates a new FileEditor.
@@ -50,24 +53,43 @@ public abstract class FileEditor extends JPanel implements ThemeListener {
 	
 
     /**
-     * Sets the EditorFrame (separate window) that contains this FileEditor.
-     * @param frame frame that contains this <code>FileEditor</code>.
-     * @see         #getFrame()
-     */
-    public void setFrame(EditorFrame frame) {
-        this.frame = frame;
-    }
-	
-	
-    /**
      * Returns the frame which contains this editor.
      * <p>
      * This method may return <code>null</code> if the editor is not inside a EditorFrame.
      * @return the frame which contains this editor.
      * @see    #setFrame(EditorFrame)
      */
-    protected EditorFrame getFrame() {
+    public EditorFrame getFrame() {
         return frame;
+    }
+
+    /**
+     * Sets the EditorFrame (separate window) that contains this FileEditor.
+     * @param frame frame that contains this <code>FileEditor</code>.
+     * @see         #getFrame()
+     */
+    final void setFrame(EditorFrame frame) {
+        this.frame = frame;
+    }
+
+
+    /**
+     * Returns the menu bar that controls the editor's frame. The menu bar should be retrieved using this method and
+     * not by calling {@link JFrame#getJMenuBar()}, which may return <code>null</code>.
+     *
+     * @return the menu bar that controls the editor's frame.
+     */
+	public JMenuBar getMenuBar() {
+        return menuBar;
+    }
+
+    /**
+     * Sets the menu bar that controls the editor's frame.
+     *
+     * @param menuBar the menu bar that controls the editor's frame.
+     */
+    final void setMenuBar(JMenuBar menuBar) {
+        this.menuBar = menuBar;
     }
 
 
@@ -82,11 +104,20 @@ public abstract class FileEditor extends JPanel implements ThemeListener {
 	
 
     /**
+     * Returns the file that is being edited.
+     *
+     * @return the file that is being edited.
+     */
+    public AbstractFile getCurrentFile() {
+        return file;
+    }
+
+    /**
      * Sets the file that is to be edited.
      * This method will automatically be called after a file editor is created and should not be called directly.
      * @param file file that is to be edited.
      */
-    public final void setCurrentFile(AbstractFile file) {
+    final void setCurrentFile(AbstractFile file) {
         this.file = file;
     }
 

@@ -69,19 +69,6 @@ public class ViewerFrame extends JFrame implements ActionListener {
         setIconImage(icon);
         this.mainFrame = mainFrame;
         this.file = file;
-		
-        // Create default menu
-        MnemonicHelper menuMnemonicHelper = new MnemonicHelper();
-        MnemonicHelper menuItemMnemonicHelper = new MnemonicHelper();
-
-        // File menu
-        JMenuBar menuBar = new JMenuBar();
-        JMenu menu = MenuToolkit.addMenu(Translator.get("file_viewer.file_menu"), menuMnemonicHelper, null);
-        closeItem = MenuToolkit.addMenuItem(menu, Translator.get("file_viewer.close"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), this);
-        menu.add(closeItem);
-        menuBar.add(menu);
-
-        setJMenuBar(menuBar);
 
         // Call #dispose() on close (default is hide)
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
@@ -89,6 +76,25 @@ public class ViewerFrame extends JFrame implements ActionListener {
         setResizable(true);
 
         initContentPane();
+    }
+
+    /**
+     * Creates a minimalist menu bar that allows to close the frame, and returns it.
+     *
+     * @return a minimalist menu bar that allows to close the frame
+     */
+    private JMenuBar createMenuBar() {
+        JMenuBar menuBar = new JMenuBar();
+        MnemonicHelper menuMnemonicHelper = new MnemonicHelper();
+        MnemonicHelper menuItemMnemonicHelper = new MnemonicHelper();
+
+        // File menu
+        JMenu menu = MenuToolkit.addMenu(Translator.get("file_viewer.file_menu"), menuMnemonicHelper, null);
+        closeItem = MenuToolkit.addMenuItem(menu, Translator.get("file_viewer.close"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), this);
+        menu.add(closeItem);
+        menuBar.add(menu);
+
+        return menuBar;
     }
 
     private void initContentPane() {
@@ -99,10 +105,17 @@ public class ViewerFrame extends JFrame implements ActionListener {
                     if(viewer==null)
                         throw new Exception("No suitable viewer found");
 
+                    // Set the viewer's fields
                     viewer.setFrame(ViewerFrame.this);
+                    JMenuBar menuBar = createMenuBar();
+                    viewer.setMenuBar(menuBar);
                     viewer.setCurrentFile(file);
 
+                    // Ask the viewer to view the file
                     viewer.view(file);
+
+                    // Set the menu bar, only when it has been fully populated (see ticket #243)
+                    ViewerFrame.this.setJMenuBar(menuBar);
                 }
                 catch(Exception e) {
                     AppLogger.fine("Exception caught", e);

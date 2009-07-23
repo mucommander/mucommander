@@ -63,7 +63,7 @@ class TextEditor extends FileEditor implements DocumentListener {
 
         EditorFrame frame = getFrame();
         if(frame!=null)
-            textEditorImpl.populateMenus(frame);
+            textEditorImpl.populateMenus(frame, getMenuBar());
     }
 
 

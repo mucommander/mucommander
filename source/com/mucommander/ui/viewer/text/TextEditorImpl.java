@@ -216,8 +216,7 @@ class TextEditorImpl implements ThemeListener, ActionListener, EncodingListener 
         }
     }
 
-    void populateMenus(JFrame frame) {
-        JMenuBar menuBar = frame.getJMenuBar();
+    void populateMenus(JFrame frame, JMenuBar menuBar) {
         this.frame = frame;
 
         // Edit menu

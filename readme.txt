@@ -192,6 +192,8 @@ Bug fixes:
   (ticket #221). Contributed by LeO.
 - Folder auto-refresh can be disabled in the preferences by setting the
   prefs.auto_refresh.check_period value to -1 (requested in ticket #233).
+- Fixed viewer/editor menus not appearing since Java for Mac OS X 10.5 Update 4
+  (ticket #243).
 
 Known issues:
 - Some translations are not up-to-date. For more information, see:
