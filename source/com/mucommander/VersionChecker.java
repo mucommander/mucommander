@@ -58,7 +58,7 @@ import java.net.URLConnection;
  * muCommander is considered up to date if:<br>
  * - the {@link com.mucommander.RuntimeConstants#VERSION local version} is
  *   not smaller than the remote one.<br>
- * - the {@link com.mucommander.RuntimeConstants#RELEASE_DATE local release date} is
+ * - the {@link com.mucommander.RuntimeConstants#BUILD_DATE local release date} is
  *   not smaller than the remote one.<br>
  * While comparing release dates seems a bit odd - after all, if a new version is release,
  * a new version number should be created. However, it's possible to download development
@@ -170,7 +170,7 @@ public class VersionChecker extends DefaultHandler {
                 return true;
 
             // Checks whether the remote release date is later than the current release date.
-            return releaseDate.compareTo(RuntimeConstants.RELEASE_DATE) > 0;
+            return releaseDate.compareTo(RuntimeConstants.BUILD_DATE) > 0;
         }
         return true;
     }
