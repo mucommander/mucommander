@@ -28,15 +28,15 @@ import com.mucommander.text.Translator;
 public class ActionCategory {
 	
 	/** The category's label key in the dictionary file */
-	private String labelKey;
+	private String descriptionKey;
 	 
 	protected ActionCategory(String labelKey) {
-		this.labelKey = labelKey;
+		this.descriptionKey = labelKey;
 	}
 
-	public String getLabelKey() { return labelKey; } 
+	public String getDescriptionKey() { return descriptionKey; } 
 
-	public String getLabel() { return Translator.get(labelKey); }
+	public String getDescription() { return Translator.get(descriptionKey); }
 	
-	public String toString() { return getLabel(); }
+	public String toString() { return getDescription(); }
 }

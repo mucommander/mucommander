@@ -30,13 +30,11 @@ import javax.swing.KeyStroke;
  */
 public interface ActionDescriptor {
 	
-	public String getID();
+	public String getId();
 	
 	public ActionCategory getCategory();
 	
 	public String getLabel();
-	
-	public String getLabelKey();
 	
 	public KeyStroke getDefaultKeyStroke();
 	
