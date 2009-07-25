@@ -36,6 +36,8 @@ public interface ActionDescriptor {
 	
 	public String getLabel();
 	
+	public String getLabelKey();
+	
 	public KeyStroke getDefaultKeyStroke();
 	
 	public KeyStroke getDefaultAltKeyStroke();

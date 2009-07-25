@@ -38,5 +38,10 @@ public class ActionCategory {
 
 	public String getDescription() { return Translator.get(descriptionKey); }
 	
-	public String toString() { return getDescription(); }
+	public String toString() { 
+		String description = getDescription();
+		if (description != null)
+			return description;
+		return getDescriptionKey();
+	}
 }

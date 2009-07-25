@@ -25,20 +25,22 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Vector;
 
 import javax.swing.BorderFactory;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.KeyStroke;
 import javax.swing.UIManager;
 
 import com.mucommander.ui.action.ActionKeymapIO;
+import com.mucommander.ui.action.ActionProperties;
 import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.dialog.pref.PreferencesDialog;
 import com.mucommander.ui.dialog.pref.PreferencesPanel;
-import com.mucommander.ui.text.KeyStrokeUtils;
 
 /**
  * 'Shortcuts' preferences panel.
@@ -81,11 +83,14 @@ public class ShortcutsPanel extends PreferencesPanel {
 		panel.setBorder(BorderFactory.createEmptyBorder());
 		panel.add(new JLabel("Show: "));
 		
-		String[] items = { "", "A", "B", "C" }; //"All actions", "File operations actions" };
+		Vector actionCategories = new Vector();
+		actionCategories.addAll(ActionProperties.getActionCategories());
+		int nbCategories = actionCategories.size();
 		final JComboBox combo = new JComboBox();
-	    for (int i = 0; i < items.length; i++) {
-	      combo.addItem(items[i]);
+	    for (int i = 0; i < nbCategories; ++i) {
+	      combo.addItem(actionCategories.elementAt(i));
 	    }
+	    
 	    combo.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {

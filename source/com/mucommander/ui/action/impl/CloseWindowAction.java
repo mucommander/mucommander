@@ -19,6 +19,7 @@
 package com.mucommander.ui.action.impl;
 
 import com.mucommander.ui.action.AbstractActionDescriptor;
+import com.mucommander.ui.action.ActionCategories;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.action.MuAction;
@@ -65,7 +66,7 @@ public class CloseWindowAction extends MuAction {
     	
 		public String getId() { return ACTION_ID; }
 
-		public ActionCategory getCategory() { return null; }
+		public ActionCategory getCategory() { return ActionCategories.Window; }
 
 		public KeyStroke getDefaultAltKeyStroke() { return KeyStroke.getKeyStroke("meta W"); }
 

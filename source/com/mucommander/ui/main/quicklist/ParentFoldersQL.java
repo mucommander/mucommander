@@ -18,17 +18,18 @@
 
 package com.mucommander.ui.main.quicklist;
 
+import java.util.Vector;
+
+import javax.swing.Icon;
+
 import com.mucommander.file.AbstractFile;
 import com.mucommander.text.Translator;
-import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.action.ActionProperties;
 import com.mucommander.ui.action.impl.ShowParentFoldersQLAction;
 import com.mucommander.ui.event.LocationEvent;
 import com.mucommander.ui.event.LocationListener;
 import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.quicklist.QuickListWithIcons;
-
-import javax.swing.*;
-import java.util.Vector;
 
 /**
  * This quick list shows the parent folders of the current location in the FileTable.
@@ -40,7 +41,7 @@ public class ParentFoldersQL extends QuickListWithIcons implements LocationListe
 	protected boolean updated = true;
 		
 	public ParentFoldersQL(FolderPanel folderPanel) {
-		super(MuAction.getStandardLabel(ShowParentFoldersQLAction.class), Translator.get("parent_folders_quick_list.empty_message"));
+		super(ActionProperties.getActionLabel(ShowParentFoldersQLAction.Descriptor.ACTION_ID), Translator.get("parent_folders_quick_list.empty_message"));
 		
 		folderPanel.getLocationManager().addLocationListener(this);		
 	}

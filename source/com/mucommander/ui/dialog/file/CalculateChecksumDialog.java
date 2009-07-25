@@ -18,23 +18,9 @@
 
 package com.mucommander.ui.dialog.file;
 
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.FileFactory;
-import com.mucommander.file.util.FileSet;
-import com.mucommander.file.util.PathUtils;
-import com.mucommander.io.security.MuProvider;
-import com.mucommander.job.CalculateChecksumJob;
-import com.mucommander.text.Translator;
-import com.mucommander.ui.action.MuAction;
-import com.mucommander.ui.action.impl.CalculateChecksumAction;
-import com.mucommander.ui.dialog.DialogToolkit;
-import com.mucommander.ui.layout.YBoxPanel;
-import com.mucommander.ui.main.MainFrame;
-import com.mucommander.ui.text.FilePathField;
-import com.mucommander.util.StringUtils;
-
-import javax.swing.*;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -47,6 +33,29 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.SortedSet;
 import java.util.TreeSet;
+
+import javax.swing.ButtonGroup;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JTextField;
+
+import com.mucommander.file.AbstractFile;
+import com.mucommander.file.FileFactory;
+import com.mucommander.file.util.FileSet;
+import com.mucommander.file.util.PathUtils;
+import com.mucommander.io.security.MuProvider;
+import com.mucommander.job.CalculateChecksumJob;
+import com.mucommander.text.Translator;
+import com.mucommander.ui.action.ActionProperties;
+import com.mucommander.ui.action.impl.CalculateChecksumAction;
+import com.mucommander.ui.dialog.DialogToolkit;
+import com.mucommander.ui.layout.YBoxPanel;
+import com.mucommander.ui.main.MainFrame;
+import com.mucommander.ui.text.FilePathField;
+import com.mucommander.util.StringUtils;
 
 /**
  * This dialog prepares a {@link com.mucommander.job.CalculateChecksumJob} and lets the user choose a checksum
@@ -81,7 +90,7 @@ public class CalculateChecksumDialog extends JobDialog implements ActionListener
 
 
     public CalculateChecksumDialog(MainFrame mainFrame, FileSet files) {
-        super(mainFrame, MuAction.getStandardLabel(CalculateChecksumAction.class), files);
+        super(mainFrame, ActionProperties.getActionLabel(CalculateChecksumAction.Descriptor.ACTION_ID), files);
 
         YBoxPanel mainPanel = new YBoxPanel();
 

@@ -19,8 +19,11 @@
 package com.mucommander.ui.action;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Hashtable;
+import java.util.Set;
 
+import javax.swing.ImageIcon;
 import javax.swing.KeyStroke;
 
 /**
@@ -29,8 +32,11 @@ import javax.swing.KeyStroke;
  * @author Arik Hadas
  */
 public class ActionProperties {
+	
 	/* map action id -> action descriptor */
 	private static Hashtable actionDescriptors = new Hashtable();
+	
+	private static HashSet actionCategories = new HashSet();
 	
 	private static HashMap defaultPrimaryActionKeymap = new HashMap();
 	private static HashMap defaultAlternateActionKeymap = new HashMap();
@@ -39,6 +45,8 @@ public class ActionProperties {
 	public static void addActionDescriptor(ActionDescriptor actionDescriptor) {
 		String actionId = actionDescriptor.getId();
 		actionDescriptors.put(actionId, actionDescriptor);
+		
+		actionCategories.add(actionDescriptor.getCategory());
 		
 		// keymaps:
 		KeyStroke defaultActionKeyStroke = actionDescriptor.getDefaultKeyStroke();
@@ -68,5 +76,25 @@ public class ActionProperties {
 	
 	static String getActionForKeyStroke(KeyStroke keyStroke) {
 		return (String) defaultAcceleratorMap.get(keyStroke);
+	}
+	
+	public static String getActionLabel(String actionId) {
+		return getActionDescriptor(actionId).getLabel();
+	}
+	
+	public static String getActionLabelKey(String actionId) {
+		return getActionDescriptor(actionId).getLabelKey();
+	}
+	
+	public static ImageIcon getActionIcon(String actionId) {
+		return getActionDescriptor(actionId).getIcon();
+	}
+	
+	public static String getActionTooltip(String actionId) {
+		return getActionDescriptor(actionId).getTooltip();
+	}
+	
+	public static Set getActionCategories() {
+		return actionCategories;
 	}
 }

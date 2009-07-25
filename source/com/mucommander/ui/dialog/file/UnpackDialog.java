@@ -24,7 +24,8 @@ import com.mucommander.file.util.FileSet;
 import com.mucommander.file.util.PathUtils;
 import com.mucommander.job.UnpackJob;
 import com.mucommander.text.Translator;
-import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.action.ActionProperties;
+import com.mucommander.ui.action.impl.UnpackAction;
 import com.mucommander.ui.main.MainFrame;
 
 
@@ -44,7 +45,7 @@ public class UnpackDialog extends TransferDestinationDialog {
      */
     public UnpackDialog(MainFrame mainFrame, FileSet files, boolean isShiftDown) {
         super(mainFrame, files,
-              MuAction.getStandardLabel(com.mucommander.ui.action.impl.UnpackAction.class),
+        	  ActionProperties.getActionLabel(UnpackAction.Descriptor.ACTION_ID),
               Translator.get("unpack_dialog.destination"),
               Translator.get("unpack_dialog.unpack"),
               Translator.get("unpack_dialog.error_title"));

@@ -18,29 +18,37 @@
 
 package com.mucommander.ui.dialog.file;
 
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
+
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.PermissionAccesses;
 import com.mucommander.file.PermissionTypes;
 import com.mucommander.file.util.FileSet;
 import com.mucommander.job.ChangeFileAttributesJob;
 import com.mucommander.text.Translator;
-import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.action.ActionProperties;
+import com.mucommander.ui.action.impl.ChangePermissionsAction;
 import com.mucommander.ui.dialog.DialogToolkit;
 import com.mucommander.ui.layout.YBoxPanel;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.text.SizeConstrainedDocument;
-
-import javax.swing.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import javax.swing.text.AttributeSet;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.Document;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 
 /**
  * This dialog allows the user to change the permissions of the currently selected/marked file(s). The permissions can be
@@ -68,11 +76,11 @@ public class ChangePermissionsDialog extends JobDialog
 
 
     public ChangePermissionsDialog(MainFrame mainFrame, FileSet files) {
-        super(mainFrame, MuAction.getStandardLabel(com.mucommander.ui.action.impl.ChangePermissionsAction.class), files);
+        super(mainFrame, ActionProperties.getActionLabel(ChangePermissionsAction.Descriptor.ACTION_ID), files);
 
         YBoxPanel mainPanel = new YBoxPanel();
 
-        mainPanel.add(new JLabel(MuAction.getStandardTooltip(com.mucommander.ui.action.impl.ChangePermissionsAction.class)+" :"));
+        mainPanel.add(new JLabel(ActionProperties.getActionLabel(ChangePermissionsAction.Descriptor.ACTION_ID)+" :"));
         mainPanel.addSpace(10);
 
         JPanel gridPanel = new JPanel(new GridLayout(4, 4));

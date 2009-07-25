@@ -19,13 +19,27 @@
 
 package com.mucommander.ui.dialog.file;
 
+import java.awt.BorderLayout;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.util.FileSet;
 import com.mucommander.file.util.PathUtils;
 import com.mucommander.job.MkdirJob;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionManager;
-import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.action.ActionProperties;
 import com.mucommander.ui.action.impl.MkdirAction;
 import com.mucommander.ui.action.impl.MkfileAction;
 import com.mucommander.ui.chooser.SizeChooser;
@@ -35,13 +49,6 @@ import com.mucommander.ui.dialog.FocusDialog;
 import com.mucommander.ui.layout.YBoxPanel;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.text.FilePathField;
-
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 
 
 /**
@@ -83,7 +90,7 @@ public class MkdirDialog extends FocusDialog implements ActionListener, ItemList
         Container contentPane = getContentPane();
 
         YBoxPanel mainPanel = new YBoxPanel();
-        mainPanel.add(new JLabel(MuAction.getStandardTooltip(mkfileMode?com.mucommander.ui.action.impl.MkfileAction.class:com.mucommander.ui.action.impl.MkdirAction.class)+" :"));
+        mainPanel.add(new JLabel(ActionProperties.getActionTooltip(mkfileMode?MkfileAction.Descriptor.ACTION_ID:MkdirAction.Descriptor.ACTION_ID)+" :"));
 
         // Create a path field with auto-completion capabilities
         pathField = new FilePathField();

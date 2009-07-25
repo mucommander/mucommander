@@ -18,6 +18,25 @@
 
 package com.mucommander.ui.dialog.shell;
 
+import java.awt.BorderLayout;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.PrintStream;
+
+import javax.swing.Box;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+
 import com.mucommander.AppLogger;
 import com.mucommander.file.FileProtocols;
 import com.mucommander.process.AbstractProcess;
@@ -25,7 +44,8 @@ import com.mucommander.process.ProcessListener;
 import com.mucommander.shell.Shell;
 import com.mucommander.shell.ShellHistoryManager;
 import com.mucommander.text.Translator;
-import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.action.ActionProperties;
+import com.mucommander.ui.action.impl.RunCommandAction;
 import com.mucommander.ui.dialog.DialogToolkit;
 import com.mucommander.ui.dialog.FocusDialog;
 import com.mucommander.ui.icon.SpinningDial;
@@ -34,11 +54,6 @@ import com.mucommander.ui.layout.YBoxPanel;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.theme.Theme;
 import com.mucommander.ui.theme.ThemeManager;
-
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
-import java.io.PrintStream;
 
 /**
  * Dialog used to execute a user-defined command.
@@ -178,10 +193,10 @@ public class RunDialog extends FocusDialog implements ActionListener, ProcessLis
      * @param mainFrame the main frame this dialog is attached to.
      */
     public RunDialog(MainFrame mainFrame) {
-        super(mainFrame, MuAction.getStandardLabel(com.mucommander.ui.action.impl.RunCommandAction.class), mainFrame);
+        super(mainFrame, ActionProperties.getActionLabel(RunCommandAction.Descriptor.ACTION_ID), mainFrame);
         this.mainFrame = mainFrame;
 		
-        // Initialises the dialog's UI.
+        // Initializes the dialog's UI.
         Container contentPane = getContentPane();
         contentPane.add(createInputArea(), BorderLayout.NORTH);
         contentPane.add(createOutputArea(), BorderLayout.CENTER);

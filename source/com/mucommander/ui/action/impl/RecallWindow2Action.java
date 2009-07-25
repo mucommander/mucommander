@@ -19,6 +19,7 @@
 package com.mucommander.ui.action.impl;
 
 import com.mucommander.ui.action.AbstractActionDescriptor;
+import com.mucommander.ui.action.ActionCategories;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.action.ActionFactory;
@@ -53,7 +54,7 @@ public class RecallWindow2Action extends RecallWindowAction {
     	
 		public String getId() { return ACTION_ID; }
 
-		public ActionCategory getCategory() { return null; }
+		public ActionCategory getCategory() { return ActionCategories.Window; }
 
 		public KeyStroke getDefaultAltKeyStroke() { return null; }
 

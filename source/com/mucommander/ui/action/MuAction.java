@@ -18,17 +18,20 @@
 
 package com.mucommander.ui.action;
 
-import com.mucommander.AppLogger;
-import com.mucommander.file.util.ResourceLoader;
-import com.mucommander.text.Translator;
-import com.mucommander.ui.icon.IconManager;
-import com.mucommander.ui.main.MainFrame;
-
-import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.util.Enumeration;
 import java.util.Hashtable;
+
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.ImageIcon;
+import javax.swing.KeyStroke;
+
+import com.mucommander.AppLogger;
+import com.mucommander.file.util.ResourceLoader;
+import com.mucommander.ui.icon.IconManager;
+import com.mucommander.ui.main.MainFrame;
 
 
 /**
@@ -136,32 +139,6 @@ public abstract class MuAction extends AbstractAction {
             else
                 AppLogger.fine("Key is not a String, property ignored for key="+key);
         }
-
-        if(useStandardLabels) {
-            // Retrieve the standard label entry from the dictionary and use it as this action's label
-            String label = getStandardLabel();
-            // If the label is not defined in the dictionary, use the label key instead
-            if(label==null)
-                label = getStandardLabelKey();
-            
-            // Append '...' to the label if this action invokes a dialog when performed
-            if(this instanceof InvokesDialog)
-                label += "...";
-
-            setLabel(label);
-
-            // Looks for a standard label entry in the dictionary and if it is defined, use it as this action's tooltip
-            String tooltip = getStandardTooltip();
-            if(tooltip!=null)
-                setToolTipText(getStandardTooltip());
-        }
-
-        if(useStandardIcon) {
-            // Retrieve the standard icon image (if any) and use it as the action's icon
-            ImageIcon icon = getStandardIcon();
-            if(icon!=null)
-                setIcon(icon);
-        }
     }
 
     /**
@@ -173,7 +150,7 @@ public abstract class MuAction extends AbstractAction {
         return this.mainFrame;
     }
 
-    public boolean useStandradLabels() { return useStandardLabels; }
+    public boolean useStandardLabels() { return useStandardLabels; }
     
     public boolean useStandardIcon() { return useStandardIcon; }
     
@@ -377,43 +354,6 @@ public abstract class MuAction extends AbstractAction {
         this.performActionInSeparateThread = performActionInSeparateThread;
     }
 
-
-    /**
-     * Shorthand for {@link #getStandardLabel(Class)} called with the Class instance returned by {@link #getClass()}.
-     *
-     * @return the standard label corresponding to this MuAction class, <code>null</code> if none was found
-     */
-    public String getStandardLabel() {
-        return getStandardLabel(getClass());
-    }
-
-    /**
-     * Shorthand for {@link #getStandardLabelKey(Class)} called with the Class instance returned by {@link #getClass()}.
-     *
-     * @return the standard dictionary key for this action's label
-     */
-    public String getStandardLabelKey() {
-        return getStandardLabelKey(getClass());
-    }
-
-    /**
-     * Shorthand for {@link #getStandardTooltip(Class)} called with the Class instance returned by {@link #getClass()}.
-     *
-     * @return the standard tooltip corresponding to this MuAction class, <code>null</code> if none was found
-     */
-    public String getStandardTooltip() {
-        return getStandardTooltip(getClass());
-    }
-
-    /**
-     * Shorthand for {@link #getStandardTooltipKey(Class)} called with the Class instance returned by {@link #getClass()}.
-     *
-     * @return the standard dictionary key for this action's tooltip
-     */
-    public String getStandardTooltipKey() {
-        return getStandardTooltipKey(getClass());
-    }
-
     /**
      * Shorthand for {@link #getStandardIcon(Class)} called with the Class instance returned by {@link #getClass()}.
      *
@@ -436,64 +376,6 @@ public abstract class MuAction extends AbstractAction {
     ////////////////////
     // Static methods //
     ////////////////////
-
-    /**
-     * Queries {@link Translator} for a label corresponding to the specified action using standard naming conventions.
-     * Returns the label or <code>null</code> if no corresponding entry was found in the dictionary.
-     *
-     * @param action a MuAction class descriptor
-     * @return the standard label corresponding to the specified MuAction class, <code>null</code> if none was found
-     */
-    public static String getStandardLabel(Class action) {
-        String labelKey = getStandardLabelKey(action);
-        if(!Translator.entryExists(labelKey))
-            return null;
-
-        return Translator.get(labelKey);
-    }
-
-    /**
-     * Returns the dictionary key for the specified action's label, using the following standard naming convention:
-     * <pre>
-     *      action_classname.label
-     * </pre>
-     * where <code>action_classname</code> is the fully qualified action class's name, as returned by <code>Class.getName()</code>.
-     *
-     * @param action a MuAction class descriptor
-     * @return the standard dictionary key for the specified action's label
-     */
-    public static String getStandardLabelKey(Class action) {
-        return action.getName()+".label";
-    }
-
-    /**
-     * Queries {@link Translator} for a tooltip corresponding to the specified action using standard naming conventions.
-     * Returns the tooltip or <code>null</code> if no corresponding entry was found in the dictionary.
-     *
-     * @param action a MuAction class descriptor
-     * @return the standard tooltip corresponding to the specified MuAction class, <code>null</code> if none was found
-     */
-    public static String getStandardTooltip(Class action) {
-        String tooltipKey = getStandardTooltipKey(action);
-        if(!Translator.entryExists(tooltipKey))
-            return null;
-
-        return Translator.get(tooltipKey);
-    }
-
-    /**
-     * Returns the dictionary key for the specified action's tooltip, using the following standard naming convention:
-     * <pre>
-     *      action_classname.tooltip
-     * </pre>
-     * where <code>action_classname</code> is the fully qualified action class's name, as returned by <code>Class.getName()</code>.
-     *
-     * @param action a MuAction class descriptor
-     * @return the standard dictionary key for the specified action's tooltip
-     */
-    public static String getStandardTooltipKey(Class action) {
-        return action.getName()+".tooltip";
-    }
 
     /**
      * Queries {@link IconManager} for an image icon corresponding to the specified action using standard icon path

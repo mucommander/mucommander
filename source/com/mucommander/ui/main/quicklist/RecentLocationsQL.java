@@ -18,16 +18,17 @@
 
 package com.mucommander.ui.main.quicklist;
 
+import java.util.LinkedList;
+
+import javax.swing.Icon;
+
 import com.mucommander.file.AbstractFile;
 import com.mucommander.text.Translator;
-import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.action.ActionProperties;
 import com.mucommander.ui.action.impl.ShowRecentLocationsQLAction;
 import com.mucommander.ui.event.LocationEvent;
 import com.mucommander.ui.event.LocationListener;
 import com.mucommander.ui.quicklist.QuickListWithIcons;
-
-import javax.swing.*;
-import java.util.LinkedList;
 
 /**
  * This quick list shows recently accessed locations.
@@ -39,7 +40,7 @@ public class RecentLocationsQL extends QuickListWithIcons implements LocationLis
 	private LinkedList linkedList;
 
 	public RecentLocationsQL() {
-		super(MuAction.getStandardLabel(ShowRecentLocationsQLAction.class), Translator.get("recent_locations_quick_list.empty_message"));
+		super(ActionProperties.getActionLabel(ShowRecentLocationsQLAction.Descriptor.ACTION_ID), Translator.get("recent_locations_quick_list.empty_message"));
 		
 		linkedList = new LinkedList();
 	}

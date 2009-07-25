@@ -34,7 +34,9 @@ import javax.swing.KeyStroke;
 
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionManager;
+import com.mucommander.ui.action.ActionProperties;
 import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.action.impl.ShowKeyboardShortcutsAction;
 import com.mucommander.ui.dialog.DialogToolkit;
 import com.mucommander.ui.dialog.FocusDialog;
 import com.mucommander.ui.layout.XAlignedComponentPanel;
@@ -173,7 +175,7 @@ public class ShortcutsDialog extends FocusDialog implements ActionListener {
 
 
     public ShortcutsDialog(MainFrame mainFrame) {
-        super(mainFrame, MuAction.getStandardLabel(com.mucommander.ui.action.impl.ShowKeyboardShortcutsAction.class), mainFrame);
+        super(mainFrame, ActionProperties.getActionLabel(ShowKeyboardShortcutsAction.Descriptor.ACTION_ID), mainFrame);
 
         this.mainFrame = mainFrame;
 

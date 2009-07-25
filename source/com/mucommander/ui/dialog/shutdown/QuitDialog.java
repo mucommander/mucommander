@@ -18,15 +18,17 @@
 
 package com.mucommander.ui.dialog.shutdown;
 
+import java.awt.Dimension;
+
+import javax.swing.JCheckBox;
+
 import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.text.Translator;
-import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.action.ActionProperties;
+import com.mucommander.ui.action.impl.QuitAction;
 import com.mucommander.ui.dialog.QuestionDialog;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.WindowManager;
-
-import javax.swing.*;
-import java.awt.*;
 
 /**
  * Quit confirmation dialog invoked when the user asked the application to quit, which gives the user a chance
@@ -63,7 +65,7 @@ public class QuitDialog extends QuestionDialog {
               Translator.get("quit_dialog.title"),
               Translator.get("quit_dialog.desc", ""+WindowManager.getMainFrames().size()),
               mainFrame,
-              new String[] {MuAction.getStandardLabel(com.mucommander.ui.action.impl.QuitAction.class), Translator.get("cancel")},
+              new String[] {ActionProperties.getActionLabel(QuitAction.Descriptor.ACTION_ID), Translator.get("cancel")},
               new int[] {QUIT_ACTION, CANCEL_ACTION},
               0);
 		

@@ -18,22 +18,23 @@
 
 package com.mucommander.ui.main.quicklist;
 
+import java.io.IOException;
+import java.util.LinkedList;
+
+import javax.swing.Icon;
+
 import com.mucommander.desktop.DesktopManager;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileProtocols;
 import com.mucommander.file.impl.local.LocalFile;
 import com.mucommander.job.TempExecJob;
 import com.mucommander.text.Translator;
-import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.action.ActionProperties;
 import com.mucommander.ui.action.impl.ShowRecentExecutedFilesQLAction;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.WindowManager;
 import com.mucommander.ui.quicklist.QuickListWithIcons;
-
-import javax.swing.*;
-import java.io.IOException;
-import java.util.LinkedList;
 
 /**
  * This quick list shows recently executed files.
@@ -46,7 +47,7 @@ public class RecentExecutedFilesQL extends QuickListWithIcons {
 	private static final int MAX_NUM_OF_ELEMENTS = 10;
 
 	public RecentExecutedFilesQL() {
-		super(MuAction.getStandardLabel(ShowRecentExecutedFilesQLAction.class), Translator.get("recent_executed_files_quick_list.empty_message"));
+		super(ActionProperties.getActionLabel(ShowRecentExecutedFilesQLAction.Descriptor.ACTION_ID), Translator.get("recent_executed_files_quick_list.empty_message"));
 	}
 	
 	protected void acceptListItem(Object item) {

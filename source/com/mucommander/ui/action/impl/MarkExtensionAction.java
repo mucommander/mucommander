@@ -22,6 +22,7 @@ import com.mucommander.file.AbstractFile;
 import com.mucommander.file.filter.ExtensionFilenameFilter;
 import com.mucommander.file.filter.FilenameFilter;
 import com.mucommander.ui.action.AbstractActionDescriptor;
+import com.mucommander.ui.action.ActionCategories;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.action.ActionFactory;
@@ -205,7 +206,7 @@ public class MarkExtensionAction extends MuAction {
     	
 		public String getId() { return ACTION_ID; }
 
-		public ActionCategory getCategory() { return null; }
+		public ActionCategory getCategory() { return ActionCategories.Selection; }
 
 		public KeyStroke getDefaultAltKeyStroke() { return null; }
 

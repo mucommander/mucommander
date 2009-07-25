@@ -18,22 +18,33 @@
 
 package com.mucommander.ui.dialog.server;
 
+import java.awt.BorderLayout;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Vector;
+
+import javax.swing.AbstractListModel;
+import javax.swing.Box;
+import javax.swing.JButton;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.ListSelectionModel;
+
 import com.mucommander.auth.Credentials;
 import com.mucommander.file.FileURL;
 import com.mucommander.file.connection.ConnectionHandler;
 import com.mucommander.file.connection.ConnectionPool;
 import com.mucommander.text.Translator;
-import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.action.ActionProperties;
+import com.mucommander.ui.action.impl.ShowServerConnectionsAction;
 import com.mucommander.ui.dialog.FocusDialog;
 import com.mucommander.ui.helper.MnemonicHelper;
 import com.mucommander.ui.layout.XBoxPanel;
 import com.mucommander.ui.main.MainFrame;
-
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.Vector;
 
 /**
  * This dialog shows a list of server connections and allows the user to close/disconnect them.
@@ -59,7 +70,7 @@ public class ShowServerConnectionsDialog extends FocusDialog implements ActionLi
 
     
     public ShowServerConnectionsDialog(MainFrame mainFrame) {
-        super(mainFrame, MuAction.getStandardLabel(com.mucommander.ui.action.impl.ShowServerConnectionsAction.class), mainFrame);
+        super(mainFrame, ActionProperties.getActionLabel(ShowServerConnectionsAction.Descriptor.ACTION_ID), mainFrame);
 
         this.mainFrame = mainFrame;
 

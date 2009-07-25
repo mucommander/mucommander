@@ -18,19 +18,20 @@
 
 package com.mucommander.ui.main.quicklist;
 
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.Vector;
+
+import javax.swing.Icon;
+
 import com.mucommander.bookmark.Bookmark;
 import com.mucommander.bookmark.BookmarkListener;
 import com.mucommander.bookmark.BookmarkManager;
 import com.mucommander.file.FileFactory;
 import com.mucommander.text.Translator;
-import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.action.ActionProperties;
 import com.mucommander.ui.action.impl.ShowBookmarksQLAction;
 import com.mucommander.ui.quicklist.QuickListWithIcons;
-
-import javax.swing.*;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.Vector;
 
 /**
  * This quick list shows existing bookmarks.
@@ -41,7 +42,7 @@ public class BookmarksQL extends QuickListWithIcons implements BookmarkListener 
 	protected Bookmark[] sortedBookmarks;
 
 	public BookmarksQL() {
-		super(MuAction.getStandardLabel(ShowBookmarksQLAction.class), Translator.get("bookmarks_menu.no_bookmark"));
+		super(ActionProperties.getActionLabel(ShowBookmarksQLAction.Descriptor.ACTION_ID), Translator.get("bookmarks_menu.no_bookmark"));
 		
 		bookmarksChanged();
 		BookmarkManager.addBookmarkListener(this);

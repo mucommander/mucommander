@@ -19,6 +19,7 @@
 package com.mucommander.ui.action.impl;
 
 import com.mucommander.ui.action.AbstractActionDescriptor;
+import com.mucommander.ui.action.ActionCategories;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.InvokesDialog;
 import com.mucommander.ui.action.MuAction;
@@ -55,7 +56,7 @@ public class ShowPreferencesAction extends MuAction implements InvokesDialog {
     	
 		public String getId() { return ACTION_ID; }
 
-		public ActionCategory getCategory() { return null; }
+		public ActionCategory getCategory() { return ActionCategories.Misc; }
 
 		public KeyStroke getDefaultAltKeyStroke() { return null; }
 

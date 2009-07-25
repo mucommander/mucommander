@@ -22,6 +22,7 @@ import com.mucommander.file.filter.AttributeFileFilter;
 import com.mucommander.file.filter.OrFileFilter;
 import com.mucommander.file.util.FileSet;
 import com.mucommander.ui.action.AbstractActionDescriptor;
+import com.mucommander.ui.action.ActionCategories;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.InvokesDialog;
 import com.mucommander.ui.action.MuAction;
@@ -68,7 +69,7 @@ public class UnpackAction extends SelectedFilesAction implements InvokesDialog {
     	
 		public String getId() { return ACTION_ID; }
 
-		public ActionCategory getCategory() { return null; }
+		public ActionCategory getCategory() { return ActionCategories.Selection; }
 
 		public KeyStroke getDefaultAltKeyStroke() { return null; }
 

@@ -18,16 +18,23 @@
 
 package com.mucommander.ui.action;
 
+import java.util.Collections;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Vector;
+import java.util.WeakHashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import javax.swing.ImageIcon;
+import javax.swing.KeyStroke;
+
 import com.mucommander.AppLogger;
 import com.mucommander.ui.action.impl.*;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.WindowManager;
-
-import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import javax.swing.KeyStroke;
 
 /**
  * ActionManager provides methods to retrieve {@link MuAction} instances and invoke them. It keeps track of all the
@@ -214,7 +221,7 @@ public class ActionManager {
     	// Convert the action-classes to MuAction instances
 		List list = Collections.list(actionFactories.keys());
 		
-		// Sort actions by their labels
+		/*// Sort actions by their labels
 		Collections.sort(list, new Comparator() {
 			public int compare(Object o1, Object o2) {
 				// TODO: remove actions without a standard label?
@@ -224,7 +231,7 @@ public class ActionManager {
 					return -1;
 				return MuAction.getStandardLabel((Class) o1).compareTo(MuAction.getStandardLabel((Class) o2));
 			}
-		});
+		});*/
 		
 		return list;
     }
@@ -323,6 +330,22 @@ public class ActionManager {
             MuAction action = actionFactory.createAction(mainFrame, properties);
             mainFrameActions.put(actionParameters, new ActionAndIdPair(action, actionId));
             
+            if(action.useStandardLabels()) {
+                // Retrieve the standard label entry from the dictionary and use it as this action's label
+                String label = ActionProperties.getActionLabel(actionId);
+                
+                // Append '...' to the label if this action invokes a dialog when performed
+                if(action instanceof InvokesDialog)
+                    label += "...";
+
+                action.setLabel(label);
+
+                // Looks for a standard label entry in the dictionary and if it is defined, use it as this action's tooltip
+                String tooltip = ActionProperties.getActionTooltip(actionId);
+                if(tooltip!=null)
+                    action.setToolTipText(tooltip);
+            }
+            
             if(action.useStandardAccelerators()) {
                 // Retrieve the standard accelerator (if any) and use it as this action's accelerator
                 KeyStroke accelerator = ActionKeymap.getAccelerator(actionId);
@@ -333,6 +356,13 @@ public class ActionManager {
                 accelerator = ActionKeymap.getAlternateAccelerator(actionId);
                 if(accelerator!=null)
                     action.setAlternateAccelerator(accelerator);
+            }
+            
+            if(action.useStandardIcon()) {
+                // Retrieve the standard icon image (if any) and use it as the action's icon
+                ImageIcon icon = ActionProperties.getActionIcon(actionId);
+                if(icon!=null)
+                    action.setIcon(icon);
             }
             
             return action;

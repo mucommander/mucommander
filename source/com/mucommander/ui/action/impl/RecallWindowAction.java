@@ -18,21 +18,22 @@
 
 package com.mucommander.ui.action.impl;
 
-import com.mucommander.AppLogger;
-import com.mucommander.text.Translator;
-import com.mucommander.ui.action.AbstractActionDescriptor;
-import com.mucommander.ui.action.ActionCategory;
-import com.mucommander.ui.action.ActionFactory;
-import com.mucommander.ui.action.MuAction;
-import com.mucommander.ui.main.MainFrame;
-import com.mucommander.ui.main.WindowManager;
-
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Hashtable;
 import java.util.Vector;
 
 import javax.swing.KeyStroke;
+
+import com.mucommander.AppLogger;
+import com.mucommander.text.Translator;
+import com.mucommander.ui.action.AbstractActionDescriptor;
+import com.mucommander.ui.action.ActionCategory;
+import com.mucommander.ui.action.ActionFactory;
+import com.mucommander.ui.action.ActionProperties;
+import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.main.MainFrame;
+import com.mucommander.ui.main.WindowManager;
 
 /**
  * Brings a MainFrame window to the front. The window number must be specified in the
@@ -101,7 +102,7 @@ public class RecallWindowAction extends MuAction implements PropertyChangeListen
      */
     private void updateLabel(int windowNumber) {
         // Update the action's label
-        setLabel(Translator.get(getStandardLabelKey(), ""+windowNumber));
+        setLabel(Translator.get(ActionProperties.getActionLabelKey(RecallWindowAction.Descriptor.ACTION_ID), ""+windowNumber));
     }
 
 

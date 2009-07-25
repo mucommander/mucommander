@@ -18,23 +18,34 @@
 
 package com.mucommander.ui.dialog.file;
 
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.util.FileSet;
-import com.mucommander.job.ChangeFileAttributesJob;
-import com.mucommander.text.CustomDateFormat;
-import com.mucommander.text.Translator;
-import com.mucommander.ui.action.MuAction;
-import com.mucommander.ui.dialog.DialogToolkit;
-import com.mucommander.ui.layout.YBoxPanel;
-import com.mucommander.ui.main.MainFrame;
-
-import javax.swing.*;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.Date;
+
+import javax.swing.ButtonGroup;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerDateModel;
+
+import com.mucommander.file.AbstractFile;
+import com.mucommander.file.util.FileSet;
+import com.mucommander.job.ChangeFileAttributesJob;
+import com.mucommander.text.CustomDateFormat;
+import com.mucommander.text.Translator;
+import com.mucommander.ui.action.ActionProperties;
+import com.mucommander.ui.action.impl.ChangeDateAction;
+import com.mucommander.ui.dialog.DialogToolkit;
+import com.mucommander.ui.layout.YBoxPanel;
+import com.mucommander.ui.main.MainFrame;
 
 /**
  * This dialog allows the user to change the date of the currently selected/marked file(s). By default, the date is now
@@ -55,11 +66,11 @@ public class ChangeDateDialog extends JobDialog implements ActionListener, ItemL
 
 
     public ChangeDateDialog(MainFrame mainFrame, FileSet files) {
-        super(mainFrame, MuAction.getStandardLabel(com.mucommander.ui.action.impl.ChangeDateAction.class), files);
+        super(mainFrame, ActionProperties.getActionLabel(ChangeDateAction.Descriptor.ACTION_ID), files);
 
         YBoxPanel mainPanel = new YBoxPanel();
 
-        mainPanel.add(new JLabel(MuAction.getStandardTooltip(com.mucommander.ui.action.impl.ChangeDateAction.class)+" :"));
+        mainPanel.add(new JLabel(ActionProperties.getActionLabel(ChangeDateAction.Descriptor.ACTION_ID)+" :"));
         mainPanel.addSpace(5);
 
         ButtonGroup buttonGroup = new ButtonGroup();

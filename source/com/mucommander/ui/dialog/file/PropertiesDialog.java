@@ -18,6 +18,22 @@
 
 package com.mucommander.ui.dialog.file;
 
+import java.awt.BorderLayout;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.SwingConstants;
+import javax.swing.border.EmptyBorder;
+
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.impl.local.LocalFile;
 import com.mucommander.file.util.FileSet;
@@ -28,7 +44,8 @@ import com.mucommander.runtime.OsFamilies;
 import com.mucommander.runtime.OsVersions;
 import com.mucommander.text.SizeFormat;
 import com.mucommander.text.Translator;
-import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.action.ActionProperties;
+import com.mucommander.ui.action.impl.ShowFilePropertiesAction;
 import com.mucommander.ui.dialog.DialogToolkit;
 import com.mucommander.ui.dialog.FocusDialog;
 import com.mucommander.ui.icon.FileIcons;
@@ -39,13 +56,6 @@ import com.mucommander.ui.layout.YBoxPanel;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.text.FileLabel;
 import com.mucommander.ui.text.MultiLineLabel;
-
-import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowEvent;
 
 /**
  * This dialog shows properties of a file or a group of files : number of files, file kind,
@@ -77,7 +87,7 @@ public class PropertiesDialog extends FocusDialog implements Runnable, ActionLis
 	
     public PropertiesDialog(MainFrame mainFrame, FileSet files) {
         super(mainFrame,
-              files.size() > 1 ? MuAction.getStandardLabel(com.mucommander.ui.action.impl.ShowFilePropertiesAction.class) :
+              files.size() > 1 ? ActionProperties.getActionLabel(ShowFilePropertiesAction.Descriptor.ACTION_ID) :
               Translator.get("properties_dialog.file_properties", files.fileAt(0).getName()), mainFrame);
         this.mainFrame = mainFrame;
 

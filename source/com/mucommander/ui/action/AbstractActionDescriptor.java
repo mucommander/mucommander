@@ -44,7 +44,7 @@ public abstract class AbstractActionDescriptor implements ActionDescriptor {
         if (label != null)
         	return label;
         // else, return the standard dictionary key for this action's label
-        return getStandardLabelKey();
+        return getLabelKey();
     }
 
     public ImageIcon getIcon() {
@@ -54,6 +54,20 @@ public abstract class AbstractActionDescriptor implements ActionDescriptor {
     public String getTooltip() {
         return getStandardTooltip(getId());
     }
+    
+    /**
+     * Returns the dictionary key for action's label, using the following standard naming convention:
+     * <pre>
+     *      action_id.label
+     * </pre>
+     * where <code>action_id</code> is a String identification of the action, as returned by <code>getId()</code>.
+     *
+     * @return the standard dictionary key for the action's label
+     */
+    public String getLabelKey() {
+		return getId()+".label";
+	}
+    
     
     /////////////////////////
     //// Private methods ////
@@ -66,25 +80,12 @@ public abstract class AbstractActionDescriptor implements ActionDescriptor {
      * @return the standard label corresponding to the MuAction, <code>null</code> if none was found
      */
     private String getStandardLabel() {
-    	String labelKey = getStandardLabelKey();
+    	String labelKey = getLabelKey();
         if(!Translator.entryExists(labelKey))
             return null;
 
         return Translator.get(labelKey);
     }
-    
-    /**
-     * Returns the dictionary key for action's label, using the following standard naming convention:
-     * <pre>
-     *      action_id.label
-     * </pre>
-     * where <code>action_id</code> is a String identification of the action, as returned by <code>getId()</code>.
-     *
-     * @return the standard dictionary key for the action's label
-     */
-    private String getStandardLabelKey() {
-		return getId()+".label";
-	}
     
     /**
      * Queries {@link IconManager} for an image icon corresponding to the specified action using standard icon path

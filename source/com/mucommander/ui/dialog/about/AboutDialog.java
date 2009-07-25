@@ -18,24 +18,42 @@
 
 package com.mucommander.ui.dialog.about;
 
-import com.mucommander.RuntimeConstants;
-import com.mucommander.desktop.DesktopManager;
-import com.mucommander.text.Translator;
-import com.mucommander.ui.action.MuAction;
-import com.mucommander.ui.dialog.FocusDialog;
-import com.mucommander.ui.icon.IconManager;
-import com.mucommander.ui.main.MainFrame;
-import com.mucommander.ui.theme.Theme;
-import com.mucommander.ui.theme.ThemeManager;
-
-import javax.swing.*;
-import javax.swing.text.*;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.Insets;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Locale;
+
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextPane;
+import javax.swing.SwingUtilities;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Style;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyleContext;
+import javax.swing.text.StyledDocument;
+
+import com.mucommander.RuntimeConstants;
+import com.mucommander.desktop.DesktopManager;
+import com.mucommander.text.Translator;
+import com.mucommander.ui.action.ActionProperties;
+import com.mucommander.ui.action.impl.GoToWebsiteAction;
+import com.mucommander.ui.action.impl.ShowAboutAction;
+import com.mucommander.ui.dialog.FocusDialog;
+import com.mucommander.ui.icon.IconManager;
+import com.mucommander.ui.main.MainFrame;
+import com.mucommander.ui.theme.Theme;
+import com.mucommander.ui.theme.ThemeManager;
 
 /**
  * Dialog displaying information about muCommander.
@@ -72,22 +90,22 @@ public class AboutDialog extends FocusDialog implements ActionListener {
 
 
 
-    // - Initialisation ---------------------------------------------------------
+    // - Initialization ---------------------------------------------------------
     // --------------------------------------------------------------------------
     /**
      * Creates a new AboutDialog.
      * @param mainFrame frame this dialog is relative to.
      */
     public AboutDialog(MainFrame mainFrame) {
-        super(mainFrame, MuAction.getStandardLabel(com.mucommander.ui.action.impl.ShowAboutAction.class), mainFrame);
+        super(mainFrame, ActionProperties.getActionLabel(ShowAboutAction.Descriptor.ACTION_ID), mainFrame);
 
-        // Initialises the dialog's content.
+        // Initializes the dialog's content.
         Container contentPane = getContentPane();
         contentPane.add(createIconPanel(), BorderLayout.WEST);
         contentPane.add(createCreditsPanel(), BorderLayout.EAST);
         setResizable(false);
 
-        // Makes sure the scroll pane is properly initialised.
+        // Makes sure the scroll pane is properly initialized.
         SwingUtilities.invokeLater(new Runnable() {
                 public void run() {
                     textPanel.getViewport().setViewPosition(new Point(0,0));
@@ -275,7 +293,7 @@ public class AboutDialog extends FocusDialog implements ActionListener {
 
         tempPanel = new JPanel(new BorderLayout());
         if(DesktopManager.canBrowse()) {
-            tempPanel.add(homeButton = new JButton(MuAction.getStandardLabel(com.mucommander.ui.action.impl.GoToWebsiteAction.class)), BorderLayout.NORTH);
+            tempPanel.add(homeButton = new JButton(ActionProperties.getActionLabel(GoToWebsiteAction.Descriptor.ACTION_ID)), BorderLayout.NORTH);
             homeButton.addActionListener(this);
         }
         else {
