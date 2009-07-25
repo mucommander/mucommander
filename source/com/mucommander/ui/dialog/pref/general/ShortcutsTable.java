@@ -22,8 +22,10 @@ import com.mucommander.AppLogger;
 import com.mucommander.runtime.JavaVersions;
 import com.mucommander.runtime.OsFamilies;
 import com.mucommander.runtime.OsVersions;
+import com.mucommander.ui.action.ActionDescriptor;
 import com.mucommander.ui.action.ActionKeymap;
 import com.mucommander.ui.action.ActionManager;
+import com.mucommander.ui.action.ActionProperties;
 import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.dialog.pref.component.PrefTable;
 import com.mucommander.ui.dialog.pref.general.ShortcutsPanel.TooltipBar;
@@ -59,8 +61,8 @@ import java.util.List;
  */
 public class ShortcutsTable extends PrefTable implements KeyListener, ListSelectionListener, FocusListener {
 
-	/** Row index to action class map */
-	private HashMap rowToAction;
+	/** Row index to action id map */
+	private HashMap rowToActionId;
 	
 	/** Row index to accelerator keystroke map */
 	private HashMap rowToAccelerator;
@@ -69,7 +71,7 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 	private HashMap rowToAlternateAccelerator;
 	
 	/** Row index to action tooltip map */
-	private HashMap rowToactionTooltip;
+	private HashMap actionToTooltip;
 	
 	/** Row index to action icon map */
 	private HashMap rowToIcon;
@@ -86,12 +88,13 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 	/** Comparator of actions according to their labels */
 	private static final Comparator ACTIONS_COMPARATOR = new Comparator() {
 		public int compare(Object o1, Object o2) {
-			// TODO: remove actions without a standard label?
+			/*// TODO: remove actions without a standard label?
 			if (MuAction.getStandardLabel((Class) o1) == null)
 				return 1;
 			if (MuAction.getStandardLabel((Class) o2) == null)
 				return -1;
-			return MuAction.getStandardLabel((Class) o1).compareTo(MuAction.getStandardLabel((Class) o2));
+			return MuAction.getStandardLabel((Class) o1).compareTo(MuAction.getStandardLabel((Class) o2));*/
+			return 1;
 		}
 	};
 	
@@ -211,10 +214,10 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 	}
 	
 	public void updateModel(ActionFilter filter) {
-		rowToAction = new HashMap();
+		rowToActionId = new HashMap();
 		rowToAccelerator = new HashMap();
 		rowToAlternateAccelerator = new HashMap();
-		rowToactionTooltip = new HashMap();
+		actionToTooltip = new HashMap();
 		rowToIcon = new HashMap();
 
 		setModel(new KeymapTableModel(createTableData(filter)));
@@ -240,8 +243,8 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 		return new KeyStrokeCellEditor(new RecordingKeyStrokeField((String) getValueAt(row, column)));
 	}
 	
-	private void setActionClass(Class action, int row) {
-		rowToAction.put(Integer.valueOf(row), action);
+	private void setActionClass(String actionId, int row) {
+		rowToActionId.put(Integer.valueOf(row), actionId);
 	}
 
 	private void setAccelerator(KeyStroke keyStroke, int row) {
@@ -265,7 +268,7 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 		Iterator iterator = state.getDirtyRowsIterator();
 		while(iterator.hasNext()) {
 			Integer row = (Integer) iterator.next();
-			ActionKeymap.changeActionAccelerators((Class) rowToAction.get(row),
+			ActionKeymap.changeActionAccelerators((String) rowToActionId.get(row),
 												  (KeyStroke) rowToAccelerator.get(row), 
 												  (KeyStroke) rowToAlternateAccelerator.get(row));
 		}
@@ -277,7 +280,7 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 	 * Builds the table data based of all actions with their associated keystrokes
 	 */
 	private Object[][] createTableData(ActionFilter filter) {
-		Enumeration actionClasses = ActionManager.getActionClasses();
+		Enumeration actionClasses = ActionManager.getActionIds();
 		
 		// Convert the action-classes to MuAction instances
 		List list = Collections.list(actionClasses);
@@ -286,39 +289,41 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 		Collections.sort(list, ACTIONS_COMPARATOR);
 
 		// Build the table data
-		Object[][] tableData = new Object[list.size()][NUM_OF_COLUMNS];
-		for (int row = 0; row < list.size(); ++row) {
-			Class actionClass = (Class) list.get(row);
-
-			ImageIcon actionIcon = MuAction.getStandardIcon(actionClass);
+		int nbRows = list.size();
+		Object[][] tableData = new Object[nbRows][NUM_OF_COLUMNS];
+		
+		for (int row = 0; row < nbRows; ++row) {
+			String actionId = (String) list.get(row);
+			ActionDescriptor actionDescriptor = ActionProperties.getActionDescriptor(actionId);
+			
+			ImageIcon actionIcon = actionDescriptor.getIcon();
 			if (actionIcon == null)
 				actionIcon = transparentIcon;			
 			rowToIcon.put(Integer.valueOf(row), IconManager.getPaddedIcon(actionIcon, new Insets(0, 4, 0, 4)));
 			
-			String actionLabel = MuAction.getStandardLabel(actionClass);
-			setActionClass(actionClass, row);
+			String actionLabel = actionDescriptor.getLabel();
+			setActionClass(actionId, row);
 			tableData[row][ACTION_DESCRIPTION_COLUMN_INDEX] = actionLabel;
 			
-			KeyStroke accelerator = ActionKeymap.getAccelerator(actionClass);
+			KeyStroke accelerator = ActionKeymap.getAccelerator(actionId);
 			setAccelerator(accelerator, row);
 			tableData[row][ACCELERATOR_COLUMN_INDEX] = KeyStrokeUtils.getKeyStrokeDisplayableRepresentation(accelerator);
 			
-			KeyStroke alternativeAccelerator = ActionKeymap.getAlternateAccelerator(actionClass);
+			KeyStroke alternativeAccelerator = ActionKeymap.getAlternateAccelerator(actionId);
 			setAlternativeAccelerator(alternativeAccelerator, row);
 			tableData[row][ALTERNATE_ACCELERATOR_COLUMN_INDEX] = KeyStrokeUtils.getKeyStrokeDisplayableRepresentation(alternativeAccelerator);
 			
-			String actionTooltip = MuAction.getStandardTooltip(actionClass);
+			String actionTooltip = actionDescriptor.getTooltip();
 			if (actionTooltip == null)
-				actionTooltip = MuAction.getStandardLabel(actionClass);
-			rowToactionTooltip.put(actionClass, actionTooltip);
-		
+				actionTooltip = actionLabel;
+			actionToTooltip.put(actionId, actionTooltip);
 		}
 
 		return tableData;
 	}
 	
 	private String getTooltipForRow(int row) {
-		return (String) rowToactionTooltip.get(rowToAction.get(Integer.valueOf(getSelectedRow())));
+		return (String) actionToTooltip.get(rowToActionId.get(Integer.valueOf(getSelectedRow())));
 	}
 
 	///////////////////////////
@@ -546,7 +551,7 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 	        	
 	        	if (isAlternativeActionCellSelected != isKeyStrokeRegisteredToAlternatuveAction || row != getSelectedRow()) {
 	        		String errorMessage = "The shortcut [" + KeyStrokeUtils.getKeyStrokeDisplayableRepresentation(pressedKeyStroke)
-	    			+ "] is already assigned to '" + ActionManager.getActionInstance((Class) rowToAction.get(rowAsInteger)).getLabel() + "'";
+	    			+ "] is already assigned to '" + ActionManager.getActionInstance((String) rowToActionId.get(rowAsInteger)).getLabel() + "'";
 	        		tooltipBar.showErrorMessage(errorMessage);
 	        		createCancelEditingStateThread(getCellEditor());
 	        	}

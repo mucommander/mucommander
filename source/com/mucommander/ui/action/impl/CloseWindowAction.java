@@ -47,7 +47,7 @@ public class CloseWindowAction extends MuAction {
     public void performAction() {
         // Closing the last window is equivalent to quitting the application: perform QuitAction in that case
         if(WindowManager.getMainFrames().size()==1)
-            ActionManager.performAction(QuitAction.class, mainFrame);
+            ActionManager.performAction(QuitAction.Descriptor.ACTION_ID, mainFrame);
         // Simply dispose the MainFrame
         else
             mainFrame.dispose();

@@ -69,20 +69,22 @@ public class ToolBarReader extends ToolBarIO {
 
     public void endDocument() {
         int nbActions = actionsV.size();
-        Class[] actions = new Class[nbActions];
-        actionsV.toArray(actions);        
+        String[] actionIds = new String[nbActions];
+        actionsV.toArray(actionIds);        
         actionsV = null;
 
-        ToolBarAttributes.setActions(actions);
+        ToolBarAttributes.setActions(actionIds);
     }
 
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
         if(qName.equals(BUTTON_ELEMENT)) {
-            String actionClassName = attributes.getValue(ACTION_ATTRIBUTE);
-            Class actionClass = ActionManager.getActionClass(actionClassName, fileVersion);
-            if (actionClass != null)
-            	actionsV.add(actionClass);
-            AppLogger.warning("Error in "+DEFAULT_TOOLBAR_FILE_NAME+": action class "+actionClassName+" not found");
+        	// Resolve action class
+            String actionAttribute = attributes.getValue(ACTION_ATTRIBUTE);
+            // TODO: read action ids
+            String actionId = ActionManager.extrapolateId(actionAttribute);
+            if (actionId != null)
+            	actionsV.add(actionId);
+            AppLogger.warning("Error in "+DEFAULT_TOOLBAR_FILE_NAME+": action class "+actionId+" not found");
         }
         else if(qName.equals(SEPARATOR_ELEMENT)) {
             actionsV.add(null);

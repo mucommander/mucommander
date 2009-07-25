@@ -68,7 +68,13 @@ public abstract class MuAction extends AbstractAction {
     /** Name of the alternate accelerator KeyStroke property */
     public final static String ALTERNATE_ACCELERATOR_PROPERTY_KEY = "alternate_accelerator";
     
-
+    // TODO: document
+    private boolean useStandardLabels;
+    
+    private boolean useStandardIcon;
+    
+    private boolean useStandardAccelerators;
+    
     /**
      * Convenience constructor which has the same effect as calling {@link #MuAction(MainFrame, Hashtable, boolean, boolean, boolean )}
      * with standard labels, icon and accelerators enabled.
@@ -115,7 +121,10 @@ public abstract class MuAction extends AbstractAction {
      */
     public MuAction(MainFrame mainFrame, Hashtable properties, boolean useStandardLabels, boolean useStandardIcon, boolean useStandardAccelerators) {
         this.mainFrame = mainFrame;
-
+        this.useStandardLabels = useStandardLabels;
+        this.useStandardIcon = useStandardIcon;
+        this.useStandardAccelerators = useStandardAccelerators;
+        
         // Add properties to this Action.
         // Property keys are expected to be String instances, those that are not will not be added.
         Enumeration keys = properties.keys();
@@ -147,18 +156,6 @@ public abstract class MuAction extends AbstractAction {
                 setToolTipText(getStandardTooltip());
         }
 
-        if(useStandardAccelerators) {
-            // Retrieve the standard accelerator (if any) and use it as this action's accelerator
-            KeyStroke accelerator = getStandardAccelerator();
-            if(accelerator!=null)
-                setAccelerator(accelerator);
-
-            // Retrieve the standard alternate accelerator (if any) and use it as this action's alternate accelerator
-            accelerator = getStandardAlternateAccelerator();
-            if(accelerator!=null)
-                setAlternateAccelerator(accelerator);
-        }
-
         if(useStandardIcon) {
             // Retrieve the standard icon image (if any) and use it as the action's icon
             ImageIcon icon = getStandardIcon();
@@ -176,6 +173,11 @@ public abstract class MuAction extends AbstractAction {
         return this.mainFrame;
     }
 
+    public boolean useStandradLabels() { return useStandardLabels; }
+    
+    public boolean useStandardIcon() { return useStandardIcon; }
+    
+    public boolean useStandardAccelerators() { return useStandardAccelerators; }
 
     /**
      * Returns the label of this action, <code>null</code> if this action has no label.
@@ -413,24 +415,6 @@ public abstract class MuAction extends AbstractAction {
     }
 
     /**
-     * Shorthand for {@link #getStandardAccelerator(Class)} called with the Class instance returned by {@link #getClass()}.
-     *
-     * @return the standard accelerator corresponding to this MuAction class, <code>null</code> if none was found
-     */
-    public KeyStroke getStandardAccelerator() {
-        return getStandardAccelerator(getClass());
-    }
-
-    /**
-     * Shorthand for {@link #getStandardAlternateAccelerator(Class)} called with the Class instance returned by {@link #getClass()}.
-     *
-     * @return the standard alternate accelerator corresponding to this MuAction class, <code>null</code> if none was found
-     */
-    public KeyStroke getStandardAlternateAccelerator() {
-        return getStandardAlternateAccelerator(getClass());
-    }
-
-    /**
      * Shorthand for {@link #getStandardIcon(Class)} called with the Class instance returned by {@link #getClass()}.
      *
      * @return the standard icon corresponding to this MuAction class, <code>null</code> if none was found
@@ -509,28 +493,6 @@ public abstract class MuAction extends AbstractAction {
      */
     public static String getStandardTooltipKey(Class action) {
         return action.getName()+".tooltip";
-    }
-
-    /**
-     * Queries {@link ActionKeymap} for an accelerator corresponding to the specified action.
-     * Returns the accelerator's KeyStroke or <code>null</code> if no corresponding accelerator was found.
-     *
-     * @param action a MuAction class descriptor
-     * @return the standard accelerator corresponding to the specified MuAction class, <code>null</code> if none was found
-     */
-    public static KeyStroke getStandardAccelerator(Class action) {
-        return ActionKeymap.getAccelerator(action);
-    }
-
-    /**
-     * Queries {@link ActionKeymap} for an alternate accelerator corresponding to the specified action.
-     * Returns the accelerator's KeyStroke or <code>null</code> if no corresponding accelerator was found.
-     *
-     * @param action a MuAction class descriptor
-     * @return the standard alternate accelerator corresponding to the specified MuAction class, <code>null</code> if none was found
-     */
-    public static KeyStroke getStandardAlternateAccelerator(Class action) {
-        return ActionKeymap.getAlternateAccelerator(action);
     }
 
     /**

@@ -32,7 +32,7 @@ import java.util.WeakHashMap;
 public class ToolBarAttributes {
 	
 	/** Command bar actions: Class instances or null to signify a separator */
-    private static Class actions[];
+    private static String actionIds[];
     
     private static boolean useDefaultActions = true;
     
@@ -40,38 +40,38 @@ public class ToolBarAttributes {
     private final static WeakHashMap listeners = new WeakHashMap();
     
     /** Default command bar actions: Class instances or null to signify a separator */
-    private final static Class[] DEFAULT_TOOLBAR_ACTIONS = new Class[] {
-            NewWindowAction.class,
-            GoBackAction.class,
-            GoForwardAction.class,
-            GoToParentAction.class,
+    private final static String[] DEFAULT_TOOLBAR_ACTIONS = new String[] {
+            NewWindowAction.Descriptor.ACTION_ID,
+            GoBackAction.Descriptor.ACTION_ID,
+            GoForwardAction.Descriptor.ACTION_ID,
+            GoToParentAction.Descriptor.ACTION_ID,
             null,
-            GoToHomeAction.class,
+            GoToHomeAction.Descriptor.ACTION_ID,
             null,
-            StopAction.class,
+            StopAction.Descriptor.ACTION_ID,
             null,
-            MarkGroupAction.class,
-            UnmarkGroupAction.class,
+            MarkGroupAction.Descriptor.ACTION_ID,
+            UnmarkGroupAction.Descriptor.ACTION_ID,
             null,
-            SwapFoldersAction.class,
-            SetSameFolderAction.class,
+            SwapFoldersAction.Descriptor.ACTION_ID,
+            SetSameFolderAction.Descriptor.ACTION_ID,
             null,
-            PackAction.class,
-            UnpackAction.class,
+            PackAction.Descriptor.ACTION_ID,
+            UnpackAction.Descriptor.ACTION_ID,
             null,
-            AddBookmarkAction.class,
-            EditBookmarksAction.class,
-            EditCredentialsAction.class,
+            AddBookmarkAction.Descriptor.ACTION_ID,
+            EditBookmarksAction.Descriptor.ACTION_ID,
+            EditCredentialsAction.Descriptor.ACTION_ID,
             null,
-            ConnectToServerAction.class,
-            ShowServerConnectionsAction.class,
-            RunCommandAction.class,
-            EmailAction.class,
+            ConnectToServerAction.Descriptor.ACTION_ID,
+            ShowServerConnectionsAction.Descriptor.ACTION_ID,
+            RunCommandAction.Descriptor.ACTION_ID,
+            EmailAction.Descriptor.ACTION_ID,
             null,
-            RevealInDesktopAction.class,
-            ShowFilePropertiesAction.class,
+            RevealInDesktopAction.Descriptor.ACTION_ID,
+            ShowFilePropertiesAction.Descriptor.ACTION_ID,
             null,
-            ShowPreferencesAction.class
+            ShowPreferencesAction.Descriptor.ACTION_ID
     };
 
     /**
@@ -81,7 +81,7 @@ public class ToolBarAttributes {
      * @param actions the action Class array to trim.
      * @return the trimmed action Class array, free of leading and trailing separators.
      */
-    private static Class[] trimActionsArray(Class[] actions) {
+    private static String[] trimActionsArray(String[] actions) {
         int start = 0;
         int end = actions.length;
 
@@ -89,13 +89,13 @@ public class ToolBarAttributes {
             start++;
 
         if(start==end)
-            return new Class[]{};
+            return new String[]{};
 
         while(end>start && actions[end-1]==null)
             end--;
 
         int newLen = end-start;
-        Class newActions[] = new Class[newLen];
+        String newActions[] = new String[newLen];
         System.arraycopy(actions, start, newActions, 0, newLen);
 
         return newActions;
@@ -107,8 +107,8 @@ public class ToolBarAttributes {
      *
      * @param actions the new toolbar actions classes
      */
-    public static void setActions(Class[] actions) {
-        ToolBarAttributes.actions = trimActionsArray(actions);
+    public static void setActions(String[] actions) {
+        ToolBarAttributes.actionIds = trimActionsArray(actions);
     	useDefaultActions = false;
     	fireActionsChanged();
     }
@@ -119,8 +119,8 @@ public class ToolBarAttributes {
      *
      * @return the actions classes that constitue the toolbar.
      */
-    public static Class[] getActions() {
-    	return useDefaultActions ? DEFAULT_TOOLBAR_ACTIONS : actions;
+    public static String[] getActions() {
+    	return useDefaultActions ? DEFAULT_TOOLBAR_ACTIONS : actionIds;
     }
     
     // - Listeners -------------------------------------------------------------

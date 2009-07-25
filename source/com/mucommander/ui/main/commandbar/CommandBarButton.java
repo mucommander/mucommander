@@ -27,9 +27,11 @@ import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.runtime.JavaVersions;
 import com.mucommander.runtime.OsFamilies;
 import com.mucommander.runtime.OsVersions;
+import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.button.NonFocusableButton;
 import com.mucommander.ui.icon.IconManager;
+import com.mucommander.ui.main.MainFrame;
 
 /**
  * 
@@ -37,16 +39,19 @@ import com.mucommander.ui.icon.IconManager;
  */
 public class CommandBarButton extends NonFocusableButton implements ConfigurationListener {
 
+	/** ID of the button's action */
+	private String actionId;
+	
 	/** Current icon scale factor */
     // The math.max(1.0f, ...) part is to workaround a bug which cause(d) this value to be set to 0.0 in the configuration file.
     private static float scaleFactor = Math.max(1.0f, MuConfiguration.getVariable(MuConfiguration.COMMAND_BAR_ICON_SCALE,
                                                                         MuConfiguration.DEFAULT_COMMAND_BAR_ICON_SCALE));
 	
-	public static CommandBarButton create(MuAction action) {
-		return action == null ? null : new CommandBarButton(action);
+    public static CommandBarButton create(String actionId, MainFrame mainFrame) {
+		return actionId == null ? null : new CommandBarButton(actionId, mainFrame);
 	}
 	
-	private CommandBarButton(MuAction action) {
+	private CommandBarButton(String actionId, MainFrame mainFrame) {
 		
 		// Use new JButton decorations introduced in Mac OS X 10.5 (Leopard) with Java 1.5 and up
         if(OsFamilies.MAC_OS_X.isCurrent() && OsVersions.MAC_OS_X_10_5.isCurrentOrHigher() && JavaVersions.JAVA_1_5.isCurrentOrHigher()) {
@@ -57,7 +62,9 @@ public class CommandBarButton extends NonFocusableButton implements Configuratio
             setMargin(new Insets(3,4,3,4));
         }
         
-        setButtonAction(action);
+        this.actionId = actionId;
+        
+        setButtonAction(actionId, mainFrame);
         
         // For Mac OS X whose default minimum width for buttons is enormous
         setMinimumSize(new Dimension(40, (int) getPreferredSize().getHeight()));
@@ -69,7 +76,8 @@ public class CommandBarButton extends NonFocusableButton implements Configuratio
 	/**
      * Sets the given button's action, custom label showing the accelerator and icon taking into account the scale factor.
      */
-    public void setButtonAction(MuAction action) {
+	public void setButtonAction(String actionID, MainFrame mainFrame) {
+    	MuAction action = ActionManager.getActionInstance(actionID, mainFrame);
     	setAction(action);
     	
         // Append the action's shortcut to the button's label
@@ -82,6 +90,15 @@ public class CommandBarButton extends NonFocusableButton implements Configuratio
         // Scale icon if scale factor is different from 1.0
         if(scaleFactor!=1.0f)
             setIcon(IconManager.getScaledIcon(action.getIcon(), scaleFactor));
+    }
+    
+    /**
+     * TODO: document
+     * 
+     * @return
+     */
+    public String getActionId() {
+    	return actionId;
     }
     
     ///////////////////////////////////

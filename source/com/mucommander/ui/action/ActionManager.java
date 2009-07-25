@@ -24,6 +24,10 @@ import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.WindowManager;
 
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import javax.swing.KeyStroke;
 
 /**
  * ActionManager provides methods to retrieve {@link MuAction} instances and invoke them. It keeps track of all the
@@ -44,153 +48,161 @@ import java.util.*;
  */
 public class ActionManager {
 
-    /** MuAction class -> factory map */
+    /** MuAction id -> factory map */
     private static Hashtable actionFactories = new Hashtable();
     
-    /** MuAction class name -> class map */
-    private static Hashtable actionClasses = new Hashtable();
-
     /** MainFrame -> MuAction map */
     private static WeakHashMap mainFrameActionsMap = new WeakHashMap();
+    
+    /** Pattern to resolve the action ID from action class path */
+    private final static Pattern pattern = Pattern.compile(".*\\.(.*)?Action");
 
     static {
-    	registerAction(AddBookmarkAction.class,                  new AddBookmarkAction.Factory());
-    	registerAction(BatchRenameAction.class,                  new BatchRenameAction.Factory());
-    	registerAction(BringAllToFrontAction.class,              new BringAllToFrontAction.Factory());
-    	registerAction(CalculateChecksumAction.class,            new CalculateChecksumAction.Factory());
-    	registerAction(ChangeDateAction.class,                   new ChangeDateAction.Factory());
-    	registerAction(ChangeLocationAction.class,               new ChangeLocationAction.Factory());
-    	registerAction(ChangePermissionsAction.class,            new ChangePermissionsAction.Factory());
-    	registerAction(CheckForUpdatesAction.class,              new CheckForUpdatesAction.Factory());
-    	registerAction(CloseWindowAction.class,                  new CloseWindowAction.Factory());
-//    	registerAction(CommandAction.class,           		     new CommandAction.Factory());
-    	registerAction(CompareFoldersAction.class,               new CompareFoldersAction.Factory());
-    	registerAction(ConnectToServerAction.class,              new ConnectToServerAction.Factory());
-    	registerAction(CopyAction.class,                         new CopyAction.Factory());
-    	registerAction(CopyFileNamesAction.class,                new CopyFileNamesAction.Factory());
-    	registerAction(CopyFilePathsAction.class,                new CopyFilePathsAction.Factory());
-    	registerAction(CopyFilesToClipboardAction.class,         new CopyFilesToClipboardAction.Factory());
-    	registerAction(CycleBackwardThruFolderPanelAction.class, new CycleBackwardThruFolderPanelAction.Factory());
-    	registerAction(CycleForwardThruFolderPanelAction.class,  new CycleForwardThruFolderPanelAction.Factory());
-    	registerAction(DeleteAction.class,         			     new DeleteAction.Factory());
-    	registerAction(DonateAction.class,    			         new DonateAction.Factory());
-    	registerAction(EditAction.class,     			         new EditAction.Factory());
-    	registerAction(EditBookmarksAction.class,                new EditBookmarksAction.Factory());
-    	registerAction(EditCredentialsAction.class,              new EditCredentialsAction.Factory());
-    	registerAction(EmailAction.class,          			     new EmailAction.Factory());
-    	registerAction(EmptyTrashAction.class,           	     new EmptyTrashAction.Factory());
-    	registerAction(ExploreBookmarksAction.class,             new ExploreBookmarksAction.Factory());
-    	registerAction(GarbageCollectAction.class,               new GarbageCollectAction.Factory());
-    	registerAction(GoBackAction.class,                       new GoBackAction.Factory());
-    	registerAction(GoForwardAction.class,                    new GoForwardAction.Factory());
-    	registerAction(GoToDocumentationAction.class,            new GoToDocumentationAction.Factory());
-    	registerAction(GoToForumsAction.class,                   new GoToForumsAction.Factory());
-    	registerAction(GoToHomeAction.class,                     new GoToHomeAction.Factory());
-    	registerAction(GoToParentAction.class,                   new GoToParentAction.Factory());
-    	registerAction(GoToParentInBothPanelsAction.class,       new GoToParentInBothPanelsAction.Factory());
-    	registerAction(GoToParentInOtherPanelAction.class,       new GoToParentInOtherPanelAction.Factory());
-    	registerAction(GoToRootAction.class,                     new GoToRootAction.Factory());
-    	registerAction(GoToWebsiteAction.class,                  new GoToWebsiteAction.Factory());
-    	registerAction(InternalEditAction.class,                 new InternalEditAction.Factory());
-    	registerAction(InternalViewAction.class,                 new InternalViewAction.Factory());
-    	registerAction(InvertSelectionAction.class,              new InvertSelectionAction.Factory());
-    	registerAction(LocalCopyAction.class,                    new LocalCopyAction.Factory());
-    	registerAction(MarkAllAction.class,           		     new MarkAllAction.Factory());
-    	registerAction(MarkExtensionAction.class,            	 new MarkExtensionAction.Factory());
-    	registerAction(MarkGroupAction.class,            		 new MarkGroupAction.Factory());
-    	registerAction(MarkPageDownAction.class,             	 new MarkPageDownAction.Factory());
-    	registerAction(MarkPageUpAction.class,                   new MarkPageUpAction.Factory());
-    	registerAction(MarkSelectedFileAction.class,             new MarkSelectedFileAction.Factory());
-    	registerAction(MarkUpToFirstRowAction.class,             new MarkUpToFirstRowAction.Factory());
-    	registerAction(MarkUpToLastRowAction.class,              new MarkUpToLastRowAction.Factory());
-    	registerAction(MaximizeWindowAction.class,               new MaximizeWindowAction.Factory());
-    	registerAction(MergeFileAction.class,            		 new MergeFileAction.Factory());
-    	registerAction(MinimizeWindowAction.class,               new MinimizeWindowAction.Factory());
-    	registerAction(MkdirAction.class,           			 new MkdirAction.Factory());
-    	registerAction(MkfileAction.class,		                 new MkfileAction.Factory());
-    	registerAction(MoveAction.class,		                 new MoveAction.Factory());
-    	registerAction(NewWindowAction.class,     		         new NewWindowAction.Factory());
-    	registerAction(OpenAction.class,          				 new OpenAction.Factory());
-    	registerAction(OpenInBothPanelsAction.class,             new OpenInBothPanelsAction.Factory());
-    	registerAction(OpenInOtherPanelAction.class,             new OpenInOtherPanelAction.Factory());
-//    	registerAction(OpenLocationAction.class,          	     new OpenLocationAction.Factory());
-    	registerAction(OpenNativelyAction.class,       		     new OpenNativelyAction.Factory());
-    	registerAction(OpenTrashAction.class,           	     new OpenTrashAction.Factory());
-    	registerAction(OpenURLInBrowserAction.class,             new OpenURLInBrowserAction.Factory());
-    	registerAction(PackAction.class,       			         new PackAction.Factory());
-    	registerAction(PasteClipboardFilesAction.class,          new PasteClipboardFilesAction.Factory());
-    	registerAction(PermanentDeleteAction.class,              new PermanentDeleteAction.Factory());
-    	registerAction(PopupLeftDriveButtonAction.class,         new PopupLeftDriveButtonAction.Factory());
-    	registerAction(PopupRightDriveButtonAction.class,        new PopupRightDriveButtonAction.Factory());
-    	registerAction(QuitAction.class,              			 new QuitAction.Factory());
-    	registerAction(RecallNextWindowAction.class,             new RecallNextWindowAction.Factory());
-    	registerAction(RecallPreviousWindowAction.class,         new RecallPreviousWindowAction.Factory());
-    	registerAction(RecallWindow10Action.class,               new RecallWindow10Action.Factory());
-    	registerAction(RecallWindow1Action.class,                new RecallWindow1Action.Factory());
-    	registerAction(RecallWindow2Action.class,                new RecallWindow2Action.Factory());
-    	registerAction(RecallWindow3Action.class,                new RecallWindow3Action.Factory());
-    	registerAction(RecallWindow4Action.class,                new RecallWindow4Action.Factory());
-    	registerAction(RecallWindow5Action.class,                new RecallWindow5Action.Factory());
-    	registerAction(RecallWindow6Action.class,                new RecallWindow6Action.Factory());
-    	registerAction(RecallWindow7Action.class,                new RecallWindow7Action.Factory());
-    	registerAction(RecallWindow8Action.class,                new RecallWindow8Action.Factory());
-    	registerAction(RecallWindow9Action.class,                new RecallWindow9Action.Factory());
-    	registerAction(RecallWindowAction.class,                 new RecallWindowAction.Factory());
-    	registerAction(RefreshAction.class,        		         new RefreshAction.Factory());
-    	registerAction(RenameAction.class,              		 new RenameAction.Factory());
-    	registerAction(ReportBugAction.class,       	         new ReportBugAction.Factory());
-    	registerAction(RevealInDesktopAction.class,              new RevealInDesktopAction.Factory());
-    	registerAction(ReverseSortOrderAction.class,             new ReverseSortOrderAction.Factory());
-    	registerAction(RunCommandAction.class,     		         new RunCommandAction.Factory());
-    	registerAction(SelectFirstRowAction.class,               new SelectFirstRowAction.Factory());
-    	registerAction(SelectLastRowAction.class,                new SelectLastRowAction.Factory());
-    	registerAction(SetSameFolderAction.class,                new SetSameFolderAction.Factory());
-    	registerAction(ShowAboutAction.class,          		     new ShowAboutAction.Factory());
-    	registerAction(ShowBookmarksQLAction.class,              new ShowBookmarksQLAction.Factory());
-    	registerAction(CustomizeCommandBarAction.class,  new CustomizeCommandBarAction.Factory());
-    	registerAction(ShowFilePropertiesAction.class,           new ShowFilePropertiesAction.Factory());
-    	registerAction(ShowKeyboardShortcutsAction.class,        new ShowKeyboardShortcutsAction.Factory());
-    	registerAction(ShowParentFoldersQLAction.class,          new ShowParentFoldersQLAction.Factory());
-    	registerAction(ShowPreferencesAction.class,              new ShowPreferencesAction.Factory());
-    	registerAction(ShowRecentExecutedFilesQLAction.class,    new ShowRecentExecutedFilesQLAction.Factory());
-    	registerAction(ShowRecentLocationsQLAction.class,        new ShowRecentLocationsQLAction.Factory());
-    	registerAction(ShowServerConnectionsAction.class,        new ShowServerConnectionsAction.Factory());
-    	registerAction(SortByDateAction.class,             		 new SortByDateAction.Factory());
-    	registerAction(SortByExtensionAction.class,              new SortByExtensionAction.Factory());
-    	registerAction(SortByGroupAction.class,            		 new SortByGroupAction.Factory());
-    	registerAction(SortByNameAction.class,           		 new SortByNameAction.Factory());
-    	registerAction(SortByOwnerAction.class,             	 new SortByOwnerAction.Factory());
-    	registerAction(SortByPermissionsAction.class,            new SortByPermissionsAction.Factory());
-    	registerAction(SortBySizeAction.class,              	 new SortBySizeAction.Factory());
-    	registerAction(SplitEquallyAction.class,             	 new SplitEquallyAction.Factory());
-    	registerAction(SplitFileAction.class,            		 new SplitFileAction.Factory());
-    	registerAction(SplitHorizontallyAction.class,            new SplitHorizontallyAction.Factory());
-    	registerAction(SplitVerticallyAction.class,              new SplitVerticallyAction.Factory());
-    	registerAction(StopAction.class,              			 new StopAction.Factory());
-    	registerAction(SwapFoldersAction.class,       	         new SwapFoldersAction.Factory());
-    	registerAction(SwitchActiveTableAction.class,            new SwitchActiveTableAction.Factory());
-    	registerAction(ToggleAutoSizeAction.class,               new ToggleAutoSizeAction.Factory());
-//    	registerAction(ToggleColumnAction.class,           	     new ToggleColumnAction.Factory());
-    	registerAction(ToggleCommandBarAction.class,             new ToggleCommandBarAction.Factory());
-    	registerAction(ToggleDateColumnAction.class,             new ToggleDateColumnAction.Factory());
-    	registerAction(ToggleExtensionColumnAction.class,        new ToggleExtensionColumnAction.Factory());
-    	registerAction(ToggleGroupColumnAction.class,            new ToggleGroupColumnAction.Factory());
-    	registerAction(ToggleHiddenFilesAction.class,            new ToggleHiddenFilesAction.Factory());
-    	registerAction(ToggleOwnerColumnAction.class,            new ToggleOwnerColumnAction.Factory());
-    	registerAction(TogglePermissionsColumnAction.class,      new TogglePermissionsColumnAction.Factory());
-    	registerAction(ToggleShowFoldersFirstAction.class,       new ToggleShowFoldersFirstAction.Factory());
-    	registerAction(ToggleSizeColumnAction.class,             new ToggleSizeColumnAction.Factory());
-    	registerAction(ToggleStatusBarAction.class,              new ToggleStatusBarAction.Factory());
-    	registerAction(ToggleToolBarAction.class,                new ToggleToolBarAction.Factory());
-    	registerAction(ToggleTreeAction.class,             		 new ToggleTreeAction.Factory());
-    	registerAction(UnmarkAllAction.class,            		 new UnmarkAllAction.Factory());
-    	registerAction(UnmarkGroupAction.class,            		 new UnmarkGroupAction.Factory());
-    	registerAction(UnpackAction.class,             			 new UnpackAction.Factory());
-    	registerAction(ViewAction.class,              			 new ViewAction.Factory());
+    	registerAction(new AddBookmarkAction.Descriptor(),                  new AddBookmarkAction.Factory());
+    	registerAction(new BatchRenameAction.Descriptor(),                  new BatchRenameAction.Factory());
+    	registerAction(new BringAllToFrontAction.Descriptor(),              new BringAllToFrontAction.Factory());
+    	registerAction(new CalculateChecksumAction.Descriptor(),            new CalculateChecksumAction.Factory());
+    	registerAction(new ChangeDateAction.Descriptor(),                   new ChangeDateAction.Factory());
+    	registerAction(new ChangeLocationAction.Descriptor(),               new ChangeLocationAction.Factory());
+    	registerAction(new ChangePermissionsAction.Descriptor(),            new ChangePermissionsAction.Factory());
+    	registerAction(new CheckForUpdatesAction.Descriptor(),              new CheckForUpdatesAction.Factory());
+    	registerAction(new CloseWindowAction.Descriptor(),                  new CloseWindowAction.Factory());
+//    	registerAction(new CommandAction.Descriptor(),           		     new CommandAction.Factory());
+    	registerAction(new CompareFoldersAction.Descriptor(),               new CompareFoldersAction.Factory());
+    	registerAction(new ConnectToServerAction.Descriptor(),              new ConnectToServerAction.Factory());
+    	registerAction(new CopyAction.Descriptor(),                         new CopyAction.Factory());
+    	registerAction(new CopyFileNamesAction.Descriptor(),                new CopyFileNamesAction.Factory());
+    	registerAction(new CopyFilePathsAction.Descriptor(),                new CopyFilePathsAction.Factory());
+    	registerAction(new CopyFilesToClipboardAction.Descriptor(),         new CopyFilesToClipboardAction.Factory());
+    	registerAction(new CycleBackwardThruFolderPanelAction.Descriptor(), new CycleBackwardThruFolderPanelAction.Factory());
+    	registerAction(new CycleForwardThruFolderPanelAction.Descriptor(),  new CycleForwardThruFolderPanelAction.Factory());
+    	registerAction(new DeleteAction.Descriptor(),         			    new DeleteAction.Factory());
+    	registerAction(new DonateAction.Descriptor(),    			        new DonateAction.Factory());
+    	registerAction(new EditAction.Descriptor(),     			        new EditAction.Factory());
+    	registerAction(new EditBookmarksAction.Descriptor(),                new EditBookmarksAction.Factory());
+    	registerAction(new EditCredentialsAction.Descriptor(),              new EditCredentialsAction.Factory());
+    	registerAction(new EmailAction.Descriptor(),          			    new EmailAction.Factory());
+    	registerAction(new EmptyTrashAction.Descriptor(),           	    new EmptyTrashAction.Factory());
+    	registerAction(new ExploreBookmarksAction.Descriptor(),             new ExploreBookmarksAction.Factory());
+    	registerAction(new GarbageCollectAction.Descriptor(),               new GarbageCollectAction.Factory());
+    	registerAction(new GoBackAction.Descriptor(),                       new GoBackAction.Factory());
+    	registerAction(new GoForwardAction.Descriptor(),                    new GoForwardAction.Factory());
+    	registerAction(new GoToDocumentationAction.Descriptor(),            new GoToDocumentationAction.Factory());
+    	registerAction(new GoToForumsAction.Descriptor(),                   new GoToForumsAction.Factory());
+    	registerAction(new GoToHomeAction.Descriptor(),                     new GoToHomeAction.Factory());
+    	registerAction(new GoToParentAction.Descriptor(),                   new GoToParentAction.Factory());
+    	registerAction(new GoToParentInBothPanelsAction.Descriptor(),       new GoToParentInBothPanelsAction.Factory());
+    	registerAction(new GoToParentInOtherPanelAction.Descriptor(),       new GoToParentInOtherPanelAction.Factory());
+    	registerAction(new GoToRootAction.Descriptor(),                     new GoToRootAction.Factory());
+    	registerAction(new GoToWebsiteAction.Descriptor(),                  new GoToWebsiteAction.Factory());
+    	registerAction(new InternalEditAction.Descriptor(),                 new InternalEditAction.Factory());
+    	registerAction(new InternalViewAction.Descriptor(),                 new InternalViewAction.Factory());
+    	registerAction(new InvertSelectionAction.Descriptor(),              new InvertSelectionAction.Factory());
+    	registerAction(new LocalCopyAction.Descriptor(),                    new LocalCopyAction.Factory());
+    	registerAction(new MarkAllAction.Descriptor(),           		    new MarkAllAction.Factory());
+    	registerAction(new MarkExtensionAction.Descriptor(),            	new MarkExtensionAction.Factory());
+    	registerAction(new MarkGroupAction.Descriptor(),            		new MarkGroupAction.Factory());
+    	registerAction(new MarkPageDownAction.Descriptor(),             	new MarkPageDownAction.Factory());
+    	registerAction(new MarkPageUpAction.Descriptor(),                   new MarkPageUpAction.Factory());
+    	registerAction(new MarkSelectedFileAction.Descriptor(),             new MarkSelectedFileAction.Factory());
+    	registerAction(new MarkUpToFirstRowAction.Descriptor(),             new MarkUpToFirstRowAction.Factory());
+    	registerAction(new MarkUpToLastRowAction.Descriptor(),              new MarkUpToLastRowAction.Factory());
+    	registerAction(new MaximizeWindowAction.Descriptor(),               new MaximizeWindowAction.Factory());
+    	registerAction(new MergeFileAction.Descriptor(),            		new MergeFileAction.Factory());
+    	registerAction(new MinimizeWindowAction.Descriptor(),               new MinimizeWindowAction.Factory());
+    	registerAction(new MkdirAction.Descriptor(),           			    new MkdirAction.Factory());
+    	registerAction(new MkfileAction.Descriptor(),		                new MkfileAction.Factory());
+    	registerAction(new MoveAction.Descriptor(),		                    new MoveAction.Factory());
+    	registerAction(new NewWindowAction.Descriptor(),     		        new NewWindowAction.Factory());
+    	registerAction(new OpenAction.Descriptor(),          				new OpenAction.Factory());
+    	registerAction(new OpenInBothPanelsAction.Descriptor(),             new OpenInBothPanelsAction.Factory());
+    	registerAction(new OpenInOtherPanelAction.Descriptor(),             new OpenInOtherPanelAction.Factory());
+//    	registerAction(new OpenLocationAction.Descriptor(),          	    new OpenLocationAction.Factory());
+    	registerAction(new OpenNativelyAction.Descriptor(),       		    new OpenNativelyAction.Factory());
+    	registerAction(new OpenTrashAction.Descriptor(),           	        new OpenTrashAction.Factory());
+    	registerAction(new OpenURLInBrowserAction.Descriptor(),             new OpenURLInBrowserAction.Factory());
+    	registerAction(new PackAction.Descriptor(),       			        new PackAction.Factory());
+    	registerAction(new PasteClipboardFilesAction.Descriptor(),          new PasteClipboardFilesAction.Factory());
+    	registerAction(new PermanentDeleteAction.Descriptor(),              new PermanentDeleteAction.Factory());
+    	registerAction(new PopupLeftDriveButtonAction.Descriptor(),         new PopupLeftDriveButtonAction.Factory());
+    	registerAction(new PopupRightDriveButtonAction.Descriptor(),        new PopupRightDriveButtonAction.Factory());
+    	registerAction(new QuitAction.Descriptor(),              			new QuitAction.Factory());
+    	registerAction(new RecallNextWindowAction.Descriptor(),             new RecallNextWindowAction.Factory());
+    	registerAction(new RecallPreviousWindowAction.Descriptor(),         new RecallPreviousWindowAction.Factory());
+    	registerAction(new RecallWindow10Action.Descriptor(),               new RecallWindow10Action.Factory());
+    	registerAction(new RecallWindow1Action.Descriptor(),                new RecallWindow1Action.Factory());
+    	registerAction(new RecallWindow2Action.Descriptor(),                new RecallWindow2Action.Factory());
+    	registerAction(new RecallWindow3Action.Descriptor(),                new RecallWindow3Action.Factory());
+    	registerAction(new RecallWindow4Action.Descriptor(),                new RecallWindow4Action.Factory());
+    	registerAction(new RecallWindow5Action.Descriptor(),                new RecallWindow5Action.Factory());
+    	registerAction(new RecallWindow6Action.Descriptor(),                new RecallWindow6Action.Factory());
+    	registerAction(new RecallWindow7Action.Descriptor(),                new RecallWindow7Action.Factory());
+    	registerAction(new RecallWindow8Action.Descriptor(),                new RecallWindow8Action.Factory());
+    	registerAction(new RecallWindow9Action.Descriptor(),                new RecallWindow9Action.Factory());
+    	registerAction(new RecallWindowAction.Descriptor(),                 new RecallWindowAction.Factory());
+    	registerAction(new RefreshAction.Descriptor(),        		        new RefreshAction.Factory());
+    	registerAction(new RenameAction.Descriptor(),              		    new RenameAction.Factory());
+    	registerAction(new ReportBugAction.Descriptor(),       	            new ReportBugAction.Factory());
+    	registerAction(new RevealInDesktopAction.Descriptor(),              new RevealInDesktopAction.Factory());
+    	registerAction(new ReverseSortOrderAction.Descriptor(),             new ReverseSortOrderAction.Factory());
+    	registerAction(new RunCommandAction.Descriptor(),     		        new RunCommandAction.Factory());
+    	registerAction(new SelectFirstRowAction.Descriptor(),               new SelectFirstRowAction.Factory());
+    	registerAction(new SelectLastRowAction.Descriptor(),                new SelectLastRowAction.Factory());
+    	registerAction(new SetSameFolderAction.Descriptor(),                new SetSameFolderAction.Factory());
+    	registerAction(new ShowAboutAction.Descriptor(),          		    new ShowAboutAction.Factory());
+    	registerAction(new ShowBookmarksQLAction.Descriptor(),              new ShowBookmarksQLAction.Factory());
+    	registerAction(new CustomizeCommandBarAction.Descriptor(),          new CustomizeCommandBarAction.Factory());
+    	registerAction(new ShowFilePropertiesAction.Descriptor(),           new ShowFilePropertiesAction.Factory());
+    	registerAction(new ShowKeyboardShortcutsAction.Descriptor(),        new ShowKeyboardShortcutsAction.Factory());
+    	registerAction(new ShowParentFoldersQLAction.Descriptor(),          new ShowParentFoldersQLAction.Factory());
+    	registerAction(new ShowPreferencesAction.Descriptor(),              new ShowPreferencesAction.Factory());
+    	registerAction(new ShowRecentExecutedFilesQLAction.Descriptor(),    new ShowRecentExecutedFilesQLAction.Factory());
+    	registerAction(new ShowRecentLocationsQLAction.Descriptor(),        new ShowRecentLocationsQLAction.Factory());
+    	registerAction(new ShowServerConnectionsAction.Descriptor(),        new ShowServerConnectionsAction.Factory());
+    	registerAction(new SortByDateAction.Descriptor(),             		new SortByDateAction.Factory());
+    	registerAction(new SortByExtensionAction.Descriptor(),              new SortByExtensionAction.Factory());
+    	registerAction(new SortByGroupAction.Descriptor(),            		new SortByGroupAction.Factory());
+    	registerAction(new SortByNameAction.Descriptor(),           		new SortByNameAction.Factory());
+    	registerAction(new SortByOwnerAction.Descriptor(),               	new SortByOwnerAction.Factory());
+    	registerAction(new SortByPermissionsAction.Descriptor(),            new SortByPermissionsAction.Factory());
+    	registerAction(new SortBySizeAction.Descriptor(),                   new SortBySizeAction.Factory());
+    	registerAction(new SplitEquallyAction.Descriptor(),             	new SplitEquallyAction.Factory());
+    	registerAction(new SplitFileAction.Descriptor(),            		new SplitFileAction.Factory());
+    	registerAction(new SplitHorizontallyAction.Descriptor(),            new SplitHorizontallyAction.Factory());
+    	registerAction(new SplitVerticallyAction.Descriptor(),              new SplitVerticallyAction.Factory());
+    	registerAction(new StopAction.Descriptor(),              			new StopAction.Factory());
+    	registerAction(new SwapFoldersAction.Descriptor(),       	        new SwapFoldersAction.Factory());
+    	registerAction(new SwitchActiveTableAction.Descriptor(),            new SwitchActiveTableAction.Factory());
+    	registerAction(new ToggleAutoSizeAction.Descriptor(),               new ToggleAutoSizeAction.Factory());
+//    	registerAction(new ToggleColumnAction.Descriptor(),           	    new ToggleColumnAction.Factory());
+    	registerAction(new ToggleCommandBarAction.Descriptor(),             new ToggleCommandBarAction.Factory());
+    	registerAction(new ToggleDateColumnAction.Descriptor(),             new ToggleDateColumnAction.Factory());
+    	registerAction(new ToggleExtensionColumnAction.Descriptor(),        new ToggleExtensionColumnAction.Factory());
+    	registerAction(new ToggleGroupColumnAction.Descriptor(),            new ToggleGroupColumnAction.Factory());
+    	registerAction(new ToggleHiddenFilesAction.Descriptor(),            new ToggleHiddenFilesAction.Factory());
+    	registerAction(new ToggleOwnerColumnAction.Descriptor(),            new ToggleOwnerColumnAction.Factory());
+    	registerAction(new TogglePermissionsColumnAction.Descriptor(),      new TogglePermissionsColumnAction.Factory());
+    	registerAction(new ToggleShowFoldersFirstAction.Descriptor(),       new ToggleShowFoldersFirstAction.Factory());
+    	registerAction(new ToggleSizeColumnAction.Descriptor(),             new ToggleSizeColumnAction.Factory());
+    	registerAction(new ToggleStatusBarAction.Descriptor(),              new ToggleStatusBarAction.Factory());
+    	registerAction(new ToggleToolBarAction.Descriptor(),                new ToggleToolBarAction.Factory());
+    	registerAction(new ToggleTreeAction.Descriptor(),             	    new ToggleTreeAction.Factory());
+    	registerAction(new UnmarkAllAction.Descriptor(),            		new UnmarkAllAction.Factory());
+    	registerAction(new UnmarkGroupAction.Descriptor(),            		new UnmarkGroupAction.Factory());
+    	registerAction(new UnpackAction.Descriptor(),             			new UnpackAction.Factory());
+    	registerAction(new ViewAction.Descriptor(),              			new ViewAction.Factory());
     }
     
-    public static Enumeration getActionClasses() {
-    	return actionClasses.elements();
+    public static Enumeration getActionIds() {
+    	return actionFactories.keys();
+    }
+    
+    public static String extrapolateId(String actionClassPath) {
+    	if (actionClassPath == null) return null;
+    	Matcher matcher = pattern.matcher(actionClassPath);
+    	return matcher.matches() ? 
+    			matcher.group(1)
+    			: actionClassPath;
     }
     
     /**
@@ -198,9 +210,9 @@ public class ActionManager {
      * 
      * @return sorted list of the action classes.
      */
-    public static List getSortedActionClasses() {
+    public static List getSortedActionIds() {
     	// Convert the action-classes to MuAction instances
-		List list = Collections.list(actionClasses.elements());
+		List list = Collections.list(actionFactories.keys());
 		
 		// Sort actions by their labels
 		Collections.sort(list, new Comparator() {
@@ -217,17 +229,27 @@ public class ActionManager {
 		return list;
     }
     
-    public static void registerAction(Class actionClass, ActionFactory actionFactory) {
-    	actionFactories.put(actionClass, actionFactory);
-    	actionClasses.put(actionClass.getName(), actionClass);
+    /**
+     * TODO: document
+     * 
+     * @param actionDescriptor
+     * @param actionFactory
+     */
+    public static void registerAction(ActionDescriptor actionDescriptor, ActionFactory actionFactory) {
+    	actionFactories.put(actionDescriptor.getId(), actionFactory);
+    	ActionProperties.addActionDescriptor(actionDescriptor);
     }
     
-    public static Class getActionClass(String actionClassName, String version) {
-    	Class actionClass = (Class) actionClasses.get(actionClassName);
-    	return actionClass != null ? actionClass :
-    								 (Class) actionClasses.get(actionClassName.replaceFirst("com.mucommander.ui.action", "com.mucommander.ui.action.impl"));
+    /**
+     * TODO: document
+     * 
+     * @param actionId
+     * @return
+     */
+    public static boolean isActionExist(String actionId) {    	
+    	return actionId != null ? actionFactories.containsKey(actionId) : false;
     }
-
+    
     /**
      * Convenience method that returns an instance of the given MuAction class, and associated with the specified
      * MainFrame. This method creates an ActionParameters with no initial property, passes it to
@@ -238,8 +260,8 @@ public class ActionManager {
      * @return a MuAction instance matching the given MuAction Class and MainFrame, <code>null</code> if the
      * class could not be found or could not be instantiated.
      */
-    public static MuAction getActionInstance(Class actionClass, MainFrame mainFrame) {
-        return getActionInstance(new ActionParameters(actionClass), mainFrame);
+    public static MuAction getActionInstance(String actionId, MainFrame mainFrame) {
+        return getActionInstance(new ActionParameters(actionId), mainFrame);
     }
 
     /**
@@ -248,8 +270,8 @@ public class ActionManager {
      * @param actionClass - MuAction class.
      * @return the corresponding MuAction instance for the given MuAction class in the current MainFrame.
      */
-    public static MuAction getActionInstance(Class actionClass) {
-        return getActionInstance(new ActionParameters(actionClass), WindowManager.getCurrentMainFrame());
+    public static MuAction getActionInstance(String actionId) {
+        return getActionInstance(new ActionParameters(actionId), WindowManager.getCurrentMainFrame());
     }
 
     /**
@@ -273,14 +295,16 @@ public class ActionManager {
         }
 
         // Looks for an existing MuAction instance used by the specified MainFrame
-        MuAction action = (MuAction)mainFrameActions.get(actionParameters);
-        if(action==null) {
-            Class actionClass = actionParameters.getActionClass();
+        if (mainFrameActions.containsKey(actionParameters)) {
+        	return ((ActionAndIdPair) mainFrameActions.get(actionParameters)).getAction();
+        }
+        else {
+            String actionId = actionParameters.getActionId();
 
             // Looks for the action's factory
-            ActionFactory actionFactory = (ActionFactory) actionFactories.get(actionClass);
+            ActionFactory actionFactory = (ActionFactory) actionFactories.get(actionId);
             if(actionFactory == null) {
-            	AppLogger.fine("couldn't initiate action: " + actionClass.getName() + ", its factory wasn't found");
+            	AppLogger.fine("couldn't initiate action: " + actionId + ", its factory wasn't found");
             	return null;
             }
 
@@ -295,34 +319,46 @@ public class ActionManager {
             	properties = (Hashtable)properties.clone();
             }
 
-            // Instanciate the MuAction class
-            action = actionFactory.createAction(mainFrame, properties);
-            mainFrameActions.put(actionParameters, action);
-        }
+            // Instantiate the MuAction class
+            MuAction action = actionFactory.createAction(mainFrame, properties);
+            mainFrameActions.put(actionParameters, new ActionAndIdPair(action, actionId));
+            
+            if(action.useStandardAccelerators()) {
+                // Retrieve the standard accelerator (if any) and use it as this action's accelerator
+                KeyStroke accelerator = ActionKeymap.getAccelerator(actionId);
+                if(accelerator!=null)
+                    action.setAccelerator(accelerator);
 
-        return action;
+                // Retrieve the standard alternate accelerator (if any) and use it as this action's alternate accelerator
+                accelerator = ActionKeymap.getAlternateAccelerator(actionId);
+                if(accelerator!=null)
+                    action.setAlternateAccelerator(accelerator);
+            }
+            
+            return action;
+        }
     }
 
 
     /**
-     * Returns a Vector of all MuAction instances matching the specified Class.
+     * Returns a Vector of all MuAction instances matching the specified action id.
      *
-     * @param muActionClass the MuAction class to compare instances against
-     * @return  a Vector of all MuAction instances matching the specified Class
+     * @param muActionId the MuAction id to compare instances against
+     * @return  a Vector of all MuAction instances matching the specified action id
      */
-    public static Vector getActionInstances(Class muActionClass) {
+    public static Vector getActionInstances(String muActionId) {
         Vector actionInstances = new Vector();
 
         // Iterate on all MainFrame instances
         Iterator mainFrameActions = mainFrameActionsMap.values().iterator();
         while(mainFrameActions.hasNext()) {
-            Iterator actions = ((Hashtable)mainFrameActions.next()).values().iterator();
-            // Iterate on all the MainFrame's actions
-            while(actions.hasNext()) {
-                MuAction action = (MuAction)actions.next();
-                if(action.getClass().equals(muActionClass)) {
+            Iterator actionAndIds = ((Hashtable)mainFrameActions.next()).values().iterator();
+            // Iterate on all the MainFrame's actions and their ids pairs
+            while(actionAndIds.hasNext()) {
+                ActionAndIdPair pair = (ActionAndIdPair)actionAndIds.next();
+                if(pair.getId().equals(muActionId)) {
                     // Found an action matching the specified class
-                    actionInstances.add(action);
+                    actionInstances.add(pair.getAction());
                     // Jump to the next MainFrame
                     break;
                 }
@@ -331,7 +367,6 @@ public class ActionManager {
 
         return actionInstances;
     }
-
 
     /**
      * Convenience method that retrieves an instance of the MuAction denoted by the given Class and associated
@@ -343,10 +378,9 @@ public class ActionManager {
      * @param mainFrame the MainFrame the action belongs to
      * @return true if the action instance could be retrieved and the action performed, false otherwise 
      */
-    public static boolean performAction(Class actionClass, MainFrame mainFrame) {
-        return performAction(new ActionParameters(actionClass), mainFrame);
+    public static boolean performAction(String actionId, MainFrame mainFrame) {
+        return performAction(new ActionParameters(actionId), mainFrame);
     }
-
 
     /**
      * Convenience method that retrieves an instance of the MuAction denoted by the given {@link ActionParameters}
@@ -367,5 +401,22 @@ public class ActionManager {
         action.performAction();
 
         return true;
+    }
+    
+    /**
+     *  TODO: document
+     */
+    private static class ActionAndIdPair {
+    	private MuAction action;
+    	private String id;
+    	
+    	public ActionAndIdPair(MuAction action, String id) {
+    		this.action = action;
+    		this.id = id;
+    	}
+    	
+    	public MuAction getAction() { return action; }
+    	
+    	public String getId() { return id; }
     }
 }

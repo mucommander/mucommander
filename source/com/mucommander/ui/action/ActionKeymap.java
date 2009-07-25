@@ -18,9 +18,11 @@
 
 package com.mucommander.ui.action;
 
+import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedList;
+import java.util.Set;
 import java.util.Vector;
 
 import javax.swing.ActionMap;
@@ -40,52 +42,45 @@ import com.mucommander.ui.main.MainFrame;
 public class ActionKeymap {
 
     /** Maps action Class onto Keystroke instances*/
-    private static HashMap primaryActionKeymap = new HashMap();
+    private static HashMap customPrimaryActionKeymap = new HashMap();
     /** Maps action Class instances onto Keystroke instances*/
-    private static HashMap alternateActionKeymap = new HashMap();
+    private static HashMap customAlternateActionKeymap = new HashMap();
 
     /** Maps Keystroke instances onto action Class */
     private static HashMap acceleratorMap = new HashMap();
-    
-    /** Maps action Class onto default Keystroke instances*/
-    private static HashMap defaultPrimaryActionKeymap;
-    /** Maps action Class instances onto default Keystroke instances*/
-    private static HashMap defaultAlternateActionKeymap;
 
     ///////////////////
     ///// getters /////
     ///////////////////
     
-    public static KeyStroke getAccelerator(Class muActionClass) {
-        return (KeyStroke)primaryActionKeymap.get(muActionClass);
+    public static KeyStroke getAccelerator(String actionId) {
+    	if (customPrimaryActionKeymap.containsKey(actionId))
+    		return (KeyStroke)customPrimaryActionKeymap.get(actionId);
+        return ActionProperties.getDefaultAccelerator(actionId);
     }
 
-    public static KeyStroke getAlternateAccelerator(Class muActionClass) {
-        return (KeyStroke)alternateActionKeymap.get(muActionClass);
+    public static KeyStroke getAlternateAccelerator(String actionId) {
+    	if (customAlternateActionKeymap.containsKey(actionId))
+    		return (KeyStroke)customAlternateActionKeymap.get(actionId);
+    	return ActionProperties.getDefaultAlternativeAccelerator(actionId);
     }
 
     public static boolean isKeyStrokeRegistered(KeyStroke ks) {
-        return getRegisteredActionClassForKeystroke(ks)!=null;
+    	return getRegisteredActionIdForKeystroke(ks)!=null;
     }
 
-    public static Class getRegisteredActionClassForKeystroke(KeyStroke ks) {
-        return (Class)acceleratorMap.get(ks);
+    public static String getRegisteredActionIdForKeystroke(KeyStroke ks) {
+    	String actionID = (String)acceleratorMap.get(ks);
+        return actionID != null ? actionID : ActionProperties.getActionForKeyStroke(ks);
     }
 
     public static void registerActions(MainFrame mainFrame) {
-        JComponent leftTable = mainFrame.getLeftPanel().getFileTable();
+    	JComponent leftTable = mainFrame.getLeftPanel().getFileTable();
         JComponent rightTable = mainFrame.getRightPanel().getFileTable();
 
-        Iterator actionClassesIterator = primaryActionKeymap.keySet().iterator();
-        while(actionClassesIterator.hasNext()) {
-            MuAction action = ActionManager.getActionInstance((Class)actionClassesIterator.next(), mainFrame);
-            ActionKeymap.registerActionAccelerators(action, leftTable, JComponent.WHEN_FOCUSED);
-            ActionKeymap.registerActionAccelerators(action, rightTable, JComponent.WHEN_FOCUSED);
-        }
-
-        actionClassesIterator = alternateActionKeymap.keySet().iterator();
-        while(actionClassesIterator.hasNext()) {
-            MuAction action = ActionManager.getActionInstance((Class)actionClassesIterator.next(), mainFrame);
+        Enumeration actionIDs = ActionManager.getActionIds();
+        while(actionIDs.hasMoreElements()) {
+            MuAction action = ActionManager.getActionInstance((String)actionIDs.nextElement(), mainFrame);
             ActionKeymap.registerActionAccelerators(action, leftTable, JComponent.WHEN_FOCUSED);
             ActionKeymap.registerActionAccelerators(action, rightTable, JComponent.WHEN_FOCUSED);
         }
@@ -141,31 +136,40 @@ public class ActionKeymap {
     		unregisterActionAccelerator(action, accelerator, comp, condition);
     }
     
-    private static void registerActionAccelerators(Class muActionClass, KeyStroke accelerator, KeyStroke alternateAccelerator) {
-    	primaryActionKeymap.put(muActionClass, accelerator);
-    	if (accelerator!=null)
-    		acceleratorMap.put(accelerator, muActionClass);
+    private static void registerActionAccelerators(String actionId, KeyStroke accelerator, KeyStroke alternateAccelerator) {
+    	if (equals(accelerator, ActionProperties.getDefaultAccelerator(actionId)) &&
+    			equals(accelerator, ActionProperties.getDefaultAlternativeAccelerator(actionId))) {
+    		customPrimaryActionKeymap.remove(actionId);
+    		customAlternateActionKeymap.remove(actionId);
+    		acceleratorMap.remove(accelerator);
+    		acceleratorMap.remove(alternateAccelerator);
+    	}
+    	else {
+    		customPrimaryActionKeymap.put(actionId, accelerator);
+    		if (accelerator!=null)
+    			acceleratorMap.put(accelerator, actionId);
 
-    	alternateActionKeymap.put(muActionClass, alternateAccelerator);
-    	if (alternateAccelerator!=null)
-    		acceleratorMap.put(alternateAccelerator, muActionClass);
+    		customAlternateActionKeymap.put(actionId, alternateAccelerator);
+    		if (alternateAccelerator!=null)
+    			acceleratorMap.put(alternateAccelerator, actionId);
+    	}
     }
-    
-    public static void changeActionAccelerators(Class muActionClass, KeyStroke accelerator, KeyStroke alternateAccelerator) {
+
+    public static void changeActionAccelerators(String actionId, KeyStroke accelerator, KeyStroke alternateAccelerator) {
     	// Remove old accelerators (primary and alternate) from accelerators map
-    	KeyStroke oldAccelator = (KeyStroke)primaryActionKeymap.remove(muActionClass);
+    	KeyStroke oldAccelator = (KeyStroke)customPrimaryActionKeymap.remove(actionId);
     	if(oldAccelator!=null)
     		acceleratorMap.remove(oldAccelator);
 
-    	oldAccelator = (KeyStroke)alternateActionKeymap.remove(muActionClass);
+    	oldAccelator = (KeyStroke)customAlternateActionKeymap.remove(actionId);
     	if(oldAccelator!=null)
     		acceleratorMap.remove(oldAccelator);
 
     	// Register new accelerators
-    	registerActionAccelerators(muActionClass, accelerator, alternateAccelerator);
+    	registerActionAccelerators(actionId, accelerator, alternateAccelerator);
 
     	// Update each MainFrame's action instance and input map
-    	Vector actionInstances = ActionManager.getActionInstances(muActionClass);
+    	Vector actionInstances = ActionManager.getActionInstances(actionId);
     	int nbActionInstances = actionInstances.size();
     	for(int i=0; i<nbActionInstances; i++) {
     		MuAction action = (MuAction)actionInstances.elementAt(i);
@@ -184,15 +188,10 @@ public class ActionKeymap {
     }
     
     public static Iterator getCustomizedActions() {
-    	Iterator classesIterator = primaryActionKeymap.keySet().iterator();
-    	LinkedList modifiedClasses = new LinkedList();
-    	while(classesIterator.hasNext()) {
-    		Class actionClass = (Class) classesIterator.next();
-    		if (!equals((KeyStroke) primaryActionKeymap.get(actionClass), (KeyStroke) defaultPrimaryActionKeymap.get(actionClass)) ||
-    			!equals((KeyStroke) alternateActionKeymap.get(actionClass), (KeyStroke) defaultAlternateActionKeymap.get(actionClass)))
-    			modifiedClasses.add(actionClass);
-    	}
-    	return modifiedClasses.iterator();
+    	Set modifiedActions = new HashSet();
+    	modifiedActions.addAll(customPrimaryActionKeymap.keySet());
+    	modifiedActions.addAll(customAlternateActionKeymap.keySet());
+    	return modifiedActions.iterator();
     }
     
     /**
@@ -204,28 +203,25 @@ public class ActionKeymap {
     	return first.equals(second);
     }
     
-    static void setDefaultKeymap(HashMap defaultPrimaryActionKeymap, HashMap defaultAlternateActionKeymap) {
-    	ActionKeymap.defaultPrimaryActionKeymap = defaultPrimaryActionKeymap;
-    	ActionKeymap.defaultAlternateActionKeymap = defaultAlternateActionKeymap;
-    	registerActions(defaultPrimaryActionKeymap, defaultAlternateActionKeymap);
-    }
-    
     public static void restoreDefault() {
-    	registerActions(defaultPrimaryActionKeymap, defaultAlternateActionKeymap);
+    	customPrimaryActionKeymap.clear();
+    	customAlternateActionKeymap.clear();
+    	acceleratorMap.clear();
     }
     
     public static boolean isDefault() { return false; }
     
     static void registerActions(HashMap primary, HashMap alternate) {
-    	Iterator classesIterator = primary.keySet().iterator();
+    	Iterator actionIdsIterator = primary.keySet().iterator();
     	
-    	while(classesIterator.hasNext()) {
-    		Class actionClass = (Class) classesIterator.next();
+    	while(actionIdsIterator.hasNext()) {
+    		String actionId = (String) actionIdsIterator.next();
     		
     		// Add the action/keystroke mapping
-        	ActionKeymap.changeActionAccelerators(actionClass, 
-        			(KeyStroke) primary.get(actionClass), 
-        			(KeyStroke) alternate.get(actionClass));
+        	ActionKeymap.changeActionAccelerators(
+        			actionId, 
+        			(KeyStroke) primary.get(actionId), 
+        			(KeyStroke) alternate.get(actionId));
     	}
     }
 }

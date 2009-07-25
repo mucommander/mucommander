@@ -45,7 +45,7 @@ import java.util.Hashtable;
 public class ActionParameters {
 
     /** MuAction class descriptor */
-    private Class actionClass;
+    private String actionId;
 
     /** Initialization properties, null if there are no initialization properties */
     private Hashtable properties;
@@ -55,10 +55,10 @@ public class ActionParameters {
      * Convenience constructor which has the same effect as calling {@link #ActionParameters(Class, Hashtable)}
      * with a null value for the <code>properties</code> parameter.
      *
-     * @param actionClass a MuAction Class descriptor
+     * @param actioId a MuAction id
      */
-    public ActionParameters(Class actionClass) {
-        this(actionClass, null);
+    public ActionParameters(String actioId) {
+        this(actioId, null);
     }
 
     /**
@@ -73,16 +73,16 @@ public class ActionParameters {
      * @param muActionClass a MuAction Class descriptor
      * @param initProperties a Hashtable containing the properties that will be used to instantiate the specified MuAction class
      */
-    public ActionParameters(Class muActionClass, Hashtable initProperties) {
-        this.actionClass = muActionClass;
+    public ActionParameters(String muActionId, Hashtable initProperties) {
+        this.actionId = muActionId;
         this.properties = initProperties;
     }
 
     /**
      * Returns a Class instance referring to a class that extends MuAction.
      */
-    public Class getActionClass() {
-        return actionClass;
+    public String getActionId() {
+        return actionId;
     }
 
     /**
@@ -105,7 +105,7 @@ public class ActionParameters {
 
         ActionParameters ad = (ActionParameters)o;
 
-        return actionClass.getName().equals(ad.actionClass.getName())
+        return actionId.equals(ad.actionId)
             && (((properties==null || properties.isEmpty()) && (ad.properties==null || ad.properties.isEmpty()))
                 || (properties!=null && ad.properties!=null && properties.equals(ad.properties)));
     }
@@ -115,13 +115,13 @@ public class ActionParameters {
      * Returns a hash code value for this ActionParameters, making this class suitable for use as a key in a Hashtable.
      */
     public int hashCode() {
-        return actionClass.hashCode() + 27*(properties==null?0:properties.hashCode());
+        return actionId.hashCode() + 27*(properties==null?0:properties.hashCode());
     }
 
     /**
      * Returns a String representation of this ActionParameters. 
      */
     public String toString() {
-        return super.toString()+" class="+actionClass.getName()+" properties="+properties;
+        return super.toString()+" class="+actionId+" properties="+properties;
     }
 }

@@ -105,15 +105,15 @@ public class ToolBar extends JToolBar implements ConfigurationListener, MouseLis
         ToolBarAttributes.addToolBarAttributesListener(this);
     }
     
-    private void addButtons(Class[] actions) {
-    	int nbActions = actions.length;
+    private void addButtons(String[] actionIds) {
+    	int nbActions = actionIds.length;
         for(int i=0; i<nbActions; i++) {
-            Class actionClass = actions[i];
-            if(actionClass==null)
+            String actionId = actionIds[i];
+            if(actionId==null)
                 addSeparator(SEPARATOR_DIMENSION);
             else {
                 // Get a MuAction instance
-                MuAction action = ActionManager.getActionInstance(actionClass, mainFrame);
+                MuAction action = ActionManager.getActionInstance(actionId, mainFrame);
                 // Do not add buttons for actions that do not have an icon
                 if(action.getIcon()!=null)
                     addButton(action);
@@ -241,7 +241,7 @@ public class ToolBar extends JToolBar implements ConfigurationListener, MouseLis
             if (DesktopManager.isRightMouseButton(e)) {
                 //			if (e.isPopupTrigger()) {	// Doesn't work under Mac OS X (CTRL+click doesn't return true)
                 JPopupMenu popupMenu = new JPopupMenu();
-                popupMenu.add(ActionManager.getActionInstance(ToggleToolBarAction.class, mainFrame));
+                popupMenu.add(ActionManager.getActionInstance(ToggleToolBarAction.Descriptor.ACTION_ID, mainFrame));
                 popupMenu.show(this, e.getX(), e.getY());
                 popupMenu.setVisible(true);
             }

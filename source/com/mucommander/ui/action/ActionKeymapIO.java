@@ -40,6 +40,7 @@ public abstract class ActionKeymapIO extends DefaultHandler  {
 	protected final static String ROOT_ELEMENT = "keymap";
     protected final static String ACTION_ELEMENT = "action";
     protected final static String CLASS_ATTRIBUTE = "class";
+    protected final static String ID_ATTRIBUTE = "id";
     protected final static String PRIMARY_KEYSTROKE_ATTRIBUTE = "keystroke";
     protected final static String ALTERNATE_KEYSTROKE_ATTRIBUTE = "alt_keystroke";
     /** Attribute containing the last muCommander version that was used to create the file */
@@ -140,10 +141,6 @@ public abstract class ActionKeymapIO extends DefaultHandler  {
      * <p>This method must be called before requesting and registering any action.
      */
     public static void loadActionKeymap() throws Exception {
-    	// Load actions keymap resource file:
-    	ActionKeymapReader resourceFileReader = new ActionKeymapReader(ResourceLoader.getResourceAsFile(ACTION_KEYMAP_RESOURCE_PATH), true);
-    	ActionKeymap.setDefaultKeymap(resourceFileReader.getPrimaryActionsKeymap(), resourceFileReader.getAlternateActionsKeymap());
-    	
     	// Load user's file if exist
     	AbstractFile actionKeymapFile = getActionsFile();
     	if (actionKeymapFile != null && actionKeymapFile.exists()) {

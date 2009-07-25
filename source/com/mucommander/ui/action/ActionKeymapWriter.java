@@ -60,12 +60,12 @@ class ActionKeymapWriter extends ActionKeymapIO {
 		Iterator modifiedActionsIterator = ActionKeymap.getCustomizedActions();
 
 		while(modifiedActionsIterator.hasNext()) {
-			Class actionClass = (Class) modifiedActionsIterator.next();
+			String actionId = (String) modifiedActionsIterator.next();
 			KeyStroke[] keyStrokes = new KeyStroke[2];
-			keyStrokes[0] = ActionKeymap.getAccelerator(actionClass);
-			keyStrokes[1] = ActionKeymap.getAlternateAccelerator(actionClass);
+			keyStrokes[0] = ActionKeymap.getAccelerator(actionId);
+			keyStrokes[1] = ActionKeymap.getAlternateAccelerator(actionId);
 
-			combinedMapping.put(actionClass, keyStrokes);
+			combinedMapping.put(actionId, keyStrokes);
 		}
 		
 		BackupOutputStream bos = null;
@@ -100,8 +100,8 @@ class ActionKeymapWriter extends ActionKeymapIO {
     			if (actionMap != null) {
     				Enumeration enumeration = actionMap.keys();
     				while (enumeration.hasMoreElements()) {
-    					Class clazz = (Class) enumeration.nextElement();
-    					addMapping(clazz, (KeyStroke[]) actionMap.get(clazz));
+    					String actionId = (String) enumeration.nextElement();
+    					addMapping(actionId, (KeyStroke[]) actionMap.get(actionId));
     				}
     			}
 
@@ -110,11 +110,11 @@ class ActionKeymapWriter extends ActionKeymapIO {
     		}
     	}
 
-    	private void addMapping(Class actionClass, KeyStroke[] keyStrokes) throws IOException {
+    	private void addMapping(String actionId, KeyStroke[] keyStrokes) throws IOException {
     		XmlAttributes attributes = new XmlAttributes();
-    		attributes.add(CLASS_ATTRIBUTE, actionClass.getCanonicalName());
+    		attributes.add(ID_ATTRIBUTE, actionId);
 
-    	    AppLogger.finest("     Writing mapping of "  + actionClass.getSimpleName() + " to " + keyStrokes[0] + " and " + keyStrokes[1]);
+    	    AppLogger.finest("     Writing mapping of "  + actionId + " to " + keyStrokes[0] + " and " + keyStrokes[1]);
 
     		if (keyStrokes[0] != null)
     			attributes.add(PRIMARY_KEYSTROKE_ATTRIBUTE, KeyStrokeUtils.getKeyStrokeRepresentation(keyStrokes[0]));

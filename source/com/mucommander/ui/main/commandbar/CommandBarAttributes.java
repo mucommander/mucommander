@@ -32,18 +32,38 @@ import javax.swing.KeyStroke;
 public class CommandBarAttributes {
 
 	/** Command bar actions */
-    private static Class actions[];
+    private static String actionIds[];
     /** Command bar alternate actions */
-    private static Class alternateActions[];
+    private static String alternateActionIds[];
     /** Modifier key that triggers the display of alternate actions when pressed */
     private static KeyStroke modifier;
     
     /** Command bar default actions */
-    private static Class defaultActions[];
+    private static final String defaultActionIds[] = 
+    {
+    	com.mucommander.ui.action.impl.ViewAction.Descriptor.ACTION_ID,
+    	com.mucommander.ui.action.impl.EditAction.Descriptor.ACTION_ID,
+    	com.mucommander.ui.action.impl.CopyAction.Descriptor.ACTION_ID,
+    	com.mucommander.ui.action.impl.MoveAction.Descriptor.ACTION_ID,
+    	com.mucommander.ui.action.impl.MkdirAction.Descriptor.ACTION_ID,
+    	com.mucommander.ui.action.impl.DeleteAction.Descriptor.ACTION_ID,
+    	com.mucommander.ui.action.impl.RefreshAction.Descriptor.ACTION_ID,
+    	com.mucommander.ui.action.impl.CloseWindowAction.Descriptor.ACTION_ID
+    };
     /** Command bar default alternate actions */
-    private static Class defaultAlternateActions[];
+    private static final String defaultAlternateActionIds[] =
+    {
+    	null,
+    	null,
+    	com.mucommander.ui.action.impl.LocalCopyAction.Descriptor.ACTION_ID,
+    	com.mucommander.ui.action.impl.RenameAction.Descriptor.ACTION_ID,
+    	com.mucommander.ui.action.impl.MkfileAction.Descriptor.ACTION_ID,
+    	com.mucommander.ui.action.impl.PermanentDeleteAction.Descriptor.ACTION_ID,
+    	null,
+    	null
+    };
     /** Default modifier key that triggers the display of alternate actions when pressed */
-    private static KeyStroke defaultModifier;
+    private static KeyStroke defaultModifier = KeyStroke.getKeyStroke("SHIFT");
     
     /** Contains all registered command-bar attributes listeners, stored as weak references */
     private static WeakHashMap listeners = new WeakHashMap();
@@ -53,8 +73,7 @@ public class CommandBarAttributes {
      * The attributes are updated only if they are not already equal to the default attributes.
      */
     public static void restoreDefault() {
-    	if (!isDefault())
-    		setAttributes(defaultActions, defaultAlternateActions, defaultModifier);
+    	setAttributes(defaultActionIds, defaultAlternateActionIds, defaultModifier);
     }
     
     /**
@@ -62,24 +81,24 @@ public class CommandBarAttributes {
      * @return true if command-bar attributes equal to the default attributes.
      */
     public static boolean isDefault() {
-    	if (actions != defaultActions) {
-    		int nbActions = actions.length;
+    	if (actionIds != defaultActionIds) {
+    		int nbActions = actionIds.length;
     		for (int i=0; i<nbActions; ++i)
-    			if (!equals(actions[i], defaultActions[i]))
+    			if (!equals(actionIds[i], defaultActionIds[i]))
     				return false;
     	}
     	
-    	if (alternateActions != defaultAlternateActions) {
-    		int nbAlternateActions = alternateActions.length;
+    	if (alternateActionIds != defaultAlternateActionIds) {
+    		int nbAlternateActions = alternateActionIds.length;
     		for (int i=0; i<nbAlternateActions; ++i)
-    			if (!equals(alternateActions[i], defaultAlternateActions[i]))
+    			if (!equals(alternateActionIds[i], defaultAlternateActionIds[i]))
     				return false;
     	}
     	
     	return defaultModifier == modifier || defaultModifier.equals(modifier);
     }
     
-    private static boolean equals(Class action1, Class action2) {
+    private static boolean equals(Object action1, Object action2) {
     	if (action1 == null)
     		return action2 == null;
     	return action1.equals(action2);
@@ -90,27 +109,15 @@ public class CommandBarAttributes {
     ///////////////
     
     /**
-     * This method is used to set the default attributes of command-bar.
-     * This method should be called only once, when parsing the command-bar resource file, as it 
-     * updates the command-bar with the given default values.
-     */
-    static void setDefaultAttributes(Class[] defaultActions, Class[] defaultAlternateActions, KeyStroke defaultModifier) {
-    	CommandBarAttributes.defaultActions = defaultActions;
-    	CommandBarAttributes.defaultAlternateActions = defaultAlternateActions;
-    	CommandBarAttributes.defaultModifier = defaultModifier;
-    	setAttributes(defaultActions, defaultAlternateActions, defaultModifier);
-    }
-    
-    /**
      * This method is used to set
      * 
      * @param actions          standard command-bar actions.
      * @param alternateActions alternate command-bar actions.
      * @param modifier         command-bar modifier.
      */
-    public static void setAttributes(Class[] actions, Class[] alternateActions, KeyStroke modifier) {
-    	CommandBarAttributes.actions = actions;
-    	CommandBarAttributes.alternateActions = alternateActions;
+    public static void setAttributes(String[] actionIds, String[] alternateActionIds, KeyStroke modifier) {
+    	CommandBarAttributes.actionIds = actionIds;
+    	CommandBarAttributes.alternateActionIds = alternateActionIds;
     	CommandBarAttributes.modifier = modifier;
     	fireAttributesChanged();
     }
@@ -119,9 +126,9 @@ public class CommandBarAttributes {
     /// getters ///
     ///////////////
         
-    public static Class[] getActions() {return actions;}
+    public static String[] getActions() {return actionIds;}
     
-    public static Class[] getAlternateActions() {return alternateActions;}
+    public static String[] getAlternateActions() {return alternateActionIds;}
     
     public static KeyStroke getModifier() {return modifier;}
     

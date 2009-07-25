@@ -112,14 +112,14 @@ public class Columns {
     };
 
     /** Array of actions that allow columns to be shown/hidden, ordered by their identifier. */
-    private final static Class TOGGLE_COLUMN_ACTIONS[] = {
-        ToggleExtensionColumnAction.class,
+    private final static String TOGGLE_COLUMN_ACTIONS[] = {
+        ToggleExtensionColumnAction.Descriptor.ACTION_ID,
         null,
-        ToggleSizeColumnAction.class,
-        ToggleDateColumnAction.class,
-        TogglePermissionsColumnAction.class,
-        ToggleOwnerColumnAction.class,
-        ToggleGroupColumnAction.class
+        ToggleSizeColumnAction.Descriptor.ACTION_ID,
+        ToggleDateColumnAction.Descriptor.ACTION_ID,
+        TogglePermissionsColumnAction.Descriptor.ACTION_ID,
+        ToggleOwnerColumnAction.Descriptor.ACTION_ID,
+        ToggleGroupColumnAction.Descriptor.ACTION_ID
     };
 
     /**
@@ -128,7 +128,7 @@ public class Columns {
      * <code>null</code>.
      * @return an arrray of actions that allow columns to be shown/hidden, ordered by their identifier.
      */
-    public static Class[] getToggleColumnActions() {
+    public static String[] getToggleColumnActions() {
         return TOGGLE_COLUMN_ACTIONS;
     }
 

@@ -65,10 +65,10 @@ public class TrashPopupButton extends PopupButton {
         AbstractTrash trash = DesktopManager.getTrash();
         if(trash!=null) {
             if(trash.canOpen())
-                popupMenu.add(ActionManager.getActionInstance(OpenTrashAction.class, mainFrame));
+                popupMenu.add(ActionManager.getActionInstance(OpenTrashAction.Descriptor.ACTION_ID, mainFrame));
 
             if(trash.canEmpty()) {
-                JMenuItem emptyTrashItem = new JMenuItem(ActionManager.getActionInstance(EmptyTrashAction.class, mainFrame));
+                JMenuItem emptyTrashItem = new JMenuItem(ActionManager.getActionInstance(EmptyTrashAction.Descriptor.ACTION_ID, mainFrame));
 
                 // Retrieve the number of items that the trash contains, -1 if this information is not available.
                 int itemCount = trash.getItemCount();

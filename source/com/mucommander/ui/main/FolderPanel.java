@@ -304,12 +304,12 @@ public class FolderPanel extends JPanel implements FocusListener, ThemeListener 
      */
     private void registerCycleThruFolderPanelAction(JComponent component) {
         ActionKeymap.registerActionAccelerators(
-                ActionManager.getActionInstance(CycleForwardThruFolderPanelAction.class, mainFrame),
+                ActionManager.getActionInstance(CycleForwardThruFolderPanelAction.Descriptor.ACTION_ID, mainFrame),
                 component,
                 JComponent.WHEN_FOCUSED);
 
         ActionKeymap.registerActionAccelerators(
-                ActionManager.getActionInstance(CycleBackwardThruFolderPanelAction.class, mainFrame),
+                ActionManager.getActionInstance(CycleBackwardThruFolderPanelAction.Descriptor.ACTION_ID, mainFrame),
                 component,
                 JComponent.WHEN_FOCUSED);
     }

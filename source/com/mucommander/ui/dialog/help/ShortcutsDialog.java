@@ -56,19 +56,19 @@ public class ShortcutsDialog extends FocusDialog implements ActionListener {
     ////////////////////////
 
     private final static String NAVIGATION_TITLE = "shortcuts_dialog.navigation";
-    private final static Class NAVIGATION_ACTIONS[] =
+    private final static String NAVIGATION_ACTIONS[] =
     {
-        com.mucommander.ui.action.impl.PopupLeftDriveButtonAction.class,
-        com.mucommander.ui.action.impl.PopupRightDriveButtonAction.class,
-        com.mucommander.ui.action.impl.ChangeLocationAction.class,
-        com.mucommander.ui.action.impl.SwitchActiveTableAction.class,
-        com.mucommander.ui.action.impl.GoToParentAction.class,
-        com.mucommander.ui.action.impl.OpenAction.class,
-        com.mucommander.ui.action.impl.OpenNativelyAction.class,
-        com.mucommander.ui.action.impl.RevealInDesktopAction.class,
-        com.mucommander.ui.action.impl.StopAction.class,
-        com.mucommander.ui.action.impl.SelectFirstRowAction.class,
-        com.mucommander.ui.action.impl.SelectLastRowAction.class
+        com.mucommander.ui.action.impl.PopupLeftDriveButtonAction.Descriptor.ACTION_ID,
+        com.mucommander.ui.action.impl.PopupRightDriveButtonAction.Descriptor.ACTION_ID,
+        com.mucommander.ui.action.impl.ChangeLocationAction.Descriptor.ACTION_ID,
+        com.mucommander.ui.action.impl.SwitchActiveTableAction.Descriptor.ACTION_ID,
+        com.mucommander.ui.action.impl.GoToParentAction.Descriptor.ACTION_ID,
+        com.mucommander.ui.action.impl.OpenAction.Descriptor.ACTION_ID,
+        com.mucommander.ui.action.impl.OpenNativelyAction.Descriptor.ACTION_ID,
+        com.mucommander.ui.action.impl.RevealInDesktopAction.Descriptor.ACTION_ID,
+        com.mucommander.ui.action.impl.StopAction.Descriptor.ACTION_ID,
+        com.mucommander.ui.action.impl.SelectFirstRowAction.Descriptor.ACTION_ID,
+        com.mucommander.ui.action.impl.SelectLastRowAction.Descriptor.ACTION_ID
     };
 
 
@@ -77,18 +77,19 @@ public class ShortcutsDialog extends FocusDialog implements ActionListener {
     ///////////////////////
 
     private final static String SELECTION_TITLE = "shortcuts_dialog.selection";
-    private final static Class SELECTION_ACTIONS[] =
-    {	com.mucommander.ui.action.impl.MarkSelectedFileAction.class,
-        com.mucommander.ui.action.impl.MarkGroupAction.class,
-        com.mucommander.ui.action.impl.UnmarkGroupAction.class,
-        com.mucommander.ui.action.impl.MarkAllAction.class,
-        com.mucommander.ui.action.impl.UnmarkAllAction.class,
-        com.mucommander.ui.action.impl.InvertSelectionAction.class,
-        com.mucommander.ui.action.impl.CopyFilesToClipboardAction.class,
-        com.mucommander.ui.action.impl.CopyFilePathsAction.class,
-        com.mucommander.ui.action.impl.CopyFilePathsAction.class,
-        com.mucommander.ui.action.impl.PasteClipboardFilesAction.class,
-        com.mucommander.ui.action.impl.CompareFoldersAction.class,
+    private final static String SELECTION_ACTIONS[] =
+    {
+    	com.mucommander.ui.action.impl.MarkSelectedFileAction.Descriptor.ACTION_ID,
+        com.mucommander.ui.action.impl.MarkGroupAction.Descriptor.ACTION_ID,
+        com.mucommander.ui.action.impl.UnmarkGroupAction.Descriptor.ACTION_ID,
+        com.mucommander.ui.action.impl.MarkAllAction.Descriptor.ACTION_ID,
+        com.mucommander.ui.action.impl.UnmarkAllAction.Descriptor.ACTION_ID,
+        com.mucommander.ui.action.impl.InvertSelectionAction.Descriptor.ACTION_ID,
+        com.mucommander.ui.action.impl.CopyFilesToClipboardAction.Descriptor.ACTION_ID,
+        com.mucommander.ui.action.impl.CopyFilePathsAction.Descriptor.ACTION_ID,
+        com.mucommander.ui.action.impl.CopyFilePathsAction.Descriptor.ACTION_ID,
+        com.mucommander.ui.action.impl.PasteClipboardFilesAction.Descriptor.ACTION_ID,
+        com.mucommander.ui.action.impl.CompareFoldersAction.Descriptor.ACTION_ID,
     };
 
 
@@ -97,16 +98,16 @@ public class ShortcutsDialog extends FocusDialog implements ActionListener {
     //////////////////
 
     private final static String VIEW_TITLE = "shortcuts_dialog.view";
-    private final static Class VIEW_ACTIONS[] =
+    private final static String VIEW_ACTIONS[] =
     {
-        com.mucommander.ui.action.impl.GoBackAction.class,
-        com.mucommander.ui.action.impl.GoForwardAction.class,
-        com.mucommander.ui.action.impl.SortByNameAction.class,
-        com.mucommander.ui.action.impl.SortByExtensionAction.class,
-        com.mucommander.ui.action.impl.SortByDateAction.class,
-        com.mucommander.ui.action.impl.SortBySizeAction.class,
-        com.mucommander.ui.action.impl.SwapFoldersAction.class,
-        com.mucommander.ui.action.impl.SetSameFolderAction.class
+        com.mucommander.ui.action.impl.GoBackAction.Descriptor.ACTION_ID,
+        com.mucommander.ui.action.impl.GoForwardAction.Descriptor.ACTION_ID,
+        com.mucommander.ui.action.impl.SortByNameAction.Descriptor.ACTION_ID,
+        com.mucommander.ui.action.impl.SortByExtensionAction.Descriptor.ACTION_ID,
+        com.mucommander.ui.action.impl.SortByDateAction.Descriptor.ACTION_ID,
+        com.mucommander.ui.action.impl.SortBySizeAction.Descriptor.ACTION_ID,
+        com.mucommander.ui.action.impl.SwapFoldersAction.Descriptor.ACTION_ID,
+        com.mucommander.ui.action.impl.SetSameFolderAction.Descriptor.ACTION_ID
     };
 
 
@@ -115,26 +116,26 @@ public class ShortcutsDialog extends FocusDialog implements ActionListener {
     /////////////////////////////
 
     private final static String FILE_OPERATIONS_TITLE = "shortcuts_dialog.file_operations";
-    private final static Class FILE_OPERATIONS_ACTIONS[] =
+    private final static String FILE_OPERATIONS_ACTIONS[] =
     {
-        com.mucommander.ui.action.impl.ViewAction.class,
-        com.mucommander.ui.action.impl.EditAction.class,
-        com.mucommander.ui.action.impl.CopyAction.class,
-        com.mucommander.ui.action.impl.LocalCopyAction.class,
-        com.mucommander.ui.action.impl.MoveAction.class,
-        com.mucommander.ui.action.impl.RenameAction.class,
-        com.mucommander.ui.action.impl.MkdirAction.class,
-        com.mucommander.ui.action.impl.MkfileAction.class,
-        com.mucommander.ui.action.impl.DeleteAction.class,
-        com.mucommander.ui.action.impl.RefreshAction.class,
-        com.mucommander.ui.action.impl.ConnectToServerAction.class,
-        com.mucommander.ui.action.impl.ShowServerConnectionsAction.class,
-        com.mucommander.ui.action.impl.RunCommandAction.class,
-        com.mucommander.ui.action.impl.PackAction.class,
-        com.mucommander.ui.action.impl.UnpackAction.class,
-        com.mucommander.ui.action.impl.EmailAction.class,
-        com.mucommander.ui.action.impl.AddBookmarkAction.class,
-        com.mucommander.ui.action.impl.ShowFilePropertiesAction.class
+        com.mucommander.ui.action.impl.ViewAction.Descriptor.ACTION_ID,
+        com.mucommander.ui.action.impl.EditAction.Descriptor.ACTION_ID,
+        com.mucommander.ui.action.impl.CopyAction.Descriptor.ACTION_ID,
+        com.mucommander.ui.action.impl.LocalCopyAction.Descriptor.ACTION_ID,
+        com.mucommander.ui.action.impl.MoveAction.Descriptor.ACTION_ID,
+        com.mucommander.ui.action.impl.RenameAction.Descriptor.ACTION_ID,
+        com.mucommander.ui.action.impl.MkdirAction.Descriptor.ACTION_ID,
+        com.mucommander.ui.action.impl.MkfileAction.Descriptor.ACTION_ID,
+        com.mucommander.ui.action.impl.DeleteAction.Descriptor.ACTION_ID,
+        com.mucommander.ui.action.impl.RefreshAction.Descriptor.ACTION_ID,
+        com.mucommander.ui.action.impl.ConnectToServerAction.Descriptor.ACTION_ID,
+        com.mucommander.ui.action.impl.ShowServerConnectionsAction.Descriptor.ACTION_ID,
+        com.mucommander.ui.action.impl.RunCommandAction.Descriptor.ACTION_ID,
+        com.mucommander.ui.action.impl.PackAction.Descriptor.ACTION_ID,
+        com.mucommander.ui.action.impl.UnpackAction.Descriptor.ACTION_ID,
+        com.mucommander.ui.action.impl.EmailAction.Descriptor.ACTION_ID,
+        com.mucommander.ui.action.impl.AddBookmarkAction.Descriptor.ACTION_ID,
+        com.mucommander.ui.action.impl.ShowFilePropertiesAction.Descriptor.ACTION_ID
     };
 
 
@@ -143,16 +144,16 @@ public class ShortcutsDialog extends FocusDialog implements ActionListener {
     /////////////////////
 
     private final static String WINDOWS_TITLE = "shortcuts_dialog.windows";
-    private final static Class WINDOWS_ACTIONS[] =
+    private final static String WINDOWS_ACTIONS[] =
     {
-        com.mucommander.ui.action.impl.NewWindowAction.class,
-        com.mucommander.ui.action.impl.CloseWindowAction.class,
-        com.mucommander.ui.action.impl.RecallPreviousWindowAction.class,
-        com.mucommander.ui.action.impl.RecallNextWindowAction.class,
-        com.mucommander.ui.action.impl.RecallWindow1Action.class,
-        com.mucommander.ui.action.impl.RecallWindow2Action.class,
-        com.mucommander.ui.action.impl.RecallWindow10Action.class,
-        com.mucommander.ui.action.impl.QuitAction.class
+        com.mucommander.ui.action.impl.NewWindowAction.Descriptor.ACTION_ID,
+        com.mucommander.ui.action.impl.CloseWindowAction.Descriptor.ACTION_ID,
+        com.mucommander.ui.action.impl.RecallPreviousWindowAction.Descriptor.ACTION_ID,
+        com.mucommander.ui.action.impl.RecallNextWindowAction.Descriptor.ACTION_ID,
+        com.mucommander.ui.action.impl.RecallWindow1Action.Descriptor.ACTION_ID,
+        com.mucommander.ui.action.impl.RecallWindow2Action.Descriptor.ACTION_ID,
+        com.mucommander.ui.action.impl.RecallWindow10Action.Descriptor.ACTION_ID,
+        com.mucommander.ui.action.impl.QuitAction.Descriptor.ACTION_ID
     };
 
 
@@ -210,10 +211,10 @@ public class ShortcutsDialog extends FocusDialog implements ActionListener {
         compPanel = new XAlignedComponentPanel(15);
 
         // Add all shortcuts and their description
-        if(descriptions instanceof Class[])
-            addShortcutList(compPanel, (Class[])descriptions);
+        if(descriptions instanceof String[][])
+        	addShortcutList(compPanel, (String[][])descriptions);
         else
-            addShortcutList(compPanel, (String[][])descriptions);
+        	addShortcutList(compPanel, (String[])descriptions);
 
         // Panel needs to be vertically aligned to the top
         northPanel = new JPanel(new BorderLayout());
@@ -227,15 +228,15 @@ public class ShortcutsDialog extends FocusDialog implements ActionListener {
     }
 
 
-    private void addShortcutList(XAlignedComponentPanel compPanel, Class muActionClasses[]) {
+    private void addShortcutList(XAlignedComponentPanel compPanel, String muActionIds[]) {
         // Add all actions shortcut and label (or tooltip if available)
-        int nbActions = muActionClasses.length;
+        int nbActions = muActionIds.length;
         MuAction action;
         KeyStroke shortcut;
         String shortcutsRep;
         String desc;
         for(int i=0; i<nbActions; i++) {
-            action = ActionManager.getActionInstance(muActionClasses[i], mainFrame);
+            action = ActionManager.getActionInstance(muActionIds[i], mainFrame);
 
             shortcut = action.getAccelerator();
             if(shortcut==null)

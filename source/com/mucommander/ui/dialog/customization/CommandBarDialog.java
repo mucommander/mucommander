@@ -24,6 +24,7 @@ import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.layout.YBoxPanel;
 import com.mucommander.ui.list.DynamicHorizontalWrapList;
 import com.mucommander.ui.list.DynamicList;
+import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.WindowManager;
 import com.mucommander.ui.main.commandbar.CommandBarAttributes;
 import com.mucommander.ui.main.commandbar.CommandBarButton;
@@ -96,6 +97,8 @@ public class CommandBarDialog extends CustomizeDialog {
 	/** Flag that indicates if there are unsaved changed in the dialog */
 	private boolean dirtyDialogFlag = false;
 	
+	private MainFrame mainFrame;
+	
 	/** DnD helper fields */
 	private DataIndexAndSource transferedButtonProperties;
 	private JButton transferedButton;
@@ -107,6 +110,7 @@ public class CommandBarDialog extends CustomizeDialog {
 	
 	private CommandBarDialog() {
 		super(WindowManager.getCurrentMainFrame(), Translator.get("command_bar_customize_dialog.title"));
+		mainFrame = (MainFrame) getParent();
 	}
 	
 	// - Singleton management ---------------------------------------------------
@@ -140,16 +144,16 @@ public class CommandBarDialog extends CustomizeDialog {
     }
     
     private boolean areActionsChanged() {
-    	// Fetch command-bar actions
-    	Class[] commandBarActions = CommandBarAttributes.getActions();
-    	int nbActions = commandBarActions.length;
+    	// Fetch command-bar action ids
+    	String[] commandBarActionIds = CommandBarAttributes.getActions();
+    	int nbActions = commandBarActionIds.length;
     	for (int i=0; i<nbActions; ++i) {
-    		JButton buttonI = (JButton) commandBarButtons.get(i);
+    		CommandBarButton buttonI = (CommandBarButton) commandBarButtons.get(i);
     		if (buttonI == null) {
-    			if (commandBarActions[i] != null)
+    			if (commandBarActionIds[i] != null)
     				return true;
     		}
-    		else if (!buttonI.getAction().getClass().equals(commandBarActions[i]))
+    		else if (!buttonI.getActionId().equals(commandBarActionIds[i]))
     			return true;
     	}
     	return false;
@@ -157,15 +161,15 @@ public class CommandBarDialog extends CustomizeDialog {
     
     private boolean areAlternativeActionsChanged() {
     	// Fetch command-bar alternative actions
-    	Class[] commandBarAlternativeActions = CommandBarAttributes.getAlternateActions();
-    	int nbActions = commandBarAlternativeActions.length;
+    	String[] commandBarAlternativeActionIds = CommandBarAttributes.getAlternateActions();
+    	int nbActions = commandBarAlternativeActionIds.length;
     	for (int i=0; i<nbActions; ++i) {
-    		JButton buttonI = (JButton) commandBarAlternativeButtons.get(i);
+    		CommandBarButton buttonI = (CommandBarButton) commandBarAlternativeButtons.get(i);
     		if (buttonI == null) {
-    			if (commandBarAlternativeActions[i] != null)
+    			if (commandBarAlternativeActionIds[i] != null)
     				return true;
     		}
-    		else if (!buttonI.getAction().getClass().equals(commandBarAlternativeActions[i]))
+    		else if (!buttonI.getActionId().equals(commandBarAlternativeActionIds[i]))
     			return true;
     	}
     	return false;
@@ -177,20 +181,20 @@ public class CommandBarDialog extends CustomizeDialog {
 	
 	protected void commit() {
 		int nbNewActions = commandBarButtons.size();
-		Class[] newActions = new Class[nbNewActions];
+		String[] newActionIds = new String[nbNewActions];
 		for (int i=0; i<nbNewActions; ++i) {
-			newActions[i] = ((JButton) commandBarButtons.get(i)).getAction().getClass();
+			newActionIds[i] = ((CommandBarButton) commandBarButtons.get(i)).getActionId();
 		}
 		
 		int nbNewAlternativeActions = commandBarAlternativeButtons.size();
-		Class[] newAlternativeActions = new Class[nbNewAlternativeActions];
+		String[] newAlternativeActionIds = new String[nbNewAlternativeActions];
 		for (int i=0; i<nbNewAlternativeActions; ++i) {
 			Object button = commandBarAlternativeButtons.get(i);
-			newAlternativeActions[i] = (button != null) ? 
-										((JButton) button).getAction().getClass() : null;
+			newAlternativeActionIds[i] = (button != null) ? 
+										((CommandBarButton) button).getActionId() : null;
 		}
 		
-		CommandBarAttributes.setAttributes(newActions, newAlternativeActions, modifierField.getKeyStroke());
+		CommandBarAttributes.setAttributes(newActionIds, newAlternativeActionIds, modifierField.getKeyStroke());
 	}
 
 	protected JPanel createCustomizationPanel() {
@@ -213,10 +217,10 @@ public class CommandBarDialog extends CustomizeDialog {
 	}
 	
 	private Collection initCommandBarActionsList() {
-		Class[] commandBarActionClasses = CommandBarAttributes.getActions();
-		int nbCommandBarActionClasses = commandBarActionClasses.length;
-		for (int i=0; i<nbCommandBarActionClasses; ++i)
-			commandBarButtons.add(createDisplayableCommandBarButton(commandBarActionClasses[i]));
+		String[] commandBarActionIds = CommandBarAttributes.getActions();
+		int nbCommandBarActionIds = commandBarActionIds.length;
+		for (int i=0; i<nbCommandBarActionIds; ++i)
+			commandBarButtons.add(createDisplayableCommandBarButton(commandBarActionIds[i]));
 		
 		commandBarButtonsList = new DynamicList(commandBarButtons); 
 		
@@ -295,14 +299,14 @@ public class CommandBarDialog extends CustomizeDialog {
             AppLogger.fine("Caught exception", e);
 		}
 		
-		return Arrays.asList(commandBarActionClasses);
+		return Arrays.asList(commandBarActionIds);
 	}
 	
 	private Collection initCommandBarAlternateActionsList() {
-		Class[] commandBarActionClasses = CommandBarAttributes.getAlternateActions();
-		int nbCommandBarActionClasses = commandBarActionClasses.length;
-		for (int i=0; i<nbCommandBarActionClasses; ++i)
-			commandBarAlternativeButtons.add(createDisplayableCommandBarButton(commandBarActionClasses[i]));
+		String[] commandBarActionIds = CommandBarAttributes.getAlternateActions();
+		int nbCommandBarActionIds = commandBarActionIds.length;
+		for (int i=0; i<nbCommandBarActionIds; ++i)
+			commandBarAlternativeButtons.add(createDisplayableCommandBarButton(commandBarActionIds[i]));
 		
 		commandBarAlternativeButtonsList = new DynamicList(commandBarAlternativeButtons);
 		
@@ -363,16 +367,16 @@ public class CommandBarDialog extends CustomizeDialog {
             AppLogger.fine("Caught exception", e);
 		}
 		
-		return Arrays.asList(commandBarActionClasses);
+		return Arrays.asList(commandBarActionIds);
 	}
 	
 	private void initActionsPoolList(Set usedActions) {
-		List sortedActionClasses = ActionManager.getSortedActionClasses();
-		Iterator sortedActionClassesIterator = sortedActionClasses.iterator();
-		while(sortedActionClassesIterator.hasNext()) {
-			Class actionClass = (Class) sortedActionClassesIterator.next();
-			if (!usedActions.contains(actionClass))
-				insertInOrder(commandBarAvailableButtons, createDisplayableCommandBarButton(actionClass));			
+		List sortedActionIds = ActionManager.getSortedActionIds();
+		Iterator sortedActionIdsIterator = sortedActionIds.iterator();
+		while(sortedActionIdsIterator.hasNext()) {
+			String actionId = (String) sortedActionIdsIterator.next();
+			if (!usedActions.contains(actionId))
+				insertInOrder(commandBarAvailableButtons, createDisplayableCommandBarButton(actionId));			
 		}
 
 		commandBarAvailableButtonsList = new DynamicHorizontalWrapList(commandBarAvailableButtons, BUTTON_PREFERRED_SIZE.width, 6);
@@ -739,10 +743,10 @@ public class CommandBarDialog extends CustomizeDialog {
 	///// Helper methods /////
 	//////////////////////////
 	
-	private static CommandBarButton createDisplayableCommandBarButton(Class actionClass) {
+	private CommandBarButton createDisplayableCommandBarButton(String actionId) {
 		CommandBarButton button = null;
-		if (actionClass != null) {
-			button = CommandBarButton.create(ActionManager.getActionInstance(actionClass));
+		if (actionId != null) {
+			button = CommandBarButton.create(actionId, mainFrame);
 			button.setEnabled(true);
 			button.setPreferredSize(BUTTON_PREFERRED_SIZE);
 		}

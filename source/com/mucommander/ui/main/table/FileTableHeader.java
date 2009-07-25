@@ -74,13 +74,14 @@ public class FileTableHeader extends JTableHeader implements MouseListener {
             JPopupMenu popupMenu = new JPopupMenu();
             MainFrame mainFrame = table.getFolderPanel().getMainFrame();
 
-            Class toggleColumnActions[] = Columns.getToggleColumnActions();
+            String toggleColumnActionIds[] = Columns.getToggleColumnActions();
             JCheckBoxMenuItem checkboxMenuItem;
-            for(int i=0; i<toggleColumnActions.length; i++) {
+            int nbToggleColumnActions = toggleColumnActionIds.length;
+            for(int i=0; i<nbToggleColumnActions; i++) {
                 if(i==Columns.NAME)
                     continue;
 
-                checkboxMenuItem = new JCheckBoxMenuItem(ActionManager.getActionInstance(toggleColumnActions[i], mainFrame));
+                checkboxMenuItem = new JCheckBoxMenuItem(ActionManager.getActionInstance(toggleColumnActionIds[i], mainFrame));
 
                 checkboxMenuItem.setSelected(table.isColumnEnabled(i));
                 checkboxMenuItem.setEnabled(table.isColumnDisplayable(i));
@@ -90,7 +91,7 @@ public class FileTableHeader extends JTableHeader implements MouseListener {
 
             popupMenu.add(new JSeparator());
 
-            checkboxMenuItem = new JCheckBoxMenuItem(ActionManager.getActionInstance(ToggleAutoSizeAction.class, mainFrame));
+            checkboxMenuItem = new JCheckBoxMenuItem(ActionManager.getActionInstance(ToggleAutoSizeAction.Descriptor.ACTION_ID, mainFrame));
             checkboxMenuItem.setSelected(mainFrame.isAutoSizeColumnsEnabled());
             popupMenu.add(checkboxMenuItem);
 

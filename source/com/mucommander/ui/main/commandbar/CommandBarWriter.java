@@ -55,15 +55,15 @@ class CommandBarWriter extends CommandBarIO implements CommandBarAttributesListe
 	
 	public void write() throws IOException {
 		if (isCommandBarChanged) {
-			Class[] commandBarActions = CommandBarAttributes.getActions();
-			Class[] commandBarAlterativeActions = CommandBarAttributes.getAlternateActions();
+			String[] commandBarActionIds = CommandBarAttributes.getActions();
+			String[] commandBarAlterativeActionIds = CommandBarAttributes.getAlternateActions();
 			KeyStroke commandBarModifier = CommandBarAttributes.getModifier();
 			
 			BackupOutputStream bos = null;
 
 			try {
 				bos = new BackupOutputStream(getDescriptionFile());
-				new Writer(bos).write(commandBarActions, commandBarAlterativeActions, commandBarModifier);
+				new Writer(bos).write(commandBarActionIds, commandBarAlterativeActionIds, commandBarModifier);
 				isCommandBarChanged = false;
 			} catch (Exception e) {
                 AppLogger.fine("Caught exception", e);
@@ -89,7 +89,7 @@ class CommandBarWriter extends CommandBarIO implements CommandBarAttributesListe
     		this.writer = new XmlWriter(stream);
     	}
 		
-		private void write(Class[] actions, Class[] alternativeActions, KeyStroke modifier) throws IOException {
+		private void write(String[] actionIds, String[] alternativeActionIds, KeyStroke modifier) throws IOException {
 			try {
 				writer.writeCommentLine("See http://trac.mucommander.com/wiki/CommandBar for information on how to customize this file");
 				
@@ -99,20 +99,20 @@ class CommandBarWriter extends CommandBarIO implements CommandBarAttributesListe
 
     			writer.startElement(ROOT_ELEMENT, rootElementAttributes, true);    			
     			
-    			int nbCommandBarActions = actions.length;
+    			int nbCommandBarActions = actionIds.length;
     			for (int i=0; i<nbCommandBarActions; ++i)
-    				write(actions[i], alternativeActions[i]);
+    				write(actionIds[i], alternativeActionIds[i]);
 
     		} finally {
     			writer.endElement(ROOT_ELEMENT);
     		}
 		}
 		
-		private void write(Class action, Class alternativeAction) throws IOException {
+		private void write(String actionId, String alternativeActionId) throws IOException {
 			XmlAttributes attributes = new XmlAttributes();
-			attributes.add(ACTION_ATTRIBUTE, action.getCanonicalName());
-			if (alternativeAction != null)
-				attributes.add(ALT_ACTION_ATTRIBUTE, alternativeAction.getCanonicalName());
+			attributes.add(ACTION_ATTRIBUTE, actionId);
+			if (alternativeActionId != null)
+				attributes.add(ALT_ACTION_ATTRIBUTE, alternativeActionId);
 			
             AppLogger.finest("Writing button: action = "  + attributes.getValue(ACTION_ATTRIBUTE) + ", alt_action = " + attributes.getValue(ALT_ACTION_ATTRIBUTE));
 			

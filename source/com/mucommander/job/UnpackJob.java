@@ -330,7 +330,7 @@ public class UnpackJob extends AbstractCopyJob {
 
         // Unselect all files in the active table upon successful completion
         if(selectedEntries!=null) {
-            ActionManager.performAction(UnmarkAllAction.class, getMainFrame());
+            ActionManager.performAction(UnmarkAllAction.Descriptor.ACTION_ID, getMainFrame());
         }
     }
 

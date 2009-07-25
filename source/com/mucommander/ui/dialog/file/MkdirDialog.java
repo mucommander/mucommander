@@ -76,7 +76,7 @@ public class MkdirDialog extends FocusDialog implements ActionListener, ItemList
      * @param mkfileMode if true, the dialog will operate in 'mkfile' mode, if false in 'mkdir' mode
      */
     public MkdirDialog(MainFrame mainFrame, boolean mkfileMode) {
-        super(mainFrame, ActionManager.getActionInstance(mkfileMode?MkfileAction.class:MkdirAction.class,mainFrame).getLabel(), mainFrame);
+        super(mainFrame, ActionManager.getActionInstance(mkfileMode?MkfileAction.Descriptor.ACTION_ID:MkdirAction.Descriptor.ACTION_ID,mainFrame).getLabel(), mainFrame);
         this.mainFrame = mainFrame;
         this.mkfileMode = mkfileMode;
 

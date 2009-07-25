@@ -135,9 +135,6 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
     /** Delay in ms after which filename editor can be triggered when current row's filename cell is clicked */
     private final static int EDIT_NAME_CLICK_DELAY = 500;
 
-    /** 'Mark/unmark selected file' action */
-    private final static Class MARK_ACTION_CLASS = com.mucommander.ui.action.impl.MarkSelectedFileAction.class;
-
     /** Timestamp of last double click - workaround for MouseEvent.getClickCount() */
     private long doubleClickTime;
 
@@ -1205,11 +1202,11 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
                                             editCurrentFilename();
                                     }
                                     else if(column == Columns.DATE) {
-                                        ActionManager.performAction(com.mucommander.ui.action.impl.ChangeDateAction.class, mainFrame);
+                                        ActionManager.performAction(com.mucommander.ui.action.impl.ChangeDateAction.Descriptor.ACTION_ID, mainFrame);
                                     }
                                     else if(column==Columns.PERMISSIONS) {
                                         if(getSelectedFile().getChangeablePermissions().getIntValue()!=0)
-                                            ActionManager.performAction(com.mucommander.ui.action.impl.ChangePermissionsAction.class, mainFrame);
+                                            ActionManager.performAction(com.mucommander.ui.action.impl.ChangePermissionsAction.Descriptor.ACTION_ID, mainFrame);
                                     }
                                 }
                             }
@@ -1220,8 +1217,8 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
             // Double-clicking on a row opens the file/folder
             else if (doubleClickCounter == 2) { // Note: user can double-click multiple times
                 ActionManager.performAction(e.isShiftDown()
-                        ?com.mucommander.ui.action.impl.OpenNativelyAction.class
-                        :com.mucommander.ui.action.impl.OpenAction.class
+                        ?com.mucommander.ui.action.impl.OpenNativelyAction.Descriptor.ACTION_ID
+                        :com.mucommander.ui.action.impl.OpenAction.Descriptor.ACTION_ID
                     , mainFrame);
             }
 
@@ -1354,7 +1351,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
         // Test if the event corresponds to the 'Mark/unmark selected file' action keystroke.
         // Note: KeyStroke.getKeyStroke(e.getKeyCode(), e.getModifiers()) is used instead of KeyStroke.getKeyStrokeForEvent()
         // in order to get a 'pressed' KeyStroke and not a 'released' one, since the action is mapped to the 'pressed' one   
-        if(ActionManager.getActionInstance(MARK_ACTION_CLASS, mainFrame).isAccelerator(KeyStroke.getKeyStroke(e.getKeyCode(), e.getModifiers()))) {
+        if(ActionManager.getActionInstance(com.mucommander.ui.action.impl.MarkSelectedFileAction.Descriptor.ACTION_ID, mainFrame).isAccelerator(KeyStroke.getKeyStroke(e.getKeyCode(), e.getModifiers()))) {
             // Reset variables used to detect repeated key strokes
             markKeyRepeated = false;
             lastRowMarked = false;
@@ -1883,9 +1880,9 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
             }
             else {
                 // Test if the typed key combination corresponds to a registered action.
-                // If that's the case, the quick search is cancelled and the action is performed.
-                Class muActionClass = ActionKeymap.getRegisteredActionClassForKeystroke(KeyStroke.getKeyStrokeForEvent(e));
-                if(muActionClass!=null) {
+                // If that's the case, the quick search is canceled and the action is performed.
+                String muActionId = ActionKeymap.getRegisteredActionIdForKeystroke(KeyStroke.getKeyStrokeForEvent(e));
+                if(muActionId!=null) {
                     // Consume the key event otherwise it would be fired again on the FileTable
                     // (or any other KeyListener on this FileTable)
                     e.consume();
@@ -1894,7 +1891,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
                     stop();
 
                     // Perform the action
-                    ActionManager.getActionInstance(muActionClass, mainFrame).performAction();
+                    ActionManager.getActionInstance(muActionId, mainFrame).performAction();
                 }
 
                 // Do not update last search string's change timestamp

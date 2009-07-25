@@ -74,18 +74,18 @@ class CommandBarReader extends CommandBarIO {
     ///// getters //////
     ////////////////////
     
-    public Class[] getActionsRead() {
+    public String[] getActionsRead() {
     	int nbActions = actionsV.size();
-        Class[] actions = new Class[nbActions];
-        actionsV.toArray(actions);
-        return actions;
+    	String[] actionIds = new String[nbActions];
+        actionsV.toArray(actionIds);
+        return actionIds;
     }
     
-    public Class[] getAlternateActionsRead() {
+    public String[] getAlternateActionsRead() {
     	int nbActions = alternateActionsV.size();
-    	Class[] alternateActions = new Class[nbActions];
-        alternateActionsV.toArray(alternateActions);
-        return alternateActions;
+    	String[] alternateActionIds = new String[nbActions];
+        alternateActionsV.toArray(alternateActionIds);
+        return alternateActionIds;
     }
     
     public KeyStroke getModifierRead() {
@@ -111,21 +111,22 @@ class CommandBarReader extends CommandBarIO {
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
         if(qName.equals(BUTTON_ELEMENT)) {
         	// Resolve action class
-            String actionClassName = attributes.getValue(ACTION_ATTRIBUTE);
-            Class actionClass = ActionManager.getActionClass(actionClassName, fileVersion);
-            if (actionClass != null)
-            	actionsV.add(actionClass);
+            String actionAttribute = attributes.getValue(ACTION_ATTRIBUTE);
+            // TODO: read action ids
+            String actionId = ActionManager.extrapolateId(actionAttribute);
+            if (actionId != null)
+            	actionsV.add(actionId);
             else
-            	AppLogger.warning("Error in "+DEFAULT_COMMAND_BAR_FILE_NAME+": action class "+actionClassName+" not found");
+            	AppLogger.warning("Error in "+DEFAULT_COMMAND_BAR_FILE_NAME+": action id for "+actionAttribute+" not found");
 
             // Resolve alternate action class (if any)
-            actionClassName = attributes.getValue(ALT_ACTION_ATTRIBUTE);
-            if(actionClassName==null)
+            actionAttribute = attributes.getValue(ALT_ACTION_ATTRIBUTE);
+            if(actionAttribute==null)
                 alternateActionsV.add(null);
             else
-                if ((actionClass = ActionManager.getActionClass(actionClassName, fileVersion)) != null)
-                	alternateActionsV.add(actionClass);
-                AppLogger.warning("Error in "+DEFAULT_COMMAND_BAR_FILE_NAME+": action class "+actionClassName+" not found");
+                if ((actionId = ActionManager.extrapolateId(actionAttribute)) != null)
+                	alternateActionsV.add(actionId);
+                AppLogger.warning("Error in "+DEFAULT_COMMAND_BAR_FILE_NAME+": action class "+actionAttribute+" not found");
         }
         else if(qName.equals(ROOT_ELEMENT)) {
         	// Retrieve modifier key (shift by default)

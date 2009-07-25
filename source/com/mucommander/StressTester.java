@@ -56,7 +56,7 @@ public class StressTester implements Runnable, ActionListener {
 
         while(run) {
             if(random.nextInt(2)==0)
-                ActionManager.performAction(com.mucommander.ui.action.impl.SwitchActiveTableAction.class, mainFrame);    
+                ActionManager.performAction(com.mucommander.ui.action.impl.SwitchActiveTableAction.Descriptor.ACTION_ID, mainFrame);    
 
             FileTable fileTable = mainFrame.getActiveTable();
             AbstractFile currentFolder = fileTable.getCurrentFolder();
@@ -67,7 +67,7 @@ public class StressTester implements Runnable, ActionListener {
                 // 1 in 3 chance to go up if folder has children
                 if(children.length==0 || (random.nextInt(3)==0 && parentFolder!=null)) {
                     fileTable.selectRow(0);
-                    ActionManager.performAction(com.mucommander.ui.action.impl.OpenAction.class, mainFrame);
+                    ActionManager.performAction(com.mucommander.ui.action.impl.OpenAction.Descriptor.ACTION_ID, mainFrame);
                 }
                 else {
                     AbstractFile randomChild = children[random.nextInt(children.length)];
@@ -77,7 +77,7 @@ public class StressTester implements Runnable, ActionListener {
                     // so that no error dialog pops up when calling tryChangeCurrentFolder()
                     randomChild.ls();
                     fileTable.selectFile(randomChild);
-                    ActionManager.performAction(com.mucommander.ui.action.impl.OpenAction.class, mainFrame);
+                    ActionManager.performAction(com.mucommander.ui.action.impl.OpenAction.Descriptor.ACTION_ID, mainFrame);
                     //					folderPanel.tryChangeCurrentFolder(randomChild, true);
                 }
             }

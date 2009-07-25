@@ -222,7 +222,7 @@ public class MainFrame extends JFrame implements LocationListener {
         setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
-                ActionManager.performAction(CloseWindowAction.class, MainFrame.this);
+                ActionManager.performAction(CloseWindowAction.Descriptor.ACTION_ID, MainFrame.this);
             }
         });
 

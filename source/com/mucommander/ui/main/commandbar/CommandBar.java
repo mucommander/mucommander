@@ -52,10 +52,10 @@ public class CommandBar extends JPanel implements KeyListener, MouseListener, Co
     private CommandBarButton buttons[];
     
     /** Command bar actions */
-    private static Class actions[];
+    private static String actionIds[];
     
     /** Command bar alternate actions */
-    private static Class alternateActions[];
+    private static String alternateActionIds[];
     
     /** Modifier key that triggers the display of alternate actions when pressed */
     private static KeyStroke modifier;
@@ -73,8 +73,8 @@ public class CommandBar extends JPanel implements KeyListener, MouseListener, Co
         // Listen to mouse events to popup a menu when command bar is right clicked
         addMouseListener(this);
 
-        actions = CommandBarAttributes.getActions();
-		alternateActions = CommandBarAttributes.getAlternateActions();
+        actionIds = CommandBarAttributes.getActions();
+		alternateActionIds = CommandBarAttributes.getAlternateActions();
         modifier = CommandBarAttributes.getModifier();
         
         addButtons();
@@ -88,13 +88,13 @@ public class CommandBar extends JPanel implements KeyListener, MouseListener, Co
      * actions array must be initialized before this function is called.
      */
     private void addButtons() {
-    	setLayout(new GridLayout(0,actions.length));
+    	setLayout(new GridLayout(0,actionIds.length));
     	
     	// Create buttons and add them to this command bar
-        int nbButtons = actions.length;
+        int nbButtons = actionIds.length;
         buttons = new CommandBarButton[nbButtons];
         for(int i=0; i<nbButtons; i++) {
-        	buttons[i] = CommandBarButton.create(ActionManager.getActionInstance(actions[i], mainFrame));
+        	buttons[i] = CommandBarButton.create(actionIds[i], mainFrame);
         	buttons[i].addMouseListener(this);
             add(buttons[i]);
         }
@@ -109,12 +109,12 @@ public class CommandBar extends JPanel implements KeyListener, MouseListener, Co
         if(!isVisible())
             return;
 
-        if(this.modifierDown !=on) {
+        if(this.modifierDown != on) {
             this.modifierDown = on;
 
             int nbButtons = buttons.length;
             for(int i=0; i<nbButtons; i++)
-                buttons[i].setButtonAction(ActionManager.getActionInstance(on && alternateActions[i]!=null?alternateActions[i]:actions[i], mainFrame));
+                buttons[i].setButtonAction(on && alternateActionIds[i]!=null?alternateActionIds[i]:actionIds[i], mainFrame);
         }
     }
 
@@ -146,8 +146,8 @@ public class CommandBar extends JPanel implements KeyListener, MouseListener, Co
         if (DesktopManager.isRightMouseButton(e)) {
             //		if (e.isPopupTrigger()) {	// Doesn't work under Mac OS X (CTRL+click doesn't return true)
             JPopupMenu popupMenu = new JPopupMenu();
-            popupMenu.add(ActionManager.getActionInstance(com.mucommander.ui.action.impl.ToggleCommandBarAction.class, mainFrame));
-            popupMenu.add(ActionManager.getActionInstance(com.mucommander.ui.action.impl.CustomizeCommandBarAction.class, mainFrame));
+            popupMenu.add(ActionManager.getActionInstance(com.mucommander.ui.action.impl.ToggleCommandBarAction.Descriptor.ACTION_ID, mainFrame));
+            popupMenu.add(ActionManager.getActionInstance(com.mucommander.ui.action.impl.CustomizeCommandBarAction.Descriptor.ACTION_ID, mainFrame));
 			// Get the click location in  the CommandBar's coordinate system. 
 			// The location returned by the MouseEvent is in the source component (button) coordinate system. it's converted using SwingUtilities to the CommandBar's coordinate system.
 			Point clickLocation = SwingUtilities.convertPoint(e.getComponent(), e.getPoint(), this);
@@ -174,8 +174,8 @@ public class CommandBar extends JPanel implements KeyListener, MouseListener, Co
     //////////////////////////////////////////
     
     public void commandBarAttributeChanged() {
-		actions = CommandBarAttributes.getActions();
-		alternateActions = CommandBarAttributes.getAlternateActions();
+		actionIds = CommandBarAttributes.getActions();
+		alternateActionIds = CommandBarAttributes.getAlternateActions();
 		modifier = CommandBarAttributes.getModifier();
 		removeAll();
 		addButtons();

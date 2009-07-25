@@ -68,18 +68,17 @@ public abstract class CommandBarIO extends DefaultHandler {
      * This method must be called before instantiating CommandBar for the first time.
      */
     public static void loadCommandBar() throws Exception {
-    	// Load command-bar resource file:
-    	CommandBarReader resourceFileReader = new CommandBarReader(ResourceLoader.getResourceAsFile(COMMAND_BAR_RESOURCE_PATH));
-    	CommandBarAttributes.setDefaultAttributes(resourceFileReader.getActionsRead(), resourceFileReader.getAlternateActionsRead(), resourceFileReader.getModifierRead());
-    	
+
     	// Load user's file if exist
     	AbstractFile commandBarFile = getDescriptionFile();
     	if(commandBarFile != null && commandBarFile.exists()) {
     		CommandBarReader reader = new CommandBarReader(commandBarFile);
     		CommandBarAttributes.setAttributes(reader.getActionsRead(), reader.getAlternateActionsRead(), reader.getModifierRead());
     	}
-    	else
-    		AppLogger.fine(DEFAULT_COMMAND_BAR_FILE_NAME + " was not found");
+    	else {
+    		CommandBarAttributes.restoreDefault();
+    		AppLogger.fine(DEFAULT_COMMAND_BAR_FILE_NAME + " was not found, using defaults");
+    	}
     	
     	// initialize the writer after setting the command-bar initial attributes:
     	commandBarWriter = CommandBarWriter.create();

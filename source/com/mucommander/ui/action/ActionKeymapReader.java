@@ -88,10 +88,10 @@ class ActionKeymapReader extends ActionKeymapIO {
      *  <li>the keystroke is already associated with an action class. In this case, the existing association is preserved.</li>
      * </ul>
      *
-     * @param actionClass the action class to associate the keystroke with
+     * @param actionId the action id to associate the keystroke with
      * @param attributes the attributes map that holds the value
      */
-    private void processKeystrokeAttribute(Class actionClass, Attributes attributes) {    	
+    private void processKeystrokeAttribute(String actionId, Attributes attributes) {    	
     	String keyStrokeString;
 
     	// Parse the primary keystroke and retrieve the corresponding KeyStroke instance
@@ -102,7 +102,7 @@ class ActionKeymapReader extends ActionKeymapIO {
     		if ((primaryKeyStroke = KeyStroke.getKeyStroke(keyStrokeString)) == null)
     			AppLogger.warning("action keymap file contains a keystroke which could not be resolved: "+keyStrokeString);
     		else if (ActionKeymap.isKeyStrokeRegistered(primaryKeyStroke))
-    			AppLogger.warning("action keymap file contains multiple associations for keystroke: "+keyStrokeString+" canceling mapping to "+actionClass.getName());
+    			AppLogger.warning("action keymap file contains multiple associations for keystroke: "+keyStrokeString+" canceling mapping to "+actionId);
     	}
 
     	// Parse the alternate keystroke and retrieve the corresponding KeyStroke instance
@@ -114,11 +114,11 @@ class ActionKeymapReader extends ActionKeymapIO {
     		if ((alternateKeyStroke = KeyStroke.getKeyStroke(keyStrokeString)) == null)
     			AppLogger.warning("action keymap file contains a keystroke which could not be resolved: "+keyStrokeString);
     		else if (ActionKeymap.isKeyStrokeRegistered(alternateKeyStroke))
-    			AppLogger.warning("action keymap file contains multiple associations for keystroke: "+keyStrokeString+" canceling mapping to "+actionClass.getName());
+    			AppLogger.warning("action keymap file contains multiple associations for keystroke: "+keyStrokeString+" canceling mapping to "+actionId);
     	}
 
-    	primaryActionsReadKeymap.put(actionClass, primaryKeyStroke);
-    	alternateActionsReadKeymap.put(actionClass, alternateKeyStroke);
+    	primaryActionsReadKeymap.put(actionId, primaryKeyStroke);
+    	alternateActionsReadKeymap.put(actionId, alternateKeyStroke);
     }
 
     ///////////////////
@@ -146,22 +146,27 @@ class ActionKeymapReader extends ActionKeymapIO {
     
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
     	if(qName.equals(ACTION_ELEMENT)) {
-    		// Retrieve the action classname
-    		String actionClassName = attributes.getValue(CLASS_ATTRIBUTE);
-    		if(actionClassName==null) {
-    			AppLogger.warning("Error in action keymap file: no 'class' attribute specified in 'action' element");
-    			return;
+    		// Retrieve the action id
+    		String actionId = attributes.getValue(ID_ATTRIBUTE);
+    		// if id attribute not exits, read class attribute
+    		if (actionId == null) {
+    			String actionClassPath = attributes.getValue(CLASS_ATTRIBUTE);
+    			
+    			if(actionClassPath==null) {
+        			AppLogger.warning("Error in action keymap file: no 'class' or 'id' attribute specified in 'action' element");
+        			return;
+        		}
+    			// extrapolate the action id from its class path
+    			actionId = ActionManager.extrapolateId(actionClassPath);
     		}
-
-    		// Resolve the action Class
-    		Class actionClass = ActionManager.getActionClass(actionClassName, fileVersion);
-    		if (actionClass == null) {
-    			AppLogger.warning("Error in action keymap file: could not resolve class "+actionClassName);
+    		
+    		if (!ActionManager.isActionExist(actionId)) {
+    			AppLogger.warning("Error in action keymap file: could not resolve action "+actionId);
     			return;
     		}
 
     		// Load the action's accelerators (if any)
-    		processKeystrokeAttribute(actionClass, attributes);
+    		processKeystrokeAttribute(actionId, attributes);
     	}
     	else if (qName.equals(ROOT_ELEMENT)) {
     		// Note: early 0.8 beta3 nightly builds did not have version attribute, so the attribute may be null
