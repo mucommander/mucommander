@@ -45,7 +45,7 @@ abstract class AbstractViewerAction extends SelectedFileAction {
 
 
 
-    // - Initialisation ------------------------------------------------------------------
+    // - Initialization ------------------------------------------------------------------
     // -----------------------------------------------------------------------------------
     /**
      * Creates a new instance of <code>AbstractViewerAction</code>.

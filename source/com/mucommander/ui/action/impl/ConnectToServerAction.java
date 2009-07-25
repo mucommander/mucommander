@@ -18,6 +18,8 @@
 
 package com.mucommander.ui.action.impl;
 
+import com.mucommander.ui.action.AbstractActionDescriptor;
+import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.InvokesDialog;
 import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.action.ActionFactory;
@@ -25,6 +27,8 @@ import com.mucommander.ui.dialog.server.ServerConnectDialog;
 import com.mucommander.ui.main.MainFrame;
 
 import java.util.Hashtable;
+
+import javax.swing.KeyStroke;
 
 /**
  * This action pops up the 'Connect to Server' dialog that assists the user in connecting to a remote server.
@@ -46,5 +50,17 @@ public class ConnectToServerAction extends MuAction implements InvokesDialog {
 		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
 			return new ConnectToServerAction(mainFrame, properties);
 		}
+    }
+    
+    public static class Descriptor extends AbstractActionDescriptor {
+    	public static final String ACTION_ID = "ConnectToServer";
+    	
+		public String getId() { return ACTION_ID; }
+
+		public ActionCategory getCategory() { return null; }
+
+		public KeyStroke getDefaultAltKeyStroke() { return null; }
+
+		public KeyStroke getDefaultKeyStroke() { return KeyStroke.getKeyStroke("control K"); }
     }
 }

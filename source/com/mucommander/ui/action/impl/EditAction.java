@@ -20,18 +20,22 @@ package com.mucommander.ui.action.impl;
 
 import com.mucommander.command.Command;
 import com.mucommander.command.CommandManager;
+import com.mucommander.ui.action.AbstractActionDescriptor;
+import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.action.ActionFactory;
 import com.mucommander.ui.main.MainFrame;
 
 import java.util.Hashtable;
 
+import javax.swing.KeyStroke;
+
 /**
  * User configurable variant of {@link InternalEditAction}.
  * @author Maxence Bernard, Nicolas Rinaudo
  */
 public class EditAction extends InternalEditAction {
-    // - Initialisation ------------------------------------------------------------------------------------------------
+    // - Initialization ------------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
     /**
      * Creates a new instance of <code>EditAction</code>.
@@ -58,5 +62,17 @@ public class EditAction extends InternalEditAction {
 		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
 			return new EditAction(mainFrame, properties);
 		}
+    }
+    
+    public static class Descriptor extends AbstractActionDescriptor {
+    	public static final String ACTION_ID = "Edit";
+    	
+		public String getId() { return ACTION_ID; }
+
+		public ActionCategory getCategory() { return null; }
+
+		public KeyStroke getDefaultAltKeyStroke() { return null; }
+
+		public KeyStroke getDefaultKeyStroke() { return KeyStroke.getKeyStroke("F4"); }
     }
 }

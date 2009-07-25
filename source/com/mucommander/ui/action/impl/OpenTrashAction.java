@@ -20,11 +20,15 @@ package com.mucommander.ui.action.impl;
 
 import com.mucommander.desktop.AbstractTrash;
 import com.mucommander.desktop.DesktopManager;
+import com.mucommander.ui.action.AbstractActionDescriptor;
+import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.action.ActionFactory;
 import com.mucommander.ui.main.MainFrame;
 
 import java.util.Hashtable;
+
+import javax.swing.KeyStroke;
 
 /**
  * Opens the trash in the default file manager of the current OS/Desktop manager. This action is enabled only
@@ -51,5 +55,17 @@ public class OpenTrashAction extends MuAction {
 		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
 			return new OpenTrashAction(mainFrame, properties);
 		}
+    }
+    
+    public static class Descriptor extends AbstractActionDescriptor {
+    	public static final String ACTION_ID = "OpenTrash";
+    	
+		public String getId() { return ACTION_ID; }
+
+		public ActionCategory getCategory() { return null; }
+
+		public KeyStroke getDefaultAltKeyStroke() { return null; }
+
+		public KeyStroke getDefaultKeyStroke() { return null; }
     }
 }

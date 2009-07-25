@@ -41,7 +41,7 @@ import java.util.Hashtable;
  * to provide a response to the action trigger, and must provide a constructor with the
  * {@link #MuAction(MainFrame, java.util.Hashtable)} signature.
  *
- * <p>MuAction subclasses should not be instanciated directly, {@link ActionManager}'s <code>getActionInstance</code>
+ * <p>MuAction subclasses should not be instantiated directly, {@link ActionManager}'s <code>getActionInstance</code>
  * methods should be used instead. Using {@link ActionManager} to retrieve a MuAction ensures that only one instance
  * exists for a given {@link com.mucommander.ui.main.MainFrame}. This is particularly important because actions are stateful and can be used
  * in several components of a MainFrame at the same time; if an action's state changes, the change must be reflected
@@ -286,7 +286,7 @@ public abstract class MuAction extends AbstractAction {
      * Returns true if the given KeyStroke is one of this action's accelerators.
      * This method always returns false if this method has no accelerator.
      *
-     * @param keyStroke the KeyStroke to test against this action's acccelerators
+     * @param keyStroke the KeyStroke to test against this action's accelerators
      * @return true if the given KeyStroke is one of this action's accelerators
      */
     public boolean isAccelerator(KeyStroke keyStroke) {

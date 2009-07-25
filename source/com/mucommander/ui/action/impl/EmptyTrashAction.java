@@ -20,11 +20,15 @@ package com.mucommander.ui.action.impl;
 
 import com.mucommander.desktop.AbstractTrash;
 import com.mucommander.desktop.DesktopManager;
+import com.mucommander.ui.action.AbstractActionDescriptor;
+import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.action.ActionFactory;
 import com.mucommander.ui.main.MainFrame;
 
 import java.util.Hashtable;
+
+import javax.swing.KeyStroke;
 
 /**
  * Empties the system trash. This action is enabled only if the current platform has an
@@ -51,5 +55,17 @@ public class EmptyTrashAction extends MuAction {
 		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
 			return new EmptyTrashAction(mainFrame, properties);
 		}
+    }
+    
+    public static class Descriptor extends AbstractActionDescriptor {
+    	public static final String ACTION_ID = "EmptyTrash";
+    	
+		public String getId() { return ACTION_ID; }
+
+		public ActionCategory getCategory() { return null; }
+
+		public KeyStroke getDefaultAltKeyStroke() { return null; }
+
+		public KeyStroke getDefaultKeyStroke() { return null; }
     }
 }

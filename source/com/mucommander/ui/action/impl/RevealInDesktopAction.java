@@ -21,12 +21,16 @@ package com.mucommander.ui.action.impl;
 
 import com.mucommander.desktop.DesktopManager;
 import com.mucommander.text.Translator;
+import com.mucommander.ui.action.AbstractActionDescriptor;
+import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.action.ActionFactory;
 import com.mucommander.ui.dialog.ErrorDialog;
 import com.mucommander.ui.main.MainFrame;
 
 import java.util.Hashtable;
+
+import javax.swing.KeyStroke;
 
 
 /**
@@ -62,5 +66,17 @@ public class RevealInDesktopAction extends MuAction {
 		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
 			return new RevealInDesktopAction(mainFrame, properties);
 		}
+    }
+    
+    public static class Descriptor extends AbstractActionDescriptor {
+    	public static final String ACTION_ID = "RevealInDesktop";
+    	
+		public String getId() { return ACTION_ID; }
+
+		public ActionCategory getCategory() { return null; }
+
+		public KeyStroke getDefaultAltKeyStroke() { return null; }
+
+		public KeyStroke getDefaultKeyStroke() { return KeyStroke.getKeyStroke("control L"); }
     }
 }

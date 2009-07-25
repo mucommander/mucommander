@@ -18,11 +18,15 @@
 
 package com.mucommander.ui.action.impl;
 
+import com.mucommander.ui.action.AbstractActionDescriptor;
+import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.action.ActionFactory;
 import com.mucommander.ui.main.MainFrame;
 
 import java.util.Hashtable;
+
+import javax.swing.KeyStroke;
 
 /**
  * This action changes the current folder of the currently active {@link com.mucommander.ui.main.FolderPanel} to
@@ -45,5 +49,17 @@ public class ExploreBookmarksAction extends MuAction {
 		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
 			return new ExploreBookmarksAction(mainFrame, properties);
 		}
+    }
+    
+    public static class Descriptor extends AbstractActionDescriptor {
+    	public static final String ACTION_ID = "ExploreBookmarks";
+    	
+		public String getId() { return ACTION_ID; }
+
+		public ActionCategory getCategory() { return null; }
+
+		public KeyStroke getDefaultAltKeyStroke() { return null; }
+
+		public KeyStroke getDefaultKeyStroke() { return KeyStroke.getKeyStroke("shift control B"); }
     }
 }

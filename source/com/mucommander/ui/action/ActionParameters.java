@@ -64,14 +64,14 @@ public class ActionParameters {
     /**
      * Creates a new ActionParameters which identifies the specified combination of MuAction class and initialization
      * properties. The <code>properties</code> parameter may be <code>null</code> if the action class is to be
-     * instanciated without any initialization properties.
+     * Instantiated without any initialization properties.
      *
      * <p>The specified Class *must* denote a class that extends {@link MuAction} and follows its conventions
-     * (provide the proper constructor), otherwise {@link ActionManager} will fail to instanciate it. However,
+     * (provide the proper constructor), otherwise {@link ActionManager} will fail to instantiate it. However,
      * ActionParameters does not check if the specified Class is valid or not.
      * 
      * @param muActionClass a MuAction Class descriptor
-     * @param initProperties a Hashtable containing the properties that will be used to instanciate the specified MuAction class
+     * @param initProperties a Hashtable containing the properties that will be used to instantiate the specified MuAction class
      */
     public ActionParameters(Class muActionClass, Hashtable initProperties) {
         this.actionClass = muActionClass;
@@ -86,7 +86,7 @@ public class ActionParameters {
     }
 
     /**
-     * Returns the list of properties that are to be used to instanciate the MuAction class, or <code>null</code> if
+     * Returns the list of properties that are to be used to instantiate the MuAction class, or <code>null</code> if
      * there are none.
      */
     public Hashtable getInitProperties() {

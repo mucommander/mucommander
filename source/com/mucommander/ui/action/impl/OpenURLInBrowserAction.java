@@ -19,6 +19,8 @@
 package com.mucommander.ui.action.impl;
 
 import com.mucommander.desktop.DesktopManager;
+import com.mucommander.ui.action.AbstractActionDescriptor;
+import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.action.ActionFactory;
 import com.mucommander.ui.dialog.ErrorDialog;
@@ -26,6 +28,8 @@ import com.mucommander.ui.main.MainFrame;
 
 import java.net.URL;
 import java.util.Hashtable;
+
+import javax.swing.KeyStroke;
 
 /**
  * This action opens a URL in the system's default browser. This action is enabled only if the OS/Window manager
@@ -63,5 +67,17 @@ public class OpenURLInBrowserAction extends MuAction {
 		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
 			return new OpenURLInBrowserAction(mainFrame, properties);
 		}
+    }
+    
+    public static class Descriptor extends AbstractActionDescriptor {
+    	public static final String ACTION_ID = "OpenURLInBrowser";
+    	
+		public String getId() { return ACTION_ID; }
+
+		public ActionCategory getCategory() { return null; }
+
+		public KeyStroke getDefaultAltKeyStroke() { return null; }
+		
+		public KeyStroke getDefaultKeyStroke() { return null; }
     }
 }

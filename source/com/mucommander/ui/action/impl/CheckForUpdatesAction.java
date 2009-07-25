@@ -18,6 +18,8 @@
 
 package com.mucommander.ui.action.impl;
 
+import com.mucommander.ui.action.AbstractActionDescriptor;
+import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.InvokesDialog;
 import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.action.ActionFactory;
@@ -25,6 +27,8 @@ import com.mucommander.ui.dialog.startup.CheckVersionDialog;
 import com.mucommander.ui.main.MainFrame;
 
 import java.util.Hashtable;
+
+import javax.swing.KeyStroke;
 
 /**
  * This action checks for a new version of muCommander.
@@ -46,5 +50,17 @@ public class CheckForUpdatesAction extends MuAction implements InvokesDialog {
 		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
 			return new CheckForUpdatesAction(mainFrame, properties);
 		}
+    }
+    
+    public static class Descriptor extends AbstractActionDescriptor {
+    	public static final String ACTION_ID = "CheckForUpdates";
+    	
+		public String getId() { return ACTION_ID; }
+
+		public ActionCategory getCategory() { return null; }
+
+		public KeyStroke getDefaultAltKeyStroke() { return null; }
+
+		public KeyStroke getDefaultKeyStroke() { return null; }
     }
 }

@@ -24,6 +24,8 @@ import com.mucommander.file.ArchiveEntryFile;
 import com.mucommander.file.FileProtocols;
 import com.mucommander.job.TempExecJob;
 import com.mucommander.text.Translator;
+import com.mucommander.ui.action.AbstractActionDescriptor;
+import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.action.ActionFactory;
 import com.mucommander.ui.dialog.ErrorDialog;
@@ -33,6 +35,8 @@ import com.mucommander.ui.main.quicklist.RecentExecutedFilesQL;
 
 import java.io.IOException;
 import java.util.Hashtable;
+
+import javax.swing.KeyStroke;
 
 /**
  * This action opens the currently selected file or folder with native file associations.
@@ -75,5 +79,17 @@ public class OpenNativelyAction extends MuAction {
 		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
 			return new OpenNativelyAction(mainFrame, properties);
 		}
+    }
+    
+    public static class Descriptor extends AbstractActionDescriptor {
+    	public static final String ACTION_ID = "OpenNatively";
+    	
+		public String getId() { return ACTION_ID; }
+
+		public ActionCategory getCategory() { return null; }
+
+		public KeyStroke getDefaultAltKeyStroke() { return null; }
+
+		public KeyStroke getDefaultKeyStroke() { return KeyStroke.getKeyStroke("shift ENTER"); }
     }
 }

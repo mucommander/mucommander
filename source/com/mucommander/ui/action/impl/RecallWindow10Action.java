@@ -18,11 +18,15 @@
 
 package com.mucommander.ui.action.impl;
 
+import com.mucommander.ui.action.AbstractActionDescriptor;
+import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.action.ActionFactory;
 import com.mucommander.ui.main.MainFrame;
 
 import java.util.Hashtable;
+
+import javax.swing.KeyStroke;
 
 /**
  * Recalls window number 10 (brings it to the front).
@@ -42,5 +46,17 @@ public class RecallWindow10Action extends RecallWindowAction {
 		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
 			return new RecallWindow10Action(mainFrame, properties);
 		}
+    }
+    
+    public static class Descriptor extends AbstractActionDescriptor {
+    	public static final String ACTION_ID = "RecallWindow10";
+    	
+		public String getId() { return ACTION_ID; }
+
+		public ActionCategory getCategory() { return null; }
+
+		public KeyStroke getDefaultAltKeyStroke() { return null; }
+
+		public KeyStroke getDefaultKeyStroke() { return KeyStroke.getKeyStroke("control 0"); }
     }
 }

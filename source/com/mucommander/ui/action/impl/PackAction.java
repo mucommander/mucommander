@@ -19,6 +19,8 @@
 package com.mucommander.ui.action.impl;
 
 import com.mucommander.file.util.FileSet;
+import com.mucommander.ui.action.AbstractActionDescriptor;
+import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.InvokesDialog;
 import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.action.ActionFactory;
@@ -26,6 +28,8 @@ import com.mucommander.ui.dialog.file.PackDialog;
 import com.mucommander.ui.main.MainFrame;
 
 import java.util.Hashtable;
+
+import javax.swing.KeyStroke;
 
 /**
  * This action pops up the 'Pack files' dialog that allows to create an archive file with the currently marked files.
@@ -49,5 +53,17 @@ public class PackAction extends SelectedFilesAction implements InvokesDialog {
 		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
 			return new PackAction(mainFrame, properties);
 		}
+    }
+    
+    public static class Descriptor extends AbstractActionDescriptor {
+    	public static final String ACTION_ID = "Pack";
+    	
+		public String getId() { return ACTION_ID; }
+
+		public ActionCategory getCategory() { return null; }
+
+		public KeyStroke getDefaultAltKeyStroke() { return null; }
+
+		public KeyStroke getDefaultKeyStroke() { return KeyStroke.getKeyStroke("control I"); }
     }
 }

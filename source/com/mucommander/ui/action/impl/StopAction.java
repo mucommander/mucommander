@@ -18,6 +18,8 @@
 
 package com.mucommander.ui.action.impl;
 
+import com.mucommander.ui.action.AbstractActionDescriptor;
+import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.action.ActionFactory;
 import com.mucommander.ui.event.LocationEvent;
@@ -26,6 +28,8 @@ import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.main.MainFrame;
 
 import java.util.Hashtable;
+
+import javax.swing.KeyStroke;
 
 /**
  * This action is invoked to stop a running location change.
@@ -82,5 +86,17 @@ public class StopAction extends MuAction implements LocationListener {
 		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
 			return new StopAction(mainFrame, properties);
 		}
+    }
+    
+    public static class Descriptor extends AbstractActionDescriptor {
+    	public static final String ACTION_ID = "Stop";
+    	
+		public String getId() { return ACTION_ID; }
+
+		public ActionCategory getCategory() { return null; }
+
+		public KeyStroke getDefaultAltKeyStroke() { return null; }
+
+		public KeyStroke getDefaultKeyStroke() { return KeyStroke.getKeyStroke("ESCAPE"); }
     }
 }

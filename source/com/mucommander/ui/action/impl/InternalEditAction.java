@@ -20,12 +20,15 @@ package com.mucommander.ui.action.impl;
 
 import com.mucommander.command.Command;
 import com.mucommander.file.AbstractFile;
+import com.mucommander.ui.action.AbstractActionDescriptor;
+import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.action.ActionFactory;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.viewer.EditorRegistrar;
 
 import javax.swing.*;
+
 import java.util.Hashtable;
 
 /**
@@ -33,7 +36,7 @@ import java.util.Hashtable;
  * @author Maxence Bernard, Nicolas Rinaudo
  */
 public class InternalEditAction extends AbstractViewerAction {
-    // - Initialisation ------------------------------------------------------------------------------------------------
+    // - Initialization ------------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
     /**
      * Creates a new instance of <code>EditAction</code>.
@@ -72,5 +75,17 @@ public class InternalEditAction extends AbstractViewerAction {
 		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
 			return new InternalEditAction(mainFrame, properties);
 		}
+    }
+    
+    public static class Descriptor extends AbstractActionDescriptor {
+    	public static final String ACTION_ID = "InternalEdit";
+    	
+		public String getId() { return ACTION_ID; }
+
+		public ActionCategory getCategory() { return null; }
+
+		public KeyStroke getDefaultAltKeyStroke() { return null; }
+
+		public KeyStroke getDefaultKeyStroke() { return null; }
     }
 }
