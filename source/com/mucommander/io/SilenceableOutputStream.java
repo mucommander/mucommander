@@ -94,20 +94,20 @@ public class SilenceableOutputStream extends FilterOutputStream {
         if(silenced)
             return;
 
-        super.write(b);
+        out.write(b);
     }
 
     public void write(byte[] b) throws IOException {
         if(silenced)
             return;
 
-        super.write(b);
+        out.write(b);
     }
 
     public void write(byte[] b, int off, int len) throws IOException {
         if(silenced)
             return;
 
-        super.write(b, off, len);
+        out.write(b, off, len);
     }
 }
