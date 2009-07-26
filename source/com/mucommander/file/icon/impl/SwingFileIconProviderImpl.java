@@ -28,7 +28,6 @@ import com.mucommander.file.icon.LocalFileIconProvider;
 import com.mucommander.file.impl.local.LocalFile;
 import com.mucommander.file.util.ResourceLoader;
 import com.mucommander.io.SilenceableOutputStream;
-import com.mucommander.io.SilenceablePrintStream;
 import com.mucommander.runtime.OsFamilies;
 import com.mucommander.runtime.OsVersion;
 
