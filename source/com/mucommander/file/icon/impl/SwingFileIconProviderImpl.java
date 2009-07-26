@@ -27,6 +27,7 @@ import com.mucommander.file.icon.IconCache;
 import com.mucommander.file.icon.LocalFileIconProvider;
 import com.mucommander.file.impl.local.LocalFile;
 import com.mucommander.file.util.ResourceLoader;
+import com.mucommander.io.SilenceableOutputStream;
 import com.mucommander.io.SilenceablePrintStream;
 import com.mucommander.runtime.OsFamilies;
 import com.mucommander.runtime.OsVersion;
@@ -35,6 +36,7 @@ import javax.swing.*;
 import javax.swing.filechooser.FileSystemView;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.PrintStream;
 import java.net.URL;
 
 /**
@@ -68,7 +70,7 @@ class SwingFileIconProviderImpl extends LocalFileIconProvider implements Cacheab
     protected static ImageIcon SYMLINK_OVERLAY_ICON;
 
     /** Allows stderr to be 'silenced' when needed */
-    protected static SilenceablePrintStream errSps;
+    protected static SilenceableOutputStream errOut;
 
 
     /**
@@ -95,7 +97,7 @@ class SwingFileIconProviderImpl extends LocalFileIconProvider implements Cacheab
         SYMLINK_OVERLAY_ICON = new ImageIcon(iconURL);
 
         // Replace stderr with a SilenceablePrintStream that can be 'silenced' when needed
-        System.setErr(errSps = new SilenceablePrintStream(System.err, false));
+        System.setErr(new PrintStream(errOut = new SilenceableOutputStream(System.err, false), true));
 
         initialized = true;
     }
@@ -121,7 +123,7 @@ class SwingFileIconProviderImpl extends LocalFileIconProvider implements Cacheab
                 // the file effectively exists when the icon is requested.
                 // So the workaround here is to catch exceptions and 'silence' System.err output during the call.
 
-                errSps.setSilenced(true);
+                errOut.setSilenced(true);
 
                 return fileSystemView.getSystemIcon(javaIoFile);
             }
@@ -130,12 +132,12 @@ class SwingFileIconProviderImpl extends LocalFileIconProvider implements Cacheab
             }
         }
         catch(Exception e) {
-            FileLogger.fine("Caught exception while retrieving system icon for file "+ javaIoFile.getAbsolutePath(), e);
+            FileLogger.finer("Caught exception while retrieving system icon for file "+ javaIoFile.getAbsolutePath(), e);
             return null;
         }
         finally {
             if(fileSystemView!=null)
-                errSps.setSilenced(false);
+                errOut.setSilenced(false);
         }
     }
 
