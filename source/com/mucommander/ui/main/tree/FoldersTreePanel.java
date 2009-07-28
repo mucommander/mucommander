@@ -26,7 +26,7 @@ import com.mucommander.file.AbstractFile;
 import com.mucommander.file.filter.AndFileFilter;
 import com.mucommander.file.filter.AttributeFileFilter;
 import com.mucommander.file.util.FileComparator;
-import com.mucommander.text.Translator;
+import com.mucommander.ui.action.ActionProperties;
 import com.mucommander.ui.action.impl.RefreshAction;
 import com.mucommander.ui.event.LocationEvent;
 import com.mucommander.ui.event.LocationListener;
@@ -120,7 +120,7 @@ public class FoldersTreePanel extends JPanel implements TreeSelectionListener,
         final JPopupMenu popup = new JPopupMenu();
         // refresh action
         JMenuItem item = new JMenuItem(
-        		Translator.get(new RefreshAction.Descriptor().getLabel()),
+        		ActionProperties.getActionLabel(RefreshAction.Descriptor.ACTION_ID),
                 KeyEvent.VK_R);
         item.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
