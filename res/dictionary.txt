@@ -5615,6 +5615,21 @@ MergeFile.label:PL:Scalaj pliki
 
 
 
+ShowDebugConsole.label:EN:Debug console
+ShowDebugConsole.label:FR:Console de débug
+# Translation missing (New!)
+
+
+
+
+
+
+
+
+
+
+
+
 
 ShowBookmarksQL.label:EN:$[bookmarks_menu]
 
@@ -13085,6 +13100,27 @@ prefs_dialog.enable_system_notifications:SV:Aktivera systemmeddelanden
 prefs_dialog.enable_system_notifications:DA:Aktiver system meddelelser
 prefs_dialog.enable_system_notifications:UA:Включити системні повідомлення
 # Translation missing (KO)
+
+
+
+
+
+
+
+
+#################
+# Debug console #
+#################
+
+debug_console_dialog.level:EN:Level
+debug_console_dialog.level:FR:Niveau
+# Translation missing (New!)
+
+
+
+
+
+
 
 
 

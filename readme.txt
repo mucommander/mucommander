@@ -129,9 +129,13 @@ What's new since v0.8.3 ?
 
 New features:
 - Added native support for 7z archives.
+- Added a keyboard shortcuts editor.
+- Added a command bar editor.
+- Added a debug console that shows the last log messages.
 
 Improvements:
 - Tar/TGZ and Zip unpacking speed has been improved significantly (ticket #74).
+- Improved RAR compatibility.
 - jCIFS library upgraded to version 1.3.10.
 - SMB domain-based authentication is now supported.
 - Added shortcuts to browse nearby SMB network shares.

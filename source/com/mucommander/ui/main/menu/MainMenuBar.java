@@ -28,8 +28,8 @@ import com.mucommander.file.AbstractFile;
 import com.mucommander.file.impl.local.LocalFile;
 import com.mucommander.runtime.OsFamilies;
 import com.mucommander.text.Translator;
-import com.mucommander.ui.action.ActionParameters;
 import com.mucommander.ui.action.ActionManager;
+import com.mucommander.ui.action.ActionParameters;
 import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.action.impl.*;
 import com.mucommander.ui.dialog.ErrorDialog;
@@ -345,6 +345,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
 
         MenuToolkit.addMenuItem(helpMenu, ActionManager.getActionInstance(GoToDocumentationAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
         MenuToolkit.addMenuItem(helpMenu, ActionManager.getActionInstance(ShowKeyboardShortcutsAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(helpMenu, ActionManager.getActionInstance(ShowDebugConsoleAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
 
         // Links to website, only shows for OS/Window manager that can launch the default browser to open URLs
         if(DesktopManager.canBrowse()) {

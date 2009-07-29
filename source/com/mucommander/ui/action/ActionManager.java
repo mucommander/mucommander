@@ -18,23 +18,15 @@
 
 package com.mucommander.ui.action;
 
-import java.util.Collections;
-import java.util.Enumeration;
-import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Vector;
-import java.util.WeakHashMap;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import javax.swing.ImageIcon;
-import javax.swing.KeyStroke;
-
 import com.mucommander.AppLogger;
 import com.mucommander.ui.action.impl.*;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.WindowManager;
+
+import javax.swing.*;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * ActionManager provides methods to retrieve {@link MuAction} instances and invoke them. It keeps track of all the
@@ -166,6 +158,7 @@ public class ActionManager {
     	registerAction(new ShowRecentExecutedFilesQLAction.Descriptor(),    new ShowRecentExecutedFilesQLAction.Factory());
     	registerAction(new ShowRecentLocationsQLAction.Descriptor(),        new ShowRecentLocationsQLAction.Factory());
     	registerAction(new ShowServerConnectionsAction.Descriptor(),        new ShowServerConnectionsAction.Factory());
+        registerAction(new ShowDebugConsoleAction.Descriptor(),             new ShowDebugConsoleAction.Factory());
     	registerAction(new SortByDateAction.Descriptor(),             		new SortByDateAction.Factory());
     	registerAction(new SortByExtensionAction.Descriptor(),              new SortByExtensionAction.Factory());
     	registerAction(new SortByGroupAction.Descriptor(),            		new SortByGroupAction.Factory());
