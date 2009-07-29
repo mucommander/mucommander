@@ -319,7 +319,7 @@ public class BufferPool {
         BufferContainer bufferContainer = factory.newBufferContainer(buffer);
 
         if(bufferContainers.contains(bufferContainer)) {
-            CommonsLogger.fine("Warning: specified buffer is already in the pool: "+buffer, new Throwable());
+            CommonsLogger.fine("Warning: specified buffer is already in the pool: "+buffer);
             return false;
         }
 
