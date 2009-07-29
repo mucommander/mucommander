@@ -134,7 +134,7 @@ public class OpenAction extends MuAction {
     	
 		public String getId() { return ACTION_ID; }
 
-		public ActionCategory getCategory() { return ActionCategories.Nevigation; }
+		public ActionCategory getCategory() { return ActionCategories.NEVIGATION; }
 
 		public KeyStroke getDefaultAltKeyStroke() { return KeyStroke.getKeyStroke("RIGHT"); }
 

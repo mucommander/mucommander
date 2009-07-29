@@ -80,7 +80,7 @@ public class BringAllToFrontAction extends MuAction {
     	
 		public String getId() { return ACTION_ID; }
 
-		public ActionCategory getCategory() { return ActionCategories.Window; }
+		public ActionCategory getCategory() { return ActionCategories.WINDOW; }
 
 		public KeyStroke getDefaultAltKeyStroke() { return null; }
 

@@ -25,8 +25,6 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Vector;
 
 import javax.swing.BorderFactory;
@@ -36,6 +34,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.UIManager;
 
+import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionKeymapIO;
 import com.mucommander.ui.action.ActionProperties;
 import com.mucommander.ui.action.MuAction;
@@ -87,6 +86,7 @@ public class ShortcutsPanel extends PreferencesPanel {
 		actionCategories.addAll(ActionProperties.getActionCategories());
 		int nbCategories = actionCategories.size();
 		final JComboBox combo = new JComboBox();
+		combo.addItem("All");
 	    for (int i = 0; i < nbCategories; ++i) {
 	      combo.addItem(actionCategories.elementAt(i));
 	    }
@@ -94,13 +94,21 @@ public class ShortcutsPanel extends PreferencesPanel {
 	    combo.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-				final String st = (String) combo.getSelectedItem();
-				shortcutsTable.updateModel(new ShortcutsTable.ActionFilter() {
-
-					public boolean accept(MuAction action) {
-						return action.getLabel().startsWith(st);
-					}
-				});
+				if (combo.getSelectedIndex() == 0) {
+					shortcutsTable.updateModel(new ShortcutsTable.ActionFilter() {
+						public boolean accept(String actionId) {
+							return true;
+						}
+					});
+				}
+				else {
+					final ActionCategory selectedActionCategory = (ActionCategory) combo.getSelectedItem();
+					shortcutsTable.updateModel(new ShortcutsTable.ActionFilter() {
+						public boolean accept(String actionId) {
+							return selectedActionCategory == ActionProperties.getActionCategory(actionId);
+						}
+					});					
+				}
 			}
 	    });
 		combo.setSelectedIndex(0);

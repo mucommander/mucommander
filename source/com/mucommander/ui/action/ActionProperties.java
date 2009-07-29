@@ -46,7 +46,9 @@ public class ActionProperties {
 		String actionId = actionDescriptor.getId();
 		actionDescriptors.put(actionId, actionDescriptor);
 		
-		actionCategories.add(actionDescriptor.getCategory());
+		ActionCategory category = actionDescriptor.getCategory();
+		if (category != null)
+			actionCategories.add(category);
 		
 		// keymaps:
 		KeyStroke defaultActionKeyStroke = actionDescriptor.getDefaultKeyStroke();
@@ -64,6 +66,10 @@ public class ActionProperties {
 	
 	public static ActionDescriptor getActionDescriptor(String actionId) {
 		return (ActionDescriptor) actionDescriptors.get(actionId);
+	}
+	
+	public static ActionCategory getActionCategory(String actionId) {
+		return getActionDescriptor(actionId).getCategory();
 	}
 	
 	static KeyStroke getDefaultAccelerator(String actionID) {

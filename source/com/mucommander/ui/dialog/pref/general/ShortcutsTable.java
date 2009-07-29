@@ -18,24 +18,35 @@
 
 package com.mucommander.ui.dialog.pref.general;
 
-import com.mucommander.AppLogger;
-import com.mucommander.runtime.JavaVersions;
-import com.mucommander.runtime.OsFamilies;
-import com.mucommander.runtime.OsVersions;
-import com.mucommander.ui.action.ActionDescriptor;
-import com.mucommander.ui.action.ActionKeymap;
-import com.mucommander.ui.action.ActionManager;
-import com.mucommander.ui.action.ActionProperties;
-import com.mucommander.ui.action.MuAction;
-import com.mucommander.ui.dialog.pref.component.PrefTable;
-import com.mucommander.ui.dialog.pref.general.ShortcutsPanel.TooltipBar;
-import com.mucommander.ui.icon.IconManager;
-import com.mucommander.ui.main.table.CellLabel;
-import com.mucommander.ui.table.CenteredTableHeaderRenderer;
-import com.mucommander.ui.text.KeyStrokeUtils;
-import com.mucommander.ui.theme.*;
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Insets;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.image.BufferedImage;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
 
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.DefaultCellEditor;
+import javax.swing.ImageIcon;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.KeyStroke;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
@@ -44,14 +55,26 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableModel;
-import java.awt.*;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.image.BufferedImage;
-import java.util.*;
-import java.util.List;
+
+import com.mucommander.AppLogger;
+import com.mucommander.runtime.JavaVersions;
+import com.mucommander.runtime.OsFamilies;
+import com.mucommander.runtime.OsVersions;
+import com.mucommander.ui.action.ActionDescriptor;
+import com.mucommander.ui.action.ActionKeymap;
+import com.mucommander.ui.action.ActionManager;
+import com.mucommander.ui.action.ActionProperties;
+import com.mucommander.ui.dialog.pref.component.PrefTable;
+import com.mucommander.ui.dialog.pref.general.ShortcutsPanel.TooltipBar;
+import com.mucommander.ui.icon.IconManager;
+import com.mucommander.ui.main.table.CellLabel;
+import com.mucommander.ui.table.CenteredTableHeaderRenderer;
+import com.mucommander.ui.text.KeyStrokeUtils;
+import com.mucommander.ui.theme.ColorChangedEvent;
+import com.mucommander.ui.theme.FontChangedEvent;
+import com.mucommander.ui.theme.Theme;
+import com.mucommander.ui.theme.ThemeCache;
+import com.mucommander.ui.theme.ThemeListener;
 
 /**
  * This class is the table in which the actions and their shortcuts are
@@ -88,13 +111,16 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 	/** Comparator of actions according to their labels */
 	private static final Comparator ACTIONS_COMPARATOR = new Comparator() {
 		public int compare(Object o1, Object o2) {
-			/*// TODO: remove actions without a standard label?
-			if (MuAction.getStandardLabel((Class) o1) == null)
+			// TODO: remove actions without a standard label?
+			String label1 = ActionProperties.getActionLabel((String) o1);
+			if (label1 == null)
 				return 1;
-			if (MuAction.getStandardLabel((Class) o2) == null)
+			
+			String label2 = ActionProperties.getActionLabel((String) o2);
+			if (label2 == null)
 				return -1;
-			return MuAction.getStandardLabel((Class) o1).compareTo(MuAction.getStandardLabel((Class) o2));*/
-			return 1;
+			
+			return label1.compareTo(label2);
 		}
 	};
 	
@@ -133,7 +159,7 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 		this.tooltipBar = tooltipBar;
 		
 		updateModel(new ActionFilter() {
-			public boolean accept(MuAction action) {
+			public boolean accept(String actionId) {
 				return true;
 			}
 		});
@@ -276,42 +302,51 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 		state.resetDirtyRows();
 	}
 	
+	private List filter(Enumeration actionIdsEnum, ActionFilter filter) {
+		List list = new LinkedList();
+		while(actionIdsEnum.hasMoreElements()) {
+			String actionId = (String) actionIdsEnum.nextElement();
+			if (filter.accept(actionId))
+				list.add(actionId);
+		}
+		return list;
+	}
+	
 	/**
 	 * Builds the table data based of all actions with their associated keystrokes
 	 */
 	private Object[][] createTableData(ActionFilter filter) {
-		Enumeration actionClasses = ActionManager.getActionIds();
+		Enumeration actionIdsEnum = ActionManager.getActionIds();
 		
-		// Convert the action-classes to MuAction instances
-		List list = Collections.list(actionClasses);
+		List filteredActionIds = filter(actionIdsEnum, filter);
 		
 		// Sort actions by their labels
-		Collections.sort(list, ACTIONS_COMPARATOR);
+		Collections.sort(filteredActionIds, ACTIONS_COMPARATOR);
 
 		// Build the table data
-		int nbRows = list.size();
+		int nbRows = filteredActionIds.size();
 		Object[][] tableData = new Object[nbRows][NUM_OF_COLUMNS];
 		
-		for (int row = 0; row < nbRows; ++row) {
-			String actionId = (String) list.get(row);
+		for (int i = 0; i < nbRows; ++i) {
+			String actionId = (String) filteredActionIds.get(i);
 			ActionDescriptor actionDescriptor = ActionProperties.getActionDescriptor(actionId);
 			
 			ImageIcon actionIcon = actionDescriptor.getIcon();
 			if (actionIcon == null)
 				actionIcon = transparentIcon;			
-			rowToIcon.put(Integer.valueOf(row), IconManager.getPaddedIcon(actionIcon, new Insets(0, 4, 0, 4)));
+			rowToIcon.put(Integer.valueOf(i), IconManager.getPaddedIcon(actionIcon, new Insets(0, 4, 0, 4)));
 			
 			String actionLabel = actionDescriptor.getLabel();
-			setActionClass(actionId, row);
-			tableData[row][ACTION_DESCRIPTION_COLUMN_INDEX] = actionLabel;
+			setActionClass(actionId, i);
+			tableData[i][ACTION_DESCRIPTION_COLUMN_INDEX] = actionLabel;
 			
 			KeyStroke accelerator = ActionKeymap.getAccelerator(actionId);
-			setAccelerator(accelerator, row);
-			tableData[row][ACCELERATOR_COLUMN_INDEX] = KeyStrokeUtils.getKeyStrokeDisplayableRepresentation(accelerator);
+			setAccelerator(accelerator, i);
+			tableData[i][ACCELERATOR_COLUMN_INDEX] = KeyStrokeUtils.getKeyStrokeDisplayableRepresentation(accelerator);
 			
 			KeyStroke alternativeAccelerator = ActionKeymap.getAlternateAccelerator(actionId);
-			setAlternativeAccelerator(alternativeAccelerator, row);
-			tableData[row][ALTERNATE_ACCELERATOR_COLUMN_INDEX] = KeyStrokeUtils.getKeyStrokeDisplayableRepresentation(alternativeAccelerator);
+			setAlternativeAccelerator(alternativeAccelerator, i);
+			tableData[i][ALTERNATE_ACCELERATOR_COLUMN_INDEX] = KeyStrokeUtils.getKeyStrokeDisplayableRepresentation(alternativeAccelerator);
 			
 			String actionTooltip = actionDescriptor.getTooltip();
 			if (actionTooltip == null)
@@ -366,7 +401,7 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 	public void keyTyped(KeyEvent e) {}
 	
 	public static abstract class ActionFilter {
-		public abstract boolean accept(MuAction action);
+		public abstract boolean accept(String actionId);
 	}
 	
 	/**

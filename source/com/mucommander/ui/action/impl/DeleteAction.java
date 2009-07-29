@@ -65,7 +65,7 @@ public class DeleteAction extends SelectedFilesAction {
     	
 		public String getId() { return ACTION_ID; }
 
-		public ActionCategory getCategory() { return ActionCategories.Files; }
+		public ActionCategory getCategory() { return ActionCategories.FILES; }
 
 		public KeyStroke getDefaultAltKeyStroke() { return KeyStroke.getKeyStroke("DELETE"); }
 

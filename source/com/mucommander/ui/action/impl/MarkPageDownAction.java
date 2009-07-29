@@ -65,7 +65,7 @@ public class MarkPageDownAction extends MuAction {
     	
 		public String getId() { return ACTION_ID; }
 
-		public ActionCategory getCategory() { return ActionCategories.Selection; }
+		public ActionCategory getCategory() { return ActionCategories.SELECTION; }
 
 		public KeyStroke getDefaultAltKeyStroke() { return null; }
 

@@ -58,7 +58,7 @@ public class CheckForUpdatesAction extends MuAction implements InvokesDialog {
     	
 		public String getId() { return ACTION_ID; }
 
-		public ActionCategory getCategory() { return ActionCategories.Misc; }
+		public ActionCategory getCategory() { return ActionCategories.MISC; }
 
 		public KeyStroke getDefaultAltKeyStroke() { return null; }
 

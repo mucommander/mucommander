@@ -76,7 +76,7 @@ public class ToggleStatusBarAction extends MuAction {
     	
 		public String getId() { return ACTION_ID; }
 
-		public ActionCategory getCategory() { return ActionCategories.View; }
+		public ActionCategory getCategory() { return ActionCategories.VIEW; }
 
 		public KeyStroke getDefaultAltKeyStroke() { return null; }
 

@@ -66,7 +66,7 @@ public class GoForwardAction extends GoToAction {
     	
 		public String getId() { return ACTION_ID; }
 
-		public ActionCategory getCategory() { return ActionCategories.Nevigation; }
+		public ActionCategory getCategory() { return ActionCategories.NEVIGATION; }
 
 		public KeyStroke getDefaultAltKeyStroke() { return null; }
 

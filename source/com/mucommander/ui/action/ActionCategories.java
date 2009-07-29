@@ -27,10 +27,10 @@ public class ActionCategories {
 	
 	private static String categoriesClassName = ActionCategories.class.getName();
 
-	public static final ActionCategory Nevigation   = new ActionCategory(categoriesClassName + ".nevigation");
-	public static final ActionCategory Selection    = new ActionCategory(categoriesClassName + ".selection");
-	public static final ActionCategory View         = new ActionCategory(categoriesClassName + ".view");
-	public static final ActionCategory Files        = new ActionCategory(categoriesClassName + ".files");
-	public static final ActionCategory Window       = new ActionCategory(categoriesClassName + ".windows");
-	public static final ActionCategory Misc         = new ActionCategory(categoriesClassName + ".misc");
+	public static final ActionCategory NEVIGATION   = new ActionCategory(categoriesClassName + ".nevigation");
+	public static final ActionCategory SELECTION    = new ActionCategory(categoriesClassName + ".selection");
+	public static final ActionCategory VIEW         = new ActionCategory(categoriesClassName + ".view");
+	public static final ActionCategory FILES        = new ActionCategory(categoriesClassName + ".files");
+	public static final ActionCategory WINDOW       = new ActionCategory(categoriesClassName + ".windows");
+	public static final ActionCategory MISC         = new ActionCategory(categoriesClassName + ".misc");
 }
