@@ -2288,6 +2288,25 @@ permissions.octal_notation:UA:Числове значення
 # Actions #
 ###########
 
+# Action categories
+com.mucommander.ui.action.ActionCategories.nevigation:EN:Nevigation
+
+
+com.mucommander.ui.action.ActionCategories.selection:EN:Selection
+
+
+com.mucommander.ui.action.ActionCategories.view:EN:View
+
+
+com.mucommander.ui.action.ActionCategories.files:EN:Files Operations
+
+
+com.mucommander.ui.action.ActionCategories.windows:EN:Window
+
+
+com.mucommander.ui.action.ActionCategories.misc:EN:Misc
+
+
 # All actions have a label and an optional tooltip. Labels are usually displayed in buttons and menus and therefore should be kept reasonably
 # short. Tooltips are displayed when leaving the mouse over a component (button, menu...) or used in dialog titles and therefore can be longer.
 
