@@ -4680,139 +4680,139 @@ Stop.label:SV:Stoppa mappbyte
 Stop.label:DA:Stop ombytning af mapper
 Stop.label:UA:Зупинити зміну папки
 
-ToggleCommandBarAction.show:EN:Show command bar
-ToggleCommandBarAction.show:FR:Afficher la barre de commande
-ToggleCommandBarAction.show:DE:Befehlsleiste anzeigen
-ToggleCommandBarAction.show:ES:Mostar la barra de comandos
-ToggleCommandBarAction.show:CS:Zobrazit lištu příkazů
-ToggleCommandBarAction.show:zh_TW:顯示命令列
-ToggleCommandBarAction.show:PL:Pokaż pasek komend
-ToggleCommandBarAction.show:HU:Parancssor megjelenítése
-ToggleCommandBarAction.show:RU:Показать панель команд
-ToggleCommandBarAction.show:zh_CN:显示命令条
-ToggleCommandBarAction.show:SL:Prikaži ukazno vrstico
-ToggleCommandBarAction.show:RO:Arată bara de comenzi
-ToggleCommandBarAction.show:IT:Mostra barra di comando
-ToggleCommandBarAction.show:KO:커맨드바 보이기
-ToggleCommandBarAction.show:pt_BR:Exibir barra de comandos
-ToggleCommandBarAction.show:NL:Commandoregel tonen
-ToggleCommandBarAction.show:SK:Zobraziť panel s príkazmi
-ToggleCommandBarAction.show:JA:コマンド バーの表示
-ToggleCommandBarAction.show:SV:Visa kommandoraden
-ToggleCommandBarAction.show:DA:Vis kommandolinien
-ToggleCommandBarAction.show:UA:Показати панель команд
+ToggleCommandBar.show:EN:Show command bar
+ToggleCommandBar.show:FR:Afficher la barre de commande
+ToggleCommandBar.show:DE:Befehlsleiste anzeigen
+ToggleCommandBar.show:ES:Mostar la barra de comandos
+ToggleCommandBar.show:CS:Zobrazit lištu příkazů
+ToggleCommandBar.show:zh_TW:顯示命令列
+ToggleCommandBar.show:PL:Pokaż pasek komend
+ToggleCommandBar.show:HU:Parancssor megjelenítése
+ToggleCommandBar.show:RU:Показать панель команд
+ToggleCommandBar.show:zh_CN:显示命令条
+ToggleCommandBar.show:SL:Prikaži ukazno vrstico
+ToggleCommandBar.show:RO:Arată bara de comenzi
+ToggleCommandBar.show:IT:Mostra barra di comando
+ToggleCommandBar.show:KO:커맨드바 보이기
+ToggleCommandBar.show:pt_BR:Exibir barra de comandos
+ToggleCommandBar.show:NL:Commandoregel tonen
+ToggleCommandBar.show:SK:Zobraziť panel s príkazmi
+ToggleCommandBar.show:JA:コマンド バーの表示
+ToggleCommandBar.show:SV:Visa kommandoraden
+ToggleCommandBar.show:DA:Vis kommandolinien
+ToggleCommandBar.show:UA:Показати панель команд
 
-ToggleCommandBarAction.hide:EN:Hide command bar
-ToggleCommandBarAction.hide:FR:Cacher la barre de commande
-ToggleCommandBarAction.hide:DE:Befehlsleiste verbergen
-ToggleCommandBarAction.hide:ES:Ocultar la barra de comandos
-ToggleCommandBarAction.hide:CS:Skrýt lištu příkazů
-ToggleCommandBarAction.hide:zh_TW:隱藏命令列
-ToggleCommandBarAction.hide:PL:Ukryj pasek komend
-ToggleCommandBarAction.hide:HU:Parancssor elrejtése
-ToggleCommandBarAction.hide:RU:Скрыть панель команд
-ToggleCommandBarAction.hide:zh_CN:隐藏命令条
-ToggleCommandBarAction.hide:SL:Skrij ukazno vrstico
-ToggleCommandBarAction.hide:RO:Ascunde bara de comenzi
-ToggleCommandBarAction.hide:IT:Nascondi barra di comando
-ToggleCommandBarAction.hide:KO:커맨드바 숨기기
-ToggleCommandBarAction.hide:pt_BR:Esconder barra de comandos
-ToggleCommandBarAction.hide:NL:Commandoregel verbergen
-ToggleCommandBarAction.hide:SK:Skryť panel s príkazmi
-ToggleCommandBarAction.hide:JA:コマンド バーを非表示にする
-ToggleCommandBarAction.hide:SV:Dölj kommandoraden
-ToggleCommandBarAction.hide:DA:Skjul kommandolinien
-ToggleCommandBarAction.hide:UA:Сховати панель команд
+ToggleCommandBar.hide:EN:Hide command bar
+ToggleCommandBar.hide:FR:Cacher la barre de commande
+ToggleCommandBar.hide:DE:Befehlsleiste verbergen
+ToggleCommandBar.hide:ES:Ocultar la barra de comandos
+ToggleCommandBar.hide:CS:Skrýt lištu příkazů
+ToggleCommandBar.hide:zh_TW:隱藏命令列
+ToggleCommandBar.hide:PL:Ukryj pasek komend
+ToggleCommandBar.hide:HU:Parancssor elrejtése
+ToggleCommandBar.hide:RU:Скрыть панель команд
+ToggleCommandBar.hide:zh_CN:隐藏命令条
+ToggleCommandBar.hide:SL:Skrij ukazno vrstico
+ToggleCommandBar.hide:RO:Ascunde bara de comenzi
+ToggleCommandBar.hide:IT:Nascondi barra di comando
+ToggleCommandBar.hide:KO:커맨드바 숨기기
+ToggleCommandBar.hide:pt_BR:Esconder barra de comandos
+ToggleCommandBar.hide:NL:Commandoregel verbergen
+ToggleCommandBar.hide:SK:Skryť panel s príkazmi
+ToggleCommandBar.hide:JA:コマンド バーを非表示にする
+ToggleCommandBar.hide:SV:Dölj kommandoraden
+ToggleCommandBar.hide:DA:Skjul kommandolinien
+ToggleCommandBar.hide:UA:Сховати панель команд
 
 ToggleHiddenFiles.label:EN:$[prefs_dialog.show_hidden_files]	 
 
-ToggleToolBarAction.show:EN:Show toolbar
-ToggleToolBarAction.show:FR:Afficher la barre d'outils
-ToggleToolBarAction.show:DE:Symbolleiste anzeigen
-ToggleToolBarAction.show:ES:Mostrar la barra de herramientas
-ToggleToolBarAction.show:CS:Zobrazit tlačítkovou lištu
-ToggleToolBarAction.show:zh_TW:顯示工具列
-ToggleToolBarAction.show:PL:Pokaż pasek narzędzi
-ToggleToolBarAction.show:HU:Eszköztár megjelenítése
-ToggleToolBarAction.show:RU:Показать панель инструментов
-ToggleToolBarAction.show:zh_CN:显示工具条
-ToggleToolBarAction.show:SL:Prikaži orodno vrstico
-ToggleToolBarAction.show:RO:Arată bara de unelte
-ToggleToolBarAction.show:IT:Mostra toolbar
-ToggleToolBarAction.show:KO:툴바 보이기
-ToggleToolBarAction.show:pt_BR:Exibir barra de ferramentas
-ToggleToolBarAction.show:NL:Toon gereedschappenbalk
-ToggleToolBarAction.show:SK:Zobraziť panel s nástrojmi
-ToggleToolBarAction.show:JA:ツール バーの表示
-ToggleToolBarAction.show:SV:Visa verktygsfältet
-ToggleToolBarAction.show:DA:Vis værktøjslinie
-ToggleToolBarAction.show:UA:Показати панель інструментів
+ToggleToolBar.show:EN:Show toolbar
+ToggleToolBar.show:FR:Afficher la barre d'outils
+ToggleToolBar.show:DE:Symbolleiste anzeigen
+ToggleToolBar.show:ES:Mostrar la barra de herramientas
+ToggleToolBar.show:CS:Zobrazit tlačítkovou lištu
+ToggleToolBar.show:zh_TW:顯示工具列
+ToggleToolBar.show:PL:Pokaż pasek narzędzi
+ToggleToolBar.show:HU:Eszköztár megjelenítése
+ToggleToolBar.show:RU:Показать панель инструментов
+ToggleToolBar.show:zh_CN:显示工具条
+ToggleToolBar.show:SL:Prikaži orodno vrstico
+ToggleToolBar.show:RO:Arată bara de unelte
+ToggleToolBar.show:IT:Mostra toolbar
+ToggleToolBar.show:KO:툴바 보이기
+ToggleToolBar.show:pt_BR:Exibir barra de ferramentas
+ToggleToolBar.show:NL:Toon gereedschappenbalk
+ToggleToolBar.show:SK:Zobraziť panel s nástrojmi
+ToggleToolBar.show:JA:ツール バーの表示
+ToggleToolBar.show:SV:Visa verktygsfältet
+ToggleToolBar.show:DA:Vis værktøjslinie
+ToggleToolBar.show:UA:Показати панель інструментів
 
-ToggleToolBarAction.hide:EN:Hide toolbar
-ToggleToolBarAction.hide:FR:Cacher la barre d'outils
-ToggleToolBarAction.hide:DE:Symbolleiste verbergen
-ToggleToolBarAction.hide:ES:Ocultar la barra de herramientas
-ToggleToolBarAction.hide:CS:Skrýt tlačítkovou lištu
-ToggleToolBarAction.hide:zh_TW:隱藏工具列
-ToggleToolBarAction.hide:PL:Ukryj pasek narzędzi
-ToggleToolBarAction.hide:HU:Eszköztár elrejtése
-ToggleToolBarAction.hide:RU:Скрыть панель инструментов
-ToggleToolBarAction.hide:zh_CN:隐藏工具条
-ToggleToolBarAction.hide:SL:Skrij orodno vrstico
-ToggleToolBarAction.hide:RO:Ascunde bara de unelte
-ToggleToolBarAction.hide:IT:Nascondi toolbar
-ToggleToolBarAction.hide:KO:툴바 숨기기
-ToggleToolBarAction.hide:pt_BR:Esconder barra de ferramentas
-ToggleToolBarAction.hide:NL:Gereedschappenbalk verbergen
-ToggleToolBarAction.hide:SK:Skryť panel s nástrojmi
-ToggleToolBarAction.hide:JA:ツール バーを非表示にする
-ToggleToolBarAction.hide:SV:Dölj vertygsfältet
-ToggleToolBarAction.hide:DA:Skjul værktøjslinie
-ToggleToolBarAction.hide:UA:Сховати панель інструментів
+ToggleToolBar.hide:EN:Hide toolbar
+ToggleToolBar.hide:FR:Cacher la barre d'outils
+ToggleToolBar.hide:DE:Symbolleiste verbergen
+ToggleToolBar.hide:ES:Ocultar la barra de herramientas
+ToggleToolBar.hide:CS:Skrýt tlačítkovou lištu
+ToggleToolBar.hide:zh_TW:隱藏工具列
+ToggleToolBar.hide:PL:Ukryj pasek narzędzi
+ToggleToolBar.hide:HU:Eszköztár elrejtése
+ToggleToolBar.hide:RU:Скрыть панель инструментов
+ToggleToolBar.hide:zh_CN:隐藏工具条
+ToggleToolBar.hide:SL:Skrij orodno vrstico
+ToggleToolBar.hide:RO:Ascunde bara de unelte
+ToggleToolBar.hide:IT:Nascondi toolbar
+ToggleToolBar.hide:KO:툴바 숨기기
+ToggleToolBar.hide:pt_BR:Esconder barra de ferramentas
+ToggleToolBar.hide:NL:Gereedschappenbalk verbergen
+ToggleToolBar.hide:SK:Skryť panel s nástrojmi
+ToggleToolBar.hide:JA:ツール バーを非表示にする
+ToggleToolBar.hide:SV:Dölj vertygsfältet
+ToggleToolBar.hide:DA:Skjul værktøjslinie
+ToggleToolBar.hide:UA:Сховати панель інструментів
 
-ToggleStatusBarAction.show:EN:Show status bar
-ToggleStatusBarAction.show:FR:Afficher la barre de status
-ToggleStatusBarAction.show:DE:Statusleiste anzeigen
-ToggleStatusBarAction.show:ES:Mostrar barra de estado
-ToggleStatusBarAction.show:CS:Zobrazit stavový řádek
-ToggleStatusBarAction.show:zh_TW:顯示狀態列
-ToggleStatusBarAction.show:PL:Pokaż pasek statusu
-ToggleStatusBarAction.show:HU:Állapotsor megjelenítése
-ToggleStatusBarAction.show:RU:Показать панель статуса
-ToggleStatusBarAction.show:zh_CN:显示状态行
-ToggleStatusBarAction.show:SL:Prikaži statusno vrstico
-ToggleStatusBarAction.show:RO:Arată bara de stare
-ToggleStatusBarAction.show:IT:Mostra barra di stato
-ToggleStatusBarAction.show:KO:상태바 보이기
-ToggleStatusBarAction.show:pt_BR:Exibir barra de status
-ToggleStatusBarAction.show:NL:Toon statusbalk
-ToggleStatusBarAction.show:SK:Zobraziť stavový riadok
-ToggleStatusBarAction.show:JA:ステータス バーの表示
-ToggleStatusBarAction.show:SV:Visa statuslisten
-ToggleStatusBarAction.show:DA:Vis statuslinie
-ToggleStatusBarAction.show:UA:Показати статус-панель
+ToggleStatusBar.show:EN:Show status bar
+ToggleStatusBar.show:FR:Afficher la barre de status
+ToggleStatusBar.show:DE:Statusleiste anzeigen
+ToggleStatusBar.show:ES:Mostrar barra de estado
+ToggleStatusBar.show:CS:Zobrazit stavový řádek
+ToggleStatusBar.show:zh_TW:顯示狀態列
+ToggleStatusBar.show:PL:Pokaż pasek statusu
+ToggleStatusBar.show:HU:Állapotsor megjelenítése
+ToggleStatusBar.show:RU:Показать панель статуса
+ToggleStatusBar.show:zh_CN:显示状态行
+ToggleStatusBar.show:SL:Prikaži statusno vrstico
+ToggleStatusBar.show:RO:Arată bara de stare
+ToggleStatusBar.show:IT:Mostra barra di stato
+ToggleStatusBar.show:KO:상태바 보이기
+ToggleStatusBar.show:pt_BR:Exibir barra de status
+ToggleStatusBar.show:NL:Toon statusbalk
+ToggleStatusBar.show:SK:Zobraziť stavový riadok
+ToggleStatusBar.show:JA:ステータス バーの表示
+ToggleStatusBar.show:SV:Visa statuslisten
+ToggleStatusBar.show:DA:Vis statuslinie
+ToggleStatusBar.show:UA:Показати статус-панель
 
-ToggleStatusBarAction.hide:EN:Hide status bar
-ToggleStatusBarAction.hide:FR:Cacher la barre de status
-ToggleStatusBarAction.hide:DE:Statusleiste verbergen
-ToggleStatusBarAction.hide:ES:Ocultar la barra de estado
-ToggleStatusBarAction.hide:CS:Skrýt stavový řádek
-ToggleStatusBarAction.hide:zh_TW:隱藏狀態列
-ToggleStatusBarAction.hide:PL:Ukryj pasek statusu
-ToggleStatusBarAction.hide:HU:Állapotsor elrejtése
-ToggleStatusBarAction.hide:RU:Скрыть панель статуса
-ToggleStatusBarAction.hide:zh_CN:隐藏状态行
-ToggleStatusBarAction.hide:SL:Skrij statusno vrstico
-ToggleStatusBarAction.hide:RO:Ascunde bara de stare
-ToggleStatusBarAction.hide:IT:Nascondi barra di stato
-ToggleStatusBarAction.hide:KO:상태바 숨기기
-ToggleStatusBarAction.hide:pt_BR:Esconder barra de status
-ToggleStatusBarAction.hide:NL:Statusbalk verbergen
-ToggleStatusBarAction.hide:SK:Skryť stavový riadok
-ToggleStatusBarAction.hide:JA:ステータス バーを非表示にする
-ToggleStatusBarAction.hide:SV:Dölj statuslisten
-ToggleStatusBarAction.hide:DA:Skjul statuslinie
-ToggleStatusBarAction.hide:UA:Сховати статус-панель
+ToggleStatusBar.hide:EN:Hide status bar
+ToggleStatusBar.hide:FR:Cacher la barre de status
+ToggleStatusBar.hide:DE:Statusleiste verbergen
+ToggleStatusBar.hide:ES:Ocultar la barra de estado
+ToggleStatusBar.hide:CS:Skrýt stavový řádek
+ToggleStatusBar.hide:zh_TW:隱藏狀態列
+ToggleStatusBar.hide:PL:Ukryj pasek statusu
+ToggleStatusBar.hide:HU:Állapotsor elrejtése
+ToggleStatusBar.hide:RU:Скрыть панель статуса
+ToggleStatusBar.hide:zh_CN:隐藏状态行
+ToggleStatusBar.hide:SL:Skrij statusno vrstico
+ToggleStatusBar.hide:RO:Ascunde bara de stare
+ToggleStatusBar.hide:IT:Nascondi barra di stato
+ToggleStatusBar.hide:KO:상태바 숨기기
+ToggleStatusBar.hide:pt_BR:Esconder barra de status
+ToggleStatusBar.hide:NL:Statusbalk verbergen
+ToggleStatusBar.hide:SK:Skryť stavový riadok
+ToggleStatusBar.hide:JA:ステータス バーを非表示にする
+ToggleStatusBar.hide:SV:Dölj statuslisten
+ToggleStatusBar.hide:DA:Skjul statuslinie
+ToggleStatusBar.hide:UA:Сховати статус-панель
 
 ToggleShowFoldersFirst.label:EN:Show folders first
 ToggleShowFoldersFirst.label:FR:Afficher d'abord les répertoires
@@ -15105,18 +15105,18 @@ recent_executed_files_quick_list.empty_message:UA:Нема попередньо�
 #theme_editor.history_colors:DE:Historienfarbe
 #theme_editor.history_colors:CS:Barvy historie
 
-#ToggleHiddenFilesAction.hide:EN:Do not show hidden files	 
-#ToggleHiddenFilesAction.hide:FR:Ne pas afficher les fichiers cachés
-#ToggleHiddenFilesAction.hide:DE:Versteckte Dateien nicht anzeigen
-#ToggleHiddenFilesAction.hide:pt_BR:Esconder arquivos ocultos
-#ToggleHiddenFilesAction.hide:NL:verborgen bestanden niet tonen
-#ToggleHiddenFilesAction.hide:SL:Skrij skrite datoteke
-#ToggleHiddenFilesAction.hide:CS:Skrýt skryté soubory
-#ToggleHiddenFilesAction.hide:RO:Nu arăta fișierele ascunse
-#ToggleHiddenFilesAction.hide:zh_TW:不顯示隱藏檔案
-#ToggleHiddenFilesAction.hide:HU:Rejtett fájlok elrejtése
-#ToggleHiddenFilesAction.hide:ES:Ocultar ficheros ocultos
-#ToggleHiddenFilesAction.hide:IT:Non mostrare i file nascosti
+#ToggleHiddenFiles.hide:EN:Do not show hidden files
+#ToggleHiddenFiles.hide:FR:Ne pas afficher les fichiers cachés
+#ToggleHiddenFiles.hide:DE:Versteckte Dateien nicht anzeigen
+#ToggleHiddenFiles.hide:pt_BR:Esconder arquivos ocultos
+#ToggleHiddenFiles.hide:NL:verborgen bestanden niet tonen
+#ToggleHiddenFiles.hide:SL:Skrij skrite datoteke
+#ToggleHiddenFiles.hide:CS:Skrýt skryté soubory
+#ToggleHiddenFiles.hide:RO:Nu arăta fișierele ascunse
+#ToggleHiddenFiles.hide:zh_TW:不顯示隱藏檔案
+#ToggleHiddenFiles.hide:HU:Rejtett fájlok elrejtése
+#ToggleHiddenFiles.hide:ES:Ocultar ficheros ocultos
+#ToggleHiddenFiles.hide:IT:Non mostrare i file nascosti
 
 #auth_dialog.error_was:EN:Error was: %1
 #auth_dialog.error_was:FR:L'erreur était: %1

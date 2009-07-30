@@ -20,17 +20,12 @@ package com.mucommander.ui.action.impl;
 
 import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.text.Translator;
-import com.mucommander.ui.action.AbstractActionDescriptor;
-import com.mucommander.ui.action.ActionCategories;
-import com.mucommander.ui.action.ActionCategory;
-import com.mucommander.ui.action.MuAction;
-import com.mucommander.ui.action.ActionFactory;
+import com.mucommander.ui.action.*;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.StatusBar;
 
+import javax.swing.*;
 import java.util.Hashtable;
-
-import javax.swing.KeyStroke;
 
 /**
  * This action shows/hides the current MainFrame's {@link com.mucommander.ui.main.StatusBar} depending on its
@@ -49,7 +44,7 @@ public class ToggleStatusBarAction extends MuAction {
         super(mainFrame, properties, false);
         setLabel(Translator.get(MuConfiguration.getVariable(MuConfiguration.STATUS_BAR_VISIBLE,
                                                                  MuConfiguration.DEFAULT_STATUS_BAR_VISIBLE) ? 
-                                com.mucommander.ui.action.impl.ToggleStatusBarAction.class.getName()+".hide":com.mucommander.ui.action.impl.ToggleStatusBarAction.class.getName()+".show"));
+                                ToggleStatusBarAction.Descriptor.ACTION_ID+".hide":ToggleStatusBarAction.Descriptor.ACTION_ID+".show"));
     }
 
     public void performAction() {
@@ -58,7 +53,7 @@ public class ToggleStatusBarAction extends MuAction {
         // Save the last status bar visible state in the configuration, this will become the default for new MainFrame windows.
         MuConfiguration.setVariable(MuConfiguration.STATUS_BAR_VISIBLE, visible);
         // Change the label to reflect the new status bar state
-        setLabel(Translator.get(visible?com.mucommander.ui.action.impl.ToggleStatusBarAction.class.getName()+".hide":com.mucommander.ui.action.impl.ToggleStatusBarAction.class.getName()+".show"));
+        setLabel(Translator.get(visible?ToggleStatusBarAction.Descriptor.ACTION_ID+".hide":ToggleStatusBarAction.Descriptor.ACTION_ID+".show"));
         // Show/hide the status bar
         statusBar.setVisible(visible);
         mainFrame.validate();

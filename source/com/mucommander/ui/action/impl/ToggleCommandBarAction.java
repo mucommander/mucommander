@@ -20,17 +20,12 @@ package com.mucommander.ui.action.impl;
 
 import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.text.Translator;
-import com.mucommander.ui.action.AbstractActionDescriptor;
-import com.mucommander.ui.action.ActionCategories;
-import com.mucommander.ui.action.ActionCategory;
-import com.mucommander.ui.action.MuAction;
-import com.mucommander.ui.action.ActionFactory;
+import com.mucommander.ui.action.*;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.commandbar.CommandBar;
 
+import javax.swing.*;
 import java.util.Hashtable;
-
-import javax.swing.KeyStroke;
 
 /**
  * This action shows/hides the current MainFrame's {@link com.mucommander.ui.main.commandbar.CommandBar} depending on its
@@ -49,7 +44,7 @@ public class ToggleCommandBarAction extends MuAction {
         super(mainFrame, properties, false);
         setLabel(Translator.get(MuConfiguration.getVariable(MuConfiguration.COMMAND_BAR_VISIBLE,
                                                                  MuConfiguration.DEFAULT_COMMAND_BAR_VISIBLE) ?
-                                com.mucommander.ui.action.impl.ToggleCommandBarAction.class.getName()+".hide":com.mucommander.ui.action.impl.ToggleCommandBarAction.class.getName()+".show"));
+                                ToggleCommandBarAction.Descriptor.ACTION_ID+".hide":ToggleCommandBarAction.Descriptor.ACTION_ID+".show"));
     }
 
 
@@ -59,7 +54,7 @@ public class ToggleCommandBarAction extends MuAction {
         // Save the last command bar visible state in the configuration, this will become the default for new MainFrame windows.
         MuConfiguration.setVariable(MuConfiguration.COMMAND_BAR_VISIBLE, visible);
         // Change the label to reflect the new command bar state
-        setLabel(Translator.get(visible?com.mucommander.ui.action.impl.ToggleCommandBarAction.class.getName()+".hide":com.mucommander.ui.action.impl.ToggleCommandBarAction.class.getName()+".show"));
+        setLabel(Translator.get(visible?ToggleCommandBarAction.Descriptor.ACTION_ID+".hide":ToggleCommandBarAction.Descriptor.ACTION_ID+".show"));
         // Show/hide the command bar
         commandBar.setVisible(visible);
         mainFrame.validate();
