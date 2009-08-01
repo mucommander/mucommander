@@ -70,7 +70,7 @@ public class ActionKeymap {
     }
 
     public static String getRegisteredActionIdForKeystroke(KeyStroke ks) {
-    	String actionID = (String)acceleratorMap.get(ks);
+    	String actionID = (String) acceleratorMap.get(ks);
         return actionID != null ? actionID : ActionProperties.getActionForKeyStroke(ks);
     }
 
@@ -156,6 +156,13 @@ public class ActionKeymap {
     }
 
     public static void changeActionAccelerators(String actionId, KeyStroke accelerator, KeyStroke alternateAccelerator) {
+    	/*String one = getRegisteredActionIdForKeystroke(accelerator);
+    	if (one != null)
+    		registerActionAccelerators(one, null, null);
+    	String two = getRegisteredActionIdForKeystroke(alternateAccelerator);
+    	if (two != null)
+    		registerActionAccelerators(two, null, null);*/
+    	
     	// Remove old accelerators (primary and alternate) from accelerators map
     	KeyStroke oldAccelator = (KeyStroke)customPrimaryActionKeymap.remove(actionId);
     	if(oldAccelator!=null)
@@ -208,8 +215,6 @@ public class ActionKeymap {
     	customAlternateActionKeymap.clear();
     	acceleratorMap.clear();
     }
-    
-    public static boolean isDefault() { return false; }
     
     static void registerActions(HashMap primary, HashMap alternate) {
     	Iterator actionIdsIterator = primary.keySet().iterator();

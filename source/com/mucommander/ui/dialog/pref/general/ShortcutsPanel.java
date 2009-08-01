@@ -27,17 +27,23 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Vector;
 
+import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.UIManager;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 
 import com.mucommander.ui.action.ActionCategory;
+import com.mucommander.ui.action.ActionKeymap;
 import com.mucommander.ui.action.ActionKeymapIO;
 import com.mucommander.ui.action.ActionProperties;
-import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.dialog.pref.PreferencesDialog;
 import com.mucommander.ui.dialog.pref.PreferencesPanel;
 
@@ -71,9 +77,34 @@ public class ShortcutsPanel extends PreferencesPanel {
 		tooltipBar = new TooltipBar();
 		shortcutsTable = new ShortcutsTable(tooltipBar);
 		
-		add(createCategoriesPanel(), BorderLayout.NORTH);
+		add(createCommandsPanel(), BorderLayout.NORTH);
 		add(createTablePanel(), BorderLayout.CENTER);
 		add(tooltipBar, BorderLayout.SOUTH);
+	}
+	
+	private JPanel createCommandsPanel() {
+		JPanel panel = new JPanel(new BorderLayout());
+		panel.setBorder(BorderFactory.createEmptyBorder());
+		
+		panel.add(createCategoriesPanel(), BorderLayout.WEST);
+		panel.add(createButtonsPanel(), BorderLayout.EAST);
+		
+		return panel;
+	}
+	
+	private JPanel createButtonsPanel() {
+		JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		panel.setBorder(BorderFactory.createEmptyBorder(0,0,0,5));
+		
+		RemoveButton removeButton = new RemoveButton();	
+		
+		final JButton restoreDefaultButton = new JButton("Restore Default");
+		restoreDefaultButton.setEnabled(false);
+		
+		panel.add(removeButton);
+		panel.add(restoreDefaultButton);
+		
+		return panel;
 	}
 	
 	private JPanel createCategoriesPanel() {
@@ -82,8 +113,7 @@ public class ShortcutsPanel extends PreferencesPanel {
 		panel.setBorder(BorderFactory.createEmptyBorder());
 		panel.add(new JLabel("Show: "));
 		
-		Vector actionCategories = new Vector();
-		actionCategories.addAll(ActionProperties.getActionCategories());
+		Vector actionCategories = new Vector(ActionProperties.getActionCategories());
 		int nbCategories = actionCategories.size();
 		final JComboBox combo = new JComboBox();
 		combo.addItem("All");
@@ -181,6 +211,42 @@ public class ShortcutsPanel extends PreferencesPanel {
 				if (!stopped)
 					showActionTooltip(lastActionTooltipShown);
 			}
+		}
+	}
+	
+	private class RemoveButton extends JButton implements ListSelectionListener, TableModelListener {
+		
+		public RemoveButton() {
+			setEnabled(false);
+			// TODO: translator
+			setAction(new AbstractAction("Remove") {
+				
+				public void actionPerformed(ActionEvent e) {
+					shortcutsTable.setValueAt(ShortcutsTable.DELETE, shortcutsTable.getSelectedRow(), shortcutsTable.getSelectedColumn());
+					shortcutsTable.repaint();
+					shortcutsTable.requestFocus();
+				}
+			});
+			
+			shortcutsTable.getSelectionModel().addListSelectionListener(this);
+			shortcutsTable.getColumnModel().getSelectionModel().addListSelectionListener(this);
+			shortcutsTable.getModel().addTableModelListener(this);
+		}
+
+		public void valueChanged(ListSelectionEvent e) {
+			updateButtonState();
+		}
+
+		public void tableChanged(TableModelEvent e) {
+			updateButtonState();			
+		}
+		
+		private void updateButtonState() {
+			int column = shortcutsTable.getSelectedColumn();
+			int row = shortcutsTable.getSelectedRow();
+			boolean canRemove = (column == ShortcutsTable.ACCELERATOR_COLUMN_INDEX || column == ShortcutsTable.ALTERNATE_ACCELERATOR_COLUMN_INDEX)
+								&& row != -1 && shortcutsTable.getValueAt(shortcutsTable.getSelectedRow(), column) != null;
+			setEnabled(canRemove);
 		}
 	}
 }
