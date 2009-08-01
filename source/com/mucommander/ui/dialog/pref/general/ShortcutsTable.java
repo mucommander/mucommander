@@ -259,7 +259,7 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 	public void updateActions() {
 		Iterator iterator = state.getDirtyRowsIterator();
 		while(iterator.hasNext()) {
-			Integer row = (Integer) iterator.next();
+			int row = ((Integer) iterator.next()).intValue();
 			ActionKeymap.changeActionAccelerators(data.getActionId(row),
 												  data.getAccelerator(row), 
 												  data.getAltAccelerator(row));
