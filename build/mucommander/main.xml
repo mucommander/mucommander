@@ -37,9 +37,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <target name="resources">
     <echo>Copying resources...</echo>
 
-    <!-- java.util.logging configuration file -->
-    <copy file="${source}/com/mucommander/logging.properties" tofile="${classes.normal}/com/mucommander/logging.properties" overwrite="true"/>
-
     <!-- Copies the images.                                    -->
     <copy todir="${classes.normal}" overwrite="true">
       <fileset dir="${res.images}">
