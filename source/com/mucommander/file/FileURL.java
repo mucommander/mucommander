@@ -22,6 +22,7 @@ package com.mucommander.file;
 import com.mucommander.auth.AuthenticationTypes;
 import com.mucommander.auth.Credentials;
 import com.mucommander.file.compat.CompatURLStreamHandler;
+import com.mucommander.file.impl.local.LocalFile;
 import com.mucommander.file.util.PathUtils;
 import com.mucommander.util.StringUtils;
 
@@ -144,9 +145,7 @@ public class FileURL implements Cloneable {
     static {
         // Register custom handlers for known schemes
 
-        String fileSeparator = System.getProperty("file.separator");
-        registerHandler(FileProtocols.FILE, new DefaultSchemeHandler(new DefaultSchemeParser(DefaultSchemeParser.LOCAL_PATH_CANONIZER, false), -1, fileSeparator, AuthenticationTypes.NO_AUTHENTICATION, null));
-
+        registerHandler(FileProtocols.FILE, new DefaultSchemeHandler(new DefaultSchemeParser(new DefaultPathCanonizer(LocalFile.SEPARATOR, System.getProperty("user.home")), false), -1, System.getProperty("file.separator"), AuthenticationTypes.NO_AUTHENTICATION, null));
         registerHandler(FileProtocols.FTP, new DefaultSchemeHandler(new DefaultSchemeParser(), 21, "/", AuthenticationTypes.AUTHENTICATION_REQUIRED, new Credentials("anonymous", "someuser@mucommander.com")));
         registerHandler(FileProtocols.SFTP, new DefaultSchemeHandler(new DefaultSchemeParser(), 22, "/", AuthenticationTypes.AUTHENTICATION_REQUIRED, null));
         registerHandler(FileProtocols.HTTP, new DefaultSchemeHandler(new DefaultSchemeParser(true), 80, "/", AuthenticationTypes.AUTHENTICATION_OPTIONAL, null));

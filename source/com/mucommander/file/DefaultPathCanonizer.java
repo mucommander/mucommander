@@ -28,7 +28,7 @@ public class DefaultPathCanonizer implements PathCanonizer {
     /** Path separator */
     protected String separator;
 
-    /** The string replacement for '~' path fragraments, null for no tilde replacement */
+    /** The string replacement for '~' path fragments, null for no tilde replacement */
     protected String tildeReplacement;
 
 
@@ -52,7 +52,7 @@ public class DefaultPathCanonizer implements PathCanonizer {
         this.separator = separator;
         this.tildeReplacement = tildeReplacement;
     }
-    
+
 
     //////////////////////////////////
     // PathCanonizer implementation //

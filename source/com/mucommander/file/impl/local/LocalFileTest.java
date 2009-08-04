@@ -72,13 +72,18 @@ public class LocalFileTest extends AbstractFileTestCase {
 
     /**
      * Asserts that {@link com.mucommander.file.impl.local.LocalFile#getUserHome()} returns a file that is not null,
-     * is a directory, and exists. 
+     * is a directory, and exists, and that '~' can be resolved as the user home folder.
+     *
+     * @throws IOException should not happen 
      */
-    public void testUserHome() {
+    public void testUserHome() throws IOException {
         AbstractFile homeFolder = LocalFile.getUserHome();
         assertNotNull(homeFolder);
         assertTrue(homeFolder.isDirectory());
         assertTrue(homeFolder.exists());
+
+        assertEquals(homeFolder, FileFactory.getFile("~"));
+        assertEquals(homeFolder.getChild("blah"), FileFactory.getFile("~").getChild("blah"));
     }
 
     /**

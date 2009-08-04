@@ -73,12 +73,6 @@ public class DefaultSchemeParser implements SchemeParser {
     /** String designating the localhost. */
     protected final static String LOCALHOST = "localhost";
 
-    /** Default path canonizer to use for local paths: uses the local path separator and user home for tilde replacement */
-    public final static PathCanonizer LOCAL_PATH_CANONIZER = new DefaultPathCanonizer(LocalFile.SEPARATOR, System.getProperty("user.home"));
-
-    /** Secondary path canonizer to use for forward slash-separated local paths on backslash-separated OSes (Windows, OS/2) */
-    public final static PathCanonizer FORWARD_SLASH_CANONIZER = new DefaultPathCanonizer("/", System.getProperty("user.home"));
-
 
     /**
      * Creates a DefaultSchemeParser with a {@link DefaultPathCanonizer} that uses <code>"/"</code> as the path
@@ -122,11 +116,24 @@ public class DefaultSchemeParser implements SchemeParser {
      * @param fileURL the FileURL instance in which to set the different parsed parts
      */
     private void handleLocalFilePath(String url, FileURL fileURL) {
-        fileURL.setHandler(FileURL.getRegisteredHandler(FileProtocols.FILE));
+        SchemeHandler handler = FileURL.getRegisteredHandler(FileProtocols.FILE);
+        SchemeParser parser = handler.getParser();
+
+        fileURL.setHandler(handler);
         fileURL.setScheme(FileProtocols.FILE);
         fileURL.setHost(LOCALHOST);
-        fileURL.setPath(pathCanonizer.canonize(url));
+        fileURL.setPath((parser instanceof DefaultSchemeParser?((DefaultSchemeParser)parser).getPathCanonizer():pathCanonizer).canonize(url));
     }
+
+    /**
+     * Returns the {@link PathCanonizer} instance that is used by this {@link DefaultSchemeParser}.
+     *
+     * @return the {@link PathCanonizer} instance that is used by this {@link DefaultSchemeParser}
+     */
+    public PathCanonizer getPathCanonizer() {
+        return pathCanonizer;
+    }
+
 
 
     /////////////////////////////////
