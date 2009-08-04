@@ -34,15 +34,6 @@ import java.io.IOException;
  */
 public class PlatformManager implements JavaVersions, OsFamilies, OsVersions {
 
-    // - Misc. constants --------------------------------------------------------
-    // --------------------------------------------------------------------------
-    /** Custom user agent for HTTP requests. */
-    public static final String USER_AGENT = RuntimeConstants.APP_STRING  + " (Java "+System.getProperty("java.vm.version")
-                                            + "; " + System.getProperty("os.name") + " " +
-                                            System.getProperty("os.version") + " " + System.getProperty("os.arch") + ")";
-
-
-
     // - Preferences folder -----------------------------------------------------
     // --------------------------------------------------------------------------
     /** Folder in which to store the preferences. */

@@ -82,28 +82,30 @@ import java.util.regex.Pattern;
  */
 public class HTTPFile extends AbstractFile {
 
+    /** java.net.URL corresponding to this */
     private URL url;
 
-    private String absPath;
+    /** Contains the attributes of the remote HTTP resource. Contains default values until the file has been resolved */
+    private SimpleFileAttributes attributes;
 
-//    private String name;
-    private long date;
-    private long size;
-
-    private boolean parentValSet;
-    protected AbstractFile parent;
-	
-    /** True if the remote resource is parsable/browsable, i.e. is or seems to be an HTML/XHTML file */
-    private boolean isParsable;
+    /** True if the file should be resolved on the remote HTTP server to fetch attribute values, false if these are
+     * guessed. */
+    private boolean resolve;
 
     /** True if file has been resolved on the remote HTTP server, either successfully or unsuccessfully */
     private boolean fileResolved;
 
-    /** True if the file could be successfully resolved on the remote HTTP server */
-	private boolean exists;
-
+    private boolean parentValSet;
+    protected AbstractFile parent;
+	
     /** Permissions for HTTP files: r-- (400 octal). Only the 'user' permissions bits are supported. */
-    final static FilePermissions PERMISSIONS = new SimpleFilePermissions(256, 448);
+    private final static FilePermissions PERMISSIONS = new SimpleFilePermissions(256, 448);
+
+    /** User agent used for all HTTP connections made by HTTPFile */
+    // TODO: add file API version, like muCommander-file-API/1.0
+    public static final String USER_AGENT = "muCommander-file-API (Java "+System.getProperty("java.vm.version")
+                                            + "; " + System.getProperty("os.name") + " " +
+                                            System.getProperty("os.version") + " " + System.getProperty("os.arch") + ")";
 
     /** Matches HTML and XHTML attribute key/value pairs, where the value is surrounded by Single Quotes */
     private final static Pattern linkAttributePatternSQ = Pattern.compile("(src|href|SRC|HREF)=\\\'.*?\\\'");
@@ -117,12 +119,13 @@ public class HTTPFile extends AbstractFile {
             disableCertificateVerifications();
         }
         catch(Exception e) {
-            FileLogger.fine("Failed to install a custom TrustManager: "+e);
+            FileLogger.fine("Failed to install a custom TrustManager", e);
         }
     }
 
 
     protected HTTPFile(FileURL fileURL) throws IOException {
+        // TODO: optimize this
         this(fileURL, new URL(fileURL.toString(false)), fileURL.toString(false));
     }
 
@@ -135,7 +138,6 @@ public class HTTPFile extends AbstractFile {
             throw new IOException();
 
         this.url = url;
-        this.absPath = absPath;
 
 //        // Determine file name (URL-decoded)
 //        this.name = fileURL.getFilename(true);
@@ -145,19 +147,33 @@ public class HTTPFile extends AbstractFile {
 //            name = name.replace('\\', ' ');
 //        }
 
+        attributes = getDefaultAttributes(absPath);
+
         String mimeType;
         // Test if based on the URL, the file looks like an HTML file :
         //  - URL contains no path after hostname (e.g. http://google.com)
         //  - URL points to dynamic content (e.g. http://lulu.superblog.com?param=hola&val=...), even though dynamic scripts do not always return HTML/XHTML
         //  - No filename with a known mime type can be extracted from the last part of the URL (e.g. NOT http://mucommander.com/download/mucommander-0_7.tgz)
         if(fileURL.getPath().equals("/")  || fileURL.getQuery()!=null || ((mimeType=MimeTypes.getMimeType(this))==null || isParsableMimeType(mimeType))) {
-            isParsable = true;
-            size = -1;
-            date = System.currentTimeMillis();
+            attributes.setDirectory(true);
+            resolve = false;
         }
         else {
-            resolveFile();
+            resolve = true;
         }
+    }
+
+
+    private SimpleFileAttributes getDefaultAttributes(String absPath) {
+        attributes = new SimpleFileAttributes();
+        attributes.setPath(absPath);
+        attributes.setDate(System.currentTimeMillis());
+        attributes.setSize(-1); // Unknown
+        attributes.setPermissions(PERMISSIONS);
+        // exist = false
+        // isDirectory = false
+
+        return attributes;
     }
 
 
@@ -227,9 +243,7 @@ public class HTTPFile extends AbstractFile {
      */
     private void resolveFile() throws IOException {
         try {
-            // Default values.
-            size = -1;
-            date = System.currentTimeMillis();
+            FileLogger.finer("Resolving "+url);
 
             // Get URLConnection instance
             HttpURLConnection conn = getHttpURLConnection(url);
@@ -244,23 +258,27 @@ public class HTTPFile extends AbstractFile {
             checkHTTPResponse(conn);
 
             // Resolve date: use last-modified header, if not set use date header, and if still not set use System.currentTimeMillis
-            date = conn.getLastModified();
+            long date = conn.getLastModified();
             if(date==0) {
                 date = conn.getDate();
                 if(date==0)
                     date = System.currentTimeMillis();
             }
+            attributes.setDate(date);
 
             // Resolve size with content-length header (-1 if not available)
-            size = conn.getContentLength();
+            attributes.setSize(conn.getContentLength());
 
             // Test if content is HTML
             String contentType = conn.getContentType();
             if(isParsableMimeType(contentType))
-                isParsable = true;
+                attributes.setDirectory(true);
 
             // File was successfully resolved on the remote HTTP server and thus exists
-            exists = true;
+            attributes.setExists(true);
+        }
+        catch(IOException e) {
+            FileLogger.fine("Failed to resolve file "+url, e);
         }
         finally {
             // Mark the file as resolved, even if the request failed
@@ -290,8 +308,8 @@ public class HTTPFile extends AbstractFile {
                 "Basic "+ Base64Encoder.encode(credentials.getLogin()+":"+credentials.getPassword())
             );
 
-        // Set user-agent header
-        conn.setRequestProperty("user-agent", com.mucommander.PlatformManager.USER_AGENT);
+        // Set user-agent header.
+        conn.setRequestProperty("User-Agent", USER_AGENT);
 
         return conn;
     }
@@ -320,13 +338,27 @@ public class HTTPFile extends AbstractFile {
             throw new IOException(conn.getResponseMessage());
     }
 
+    private void checkResolveFile() {
+        if(resolve && !fileResolved) {
+            try {
+                resolveFile();
+            }
+            catch(IOException e) {
+                FileLogger.fine("Failed to resolve "+url, e);
+                // file will be considered as resolved
+            }
+        }
+    }
+
 	
     /////////////////////////////////////////
     // AbstractFile methods implementation //
     /////////////////////////////////////////
 	
     public long getDate() {
-        return date;
+        checkResolveFile();
+
+        return attributes.getDate();
     }
 
     public boolean canChangeDate() {
@@ -340,7 +372,9 @@ public class HTTPFile extends AbstractFile {
     }
 	
     public long getSize() {
-        return size;	// Size == -1 if not known
+        checkResolveFile();
+
+        return attributes.getSize();	// Size == -1 if not known
     }
 	
     public AbstractFile getParent() {
@@ -375,11 +409,11 @@ public class HTTPFile extends AbstractFile {
             catch(IOException e) {}
         }
 
-        return exists;
+        return attributes.exists();
     }
 
     public FilePermissions getPermissions() {
-        return PERMISSIONS;
+        return attributes.getPermissions();
     }
 
     public PermissionBits getChangeablePermissions() {
@@ -657,7 +691,7 @@ public class HTTPFile extends AbstractFile {
     ////////////////////////
 
     public String getAbsolutePath() {
-        return absPath;
+        return attributes.getPath();
     }
 
     public String getCanonicalPath() {
@@ -669,7 +703,9 @@ public class HTTPFile extends AbstractFile {
     }
 
     public boolean isBrowsable() {
-        return isParsable;
+        checkResolveFile();
+
+        return attributes.isDirectory();
     }
 
     public String getName() {

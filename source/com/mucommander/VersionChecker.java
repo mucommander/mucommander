@@ -18,14 +18,13 @@
 
 package com.mucommander;
 
+import com.mucommander.file.FileFactory;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 import javax.xml.parsers.SAXParserFactory;
 import java.io.InputStream;
-import java.net.URL;
-import java.net.URLConnection;
 
 /**
  * Retrieves information about the latest release of muCommander.
@@ -127,21 +126,23 @@ public class VersionChecker extends DefaultHandler {
      * @exception Exception thrown if any error happens while retrieving the remote version.
      */
     public static VersionChecker getInstance() throws Exception {
-        URLConnection  conn;   // Connection to the remote XML file.
-        InputStream    in;     // Input stream on the remote XML file.
         VersionChecker instance;
+        InputStream    in;     // Input stream on the remote XML file.
 
         AppLogger.fine("Opening connection to " + RuntimeConstants.VERSION_URL);
 
-        // Initialisation.
-        conn   = new URL(RuntimeConstants.VERSION_URL).openConnection();
-        conn.setRequestProperty("user-agent", PlatformManager.USER_AGENT);
-
         // Parses the remote XML file using UTF-8 encoding.
-        conn.connect();
-        in = conn.getInputStream();
-        SAXParserFactory.newInstance().newSAXParser().parse(in, instance = new VersionChecker());
-        in.close();
+        in = FileFactory.getFile(RuntimeConstants.VERSION_URL).getInputStream();
+        try {
+            SAXParserFactory.newInstance().newSAXParser().parse(in, instance = new VersionChecker());
+        }
+        catch(Exception e) {
+            AppLogger.fine("Failed to read version XML file at "+RuntimeConstants.VERSION_URL, e);
+            throw e;
+        }
+        finally {
+            in.close();
+        }
 
         // Makes sure we retrieved the information we were looking for.
         // We're not checking the release date as older version of muCommander
