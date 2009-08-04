@@ -23,6 +23,7 @@ import com.mucommander.command.Command;
 import com.mucommander.command.CommandException;
 import com.mucommander.command.CommandManager;
 import com.mucommander.commons.CommonsLogger;
+import com.mucommander.commons.log.SingleLineFormatter;
 import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.extension.ExtensionManager;
 import com.mucommander.file.FileFactory;
@@ -30,9 +31,9 @@ import com.mucommander.file.FileLogger;
 import com.mucommander.file.icon.impl.SwingFileIconProvider;
 import com.mucommander.file.impl.ftp.FTPProtocolProvider;
 import com.mucommander.file.impl.smb.SMBProtocolProvider;
-import com.mucommander.file.util.ResourceLoader;
 import com.mucommander.runtime.OsFamilies;
 import com.mucommander.shell.ShellHistoryManager;
+import com.mucommander.ui.dialog.debug.DebugConsoleHandler;
 import com.mucommander.ui.dialog.startup.CheckVersionDialog;
 import com.mucommander.ui.dialog.startup.InitialSetupDialog;
 import com.mucommander.ui.main.SplashScreen;
@@ -41,12 +42,8 @@ import com.mucommander.ui.main.commandbar.CommandBarIO;
 import com.mucommander.ui.main.toolbar.ToolBarIO;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.lang.reflect.Constructor;
-import java.util.logging.Handler;
-import java.util.logging.Level;
-import java.util.logging.LogManager;
-import java.util.logging.Logger;
+import java.util.logging.*;
 
 /**
  * muCommander launcher.
@@ -601,13 +598,31 @@ public class Launcher {
     }
 
     private static void configureLogging() throws IOException {
-        // Read the java.util.logging configuration file bundled with the muCommander JAR, replacing the JRE's
-        // logging.properties configuration.
-        InputStream resIn = ResourceLoader.getRootPackageAsFile(Launcher.class).getChild("com/mucommander/logging.properties").getInputStream();
-        LogManager.getLogManager().readConfiguration(resIn);
-        resIn.close();
+        // We're no longer using LogManager and a logging.properties file to initialize java.util.logging, because of
+        // a limitation with Webstart limiting the use of handlers and formatters residing in the system's classpath,
+        // i.e. built-in ones.
 
-        // Read the log level defined in the configuration
+//        // Read the java.util.logging configuration file bundled with the muCommander JAR, replacing the JRE's
+//        // logging.properties configuration.
+//        InputStream resIn = ResourceLoader.getRootPackageAsFile(Launcher.class).getChild("com/mucommander/logging.properties").getInputStream();
+//        LogManager.getLogManager().readConfiguration(resIn);
+//        resIn.close();
+
+        // Remove default handlers
+        Logger rootLogger = LogManager.getLogManager().getLogger("");
+        Handler handlers[] = rootLogger.getHandlers();
+        for(int i=0; i<handlers.length; i++)
+            rootLogger.removeHandler(handlers[i]);
+
+        // and add ours
+        handlers = new Handler[] { new ConsoleHandler(), new DebugConsoleHandler()};
+        Formatter formatter = new SingleLineFormatter();
+        for(int i=0; i<handlers.length; i++) {
+            handlers[i].setFormatter(formatter);
+            rootLogger.addHandler(handlers[i]);
+        }
+
+        // Set the log level to the value defined in the configuration
         updateLogLevel(getLogLevel());
 
 //        Logger fileLogger = FileLogger.getLogger();
@@ -647,12 +662,11 @@ public class Launcher {
      */
     public static void updateLogLevel(Level level) {
         // Set the level of muCommander loggers.
-        // Note: non-muCommander loggers default to the level defined in the bundled logging.properties.
+        // Note: non-muCommander loggers default to the level defined in the JRE's logging.properties.
         CommonsLogger.getLogger().setLevel(level);
         FileLogger.getLogger().setLevel(level);
         AppLogger.getLogger().setLevel(level);
 
-        // Set the level of handlers
         Logger rootLogger = LogManager.getLogManager().getLogger("");
         Handler handlers[] = rootLogger.getHandlers();
         for(int i=0; i<handlers.length; i++)
