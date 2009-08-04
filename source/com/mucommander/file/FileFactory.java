@@ -642,11 +642,11 @@ public class FileFactory {
             if(useCache) {
                 archiveFile = archiveFileCache.get(file.getURL());
                 if(archiveFile!=null) {
-                    FileLogger.finest("Found cached archive file for: "+file.getAbsolutePath());
+//                    FileLogger.finest("Found cached archive file for: "+file.getAbsolutePath());
                     return archiveFile;
                 }
 
-                FileLogger.finest("No cached archive file found for: "+file.getAbsolutePath());
+//                FileLogger.finest("No cached archive file found for: "+file.getAbsolutePath());
             }
 
             ArchiveFormatProvider provider;
