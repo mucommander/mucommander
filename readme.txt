@@ -202,7 +202,9 @@ Bug fixes:
 - Text viewer/editor no longer treats the Unicode BOM as an editable character
   (ticket #245).
 - UTF-16 and UTF-32 text files are no longer recognized as binary files
-  (ticket #235).  
+  (ticket #235).
+- Fixed erratic current file selection when 'Refresh' is called repeatedly
+  (ticket #250).
 
 Known issues:
 - Some translations are not up-to-date. For more information, see:

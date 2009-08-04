@@ -373,27 +373,46 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
     }
 
     /**
-     * Changes the current folder, preserving the current file selection if the folder hasn't changed.
+     * Shorthand for {@link #setCurrentFolder(AbstractFile, AbstractFile[], AbstractFile)} called with no specific file
+     * to select (default selection).
      *
-     * @param folder the new folder
-     * @param children child files of the new folder
+     * @param folder the new current folder
+     * @param children children of the specified folder
      */
     public void setCurrentFolder(AbstractFile folder, AbstractFile[] children) {
         setCurrentFolder(folder, children, null);
     }
 
     /**
-     * Changes the current folder, selecting the specified file if it can be found in the folder.
-     * The current file selection is preserved if the folder hasn't changed.
+     * Changes the current folder to the specified one and refreshes the table to reflect the folder's contents.
+     * The current file selection is also updated, with the following behavior:
+     * <ul>
+     *   <li>If <code>filetoSelect</code> is not <code>null</code>, the specified file becomes the currently selected
+     * file, if it can be found in the new current folder. Previously marked files are cleared.</li>
+     *   <li>If it is <code>null</code>:
+     *     <ul>
+     *       <li>if the current folder is the same as the previous one, the currently selected file and marked files
+     * remain the same, provided they still exist.</li>
+     *       <li>if the new current folder is the parent of the previous one, the previous current folder is selected.</li>
+     *       <li>in any other case, the first row is selected, whether it be the parent directory ('..') or the first
+     * file of the current folder if it has no parent.</li>
+     *     </ul>
+     *   </li>
+     * </ul>
      *
-     * @param folder the new folder
-     * @param children child files of the new folder
-     * @param select the file to select (highlight), can be null.
+     * <p>
+     * This method returns only when the folder has actually been changed and the table refreshed.<br>
+     * <b>Important:</b> This method should only be called by {@link FolderPanel} and in any case MUST be synchronized
+     * externally to ensure this method is never called concurrently by different threads.
+     * </p>
+     *
+     * @param folder the new current folder
+     * @param children children of the specified folder
+     * @param fileToSelect the file to select, <code>null</code> for the default selection.
      */
-    public synchronized void setCurrentFolder(AbstractFile folder, AbstractFile children[], AbstractFile select) {
-        AbstractFile currentFolder;      // Current folder.
-        FileSet      markedFiles;  // Buffer for all previously marked file.
-        AbstractFile selectedFile; // Buffer for the previously selected file.
+    public void setCurrentFolder(AbstractFile folder, AbstractFile children[], AbstractFile fileToSelect) {
+        AbstractFile currentFolder;     // Current folder.
+        FileSet      markedFiles;       // Buffer for all previously marked file.
 
         // Stop quick search in case it was being used before folder change
         quickSearch.stop();
@@ -403,25 +422,40 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
         // If we're refreshing the current folder, save the current selection and marked files
         // in order to restore them properly.
         markedFiles  = null;
-        selectedFile = null;
         if(currentFolder != null && folder.equalsCanonical(currentFolder)) {
             markedFiles = tableModel.getMarkedFiles();
-            selectedFile = getSelectedFile();
+            if(fileToSelect==null)
+                fileToSelect = getSelectedFile();
         }
 
-        // If we're navigating to the current folder's parent, we must select
-        // the current folder.
-        else if(tableModel.hasParentFolder() && folder.equals(tableModel.getParentFolder()))
-            selectedFile = currentFolder;
-
-        // Makes sure we select the requested file if it was specified.
-        if(select != null)
-            selectedFile = select;
+        // If we're navigating to the current folder's parent, we select the current folder.
+        else if(fileToSelect==null) {
+            if(tableModel.hasParentFolder() && folder.equals(tableModel.getParentFolder()))
+                fileToSelect = currentFolder;
+        }
 
         // Changes the current folder in the swing thread to make sure that repaints cannot
-        // happen in the middle of the operation - this is used to prevent flickers, baddly
+        // happen in the middle of the operation - this is used to prevent flickering, badly
         // refreshed frames and such unpleasant graphical artifacts.
-        SwingUtilities.invokeLater(new FolderChangeThread(folder, children, markedFiles, selectedFile));
+        Runnable folderChangeThread = new FolderChangeThread(folder, children, markedFiles, fileToSelect);
+
+        // Wait for the task to complete, so that we return only when the folder has actually been changed and the
+        // table updated to reflect the new folder.
+        // Note: we use a wait/notify scheme rather than calling SwingUtilities#invokeAndWait to avoid deadlocks
+        // due to AWT thread synchronization issues.
+        synchronized(folderChangeThread) {
+            SwingUtilities.invokeLater(folderChangeThread);
+            while(true) {
+                try {
+                    // FolderChangeThread will call notify when done
+                    folderChangeThread.wait();
+                    break;
+                }
+                catch(InterruptedException e) {
+                    // will keep looping
+                }
+            }
+        }
     }
 
     /**
@@ -1035,16 +1069,12 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
         if(cellRect.y<visibleRect.y || cellRect.y+getRowHeight()>visibleRect.y+visibleRect.height) {
             final JScrollPane scrollPane = folderPanel.getScrollPane();
             if(scrollPane!=null) {
-                    //scrollPane.getViewport().reshape(0, 0, getWidth(), getHeight());
-
                 // At this point JViewport is not yet aware of the new FileTable dimensions, calling setViewPosition
                 // would not work. Instead, SwingUtilities.invokeLater is used to delay the call after all pending
                 // UI events (including JViewport revalidation) have been processed.
                 SwingUtilities.invokeLater(new Runnable() {
                     public void run() {
-                        AppLogger.finest("calling viewPort.setViewPostion(0, "+(cellRect.y-scrollPane.getHeight()/2-getRowHeight()/2)+")");
                         scrollPane.getViewport().setViewPosition(new java.awt.Point(0, Math.max(0, cellRect.y-scrollPane.getHeight()/2-getRowHeight()/2)));
-                        //                        scrollPane.repaint();
                     }
                 });
             }
@@ -1966,7 +1996,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
             this.selectedFile = selectedFile;
         }
 
-        public synchronized void run() {
+        public void run() {
             try {
                 // Set the new current folder.
                 tableModel.setCurrentFolder(folder, children);
@@ -2001,8 +2031,10 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
                     }
                 }
                 // If no file was marked as needing to be selected, selects the first line.
-                else
+                else {
                     rowToSelect = 0;
+                }
+
                 selectRow(currentRow = rowToSelect);
                 fireSelectedFileChangedEvent();
 
@@ -2024,9 +2056,16 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
                 resizeAndRepaint();
             }
 
-            // While no such thing should happen, we want to make absolutely sure no exception
-            // is propagated in Swing's paint thread.
             catch(Throwable e) {
+                // While no such thing should happen, we want to make absolutely sure no exception
+                // is propagated to the AWT event dispatch thread.
+                AppLogger.warning("Caught exception while changing folder, this should not happen!", e);
+            }
+            finally {
+                // Notify #setCurrentFolder that we're done changing the folder.
+                synchronized(this) {
+                    notify();
+                }
             }
         }
     }

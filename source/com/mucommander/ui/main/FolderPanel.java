@@ -464,7 +464,7 @@ public class FolderPanel extends JPanel implements FocusListener, ThemeListener 
      * It does nothing and returns <code>null</code> if another folder change is already underway.</p>
      *
      * <p>
-     * This method is <b>not</b> I/O-bound and returns immmediately without any chance of locking the calling thread.
+     * This method is <b>not</b> I/O-bound and returns immediately, without any chance of locking the calling thread.
      * </p>
      *
      * @param folder the folder to be made current folder
@@ -476,14 +476,14 @@ public class FolderPanel extends JPanel implements FocusListener, ThemeListener 
     }
 
     /**
-     * Tries to change current folder to the new specified one, and select the given file after the folder has been
+     * Tries to change current folder to the new specified one, and selects the given file after the folder has been
      * changed. The user is notified by a dialog if the folder could not be changed.
      *
      * <p>This method spawns a separate thread that takes care of the actual folder change and returns it.
      * It does nothing and returns <code>null</code> if another folder change is already underway.</p>
      *
      * <p>
-     * This method is <b>not</b> I/O-bound and returns immmediately without any chance of locking the calling thread.
+     * This method is <b>not</b> I/O-bound and returns immediately, without any chance of locking the calling thread.
      * </p>
      *
      * @param folder the folder to be made current folder
@@ -494,10 +494,11 @@ public class FolderPanel extends JPanel implements FocusListener, ThemeListener 
         AppLogger.finer("folder="+folder+" selectThisFileAfter="+selectThisFileAfter);
 
         synchronized(FOLDER_CHANGE_LOCK) {
-            // Make sure there is not an existing thread running,
-            // this should not normally happen but if it does, report the error
+            // Make sure a folder change is not already taking place. This can happen under rare but normal
+            // circumstances, if this method is called before the folder change thread has had the time to call
+            // MainFrame#setNoEventsMode.
             if(changeFolderThread!=null) {
-                AppLogger.fine(">>>>>>>>> THREAD NOT NULL = "+changeFolderThread, new Throwable());
+                AppLogger.fine("A folder change is already taking place ("+changeFolderThread+"), returning null");
                 return null;
             }
 
@@ -518,7 +519,7 @@ public class FolderPanel extends JPanel implements FocusListener, ThemeListener 
      * path could not be resolved.</p>
      *
      * <p>
-     * This method is <b>not</b> I/O-bound and returns immmediately without any chance of locking the calling thread.
+     * This method is <b>not</b> I/O-bound and returns immediately, without any chance of locking the calling thread.
      * </p>
      *
      * @param folderPath path to the new current folder. If this path does not resolve into a file, an error message will be displayed.
@@ -543,7 +544,7 @@ public class FolderPanel extends JPanel implements FocusListener, ThemeListener 
      * It does nothing and returns <code>null</code> if another folder change is already underway.</p>
      *
      * <p>
-     * This method is <b>not</b> I/O-bound and returns immmediately without any chance of locking the calling thread.
+     * This method is <b>not</b> I/O-bound and returns immediately, without any chance of locking the calling thread.
      * </p>
      *
      * @param folderURL location to the new current folder. If this URL does not resolve into a file, an error message will be displayed.
@@ -562,7 +563,7 @@ public class FolderPanel extends JPanel implements FocusListener, ThemeListener 
      * It does nothing and returns <code>null</code> if another folder change is already underway.</p>
      *
      * <p>
-     * This method is <b>not</b> I/O-bound and returns immmediately without any chance of locking the calling thread.
+     * This method is <b>not</b> I/O-bound and returns immediately, without any chance of locking the calling thread.
      * </p>
      *
      * @param folderURL folder's URL to be made current folder. If this URL does not resolve into an existing file, an error message will be displayed.
@@ -573,10 +574,11 @@ public class FolderPanel extends JPanel implements FocusListener, ThemeListener 
         AppLogger.finer("folderURL="+folderURL);
 
         synchronized(FOLDER_CHANGE_LOCK) {
-            // Make sure there is not an existing thread running,
-            // this should not normally happen but if it does, report the error
+            // Make sure a folder change is not already taking place. This can happen under rare but normal
+            // circumstances, if this method is called before the folder change thread has had the time to call
+            // MainFrame#setNoEventsMode.
             if(changeFolderThread!=null) {
-                AppLogger.fine(">>>>>>>>> THREAD NOT NULL = "+changeFolderThread, new Throwable());
+                AppLogger.fine("A folder change is already taking place ("+changeFolderThread+"), returning null");
                 return null;
             }
 
@@ -595,7 +597,7 @@ public class FolderPanel extends JPanel implements FocusListener, ThemeListener 
      * It does nothing and returns <code>null</code> if another folder change is already underway.</p>
      *
      * <p>
-     * This method is <b>not</b> I/O-bound and returns immmediately without any chance of locking the calling thread.
+     * This method is <b>not</b> I/O-bound and returns immediately, without any chance of locking the calling thread.
      * </p>
      *
      * @return the thread that performs the actual folder change, null if another folder change is already underway
@@ -612,7 +614,7 @@ public class FolderPanel extends JPanel implements FocusListener, ThemeListener 
      * It does nothing and returns <code>null</code> if another folder change is already underway.</p>
      *
      * <p>
-     * This method is <b>not</b> I/O-bound and returns immmediately without any chance of locking the calling thread.
+     * This method is <b>not</b> I/O-bound and returns immediately, without any chance of locking the calling thread.
      * </p>
      *
      * @param selectThisFileAfter file to be selected after the folder has been refreshed (if it exists in the folder), can be null in which case FileTable rules will be used to select current file 
@@ -636,22 +638,20 @@ public class FolderPanel extends JPanel implements FocusListener, ThemeListener 
      * @param fileToSelect file to be selected after the folder has been refreshed (if it exists in the folder), can be null in which case FileTable rules will be used to select current file
      */
     private void setCurrentFolder(AbstractFile folder, AbstractFile children[], AbstractFile fileToSelect) {
-        synchronized(FOLDER_CHANGE_LOCK) {
-            // Change the current folder in the table and select the given file if not null
-            if(fileToSelect == null)
-                fileTable.setCurrentFolder(folder, children);
-            else
-                fileTable.setCurrentFolder(folder, children, fileToSelect);
+        // Change the current folder in the table and select the given file if not null
+        if(fileToSelect == null)
+            fileTable.setCurrentFolder(folder, children);
+        else
+            fileTable.setCurrentFolder(folder, children, fileToSelect);
 
-            // Update the current folder's value now that it is set
-            this.currentFolder = folder;
+        // Update the current folder's value now that it is set
+        this.currentFolder = folder;
 
-            // Add the folder to history
-            folderHistory.addToHistory(folder);
+        // Add the folder to history
+        folderHistory.addToHistory(folder);
 
-            // Notify listeners that the location has changed
-            locationManager.fireLocationChanged(folder.getURL());
-        }
+        // Notify listeners that the location has changed
+        locationManager.fireLocationChanged(folder.getURL());
     }
 
 
