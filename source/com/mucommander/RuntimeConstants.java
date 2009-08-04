@@ -100,7 +100,7 @@ public class RuntimeConstants {
             }
         }
         catch(Exception e) {
-            e.printStackTrace();
+            AppLogger.warning("Failed to read MANIFEST.MF, using default values", e);
             // Ignore this, attributes is already set to null.
         }
         finally {
