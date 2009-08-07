@@ -138,7 +138,7 @@ public class ActionKeymap {
     
     private static void registerActionAccelerators(String actionId, KeyStroke accelerator, KeyStroke alternateAccelerator) {
     	if (equals(accelerator, ActionProperties.getDefaultAccelerator(actionId)) &&
-    			equals(accelerator, ActionProperties.getDefaultAlternativeAccelerator(actionId))) {
+    			equals(alternateAccelerator, ActionProperties.getDefaultAlternativeAccelerator(actionId))) {
     		customPrimaryActionKeymap.remove(actionId);
     		customAlternateActionKeymap.remove(actionId);
     		acceleratorMap.remove(accelerator);

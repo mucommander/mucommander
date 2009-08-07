@@ -72,11 +72,11 @@ public class ActionProperties {
 		return getActionDescriptor(actionId).getCategory();
 	}
 	
-	static KeyStroke getDefaultAccelerator(String actionID) {
+	public static KeyStroke getDefaultAccelerator(String actionID) {
 		return (KeyStroke) defaultPrimaryActionKeymap.get(actionID);
 	}
 	
-	static KeyStroke getDefaultAlternativeAccelerator(String actionID) {
+	public static KeyStroke getDefaultAlternativeAccelerator(String actionID) {
 		return (KeyStroke) defaultAlternateActionKeymap.get(actionID);
 	}
 	

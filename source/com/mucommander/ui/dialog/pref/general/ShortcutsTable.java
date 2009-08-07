@@ -250,7 +250,7 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 	public boolean hasChanged() { return state.isTableBeenModified(); }
 	
 	public TableCellEditor getCellEditor(int row, int column) {
-		return new KeyStrokeCellEditor(new RecordingKeyStrokeField((String) getValueAt(row, column)));
+		return new KeyStrokeCellEditor(new RecordingKeyStrokeField(KeyStrokeUtils.getKeyStrokeDisplayableRepresentation((KeyStroke) getValueAt(row, column))));
 	}
 	
 	/**
@@ -398,7 +398,8 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 				return data.getTableData(row, column);
 			case ACCELERATOR_COLUMN_INDEX:
 			case ALTERNATE_ACCELERATOR_COLUMN_INDEX:
-				return KeyStrokeUtils.getKeyStrokeDisplayableRepresentation((KeyStroke) data.getTableData(row, column));
+//				return KeyStrokeUtils.getKeyStrokeDisplayableRepresentation((KeyStroke) data.getTableData(row, column));
+				return (KeyStroke) data.getTableData(row, column);
 			}
 			return data.getTableData(row, column);
 		}
@@ -549,6 +550,7 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 				data[i][ACTION_DESCRIPTION_COLUMN_INDEX] = new ActionDescription(IconManager.getPaddedIcon(actionIcon, new Insets(0, 4, 0, 4)), actionLabel);
 				
 				KeyStroke accelerator = ActionKeymap.getAccelerator(actionId);
+//				ActionProperties.get
 				setAccelerator(accelerator, i);
 				
 				KeyStroke alternativeAccelerator = ActionKeymap.getAlternateAccelerator(actionId);
@@ -717,10 +719,14 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 				ActionDescription description = (ActionDescription) value;
 				label.setIcon(description.icon);
 				label.setText(description.text);
+				
+				// set cell's foreground color
+				label.setForeground(ThemeCache.foregroundColors[ThemeCache.ACTIVE][ThemeCache.NORMAL][ThemeCache.PLAIN_FILE]);
 			}
 			// Any other column
 			else {
-				String text = value == null ? "" : (String) value;
+				final KeyStroke key = (KeyStroke) value;
+				String text = key == null ? "" : KeyStrokeUtils.getKeyStrokeDisplayableRepresentation(key);
 				
 				// If component's preferred width is bigger than column width then the component is not entirely
 	            // visible so we set a tooltip text that will display the whole text when mouse is over the component
@@ -732,12 +738,28 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 	            
 	            // Set label's text
 				label.setText(text);
+				// set cell's foreground color
+				if (key != null) {
+					boolean customized;
+					switch (columnId) {
+					case ACCELERATOR_COLUMN_INDEX:
+						customized = !key.equals(ActionProperties.getDefaultAccelerator(data.getActionId(convertRowIndexToModel(rowIndex))));
+						break;
+					case ALTERNATE_ACCELERATOR_COLUMN_INDEX:
+						customized = !key.equals(ActionProperties.getDefaultAlternativeAccelerator(data.getActionId(convertRowIndexToModel(rowIndex))));
+						break;
+					default:
+						customized = false;
+					}
+
+					label.setForeground(customized ?
+							ThemeCache.foregroundColors[ThemeCache.ACTIVE][ThemeCache.NORMAL][ThemeCache.SYMLINK]
+							: ThemeCache.foregroundColors[ThemeCache.ACTIVE][ThemeCache.NORMAL][ThemeCache.PLAIN_FILE]);
+				}
 			}
 			
 			// set outline for the focused cell
 			label.setOutline(hasFocus ? ThemeCache.backgroundColors[ThemeCache.ACTIVE][ThemeCache.SELECTED] : null);
-			// set cell's foreground color
-			label.setForeground(ThemeCache.foregroundColors[ThemeCache.ACTIVE][ThemeCache.NORMAL][ThemeCache.PLAIN_FILE]);
 			// set cell's background color
 			label.setBackground(ThemeCache.backgroundColors[ThemeCache.ACTIVE][rowIndex % 2 == 0 ? ThemeCache.NORMAL : ThemeCache.ALTERNATE]);
 			
