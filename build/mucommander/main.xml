@@ -47,9 +47,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Copies misc. data files.                              -->
     <copy file="${res.dictionary}"        tofile="${classes.normal}/dictionary.txt" overwrite="true"/>
     <copy file="${res}/mime.types"        todir="${classes.normal}" overwrite="true"/>
-    <copy file="${res}/toolbar.xml"       todir="${classes.normal}" overwrite="true"/>
-    <copy file="${res}/command_bar.xml"   todir="${classes.normal}" overwrite="true"/>
-    <copy file="${res}/action_keymap.xml" todir="${classes.normal}" overwrite="true"/>
     <copy file="${res.license}"           tofile="${classes.normal}/license.txt" overwrite="true"/>
     <copy file="${source}/com/mucommander/file/icon/impl/link.png" tofile="${classes.normal}/com/mucommander/file/icon/impl/link.png" overwrite="true"/>
 
