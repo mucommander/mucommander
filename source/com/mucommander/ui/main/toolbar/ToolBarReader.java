@@ -84,7 +84,8 @@ public class ToolBarReader extends ToolBarIO {
             String actionId = ActionManager.extrapolateId(actionAttribute);
             if (actionId != null)
             	actionsV.add(actionId);
-            AppLogger.warning("Error in "+DEFAULT_TOOLBAR_FILE_NAME+": action class "+actionId+" not found");
+            else
+            	AppLogger.warning("Error in "+DEFAULT_TOOLBAR_FILE_NAME+": action class "+actionId+" not found");
         }
         else if(qName.equals(SEPARATOR_ELEMENT)) {
             actionsV.add(null);

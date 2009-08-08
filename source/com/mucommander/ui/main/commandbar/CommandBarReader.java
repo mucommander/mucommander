@@ -126,7 +126,8 @@ class CommandBarReader extends CommandBarIO {
             else
                 if ((actionId = ActionManager.extrapolateId(actionAttribute)) != null)
                 	alternateActionsV.add(actionId);
-                AppLogger.warning("Error in "+DEFAULT_COMMAND_BAR_FILE_NAME+": action class "+actionAttribute+" not found");
+                else
+                	AppLogger.warning("Error in "+DEFAULT_COMMAND_BAR_FILE_NAME+": action class "+actionAttribute+" not found");
         }
         else if(qName.equals(ROOT_ELEMENT)) {
         	// Retrieve modifier key (shift by default)

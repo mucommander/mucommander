@@ -40,7 +40,7 @@ public class ActionProperties {
 	
 	private static HashMap defaultPrimaryActionKeymap = new HashMap();
 	private static HashMap defaultAlternateActionKeymap = new HashMap();
-	private static HashMap defaultAcceleratorMap = new HashMap();
+	private static AcceleratorMap defaultAcceleratorMap = new AcceleratorMap();
 	
 	public static void addActionDescriptor(ActionDescriptor actionDescriptor) {
 		String actionId = actionDescriptor.getId();
@@ -54,13 +54,13 @@ public class ActionProperties {
 		KeyStroke defaultActionKeyStroke = actionDescriptor.getDefaultKeyStroke();
 		if (defaultActionKeyStroke != null) {
 			defaultPrimaryActionKeymap.put(actionId, defaultActionKeyStroke);
-			defaultAcceleratorMap.put(defaultActionKeyStroke, actionId);
+			defaultAcceleratorMap.putAccelerator(defaultActionKeyStroke, actionId);
 		}
 		
 		KeyStroke defaultActionAlternativeKeyStroke = actionDescriptor.getDefaultAltKeyStroke();
 		if (defaultActionAlternativeKeyStroke != null) {
 			defaultAlternateActionKeymap.put(actionId, defaultActionAlternativeKeyStroke);
-			defaultAcceleratorMap.put(defaultActionAlternativeKeyStroke, actionId);
+			defaultAcceleratorMap.putAlternativeAccelerator(defaultActionAlternativeKeyStroke, actionId);
 		}
 	}
 	
@@ -80,8 +80,12 @@ public class ActionProperties {
 		return (KeyStroke) defaultAlternateActionKeymap.get(actionID);
 	}
 	
-	static String getActionForKeyStroke(KeyStroke keyStroke) {
-		return (String) defaultAcceleratorMap.get(keyStroke);
+	static String getDefaultActionForKeyStroke(KeyStroke keyStroke) {
+		return defaultAcceleratorMap.getActionId(keyStroke);
+	}
+	
+	static int getDefaultAcceleratorType(KeyStroke keyStroke) {
+		return defaultAcceleratorMap.getAcceleratorType(keyStroke);
 	}
 	
 	public static String getActionLabel(String actionId) {
