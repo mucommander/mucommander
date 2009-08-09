@@ -18,17 +18,12 @@
 
 package com.mucommander.ui.action.impl;
 
-import com.mucommander.ui.action.AbstractActionDescriptor;
-import com.mucommander.ui.action.ActionCategories;
-import com.mucommander.ui.action.ActionCategory;
-import com.mucommander.ui.action.MuAction;
-import com.mucommander.ui.action.ActionFactory;
+import com.mucommander.ui.action.*;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.WindowManager;
 
+import javax.swing.*;
 import java.util.Hashtable;
-
-import javax.swing.KeyStroke;
 
 /**
  * This action creates a new muCommander window.
@@ -39,6 +34,9 @@ public class NewWindowAction extends MuAction {
 
     public NewWindowAction(MainFrame mainFrame, Hashtable properties) {
         super(mainFrame, properties);
+
+        // This action must be performed in a separate thread as it will otherwise lock the AWT event thread
+        setPerformActionInSeparateThread(true);
     }
 
     public void performAction() {
