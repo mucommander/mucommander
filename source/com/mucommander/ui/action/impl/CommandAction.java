@@ -53,7 +53,7 @@ public class CommandAction extends MuAction {
      * @param command    command to run when this action is called.
      */
     public CommandAction(MainFrame mainFrame, Hashtable properties, Command command) {
-        super(mainFrame, properties, false);
+        super(mainFrame, properties);
         this.command = command;
         setLabel(command.getDisplayName());
     }

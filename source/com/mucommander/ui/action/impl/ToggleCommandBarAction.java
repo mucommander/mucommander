@@ -41,7 +41,7 @@ import java.util.Hashtable;
 public class ToggleCommandBarAction extends MuAction {
 
     public ToggleCommandBarAction(MainFrame mainFrame, Hashtable properties) {
-        super(mainFrame, properties, false);
+        super(mainFrame, properties);
         updateLabel(MuConfiguration.getVariable(MuConfiguration.COMMAND_BAR_VISIBLE, MuConfiguration.DEFAULT_COMMAND_BAR_VISIBLE));
     }
 

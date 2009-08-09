@@ -322,8 +322,9 @@ public class ActionManager {
             // Instantiate the MuAction class
             MuAction action = actionFactory.createAction(mainFrame, properties);
             mainFrameActions.put(actionParameters, new ActionAndIdPair(action, actionId));
-            
-            if(action.useStandardLabels()) {
+
+            // If the action's label has not been set yet, use the action descriptor's
+            if(action.getLabel()==null) {
                 // Retrieve the standard label entry from the dictionary and use it as this action's label
                 String label = ActionProperties.getActionLabel(actionId);
                 
@@ -339,7 +340,8 @@ public class ActionManager {
                     action.setToolTipText(tooltip);
             }
             
-            if(action.useStandardAccelerators()) {
+            // If the action's accelerators have not been set yet, use the ones from ActionKeymap
+            if(action.getAccelerator()==null) {
                 // Retrieve the standard accelerator (if any) and use it as this action's accelerator
                 KeyStroke accelerator = ActionKeymap.getAccelerator(actionId);
                 if(accelerator!=null)
@@ -351,7 +353,8 @@ public class ActionManager {
                     action.setAlternateAccelerator(accelerator);
             }
             
-            if(action.useStandardIcon()) {
+            // If the action's icon has not been set yet, use the action descriptor's
+            if(action.getIcon()==null) {
                 // Retrieve the standard icon image (if any) and use it as the action's icon
                 ImageIcon icon = ActionProperties.getActionIcon(actionId);
                 if(icon!=null)

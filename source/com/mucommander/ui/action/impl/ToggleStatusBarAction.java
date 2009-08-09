@@ -41,7 +41,7 @@ import java.util.Hashtable;
 public class ToggleStatusBarAction extends MuAction {
 
     public ToggleStatusBarAction(MainFrame mainFrame, Hashtable properties) {
-        super(mainFrame, properties, false);
+        super(mainFrame, properties);
         updateLabel(MuConfiguration.getVariable(MuConfiguration.STATUS_BAR_VISIBLE, MuConfiguration.DEFAULT_STATUS_BAR_VISIBLE));
     }
 

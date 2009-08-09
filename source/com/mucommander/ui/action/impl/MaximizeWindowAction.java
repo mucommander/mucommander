@@ -18,20 +18,13 @@
 
 package com.mucommander.ui.action.impl;
 
-import java.util.Hashtable;
-
-import javax.swing.JFrame;
-import javax.swing.KeyStroke;
-
 import com.mucommander.runtime.OsFamilies;
 import com.mucommander.text.Translator;
-import com.mucommander.ui.action.AbstractActionDescriptor;
-import com.mucommander.ui.action.ActionCategories;
-import com.mucommander.ui.action.ActionCategory;
-import com.mucommander.ui.action.ActionFactory;
-import com.mucommander.ui.action.ActionProperties;
-import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.action.*;
 import com.mucommander.ui.main.MainFrame;
+
+import javax.swing.*;
+import java.util.Hashtable;
 
 /**
  * Maximizes the {@link MainFrame} this action is associated with.
@@ -42,10 +35,7 @@ import com.mucommander.ui.main.MainFrame;
 public class MaximizeWindowAction extends MuAction {
 
     public MaximizeWindowAction(MainFrame mainFrame, Hashtable properties) {
-        super(mainFrame, properties, !OsFamilies.MAC_OS_X.isCurrent());
-
-        if(OsFamilies.MAC_OS_X.isCurrent())
-            setLabel(Translator.get(ActionProperties.getActionLabelKey(MaximizeWindowAction.Descriptor.ACTION_ID)+".mac_os_x"));
+        super(mainFrame, properties);
     }
 
     public void performAction() {
@@ -69,5 +59,10 @@ public class MaximizeWindowAction extends MuAction {
 		public KeyStroke getDefaultAltKeyStroke() { return null; }
 
 		public KeyStroke getDefaultKeyStroke() { return null; }
+
+        public String getLabel() {
+            // Use a special on Mac OS X
+            return OsFamilies.MAC_OS_X.isCurrent()?Translator.get(ActionProperties.getActionLabelKey(MaximizeWindowAction.Descriptor.ACTION_ID)+".mac_os_x"):super.getLabel();
+        }
     }
 }

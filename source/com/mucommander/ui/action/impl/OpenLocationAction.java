@@ -54,7 +54,7 @@ public class OpenLocationAction extends MuAction {
      * Creates a new OpenLocationAction instance using the provided FileURL and label.
      */
     public OpenLocationAction(MainFrame mainFrame, Hashtable properties, FileURL url, String label) {
-        super(mainFrame, properties, false);
+        super(mainFrame, properties);
 
         this.url = url;
         setLabel(label);
@@ -74,7 +74,7 @@ public class OpenLocationAction extends MuAction {
      * Creates a new OpenLocationAction instance using the provided AbstractFile and label.
      */
     public OpenLocationAction(MainFrame mainFrame, Hashtable properties, AbstractFile file, String label) {
-        super(mainFrame, properties, false);
+        super(mainFrame, properties);
 
         this.file = file;
         setLabel(label);
@@ -93,7 +93,7 @@ public class OpenLocationAction extends MuAction {
      * Creates a new OpenLocationAction instance using the provided path and label.
      */
     public OpenLocationAction(MainFrame mainFrame, Hashtable properties, String path, String label) {
-        super(mainFrame, properties, false);
+        super(mainFrame, properties);
 
         this.path = path;
         setLabel(label);

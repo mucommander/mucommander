@@ -40,7 +40,7 @@ import java.util.Hashtable;
 public class ToggleToolBarAction extends MuAction {
 
     public ToggleToolBarAction(MainFrame mainFrame, Hashtable properties) {
-        super(mainFrame, properties, false);
+        super(mainFrame, properties);
         updateLabel(MuConfiguration.getVariable(MuConfiguration.TOOLBAR_VISIBLE, MuConfiguration.DEFAULT_TOOLBAR_VISIBLE));
     }
 

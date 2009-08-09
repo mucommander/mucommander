@@ -18,20 +18,16 @@
 
 package com.mucommander.ui.action;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
-import java.util.Enumeration;
-import java.util.Hashtable;
-
-import javax.swing.AbstractAction;
-import javax.swing.Action;
-import javax.swing.ImageIcon;
-import javax.swing.KeyStroke;
-
 import com.mucommander.AppLogger;
 import com.mucommander.file.util.ResourceLoader;
 import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.main.MainFrame;
+
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import java.util.Enumeration;
+import java.util.Hashtable;
 
 
 /**
@@ -71,62 +67,16 @@ public abstract class MuAction extends AbstractAction {
     /** Name of the alternate accelerator KeyStroke property */
     public final static String ALTERNATE_ACCELERATOR_PROPERTY_KEY = "alternate_accelerator";
     
-    // TODO: document
-    private boolean useStandardLabels;
-    
-    private boolean useStandardIcon;
-    
-    private boolean useStandardAccelerators;
-    
     /**
-     * Convenience constructor which has the same effect as calling {@link #MuAction(MainFrame, Hashtable, boolean, boolean, boolean )}
-     * with standard labels, icon and accelerators enabled.
-     * 
+     * Creates a new <code>MuAction</code> associated with the specified {@link MainFrame}. The properties contained by
+     * the given {@link Hashtable} are used to initialize this action's property map.
+     *
      * @param mainFrame the MainFrame to associate with this new MuAction
      * @param properties the initial properties to use in this action. The Hashtable may simply be empty if no initial
      * properties are specified.
      */
     public MuAction(MainFrame mainFrame, Hashtable properties) {
-        this(mainFrame, properties, true, true, true);
-    }
-
-    /**
-     * Convenience constructor which has the same effect as calling {@link #MuAction(MainFrame, Hashtable, boolean, boolean, boolean)}
-     * with standard icon and accelerators enabled.
-     *
-     * @param mainFrame the MainFrame to associate with this new MuAction
-     * @param properties the initial properties to use in this action. The Hashtable may simply be empty if no initial
-     * properties are specified.
-     * @param useStandardLabels if <code>true</code>, standard label and tooltip (if any) will be retrieved with
-     * {@link #getStandardLabel(Class)} and {@link #getStandardTooltip(Class)} and used
-     */
-    public MuAction(MainFrame mainFrame, Hashtable properties, boolean useStandardLabels) {
-        this(mainFrame, properties, useStandardLabels, true, true);
-    }
-
-    /**
-     * Creates a new MuAction associated with the specified {@link MainFrame}. The properties contained by the given
-     * <code>Hashtable</code> are used to initialize this action's property map.
-     *
-     * <p>The <code>useStandardLabels</code>, <code>useStandardIcon</code> and <code>useStandardAccelerators</code>
-     * parameters control whether standard property values are automatically retrieved and used. These should
-     * be disabled if custom values are used.</p>
-     *
-     * @param mainFrame the MainFrame to associate with this new MuAction
-     * @param properties the initial properties to use in this action. The Hashtable may simply be empty if no initial
-     * properties are specified.
-     * @param useStandardLabels if <code>true</code>, standard label and tooltip (if any) will be retrieved with
-     * {@link #getStandardLabel()} and {@link #getStandardTooltip()} and used
-     * @param useStandardIcon if <code>true</code>, standard icon (if any) will be retrieved using {@link #getStandardIcon()}
-     * and used
-     * @param useStandardAccelerators if <code>true</code>, standard accelerator and alternate accelerator (if any) will
-     * be retrieved with {@link #getStandardAccelerator()} and {@link #getStandardAlternateAccelerator()} and used
-     */
-    public MuAction(MainFrame mainFrame, Hashtable properties, boolean useStandardLabels, boolean useStandardIcon, boolean useStandardAccelerators) {
         this.mainFrame = mainFrame;
-        this.useStandardLabels = useStandardLabels;
-        this.useStandardIcon = useStandardIcon;
-        this.useStandardAccelerators = useStandardAccelerators;
         
         // Add properties to this Action.
         // Property keys are expected to be String instances, those that are not will not be added.
@@ -149,12 +99,6 @@ public abstract class MuAction extends AbstractAction {
     public MainFrame getMainFrame() {
         return this.mainFrame;
     }
-
-    public boolean useStandardLabels() { return useStandardLabels; }
-    
-    public boolean useStandardIcon() { return useStandardIcon; }
-    
-    public boolean useStandardAccelerators() { return useStandardAccelerators; }
 
     /**
      * Returns the label of this action, <code>null</code> if this action has no label.

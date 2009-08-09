@@ -41,7 +41,7 @@ public abstract class ToggleColumnAction extends MuAction {
     protected int columnIndex;
 
     public ToggleColumnAction(MainFrame mainFrame, Hashtable properties, int columnIndex) {
-        super(mainFrame, properties, false);
+        super(mainFrame, properties);
 
         this.columnIndex = columnIndex;
         updateLabel();
