@@ -18,11 +18,11 @@
 
 package com.mucommander.ui.action;
 
-import javax.swing.ImageIcon;
-
 import com.mucommander.file.util.ResourceLoader;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.icon.IconManager;
+
+import javax.swing.*;
 
 /**
  * AbstractActionDescriptor is an abstract class which implements ActionDescriptor interface.
@@ -67,8 +67,18 @@ public abstract class AbstractActionDescriptor implements ActionDescriptor {
     public String getLabelKey() {
 		return getId()+".label";
 	}
-    
-    
+
+    /**
+     * Implements {@link ActionDescriptor#isParameterized()} by returning <code>false</code>, which suits most actions.
+     * This method can be overridden to change this behavior.
+     *
+     * @return <code>false</code>
+     */
+    public boolean isParameterized() {
+        return false;
+    }
+
+
     /////////////////////////
     //// Private methods ////
     /////////////////////////

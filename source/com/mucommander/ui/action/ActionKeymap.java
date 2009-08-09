@@ -18,18 +18,10 @@
 
 package com.mucommander.ui.action;
 
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
-
-import javax.swing.ActionMap;
-import javax.swing.InputMap;
-import javax.swing.JComponent;
-import javax.swing.KeyStroke;
-
 import com.mucommander.ui.main.MainFrame;
+
+import javax.swing.*;
+import java.util.*;
 
 /**
  * This class manages keyboard associations with {@link MuAction} ids.
@@ -56,9 +48,18 @@ public class ActionKeymap {
      */
     public static void registerActions(MainFrame mainFrame) {
         Enumeration actionIds = ActionManager.getActionIds();
+        String actionId;
+        ActionDescriptor actionDescriptor;
         while(actionIds.hasMoreElements()) {
-            MuAction action = ActionManager.getActionInstance((String)actionIds.nextElement(), mainFrame);
-            registerAction(mainFrame, action);
+            actionId = (String)actionIds.nextElement();
+            actionDescriptor = ActionProperties.getActionDescriptor(actionId);
+
+            // Instantiate the action only if:
+            //  - it is not parameterized: parameterized actions should only be instantiated with the required parameters
+            //  - it has an accelerator, either the descriptor's default or a custom one
+            if(!actionDescriptor.isParameterized() && (customPrimaryActionKeymap.containsKey(actionId) || actionDescriptor.getDefaultKeyStroke()!=null)) {
+                registerAction(mainFrame, ActionManager.getActionInstance(actionId, mainFrame));
+            }
         }
     }
     

@@ -18,8 +18,7 @@
 
 package com.mucommander.ui.action;
 
-import javax.swing.ImageIcon;
-import javax.swing.KeyStroke;
+import javax.swing.*;
 
 /**
  * Each MuAction is registered with an object of ActionDescriptor type
@@ -45,4 +44,11 @@ public interface ActionDescriptor {
 	public ImageIcon getIcon();
 	
 	public String getTooltip();
+
+    /**
+     * Returns <code>true</code> if the action requires parameters at creation time.
+     *
+     * @return <code>true</code> if the action requires parameters at creation time.
+     */
+    public boolean isParameterized();
 }
