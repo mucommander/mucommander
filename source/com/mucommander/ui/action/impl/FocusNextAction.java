@@ -18,30 +18,25 @@
 
 package com.mucommander.ui.action.impl;
 
-import com.mucommander.ui.action.AbstractActionDescriptor;
-import com.mucommander.ui.action.ActionCategories;
-import com.mucommander.ui.action.ActionCategory;
-import com.mucommander.ui.action.MuAction;
-import com.mucommander.ui.action.ActionFactory;
+import com.mucommander.ui.action.*;
 import com.mucommander.ui.helper.FocusRequester;
 import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.table.FileTable;
 
 import javax.swing.*;
-
 import java.awt.*;
 import java.util.Hashtable;
 
 /**
- * This action allows to cycle backward through the current FolderPanel's focusable components: file table, folder tree
+ * This action allows to cycle forward through the current FolderPanel's focusable components: file table, folder tree
  * and location field. The action has no effect when the focus is not in the MainFrame this action is tied to.
  *
  * @author Maxence Bernard
  */
-public class CycleBackwardThruFolderPanelAction extends MuAction {
+public class FocusNextAction extends MuAction {
 
-    public CycleBackwardThruFolderPanelAction(MainFrame mainFrame, Hashtable properties) {
+    public FocusNextAction(MainFrame mainFrame, Hashtable properties) {
         super(mainFrame, properties);
 
         // Perform the action also when in 'no events' mode
@@ -60,29 +55,29 @@ public class CycleBackwardThruFolderPanelAction extends MuAction {
         JTextField locationField = folderPanel.getLocationTextField();
         JTree tree = folderPanel.getFoldersTreePanel().getTree();
 
-        // Request focus on the 'previous' component, the cycle order being from right to left, bottom to top.
-        Component previousComponent;
-        if(focusOwner==fileTable)
-            previousComponent = folderPanel.isTreeVisible()?(JComponent)tree:locationField;
+        // Request focus on the 'next' component, the cycle order being from left to right, top to bottom.
+        Component nextComponent;
+        if(focusOwner==locationField)
+            nextComponent = folderPanel.isTreeVisible()?(JComponent)tree:fileTable;
         else if(focusOwner==tree)
-            previousComponent = locationField;
-        else if(focusOwner==locationField)
-            previousComponent = fileTable;
+            nextComponent = fileTable;
+        else if(focusOwner==fileTable)
+            nextComponent = locationField;
         else
             return;
 
-        FocusRequester.requestFocusInWindow(previousComponent);
+        FocusRequester.requestFocusInWindow(nextComponent);
     }
     
     public static class Factory implements ActionFactory {
 
 		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
-			return new CycleBackwardThruFolderPanelAction(mainFrame, properties);
+			return new FocusNextAction(mainFrame, properties);
 		}
     }
     
     public static class Descriptor extends AbstractActionDescriptor {
-    	public static final String ACTION_ID = "CycleBackwardThruFolderPanel";
+    	public static final String ACTION_ID = "FocusNext";
     	
 		public String getId() { return ACTION_ID; }
 
@@ -90,6 +85,6 @@ public class CycleBackwardThruFolderPanelAction extends MuAction {
 
 		public KeyStroke getDefaultAltKeyStroke() { return null; }
 
-		public KeyStroke getDefaultKeyStroke() { return KeyStroke.getKeyStroke("shift control TAB"); }
+		public KeyStroke getDefaultKeyStroke() { return KeyStroke.getKeyStroke("control TAB"); }
     }
 }

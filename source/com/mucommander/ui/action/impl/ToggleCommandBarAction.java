@@ -42,11 +42,12 @@ public class ToggleCommandBarAction extends MuAction {
 
     public ToggleCommandBarAction(MainFrame mainFrame, Hashtable properties) {
         super(mainFrame, properties, false);
-        setLabel(Translator.get(MuConfiguration.getVariable(MuConfiguration.COMMAND_BAR_VISIBLE,
-                                                                 MuConfiguration.DEFAULT_COMMAND_BAR_VISIBLE) ?
-                                ToggleCommandBarAction.Descriptor.ACTION_ID+".hide":ToggleCommandBarAction.Descriptor.ACTION_ID+".show"));
+        updateLabel(MuConfiguration.getVariable(MuConfiguration.COMMAND_BAR_VISIBLE, MuConfiguration.DEFAULT_COMMAND_BAR_VISIBLE));
     }
 
+    private void updateLabel(boolean visible) {
+        setLabel(Translator.get(visible?Descriptor.ACTION_ID+".hide":Descriptor.ACTION_ID+".show"));
+    }
 
     public void performAction() {
         CommandBar commandBar = mainFrame.getCommandBar();
@@ -54,7 +55,7 @@ public class ToggleCommandBarAction extends MuAction {
         // Save the last command bar visible state in the configuration, this will become the default for new MainFrame windows.
         MuConfiguration.setVariable(MuConfiguration.COMMAND_BAR_VISIBLE, visible);
         // Change the label to reflect the new command bar state
-        setLabel(Translator.get(visible?ToggleCommandBarAction.Descriptor.ACTION_ID+".hide":ToggleCommandBarAction.Descriptor.ACTION_ID+".show"));
+        updateLabel(visible);
         // Show/hide the command bar
         commandBar.setVisible(visible);
         mainFrame.validate();
@@ -72,10 +73,12 @@ public class ToggleCommandBarAction extends MuAction {
     	
 		public String getId() { return ACTION_ID; }
 
-		public ActionCategory getCategory() { return ActionCategories.VIEW; }
+        public ActionCategory getCategory() { return ActionCategories.VIEW; }
 
 		public KeyStroke getDefaultAltKeyStroke() { return null; }
 
 		public KeyStroke getDefaultKeyStroke() { return null; }
+
+        public String getLabelKey() { return ACTION_ID+".show"; }
     }
 }

@@ -19,7 +19,6 @@
 package com.mucommander.ui.main.table;
 
 import com.mucommander.text.Translator;
-import com.mucommander.ui.action.impl.*;
 
 /**
  * Defines columns related constants.
@@ -100,6 +99,17 @@ public class Columns {
         return MINIMUM_COLUMN_WIDTHS[column];
     }
 
+    /**
+     * Returns the action IDs whose corresponding action allows the column to be shown/hidden.
+     * Caution: the {@link #NAME} column cannot be toggled, therefore the return action ID is <code>null</code>.
+     *
+     * @param column column index
+     * @return the action IDs whose corresponding action allows the column to be shown/hidden.
+     */
+    public static String getToggleColumnActionId(int column) {
+        return TOGGLE_COLUMN_ACTIONS[column];
+    }
+
     /** Minimum width of each column */
     private static final int MINIMUM_COLUMN_WIDTHS[] = {
         STANDARD_MINIMUM_WIDTH,         // Extension
@@ -113,25 +123,14 @@ public class Columns {
 
     /** Array of actions that allow columns to be shown/hidden, ordered by their identifier. */
     private final static String TOGGLE_COLUMN_ACTIONS[] = {
-        ToggleExtensionColumnAction.Descriptor.ACTION_ID,
+        "ToggleExtensionColumn",
         null,
-        ToggleSizeColumnAction.Descriptor.ACTION_ID,
-        ToggleDateColumnAction.Descriptor.ACTION_ID,
-        TogglePermissionsColumnAction.Descriptor.ACTION_ID,
-        ToggleOwnerColumnAction.Descriptor.ACTION_ID,
-        ToggleGroupColumnAction.Descriptor.ACTION_ID
+        "ToggleSizeColumn",
+        "ToggleDateColumn",
+        "TogglePermissionsColumn",
+        "ToggleOwnerColumn",
+        "ToggleGroupColumn"
     };
-
-    /**
-     * Returns an arrray of actions that allow columns to be shown/hidden, ordered by their identifier.
-     * Caution: the {@link #NAME} column cannot be toggled, therefore the corresponding array element is
-     * <code>null</code>.
-     * @return an arrray of actions that allow columns to be shown/hidden, ordered by their identifier.
-     */
-    public static String[] getToggleColumnActions() {
-        return TOGGLE_COLUMN_ACTIONS;
-    }
-
 
     /**
      * Prevents instanciations of the class.

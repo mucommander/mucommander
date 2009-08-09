@@ -42,9 +42,11 @@ public class ToggleStatusBarAction extends MuAction {
 
     public ToggleStatusBarAction(MainFrame mainFrame, Hashtable properties) {
         super(mainFrame, properties, false);
-        setLabel(Translator.get(MuConfiguration.getVariable(MuConfiguration.STATUS_BAR_VISIBLE,
-                                                                 MuConfiguration.DEFAULT_STATUS_BAR_VISIBLE) ? 
-                                ToggleStatusBarAction.Descriptor.ACTION_ID+".hide":ToggleStatusBarAction.Descriptor.ACTION_ID+".show"));
+        updateLabel(MuConfiguration.getVariable(MuConfiguration.STATUS_BAR_VISIBLE, MuConfiguration.DEFAULT_STATUS_BAR_VISIBLE));
+    }
+
+    private void updateLabel(boolean visible) {
+        setLabel(Translator.get(visible?Descriptor.ACTION_ID+".hide":Descriptor.ACTION_ID+".show"));
     }
 
     public void performAction() {
@@ -53,7 +55,7 @@ public class ToggleStatusBarAction extends MuAction {
         // Save the last status bar visible state in the configuration, this will become the default for new MainFrame windows.
         MuConfiguration.setVariable(MuConfiguration.STATUS_BAR_VISIBLE, visible);
         // Change the label to reflect the new status bar state
-        setLabel(Translator.get(visible?ToggleStatusBarAction.Descriptor.ACTION_ID+".hide":ToggleStatusBarAction.Descriptor.ACTION_ID+".show"));
+        updateLabel(visible);
         // Show/hide the status bar
         statusBar.setVisible(visible);
         mainFrame.validate();
@@ -76,5 +78,7 @@ public class ToggleStatusBarAction extends MuAction {
 		public KeyStroke getDefaultAltKeyStroke() { return null; }
 
 		public KeyStroke getDefaultKeyStroke() { return null; }
+
+        public String getLabelKey() { return ACTION_ID+".show"; }
     }
 }

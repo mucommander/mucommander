@@ -2636,6 +2636,7 @@ ConnectToServer.tooltip:SV:Anslut till fjärrserver
 ConnectToServer.tooltip:DA:Forbind til en fjernserver
 ConnectToServer.tooltip:UA:З'єднатися з віддаленим сервером
 
+# User-configurable viewer
 View.label:EN:View
 View.label:FR:Voir
 View.label:DE:Ansicht
@@ -2657,6 +2658,29 @@ View.label:JA:表示
 View.label:SV:Visa
 View.label:DA:Vis
 View.label:UA:Переглянути
+
+# Internal viewer
+InternalView.label:EN:View (internal)
+InternalView.label:FR:Voir (interne)
+# Translation missing (New!)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 View.tooltip:EN:View selected file
 View.tooltip:FR:Voir le fichier sélectionné
@@ -2680,7 +2704,30 @@ View.tooltip:SV:Visa markerad fil
 View.tooltip:DA:Vis markerede fil
 View.tooltip:UA:Переглянути вибраний файл
 
+# User-configurable editor
 Edit.label:EN:$[edit]
+
+# Internal editor
+InternalEdit.label:EN:Edit (internal)
+InternalEdit.label:FR:Editer (interne)
+# Translation missing (New!)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 Edit.tooltip:EN:Edit selected file
 Edit.tooltip:FR:Editer le fichier selectionné
@@ -4680,6 +4727,52 @@ Stop.label:SV:Stoppa mappbyte
 Stop.label:DA:Stop ombytning af mapper
 Stop.label:UA:Зупинити зміну папки
 
+# %1 is replaced by the column's name (Date, Size, ...).
+ToggleColumn.show:EN:Show %1 column
+ToggleColumn.show:FR:Afficher la colonne %1
+# Translation missing (New!)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# %1 is replaced by the column's name (Date, Size, ...).
+ToggleColumn.hide:EN:Show %1 column
+ToggleColumn.hide:FR:Afficher la colonne %1
+# Translation missing (New!)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ToggleCommandBar.show:EN:Show command bar
 ToggleCommandBar.show:FR:Afficher la barre de commande
 ToggleCommandBar.show:DE:Befehlsleiste anzeigen
@@ -5637,6 +5730,42 @@ MergeFile.label:PL:Scalaj pliki
 ShowDebugConsole.label:EN:Debug console
 ShowDebugConsole.label:FR:Console de débug
 # Translation missing (New!)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+FocusPrevious.label:EN:Focus previous component
+FocusPrevious.label:FR:Sélectionner le précédent composant
+# Translation missing (New!)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+FocusNext.label:EN:Focus next component
+FocusNext.label:FR:Sélectionner le prochain composant
+# Translation missing (New!)
+
+
 
 
 

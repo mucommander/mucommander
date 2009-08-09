@@ -19,20 +19,14 @@
 
 package com.mucommander.ui.action.impl;
 
-import java.util.Hashtable;
-
-import javax.swing.KeyStroke;
-
 import com.mucommander.desktop.DesktopManager;
 import com.mucommander.text.Translator;
-import com.mucommander.ui.action.AbstractActionDescriptor;
-import com.mucommander.ui.action.ActionCategories;
-import com.mucommander.ui.action.ActionCategory;
-import com.mucommander.ui.action.ActionFactory;
-import com.mucommander.ui.action.ActionProperties;
-import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.action.*;
 import com.mucommander.ui.dialog.ErrorDialog;
 import com.mucommander.ui.main.MainFrame;
+
+import javax.swing.*;
+import java.util.Hashtable;
 
 
 /**
@@ -45,13 +39,8 @@ public class RevealInDesktopAction extends MuAction {
 
     public RevealInDesktopAction(MainFrame mainFrame, Hashtable properties) {
         super(mainFrame, properties);
-        if(DesktopManager.canOpenInFileManager())
-            setLabel(Translator.get(ActionProperties.getActionLabelKey(RevealInDesktopAction.Descriptor.ACTION_ID), DesktopManager.getFileManagerName()));
-        else {
-            // Disable this action if the platform is not capable of opening files in the default file manager
-            setLabel(Translator.get(ActionProperties.getActionLabelKey(RevealInDesktopAction.Descriptor.ACTION_ID), Translator.get("file_manager")));
-            setEnabled(false);
-        }
+
+        setEnabled(DesktopManager.canOpenInFileManager());
     }
 
     public void performAction() {
@@ -80,5 +69,9 @@ public class RevealInDesktopAction extends MuAction {
 		public KeyStroke getDefaultAltKeyStroke() { return null; }
 
 		public KeyStroke getDefaultKeyStroke() { return KeyStroke.getKeyStroke("control L"); }
+
+        public String getLabel() {
+            return Translator.get(ActionProperties.getActionLabelKey(RevealInDesktopAction.Descriptor.ACTION_ID), DesktopManager.canOpenInFileManager()?DesktopManager.getFileManagerName():Translator.get("file_manager"));
+        }
     }
 }

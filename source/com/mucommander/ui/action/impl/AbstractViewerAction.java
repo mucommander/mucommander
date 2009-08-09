@@ -36,14 +36,6 @@ import java.util.Hashtable;
  * @author Maxence Bernard, Nicolas Rinaudo
  */
 abstract class AbstractViewerAction extends SelectedFileAction {
-    // - Property names ------------------------------------------------------------------
-    // -----------------------------------------------------------------------------------
-    /** Key that controls whether or not to use the custom command. */
-    public static final String USE_CUSTOM_COMMAND_PROPERTY_KEY = "use_custom";
-    /** Key that controls the command that will be used to open files. */
-    public static final String CUSTOM_COMMAND_PROPERTY_KEY     = "custom_command";
-
-
 
     // - Initialization ------------------------------------------------------------------
     // -----------------------------------------------------------------------------------

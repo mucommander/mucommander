@@ -18,10 +18,15 @@
 
 package com.mucommander.ui.action.impl;
 
+import com.mucommander.text.Translator;
+import com.mucommander.ui.action.AbstractActionDescriptor;
+import com.mucommander.ui.action.ActionCategories;
+import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.table.Columns;
 
+import javax.swing.*;
 import java.util.Hashtable;
 
 /**
@@ -37,12 +42,38 @@ public abstract class ToggleColumnAction extends MuAction {
 
     public ToggleColumnAction(MainFrame mainFrame, Hashtable properties, int columnIndex) {
         super(mainFrame, properties, false);
-        setLabel(Columns.getColumnLabel(columnIndex));
 
         this.columnIndex = columnIndex;
+        updateLabel();
+    }
+
+    protected boolean isColumnVisible() {
+        return mainFrame.getActiveTable().isColumnVisible(columnIndex);
+    }
+
+    protected void updateLabel() {
+        setLabel(Translator.get(isColumnVisible()?"ToggleColumn.hide":"ToggleColumn.show", Columns.getColumnLabel(Columns.DATE)));
     }
 
     public void performAction() {
-        mainFrame.getActiveTable().setColumnEnabled(columnIndex, !mainFrame.getActiveTable().isColumnVisible(columnIndex));
+        mainFrame.getActiveTable().setColumnEnabled(columnIndex, !isColumnVisible());
+    }
+
+
+    public static abstract class Descriptor extends AbstractActionDescriptor {
+
+        private int columnIndex; 
+
+        public Descriptor(int columnIndex) { this.columnIndex = columnIndex; }
+
+        public String getId() { return Columns.getToggleColumnActionId(columnIndex); }
+
+        public ActionCategory getCategory() { return ActionCategories.VIEW; }
+
+        public KeyStroke getDefaultAltKeyStroke() { return null; }
+
+        public KeyStroke getDefaultKeyStroke() { return null; }
+
+        public String getLabel() { return Translator.get("ToggleColumn.show", Columns.getColumnLabel(columnIndex)); }
     }
 }

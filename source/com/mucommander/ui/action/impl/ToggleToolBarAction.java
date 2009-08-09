@@ -41,9 +41,11 @@ public class ToggleToolBarAction extends MuAction {
 
     public ToggleToolBarAction(MainFrame mainFrame, Hashtable properties) {
         super(mainFrame, properties, false);
-        setLabel(Translator.get(MuConfiguration.getVariable(MuConfiguration.TOOLBAR_VISIBLE,
-                                                                 MuConfiguration.DEFAULT_TOOLBAR_VISIBLE)
-                                ? ToggleToolBarAction.Descriptor.ACTION_ID+".hide":ToggleToolBarAction.Descriptor.ACTION_ID+".show"));
+        updateLabel(MuConfiguration.getVariable(MuConfiguration.TOOLBAR_VISIBLE, MuConfiguration.DEFAULT_TOOLBAR_VISIBLE));
+    }
+
+    private void updateLabel(boolean visible) {
+        setLabel(Translator.get(visible?Descriptor.ACTION_ID+".hide":Descriptor.ACTION_ID+".show"));
     }
 
     public void performAction() {
@@ -52,7 +54,7 @@ public class ToggleToolBarAction extends MuAction {
         // Save the last toolbar visible state in the configuration, this will become the default for new MainFrame windows.
         MuConfiguration.setVariable(MuConfiguration.TOOLBAR_VISIBLE, visible);
         // Change the label to reflect the new toolbar state
-        setLabel(Translator.get(visible?ToggleToolBarAction.Descriptor.ACTION_ID+".hide":ToggleToolBarAction.Descriptor.ACTION_ID+".show"));
+        updateLabel(visible);
         // Show/hide the toolbar
         toolBarPanel.setVisible(visible);
         mainFrame.validate();
@@ -75,5 +77,7 @@ public class ToggleToolBarAction extends MuAction {
 		public KeyStroke getDefaultAltKeyStroke() { return null; }
 
 		public KeyStroke getDefaultKeyStroke() { return null; }
+
+        public String getLabelKey() { return ACTION_ID+".show"; }
     }
 }

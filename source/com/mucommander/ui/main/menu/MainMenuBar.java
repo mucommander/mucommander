@@ -222,14 +222,11 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
         // Toggle columns submenu
         columnsMenu = MenuToolkit.addMenu(Translator.get("view_menu.show_hide_columns"), null, this);
         menuItemMnemonicHelper2.clear();
-        String toggleColumnActionIds[] = Columns.getToggleColumnActions();
-
-        int nbToggleColumnActionIds = toggleColumnActionIds.length;
-        for(int i=0; i<nbToggleColumnActionIds; i++) {
+        for(int i=0; i<Columns.COLUMN_COUNT; i++) {
             if(i==Columns.NAME)
                 continue;
 
-            toggleColumnItems[i] = MenuToolkit.addCheckBoxMenuItem(columnsMenu, ActionManager.getActionInstance(toggleColumnActionIds[i], mainFrame), menuItemMnemonicHelper2);
+            toggleColumnItems[i] = MenuToolkit.addCheckBoxMenuItem(columnsMenu, ActionManager.getActionInstance(Columns.getToggleColumnActionId(i), mainFrame), menuItemMnemonicHelper2);
         }
         viewMenu.add(columnsMenu);
 
@@ -412,6 +409,8 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
                     continue;
                 toggleColumnItems[i].setSelected(activeTable.isColumnEnabled(i));
                 toggleColumnItems[i].setEnabled(activeTable.isColumnDisplayable(i));
+                // Override the action's label to a shorter one
+                toggleColumnItems[i].setText(Columns.getColumnLabel(i));
             }
         }
         else if(source==goMenu) {

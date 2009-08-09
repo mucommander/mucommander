@@ -18,16 +18,11 @@
 
 package com.mucommander.ui.action.impl;
 
-import com.mucommander.ui.action.AbstractActionDescriptor;
-import com.mucommander.ui.action.ActionCategories;
-import com.mucommander.ui.action.ActionCategory;
-import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.action.ActionFactory;
+import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.main.MainFrame;
 
 import java.util.Hashtable;
-
-import javax.swing.KeyStroke;
 
 /**
  * Recalls window number 7 (brings it to the front).
@@ -37,9 +32,7 @@ import javax.swing.KeyStroke;
 public class RecallWindow7Action extends RecallWindowAction {
 
     public RecallWindow7Action(MainFrame mainFrame, Hashtable properties) {
-        super(mainFrame, properties);
-
-        putValue(WINDOW_NUMBER_PROPERTY_KEY, "7");
+        super(mainFrame, properties, 7);
     }
     
     public static class Factory implements ActionFactory {
@@ -49,15 +42,11 @@ public class RecallWindow7Action extends RecallWindowAction {
 		}
     }
     
-    public static class Descriptor extends AbstractActionDescriptor {
-    	public static final String ACTION_ID = "RecallWindow7";
-    	
-		public String getId() { return ACTION_ID; }
+    public static class Descriptor extends RecallWindowAction.Descriptor {
+        public static final String ACTION_ID = RecallWindowAction.Descriptor.ACTION_ID+"7";
 
-		public ActionCategory getCategory() { return ActionCategories.WINDOW; }
-
-		public KeyStroke getDefaultAltKeyStroke() { return null; }
-
-		public KeyStroke getDefaultKeyStroke() { return KeyStroke.getKeyStroke("control 7"); }
+        public Descriptor() {
+            super(7);
+        }
     }
 }

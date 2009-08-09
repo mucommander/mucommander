@@ -35,8 +35,8 @@ import com.mucommander.file.util.FileSet;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionKeymap;
 import com.mucommander.ui.action.ActionManager;
-import com.mucommander.ui.action.impl.CycleBackwardThruFolderPanelAction;
-import com.mucommander.ui.action.impl.CycleForwardThruFolderPanelAction;
+import com.mucommander.ui.action.impl.FocusNextAction;
+import com.mucommander.ui.action.impl.FocusPreviousAction;
 import com.mucommander.ui.border.MutableLineBorder;
 import com.mucommander.ui.dialog.ErrorDialog;
 import com.mucommander.ui.dialog.QuestionDialog;
@@ -297,19 +297,19 @@ public class FolderPanel extends JPanel implements FocusListener, ThemeListener 
     }
 
     /**
-     * Registers the {@link com.mucommander.ui.action.impl.CycleForwardThruFolderPanelAction} and
-     * {@link com.mucommander.ui.action.impl.CycleBackwardThruFolderPanelAction actions onto the given component's input map.
+     * Registers the {@link FocusNextAction} and
+     * {@link FocusPreviousAction actions onto the given component's input map.
      *  
      * @param component the component for which to register the cycle actions
      */
     private void registerCycleThruFolderPanelAction(JComponent component) {
         ActionKeymap.registerActionAccelerators(
-                ActionManager.getActionInstance(CycleForwardThruFolderPanelAction.Descriptor.ACTION_ID, mainFrame),
+                ActionManager.getActionInstance(FocusNextAction.Descriptor.ACTION_ID, mainFrame),
                 component,
                 JComponent.WHEN_FOCUSED);
 
         ActionKeymap.registerActionAccelerators(
-                ActionManager.getActionInstance(CycleBackwardThruFolderPanelAction.Descriptor.ACTION_ID, mainFrame),
+                ActionManager.getActionInstance(FocusPreviousAction.Descriptor.ACTION_ID, mainFrame),
                 component,
                 JComponent.WHEN_FOCUSED);
     }

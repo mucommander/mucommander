@@ -18,17 +18,12 @@
 
 package com.mucommander.ui.action.impl;
 
-import com.mucommander.ui.action.AbstractActionDescriptor;
-import com.mucommander.ui.action.ActionCategories;
-import com.mucommander.ui.action.ActionCategory;
-import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.action.ActionFactory;
+import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.table.Columns;
 
 import java.util.Hashtable;
-
-import javax.swing.KeyStroke;
 
 /**
  * Shows/hides the 'Owner' column of the currently active FileTable. If the column is currently visible, this action
@@ -48,16 +43,8 @@ public class ToggleOwnerColumnAction extends ToggleColumnAction {
 			return new ToggleOwnerColumnAction(mainFrame, properties);
 		}
     }
-    
-    public static class Descriptor extends AbstractActionDescriptor {
-    	public static final String ACTION_ID = "ToggleOwnerColumn";
-    	
-		public String getId() { return ACTION_ID; }
 
-		public ActionCategory getCategory() { return ActionCategories.VIEW; }
-
-		public KeyStroke getDefaultAltKeyStroke() { return null; }
-
-		public KeyStroke getDefaultKeyStroke() { return null; }
+    public static class Descriptor extends ToggleColumnAction.Descriptor {
+        public Descriptor() { super(Columns.OWNER); }
     }
 }

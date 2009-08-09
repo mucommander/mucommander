@@ -74,17 +74,17 @@ public class FileTableHeader extends JTableHeader implements MouseListener {
             JPopupMenu popupMenu = new JPopupMenu();
             MainFrame mainFrame = table.getFolderPanel().getMainFrame();
 
-            String toggleColumnActionIds[] = Columns.getToggleColumnActions();
             JCheckBoxMenuItem checkboxMenuItem;
-            int nbToggleColumnActions = toggleColumnActionIds.length;
-            for(int i=0; i<nbToggleColumnActions; i++) {
+            for(int i=0; i<Columns.COLUMN_COUNT; i++) {
                 if(i==Columns.NAME)
                     continue;
 
-                checkboxMenuItem = new JCheckBoxMenuItem(ActionManager.getActionInstance(toggleColumnActionIds[i], mainFrame));
+                checkboxMenuItem = new JCheckBoxMenuItem(ActionManager.getActionInstance(Columns.getToggleColumnActionId(i), mainFrame));
 
                 checkboxMenuItem.setSelected(table.isColumnEnabled(i));
                 checkboxMenuItem.setEnabled(table.isColumnDisplayable(i));
+                // Override the action's label to a shorter one
+                checkboxMenuItem.setText(Columns.getColumnLabel(i));
 
                 popupMenu.add(checkboxMenuItem);
             }

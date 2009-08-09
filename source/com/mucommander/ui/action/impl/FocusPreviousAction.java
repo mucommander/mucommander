@@ -18,30 +18,26 @@
 
 package com.mucommander.ui.action.impl;
 
-import com.mucommander.ui.action.AbstractActionDescriptor;
-import com.mucommander.ui.action.ActionCategories;
-import com.mucommander.ui.action.ActionCategory;
-import com.mucommander.ui.action.MuAction;
-import com.mucommander.ui.action.ActionFactory;
+import com.mucommander.ui.action.*;
 import com.mucommander.ui.helper.FocusRequester;
 import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.table.FileTable;
 
 import javax.swing.*;
-
 import java.awt.*;
 import java.util.Hashtable;
 
 /**
- * This action allows to cycle forward through the current FolderPanel's focusable components: file table, folder tree
- * and location field. The action has no effect when the focus is not in the MainFrame this action is tied to.
+ * This action allows to cycle backward through the current {@link FolderPanel}'s focusable components: file table,
+ * folder tree and location field. The action has no effect when the focus is not in the {@link MainFrame} this action
+ * is tied to.
  *
  * @author Maxence Bernard
  */
-public class CycleForwardThruFolderPanelAction extends MuAction {
+public class FocusPreviousAction extends MuAction {
 
-    public CycleForwardThruFolderPanelAction(MainFrame mainFrame, Hashtable properties) {
+    public FocusPreviousAction(MainFrame mainFrame, Hashtable properties) {
         super(mainFrame, properties);
 
         // Perform the action also when in 'no events' mode
@@ -60,29 +56,29 @@ public class CycleForwardThruFolderPanelAction extends MuAction {
         JTextField locationField = folderPanel.getLocationTextField();
         JTree tree = folderPanel.getFoldersTreePanel().getTree();
 
-        // Request focus on the 'next' component, the cycle order being from left to right, top to bottom.
-        Component nextComponent;
-        if(focusOwner==locationField)
-            nextComponent = folderPanel.isTreeVisible()?(JComponent)tree:fileTable;
+        // Request focus on the 'previous' component, the cycle order being from right to left, bottom to top.
+        Component previousComponent;
+        if(focusOwner==fileTable)
+            previousComponent = folderPanel.isTreeVisible()?(JComponent)tree:locationField;
         else if(focusOwner==tree)
-            nextComponent = fileTable;
-        else if(focusOwner==fileTable)
-            nextComponent = locationField;
+            previousComponent = locationField;
+        else if(focusOwner==locationField)
+            previousComponent = fileTable;
         else
             return;
 
-        FocusRequester.requestFocusInWindow(nextComponent);
+        FocusRequester.requestFocusInWindow(previousComponent);
     }
     
     public static class Factory implements ActionFactory {
 
 		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
-			return new CycleForwardThruFolderPanelAction(mainFrame, properties);
+			return new FocusPreviousAction(mainFrame, properties);
 		}
     }
     
     public static class Descriptor extends AbstractActionDescriptor {
-    	public static final String ACTION_ID = "CycleForwardThruFolderPanel";
+    	public static final String ACTION_ID = "FocusPrevious";
     	
 		public String getId() { return ACTION_ID; }
 
@@ -90,6 +86,6 @@ public class CycleForwardThruFolderPanelAction extends MuAction {
 
 		public KeyStroke getDefaultAltKeyStroke() { return null; }
 
-		public KeyStroke getDefaultKeyStroke() { return KeyStroke.getKeyStroke("control TAB"); }
+		public KeyStroke getDefaultKeyStroke() { return KeyStroke.getKeyStroke("shift control TAB"); }
     }
 }

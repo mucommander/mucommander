@@ -18,55 +18,59 @@
 
 package com.mucommander.ui.action.impl;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.util.Hashtable;
-import java.util.Vector;
-
-import javax.swing.KeyStroke;
-
 import com.mucommander.AppLogger;
 import com.mucommander.text.Translator;
-import com.mucommander.ui.action.AbstractActionDescriptor;
-import com.mucommander.ui.action.ActionCategory;
-import com.mucommander.ui.action.ActionFactory;
-import com.mucommander.ui.action.ActionProperties;
-import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.action.*;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.WindowManager;
 
+import javax.swing.*;
+import java.util.Hashtable;
+import java.util.Vector;
+
 /**
- * Brings a MainFrame window to the front. The window number must be specified in the
- * {@link #WINDOW_NUMBER_PROPERTY_KEY} property, and must exist (i.e. must refer to an existing window number).
+ * Brings a {@link }MainFrame} window to the front. This action operates on a specific window number specified in the
+ * constructor, either as a constructor parameter, or in the {@link #WINDOW_NUMBER_PROPERTY_KEY} property.
  *
  * @see com.mucommander.ui.main.WindowManager
  * @author Maxence Bernard
  */
-public class RecallWindowAction extends MuAction implements PropertyChangeListener {
+public class RecallWindowAction extends MuAction {
 
+    /** Window number this action operates on */
+    private int windowNumber;
+
+    /** Key of the property that holds the window number */
     public final static String WINDOW_NUMBER_PROPERTY_KEY = "window_number";
-    
+
 
     public RecallWindowAction(MainFrame mainFrame, Hashtable properties) {
         super(mainFrame, properties);
 
-        // Set label in case the window number was set in the initial properties
-        int windowNumber = getWindowNumber();
-        if(windowNumber!=-1)
-            updateLabel(windowNumber);
+        Object windowNumberValue = getValue(WINDOW_NUMBER_PROPERTY_KEY);
+        if(windowNumberValue==null || !(windowNumberValue instanceof String))
+            throw new IllegalArgumentException(WINDOW_NUMBER_PROPERTY_KEY+" ("+windowNumberValue+")");
 
-        // Listen to window number property change
-        addPropertyChangeListener(this);
+        windowNumber = Integer.parseInt((String)windowNumberValue);
+
+        if(windowNumber<=0)
+            throw new IllegalArgumentException(WINDOW_NUMBER_PROPERTY_KEY+" ("+windowNumberValue+")");
     }
 
+    public RecallWindowAction(MainFrame mainFrame, Hashtable properties, int windowNumber) {
+        super(mainFrame, properties);
+
+        this.windowNumber = windowNumber;
+        if(windowNumber<=0)
+            throw new IllegalArgumentException("windowNumber ("+windowNumber+")");
+    }
 
     public void performAction() {
         Vector mainFrames = WindowManager.getMainFrames();
 
         // Checks that the window number currently exists
-        int windowNumber = getWindowNumber();
         if(windowNumber<=0 || windowNumber>mainFrames.size()) {
-            AppLogger.fine("Specified window does not exist: "+getValue(WINDOW_NUMBER_PROPERTY_KEY));
+            AppLogger.fine("Window number "+windowNumber+" does not exist");
             return;
         }
 
@@ -74,71 +78,45 @@ public class RecallWindowAction extends MuAction implements PropertyChangeListen
         ((MainFrame)mainFrames.elementAt(windowNumber-1)).toFront();
     }
 
-
-    /**
-     * Returns the window number contained by the {@link #WINDOW_NUMBER_PROPERTY_KEY} property or -1 if the property
-     * doesn't contain any value, or a value that cannot be parsed as an int.
-     *
-     * @return the window number's property value or -1 if the property doesn't contain any value, or a value that cannot be parsed as an int.
-     */
-    private int getWindowNumber() {
-        try {
-            Object windowNumberValue = getValue(WINDOW_NUMBER_PROPERTY_KEY);
-            if(windowNumberValue==null || !(windowNumberValue instanceof String))
-                return -1;
-            
-            return Integer.parseInt((String)windowNumberValue);
-        }
-        catch(Exception e) {
-            return -1;
-        }
-    }
-
-
-    /**
-     * Updates the label using the given window number.
-     *
-     * @param windowNumber the window number to be used in the label
-     */
-    private void updateLabel(int windowNumber) {
-        // Update the action's label
-        setLabel(Translator.get(ActionProperties.getActionLabelKey(RecallWindowAction.Descriptor.ACTION_ID), ""+windowNumber));
-    }
-
-
-    ///////////////////////////////////////////
-    // PropertyChangeListener implementation //
-    ///////////////////////////////////////////
-
-    public void propertyChange(PropertyChangeEvent propertyChangeEvent) {
-
-        if(propertyChangeEvent.getPropertyName().equals(WINDOW_NUMBER_PROPERTY_KEY)) {
-            int windowNumber = getWindowNumber();
-            if(windowNumber==-1) {
-                AppLogger.fine("Invalid "+WINDOW_NUMBER_PROPERTY_KEY+" property="+getValue(WINDOW_NUMBER_PROPERTY_KEY));
-            }
-            else {
-                updateLabel(windowNumber);
-            }
-        }
-    }
-    
     public static class Factory implements ActionFactory {
 
 		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
 			return new RecallWindowAction(mainFrame, properties);
 		}
     }
-    
+
     public static class Descriptor extends AbstractActionDescriptor {
     	public static final String ACTION_ID = "RecallWindow";
-    	
-		public String getId() { return ACTION_ID; }
 
-		public ActionCategory getCategory() { return null; }
+        private int windowNumber;
+
+        public Descriptor() {
+            this(-1);
+        }
+
+        protected Descriptor(int windowNumber) {
+            this.windowNumber = windowNumber;
+        }
+
+		public String getId() { return ACTION_ID+(windowNumber==-1?"":""+windowNumber); }
+
+		public ActionCategory getCategory() { return ActionCategories.WINDOW; }
 
 		public KeyStroke getDefaultAltKeyStroke() { return null; }
 
-		public KeyStroke getDefaultKeyStroke() { return null; }
+        public KeyStroke getDefaultKeyStroke() {
+            if(windowNumber<=0 || windowNumber>10)
+                return null;
+
+            return KeyStroke.getKeyStroke("control "+(windowNumber==10?0:windowNumber));
+        }
+
+        public String getLabel() {
+            return Translator.get(getLabelKey(), windowNumber==-1?"?":""+windowNumber);
+        }
+
+        public boolean isParameterized() {
+            return windowNumber==-1;
+        }
     }
 }
