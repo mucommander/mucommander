@@ -54,10 +54,9 @@ public class ActionKeymap {
             actionId = (String)actionIds.nextElement();
             actionDescriptor = ActionProperties.getActionDescriptor(actionId);
 
-            // Instantiate the action only if:
-            //  - it is not parameterized: parameterized actions should only be instantiated with the required parameters
-            //  - it has an accelerator, either the descriptor's default or a custom one
-            if(!actionDescriptor.isParameterized() && (customPrimaryActionKeymap.containsKey(actionId) || actionDescriptor.getDefaultKeyStroke()!=null)) {
+            // Instantiate the action only if it is not parameterized: parameterized actions should only be instantiated
+            // when they are needed and with the required parameters.
+            if(!actionDescriptor.isParameterized()) {
                 registerAction(mainFrame, ActionManager.getActionInstance(actionId, mainFrame));
             }
         }
