@@ -32,7 +32,7 @@ import java.io.OutputStream;
 /**
  * A simple text editor. Most of the implementation is located in {@link TextEditorImpl}.
  *
- * @author Maxence Bernard
+ * @author Maxence Bernard, Nicolas Rinaudo
  */
 class TextEditor extends FileEditor implements DocumentListener {
 
@@ -51,11 +51,24 @@ class TextEditor extends FileEditor implements DocumentListener {
     ///////////////////////////////
 
     protected void saveAs(AbstractFile destFile) throws IOException {
-        OutputStream out = destFile.getOutputStream(false);
-        out.write(textEditorImpl.getTextArea().getText().getBytes(textEditorImpl.getFileEncoding()));
-        out.close();
+        OutputStream out;
 
-        setSaveNeeded(false);
+        out = null;
+
+        try {
+            out = destFile.getOutputStream(false);
+            textEditorImpl.write(out);
+            setSaveNeeded(false);
+        }
+        finally {
+            if(out != null) {
+                try {out.close();}
+                catch(IOException e) {
+                    // Ignored
+                }
+            }
+
+        }
     }
 
     public void edit(AbstractFile file) throws IOException {
@@ -93,6 +106,6 @@ class TextEditor extends FileEditor implements DocumentListener {
     }
 
     public void requestFocus() {
-        textEditorImpl.getTextArea().requestFocus();
+        textEditorImpl.requestFocus();
     }
 }

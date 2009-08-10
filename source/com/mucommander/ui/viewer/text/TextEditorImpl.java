@@ -34,21 +34,20 @@ import com.mucommander.ui.viewer.EditorFrame;
 
 import javax.swing.*;
 import javax.swing.event.DocumentListener;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.nio.charset.Charset;
 
 /**
  * Text editor implementation used by {@link TextViewer} and {@link TextEditor}.
  *
- * @author Maxence Bernard, Mariusz Jakubowski
+ * @author Maxence Bernard, Mariusz Jakubowski, Nicolas Rinaudo
  */
 class TextEditorImpl implements ThemeListener, ActionListener, EncodingListener {
-
     private boolean isEditable;
     private DocumentListener documentListener;
 
@@ -69,6 +68,9 @@ class TextEditorImpl implements ThemeListener, ActionListener, EncodingListener 
     private JMenuItem findPreviousItem;
 
 
+    ////////////////////
+    // Initialisation //
+    ////////////////////
     public TextEditorImpl(boolean isEditable) {
         this.isEditable = isEditable;
 
@@ -89,6 +91,11 @@ class TextEditorImpl implements ThemeListener, ActionListener, EncodingListener 
         textArea.setFont(ThemeManager.getCurrentFont(Theme.EDITOR_FONT));
     }
 
+
+
+    /////////////////
+    // Search code //
+    /////////////////
     private void find() {
         FindDialog findDialog = new FindDialog(frame);
 
@@ -146,6 +153,10 @@ class TextEditorImpl implements ThemeListener, ActionListener, EncodingListener 
     // Package-access methods //
     ////////////////////////////
 
+    void requestFocus() {
+        textArea.requestFocus();
+    }
+
     JTextArea getTextArea() {
         return textArea;
     }
@@ -158,39 +169,49 @@ class TextEditorImpl implements ThemeListener, ActionListener, EncodingListener 
 
         // Get a RandomAccessInputStream on the file if possible, if not get a simple InputStream
         InputStream in = null;
-        if(file.hasRandomAccessInputStream()) {
-            try { in = file.getRandomAccessInputStream(); }
-            catch(IOException e) {
-                // In that case we simply get an InputStream
+
+        try {
+            if(file.hasRandomAccessInputStream()) {
+                try { in = file.getRandomAccessInputStream(); }
+                catch(IOException e) {
+                    // In that case we simply get an InputStream
+                }
+            }
+
+            if(in==null)
+                in = file.getInputStream();
+
+            String encoding = EncodingDetector.detectEncoding(in);
+            // If the encoding could not be detected or the detected encoding is not supported, default to UTF-8
+            if(encoding==null || !Charset.isSupported(encoding))
+                encoding = "UTF-8";
+
+            if(in instanceof RandomAccessInputStream) {
+                // Seek to the beginning of the file and reuse the stream
+                ((RandomAccessInputStream)in).seek(0);
+            }
+            else {
+                // TODO: it would be more efficient to use some sort of PushBackInputStream, though we can't use PushBackInputStream because we don't want to keep pushing back for the whole InputStream lifetime
+
+                // Close the InputStream and open a new one
+                // Note: we could use mark/reset if the InputStream supports it, but it is almost never implemented by
+                // InputStream subclasses and a broken by design anyway.
+                in.close();
+                in = file.getInputStream();
+            }
+
+            // Load the file into the text area
+            // Note: loadDocument closes the InputStream
+            loadDocument(in, encoding);
+        }
+        finally {
+            if(in != null) {
+                try {in.close();}
+                catch(IOException e) {
+                    // Nothing to do here.
+                }
             }
         }
-
-        if(in==null)
-            in = file.getInputStream();
-
-        String encoding = EncodingDetector.detectEncoding(in);
-        // If the encoding could not be detected or the detected encoding is not supported, default to UTF-8
-        if(encoding==null || !Charset.isSupported(encoding))
-            encoding = "UTF-8";
-
-        if(in instanceof RandomAccessInputStream) {
-            // Seek to the beginning of the file and reuse the stream
-            ((RandomAccessInputStream)in).seek(0);
-        }
-        else {
-            // TODO: it would be more efficient to use some sort of PushBackInputStream, though we can't use PushBackInputStream because we don't want to keep pushing back for the whole InputStream lifetime
-
-            // Close the InputStream and open a new one
-            // Note: we could use mark/reset if the InputStream supports it, but it is almost never implemented by
-            // InputStream subclasses and a broken by design anyway.
-            in.close();
-            in = file.getInputStream();
-        }
-
-        // Load the file into the text area
-        // Note: loadDocument closes the InputStream
-        loadDocument(in, encoding);
-
         // Listen to theme changes to update the text area if it is visible
         ThemeManager.addCurrentThemeListener(this);
     }
@@ -203,24 +224,25 @@ class TextEditorImpl implements ThemeListener, ActionListener, EncodingListener 
         if(encoding.toLowerCase().startsWith("utf"))
             in = new BOMInputStream(in);
 
-        InputStreamReader isr = new InputStreamReader(in, encoding);
+        Reader isr = new BufferedReader(new InputStreamReader(in, encoding));
 
-        try {
-            // Feed the file's contents to text area
-            textArea.read(isr, null);
-            isr.close();
+        // Feed the file's contents to text area
+        textArea.read(isr, null);
 
-            // Listen to document changes
-            if(documentListener!=null)
-                textArea.getDocument().addDocumentListener(documentListener);
+        // Listen to document changes
+        if(documentListener!=null)
+            textArea.getDocument().addDocumentListener(documentListener);
 
-            // Move cursor to the top
-            textArea.setCaretPosition(0);
-        }
-        finally {
-            // Close the stream no matter what
-            isr.close();
-        }
+        // Move cursor to the top
+        textArea.setCaretPosition(0);
+    }
+
+    void write(OutputStream out) throws IOException {
+        Document document;
+
+        document = textArea.getDocument();
+        try {textArea.getUI().getEditorKit(textArea).write(new BufferedWriter(new OutputStreamWriter(out, encoding)), document, 0, document.getLength());}
+        catch(BadLocationException e) {throw new IOException(e);}
     }
 
     void populateMenus(JFrame frame, JMenuBar menuBar) {
