@@ -62,7 +62,7 @@ class SwingFileIconProviderImpl extends LocalFileIconProvider implements Cacheab
     /** True if init has been called */
     protected static boolean initialized;
 
-    /** Transparent icon symbolizing symlinks, painted over an existing icon */
+    /** Name of the 'symlink' icon resource located in the same package as this class */
     private final static String SYMLINK_ICON_NAME = "link.png";
 
     /** Icon that is painted over a symlink's target file icon to symbolize a symlink to the target file. */
@@ -88,10 +88,9 @@ class SwingFileIconProviderImpl extends LocalFileIconProvider implements Cacheab
             fileSystemView = FileSystemView.getFileSystemView();
 
         // Loads the symlink overlay icon
-        String iconPath = ResourceLoader.getRelativePackagePath(SwingFileIconProviderImpl.class.getPackage())+"/"+SYMLINK_ICON_NAME;
-        URL iconURL = ResourceLoader.getResourceAsURL(iconPath);
+        URL iconURL = ResourceLoader.getPackageResourceAsURL(SwingFileIconProviderImpl.class.getPackage(), SYMLINK_ICON_NAME);
         if(iconURL==null)
-            throw new RuntimeException("Could not locate required symlink icon: "+iconPath);
+            throw new RuntimeException("Could not locate required symlink icon: "+SYMLINK_ICON_NAME);
 
         SYMLINK_OVERLAY_ICON = new ImageIcon(iconURL);
 

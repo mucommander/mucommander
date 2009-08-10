@@ -35,14 +35,16 @@ import java.util.StringTokenizer;
 public class MimeTypes extends Hashtable {
 
     private final static MimeTypes mimeTypes = new MimeTypes();
-    
+
+    /** Name of the 'mime.types' resource file located in the same package as this class */
+    private static final String MIME_TYPES_RESOURCE_NAME = "mime.types";
 	
     private MimeTypes() {
         BufferedReader br;
 
         br = null;
         try {
-            br = new BufferedReader(new InputStreamReader(ResourceLoader.getResourceAsStream("/mime.types")));
+            br = new BufferedReader(new InputStreamReader(ResourceLoader.getPackageResourceAsStream(MimeTypes.class.getPackage(), MIME_TYPES_RESOURCE_NAME)));
 
             String line;
             StringTokenizer st;
