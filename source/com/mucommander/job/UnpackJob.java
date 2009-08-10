@@ -28,6 +28,7 @@ import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.action.impl.UnmarkAllAction;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;
+import com.mucommander.util.StringUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -231,7 +232,7 @@ public class UnpackJob extends AbstractCopyJob {
                     relDestPath = newName+(PathUtils.getDepth(relDestPath, "/")<=1?"":"/"+PathUtils.removeLeadingFragments(relDestPath, "/", 1));
 
                 if(!"/".equals(destSeparator))
-                    relDestPath = relDestPath.replace("/", destSeparator);
+                    relDestPath = StringUtils.replaceCompat(relDestPath, "/", destSeparator);
 
                 // Create destination AbstractFile instance
                 destFile = destFolder.getChild(relDestPath);

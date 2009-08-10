@@ -372,7 +372,7 @@ public class BatchRenameDialog extends FocusDialog implements ActionListener,
 
         // search & replace
         if (edtSearchFor.getText().length() > 0) {
-            newName = newName.replace(edtSearchFor.getText(), edtReplaceWith
+            newName = StringUtils.replaceCompat(newName, edtSearchFor.getText(), edtReplaceWith
                     .getText());
         }
 
