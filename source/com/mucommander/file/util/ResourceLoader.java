@@ -21,24 +21,31 @@ package com.mucommander.file.util;
 import com.mucommander.file.AbstractArchiveFile;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
+import com.mucommander.file.FileLogger;
 import com.mucommander.file.impl.local.LocalFile;
 import com.mucommander.util.StringUtils;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLDecoder;
+import java.util.Enumeration;
 
 /**
- * This class provides methods to load resources located within reach of a <code>ClassLoader</code>. Those resources
- * can reside either in a JAR file or in a local directory -- all methods of this class are agnostic to either type
- * of location.
+ * This class provides methods to load resources located within the reach of a <code>ClassLoader</code>. Those resources
+ * can reside either in a JAR file or in a local directory that are in the classpath -- all methods of this class are
+ * agnostic to either type of location.
  *
- * <p>The <code>ResourceAsURL</code> and <code>ResourceAsStream</code> methods are akin to those of <code>java.lang.Class</code>
- * and <code>java.lang.ClassLoader</code>, albeit easier to work with. But the real fun lies in the <code>ResourceAsFile</code>
- * methods which allow to manipulate resources as regular files -- again, whether they be in a regular directory or
- * in a JAR file. Finally, the {@link #getRootPackageAsFile(Class)} method allows to list and manipulate the resource
- * files contained in a particular classpath's location, including the .class files.
+ * <p>The <code>getResourceAsURL</code> and <code>getResourceAsStream</code> methods are akin to those of
+ * <code>java.lang.Class</code> and <code>java.lang.ClassLoader</code>, except that they are not sensitive to the
+ * presence of a leading forward-slash separator in the resource path, and that they allow the search to be limited
+ * to a particular classpath location.</p>
+ *
+ * <p>But the real fun lies in the <code>getResourceAsFile</code> methods, which allow to manipulate resources as
+ * regular files -- again, whether they be in a regular directory or in a JAR file. Likewise,
+ * the {@link #getRootPackageAsFile(Class)} allows to dynamically explore and manipulate the resource files contained
+ * in a particular classpath's location.</p>
  *
  * @author Maxence Bernard
  */
@@ -66,121 +73,247 @@ public class ResourceLoader {
         //
         return defaultClassLoader;
     }
-    
+
 
     /**
-     * Finds the resource with the given path and returns a URL pointing to its location, or <code>null</code>
-     * if the resource couldn't be located.
-     * The <code>ClassLoader</code> returned by {@link #getDefaultClassLoader()} is used for locating the resource.
+     * This method is similar to {@link #getResourceAsURL(String)} except that it looks for a resource with a given
+     * name in a specific package.
      *
-     * <p>The given path may or may not start with a leading slash character ('/'), this doesn't affect the way it
-     * is interpreted.</p>
+     * @param ppackage package serving as a base folder for the resource to retrieve
+     * @param name name of the resource in the package. This is a filename only, not a path.
+     * @return a URL pointing to the resource, or <code>null</code> if the resource couldn't be located
+     */
+    public static URL getPackageResourceAsURL(Package ppackage, String name) {
+        return getPackageResourceAsURL(ppackage, name, getDefaultClassLoader(), null);
+    }
+
+    /**
+     * This method is similar to {@link #getResourceAsURL(String)} except that it looks for a resource with a given
+     * name in a specific package.
      *
-     * @param path a path to the resource, relative to the default ClassLoader's classpath
+     * @param ppackage package serving as a base folder for the resource to retrieve
+     * @param classLoader the ClassLoader used for locating the resource. May not be <code>null</code>.
+     * @param rootPackageFile root package location (JAR file or directory) that limits the scope of the search,
+     * <code>null</code> to look for the resource in the whole class path.
+     * @param name name of the resource in the package. This is a filename only, not a path.
+     * @return a URL pointing to the resource, or <code>null</code> if the resource couldn't be located
+     * @see #getRootPackageAsFile(Class)
+     */
+    public static URL getPackageResourceAsURL(Package ppackage, String name, ClassLoader classLoader, AbstractFile rootPackageFile) {
+        return ResourceLoader.getResourceAsURL(getRelativePackagePath(ppackage)+"/"+name, classLoader, rootPackageFile);
+    }
+
+    /**
+     * Shorthand for {@link #getResourceAsURL(String, ClassLoader, AbstractFile)} called with the
+     * {@link #getDefaultClassLoader() default class loader} and a <code>null</code> root package file.
+     *
+     * @param path forward slash-separated path to the resource to look for, relative to the parent classpath
+     * location (directory or JAR file) that contains it.
      * @return a URL pointing to the resource, or <code>null</code> if the resource couldn't be located
      */
     public static URL getResourceAsURL(String path) {
-        return getResourceAsURL(path, null);
+        return getResourceAsURL(path, getDefaultClassLoader(), null);
     }
 
     /**
      * Finds the resource with the given path and returns a URL pointing to its location, or <code>null</code>
-     * if the resource couldn't be located.
-     * The given <code>ClassLoader</code> is used for locating the resource. If it is <code>null</code>, the
-     * <code>ClassLoader</code> returned by {@link #getDefaultClassLoader()} is used.
+     * if the resource couldn't be located. The given <code>ClassLoader</code> is used for locating the resource.
      *
-     * <p>The given path may or may not start with a leading slash character ('/'), this doesn't affect the way it
-     * is interpreted.</p>
+     * <p>The given resource path must be forward slash (<code>/</code>) separated. It may or may not start with a
+     * leading forward slash character, this doesn't affect the way it is interpreted.</p>
      *
-     * @param path a path to the resource, relative to the given ClassLoader's classpath
-     * @param classLoader the ClassLoader used for locating the resource
+     * <p>The <code>rootPackageFile</code> argument can be used to limit the scope of the search to a specific
+     * location (JAR file or directory) in the classpath: resources located outside of this location will not be matched.
+     * This avoids potential ambiguities that can arise if the specified resource path exists in several locations.
+     * If this parameter is <code>null</code>, the resource is looked up in the whole class path. In that case and if
+     * several resources with the specified path exist, the choice of the resource to return is arbitrary.</p>
+     *
+     * @param path forward slash-separated path to the resource to look for, relative to the parent classpath
+     * location (directory or JAR file) that contains it.
+     * @param classLoader the ClassLoader used for locating the resource. May not be <code>null</code>.
+     * @param rootPackageFile root package location (JAR file or directory) that limits the scope of the search,
+     * <code>null</code> to look for the resource in the whole class path.
      * @return a URL pointing to the resource, or <code>null</code> if the resource couldn't be located
      */
-    public static URL getResourceAsURL(String path, ClassLoader classLoader) {
-        if(classLoader==null)
-            classLoader = getDefaultClassLoader();
+    public static URL getResourceAsURL(String path, ClassLoader classLoader, AbstractFile rootPackageFile) {
+        path = removeLeadingSlash(path);
 
-        return classLoader.getResource(removeLeadingSlash(path));
+        if(rootPackageFile==null)
+            return classLoader.getResource(path);
+
+        String separator = rootPackageFile.getSeparator();
+        if(!separator.equals("/"))
+            path = StringUtils.replaceCompat(path, "/", separator);
+
+        try {
+            // Iterate through all resources that match the given path, and return the one located inside the
+            // given root package file.
+            Enumeration resourceEnum = classLoader.getResources(removeLeadingSlash(path));
+            String rootPackagePath = rootPackageFile.getAbsolutePath();
+            String resourcePath = rootPackageFile.getAbsolutePath(true)+path;
+            URL resourceURL;
+            while(resourceEnum.hasMoreElements()) {
+                resourceURL = (URL)resourceEnum.nextElement();
+
+                if("jar".equals(resourceURL.getProtocol())) {
+                    if(getJarFilePath(resourceURL).equals(rootPackagePath))
+                        return resourceURL;
+                }
+                else {
+                    if(normalizeUrlPath(getDecodedURLPath(resourceURL)).equals(resourcePath))
+                        return resourceURL;
+                }
+            }
+        }
+        catch(IOException e) {
+            FileLogger.fine("Failed to lookup resource "+path, e);
+            return null;
+        }
+
+        return null;
     }
 
+    /**
+     * This method is similar to {@link #getResourceAsStream(String)} except that it looks for a resource with a given
+     * name in a specific package.
+     *
+     * @param ppackage package serving as a base folder for the resource to retrieve
+     * @param name name of the resource in the package. This is a filename only, not a path.
+     * @return an InputStream that allows to read the resource, or <code>null</code> if the resource couldn't be located
+     */
+    public static InputStream getPackageResourceAsStream(Package ppackage, String name) {
+        return getPackageResourceAsStream(ppackage, name, getDefaultClassLoader(), null);
+    }
 
     /**
-     * Finds the resource with the given path and returns an <code>InputStream</code> to read from it, or <code>null</code>
-     * if the resource couldn't be located.
-     * The <code>ClassLoader</code> returned by {@link #getDefaultClassLoader()} is used for locating the resource.
+     * This method is similar to {@link #getResourceAsStream(String, ClassLoader, AbstractFile)} except that it looks
+     * for a resource with a given name in a specific package.
      *
-     * <p>The given path may or may not start with a leading slash character ('/'), this doesn't affect the way it
-     * is interpreted.</p>
+     * @param ppackage package serving as a base folder for the resource to retrieve
+     * @param name name of the resource in the package. This is a filename only, not a path.
+     * @param classLoader the ClassLoader used for locating the resource. May not be <code>null</code>.
+     * @param rootPackageFile root package location (JAR file or directory) that limits the scope of the search,
+     * <code>null</code> to look for the resource in the whole class path.
+     * @return an InputStream that allows to read the resource, or <code>null</code> if the resource couldn't be located
+     */
+    public static InputStream getPackageResourceAsStream(Package ppackage, String name, ClassLoader classLoader, AbstractFile rootPackageFile) {
+        return ResourceLoader.getResourceAsStream(getRelativePackagePath(ppackage)+"/"+name, classLoader, rootPackageFile);
+    }
 
-     * @param path a path to the resource, relative to the default ClassLoader's classpath
-     * @return an InputStream that allows to read from the resource, or <code>null</code> if the resource couldn't be located
+    /**
+     * Shorthand for {@link #getResourceAsStream(String, ClassLoader, AbstractFile)} called with the
+     * {@link #getDefaultClassLoader() default class loader} and a <code>null</code> root package file.
+     *
+     * @param path forward slash-separated path to the resource to look for, relative to the parent classpath
+     * location (directory or JAR file) that contains it.
+     * @return an InputStream that allows to read the resource, or <code>null</code> if the resource couldn't be located
      */
     public static InputStream getResourceAsStream(String path) {
-        return getResourceAsStream(path, null);
+        return getResourceAsStream(path, getDefaultClassLoader(), null);
     }
 
     /**
-     * Finds the resource with the given path and returns an <code>InputStream</code> to read from it, or <code>null</code>
-     * if the resource couldn't be located.
-     * The given <code>ClassLoader</code> is used for locating the resource. If it is <code>null</code>, the
-     * <code>ClassLoader</code> returned by {@link #getDefaultClassLoader()} is used.
+     * Finds the resource with the given path and returns an <code>InputStream</code> to read it, or <code>null</code>
+     * if the resource couldn't be located. The given <code>ClassLoader</code> is used for locating the resource.
      *
-     * <p>The given path may or may not start with a leading slash character ('/'), this doesn't affect the way it
-     * is interpreted.</p>
-
-     * @param path a path to the resource, relative to the given ClassLoader's classpath
-     * @param classLoader the Class whose ClassLoader is used for locating the resource
-     * @return an InputStream that allows to read from the resource, or <code>null</code> if the resource couldn't be located
+     * <p>The given resource path must be forward slash (<code>/</code>) separated. It may or may not start with a
+     * leading forward slash character, this doesn't affect the way it is interpreted.</p>
+     *
+     * <p>The <code>rootPackageFile</code> argument can be used to limit the scope of the search to a specific
+     * location (JAR file or directory) in the classpath: resources located outside of this location will not be matched.
+     * This avoids potential ambiguities that can arise if the specified resource path exists in several locations.
+     * If this parameter is <code>null</code>, the resource is looked up in the whole class path. In that case and if
+     * several resources with the specified path exist, the choice of the resource to return is arbitrary.</p>
+     *
+     * @param path forward slash-separated path to the resource to look for, relative to the parent classpath
+     * location (directory or JAR file) that contains it.
+     * @param classLoader the ClassLoader used for locating the resource. May not be <code>null</code>.
+     * @param rootPackageFile root package location (JAR file or directory) that limits the scope of the search,
+     * <code>null</code> to look for the resource in the whole class path.
+     * @return an InputStream that allows to read the resource, or <code>null</code> if the resource couldn't be located
      */
-    public static InputStream getResourceAsStream(String path, ClassLoader classLoader) {
-        if(classLoader==null)
-            classLoader = getDefaultClassLoader();
-
-        return classLoader.getResourceAsStream(removeLeadingSlash(path));
+    public static InputStream getResourceAsStream(String path, ClassLoader classLoader, AbstractFile rootPackageFile) {
+        try {
+            URL resourceURL = getResourceAsURL(path, classLoader, rootPackageFile);
+            return resourceURL==null?null:resourceURL.openStream();
+        }
+        catch(IOException e) {
+            return null;
+        }
     }
 
+    /**
+     * This method is similar to {@link #getResourceAsFile(String)} except that it looks for a resource with a given
+     * name in a specific package.
+     *
+     * @param ppackage package serving as a base folder for the resource to retrieve
+     * @param name name of the resource in the package. This is a filename only, not a path.
+     * @return an AbstractFile that represents the resource, or <code>null</code> if the resource couldn't be located
+     */
+    public static AbstractFile getPackageResourceAsFile(Package ppackage, String name) {
+        return getPackageResourceAsFile(ppackage, name, getDefaultClassLoader(), null);
+    }
 
     /**
-     * Finds the resource with the given path and returns an {@link AbstractFile} that gives full access to it,
-     * or <code>null</code> if the resource couldn't be located.
-     * The <code>ClassLoader</code> returned by {@link #getDefaultClassLoader()} is used for locating the resource.
+     * This method is similar to {@link #getResourceAsFile(String, ClassLoader, AbstractFile)} except that it looks for
+     * a resource with a given name in a specific package.
      *
-     * <p>The given path may or may not start with a leading slash character ('/'), this doesn't affect the way it
-     * is interpreted. Also noteworthy is this method may be slower than {@link #getResourceAsStream(String)} if
-     * the resource is located inside a JAR file, because the Zip file headers will have to be parsed the first time
-     * the archive is accessed. So this latter method should be favored if the file is simply used for reading the
-     * resource.</p>
+     * @param ppackage package serving as a base folder for the resource to retrieve
+     * @param name name of the resource in the package. This is a filename only, not a path.
+     * @param classLoader the ClassLoader used for locating the resource. May not be <code>null</code>.
+     * @param rootPackageFile root package location (JAR file or directory) that limits the scope of the search,
+     * <code>null</code> to look for the resource in the whole class path.
+     * @return an AbstractFile that represents the resource, or <code>null</code> if the resource couldn't be located
+     */
+    public static AbstractFile getPackageResourceAsFile(Package ppackage, String name, ClassLoader classLoader, AbstractFile rootPackageFile) {
+        return ResourceLoader.getResourceAsFile(getRelativePackagePath(ppackage)+"/"+name, classLoader, rootPackageFile);
+    }
+
+    /**
+     * Shorthand for {@link #getResourceAsFile(String, ClassLoader, AbstractFile)} called with the
+     * {@link #getDefaultClassLoader() default class loader} and a <code>null</code> root package file.
      *
-     * @param path a path to the resource, relative to the default ClassLoader's classpath
-     * @return an AbstractFile that allows to access the resource, or <code>null</code> if the resource couldn't be located
+     * @param path forward slash-separated path to the resource to look for, relative to the parent classpath
+     * location (directory or JAR file) that contains it.
+     * @return an AbstractFile that represents the resource, or <code>null</code> if the resource couldn't be located
      */
     public static AbstractFile getResourceAsFile(String path) {
-        return getResourceAsFile(removeLeadingSlash(path), null);
+        return getResourceAsFile(removeLeadingSlash(path), getDefaultClassLoader(), null);
     }
 
     /**
      * Finds the resource with the given path and returns an {@link AbstractFile} that gives full access to it,
-     * or <code>null</code> if the resource couldn't be located.
-     * The given <code>ClassLoader</code> is used for locating the resource. If it is <code>null</code>, the
-     * <code>ClassLoader</code> returned by {@link #getDefaultClassLoader()} is used.
+     * or <code>null</code> if the resource couldn't be located. The given <code>ClassLoader</code> is used for locating
+     * the resource.
      *
-     * <p>The given path may or may not start with a leading slash character ('/'), this doesn't affect the way it
-     * is interpreted. Also noteworthy is this method may be slower than {@link #getResourceAsStream(String)} if
+     * <p>The given resource path must be forward slash (<code>/</code>) separated. It may or may not start with a 
+     * leading forward slash character, this doesn't affect the way it is interpreted.</p>
+     *
+     * <p>It is worth noting that this method may be slower than {@link #getResourceAsStream(String)} if
      * the resource is located inside a JAR file, because the Zip file headers will have to be parsed the first time
-     * the archive is accessed. So this latter method should be favored if the file is simply used for reading the
-     * resource.</p>
-
-     * @param path a path to the resource, relative to the given ClassLoader's classpath
+     * the archive is accessed. Therefore, the latter approach should be favored if the file is simply used for
+     * reading the resource.</p>
+     *
+     * <p>The <code>rootPackageFile</code> argument can be used to limit the scope of the search to a specific
+     * location (JAR file or directory) in the classpath: resources located outside of this location will not be matched.
+     * This avoids potential ambiguities that can arise if the specified resource path exists in several locations.
+     * If this parameter is <code>null</code>, the resource is looked up in the whole class path. In that case and if
+     * several resources with the specified path exist, the choice of the resource to return is arbitrary.</p>
+     *
+     * @param path forward slash-separated path to the resource to look for, relative to the parent classpath
+     * location (directory or JAR file) that contains it.
      * @param classLoader the ClassLoader is used for locating the resource
-     * @return an AbstractFile that allows to access the resource, or <code>null</code> if the resource couldn't be located
+     * @param rootPackageFile root package location (JAR file or directory) that limits the scope of the search,
+     * <code>null</code> to look for the resource in the whole class path.
+     * @return an AbstractFile that represents the resource, or <code>null</code> if the resource couldn't be located
      */
-    public static AbstractFile getResourceAsFile(String path, ClassLoader classLoader) {
+    public static AbstractFile getResourceAsFile(String path, ClassLoader classLoader, AbstractFile rootPackageFile) {
         if(classLoader==null)
             classLoader = getDefaultClassLoader();
 
         path = removeLeadingSlash(path);
 
-        URL aClassURL = getResourceAsURL(path, classLoader);
+        URL aClassURL = getResourceAsURL(path, classLoader, rootPackageFile);
         if(aClassURL==null)
             return null;        // no resource under that path
 
@@ -214,7 +347,7 @@ public class ResourceLoader {
             classLoader = getDefaultClassLoader();
 
         String aClassRelPath = getRelativeClassPath(aClass);
-        URL aClassURL = getResourceAsURL(aClassRelPath, classLoader);
+        URL aClassURL = getResourceAsURL(aClassRelPath, classLoader, null);
 
         if(aClassURL==null)
             return null;    // no resource under that path
@@ -249,7 +382,12 @@ public class ResourceLoader {
     public static String getRelativeClassPath(Class cclass) {
         return cclass.getName().replace('.', '/')+".class";
     }
-    
+
+
+    /////////////////////
+    // Private methods //
+    /////////////////////
+
     /**
      * Extracts and returns the path to the JAR file from a URL that points to a resource inside a JAR file.
      * The returned path is in a format that {@link FileFactory} can turn into an {@link AbstractFile}.
@@ -261,8 +399,9 @@ public class ResourceLoader {
         // URL-decode the path
         String path = getDecodedURLPath(url);
 
-        // Here's an example of such a path:
+        // Here are a couple examples of such paths:
         // file:/System/Library/Frameworks/JavaVM.framework/Versions/1.6.0/Classes/classes.jar!/java/lang/Object.class
+        // http://www.mucommander.com/webstart/nightly/mucommander.jar!/com/mucommander/RuntimeConstants.class
 
         int pos = path.indexOf(".jar!");
         if(pos==-1)
@@ -306,6 +445,10 @@ public class ResourceLoader {
      * @return the normalized path
      */
     private static String normalizeUrlPath(String path) {
+        // Don't touch http/https URLs
+        if(path.startsWith("http:") || path.startsWith("https:"))
+            return path;
+
         // Remove the leading "file:" (if any)
         if(path.startsWith("file:"))
             path = path.substring(5, path.length());
