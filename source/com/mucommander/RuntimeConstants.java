@@ -91,7 +91,7 @@ public class RuntimeConstants {
         in         = null;
         attributes = null;
         try {
-            if((in = ResourceLoader.getRootPackageAsFile(RuntimeConstants.class).getChild("META-INF/MANIFEST.MF").getInputStream()) != null) {
+            if((in = ResourceLoader.getResourceAsStream("META-INF/MANIFEST.MF", ResourceLoader.getDefaultClassLoader(), ResourceLoader.getRootPackageAsFile(RuntimeConstants.class))) != null) {
                 Manifest manifest;
 
                 manifest = new Manifest();

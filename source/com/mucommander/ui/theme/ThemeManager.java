@@ -25,7 +25,6 @@ import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
 import com.mucommander.file.filter.ExtensionFilenameFilter;
-import com.mucommander.file.util.PathUtils;
 import com.mucommander.file.util.ResourceLoader;
 import com.mucommander.io.BackupInputStream;
 import com.mucommander.io.BackupOutputStream;
@@ -47,12 +46,18 @@ public class ThemeManager {
     /** Path to the user defined theme file. */
     private static       AbstractFile userThemeFile;
     /** Default user defined theme file name. */
-    private static final String       USER_THEME_FILE_NAME = "user_theme.xml";
+    private static final String       USER_THEME_FILE_NAME   = "user_theme.xml";
     /** Path to the custom themes repository. */
-    private static final String       CUSTOM_THEME_FOLDER  = "themes";
+    private static final String       CUSTOM_THEME_FOLDER    = "themes";
     /** List of all registered theme change listeners. */
-    private static final WeakHashMap  listeners            = new WeakHashMap();
-
+    private static final WeakHashMap  listeners              = new WeakHashMap();
+ /** List of all predefined theme names. */
+    private static final String[]     PREDEFINED_THEME_NAMES = {
+        "ClassicCommander",
+        "Native",
+        "RetroCommander",
+        "Striped"
+    };
 
 
     // - Instance variables --------------------------------------------------------------
@@ -137,10 +142,16 @@ public class ThemeManager {
     // - Themes access -------------------------------------------------------------------
     // -----------------------------------------------------------------------------------
     private static Iterator predefinedThemeNames() {
-        try {
-            return getThemeNames(ResourceLoader.getRootPackageAsFile(ThemeManager.class).getChild(PathUtils.removeLeadingSeparator(RuntimeConstants.THEMES_PATH, "/")));
-        }
-        catch(IOException e) {return Collections.emptyList().iterator();}
+        // The list of predefined themes is no longer dynamically created as this causes Webstart to retrieve and
+        // explore the application's JAR via HTTP, which is inefficient and prevents the application from being
+        // launched offline.
+
+//        try {
+//            return getThemeNames(ResourceLoader.getRootPackageAsFile(ThemeManager.class).getChild(PathUtils.removeLeadingSeparator(RuntimeConstants.THEMES_PATH, "/")));
+//        }
+//        catch(IOException e) {return Collections.emptyList().iterator();}
+
+        return Arrays.asList(PREDEFINED_THEME_NAMES).iterator();
     }
 
     private static Iterator customThemeNames() throws IOException {
