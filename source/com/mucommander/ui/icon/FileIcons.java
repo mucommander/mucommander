@@ -106,8 +106,9 @@ public class FileIcons {
      * Returns an icon for the given file and of the specified dimension.
      * The returned icon will either be a system icon, or one from the custom icon set, depending on the current
      * {@link #getSystemIconsPolicy() system icons policy}.
-     * Returns <code>null</code> if the icon couldn't be retrieved, either because the file doesn't exist or for
-     * any other reason.
+     * If a system icon should have been returned for the specified file but could not be resolved
+     * ({@link #getSystemFileIcon(AbstractFile, Dimension)} returned <code>null</code>), an icon from the
+     * custom icon set will be returned instead. Therefore, this method never returns <code>null</code>.
      *
      * @param file the AbstractFile instance for which an icon will be returned
      * @param iconDimension the icon's dimension
@@ -115,25 +116,27 @@ public class FileIcons {
      * @see #getSystemIconsPolicy()
      */
     public static Icon getFileIcon(AbstractFile file, Dimension iconDimension) {
+        boolean systemIcon = false;
+
         if(USE_SYSTEM_ICONS_ALWAYS.equals(systemIconsPolicy))
-            return getSystemFileIcon(file, iconDimension);
+            systemIcon = true;
 
         if(USE_SYSTEM_ICONS_APPLICATIONS.equals(systemIconsPolicy)) {
             String extension = file.getExtension();
 
             if(extension!=null) {
-                boolean systemIcon;
-
                 if(OsFamilies.MAC_OS_X.isCurrent() && "app".equalsIgnoreCase(extension))
                     systemIcon = true;
                 else if(OsFamilies.WINDOWS.isCurrent() && "exe".equalsIgnoreCase(extension))
                     systemIcon = true;
-                else
-                    systemIcon = false;
-
-                if(systemIcon)
-                    return getSystemFileIcon(file, iconDimension);
             }
+        }
+
+        if(systemIcon) {
+            Icon icon = getSystemFileIcon(file, iconDimension);
+            if(icon!=null)
+                return icon;
+            // If the system icon could not be resolved, return a custom file icon
         }
 
         return getCustomFileIcon(file, iconDimension);
@@ -153,9 +156,8 @@ public class FileIcons {
 
     /**
      * Returns an icon of the specified dimension for the given file. The icon is provided by the
-     * {@link #getCustomFileIconProvider() custom file icon provider}.
-     * Returns <code>null</code> if the icon couldn't be retrieved, either because the file doesn't exist
-     * or for any other reason.
+     * {@link #getCustomFileIconProvider() custom file icon provider}. This method is guaranteed to never return
+     * <code>null</code>.
      *
      * @param file the file for which an icon is to be returned
      * @param iconDimension the icon's dimension
@@ -180,7 +182,8 @@ public class FileIcons {
     /**
      * Returns an icon of the specified dimension for the given file. The returned icon is provided by the
      * underlying OS/desktop manager, using the {@link com.mucommander.file.icon.FileIconProvider} currently set.
-     * Returns <code>null</code> if the icon couldn't be retrieved, either because the file doesn't exist or for any other reason.
+     * Returns <code>null</code> if the icon couldn't be retrieved, either because the file doesn't exist or for
+     * any other reason.
      *
      * @param file the file for which an icon is to be returned
      * @param iconDimension the icon's dimension

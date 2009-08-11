@@ -18,31 +18,6 @@
 
 package com.mucommander.ui.dialog.about;
 
-import java.awt.BorderLayout;
-import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Font;
-import java.awt.Insets;
-import java.awt.Point;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.IOException;
-import java.net.URL;
-import java.util.Locale;
-
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextPane;
-import javax.swing.SwingUtilities;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.Style;
-import javax.swing.text.StyleConstants;
-import javax.swing.text.StyleContext;
-import javax.swing.text.StyledDocument;
-
 import com.mucommander.RuntimeConstants;
 import com.mucommander.desktop.DesktopManager;
 import com.mucommander.text.Translator;
@@ -54,6 +29,15 @@ import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.theme.Theme;
 import com.mucommander.ui.theme.ThemeManager;
+
+import javax.swing.*;
+import javax.swing.text.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.net.URL;
+import java.util.Locale;
 
 /**
  * Dialog displaying information about muCommander.
@@ -149,12 +133,14 @@ public class AboutDialog extends FocusDialog implements ActionListener {
             insertHeader(doc,         "Contributors");
             insertNormalString(doc,   "Ivan Baidakov");
             insertNormalString(doc,   "Vassil Dichev");
-            insertNormalString(doc,   "David Kovar");
             insertNormalString(doc,   "Karel Klic");
+            insertNormalString(doc,   "David Kovar");
             insertNormalString(doc,   "Joshua Lebo");
+            insertNormalString(doc,   "LeO");
             insertNormalString(doc,   "Xavier Martin");
             insertNormalString(doc,   "Alejandro Scandroli");
             insertNormalString(doc,   "Alexander Yerenkow");
+            insertNormalString(doc,   "Johann Schmitz");
             insertLineBreak(doc);
 
             // QA

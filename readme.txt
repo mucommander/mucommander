@@ -91,8 +91,11 @@ Contributors:
 - Karel Klic
 - David Kovar
 - Joshua Lebo
+- LeO
 - Xavier Martin
 - Alejandro Scandroli
+- Alexander Yerenkow
+- Johann Schmitz
 
 Translators: 
 - Tony Klüver and Frank Berger (German)
@@ -209,6 +212,8 @@ Bug fixes:
 - Text editor now preserves Unicode BOMs when saving files (ticket #251).
 - Fixed file selection issues when middle clicking and dragging the mouse
   (ticket #176).
+- Fixed an issue causing icons not to appear on certain files when using
+  system icons (ticket #225). Fix contributed by LeO.
 
 Known issues:
 - Some translations are not up-to-date. For more information, see:
