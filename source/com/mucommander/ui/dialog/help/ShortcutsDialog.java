@@ -24,6 +24,11 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Set;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -33,9 +38,10 @@ import javax.swing.JTabbedPane;
 import javax.swing.KeyStroke;
 
 import com.mucommander.text.Translator;
+import com.mucommander.ui.action.ActionCategory;
+import com.mucommander.ui.action.ActionKeymap;
 import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.action.ActionProperties;
-import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.action.impl.ShowKeyboardShortcutsAction;
 import com.mucommander.ui.dialog.DialogToolkit;
 import com.mucommander.ui.dialog.FocusDialog;
@@ -51,115 +57,7 @@ import com.mucommander.ui.text.KeyStrokeUtils;
  */
 public class ShortcutsDialog extends FocusDialog implements ActionListener {
 
-    private MainFrame mainFrame;
-
-    ////////////////////////
-    // Navigation actions //
-    ////////////////////////
-
-    private final static String NAVIGATION_TITLE = "shortcuts_dialog.navigation";
-    private final static String NAVIGATION_ACTIONS[] =
-    {
-        com.mucommander.ui.action.impl.PopupLeftDriveButtonAction.Descriptor.ACTION_ID,
-        com.mucommander.ui.action.impl.PopupRightDriveButtonAction.Descriptor.ACTION_ID,
-        com.mucommander.ui.action.impl.ChangeLocationAction.Descriptor.ACTION_ID,
-        com.mucommander.ui.action.impl.SwitchActiveTableAction.Descriptor.ACTION_ID,
-        com.mucommander.ui.action.impl.GoToParentAction.Descriptor.ACTION_ID,
-        com.mucommander.ui.action.impl.OpenAction.Descriptor.ACTION_ID,
-        com.mucommander.ui.action.impl.OpenNativelyAction.Descriptor.ACTION_ID,
-        com.mucommander.ui.action.impl.RevealInDesktopAction.Descriptor.ACTION_ID,
-        com.mucommander.ui.action.impl.StopAction.Descriptor.ACTION_ID,
-        com.mucommander.ui.action.impl.SelectFirstRowAction.Descriptor.ACTION_ID,
-        com.mucommander.ui.action.impl.SelectLastRowAction.Descriptor.ACTION_ID
-    };
-
-
-    ///////////////////////
-    // Selection actions //
-    ///////////////////////
-
-    private final static String SELECTION_TITLE = "shortcuts_dialog.selection";
-    private final static String SELECTION_ACTIONS[] =
-    {
-    	com.mucommander.ui.action.impl.MarkSelectedFileAction.Descriptor.ACTION_ID,
-        com.mucommander.ui.action.impl.MarkGroupAction.Descriptor.ACTION_ID,
-        com.mucommander.ui.action.impl.UnmarkGroupAction.Descriptor.ACTION_ID,
-        com.mucommander.ui.action.impl.MarkAllAction.Descriptor.ACTION_ID,
-        com.mucommander.ui.action.impl.UnmarkAllAction.Descriptor.ACTION_ID,
-        com.mucommander.ui.action.impl.InvertSelectionAction.Descriptor.ACTION_ID,
-        com.mucommander.ui.action.impl.CopyFilesToClipboardAction.Descriptor.ACTION_ID,
-        com.mucommander.ui.action.impl.CopyFilePathsAction.Descriptor.ACTION_ID,
-        com.mucommander.ui.action.impl.CopyFilePathsAction.Descriptor.ACTION_ID,
-        com.mucommander.ui.action.impl.PasteClipboardFilesAction.Descriptor.ACTION_ID,
-        com.mucommander.ui.action.impl.CompareFoldersAction.Descriptor.ACTION_ID,
-    };
-
-
-    //////////////////
-    // View actions //
-    //////////////////
-
-    private final static String VIEW_TITLE = "shortcuts_dialog.view";
-    private final static String VIEW_ACTIONS[] =
-    {
-        com.mucommander.ui.action.impl.GoBackAction.Descriptor.ACTION_ID,
-        com.mucommander.ui.action.impl.GoForwardAction.Descriptor.ACTION_ID,
-        com.mucommander.ui.action.impl.SortByNameAction.Descriptor.ACTION_ID,
-        com.mucommander.ui.action.impl.SortByExtensionAction.Descriptor.ACTION_ID,
-        com.mucommander.ui.action.impl.SortByDateAction.Descriptor.ACTION_ID,
-        com.mucommander.ui.action.impl.SortBySizeAction.Descriptor.ACTION_ID,
-        com.mucommander.ui.action.impl.SwapFoldersAction.Descriptor.ACTION_ID,
-        com.mucommander.ui.action.impl.SetSameFolderAction.Descriptor.ACTION_ID
-    };
-
-
-    /////////////////////////////
-    // File operations actions //
-    /////////////////////////////
-
-    private final static String FILE_OPERATIONS_TITLE = "shortcuts_dialog.file_operations";
-    private final static String FILE_OPERATIONS_ACTIONS[] =
-    {
-        com.mucommander.ui.action.impl.ViewAction.Descriptor.ACTION_ID,
-        com.mucommander.ui.action.impl.EditAction.Descriptor.ACTION_ID,
-        com.mucommander.ui.action.impl.CopyAction.Descriptor.ACTION_ID,
-        com.mucommander.ui.action.impl.LocalCopyAction.Descriptor.ACTION_ID,
-        com.mucommander.ui.action.impl.MoveAction.Descriptor.ACTION_ID,
-        com.mucommander.ui.action.impl.RenameAction.Descriptor.ACTION_ID,
-        com.mucommander.ui.action.impl.MkdirAction.Descriptor.ACTION_ID,
-        com.mucommander.ui.action.impl.MkfileAction.Descriptor.ACTION_ID,
-        com.mucommander.ui.action.impl.DeleteAction.Descriptor.ACTION_ID,
-        com.mucommander.ui.action.impl.RefreshAction.Descriptor.ACTION_ID,
-        com.mucommander.ui.action.impl.ConnectToServerAction.Descriptor.ACTION_ID,
-        com.mucommander.ui.action.impl.ShowServerConnectionsAction.Descriptor.ACTION_ID,
-        com.mucommander.ui.action.impl.RunCommandAction.Descriptor.ACTION_ID,
-        com.mucommander.ui.action.impl.PackAction.Descriptor.ACTION_ID,
-        com.mucommander.ui.action.impl.UnpackAction.Descriptor.ACTION_ID,
-        com.mucommander.ui.action.impl.EmailAction.Descriptor.ACTION_ID,
-        com.mucommander.ui.action.impl.AddBookmarkAction.Descriptor.ACTION_ID,
-        com.mucommander.ui.action.impl.ShowFilePropertiesAction.Descriptor.ACTION_ID
-    };
-
-
-    /////////////////////
-    // Windows actions //
-    /////////////////////
-
-    private final static String WINDOWS_TITLE = "shortcuts_dialog.windows";
-    private final static String WINDOWS_ACTIONS[] =
-    {
-        com.mucommander.ui.action.impl.NewWindowAction.Descriptor.ACTION_ID,
-        com.mucommander.ui.action.impl.CloseWindowAction.Descriptor.ACTION_ID,
-        com.mucommander.ui.action.impl.RecallPreviousWindowAction.Descriptor.ACTION_ID,
-        com.mucommander.ui.action.impl.RecallNextWindowAction.Descriptor.ACTION_ID,
-        com.mucommander.ui.action.impl.RecallWindow1Action.Descriptor.ACTION_ID,
-        com.mucommander.ui.action.impl.RecallWindow2Action.Descriptor.ACTION_ID,
-        com.mucommander.ui.action.impl.RecallWindow10Action.Descriptor.ACTION_ID,
-        com.mucommander.ui.action.impl.QuitAction.Descriptor.ACTION_ID
-    };
-
-
-    //////////////////////////
+	//////////////////////////
     // Quick search actions //
     //////////////////////////
     
@@ -172,23 +70,31 @@ public class ShortcutsDialog extends FocusDialog implements ActionListener {
         {"INSERT", "shortcuts_dialog.quick_search.mark_jump_next"},
         {"ESCAPE", "shortcuts_dialog.quick_search.cancel_search"},
     };
-
-
+    
     public ShortcutsDialog(MainFrame mainFrame) {
         super(mainFrame, ActionProperties.getActionLabel(ShowKeyboardShortcutsAction.Descriptor.ACTION_ID), mainFrame);
-
-        this.mainFrame = mainFrame;
 
         Container contentPane = getContentPane();
         JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 
-        // Create a tab and panel for each topic
-        addTopic(tabbedPane, NAVIGATION_TITLE, NAVIGATION_ACTIONS);
-        addTopic(tabbedPane, SELECTION_TITLE, SELECTION_ACTIONS);
+        // Get all existing action categories
+        Set actionCategories = ActionProperties.getActionCategories();
+        Iterator actionCategoriesIterator = actionCategories.iterator();
+        // Create LinkedList for each category.
+        Hashtable table = new Hashtable();
+        while (actionCategoriesIterator.hasNext())
+        	table.put(actionCategoriesIterator.next(), new LinkedList());
+        
+        // Separate the actions according to their categories. 
+        sortActionsToCategories(table);
+        
+        //Create a tab and panel for each category
+        Enumeration categories = table.keys();
+        while (categories.hasMoreElements()) {
+        	ActionCategory category = (ActionCategory) categories.nextElement();
+        	addTopic(tabbedPane, category.toString(), ((LinkedList) table.get(category)).iterator());
+        }
         addTopic(tabbedPane, QUICK_SEARCH_TITLE, QUICK_SEARCH_DESC);
-        addTopic(tabbedPane, VIEW_TITLE, VIEW_ACTIONS);
-        addTopic(tabbedPane, FILE_OPERATIONS_TITLE, FILE_OPERATIONS_ACTIONS);
-        addTopic(tabbedPane, WINDOWS_TITLE, WINDOWS_ACTIONS);
         
         contentPane.add(tabbedPane, BorderLayout.CENTER);
 
@@ -204,8 +110,17 @@ public class ShortcutsDialog extends FocusDialog implements ActionListener {
         setMaximumSize(new Dimension(600, 360));
     }
 
+    private void sortActionsToCategories(Hashtable table) {
+    	Enumeration actionIds = ActionManager.getActionIds();
+    	while (actionIds.hasMoreElements()) {
+    		String actionId = (String) actionIds.nextElement();
+    		ActionCategory category = ActionProperties.getActionCategory(actionId);
+    		if (category != null)
+    			((LinkedList) table.get(category)).add(actionId);
+    	}
+    }
 
-    private void addTopic(JTabbedPane tabbedPane, String titleKey, Object descriptions[]) {
+    private void addTopic(JTabbedPane tabbedPane, String titleKey, Iterator descriptionsIterator) {
         XAlignedComponentPanel compPanel;
         JPanel northPanel;
         JScrollPane scrollPane;
@@ -213,10 +128,7 @@ public class ShortcutsDialog extends FocusDialog implements ActionListener {
         compPanel = new XAlignedComponentPanel(15);
 
         // Add all shortcuts and their description
-        if(descriptions instanceof String[][])
-        	addShortcutList(compPanel, (String[][])descriptions);
-        else
-        	addShortcutList(compPanel, (String[])descriptions);
+        addShortcutList(compPanel, descriptionsIterator);
 
         // Panel needs to be vertically aligned to the top
         northPanel = new JPanel(new BorderLayout());
@@ -226,44 +138,57 @@ public class ShortcutsDialog extends FocusDialog implements ActionListener {
         scrollPane = new JScrollPane(northPanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         scrollPane.setBorder(null);
 
-        tabbedPane.addTab(Translator.get(titleKey), scrollPane);
+        tabbedPane.addTab(titleKey, scrollPane);
+    }
+    
+    private void addTopic(JTabbedPane tabbedPane, String titleKey, String descriptions[][]) {
+        XAlignedComponentPanel compPanel;
+        JPanel northPanel;
+        JScrollPane scrollPane;
+
+        compPanel = new XAlignedComponentPanel(15);
+
+        // Add all shortcuts and their description
+        addShortcutList(compPanel, descriptions);
+
+        // Panel needs to be vertically aligned to the top
+        northPanel = new JPanel(new BorderLayout());
+        northPanel.add(compPanel, BorderLayout.NORTH);
+
+        // Horizontal/vertical scroll bars will be displayed if needed
+        scrollPane = new JScrollPane(northPanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setBorder(null);
+
+        tabbedPane.addTab(titleKey, scrollPane);
     }
 
-
-    private void addShortcutList(XAlignedComponentPanel compPanel, String muActionIds[]) {
+    private void addShortcutList(XAlignedComponentPanel compPanel, Iterator muActionIdsIterator) {
         // Add all actions shortcut and label (or tooltip if available)
-        int nbActions = muActionIds.length;
-        MuAction action;
+        String actionId;
         KeyStroke shortcut;
         String shortcutsRep;
-        String desc;
-        for(int i=0; i<nbActions; i++) {
-            action = ActionManager.getActionInstance(muActionIds[i], mainFrame);
+        while (muActionIdsIterator.hasNext()) {
+        	actionId =(String) muActionIdsIterator.next();
 
-            shortcut = action.getAccelerator();
+            shortcut = ActionKeymap.getAccelerator(actionId);
             if(shortcut==null)
                 continue;
 
             shortcutsRep = KeyStrokeUtils.getKeyStrokeDisplayableRepresentation(shortcut);
 
-            shortcut = action.getAlternateAccelerator();
+            shortcut = ActionKeymap.getAlternateAccelerator(actionId);
             if(shortcut!=null)
                 shortcutsRep += " / "+ KeyStrokeUtils.getKeyStrokeDisplayableRepresentation(shortcut);
 
-            desc = action.getToolTipText();
-            if(desc==null)
-                desc = action.getLabel();
-            compPanel.addRow(shortcutsRep, new JLabel(desc), 5);
+            compPanel.addRow(shortcutsRep, new JLabel(ActionProperties.getActionDescription(actionId)), 5);
         }
     }
-
 
     private void addShortcutList(XAlignedComponentPanel compPanel, String desc[][]) {
         int nbShortcuts = desc.length;
         for(int i=0; i<nbShortcuts; i++)
             compPanel.addRow(desc[i][0], new JLabel(Translator.get(desc[i][1])), 5);
     }
-
 
     public void actionPerformed(ActionEvent e) {
         // OK disposes the dialog

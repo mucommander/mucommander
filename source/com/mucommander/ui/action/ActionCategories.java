@@ -18,6 +18,7 @@
 
 package com.mucommander.ui.action;
 
+
 /**
  * TODO: document
  * 
@@ -25,12 +26,10 @@ package com.mucommander.ui.action;
  */
 public class ActionCategories {
 	
-	private static String categoriesClassName = ActionCategories.class.getName();
-
-	public static final ActionCategory NEVIGATION   = new ActionCategory(categoriesClassName + ".nevigation");
-	public static final ActionCategory SELECTION    = new ActionCategory(categoriesClassName + ".selection");
-	public static final ActionCategory VIEW         = new ActionCategory(categoriesClassName + ".view");
-	public static final ActionCategory FILES        = new ActionCategory(categoriesClassName + ".files");
-	public static final ActionCategory WINDOW       = new ActionCategory(categoriesClassName + ".windows");
-	public static final ActionCategory MISC         = new ActionCategory(categoriesClassName + ".misc");
+	public static final ActionCategory NEVIGATION   = new ActionCategory(ActionCategories.class.getName() + ".navigation");
+	public static final ActionCategory SELECTION    = new ActionCategory(ActionCategories.class.getName() + ".selection");
+	public static final ActionCategory VIEW         = new ActionCategory(ActionCategories.class.getName() + ".view");
+	public static final ActionCategory FILES        = new ActionCategory(ActionCategories.class.getName() + ".file_operations");
+	public static final ActionCategory WINDOW       = new ActionCategory(ActionCategories.class.getName() + ".windows");
+	public static final ActionCategory MISC         = new ActionCategory(ActionCategories.class.getName() + ".misc");
 }

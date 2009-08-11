@@ -30,8 +30,8 @@ public class ActionCategory {
 	/** The category's label key in the dictionary file */
 	private String descriptionKey;
 	 
-	protected ActionCategory(String labelKey) {
-		this.descriptionKey = labelKey;
+	protected ActionCategory(String descriptionKey) {
+		this.descriptionKey = descriptionKey;
 	}
 
 	public String getDescriptionKey() { return descriptionKey; } 
@@ -43,5 +43,11 @@ public class ActionCategory {
 		if (description != null)
 			return description;
 		return getDescriptionKey();
+	}
+	
+	public boolean equals(Object obj) {
+		if (obj instanceof ActionCategory)
+			return descriptionKey.equals(((ActionCategory) obj).descriptionKey);
+		return false;
 	}
 }

@@ -55,6 +55,13 @@ public abstract class AbstractActionDescriptor implements ActionDescriptor {
         return getStandardTooltip(getId());
     }
     
+    public String getDescription() {
+    	String tooltip = getTooltip();
+    	if (tooltip == null)
+    		return getLabel();
+    	return tooltip;
+    }
+    
     /**
      * Returns the dictionary key for action's label, using the following standard naming convention:
      * <pre>

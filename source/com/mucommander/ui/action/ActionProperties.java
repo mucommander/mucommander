@@ -68,6 +68,10 @@ public class ActionProperties {
 		return (ActionDescriptor) actionDescriptors.get(actionId);
 	}
 	
+	public static String getActionDescription(String actionId) {
+		return getActionDescriptor(actionId).getDescription();
+	}
+	
 	public static ActionCategory getActionCategory(String actionId) {
 		return getActionDescriptor(actionId).getCategory();
 	}

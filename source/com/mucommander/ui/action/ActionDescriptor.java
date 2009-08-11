@@ -31,6 +31,8 @@ public interface ActionDescriptor {
 	
 	public String getId();
 	
+	public String getDescription();
+	
 	public ActionCategory getCategory();
 	
 	public String getLabel();

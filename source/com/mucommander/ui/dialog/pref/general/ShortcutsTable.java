@@ -500,7 +500,7 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 	private class ShortcutsTableData {
 		private Object[][] data;
 		private String[] actionIds;
-		private String[] tooltips;
+		private String[] descriptions;
 		
 		public ShortcutsTableData(ActionFilter filter) {
 			List filteredActionIds = filter(ActionManager.getActionIds(), filter);
@@ -511,7 +511,7 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 			int nbRows = filteredActionIds.size();
 			
 			actionIds = new String[nbRows];
-			tooltips = new String[nbRows];
+			descriptions = new String[nbRows];
 			data = new Object[nbRows][NUM_OF_COLUMNS];
 			
 			for (int i = 0; i < nbRows; ++i) {
@@ -527,16 +527,12 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 				data[i][ACTION_DESCRIPTION_COLUMN_INDEX] = new ActionDescription(IconManager.getPaddedIcon(actionIcon, new Insets(0, 4, 0, 4)), actionLabel);
 				
 				KeyStroke accelerator = ActionKeymap.getAccelerator(actionId);
-//				ActionProperties.get
 				setAccelerator(accelerator, i);
 				
 				KeyStroke alternativeAccelerator = ActionKeymap.getAlternateAccelerator(actionId);
 				setAlternativeAccelerator(alternativeAccelerator, i);
 				
-				String actionTooltip = actionDescriptor.getTooltip();
-				if (actionTooltip == null)
-					actionTooltip = actionLabel;
-				tooltips[i] = actionTooltip;
+				descriptions[i] = actionDescriptor.getDescription();
 			}
 		}
 		
@@ -544,7 +540,7 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 		
 		public Object getTableData(int row, int col) { return data[row][col]; }
 		
-		public String getCurrentTooltip() { return tooltips[getSelectedRow()]; }
+		public String getCurrentTooltip() { return descriptions[getSelectedRow()]; }
 		
 		public String getActionId(int row) { return (String) actionIds[row]; }
 		
