@@ -142,15 +142,18 @@ public class ResourceLoader {
             return classLoader.getResource(path);
 
         String separator = rootPackageFile.getSeparator();
-        if(!separator.equals("/"))
-            path = StringUtils.replaceCompat(path, "/", separator);
+        String nativePath;
+        if(separator.equals("/"))
+            nativePath = path;
+        else
+            nativePath = StringUtils.replaceCompat(path, "/", separator);
 
         try {
             // Iterate through all resources that match the given path, and return the one located inside the
             // given root package file.
-            Enumeration resourceEnum = classLoader.getResources(removeLeadingSlash(path));
+            Enumeration resourceEnum = classLoader.getResources(path);
             String rootPackagePath = rootPackageFile.getAbsolutePath();
-            String resourcePath = rootPackageFile.getAbsolutePath(true)+path;
+            String resourcePath = rootPackageFile.getAbsolutePath(true)+nativePath;
             URL resourceURL;
             while(resourceEnum.hasMoreElements()) {
                 resourceURL = (URL)resourceEnum.nextElement();
