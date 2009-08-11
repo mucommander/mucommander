@@ -1468,9 +1468,9 @@ public class ThemeData {
      * @return the default quick list header font.
      */
     private static Font getMenuHeaderFont() {
-    	if (DEFAULT_MENU_HEADER_FONT == null) {
+    	if(DEFAULT_MENU_HEADER_FONT == null) {
             if((DEFAULT_MENU_HEADER_FONT = UIManager.getDefaults().getFont("InternalFrame.font")) == null)
-                DEFAULT_MENU_HEADER_FONT = new JInternalFrame().getRootPane().getFont();
+                DEFAULT_MENU_HEADER_FONT = new JTable().getFont();
     	}
         return DEFAULT_MENU_HEADER_FONT;
     }
