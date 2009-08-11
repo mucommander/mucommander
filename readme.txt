@@ -129,7 +129,8 @@ What's new since v0.8.3 ?
 
 New features:
 - Added native support for 7z archives.
-- Added a keyboard shortcuts editor.
+- Added a keyboard shortcuts editor. Originally contributed by Johann Schmitz
+  and improved by Arik Hadas.
 - Added a command bar editor.
 - Added a debug console that shows the last log messages.
 
