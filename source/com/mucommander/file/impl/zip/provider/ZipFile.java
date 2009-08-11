@@ -45,7 +45,7 @@ import java.util.zip.ZipException;
  * <p>This class doesn't extend <code>java.util.zip.ZipFile</code> as it would have to reimplement all methods anyway.
  * Like <code>java.util.ZipFile</code>, it supports compressed (DEFLATED) and uncompressed (STORED) entries.</p>
  *
- * <p>Random read access is required to instanciate a <code>ZipFile</code> and retrieve its entries. Furthermore, random
+ * <p>Random read access is required to instantiate a <code>ZipFile</code> and retrieve its entries. Furthermore, random
  * write access is required for methods that modify the Zip file.</p>
  *
  * <p>The method signatures mimic the ones of <code>java.util.zip.ZipFile</code> with a few exceptions:
@@ -1063,7 +1063,7 @@ public class ZipFile implements ZipConstants {
      * If the specified encoding isn't supported, the platform's default encoding will be used.
      *
      * @param bytes the byte array to transform
-     * @param encoding the encoding to use to instanciate the String
+     * @param encoding the encoding to use to instantiate the String
      * @return String instance that was created with the given encoding
      */
     private static String getString(byte[] bytes, String encoding) {

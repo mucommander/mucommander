@@ -41,7 +41,7 @@ import java.awt.event.InputEvent;
  * used to change the current folder, or copy/move files to the current folder.
  *
  * <p>There are 2 different modes this class can operate in. The mode to be used has to be specified when this class is
- * instanciated.
+ * instantiated.
  *
  * <p>In 'folder change mode', when a file or string representing a file path is dropped, the associated FolderPanel's
  * current folder is changed:

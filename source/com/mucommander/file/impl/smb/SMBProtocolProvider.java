@@ -56,7 +56,7 @@ public class SMBProtocolProvider implements ProtocolProvider {
 
     /**
      * Sets the authentication protocol to use when connecting to SMB servers. This configuration method must be called
-     * before {@link SMBFile} is first instanciated ; calling it after that will have no effect.
+     * before {@link SMBFile} is first instantiated ; calling it after that will have no effect.
      * <p>
      * This configuration option is mapped onto jCIFS's <code>jcifs.smb.lmCompatibility</code> client property.
      * jCIFS's default will be used if this method is not called.
@@ -82,7 +82,7 @@ public class SMBProtocolProvider implements ProtocolProvider {
 
     /**
      * Sets whether or not 'extended security' should be used when connecting to SMB servers. This configuration method
-     * must be called before {@link SMBFile} is first instanciated ; calling it after that will have no effect.
+     * must be called before {@link SMBFile} is first instantiated ; calling it after that will have no effect.
      * <p>
      * This configuration option is mapped onto jCIFS's <code>jcifs.smb.client.useExtendedSecurity</code> client
      * property. jCIFS's default value will be used if this method is not called, which is <code>true</code> since

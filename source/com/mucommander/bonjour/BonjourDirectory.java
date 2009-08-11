@@ -87,7 +87,7 @@ public class BonjourDirectory implements ServiceListener {
                     jmDNS.addServiceListener(KNOWN_SERVICE_TYPES[i][0], instance);
             }
             catch(IOException e) {
-                AppLogger.warning("Could not instanciate jmDNS, Bonjour not enabled", e);
+                AppLogger.warning("Could not instantiate jmDNS, Bonjour not enabled", e);
             }
         }
         else if(!enabled && jmDNS!=null) {

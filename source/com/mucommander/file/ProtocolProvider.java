@@ -21,9 +21,9 @@ package com.mucommander.file;
 import java.io.IOException;
 
 /**
- * This interface allows {@link FileFactory} to instanciate {@link AbstractFile} implementations.
+ * This interface allows {@link FileFactory} to instantiate {@link AbstractFile} implementations.
  * <p>
- * For {@link AbstractFile} implementations to be automatically instanciated by {@link FileFactory}, this interface
+ * For {@link AbstractFile} implementations to be automatically instantiated by {@link FileFactory}, this interface
  * needs to be implemented and an instance registered with {@link FileFactory} and binded to a protocol identifier.
  * </p>
  *

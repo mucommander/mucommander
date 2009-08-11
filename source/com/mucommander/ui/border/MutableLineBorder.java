@@ -22,7 +22,7 @@ import javax.swing.border.LineBorder;
 import java.awt.*;
 
 /**
- * Implementation of <code>LineBorder</code> that allows applications to change the color after it's been instanciated.
+ * Implementation of <code>LineBorder</code> that allows applications to change the color after it's been instantiated.
  * @author Nicolas Rinaudo
  */
 public class MutableLineBorder extends LineBorder {

@@ -93,7 +93,7 @@ public abstract class AbstractCopyJob extends TransferFileJob {
                 break;
             }
             catch(IOException e) {
-                // Destination file couldn't be instanciated
+                // Destination file couldn't be instantiated
 
                 int ret = showErrorDialog(errorDialogTitle, Translator.get("cannot_write_file", destFileName));
                 // Retry loops

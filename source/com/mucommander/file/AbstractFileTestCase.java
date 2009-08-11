@@ -59,7 +59,7 @@ public abstract class AbstractFileTestCase extends TestCase {
     protected Vector filesToDelete;
 
     /**
-     * A temporary file instance automatically instanciated by {@link #setUp()} when a test is started. The file
+     * A temporary file instance automatically instantiated by {@link #setUp()} when a test is started. The file
      * is not physically created.
      */
     protected AbstractFile tempFile;

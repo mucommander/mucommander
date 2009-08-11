@@ -35,7 +35,7 @@ import java.util.zip.GZIPOutputStream;
  * Archiver is an abstract class that represents a generic file archiver and abstracts the underlying
  * compression method and specifics of the format.
  *
- * <p>Subclasses implement specific archive formats (Zip, Tar...) but cannot be instanciated directly.
+ * <p>Subclasses implement specific archive formats (Zip, Tar...) but cannot be instantiated directly.
  * Instead, the <code>getArchiver</code> methods can be used to retrieve an Archiver
  * instance for a specified archive format. A list of available archive formats can be dynamically retrieved
  * using {@link #getFormats(boolean) getFormats}.

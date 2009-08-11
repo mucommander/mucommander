@@ -93,7 +93,7 @@ public class TransferableFileSet implements Transferable {
         }
         catch(ClassNotFoundException e) {
             // That should never happen
-            AppLogger.fine("FileSet DataFlavor could not be instanciated", e);
+            AppLogger.fine("FileSet DataFlavor could not be instantiated", e);
         }
     }
 

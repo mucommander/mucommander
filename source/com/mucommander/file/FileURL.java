@@ -40,7 +40,7 @@ import java.util.NoSuchElementException;
  *
  * <h3>Instanciation</h3>
  * <p>
- * FileURL cannot be instanciated directly, instances can be created using {@link #FileURL#getFileURL(String)}.
+ * FileURL cannot be instantiated directly, instances can be created using {@link #FileURL#getFileURL(String)}.
  * Unlike the <code>java.net.URL</code> and <code>java.net.URI</code> classes, FileURL instances are mutable --
  * all URL parts can be freely modified. FileURL instances can also be cloned using the standard {@link #clone()} method.
  * </p>

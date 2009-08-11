@@ -37,7 +37,7 @@ import java.security.NoSuchAlgorithmException;
 /**
  * <code>AbstractFile</code> is the superclass of all files.
  *
- * <p>AbstractFile classes should never be instanciated directly. Instead, the {@link FileFactory} <code>getFile</code>
+ * <p>AbstractFile classes should never be instantiated directly. Instead, the {@link FileFactory} <code>getFile</code>
  * methods should be used to get a file instance from a path or {@link FileURL} location.</p>
  *
  * @see com.mucommander.file.FileFactory
@@ -826,12 +826,12 @@ public abstract class AbstractFile implements FileAttributes, PermissionTypes, P
      * Returns a child of this file, whose path is the concatenation of this file's path and the given relative path.
      * Although this method does not enforce it, the specified path should be relative, i.e. should not start with
      * a separator.<br/>
-     * An <code>IOException</code> may be thrown if the child file could not be instanciated but the returned file
+     * An <code>IOException</code> may be thrown if the child file could not be instantiated but the returned file
      * instance should never be <code>null</code>.
      *
      * @param relativePath the child's path, relative to this file's path
      * @return an AbstractFile representing the requested child file, never null
-     * @throws IOException if the child file could not be instanciated
+     * @throws IOException if the child file could not be instantiated
      */
     public final AbstractFile getChild(String relativePath) throws IOException {
         FileURL childURL = (FileURL)getURL().clone();
@@ -861,7 +861,7 @@ public abstract class AbstractFile implements FileAttributes, PermissionTypes, P
      * An <code>IOException</code> will be thrown in any of the following cases:
      * <ul>
      *  <li>if the filename contains one or several path separator (the file would not be a direct child)</li>
-     *  <li>if the child file could not be instanciated</li>
+     *  <li>if the child file could not be instantiated</li>
      * </ul>
      * This method never returns <<code>null</code>.
      *

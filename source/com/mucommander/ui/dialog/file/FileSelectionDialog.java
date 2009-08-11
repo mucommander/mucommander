@@ -183,7 +183,7 @@ public class FileSelectionDialog extends FocusDialog implements ActionListener {
                 testString = keywordString;
             }
 
-            // Instanciate the main file filter
+            // Instantiate the main file filter
             FileFilter filter;
             switch (comparison) {
                 case CONTAINS:

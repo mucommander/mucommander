@@ -206,7 +206,7 @@ public class ExtensionManager {
      * @param  filename    the extension's filename 
      * @return             an AbstractFile to the extension file with the specified filename and located in the
      * extensions folder.
-     * @throws IOException if the file could not be instanciated.
+     * @throws IOException if the file could not be instantiated.
      */
     public static AbstractFile getExtensionsFile(String filename) throws IOException {
         return getExtensionsFolder().getDirectChild(filename);

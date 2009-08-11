@@ -23,10 +23,10 @@ import com.mucommander.file.filter.FilenameFilter;
 import java.io.IOException;
 
 /**
- * This interface allows {@link FileFactory} to instanciate {@link AbstractArchiveFile} implementations and associate
+ * This interface allows {@link FileFactory} to instantiate {@link AbstractArchiveFile} implementations and associate
  * them with the filenames matched by a {@link FilenameFilter}.
  * <p>
- * For {@link AbstractArchiveFile} implementations to be automatically instanciated by {@link FileFactory},
+ * For {@link AbstractArchiveFile} implementations to be automatically instantiated by {@link FileFactory},
  * this interface needs to be implemented and an instance registered with {@link FileFactory}.
  * </p>
  *
