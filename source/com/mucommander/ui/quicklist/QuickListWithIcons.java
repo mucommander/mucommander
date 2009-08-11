@@ -18,18 +18,17 @@
 
 package com.mucommander.ui.quicklist;
 
-import java.util.HashMap;
-
-import javax.swing.Icon;
-import javax.swing.event.PopupMenuEvent;
-import javax.swing.event.PopupMenuListener;
-
 import com.mucommander.file.AbstractFile;
 import com.mucommander.ui.icon.CustomFileIconProvider;
 import com.mucommander.ui.icon.FileIcons;
 import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.icon.SpinningDial;
 import com.mucommander.ui.quicklist.item.DataList;
+
+import javax.swing.*;
+import javax.swing.event.PopupMenuEvent;
+import javax.swing.event.PopupMenuListener;
+import java.util.HashMap;
 
 /**
  * FileTablePopupWithIcons is a FileTablePopupWithDataList in which the data list 
@@ -40,7 +39,7 @@ import com.mucommander.ui.quicklist.item.DataList;
 
 public abstract class QuickListWithIcons extends QuickListWithDataList {
 	// This HashMap's keys are items and its objects are the corresponding icon.
-	private HashMap itemToIconCacheMap = new HashMap();
+	private final HashMap itemToIconCacheMap = new HashMap();
 	// This SpinningDial will appear until the icon fetching of an item is over.
 	private static final SpinningDial waitingIcon = new SpinningDial();
 	// If the icon fetching fails for some item, the following icon will appear for it. 

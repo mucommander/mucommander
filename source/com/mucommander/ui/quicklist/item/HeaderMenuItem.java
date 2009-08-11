@@ -18,17 +18,13 @@
 
 package com.mucommander.ui.quicklist.item;
 
-import java.awt.Color;
-import java.awt.GradientPaint;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
-import java.awt.image.BufferedImage;
-
 import com.mucommander.ui.theme.ColorChangedEvent;
 import com.mucommander.ui.theme.FontChangedEvent;
 import com.mucommander.ui.theme.ThemeData;
 import com.mucommander.ui.theme.ThemeManager;
+
+import java.awt.*;
+import java.awt.image.BufferedImage;
 
 /**
  * HeaderMenuItem is a custom MenuItem that shown as the first item in every QuickList.
@@ -60,7 +56,7 @@ public class HeaderMenuItem extends MenuItem {
 		graphics.drawImage(getBackgroundImage(getWidth(), getHeight(),
 				graphics, background, secondaryBackground), 				
 				0, 0, null);
-		
+
 		// draw text:
 		graphics.setFont(FONT);
 		graphics.setColor(foreground);
@@ -78,7 +74,7 @@ public class HeaderMenuItem extends MenuItem {
 		
 		BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 		graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		
+
 		// paint transition color
 		GradientPaint gradient = new GradientPaint(0, 0, leftColor, width, 0, rightColor);
 		graphics.setPaint(gradient);
