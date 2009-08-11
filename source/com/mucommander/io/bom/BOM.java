@@ -18,6 +18,8 @@
 
 package com.mucommander.io.bom;
 
+import java.nio.charset.Charset;
+
 /**
  * BOM represents a Byte-Order Mark, a byte sequence that can be found at the beginning of a Unicode text stream
  * which indicates the encoding of the text that follows.
@@ -30,20 +32,24 @@ public class BOM {
     /** the byte sequence that identifies this BOM */
     private byte[] sig;
 
-    /** the character encoding designated by this BOM */
+    /** the character encoding denoted by this BOM */
     private String encoding;
 
+    /** character encoding aliases that map onto this BOM */
+    private String aliases[];
 
     /**
-     * Creates a new <code>BOM</code> instance identified by the given signature and designating the specified
+     * Creates a new <code>BOM</code> instance identified by the given signature and denoting the specified
      * character encoding.
      *
      * @param signature the byte sequence that identifies this BOM
-     * @param encoding the character encoding designated by this BOM
+     * @param encoding the character encoding denoted by this BOM
+     * @param aliases character encoding aliases
      */
-    public BOM(byte signature[], String encoding) {
+    BOM(byte signature[], String encoding, String[] aliases) {
         this.sig = signature;
         this.encoding = encoding;
+        this.aliases = aliases;
     }
 
     /**
@@ -62,6 +68,15 @@ public class BOM {
      */
     public String getEncoding() {
         return encoding;
+    }
+
+    /**
+     * Returns a set of character encoding aliases that map onto this BOM.
+     *
+     * @return a set of character encoding aliases that map onto this BOM
+     */
+    public String[] getAliases() {
+        return aliases;
     }
 
     /**
@@ -91,6 +106,50 @@ public class BOM {
      */
     public boolean sigEquals(byte bytes[]) {
         return bytes.length==sig.length && sigStartsWith(bytes);
+    }
+
+
+    ////////////////////
+    // Static methods //
+    ////////////////////
+
+    /**
+     * Returns a {@link BOM} instance for the specified encoding, <code>null</code> if the encoding doesn't
+     * have a corresponding BOM (non-Unicode encoding). The search is case-insensitive.
+     *
+     * <p>All UTF encoding aliases are supported, in a BOM-neutral way: a BOM is always returned, regardless of
+     * whether the particular encoding requires a BOM to be used or not. For instance,
+     * <code>UTF-16LE</code> and <code>UnicodeLittleUnmarked</code> will both return the {@link BOMConstants#UTF16_LE_BOM}
+     * BOM, even though by specification <code>UTF-16LE</code> and <code>UnicodeLittleUnmarked</code> should not
+     * include a BOM in the data stream. Furthermore, when called with <code>UTF-16</code> and <code>UTF-32</code>,
+     * the returned BOM will arbitrarily default to big endian and return {@link BOMConstants#UTF16_BE_BOM} and
+     * {@link BOMConstants#UTF32_BE_BOM} respectively.
+     *
+     * @param encoding name of a character encoding
+     * @return a {@link BOM} instance for the specified encoding, <code>null</code> if the encoding doesn't
+     * have a corresponding BOM (non-Unicode encoding).
+     */
+    public static BOM getInstance(String encoding) {
+        if(!Charset.isSupported(encoding))
+            return null;
+
+        Charset charset = Charset.forName(encoding);
+        // Retrieve the charset's canonical name for aliases we may not know about
+        encoding = charset.name();
+
+        String[] aliases;
+
+        for(int i=0; i<BOMConstants.SUPPORTED_BOMS.length; i++) {
+            if(BOMConstants.SUPPORTED_BOMS[i].getEncoding().equalsIgnoreCase(encoding))
+                return BOMConstants.SUPPORTED_BOMS[i];
+
+            aliases = BOMConstants.SUPPORTED_BOMS[i].getAliases();
+            for(int j=0; j<aliases.length; j++)
+                if(aliases[j].equalsIgnoreCase(encoding))
+                    return BOMConstants.SUPPORTED_BOMS[i];
+        }
+
+        return null;
     }
 
 

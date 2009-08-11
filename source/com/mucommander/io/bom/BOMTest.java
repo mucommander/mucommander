@@ -21,6 +21,7 @@ package com.mucommander.io.bom;
 import junit.framework.TestCase;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -92,6 +93,53 @@ public class BOMTest extends TestCase implements BOMConstants {
         bomIn = getBOMInputStream(b);
         assertNotSame(UTF8_BOM, bomIn.getBOM());
         assertEOF(bomIn);
+    }
+
+    /**
+     * Tests {@link BOM#getInstance(String)}.
+     */
+    public void testBOMResolution() {
+        for(int i=0; i<SUPPORTED_BOMS.length; i++) {
+            // Test case variations
+            assertEquals(SUPPORTED_BOMS[i], BOM.getInstance(SUPPORTED_BOMS[i].getEncoding().toLowerCase()));
+            assertEquals(SUPPORTED_BOMS[i], BOM.getInstance(SUPPORTED_BOMS[i].getEncoding().toUpperCase()));
+        }
+
+        // Test non-UTF encodings
+        assertNull(BOM.getInstance("ISO-8859-1"));
+        assertNull(BOM.getInstance("Shift_JIS"));
+
+        // Test UTF aliases
+        assertEquals(BOMConstants.UTF16_BE_BOM, BOM.getInstance("UnicodeBig"));
+        assertEquals(BOMConstants.UTF16_BE_BOM, BOM.getInstance("UnicodeBigUnmarked"));
+        assertEquals(BOMConstants.UTF16_BE_BOM, BOM.getInstance("UTF-16"));
+        assertEquals(BOMConstants.UTF16_LE_BOM, BOM.getInstance("UnicodeLittle"));
+        assertEquals(BOMConstants.UTF16_LE_BOM, BOM.getInstance("UnicodeLittleUnmarked"));
+        assertEquals(BOMConstants.UTF32_BE_BOM, BOM.getInstance("UTF-32"));
+    }
+
+    /**
+     * Tests {@link BOMWriter}.
+     *
+     * @throws IOException should not happen
+     */
+    public void testBOMWriter() throws IOException {
+        String testString = "This is a test";
+        ByteArrayOutputStream baos;
+        BOMWriter bomWriter;
+        BOMInputStream bomIn;
+
+        for(int i=0; i<SUPPORTED_BOMS.length; i++) {
+            baos = new ByteArrayOutputStream();
+            bomWriter = new BOMWriter(baos, SUPPORTED_BOMS[i].getEncoding());
+            bomWriter.write(testString);
+            bomWriter.close();
+
+            bomIn = getBOMInputStream(baos.toByteArray());
+            assertEquals(SUPPORTED_BOMS[i], bomIn.getBOM());
+            assertStreamEquals(testString.getBytes(SUPPORTED_BOMS[i].getEncoding()), bomIn);
+            assertEOF(bomIn);
+        }
     }
 
 
