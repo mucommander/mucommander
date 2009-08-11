@@ -2289,23 +2289,119 @@ permissions.octal_notation:UA:Числове значення
 ###########
 
 # Action categories
-com.mucommander.ui.action.ActionCategories.nevigation:EN:Nevigation
-
+com.mucommander.ui.action.ActionCategories.navigation:EN:Navigation
+com.mucommander.ui.action.ActionCategories.navigation:FR:Navigation
+com.mucommander.ui.action.ActionCategories.navigation:DE:Navigation
+com.mucommander.ui.action.ActionCategories.navigation:ES:Navigation
+com.mucommander.ui.action.ActionCategories.navigation:CS:Navigace
+com.mucommander.ui.action.ActionCategories.navigation:zh_TW:導覽
+com.mucommander.ui.action.ActionCategories.navigation:PL:Nawigacja
+com.mucommander.ui.action.ActionCategories.navigation:HU:Navigáció
+com.mucommander.ui.action.ActionCategories.navigation:RU:Перемещение
+com.mucommander.ui.action.ActionCategories.navigation:zh_CN:导航
+com.mucommander.ui.action.ActionCategories.navigation:SL:Navigacija
+com.mucommander.ui.action.ActionCategories.navigation:RO:Navigare
+com.mucommander.ui.action.ActionCategories.navigation:IT:Navigare
+com.mucommander.ui.action.ActionCategories.navigation:KO:탐색
+com.mucommander.ui.action.ActionCategories.navigation:pt_BR:Navegação
+com.mucommander.ui.action.ActionCategories.navigation:NL:Navigatie
+com.mucommander.ui.action.ActionCategories.navigation:SK:Navigácia
+com.mucommander.ui.action.ActionCategories.navigation:JA:操作
+com.mucommander.ui.action.ActionCategories.navigation:SV:Navigation
+com.mucommander.ui.action.ActionCategories.navigation:DA:Navigation
+com.mucommander.ui.action.ActionCategories.navigation:UA:Навігація
 
 com.mucommander.ui.action.ActionCategories.selection:EN:Selection
-
+com.mucommander.ui.action.ActionCategories.selection:FR:Selection
+com.mucommander.ui.action.ActionCategories.selection:DE:Auswahl
+com.mucommander.ui.action.ActionCategories.selection:ES:Selección
+com.mucommander.ui.action.ActionCategories.selection:CS:Výběr
+com.mucommander.ui.action.ActionCategories.selection:zh_TW:選取
+com.mucommander.ui.action.ActionCategories.selection:PL:Wybór
+com.mucommander.ui.action.ActionCategories.selection:HU:Kiválasztás
+com.mucommander.ui.action.ActionCategories.selection:RU:Выбор
+com.mucommander.ui.action.ActionCategories.selection:zh_CN:选择
+com.mucommander.ui.action.ActionCategories.selection:SL:Izbira
+com.mucommander.ui.action.ActionCategories.selection:RO:Selectare
+com.mucommander.ui.action.ActionCategories.selection:IT:Selezionare
+com.mucommander.ui.action.ActionCategories.selection:KO:셀렉션
+com.mucommander.ui.action.ActionCategories.selection:pt_BR:Seleção
+com.mucommander.ui.action.ActionCategories.selection:NL:Selectie
+com.mucommander.ui.action.ActionCategories.selection:SK:Výber
+com.mucommander.ui.action.ActionCategories.selection:JA:選択範囲
+com.mucommander.ui.action.ActionCategories.selection:SV:Markering
+com.mucommander.ui.action.ActionCategories.selection:DA:Markering
+com.mucommander.ui.action.ActionCategories.selection:UA:Вибір
 
 com.mucommander.ui.action.ActionCategories.view:EN:View
+com.mucommander.ui.action.ActionCategories.view:FR:Vue
+com.mucommander.ui.action.ActionCategories.view:DE:Ansicht
+com.mucommander.ui.action.ActionCategories.view:ES:Ver
+com.mucommander.ui.action.ActionCategories.view:CS:Zobrazit
+com.mucommander.ui.action.ActionCategories.view:zh_TW:檢視
+com.mucommander.ui.action.ActionCategories.view:PL:Podgląd
+com.mucommander.ui.action.ActionCategories.view:HU:Megnéz
+com.mucommander.ui.action.ActionCategories.view:RU:Просмотр
+com.mucommander.ui.action.ActionCategories.view:zh_CN:查看
+com.mucommander.ui.action.ActionCategories.view:SL:Pogled
+com.mucommander.ui.action.ActionCategories.view:RO:Vizualizare
+com.mucommander.ui.action.ActionCategories.view:IT:Visualizzare
+com.mucommander.ui.action.ActionCategories.view:KO:보기
+com.mucommander.ui.action.ActionCategories.view:pt_BR:Visualizar
+com.mucommander.ui.action.ActionCategories.view:NL:Beeld
+com.mucommander.ui.action.ActionCategories.view:SK:Zobraziť
+com.mucommander.ui.action.ActionCategories.view:JA:表示
+com.mucommander.ui.action.ActionCategories.view:SV:Visa
+com.mucommander.ui.action.ActionCategories.view:DA:Vis
+com.mucommander.ui.action.ActionCategories.view:UA:Перегляд
 
-
-com.mucommander.ui.action.ActionCategories.files:EN:Files Operations
-
+com.mucommander.ui.action.ActionCategories.file_operations:EN:Files Operations
+com.mucommander.ui.action.ActionCategories.file_operations:EN:File operations
+com.mucommander.ui.action.ActionCategories.file_operations:FR:Opérations sur fichiers
+com.mucommander.ui.action.ActionCategories.file_operations:DE:Dateioperationen
+com.mucommander.ui.action.ActionCategories.file_operations:ES:Operaciones con ficheros
+com.mucommander.ui.action.ActionCategories.file_operations:CS:Operace se soubory
+com.mucommander.ui.action.ActionCategories.file_operations:zh_TW:檔案操作
+com.mucommander.ui.action.ActionCategories.file_operations:PL:Operacje na plikach
+com.mucommander.ui.action.ActionCategories.file_operations:HU:Fájl műveletek
+com.mucommander.ui.action.ActionCategories.file_operations:RU:Файловые операции
+com.mucommander.ui.action.ActionCategories.file_operations:zh_CN:文件操作
+com.mucommander.ui.action.ActionCategories.file_operations:SL:Operacije z datotekami
+com.mucommander.ui.action.ActionCategories.file_operations:RO:Operații cu fișiere
+com.mucommander.ui.action.ActionCategories.file_operations:IT:Operazioni su file
+com.mucommander.ui.action.ActionCategories.file_operations:KO:파일 작업
+com.mucommander.ui.action.ActionCategories.file_operations:pt_BR:Operações com arquivos
+com.mucommander.ui.action.ActionCategories.file_operations:NL:Bestandsbewerkingen
+com.mucommander.ui.action.ActionCategories.file_operations:SK:Operácie so súbormi
+com.mucommander.ui.action.ActionCategories.file_operations:JA:ファイルの操作
+com.mucommander.ui.action.ActionCategories.file_operations:SV:Filåtgärder
+com.mucommander.ui.action.ActionCategories.file_operations:DA:Fil handlinger
+com.mucommander.ui.action.ActionCategories.file_operations:UA:Файлові операції
 
 com.mucommander.ui.action.ActionCategories.windows:EN:Window
-
+com.mucommander.ui.action.ActionCategories.windows:FR:Fenêtres
+com.mucommander.ui.action.ActionCategories.windows:DE:Fenster
+com.mucommander.ui.action.ActionCategories.windows:ES:Ventanas
+com.mucommander.ui.action.ActionCategories.windows:CS:Okna
+com.mucommander.ui.action.ActionCategories.windows:zh_TW:視窗
+com.mucommander.ui.action.ActionCategories.windows:PL:Okna
+com.mucommander.ui.action.ActionCategories.windows:HU:Ablak
+com.mucommander.ui.action.ActionCategories.windows:RU:Окна
+com.mucommander.ui.action.ActionCategories.windows:zh_CN:窗口
+com.mucommander.ui.action.ActionCategories.windows:SL:Okna
+com.mucommander.ui.action.ActionCategories.windows:RO:Ferestre
+com.mucommander.ui.action.ActionCategories.windows:IT:Finestre
+com.mucommander.ui.action.ActionCategories.windows:KO:창
+com.mucommander.ui.action.ActionCategories.windows:pt_BR:Janelas
+com.mucommander.ui.action.ActionCategories.windows:NL:Vensters
+com.mucommander.ui.action.ActionCategories.windows:SK:Okná
+com.mucommander.ui.action.ActionCategories.windows:JA:ウィンドウ
+com.mucommander.ui.action.ActionCategories.windows:SV:Fönster
+com.mucommander.ui.action.ActionCategories.windows:DA:Vinduer
+com.mucommander.ui.action.ActionCategories.windows:UA:Вікна
 
 com.mucommander.ui.action.ActionCategories.misc:EN:Misc
-
+#NEW!
 
 # All actions have a label and an optional tooltip. Labels are usually displayed in buttons and menus and therefore should be kept reasonably
 # short. Tooltips are displayed when leaving the mouse over a component (button, menu...) or used in dialog titles and therefore can be longer.
@@ -10350,94 +10446,6 @@ text_editor.select_all:EN:$[text_viewer.select_all]
 # Shortcuts dialog #
 ####################
 
-shortcuts_dialog.navigation:EN:Navigation
-shortcuts_dialog.navigation:FR:Navigation
-shortcuts_dialog.navigation:DE:Navigation
-shortcuts_dialog.navigation:ES:Navigation
-shortcuts_dialog.navigation:CS:Navigace
-shortcuts_dialog.navigation:zh_TW:導覽
-shortcuts_dialog.navigation:PL:Nawigacja
-shortcuts_dialog.navigation:HU:Navigáció
-shortcuts_dialog.navigation:RU:Перемещение
-shortcuts_dialog.navigation:zh_CN:导航
-shortcuts_dialog.navigation:SL:Navigacija
-shortcuts_dialog.navigation:RO:Navigare
-shortcuts_dialog.navigation:IT:Navigare
-shortcuts_dialog.navigation:KO:탐색
-shortcuts_dialog.navigation:pt_BR:Navegação
-shortcuts_dialog.navigation:NL:Navigatie
-shortcuts_dialog.navigation:SK:Navigácia
-shortcuts_dialog.navigation:JA:操作
-shortcuts_dialog.navigation:SV:Navigation
-shortcuts_dialog.navigation:DA:Navigation
-shortcuts_dialog.navigation:UA:Навігація
-
-shortcuts_dialog.view:EN:View
-shortcuts_dialog.view:FR:Vue
-shortcuts_dialog.view:DE:Ansicht
-shortcuts_dialog.view:ES:Ver
-shortcuts_dialog.view:CS:Zobrazit
-shortcuts_dialog.view:zh_TW:檢視
-shortcuts_dialog.view:PL:Podgląd
-shortcuts_dialog.view:HU:Megnéz
-shortcuts_dialog.view:RU:Просмотр
-shortcuts_dialog.view:zh_CN:查看
-shortcuts_dialog.view:SL:Pogled
-shortcuts_dialog.view:RO:Vizualizare
-shortcuts_dialog.view:IT:Visualizzare
-shortcuts_dialog.view:KO:보기
-shortcuts_dialog.view:pt_BR:Visualizar
-shortcuts_dialog.view:NL:Beeld
-shortcuts_dialog.view:SK:Zobraziť
-shortcuts_dialog.view:JA:表示
-shortcuts_dialog.view:SV:Visa
-shortcuts_dialog.view:DA:Vis
-shortcuts_dialog.view:UA:Перегляд
-
-shortcuts_dialog.selection:EN:Selection
-shortcuts_dialog.selection:FR:Selection
-shortcuts_dialog.selection:DE:Auswahl
-shortcuts_dialog.selection:ES:Selección
-shortcuts_dialog.selection:CS:Výběr
-shortcuts_dialog.selection:zh_TW:選取
-shortcuts_dialog.selection:PL:Wybór
-shortcuts_dialog.selection:HU:Kiválasztás
-shortcuts_dialog.selection:RU:Выбор
-shortcuts_dialog.selection:zh_CN:选择
-shortcuts_dialog.selection:SL:Izbira
-shortcuts_dialog.selection:RO:Selectare
-shortcuts_dialog.selection:IT:Selezionare
-shortcuts_dialog.selection:KO:셀렉션
-shortcuts_dialog.selection:pt_BR:Seleção
-shortcuts_dialog.selection:NL:Selectie
-shortcuts_dialog.selection:SK:Výber
-shortcuts_dialog.selection:JA:選択範囲
-shortcuts_dialog.selection:SV:Markering
-shortcuts_dialog.selection:DA:Markering
-shortcuts_dialog.selection:UA:Вибір
-
-shortcuts_dialog.file_operations:EN:File operations
-shortcuts_dialog.file_operations:FR:Opérations sur fichiers
-shortcuts_dialog.file_operations:DE:Dateioperationen
-shortcuts_dialog.file_operations:ES:Operaciones con ficheros
-shortcuts_dialog.file_operations:CS:Operace se soubory
-shortcuts_dialog.file_operations:zh_TW:檔案操作
-shortcuts_dialog.file_operations:PL:Operacje na plikach
-shortcuts_dialog.file_operations:HU:Fájl műveletek
-shortcuts_dialog.file_operations:RU:Файловые операции
-shortcuts_dialog.file_operations:zh_CN:文件操作
-shortcuts_dialog.file_operations:SL:Operacije z datotekami
-shortcuts_dialog.file_operations:RO:Operații cu fișiere
-shortcuts_dialog.file_operations:IT:Operazioni su file
-shortcuts_dialog.file_operations:KO:파일 작업
-shortcuts_dialog.file_operations:pt_BR:Operações com arquivos
-shortcuts_dialog.file_operations:NL:Bestandsbewerkingen
-shortcuts_dialog.file_operations:SK:Operácie so súbormi
-shortcuts_dialog.file_operations:JA:ファイルの操作
-shortcuts_dialog.file_operations:SV:Filåtgärder
-shortcuts_dialog.file_operations:DA:Fil handlinger
-shortcuts_dialog.file_operations:UA:Файлові операції
-
 shortcuts_dialog.quick_search:EN:$[quick_search]
 
 shortcuts_dialog.quick_search.start_search:EN:Type in any character to start a quick search
@@ -10571,28 +10579,6 @@ shortcuts_dialog.quick_search.mark_jump_next:JA:現在のファイルをマー�
 shortcuts_dialog.quick_search.mark_jump_next:SV:Markera/Avmarkera aktuell fil och gå till nästa sökresultat
 shortcuts_dialog.quick_search.mark_jump_next:DA:Marker/afmarker aktuel fil og gå til næste søgeresultat
 shortcuts_dialog.quick_search.mark_jump_next:UA:Відмітити/зняти відмітку з поточного файлу і перейти до наступних результатів швидкого пошуку
-
-shortcuts_dialog.windows:EN:Windows
-shortcuts_dialog.windows:FR:Fenêtres
-shortcuts_dialog.windows:DE:Fenster
-shortcuts_dialog.windows:ES:Ventanas
-shortcuts_dialog.windows:CS:Okna
-shortcuts_dialog.windows:zh_TW:視窗
-shortcuts_dialog.windows:PL:Okna
-shortcuts_dialog.windows:HU:Ablak
-shortcuts_dialog.windows:RU:Окна
-shortcuts_dialog.windows:zh_CN:窗口
-shortcuts_dialog.windows:SL:Okna
-shortcuts_dialog.windows:RO:Ferestre
-shortcuts_dialog.windows:IT:Finestre
-shortcuts_dialog.windows:KO:창
-shortcuts_dialog.windows:pt_BR:Janelas
-shortcuts_dialog.windows:NL:Vensters
-shortcuts_dialog.windows:SK:Okná
-shortcuts_dialog.windows:JA:ウィンドウ
-shortcuts_dialog.windows:SV:Fönster
-shortcuts_dialog.windows:DA:Vinduer
-shortcuts_dialog.windows:UA:Вікна
 
 
 #######################

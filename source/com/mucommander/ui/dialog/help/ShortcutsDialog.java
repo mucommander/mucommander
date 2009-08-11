@@ -94,7 +94,7 @@ public class ShortcutsDialog extends FocusDialog implements ActionListener {
         	ActionCategory category = (ActionCategory) categories.nextElement();
         	addTopic(tabbedPane, category.toString(), ((LinkedList) table.get(category)).iterator());
         }
-        addTopic(tabbedPane, QUICK_SEARCH_TITLE, QUICK_SEARCH_DESC);
+        addTopic(tabbedPane, Translator.get(QUICK_SEARCH_TITLE), QUICK_SEARCH_DESC);
         
         contentPane.add(tabbedPane, BorderLayout.CENTER);
 
