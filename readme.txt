@@ -205,6 +205,7 @@ Bug fixes:
   (ticket #235).
 - Fixed erratic current file selection when 'Refresh' is called repeatedly
   (ticket #250).
+- Text editor now preserves Unicode BOMs when saving files (ticket #251).
 
 Known issues:
 - Some translations are not up-to-date. For more information, see:
