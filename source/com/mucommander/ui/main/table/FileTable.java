@@ -1332,7 +1332,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
             if(draggedRow==-1)
                 return;
 
-            setRangeMarked(lastRow, draggedRow, markOnRightClick);
+            setRangeMarked(lastDraggedRow, draggedRow, markOnRightClick);
 
             lastDraggedRow = draggedRow;
         }
