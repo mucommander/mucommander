@@ -19,6 +19,9 @@
 package com.mucommander.desktop;
 
 import com.mucommander.file.AbstractFile;
+import com.mucommander.text.Translator;
+import com.mucommander.ui.dialog.ErrorDialog;
+import com.mucommander.ui.main.WindowManager;
 
 import java.util.Vector;
 
@@ -139,7 +142,8 @@ public abstract class QueuedTrash extends AbstractTrash {
             while(queueSize!=queuedFiles.size());
 
             synchronized(moveToTrashLock) {     // Files can't be added to queue while files are moved to trash
-                moveToTrash(queuedFiles);
+                if(!moveToTrash(queuedFiles))
+                    ErrorDialog.showErrorDialog(WindowManager.getCurrentMainFrame(), Translator.get("delete_dialog.move_to_trash.option"), Translator.get("delete_dialog.move_to_trash.failed"));
 
                 queuedFiles.clear();
                 // Wake up any thread waiting for this thread to be finished
