@@ -148,7 +148,7 @@ public class MergeFileJob extends AbstractCopyJob {
 			crcIn = crcFile.getInputStream();
 			BufferedReader crcReader = new BufferedReader(new InputStreamReader(crcIn));
 			String crcLine = crcReader.readLine();
-			crcLine = crcLine.substring(crcLine.indexOf(' ')+1).trim();
+			crcLine = crcLine.substring(crcLine.lastIndexOf(' ')+1).trim();
 			String crcDest = destFile.calculateChecksum("CRC32");
 			if (!crcLine.equals(crcDest)) {
 	            showErrorDialog(errorDialogTitle,
