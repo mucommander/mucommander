@@ -121,16 +121,8 @@ public class FileIcons {
         if(USE_SYSTEM_ICONS_ALWAYS.equals(systemIconsPolicy))
             systemIcon = true;
 
-        if(USE_SYSTEM_ICONS_APPLICATIONS.equals(systemIconsPolicy)) {
-            String extension = file.getExtension();
-
-            if(extension!=null) {
-                if(OsFamilies.MAC_OS_X.isCurrent() && "app".equalsIgnoreCase(extension))
-                    systemIcon = true;
-                else if(OsFamilies.WINDOWS.isCurrent() && "exe".equalsIgnoreCase(extension))
-                    systemIcon = true;
-            }
-        }
+        if(USE_SYSTEM_ICONS_APPLICATIONS.equals(systemIconsPolicy))
+            systemIcon = com.mucommander.desktop.DesktopManager.isApplication(file);
 
         if(systemIcon) {
             Icon icon = getSystemFileIcon(file, iconDimension);

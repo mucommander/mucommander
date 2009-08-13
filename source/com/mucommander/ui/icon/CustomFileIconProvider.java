@@ -81,7 +81,6 @@ public class CustomFileIconProvider implements FileIconProvider {
         {"configuration.png", "cnf", "conf", "config", "inf", "ini", "pif", "prefs", "prf"},	// Configuration file
         {"database.png", "myi", "myd", "frm", "sql", "sqc", "sqr", "mdb", "mde", "mdn", "mdt", "accdb", "accde", "accdr", "accdt"},	// Database file
         {"executable_windows.png", "bat", "com", "exe"},	// Windows executables
-        {"executable_osx.png", "app"},	// Mac OS X executables
         {"feed.png", "rdf", "rss"},	// RSS/RDF feed
         {"font.png", "fnt", "fon", "otf"},	// Non-TrueType font
         {"font_truetype.png", "ttc", "ttf"},	// TrueType font

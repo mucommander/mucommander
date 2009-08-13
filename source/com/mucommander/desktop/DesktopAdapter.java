@@ -18,6 +18,8 @@
 
 package com.mucommander.desktop;
 
+import com.mucommander.file.AbstractFile;
+
 import java.awt.event.MouseEvent;
 
 /**
@@ -141,4 +143,15 @@ public interface DesktopAdapter {
      * @return the command used to start shell processes.
      */
     public String getDefaultShell();
+
+    /**
+     * Returns <code>true</code> if the given file is an application file. What an application file actually is
+     * is system-dependent and can take various forms.
+     * It can be a simple executable file, as in the case of Windows <code>.exe</code> files, or a directory 
+     * containing an executable and various meta-information files, like Mac OS X's <code>.app</code> files.
+     *
+     * @param file the file to test
+     * @return <code>true</code> if the given file is an application file
+     */
+    public boolean isApplication(AbstractFile file);
 }

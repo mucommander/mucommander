@@ -21,6 +21,7 @@ package com.mucommander.desktop.windows;
 import com.mucommander.desktop.DefaultDesktopAdapter;
 import com.mucommander.desktop.DesktopInitialisationException;
 import com.mucommander.desktop.DesktopManager;
+import com.mucommander.file.AbstractFile;
 import com.mucommander.runtime.OsFamily;
 
 /**
@@ -40,5 +41,20 @@ class WindowsDesktopAdapter extends DefaultDesktopAdapter {
 
     public boolean isAvailable() {
         return OsFamily.getCurrent().equals(OsFamily.WINDOWS);
+    }
+
+    /**
+     * Returns <code>true</code> for regular files (not directories) with an <code>exe</code> extension
+     * (case-insensitive comparison).
+     *
+     * @param file the file to test
+     * @return <code>true</code> for regular files (not directories) with an <code>exe</code> extension
+     * (case-insensitive comparison).
+     */
+    public boolean isApplication(AbstractFile file) {
+        String extension = file.getExtension();
+
+        // the isDirectory() test comes last as it is I/O bound
+        return extension!=null && extension.equalsIgnoreCase("exe") && !file.isDirectory();
     }
 }

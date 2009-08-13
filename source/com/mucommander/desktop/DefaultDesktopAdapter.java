@@ -19,6 +19,7 @@
 package com.mucommander.desktop;
 
 import com.mucommander.AppLogger;
+import com.mucommander.file.AbstractFile;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -137,4 +138,12 @@ public class DefaultDesktopAdapter implements DesktopAdapter {
      * @return <code>/bin/sh -l -c"</code>.
      */
     public String getDefaultShell() {return "/bin/sh -l -c";}
+
+    /**
+     * Always returns <code>false</code>.
+     * @return <code>false</code>, always.
+     */
+    public boolean isApplication(AbstractFile file) {
+        return false;
+    }
 }

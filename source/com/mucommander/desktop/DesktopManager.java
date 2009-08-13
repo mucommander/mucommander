@@ -528,8 +528,29 @@ public class DesktopManager {
 
     // - Misc. -----------------------------------------------------------
     // -------------------------------------------------------------------
+    /**
+     * Returns the command used to start shell processes.
+     * <p>
+     * The returned command must set the shell in its 'run script' mode.
+     * For example, for bash, the returned command should be <code>/bin/bash -l -c"</code>.
+     * </p>
+     * @return the command used to start shell processes.
+     */
     public static String getDefaultShell() {
         checkInit();
         return desktop.getDefaultShell();
+    }
+
+    /**
+     * Returns <code>true</code> if the given file is an application file. What an application file actually is
+     * is system-dependent and can take various forms.
+     * It can be a simple executable file, as in the case of Windows <code>.exe</code> files, or a directory
+     * containing an executable and various meta-information files, like Mac OS X's <code>.app</code> files.
+     *
+     * @param file the file to test
+     * @return <code>true</code> if the given file is an application file
+     */
+    public static boolean isApplication(AbstractFile file) {
+        return desktop.isApplication(file);
     }
 }
