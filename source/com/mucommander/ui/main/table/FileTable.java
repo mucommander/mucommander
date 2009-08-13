@@ -1558,10 +1558,13 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
             String fieldText = filenameField.getText();
             filenameField.setSelectionStart(0);
 
-            // If the current file is a directory, select the whole file name.
-            if(tableModel.getFileAtRow(editingRow).isDirectory())
-                filenameField.setSelectionEnd(fieldText.length());
+            AbstractFile file = tableModel.getFileAtRow(editingRow);
 
+            // If the current file is a directory and not an application file (e.g. Mac OS X .app directory), select
+            // the whole file name.
+            if(file.isDirectory() && !DesktopManager.isApplication(file)) {
+                filenameField.setSelectionEnd(fieldText.length());
+            }
             // Otherwise, select the file name without its extension, except when empty ('.DS_Store', for example).
             else {
                 int extPos = fieldText.lastIndexOf('.');
