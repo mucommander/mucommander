@@ -37,10 +37,11 @@ import com.mucommander.file.AbstractFile;
 import com.mucommander.file.util.FileSet;
 import com.mucommander.file.util.PathUtils;
 import com.mucommander.job.SplitFileJob;
+import com.mucommander.text.SizeFormat;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.DialogToolkit;
+import com.mucommander.ui.layout.XAlignedComponentPanel;
 import com.mucommander.ui.layout.XBoxPanel;
-import com.mucommander.ui.layout.YBoxPanel;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.text.FilePathField;
 
@@ -107,28 +108,16 @@ public class SplitFileDialog extends JobDialog implements ActionListener {
     protected void initialize() {
         Container content = getContentPane();
         content.setLayout(new BorderLayout(0, 5));
-        YBoxPanel pnlInfo = new YBoxPanel();
-        pnlInfo.add(new JLabel(Translator.get("split_file_dialog.file_to_split") + ": " + file.getName()));
-        pnlInfo.add(new JLabel(Translator.get("size") + ": " + Long.toString(file.getSize())));
-        content.add(pnlInfo, BorderLayout.NORTH);
-        content.add(getPnlControls(), BorderLayout.CENTER);
-        content.add(getPnlButtons(), BorderLayout.SOUTH);
-        getRootPane().setDefaultButton(btnSplit);
-        updatePartsNumber();
-    }
+        XAlignedComponentPanel pnlMain = new XAlignedComponentPanel(10);
 
-    private JPanel getPnlControls() {
-		YBoxPanel pnlControls = new YBoxPanel();
-		XBoxPanel pnlDir = new XBoxPanel();
-		pnlDir.add(new JLabel(Translator.get("split_file_dialog.target_directory") + ":"));
-		pnlDir.addSpace(5);
+        pnlMain.addRow(Translator.get("split_file_dialog.file_to_split") + ":", new JLabel(file.getName()), 0);
+        String size = SizeFormat.format(file.getSize(), SizeFormat.DIGITS_FULL | SizeFormat.UNIT_LONG | SizeFormat.INCLUDE_SPACE);
+        pnlMain.addRow(Translator.get("size") + ":", new JLabel(size), 10);
+        
 		edtTargetDirectory = new FilePathField(destFolder.getAbsolutePath(), 40);
-		pnlDir.add(edtTargetDirectory);
-		pnlControls.add(pnlDir);
-		pnlControls.addSpace(5);
-		XBoxPanel pnlSize = new XBoxPanel();
-		pnlSize.add(new JLabel(Translator.get("split_file_dialog.part_size") + ":"));
-		pnlSize.addSpace(5);
+        pnlMain.addRow(Translator.get("split_file_dialog.target_directory") + ":", edtTargetDirectory, 5);
+
+        XBoxPanel pnlSize = new XBoxPanel();
 		String[] sizes = new String[] {
 			MSG_AUTO,	
 			"10 " + Translator.get("unit.mb"),
@@ -148,13 +137,18 @@ public class SplitFileDialog extends JobDialog implements ActionListener {
 		//spnParts.addChangeListener(this);   // TODO make editable
 		spnParts.setEnabled(false);
 		pnlSize.add(spnParts);
-		pnlControls.add(pnlSize);
-		pnlControls.addSpace(5);
+        pnlMain.addRow(Translator.get("split_file_dialog.part_size") + ":", pnlSize, 0);
+        
 		cbGenerateCRC = new JCheckBox(Translator.get("split_file_dialog.generate_CRC"));
 		cbGenerateCRC.setSelected(true);
-		pnlControls.add(cbGenerateCRC);
-		return pnlControls;
-	}
+		pnlMain.addRow("", cbGenerateCRC, 0);
+
+		content.add(pnlMain, BorderLayout.CENTER);
+        content.add(getPnlButtons(), BorderLayout.SOUTH);
+        getRootPane().setDefaultButton(btnSplit);
+        updatePartsNumber();
+    }
+
 
 	/**
      * Creates bottom panel with buttons.
