@@ -25,6 +25,7 @@ import com.mucommander.file.util.FileSet;
 import com.mucommander.file.util.PathUtils;
 import com.mucommander.file.util.PathUtils.ResolvedDestination;
 import com.mucommander.job.MergeFileJob;
+import com.mucommander.job.TransferFileJob;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.main.MainFrame;
 
@@ -106,16 +107,16 @@ public class MergeFileDialog extends TransferDestinationDialog {
     protected void initialize() {
     }
 
-    protected void startJob(ResolvedDestination resolvedDest,
-    		int defaultFileExistsAction, boolean verifyIntegrity) {
-        ProgressDialog progressDialog = new ProgressDialog(mainFrame,
-                Translator.get("progress_dialog.processing_files"));
-		MergeFileJob job = new MergeFileJob(progressDialog, mainFrame,
+    protected TransferFileJob createTransferFileJob(ProgressDialog progressDialog, ResolvedDestination resolvedDest, int defaultFileExistsAction) {
+		return new MergeFileJob(progressDialog, mainFrame,
 		       files, resolvedDest.getDestinationFile(), defaultFileExistsAction);
-        progressDialog.start(job);
 	}
-    
-	protected boolean verifyPath(PathUtils.ResolvedDestination resolvedDest, String destPath) {
+
+    protected String getProgressDialogTitle() {
+        return Translator.get("progress_dialog.processing_files");
+    }
+
+    protected boolean verifyPath(PathUtils.ResolvedDestination resolvedDest, String destPath) {
         // The path entered doesn't correspond to any existing folder
         if (resolvedDest==null) {
             showErrorDialog(Translator.get("invalid_path", destPath), errorDialogTitle);
@@ -123,6 +124,6 @@ public class MergeFileDialog extends TransferDestinationDialog {
         }
         return true;
 	}
- 
-    
+
+
 }

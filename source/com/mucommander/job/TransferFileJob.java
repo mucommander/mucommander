@@ -291,8 +291,8 @@ public abstract class TransferFileJob extends FileJob {
                     default:
                         choice = showErrorDialog(errorDialogTitle,
                                                  Translator.get("error_while_transferring", sourceFile.getName()),
-                                                 new String[]{SKIP_TEXT, APPEND_TEXT, RETRY_TEXT, CANCEL_TEXT},
-                                                 new int[]{SKIP_ACTION, APPEND_ACTION, RETRY_ACTION, CANCEL_ACTION}
+                                                 new String[]{SKIP_TEXT, SKIP_ALL_TEXT, APPEND_TEXT, RETRY_TEXT, CANCEL_TEXT},
+                                                 new int[]{SKIP_ACTION, SKIP_ALL_ACTION, APPEND_ACTION, RETRY_ACTION, CANCEL_ACTION}
                                                  );
                     break;
                 }

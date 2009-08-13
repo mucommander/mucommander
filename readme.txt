@@ -133,9 +133,11 @@ What's new since v0.8.3 ?
 New features:
 - Added native support for 7z archives.
 - Added a keyboard shortcuts editor. Originally contributed by Johann Schmitz
-  and improved by Arik Hadas.
+  and improved by Arik Hadas (ticket #84).
 - Added a command bar editor.
-- Added a debug console that shows the last log messages.
+- Added a debug console that shows recent log messages.
+- New 'Skip errors' option added to copy/move/unpack/download file operations,
+  allowing file transfer errors to be ignored silently (ticket #231).
 
 Improvements:
 - Tar/TGZ and Zip unpacking speed has been improved significantly (ticket #74).

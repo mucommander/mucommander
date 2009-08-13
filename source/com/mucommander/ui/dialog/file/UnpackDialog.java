@@ -22,6 +22,7 @@ package com.mucommander.ui.dialog.file;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.util.FileSet;
 import com.mucommander.file.util.PathUtils;
+import com.mucommander.job.TransferFileJob;
 import com.mucommander.job.UnpackJob;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionProperties;
@@ -62,25 +63,22 @@ public class UnpackDialog extends TransferDestinationDialog {
         showDialog();
     }
 
-    protected void startJob(PathUtils.ResolvedDestination resolvedDest, int defaultFileExistsAction, boolean verifyIntegrity) {
-        ProgressDialog progressDialog = new ProgressDialog(mainFrame, Translator.get("unpack_dialog.unpacking"));
-
+    protected TransferFileJob createTransferFileJob(ProgressDialog progressDialog, PathUtils.ResolvedDestination resolvedDest, int defaultFileExistsAction) {
         int destinationType = resolvedDest.getDestinationType();
         if(destinationType==PathUtils.ResolvedDestination.EXISTING_FILE) {
             showErrorDialog(Translator.get("invalid_path", resolvedDest.getDestinationFile().getAbsolutePath()));
-            return;
+            return null;
         }
 
-        UnpackJob job = new UnpackJob(
+        return new UnpackJob(
                 progressDialog,
                 mainFrame,
                 files,
                 destinationType==PathUtils.ResolvedDestination.NEW_FILE?resolvedDest.getDestinationFile():resolvedDest.getDestinationFolder(),
                 defaultFileExistsAction);
-
-        job.setIntegrityCheckEnabled(verifyIntegrity);
-
-        progressDialog.start(job);
     }
 
+    protected String getProgressDialogTitle() {
+        return Translator.get("unpack_dialog.unpacking");
+    }
 }

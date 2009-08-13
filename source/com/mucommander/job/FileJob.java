@@ -136,24 +136,28 @@ public abstract class FileJob implements Runnable {
     
     /** Information about this job progress */
     private JobProgress jobProgress;
-        
+
+    /** True if the user asked to automatically skip errors */
+    private boolean autoSkipErrors;
 
 //    private int nbFilesProcessed;
 //    private int nbFilesDiscovered;
 
     protected final static int SKIP_ACTION = 0;
-    protected final static int RETRY_ACTION = 1;
-    protected final static int CANCEL_ACTION = 2;
-    protected final static int APPEND_ACTION = 3;
-    protected final static int OK_ACTION = 4;
+    protected final static int SKIP_ALL_ACTION = 1;
+    protected final static int RETRY_ACTION = 2;
+    protected final static int CANCEL_ACTION = 3;
+    protected final static int APPEND_ACTION = 4;
+    protected final static int OK_ACTION = 5;
 
     protected final static String SKIP_TEXT = Translator.get("skip");
+    protected final static String SKIP_ALL_TEXT = Translator.get("skip_all");
     protected final static String RETRY_TEXT = Translator.get("retry");
     protected final static String CANCEL_TEXT = Translator.get("cancel");
     protected final static String APPEND_TEXT = Translator.get("resume");
     protected final static String OK_TEXT = Translator.get("ok");
-    
-	
+
+
     /**
      * Creates a new FileJob without starting it.
      *
@@ -200,11 +204,22 @@ public abstract class FileJob implements Runnable {
 	
     /**
      * Specifies whether or not files that have been processed should be unmarked from current table (enabled by default).
+     *
+     * @param autoUnmark <code>true</code> to automatically unmark files after they have been processed.
      */
     public void setAutoUnmark(boolean autoUnmark) {
         this.autoUnmark = autoUnmark;
     }
-	
+
+    /**
+     * Sets whether or not this file job should automatically skip errors when encountered (disabled by default).
+     *
+     * @param autoSkipErrors <code>true</code> to automatically skip errors, <code>false</code> to show an error dialog.
+     */
+    public void setAutoSkipErrors(boolean autoSkipErrors) {
+        this.autoSkipErrors = autoSkipErrors;
+    }
+
 	
     /**
      * Sets the given file to be selected in the active table after this job has finished.
@@ -572,13 +587,9 @@ public abstract class FileJob implements Runnable {
      * is returned.
      */
     protected int showErrorDialog(String title, String message) {
-        String actionTexts[] = new String[]{SKIP_TEXT, RETRY_TEXT, CANCEL_TEXT};
-        int actionValues[] = new int[]{SKIP_ACTION, RETRY_ACTION, CANCEL_ACTION};
+        String actionTexts[] = new String[]{SKIP_TEXT, SKIP_ALL_TEXT, RETRY_TEXT, CANCEL_TEXT};
+        int actionValues[] = new int[]{SKIP_ACTION, SKIP_ALL_ACTION, RETRY_ACTION, CANCEL_ACTION};
 
-        // Send a system notification if a notifier is available and enabled
-        if(AbstractNotifier.isAvailable() && AbstractNotifier.getNotifier().isEnabled())
-            AbstractNotifier.getNotifier().displayBackgroundNotification(NotificationTypes.NOTIFICATION_TYPE_JOB_ERROR, title, message);
-        
         return showErrorDialog(title, message, actionTexts, actionValues);
     }
 
@@ -588,8 +599,18 @@ public abstract class FileJob implements Runnable {
      * Displays an error dialog with the specified title and message and returns the selection action's value.
      */
     protected int showErrorDialog(String title, String message, String actionTexts[], int actionValues[]) {
+        // Return SKIP_ACTION if 'skip all' has previously been selected and 'skip' is in the list of actions.
+        if(autoSkipErrors) {
+            for(int i=0; i<actionValues.length; i++)
+                if(actionValues[i]==SKIP_ACTION)
+                    return SKIP_ACTION;
+        }
+
+        // Send a system notification if a notifier is available and enabled
+        if(AbstractNotifier.isAvailable() && AbstractNotifier.getNotifier().isEnabled())
+            AbstractNotifier.getNotifier().displayBackgroundNotification(NotificationTypes.NOTIFICATION_TYPE_JOB_ERROR, title, message);
+
         QuestionDialog dialog;
-		
         if(getProgressDialog()==null)
             dialog = new QuestionDialog(getMainFrame(), 
                                         title,
@@ -611,6 +632,11 @@ public abstract class FileJob implements Runnable {
         int userChoice = waitForUserResponse(dialog);
         if(userChoice==-1 || userChoice==CANCEL_ACTION)
             interrupt();
+        // Keep 'skip all' choice for further error and return SKIP_ACTION
+        else if(userChoice==SKIP_ALL_ACTION) {
+            autoSkipErrors = true;
+            return SKIP_ACTION;
+        }
 
         return userChoice;
     }

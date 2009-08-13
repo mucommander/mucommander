@@ -21,6 +21,7 @@ package com.mucommander.ui.dialog.file;
 
 import com.mucommander.file.util.FileSet;
 import com.mucommander.file.util.PathUtils;
+import com.mucommander.job.TransferFileJob;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.DialogToolkit;
 import com.mucommander.ui.layout.YBoxPanel;
@@ -38,8 +39,9 @@ import java.awt.event.ActionListener;
  * and control some options such as the default action to perform when a file already exists in the destination, or
  * if the files should be checked for integrity.
  *
- * <p>The {@link #startJob(com.mucommander.file.util.PathUtils.ResolvedDestination,int,boolean)} method is called to start the job when the
- * user has confirmed the operation, either by pressing the OK button or by pressing the Enter key.</p>
+ * <p>The {@link #createTransferFileJob(ProgressDialog, PathUtils.ResolvedDestination, int)} method is called to create
+ * and return a {@link TransferFileJob} when the user has confirmed the operation, either by pressing the OK button or
+ * by pressing the Enter key.</p>
  *
  * @author Maxence Bernard
  */
@@ -47,6 +49,7 @@ public abstract class TransferDestinationDialog extends JobDialog implements Act
 
     protected JTextField pathField;
     protected JComboBox fileExistsActionComboBox;
+    protected JCheckBox skipErrorsCheckBox;
     protected JCheckBox verifyIntegrityCheckBox;
     protected JButton okButton;
     protected JButton cancelButton;
@@ -118,7 +121,12 @@ public abstract class TransferDestinationDialog extends JobDialog implements Act
             fileExistsActionComboBox.addItem(DEFAULT_ACTIONS_TEXT[i]);
         mainPanel.add(fileExistsActionComboBox);
 
-        mainPanel.addSpace(10);
+//        mainPanel.addSpace(5);
+
+        skipErrorsCheckBox = new JCheckBox(Translator.get("destination_dialog.skip_errors"));
+        mainPanel.add(skipErrorsCheckBox);
+
+//        mainPanel.addSpace(5);
 
         verifyIntegrityCheckBox = new JCheckBox(Translator.get("destination_dialog.verify_integrity"));
         mainPanel.add(verifyIntegrityCheckBox);
@@ -188,8 +196,15 @@ public abstract class TransferDestinationDialog extends JobDialog implements Act
             defaultFileExistsAction = DEFAULT_ACTIONS[defaultFileExistsAction-1];
         // Note: we don't remember default action on purpose: we want the user to specify it each time,
         // it would be too dangerous otherwise.
-		
-        startJob(resolvedDest, defaultFileExistsAction, verifyIntegrityCheckBox.isSelected());
+
+        ProgressDialog progressDialog = new ProgressDialog(mainFrame, getProgressDialogTitle());
+        TransferFileJob job = createTransferFileJob(progressDialog, resolvedDest, defaultFileExistsAction);
+
+        if(job!=null) {
+            job.setAutoSkipErrors(skipErrorsCheckBox.isSelected());
+            job.setIntegrityCheckEnabled(verifyIntegrityCheckBox.isSelected());
+            progressDialog.start(job);
+        }
     }
 
 
@@ -197,8 +212,10 @@ public abstract class TransferDestinationDialog extends JobDialog implements Act
     // Abstract methods //
     //////////////////////
 
-    protected abstract void startJob(PathUtils.ResolvedDestination resolvedDest, int defaultFileExistsAction, boolean verifyIntegrity);
-	
+    protected abstract TransferFileJob createTransferFileJob(ProgressDialog progressDialog, PathUtils.ResolvedDestination resolvedDest, int defaultFileExistsAction);
+
+    protected abstract String getProgressDialogTitle();
+
 
     ////////////////////////
     // Overridden methods //

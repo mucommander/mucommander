@@ -452,7 +452,7 @@ delete:DA:Slet
 delete:UA:Видалити
 
 skip:EN:Skip
-skip:FR:Suivant
+skip:FR:Ignorer
 skip:DE:Überspringen
 skip:ES:Saltar
 skip:CS:Přeskočit
@@ -472,6 +472,27 @@ skip:JA:スキップ
 skip:SV:Hoppa över
 skip:DA:Spring over
 skip:UA:Пропустити
+
+skip_all:EN:Skip all
+skip_all:FR:Ignorer tous
+# Translation missing (New!)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 retry:EN:Retry
 retry:FR:Réessayer
@@ -6659,6 +6680,18 @@ destination_dialog.verify_integrity:SL:Preverjanje integritete podatkov
 destination_dialog.verify_integrity:SV:Verifierar data integritet
 destination_dialog.verify_integrity:UA:Перевірити цілісність даних
 # Translation missing (KO, zh_CN, SK)
+
+
+
+
+
+
+destination_dialog.skip_errors:EN:Skip errors
+destination_dialog.skip_errors:FR:Ignorer les erreurs
+# Translation missing (New!)
+
+
+
 
 
 

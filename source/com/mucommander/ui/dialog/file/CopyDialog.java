@@ -107,9 +107,7 @@ public class CopyDialog extends TransferDestinationDialog {
         setTextField(fieldText, startPosition, endPosition);
     }
 
-    protected void startJob(PathUtils.ResolvedDestination resolvedDest, int defaultFileExistsAction, boolean verifyIntegrity) {
-        ProgressDialog progressDialog = new ProgressDialog(mainFrame, Translator.get("copy_dialog.copying"));
-
+    protected TransferFileJob createTransferFileJob(ProgressDialog progressDialog, PathUtils.ResolvedDestination resolvedDest, int defaultFileExistsAction) {
         AbstractFile baseFolder = files.getBaseFolder();
         AbstractArchiveFile parentArchiveFile = baseFolder.getParentArchive();
         TransferFileJob job;
@@ -147,9 +145,10 @@ public class CopyDialog extends TransferDestinationDialog {
                 defaultFileExistsAction);
         }
 
-        job.setIntegrityCheckEnabled(verifyIntegrity);
-
-        progressDialog.start(job);
+        return job;
     }
 
+    protected String getProgressDialogTitle() {
+        return Translator.get("copy_dialog.copying");
+    }
 }
