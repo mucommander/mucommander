@@ -33,6 +33,7 @@ import com.mucommander.file.impl.ftp.FTPProtocolProvider;
 import com.mucommander.file.impl.smb.SMBProtocolProvider;
 import com.mucommander.runtime.OsFamilies;
 import com.mucommander.shell.ShellHistoryManager;
+import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.dialog.debug.DebugConsoleHandler;
 import com.mucommander.ui.dialog.startup.CheckVersionDialog;
 import com.mucommander.ui.dialog.startup.InitialSetupDialog;
@@ -49,7 +50,7 @@ import java.util.logging.*;
  * muCommander launcher.
  * <p>
  * This class is used to start muCommander. It will analyse command line
- * arguments, initialise the whole software and start the main window.
+ * arguments, initialize the whole software and start the main window.
  * </p>
  * @author Maxence Bernard, Nicolas Rinaudo
  */
@@ -457,9 +458,9 @@ public class Launcher {
         // Configure filesystems
         configureFilesystems();
 
-        // Initialises the desktop.
+        // Initializes the desktop.
         try {com.mucommander.desktop.DesktopManager.init(isFirstBoot);}
-        catch(Exception e) {printError("Could not initialise desktop", e, true);}
+        catch(Exception e) {printError("Could not initialize desktop", e, true);}
 
         // Loads dictionary
         printStartupMessage("Loading dictionary...");
@@ -516,10 +517,14 @@ public class Launcher {
                                                                                           MuConfiguration.DEFAULT_TABLE_ICON_SCALE)));
         com.mucommander.ui.icon.FileIcons.setSystemIconsPolicy(MuConfiguration.getVariable(MuConfiguration.USE_SYSTEM_FILE_ICONS, MuConfiguration.DEFAULT_USE_SYSTEM_FILE_ICONS));
 
+		// Register actions
+        printStartupMessage("Registering actions...");
+        ActionManager.registerActions();
+		
         // Loads the ActionKeymap file
-        printStartupMessage("Loading actions...");
+        printStartupMessage("Loading actions shortcuts...");
         try {com.mucommander.ui.action.ActionKeymapIO.loadActionKeymap();}
-        catch(Exception e) {printFileError("Could not load actions", e, fatalWarnings);}
+        catch(Exception e) {printFileError("Could not load actions shortcuts", e, fatalWarnings);}
 
         // Loads the ToolBar's description file
         printStartupMessage("Loading toolbar description...");

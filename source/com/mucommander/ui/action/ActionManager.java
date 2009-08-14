@@ -56,7 +56,7 @@ public class ActionManager {
     /** Pattern to resolve the action ID from action class path */
     private final static Pattern pattern = Pattern.compile(".*\\.(.*)?Action");
 
-    static {
+    public static void registerActions() {
     	registerAction(new AddBookmarkAction.Descriptor(),                  new AddBookmarkAction.Factory());
     	registerAction(new BatchRenameAction.Descriptor(),                  new BatchRenameAction.Factory());
     	registerAction(new BringAllToFrontAction.Descriptor(),              new BringAllToFrontAction.Factory());
@@ -73,8 +73,8 @@ public class ActionManager {
     	registerAction(new CopyFileNamesAction.Descriptor(),                new CopyFileNamesAction.Factory());
     	registerAction(new CopyFilePathsAction.Descriptor(),                new CopyFilePathsAction.Factory());
     	registerAction(new CopyFilesToClipboardAction.Descriptor(),         new CopyFilesToClipboardAction.Factory());
-    	registerAction(new FocusPreviousAction.Descriptor(), new FocusPreviousAction.Factory());
-    	registerAction(new FocusNextAction.Descriptor(),  new FocusNextAction.Factory());
+    	registerAction(new FocusPreviousAction.Descriptor(),                new FocusPreviousAction.Factory());
+    	registerAction(new FocusNextAction.Descriptor(),                    new FocusNextAction.Factory());
     	registerAction(new DeleteAction.Descriptor(),         			    new DeleteAction.Factory());
     	registerAction(new DonateAction.Descriptor(),    			        new DonateAction.Factory());
     	registerAction(new EditAction.Descriptor(),     			        new EditAction.Factory());
