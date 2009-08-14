@@ -22,6 +22,7 @@ import com.mucommander.auth.Credentials;
 import com.mucommander.file.FileLogger;
 import com.mucommander.file.FileURL;
 
+import java.io.InterruptedIOException;
 import java.util.Vector;
 
 
@@ -43,63 +44,82 @@ public class ConnectionPool implements Runnable {
     /** Controls how of often the thread monitor checks connections */
     private final static int MONITOR_SLEEP_PERIOD = 1000;
 
+    /** Maximum number of simultaneous connections per realm/credentials combo */
+    private final static int MAX_CONNECTIONS_PER_REALM = 4;
 
 
-    public static synchronized ConnectionHandler getConnectionHandler(ConnectionHandlerFactory connectionHandlerFactory, FileURL url) {
-        return getConnectionHandler(connectionHandlerFactory, url, false);
-    }
-
-
-    public static synchronized ConnectionHandler getConnectionHandler(ConnectionHandlerFactory connectionHandlerFactory, FileURL url, boolean acquireLock) {
+    public static ConnectionHandler getConnectionHandler(ConnectionHandlerFactory connectionHandlerFactory, FileURL url, boolean acquireLock) throws InterruptedIOException {
         FileURL realm = url.getRealm();
 
-        synchronized(connectionHandlers) {      // Ensures that monitor thread is not currently changing the list while we access it
-            int nbConn = connectionHandlers.size();
-            ConnectionHandler connHandler;
-            Credentials urlCredentials = url.getCredentials();
-            // Try and find an appropriate existing ConnectionHandler
-            for(int i=0; i<nbConn; i++) {
-                connHandler = getConnectionHandlerAt(i);
-                synchronized(connHandler) {     // Ensures that lock remains unchanged while we access/update it
-                    // ConnectionHandler must match the realm and credentials and must not be locked
-                    if(connHandler.equals(realm, urlCredentials) && !connHandler.isLocked()) {
+        while(true) {
+            synchronized(connectionHandlers) {      // Ensures that monitor thread is not currently changing the list while we access it
+                int nbConn = connectionHandlers.size();
+                ConnectionHandler connHandler;
+                Credentials urlCredentials = url.getCredentials();
+                int matchingConnHandlers = 0;
 
-                        // Try to acquire lock if a lock was requested
-                        if(!acquireLock || connHandler.acquireLock()) {
-                            FileLogger.finer("returning ConnectionHandler "+connHandler+", realm ="+realm);
+                // Try and find an appropriate existing ConnectionHandler
+                for(int i=0; i<nbConn; i++) {
+                    connHandler = getConnectionHandlerAt(i);
+                        // ConnectionHandler must match the realm and credentials and must not be locked
+                        if(connHandler.equals(realm, urlCredentials)) {
+                            synchronized(connHandler) {     // Ensures that lock remains unchanged while we access/update it
+                                if(!connHandler.isLocked()) {
+                                    // Try to acquire lock if a lock was requested
+                                    if(!acquireLock || connHandler.acquireLock()) {
+                                        FileLogger.finer("returning ConnectionHandler "+connHandler+", realm ="+realm);
 
-                            // Update last activity timestamp to now
-                            connHandler.updateLastActivityTimestamp();
+                                        // Update last activity timestamp to now
+                                        connHandler.updateLastActivityTimestamp();
 
-                            return connHandler;
+                                        return connHandler;
+                                    }
+                                }
+                            }
+                        }
+
+                    matchingConnHandlers++;
+                    if(matchingConnHandlers==MAX_CONNECTIONS_PER_REALM) {
+                        FileLogger.finer("Maximum number of connection per realm reached, waiting for one to be removed or released...");
+                        try {
+                            // Wait for a ConnectionHandler to be released or removed from the pool
+                            connectionHandlers.wait();      // relinquishes the lock on connectionHandlers
+                            break;
+                        }
+                        catch(InterruptedException e) {
+                            FileLogger.finer("Interrupted while waiting on a connection for "+url, e);
+                            throw new InterruptedIOException();
                         }
                     }
                 }
+
+                if(matchingConnHandlers==MAX_CONNECTIONS_PER_REALM)
+                    continue;
+
+                // No suitable ConnectionHandler found, create a new one
+                connHandler = connectionHandlerFactory.createConnectionHandler(url);
+
+                // Acquire lock if a lock was requested
+                if(acquireLock)
+                    connHandler.acquireLock();
+
+                FileLogger.finer("adding new ConnectionHandler "+connHandler+", realm="+connHandler.getRealm());
+
+                // Insert new ConnectionHandler at first position as if it has more chances to be accessed again soon
+                connectionHandlers.insertElementAt(connHandler, 0);
+
+                // Start monitor thread if it is not currently running (if there previously was no registered ConnectionHandler)
+                if(monitorThread==null) {
+                    FileLogger.finer("starting monitor thread");
+                    monitorThread = new Thread(instance);
+                    monitorThread.start();
+                }
+
+                // Update last activity timestamp to now
+                connHandler.updateLastActivityTimestamp();
+
+                return connHandler;
             }
-
-            // No suitable ConnectionHandler found, create a new one
-            connHandler = connectionHandlerFactory.createConnectionHandler(url);
-
-            // Acquire lock if a lock was requested
-            if(acquireLock)
-                connHandler.acquireLock();
-
-            FileLogger.finer("adding new ConnectionHandler "+connHandler+", realm="+connHandler.getRealm());
-
-            // Insert new ConnectionHandler at first position as if it has more chances to be accessed again soon
-            connectionHandlers.insertElementAt(connHandler, 0);
-
-            // Start monitor thread if it is not currently running (if there previously was no registered ConnectionHandler) 
-            if(monitorThread==null) {
-                FileLogger.finer("starting monitor thread");
-                monitorThread = new Thread(instance);
-                monitorThread.start();
-            }
-
-            // Update last activity timestamp to now
-            connHandler.updateLastActivityTimestamp();
-
-            return connHandler;
         }
     }
 
@@ -112,12 +132,9 @@ public class ConnectionPool implements Runnable {
      * @return a list of registered ConnectionHandler instances
      */
     public static Vector getConnectionHandlersSnapshot() {
-        synchronized(connectionHandlers) {
-            return (Vector)connectionHandlers.clone();
-        }
+        return (Vector)connectionHandlers.clone();
     }
     
-
     /**
      * Returns the ConnectionHandler instance located at the given position in the list.
      */
@@ -125,20 +142,16 @@ public class ConnectionPool implements Runnable {
         return (ConnectionHandler)connectionHandlers.elementAt(i);
     }
 
-
     /**
-     * For debugging purposes only: returns a String dump of all registered ConnectionHandler instances.
+     * Called by {@link ConnectionHandler#releaseLock()} to notify the <code>ConnectionHandler</code> that a
+     * <code>ConnectionHandler</code> has been released.
      */
-    public static String dumpConnections() {
-        int nbElements = connectionHandlers.size();
-
-        String rep = "";
-        for(int i=0; i<nbElements; i++)
-            rep += getConnectionHandlerAt(i)+" isConnected()="+getConnectionHandlerAt(i).isConnected()+" ";
-
-        return rep;
+    static void notifyConnectionHandlerLockReleased() {
+        synchronized(connectionHandlers) {
+            // Notify any thread waiting for a ConnectionHandler to be released
+            connectionHandlers.notify();
+        }
     }
-
 
     /**
      * Monitors connections and periodically:
@@ -162,7 +175,11 @@ public class ConnectionPool implements Runnable {
                             // Remove ConnectionHandler instance from the list of registered ConnectionHandler
                             // if it is not connected
                             if(!connHandler.isConnected()) {
+                                FileLogger.finer("Removing unconnected ConnectionHandler "+connHandler);
+
                                 connectionHandlers.removeElementAt(i);
+                                // Notify any thread waiting for a ConnectionHandler to be released
+                                connectionHandlers.notify();
 
                                 continue;       // Skips close on inactivity and keep alive checks
                             }
@@ -173,7 +190,11 @@ public class ConnectionPool implements Runnable {
                             // from the list of registered ConnectionHandler and close the connection in a separate thread
                             long closePeriod = connHandler.getCloseOnInactivityPeriod();
                             if(closePeriod!=-1 && now-lastUsed>closePeriod*1000) {
+                                FileLogger.finer("Removing timed-out ConnectionHandler "+connHandler);
+
                                 connectionHandlers.removeElementAt(i);
+                                // Notify any thread waiting for a ConnectionHandler to be released
+                                connectionHandlers.notify();
 
                                 // Close connection in a separate thread as it could lock this thread
                                 new CloseConnectionThread(connHandler).start();
@@ -206,7 +227,9 @@ public class ConnectionPool implements Runnable {
             try {
                 Thread.sleep(Math.max(0, MONITOR_SLEEP_PERIOD-(System.currentTimeMillis()-now)));
             }
-            catch(InterruptedException e) {}
+            catch(InterruptedException e) {
+                // Will loop again
+            }
         }
     }
 
@@ -224,11 +247,11 @@ public class ConnectionPool implements Runnable {
         }
 
         public void run() {
-            FileLogger.finer("closing connection: "+connHandler);
-
             // Try to close connection, only if it is connected
-            if(connHandler.isConnected())
+            if(connHandler.isConnected()) {
+                FileLogger.finer("Closing connection held by "+connHandler);
                 connHandler.closeConnection();
+            }
         }
     }
 

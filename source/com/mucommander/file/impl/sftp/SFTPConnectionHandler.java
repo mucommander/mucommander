@@ -66,7 +66,7 @@ class SFTPConnectionHandler extends ConnectionHandler {
     // ConnectionHandler implementation //
     //////////////////////////////////////
 
-    public synchronized void startConnection() throws IOException {
+    public void startConnection() throws IOException {
         FileLogger.finer("starting connection to "+realm);
         try {
             FileURL realm = getRealm();

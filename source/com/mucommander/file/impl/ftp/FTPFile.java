@@ -30,10 +30,7 @@ import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPConnectionClosedException;
 import org.apache.commons.net.ftp.FTPReply;
 
-import java.io.FilterInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.text.SimpleDateFormat;
@@ -162,11 +159,9 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
             return createFTPFile("/", true);
         }
         else {
-            FTPConnectionHandler connHandler = null;
+            FTPConnectionHandler connHandler = (FTPConnectionHandler)ConnectionPool.getConnectionHandler(this, fileURL, true);
             org.apache.commons.net.ftp.FTPFile files[];
             try {
-                // Retrieve a ConnectionHandler and lock it
-                connHandler = (FTPConnectionHandler)ConnectionPool.getConnectionHandler(this, fileURL, true);
                 // Makes sure the connection is started, if not starts it
                 connHandler.checkConnection();
 
@@ -176,8 +171,7 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
             }
             finally {
                 // Release the lock on the ConnectionHandler
-                if(connHandler!=null)
-                    connHandler.releaseLock();
+                connHandler.releaseLock();
             }
 
             // File doesn't exist
@@ -300,7 +294,14 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
      */
     public boolean canChangeDate() {
         // Return false if we know the 'SITE UTIME' command is not supported by the server
-        return ((FTPConnectionHandler)ConnectionPool.getConnectionHandler(this, fileURL, false)).utimeCommandSupported;
+        try {
+            // Do not lock the connection handler, not needed.
+            return ((FTPConnectionHandler)ConnectionPool.getConnectionHandler(this, fileURL, false)).utimeCommandSupported;
+        }
+        catch(InterruptedIOException e) {
+            // Should not happen in practice
+            return false;
+        }
     }
 
     /**
@@ -350,7 +351,8 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
         }
         catch(IOException e) {
             // Checks if the IOException corresponds to a socket error and in that case, closes the connection
-            connHandler.checkSocketException(e);
+            if(connHandler!=null)
+                connHandler.checkSocketException(e);
 
             return false;
         }
@@ -417,10 +419,16 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
      * servers do), {@link PermissionBits#EMPTY_PERMISSION_BITS} otherwise
      */
     public PermissionBits getChangeablePermissions() {
-         // Do not lock the connection handler, not needed.
-        return ((FTPConnectionHandler)ConnectionPool.getConnectionHandler(this, fileURL, false)).chmodCommandSupported
-                ?PermissionBits.FULL_PERMISSION_BITS    // Full permission support (777 octal)
-                :PermissionBits.EMPTY_PERMISSION_BITS;  // Permissions can't be changed
+        try {
+            // Do not lock the connection handler, not needed.
+            return ((FTPConnectionHandler)ConnectionPool.getConnectionHandler(this, fileURL, false)).chmodCommandSupported
+                    ?PermissionBits.FULL_PERMISSION_BITS    // Full permission support (777 octal)
+                    :PermissionBits.EMPTY_PERMISSION_BITS;  // Permissions can't be changed
+        }
+        catch(InterruptedIOException e) {
+            // Should not happen in practice
+            return PermissionBits.EMPTY_PERMISSION_BITS;  // Permissions can't be changed
+        }
     }
 
     public String getOwner() {
@@ -493,10 +501,9 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
     }
 
     public void delete() throws IOException {
-        FTPConnectionHandler connHandler = null;
+        // Retrieve a ConnectionHandler and lock it
+        FTPConnectionHandler connHandler = (FTPConnectionHandler)ConnectionPool.getConnectionHandler(this, fileURL, true);
         try {
-            // Retrieve a ConnectionHandler and lock it
-            connHandler = (FTPConnectionHandler)ConnectionPool.getConnectionHandler(this, fileURL, true);
             // Makes sure the connection is started, if not starts it
             connHandler.checkConnection();
 
@@ -517,8 +524,7 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
         }
         finally {
             // Release the lock on the ConnectionHandler
-            if(connHandler!=null)
-                connHandler.releaseLock();
+            connHandler.releaseLock();
         }
     }
 
@@ -584,10 +590,9 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
 
 
     public void mkdir() throws IOException {
-        FTPConnectionHandler connHandler = null;
+        // Retrieve a ConnectionHandler and lock it
+        FTPConnectionHandler connHandler = (FTPConnectionHandler)ConnectionPool.getConnectionHandler(this, fileURL, true);
         try {
-            // Retrieve a ConnectionHandler and lock it
-            connHandler = (FTPConnectionHandler)ConnectionPool.getConnectionHandler(this, fileURL, true);
             // Makes sure the connection is started, if not starts it
             connHandler.checkConnection();
 
@@ -607,8 +612,7 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
         }
         finally {
             // Release the lock on the ConnectionHandler
-            if(connHandler!=null)
-                connHandler.releaseLock();
+            connHandler.releaseLock();
         }
     }
 
@@ -676,7 +680,8 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
         }
         catch(IOException e) {
             // Checks if the IOException corresponds to a socket error and in that case, closes the connection
-            connHandler.checkSocketException(e);
+            if(connHandler!=null)
+                connHandler.checkSocketException(e);
 
             return false;
         }
@@ -717,7 +722,8 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
         }
         catch(IOException e) {
             // Checks if the IOException corresponds to a socket error and in that case, closes the connection
-            connHandler.checkSocketException(e);
+            if(connHandler!=null)
+                connHandler.checkSocketException(e);
 
             throw new FileTransferException(FileTransferException.UNKNOWN_REASON);    // Report that move failed
         }
@@ -887,11 +893,13 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
                 }
             }
             catch(IOException e) {
-                // Checks if the IOException corresponds to a socket error and in that case, closes the connection
-                connHandler.checkSocketException(e);
+                if(connHandler!=null) {
+                    // Checks if the IOException corresponds to a socket error and in that case, closes the connection
+                    connHandler.checkSocketException(e);
 
-                // Release the lock on the ConnectionHandler if the InputStream could not be created
-                connHandler.releaseLock();
+                    // Release the lock on the ConnectionHandler if the InputStream could not be created
+                    connHandler.releaseLock();
+                }
 
                 // Re-throw IOException
                 throw e;
@@ -1013,11 +1021,13 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
                     throw new IOException();
             }
             catch(IOException e) {
-                // Checks if the IOException corresponds to a socket error and in that case, closes the connection
-                connHandler.checkSocketException(e);
+                if(connHandler!=null) {
+                    // Checks if the IOException corresponds to a socket error and in that case, closes the connection
+                    connHandler.checkSocketException(e);
 
-                // Release the lock on the ConnectionHandler if the OutputStream could not be created
-                connHandler.releaseLock();
+                    // Release the lock on the ConnectionHandler if the OutputStream could not be created
+                    connHandler.releaseLock();
+                }
 
                 // Re-throw IOException
                 throw e;

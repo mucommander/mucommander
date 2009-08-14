@@ -166,10 +166,12 @@ public class SFTPFile extends AbstractFile {
     }
 
     public boolean changeDate(long lastModified) {
-        // Retrieve a ConnectionHandler and lock it
-        SFTPConnectionHandler connHandler = (SFTPConnectionHandler)ConnectionPool.getConnectionHandler(connHandlerFactory, fileURL, true);
+        SFTPConnectionHandler connHandler = null;
         SftpFile sftpFile = null;
         try {
+            // Retrieve a ConnectionHandler and lock it
+            connHandler = (SFTPConnectionHandler)ConnectionPool.getConnectionHandler(connHandlerFactory, fileURL, true);
+
             // Makes sure the connection is started, if not starts it
             connHandler.checkConnection();
 
@@ -196,7 +198,8 @@ public class SFTPFile extends AbstractFile {
                 catch(IOException e) {}
 
             // Release the lock on the ConnectionHandler
-            connHandler.releaseLock();
+            if(connHandler!=null)
+                connHandler.releaseLock();
         }
     }
 
@@ -371,8 +374,11 @@ public class SFTPFile extends AbstractFile {
 
     public void delete() throws IOException {
         // Retrieve a ConnectionHandler and lock it
-        SFTPConnectionHandler connHandler = (SFTPConnectionHandler)ConnectionPool.getConnectionHandler(connHandlerFactory, fileURL, true);
+        SFTPConnectionHandler connHandler = null;
         try {
+            // Retrieve a ConnectionHandler and lock it
+            connHandler = (SFTPConnectionHandler)ConnectionPool.getConnectionHandler(connHandlerFactory, fileURL, true);
+
             // Makes sure the connection is started, if not starts it
             connHandler.checkConnection();
 
@@ -389,7 +395,8 @@ public class SFTPFile extends AbstractFile {
         }
         finally {
             // Release the lock on the ConnectionHandler if the OutputStream could not be created
-            connHandler.releaseLock();
+            if(connHandler!=null)
+                connHandler.releaseLock();
         }
     }
 
@@ -509,9 +516,11 @@ public class SFTPFile extends AbstractFile {
 
 
     public boolean changePermissions(int permissions) {
-        // Retrieve a ConnectionHandler and lock it
-        SFTPConnectionHandler connHandler = (SFTPConnectionHandler)ConnectionPool.getConnectionHandler(connHandlerFactory, fileURL, true);
+        SFTPConnectionHandler connHandler = null;
         try {
+            // Retrieve a ConnectionHandler and lock it
+            connHandler = (SFTPConnectionHandler)ConnectionPool.getConnectionHandler(connHandlerFactory, fileURL, true);
+
             // Makes sure the connection is started, if not starts it
             connHandler.checkConnection();
 
@@ -527,7 +536,8 @@ public class SFTPFile extends AbstractFile {
         }
         finally {
             // Release the lock on the ConnectionHandler
-            connHandler.releaseLock();
+            if(connHandler!=null)
+                connHandler.releaseLock();
         }
     }
 
@@ -555,9 +565,11 @@ public class SFTPFile extends AbstractFile {
 
         // If destination file is an SFTP file located on the same server, tell the server to rename the file.
 
-        // Retrieve a ConnectionHandler and lock it
-        SFTPConnectionHandler connHandler = (SFTPConnectionHandler)ConnectionPool.getConnectionHandler(connHandlerFactory, fileURL, true);
+        SFTPConnectionHandler connHandler = null;
         try {
+            // Retrieve a ConnectionHandler and lock it
+            connHandler = (SFTPConnectionHandler)ConnectionPool.getConnectionHandler(connHandlerFactory, fileURL, true);
+
             // Makes sure the connection is started, if not starts it
             connHandler.checkConnection();
 
@@ -586,7 +598,8 @@ public class SFTPFile extends AbstractFile {
         }
         finally {
             // Release the lock on the ConnectionHandler
-            connHandler.releaseLock();
+            if(connHandler!=null)
+                connHandler.releaseLock();
         }
     }
 
@@ -627,9 +640,11 @@ public class SFTPFile extends AbstractFile {
             if(canonicalPath!=null && (System.currentTimeMillis()-canonicalPathFetchedTime<attributeCachingPeriod))
                 return canonicalPath;
 
-            // Retrieve a ConnectionHandler and lock it
-            SFTPConnectionHandler connHandler = (SFTPConnectionHandler)ConnectionPool.getConnectionHandler(connHandlerFactory, fileURL, true);
+            SFTPConnectionHandler connHandler = null;
             try {
+                // Retrieve a ConnectionHandler and lock it
+                connHandler = (SFTPConnectionHandler)ConnectionPool.getConnectionHandler(connHandlerFactory, fileURL, true);
+
                 // Makes sure the connection is started, if not starts it
                 connHandler.checkConnection();
 
@@ -655,7 +670,8 @@ public class SFTPFile extends AbstractFile {
             }
             finally {
                 // Release the lock on the ConnectionHandler
-                connHandler.releaseLock();
+                if(connHandler!=null)
+                    connHandler.releaseLock();
             }
         }
 
@@ -715,9 +731,11 @@ public class SFTPFile extends AbstractFile {
         }
 
         private void fetchAttributes() throws AuthException {
-            // Retrieve a ConnectionHandler and lock it
-            SFTPConnectionHandler connHandler = (SFTPConnectionHandler)ConnectionPool.getConnectionHandler(SFTPFile.connHandlerFactory, url, true);
+            SFTPConnectionHandler connHandler = null;
             try {
+                // Retrieve a ConnectionHandler and lock it
+                connHandler = (SFTPConnectionHandler)ConnectionPool.getConnectionHandler(SFTPFile.connHandlerFactory, url, true);
+
                 // Makes sure the connection is started, if not starts it
                 connHandler.checkConnection();
 
@@ -742,7 +760,8 @@ public class SFTPFile extends AbstractFile {
             }
             finally {
                 // Release the lock on the ConnectionHandler
-                connHandler.releaseLock();
+                if(connHandler!=null)
+                    connHandler.releaseLock();
             }
         }
 

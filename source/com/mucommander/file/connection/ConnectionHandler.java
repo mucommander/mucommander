@@ -134,13 +134,18 @@ public abstract class ConnectionHandler {
      *
      * @return true if it could be locked, false if it is not locked
      */
-    public synchronized boolean releaseLock() {
-        if(!isLocked) {
-            FileLogger.fine("!!!!! releaseLock() returning false, should not happen !!!!!", new Throwable());
-            return false;
+    public boolean releaseLock() {
+        synchronized(this) {
+            if(!isLocked) {
+                FileLogger.fine("!!!!! releaseLock() returning false, should not happen !!!!!", new Throwable());
+                return false;
+            }
+
+            isLocked = false;
         }
 
-        isLocked = false;
+        ConnectionPool.notifyConnectionHandlerLockReleased();
+
         return true;
     }
 
