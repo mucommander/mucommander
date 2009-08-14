@@ -22,16 +22,20 @@ import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
+import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.util.FileSet;
@@ -39,6 +43,9 @@ import com.mucommander.file.util.PathUtils;
 import com.mucommander.job.SplitFileJob;
 import com.mucommander.text.SizeFormat;
 import com.mucommander.text.Translator;
+import com.mucommander.ui.combobox.ComboBoxListener;
+import com.mucommander.ui.combobox.EditableComboBox;
+import com.mucommander.ui.combobox.SaneComboBox;
 import com.mucommander.ui.dialog.DialogToolkit;
 import com.mucommander.ui.layout.XAlignedComponentPanel;
 import com.mucommander.ui.layout.XBoxPanel;
@@ -84,8 +91,12 @@ public class SplitFileDialog extends JobDialog implements ActionListener {
 
 	private FilePathField edtTargetDirectory;
 	private JCheckBox cbGenerateCRC;
-	private JComboBox cbSize;
+	private JTextField edtSize;
+	private EditableComboBox cbSize;
 	private JSpinner spnParts;
+
+	protected boolean edtChange;
+
     
  
 
@@ -126,16 +137,40 @@ public class SplitFileDialog extends JobDialog implements ActionListener {
 			"650 " + Translator.get("unit.mb"),
 			"700 " + Translator.get("unit.mb")
 		};
-		cbSize = new JComboBox(sizes);
-		cbSize.setEditable(true);
-		cbSize.addActionListener(this);
+		edtSize = new JTextField();
+		cbSize = new EditableComboBox(edtSize, sizes);
+		cbSize.setComboSelectionUpdatesTextField(true);
+		cbSize.setSelectedIndex(1);
+		edtSize.addKeyListener(new KeyAdapter() {
+			public void keyReleased(KeyEvent e) {
+				updatePartsNumber();
+			}
+		});
+		cbSize.addComboBoxListener(new ComboBoxListener() {			
+			public void comboBoxSelectionChanged(SaneComboBox source) {
+				updatePartsNumber();				
+			}
+		});
 		pnlSize.add(cbSize);
 		pnlSize.addSpace(10);
 		pnlSize.add(new JLabel(Translator.get("split_file_dialog.parts") + ":"));
 		pnlSize.addSpace(5);
-		spnParts = new JSpinner(new SpinnerNumberModel(1, 1, file.getSize(), 1));
-		//spnParts.addChangeListener(this);   // TODO make editable
-		spnParts.setEnabled(false);
+		spnParts = new JSpinner(new SpinnerNumberModel(Long.valueOf(1), Long.valueOf(1), 
+				Long.valueOf(file.getSize()), Long.valueOf(1)));
+		spnParts.addChangeListener(new ChangeListener() {			
+			public void stateChanged(ChangeEvent e) {
+				if (!edtChange) {
+					long parts = ((Number)spnParts.getValue()).longValue();
+					long newsize = file.getSize() / parts;
+					if (file.getSize() % parts != 0) {
+						newsize++;
+					}
+					if (getBytes() != newsize) {
+						edtSize.setText(Long.toString(newsize));
+					}
+				}
+			}
+		});   
 		pnlSize.add(spnParts);
         pnlMain.addRow(Translator.get("split_file_dialog.part_size") + ":", pnlSize, 0);
         
@@ -164,9 +199,10 @@ public class SplitFileDialog extends JobDialog implements ActionListener {
      * Executes the split job.
      */
 	private void startJob() {
-		int size = getBytes();
-		if (size < 1) 
+		long size = getBytes();
+		if (size < 1) { 
 			return;		
+		}
 
 		String destPath = edtTargetDirectory.getText();
         PathUtils.ResolvedDestination resolvedDest = 
@@ -187,7 +223,7 @@ public class SplitFileDialog extends JobDialog implements ActionListener {
         ProgressDialog progressDialog = new ProgressDialog(mainFrame,
                 Translator.get("progress_dialog.processing_files"));
 		SplitFileJob job = new SplitFileJob(progressDialog, mainFrame,
-		        file, resolvedDest.getDestinationFolder(), size, (int) parts);
+		        file, resolvedDest.getDestinationFolder(), size, (int)parts);
 		job.setIntegrityCheckEnabled(cbGenerateCRC.isSelected());
         progressDialog.start(job);
 	}
@@ -196,10 +232,11 @@ public class SplitFileDialog extends JobDialog implements ActionListener {
      * Returns number of bytes entered in "Bytes per part" control.
      * @return
      */
-    private int getBytes() {
-		String strVal = ((String) cbSize.getSelectedItem()).trim();
-		if (MSG_AUTO.equals(strVal))
-			return (int) file.getSize();
+    private long getBytes() {
+		String strVal = edtSize.getText().trim();
+		if (MSG_AUTO.equals(strVal)) {
+			return (long) file.getSize();
+		}
 		String[] strArr = strVal.split(" ");
 		if (strArr.length < 1 || strArr.length > 2) {
 			return -1;
@@ -221,7 +258,7 @@ public class SplitFileDialog extends JobDialog implements ActionListener {
 		try {
 			double size = DECIMAL_FORMAT.parse(strArr[0]).doubleValue();
 			size *= unit;
-			return (int) size;
+			return (long) size;
 		} catch (Exception e) {
 			return -1;
 		}
@@ -231,11 +268,12 @@ public class SplitFileDialog extends JobDialog implements ActionListener {
      * Returns number of parts this file will be splitted.
      * @return
      */
-    private int getParts() {
-		int size = getBytes();
-		if (size < 1) 
+    private long getParts() {
+		long size = getBytes();
+		if (size < 1) { 
 			return -1;
-		return (int) Math.ceil((double)file.getSize() / (double)size);
+		}
+		return (long) Math.ceil((double)file.getSize() / (double)size);
     }
 
     /**
@@ -243,10 +281,13 @@ public class SplitFileDialog extends JobDialog implements ActionListener {
      * "Bytes per part" control.
      */
 	private void updatePartsNumber() {
-		int parts = getParts();
-		if (parts < 1)
+		long parts = getParts();
+		if (parts < 1) {
 			return;
-		spnParts.setValue(new Integer(parts));
+		}
+		edtChange = true;
+		spnParts.setValue(Long.valueOf(parts));
+		edtChange = false;
 	}
 
     // /////////////////////////////////
@@ -257,8 +298,6 @@ public class SplitFileDialog extends JobDialog implements ActionListener {
         Object source = e.getSource();
         if (source == btnClose) {
             dispose();
-        } else if (source == cbSize) {
-        	updatePartsNumber();
         } else if (source == btnSplit) {
             dispose();
             startJob();
