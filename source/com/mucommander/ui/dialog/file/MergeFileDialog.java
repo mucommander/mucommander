@@ -38,6 +38,8 @@ import java.io.IOException;
  */
 public class MergeFileDialog extends TransferDestinationDialog {
 
+    private AbstractFile destFolder;
+
     /**
      * Creates a new combine file dialog.
      * @param mainFrame the main frame
@@ -50,12 +52,8 @@ public class MergeFileDialog extends TransferDestinationDialog {
                 Translator.get("copy_dialog.destination"),
                 Translator.get("merge_file_dialog.merge"),
                 Translator.get("copy_dialog.error_title"));
-        String path = destFolder.getAbsolutePath(true) + files.fileAt(0).getNameWithoutExtension();
-        setTextField(path);
-        if (files.size() == 1) {
-        	searchParts(files.fileAt(0));
-        }
-        initialize();
+
+        this.destFolder = destFolder;
     }
 
     /**
@@ -101,10 +99,27 @@ public class MergeFileDialog extends TransferDestinationDialog {
 		setFiles(files);
 	}
 
-	/**
-     * Initializes the dialog.
-     */
-    protected void initialize() {
+    protected boolean isValidDestination(PathUtils.ResolvedDestination resolvedDest, String destPath) {
+        // The path entered doesn't correspond to any existing folder
+        if (resolvedDest==null) {
+            showErrorDialog(Translator.get("invalid_path", destPath), errorDialogTitle);
+            return false;
+        }
+        return true;
+	}
+
+
+    //////////////////////////////////////////////
+    // TransferDestinationDialog implementation //
+    //////////////////////////////////////////////
+
+    protected PathFieldContent computeInitialPath(FileSet files) {
+        String path = destFolder.getAbsolutePath(true) + files.fileAt(0).getNameWithoutExtension();
+        if (files.size() == 1) {
+        	searchParts(files.fileAt(0));
+        }
+
+        return new PathFieldContent(path);
     }
 
     protected TransferFileJob createTransferFileJob(ProgressDialog progressDialog, ResolvedDestination resolvedDest, int defaultFileExistsAction) {
@@ -115,15 +130,5 @@ public class MergeFileDialog extends TransferDestinationDialog {
     protected String getProgressDialogTitle() {
         return Translator.get("progress_dialog.processing_files");
     }
-
-    protected boolean verifyPath(PathUtils.ResolvedDestination resolvedDest, String destPath) {
-        // The path entered doesn't correspond to any existing folder
-        if (resolvedDest==null) {
-            showErrorDialog(Translator.get("invalid_path", destPath), errorDialogTitle);
-            return false;
-        }
-        return true;
-	}
-
 
 }

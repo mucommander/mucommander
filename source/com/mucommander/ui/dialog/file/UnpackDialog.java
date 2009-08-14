@@ -37,6 +37,8 @@ import com.mucommander.ui.main.MainFrame;
  */
 public class UnpackDialog extends TransferDestinationDialog {
 
+    protected boolean isShiftDown;
+
     /**
      * Creates and displays a new UnpackDialog.
      *
@@ -50,17 +52,25 @@ public class UnpackDialog extends TransferDestinationDialog {
               Translator.get("unpack_dialog.destination"),
               Translator.get("unpack_dialog.unpack"),
               Translator.get("unpack_dialog.error_title"));
-	    
+
+        this.isShiftDown = isShiftDown;
+        showDialog();
+    }
+
+    
+    //////////////////////////////////////////////
+    // TransferDestinationDialog implementation //
+    //////////////////////////////////////////////
+
+    protected PathFieldContent computeInitialPath(FileSet files) {
         AbstractFile destFolder = mainFrame.getInactiveTable().getCurrentFolder();
         String fieldText;
         if(isShiftDown)
             fieldText = ".";
         else
             fieldText = destFolder.getAbsolutePath(true);
-		
-        setTextField(fieldText);
-		
-        showDialog();
+
+        return new PathFieldContent(fieldText);
     }
 
     protected TransferFileJob createTransferFileJob(ProgressDialog progressDialog, PathUtils.ResolvedDestination resolvedDest, int defaultFileExistsAction) {

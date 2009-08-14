@@ -40,13 +40,20 @@ import com.mucommander.ui.main.MainFrame;
 public class MoveDialog extends TransferDestinationDialog {
 
     public MoveDialog(MainFrame mainFrame, FileSet files) {
-        super(mainFrame, files);
-		
-        init(Translator.get("move_dialog.move"),
-             Translator.get("move_dialog.move_description"),
-             Translator.get("move_dialog.move"),
-             Translator.get("move_dialog.error_title"));
+        super(mainFrame, files,
+                Translator.get("move_dialog.move"),
+                Translator.get("move_dialog.move_description"),
+                Translator.get("move_dialog.move"),
+                Translator.get("move_dialog.error_title"));
         
+        showDialog();
+    }
+
+    //////////////////////////////////////////////
+    // TransferDestinationDialog implementation //
+    //////////////////////////////////////////////
+
+    protected PathFieldContent computeInitialPath(FileSet files) {
         String       fieldText;
         int          startPosition;
         int          endPosition;
@@ -59,7 +66,6 @@ public class MoveDialog extends TransferDestinationDialog {
         if(nbFiles==1) {
             AbstractFile file = ((AbstractFile)files.elementAt(0));
             AbstractFile destFile;
-            // TODO: move those I/O bound calls to another thread as they can lock the main thread
             startPosition = fieldText.length();
             if(!(file.isDirectory() && (destFile=FileFactory.getFile(fieldText+file.getName()))!=null && destFile.exists() && destFile.isDirectory())) {
                 endPosition = file.getName().lastIndexOf('.');
@@ -77,9 +83,7 @@ public class MoveDialog extends TransferDestinationDialog {
             endPosition   = fieldText.length();
         }
 
-        setTextField(fieldText, startPosition, endPosition);
-
-        showDialog();
+        return new PathFieldContent(fieldText, startPosition, endPosition);
     }
 
     protected TransferFileJob createTransferFileJob(ProgressDialog progressDialog, PathUtils.ResolvedDestination resolvedDest, int defaultFileExistsAction) {

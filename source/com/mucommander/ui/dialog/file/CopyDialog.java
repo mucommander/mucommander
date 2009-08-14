@@ -42,6 +42,8 @@ import java.util.Vector;
  */
 public class CopyDialog extends TransferDestinationDialog {
 
+    protected boolean localCopy;
+
     /**
      * Creates and displays a new CopyDialog.
      *
@@ -55,6 +57,16 @@ public class CopyDialog extends TransferDestinationDialog {
               Translator.get("copy_dialog.copy"),
               Translator.get("copy_dialog.error_title"));
 
+        this.localCopy = localCopy;
+        showDialog();
+    }
+
+
+    //////////////////////////////////////////////
+    // TransferDestinationDialog implementation //
+    //////////////////////////////////////////////
+
+    protected PathFieldContent computeInitialPath(FileSet files) {
         String fieldText;     // Text to display in the destination field.
         int    startPosition; // Index of the first selected character in the destination field.
         int    endPosition;   // Index of the last selected character in the destination field.
@@ -72,7 +84,7 @@ public class CopyDialog extends TransferDestinationDialog {
             if(endPosition <= 0)
                 endPosition = fieldText.length();
         }
-        // Fill text field with absolute path, and if there is only one file, 
+        // Fill text field with absolute path, and if there is only one file,
         // append file's name
         else {
             fieldText = destFolder.getAbsolutePath(true);
@@ -83,7 +95,6 @@ public class CopyDialog extends TransferDestinationDialog {
                 AbstractFile file = ((AbstractFile)files.elementAt(0));
                 AbstractFile destFile;
 
-                // TODO: move those I/O bound calls to another thread as they can lock the main thread
                 startPosition  = fieldText.length();
 
                 if(!(file.isDirectory() && (destFile=FileFactory.getFile(fieldText+file.getName()))!=null && destFile.exists() && destFile.isDirectory())) {
@@ -104,7 +115,7 @@ public class CopyDialog extends TransferDestinationDialog {
 
         }
 
-        setTextField(fieldText, startPosition, endPosition);
+        return new PathFieldContent(fieldText, startPosition, endPosition);
     }
 
     protected TransferFileJob createTransferFileJob(ProgressDialog progressDialog, PathUtils.ResolvedDestination resolvedDest, int defaultFileExistsAction) {

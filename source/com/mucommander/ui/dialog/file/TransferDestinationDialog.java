@@ -19,45 +19,59 @@
 
 package com.mucommander.ui.dialog.file;
 
+import com.mucommander.AppLogger;
 import com.mucommander.file.util.FileSet;
 import com.mucommander.file.util.PathUtils;
 import com.mucommander.job.TransferFileJob;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.DialogToolkit;
+import com.mucommander.ui.icon.SpinningDial;
 import com.mucommander.ui.layout.YBoxPanel;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.text.FilePathField;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.lang.reflect.InvocationTargetException;
 
 
 /**
- * This class is an abstract dialog which allows the user to specify in a text field the destination of a transfer
+ * This class is an abstract dialog which allows the user to enter the destination of a transfer in a text field
  * and control some options such as the default action to perform when a file already exists in the destination, or
  * if the files should be checked for integrity.
- *
- * <p>The {@link #createTransferFileJob(ProgressDialog, PathUtils.ResolvedDestination, int)} method is called to create
- * and return a {@link TransferFileJob} when the user has confirmed the operation, either by pressing the OK button or
- * by pressing the Enter key.</p>
+ * <p>
+ * The initial path displayed in the text field is the one returned by {@link #computeInitialPath(FileSet)}.
+ * When the dialog is confirmed by the user, either by pressing the 'OK' button or the 'Enter' key, the destination
+ * path is resolved and checked with {@link #isValidDestination(PathUtils.ResolvedDestination, String)}. If the
+ * path is a valid destination, a job instance is created using
+ * {@link #createTransferFileJob(ProgressDialog, PathUtils.ResolvedDestination, int)} and started. If it isn't,
+ * the user is notified with an error message.
+ * </p>
  *
  * @author Maxence Bernard
  */
-public abstract class TransferDestinationDialog extends JobDialog implements ActionListener {
+public abstract class TransferDestinationDialog extends JobDialog implements ActionListener, DocumentListener {
+    protected String errorDialogTitle;
 
-    protected JTextField pathField;
-    protected JComboBox fileExistsActionComboBox;
-    protected JCheckBox skipErrorsCheckBox;
-    protected JCheckBox verifyIntegrityCheckBox;
-    protected JButton okButton;
-    protected JButton cancelButton;
+    private FilePathField pathField;
+    private SpinningDial spinningDial;
 
-    protected String errorDialogTitle = Translator.get("error");
-	
+    private JComboBox fileExistsActionComboBox;
+    private JCheckBox skipErrorsCheckBox;
+    private JCheckBox verifyIntegrityCheckBox;
+    private JButton okButton;
+
+    /** Background thread that is currently being executed, <code>null</code> if there is none. */
+    private Thread thread;
+
     // Dialog size constraints
-    protected final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(320,0);	
+    protected final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(360,0);
     // Dialog width should not exceed 360, height is not an issue (always the same)
     protected final static Dimension MAXIMUM_DIALOG_DIMENSION = new Dimension(400,10000);	
 
@@ -81,33 +95,25 @@ public abstract class TransferDestinationDialog extends JobDialog implements Act
     };
 	
 
-    public TransferDestinationDialog(MainFrame mainFrame, FileSet files) {
-        super(mainFrame, null, files);
-    }
-	
     public TransferDestinationDialog(MainFrame mainFrame, FileSet files, String title, String labelText, String okText, String errorDialogTitle) {
-        this(mainFrame, files);
-		
-        init(title, labelText, okText, errorDialogTitle);
-    }
-	
-	
-    protected void init(String title, String labelText, String okText, String errorDialogTitle) {
+        super(mainFrame, title, files);
+
         this.errorDialogTitle = errorDialogTitle;
 
-        setTitle(title);
-		
         YBoxPanel mainPanel = new YBoxPanel();
-		
-        JLabel label = new JLabel(labelText+" :");
-        mainPanel.add(label);
+        mainPanel.add(new JLabel(labelText+" :"));
 
         // Create a path field with auto-completion capabilities
         pathField = new FilePathField();
 
-        pathField.addActionListener(this);
-        mainPanel.add(pathField);
+        JPanel borderPanel = new JPanel(new BorderLayout());
+        borderPanel.add(pathField, BorderLayout.CENTER);
+        // Spinning dial displayed while I/O-bound operations are being performed in a separate thread
+        spinningDial = new SpinningDial(false);
+        borderPanel.add(new JLabel(spinningDial), BorderLayout.EAST);
+        mainPanel.add(borderPanel);
         mainPanel.addSpace(10);
+        pathField.getDocument().addDocumentListener(this);
 
         // Path field will receive initial focus
         setInitialFocusComponent(pathField);		
@@ -121,12 +127,8 @@ public abstract class TransferDestinationDialog extends JobDialog implements Act
             fileExistsActionComboBox.addItem(DEFAULT_ACTIONS_TEXT[i]);
         mainPanel.add(fileExistsActionComboBox);
 
-//        mainPanel.addSpace(5);
-
         skipErrorsCheckBox = new JCheckBox(Translator.get("destination_dialog.skip_errors"));
         mainPanel.add(skipErrorsCheckBox);
-
-//        mainPanel.addSpace(5);
 
         verifyIntegrityCheckBox = new JCheckBox(Translator.get("destination_dialog.verify_integrity"));
         mainPanel.add(verifyIntegrityCheckBox);
@@ -137,7 +139,9 @@ public abstract class TransferDestinationDialog extends JobDialog implements Act
         JPanel fileDetailsPanel = createFileDetailsPanel();
 
         okButton = new JButton(okText);
-        cancelButton = new JButton(Translator.get("cancel"));
+        // Prevent the dialog from being validated while the initial path is being set.
+        okButton.setEnabled(false);
+        JButton cancelButton = new JButton(Translator.get("cancel"));
 
         mainPanel.add(createButtonsPanel(createFileDetailsButton(fileDetailsPanel),
                 DialogToolkit.createOKCancelPanel(okButton, cancelButton, getRootPane(), this)));
@@ -148,45 +152,78 @@ public abstract class TransferDestinationDialog extends JobDialog implements Act
         // Set minimum/maximum dimension
         setMinimumSize(MINIMUM_DIALOG_DIMENSION);
         setMaximumSize(MAXIMUM_DIALOG_DIMENSION);
+
+        // Dispose this dialog when the close window button is pressed
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+
+        // Interrupt any ongoing thread when the dialog has been closed, regardless of how it has been closed.
+        addWindowListener(new WindowAdapter() {
+            public void windowClosed(WindowEvent e) {
+                interruptOngoingThread();
+            }
+        });
+
+        // Spawn a new thread that retrieves the initial path (I/O-bound) and sets the path field accordingly
+        startThread(new InitialPathRetriever());
     }
 
-
-    protected void setTextField(String text) {
-        pathField.setText(text);
-        // Text is selected so that user can directly type and replace path
-        pathField.setSelectionStart(0);
-        pathField.setSelectionEnd(text.length());
-    }
-
-
-    protected void setTextField(String text, int selStart, int selEnd) {
-        pathField.setText(text);
-        // Text is selected so that user can directly type and replace path
-        pathField.setSelectionStart(selStart);
-        pathField.setSelectionEnd(selEnd);
-    }
-	
-	protected boolean verifyPath(PathUtils.ResolvedDestination resolvedDest, String destPath) {
-        // The path entered doesn't correspond to any existing folder
-        if (resolvedDest==null || (files.size()>1 && resolvedDest.getDestinationType()!=PathUtils.ResolvedDestination.EXISTING_FOLDER)) {
-            showErrorDialog(Translator.get("invalid_path", destPath), errorDialogTitle);
-            return false;
-        }
-        return true;
-	}
-	
     /**
-     * This method is invoked when the OK button is pressed.
+     * Interrupts any ongoing thread and starts the given one. The spinning dial is set to 'animated'.
+     *
+     * @param thread the thread to start
      */
-    private void okPressed() {
-        String destPath = pathField.getText();
+    private synchronized void startThread(Thread thread) {
+        // Interrupt any ongoing thread
+        interruptOngoingThread();
 
-        // Resolves destination folder
-        // TODO: move those I/O bound calls to job as they can lock the main thread
-        PathUtils.ResolvedDestination resolvedDest = PathUtils.resolveDestination(destPath, mainFrame.getActiveTable().getCurrentFolder());
-        if (!verifyPath(resolvedDest, destPath))
-        	return;
+        // Spin the dial
+        spinningDial.setAnimated(true);
 
+        // Start the thread
+        this.thread = thread;
+        thread.start();
+    }
+
+    /**
+     * Interrupts the ongoing thread if there is one, does nothing otherwise.
+     */
+    private synchronized void interruptOngoingThread() {
+        if(thread!=null) {
+            AppLogger.finest("Calling interrupt() on "+thread);
+            thread.interrupt();
+            // Set the current thread to null
+            thread = null;
+        }
+    }
+
+    /**
+     * This method checks that the given resolved destination is valid. This implementation returns <code>true</code>
+     * if the resolved destination is not <code>null</code> and, in case there is more than one if to process, if the
+     * destination is a folder that exists. This method can safely be overridden by subclasses to change the behavior.
+     * <p>
+     * Returning <code>true</code> will cause the job to go ahead and be started. Returning <code>false</code> will
+     * pop up an error dialog that notifies the user that the path is incorrect.
+     * </p>
+     * <p>
+     * This method is called from a dedicated thread so that it can safely perform I/O operations without any chance
+     * of locking the event thread.
+     * </p>
+     *
+     * @param resolvedDest the resolved destination
+     * @param destPath the path, as it was entered in the path field
+     * @return <code>true</code> if the given resolved destination is valid
+     */
+	protected boolean isValidDestination(PathUtils.ResolvedDestination resolvedDest, String destPath) {
+        return (resolvedDest!=null && (files.size()==1 || resolvedDest.getDestinationType()==PathUtils.ResolvedDestination.EXISTING_FOLDER));
+	}
+
+    /**
+     * This method is called after the destination has been validated to start the job, with the resolved destination
+     * that has been validated by {@link #isValidDestination(PathUtils.ResolvedDestination, String)}.
+     *
+     * @param resolvedDest the resolved destination
+     */
+    private void startJob(PathUtils.ResolvedDestination resolvedDest) {
         // Retrieve default action when a file exists in destination, default choice
         // (if not specified by the user) is 'Ask'
         int defaultFileExistsAction = fileExistsActionComboBox.getSelectedIndex();
@@ -207,27 +244,233 @@ public abstract class TransferDestinationDialog extends JobDialog implements Act
         }
     }
 
+    /**
+     * Called when the path has changed while {@link InitialPathRetriever} is running.
+     */
+    private void textUpdated() {
+        synchronized(this) {
+            if(thread!=null && thread instanceof InitialPathRetriever) {
+                // Interrupt InitialPathRetriever
+                interruptOngoingThread();
+
+                // Enable
+                okButton.setEnabled(true);
+
+                pathField.getDocument().removeDocumentListener(this);
+            }
+        }
+    }
+
+
+    //////////////////////////////
+    // DocumentListener methods //
+    //////////////////////////////
+
+    public void insertUpdate(DocumentEvent e) {
+        textUpdated();
+    }
+
+    public void removeUpdate(DocumentEvent e) {
+        textUpdated();
+    }
+
+    public void changedUpdate(DocumentEvent e) {
+    }
+
+
+    ///////////////////////////////////
+    // ActionListener implementation //
+    ///////////////////////////////////
+
+    public void actionPerformed(ActionEvent e) {
+        Object source = e.getSource();
+
+        if(source == okButton) {
+            // Disable the OK button and path field while the current path is being resolved
+            okButton.setEnabled(false);
+            pathField.setEnabled(false);
+
+            // Start resolving the path
+            startThread(new PathResolver());
+        }
+        else {              // Cancel button
+            dispose();
+        }
+    }
+
 
     //////////////////////
     // Abstract methods //
     //////////////////////
 
+    /**
+     * Called when the dialog has just been created to compute the initial path, based on the user file selection.
+     *
+     * <p>This method is called from a dedicated thread so that it can safely perform I/O operations without any chance
+     * of locking the event thread.</p>
+     *
+     * @param files files that were selected/marked by the user
+     * @return a {@link PathFieldContent} containing the initial path to set in the path field
+     */
+    protected abstract PathFieldContent computeInitialPath(FileSet files);
+
+    /**
+     * Called after the dialog has been confirmed by the user and the resolved destination has been
+     * {@link #isValidDestination(PathUtils.ResolvedDestination, String) validated} to create the
+     * {@link TransferFileJob} instance that will subsequently be started.
+     *
+     * <p>This method is called from a dedicated thread so that it can safely perform I/O operations without any chance
+     * of locking the event thread.</p>
+     *
+     * @param progressDialog the progress dialog that will show the job's progression
+     * @param resolvedDest the resolved and validated destination
+     * @param defaultFileExistsAction the value of the 'default action when file exists' choice
+     * @return the {@link TransferFileJob} instance that will subsequently be started
+     */
     protected abstract TransferFileJob createTransferFileJob(ProgressDialog progressDialog, PathUtils.ResolvedDestination resolvedDest, int defaultFileExistsAction);
 
+    /**
+     * Returns the title to be used in the progress dialog.
+     *
+     * @return the title to be used in the progress dialog.
+     */
     protected abstract String getProgressDialogTitle();
 
 
-    ////////////////////////
-    // Overridden methods //
-    ////////////////////////
+    ///////////////////
+    // Inner classes //
+    ///////////////////
 
-    public void actionPerformed(ActionEvent e) {
-        Object source = e.getSource();
-        dispose();
+    /**
+     * This class wraps a path, and start and end offsets for the partion of the text to be selected in the text field.
+     */
+    protected class PathFieldContent {
+        protected String path;
+        protected int selectionStart;
+        protected int selectionEnd;
 
-        // OK action
-        if(source == okButton || source == pathField) {
-            okPressed();
+        protected PathFieldContent(String path) {
+            this(path, 0, path.length());
+        }
+
+        protected PathFieldContent(String path, int selectionStart, int selectionEnd) {
+            this.path = path;
+            this.selectionStart = selectionStart;
+            this.selectionEnd = selectionEnd;
+        }
+    }
+
+    /**
+     * Retrieves the initial path to be set in the path field by calling {@link TransferDestinationDialog#computeInitialPath(FileSet)}.
+     * Since this operation can be I/O-bound, it is performed in a separate thread.
+     */
+    private class InitialPathRetriever extends Thread {
+
+        /** True if the thread has been interrupted */
+        private boolean interrupted;
+
+        public void run() {
+            final PathFieldContent pathFieldContent = computeInitialPath(files);
+
+            // Perform UI tasks in the AWT event thread
+            try {
+                SwingUtilities.invokeAndWait(new Runnable() {
+                    public void run() {
+                        spinningDial.setAnimated(false);
+
+                        if(!interrupted) {
+                            // Document change events are no longer needed
+                            pathField.getDocument().removeDocumentListener(TransferDestinationDialog.this);
+
+                            // Set the initial path
+                            pathField.setText(pathFieldContent.path);
+                            // Text is selected so that user can directly type and replace path
+                            pathField.setSelectionStart(pathFieldContent.selectionStart);
+                            pathField.setSelectionEnd(pathFieldContent.selectionEnd);
+
+                            okButton.setEnabled(true);
+                        }
+                    }
+                });
+            }
+            catch(InterruptedException e) {
+                AppLogger.finest("Interrupted", e);
+            }
+            catch(InvocationTargetException e) {
+                AppLogger.fine("Caught exception", e);
+            }
+
+            // Set the current thread to null
+            synchronized(TransferDestinationDialog.this) {
+                if(thread==this)        // This thread may have been interrupted already
+                    thread = null;
+            }
+        }
+
+        /**
+         * Overridden to trap interruptions ({@link #isInterrupted()} doesn't seem to be working as advertised).
+         */
+        public void interrupt() {
+            super.interrupt();
+            this.interrupted = true;
+        }
+    }
+
+    /**
+     * Resolves the path entered in the path field into a {@link PathUtils.ResolvedDestination} instance and validates
+     * it using {@link TransferDestinationDialog#isValidDestination(PathUtils.ResolvedDestination, String)}.
+     * Since both of those operations can be I/O-bound, they are performed in a separate thread.
+     * <p>
+     * If the destination is valid, the job is started using {@link TransferDestinationDialog#startJob(PathUtils.ResolvedDestination)}
+     * and this dialog is disposed. Otherwise, a error dialog is displayed to notify the user that the path he has
+     * entered is invalid and invite him to try again.
+     * </p>
+     */
+    private class PathResolver extends Thread {
+
+        /** True if the thread has been interrupted */
+        private boolean interrupted;
+
+        public void run() {
+            final String destPath = pathField.getText();
+
+            // Resolves destination folder (I/O bound)
+            final PathUtils.ResolvedDestination resolvedDest = PathUtils.resolveDestination(destPath, mainFrame.getActiveTable().getCurrentFolder());
+            // Resolves destination folder (I/O bound)
+            final boolean isValid = isValidDestination(resolvedDest, destPath);
+
+            // Perform UI tasks in the AWT event thread
+            SwingUtilities.invokeLater(new Runnable() {
+                public void run() {
+                    if(interrupted) {
+                        dispose();
+                    }
+                    else if(isValid) {
+                        dispose();
+                        startJob(resolvedDest);
+                    }
+                    else {
+                        showErrorDialog(Translator.get("invalid_path", destPath), errorDialogTitle);
+                        // Re-enable the OK button and path field so that a new path can be entered
+                        okButton.setEnabled(true);
+                        pathField.setEnabled(true);
+                    }
+                }
+            });
+
+            // Set the current thread to null
+            synchronized(TransferDestinationDialog.this) {
+                if(thread==this)        // This thread may have been interrupted already
+                    thread = null;
+            }
+        }
+
+        /**
+         * Overridden to trap interruptions ({@link #isInterrupted()} doesn't seem to be working as advertised).
+         */
+        public void interrupt() {
+            super.interrupt();
+            this.interrupted = true;
         }
     }
 }

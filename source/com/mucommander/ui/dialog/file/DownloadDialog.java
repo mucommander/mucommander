@@ -42,13 +42,21 @@ public class DownloadDialog extends TransferDestinationDialog {
               Translator.get("download_dialog.download"),
               Translator.get("download_dialog.error_title"));
 
+        showDialog();
+    }
+
+    
+    //////////////////////////////////////////////
+    // TransferDestinationDialog implementation //
+    //////////////////////////////////////////////
+
+    protected PathFieldContent computeInitialPath(FileSet files) {
         AbstractFile file = (AbstractFile)files.elementAt(0);
-		
+
         //		AbstractFile activeFolder = mainFrame.getActiveTable().getCurrentFolder();
         AbstractFile unactiveFolder = mainFrame.getInactiveTable().getCurrentFolder();
         // Fill text field with current folder's absolute path and file name
-        setTextField(unactiveFolder.getAbsolutePath(true)+file.getName());
-        showDialog();
+        return new PathFieldContent(unactiveFolder.getAbsolutePath(true)+file.getName());
     }
 
     protected TransferFileJob createTransferFileJob(ProgressDialog progressDialog, PathUtils.ResolvedDestination resolvedDest, int defaultFileExistsAction) {
