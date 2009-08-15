@@ -33,7 +33,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-
 /**
  * Dialog invoked when the user wants to change a file name after a collision has been detected
  * while copying or moving files.
@@ -41,7 +40,7 @@ import java.awt.event.ActionListener;
  * @see CopyJob
  * @author Mariusz Jakubowski
  */
-public class RenameDialog extends FocusDialog implements ActionListener, DialogResult {
+public class FileCollisionRenameDialog extends FocusDialog implements ActionListener, DialogResult {
 	
     private JTextField edtNewName;
 
@@ -58,8 +57,10 @@ public class RenameDialog extends FocusDialog implements ActionListener, DialogR
     /**
      * Creates a new rename file dialog.
      *
+     * @param mainFrame the parent MainFrame 
+     * @param file the file to rename.
      */
-    public RenameDialog(MainFrame mainFrame, AbstractFile file) {
+    public FileCollisionRenameDialog(MainFrame mainFrame, AbstractFile file) {
         super(mainFrame, Translator.get("rename"), mainFrame);
 
         Container contentPane = getContentPane();
@@ -70,9 +71,7 @@ public class RenameDialog extends FocusDialog implements ActionListener, DialogR
         edtNewName.addActionListener(this);
 
         // Sets the initial selection.
-        edtNewName.setText(file.getName());
-        edtNewName.setSelectionStart(0);
-        edtNewName.setSelectionEnd(edtNewName.getText().length());
+        AbstractCopyDialog.selectDestinationFilename(file, file.getName(), 0).feedToPathField(edtNewName);
         mainPanel.add(edtNewName);
    
         mainPanel.addSpace(10);

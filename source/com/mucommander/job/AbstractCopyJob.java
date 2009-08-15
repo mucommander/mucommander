@@ -23,8 +23,8 @@ import com.mucommander.file.AbstractRWArchiveFile;
 import com.mucommander.file.util.FileSet;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.file.FileCollisionDialog;
+import com.mucommander.ui.dialog.file.FileCollisionRenameDialog;
 import com.mucommander.ui.dialog.file.ProgressDialog;
-import com.mucommander.ui.dialog.file.RenameDialog;
 import com.mucommander.ui.main.MainFrame;
 
 import java.io.IOException;
@@ -181,7 +181,7 @@ public abstract class AbstractCopyJob extends TransferFileJob {
                     break;
                 } else if (choice == FileCollisionDialog.RENAME_ACTION) {
                     setPaused(true);
-                    RenameDialog dlg = new RenameDialog(getMainFrame(), destFile);
+                    FileCollisionRenameDialog dlg = new FileCollisionRenameDialog(getMainFrame(), destFile);
                     String destFileName = (String) waitForUserResponseObject(dlg);
                     setPaused(false);
                     if (destFileName != null) {
