@@ -19,18 +19,12 @@
 package com.mucommander.ui.action.impl;
 
 import com.mucommander.file.util.FileSet;
-import com.mucommander.ui.action.AbstractActionDescriptor;
-import com.mucommander.ui.action.ActionCategories;
-import com.mucommander.ui.action.ActionCategory;
-import com.mucommander.ui.action.InvokesDialog;
-import com.mucommander.ui.action.MuAction;
-import com.mucommander.ui.action.ActionFactory;
+import com.mucommander.ui.action.*;
 import com.mucommander.ui.dialog.file.PackDialog;
 import com.mucommander.ui.main.MainFrame;
 
+import javax.swing.*;
 import java.util.Hashtable;
-
-import javax.swing.KeyStroke;
 
 /**
  * This action pops up the 'Pack files' dialog that allows to create an archive file with the currently marked files.
@@ -46,7 +40,7 @@ public class PackAction extends SelectedFilesAction implements InvokesDialog {
     public void performAction() {
         FileSet files = mainFrame.getActiveTable().getSelectedFiles();
         if(files.size()>0)
-            new PackDialog(mainFrame, files, false);
+            new PackDialog(mainFrame, files, false).showDialog();
     }
     
     public static class Factory implements ActionFactory {

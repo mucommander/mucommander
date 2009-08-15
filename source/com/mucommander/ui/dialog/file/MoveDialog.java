@@ -20,8 +20,6 @@
 
 package com.mucommander.ui.dialog.file;
 
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.FileFactory;
 import com.mucommander.file.util.FileSet;
 import com.mucommander.file.util.PathUtils;
 import com.mucommander.job.MoveJob;
@@ -37,7 +35,7 @@ import com.mucommander.ui.main.MainFrame;
  * @see com.mucommander.ui.action.impl.RenameAction
  * @author Maxence Bernard
  */
-public class MoveDialog extends TransferDestinationDialog {
+public class MoveDialog extends AbstractCopyDialog {
 
     public MoveDialog(MainFrame mainFrame, FileSet files) {
         super(mainFrame, files,
@@ -45,46 +43,12 @@ public class MoveDialog extends TransferDestinationDialog {
                 Translator.get("move_dialog.move_description"),
                 Translator.get("move_dialog.move"),
                 Translator.get("move_dialog.error_title"));
-        
-        showDialog();
     }
+
 
     //////////////////////////////////////////////
     // TransferDestinationDialog implementation //
     //////////////////////////////////////////////
-
-    protected PathFieldContent computeInitialPath(FileSet files) {
-        String       fieldText;
-        int          startPosition;
-        int          endPosition;
-        AbstractFile destFolder = mainFrame.getInactiveTable().getCurrentFolder();
-        fieldText = destFolder.getAbsolutePath(true);
-        // Append filename to destination path if there is only one file to copy
-        // and if the file is not a directory that already exists in destination
-        // (otherwise folder would be copied into the destination folder)
-        int nbFiles = files.size();
-        if(nbFiles==1) {
-            AbstractFile file = ((AbstractFile)files.elementAt(0));
-            AbstractFile destFile;
-            startPosition = fieldText.length();
-            if(!(file.isDirectory() && (destFile=FileFactory.getFile(fieldText+file.getName()))!=null && destFile.exists() && destFile.isDirectory())) {
-                endPosition = file.getName().lastIndexOf('.');
-                if(endPosition > 0)
-                    endPosition += startPosition;
-                else
-                    endPosition  = startPosition + file.getName().length();
-                fieldText += file.getName();
-            }
-            else
-                endPosition = fieldText.length();
-        }
-        else {
-            startPosition = 0;
-            endPosition   = fieldText.length();
-        }
-
-        return new PathFieldContent(fieldText, startPosition, endPosition);
-    }
 
     protected TransferFileJob createTransferFileJob(ProgressDialog progressDialog, PathUtils.ResolvedDestination resolvedDest, int defaultFileExistsAction) {
         return new MoveJob(

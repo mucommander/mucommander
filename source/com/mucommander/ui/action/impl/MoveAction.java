@@ -19,17 +19,12 @@
 package com.mucommander.ui.action.impl;
 
 import com.mucommander.file.util.FileSet;
-import com.mucommander.ui.action.AbstractActionDescriptor;
-import com.mucommander.ui.action.ActionCategories;
-import com.mucommander.ui.action.ActionCategory;
-import com.mucommander.ui.action.MuAction;
-import com.mucommander.ui.action.ActionFactory;
+import com.mucommander.ui.action.*;
 import com.mucommander.ui.dialog.file.MoveDialog;
 import com.mucommander.ui.main.MainFrame;
 
+import javax.swing.*;
 import java.util.Hashtable;
-
-import javax.swing.KeyStroke;
 
 /**
  * This action invokes the 'Move dialog' which allows to move the currently selected/marked files
@@ -47,8 +42,9 @@ public class MoveAction extends SelectedFilesAction {
         FileSet files = mainFrame.getActiveTable().getSelectedFiles();
 
         // Display move dialog only if at least one file is selected/marked
-        if(files.size()>0)
-            new MoveDialog(mainFrame, files);
+        if(files.size()>0) {
+            new MoveDialog(mainFrame, files).showDialog();
+        }
     }
     
     public static class Factory implements ActionFactory {

@@ -18,17 +18,12 @@
 
 package com.mucommander.ui.action.impl;
 
-import com.mucommander.ui.action.AbstractActionDescriptor;
-import com.mucommander.ui.action.ActionCategories;
-import com.mucommander.ui.action.ActionCategory;
-import com.mucommander.ui.action.MuAction;
-import com.mucommander.ui.action.ActionFactory;
+import com.mucommander.ui.action.*;
 import com.mucommander.ui.dialog.file.MkdirDialog;
 import com.mucommander.ui.main.MainFrame;
 
+import javax.swing.*;
 import java.util.Hashtable;
-
-import javax.swing.KeyStroke;
 
 /**
  * This action brings up the 'Make directory' dialog which allows to create a new directory in the currently active folder.
@@ -42,7 +37,7 @@ public class MkdirAction extends MuAction {
     }
 
     public void performAction() {
-        new MkdirDialog(mainFrame, false);
+        new MkdirDialog(mainFrame, false).showDialog();
     }
     
     public static class Factory implements ActionFactory {

@@ -22,7 +22,6 @@ package com.mucommander.ui.dialog.file;
 import com.mucommander.file.AbstractArchiveFile;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.ArchiveEntryFile;
-import com.mucommander.file.FileFactory;
 import com.mucommander.file.util.FileSet;
 import com.mucommander.file.util.PathUtils;
 import com.mucommander.job.CopyJob;
@@ -35,88 +34,32 @@ import java.util.Vector;
 
 
 /**
- * Dialog invoked when the user wants to copy currently selected files.
+ * Dialog invoked when the user wants to copy currently selected files. The destination field is pre-filled with
+ * the 'other' panel's path and, if there is only one file to copy, with the source file's name.
  *
  * @see com.mucommander.ui.action.impl.CopyAction
  * @author Maxence Bernard
  */
-public class CopyDialog extends TransferDestinationDialog {
-
-    protected boolean localCopy;
+public class CopyDialog extends AbstractCopyDialog {
 
     /**
-     * Creates and displays a new CopyDialog.
+     * Creates a new <code>CopyDialog</code>.
      *
-     * @param mainFrame the main frame this dialog is attached to.
-     * @param localCopy true if shift key was pressed when invoking this dialog.
+     * @param mainFrame the main frame that spawned this dialog.
+     * @param files files to be copied
      */
-    public CopyDialog(MainFrame mainFrame, FileSet files, boolean localCopy) {
+    public CopyDialog(MainFrame mainFrame, FileSet files) {
         super(mainFrame, files,
               Translator.get("copy_dialog.copy"),
               Translator.get("copy_dialog.destination"),
               Translator.get("copy_dialog.copy"),
               Translator.get("copy_dialog.error_title"));
-
-        this.localCopy = localCopy;
-        showDialog();
     }
 
 
     //////////////////////////////////////////////
     // TransferDestinationDialog implementation //
     //////////////////////////////////////////////
-
-    protected PathFieldContent computeInitialPath(FileSet files) {
-        String fieldText;     // Text to display in the destination field.
-        int    startPosition; // Index of the first selected character in the destination field.
-        int    endPosition;   // Index of the last selected character in the destination field.
-        int    nbFiles = files.size();
-
-        AbstractFile destFolder = mainFrame.getInactiveTable().getCurrentFolder();
-
-        // Local copy: fill text field with the sole file's name
-        if(localCopy) {
-            fieldText     = ((AbstractFile)files.elementAt(0)).getName();
-            startPosition = 0;
-            endPosition   = fieldText.indexOf('.');
-
-            // If the file doesn't have an extension, selection extends to the end of its name.
-            if(endPosition <= 0)
-                endPosition = fieldText.length();
-        }
-        // Fill text field with absolute path, and if there is only one file,
-        // append file's name
-        else {
-            fieldText = destFolder.getAbsolutePath(true);
-            // Append filename to destination path if there is only one file to copy
-            // and if the file is not a directory that already exists in destination
-            // (otherwise folder would be copied into the destination folder)
-            if(nbFiles==1) {
-                AbstractFile file = ((AbstractFile)files.elementAt(0));
-                AbstractFile destFile;
-
-                startPosition  = fieldText.length();
-
-                if(!(file.isDirectory() && (destFile=FileFactory.getFile(fieldText+file.getName()))!=null && destFile.exists() && destFile.isDirectory())) {
-                    endPosition = file.getName().lastIndexOf('.');
-                    if(endPosition > 0)
-                        endPosition += startPosition;
-                    else
-                        endPosition = startPosition + file.getName().length();
-                    fieldText += file.getName();
-                }
-                else
-                    endPosition = fieldText.length();
-            }
-            else {
-                endPosition   = fieldText.length();
-                startPosition = 0;
-            }
-
-        }
-
-        return new PathFieldContent(fieldText, startPosition, endPosition);
-    }
 
     protected TransferFileJob createTransferFileJob(ProgressDialog progressDialog, PathUtils.ResolvedDestination resolvedDest, int defaultFileExistsAction) {
         AbstractFile baseFolder = files.getBaseFolder();

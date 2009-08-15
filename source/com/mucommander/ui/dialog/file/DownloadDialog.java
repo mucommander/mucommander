@@ -41,8 +41,6 @@ public class DownloadDialog extends TransferDestinationDialog {
               Translator.get("download_dialog.description"),
               Translator.get("download_dialog.download"),
               Translator.get("download_dialog.error_title"));
-
-        showDialog();
     }
 
     

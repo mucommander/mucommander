@@ -24,7 +24,7 @@ import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionFactory;
 import com.mucommander.ui.action.MuAction;
-import com.mucommander.ui.dialog.file.CopyDialog;
+import com.mucommander.ui.dialog.file.LocalCopyDialog;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.table.FileTable;
 
@@ -51,7 +51,7 @@ public class LocalCopyAction extends SelectedFileAction {
 
         // Display local copy dialog only if a file other than '..' is currently selected
         if(selectedFile!=null) {
-            new CopyDialog(mainFrame, new FileSet(activeTable.getCurrentFolder(), selectedFile), true);
+            new LocalCopyDialog(mainFrame, new FileSet(activeTable.getCurrentFolder(), selectedFile)).showDialog();;
         }
     }
     

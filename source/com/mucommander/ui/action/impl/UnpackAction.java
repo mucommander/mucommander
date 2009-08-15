@@ -21,18 +21,12 @@ package com.mucommander.ui.action.impl;
 import com.mucommander.file.filter.AttributeFileFilter;
 import com.mucommander.file.filter.OrFileFilter;
 import com.mucommander.file.util.FileSet;
-import com.mucommander.ui.action.AbstractActionDescriptor;
-import com.mucommander.ui.action.ActionCategories;
-import com.mucommander.ui.action.ActionCategory;
-import com.mucommander.ui.action.InvokesDialog;
-import com.mucommander.ui.action.MuAction;
-import com.mucommander.ui.action.ActionFactory;
+import com.mucommander.ui.action.*;
 import com.mucommander.ui.dialog.file.UnpackDialog;
 import com.mucommander.ui.main.MainFrame;
 
+import javax.swing.*;
 import java.util.Hashtable;
-
-import javax.swing.KeyStroke;
 
 /**
  * This action pops up the 'Unpack files' dialog that allows to unpack the currently marked files.
@@ -54,7 +48,7 @@ public class UnpackAction extends SelectedFilesAction implements InvokesDialog {
     public void performAction() {
         FileSet files = mainFrame.getActiveTable().getSelectedFiles();
         if(files.size()>0)
-            new UnpackDialog(mainFrame, files, false);
+            new UnpackDialog(mainFrame, files, false).showDialog();
     }
     
     public static class Factory implements ActionFactory {

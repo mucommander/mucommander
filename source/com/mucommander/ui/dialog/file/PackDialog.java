@@ -19,22 +19,6 @@
 
 package com.mucommander.ui.dialog.file;
 
-import java.awt.BorderLayout;
-import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
-
 import com.mucommander.file.archiver.Archiver;
 import com.mucommander.file.util.FileSet;
 import com.mucommander.file.util.PathUtils;
@@ -48,6 +32,13 @@ import com.mucommander.ui.layout.YBoxPanel;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.table.FileTable;
 import com.mucommander.ui.text.FilePathField;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 
 
 /**
@@ -174,8 +165,6 @@ public class PackDialog extends JobDialog implements ActionListener, ItemListene
         // Packs dialog
         setMinimumSize(MINIMUM_DIALOG_DIMENSION);
         setMaximumSize(MAXIMUM_DIALOG_DIMENSION);
-	
-        showDialog();
     }
 	
 	

@@ -155,8 +155,6 @@ public class EmailFilesDialog extends JobDialog implements ActionListener, ItemL
             // Packs dialog
             setMinimumSize(MINIMUM_DIALOG_DIMENSION);
             setMaximumSize(MAXIMUM_DIALOG_DIMENSION);
-		
-            showDialog();
         }
         catch(IOException e) {
             showErrorDialog(Translator.get("email_dialog.read_error"), Translator.get("email_dialog.error_title"));

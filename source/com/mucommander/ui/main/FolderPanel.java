@@ -454,7 +454,7 @@ public class FolderPanel extends JPanel implements FocusListener, ThemeListener 
         fileSet.add(file);
 		
         // Show confirmation/path modification dialog
-        new DownloadDialog(mainFrame, fileSet);
+        new DownloadDialog(mainFrame, fileSet).showDialog();
     }
 	
     /**

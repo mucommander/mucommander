@@ -42,7 +42,7 @@ public class CopyAction extends SelectedFilesAction {
 
         // Display copy dialog only if at least one file is selected/marked
         if(files.size()>0)
-            new CopyDialog(mainFrame, files, false);
+            new CopyDialog(mainFrame, files).showDialog();
     }
     
     public static class Factory implements ActionFactory {

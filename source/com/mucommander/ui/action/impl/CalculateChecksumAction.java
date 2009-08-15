@@ -19,18 +19,12 @@
 package com.mucommander.ui.action.impl;
 
 import com.mucommander.file.util.FileSet;
-import com.mucommander.ui.action.AbstractActionDescriptor;
-import com.mucommander.ui.action.ActionCategories;
-import com.mucommander.ui.action.ActionCategory;
-import com.mucommander.ui.action.InvokesDialog;
-import com.mucommander.ui.action.MuAction;
-import com.mucommander.ui.action.ActionFactory;
+import com.mucommander.ui.action.*;
 import com.mucommander.ui.dialog.file.CalculateChecksumDialog;
 import com.mucommander.ui.main.MainFrame;
 
+import javax.swing.*;
 import java.util.Hashtable;
-
-import javax.swing.KeyStroke;
 
 /**
  * This action invokes the {@link com.mucommander.ui.dialog.file.CalculateChecksumDialog} which allows to calculate
@@ -49,7 +43,7 @@ public class CalculateChecksumAction extends SelectedFilesAction implements Invo
 
         // Invoke job dialog only if at least one file is selected/marked
         if(files.size()>0)
-            new CalculateChecksumDialog(mainFrame, files);
+            new CalculateChecksumDialog(mainFrame, files).showDialog();
     }
     
     public static class Factory implements ActionFactory {

@@ -54,7 +54,6 @@ public class UnpackDialog extends TransferDestinationDialog {
               Translator.get("unpack_dialog.error_title"));
 
         this.isShiftDown = isShiftDown;
-        showDialog();
     }
 
     

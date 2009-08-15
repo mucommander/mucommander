@@ -122,7 +122,6 @@ public class DeleteDialog extends JobDialog implements ItemListener, ActionListe
         // Size dialog and show it to the screen
         setMinimumSize(MINIMUM_DIALOG_DIMENSION);
         setResizable(false);
-        showDialog();
     }
 
 
