@@ -18,23 +18,13 @@
 
 package com.mucommander.ui.dialog.customization;
 
-import com.mucommander.AppLogger;
-import com.mucommander.text.Translator;
-import com.mucommander.ui.action.ActionManager;
-import com.mucommander.ui.layout.YBoxPanel;
-import com.mucommander.ui.list.DynamicHorizontalWrapList;
-import com.mucommander.ui.list.DynamicList;
-import com.mucommander.ui.main.MainFrame;
-import com.mucommander.ui.main.WindowManager;
-import com.mucommander.ui.main.commandbar.CommandBarAttributes;
-import com.mucommander.ui.main.commandbar.CommandBarButton;
-import com.mucommander.ui.text.RecordingKeyStrokeTextField;
-import com.mucommander.util.AlteredVector;
-
-import javax.swing.*;
-import javax.swing.Box.Filler;
-import javax.swing.border.Border;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
+import java.awt.Point;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
@@ -44,8 +34,43 @@ import java.awt.dnd.DropTargetEvent;
 import java.awt.dnd.DropTargetListener;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
+import java.util.TooManyListenersException;
+import java.util.Vector;
+
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.ListCellRenderer;
+import javax.swing.ListSelectionModel;
+import javax.swing.TransferHandler;
+import javax.swing.UIManager;
+import javax.swing.Box.Filler;
+import javax.swing.border.Border;
+
+import com.mucommander.AppLogger;
+import com.mucommander.text.Translator;
+import com.mucommander.ui.action.ActionManager;
+import com.mucommander.ui.layout.YBoxPanel;
+import com.mucommander.ui.list.DynamicHorizontalWrapList;
+import com.mucommander.ui.list.DynamicList;
+import com.mucommander.ui.main.MainFrame;
+import com.mucommander.ui.main.commandbar.CommandBarAttributes;
+import com.mucommander.ui.main.commandbar.CommandBarButton;
+import com.mucommander.ui.main.commandbar.CommandBarButtonForDisplay;
+import com.mucommander.ui.text.RecordingKeyStrokeTextField;
+import com.mucommander.util.AlteredVector;
 
 /**
  * Dialog used to customize the command-bar.
@@ -64,12 +89,6 @@ public class CommandBarDialog extends CustomizeDialog {
 	private static final int RIGHT = 1;
 	
 	private static final int MODIFIER_FIELD_MAX_LENGTH = 6;
-	
-	/** Used to ensure we only have the one preferences dialog open at any given time. */
-    private static CommandBarDialog singleton;
-    
-    /** The preferred size of button in the lists */
-	public static final Dimension BUTTON_PREFERRED_SIZE = new Dimension(130, 30);
 	
 	/** The color that is used to paint highlighted button's border */
 	private static final Color PAINTED_BORDER_COLOR = Color.gray;
@@ -94,11 +113,6 @@ public class CommandBarDialog extends CustomizeDialog {
 	/** Field which allows the user to enter new KeyStorke modifier for command-bar */
 	private RecordingKeyStrokeTextField modifierField;
 	
-	/** Flag that indicates if there are unsaved changed in the dialog */
-	private boolean dirtyDialogFlag = false;
-	
-	private MainFrame mainFrame;
-	
 	/** DnD helper fields */
 	private DataIndexAndSource transferedButtonProperties;
 	private JButton transferedButton;
@@ -108,39 +122,12 @@ public class CommandBarDialog extends CustomizeDialog {
 	private boolean isImported = false;
 	private boolean canImport = false;
 	
-	private CommandBarDialog() {
-		super(WindowManager.getCurrentMainFrame(), Translator.get("command_bar_customize_dialog.title"));
-		mainFrame = (MainFrame) getParent();
+	public CommandBarDialog(MainFrame mainFrame) {
+		super(mainFrame, Translator.get("command_bar_customize_dialog.title"));
 	}
 	
-	// - Singleton management ---------------------------------------------------
-    // --------------------------------------------------------------------------
-    public static synchronized CommandBarDialog getDialog() {
-        // If no instance already exists, create a new one.
-        if(singleton == null)
-            singleton = new CommandBarDialog();
-
-        return singleton;
-    }
-    
-    /**
-     * Releases the singleton.
-     */
-    private static synchronized void releaseSingleton() {
-        singleton = null;
-    }
-    
-    /**
-     * Overridden
-     */
-    public void dispose() {
-    	if (dirtyDialogFlag)
-    		releaseSingleton();
-        super.dispose();
-    }
-    
     protected void componentChanged() {
-    	setCommitButtonsEnabled(dirtyDialogFlag = (areActionsChanged() || areAlternativeActionsChanged() || isModifierChanged()));    		
+    	setCommitButtonsEnabled(areActionsChanged() || areAlternativeActionsChanged() || isModifierChanged());    		
     }
     
     private boolean areActionsChanged() {
@@ -148,7 +135,7 @@ public class CommandBarDialog extends CustomizeDialog {
     	String[] commandBarActionIds = CommandBarAttributes.getActions();
     	int nbActions = commandBarActionIds.length;
     	for (int i=0; i<nbActions; ++i) {
-    		CommandBarButton buttonI = (CommandBarButton) commandBarButtons.get(i);
+    		CommandBarButtonForDisplay buttonI = (CommandBarButtonForDisplay) commandBarButtons.get(i);
     		if (buttonI == null) {
     			if (commandBarActionIds[i] != null)
     				return true;
@@ -164,7 +151,7 @@ public class CommandBarDialog extends CustomizeDialog {
     	String[] commandBarAlternativeActionIds = CommandBarAttributes.getAlternateActions();
     	int nbActions = commandBarAlternativeActionIds.length;
     	for (int i=0; i<nbActions; ++i) {
-    		CommandBarButton buttonI = (CommandBarButton) commandBarAlternativeButtons.get(i);
+    		CommandBarButtonForDisplay buttonI = (CommandBarButtonForDisplay) commandBarAlternativeButtons.get(i);
     		if (buttonI == null) {
     			if (commandBarAlternativeActionIds[i] != null)
     				return true;
@@ -183,7 +170,7 @@ public class CommandBarDialog extends CustomizeDialog {
 		int nbNewActions = commandBarButtons.size();
 		String[] newActionIds = new String[nbNewActions];
 		for (int i=0; i<nbNewActions; ++i) {
-			newActionIds[i] = ((CommandBarButton) commandBarButtons.get(i)).getActionId();
+			newActionIds[i] = ((CommandBarButtonForDisplay) commandBarButtons.get(i)).getActionId();
 		}
 		
 		int nbNewAlternativeActions = commandBarAlternativeButtons.size();
@@ -191,7 +178,7 @@ public class CommandBarDialog extends CustomizeDialog {
 		for (int i=0; i<nbNewAlternativeActions; ++i) {
 			Object button = commandBarAlternativeButtons.get(i);
 			newAlternativeActionIds[i] = (button != null) ? 
-										((CommandBarButton) button).getActionId() : null;
+										((CommandBarButtonForDisplay) button).getActionId() : null;
 		}
 		
 		CommandBarAttributes.setAttributes(newActionIds, newAlternativeActionIds, modifierField.getKeyStroke());
@@ -220,7 +207,7 @@ public class CommandBarDialog extends CustomizeDialog {
 		String[] commandBarActionIds = CommandBarAttributes.getActions();
 		int nbCommandBarActionIds = commandBarActionIds.length;
 		for (int i=0; i<nbCommandBarActionIds; ++i)
-			commandBarButtons.add(createDisplayableCommandBarButton(commandBarActionIds[i]));
+			commandBarButtons.add(CommandBarButtonForDisplay.create(commandBarActionIds[i]));
 		
 		commandBarButtonsList = new DynamicList(commandBarButtons); 
 		
@@ -258,7 +245,7 @@ public class CommandBarDialog extends CustomizeDialog {
 						Point dropLocation = dtde.getLocation();
 						index = commandBarButtonsList.locationToIndex(dropLocation);
 						Point cellLocation = commandBarButtonsList.indexToLocation(index);
-						newSide = cellLocation.x + BUTTON_PREFERRED_SIZE.width / 2 > dropLocation.x ? LEFT : RIGHT;
+						newSide = cellLocation.x + CommandBarButtonForDisplay.PREFERRED_SIZE.width / 2 > dropLocation.x ? LEFT : RIGHT;
 					}
 					else
 						index = -2;
@@ -280,7 +267,7 @@ public class CommandBarDialog extends CustomizeDialog {
 					int index = commandBarButtonsList.locationToIndex(dropLocation);
 					// get the cell position 
 					Point cellLocation = commandBarButtonsList.indexToLocation(index);
-					if (cellLocation.x + BUTTON_PREFERRED_SIZE.width / 2 < dropLocation.x)
+					if (cellLocation.x + CommandBarButtonForDisplay.PREFERRED_SIZE.width / 2 < dropLocation.x)
 						index++;
 
 					commandBarButtons.add(index, transferedButton);
@@ -306,7 +293,7 @@ public class CommandBarDialog extends CustomizeDialog {
 		String[] commandBarActionIds = CommandBarAttributes.getAlternateActions();
 		int nbCommandBarActionIds = commandBarActionIds.length;
 		for (int i=0; i<nbCommandBarActionIds; ++i)
-			commandBarAlternativeButtons.add(createDisplayableCommandBarButton(commandBarActionIds[i]));
+			commandBarAlternativeButtons.add(CommandBarButtonForDisplay.create(commandBarActionIds[i]));
 		
 		commandBarAlternativeButtonsList = new DynamicList(commandBarAlternativeButtons);
 		
@@ -376,10 +363,10 @@ public class CommandBarDialog extends CustomizeDialog {
 		while(sortedActionIdsIterator.hasNext()) {
 			String actionId = (String) sortedActionIdsIterator.next();
 			if (!usedActions.contains(actionId))
-				insertInOrder(commandBarAvailableButtons, createDisplayableCommandBarButton(actionId));			
+				insertInOrder(commandBarAvailableButtons, CommandBarButtonForDisplay.create(actionId));			
 		}
 
-		commandBarAvailableButtonsList = new DynamicHorizontalWrapList(commandBarAvailableButtons, BUTTON_PREFERRED_SIZE.width, 6);
+		commandBarAvailableButtonsList = new DynamicHorizontalWrapList(commandBarAvailableButtons, CommandBarButtonForDisplay.PREFERRED_SIZE.width, 6);
 		
 		commandBarAvailableButtonsList.setCellRenderer(new AvailableButtonCellListRenderer());
 		commandBarAvailableButtonsList.setDragEnabled(true);
@@ -477,7 +464,7 @@ public class CommandBarDialog extends CustomizeDialog {
 				return filler;
 			}
 			else {
-				CommandBarButton button = (CommandBarButton) value;
+				CommandBarButtonForDisplay button = (CommandBarButtonForDisplay) value;
 
                 // Note: we wrap the button inside a panel and decorate the panel's border. The reason for decorating
                 // the panel and not directly the button is because JButton stops rendering correctly under Mac OS X if
@@ -503,7 +490,7 @@ public class CommandBarDialog extends CustomizeDialog {
 				return filler;
 			}
 			else {
-                CommandBarButton button = (CommandBarButton) value;
+                CommandBarButtonForDisplay button = (CommandBarButtonForDisplay) value;
 
                 // Note: we wrap the button inside a panel and decorate the panel's border. The reason for decorating
                 // the panel and not directly the button is because JButton stops rendering correctly under Mac OS X if
@@ -525,7 +512,7 @@ public class CommandBarDialog extends CustomizeDialog {
 				int index, boolean isSelected, boolean cellHasFocus) {
 			
 			JPanel panel = new JPanel(new BorderLayout());
-			CommandBarButton button = (CommandBarButton) value;
+			CommandBarButtonForDisplay button = (CommandBarButtonForDisplay) value;
 			panel.add(button, BorderLayout.CENTER);
 			panel.setToolTipText(button.getToolTipText());
 			return panel;
@@ -577,7 +564,7 @@ public class CommandBarDialog extends CustomizeDialog {
 		public ActionListTransferHandler() {
 			try {
 				flavor = new DataFlavor(DataFlavor.javaJVMLocalObjectMimeType +
-				           ";class=\"" + CommandBarButton.class.getName() + "\"");
+				           ";class=\"" + CommandBarButtonForDisplay.class.getName() + "\"");
 			} catch (ClassNotFoundException e) {
                 AppLogger.fine("Caught exception", e);
 			}
@@ -743,20 +730,9 @@ public class CommandBarDialog extends CustomizeDialog {
 	///// Helper methods /////
 	//////////////////////////
 	
-	private CommandBarButton createDisplayableCommandBarButton(String actionId) {
-		CommandBarButton button = null;
-		if (actionId != null) {
-			button = CommandBarButton.create(actionId, mainFrame);
-			button.setEnabled(true);
-			button.setPreferredSize(BUTTON_PREFERRED_SIZE);
-		}
-		
-		return button;
-	}
-	
 	private static Filler createBoxFiller() {
 		Box.Filler filler = (Filler) Box.createHorizontalGlue();
-		filler.setPreferredSize(BUTTON_PREFERRED_SIZE);		
+		filler.setPreferredSize(CommandBarButtonForDisplay.PREFERRED_SIZE);		
 		return filler;
 	}
 	

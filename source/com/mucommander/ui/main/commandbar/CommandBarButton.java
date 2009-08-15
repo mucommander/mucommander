@@ -34,6 +34,9 @@ import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.main.MainFrame;
 
 /**
+ * Button that located in command-bar.
+ * Button in command-bar are associated with an MuAction and could have an alternative action,
+ * i.e an action that would replace the regular button's action when a modifier key is pressed.
  * 
  * @author Arik Hadas
  */
@@ -44,14 +47,14 @@ public class CommandBarButton extends NonFocusableButton implements Configuratio
 	
 	/** Current icon scale factor */
     // The math.max(1.0f, ...) part is to workaround a bug which cause(d) this value to be set to 0.0 in the configuration file.
-    private static float scaleFactor = Math.max(1.0f, MuConfiguration.getVariable(MuConfiguration.COMMAND_BAR_ICON_SCALE,
+    protected static float scaleFactor = Math.max(1.0f, MuConfiguration.getVariable(MuConfiguration.COMMAND_BAR_ICON_SCALE,
                                                                         MuConfiguration.DEFAULT_COMMAND_BAR_ICON_SCALE));
 	
     public static CommandBarButton create(String actionId, MainFrame mainFrame) {
 		return actionId == null ? null : new CommandBarButton(actionId, mainFrame);
 	}
 	
-	private CommandBarButton(String actionId, MainFrame mainFrame) {
+	protected CommandBarButton(String actionId, MainFrame mainFrame) {
 		
 		// Use new JButton decorations introduced in Mac OS X 10.5 (Leopard) with Java 1.5 and up
         if(OsFamilies.MAC_OS_X.isCurrent() && OsVersions.MAC_OS_X_10_5.isCurrentOrHigher() && JavaVersions.JAVA_1_5.isCurrentOrHigher()) {
@@ -76,8 +79,9 @@ public class CommandBarButton extends NonFocusableButton implements Configuratio
 	/**
      * Sets the given button's action, custom label showing the accelerator and icon taking into account the scale factor.
      */
-	public void setButtonAction(String actionID, MainFrame mainFrame) {
-    	MuAction action = ActionManager.getActionInstance(actionID, mainFrame);
+	public void setButtonAction(String actionId, MainFrame mainFrame) {
+    	MuAction action = ActionManager.getActionInstance(actionId, mainFrame);
+    	
     	setAction(action);
     	
         // Append the action's shortcut to the button's label
@@ -91,11 +95,11 @@ public class CommandBarButton extends NonFocusableButton implements Configuratio
         if(scaleFactor!=1.0f)
             setIcon(IconManager.getScaledIcon(action.getIcon(), scaleFactor));
     }
-    
+	
     /**
-     * TODO: document
+     * Return the id of the button's action
      * 
-     * @return
+     * @return id of the button's action
      */
     public String getActionId() {
     	return actionId;

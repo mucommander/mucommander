@@ -261,7 +261,7 @@ public class ActionManager {
      * class could not be found or could not be instantiated.
      */
     public static MuAction getActionInstance(String actionId, MainFrame mainFrame) {
-        return getActionInstance(new ActionParameters(actionId), mainFrame);
+        return getActionInstance(new ActionParameters(actionId), mainFrame != null ? mainFrame : WindowManager.getCurrentMainFrame());
     }
 
     /**
@@ -271,7 +271,7 @@ public class ActionManager {
      * @return the corresponding MuAction instance for the given MuAction class in the current MainFrame.
      */
     public static MuAction getActionInstance(String actionId) {
-        return getActionInstance(new ActionParameters(actionId), WindowManager.getCurrentMainFrame());
+        return getActionInstance(new ActionParameters(actionId), null);
     }
 
     /**

@@ -42,7 +42,7 @@ public class CustomizeCommandBarAction extends MuAction implements InvokesDialog
         super(mainFrame, properties);
     }
 
-    public void performAction() {CommandBarDialog.getDialog().showDialog();}
+    public void performAction() { new CommandBarDialog(mainFrame).showDialog(); }
     
     public static class Factory implements ActionFactory {
 
