@@ -216,6 +216,8 @@ Bug fixes:
   (ticket #176).
 - Fixed an issue causing icons not to appear on certain files when using
   system icons (ticket #225). Fix contributed by LeO.
+- Fixed UI freezes when invoking Copy/Move/Unpack dialogs on a remote
+  filesystem (ticket #12).
 
 Known issues:
 - Some translations are not up-to-date. For more information, see:
