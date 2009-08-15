@@ -28,7 +28,6 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.Set;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -53,7 +52,7 @@ import com.mucommander.ui.text.KeyStrokeUtils;
 /**
  * Dialog that displays shortcuts used in the application, sorted by topics.
  *
- * @author Maxence Bernard
+ * @author Maxence Bernard, Arik Hadas
  */
 public class ShortcutsDialog extends FocusDialog implements ActionListener {
 
@@ -77,23 +76,21 @@ public class ShortcutsDialog extends FocusDialog implements ActionListener {
         Container contentPane = getContentPane();
         JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 
-        // Get all existing action categories
-        Set actionCategories = ActionProperties.getActionCategories();
-        Iterator actionCategoriesIterator = actionCategories.iterator();
-        // Create LinkedList for each category.
-        Hashtable table = new Hashtable();
-        while (actionCategoriesIterator.hasNext())
-        	table.put(actionCategoriesIterator.next(), new LinkedList());
-        
         // Separate the actions according to their categories. 
-        sortActionsToCategories(table);
+        Hashtable categoryToItsActionsWithShortcutsIdsMap = createCategoryToItsActionsWithShortcutsMap();
         
-        //Create a tab and panel for each category
-        Enumeration categories = table.keys();
+        //Create tab and panel for each category
+        Enumeration categories = categoryToItsActionsWithShortcutsIdsMap.keys();
         while (categories.hasMoreElements()) {
         	ActionCategory category = (ActionCategory) categories.nextElement();
-        	addTopic(tabbedPane, category.toString(), ((LinkedList) table.get(category)).iterator());
+        	// Get the list of actions from the above category which have shortcuts assigned to them
+        	LinkedList categoryActionsWithShortcuts = (LinkedList) categoryToItsActionsWithShortcutsIdsMap.get(category);
+        	// If there is at least one action in the category with shortcuts assigned to it, add tab for the category
+        	if (!categoryActionsWithShortcuts.isEmpty())
+        		addTopic(tabbedPane, ""+category, categoryActionsWithShortcuts.iterator());
         }
+        
+        // Create tab for quick-search category 
         addTopic(tabbedPane, Translator.get(QUICK_SEARCH_TITLE), QUICK_SEARCH_DESC);
         
         contentPane.add(tabbedPane, BorderLayout.CENTER);
@@ -110,14 +107,28 @@ public class ShortcutsDialog extends FocusDialog implements ActionListener {
         setMaximumSize(new Dimension(600, 360));
     }
 
-    private void sortActionsToCategories(Hashtable table) {
+    private Hashtable createCategoryToItsActionsWithShortcutsMap() {
+    	// Get Iterator to all existing action categories
+        Iterator actionCategoriesIterator = ActionProperties.getActionCategories().iterator();
+
+        // Hashtable that maps actions-category to LinkedList of actions (Ids) from the category that have shortcuts assigned to them
+        Hashtable categoryToItsActionsWithShortcutsIdsMap = new Hashtable();
+        
+    	// Initialize empty LinkedList for each category
+        while (actionCategoriesIterator.hasNext())
+        	categoryToItsActionsWithShortcutsIdsMap.put(actionCategoriesIterator.next(), new LinkedList());
+        
+        // Go over all action ids
     	Enumeration actionIds = ActionManager.getActionIds();
     	while (actionIds.hasMoreElements()) {
     		String actionId = (String) actionIds.nextElement();
     		ActionCategory category = ActionProperties.getActionCategory(actionId);
-    		if (category != null)
-    			((LinkedList) table.get(category)).add(actionId);
+    		// If the action has category and there is a primary shortcut assigned to it, add its id to the list of the category
+    		if (category != null && ActionKeymap.getAccelerator(actionId) != null)
+    			((LinkedList) categoryToItsActionsWithShortcutsIdsMap.get(category)).add(actionId);
     	}
+    	
+    	return categoryToItsActionsWithShortcutsIdsMap;
     }
 
     private void addTopic(JTabbedPane tabbedPane, String titleKey, Iterator descriptionsIterator) {
@@ -171,8 +182,6 @@ public class ShortcutsDialog extends FocusDialog implements ActionListener {
         	actionId =(String) muActionIdsIterator.next();
 
             shortcut = ActionKeymap.getAccelerator(actionId);
-            if(shortcut==null)
-                continue;
 
             shortcutsRep = KeyStrokeUtils.getKeyStrokeDisplayableRepresentation(shortcut);
 
