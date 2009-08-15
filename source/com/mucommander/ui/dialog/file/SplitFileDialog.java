@@ -18,25 +18,6 @@
 
 package com.mucommander.ui.dialog.file;
 
-import java.awt.BorderLayout;
-import java.awt.Container;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JSpinner;
-import javax.swing.JTextField;
-import javax.swing.SpinnerNumberModel;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.util.FileSet;
 import com.mucommander.file.util.PathUtils;
@@ -51,6 +32,17 @@ import com.mucommander.ui.layout.XAlignedComponentPanel;
 import com.mucommander.ui.layout.XBoxPanel;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.text.FilePathField;
+
+import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 
 /**
  * Dialog used to split a file into parts.
@@ -223,7 +215,7 @@ public class SplitFileDialog extends JobDialog implements ActionListener {
         ProgressDialog progressDialog = new ProgressDialog(mainFrame,
                 Translator.get("progress_dialog.processing_files"));
 		SplitFileJob job = new SplitFileJob(progressDialog, mainFrame,
-		        file, resolvedDest.getDestinationFolder(), size, (int)parts);
+		        file, resolvedDest.getDestinationFolder(), (int)size, (int)parts);
 		job.setIntegrityCheckEnabled(cbGenerateCRC.isSelected());
         progressDialog.start(job);
 	}
