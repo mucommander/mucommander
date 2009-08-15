@@ -162,6 +162,8 @@ Improvements:
 - Leading and trailing toolbar separators are no longer displayed (ticket #166).
 - 'Permanent delete' no longer asks whether symlinks should be followed, they
   are now silently deleted without being followed (easier and safer).
+- Improvements made to the filename selection algorithm used in
+  Copy/Move/Unpack/Rename destination fields (ticket #167).
 
 Localization:
 - 

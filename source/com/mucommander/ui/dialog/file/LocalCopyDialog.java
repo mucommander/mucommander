@@ -46,17 +46,8 @@ public class LocalCopyDialog extends CopyDialog {
     ////////////////////////
 
     protected PathFieldContent computeInitialPath(FileSet files) {
-        String fieldText;     // Text to display in the destination field.
-        int    endPosition;   // Index of the last selected character in the destination field.
+        AbstractFile file = (AbstractFile)files.elementAt(0);
+        return selectDestinationFilename(file, file.getName(), 0);
 
-        // Fill text field with the sole file's name
-        fieldText     = ((AbstractFile)files.elementAt(0)).getName();
-        endPosition   = fieldText.indexOf('.');
-
-        // If the file doesn't have an extension, selection extends to the end of its name.
-        if(endPosition <= 0)
-            endPosition = fieldText.length();
-
-        return new PathFieldContent(fieldText, 0, endPosition);
     }
 }

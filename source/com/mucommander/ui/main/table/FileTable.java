@@ -33,6 +33,7 @@ import com.mucommander.text.CustomDateFormat;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionKeymap;
 import com.mucommander.ui.action.ActionManager;
+import com.mucommander.ui.dialog.file.AbstractCopyDialog;
 import com.mucommander.ui.dialog.file.FileCollisionDialog;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.event.ActivePanelListener;
@@ -1546,8 +1547,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
         /**
          * Notifies this editor that the given row's filename cell is being edited. This method has to be called once
          * when a row just started being edited. It will save the row number and select the filename without
-         * its extension to make it easier to rename (it happens more often that ones wishes to rename a file's name
-         * than its extension).
+         * its extension to make it easier to rename using {@link AbstractCopyDialog.highlightFilename}.
          *
          * @param row row which is being edited
          */
@@ -1555,24 +1555,8 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
             // The editing row has to be saved as it could change after row editing has been started
             this.editingRow = row;
 
-            String fieldText = filenameField.getText();
-            filenameField.setSelectionStart(0);
-
             AbstractFile file = tableModel.getFileAtRow(editingRow);
-
-            // If the current file is a directory and not an application file (e.g. Mac OS X .app directory), select
-            // the whole file name.
-            if(file.isDirectory() && !DesktopManager.isApplication(file)) {
-                filenameField.setSelectionEnd(fieldText.length());
-            }
-            // Otherwise, select the file name without its extension, except when empty ('.DS_Store', for example).
-            else {
-                int extPos = fieldText.lastIndexOf('.');
-            
-                // Text is selected so that user can directly type and replace path
-                filenameField.setSelectionStart(0);
-                filenameField.setSelectionEnd(extPos>0?extPos:fieldText.length());
-            }
+            AbstractCopyDialog.selectDestinationFilename(file, file.getName(), 0).feedToPathField(filenameField);
 
             // Request focus on text field
             filenameField.requestFocus();

@@ -342,25 +342,6 @@ public abstract class TransferDestinationDialog extends JobDialog implements Act
     ///////////////////
 
     /**
-     * This class wraps a path, and start and end offsets for the partion of the text to be selected in the text field.
-     */
-    protected class PathFieldContent {
-        protected String path;
-        protected int selectionStart;
-        protected int selectionEnd;
-
-        protected PathFieldContent(String path) {
-            this(path, 0, path.length());
-        }
-
-        protected PathFieldContent(String path, int selectionStart, int selectionEnd) {
-            this.path = path;
-            this.selectionStart = selectionStart;
-            this.selectionEnd = selectionEnd;
-        }
-    }
-
-    /**
      * Retrieves the initial path to be set in the path field by calling {@link TransferDestinationDialog#computeInitialPath(FileSet)}.
      * Since this operation can be I/O-bound, it is performed in a separate thread.
      */
@@ -382,11 +363,8 @@ public abstract class TransferDestinationDialog extends JobDialog implements Act
                             // Document change events are no longer needed
                             pathField.getDocument().removeDocumentListener(TransferDestinationDialog.this);
 
-                            // Set the initial path
-                            pathField.setText(pathFieldContent.path);
-                            // Text is selected so that user can directly type and replace path
-                            pathField.setSelectionStart(pathFieldContent.selectionStart);
-                            pathField.setSelectionEnd(pathFieldContent.selectionEnd);
+                            // Set the path field's text and selection 
+                            pathFieldContent.feedToPathField(pathField);
 
                             okButton.setEnabled(true);
                         }
