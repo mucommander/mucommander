@@ -127,7 +127,7 @@ class KdeTrash extends QueuedTrash {
     }
 
     public void open() {
-        executeAndWait(baseCommand+" openURL trash:/");
+        executeAndWait(baseCommand+" exec trash:/");
     }
 
     /**
