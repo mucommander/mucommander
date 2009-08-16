@@ -45,9 +45,10 @@ abstract class KdeDesktopAdapter extends DefaultDesktopAdapter {
 
         // Registers KDE specific commands.
         try {
-            CommandManager.registerDefaultCommand(new Command(CommandManager.FILE_OPENER_ALIAS,  getBaseCommand()+" exec $f",    Command.SYSTEM_COMMAND, null));
-            CommandManager.registerDefaultCommand(new Command(CommandManager.URL_OPENER_ALIAS,   getBaseCommand()+" openURL $f", Command.SYSTEM_COMMAND, null));
-            CommandManager.registerDefaultCommand(new Command(CommandManager.FILE_MANAGER_ALIAS, getBaseCommand()+" exec $f",    Command.SYSTEM_COMMAND, getFileManagerName()));
+            String execCommand = getBaseCommand()+" exec $f";
+            CommandManager.registerDefaultCommand(new Command(CommandManager.FILE_OPENER_ALIAS,  execCommand, Command.SYSTEM_COMMAND, null));
+            CommandManager.registerDefaultCommand(new Command(CommandManager.URL_OPENER_ALIAS,   execCommand, Command.SYSTEM_COMMAND, null));
+            CommandManager.registerDefaultCommand(new Command(CommandManager.FILE_MANAGER_ALIAS, execCommand, Command.SYSTEM_COMMAND, getFileManagerName()));
         }
         catch(CommandException e) {throw new DesktopInitialisationException(e);}
 
