@@ -21,8 +21,10 @@ package com.mucommander.desktop;
 import com.mucommander.AppLogger;
 import com.mucommander.desktop.gnome.ConfiguredGnomeDesktopAdapter;
 import com.mucommander.desktop.gnome.GuessedGnomeDesktopAdapter;
-import com.mucommander.desktop.kde.ConfiguredKdeDesktopAdapter;
-import com.mucommander.desktop.kde.GuessedKdeDesktopAdapter;
+import com.mucommander.desktop.kde.ConfiguredKde3DesktopAdapter;
+import com.mucommander.desktop.kde.ConfiguredKde4DesktopAdapter;
+import com.mucommander.desktop.kde.GuessedKde3DesktopAdapter;
+import com.mucommander.desktop.kde.GuessedKde4DesktopAdapter;
 import com.mucommander.desktop.openvms.OpenVMSDesktopAdapter;
 import com.mucommander.desktop.osx.OSXDesktopAdapter;
 import com.mucommander.desktop.windows.Win9xDesktopAdapter;
@@ -143,9 +145,11 @@ public class DesktopManager {
         // Unix desktops:
         // - check for Gnome before KDE, as it seems to be more popular.
         // - check for 'configured' before 'guessed', as guesses are less reliable and more expensive.
-        registerAdapter(new GuessedKdeDesktopAdapter());
+        registerAdapter(new GuessedKde3DesktopAdapter());
+        registerAdapter(new GuessedKde4DesktopAdapter());
         registerAdapter(new GuessedGnomeDesktopAdapter());
-        registerAdapter(new ConfiguredKdeDesktopAdapter());
+        registerAdapter(new ConfiguredKde3DesktopAdapter());
+        registerAdapter(new ConfiguredKde4DesktopAdapter());
         registerAdapter(new ConfiguredGnomeDesktopAdapter());
 
         // Known OS adapters.

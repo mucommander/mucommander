@@ -16,21 +16,26 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.mucommander.desktop.gnome;
+package com.mucommander.desktop.kde;
 
-import com.mucommander.process.ProcessRunner;
+import com.mucommander.desktop.TrashProvider;
 
 /**
- * @author Nicolas Rinaudo
+ * @author Maxence Bernard
  */
-public class GuessedGnomeDesktopAdapter extends GnomeDesktopAdapter {
-    public String toString() {return "Gnome Desktop (guessed)";}
+abstract class Kde3DesktopAdapter extends KdeDesktopAdapter {
 
-    public boolean isAvailable() {
-        try {
-            ProcessRunner.execute("gnome-open");
-            return true;
-        }
-        catch(Exception e) {return false;}
+    static String BASE_COMMAND = "kfmclient";
+
+    protected String getFileManagerName() {
+        return "Konqueror";
+    }
+
+    protected String getBaseCommand() {
+        return BASE_COMMAND;
+    }
+
+    protected TrashProvider getTrashProvider() {
+        return new Kde3TrashProvider();
     }
 }

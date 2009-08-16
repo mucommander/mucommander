@@ -16,21 +16,29 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.mucommander.desktop.gnome;
+package com.mucommander.desktop.kde;
 
 import com.mucommander.process.ProcessRunner;
 
 /**
+ * 'Guessed' desktop adapter for KDE 3. The availability of this desktop depends on the presence of the
+ * <code>kfmclient</code> command.
+ *
  * @author Nicolas Rinaudo
  */
-public class GuessedGnomeDesktopAdapter extends GnomeDesktopAdapter {
-    public String toString() {return "Gnome Desktop (guessed)";}
+public class GuessedKde3DesktopAdapter extends Kde3DesktopAdapter {
+
+    public String toString() {
+        return "KDE 3 Desktop (guessed)";
+    }
 
     public boolean isAvailable() {
         try {
-            ProcessRunner.execute("gnome-open");
+            ProcessRunner.execute("kfmclient");
             return true;
         }
-        catch(Exception e) {return false;}
+        catch(Exception e) {
+            return false;
+        }
     }
 }

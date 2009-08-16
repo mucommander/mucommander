@@ -18,19 +18,18 @@
 
 package com.mucommander.desktop.kde;
 
-import com.mucommander.process.ProcessRunner;
+import com.mucommander.desktop.AbstractTrash;
+import com.mucommander.desktop.TrashProvider;
 
 /**
- * @author Nicolas Rinaudo
+ * This class is a trash provider for the {@link KdeTrash KDE 3 trash}.
+ *
+ * @see KdeTrash
+ * @author Maxence Bernard
  */
-public class GuessedKdeDesktopAdapter extends KdeDesktopAdapter {
-    public String toString() {return "KDE Desktop (guess)";}
+class Kde3TrashProvider implements TrashProvider {
 
-    public boolean isAvailable() {
-        try {
-            ProcessRunner.execute("kfmclient");
-            return true;
-        }
-        catch(Exception e) {return false;}
+    public AbstractTrash getTrash() {
+        return new KdeTrash(Kde3DesktopAdapter.BASE_COMMAND);
     }
 }

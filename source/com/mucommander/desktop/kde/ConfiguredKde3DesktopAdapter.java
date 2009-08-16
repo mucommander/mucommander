@@ -21,20 +21,27 @@ package com.mucommander.desktop.kde;
 import com.mucommander.runtime.JavaVersion;
 
 /**
+ * 'Configured' desktop adapter for KDE 3. The availability of this desktop depends on the presence of the
+ * <code>KDE_FULL_SESSION</code> environment variable.
+ *
  * @author Nicolas Rinaudo
  */
-public class ConfiguredKdeDesktopAdapter extends KdeDesktopAdapter {
-    private static final String ENV_VAR = "KDE_FULL_SESSION";
+public class ConfiguredKde3DesktopAdapter extends Kde3DesktopAdapter {
 
-    public String toString() {return "KDE Desktop";}
+    private static final String KDE_FULL_SESSION_VAR = "KDE_FULL_SESSION";
+
+    protected String getConfiguredEnvVariable(String name) {
+        return JavaVersion.JAVA_1_4.isCurrentOrLower()?System.getProperty(name):System.getenv(name);
+    }
+
+    public String toString() {
+        return "KDE 3 Desktop";
+    }
 
     public boolean isAvailable() {
-        String var;
-        if(JavaVersion.JAVA_1_4.isCurrentOrLower())
-            var = System.getProperty(ENV_VAR);
-        else
-            var = System.getenv(ENV_VAR);
-
+        String var = getConfiguredEnvVariable(KDE_FULL_SESSION_VAR);
         return var != null && !var.trim().equals("");
     }
+
+
 }
