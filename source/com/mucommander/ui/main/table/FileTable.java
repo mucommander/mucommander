@@ -368,9 +368,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
      * @return the folder currently displayed by this FileTable
      */
     public AbstractFile getCurrentFolder() {
-        // Note: tableModel#getCurrentFolder() must not be returned because the folder is set asynchronously in the
-        // table model and this method would return null until it has been set, generating NPE in the application.
-        return folderPanel.getCurrentFolder();
+        return tableModel.getCurrentFolder();
     }
 
     /**
@@ -1976,7 +1974,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
         private FileSet        markedFiles;
         private AbstractFile   selectedFile;
 
-        public FolderChangeThread(AbstractFile folder, AbstractFile[] children, FileSet markedFiles, AbstractFile selectedFile) {
+        private FolderChangeThread(AbstractFile folder, AbstractFile[] children, FileSet markedFiles, AbstractFile selectedFile) {
             this.folder       = folder;
             this.children     = children;
             this.markedFiles  = markedFiles;
