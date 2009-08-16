@@ -149,6 +149,10 @@ public class CopyJob extends AbstractCopyJob {
                         processFile(subFiles[i], destFile);
                     }
 
+                    // Set currentDestFile back to the enclosing folder in case an overridden processFile method
+                    // needs to work with the folder after calling super.processFile.
+                    currentDestFile = destFile;
+
                     // Only when finished with folder, set destination folder's date to match the original folder one
                     destFile.changeDate(file.getDate());
 

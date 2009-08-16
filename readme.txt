@@ -220,6 +220,8 @@ Bug fixes:
   system icons (ticket #225). Fix contributed by LeO.
 - Fixed UI freezes when invoking Copy/Move/Unpack dialogs on a remote
   filesystem (ticket #12).
+- Fixed 'open natively' opening all files when invoked on a remote filesystem
+  or on archive entries (ticket #147).
 
 Known issues:
 - Some translations are not up-to-date. For more information, see:

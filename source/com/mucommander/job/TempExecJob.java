@@ -18,8 +18,11 @@
 
 package com.mucommander.job;
 
+import com.mucommander.AppLogger;
 import com.mucommander.desktop.DesktopManager;
 import com.mucommander.file.AbstractFile;
+import com.mucommander.file.PermissionAccesses;
+import com.mucommander.file.PermissionTypes;
 import com.mucommander.file.util.FileSet;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;
@@ -29,12 +32,15 @@ import com.mucommander.ui.main.quicklist.RecentExecutedFilesQL;
  * This job copies a file or a set of files to a temporary folder, makes the temporary file(s) read-only and
  * executes each of them with native file associations. The temporary files are deleted when the JVM terminates.
  *
- * <p>It is important to understand that when this job operates on a set of files a process is started for each file
+ * <p>It is important to understand that when this job operates on a set of files, a process is started for each file
  * to execute, so this operation should require confirmation by the user before being attempted.</p>
  *
  * @author Maxence Bernard
  */
 public class TempExecJob extends TempCopyJob {
+
+    /** Files to execute */
+    private FileSet filesToExecute;
 
     /**
      * Creates a new <code>TempExecJob</code> that operates on a single file.
@@ -44,7 +50,7 @@ public class TempExecJob extends TempCopyJob {
      * @param fileToExecute the file to copy to a temporary location and execute
      */
     public TempExecJob(ProgressDialog progressDialog, MainFrame mainFrame, AbstractFile fileToExecute) {
-        super(progressDialog, mainFrame, fileToExecute);
+        this(progressDialog, mainFrame, new FileSet(fileToExecute.getParent(), fileToExecute));
     }
 
     /**
@@ -57,6 +63,8 @@ public class TempExecJob extends TempCopyJob {
      */
     public TempExecJob(ProgressDialog progressDialog, MainFrame mainFrame, FileSet filesToExecute) {
         super(progressDialog, mainFrame, filesToExecute);
+
+        this.filesToExecute = filesToExecute;
     }
 
 
@@ -68,12 +76,26 @@ public class TempExecJob extends TempCopyJob {
         if(!super.processFile(file, recurseParams))
             return false;
 
-        // Try to open the file.
-        try {
-        	DesktopManager.open(currentDestFile);
-        	RecentExecutedFilesQL.addFile(file);
-    	}
-        catch(Exception e) {return false;}
+        // TODO: temporary files seem to remain after the JVM quits under Mac OS X, even if the files permissions are unchanged
+
+        // Execute the file, only if it is one of the top-level files
+        if(filesToExecute.indexOf(file)!=-1) {
+            if(!currentDestFile.isDirectory()) {        // Do not change directories' permissions
+                // Make the temporary file read only
+                if(currentDestFile.getChangeablePermissions().getBitValue(PermissionAccesses.USER_ACCESS, PermissionTypes.WRITE_PERMISSION))
+                    currentDestFile.changePermission(PermissionAccesses.USER_ACCESS, PermissionTypes.WRITE_PERMISSION, false);
+            }
+
+            // Try to open the file.
+            try {
+                DesktopManager.open(currentDestFile);
+                RecentExecutedFilesQL.addFile(file);
+            }
+            catch(Exception e) {
+                AppLogger.fine("Caught exeception while opening "+currentDestFile, e);
+                return false;
+            }
+        }
 
         return true;
     }

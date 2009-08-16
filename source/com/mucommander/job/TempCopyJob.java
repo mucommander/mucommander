@@ -21,8 +21,6 @@ package com.mucommander.job;
 import com.mucommander.AppLogger;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
-import com.mucommander.file.PermissionAccesses;
-import com.mucommander.file.PermissionTypes;
 import com.mucommander.file.util.FileSet;
 import com.mucommander.ui.dialog.file.FileCollisionDialog;
 import com.mucommander.ui.dialog.file.ProgressDialog;
@@ -38,9 +36,6 @@ import java.io.IOException;
  */
 public class TempCopyJob extends CopyJob {
 
-    /** This list is populated with temporary files, as they are created by processFile() */
-    protected FileSet tempFiles;
-
     /**
      * Creates a new <code>TempExecJob</code> that operates on a single file.
      *
@@ -50,7 +45,6 @@ public class TempCopyJob extends CopyJob {
      */
     public TempCopyJob(ProgressDialog progressDialog, MainFrame mainFrame, AbstractFile fileToCopy) {
         super(progressDialog, mainFrame, new FileSet(fileToCopy.getParent(), fileToCopy), FileFactory.getTemporaryFolder(), getTemporaryFileName(fileToCopy), COPY_MODE, FileCollisionDialog.OVERWRITE_ACTION);
-        tempFiles = new FileSet(baseDestFolder);
     }
 
     /**
@@ -62,14 +56,13 @@ public class TempCopyJob extends CopyJob {
      */
     public TempCopyJob(ProgressDialog progressDialog, MainFrame mainFrame, FileSet filesToCopy) {
         super(progressDialog, mainFrame, filesToCopy, getTemporaryFolder(filesToCopy), null, COPY_MODE, FileCollisionDialog.OVERWRITE_ACTION);
-        tempFiles = new FileSet(baseDestFolder);
     }
 
 
-    protected static AbstractFile getTemporaryFolder(FileSet filesToExecute) {
+    protected static AbstractFile getTemporaryFolder(FileSet files) {
         AbstractFile tempFolder;
         try {
-            tempFolder = FileFactory.getTemporaryFile(filesToExecute.getBaseFolder().getName(), true);
+            tempFolder = FileFactory.getTemporaryFile(files.getBaseFolder().getName(), true);
             tempFolder.mkdir();
         }
         catch(IOException e) {
@@ -79,32 +72,14 @@ public class TempCopyJob extends CopyJob {
         return tempFolder;
     }
 
-    protected static String getTemporaryFileName(AbstractFile fileToExecute) {
+    protected static String getTemporaryFileName(AbstractFile files) {
         try {
-            return FileFactory.getTemporaryFile(fileToExecute.getName(), true).getName();
+            return FileFactory.getTemporaryFile(files.getName(), true).getName();
         }
         catch(IOException e) {
             // Should never happen under normal circumstances.
             AppLogger.warning("Caught exception instanciating temporary file, this should not happen!");
-            return fileToExecute.getName();
+            return files.getName();
         }
-    }
-
-
-    ////////////////////////
-    // Overridden methods //
-    ////////////////////////
-
-    protected boolean processFile(AbstractFile file, Object recurseParams) {
-        if(!super.processFile(file, recurseParams))
-            return false;
-
-        // Make the temporary file read only
-        if(currentDestFile.getChangeablePermissions().getBitValue(PermissionAccesses.USER_ACCESS, PermissionTypes.WRITE_PERMISSION))
-            currentDestFile.changePermission(PermissionAccesses.USER_ACCESS, PermissionTypes.WRITE_PERMISSION, false);
-
-        tempFiles.add(currentDestFile);
-
-        return true;
     }
 }
