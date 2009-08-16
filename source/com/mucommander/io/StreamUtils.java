@@ -101,7 +101,19 @@ public class StreamUtils {
         }
     }
     
-    public static long copyStream(InputStream in, OutputStream out, int bufferSize, int length) throws FileTransferException {
+    /**
+     * Copies the <code>length</code> bytes from the given <code>InputStream</code> to the specified </code>OutputStream</code>
+     * and throws a {@link FileTransferException} if something went wrong. This method does *NOT* close any of the
+     * given streams.
+     * 
+     * @param in the InputStream to read from
+     * @param out the OutputStream to write to
+     * @param bufferSize size of the buffer to use, in bytes
+     * @param length number of bytes to copy from InputStream
+     * @return the number of bytes that were copied
+     * @throws FileTransferException if something went wrong while reading from or writing to one of the provided streams
+     */
+    public static long copyStream(InputStream in, OutputStream out, int bufferSize, long length) throws FileTransferException {
         // Use BufferPool to reuse any available buffer of the same size
         byte buffer[] = BufferPool.getByteArray(bufferSize);
         try {
@@ -114,7 +126,7 @@ public class StreamUtils {
                 	if (in.markSupported()) {
                 		in.mark(buffer.length);
                 	}
-                    nbRead = in.read(buffer, 0, Math.min(buffer.length, length));
+                    nbRead = in.read(buffer, 0, (int)Math.min(buffer.length, length));	// the result of min will be int
                     length-=nbRead;
                 }
                 catch(IOException e) {
@@ -130,13 +142,11 @@ public class StreamUtils {
                 catch(IOException e) {
                 	try {
 						in.reset();
-	                    //nbRead = in.read(buffer, 0, Math.min(buffer.length, length));
 					} catch (IOException e1) {
 						CommonsLogger.fine("Caught exception", e1);
-	                	throw new FileTransferException(FileTransferException.WRITING_DESTINATION);
+	                	throw new FileTransferException(FileTransferException.READING_SOURCE);
 					}
-                	return -totalRead;
-                	//throw new FileTransferException(FileTransferException.WRITING_DESTINATION);
+                	throw new FileTransferException(FileTransferException.WRITING_DESTINATION, totalRead);
                 }
 
                 totalRead += nbRead;

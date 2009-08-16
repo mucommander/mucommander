@@ -215,7 +215,7 @@ public class SplitFileDialog extends JobDialog implements ActionListener {
         ProgressDialog progressDialog = new ProgressDialog(mainFrame,
                 Translator.get("progress_dialog.processing_files"));
 		SplitFileJob job = new SplitFileJob(progressDialog, mainFrame,
-		        file, resolvedDest.getDestinationFolder(), (int)size, (int)parts);
+		        file, resolvedDest.getDestinationFolder(), size, (int)parts);
 		job.setIntegrityCheckEnabled(cbGenerateCRC.isSelected());
         progressDialog.start(job);
 	}

@@ -26,11 +26,13 @@ import com.mucommander.file.FileURL;
 import com.mucommander.file.util.FileSet;
 import com.mucommander.io.BufferPool;
 import com.mucommander.io.ChecksumInputStream;
+import com.mucommander.io.FileTransferException;
 import com.mucommander.io.StreamUtils;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.file.FileCollisionDialog;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;
+import com.sun.image.codec.jpeg.TruncatedFileException;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -44,11 +46,12 @@ import java.security.NoSuchAlgorithmException;
  */
 public class SplitFileJob extends AbstractCopyJob {
 
-    private int partSize;
+    private long partSize;
 	private AbstractFile sourceFile;
 	private InputStream origFileStream;
 	private AbstractFile destFolder;
 	private long sizeLeft;
+	private boolean recalculateCRC = false;
 		
 
 	/**
@@ -71,7 +74,7 @@ public class SplitFileJob extends AbstractCopyJob {
 
 	
 	public SplitFileJob(ProgressDialog progressDialog, MainFrame mainFrame, 
-			AbstractFile file, AbstractFile destFolder, int partSize, int parts) {
+			AbstractFile file, AbstractFile destFolder, long partSize, int parts) {
         super(progressDialog, mainFrame, new FileSet(), destFolder, null, FileCollisionDialog.ASK_ACTION);
         this.partSize = partSize;
         this.setNbFiles(parts);
@@ -118,7 +121,7 @@ public class SplitFileJob extends AbstractCopyJob {
 	 */
 	private void createInputStream() {
         try {
-			origFileStream = sourceFile.getInputStream();
+        	origFileStream = sourceFile.getInputStream();
 		}
         catch (IOException e) {
             AppLogger.fine("Caught exception", e);
@@ -160,7 +163,32 @@ public class SplitFileJob extends AbstractCopyJob {
         try {
 			out = destFile.getOutputStream(false);
 			
-			long written = StreamUtils.copyStream(origFileStream, out, BufferPool.getDefaultBufferSize(), partSize);
+			try {
+				long written = StreamUtils.copyStream(origFileStream, out, BufferPool.getDefaultBufferSize(), partSize);
+				sizeLeft -= written;
+			} catch (FileTransferException e) {
+				if (e.getReason() == FileTransferException.WRITING_DESTINATION) {
+					// out of disk space - ask a user for a new disk
+					recalculateCRC = true;		// recalculate CRC (DigestInputStream doesn't support mark() and reset())
+					out.close();
+					out = null;
+					sizeLeft -= e.getBytesWritten();
+					showErrorDialog(Translator.get("split_file_dialog.title"), 
+							Translator.get("split_file_dialog.insert_new_media"), 
+							new String[]{OK_TEXT, CANCEL_TEXT}, 
+							new int[]{OK_ACTION, CANCEL_ACTION});
+					if (getState()==INTERRUPTED) {
+						return false;
+					}
+					// create new output file if necessary
+					if ((sizeLeft>0) && (getCurrentFileIndex() == getNbFiles()-1)) {
+						setNbFiles(getNbFiles() + 1);
+						addDummyFile(getNbFiles(), sizeLeft);
+					}
+				} else {
+					throw e;
+				}
+			}
 			
 	        // Preserve source file's date
 	        destFile.changeDate(sourceFile.getDate());
@@ -168,27 +196,6 @@ public class SplitFileJob extends AbstractCopyJob {
 	        // Preserve source file's permissions: preserve only the permissions bits that are supported by the source file
 	        // and use default permissions for the rest of them.
 	        destFile.importPermissions(sourceFile, FilePermissions.DEFAULT_FILE_PERMISSIONS);  // use #importPermissions(AbstractFile, int) to avoid isDirectory test
-			
-			if (written < 0) {
-				// out of disk space - ask a user for a new disk
-				out.close();
-				out = null;
-				sizeLeft += written;
-				showErrorDialog(Translator.get("split_file_dialog.title"), 
-						Translator.get("split_file_dialog.insert_new_media"), 
-						new String[]{OK_TEXT, CANCEL_TEXT}, 
-						new int[]{OK_ACTION, CANCEL_ACTION});
-				if (getState()==INTERRUPTED) {
-					return false;
-				}
-				// create new output file if necessary
-				if ((sizeLeft>0) && (getCurrentFileIndex() == getNbFiles()-1)) {
-					setNbFiles(getNbFiles() + 1);
-					addDummyFile(getNbFiles(), sizeLeft);
-				}
-			} else {
-				sizeLeft -= written;
-			}
 			
 		} catch (IOException e) {
             AppLogger.fine("Caught exception", e);
@@ -222,15 +229,22 @@ public class SplitFileJob extends AbstractCopyJob {
     	// create checksum file
     	if (isIntegrityCheckEnabled()) {
             if(origFileStream!=null && (origFileStream instanceof ChecksumInputStream)) {
-            	String crcFileName = sourceFile.getName() + ".sfv"; 
-                String sourceChecksum = ((ChecksumInputStream)origFileStream).getChecksumString();
+            	String crcFileName = sourceFile.getName() + ".sfv";
                 try {
+	            	String sourceChecksum;
+	            	if (recalculateCRC ) {
+	            		origFileStream = sourceFile.getInputStream();
+						sourceChecksum = AbstractFile.calculateChecksum(origFileStream, MessageDigest.getInstance("CRC32"));
+						origFileStream.close();
+	            	} else {
+	                	sourceChecksum = ((ChecksumInputStream)origFileStream).getChecksumString();
+	            	}
 					AbstractFile crcFile = baseDestFolder.getDirectChild(crcFileName);
 					OutputStream crcStream = crcFile.getOutputStream(false);
 					String line = sourceFile.getName() + " " + sourceChecksum;
 					crcStream.write(line.getBytes("utf-8"));
 					crcStream.close();
-				} catch (IOException e) {
+				} catch (Exception e) {
                     AppLogger.fine("Caught exception", e);
 					
 		            showErrorDialog(errorDialogTitle,

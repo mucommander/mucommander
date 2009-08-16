@@ -75,16 +75,28 @@ public class FileTransferException extends IOException {
 
     protected int reason;
 
+	private long bytesWritten;
+
 
     public FileTransferException(int reason) {
         this.reason = reason;
     }
 
+    public FileTransferException(int reason, long bytesWritten) {
+        this.reason = reason;
+        this.bytesWritten = bytesWritten;
+    }
+    
     public int getReason() {
         return reason;
     }
 
-    public String toString() {
+	public long getBytesWritten() {
+		return bytesWritten;
+	}
+
+	public String toString() {
         return super.toString()+" reason="+reason;
     }
+
 }
