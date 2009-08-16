@@ -41,7 +41,7 @@ abstract class KdeDesktopAdapter extends DefaultDesktopAdapter {
 
     public void init(boolean install) throws DesktopInitialisationException {
         // Initialises trash management.
-        DesktopManager.setTrashProvider(new Kde3TrashProvider());
+        DesktopManager.setTrashProvider(getTrashProvider());
 
         // Registers KDE specific commands.
         try {
