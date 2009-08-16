@@ -73,7 +73,7 @@ public class DebugConsoleHandler extends Handler {
      *
      * @return the last records that were collected by this handler.
      */
-    public LogRecord[] getLogRecords() {
+    public synchronized LogRecord[] getLogRecords() {
         LogRecord[] records = new LogRecord[logRecords.size()];
         logRecords.toArray(records);
 
@@ -85,17 +85,17 @@ public class DebugConsoleHandler extends Handler {
     // Handler implementation //
     ////////////////////////////
 
-    public void publish(LogRecord record) {
+    public synchronized void publish(LogRecord record) {
         if(logRecords.size()== bufferSize)
             logRecords.removeFirst();
 
         logRecords.add(record);
     }
 
-    public void flush() {
+    public synchronized void flush() {
     }
 
-    public void close() throws SecurityException {
+    public synchronized void close() throws SecurityException {
         logRecords.clear();
     }
 }
