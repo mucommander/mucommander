@@ -717,10 +717,10 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 					boolean customized;
 					switch (columnId) {
 					case ACCELERATOR_COLUMN_INDEX:
-						customized = !key.equals(ActionProperties.getDefaultAccelerator(data.getActionId(convertRowIndexToModel(rowIndex))));
+						customized = !key.equals(ActionProperties.getDefaultAccelerator(data.getActionId(rowIndex)));
 						break;
 					case ALTERNATE_ACCELERATOR_COLUMN_INDEX:
-						customized = !key.equals(ActionProperties.getDefaultAlternativeAccelerator(data.getActionId(convertRowIndexToModel(rowIndex))));
+						customized = !key.equals(ActionProperties.getDefaultAlternativeAccelerator(data.getActionId(rowIndex)));
 						break;
 					default:
 						customized = false;
