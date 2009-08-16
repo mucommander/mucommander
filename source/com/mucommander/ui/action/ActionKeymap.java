@@ -82,33 +82,15 @@ public class ActionKeymap {
      * @param alternateAccelerator - KeyStroke that would be alternative accelerator of the given action.
      */
     public static void changeActionAccelerators(String actionId, KeyStroke accelerator, KeyStroke alternateAccelerator) {
-    	// If primary accelerator is already registered to MuAction, unregister it.
-    	if (isKeyStrokeRegistered(accelerator)) {
-    		String prevAcceleratorActionId = getRegisteredActionIdForKeystroke(accelerator);
-    		
-    		switch (getAcceleratorType(accelerator)) {
-    		case AcceleratorMap.PRIMARY_ACCELERATOR:
-    			registerActionAccelerators(prevAcceleratorActionId, null, getAlternateAccelerator(prevAcceleratorActionId));
-    			break;
-    		case AcceleratorMap.ALTERNATIVE_ACCELERATOR:
-    			registerActionAccelerators(prevAcceleratorActionId, getAccelerator(prevAcceleratorActionId), null);
-    			break;
-    		}
-    	}
+    	// If primary accelerator is already registered to other MuAction, unregister it.
+    	String previousActionForAccelerator = getRegisteredActionIdForKeystroke(accelerator);
+    	if (previousActionForAccelerator != null && !previousActionForAccelerator.equals(actionId))
+    		unregisterAcceleratorFromAction(previousActionForAccelerator, accelerator);
     	
-    	// If alternative accelerator is already registered to MuAction, unregister it.
-    	if (isKeyStrokeRegistered(alternateAccelerator)) {
-    		String prevAltAcceleratorActionId = getRegisteredActionIdForKeystroke(alternateAccelerator);
-    		
-    		switch (getAcceleratorType(alternateAccelerator)) {
-    		case AcceleratorMap.PRIMARY_ACCELERATOR:
-    			registerActionAccelerators(prevAltAcceleratorActionId, null, getAlternateAccelerator(prevAltAcceleratorActionId));
-    			break;
-    		case AcceleratorMap.ALTERNATIVE_ACCELERATOR:
-    			registerActionAccelerators(prevAltAcceleratorActionId, getAccelerator(prevAltAcceleratorActionId), null);
-    			break;
-    		}
-    	}
+    	// If alternative accelerator is already registered to other MuAction, unregister it.
+    	String previousActionForAlternativeAccelerator = getRegisteredActionIdForKeystroke(alternateAccelerator);
+    	if (previousActionForAlternativeAccelerator != null && !previousActionForAlternativeAccelerator.equals(alternateAccelerator))
+    		unregisterAcceleratorFromAction(previousActionForAlternativeAccelerator, alternateAccelerator);
     	
     	// Remove action's previous accelerators (primary and alternate)
     	acceleratorMap.remove((KeyStroke)customPrimaryActionKeymap.remove(actionId));
@@ -116,6 +98,17 @@ public class ActionKeymap {
 
     	// Register new accelerators
     	registerActionAccelerators(actionId, accelerator, alternateAccelerator);
+    }
+    
+    private static void unregisterAcceleratorFromAction(String actionId, KeyStroke accelerator) {
+    	switch (getAcceleratorType(accelerator)) {
+		case AcceleratorMap.PRIMARY_ACCELERATOR:
+			registerActionAccelerators(actionId, null, getAlternateAccelerator(actionId));
+			break;
+		case AcceleratorMap.ALTERNATIVE_ACCELERATOR:
+			registerActionAccelerators(actionId, getAccelerator(actionId), null);
+			break;
+		}
     }
     
     /**
@@ -146,6 +139,16 @@ public class ActionKeymap {
      */
     public static boolean isKeyStrokeRegistered(KeyStroke ks) {
     	return getRegisteredActionIdForKeystroke(ks)!=null;
+    }
+    
+    /**
+     * Check whether the action has accelerator assigned to it.
+     * 
+     * @param actionId - id of MuAction.
+     * @return true if there is a shortcut which is assigned to the action, false otherwise.
+     */
+    public static boolean doesActionHaveShortcut(String actionId) {
+    	return getAccelerator(actionId) != null;
     }
     
     /**
@@ -202,7 +205,7 @@ public class ActionKeymap {
      * @param ks - accelerator.
      * @return accelerator type.
      */
-    public static int getAcceleratorType(KeyStroke ks) {
+    private static int getAcceleratorType(KeyStroke ks) {
     	int type = acceleratorMap.getAcceleratorType(ks);
     	return type != 0 ? type : ActionProperties.getDefaultAcceleratorType(ks);
     }
