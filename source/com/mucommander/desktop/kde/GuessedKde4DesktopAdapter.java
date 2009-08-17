@@ -52,7 +52,7 @@ public class GuessedKde4DesktopAdapter extends Kde4DesktopAdapter {
 
     public boolean isAvailable() {
         try {
-            ProcessRunner.execute("kioclient");
+            ProcessRunner.execute(BASE_COMMAND);
             return true;
         }
         catch(Exception e) {
