@@ -58,7 +58,11 @@ class TextEditor extends FileEditor implements DocumentListener {
         try {
             out = destFile.getOutputStream(false);
             textEditorImpl.write(out);
+
             setSaveNeeded(false);
+
+            // Change the parent folder's date to now, so that changes are picked up by folder auto-refresh (see ticket #258)
+            destFile.getParent().changeDate(System.currentTimeMillis());
         }
         finally {
             if(out != null) {
@@ -67,7 +71,6 @@ class TextEditor extends FileEditor implements DocumentListener {
                     // Ignored
                 }
             }
-
         }
     }
 
