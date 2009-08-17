@@ -67,7 +67,6 @@ import com.mucommander.ui.list.DynamicHorizontalWrapList;
 import com.mucommander.ui.list.DynamicList;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.commandbar.CommandBarAttributes;
-import com.mucommander.ui.main.commandbar.CommandBarButton;
 import com.mucommander.ui.main.commandbar.CommandBarButtonForDisplay;
 import com.mucommander.ui.text.RecordingKeyStrokeTextField;
 import com.mucommander.util.AlteredVector;
@@ -270,6 +269,7 @@ public class CommandBarDialog extends CustomizeDialog {
 					if (cellLocation.x + CommandBarButtonForDisplay.PREFERRED_SIZE.width / 2 < dropLocation.x)
 						index++;
 
+					index += transferedButtonProperties.getSource() == COMMAND_BAR_BUTTONS_LIST_ID && index > transferedButtonProperties.getIndex() ? -1 : 0;
 					commandBarButtons.add(index, transferedButton);
 					commandBarAlternativeButtons.add(index, transferedButtonProperties.getSource() == COMMAND_BAR_BUTTONS_LIST_ID ?
 																commandBarAlternativeButtons.remove(transferedButtonProperties.getIndex()) :
