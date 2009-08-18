@@ -4642,10 +4642,6 @@ Unpack.tooltip:SV:Extrahera markerade filarkiv
 Unpack.tooltip:DA:Udpak markerede filarkiver
 Unpack.tooltip:UA:Розпакувати відмічені файли-архіви
 
-CustomizeCommandBar.label:EN:Customize
-
-CustomizeCommandBar.tooltip:EN:Customize command-bar
-
 ShowFileProperties.label:EN:Properties
 ShowFileProperties.label:FR:Propriétés
 ShowFileProperties.label:DE:Eigenschaften
@@ -4979,6 +4975,26 @@ ToggleToolBar.hide:JA:ツール バーを非表示にする
 ToggleToolBar.hide:SV:Dölj vertygsfältet
 ToggleToolBar.hide:DA:Skjul værktøjslinie
 ToggleToolBar.hide:UA:Сховати панель інструментів
+
+CustomizeCommandBar.label:EN:Customize command bar
+CustomizeCommandBar.label:FR:Personnaliser la barre de commande
+# Translation missing (New!)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ToggleStatusBar.show:EN:Show status bar
 ToggleStatusBar.show:FR:Afficher la barre de status
@@ -11653,13 +11669,39 @@ theme_editor.item:FR:Élément
 # Command-bar customization dialog #
 #####################################
 
-command_bar_customize_dialog.title:EN:Command Bar Customizing
-
 command_bar_customize_dialog.available_actions:EN:Available Actions
+command_bar_customize_dialog.available_actions:FR:Actions disponibles
+# Translation missing (New!)
 
-command_bar_customize_dialog.command_bar:EN:Command Bar
+
+
+
+
+
+
+
+
+
+
+
 
 command_bar_customize_dialog.modifier:EN:Modifier
+command_bar_customize_dialog.modifier:FR:Modificateur
+# Translation missing (New!)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 ######################

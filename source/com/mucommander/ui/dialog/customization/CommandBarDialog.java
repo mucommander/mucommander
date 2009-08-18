@@ -18,13 +18,24 @@
 
 package com.mucommander.ui.dialog.customization;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.GridLayout;
-import java.awt.Point;
+import com.mucommander.AppLogger;
+import com.mucommander.text.Translator;
+import com.mucommander.ui.action.ActionManager;
+import com.mucommander.ui.action.ActionProperties;
+import com.mucommander.ui.action.impl.CustomizeCommandBarAction;
+import com.mucommander.ui.layout.YBoxPanel;
+import com.mucommander.ui.list.DynamicHorizontalWrapList;
+import com.mucommander.ui.list.DynamicList;
+import com.mucommander.ui.main.MainFrame;
+import com.mucommander.ui.main.commandbar.CommandBarAttributes;
+import com.mucommander.ui.main.commandbar.CommandBarButtonForDisplay;
+import com.mucommander.ui.text.RecordingKeyStrokeTextField;
+import com.mucommander.util.AlteredVector;
+
+import javax.swing.*;
+import javax.swing.Box.Filler;
+import javax.swing.border.Border;
+import java.awt.*;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
@@ -34,42 +45,8 @@ import java.awt.dnd.DropTargetEvent;
 import java.awt.dnd.DropTargetListener;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.Iterator;
+import java.util.*;
 import java.util.List;
-import java.util.Set;
-import java.util.TooManyListenersException;
-import java.util.Vector;
-
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.ListCellRenderer;
-import javax.swing.ListSelectionModel;
-import javax.swing.TransferHandler;
-import javax.swing.UIManager;
-import javax.swing.Box.Filler;
-import javax.swing.border.Border;
-
-import com.mucommander.AppLogger;
-import com.mucommander.text.Translator;
-import com.mucommander.ui.action.ActionManager;
-import com.mucommander.ui.layout.YBoxPanel;
-import com.mucommander.ui.list.DynamicHorizontalWrapList;
-import com.mucommander.ui.list.DynamicList;
-import com.mucommander.ui.main.MainFrame;
-import com.mucommander.ui.main.commandbar.CommandBarAttributes;
-import com.mucommander.ui.main.commandbar.CommandBarButtonForDisplay;
-import com.mucommander.ui.text.RecordingKeyStrokeTextField;
-import com.mucommander.util.AlteredVector;
 
 /**
  * Dialog used to customize the command-bar.
@@ -122,7 +99,7 @@ public class CommandBarDialog extends CustomizeDialog {
 	private boolean canImport = false;
 	
 	public CommandBarDialog(MainFrame mainFrame) {
-		super(mainFrame, Translator.get("command_bar_customize_dialog.title"));
+		super(mainFrame, ActionProperties.getActionLabel(CustomizeCommandBarAction.Descriptor.ACTION_ID));
 	}
 	
     protected void componentChanged() {
@@ -388,7 +365,7 @@ public class CommandBarDialog extends CustomizeDialog {
 	
 	protected JPanel createCommandBarPanel() {
 		YBoxPanel panel = new YBoxPanel();
-		panel.setBorder(BorderFactory.createTitledBorder(Translator.get("command_bar_customize_dialog.command_bar")));
+		panel.setBorder(BorderFactory.createTitledBorder(Translator.get("preview")));
 		
 		panel.add(Box.createRigidArea(new Dimension(0, 5)));
 		
