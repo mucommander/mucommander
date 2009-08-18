@@ -157,11 +157,13 @@ public class FolderChangeMonitor implements Runnable, WindowListener, LocationLi
                 // - monitor is not paused
                 // - current folder is not being changed
                 if(monitor.folderPanel.getMainFrame().isForegroundActive() && !folderChanging && !monitor.paused) {
-                    if(System.currentTimeMillis()-monitor.lastCheckTimestamp>monitor.waitBeforeCheckTime) {
+                    // By checking FolderPanel.getLastFolderChangeTime(), we ensure that we don't check right after
+                    // the folder has been refreshed.
+                    if(System.currentTimeMillis()-Math.max(monitor.lastCheckTimestamp, monitor.folderPanel.getLastFolderChangeTime())>monitor.waitBeforeCheckTime) {
                         // Checks folder contents and refreshes view if necessary
                         folderRefreshed = monitor.checkAndRefresh();
                         monitor.lastCheckTimestamp = System.currentTimeMillis();
-	
+
                         // If folder change check took an average of N milliseconds, we will wait at least N*WAIT_MULTIPLIER before next check
                         monitor.waitBeforeCheckTime = monitor.nbSamples==0?
                             checkPeriod
@@ -191,16 +193,17 @@ public class FolderChangeMonitor implements Runnable, WindowListener, LocationLi
         // checked/refreshed
         this.paused = paused;
 
-        // Check folder for changes immediately as
-        // setPaused(true) is often called after a FileJob
-        if(paused)
+        // Check folder for changes immediately as setPaused(false) is often called after a FileJob
+        if(!paused)
             this.waitBeforeCheckTime = 0;
     }
 	
 	
     /**
-     * Forces this monitor to update current folder information. This method
-     * should be called when a folder has been manually refreshed, so that this monitor doesn't detect changes and try to refresh the table again.
+     * Forces this monitor to update current folder information. This method should be called when a folder has been
+     * manually refreshed, so that this monitor doesn't detect changes and try to refresh the table again.
+     *
+     * @param folder the new current folder
      */
     private void updateFolderInfo(AbstractFile folder) {
         this.currentFolder = folder;
@@ -218,7 +221,7 @@ public class FolderChangeMonitor implements Runnable, WindowListener, LocationLi
     private synchronized boolean checkAndRefresh() {
         if(paused)
             return false;
-		
+
         AbstractFile folder;
         long date;
         long timeStamp;

@@ -79,6 +79,7 @@ public class FolderPanel extends JPanel implements FocusListener, ThemeListener 
     private AbstractFile currentFolder;
     private ChangeFolderThread changeFolderThread;
 
+    private long lastFolderChangeTime;
     private FolderChangeMonitor folderChangeMonitor;
 
     private LocationManager locationManager = new LocationManager(this);
@@ -638,6 +639,10 @@ public class FolderPanel extends JPanel implements FocusListener, ThemeListener 
      * @param fileToSelect file to be selected after the folder has been refreshed (if it exists in the folder), can be null in which case FileTable rules will be used to select current file
      */
     private void setCurrentFolder(AbstractFile folder, AbstractFile children[], AbstractFile fileToSelect) {
+        // Update the timestamp right before the folder is set in case FolderChangeMonitor checks the timestamp
+        // while FileTable#setCurrentFolder is being called. 
+        lastFolderChangeTime = System.currentTimeMillis();
+
         // Change the current folder in the table and select the given file if not null
         if(fileToSelect == null)
             fileTable.setCurrentFolder(folder, children);
@@ -664,6 +669,14 @@ public class FolderPanel extends JPanel implements FocusListener, ThemeListener 
         return changeFolderThread!=null;
     }
 
+    /**
+     * Returns the time at which the last folder change completed successfully.
+     *
+     * @return the time at which the last folder change completed successfully.
+     */
+    public long getLastFolderChangeTime() {
+        return lastFolderChangeTime;
+    }
 
     /**
      * Returns the thread that is currently changing the current folder, <code>null</code> is the folder is not being
