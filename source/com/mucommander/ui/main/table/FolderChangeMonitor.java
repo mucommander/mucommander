@@ -94,8 +94,7 @@ public class FolderChangeMonitor implements Runnable, WindowListener, LocationLi
 
     /** Granularity of the thread check (number of milliseconds to sleep before next loop) */
     private final static int TICK = 300;
-	
-	
+
     static {
         instances = new Vector();
 
@@ -135,6 +134,8 @@ public class FolderChangeMonitor implements Runnable, WindowListener, LocationLi
 
 	
     public void run() {
+        // TODO: it would be more efficient to use a wait/notify scheme rather than sleeping. 
+        // It would also allow folders to be checked immediately upon certain conditions such as a window becoming activated.
 
         int nbInstances;
         FolderChangeMonitor monitor;
