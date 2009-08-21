@@ -192,11 +192,33 @@ public class ActionManager {
     	registerAction(new UnpackAction.Descriptor(),             			new UnpackAction.Factory());
     	registerAction(new ViewAction.Descriptor(),              			new ViewAction.Factory());
     }
+
+    /**
+     * Registration method for MuActions.
+     * 
+     * @param actionDescriptor - ActionDescriptor instance of the action.
+     * @param actionFactory - ActionFactory instance of the action.
+     */
+    public static void registerAction(ActionDescriptor actionDescriptor, ActionFactory actionFactory) {
+    	actionFactories.put(actionDescriptor.getId(), actionFactory);
+    	ActionProperties.addActionDescriptor(actionDescriptor);
+    }
     
+    /**
+     * Return all ids of the registered actions.
+     * 
+     * @return Enumeration of all registered actions' ids.
+     */
     public static Enumeration getActionIds() {
     	return actionFactories.keys();
     }
     
+    /**
+     * Return the id of MuAction in a given path.
+     * 
+     * @param actionClassPath - path to MuAction class.
+     * @return String representing the id of the MuAction in the specified path. null is returned if the given path is invalid.
+     */
     public static String extrapolateId(String actionClassPath) {
     	if (actionClassPath == null) return null;
     	Matcher matcher = pattern.matcher(actionClassPath);
@@ -206,45 +228,10 @@ public class ActionManager {
     }
     
     /**
-     * This method is used to fetch all the action classes sorted by their labels.
+     * Checks whether an MuAction is registered.
      * 
-     * @return sorted list of the action classes.
-     */
-    public static List getSortedActionIds() {
-    	// Convert the action-classes to MuAction instances
-		List list = Collections.list(actionFactories.keys());
-		
-		/*// Sort actions by their labels
-		Collections.sort(list, new Comparator() {
-			public int compare(Object o1, Object o2) {
-				// TODO: remove actions without a standard label?
-				if (MuAction.getStandardLabel((Class) o1) == null)
-					return 1;
-				if (MuAction.getStandardLabel((Class) o2) == null)
-					return -1;
-				return MuAction.getStandardLabel((Class) o1).compareTo(MuAction.getStandardLabel((Class) o2));
-			}
-		});*/
-		
-		return list;
-    }
-    
-    /**
-     * TODO: document
-     * 
-     * @param actionDescriptor
-     * @param actionFactory
-     */
-    public static void registerAction(ActionDescriptor actionDescriptor, ActionFactory actionFactory) {
-    	actionFactories.put(actionDescriptor.getId(), actionFactory);
-    	ActionProperties.addActionDescriptor(actionDescriptor);
-    }
-    
-    /**
-     * TODO: document
-     * 
-     * @param actionId
-     * @return
+     * @param actionId - id of MuAction.
+     * @return true if an MuAction which is represented by the given id is registered, otherwise return false.
      */
     public static boolean isActionExist(String actionId) {    	
     	return actionId != null ? actionFactories.containsKey(actionId) : false;
@@ -430,7 +417,7 @@ public class ActionManager {
     }
     
     /**
-     *  TODO: document
+     *  Helper class to represent a pair of instance and id of MuAction.
      */
     private static class ActionAndIdPair {
     	private MuAction action;

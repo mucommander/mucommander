@@ -18,9 +18,8 @@
 
 package com.mucommander.ui.action;
 
-
 /**
- * TODO: document
+ * This class contains instances of MuAction's categories.
  * 
  * @author Arik Hadas
  */
