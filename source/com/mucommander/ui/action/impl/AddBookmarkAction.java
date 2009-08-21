@@ -58,7 +58,7 @@ public class AddBookmarkAction extends MuAction implements InvokesDialog {
     	
 		public String getId() {	return ACTION_ID; }
 
-		public ActionCategory getCategory() { return ActionCategories.NEVIGATION; }
+		public ActionCategory getCategory() { return ActionCategories.NAVIGATION; }
 
 		public KeyStroke getDefaultAltKeyStroke() { return null; }
 

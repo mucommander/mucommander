@@ -58,7 +58,7 @@ public class ShowRecentLocationsQLAction extends ShowQuickListAction {
 		
 		public String getId() { return ACTION_ID; }
 
-		public ActionCategory getCategory() { return ActionCategories.NEVIGATION; }
+		public ActionCategory getCategory() { return ActionCategories.NAVIGATION; }
 
 		public KeyStroke getDefaultAltKeyStroke() { return null; }
 
