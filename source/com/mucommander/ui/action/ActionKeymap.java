@@ -77,6 +77,8 @@ public class ActionKeymap {
     /**
      * Register new accelerators to the given action.
      * 
+     * Note: if accelerator is null, it would be replaced by alternateAccelerator.
+     * 
      * @param actionId - id of the MuAction.
      * @param accelerator - KeyStroke that would be primary accelerator of the given action.
      * @param alternateAccelerator - KeyStroke that would be alternative accelerator of the given action.
@@ -195,8 +197,8 @@ public class ActionKeymap {
      * @return id of MuAction to which the given accelerator is registered, null if the accelerator is not registered.
      */
     public static String getRegisteredActionIdForKeystroke(KeyStroke ks) {
-    	String actionID = acceleratorMap.getActionId(ks);
-        return actionID != null ? actionID : ActionProperties.getDefaultActionForKeyStroke(ks);
+    	String actionId = acceleratorMap.getActionId(ks);
+        return actionId != null ? actionId : ActionProperties.getDefaultActionForKeyStroke(ks);
     }
     
     /**
@@ -281,6 +283,12 @@ public class ActionKeymap {
      * Register primary and alternative accelerators to MuAction.
      */
     private static void registerActionAccelerators(String actionId, KeyStroke accelerator, KeyStroke alternateAccelerator) {
+    	// If accelerator is null, replace it with alternateAccelerator
+    	if (accelerator == null) {
+    		accelerator = alternateAccelerator;
+    		alternateAccelerator = null;
+    	}
+    	
     	// New accelerators are identical to the default action's accelerators
     	if (equals(accelerator, ActionProperties.getDefaultAccelerator(actionId)) &&
     			equals(alternateAccelerator, ActionProperties.getDefaultAlternativeAccelerator(actionId))) {

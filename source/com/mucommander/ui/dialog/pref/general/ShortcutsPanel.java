@@ -41,7 +41,6 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 
 import com.mucommander.ui.action.ActionCategory;
-import com.mucommander.ui.action.ActionKeymap;
 import com.mucommander.ui.action.ActionKeymapIO;
 import com.mucommander.ui.action.ActionProperties;
 import com.mucommander.ui.dialog.pref.PreferencesDialog;

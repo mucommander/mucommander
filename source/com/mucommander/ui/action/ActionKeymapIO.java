@@ -18,16 +18,16 @@
 
 package com.mucommander.ui.action;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
+import org.xml.sax.helpers.DefaultHandler;
+
 import com.mucommander.AppLogger;
 import com.mucommander.PlatformManager;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
-import com.mucommander.file.util.ResourceLoader;
-import org.xml.sax.helpers.DefaultHandler;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 
 /**
  * This class contains the common things to the actions reading and writing.

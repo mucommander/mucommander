@@ -18,19 +18,21 @@
 
 package com.mucommander.ui.action;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.HashMap;
+
+import javax.swing.KeyStroke;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParserFactory;
+
+import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
+
 import com.mucommander.AppLogger;
 import com.mucommander.RuntimeConstants;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.io.BackupInputStream;
-import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
-
-import javax.swing.*;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParserFactory;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.HashMap;
 
 /**
  * This class is responsible for reading the actions.
@@ -80,45 +82,62 @@ class ActionKeymapReader extends ActionKeymapIO {
     }
 	
     /**
-     * Parses the keystroke defined in the given attribute map (if any) and associates it with the given action class.
+     * Parses the keystrokes defined in the given attribute map (if any) and associates them with the given action id.
      * The keystroke will not be associated in any of the following cases:
      * <ul>
-     *  <li>the keystroke attribute does not contain any value.</li>
-     *  <li>the keystroke attribute has a value that does not represent a valid KeyStroke (syntax error).</li>
-     *  <li>the keystroke is already associated with an action class. In this case, the existing association is preserved.</li>
+     *  <li>the keystrokes attributes do not contain any value.</li>
+     *  <li>the keystrokes attributes have values that do not represent a valid KeyStroke (syntax error).</li>
      * </ul>
+     * If a given keystroke is already associated to an action, the existing association is replaced. 
+     * If there is a valid alternative keystroke defined but there is no valid primary keystroke defined, the primary keystroke 
+     * is replaced by the alternative keystroke.
      *
      * @param actionId the action id to associate the keystroke with
      * @param attributes the attributes map that holds the value
      */
     private void processKeystrokeAttribute(String actionId, Attributes attributes) {    	
     	String keyStrokeString;
-
-    	// Parse the primary keystroke and retrieve the corresponding KeyStroke instance
-    	keyStrokeString = attributes.getValue(PRIMARY_KEYSTROKE_ATTRIBUTE);
+    	KeyStroke alternateKeyStroke = null;
     	KeyStroke primaryKeyStroke = null;
     	
-    	if(keyStrokeString!=null) {
-    		if ((primaryKeyStroke = KeyStroke.getKeyStroke(keyStrokeString)) == null)
-    			AppLogger.warning("action keymap file contains a keystroke which could not be resolved: "+keyStrokeString);
+    	// Parse the primary keystroke and retrieve the corresponding KeyStroke instance
+    	keyStrokeString = attributes.getValue(PRIMARY_KEYSTROKE_ATTRIBUTE);
+    	
+    	if (keyStrokeString != null) {
+    		primaryKeyStroke = KeyStroke.getKeyStroke(keyStrokeString);
+    		if (primaryKeyStroke == null)
+    			AppLogger.info("Action keymap file contains a keystroke which could not be resolved: " + keyStrokeString);
     		else if (ActionKeymap.isKeyStrokeRegistered(primaryKeyStroke))
-    			AppLogger.warning("action keymap file contains multiple associations for keystroke: "+keyStrokeString+" canceling mapping to "+actionId);
+    			AppLogger.fine("Canceling previous association of keystroke " + keyStrokeString + ", reassign it to action: " + actionId);
     	}
 
     	// Parse the alternate keystroke and retrieve the corresponding KeyStroke instance
     	keyStrokeString = attributes.getValue(ALTERNATE_KEYSTROKE_ATTRIBUTE);
-    	KeyStroke alternateKeyStroke = null;
     	
-    	// and return if the attribute's value is invalid.
-    	if(keyStrokeString!=null) {
-    		if ((alternateKeyStroke = KeyStroke.getKeyStroke(keyStrokeString)) == null)
-    			AppLogger.warning("action keymap file contains a keystroke which could not be resolved: "+keyStrokeString);
+    	if (keyStrokeString != null) {
+    		alternateKeyStroke = KeyStroke.getKeyStroke(keyStrokeString);
+    		if (alternateKeyStroke == null)
+    			AppLogger.info("Action keymap file contains a keystroke which could not be resolved: " + keyStrokeString);
     		else if (ActionKeymap.isKeyStrokeRegistered(alternateKeyStroke))
-    			AppLogger.warning("action keymap file contains multiple associations for keystroke: "+keyStrokeString+" canceling mapping to "+actionId);
+    			AppLogger.fine("Canceling previous association of keystroke " + keyStrokeString + ", reassign it to action: " + actionId);
     	}
 
-    	primaryActionsReadKeymap.put(actionId, primaryKeyStroke);
-    	alternateActionsReadKeymap.put(actionId, alternateKeyStroke);
+    	// If either primary shortcut or alternative shortcut is defined for the action, save them
+    	if (primaryKeyStroke != null || alternateKeyStroke != null) {
+    		// If there is no primary shortcut defined for the action but there is an alternative shortcut defined,
+    		// turn the alternative shortcut to the action's primary shortcut
+    		if (primaryKeyStroke == null) {
+    			AppLogger.fine("Action \"" + actionId +"\" has an alternative shortcut with no primary shortcut, so the alternative shortcut become primary");
+    			primaryActionsReadKeymap.put(actionId, alternateKeyStroke);
+    			alternateActionsReadKeymap.put(actionId, null);
+    			// Mark that the actions keymap file should be updated
+    			setModified();
+    		}
+    		else {
+    			primaryActionsReadKeymap.put(actionId, primaryKeyStroke);
+    			alternateActionsReadKeymap.put(actionId, alternateKeyStroke);    		
+    		}
+    	}
     }
 
     ///////////////////
@@ -172,7 +191,7 @@ class ActionKeymapReader extends ActionKeymapIO {
     		// Note: early 0.8 beta3 nightly builds did not have version attribute, so the attribute may be null
     		fileVersion = attributes.getValue(VERSION_ATTRIBUTE);
     		
-    		// if it's the user's customization file and its version is not up-to-date,
+    		// if the file's version is not up-to-date,
     		// update the file to the current version at quitting.
     		if (!isResourceFile && !RuntimeConstants.VERSION.equals(fileVersion))
     			setModified();
