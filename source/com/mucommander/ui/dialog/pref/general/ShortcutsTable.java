@@ -749,9 +749,7 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 						customized = false;
 					}
 
-					label.setForeground(customized ?
-							ThemeCache.foregroundColors[ThemeCache.ACTIVE][ThemeCache.NORMAL][ThemeCache.SYMLINK]
-							: ThemeCache.foregroundColors[ThemeCache.ACTIVE][ThemeCache.NORMAL][ThemeCache.PLAIN_FILE]);
+					label.setForeground(ThemeCache.foregroundColors[ThemeCache.ACTIVE][ThemeCache.NORMAL][customized ? ThemeCache.PLAIN_FILE : ThemeCache.HIDDEN_FILE]);
 				}
 			}
 			
