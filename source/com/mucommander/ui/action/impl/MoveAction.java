@@ -18,13 +18,19 @@
 
 package com.mucommander.ui.action.impl;
 
+import java.awt.event.KeyEvent;
+import java.util.Hashtable;
+
+import javax.swing.KeyStroke;
+
 import com.mucommander.file.util.FileSet;
-import com.mucommander.ui.action.*;
+import com.mucommander.ui.action.AbstractActionDescriptor;
+import com.mucommander.ui.action.ActionCategories;
+import com.mucommander.ui.action.ActionCategory;
+import com.mucommander.ui.action.ActionFactory;
+import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.dialog.file.MoveDialog;
 import com.mucommander.ui.main.MainFrame;
-
-import javax.swing.*;
-import java.util.Hashtable;
 
 /**
  * This action invokes the 'Move dialog' which allows to move the currently selected/marked files
@@ -63,6 +69,6 @@ public class MoveAction extends SelectedFilesAction {
 
 		public KeyStroke getDefaultAltKeyStroke() { return null; }
 
-		public KeyStroke getDefaultKeyStroke() { return KeyStroke.getKeyStroke("F6"); }
+		public KeyStroke getDefaultKeyStroke() { return KeyStroke.getKeyStroke(KeyEvent.VK_F6, 0); }
     }
 }

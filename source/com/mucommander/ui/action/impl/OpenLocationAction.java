@@ -18,6 +18,8 @@
 
 package com.mucommander.ui.action.impl;
 
+import java.util.Hashtable;
+
 import com.mucommander.bonjour.BonjourService;
 import com.mucommander.bookmark.Bookmark;
 import com.mucommander.file.AbstractFile;
@@ -26,8 +28,6 @@ import com.mucommander.file.FileURL;
 import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.main.MainFrame;
-
-import java.util.Hashtable;
 
 /**
  * This action opens a specified location in the current active FileTable. The location can be designated by either a

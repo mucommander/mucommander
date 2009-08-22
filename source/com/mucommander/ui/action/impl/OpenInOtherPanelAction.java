@@ -18,18 +18,19 @@
 
 package com.mucommander.ui.action.impl;
 
+import java.awt.event.KeyEvent;
+import java.util.Hashtable;
+
+import javax.swing.KeyStroke;
+
 import com.mucommander.file.AbstractFile;
 import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategories;
 import com.mucommander.ui.action.ActionCategory;
-import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.action.ActionFactory;
+import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.table.FileTable;
-
-import java.util.Hashtable;
-
-import javax.swing.KeyStroke;
 
 /**
  * Opens browsable files in the inactive panel.
@@ -88,6 +89,6 @@ public class OpenInOtherPanelAction extends SelectedFileAction {
 
 		public KeyStroke getDefaultAltKeyStroke() { return null; }
 
-		public KeyStroke getDefaultKeyStroke() { return KeyStroke.getKeyStroke("control ENTERS"); }
+		public KeyStroke getDefaultKeyStroke() { return KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, KeyEvent.CTRL_DOWN_MASK); }
     }
 }

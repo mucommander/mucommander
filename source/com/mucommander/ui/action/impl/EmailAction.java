@@ -18,13 +18,20 @@
 
 package com.mucommander.ui.action.impl;
 
+import java.awt.event.KeyEvent;
+import java.util.Hashtable;
+
+import javax.swing.KeyStroke;
+
 import com.mucommander.file.util.FileSet;
-import com.mucommander.ui.action.*;
+import com.mucommander.ui.action.AbstractActionDescriptor;
+import com.mucommander.ui.action.ActionCategories;
+import com.mucommander.ui.action.ActionCategory;
+import com.mucommander.ui.action.ActionFactory;
+import com.mucommander.ui.action.InvokesDialog;
+import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.dialog.file.EmailFilesDialog;
 import com.mucommander.ui.main.MainFrame;
-
-import javax.swing.*;
-import java.util.Hashtable;
 
 /**
  * This action pops up the 'Email files' dialog that allows to email the currently marked files as attachment.
@@ -59,6 +66,6 @@ public class EmailAction extends SelectedFilesAction implements InvokesDialog {
 
 		public KeyStroke getDefaultAltKeyStroke() { return null; }
 
-		public KeyStroke getDefaultKeyStroke() { return KeyStroke.getKeyStroke("control S"); }
+		public KeyStroke getDefaultKeyStroke() { return KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_DOWN_MASK); }
     }
 }

@@ -18,6 +18,11 @@
 
 package com.mucommander.ui.action.impl;
 
+import java.awt.event.KeyEvent;
+import java.util.Hashtable;
+
+import javax.swing.KeyStroke;
+
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.util.FileSet;
 import com.mucommander.job.CopyJob;
@@ -27,17 +32,13 @@ import com.mucommander.text.Translator;
 import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategories;
 import com.mucommander.ui.action.ActionCategory;
-import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.action.ActionFactory;
+import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.dialog.file.FileCollisionDialog;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.dnd.ClipboardNotifier;
 import com.mucommander.ui.dnd.ClipboardSupport;
 import com.mucommander.ui.main.MainFrame;
-
-import java.util.Hashtable;
-
-import javax.swing.KeyStroke;
 
 /**
  * This action pastes the files contained by the system clipboard to the currently active folder.
@@ -86,8 +87,8 @@ public class PasteClipboardFilesAction extends MuAction {
 
 		public ActionCategory getCategory() { return ActionCategories.SELECTION; }
 
-		public KeyStroke getDefaultAltKeyStroke() { return KeyStroke.getKeyStroke("meta V"); }
+		public KeyStroke getDefaultAltKeyStroke() { return KeyStroke.getKeyStroke(KeyEvent.VK_V, KeyEvent.META_DOWN_MASK); }
 
-		public KeyStroke getDefaultKeyStroke() { return KeyStroke.getKeyStroke("control V"); }
+		public KeyStroke getDefaultKeyStroke() { return KeyStroke.getKeyStroke(KeyEvent.VK_V, KeyEvent.CTRL_DOWN_MASK); }
     }
 }

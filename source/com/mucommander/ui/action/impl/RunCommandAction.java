@@ -18,18 +18,19 @@
 
 package com.mucommander.ui.action.impl;
 
-import com.mucommander.ui.action.AbstractActionDescriptor;
-import com.mucommander.ui.action.ActionCategories;
-import com.mucommander.ui.action.ActionCategory;
-import com.mucommander.ui.action.InvokesDialog;
-import com.mucommander.ui.action.MuAction;
-import com.mucommander.ui.action.ActionFactory;
-import com.mucommander.ui.dialog.shell.RunDialog;
-import com.mucommander.ui.main.MainFrame;
-
+import java.awt.event.KeyEvent;
 import java.util.Hashtable;
 
 import javax.swing.KeyStroke;
+
+import com.mucommander.ui.action.AbstractActionDescriptor;
+import com.mucommander.ui.action.ActionCategories;
+import com.mucommander.ui.action.ActionCategory;
+import com.mucommander.ui.action.ActionFactory;
+import com.mucommander.ui.action.InvokesDialog;
+import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.dialog.shell.RunDialog;
+import com.mucommander.ui.main.MainFrame;
 
 /**
  * This action pops up the 'Run command' dialog that is used to execute a shell command.
@@ -62,6 +63,6 @@ public class RunCommandAction extends MuAction implements InvokesDialog {
 
 		public KeyStroke getDefaultAltKeyStroke() { return null; }
 
-		public KeyStroke getDefaultKeyStroke() { return KeyStroke.getKeyStroke("control R"); }
+		public KeyStroke getDefaultKeyStroke() { return KeyStroke.getKeyStroke(KeyEvent.VK_R, KeyEvent.CTRL_DOWN_MASK); }
     }
 }

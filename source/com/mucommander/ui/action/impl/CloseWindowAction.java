@@ -18,18 +18,19 @@
 
 package com.mucommander.ui.action.impl;
 
-import com.mucommander.ui.action.AbstractActionDescriptor;
-import com.mucommander.ui.action.ActionCategories;
-import com.mucommander.ui.action.ActionCategory;
-import com.mucommander.ui.action.ActionManager;
-import com.mucommander.ui.action.MuAction;
-import com.mucommander.ui.action.ActionFactory;
-import com.mucommander.ui.main.MainFrame;
-import com.mucommander.ui.main.WindowManager;
-
+import java.awt.event.KeyEvent;
 import java.util.Hashtable;
 
 import javax.swing.KeyStroke;
+
+import com.mucommander.ui.action.AbstractActionDescriptor;
+import com.mucommander.ui.action.ActionCategories;
+import com.mucommander.ui.action.ActionCategory;
+import com.mucommander.ui.action.ActionFactory;
+import com.mucommander.ui.action.ActionManager;
+import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.main.MainFrame;
+import com.mucommander.ui.main.WindowManager;
 
 /**
  * If there is more than one window currently open, this action disposes the currently active MainFrame
@@ -68,8 +69,8 @@ public class CloseWindowAction extends MuAction {
 
 		public ActionCategory getCategory() { return ActionCategories.WINDOW; }
 
-		public KeyStroke getDefaultAltKeyStroke() { return KeyStroke.getKeyStroke("meta W"); }
+		public KeyStroke getDefaultAltKeyStroke() { return KeyStroke.getKeyStroke(KeyEvent.VK_W, KeyEvent.META_DOWN_MASK); }
 
-		public KeyStroke getDefaultKeyStroke() { return KeyStroke.getKeyStroke("F10"); }
+		public KeyStroke getDefaultKeyStroke() { return KeyStroke.getKeyStroke(KeyEvent.VK_F10, 0); }
     }
 }

@@ -18,13 +18,19 @@
 
 package com.mucommander.ui.action.impl;
 
+import java.awt.event.KeyEvent;
+import java.util.Hashtable;
+
+import javax.swing.KeyStroke;
+
 import com.mucommander.file.util.FileSet;
-import com.mucommander.ui.action.*;
+import com.mucommander.ui.action.AbstractActionDescriptor;
+import com.mucommander.ui.action.ActionCategories;
+import com.mucommander.ui.action.ActionCategory;
+import com.mucommander.ui.action.ActionFactory;
+import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.dialog.file.DeleteDialog;
 import com.mucommander.ui.main.MainFrame;
-
-import javax.swing.*;
-import java.util.Hashtable;
 
 /**
  * This action invokes a Delete confirmation dialog to delete the currently selected / marked files in the currently
@@ -61,8 +67,8 @@ public class PermanentDeleteAction extends SelectedFilesAction {
 
 		public ActionCategory getCategory() { return ActionCategories.FILES; }
 
-		public KeyStroke getDefaultAltKeyStroke() { return KeyStroke.getKeyStroke("shift DELETE"); }
+		public KeyStroke getDefaultAltKeyStroke() { return KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, KeyEvent.SHIFT_DOWN_MASK); }
 
-		public KeyStroke getDefaultKeyStroke() { return KeyStroke.getKeyStroke("shift F8"); }
+		public KeyStroke getDefaultKeyStroke() { return KeyStroke.getKeyStroke(KeyEvent.VK_F8, KeyEvent.SHIFT_DOWN_MASK); }
     }
 }

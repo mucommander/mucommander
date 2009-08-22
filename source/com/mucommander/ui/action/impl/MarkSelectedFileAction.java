@@ -18,16 +18,17 @@
 
 package com.mucommander.ui.action.impl;
 
-import com.mucommander.ui.action.AbstractActionDescriptor;
-import com.mucommander.ui.action.ActionCategories;
-import com.mucommander.ui.action.ActionCategory;
-import com.mucommander.ui.action.MuAction;
-import com.mucommander.ui.action.ActionFactory;
-import com.mucommander.ui.main.MainFrame;
-
+import java.awt.event.KeyEvent;
 import java.util.Hashtable;
 
 import javax.swing.KeyStroke;
+
+import com.mucommander.ui.action.AbstractActionDescriptor;
+import com.mucommander.ui.action.ActionCategories;
+import com.mucommander.ui.action.ActionCategory;
+import com.mucommander.ui.action.ActionFactory;
+import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.main.MainFrame;
 
 /**
  * Marks or unmarks the current selected file (current row) and advance current row to the next one,
@@ -66,8 +67,8 @@ public class MarkSelectedFileAction extends MuAction {
 
 		public ActionCategory getCategory() { return ActionCategories.SELECTION; }
 
-		public KeyStroke getDefaultAltKeyStroke() { return KeyStroke.getKeyStroke("INSERT"); }
+		public KeyStroke getDefaultAltKeyStroke() { return KeyStroke.getKeyStroke(KeyEvent.VK_INSERT, 0); }
 
-		public KeyStroke getDefaultKeyStroke() { return KeyStroke.getKeyStroke("SPACE"); }
+		public KeyStroke getDefaultKeyStroke() { return KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0); }
     }
 }

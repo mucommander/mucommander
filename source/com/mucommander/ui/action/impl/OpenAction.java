@@ -18,6 +18,12 @@
 
 package com.mucommander.ui.action.impl;
 
+import java.awt.event.KeyEvent;
+import java.io.IOException;
+import java.util.Hashtable;
+
+import javax.swing.KeyStroke;
+
 import com.mucommander.desktop.DesktopManager;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileProtocols;
@@ -27,18 +33,13 @@ import com.mucommander.text.Translator;
 import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategories;
 import com.mucommander.ui.action.ActionCategory;
-import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.action.ActionFactory;
+import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.dialog.ErrorDialog;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.quicklist.RecentExecutedFilesQL;
-
-import java.io.IOException;
-import java.util.Hashtable;
-
-import javax.swing.KeyStroke;
 
 /**
  * This action 'opens' the currently selected file or folder in the active FileTable.
@@ -136,8 +137,8 @@ public class OpenAction extends MuAction {
 
 		public ActionCategory getCategory() { return ActionCategories.NAVIGATION; }
 
-		public KeyStroke getDefaultAltKeyStroke() { return KeyStroke.getKeyStroke("RIGHT"); }
+		public KeyStroke getDefaultAltKeyStroke() { return KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, 0); }
 
-		public KeyStroke getDefaultKeyStroke() { return KeyStroke.getKeyStroke("ENTER"); }
+		public KeyStroke getDefaultKeyStroke() { return KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0); }
     }
 }

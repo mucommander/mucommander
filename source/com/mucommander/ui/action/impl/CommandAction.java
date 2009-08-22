@@ -18,6 +18,8 @@
 
 package com.mucommander.ui.action.impl;
 
+import java.util.Hashtable;
+
 import com.mucommander.AppLogger;
 import com.mucommander.command.Command;
 import com.mucommander.file.FileProtocols;
@@ -30,8 +32,6 @@ import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.dialog.ErrorDialog;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;
-
-import java.util.Hashtable;
 
 /**
  * @author Nicolas Rinaudo

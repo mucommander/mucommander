@@ -18,15 +18,21 @@
 
 package com.mucommander.ui.action.impl;
 
-import com.mucommander.AppLogger;
-import com.mucommander.text.Translator;
-import com.mucommander.ui.action.*;
-import com.mucommander.ui.main.MainFrame;
-import com.mucommander.ui.main.WindowManager;
-
-import javax.swing.*;
+import java.awt.event.KeyEvent;
 import java.util.Hashtable;
 import java.util.Vector;
+
+import javax.swing.KeyStroke;
+
+import com.mucommander.AppLogger;
+import com.mucommander.text.Translator;
+import com.mucommander.ui.action.AbstractActionDescriptor;
+import com.mucommander.ui.action.ActionCategories;
+import com.mucommander.ui.action.ActionCategory;
+import com.mucommander.ui.action.ActionFactory;
+import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.main.MainFrame;
+import com.mucommander.ui.main.WindowManager;
 
 /**
  * Brings a {@link }MainFrame} window to the front. This action operates on a specific window number specified in the
@@ -108,7 +114,7 @@ public class RecallWindowAction extends MuAction {
             if(windowNumber<=0 || windowNumber>10)
                 return null;
 
-            return KeyStroke.getKeyStroke("control "+(windowNumber==10?0:windowNumber));
+            return KeyStroke.getKeyStroke(Character.forDigit(windowNumber==10 ? 0 : windowNumber, 10), KeyEvent.CTRL_DOWN_MASK);
         }
 
         public String getLabel() {

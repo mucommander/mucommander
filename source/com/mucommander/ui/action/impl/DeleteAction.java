@@ -24,6 +24,8 @@ import com.mucommander.ui.dialog.file.DeleteDialog;
 import com.mucommander.ui.main.MainFrame;
 
 import javax.swing.*;
+
+import java.awt.event.KeyEvent;
 import java.util.Hashtable;
 
 /**
@@ -62,8 +64,8 @@ public class DeleteAction extends SelectedFilesAction {
 
 		public ActionCategory getCategory() { return ActionCategories.FILES; }
 
-		public KeyStroke getDefaultAltKeyStroke() { return KeyStroke.getKeyStroke("DELETE"); }
+		public KeyStroke getDefaultAltKeyStroke() { return KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0); }
 
-		public KeyStroke getDefaultKeyStroke() { return KeyStroke.getKeyStroke("F8"); }
+		public KeyStroke getDefaultKeyStroke() { return KeyStroke.getKeyStroke(KeyEvent.VK_F8, 0); }
     }
 }

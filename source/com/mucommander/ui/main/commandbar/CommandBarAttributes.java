@@ -18,6 +18,7 @@
 
 package com.mucommander.ui.main.commandbar;
 
+import java.awt.event.KeyEvent;
 import java.util.Iterator;
 import java.util.WeakHashMap;
 
@@ -63,7 +64,7 @@ public class CommandBarAttributes {
     	null
     };
     /** Default modifier key that triggers the display of alternate actions when pressed */
-    private static KeyStroke defaultModifier = KeyStroke.getKeyStroke("SHIFT");
+    private static KeyStroke defaultModifier = KeyStroke.getKeyStroke(KeyEvent.VK_SHIFT, 0);
     
     /** Contains all registered command-bar attributes listeners, stored as weak references */
     private static WeakHashMap listeners = new WeakHashMap();
