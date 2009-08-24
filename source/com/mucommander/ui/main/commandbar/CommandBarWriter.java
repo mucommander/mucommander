@@ -18,6 +18,11 @@
 
 package com.mucommander.ui.main.commandbar;
 
+import java.io.IOException;
+import java.io.OutputStream;
+
+import javax.swing.KeyStroke;
+
 import com.mucommander.AppLogger;
 import com.mucommander.RuntimeConstants;
 import com.mucommander.io.BackupOutputStream;
@@ -25,20 +30,13 @@ import com.mucommander.ui.text.KeyStrokeUtils;
 import com.mucommander.xml.XmlAttributes;
 import com.mucommander.xml.XmlWriter;
 
-import javax.swing.*;
-import java.io.IOException;
-import java.io.OutputStream;
-
 /**
  * This class is responsible for writing the command-bar attributes (actions and modifier).
  * 
  * @author Arik Hadas
  */
-class CommandBarWriter extends CommandBarIO implements CommandBarAttributesListener {
+class CommandBarWriter extends CommandBarIO {
 
-	/** Flag that indicates if are there unsaved command-bar changes */
-	protected boolean isCommandBarChanged = false;
-	
 	// - Singleton -------------------------------------------------------
     // -------------------------------------------------------------------
 	private static CommandBarWriter instance;
@@ -49,37 +47,24 @@ class CommandBarWriter extends CommandBarIO implements CommandBarAttributesListe
 		return instance;
 	}
 	
-	private CommandBarWriter() {
-		CommandBarAttributes.addCommandBarAttributesListener(this);
-	}
+	private CommandBarWriter() {}
 	
-	public void write() throws IOException {
-		if (isCommandBarChanged) {
-			String[] commandBarActionIds = CommandBarAttributes.getActions();
-			String[] commandBarAlterativeActionIds = CommandBarAttributes.getAlternateActions();
-			KeyStroke commandBarModifier = CommandBarAttributes.getModifier();
-			
-			BackupOutputStream bos = null;
+	void write() throws IOException {
+		String[] commandBarActionIds = CommandBarAttributes.getActions();
+		String[] commandBarAlterativeActionIds = CommandBarAttributes.getAlternateActions();
+		KeyStroke commandBarModifier = CommandBarAttributes.getModifier();
 
-			try {
-				bos = new BackupOutputStream(getDescriptionFile());
-				new Writer(bos).write(commandBarActionIds, commandBarAlterativeActionIds, commandBarModifier);
-				isCommandBarChanged = false;
-			} catch (Exception e) {
-                AppLogger.fine("Caught exception", e);
-			} finally {
-				bos.close();
-			}
+		BackupOutputStream bos = null;
+
+		try {
+			bos = new BackupOutputStream(getDescriptionFile());
+			new Writer(bos).write(commandBarActionIds, commandBarAlterativeActionIds, commandBarModifier);
+			wasCommandBarModified = false;
+		} catch (Exception e) {
+			AppLogger.fine("Caught exception", e);
+		} finally {
+			bos.close();
 		}
-		AppLogger.fine("Command bar not modified, not saving.");
-	}
-	
-	////////////////////////////////////////////////
-    ///// CommandBarAttributesListener methods /////
-    ////////////////////////////////////////////////
-    
-	public void commandBarAttributeChanged() {
-    	isCommandBarChanged = true;
 	}
 	
 	private static class Writer {
@@ -110,11 +95,11 @@ class CommandBarWriter extends CommandBarIO implements CommandBarAttributesListe
 		
 		private void write(String actionId, String alternativeActionId) throws IOException {
 			XmlAttributes attributes = new XmlAttributes();
-			attributes.add(ACTION_ATTRIBUTE, actionId);
+			attributes.add(ACTION_ID_ATTRIBUTE, actionId);
 			if (alternativeActionId != null)
-				attributes.add(ALT_ACTION_ATTRIBUTE, alternativeActionId);
+				attributes.add(ALT_ACTION_ID_ATTRIBUTE, alternativeActionId);
 			
-            AppLogger.finest("Writing button: action = "  + attributes.getValue(ACTION_ATTRIBUTE) + ", alt_action = " + attributes.getValue(ALT_ACTION_ATTRIBUTE));
+            AppLogger.finest("Writing button: action_id = "  + attributes.getValue(ACTION_ID_ATTRIBUTE) + ", alt_action_id = " + attributes.getValue(ALT_ACTION_ID_ATTRIBUTE));
 			
 			writer.writeStandAloneElement(BUTTON_ELEMENT, attributes);
 		}

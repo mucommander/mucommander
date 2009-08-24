@@ -42,10 +42,11 @@ public class ToolBarAttributes {
     /** Default command bar actions: Class instances or null to signify a separator */
     private final static String[] DEFAULT_TOOLBAR_ACTIONS = new String[] {
             NewWindowAction.Descriptor.ACTION_ID,
+            null,
             GoBackAction.Descriptor.ACTION_ID,
             GoForwardAction.Descriptor.ACTION_ID,
-            GoToParentAction.Descriptor.ACTION_ID,
             null,
+            GoToParentAction.Descriptor.ACTION_ID,
             GoToHomeAction.Descriptor.ACTION_ID,
             null,
             StopAction.Descriptor.ACTION_ID,
@@ -111,6 +112,30 @@ public class ToolBarAttributes {
         ToolBarAttributes.actionIds = trimActionsArray(actions);
     	useDefaultActions = false;
     	fireActionsChanged();
+    }
+    
+    /**
+     * TODO: document
+     * 
+     * @return
+     */
+    public static boolean areDefaultAttributes() {
+    	int nbActions = actionIds.length;
+    	
+    	if (nbActions != DEFAULT_TOOLBAR_ACTIONS.length)
+    		return false;
+    	
+    	for (int i=0; i<nbActions; ++i)
+    		if (!equals(actionIds[i], DEFAULT_TOOLBAR_ACTIONS[i]))
+    			return false;
+    	
+    	return true;
+    }
+    
+    private static boolean equals(Object action1, Object action2) {
+    	if (action1 == null)
+    		return action2 == null;
+    	return action1.equals(action2);
     }
     
     /**

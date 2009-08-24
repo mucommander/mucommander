@@ -18,19 +18,22 @@
 
 package com.mucommander.ui.main.commandbar;
 
-import com.mucommander.AppLogger;
-import com.mucommander.file.AbstractFile;
-import com.mucommander.io.BackupInputStream;
-import com.mucommander.ui.action.ActionManager;
-import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
-
-import javax.swing.*;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParserFactory;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Vector;
+
+import javax.swing.KeyStroke;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParserFactory;
+
+import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
+
+import com.mucommander.AppLogger;
+import com.mucommander.RuntimeConstants;
+import com.mucommander.file.AbstractFile;
+import com.mucommander.io.BackupInputStream;
+import com.mucommander.ui.action.ActionManager;
 
 /**
  * This class parses the XML file describing the command bar's buttons and associated actions.
@@ -110,24 +113,43 @@ class CommandBarReader extends CommandBarIO {
 
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
         if(qName.equals(BUTTON_ELEMENT)) {
-        	// Resolve action class
-            String actionAttribute = attributes.getValue(ACTION_ATTRIBUTE);
-            // TODO: read action ids
-            String actionId = ActionManager.extrapolateId(actionAttribute);
-            if (actionId != null)
-            	actionsV.add(actionId);
-            else
-            	AppLogger.warning("Error in "+DEFAULT_COMMAND_BAR_FILE_NAME+": action id for "+actionAttribute+" not found");
+        	// Resolve action id
+        	String actionIdAttribute = attributes.getValue(ACTION_ID_ATTRIBUTE);
+        	if (actionIdAttribute != null) {
+        		if (ActionManager.isActionExist(actionIdAttribute)) {
+        			actionsV.add(actionIdAttribute);
 
-            // Resolve alternate action class (if any)
-            actionAttribute = attributes.getValue(ALT_ACTION_ATTRIBUTE);
-            if(actionAttribute==null)
-                alternateActionsV.add(null);
-            else
-                if ((actionId = ActionManager.extrapolateId(actionAttribute)) != null)
-                	alternateActionsV.add(actionId);
-                else
-                	AppLogger.warning("Error in "+DEFAULT_COMMAND_BAR_FILE_NAME+": action class "+actionAttribute+" not found");
+        			// Resolve alternate action id (if any)
+        			actionIdAttribute = attributes.getValue(ALT_ACTION_ID_ATTRIBUTE);
+        			alternateActionsV.add(ActionManager.isActionExist(actionIdAttribute) ? actionIdAttribute : null);
+        		}
+        	}
+        	else {
+        		// Resolve action class
+        		String actionClassAttribute = attributes.getValue(ACTION_ATTRIBUTE);
+        		if (actionClassAttribute != null) {
+        			String actionId = ActionManager.extrapolateId(actionClassAttribute);
+        			if (ActionManager.isActionExist(actionId)) {
+        				actionsV.add(actionId);
+
+        				// Resolve alternate action class (if any)
+        				actionClassAttribute = attributes.getValue(ALT_ACTION_ATTRIBUTE);
+        				if(actionClassAttribute == null)
+        					alternateActionsV.add(null);
+        				else {
+        					actionId = ActionManager.extrapolateId(actionClassAttribute);
+        					if (ActionManager.isActionExist(actionId))
+        						alternateActionsV.add(actionId);
+        					else {
+        						AppLogger.warning("Error in "+DEFAULT_COMMAND_BAR_FILE_NAME+": action id for " + actionClassAttribute + " not found");
+        						alternateActionsV.add(null);
+        					}
+        				}
+        			}
+        			else
+        				AppLogger.warning("Error in "+DEFAULT_COMMAND_BAR_FILE_NAME+": action id for " + actionClassAttribute + " not found");
+        		}
+        	}
         }
         else if(qName.equals(ROOT_ELEMENT)) {
         	// Retrieve modifier key (shift by default)
@@ -135,6 +157,10 @@ class CommandBarReader extends CommandBarIO {
             
         	// Note: early 0.8 beta3 nightly builds did not have version attribute, so the attribute may be null
             fileVersion = attributes.getValue(VERSION_ATTRIBUTE);
+            
+            // if the file's version is not up-to-date, update the file to the current version at quitting.
+    		if (!RuntimeConstants.VERSION.equals(fileVersion))
+    			setModified();
         }
     }
 }

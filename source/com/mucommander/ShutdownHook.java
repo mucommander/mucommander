@@ -25,6 +25,7 @@ import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.shell.ShellHistoryManager;
 import com.mucommander.ui.action.ActionKeymapIO;
 import com.mucommander.ui.main.commandbar.CommandBarIO;
+import com.mucommander.ui.main.toolbar.ToolBarIO;
 import com.mucommander.ui.main.tree.TreeIOThreadManager;
 import com.mucommander.ui.theme.ThemeManager;
 
@@ -114,6 +115,10 @@ public class ShutdownHook extends Thread {
         // Saves the command bar.
         try { CommandBarIO.saveCommandBar(); }
         catch(Exception e) {AppLogger.warning("Failed to save command bar", e); }
+        
+        // Saves the tool bar.
+        try { ToolBarIO.saveToolBar(); }
+        catch(Exception e) {AppLogger.warning("Failed to save toolbar", e); }
         
 
         // Shutdown tasks should only be performed once

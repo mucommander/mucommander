@@ -18,16 +18,16 @@
 
 package com.mucommander.ui.main.commandbar;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
+import org.xml.sax.helpers.DefaultHandler;
+
 import com.mucommander.AppLogger;
 import com.mucommander.PlatformManager;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
-import com.mucommander.file.util.ResourceLoader;
-import org.xml.sax.helpers.DefaultHandler;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 
 /**
  * This class contains the common things for reading and writing the command-bar actions and modifier.
@@ -44,10 +44,14 @@ public abstract class CommandBarIO extends DefaultHandler {
 	protected static final String MODIFIER_ATTRIBUTE = "modifier";
     /** Element describing one of the button in the list */
 	protected static final String BUTTON_ELEMENT = "button";
-    /** Attribute containing the action associated with the button */
+    /** Attribute containing the action class associated with the button */
 	protected static final String ACTION_ATTRIBUTE = "action";
-	/** Attribute containing the alternative action associated with the button */
+	/** Attribute containing the alternative action class associated with the button */
 	protected static final String ALT_ACTION_ATTRIBUTE = "alt_action";
+	/** Attribute containing the action id associated with the button */
+	protected static final String ACTION_ID_ATTRIBUTE = "action_id";
+	/** Attribute containing the alternative action id associated with the button */
+	protected static final String ALT_ACTION_ID_ATTRIBUTE = "alt_action_id";
  
 	/** Default command bar descriptor filename */
 	protected final static String DEFAULT_COMMAND_BAR_FILE_NAME = "command_bar.xml";
@@ -60,6 +64,9 @@ public abstract class CommandBarIO extends DefaultHandler {
 	
 	/** CommandBarWriter instance */
 	private static CommandBarWriter commandBarWriter;
+	
+	/** Whether the command-bar has been modified and should be saved */
+    protected static boolean wasCommandBarModified;
 	
 	/**
      * Parses the XML file describing the command bar's buttons and associated actions.
@@ -85,13 +92,31 @@ public abstract class CommandBarIO extends DefaultHandler {
     }
     
     /**
+     * Mark that actions were modified and therefore should be saved.
+     */
+    public static void setModified() { wasCommandBarModified = true; }
+    
+    /**
      * Writes the current command bar to the user's command bar file.
      * @throws IOException 
      * @throws IOException
      */
     public static void saveCommandBar() throws IOException {
-    	if (commandBarWriter != null)
-    		commandBarWriter.write();
+    	if (CommandBarAttributes.areDefaultAttributes()) {
+    		AbstractFile commandBarFile = getDescriptionFile();
+        	if(commandBarFile != null && commandBarFile.exists()) {
+        		AppLogger.info("Command bar use default settings, removing descriptor file");
+        		commandBarFile.delete();
+        	}
+        	else
+    			AppLogger.fine("Command bar not modified, not saving");
+    	}
+    	else if (commandBarWriter != null) {
+    		if (wasCommandBarModified)
+    			commandBarWriter.write();
+    		else
+    			AppLogger.fine("Command bar not modified, not saving");
+    	}
     	else
     		AppLogger.warning("Could not save command bar. writer is null");
     }

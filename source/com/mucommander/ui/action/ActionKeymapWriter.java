@@ -55,7 +55,7 @@ class ActionKeymapWriter extends ActionKeymapIO {
 		}
 	}
 	
-	public void write() throws IOException {
+	void write() throws IOException {
 		Hashtable combinedMapping = new Hashtable();
 		Iterator modifiedActionsIterator = ActionKeymap.getCustomizedActions();
 

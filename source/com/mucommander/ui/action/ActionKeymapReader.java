@@ -51,9 +51,6 @@ class ActionKeymapReader extends ActionKeymapIO {
     
     /** Parsed file */
     private AbstractFile file;
-    /** true => the parsed file is the resource file (the one inside the jar)
-     *  false => the parsed file is the user's file */
-    private boolean isResourceFile;
     
     /**
      * Loads the action file: loads the one contained in the JAR file first, and then the user's one.
@@ -67,9 +64,8 @@ class ActionKeymapReader extends ActionKeymapIO {
      * @throws IOException 
      * @throws SAXException 
      */
-    ActionKeymapReader(AbstractFile file, boolean isResourceFile) throws SAXException, IOException, ParserConfigurationException {
+    ActionKeymapReader(AbstractFile file) throws SAXException, IOException, ParserConfigurationException {
     	this.file = file;
-    	this.isResourceFile = isResourceFile;
     	
     	InputStream in = null;
     	try {SAXParserFactory.newInstance().newSAXParser().parse(in = new BackupInputStream(file), this);}
@@ -107,8 +103,11 @@ class ActionKeymapReader extends ActionKeymapIO {
     		primaryKeyStroke = KeyStroke.getKeyStroke(keyStrokeString);
     		if (primaryKeyStroke == null)
     			AppLogger.info("Action keymap file contains a keystroke which could not be resolved: " + keyStrokeString);
-    		else if (ActionKeymap.isKeyStrokeRegistered(primaryKeyStroke))
-    			AppLogger.fine("Canceling previous association of keystroke " + keyStrokeString + ", reassign it to action: " + actionId);
+    		else {
+    			String prevAssignedActionId = ActionKeymap.getRegisteredActionIdForKeystroke(primaryKeyStroke);
+    			if (prevAssignedActionId != null && !prevAssignedActionId.equals(actionId))
+    				AppLogger.fine("Canceling previous association of keystroke " + keyStrokeString + ", reassign it to action: " + actionId);
+    		}
     	}
 
     	// Parse the alternate keystroke and retrieve the corresponding KeyStroke instance
@@ -118,8 +117,11 @@ class ActionKeymapReader extends ActionKeymapIO {
     		alternateKeyStroke = KeyStroke.getKeyStroke(keyStrokeString);
     		if (alternateKeyStroke == null)
     			AppLogger.info("Action keymap file contains a keystroke which could not be resolved: " + keyStrokeString);
-    		else if (ActionKeymap.isKeyStrokeRegistered(alternateKeyStroke))
-    			AppLogger.fine("Canceling previous association of keystroke " + keyStrokeString + ", reassign it to action: " + actionId);
+    		else {
+    			String prevAssignedActionId = ActionKeymap.getRegisteredActionIdForKeystroke(alternateKeyStroke);
+    			if (prevAssignedActionId != null && !prevAssignedActionId.equals(actionId))
+    				AppLogger.fine("Canceling previous association of keystroke " + keyStrokeString + ", reassign it to action: " + actionId);
+    		}
     	}
 
     	// If either primary shortcut or alternative shortcut is defined for the action, save them
@@ -191,9 +193,8 @@ class ActionKeymapReader extends ActionKeymapIO {
     		// Note: early 0.8 beta3 nightly builds did not have version attribute, so the attribute may be null
     		fileVersion = attributes.getValue(VERSION_ATTRIBUTE);
     		
-    		// if the file's version is not up-to-date,
-    		// update the file to the current version at quitting.
-    		if (!isResourceFile && !RuntimeConstants.VERSION.equals(fileVersion))
+    		// if the file's version is not up-to-date, update the file to the current version at quitting.
+    		if (!RuntimeConstants.VERSION.equals(fileVersion))
     			setModified();
     	}
     }

@@ -40,7 +40,7 @@ public class CommandBarAttributes {
     private static KeyStroke modifier;
     
     /** Command bar default actions */
-    private static final String defaultActionIds[] = 
+    private static final String DEFAULT_ACTION_IDS[] = 
     {
     	com.mucommander.ui.action.impl.ViewAction.Descriptor.ACTION_ID,
     	com.mucommander.ui.action.impl.EditAction.Descriptor.ACTION_ID,
@@ -52,7 +52,7 @@ public class CommandBarAttributes {
     	com.mucommander.ui.action.impl.CloseWindowAction.Descriptor.ACTION_ID
     };
     /** Command bar default alternate actions */
-    private static final String defaultAlternateActionIds[] =
+    private static final String DEFAULT_ALTERNATE_ACTION_IDS[] =
     {
     	null,
     	null,
@@ -64,7 +64,7 @@ public class CommandBarAttributes {
     	null
     };
     /** Default modifier key that triggers the display of alternate actions when pressed */
-    private static KeyStroke defaultModifier = KeyStroke.getKeyStroke(KeyEvent.VK_SHIFT, 0);
+    private static KeyStroke DEFAULT_MODIFIER = KeyStroke.getKeyStroke(KeyEvent.VK_SHIFT, 0);
     
     /** Contains all registered command-bar attributes listeners, stored as weak references */
     private static WeakHashMap listeners = new WeakHashMap();
@@ -74,29 +74,36 @@ public class CommandBarAttributes {
      * The attributes are updated only if they are not already equal to the default attributes.
      */
     public static void restoreDefault() {
-    	setAttributes(defaultActionIds, defaultAlternateActionIds, defaultModifier);
+    	setAttributes(DEFAULT_ACTION_IDS, DEFAULT_ALTERNATE_ACTION_IDS, DEFAULT_MODIFIER);
     }
     
     /**
-     * 
      * @return true if command-bar attributes equal to the default attributes.
      */
-    public static boolean isDefault() {
-    	if (actionIds != defaultActionIds) {
+    public static boolean areDefaultAttributes() {
+    	if (actionIds != DEFAULT_ACTION_IDS) {
     		int nbActions = actionIds.length;
+    		
+    		if (nbActions != DEFAULT_ACTION_IDS.length)
+    			return false;
+    		
     		for (int i=0; i<nbActions; ++i)
-    			if (!equals(actionIds[i], defaultActionIds[i]))
+    			if (!equals(actionIds[i], DEFAULT_ACTION_IDS[i]))
     				return false;
     	}
     	
-    	if (alternateActionIds != defaultAlternateActionIds) {
+    	if (alternateActionIds != DEFAULT_ALTERNATE_ACTION_IDS) {
     		int nbAlternateActions = alternateActionIds.length;
+    		
+    		if (nbAlternateActions != DEFAULT_ALTERNATE_ACTION_IDS.length)
+    			return false;
+    		
     		for (int i=0; i<nbAlternateActions; ++i)
-    			if (!equals(alternateActionIds[i], defaultAlternateActionIds[i]))
+    			if (!equals(alternateActionIds[i], DEFAULT_ALTERNATE_ACTION_IDS[i]))
     				return false;
     	}
     	
-    	return defaultModifier == modifier || defaultModifier.equals(modifier);
+    	return DEFAULT_MODIFIER == modifier || DEFAULT_MODIFIER.equals(modifier);
     }
     
     private static boolean equals(Object action1, Object action2) {
@@ -126,7 +133,7 @@ public class CommandBarAttributes {
     ///////////////
     /// getters ///
     ///////////////
-        
+    
     public static String[] getActions() {return actionIds;}
     
     public static String[] getAlternateActions() {return alternateActionIds;}

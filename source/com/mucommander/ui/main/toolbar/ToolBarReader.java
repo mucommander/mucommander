@@ -18,17 +18,20 @@
 
 package com.mucommander.ui.main.toolbar;
 
-import com.mucommander.AppLogger;
-import com.mucommander.file.AbstractFile;
-import com.mucommander.io.BackupInputStream;
-import com.mucommander.ui.action.ActionManager;
-import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
-
-import javax.xml.parsers.SAXParserFactory;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Vector;
+
+import javax.xml.parsers.SAXParserFactory;
+
+import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
+
+import com.mucommander.AppLogger;
+import com.mucommander.RuntimeConstants;
+import com.mucommander.file.AbstractFile;
+import com.mucommander.io.BackupInputStream;
+import com.mucommander.ui.action.ActionManager;
 
 /**
  * This class parses the XML file describing the toolbar's buttons and associated actions.
@@ -58,6 +61,12 @@ public class ToolBarReader extends ToolBarIO {
         }
     }
     
+    public String[] getActionsRead() {
+    	int nbActions = actionsV.size();
+    	String[] actionIds = new String[nbActions];
+        actionsV.toArray(actionIds);
+        return actionIds;
+    }
 
     ////////////////////////////
     // ContentHandler methods //
@@ -67,25 +76,27 @@ public class ToolBarReader extends ToolBarIO {
         actionsV = new Vector();
     }
 
-    public void endDocument() {
-        int nbActions = actionsV.size();
-        String[] actionIds = new String[nbActions];
-        actionsV.toArray(actionIds);        
-        actionsV = null;
-
-        ToolBarAttributes.setActions(actionIds);
-    }
+    public void endDocument() {}
 
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
         if(qName.equals(BUTTON_ELEMENT)) {
-        	// Resolve action class
-            String actionAttribute = attributes.getValue(ACTION_ATTRIBUTE);
-            // TODO: read action ids
-            String actionId = ActionManager.extrapolateId(actionAttribute);
-            if (actionId != null)
-            	actionsV.add(actionId);
-            else
-            	AppLogger.warning("Error in "+DEFAULT_TOOLBAR_FILE_NAME+": action class "+actionId+" not found");
+        	// Resolve action id
+        	String actionIdAttribute = attributes.getValue(ACTION_ID_ATTRIBUTE);
+        	if (actionIdAttribute != null) {
+        		if (ActionManager.isActionExist(actionIdAttribute))
+        			actionsV.add(actionIdAttribute);
+        		else
+        			AppLogger.warning("Error in "+DEFAULT_TOOLBAR_FILE_NAME+": action id \"" + actionIdAttribute + "\" not found");
+        	}
+        	else {
+        		// Resolve action class
+        		String actionClassAttribute = attributes.getValue(ACTION_ATTRIBUTE);
+        		String actionId = ActionManager.extrapolateId(actionClassAttribute);
+        		if (ActionManager.isActionExist(actionId))
+        			actionsV.add(actionId);
+        		else
+        			AppLogger.warning("Error in "+DEFAULT_TOOLBAR_FILE_NAME+": action id for class " + actionClassAttribute + " was not found");
+        	}
         }
         else if(qName.equals(SEPARATOR_ELEMENT)) {
             actionsV.add(null);
@@ -93,6 +104,10 @@ public class ToolBarReader extends ToolBarIO {
         else if (qName.equals(ROOT_ELEMENT)) {
         	// Note: early 0.8 beta3 nightly builds did not have version attribute, so the attribute may be null
             fileVersion = attributes.getValue(VERSION_ATTRIBUTE);
+
+            // if the file's version is not up-to-date, update the file to the current version at quitting.
+            if (!RuntimeConstants.VERSION.equals(fileVersion))
+            	setModified();
         }
     }
 }

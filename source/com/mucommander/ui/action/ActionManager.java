@@ -220,7 +220,9 @@ public class ActionManager {
      * @return String representing the id of the MuAction in the specified path. null is returned if the given path is invalid.
      */
     public static String extrapolateId(String actionClassPath) {
-    	if (actionClassPath == null) return null;
+    	if (actionClassPath == null)
+    		return null;
+    	
     	Matcher matcher = pattern.matcher(actionClassPath);
     	return matcher.matches() ? 
     			matcher.group(1)

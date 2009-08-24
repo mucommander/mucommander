@@ -125,7 +125,8 @@ public abstract class ActionKeymapIO extends DefaultHandler  {
     public static void saveActionKeymap() throws IOException {
     	if (wereActionsModified)
     		writer.write();
-    	else AppLogger.fine("Action keymap not modified, not saving");
+    	else
+    		AppLogger.fine("Action keymap not modified, not saving");
     }
     
     protected static void createEmptyFile() throws IOException {
@@ -144,7 +145,7 @@ public abstract class ActionKeymapIO extends DefaultHandler  {
     	// Load user's file if exist
     	AbstractFile actionKeymapFile = getActionsFile();
     	if (actionKeymapFile != null && actionKeymapFile.exists()) {
-    		ActionKeymapReader reader = new ActionKeymapReader(actionKeymapFile, false);
+    		ActionKeymapReader reader = new ActionKeymapReader(actionKeymapFile);
     		ActionKeymap.registerActions(reader.getPrimaryActionsKeymap(), reader.getAlternateActionsKeymap());
     	}
     	else {

@@ -69,6 +69,7 @@ import com.mucommander.ui.list.DynamicList;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.commandbar.CommandBarAttributes;
 import com.mucommander.ui.main.commandbar.CommandBarButtonForDisplay;
+import com.mucommander.ui.main.commandbar.CommandBarIO;
 import com.mucommander.ui.text.RecordingKeyStrokeTextField;
 import com.mucommander.util.AlteredVector;
 
@@ -182,6 +183,7 @@ public class CommandBarDialog extends CustomizeDialog {
 		}
 		
 		CommandBarAttributes.setAttributes(newActionIds, newAlternativeActionIds, modifierField.getKeyStroke());
+		CommandBarIO.setModified();
 	}
 
 	protected JPanel createCustomizationPanel() {
