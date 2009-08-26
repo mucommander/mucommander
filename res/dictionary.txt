@@ -475,6 +475,7 @@ skip:UA:Пропустити
 
 skip_all:EN:Skip all
 skip_all:FR:Ignorer tous
+skip_all:NL:Alles overslaan
 # Translation missing (New!)
 
 
@@ -908,6 +909,7 @@ choose:UA:Вибрати
 # Used for instance in the 'misc' preference panel
 customize:EN:Customize
 customize:FR:Personnaliser
+customize:NL:Voorkeur
 # Translation missing (New!)
 
 
@@ -1055,6 +1057,7 @@ encoding:UA:Кодування
 # Used in the dialog that allows to customize the list of preferred encodings
 preferred_encodings:EN:Preferred encodings
 preferred_encodings:FR:Encodages préférés
+preferred_encodings:NL:Encodages préférés
 # Translation missing (New!)
 
 
@@ -2779,6 +2782,7 @@ View.label:UA:Переглянути
 # Internal viewer
 InternalView.label:EN:View (internal)
 InternalView.label:FR:Voir (interne)
+InternalView.label:NL:Bekijken (intern)
 # Translation missing (New!)
 
 
@@ -2827,6 +2831,7 @@ Edit.label:EN:$[edit]
 # Internal editor
 InternalEdit.label:EN:Edit (internal)
 InternalEdit.label:FR:Editer (interne)
+InternalEdit.label:NL:Bewerken (intern)
 # Translation missing (New!)
 
 
@@ -4843,6 +4848,7 @@ Stop.label:UA:Зупинити зміну папки
 # %1 is replaced by the column's name (Date, Size, ...).
 ToggleColumn.show:EN:Show %1 column
 ToggleColumn.show:FR:Afficher la colonne %1
+ToggleColumn.show:NL:Toon kolom %1
 # Translation missing (New!)
 
 
@@ -5653,6 +5659,7 @@ MaximizeWindow.label.mac_os_x:pt_BR:Zoom
 MaximizeWindow.label.mac_os_x:SL:Povečaj
 MaximizeWindow.label.mac_os_x:SV:Zooma
 MaximizeWindow.label.mac_os_x:UA:Збільшити
+MaximizeWindow.label.mac_os_x:NL:Zoom
 # Translation missing (New!)
 
 
@@ -5833,6 +5840,7 @@ ShowRecentExecutedFilesQL.label:UA:Останні виконані файли
 
 SplitFile.label:EN:Split File
 SplitFile.label:PL:Podziel plik
+SplitFile.label:NL:Splits bestand
 # Translation missing (New!)
 
 
@@ -5849,6 +5857,7 @@ SplitFile.label:PL:Podziel plik
 
 MergeFile.label:EN:Combine files
 MergeFile.label:PL:Scalaj pliki
+MergeFile.label:NL:Voeg bestanden samen
 # Translation missing (New!)
 
 
@@ -5862,6 +5871,7 @@ MergeFile.label:PL:Scalaj pliki
 
 ShowDebugConsole.label:EN:Debug console
 ShowDebugConsole.label:FR:Console de débug
+ShowDebugConsole.label:NL:Debug console
 # Translation missing (New!)
 
 
@@ -6704,6 +6714,7 @@ destination_dialog.verify_integrity:UA:Перевірити цілісність
 
 destination_dialog.skip_errors:EN:Skip errors
 destination_dialog.skip_errors:FR:Ignorer les erreurs
+destination_dialog.skip_errors:NL:Negeer fouten
 # Translation missing (New!)
 
 
@@ -7586,6 +7597,7 @@ delete_dialog.move_to_trash.option:UA:Перенести в Смітник
 
 delete_dialog.move_to_trash.failed:EN:One or more files could not be moved to the trash.
 delete_dialog.move_to_trash.failed:FR:Un ou plusieurs fichiers n'ont pu être déplacés dans la corbeille.
+delete_dialog.move_to_trash.failed:NL:Een of meer bestanden konden niet naar de prullenbak verplaatst worden.
 # Translation missing (New!)
 
 
@@ -8043,46 +8055,57 @@ email.send_file_error:UA:Не вдалося надіслати файл %1, п�
 
 split_file_dialog.title:EN:Split file
 split_file_dialog.title:PL:Podział pliku
+split_file_dialog.title:NL:Splits bestand
 # Translation missing (New!)
 
 split_file_dialog.error_title:EN:Split file error
 split_file_dialog.error_title:PL:Błąd podziału pliku
+split_file_dialog.error_title:NL:Fout bij bestandsplitsen
 # Translation missing (New!)
 
 split_file_dialog.file_to_split:EN:File to split
 split_file_dialog.file_to_split:PL:Plik do podziału
+split_file_dialog.file_to_split:NL:Te splitsen bestand
 # Translation missing (New!)
 
 split_file_dialog.target_directory:EN:Target directory
 split_file_dialog.target_directory:PL:Katalog docelowy
+split_file_dialog.target_directory:NL:Doelmap
 # Translation missing (New!)
 
 split_file_dialog.part_size:EN:Size of one part
 split_file_dialog.part_size:PL:Wielkość jednej części
+split_file_dialog.part_size:NL:Grootte van de stukken
 # Translation missing (New!)
 
 split_file_dialog.parts:EN:Number of parts
 split_file_dialog.parts:PL:Liczba części
+split_file_dialog.parts:NL:Hoeveelheid stukken
 # Translation missing (New!)
 
 split_file_dialog.generate_CRC:EN:Generate CRC file
 split_file_dialog.generate_CRC:PL:Wygeneruj plik CRC
+split_file_dialog.generate_CRC:NL:Creëer CRC bestand
 # Translation missing (New!)
 
 split_file_dialog.split:EN:Split
 split_file_dialog.split:PL:Podziel
+split_file_dialog.split:NL:Splits
 # Translation missing (New!)
 
 split_file_dialog.max_parts:EN:Maximum number of parts is %1
 split_file_dialog.max_parts:PL:Maksymalna liczba części wynosi %1
+split_file_dialog.max_parts:NL:Maximum hoeveelheid delen is %1
 # Translation missing (New!)
 
 split_file_dialog.auto:EN:Auto
 split_file_dialog.auto:PL:Automatycznie
+split_file_dialog.auto:NL:Automatisch
 # Translation missing (New!)
 
 split_file_dialog.insert_new_media:EN:Insert new media
 split_file_dialog.insert_new_media:PL:Włóż kolejny dysk
+split_file_dialog.insert_new_media:NL:Nieuw medium invoeren
 # Translation missing (New!)
 
 
@@ -8092,18 +8115,22 @@ split_file_dialog.insert_new_media:PL:Włóż kolejny dysk
 
 merge_file_dialog.title:EN:Combine file
 merge_file_dialog.title:PL:Scal plik
+merge_file_dialog.title:NL:Bestand samenvoegen
 # Translation missing (New!)
 
 merge_file_dialog.error_title:EN:Merge files error
 merge_file_dialog.error_title:PL:Błąd łączenia plików
+merge_file_dialog.error_title:NL:Fout bij bestand samenvoegen
 # Translation missing (New!)
 
 merge_file_dialog.merge:EN:Combine
 merge_file_dialog.merge:PL:Scal
+merge_file_dialog.merge:NL:Samenvoegen
 # Translation missing (New!)
 
 merge_job.no_crc_file:EN:Combine succeeded. No CRC file.
 merge_job.no_crc_file:PL:Scalanie zakończone pomyślnie. Brak pliku CRC.
+merge_job.no_crc_file:NL:Samenvoegen geslaagd. Geen CRC bestand.
 # Translation missing (New!)
 
 merge_job.crc_read_error:EN:Error while reading CRC file.
@@ -8112,10 +8139,12 @@ merge_job.crc_read_error:PL:Błąd podczas odczytywania pliku CRC.
 
 merge_job.crc_check_failed:EN:CRC mismatch: expected %2, found %1
 merge_job.crc_check_failed:PL:Pliki CRC nie zgadzają się %1 <> %2
+merge_job.crc_check_failed:NL:CRC past niet: verwacht %2, gevonden %1
 # Translation missing (New!)
 
 merge_job.crc_ok:EN:Combine succeeded. CRC checksum ok.
 merge_job.crc_ok:PL:Scalanie zakończone pomyślnie. Plik CRC zweryfikowany.
+merge_job.crc_ok:NL:Samenvoegen geslaagd. CRC controlsom ok.
 # Translation missing (New!)
 
 
@@ -9070,6 +9099,7 @@ server_connect_dialog.share:UA:Спільний ресурс
 # Used for SMB connection properties
 server_connect_dialog.domain:EN:Domain
 server_connect_dialog.domain:FR:Domaine
+server_connect_dialog.domain:NL:Domein
 # Translation missing (New!)
 
 
@@ -9283,7 +9313,7 @@ server_connect_dialog.private_key:EN:Private key
 server_connect_dialog.private_key:FR:Clé privée
 server_connect_dialog.private_key:PL:Klucz prywatny
 server_connect_dialog.private_key:DA:Privat nøgle
-server_connect_dialog.private_key:NL:Private sleutel
+server_connect_dialog.private_key:NL:Persoonlijke sleutel
 server_connect_dialog.private_key:RO:Cheia privată
 server_connect_dialog.private_key:DE:Privater Schlüssel
 server_connect_dialog.private_key:HU:Privát kulcs
@@ -11635,6 +11665,7 @@ theme_editor.symbolic_link:UA:Символьний лінк
 # Used in the 'Quick lists' panel of the theme editor
 theme_editor.header:EN:Header
 theme_editor.header:FR:En-tête
+theme_editor.header:NL:Kop
 # Translation missing (New!)
 
 
@@ -11654,6 +11685,7 @@ theme_editor.header:FR:En-tête
 # Used in the 'Quick lists' panel of the theme editor
 theme_editor.item:EN:Item
 theme_editor.item:FR:Élément
+theme_editor.item:NL:Inhoud
 # Translation missing (New!)
 
 
@@ -13346,6 +13378,7 @@ prefs_dialog.enable_system_notifications:UA:Включити системні п
 
 debug_console_dialog.level:EN:Level
 debug_console_dialog.level:FR:Niveau
+debug_console_dialog.level:NL:Niveau
 # Translation missing (New!)
 
 
@@ -14986,6 +15019,7 @@ batch_rename_dialog.duplicate_names:pt_BR:Nomes duplicados!
 batch_rename_dialog.duplicate_names:SL:Podvojena imena!
 batch_rename_dialog.duplicate_names:SV:Duplicera namn!
 batch_rename_dialog.duplicate_names:UA:Імена співпадають
+batch_rename_dialog.duplicate_names:NL:Dubbele Naam!
 # Translation missing (New!)
 
 
