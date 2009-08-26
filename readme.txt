@@ -224,7 +224,8 @@ Bug fixes:
 - Fixed 'open natively' opening all files when invoked on a remote filesystem
   or on archive entries (ticket #147).
 - Fixed auto-refresh not picking changes changes made to a file that was edited
-  (ticket #258).  
+  (ticket #258).
+- Fixed 'Move to trash' failures under GNOME (ticket #97).    
 
 Known issues:
 - Some translations are not up-to-date. For more information, see:
