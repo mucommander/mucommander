@@ -42,12 +42,14 @@ import java.util.Vector;
  * connect to authenticated file systems. It provides methods to find credentials matching a particular location and to
  * read and write credentials to an XML file.
  *
- * <p>Two types of {@link CredentialsMapping} are used:
+ * <p>
+ * Two types of {@link CredentialsMapping} are used:
  * <ul>
  *  <li>persistent credentials: stored in an XML file when the application terminates, and loaded the next time the
- * application is started.
- *  <li>volatile credentials: lost when the application terminates.
+ * application is started.</li>
+ *  <li>volatile credentials: lost when the application terminates.</li>
  * </ul>
+ * </p>
  *
  * @author Maxence Bernard
  */
@@ -182,11 +184,11 @@ public class CredentialsManager implements VectorChangeListener {
      * persistent.
      *
      * <p>The returned credentials will match the given URL's scheme and host, but the path may differ so there is
-     * no guarantee that the credentials will successfully authenticate the location.
+     * no guarantee that the credentials will successfully authenticate the location.</p>
      *
      * <p>The best match (credentials with the 'closest' path to the provided location's path) is returned at the first
      * position ([0]), if there is at least one matching credentials instance. The returned array can be empty
-     * (zero length) but never null.
+     * (zero length) but never null.</p>
      * 
      * @param location the location to be compared against known credentials instances, both volatile and persistent
      * @return an array of CredentialsMapping matching the given URL's scheme and host, best match at the first position
@@ -232,10 +234,10 @@ public class CredentialsManager implements VectorChangeListener {
      *
      * <p>Depending on value returned by {@link CredentialsMapping#isPersistent()}, the credentials will either be stored
      * in the volatile credentials list or the persistent one. Any existing credentials mapped to the same realm
-     * will be replaced by the provided ones.
+     * will be replaced by the provided ones.</p>
      *
      * <p>This method should be called when new credentials have been entered by the user, after they have been validated
-     * by the application (i.e. access was granted to the location).
+     * by the application (i.e. access was granted to the location).</p>
      *
      * @param credentialsMapping credentials to be added to the list of known credentials
      */
@@ -251,23 +253,13 @@ public class CredentialsManager implements VectorChangeListener {
         AppLogger.finest("before, persistentCredentials="+ persistentCredentialMappings);
         AppLogger.finest("before, volatileCredentials="+ volatileCredentialMappings);
 
-        int index = persistentCredentialMappings.indexOf(credentialsMapping);
-        if(persist || index!=-1) {
-            if(index==-1)
-                persistentCredentialMappings.add(credentialsMapping);
-            else
-                persistentCredentialMappings.setElementAt(credentialsMapping, index);
-
-            index = volatileCredentialMappings.indexOf(credentialsMapping);
-            if(index!=-1)
-                volatileCredentialMappings.removeElementAt(index);
+        if(persist) {
+            replaceVectorElement(persistentCredentialMappings, credentialsMapping);
+            volatileCredentialMappings.removeElement(credentialsMapping);
         }
         else {
-            index = volatileCredentialMappings.indexOf(credentialsMapping);
-            if(index==-1)
-                volatileCredentialMappings.add(credentialsMapping);
-            else
-                volatileCredentialMappings.setElementAt(credentialsMapping, index);
+            replaceVectorElement(volatileCredentialMappings, credentialsMapping);
+            persistentCredentialMappings.removeElement(credentialsMapping);
         }
 
         AppLogger.finest("after, persistentCredentials="+ persistentCredentialMappings);
@@ -364,8 +356,10 @@ public class CredentialsManager implements VectorChangeListener {
      * Finds are returns the index of the CredentialsMapping instance that best matches the given location
      * amongst the provided matching CredentialsMapping Vector, or -1 if the matches Vector is empty.
      *
-     * <p>The path of each matching CredentialsMapping' location is compared to the provided location's path: the more
+     * <p>
+     * The path of each matching CredentialsMapping' location is compared to the provided location's path: the more
      * folder parts match, the better. If both paths are equal, then the CredentialsMapping index is returned (perfect match).
+     * </p>
      *
      * @param location the location to be compared against CredentialsMapping matches
      * @param matches CredentialsMapping instances matching the given location
@@ -430,6 +424,20 @@ public class CredentialsManager implements VectorChangeListener {
         return bestMatchIndex;
     }
 
+    /**
+     * Replaces any object that's equal to the given one in the <code>Vector</code>, preserving its position. If the
+     * vector contains no such object, it is added to the end of the vector.
+     *
+     * @param vector the <code>Vector</code> to replace/add the object to
+     * @param o the object to replace/add
+     */
+    private static void replaceVectorElement(Vector vector, Object o) {
+        int index = vector.indexOf(o);
+        if(index==-1)
+            vector.add(o);
+        else
+            vector.setElementAt(o, index);
+    }
 
     /**
      * Returns the list of known volatile {@link CredentialsMapping}, stored in a Vector.

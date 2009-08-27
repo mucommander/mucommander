@@ -264,15 +264,21 @@ public class AuthDialog extends FocusDialog implements ActionListener, EditableC
         else {
             Credentials enteredCredentials = new Credentials(loginField.getText(), new String(passwordField.getPassword()));
             guestCredentialsSelected = false;
-            selectedCredentialsMapping = new CredentialsMapping(enteredCredentials, fileURL, saveCredentialsCheckBox.isSelected());
 
-            // Reuse any existing instance which may contain connection properties
+            boolean isPersistent = saveCredentialsCheckBox.isSelected();
+            selectedCredentialsMapping = new CredentialsMapping(enteredCredentials, fileURL, isPersistent);
+
+            // Look for an existing matching CredentialsMapping instance to re-use the realm which may contain
+            // connection properties.
             int nbCredentials = credentialsMappings.length;
             CredentialsMapping cm;
             for(int i=0; i<nbCredentials; i++) {
                 cm = credentialsMappings[i];
                 if(cm.getCredentials().equals(enteredCredentials, true)) {  // Comparison must be password-sensitive
-                    selectedCredentialsMapping = cm;
+                    // Create a new CredentialsMapping instance in case the 'isPersistent' flag has changed.
+                    // (original credentials may have originally been added as 'volatile' and then made persistent by
+                    // ticking the checkbox, or vice-versa)
+                    selectedCredentialsMapping = new CredentialsMapping(cm.getCredentials(), cm.getRealm(), isPersistent);
                     break;
                 }
             }
