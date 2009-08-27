@@ -227,6 +227,8 @@ Bug fixes:
   (ticket #258).
 - Fixed 'Move to trash' failures under GNOME (ticket #97).
 - Credentials could end up not being saved upon application exit (ticket #173).
+- Fixed connection issues when using a password containing a slash character
+  (ticket #137).
 
 Known issues:
 - Some translations are not up-to-date. Refer to
