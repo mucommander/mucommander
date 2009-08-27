@@ -225,11 +225,12 @@ Bug fixes:
   or on archive entries (ticket #147).
 - Fixed auto-refresh not picking changes changes made to a file that was edited
   (ticket #258).
-- Fixed 'Move to trash' failures under GNOME (ticket #97).    
+- Fixed 'Move to trash' failures under GNOME (ticket #97).
+- Credentials could end up not being saved upon application exit (ticket #173).
 
 Known issues:
-- Some translations are not up-to-date. For more information, see:
-  http://www.mucommander.com/forums/viewtopic.php?f=6&t=442 .
+- Some translations are not up-to-date. Refer to
+  http://trac.mucommander.com/wiki/Translations for more information.
 - RAR and SFTP support are only available under Java 1.5 or higher.
 - Executable permissions are not preserved properly for local files prior to
   Java 1.6.
