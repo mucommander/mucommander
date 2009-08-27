@@ -142,7 +142,7 @@ New features:
 Improvements:
 - Tar/TGZ and Zip unpacking speed has been improved significantly (ticket #74).
 - Improved RAR compatibility.
-- jCIFS library upgraded to version 1.3.10.
+- jCIFS library upgraded to version 1.3.12.
 - SMB domain-based authentication is now supported.
 - Added shortcuts to browse nearby SMB network shares.
 - JNA library upgraded to version 3.0.9.
