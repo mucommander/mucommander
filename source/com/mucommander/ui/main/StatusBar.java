@@ -292,7 +292,7 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
             // Retrieves free and total volume space.
             // Perform volume info retrieval in a separate thread as this method may be called
             // by the event thread and it can take a while, we want to return as soon as possible
-            new Thread() {
+            new Thread("StatusBar.updateVolumeInfo") {
                 public void run() {
                     // Free space on current volume, -1 if this information is not available 
                     long volumeFree;
@@ -366,7 +366,7 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
     private synchronized void startAutoUpdate() {
         if(autoUpdateThread==null) {
             // Start volume info auto-update thread
-            autoUpdateThread = new Thread(this);
+            autoUpdateThread = new Thread(this, "StatusBar autoUpdateThread");
             // Set the thread as a daemon thread
             autoUpdateThread.setDaemon(true);
             autoUpdateThread.start();
