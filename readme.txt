@@ -229,6 +229,8 @@ Bug fixes:
 - Credentials could end up not being saved upon application exit (ticket #173).
 - Fixed connection issues when using a password containing a slash character
   (ticket #137).
+- Fixed a case where the application would freeze when browsing HTTP shares
+  with the tree view enabled (ticket #266).
 
 Known issues:
 - Some translations are not up-to-date. Refer to
