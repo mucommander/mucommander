@@ -25,11 +25,13 @@ import com.mucommander.text.CustomDateFormat;
 import com.mucommander.text.SizeFormat;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.QuestionDialog;
+import com.mucommander.ui.layout.InformationPane;
 import com.mucommander.ui.layout.XAlignedComponentPanel;
 import com.mucommander.ui.layout.YBoxPanel;
 import com.mucommander.ui.notifier.AbstractNotifier;
 import com.mucommander.ui.notifier.NotificationTypes;
 import com.mucommander.ui.text.FileLabel;
+import com.mucommander.ui.text.FontUtils;
 
 import javax.swing.*;
 import java.awt.*;
@@ -80,7 +82,7 @@ public class FileCollisionDialog extends QuestionDialog {
     public FileCollisionDialog(Dialog owner, Component locationRelative, int collisionType, AbstractFile sourceFile, AbstractFile destFile, boolean multipleFilesMode, boolean allowRename) {
         super(owner, Translator.get("file_collision_dialog.title"), locationRelative);
 		
-        init(owner, collisionType, sourceFile, destFile, multipleFilesMode, allowRename);
+        init(collisionType, sourceFile, destFile, multipleFilesMode, allowRename);
     }
 
     /**
@@ -97,11 +99,11 @@ public class FileCollisionDialog extends QuestionDialog {
     public FileCollisionDialog(Frame owner, Component locationRelative, int collisionType, AbstractFile sourceFile, AbstractFile destFile, boolean multipleFilesMode, boolean allowRename) {
         super(owner, Translator.get("file_collision_dialog.title"), locationRelative);
 
-        init(owner, collisionType, sourceFile, destFile, multipleFilesMode, allowRename);
+        init(collisionType, sourceFile, destFile, multipleFilesMode, allowRename);
     }
 
 
-    private void init(Container owner, int collisionType, AbstractFile sourceFile, AbstractFile destFile, boolean multipleFilesMode, boolean allowRename) {
+    private void init(int collisionType, AbstractFile sourceFile, AbstractFile destFile, boolean multipleFilesMode, boolean allowRename) {
 
         // Init choices
 
@@ -151,7 +153,6 @@ public class FileCollisionDialog extends QuestionDialog {
         for(int i=0; i<nbChoices; i++)
             choicesActions[i] = ((Integer)choicesActionsV.elementAt(i)).intValue();
 
-
         // Init UI
 
         String desc;
@@ -168,9 +169,12 @@ public class FileCollisionDialog extends QuestionDialog {
         YBoxPanel yPanel = new YBoxPanel();
 
         if(desc!=null) {
-            yPanel.add(new JLabel(desc+": "));
+            yPanel.add(new InformationPane(desc, null, Font.PLAIN, InformationPane.QUESTION_ICON));
             yPanel.addSpace(10);
         }
+
+        // Add a separator before file details
+        yPanel.add(new JSeparator());
 
         XAlignedComponentPanel tfPanel = new XAlignedComponentPanel(10);
 
@@ -187,7 +191,10 @@ public class FileCollisionDialog extends QuestionDialog {
 
         yPanel.add(tfPanel);
 
-        init(owner, yPanel,
+        // Add a separator after file details
+        yPanel.add(new JSeparator());
+        
+        init(yPanel,
              choicesText,
              choicesActions,
              3);
@@ -205,23 +212,27 @@ public class FileCollisionDialog extends QuestionDialog {
 
 
     private void addFileDetails(XAlignedComponentPanel panel, AbstractFile file, String nameLabel) {
-        panel.addRow(nameLabel+":", new FileLabel(file, false), 0);
+        addFileDetailsRow(panel, nameLabel+":", new FileLabel(file, false), 0);
 
         AbstractFile parent = file.getParent();
 
-        panel.addRow(Translator.get("location")+":", new FileLabel((parent==null?file:parent), true), 0);
+        addFileDetailsRow(panel, Translator.get("location")+":", new FileLabel((parent==null?file:parent), true), 0);
 
-        panel.addRow(Translator.get("size")+":", new JLabel(SizeFormat.format(file.getSize(), SizeFormat.DIGITS_FULL| SizeFormat.UNIT_LONG| SizeFormat.INCLUDE_SPACE)), 0);
+        addFileDetailsRow(panel, Translator.get("size")+":", new JLabel(SizeFormat.format(file.getSize(), SizeFormat.DIGITS_FULL| SizeFormat.UNIT_LONG| SizeFormat.INCLUDE_SPACE)), 0);
 
-        panel.addRow(Translator.get("date")+":", new JLabel(CustomDateFormat.format(new Date(file.getDate()))), 0);
+        addFileDetailsRow(panel, Translator.get("date")+":", new JLabel(CustomDateFormat.format(new Date(file.getDate()))), 0);
 
-        panel.addRow(Translator.get("permissions")+":", new JLabel(file.getPermissionsString()), 10);
+        addFileDetailsRow(panel, Translator.get("permissions")+":", new JLabel(file.getPermissionsString()), 10);
     }
 
-
+    private void addFileDetailsRow(XAlignedComponentPanel panel, String label, JComponent comp, int ySpaceAfter) {
+        panel.addRow(FontUtils.makeMini(new JLabel(label)), FontUtils.makeMini(comp), ySpaceAfter);
+    }
 
     /**
-     * Returns true if the 'apply to all' checkbox has been selected.
+     * Returns <code>true</code> if the 'apply to all' checkbox has been selected.
+     *
+     * @return <code>true</code> if the 'apply to all' checkbox has been selected.
      */
     public boolean applyToAllSelected() {
         return applyToAllCheckBox==null?false:applyToAllCheckBox.isSelected();

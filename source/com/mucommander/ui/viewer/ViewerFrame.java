@@ -24,7 +24,7 @@ import com.mucommander.file.AbstractFile;
 import com.mucommander.runtime.OsFamilies;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.DialogToolkit;
-import com.mucommander.ui.dialog.ErrorDialog;
+import com.mucommander.ui.dialog.InformationDialog;
 import com.mucommander.ui.helper.FocusRequester;
 import com.mucommander.ui.helper.MenuToolkit;
 import com.mucommander.ui.helper.MnemonicHelper;
@@ -168,7 +168,7 @@ public class ViewerFrame extends JFrame implements ActionListener {
     }
 
     public void showGenericViewErrorDialog() {
-        ErrorDialog.showErrorDialog(mainFrame, Translator.get("file_viewer.view_error_title"), Translator.get("file_viewer.view_error"));
+        InformationDialog.showErrorDialog(mainFrame, Translator.get("file_viewer.view_error_title"), Translator.get("file_viewer.view_error"));
     }
 
 

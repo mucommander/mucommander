@@ -18,22 +18,6 @@
 
 package com.mucommander.ui.dialog.file;
 
-import java.awt.BorderLayout;
-import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowEvent;
-
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.SwingConstants;
-import javax.swing.border.EmptyBorder;
-
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.impl.local.LocalFile;
 import com.mucommander.file.util.FileSet;
@@ -57,6 +41,13 @@ import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.text.FileLabel;
 import com.mucommander.ui.text.MultiLineLabel;
 
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+
 /**
  * This dialog shows properties of a file or a group of files : number of files, file kind,
  * combined size and location.
@@ -75,8 +66,8 @@ public class PropertiesDialog extends FocusDialog implements Runnable, ActionLis
     private JButton okCancelButton;
 
     // Dialog width is constrained to 320, height is not an issue (always the same)
-    private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(320,0);	
-    private final static Dimension MAXIMUM_DIALOG_DIMENSION = new Dimension(400,10000);	
+    private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(360,0);
+    private final static Dimension MAXIMUM_DIALOG_DIMENSION = new Dimension(450,10000);	
 
     /** How often should progress information be refreshed (in ms) */
     private final static int REFRESH_RATE = 500;
@@ -169,9 +160,9 @@ public class PropertiesDialog extends FocusDialog implements Runnable, ActionLis
                              +(nbFiles>0&&nbFolders>0?", ":"")
                              +(nbFolders>0?Translator.get("nb_folders", ""+nbFolders):"")
                              );
-        sizeLabel.setText(SizeFormat.format(job.getTotalBytes(), SizeFormat.DIGITS_MEDIUM | SizeFormat.UNIT_LONG | SizeFormat.INCLUDE_SPACE| SizeFormat.ROUND_TO_KB) + 
+        sizeLabel.setText(SizeFormat.format(job.getTotalBytes(), SizeFormat.DIGITS_MEDIUM | SizeFormat.UNIT_LONG | SizeFormat.INCLUDE_SPACE| SizeFormat.ROUND_TO_KB) +
 			  " (" + SizeFormat.format(job.getTotalBytes(), SizeFormat.DIGITS_FULL | SizeFormat.UNIT_LONG | SizeFormat.INCLUDE_SPACE) + ")");
-		
+
         counterLabel.repaint(REFRESH_RATE);
         sizeLabel.repaint(REFRESH_RATE);
     }

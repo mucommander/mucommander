@@ -18,10 +18,6 @@
 
 package com.mucommander.ui.dialog.shutdown;
 
-import java.awt.Dimension;
-
-import javax.swing.JCheckBox;
-
 import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionProperties;
@@ -29,6 +25,8 @@ import com.mucommander.ui.action.impl.QuitAction;
 import com.mucommander.ui.dialog.QuestionDialog;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.WindowManager;
+
+import javax.swing.*;
 
 /**
  * Quit confirmation dialog invoked when the user asked the application to quit, which gives the user a chance
@@ -40,12 +38,10 @@ import com.mucommander.ui.main.WindowManager;
  * @author Maxence Bernard
  */
 public class QuitDialog extends QuestionDialog {
+
     /** True when quit confirmation button has been pressed by the user */
     private boolean quitConfirmed;
 	
-    // Dialog's width has to be at least 240
-    private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(240,0);	
-
     private final static int QUIT_ACTION = 0;
     private final static int CANCEL_ACTION = 1;
 
@@ -72,8 +68,6 @@ public class QuitDialog extends QuestionDialog {
         JCheckBox showNextTimeCheckBox = new JCheckBox(Translator.get("quit_dialog.show_next_time"), true);
         addComponent(showNextTimeCheckBox);
 		
-        setMinimumSize(MINIMUM_DIALOG_DIMENSION);
-
         this.quitConfirmed = getActionValue()==QUIT_ACTION;
         if(quitConfirmed) {
             // Remember user preference

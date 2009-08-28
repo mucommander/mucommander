@@ -33,9 +33,11 @@ public class FontUtils {
      *
      * @param comp the component for which to change the font
      * @param newStyle the new Font style to use, see <code>java.awt.Font</code> for allowed values
+     * @return the component that was passed, for convenience only
      */
-    public static void changeStyle(JComponent comp, int newStyle) {
+    public static JComponent changeStyle(JComponent comp, int newStyle) {
         comp.setFont(comp.getFont().deriveFont(newStyle));
+        return comp;
     }
 
     /**
@@ -43,9 +45,11 @@ public class FontUtils {
      *
      * @param comp the component for which to change the font
      * @param newSize the new Font size to use, see <code>java.awt.Font</code> for allowed values
+     * @return the component that was passed, for convenience only
      */
-    public static void changeSize(JComponent comp, float newSize) {
+    public static JComponent changeSize(JComponent comp, float newSize) {
         comp.setFont(comp.getFont().deriveFont(newSize));
+        return comp;
     }
 
     /**
@@ -54,9 +58,11 @@ public class FontUtils {
      * @param comp the component for which to change the font
      * @param newStyle the new Font style to use, see <code>java.awt.Font</code> for allowed values
      * @param newSize the new Font size to use, see <code>java.awt.Font</code> for allowed values
+     * @return the component that was passed, for convenience only
      */
-    public static void changeStyleAndSize(JComponent comp, int newStyle, float newSize) {
+    public static JComponent changeStyleAndSize(JComponent comp, int newStyle, float newSize) {
         comp.setFont(comp.getFont().deriveFont(newStyle, newSize));
+        return comp;
     }
 
     /**
@@ -64,9 +70,11 @@ public class FontUtils {
      * Other attributes of the font are left unchanged.
      *
      * @param comp the component for which to change the font
+     * @return the component that was passed, for convenience only
      */
-    public static void makeBold(JComponent comp) {
+    public static JComponent makeBold(JComponent comp) {
         changeStyle(comp, Font.BOLD);
+        return comp;
     }
 
     /**
@@ -74,9 +82,11 @@ public class FontUtils {
      * Other attributes of the font are left unchanged.
      *
      * @param comp the component for which to change the font
+     * @return the component that was passed, for convenience only
      */
-    public static void makeItalic(JComponent comp) {
+    public static JComponent makeItalic(JComponent comp) {
         changeStyle(comp, Font.BOLD);
+        return comp;
     }
 
     /**
@@ -84,9 +94,11 @@ public class FontUtils {
      * Other attributes of the font are left unchanged.
      *
      * @param comp the component for which to change the font
+     * @return the component that was passed, for convenience only
      */
-    public static void makeBoldItalic(JComponent comp) {
+    public static JComponent makeBoldItalic(JComponent comp) {
         changeStyle(comp, Font.BOLD|Font.ITALIC);
+        return comp;
     }
 
     /**
@@ -94,16 +106,20 @@ public class FontUtils {
      * Other attributes of the font are left unchanged.
      *
      * @param comp the component for which to change the font
+     * @return the component that was passed, for convenience only
      */
-    public static void makePlain(JComponent comp) {
+    public static JComponent makePlain(JComponent comp) {
         changeStyle(comp, Font.PLAIN);
+        return comp;
     }
     /**
      * Decreases the size of the given component's font by 2 units. Other attributes of the font are left unchanged.
      *
      * @param comp the component for which to change the font
+     * @return the component that was passed, for convenience only
      */
-    public static void makeMini(JComponent comp) {
+    public static JComponent makeMini(JComponent comp) {
         changeSize(comp, comp.getFont().getSize()-2);
+        return comp;
     }
 }

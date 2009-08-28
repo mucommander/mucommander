@@ -31,11 +31,10 @@ import com.mucommander.ui.combobox.SaneComboBox;
 import com.mucommander.ui.dialog.DialogToolkit;
 import com.mucommander.ui.dialog.FocusDialog;
 import com.mucommander.ui.helper.FocusRequester;
+import com.mucommander.ui.layout.InformationPane;
 import com.mucommander.ui.layout.XAlignedComponentPanel;
 import com.mucommander.ui.layout.YBoxPanel;
 import com.mucommander.ui.main.MainFrame;
-import com.mucommander.ui.text.FontUtils;
-import com.mucommander.ui.text.MultiLineLabel;
 import com.mucommander.util.StringUtils;
 
 import javax.swing.*;
@@ -87,16 +86,16 @@ public class AuthDialog extends FocusDialog implements ActionListener, EditableC
         Container contentPane = getContentPane();
         contentPane.setLayout(new BorderLayout());
 
-        YBoxPanel yPanel = new YBoxPanel(5);
+        YBoxPanel yPanel = new YBoxPanel();
 
         if(authFailed) {
-            JTextArea label = new MultiLineLabel(Translator.get("auth_dialog.authentication_failed")+(errorMessage==null||(errorMessage=errorMessage.trim()).equals("")?"":" : "+errorMessage));
-            FontUtils.makeBold(label);
-
-            yPanel.add(label);
+            yPanel.add(new InformationPane(Translator.get("auth_dialog.authentication_failed"), errorMessage, errorMessage==null?Font.PLAIN:Font.BOLD, InformationPane.ERROR_ICON));
             yPanel.addSpace(5);
+            yPanel.add(new JSeparator());
         }
 
+        yPanel.addSpace(5);
+        
         this.fileURL = fileURL;
 
         // Retrieve guest credentials (if any)
@@ -124,7 +123,7 @@ public class AuthDialog extends FocusDialog implements ActionListener, EditableC
             buttonGroup.add(guestRadioButton);
             buttonGroup.add(userRadioButton);
         }
-        // If not display an introductive label ("please enter a login and password")
+        // If not, display an introduction label ("please enter a login and password")
         else {
             yPanel.add(new JLabel(Translator.get("auth_dialog.desc")));
             yPanel.addSpace(15);

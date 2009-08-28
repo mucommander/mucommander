@@ -32,7 +32,7 @@ import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.action.ActionParameters;
 import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.action.impl.*;
-import com.mucommander.ui.dialog.ErrorDialog;
+import com.mucommander.ui.dialog.InformationDialog;
 import com.mucommander.ui.dialog.pref.theme.ThemeEditorDialog;
 import com.mucommander.ui.helper.MenuToolkit;
 import com.mucommander.ui.helper.MnemonicHelper;
@@ -569,7 +569,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
                 ThemeManager.setCurrentTheme(theme);
             }
             catch(IllegalArgumentException e) {
-                ErrorDialog.showErrorDialog(mainFrame, Translator.get("theme_could_not_be_loaded"));
+                InformationDialog.showErrorDialog(mainFrame, Translator.get("theme_could_not_be_loaded"));
             }
         }
     }

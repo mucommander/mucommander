@@ -29,9 +29,8 @@ import com.mucommander.job.FileCollisionChecker;
 import com.mucommander.runtime.OsFamilies;
 import com.mucommander.runtime.OsVersions;
 import com.mucommander.text.Translator;
-import com.mucommander.ui.dialog.ErrorDialog;
+import com.mucommander.ui.dialog.InformationDialog;
 import com.mucommander.ui.dialog.QuestionDialog;
-import com.mucommander.ui.dialog.WarningDialog;
 import com.mucommander.ui.dialog.file.FileCollisionDialog;
 import com.mucommander.ui.dialog.pref.PreferencesDialog;
 import com.mucommander.ui.dialog.pref.PreferencesPanel;
@@ -725,7 +724,7 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
             // Identifies all the look&feels contained by the new library and adds them to the list of custom
             // If no look&feel was found, notifies the user.
             if((newLookAndFeels = new ClassFinder().find(lookAndFeelLibrary, new LookAndFeelFilter())).isEmpty())
-                WarningDialog.showWarningDialog(this, Translator.get("prefs_dialog.no_look_and_feel"));
+                InformationDialog.showWarningDialog(this, Translator.get("prefs_dialog.no_look_and_feel"));
             else if(importLookAndFeelLibrary(lookAndFeelLibrary)) {
                 String currentName;
 
@@ -753,7 +752,7 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
         catch(Exception e) {
             AppLogger.fine("Exception caught", e);
 
-            ErrorDialog.showErrorDialog(this);
+            InformationDialog.showErrorDialog(this);
         }
         setLookAndFeelsLoading(false);
     }
@@ -775,7 +774,7 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
 
             // Makes sure the file actually exists - JFileChooser apparently doesn't enforce that properly in all look&feels.
             if(!file.exists()) {
-                ErrorDialog.showErrorDialog(this, Translator.get("this_file_does_not_exist", file.getName()));
+                InformationDialog.showErrorDialog(this, Translator.get("this_file_does_not_exist", file.getName()));
                 return;
             }
 
@@ -839,7 +838,7 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
             }
             catch(Exception e) {}
             // Otherwise, notifies the user.
-            ErrorDialog.showErrorDialog(this, Translator.get("prefs_dialog.rename_failed", theme.getName()));
+            InformationDialog.showErrorDialog(this, Translator.get("prefs_dialog.rename_failed", theme.getName()));
         }
     }
 
@@ -861,7 +860,7 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
             themeComboBox.removeItem(theme);
         }
         catch(Exception e) {
-            ErrorDialog.showErrorDialog(this);
+            InformationDialog.showErrorDialog(this);
         }
     }
 
@@ -919,7 +918,7 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
             file               = FileFactory.getFile(chooser.getSelectedFile().getAbsolutePath());
             lastSelectedFolder = file.getParent();
             if(!file.exists()) {
-                ErrorDialog.showErrorDialog(this, Translator.get("this_file_does_not_exist", file.getName()));
+                InformationDialog.showErrorDialog(this, Translator.get("this_file_does_not_exist", file.getName()));
                 return;
             }
 
@@ -927,7 +926,7 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
             try {insertTheme(ThemeManager.importTheme((java.io.File)file.getUnderlyingFileObject()));}
             // Notifies the user that something went wrong.
             catch(Exception ex) {
-                ErrorDialog.showErrorDialog(this, Translator.get("prefs_dialog.error_in_import", file.getName()));
+                InformationDialog.showErrorDialog(this, Translator.get("prefs_dialog.error_in_import", file.getName()));
             }
         }
     }
@@ -980,7 +979,7 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
             }
             // Notifies users of errors.
             catch(Exception exception) {
-                ErrorDialog.showErrorDialog(this, Translator.get("write_error"), Translator.get("cannot_write_file", file.getName()));
+                InformationDialog.showErrorDialog(this, Translator.get("write_error"), Translator.get("cannot_write_file", file.getName()));
             }
         }
     }
@@ -991,7 +990,7 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
     private void duplicateTheme(Theme theme) {
         try {insertTheme(ThemeManager.duplicateTheme(theme));}
         catch(Exception e) {
-            ErrorDialog.showErrorDialog(this);
+            InformationDialog.showErrorDialog(this);
         }
     }
 

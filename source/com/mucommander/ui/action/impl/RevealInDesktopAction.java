@@ -19,21 +19,15 @@
 
 package com.mucommander.ui.action.impl;
 
-import java.awt.event.KeyEvent;
-import java.util.Hashtable;
-
-import javax.swing.KeyStroke;
-
 import com.mucommander.desktop.DesktopManager;
 import com.mucommander.text.Translator;
-import com.mucommander.ui.action.AbstractActionDescriptor;
-import com.mucommander.ui.action.ActionCategories;
-import com.mucommander.ui.action.ActionCategory;
-import com.mucommander.ui.action.ActionFactory;
-import com.mucommander.ui.action.ActionProperties;
-import com.mucommander.ui.action.MuAction;
-import com.mucommander.ui.dialog.ErrorDialog;
+import com.mucommander.ui.action.*;
+import com.mucommander.ui.dialog.InformationDialog;
 import com.mucommander.ui.main.MainFrame;
+
+import javax.swing.*;
+import java.awt.event.KeyEvent;
+import java.util.Hashtable;
 
 
 /**
@@ -55,7 +49,7 @@ public class RevealInDesktopAction extends MuAction {
             DesktopManager.openInFileManager(mainFrame.getActivePanel().getCurrentFolder());
         }
         catch(Exception e) {
-            ErrorDialog.showErrorDialog(mainFrame);
+            InformationDialog.showErrorDialog(mainFrame);
         }
     }
     

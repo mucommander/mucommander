@@ -202,7 +202,6 @@ public class DeleteJob extends FileJob {
                     break;
                 }
                 catch(IOException e) {
-        // Todo: localize this entry
                     if(showErrorDialog(errorDialogTitle, Translator.get("error_while_optimizing_archive", archiveFile.getName()))==RETRY_ACTION)
                         continue;
 

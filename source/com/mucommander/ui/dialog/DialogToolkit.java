@@ -158,4 +158,28 @@ public class DialogToolkit {
         return panel;
     }
 
+    /**
+     * Returns the specified component's toplevel <code>Frame</code> or
+     * <code>Dialog</code>.
+     *
+     * @param parentComponent the <code>Component</code> to check for a
+     *		<code>Frame</code> or <code>Dialog</code>
+     * @return the <code>Frame</code> or <code>Dialog</code> that
+     *		contains the component, or the default
+     *         	frame if the component is <code>null</code>,
+     *		or does not have a valid
+     *         	<code>Frame</code> or <code>Dialog</code> parent
+     * @exception HeadlessException if
+     *   <code>GraphicsEnvironment.isHeadless</code> returns
+     *   <code>true</code>
+     * @see java.awt.GraphicsEnvironment#isHeadless
+     */
+    public static Window getWindowForComponent(Component parentComponent) throws HeadlessException {
+        // Note: this method is a shameless rip from javax.swing.JOptionPane
+        if (parentComponent == null)
+            return JOptionPane.getRootFrame();
+        if (parentComponent instanceof Frame || parentComponent instanceof Dialog)
+            return (Window)parentComponent;
+        return getWindowForComponent(parentComponent.getParent());
+    }
 }

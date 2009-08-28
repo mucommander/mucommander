@@ -21,8 +21,8 @@ package com.mucommander.ui.dialog.file;
 import com.mucommander.file.util.FileSet;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.button.CollapseExpandButton;
-import com.mucommander.ui.dialog.ErrorDialog;
 import com.mucommander.ui.dialog.FocusDialog;
+import com.mucommander.ui.dialog.InformationDialog;
 import com.mucommander.ui.layout.AsyncPanel;
 import com.mucommander.ui.list.FileList;
 import com.mucommander.ui.main.MainFrame;
@@ -60,7 +60,7 @@ public abstract class JobDialog extends FocusDialog {
      * @param title the error title
      */
     protected void showErrorDialog(String message, String title) {
-        ErrorDialog.showErrorDialog(mainFrame, title, message);
+        InformationDialog.showErrorDialog(mainFrame, title, message);
     }
 
     /**

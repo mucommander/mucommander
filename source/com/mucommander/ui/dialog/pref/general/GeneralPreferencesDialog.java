@@ -20,7 +20,7 @@ package com.mucommander.ui.dialog.pref.general;
 
 import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.text.Translator;
-import com.mucommander.ui.dialog.ErrorDialog;
+import com.mucommander.ui.dialog.InformationDialog;
 import com.mucommander.ui.dialog.pref.PreferencesDialog;
 import com.mucommander.ui.dialog.pref.component.PrefComponent;
 import com.mucommander.ui.main.WindowManager;
@@ -133,7 +133,7 @@ public class GeneralPreferencesDialog extends PreferencesDialog {
             MuConfiguration.write();
         }
         catch(Exception e) {
-            ErrorDialog.showErrorDialog(this);
+            InformationDialog.showErrorDialog(this);
         }
     }
 

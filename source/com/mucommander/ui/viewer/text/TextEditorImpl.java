@@ -18,32 +18,6 @@
 
 package com.mucommander.ui.viewer.text;
 
-import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.Reader;
-import java.io.Writer;
-import java.nio.charset.Charset;
-
-import javax.swing.JFrame;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JSeparator;
-import javax.swing.JTextArea;
-import javax.swing.KeyStroke;
-import javax.swing.event.DocumentListener;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.Document;
-
 import com.mucommander.file.AbstractFile;
 import com.mucommander.io.EncodingDetector;
 import com.mucommander.io.RandomAccessInputStream;
@@ -52,17 +26,24 @@ import com.mucommander.io.bom.BOMInputStream;
 import com.mucommander.io.bom.BOMWriter;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.DialogOwner;
-import com.mucommander.ui.dialog.ErrorDialog;
+import com.mucommander.ui.dialog.InformationDialog;
 import com.mucommander.ui.encoding.EncodingListener;
 import com.mucommander.ui.encoding.EncodingMenu;
 import com.mucommander.ui.helper.MenuToolkit;
 import com.mucommander.ui.helper.MnemonicHelper;
-import com.mucommander.ui.theme.ColorChangedEvent;
-import com.mucommander.ui.theme.FontChangedEvent;
-import com.mucommander.ui.theme.Theme;
-import com.mucommander.ui.theme.ThemeListener;
-import com.mucommander.ui.theme.ThemeManager;
+import com.mucommander.ui.theme.*;
 import com.mucommander.ui.viewer.EditorFrame;
+
+import javax.swing.*;
+import javax.swing.event.DocumentListener;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.io.*;
+import java.nio.charset.Charset;
 
 /**
  * Text editor implementation used by {@link TextViewer} and {@link TextEditor}.
@@ -350,7 +331,7 @@ class TextEditorImpl implements ThemeListener, ActionListener, EncodingListener 
             loadDocument(file.getInputStream(), newEncoding);
         }
         catch(IOException ex) {
-            ErrorDialog.showErrorDialog(frame, Translator.get("read_error"), Translator.get("file_editor.cannot_read_file", file.getName()));
+            InformationDialog.showErrorDialog(frame, Translator.get("read_error"), Translator.get("file_editor.cannot_read_file", file.getName()));
         }
     }
 

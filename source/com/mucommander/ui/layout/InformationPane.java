@@ -18,6 +18,8 @@
 
 package com.mucommander.ui.layout;
 
+import com.mucommander.ui.text.MultiLineLabel;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -52,17 +54,17 @@ public class InformationPane extends JPanel {
     /** Label used to display the icon, can be null if no icon is used */
     private JLabel iconLabel;
     /** Label used to display the main message */
-    private JLabel mainLabel;
+    private MultiLineLabel mainLabel;
     /** Label used to display the caption message */
-    private JLabel captionLabel;
+    private MultiLineLabel captionLabel;
 
-    /** Designated the 'error' predefined icon */
+    /** Designates the 'error' predefined icon */
     public final static int ERROR_ICON = 1;
-    /** Designated the 'information' predefined icon */
+    /** Designates the 'information' predefined icon */
     public final static int INFORMATION_ICON = 2;
-    /** Designated the 'warning' predefined icon */
+    /** DesignateS the 'warning' predefined icon */
     public final static int WARNING_ICON = 3;
-    /** Designated the 'question' predefined icon */
+    /** Designates the 'question' predefined icon */
     public final static int QUESTION_ICON = 4;
 
     /**
@@ -110,16 +112,16 @@ public class InformationPane extends JPanel {
         if(icon!=null)
             setIcon(icon);
 
-        YBoxPanel yPanel = new YBoxPanel();
+        YBoxPanel yPanel = new YBoxPanel(5);
 
-        mainLabel = new JLabel(mainMessage);
+        mainLabel = new MultiLineLabel(mainMessage);
         if(mainMessageFontStyle!=Font.PLAIN)
             setMainLabelFontStyle(mainMessageFontStyle);
         yPanel.add(mainLabel);
 
         yPanel.addSpace(5);
 
-        captionLabel = new JLabel(captionMessage);
+        captionLabel = new MultiLineLabel(captionMessage);
         Font labelFont = mainLabel.getFont();
         captionLabel.setFont(labelFont.deriveFont(Font.PLAIN, labelFont.getSize()-2));
         yPanel.add(captionLabel);
@@ -165,7 +167,7 @@ public class InformationPane extends JPanel {
      *
      * @return the main label displayed in this InformationPane
      */
-    public JLabel getMainLabel() {
+    public MultiLineLabel getMainLabel() {
         return mainLabel;
     }
 
@@ -174,7 +176,7 @@ public class InformationPane extends JPanel {
      *
      * @return the caption label displayed in this InformationPane
      */
-    public JLabel getCaptionLabel() {
+    public MultiLineLabel getCaptionLabel() {
         return captionLabel;
     }
 

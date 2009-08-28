@@ -18,8 +18,6 @@
 
 package com.mucommander.ui.action.impl;
 
-import java.util.Hashtable;
-
 import com.mucommander.AppLogger;
 import com.mucommander.command.Command;
 import com.mucommander.file.FileProtocols;
@@ -29,9 +27,11 @@ import com.mucommander.job.TempOpenWithJob;
 import com.mucommander.process.ProcessRunner;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.MuAction;
-import com.mucommander.ui.dialog.ErrorDialog;
+import com.mucommander.ui.dialog.InformationDialog;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;
+
+import java.util.Hashtable;
 
 /**
  * @author Nicolas Rinaudo
@@ -76,7 +76,7 @@ public class CommandAction extends MuAction {
         if(selectedFiles.getBaseFolder().getURL().getScheme().equals(FileProtocols.FILE) && (selectedFiles.getBaseFolder().hasAncestor(LocalFile.class))) {
             try {ProcessRunner.execute(command.getTokens(selectedFiles), selectedFiles.getBaseFolder());}
             catch(Exception e) {
-                ErrorDialog.showErrorDialog(mainFrame);
+                InformationDialog.showErrorDialog(mainFrame);
 
                 AppLogger.fine("Failed to execute command: " + command.getCommand(), e);
             }

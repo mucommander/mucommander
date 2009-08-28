@@ -18,15 +18,6 @@
 
 package com.mucommander.ui.dialog.startup;
 
-import java.awt.BorderLayout;
-import java.awt.Container;
-import java.awt.Dimension;
-import java.net.URL;
-import java.util.Vector;
-
-import javax.swing.JCheckBox;
-import javax.swing.JLabel;
-
 import com.mucommander.AppLogger;
 import com.mucommander.VersionChecker;
 import com.mucommander.conf.impl.MuConfiguration;
@@ -36,10 +27,16 @@ import com.mucommander.job.SelfUpdateJob;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionProperties;
 import com.mucommander.ui.action.impl.GoToWebsiteAction;
-import com.mucommander.ui.dialog.ErrorDialog;
+import com.mucommander.ui.dialog.InformationDialog;
 import com.mucommander.ui.dialog.QuestionDialog;
 import com.mucommander.ui.dialog.file.ProgressDialog;
+import com.mucommander.ui.layout.InformationPane;
 import com.mucommander.ui.main.MainFrame;
+
+import javax.swing.*;
+import java.awt.*;
+import java.net.URL;
+import java.util.Vector;
 
 /**
  * This class takes care of retrieving the information about the latest muCommander version from a remote server and
@@ -89,7 +86,7 @@ public class CheckVersionDialog extends QuestionDialog implements Runnable {
         Container contentPane = getContentPane();
         contentPane.setLayout(new BorderLayout());
         
-        String         text;
+        String         message;
         String         title;
         VersionChecker version;
         URL            downloadURL = null;
@@ -113,10 +110,10 @@ public class CheckVersionDialog extends QuestionDialog implements Runnable {
                 // If the platform is not capable of opening a new browser window,
                 // display the download URL.
                 if(downloadOption) {
-                    text = Translator.get("version_dialog.new_version");
+                    message = Translator.get("version_dialog.new_version");
                 }
                 else {
-                    text = Translator.get("version_dialog.new_version_url", downloadURL.toString());
+                    message = Translator.get("version_dialog.new_version_url", downloadURL.toString());
                 }
 
                 jarURL = version.getJarURL();
@@ -133,7 +130,7 @@ public class CheckVersionDialog extends QuestionDialog implements Runnable {
                 }
                 
                 title = Translator.get("version_dialog.no_new_version_title");
-                text = Translator.get("version_dialog.no_new_version");
+                message = Translator.get("version_dialog.no_new_version");
             }
         }
         // Check failed
@@ -146,7 +143,7 @@ public class CheckVersionDialog extends QuestionDialog implements Runnable {
             }
 
             title = Translator.get("version_dialog.not_available_title");
-            text = Translator.get("version_dialog.not_available");
+            message = Translator.get("version_dialog.not_available");
         }
 
         // Set title
@@ -180,7 +177,7 @@ public class CheckVersionDialog extends QuestionDialog implements Runnable {
             labels[i] = (String)labelsV.elementAt(i);
         }
 
-        init(mainFrame, new JLabel(text),
+        init(new InformationPane(message, null, Font.PLAIN, InformationPane.INFORMATION_ICON),
              labels,
              actions,
              0);
@@ -200,7 +197,7 @@ public class CheckVersionDialog extends QuestionDialog implements Runnable {
                 DesktopManager.executeOperation(DesktopManager.BROWSE, new Object[] {downloadURL});
             }
             catch(Exception e) {
-                ErrorDialog.showErrorDialog(this);
+                InformationDialog.showErrorDialog(this);
             }
         }
         else if(action==INSTALL_AND_RESTART_ACTION) {

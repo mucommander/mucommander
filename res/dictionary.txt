@@ -1636,6 +1636,25 @@ this_operation_cannot_be_undone:UA:Неможливо скасувати дан�
 # Translation missing (KO)
 
 
+details:EN:Details
+details:FR:Détails
+# Translation missing (New!)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ##########################
 # Generic error messages #
 ##########################
@@ -6308,7 +6327,7 @@ table.folder_access_error_title:DA:Fejl ved mappe adgang
 table.folder_access_error_title:UA:Помилка під час доступу до папки
 
 table.folder_access_error:EN:Unable to read folder content
-table.folder_access_error:FR:Unable to read folder content
+table.folder_access_error:FR:Le contenu du dossier ne peut être lu
 table.folder_access_error:DE:Kann Ordnerinhalt nicht lesen
 table.folder_access_error:ES:Imposible leer el contenido del directorio
 table.folder_access_error:CS:Nelze číst obsah složky

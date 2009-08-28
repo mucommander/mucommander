@@ -65,16 +65,15 @@ public class FocusDialog extends JDialog implements WindowListener {
     
     public FocusDialog(Frame owner, String title, Component locationRelativeComp) {
         super(owner, title, true);
-        init(owner, locationRelativeComp);
+        init(locationRelativeComp);
     }
 
     public FocusDialog(Dialog owner, String title, Component locationRelativeComp) {
         super(owner, title, true);
-        init(owner, locationRelativeComp);
+        init(locationRelativeComp);
     }
 
-
-    private void init(Window owner, Component locationRelativeComp) {
+    private void init(Component locationRelativeComp) {
         this.locationRelativeComp = locationRelativeComp;
         setLocationRelativeTo(locationRelativeComp);
 

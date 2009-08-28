@@ -19,7 +19,7 @@
 package com.mucommander.ui.dialog.pref.theme;
 
 import com.mucommander.text.Translator;
-import com.mucommander.ui.dialog.ErrorDialog;
+import com.mucommander.ui.dialog.InformationDialog;
 import com.mucommander.ui.dialog.QuestionDialog;
 import com.mucommander.ui.dialog.pref.PreferencesDialog;
 import com.mucommander.ui.dialog.pref.component.PrefComponent;
@@ -133,7 +133,7 @@ public class ThemeEditorDialog extends PreferencesDialog {
             }
             catch(Exception exception) {
                 try {
-                    ErrorDialog.showErrorDialog(this, Translator.get("write_error"), Translator.get("cannot_write_file", ThemeManager.getUserThemeFile().getAbsolutePath()));
+                    InformationDialog.showErrorDialog(this, Translator.get("write_error"), Translator.get("cannot_write_file", ThemeManager.getUserThemeFile().getAbsolutePath()));
                 }
                 catch(Exception e) {}
             }

@@ -38,7 +38,7 @@ import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.action.impl.FocusNextAction;
 import com.mucommander.ui.action.impl.FocusPreviousAction;
 import com.mucommander.ui.border.MutableLineBorder;
-import com.mucommander.ui.dialog.ErrorDialog;
+import com.mucommander.ui.dialog.InformationDialog;
 import com.mucommander.ui.dialog.QuestionDialog;
 import com.mucommander.ui.dialog.auth.AuthDialog;
 import com.mucommander.ui.dialog.file.DownloadDialog;
@@ -298,8 +298,8 @@ public class FolderPanel extends JPanel implements FocusListener, ThemeListener 
     }
 
     /**
-     * Registers the {@link FocusNextAction} and
-     * {@link FocusPreviousAction actions onto the given component's input map.
+     * Registers the {@link FocusNextAction} and {@link FocusPreviousAction} actions onto the given component's
+     * input map.
      *  
      * @param component the component for which to register the cycle actions
      */
@@ -410,7 +410,7 @@ public class FolderPanel extends JPanel implements FocusListener, ThemeListener 
      * Displays a popup dialog informing the user that the requested folder doesn't exist or isn't available.
      */
     private void showFolderDoesNotExistDialog() {
-        ErrorDialog.showErrorDialog(mainFrame, Translator.get("table.folder_access_error_title"), Translator.get("folder_does_not_exist"));
+        InformationDialog.showErrorDialog(mainFrame, Translator.get("table.folder_access_error_title"), Translator.get("folder_does_not_exist"));
     }
 
 
@@ -420,10 +420,7 @@ public class FolderPanel extends JPanel implements FocusListener, ThemeListener 
      * @param e the Exception that was caught while changing the folder
      */
     private void showAccessErrorDialog(Exception e) {
-        String exceptionMsg = e==null?null:e.getMessage();
-        String errorMsg = Translator.get("table.folder_access_error")+(exceptionMsg==null?"":": "+exceptionMsg);
-
-        ErrorDialog.showErrorDialog(mainFrame, Translator.get("table.folder_access_error_title"), errorMsg);
+        InformationDialog.showErrorDialog(mainFrame, Translator.get("table.folder_access_error_title"), Translator.get("table.folder_access_error"), e==null?null:e.getMessage(), e);
     }
 
 

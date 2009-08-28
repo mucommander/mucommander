@@ -30,8 +30,8 @@ import com.mucommander.ui.action.impl.MkdirAction;
 import com.mucommander.ui.action.impl.MkfileAction;
 import com.mucommander.ui.chooser.SizeChooser;
 import com.mucommander.ui.dialog.DialogToolkit;
-import com.mucommander.ui.dialog.ErrorDialog;
 import com.mucommander.ui.dialog.FocusDialog;
+import com.mucommander.ui.dialog.InformationDialog;
 import com.mucommander.ui.layout.YBoxPanel;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.text.FilePathField;
@@ -144,14 +144,14 @@ public class MkdirDialog extends FocusDialog implements ActionListener, ItemList
         PathUtils.ResolvedDestination resolvedDest = PathUtils.resolveDestination(enteredPath, mainFrame.getActiveTable().getCurrentFolder());
         // The path entered doesn't correspond to any existing folder
         if (resolvedDest==null) {
-            ErrorDialog.showErrorDialog(mainFrame, Translator.get("invalid_path", enteredPath));
+            InformationDialog.showErrorDialog(mainFrame, Translator.get("invalid_path", enteredPath));
             return;
         }
 
         // Checks if the directory already exists and reports the error if that's the case
         int destinationType = resolvedDest.getDestinationType();
         if(destinationType==PathUtils.ResolvedDestination.EXISTING_FOLDER) {
-            ErrorDialog.showErrorDialog(mainFrame, Translator.get("directory_already_exists", enteredPath));
+            InformationDialog.showErrorDialog(mainFrame, Translator.get("directory_already_exists", enteredPath));
             return;
         }
 

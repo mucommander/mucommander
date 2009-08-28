@@ -18,27 +18,22 @@
 
 package com.mucommander.ui.action.impl;
 
-import java.awt.event.KeyEvent;
-import java.io.IOException;
-import java.util.Hashtable;
-
-import javax.swing.KeyStroke;
-
 import com.mucommander.desktop.DesktopManager;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.ArchiveEntryFile;
 import com.mucommander.file.FileProtocols;
 import com.mucommander.job.TempExecJob;
 import com.mucommander.text.Translator;
-import com.mucommander.ui.action.AbstractActionDescriptor;
-import com.mucommander.ui.action.ActionCategories;
-import com.mucommander.ui.action.ActionCategory;
-import com.mucommander.ui.action.ActionFactory;
-import com.mucommander.ui.action.MuAction;
-import com.mucommander.ui.dialog.ErrorDialog;
+import com.mucommander.ui.action.*;
+import com.mucommander.ui.dialog.InformationDialog;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.quicklist.RecentExecutedFilesQL;
+
+import javax.swing.*;
+import java.awt.event.KeyEvent;
+import java.io.IOException;
+import java.util.Hashtable;
 
 /**
  * This action opens the currently selected file or folder with native file associations.
@@ -71,7 +66,7 @@ public class OpenNativelyAction extends MuAction {
             	RecentExecutedFilesQL.addFile(selectedFile);
         	}
             catch(IOException e) {
-                ErrorDialog.showErrorDialog(mainFrame);
+                InformationDialog.showErrorDialog(mainFrame);
             }
         }
     }

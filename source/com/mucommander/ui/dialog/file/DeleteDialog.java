@@ -67,7 +67,7 @@ public class DeleteDialog extends JobDialog implements ItemListener, ActionListe
     private JButton deleteButton;
 
     /** Dialog size constraints */
-    private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(320,0);
+    private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(360,0);
 
 
     public DeleteDialog(MainFrame mainFrame, FileSet files, boolean deletePermanently) {

@@ -23,7 +23,7 @@ import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionFactory;
 import com.mucommander.ui.action.MuAction;
-import com.mucommander.ui.dialog.ErrorDialog;
+import com.mucommander.ui.dialog.InformationDialog;
 import com.mucommander.ui.main.MainFrame;
 
 import javax.swing.*;
@@ -56,7 +56,7 @@ public class OpenURLInBrowserAction extends MuAction {
                 DesktopManager.browse(new URL((String)url));
             }
             catch(Exception e) {
-                ErrorDialog.showErrorDialog(mainFrame);
+                InformationDialog.showErrorDialog(mainFrame);
             }
         }
     }
