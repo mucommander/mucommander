@@ -196,7 +196,7 @@ public class FoldersTreePanel extends JPanel implements TreeSelectionListener,
         AbstractFile tempFolder = currentFolder;
         AbstractFile tempParent;
         while (!tempFolder.isDirectory()) {
-            tempParent = currentFolder.getParent();
+            tempParent = tempFolder.getParent();
             if(tempParent==null)
                 break;
 
