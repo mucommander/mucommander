@@ -24,11 +24,25 @@ package com.mucommander.ui.action;
  * @author Arik Hadas
  */
 public class ActionCategories {
-	
+	public static final ActionCategory ALL        = new AllCategory();
 	public static final ActionCategory NAVIGATION = new ActionCategory(ActionCategories.class.getName() + ".navigation");
 	public static final ActionCategory SELECTION  = new ActionCategory(ActionCategories.class.getName() + ".selection");
 	public static final ActionCategory VIEW       = new ActionCategory(ActionCategories.class.getName() + ".view");
 	public static final ActionCategory FILES      = new ActionCategory(ActionCategories.class.getName() + ".file_operations");
 	public static final ActionCategory WINDOW     = new ActionCategory(ActionCategories.class.getName() + ".windows");
 	public static final ActionCategory MISC       = new ActionCategory(ActionCategories.class.getName() + ".misc");
+	
+	/**
+	 * Category that contains all actions.
+	 */
+	private static class AllCategory extends ActionCategory {
+
+		protected AllCategory() {
+			super(ActionCategories.class.getName() + ".all");
+		}
+		
+		public boolean contains(String actionId) {
+			return true;
+		}
+	}
 }

@@ -38,6 +38,13 @@ public class ActionCategory {
 
 	public String getDescription() { return Translator.get(descriptionKey); }
 	
+	public boolean contains(String actionId) {
+		ActionCategory actionCategory = ActionProperties.getActionCategory(actionId);
+		if (actionCategory != null)
+			return descriptionKey.equals(actionCategory.getDescriptionKey());
+		return false;
+	}
+	
 	public String toString() { 
 		String description = getDescription();
 		if (description != null)

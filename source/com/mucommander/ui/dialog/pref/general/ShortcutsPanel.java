@@ -40,6 +40,7 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 
+import com.mucommander.ui.action.ActionCategories;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionKeymapIO;
 import com.mucommander.ui.action.ActionProperties;
@@ -115,32 +116,23 @@ public class ShortcutsPanel extends PreferencesPanel {
 		Vector actionCategories = new Vector(ActionProperties.getActionCategories());
 		int nbCategories = actionCategories.size();
 		final JComboBox combo = new JComboBox();
-		combo.addItem("All");
-	    for (int i = 0; i < nbCategories; ++i) {
+		combo.addItem(ActionCategories.ALL);
+	    for (int i = 0; i < nbCategories; ++i)
 	      combo.addItem(actionCategories.elementAt(i));
-	    }
 	    
 	    combo.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-				if (combo.getSelectedIndex() == 0) {
-					shortcutsTable.updateModel(new ShortcutsTable.ActionFilter() {
-						public boolean accept(String actionId) {
-							return true;
-						}
-					});
-				}
-				else {
-					final ActionCategory selectedActionCategory = (ActionCategory) combo.getSelectedItem();
-					shortcutsTable.updateModel(new ShortcutsTable.ActionFilter() {
-						public boolean accept(String actionId) {
-							return selectedActionCategory == ActionProperties.getActionCategory(actionId);
-						}
-					});					
-				}
+				final ActionCategory selectedActionCategory = (ActionCategory) combo.getSelectedItem();
+				shortcutsTable.updateModel(new ShortcutsTable.ActionFilter() {
+					public boolean accept(String actionId) {
+						return selectedActionCategory.contains(actionId);
+					}
+				});					
 			}
 	    });
-		combo.setSelectedIndex(0);
+
+	    combo.setSelectedIndex(0);
 		
 		panel.add(combo);
 		
@@ -157,6 +149,7 @@ public class ShortcutsPanel extends PreferencesPanel {
 	///////////////////////
     // PrefPanel methods //
     ///////////////////////
+	
 	protected void commit() {
 		shortcutsTable.updateActions();
 		ActionKeymapIO.setModified();
