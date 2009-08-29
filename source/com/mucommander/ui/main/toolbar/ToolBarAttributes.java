@@ -115,9 +115,9 @@ public class ToolBarAttributes {
     }
     
     /**
-     * TODO: document
+     * Check whether the default attributes are used.
      * 
-     * @return
+     * @return true if the default attributes are used, false otherwise.
      */
     public static boolean areDefaultAttributes() {
     	int nbActions = actionIds.length;
@@ -139,10 +139,10 @@ public class ToolBarAttributes {
     }
     
     /**
-     * Returns the actions classes that constitue the toolbar. <code>null</code> elements are used to insert a separator
+     * Returns the actions classes that constitute the toolbar. <code>null</code> elements are used to insert a separator
      * between buttons.
      *
-     * @return the actions classes that constitue the toolbar.
+     * @return the actions classes that constitute the toolbar.
      */
     public static String[] getActions() {
     	return useDefaultActions ? DEFAULT_TOOLBAR_ACTIONS : actionIds;

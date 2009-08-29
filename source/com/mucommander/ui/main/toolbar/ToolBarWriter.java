@@ -28,7 +28,7 @@ import com.mucommander.xml.XmlAttributes;
 import com.mucommander.xml.XmlWriter;
 
 /**
- * TODO: document
+ * This class is responsible for writing the tool-bar attributes (buttons and separators).
  * 
  * @author Arik Hadas
  */
