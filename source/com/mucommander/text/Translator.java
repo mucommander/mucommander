@@ -28,20 +28,23 @@ import java.util.*;
 
 
 /**
- * This class takes care of all text localization issues by loading all text entries from 
- * a dictionary file on startup and translating them into the current language on demand.
+ * This class takes care of all text localization issues by loading all text entries from a dictionary file on startup
+ * and translating them into the current language on demand.
  *
- * <p>All public methods are static to make it easy to call them throughout the application</p>
+ * <p>All public methods are static to make it easy to call them throughout the application.</p>
  *
- * <p>See dictionary file for more information about dictionary file grammar.</p>
+ * <p>See dictionary file for more information about th dictionary file format.</p>
  *
  * @author Maxence Bernard
  */
 public class Translator {
 
-    /** Hashtable that maps text keys to values */
+    /** Contains key/value pairs for the current language */
     private static Hashtable dictionary;
 
+    /** Contains key/value pairs for the default language, for entries that are not defined in the current language */
+    private static Hashtable defaultDictionary;
+    
     /** List of all available languages in the dictionary file */
     private static Vector availableLanguages;
 
@@ -66,8 +69,11 @@ public class Translator {
      * <p>
      * If the language set in the preferences or the system's language is not available, the default language as
      * defined by {@link #DEFAULT_LANGUAGE} will be used.
+     * </p>
+     *
+     * @param availableLanguages list of available languages
      */
-    private static void determineCurrentLanguage(Vector availableLanguages) {
+    private static void setCurrentLanguage(Vector availableLanguages) {
         String lang = MuConfiguration.getVariable(MuConfiguration.LANGUAGE);
 
         if(lang==null) {
@@ -112,21 +118,27 @@ public class Translator {
 
     /**
      * Loads the default dictionary file.
-     * @exception IOException thrown if an IO error occurs.
+     *
+     * @throws IOException thrown if an IO error occurs.
      */
-    public static void loadDictionaryFile() throws IOException {loadDictionaryFile(com.mucommander.RuntimeConstants.DICTIONARY_FILE);}
+    public static void loadDictionaryFile() throws IOException {
+        loadDictionaryFile(com.mucommander.RuntimeConstants.DICTIONARY_FILE);
+    }
 
     /**
-     * Reads the dictionary file which contains localized text entries.
-     * @exception IOException thrown if an IO error occurs.
+     * Loads the specified dictionary file, which contains localized text entries.
+     *
+     * @param filePath path to the dictionary file
+     * @throws IOException thrown if an IO error occurs.
      */
     public static void loadDictionaryFile(String filePath) throws IOException {
         availableLanguages = new Vector();
         dictionary         = new Hashtable();
+        defaultDictionary  = new Hashtable();
 
         BufferedReader br = new BufferedReader(new BOMReader(ResourceLoader.getResourceAsStream(filePath)));
         String line;
-        String key;
+        String keyLC;
         String lang;
         String text;
         StringTokenizer st;
@@ -137,11 +149,11 @@ public class Translator {
 
                 try {
                     // Sets delimiter to ':'
-                    key = st.nextToken(":").trim();
+                    keyLC = st.nextToken(":").trim().toLowerCase();
 
                     // Special key that lists available languages, must
                     // be defined before any other entry
-                    if(Translator.language==null && key.equals(AVAILABLE_LANGUAGES_KEY)) {
+                    if(Translator.language==null && keyLC.equals(AVAILABLE_LANGUAGES_KEY)) {
                         // Parse comma separated languages
                         st = new StringTokenizer(st.nextToken(), ",\n");
                         while(st.hasMoreTokens())
@@ -149,8 +161,8 @@ public class Translator {
 
                         AppLogger.finer("Available languages= "+availableLanguages);
 
-                        // Determines current language based on available languages and preferred language (if set) or sytem's language 
-                        determineCurrentLanguage(availableLanguages);
+                        // Determines current language based on available languages and preferred language (if set) or system's language
+                        setCurrentLanguage(availableLanguages);
 
                         continue;
                     }
@@ -167,15 +179,21 @@ public class Translator {
                     while ((pos = text.indexOf("\\n", pos))!=-1)
                         text = text.substring(0, pos)+"\n"+text.substring(pos+2, text.length());
 
-                    // Replace "\\uxxxx" unicode charcter strings by the designated character
+                    // Replace "\\uxxxx" unicode strings by the designated character
                     pos = 0;
 
                     while ((pos = text.indexOf("\\u", pos))!=-1)
                         text = text.substring(0, pos)+(char)(Integer.parseInt(text.substring(pos+2, pos+6), 16))+text.substring(pos+6, text.length());
 
                     // Add entry for current language, or for default language if a value for current language wasn't already set
-                    if(lang.equalsIgnoreCase(language) || (lang.equalsIgnoreCase(DEFAULT_LANGUAGE) && dictionary.get(key)==null))
-                        put(key, text);
+                    if(lang.equalsIgnoreCase(language)) {
+                        dictionary.put(keyLC, text);
+                        // Remove the default dictionary entry as it will not be used (saves some memory).
+                        defaultDictionary.remove(keyLC);
+                    }
+                    else if(lang.equalsIgnoreCase(DEFAULT_LANGUAGE) && dictionary.get(keyLC)==null) {
+                        defaultDictionary.put(keyLC, text);
+                    }
                 }
                 catch(Exception e) {
                     AppLogger.info("error in line " + line + " (" + e + ")");
@@ -211,40 +229,45 @@ public class Translator {
 
 
     /**
-     * Returns true if the given key exists (has a corresponding value) in the current language.
+     * Returns <code>true</code> if the given entry's key has a value in the current language.
+     * If the <code>useDefaultLanguage</code> parameter is <code>true</code>, entries that have no value in the 
+     * {@link #getLanguage() current language} but one in the {@link #DEFAULT_LANGUAGE} will be considered as having
+     * a value (<code>true</code> will be returned).
+     *
+     * @param key key of the requested dictionary entry (case-insensitive)
+     * @param useDefaultLanguage if <code>true</code>, entries that have no value in the {@link #getLanguage() current
+     * language} but one in the {@link #DEFAULT_LANGUAGE} will be considered as having a value
+     * @return <code>true</code> if the given key has a corresponding value in the current language.
      */
-    public static boolean entryExists(String key) {
-        return dictionary.get(key.toLowerCase())!=null;
+    public static boolean hasValue(String key, boolean useDefaultLanguage) {
+        return dictionary.get(key.toLowerCase())!=null
+                || (useDefaultLanguage && defaultDictionary.get(key.toLowerCase())!=null);
     }
 
-
     /**
-     * Adds the key/text value to the dictionary.
+     * Returns the localized text String for the given key expressd in the current language, or in the default language
+     * if there is no value for the current language. Entry parameters (%1, %2, ...), if any, are replaced by the
+     * specified values.
      *
-     * @param key a case-insensitive key.
-     * @param text localized text.
-     */
-    private static void put(String key, String text) {
-        // Adds a new entry to the dictionary
-        dictionary.put(key.toLowerCase(), text);
-    }
-
-
-    /**
-     * Returns the localized text String corresponding to the given key and
-     * current language (or default language if a value for current language is not available),
-     * and replaces  the %1, %2... parameters by their given value.
-     *
-     * @param key a case-insensitive key.
+     * @param key key of the requested dictionary entry (case-insensitive)
      * @param paramValues array of parameters which will be used as values for variables.
+     * @return the localized text String for the given key expressd in the current language
      */
     public static String get(String key, String paramValues[]) {
         // Returns the localized text
         String text = (String)dictionary.get(key.toLowerCase());
 
         if (text==null) {
-            AppLogger.fine("Unknown key "+key);
-            return key;
+            text = (String)defaultDictionary.get(key.toLowerCase()); 
+
+            if(text==null) {
+                AppLogger.fine("No value for "+key+", returning key");
+                return key;
+            }
+            else {
+                AppLogger.fine("No value for "+key+" in language "+language+", using "+DEFAULT_LANGUAGE+" value");
+                // Don't return yet, parameters need to be replaced
+            }
         }
 
         // Replace %1, %2 ... parameters by their value
@@ -274,7 +297,8 @@ public class Translator {
     /**
      * Convenience method, equivalent to <code>get(key, (String[])null)</code>.
      *
-     * @param key a case-insensitive key.
+     * @param key key of the requested dictionary entry (case-insensitive)
+     * @return the localized text String for the given key expressd in the current language
      */
     public static String get(String key) {
         return get(key, (String[])null);
@@ -284,8 +308,9 @@ public class Translator {
     /**
      * Convenience method, equivalent to <code>get(key, new String[]{paramValue1})</code>)</code>.
      *
-     * @param key a case-insensitive key.
+     * @param key key of the requested dictionary entry (case-insensitive)
      * @param paramValue1 first parameter which will be used to replace %1 variables.
+     * @return the localized text String for the given key expressd in the current language
      */
     public static String get(String key, String paramValue1) {
         return get(key, new String[] {paramValue1});
@@ -295,9 +320,10 @@ public class Translator {
     /**
      * Convenience method, equivalent to <code>get(key, new String[]{paramValue1, paramValue2})</code>)</code>.
      *
-     * @param key a case-insensitive key.
+     * @param key key of the requested dictionary entry (case-insensitive)
      * @param paramValue1 first parameter which will be used to replace %1 variables.
      * @param paramValue2 second parameter which will be used to replace %2 variables.
+     * @return the localized text String for the given key expressd in the current language
      */
     public static String get(String key, String paramValue1, String paramValue2) {
         return get(key, new String[] {paramValue1, paramValue2});
@@ -307,10 +333,11 @@ public class Translator {
     /**
      * Convenience method, equivalent to <code>get(key, new String[]{paramValue1, paramValue2, paramValue3})</code>)</code>.
      *
-     * @param key a case-insensitive key.
+     * @param key key of the requested dictionary entry (case-insensitive)
      * @param paramValue1 first parameter which will be used to replace %1 variables.
      * @param paramValue2 second parameter which will be used to replace %2 variables.
      * @param paramValue3 third parameter which will be used to replace %3 variables.
+     * @return the localized text String for the given key expressd in the current language
      */
     public static String get(String key, String paramValue1, String paramValue2, String paramValue3) {
         return get(key, new String[] {
@@ -463,6 +490,7 @@ public class Translator {
      * @param newLanguageFile dictionary file containing new language entries
      * @param resultingFile merged dictionary file
      * @param newLanguage new language
+     * @throws IOException if an I/O error occurred
      */
     private static void addLanguageToDictionary(String originalFile, String newLanguageFile, String resultingFile, String newLanguage) throws IOException {
         // Initialize streams

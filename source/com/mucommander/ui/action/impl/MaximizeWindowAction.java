@@ -61,8 +61,12 @@ public class MaximizeWindowAction extends MuAction {
 		public KeyStroke getDefaultKeyStroke() { return null; }
 
         public String getLabel() {
-            // Use a special on Mac OS X
-            return OsFamilies.MAC_OS_X.isCurrent()?Translator.get(ActionProperties.getActionLabelKey(MaximizeWindowAction.Descriptor.ACTION_ID)+".mac_os_x"):super.getLabel();
+            // Use a special label for Mac OS X, if it exists, use the standard action label otherwise
+            String macLabelKey = ActionProperties.getActionLabelKey(ACTION_ID)+".mac_os_x";
+            if(OsFamilies.MAC_OS_X.isCurrent() && Translator.hasValue(macLabelKey, false))
+                return Translator.get(macLabelKey);
+
+            return super.getLabel();
         }
     }
 }

@@ -98,7 +98,7 @@ public abstract class AbstractActionDescriptor implements ActionDescriptor {
      */
     private String getStandardLabel() {
     	String labelKey = getLabelKey();
-        if(!Translator.entryExists(labelKey))
+        if(!Translator.hasValue(labelKey, true))
             return null;
 
         return Translator.get(labelKey);
@@ -141,7 +141,7 @@ public abstract class AbstractActionDescriptor implements ActionDescriptor {
      */
     private static String getStandardTooltip(String actionId) {
         String tooltipKey = getStandardTooltipKey(actionId);
-        if(!Translator.entryExists(tooltipKey))
+        if(!Translator.hasValue(tooltipKey, true))
             return null;
 
         return Translator.get(tooltipKey);

@@ -18,21 +18,14 @@
 
 package com.mucommander.ui.action.impl;
 
-import java.awt.event.KeyEvent;
-import java.util.Hashtable;
-
-import javax.swing.JFrame;
-import javax.swing.KeyStroke;
-
 import com.mucommander.runtime.OsFamilies;
 import com.mucommander.text.Translator;
-import com.mucommander.ui.action.AbstractActionDescriptor;
-import com.mucommander.ui.action.ActionCategories;
-import com.mucommander.ui.action.ActionCategory;
-import com.mucommander.ui.action.ActionFactory;
-import com.mucommander.ui.action.ActionProperties;
-import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.action.*;
 import com.mucommander.ui.main.MainFrame;
+
+import javax.swing.*;
+import java.awt.event.KeyEvent;
+import java.util.Hashtable;
 
 /**
  * Minimizes the {@link MainFrame} this action is associated with.
@@ -69,8 +62,12 @@ public class MinimizeWindowAction extends MuAction {
 		public KeyStroke getDefaultKeyStroke() { return KeyStroke.getKeyStroke(KeyEvent.VK_M, KeyEvent.META_DOWN_MASK); }
 
         public String getLabel() {
-            // Use a special on Mac OS X
-            return OsFamilies.MAC_OS_X.isCurrent()?Translator.get(ActionProperties.getActionLabelKey(MinimizeWindowAction.Descriptor.ACTION_ID)+".mac_os_x"):super.getLabel();
+            // Use a special label for Mac OS X, if it exists, use the standard action label otherwise
+            String macLabelKey = ActionProperties.getActionLabelKey(ACTION_ID)+".mac_os_x";
+            if(OsFamilies.MAC_OS_X.isCurrent() && Translator.hasValue(macLabelKey, false))
+                return Translator.get(macLabelKey);
+
+            return super.getLabel();
         }
     }
 }
