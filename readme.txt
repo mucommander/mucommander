@@ -118,6 +118,7 @@ Translators:
 - Jakob Ekström (Swedish)
 - Jeppe Toustrup (Danish)
 - Mykola Bilovus (Ukrainian)
+- ChArLoK_16 (Arabic)
 
 Special thanks:
 - Semyon Filippov (muCommander icon)
@@ -167,7 +168,7 @@ Improvements:
 - Added support for KDE 4 (ticket #257).  
 
 Localization:
-- 
+- Arabic (AR) translation, contributed by ChArLoK_16.
 
 Bug fixes:
 - Zip entries using '\' as a path separator are now tolerated and handled
