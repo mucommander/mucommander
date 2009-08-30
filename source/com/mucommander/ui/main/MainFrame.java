@@ -103,34 +103,35 @@ public class MainFrame extends JFrame implements LocationListener {
     private void setWindowIcon() {
         // TODO: this code should probably be moved to the desktop API
 
-        // Mac OS X completely ignores calls to #setIconImage/setIconImages, no need to waste time
-        if(OsFamilies.MAC_OS_X.isCurrent())
+        // - Mac OS X: completely ignores calls to #setIconImage/setIconImages, no need to waste time
+        // - Windows XP: messes up 8-bit PNG transparency, better off with the .ico of the exe launcher.
+        // - Windows + Java 1.5: offers no way to have multi-resolution icons, better off with the .ico of the exe launcher
+        if(OsFamilies.MAC_OS_X.isCurrent() || (OsFamilies.WINDOWS.isCurrent() && (OsVersions.WINDOWS_XP.isCurrentOrLower() || JavaVersions.JAVA_1_5.isCurrentOrLower())))
             return;
 
-        // Use Java 1.6 's new Window#setIconImages(List<Image>)  
+        // Windows Vista supports 8-bit transparency and icon resolutions up to 256x256.
+        // GNOME and KDE support 8-bit transparency.
+
+        // Use Java 1.6 's new Window#setIconImages(List<Image>) when available  
         if(JavaVersions.JAVA_1_6.isCurrentOrHigher()) {
             Vector icons = new Vector();
 
-            // Any OS should support 16x16 icons with 1-bit transparency
+            // Start with a 16x16 image with 1-bit transparency, any OS should support that
             icons.add(IconManager.getIcon("/icon16_8.png").getImage());
 
-            // Windows XP does not support 8-bit alpha transparency, only 1-bit transparency.
-            if(OsFamilies.WINDOWS.isCurrent() && OsVersions.WINDOWS_XP.isCurrentOrLower()) {
-                icons.add(IconManager.getIcon("/icon48_8.png").getImage());
-            }
-            // Windows Vista supports 8-bit transparency and icon resolutions up to 256x256.
-            // GNOME and KDE support 8-bit transparency.
-            else {
-                icons.add(IconManager.getIcon("/icon48_24.png").getImage());
-                icons.add(IconManager.getIcon("/icon128_24.png").getImage());
-                icons.add(IconManager.getIcon("/icon256_24.png").getImage());
-            }
+            // Add PNG 24 images (8-bit transparency)
+            icons.add(IconManager.getIcon("/icon16_24.png").getImage());
+            icons.add(IconManager.getIcon("/icon32_24.png").getImage());
+            icons.add(IconManager.getIcon("/icon48_24.png").getImage());
+            icons.add(IconManager.getIcon("/icon128_24.png").getImage());
+            icons.add(IconManager.getIcon("/icon256_24.png").getImage());
 
             setIconImages(icons);
         }
         else {      // Java 1.5 or lower
             // Err on the safe side by not assuming that 8-bit transparency is supported.
-            setIconImage(IconManager.getIcon("/icon48_8.png").getImage());
+            // Any OS should support 16x16 icons with 1-bit transparency
+            setIconImage(IconManager.getIcon("/icon16_8.png").getImage());
         }
     }
 
