@@ -18,18 +18,14 @@
 
 package com.mucommander.conf.impl;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-
 import com.mucommander.PlatformManager;
 import com.mucommander.conf.ConfigurationSource;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
 import com.mucommander.io.BackupInputStream;
 import com.mucommander.io.BackupOutputStream;
+
+import java.io.*;
 
 /**
  * @author Nicolas Rinaudo
@@ -49,7 +45,7 @@ class MuConfigurationSource implements ConfigurationSource {
     /**
      * Creates a new <code>MuConfigurationSource</code> on the specified file.
      * @param path path to the configuration file.
-     * @throws IOException if <code>path</code> is not accessible.
+     * @throws FileNotFoundException if <code>path</code> is not accessible.
      */
     public MuConfigurationSource(String path) throws FileNotFoundException {setConfigurationFile(path);}
 
