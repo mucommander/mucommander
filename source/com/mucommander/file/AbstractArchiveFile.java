@@ -41,7 +41,7 @@ import java.util.WeakHashMap;
  * listing the archive's contents or retrieving a particular entry's contents.
  *  <li>{@link AbstractRWArchiveFile}: read-write archives, these are also able to modify the archive by adding or
  * deleting an entry from the archive. These operations usually require random access to the underlying file,
- * so write operations may not be available on all underlying file types. The {@link #isWritableArchive()} method allows
+ * so write operations may not be available on all underlying file types. The {@link #isWritable()} method allows
  * to determine whether the archive file is able to carry out write operations or not.
  * </ul>
  * When implementing a new archive file/format, either <code>AbstractROArchiveFile</code> or <code>AbstractRWArchiveFile</code>
@@ -346,7 +346,7 @@ public abstract class AbstractArchiveFile extends ProxyFile {
         );
     }
 
-
+    
     //////////////////////
     // Abstract methods //
     //////////////////////
@@ -398,8 +398,19 @@ public abstract class AbstractArchiveFile extends ProxyFile {
      *
      * @return true if this archive is writable, i.e. is capable of adding and deleting entries to
      * the underlying archive file.
+     *
+     * // TODO: generalize and move this method to AbstractFile
      */
-    public abstract boolean isWritableArchive();
+    public abstract boolean isWritable();
+
+
+    /////////////////////////////////////////
+    // Partial AbstractFile implementation //
+    /////////////////////////////////////////
+
+    public boolean isArchive() {
+        return exists() && !isDirectory();
+    }
 
 
     ////////////////////////
@@ -451,28 +462,17 @@ public abstract class AbstractArchiveFile extends ProxyFile {
         return ls(entryTreeRoot, this, null, filter);
     }
 
-    /**
-     * Always returns <code>true</code>, archive files can be browsed even though they are not directories.
-     */
-    public boolean isBrowsable() {
-        return true;
-    }
-	
-    /**
-     * Always returns <code>false</code>, archive files can be browsed but they are not directiories.
-     */
-    public boolean isDirectory() {
-        return false;
-    }
+    // Note: do not override #isDirectory() to always return true, as AbstractArchiveFile instances may be created when
+    // the file does not exist yet, and then be mkdir(): in that case, the file will be a directory and not an archive.
 
     /**
-     * Returns the proxied file's free space if this archive is writable (as reported by {@link #isWritableArchive()},
+     * Returns the proxied file's free space if this archive is writable (as reported by {@link #isWritable()},
      * else returns <code>0</code>. 
      *
      * @return the proxied file's free space is this archive is writable, 0 otherwise.
      */
     public long getFreeSpace() {
-        if(isWritableArchive())
+        if(isWritable())
             return file.getFreeSpace();
         else
             return 0;

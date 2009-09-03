@@ -32,7 +32,7 @@ import java.io.*;
  * Represents a file in the <code>bookmark://</code> file system.
  * @author Nicolas Rinaudo
  */
-public class BookmarkFile extends AbstractFile {
+public class BookmarkFile extends ProtocolFile {
     // - Instance fields -------------------------------------------------------
     // -------------------------------------------------------------------------
     /** Bookmark wrapped by this abstract file. */
@@ -131,13 +131,7 @@ public class BookmarkFile extends AbstractFile {
      * Returns <code>false</code>.
      * @return <code>false</code>.
      */
-    public boolean isDirectory() {return false;}
-
-    /**
-     * Returns <code>true</code>.
-     * @return <code>true</code>.
-     */
-    public boolean isBrowsable() {return true;}
+    public boolean isDirectory() {return true;}
 
     /**
      * Sets the wrapped file's parent.

@@ -269,13 +269,13 @@ public class MoveJob extends AbstractCopyJob {
 
         // If the source files are located inside an archive, optimize the archive file
         AbstractArchiveFile sourceArchiveFile = getBaseSourceFolder()==null?null:getBaseSourceFolder().getParentArchive();
-        if(sourceArchiveFile!=null && sourceArchiveFile.isWritableArchive())
+        if(sourceArchiveFile!=null && sourceArchiveFile.isArchive() && sourceArchiveFile.isWritable())
             optimizeArchive((AbstractRWArchiveFile)sourceArchiveFile);
 
         // If the destination files are located inside an archive, optimize the archive file, only if the destination
         // archive is different from the source one
         AbstractArchiveFile destArchiveFile = baseDestFolder.getParentArchive();
-        if(destArchiveFile!=null && destArchiveFile.isWritableArchive()
+        if(destArchiveFile!=null && destArchiveFile.isArchive() && destArchiveFile.isWritable()
                 && !(sourceArchiveFile!=null && destArchiveFile.equalsCanonical(sourceArchiveFile)))
             optimizeArchive((AbstractRWArchiveFile)destArchiveFile);
 

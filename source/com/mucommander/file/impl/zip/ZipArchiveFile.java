@@ -343,7 +343,7 @@ public class ZipArchiveFile extends AbstractRWArchiveFile {
      *
      * @return true only if the proxied archive file has random read and write access
      */
-    public boolean isWritableArchive() {
+    public boolean isWritable() {
         return file.hasRandomAccessInputStream() && file.hasRandomAccessOutputStream();
     }
 

@@ -166,7 +166,7 @@ public class UnpackJob extends AbstractCopyJob {
         }
 
         // Abort if the file is neither an archive file nor a directory
-        if(!file.hasAncestor(AbstractArchiveFile.class))
+        if(!file.isArchive())
             return false;
 
         // 'Cast' the file as an archive file
@@ -326,7 +326,7 @@ public class UnpackJob extends AbstractCopyJob {
 
         // If the destination files are located inside an archive, optimize the archive file
         AbstractArchiveFile archiveFile = baseDestFolder.getParentArchive();
-        if(archiveFile!=null && archiveFile.isWritableArchive())
+        if(archiveFile!=null && archiveFile.isArchive() && archiveFile.isWritable())
             optimizeArchive((AbstractRWArchiveFile)archiveFile);
 
         // Unselect all files in the active table upon successful completion

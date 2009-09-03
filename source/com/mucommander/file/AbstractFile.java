@@ -228,18 +228,6 @@ public abstract class AbstractFile implements FileAttributes, PermissionTypes, P
 
 
     /**
-     * Returns <code>true</code> if this file is browsable. A file is considered browsable if it contains children files
-     * that can be exposed by calling the <code>ls()</code> methods. {@link AbstractArchiveFile} implementations will
-     * usually return <code>true</code>, as will directories (directories are always browsable).
-     *
-     * @return true if this file is browsable
-     */
-    public boolean isBrowsable() {
-        return isDirectory() || (this instanceof AbstractArchiveFile);
-    }
-
-
-    /**
      * Returns <code>true</code> if this file is hidden.
      *
      * <p>This default implementation is solely based on the filename and returns <code>true</code> if this
@@ -610,7 +598,7 @@ public abstract class AbstractFile implements FileAttributes, PermissionTypes, P
 
     /**
      * Returns the children files that this file contains, filtering out files that do not match the specified FilenameFilter.
-     * For this operation to be successful, this file must be 'browsable', i.e. {@link #isBrowsable()} must return 
+     * For this operation to be successful, this file must be 'browsable', i.e. {@link #isBrowsable()} must return
      * <code>true</code>.
      *
      * <p>This default implementation filters out files *after* they have been created. This method
@@ -760,6 +748,17 @@ public abstract class AbstractFile implements FileAttributes, PermissionTypes, P
     ///////////////////
     // Final methods //
     ///////////////////
+
+    /**
+     * Returns <code>true</code> if this file is browsable. A file is considered browsable if it contains children files
+     * that can be retrieved by calling the <code>ls()</code> methods. Archive files will usually return
+     * <code>true</code>, as will directories (directories are always browsable).
+     *
+     * @return true if this file is browsable
+     */
+    public final boolean isBrowsable() {
+        return isDirectory() || isArchive();
+    }
 
     /**
      * Returns the name of the file without its extension.
@@ -1036,10 +1035,17 @@ public abstract class AbstractFile implements FileAttributes, PermissionTypes, P
 
     /**
      * Convenience method that returns the parent {@link AbstractArchiveFile} that contains this file. If this file
-     * is an AbstractArchiveFile or an ancestor of AbstractArchiveFile, <code>this</code> is returned. If this file
-     * is not contained by an archive or is not an archive, <code>null</code> is returned.
+     * is an {@link AbstractArchiveFile} or an ancestor of {@link AbstractArchiveFile}, <code>this</code> is returned.
+     * If this file is neither contained by an archive nor is an archive, <code>null</code> is returned.
      *
-     * @return the parent AbstractArchiveFile that contains this file
+     * <p>
+     * <b>Important note:</b> the returned {@link AbstractArchiveFile}, if any, may not necessarily be an
+     * archive, as specified by {@link #isArchive()}. This is the case for files that were resolved as
+     * {@link AbstractArchiveFile} instances based on their path, but that do not yet exist or were created as
+     * directories. On the contrary, an existing archive will necessarily return a non-null value.
+     * </p>
+     *
+     * @return the parent {@link AbstractArchiveFile} that contains this file
      */
     public final AbstractArchiveFile getParentArchive() {
         if(hasAncestor(AbstractArchiveFile.class))
@@ -1525,12 +1531,23 @@ public abstract class AbstractFile implements FileAttributes, PermissionTypes, P
      * <ul>
      *  <li>this file does not exist</li>
      *  <li>this file is a regular file</li>
-     *  <li>this file is browsable (as reported by {@link #isBrowsable()} but not a directory</li>
+     *  <li>this file is an {@link #isArchive() archive}</li>
      * </ul> 
      *
      * @return <code>true</code> if this file is a directory, <code>false</code> in any of the cases listed above
      */
     public abstract boolean isDirectory();
+
+    /**
+     * Returns <code>true</code> if this file is an archive.
+     * <p>
+     * An archive is a file container that can be {@link #isBrowsable() browsed}.  Archive files may not be
+     * {@link #isDirectory() directories}, and vice-versa.
+     * </p>.
+     *
+     * @return <code>true</code> if this file is an archive.
+     */
+    public abstract boolean isArchive();
 
     /**
      * Returns <code>true</code> if this file is a symbolic link. Symbolic links need to be handled with special care,

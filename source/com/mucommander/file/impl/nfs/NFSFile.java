@@ -51,7 +51,7 @@ import java.io.OutputStream;
  *
  * @author Maxence Bernard
  */
-public class NFSFile extends AbstractFile {
+public class NFSFile extends ProtocolFile {
 
     /** Underlying file instance */
     private XFile file;

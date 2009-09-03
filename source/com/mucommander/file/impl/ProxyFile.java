@@ -225,8 +225,8 @@ public abstract class ProxyFile extends AbstractFile {
         return file.getSeparator();
     }
 
-    public boolean isBrowsable() {
-        return file.isBrowsable();
+    public boolean isArchive() {
+        return file.isArchive();
     }
 
     public boolean isHidden() {

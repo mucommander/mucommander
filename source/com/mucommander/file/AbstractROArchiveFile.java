@@ -28,7 +28,7 @@ package com.mucommander.file;
  *  <li>{@link #getEntryIterator()} to list the entries contained by the archive in a flat, non hierarchical way
  *  <li>{@link AbstractArchiveFile#getEntryInputStream(ArchiveEntry, ArchiveEntryIterator)} to retrieve a particular entry's content.
  * </ul>
- * The {@link #isWritableArchive()} method is implemented to always returns <code>false</code>.
+ * The {@link #isWritable()} method is implemented to always returns <code>false</code>.
  * </p>
  *
  * @author Maxence Bernard
@@ -55,7 +55,7 @@ public abstract class AbstractROArchiveFile extends AbstractArchiveFile {
      *
      * @return false
      */
-    public final boolean isWritableArchive() {
+    public final boolean isWritable() {
         return false;
     }
 }

@@ -193,7 +193,7 @@ public class CopyJob extends AbstractCopyJob {
 
         // If the destination files are located inside an archive, optimize the archive file
         AbstractArchiveFile archiveFile = baseDestFolder.getParentArchive();
-        if(archiveFile!=null && archiveFile.isWritableArchive())
+        if(archiveFile!=null && archiveFile.isArchive() && archiveFile.isWritable())
             optimizeArchive((AbstractRWArchiveFile)archiveFile);
 
         // If this job correponds to a 'local copy' of a single file and in the same directory,

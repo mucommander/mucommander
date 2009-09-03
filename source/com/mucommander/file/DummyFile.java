@@ -154,6 +154,13 @@ public class DummyFile extends AbstractFile {
     /**
      * Implementation notes: always returns <code>false</code>.
      */
+    public boolean isArchive() {
+        return false;
+    }
+
+    /**
+     * Implementation notes: always returns <code>false</code>.
+     */
     public boolean isSymlink() {
         return false;
     }

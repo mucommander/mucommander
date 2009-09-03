@@ -18,7 +18,6 @@
 
 package com.mucommander.file.filter;
 
-import com.mucommander.file.AbstractArchiveFile;
 import com.mucommander.file.AbstractFile;
 
 /**
@@ -41,25 +40,25 @@ import com.mucommander.file.AbstractFile;
  */
 public class AttributeFileFilter extends FileFilter {
 
-    /** Tests if the file is a directory, cf {@link com.mucommander.file.AbstractFile#isDirectory()}. */
+    /** Tests if the file is a {@link com.mucommander.file.AbstractFile#isDirectory() directory}. */
     public static final int DIRECTORY = 0;
 
-    /** Tests if the file is a regular file, i.e. not a directory. Note that this is equivalent to inverting {@link #DIRECTORY}. */
+    /** Tests if the file is a regular file, i.e. not a directory. This is equivalent to negating {@link #DIRECTORY}. */
     public static final int FILE      = 1;
 
-    /** Tests if the file is browsable, cf {@link com.mucommander.file.AbstractFile#isBrowsable()}. */
+    /** Tests if the file is {@link com.mucommander.file.AbstractFile#isBrowsable() browsable}. */
     public static final int BROWSABLE = 2;
 
-    /** Tests if the file is an archive. */
+    /** Tests if the file is an {@link com.mucommander.file.AbstractFile#isArchive() archive}. */
     public static final int ARCHIVE   = 3;
 
-    /** Tests if the file is a symlink, cf {@link com.mucommander.file.AbstractFile#isSymlink()}. */
+    /** Tests if the file is a {@link com.mucommander.file.AbstractFile#isSymlink() symlink}. */
     public static final int SYMLINK   = 4;
 
-    /** Tests if the file is hidden, cf {@link com.mucommander.file.AbstractFile#isHidden()}. */
+    /** Tests if the file is {@link com.mucommander.file.AbstractFile#isHidden() hidden}. */
     public static final int HIDDEN    = 5;
 
-    /** Tests if the file is a root folder, cf {@link com.mucommander.file.AbstractFile#isRoot()}. */
+    /** Tests if the file is a {@link com.mucommander.file.AbstractFile#isRoot() root folder}. */
     public static final int ROOT      = 6;
 
 
@@ -122,7 +121,7 @@ public class AttributeFileFilter extends FileFilter {
             case BROWSABLE:
                 return file.isBrowsable();
             case ARCHIVE:
-                return file.hasAncestor(AbstractArchiveFile.class);
+                return file.isArchive();
             case SYMLINK:
                 return file.isSymlink();
             case HIDDEN:

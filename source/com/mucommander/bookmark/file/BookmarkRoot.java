@@ -21,10 +21,7 @@ package com.mucommander.bookmark.file;
 import com.mucommander.bookmark.Bookmark;
 import com.mucommander.bookmark.BookmarkListener;
 import com.mucommander.bookmark.BookmarkManager;
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.FilePermissions;
-import com.mucommander.file.FileURL;
-import com.mucommander.file.PermissionBits;
+import com.mucommander.file.*;
 import com.mucommander.io.RandomAccessInputStream;
 import com.mucommander.io.RandomAccessOutputStream;
 
@@ -36,7 +33,7 @@ import java.io.OutputStream;
  * Represents the root of the <code>bookmarks://</code> file system.
  * @author Nicolas Rinaudo
  */
-class BookmarkRoot extends AbstractFile implements BookmarkListener {
+class BookmarkRoot extends ProtocolFile implements BookmarkListener {
     // - Instance fields -------------------------------------------------------
     // -------------------------------------------------------------------------
     /** Time at which the bookmarks were last modified. */

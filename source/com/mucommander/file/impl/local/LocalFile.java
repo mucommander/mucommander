@@ -67,7 +67,7 @@ import java.util.regex.Pattern;
  *
  * @author Maxence Bernard
  */
-public class LocalFile extends AbstractFile {
+public class LocalFile extends ProtocolFile {
 
     protected File file;
     private FilePermissions permissions;

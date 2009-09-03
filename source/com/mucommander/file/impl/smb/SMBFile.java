@@ -58,7 +58,7 @@ import java.net.MalformedURLException;
  *
  * @author Maxence Bernard
  */
- public class SMBFile extends AbstractFile {
+ public class SMBFile extends ProtocolFile {
 
     private SmbFile file;
     private FilePermissions permissions;

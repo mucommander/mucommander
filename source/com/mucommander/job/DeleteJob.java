@@ -191,7 +191,7 @@ public class DeleteJob extends FileJob {
         // If the source files are located inside an archive, optimize the archive file
         AbstractArchiveFile archiveFile = getBaseSourceFolder().getParentArchive();
 
-        if(archiveFile!=null && archiveFile.isWritableArchive()) {
+        if(archiveFile!=null && archiveFile.isArchive() && archiveFile.isWritable()) {
             while(true) {
                 try {
                     archiveToOptimize = ((AbstractRWArchiveFile)archiveFile);

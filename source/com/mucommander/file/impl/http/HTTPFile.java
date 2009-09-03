@@ -80,7 +80,7 @@ import java.util.regex.Pattern;
  *
  * @author Maxence Bernard
  */
-public class HTTPFile extends AbstractFile {
+public class HTTPFile extends ProtocolFile {
 
     /** java.net.URL corresponding to this */
     private URL url;
@@ -441,7 +441,9 @@ public class HTTPFile extends AbstractFile {
     }
 
     public boolean isDirectory() {
-        return false;
+        checkResolveFile();
+
+        return attributes.isDirectory();
     }
 	
     public boolean isSymlink() {
@@ -700,12 +702,6 @@ public class HTTPFile extends AbstractFile {
 
     public boolean isHidden() {
         return false;
-    }
-
-    public boolean isBrowsable() {
-        checkResolveFile();
-
-        return attributes.isDirectory();
     }
 
     public String getName() {

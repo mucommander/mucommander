@@ -58,7 +58,7 @@ import java.util.List;
  * @see ConnectionPool
  * @author Maxence Bernard
  */
-public class SFTPFile extends AbstractFile {
+public class SFTPFile extends ProtocolFile {
 
     /** The absolute path to the file on the remote server, not the full URL */
     private String absPath;

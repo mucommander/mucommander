@@ -73,7 +73,7 @@ import java.util.Date;
  * @see ConnectionPool
  * @author Maxence Bernard
  */
-public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
+public class FTPFile extends ProtocolFile implements ConnectionHandlerFactory {
 
     private org.apache.commons.net.ftp.FTPFile file;
 

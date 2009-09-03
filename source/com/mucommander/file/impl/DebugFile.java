@@ -184,11 +184,11 @@ public class DebugFile extends ProxyFile {
         return super.getCanonicalFile();
     }
 
-    public boolean isBrowsable() {
+    public boolean isArchive() {
         FileLogger.finest(getDebugString());
         lag();
 
-        return super.isBrowsable();
+        return super.isArchive();
     }
 
     public boolean isHidden() {
