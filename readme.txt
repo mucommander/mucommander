@@ -165,7 +165,9 @@ Improvements:
   are now silently deleted without being followed (easier and safer).
 - Improvements made to the filename selection algorithm used in
   Copy/Move/Unpack/Rename destination fields (ticket #167).
-- Added support for KDE 4 (ticket #257).  
+- Added support for KDE 4 (ticket #257).
+- Startup failures are now handled gracefully by displaying a proper message
+  and error details.
 
 Localization:
 - Arabic (AR) translation, contributed by ChArLoK_16.

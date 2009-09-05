@@ -34,6 +34,7 @@ import com.mucommander.file.impl.smb.SMBProtocolProvider;
 import com.mucommander.runtime.OsFamilies;
 import com.mucommander.shell.ShellHistoryManager;
 import com.mucommander.ui.action.ActionManager;
+import com.mucommander.ui.dialog.InformationDialog;
 import com.mucommander.ui.dialog.debug.DebugConsoleHandler;
 import com.mucommander.ui.dialog.startup.CheckVersionDialog;
 import com.mucommander.ui.dialog.startup.InitialSetupDialog;
@@ -262,328 +263,341 @@ public class Launcher {
      * @throws IOException if an unrecoverable error occurred during startup 
      */
     public static void main(String args[]) throws IOException {
-        int i; // Index in the command line arguments.
+        try {
+            int i; // Index in the command line arguments.
 
-        // Initialises fields.
-        // Whether or not to ignore warnings when booting.
-        boolean fatalWarnings = false;
-        verbose               = true;
+            // Initialises fields.
+            // Whether or not to ignore warnings when booting.
+            boolean fatalWarnings = false;
+            verbose               = true;
 
-        // - Command line parsing -------------------------------------
-        // ------------------------------------------------------------
-        for(i = 0; i < args.length; i++) {
-            // Print version.
-            if(args[i].equals("-v") || args[i].equals("--version"))
-                printVersion();
+            // - Command line parsing -------------------------------------
+            // ------------------------------------------------------------
+            for(i = 0; i < args.length; i++) {
+                // Print version.
+                if(args[i].equals("-v") || args[i].equals("--version"))
+                    printVersion();
 
-            // Print help.
-            else if(args[i].equals("-h") || args[i].equals("--help"))
-                printUsage();
+                // Print help.
+                else if(args[i].equals("-h") || args[i].equals("--help"))
+                    printUsage();
 
-            // Associations handling.
-            else if(args[i].equals("-a") || args[i].equals("--assoc")) {
-                if(i >= args.length - 1)
-                    printError("Missing FILE parameter to " + args[i], null, true);
-                try {com.mucommander.command.CommandManager.setAssociationFile(args[++i]);}
-                catch(Exception e) {printError("Could not set association files", e, fatalWarnings);}
+                // Associations handling.
+                else if(args[i].equals("-a") || args[i].equals("--assoc")) {
+                    if(i >= args.length - 1)
+                        printError("Missing FILE parameter to " + args[i], null, true);
+                    try {com.mucommander.command.CommandManager.setAssociationFile(args[++i]);}
+                    catch(Exception e) {printError("Could not set association files", e, fatalWarnings);}
+                }
+
+                // Custom commands handling.
+                else if(args[i].equals("-f") || args[i].equals("--commands")) {
+                    if(i >= args.length - 1)
+                        printError("Missing FILE parameter to " + args[i], null, true);
+                    try {com.mucommander.command.CommandManager.setCommandFile(args[++i]);}
+                    catch(Exception e) {printError("Could not set commands file", e, fatalWarnings);}
+                }
+
+                // Bookmarks handling.
+                else if(args[i].equals("-b") || args[i].equals("--bookmarks")) {
+                    if(i >= args.length - 1)
+                        printError("Missing FILE parameter to " + args[i], null, true);
+                    try {com.mucommander.bookmark.BookmarkManager.setBookmarksFile(args[++i]);}
+                    catch(Exception e) {printError("Could not set bookmarks file", e, fatalWarnings);}
+                }
+
+                // Configuration handling.
+                else if(args[i].equals("-c") || args[i].equals("--configuration")) {
+                    if(i >= args.length - 1)
+                        printError("Missing FILE parameter to " + args[i], null, true);
+                    try {MuConfiguration.setConfigurationFile(args[++i]);}
+                    catch(Exception e) {printError("Could not set configuration file", e, fatalWarnings);}
+                }
+
+                // Shell history.
+                else if(args[i].equals("-s") || args[i].equals("--shell-history")) {
+                    if(i >= args.length - 1)
+                        printError("Missing FILE parameter to " + args[i], null, true);
+                    try {ShellHistoryManager.setHistoryFile(args[++i]);}
+                    catch(Exception e) {printError("Could not set shell history file", e, fatalWarnings);}
+                }
+
+                // Keymap file.
+                else if(args[i].equals("-k") || args[i].equals("--keymap")) {
+                    if(i >= args.length - 1)
+                        printError("Missing FILE parameter to " + args[i], null, true);
+                    try {com.mucommander.ui.action.ActionKeymapIO.setActionsFile(args[++i]);}
+                    catch(Exception e) {printError("Could not set keymap file", e, fatalWarnings);}
+                }
+
+                // Toolbar file.
+                else if(args[i].equals("-t") || args[i].equals("--toolbar")) {
+                    if(i >= args.length - 1)
+                        printError("Missing FILE parameter to " + args[i], null, true);
+                    try {
+                        ToolBarIO.setDescriptionFile(args[++i]);}
+                    catch(Exception e) {printError("Could not set keymap file", e, fatalWarnings);}
+                }
+
+                // Commandbar file.
+                else if(args[i].equals("-C") || args[i].equals("--commandbar")) {
+                    if(i >= args.length - 1)
+                        printError("Missing FILE parameter to " + args[i], null, true);
+                    try {
+                        CommandBarIO.setDescriptionFile(args[++i]);}
+                    catch(Exception e) {printError("Could not set commandbar description file", e, fatalWarnings);}
+                }
+
+                // Credentials file.
+                else if(args[i].equals("-U") || args[i].equals("--credentials")) {
+                    if(i >= args.length - 1)
+                        printError("Missing FILE parameter to " + args[i], null, true);
+                    try {com.mucommander.auth.CredentialsManager.setCredentialsFile(args[++i]);}
+                    catch(Exception e) {printError("Could not set credentials file", e, fatalWarnings);}
+                }
+
+                // Preference folder.
+                else if((args[i].equals("-p") || args[i].equals("--preferences"))) {
+                    if(i >= args.length - 1)
+                        printError("Missing FOLDER parameter to " + args[i], null, true);
+                    try {PlatformManager.setPreferencesFolder(args[++i]);}
+                    catch(Exception e) {printError("Could not set preferences folder", e, fatalWarnings);}
+                }
+
+                // Extensions folder.
+                else if((args[i].equals("-e") || args[i].equals("--extensions"))) {
+                    if(i >= args.length - 1)
+                        printError("Missing FOLDER parameter to " + args[i], null, true);
+                    try {ExtensionManager.setExtensionsFolder(args[++i]);}
+                    catch(Exception e) {printError("Could not set extensions folder", e, fatalWarnings);}
+                }
+
+                // Ignore warnings.
+                else if(args[i].equals("-i") || args[i].equals("--ignore-warnings"))
+                    fatalWarnings = false;
+
+                // Fail on warnings.
+                else if(args[i].equals("-w") || args[i].equals("--fail-on-warnings"))
+                    fatalWarnings = true;
+
+                // Silent mode.
+                else if(args[i].equals("-S") || args[i].equals("--silent"))
+                    verbose = false;
+
+                // Verbose mode.
+                else if(args[i].equals("-V") || args[i].equals("--verbose"))
+                    verbose = true;
+
+                // Illegal argument.
+                else
+                    break;
             }
 
-            // Custom commands handling.
-            else if(args[i].equals("-f") || args[i].equals("--commands")) {
-                if(i >= args.length - 1)
-                    printError("Missing FILE parameter to " + args[i], null, true);
-                try {com.mucommander.command.CommandManager.setCommandFile(args[++i]);}
-                catch(Exception e) {printError("Could not set commands file", e, fatalWarnings);}
-            }
+            // - Configuration init ---------------------------------------
+            // ------------------------------------------------------------
 
-            // Bookmarks handling.
-            else if(args[i].equals("-b") || args[i].equals("--bookmarks")) {
-                if(i >= args.length - 1)
-                    printError("Missing FILE parameter to " + args[i], null, true);
-                try {com.mucommander.bookmark.BookmarkManager.setBookmarksFile(args[++i]);}
-                catch(Exception e) {printError("Could not set bookmarks file", e, fatalWarnings);}
-            }
 
-            // Configuration handling.
-            else if(args[i].equals("-c") || args[i].equals("--configuration")) {
-                if(i >= args.length - 1)
-                    printError("Missing FILE parameter to " + args[i], null, true);
-                try {MuConfiguration.setConfigurationFile(args[++i]);}
-                catch(Exception e) {printError("Could not set configuration file", e, fatalWarnings);}
-            }
+            // Attempts to guess whether this is the first time muCommander is booted or not.
+            boolean isFirstBoot;
+            try {isFirstBoot = !MuConfiguration.getConfigurationFile().exists();}
+            catch(IOException e) {isFirstBoot = true;}
 
-            // Shell history.
-            else if(args[i].equals("-s") || args[i].equals("--shell-history")) {
-                if(i >= args.length - 1)
-                    printError("Missing FILE parameter to " + args[i], null, true);
-                try {ShellHistoryManager.setHistoryFile(args[++i]);}
-                catch(Exception e) {printError("Could not set shell history file", e, fatalWarnings);}
-            }
+            // Configuration needs to be loaded before any sort of GUI creation is performed : under Mac OS X, if we're
+            // to use the metal look, we need to know about it right about now.
+            try {MuConfiguration.read();}
+            catch(Exception e) {printFileError("Could not load configuration", e, fatalWarnings);}
 
-            // Keymap file.
-            else if(args[i].equals("-k") || args[i].equals("--keymap")) {
-                if(i >= args.length - 1)
-                    printError("Missing FILE parameter to " + args[i], null, true);
-                try {com.mucommander.ui.action.ActionKeymapIO.setActionsFile(args[++i]);}
-                catch(Exception e) {printError("Could not set keymap file", e, fatalWarnings);}
-            }
 
-            // Toolbar file.
-            else if(args[i].equals("-t") || args[i].equals("--toolbar")) {
-                if(i >= args.length - 1)
-                    printError("Missing FILE parameter to " + args[i], null, true);
+            // - Logging configuration ------------------------------------
+            // ------------------------------------------------------------
+            configureLogging();
+
+
+            // - MAC OS X specific init -----------------------------------
+            // ------------------------------------------------------------
+            // If muCommander is running under Mac OS X (how lucky!), add some glue for the main menu bar and other OS X
+            // specifics.
+            if(OsFamilies.MAC_OS_X.isCurrent()) {
+                // Use reflection to create an OSXIntegration instance so that ClassLoader
+                // doesn't throw an NoClassDefFoundException under platforms other than Mac OS X
                 try {
-                    ToolBarIO.setDescriptionFile(args[++i]);}
-                catch(Exception e) {printError("Could not set keymap file", e, fatalWarnings);}
+                    Class osxIntegrationClass = Class.forName("com.mucommander.ui.macosx.OSXIntegration");
+                    Constructor constructor   = osxIntegrationClass.getConstructor(new Class[]{});
+                    constructor.newInstance(new Object[]{});
+                }
+                catch(Exception e) {
+                    AppLogger.fine("Exception thrown while initializing Mac OS X integration", e);
+                }
             }
 
-            // Commandbar file.
-            else if(args[i].equals("-C") || args[i].equals("--commandbar")) {
-                if(i >= args.length - 1)
-                    printError("Missing FILE parameter to " + args[i], null, true);
-                try {
-                    CommandBarIO.setDescriptionFile(args[++i]);}
-                catch(Exception e) {printError("Could not set commandbar description file", e, fatalWarnings);}
-            }
 
-            // Credentials file.
-            else if(args[i].equals("-U") || args[i].equals("--credentials")) {
-                if(i >= args.length - 1)
-                    printError("Missing FILE parameter to " + args[i], null, true);
-                try {com.mucommander.auth.CredentialsManager.setCredentialsFile(args[++i]);}
-                catch(Exception e) {printError("Could not set credentials file", e, fatalWarnings);}
-            }
-
-            // Preference folder.
-            else if((args[i].equals("-p") || args[i].equals("--preferences"))) {
-                if(i >= args.length - 1)
-                    printError("Missing FOLDER parameter to " + args[i], null, true);
-                try {PlatformManager.setPreferencesFolder(args[++i]);}
-                catch(Exception e) {printError("Could not set preferences folder", e, fatalWarnings);}
-            }
-
-            // Extensions folder.
-            else if((args[i].equals("-e") || args[i].equals("--extensions"))) {
-                if(i >= args.length - 1)
-                    printError("Missing FOLDER parameter to " + args[i], null, true);
-                try {ExtensionManager.setExtensionsFolder(args[++i]);}
-                catch(Exception e) {printError("Could not set extensions folder", e, fatalWarnings);}
-            }
-
-            // Ignore warnings.
-            else if(args[i].equals("-i") || args[i].equals("--ignore-warnings"))
-                fatalWarnings = false;
-
-            // Fail on warnings.
-            else if(args[i].equals("-w") || args[i].equals("--fail-on-warnings"))
-                fatalWarnings = true;
-
-            // Silent mode.
-            else if(args[i].equals("-S") || args[i].equals("--silent"))
-                verbose = false;
-
-            // Verbose mode.
-            else if(args[i].equals("-V") || args[i].equals("--verbose"))
-                verbose = true;
-
-            // Illegal argument.
-            else
-                break;
-        }
-
-        // - Configuration init ---------------------------------------
-        // ------------------------------------------------------------
-
-
-        // Attempts to guess whether this is the first time muCommander is booted or not.
-        boolean isFirstBoot;
-        try {isFirstBoot = !MuConfiguration.getConfigurationFile().exists();}
-        catch(IOException e) {isFirstBoot = true;}
-
-        // Configuration needs to be loaded before any sort of GUI creation is performed : under Mac OS X, if we're
-        // to use the metal look, we need to know about it right about now.
-        try {MuConfiguration.read();}
-        catch(Exception e) {printFileError("Could not load configuration", e, fatalWarnings);}
-
-
-        // - Logging configuration ------------------------------------
-        // ------------------------------------------------------------
-        configureLogging();
-
-
-        // - MAC OS X specific init -----------------------------------
-        // ------------------------------------------------------------
-        // If muCommander is running under Mac OS X (how lucky!), add some glue for the main menu bar and other OS X
-        // specifics.
-        if(OsFamilies.MAC_OS_X.isCurrent()) {
-            // Use reflection to create an OSXIntegration instance so that ClassLoader
-            // doesn't throw an NoClassDefFoundException under platforms other than Mac OS X
+            // - muCommander boot -----------------------------------------
+            // ------------------------------------------------------------
+            // Adds all extensions to the classpath.
             try {
-                Class osxIntegrationClass = Class.forName("com.mucommander.ui.macosx.OSXIntegration");
-                Constructor constructor   = osxIntegrationClass.getConstructor(new Class[]{});
-                constructor.newInstance(new Object[]{});
+                ExtensionManager.addExtensionsToClasspath();
             }
             catch(Exception e) {
-                AppLogger.fine("Exception thrown while initializing Mac OS X integration", e);
+                AppLogger.fine("Failed to add extensions to the classpath", e);
             }
+
+            // This the property is supposed to have the java.net package use the proxy defined in the system settings
+            // to establish HTTP connections. This property is supported only under Java 1.5 and up.
+            // Note that Mac OS X already uses the system HTTP proxy, with or without this property being set.
+            System.setProperty("java.net.useSystemProxies", "true");
+
+            // Shows the splash screen, if enabled in the preferences
+            useSplash = MuConfiguration.getVariable(MuConfiguration.SHOW_SPLASH_SCREEN, MuConfiguration.DEFAULT_SHOW_SPLASH_SCREEN);
+            if(useSplash) {
+                splashScreen = new SplashScreen(RuntimeConstants.VERSION, "Loading preferences...");}
+
+            boolean showSetup;
+            showSetup = MuConfiguration.getVariable(MuConfiguration.THEME_TYPE) == null;
+
+            // Traps VM shutdown
+            Runtime.getRuntime().addShutdownHook(new ShutdownHook());
+
+            // Configure filesystems
+            configureFilesystems();
+
+            // Initializes the desktop.
+            try {com.mucommander.desktop.DesktopManager.init(isFirstBoot);}
+            catch(Exception e) {printError("Could not initialize desktop", e, true);}
+
+            // Loads dictionary
+            printStartupMessage("Loading dictionary...");
+            try {com.mucommander.text.Translator.loadDictionaryFile();}
+            catch(Exception e) {printError("Could not load dictionary", e, true);}
+
+            // Loads custom commands
+            printStartupMessage("Loading file associations...");
+            try {com.mucommander.command.CommandManager.loadCommands();}
+            catch(Exception e) {
+                printFileError("Could not load custom commands", e, fatalWarnings);
+            }
+
+            // Migrates the custom editor and custom viewer if necessary.
+            migrateCommand("viewer.use_custom", "viewer.custom_command", CommandManager.VIEWER_ALIAS);
+            migrateCommand("editor.use_custom", "editor.custom_command", CommandManager.EDITOR_ALIAS);
+            try {CommandManager.writeCommands();}
+            catch(Exception e) {
+                System.out.println("###############################");
+                AppLogger.fine("Caught exception", e);
+                // There's really nothing we can do about this...
+            }
+
+            try {com.mucommander.command.CommandManager.loadAssociations();}
+            catch(Exception e) {
+                printFileError("Could not load custom associations", e, fatalWarnings);
+            }
+
+            // Loads bookmarks
+            printStartupMessage("Loading bookmarks...");
+            try {com.mucommander.bookmark.BookmarkManager.loadBookmarks();}
+            catch(Exception e) {printFileError("Could not load bookmarks", e, fatalWarnings);}
+
+            // Loads credentials
+            printStartupMessage("Loading credentials...");
+            try {com.mucommander.auth.CredentialsManager.loadCredentials();}
+            catch(Exception e) {printFileError("Could not load credentials", e, fatalWarnings);}
+
+            // Loads shell history
+            printStartupMessage("Loading shell history...");
+            try {ShellHistoryManager.loadHistory();}
+            catch(Exception e) {printFileError("Could not load shell history", e, fatalWarnings);}
+
+            // Inits CustomDateFormat to make sure that its ConfigurationListener is added
+            // before FileTable, so CustomDateFormat gets notified of date format changes first
+            com.mucommander.text.CustomDateFormat.init();
+
+            // Initialize file icons
+            printStartupMessage("Loading icons...");
+            // Initialize the SwingFileIconProvider from the main thread, see method Javadoc for an explanation on why we do this now
+            SwingFileIconProvider.forceInit();
+            // The math.max(1.0f, ...) part is to workaround a bug which cause(d) this value to be set to 0.0 in the configuration file.
+            com.mucommander.ui.icon.FileIcons.setScaleFactor(Math.max(1.0f, MuConfiguration.getVariable(MuConfiguration.TABLE_ICON_SCALE,
+                                                                                              MuConfiguration.DEFAULT_TABLE_ICON_SCALE)));
+            com.mucommander.ui.icon.FileIcons.setSystemIconsPolicy(MuConfiguration.getVariable(MuConfiguration.USE_SYSTEM_FILE_ICONS, MuConfiguration.DEFAULT_USE_SYSTEM_FILE_ICONS));
+
+            // Register actions
+            printStartupMessage("Registering actions...");
+            ActionManager.registerActions();
+
+            // Loads the ActionKeymap file
+            printStartupMessage("Loading actions shortcuts...");
+            try {com.mucommander.ui.action.ActionKeymapIO.loadActionKeymap();}
+            catch(Exception e) {printFileError("Could not load actions shortcuts", e, fatalWarnings);}
+
+            // Loads the ToolBar's description file
+            printStartupMessage("Loading toolbar description...");
+            try {ToolBarIO.loadDescriptionFile();}
+            catch(Exception e) {printFileError("Could not load toolbar description", e, fatalWarnings);}
+
+            // Loads the CommandBar's description file
+            printStartupMessage("Loading command bar description...");
+            try {CommandBarIO.loadCommandBar();}
+            catch(Exception e) {printFileError("Could not load commandbar description", e, fatalWarnings);}
+
+            // Loads the themes.
+            printStartupMessage("Loading theme...");
+            com.mucommander.ui.theme.ThemeManager.loadCurrentTheme();
+
+            // Starts Bonjour services discovery (only if enabled in prefs)
+            printStartupMessage("Starting Bonjour services discovery...");
+            com.mucommander.bonjour.BonjourDirectory.setActive(MuConfiguration.getVariable(MuConfiguration.ENABLE_BONJOUR_DISCOVERY, MuConfiguration.DEFAULT_ENABLE_BONJOUR_DISCOVERY));
+
+            // Creates the initial main frame using any initial path specified by the command line.
+            printStartupMessage("Initializing window...");
+            for(; i < args.length; i += 2) {
+                if(i < args.length - 1)
+                    WindowManager.createNewMainFrame(args[i], args[i + 1]);
+                else
+                    WindowManager.createNewMainFrame(args[i], null);
+            }
+
+            // If no initial path was specified, start a default main window.
+            if(WindowManager.getCurrentMainFrame() == null)
+                WindowManager.createNewMainFrame();
+
+            // Done launching, wake up threads waiting for the application being launched.
+            // Important: this must be done before disposing the splash screen, as this would otherwise create a deadlock
+            // if the AWT event thread were waiting in #waitUntilLaunched .
+            synchronized(LAUNCH_LOCK) {
+                isLaunching = false;
+                LAUNCH_LOCK.notifyAll();
+            }
+
+            // Enable system notifications, only after MainFrame is created as SystemTrayNotifier needs to retrieve
+            // a MainFrame instance
+            if(MuConfiguration.getVariable(MuConfiguration.ENABLE_SYSTEM_NOTIFICATIONS, MuConfiguration.DEFAULT_ENABLE_SYSTEM_NOTIFICATIONS)) {
+                printStartupMessage("Enabling system notifications...");
+                if(com.mucommander.ui.notifier.AbstractNotifier.isAvailable())
+                    com.mucommander.ui.notifier.AbstractNotifier.getNotifier().setEnabled(true);
+            }
+
+            // Dispose splash screen.
+            if(splashScreen!=null)
+                splashScreen.dispose();
+
+            // Check for newer version unless it was disabled
+            if(MuConfiguration.getVariable(MuConfiguration.CHECK_FOR_UPDATE, MuConfiguration.DEFAULT_CHECK_FOR_UPDATE))
+                new CheckVersionDialog(WindowManager.getCurrentMainFrame(), false);
+
+            // If no theme is configured in the preferences, ask for an initial theme.
+            if(showSetup)
+                new InitialSetupDialog(WindowManager.getCurrentMainFrame()).showDialog();
         }
+        catch(Throwable t) {
+            // Startup failed, dispose the splash screen
+            if(splashScreen!=null)
+                splashScreen.dispose();
 
+            // Display an error dialog with a proper message and error details
+            InformationDialog.showErrorDialog(null, null, "startup_error", null, t);
 
-        // - muCommander boot -----------------------------------------
-        // ------------------------------------------------------------
-        // Adds all extensions to the classpath.
-        try {
-            ExtensionManager.addExtensionsToClasspath();
+            // Quit the application
+            WindowManager.quit();
         }
-        catch(Exception e) {
-            AppLogger.fine("Failed to add extensions to the classpath", e);
-        }
-       
-        // This the property is supposed to have the java.net package use the proxy defined in the system settings
-        // to establish HTTP connections. This property is supported only under Java 1.5 and up.
-        // Note that Mac OS X already uses the system HTTP proxy, with or without this property being set.
-        System.setProperty("java.net.useSystemProxies", "true");
-
-        // Shows the splash screen, if enabled in the preferences
-        useSplash = MuConfiguration.getVariable(MuConfiguration.SHOW_SPLASH_SCREEN, MuConfiguration.DEFAULT_SHOW_SPLASH_SCREEN);
-        if(useSplash) {
-            splashScreen = new SplashScreen(RuntimeConstants.VERSION, "Loading preferences...");}
-
-        boolean showSetup;
-        showSetup = MuConfiguration.getVariable(MuConfiguration.THEME_TYPE) == null;
-
-        // Traps VM shutdown
-        Runtime.getRuntime().addShutdownHook(new ShutdownHook());
-
-        // Configure filesystems
-        configureFilesystems();
-
-        // Initializes the desktop.
-        try {com.mucommander.desktop.DesktopManager.init(isFirstBoot);}
-        catch(Exception e) {printError("Could not initialize desktop", e, true);}
-
-        // Loads dictionary
-        printStartupMessage("Loading dictionary...");
-        try {com.mucommander.text.Translator.loadDictionaryFile();}
-        catch(Exception e) {printError("Could not load dictionary", e, true);}
-
-        // Loads custom commands
-        printStartupMessage("Loading file associations...");
-        try {com.mucommander.command.CommandManager.loadCommands();}
-        catch(Exception e) {
-            printFileError("Could not load custom commands", e, fatalWarnings);
-        }
-
-        // Migrates the custom editor and custom viewer if necessary.
-        migrateCommand("viewer.use_custom", "viewer.custom_command", CommandManager.VIEWER_ALIAS);
-        migrateCommand("editor.use_custom", "editor.custom_command", CommandManager.EDITOR_ALIAS);
-        try {CommandManager.writeCommands();}
-        catch(Exception e) {
-            System.out.println("###############################");
-            AppLogger.fine("Caught exception", e);
-            // There's really nothing we can do about this...
-        }
-
-        try {com.mucommander.command.CommandManager.loadAssociations();}
-        catch(Exception e) {
-            printFileError("Could not load custom associations", e, fatalWarnings);
-        }
-
-        // Loads bookmarks
-        printStartupMessage("Loading bookmarks...");
-        try {com.mucommander.bookmark.BookmarkManager.loadBookmarks();}
-        catch(Exception e) {printFileError("Could not load bookmarks", e, fatalWarnings);}
-
-        // Loads credentials
-        printStartupMessage("Loading credentials...");
-        try {com.mucommander.auth.CredentialsManager.loadCredentials();}
-        catch(Exception e) {printFileError("Could not load credentials", e, fatalWarnings);}
-        
-        // Loads shell history
-        printStartupMessage("Loading shell history...");
-        try {ShellHistoryManager.loadHistory();}
-        catch(Exception e) {printFileError("Could not load shell history", e, fatalWarnings);}
-
-        // Inits CustomDateFormat to make sure that its ConfigurationListener is added
-        // before FileTable, so CustomDateFormat gets notified of date format changes first
-        com.mucommander.text.CustomDateFormat.init();
-
-        // Initialize file icons
-        printStartupMessage("Loading icons...");
-        // Initialize the SwingFileIconProvider from the main thread, see method Javadoc for an explanation on why we do this now
-        SwingFileIconProvider.forceInit();
-        // The math.max(1.0f, ...) part is to workaround a bug which cause(d) this value to be set to 0.0 in the configuration file.
-        com.mucommander.ui.icon.FileIcons.setScaleFactor(Math.max(1.0f, MuConfiguration.getVariable(MuConfiguration.TABLE_ICON_SCALE,
-                                                                                          MuConfiguration.DEFAULT_TABLE_ICON_SCALE)));
-        com.mucommander.ui.icon.FileIcons.setSystemIconsPolicy(MuConfiguration.getVariable(MuConfiguration.USE_SYSTEM_FILE_ICONS, MuConfiguration.DEFAULT_USE_SYSTEM_FILE_ICONS));
-
-		// Register actions
-        printStartupMessage("Registering actions...");
-        ActionManager.registerActions();
-		
-        // Loads the ActionKeymap file
-        printStartupMessage("Loading actions shortcuts...");
-        try {com.mucommander.ui.action.ActionKeymapIO.loadActionKeymap();}
-        catch(Exception e) {printFileError("Could not load actions shortcuts", e, fatalWarnings);}
-
-        // Loads the ToolBar's description file
-        printStartupMessage("Loading toolbar description...");
-        try {ToolBarIO.loadDescriptionFile();}
-        catch(Exception e) {printFileError("Could not load toolbar description", e, fatalWarnings);}
-
-        // Loads the CommandBar's description file
-        printStartupMessage("Loading command bar description...");
-        try {CommandBarIO.loadCommandBar();}
-        catch(Exception e) {printFileError("Could not load commandbar description", e, fatalWarnings);}
-
-        // Loads the themes.
-        printStartupMessage("Loading theme...");
-        com.mucommander.ui.theme.ThemeManager.loadCurrentTheme();
-
-        // Starts Bonjour services discovery (only if enabled in prefs)
-        printStartupMessage("Starting Bonjour services discovery...");
-        com.mucommander.bonjour.BonjourDirectory.setActive(MuConfiguration.getVariable(MuConfiguration.ENABLE_BONJOUR_DISCOVERY, MuConfiguration.DEFAULT_ENABLE_BONJOUR_DISCOVERY));
-
-        // Creates the initial main frame using any initial path specified by the command line.
-        printStartupMessage("Initializing window...");
-        for(; i < args.length; i += 2) {
-            if(i < args.length - 1)
-                WindowManager.createNewMainFrame(args[i], args[i + 1]);
-            else
-                WindowManager.createNewMainFrame(args[i], null);
-        }
-
-        // If no initial path was specified, start a default main window.
-        if(WindowManager.getCurrentMainFrame() == null)
-    	    WindowManager.createNewMainFrame();
-
-        // Done launching, wake up threads waiting for the application being launched.
-        // Important: this must be done before disposing the splash screen, as this would otherwise create a deadlock
-        // if the AWT event thread were waiting in #waitUntilLaunched .
-        synchronized(LAUNCH_LOCK) {
-            isLaunching = false;
-            LAUNCH_LOCK.notifyAll();
-        }
-
-        // Enable system nofifications, only after MainFrame is created as SystemTrayNotifier needs to retrieve
-        // a MainFrame instance
-        if(MuConfiguration.getVariable(MuConfiguration.ENABLE_SYSTEM_NOTIFICATIONS, MuConfiguration.DEFAULT_ENABLE_SYSTEM_NOTIFICATIONS)) {
-            printStartupMessage("Enabling system notifications...");
-            if(com.mucommander.ui.notifier.AbstractNotifier.isAvailable())
-                com.mucommander.ui.notifier.AbstractNotifier.getNotifier().setEnabled(true);
-        }
-
-        // Dispose splash screen.
-        if(useSplash)
-            splashScreen.dispose();
-        
-        // Check for newer version unless it was disabled
-        if(MuConfiguration.getVariable(MuConfiguration.CHECK_FOR_UPDATE, MuConfiguration.DEFAULT_CHECK_FOR_UPDATE))
-            new CheckVersionDialog(WindowManager.getCurrentMainFrame(), false);
-
-        // If no theme is configured in the preferences, ask for an initial theme.
-        if(showSetup)
-            new InitialSetupDialog(WindowManager.getCurrentMainFrame()).showDialog();
     }
 
     private static void configureFilesystems() {

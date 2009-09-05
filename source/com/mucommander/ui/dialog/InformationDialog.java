@@ -122,10 +122,10 @@ public class InformationDialog {
      * @param title the dialog's title, <code>null</code> for a generic localized title.
      * @param message the error message to display in the dialog, <code>null</code> for a generic localized message.
      * @param captionMessage the caption message to display underneath the error message, <code>null</code> for none.
-     * @param exception exception for which to show the stack trace, <code>null</code> for none.
+     * @param throwable exception for which to show the stack trace, <code>null</code> for none.
      */
-    public static void showErrorDialog(Component parentComponent, String title, String message, String captionMessage, Exception exception) {
-        showDialog(ERROR_DIALOG_TYPE, parentComponent, title==null?Translator.get("error"):title, message==null?Translator.get("generic_error"):message, captionMessage, exception);
+    public static void showErrorDialog(Component parentComponent, String title, String message, String captionMessage, Throwable throwable) {
+        showDialog(ERROR_DIALOG_TYPE, parentComponent, title==null?Translator.get("error"):title, message==null?Translator.get("generic_error"):message, captionMessage, throwable);
     }
 
    /**
@@ -176,9 +176,9 @@ public class InformationDialog {
      * @param message the main message to display in the dialog, <code>null</code> for a generic localized message, if
      * one exists for the dialog type.
      * @param captionMessage the caption message to display underneath the main message, <code>null</code> for none.
-     * @param exception exception for which to show the stack trace, <code>null</code> for none.
+     * @param throwable exception for which to show the stack trace, <code>null</code> for none.
      */
-    public static void showDialog(int dialogType, Component parentComponent, String title, String message, String captionMessage, Exception exception) {
+    public static void showDialog(int dialogType, Component parentComponent, String title, String message, String captionMessage, Throwable throwable) {
         Window owner = DialogToolkit.getWindowForComponent(parentComponent);
 
         final FocusDialog dialog;
@@ -209,14 +209,14 @@ public class InformationDialog {
         mainPanel.add(buttonPanel);
 
         // Show the exception's stack trace in an expandable/collapsible panel
-        if(exception!=null) {
+        if(throwable !=null) {
             JTextArea detailsArea = new JTextArea();
             detailsArea.setEditable(false);
 
             // Get the stack trace as a string
             StringWriter sw = new StringWriter();
             PrintWriter pw = new PrintWriter(sw, true);
-            exception.printStackTrace(pw);
+            throwable.printStackTrace(pw);
             pw.close();
             // Fill the area with the stack trace.
             // Tabs by space characters to reduce the text's width

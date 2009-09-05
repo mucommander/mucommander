@@ -2270,6 +2270,23 @@ integrity_check_error:AR:فشل التحقق من التكامل: المصدر �
 
 
 
+startup_error:EN:An error prevented muCommander from starting.
+startup_error:FR:Une erreur a empêché muCommander de démarrer.
+# Translation missing (New!)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
