@@ -18,6 +18,8 @@
 
 package com.mucommander.bookmark;
 
+import com.mucommander.RuntimeConstants;
+import com.mucommander.xml.XmlAttributes;
 import com.mucommander.xml.XmlWriter;
 
 import java.io.IOException;
@@ -37,13 +39,13 @@ class BookmarkWriter implements BookmarkConstants, BookmarkBuilder {
     public void startBookmarks() throws BookmarkException {
         // Root element
         try {
-            out.startElement(ELEMENT_ROOT);
-            out.println();
+            // Version the file.
+            // Note: the version attribute was introduced in muCommander 0.8.4.
+            XmlAttributes attributes = new XmlAttributes();
+            attributes.add("version", RuntimeConstants.VERSION);
 
-            // Add muCommander version
-            out.startElement(ELEMENT_VERSION);
-            out.writeCData(com.mucommander.RuntimeConstants.VERSION);
-            out.endElement(ELEMENT_VERSION);
+            out.startElement(ELEMENT_ROOT, attributes);
+            out.println();
         }
         catch(IOException e) {throw new BookmarkException(e);}
     }

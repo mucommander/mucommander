@@ -58,8 +58,6 @@ public class MuConfiguration {
     public static final String  DEFAULT_TIME_FORMAT               = "hh:mm a";
     /** Language muCommander should use when looking for text.. */
     public static final String  LANGUAGE                          = "language";
-    /** muCommander's version at time of writing the configuration file. */
-    public static final String  VERSION                           = "conf_version";
     /** Whether or not to display compact file sizes. */
     public static final String  DISPLAY_COMPACT_FILE_SIZE         = "display_compact_file_size";
     /** Default file size display behavior. */
@@ -280,6 +278,10 @@ public class MuConfiguration {
         false,  // Owner
         false   // Group
     };
+
+    /** Name of the root element's attribute that contains the version of muCommander used to write the configuration file. */
+    static final String VERSION_ATTRIBUTE = "version";
+
 
     /**
      * Returns the configuration section corresponding to the specified {@link com.mucommander.ui.main.table.FileTable},
@@ -551,16 +553,16 @@ public class MuConfiguration {
     public static void read() throws IOException, ConfigurationException {
         String configurationVersion;
 
-        try {configuration.read();}
+        VersionedXmlConfigurationReader reader = new VersionedXmlConfigurationReader();
+        try {configuration.read(reader);}
         finally {
-            configurationVersion = getVariable(VERSION);
+            configurationVersion = reader.getVersion();
             if(configurationVersion == null || !configurationVersion.equals(RuntimeConstants.VERSION)) {
                 renameVariable("show_hidden_files", SHOW_HIDDEN_FILES);
                 renameVariable("auto_size_columns", AUTO_SIZE_COLUMNS);
                 renameVariable("show_toolbar",      TOOLBAR_VISIBLE);
                 renameVariable("show_status_bar",   STATUS_BAR_VISIBLE);
                 renameVariable("show_command_bar",  COMMAND_BAR_VISIBLE);
-                setVariable(VERSION, RuntimeConstants.VERSION);
             }
 
             // Initialises mac os x specific values
@@ -578,7 +580,7 @@ public class MuConfiguration {
      * @throws IOException            if an I/O error occurs.
      * @throws ConfigurationException if a configuration related error occurs.
      */
-    public static void write() throws IOException, ConfigurationException {configuration.write();}
+    public static void write() throws IOException, ConfigurationException {configuration.write(new VersionedXmlConfigurationWriter());}
 
 
 

@@ -16,17 +16,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.mucommander.shell;
+package com.mucommander.conf.impl;
+
+import com.mucommander.conf.ConfigurationWriter;
+import com.mucommander.conf.ConfigurationWriterFactory;
+import com.mucommander.conf.WriterConfigurationException;
 
 /**
- * Defines the structure of the shell history XML file.
- * @author Nicolas Rinaudo
- */
-interface ShellHistoryConstants {
-    /** Name of the XML file's root element. */
-    static final String ROOT_ELEMENT    = "history";
-    /** Name of a command element in the XML file. */
-    static final String COMMAND_ELEMENT = "command";
-    /** Name of the root element's attribute containing the muCommander version that was used to create the shell history file */
-    static final String ATTRIBUTE_VERSION      = "version";
+* @author Maxence Bernard
+*/
+class VersionedXmlConfigurationWriterFactory implements ConfigurationWriterFactory {
+    public ConfigurationWriter getWriterInstance() throws WriterConfigurationException {
+        return new VersionedXmlConfigurationWriter();
+    }
 }

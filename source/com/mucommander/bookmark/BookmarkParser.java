@@ -46,6 +46,8 @@ class BookmarkParser extends DefaultHandler implements BookmarkConstants {
     private StringBuffer characters;
     /** Receives bookmarks events. */
     private BookmarkBuilder builder;
+    /** muCommander version that was used to write the bookmarks file */
+    private String version;
 
 
     /**
@@ -60,6 +62,18 @@ class BookmarkParser extends DefaultHandler implements BookmarkConstants {
         this.builder = builder;
         characters   = new StringBuffer();
         SAXParserFactory.newInstance().newSAXParser().parse(in, this);
+    }
+
+    /**
+     * Returns the muCommander version that was used to write the bookmarks file, <code>null</code> if it is unknown.
+     * <p>
+     * Note: the version attribute was introduced in muCommander 0.8.4.
+     * </p>
+     *
+     * @return the muCommander version that was used to write the bookmarks file, <code>null</code> if it is unknown.
+     */
+    public String getVersion() {
+        return version;
     }
 
 
@@ -88,7 +102,10 @@ class BookmarkParser extends DefaultHandler implements BookmarkConstants {
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
         characters.setLength(0);
 
-        if(qName.equals(ELEMENT_BOOKMARK)) {
+        if(qName.equals(ELEMENT_ROOT)) {
+            version = attributes.getValue(ATTRIBUTE_VERSION);
+        }
+        else if(qName.equals(ELEMENT_BOOKMARK)) {
             // Reset parsing variables
             bookmarkName = null;
             bookmarkLocation = null;

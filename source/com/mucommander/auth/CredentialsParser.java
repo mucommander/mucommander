@@ -50,6 +50,9 @@ class CredentialsParser extends DefaultHandler implements CredentialsConstants {
     private String password;
     private StringBuffer characters;
 
+    /** muCommander version that was used to write the credentials file */
+    private String version;
+
     /** Contains the encryption method used to encrypt/decrypt passwords */
     private String encryptionMethod;
 
@@ -78,6 +81,18 @@ class CredentialsParser extends DefaultHandler implements CredentialsConstants {
         }
     }
 
+    /**
+     * Returns the muCommander version that was used to write the credentials file, <code>null</code> if it is unknown.
+     * <p>
+     * Note: the version attribute was introduced in muCommander 0.8.4.
+     * </p>
+     *
+     * @return the muCommander version that was used to write the credentials file, <code>null</code> if it is unknown.
+     */
+    public String getVersion() {
+        return version;
+    }
+
 
     ///////////////////////////////////
     // ContentHandler implementation //
@@ -102,6 +117,7 @@ class CredentialsParser extends DefaultHandler implements CredentialsConstants {
         // Root element, the 'encryption' attribute specifies which encoding was used to encrypt passwords
         else if(qName.equals(ELEMENT_ROOT)) {
             encryptionMethod = attributes.getValue("encryption");
+            version = attributes.getValue(ATTRIBUTE_VERSION);
         }
     }
 

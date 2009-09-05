@@ -34,7 +34,7 @@ public class XmlConfigurationWriter implements ConfigurationWriter {
     // - Class constants -------------------------------------------------------
     // -------------------------------------------------------------------------
     /** Root element name. */
-    private static final String ROOT_ELEMENT = "prefs";
+    public static final String ROOT_ELEMENT = "prefs";
 
 
 

@@ -18,6 +18,7 @@
 
 package com.mucommander.auth;
 
+import com.mucommander.RuntimeConstants;
 import com.mucommander.bookmark.XORCipher;
 import com.mucommander.file.FileURL;
 import com.mucommander.xml.XmlAttributes;
@@ -47,13 +48,10 @@ public class CredentialsWriter implements CredentialsConstants {
         // Root element, add the encryption method used
         XmlAttributes attributes = new XmlAttributes();
         attributes.add(ATTRIBUTE_ENCRYPTION, WEAK_ENCRYPTION_METHOD);
+        // Version the file
+        attributes.add(ATTRIBUTE_VERSION, RuntimeConstants.VERSION);
         out.startElement(ELEMENT_ROOT, attributes);
         out.println();
-
-        // Add muCommander version
-        out.startElement(ELEMENT_VERSION);
-        out.writeCData(com.mucommander.RuntimeConstants.VERSION);
-        out.endElement(ELEMENT_VERSION);
 
         Iterator iterator = CredentialsManager.getPersistentCredentialMappings().iterator();
         CredentialsMapping credentialsMapping;

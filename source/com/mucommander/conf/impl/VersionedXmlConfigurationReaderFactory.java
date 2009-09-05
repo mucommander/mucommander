@@ -16,17 +16,23 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.mucommander.shell;
+package com.mucommander.conf.impl;
+
+import com.mucommander.conf.ConfigurationReader;
+import com.mucommander.conf.ConfigurationReaderFactory;
+import com.mucommander.conf.ReaderConfigurationException;
 
 /**
- * Defines the structure of the shell history XML file.
- * @author Nicolas Rinaudo
+ * @author Maxence Bernard
  */
-interface ShellHistoryConstants {
-    /** Name of the XML file's root element. */
-    static final String ROOT_ELEMENT    = "history";
-    /** Name of a command element in the XML file. */
-    static final String COMMAND_ELEMENT = "command";
-    /** Name of the root element's attribute containing the muCommander version that was used to create the shell history file */
-    static final String ATTRIBUTE_VERSION      = "version";
+public class VersionedXmlConfigurationReaderFactory implements ConfigurationReaderFactory {
+
+    ///////////////////////////////////////////////
+    // ConfigurationReaderFactory implementation //
+    ///////////////////////////////////////////////
+
+
+    public ConfigurationReader getReaderInstance() throws ReaderConfigurationException {
+        return new VersionedXmlConfigurationReader();
+    }
 }

@@ -47,7 +47,8 @@ class ShellHistoryReader extends DefaultHandler implements ShellHistoryConstants
     private int          status;
     /** Buffer for the current command. */
     private StringBuffer command;
-
+    /** muCommander version that was used to write the shell history file */
+    private String version;
 
 
     // - Initialisation ------------------------------------------------------
@@ -60,6 +61,17 @@ class ShellHistoryReader extends DefaultHandler implements ShellHistoryConstants
         status = STATUS_UNKNOWN;
     }
 
+    /**
+     * Returns the muCommander version that was used to write the shell history file, <code>null</code> if it is unknown.
+     * <p>
+     * Note: the version attribute was introduced in muCommander 0.8.4.
+     * </p>
+     *
+     * @return the muCommander version that was used to write the shell history file, <code>null</code> if it is unknown.
+     */
+    public String getVersion() {
+        return version;
+    }
 
 
     // - XML interaction -----------------------------------------------------
@@ -83,8 +95,10 @@ class ShellHistoryReader extends DefaultHandler implements ShellHistoryConstants
      */
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
         // Root element declaration.
-        if(qName.equals(ROOT_ELEMENT) && (status == STATUS_UNKNOWN))
+        if(qName.equals(ROOT_ELEMENT) && (status == STATUS_UNKNOWN)) {
             status = STATUS_ROOT;
+            version = attributes.getValue(ATTRIBUTE_VERSION);
+        }
 
         // Command element declaration.
         else if(qName.equals(COMMAND_ELEMENT) && status == STATUS_ROOT)
