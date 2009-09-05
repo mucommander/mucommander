@@ -27,13 +27,9 @@ import com.mucommander.io.RandomAccessInputStream;
 import com.mucommander.io.RandomAccessOutputStream;
 import com.mucommander.io.base64.Base64Encoder;
 
-import javax.net.ssl.*;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.security.SecureRandom;
-import java.security.cert.CertificateException;
-import java.security.cert.X509Certificate;
 import java.util.StringTokenizer;
 import java.util.TreeSet;
 import java.util.Vector;
@@ -114,16 +110,6 @@ public class HTTPFile extends ProtocolFile {
     private final static Pattern linkAttributePatternDQ = Pattern.compile("(src|href|SRC|HREF)=\\\".*?\\\"");
 
 
-    static {
-        try {
-            disableCertificateVerifications();
-        }
-        catch(Exception e) {
-            FileLogger.fine("Failed to install a custom TrustManager", e);
-        }
-    }
-
-
     protected HTTPFile(FileURL fileURL) throws IOException {
         // TODO: optimize this
         this(fileURL, new URL(fileURL.toString(false)), fileURL.toString(false));
@@ -186,52 +172,6 @@ public class HTTPFile extends ProtocolFile {
     private boolean isParsableMimeType(String mimeType) {
         return mimeType!=null
            && (mimeType.startsWith("text/html") || mimeType.startsWith("application/xhtml+xml") || mimeType.startsWith("application/xml"));
-    }
-
-
-    /**
-	 * Installs a custom <code>javax.net.ssl.X509TrustManager</code> and <code>javax.net.ssl.HostnameVerifier</code>
-     * to bypass the default SSL certificate verifications and blindly trust all SSL certificates, even if they are
-     * self-signed, expired, or do not match the requested hostname.
-     * As a result in such cases, <code>HttpsURLConnection#openConnection()</code> will succeed instead of throwing a
-     * <code>javax.net.ssl.SSLException</code>.
-     *
-     * <p>This method needs to be called only once in the JVM lifetime and will impact all HTTPS connections made,
-     * i.e. not only the ones made by this class.</p>
-     *
-     * <p>This clearly is unsecure for the user, but arguably better from a feature standpoint than systematically
-     * failing untrusted connections.</p>
-     *
-     * @throws Exception if an error occurred while installing the custom X509TrustManager.
-	 */
-	private static void disableCertificateVerifications() throws Exception {
-        // Todo: find a way to warn the user when the server cannot be trusted
-
-        // Create a custom X509 trust manager that does not validate certificate chains
-        TrustManager permissiveTrustManager = new X509TrustManager() {
-            public X509Certificate[] getAcceptedIssuers() {
-                return null;
-            }
-            public void checkServerTrusted(X509Certificate[] certs, String authType) throws CertificateException {
-            }
-
-            public void checkClientTrusted(X509Certificate[] certs, String authType) throws CertificateException {
-            }
-        };
-
-        // Install the permissive trust manager
-        SSLContext sc = SSLContext.getInstance("SSL");
-        sc.init(null, new TrustManager[]{permissiveTrustManager}, new SecureRandom());
-        HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
-
-        // Create and install a custom hostname verifier that allows hostname mismatches
-        HostnameVerifier permissiveHostnameVerifier = new HostnameVerifier() {
-           public boolean verify(String urlHostName, SSLSession session) {
-               return true;
-           }
-
-        };
-       HttpsURLConnection.setDefaultHostnameVerifier(permissiveHostnameVerifier);
     }
 
 
