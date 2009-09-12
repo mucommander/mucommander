@@ -84,6 +84,11 @@ public class ActionKeymap {
      * @param alternateAccelerator - KeyStroke that would be alternative accelerator of the given action.
      */
     public static void changeActionAccelerators(String actionId, KeyStroke accelerator, KeyStroke alternateAccelerator) {
+    	// Check whether the given actions are already assigned to the given action
+    	if (equals(accelerator, ActionKeymap.getAccelerator(actionId)) &&
+    			equals(alternateAccelerator, ActionKeymap.getAlternateAccelerator(actionId)))
+    		return;
+    	
     	// If primary accelerator is already registered to other MuAction, unregister it.
     	String previousActionForAccelerator = getRegisteredActionIdForKeystroke(accelerator);
     	if (previousActionForAccelerator != null && !previousActionForAccelerator.equals(actionId))
@@ -126,10 +131,10 @@ public class ActionKeymap {
     		String actionId = (String) actionIdsIterator.next();
     		
     		// Add the action/keystroke mapping
-        	ActionKeymap.changeActionAccelerators(
-        			actionId, 
-        			(KeyStroke) primary.get(actionId), 
-        			(KeyStroke) alternate.get(actionId));
+    		ActionKeymap.registerActionAccelerators(
+    				actionId, 
+    				(KeyStroke) primary.get(actionId), 
+    				(KeyStroke) alternate.get(actionId));
     	}
     }
 
@@ -328,7 +333,7 @@ public class ActionKeymap {
     /**
      * Return true if the two KeyStrokes are equal, false otherwise.
      */
-    private static boolean equals(KeyStroke first, KeyStroke second) {
+    private static boolean equals(Object first, Object second) {
     	if (first == null)
     		return second == null;
     	return first.equals(second);

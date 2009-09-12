@@ -151,7 +151,7 @@ public class ShortcutsPanel extends PreferencesPanel {
     ///////////////////////
 	
 	protected void commit() {
-		shortcutsTable.updateActions();
+		shortcutsTable.commitChanges();
 		ActionKeymapIO.setModified();
 	}
 	
