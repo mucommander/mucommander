@@ -98,8 +98,13 @@ public class ShortcutsPanel extends PreferencesPanel {
 		
 		RemoveButton removeButton = new RemoveButton();	
 		
-		final JButton restoreDefaultButton = new JButton("Restore Default");
-		restoreDefaultButton.setEnabled(false);
+		final JButton restoreDefaultButton = new JButton();
+		restoreDefaultButton.setAction(new AbstractAction("Restore Default") {
+			
+			public void actionPerformed(ActionEvent e) {
+				shortcutsTable.restoreDefaults();
+			}
+		});
 		
 		panel.add(removeButton);
 		panel.add(restoreDefaultButton);

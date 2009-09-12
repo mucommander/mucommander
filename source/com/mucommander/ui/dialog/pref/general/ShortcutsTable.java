@@ -239,6 +239,10 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 		data.submitChanges();
 	}
 	
+	public void restoreDefaults() {
+		data.restoreDefaultAccelerators();
+	}
+	
 	///////////////////////////
     // FocusListener methods //
     ///////////////////////////
@@ -560,6 +564,23 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 					return true;
 			}
 			return false;
+		}
+		
+		public void restoreDefaultAccelerators() {
+			Iterator actionIdsIterator = allActionIds.iterator();
+			while (actionIdsIterator.hasNext()) {
+				String actionId = (String) actionIdsIterator.next();
+				((HashMap) db.get(actionId)).put(this.accelerator, ActionProperties.getDefaultAccelerator(actionId));
+				((HashMap) db.get(actionId)).put(this.alt_accelerator, ActionProperties.getDefaultAlternativeAccelerator(actionId));
+			}
+			
+			int nbRows = actionIds.length;
+			for (int i=0; i<nbRows; ++i) {
+				data[i][ACCELERATOR_COLUMN_INDEX] = ((HashMap) db.get(actionIds[i])).get(this.accelerator);
+				data[i][ALTERNATE_ACCELERATOR_COLUMN_INDEX] = ((HashMap) db.get(actionIds[i])).get(this.alt_accelerator);
+			}
+			
+			((DefaultTableModel) getModel()).fireTableDataChanged();
 		}
 		
 		public void submitChanges() {
