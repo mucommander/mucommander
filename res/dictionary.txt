@@ -2439,6 +2439,9 @@ permissions.octal_notation:AR:تدوين ثماني
 # Action categories #
 #####################
 
+com.mucommander.ui.action.ActionCategories.all:EN:All
+# Translation missing (New!)
+
 com.mucommander.ui.action.ActionCategories.navigation:EN:Navigation
 com.mucommander.ui.action.ActionCategories.navigation:FR:Navigation
 com.mucommander.ui.action.ActionCategories.navigation:DE:Navigation
