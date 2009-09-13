@@ -202,6 +202,8 @@ public class ActionProperties {
 	 * Getter for all existed categories.
 	 * Existed category means an actions category which at least one of its actions is registered.
 	 * 
+	 * The categories are ordered based on the alphabet order of their descriptions (labels).
+	 * 
 	 * @return Set of existed action categories.
 	 */
 	public static Set getActionCategories() {
