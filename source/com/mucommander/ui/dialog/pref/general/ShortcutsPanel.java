@@ -25,7 +25,7 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Vector;
+import java.util.Iterator;
 
 import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
@@ -116,14 +116,14 @@ public class ShortcutsPanel extends PreferencesPanel {
 		JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		
 		panel.setBorder(BorderFactory.createEmptyBorder());
+		// TODO: translator
 		panel.add(new JLabel("Show: "));
 		
-		Vector actionCategories = new Vector(ActionProperties.getActionCategories());
-		int nbCategories = actionCategories.size();
+		Iterator actionCategoriesIterator = ActionProperties.getActionCategories().iterator();
 		final JComboBox combo = new JComboBox();
 		combo.addItem(ActionCategories.ALL);
-	    for (int i = 0; i < nbCategories; ++i)
-	      combo.addItem(actionCategories.elementAt(i));
+	    while (actionCategoriesIterator.hasNext())
+	      combo.addItem(actionCategoriesIterator.next());
 	    
 	    combo.addActionListener(new ActionListener() {
 
@@ -133,7 +133,7 @@ public class ShortcutsPanel extends PreferencesPanel {
 					public boolean accept(String actionId) {
 						return selectedActionCategory.contains(actionId);
 					}
-				});					
+				});
 			}
 	    });
 

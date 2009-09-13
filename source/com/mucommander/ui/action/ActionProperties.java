@@ -19,9 +19,9 @@
 package com.mucommander.ui.action;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Set;
+import java.util.TreeSet;
 
 import javax.swing.ImageIcon;
 import javax.swing.KeyStroke;
@@ -42,7 +42,7 @@ public class ActionProperties {
 	private static ActionDescriptor nullActionDescriptor = new NullActionDescriptor();
 	
 	/* Contains all used action categories (i.e for each category at least one action is registered) */
-	private static HashSet actionCategories = new HashSet();
+	private static TreeSet actionCategories = new TreeSet();
 
 	/* Maps action id -> primary shortcut */
 	private static HashMap defaultPrimaryActionKeymap = new HashMap();
