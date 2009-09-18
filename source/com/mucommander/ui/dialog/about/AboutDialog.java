@@ -224,10 +224,11 @@ public class AboutDialog extends FocusDialog implements ActionListener {
             insertLineBreak(doc);
 
             // VM information.
-            insertHeader(doc,         "Java VM");
-            insertNormalString(doc,   "Name: " + System.getProperty("java.vm.name"));
-            insertNormalString(doc,   "Version: " + System.getProperty("java.vm.version"));
-            insertNormalString(doc,   "Vendor: " + System.getProperty("java.vm.vendor"));
+            insertHeader(doc,         "Java");
+            insertNormalString(doc,   "Runtime version: " + System.getProperty("java.version"));
+            insertNormalString(doc,   "VM name: " + System.getProperty("java.vm.name"));
+            insertNormalString(doc,   "VM version: " + System.getProperty("java.vm.version"));
+            insertNormalString(doc,   "VM vendor: " + System.getProperty("java.vm.vendor"));
             insertLineBreak(doc);
 
             // OS information.

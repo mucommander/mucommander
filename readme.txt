@@ -236,6 +236,8 @@ Bug fixes:
   (ticket #137).
 - Fixed a case where the application would freeze when browsing HTTP shares
   with the tree view enabled (ticket #266).
+- Added the Java runtime version to the 'Version information' section of the
+  'About' dialog (ticket #274).
 
 Known issues:
 - Some translations are not up-to-date. Refer to
