@@ -4260,97 +4260,165 @@ MarkSelectedFile.tooltip:DA:Marker/afmarker valgte fil
 MarkSelectedFile.tooltip:UA:Відмітити/зняти відмітку для вибраного файла
 MarkSelectedFile.tooltip:AR:تحديد/إلغاء الملفات المعينة
 
-MarkPageDown.label:EN:Mark page down
-MarkPageDown.label:FR:Marquer les fichiers jusqu'à la prochaine page
-MarkPageDown.label:zh_TW:標記檔案至下一頁
-MarkPageDown.label:DE:Dateien bis zur nächsten Seite Markieren
-MarkPageDown.label:RO:Selectează fișierele din pagina următoare
-MarkPageDown.label:IT:Seleziona pagina giu'
-MarkPageDown.label:CS:Označit stránku dolů
-MarkPageDown.label:zh_CN:标记文件到下一页
-MarkPageDown.label:RU:Выделить файлы на следующей странице
-MarkPageDown.label:SL:Označi datoteke do naslednje strani
-MarkPageDown.label:ES:Marcar página abajo
-MarkPageDown.label:PL:Zaznacz strone niżej (page down)
-MarkPageDown.label:KO:페이지 아래로 선택
-MarkPageDown.label:pt_BR:Marcar página abaixo
-MarkPageDown.label:NL:Markeer bestanden tot volgende bladzijde 
-MarkPageDown.label:SK:Označiť po nasledujúcu stránku
-MarkPageDown.label:HU:Következő lap kijelölése
-MarkPageDown.label:JA:下へページをマーク
-MarkPageDown.label:SV:Markera sidan neråt
-MarkPageDown.label:DA:Marker side ned
-MarkPageDown.label:UA:Відмітити файли на сторінку вниз
-MarkPageDown.label:AR:تحديد صفحة للأسفل
+MarkNextBlock.label:EN:Mark one block down
+MarkNextBlock.label:FR:Marquer un bloc vers le bas
+# Translation missing (New!)
 
-MarkPageUp.label:EN:Mark page up
-MarkPageUp.label:FR:Marquer les fichiers jusqu'à la page précédente
-MarkPageUp.label:zh_TW:標記檔案至上一頁
-MarkPageUp.label:DE:Dateien bis zur vorigen Seite Markieren
-MarkPageUp.label:RO:Selectează fișierele din pagina anterioară
-MarkPageUp.label:zh_CN:标记文件到上一页
-MarkPageUp.label:RU:Выделить файлы на предыдущей странице
-MarkPageUp.label:SL:Označi datoteke od prejšnje strani
-MarkPageUp.label:CS:Označit stránku nahoru
-MarkPageUp.label:ES:Marcar página arriba
-MarkPageUp.label:PL:aznacz strone wyżej (page up)
-MarkPageUp.label:KO:페이지 위로 선택
-MarkPageUp.label:pt_BR:Marcar página acima
-MarkPageUp.label:NL:Markeer bestanden tot vorige pagina
-MarkPageUp.label:SK:Označiť po predchádzajúcu stránku
-MarkPageUp.label:HU:Előző lap kijelölése
-MarkPageUp.label:IT:Seleziona pagina su
-MarkPageUp.label:JA:上へページをマーク
-MarkPageUp.label:SV:Markera sidan uppåt
-MarkPageUp.label:DA:Marker side op
-MarkPageUp.label:UA:Відмітити файли на сторінку вверх
-MarkPageUp.label:AR:تحديد صفحة للأعلى
 
-MarkUpToFirstRow.label:EN:Mark files to the beginning
-MarkUpToFirstRow.label:FR:Marquer les fichiers jusqu'au début
-MarkUpToFirstRow.label:zh_TW:標記檔案至開頭
-MarkUpToFirstRow.label:DE:Dateien bis zum Anfang Markieren
-MarkUpToFirstRow.label:RO:Selectează fișierele până la început
-MarkUpToFirstRow.label:IT:Seleziona file dall'inizio
-MarkUpToFirstRow.label:CS:Označit soubory do začátku
-MarkUpToFirstRow.label:zh_CN:标记文件到开头
-MarkUpToFirstRow.label:RU:Отметить файлы до начала
-MarkUpToFirstRow.label:SL:Označi datoteke od začetka
-MarkUpToFirstRow.label:ES:Marcar ficheros hasta el comienzo
-MarkUpToFirstRow.label:PL:Zaznacz pliki do początku
-MarkUpToFirstRow.label:KO:시작부터 선택
-MarkUpToFirstRow.label:pt_BR:Marcar arquivos até o início
-MarkUpToFirstRow.label:NL:Markeer bestanden tot begin
-MarkUpToFirstRow.label:SK:Označiť súbory po začiatok
-MarkUpToFirstRow.label:HU:Fájlok kijelölése a kezdethez
-MarkUpToFirstRow.label:JA:始めまでのファイルをマーク
-MarkUpToFirstRow.label:SV:Markera filer till början
-MarkUpToFirstRow.label:DA:Marker filer til begyndelsen
-MarkUpToFirstRow.label:UA:Відмітити файли до початку
-MarkUpToFirstRow.label:AR:تحديد الملفات حتى البداية
 
-MarkUpToLastRow.label:EN:Mark files to the end
-MarkUpToLastRow.label:FR:Marquer les fichiers jusqu'à la fin
-MarkUpToLastRow.label:zh_TW:標記檔案至結尾
-MarkUpToLastRow.label:DE:Dateien bis zum Ende Markieren
-MarkUpToLastRow.label:RO:Selectează fișierele până la sfârșit
-MarkUpToLastRow.label:IT:Seleziona file fino alla fine
-MarkUpToLastRow.label:CS:Označit soubory do konce
-MarkUpToLastRow.label:zh_CN:标记文件到结尾
-MarkUpToLastRow.label:RU:Отметить файлы до конца
-MarkUpToLastRow.label:SL:Označi datoteke do konca
-MarkUpToLastRow.label:ES:Marcar ficheros hasta el final
-MarkUpToLastRow.label:PL:Zaznacz pliki do końca
-MarkUpToLastRow.label:KO:끝까지 선택
-MarkUpToLastRow.label:pt_BR:Marcar arquivos até o final
-MarkUpToLastRow.label:NL:Markeer bestanden tot eind
-MarkUpToLastRow.label:SK:Označiť súbory do konca
-MarkUpToLastRow.label:HU:Fájlok kijelölése a végéhez
-MarkUpToLastRow.label:JA:終わりまでのファイルをマーク
-MarkUpToLastRow.label:SV:Markera filer till slutet
-MarkUpToLastRow.label:DA:Marker filer til enden
-MarkUpToLastRow.label:UA:Відмітити файли до кінця
-MarkUpToLastRow.label:AR:تحديد الملفات حتى النهاية
+
+
+
+
+
+
+
+
+
+
+
+MarkPreviousBlock.label:EN:Mark one block up
+MarkPreviousBlock.label:FR:Marquer un bloc vers le haut
+# Translation missing (New!)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+MarkNextRow.label:EN:Mark one row down
+MarkNextRow.label:FR:Marquer une ligne vers le bas
+# Translation missing (New!)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+MarkPreviousRow.label:EN:Mark one row up
+MarkPreviousRow.label:FR:Marquer une ligne vers le haut
+# Translation missing (New!)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+MarkNextPage.label:EN:Mark one page up
+MarkNextPage.label:FR:Marquer une page vers le bas
+MarkNextPage.label:zh_TW:標記檔案至下一頁
+MarkNextPage.label:DE:Dateien bis zur nächsten Seite Markieren
+MarkNextPage.label:RO:Selectează fișierele din pagina următoare
+MarkNextPage.label:IT:Seleziona pagina giu'
+MarkNextPage.label:CS:Označit stránku dolů
+MarkNextPage.label:zh_CN:标记文件到下一页
+MarkNextPage.label:RU:Выделить файлы на следующей странице
+MarkNextPage.label:SL:Označi datoteke do naslednje strani
+MarkNextPage.label:ES:Marcar página abajo
+MarkNextPage.label:PL:Zaznacz strone niżej (page down)
+MarkNextPage.label:KO:페이지 아래로 선택
+MarkNextPage.label:pt_BR:Marcar página abaixo
+MarkNextPage.label:NL:Markeer bestanden tot volgende bladzijde 
+MarkNextPage.label:SK:Označiť po nasledujúcu stránku
+MarkNextPage.label:HU:Következő lap kijelölése
+MarkNextPage.label:JA:下へページをマーク
+MarkNextPage.label:SV:Markera sidan neråt
+MarkNextPage.label:DA:Marker side ned
+MarkNextPage.label:UA:Відмітити файли на сторінку вниз
+MarkNextPage.label:AR:تحديد صفحة للأسفل
+
+MarkPreviousPage.label:EN:Mark one page down
+MarkPreviousPage.label:FR:Marquer une page vers le haut
+MarkPreviousPage.label:zh_TW:標記檔案至上一頁
+MarkPreviousPage.label:DE:Dateien bis zur vorigen Seite Markieren
+MarkPreviousPage.label:RO:Selectează fișierele din pagina anterioară
+MarkPreviousPage.label:zh_CN:标记文件到上一页
+MarkPreviousPage.label:RU:Выделить файлы на предыдущей странице
+MarkPreviousPage.label:SL:Označi datoteke od prejšnje strani
+MarkPreviousPage.label:CS:Označit stránku nahoru
+MarkPreviousPage.label:ES:Marcar página arriba
+MarkPreviousPage.label:PL:aznacz strone wyżej (page up)
+MarkPreviousPage.label:KO:페이지 위로 선택
+MarkPreviousPage.label:pt_BR:Marcar página acima
+MarkPreviousPage.label:NL:Markeer bestanden tot vorige pagina
+MarkPreviousPage.label:SK:Označiť po predchádzajúcu stránku
+MarkPreviousPage.label:HU:Előző lap kijelölése
+MarkPreviousPage.label:IT:Seleziona pagina su
+MarkPreviousPage.label:JA:上へページをマーク
+MarkPreviousPage.label:SV:Markera sidan uppåt
+MarkPreviousPage.label:DA:Marker side op
+MarkPreviousPage.label:UA:Відмітити файли на сторінку вверх
+MarkPreviousPage.label:AR:تحديد صفحة للأعلى
+
+MarkToFirstRow.label:EN:Mark files to the beginning
+MarkToFirstRow.label:FR:Marquer les fichiers jusqu'au début
+MarkToFirstRow.label:zh_TW:標記檔案至開頭
+MarkToFirstRow.label:DE:Dateien bis zum Anfang Markieren
+MarkToFirstRow.label:RO:Selectează fișierele până la început
+MarkToFirstRow.label:IT:Seleziona file dall'inizio
+MarkToFirstRow.label:CS:Označit soubory do začátku
+MarkToFirstRow.label:zh_CN:标记文件到开头
+MarkToFirstRow.label:RU:Отметить файлы до начала
+MarkToFirstRow.label:SL:Označi datoteke od začetka
+MarkToFirstRow.label:ES:Marcar ficheros hasta el comienzo
+MarkToFirstRow.label:PL:Zaznacz pliki do początku
+MarkToFirstRow.label:KO:시작부터 선택
+MarkToFirstRow.label:pt_BR:Marcar arquivos até o início
+MarkToFirstRow.label:NL:Markeer bestanden tot begin
+MarkToFirstRow.label:SK:Označiť súbory po začiatok
+MarkToFirstRow.label:HU:Fájlok kijelölése a kezdethez
+MarkToFirstRow.label:JA:始めまでのファイルをマーク
+MarkToFirstRow.label:SV:Markera filer till början
+MarkToFirstRow.label:DA:Marker filer til begyndelsen
+MarkToFirstRow.label:UA:Відмітити файли до початку
+MarkToFirstRow.label:AR:تحديد الملفات حتى البداية
+
+MarkToLastRow.label:EN:Mark files to the end
+MarkToLastRow.label:FR:Marquer les fichiers jusqu'à la fin
+MarkToLastRow.label:zh_TW:標記檔案至結尾
+MarkToLastRow.label:DE:Dateien bis zum Ende Markieren
+MarkToLastRow.label:RO:Selectează fișierele până la sfârșit
+MarkToLastRow.label:IT:Seleziona file fino alla fine
+MarkToLastRow.label:CS:Označit soubory do konce
+MarkToLastRow.label:zh_CN:标记文件到结尾
+MarkToLastRow.label:RU:Отметить файлы до конца
+MarkToLastRow.label:SL:Označi datoteke do konca
+MarkToLastRow.label:ES:Marcar ficheros hasta el final
+MarkToLastRow.label:PL:Zaznacz pliki do końca
+MarkToLastRow.label:KO:끝까지 선택
+MarkToLastRow.label:pt_BR:Marcar arquivos até o final
+MarkToLastRow.label:NL:Markeer bestanden tot eind
+MarkToLastRow.label:SK:Označiť súbory do konca
+MarkToLastRow.label:HU:Fájlok kijelölése a végéhez
+MarkToLastRow.label:JA:終わりまでのファイルをマーク
+MarkToLastRow.label:SV:Markera filer till slutet
+MarkToLastRow.label:DA:Marker filer til enden
+MarkToLastRow.label:UA:Відмітити файли до кінця
+MarkToLastRow.label:AR:تحديد الملفات حتى النهاية
 
 MarkExtension.label:EN:Mark extension
 MarkExtension.label:FR:Marquer l'extension
@@ -5532,8 +5600,105 @@ SwitchActiveTable.label:DA:Skift i mellem venstre og højre panel
 SwitchActiveTable.label:UA:Перемкнути праву і ліву панелі
 SwitchActiveTable.label:AR:تبديل بين اللوحتين اليمنى واليسرى
 
+SelectNextBlock.label:EN:Jump down one block
+SelectNextBlock.label:FR:Descendre d'un bloc
+# Translation missing (New!)
+
+
+
+
+
+
+
+
+
+
+
+
+
+SelectPreviousBlock.label:EN:Jump up one block
+SelectPreviousBlock.label:FR:Remonter d'un bloc
+# Translation missing (New!)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+SelectNextPage.label:EN:Jump down one page
+SelectNextPage.label:FR:Descendre d'une page
+# Translation missing (New!)
+
+
+
+
+
+
+
+
+
+
+
+
+
+SelectPreviousPage.label:EN:Jump up one page
+SelectPreviousPage.label:FR:Remonter d'une page
+# Translation missing (New!)
+
+
+
+
+
+
+
+
+
+
+
+
+
+SelectNextRow.label:EN:Jump down one row
+SelectNextRow.label:FR:Descendre d'une ligne
+# Translation missing (New!)
+
+
+
+
+
+
+
+
+
+
+
+
+
+SelectPreviousRow.label:EN:Jump up one row
+SelectPreviousRow.label:FR:Remonter d'une ligne
+# Translation missing (New!)
+
+
+
+
+
+
+
+
+
+
+
+
+
 SelectFirstRow.label:EN:Select first file in current folder
-SelectFirstRow.label:FR:Selectionner le premier fichier du dossier
+SelectFirstRow.label:FR:Sélectionner le premier fichier du dossier
 SelectFirstRow.label:DE:Erste Datei im aktuellen Ordner markieren
 SelectFirstRow.label:ES:Seleccionar el primer fichero en el directorio actual
 SelectFirstRow.label:CS:Vybrat první soubor ve stávající složce
@@ -5556,7 +5721,7 @@ SelectFirstRow.label:UA:Перейти до першого файлу в кат�
 SelectFirstRow.label:AR:اختيار الملف الأول في المجلد الحالي
 
 SelectLastRow.label:EN:Select last file in current folder
-SelectLastRow.label:FR:Selectionner le dernier fichier du dossier
+SelectLastRow.label:FR:Sélectionner le dernier fichier du dossier
 SelectLastRow.label:DE:Letzte Datei im aktuellen Ordner markieren
 SelectLastRow.label:ES:Seleccionar el último fichero en el directorio actual
 SelectLastRow.label:CS:Vybrat poslední soubor ve stávající složce

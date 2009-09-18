@@ -219,6 +219,13 @@ public class FolderPanel extends JPanel implements FocusListener, ThemeListener 
         backgroundColor          = ThemeManager.getCurrentColor(Theme.FILE_TABLE_BACKGROUND_COLOR);
         unmatchedBackgroundColor = ThemeManager.getCurrentColor(Theme.FILE_TABLE_UNMATCHED_BACKGROUND_COLOR);
 
+        // Remove default action mappings that conflict with corresponding mu actions
+        InputMap inputMap = scrollPane.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).getParent();
+        inputMap.remove(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0));
+        inputMap.remove(KeyStroke.getKeyStroke(KeyEvent.VK_UP, 0));
+        inputMap.remove(KeyStroke.getKeyStroke(KeyEvent.VK_PAGE_DOWN, 0));
+        inputMap.remove(KeyStroke.getKeyStroke(KeyEvent.VK_PAGE_UP, 0));
+
         // Catch mouse events on the ScrollPane
         scrollPane.addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {

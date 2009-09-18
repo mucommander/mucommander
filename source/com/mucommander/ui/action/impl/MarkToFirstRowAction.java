@@ -18,53 +18,40 @@
 
 package com.mucommander.ui.action.impl;
 
+import com.mucommander.ui.action.*;
+import com.mucommander.ui.main.MainFrame;
+
+import javax.swing.*;
 import java.awt.event.KeyEvent;
 import java.util.Hashtable;
 
-import javax.swing.KeyStroke;
-
-import com.mucommander.ui.action.AbstractActionDescriptor;
-import com.mucommander.ui.action.ActionCategories;
-import com.mucommander.ui.action.ActionCategory;
-import com.mucommander.ui.action.ActionFactory;
-import com.mucommander.ui.action.MuAction;
-import com.mucommander.ui.main.MainFrame;
-import com.mucommander.ui.main.table.FileTable;
-
 /**
- * Marks/unmarks files in the active FileTable, from the currently selected row to the last row (inclusive).
- * The last row will also become the currently selected row.
+ * Marks/unmarks files in the active FileTable, from the currently selected row to the first row (inclusive).
+ * The first row will also become the currently selected row.
  *
  * <p>The currently selected row's marked state determines whether the rows will be marked or unmarked : if the selected
  * row is marked, the rows will be unmarked and vice-versa.
  *
  * @author Maxence Bernard
  */
-public class MarkUpToLastRowAction extends MuAction {
+public class MarkToFirstRowAction extends MarkBackwardAction {
 
-    public MarkUpToLastRowAction(MainFrame mainFrame, Hashtable properties) {
+    public MarkToFirstRowAction(MainFrame mainFrame, Hashtable properties) {
         super(mainFrame, properties);
     }
 
-    public void performAction() {
-        FileTable fileTable = mainFrame.getActiveTable();
-
-        int selectedRow = fileTable.getSelectedRow();
-        int lastRow = fileTable.getRowCount()-1;
-
-        fileTable.setRangeMarked(selectedRow, lastRow, !fileTable.getFileTableModel().isRowMarked(selectedRow));
-        fileTable.selectRow(lastRow);
+    protected int getRowDecrement() {
+        return mainFrame.getActiveTable().getSelectedRow();
     }
-    
-    public static class Factory implements ActionFactory {
 
+    public static class Factory implements ActionFactory {
 		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
-			return new MarkUpToLastRowAction(mainFrame, properties);
+			return new MarkToFirstRowAction(mainFrame, properties);
 		}
     }
     
     public static class Descriptor extends AbstractActionDescriptor {
-    	public static final String ACTION_ID = "MarkUpToLastRow";
+    	public static final String ACTION_ID = "MarkToFirstRow";
     	
 		public String getId() { return ACTION_ID; }
 
@@ -72,6 +59,6 @@ public class MarkUpToLastRowAction extends MuAction {
 
 		public KeyStroke getDefaultAltKeyStroke() { return null; }
 
-		public KeyStroke getDefaultKeyStroke() { return KeyStroke.getKeyStroke(KeyEvent.VK_END, KeyEvent.SHIFT_DOWN_MASK); }
+		public KeyStroke getDefaultKeyStroke() { return KeyStroke.getKeyStroke(KeyEvent.VK_HOME, KeyEvent.SHIFT_DOWN_MASK); }
     }
 }

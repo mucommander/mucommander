@@ -101,8 +101,6 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
     private boolean markOnRightClick;
     private int     lastDraggedRow = -1;
 
-    // For UP/DOWN + shift
-    private boolean markOnShift;
     // Used by shift+Click
     private int lastRow;
 
@@ -160,8 +158,9 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
         this.mainFrame   = mainFrame;
         this.folderPanel = folderPanel;
 
-        // Remove any action mapped to the Escape key, since we need Escape to cancel folder change
-        getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).getParent().remove(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE ,0));
+        // Remove all default action mappings as they conflict with corresponding mu actions
+        InputMap inputMap = getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).getParent();
+        inputMap.clear();
 
         // Initialises the table.
         cellRenderer     = new FileTableCellRenderer(this);
@@ -1347,27 +1346,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
     /////////////////////////
 
     public void keyPressed(KeyEvent e) {
-        // Discard key events while in 'no events mode' or editing a row
-        if(mainFrame.getNoEventsMode() || isEditing())
-            return;
-
-        int keyCode = e.getKeyCode();
-        boolean isShiftDown = e.isShiftDown();
-
-        // The following actions must not be triggered when quick searching
-        if(quickSearch.isActive())
-            return;
-
-        // Determine if shift+UP/DOWN will mark or unmark file(s)
-        if (keyCode == KeyEvent.VK_SHIFT) {
-            markOnShift = !tableModel.isRowMarked(currentRow);
-        }
-        // Mark/unmark file
-        else if (isShiftDown && (keyCode == KeyEvent.VK_DOWN || keyCode == KeyEvent.VK_UP)) {
-            setRowMarked(currentRow, markOnShift);
-        }
     }
-
 
     public void keyTyped(KeyEvent e) {
     }

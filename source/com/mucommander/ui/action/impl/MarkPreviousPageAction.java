@@ -18,50 +18,39 @@
 
 package com.mucommander.ui.action.impl;
 
-import java.awt.event.KeyEvent;
-import java.util.Hashtable;
-
-import javax.swing.KeyStroke;
-
-import com.mucommander.ui.action.AbstractActionDescriptor;
-import com.mucommander.ui.action.ActionCategories;
-import com.mucommander.ui.action.ActionCategory;
-import com.mucommander.ui.action.ActionFactory;
-import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.action.*;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.table.FileTable;
 
+import javax.swing.*;
+import java.awt.event.KeyEvent;
+import java.util.Hashtable;
+
 /**
- * Marks/unmarks rows in the active FileTable, from the currently selected row to the previous page's row (inclusive).
- * The row immediately after the last marked/unmarked row will become the currently selected row.
+ * Marks/unmarks the previous page's rows in the current {@link FileTable}, starting with the
+ * current row, and moves the selected row right before the last marked/unmarked row.
  *
  * @author Maxence Bernard
  */
-public class MarkPageUpAction extends MuAction {
+public class MarkPreviousPageAction extends MarkBackwardAction {
 
-    public MarkPageUpAction(MainFrame mainFrame, Hashtable properties) {
+    public MarkPreviousPageAction(MainFrame mainFrame, Hashtable properties) {
         super(mainFrame, properties);
     }
 
-    public void performAction() {
-        FileTable fileTable = mainFrame.getActiveTable();
-
-        int currentRow = fileTable.getSelectedRow();
-        int endRow = Math.max(0, currentRow - fileTable.getPageRowIncrement());
-
-        fileTable.setRangeMarked(currentRow, endRow, !fileTable.getFileTableModel().isRowMarked(currentRow));
-        fileTable.selectRow(Math.max(0, endRow-1));
+    protected int getRowDecrement() {
+        // Note: the page row increment varies with the file table's height
+        return mainFrame.getActiveTable().getPageRowIncrement()+1;
     }
-    
-    public static class Factory implements ActionFactory {
 
+    public static class Factory implements ActionFactory {
 		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
-			return new MarkPageUpAction(mainFrame, properties);
+			return new MarkPreviousPageAction(mainFrame, properties);
 		}
     }
     
     public static class Descriptor extends AbstractActionDescriptor {
-    	public static final String ACTION_ID = "MarkPageUp";
+    	public static final String ACTION_ID = "MarkPreviousPage";
     	
 		public String getId() { return ACTION_ID; }
 
