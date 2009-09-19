@@ -24,10 +24,13 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.Vector;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -61,14 +64,31 @@ public class ShortcutsDialog extends FocusDialog implements ActionListener {
     //////////////////////////
     
     private final static String QUICK_SEARCH_TITLE = "shortcuts_dialog.quick_search";
-    private final static String QUICK_SEARCH_DESC[][] = {
-        {"", "shortcuts_dialog.quick_search.start_search"},
-        {"UP", "shortcuts_dialog.quick_search.jump_to_previous"},
-        {"DOWN", "shortcuts_dialog.quick_search.jump_to_next"},
-        {"BACKSPACE", "shortcuts_dialog.quick_search.remove_last_char"},
-        {"INSERT", "shortcuts_dialog.quick_search.mark_jump_next"},
-        {"ESCAPE", "shortcuts_dialog.quick_search.cancel_search"},
+    private final static Hashtable QUICK_SEARCH_SHORTCUTS = new Hashtable() {
+    	{
+    		put("shortcuts_dialog.quick_search.start_search", "");
+    		put("shortcuts_dialog.quick_search.jump_to_previous", "UP");
+    		put("shortcuts_dialog.quick_search.jump_to_next", "DOWN");
+    		put("shortcuts_dialog.quick_search.remove_last_char", "BACKSPACE");
+    		put("shortcuts_dialog.quick_search.mark_jump_next", "INSERT");
+    		put("shortcuts_dialog.quick_search.cancel_search", "ESCAPE");
+    	}
     };
+    
+    /** Comparator of actions according to their labels */
+	private static final Comparator ACTIONS_COMPARATOR = new Comparator() {
+		public int compare(Object o1, Object o2) {
+			String label1 = ActionProperties.getActionLabel((String) o1);
+			if (label1 == null)
+				return 1;
+			
+			String label2 = ActionProperties.getActionLabel((String) o2);
+			if (label2 == null)
+				return -1;
+			
+			return label1.compareTo(label2);
+		}
+	};
     
     public ShortcutsDialog(MainFrame mainFrame) {
         super(mainFrame, ActionProperties.getActionLabel(ShowKeyboardShortcutsAction.Descriptor.ACTION_ID), mainFrame);
@@ -85,13 +105,15 @@ public class ShortcutsDialog extends FocusDialog implements ActionListener {
         	ActionCategory category = (ActionCategory) categories.nextElement();
         	// Get the list of actions from the above category which have shortcuts assigned to them
         	LinkedList categoryActionsWithShortcuts = (LinkedList) categoryToItsActionsWithShortcutsIdsMap.get(category);
+        	Collections.sort(categoryActionsWithShortcuts, ACTIONS_COMPARATOR);
+        	
         	// If there is at least one action in the category with shortcuts assigned to it, add tab for the category
         	if (!categoryActionsWithShortcuts.isEmpty())
         		addTopic(tabbedPane, ""+category, categoryActionsWithShortcuts.iterator());
         }
         
         // Create tab for quick-search category 
-        addTopic(tabbedPane, Translator.get(QUICK_SEARCH_TITLE), QUICK_SEARCH_DESC);
+        addTopic(tabbedPane, Translator.get(QUICK_SEARCH_TITLE), QUICK_SEARCH_SHORTCUTS);
         
         contentPane.add(tabbedPane, BorderLayout.CENTER);
 
@@ -152,7 +174,7 @@ public class ShortcutsDialog extends FocusDialog implements ActionListener {
         tabbedPane.addTab(titleKey, scrollPane);
     }
     
-    private void addTopic(JTabbedPane tabbedPane, String titleKey, String descriptions[][]) {
+    private void addTopic(JTabbedPane tabbedPane, String titleKey, Hashtable actionsToShortcutsMap) {
         XAlignedComponentPanel compPanel;
         JPanel northPanel;
         JScrollPane scrollPane;
@@ -160,7 +182,7 @@ public class ShortcutsDialog extends FocusDialog implements ActionListener {
         compPanel = new XAlignedComponentPanel(15);
 
         // Add all shortcuts and their description
-        addShortcutList(compPanel, descriptions);
+        addShortcutList(compPanel, actionsToShortcutsMap);
 
         // Panel needs to be vertically aligned to the top
         northPanel = new JPanel(new BorderLayout());
@@ -193,10 +215,13 @@ public class ShortcutsDialog extends FocusDialog implements ActionListener {
         }
     }
 
-    private void addShortcutList(XAlignedComponentPanel compPanel, String desc[][]) {
-        int nbShortcuts = desc.length;
-        for(int i=0; i<nbShortcuts; i++)
-            compPanel.addRow(desc[i][0], new JLabel(Translator.get(desc[i][1])), 5);
+    private void addShortcutList(XAlignedComponentPanel compPanel, Hashtable actionsToShortcutsMap) {
+    	Vector vec = new Vector(actionsToShortcutsMap.keySet());
+    	Collections.sort(vec);
+        for(Enumeration actionsEnumeration = vec.elements(); actionsEnumeration.hasMoreElements();) {
+        	String action = (String) actionsEnumeration.nextElement();
+            compPanel.addRow((String) actionsToShortcutsMap.get(action), new JLabel(Translator.get(action)), 5);
+        }
     }
 
     public void actionPerformed(ActionEvent e) {
