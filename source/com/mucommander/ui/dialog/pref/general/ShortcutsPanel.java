@@ -29,6 +29,7 @@ import java.util.Iterator;
 
 import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -77,28 +78,59 @@ public class ShortcutsPanel extends PreferencesPanel {
 		tooltipBar = new TooltipBar();
 		shortcutsTable = new ShortcutsTable(tooltipBar);
 		
-		add(createCommandsPanel(), BorderLayout.NORTH);
-		add(createTablePanel(), BorderLayout.CENTER);
-		add(tooltipBar, BorderLayout.SOUTH);
+		add(createNorthPanel(), BorderLayout.NORTH);
+		add(createCenterPanel(), BorderLayout.CENTER);
+		add(createSouthPanel(), BorderLayout.SOUTH);
 	}
 	
-	private JPanel createCommandsPanel() {
+	/**
+	 * Returns a panel that contains combo-box of action categories which is used for filtering 
+	 * the actions shown at the shortcuts editor table.
+	 */
+	private JPanel createNorthPanel() {
 		JPanel panel = new JPanel(new BorderLayout());
 		panel.setBorder(BorderFactory.createEmptyBorder());
 		
-		panel.add(createCategoriesPanel(), BorderLayout.WEST);
-		panel.add(createButtonsPanel(), BorderLayout.EAST);
+		panel.add(createFilteringPanel(), BorderLayout.WEST);
+		
+		return panel;
+	}
+
+	/**
+	 * Returns a panel that contains the shortcuts editor table.
+	 */
+	private JPanel createCenterPanel() {
+		JPanel panel = new JPanel(new GridLayout(1,0));
+		shortcutsTable.setPreferredColumnWidths(new double[] {0.6, 0.2, 0.2});
+		panel.add(new JScrollPane(shortcutsTable));
+		return panel;
+	}
+	
+	/**
+	 * Returns a panel that contain the tooltip bar and the shortcuts editor buttons below it.
+	 */
+	private JPanel createSouthPanel() {
+		JPanel panel = new JPanel();
+		panel.setBorder(BorderFactory.createEmptyBorder());
+		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+		
+		JPanel tooltipBarPanel = new JPanel(new BorderLayout());
+		tooltipBarPanel.add(tooltipBar, BorderLayout.WEST);
+		
+		panel.add(tooltipBarPanel);
+		panel.add(createButtonsPanel());
 		
 		return panel;
 	}
 	
 	private JPanel createButtonsPanel() {
-		JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		JPanel panel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 		panel.setBorder(BorderFactory.createEmptyBorder(0,0,0,5));
 		
 		RemoveButton removeButton = new RemoveButton();	
 		
 		final JButton restoreDefaultButton = new JButton();
+		// TODO: translator
 		restoreDefaultButton.setAction(new AbstractAction("Restore Default") {
 			
 			public void actionPerformed(ActionEvent e) {
@@ -112,9 +144,8 @@ public class ShortcutsPanel extends PreferencesPanel {
 		return panel;
 	}
 	
-	private JPanel createCategoriesPanel() {
+	private JPanel createFilteringPanel() {
 		JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-		
 		panel.setBorder(BorderFactory.createEmptyBorder());
 		// TODO: translator
 		panel.add(new JLabel("Show: "));
@@ -141,13 +172,6 @@ public class ShortcutsPanel extends PreferencesPanel {
 		
 		panel.add(combo);
 		
-		return panel;
-	}
-	
-	private JPanel createTablePanel() {
-		JPanel panel = new JPanel(new GridLayout(1,0));
-		shortcutsTable.setPreferredColumnWidths(new double[] {0.6, 0.2, 0.2});
-		panel.add(new JScrollPane(shortcutsTable));
 		return panel;
 	}
 	
