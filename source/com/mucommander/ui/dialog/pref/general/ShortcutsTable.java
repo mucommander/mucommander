@@ -57,6 +57,7 @@ import com.mucommander.AppLogger;
 import com.mucommander.runtime.JavaVersions;
 import com.mucommander.runtime.OsFamilies;
 import com.mucommander.runtime.OsVersions;
+import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionDescriptor;
 import com.mucommander.ui.action.ActionKeymap;
 import com.mucommander.ui.action.ActionManager;
@@ -348,8 +349,9 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 		private ShortcutsTableData tableData = null;
 
 		private KeymapTableModel(ShortcutsTableData data) {
-			//TODO: use translator
-			super(data.getTableData(), new String[] {"Action Description", "Shortcut", "Alternate Shortcut"});
+			super(data.getTableData(), new String[] {Translator.get("shortcuts_table.action_description"),
+													 Translator.get("shortcuts_table.shortcut"),
+													 Translator.get("shortcuts_table.alternate_shortcut")});
 			this.tableData = data;
 		}
 
@@ -402,8 +404,7 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 		private KeyStroke lastKeyStroke;
 		
 		public RecordingKeyStrokeField(KeyStroke currentKeyStroke) {
-			// TODO translator
-			super("Type in a shortcut");
+			super(Translator.get("shortcuts_table.type_in_a_shortcut"));
 			
 			lastKeyStroke = currentKeyStroke;			
 			setBorder(BorderFactory.createEmptyBorder());

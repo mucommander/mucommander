@@ -41,6 +41,7 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 
+import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionCategories;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionKeymapIO;
@@ -62,8 +63,7 @@ public class ShortcutsPanel extends PreferencesPanel {
 	private TooltipBar tooltipBar;
 	
 	public ShortcutsPanel(PreferencesDialog parent) {
-		//TODO: use translator
-		super(parent, "Shortcuts");
+		super(parent, Translator.get("shortcuts_panel" + ".title"));
 		initUI();
 		setPreferredSize(new Dimension(0,0));
 		
@@ -130,8 +130,7 @@ public class ShortcutsPanel extends PreferencesPanel {
 		RemoveButton removeButton = new RemoveButton();	
 		
 		final JButton restoreDefaultButton = new JButton();
-		// TODO: translator
-		restoreDefaultButton.setAction(new AbstractAction("Restore Default") {
+		restoreDefaultButton.setAction(new AbstractAction(Translator.get("shortcuts_panel" + ".restore_defaults")) {
 			
 			public void actionPerformed(ActionEvent e) {
 				shortcutsTable.restoreDefaults();
@@ -147,8 +146,7 @@ public class ShortcutsPanel extends PreferencesPanel {
 	private JPanel createFilteringPanel() {
 		JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		panel.setBorder(BorderFactory.createEmptyBorder());
-		// TODO: translator
-		panel.add(new JLabel("Show: "));
+		panel.add(new JLabel(Translator.get("shortcuts_panel" + ".show") + ":"));
 		
 		Iterator actionCategoriesIterator = ActionProperties.getActionCategories().iterator();
 		final JComboBox combo = new JComboBox();
@@ -186,11 +184,12 @@ public class ShortcutsPanel extends PreferencesPanel {
 	
 	class TooltipBar extends JLabel {
 		private String lastActionTooltipShown;
-		private static final String DEFAULT_MESSAGE = "Press Enter\\double click on the shortcut you'd like to edit";
+		private String DEFAULT_MESSAGE;
 		private static final int MESSAGE_SHOWING_TIME = 3000;
 		private MessageRemoverThread currentRemoverThread;
 		
 		public TooltipBar() {
+			DEFAULT_MESSAGE = Translator.get("shortcuts_panel.default_message");
 			Font tableFont = UIManager.getFont("TableHeader.font");
 			setFont(new Font(tableFont.getName(), Font.BOLD, tableFont.getSize()));
 			setHorizontalAlignment(JLabel.LEFT);
@@ -239,8 +238,7 @@ public class ShortcutsPanel extends PreferencesPanel {
 		
 		public RemoveButton() {
 			setEnabled(false);
-			// TODO: translator
-			setAction(new AbstractAction("Remove") {
+			setAction(new AbstractAction(Translator.get("shortcuts_panel" + ".remove")) {
 				
 				public void actionPerformed(ActionEvent e) {
 					shortcutsTable.setValueAt(ShortcutsTable.DELETE, shortcutsTable.getSelectedRow(), shortcutsTable.getSelectedColumn());

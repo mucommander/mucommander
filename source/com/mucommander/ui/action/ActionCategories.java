@@ -25,12 +25,12 @@ package com.mucommander.ui.action;
  */
 public class ActionCategories {
 	public static final ActionCategory ALL        = new AllCategory();
-	public static final ActionCategory NAVIGATION = new ActionCategory(ActionCategories.class.getName() + ".navigation");
-	public static final ActionCategory SELECTION  = new ActionCategory(ActionCategories.class.getName() + ".selection");
-	public static final ActionCategory VIEW       = new ActionCategory(ActionCategories.class.getName() + ".view");
-	public static final ActionCategory FILES      = new ActionCategory(ActionCategories.class.getName() + ".file_operations");
-	public static final ActionCategory WINDOW     = new ActionCategory(ActionCategories.class.getName() + ".windows");
-	public static final ActionCategory MISC       = new ActionCategory(ActionCategories.class.getName() + ".misc");
+	public static final ActionCategory NAVIGATION = new ActionCategory("action_categories" + ".navigation");
+	public static final ActionCategory SELECTION  = new ActionCategory("action_categories" + ".selection");
+	public static final ActionCategory VIEW       = new ActionCategory("action_categories" + ".view");
+	public static final ActionCategory FILES      = new ActionCategory("action_categories" + ".file_operations");
+	public static final ActionCategory WINDOW     = new ActionCategory("action_categories" + ".windows");
+	public static final ActionCategory MISC       = new ActionCategory("action_categories" + ".misc");
 	
 	/**
 	 * Category that contains all actions.
@@ -38,7 +38,7 @@ public class ActionCategories {
 	private static class AllCategory extends ActionCategory {
 
 		protected AllCategory() {
-			super(ActionCategories.class.getName() + ".all");
+			super("action_categories" + ".all");
 		}
 		
 		public boolean contains(String actionId) {

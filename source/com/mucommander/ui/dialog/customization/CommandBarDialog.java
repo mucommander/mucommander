@@ -404,8 +404,7 @@ public class CommandBarDialog extends CustomizeDialog {
 
 		panel.add(Box.createRigidArea(new Dimension(0, 5)));
 		
-		// TODO: translator\remove
-		panel.add(new JLabel("(Drag buttons to customize the command bar)"));
+		panel.add(new JLabel("(" + Translator.get("command_bar_dialog.help") + ")"));
 		
 		panel.add(Box.createRigidArea(new Dimension(0, 5)));
 		
