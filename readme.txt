@@ -148,7 +148,7 @@ Improvements:
 - jCIFS library upgraded to version 1.3.12.
 - SMB domain-based authentication is now supported.
 - Added shortcuts to browse nearby SMB network shares.
-- JNA library upgraded to version 3.0.9.
+- JNA library upgraded to version 3.2.2.
 - Character encodings can be more easily selected (ticket #15).
 - Added icon mappings for Office 2007 file extensions.
 - 'Mark/Unmark files' is no longer case-sensitive by default.
