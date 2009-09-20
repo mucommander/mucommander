@@ -170,6 +170,8 @@ Improvements:
 - Added support for KDE 4 (ticket #257).
 - Startup failures are now handled gracefully by displaying a proper message
   and error details.
+- Local UNIX volumes are now resolved using /proc/mounts (dynamic) rather rather
+  than /etc/fstab (static). Contributed by Kowy (ticket #227).
 
 Localization:
 - Arabic (AR) translation, contributed by ChArLoK_16.

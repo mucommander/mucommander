@@ -25,6 +25,7 @@ import com.mucommander.file.util.Kernel32API;
 import com.mucommander.file.util.PathUtils;
 import com.mucommander.io.*;
 import com.mucommander.runtime.*;
+import com.mucommander.util.StringUtils;
 import com.sun.jna.ptr.LongByReference;
 
 import java.io.*;
@@ -113,6 +114,14 @@ public class LocalFile extends ProtocolFile {
     private final static PermissionBits CHANGEABLE_PERMISSIONS = JavaVersions.JAVA_1_6.isCurrentOrHigher()
             ?(IS_WINDOWS?CHANGEABLE_PERMISSIONS_JAVA_1_6_WINDOWS:CHANGEABLE_PERMISSIONS_JAVA_1_6_NON_WINDOWS)
             : CHANGEABLE_PERMISSIONS_JAVA_1_5;
+
+    /**
+ 	 * List of known UNIX filesystems.
+ 	 */
+ 	public static final String[] KNOWN_UNIX_FS = { "adfs", "affs", "autofs", "cifs", "coda", "cramfs",
+                                                   "debugfs", "efs", "ext2", "ext3", "fuseblk", "hfs", "hfsplus", "hpfs",
+                                                   "iso9660", "jfs", "minix", "msdos", "ncpfs", "nfs", "nfs4", "ntfs",
+                                                   "qnx4", "reiserfs", "smbfs", "udf", "ufs", "usbfs", "vfat", "xfs" };
 
     static {
         // Prevents Windows from poping up a message box when it cannot find a file. Those message box are triggered by
@@ -416,9 +425,9 @@ public class LocalFile extends ProtocolFile {
             // Add java.io.File's root folders
             addJavaIoFileRoots(volumesV);
 
-            // Add /etc/fstab folders under UNIX-based systems.
+            // Add /proc/mounts folders under UNIX-based systems.
             if(OsFamily.getCurrent().isUnixBased())
-                addFstabEntries(volumesV);
+                addMountEntries(volumesV);
         }
 
         // Add home folder, if it is not already present in the list
@@ -456,41 +465,49 @@ public class LocalFile extends ProtocolFile {
     }
 
     /**
-     * Parses <code>/etc/fstab</code>, resolves all the mount points it contains and adds them to the given
-     * <code>Vector</code>.
+     * Parses <code>/proc/mounts</code> kernel virtual file, resolves all the mount points that look like regular
+     * filesystems it contains and adds them to the given <code>Vector</code>.
      *
      * @param v the <code>Vector</code> to add mount points to
      */
-    private static void addFstabEntries(Vector v) {
+    private static void addMountEntries(Vector v) {
         BufferedReader br;
 
         br = null;
         try {
-            br = new BufferedReader(new InputStreamReader(new FileInputStream("/etc/fstab")));
+            br = new BufferedReader(new InputStreamReader(new FileInputStream("/proc/mounts")));
             StringTokenizer st;
             String line;
             AbstractFile file;
-            String folderPath;
-            while((line=br.readLine())!=null) {
-                // Skip comments
-                // JS, 2008-09-25: Exclude empty lines too
-                // JS, 2009-03-21: Exclude mount destination "swap" too
+            String mountPoint, fsType;
+            boolean knownFS;
+            // read each line in file and parse it
+            while ((line=br.readLine())!=null) {
                 line = line.trim();
-                if(line.length() > 0 && !line.startsWith("#")) {
-                    st = new StringTokenizer(line);
-                    // path is second token
-                    st.nextToken();
-                    folderPath = st.nextToken();
-                    if(!(folderPath.equals("/proc") || folderPath.equals("none") || folderPath.equals("/dev/shm") || folderPath.equals("swap"))) {
-                        file = FileFactory.getFile(folderPath);
-                        if(file!=null && !v.contains(file))
-                            v.add(file);
+                // split line into tokens separated by " \t\n\r\f"
+                // tokens are: device, mount_point, fs_type, attributes, fs_freq, fs_passno
+                st = new StringTokenizer(line);
+                st.nextToken();
+                mountPoint = StringUtils.replaceCompat(st.nextToken(), "\\040", " ");
+                fsType = st.nextToken();
+                knownFS = false;
+                for (int i = 0; i < KNOWN_UNIX_FS.length; i++) {
+                    if (KNOWN_UNIX_FS[i].equals(fsType)) {
+                        // this is really known physical FS
+                        knownFS = true;
+                        break;
                     }
+                }
+
+                if (knownFS) {
+                    file = FileFactory.getFile(mountPoint);
+                    if(file!=null && !v.contains(file))
+                        v.add(file);
                 }
             }
         }
         catch(Exception e) {
-            FileLogger.warning("Error reading /etc/fstab entries", e);
+            FileLogger.warning("Error parsing /proc/mounts entries", e);
         }
         finally {
             if(br != null) {
