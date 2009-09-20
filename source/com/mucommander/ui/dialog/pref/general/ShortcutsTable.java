@@ -545,6 +545,7 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 			}
 			
 			((DefaultTableModel) getModel()).setRowCount(data.length);
+			ShortcutsTable.this.repaint();
 		}
 		
 		public Object[][] getTableData() { return data; }
