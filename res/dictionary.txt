@@ -2439,126 +2439,126 @@ permissions.octal_notation:AR:تدوين ثماني
 # Action categories #
 #####################
 
-com.mucommander.ui.action.ActionCategories.all:EN:All
+action_categories.all:EN:All
 # Translation missing (New!)
 
-com.mucommander.ui.action.ActionCategories.navigation:EN:Navigation
-com.mucommander.ui.action.ActionCategories.navigation:FR:Navigation
-com.mucommander.ui.action.ActionCategories.navigation:DE:Navigation
-com.mucommander.ui.action.ActionCategories.navigation:ES:Navigation
-com.mucommander.ui.action.ActionCategories.navigation:CS:Navigace
-com.mucommander.ui.action.ActionCategories.navigation:zh_TW:導覽
-com.mucommander.ui.action.ActionCategories.navigation:PL:Nawigacja
-com.mucommander.ui.action.ActionCategories.navigation:HU:Navigáció
-com.mucommander.ui.action.ActionCategories.navigation:RU:Перемещение
-com.mucommander.ui.action.ActionCategories.navigation:zh_CN:导航
-com.mucommander.ui.action.ActionCategories.navigation:SL:Navigacija
-com.mucommander.ui.action.ActionCategories.navigation:RO:Navigare
-com.mucommander.ui.action.ActionCategories.navigation:IT:Navigare
-com.mucommander.ui.action.ActionCategories.navigation:KO:탐색
-com.mucommander.ui.action.ActionCategories.navigation:pt_BR:Navegação
-com.mucommander.ui.action.ActionCategories.navigation:NL:Navigatie
-com.mucommander.ui.action.ActionCategories.navigation:SK:Navigácia
-com.mucommander.ui.action.ActionCategories.navigation:JA:操作
-com.mucommander.ui.action.ActionCategories.navigation:SV:Navigation
-com.mucommander.ui.action.ActionCategories.navigation:DA:Navigation
-com.mucommander.ui.action.ActionCategories.navigation:UA:Навігація
-com.mucommander.ui.action.ActionCategories.navigation:AR:تصفح
+action_categories.navigation:EN:Navigation
+action_categories.navigation:FR:Navigation
+action_categories.navigation:DE:Navigation
+action_categories.navigation:ES:Navigation
+action_categories.navigation:CS:Navigace
+action_categories.navigation:zh_TW:導覽
+action_categories.navigation:PL:Nawigacja
+action_categories.navigation:HU:Navigáció
+action_categories.navigation:RU:Перемещение
+action_categories.navigation:zh_CN:导航
+action_categories.navigation:SL:Navigacija
+action_categories.navigation:RO:Navigare
+action_categories.navigation:IT:Navigare
+action_categories.navigation:KO:탐색
+action_categories.navigation:pt_BR:Navegação
+action_categories.navigation:NL:Navigatie
+action_categories.navigation:SK:Navigácia
+action_categories.navigation:JA:操作
+action_categories.navigation:SV:Navigation
+action_categories.navigation:DA:Navigation
+action_categories.navigation:UA:Навігація
+action_categories.navigation:AR:تصفح
 
-com.mucommander.ui.action.ActionCategories.selection:EN:Selection
-com.mucommander.ui.action.ActionCategories.selection:FR:Selection
-com.mucommander.ui.action.ActionCategories.selection:DE:Auswahl
-com.mucommander.ui.action.ActionCategories.selection:ES:Selección
-com.mucommander.ui.action.ActionCategories.selection:CS:Výběr
-com.mucommander.ui.action.ActionCategories.selection:zh_TW:選取
-com.mucommander.ui.action.ActionCategories.selection:PL:Wybór
-com.mucommander.ui.action.ActionCategories.selection:HU:Kiválasztás
-com.mucommander.ui.action.ActionCategories.selection:RU:Выбор
-com.mucommander.ui.action.ActionCategories.selection:zh_CN:选择
-com.mucommander.ui.action.ActionCategories.selection:SL:Izbira
-com.mucommander.ui.action.ActionCategories.selection:RO:Selectare
-com.mucommander.ui.action.ActionCategories.selection:IT:Selezionare
-com.mucommander.ui.action.ActionCategories.selection:KO:셀렉션
-com.mucommander.ui.action.ActionCategories.selection:pt_BR:Seleção
-com.mucommander.ui.action.ActionCategories.selection:NL:Selectie
-com.mucommander.ui.action.ActionCategories.selection:SK:Výber
-com.mucommander.ui.action.ActionCategories.selection:JA:選択範囲
-com.mucommander.ui.action.ActionCategories.selection:SV:Markering
-com.mucommander.ui.action.ActionCategories.selection:DA:Markering
-com.mucommander.ui.action.ActionCategories.selection:UA:Вибір
-com.mucommander.ui.action.ActionCategories.selection:AR:تحديد
+action_categories.selection:EN:Selection
+action_categories.selection:FR:Selection
+action_categories.selection:DE:Auswahl
+action_categories.selection:ES:Selección
+action_categories.selection:CS:Výběr
+action_categories.selection:zh_TW:選取
+action_categories.selection:PL:Wybór
+action_categories.selection:HU:Kiválasztás
+action_categories.selection:RU:Выбор
+action_categories.selection:zh_CN:选择
+action_categories.selection:SL:Izbira
+action_categories.selection:RO:Selectare
+action_categories.selection:IT:Selezionare
+action_categories.selection:KO:셀렉션
+action_categories.selection:pt_BR:Seleção
+action_categories.selection:NL:Selectie
+action_categories.selection:SK:Výber
+action_categories.selection:JA:選択範囲
+action_categories.selection:SV:Markering
+action_categories.selection:DA:Markering
+action_categories.selection:UA:Вибір
+action_categories.selection:AR:تحديد
 
-com.mucommander.ui.action.ActionCategories.view:EN:View
-com.mucommander.ui.action.ActionCategories.view:FR:Vue
-com.mucommander.ui.action.ActionCategories.view:DE:Ansicht
-com.mucommander.ui.action.ActionCategories.view:ES:Ver
-com.mucommander.ui.action.ActionCategories.view:CS:Zobrazit
-com.mucommander.ui.action.ActionCategories.view:zh_TW:檢視
-com.mucommander.ui.action.ActionCategories.view:PL:Podgląd
-com.mucommander.ui.action.ActionCategories.view:HU:Megnéz
-com.mucommander.ui.action.ActionCategories.view:RU:Просмотр
-com.mucommander.ui.action.ActionCategories.view:zh_CN:查看
-com.mucommander.ui.action.ActionCategories.view:SL:Pogled
-com.mucommander.ui.action.ActionCategories.view:RO:Vizualizare
-com.mucommander.ui.action.ActionCategories.view:IT:Visualizzare
-com.mucommander.ui.action.ActionCategories.view:KO:보기
-com.mucommander.ui.action.ActionCategories.view:pt_BR:Visualizar
-com.mucommander.ui.action.ActionCategories.view:NL:Beeld
-com.mucommander.ui.action.ActionCategories.view:SK:Zobraziť
-com.mucommander.ui.action.ActionCategories.view:JA:表示
-com.mucommander.ui.action.ActionCategories.view:SV:Visa
-com.mucommander.ui.action.ActionCategories.view:DA:Vis
-com.mucommander.ui.action.ActionCategories.view:UA:Перегляд
-com.mucommander.ui.action.ActionCategories.view:AR:عرض
+action_categories.view:EN:View
+action_categories.view:FR:Vue
+action_categories.view:DE:Ansicht
+action_categories.view:ES:Ver
+action_categories.view:CS:Zobrazit
+action_categories.view:zh_TW:檢視
+action_categories.view:PL:Podgląd
+action_categories.view:HU:Megnéz
+action_categories.view:RU:Просмотр
+action_categories.view:zh_CN:查看
+action_categories.view:SL:Pogled
+action_categories.view:RO:Vizualizare
+action_categories.view:IT:Visualizzare
+action_categories.view:KO:보기
+action_categories.view:pt_BR:Visualizar
+action_categories.view:NL:Beeld
+action_categories.view:SK:Zobraziť
+action_categories.view:JA:表示
+action_categories.view:SV:Visa
+action_categories.view:DA:Vis
+action_categories.view:UA:Перегляд
+action_categories.view:AR:عرض
 
-com.mucommander.ui.action.ActionCategories.file_operations:EN:Files Operations
-com.mucommander.ui.action.ActionCategories.file_operations:EN:File operations
-com.mucommander.ui.action.ActionCategories.file_operations:FR:Opérations sur fichiers
-com.mucommander.ui.action.ActionCategories.file_operations:DE:Dateioperationen
-com.mucommander.ui.action.ActionCategories.file_operations:ES:Operaciones con ficheros
-com.mucommander.ui.action.ActionCategories.file_operations:CS:Operace se soubory
-com.mucommander.ui.action.ActionCategories.file_operations:zh_TW:檔案操作
-com.mucommander.ui.action.ActionCategories.file_operations:PL:Operacje na plikach
-com.mucommander.ui.action.ActionCategories.file_operations:HU:Fájl műveletek
-com.mucommander.ui.action.ActionCategories.file_operations:RU:Файловые операции
-com.mucommander.ui.action.ActionCategories.file_operations:zh_CN:文件操作
-com.mucommander.ui.action.ActionCategories.file_operations:SL:Operacije z datotekami
-com.mucommander.ui.action.ActionCategories.file_operations:RO:Operații cu fișiere
-com.mucommander.ui.action.ActionCategories.file_operations:IT:Operazioni su file
-com.mucommander.ui.action.ActionCategories.file_operations:KO:파일 작업
-com.mucommander.ui.action.ActionCategories.file_operations:pt_BR:Operações com arquivos
-com.mucommander.ui.action.ActionCategories.file_operations:NL:Bestandsbewerkingen
-com.mucommander.ui.action.ActionCategories.file_operations:SK:Operácie so súbormi
-com.mucommander.ui.action.ActionCategories.file_operations:JA:ファイルの操作
-com.mucommander.ui.action.ActionCategories.file_operations:SV:Filåtgärder
-com.mucommander.ui.action.ActionCategories.file_operations:DA:Fil handlinger
-com.mucommander.ui.action.ActionCategories.file_operations:UA:Файлові операції
-com.mucommander.ui.action.ActionCategories.file_operations:AR:عمليات الملفات
+action_categories.file_operations:EN:Files Operations
+action_categories.file_operations:EN:File operations
+action_categories.file_operations:FR:Opérations sur fichiers
+action_categories.file_operations:DE:Dateioperationen
+action_categories.file_operations:ES:Operaciones con ficheros
+action_categories.file_operations:CS:Operace se soubory
+action_categories.file_operations:zh_TW:檔案操作
+action_categories.file_operations:PL:Operacje na plikach
+action_categories.file_operations:HU:Fájl műveletek
+action_categories.file_operations:RU:Файловые операции
+action_categories.file_operations:zh_CN:文件操作
+action_categories.file_operations:SL:Operacije z datotekami
+action_categories.file_operations:RO:Operații cu fișiere
+action_categories.file_operations:IT:Operazioni su file
+action_categories.file_operations:KO:파일 작업
+action_categories.file_operations:pt_BR:Operações com arquivos
+action_categories.file_operations:NL:Bestandsbewerkingen
+action_categories.file_operations:SK:Operácie so súbormi
+action_categories.file_operations:JA:ファイルの操作
+action_categories.file_operations:SV:Filåtgärder
+action_categories.file_operations:DA:Fil handlinger
+action_categories.file_operations:UA:Файлові операції
+action_categories.file_operations:AR:عمليات الملفات
 
-com.mucommander.ui.action.ActionCategories.windows:EN:Window
-com.mucommander.ui.action.ActionCategories.windows:FR:Fenêtres
-com.mucommander.ui.action.ActionCategories.windows:DE:Fenster
-com.mucommander.ui.action.ActionCategories.windows:ES:Ventanas
-com.mucommander.ui.action.ActionCategories.windows:CS:Okna
-com.mucommander.ui.action.ActionCategories.windows:zh_TW:視窗
-com.mucommander.ui.action.ActionCategories.windows:PL:Okna
-com.mucommander.ui.action.ActionCategories.windows:HU:Ablak
-com.mucommander.ui.action.ActionCategories.windows:RU:Окна
-com.mucommander.ui.action.ActionCategories.windows:zh_CN:窗口
-com.mucommander.ui.action.ActionCategories.windows:SL:Okna
-com.mucommander.ui.action.ActionCategories.windows:RO:Ferestre
-com.mucommander.ui.action.ActionCategories.windows:IT:Finestre
-com.mucommander.ui.action.ActionCategories.windows:KO:창
-com.mucommander.ui.action.ActionCategories.windows:pt_BR:Janelas
-com.mucommander.ui.action.ActionCategories.windows:NL:Vensters
-com.mucommander.ui.action.ActionCategories.windows:SK:Okná
-com.mucommander.ui.action.ActionCategories.windows:JA:ウィンドウ
-com.mucommander.ui.action.ActionCategories.windows:SV:Fönster
-com.mucommander.ui.action.ActionCategories.windows:DA:Vinduer
-com.mucommander.ui.action.ActionCategories.windows:UA:Вікна
-com.mucommander.ui.action.ActionCategories.windows:AR:نوافذ
+action_categories.windows:EN:Window
+action_categories.windows:FR:Fenêtres
+action_categories.windows:DE:Fenster
+action_categories.windows:ES:Ventanas
+action_categories.windows:CS:Okna
+action_categories.windows:zh_TW:視窗
+action_categories.windows:PL:Okna
+action_categories.windows:HU:Ablak
+action_categories.windows:RU:Окна
+action_categories.windows:zh_CN:窗口
+action_categories.windows:SL:Okna
+action_categories.windows:RO:Ferestre
+action_categories.windows:IT:Finestre
+action_categories.windows:KO:창
+action_categories.windows:pt_BR:Janelas
+action_categories.windows:NL:Vensters
+action_categories.windows:SK:Okná
+action_categories.windows:JA:ウィンドウ
+action_categories.windows:SV:Fönster
+action_categories.windows:DA:Vinduer
+action_categories.windows:UA:Вікна
+action_categories.windows:AR:نوافذ
 
-com.mucommander.ui.action.ActionCategories.misc:EN:$[prefs_dialog.misc_tab]
+action_categories.misc:EN:$[prefs_dialog.misc_tab]
 
 
 ###########
@@ -6733,6 +6733,51 @@ status_bar.volume_capacity:DA:Kapacitet: %1
 status_bar.volume_capacity:UA:Ємність %1
 status_bar.volume_capacity:AR:السعة: %1
 
+####################
+# Shortcuts editor #
+####################
+
+shortcuts_panel.title:EN:Shortcuts
+# Translation missing (New!)
+
+
+shortcuts_panel.restore_defaults:EN:Restore Defaults
+# Translation missing (New!)
+
+
+shortcuts_panel.remove:EN:Remove
+# Translation missing (New!)
+
+
+shortcuts_panel.show:EN:Show
+# Translation missing (New!)
+
+
+shortcuts_panel.default_message:EN:Press Enter\double click on the shortcut you'd like to edit
+# Translation missing (New!)
+
+
+shortcuts_table.action_description:EN:Action Description
+# Translation missing (New!)
+
+
+shortcuts_table.shortcut:EN:Shortcut
+# Translation missing (New!)
+
+
+shortcuts_table.alternate_shortcut:EN:Alternate Shortcut
+# Translation missing (New!)
+
+
+shortcuts_table.type_in_a_shortcut:EN:Type in a shortcut
+# Translation missing (New!)
+
+######################
+# Command Bar Dialog #
+######################
+
+command_bar_dialog.help:EN:Drag buttons to customize the command bar
+# Translation missing (New!)
 
 #########
 # Table #
