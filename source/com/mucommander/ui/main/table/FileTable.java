@@ -159,8 +159,9 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
         this.folderPanel = folderPanel;
 
         // Remove all default action mappings as they conflict with corresponding mu actions
-        InputMap inputMap = getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).getParent();
+        InputMap inputMap = getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
         inputMap.clear();
+        inputMap.setParent(null);
 
         // Initialises the table.
         cellRenderer     = new FileTableCellRenderer(this);

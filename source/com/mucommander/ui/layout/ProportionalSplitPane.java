@@ -141,10 +141,8 @@ public class ProportionalSplitPane extends JSplitPane implements ComponentListen
      */
     public void disableAccessibilityShortcuts() {
         InputMap inputMap = getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
-        InputMap parentInputMap = inputMap.getParent();
-        KeyStroke ks[] = inputMap.allKeys();
-        for(int i=0; i<ks.length; i++)
-            parentInputMap.remove(ks[i]);
+        inputMap.clear();
+        inputMap.setParent(null);
     }
 
 
