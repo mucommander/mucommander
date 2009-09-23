@@ -26,6 +26,8 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
+import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
@@ -43,6 +45,7 @@ import javax.swing.DefaultCellEditor;
 import javax.swing.ImageIcon;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.JViewport;
 import javax.swing.KeyStroke;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -189,6 +192,32 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 
     private static boolean usesTableHeaderRenderingProperties() {
         return OsFamilies.MAC_OS_X.isCurrent() && OsVersions.MAC_OS_X_10_5.isCurrentOrHigher() && JavaVersions.JAVA_1_5.isCurrentOrHigher();
+    }
+    
+    /** 
+     * Assumes table is contained in a JScrollPane. Scrolls the
+     * cell (rowIndex, vColIndex) so that it is visible within the viewport.
+ 	*/
+    public void scrollToVisible(int rowIndex, int vColIndex) {
+    	if (!(getParent() instanceof JViewport))
+            return;
+
+    	JViewport viewport = (JViewport) getParent();
+    
+        // This rectangle is relative to the table where the
+        // northwest corner of cell (0,0) is always (0,0).
+        Rectangle rect = getCellRect(rowIndex, vColIndex, true);
+    
+        // The location of the viewport relative to the table
+        Point pt = viewport.getViewPosition();
+    
+        // Translate the cell location so that it is relative
+        // to the view, assuming the northwest corner of the
+        // view is (0,0)
+        rect.setLocation(rect.x-pt.x, rect.y-pt.y);
+    
+        // Scroll the area into view
+        viewport.scrollRectToVisible(rect);
     }
 
 	/**
@@ -544,8 +573,10 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 				descriptions[i] = actionDescriptor.getDescription();
 			}
 			
+			ShortcutsTable.this.clearSelection();
 			((DefaultTableModel) getModel()).setRowCount(data.length);
 			ShortcutsTable.this.repaint();
+			ShortcutsTable.this.scrollToVisible(0, 0);
 		}
 		
 		public Object[][] getTableData() { return data; }

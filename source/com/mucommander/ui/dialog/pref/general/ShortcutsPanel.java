@@ -163,6 +163,7 @@ public class ShortcutsPanel extends PreferencesPanel {
 						return selectedActionCategory.contains(actionId);
 					}
 				});
+				tooltipBar.showDefaultMessage();
 			}
 	    });
 
