@@ -493,6 +493,7 @@ skip:AR:تخطي
 skip_all:EN:Skip all
 skip_all:FR:Ignorer tous
 skip_all:NL:Alles overslaan
+skip_all:DA:Spring over alle
 # Translation missing (New!)
 
 
@@ -945,6 +946,7 @@ customize:EN:Customize
 customize:FR:Personnaliser
 customize:NL:Voorkeur
 customize:AR:تخصيص
+customize:DA:Tilpas
 # Translation missing (New!)
 
 
@@ -1099,6 +1101,7 @@ preferred_encodings:EN:Preferred encodings
 preferred_encodings:FR:Encodages préférés
 preferred_encodings:NL:Encodages préférés
 preferred_encodings:AR:الترميز المفضل
+preferred_encodings:DA:Foretrukket indkodning
 # Translation missing (New!)
 
 
@@ -1701,6 +1704,7 @@ this_operation_cannot_be_undone:AR:هذه العملية لا يمكن إلغا�
 
 details:EN:Details
 details:FR:Détails
+details:DA:Detaljer
 # Translation missing (New!)
 
 
@@ -2272,6 +2276,7 @@ integrity_check_error:AR:فشل التحقق من التكامل: المصدر �
 
 startup_error:EN:An error prevented muCommander from starting.
 startup_error:FR:Une erreur a empêché muCommander de démarrer.
+startup_error:DA:En fejl forhindrede muCommander fra at starte.
 # Translation missing (New!)
 
 
@@ -2936,6 +2941,7 @@ View.label:AR:عرض
 InternalView.label:EN:View (internal)
 InternalView.label:FR:Voir (interne)
 InternalView.label:NL:Bekijken (intern)
+InternalView.label:DA:Vis (indbygget)
 # Translation missing (New!)
 
 
@@ -2986,6 +2992,7 @@ Edit.label:EN:$[edit]
 InternalEdit.label:EN:Edit (internal)
 InternalEdit.label:FR:Editer (interne)
 InternalEdit.label:NL:Bewerken (intern)
+InternalEdit.label:DA:Rediger (indbygget)
 # Translation missing (New!)
 
 
@@ -4262,6 +4269,7 @@ MarkSelectedFile.tooltip:AR:تحديد/إلغاء الملفات المعينة
 
 MarkNextBlock.label:EN:Mark one block down
 MarkNextBlock.label:FR:Marquer un bloc vers le bas
+MarkNextBlock.label:DA:Marker en blok ned
 # Translation missing (New!)
 
 
@@ -4279,6 +4287,7 @@ MarkNextBlock.label:FR:Marquer un bloc vers le bas
 
 MarkPreviousBlock.label:EN:Mark one block up
 MarkPreviousBlock.label:FR:Marquer un bloc vers le haut
+MarkPreviousBlock.label:DA:Marker en blok op
 # Translation missing (New!)
 
 
@@ -4296,6 +4305,7 @@ MarkPreviousBlock.label:FR:Marquer un bloc vers le haut
 
 MarkNextRow.label:EN:Mark one row down
 MarkNextRow.label:FR:Marquer une ligne vers le bas
+MarkNextRow.label:DA:Marker en række ned
 # Translation missing (New!)
 
 
@@ -4313,6 +4323,7 @@ MarkNextRow.label:FR:Marquer une ligne vers le bas
 
 MarkPreviousRow.label:EN:Mark one row up
 MarkPreviousRow.label:FR:Marquer une ligne vers le haut
+MarkPreviousRow.label:DA:Marker en række op
 # Translation missing (New!)
 
 
@@ -5156,6 +5167,7 @@ Stop.label:AR:إيقاف تغيير الملفات
 ToggleColumn.show:EN:Show %1 column
 ToggleColumn.show:FR:Afficher la colonne %1
 ToggleColumn.show:NL:Toon kolom %1
+ToggleColumn.show:DA:Vis %1 kolonne
 # Translation missing (New!)
 
 
@@ -5179,6 +5191,7 @@ ToggleColumn.show:NL:Toon kolom %1
 # %1 is replaced by the column's name (Date, Size, ...).
 ToggleColumn.hide:EN:Show %1 column
 ToggleColumn.hide:FR:Afficher la colonne %1
+ToggleColumn.hide:DA:Vis %1 kolonne
 # Translation missing (New!)
 
 
@@ -5296,6 +5309,7 @@ ToggleToolBar.hide:AR:إخفاء شريط الأدوات
 CustomizeCommandBar.label:EN:Customize command bar
 CustomizeCommandBar.label:FR:Personnaliser la barre de commande
 CustomizeCommandBar.label:AR:تخصيص
+CustomizeCommandBar.label:DA:Tilpas kommandolinien
 # Translation missing (New!)
 
 
@@ -5602,6 +5616,7 @@ SwitchActiveTable.label:AR:تبديل بين اللوحتين اليمنى وا�
 
 SelectNextBlock.label:EN:Jump down one block
 SelectNextBlock.label:FR:Descendre d'un bloc
+SelectNextBlock.label:DA:Spring en blok ned
 # Translation missing (New!)
 
 
@@ -5618,6 +5633,7 @@ SelectNextBlock.label:FR:Descendre d'un bloc
 
 SelectPreviousBlock.label:EN:Jump up one block
 SelectPreviousBlock.label:FR:Remonter d'un bloc
+SelectPreviousBlock.label:DA:Spring en blok op
 # Translation missing (New!)
 
 
@@ -5635,6 +5651,7 @@ SelectPreviousBlock.label:FR:Remonter d'un bloc
 
 SelectNextPage.label:EN:Jump down one page
 SelectNextPage.label:FR:Descendre d'une page
+SelectNextPage.label:DA:Spring en side ned
 # Translation missing (New!)
 
 
@@ -5651,6 +5668,7 @@ SelectNextPage.label:FR:Descendre d'une page
 
 SelectPreviousPage.label:EN:Jump up one page
 SelectPreviousPage.label:FR:Remonter d'une page
+SelectPreviousPage.label:DA:Spring en side op
 # Translation missing (New!)
 
 
@@ -5667,6 +5685,7 @@ SelectPreviousPage.label:FR:Remonter d'une page
 
 SelectNextRow.label:EN:Jump down one row
 SelectNextRow.label:FR:Descendre d'une ligne
+SelectNextRow.label:DA:Spring en række ned
 # Translation missing (New!)
 
 
@@ -5683,6 +5702,7 @@ SelectNextRow.label:FR:Descendre d'une ligne
 
 SelectPreviousRow.label:EN:Jump up one row
 SelectPreviousRow.label:FR:Remonter d'une ligne
+SelectPreviousRow.label:DA:Spring en række op
 # Translation missing (New!)
 
 
@@ -6256,6 +6276,7 @@ ShowRecentExecutedFilesQL.label:SL:Nedavno izvršene datoteke
 ShowRecentExecutedFilesQL.label:SV:Nyligen öppnade filer
 ShowRecentExecutedFilesQL.label:UA:Останні виконані файли
 ShowRecentExecutedFilesQL.label:AR:آخر الملفات تشغيلاً
+ShowRecentExecutedFilesQL.label:DA:Nyeligt kørte filer
 # Translation missing (New!)
 
 
@@ -6278,6 +6299,7 @@ SplitFile.label:EN:Split File
 SplitFile.label:PL:Podziel plik
 SplitFile.label:NL:Splits bestand
 SplitFile.label:AR:تقسيم الملف
+SplitFile.label:DA:Del fil
 # Translation missing (New!)
 
 
@@ -6296,6 +6318,7 @@ MergeFile.label:EN:Combine files
 MergeFile.label:PL:Scalaj pliki
 MergeFile.label:NL:Voeg bestanden samen
 MergeFile.label:AR:دمع الملفات
+MergeFile.label:DA:Sammenflet fil
 # Translation missing (New!)
 
 
@@ -6310,6 +6333,7 @@ MergeFile.label:AR:دمع الملفات
 ShowDebugConsole.label:EN:Debug console
 ShowDebugConsole.label:FR:Console de débug
 ShowDebugConsole.label:NL:Debug console
+ShowDebugConsole.label:DA:Fejlsøgningskonsol
 # Translation missing (New!)
 
 
@@ -6327,6 +6351,7 @@ ShowDebugConsole.label:NL:Debug console
 
 FocusPrevious.label:EN:Focus previous component
 FocusPrevious.label:FR:Sélectionner le précédent composant
+FocusPrevious.label:DA:Fokuser på tidligere komponent
 # Translation missing (New!)
 
 
@@ -6344,6 +6369,7 @@ FocusPrevious.label:FR:Sélectionner le précédent composant
 
 FocusNext.label:EN:Focus next component
 FocusNext.label:FR:Sélectionner le prochain composant
+FocusNext.label:DA:Fokuser på næste komponent
 # Translation missing (New!)
 
 
@@ -6570,6 +6596,7 @@ quick_lists_menu:SL:Hitri seznam
 quick_lists_menu:SV:Snabblista
 quick_lists_menu:UA:Швидкий список
 quick_lists_menu:AR:القوائم السريعة
+quick_lists_menu:DA:Hurtig lister
 # Translation missing (New!)
 
 
@@ -6738,38 +6765,47 @@ status_bar.volume_capacity:AR:السعة: %1
 ####################
 
 shortcuts_panel.title:EN:Shortcuts
+shortcuts_panel.title:DA:Genveje
 # Translation missing (New!)
 
 
 shortcuts_panel.restore_defaults:EN:Restore Defaults
+shortcuts_panel.restore_defaults:DA:Standard indstillinger
 # Translation missing (New!)
 
 
 shortcuts_panel.remove:EN:Remove
+shortcuts_panel.remove:DA:Fjern
 # Translation missing (New!)
 
 
 shortcuts_panel.show:EN:Show
+shortcuts_panel.show:DA:Vis
 # Translation missing (New!)
 
 
-shortcuts_panel.default_message:EN:Press Enter\double click on the shortcut you'd like to edit
+shortcuts_panel.default_message:EN:Press Enter/double click on the shortcut you'd like to edit
+shortcuts_panel.default_message:DA:Tryk Enter/dobbelt klik på den genvej du gerne vil redigere
 # Translation missing (New!)
 
 
 shortcuts_table.action_description:EN:Action Description
+shortcuts_table.action_description:DA:Handlingsbeskrivelse
 # Translation missing (New!)
 
 
 shortcuts_table.shortcut:EN:Shortcut
+shortcuts_table.shortcut:DA:Genvej
 # Translation missing (New!)
 
 
 shortcuts_table.alternate_shortcut:EN:Alternate Shortcut
+shortcuts_table.alternate_shortcut:DA:Alternativ genvej
 # Translation missing (New!)
 
 
 shortcuts_table.type_in_a_shortcut:EN:Type in a shortcut
+shortcuts_table.type_in_a_shortcut:DA:Indtast en genvej
 # Translation missing (New!)
 
 ######################
@@ -6777,6 +6813,7 @@ shortcuts_table.type_in_a_shortcut:EN:Type in a shortcut
 ######################
 
 command_bar_dialog.help:EN:Drag buttons to customize the command bar
+command_bar_dialog.help:DA:Træk knapper for at tilpasse kommandolinien
 # Translation missing (New!)
 
 #########
@@ -7230,6 +7267,7 @@ destination_dialog.verify_integrity:AR:تدقيق تكامل البيانات
 destination_dialog.skip_errors:EN:Skip errors
 destination_dialog.skip_errors:FR:Ignorer les erreurs
 destination_dialog.skip_errors:NL:Negeer fouten
+destination_dialog.skip_errors:DA:Ignorer fejl
 # Translation missing (New!)
 
 
@@ -8147,6 +8185,7 @@ delete_dialog.move_to_trash.option:AR:نقل إلى سلة المحذوفات
 delete_dialog.move_to_trash.failed:EN:One or more files could not be moved to the trash.
 delete_dialog.move_to_trash.failed:FR:Un ou plusieurs fichiers n'ont pu être déplacés dans la corbeille.
 delete_dialog.move_to_trash.failed:NL:Een of meer bestanden konden niet naar de prullenbak verplaatst worden.
+delete_dialog.move_to_trash.failed:DA:En eller flere filer kunne ikke flyttes til papirkurven.
 # Translation missing (New!)
 
 
@@ -8625,66 +8664,77 @@ split_file_dialog.title:EN:Split file
 split_file_dialog.title:PL:Podział pliku
 split_file_dialog.title:NL:Splits bestand
 split_file_dialog.title:AR:تقسيم الملف
+split_file_dialog.title:DA:Del fil
 # Translation missing (New!)
 
 split_file_dialog.error_title:EN:Split file error
 split_file_dialog.error_title:PL:Błąd podziału pliku
 split_file_dialog.error_title:NL:Fout bij bestandsplitsen
 split_file_dialog.error_title:AR:خطأ في تقسيم الملف
+split_file_dialog.error_title:DA:Fejl under deling af fil
 # Translation missing (New!)
 
 split_file_dialog.file_to_split:EN:File to split
 split_file_dialog.file_to_split:PL:Plik do podziału
 split_file_dialog.file_to_split:NL:Te splitsen bestand
 split_file_dialog.file_to_split:AR:تقسيم الملف
+split_file_dialog.file_to_split:DA:Fil som skal deles
 # Translation missing (New!)
 
 split_file_dialog.target_directory:EN:Target directory
 split_file_dialog.target_directory:PL:Katalog docelowy
 split_file_dialog.target_directory:NL:Doelmap
 split_file_dialog.target_directory:AR:الدليل الهدف
+split_file_dialog.target_directory:DA:Destinations mappe
 # Translation missing (New!)
 
 split_file_dialog.part_size:EN:Size of one part
 split_file_dialog.part_size:PL:Wielkość jednej części
 split_file_dialog.part_size:NL:Grootte van de stukken
 split_file_dialog.part_size:AR:حجم الجزء الواحد
+split_file_dialog.part_size:DA:Størrelse per del
 # Translation missing (New!)
 
 split_file_dialog.parts:EN:Number of parts
 split_file_dialog.parts:PL:Liczba części
 split_file_dialog.parts:NL:Hoeveelheid stukken
 split_file_dialog.parts:AR:عدد الأجزاء
+split_file_dialog.parts:DA:Antal dele
 # Translation missing (New!)
 
 split_file_dialog.generate_CRC:EN:Generate CRC file
 split_file_dialog.generate_CRC:PL:Wygeneruj plik CRC
 split_file_dialog.generate_CRC:NL:Creëer CRC bestand
 split_file_dialog.generate_CRC:AR:توليد ملف CRC
+split_file_dialog.generate_CRC:DA:Generer CRC fil
 # Translation missing (New!)
 
 split_file_dialog.split:EN:Split
 split_file_dialog.split:PL:Podziel
 split_file_dialog.split:NL:Splits
 split_file_dialog.split:AR:تفسيم
+split_file_dialog.split:DA:Del
 # Translation missing (New!)
 
 split_file_dialog.max_parts:EN:Maximum number of parts is %1
 split_file_dialog.max_parts:PL:Maksymalna liczba części wynosi %1
 split_file_dialog.max_parts:NL:Maximum hoeveelheid delen is %1
 split_file_dialog.max_parts:AR:العدد الأكبر من الأجزاء هو %1
+split_file_dialog.max_parts:DA:Maksimal antal dele er %1
 # Translation missing (New!)
 
 split_file_dialog.auto:EN:Auto
 split_file_dialog.auto:PL:Automatycznie
 split_file_dialog.auto:NL:Automatisch
 split_file_dialog.auto:AR:آلي
+split_file_dialog.auto:DA:Automatisk
 # Translation missing (New!)
 
 split_file_dialog.insert_new_media:EN:Insert new media
 split_file_dialog.insert_new_media:PL:Włóż kolejny dysk
 split_file_dialog.insert_new_media:NL:Nieuw medium invoeren
 split_file_dialog.insert_new_media:AR:أدخل قرص جديد
+split_file_dialog.insert_new_media:DA:Indsæt nyt medie
 # Translation missing (New!)
 
 
@@ -8696,41 +8746,48 @@ merge_file_dialog.title:EN:Combine file
 merge_file_dialog.title:PL:Scal plik
 merge_file_dialog.title:NL:Bestand samenvoegen
 merge_file_dialog.title:AR:دمج ملفات
+merge_file_dialog.title:DA:Sammenflet fil
 # Translation missing (New!)
 
 merge_file_dialog.error_title:EN:Merge files error
 merge_file_dialog.error_title:PL:Błąd łączenia plików
 merge_file_dialog.error_title:NL:Fout bij bestand samenvoegen
 merge_file_dialog.error_title:AR:خطأ في دمج الملفات
+merge_file_dialog.error_title:DA:Fejl under sammenfletning af filer
 # Translation missing (New!)
 
 merge_file_dialog.merge:EN:Combine
 merge_file_dialog.merge:PL:Scal
 merge_file_dialog.merge:NL:Samenvoegen
 merge_file_dialog.merge:AR:دمج
+merge_file_dialog.merge:DA:Sammenflet
 # Translation missing (New!)
 
 merge_job.no_crc_file:EN:Combine succeeded. No CRC file.
 merge_job.no_crc_file:PL:Scalanie zakończone pomyślnie. Brak pliku CRC.
 merge_job.no_crc_file:NL:Samenvoegen geslaagd. Geen CRC bestand.
 merge_job.no_crc_file:AR:نجح الدمج، لا يوجد ملف CRC.
+merge_job.no_crc_file:DA:Sammenfletning fuldført. Ingen CRC fil.
 # Translation missing (New!)
 
 merge_job.crc_read_error:EN:Error while reading CRC file.
 merge_job.crc_read_error:PL:Błąd podczas odczytywania pliku CRC.
 merge_job.crc_read_error:AR:خطأ أثناء قراءة ملف CRC.
+merge_job.crc_read_error:DA:Fejl under løsning af CRC fil.
 # Translation missing (New!)
 
 merge_job.crc_check_failed:EN:CRC mismatch: expected %2, found %1
 merge_job.crc_check_failed:PL:Pliki CRC nie zgadzają się %1 <> %2
 merge_job.crc_check_failed:NL:CRC past niet: verwacht %2, gevonden %1
 merge_job.crc_check_failed:AR:عدم تطابق CRC: الموجود %1، المتوقع %2
+merge_job.crc_check_failed:DA:CRC fejl: forventede %2 men fik %1
 # Translation missing (New!)
 
 merge_job.crc_ok:EN:Combine succeeded. CRC checksum ok.
 merge_job.crc_ok:PL:Scalanie zakończone pomyślnie. Plik CRC zweryfikowany.
 merge_job.crc_ok:NL:Samenvoegen geslaagd. CRC controlsom ok.
 merge_job.crc_ok:AR:تم الدمج. نجح اختبار تحقق CRC.
+merge_job.crc_ok:DA:Sammenfletning fuldført. CRC kontrolsum ok.
 # Translation missing (New!)
 
 
@@ -9725,6 +9782,7 @@ server_connect_dialog.domain:EN:Domain
 server_connect_dialog.domain:FR:Domaine
 server_connect_dialog.domain:NL:Domein
 server_connect_dialog.domain:AR:نطاق
+server_connect_dialog.domain:DA:Domæne
 # Translation missing (New!)
 
 
@@ -10418,6 +10476,7 @@ auth_dialog.connect_as:SL:Poveži kot
 auth_dialog.connect_as:SV:Anslut som
 auth_dialog.connect_as:UA:Під'єднатись як
 auth_dialog.connect_as:AR:الاتصال كـ
+auth_dialog.connect_as:DA:Forbind som
 # Translation missing (New!)
 
 
@@ -10451,6 +10510,7 @@ auth_dialog.authentication_failed:SL:Avtentikacija neuspešna
 auth_dialog.authentication_failed:SV:Autentisering misslyckades
 auth_dialog.authentication_failed:UA:Аутентифікація не пройдена
 auth_dialog.authentication_failed:AR:فشل في المصادقة
+auth_dialog.authentication_failed:DA:Godkendelse fejlet
 # Translation missing (New!)
 
 
@@ -12389,6 +12449,7 @@ theme_editor.header:EN:Header
 theme_editor.header:FR:En-tête
 theme_editor.header:NL:Kop
 theme_editor.header:AR:الرأس
+theme_editor.header:DA:Overskrift
 # Translation missing (New!)
 
 
@@ -12410,6 +12471,7 @@ theme_editor.item:EN:Item
 theme_editor.item:FR:Élément
 theme_editor.item:NL:Inhoud
 theme_editor.item:AR:عنصر
+theme_editor.item:DA:Element
 # Translation missing (New!)
 
 
@@ -12428,6 +12490,7 @@ theme_editor.item:AR:عنصر
 command_bar_customize_dialog.available_actions:EN:Available Actions
 command_bar_customize_dialog.available_actions:FR:Actions disponibles
 command_bar_customize_dialog.available_actions:AR:الأفعال المتاحة
+command_bar_customize_dialog.available_actions:DA:Tilgængelige handlinger
 # Translation missing (New!)
 
 
@@ -12445,6 +12508,7 @@ command_bar_customize_dialog.available_actions:AR:الأفعال المتاحة
 command_bar_customize_dialog.modifier:EN:Modifier
 command_bar_customize_dialog.modifier:FR:Modificateur
 command_bar_customize_dialog.modifier:AR:المعدل
+command_bar_customize_dialog.modifier:DA:Ændrer
 # Translation missing (New!)
 
 
@@ -14172,6 +14236,7 @@ prefs_dialog.enable_system_notifications:AR:تفعيل تنبيهات النظا
 debug_console_dialog.level:EN:Level
 debug_console_dialog.level:FR:Niveau
 debug_console_dialog.level:NL:Niveau
+debug_console_dialog.level:DA:Niveau
 # Translation missing (New!)
 
 
@@ -15483,6 +15548,7 @@ batch_rename_dialog.format:SL:Formatiraj
 batch_rename_dialog.format:SV:Format
 batch_rename_dialog.format:UA:Формат
 batch_rename_dialog.format:AR:الصيغة
+batch_rename_dialog.format:DA:Format
 # Translation missing (New!)
 
 
@@ -15964,6 +16030,7 @@ recent_executed_files_quick_list.empty_message:SL:Ni nedavno zagnanih datotek
 recent_executed_files_quick_list.empty_message:SV:Inga nyligen öppnade filer
 recent_executed_files_quick_list.empty_message:UA:Нема попереднього виконаного файла
 recent_executed_files_quick_list.empty_message:AR:لا يوجد ملفات مشغلة أخيراً
+recent_executed_files_quick_list.empty_message:DA:Ingen nyeligt kørte filer
 # Translation missing (New!)
 
 
