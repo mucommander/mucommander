@@ -262,16 +262,6 @@ reset:UA:Скинути
 reset:AR:تصفير
 # Translation missing (KO)
 
-
-
-
-
-
-
-
-
-
-
 rename:EN:Rename
 rename:FR:Renommer
 rename:DE:Umbenennen
@@ -336,21 +326,7 @@ change:SL:Spremeni
 change:UA:Змінити
 change:SV:Ändra
 change:AR:تغيير
-# Translation missing (New!)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+# Translation missing (ES, KO, RU, SK, zh_CN)
 
 save:EN:Save
 save:FR:Enregistrer
@@ -495,8 +471,6 @@ skip_all:FR:Ignorer tous
 skip_all:NL:Alles overslaan
 skip_all:DA:Spring over alle
 # Translation missing (New!)
-
-
 
 
 
@@ -812,17 +786,6 @@ quick_search:UA:Швидкий пошук
 quick_search:AR:بحث سريع
 # Translation missing (KO)
 
-
-
-
-
-
-
-
-
-
-
-
 file_manager:EN:File manager
 file_manager:FR:Gestionnaire de fichiers
 file_manager:DA:Filhåndterer
@@ -839,18 +802,7 @@ file_manager:SL:Urejevalnik datotek
 file_manager:SV:Filhanterare
 file_manager:UA:Менеджер файлів
 file_manager:AR:مدير الملفات
-# Translation missing (New!)
-
-
-
-
-
-
-
-
-
-
-
+# Translation missing (ES, KO, RU, SK, zh_CN, pt_BR)
 
 # Used as a button label, in the 'Mkdir' dialog for instance
 create:EN:Create
@@ -898,19 +850,6 @@ creating_file:UA:Створюється %1
 creating_file:AR:إنشاء %1
 # Translation missing (KO, zh_CN, SK)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 # Used as a button label in the file chooser of the 'Folders' preferences
 choose:EN:Choose
 choose:FR:Choisir
@@ -934,13 +873,6 @@ choose:UA:Вибрати
 choose:AR:اختيار
 # Translation missing (zh_CN, KO)
 
-
-
-
-
-
-
-
 # Used for instance in the 'misc' preference panel
 customize:EN:Customize
 customize:FR:Personnaliser
@@ -948,6 +880,7 @@ customize:NL:Voorkeur
 customize:AR:تخصيص
 customize:DA:Tilpas
 # Translation missing (New!)
+
 
 
 
@@ -985,17 +918,6 @@ choose_folder:DA:Vælg mappe
 choose_folder:UA:Вибрати папку
 choose_folder:AR:اختيار مجلد
 # Translation missing (zh_CN, KO)
-
-
-
-
-
-
-
-
-
-
-
 
 login:EN:Login
 login:FR:Identifiant
@@ -1090,12 +1012,6 @@ encoding:UA:Кодування
 encoding:AR:ترميز
 # Translation missing (KO)
 
-
-
-
-
-
-
 # Used in the dialog that allows to customize the list of preferred encodings
 preferred_encodings:EN:Preferred encodings
 preferred_encodings:FR:Encodages préférés
@@ -1103,7 +1019,6 @@ preferred_encodings:NL:Encodages préférés
 preferred_encodings:AR:الترميز المفضل
 preferred_encodings:DA:Foretrukket indkodning
 # Translation missing (New!)
-
 
 
 
@@ -1143,15 +1058,6 @@ license:DA:Licens
 license:UA:Ліцензія
 license:AR:ترخيص
 # Translation missing (KO)
-
-
-
-
-
-
-
-
-
 
 name:EN:Name
 name:FR:Nom
@@ -1290,19 +1196,6 @@ owner:UA:Власник
 owner:AR:مالك
 # Translation missing (KO, zh_CN)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 group:EN:Group
 group:FR:Groupe
 group:JA:グループ
@@ -1324,20 +1217,6 @@ group:SL:Skupina
 group:UA:Група
 group:AR:مجموعة
 # Translation missing (KO, zh_CN)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 location:EN:Location
 location:FR:Emplacement
@@ -1481,13 +1360,6 @@ go_to:UA:Перейти
 go_to:AR:الذهاب إلى
 # Translation missing (KO)
 
-
-
-
-
-
-
-
 example:EN:Example
 example:FR:Exemple
 example:DE:Beispiel
@@ -1533,11 +1405,6 @@ preview:DA:Eksempel
 preview:UA:Попередній перегляд
 preview:AR:معاينة
 # Translation missing (KO)
-
-
-
-
-
 
 # Used for archive (e.g. Zip) and file comments (e.g. Mac OS X Finder comments)
 comment:EN:Comment
@@ -1585,15 +1452,6 @@ sample_text:DA:Eksempel på tekst
 sample_text:UA:Приклад тексту
 sample_text:AR:عينة نص
 # Translation missing (KO)
-
-
-
-
-
-
-
-
-
 
 # %1 is replaced by a number of files, e.g. '5 files(s)'
 nb_files:EN:%1 file(s)
@@ -1666,18 +1524,6 @@ loading:UA:Завантаження...
 loading:AR:تحميل...
 # Translation missing (zh_CN, KO)
 
-
-
-
-
-
-
-
-
-
-
-
-
 this_operation_cannot_be_undone:EN:This operation cannot be undone.
 this_operation_cannot_be_undone:FR:Cette opération ne peut pas être annulée.
 this_operation_cannot_be_undone:zh_CN:此操作不能还原.
@@ -1701,7 +1547,7 @@ this_operation_cannot_be_undone:UA:Неможливо скасувати дан�
 this_operation_cannot_be_undone:AR:هذه العملية لا يمكن إلغاؤها.
 # Translation missing (KO)
 
-
+# Used as a button in error dialogs to show more information about the error.
 details:EN:Details
 details:FR:Détails
 details:DA:Detaljer
@@ -1795,16 +1641,6 @@ generic_error:UA:При виконанні операції сталася по�
 generic_error:AR:حدث خطأ أثناء إنجاز العملية المطلوبة
 # Translation missing (KO, zh_CN, SK)
 
-
-
-
-
-
-
-
-
-
-
 folder_does_not_exist:EN:This folder doesn't exist or is not available.
 folder_does_not_exist:FR:Ce dossier n'existe pas ou n'est pas disponible.
 folder_does_not_exist:DE:Dieser Ordner existiert nicht oder ist nicht verfügbar.
@@ -1873,16 +1709,6 @@ this_file_does_not_exist:DA:Filen findes ikke eller er ikke tilgængelig: %1
 this_file_does_not_exist:UA:Файл %1 не існує або є недоступним
 this_file_does_not_exist:AR:الملف التالي غير موجود أو أنه غير متاح: %1
 # Translation missing (KO)
-
-
-
-
-
-
-
-
-
-
 
 invalid_path:EN:Invalid path: %1
 invalid_path:FR:Chemin invalide: %1
@@ -2233,11 +2059,6 @@ read_error:UA:Помилка під час читання
 read_error:AR:خطأ قراءة
 # Translation missing (KO)
 
-
-
-
-
-
 # This error is displayed during a transfer when the 'Verify data integrity' 
 # option has been enabled and the checksum of the source and destination files
 # don't match. Most people will probably never see this message but they'll
@@ -2263,22 +2084,11 @@ integrity_check_error:UA:Не пройдено перевірки цілісно
 integrity_check_error:AR:فشل التحقق من التكامل: المصدر والوجهة غير متطابقين
 # Translation missing (KO, zh_CN, SK)
 
-
-
-
-
-
-
-
-
-
-
-
+# Used when an unexpected error occurs on startup.
 startup_error:EN:An error prevented muCommander from starting.
 startup_error:FR:Une erreur a empêché muCommander de démarrer.
 startup_error:DA:En fejl forhindrede muCommander fra at starte.
 # Translation missing (New!)
-
 
 
 
@@ -2444,8 +2254,25 @@ permissions.octal_notation:AR:تدوين ثماني
 # Action categories #
 #####################
 
+# Displayed in the shortcut editor (preferences)
+
 action_categories.all:EN:All
 # Translation missing (New!)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 action_categories.navigation:EN:Navigation
 action_categories.navigation:FR:Navigation
@@ -2666,22 +2493,6 @@ ExploreBookmarks.label:SL:Razišči Priljubljene
 ExploreBookmarks.label:UA:Переглянути закладки
 ExploreBookmarks.label:AR:استكشاف العلامات
 # Translation missing (KO, zh_CN, SK)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 EditCredentials.label:EN:Edit credentials
 EditCredentials.label:FR:Éditer les indentifiants
@@ -2959,9 +2770,6 @@ InternalView.label:DA:Vis (indbygget)
 
 
 
-
-
-
 View.tooltip:EN:View selected file
 View.tooltip:FR:Voir le fichier sélectionné
 View.tooltip:DE:Markierte Datei betrachten
@@ -2994,8 +2802,6 @@ InternalEdit.label:FR:Editer (interne)
 InternalEdit.label:NL:Bewerken (intern)
 InternalEdit.label:DA:Rediger (indbygget)
 # Translation missing (New!)
-
-
 
 
 
@@ -3337,16 +3143,7 @@ Delete.tooltip:zh_CN:刪除已标记文件
 Delete.tooltip:RO:Șterge fișierele selectate
 Delete.tooltip:KO:선택된 파일 삭제
 Delete.tooltip:SK:Odstrániť označené súbory
-# Translation missing (New!)
-
-
-
-
-
-
-
-
-
+# Translation missing (ES, KO, RU, SK, zh_CN)
 
 # Deletes without using the system trash
 PermanentDelete.label:EN:Delete permanently
@@ -3366,21 +3163,7 @@ PermanentDelete.label:SL:Trajno brisanje
 PermanentDelete.label:SV:Ta bort permanent
 PermanentDelete.label:UA:Видаляти зразу
 PermanentDelete.label:AR:حذف نهائي
-# Translation missing (New!)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+# Translation missing (ES, KO, RU, SK, zh_CN)
 
 PermanentDelete.tooltip:EN:Delete marked files without using the system trash
 PermanentDelete.tooltip:FR:Supprimer les fichiers marqués sans utiliser la corbeille système
@@ -3399,22 +3182,7 @@ PermanentDelete.tooltip:SL:Izbriši označene datoteke brez uporabe koša
 PermanentDelete.tooltip:SV:Ta bort markerade filer utan att använda papperskorgen
 PermanentDelete.tooltip:UA:Видаляти відмічені файли не використовуючи системний кошик
 PermanentDelete.tooltip:AR:حذف الملفات المحددة بدون استخدام سلة المحذوفات
-# Translation missing (New!)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+# Translation missing (ES, KO, RU, SK, zh_CN)
 
 Refresh.label:EN:Refresh
 Refresh.label:FR:Actualiser
@@ -3824,19 +3592,7 @@ GoToParentInOtherPanel.label:SL:Pojdi v izvorno mapo v drugem oknu
 GoToParentInOtherPanel.label:SV:Gå till överordnad mapp i andra vyn
 GoToParentInOtherPanel.label:UA:Перейти наверх в іншій панелі
 GoToParentInOtherPanel.label:AR:اذهب للأب في لوحة أخرى
-# Translation missing (New!)
-
-
-
-
-
-
-
-
-
-
-
-
+# Translation missing (ES, KO, RU, SK, zh_CN)
 
 GoToParentInBothPanels.label:EN:Go to parent in both panels
 GoToParentInBothPanels.label:FR:Remonter dans les deux panneaux
@@ -3855,21 +3611,7 @@ GoToParentInBothPanels.label:SL:Pojdi v izvorno mapo v obeh oknih
 GoToParentInBothPanels.label:SV:Gå till överordnad mapp i båda vyerna
 GoToParentInBothPanels.label:UA:Перейти наверх в обох панелях
 GoToParentInBothPanels.label:AR:اذهب للأب في كلا اللوحتين
-# Translation missing (New!)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+# Translation missing (ES, KO, RU, SK, zh_CN)
 
 GoToRoot.label:EN:Go to root
 GoToRoot.label:FR:Aller à la racine
@@ -4031,21 +3773,6 @@ SortByOwner.label:UA:Сортувати за власником
 SortByOwner.label:AR:فرز حسب المالك
 # Translation missing (KO, zh_CN)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 SortByGroup.label:EN:Sort by Group
 SortByGroup.label:FR:Trier par Groupe
 SortByGroup.label:JA:グループで整列
@@ -4067,21 +3794,6 @@ SortByGroup.label:SL:Razvrsti po skupini
 SortByGroup.label:UA:Сортувати за групою
 SortByGroup.label:AR:فرز حسب المجموعة
 # Translation missing (KO, zh_CN)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 MarkGroup.label:EN:Mark files
 MarkGroup.label:FR:Marquer fichiers
@@ -4267,6 +3979,7 @@ MarkSelectedFile.tooltip:DA:Marker/afmarker valgte fil
 MarkSelectedFile.tooltip:UA:Відмітити/зняти відмітку для вибраного файла
 MarkSelectedFile.tooltip:AR:تحديد/إلغاء الملفات المعينة
 
+# Note: a block is 5 rows
 MarkNextBlock.label:EN:Mark one block down
 MarkNextBlock.label:FR:Marquer un bloc vers le bas
 MarkNextBlock.label:DA:Marker en blok ned
@@ -4285,10 +3998,14 @@ MarkNextBlock.label:DA:Marker en blok ned
 
 
 
+
+# Note: a block is 5 rows
 MarkPreviousBlock.label:EN:Mark one block up
 MarkPreviousBlock.label:FR:Marquer un bloc vers le haut
 MarkPreviousBlock.label:DA:Marker en blok op
 # Translation missing (New!)
+
+
 
 
 
@@ -4321,10 +4038,14 @@ MarkNextRow.label:DA:Marker en række ned
 
 
 
+
+
 MarkPreviousRow.label:EN:Mark one row up
 MarkPreviousRow.label:FR:Marquer une ligne vers le haut
 MarkPreviousRow.label:DA:Marker en række op
 # Translation missing (New!)
+
+
 
 
 
@@ -4451,23 +4172,6 @@ MarkExtension.label:SL:Označi končnico
 MarkExtension.label:UA:Відмітити розширення
 MarkExtension.label:AR:تحديد لاحقة
 # Translation missing (KO, zh_CN, SK)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 InvertSelection.label:EN:Invert selection
 InvertSelection.label:FR:Inverser sélection
@@ -4744,20 +4448,6 @@ OpenInOtherPanel.label:UA:Відкрити в іншій панелі
 OpenInOtherPanel.label:AR:فتح في لوحة أخرى
 # Translation missing (KO, zh_CN, SK)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 OpenInBothPanels.label:EN:Open in both panels
 OpenInBothPanels.label:FR:Ouvrir dans les deux panneaux
 OpenInBothPanels.label:NL:Openen in beide schermen
@@ -4778,20 +4468,6 @@ OpenInBothPanels.label:SL:Odpri v obeh oknih
 OpenInBothPanels.label:UA:Відкрити в обох панелях
 OpenInBothPanels.label:AR:فتح في كلا اللوحتين
 # Translation missing (KO, zh_CN, SK)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 # This action is used to show a selected file in the system's default file manager, %1 is the name of the system's 
 # file manager (Finder, Explorer...)
@@ -5185,17 +4861,11 @@ ToggleColumn.show:DA:Vis %1 kolonne
 
 
 
-
-
-
 # %1 is replaced by the column's name (Date, Size, ...).
 ToggleColumn.hide:EN:Show %1 column
 ToggleColumn.hide:FR:Afficher la colonne %1
 ToggleColumn.hide:DA:Vis %1 kolonne
 # Translation missing (New!)
-
-
-
 
 
 
@@ -5327,7 +4997,6 @@ CustomizeCommandBar.label:DA:Tilpas kommandolinien
 
 
 
-
 ToggleStatusBar.show:EN:Show status bar
 ToggleStatusBar.show:FR:Afficher la barre de status
 ToggleStatusBar.show:DE:Statusleiste anzeigen
@@ -5414,22 +5083,7 @@ ToggleTree.label:SL:Prikaži drevesno strukturo
 ToggleTree.label:SV:Visa trädvy
 ToggleTree.label:UA:Показати дерево
 ToggleTree.label:AR:إظهار العرض الشجري
-# Translation missing (New!)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+# Translation missing (ES, KO, RU, SK, zh_CN)
 
 PopupLeftDriveButton.label:EN:Change left folder
 PopupLeftDriveButton.label:FR:Changer le dossier de gauche
@@ -5583,14 +5237,6 @@ BringAllToFront.label:UA:Показати всі вікна
 BringAllToFront.label:AR:إحضار جميع النوافذ للمقدمة
 # Translation missing (KO)
 
-
-
-
-
-
-
-
-
 SwitchActiveTable.label:EN:Switch between left and right panels
 SwitchActiveTable.label:FR:Basculer entre les dossiers de droite et de gauche
 SwitchActiveTable.label:DE:Zwischen linkem und rechtem Fenster wechseln
@@ -5614,6 +5260,7 @@ SwitchActiveTable.label:DA:Skift i mellem venstre og højre panel
 SwitchActiveTable.label:UA:Перемкнути праву і ліву панелі
 SwitchActiveTable.label:AR:تبديل بين اللوحتين اليمنى واليسرى
 
+# Note: a block is 5 rows
 SelectNextBlock.label:EN:Jump down one block
 SelectNextBlock.label:FR:Descendre d'un bloc
 SelectNextBlock.label:DA:Spring en blok ned
@@ -5631,10 +5278,15 @@ SelectNextBlock.label:DA:Spring en blok ned
 
 
 
+
+
+# Note: a block is 5 rows
 SelectPreviousBlock.label:EN:Jump up one block
 SelectPreviousBlock.label:FR:Remonter d'un bloc
 SelectPreviousBlock.label:DA:Spring en blok op
 # Translation missing (New!)
+
+
 
 
 
@@ -5666,10 +5318,16 @@ SelectNextPage.label:DA:Spring en side ned
 
 
 
+
+
+
 SelectPreviousPage.label:EN:Jump up one page
 SelectPreviousPage.label:FR:Remonter d'une page
 SelectPreviousPage.label:DA:Spring en side op
 # Translation missing (New!)
+
+
+
 
 
 
@@ -5700,10 +5358,16 @@ SelectNextRow.label:DA:Spring en række ned
 
 
 
+
+
+
 SelectPreviousRow.label:EN:Jump up one row
 SelectPreviousRow.label:FR:Remonter d'une ligne
 SelectPreviousRow.label:DA:Spring en række op
 # Translation missing (New!)
+
+
+
 
 
 
@@ -5993,14 +5657,6 @@ OpenTrash.label:UA:Відкрити Смітник
 OpenTrash.label:AR:افتح سلة المحذوفات
 # Translation missing (KO)
 
-
-
-
-
-
-
-
-
 EmptyTrash.label:EN:Empty Trash
 EmptyTrash.label:FR:Vider la Corbeille
 EmptyTrash.label:HU:Lomtár ürítése
@@ -6024,17 +5680,6 @@ EmptyTrash.label:UA:Очистити Смітник
 EmptyTrash.label:AR:تفريغ سلة المحذوفات
 # Translation missing (KO)
 
-
-
-
-
-
-
-
-
-
-
-
 CalculateChecksum.label:EN:Calculate checksum
 CalculateChecksum.label:FR:Calculer la checksum
 CalculateChecksum.label:NL:Checksum berekenen
@@ -6056,19 +5701,6 @@ CalculateChecksum.label:UA:Порахувати контрольну суму
 CalculateChecksum.label:AR:حساب تدقيق المجموع
 # Translation missing (KO, zh_CN, SK)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 MaximizeWindow.label:EN:Maximize
 MaximizeWindow.label:en_GB:Maximise
 MaximizeWindow.label:FR:Agrandir
@@ -6087,18 +5719,7 @@ MaximizeWindow.label:SL:Povečaj
 MaximizeWindow.label:SV:Maximera
 MaximizeWindow.label:UA:Розгорнути
 MaximizeWindow.label:AR:تكبير
-# Translation missing (New!)
-
-
-
-
-
-
-
-
-
-
-
+# Translation missing (ES, KO, RU, SK, zh_CN)
 
 # This entry overrides the standard 'Maximize' label under Mac OS X.
 # Mac OS X uses a special terminology: 'Zoom' instead of 'Maximize'.
@@ -6115,18 +5736,6 @@ MaximizeWindow.label.mac_os_x:SL:Povečaj
 MaximizeWindow.label.mac_os_x:SV:Zooma
 MaximizeWindow.label.mac_os_x:UA:Збільшити
 MaximizeWindow.label.mac_os_x:NL:Zoom
-# Translation missing (New!)
-
-
-
-
-
-
-
-
-
-
-
 
 MinimizeWindow.label:EN:Minimize
 MinimizeWindow.label:en_GB:Minimise
@@ -6146,18 +5755,6 @@ MinimizeWindow.label:SL:Minimiziraj
 MinimizeWindow.label:SV:Minimera
 MinimizeWindow.label:UA:Згорнути
 MinimizeWindow.label:AR:تصغير
-# Translation missing (New!)
-
-
-
-
-
-
-
-
-
-
-
 
 # This entry overrides the standard 'Minimize' label under Mac OS X.
 # If this entry is not defined for a particular language, the generic 'Maximize' 
@@ -6165,17 +5762,6 @@ MinimizeWindow.label:AR:تصغير
 MinimizeWindow.label.mac_os_x:DE:Im Dock ablegen
 MinimizeWindow.label.mac_os_x:HU:Kicsinyítés
 MinimizeWindow.label.mac_os_x:UA:В Док
-# Translation missing (New!)
-
-
-
-
-
-
-
-
-
-
 
 GoToDocumentation.label:EN:Online documentation
 GoToDocumentation.label:FR:Documentation en ligne
@@ -6194,15 +5780,7 @@ GoToDocumentation.label:SL:Dokumentacija na spletu
 GoToDocumentation.label:SV:Online dokumentation
 GoToDocumentation.label:UA:Документація в мережі
 GoToDocumentation.label:AR:الاتصال بالوثائق
-# Translation missing (New!)
-
-
-
-
-
-
-
-
+# Translation missing (ES, KO, RU, SK, zh_CN)
 
 ShowParentFoldersQL.label:EN:Parent folders
 ShowParentFoldersQL.label:FR:Dossiers parents
@@ -6221,16 +5799,7 @@ ShowParentFoldersQL.label:SL:Izvorne mape
 ShowParentFoldersQL.label:SV:Överordnade mappar
 ShowParentFoldersQL.label:UA:Наверх
 ShowParentFoldersQL.label:AR:المجلدات الأب
-# Translation missing (New!)
-
-
-
-
-
-
-
-
-
+# Translation missing (ES, KO, RU, SK, zh_CN)
 
 ShowRecentLocationsQL.label:EN:Recent locations
 ShowRecentLocationsQL.label:FR:Dossiers récents
@@ -6249,16 +5818,7 @@ ShowRecentLocationsQL.label:SL:Nedavne lokacije
 ShowRecentLocationsQL.label:SV:Nyligen besökta platser
 ShowRecentLocationsQL.label:UA:Останні відвідані місця
 ShowRecentLocationsQL.label:AR:المواقع الأخيرة
-# Translation missing (New!)
-
-
-
-
-
-
-
-
-
+# Translation missing (ES, KO, RU, SK, zh_CN)
 
 ShowRecentExecutedFilesQL.label:EN:Recently executed files
 ShowRecentExecutedFilesQL.label:FR:Fichiers récemment exécutés
@@ -6277,30 +5837,17 @@ ShowRecentExecutedFilesQL.label:SV:Nyligen öppnade filer
 ShowRecentExecutedFilesQL.label:UA:Останні виконані файли
 ShowRecentExecutedFilesQL.label:AR:آخر الملفات تشغيلاً
 ShowRecentExecutedFilesQL.label:DA:Nyeligt kørte filer
-# Translation missing (New!)
+# Translation missing (ES, KO, RU, SK, zh_CN)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-SplitFile.label:EN:Split File
+SplitFile.label:EN:Split file
 SplitFile.label:PL:Podziel plik
 SplitFile.label:NL:Splits bestand
 SplitFile.label:AR:تقسيم الملف
 SplitFile.label:DA:Del fil
 # Translation missing (New!)
+
+
+
 
 
 
@@ -6330,6 +5877,12 @@ MergeFile.label:DA:Sammenflet fil
 
 
 
+
+
+
+
+
+
 ShowDebugConsole.label:EN:Debug console
 ShowDebugConsole.label:FR:Console de débug
 ShowDebugConsole.label:NL:Debug console
@@ -6349,6 +5902,8 @@ ShowDebugConsole.label:DA:Fejlsøgningskonsol
 
 
 
+
+# Gives focus to the previous focusable component
 FocusPrevious.label:EN:Focus previous component
 FocusPrevious.label:FR:Sélectionner le précédent composant
 FocusPrevious.label:DA:Fokuser på tidligere komponent
@@ -6367,10 +5922,14 @@ FocusPrevious.label:DA:Fokuser på tidligere komponent
 
 
 
+
+
+# Gives focus to the next focusable component
 FocusNext.label:EN:Focus next component
 FocusNext.label:FR:Sélectionner le prochain composant
 FocusNext.label:DA:Fokuser på næste komponent
 # Translation missing (New!)
+
 
 
 
@@ -6597,22 +6156,7 @@ quick_lists_menu:SV:Snabblista
 quick_lists_menu:UA:Швидкий список
 quick_lists_menu:AR:القوائم السريعة
 quick_lists_menu:DA:Hurtig lister
-# Translation missing (New!)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+# Translation missing (ES, KO, RU, SK, zh_CN)
 
 window_menu:EN:Window
 window_menu:FR:Fenêtre
@@ -6769,9 +6313,37 @@ shortcuts_panel.title:DA:Genveje
 # Translation missing (New!)
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 shortcuts_panel.restore_defaults:EN:Restore Defaults
 shortcuts_panel.restore_defaults:DA:Standard indstillinger
 # Translation missing (New!)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 shortcuts_panel.remove:EN:Remove
@@ -6779,9 +6351,37 @@ shortcuts_panel.remove:DA:Fjern
 # Translation missing (New!)
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 shortcuts_panel.show:EN:Show
 shortcuts_panel.show:DA:Vis
 # Translation missing (New!)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 shortcuts_panel.default_message:EN:Press Enter/double click on the shortcut you'd like to edit
@@ -6789,9 +6389,37 @@ shortcuts_panel.default_message:DA:Tryk Enter/dobbelt klik på den genvej du ger
 # Translation missing (New!)
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 shortcuts_table.action_description:EN:Action Description
 shortcuts_table.action_description:DA:Handlingsbeskrivelse
 # Translation missing (New!)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 shortcuts_table.shortcut:EN:Shortcut
@@ -6799,14 +6427,57 @@ shortcuts_table.shortcut:DA:Genvej
 # Translation missing (New!)
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 shortcuts_table.alternate_shortcut:EN:Alternate Shortcut
 shortcuts_table.alternate_shortcut:DA:Alternativ genvej
 # Translation missing (New!)
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 shortcuts_table.type_in_a_shortcut:EN:Type in a shortcut
 shortcuts_table.type_in_a_shortcut:DA:Indtast en genvej
 # Translation missing (New!)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ######################
 # Command Bar Dialog #
@@ -6815,6 +6486,21 @@ shortcuts_table.type_in_a_shortcut:DA:Indtast en genvej
 command_bar_dialog.help:EN:Drag buttons to customize the command bar
 command_bar_dialog.help:DA:Træk knapper for at tilpasse kommandolinien
 # Translation missing (New!)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 #########
 # Table #
@@ -7079,18 +6765,6 @@ version_dialog.install_and_restart:UA:Встановити та перезапу
 version_dialog.install_and_restart:AR:تنصيب وإعادة تشغيل
 # Translation missing (KO, zh_CN, SK)
 
-
-
-
-
-
-
-
-
-
-
-
-
 # Displayed in the progress dialog before actually installing the a new version
 version_dialog.preparing_for_update:EN:Preparing for update...
 version_dialog.preparing_for_update:FR:Préparation de la mise à jour...
@@ -7112,16 +6786,6 @@ version_dialog.preparing_for_update:SL:Pripravljam za nadgradnjo...
 version_dialog.preparing_for_update:UA:Готуюсь до оновлення...
 version_dialog.preparing_for_update:AR:التحضير للتحديثات...
 # Translation missing (KO, zh_CN, SK)
-
-
-
-
-
-
-
-
-
-
 
 
 ###############
@@ -7178,11 +6842,6 @@ quit_dialog.desc:DA:Du har %1 vinduer åbne. Er du sikker på du vil afslutte?
 quit_dialog.desc:UA:Вийти з muCommander (відкрито %1 вікон) ?
 quit_dialog.desc:AR:لديك %1 من النوافذ المفتوحة، هل أنت متأكد أنك تريد الخروج؟
 # Translation missing (zh_CN, KO) : this entry needs to be updated to take into account the number of windows
-
-
-
-
-
 
 quit_dialog.show_next_time:EN:Show next time
 quit_dialog.show_next_time:FR:Afficher la prochaine fois
@@ -7259,18 +6918,12 @@ destination_dialog.verify_integrity:UA:Перевірити цілісність
 destination_dialog.verify_integrity:AR:تدقيق تكامل البيانات
 # Translation missing (KO, zh_CN, SK)
 
-
-
-
-
-
+# Used in copy/move/unpack dialogs
 destination_dialog.skip_errors:EN:Skip errors
 destination_dialog.skip_errors:FR:Ignorer les erreurs
 destination_dialog.skip_errors:NL:Negeer fouten
 destination_dialog.skip_errors:DA:Ignorer fejl
 # Translation missing (New!)
-
-
 
 
 
@@ -7345,17 +6998,6 @@ rename_dialog.new_name:SV:Nytt namn
 rename_dialog.new_name:UA:Нове ім'я
 rename_dialog.new_name:AR:الاسم الجديد
 # Translation missing (KO, zh_CN, SK)
-
-
-
-
-
-
-
-
-
-
-
 
 
 ########
@@ -7771,14 +7413,6 @@ optimizing_archive:UA:Оптимізація архіву %1
 optimizing_archive:AR:تعديل الأرشيف %1
 # Translation missing (KO)
 
-
-
-
-
-
-
-
-
 # This gets displayed in the file progress diaog when files are copied into
 # a writable archive (Zip only at the moment).
 error_while_optimizing_archive:EN:Error while optimizing archive %1
@@ -7804,16 +7438,6 @@ error_while_optimizing_archive:DA:Fejl under optimering af arkiv %1
 error_while_optimizing_archive:UA:Помилка при оптимізації архіву %1
 error_while_optimizing_archive:AR:خطأ أثناء تعديل الأرشيف %1
 # Translation missing (KO)
-
-
-
-
-
-
-
-
-
-
 
 
 ########
@@ -8062,19 +7686,6 @@ mkfile_dialog.allocate_space:AR:المساحة المحجوزة
 # Translation missing (KO, zh_CN, SK, SL)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 ##########
 # Delete #
 ##########
@@ -8146,13 +7757,6 @@ delete_dialog.move_to_trash.confirmation_details:UA:Файли буде пере
 delete_dialog.move_to_trash.confirmation_details:AR:الملفات سوف تنقل إلى سلة المحذوفات
 # Translation missing (KO)
 
-
-
-
-
-
-
-
 delete_dialog.move_to_trash.option:EN:Move to trash
 delete_dialog.move_to_trash.option:FR:Déplacer dans la corbeille
 delete_dialog.move_to_trash.option:HU:Áthelyezés a lomtárba
@@ -8176,21 +7780,11 @@ delete_dialog.move_to_trash.option:UA:Перенести в Смітник
 delete_dialog.move_to_trash.option:AR:نقل إلى سلة المحذوفات
 # Translation missing (KO)
 
-
-
-
-
-
-
 delete_dialog.move_to_trash.failed:EN:One or more files could not be moved to the trash.
 delete_dialog.move_to_trash.failed:FR:Un ou plusieurs fichiers n'ont pu être déplacés dans la corbeille.
 delete_dialog.move_to_trash.failed:NL:Een of meer bestanden konden niet naar de prullenbak verplaatst worden.
 delete_dialog.move_to_trash.failed:DA:En eller flere filer kunne ikke flyttes til papirkurven.
 # Translation missing (New!)
-
-
-
-
 
 
 
@@ -8511,12 +8105,6 @@ email_dialog.sending:UA:Відсилання файлів
 email_dialog.sending:AR:إرسال الملفات
 # Translation missing (KO)
 
-
-
-
-
-
-
 email.sending_file:EN:Sending %1
 email.sending_file:FR:Envoi de %1
 email.sending_file:DE:Sende %1
@@ -8667,12 +8255,42 @@ split_file_dialog.title:AR:تقسيم الملف
 split_file_dialog.title:DA:Del fil
 # Translation missing (New!)
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 split_file_dialog.error_title:EN:Split file error
 split_file_dialog.error_title:PL:Błąd podziału pliku
 split_file_dialog.error_title:NL:Fout bij bestandsplitsen
 split_file_dialog.error_title:AR:خطأ في تقسيم الملف
 split_file_dialog.error_title:DA:Fejl under deling af fil
 # Translation missing (New!)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 split_file_dialog.file_to_split:EN:File to split
 split_file_dialog.file_to_split:PL:Plik do podziału
@@ -8681,6 +8299,21 @@ split_file_dialog.file_to_split:AR:تقسيم الملف
 split_file_dialog.file_to_split:DA:Fil som skal deles
 # Translation missing (New!)
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 split_file_dialog.target_directory:EN:Target directory
 split_file_dialog.target_directory:PL:Katalog docelowy
 split_file_dialog.target_directory:NL:Doelmap
@@ -8688,12 +8321,42 @@ split_file_dialog.target_directory:AR:الدليل الهدف
 split_file_dialog.target_directory:DA:Destinations mappe
 # Translation missing (New!)
 
-split_file_dialog.part_size:EN:Size of one part
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+split_file_dialog.part_size:EN:Part size
 split_file_dialog.part_size:PL:Wielkość jednej części
 split_file_dialog.part_size:NL:Grootte van de stukken
 split_file_dialog.part_size:AR:حجم الجزء الواحد
 split_file_dialog.part_size:DA:Størrelse per del
 # Translation missing (New!)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 split_file_dialog.parts:EN:Number of parts
 split_file_dialog.parts:PL:Liczba części
@@ -8702,12 +8365,42 @@ split_file_dialog.parts:AR:عدد الأجزاء
 split_file_dialog.parts:DA:Antal dele
 # Translation missing (New!)
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 split_file_dialog.generate_CRC:EN:Generate CRC file
 split_file_dialog.generate_CRC:PL:Wygeneruj plik CRC
 split_file_dialog.generate_CRC:NL:Creëer CRC bestand
 split_file_dialog.generate_CRC:AR:توليد ملف CRC
 split_file_dialog.generate_CRC:DA:Generer CRC fil
 # Translation missing (New!)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 split_file_dialog.split:EN:Split
 split_file_dialog.split:PL:Podziel
@@ -8716,12 +8409,42 @@ split_file_dialog.split:AR:تفسيم
 split_file_dialog.split:DA:Del
 # Translation missing (New!)
 
-split_file_dialog.max_parts:EN:Maximum number of parts is %1
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+split_file_dialog.max_parts:EN:Maximum allowed number of parts is %1
 split_file_dialog.max_parts:PL:Maksymalna liczba części wynosi %1
 split_file_dialog.max_parts:NL:Maximum hoeveelheid delen is %1
 split_file_dialog.max_parts:AR:العدد الأكبر من الأجزاء هو %1
 split_file_dialog.max_parts:DA:Maksimal antal dele er %1
 # Translation missing (New!)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 split_file_dialog.auto:EN:Auto
 split_file_dialog.auto:PL:Automatycznie
@@ -8730,12 +8453,42 @@ split_file_dialog.auto:AR:آلي
 split_file_dialog.auto:DA:Automatisk
 # Translation missing (New!)
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 split_file_dialog.insert_new_media:EN:Insert new media
 split_file_dialog.insert_new_media:PL:Włóż kolejny dysk
 split_file_dialog.insert_new_media:NL:Nieuw medium invoeren
 split_file_dialog.insert_new_media:AR:أدخل قرص جديد
 split_file_dialog.insert_new_media:DA:Indsæt nyt medie
 # Translation missing (New!)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 ##############
@@ -8749,12 +8502,42 @@ merge_file_dialog.title:AR:دمج ملفات
 merge_file_dialog.title:DA:Sammenflet fil
 # Translation missing (New!)
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 merge_file_dialog.error_title:EN:Merge files error
 merge_file_dialog.error_title:PL:Błąd łączenia plików
 merge_file_dialog.error_title:NL:Fout bij bestand samenvoegen
 merge_file_dialog.error_title:AR:خطأ في دمج الملفات
 merge_file_dialog.error_title:DA:Fejl under sammenfletning af filer
 # Translation missing (New!)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 merge_file_dialog.merge:EN:Combine
 merge_file_dialog.merge:PL:Scal
@@ -8763,6 +8546,21 @@ merge_file_dialog.merge:AR:دمج
 merge_file_dialog.merge:DA:Sammenflet
 # Translation missing (New!)
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 merge_job.no_crc_file:EN:Combine succeeded. No CRC file.
 merge_job.no_crc_file:PL:Scalanie zakończone pomyślnie. Brak pliku CRC.
 merge_job.no_crc_file:NL:Samenvoegen geslaagd. Geen CRC bestand.
@@ -8770,11 +8568,41 @@ merge_job.no_crc_file:AR:نجح الدمج، لا يوجد ملف CRC.
 merge_job.no_crc_file:DA:Sammenfletning fuldført. Ingen CRC fil.
 # Translation missing (New!)
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 merge_job.crc_read_error:EN:Error while reading CRC file.
 merge_job.crc_read_error:PL:Błąd podczas odczytywania pliku CRC.
 merge_job.crc_read_error:AR:خطأ أثناء قراءة ملف CRC.
 merge_job.crc_read_error:DA:Fejl under løsning af CRC fil.
 # Translation missing (New!)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 merge_job.crc_check_failed:EN:CRC mismatch: expected %2, found %1
 merge_job.crc_check_failed:PL:Pliki CRC nie zgadzają się %1 <> %2
@@ -8783,12 +8611,42 @@ merge_job.crc_check_failed:AR:عدم تطابق CRC: الموجود %1، الم�
 merge_job.crc_check_failed:DA:CRC fejl: forventede %2 men fik %1
 # Translation missing (New!)
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 merge_job.crc_ok:EN:Combine succeeded. CRC checksum ok.
 merge_job.crc_ok:PL:Scalanie zakończone pomyślnie. Plik CRC zweryfikowany.
 merge_job.crc_ok:NL:Samenvoegen geslaagd. CRC controlsom ok.
 merge_job.crc_ok:AR:تم الدمج. نجح اختبار تحقق CRC.
 merge_job.crc_ok:DA:Sammenfletning fuldført. CRC kontrolsum ok.
 # Translation missing (New!)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 #########################
@@ -8956,14 +8814,6 @@ file_selection_dialog.ends_with:UA:Закінчується на
 file_selection_dialog.ends_with:AR:تنتهي بـ
 # Translation missing (KO)
 
-
-
-
-
-
-
-
-
 file_selection_dialog.is:EN:Is
 file_selection_dialog.is:FR:Est
 file_selection_dialog.is:DE:ist
@@ -9054,20 +8904,6 @@ file_selection_dialog.matches_regexp:SL:Enakovreden Regexp
 file_selection_dialog.matches_regexp:UA:Відповідає регулярному виразові
 file_selection_dialog.matches_regexp:AR:مطابقة التعابير القياسية
 # Translation missing (KO, zh_CN)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 ###################
@@ -9306,19 +9142,6 @@ progress_dialog.verifying_file:UA:Перевірка %1
 progress_dialog.verifying_file:AR:تدقيق %1
 # Translation missing (KO, zh_CN, SK)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 progress_dialog.job_finished:EN:Job finished
 progress_dialog.job_finished:FR:Tâche terminée
 progress_dialog.job_finished:SL:Naloga zaključena
@@ -9364,15 +9187,6 @@ progress_dialog.job_error:DA:Fejl under job
 progress_dialog.job_error:UA:Помилка
 progress_dialog.job_error:AR:خطأ في المهمة
 # Translation missing (KO)
-
-
-
-
-
-
-
-
-
 
 
 #####################
@@ -9476,17 +9290,6 @@ calculate_checksum_dialog.checksum_algorithm:UA:Алгоритм підраху�
 calculate_checksum_dialog.checksum_algorithm:AR:خوارزمية تدقيق المجموع
 # Translation missing (KO, zh_CN, SK)
 
-
-
-
-
-
-
-
-
-
-
-
 # Used as the label of a radio button for the destination checksum file
 calculate_checksum_dialog.temporary_file:EN:Temporary file
 calculate_checksum_dialog.temporary_file:FR:Fichier temporaire
@@ -9508,21 +9311,6 @@ calculate_checksum_dialog.temporary_file:SL:Začasna datoteka
 calculate_checksum_dialog.temporary_file:UA:Тимчасовий файл
 calculate_checksum_dialog.temporary_file:AR:ملف مؤقت
 # Translation missing (KO, zh_CN, SK)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 ######################
@@ -9771,12 +9559,6 @@ server_connect_dialog.share:UA:Спільний ресурс
 server_connect_dialog.share:AR:مشاركة
 # Translation missing (KO)
 
-
-
-
-
-
-
 # Used for SMB connection properties
 server_connect_dialog.domain:EN:Domain
 server_connect_dialog.domain:FR:Domaine
@@ -9784,10 +9566,6 @@ server_connect_dialog.domain:NL:Domein
 server_connect_dialog.domain:AR:نطاق
 server_connect_dialog.domain:DA:Domæne
 # Translation missing (New!)
-
-
-
-
 
 
 
@@ -9965,13 +9743,6 @@ server_connect_dialog.protocol:UA:Протокол
 server_connect_dialog.protocol:AR:بروتوكول
 # Translation missing (KO)
 
-
-
-
-
-
-
-
 server_connect_dialog.nfs_version:EN:NFS version
 server_connect_dialog.nfs_version:FR:Version de NFS
 server_connect_dialog.nfs_version:CS:Verze NFS
@@ -9995,10 +9766,6 @@ server_connect_dialog.nfs_version:UA:Версія NFS
 server_connect_dialog.nfs_version:AR:إصدار NFS
 # Translation missing (KO)
 
-
-
-
-
 # Used in the SFTP panel for (optional) public key authentication.
 server_connect_dialog.private_key:EN:Private key
 server_connect_dialog.private_key:FR:Clé privée
@@ -10017,20 +9784,7 @@ server_connect_dialog.private_key:SL:Zasebni ključ
 server_connect_dialog.private_key:SV:Privat nyckel
 server_connect_dialog.private_key:UA:Приватний ключ
 server_connect_dialog.private_key:AR:المفتاح الخاص
-# Translation missing (New!)
-
-
-
-
-
-
-
-
-
-
-
-
-
+# Translation missing (ES, KO, RU, SK, zh_CN)
 
 # Used in the SFTP panel for (optional) public key authentication. The 
 # passphrase is used to decypher the private key ; the meaning of 'passphrase'
@@ -10052,19 +9806,7 @@ server_connect_dialog.passphrase:SL:Geslo
 server_connect_dialog.passphrase:SV:Lösenfras
 server_connect_dialog.passphrase:UA:Ключова фраза
 server_connect_dialog.passphrase:AR:كلمة السر
-# Translation missing (New!)
-
-
-
-
-
-
-
-
-
-
-
-
+# Translation missing (ES, KO, RU, SK, zh_CN)
 
 
 ###############
@@ -10135,18 +9877,7 @@ ftp_connect.nb_connection_retries:SL:Število poskusov povezave
 ftp_connect.nb_connection_retries:SV:Antal försök att återansluta
 ftp_connect.nb_connection_retries:UA:Кількість спроб з'єднання
 ftp_connect.nb_connection_retries:AR:عدد إعادة محاولات الاتصال
-# Translation missing (New!)
-
-
-
-
-
-
-
-
-
-
-
+# Translation missing (ES, KO, RU, SK, zh_CN)
 
 ftp_connect.retry_delay:EN:Delay between retries (in seconds)
 ftp_connect.retry_delay:FR:Délai entre tentatives de connexion (en secondes)
@@ -10166,21 +9897,7 @@ ftp_connect.retry_delay:SL:Zamik med poskusi (v sekundah)
 ftp_connect.retry_delay:SV:Fördröjning mellan försöken (i sekunder)
 ftp_connect.retry_delay:UA:Пауза між спробами (секунди)
 ftp_connect.retry_delay:AR:المدة بين محاولتي الاتصال (بالثواني)
-# Translation missing (New!)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+# Translation missing (ES, KO, RU, SK, zh_CN)
 
 
 ################
@@ -10477,22 +10194,7 @@ auth_dialog.connect_as:SV:Anslut som
 auth_dialog.connect_as:UA:Під'єднатись як
 auth_dialog.connect_as:AR:الاتصال كـ
 auth_dialog.connect_as:DA:Forbind som
-# Translation missing (New!)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+# Translation missing (ES, KO, RU, SK, zh_CN)
 
 auth_dialog.authentication_failed:EN:Authentication failed
 auth_dialog.authentication_failed:FR:L'authentification a échoué
@@ -10511,24 +10213,7 @@ auth_dialog.authentication_failed:SV:Autentisering misslyckades
 auth_dialog.authentication_failed:UA:Аутентифікація не пройдена
 auth_dialog.authentication_failed:AR:فشل في المصادقة
 auth_dialog.authentication_failed:DA:Godkendelse fejlet
-# Translation missing (New!)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+# Translation missing (ES, KO, RU, SK, zh_CN)
 
 
 #################
@@ -10885,17 +10570,6 @@ text_viewer.find:UA:Шукати
 text_viewer.find:AR:بحث
 # Translation missing (zh_CN, KO)
 
-
-
-
-
-
-
-
-
-
-
-
 # Displayed in the 'Edit' menu of the internal text editor
 text_viewer.find_next:EN:Find next
 text_viewer.find_next:FR:Rechercher suivant
@@ -10918,17 +10592,6 @@ text_viewer.find_next:DA:Find næste
 text_viewer.find_next:UA:Шукати далі
 text_viewer.find_next:AR:بحث عن التالي
 # Translation missing (zh_CN, KO)
-
-
-
-
-
-
-
-
-
-
-
 
 # Displayed in the 'Edit' menu of the internal text editor
 text_viewer.find_previous:EN:Find previous
@@ -10953,16 +10616,6 @@ text_viewer.find_previous:UA:Знайти попереднє
 text_viewer.find_previous:AR:بحث عن السابق
 # Translation missing (zh_CN, KO)
 
-
-
-
-
-
-
-
-
-
-
 text_viewer.binary_file_warning:EN:This appears to be a binary file
 text_viewer.binary_file_warning:FR:Ce fichier a l'air d'être un fichier binaire
 text_viewer.binary_file_warning:HU:Ez a fájl valószínűleg bináris fájl
@@ -10983,23 +10636,6 @@ text_viewer.binary_file_warning:SV:Detta verkar vara en binär fil
 text_viewer.binary_file_warning:UA:Файл, скоріш за все, двійковий
 text_viewer.binary_file_warning:AR:يبدو وكأنه ملف ثنائي (Binary)
 # Translation missing (KO, zh_CN, SK)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 ################
@@ -11456,10 +11092,6 @@ theme_editor.title:UA:Редактор теми
 theme_editor.title:AR:محرر الثمة
 # Translation missing (KO)
 
-
-
-
-
 theme_editor.folder_tab:EN:Folder pane
 theme_editor.folder_tab:FR:Panneau de dossier
 theme_editor.folder_tab:HU:Könyvtár tábla
@@ -11482,11 +11114,6 @@ theme_editor.folder_tab:DA:Mappe panel
 theme_editor.folder_tab:UA:Панель папки
 theme_editor.folder_tab:AR:لوح المجلد
 # Translation missing (KO)
-
-
-
-
-
 
 theme_editor.shell_tab:EN:Shell
 theme_editor.shell_tab:FR:Shell
@@ -11511,14 +11138,6 @@ theme_editor.shell_tab:UA:Оболонка
 theme_editor.shell_tab:AR:صدفة
 # Translation missing (KO)
 
-
-
-
-
-
-
-
-
 # Shell history refers to the text field's popup menu of the 'Run command' dialog
 theme_editor.shell_history_tab:EN:Shell history
 theme_editor.shell_history_tab:FR:Historique du shell
@@ -11542,17 +11161,6 @@ theme_editor.shell_history_tab:UA:Історія команд
 theme_editor.shell_history_tab:AR:محفوظات الصدفة
 # Translation missing (zh_CN, KO)
 
-
-
-
-
-
-
-
-
-
-
-
 theme_editor.statusbar_tab:EN:Status bar
 theme_editor.statusbar_tab:FR:Barre de status
 theme_editor.statusbar_tab:HU:Állapotsor
@@ -11575,11 +11183,6 @@ theme_editor.statusbar_tab:DA:Statuslinie
 theme_editor.statusbar_tab:UA:Статус-панель
 theme_editor.statusbar_tab:AR:شريط المعلومات
 # Translation missing (KO)
-
-
-
-
-
 
 # 'Free space' refers to the free space indicator displayed in the status bar.
 theme_editor.free_space:EN:Free space
@@ -11605,10 +11208,6 @@ theme_editor.free_space:UA:Вільне місце
 theme_editor.free_space:AR:المساحة الحرة
 # Translation missing (KO)
 
-
-
-
-
 theme_editor.free_space.ok:EN:OK
 theme_editor.free_space.ok:FR:OK
 theme_editor.free_space.ok:HU:OK
@@ -11631,10 +11230,6 @@ theme_editor.free_space.ok:DA:OK
 theme_editor.free_space.ok:UA:Гаразд
 theme_editor.free_space.ok:AR:موافق
 # Translation missing (KO)
-
-
-
-
 
 theme_editor.free_space.warning:EN:Warning
 theme_editor.free_space.warning:FR:Avertissement
@@ -11659,10 +11254,6 @@ theme_editor.free_space.warning:UA:Увага
 theme_editor.free_space.warning:AR:تحذير
 # Translation missing (KO)
 
-
-
-
-
 theme_editor.free_space.critical:EN:Critical
 theme_editor.free_space.critical:FR:Critique
 theme_editor.free_space.critical:HU:Kritikus
@@ -11685,11 +11276,6 @@ theme_editor.free_space.critical:DA:Kritisk
 theme_editor.free_space.critical:UA:Дуже мало
 theme_editor.free_space.critical:AR:خطير
 # Translation missing (KO)
-
-
-
-
-
 
 theme_editor.locationbar_tab:EN:Location bar
 theme_editor.locationbar_tab:FR:Barre d'emplacement
@@ -11714,9 +11300,6 @@ theme_editor.locationbar_tab:UA:Панель місцезнаходження
 theme_editor.locationbar_tab:AR:شريط الموقع
 # Translation missing (KO)
 
-
-
-
 theme_editor.editor_tab:EN:File editor
 theme_editor.editor_tab:FR:Editeur de fichiers
 theme_editor.editor_tab:HU:Fájlszerkesztő
@@ -11739,10 +11322,6 @@ theme_editor.editor_tab:DA:Fil behandler
 theme_editor.editor_tab:UA:Редактор файлів
 theme_editor.editor_tab:AR:محرر الملف
 # Translation missing (KO)
-
-
-
-
 
 theme_editor.font:EN:Font
 theme_editor.font:FR:Fonte
@@ -11790,14 +11369,6 @@ theme_editor.active_panel:UA:Активна
 theme_editor.active_panel:AR:فعال
 # Translation missing (zh_CN, KO)
 
-
-
-
-
-
-
-
-
 # 'Inactive' refers to a file pane that doesn't have keyboard focus.
 theme_editor.inactive_panel:EN:Inactive
 theme_editor.inactive_panel:FR:Inactif
@@ -11821,13 +11392,6 @@ theme_editor.inactive_panel:UA:Неактивна
 theme_editor.inactive_panel:AR:غير فعال
 # Translation missing (zh_CN, KO)
 
-
-
-
-
-
-
-
 theme_editor.general:EN:General
 theme_editor.general:FR:General
 theme_editor.general:PL:Ogólne
@@ -11849,14 +11413,6 @@ theme_editor.general:DA:Generelt
 theme_editor.general:UA:Загальні
 theme_editor.general:AR:عام
 # Translation missing (zh_CN, KO)
-
-
-
-
-
-
-
-
 
 theme_editor.theme_warning:EN:This will overwrite the custom theme. Do you wish to proceed?
 theme_editor.theme_warning:FR:Cette opération va modifier le thème personnalisé. Voulez-vous continuer?
@@ -11906,11 +11462,6 @@ theme_editor.could_not_save_theme:UA:Не вдалося зберегти тем
 theme_editor.could_not_save_theme:AR:لا يمكن كتابة الثمة %1
 # Translation missing (KO)
 
-
-
-
-
-
 theme_editor.border:EN:Border
 theme_editor.border:FR:Bordure
 theme_editor.border:HU:Keret
@@ -11933,14 +11484,6 @@ theme_editor.border:DA:Kant
 theme_editor.border:UA:Рамка
 theme_editor.border:AR:إطار
 # Translation missing (KO)
-
-
-
-
-
-
-
-
 
 theme_editor.background:EN:Background
 theme_editor.background:FR:Fond
@@ -11988,17 +11531,6 @@ theme_editor.alternate_background:UA:Інший фон
 theme_editor.alternate_background:AR:خلفية بديلة
 # Translation missing (zh_CN, KO)
 
-
-
-
-
-
-
-
-
-
-
-
 theme_editor.unfocused_background:EN:Background (without focus)
 theme_editor.unfocused_background:FR:Fond (sans focus)
 theme_editor.unfocused_background:HU:Háttér (kijelölve)
@@ -12021,14 +11553,6 @@ theme_editor.unfocused_background:DA:Baggrund (uden fokus)
 theme_editor.unfocused_background:UA:Фон (без фокусу)
 theme_editor.unfocused_background:AR:الخلفية (بدون تركيز)
 # Translation missing (KO)
-
-
-
-
-
-
-
-
 
 theme_editor.quick_search:EN:$[quick_search]
 
@@ -12056,17 +11580,6 @@ theme_editor.quick_search.unmatched_file:UA:Відсіяні файли
 theme_editor.quick_search.unmatched_file:AR:ملفان غير متطابقان
 # Translation missing (KO)
 
-
-
-
-
-
-
-
-
-
-
-
 theme_editor.text:EN:Text
 theme_editor.text:FR:Texte
 theme_editor.text:HU:Szöveg
@@ -12089,12 +11602,6 @@ theme_editor.text:DA:Tekst
 theme_editor.text:UA:Текст
 theme_editor.text:AR:نص
 # Translation missing (KO)
-
-
-
-
-
-
 
 theme_editor.progress:EN:Progress
 theme_editor.progress:FR:Progression
@@ -12119,13 +11626,6 @@ theme_editor.progress:UA:Індикатор виконання
 theme_editor.progress:AR:تقدم
 # Translation missing (KO)
 
-
-
-
-
-
-
-
 theme_editor.normal:EN:Normal
 theme_editor.normal:FR:Normal
 theme_editor.normal:HU:Normál
@@ -12148,14 +11648,6 @@ theme_editor.normal:DA:Normal
 theme_editor.normal:UA:Звичайний
 theme_editor.normal:AR:طبيعي
 # Translation missing (KO)
-
-
-
-
-
-
-
-
 
 theme_editor.normal_unfocused:EN:Normal (without focus)
 theme_editor.normal_unfocused:FR:Normal (sans focus)
@@ -12180,13 +11672,6 @@ theme_editor.normal_unfocused:UA:Звичайний (без фокусу)
 theme_editor.normal_unfocused:AR:طبيعي (بدون تركيز)
 # Translation missing (KO)
 
-
-
-
-
-
-
-
 theme_editor.selected:EN:Selected
 theme_editor.selected:FR:Sélectionné
 theme_editor.selected:HU:Kiválasztott
@@ -12210,12 +11695,6 @@ theme_editor.selected:UA:Вибраний
 theme_editor.selected:AR:محدد
 # Translation missing (KO)
 
-
-
-
-
-
-
 theme_editor.selected_unfocused:EN:Selected (without focus)
 theme_editor.selected_unfocused:FR:Sélectionné (without focus)
 theme_editor.selected_unfocused:HU:Kiválasztott (kijelöletlen)
@@ -12238,12 +11717,6 @@ theme_editor.selected_unfocused:DA:Markeret (uden fokus)
 theme_editor.selected_unfocused:UA:Вибраний (без фокусу)
 theme_editor.selected_unfocused:AR:محدد (بدون تركيز)
 # Translation missing (KO)
-
-
-
-
-
-
 
 theme_editor.color:EN:Color
 theme_editor.color:en_GB:Colour
@@ -12269,12 +11742,6 @@ theme_editor.color:UA:Колір
 theme_editor.color:AR:لون
 # Translation missing (KO)
 
-
-
-
-
-
-
 theme_editor.colors:EN:Colors
 theme_editor.colors:en_GB:Colours
 theme_editor.colors:FR:Couleurs
@@ -12298,13 +11765,6 @@ theme_editor.colors:DA:Farver
 theme_editor.colors:UA:Кольори
 theme_editor.colors:AR:ألوان
 # Translation missing (KO)
-
-
-
-
-
-
-
 
 theme_editor.plain_file:EN:Plain file
 theme_editor.plain_file:FR:Fichier normal
@@ -12466,6 +11926,7 @@ theme_editor.header:DA:Overskrift
 
 
 
+
 # Used in the 'Quick lists' panel of the theme editor
 theme_editor.item:EN:Item
 theme_editor.item:FR:Élément
@@ -12473,6 +11934,12 @@ theme_editor.item:NL:Inhoud
 theme_editor.item:AR:عنصر
 theme_editor.item:DA:Element
 # Translation missing (New!)
+
+
+
+
+
+
 
 
 
@@ -12492,6 +11959,9 @@ command_bar_customize_dialog.available_actions:FR:Actions disponibles
 command_bar_customize_dialog.available_actions:AR:الأفعال المتاحة
 command_bar_customize_dialog.available_actions:DA:Tilgængelige handlinger
 # Translation missing (New!)
+
+
+
 
 
 
@@ -12895,23 +12365,7 @@ prefs_dialog.show_splash_screen:SL:Prikaži brizgana okna
 prefs_dialog.show_splash_screen:SV:Visa startbild
 prefs_dialog.show_splash_screen:UA:Показувати початкову заставку
 prefs_dialog.show_splash_screen:AR:إظهار شاشة البداية
-# Translation missing (New!)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+# Translation missing (ES, KO, RU, SK, zh_CN)
 
 # Folders tab
 
@@ -13171,11 +12625,6 @@ prefs_dialog.follow_symlinks_when_cd:UA:Переходити за символь
 prefs_dialog.follow_symlinks_when_cd:AR:اتبع الوصلات الرمزية عند تغيير المجلد
 # Translation missing (KO)
 
-
-
-
-
-
 # Appearance tab
 
 prefs_dialog.appearance_tab:EN:Appearance
@@ -13430,15 +12879,6 @@ prefs_dialog.edit_current_theme:UA:Редагувати поточну тему.
 prefs_dialog.edit_current_theme:AR:تعديل الثمة الحالية...
 # Translation missing (zh_CN, KO)
 
-
-
-
-
-
-
-
-
-
 prefs_dialog.themes:EN:Themes
 prefs_dialog.themes:FR:Thèmes
 prefs_dialog.themes:SL:Teme
@@ -13485,10 +12925,6 @@ prefs_dialog.import_theme:UA:Імпортувати тему
 prefs_dialog.import_theme:AR:إضافة ثمة
 # Translation missing (KO)
 
-
-
-
-
 prefs_dialog.import_look_and_feel:EN:Import look & feel
 prefs_dialog.import_look_and_feel:FR:Importer un look & feel
 prefs_dialog.import_look_and_feel:NL:Importeer look and feel
@@ -13510,17 +12946,6 @@ prefs_dialog.import_look_and_feel:UA:Імпортувати налаштуван
 prefs_dialog.import_look_and_feel:AR:إضافة شكل وإحساس
 # Translation missing (KO, zh_CN, SK)
 
-
-
-
-
-
-
-
-
-
-
-
 prefs_dialog.no_look_and_feel:EN:No look & feel was found.
 prefs_dialog.no_look_and_feel:FR:Aucun look & feel n'a été trouvé.
 prefs_dialog.no_look_and_feel:SV:Inget utseende och känsla hittades.
@@ -13541,17 +12966,6 @@ prefs_dialog.no_look_and_feel:SL:Ne najdem "Look & feel"
 prefs_dialog.no_look_and_feel:UA:Не знайдено налаштувань вигляду
 prefs_dialog.no_look_and_feel:AR:لا يوجد شكل وإحساس
 # Translation missing (KO, zh_CN, SK)
-
-
-
-
-
-
-
-
-
-
-
 
 # Error message displayed when a theme import fails because it couldn't be written.
 # %1 will be replaced by the theme's name.
@@ -13578,11 +12992,6 @@ prefs_dialog.error_in_import:UA:Помилка при імпорті теми %1
 prefs_dialog.error_in_import:AR:خطأ عند إضافة الثمة %1.
 # Translation missing (KO)
 
-
-
-
-
-
 # Error message displayed when a theme import fails because it couldn't be loaded.
 # %1 will be replaced by the path to the theme's file.
 prefs_dialog.cannot_read_theme:EN:Cannot load theme from file %1
@@ -13607,12 +13016,6 @@ prefs_dialog.cannot_read_theme:DA:Kunne ikke hente temaet fra filen %1
 prefs_dialog.cannot_read_theme:UA:Не вдається завантажити тему з файла %1
 prefs_dialog.cannot_read_theme:AR:لا يمكن تحميل الثمة من الملف %1
 # Translation missing (KO)
-
-
-
-
-
-
 
 # Title of the theme export dialog box. %1 will be replaced by the name of the theme
 # being exported.
@@ -13639,11 +13042,6 @@ prefs_dialog.export_theme:UA:Експорт
 prefs_dialog.export_theme:AR:تصدير %1
 # Translation missing (KO)
 
-
-
-
-
-
 prefs_dialog.import:EN:Import
 prefs_dialog.import:FR:Importer
 prefs_dialog.import:HU:Importálás
@@ -13667,11 +13065,6 @@ prefs_dialog.import:UA:Імпорт
 prefs_dialog.import:AR:استيراد
 # Translation missing (KO)
 
-
-
-
-
-
 prefs_dialog.export:EN:Export
 prefs_dialog.export:FR:Exporter
 prefs_dialog.export:HU:Exportálás
@@ -13694,11 +13087,6 @@ prefs_dialog.export:DA:Eksporter
 prefs_dialog.export:UA:Експорт
 prefs_dialog.export:AR:تصدير
 # Translation missing (KO)
-
-
-
-
-
 
 # %1 will be replaced by the type of theme being described.
 prefs_dialog.theme_type:EN:Type: %1
@@ -13724,11 +13112,6 @@ prefs_dialog.theme_type:UA:Тип: %1
 prefs_dialog.theme_type:AR:نوع %1
 # Translation missing (KO)
 
-
-
-
-
-
 # %1 will be replaced by the theme name.
 prefs_dialog.delete_theme:EN:Permanently delete theme %1 ?
 prefs_dialog.delete_theme:FR:Supprimer définitivement le thème %1 ?
@@ -13753,9 +13136,6 @@ prefs_dialog.delete_theme:UA:Видалити тему %1 безвідновно
 prefs_dialog.delete_theme:AR:حذف الثمة %1 بشكل نهائي؟
 # Translation missing (KO)
 
-
-
-
 # %1 will be replaced by the look and feel name.
 prefs_dialog.delete_look_and_feel:EN:Permanently delete look & feel %1 ?
 prefs_dialog.delete_look_and_feel:FR:Supprimer définitivement le look & feel %1 ?
@@ -13777,17 +13157,6 @@ prefs_dialog.delete_look_and_feel:SL:Trajno izbrišem "look & feel" %1 ?
 prefs_dialog.delete_look_and_feel:UA:Видалити налаштування вигляду %1 безвідновно ?
 prefs_dialog.delete_look_and_feel:AR:حذف المظهر والإحساس %1 بشكل نهائي؟
 # Translation missing (KO, zh_CN, SK)
-
-
-
-
-
-
-
-
-
-
-
 
 prefs_dialog.rename_failed:EN:Failed to rename theme %1
 prefs_dialog.rename_failed:FR:Impossible de renommer le thème %1
@@ -13811,12 +13180,6 @@ prefs_dialog.rename_failed:DA:Kunne ikke omdøbe temaet %1
 prefs_dialog.rename_failed:UA:Не вдалося перейменувати тему %1
 prefs_dialog.rename_failed:AR:فشل في إعادة تسمية الثمة %1
 # Translation missing (KO)
-
-
-
-
-
-
 
 # Label of the 'XML file' filter used by the theme import / export dialog boxes.
 prefs_dialog.xml_file:EN:XML file
@@ -13842,10 +13205,6 @@ prefs_dialog.xml_file:UA:XML файл
 prefs_dialog.xml_file:AR:ملف XML
 # Translation missing (KO)
 
-
-
-
-
 # Label of the JAR file' filter used by the look&feel import / export dialog boxes.
 prefs_dialog.jar_file:EN:JAR file
 prefs_dialog.jar_file:FR:Fichier JAR
@@ -13867,12 +13226,6 @@ prefs_dialog.jar_file:SL:JAR datoteka
 prefs_dialog.jar_file:UA:JAR файл
 prefs_dialog.jar_file:AR:ملف JAR
 # Translation missing (KO, zh_CN, SK)
-
-
-
-
-
-
 
 # Mail tab
 
@@ -14136,13 +13489,6 @@ prefs_dialog.shell_encoding:UA:Кодування командної оболо�
 prefs_dialog.shell_encoding:AR:ترميز الصدفة
 # Translation missing (zh_CN, KO)
 
-
-
-
-
-
-
-
 # Refers to automatic detecting of the character encoding
 prefs_dialog.auto_detect_shell_encoding:EN:Auto-detect
 prefs_dialog.auto_detect_shell_encoding:FR:Détection automatique
@@ -14165,14 +13511,6 @@ prefs_dialog.auto_detect_shell_encoding:DA:Vælg automatisk
 prefs_dialog.auto_detect_shell_encoding:UA:Авто визначення
 prefs_dialog.auto_detect_shell_encoding:AR:اكتشاف تلقائي
 # Translation missing (zh_CN, KO)
-
-
-
-
-
-
-
-
 
 # Bonjour is a service discovery protocol : http://en.wikipedia.org/wiki/Bonjour_%28software%29
 prefs_dialog.enable_bonjour_discovery:EN:Enable Bonjour services discovery
@@ -14223,12 +13561,6 @@ prefs_dialog.enable_system_notifications:AR:تفعيل تنبيهات النظا
 # Translation missing (KO)
 
 
-
-
-
-
-
-
 #################
 # Debug console #
 #################
@@ -14238,6 +13570,7 @@ debug_console_dialog.level:FR:Niveau
 debug_console_dialog.level:NL:Niveau
 debug_console_dialog.level:DA:Niveau
 # Translation missing (New!)
+
 
 
 
@@ -14640,14 +13973,6 @@ theme.custom:UA:Тема користувача
 theme.custom:AR:مخصصة
 # Translation missing (KO)
 
-
-
-
-
-
-
-
-
 theme.built_in:EN:Built-in
 theme.built_in:FR:Pré-installé
 theme.built_in:HU:Beépített
@@ -14670,14 +13995,6 @@ theme.built_in:DA:Indbygget
 theme.built_in:UA:Вбудована
 theme.built_in:AR:مضمنة
 # Translation missing (KO)
-
-
-
-
-
-
-
-
 
 theme.add_on:EN:Add-on
 theme.add_on:FR:Ajouté
@@ -14702,14 +14019,6 @@ theme.add_on:UA:Додаток
 theme.add_on:AR:إضافة
 # Translation missing (KO)
 
-
-
-
-
-
-
-
-
 theme.current:EN:current
 theme.current:FR:courant
 theme.current:HU:jelenlegi
@@ -14732,14 +14041,6 @@ theme.current:DA:Aktuel
 theme.current:UA:поточна
 theme.current:AR:الحالية
 # Translation missing (KO)
-
-
-
-
-
-
-
-
 
 # Error message displayed when a theme cannot be loaded
 theme_could_not_be_loaded:EN:An error occurred while loading this theme.
@@ -14966,11 +14267,6 @@ color_chooser.red:UA:Червоний
 color_chooser.red:AR:أحمر
 # Translation missing (KO)
 
-
-
-
-
-
 color_chooser.green:EN:Green
 color_chooser.green:FR:Vert
 color_chooser.green:HU:Zöld
@@ -14993,12 +14289,6 @@ color_chooser.green:DA:Grøn
 color_chooser.green:UA:Зелений
 color_chooser.green:AR:أخضر
 # Translation missing (KO)
-
-
-
-
-
-
 
 color_chooser.blue:EN:Blue
 color_chooser.blue:FR:Bleu
@@ -15023,12 +14313,6 @@ color_chooser.blue:UA:Синій
 color_chooser.blue:AR:أزرق
 # Translation missing (KO)
 
-
-
-
-
-
-
 color_chooser.hue:EN:Hue
 color_chooser.hue:FR:Tonalité
 color_chooser.hue:HU:Színárnyalat
@@ -15052,12 +14336,6 @@ color_chooser.hue:UA:Відтінок
 color_chooser.hue:AR:تدرج اللون
 # Translation missing (KO)
 
-
-
-
-
-
-
 color_chooser.brightness:EN:Brightness
 color_chooser.brightness:FR:Luminosité
 color_chooser.brightness:HU:Világosság
@@ -15080,10 +14358,6 @@ color_chooser.brightness:DA:Intensitet
 color_chooser.brightness:UA:Яскравість
 color_chooser.brightness:AR:السطوع
 # Translation missing (KO)
-
-
-
-
 
 # 'Swatches' refer to color samples arranged in a grid
 color_chooser.swatches:EN:Swatches
@@ -15109,11 +14383,6 @@ color_chooser.swatches:UA:Зразки
 color_chooser.swatches:AR:النماذج
 # Translation missing (KO)
 
-
-
-
-
-
 color_chooser.saturation:EN:Saturation
 color_chooser.saturation:FR:Saturation
 color_chooser.saturation:HU:Telítettség
@@ -15136,12 +14405,6 @@ color_chooser.saturation:DA:Mætning
 color_chooser.saturation:UA:Насиченість
 color_chooser.saturation:AR:التشبع
 # Translation missing (KO)
-
-
-
-
-
-
 
 # RGB stands for Red Green Blue
 color_chooser.rgb:EN:RGB
@@ -15167,13 +14430,6 @@ color_chooser.rgb:UA:RGB
 color_chooser.rgb:AR:RGB
 # Translation missing (KO)
 
-
-
-
-
-
-
-
 color_chooser.hsb:EN:HSB
 color_chooser.hsb:FR:TSL
 color_chooser.hsb:HU:HSB
@@ -15196,12 +14452,6 @@ color_chooser.hsb:DA:HSB
 color_chooser.hsb:UA:HSB
 color_chooser.hsb:AR:HSB
 # Translation missing (KO)
-
-
-
-
-
-
 
 color_chooser.recent:EN:Recent
 color_chooser.recent:FR:Récentes
@@ -15226,13 +14476,6 @@ color_chooser.recent:UA:Попередній
 color_chooser.recent:AR:الأخير
 # Translation missing (KO)
 
-
-
-
-
-
-
-
 color_chooser.alpha:EN:Alpha transparency
 color_chooser.alpha:FR:Transparence alpha
 color_chooser.alpha:HU:Alfa átlátszóság
@@ -15255,13 +14498,6 @@ color_chooser.alpha:DA:Alpha-gennemsigtig
 color_chooser.alpha:UA:Прозорість
 color_chooser.alpha:AR:الشفافية
 # Translation missing (KO)
-
-
-
-
-
-
-
 
 color_chooser.title:EN:Pick a color
 color_chooser.title:en_GB:Pick a colour
@@ -15309,18 +14545,7 @@ batch_rename_dialog.title:SL:Preimenuj sveženj
 batch_rename_dialog.title:SV:Döp om filer
 batch_rename_dialog.title:UA:Масове перейменування
 batch_rename_dialog.title:AR:إعادة تسمية بالملفات الدفعية
-# Translation missing (New!)
-
-
-
-
-
-
-
-
-
-
-
+# Translation missing (ES, KO, RU, SK, zh_CN)
 
 batch_rename_dialog.mask:EN:Rename pattern
 batch_rename_dialog.mask:FR:Modèle de renommage
@@ -15339,18 +14564,7 @@ batch_rename_dialog.mask:SL:Preimenuj vzorec
 batch_rename_dialog.mask:SV:Mönster
 batch_rename_dialog.mask:UA:Маска перейменування
 batch_rename_dialog.mask:AR:نمط إعادة التسمية
-# Translation missing (New!)
-
-
-
-
-
-
-
-
-
-
-
+# Translation missing (ES, KO, RU, SK, zh_CN)
 
 batch_rename_dialog.search_replace:EN:Search & Replace
 batch_rename_dialog.search_replace:FR:Chercher & Remplacer
@@ -15369,18 +14583,7 @@ batch_rename_dialog.search_replace:SL:Išči in zamenjaj
 batch_rename_dialog.search_replace:SV:Sök och Ersätt
 batch_rename_dialog.search_replace:UA:Знайти та замінити
 batch_rename_dialog.search_replace:AR:بحث واستبدال
-# Translation missing (New!)
-
-
-
-
-
-
-
-
-
-
-
+# Translation missing (ES, KO, RU, SK, zh_CN)
 
 batch_rename_dialog.search_for:EN:Search for
 batch_rename_dialog.search_for:FR:Chercher
@@ -15399,18 +14602,7 @@ batch_rename_dialog.search_for:SL:Iskanje za
 batch_rename_dialog.search_for:SV:Sök efter
 batch_rename_dialog.search_for:UA:Шукати
 batch_rename_dialog.search_for:AR:بحث عن
-# Translation missing (New!)
-
-
-
-
-
-
-
-
-
-
-
+# Translation missing (ES, KO, RU, SK, zh_CN)
 
 batch_rename_dialog.replace_with:EN:Replace with
 batch_rename_dialog.replace_with:FR:Remplacer par
@@ -15429,18 +14621,7 @@ batch_rename_dialog.replace_with:SL:Zamenjaj z
 batch_rename_dialog.replace_with:SV:Ersätt med
 batch_rename_dialog.replace_with:UA:Замінити на
 batch_rename_dialog.replace_with:AR:استبدال بـ
-# Translation missing (New!)
-
-
-
-
-
-
-
-
-
-
-
+# Translation missing (ES, KO, RU, SK, zh_CN)
 
 batch_rename_dialog.counter:EN:Counter
 batch_rename_dialog.counter:FR:Compteur
@@ -15459,18 +14640,7 @@ batch_rename_dialog.counter:SL:Števec
 batch_rename_dialog.counter:SV:Räknare
 batch_rename_dialog.counter:UA:Лічильник
 batch_rename_dialog.counter:AR:عداد
-# Translation missing (New!)
-
-
-
-
-
-
-
-
-
-
-
+# Translation missing (ES, KO, RU, SK, zh_CN)
 
 batch_rename_dialog.start_at:EN:Start at
 batch_rename_dialog.start_at:FR:Commencer à
@@ -15489,18 +14659,7 @@ batch_rename_dialog.start_at:SL:Začni v
 batch_rename_dialog.start_at:SV:Börja vid
 batch_rename_dialog.start_at:UA:Почати з
 batch_rename_dialog.start_at:AR:يبدأ بـ
-# Translation missing (New!)
-
-
-
-
-
-
-
-
-
-
-
+# Translation missing (ES, KO, RU, SK, zh_CN)
 
 batch_rename_dialog.step_by:EN:Step by
 batch_rename_dialog.step_by:FR:Incrément
@@ -15519,18 +14678,7 @@ batch_rename_dialog.step_by:SL:Korak po
 batch_rename_dialog.step_by:SV:Öka med
 batch_rename_dialog.step_by:UA:Крок
 batch_rename_dialog.step_by:AR:خطوة بـ
-# Translation missing (New!)
-
-
-
-
-
-
-
-
-
-
-
+# Translation missing (ES, KO, RU, SK, zh_CN)
 
 batch_rename_dialog.format:EN:Format
 batch_rename_dialog.format:FR:Format
@@ -15549,18 +14697,7 @@ batch_rename_dialog.format:SV:Format
 batch_rename_dialog.format:UA:Формат
 batch_rename_dialog.format:AR:الصيغة
 batch_rename_dialog.format:DA:Format
-# Translation missing (New!)
-
-
-
-
-
-
-
-
-
-
-
+# Translation missing (ES, KO, RU, SK, zh_CN)
 
 batch_rename_dialog.upper_lower_case:EN:Upper/Lowercase
 batch_rename_dialog.upper_lower_case:FR:Casse
@@ -15579,18 +14716,7 @@ batch_rename_dialog.upper_lower_case:SL:Velike/Male črke
 batch_rename_dialog.upper_lower_case:SV:Skiftläge
 batch_rename_dialog.upper_lower_case:UA:Верхній/нижній регістр
 batch_rename_dialog.upper_lower_case:AR:حروف كبيرة/صغيرة
-# Translation missing (New!)
-
-
-
-
-
-
-
-
-
-
-
+# Translation missing (ES, KO, RU, SK, zh_CN)
 
 batch_rename_dialog.no_change:EN:Unchanged
 batch_rename_dialog.no_change:FR:Inchangée
@@ -15609,18 +14735,7 @@ batch_rename_dialog.no_change:SL:Nespremenjeno
 batch_rename_dialog.no_change:SV:Oförändrad
 batch_rename_dialog.no_change:UA:Без змін
 batch_rename_dialog.no_change:AR:غير متغير
-# Translation missing (New!)
-
-
-
-
-
-
-
-
-
-
-
+# Translation missing (ES, KO, RU, SK, zh_CN)
 
 batch_rename_dialog.lower_case:EN:lowercase
 batch_rename_dialog.lower_case:FR:minuscule
@@ -15639,18 +14754,7 @@ batch_rename_dialog.lower_case:SL:male črke
 batch_rename_dialog.lower_case:SV:små bokstäver
 batch_rename_dialog.lower_case:UA:нижній регістр
 batch_rename_dialog.lower_case:AR:حروف صغيرة
-# Translation missing (New!)
-
-
-
-
-
-
-
-
-
-
-
+# Translation missing (ES, KO, RU, SK, zh_CN)
 
 batch_rename_dialog.upper_case:EN:UPPERCASE
 batch_rename_dialog.upper_case:FR:MAJUSCULE
@@ -15669,18 +14773,7 @@ batch_rename_dialog.upper_case:SL:VELIKE ČRKE
 batch_rename_dialog.upper_case:SV:STORA BOKSTÄVER
 batch_rename_dialog.upper_case:UA:ВЕРХІНЙ РЕГІСТР
 batch_rename_dialog.upper_case:AR:حروف كبيرة
-# Translation missing (New!)
-
-
-
-
-
-
-
-
-
-
-
+# Translation missing (ES, KO, RU, SK, zh_CN)
 
 batch_rename_dialog.first_upper:EN:First letter uppercase
 batch_rename_dialog.first_upper:FR:Première lettre majuscule
@@ -15699,18 +14792,7 @@ batch_rename_dialog.first_upper:SL:Velika začetnica
 batch_rename_dialog.first_upper:SV:Första bokstaven stor
 batch_rename_dialog.first_upper:UA:Велика парша буква
 batch_rename_dialog.first_upper:AR:أول حرف كبير
-# Translation missing (New!)
-
-
-
-
-
-
-
-
-
-
-
+# Translation missing (ES, KO, RU, SK, zh_CN)
 
 batch_rename_dialog.word:EN:First Of Each Word
 batch_rename_dialog.word:FR:Première De Chaque Mot
@@ -15729,18 +14811,7 @@ batch_rename_dialog.word:SL:Velika Začetnica Vsake Besede
 batch_rename_dialog.word:SV:Fösta Bokstaven I Varje Ord
 batch_rename_dialog.word:UA:Перша У Кожному Слові
 batch_rename_dialog.word:AR:أول حرف من كل كلمة
-# Translation missing (New!)
-
-
-
-
-
-
-
-
-
-
-
+# Translation missing (ES, KO, RU, SK, zh_CN)
 
 batch_rename_dialog.old_name:EN:Old name
 batch_rename_dialog.old_name:FR:Ancien nom
@@ -15759,18 +14830,7 @@ batch_rename_dialog.old_name:SL:Staro ime
 batch_rename_dialog.old_name:SV:Gammalt namn
 batch_rename_dialog.old_name:UA:Старе ім'я
 batch_rename_dialog.old_name:AR:الاسم القديم
-# Translation missing (New!)
-
-
-
-
-
-
-
-
-
-
-
+# Translation missing (ES, KO, RU, SK, zh_CN)
 
 batch_rename_dialog.new_name:EN:New name
 batch_rename_dialog.new_name:FR:Nouveau nom
@@ -15789,18 +14849,7 @@ batch_rename_dialog.new_name:SL:Novo ime
 batch_rename_dialog.new_name:SV:Nytt namn
 batch_rename_dialog.new_name:UA:Нове ім'я
 batch_rename_dialog.new_name:AR:الاسم الجديد
-# Translation missing (New!)
-
-
-
-
-
-
-
-
-
-
-
+# Translation missing (ES, KO, RU, SK, zh_CN)
 
 batch_rename_dialog.remove:EN:Remove
 batch_rename_dialog.remove:FR:Retirer
@@ -15819,16 +14868,7 @@ batch_rename_dialog.remove:SL:Odstrani
 batch_rename_dialog.remove:SV:Ta bort
 batch_rename_dialog.remove:UA:Видалити
 batch_rename_dialog.remove:AR:حذف
-# Translation missing (New!)
-
-
-
-
-
-
-
-
-
+# Translation missing (ES, KO, RU, SK, zh_CN)
 
 # This label corresponds to a feature that is currently not used. 
 # The 'block name' feature allows selected file names to be preserved, i.e. not
@@ -15850,18 +14890,7 @@ batch_rename_dialog.block_name:SL:Ohrani
 batch_rename_dialog.block_name:SV:Bevara
 batch_rename_dialog.block_name:UA:Не змінювати
 batch_rename_dialog.block_name:AR:حفظ
-# Translation missing (New!)
-
-
-
-
-
-
-
-
-
-
-
+# Translation missing (ES, KO, RU, SK, zh_CN)
 
 batch_rename_dialog.range:EN:Range
 batch_rename_dialog.range:FR:Intervalle
@@ -15880,18 +14909,7 @@ batch_rename_dialog.range:SL:Razpon
 batch_rename_dialog.range:SV:Område
 batch_rename_dialog.range:UA:Інтервал
 batch_rename_dialog.range:AR:مدى
-# Translation missing (New!)
-
-
-
-
-
-
-
-
-
-
-
+# Translation missing (ES, KO, RU, SK, zh_CN)
 
 batch_rename_dialog.proceed_renaming:EN:%1 files out of %2 will be renamed. Do you wish to proceed?
 batch_rename_dialog.proceed_renaming:FR:%1 fichiers sur %2 vont être renommés. Etes-vous sûr?
@@ -15910,18 +14928,7 @@ batch_rename_dialog.proceed_renaming:SL:%1 datotek od %2 bo preimenovanih. Nadal
 batch_rename_dialog.proceed_renaming:SV:%1 av %2 filer kommer döpas om. Vill du fortsätta?
 batch_rename_dialog.proceed_renaming:UA:%1 фа1ли з %2 будуть перейменовані. Продовжити ?
 batch_rename_dialog.proceed_renaming:AR:%1 ملفات من %2 سيتم إعادة تسميتها. هل تريد التنفيذ؟
-# Translation missing (New!)
-
-
-
-
-
-
-
-
-
-
-
+# Translation missing (ES, KO, RU, SK, zh_CN)
 
 batch_rename_dialog.duplicate_names:EN:Duplicate names!
 batch_rename_dialog.duplicate_names:FR:Doublons de noms!
@@ -15940,18 +14947,7 @@ batch_rename_dialog.duplicate_names:SV:Duplicera namn!
 batch_rename_dialog.duplicate_names:UA:Імена співпадають
 batch_rename_dialog.duplicate_names:NL:Dubbele Naam!
 batch_rename_dialog.duplicate_names:AR:أسماء متكررة!
-# Translation missing (New!)
-
-
-
-
-
-
-
-
-
-
-
+# Translation missing (ES, KO, RU, SK, zh_CN)
 
 
 ###############
@@ -15975,16 +14971,7 @@ parent_folders_quick_list.empty_message:SL:Trenutna lokacija nima izvora
 parent_folders_quick_list.empty_message:SV:Det finns ingen överodnad mapp till denna plats
 parent_folders_quick_list.empty_message:UA:Ви на верхньому рівні
 parent_folders_quick_list.empty_message:AR:الموقع الحالي ليس لديه مجلد أب
-# Translation missing (New!)
-
-
-
-
-
-
-
-
-
+# Translation missing (ES, KO, RU, SK, zh_CN)
 
 recent_locations_quick_list.empty_message:EN:No recent location
 recent_locations_quick_list.empty_message:FR:Pas de dossier récent
@@ -16003,16 +14990,7 @@ recent_locations_quick_list.empty_message:SL:Ni nedavne lokacije
 recent_locations_quick_list.empty_message:SV:Inga nyligen besökta platser
 recent_locations_quick_list.empty_message:UA:Нема попереднього місцезнаходження
 recent_locations_quick_list.empty_message:AR:لا يوجد مواقع أخيرة
-# Translation missing (New!)
-
-
-
-
-
-
-
-
-
+# Translation missing (ES, KO, RU, SK, zh_CN)
 
 recent_executed_files_quick_list.empty_message:EN:No recently executed file
 recent_executed_files_quick_list.empty_message:FR:Pas de fichier récemment exécuté
@@ -16031,11 +15009,7 @@ recent_executed_files_quick_list.empty_message:SV:Inga nyligen öppnade filer
 recent_executed_files_quick_list.empty_message:UA:Нема попереднього виконаного файла
 recent_executed_files_quick_list.empty_message:AR:لا يوجد ملفات مشغلة أخيراً
 recent_executed_files_quick_list.empty_message:DA:Ingen nyeligt kørte filer
-# Translation missing (New!)
-
-
-
-
+# Translation missing (ES, KO, RU, SK, zh_CN)
 
 
 ######################
