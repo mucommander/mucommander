@@ -22,28 +22,21 @@ import com.mucommander.file.AbstractFile;
 import com.mucommander.file.filter.AttributeFileFilter;
 import com.mucommander.file.filter.FileFilter;
 import com.mucommander.file.util.FileSet;
-import com.mucommander.ui.action.AbstractActionDescriptor;
-import com.mucommander.ui.action.ActionCategories;
-import com.mucommander.ui.action.ActionCategory;
-import com.mucommander.ui.action.InvokesDialog;
-import com.mucommander.ui.action.MuAction;
-import com.mucommander.ui.action.ActionFactory;
-import com.mucommander.ui.dialog.file.MergeFileDialog;
+import com.mucommander.ui.action.*;
+import com.mucommander.ui.dialog.file.CombineFilesDialog;
 import com.mucommander.ui.main.MainFrame;
 
+import javax.swing.*;
 import java.util.Hashtable;
 
-import javax.swing.KeyStroke;
-
 /**
- * This action invokes the merge file dialog which allows to
- * merge parts of a file.
+ * This action invokes the merge file dialog which allows to combine file parts into the original file.
  *
  * @author Mariusz Jakubowski
  */
-public class MergeFileAction extends SelectedFilesAction implements InvokesDialog {
+public class CombineFilesAction extends SelectedFilesAction implements InvokesDialog {
 	
-    public MergeFileAction(MainFrame mainFrame, Hashtable properties) {
+    public CombineFilesAction(MainFrame mainFrame, Hashtable properties) {
         super(mainFrame, properties);
     }
 
@@ -58,18 +51,18 @@ public class MergeFileAction extends SelectedFilesAction implements InvokesDialo
     		return;
 
         AbstractFile destFolder = mainFrame.getInactivePanel().getCurrentFolder();
-        new MergeFileDialog(mainFrame, files, destFolder).showDialog();
+        new CombineFilesDialog(mainFrame, files, destFolder).showDialog();
     }
 
     public static class Factory implements ActionFactory {
 
 		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
-			return new MergeFileAction(mainFrame, properties);
+			return new CombineFilesAction(mainFrame, properties);
 		}
     }
     
     public static class Descriptor extends AbstractActionDescriptor {
-    	public static final String ACTION_ID = "MergeFile";
+    	public static final String ACTION_ID = "CombineFiles";
     	
 		public String getId() { return ACTION_ID; }
 

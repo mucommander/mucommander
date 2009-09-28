@@ -24,7 +24,7 @@ import com.mucommander.file.filter.*;
 import com.mucommander.file.util.FileSet;
 import com.mucommander.file.util.PathUtils;
 import com.mucommander.file.util.PathUtils.ResolvedDestination;
-import com.mucommander.job.MergeFileJob;
+import com.mucommander.job.CombineFilesJob;
 import com.mucommander.job.TransferFileJob;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.main.MainFrame;
@@ -32,11 +32,11 @@ import com.mucommander.ui.main.MainFrame;
 import java.io.IOException;
 
 /**
- * Dialog used to merge parts of a file.
+ * Dialog used to combine file parts into the original file.
  * 
  * @author Mariusz Jakubowski
  */
-public class MergeFileDialog extends TransferDestinationDialog {
+public class CombineFilesDialog extends TransferDestinationDialog {
 
     private AbstractFile destFolder;
 
@@ -46,11 +46,11 @@ public class MergeFileDialog extends TransferDestinationDialog {
      * @param files a list of files to combine
      * @param destFolder default destination folder
      */
-    public MergeFileDialog(MainFrame mainFrame, FileSet files, AbstractFile destFolder) {
+    public CombineFilesDialog(MainFrame mainFrame, FileSet files, AbstractFile destFolder) {
         super(mainFrame, files, 
-        		Translator.get("merge_file_dialog.title"),
+        		Translator.get("combine_files_dialog.title"),
                 Translator.get("copy_dialog.destination"),
-                Translator.get("merge_file_dialog.merge"),
+                Translator.get("combine_files_dialog.merge"),
                 Translator.get("copy_dialog.error_title"));
 
         this.destFolder = destFolder;
@@ -123,7 +123,7 @@ public class MergeFileDialog extends TransferDestinationDialog {
     }
 
     protected TransferFileJob createTransferFileJob(ProgressDialog progressDialog, ResolvedDestination resolvedDest, int defaultFileExistsAction) {
-		return new MergeFileJob(progressDialog, mainFrame,
+		return new CombineFilesJob(progressDialog, mainFrame,
 		       files, resolvedDest.getDestinationFile(), defaultFileExistsAction);
 	}
 

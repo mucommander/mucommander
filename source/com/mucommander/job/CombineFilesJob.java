@@ -32,20 +32,20 @@ import java.io.*;
  * This job combines files into one file, optionally checking the CRC of the merged file.
  * @author Mariusz Jakubowski
  */
-public class MergeFileJob extends AbstractCopyJob {
+public class CombineFilesJob extends AbstractCopyJob {
 	AbstractFile destFile = null;
 	private OutputStream out;
 	private AbstractFile crcFile;
 
 
-	public MergeFileJob(ProgressDialog progressDialog, MainFrame mainFrame,
+	public CombineFilesJob(ProgressDialog progressDialog, MainFrame mainFrame,
 			FileSet files, AbstractFile destFile,
 			int fileExistsAction) {
 		super(progressDialog, mainFrame, files, destFile, null, fileExistsAction);
-        this.errorDialogTitle = Translator.get("merge_file_dialog.error_title");
+        this.errorDialogTitle = Translator.get("combine_files_dialog.error_title");
 	}
 
-	protected boolean hasFolderChanged(AbstractFile folder) {
+    protected boolean hasFolderChanged(AbstractFile folder) {
         return baseDestFolder.isParentOf(folder);
 	}
 
@@ -137,7 +137,7 @@ public class MergeFileJob extends AbstractCopyJob {
 	private void checkCRC() {
 		if (crcFile==null  || !crcFile.exists()) {
             showErrorDialog(errorDialogTitle,
-                    Translator.get("merge_job.no_crc_file"),
+                    Translator.get("combine_files_job.no_crc_file"),
                     new String[]{OK_TEXT},
                     new int[]{OK_ACTION}
                     );
@@ -152,13 +152,13 @@ public class MergeFileJob extends AbstractCopyJob {
 			String crcDest = destFile.calculateChecksum("CRC32");
 			if (!crcLine.equals(crcDest)) {
 	            showErrorDialog(errorDialogTitle,
-	                    Translator.get("merge_job.crc_check_failed", crcDest, crcLine),
+	                    Translator.get("combine_files_job.crc_check_failed", crcDest, crcLine),
 	                    new String[]{OK_TEXT},
 	                    new int[]{OK_ACTION}
 	                    );
 			} else {
-	            showErrorDialog(Translator.get("merge_file_dialog.title"),
-	                    Translator.get("merge_job.crc_ok"),
+	            showErrorDialog(Translator.get("combine_files_dialog.title"),
+	                    Translator.get("combine_files_job.crc_ok"),
 	                    new String[]{OK_TEXT},
 	                    new int[]{OK_ACTION}
 	                    );
@@ -166,7 +166,7 @@ public class MergeFileJob extends AbstractCopyJob {
 		} catch (Exception e) {
             AppLogger.fine("Caught exception", e);
             showErrorDialog(errorDialogTitle,
-                    Translator.get("merge_job.crc_read_error"),
+                    Translator.get("combine_files_job.crc_read_error"),
                     new String[]{CANCEL_TEXT},
                     new int[]{CANCEL_ACTION}
                     );

@@ -5861,11 +5861,11 @@ SplitFile.label:DA:Del fil
 
 
 
-MergeFile.label:EN:Combine files
-MergeFile.label:PL:Scalaj pliki
-MergeFile.label:NL:Voeg bestanden samen
-MergeFile.label:AR:دمع الملفات
-MergeFile.label:DA:Sammenflet fil
+CombineFiles.label:EN:Combine files
+CombineFiles.label:PL:Scalaj pliki
+CombineFiles.label:NL:Voeg bestanden samen
+CombineFiles.label:AR:دمع الملفات
+CombineFiles.label:DA:Sammenflet fil
 # Translation missing (New!)
 
 
@@ -6307,6 +6307,8 @@ status_bar.volume_capacity:AR:السعة: %1
 ####################
 # Shortcuts editor #
 ####################
+
+# All those entries can be seen in the shortcuts editor, in the preferences.
 
 shortcuts_panel.title:EN:Shortcuts
 shortcuts_panel.title:DA:Genveje
@@ -8491,15 +8493,15 @@ split_file_dialog.insert_new_media:DA:Indsæt nyt medie
 
 
 
-##############
-# Merge file #
-##############
+#################
+# Combine files #
+#################
 
-merge_file_dialog.title:EN:Combine file
-merge_file_dialog.title:PL:Scal plik
-merge_file_dialog.title:NL:Bestand samenvoegen
-merge_file_dialog.title:AR:دمج ملفات
-merge_file_dialog.title:DA:Sammenflet fil
+combine_files_dialog.title:EN:Combine file
+combine_files_dialog.title:PL:Scal plik
+combine_files_dialog.title:NL:Bestand samenvoegen
+combine_files_dialog.title:AR:دمج ملفات
+combine_files_dialog.title:DA:Sammenflet fil
 # Translation missing (New!)
 
 
@@ -8517,11 +8519,11 @@ merge_file_dialog.title:DA:Sammenflet fil
 
 
 
-merge_file_dialog.error_title:EN:Merge files error
-merge_file_dialog.error_title:PL:Błąd łączenia plików
-merge_file_dialog.error_title:NL:Fout bij bestand samenvoegen
-merge_file_dialog.error_title:AR:خطأ في دمج الملفات
-merge_file_dialog.error_title:DA:Fejl under sammenfletning af filer
+combine_files_dialog.error_title:EN:Merge files error
+combine_files_dialog.error_title:PL:Błąd łączenia plików
+combine_files_dialog.error_title:NL:Fout bij bestand samenvoegen
+combine_files_dialog.error_title:AR:خطأ في دمج الملفات
+combine_files_dialog.error_title:DA:Fejl under sammenfletning af filer
 # Translation missing (New!)
 
 
@@ -8539,11 +8541,11 @@ merge_file_dialog.error_title:DA:Fejl under sammenfletning af filer
 
 
 
-merge_file_dialog.merge:EN:Combine
-merge_file_dialog.merge:PL:Scal
-merge_file_dialog.merge:NL:Samenvoegen
-merge_file_dialog.merge:AR:دمج
-merge_file_dialog.merge:DA:Sammenflet
+combine_files_dialog.merge:EN:Combine
+combine_files_dialog.merge:PL:Scal
+combine_files_dialog.merge:NL:Samenvoegen
+combine_files_dialog.merge:AR:دمج
+combine_files_dialog.merge:DA:Sammenflet
 # Translation missing (New!)
 
 
@@ -8561,11 +8563,11 @@ merge_file_dialog.merge:DA:Sammenflet
 
 
 
-merge_job.no_crc_file:EN:Combine succeeded. No CRC file.
-merge_job.no_crc_file:PL:Scalanie zakończone pomyślnie. Brak pliku CRC.
-merge_job.no_crc_file:NL:Samenvoegen geslaagd. Geen CRC bestand.
-merge_job.no_crc_file:AR:نجح الدمج، لا يوجد ملف CRC.
-merge_job.no_crc_file:DA:Sammenfletning fuldført. Ingen CRC fil.
+combine_files_job.no_crc_file:EN:Combine succeeded. No CRC file.
+combine_files_job.no_crc_file:PL:Scalanie zakończone pomyślnie. Brak pliku CRC.
+combine_files_job.no_crc_file:NL:Samenvoegen geslaagd. Geen CRC bestand.
+combine_files_job.no_crc_file:AR:نجح الدمج، لا يوجد ملف CRC.
+combine_files_job.no_crc_file:DA:Sammenfletning fuldført. Ingen CRC fil.
 # Translation missing (New!)
 
 
@@ -8583,10 +8585,11 @@ merge_job.no_crc_file:DA:Sammenfletning fuldført. Ingen CRC fil.
 
 
 
-merge_job.crc_read_error:EN:Error while reading CRC file.
-merge_job.crc_read_error:PL:Błąd podczas odczytywania pliku CRC.
-merge_job.crc_read_error:AR:خطأ أثناء قراءة ملف CRC.
-merge_job.crc_read_error:DA:Fejl under løsning af CRC fil.
+combine_files_job.crc_read_error:EN:Error while reading CRC file.
+combine_files_job.crc_read_error:PL:Błąd podczas odczytywania pliku CRC.
+combine_files_job.crc_read_error:NL:Fout bij lezen CRC bestand.
+combine_files_job.crc_read_error:AR:خطأ أثناء قراءة ملف CRC.
+combine_files_job.crc_read_error:DA:Fejl under løsning af CRC fil.
 # Translation missing (New!)
 
 
@@ -8604,11 +8607,11 @@ merge_job.crc_read_error:DA:Fejl under løsning af CRC fil.
 
 
 
-merge_job.crc_check_failed:EN:CRC mismatch: expected %2, found %1
-merge_job.crc_check_failed:PL:Pliki CRC nie zgadzają się %1 <> %2
-merge_job.crc_check_failed:NL:CRC past niet: verwacht %2, gevonden %1
-merge_job.crc_check_failed:AR:عدم تطابق CRC: الموجود %1، المتوقع %2
-merge_job.crc_check_failed:DA:CRC fejl: forventede %2 men fik %1
+combine_files_job.crc_check_failed:EN:CRC mismatch: expected %2, found %1
+combine_files_job.crc_check_failed:PL:Pliki CRC nie zgadzają się %1 <> %2
+combine_files_job.crc_check_failed:NL:CRC past niet: verwacht %2, gevonden %1
+combine_files_job.crc_check_failed:AR:عدم تطابق CRC: الموجود %1، المتوقع %2
+combine_files_job.crc_check_failed:DA:CRC fejl: forventede %2 men fik %1
 # Translation missing (New!)
 
 
@@ -8626,11 +8629,11 @@ merge_job.crc_check_failed:DA:CRC fejl: forventede %2 men fik %1
 
 
 
-merge_job.crc_ok:EN:Combine succeeded. CRC checksum ok.
-merge_job.crc_ok:PL:Scalanie zakończone pomyślnie. Plik CRC zweryfikowany.
-merge_job.crc_ok:NL:Samenvoegen geslaagd. CRC controlsom ok.
-merge_job.crc_ok:AR:تم الدمج. نجح اختبار تحقق CRC.
-merge_job.crc_ok:DA:Sammenfletning fuldført. CRC kontrolsum ok.
+combine_files_job.crc_ok:EN:Combine succeeded. CRC checksum ok.
+combine_files_job.crc_ok:PL:Scalanie zakończone pomyślnie. Plik CRC zweryfikowany.
+combine_files_job.crc_ok:NL:Samenvoegen geslaagd. CRC controlsom ok.
+combine_files_job.crc_ok:AR:تم الدمج. نجح اختبار تحقق CRC.
+combine_files_job.crc_ok:DA:Sammenfletning fuldført. CRC kontrolsum ok.
 # Translation missing (New!)
 
 

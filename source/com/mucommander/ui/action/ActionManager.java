@@ -111,7 +111,7 @@ public class ActionManager {
     	registerAction(new MarkToFirstRowAction.Descriptor(),               new MarkToFirstRowAction.Factory());
     	registerAction(new MarkToLastRowAction.Descriptor(),                new MarkToLastRowAction.Factory());
     	registerAction(new MaximizeWindowAction.Descriptor(),               new MaximizeWindowAction.Factory());
-    	registerAction(new MergeFileAction.Descriptor(),            		new MergeFileAction.Factory());
+    	registerAction(new CombineFilesAction.Descriptor(),            		new CombineFilesAction.Factory());
     	registerAction(new MinimizeWindowAction.Descriptor(),               new MinimizeWindowAction.Factory());
     	registerAction(new MkdirAction.Descriptor(),           			    new MkdirAction.Factory());
     	registerAction(new MkfileAction.Descriptor(),		                new MkfileAction.Factory());
