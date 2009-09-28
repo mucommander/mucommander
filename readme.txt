@@ -141,6 +141,7 @@ New features:
   allowing file transfer errors to be ignored silently (ticket #231).
 - Files can be selected or marked one block at a time (ticket #116).
   Default shortcuts are Control+UP/DOWN and Shift+Control+UP/DOWN respectively.
+- New split and combine files functionality.
 
 Improvements:
 - Tar/TGZ and Zip unpacking speed has been improved significantly (ticket #74).
