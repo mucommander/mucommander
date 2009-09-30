@@ -50,7 +50,7 @@ public class UnpackDialog extends TransferDestinationDialog {
         super(mainFrame, files,
         	  ActionProperties.getActionLabel(UnpackAction.Descriptor.ACTION_ID),
               Translator.get("unpack_dialog.destination"),
-              Translator.get("unpack_dialog.unpack"),
+              Translator.get("unpack"),
               Translator.get("unpack_dialog.error_title"));
 
         this.isShiftDown = isShiftDown;

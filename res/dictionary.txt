@@ -648,6 +648,75 @@ copy:DA:Kopier
 copy:UA:Копіювати
 copy:AR:نسخ
 
+move:EN:Move
+move:FR:Déplacer
+move:DE:Verschieben
+move:ES:Mover
+move:CS:Přesunout
+move:zh_TW:搬移
+move:PL:Przenieś
+move:HU:Mozgat
+move:RU:Перенести
+move:zh_CN:移动
+move:SL:Premakni
+move:RO:Mută
+move:IT:Sposta
+move:KO:이동
+move:pt_BR:Mover
+move:NL:Verplaatsen
+move:SK:Presunúť
+move:JA:移動
+move:SV:Flytta
+move:DA:Flyt
+move:UA:Перенести
+move:AR:نقل
+
+pack:EN:Pack
+pack:FR:Compresser
+pack:DE:Packen
+pack:ES:Comprimir
+pack:CS:Komprimovat
+pack:zh_TW:壓縮
+pack:HU:Tömörítés
+pack:RU:Архивация
+pack:PL:Spakuj
+pack:zh_CN:压缩
+pack:SL:Stiskanje
+pack:RO:Arhivează
+pack:IT:Compressione
+pack:KO:압축
+pack:pt_BR:Compactar
+pack:NL:Inpakken
+pack:SK:Komprimovať
+pack:JA:パック
+pack:SV:Komprimera
+pack:DA:Komprimer
+pack:UA:Стиснути
+pack:AR:أرشفة
+
+unpack:EN:Unpack
+unpack:FR:Décompresser
+unpack:DE:Entpacken
+unpack:ES:Descomprimir
+unpack:CS:Dekomprimovat
+unpack:zh_TW:解壓縮
+unpack:PL:Rozpakuj
+unpack:HU:Kicsomagolás
+unpack:RU:Разархивация
+unpack:zh_CN:解压缩
+unpack:SL:Razširjanje
+unpack:RO:Dearhivează
+unpack:IT:Decomprimi
+unpack:KO:압축해제
+unpack:pt_BR:Descompactar
+unpack:NL:Uitpakken
+unpack:SK:Dekomprimovať
+unpack:JA:パック解除
+unpack:SV:Extrahera
+unpack:DA:Udpak
+unpack:UA:Розпакувати
+unpack:AR:استخراج
+
 download:EN:Download
 download:FR:Télécharger
 download:DE:Download
@@ -1547,6 +1616,27 @@ this_operation_cannot_be_undone:UA:Неможливо скасувати дан�
 this_operation_cannot_be_undone:AR:هذه العملية لا يمكن إلغاؤها.
 # Translation missing (KO)
 
+remove:EN:Remove
+remove:FR:Retirer
+remove:ES:Eliminar
+remove:RU:Удалить
+remove:PL:Usuń
+remove:DA:Fjern
+remove:NL:Verwijder
+remove:RO:Elimină
+remove:DE:Entfernen
+remove:HU:Mozgat
+remove:zh_TW:移除
+remove:JA:削除
+remove:CS:Odstranit
+remove:IT:Elimina
+remove:pt_BR:Remover
+remove:SL:Odstrani
+remove:SV:Ta bort
+remove:UA:Видалити
+remove:AR:حذف
+# Translation missing (KO, SK, zh_CN)
+
 # Used as a button in error dialogs to show more information about the error.
 details:EN:Details
 details:FR:Détails
@@ -2257,6 +2347,7 @@ permissions.octal_notation:AR:تدوين ثماني
 # Displayed in the shortcut editor (preferences)
 
 action_categories.all:EN:All
+action_categories.all:FR:Tous
 # Translation missing (New!)
 
 
@@ -2841,28 +2932,7 @@ Edit.tooltip:DA:Rediger markerede fil
 Edit.tooltip:UA:Редагувати вибраний файл
 Edit.tooltip:AR:تحرير الملف المحدد
 
-Copy.label:EN:Copy
-Copy.label:FR:Copier
-Copy.label:DE:Kopieren
-Copy.label:ES:Copiar
-Copy.label:CS:Kopírovat
-Copy.label:zh_TW:複製
-Copy.label:PL:Kopiuj
-Copy.label:HU:Másol
-Copy.label:RU:Копировать
-Copy.label:zh_CN:复制
-Copy.label:SL:Kopiraj
-Copy.label:RO:Copiază
-Copy.label:IT:Copia
-Copy.label:KO:복사
-Copy.label:pt_BR:Copiar
-Copy.label:NL:Kopieren
-Copy.label:SK:Kopírovať
-Copy.label:JA:コピー
-Copy.label:SV:Kopiera
-Copy.label:DA:Kopier
-Copy.label:UA:Копіювати
-Copy.label:AR:نسخ
+Copy.label:EN:$[copy]
 
 Copy.tooltip:EN:Copy marked files
 Copy.tooltip:FR:Copier les fichiers marqués
@@ -2933,28 +3003,7 @@ LocalCopy.tooltip:DA:Kopier markeret fil til den aktuelle mappe
 LocalCopy.tooltip:UA:Копіювати вибраний файл в поточну папку
 LocalCopy.tooltip:AR:نسخ الملف المحدد في المجلد الحالي
 
-Move.label:EN:Move
-Move.label:FR:Déplacer
-Move.label:DE:Verschieben
-Move.label:ES:Mover
-Move.label:CS:Přesunout
-Move.label:zh_TW:搬移
-Move.label:PL:Przenieś
-Move.label:HU:Mozgat
-Move.label:RU:Перенести
-Move.label:zh_CN:移动
-Move.label:SL:Premakni
-Move.label:RO:Mută
-Move.label:IT:Sposta
-Move.label:KO:이동
-Move.label:pt_BR:Mover
-Move.label:NL:Verplaatsen
-Move.label:SK:Presunúť
-Move.label:JA:移動
-Move.label:SV:Flytta
-Move.label:DA:Flyt
-Move.label:UA:Перенести
-Move.label:AR:نقل
+Move.label:EN:$[move]
 
 Move.tooltip:EN:Move marked files
 Move.tooltip:FR:Déplacer les fichiers marqués
@@ -3096,28 +3145,7 @@ Mkfile.tooltip:DA:Opret en ny fil i den aktuelle mappe
 Mkfile.tooltip:UA:Створити файл в поточній папці
 Mkfile.tooltip:AR:إنشاء ملف في المجلد الحالي
 
-Delete.label:EN:Delete
-Delete.label:FR:Supprimer
-Delete.label:DE:Löschen
-Delete.label:ES:Eliminar
-Delete.label:CS:Smazat
-Delete.label:zh_TW:刪除
-Delete.label:PL:Usuń
-Delete.label:HU:Törlés
-Delete.label:RU:Удалить
-Delete.label:zh_CN:刪除
-Delete.label:SL:Brisanje
-Delete.label:RO:Șterge
-Delete.label:IT:Elimina
-Delete.label:KO:삭제
-Delete.label:pt_BR:Apagar
-Delete.label:NL:Verwijderen
-Delete.label:SK:Odstrániť
-Delete.label:JA:削除
-Delete.label:SV:Radera
-Delete.label:DA:Slet
-Delete.label:UA:Видалити
-Delete.label:AR:حذف
+Delete.label:EN:$[delete]
 
 # Note: the system trash is available on certain OS environments only (Windows, Mac OS X, KDE), and only for local files.
 Delete.tooltip:EN:Delete marked files using the system trash when possible
@@ -4540,28 +4568,7 @@ RunCommand.tooltip:DA:Kør en kommando i aktuel mappe
 RunCommand.tooltip:UA:Виконати в поточній папці
 RunCommand.tooltip:AR:تنفيذ أمر في المجلد الحالي
 
-Pack.label:EN:Pack files
-Pack.label:FR:Compresser fichiers
-Pack.label:DE:Dateien packen
-Pack.label:ES:Comprimir ficheros
-Pack.label:CS:Komprimovat
-Pack.label:zh_TW:壓縮檔案
-Pack.label:PL:Spakuj pliki
-Pack.label:HU:Tömörítés
-Pack.label:RU:Архивировать файлы
-Pack.label:zh_CN:压缩文件
-Pack.label:SL:Stiskanje datotek
-Pack.label:RO:Arhivează fișiere
-Pack.label:IT:Comprimi file
-Pack.label:KO:파일압축
-Pack.label:pt_BR:Compactar arquivos
-Pack.label:NL:Bestanden inpakken
-Pack.label:SK:Skomprimovať súbory
-Pack.label:JA:ファイルのパック
-Pack.label:SV:Komprimera filer
-Pack.label:DA:Komprimer filer
-Pack.label:UA:Стиснути файли
-Pack.label:AR:أرشفة الملفات
+Pack.label:EN:$[pack]
 
 Pack.tooltip:EN:Pack marked files into an archive
 Pack.tooltip:FR:Compresser les fichiers marqués dans une archive
@@ -4586,28 +4593,7 @@ Pack.tooltip:DA:Komprimer markerede filer til et arkiv
 Pack.tooltip:UA:Стиснути вибрані файли у архів
 Pack.tooltip:AR:أرشفة الملفات المحددة في أرشيف
 
-Unpack.label:EN:Unpack files
-Unpack.label:FR:Décompresser fichiers
-Unpack.label:DE:Dateien entpacken
-Unpack.label:ES:Descomprimir ficheros
-Unpack.label:CS:Dekomprimovat
-Unpack.label:zh_TW:解壓縮檔案
-Unpack.label:PL:Rozpakuj pliki
-Unpack.label:HU:Kicsomagolás
-Unpack.label:RU:Разархивировать файлы
-Unpack.label:zh_CN:解压缩文件
-Unpack.label:SL:Razširjanje datotek
-Unpack.label:RO:Dearhivează fișiere
-Unpack.label:IT:Decomprimi file
-Unpack.label:KO:파일 압축해제
-Unpack.label:pt_BR:Descompactar arquivos
-Unpack.label:NL:Bestanden uitpakken
-Unpack.label:SK:Dekomprimovať súbory
-Unpack.label:JA:ファイルのパック解除
-Unpack.label:SV:Extrahera filer
-Unpack.label:DA:Udpak filer
-Unpack.label:UA:Розпакувати файли
-Unpack.label:AR:استخراج الملفات
+Unpack.label:EN:$[unpack]
 
 Unpack.tooltip:EN:Unpack marked archive files
 Unpack.tooltip:FR:Décompresser les archives marquées
@@ -5840,6 +5826,7 @@ ShowRecentExecutedFilesQL.label:DA:Nyeligt kørte filer
 # Translation missing (ES, KO, RU, SK, zh_CN)
 
 SplitFile.label:EN:Split file
+SplitFile.label:FR:Scinder le fichier
 SplitFile.label:PL:Podziel plik
 SplitFile.label:NL:Splits bestand
 SplitFile.label:AR:تقسيم الملف
@@ -5862,6 +5849,7 @@ SplitFile.label:DA:Del fil
 
 
 CombineFiles.label:EN:Combine files
+CombineFiles.label:FR:Aggréger les fichiers
 CombineFiles.label:PL:Scalaj pliki
 CombineFiles.label:NL:Voeg bestanden samen
 CombineFiles.label:AR:دمع الملفات
@@ -6311,6 +6299,7 @@ status_bar.volume_capacity:AR:السعة: %1
 # All those entries can be seen in the shortcuts editor, in the preferences.
 
 shortcuts_panel.title:EN:Shortcuts
+shortcuts_panel.title:FR:Raccourcis
 shortcuts_panel.title:DA:Genveje
 # Translation missing (New!)
 
@@ -6329,7 +6318,8 @@ shortcuts_panel.title:DA:Genveje
 
 
 
-shortcuts_panel.restore_defaults:EN:Restore Defaults
+shortcuts_panel.restore_defaults:EN:Restore defaults
+shortcuts_panel.restore_defaults:FR:Réinitialiser
 shortcuts_panel.restore_defaults:DA:Standard indstillinger
 # Translation missing (New!)
 
@@ -6348,26 +6338,8 @@ shortcuts_panel.restore_defaults:DA:Standard indstillinger
 
 
 
-shortcuts_panel.remove:EN:Remove
-shortcuts_panel.remove:DA:Fjern
-# Translation missing (New!)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 shortcuts_panel.show:EN:Show
+shortcuts_panel.show:FR:Afficher
 shortcuts_panel.show:DA:Vis
 # Translation missing (New!)
 
@@ -6386,7 +6358,8 @@ shortcuts_panel.show:DA:Vis
 
 
 
-shortcuts_panel.default_message:EN:Press Enter/double click on the shortcut you'd like to edit
+shortcuts_panel.default_message:EN:Press Enter or double-click the shortcut you wish to edit
+shortcuts_panel.default_message:FR:Appuyez sur Entrée ou double-cliquez sur le raccourci à éditer 
 shortcuts_panel.default_message:DA:Tryk Enter/dobbelt klik på den genvej du gerne vil redigere
 # Translation missing (New!)
 
@@ -6405,7 +6378,8 @@ shortcuts_panel.default_message:DA:Tryk Enter/dobbelt klik på den genvej du ger
 
 
 
-shortcuts_table.action_description:EN:Action Description
+shortcuts_table.action_description:EN:Action description
+shortcuts_table.action_description:FR:Description de l'action
 shortcuts_table.action_description:DA:Handlingsbeskrivelse
 # Translation missing (New!)
 
@@ -6425,6 +6399,7 @@ shortcuts_table.action_description:DA:Handlingsbeskrivelse
 
 
 shortcuts_table.shortcut:EN:Shortcut
+shortcuts_table.shortcut:FR:Raccourci
 shortcuts_table.shortcut:DA:Genvej
 # Translation missing (New!)
 
@@ -6444,6 +6419,7 @@ shortcuts_table.shortcut:DA:Genvej
 
 
 shortcuts_table.alternate_shortcut:EN:Alternate Shortcut
+shortcuts_table.alternate_shortcut:FR:Raccourci secondaire
 shortcuts_table.alternate_shortcut:DA:Alternativ genvej
 # Translation missing (New!)
 
@@ -6463,6 +6439,7 @@ shortcuts_table.alternate_shortcut:DA:Alternativ genvej
 
 
 shortcuts_table.type_in_a_shortcut:EN:Type in a shortcut
+shortcuts_table.type_in_a_shortcut:FR:Saisissez le raccourci
 shortcuts_table.type_in_a_shortcut:DA:Indtast en genvej
 # Translation missing (New!)
 
@@ -6486,6 +6463,7 @@ shortcuts_table.type_in_a_shortcut:DA:Indtast en genvej
 ######################
 
 command_bar_dialog.help:EN:Drag buttons to customize the command bar
+command_bar_dialog.help:FR:Déplacez les boutons pour personnaliser la barre de commande
 command_bar_dialog.help:DA:Træk knapper for at tilpasse kommandolinien
 # Translation missing (New!)
 
@@ -7006,29 +6984,6 @@ rename_dialog.new_name:AR:الاسم الجديد
 # Copy #
 ########
 
-copy_dialog.copy:EN:Copy
-copy_dialog.copy:FR:Copier
-copy_dialog.copy:DE:Kopieren
-copy_dialog.copy:ES:Copiar
-copy_dialog.copy:CS:Kopírovat
-copy_dialog.copy:zh_TW:複製
-copy_dialog.copy:PL:Kopiowanie
-copy_dialog.copy:HU:Másol
-copy_dialog.copy:RU:Копирование
-copy_dialog.copy:zh_CN:复制
-copy_dialog.copy:SL:Kopiranje
-copy_dialog.copy:RO:Copiază
-copy_dialog.copy:IT:Copia
-copy_dialog.copy:KO:복사
-copy_dialog.copy:pt_BR:Copiar
-copy_dialog.copy:NL:Kopiëren
-copy_dialog.copy:SK:Kopírovať
-copy_dialog.copy:JA:コピー
-copy_dialog.copy:SV:Kopiera
-copy_dialog.copy:DA:Kopier
-copy_dialog.copy:UA:Копіювати
-copy_dialog.copy:AR:نسخ
-
 copy_dialog.destination:EN:Copy selected file(s) to
 copy_dialog.destination:FR:Copier les fichiers sélectionnés dans
 copy_dialog.destination:DE:Kopiere markierte Datei(en) nach
@@ -7125,29 +7080,6 @@ copy_dialog.copying_file:AR:نسخ %1
 ########
 # Pack #
 ########
-
-pack_dialog.pack:EN:Pack
-pack_dialog.pack:FR:Compresser
-pack_dialog.pack:DE:Packen
-pack_dialog.pack:ES:Comprimir
-pack_dialog.pack:CS:Komprimovat
-pack_dialog.pack:zh_TW:壓縮
-pack_dialog.pack:HU:Tömörítés
-pack_dialog.pack:RU:Архивация
-pack_dialog.pack:PL:Spakuj
-pack_dialog.pack:zh_CN:压缩
-pack_dialog.pack:SL:Stiskanje
-pack_dialog.pack:RO:Arhivează
-pack_dialog.pack:IT:Compressione
-pack_dialog.pack:KO:압축
-pack_dialog.pack:pt_BR:Compactar
-pack_dialog.pack:NL:Inpakken
-pack_dialog.pack:SK:Komprimovať
-pack_dialog.pack:JA:パック
-pack_dialog.pack:SV:Komprimera
-pack_dialog.pack:DA:Komprimer
-pack_dialog.pack:UA:Стиснути
-pack_dialog.pack:AR:أرشفة
 
 pack_dialog.packing:EN:Packing files
 pack_dialog.packing:FR:Compression en cours
@@ -7268,29 +7200,6 @@ pack_dialog.archive_format:AR:صيغة الأرشيف
 ##########
 # Unpack #
 ##########
-
-unpack_dialog.unpack:EN:Unpack
-unpack_dialog.unpack:FR:Décompresser
-unpack_dialog.unpack:DE:Entpacken
-unpack_dialog.unpack:ES:Descomprimir
-unpack_dialog.unpack:CS:Dekomprimovat
-unpack_dialog.unpack:zh_TW:解壓縮
-unpack_dialog.unpack:PL:Rozpakuj
-unpack_dialog.unpack:HU:Kicsomagolás
-unpack_dialog.unpack:RU:Разархивация
-unpack_dialog.unpack:zh_CN:解压缩
-unpack_dialog.unpack:SL:Razširjanje
-unpack_dialog.unpack:RO:Dearhivează
-unpack_dialog.unpack:IT:Decomprimi
-unpack_dialog.unpack:KO:압축해제
-unpack_dialog.unpack:pt_BR:Descompactar
-unpack_dialog.unpack:NL:Uitpakken
-unpack_dialog.unpack:SK:Dekomprimovať
-unpack_dialog.unpack:JA:パック解除
-unpack_dialog.unpack:SV:Extrahera
-unpack_dialog.unpack:DA:Udpak
-unpack_dialog.unpack:UA:Розпакувати
-unpack_dialog.unpack:AR:استخراج
 
 unpack_dialog.destination:EN:Unpack selected file(s) to
 unpack_dialog.destination:FR:Décompresser les fichiers selectionnés dans
@@ -7445,29 +7354,6 @@ error_while_optimizing_archive:AR:خطأ أثناء تعديل الأرشيف %1
 ########
 # Move #
 ########
-
-move_dialog.move:EN:Move
-move_dialog.move:FR:Déplacer
-move_dialog.move:DE:Verschieben
-move_dialog.move:ES:Mover
-move_dialog.move:CS:Přesunout
-move_dialog.move:zh_TW:搬移
-move_dialog.move:PL:Przenieś
-move_dialog.move:HU:Áthelyez
-move_dialog.move:RU:Перемещение
-move_dialog.move:zh_CN:移动
-move_dialog.move:SL:Premakni
-move_dialog.move:RO:Mută
-move_dialog.move:IT:Sposta
-move_dialog.move:KO:이동
-move_dialog.move:pt_BR:Mover
-move_dialog.move:NL:Verplaatsen
-move_dialog.move:SK:Presunúť
-move_dialog.move:JA:移動
-move_dialog.move:SV:Flytta
-move_dialog.move:DA:Flyt
-move_dialog.move:UA:Перемістити
-move_dialog.move:AR:نقل
 
 move_dialog.move_description:EN:Move to
 move_dialog.move_description:FR:Déplacer vers
@@ -8251,6 +8137,7 @@ email.send_file_error:AR:لا يمكن إرسال الملف %1، لم يتم إ
 ##############
 
 split_file_dialog.title:EN:Split file
+split_file_dialog.title:FR:Scinder le fichier
 split_file_dialog.title:PL:Podział pliku
 split_file_dialog.title:NL:Splits bestand
 split_file_dialog.title:AR:تقسيم الملف
@@ -8519,7 +8406,7 @@ combine_files_dialog.title:DA:Sammenflet fil
 
 
 
-combine_files_dialog.error_title:EN:Merge files error
+combine_files_dialog.error_title:EN:Combine file error
 combine_files_dialog.error_title:PL:Błąd łączenia plików
 combine_files_dialog.error_title:NL:Fout bij bestand samenvoegen
 combine_files_dialog.error_title:AR:خطأ في دمج الملفات
@@ -8541,11 +8428,11 @@ combine_files_dialog.error_title:DA:Fejl under sammenfletning af filer
 
 
 
-combine_files_dialog.merge:EN:Combine
-combine_files_dialog.merge:PL:Scal
-combine_files_dialog.merge:NL:Samenvoegen
-combine_files_dialog.merge:AR:دمج
-combine_files_dialog.merge:DA:Sammenflet
+combine_files_dialog.combine:EN:Combine
+combine_files_dialog.combine:PL:Scal
+combine_files_dialog.combine:NL:Samenvoegen
+combine_files_dialog.combine:AR:دمج
+combine_files_dialog.combine:DA:Sammenflet
 # Translation missing (New!)
 
 
@@ -14531,8 +14418,8 @@ color_chooser.title:AR:اختيار لون
 # Batch-rename dialog #
 #######################
 
-batch_rename_dialog.title:EN:Batch Rename
-batch_rename_dialog.title:FR:Renommage Multiple
+batch_rename_dialog.title:EN:Batch rename
+batch_rename_dialog.title:FR:Renommage multiple
 batch_rename_dialog.title:PL:Zmiana nazw plików
 batch_rename_dialog.title:DA:Multi omdøbning
 batch_rename_dialog.title:NL:Multi hernoemen
@@ -14852,25 +14739,6 @@ batch_rename_dialog.new_name:SL:Novo ime
 batch_rename_dialog.new_name:SV:Nytt namn
 batch_rename_dialog.new_name:UA:Нове ім'я
 batch_rename_dialog.new_name:AR:الاسم الجديد
-# Translation missing (ES, KO, RU, SK, zh_CN)
-
-batch_rename_dialog.remove:EN:Remove
-batch_rename_dialog.remove:FR:Retirer
-batch_rename_dialog.remove:PL:Usuń
-batch_rename_dialog.remove:DA:Fjern
-batch_rename_dialog.remove:NL:Verwijder
-batch_rename_dialog.remove:RO:Elimină
-batch_rename_dialog.remove:DE:Entfernen
-batch_rename_dialog.remove:HU:Mozgat
-batch_rename_dialog.remove:zh_TW:移除
-batch_rename_dialog.remove:JA:削除
-batch_rename_dialog.remove:CS:Odstranit
-batch_rename_dialog.remove:IT:Elimina
-batch_rename_dialog.remove:pt_BR:Remover
-batch_rename_dialog.remove:SL:Odstrani
-batch_rename_dialog.remove:SV:Ta bort
-batch_rename_dialog.remove:UA:Видалити
-batch_rename_dialog.remove:AR:حذف
 # Translation missing (ES, KO, RU, SK, zh_CN)
 
 # This label corresponds to a feature that is currently not used. 
@@ -15422,3 +15290,50 @@ recent_executed_files_quick_list.empty_message:DA:Ingen nyeligt kørte filer
 #delete.delete_linked_folder:DA:Slet mappe
 #delete.delete_linked_folder:UA:Видалати папку
 #delete.delete_linked_folder:AR:حذف المجلد
+
+#Unpack.label:EN:Unpack files
+#Unpack.label:FR:Décompresser fichiers
+#Unpack.label:DE:Dateien entpacken
+#Unpack.label:ES:Descomprimir ficheros
+#Unpack.label:CS:Dekomprimovat
+#Unpack.label:zh_TW:解壓縮檔案
+#Unpack.label:PL:Rozpakuj pliki
+#Unpack.label:HU:Kicsomagolás
+#Unpack.label:RU:Разархивировать файлы
+#Unpack.label:zh_CN:解压缩文件
+#Unpack.label:SL:Razširjanje datotek
+#Unpack.label:RO:Dearhivează fișiere
+#Unpack.label:IT:Decomprimi file
+#Unpack.label:KO:파일 압축해제
+#Unpack.label:pt_BR:Descompactar arquivos
+#Unpack.label:NL:Bestanden uitpakken
+#Unpack.label:SK:Dekomprimovať súbory
+#Unpack.label:JA:ファイルのパック解除
+#Unpack.label:SV:Extrahera filer
+#Unpack.label:DA:Udpak filer
+#Unpack.label:UA:Розпакувати файли
+#Unpack.label:AR:استخراج الملفات
+
+#Pack.label:EN:Pack files
+#Pack.label:FR:Compresser fichiers
+#Pack.label:DE:Dateien packen
+#Pack.label:ES:Comprimir ficheros
+#Pack.label:CS:Komprimovat
+#Pack.label:zh_TW:壓縮檔案
+#Pack.label:PL:Spakuj pliki
+#Pack.label:HU:Tömörítés
+#Pack.label:RU:Архивировать файлы
+#Pack.label:zh_CN:压缩文件
+#Pack.label:SL:Stiskanje datotek
+#Pack.label:RO:Arhivează fișiere
+#Pack.label:IT:Comprimi file
+#Pack.label:KO:파일압축
+#Pack.label:pt_BR:Compactar arquivos
+#Pack.label:NL:Bestanden inpakken
+#Pack.label:SK:Skomprimovať súbory
+#Pack.label:JA:ファイルのパック
+#Pack.label:SV:Komprimera filer
+#Pack.label:DA:Komprimer filer
+#Pack.label:UA:Стиснути файли
+#Pack.label:AR:أرشفة الملفات
+

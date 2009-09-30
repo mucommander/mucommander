@@ -25,6 +25,8 @@ import com.mucommander.file.util.PathUtils;
 import com.mucommander.job.MoveJob;
 import com.mucommander.job.TransferFileJob;
 import com.mucommander.text.Translator;
+import com.mucommander.ui.action.ActionProperties;
+import com.mucommander.ui.action.impl.MoveAction;
 import com.mucommander.ui.main.MainFrame;
 
 
@@ -39,9 +41,9 @@ public class MoveDialog extends AbstractCopyDialog {
 
     public MoveDialog(MainFrame mainFrame, FileSet files) {
         super(mainFrame, files,
-                Translator.get("move_dialog.move"),
+                ActionProperties.getActionLabel(MoveAction.Descriptor.ACTION_ID),
                 Translator.get("move_dialog.move_description"),
-                Translator.get("move_dialog.move"),
+                Translator.get("move"),
                 Translator.get("move_dialog.error_title"));
     }
 

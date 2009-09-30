@@ -50,7 +50,7 @@ public class CombineFilesDialog extends TransferDestinationDialog {
         super(mainFrame, files, 
         		Translator.get("combine_files_dialog.title"),
                 Translator.get("copy_dialog.destination"),
-                Translator.get("combine_files_dialog.merge"),
+                Translator.get("combine_files_dialog.combine"),
                 Translator.get("copy_dialog.error_title"));
 
         this.destFolder = destFolder;

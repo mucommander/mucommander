@@ -28,6 +28,8 @@ import com.mucommander.job.CopyJob;
 import com.mucommander.job.TransferFileJob;
 import com.mucommander.job.UnpackJob;
 import com.mucommander.text.Translator;
+import com.mucommander.ui.action.ActionProperties;
+import com.mucommander.ui.action.impl.CopyAction;
 import com.mucommander.ui.main.MainFrame;
 
 import java.util.Vector;
@@ -50,9 +52,9 @@ public class CopyDialog extends AbstractCopyDialog {
      */
     public CopyDialog(MainFrame mainFrame, FileSet files) {
         super(mainFrame, files,
-              Translator.get("copy_dialog.copy"),
+              ActionProperties.getActionLabel(CopyAction.Descriptor.ACTION_ID),
               Translator.get("copy_dialog.destination"),
-              Translator.get("copy_dialog.copy"),
+              Translator.get("copy"),
               Translator.get("copy_dialog.error_title"));
     }
 

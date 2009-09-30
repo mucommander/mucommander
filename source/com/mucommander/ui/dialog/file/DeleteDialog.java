@@ -25,6 +25,7 @@ import com.mucommander.file.util.FileSet;
 import com.mucommander.job.DeleteJob;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionManager;
+import com.mucommander.ui.action.ActionProperties;
 import com.mucommander.ui.action.impl.DeleteAction;
 import com.mucommander.ui.action.impl.PermanentDeleteAction;
 import com.mucommander.ui.dialog.DialogToolkit;
@@ -70,7 +71,7 @@ public class DeleteDialog extends JobDialog implements ItemListener, ActionListe
 
 
     public DeleteDialog(MainFrame mainFrame, FileSet files, boolean deletePermanently) {
-        super(mainFrame, Translator.get("delete"), files);
+        super(mainFrame, ActionProperties.getActionLabel(DeleteAction.Descriptor.ACTION_ID), files);
 
         this.mainFrame = mainFrame;
 
