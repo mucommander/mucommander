@@ -157,7 +157,7 @@ public class CombineFilesJob extends AbstractCopyJob {
 	                    new int[]{OK_ACTION}
 	                    );
 			} else {
-	            showErrorDialog(Translator.get("combine_files_dialog.title"),
+	            showErrorDialog(Translator.get("combine_files_dialog.error_title"),
 	                    Translator.get("combine_files_job.crc_ok"),
 	                    new String[]{OK_TEXT},
 	                    new int[]{OK_ACTION}

@@ -27,6 +27,8 @@ import com.mucommander.file.util.PathUtils.ResolvedDestination;
 import com.mucommander.job.CombineFilesJob;
 import com.mucommander.job.TransferFileJob;
 import com.mucommander.text.Translator;
+import com.mucommander.ui.action.ActionProperties;
+import com.mucommander.ui.action.impl.CombineFilesAction;
 import com.mucommander.ui.main.MainFrame;
 
 import java.io.IOException;
@@ -48,10 +50,10 @@ public class CombineFilesDialog extends TransferDestinationDialog {
      */
     public CombineFilesDialog(MainFrame mainFrame, FileSet files, AbstractFile destFolder) {
         super(mainFrame, files, 
-        		Translator.get("combine_files_dialog.title"),
+        		ActionProperties.getActionLabel(CombineFilesAction.Descriptor.ACTION_ID),
                 Translator.get("copy_dialog.destination"),
-                Translator.get("combine_files_dialog.combine"),
-                Translator.get("copy_dialog.error_title"));
+                Translator.get("combine"),
+                Translator.get("combine_files_dialog.error_title"));
 
         this.destFolder = destFolder;
     }

@@ -24,6 +24,8 @@ import com.mucommander.file.util.PathUtils;
 import com.mucommander.job.SplitFileJob;
 import com.mucommander.text.SizeFormat;
 import com.mucommander.text.Translator;
+import com.mucommander.ui.action.ActionProperties;
+import com.mucommander.ui.action.impl.SplitFileAction;
 import com.mucommander.ui.combobox.ComboBoxListener;
 import com.mucommander.ui.combobox.EditableComboBox;
 import com.mucommander.ui.combobox.SaneComboBox;
@@ -89,8 +91,6 @@ public class SplitFileDialog extends JobDialog implements ActionListener {
 
 	protected boolean edtChange;
 
-    
- 
 
     /**
      * Creates a new split file dialog.
@@ -99,7 +99,7 @@ public class SplitFileDialog extends JobDialog implements ActionListener {
      * @param destFolder default destination folder 
      */
     public SplitFileDialog(MainFrame mainFrame, AbstractFile file, AbstractFile destFolder) {
-        super(mainFrame, Translator.get("split_file_dialog.title"), new FileSet());
+        super(mainFrame, ActionProperties.getActionLabel(SplitFileAction.Descriptor.ACTION_ID), new FileSet());
         this.file = file;
         this.destFolder = destFolder;
         initialize();
@@ -181,7 +181,7 @@ public class SplitFileDialog extends JobDialog implements ActionListener {
      * Creates bottom panel with buttons.
      */
     private JPanel getPnlButtons() {
-        btnSplit = new JButton(Translator.get("split_file_dialog.split"));
+        btnSplit = new JButton(Translator.get("split"));
         btnClose = new JButton(Translator.get("cancel"));
         return DialogToolkit.createOKCancelPanel(btnSplit, btnClose, getRootPane(), this);
     }
@@ -202,14 +202,14 @@ public class SplitFileDialog extends JobDialog implements ActionListener {
         // The path entered doesn't correspond to any existing folder
         if (resolvedDest==null || (files.size()>1 && 
         		resolvedDest.getDestinationType()!=PathUtils.ResolvedDestination.EXISTING_FOLDER)) {
-            showErrorDialog(Translator.get("invalid_path", destPath), Translator.get("split_file_dialog.title"));
+            showErrorDialog(Translator.get("invalid_path", destPath), Translator.get("split_file_dialog.error_title"));
             return;
         }
 
         long parts = getParts();
         if (parts > MAX_PARTS) {
             showErrorDialog(Translator.get("split_file_dialog.max_parts", 
-            		Integer.toString(MAX_PARTS)), Translator.get("split_file_dialog.title"));
+            		Integer.toString(MAX_PARTS)), Translator.get("split_file_dialog.error_title"));
         	return;
         }
         ProgressDialog progressDialog = new ProgressDialog(mainFrame,

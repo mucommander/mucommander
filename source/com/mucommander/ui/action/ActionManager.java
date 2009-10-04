@@ -83,7 +83,7 @@ public class ActionManager {
     	registerAction(new EmailAction.Descriptor(),          			    new EmailAction.Factory());
     	registerAction(new EmptyTrashAction.Descriptor(),           	    new EmptyTrashAction.Factory());
     	registerAction(new ExploreBookmarksAction.Descriptor(),             new ExploreBookmarksAction.Factory());
-    	registerAction(new GarbageCollectAction.Descriptor(),               new GarbageCollectAction.Factory());
+//    	registerAction(new GarbageCollectAction.Descriptor(),               new GarbageCollectAction.Factory());
     	registerAction(new GoBackAction.Descriptor(),                       new GoBackAction.Factory());
     	registerAction(new GoForwardAction.Descriptor(),                    new GoForwardAction.Factory());
     	registerAction(new GoToDocumentationAction.Descriptor(),            new GoToDocumentationAction.Factory());

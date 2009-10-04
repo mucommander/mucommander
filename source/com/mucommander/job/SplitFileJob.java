@@ -18,12 +18,6 @@
 
 package com.mucommander.job;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-
 import com.mucommander.AppLogger;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.DummyFile;
@@ -35,9 +29,17 @@ import com.mucommander.io.ChecksumInputStream;
 import com.mucommander.io.FileTransferException;
 import com.mucommander.io.StreamUtils;
 import com.mucommander.text.Translator;
+import com.mucommander.ui.action.ActionProperties;
+import com.mucommander.ui.action.impl.SplitFileAction;
 import com.mucommander.ui.dialog.file.FileCollisionDialog;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 /**
  * This job split the file into parts with given size.
@@ -51,7 +53,7 @@ public class SplitFileJob extends AbstractCopyJob {
 	private AbstractFile destFolder;
 	private long sizeLeft;
 	private boolean recalculateCRC = false;
-		
+
 
 	/**
 	 * A class for holding file name and size of one part.
@@ -172,7 +174,7 @@ public class SplitFileJob extends AbstractCopyJob {
 					out.close();
 					out = null;
 					sizeLeft -= e.getBytesWritten();
-					showErrorDialog(Translator.get("split_file_dialog.title"), 
+					showErrorDialog(ActionProperties.getActionLabel(SplitFileAction.Descriptor.ACTION_ID),
 							Translator.get("split_file_dialog.insert_new_media"), 
 							new String[]{OK_TEXT, CANCEL_TEXT}, 
 							new int[]{OK_ACTION, CANCEL_ACTION});

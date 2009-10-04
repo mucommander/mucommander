@@ -740,6 +740,53 @@ download:DA:Hent
 download:UA:Завантажити
 download:AR:تنزيل
 
+# Split as in split a file into several parts.
+split:EN:Split
+split:FR:Scinder
+split:PL:Podziel
+split:NL:Splits
+split:AR:تفسيم
+split:DA:Del
+# Translation missing (New!)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Combine as in combine several files into a single one
+combine:EN:Combine
+combine:FR:Aggréger
+combine:PL:Scal
+combine:NL:Samenvoegen
+combine:AR:دمج
+combine:DA:Sammenflet
+# Translation missing (New!)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 browse:EN:Browse
 browse:FR:Explorer
 browse:DE:Browsen
@@ -2537,7 +2584,24 @@ AddBookmark.tooltip:DA:Tilføj den nuværende mappe til bogmærker
 AddBookmark.tooltip:UA:Додати поточну папку до закладок
 AddBookmark.tooltip:AR:إضافة المجلد الحالي إلى قائمة العلامات
 
-BatchRename.label:EN:$[batch_rename_dialog.title]
+BatchRename.label:EN:Batch rename
+BatchRename.label:FR:Renommage multiple
+BatchRename.label:PL:Zmiana nazw plików
+BatchRename.label:DA:Multi omdøbning
+BatchRename.label:NL:Multi hernoemen
+BatchRename.label:RO:Redenumire multiplă
+BatchRename.label:DE:Mehrfach Umbenennung
+BatchRename.label:HU:Csoportos átnevezés
+BatchRename.label:zh_TW:批次改名
+BatchRename.label:JA:名前の一括変更
+BatchRename.label:CS:Dávkové přejmenování
+BatchRename.label:IT:Multi rinomina
+BatchRename.label:pt_BR:Multipla renomeação
+BatchRename.label:SL:Preimenuj sveženj
+BatchRename.label:SV:Döp om filer
+BatchRename.label:UA:Масове перейменування
+BatchRename.label:AR:إعادة تسمية بالملفات الدفعية
+# Translation missing (ES, KO, RU, SK, zh_CN)
 
 EditBookmarks.label:EN:Edit bookmarks
 EditBookmarks.label:FR:Éditer les favoris
@@ -2780,8 +2844,8 @@ ConnectToServer.label:HU:Csatlakozás a szerverhez
 ConnectToServer.label:RU:Соединение с сервером
 ConnectToServer.label:zh_CN:连接到服务器
 ConnectToServer.label:SL:Povezava s strežnikom
-ConnectToServer.label:RO:Conectare la un server...
-ConnectToServer.label:IT:Connetti al server...
+ConnectToServer.label:RO:Conectare la un server
+ConnectToServer.label:IT:Connetti al server
 ConnectToServer.label:KO:서버에 접속
 ConnectToServer.label:pt_BR:Conectar ao servidor
 ConnectToServer.label:NL:Met server verbinden
@@ -2839,7 +2903,7 @@ View.label:DA:Vis
 View.label:UA:Переглянути
 View.label:AR:عرض
 
-# Internal viewer
+# View with the internal viewer
 InternalView.label:EN:View (internal)
 InternalView.label:FR:Voir (interne)
 InternalView.label:NL:Bekijken (intern)
@@ -2887,7 +2951,7 @@ View.tooltip:AR:عرض الملف المحدد
 # User-configurable editor
 Edit.label:EN:$[edit]
 
-# Internal editor
+# Edit with the internal editor
 InternalEdit.label:EN:Edit (internal)
 InternalEdit.label:FR:Editer (interne)
 InternalEdit.label:NL:Bewerken (intern)
@@ -3396,7 +3460,7 @@ PasteClipboardFiles.label:DA:Indsæt fil(er)
 PasteClipboardFiles.label:UA:Вставити файл(и)
 PasteClipboardFiles.label:AR:إلصاق الملفـ(ات)
 
-Email.label:EN:Email files
+Email.label:EN:Send by email
 Email.label:FR:Envoyer par email
 Email.label:DE:Dateien mailen
 Email.label:ES:Enviar por email
@@ -3407,7 +3471,7 @@ Email.label:HU:Küldés e-mailben
 Email.label:RU:Отправить файлы по Email
 Email.label:zh_CN:邮寄文件
 Email.label:SL:Pošiljanje prek e-pošte
-Email.label:RO:Trimite prin email...
+Email.label:RO:Trimite prin email
 Email.label:IT:Invia i file via eMail
 Email.label:KO:메일로 보내기
 Email.label:pt_BR:Enviar por email
@@ -3834,7 +3898,7 @@ MarkGroup.label:HU:Fájl(ok) kijelölése
 MarkGroup.label:RU:Выделить файлы
 MarkGroup.label:zh_CN:标记文件
 MarkGroup.label:SL:Označi datoteke
-MarkGroup.label:RO:Selectează fișiere...
+MarkGroup.label:RO:Selectează fișiere
 MarkGroup.label:IT:Seleziona file
 MarkGroup.label:KO:파일 선택
 MarkGroup.label:pt_BR:Marcar arquivos
@@ -3880,7 +3944,7 @@ UnmarkGroup.label:HU:Kijelölés megszüntetése
 UnmarkGroup.label:RU:Снять выделение с файлов
 UnmarkGroup.label:zh_CN:取消标记
 UnmarkGroup.label:SL:Odznači datoteke
-UnmarkGroup.label:RO:Deselectează fișiere...
+UnmarkGroup.label:RO:Deselectează fișiere
 UnmarkGroup.label:IT:Deseleziona file
 UnmarkGroup.label:KO:파일 선택 해제
 UnmarkGroup.label:pt_BR:Desmarcar arquivos
@@ -4675,7 +4739,7 @@ ShowPreferences.label:HU:Beállítások
 ShowPreferences.label:RU:Настройки
 ShowPreferences.label:zh_CN:偏好
 ShowPreferences.label:SL:Nastavitve
-ShowPreferences.label:RO:Preferințe...
+ShowPreferences.label:RO:Preferințe
 ShowPreferences.label:IT:Preferenze
 ShowPreferences.label:KO:환경설정
 ShowPreferences.label:pt_BR:Preferências
@@ -5825,12 +5889,10 @@ ShowRecentExecutedFilesQL.label:AR:آخر الملفات تشغيلاً
 ShowRecentExecutedFilesQL.label:DA:Nyeligt kørte filer
 # Translation missing (ES, KO, RU, SK, zh_CN)
 
-SplitFile.label:EN:Split file
-SplitFile.label:FR:Scinder le fichier
-SplitFile.label:PL:Podziel plik
-SplitFile.label:NL:Splits bestand
-SplitFile.label:AR:تقسيم الملف
-SplitFile.label:DA:Del fil
+SplitFile.label:EN:$[split]
+
+SplitFile.tooltip:EN:Split a file into multiple parts
+SplitFile.tooltip:FR:Scinder un fichier en plusieurs parties
 # Translation missing (New!)
 
 
@@ -5846,16 +5908,11 @@ SplitFile.label:DA:Del fil
 
 
 
+CombineFiles.label:EN:$[combine]
 
-
-CombineFiles.label:EN:Combine files
-CombineFiles.label:FR:Aggréger les fichiers
-CombineFiles.label:PL:Scalaj pliki
-CombineFiles.label:NL:Voeg bestanden samen
-CombineFiles.label:AR:دمع الملفات
-CombineFiles.label:DA:Sammenflet fil
+CombineFiles.tooltip:EN:Combine split file parts to recreate the original file
+CombineFiles.tooltip:FR:Aggréger des fichiers scindés pour recréer le fichier original
 # Translation missing (New!)
-
 
 
 
@@ -6487,7 +6544,7 @@ command_bar_dialog.help:DA:Træk knapper for at tilpasse kommandolinien
 #########
 
 table.folder_access_error_title:EN:Folder access error
-table.folder_access_error_title:FR:Folder access error
+table.folder_access_error_title:FR:Erreur d'accès au répertoire
 table.folder_access_error_title:DE:Fehler beim Ordnerzugriff
 table.folder_access_error_title:ES:Error al acceder al directorio
 table.folder_access_error_title:CS:Chyba při přístupu k složce
@@ -7763,29 +7820,6 @@ delete.deleting_file:AR:حذف %1
 # Email #
 #########
 
-email_dialog.title:EN:Email files
-email_dialog.title:FR:Envoyer par email
-email_dialog.title:DE:Dateien mailen
-email_dialog.title:ES:Enviar por correo
-email_dialog.title:CS:Odeslat e-mailem
-email_dialog.title:zh_TW:郵寄檔案
-email_dialog.title:PL:Wyślij pliki pocztą e-mail
-email_dialog.title:HU:Fájlküldés e-mailben
-email_dialog.title:RU:Отправка файлов по Email
-email_dialog.title:zh_CN:Email文件
-email_dialog.title:SL:Pošlji prek e-pošte
-email_dialog.title:RO:Trimite fișierele prin email
-email_dialog.title:IT:Spedisci file per eMail
-email_dialog.title:KO:이메일 보내기
-email_dialog.title:pt_BR:Enviar arquivos por email
-email_dialog.title:NL:Verstuur bestanden per email
-email_dialog.title:SK:Poslať súbory e-mailom
-email_dialog.title:JA:ファイルの電子メール
-email_dialog.title:SV:Mejla filer
-email_dialog.title:DA:E-mail filer
-email_dialog.title:UA:Надіслати файли по email
-email_dialog.title:AR:أرسل الملفات بالبريد
-
 email_dialog.prefs_not_set_title:EN:Mail not configured
 email_dialog.prefs_not_set_title:FR:Paramètres absents
 email_dialog.prefs_not_set_title:DE:eMail nicht konfiguriert
@@ -8136,30 +8170,8 @@ email.send_file_error:AR:لا يمكن إرسال الملف %1، لم يتم إ
 # Split file #
 ##############
 
-split_file_dialog.title:EN:Split file
-split_file_dialog.title:FR:Scinder le fichier
-split_file_dialog.title:PL:Podział pliku
-split_file_dialog.title:NL:Splits bestand
-split_file_dialog.title:AR:تقسيم الملف
-split_file_dialog.title:DA:Del fil
-# Translation missing (New!)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 split_file_dialog.error_title:EN:Split file error
+split_file_dialog.error_title:FR:Erreur de scindage
 split_file_dialog.error_title:PL:Błąd podziału pliku
 split_file_dialog.error_title:NL:Fout bij bestandsplitsen
 split_file_dialog.error_title:AR:خطأ في تقسيم الملف
@@ -8182,6 +8194,7 @@ split_file_dialog.error_title:DA:Fejl under deling af fil
 
 
 split_file_dialog.file_to_split:EN:File to split
+split_file_dialog.file_to_split:FR:Fichier à scinder
 split_file_dialog.file_to_split:PL:Plik do podziału
 split_file_dialog.file_to_split:NL:Te splitsen bestand
 split_file_dialog.file_to_split:AR:تقسيم الملف
@@ -8204,6 +8217,7 @@ split_file_dialog.file_to_split:DA:Fil som skal deles
 
 
 split_file_dialog.target_directory:EN:Target directory
+split_file_dialog.target_directory:FR:Répertoire cible
 split_file_dialog.target_directory:PL:Katalog docelowy
 split_file_dialog.target_directory:NL:Doelmap
 split_file_dialog.target_directory:AR:الدليل الهدف
@@ -8225,7 +8239,8 @@ split_file_dialog.target_directory:DA:Destinations mappe
 
 
 
-split_file_dialog.part_size:EN:Part size
+split_file_dialog.part_size:EN:Size of one part
+split_file_dialog.part_size:FR:Taille d'une partie
 split_file_dialog.part_size:PL:Wielkość jednej części
 split_file_dialog.part_size:NL:Grootte van de stukken
 split_file_dialog.part_size:AR:حجم الجزء الواحد
@@ -8248,6 +8263,7 @@ split_file_dialog.part_size:DA:Størrelse per del
 
 
 split_file_dialog.parts:EN:Number of parts
+split_file_dialog.parts:FR:Nombre de parties
 split_file_dialog.parts:PL:Liczba części
 split_file_dialog.parts:NL:Hoeveelheid stukken
 split_file_dialog.parts:AR:عدد الأجزاء
@@ -8270,6 +8286,7 @@ split_file_dialog.parts:DA:Antal dele
 
 
 split_file_dialog.generate_CRC:EN:Generate CRC file
+split_file_dialog.generate_CRC:FR:Générer un fichier CRC
 split_file_dialog.generate_CRC:PL:Wygeneruj plik CRC
 split_file_dialog.generate_CRC:NL:Creëer CRC bestand
 split_file_dialog.generate_CRC:AR:توليد ملف CRC
@@ -8291,29 +8308,8 @@ split_file_dialog.generate_CRC:DA:Generer CRC fil
 
 
 
-split_file_dialog.split:EN:Split
-split_file_dialog.split:PL:Podziel
-split_file_dialog.split:NL:Splits
-split_file_dialog.split:AR:تفسيم
-split_file_dialog.split:DA:Del
-# Translation missing (New!)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 split_file_dialog.max_parts:EN:Maximum allowed number of parts is %1
+split_file_dialog.max_parts:FR:Le nombre maximum de parties authorisé est de %1
 split_file_dialog.max_parts:PL:Maksymalna liczba części wynosi %1
 split_file_dialog.max_parts:NL:Maximum hoeveelheid delen is %1
 split_file_dialog.max_parts:AR:العدد الأكبر من الأجزاء هو %1
@@ -8336,6 +8332,7 @@ split_file_dialog.max_parts:DA:Maksimal antal dele er %1
 
 
 split_file_dialog.auto:EN:Auto
+split_file_dialog.auto:FR:Automatique
 split_file_dialog.auto:PL:Automatycznie
 split_file_dialog.auto:NL:Automatisch
 split_file_dialog.auto:AR:آلي
@@ -8358,6 +8355,7 @@ split_file_dialog.auto:DA:Automatisk
 
 
 split_file_dialog.insert_new_media:EN:Insert new media
+split_file_dialog.insert_new_media:FR:Insérer un nouveau disque
 split_file_dialog.insert_new_media:PL:Włóż kolejny dysk
 split_file_dialog.insert_new_media:NL:Nieuw medium invoeren
 split_file_dialog.insert_new_media:AR:أدخل قرص جديد
@@ -8384,29 +8382,8 @@ split_file_dialog.insert_new_media:DA:Indsæt nyt medie
 # Combine files #
 #################
 
-combine_files_dialog.title:EN:Combine file
-combine_files_dialog.title:PL:Scal plik
-combine_files_dialog.title:NL:Bestand samenvoegen
-combine_files_dialog.title:AR:دمج ملفات
-combine_files_dialog.title:DA:Sammenflet fil
-# Translation missing (New!)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 combine_files_dialog.error_title:EN:Combine file error
+combine_files_dialog.error_title:FR:Erreur d'agrégation
 combine_files_dialog.error_title:PL:Błąd łączenia plików
 combine_files_dialog.error_title:NL:Fout bij bestand samenvoegen
 combine_files_dialog.error_title:AR:خطأ في دمج الملفات
@@ -8428,29 +8405,8 @@ combine_files_dialog.error_title:DA:Fejl under sammenfletning af filer
 
 
 
-combine_files_dialog.combine:EN:Combine
-combine_files_dialog.combine:PL:Scal
-combine_files_dialog.combine:NL:Samenvoegen
-combine_files_dialog.combine:AR:دمج
-combine_files_dialog.combine:DA:Sammenflet
-# Translation missing (New!)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 combine_files_job.no_crc_file:EN:Combine succeeded. No CRC file.
+combine_files_job.no_crc_file:FR:Agrégation terminée avec succès. Pas de fichier CRC.
 combine_files_job.no_crc_file:PL:Scalanie zakończone pomyślnie. Brak pliku CRC.
 combine_files_job.no_crc_file:NL:Samenvoegen geslaagd. Geen CRC bestand.
 combine_files_job.no_crc_file:AR:نجح الدمج، لا يوجد ملف CRC.
@@ -8473,6 +8429,7 @@ combine_files_job.no_crc_file:DA:Sammenfletning fuldført. Ingen CRC fil.
 
 
 combine_files_job.crc_read_error:EN:Error while reading CRC file.
+combine_files_job.crc_read_error:FR:Erreur lors de la lecture du fichier CRC.
 combine_files_job.crc_read_error:PL:Błąd podczas odczytywania pliku CRC.
 combine_files_job.crc_read_error:NL:Fout bij lezen CRC bestand.
 combine_files_job.crc_read_error:AR:خطأ أثناء قراءة ملف CRC.
@@ -8495,6 +8452,7 @@ combine_files_job.crc_read_error:DA:Fejl under løsning af CRC fil.
 
 
 combine_files_job.crc_check_failed:EN:CRC mismatch: expected %2, found %1
+combine_files_job.crc_check_failed:FR:Échec vérification CRC (%1 au lieu de %2).
 combine_files_job.crc_check_failed:PL:Pliki CRC nie zgadzają się %1 <> %2
 combine_files_job.crc_check_failed:NL:CRC past niet: verwacht %2, gevonden %1
 combine_files_job.crc_check_failed:AR:عدم تطابق CRC: الموجود %1، المتوقع %2
@@ -8517,6 +8475,7 @@ combine_files_job.crc_check_failed:DA:CRC fejl: forventede %2 men fik %1
 
 
 combine_files_job.crc_ok:EN:Combine succeeded. CRC checksum ok.
+combine_files_job.crc_ok:FR:Agrégation terminée avec succès. Vérification CRC OK.
 combine_files_job.crc_ok:PL:Scalanie zakończone pomyślnie. Plik CRC zweryfikowany.
 combine_files_job.crc_ok:NL:Samenvoegen geslaagd. CRC controlsom ok.
 combine_files_job.crc_ok:AR:تم الدمج. نجح اختبار تحقق CRC.
@@ -14418,25 +14377,6 @@ color_chooser.title:AR:اختيار لون
 # Batch-rename dialog #
 #######################
 
-batch_rename_dialog.title:EN:Batch rename
-batch_rename_dialog.title:FR:Renommage multiple
-batch_rename_dialog.title:PL:Zmiana nazw plików
-batch_rename_dialog.title:DA:Multi omdøbning
-batch_rename_dialog.title:NL:Multi hernoemen
-batch_rename_dialog.title:RO:Redenumire multiplă
-batch_rename_dialog.title:DE:Mehrfach Umbenennung
-batch_rename_dialog.title:HU:Csoportos átnevezés
-batch_rename_dialog.title:zh_TW:批次改名
-batch_rename_dialog.title:JA:名前の一括変更
-batch_rename_dialog.title:CS:Dávkové přejmenování
-batch_rename_dialog.title:IT:Multi rinomina
-batch_rename_dialog.title:pt_BR:Multipla renomeação
-batch_rename_dialog.title:SL:Preimenuj sveženj
-batch_rename_dialog.title:SV:Döp om filer
-batch_rename_dialog.title:UA:Масове перейменування
-batch_rename_dialog.title:AR:إعادة تسمية بالملفات الدفعية
-# Translation missing (ES, KO, RU, SK, zh_CN)
-
 batch_rename_dialog.mask:EN:Rename pattern
 batch_rename_dialog.mask:FR:Modèle de renommage
 batch_rename_dialog.mask:PL:Matryca
@@ -15336,4 +15276,3 @@ recent_executed_files_quick_list.empty_message:DA:Ingen nyeligt kørte filer
 #Pack.label:DA:Komprimer filer
 #Pack.label:UA:Стиснути файли
 #Pack.label:AR:أرشفة الملفات
-
