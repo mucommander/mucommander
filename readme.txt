@@ -173,6 +173,10 @@ Improvements:
   and error details.
 - Local UNIX volumes are now resolved using /proc/mounts (dynamic) rather rather
   than /etc/fstab (static). Contributed by Kowy (ticket #227).
+- Added the Java runtime version to the 'Version information' section of the
+  'About' dialog (ticket #274).
+- 'mka', 'mkv' and 'divx' files now have proper audio/video icons. Suggested
+  by Tenzer (ticket #279).
 
 Localization:
 - Arabic (AR) translation, contributed by ChArLoK_16.
@@ -239,10 +243,6 @@ Bug fixes:
   (ticket #137).
 - Fixed a case where the application would freeze when browsing HTTP shares
   with the tree view enabled (ticket #266).
-- Added the Java runtime version to the 'Version information' section of the
-  'About' dialog (ticket #274).
-- 'mka', 'mkv' and 'divx' files now have proper audio/video icons. Suggested
-  by Tenzer (ticket #279).
 
 Known issues:
 - Some translations are not up-to-date. Refer to
