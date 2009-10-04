@@ -247,6 +247,7 @@ Bug fixes:
 Known issues:
 - Some translations are not up-to-date. Refer to
   http://trac.mucommander.com/wiki/Translations for more information.
+- Recycle Bin not working on Windows 64-bit (ticket #234).
 - RAR and SFTP support are only available under Java 1.5 or higher.
 - Executable permissions are not preserved properly for local files prior to
   Java 1.6.
