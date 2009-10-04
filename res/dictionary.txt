@@ -5893,6 +5893,7 @@ SplitFile.label:EN:$[split]
 
 SplitFile.tooltip:EN:Split a file into multiple parts
 SplitFile.tooltip:FR:Scinder un fichier en plusieurs parties
+SplitFile.tooltip:DA:Del en fil op i flere dele
 # Translation missing (New!)
 
 
@@ -5912,6 +5913,7 @@ CombineFiles.label:EN:$[combine]
 
 CombineFiles.tooltip:EN:Combine split file parts to recreate the original file
 CombineFiles.tooltip:FR:Aggréger des fichiers scindés pour recréer le fichier original
+CombineFiles.tooltip:DA:Sammenflet delte filer for at genoprette de oprindelige filer
 # Translation missing (New!)
 
 
