@@ -241,6 +241,8 @@ Bug fixes:
   with the tree view enabled (ticket #266).
 - Added the Java runtime version to the 'Version information' section of the
   'About' dialog (ticket #274).
+- 'mka', 'mkv' and 'divx' files now have proper audio/video icons. Suggested
+  by Tenzer (ticket #279).
 
 Known issues:
 - Some translations are not up-to-date. Refer to
