@@ -2395,6 +2395,7 @@ permissions.octal_notation:AR:تدوين ثماني
 
 action_categories.all:EN:All
 action_categories.all:FR:Tous
+action_categories.all:DA:Alle
 # Translation missing (New!)
 
 
