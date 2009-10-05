@@ -4913,8 +4913,8 @@ ToggleColumn.show:DA:Vis %1 kolonne
 
 
 # %1 is replaced by the column's name (Date, Size, ...).
-ToggleColumn.hide:EN:Show %1 column
-ToggleColumn.hide:FR:Afficher la colonne %1
+ToggleColumn.hide:EN:Hide %1 column
+ToggleColumn.hide:FR:Cacher la colonne %1
 ToggleColumn.hide:DA:Vis %1 kolonne
 # Translation missing (New!)
 
