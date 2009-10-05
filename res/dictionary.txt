@@ -471,6 +471,7 @@ skip_all:FR:Ignorer tous
 skip_all:NL:Alles overslaan
 skip_all:DA:Spring over alle
 skip_all:pt_BR:Ignorar tudo
+skip_all:RO:Sari peste toate
 # Translation missing (New!)
 
 
@@ -749,6 +750,7 @@ split:NL:Splits
 split:AR:تفسيم
 split:DA:Del
 split:pt_BR:Dividir
+split:RO:Împarte
 # Translation missing (New!)
 
 
@@ -773,6 +775,7 @@ combine:NL:Samenvoegen
 combine:AR:دمج
 combine:DA:Sammenflet
 combine:pt_BR:Combinar
+combine:RO:Combină
 # Translation missing (New!)
 
 
@@ -1000,6 +1003,7 @@ customize:NL:Voorkeur
 customize:AR:تخصيص
 customize:DA:Tilpas
 customize:pt_BR:Customize
+customize:RO:Personalizează
 # Translation missing (New!)
 
 
@@ -1140,6 +1144,7 @@ preferred_encodings:NL:Encodages préférés
 preferred_encodings:AR:الترميز المفضل
 preferred_encodings:DA:Foretrukket indkodning
 preferred_encodings:pt_BR:Encode preferido
+preferred_encodings:RO:Codificări preferate
 # Translation missing (New!)
 
 
@@ -1695,6 +1700,7 @@ details:EN:Details
 details:FR:Détails
 details:DA:Detaljer
 details:pt_BR:Detalhes
+details:RO:Detalii
 # Translation missing (New!)
 
 
@@ -2233,6 +2239,7 @@ startup_error:EN:An error prevented muCommander from starting.
 startup_error:FR:Une erreur a empêché muCommander de démarrer.
 startup_error:DA:En fejl forhindrede muCommander fra at starte.
 startup_error:pt_BR:Um erro impediu muCommander de iniciar.
+startup_error:RO:O eroare a prevenit muCommander să pornească.
 # Translation missing (New!)
 
 
@@ -2405,6 +2412,7 @@ action_categories.all:EN:All
 action_categories.all:FR:Tous
 action_categories.all:DA:Alle
 action_categories.all:pt_BR:Todos
+action_categories.all:RO:Toate
 # Translation missing (New!)
 
 
@@ -2919,6 +2927,7 @@ InternalView.label:FR:Voir (interne)
 InternalView.label:NL:Bekijken (intern)
 InternalView.label:DA:Vis (indbygget)
 InternalView.label:pt_BR:Ver (interno)
+InternalView.label:RO:Vizualizează (intern)
 # Translation missing (New!)
 
 
@@ -2968,6 +2977,7 @@ InternalEdit.label:FR:Editer (interne)
 InternalEdit.label:NL:Bewerken (intern)
 InternalEdit.label:DA:Rediger (indbygget)
 InternalEdit.label:pt_BR:Editar (interno)
+InternalEdit.label:RO:Editează (internal)
 # Translation missing (New!)
 
 
@@ -3240,6 +3250,7 @@ Delete.tooltip:SL:Izbriši označene datoteke z uporabo koša
 Delete.tooltip:SV:Radera markerade filer via papperskorgen när det är möjligt
 Delete.tooltip:UA:Видаляти відмічені файли у системний кошик, коли доступно
 Delete.tooltip:AR:حذف الملفات المحددة باستخدام سلة المحذوفات إن أمكن
+Delete.tooltip:RO:Șterge fișierele selectate
 # The following entries need to be updated to indicate that the system trash is used when it is available
 Delete.tooltip:ES:Elimiar los ficheros marcados
 Delete.tooltip:RU:Удаление выделенных файлов
@@ -4088,6 +4099,7 @@ MarkNextBlock.label:EN:Mark one block down
 MarkNextBlock.label:FR:Marquer un bloc vers le bas
 MarkNextBlock.label:DA:Marker en blok ned
 MarkNextBlock.label:pt_BR:Marque um próximo bloco
+MarkNextBlock.label:RO:Selectează un bloc în jos
 # Translation missing (New!)
 
 
@@ -4109,6 +4121,7 @@ MarkPreviousBlock.label:EN:Mark one block up
 MarkPreviousBlock.label:FR:Marquer un bloc vers le haut
 MarkPreviousBlock.label:DA:Marker en blok op
 MarkPreviousBlock.label:pt_BR:Marque um bloco anterior
+MarkPreviousBlock.label:RO:Selectează un bloc în sus
 # Translation missing (New!)
 
 
@@ -4130,6 +4143,7 @@ MarkNextRow.label:EN:Mark one row down
 MarkNextRow.label:FR:Marquer une ligne vers le bas
 MarkNextRow.label:DA:Marker en række ned
 MarkNextRow.label:pt_BR:Marque uma próxima linha
+MarkNextRow.label:RO:Selectează un rând în jos
 # Translation missing (New!)
 
 
@@ -4151,6 +4165,7 @@ MarkPreviousRow.label:EN:Mark one row up
 MarkPreviousRow.label:FR:Marquer une ligne vers le haut
 MarkPreviousRow.label:DA:Marker en række op
 MarkPreviousRow.label:pt_BR:Marque uma linha anterior
+MarkPreviousRow.label:RO:Selectează un rând în sus
 # Translation missing (New!)
 
 
@@ -4908,11 +4923,10 @@ Stop.label:AR:إيقاف تغيير الملفات
 # %1 is replaced by the column's name (Date, Size, ...).
 ToggleColumn.show:EN:Show %1 column
 ToggleColumn.show:FR:Afficher la colonne %1
-ToggleColumn.show:pt_BR:Exibir coluna %1
-ToggleColumn.hide:DA:Skjul %1 kolonne
-ToggleColumn.hide:pt_BR:Esconder coluna %1
+ToggleColumn.show:DA:Vis %1 kolonne
 ToggleColumn.show:NL:Toon kolom %1
 ToggleColumn.show:pt_BR:Exibir coluna %1
+ToggleColumn.show:RO:Afișează coloana cu %1
 # Translation missing (New!)
 
 
@@ -4933,8 +4947,9 @@ ToggleColumn.show:pt_BR:Exibir coluna %1
 # %1 is replaced by the column's name (Date, Size, ...).
 ToggleColumn.hide:EN:Hide %1 column
 ToggleColumn.hide:FR:Cacher la colonne %1
-ToggleColumn.hide:DA:Vis %1 kolonne
+ToggleColumn.hide:DA:Skjul %1 kolonne
 ToggleColumn.hide:pt_BR:Esconder coluna %1
+ToggleColumn.hide:RO:Ascunde coloana cu %1
 # Translation missing (New!)
 
 
@@ -5051,6 +5066,7 @@ CustomizeCommandBar.label:FR:Personnaliser la barre de commande
 CustomizeCommandBar.label:AR:تخصيص
 CustomizeCommandBar.label:DA:Tilpas kommandolinien
 CustomizeCommandBar.label:pt_BR:Customizar barra de comando
+CustomizeCommandBar.label:RO:Personalizează bara de comande
 # Translation missing (New!)
 
 
@@ -5336,6 +5352,7 @@ SelectNextBlock.label:EN:Jump down one block
 SelectNextBlock.label:FR:Descendre d'un bloc
 SelectNextBlock.label:DA:Spring en blok ned
 SelectNextBlock.label:pt_BR:Pular para próximo bloco
+SelectNextBlock.label:RO:Coboară un bloc
 # Translation missing (New!)
 
 
@@ -5357,6 +5374,7 @@ SelectPreviousBlock.label:EN:Jump up one block
 SelectPreviousBlock.label:FR:Remonter d'un bloc
 SelectPreviousBlock.label:DA:Spring en blok op
 SelectPreviousBlock.label:pt_BR:Pular para bloco anterior
+SelectPreviousBlock.label:RO:Urcă un bloc
 # Translation missing (New!)
 
 
@@ -5378,6 +5396,7 @@ SelectNextPage.label:EN:Jump down one page
 SelectNextPage.label:FR:Descendre d'une page
 SelectNextPage.label:DA:Spring en side ned
 SelectNextPage.label:pt_BR:Pular para próxima página
+SelectNextPage.label:RO:Coboară o pagină
 # Translation missing (New!)
 
 
@@ -5399,6 +5418,7 @@ SelectPreviousPage.label:EN:Jump up one page
 SelectPreviousPage.label:FR:Remonter d'une page
 SelectPreviousPage.label:DA:Spring en side op
 SelectPreviousPage.label:pt_BR:Pular para página anterior
+SelectPreviousPage.label:RO:Urcă o pagină
 # Translation missing (New!)
 
 
@@ -5420,6 +5440,7 @@ SelectNextRow.label:EN:Jump down one row
 SelectNextRow.label:FR:Descendre d'une ligne
 SelectNextRow.label:DA:Spring en række ned
 SelectNextRow.label:pt_BR:Pular para próxima linha
+SelectNextRow.label:RO:Coboară un rând
 # Translation missing (New!)
 
 
@@ -5441,6 +5462,7 @@ SelectPreviousRow.label:EN:Jump up one row
 SelectPreviousRow.label:FR:Remonter d'une ligne
 SelectPreviousRow.label:DA:Spring en række op
 SelectPreviousRow.label:pt_BR:Pular para linha anterior
+SelectPreviousRow.label:RO:Urcă un rând
 # Translation missing (New!)
 
 
@@ -5922,6 +5944,7 @@ SplitFile.tooltip:EN:Split a file into multiple parts
 SplitFile.tooltip:FR:Scinder un fichier en plusieurs parties
 SplitFile.tooltip:DA:Del en fil op i flere dele
 SplitFile.tooltip:pt_BR:Dividir um arquivo em várias partes
+SplitFile.tooltip:RO:Împarte un fișier în mai multe bucăți
 # Translation missing (New!)
 
 
@@ -5943,6 +5966,7 @@ CombineFiles.tooltip:EN:Combine split file parts to recreate the original file
 CombineFiles.tooltip:FR:Aggréger des fichiers scindés pour recréer le fichier original
 CombineFiles.tooltip:DA:Sammenflet delte filer for at genoprette de oprindelige filer
 CombineFiles.tooltip:pt_BR:Recriar arquivo dividido em várias partes
+CombineFiles.tooltip:RO:Combină un fișier împărțit în bucăți pentru a recrea originalul
 # Translation missing (New!)
 
 
@@ -5964,6 +5988,7 @@ ShowDebugConsole.label:FR:Console de débug
 ShowDebugConsole.label:NL:Debug console
 ShowDebugConsole.label:DA:Fejlsøgningskonsol
 ShowDebugConsole.label:pt_BR:Console de debug
+ShowDebugConsole.label:RO:Consolă pentru debug
 # Translation missing (New!)
 
 
@@ -5985,6 +6010,7 @@ FocusPrevious.label:EN:Focus previous component
 FocusPrevious.label:FR:Sélectionner le précédent composant
 FocusPrevious.label:DA:Fokuser på tidligere komponent
 FocusPrevious.label:pt_BR:Focar componente anterior
+FocusPrevious.label:RO:Selectează componenta precedentă
 # Translation missing (New!)
 
 
@@ -6007,6 +6033,7 @@ FocusNext.label:EN:Focus next component
 FocusNext.label:FR:Sélectionner le prochain composant
 FocusNext.label:DA:Fokuser på næste komponent
 FocusNext.label:pt_BR:Focar próximo componente
+FocusNext.label:RO:Selectează component următoare
 # Translation missing (New!)
 
 
@@ -6393,6 +6420,7 @@ shortcuts_panel.title:EN:Shortcuts
 shortcuts_panel.title:FR:Raccourcis
 shortcuts_panel.title:DA:Genveje
 shortcuts_panel.title:pt_BR:Atalhos
+shortcuts_panel.title:RO:Scurtături
 # Translation missing (New!)
 
 
@@ -6414,6 +6442,7 @@ shortcuts_panel.restore_defaults:EN:Restore defaults
 shortcuts_panel.restore_defaults:FR:Réinitialiser
 shortcuts_panel.restore_defaults:DA:Standard indstillinger
 shortcuts_panel.restore_defaults:pt_BR:Restaurar
+shortcuts_panel.restore_defaults:RO:Revine la configurația inițială
 # Translation missing (New!)
 
 
@@ -6435,6 +6464,7 @@ shortcuts_panel.show:EN:Show
 shortcuts_panel.show:FR:Afficher
 shortcuts_panel.show:DA:Vis
 shortcuts_panel.show:pt_BR:Exibir
+shortcuts_panel.show:RO:Arată
 # Translation missing (New!)
 
 
@@ -6456,6 +6486,7 @@ shortcuts_panel.default_message:EN:Press Enter or double-click the shortcut you 
 shortcuts_panel.default_message:FR:Appuyez sur Entrée ou double-cliquez sur le raccourci à éditer 
 shortcuts_panel.default_message:DA:Tryk Enter/dobbelt klik på den genvej du gerne vil redigere
 shortcuts_panel.default_message:pt_BR:Aperte Enter ou dê dois cliques sobre o atalho que você deseja editar
+shortcuts_panel.default_message:RO:Apăsați Enter sau dați dublu-clic pe scurtătura pe care doriți să o editați
 # Translation missing (New!)
 
 
@@ -6477,6 +6508,7 @@ shortcuts_table.action_description:EN:Action description
 shortcuts_table.action_description:FR:Description de l'action
 shortcuts_table.action_description:DA:Handlingsbeskrivelse
 shortcuts_table.action_description:pt_BR:Descrição da ação
+shortcuts_table.action_description:RO:Descrierea acțiunii
 # Translation missing (New!)
 
 
@@ -6498,6 +6530,7 @@ shortcuts_table.shortcut:EN:Shortcut
 shortcuts_table.shortcut:FR:Raccourci
 shortcuts_table.shortcut:DA:Genvej
 shortcuts_table.shortcut:pt_BR:Atalho
+shortcuts_table.shortcut:RO:Scurtătură
 # Translation missing (New!)
 
 
@@ -6519,6 +6552,7 @@ shortcuts_table.alternate_shortcut:EN:Alternate Shortcut
 shortcuts_table.alternate_shortcut:FR:Raccourci secondaire
 shortcuts_table.alternate_shortcut:DA:Alternativ genvej
 shortcuts_table.alternate_shortcut:pt_BR:Atalho secundário
+shortcuts_table.alternate_shortcut:RO:Scurtătură alternativă
 # Translation missing (New!)
 
 
@@ -6540,6 +6574,7 @@ shortcuts_table.type_in_a_shortcut:EN:Type in a shortcut
 shortcuts_table.type_in_a_shortcut:FR:Saisissez le raccourci
 shortcuts_table.type_in_a_shortcut:DA:Indtast en genvej
 shortcuts_table.type_in_a_shortcut:pt_BR:Digite um atalho
+shortcuts_table.type_in_a_shortcut:RO:Tipul de scurtătură
 # Translation missing (New!)
 
 
@@ -6565,6 +6600,7 @@ command_bar_dialog.help:EN:Drag buttons to customize the command bar
 command_bar_dialog.help:FR:Déplacez les boutons pour personnaliser la barre de commande
 command_bar_dialog.help:DA:Træk knapper for at tilpasse kommandolinien
 command_bar_dialog.help:pt_BR:Arraste os butões para customizar a barra de comandos
+command_bar_dialog.help:RO:Trageți butoane pentru a personaliza bara de comenzi
 # Translation missing (New!)
 
 
@@ -7004,6 +7040,7 @@ destination_dialog.skip_errors:FR:Ignorer les erreurs
 destination_dialog.skip_errors:NL:Negeer fouten
 destination_dialog.skip_errors:DA:Ignorer fejl
 destination_dialog.skip_errors:pt_BR:Ignore erros
+destination_dialog.skip_errors:RO:Ignoră erorile
 # Translation missing (New!)
 
 
@@ -7774,6 +7811,7 @@ delete_dialog.move_to_trash.failed:FR:Un ou plusieurs fichiers n'ont pu être d�
 delete_dialog.move_to_trash.failed:NL:Een of meer bestanden konden niet naar de prullenbak verplaatst worden.
 delete_dialog.move_to_trash.failed:DA:En eller flere filer kunne ikke flyttes til papirkurven.
 delete_dialog.move_to_trash.failed:pt_BR:Um ou mais arquivos não puderam ser movidos para a lixeira.
+delete_dialog.move_to_trash.failed:RO:Unul sau mai multe fișiere nu au putut fi mutate la gunoi.
 # Translation missing (New!)
 
 
@@ -8222,6 +8260,7 @@ split_file_dialog.error_title:NL:Fout bij bestandsplitsen
 split_file_dialog.error_title:AR:خطأ في تقسيم الملف
 split_file_dialog.error_title:DA:Fejl under deling af fil
 split_file_dialog.error_title:pt_BR:Erro ao dividir arquivo
+split_file_dialog.error_title:RO:Eroare la împărțirea fișierul
 # Translation missing (New!)
 
 
@@ -8246,6 +8285,7 @@ split_file_dialog.file_to_split:NL:Te splitsen bestand
 split_file_dialog.file_to_split:AR:تقسيم الملف
 split_file_dialog.file_to_split:DA:Fil som skal deles
 split_file_dialog.file_to_split:pt_BR:Arquivo a ser dividido
+split_file_dialog.file_to_split:RO:Fișierul care trebuie împărțit
 # Translation missing (New!)
 
 
@@ -8270,6 +8310,7 @@ split_file_dialog.target_directory:NL:Doelmap
 split_file_dialog.target_directory:AR:الدليل الهدف
 split_file_dialog.target_directory:DA:Destinations mappe
 split_file_dialog.target_directory:pt_BR:Diretório de destino
+split_file_dialog.target_directory:RO:Directorul destinație
 # Translation missing (New!)
 
 
@@ -8294,6 +8335,7 @@ split_file_dialog.part_size:NL:Grootte van de stukken
 split_file_dialog.part_size:AR:حجم الجزء الواحد
 split_file_dialog.part_size:DA:Størrelse per del
 split_file_dialog.part_size:pt_BR:Tamanho de uma parte
+split_file_dialog.part_size:RO:Dimensiunea fiecărei părți
 # Translation missing (New!)
 
 
@@ -8318,6 +8360,7 @@ split_file_dialog.parts:NL:Hoeveelheid stukken
 split_file_dialog.parts:AR:عدد الأجزاء
 split_file_dialog.parts:DA:Antal dele
 split_file_dialog.parts:pt_BR:Número de partes
+split_file_dialog.parts:RO:Numărul de părți
 # Translation missing (New!)
 
 
@@ -8342,6 +8385,7 @@ split_file_dialog.generate_CRC:NL:Creëer CRC bestand
 split_file_dialog.generate_CRC:AR:توليد ملف CRC
 split_file_dialog.generate_CRC:DA:Generer CRC fil
 split_file_dialog.generate_CRC:pt_BR:Gerar arquivo CRC
+split_file_dialog.generate_CRC:RO:Generează sumă de control
 # Translation missing (New!)
 
 
@@ -8366,6 +8410,7 @@ split_file_dialog.max_parts:NL:Maximum hoeveelheid delen is %1
 split_file_dialog.max_parts:AR:العدد الأكبر من الأجزاء هو %1
 split_file_dialog.max_parts:DA:Maksimal antal dele er %1
 split_file_dialog.max_parts:pt_BR:Número máximo de partes permitidas é %1
+split_file_dialog.max_parts:RO:Numărul maxim de părți este %1
 # Translation missing (New!)
 
 
@@ -8390,6 +8435,7 @@ split_file_dialog.auto:NL:Automatisch
 split_file_dialog.auto:AR:آلي
 split_file_dialog.auto:DA:Automatisk
 split_file_dialog.auto:pt_BR:Automático
+split_file_dialog.auto:RO:Automatic
 # Translation missing (New!)
 
 
@@ -8414,6 +8460,7 @@ split_file_dialog.insert_new_media:NL:Nieuw medium invoeren
 split_file_dialog.insert_new_media:AR:أدخل قرص جديد
 split_file_dialog.insert_new_media:DA:Indsæt nyt medie
 split_file_dialog.insert_new_media:pt_BR:Insira nova mídia
+split_file_dialog.insert_new_media:RO:Introduceți următorul disc
 # Translation missing (New!)
 
 
@@ -8443,6 +8490,7 @@ combine_files_dialog.error_title:NL:Fout bij bestand samenvoegen
 combine_files_dialog.error_title:AR:خطأ في دمج الملفات
 combine_files_dialog.error_title:DA:Fejl under sammenfletning af filer
 combine_files_dialog.error_title:pt_BR:Erro ao combinar arquivo
+combine_files_dialog.error_title:RO:Eroare la combinare
 # Translation missing (New!)
 
 
@@ -8467,6 +8515,7 @@ combine_files_job.no_crc_file:NL:Samenvoegen geslaagd. Geen CRC bestand.
 combine_files_job.no_crc_file:AR:نجح الدمج، لا يوجد ملف CRC.
 combine_files_job.no_crc_file:DA:Sammenfletning fuldført. Ingen CRC fil.
 combine_files_job.no_crc_file:pt_BR:Arquivo combinado com sucesso. Sem arquivo CRC.
+combine_files_job.no_crc_file:RO:Combinarea s-a terminat cu succes. Fără sumă de control.
 # Translation missing (New!)
 
 
@@ -8491,6 +8540,7 @@ combine_files_job.crc_read_error:NL:Fout bij lezen CRC bestand.
 combine_files_job.crc_read_error:AR:خطأ أثناء قراءة ملف CRC.
 combine_files_job.crc_read_error:DA:Fejl under løsning af CRC fil.
 combine_files_job.crc_read_error:pt_BR:Erro ao ler arquivo CRC.
+combine_files_job.crc_read_error:RO:Eroare la citirea sumei de control.
 # Translation missing (New!)
 
 
@@ -8515,6 +8565,7 @@ combine_files_job.crc_check_failed:NL:CRC past niet: verwacht %2, gevonden %1
 combine_files_job.crc_check_failed:AR:عدم تطابق CRC: الموجود %1، المتوقع %2
 combine_files_job.crc_check_failed:DA:CRC fejl: forventede %2 men fik %1
 combine_files_job.crc_check_failed:pt_BR:CRC erro de checagem: esperado %2, encontrado %1
+combine_files_job.crc_check_failed:RO:Suma de control nu se potrivește: așteptată %2, găsită %1
 # Translation missing (New!)
 
 
@@ -8539,6 +8590,7 @@ combine_files_job.crc_ok:NL:Samenvoegen geslaagd. CRC controlsom ok.
 combine_files_job.crc_ok:AR:تم الدمج. نجح اختبار تحقق CRC.
 combine_files_job.crc_ok:DA:Sammenfletning fuldført. CRC kontrolsum ok.
 combine_files_job.crc_ok:pt_BR:Combinação realizada com sucesso. CRC verificado.
+combine_files_job.crc_ok:RO:Combinarea a reușit. Suma de control este OK.
 # Translation missing (New!)
 
 
@@ -9474,6 +9526,7 @@ server_connect_dialog.domain:NL:Domein
 server_connect_dialog.domain:AR:نطاق
 server_connect_dialog.domain:DA:Domæne
 server_connect_dialog.domain:pt_BR:Domínio
+server_connect_dialog.domain:RO:Domeniu
 # Translation missing (New!)
 
 
@@ -11820,6 +11873,7 @@ theme_editor.header:NL:Kop
 theme_editor.header:AR:الرأس
 theme_editor.header:DA:Overskrift
 theme_editor.header:pt_BR:Cabeçalho
+theme_editor.header:RO:Antet
 # Translation missing (New!)
 
 
@@ -11844,6 +11898,7 @@ theme_editor.item:NL:Inhoud
 theme_editor.item:AR:عنصر
 theme_editor.item:DA:Element
 theme_editor.item:pt_BR:Item
+theme_editor.item:RO:Element
 # Translation missing (New!)
 
 
@@ -11870,6 +11925,7 @@ command_bar_customize_dialog.available_actions:FR:Actions disponibles
 command_bar_customize_dialog.available_actions:AR:الأفعال المتاحة
 command_bar_customize_dialog.available_actions:DA:Tilgængelige handlinger
 command_bar_customize_dialog.available_actions:pt_BR:Ações disponíveis
+command_bar_customize_dialog.available_actions:RO:Acțiuni disponibile
 # Translation missing (New!)
 
 
@@ -11892,6 +11948,7 @@ command_bar_customize_dialog.modifier:FR:Modificateur
 command_bar_customize_dialog.modifier:AR:المعدل
 command_bar_customize_dialog.modifier:DA:Ændrer
 command_bar_customize_dialog.modifier:pt_BR:Modificador
+command_bar_customize_dialog.modifier:RO:Modifică
 # Translation missing (New!)
 
 
@@ -13483,6 +13540,7 @@ debug_console_dialog.level:FR:Niveau
 debug_console_dialog.level:NL:Niveau
 debug_console_dialog.level:DA:Niveau
 debug_console_dialog.level:pt_BR:Nível
+debug_console_dialog.level:RO:Nivel
 # Translation missing (New!)
 
 
