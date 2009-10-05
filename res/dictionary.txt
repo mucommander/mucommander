@@ -4893,8 +4893,8 @@ Stop.label:AR:إيقاف تغيير الملفات
 # %1 is replaced by the column's name (Date, Size, ...).
 ToggleColumn.show:EN:Show %1 column
 ToggleColumn.show:FR:Afficher la colonne %1
+ToggleColumn.hide:DA:Skjul %1 kolonne
 ToggleColumn.show:NL:Toon kolom %1
-ToggleColumn.show:DA:Vis %1 kolonne
 # Translation missing (New!)
 
 
