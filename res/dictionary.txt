@@ -2537,7 +2537,6 @@ action_categories.view:DA:Vis
 action_categories.view:UA:Перегляд
 action_categories.view:AR:عرض
 
-action_categories.file_operations:EN:Files Operations
 action_categories.file_operations:EN:File operations
 action_categories.file_operations:FR:Opérations sur fichiers
 action_categories.file_operations:DE:Dateioperationen
@@ -4457,8 +4456,8 @@ SetSameFolder.label:DA:Vis samme mappe
 SetSameFolder.label:UA:Встановити однакові папки
 SetSameFolder.label:AR:تعيين نفس المجلد
 
-SetSameFolder.tooltip:EN:Set same directory to left and right folders
-SetSameFolder.tooltip:FR:Affecter le même repertoire aux dossiers de gauche et de droite
+SetSameFolder.tooltip:EN:Set same directory to left and right panels
+SetSameFolder.tooltip:FR:Affecter le même repertoire aux panneaux de gauche et de droite
 SetSameFolder.tooltip:DE:Gleicher Ordner für linkes und rechtes Fenster
 SetSameFolder.tooltip:ES:Ajustar el mismo directorio en ambos lados
 SetSameFolder.tooltip:CS:Nastavit stejnou složku vlevo a vpravo
@@ -8524,7 +8523,7 @@ split_file_dialog.target_directory:SV:Målmapp
 
 
 
-split_file_dialog.part_size:EN:Size of one part
+split_file_dialog.part_size:EN:Size of each part
 split_file_dialog.part_size:FR:Taille d'une partie
 split_file_dialog.part_size:PL:Wielkość jednej części
 split_file_dialog.part_size:NL:Grootte van de stukken
