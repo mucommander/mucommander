@@ -476,6 +476,7 @@ skip_all:RO:Sari peste toate
 skip_all:SK:Preskočiť všetko
 skip_all:zh_TW:全部略過
 skip_all:DE:Alle Überspringen
+skip_all:SV:Hoppa över alla
 # Translation missing (New!)
 
 
@@ -758,6 +759,7 @@ split:RO:Împarte
 split:SK:Rozdeliť
 split:zh_TW:分割
 split:DE:Aufteilen
+split:SV:Dela
 # Translation missing (New!)
 
 
@@ -786,6 +788,7 @@ combine:RO:Combină
 combine:SK:Spojiť
 combine:zh_TW:合併
 combine:DE:Zusammenfügen
+combine:SV:Sammanfläta
 # Translation missing (New!)
 
 
@@ -1019,6 +1022,7 @@ customize:RO:Personalizează
 customize:SK:Upraviť
 customize:zh_TW:自訂
 customize:DE:Anpassen
+customize:SV:Anpassa
 # Translation missing (New!)
 
 
@@ -1146,7 +1150,7 @@ encoding:DE:Kodierung
 encoding:IT:Codifica
 encoding:PL:Kodowanie
 encoding:JA:エンコード
-encoding:SV:Teckenkodning
+encoding:SV:Textkodning
 encoding:DA:Tegnkodning
 encoding:UA:Кодування
 encoding:AR:ترميز
@@ -1163,6 +1167,7 @@ preferred_encodings:RO:Codificări preferate
 preferred_encodings:SK:Predvolené kódovanie
 preferred_encodings:zh_TW:偏好的編碼
 preferred_encodings:DE:Bevorzugte Kodierungen
+preferred_encodings:SV:Förvald textkodning
 # Translation missing (New!)
 
 
@@ -1723,6 +1728,7 @@ details:RO:Detalii
 details:SK:Detaily
 details:zh_TW:細節
 details:DE:Details
+details:SV:Detaljer
 # Translation missing (New!)
 
 
@@ -2267,6 +2273,7 @@ startup_error:RO:O eroare a prevenit muCommander să pornească.
 startup_error:SK:Chyba bráni spusteniu muCommander-a.
 startup_error:zh_TW:有錯誤造成 muCommander 無法啟動
 startup_error:DE:Ein Fehler hat muCommander am Start gehindert.
+startup_error:SV:Ett fel förhindrade muCommander från att starta.
 # Translation missing (New!)
 
 
@@ -2443,6 +2450,7 @@ action_categories.all:RO:Toate
 action_categories.all:SK:Všetky
 action_categories.all:zh_TW:全部
 action_categories.all:DE:Alle
+action_categories.all:SV:Alla
 # Translation missing (New!)
 
 
@@ -2963,6 +2971,7 @@ InternalView.label:RO:Vizualizează (intern)
 InternalView.label:SK:Zobraziť (interne)
 InternalView.label:zh_TW:檢視 (內建)
 InternalView.label:DE:Anzeigen (eingebaut)
+InternalView.label:SV:Visa (intern)
 # Translation missing (New!)
 
 
@@ -3016,6 +3025,7 @@ InternalEdit.label:RO:Editează (internal)
 InternalEdit.label:SK:Upraviť (interne)
 InternalEdit.label:zh_TW:編輯 (內建)
 InternalEdit.label:DE:Editor (eingebaut)
+InternalEdit.label:SV:Redigera (intern)
 # Translation missing (New!)
 
 
@@ -3285,7 +3295,7 @@ Delete.tooltip:CS:Je-li možné, označené přesunout do Koše
 Delete.tooltip:IT:Elimina file selezionati usando il cestino quando possibile
 Delete.tooltip:pt_BR:Apagar arquivos selecionados
 Delete.tooltip:SL:Izbriši označene datoteke z uporabo koša
-Delete.tooltip:SV:Radera markerade filer via papperskorgen när det är möjligt
+Delete.tooltip:SV:Radera markerade filer till papperskorgen när det är möjligt
 Delete.tooltip:UA:Видаляти відмічені файли у системний кошик, коли доступно
 Delete.tooltip:AR:حذف الملفات المحددة باستخدام سلة المحذوفات إن أمكن
 Delete.tooltip:RO:Șterge fișierele selectate
@@ -3313,7 +3323,7 @@ PermanentDelete.label:CS:Smazat přímo
 PermanentDelete.label:IT:Elimina definitivamente
 PermanentDelete.label:pt_BR:Remover definitivamente
 PermanentDelete.label:SL:Trajno brisanje
-PermanentDelete.label:SV:Ta bort permanent
+PermanentDelete.label:SV:Radera permanent
 PermanentDelete.label:UA:Видаляти зразу
 PermanentDelete.label:AR:حذف نهائي
 PermanentDelete.label:SK:Úplne zmazať
@@ -3333,7 +3343,7 @@ PermanentDelete.tooltip:CS:Smazat označené soubory bez použití systémového
 PermanentDelete.tooltip:IT:Elimina file selezionati senza usare il cestino
 PermanentDelete.tooltip:pt_BR:Remover arquivos marcados definitivamente
 PermanentDelete.tooltip:SL:Izbriši označene datoteke brez uporabe koša
-PermanentDelete.tooltip:SV:Ta bort markerade filer utan att använda papperskorgen
+PermanentDelete.tooltip:SV:Radera markerade filer utan att använda papperskorgen
 PermanentDelete.tooltip:UA:Видаляти відмічені файли не використовуючи системний кошик
 PermanentDelete.tooltip:AR:حذف الملفات المحددة بدون استخدام سلة المحذوفات
 PermanentDelete.tooltip:SK:Úplne zmazať označené súbory
@@ -4145,6 +4155,7 @@ MarkNextBlock.label:RO:Selectează un bloc în jos
 MarkNextBlock.label:SK:Označiť blok dole
 MarkNextBlock.label:zh_TW:往下標記一個區塊
 MarkNextBlock.label:DE:Nächsten Block markieren
+MarkNextBlock.label:SV:Markera ett block neråt
 # Translation missing (New!)
 
 
@@ -4170,6 +4181,7 @@ MarkPreviousBlock.label:RO:Selectează un bloc în sus
 MarkPreviousBlock.label:SK:Označiť blok hore
 MarkPreviousBlock.label:zh_TW:往上標記一個區塊
 MarkPreviousBlock.label:DE:Vorigen Block markieren
+MarkPreviousBlock.label:SV:Markera ett block uppåt
 # Translation missing (New!)
 
 
@@ -4195,6 +4207,7 @@ MarkNextRow.label:RO:Selectează un rând în jos
 MarkNextRow.label:SK:Označiť riadok dole
 MarkNextRow.label:zh_TW:往下標記一行
 MarkNextRow.label:DE:Nächste Zeile markieren
+MarkNextRow.label:SV:Markera en rad neråt
 # Translation missing (New!)
 
 
@@ -4220,6 +4233,7 @@ MarkPreviousRow.label:RO:Selectează un rând în sus
 MarkPreviousRow.label:SK:Označiť riadok hore
 MarkPreviousRow.label:zh_TW:往上標記一行
 MarkPreviousRow.label:DE:Vorige Zeile markieren
+MarkPreviousRow.label:SV:Markera en rad uppåt
 # Translation missing (New!)
 
 
@@ -4987,6 +5001,7 @@ ToggleColumn.show:RO:Afișează coloana cu %1
 ToggleColumn.show:SK:Zobraziť stĺpec %1
 ToggleColumn.show:zh_TW:顯示 %1 欄位
 ToggleColumn.show:DE:Zeige Spalte %1
+ToggleColumn.show:SV:Visa %1 kolumn
 # Translation missing (New!)
 
 
@@ -5013,6 +5028,7 @@ ToggleColumn.hide:RO:Ascunde coloana cu %1
 ToggleColumn.hide:SK:Zobraziť stĺpec %1
 ToggleColumn.hide:zh_TW:隱藏 %1 欄位
 ToggleColumn.hide:DE:Verberge Spalte %1
+ToggleColumn.hide:SV:Göm %1 kolumn
 # Translation missing (New!)
 
 
@@ -5133,6 +5149,7 @@ CustomizeCommandBar.label:RO:Personalizează bara de comande
 CustomizeCommandBar.label:SK:Vlastné nastavenie panela príkazov
 CustomizeCommandBar.label:zh_TW:自訂命令工作列
 CustomizeCommandBar.label:DE:Kommandozeile anpassen
+CustomizeCommandBar.label:SV:Anpassa kommandoraden
 # Translation missing (New!)
 
 
@@ -5423,6 +5440,7 @@ SelectNextBlock.label:RO:Coboară un bloc
 SelectNextBlock.label:SK:Skok o jeden blok dole
 SelectNextBlock.label:zh_TW:往下跳一區塊
 SelectNextBlock.label:DE:Zum nächsten Block springen
+SelectNextBlock.label:SV:Hoppa ett block neråt
 # Translation missing (New!)
 
 
@@ -5448,6 +5466,7 @@ SelectPreviousBlock.label:RO:Urcă un bloc
 SelectPreviousBlock.label:SK:Skok o jeden blok hore
 SelectPreviousBlock.label:zh_TW:往上跳一區塊
 SelectPreviousBlock.label:DE:Zum vorigen Block springen
+SelectPreviousBlock.label:SV:Hoppa ett block uppåt
 # Translation missing (New!)
 
 
@@ -5473,6 +5492,7 @@ SelectNextPage.label:RO:Coboară o pagină
 SelectNextPage.label:SK:Skok o stranu dole
 SelectNextPage.label:zh_TW:往下跳一頁
 SelectNextPage.label:DE:Nächste Seite
+SelectNextPage.label:SV:Hoppa en sida neråt
 # Translation missing (New!)
 
 
@@ -5498,6 +5518,7 @@ SelectPreviousPage.label:RO:Urcă o pagină
 SelectPreviousPage.label:SK:Skok o stranu hore
 SelectPreviousPage.label:zh_TW:往上跳一頁
 SelectPreviousPage.label:DE:Vorige Seite
+SelectPreviousPage.label:SV:Hoppa en sida uppåt
 # Translation missing (New!)
 
 
@@ -5523,6 +5544,7 @@ SelectNextRow.label:RO:Coboară un rând
 SelectNextRow.label:SK:Skok o riadok dole
 SelectNextRow.label:zh_TW:往下跳一行
 SelectNextRow.label:DE:Nächste Zeile
+SelectNextRow.label:SV:Hoppa en rad neråt
 # Translation missing (New!)
 
 
@@ -5548,6 +5570,7 @@ SelectPreviousRow.label:RO:Urcă un rând
 SelectPreviousRow.label:SK:Skok o riadok hore
 SelectPreviousRow.label:zh_TW:往上跳一行
 SelectPreviousRow.label:DE:Vorige Zeile
+SelectPreviousRow.label:SV:Hoppa en rad uppåt
 # Translation missing (New!)
 
 
@@ -6039,6 +6062,7 @@ SplitFile.tooltip:RO:Împarte un fișier în mai multe bucăți
 SplitFile.tooltip:SK:Rozdeliť súbor na viacero častí
 SplitFile.tooltip:zh_TW:將檔案分割成多個
 SplitFile.tooltip:DE:Datei in mehrere Teile aufspalten
+SplitFile.tooltip:SV:Dela upp en fil i flera delar
 # Translation missing (New!)
 
 
@@ -6064,6 +6088,7 @@ CombineFiles.tooltip:RO:Combină un fișier împărțit în bucăți pentru a re
 CombineFiles.tooltip:SK:Spojiť časti súboru do originálneho súboru
 CombineFiles.tooltip:zh_TW:將分割檔合併成原檔案
 CombineFiles.tooltip:DE:Dateiteile zum Original zusammenfügen
+CombineFiles.tooltip:SV:Slå samman uppdelade filer för att återskapa originalfilen
 # Translation missing (New!)
 
 
@@ -6089,6 +6114,7 @@ ShowDebugConsole.label:RO:Consolă pentru debug
 ShowDebugConsole.label:SK:Konzola pre ladenie
 ShowDebugConsole.label:zh_TW:偵錯主控台
 ShowDebugConsole.label:DE:Debug-Konsole
+ShowDebugConsole.label:SV:Felsökningskonsol
 # Translation missing (New!)
 
 
@@ -6114,6 +6140,7 @@ FocusPrevious.label:RO:Selectează componenta precedentă
 FocusPrevious.label:SK:Označiť predchádzajúcu komponentu
 FocusPrevious.label:zh_TW:將輸入焦點移至前一個元件
 FocusPrevious.label:DE:Fokus in vorherige Komponente
+FocusPrevious.label:SV:Fokusera på föregående komponent
 # Translation missing (New!)
 
 
@@ -6140,6 +6167,7 @@ FocusNext.label:RO:Selectează component următoare
 FocusNext.label:SK:Označiť nasledujúcu komponentu
 FocusNext.label:zh_TW:將輸入焦點移至後一個元件
 FocusNext.label:DE:Fokus in nächste Komponente
+FocusNext.label:SV:Fokusera på nästa komponent
 # Translation missing (New!)
 
 
@@ -6531,6 +6559,7 @@ shortcuts_panel.title:RO:Scurtături
 shortcuts_panel.title:SK:Skratky
 shortcuts_panel.title:zh_TW:捷徑
 shortcuts_panel.title:DE:Tastenkürzel
+shortcuts_panel.title:SV:Kortkommandon
 # Translation missing (New!)
 
 
@@ -6556,6 +6585,7 @@ shortcuts_panel.restore_defaults:RO:Revine la configurația inițială
 shortcuts_panel.restore_defaults:SK:Obnoviť pôvodné
 shortcuts_panel.restore_defaults:zh_TW:回復預設值
 shortcuts_panel.restore_defaults:DE:Standard wiederherstellen
+shortcuts_panel.restore_defaults:SV:Återställ förval
 # Translation missing (New!)
 
 
@@ -6581,6 +6611,7 @@ shortcuts_panel.show:RO:Arată
 shortcuts_panel.show:SK:Zobraziť
 shortcuts_panel.show:zh_TW:顯示
 shortcuts_panel.show:DE:Zeigen
+shortcuts_panel.show:SV:Visa
 # Translation missing (New!)
 
 
@@ -6606,6 +6637,7 @@ shortcuts_panel.default_message:RO:Apăsați Enter sau dați dublu-clic pe scurt
 shortcuts_panel.default_message:SK:Stlačte Enter alebo dvojklik myšou na skratku, ktorú chcete upraviť
 shortcuts_panel.default_message:zh_TW:按下 Enter 或雙擊捷徑來進行編輯
 shortcuts_panel.default_message:DE:Drücken Sie Enter oder führen Sie einen Doppelklick auf dem Tastenkürzel aus, dass sie bearbeiten wollen
+shortcuts_panel.default_message:SV:Tryck Enter eller dubbelklicka på kortkommandot som du vill redigera
 # Translation missing (New!)
 
 
@@ -6631,6 +6663,7 @@ shortcuts_table.action_description:RO:Descrierea acțiunii
 shortcuts_table.action_description:SK:Popis akcie
 shortcuts_table.action_description:zh_TW:操作描述
 shortcuts_table.action_description:DE:Beschreibung der Aktion
+shortcuts_table.action_description:SV:Handlingsbeskrivning
 # Translation missing (New!)
 
 
@@ -6656,6 +6689,7 @@ shortcuts_table.shortcut:RO:Scurtătură
 shortcuts_table.shortcut:SK:Skratka
 shortcuts_table.shortcut:zh_TW:捷徑
 shortcuts_table.shortcut:DE:Tastenkürzel
+shortcuts_table.shortcut:SV:Kortkommando
 # Translation missing (New!)
 
 
@@ -6681,6 +6715,7 @@ shortcuts_table.alternate_shortcut:RO:Scurtătură alternativă
 shortcuts_table.alternate_shortcut:SK:Alternatívna skratka
 shortcuts_table.alternate_shortcut:zh_TW:替換捷徑
 shortcuts_table.alternate_shortcut:DE:Alternatives Tastenkürzel
+shortcuts_table.alternate_shortcut:SV:Alternativt kortkommando
 # Translation missing (New!)
 
 
@@ -6706,6 +6741,7 @@ shortcuts_table.type_in_a_shortcut:RO:Tipul de scurtătură
 shortcuts_table.type_in_a_shortcut:SK:Zadajte skratku
 shortcuts_table.type_in_a_shortcut:zh_TW:在捷徑輸入
 shortcuts_table.type_in_a_shortcut:DE:Tastenkürzel eingeben
+shortcuts_table.type_in_a_shortcut:SV:Ange kortkommando
 # Translation missing (New!)
 
 
@@ -6735,6 +6771,7 @@ command_bar_dialog.help:RO:Trageți butoane pentru a personaliza bara de comenzi
 command_bar_dialog.help:SK:Pre prispôsobenie príkazového panelu presuňte tlačidlá
 command_bar_dialog.help:zh_TW:拖曳按鈕來自訂命令工作列
 command_bar_dialog.help:DE:Verschieben Sie die Schaltflächen um die Kommandozeile anzupassen
+command_bar_dialog.help:SV:Dra knapparna för att anpassa kommandoraden
 # Translation missing (New!)
 
 
@@ -7181,6 +7218,7 @@ destination_dialog.skip_errors:RO:Ignoră erorile
 destination_dialog.skip_errors:SK:Ignorovať chyby
 destination_dialog.skip_errors:zh_TW:略過錯誤
 destination_dialog.skip_errors:DE:Fehler ignorieren
+destination_dialog.skip_errors:SV:Ignorera fel
 # Translation missing (New!)
 
 
@@ -7957,6 +7995,7 @@ delete_dialog.move_to_trash.failed:RO:Unul sau mai multe fișiere nu au putut fi
 delete_dialog.move_to_trash.failed:SK:Jeden alebo viacero súborov nemohlo byť presunutých do koša.
 delete_dialog.move_to_trash.failed:zh_TW:一個或多個檔案無法移至垃圾桶
 delete_dialog.move_to_trash.failed:DE:Eine oder mehrere Dateien konnten nicht in den Papierkorb verschoben werden.
+delete_dialog.move_to_trash.failed:SV:En eller flera filer kunde inte flyttas till papperskorgen
 # Translation missing (New!)
 
 
@@ -8409,6 +8448,7 @@ split_file_dialog.error_title:RO:Eroare la împărțirea fișierul
 split_file_dialog.error_title:SK:Chyba pri delení súboru
 split_file_dialog.error_title:zh_TW:分割檔案錯誤
 split_file_dialog.error_title:DE:Fehler beim Aufspalten einer Datei 
+split_file_dialog.error_title:SV:Fel vid uppdelning av fil
 # Translation missing (New!)
 
 
@@ -8437,6 +8477,7 @@ split_file_dialog.file_to_split:RO:Fișierul care trebuie împărțit
 split_file_dialog.file_to_split:SK:Súbor na rozdelenie
 split_file_dialog.file_to_split:zh_TW:欲分割的檔案
 split_file_dialog.file_to_split:DE:Datei zum Aufspalten
+split_file_dialog.file_to_split:SV:Dela upp fil
 # Translation missing (New!)
 
 
@@ -8465,6 +8506,7 @@ split_file_dialog.target_directory:RO:Directorul destinație
 split_file_dialog.target_directory:SK:Cieľový priečinok
 split_file_dialog.target_directory:zh_TW:目的資料夾
 split_file_dialog.target_directory:DE:Zielverzeichnis
+split_file_dialog.target_directory:SV:Målmapp
 # Translation missing (New!)
 
 
@@ -8493,6 +8535,7 @@ split_file_dialog.part_size:RO:Dimensiunea fiecărei părți
 split_file_dialog.part_size:SK:Veľkosť jednej časti
 split_file_dialog.part_size:zh_TW:分割大小
 split_file_dialog.part_size:DE:Größe eines Teils
+split_file_dialog.part_size:SV:Delstorlek
 # Translation missing (New!)
 
 
@@ -8521,6 +8564,7 @@ split_file_dialog.parts:RO:Numărul de părți
 split_file_dialog.parts:SK:Počet častí
 split_file_dialog.parts:zh_TW:分割數目
 split_file_dialog.parts:DE:Anzahl der Teile
+split_file_dialog.parts:SV:Antal delar
 # Translation missing (New!)
 
 
@@ -8549,6 +8593,7 @@ split_file_dialog.generate_CRC:RO:Generează sumă de control
 split_file_dialog.generate_CRC:SK:Generovať CRC súboru
 split_file_dialog.generate_CRC:zh_TW:產生 CRC 檔案
 split_file_dialog.generate_CRC:DE:Erzeuge CRC-Datei
+split_file_dialog.generate_CRC:SV:Skapa CRC fil
 # Translation missing (New!)
 
 
@@ -8577,6 +8622,7 @@ split_file_dialog.max_parts:RO:Numărul maxim de părți este %1
 split_file_dialog.max_parts:SK:Maximálny počet častí je %1
 split_file_dialog.max_parts:zh_TW:最多允許的分割數目為 %1
 split_file_dialog.max_parts:DE:Maximale Anzehl der Teile ist %1
+split_file_dialog.max_parts:SV:Maximalt antal tillåtna delar är %1
 # Translation missing (New!)
 
 
@@ -8605,6 +8651,7 @@ split_file_dialog.auto:RO:Automatic
 split_file_dialog.auto:SK:Automaticky
 split_file_dialog.auto:zh_TW:自動
 split_file_dialog.auto:DE:Automatisch
+split_file_dialog.auto:SV:Automatiskt
 # Translation missing (New!)
 
 
@@ -8633,6 +8680,7 @@ split_file_dialog.insert_new_media:RO:Introduceți următorul disc
 split_file_dialog.insert_new_media:SK:Vložte nové médium
 split_file_dialog.insert_new_media:zh_TW:插入新的媒體
 split_file_dialog.insert_new_media:DE:Neues Medium einlegen
+split_file_dialog.insert_new_media:SV:Sätt in ny media
 # Translation missing (New!)
 
 
@@ -8666,6 +8714,7 @@ combine_files_dialog.error_title:RO:Eroare la combinare
 combine_files_dialog.error_title:SK:Chyba pri spájaní súboru
 combine_files_dialog.error_title:zh_TW:合併檔案錯誤
 combine_files_dialog.error_title:DE:Fehler beim Zusammenfügen der Datei
+combine_files_dialog.error_title:SV:Fel vid sammanslagning av filer
 # Translation missing (New!)
 
 
@@ -8694,6 +8743,7 @@ combine_files_job.no_crc_file:RO:Combinarea s-a terminat cu succes. Fără sumă
 combine_files_job.no_crc_file:SK:Spojenie úspešné. Žiadny CRC súbor.
 combine_files_job.no_crc_file:zh_TW:合併成功, 沒有 CRC 檔案.
 combine_files_job.no_crc_file:DE:Zusammenfügen der Datei erfolgreich. Keine CRC-Datei.
+combine_files_job.no_crc_file:SV:Sammanslagning klart. Ingen CRC fil.
 # Translation missing (New!)
 
 
@@ -8722,6 +8772,7 @@ combine_files_job.crc_read_error:RO:Eroare la citirea sumei de control.
 combine_files_job.crc_read_error:SK:Chyba pri čítaní CRC súboru.
 combine_files_job.crc_read_error:zh_TW:當讀取 CRC 檔案時發生錯誤.
 combine_files_job.crc_read_error:DE:Fehler beim Lesen der CRC-Datei.
+combine_files_job.crc_read_error:SV:Fel vid läsning av CRC fil.
 # Translation missing (New!)
 
 
@@ -8750,6 +8801,7 @@ combine_files_job.crc_check_failed:RO:Suma de control nu se potrivește: aștept
 combine_files_job.crc_check_failed:SK:Chybné CRC: očakávané %2, nájdené %1
 combine_files_job.crc_check_failed:zh_TW:CRC 不符合: 預期 %2, 發現 %1
 combine_files_job.crc_check_failed:DE:CRC-Fehler: erwartet %2, gefunden %1
+combine_files_job.crc_check_failed:SV:CRC matchar inte: förväntade %2, hittade %1
 # Translation missing (New!)
 
 
@@ -8778,6 +8830,7 @@ combine_files_job.crc_ok:RO:Combinarea a reușit. Suma de control este OK.
 combine_files_job.crc_ok:SK:Spojenie úspešné. CRC ok.
 combine_files_job.crc_ok:zh_TW:合併成功. CRC 驗證成功.
 combine_files_job.crc_ok:DE:Zusammenfügen der Datei erfolgreich. CRC-Prüfsumme o.k.
+combine_files_job.crc_ok:SV:Sammanslagning klart. CRC checksum ok.
 # Translation missing (New!)
 
 
@@ -9720,6 +9773,7 @@ server_connect_dialog.domain:RO:Domeniu
 server_connect_dialog.domain:SK:Doména
 server_connect_dialog.domain:zh_TW:網域
 server_connect_dialog.domain:DE:Domäne
+server_connect_dialog.domain:SV:Domän
 # Translation missing (New!)
 
 
@@ -12077,6 +12131,7 @@ theme_editor.header:RO:Antet
 theme_editor.header:SK:Hlavička
 theme_editor.header:zh_TW:標頭
 theme_editor.header:DE:Überschrift
+theme_editor.header:SV:Sidhuvud
 # Translation missing (New!)
 
 
@@ -12105,6 +12160,7 @@ theme_editor.item:RO:Element
 theme_editor.item:SK:Položka
 theme_editor.item:zh_TW:項目
 theme_editor.item:DE:Element
+theme_editor.item:SV:Lista
 # Translation missing (New!)
 
 
@@ -12135,6 +12191,7 @@ command_bar_customize_dialog.available_actions:RO:Acțiuni disponibile
 command_bar_customize_dialog.available_actions:SK:Dostupné akcie
 command_bar_customize_dialog.available_actions:zh_TW:可供選擇的操作
 command_bar_customize_dialog.available_actions:DE:Verfügbare Aktionen
+command_bar_customize_dialog.available_actions:SV:Tillgängliga handlingar
 # Translation missing (New!)
 
 
@@ -12161,6 +12218,7 @@ command_bar_customize_dialog.modifier:RO:Modifică
 command_bar_customize_dialog.modifier:SK:Modifikátor
 command_bar_customize_dialog.modifier:zh_TW:切換鍵
 command_bar_customize_dialog.modifier:DE:Modifizierer
+command_bar_customize_dialog.modifier:SV:Specialtangent
 # Translation missing (New!)
 
 
@@ -13668,7 +13726,7 @@ prefs_dialog.shell_encoding:pt_BR:Codificação do Shell
 prefs_dialog.shell_encoding:HU:Karakter kódolás
 prefs_dialog.shell_encoding:JA:シェルのエンコード
 prefs_dialog.shell_encoding:SK:Kódovanie textu shellu
-prefs_dialog.shell_encoding:SV:Terminal teckenuppsättning
+prefs_dialog.shell_encoding:SV:Terminal textkodning
 prefs_dialog.shell_encoding:RU:Кодировка командной строки
 prefs_dialog.shell_encoding:ES:Codificación de terminal
 prefs_dialog.shell_encoding:DA:Kommandofortolker indkodning
@@ -13761,6 +13819,7 @@ debug_console_dialog.level:RO:Nivel
 debug_console_dialog.level:SK:Úroveň
 debug_console_dialog.level:zh_TW:程度
 debug_console_dialog.level:DE:Level
+debug_console_dialog.level:SV:Nivå
 # Translation missing (New!)
 
 
