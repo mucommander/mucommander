@@ -751,7 +751,7 @@ download:AR:تنزيل
 split:EN:Split
 split:FR:Scinder
 split:PL:Podziel
-split:NL:Splits
+split:NL:Splitsen
 split:AR:تفسيم
 split:DA:Del
 split:pt_BR:Dividir
@@ -924,7 +924,7 @@ quick_search:AR:بحث سريع
 file_manager:EN:File manager
 file_manager:FR:Gestionnaire de fichiers
 file_manager:DA:Filhåndterer
-file_manager:NL:Bestansbeheerder
+file_manager:NL:Bestandsbeheerder
 file_manager:RO:Manager de fișiere
 file_manager:DE:Dateimanager
 file_manager:HU:Fájlkezelő
@@ -1014,7 +1014,7 @@ choose:AR:اختيار
 # Used for instance in the 'misc' preference panel
 customize:EN:Customize
 customize:FR:Personnaliser
-customize:NL:Voorkeur
+customize:NL:Aanpassen
 customize:AR:تخصيص
 customize:DA:Tilpas
 customize:pt_BR:Customize
@@ -1159,7 +1159,7 @@ encoding:AR:ترميز
 # Used in the dialog that allows to customize the list of preferred encodings
 preferred_encodings:EN:Preferred encodings
 preferred_encodings:FR:Encodages préférés
-preferred_encodings:NL:Encodages préférés
+preferred_encodings:NL:Voorkeurs tekenset
 preferred_encodings:AR:الترميز المفضل
 preferred_encodings:DA:Foretrukket indkodning
 preferred_encodings:pt_BR:Encode preferido
@@ -1729,6 +1729,7 @@ details:SK:Detaily
 details:zh_TW:細節
 details:DE:Details
 details:SV:Detaljer
+details:NL:Details
 # Translation missing (New!)
 
 
@@ -2274,6 +2275,7 @@ startup_error:SK:Chyba bráni spusteniu muCommander-a.
 startup_error:zh_TW:有錯誤造成 muCommander 無法啟動
 startup_error:DE:Ein Fehler hat muCommander am Start gehindert.
 startup_error:SV:Ett fel förhindrade muCommander från att starta.
+startup_error:NL:Een fout verhinderde het opstarten van muCommander.
 # Translation missing (New!)
 
 
@@ -2451,6 +2453,7 @@ action_categories.all:SK:Všetky
 action_categories.all:zh_TW:全部
 action_categories.all:DE:Alle
 action_categories.all:SV:Alla
+action_categories.all:NL:Alle
 # Translation missing (New!)
 
 
@@ -4155,6 +4158,7 @@ MarkNextBlock.label:SK:Označiť blok dole
 MarkNextBlock.label:zh_TW:往下標記一個區塊
 MarkNextBlock.label:DE:Nächsten Block markieren
 MarkNextBlock.label:SV:Markera ett block neråt
+MarkNextBlock.label:NL:Markeer een blok naar beneden
 # Translation missing (New!)
 
 
@@ -4181,6 +4185,7 @@ MarkPreviousBlock.label:SK:Označiť blok hore
 MarkPreviousBlock.label:zh_TW:往上標記一個區塊
 MarkPreviousBlock.label:DE:Vorigen Block markieren
 MarkPreviousBlock.label:SV:Markera ett block uppåt
+MarkPreviousBlock.label:NL:Markeer een blok omhoog
 # Translation missing (New!)
 
 
@@ -4207,6 +4212,7 @@ MarkNextRow.label:SK:Označiť riadok dole
 MarkNextRow.label:zh_TW:往下標記一行
 MarkNextRow.label:DE:Nächste Zeile markieren
 MarkNextRow.label:SV:Markera en rad neråt
+MarkNextRow.label:NL:Markeer een regel naar beneden
 # Translation missing (New!)
 
 
@@ -4233,6 +4239,7 @@ MarkPreviousRow.label:SK:Označiť riadok hore
 MarkPreviousRow.label:zh_TW:往上標記一行
 MarkPreviousRow.label:DE:Vorige Zeile markieren
 MarkPreviousRow.label:SV:Markera en rad uppåt
+MarkPreviousRow.label:NL:Markeer een regel omhoog
 # Translation missing (New!)
 
 
@@ -4994,7 +5001,7 @@ Stop.label:AR:إيقاف تغيير الملفات
 ToggleColumn.show:EN:Show %1 column
 ToggleColumn.show:FR:Afficher la colonne %1
 ToggleColumn.show:DA:Vis %1 kolonne
-ToggleColumn.show:NL:Toon kolom %1
+ToggleColumn.show:NL:Toon de kolom %1
 ToggleColumn.show:pt_BR:Exibir coluna %1
 ToggleColumn.show:RO:Afișează coloana cu %1
 ToggleColumn.show:SK:Zobraziť stĺpec %1
@@ -5028,6 +5035,7 @@ ToggleColumn.hide:SK:Zobraziť stĺpec %1
 ToggleColumn.hide:zh_TW:隱藏 %1 欄位
 ToggleColumn.hide:DE:Verberge Spalte %1
 ToggleColumn.hide:SV:Göm %1 kolumn
+ToggleColumn.hide:NL:Verberg de kolom %1
 # Translation missing (New!)
 
 
@@ -5060,7 +5068,7 @@ ToggleCommandBar.show:RO:Arată bara de comenzi
 ToggleCommandBar.show:IT:Mostra barra di comando
 ToggleCommandBar.show:KO:커맨드바 보이기
 ToggleCommandBar.show:pt_BR:Exibir barra de comandos
-ToggleCommandBar.show:NL:Commandoregel tonen
+ToggleCommandBar.show:NL:Commandobalk tonen
 ToggleCommandBar.show:SK:Zobraziť panel s príkazmi
 ToggleCommandBar.show:JA:コマンド バーの表示
 ToggleCommandBar.show:SV:Visa kommandoraden
@@ -5083,7 +5091,7 @@ ToggleCommandBar.hide:RO:Ascunde bara de comenzi
 ToggleCommandBar.hide:IT:Nascondi barra di comando
 ToggleCommandBar.hide:KO:커맨드바 숨기기
 ToggleCommandBar.hide:pt_BR:Esconder barra de comandos
-ToggleCommandBar.hide:NL:Commandoregel verbergen
+ToggleCommandBar.hide:NL:Commandobalk verbergen
 ToggleCommandBar.hide:SK:Skryť panel s príkazmi
 ToggleCommandBar.hide:JA:コマンド バーを非表示にする
 ToggleCommandBar.hide:SV:Dölj kommandoraden
@@ -5149,6 +5157,7 @@ CustomizeCommandBar.label:SK:Vlastné nastavenie panela príkazov
 CustomizeCommandBar.label:zh_TW:自訂命令工作列
 CustomizeCommandBar.label:DE:Kommandozeile anpassen
 CustomizeCommandBar.label:SV:Anpassa kommandoraden
+CustomizeCommandBar.label:NL:Commandobalk aanpassen
 # Translation missing (New!)
 
 
@@ -5440,6 +5449,7 @@ SelectNextBlock.label:SK:Skok o jeden blok dole
 SelectNextBlock.label:zh_TW:往下跳一區塊
 SelectNextBlock.label:DE:Zum nächsten Block springen
 SelectNextBlock.label:SV:Hoppa ett block neråt
+SelectNextBlock.label:NL:Een blok naar beneden
 # Translation missing (New!)
 
 
@@ -5466,6 +5476,7 @@ SelectPreviousBlock.label:SK:Skok o jeden blok hore
 SelectPreviousBlock.label:zh_TW:往上跳一區塊
 SelectPreviousBlock.label:DE:Zum vorigen Block springen
 SelectPreviousBlock.label:SV:Hoppa ett block uppåt
+SelectPreviousBlock.label:NL:Een blok omhoog
 # Translation missing (New!)
 
 
@@ -5492,6 +5503,7 @@ SelectNextPage.label:SK:Skok o stranu dole
 SelectNextPage.label:zh_TW:往下跳一頁
 SelectNextPage.label:DE:Nächste Seite
 SelectNextPage.label:SV:Hoppa en sida neråt
+SelectNextPage.label:NL:Een bladzijde omlaag
 # Translation missing (New!)
 
 
@@ -5518,6 +5530,7 @@ SelectPreviousPage.label:SK:Skok o stranu hore
 SelectPreviousPage.label:zh_TW:往上跳一頁
 SelectPreviousPage.label:DE:Vorige Seite
 SelectPreviousPage.label:SV:Hoppa en sida uppåt
+SelectPreviousPage.label:NL:Een bladzijde omhoog
 # Translation missing (New!)
 
 
@@ -5544,6 +5557,7 @@ SelectNextRow.label:SK:Skok o riadok dole
 SelectNextRow.label:zh_TW:往下跳一行
 SelectNextRow.label:DE:Nächste Zeile
 SelectNextRow.label:SV:Hoppa en rad neråt
+SelectNextRow.label:NL:Een regel omlaag
 # Translation missing (New!)
 
 
@@ -5570,6 +5584,7 @@ SelectPreviousRow.label:SK:Skok o riadok hore
 SelectPreviousRow.label:zh_TW:往上跳一行
 SelectPreviousRow.label:DE:Vorige Zeile
 SelectPreviousRow.label:SV:Hoppa en rad uppåt
+SelectPreviousRow.label:NL:Een regel omhoog
 # Translation missing (New!)
 
 
@@ -6062,6 +6077,7 @@ SplitFile.tooltip:SK:Rozdeliť súbor na viacero častí
 SplitFile.tooltip:zh_TW:將檔案分割成多個
 SplitFile.tooltip:DE:Datei in mehrere Teile aufspalten
 SplitFile.tooltip:SV:Dela upp en fil i flera delar
+SplitFile.tooltip:NL:Bestand opsplitsen in verschillende gedeeltes
 # Translation missing (New!)
 
 
@@ -6088,6 +6104,7 @@ CombineFiles.tooltip:SK:Spojiť časti súboru do originálneho súboru
 CombineFiles.tooltip:zh_TW:將分割檔合併成原檔案
 CombineFiles.tooltip:DE:Dateiteile zum Original zusammenfügen
 CombineFiles.tooltip:SV:Slå samman uppdelade filer för att återskapa originalfilen
+CombineFiles.tooltip:NL:Gesplitse bestandsdelen samenvoegen om het orrigineel terug te krijgen
 # Translation missing (New!)
 
 
@@ -6140,6 +6157,7 @@ FocusPrevious.label:SK:Označiť predchádzajúcu komponentu
 FocusPrevious.label:zh_TW:將輸入焦點移至前一個元件
 FocusPrevious.label:DE:Fokus in vorherige Komponente
 FocusPrevious.label:SV:Fokusera på föregående komponent
+FocusPrevious.label:NL:Focus op vorige component
 # Translation missing (New!)
 
 
@@ -6167,6 +6185,7 @@ FocusNext.label:SK:Označiť nasledujúcu komponentu
 FocusNext.label:zh_TW:將輸入焦點移至後一個元件
 FocusNext.label:DE:Fokus in nächste Komponente
 FocusNext.label:SV:Fokusera på nästa komponent
+FocusNext.label:NL:Focus op vorige component
 # Translation missing (New!)
 
 
@@ -6559,6 +6578,7 @@ shortcuts_panel.title:SK:Skratky
 shortcuts_panel.title:zh_TW:捷徑
 shortcuts_panel.title:DE:Tastenkürzel
 shortcuts_panel.title:SV:Kortkommandon
+shortcuts_panel.title:NL:Sneltoetsen
 # Translation missing (New!)
 
 
@@ -6585,6 +6605,7 @@ shortcuts_panel.restore_defaults:SK:Obnoviť pôvodné
 shortcuts_panel.restore_defaults:zh_TW:回復預設值
 shortcuts_panel.restore_defaults:DE:Standard wiederherstellen
 shortcuts_panel.restore_defaults:SV:Återställ förval
+shortcuts_panel.restore_defaults:NL:Standaard instellingen
 # Translation missing (New!)
 
 
@@ -6611,6 +6632,7 @@ shortcuts_panel.show:SK:Zobraziť
 shortcuts_panel.show:zh_TW:顯示
 shortcuts_panel.show:DE:Zeigen
 shortcuts_panel.show:SV:Visa
+shortcuts_panel.show:NL:Toon
 # Translation missing (New!)
 
 
@@ -6637,6 +6659,7 @@ shortcuts_panel.default_message:SK:Stlačte Enter alebo dvojklik myšou na skrat
 shortcuts_panel.default_message:zh_TW:按下 Enter 或雙擊捷徑來進行編輯
 shortcuts_panel.default_message:DE:Drücken Sie Enter oder führen Sie einen Doppelklick auf dem Tastenkürzel aus, dass sie bearbeiten wollen
 shortcuts_panel.default_message:SV:Tryck Enter eller dubbelklicka på kortkommandot som du vill redigera
+shortcuts_panel.default_message:NL:Druk op Enter of dubbelklik op de sneltoets die u wilt bewerken
 # Translation missing (New!)
 
 
@@ -6663,6 +6686,7 @@ shortcuts_table.action_description:SK:Popis akcie
 shortcuts_table.action_description:zh_TW:操作描述
 shortcuts_table.action_description:DE:Beschreibung der Aktion
 shortcuts_table.action_description:SV:Handlingsbeskrivning
+shortcuts_table.action_description:NL:Beschrijving van de actie
 # Translation missing (New!)
 
 
@@ -6689,6 +6713,7 @@ shortcuts_table.shortcut:SK:Skratka
 shortcuts_table.shortcut:zh_TW:捷徑
 shortcuts_table.shortcut:DE:Tastenkürzel
 shortcuts_table.shortcut:SV:Kortkommando
+shortcuts_table.shortcut:NL:Sneltoets
 # Translation missing (New!)
 
 
@@ -6715,6 +6740,7 @@ shortcuts_table.alternate_shortcut:SK:Alternatívna skratka
 shortcuts_table.alternate_shortcut:zh_TW:替換捷徑
 shortcuts_table.alternate_shortcut:DE:Alternatives Tastenkürzel
 shortcuts_table.alternate_shortcut:SV:Alternativt kortkommando
+shortcuts_table.alternate_shortcut:NL:Alternatieve sneltoets
 # Translation missing (New!)
 
 
@@ -6741,6 +6767,7 @@ shortcuts_table.type_in_a_shortcut:SK:Zadajte skratku
 shortcuts_table.type_in_a_shortcut:zh_TW:在捷徑輸入
 shortcuts_table.type_in_a_shortcut:DE:Tastenkürzel eingeben
 shortcuts_table.type_in_a_shortcut:SV:Ange kortkommando
+shortcuts_table.type_in_a_shortcut:NL:Voer een sneltoets in
 # Translation missing (New!)
 
 
@@ -6771,6 +6798,7 @@ command_bar_dialog.help:SK:Pre prispôsobenie príkazového panelu presuňte tla
 command_bar_dialog.help:zh_TW:拖曳按鈕來自訂命令工作列
 command_bar_dialog.help:DE:Verschieben Sie die Schaltflächen um die Kommandozeile anzupassen
 command_bar_dialog.help:SV:Dra knapparna för att anpassa kommandoraden
+command_bar_dialog.help:NL:Sleep knoppen om de commandobalk aan te passen
 # Translation missing (New!)
 
 
@@ -7965,7 +7993,7 @@ delete_dialog.move_to_trash.confirmation_details:AR:الملفات سوف تنق
 delete_dialog.move_to_trash.option:EN:Move to trash
 delete_dialog.move_to_trash.option:FR:Déplacer dans la corbeille
 delete_dialog.move_to_trash.option:HU:Áthelyezés a lomtárba
-delete_dialog.move_to_trash.option:NL:Verplaats naar prullenbnak
+delete_dialog.move_to_trash.option:NL:Verplaats naar prullenbak
 delete_dialog.move_to_trash.option:zh_CN:移动到垃圾桶
 delete_dialog.move_to_trash.option:zh_TW:移至資源回收桶
 delete_dialog.move_to_trash.option:RO:Aruncă la gunoi
@@ -8439,7 +8467,7 @@ email.send_file_error:AR:لا يمكن إرسال الملف %1، لم يتم إ
 split_file_dialog.error_title:EN:Split file error
 split_file_dialog.error_title:FR:Erreur de scindage
 split_file_dialog.error_title:PL:Błąd podziału pliku
-split_file_dialog.error_title:NL:Fout bij bestandsplitsen
+split_file_dialog.error_title:NL:Fout bij bestanden opsplitsen
 split_file_dialog.error_title:AR:خطأ في تقسيم الملف
 split_file_dialog.error_title:DA:Fejl under deling af fil
 split_file_dialog.error_title:pt_BR:Erro ao dividir arquivo
@@ -12191,6 +12219,7 @@ command_bar_customize_dialog.available_actions:SK:Dostupné akcie
 command_bar_customize_dialog.available_actions:zh_TW:可供選擇的操作
 command_bar_customize_dialog.available_actions:DE:Verfügbare Aktionen
 command_bar_customize_dialog.available_actions:SV:Tillgängliga handlingar
+command_bar_customize_dialog.available_actions:NL:Beschikbare acties
 # Translation missing (New!)
 
 
@@ -12218,6 +12247,7 @@ command_bar_customize_dialog.modifier:SK:Modifikátor
 command_bar_customize_dialog.modifier:zh_TW:切換鍵
 command_bar_customize_dialog.modifier:DE:Modifizierer
 command_bar_customize_dialog.modifier:SV:Specialtangent
+command_bar_customize_dialog.modifier:NL:Veranderen
 # Translation missing (New!)
 
 
@@ -12973,7 +13003,7 @@ prefs_dialog.command_bar_icons:ES:Barra de comandos
 prefs_dialog.command_bar_icons:PL:Linia komend
 prefs_dialog.command_bar_icons:KO:명령 바
 prefs_dialog.command_bar_icons:pt_BR:Barra de comandos
-prefs_dialog.command_bar_icons:NL:Commandoregel
+prefs_dialog.command_bar_icons:NL:Commandobalk
 prefs_dialog.command_bar_icons:SK:Panel príkazov
 prefs_dialog.command_bar_icons:HU:Parancssor
 prefs_dialog.command_bar_icons:JA:コマンド バー
