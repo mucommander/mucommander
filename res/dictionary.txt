@@ -478,6 +478,7 @@ skip_all:zh_TW:全部略過
 skip_all:DE:Alle Überspringen
 skip_all:SV:Hoppa över alla
 skip_all:AR:تخطي الكل
+skip_all:HU:Mindet kihagy
 # Translation missing (New!)
 
 
@@ -761,6 +762,7 @@ split:SK:Rozdeliť
 split:zh_TW:分割
 split:DE:Aufteilen
 split:SV:Dela
+split:HU:Fájldarabolás
 # Translation missing (New!)
 
 
@@ -790,6 +792,7 @@ combine:SK:Spojiť
 combine:zh_TW:合併
 combine:DE:Zusammenfügen
 combine:SV:Sammanfläta
+combine:HU:Fájlok összefűzése
 # Translation missing (New!)
 
 
@@ -940,7 +943,7 @@ file_manager:UA:Менеджер файлів
 file_manager:AR:مدير الملفات
 file_manager:pt_BR:Gerenciador de arquivos
 file_manager:SK:Správca súborov
-# Translation missing (ES, KO, RU, zh_CN, pt_BR)
+# Translation missing (ES, KO, RU, zh_CN)
 
 # Used as a button label, in the 'Mkdir' dialog for instance
 create:EN:Create
@@ -1024,6 +1027,7 @@ customize:SK:Upraviť
 customize:zh_TW:自訂
 customize:DE:Anpassen
 customize:SV:Anpassa
+customize:HU:Beállítás
 # Translation missing (New!)
 
 
@@ -1169,6 +1173,7 @@ preferred_encodings:SK:Predvolené kódovanie
 preferred_encodings:zh_TW:偏好的編碼
 preferred_encodings:DE:Bevorzugte Kodierungen
 preferred_encodings:SV:Förvald textkodning
+preferred_encodings:HU:Ajánlott kódolás
 # Translation missing (New!)
 
 
@@ -1732,6 +1737,7 @@ details:DE:Details
 details:SV:Detaljer
 details:NL:Details
 details:AR:تفاصيل
+details:HU:Részletek
 # Translation missing (New!)
 
 
@@ -2279,6 +2285,7 @@ startup_error:DE:Ein Fehler hat muCommander am Start gehindert.
 startup_error:SV:Ett fel förhindrade muCommander från att starta.
 startup_error:NL:Een fout verhinderde het opstarten van muCommander.
 startup_error:AR:حدث خطأ منع من تشغيل muCommander.
+startup_error:HU:Váratlan hiba fordult elő a muCommander indulásakor.
 # Translation missing (New!)
 
 
@@ -2458,6 +2465,7 @@ action_categories.all:DE:Alle
 action_categories.all:SV:Alla
 action_categories.all:NL:Alle
 action_categories.all:AR:الكل
+action_categories.all:HU:Összes
 # Translation missing (New!)
 
 
@@ -2528,7 +2536,7 @@ action_categories.view:ES:Ver
 action_categories.view:CS:Zobrazit
 action_categories.view:zh_TW:檢視
 action_categories.view:PL:Podgląd
-action_categories.view:HU:Megnéz
+action_categories.view:HU:Megjelenítés
 action_categories.view:RU:Просмотр
 action_categories.view:zh_CN:查看
 action_categories.view:SL:Pogled
@@ -2979,6 +2987,7 @@ InternalView.label:zh_TW:檢視 (內建)
 InternalView.label:DE:Anzeigen (eingebaut)
 InternalView.label:SV:Visa (intern)
 InternalView.label:AR:عرض (محلي)
+InternalView.label:HU:Megnéző (beépített)
 # Translation missing (New!)
 
 
@@ -3034,6 +3043,7 @@ InternalEdit.label:zh_TW:編輯 (內建)
 InternalEdit.label:DE:Editor (eingebaut)
 InternalEdit.label:SV:Redigera (intern)
 InternalEdit.label:AR:تحرير (محلي)
+InternalEdit.label:HU:Szerkesztő (beépített)
 # Translation missing (New!)
 
 
@@ -4166,6 +4176,7 @@ MarkNextBlock.label:DE:Nächsten Block markieren
 MarkNextBlock.label:SV:Markera ett block neråt
 MarkNextBlock.label:NL:Markeer een blok naar beneden
 MarkNextBlock.label:AR:تحديد كتلة واحدة للأسفل
+MarkNextBlock.label:HU:Egy blokk kijelölése lefelé
 # Translation missing (New!)
 
 
@@ -4194,6 +4205,7 @@ MarkPreviousBlock.label:DE:Vorigen Block markieren
 MarkPreviousBlock.label:SV:Markera ett block uppåt
 MarkPreviousBlock.label:NL:Markeer een blok omhoog
 MarkPreviousBlock.label:AR:تحديد كتلة واحدة للأعلى
+MarkPreviousBlock.label:HU:Egy blokk kijelölése felfelé
 # Translation missing (New!)
 
 
@@ -4222,6 +4234,7 @@ MarkNextRow.label:DE:Nächste Zeile markieren
 MarkNextRow.label:SV:Markera en rad neråt
 MarkNextRow.label:NL:Markeer een regel naar beneden
 MarkNextRow.label:AR:تحديد صف واحد للأسفل
+MarkNextRow.label:HU:Egy sor kijelölése lefelé
 # Translation missing (New!)
 
 
@@ -4250,6 +4263,7 @@ MarkPreviousRow.label:DE:Vorige Zeile markieren
 MarkPreviousRow.label:SV:Markera en rad uppåt
 MarkPreviousRow.label:NL:Markeer een regel omhoog
 MarkPreviousRow.label:AR:تحديد صف واحد للأعلى
+MarkPreviousRow.label:HU:Egy sor kijelölése felfelé
 # Translation missing (New!)
 
 
@@ -4283,7 +4297,7 @@ MarkNextPage.label:KO:페이지 아래로 선택
 MarkNextPage.label:pt_BR:Marcar página abaixo
 MarkNextPage.label:NL:Markeer bestanden tot volgende bladzijde 
 MarkNextPage.label:SK:Označiť po nasledujúcu stránku
-MarkNextPage.label:HU:Következő lap kijelölése
+MarkNextPage.label:HU:Előző lap kijelölése
 MarkNextPage.label:JA:下へページをマーク
 MarkNextPage.label:SV:Markera sidan neråt
 MarkNextPage.label:DA:Marker side ned
@@ -4305,7 +4319,7 @@ MarkPreviousPage.label:KO:페이지 위로 선택
 MarkPreviousPage.label:pt_BR:Marcar página acima
 MarkPreviousPage.label:NL:Markeer bestanden tot vorige pagina
 MarkPreviousPage.label:SK:Označiť po predchádzajúcu stránku
-MarkPreviousPage.label:HU:Előző lap kijelölése
+MarkPreviousPage.label:HU:Következő lap kijelölése
 MarkPreviousPage.label:IT:Seleziona pagina su
 MarkPreviousPage.label:JA:上へページをマーク
 MarkPreviousPage.label:SV:Markera sidan uppåt
@@ -4434,7 +4448,7 @@ SwapFolders.tooltip:ES:Intercambiar directorios
 SwapFolders.tooltip:CS:Prohodit složky vlevo a vpravo
 SwapFolders.tooltip:zh_TW:切換左右方的資料夾
 SwapFolders.tooltip:PL:Zmień katalogi  z lewej i prawej strony
-SwapFolders.tooltip:HU:A bal és jobb panel felcserélése
+SwapFolders.tooltip:HU:A bal és jobb panel váltás
 SwapFolders.tooltip:RU:Поменять местами панели
 SwapFolders.tooltip:zh_CN:交换左右文件夹
 SwapFolders.tooltip:SL:Zamenjaj levo in desno okno
@@ -5019,6 +5033,7 @@ ToggleColumn.show:zh_TW:顯示 %1 欄位
 ToggleColumn.show:DE:Zeige Spalte %1
 ToggleColumn.show:SV:Visa %1 kolumn
 ToggleColumn.show:AR:إظهار عمود %1
+ToggleColumn.show:HU:%1 oszlop megjelenítése
 # Translation missing (New!)
 
 
@@ -5048,6 +5063,7 @@ ToggleColumn.hide:DE:Verberge Spalte %1
 ToggleColumn.hide:SV:Göm %1 kolumn
 ToggleColumn.hide:NL:Verberg de kolom %1
 ToggleColumn.hide:AR:إخفاء عمود %1
+ToggleColumn.hide:HU:%1 oszlop elrejtése
 # Translation missing (New!)
 
 
@@ -5072,7 +5088,7 @@ ToggleCommandBar.show:ES:Mostar la barra de comandos
 ToggleCommandBar.show:CS:Zobrazit lištu příkazů
 ToggleCommandBar.show:zh_TW:顯示命令列
 ToggleCommandBar.show:PL:Pokaż pasek komend
-ToggleCommandBar.show:HU:Parancssor megjelenítése
+ToggleCommandBar.show:HU:Parancsszalag megjelenítése
 ToggleCommandBar.show:RU:Показать панель команд
 ToggleCommandBar.show:zh_CN:显示命令条
 ToggleCommandBar.show:SL:Prikaži ukazno vrstico
@@ -5095,7 +5111,7 @@ ToggleCommandBar.hide:ES:Ocultar la barra de comandos
 ToggleCommandBar.hide:CS:Skrýt lištu příkazů
 ToggleCommandBar.hide:zh_TW:隱藏命令列
 ToggleCommandBar.hide:PL:Ukryj pasek komend
-ToggleCommandBar.hide:HU:Parancssor elrejtése
+ToggleCommandBar.hide:HU:Parancsszalag elrejtése
 ToggleCommandBar.hide:RU:Скрыть панель команд
 ToggleCommandBar.hide:zh_CN:隐藏命令条
 ToggleCommandBar.hide:SL:Skrij ukazno vrstico
@@ -5170,6 +5186,7 @@ CustomizeCommandBar.label:zh_TW:自訂命令工作列
 CustomizeCommandBar.label:DE:Kommandozeile anpassen
 CustomizeCommandBar.label:SV:Anpassa kommandoraden
 CustomizeCommandBar.label:NL:Commandobalk aanpassen
+CustomizeCommandBar.label:HU:Parancsszalag beállítása
 # Translation missing (New!)
 
 
@@ -5435,7 +5452,7 @@ SwitchActiveTable.label:ES:Cambiar entre los paneles izquierdo y derecho
 SwitchActiveTable.label:CS:Přepnout mezi levým a pravým panelem
 SwitchActiveTable.label:zh_TW:在左右面板間交互切換
 SwitchActiveTable.label:PL:Zamień aktualne panel
-SwitchActiveTable.label:HU:A bal és jobb panel felcserélése
+SwitchActiveTable.label:HU:A bal és jobb panel váltás
 SwitchActiveTable.label:RU:Переключение между левой и правой панелью
 SwitchActiveTable.label:zh_CN:在左右面板间切换
 SwitchActiveTable.label:SL:Preklopi med levo in desno stranjo
@@ -5463,6 +5480,7 @@ SelectNextBlock.label:DE:Zum nächsten Block springen
 SelectNextBlock.label:SV:Hoppa ett block neråt
 SelectNextBlock.label:NL:Een blok naar beneden
 SelectNextBlock.label:AR:قفز كتلة واحدة للأسفل
+SelectNextBlock.label:HU:Ugrás egy blokkal lefelé
 # Translation missing (New!)
 
 
@@ -5491,6 +5509,7 @@ SelectPreviousBlock.label:DE:Zum vorigen Block springen
 SelectPreviousBlock.label:SV:Hoppa ett block uppåt
 SelectPreviousBlock.label:NL:Een blok omhoog
 SelectPreviousBlock.label:AR:قفز كتلة واحدة للأعلى
+SelectPreviousBlock.label:HU:Ugrás egy blokkal felfelé
 # Translation missing (New!)
 
 
@@ -5519,6 +5538,7 @@ SelectNextPage.label:DE:Nächste Seite
 SelectNextPage.label:SV:Hoppa en sida neråt
 SelectNextPage.label:NL:Een bladzijde omlaag
 SelectNextPage.label:AR:قفز صفحة واحدة للأسفل
+SelectNextPage.label:HU:Ugrás a következő lapra
 # Translation missing (New!)
 
 
@@ -5547,6 +5567,7 @@ SelectPreviousPage.label:DE:Vorige Seite
 SelectPreviousPage.label:SV:Hoppa en sida uppåt
 SelectPreviousPage.label:NL:Een bladzijde omhoog
 SelectPreviousPage.label:AR:قفز صفحة واحدة للأعلى
+SelectPreviousPage.label:HU:Ugrás az előző lapra
 # Translation missing (New!)
 
 
@@ -5575,6 +5596,7 @@ SelectNextRow.label:DE:Nächste Zeile
 SelectNextRow.label:SV:Hoppa en rad neråt
 SelectNextRow.label:NL:Een regel omlaag
 SelectNextRow.label:AR:قفز صف واحد للأسفل
+SelectNextRow.label:HU:Ugrás a következő sorra
 # Translation missing (New!)
 
 
@@ -5603,6 +5625,7 @@ SelectPreviousRow.label:DE:Vorige Zeile
 SelectPreviousRow.label:SV:Hoppa en rad uppåt
 SelectPreviousRow.label:NL:Een regel omhoog
 SelectPreviousRow.label:AR:قفز صف واحد للأعلى
+SelectPreviousRow.label:HU:Ugrás az előző sorra
 # Translation missing (New!)
 
 
@@ -6050,7 +6073,7 @@ ShowRecentLocationsQL.label:DA:Nyeligt tilgåede placeringer
 ShowRecentLocationsQL.label:NL:Recente locaties
 ShowRecentLocationsQL.label:RO:Locații recente
 ShowRecentLocationsQL.label:DE:Kürzlich besuchte Ordner
-ShowRecentLocationsQL.label:HU:Legutóbbi helyek
+ShowRecentLocationsQL.label:HU:Legutóbb felkeresett helyek
 ShowRecentLocationsQL.label:zh_TW:最近開啟位置
 ShowRecentLocationsQL.label:JA:最近の場所
 ShowRecentLocationsQL.label:PL:Ostatnie lokalizacje
@@ -6069,7 +6092,7 @@ ShowRecentExecutedFilesQL.label:FR:Fichiers récemment exécutés
 ShowRecentExecutedFilesQL.label:NL:Recent uitgevoerde bestanden
 ShowRecentExecutedFilesQL.label:RO:Fișiere executate recent
 ShowRecentExecutedFilesQL.label:DE:Kürzlich ausgeführte Programme
-ShowRecentExecutedFilesQL.label:HU:Legutóbbi futtatott fájlok
+ShowRecentExecutedFilesQL.label:HU:Legutóbb futtatott fájlok
 ShowRecentExecutedFilesQL.label:zh_TW:最近執行檔案
 ShowRecentExecutedFilesQL.label:JA:最近実行したファイル
 ShowRecentExecutedFilesQL.label:PL:Ostatnio wykonywane pliki
@@ -6097,6 +6120,7 @@ SplitFile.tooltip:DE:Datei in mehrere Teile aufspalten
 SplitFile.tooltip:SV:Dela upp en fil i flera delar
 SplitFile.tooltip:NL:Bestand opsplitsen in verschillende gedeeltes
 SplitFile.tooltip:AR:تقسيم ملف إلى عدة أجزاء
+SplitFile.tooltip:HU:A fájl darabolása kisebb részekre
 # Translation missing (New!)
 
 
@@ -6125,6 +6149,7 @@ CombineFiles.tooltip:DE:Dateiteile zum Original zusammenfügen
 CombineFiles.tooltip:SV:Slå samman uppdelade filer för att återskapa originalfilen
 CombineFiles.tooltip:NL:Gesplitse bestandsdelen samenvoegen om het orrigineel terug te krijgen
 CombineFiles.tooltip:AR:إعادة دمج أقسام ملف وتجميع الملف الأصلي
+CombineFiles.tooltip:HU:Az eredeti fájl összeállítása a kisebb részekből
 # Translation missing (New!)
 
 
@@ -6152,6 +6177,7 @@ ShowDebugConsole.label:zh_TW:偵錯主控台
 ShowDebugConsole.label:DE:Debug-Konsole
 ShowDebugConsole.label:SV:Felsökningskonsol
 ShowDebugConsole.label:AR:لوحة التنقيح
+ShowDebugConsole.label:HU:A konzol nyomkövetése
 # Translation missing (New!)
 
 
@@ -6180,6 +6206,7 @@ FocusPrevious.label:DE:Fokus in vorherige Komponente
 FocusPrevious.label:SV:Fokusera på föregående komponent
 FocusPrevious.label:NL:Focus op vorige component
 FocusPrevious.label:AR:التركيز على المكون السابق
+FocusPrevious.label:HU:Az előző összetevő kijelölése
 # Translation missing (New!)
 
 
@@ -6209,6 +6236,7 @@ FocusNext.label:DE:Fokus in nächste Komponente
 FocusNext.label:SV:Fokusera på nästa komponent
 FocusNext.label:NL:Focus op vorige component
 FocusNext.label:AR:التركيز على المكون التالي
+FocusNext.label:HU:A következő összetevő kijelölése
 # Translation missing (New!)
 
 
@@ -6603,6 +6631,7 @@ shortcuts_panel.title:DE:Tastenkürzel
 shortcuts_panel.title:SV:Kortkommandon
 shortcuts_panel.title:NL:Sneltoetsen
 shortcuts_panel.title:AR:الاختصارات
+shortcuts_panel.title:HU:Gyorsbillentyűk
 # Translation missing (New!)
 
 
@@ -6631,6 +6660,7 @@ shortcuts_panel.restore_defaults:DE:Standard wiederherstellen
 shortcuts_panel.restore_defaults:SV:Återställ förval
 shortcuts_panel.restore_defaults:NL:Standaard instellingen
 shortcuts_panel.restore_defaults:AR:استعادة الافتراضيات
+shortcuts_panel.restore_defaults:HU:Alaphelyzet visszaállítása
 # Translation missing (New!)
 
 
@@ -6659,6 +6689,7 @@ shortcuts_panel.show:DE:Zeigen
 shortcuts_panel.show:SV:Visa
 shortcuts_panel.show:NL:Toon
 shortcuts_panel.show:AR:إظهار
+shortcuts_panel.show:HU:Megjelenítés
 # Translation missing (New!)
 
 
@@ -6687,6 +6718,7 @@ shortcuts_panel.default_message:DE:Drücken Sie Enter oder führen Sie einen Dop
 shortcuts_panel.default_message:SV:Tryck Enter eller dubbelklicka på kortkommandot som du vill redigera
 shortcuts_panel.default_message:NL:Druk op Enter of dubbelklik op de sneltoets die u wilt bewerken
 shortcuts_panel.default_message:AR:اضغط إدخال أو مزدوجة بزر الفأرة على الاختصار الذي تود تعديله
+shortcuts_panel.default_message:HU:Nyomja meg az Enter billentyűt vagy kattintson duplán a Gyorsbillentyűk módosításához.
 # Translation missing (New!)
 
 
@@ -6715,6 +6747,7 @@ shortcuts_table.action_description:DE:Beschreibung der Aktion
 shortcuts_table.action_description:SV:Handlingsbeskrivning
 shortcuts_table.action_description:NL:Beschrijving van de actie
 shortcuts_table.action_description:AR:وصف الحدث
+shortcuts_table.action_description:HU:A művelet leírása
 # Translation missing (New!)
 
 
@@ -6743,6 +6776,7 @@ shortcuts_table.shortcut:DE:Tastenkürzel
 shortcuts_table.shortcut:SV:Kortkommando
 shortcuts_table.shortcut:NL:Sneltoets
 shortcuts_table.shortcut:AR:اختصار
+shortcuts_table.shortcut:HU:Gyorsbillentyű
 # Translation missing (New!)
 
 
@@ -6771,6 +6805,7 @@ shortcuts_table.alternate_shortcut:DE:Alternatives Tastenkürzel
 shortcuts_table.alternate_shortcut:SV:Alternativt kortkommando
 shortcuts_table.alternate_shortcut:NL:Alternatieve sneltoets
 shortcuts_table.alternate_shortcut:AR:اختصار بديل
+shortcuts_table.alternate_shortcut:HU:Másodlagos Gyorsbillentyű
 # Translation missing (New!)
 
 
@@ -6799,6 +6834,7 @@ shortcuts_table.type_in_a_shortcut:DE:Tastenkürzel eingeben
 shortcuts_table.type_in_a_shortcut:SV:Ange kortkommando
 shortcuts_table.type_in_a_shortcut:NL:Voer een sneltoets in
 shortcuts_table.type_in_a_shortcut:AR:إدخال اختصار
+shortcuts_table.type_in_a_shortcut:HU:Gyorsbillentyű típusa
 # Translation missing (New!)
 
 
@@ -6831,6 +6867,7 @@ command_bar_dialog.help:DE:Verschieben Sie die Schaltflächen um die Kommandozei
 command_bar_dialog.help:SV:Dra knapparna för att anpassa kommandoraden
 command_bar_dialog.help:NL:Sleep knoppen om de commandobalk aan te passen
 command_bar_dialog.help:AR:اسحب الأزرار لتخصيص شريط الأوامر
+command_bar_dialog.help:HU:A nyomógombok húzásával módosíthatja a Parancsszalagot.
 # Translation missing (New!)
 
 
@@ -7279,6 +7316,7 @@ destination_dialog.skip_errors:zh_TW:略過錯誤
 destination_dialog.skip_errors:DE:Fehler ignorieren
 destination_dialog.skip_errors:SV:Ignorera fel
 destination_dialog.skip_errors:AR:تجاوز الأخطاء
+destination_dialog.skip_errors:HU:Hibák kihagyása
 # Translation missing (New!)
 
 
@@ -8057,6 +8095,7 @@ delete_dialog.move_to_trash.failed:zh_TW:一個或多個檔案無法移至垃圾
 delete_dialog.move_to_trash.failed:DE:Eine oder mehrere Dateien konnten nicht in den Papierkorb verschoben werden.
 delete_dialog.move_to_trash.failed:SV:En eller flera filer kunde inte flyttas till papperskorgen
 delete_dialog.move_to_trash.failed:AR:ملف أو أكثر لا يمكن نقله إلى سلة المحذوفات.
+delete_dialog.move_to_trash.failed:HU:A fájl(oka)t nem lehet a Lomtárba dobni.
 # Translation missing (New!)
 
 
@@ -8510,6 +8549,7 @@ split_file_dialog.error_title:SK:Chyba pri delení súboru
 split_file_dialog.error_title:zh_TW:分割檔案錯誤
 split_file_dialog.error_title:DE:Fehler beim Aufspalten einer Datei 
 split_file_dialog.error_title:SV:Fel vid uppdelning av fil
+split_file_dialog.error_title:HU:Fájldarabolási hiba
 # Translation missing (New!)
 
 
@@ -8539,6 +8579,7 @@ split_file_dialog.file_to_split:SK:Súbor na rozdelenie
 split_file_dialog.file_to_split:zh_TW:欲分割的檔案
 split_file_dialog.file_to_split:DE:Datei zum Aufspalten
 split_file_dialog.file_to_split:SV:Dela upp fil
+split_file_dialog.file_to_split:HU:Fájldarabolás
 # Translation missing (New!)
 
 
@@ -8568,6 +8609,7 @@ split_file_dialog.target_directory:SK:Cieľový priečinok
 split_file_dialog.target_directory:zh_TW:目的資料夾
 split_file_dialog.target_directory:DE:Zielverzeichnis
 split_file_dialog.target_directory:SV:Målmapp
+split_file_dialog.target_directory:HU:Célkönyvtár
 # Translation missing (New!)
 
 
@@ -8597,6 +8639,7 @@ split_file_dialog.part_size:SK:Veľkosť jednej časti
 split_file_dialog.part_size:zh_TW:分割大小
 split_file_dialog.part_size:DE:Größe eines Teils
 split_file_dialog.part_size:SV:Delstorlek
+split_file_dialog.part_size:HU:Egy rész mérete
 # Translation missing (New!)
 
 
@@ -8626,6 +8669,7 @@ split_file_dialog.parts:SK:Počet častí
 split_file_dialog.parts:zh_TW:分割數目
 split_file_dialog.parts:DE:Anzahl der Teile
 split_file_dialog.parts:SV:Antal delar
+split_file_dialog.parts:HU:Darabok száma
 # Translation missing (New!)
 
 
@@ -8655,6 +8699,7 @@ split_file_dialog.generate_CRC:SK:Generovať CRC súboru
 split_file_dialog.generate_CRC:zh_TW:產生 CRC 檔案
 split_file_dialog.generate_CRC:DE:Erzeuge CRC-Datei
 split_file_dialog.generate_CRC:SV:Skapa CRC fil
+split_file_dialog.generate_CRC:HU:CRC fájl készítése
 # Translation missing (New!)
 
 
@@ -8684,6 +8729,7 @@ split_file_dialog.max_parts:SK:Maximálny počet častí je %1
 split_file_dialog.max_parts:zh_TW:最多允許的分割數目為 %1
 split_file_dialog.max_parts:DE:Maximale Anzehl der Teile ist %1
 split_file_dialog.max_parts:SV:Maximalt antal tillåtna delar är %1
+split_file_dialog.max_parts:HU:A részek maximális darabszáma: %1
 # Translation missing (New!)
 
 
@@ -8713,6 +8759,7 @@ split_file_dialog.auto:SK:Automaticky
 split_file_dialog.auto:zh_TW:自動
 split_file_dialog.auto:DE:Automatisch
 split_file_dialog.auto:SV:Automatiskt
+split_file_dialog.auto:HU:Automatikus
 # Translation missing (New!)
 
 
@@ -8742,6 +8789,7 @@ split_file_dialog.insert_new_media:SK:Vložte nové médium
 split_file_dialog.insert_new_media:zh_TW:插入新的媒體
 split_file_dialog.insert_new_media:DE:Neues Medium einlegen
 split_file_dialog.insert_new_media:SV:Sätt in ny media
+split_file_dialog.insert_new_media:HU:Helyezzen be új adathordozót
 # Translation missing (New!)
 
 
@@ -8776,6 +8824,7 @@ combine_files_dialog.error_title:SK:Chyba pri spájaní súboru
 combine_files_dialog.error_title:zh_TW:合併檔案錯誤
 combine_files_dialog.error_title:DE:Fehler beim Zusammenfügen der Datei
 combine_files_dialog.error_title:SV:Fel vid sammanslagning av filer
+combine_files_dialog.error_title:HU:Fájl összefűzési hiba
 # Translation missing (New!)
 
 
@@ -8805,6 +8854,7 @@ combine_files_job.no_crc_file:SK:Spojenie úspešné. Žiadny CRC súbor.
 combine_files_job.no_crc_file:zh_TW:合併成功, 沒有 CRC 檔案.
 combine_files_job.no_crc_file:DE:Zusammenfügen der Datei erfolgreich. Keine CRC-Datei.
 combine_files_job.no_crc_file:SV:Sammanslagning klart. Ingen CRC fil.
+combine_files_job.no_crc_file:HU:A fájlok összefűzése sikerült. Nincs CRC fájl.
 # Translation missing (New!)
 
 
@@ -8834,6 +8884,7 @@ combine_files_job.crc_read_error:SK:Chyba pri čítaní CRC súboru.
 combine_files_job.crc_read_error:zh_TW:當讀取 CRC 檔案時發生錯誤.
 combine_files_job.crc_read_error:DE:Fehler beim Lesen der CRC-Datei.
 combine_files_job.crc_read_error:SV:Fel vid läsning av CRC fil.
+combine_files_job.crc_read_error:HU:CRC fájl olvasási hiba.
 # Translation missing (New!)
 
 
@@ -8863,6 +8914,7 @@ combine_files_job.crc_check_failed:SK:Chybné CRC: očakávané %2, nájdené %1
 combine_files_job.crc_check_failed:zh_TW:CRC 不符合: 預期 %2, 發現 %1
 combine_files_job.crc_check_failed:DE:CRC-Fehler: erwartet %2, gefunden %1
 combine_files_job.crc_check_failed:SV:CRC matchar inte: förväntade %2, hittade %1
+combine_files_job.crc_check_failed:HU:CRC hiba: hiányzik: %2, megtalált: %1
 # Translation missing (New!)
 
 
@@ -8892,6 +8944,7 @@ combine_files_job.crc_ok:SK:Spojenie úspešné. CRC ok.
 combine_files_job.crc_ok:zh_TW:合併成功. CRC 驗證成功.
 combine_files_job.crc_ok:DE:Zusammenfügen der Datei erfolgreich. CRC-Prüfsumme o.k.
 combine_files_job.crc_ok:SV:Sammanslagning klart. CRC checksum ok.
+combine_files_job.crc_ok:HU:A fájlok összefűzése sikerült. CRC ellenőrzőszám rendben.
 # Translation missing (New!)
 
 
@@ -9835,6 +9888,7 @@ server_connect_dialog.domain:SK:Doména
 server_connect_dialog.domain:zh_TW:網域
 server_connect_dialog.domain:DE:Domäne
 server_connect_dialog.domain:SV:Domän
+server_connect_dialog.domain:HU:Tartomány
 # Translation missing (New!)
 
 
@@ -12165,7 +12219,7 @@ theme_editor.symbolic_link:ES:Enlace simbólico
 theme_editor.symbolic_link:CS:Symbolický odkaz
 theme_editor.symbolic_link:zh_TW:符號連結
 theme_editor.symbolic_link:PL:Dowiązanie symboliczne
-theme_editor.symbolic_link:HU:Parancsikon
+theme_editor.symbolic_link:HU:Jelképes hivatkozás
 theme_editor.symbolic_link:RU:Символьная ссылка
 theme_editor.symbolic_link:zh_CN:符号连接
 theme_editor.symbolic_link:SL:Simbolna povezava
@@ -12193,6 +12247,7 @@ theme_editor.header:SK:Hlavička
 theme_editor.header:zh_TW:標頭
 theme_editor.header:DE:Überschrift
 theme_editor.header:SV:Sidhuvud
+theme_editor.header:HU:Fejléc
 # Translation missing (New!)
 
 
@@ -12222,6 +12277,7 @@ theme_editor.item:SK:Položka
 theme_editor.item:zh_TW:項目
 theme_editor.item:DE:Element
 theme_editor.item:SV:Lista
+theme_editor.item:HU:Elem
 # Translation missing (New!)
 
 
@@ -12254,6 +12310,7 @@ command_bar_customize_dialog.available_actions:zh_TW:可供選擇的操作
 command_bar_customize_dialog.available_actions:DE:Verfügbare Aktionen
 command_bar_customize_dialog.available_actions:SV:Tillgängliga handlingar
 command_bar_customize_dialog.available_actions:NL:Beschikbare acties
+command_bar_customize_dialog.available_actions:HU:Lehetséges műveletek
 # Translation missing (New!)
 
 
@@ -12282,6 +12339,7 @@ command_bar_customize_dialog.modifier:zh_TW:切換鍵
 command_bar_customize_dialog.modifier:DE:Modifizierer
 command_bar_customize_dialog.modifier:SV:Specialtangent
 command_bar_customize_dialog.modifier:NL:Veranderen
+command_bar_customize_dialog.modifier:HU:Módosítók
 # Translation missing (New!)
 
 
@@ -12911,7 +12969,7 @@ prefs_dialog.follow_symlinks_when_cd:FR:Suivre les liens symboliques en changean
 prefs_dialog.follow_symlinks_when_cd:CS:Následovat symbolické odkazy při změnách složky
 prefs_dialog.follow_symlinks_when_cd:NL:Volg symbolische koppelingen bij wijzigen huidige directory
 prefs_dialog.follow_symlinks_when_cd:SK:Nasladovať symbolické odkazy pri zmenách aktuálneho priečinku
-prefs_dialog.follow_symlinks_when_cd:HU:Könyvtár váltáskor ugrás a parancsikon hivatkozásához
+prefs_dialog.follow_symlinks_when_cd:HU:Könyvtár váltáskor ugrás a hivatkozásához
 prefs_dialog.follow_symlinks_when_cd:zh_CN:改变当前目录时跟随符号连接
 prefs_dialog.follow_symlinks_when_cd:zh_TW:切換目前資料夾時跟隨符號鏈結
 prefs_dialog.follow_symlinks_when_cd:RO:Urmează legăturile simbolice la schimbarea directorului curent
@@ -13884,6 +13942,7 @@ debug_console_dialog.level:zh_TW:程度
 debug_console_dialog.level:DE:Level
 debug_console_dialog.level:SV:Nivå
 debug_console_dialog.level:AR:مرحلة
+debug_console_dialog.level:HU:Szint
 # Translation missing (New!)
 
 
@@ -15296,7 +15355,7 @@ recent_executed_files_quick_list.empty_message:FR:Pas de fichier récemment exé
 recent_executed_files_quick_list.empty_message:NL:Geen recent uitgevoerde bestanden
 recent_executed_files_quick_list.empty_message:RO:Nici un fișier executat recent
 recent_executed_files_quick_list.empty_message:DE:Keine jüngst ausgeführten Programme
-recent_executed_files_quick_list.empty_message:HU:Nincsenek legutóbbi futtatott fájlok
+recent_executed_files_quick_list.empty_message:HU:Nincsenek legutóbb futtatott fájlok
 recent_executed_files_quick_list.empty_message:zh_TW:沒有最近執行檔案
 recent_executed_files_quick_list.empty_message:JA:最近実行したファイルがありません
 recent_executed_files_quick_list.empty_message:PL:Brak ostatnio uruchamianych plików
