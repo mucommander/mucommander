@@ -477,6 +477,7 @@ skip_all:SK:Preskočiť všetko
 skip_all:zh_TW:全部略過
 skip_all:DE:Alle Überspringen
 skip_all:SV:Hoppa över alla
+skip_all:AR:تخطي الكل
 # Translation missing (New!)
 
 
@@ -1730,6 +1731,7 @@ details:zh_TW:細節
 details:DE:Details
 details:SV:Detaljer
 details:NL:Details
+details:AR:تفاصيل
 # Translation missing (New!)
 
 
@@ -2276,6 +2278,7 @@ startup_error:zh_TW:有錯誤造成 muCommander 無法啟動
 startup_error:DE:Ein Fehler hat muCommander am Start gehindert.
 startup_error:SV:Ett fel förhindrade muCommander från att starta.
 startup_error:NL:Een fout verhinderde het opstarten van muCommander.
+startup_error:AR:حدث خطأ منع من تشغيل muCommander.
 # Translation missing (New!)
 
 
@@ -2454,6 +2457,7 @@ action_categories.all:zh_TW:全部
 action_categories.all:DE:Alle
 action_categories.all:SV:Alla
 action_categories.all:NL:Alle
+action_categories.all:AR:الكل
 # Translation missing (New!)
 
 
@@ -2974,6 +2978,7 @@ InternalView.label:SK:Zobraziť (interne)
 InternalView.label:zh_TW:檢視 (內建)
 InternalView.label:DE:Anzeigen (eingebaut)
 InternalView.label:SV:Visa (intern)
+InternalView.label:AR:عرض (محلي)
 # Translation missing (New!)
 
 
@@ -3028,6 +3033,7 @@ InternalEdit.label:SK:Upraviť (interne)
 InternalEdit.label:zh_TW:編輯 (內建)
 InternalEdit.label:DE:Editor (eingebaut)
 InternalEdit.label:SV:Redigera (intern)
+InternalEdit.label:AR:تحرير (محلي)
 # Translation missing (New!)
 
 
@@ -4159,6 +4165,7 @@ MarkNextBlock.label:zh_TW:往下標記一個區塊
 MarkNextBlock.label:DE:Nächsten Block markieren
 MarkNextBlock.label:SV:Markera ett block neråt
 MarkNextBlock.label:NL:Markeer een blok naar beneden
+MarkNextBlock.label:AR:تحديد كتلة واحدة للأسفل
 # Translation missing (New!)
 
 
@@ -4186,6 +4193,7 @@ MarkPreviousBlock.label:zh_TW:往上標記一個區塊
 MarkPreviousBlock.label:DE:Vorigen Block markieren
 MarkPreviousBlock.label:SV:Markera ett block uppåt
 MarkPreviousBlock.label:NL:Markeer een blok omhoog
+MarkPreviousBlock.label:AR:تحديد كتلة واحدة للأعلى
 # Translation missing (New!)
 
 
@@ -4213,6 +4221,7 @@ MarkNextRow.label:zh_TW:往下標記一行
 MarkNextRow.label:DE:Nächste Zeile markieren
 MarkNextRow.label:SV:Markera en rad neråt
 MarkNextRow.label:NL:Markeer een regel naar beneden
+MarkNextRow.label:AR:تحديد صف واحد للأسفل
 # Translation missing (New!)
 
 
@@ -4240,6 +4249,7 @@ MarkPreviousRow.label:zh_TW:往上標記一行
 MarkPreviousRow.label:DE:Vorige Zeile markieren
 MarkPreviousRow.label:SV:Markera en rad uppåt
 MarkPreviousRow.label:NL:Markeer een regel omhoog
+MarkPreviousRow.label:AR:تحديد صف واحد للأعلى
 # Translation missing (New!)
 
 
@@ -5008,6 +5018,7 @@ ToggleColumn.show:SK:Zobraziť stĺpec %1
 ToggleColumn.show:zh_TW:顯示 %1 欄位
 ToggleColumn.show:DE:Zeige Spalte %1
 ToggleColumn.show:SV:Visa %1 kolumn
+ToggleColumn.show:AR:إظهار عمود %1
 # Translation missing (New!)
 
 
@@ -5036,6 +5047,7 @@ ToggleColumn.hide:zh_TW:隱藏 %1 欄位
 ToggleColumn.hide:DE:Verberge Spalte %1
 ToggleColumn.hide:SV:Göm %1 kolumn
 ToggleColumn.hide:NL:Verberg de kolom %1
+ToggleColumn.hide:AR:إخفاء عمود %1
 # Translation missing (New!)
 
 
@@ -5450,6 +5462,7 @@ SelectNextBlock.label:zh_TW:往下跳一區塊
 SelectNextBlock.label:DE:Zum nächsten Block springen
 SelectNextBlock.label:SV:Hoppa ett block neråt
 SelectNextBlock.label:NL:Een blok naar beneden
+SelectNextBlock.label:AR:قفز كتلة واحدة للأسفل
 # Translation missing (New!)
 
 
@@ -5477,6 +5490,7 @@ SelectPreviousBlock.label:zh_TW:往上跳一區塊
 SelectPreviousBlock.label:DE:Zum vorigen Block springen
 SelectPreviousBlock.label:SV:Hoppa ett block uppåt
 SelectPreviousBlock.label:NL:Een blok omhoog
+SelectPreviousBlock.label:AR:قفز كتلة واحدة للأعلى
 # Translation missing (New!)
 
 
@@ -5504,6 +5518,7 @@ SelectNextPage.label:zh_TW:往下跳一頁
 SelectNextPage.label:DE:Nächste Seite
 SelectNextPage.label:SV:Hoppa en sida neråt
 SelectNextPage.label:NL:Een bladzijde omlaag
+SelectNextPage.label:AR:قفز صفحة واحدة للأسفل
 # Translation missing (New!)
 
 
@@ -5531,6 +5546,7 @@ SelectPreviousPage.label:zh_TW:往上跳一頁
 SelectPreviousPage.label:DE:Vorige Seite
 SelectPreviousPage.label:SV:Hoppa en sida uppåt
 SelectPreviousPage.label:NL:Een bladzijde omhoog
+SelectPreviousPage.label:AR:قفز صفحة واحدة للأعلى
 # Translation missing (New!)
 
 
@@ -5558,6 +5574,7 @@ SelectNextRow.label:zh_TW:往下跳一行
 SelectNextRow.label:DE:Nächste Zeile
 SelectNextRow.label:SV:Hoppa en rad neråt
 SelectNextRow.label:NL:Een regel omlaag
+SelectNextRow.label:AR:قفز صف واحد للأسفل
 # Translation missing (New!)
 
 
@@ -5585,6 +5602,7 @@ SelectPreviousRow.label:zh_TW:往上跳一行
 SelectPreviousRow.label:DE:Vorige Zeile
 SelectPreviousRow.label:SV:Hoppa en rad uppåt
 SelectPreviousRow.label:NL:Een regel omhoog
+SelectPreviousRow.label:AR:قفز صف واحد للأعلى
 # Translation missing (New!)
 
 
@@ -6078,6 +6096,7 @@ SplitFile.tooltip:zh_TW:將檔案分割成多個
 SplitFile.tooltip:DE:Datei in mehrere Teile aufspalten
 SplitFile.tooltip:SV:Dela upp en fil i flera delar
 SplitFile.tooltip:NL:Bestand opsplitsen in verschillende gedeeltes
+SplitFile.tooltip:AR:تقسيم ملف إلى عدة أجزاء
 # Translation missing (New!)
 
 
@@ -6105,6 +6124,7 @@ CombineFiles.tooltip:zh_TW:將分割檔合併成原檔案
 CombineFiles.tooltip:DE:Dateiteile zum Original zusammenfügen
 CombineFiles.tooltip:SV:Slå samman uppdelade filer för att återskapa originalfilen
 CombineFiles.tooltip:NL:Gesplitse bestandsdelen samenvoegen om het orrigineel terug te krijgen
+CombineFiles.tooltip:AR:إعادة دمج أقسام ملف وتجميع الملف الأصلي
 # Translation missing (New!)
 
 
@@ -6131,6 +6151,7 @@ ShowDebugConsole.label:SK:Konzola pre ladenie
 ShowDebugConsole.label:zh_TW:偵錯主控台
 ShowDebugConsole.label:DE:Debug-Konsole
 ShowDebugConsole.label:SV:Felsökningskonsol
+ShowDebugConsole.label:AR:لوحة التنقيح
 # Translation missing (New!)
 
 
@@ -6158,6 +6179,7 @@ FocusPrevious.label:zh_TW:將輸入焦點移至前一個元件
 FocusPrevious.label:DE:Fokus in vorherige Komponente
 FocusPrevious.label:SV:Fokusera på föregående komponent
 FocusPrevious.label:NL:Focus op vorige component
+FocusPrevious.label:AR:التركيز على المكون السابق
 # Translation missing (New!)
 
 
@@ -6186,6 +6208,7 @@ FocusNext.label:zh_TW:將輸入焦點移至後一個元件
 FocusNext.label:DE:Fokus in nächste Komponente
 FocusNext.label:SV:Fokusera på nästa komponent
 FocusNext.label:NL:Focus op vorige component
+FocusNext.label:AR:التركيز على المكون التالي
 # Translation missing (New!)
 
 
@@ -6579,6 +6602,7 @@ shortcuts_panel.title:zh_TW:捷徑
 shortcuts_panel.title:DE:Tastenkürzel
 shortcuts_panel.title:SV:Kortkommandon
 shortcuts_panel.title:NL:Sneltoetsen
+shortcuts_panel.title:AR:الاختصارات
 # Translation missing (New!)
 
 
@@ -6606,6 +6630,7 @@ shortcuts_panel.restore_defaults:zh_TW:回復預設值
 shortcuts_panel.restore_defaults:DE:Standard wiederherstellen
 shortcuts_panel.restore_defaults:SV:Återställ förval
 shortcuts_panel.restore_defaults:NL:Standaard instellingen
+shortcuts_panel.restore_defaults:AR:استعادة الافتراضيات
 # Translation missing (New!)
 
 
@@ -6633,6 +6658,7 @@ shortcuts_panel.show:zh_TW:顯示
 shortcuts_panel.show:DE:Zeigen
 shortcuts_panel.show:SV:Visa
 shortcuts_panel.show:NL:Toon
+shortcuts_panel.show:AR:إظهار
 # Translation missing (New!)
 
 
@@ -6660,6 +6686,7 @@ shortcuts_panel.default_message:zh_TW:按下 Enter 或雙擊捷徑來進行編�
 shortcuts_panel.default_message:DE:Drücken Sie Enter oder führen Sie einen Doppelklick auf dem Tastenkürzel aus, dass sie bearbeiten wollen
 shortcuts_panel.default_message:SV:Tryck Enter eller dubbelklicka på kortkommandot som du vill redigera
 shortcuts_panel.default_message:NL:Druk op Enter of dubbelklik op de sneltoets die u wilt bewerken
+shortcuts_panel.default_message:AR:اضغط إدخال أو مزدوجة بزر الفأرة على الاختصار الذي تود تعديله
 # Translation missing (New!)
 
 
@@ -6687,6 +6714,7 @@ shortcuts_table.action_description:zh_TW:操作描述
 shortcuts_table.action_description:DE:Beschreibung der Aktion
 shortcuts_table.action_description:SV:Handlingsbeskrivning
 shortcuts_table.action_description:NL:Beschrijving van de actie
+shortcuts_table.action_description:AR:وصف الحدث
 # Translation missing (New!)
 
 
@@ -6714,6 +6742,7 @@ shortcuts_table.shortcut:zh_TW:捷徑
 shortcuts_table.shortcut:DE:Tastenkürzel
 shortcuts_table.shortcut:SV:Kortkommando
 shortcuts_table.shortcut:NL:Sneltoets
+shortcuts_table.shortcut:AR:اختصار
 # Translation missing (New!)
 
 
@@ -6741,6 +6770,7 @@ shortcuts_table.alternate_shortcut:zh_TW:替換捷徑
 shortcuts_table.alternate_shortcut:DE:Alternatives Tastenkürzel
 shortcuts_table.alternate_shortcut:SV:Alternativt kortkommando
 shortcuts_table.alternate_shortcut:NL:Alternatieve sneltoets
+shortcuts_table.alternate_shortcut:AR:اختصار بديل
 # Translation missing (New!)
 
 
@@ -6768,6 +6798,7 @@ shortcuts_table.type_in_a_shortcut:zh_TW:在捷徑輸入
 shortcuts_table.type_in_a_shortcut:DE:Tastenkürzel eingeben
 shortcuts_table.type_in_a_shortcut:SV:Ange kortkommando
 shortcuts_table.type_in_a_shortcut:NL:Voer een sneltoets in
+shortcuts_table.type_in_a_shortcut:AR:إدخال اختصار
 # Translation missing (New!)
 
 
@@ -6799,6 +6830,7 @@ command_bar_dialog.help:zh_TW:拖曳按鈕來自訂命令工作列
 command_bar_dialog.help:DE:Verschieben Sie die Schaltflächen um die Kommandozeile anzupassen
 command_bar_dialog.help:SV:Dra knapparna för att anpassa kommandoraden
 command_bar_dialog.help:NL:Sleep knoppen om de commandobalk aan te passen
+command_bar_dialog.help:AR:اسحب الأزرار لتخصيص شريط الأوامر
 # Translation missing (New!)
 
 
@@ -7246,6 +7278,7 @@ destination_dialog.skip_errors:SK:Ignorovať chyby
 destination_dialog.skip_errors:zh_TW:略過錯誤
 destination_dialog.skip_errors:DE:Fehler ignorieren
 destination_dialog.skip_errors:SV:Ignorera fel
+destination_dialog.skip_errors:AR:تجاوز الأخطاء
 # Translation missing (New!)
 
 
@@ -8023,6 +8056,7 @@ delete_dialog.move_to_trash.failed:SK:Jeden alebo viacero súborov nemohlo byť 
 delete_dialog.move_to_trash.failed:zh_TW:一個或多個檔案無法移至垃圾桶
 delete_dialog.move_to_trash.failed:DE:Eine oder mehrere Dateien konnten nicht in den Papierkorb verschoben werden.
 delete_dialog.move_to_trash.failed:SV:En eller flera filer kunde inte flyttas till papperskorgen
+delete_dialog.move_to_trash.failed:AR:ملف أو أكثر لا يمكن نقله إلى سلة المحذوفات.
 # Translation missing (New!)
 
 
@@ -13849,6 +13883,7 @@ debug_console_dialog.level:SK:Úroveň
 debug_console_dialog.level:zh_TW:程度
 debug_console_dialog.level:DE:Level
 debug_console_dialog.level:SV:Nivå
+debug_console_dialog.level:AR:مرحلة
 # Translation missing (New!)
 
 
