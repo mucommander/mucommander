@@ -18,11 +18,11 @@
 
 package com.mucommander.ui.main.commandbar;
 
-import java.awt.Dimension;
-
 import com.mucommander.ui.action.ActionProperties;
 import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.main.MainFrame;
+
+import java.awt.*;
 
 /**
  * CommandBarButton that used for display purpose only
@@ -45,12 +45,14 @@ public class CommandBarButtonForDisplay extends CommandBarButton {
 	}
 	
 	public void setButtonAction(String actionId, MainFrame mainFrame) {
-        // Append the action's shortcut to the button's label
+        // Use the action's label as the button's label
         String label = ActionProperties.getActionLabel(actionId);
-        String acceleratorText = ActionProperties.getActionTooltip(actionId);
-        if(acceleratorText != null)
-            label += " [" + acceleratorText + ']';
         setText(label);
+
+        // Set the button's tooltip to the action's tooltip if it has one,
+        // to the action's label otherwise (the label may be too long for being displayed fully)
+        String tooltipText = ActionProperties.getActionTooltip(actionId);
+        setToolTipText(tooltipText==null?label:tooltipText);
 
         setIcon(IconManager.getScaledIcon(ActionProperties.getActionIcon(actionId), scaleFactor));
 	}
