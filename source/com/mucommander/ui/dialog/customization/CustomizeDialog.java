@@ -114,10 +114,13 @@ public abstract class CustomizeDialog extends FocusDialog implements ActionListe
         Object source = e.getSource();
 
         // Commit changes
-        if (source == okButton || source == applyButton) {
+        if (source == okButton || source == applyButton)
             commit();
-        }
 
+        // Disable OK & Apply buttons
+        if (source == applyButton)
+        	setCommitButtonsEnabled(false);
+        
         // Dispose dialog
         if (source == okButton || source == cancelButton)
             dispose();
