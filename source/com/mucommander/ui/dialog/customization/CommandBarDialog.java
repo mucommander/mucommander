@@ -110,6 +110,10 @@ public class CommandBarDialog extends CustomizeDialog {
     	// Fetch command-bar action ids
     	String[] commandBarActionIds = CommandBarAttributes.getActions();
     	int nbActions = commandBarActionIds.length;
+    	
+    	if (nbActions != commandBarButtons.size())
+    		return true;
+    	
     	for (int i=0; i<nbActions; ++i) {
     		CommandBarButtonForDisplay buttonI = (CommandBarButtonForDisplay) commandBarButtons.get(i);
     		if (buttonI == null) {
@@ -126,6 +130,10 @@ public class CommandBarDialog extends CustomizeDialog {
     	// Fetch command-bar alternative actions
     	String[] commandBarAlternativeActionIds = CommandBarAttributes.getAlternateActions();
     	int nbActions = commandBarAlternativeActionIds.length;
+    	
+    	if (nbActions != commandBarAlternativeButtons.size())
+    		return true;
+    	
     	for (int i=0; i<nbActions; ++i) {
     		CommandBarButtonForDisplay buttonI = (CommandBarButtonForDisplay) commandBarAlternativeButtons.get(i);
     		if (buttonI == null) {
