@@ -204,21 +204,37 @@ public abstract class MuAction extends AbstractAction {
         putValue(ALTERNATE_ACCELERATOR_PROPERTY_KEY, keyStroke);
     }
 
+    /**
+     * Returns <code>true</code> if both keystrokes' {@link KeyStroke#getKeyChar() char},
+     * {@link KeyStroke#getKeyCode() code} and {@link KeyStroke#getModifiers() modifiers} are equal.
+     * Unlike {@link KeyStroke#equals(Object)}, this method does not take into account the
+     * {@link KeyStroke#isOnKeyRelease() onKeyRelease} flag.
+     *
+     * @param ks1 first keystroke to test
+     * @param ks2 second keystroke to test
+     * @return <code>true</code> if both keystrokes' char, code and modifiers are equal
+     */
+    protected boolean acceleratorsEqual(KeyStroke ks1, KeyStroke ks2) {
+        return ks1.getKeyChar()==ks2.getKeyChar()
+            && ks1.getKeyCode()==ks2.getKeyCode()
+            && ks1.getModifiers()==ks2.getModifiers();
+    }
 
     /**
-     * Returns true if the given KeyStroke is one of this action's accelerators.
-     * This method always returns false if this method has no accelerator.
+     * Returns <code>true</code> if the given KeyStroke is one of this action's accelerators. Keystrokes are compared
+     * using {@link #acceleratorsEqual(KeyStroke, KeyStroke)}, so that the {@link KeyStroke#isOnKeyRelease()} flag
+     * is not taken into account. This method always returns <code>false</code> if this method has no accelerator.
      *
      * @param keyStroke the KeyStroke to test against this action's accelerators
      * @return true if the given KeyStroke is one of this action's accelerators
      */
     public boolean isAccelerator(KeyStroke keyStroke) {
         KeyStroke accelerator = getAccelerator();
-        if(accelerator!=null && accelerator.equals(keyStroke))
+        if(accelerator!=null && acceleratorsEqual(accelerator, keyStroke))
             return true;
 
         accelerator = getAlternateAccelerator();
-        return accelerator!=null && accelerator.equals(keyStroke);
+        return accelerator!=null && acceleratorsEqual(accelerator, keyStroke);
     }
 
 

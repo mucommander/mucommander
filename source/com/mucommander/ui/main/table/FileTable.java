@@ -33,6 +33,9 @@ import com.mucommander.text.CustomDateFormat;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionKeymap;
 import com.mucommander.ui.action.ActionManager;
+import com.mucommander.ui.action.impl.MarkNextRowAction;
+import com.mucommander.ui.action.impl.MarkPreviousRowAction;
+import com.mucommander.ui.action.impl.MarkSelectedFileAction;
 import com.mucommander.ui.dialog.file.AbstractCopyDialog;
 import com.mucommander.ui.dialog.file.FileCollisionDialog;
 import com.mucommander.ui.dialog.file.ProgressDialog;
@@ -612,12 +615,12 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
      * <ul>
      * <li>if quick search is active, this method does nothing
      * <li>if '..' file is selected, file is not marked but current row is still advanced to the next one
-     * <li>if the {@link com.mucommander.ui.action.impl.MarkSelectedFileAction} key event is repeated and the last file has already
+     * <li>if the {@link MarkSelectedFileAction} key event is repeated and the last file has already
      * been marked/unmarked since the key was last released, the file is not marked in order to avoid
      * marked/unmarked flaps when the mark key is kept pressed.
      * </ul>
      *
-     * @see com.mucommander.ui.action.impl.MarkSelectedFileAction
+     * @see MarkSelectedFileAction
      */
     public void markSelectedFile() {
         // Avoids repeated mark/unmark on last row: return if last row has already been marked/unmarked
@@ -1359,9 +1362,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
             return;
 
         // Test if the event corresponds to the 'Mark/unmark selected file' action keystroke.
-        // Note: KeyStroke.getKeyStroke(e.getKeyCode(), e.getModifiers()) is used instead of KeyStroke.getKeyStrokeForEvent()
-        // in order to get a 'pressed' KeyStroke and not a 'released' one, since the action is mapped to the 'pressed' one   
-        if(ActionManager.getActionInstance(com.mucommander.ui.action.impl.MarkSelectedFileAction.Descriptor.ACTION_ID, mainFrame).isAccelerator(KeyStroke.getKeyStroke(e.getKeyCode(), e.getModifiers()))) {
+        if(ActionManager.getActionInstance(MarkSelectedFileAction.Descriptor.ACTION_ID, mainFrame).isAccelerator(KeyStroke.getKeyStrokeForEvent(e))) {
             // Reset variables used to detect repeated key strokes
             markKeyRepeated = false;
             lastRowMarked = false;
@@ -1819,9 +1820,10 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
 
             // At this point, quick search is active
             int keyCode = e.getKeyCode();
+            boolean keyHasModifiers = (e.getModifiersEx()&(KeyEvent.SHIFT_DOWN_MASK|KeyEvent.ALT_DOWN_MASK|KeyEvent.CTRL_DOWN_MASK|KeyEvent.META_DOWN_MASK))!=0;
 
             // Backspace removes the last character of the search string
-            if(keyCode==KeyEvent.VK_BACK_SPACE) {
+            if(keyCode==KeyEvent.VK_BACK_SPACE && !keyHasModifiers) {
                 int searchStringLen = searchString.length();
 
                 // Search string is empty already
@@ -1842,25 +1844,36 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
                 findMatch(0, true, true);
             }
             // Escape immediately cancels the quick search
-            else if(keyCode==KeyEvent.VK_ESCAPE) {
+            else if(keyCode==KeyEvent.VK_ESCAPE && !keyHasModifiers) {
                 stop();
             }
             // Up/Down jumps to previous/next match
             // Shift+Up/Shift+Down marks currently selected file and jumps to previous/next match
-            else if(keyCode==KeyEvent.VK_UP || keyCode==KeyEvent.VK_DOWN) {
-                // Mark the currently selected file if shift modifier is pressed
-                if(e.isShiftDown()) {
-                    // Mark/unmark current row before jumping to next search result
-                    // but don't mark/unmark '..' file
-                    if(!isParentFolderSelected())
-                        setRowMarked(currentRow, !tableModel.isRowMarked(currentRow));
-                }
-
+            else if((keyCode==KeyEvent.VK_UP || keyCode==KeyEvent.VK_DOWN) && !keyHasModifiers) {
                 // Find the first row before/after the current row that matches the search string
                 if(keyCode==KeyEvent.VK_UP)
                     findMatch(currentRow-1, false, false);
                 else
                     findMatch(currentRow+1, true, false);
+            }
+            // MarkSelectedFileAction and MarkNextRowAction mark the current row and moves to the next match
+            else if(ActionManager.getActionInstance(MarkSelectedFileAction.Descriptor.ACTION_ID, mainFrame).isAccelerator(KeyStroke.getKeyStrokeForEvent(e))
+                 || ActionManager.getActionInstance(MarkNextRowAction.Descriptor.ACTION_ID, mainFrame).isAccelerator(KeyStroke.getKeyStrokeForEvent(e))) {
+
+                if(!isParentFolderSelected())  // Don't mark/unmark the '..' file
+                    setRowMarked(currentRow, !tableModel.isRowMarked(currentRow));
+
+                // Find the first the next row that matches the search string
+                findMatch(currentRow+1, true, false);
+            }
+            // MarkPreviousRowAction marks the current row and moves to the previous match
+            else if(ActionManager.getActionInstance(MarkPreviousRowAction.Descriptor.ACTION_ID, mainFrame).isAccelerator(KeyStroke.getKeyStrokeForEvent(e))) {
+
+                if(!isParentFolderSelected())  // Don't mark/unmark the '..' file
+                    setRowMarked(currentRow, !tableModel.isRowMarked(currentRow));
+
+                // Find the first the previous row that matches the search string
+                findMatch(currentRow-1, false, false);
             }
             // If no modifier other than Shift is pressed and the typed character is not a control character (space is ok)
             // and a valid Unicode character, add it to the current search string
