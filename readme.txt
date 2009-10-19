@@ -243,6 +243,7 @@ Bug fixes:
   (ticket #137).
 - Fixed a case where the application would freeze when browsing HTTP shares
   with the tree view enabled (ticket #266).
+- Fixed quick search issues under Mac OS X Snow Leopard (ticket #309).   
 
 Known issues:
 - Some translations are not up-to-date. Refer to
