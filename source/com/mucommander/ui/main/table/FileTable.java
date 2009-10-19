@@ -1245,6 +1245,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
             }
             // Double-clicking on a row opens the file/folder
             else if (doubleClickCounter == 2) { // Note: user can double-click multiple times
+                this.lastDoubleClickTimestamp = System.currentTimeMillis();
                 ActionManager.performAction(e.isShiftDown()
                         ?com.mucommander.ui.action.impl.OpenNativelyAction.Descriptor.ACTION_ID
                         :com.mucommander.ui.action.impl.OpenAction.Descriptor.ACTION_ID
