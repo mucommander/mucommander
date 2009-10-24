@@ -124,22 +124,19 @@ class ActionKeymapReader extends ActionKeymapIO {
     		}
     	}
 
-    	// If either primary shortcut or alternative shortcut is defined for the action, save them
-    	if (primaryKeyStroke != null || alternateKeyStroke != null) {
-    		// If there is no primary shortcut defined for the action but there is an alternative shortcut defined,
-    		// turn the alternative shortcut to the action's primary shortcut
-    		if (primaryKeyStroke == null) {
-    			AppLogger.fine("Action \"" + actionId +"\" has an alternative shortcut with no primary shortcut, so the alternative shortcut become primary");
-    			primaryActionsReadKeymap.put(actionId, alternateKeyStroke);
-    			alternateActionsReadKeymap.put(actionId, null);
-    			// Mark that the actions keymap file should be updated
-    			setModified();
-    		}
-    		else {
-    			primaryActionsReadKeymap.put(actionId, primaryKeyStroke);
-    			alternateActionsReadKeymap.put(actionId, alternateKeyStroke);    		
-    		}
-    	}
+   		// If there is no primary shortcut defined for the action but there is an alternative shortcut defined,
+   		// turn the alternative shortcut to the action's primary shortcut
+   		if (primaryKeyStroke == null) {
+   			AppLogger.fine("Action \"" + actionId +"\" has an alternative shortcut with no primary shortcut, so the alternative shortcut become primary");
+   			primaryActionsReadKeymap.put(actionId, alternateKeyStroke);
+   			alternateActionsReadKeymap.put(actionId, null);
+   			// Mark that the actions keymap file should be updated
+  			setModified();
+   		}
+   		else {
+   			primaryActionsReadKeymap.put(actionId, primaryKeyStroke);
+   			alternateActionsReadKeymap.put(actionId, alternateKeyStroke);    		
+   		}
     }
 
     ///////////////////
