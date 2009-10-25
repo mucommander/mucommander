@@ -3,7 +3,7 @@ Version: @VERSION@
 Section: utils
 Priority: optional
 Recommends: java-virtual-machine, java2-runtime
-Suggests: sun-java5-jre
+Suggests: sun-java6-jre
 Architecture: all
 Installed-Size: @SIZE@
 Maintainer: Maxence Bernard <maxence@maxence.info>

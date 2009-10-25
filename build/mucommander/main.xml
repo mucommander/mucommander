@@ -1095,14 +1095,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- nightly builds.                                         -->
   <target name="nightly-debian-names" depends="load-antcontrib" if="is-nightly">
     <tstamp/>
-    <propertyregex property="deb.version" input="${app.version} ${DSTAMP}" regexp="[ .]" replace="_"/>
+    <property name="deb.version" value="${app.version}-${DSTAMP}"/>
     <property name="deb.name" value="mucommander_current_all.deb"/>
   </target>
 
   <!-- Generates the debian version and file name for          -->
   <!-- non-nightly builds.                                     -->
   <target name="release-debian-names" depends="load-antcontrib" unless="is-nightly">
-    <propertyregex property="deb.version" input="${app.version}" regexp="[ .]" replace="_"/>
+    <property name="deb.version" value="${app.version}"/>
     <property name="deb.name" value="mucommander_${deb.version}_all.deb"/>
   </target>
 
