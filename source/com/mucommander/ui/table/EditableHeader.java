@@ -123,9 +123,8 @@ public class EditableHeader extends JTableHeader implements CellEditorListener {
 		boolean isSelected = true;
 		int row = HEADER_ROW;
 		JTable table = getTable();
-		Component comp = editor.getTableCellEditorComponent(table, value,
+		return editor.getTableCellEditorComponent(table, value,
 				isSelected, row, index);
-		return comp;
 	}
 
 	public TableCellEditor getCellEditor() { return cellEditor; }
