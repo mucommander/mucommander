@@ -17,12 +17,6 @@
  */
 package com.mucommander.file.impl.rar.provider.de.innosystec.unrar.unpack;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Vector;
-
 import com.mucommander.file.impl.rar.provider.de.innosystec.unrar.exception.RarException;
 import com.mucommander.file.impl.rar.provider.de.innosystec.unrar.unpack.decode.Compress;
 import com.mucommander.file.impl.rar.provider.de.innosystec.unrar.unpack.ppm.BlockTypes;
@@ -31,6 +25,12 @@ import com.mucommander.file.impl.rar.provider.de.innosystec.unrar.unpack.ppm.Sub
 import com.mucommander.file.impl.rar.provider.de.innosystec.unrar.unpack.vm.BitInput;
 import com.mucommander.file.impl.rar.provider.de.innosystec.unrar.unpack.vm.RarVM;
 import com.mucommander.file.impl.rar.provider.de.innosystec.unrar.unpack.vm.VMPreparedProgram;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Vector;
 
 /**
  * DOCUMENT ME
@@ -636,7 +636,7 @@ public final class Unpack extends Unpack20
 			addbits(1);
 		} else {
 			NewFile = true;
-			NewTable = (BitField & 0x4000) != 0 ? true : false;
+			NewTable = (BitField & 0x4000) != 0;
 			addbits(2);
 		}
 		tablesRead = !NewTable;

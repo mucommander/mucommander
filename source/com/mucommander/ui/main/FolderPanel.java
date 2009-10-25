@@ -860,11 +860,9 @@ public class FolderPanel extends JPanel implements FocusListener, ThemeListener 
          * @return <code>true</code> if the given file should have its canonical path followed
          */
         private boolean followCanonicalPath(AbstractFile file) {
-            if((MuConfiguration.getVariable(MuConfiguration.CD_FOLLOWS_SYMLINKS, MuConfiguration.DEFAULT_CD_FOLLOWS_SYMLINKS)
-                || file.getURL().getScheme().equals(FileProtocols.HTTP)) && !file.getAbsolutePath(false).equals(file.getCanonicalPath(false)))
-                return true;
-
-            return false;
+            return (MuConfiguration.getVariable(MuConfiguration.CD_FOLLOWS_SYMLINKS, MuConfiguration.DEFAULT_CD_FOLLOWS_SYMLINKS)
+                || file.getURL().getScheme().equals(FileProtocols.HTTP))
+            && !file.getAbsolutePath(false).equals(file.getCanonicalPath(false));
         }
 
         /**
