@@ -39,14 +39,16 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.text.BadLocationException;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Container;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.text.NumberFormat;
 import java.util.*;
-import java.util.List;
 
 /**
  * Dialog used to set parameters for renaming multiple files.
@@ -76,7 +78,6 @@ public class BatchRenameDialog extends FocusDialog implements ActionListener,
     private JTextField edtCounterStep;
     private JComboBox cbCounterDigits;
     private JComboBox cbCase;
-    private JButton btnRemove;
     private RenameTableModel tableModel;
     private AbstractAction actRemove;
     private JButton btnName;
@@ -135,8 +136,7 @@ public class BatchRenameDialog extends FocusDialog implements ActionListener,
      */
     private JPanel getPnlButtons() {
         JPanel pnlButtons = new JPanel(new BorderLayout());
-        btnRemove = new JButton(getActRemove());
-        pnlButtons.add(btnRemove, BorderLayout.WEST);
+        pnlButtons.add(new JButton(getActRemove()), BorderLayout.WEST);
         XBoxPanel pnlButtonsRight = new XBoxPanel();
         lblDuplicates = new JLabel(Translator.get("batch_rename_dialog.duplicate_names"));
         lblDuplicates.setForeground(Color.red);

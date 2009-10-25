@@ -30,17 +30,11 @@ import com.mucommander.ui.dialog.pref.component.PrefTextField;
 import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.layout.YBoxPanel;
 
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.ButtonGroup;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JPanel;
+import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.plaf.basic.BasicComboBoxRenderer;
 import javax.swing.text.PlainDocument;
-
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.FlowLayout;
@@ -67,7 +61,6 @@ class GeneralPanel extends PreferencesPanel implements ItemListener, ActionListe
 	
     // Date/time format
     private PrefRadioButton time12RadioButton;
-    private PrefRadioButton time24RadioButton;
     private PrefComboBox dateFormatComboBox;
     private PrefTextField dateSeparatorField;
     private PrefCheckBox showSecondsCheckBox;
@@ -254,7 +247,7 @@ class GeneralPanel extends PreferencesPanel implements ItemListener, ActionListe
 			}
         };
         time12RadioButton.addActionListener(this);
-        time24RadioButton = new PrefRadioButton(Translator.get("prefs_dialog.time_24_hour")) {
+        PrefRadioButton time24RadioButton = new PrefRadioButton(Translator.get("prefs_dialog.time_24_hour")) {
 			public boolean hasChanged() {
 				String timeFormat = MuConfiguration.getVariable(MuConfiguration.TIME_FORMAT);
 		        return isSelected() != (timeFormat.equals(HOUR_24_TIME_FORMAT) || timeFormat.equals(HOUR_24_TIME_FORMAT_WITH_SECONDS));

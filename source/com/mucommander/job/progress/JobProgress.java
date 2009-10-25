@@ -42,7 +42,6 @@ public class JobProgress {
 	private long totalBps;
 	private long lastBytesTotal;
 	private String jobStatusString;
-	private int jobState;
 	private long jobPauseStartDate;
 
 	public JobProgress(FileJob job) {
@@ -71,7 +70,7 @@ public class JobProgress {
 	 *         <code>false</code> if only label has been updated.
 	 */
 	public boolean calcJobProgress(boolean fullUpdate) {
-		jobState = job.getState();
+		int jobState = job.getState();
 		jobPauseStartDate = job.getPauseStartDate();
 		if (jobState == FileJob.FINISHED || jobState == FileJob.INTERRUPTED) {
 			jobStatusString = Translator.get("progress_dialog.job_finished");

@@ -18,21 +18,19 @@
 
 package com.mucommander.ui.action;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.HashMap;
-
-import javax.swing.KeyStroke;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParserFactory;
-
-import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
-
 import com.mucommander.AppLogger;
 import com.mucommander.RuntimeConstants;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.io.BackupInputStream;
+import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
+
+import javax.swing.KeyStroke;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParserFactory;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.HashMap;
 
 /**
  * This class is responsible for reading the actions.
@@ -47,8 +45,7 @@ class ActionKeymapReader extends ActionKeymapIO {
     private HashMap primaryActionsReadKeymap;
     /** Maps action Class instances onto Keystroke instances*/
     private HashMap alternateActionsReadKeymap;
-    private String fileVersion;
-    
+
     /** Parsed file */
     private AbstractFile file;
     
@@ -188,7 +185,7 @@ class ActionKeymapReader extends ActionKeymapIO {
     	}
     	else if (qName.equals(ROOT_ELEMENT)) {
     		// Note: early 0.8 beta3 nightly builds did not have version attribute, so the attribute may be null
-    		fileVersion = attributes.getValue(VERSION_ATTRIBUTE);
+            String fileVersion = attributes.getValue(VERSION_ATTRIBUTE);
     		
     		// if the file's version is not up-to-date, update the file to the current version at quitting.
     		if (!RuntimeConstants.VERSION.equals(fileVersion))

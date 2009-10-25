@@ -38,7 +38,8 @@ import com.mucommander.ui.text.FilePathField;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -86,7 +87,6 @@ public class SplitFileDialog extends JobDialog implements ActionListener {
 	private FilePathField edtTargetDirectory;
 	private JCheckBox cbGenerateCRC;
 	private JTextField edtSize;
-	private EditableComboBox cbSize;
 	private JSpinner spnParts;
 
 	protected boolean edtChange;
@@ -130,7 +130,7 @@ public class SplitFileDialog extends JobDialog implements ActionListener {
 			"700 " + Translator.get("unit.mb")
 		};
 		edtSize = new JTextField();
-		cbSize = new EditableComboBox(edtSize, sizes);
+		EditableComboBox cbSize = new EditableComboBox(edtSize, sizes);
 		cbSize.setComboSelectionUpdatesTextField(true);
 		cbSize.setSelectedIndex(1);
 		edtSize.addKeyListener(new KeyAdapter() {

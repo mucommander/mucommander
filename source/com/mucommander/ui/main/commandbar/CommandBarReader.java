@@ -18,22 +18,20 @@
 
 package com.mucommander.ui.main.commandbar;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Vector;
-
-import javax.swing.KeyStroke;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParserFactory;
-
-import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
-
 import com.mucommander.AppLogger;
 import com.mucommander.RuntimeConstants;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.io.BackupInputStream;
 import com.mucommander.ui.action.ActionManager;
+import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
+
+import javax.swing.KeyStroke;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParserFactory;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Vector;
 
 /**
  * This class parses the XML file describing the command bar's buttons and associated actions.
@@ -48,9 +46,7 @@ class CommandBarReader extends CommandBarIO {
     private Vector alternateActionsV;
     /** Temporarily used for XML parsing */
     private KeyStroke modifier;
-    /** Temporarily used for XML parsing */
-    private String fileVersion;
-    
+
     /** Parsed file */
     private AbstractFile file;
 
@@ -156,7 +152,7 @@ class CommandBarReader extends CommandBarIO {
         	modifier = KeyStroke.getKeyStroke(attributes.getValue(MODIFIER_ATTRIBUTE));
             
         	// Note: early 0.8 beta3 nightly builds did not have version attribute, so the attribute may be null
-            fileVersion = attributes.getValue(VERSION_ATTRIBUTE);
+            String fileVersion = attributes.getValue(VERSION_ATTRIBUTE);
             
             // if the file's version is not up-to-date, update the file to the current version at quitting.
     		if (!RuntimeConstants.VERSION.equals(fileVersion))

@@ -31,7 +31,6 @@ import com.mucommander.ui.main.MainFrame;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 
 
 /**
@@ -59,10 +58,7 @@ public class ArchiveJob extends TransferFileJob {
     /** Lock to avoid Archiver.close() to be called while data is being written */
     private final Object ioLock = new Object();
 
-    /** OutputStream of the current file  */
-    private OutputStream out;
 
-    
     public ArchiveJob(ProgressDialog progressDialog, MainFrame mainFrame, FileSet files, AbstractFile destFile, int archiveFormat, String archiveComment) {
         super(progressDialog, mainFrame, files);
 		
@@ -180,10 +176,8 @@ public class ArchiveJob extends TransferFileJob {
                 // Tries to get an Archiver instance.
                 this.archiver = Archiver.getArchiver(destFile, archiveFormat);
                 this.archiver.setComment(archiveComment);
-                this.out = archiver.getOutputStream();
 
                 break;
-
             }
             catch(Exception e) {
                 int choice = showErrorDialog(Translator.get("pack_dialog.error_title"),

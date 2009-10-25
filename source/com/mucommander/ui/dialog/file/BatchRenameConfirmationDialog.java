@@ -28,14 +28,12 @@ import com.mucommander.ui.layout.InformationPane;
 import com.mucommander.ui.layout.YBoxPanel;
 import com.mucommander.ui.main.MainFrame;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JButton;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class BatchRenameConfirmationDialog extends FocusDialog implements ActionListener {
-
-    private InformationPane informationPane;
 
     private JButton btnRename;
     
@@ -46,10 +44,9 @@ public class BatchRenameConfirmationDialog extends FocusDialog implements Action
 
         YBoxPanel mainPanel = new YBoxPanel();
         String msg = Translator.get("batch_rename_dialog.proceed_renaming", Integer.toString(changed), Integer.toString(unchanged));
-        informationPane = new InformationPane(msg,
+        mainPanel.add(new InformationPane(msg,
                 Translator.get("this_operation_cannot_be_undone"),
-                Font.BOLD, InformationPane.getPredefinedIcon(InformationPane.WARNING_ICON));
-        mainPanel.add(informationPane);
+                Font.BOLD, InformationPane.getPredefinedIcon(InformationPane.WARNING_ICON)));
         mainPanel.addSpace(10);
         btnRename = new JButton(Translator.get("rename"));
         JButton cancelButton = new JButton(Translator.get("cancel"));

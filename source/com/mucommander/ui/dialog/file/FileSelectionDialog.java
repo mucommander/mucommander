@@ -29,7 +29,9 @@ import com.mucommander.ui.main.table.FileTable;
 import com.mucommander.util.StringUtils;
 
 import javax.swing.*;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.regex.PatternSyntaxException;
@@ -59,8 +61,7 @@ public class FileSelectionDialog extends FocusDialog implements ActionListener {
     private JCheckBox includeFoldersCheckBox;
 
     private JButton okButton;
-    private JButton cancelButton;
-	
+
     private MainFrame mainFrame;
 	
     /** 
@@ -145,8 +146,7 @@ public class FileSelectionDialog extends FocusDialog implements ActionListener {
         contentPane.add(northPanel, BorderLayout.NORTH);
 
         okButton = new JButton(Translator.get(addToSelection?"file_selection_dialog.mark":"file_selection_dialog.unmark"));
-        cancelButton = new JButton(Translator.get("cancel"));
-        contentPane.add(DialogToolkit.createOKCancelPanel(okButton, cancelButton, getRootPane(), this), BorderLayout.SOUTH);
+        contentPane.add(DialogToolkit.createOKCancelPanel(okButton, new JButton(Translator.get("cancel")), getRootPane(), this), BorderLayout.SOUTH);
 
         // Selection field receives initial keyboard focus
         setInitialFocusComponent(selectionField);

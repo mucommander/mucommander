@@ -18,20 +18,18 @@
 
 package com.mucommander.ui.main.toolbar;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Vector;
-
-import javax.xml.parsers.SAXParserFactory;
-
-import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
-
 import com.mucommander.AppLogger;
 import com.mucommander.RuntimeConstants;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.io.BackupInputStream;
 import com.mucommander.ui.action.ActionManager;
+import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
+
+import javax.xml.parsers.SAXParserFactory;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Vector;
 
 /**
  * This class parses the XML file describing the toolbar's buttons and associated actions.
@@ -42,8 +40,6 @@ public class ToolBarReader extends ToolBarIO {
 
     /** Temporarily used for XML parsing */
     private Vector actionsV;
-    /** Temporarily used for XML parsing */
-    private String fileVersion;
     
     /**
      * Starts parsing the XML description file.
@@ -103,7 +99,7 @@ public class ToolBarReader extends ToolBarIO {
         }
         else if (qName.equals(ROOT_ELEMENT)) {
         	// Note: early 0.8 beta3 nightly builds did not have version attribute, so the attribute may be null
-            fileVersion = attributes.getValue(VERSION_ATTRIBUTE);
+            String fileVersion = attributes.getValue(VERSION_ATTRIBUTE);
 
             // if the file's version is not up-to-date, update the file to the current version at quitting.
             if (!RuntimeConstants.VERSION.equals(fileVersion))

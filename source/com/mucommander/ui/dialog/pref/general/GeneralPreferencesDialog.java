@@ -25,7 +25,7 @@ import com.mucommander.ui.dialog.pref.PreferencesDialog;
 import com.mucommander.ui.dialog.pref.component.PrefComponent;
 import com.mucommander.ui.main.WindowManager;
 
-import java.awt.*;
+import java.awt.Dimension;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -88,8 +88,6 @@ public class GeneralPreferencesDialog extends PreferencesDialog {
     // --------------------------------------------------------------------------
     /** Index of the tab that was last selected by the user. */
     private static int      lastTabIndex = 0;
-    /** Whether or not the dialog should take tab selection events into account. */
-    private         boolean listenToChanges;
 
 
 
@@ -101,7 +99,6 @@ public class GeneralPreferencesDialog extends PreferencesDialog {
     private GeneralPreferencesDialog() {
         super(WindowManager.getCurrentMainFrame(), Translator.get("prefs_dialog.title"));
         modifiedComponents = new LinkedHashSet();
-        listenToChanges = false;
 
         // Adds the preference tabs.
         addPreferencesPanel(new GeneralPanel(this),    GENERAL_ICON);
@@ -117,7 +114,6 @@ public class GeneralPreferencesDialog extends PreferencesDialog {
 
         // Restores the last selected index.
         setActiveTab(lastTabIndex);
-        listenToChanges = true;
     }
 
 
