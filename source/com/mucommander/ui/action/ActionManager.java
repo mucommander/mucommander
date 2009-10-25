@@ -21,7 +21,6 @@ package com.mucommander.ui.action;
 import com.mucommander.AppLogger;
 import com.mucommander.ui.action.impl.*;
 import com.mucommander.ui.main.MainFrame;
-import com.mucommander.ui.main.WindowManager;
 
 import javax.swing.ImageIcon;
 import javax.swing.KeyStroke;
@@ -251,41 +250,32 @@ public class ActionManager {
     }
     
     /**
-     * Convenience method that returns an instance of the given MuAction class, and associated with the specified
-     * MainFrame. This method creates an ActionParameters with no initial property, passes it to
-     * {@link #getActionInstance(ActionParameters, MainFrame)} and returns the MuAction instance.
+     * Convenience method that returns an instance of the action denoted by the given ID, and associated with the
+     * specified <code>MainFrame</code>. This method creates an ActionParameters with no initial property, passes it to
+     * {@link #getActionInstance(ActionParameters, MainFrame)} and returns the {@link MuAction} instance.
      *
-     * @param actionClass the MuAction class to instantiate
+     * @param actionId ID of the action to instantiate
      * @param mainFrame the MainFrame instance the action belongs to
-     * @return a MuAction instance matching the given MuAction Class and MainFrame, <code>null</code> if the
-     * class could not be found or could not be instantiated.
+     * @return a MuAction instance matching the given action ID and MainFrame, <code>null</code> if the
+     * action could not be found or could not be instantiated.
      */
     public static MuAction getActionInstance(String actionId, MainFrame mainFrame) {
-        return getActionInstance(new ActionParameters(actionId), mainFrame != null ? mainFrame : WindowManager.getCurrentMainFrame());
+        return getActionInstance(new ActionParameters(actionId), mainFrame);
     }
 
     /**
-     * Helper method to get action instance of the given MuAction class in the current MainFrame.
-     * 
-     * @param actionClass - MuAction class.
-     * @return the corresponding MuAction instance for the given MuAction class in the current MainFrame.
-     */
-    public static MuAction getActionInstance(String actionId) {
-        return getActionInstance(new ActionParameters(actionId), null);
-    }
-
-    /**
-     * Returns an instance of the MuAction class denoted by the given ActionParameters, for the specified MainFrame.
-     * If an existing instance corresponding to the same ActionParameters and MainFrame is found, it is simply returned.
+     * Returns an instance of the MuAction class denoted by the given ActionParameters and for the
+     * specified MainFrame. If an existing instance corresponding to the same ActionParameters and MainFrame is found,
+     * it is simply returned.
      * If no matching instance could be found, a new instance is created, added to the internal action instances map
      * (for further use) and returned.
-     * If the MuAction denoted by the specified ActionParameters cannot be found or cannot be instantiated,
+     * If the action denoted by the specified ActionParameters cannot be found or cannot be instantiated,
      * <code>null</code> is returned.
      *
      * @param actionParameters a descriptor of the action class to instantiate with initial properties
      * @param mainFrame the MainFrame instance the action belongs to
      * @return a MuAction instance matching the given ActionParameters and MainFrame, <code>null</code> if the
-     * MuAction class denoted by the ActionParameters could not be found or could not be instantiated.
+     * MuAction action denoted by the ActionParameters could not be found or could not be instantiated.
      */
     public static MuAction getActionInstance(ActionParameters actionParameters, MainFrame mainFrame) {
         Hashtable mainFrameActions = (Hashtable)mainFrameActionsMap.get(mainFrame);
@@ -395,12 +385,12 @@ public class ActionManager {
     }
 
     /**
-     * Convenience method that retrieves an instance of the MuAction denoted by the given Class and associated
+     * Convenience method that retrieves an instance of the action denoted by the given ID and associated
      * with the given {@link MainFrame} and calls {@link MuAction#performAction()} on it.
      * Returns <code>true</code> if an instance of the action could be retrieved and performed, <code>false</code>
      * if the MuAction could not be found or could not be instantiated.
      *
-     * @param actionClass the class of the MuAction to perform
+     * @param actionId ID of the action to perform
      * @param mainFrame the MainFrame the action belongs to
      * @return true if the action instance could be retrieved and the action performed, false otherwise 
      */
