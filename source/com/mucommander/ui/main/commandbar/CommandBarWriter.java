@@ -18,17 +18,16 @@
 
 package com.mucommander.ui.main.commandbar;
 
-import java.io.IOException;
-import java.io.OutputStream;
-
-import javax.swing.KeyStroke;
-
 import com.mucommander.AppLogger;
 import com.mucommander.RuntimeConstants;
 import com.mucommander.io.BackupOutputStream;
 import com.mucommander.ui.text.KeyStrokeUtils;
 import com.mucommander.xml.XmlAttributes;
 import com.mucommander.xml.XmlWriter;
+
+import javax.swing.KeyStroke;
+import java.io.IOException;
+import java.io.OutputStream;
 
 /**
  * This class is responsible for writing the command-bar attributes (actions and modifier).
@@ -54,10 +53,9 @@ class CommandBarWriter extends CommandBarIO {
 		String[] commandBarAlterativeActionIds = CommandBarAttributes.getAlternateActions();
 		KeyStroke commandBarModifier = CommandBarAttributes.getModifier();
 
-		BackupOutputStream bos = null;
+		BackupOutputStream bos = new BackupOutputStream(getDescriptionFile());
 
 		try {
-			bos = new BackupOutputStream(getDescriptionFile());
 			new Writer(bos).write(commandBarActionIds, commandBarAlterativeActionIds, commandBarModifier);
 			wasCommandBarModified = false;
 		} catch (Exception e) {

@@ -25,7 +25,7 @@ import com.mucommander.ui.text.KeyStrokeUtils;
 import com.mucommander.xml.XmlAttributes;
 import com.mucommander.xml.XmlWriter;
 
-import javax.swing.*;
+import javax.swing.KeyStroke;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Enumeration;
@@ -43,10 +43,9 @@ class ActionKeymapWriter extends ActionKeymapIO {
 	ActionKeymapWriter() {}
 	
 	public void create() throws IOException {
-		BackupOutputStream bos = null;
+		BackupOutputStream bos = new BackupOutputStream(getActionsFile());
 
 		try {
-			bos = new BackupOutputStream(getActionsFile());
 			new Writer(bos).writeKeyMap(null);
 		} catch (Exception e) {
 			AppLogger.fine("Caught exception", e);
@@ -68,10 +67,9 @@ class ActionKeymapWriter extends ActionKeymapIO {
 			combinedMapping.put(actionId, keyStrokes);
 		}
 		
-		BackupOutputStream bos = null;
+		BackupOutputStream bos = new BackupOutputStream(getActionsFile());
 
 		try {
-			bos = new BackupOutputStream(getActionsFile());
 			new Writer(bos).writeKeyMap(combinedMapping);
 			wereActionsModified = false;
 		} catch (Exception e) {

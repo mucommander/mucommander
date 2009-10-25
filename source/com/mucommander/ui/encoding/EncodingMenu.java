@@ -22,7 +22,9 @@ import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.DialogOwner;
 
 import javax.swing.*;
-import java.awt.*;
+import java.awt.Dialog;
+import java.awt.Frame;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Iterator;
