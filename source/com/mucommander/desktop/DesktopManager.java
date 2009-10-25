@@ -273,8 +273,6 @@ public class DesktopManager {
     // - Operation support -----------------------------------------------
     // -------------------------------------------------------------------
     private static Vector getOperations(String type, int priority) {
-        Vector container;
-
         if(operations[priority] == null)
             return null;
 

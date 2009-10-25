@@ -18,14 +18,14 @@
 
 package com.mucommander.ui.quicklist.item;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-
 import com.mucommander.ui.theme.ColorChangedEvent;
 import com.mucommander.ui.theme.FontChangedEvent;
 import com.mucommander.ui.theme.ThemeData;
 import com.mucommander.ui.theme.ThemeManager;
+
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 
 /**
  * This class represent an item that will be shown in a QuickList which doesn't
@@ -47,7 +47,6 @@ public class EmptyMessageMenuItem extends MenuItem {
 	}
 	
 	protected final void paintComponent(Graphics g) {
-		Graphics old = g.create();
 		Graphics2D graphics = (Graphics2D) g;
 		
 		// paint the background of this item with lightGray color
@@ -58,8 +57,6 @@ public class EmptyMessageMenuItem extends MenuItem {
 		graphics.setFont(FONT);
 		graphics.setColor(foreground);
 		graphics.drawString(getText(), X_AXIS_OFFSET, (int) graphics.getFontMetrics().getLineMetrics(this.getText(), graphics).getHeight());
-		
-		g = old;
 	}
 
 	public void colorChanged(ColorChangedEvent event) {

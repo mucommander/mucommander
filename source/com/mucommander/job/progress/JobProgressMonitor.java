@@ -18,18 +18,17 @@
 
 package com.mucommander.job.progress;
 
+import com.mucommander.job.FileJob;
+import com.mucommander.job.FileJobListener;
+
+import javax.swing.SwingUtilities;
+import javax.swing.Timer;
+import javax.swing.event.EventListenerList;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
-import javax.swing.SwingUtilities;
-import javax.swing.Timer;
-import javax.swing.event.EventListenerList;
-
-import com.mucommander.job.FileJob;
-import com.mucommander.job.FileJobListener;
 
 /**
  * A class that monitors jobs progress.
@@ -267,7 +266,7 @@ public class JobProgressMonitor implements FileJobListener {
 			
 			// for each job calculate new progress and notify listeners
 			for (Iterator i = jobs.iterator(); i.hasNext();) {
-				boolean updateFullUI = false;
+				boolean updateFullUI;
 				FileJob job = (FileJob) i.next();
 				JobProgress jobProgress = job.getJobProgress();
 				updateFullUI = jobProgress.calcJobProgress(fullUpdate);

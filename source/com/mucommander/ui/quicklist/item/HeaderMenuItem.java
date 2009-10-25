@@ -46,7 +46,6 @@ public class HeaderMenuItem extends MenuItem {
 	}
 		
 	protected final void paintComponent(Graphics g) {		
-		Graphics old = g.create();
 		Graphics2D graphics = (Graphics2D) g;
 	
 		graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
@@ -61,8 +60,6 @@ public class HeaderMenuItem extends MenuItem {
 		graphics.setFont(FONT);
 		graphics.setColor(foreground);
 		graphics.drawString(getText(), X_AXIS_OFFSET, (int) graphics.getFontMetrics().getLineMetrics(this.getText(), graphics).getHeight());
-		
-		g = old;
 	}
 	
 	private BufferedImage getBackgroundImage(int width, int height, 

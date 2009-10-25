@@ -432,7 +432,7 @@ public class BatchRenameDialog extends FocusDialog implements ActionListener,
                 String strToken = pattern.substring(i + 1, tokenEnd);
                 if (strToken.length() > 0) {
                     c = strToken.charAt(0);
-                    AbstractToken t = null;
+                    AbstractToken t;
                     switch (c) {
                     case 'N':
                         t = new NameToken(strToken);

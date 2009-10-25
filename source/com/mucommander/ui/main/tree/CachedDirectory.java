@@ -26,7 +26,9 @@ import com.mucommander.ui.icon.CustomFileIconProvider;
 import com.mucommander.ui.icon.FileIcons;
 import com.mucommander.ui.icon.IconManager;
 
-import javax.swing.*;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.SwingUtilities;
 import java.util.Arrays;
 
 /**
@@ -98,7 +100,7 @@ public class CachedDirectory extends ProxyFile {
             setCachedIcon(FileIcons.getFileIcon(getProxiedFile()));
         }
 
-        AbstractFile[] children = null;
+        AbstractFile[] children;
         try {
             children = file.ls(cache.getFilter());
         } catch (Exception e) {

@@ -18,44 +18,6 @@
 
 package com.mucommander.ui.dialog.pref.general;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Insets;
-import java.awt.Point;
-import java.awt.Rectangle;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.image.BufferedImage;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-
-import javax.swing.BorderFactory;
-import javax.swing.DefaultCellEditor;
-import javax.swing.ImageIcon;
-import javax.swing.JTable;
-import javax.swing.JTextField;
-import javax.swing.JViewport;
-import javax.swing.KeyStroke;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellEditor;
-import javax.swing.table.TableCellRenderer;
-import javax.swing.table.TableModel;
-
 import com.mucommander.AppLogger;
 import com.mucommander.runtime.JavaVersions;
 import com.mucommander.runtime.OsFamilies;
@@ -71,11 +33,25 @@ import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.main.table.CellLabel;
 import com.mucommander.ui.table.CenteredTableHeaderRenderer;
 import com.mucommander.ui.text.KeyStrokeUtils;
-import com.mucommander.ui.theme.ColorChangedEvent;
-import com.mucommander.ui.theme.FontChangedEvent;
-import com.mucommander.ui.theme.Theme;
-import com.mucommander.ui.theme.ThemeCache;
-import com.mucommander.ui.theme.ThemeListener;
+import com.mucommander.ui.theme.*;
+
+import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellEditor;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableModel;
+import java.awt.*;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.image.BufferedImage;
+import java.util.*;
+import java.util.List;
 
 /**
  * This class is the table in which the actions and their shortcuts are
@@ -557,10 +533,6 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 				String actionId = (String) filteredActionIds.get(i);
 				actionIds[i] = actionId;
 				ActionDescriptor actionDescriptor = ActionProperties.getActionDescriptor(actionId);
-				
-				ImageIcon actionIcon = actionDescriptor.getIcon();
-				if (actionIcon == null)
-					actionIcon = transparentIcon;			
 				
 				data[i][ACTION_DESCRIPTION_COLUMN_INDEX] = ((HashMap) db.get(actionId)).get(this.description);
 				

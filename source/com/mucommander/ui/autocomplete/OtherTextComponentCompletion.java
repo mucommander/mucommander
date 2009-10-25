@@ -46,7 +46,7 @@ public class OtherTextComponentCompletion extends CompletionType {
 					         
 	            list.setVisibleRowCount(Math.min(list.getModel().getSize() ,VISIBLE_ROW_COUNT));
 	            
-	            int x = 0; 
+	            int x; 
 	            try{	                
 	                x = autocompletedtextComp.modelToView().x;
 	            } catch(BadLocationException e){ 
