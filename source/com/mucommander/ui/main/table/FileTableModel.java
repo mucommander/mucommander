@@ -328,7 +328,7 @@ public class FileTableModel extends AbstractTableModel {
         AbstractFile[] cachedFilesCopy = new AbstractFile[cachedFiles.length];
         System.arraycopy(cachedFiles, 0, cachedFilesCopy, 0, cachedFiles.length);
 
-        return cachedFiles;
+        return cachedFilesCopy;
     }
 
 
