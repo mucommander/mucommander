@@ -61,7 +61,7 @@ public class ValueListTest extends TestCase {
 
         data = new Vector();
         for(int i = 0; i < 7; i++)
-            data.add(new Boolean(i % 2 == 0));
+            data.add(Boolean.valueOf(i % 2 == 0));
         return data;
     }
 
