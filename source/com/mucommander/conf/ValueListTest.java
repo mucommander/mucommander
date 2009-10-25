@@ -178,7 +178,7 @@ public class ValueListTest extends TestCase {
     public void testBooleanValues() {testBooleanValues(new ValueList(ValueList.toString(createBooleanData(), ";"), ";"));}
 
     /**
-     * Tests the {@link ValueList#listValueAt(int)} method.
+     * Tests the {@link ValueList#listValueAt(int, String)} method.
      */
     public void testListValues() {
         Vector    data;

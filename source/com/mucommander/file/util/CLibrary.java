@@ -33,7 +33,7 @@ public interface CLibrary extends Library {
     //////////////////////
     
     /**
-     * Structure that holds the information returned by {@link CLibrary#statvfs(String, CLibrary.STATVFSSTRUCT)}.
+     * Structure that holds the information returned by {@link CLibrary#statvfs(String, STATVFSSTRUCT)}.
      */
     public static class STATVFSSTRUCT extends Structure {
         /* file system block size */

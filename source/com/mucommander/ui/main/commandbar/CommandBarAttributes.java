@@ -18,11 +18,10 @@
 
 package com.mucommander.ui.main.commandbar;
 
+import javax.swing.KeyStroke;
 import java.awt.event.KeyEvent;
 import java.util.Iterator;
 import java.util.WeakHashMap;
-
-import javax.swing.KeyStroke;
 
 /**
  * This class is responsible to handle the attributes of CommandBars - their actions, alternate actions and modifier.
@@ -117,11 +116,11 @@ public class CommandBarAttributes {
     ///////////////
     
     /**
-     * This method is used to set
+     * This method sets command bar actions and modifiers.
      * 
-     * @param actions          standard command-bar actions.
-     * @param alternateActions alternate command-bar actions.
-     * @param modifier         command-bar modifier.
+     * @param actionIds          standard command-bar actions.
+     * @param alternateActionIds alternate command-bar actions.
+     * @param modifier           command-bar modifier.
      */
     public static void setAttributes(String[] actionIds, String[] alternateActionIds, KeyStroke modifier) {
     	CommandBarAttributes.actionIds = actionIds;

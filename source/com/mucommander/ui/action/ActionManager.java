@@ -272,7 +272,7 @@ public class ActionManager {
      * If the action denoted by the specified ActionParameters cannot be found or cannot be instantiated,
      * <code>null</code> is returned.
      *
-     * @param actionParameters a descriptor of the action class to instantiate with initial properties
+     * @param actionParameters a descriptor of the action to instantiate with initial properties
      * @param mainFrame the MainFrame instance the action belongs to
      * @return a MuAction instance matching the given ActionParameters and MainFrame, <code>null</code> if the
      * MuAction action denoted by the ActionParameters could not be found or could not be instantiated.

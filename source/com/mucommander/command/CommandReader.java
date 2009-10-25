@@ -127,7 +127,7 @@ public class CommandReader extends DefaultHandler implements CommandsXmlConstant
      * <ul>
      *   <li>If <code>type</code> equals {CommandsXmlConstants#VALUE_SYSTEM}, {@link Command#SYSTEM_COMMAND} will be returned.</li>
      *   <li>If <code>type</code> equals {CommandsXmlConstants#VALUE_INVISIBLE}, {@link Command#INVISIBLE_COMMAND} will be returned.</li>
-     *   <li>In any other case, {@link Command.NORMAL_COMMAND} will be returned.</li>
+     *   <li>In any other case, {@link Command#NORMAL_COMMAND} will be returned.</li>
      * </ul>
      * </p>
      * @param  type type to analyse.

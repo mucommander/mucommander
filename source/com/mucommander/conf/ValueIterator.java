@@ -19,6 +19,7 @@
 package com.mucommander.conf;
 
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 /**
  * Iterator with support for value casting.

@@ -113,7 +113,6 @@ public class DirectoryCache {
     
     /**
      * Deletes entry and all children from the cache.
-     * @param folder
      */
     public synchronized void removeWithChildren(AbstractFile key) {
         CachedDirectory cachedDir = (CachedDirectory) cache.get(key);

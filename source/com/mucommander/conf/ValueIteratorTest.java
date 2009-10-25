@@ -110,7 +110,7 @@ public class ValueIteratorTest extends ValueListTest {
     }
 
     /**
-     * Tests the {@link ValueIterator#nextListValue()} method.
+     * Tests the {@link ValueIterator#nextListValue(String)} method.
      * @param values    test data.
      * @param separator separator to use when creating list values.
      */

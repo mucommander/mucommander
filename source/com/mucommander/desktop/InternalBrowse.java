@@ -69,7 +69,7 @@ class InternalBrowse extends UrlOperation {
 
     /**
      * Opens the specified URL in the system's default browser.
-     * @param  target      URL to browse.
+     * @param  url         URL to browse.
      * @throws IOException if an error occured.
      */
     public void execute(URL url) throws IOException {

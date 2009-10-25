@@ -27,10 +27,10 @@ import java.util.Hashtable;
  *
  * <p>Two ActionParameters instances are equal only if:
  * <ul>
- *  <li>they refer to the same MuAction class
+ *  <li>they refer to the same action ID
  *  <li>both sets of initialization properties are equal, i.e. they contain the same key/value pairs (deep equality)
  * </ul>
- * This means that two ActionParameters instances referring to the same MuAction class but with a different set of
+ * This means that two ActionParameters instances referring to the same MuAction ID but with a different set of
  * initialization properties will not be equal.
  *
  * <p>This class is used by ActionManager to instance MuAction and allow several instances to live in memory only if
@@ -44,7 +44,7 @@ import java.util.Hashtable;
  */
 public class ActionParameters {
 
-    /** MuAction class descriptor */
+    /** Action ID */
     private String actionId;
 
     /** Initialization properties, null if there are no initialization properties */
@@ -52,34 +52,32 @@ public class ActionParameters {
 
 
     /**
-     * Convenience constructor which has the same effect as calling {@link #ActionParameters(Class, Hashtable)}
+     * Convenience constructor which has the same effect as calling {@link #ActionParameters(String, Hashtable)}
      * with a null value for the <code>properties</code> parameter.
      *
-     * @param actioId a MuAction id
+     * @param actionId a MuAction id
      */
-    public ActionParameters(String actioId) {
-        this(actioId, null);
+    public ActionParameters(String actionId) {
+        this(actionId, null);
     }
 
     /**
-     * Creates a new ActionParameters which identifies the specified combination of MuAction class and initialization
-     * properties. The <code>properties</code> parameter may be <code>null</code> if the action class is to be
-     * Instantiated without any initialization properties.
+     * Creates a new ActionParameters which identifies the specified combination of MuAction action ID and
+     * initialization properties. The <code>properties</code> parameter may be <code>null</code> if the action class is
+     * to be instantiated without any initialization properties.
      *
-     * <p>The specified Class *must* denote a class that extends {@link MuAction} and follows its conventions
-     * (provide the proper constructor), otherwise {@link ActionManager} will fail to instantiate it. However,
-     * ActionParameters does not check if the specified Class is valid or not.
-     * 
-     * @param muActionClass a MuAction Class descriptor
+     * @param actionId a MuAction id
      * @param initProperties a Hashtable containing the properties that will be used to instantiate the specified MuAction class
      */
-    public ActionParameters(String muActionId, Hashtable initProperties) {
-        this.actionId = muActionId;
+    public ActionParameters(String actionId, Hashtable initProperties) {
+        this.actionId = actionId;
         this.properties = initProperties;
     }
 
     /**
-     * Returns a Class instance referring to a class that extends MuAction.
+     * Returns the action ID that was used to create this object.
+     *
+     * @return the action ID that was used to create this object.
      */
     public String getActionId() {
         return actionId;
@@ -88,6 +86,9 @@ public class ActionParameters {
     /**
      * Returns the list of properties that are to be used to instantiate the MuAction class, or <code>null</code> if
      * there are none.
+     *
+     * @return the list of properties that are to be used to instantiate the MuAction class, or <code>null</code> if
+     * there are none
      */
     public Hashtable getInitProperties() {
         return properties;

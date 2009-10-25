@@ -21,7 +21,7 @@ package com.mucommander.util;
 import junit.framework.TestCase;
 
 /**
- * Tests the {@link StringUtil} class.
+ * Tests the {@link StringUtils} class.
  * @author Nicolas Rinaudo
  */
 public class StringUtilsTest extends TestCase {

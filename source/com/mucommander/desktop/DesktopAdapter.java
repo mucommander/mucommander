@@ -19,6 +19,7 @@
 package com.mucommander.desktop;
 
 import com.mucommander.file.AbstractFile;
+import com.mucommander.file.filter.FileFilter;
 
 import java.awt.event.MouseEvent;
 
@@ -45,7 +46,7 @@ import java.awt.event.MouseEvent;
  * This is achieved through the {@link #init(boolean)} method. Application developers are
  * expected to register all of their desktop specific tools there: {@link DesktopOperation desktop operations},
  * {@link com.mucommander.command.Command commands},
- * {@link com.mucommander.command.CommandManager#registerDefaultAssociation(String,FileFilter) associations}...<br>
+ * {@link com.mucommander.command.CommandManager#registerDefaultAssociation(String, FileFilter) associations}...<br>
  * </p>
  * @author Nicolas Rinaudo, Maxence Bernard
  */

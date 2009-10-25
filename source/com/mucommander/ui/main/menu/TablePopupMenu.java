@@ -25,7 +25,10 @@ import com.mucommander.file.util.FileSet;
 import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.main.MainFrame;
 
-import javax.swing.*;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
+import javax.swing.JSeparator;
+import javax.swing.KeyStroke;
 import java.awt.event.KeyEvent;
 
 /**
@@ -114,7 +117,7 @@ public class TablePopupMenu extends JPopupMenu {
 
 
     /**
-     * Adds the specified MuAction to this popup menu as a JMenuItem.
+     * Adds the MuAction denoted by the given ID to this popup menu, as a <code>JMenuItem</code>.
      * <p>
      * No icon will be displayed, regardless of whether the action has one or not.
      * </p>
@@ -122,7 +125,7 @@ public class TablePopupMenu extends JPopupMenu {
      * If the action has a keyboard shortcut that conflicts with the menu's internal ones (enter, space and escape),
      * they will not be used.
      * </p>
-     * @param actionClass MuAction Class instance
+     * @param actionId action ID
      */
     private void addAction(String actionId) {
         JMenuItem item;
