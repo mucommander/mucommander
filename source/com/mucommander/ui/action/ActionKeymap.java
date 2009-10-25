@@ -20,7 +20,10 @@ package com.mucommander.ui.action;
 
 import com.mucommander.ui.main.MainFrame;
 
-import javax.swing.*;
+import javax.swing.ActionMap;
+import javax.swing.InputMap;
+import javax.swing.JComponent;
+import javax.swing.KeyStroke;
 import java.util.*;
 
 /**
@@ -96,7 +99,7 @@ public class ActionKeymap {
     	
     	// If alternative accelerator is already registered to other MuAction, unregister it.
     	String previousActionForAlternativeAccelerator = getRegisteredActionIdForKeystroke(alternateAccelerator);
-    	if (previousActionForAlternativeAccelerator != null && !previousActionForAlternativeAccelerator.equals(alternateAccelerator))
+    	if (previousActionForAlternativeAccelerator != null && !previousActionForAlternativeAccelerator.equals(actionId))
     		unregisterAcceleratorFromAction(previousActionForAlternativeAccelerator, alternateAccelerator);
     	
     	// Remove action's previous accelerators (primary and alternate)
