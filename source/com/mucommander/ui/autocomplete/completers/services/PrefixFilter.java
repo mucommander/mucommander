@@ -49,7 +49,7 @@ public class PrefixFilter {
 	 * @return <code>true</code> if the given input was accepted by this filter, <code>false</code> otherwise.
 	 */
 	public boolean accept(String input) {
-		return prefix!=null ? input.toLowerCase().startsWith(prefix) : true;
+		return prefix == null || input.toLowerCase().startsWith(prefix);
 	}
 		
 	/**

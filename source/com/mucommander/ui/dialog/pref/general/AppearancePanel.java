@@ -48,7 +48,10 @@ import com.mucommander.ui.theme.ThemeManager;
 
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicComboBoxRenderer;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
@@ -559,7 +562,9 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
      * Returns <code>true</code> if the specified class name is that of a custom look and feel.
      * @return <code>true</code> if the specified class name is that of a custom look and feel, <code>false</code> otherwise.
      */
-    private boolean isCustomLookAndFeel(String className) {return customLookAndFeels == null ? false : customLookAndFeels.contains(className);}
+    private boolean isCustomLookAndFeel(String className) {
+        return customLookAndFeels != null && customLookAndFeels.contains(className);
+    }
 
     /**
      * Returns <code>true</code> if the specified look and feel is modifiable.

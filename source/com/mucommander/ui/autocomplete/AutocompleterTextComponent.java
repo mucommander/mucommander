@@ -23,7 +23,7 @@ import com.mucommander.ui.combobox.EditableComboBox;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.JTextComponent;
-import java.awt.*;
+import java.awt.Rectangle;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -134,7 +134,7 @@ public abstract class AutocompleterTextComponent {
 	 * 	otherwise, true if the combo-box list of items is visible.
 	 */
 	public boolean isComponentsPopupVisible() {
-		return editableComboBox == null ? false : editableComboBox.isPopupVisible();
+		return editableComboBox != null && editableComboBox.isPopupVisible();
 	}
 	
 	/**

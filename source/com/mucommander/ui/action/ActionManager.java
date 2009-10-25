@@ -23,7 +23,8 @@ import com.mucommander.ui.action.impl.*;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.WindowManager;
 
-import javax.swing.*;
+import javax.swing.ImageIcon;
+import javax.swing.KeyStroke;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -246,7 +247,7 @@ public class ActionManager {
      * @return true if an MuAction which is represented by the given id is registered, otherwise return false.
      */
     public static boolean isActionExist(String actionId) {    	
-    	return actionId != null ? actionFactories.containsKey(actionId) : false;
+    	return actionId != null && actionFactories.containsKey(actionId);
     }
     
     /**

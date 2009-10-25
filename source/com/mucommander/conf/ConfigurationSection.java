@@ -146,7 +146,7 @@ class ConfigurationSection {
      * @param value value to cast to an boolean.
      * @return <code>value</code> as an boolean.
      */
-    public static boolean getBooleanValue(String value) {return value == null ? false : Boolean.TRUE.toString().equals(value);}
+    public static boolean getBooleanValue(String value) {return value != null && Boolean.TRUE.toString().equals(value);}
 
     /**
      * Casts the specified value into an long.

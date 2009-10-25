@@ -33,8 +33,14 @@ import com.mucommander.ui.notifier.NotificationTypes;
 import com.mucommander.ui.text.FileLabel;
 import com.mucommander.ui.text.FontUtils;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JCheckBox;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JSeparator;
+import java.awt.Component;
+import java.awt.Dialog;
+import java.awt.Font;
+import java.awt.Frame;
 import java.util.Date;
 import java.util.Vector;
 
@@ -235,7 +241,7 @@ public class FileCollisionDialog extends QuestionDialog {
      * @return <code>true</code> if the 'apply to all' checkbox has been selected.
      */
     public boolean applyToAllSelected() {
-        return applyToAllCheckBox==null?false:applyToAllCheckBox.isSelected();
+        return applyToAllCheckBox != null && applyToAllCheckBox.isSelected();
     }
 	
 }

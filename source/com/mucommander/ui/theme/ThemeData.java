@@ -19,7 +19,8 @@
  package com.mucommander.ui.theme;
 
 import javax.swing.*;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Font;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Iterator;
@@ -1286,7 +1287,7 @@ public class ThemeData {
         // If fonts[id] is null and we're set to ignore defaults, both fonts are different.
         // If we're set to use defaults, we must compare font and the default value for id.
         if(fonts[id] == null)
-            return ignoreDefaults ? true : !getDefaultFont(id).equals(font);
+            return ignoreDefaults || !getDefaultFont(id).equals(font);
 
         // 'Standard' case: both fonts are set, compare them normally.
         return !font.equals(fonts[id]);
@@ -1331,7 +1332,7 @@ public class ThemeData {
         // If colors[id] is null and we're set to ignore defaults, both colors are different.
         // If we're set to use defaults, we must compare color and the default value for id.
         if(colors[id] == null)
-            return ignoreDefaults ? true : !getDefaultColor(id, this).equals(color);
+            return ignoreDefaults || !getDefaultColor(id, this).equals(color);
 
         // 'Standard' case: both colors are set, compare them normally.
         return !color.equals(colors[id]);
