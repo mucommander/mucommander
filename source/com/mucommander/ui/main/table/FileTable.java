@@ -1472,7 +1472,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
             super(textField);
             this.filenameField = textField;
             // Sets the font to the same one that's used for cell rendering (user-defined)
-            filenameField.setFont(cellRenderer.getCellFont());
+            filenameField.setFont(FileTableCellRenderer.getCellFont());
             textField.addKeyListener(
                 new KeyAdapter() {
                     // Cancel editing when escape key pressed, this is unfortunately not DefaultCellEditor's
