@@ -34,7 +34,9 @@ import com.mucommander.ui.text.FilePathField;
 import com.mucommander.util.StringUtils;
 
 import javax.swing.*;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -267,7 +269,6 @@ public class CalculateChecksumDialog extends JobDialog implements ActionListener
                 // Note: FileFactory.getTemporaryFile() should never throw an IOException
 
                 showErrorDialog(Translator.get("invalid_path", specificLocationTextField.getText()));
-                return;
             }
         }
     }
