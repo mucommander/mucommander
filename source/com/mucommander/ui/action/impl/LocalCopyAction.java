@@ -18,11 +18,6 @@
 
 package com.mucommander.ui.action.impl;
 
-import java.awt.event.KeyEvent;
-import java.util.Hashtable;
-
-import javax.swing.KeyStroke;
-
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.util.FileSet;
 import com.mucommander.ui.action.AbstractActionDescriptor;
@@ -32,6 +27,10 @@ import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.dialog.file.LocalCopyDialog;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.table.FileTable;
+
+import javax.swing.KeyStroke;
+import java.awt.event.KeyEvent;
+import java.util.Hashtable;
 
 /**
  * This action invokes the 'Copy dialog' which allows to copy the currently selected/marked files to a specified destination.
@@ -53,7 +52,7 @@ public class LocalCopyAction extends SelectedFileAction {
 
         // Display local copy dialog only if a file other than '..' is currently selected
         if(selectedFile!=null) {
-            new LocalCopyDialog(mainFrame, new FileSet(activeTable.getCurrentFolder(), selectedFile)).showDialog();;
+            new LocalCopyDialog(mainFrame, new FileSet(activeTable.getCurrentFolder(), selectedFile)).showDialog();
         }
     }
     

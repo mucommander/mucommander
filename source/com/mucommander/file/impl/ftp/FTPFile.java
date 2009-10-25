@@ -1284,7 +1284,7 @@ public class FTPFile extends ProtocolFile implements ConnectionHandlerFactory {
                                 FileLogger.fine("waiting "+retryDelay+ "ms before retrying to connect");
 
                                 try { Thread.sleep(retryDelay); }
-                                catch(InterruptedException e2) {};
+                                catch(InterruptedException e2) {}
                             }
 
                             continue;
