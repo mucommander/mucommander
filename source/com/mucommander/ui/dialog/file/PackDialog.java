@@ -150,7 +150,7 @@ public class PackDialog extends JobDialog implements ActionListener, ItemListene
         // Create file details button and OK/cancel buttons and lay them out a single row
         JPanel fileDetailsPanel = createFileDetailsPanel();
 
-        okButton = new JButton(Translator.get("pack_dialog.pack"));
+        okButton = new JButton(Translator.get("pack"));
         cancelButton = new JButton(Translator.get("cancel"));
 
         mainPanel.add(createButtonsPanel(createFileDetailsButton(fileDetailsPanel),
