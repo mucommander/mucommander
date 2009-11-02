@@ -173,7 +173,7 @@ public class AboutDialog extends FocusDialog implements ActionListener {
             insertDetailedString(doc, "Nardog",              "Japanese");
             insertDetailedString(doc, "Jeppe Toustrup",      "Danish");
             insertDetailedString(doc, "Peter Vasko",         "Czech");
-            insertDetailedString(doc, "Woodie",              "Simplified Chinese");
+            insertDetailedString(doc, "whiteriver",          "Simplified Chinese");
             insertLineBreak(doc);
 
             // Special thanks.

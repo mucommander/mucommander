@@ -98,15 +98,15 @@ Contributors:
 - Johann Schmitz
 
 Translators: 
-- Tony Klüver and Frank Berger (German)
+- Frank Berger and Tony Klüver (German)
 - Marcos Cobeña (Spanish)
-- Peter Vasko and Jaromír Mára (Czech)
+- Jaromír Mára and Peter Vasko (Czech)
 - Kent Hsu (Traditional Chinese)
 - Jioh L. Jung (Korean)
 - Andrzej Kosiński (Polish)
-- Tamás Balogh-Walder and György Varga (Hungarian)
+- György Varga and Tamás Balogh-Walder (Hungarian)
 - 4X_Pro (Russian)
-- Woodie (Simplified Chinese)
+- whiteriver and Woodie (Simplified Chinese)
 - Joze Kovacic (Slovenian)
 - Catalin Hritcu (Romanian)
 - Roberto Angeletti (Italian)
