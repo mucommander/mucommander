@@ -3340,6 +3340,7 @@ Delete.tooltip:PL:Usuwa zaznaczone pliki (przenosi do kosza, jeżeli możliwe)
 Delete.tooltip:DE:Markierte Dateien in den Papierkorb verschieben (falls möglich) 
 Delete.tooltip:HU:A kijelölt fájlok lomtárba helyezése, ha lehetséges
 Delete.tooltip:zh_TW:刪除已標記檔案
+Delete.tooltip:zh_CN:可能的话，将标记的文件放入回收站
 Delete.tooltip:NL:Gemarkeerde bestanden verwijderen met gebruik van de prullenbak indien mogelijk
 Delete.tooltip:JA:マークされたファイルを削除します
 Delete.tooltip:CS:Je-li možné, označené přesunout do Koše
@@ -3354,10 +3355,9 @@ Delete.tooltip:SK:Zmazať označené súbory (do koša, ak je k dispozícii)
 # The following entries need to be updated to indicate that the system trash is used when it is available
 Delete.tooltip:ES:Elimiar los ficheros marcados
 Delete.tooltip:RU:Удаление выделенных файлов
-Delete.tooltip:zh_CN:刪除已标记文件
 Delete.tooltip:RO:Șterge fișierele selectate
 Delete.tooltip:KO:선택된 파일 삭제
-# Translation missing (ES, KO, RU, zh_CN)
+# Translation missing (ES, KO, RU)
 
 # Deletes without using the system trash
 PermanentDelete.label:EN:Delete permanently
@@ -7246,6 +7246,7 @@ version_dialog.install_and_restart:CS:Nainstalovat a restartovat
 version_dialog.install_and_restart:RO:Instalează și repornește
 version_dialog.install_and_restart:ES:Instalar y reiniciar
 version_dialog.install_and_restart:zh_TW:安裝及重啟
+version_dialog.install_and_restart:zh_CN:安装并重启
 version_dialog.install_and_restart:IT:Installa e riparti
 version_dialog.install_and_restart:pt_BR:Instalar e reiniciar
 version_dialog.install_and_restart:DA:Installer og genstart
@@ -7253,7 +7254,7 @@ version_dialog.install_and_restart:SL:Namesti in ponovno zaženi
 version_dialog.install_and_restart:UA:Встановити та перезапустити
 version_dialog.install_and_restart:AR:تنصيب وإعادة تشغيل
 version_dialog.install_and_restart:SK:Nainštalovať a reštartovať
-# Translation missing (KO, zh_CN)
+# Translation missing (KO)
 
 # Displayed in the progress dialog before actually installing the a new version
 version_dialog.preparing_for_update:EN:Preparing for update...
@@ -7320,7 +7321,7 @@ quit_dialog.desc:zh_TW:你有 %1 個開啟的視窗. 確定要離開 ?
 quit_dialog.desc:PL:Masz otwartych %1 okien. Zamknąć wszystkie okna i zakończyć pracę muCommandera ?
 quit_dialog.desc:HU:Biztos ki akar lépni? (%1 muCommander van megnyitva.)
 quit_dialog.desc:RU:Закрыть %1 окон и выйти из muCommander ?
-quit_dialog.desc:zh_CN:关闭所有窗口并退出 muCommander ?
+quit_dialog.desc:zh_CN:您有 %1 个开启中的窗口. 确认退出 ?
 quit_dialog.desc:SL:Odprto/-ih je %1 okno/-en. Želite zapreti vsa okna? 
 quit_dialog.desc:RO:Aveți %1 ferestre deschise. Sunteți sigur ca doriti sa închideți muCommander?
 quit_dialog.desc:IT:Hai %1 finestra(e) aperta(e). Sei sicuro di voler uscire ?
@@ -7333,7 +7334,7 @@ quit_dialog.desc:SV:Du har %1 fönster öppna. Vill du avsluta ändå?
 quit_dialog.desc:DA:Du har %1 vinduer åbne. Er du sikker på du vil afslutte? 
 quit_dialog.desc:UA:Вийти з muCommander (відкрито %1 вікон) ?
 quit_dialog.desc:AR:لديك %1 من النوافذ المفتوحة، هل أنت متأكد أنك تريد الخروج؟
-# Translation missing (zh_CN, KO) : this entry needs to be updated to take into account the number of windows
+# Translation missing (KO) : this entry needs to be updated to take into account the number of windows
 
 quit_dialog.show_next_time:EN:Show next time
 quit_dialog.show_next_time:FR:Afficher la prochaine fois
