@@ -19,13 +19,10 @@
  package com.mucommander.ui.theme;
 
 import javax.swing.*;
-import java.awt.Color;
-import java.awt.Font;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
+import java.awt.*;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.WeakHashMap;
-
 
 /**
  * Base class for all things Theme.
@@ -688,65 +685,53 @@ public class ThemeData {
     // The following fields are look&feel dependant values for the fonts that are used by
     // themes. We need to monitor them, as they are prone to change through UIManager.
 
-    /** Default font for text area components. */
-    private static Font  DEFAULT_TEXT_AREA_FONT;
-    /** Default font for text field components. */
-    private static Font  DEFAULT_TEXT_FIELD_FONT;
-    /** Default font for label components. */
-    private static Font  DEFAULT_LABEL_FONT;
-    /** Default font for table components. */
-    private static Font  DEFAULT_TABLE_FONT;
-    /** Default font for menu headers. */
-    private static Font  DEFAULT_MENU_HEADER_FONT;
 
 
-
-    // - Default colors ------------------------------------------------------------------------------------------------
+    // - Default identifiers -------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
-    // The following fields are look&feel dependant values for the colors that are used by
-    // themes. We need to monitor them, as they are prone to change through UIManager.
-
-    /** Default foreground color for text area components. */
-    private static Color DEFAULT_TEXT_AREA_COLOR;
-    /** Default background color for text area components. */
-    private static Color DEFAULT_TEXT_AREA_BACKGROUND_COLOR;
-    /** Default selection foreground color for text area components. */
-    private static Color DEFAULT_TEXT_AREA_SELECTION_COLOR;
-    /** Default selection background color for text area components. */
-    private static Color DEFAULT_TEXT_AREA_SELECTION_BACKGROUND_COLOR;
-    /** Default foreground color for text field components. */
-    private static Color DEFAULT_TEXT_FIELD_COLOR;
-    /** Default progress color for {@link com.mucommander.ui.progress.ProgressTextField} components. */
-    private static Color DEFAULT_TEXT_FIELD_PROGRESS_COLOR;
-    /** Default background color for text field components. */
-    private static Color DEFAULT_TEXT_FIELD_BACKGROUND_COLOR;
-    /** Default selection foreground color for text field components. */
-    private static Color DEFAULT_TEXT_FIELD_SELECTION_COLOR;
-    /** Default selection background color for text field components. */
-    private static Color DEFAULT_TEXT_FIELD_SELECTION_BACKGROUND_COLOR;
-    /** Default foreground color for table components. */
-    private static Color DEFAULT_TABLE_COLOR;
-    /** Default background color for table components. */
-    private static Color DEFAULT_TABLE_BACKGROUND_COLOR;
-    /** Default selection foreground color for table components. */
-    private static Color DEFAULT_TABLE_SELECTION_COLOR;
-    /** Default selection background color for table components. */
-    private static Color DEFAULT_TABLE_SELECTION_BACKGROUND_COLOR;
-    /** Default 'unmatched' color for table components. */
-    private static Color DEFAULT_TABLE_UNMATCHED_COLOR;
-    /** Default 'unmatched' background color for table components. */
-    private static Color DEFAULT_TABLE_UNMATCHED_BACKGROUND_COLOR;
-    /** Default background color for menu headers. */
-    private static Color DEFAULT_MENU_HEADER_BACKGROUND_COLOR;
-    /** Default foreground color for menu headers. */
-    private static Color DEFAULT_MENU_HEADER_FOREGROUND_COLOR;
+    public static final String DEFAULT_TEXT_AREA_FOREGROUND            = "TextArea.foreground";
+    public static final String DEFAULT_TEXT_AREA_BACKGROUND            = "TextArea.background";
+    public static final String DEFAULT_TEXT_AREA_SELECTION_FOREGROUND  = "TextArea.selectionForeground";
+    public static final String DEFAULT_TEXT_AREA_SELECTION_BACKGROUND  = "TextArea.selectionBackground";
+    public static final String DEFAULT_TEXT_FIELD_FOREGROUND           = "TextField.foreground";
+    public static final String DEFAULT_TEXT_FIELD_BACKGROUND           = "TextField.background";
+    public static final String DEFAULT_TEXT_FIELD_SELECTION_FOREGROUND = "TextField.selectionForeground";
+    public static final String DEFAULT_TEXT_FIELD_SELECTION_BACKGROUND = "TextField.selectionBackground";
+    public static final String DEFAULT_TEXT_FIELD_PROGRESS_BACKGROUND  = "TextField.progress";
+    public static final String DEFAULT_TABLE_FOREGROUND                = "Table.foreground";
+    public static final String DEFAULT_TABLE_BACKGROUND                = "Table.background";
+    public static final String DEFAULT_TABLE_SELECTION_FOREGROUND      = "Table.selectionForeground";
+    public static final String DEFAULT_TABLE_SELECTION_BACKGROUND      = "Table.selectionBackground";
+    public static final String DEFAULT_TABLE_UNMATCHED_FOREGROUND      = "Table.unmatchedForeground";
+    public static final String DEFAULT_TABLE_UNMATCHED_BACKGROUND      = "Table.unmatchedBackground";
+    public static final String DEFAULT_MENU_HEADER_FOREGROUND          = "MenuHeader.foreground";
+    public static final String DEFAULT_MENU_HEADER_BACKGROUND          = "MenuHeader.background";
+    public static final String DEFAULT_TEXT_AREA_FONT                  = "TextArea.font";
+    public static final String DEFAULT_TEXT_FIELD_FONT                 = "TextField.font";
+    public static final String DEFAULT_LABEL_FONT                      = "Label.font";
+    public static final String DEFAULT_TABLE_FONT                      = "Table.font";
+    public static final String DEFAULT_MENU_HEADER_FONT                = "MenuHeader.font";
 
 
+    
 
     // - Listeners -----------------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
     /** Listeners on the default font and colors. */
     private static WeakHashMap listeners = new WeakHashMap();
+
+
+
+    // - Registered colors & fonts -------------------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------------
+    /** All registered colors. */
+    private static final Hashtable COLORS;
+    /** All registered default colors. */
+    private static final Hashtable DEFAULT_COLORS;
+    /** All registered fonts. */
+    private static final Hashtable FONTS;
+    /** All registered default fonts. */
+    private static final Hashtable DEFAULT_FONTS;
 
 
 
@@ -759,12 +744,242 @@ public class ThemeData {
 
 
 
-    // - Initialisation ------------------------------------------------------------------------------------------------
-    // -----------------------------------------------------------------------------------------------------------------
-    /**
-     * Starts listening on default colors and fonts.
-     */
-    static {UIManager.addPropertyChangeListener(new DefaultValuesListener());}
+
+
+
+
+    public static void registerDefaultColor(String name, DefaultColor color) {
+        DEFAULT_COLORS.put(name, color);
+    }
+
+    public static void registerDefaultFont(String name, DefaultFont font) {
+        DEFAULT_FONTS.put(name, font);
+    }
+
+    public static void registerColor(int id, String defaultColor) {
+        DefaultColor color;
+
+        if((color = ((DefaultColor)DEFAULT_COLORS.get(defaultColor))) == null)
+            throw new IllegalArgumentException("Not a registered default color: " + defaultColor);
+        registerColor(id, color);
+    }
+
+    public static void registerFont(int id, String defaultFont) {
+        DefaultFont font;
+
+        if((font = ((DefaultFont)DEFAULT_FONTS.get(defaultFont))) == null)
+            throw new IllegalArgumentException("Not a registered default font: " + defaultFont);
+        registerFont(id, font);
+    }
+
+    public static void registerColor(int id, Color color) {
+        registerColor(id, new FixedDefaultColor(color));
+    }
+
+    public static void registerFont(int id, Font font) {
+        registerFont(id, new FixedDefaultFont(font));
+    }
+
+    public static void registerColor(int id, int defaultId) {
+        registerColor(id, new LinkedDefaultColor(defaultId));
+    }
+
+    public static void registerFont(int id, int defaultId) {
+        registerFont(id, new LinkedDefaultFont(defaultId));
+    }
+
+    public static void registerColor(int id, DefaultColor color) {
+        Integer colorId;
+
+        colorId = Integer.valueOf(id);
+        COLORS.put(colorId, color);
+        color.link(colorId);
+    }
+
+    public static void registerFont(int id, DefaultFont font) {
+        Integer fontId;
+
+        fontId = Integer.valueOf(id);
+        FONTS.put(fontId, font);
+        font.link(fontId);
+    }
+
+
+    static {
+        ComponentMapper mapper;
+
+        COLORS         = new Hashtable();
+        DEFAULT_COLORS = new Hashtable();
+        FONTS          = new Hashtable();
+        DEFAULT_FONTS  = new Hashtable();
+
+
+
+        // - Default values registering --------------------------------------------------------------------------------
+        // -------------------------------------------------------------------------------------------------------------
+        mapper = new ComponentMapper() {public JComponent getComponent() {return new JTextArea();}};
+        registerDefaultFont(DEFAULT_TEXT_AREA_FONT,new SystemDefaultFont("TextArea.font", mapper));
+        registerDefaultColor(DEFAULT_TEXT_AREA_FOREGROUND,
+                             new SystemDefaultColor(SystemDefaultColor.FOREGROUND, "TextArea.foreground", mapper));
+        registerDefaultColor(DEFAULT_TEXT_AREA_BACKGROUND,
+                             new SystemDefaultColor(SystemDefaultColor.BACKGROUND, "TextArea.background", mapper));
+        registerDefaultColor(DEFAULT_TEXT_AREA_SELECTION_FOREGROUND,
+                             new SystemDefaultColor(SystemDefaultColor.SELECTION_FOREGROUND, "TextArea.selectionForeground", mapper));
+        registerDefaultColor(DEFAULT_TEXT_AREA_SELECTION_BACKGROUND,
+                             new SystemDefaultColor(SystemDefaultColor.SELECTION_BACKGROUND, "TextArea.selectionBackground", mapper));
+
+        // Register TextField related default values.
+        mapper = new ComponentMapper() {public JComponent getComponent() {return new JTextField();}};
+        registerDefaultFont(DEFAULT_TEXT_FIELD_FONT, new SystemDefaultFont("TextField.font", mapper));
+        registerDefaultColor(DEFAULT_TEXT_FIELD_FOREGROUND,
+                             new SystemDefaultColor(SystemDefaultColor.FOREGROUND, "TextField.foreground", mapper));
+        registerDefaultColor(DEFAULT_TEXT_FIELD_BACKGROUND,
+                             new SystemDefaultColor(SystemDefaultColor.BACKGROUND, "TextField.background", mapper));
+        registerDefaultColor(DEFAULT_TEXT_FIELD_SELECTION_FOREGROUND,
+                             new SystemDefaultColor(SystemDefaultColor.SELECTION_FOREGROUND, "TextField.selectionForeground", mapper));
+        registerDefaultColor(DEFAULT_TEXT_FIELD_SELECTION_BACKGROUND,
+                             new SystemDefaultColor(SystemDefaultColor.SELECTION_BACKGROUND, "TextField.selectionBackground", mapper));
+        registerDefaultColor(DEFAULT_TEXT_FIELD_PROGRESS_BACKGROUND,
+                             new SystemDefaultColor(SystemDefaultColor.SELECTION_BACKGROUND, "TextField.selectionBackground", mapper) {
+                                 public Color getColor(ThemeData data) {
+                                     Color color;
+
+                                     color = super.getColor(data);
+                                     return new Color(color.getRed(), color.getGreen(), color.getBlue(), 64);
+                                 }
+                             });
+
+        // Register Table related default values.
+        mapper = new ComponentMapper() {public JComponent getComponent() {return new JTable();}};
+        registerDefaultFont(DEFAULT_TABLE_FONT, new SystemDefaultFont("Table.font", mapper));
+        registerDefaultColor(DEFAULT_TABLE_FOREGROUND,
+                             new SystemDefaultColor(SystemDefaultColor.FOREGROUND, "Table.foreground", mapper));
+        registerDefaultColor(DEFAULT_TABLE_BACKGROUND,
+                             new SystemDefaultColor(SystemDefaultColor.BACKGROUND, "Table.background", mapper));
+        registerDefaultColor(DEFAULT_TABLE_SELECTION_FOREGROUND,
+                             new SystemDefaultColor(SystemDefaultColor.SELECTION_FOREGROUND, "Table.selectionForeground", mapper));
+        registerDefaultColor(DEFAULT_TABLE_SELECTION_BACKGROUND,
+                             new SystemDefaultColor(SystemDefaultColor.SELECTION_BACKGROUND, "Table.selectionBackground", mapper));
+        registerDefaultColor(DEFAULT_TABLE_UNMATCHED_FOREGROUND,
+                             new SystemDefaultColor(SystemDefaultColor.FOREGROUND, "Table.foreground", mapper) {
+                                 public Color getColor(ThemeData data) {
+                                     return super.getColor(data).darker();
+                                 }
+                             });
+        registerDefaultColor(DEFAULT_TABLE_UNMATCHED_BACKGROUND,
+                             new SystemDefaultColor(SystemDefaultColor.BACKGROUND, "Table.background", mapper) {
+                                 public Color getColor(ThemeData data) {
+                                     return super.getColor(data).darker();
+                                 }
+                             });
+
+        // Menu header related default values.
+        mapper = new ComponentMapper() {public JComponent getComponent() {return new JInternalFrame();}};
+        registerDefaultFont(DEFAULT_MENU_HEADER_FONT, new SystemDefaultFont("InternalFrame.font", mapper));
+        registerDefaultColor(DEFAULT_MENU_HEADER_BACKGROUND,
+                             new SystemDefaultColor(SystemDefaultColor.BACKGROUND, "InternalFrame.activeTitleBackground", mapper));
+        registerDefaultColor(DEFAULT_MENU_HEADER_FOREGROUND,
+                             new SystemDefaultColor(SystemDefaultColor.FOREGROUND, "InternalFrame.activeTitleForeground", mapper));
+
+        // Label related default values.
+        mapper = new ComponentMapper() {public JComponent getComponent() {return new JLabel();}};
+        registerDefaultFont(DEFAULT_LABEL_FONT, new SystemDefaultFont("Label.font", mapper));
+
+        
+
+        // - Default values linking ------------------------------------------------------------------------------------
+        // -------------------------------------------------------------------------------------------------------------
+        // QuickList default values.
+        registerFont(QUICK_LIST_ITEM_FONT,                          DEFAULT_TABLE_FONT);
+        registerFont(QUICK_LIST_HEADER_FONT,                        DEFAULT_MENU_HEADER_FONT);
+        registerColor(QUICK_LIST_HEADER_SECONDARY_BACKGROUND_COLOR, DEFAULT_MENU_HEADER_BACKGROUND);
+        registerColor(QUICK_LIST_HEADER_BACKGROUND_COLOR,           DEFAULT_MENU_HEADER_BACKGROUND);
+        registerColor(QUICK_LIST_HEADER_FOREGROUND_COLOR,           DEFAULT_MENU_HEADER_FOREGROUND);
+        registerColor(QUICK_LIST_ITEM_BACKGROUND_COLOR,             FILE_TABLE_BACKGROUND_COLOR);
+        registerColor(QUICK_LIST_ITEM_FOREGROUND_COLOR,             FILE_FOREGROUND_COLOR);
+        registerColor(QUICK_LIST_SELECTED_ITEM_BACKGROUND_COLOR,    FILE_TABLE_SELECTED_BACKGROUND_COLOR);
+        registerColor(QUICK_LIST_SELECTED_ITEM_FOREGROUND_COLOR,    FILE_SELECTED_FOREGROUND_COLOR);
+
+        // File default values.
+        registerColor(HIDDEN_FILE_FOREGROUND_COLOR,                   DEFAULT_TABLE_FOREGROUND);
+        registerColor(FOLDER_FOREGROUND_COLOR,                        DEFAULT_TABLE_FOREGROUND);
+        registerColor(ARCHIVE_FOREGROUND_COLOR,                       DEFAULT_TABLE_FOREGROUND);
+        registerColor(SYMLINK_FOREGROUND_COLOR,                       DEFAULT_TABLE_FOREGROUND);
+        registerColor(FILE_INACTIVE_FOREGROUND_COLOR,                 DEFAULT_TABLE_FOREGROUND);
+        registerColor(HIDDEN_FILE_INACTIVE_FOREGROUND_COLOR,          DEFAULT_TABLE_FOREGROUND);
+        registerColor(FOLDER_INACTIVE_FOREGROUND_COLOR,               DEFAULT_TABLE_FOREGROUND);
+        registerColor(ARCHIVE_INACTIVE_FOREGROUND_COLOR,              DEFAULT_TABLE_FOREGROUND);
+        registerColor(SYMLINK_INACTIVE_FOREGROUND_COLOR,              DEFAULT_TABLE_FOREGROUND);
+        registerColor(FILE_FOREGROUND_COLOR,                          DEFAULT_TABLE_FOREGROUND);
+        registerColor(HIDDEN_FILE_SELECTED_FOREGROUND_COLOR,          DEFAULT_TABLE_SELECTION_FOREGROUND);
+        registerColor(FOLDER_SELECTED_FOREGROUND_COLOR,               DEFAULT_TABLE_SELECTION_FOREGROUND);
+        registerColor(ARCHIVE_SELECTED_FOREGROUND_COLOR,              DEFAULT_TABLE_SELECTION_FOREGROUND);
+        registerColor(SYMLINK_SELECTED_FOREGROUND_COLOR,              DEFAULT_TABLE_SELECTION_FOREGROUND);
+        registerColor(HIDDEN_FILE_INACTIVE_SELECTED_FOREGROUND_COLOR, DEFAULT_TABLE_SELECTION_FOREGROUND);
+        registerColor(FOLDER_INACTIVE_SELECTED_FOREGROUND_COLOR,      DEFAULT_TABLE_SELECTION_FOREGROUND);
+        registerColor(ARCHIVE_INACTIVE_SELECTED_FOREGROUND_COLOR,     DEFAULT_TABLE_SELECTION_FOREGROUND);
+        registerColor(SYMLINK_INACTIVE_SELECTED_FOREGROUND_COLOR,     DEFAULT_TABLE_SELECTION_FOREGROUND);
+        registerColor(FILE_INACTIVE_SELECTED_FOREGROUND_COLOR,        DEFAULT_TABLE_SELECTION_FOREGROUND);
+        registerColor(FILE_SELECTED_FOREGROUND_COLOR,                 DEFAULT_TABLE_SELECTION_FOREGROUND);
+
+        // FileTable default values.
+        registerFont(FILE_TABLE_FONT,                                          DEFAULT_TABLE_FONT);
+        registerColor(FILE_TABLE_BACKGROUND_COLOR,                             DEFAULT_TABLE_BACKGROUND);
+        registerColor(FILE_TABLE_INACTIVE_BACKGROUND_COLOR,                    DEFAULT_TABLE_BACKGROUND);
+        registerColor(FILE_TABLE_ALTERNATE_BACKGROUND_COLOR,                   DEFAULT_TABLE_BACKGROUND);
+        registerColor(FILE_TABLE_INACTIVE_ALTERNATE_BACKGROUND_COLOR,          DEFAULT_TABLE_BACKGROUND);
+        registerColor(FILE_TABLE_SELECTED_BACKGROUND_COLOR,                    DEFAULT_TABLE_SELECTION_BACKGROUND);
+        registerColor(FILE_TABLE_INACTIVE_SELECTED_BACKGROUND_COLOR,           DEFAULT_TABLE_SELECTION_BACKGROUND);
+        registerColor(FILE_TABLE_UNMATCHED_FOREGROUND_COLOR,                   DEFAULT_TABLE_UNMATCHED_FOREGROUND);
+        registerColor(FILE_TABLE_UNMATCHED_BACKGROUND_COLOR,                   DEFAULT_TABLE_UNMATCHED_BACKGROUND);
+        registerColor(STATUS_BAR_BACKGROUND_COLOR,                             new Color(0xD5D5D5));
+        registerColor(MARKED_FOREGROUND_COLOR,                                 Color.RED);
+        registerColor(MARKED_INACTIVE_FOREGROUND_COLOR,                        Color.RED);
+        registerColor(MARKED_SELECTED_FOREGROUND_COLOR,                        Color.RED);
+        registerColor(MARKED_INACTIVE_SELECTED_FOREGROUND_COLOR,               Color.RED);
+        registerColor(FILE_TABLE_BORDER_COLOR,                                 Color.GRAY);
+        registerColor(FILE_TABLE_INACTIVE_BORDER_COLOR,                        Color.GRAY);
+        registerColor(FILE_TABLE_SELECTED_SECONDARY_BACKGROUND_COLOR,          FILE_TABLE_SELECTED_BACKGROUND_COLOR);
+        registerColor(FILE_TABLE_SELECTED_OUTLINE_COLOR,                       FILE_TABLE_SELECTED_BACKGROUND_COLOR);
+        registerColor(FILE_TABLE_INACTIVE_SELECTED_SECONDARY_BACKGROUND_COLOR, FILE_TABLE_INACTIVE_SELECTED_BACKGROUND_COLOR);
+        registerColor(FILE_TABLE_INACTIVE_SELECTED_OUTLINE_COLOR,              FILE_TABLE_INACTIVE_SELECTED_BACKGROUND_COLOR);
+
+        // Shell default values.
+        registerFont(SHELL_FONT,                              DEFAULT_TEXT_AREA_FONT);
+        registerFont(SHELL_HISTORY_FONT,                       DEFAULT_TEXT_FIELD_FONT);
+        registerColor(SHELL_FOREGROUND_COLOR,                  DEFAULT_TEXT_AREA_FOREGROUND);
+        registerColor(SHELL_BACKGROUND_COLOR,                  DEFAULT_TEXT_AREA_BACKGROUND);
+        registerColor(SHELL_SELECTED_FOREGROUND_COLOR,         DEFAULT_TEXT_AREA_SELECTION_FOREGROUND);
+        registerColor(SHELL_SELECTED_BACKGROUND_COLOR,         DEFAULT_TEXT_AREA_SELECTION_BACKGROUND);
+        registerColor(SHELL_HISTORY_FOREGROUND_COLOR,          DEFAULT_TEXT_FIELD_FOREGROUND);
+        registerColor(SHELL_HISTORY_BACKGROUND_COLOR,          DEFAULT_TEXT_FIELD_BACKGROUND);
+        registerColor(SHELL_HISTORY_SELECTED_FOREGROUND_COLOR, DEFAULT_TEXT_FIELD_SELECTION_FOREGROUND);
+        registerColor(SHELL_HISTORY_SELECTED_BACKGROUND_COLOR, DEFAULT_TEXT_FIELD_SELECTION_BACKGROUND);
+
+        // Editor default values.
+        registerFont(EDITOR_FONT,                       DEFAULT_TEXT_AREA_FONT);
+        registerColor(EDITOR_FOREGROUND_COLOR,          DEFAULT_TEXT_AREA_FOREGROUND);
+        registerColor(EDITOR_BACKGROUND_COLOR,          DEFAULT_TEXT_AREA_BACKGROUND);
+        registerColor(EDITOR_SELECTED_FOREGROUND_COLOR, DEFAULT_TEXT_AREA_SELECTION_FOREGROUND);
+        registerColor(EDITOR_SELECTED_BACKGROUND_COLOR, DEFAULT_TEXT_AREA_SELECTION_BACKGROUND);
+
+        // Location default values.
+        registerFont(LOCATION_BAR_FONT,                       DEFAULT_TEXT_FIELD_FONT);
+        registerColor(LOCATION_BAR_FOREGROUND_COLOR,          DEFAULT_TEXT_FIELD_FOREGROUND);
+        registerColor(LOCATION_BAR_BACKGROUND_COLOR,          DEFAULT_TEXT_FIELD_BACKGROUND);
+        registerColor(LOCATION_BAR_SELECTED_FOREGROUND_COLOR, DEFAULT_TEXT_FIELD_SELECTION_FOREGROUND);
+        registerColor(LOCATION_BAR_SELECTED_BACKGROUND_COLOR, DEFAULT_TEXT_FIELD_SELECTION_BACKGROUND);
+        registerColor(LOCATION_BAR_PROGRESS_COLOR,            DEFAULT_TEXT_FIELD_PROGRESS_BACKGROUND);
+
+        // Status bar default values.
+        registerFont(STATUS_BAR_FONT,              DEFAULT_LABEL_FONT);
+        registerColor(STATUS_BAR_FOREGROUND_COLOR, DEFAULT_TEXT_FIELD_FOREGROUND);
+        registerColor(STATUS_BAR_CRITICAL_COLOR,   Color.RED);
+        registerColor(STATUS_BAR_BORDER_COLOR,     Color.GRAY);
+        registerColor(STATUS_BAR_BACKGROUND_COLOR, new Color(0xD5D5D5));
+        registerColor(STATUS_BAR_OK_COLOR,         new Color(0x70EC2B));
+        registerColor(STATUS_BAR_WARNING_COLOR,    new Color(0xFF7F00));
+    }
 
 
     /**
@@ -962,12 +1177,13 @@ public class ThemeData {
      * </p>
      * @param  id identifier of the font to retrieve.
      * @return    the requested font, or its default value if not set.
-     * @see       #getDefaultFont(int)
+     * @see       #getDefaultFont(int, ThemeData)
      * @see       #isFontSet(int)
      */
     public synchronized Font getFont(int id) {
         checkFontIdentifier(id);
-        return (fonts[id] == null) ? getDefaultFont(id) : fonts[id];
+
+        return (fonts[id] == null) ? getDefaultFont(id, this) : fonts[id];
     }
 
 
@@ -983,7 +1199,7 @@ public class ThemeData {
      * Returns <code>true</code> if the specified font is set.
      * @param  id identifier of the font to check for.
      * @return    <code>true</code> if the specified font is set, <code>false</code> otherwise.
-     * @see       #getDefaultFont(int)
+     * @see       #getDefaultFont(int, ThemeData)
      */
     public boolean isFontSet(int id) {return fonts[id] != null;}
 
@@ -1003,163 +1219,7 @@ public class ThemeData {
         // Makes sure id is a legal color identifier.
         checkColorIdentifier(id);
 
-        switch(id) {
-            // File table background colors.
-            case FILE_TABLE_BACKGROUND_COLOR:
-            case FILE_TABLE_INACTIVE_BACKGROUND_COLOR:
-            case FILE_TABLE_ALTERNATE_BACKGROUND_COLOR:
-            case FILE_TABLE_INACTIVE_ALTERNATE_BACKGROUND_COLOR:
-                return getTableBackgroundColor();
-
-            case QUICK_LIST_ITEM_BACKGROUND_COLOR:
-                return data.getColor(FILE_TABLE_BACKGROUND_COLOR);
-
-
-            // File table foreground colors (everything except marked
-            // defaults to the l&f specific table foreground color).
-            case HIDDEN_FILE_FOREGROUND_COLOR:
-            case FOLDER_FOREGROUND_COLOR:
-            case ARCHIVE_FOREGROUND_COLOR:
-            case SYMLINK_FOREGROUND_COLOR:
-            case FILE_INACTIVE_FOREGROUND_COLOR:
-            case HIDDEN_FILE_INACTIVE_FOREGROUND_COLOR:
-            case FOLDER_INACTIVE_FOREGROUND_COLOR:
-            case ARCHIVE_INACTIVE_FOREGROUND_COLOR:
-            case SYMLINK_INACTIVE_FOREGROUND_COLOR:
-            case FILE_FOREGROUND_COLOR:
-                return getTableColor();
-
-            case QUICK_LIST_ITEM_FOREGROUND_COLOR:
-                return data.getColor(FILE_FOREGROUND_COLOR);
-
-            // Marked files foreground colors (they have to be different
-            // of the standard file foreground colors).
-            case MARKED_FOREGROUND_COLOR:
-            case MARKED_INACTIVE_FOREGROUND_COLOR:
-            case MARKED_SELECTED_FOREGROUND_COLOR:
-            case MARKED_INACTIVE_SELECTED_FOREGROUND_COLOR:
-                return Color.RED;
-
-            // Text areas default foreground colors.
-            case SHELL_FOREGROUND_COLOR:
-            case EDITOR_FOREGROUND_COLOR:
-                return getTextAreaColor();
-
-            // Text areas default background colors.
-            case SHELL_BACKGROUND_COLOR:
-            case EDITOR_BACKGROUND_COLOR:
-                return getTextAreaBackgroundColor();
-
-            // Text fields default foreground colors.
-            case SHELL_HISTORY_FOREGROUND_COLOR:
-            case LOCATION_BAR_FOREGROUND_COLOR:
-            case STATUS_BAR_FOREGROUND_COLOR:
-                return getTextFieldColor();
-
-            // Text fields default background colors.
-            case LOCATION_BAR_BACKGROUND_COLOR:
-            case SHELL_HISTORY_BACKGROUND_COLOR:
-                return getTextFieldBackgroundColor();
-
-            // The location bar progress color is a bit of a special case,
-            // as it requires alpha transparency.
-            case LOCATION_BAR_PROGRESS_COLOR:
-                return getTextFieldProgressColor();
-
-            // Selected table background colors.
-
-            case QUICK_LIST_HEADER_SECONDARY_BACKGROUND_COLOR:
-            case QUICK_LIST_HEADER_BACKGROUND_COLOR:
-                return getMenuHeaderBackgroundColor();
-
-            case FILE_TABLE_SELECTED_BACKGROUND_COLOR:
-            case FILE_TABLE_INACTIVE_SELECTED_BACKGROUND_COLOR:
-                return getTableSelectionBackgroundColor();
-
-            case QUICK_LIST_SELECTED_ITEM_BACKGROUND_COLOR:
-                return data.getColor(FILE_TABLE_SELECTED_BACKGROUND_COLOR);
-
-            // The secondary background and outline colors default to the current
-            // value of 'selected background'.
-            case FILE_TABLE_SELECTED_SECONDARY_BACKGROUND_COLOR:
-            case FILE_TABLE_SELECTED_OUTLINE_COLOR:
-                return data.getColor(FILE_TABLE_SELECTED_BACKGROUND_COLOR);
-
-            case FILE_TABLE_INACTIVE_SELECTED_SECONDARY_BACKGROUND_COLOR:
-            case FILE_TABLE_INACTIVE_SELECTED_OUTLINE_COLOR:
-                return data.getColor(FILE_TABLE_INACTIVE_SELECTED_BACKGROUND_COLOR);
-
-            // Border colors.
-            case FILE_TABLE_BORDER_COLOR:
-            case FILE_TABLE_INACTIVE_BORDER_COLOR:
-            case STATUS_BAR_BORDER_COLOR:
-                return Color.GRAY;
-
-            // Foreground color for selected elements in the file table.
-            case HIDDEN_FILE_SELECTED_FOREGROUND_COLOR:
-            case FOLDER_SELECTED_FOREGROUND_COLOR:
-            case ARCHIVE_SELECTED_FOREGROUND_COLOR:
-            case SYMLINK_SELECTED_FOREGROUND_COLOR:
-            case HIDDEN_FILE_INACTIVE_SELECTED_FOREGROUND_COLOR:
-            case FOLDER_INACTIVE_SELECTED_FOREGROUND_COLOR:
-            case ARCHIVE_INACTIVE_SELECTED_FOREGROUND_COLOR:
-            case SYMLINK_INACTIVE_SELECTED_FOREGROUND_COLOR:
-            case FILE_INACTIVE_SELECTED_FOREGROUND_COLOR:
-            case FILE_SELECTED_FOREGROUND_COLOR:
-                return getTableSelectionColor();
-
-            case QUICK_LIST_SELECTED_ITEM_FOREGROUND_COLOR:
-                return data.getColor(FILE_SELECTED_FOREGROUND_COLOR);
-
-            // Foreground color for selected text area elements.
-            case SHELL_SELECTED_FOREGROUND_COLOR:
-            case EDITOR_SELECTED_FOREGROUND_COLOR:
-                return getTextAreaSelectionColor();
-
-            // Background color for selected text area elements.
-            case SHELL_SELECTED_BACKGROUND_COLOR:
-            case EDITOR_SELECTED_BACKGROUND_COLOR:
-                return getTextAreaSelectionBackgroundColor();
-
-            // Foreground color for selected text fields elements.
-            case LOCATION_BAR_SELECTED_FOREGROUND_COLOR:
-            case SHELL_HISTORY_SELECTED_FOREGROUND_COLOR:
-                return getTextFieldSelectionColor();
-
-            // Background color for selected text fields elements.
-            case SHELL_HISTORY_SELECTED_BACKGROUND_COLOR:
-            case LOCATION_BAR_SELECTED_BACKGROUND_COLOR:
-                return getTextFieldSelectionBackgroundColor();
-
-            // Status bar defaults.
-            case STATUS_BAR_BACKGROUND_COLOR:
-                return new Color(0xD5D5D5);
-
-            // Status bar 'ok' color.
-            case STATUS_BAR_OK_COLOR:
-                return new Color(0x70EC2B);
-
-            // Status bar 'warning' color.
-            case STATUS_BAR_WARNING_COLOR:
-                return new Color(0xFF7F00);
-
-            // Status bar 'critical' color.
-            case STATUS_BAR_CRITICAL_COLOR:
-                return Color.RED;
-
-            // Unmatched colors.
-            case FILE_TABLE_UNMATCHED_BACKGROUND_COLOR:
-                return getTableUnmatchedBackgroundColor();
-            case FILE_TABLE_UNMATCHED_FOREGROUND_COLOR:
-                return getTableUnmatchedColor();
-
-
-            case QUICK_LIST_HEADER_FOREGROUND_COLOR:
-                return getMenuHeaderForegroundColor();
-        }
-
-        // This should never happen.
-        return null;
+        return ((DefaultColor)COLORS.get(Integer.valueOf(id))).getColor(data);
     }
 
     /**
@@ -1173,36 +1233,10 @@ public class ThemeData {
      * @return    the default value for the specified font.
      * @see       #addDefaultValuesListener(ThemeListener)
      */
-    public static Font getDefaultFont(int id) {
+    private static Font getDefaultFont(int id, ThemeData data) {
         checkFontIdentifier(id);
 
-	switch(id) {
-            // Table font.
-        case FILE_TABLE_FONT:
-        case QUICK_LIST_ITEM_FONT:
-            return getTableFont();
-
-	    // Text Area font.
-        case EDITOR_FONT:
-        case SHELL_FONT:
-	    return getTextAreaFont();
-
-	    // Text Field font.
-        case LOCATION_BAR_FONT:
-        case SHELL_HISTORY_FONT:
-	    return getTextFieldFont();
-
-        // Label fonts.
-        case STATUS_BAR_FONT:
-	    return getLabelFont();
-	    
-	    // Quick list header font.
-        case QUICK_LIST_HEADER_FONT:
-    	return getMenuHeaderFont();
-        }
-
-        // This should never happen.
-        return null;
+        return((DefaultFont)FONTS.get(Integer.valueOf(id))).getFont(data);
     }
 
 
@@ -1287,7 +1321,7 @@ public class ThemeData {
         // If fonts[id] is null and we're set to ignore defaults, both fonts are different.
         // If we're set to use defaults, we must compare font and the default value for id.
         if(fonts[id] == null)
-            return ignoreDefaults || !getDefaultFont(id).equals(font);
+            return ignoreDefaults ? true : !getDefaultFont(id, this).equals(font);
 
         // 'Standard' case: both fonts are set, compare them normally.
         return !font.equals(fonts[id]);
@@ -1379,7 +1413,7 @@ public class ThemeData {
      * @param id   identifier of the font that changed.
      * @param font new value for the font that changed.
      */
-    private static void triggerFontEvent(int id, Font font) {
+    static void triggerFontEvent(int id, Font font) {
         Iterator         iterator; // Used to iterate through the listeners.
         FontChangedEvent event;    // Event that will be dispatched.
 
@@ -1397,7 +1431,7 @@ public class ThemeData {
      * @param id    identifier of the color that changed.
      * @param color new value for the color that changed.
      */
-    private static void triggerColorEvent(int id, Color color) {
+    static void triggerColorEvent(int id, Color color) {
         Iterator          iterator; // Used to iterate through the listeners.
         ColorChangedEvent event;    // Event that will be dispatched.
 
@@ -1414,17 +1448,6 @@ public class ThemeData {
 
     // - Helper methods ------------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
-    /**
-     * Escapes the specified color.
-     * <p>
-     * This is a workaround for a strange Swing bug: in some cases, if a color is not an instance of
-     * <code>java.awt.Color</code> but rather of one of its subclasses, it won't be painted properly.<br/>
-     * </p>
-     * @param  color color to escape.
-     * @return       escaped color.
-     */
-    private static Color escapeColor(Color color) {return new Color(color.getRGB(), (color.getRGB() & 0xFF000000) != 0xFF000000);}
-
     /**
      * Checks whether the specified color identifier is legal.
      * @param  id                       identifier to check against.
@@ -1443,788 +1466,5 @@ public class ThemeData {
     private static void checkFontIdentifier(int id) {
         if(id < 0 || id >= FONT_COUNT)
             throw new IllegalArgumentException("Illegal font identifier: " + id);
-    }
-
-
-
-    // - L&F dependant defaults ----------------------------------------------------------------------------------------
-    // -----------------------------------------------------------------------------------------------------------------
-    /**
-     * Returns the current look and feel's table font.
-     * <p>
-     * If {@link #DEFAULT_TABLE_FONT} is not <code>null</code>, this method returns its value.
-     * Otherwise, it will be set to the current default font before being returned.
-     * </p>
-     * @return the current look and feel's table font.
-     */
-    private static Font getTableFont() {
-        if(DEFAULT_TABLE_FONT == null) {
-            if((DEFAULT_TABLE_FONT = UIManager.getDefaults().getFont("Table.font")) == null)
-                DEFAULT_TABLE_FONT = new JTable().getFont();
-        }
-        return DEFAULT_TABLE_FONT;
-    }
-    
-    /**
-     * @return the default quick list header font.
-     */
-    private static Font getMenuHeaderFont() {
-    	if(DEFAULT_MENU_HEADER_FONT == null) {
-            if((DEFAULT_MENU_HEADER_FONT = UIManager.getDefaults().getFont("InternalFrame.font")) == null)
-                DEFAULT_MENU_HEADER_FONT = new JTable().getFont();
-    	}
-        return DEFAULT_MENU_HEADER_FONT;
-    }
-
-    /**
-     * Returns the current look and feel's text area font.
-     * <p>
-     * If {@link #DEFAULT_TEXT_AREA_FONT} is not <code>null</code>, this method returns its value.
-     * Otherwise, it will be set to the current default font before being returned.
-     * </p>
-     * @return the current look and feel's text area font.
-     */
-    private static Font getTextAreaFont() {
-        if(DEFAULT_TEXT_AREA_FONT == null) {
-            if((DEFAULT_TEXT_AREA_FONT = UIManager.getDefaults().getFont("TextArea.font")) == null)
-                DEFAULT_TEXT_AREA_FONT = new JTable().getFont();
-        }
-        return DEFAULT_TEXT_AREA_FONT;
-    }
-
-    /**
-     * Returns the current look and feel's text field font.
-     * <p>
-     * If {@link #DEFAULT_TEXT_FIELD_FONT} is not <code>null</code>, this method returns its value.
-     * Otherwise, it will be set to the current default font before being returned.
-     * </p>
-     * @return the current look and feel's text field font.
-     */
-    private static Font getTextFieldFont() {
-        if(DEFAULT_TEXT_FIELD_FONT == null) {
-            if((DEFAULT_TEXT_FIELD_FONT = UIManager.getDefaults().getFont("TextField.font")) == null)
-                DEFAULT_TEXT_FIELD_FONT = new JTable().getFont();
-        }
-        return DEFAULT_TEXT_FIELD_FONT;
-    }
-
-    /**
-     * Returns the current look and feel's label font.
-     * <p>
-     * If {@link #DEFAULT_LABEL_FONT} is not <code>null</code>, this method returns its value.
-     * Otherwise, it will be set to the current default font before being returned.
-     * </p>
-     * @return the current look and feel's label font.
-     */
-    private static Font getLabelFont() {
-        if(DEFAULT_LABEL_FONT == null) {
-            if((DEFAULT_LABEL_FONT = UIManager.getDefaults().getFont("Label.font")) == null)
-                DEFAULT_LABEL_FONT = new JTable().getFont();
-        }
-        return DEFAULT_LABEL_FONT;
-    }
-
-    /**
-     * Returns the current look and feel's text field 'progress' color.
-     * <p>
-     * If {@link #DEFAULT_TEXT_FIELD_PROGRESS_COLOR} is not <code>null</code>, this method returns its value.
-     * Otherwise, it will be set to the current default color before being returned.
-     * </p>
-     * @return the current look and feel's text field 'progress' color.
-     */
-    private static synchronized Color getTextFieldProgressColor() {
-        if(DEFAULT_TEXT_FIELD_PROGRESS_COLOR == null) {
-            Color buffer;
-
-            buffer = getTextFieldSelectionBackgroundColor();
-            DEFAULT_TEXT_FIELD_PROGRESS_COLOR = escapeColor(new Color(buffer.getRed(), buffer.getGreen(), buffer.getBlue(), 64));
-        }
-
-        return DEFAULT_TEXT_FIELD_PROGRESS_COLOR;
-    }
-
-    /**
-     * Returns the current look and feel's text area foreground color.
-     * <p>
-     * If {@link #DEFAULT_TEXT_AREA_COLOR} is not <code>null</code>, this method returns its value.
-     * Otherwise, it will be set to the current default color before being returned.
-     * </p>
-     * @return the current look and feel's text area foreground color.
-     */
-    private static synchronized Color getTextAreaColor() {
-        if(DEFAULT_TEXT_AREA_COLOR == null) {
-            if((DEFAULT_TEXT_AREA_COLOR = UIManager.getDefaults().getColor("TextArea.foreground")) == null)
-                DEFAULT_TEXT_AREA_COLOR = new JTextArea().getForeground();
-            DEFAULT_TEXT_AREA_COLOR = escapeColor(DEFAULT_TEXT_AREA_COLOR);
-        }
-        return DEFAULT_TEXT_AREA_COLOR;
-    }
-
-    /**
-     * Returns the current look and feel's text area background color.
-     * <p>
-     * If {@link #DEFAULT_TEXT_AREA_BACKGROUND_COLOR} is not <code>null</code>, this method returns its value.
-     * Otherwise, it will be set to the current default color before being returned.
-     * </p>
-     * @return the current look and feel's text area background color.
-     */
-    private static synchronized Color getTextAreaBackgroundColor() {
-        if(DEFAULT_TEXT_AREA_BACKGROUND_COLOR == null) {
-            if((DEFAULT_TEXT_AREA_BACKGROUND_COLOR = UIManager.getDefaults().getColor("TextArea.background")) == null)
-                DEFAULT_TEXT_AREA_BACKGROUND_COLOR = new JTextArea().getBackground();
-            DEFAULT_TEXT_AREA_BACKGROUND_COLOR = escapeColor(DEFAULT_TEXT_AREA_BACKGROUND_COLOR);
-        }
-        return DEFAULT_TEXT_AREA_BACKGROUND_COLOR;
-    }
-
-    /**
-     * Returns the current look and feel's text area selection foreground color.
-     * <p>
-     * If {@link #DEFAULT_TEXT_AREA_SELECTION_COLOR} is not <code>null</code>, this method returns its value.
-     * Otherwise, it will be set to the current default color before being returned.
-     * </p>
-     * @return the current look and feel's text area selection foreground color.
-     */
-    private static synchronized Color getTextAreaSelectionColor() {
-        if(DEFAULT_TEXT_AREA_SELECTION_COLOR == null) {
-            if((DEFAULT_TEXT_AREA_SELECTION_COLOR = UIManager.getDefaults().getColor("TextArea.selectionForeground")) == null)
-                DEFAULT_TEXT_AREA_SELECTION_COLOR = new JTextArea().getSelectionColor();
-            DEFAULT_TEXT_AREA_SELECTION_COLOR = escapeColor(DEFAULT_TEXT_AREA_SELECTION_COLOR);
-        }
-        return DEFAULT_TEXT_AREA_SELECTION_COLOR;
-    }
-
-    /**
-     * Returns the current look and feel's text area selection background color.
-     * <p>
-     * If {@link #DEFAULT_TEXT_AREA_SELECTION_BACKGROUND_COLOR} is not <code>null</code>, this method returns its value.
-     * Otherwise, it will be set to the current default color before being returned.
-     * </p>
-     * @return the current look and feel's text area selection background color.
-     */
-    private static synchronized Color getTextAreaSelectionBackgroundColor() {
-        if(DEFAULT_TEXT_AREA_SELECTION_BACKGROUND_COLOR == null) {
-            if((DEFAULT_TEXT_AREA_SELECTION_BACKGROUND_COLOR = UIManager.getDefaults().getColor("TextArea.selectionBackground")) == null)
-            DEFAULT_TEXT_AREA_SELECTION_BACKGROUND_COLOR = new JTextArea().getSelectedTextColor();
-            DEFAULT_TEXT_AREA_SELECTION_BACKGROUND_COLOR = escapeColor(DEFAULT_TEXT_AREA_SELECTION_BACKGROUND_COLOR);
-        }
-        return DEFAULT_TEXT_AREA_SELECTION_BACKGROUND_COLOR;
-    }
-
-    /**
-     * Returns the current look and feel's text field foreground color.
-     * <p>
-     * If {@link #DEFAULT_TEXT_FIELD_COLOR} is not <code>null</code>, this method returns its value.
-     * Otherwise, it will be set to the current default color before being returned.
-     * </p>
-     * @return the current look and feel's text field foreground color.
-     */
-    private static synchronized Color getTextFieldColor() {
-        if(DEFAULT_TEXT_FIELD_COLOR == null) {
-            if((DEFAULT_TEXT_FIELD_COLOR = UIManager.getDefaults().getColor("TextField.foreground")) == null)
-                DEFAULT_TEXT_FIELD_COLOR = new JTextField().getForeground();
-            DEFAULT_TEXT_FIELD_COLOR = escapeColor(DEFAULT_TEXT_FIELD_COLOR);
-        }
-        return DEFAULT_TEXT_FIELD_COLOR;
-    }
-
-    /**
-     * Returns the current look and feel's text field background color.
-     * <p>
-     * If {@link #DEFAULT_TEXT_FIELD_BACKGROUND_COLOR} is not <code>null</code>, this method returns its value.
-     * Otherwise, it will be set to the current default color before being returned.
-     * </p>
-     * @return the current look and feel's text field background color.
-     */
-    private static synchronized Color getTextFieldBackgroundColor() {
-        if(DEFAULT_TEXT_FIELD_BACKGROUND_COLOR == null) {
-            if((DEFAULT_TEXT_FIELD_BACKGROUND_COLOR = UIManager.getDefaults().getColor("TextField.background")) == null)
-                DEFAULT_TEXT_FIELD_BACKGROUND_COLOR = new JTextField().getBackground();
-            DEFAULT_TEXT_FIELD_BACKGROUND_COLOR = escapeColor(DEFAULT_TEXT_FIELD_BACKGROUND_COLOR);
-        }
-        return DEFAULT_TEXT_FIELD_BACKGROUND_COLOR;
-    }
-
-    /**
-     * Returns the current look and feel's text field selection foreground color.
-     * <p>
-     * If {@link #DEFAULT_TEXT_FIELD_SELECTION_COLOR} is not <code>null</code>, this method returns its value.
-     * Otherwise, it will be set to the current default color before being returned.
-     * </p>
-     * @return the current look and feel's text field selection foreground color.
-     */
-    private static synchronized Color getTextFieldSelectionColor() {
-        if(DEFAULT_TEXT_FIELD_SELECTION_COLOR == null) {
-            if((DEFAULT_TEXT_FIELD_SELECTION_COLOR = UIManager.getDefaults().getColor("TextField.selectionForeground")) == null)
-                DEFAULT_TEXT_FIELD_SELECTION_COLOR = new JTextField().getSelectionColor();
-            DEFAULT_TEXT_FIELD_SELECTION_COLOR = escapeColor(DEFAULT_TEXT_FIELD_SELECTION_COLOR);
-        }
-        return DEFAULT_TEXT_FIELD_SELECTION_COLOR;
-    }
-
-    /**
-     * Returns the current look and feel's text field selection background color.
-     * <p>
-     * If {@link #DEFAULT_TEXT_FIELD_SELECTION_BACKGROUND_COLOR} is not <code>null</code>, this method returns its value.
-     * Otherwise, it will be set to the current default color before being returned.
-     * </p>
-     * @return the current look and feel's text field selection background color.
-     */
-    private static synchronized Color getTextFieldSelectionBackgroundColor() {
-        if(DEFAULT_TEXT_FIELD_SELECTION_BACKGROUND_COLOR == null) {
-            if((DEFAULT_TEXT_FIELD_SELECTION_BACKGROUND_COLOR = UIManager.getDefaults().getColor("TextField.selectionBackground")) == null)
-                DEFAULT_TEXT_FIELD_SELECTION_BACKGROUND_COLOR = new JTextField().getSelectedTextColor();
-            DEFAULT_TEXT_FIELD_SELECTION_BACKGROUND_COLOR = escapeColor(DEFAULT_TEXT_FIELD_SELECTION_BACKGROUND_COLOR);
-        }
-        return DEFAULT_TEXT_FIELD_SELECTION_BACKGROUND_COLOR;
-    }
-
-    /**
-     * Returns the current look and feel's table foreground color.
-     * <p>
-     * If {@link #DEFAULT_TABLE_COLOR} is not <code>null</code>, this method returns its value.
-     * Otherwise, it will be set to the current default color before being returned.
-     * </p>
-     * @return the current look and feel's table foreground color.
-     */
-    private static synchronized Color getTableColor() {
-        if(DEFAULT_TABLE_COLOR == null) {
-            if((DEFAULT_TABLE_COLOR = UIManager.getDefaults().getColor("Table.foreground")) == null)
-                DEFAULT_TABLE_COLOR = new JTable().getForeground();
-            DEFAULT_TABLE_COLOR = escapeColor(DEFAULT_TABLE_COLOR);
-        }
-        return DEFAULT_TABLE_COLOR;
-    }
-
-    /**
-     * Returns the current look and feel's table background color.
-     * <p>
-     * If {@link #DEFAULT_TABLE_BACKGROUND_COLOR} is not <code>null</code>, this method returns its value.
-     * Otherwise, it will be set to the current default color before being returned.
-     * </p>
-     * @return the current look and feel's table background color.
-     */
-    private static synchronized Color getTableBackgroundColor() {
-        if(DEFAULT_TABLE_BACKGROUND_COLOR == null) {
-            if((DEFAULT_TABLE_BACKGROUND_COLOR = UIManager.getDefaults().getColor("Table.background")) == null)
-                DEFAULT_TABLE_BACKGROUND_COLOR = new JTable().getBackground();
-            DEFAULT_TABLE_BACKGROUND_COLOR = escapeColor(DEFAULT_TABLE_BACKGROUND_COLOR);
-        }
-        return DEFAULT_TABLE_BACKGROUND_COLOR;
-    }
-
-    /**
-     * Returns the current look and feel's table unmatched color.
-     * <p>
-     * If {@link #DEFAULT_TABLE_UNMATCHED_COLOR} is not <code>null</code>, this method returns its value.
-     * Otherwise, it will be set to the current default color before being returned.
-     * </p>
-     * @return the current look and feel's table unmatched color.
-     */
-    private static synchronized Color getTableUnmatchedColor() {
-        if(DEFAULT_TABLE_UNMATCHED_COLOR == null)
-            DEFAULT_TABLE_UNMATCHED_COLOR = escapeColor(getTableColor().darker());
-        return DEFAULT_TABLE_UNMATCHED_COLOR;
-    }
-
-    /**
-     * Returns the current look and feel's table unmatched background color.
-     * <p>
-     * If {@link #DEFAULT_TABLE_UNMATCHED_BACKGROUND_COLOR} is not <code>null</code>, this method returns its value.
-     * Otherwise, it will be set to the current default color before being returned.
-     * </p>
-     * @return the current look and feel's table unmatched background color.
-     */
-    private static synchronized Color getTableUnmatchedBackgroundColor() {
-        if(DEFAULT_TABLE_UNMATCHED_BACKGROUND_COLOR == null)
-            DEFAULT_TABLE_UNMATCHED_BACKGROUND_COLOR = escapeColor(getTableBackgroundColor().darker());
-        return DEFAULT_TABLE_UNMATCHED_BACKGROUND_COLOR;
-    }
-
-    /**
-     * Returns the current look and feel's table foreground selection color.
-     * <p>
-     * If {@link #DEFAULT_TABLE_SELECTION_COLOR} is not <code>null</code>, this method returns its value.
-     * Otherwise, it will be set to the current default color before being returned.
-     * </p>
-     * @return the current look and feel's table foreground selection color.
-     */
-    private static synchronized Color getTableSelectionColor() {
-        if(DEFAULT_TABLE_SELECTION_COLOR == null) {
-            if((DEFAULT_TABLE_SELECTION_COLOR = UIManager.getDefaults().getColor("Table.selectionForeground")) == null)
-                DEFAULT_TABLE_SELECTION_COLOR = new JTable().getSelectionForeground();
-            DEFAULT_TABLE_SELECTION_COLOR = escapeColor(DEFAULT_TABLE_SELECTION_COLOR);
-        }
-        return DEFAULT_TABLE_SELECTION_COLOR;
-    }
-
-    /**
-     * Returns the current look and feel's table background selection color.
-     * <p>
-     * If {@link #DEFAULT_TABLE_SELECTION_BACKGROUND_COLOR} is not <code>null</code>, this method returns its value.
-     * Otherwise, it will be set to the current default color before being returned.
-     * </p>
-     * @return the current look and feel's table background selection color.
-     */
-    private static synchronized Color getTableSelectionBackgroundColor() {
-        if(DEFAULT_TABLE_SELECTION_BACKGROUND_COLOR == null) {
-            if((DEFAULT_TABLE_SELECTION_BACKGROUND_COLOR = UIManager.getDefaults().getColor("Table.selectionBackground")) == null)
-                DEFAULT_TABLE_SELECTION_BACKGROUND_COLOR = new JTable().getSelectionBackground();
-            DEFAULT_TABLE_SELECTION_BACKGROUND_COLOR = escapeColor(DEFAULT_TABLE_SELECTION_BACKGROUND_COLOR);
-        }
-        return DEFAULT_TABLE_SELECTION_BACKGROUND_COLOR;
-    }
-
-    private static synchronized Color getMenuHeaderBackgroundColor() {
-        if(DEFAULT_MENU_HEADER_BACKGROUND_COLOR == null) {
-            if((DEFAULT_MENU_HEADER_BACKGROUND_COLOR = UIManager.getDefaults().getColor("InternalFrame.activeTitleBackground")) == null)
-                DEFAULT_MENU_HEADER_BACKGROUND_COLOR = new JInternalFrame().getBackground();
-            DEFAULT_MENU_HEADER_BACKGROUND_COLOR = escapeColor(DEFAULT_MENU_HEADER_BACKGROUND_COLOR);
-        }
-        return DEFAULT_MENU_HEADER_BACKGROUND_COLOR;
-    }
-
-    private static synchronized Color getMenuHeaderForegroundColor() {
-        if(DEFAULT_MENU_HEADER_FOREGROUND_COLOR == null) {
-            if((DEFAULT_MENU_HEADER_FOREGROUND_COLOR = UIManager.getDefaults().getColor("InternalFrame.activeTitleForeground")) == null)
-                DEFAULT_MENU_HEADER_FOREGROUND_COLOR = new JInternalFrame().getBackground();
-            DEFAULT_MENU_HEADER_FOREGROUND_COLOR = escapeColor(DEFAULT_MENU_HEADER_FOREGROUND_COLOR);
-        }
-        return DEFAULT_MENU_HEADER_FOREGROUND_COLOR;
-    }
-
-    private static synchronized void resetMenuHeaderBackgroundColor() {
-        Color buffer;
-
-        buffer = DEFAULT_MENU_HEADER_BACKGROUND_COLOR;
-        DEFAULT_MENU_HEADER_BACKGROUND_COLOR = null;
-
-        if(!getMenuHeaderBackgroundColor().equals(buffer)) {
-            triggerColorEvent(QUICK_LIST_HEADER_BACKGROUND_COLOR, getMenuHeaderBackgroundColor());
-            triggerColorEvent(QUICK_LIST_HEADER_SECONDARY_BACKGROUND_COLOR, getMenuHeaderBackgroundColor());
-        }
-    }
-
-    private static synchronized void resetMenuHeaderForegroundColor() {
-        Color buffer;
-
-        buffer = DEFAULT_MENU_HEADER_FOREGROUND_COLOR;
-        DEFAULT_MENU_HEADER_FOREGROUND_COLOR = null;
-
-        if(!getMenuHeaderForegroundColor().equals(buffer)) {
-            triggerColorEvent(QUICK_LIST_HEADER_FOREGROUND_COLOR, getMenuHeaderForegroundColor());
-        }
-    }
-
-    /**
-     * Resets the default text area color.
-     * <p>
-     * In addition to updating the current default color, this method will propagate {@link ColorChangedEvent color events}
-     * to listeners if necessary.
-     * </p>
-     */
-    private static synchronized void resetTextAreaColor() {
-        Color buffer;
-
-        buffer = DEFAULT_TEXT_AREA_COLOR;
-        DEFAULT_TEXT_AREA_COLOR = null;
-
-        if(!getTextAreaColor().equals(buffer)) {
-            triggerColorEvent(SHELL_FOREGROUND_COLOR, getTextAreaColor());
-            triggerColorEvent(EDITOR_FOREGROUND_COLOR, getTextAreaColor());
-        }
-    }
-
-    /**
-     * Resets the default text area background color.
-     * <p>
-     * In addition to updating the current default color, this method will propagate {@link ColorChangedEvent color events}
-     * to listeners if necessary.
-     * </p>
-     */
-    private static synchronized void resetTextAreaBackgroundColor() {
-        Color buffer;
-
-        buffer = DEFAULT_TEXT_AREA_BACKGROUND_COLOR;
-        DEFAULT_TEXT_AREA_BACKGROUND_COLOR = null;
-
-        if(!getTextAreaBackgroundColor().equals(buffer)) {
-            triggerColorEvent(SHELL_BACKGROUND_COLOR, getTextAreaBackgroundColor());
-            triggerColorEvent(EDITOR_BACKGROUND_COLOR, getTextAreaBackgroundColor());
-        }
-    }
-
-    /**
-     * Resets the default text area selection color.
-     * <p>
-     * In addition to updating the current default color, this method will propagate {@link ColorChangedEvent color events}
-     * to listeners if necessary.
-     * </p>
-     */
-    private static synchronized void resetTextAreaSelectionColor() {
-        Color buffer;
-
-        buffer = DEFAULT_TEXT_AREA_SELECTION_COLOR;
-        DEFAULT_TEXT_AREA_SELECTION_COLOR = null;
-
-        if(!getTextAreaSelectionColor().equals(buffer)) {
-            triggerColorEvent(SHELL_SELECTED_FOREGROUND_COLOR, getTextAreaSelectionColor());
-            triggerColorEvent(EDITOR_SELECTED_FOREGROUND_COLOR, getTextAreaSelectionColor());
-        }
-    }
-
-    /**
-     * Resets the default text area selection background color.
-     * <p>
-     * In addition to updating the current default color, this method will propagate {@link ColorChangedEvent color events}
-     * to listeners if necessary.
-     * </p>
-     */
-    private static synchronized void resetTextAreaSelectionBackgroundColor() {
-        Color buffer;
-
-        buffer = DEFAULT_TEXT_AREA_SELECTION_BACKGROUND_COLOR;
-        DEFAULT_TEXT_AREA_SELECTION_BACKGROUND_COLOR = null;
-
-        if(!getTextAreaSelectionBackgroundColor().equals(buffer)) {
-            triggerColorEvent(SHELL_SELECTED_BACKGROUND_COLOR, getTextAreaSelectionBackgroundColor());
-            triggerColorEvent(EDITOR_SELECTED_BACKGROUND_COLOR, getTextAreaSelectionBackgroundColor());
-        }
-    }
-
-    /**
-     * Resets the default text field foreground color.
-     * <p>
-     * In addition to updating the current default color, this method will propagate {@link ColorChangedEvent color events}
-     * to listeners if necessary.
-     * </p>
-     */
-    private static synchronized void resetTextFieldColor() {
-        Color buffer;
-
-        buffer = DEFAULT_TEXT_FIELD_COLOR;
-        DEFAULT_TEXT_FIELD_COLOR = null;
-
-        if(!getTextFieldColor().equals(buffer)) {
-            triggerColorEvent(SHELL_HISTORY_FOREGROUND_COLOR, getTextFieldColor());
-            triggerColorEvent(LOCATION_BAR_FOREGROUND_COLOR, getTextFieldColor());
-            triggerColorEvent(STATUS_BAR_FOREGROUND_COLOR, getTextFieldColor());
-        }
-    }
-
-    /**
-     * Resets the default text field background color.
-     * <p>
-     * In addition to updating the current default color, this method will propagate {@link ColorChangedEvent color events}
-     * to listeners if necessary.
-     * </p>
-     */
-    private static synchronized void resetTextFieldBackgroundColor() {
-        Color buffer;
-
-        buffer = DEFAULT_TEXT_FIELD_BACKGROUND_COLOR;
-        DEFAULT_TEXT_FIELD_BACKGROUND_COLOR = null;
-
-        if(!getTextFieldBackgroundColor().equals(buffer)) {
-            triggerColorEvent(SHELL_HISTORY_BACKGROUND_COLOR, getTextFieldBackgroundColor());
-            triggerColorEvent(LOCATION_BAR_BACKGROUND_COLOR, getTextFieldBackgroundColor());
-            triggerColorEvent(STATUS_BAR_BACKGROUND_COLOR, getTextFieldBackgroundColor());
-        }
-    }
-
-    /**
-     * Resets the default text field selection color.
-     * <p>
-     * In addition to updating the current default color, this method will propagate {@link ColorChangedEvent color events}
-     * to listeners if necessary.
-     * </p>
-     */
-    private static synchronized void resetTextFieldSelectionColor() {
-        Color buffer;
-
-        buffer = DEFAULT_TEXT_FIELD_SELECTION_COLOR;
-        DEFAULT_TEXT_FIELD_SELECTION_COLOR = null;
-        DEFAULT_TEXT_FIELD_PROGRESS_COLOR  = null;
-
-        if(!getTextFieldSelectionColor().equals(buffer)) {
-            triggerColorEvent(SHELL_HISTORY_SELECTED_FOREGROUND_COLOR, getTextFieldSelectionColor());
-            triggerColorEvent(LOCATION_BAR_SELECTED_FOREGROUND_COLOR, getTextFieldSelectionColor());
-            triggerColorEvent(LOCATION_BAR_PROGRESS_COLOR, getTextFieldProgressColor());
-        }
-    }
-
-    /**
-     * Resets the default text field selection background color.
-     * <p>
-     * In addition to updating the current default color, this method will propagate {@link ColorChangedEvent color events}
-     * to listeners if necessary.
-     * </p>
-     */
-    private static synchronized void resetTextFieldSelectionBackgroundColor() {
-        Color buffer;
-
-        buffer = DEFAULT_TEXT_FIELD_SELECTION_BACKGROUND_COLOR;
-        DEFAULT_TEXT_FIELD_SELECTION_BACKGROUND_COLOR = null;
-
-        if(!getTextFieldSelectionBackgroundColor().equals(buffer)) {
-            triggerColorEvent(SHELL_HISTORY_SELECTED_BACKGROUND_COLOR, getTextFieldSelectionBackgroundColor());
-            triggerColorEvent(LOCATION_BAR_SELECTED_BACKGROUND_COLOR, getTextFieldSelectionBackgroundColor());
-        }
-    }
-
-    /**
-     * Resets the default table foreground color.
-     * <p>
-     * In addition to updating the current default color, this method will propagate {@link ColorChangedEvent color events}
-     * to listeners if necessary.
-     * </p>
-     */
-    private static synchronized void resetTableColor() {
-        Color buffer;
-
-        buffer = DEFAULT_TABLE_COLOR;
-        DEFAULT_TABLE_COLOR           = null;
-        DEFAULT_TABLE_UNMATCHED_COLOR = null;
-
-        if(!getTableColor().equals(buffer)) {
-            triggerColorEvent(HIDDEN_FILE_FOREGROUND_COLOR, getTableColor());
-            triggerColorEvent(FOLDER_FOREGROUND_COLOR, getTableColor());
-            triggerColorEvent(ARCHIVE_FOREGROUND_COLOR, getTableColor());
-            triggerColorEvent(SYMLINK_FOREGROUND_COLOR, getTableColor());
-            triggerColorEvent(FILE_INACTIVE_FOREGROUND_COLOR, getTableColor());
-            triggerColorEvent(HIDDEN_FILE_INACTIVE_FOREGROUND_COLOR, getTableColor());
-            triggerColorEvent(FOLDER_INACTIVE_FOREGROUND_COLOR, getTableColor());
-            triggerColorEvent(ARCHIVE_INACTIVE_FOREGROUND_COLOR, getTableColor());
-            triggerColorEvent(SYMLINK_INACTIVE_FOREGROUND_COLOR, getTableColor());
-            triggerColorEvent(FILE_FOREGROUND_COLOR, getTableColor());
-            triggerColorEvent(FILE_TABLE_UNMATCHED_FOREGROUND_COLOR, getTableUnmatchedColor());
-        }
-    }
-
-    /**
-     * Resets the default table background color.
-     * <p>
-     * In addition to updating the current default color, this method will propagate {@link ColorChangedEvent color events}
-     * to listeners if necessary.
-     * </p>
-     */
-    private static synchronized void resetTableBackgroundColor() {
-        Color buffer;
-
-        buffer                                   = DEFAULT_TABLE_BACKGROUND_COLOR;
-        DEFAULT_TABLE_BACKGROUND_COLOR           = null;
-        DEFAULT_TABLE_UNMATCHED_BACKGROUND_COLOR = null;
-
-        if(!getTableBackgroundColor().equals(buffer)) {
-            triggerColorEvent(FILE_TABLE_INACTIVE_BACKGROUND_COLOR, getTableBackgroundColor());
-            triggerColorEvent(FILE_TABLE_BACKGROUND_COLOR, getTableBackgroundColor());
-            triggerColorEvent(FILE_TABLE_INACTIVE_ALTERNATE_BACKGROUND_COLOR, getTableBackgroundColor());
-            triggerColorEvent(FILE_TABLE_ALTERNATE_BACKGROUND_COLOR, getTableBackgroundColor());
-        }
-    }
-
-    /**
-     * Resets the default table selection foreground color.
-     * <p>
-     * In addition to updating the current default color, this method will propagate {@link ColorChangedEvent color events}
-     * to listeners if necessary.
-     * </p>
-     */
-    private static synchronized void resetTableSelectionColor() {
-        Color buffer;
-
-        buffer = DEFAULT_TABLE_SELECTION_COLOR;
-        DEFAULT_TABLE_SELECTION_COLOR = null;
-
-        if(!getTableSelectionColor().equals(buffer)) {
-            triggerColorEvent(HIDDEN_FILE_SELECTED_FOREGROUND_COLOR, getTableSelectionColor());
-            triggerColorEvent(FOLDER_SELECTED_FOREGROUND_COLOR, getTableSelectionColor());
-            triggerColorEvent(ARCHIVE_SELECTED_FOREGROUND_COLOR, getTableSelectionColor());
-            triggerColorEvent(SYMLINK_SELECTED_FOREGROUND_COLOR, getTableSelectionColor());
-            triggerColorEvent(FILE_INACTIVE_SELECTED_FOREGROUND_COLOR, getTableSelectionColor());
-            triggerColorEvent(HIDDEN_FILE_INACTIVE_SELECTED_FOREGROUND_COLOR, getTableSelectionColor());
-            triggerColorEvent(FOLDER_INACTIVE_SELECTED_FOREGROUND_COLOR, getTableSelectionColor());
-            triggerColorEvent(ARCHIVE_INACTIVE_SELECTED_FOREGROUND_COLOR, getTableSelectionColor());
-            triggerColorEvent(SYMLINK_INACTIVE_SELECTED_FOREGROUND_COLOR, getTableSelectionColor());
-            triggerColorEvent(FILE_SELECTED_FOREGROUND_COLOR, getTableSelectionColor());
-        }
-    }
-
-    /**
-     * Resets the default table selection background color.
-     * <p>
-     * In addition to updating the current default color, this method will propagate {@link ColorChangedEvent color events}
-     * to listeners if necessary.
-     * </p>
-     */
-    private static synchronized void resetTableSelectionBackgroundColor() {
-        Color buffer;
-
-        buffer = DEFAULT_TABLE_SELECTION_BACKGROUND_COLOR;
-        DEFAULT_TABLE_SELECTION_BACKGROUND_COLOR = null;
-
-        if(!getTableSelectionBackgroundColor().equals(buffer)) {
-            triggerColorEvent(FILE_TABLE_SELECTED_BACKGROUND_COLOR, getTableSelectionBackgroundColor());
-            triggerColorEvent(FILE_TABLE_INACTIVE_SELECTED_BACKGROUND_COLOR, getTableSelectionBackgroundColor());
-            triggerColorEvent(FILE_TABLE_SELECTED_OUTLINE_COLOR, getTableSelectionBackgroundColor());
-            triggerColorEvent(FILE_TABLE_INACTIVE_SELECTED_OUTLINE_COLOR, getTableSelectionBackgroundColor());
-            triggerColorEvent(FILE_TABLE_SELECTED_SECONDARY_BACKGROUND_COLOR, getTableSelectionBackgroundColor());
-            triggerColorEvent(FILE_TABLE_INACTIVE_SELECTED_SECONDARY_BACKGROUND_COLOR, getTableSelectionBackgroundColor());
-        }
-    }
-
-    /**
-     * Resets the default table font.
-     * <p>
-     * In addition to updating the current default color, this method will propagate {@link FontChangedEvent font events}
-     * to listeners if necessary.
-     * </p>
-     */
-    private static synchronized void resetTableFont() {
-        Font buffer;
-
-        buffer = DEFAULT_TABLE_FONT;
-        DEFAULT_TABLE_FONT = null;
-
-        if(!getTableFont().equals(buffer))
-            triggerFontEvent(FILE_TABLE_FONT, getTableFont());
-    }
-
-    /**
-     * Resets the default text area font.
-     * <p>
-     * In addition to updating the current default color, this method will propagate {@link FontChangedEvent font events}
-     * to listeners if necessary.
-     * </p>
-     */
-    private static synchronized void resetTextAreaFont() {
-        Font buffer;
-
-        buffer = DEFAULT_TEXT_AREA_FONT;
-        DEFAULT_TEXT_AREA_FONT = null;
-
-        if(!getTextAreaFont().equals(buffer)) {
-            triggerFontEvent(EDITOR_FONT, getTextAreaFont());
-            triggerFontEvent(SHELL_FONT, getTextAreaFont());
-        }
-    }
-
-    /**
-     * Resets the default text field font.
-     * <p>
-     * In addition to updating the current default color, this method will propagate {@link FontChangedEvent font events}
-     * to listeners if necessary.
-     * </p>
-     */
-    private static synchronized void resetTextFieldFont() {
-        Font buffer;
-
-        buffer = DEFAULT_TEXT_FIELD_FONT;
-        DEFAULT_TEXT_FIELD_FONT = null;
-
-        if(!getTextFieldFont().equals(buffer)) {
-            triggerFontEvent(LOCATION_BAR_FONT, getTextFieldFont());
-            triggerFontEvent(SHELL_HISTORY_FONT, getTextFieldFont());
-        }
-    }
-
-    private static synchronized void resetMenuHeaderFont() {
-        Font buffer;
-
-        buffer = DEFAULT_MENU_HEADER_FONT;
-        DEFAULT_MENU_HEADER_FONT = null;
-
-        if(!getMenuHeaderFont().equals(buffer)) {
-            triggerFontEvent(QUICK_LIST_HEADER_FONT, getMenuHeaderFont());
-        }
-    }
-
-    /**
-     * Resets the default label font.
-     * <p>
-     * In addition to updating the current default color, this method will propagate {@link FontChangedEvent font events}
-     * to listeners if necessary.
-     * </p>
-     */
-    private static synchronized void resetLabelFont() {
-        Font buffer;
-
-        buffer = DEFAULT_LABEL_FONT;
-        DEFAULT_LABEL_FONT = null;
-
-        if(!getLabelFont().equals(buffer))
-            triggerFontEvent(STATUS_BAR_FONT, getLabelFont());
-    }
-
-    // - Default values listener ---------------------------------------------------------------------------------------
-    // -----------------------------------------------------------------------------------------------------------------
-    /**
-     * Listens on changes to the default colors.
-     * @author Nicolas Rinaudo
-     */
-    private static class DefaultValuesListener implements PropertyChangeListener {
-        public void propertyChange(PropertyChangeEvent event) {
-            String property;
-            property = event.getPropertyName();
-            if(property.equals("lookAndFeel")) {
-                resetTextAreaColor();
-                resetTextAreaBackgroundColor();
-                resetTextAreaSelectionColor();
-                resetTextAreaSelectionBackgroundColor();
-                resetTextFieldColor();
-                resetTextFieldBackgroundColor();
-                resetTextFieldSelectionColor();
-                resetTextFieldSelectionBackgroundColor();
-                resetTableColor();
-                resetTableBackgroundColor();
-                resetTableSelectionColor();
-                resetTableSelectionBackgroundColor();
-                resetTableFont();
-                resetTextAreaFont();
-                resetTextFieldFont();
-                resetLabelFont();
-                resetMenuHeaderFont();
-                resetMenuHeaderForegroundColor();
-                resetMenuHeaderBackgroundColor();
-            }
-            else if(property.equals("TextArea.foreground"))
-                resetTextAreaColor();
-            else if(property.equals("TextArea.background"))
-                resetTextAreaBackgroundColor();
-            else if(property.equals("TextArea.selectionForeground"))
-                resetTextAreaSelectionColor();
-            else if(property.equals("TextArea.selectionBackground"))
-                resetTextAreaSelectionBackgroundColor();
-            else if(property.equals("TextField.foreground"))
-                resetTextFieldColor();
-            else if(property.equals("TextField.background"))
-                resetTextFieldBackgroundColor();
-            else if(property.equals("TextField.selectionForeground"))
-                resetTextFieldSelectionColor();
-            else if(property.equals("TextField.selectionBackground"))
-                resetTextFieldSelectionBackgroundColor();
-            else if(property.equals("Table.foreground"))
-                resetTableColor();
-            else if(property.equals("Table.background"))
-                resetTableBackgroundColor();
-            else if(property.equals("Table.selectionForeground"))
-                resetTableSelectionColor();
-            else if(property.equals("Table.selectionBackground"))
-                resetTableSelectionBackgroundColor();
-            else if(property.equals("Table.font"))
-                resetTableFont();
-            else if(property.equals("TextArea.font"))
-                resetTextAreaFont();
-            else if(property.equals("TextField.font"))
-                resetTextFieldFont();
-            else if(property.equals("Label.font"))
-                resetLabelFont();
-            else if(property.equals("InternalFrame.font"))
-                resetMenuHeaderFont();
-            else if(property.equals("InternalFrame.activeTitleForeground"))
-                resetMenuHeaderForegroundColor();
-            else if(property.equals("InternalFrame.activeTitleBackground"))
-                resetMenuHeaderBackgroundColor();
-        }
     }
 }

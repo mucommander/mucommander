@@ -205,7 +205,6 @@ class TextEditorImpl implements ThemeListener, ActionListener, EncodingListener 
             }
 
             // Load the file into the text area
-            // Note: loadDocument closes the InputStream
             loadDocument(in, encoding);
         }
         finally {
