@@ -170,16 +170,12 @@ The following options are available:
  -a FILE, --assoc FILE             Load associations from FILE.
  -b FILE, --bookmarks FILE         Load bookmarks from FILE.
  -c FILE, --configuration FILE     Load configuration from FILE
- -C FILE, --commandbar FILE        Load command bar from FILE
+ -C FILE, --commandbar FILE        Load command bar from FILE.
  -e FOLDER, --extensions FOLDER    Load extensions from FOLDER.
  -f FILE, --commands FILE          Load custom commands from FILE.
  -i, --ignore-warnings             Do not fail on warnings (default).
  -k FILE, --keymap FILE            Load keymap from FILE
- -n, --no-debug                    Disable debug output to stdout
- -d, --debug                       Enable debug output to stdout (default)
  -p FOLDER, --preferences FOLDER   Store configuration files in FOLDER
- --no-splash                       Disable splashscreen on startup
- --splash                          Enable splashscreen on startup (default)
  -S, --silent                      Do not print verbose error messages
  -s FILE, --shell-history FILE     Load shell history from FILE
  -t FILE, --toolbar FILE           Load toolbar from FILE
@@ -204,64 +200,8 @@ Will:
  - load the default directory in the second window's fourth panel
 
 
-Advanced configuration
-----------------------
+Documentation
+-------------
 
-muCommander has some advanced configuration options which cannot (yet) be
-accessed through the GUI.
-After having booted the application for the first time, the following files
-will be created in muCommander's preferences folder:
- - action_keymap.xml (keyboard shortcuts description file).
- - command_bar.xml   (commandbar description file).
- - toolbar.xml       (toolbar description file).
-
-Brave users can edit these XML files and tune muCommander to their own needs.
-Here are a few hints on how to edit these files.
-
-
- - action_keymap.xml
-All customisable actions are listed in that file, using the following format:
-<action class="com.mucommander.ui.action.CopyFilesToClipboardAction"
-        keystroke="control C" alt_keystroke="meta C"/>
-
-It's probably safer not to mess around with the class argument, as this could
-actually remove features from muCommander.
-keystroke and alt_keystroke should be fairly safe explanatory. It's important to
-note, however, that due to Java's capricious nature, the case is important.
-CONTROL C will not be understood, and neither will control c.
-
-
- - command_bar.xml
-This file describes the content of your command bar (the bit will all the
-buttons on the lower part of the window).
-Each item in the file corresponds to a button in the bar. You can edit them, add
-some or remove some.
-
-The syntax is as follows:
-<button action="com.mucommander.ui.action.CopyAction"
-        alt_action="com.mucommander.ui.action.LocalCopyAction"/>
-Where:
- - action is the main action executed by the button
- - alt_action is the action executed by the button when the shift key is held
-   down
-
-For a list of legal actions, please refer to action_keymap.xml
-
-
- - toolbar.xml
-This file controls the content of your toolbar. It works in the same way as
-command_bar.xml, with two notable differences:
-  - you can use a <separator/> element to add a separator in the toolbar
-  - alt_action is not available
-
-
-- commands.xml
-This file controls the various system commands that muCommander can call.
-Documentation on how to customise those commands can be found here:
-http://www.mucommander.com/forums/viewtopic.php?t=420
-
-
-- associations.xml
-This file controls custom command / file associations.
-Documentation on how to customise those associations can be found here:
-http://www.mucommander.com/forums/viewtopic.php?t=634
+Documentation on how to use, customize and extend muCommander is available at:
+http://trac.mucommander.com
