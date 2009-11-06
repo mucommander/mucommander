@@ -5,7 +5,7 @@
 
 
 ----------------------------
-muCommander v0.8.4 (nightly)
+muCommander v0.8.5 (nightly)
 ----------------------------
 
 muCommander is a cross-platform file manager featuring a Norton Commander
@@ -23,8 +23,8 @@ Copyright (C) 2002-2009 Maxence Bernard.
 Requirements
 ------------
 
-Java Runtime Environment 1.4.0 (JRE) or later is required to run
-muCommander. JRE 1.6 is recommended, you can download it at http://java.com.
+A Java Runtime Environment (JRE) 1.5 or later is required to run muCommander.
+Java 1.6 is recommended, you can download it at http://java.com.
 
 Mac OS X users: your favorite OS already comes with a Java runtime so you're
 good to go!
@@ -128,122 +128,20 @@ Many thanks to all of you who suggested new features, reported bugs, sent warm
 emails or generously donated to the project !
 
 
-What's new since v0.8.3 ?
+What's new since v0.8.4 ?
 -------------------------
 
 New features:
-- Added native support for 7z archives.
-- Added a keyboard shortcuts editor. Originally contributed by Johann Schmitz
-  and improved by Arik Hadas (ticket #84).
-- Added a command bar editor.
-- Added a debug console that shows recent log messages.
-- New 'Skip errors' option added to copy/move/unpack/download file operations,
-  allowing file transfer errors to be ignored silently (ticket #231).
-- Files can be selected or marked one block at a time (ticket #116).
-  Default shortcuts are Control+UP/DOWN and Shift+Control+UP/DOWN respectively.
-- New split and combine files functionality.
+ -
 
 Improvements:
-- Tar/TGZ and Zip unpacking speed has been improved significantly (ticket #74).
-- Improved RAR compatibility.
-- jCIFS library upgraded to version 1.3.12.
-- SMB domain-based authentication is now supported.
-- Added shortcuts to browse nearby SMB network shares.
-- JNA library upgraded to version 3.2.2.
-- Character encodings can be more easily selected (ticket #15).
-- Added icon mappings for Office 2007 file extensions.
-- 'Mark/Unmark files' is no longer case-sensitive by default.
-- Mac OS X: muCommander can now be interacted with from the Finder (Open with)
-  or by dragging file/folders to the Dock icon (ticket #153).
-- New and improved application icon, contributed by Semyon Filippov.
-- Added a 'New window' item to the system tray menu.
-- Improved support for NRG images ; audio tracks can now be dumped as WAV files.
-  Contributed by Xavier Martin.
-- Improved the toolbar's behavior when the window is too small for all buttons
-  to be displayed (ticket #165). Contributed by LeO.
-- File table's right-click menu now has visibility toggles for all columns
-  instead of just the current one, and one for Auto-Size columns (ticket #226).
-- Leading and trailing toolbar separators are no longer displayed (ticket #166).
-- 'Permanent delete' no longer asks whether symlinks should be followed, they
-  are now silently deleted without being followed (easier and safer).
-- Improvements made to the filename selection algorithm used in
-  Copy/Move/Unpack/Rename destination fields (ticket #167).
-- Added support for KDE 4 (ticket #257).
-- Startup failures are now handled gracefully by displaying a proper message
-  and error details.
-- Local UNIX volumes are now resolved using /proc/mounts (dynamic) rather rather
-  than /etc/fstab (static). Contributed by Kowy (ticket #227).
-- Added the Java runtime version to the 'Version information' section of the
-  'About' dialog (ticket #274).
-- 'mka', 'mkv' and 'divx' files now have proper audio/video icons. Suggested
-  by Tenzer (ticket #279).
+ -
 
 Localization:
-- Arabic (AR) translation, contributed by ChArLoK_16.
+ -
 
 Bug fixes:
-- Zip entries using '\' as a path separator are now tolerated and handled
-  appropriately (ticket #98).
-- Fixed image viewer not updating the zoom level in the window title
-  (ticket #102). Contributed by Joshua Lebo.
-- Fixed date of Zip entries incorrectly displayed under certain conditions
-  (ticket #107). Contributed by Oliver Burgmaier.
-- Fixed SMB connection issues (ticket #106).
-- Fixed connection issues with FTP servers not supporting the SYST command ;
-  those are now considered as Unix servers (ticket #121).
-- Fixed credentials ignored when setting a remote startup folder (ticket #108).
-- Fixed unconsistent handling of destination when unpacking an archive 
-  (ticket #93).
-- Fixed the display of homonymous volumes in the drive popup button (ticket #138).
-- Swap partitions declared in /etc/fstab are now properly handled (ticket #139).
-  Contributed by Johann Schmitz.
-- Fixed issues with Look & Feel (ticket #145).
-- Fixed slow downs affecting the drive popup button under Windows (ticket #122).
-  Contributed by Alexander Yerenkow. 
-- Fixed an exception occuring in the 'Run dialog' when pressing Enter
-  repeatedly (ticket #212).
-- Fixed an issue with the panel separator being set incorrectly after a resize
-  of the main window (ticket #163).
-- Improved the toolbar's behavior when the window is too small for all buttons
-  to be displayed (ticket #165). Contributed by LeO.
-- Fixed flashing command windows under Windows 95/98/Me (ticket #63).
-- The authentication dialog's login field is now prefilled with the current
-  user's name (ticket #185). Contributed by LeO.
-- Fixed exceptions occurring while copying text to the clipboard from an external
-  application under certain conditions (ticket #164).
-- Added support for forward slash-separated paths on backslash-separated OSes
-  (Windows, OS/2) (ticket #94).
-- Double-click speed system preference is now honoured under GNOME and KDE
-  (ticket #221). Contributed by LeO.
-- Folder auto-refresh can be disabled in the preferences by setting the
-  prefs.auto_refresh.check_period value to -1 (requested in ticket #233).
-- Fixed viewer/editor menus not appearing since Java for Mac OS X 10.5 Update 4
-  (ticket #243).
-- Fixed malfunctioning encoding detection in text viewer/editor (ticket #244).
-- Text viewer/editor no longer treats the Unicode BOM as an editable character
-  (ticket #245).
-- UTF-16 and UTF-32 text files are no longer recognized as binary files
-  (ticket #235).
-- Fixed erratic current file selection when 'Refresh' is called repeatedly
-  (ticket #250).
-- Text editor now preserves Unicode BOMs when saving files (ticket #251).
-- Fixed file selection issues when middle clicking and dragging the mouse
-  (ticket #176).
-- Fixed an issue causing icons not to appear on certain files when using
-  system icons (ticket #225). Fix contributed by LeO.
-- Fixed UI freezes when invoking Copy/Move/Unpack dialogs on a remote
-  filesystem (ticket #12).
-- Fixed 'open natively' opening all files when invoked on a remote filesystem
-  or on archive entries (ticket #147).
-- Fixed auto-refresh not picking changes changes made to a file that was edited
-  (ticket #258).
-- Fixed 'Move to trash' failures under GNOME (ticket #97).
-- Credentials could end up not being saved upon application exit (ticket #173).
-- Fixed connection issues when using a password containing a slash character
-  (ticket #137).
-- Fixed a case where the application would freeze when browsing HTTP shares
-  with the tree view enabled (ticket #266).
-- Fixed quick search issues under Mac OS X Snow Leopard (ticket #309).   
+ -
 
 Known issues:
 - Some translations are not up-to-date. Refer to
@@ -311,8 +209,8 @@ Advanced configuration
 
 muCommander has some advanced configuration options which cannot (yet) be
 accessed through the GUI.
-After having booted the application for the first time, the following files will
-be created in muCommander's preferences folder:
+After having booted the application for the first time, the following files
+will be created in muCommander's preferences folder:
  - action_keymap.xml (keyboard shortcuts description file).
  - command_bar.xml   (commandbar description file).
  - toolbar.xml       (toolbar description file).

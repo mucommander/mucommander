@@ -27,14 +27,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- constants, such as the current version number.          -->
 
   <!-- Version number of the application.                      -->
-  <property name="app.version"            value="0.8.4"/>
+  <property name="app.version"            value="0.8.5"/>
   <!-- Copyright line of the application.                      -->
   <!-- This should typically be 2002-<current-year>            -->
   <property name="app.copyright"          value="2002-2009"/>
   <!-- Targeted version of the JVM.                            -->
   <!-- Note that this has got to match the following format:   -->
   <!-- <MAJOR_VERSION>.<MINOR_VERSION>                         -->
-  <property name="app.jvm"                value="1.4"/>
+  <property name="app.jvm"                value="1.5"/>
   <!-- Fully qualified name of the application's main class.   -->
   <property name="app.main"               value="com.mucommander.Launcher"/>
 
