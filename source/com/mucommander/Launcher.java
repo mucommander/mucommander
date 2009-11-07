@@ -43,6 +43,7 @@ import com.mucommander.ui.main.WindowManager;
 import com.mucommander.ui.main.commandbar.CommandBarIO;
 import com.mucommander.ui.main.toolbar.ToolBarIO;
 
+import java.awt.GraphicsEnvironment;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.util.logging.*;
@@ -256,6 +257,16 @@ public class Launcher {
         }
     }
 
+    /**
+     * Checks whether a graphics environment is available and exit with an error otherwise.
+     */
+    private static void checkHeadless() {
+        if(GraphicsEnvironment.isHeadless()) {
+            System.err.println("Error: no graphical environment detected.");
+            System.exit(1);
+        }
+    }
+
 
     /**
      * Main method used to startup muCommander.
@@ -396,6 +407,8 @@ public class Launcher {
             // - Configuration init ---------------------------------------
             // ------------------------------------------------------------
 
+            // Ensure that a graphics environment is available, exit otherwise.
+            checkHeadless();
 
             // Attempts to guess whether this is the first time muCommander is booted or not.
             boolean isFirstBoot;

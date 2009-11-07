@@ -132,16 +132,17 @@ What's new since v0.8.4 ?
 -------------------------
 
 New features:
- -
+-
 
 Improvements:
- -
+- A proper error message is displayed when muCommander is started in a
+  headless environment.
 
 Localization:
- -
+-
 
 Bug fixes:
- -
+-
 
 Known issues:
 - Some translations are not up-to-date. Refer to
