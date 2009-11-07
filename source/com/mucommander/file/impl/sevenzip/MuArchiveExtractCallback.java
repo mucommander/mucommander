@@ -1,12 +1,13 @@
 package com.mucommander.file.impl.sevenzip;
 
-import com.mucommander.file.FileLogger;
-import com.mucommander.file.impl.sevenzip.provider.SevenZip.Archive.IInArchive;
-import com.mucommander.file.impl.sevenzip.provider.SevenZip.Archive.SevenZipEntry;
-import com.mucommander.file.impl.sevenzip.provider.SevenZip.ArchiveExtractCallback;
-import com.mucommander.file.impl.sevenzip.provider.SevenZip.HRESULT;
-
 import java.io.File;
+
+import SevenZip.ArchiveExtractCallback;
+import SevenZip.HRESULT;
+import SevenZip.Archive.IInArchive;
+import SevenZip.Archive.SevenZipEntry;
+
+import com.mucommander.file.FileLogger;
 
 public class MuArchiveExtractCallback extends ArchiveExtractCallback {
 	private java.io.OutputStream out;

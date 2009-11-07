@@ -1,11 +1,12 @@
 package com.mucommander.file.impl.sevenzip;
 
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.FileLogger;
-import com.mucommander.file.impl.sevenzip.provider.SevenZip.IInStream;
-
 import java.io.IOException;
 import java.io.InputStream;
+
+import SevenZip.IInStream;
+
+import com.mucommander.file.AbstractFile;
+import com.mucommander.file.FileLogger;
 
 public class MuRandomAccessFile  extends IInStream {
 	
