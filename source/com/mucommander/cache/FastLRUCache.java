@@ -183,7 +183,7 @@ public class FastLRUCache extends LRUCache {
                 // update eldestExpirationDate
                 this.eldestExpirationDate = expirationDate;
             }
-            expirationDateL = new Long(expirationDate);
+            expirationDateL = expirationDate;
         }
 
         cacheMap.put(key, new Object[]{value, expirationDateL});

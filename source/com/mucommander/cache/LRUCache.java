@@ -234,12 +234,12 @@ public abstract class LRUCache {
             // 50% chance to add a new element with a random value and expiration date (50% chance for no expiration date)
             if(cache.size()==0 || random.nextBoolean()) {
                 //				System.out.println("cache.add()");				
-                cache.add(new Integer(random.nextInt(capacity)), new Integer(random.nextInt()), random.nextBoolean()?-1:random.nextInt(10));
+                cache.add(random.nextInt(capacity), random.nextInt(), random.nextBoolean()?-1:random.nextInt(10));
             }
             // 50% chance to retrieve a random existing element
             else {
                 //				System.out.println("cache.get()");
-                cache.get(new Integer(random.nextInt(capacity)));
+                cache.get(random.nextInt(capacity));
             }
 		
             try {

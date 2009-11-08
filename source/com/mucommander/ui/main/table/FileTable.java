@@ -209,7 +209,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
 
             // Highlights the selected column
             tableHeader.putClientProperty("JTableHeader.selectedColumn", isActiveTable
-                    ?new Integer(convertColumnIndexToView(sortInfo.getCriterion()))
+                    ? convertColumnIndexToView(sortInfo.getCriterion())
                     :null);
 
             // Displays an ascending/descending arrow

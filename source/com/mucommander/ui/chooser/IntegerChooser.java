@@ -18,10 +18,13 @@
 
 package com.mucommander.ui.chooser;
 
-import javax.swing.*;
+import javax.swing.JPanel;
+import javax.swing.JSlider;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import java.awt.*;
+import java.awt.BorderLayout;
 import java.util.Iterator;
 import java.util.WeakHashMap;
 
@@ -113,7 +116,7 @@ public class IntegerChooser extends JPanel implements ChangeListener {
      */
     public void setValue(int value) {
         slider.setValue(value);
-        spinner.setValue(new Integer(value));
+        spinner.setValue(value);
     }
 
 
@@ -152,7 +155,7 @@ public class IntegerChooser extends JPanel implements ChangeListener {
         if(e.getSource() == spinner)
             slider.setValue(((Integer)spinner.getValue()).intValue());
         else if(e.getSource() == slider)
-            spinner.setValue(new Integer(slider.getValue()));
+            spinner.setValue(slider.getValue());
 
         // Notifies listeners.
         event    = new ChangeEvent(this);

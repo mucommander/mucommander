@@ -102,7 +102,7 @@ public class RealValue implements InfoElement {
      * Sets the value of the real property.
      * @param f value of the property.
      */
-    public void setValue(float f) {value = new Float(f);}
+    public void setValue(float f) {value = f;}
 
 
 

@@ -24,7 +24,8 @@ import com.mucommander.ui.button.ButtonChoicePanel;
 import com.mucommander.ui.layout.InformationPane;
 import com.mucommander.ui.layout.YBoxPanel;
 
-import javax.swing.*;
+import javax.swing.JButton;
+import javax.swing.JComponent;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -178,6 +179,6 @@ public class QuestionDialog extends FocusDialog implements ActionListener, Dialo
 
     public Object getUserInput() {
         super.showDialog();
-        return new Integer(retValue);
+        return retValue;
     }
 }

@@ -480,10 +480,10 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 		private String[] actionIds;
 		private String[] descriptions;
 		
-		private final Integer description = Integer.valueOf(0);
-		private final Integer accelerator = Integer.valueOf(1);
-		private final Integer alt_accelerator = Integer.valueOf(2);
-		private final Integer tooltips = Integer.valueOf(3);
+		private final Integer description = 0;
+		private final Integer accelerator = 1;
+		private final Integer alt_accelerator = 2;
+		private final Integer tooltips = 3;
 		
 		private List allActionIds;
 		private HashMap db;

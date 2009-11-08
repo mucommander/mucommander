@@ -153,8 +153,8 @@ public class SizeFormatTest extends TestCase {
     }
 
     private void testDigitsFull(long size) {
-        assertEquals(Double.valueOf(size),
-                     Double.valueOf(DECIMAL_FORMAT.parse(SizeFormat.format(size, SizeFormat.DIGITS_FULL | SizeFormat.UNIT_NONE), new ParsePosition(0)).longValue()));
+        assertEquals((double) size,
+                (double) DECIMAL_FORMAT.parse(SizeFormat.format(size, SizeFormat.DIGITS_FULL | SizeFormat.UNIT_NONE), new ParsePosition(0)).longValue());
     }
 
     /**

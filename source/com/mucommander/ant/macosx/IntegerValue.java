@@ -102,7 +102,7 @@ public class IntegerValue implements InfoElement {
      * Sets the value of the integer property.
      * @param i value of the property.
      */
-    public void setValue(int i) {value = new Integer(i);}
+    public void setValue(int i) {value = i;}
 
 
 

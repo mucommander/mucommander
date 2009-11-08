@@ -37,7 +37,7 @@ public class ValueListTest extends TestCase {
 
         data = new Vector();
         for(int i = 1; i < 8; i++)
-            data.add(new Integer(i));
+            data.add(i);
         return data;
     }
 
@@ -61,7 +61,7 @@ public class ValueListTest extends TestCase {
 
         data = new Vector();
         for(int i = 0; i < 7; i++)
-            data.add(Boolean.valueOf(i % 2 == 0));
+            data.add(i % 2 == 0);
         return data;
     }
 

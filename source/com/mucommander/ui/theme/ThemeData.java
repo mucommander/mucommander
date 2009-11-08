@@ -19,7 +19,8 @@
  package com.mucommander.ui.theme;
 
 import javax.swing.*;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Font;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.WeakHashMap;
@@ -791,7 +792,7 @@ public class ThemeData {
     public static void registerColor(int id, DefaultColor color) {
         Integer colorId;
 
-        colorId = Integer.valueOf(id);
+        colorId = id;
         COLORS.put(colorId, color);
         color.link(colorId);
     }
@@ -799,7 +800,7 @@ public class ThemeData {
     public static void registerFont(int id, DefaultFont font) {
         Integer fontId;
 
-        fontId = Integer.valueOf(id);
+        fontId = id;
         FONTS.put(fontId, font);
         font.link(fontId);
     }

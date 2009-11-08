@@ -71,7 +71,7 @@ public class DateValue implements InfoElement {
      * </p>
      * @param i date's year.
      */
-    public void setYear(int i) {year = new Integer(i);}
+    public void setYear(int i) {year = i;}
 
     /**
      * Allows Ant to set the date's month.
@@ -80,7 +80,7 @@ public class DateValue implements InfoElement {
      * </p>
      * @param i date's month.
      */
-    public void setMonth(int i) {month = new Integer(i);}
+    public void setMonth(int i) {month = i;}
 
     /**
      * Allows Ant to set the date's day.
@@ -90,7 +90,7 @@ public class DateValue implements InfoElement {
      * </p>
      * @param i date's month.
      */
-    public void setDay(int i) {day = new Integer(i);}
+    public void setDay(int i) {day = i;}
 
     /**
      * Allows Ant to set the date's hours.
@@ -100,7 +100,7 @@ public class DateValue implements InfoElement {
      * </p>
      * @param i date's hour.
      */
-    public void setHours(int i) {hours = new Integer(i);}
+    public void setHours(int i) {hours = i;}
 
     /**
      * Allows Ant to set the date's minutes.
@@ -113,7 +113,7 @@ public class DateValue implements InfoElement {
      * </p>
      * @param i date's minutes.
      */
-    public void setMinutes(int i) {minutes = new Integer(i);}
+    public void setMinutes(int i) {minutes = i;}
 
     /**
      * Allows Ant to set the date's seconds.
@@ -122,7 +122,7 @@ public class DateValue implements InfoElement {
      * </p>
      * @param i date's seconds.
      */
-    public void setSeconds(int i) {seconds = new Integer(i);}
+    public void setSeconds(int i) {seconds = i;}
 
 
 
@@ -141,11 +141,11 @@ public class DateValue implements InfoElement {
         // Makes sure year is initialised properly.
         if(year == null) {
             // Uses default values where applicable.
-            year = new Integer(now.get(Calendar.YEAR));
+            year = now.get(Calendar.YEAR);
             if(month == null) {
-                month = new Integer(getMonthNumber(now.get(Calendar.MONTH)));
+                month = getMonthNumber(now.get(Calendar.MONTH));
                 if(day == null)
-                    day = new Integer(now.get(Calendar.DAY_OF_MONTH));
+                    day = now.get(Calendar.DAY_OF_MONTH);
             }
         }
         else if(year.intValue() < 0)

@@ -147,8 +147,8 @@ public class SplitFileDialog extends JobDialog implements ActionListener {
 		pnlSize.addSpace(10);
 		pnlSize.add(new JLabel(Translator.get("split_file_dialog.parts") + ":"));
 		pnlSize.addSpace(5);
-		spnParts = new JSpinner(new SpinnerNumberModel(Long.valueOf(1), Long.valueOf(1), 
-				Long.valueOf(file.getSize()), Long.valueOf(1)));
+		spnParts = new JSpinner(new SpinnerNumberModel(1, 1,
+                file.getSize(), 1));
 		spnParts.addChangeListener(new ChangeListener() {			
 			public void stateChanged(ChangeEvent e) {
 				if (!edtChange) {
@@ -278,7 +278,7 @@ public class SplitFileDialog extends JobDialog implements ActionListener {
 			return;
 		}
 		edtChange = true;
-		spnParts.setValue(Long.valueOf(parts));
+		spnParts.setValue(parts);
 		edtChange = false;
 	}
 

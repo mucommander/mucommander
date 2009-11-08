@@ -19,7 +19,7 @@
 
 package com.mucommander.ui.helper;
 
-import javax.swing.*;
+import javax.swing.JButton;
 import java.util.Vector;
 
 
@@ -69,7 +69,7 @@ public class MnemonicHelper {
         do {
             mnemonic = text.charAt(mnemonicPos++);
             if(!isMnemonicUsed(mnemonic)) {
-                takenMnemonics.add(new Character(mnemonic));
+                takenMnemonics.add(mnemonic);
                 return mnemonic;
             }
         }

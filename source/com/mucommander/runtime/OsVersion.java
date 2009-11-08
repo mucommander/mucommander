@@ -38,7 +38,7 @@ public class OsVersion extends ComparableRuntimeProperty implements OsVersions {
 
 
     protected OsVersion(String stringRepresentation, int intValue) {
-        super(stringRepresentation, new Integer(intValue));
+        super(stringRepresentation, intValue);
     }
 
     protected OsVersion(String stringRepresentation, Integer intValue) {

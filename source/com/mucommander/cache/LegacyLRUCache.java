@@ -183,7 +183,7 @@ public class LegacyLRUCache extends LRUCache {
         }
         else {
             long expirationDate = System.currentTimeMillis()+timeToLive;
-            expirationDates.add(new Long(expirationDate));
+            expirationDates.add(expirationDate);
             // Update eledestExpirationDate if new element's expiration date is older
             if(expirationDate<this.eldestExpirationDate) {
                 // update eldestExpirationDate

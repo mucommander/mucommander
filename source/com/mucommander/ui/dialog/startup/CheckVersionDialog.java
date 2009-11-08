@@ -33,8 +33,11 @@ import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.layout.InformationPane;
 import com.mucommander.ui.main.MainFrame;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JCheckBox;
+import java.awt.BorderLayout;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.Font;
 import java.net.URL;
 import java.util.Vector;
 
@@ -153,12 +156,12 @@ public class CheckVersionDialog extends QuestionDialog implements Runnable {
         Vector labelsV = new Vector();
 
         // 'OK' choice
-        actionsV.add(new Integer(OK_ACTION));
+        actionsV.add(OK_ACTION);
         labelsV.add(Translator.get("ok"));
 
         // 'Go to website' choice (if available)
         if(downloadOption) {
-            actionsV.add(new Integer(GO_TO_WEBSITE_ACTION));
+            actionsV.add(GO_TO_WEBSITE_ACTION);
             labelsV.add(ActionProperties.getActionLabel(GoToWebsiteAction.Descriptor.ACTION_ID));
         }
 

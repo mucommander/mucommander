@@ -95,7 +95,7 @@ public class ProgressDialog extends FocusDialog implements ActionListener, ItemL
 
     static {
         // Disable JProgressBar animation which is a real CPU hog under Mac OS X
-        UIManager.put("ProgressBar.repaintInterval", new Integer(Integer.MAX_VALUE));
+        UIManager.put("ProgressBar.repaintInterval", Integer.MAX_VALUE);
     }
 
 
@@ -501,7 +501,7 @@ public class ProgressDialog extends FocusDialog implements ActionListener, ItemL
                     samples.removeElementAt(0);
 
                 // Add sample to the vector
-                samples.add(new Long(bytesPerSecond));
+                samples.add(bytesPerSecond);
             }
 
             repaint();
