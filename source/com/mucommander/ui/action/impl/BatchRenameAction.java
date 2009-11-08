@@ -18,20 +18,14 @@
 
 package com.mucommander.ui.action.impl;
 
-import java.awt.event.KeyEvent;
-import java.util.Hashtable;
-
-import javax.swing.KeyStroke;
-
 import com.mucommander.file.util.FileSet;
-import com.mucommander.ui.action.AbstractActionDescriptor;
-import com.mucommander.ui.action.ActionCategories;
-import com.mucommander.ui.action.ActionCategory;
-import com.mucommander.ui.action.ActionFactory;
-import com.mucommander.ui.action.InvokesDialog;
-import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.action.*;
 import com.mucommander.ui.dialog.file.BatchRenameDialog;
 import com.mucommander.ui.main.MainFrame;
+
+import javax.swing.KeyStroke;
+import java.awt.event.KeyEvent;
+import java.util.Hashtable;
 
 /**
  * This action invokes the 'Batch-Rename' dialog which allows to
@@ -41,7 +35,7 @@ import com.mucommander.ui.main.MainFrame;
  */
 public class BatchRenameAction extends SelectedFilesAction implements InvokesDialog {
 
-    public BatchRenameAction(MainFrame mainFrame, Hashtable properties) {
+    public BatchRenameAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -56,7 +50,7 @@ public class BatchRenameAction extends SelectedFilesAction implements InvokesDia
 
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
 			return new BatchRenameAction(mainFrame, properties);
 		}
     }

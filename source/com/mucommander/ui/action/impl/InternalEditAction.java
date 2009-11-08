@@ -20,16 +20,12 @@ package com.mucommander.ui.action.impl;
 
 import com.mucommander.command.Command;
 import com.mucommander.file.AbstractFile;
-import com.mucommander.ui.action.AbstractActionDescriptor;
-import com.mucommander.ui.action.ActionCategories;
-import com.mucommander.ui.action.ActionCategory;
-import com.mucommander.ui.action.MuAction;
-import com.mucommander.ui.action.ActionFactory;
+import com.mucommander.ui.action.*;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.viewer.EditorRegistrar;
 
-import javax.swing.*;
-
+import javax.swing.ImageIcon;
+import javax.swing.KeyStroke;
 import java.util.Hashtable;
 
 /**
@@ -44,7 +40,7 @@ public class InternalEditAction extends AbstractViewerAction {
      * @param mainFrame  frame to which the action is attached.
      * @param properties action's properties.
      */
-    public InternalEditAction(MainFrame mainFrame, Hashtable properties) {
+    public InternalEditAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
         super(mainFrame, properties);
 
         ImageIcon icon;
@@ -73,7 +69,7 @@ public class InternalEditAction extends AbstractViewerAction {
     // - Factory -------------------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
     public static class Factory implements ActionFactory {
-		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
 			return new InternalEditAction(mainFrame, properties);
 		}
     }

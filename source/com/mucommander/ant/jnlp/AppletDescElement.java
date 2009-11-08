@@ -26,14 +26,14 @@ import java.util.Vector;
  * @ant.type name="appletdesc" category="webstart"
  */
 public class AppletDescElement {
-    private String documentBase;
-    private String mainClass;
-    private String name;
-    private int    width;
-    private int    height;
-    private Vector params;
+    private String                  documentBase;
+    private String                  mainClass;
+    private String                  name;
+    private int                     width;
+    private int                     height;
+    private Vector<PropertyElement> params;
 
-    public AppletDescElement() {params = new Vector();}
+    public AppletDescElement() {params = new Vector<PropertyElement>();}
 
     public String getDocumentBase() {return documentBase;}
     public String getMain() {return mainClass;}
@@ -41,7 +41,7 @@ public class AppletDescElement {
     public int getWidth() {return width;}
     public int getHeight() {return height;}
     public boolean hasParams() {return !params.isEmpty();}
-    public Iterator params() {return params.iterator();}
+    public Iterator<PropertyElement> params() {return params.iterator();}
     public void setDocumentBase(String s) {documentBase = s;}
     public void setMain(String s) {mainClass = s;}
     public void setName(String s) {name = s;}

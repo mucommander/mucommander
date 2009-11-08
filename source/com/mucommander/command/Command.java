@@ -215,13 +215,13 @@ public class Command {
      * @return         the specified command's tokens after replacing keywords by the corresponding values from the specified files.
      */
     public static String[] getTokens(String command, AbstractFile[] files) {
-        Vector       tokens;        // All tokens.
-        char[]       buffer;        // All the characters that compose command.
-        StringBuffer currentToken;  // Buffer for the current token.
-        boolean      isInQuotes;    // Whether we're currently within quotes or not.
+        Vector<String> tokens;        // All tokens.
+        char[]         buffer;        // All the characters that compose command.
+        StringBuffer   currentToken;  // Buffer for the current token.
+        boolean        isInQuotes;    // Whether we're currently within quotes or not.
 
         // Initialises parsing.
-        tokens       = new Vector();
+        tokens       = new Vector<String>();
         command      = command.trim();
         currentToken = new StringBuffer(command.length());
         buffer       = command.toCharArray();
@@ -316,7 +316,7 @@ public class Command {
         if(tokens.size() == 0)
             return new String[] {""};
 
-        return (String[]) tokens.toArray(new String[tokens.size()]);
+        return tokens.toArray(new String[tokens.size()]);
     }
 
     /**

@@ -18,27 +18,22 @@
 
 package com.mucommander.ui.action.impl;
 
-import java.awt.event.KeyEvent;
-import java.util.Hashtable;
-
-import javax.swing.KeyStroke;
-
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.util.FileSet;
 import com.mucommander.job.CopyJob;
 import com.mucommander.runtime.JavaVersions;
 import com.mucommander.runtime.OsFamilies;
 import com.mucommander.text.Translator;
-import com.mucommander.ui.action.AbstractActionDescriptor;
-import com.mucommander.ui.action.ActionCategories;
-import com.mucommander.ui.action.ActionCategory;
-import com.mucommander.ui.action.ActionFactory;
-import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.action.*;
 import com.mucommander.ui.dialog.file.FileCollisionDialog;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.dnd.ClipboardNotifier;
 import com.mucommander.ui.dnd.ClipboardSupport;
 import com.mucommander.ui.main.MainFrame;
+
+import javax.swing.KeyStroke;
+import java.awt.event.KeyEvent;
+import java.util.Hashtable;
 
 /**
  * This action pastes the files contained by the system clipboard to the currently active folder.
@@ -51,7 +46,7 @@ import com.mucommander.ui.main.MainFrame;
  */
 public class PasteClipboardFilesAction extends MuAction {
 
-    public PasteClipboardFilesAction(MainFrame mainFrame, Hashtable properties) {
+    public PasteClipboardFilesAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
         super(mainFrame, properties);
 
         // Allows this action to be dynamically enabled when the clipboard contains files, and disabled otherwise.
@@ -75,7 +70,7 @@ public class PasteClipboardFilesAction extends MuAction {
     
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
 			return new PasteClipboardFilesAction(mainFrame, properties);
 		}
     }

@@ -41,7 +41,7 @@ public class DebugConsoleHandler extends Handler {
     private int bufferSize;
 
     /** Contains the last LogRecord instances. */
-    private LinkedList logRecords;
+    private LinkedList<LogRecord> logRecords;
 
     /** Singleton instance of DebugConsoleHandler */
     private static DebugConsoleHandler INSTANCE;
@@ -54,7 +54,7 @@ public class DebugConsoleHandler extends Handler {
         setFormatter(new SingleLineFormatter());
 
         bufferSize = MuConfiguration.getVariable(MuConfiguration.LOG_BUFFER_SIZE, MuConfiguration.DEFAULT_LOG_BUFFER_SIZE);
-        logRecords = new LinkedList();
+        logRecords = new LinkedList<LogRecord>();
 
         INSTANCE = this;
     }

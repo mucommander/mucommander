@@ -27,14 +27,14 @@ import java.util.Vector;
  */
 public class ApplicationDescElement {
     private String mainClass;
-    private Vector arguments;
+    private Vector<ArgumentElement> arguments;
 
-    public ApplicationDescElement() {arguments = new Vector();}
+    public ApplicationDescElement() {arguments = new Vector<ArgumentElement>();}
 
     public void setMain(String s) {mainClass = s;}
     public String getMain() {return mainClass;}
     public boolean hasArguments() {return !arguments.isEmpty();}
-    public Iterator arguments() {return arguments.iterator();}
+    public Iterator<ArgumentElement> arguments() {return arguments.iterator();}
     public ArgumentElement createArgument() {
         ArgumentElement buffer;
 

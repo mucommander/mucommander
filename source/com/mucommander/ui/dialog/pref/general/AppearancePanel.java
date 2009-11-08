@@ -137,15 +137,15 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
     // - Misc. fields --------------------------------------------------------------------
     // -----------------------------------------------------------------------------------
     /** System icon combobox. */
-    private PrefComboBox 		   useSystemFileIconsComboBox;
+    private PrefComboBox 	 useSystemFileIconsComboBox;
     /** Identifier of 'yes' actions in question dialogs. */
-    private final static int       YES_ACTION = 0;
+    private final static int YES_ACTION = 0;
     /** Identifier of 'no' actions in question dialogs. */
-    private final static int       NO_ACTION = 1;
+    private final static int NO_ACTION = 1;
     /** Identifier of 'cancel' actions in question dialogs. */
-    private final static int       CANCEL_ACTION = 2;
+    private final static int CANCEL_ACTION = 2;
     /** All known custom look and feels. */
-    private              Vector    customLookAndFeels;
+    private Vector<String>   customLookAndFeels;
 
 
 

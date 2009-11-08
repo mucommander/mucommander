@@ -18,18 +18,13 @@
 
 package com.mucommander.ui.action.impl;
 
-import java.awt.event.KeyEvent;
-import java.util.Hashtable;
-
-import javax.swing.KeyStroke;
-
-import com.mucommander.ui.action.AbstractActionDescriptor;
-import com.mucommander.ui.action.ActionCategories;
-import com.mucommander.ui.action.ActionCategory;
-import com.mucommander.ui.action.ActionFactory;
-import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.action.*;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.table.FileTable;
+
+import javax.swing.KeyStroke;
+import java.awt.event.KeyEvent;
+import java.util.Hashtable;
 
 /**
  * This action selects the last row/file in the current FileTable.
@@ -38,7 +33,7 @@ import com.mucommander.ui.main.table.FileTable;
  */
 public class SelectLastRowAction extends MuAction {
 
-    public SelectLastRowAction(MainFrame mainFrame, Hashtable properties) {
+    public SelectLastRowAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -49,7 +44,7 @@ public class SelectLastRowAction extends MuAction {
     
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
 			return new SelectLastRowAction(mainFrame, properties);
 		}
     }

@@ -18,18 +18,13 @@
 
 package com.mucommander.ui.action.impl;
 
-import java.awt.event.KeyEvent;
-import java.util.Hashtable;
-
-import javax.swing.KeyStroke;
-
-import com.mucommander.ui.action.AbstractActionDescriptor;
-import com.mucommander.ui.action.ActionCategories;
-import com.mucommander.ui.action.ActionCategory;
-import com.mucommander.ui.action.ActionFactory;
-import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.action.*;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.table.Columns;
+
+import javax.swing.KeyStroke;
+import java.awt.event.KeyEvent;
+import java.util.Hashtable;
 
 /**
  * This action sorts the currently active {@link com.mucommander.ui.main.table.FileTable} by owner.
@@ -39,13 +34,13 @@ import com.mucommander.ui.main.table.Columns;
  */
 public class SortByOwnerAction extends SortByAction {
 
-    public SortByOwnerAction(MainFrame mainFrame, Hashtable properties) {
+    public SortByOwnerAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
         super(mainFrame, properties, Columns.OWNER);
     }
     
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
 			return new SortByOwnerAction(mainFrame, properties);
 		}
     }

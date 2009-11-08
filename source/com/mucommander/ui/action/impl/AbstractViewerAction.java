@@ -44,7 +44,7 @@ abstract class AbstractViewerAction extends SelectedFileAction {
      * @param mainFrame  frame to which the action is attached.
      * @param properties action's properties.
      */
-    public AbstractViewerAction(MainFrame mainFrame, Hashtable properties) {
+    public AbstractViewerAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
         super(mainFrame, properties);
 
         // Enable this action only when the currently selected file is not a directory.

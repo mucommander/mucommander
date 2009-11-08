@@ -98,7 +98,7 @@ public class Configuration {
     /** Holds the content of the configuration file. */
     private final ConfigurationSection root = new ConfigurationSection();
     /** Contains all registered configuration listeners, stored as weak references */
-    private static final WeakHashMap   listeners = new WeakHashMap();
+    private static final WeakHashMap<ConfigurationListener, ?> listeners = new WeakHashMap<ConfigurationListener, Object>();
 
 
 
@@ -1090,11 +1090,8 @@ public class Configuration {
      * @param event event to propagate.
      */
     private static void triggerEvent(ConfigurationEvent event) {
-        Iterator iterator;
-
-        iterator = listeners.keySet().iterator();
-        while(iterator.hasNext())
-            ((ConfigurationListener)iterator.next()).configurationChanged(event);
+        for(ConfigurationListener listener : listeners.keySet())
+            listener.configurationChanged(event);
     }
 
 
@@ -1118,11 +1115,11 @@ public class Configuration {
         // - Instance variables ------------------------------------------------
         // ---------------------------------------------------------------------
         /** Parents of {@link #currentSection}. */
-        private Stack                sections;
+        private Stack<ConfigurationSection> sections;
         /** Fully qualified names of {@link #currentSection}. */
-        private Stack                sectionNames;
+        private Stack<String>               sectionNames;
         /** Section that we're currently building. */
-        private ConfigurationSection currentSection;
+        private ConfigurationSection        currentSection;
 
 
 
@@ -1142,8 +1139,8 @@ public class Configuration {
          * Initialises the configuration bulding.
          */
         public void startConfiguration() {
-            sections     = new Stack();
-            sectionNames = new Stack();
+            sections     = new Stack<ConfigurationSection>();
+            sectionNames = new Stack<String>();
         }
 
         /**
@@ -1184,7 +1181,7 @@ public class Configuration {
 
             // Makes sure there is a section to close.
             try {
-                buffer = (ConfigurationSection)sections.pop();
+                buffer = sections.pop();
                 sectionNames.pop();
             }
             catch(EmptyStackException e) {throw new ConfigurationStructureException("Section " + name + " was already closed.");}

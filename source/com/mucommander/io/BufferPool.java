@@ -53,7 +53,7 @@ import java.util.Vector;
 public class BufferPool {
 
     /** List of BufferContainer instances that wraps available buffers */
-    private static Vector bufferContainers = new Vector();
+    private static Vector<BufferContainer> bufferContainers = new Vector<BufferContainer>();
 
     /** The initial default buffer size */
     public final static int INITIAL_DEFAULT_BUFFER_SIZE = 65536;
@@ -216,7 +216,7 @@ public class BufferPool {
 
         // Looks for a buffer container in the pool that matches the specified size and buffer class.
         for(int i=0; i<nbBuffers; i++) {
-            bufferContainer = (BufferContainer) bufferContainers.elementAt(i);
+            bufferContainer = bufferContainers.elementAt(i);
             buffer = bufferContainer.getBuffer();
 
             // Caution: mind the difference between BufferContainer#getLength() and BufferContainer#getSize()
@@ -372,7 +372,7 @@ public class BufferPool {
         int count = 0;        
         int nbBuffers = bufferContainers.size();
         for(int i=0; i<nbBuffers; i++) {
-            if(factory.matchesBufferClass(((BufferContainer)bufferContainers.elementAt(i)).getBuffer().getClass())) {
+            if(factory.matchesBufferClass(bufferContainers.elementAt(i).getBuffer().getClass())) {
                 count ++;
             }
         }

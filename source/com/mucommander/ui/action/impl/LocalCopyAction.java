@@ -42,7 +42,7 @@ import java.util.Hashtable;
  */
 public class LocalCopyAction extends SelectedFileAction {
 
-    public LocalCopyAction(MainFrame mainFrame, Hashtable properties) {
+    public LocalCopyAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -58,7 +58,7 @@ public class LocalCopyAction extends SelectedFileAction {
     
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
 			return new LocalCopyAction(mainFrame, properties);
 		}
     }

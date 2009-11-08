@@ -23,8 +23,7 @@ import com.mucommander.ui.action.*;
 import com.mucommander.ui.dialog.file.DeleteDialog;
 import com.mucommander.ui.main.MainFrame;
 
-import javax.swing.*;
-
+import javax.swing.KeyStroke;
 import java.awt.event.KeyEvent;
 import java.util.Hashtable;
 
@@ -39,7 +38,7 @@ import java.util.Hashtable;
  */
 public class DeleteAction extends SelectedFilesAction {
 
-    public DeleteAction(MainFrame mainFrame, Hashtable properties) {
+    public DeleteAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -52,7 +51,7 @@ public class DeleteAction extends SelectedFilesAction {
     
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
 			return new DeleteAction(mainFrame, properties);
 		}
     }

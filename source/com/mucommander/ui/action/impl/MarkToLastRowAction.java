@@ -22,7 +22,7 @@ import com.mucommander.ui.action.*;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.table.FileTable;
 
-import javax.swing.*;
+import javax.swing.KeyStroke;
 import java.awt.event.KeyEvent;
 import java.util.Hashtable;
 
@@ -37,7 +37,7 @@ import java.util.Hashtable;
  */
 public class MarkToLastRowAction extends MarkForwardAction {
 
-    public MarkToLastRowAction(MainFrame mainFrame, Hashtable properties) {
+    public MarkToLastRowAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -48,7 +48,7 @@ public class MarkToLastRowAction extends MarkForwardAction {
     }
 
     public static class Factory implements ActionFactory {
-		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
 			return new MarkToLastRowAction(mainFrame, properties);
 		}
     }

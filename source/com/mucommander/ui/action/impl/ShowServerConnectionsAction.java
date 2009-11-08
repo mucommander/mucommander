@@ -18,19 +18,13 @@
 
 package com.mucommander.ui.action.impl;
 
-import java.awt.event.KeyEvent;
-import java.util.Hashtable;
-
-import javax.swing.KeyStroke;
-
-import com.mucommander.ui.action.AbstractActionDescriptor;
-import com.mucommander.ui.action.ActionCategories;
-import com.mucommander.ui.action.ActionCategory;
-import com.mucommander.ui.action.ActionFactory;
-import com.mucommander.ui.action.InvokesDialog;
-import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.action.*;
 import com.mucommander.ui.dialog.server.ShowServerConnectionsDialog;
 import com.mucommander.ui.main.MainFrame;
+
+import javax.swing.KeyStroke;
+import java.awt.event.KeyEvent;
+import java.util.Hashtable;
 
 /**
  * Displays a dialog which shows a list of open server connections and allows the user to close them.
@@ -39,7 +33,7 @@ import com.mucommander.ui.main.MainFrame;
  */
 public class ShowServerConnectionsAction extends MuAction implements InvokesDialog {
 
-    public ShowServerConnectionsAction(MainFrame mainFrame, Hashtable properties) {
+    public ShowServerConnectionsAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -49,7 +43,7 @@ public class ShowServerConnectionsAction extends MuAction implements InvokesDial
     
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
 			return new ShowServerConnectionsAction(mainFrame, properties);
 		}
     }

@@ -18,16 +18,11 @@
 
 package com.mucommander.ui.action.impl;
 
-import com.mucommander.ui.action.AbstractActionDescriptor;
-import com.mucommander.ui.action.ActionCategories;
-import com.mucommander.ui.action.ActionCategory;
-import com.mucommander.ui.action.MuAction;
-import com.mucommander.ui.action.ActionFactory;
+import com.mucommander.ui.action.*;
 import com.mucommander.ui.main.MainFrame;
 
-import java.util.Hashtable;
-
 import javax.swing.KeyStroke;
+import java.util.Hashtable;
 
 /**
  * This action opens the mucommander.com donation page URL in the system's default browser.
@@ -36,7 +31,7 @@ import javax.swing.KeyStroke;
  */
 public class DonateAction extends OpenURLInBrowserAction {
 
-    public DonateAction(MainFrame mainFrame, Hashtable properties) {
+    public DonateAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
         super(mainFrame, properties);
 
         putValue(URL_PROPERTY_KEY, com.mucommander.RuntimeConstants.DONATION_URL);
@@ -44,7 +39,7 @@ public class DonateAction extends OpenURLInBrowserAction {
     
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
 			return new DonateAction(mainFrame, properties);
 		}
     }

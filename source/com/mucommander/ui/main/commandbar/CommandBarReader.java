@@ -41,9 +41,9 @@ import java.util.Vector;
 class CommandBarReader extends CommandBarIO {
 
     /** Temporarily used for XML parsing */
-    private Vector actionsV;
+    private Vector<String> actionsIdsV;
     /** Temporarily used for XML parsing */
-    private Vector alternateActionsV;
+    private Vector<String> alternateActionsIdsV;
     /** Temporarily used for XML parsing */
     private KeyStroke modifier;
 
@@ -74,16 +74,16 @@ class CommandBarReader extends CommandBarIO {
     ////////////////////
     
     public String[] getActionsRead() {
-    	int nbActions = actionsV.size();
+    	int nbActions = actionsIdsV.size();
     	String[] actionIds = new String[nbActions];
-        actionsV.toArray(actionIds);
+        actionsIdsV.toArray(actionIds);
         return actionIds;
     }
     
     public String[] getAlternateActionsRead() {
-    	int nbActions = alternateActionsV.size();
+    	int nbActions = alternateActionsIdsV.size();
     	String[] alternateActionIds = new String[nbActions];
-        alternateActionsV.toArray(alternateActionIds);
+        alternateActionsIdsV.toArray(alternateActionIds);
         return alternateActionIds;
     }
     
@@ -98,8 +98,8 @@ class CommandBarReader extends CommandBarIO {
     public void startDocument() {
         AppLogger.finest(file.getAbsolutePath()+" parsing started");
 
-        actionsV = new Vector();
-        alternateActionsV = new Vector();
+        actionsIdsV = new Vector<String>();
+        alternateActionsIdsV = new Vector<String>();
         modifier = null;
     }
 
@@ -113,11 +113,11 @@ class CommandBarReader extends CommandBarIO {
         	String actionIdAttribute = attributes.getValue(ACTION_ID_ATTRIBUTE);
         	if (actionIdAttribute != null) {
         		if (ActionManager.isActionExist(actionIdAttribute)) {
-        			actionsV.add(actionIdAttribute);
+        			actionsIdsV.add(actionIdAttribute);
 
         			// Resolve alternate action id (if any)
         			actionIdAttribute = attributes.getValue(ALT_ACTION_ID_ATTRIBUTE);
-        			alternateActionsV.add(ActionManager.isActionExist(actionIdAttribute) ? actionIdAttribute : null);
+        			alternateActionsIdsV.add(ActionManager.isActionExist(actionIdAttribute) ? actionIdAttribute : null);
         		}
         	}
         	else {
@@ -126,19 +126,19 @@ class CommandBarReader extends CommandBarIO {
         		if (actionClassAttribute != null) {
         			String actionId = ActionManager.extrapolateId(actionClassAttribute);
         			if (ActionManager.isActionExist(actionId)) {
-        				actionsV.add(actionId);
+        				actionsIdsV.add(actionId);
 
         				// Resolve alternate action class (if any)
         				actionClassAttribute = attributes.getValue(ALT_ACTION_ATTRIBUTE);
         				if(actionClassAttribute == null)
-        					alternateActionsV.add(null);
+        					alternateActionsIdsV.add(null);
         				else {
         					actionId = ActionManager.extrapolateId(actionClassAttribute);
         					if (ActionManager.isActionExist(actionId))
-        						alternateActionsV.add(actionId);
+        						alternateActionsIdsV.add(actionId);
         					else {
         						AppLogger.warning("Error in "+DEFAULT_COMMAND_BAR_FILE_NAME+": action id for " + actionClassAttribute + " not found");
-        						alternateActionsV.add(null);
+        						alternateActionsIdsV.add(null);
         					}
         				}
         			}

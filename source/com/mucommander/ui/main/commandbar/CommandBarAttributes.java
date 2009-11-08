@@ -20,7 +20,6 @@ package com.mucommander.ui.main.commandbar;
 
 import javax.swing.KeyStroke;
 import java.awt.event.KeyEvent;
-import java.util.Iterator;
 import java.util.WeakHashMap;
 
 /**
@@ -66,7 +65,7 @@ public class CommandBarAttributes {
     private static KeyStroke DEFAULT_MODIFIER = KeyStroke.getKeyStroke(KeyEvent.VK_SHIFT, 0);
     
     /** Contains all registered command-bar attributes listeners, stored as weak references */
-    private static WeakHashMap listeners = new WeakHashMap();
+    private static WeakHashMap<CommandBarAttributesListener, ?> listeners = new WeakHashMap<CommandBarAttributesListener, Object>();
 
     /**
      * This method restore the default command-bar attributes.
@@ -153,9 +152,8 @@ public class CommandBarAttributes {
     protected static void fireAttributesChanged() {
     	synchronized(listeners) {
             // Iterate on all listeners
-            Iterator iterator = listeners.keySet().iterator();
-            while(iterator.hasNext())
-                ((CommandBarAttributesListener)iterator.next()).commandBarAttributeChanged();
+            for(CommandBarAttributesListener listener : listeners.keySet())
+                listener.commandBarAttributeChanged();
         }
     }
 }

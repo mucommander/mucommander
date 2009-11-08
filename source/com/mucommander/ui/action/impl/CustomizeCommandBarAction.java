@@ -18,18 +18,12 @@
 
 package com.mucommander.ui.action.impl;
 
-import java.util.Hashtable;
-
-import javax.swing.KeyStroke;
-
-import com.mucommander.ui.action.AbstractActionDescriptor;
-import com.mucommander.ui.action.ActionCategories;
-import com.mucommander.ui.action.ActionCategory;
-import com.mucommander.ui.action.InvokesDialog;
-import com.mucommander.ui.action.MuAction;
-import com.mucommander.ui.action.ActionFactory;
+import com.mucommander.ui.action.*;
 import com.mucommander.ui.dialog.customization.CommandBarDialog;
 import com.mucommander.ui.main.MainFrame;
+
+import javax.swing.KeyStroke;
+import java.util.Hashtable;
 
 /**
  * This action opens the dialog which allows the user to customize the command-bar.
@@ -38,7 +32,7 @@ import com.mucommander.ui.main.MainFrame;
  */
 public class CustomizeCommandBarAction extends MuAction implements InvokesDialog {
 	
-	public CustomizeCommandBarAction(MainFrame mainFrame, Hashtable properties) {
+	public CustomizeCommandBarAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -46,7 +40,7 @@ public class CustomizeCommandBarAction extends MuAction implements InvokesDialog
     
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
 			return new CustomizeCommandBarAction(mainFrame, properties);
 		}
     }

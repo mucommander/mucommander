@@ -18,13 +18,12 @@
 
 package com.mucommander.ui.action;
 
+import javax.swing.ImageIcon;
+import javax.swing.KeyStroke;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Set;
 import java.util.TreeSet;
-
-import javax.swing.ImageIcon;
-import javax.swing.KeyStroke;
 
 /**
  * Class that maintains properties of the registered MuAction-s:
@@ -37,17 +36,17 @@ import javax.swing.KeyStroke;
 public class ActionProperties {
 	
 	/* Maps action id -> action descriptor */
-	private static Hashtable actionDescriptors = new Hashtable();
+	private static Hashtable<String, ActionDescriptor> actionDescriptors = new Hashtable<String, ActionDescriptor>();
 
 	private static ActionDescriptor nullActionDescriptor = new NullActionDescriptor();
 	
 	/* Contains all used action categories (i.e for each category at least one action is registered) */
-	private static TreeSet actionCategories = new TreeSet();
+	private static TreeSet<ActionCategory> actionCategories = new TreeSet<ActionCategory>();
 
 	/* Maps action id -> primary shortcut */
-	private static HashMap defaultPrimaryActionKeymap = new HashMap();
+	private static HashMap<String, KeyStroke> defaultPrimaryActionKeymap = new HashMap<String, KeyStroke>();
 	/* Maps action id -> alternative shortcut */
-	private static HashMap defaultAlternateActionKeymap = new HashMap();
+	private static HashMap<String, KeyStroke> defaultAlternateActionKeymap = new HashMap<String, KeyStroke>();
 	/* Maps shortcut -> action id */
 	private static AcceleratorMap defaultAcceleratorMap = new AcceleratorMap();
 	
@@ -88,7 +87,7 @@ public class ActionProperties {
 	 * @return ActionDescriptor of the given MuAction. null is returned if ActionDescriptor doesn't exist.
 	 */
 	public static ActionDescriptor getActionDescriptor(String actionId) {
-		return (ActionDescriptor) actionDescriptors.get(actionId);
+		return actionDescriptors.get(actionId);
 	}
 	
 	/**
@@ -122,7 +121,7 @@ public class ActionProperties {
 	 * @return default shortcut of the given MuAction. null is returned if default shortcut doesn't exist.
 	 */
 	public static KeyStroke getDefaultAccelerator(String actionId) {
-		return (KeyStroke) defaultPrimaryActionKeymap.get(actionId);
+		return defaultPrimaryActionKeymap.get(actionId);
 	}
 	
 	/**
@@ -132,7 +131,7 @@ public class ActionProperties {
 	 * @return alternative shortcut for the given MuAction. null is returned if alternative shortcut doesn't exist.
 	 */
 	public static KeyStroke getDefaultAlternativeAccelerator(String actionId) {
-		return (KeyStroke) defaultAlternateActionKeymap.get(actionId);
+		return defaultAlternateActionKeymap.get(actionId);
 	}
 	
 	/**
@@ -206,12 +205,12 @@ public class ActionProperties {
 	 * 
 	 * @return Set of existed action categories.
 	 */
-	public static Set getActionCategories() {
+	public static Set<ActionCategory> getActionCategories() {
 		return actionCategories;
 	}
 	
 	private static ActionDescriptor getNullSafeActionDescriptor(String actionId) {
-		ActionDescriptor actionDescriptor = (ActionDescriptor) actionDescriptors.get(actionId);
+		ActionDescriptor actionDescriptor = actionDescriptors.get(actionId);
 		return actionDescriptor != null ? actionDescriptor : nullActionDescriptor;
 	}
 	

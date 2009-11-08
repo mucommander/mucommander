@@ -19,7 +19,6 @@
 package com.mucommander.ui.theme;
 
 import java.awt.Color;
-import java.util.Iterator;
 import java.util.Vector;
 
 /**
@@ -39,7 +38,7 @@ public abstract class DefaultColor {
     // - Instance fields -----------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
     /** List of colors linked to this default value. */
-    private Vector linkedColors;
+    private Vector<Integer> linkedColors;
 
 
 
@@ -49,7 +48,7 @@ public abstract class DefaultColor {
      * Creates a new instance of {@link DefaultColor}.
      */
     protected DefaultColor() {
-        linkedColors = new Vector();
+        linkedColors = new Vector<Integer>();
     }
 
 
@@ -61,11 +60,8 @@ public abstract class DefaultColor {
      * @param color new default color value.
      */
     protected void notifyChange(Color color) {
-        Iterator colors;
-
-        colors = linkedColors.iterator();
-        while(colors.hasNext())
-            ThemeData.triggerColorEvent((Integer) colors.next(), color);
+        for(int i : linkedColors)
+            ThemeData.triggerColorEvent(i, color);    
     }
 
     /**

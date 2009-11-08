@@ -33,13 +33,13 @@ import java.util.Hashtable;
  */
 public class ToggleGroupColumnAction extends ToggleColumnAction {
 
-    public ToggleGroupColumnAction(MainFrame mainFrame, Hashtable properties) {
+    public ToggleGroupColumnAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
         super(mainFrame, properties, Columns.GROUP);
     }
     
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
 			return new ToggleGroupColumnAction(mainFrame, properties);
 		}
     }

@@ -36,7 +36,7 @@ import java.util.Hashtable;
  */
 public abstract class GoToAction extends MuAction implements ActivePanelListener, LocationListener {
 
-    public GoToAction(MainFrame mainFrame, Hashtable properties) {
+    public GoToAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
         super(mainFrame, properties);
 
         // Listen to active table change events

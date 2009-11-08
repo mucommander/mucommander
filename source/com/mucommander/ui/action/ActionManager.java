@@ -48,10 +48,10 @@ import java.util.regex.Pattern;
 public class ActionManager {
 
     /** MuAction id -> factory map */
-    private static Hashtable actionFactories = new Hashtable();
+    private static Hashtable<String, ActionFactory> actionFactories = new Hashtable<String, ActionFactory>();
     
     /** MainFrame -> MuAction map */
-    private static WeakHashMap mainFrameActionsMap = new WeakHashMap();
+    private static WeakHashMap<MainFrame, Hashtable<ActionParameters, ActionAndIdPair>> mainFrameActionsMap = new WeakHashMap<MainFrame, Hashtable<ActionParameters, ActionAndIdPair>>();
     
     /** Pattern to resolve the action ID from action class path */
     private final static Pattern pattern = Pattern.compile(".*\\.(.*)?Action");
@@ -219,7 +219,7 @@ public class ActionManager {
      * 
      * @return Enumeration of all registered actions' ids.
      */
-    public static Enumeration getActionIds() {
+    public static Enumeration<String> getActionIds() {
     	return actionFactories.keys();
     }
     
@@ -278,21 +278,21 @@ public class ActionManager {
      * MuAction action denoted by the ActionParameters could not be found or could not be instantiated.
      */
     public static MuAction getActionInstance(ActionParameters actionParameters, MainFrame mainFrame) {
-        Hashtable mainFrameActions = (Hashtable)mainFrameActionsMap.get(mainFrame);
+        Hashtable<ActionParameters, ActionAndIdPair> mainFrameActions = mainFrameActionsMap.get(mainFrame);
         if(mainFrameActions==null) {
-            mainFrameActions = new Hashtable();
+            mainFrameActions = new Hashtable<ActionParameters, ActionAndIdPair>();
             mainFrameActionsMap.put(mainFrame, mainFrameActions);
         }
 
         // Looks for an existing MuAction instance used by the specified MainFrame
         if (mainFrameActions.containsKey(actionParameters)) {
-        	return ((ActionAndIdPair) mainFrameActions.get(actionParameters)).getAction();
+        	return mainFrameActions.get(actionParameters).getAction();
         }
         else {
             String actionId = actionParameters.getActionId();
 
             // Looks for the action's factory
-            ActionFactory actionFactory = (ActionFactory) actionFactories.get(actionId);
+            ActionFactory actionFactory = actionFactories.get(actionId);
             if(actionFactory == null) {
             	AppLogger.fine("couldn't initiate action: " + actionId + ", its factory wasn't found");
             	return null;
@@ -362,16 +362,16 @@ public class ActionManager {
      * @param muActionId the MuAction id to compare instances against
      * @return  a Vector of all MuAction instances matching the specified action id
      */
-    public static Vector getActionInstances(String muActionId) {
-        Vector actionInstances = new Vector();
+    public static Vector<MuAction> getActionInstances(String muActionId) {
+        Vector<MuAction> actionInstances = new Vector<MuAction>();
 
         // Iterate on all MainFrame instances
-        Iterator mainFrameActions = mainFrameActionsMap.values().iterator();
+        Iterator<Hashtable<ActionParameters, ActionAndIdPair>> mainFrameActions = mainFrameActionsMap.values().iterator();
         while(mainFrameActions.hasNext()) {
-            Iterator actionAndIds = ((Hashtable)mainFrameActions.next()).values().iterator();
+            Iterator<ActionAndIdPair> actionAndIds = mainFrameActions.next().values().iterator();
             // Iterate on all the MainFrame's actions and their ids pairs
             while(actionAndIds.hasNext()) {
-                ActionAndIdPair pair = (ActionAndIdPair)actionAndIds.next();
+                ActionAndIdPair pair = actionAndIds.next();
                 if(pair.getId().equals(muActionId)) {
                     // Found an action matching the specified class
                     actionInstances.add(pair.getAction());

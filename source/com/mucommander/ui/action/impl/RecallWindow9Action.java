@@ -31,13 +31,13 @@ import java.util.Hashtable;
  */
 public class RecallWindow9Action extends RecallWindowAction {
 
-    public RecallWindow9Action(MainFrame mainFrame, Hashtable properties) {
+    public RecallWindow9Action(MainFrame mainFrame, Hashtable<String,Object> properties) {
         super(mainFrame, properties, 9);
     }
     
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
 			return new RecallWindow9Action(mainFrame, properties);
 		}
     }

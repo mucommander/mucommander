@@ -220,7 +220,7 @@ public class BatchRenameDialog extends FocusDialog implements ActionListener,
         edtReplaceWith.getDocument().addDocumentListener(this);
 
         // upper/lower case
-        Vector ulcase = new Vector();
+        Vector<String> ulcase = new Vector<String>();
         ulcase.add(Translator.get("batch_rename_dialog.no_change"));
         ulcase.add(Translator.get("batch_rename_dialog.lower_case"));
         ulcase.add(Translator.get("batch_rename_dialog.upper_case"));
@@ -238,7 +238,7 @@ public class BatchRenameDialog extends FocusDialog implements ActionListener,
         edtCounterStep.getDocument().addDocumentListener(this);
         edtCounterStep.setColumns(2);
 
-        Vector digits = new Vector();
+        Vector<String> digits = new Vector<String>();
         String zeros = "0000";
         for (int i = 1; i <= 5; i++) {
             digits.add(zeros.substring(0, i - 1) + "1");
@@ -344,7 +344,7 @@ public class BatchRenameDialog extends FocusDialog implements ActionListener,
      */
     private void checkForDuplicates() {
         boolean duplicates = false;
-        Set names = new HashSet();
+        Set<String> names = new HashSet<String>();
         for (int i=0; i<newNames.size(); i++) {
             String name = (String) newNames.get(i);
             AbstractFile file = (AbstractFile) files.get(i);

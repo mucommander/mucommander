@@ -32,7 +32,7 @@ class BufferedConfigurationExplorer extends ConfigurationExplorer {
     // - Instance variables --------------------------------------------------------------
     // -----------------------------------------------------------------------------------
     /** Sections that have been passed through. */
-    private Stack sections;
+    private Stack<ConfigurationSection> sections;
 
 
 
@@ -44,7 +44,7 @@ class BufferedConfigurationExplorer extends ConfigurationExplorer {
      */
     public BufferedConfigurationExplorer(ConfigurationSection root) {
         super(root);
-        sections = new Stack();
+        sections = new Stack<ConfigurationSection>();
     }
 
 
@@ -61,7 +61,7 @@ class BufferedConfigurationExplorer extends ConfigurationExplorer {
      * Returns the next section in history.
      * @return the next section in history.
      */
-    public ConfigurationSection popSection() {return (ConfigurationSection)sections.pop();}
+    public ConfigurationSection popSection() {return sections.pop();}
 
 
 

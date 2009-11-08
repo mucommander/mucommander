@@ -18,17 +18,12 @@
 
 package com.mucommander.ui.action.impl;
 
-import java.awt.event.KeyEvent;
-import java.util.Hashtable;
+import com.mucommander.ui.action.*;
+import com.mucommander.ui.main.MainFrame;
 
 import javax.swing.KeyStroke;
-
-import com.mucommander.ui.action.AbstractActionDescriptor;
-import com.mucommander.ui.action.ActionCategories;
-import com.mucommander.ui.action.ActionCategory;
-import com.mucommander.ui.action.ActionFactory;
-import com.mucommander.ui.action.MuAction;
-import com.mucommander.ui.main.MainFrame;
+import java.awt.event.KeyEvent;
+import java.util.Hashtable;
 
 /**
  * This action changes the current folder of the currently active {@link com.mucommander.ui.main.FolderPanel} to
@@ -38,7 +33,7 @@ import com.mucommander.ui.main.MainFrame;
  */
 public class ExploreBookmarksAction extends MuAction {
 
-    public ExploreBookmarksAction(MainFrame mainFrame, Hashtable properties) {
+    public ExploreBookmarksAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -48,7 +43,7 @@ public class ExploreBookmarksAction extends MuAction {
     
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
 			return new ExploreBookmarksAction(mainFrame, properties);
 		}
     }

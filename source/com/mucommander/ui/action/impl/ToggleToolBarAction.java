@@ -23,7 +23,8 @@ import com.mucommander.text.Translator;
 import com.mucommander.ui.action.*;
 import com.mucommander.ui.main.MainFrame;
 
-import javax.swing.*;
+import javax.swing.JPanel;
+import javax.swing.KeyStroke;
 import java.util.Hashtable;
 
 /**
@@ -39,7 +40,7 @@ import java.util.Hashtable;
  */
 public class ToggleToolBarAction extends MuAction {
 
-    public ToggleToolBarAction(MainFrame mainFrame, Hashtable properties) {
+    public ToggleToolBarAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
         super(mainFrame, properties);
         updateLabel(MuConfiguration.getVariable(MuConfiguration.TOOLBAR_VISIBLE, MuConfiguration.DEFAULT_TOOLBAR_VISIBLE));
     }
@@ -62,7 +63,7 @@ public class ToggleToolBarAction extends MuAction {
     
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
 			return new ToggleToolBarAction(mainFrame, properties);
 		}
     }

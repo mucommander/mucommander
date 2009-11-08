@@ -30,7 +30,7 @@ import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.quicklist.RecentExecutedFilesQL;
 
-import javax.swing.*;
+import javax.swing.KeyStroke;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.util.Hashtable;
@@ -42,7 +42,7 @@ import java.util.Hashtable;
  */
 public class OpenNativelyAction extends MuAction {
 
-    public OpenNativelyAction(MainFrame mainFrame, Hashtable properties) {
+    public OpenNativelyAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -73,7 +73,7 @@ public class OpenNativelyAction extends MuAction {
     
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
 			return new OpenNativelyAction(mainFrame, properties);
 		}
     }

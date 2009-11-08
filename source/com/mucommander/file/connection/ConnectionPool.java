@@ -36,7 +36,7 @@ public class ConnectionPool implements Runnable {
     private static ConnectionPool instance = new ConnectionPool();
 
     /** List of registered ConnectionHandler */
-    private final static Vector connectionHandlers = new Vector();
+    private final static Vector<ConnectionHandler> connectionHandlers = new Vector<ConnectionHandler>();
 
     /** The thread that monitors connections, null if there currently is no registered ConnectionHandler */
     private static Thread monitorThread;
@@ -131,15 +131,15 @@ public class ConnectionPool implements Runnable {
      *
      * @return a list of registered ConnectionHandler instances
      */
-    public static Vector getConnectionHandlersSnapshot() {
-        return (Vector)connectionHandlers.clone();
+    public static Vector<ConnectionHandler> getConnectionHandlersSnapshot() {
+        return (Vector<ConnectionHandler>)connectionHandlers.clone();
     }
     
     /**
      * Returns the ConnectionHandler instance located at the given position in the list.
      */
     private static ConnectionHandler getConnectionHandlerAt(int i) {
-        return (ConnectionHandler)connectionHandlers.elementAt(i);
+        return connectionHandlers.elementAt(i);
     }
 
     /**

@@ -19,7 +19,6 @@
 package com.mucommander.util;
 
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.Vector;
 import java.util.WeakHashMap;
 
@@ -37,17 +36,17 @@ import java.util.WeakHashMap;
  *
  * @author Maxence Bernard
  */
-public class AlteredVector extends Vector {
+public class AlteredVector<E> extends Vector<E> {
 
     /** Contains all registered listeners, stored as weak references */
-    private WeakHashMap listeners = new WeakHashMap();
+    private WeakHashMap<VectorChangeListener, Object> listeners = new WeakHashMap<VectorChangeListener, Object>();
 
 
     public AlteredVector() {
         super();
     }
 
-    public AlteredVector(Collection collection) {
+    public AlteredVector(Collection<? extends E> collection) {
         super(collection);
     }
 
@@ -91,9 +90,8 @@ public class AlteredVector extends Vector {
      * @param nbAdded number of elements added
      */
     private void fireElementsAddedEvent(int startIndex, int nbAdded) {
-        Iterator iterator = listeners.keySet().iterator();
-        while(iterator.hasNext())
-            ((VectorChangeListener)iterator.next()).elementsAdded(startIndex, nbAdded);
+        for(VectorChangeListener listener : listeners.keySet())
+            listener.elementsAdded(startIndex, nbAdded);
     }
 
     /**
@@ -103,9 +101,8 @@ public class AlteredVector extends Vector {
      * @param nbRemoved number of elements removed
      */
     private void fireElementsRemovedEvent(int startIndex, int nbRemoved) {
-        Iterator iterator = listeners.keySet().iterator();
-        while(iterator.hasNext())
-            ((VectorChangeListener)iterator.next()).elementsRemoved(startIndex, nbRemoved);
+        for(VectorChangeListener listener : listeners.keySet())
+            listener.elementsRemoved(startIndex, nbRemoved);
     }
 
     /**
@@ -114,9 +111,8 @@ public class AlteredVector extends Vector {
      * @param index index of the element that has been changed
      */
     private void fireElementChangedEvent(int index) {
-        Iterator iterator = listeners.keySet().iterator();
-        while(iterator.hasNext())
-            ((VectorChangeListener)iterator.next()).elementChanged(index);
+        for(VectorChangeListener listener : listeners.keySet())
+            listener.elementChanged(index);
     }
 
 
@@ -124,13 +120,13 @@ public class AlteredVector extends Vector {
     // Overridden methods //
     ////////////////////////
 
-    public void setElementAt(Object o, int i) {
+    public void setElementAt(E o, int i) {
         super.setElementAt(o, i);
 
         fireElementChangedEvent(i);
     }
 
-    public Object set(int i, Object o) {
+    public E set(int i, E o) {
         o = super.set(i, o);
 
         fireElementChangedEvent(i);
@@ -138,25 +134,25 @@ public class AlteredVector extends Vector {
         return o;
     }
 
-    public void insertElementAt(Object o, int i) {
+    public void insertElementAt(E o, int i) {
         super.insertElementAt(o, i);
 
         fireElementsAddedEvent(i, 1);
     }
 
-    public void add(int i, Object o) {
+    public void add(int i, E o) {
         insertElementAt(o, i);
 
         fireElementsAddedEvent(i, 1);
     }
 
-    public void addElement(Object o) {
+    public void addElement(E o) {
         super.addElement(o);
 
         fireElementsAddedEvent(size()-1, 1);
     }
 
-    public boolean add(Object o) {
+    public boolean add(E o) {
         addElement(o);
 
         fireElementsAddedEvent(size()-1, 1);
@@ -164,7 +160,7 @@ public class AlteredVector extends Vector {
         return true;
     }
 
-    public boolean addAll(Collection collection) {
+    public boolean addAll(Collection<? extends E> collection) {
         int sizeBefore = size();
 
         boolean b = super.addAll(collection);
@@ -174,7 +170,7 @@ public class AlteredVector extends Vector {
         return b;
     }
 
-    public boolean addAll(int i, Collection collection) {
+    public boolean addAll(int i, Collection<? extends E> collection) {
         int sizeBefore = size();
 
         boolean b = super.addAll(i, collection);
@@ -190,8 +186,8 @@ public class AlteredVector extends Vector {
         fireElementsRemovedEvent(i, 1);
     }
 
-    public Object remove(int i) {
-        Object o = super.remove(i);
+    public E remove(int i) {
+        E o = super.remove(i);
 
         fireElementsRemovedEvent(i, 1);
 

@@ -42,9 +42,9 @@ import java.util.HashMap;
 class ActionKeymapReader extends ActionKeymapIO {
 	
 	/** Maps action Class onto Keystroke instances*/
-    private HashMap primaryActionsReadKeymap;
+    private HashMap<String, KeyStroke> primaryActionsReadKeymap;
     /** Maps action Class instances onto Keystroke instances*/
-    private HashMap alternateActionsReadKeymap;
+    private HashMap<String, KeyStroke> alternateActionsReadKeymap;
 
     /** Parsed file */
     private AbstractFile file;
@@ -140,9 +140,9 @@ class ActionKeymapReader extends ActionKeymapIO {
     ///// getters /////
     ///////////////////
     
-    public HashMap getPrimaryActionsKeymap() {return primaryActionsReadKeymap;}
+    public HashMap<String, KeyStroke> getPrimaryActionsKeymap() {return primaryActionsReadKeymap;}
     
-    public HashMap getAlternateActionsKeymap() {return alternateActionsReadKeymap;}
+    public HashMap<String, KeyStroke> getAlternateActionsKeymap() {return alternateActionsReadKeymap;}
     
     ///////////////////////////////////
     // ContentHandler implementation //
@@ -151,8 +151,8 @@ class ActionKeymapReader extends ActionKeymapIO {
     public void startDocument() {
     	AppLogger.finest(file.getAbsolutePath()+" parsing started");
     	
-    	primaryActionsReadKeymap = new HashMap();
-    	alternateActionsReadKeymap = new HashMap();
+    	primaryActionsReadKeymap = new HashMap<String, KeyStroke>();
+    	alternateActionsReadKeymap = new HashMap<String, KeyStroke>();
     }
     
     public void endDocument() {

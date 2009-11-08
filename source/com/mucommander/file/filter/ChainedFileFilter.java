@@ -36,7 +36,7 @@ import java.util.Vector;
 public abstract class ChainedFileFilter extends FileFilter {
 
     /** List of registered FileFilter */
-    protected Vector filters = new Vector();
+    protected Vector<FileFilter> filters = new Vector<FileFilter>();
 
     /**
      * Creates a new ChainedFileFilter that initially contains no {@link FileFilter}.
@@ -68,7 +68,7 @@ public abstract class ChainedFileFilter extends FileFilter {
      *
      * @return an <code>Iterator</code> that traverses all the registered filters. 
      */
-    public Iterator getFileFilterIterator() {
+    public Iterator<FileFilter> getFileFilterIterator() {
         return filters.iterator();
     }
 

@@ -79,8 +79,8 @@ public class CompoundReaderTest extends TestCase {
      *
      * @return a test Reader iterator.
      */
-    private static Iterator getTestReaderIterator() {
-        Vector v = new Vector();
+    private static Iterator<StringReader> getTestReaderIterator() {
+        Vector<StringReader> v = new Vector<StringReader>();
 
         for (String testString : TEST_STRINGS)
             v.add(new StringReader(testString));

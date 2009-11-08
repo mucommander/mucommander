@@ -47,11 +47,11 @@ public class ThemeManager {
     /** Path to the user defined theme file. */
     private static       AbstractFile userThemeFile;
     /** Default user defined theme file name. */
-    private static final String       USER_THEME_FILE_NAME   = "user_theme.xml";
+    private static final String       USER_THEME_FILE_NAME             = "user_theme.xml";
     /** Path to the custom themes repository. */
-    private static final String       CUSTOM_THEME_FOLDER    = "themes";
+    private static final String       CUSTOM_THEME_FOLDER              = "themes";
     /** List of all registered theme change listeners. */
-    private static final WeakHashMap  listeners              = new WeakHashMap();
+    private static final WeakHashMap<ThemeListener, Object>  listeners = new WeakHashMap<ThemeListener, Object>();
  /** List of all predefined theme names. */
     private static final String[]     PREDEFINED_THEME_NAMES = {
         "ClassicCommander",
@@ -142,7 +142,7 @@ public class ThemeManager {
 
     // - Themes access -------------------------------------------------------------------
     // -----------------------------------------------------------------------------------
-    private static Iterator predefinedThemeNames() {
+    private static Iterator<String> predefinedThemeNames() {
         // The list of predefined themes is no longer dynamically created as this causes Webstart to retrieve and
         // explore the application's JAR via HTTP, which is inefficient and prevents the application from being
         // launched offline.
@@ -155,30 +155,30 @@ public class ThemeManager {
         return Arrays.asList(PREDEFINED_THEME_NAMES).iterator();
     }
 
-    private static Iterator customThemeNames() throws IOException {
+    private static Iterator<String> customThemeNames() throws IOException {
         return getThemeNames(FileFactory.getFile(getCustomThemesFolder().getAbsolutePath()));
     }
 
-    private static Iterator getThemeNames(AbstractFile themeFolder) {
+    private static Iterator<String> getThemeNames(AbstractFile themeFolder) {
         AbstractFile[] files;
-        Vector         names;
+        Vector<String> names;
 
         try {
             files = themeFolder.ls(new ExtensionFilenameFilter(".xml"));
-            names = new Vector();
+            names = new Vector<String>();
             for (AbstractFile file : files)
                 names.add(getThemeName(file));
             return names.iterator();
         }
-        catch(Exception e) {return new Vector().iterator();}
+        catch(Exception e) {return new Vector<String>().iterator();}
     }
 
-    public static Vector getAvailableThemes() {
-        Vector   themes;
-        Iterator iterator;
-        String   name;
+    public static Vector<Theme> getAvailableThemes() {
+        Vector<Theme>   themes;
+        Iterator<String> iterator;
+        String          name;
 
-        themes = new Vector();
+        themes = new Vector<Theme>();
 
         // Tries to load the user theme. If it's corrupt, uses an empty user theme.
         try {themes.add(readTheme(Theme.USER_THEME, null));}
@@ -187,7 +187,7 @@ public class ThemeManager {
         // Loads predefined themes.
         iterator = predefinedThemeNames();
         while(iterator.hasNext()) {
-            name = (String)iterator.next();
+            name = iterator.next();
             try {themes.add(readTheme(Theme.PREDEFINED_THEME, name));}
             catch(Exception e) {
                 AppLogger.warning("Failed to load predefined theme " + name, e);
@@ -198,7 +198,7 @@ public class ThemeManager {
         try {
             iterator = customThemeNames();
             while(iterator.hasNext()) {
-                name = (String)iterator.next();
+                name = iterator.next();
                 try {themes.add(readTheme(Theme.CUSTOM_THEME, name));}
                 catch(Exception e) {
                     AppLogger.warning("Failed to load custom theme " + name, e);
@@ -210,18 +210,18 @@ public class ThemeManager {
         }
 
         // Sorts the themes by name.
-        Collections.sort(themes, new Comparator() {
-                public int compare(Object o1, Object o2) {return (((Theme)o1).getName()).compareTo(((Theme)o2).getName());}
+        Collections.sort(themes, new Comparator<Theme>() {
+                public int compare(Theme t1, Theme t2) {return (t1.getName()).compareTo(t2.getName());}
             });
 
         return themes;
     }
 
-    public static Vector getAvailableThemeNames() {
-        Vector   themes;
-        Iterator iterator;
+    public static Vector<String> getAvailableThemeNames() {
+        Vector<String>   themes;
+        Iterator<String> iterator;
 
-        themes = new Vector();
+        themes = new Vector<String>();
 
         // Adds the user theme name.
         themes.add(Translator.get("theme.custom_theme"));
@@ -247,9 +247,9 @@ public class ThemeManager {
         return themes;
     }
 
-    public static Iterator availableThemeNames() {return getAvailableThemeNames().iterator();}
+    public static Iterator<String> availableThemeNames() {return getAvailableThemeNames().iterator();}
 
-    public static synchronized Iterator availableThemes() {return getAvailableThemes().iterator();}
+    public static synchronized Iterator<Theme> availableThemes() {return getAvailableThemes().iterator();}
 
 
 
@@ -621,9 +621,9 @@ public class ThemeManager {
     }
 
     private static String getAvailableCustomThemeName(String name) {
-        Vector names;
-        int    i;
-        String buffer;
+        Vector<String> names;
+        int            i;
+        String         buffer;
 
         names = getAvailableThemeNames();
 
@@ -1080,12 +1080,9 @@ public class ThemeManager {
      * @see         #triggerThemeChange(Theme,Theme)
      */
     private static void triggerFontEvent(FontChangedEvent event) {
-        Iterator iterator;
-
         synchronized (listeners) {
-            iterator = listeners.keySet().iterator();
-            while(iterator.hasNext())
-                ((ThemeListener)iterator.next()).fontChanged(event);
+            for(ThemeListener listener : listeners.keySet())
+                listener.fontChanged(event);
         }
     }
 
@@ -1095,12 +1092,9 @@ public class ThemeManager {
      * @see         #triggerThemeChange(Theme,Theme)
      */
     private static void triggerColorEvent(ColorChangedEvent event) {
-        Iterator iterator;
-
         synchronized (listeners) {
-            iterator = listeners.keySet().iterator();
-            while(iterator.hasNext())
-                ((ThemeListener)iterator.next()).colorChanged(event);
+            for(ThemeListener listener : listeners.keySet())
+                listener.colorChanged(event);
         }
     }
 

@@ -33,7 +33,7 @@ import java.util.Hashtable;
  */
 public abstract class MarkBackwardAction extends MuAction {
 
-    public MarkBackwardAction(MainFrame mainFrame, Hashtable properties) {
+    public MarkBackwardAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
         super(mainFrame, properties);
     }
 

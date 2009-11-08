@@ -25,7 +25,7 @@ import com.mucommander.ui.action.*;
 import com.mucommander.ui.dialog.file.UnpackDialog;
 import com.mucommander.ui.main.MainFrame;
 
-import javax.swing.*;
+import javax.swing.KeyStroke;
 import java.awt.event.KeyEvent;
 import java.util.Hashtable;
 
@@ -36,7 +36,7 @@ import java.util.Hashtable;
  */
 public class UnpackAction extends SelectedFilesAction implements InvokesDialog {
 
-    public UnpackAction(MainFrame mainFrame, Hashtable properties) {
+    public UnpackAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
         super(mainFrame, properties);
 
         // Unpack job operates on archives and directories
@@ -54,7 +54,7 @@ public class UnpackAction extends SelectedFilesAction implements InvokesDialog {
     
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
 			return new UnpackAction(mainFrame, properties);
 		}
     }

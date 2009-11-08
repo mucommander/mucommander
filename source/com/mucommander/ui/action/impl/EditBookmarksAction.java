@@ -18,18 +18,12 @@
 
 package com.mucommander.ui.action.impl;
 
-import com.mucommander.ui.action.AbstractActionDescriptor;
-import com.mucommander.ui.action.ActionCategories;
-import com.mucommander.ui.action.ActionCategory;
-import com.mucommander.ui.action.InvokesDialog;
-import com.mucommander.ui.action.MuAction;
-import com.mucommander.ui.action.ActionFactory;
+import com.mucommander.ui.action.*;
 import com.mucommander.ui.dialog.bookmark.EditBookmarksDialog;
 import com.mucommander.ui.main.MainFrame;
 
-import java.util.Hashtable;
-
 import javax.swing.KeyStroke;
+import java.util.Hashtable;
 
 
 /**
@@ -39,7 +33,7 @@ import javax.swing.KeyStroke;
  */
 public class EditBookmarksAction extends MuAction implements InvokesDialog {
 
-    public EditBookmarksAction(MainFrame mainFrame, Hashtable properties) {
+    public EditBookmarksAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -49,7 +43,7 @@ public class EditBookmarksAction extends MuAction implements InvokesDialog {
     
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
 			return new EditBookmarksAction(mainFrame, properties);
 		}
     }

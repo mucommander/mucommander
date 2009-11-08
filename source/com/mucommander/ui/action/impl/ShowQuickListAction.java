@@ -31,7 +31,7 @@ import java.util.Hashtable;
  */
 abstract class ShowQuickListAction extends MuAction {
 
-	public ShowQuickListAction(MainFrame mainFrame, Hashtable properties) {
+	public ShowQuickListAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
 		super(mainFrame, properties);		
 	}
 	

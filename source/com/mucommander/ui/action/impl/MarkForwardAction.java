@@ -33,7 +33,7 @@ import java.util.Hashtable;
  */
 public abstract class MarkForwardAction extends MuAction {
 
-    public MarkForwardAction(MainFrame mainFrame, Hashtable properties) {
+    public MarkForwardAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
         super(mainFrame, properties);
     }
 

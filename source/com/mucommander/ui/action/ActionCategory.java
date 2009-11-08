@@ -25,7 +25,7 @@ import com.mucommander.text.Translator;
  * 
  * @author Arik Hadas
  */
-public class ActionCategory implements Comparable {
+public class ActionCategory implements Comparable<ActionCategory> {
 	
 	/** The category's label key in the dictionary file */
 	private String descriptionKey;
@@ -58,10 +58,7 @@ public class ActionCategory implements Comparable {
 		return false;
 	}
 
-	public int compareTo(Object obj) {
-		if (obj instanceof ActionCategory) {
-			return getDescription().compareTo(((ActionCategory) obj).getDescription());
-		}
-		return 1;
+	public int compareTo(ActionCategory actionCategory) {
+        return getDescription().compareTo(actionCategory.getDescription());
 	}
 }

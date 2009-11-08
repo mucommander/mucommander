@@ -18,19 +18,14 @@
 
 package com.mucommander.ui.action.impl;
 
-import com.mucommander.ui.action.AbstractActionDescriptor;
-import com.mucommander.ui.action.ActionCategories;
-import com.mucommander.ui.action.ActionCategory;
-import com.mucommander.ui.action.MuAction;
-import com.mucommander.ui.action.ActionFactory;
+import com.mucommander.ui.action.*;
 import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.main.MainFrame;
 
+import javax.swing.KeyStroke;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Hashtable;
-
-import javax.swing.KeyStroke;
 
 /**
  * Opens the muCommander online documentation in the system's default browser. The {@link #TOPIC_PROPERTY_KEY}
@@ -44,7 +39,7 @@ public class GoToDocumentationAction extends OpenURLInBrowserAction implements P
     /** Key to the topic property */
     public final static String TOPIC_PROPERTY_KEY = "topic";
 
-    public GoToDocumentationAction(MainFrame mainFrame, Hashtable properties) {
+    public GoToDocumentationAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
         super(mainFrame, properties);
 
         setIcon(IconManager.getIcon(IconManager.COMMON_ICON_SET, "help.png"));
@@ -90,7 +85,7 @@ public class GoToDocumentationAction extends OpenURLInBrowserAction implements P
     
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
 			return new GoToDocumentationAction(mainFrame, properties);
 		}
     }

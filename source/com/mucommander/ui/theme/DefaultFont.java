@@ -19,7 +19,6 @@
 package com.mucommander.ui.theme;
 
 import java.awt.Font;
-import java.util.Iterator;
 import java.util.Vector;
 
 /**
@@ -38,7 +37,7 @@ public abstract class DefaultFont {
     // - Instance fields -----------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
     /** List of fonts linked to this default value. */
-    private Vector linkedFonts;
+    private Vector<Integer> linkedFonts;
 
 
 
@@ -48,7 +47,7 @@ public abstract class DefaultFont {
      * Creates a new instance of {@link DefaultFont}.
      */
     protected DefaultFont() {
-        linkedFonts = new Vector();
+        linkedFonts = new Vector<Integer>();
     }
 
 
@@ -72,11 +71,8 @@ public abstract class DefaultFont {
      * @param font new default font value.
      */
     protected void notifyChange(Font font) {
-        Iterator fonts;
-
-        fonts = linkedFonts.iterator();
-        while(fonts.hasNext())
-            ThemeData.triggerFontEvent((Integer) fonts.next(), font);
+        for(int i : linkedFonts)
+            ThemeData.triggerFontEvent(i, font);
     }
 
 

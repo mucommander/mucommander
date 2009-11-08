@@ -36,7 +36,7 @@ public class AbstractFileClassLoader extends ClassLoader {
     // - Instance fields -------------------------------------------------------
     // -------------------------------------------------------------------------
     /** All abstract files in which to look for classes and resources. */
-    private Vector files;
+    private Vector<AbstractFile> files;
 
 
 
@@ -48,7 +48,7 @@ public class AbstractFileClassLoader extends ClassLoader {
      */
     public AbstractFileClassLoader(ClassLoader parent) {
         super(parent);
-        files = new Vector();
+        files = new Vector<AbstractFile>();
     }
 
     /**
@@ -82,7 +82,7 @@ public class AbstractFileClassLoader extends ClassLoader {
      * Returns an iterator on all files in this loader's classpath.
      * @return an iterator on all files in this loader's classpath.
      */
-    public Iterator files() {return files.iterator();}
+    public Iterator<AbstractFile> files() {return files.iterator();}
 
     /**
      * Returns <code>true</code> if this loader's classpath already contains the specified file.
@@ -101,7 +101,7 @@ public class AbstractFileClassLoader extends ClassLoader {
      * @return      an {@link AbstractFile} instance describing the requested resource if found, <code>null</code> otherwise.
      */
     private AbstractFile findResourceAsFile(String name) {
-        Iterator     iterator; // Iterator on all classpath elements.
+        Iterator<AbstractFile> iterator; // Iterator on all classpath elements.
         AbstractFile file;     // Current file.
 
         iterator = files.iterator();
@@ -166,19 +166,19 @@ public class AbstractFileClassLoader extends ClassLoader {
      * @param  name of the resources to find.
      * @return      an enumeration containing the URLs of all the resources that match <code>name</code>.
      */
-    protected Enumeration findResources(String name) {
-        Iterator     iterator;   // Iterator on all available JAR files.
-        AbstractFile file;       // AbstractFile describing each match.
-        Vector       resources;  // All resources that match 'name'.
+    protected Enumeration<URL> findResources(String name) {
+        Iterator<AbstractFile> iterator;   // Iterator on all available JAR files.
+        AbstractFile           file;       // AbstractFile describing each match.
+        Vector<URL>            resources;  // All resources that match 'name'.
 
         // Initialisation.
         iterator  = files.iterator();
-        resources = new Vector();
+        resources = new Vector<URL>();
 
         // Goes through all files in the classpath to find the resource.
         while(iterator.hasNext()) {
             try {
-                if((file = ((AbstractFile)iterator.next()).getChild(name)).exists())
+                if((file = iterator.next().getChild(name)).exists())
                     resources.add(file.getJavaNetURL());
             }
             catch(IOException e) {}

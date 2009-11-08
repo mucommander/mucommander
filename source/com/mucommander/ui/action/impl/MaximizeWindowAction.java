@@ -23,7 +23,8 @@ import com.mucommander.text.Translator;
 import com.mucommander.ui.action.*;
 import com.mucommander.ui.main.MainFrame;
 
-import javax.swing.*;
+import javax.swing.JFrame;
+import javax.swing.KeyStroke;
 import java.util.Hashtable;
 
 /**
@@ -34,7 +35,7 @@ import java.util.Hashtable;
  */
 public class MaximizeWindowAction extends MuAction {
 
-    public MaximizeWindowAction(MainFrame mainFrame, Hashtable properties) {
+    public MaximizeWindowAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -44,7 +45,7 @@ public class MaximizeWindowAction extends MuAction {
     
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
 			return new MaximizeWindowAction(mainFrame, properties);
 		}
     }

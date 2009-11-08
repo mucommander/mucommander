@@ -127,7 +127,7 @@ public abstract class FileFilter {
      * @return a file array of files that were matched by this filter
      */
     public AbstractFile[] filter(AbstractFile files[]) {
-        Vector filteredFilesV = new Vector();
+        Vector<AbstractFile> filteredFilesV = new Vector<AbstractFile>();
         int nbFiles = files.length;
         AbstractFile file;
         for(int i=0; i<nbFiles; i++) {

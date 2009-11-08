@@ -26,7 +26,7 @@ import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.dialog.InformationDialog;
 import com.mucommander.ui.main.MainFrame;
 
-import javax.swing.*;
+import javax.swing.KeyStroke;
 import java.net.URL;
 import java.util.Hashtable;
 
@@ -41,7 +41,7 @@ public class OpenURLInBrowserAction extends MuAction {
     /** Key to the URL property */
     public final static String URL_PROPERTY_KEY = "url";
 
-    public OpenURLInBrowserAction(MainFrame mainFrame, Hashtable properties) {
+    public OpenURLInBrowserAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
         super(mainFrame, properties);
 
         // Enable this action only if the current platform is capable of opening URLs in the default browser.
@@ -63,7 +63,7 @@ public class OpenURLInBrowserAction extends MuAction {
     
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
 			return new OpenURLInBrowserAction(mainFrame, properties);
 		}
     }

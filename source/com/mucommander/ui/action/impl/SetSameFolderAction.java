@@ -18,17 +18,12 @@
 
 package com.mucommander.ui.action.impl;
 
-import java.awt.event.KeyEvent;
-import java.util.Hashtable;
+import com.mucommander.ui.action.*;
+import com.mucommander.ui.main.MainFrame;
 
 import javax.swing.KeyStroke;
-
-import com.mucommander.ui.action.AbstractActionDescriptor;
-import com.mucommander.ui.action.ActionCategories;
-import com.mucommander.ui.action.ActionCategory;
-import com.mucommander.ui.action.ActionFactory;
-import com.mucommander.ui.action.MuAction;
-import com.mucommander.ui.main.MainFrame;
+import java.awt.event.KeyEvent;
+import java.util.Hashtable;
 
 /**
  * This action equalizes both FileTable's current folders: the 'inactive' FileTable's current folder becomes
@@ -38,7 +33,7 @@ import com.mucommander.ui.main.MainFrame;
  */
 public class SetSameFolderAction extends MuAction {
 
-    public SetSameFolderAction(MainFrame mainFrame, Hashtable properties) {
+    public SetSameFolderAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -48,7 +43,7 @@ public class SetSameFolderAction extends MuAction {
     
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
 			return new SetSameFolderAction(mainFrame, properties);
 		}
     }

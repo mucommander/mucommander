@@ -22,8 +22,9 @@ import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileProtocols;
 import com.mucommander.file.icon.FileIconProvider;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import java.awt.Dimension;
 import java.util.Hashtable;
 
 /**
@@ -39,7 +40,7 @@ public class CustomFileIconProvider implements FileIconProvider {
     private static boolean initialized;
 
     /** Hashtable that associates file extensions with icon names */
-    private static Hashtable extensionMap;
+    private static Hashtable<String, String> extensionMap;
 
     /** Icon for directories */
     public final static String FOLDER_ICON_NAME = "folder.png";
@@ -119,7 +120,7 @@ public class CustomFileIconProvider implements FileIconProvider {
      */
     private static void init() {
         // Map known file extensions to icon names
-        extensionMap = new Hashtable();
+        extensionMap = new Hashtable<String, String>();
         int nbIcons = ICON_EXTENSIONS.length;
         for(int i=0; i<nbIcons; i++) {
             int nbExtensions = ICON_EXTENSIONS[i].length;
@@ -186,7 +187,7 @@ public class CustomFileIconProvider implements FileIconProvider {
                 icon = IconManager.getIcon(IconManager.FILE_ICON_SET, FILE_ICON_NAME);
             else {
                 // Compare extension against lower-cased extensions
-                String iconName = (String)extensionMap.get(fileExtension.toLowerCase());
+                String iconName = extensionMap.get(fileExtension.toLowerCase());
                 if(iconName==null)	// No icon associated to extension, use default file icon
                     icon = IconManager.getIcon(IconManager.FILE_ICON_SET, FILE_ICON_NAME);
                 else {

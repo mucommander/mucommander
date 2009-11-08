@@ -18,20 +18,14 @@
 
 package com.mucommander.ui.action.impl;
 
-import java.awt.event.KeyEvent;
-import java.util.Hashtable;
-
-import javax.swing.KeyStroke;
-
 import com.mucommander.file.util.FileSet;
-import com.mucommander.ui.action.AbstractActionDescriptor;
-import com.mucommander.ui.action.ActionCategories;
-import com.mucommander.ui.action.ActionCategory;
-import com.mucommander.ui.action.ActionFactory;
-import com.mucommander.ui.action.InvokesDialog;
-import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.action.*;
 import com.mucommander.ui.dialog.file.ChangeDateDialog;
 import com.mucommander.ui.main.MainFrame;
+
+import javax.swing.KeyStroke;
+import java.awt.event.KeyEvent;
+import java.util.Hashtable;
 
 /**
  * Brings up a dialog that allows the user to change the date of the currently selected/marked files.
@@ -40,7 +34,7 @@ import com.mucommander.ui.main.MainFrame;
  */
 public class ChangeDateAction extends SelectedFilesAction implements InvokesDialog {
 
-    public ChangeDateAction(MainFrame mainFrame, Hashtable properties) {
+    public ChangeDateAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -55,7 +49,7 @@ public class ChangeDateAction extends SelectedFilesAction implements InvokesDial
     
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
 			return new ChangeDateAction(mainFrame, properties);
 		}
     }

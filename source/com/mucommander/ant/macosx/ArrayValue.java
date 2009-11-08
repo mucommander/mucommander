@@ -22,7 +22,6 @@ import com.mucommander.xml.XmlWriter;
 import org.apache.tools.ant.BuildException;
 
 import java.io.IOException;
-import java.util.Iterator;
 import java.util.Vector;
 
 /**
@@ -30,9 +29,9 @@ import java.util.Vector;
  */
 public class ArrayValue implements InfoElement {
     public static final String ELEMENT_ARRAY     = "array";
-    private Vector keys;
+    private Vector<InfoElement> keys;
 
-    public ArrayValue() {keys = new Vector();}
+    public ArrayValue() {keys = new Vector<InfoElement>();}
 
     public BooleanValue createBoolean() {
         BooleanValue value;
@@ -99,15 +98,12 @@ public class ArrayValue implements InfoElement {
     }
 
     public void write(XmlWriter out) throws BuildException {
-        Iterator iterator;
-
         try {
             out.startElement(ELEMENT_ARRAY);
             out.println();
 
-            iterator = keys.iterator();
-            while(iterator.hasNext())
-                ((InfoElement)iterator.next()).write(out);
+            for(InfoElement el : keys)
+                el.write(out);
 
             out.endElement(ELEMENT_ARRAY);
         }

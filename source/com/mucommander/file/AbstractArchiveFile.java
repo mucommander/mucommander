@@ -79,7 +79,7 @@ public abstract class AbstractArchiveFile extends ProxyFile {
 
     /** Caches ArchiveEntryFile instances so that there is only one ArchiveEntryFile corresponding to the same entry
      * at any given time, to avoid attribute inconsistencies. The key is the corresponding ArchiveEntry. */
-    protected WeakHashMap archiveEntryFiles;
+    protected WeakHashMap<ArchiveEntry, ArchiveEntryFile> archiveEntryFiles;
 
     /**
      * Creates an AbstractArchiveFile on top of the given file.
@@ -99,7 +99,7 @@ public abstract class AbstractArchiveFile extends ProxyFile {
     protected void createEntriesTree() throws IOException {
         // TODO: this method is not thread-safe and must be synchronized
         ArchiveEntryTree treeRoot = new ArchiveEntryTree();
-        archiveEntryFiles = new WeakHashMap();
+        archiveEntryFiles = new WeakHashMap<ArchiveEntry, ArchiveEntryFile>();
 
         long start = System.currentTimeMillis();
         ArchiveEntryIterator entries = getEntryIterator();
@@ -215,7 +215,7 @@ public abstract class AbstractArchiveFile extends ProxyFile {
         }
         // Use provided FilenameFilter and temporarily store created entry files that match the filter in a Vector
         else {
-            Vector filesV = new Vector();
+            Vector<AbstractFile> filesV = new Vector<AbstractFile>();
             for(int c=0; c<nbChildren; c++) {
                 ArchiveEntry entry = (ArchiveEntry)(((DefaultMutableTreeNode)treeNode.getChildAt(c)).getUserObject());
                 if(!filenameFilter.accept(entry.getName()))
@@ -251,7 +251,7 @@ public abstract class AbstractArchiveFile extends ProxyFile {
         // Cache ArchiveEntryFile instances so that there is only one ArchiveEntryFile corresponding to the same entry
         // at any given time, to avoid attribute inconsistencies.
 
-        AbstractFile entryFile = (ArchiveEntryFile)archiveEntryFiles.get(entry);
+        ArchiveEntryFile entryFile = archiveEntryFiles.get(entry);
         if(entryFile==null) {
             FileURL archiveURL = getURL();
             FileURL entryURL = (FileURL)archiveURL.clone();

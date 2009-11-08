@@ -27,7 +27,6 @@ import com.mucommander.util.AlteredVector;
 import com.mucommander.util.VectorChangeListener;
 
 import java.io.*;
-import java.util.Iterator;
 import java.util.WeakHashMap;
 
 /**
@@ -49,10 +48,10 @@ public class BookmarkManager implements VectorChangeListener {
     private static final String DEFAULT_BOOKMARKS_FILE_NAME = "bookmarks.xml";
 
     /** Bookmark instances */
-    private static AlteredVector bookmarks = new AlteredVector();
+    private static AlteredVector<Bookmark> bookmarks = new AlteredVector<Bookmark>();
 
     /** Contains all registered bookmark listeners, stored as weak references */
-    private static WeakHashMap listeners = new WeakHashMap();
+    private static WeakHashMap<BookmarkListener, ?> listeners = new WeakHashMap<BookmarkListener, Object>();
 
     /** Specifies whether bookmark events should be fired when a change to the bookmarks is detected */
     private static boolean fireEvents = true;
@@ -94,13 +93,8 @@ public class BookmarkManager implements VectorChangeListener {
      * @throws BookmarkException if an error occurs.
      */
     public static synchronized void buildBookmarks(BookmarkBuilder builder) throws BookmarkException {
-        Iterator iterator;
-        Bookmark bookmark;
-
         builder.startBookmarks();
-        iterator = bookmarks.iterator();
-        while(iterator.hasNext()) {
-            bookmark = (Bookmark)iterator.next();
+        for(Bookmark bookmark : bookmarks) {
             builder.addBookmark(bookmark.getName(), bookmark.getLocation());
         }
         builder.endBookmarks();
@@ -257,7 +251,7 @@ public class BookmarkManager implements VectorChangeListener {
      * However, it is safe to modify bookmarks individually, events will be properly fired.
      * @return an {@link AlteredVector} that contains all bookmarks.
      */
-    public static synchronized AlteredVector getBookmarks() {
+    public static synchronized AlteredVector<Bookmark> getBookmarks() {
         return bookmarks;
     }
 
@@ -337,9 +331,8 @@ public class BookmarkManager implements VectorChangeListener {
 
         synchronized(listeners) {
             // Iterate on all listeners
-            Iterator iterator = listeners.keySet().iterator();
-            while(iterator.hasNext())
-                ((BookmarkListener)iterator.next()).bookmarksChanged();
+            for(BookmarkListener listener : listeners.keySet())
+                listener.bookmarksChanged();
         }
     }
 

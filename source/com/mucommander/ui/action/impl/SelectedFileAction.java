@@ -36,7 +36,7 @@ import java.util.Hashtable;
  */
 public abstract class SelectedFileAction extends FileAction {
 
-    public SelectedFileAction(MainFrame mainFrame, Hashtable properties) {
+    public SelectedFileAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
         super(mainFrame, properties);
     }
 

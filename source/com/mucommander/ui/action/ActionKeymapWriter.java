@@ -55,11 +55,11 @@ class ActionKeymapWriter extends ActionKeymapIO {
 	}
 	
 	void write() throws IOException {
-		Hashtable combinedMapping = new Hashtable();
-		Iterator modifiedActionsIterator = ActionKeymap.getCustomizedActions();
+		Hashtable<String, KeyStroke[]> combinedMapping = new Hashtable<String, KeyStroke[]>();
+		Iterator<String> modifiedActionsIterator = ActionKeymap.getCustomizedActions();
 
 		while(modifiedActionsIterator.hasNext()) {
-			String actionId = (String) modifiedActionsIterator.next();
+			String actionId = modifiedActionsIterator.next();
 			KeyStroke[] keyStrokes = new KeyStroke[2];
 			keyStrokes[0] = ActionKeymap.getAccelerator(actionId);
 			keyStrokes[1] = ActionKeymap.getAlternateAccelerator(actionId);
@@ -86,7 +86,7 @@ class ActionKeymapWriter extends ActionKeymapIO {
     		this.writer = new XmlWriter(stream);
     	}
     	
-    	private void writeKeyMap(Hashtable actionMap) throws IOException {
+    	private void writeKeyMap(Hashtable<String, KeyStroke[]> actionMap) throws IOException {
     		try {
     			writer.writeCommentLine("See http://trac.mucommander.com/wiki/ActionKeyMap for information on how to customize this file");
     			
@@ -96,10 +96,10 @@ class ActionKeymapWriter extends ActionKeymapIO {
     			writer.startElement(ROOT_ELEMENT, rootElementAttributes, true);
 
     			if (actionMap != null) {
-    				Enumeration enumeration = actionMap.keys();
+    				Enumeration<String> enumeration = actionMap.keys();
     				while (enumeration.hasMoreElements()) {
-    					String actionId = (String) enumeration.nextElement();
-    					addMapping(actionId, (KeyStroke[]) actionMap.get(actionId));
+    					String actionId = enumeration.nextElement();
+    					addMapping(actionId, actionMap.get(actionId));
     				}
     			}
 

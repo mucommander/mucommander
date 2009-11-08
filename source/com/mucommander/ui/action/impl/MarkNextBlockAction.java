@@ -22,7 +22,7 @@ import com.mucommander.ui.action.*;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.table.FileTable;
 
-import javax.swing.*;
+import javax.swing.KeyStroke;
 import java.awt.event.KeyEvent;
 import java.util.Hashtable;
 
@@ -38,7 +38,7 @@ public class MarkNextBlockAction extends MarkForwardAction {
     // TODO: make this value configurable
     private static final int BLOCK_SIZE = 5;
 
-    public MarkNextBlockAction(MainFrame mainFrame, Hashtable properties) {
+    public MarkNextBlockAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -47,7 +47,7 @@ public class MarkNextBlockAction extends MarkForwardAction {
     }
 
     public static class Factory implements ActionFactory {
-		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
 			return new MarkNextBlockAction(mainFrame, properties);
 		}
     }

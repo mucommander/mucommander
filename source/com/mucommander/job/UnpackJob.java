@@ -45,7 +45,7 @@ import java.util.Vector;
 public class UnpackJob extends AbstractCopyJob {
 
     /** Archive entries to be unpacked */
-    protected Vector selectedEntries;
+    protected Vector<ArchiveEntry> selectedEntries;
 
     /** Depth of the folder in which the top entries are located. 0 is the highest depth (archive's root folder) */
     protected int baseArchiveDepth;
@@ -82,7 +82,7 @@ public class UnpackJob extends AbstractCopyJob {
      * @param selectedEntries entries to be unpacked
      * @param baseArchiveDepth depth of the folder in which the top entries are located. 0 is the highest depth (archive's root folder)
      */
-    public UnpackJob(ProgressDialog progressDialog, MainFrame mainFrame, AbstractArchiveFile archiveFile, int baseArchiveDepth, AbstractFile destFolder, String newName, int fileExistsAction, Vector selectedEntries) {
+    public UnpackJob(ProgressDialog progressDialog, MainFrame mainFrame, AbstractArchiveFile archiveFile, int baseArchiveDepth, AbstractFile destFolder, String newName, int fileExistsAction, Vector<ArchiveEntry> selectedEntries) {
         super(progressDialog, mainFrame, new FileSet(archiveFile.getParent(), archiveFile), destFolder, newName, fileExistsAction);
 
         this.errorDialogTitle = Translator.get("unpack_dialog.error_title");
@@ -194,7 +194,7 @@ public class UnpackJob extends AbstractCopyJob {
                     // Process this entry if the selectedEntries set contains this entry, or a parent of this entry
                     int nbSelectedEntries = selectedEntries.size();
                     for(int i=0; i<nbSelectedEntries; i++) {
-                        ArchiveEntry selectedEntry = (ArchiveEntry)selectedEntries.elementAt(i);
+                        ArchiveEntry selectedEntry = selectedEntries.elementAt(i);
                         // Note: paths of directory entries must end with '/', so this compares whether
                         // selectedEntry is a parent of the current entry.
                         if(selectedEntry.isDirectory()) {

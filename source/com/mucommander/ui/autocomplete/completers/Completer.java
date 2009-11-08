@@ -22,8 +22,7 @@ import com.mucommander.file.FileURL;
 import com.mucommander.ui.autocomplete.AutocompleterTextComponent;
 import com.mucommander.ui.autocomplete.completers.services.CompletionService;
 
-import javax.swing.*;
-
+import javax.swing.JList;
 import java.net.MalformedURLException;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
@@ -42,10 +41,10 @@ import java.util.Vector;
  */
 
 public abstract class Completer {
-	private Set services;
+	private Set<CompletionService> services;
 	
 	public Completer() {
-		services = new LinkedHashSet();
+		services = new LinkedHashSet<CompletionService>();
 	}
 	
 	/**

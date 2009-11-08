@@ -26,7 +26,7 @@ import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.table.Columns;
 
-import javax.swing.*;
+import javax.swing.KeyStroke;
 import java.util.Hashtable;
 
 /**
@@ -40,7 +40,7 @@ public abstract class ToggleColumnAction extends MuAction {
     /** Index of the FileTable column this action operates on */
     protected int columnIndex;
 
-    public ToggleColumnAction(MainFrame mainFrame, Hashtable properties, int columnIndex) {
+    public ToggleColumnAction(MainFrame mainFrame, Hashtable<String,Object> properties, int columnIndex) {
         super(mainFrame, properties);
 
         this.columnIndex = columnIndex;

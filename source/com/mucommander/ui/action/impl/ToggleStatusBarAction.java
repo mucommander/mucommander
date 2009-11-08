@@ -24,7 +24,7 @@ import com.mucommander.ui.action.*;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.StatusBar;
 
-import javax.swing.*;
+import javax.swing.KeyStroke;
 import java.util.Hashtable;
 
 /**
@@ -40,7 +40,7 @@ import java.util.Hashtable;
  */
 public class ToggleStatusBarAction extends MuAction {
 
-    public ToggleStatusBarAction(MainFrame mainFrame, Hashtable properties) {
+    public ToggleStatusBarAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
         super(mainFrame, properties);
         updateLabel(MuConfiguration.getVariable(MuConfiguration.STATUS_BAR_VISIBLE, MuConfiguration.DEFAULT_STATUS_BAR_VISIBLE));
     }
@@ -63,7 +63,7 @@ public class ToggleStatusBarAction extends MuAction {
     
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
 			return new ToggleStatusBarAction(mainFrame, properties);
 		}
     }

@@ -31,7 +31,7 @@ import java.util.Hashtable;
  */
 public abstract class SelectBackwardAction extends MuAction {
 
-    public SelectBackwardAction(MainFrame mainFrame, Hashtable properties) {
+    public SelectBackwardAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
         super(mainFrame, properties);
     }
 

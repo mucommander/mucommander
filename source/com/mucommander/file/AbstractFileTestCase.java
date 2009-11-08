@@ -27,8 +27,9 @@ import com.mucommander.io.security.MuProvider;
 import com.mucommander.util.StringUtils;
 import junit.framework.TestCase;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.Icon;
+import java.awt.Dimension;
+import java.awt.GraphicsEnvironment;
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -56,7 +57,7 @@ public abstract class AbstractFileTestCase extends TestCase {
     /**
      * AbstractFile instances to be deleted if they exist when {@link #tearDown()} is called.
      */
-    protected Vector filesToDelete;
+    protected Vector<AbstractFile> filesToDelete;
 
     /**
      * A temporary file instance automatically instantiated by {@link #setUp()} when a test is started. The file
@@ -84,7 +85,7 @@ public abstract class AbstractFileTestCase extends TestCase {
      * @throws IOException if an error occurred while creating test variables
      */
     protected void setUp() throws IOException {
-        filesToDelete = new Vector();
+        filesToDelete = new Vector<AbstractFile>();
 
         tempFile = getTemporaryFile();
         deleteWhenFinished(tempFile);   // this file will be automatically deleted when the test is over
@@ -101,11 +102,11 @@ public abstract class AbstractFileTestCase extends TestCase {
      * @throws IOException if an error occurred while delete files registered with {@link #deleteWhenFinished(AbstractFile)}
      */
     protected void tearDown() throws IOException {
-        Iterator iterator = filesToDelete.iterator();
+        Iterator<AbstractFile> iterator = filesToDelete.iterator();
 
         AbstractFile file;
         while(iterator.hasNext()) {
-            file = (AbstractFile)iterator.next();
+            file = iterator.next();
             if(file.exists())
                 file.deleteRecursively();
         }

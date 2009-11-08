@@ -18,17 +18,12 @@
 
 package com.mucommander.ui.action.impl;
 
-import java.awt.event.KeyEvent;
-import java.util.Hashtable;
+import com.mucommander.ui.action.*;
+import com.mucommander.ui.main.MainFrame;
 
 import javax.swing.KeyStroke;
-
-import com.mucommander.ui.action.AbstractActionDescriptor;
-import com.mucommander.ui.action.ActionCategories;
-import com.mucommander.ui.action.ActionCategory;
-import com.mucommander.ui.action.ActionFactory;
-import com.mucommander.ui.action.MuAction;
-import com.mucommander.ui.main.MainFrame;
+import java.awt.event.KeyEvent;
+import java.util.Hashtable;
 
 /**
  * This action recalls the next folder in the current FolderPanel's history.
@@ -37,7 +32,7 @@ import com.mucommander.ui.main.MainFrame;
  */
 public class GoForwardAction extends GoToAction {
 
-    public GoForwardAction(MainFrame mainFrame, Hashtable properties) {
+    public GoForwardAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -57,7 +52,7 @@ public class GoForwardAction extends GoToAction {
 
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
 			return new GoForwardAction(mainFrame, properties);
 		}
     }

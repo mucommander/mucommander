@@ -18,9 +18,9 @@
 
 package com.mucommander.ui.action;
 
-import java.util.Hashtable;
-
 import com.mucommander.ui.main.MainFrame;
+
+import java.util.Hashtable;
 
 /**
  *  Each MuAction's factory should implement this interface.
@@ -36,5 +36,5 @@ public interface ActionFactory {
 	 * @param properties - a hashtable of arguments for the action. 
 	 * @return an instance of MuAction subclass.
 	 */
-	public MuAction createAction(MainFrame mainFrame, Hashtable properties);
+	public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties);
 }

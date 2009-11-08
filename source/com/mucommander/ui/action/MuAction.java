@@ -18,15 +18,16 @@
 
 package com.mucommander.ui.action;
 
-import com.mucommander.AppLogger;
 import com.mucommander.file.util.ResourceLoader;
 import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.main.MainFrame;
 
-import javax.swing.*;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.ImageIcon;
+import javax.swing.KeyStroke;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
-import java.util.Enumeration;
 import java.util.Hashtable;
 
 
@@ -75,20 +76,12 @@ public abstract class MuAction extends AbstractAction {
      * @param properties the initial properties to use in this action. The Hashtable may simply be empty if no initial
      * properties are specified.
      */
-    public MuAction(MainFrame mainFrame, Hashtable properties) {
+    public MuAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
         this.mainFrame = mainFrame;
         
         // Add properties to this Action.
-        // Property keys are expected to be String instances, those that are not will not be added.
-        Enumeration keys = properties.keys();
-        while(keys.hasMoreElements()) {
-            Object key = keys.nextElement();
-
-            if(key instanceof String)
-                putValue((String)key, properties.get(key));
-            else
-                AppLogger.fine("Key is not a String, property ignored for key="+key);
-        }
+        for(String key : properties.keySet())
+            putValue(key, properties.get(key));
     }
 
     /**

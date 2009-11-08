@@ -74,7 +74,7 @@ public class DefaultPathCanonizer implements PathCanonizer {
             int separatorLen = separator.length();
             String dir;		// Current directory
             String dirWS;	// Current directory without trailing separator
-            Vector pathV = new Vector();	// Will contain directory hierachy
+            Vector<String> pathV = new Vector<String>();	// Will contain directory hierachy
             while((pos=pos2)!=-1) {
                 // Get the index of the next path separator occurrence
                 pos2 = path.indexOf(separator, pos);

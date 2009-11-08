@@ -21,6 +21,7 @@ package com.mucommander.ui.dialog.file;
 
 import com.mucommander.file.AbstractArchiveFile;
 import com.mucommander.file.AbstractFile;
+import com.mucommander.file.ArchiveEntry;
 import com.mucommander.file.ArchiveEntryFile;
 import com.mucommander.file.util.FileSet;
 import com.mucommander.file.util.PathUtils;
@@ -74,9 +75,9 @@ public class CopyDialog extends AbstractCopyDialog {
         if(parentArchiveFile!=null) {
             // Add all selected archive entries to a vector
             int nbFiles = files.size();
-            Vector selectedEntries = new Vector();
+            Vector<ArchiveEntry> selectedEntries = new Vector<ArchiveEntry>();
             for(int i=0; i<nbFiles; i++) {
-                selectedEntries.add((files.fileAt(i).getAncestor(ArchiveEntryFile.class).getUnderlyingFileObject()));
+                selectedEntries.add((ArchiveEntry)files.fileAt(i).getAncestor(ArchiveEntryFile.class).getUnderlyingFileObject());
             }
 
             job = new UnpackJob(

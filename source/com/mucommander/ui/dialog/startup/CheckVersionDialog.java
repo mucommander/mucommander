@@ -152,8 +152,8 @@ public class CheckVersionDialog extends QuestionDialog implements Runnable {
         // Set title
         setTitle(title);
 
-        Vector actionsV = new Vector();
-        Vector labelsV = new Vector();
+        Vector<Integer> actionsV = new Vector<Integer>();
+        Vector<String> labelsV = new Vector<String>();
 
         // 'OK' choice
         actionsV.add(OK_ACTION);

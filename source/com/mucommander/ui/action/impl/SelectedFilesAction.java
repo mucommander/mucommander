@@ -32,7 +32,7 @@ import java.util.Hashtable;
  */
 public abstract class SelectedFilesAction extends SelectedFileAction {
 
-    public SelectedFilesAction(MainFrame mainFrame, Hashtable properties) {
+    public SelectedFilesAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
         super(mainFrame, properties);
     }
 

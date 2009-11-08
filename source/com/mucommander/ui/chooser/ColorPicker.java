@@ -20,14 +20,15 @@ package com.mucommander.ui.chooser;
 
 import com.mucommander.ui.icon.IconManager;
 
-import javax.swing.*;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.SwingUtilities;
 import java.awt.*;
 import java.awt.event.AWTEventListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
-import java.util.Iterator;
 import java.util.WeakHashMap;
 
 /**
@@ -38,7 +39,7 @@ public class ColorPicker extends JButton implements ActionListener, AWTEventList
     private Robot robot;
     private boolean isActive;
 
-    private WeakHashMap listeners = new WeakHashMap();
+    private WeakHashMap<ColorChangeListener, ?> listeners = new WeakHashMap<ColorChangeListener, Object>();
 
     /** True if this component is supported (java.awt.Robot can be used) */
     private static boolean isSupported;
@@ -163,9 +164,8 @@ public class ColorPicker extends JButton implements ActionListener, AWTEventList
 
     private void fireColorPicked(Color color) {
         // Iterate on all listeners
-        Iterator iterator = listeners.keySet().iterator();
-        while(iterator.hasNext())
-            ((ColorChangeListener)iterator.next()).colorChanged(new ColorChangeEvent(this, color));
+        for(ColorChangeListener listener : listeners.keySet())
+            listener.colorChanged(new ColorChangeEvent(this, color));
     }
 
 

@@ -51,7 +51,8 @@ import com.mucommander.ui.icon.IconManager;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileSystemView;
-import java.awt.*;
+import java.awt.Dimension;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.Hashtable;
@@ -529,15 +530,15 @@ public class DrivePopupButton extends PopupButton implements LocationListener, B
      */
     private class CustomOpenLocationAction extends OpenLocationAction {
 
-        public CustomOpenLocationAction(MainFrame mainFrame, Hashtable properties, Bookmark bookmark) {
+        public CustomOpenLocationAction(MainFrame mainFrame, Hashtable<String,Object> properties, Bookmark bookmark) {
             super(mainFrame, properties, bookmark);
         }
 
-        public CustomOpenLocationAction(MainFrame mainFrame, Hashtable properties, AbstractFile file) {
+        public CustomOpenLocationAction(MainFrame mainFrame, Hashtable<String,Object> properties, AbstractFile file) {
             super(mainFrame, properties, file);
         }
 
-        public CustomOpenLocationAction(MainFrame mainFrame, Hashtable properties, BonjourService bs) {
+        public CustomOpenLocationAction(MainFrame mainFrame, Hashtable<String,Object> properties, BonjourService bs) {
             super(mainFrame, properties, bs);
         }
 

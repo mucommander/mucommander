@@ -117,8 +117,8 @@ public abstract class AutocompleterTextComponent {
 	 * @return empty Vector if component is not an EditableComboBox,
 	 *  otherwise return Vector which contains the names of the combobox items.
 	 */
-	public Vector getItemNames() {
-		Vector result = new Vector();
+	public Vector<String> getItemNames() {
+		Vector<String> result = new Vector<String>();
 		if (editableComboBox != null) {
 			int nbItems = editableComboBox.getItemCount();
 			for (int i=0; i < nbItems; i++)

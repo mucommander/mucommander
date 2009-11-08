@@ -31,7 +31,7 @@ import java.util.Hashtable;
  */
 public abstract class SelectForwardAction extends MuAction {
 
-    public SelectForwardAction(MainFrame mainFrame, Hashtable properties) {
+    public SelectForwardAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
         super(mainFrame, properties);
     }
 

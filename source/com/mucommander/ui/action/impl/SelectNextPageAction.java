@@ -22,7 +22,7 @@ import com.mucommander.ui.action.*;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.table.FileTable;
 
-import javax.swing.*;
+import javax.swing.KeyStroke;
 import java.awt.event.KeyEvent;
 import java.util.Hashtable;
 
@@ -33,7 +33,7 @@ import java.util.Hashtable;
  */
 public class SelectNextPageAction extends SelectForwardAction {
 
-    public SelectNextPageAction(MainFrame mainFrame, Hashtable properties) {
+    public SelectNextPageAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -43,7 +43,7 @@ public class SelectNextPageAction extends SelectForwardAction {
     }
 
     public static class Factory implements ActionFactory {
-        public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+        public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
             return new SelectNextPageAction(mainFrame, properties);
         }
     }

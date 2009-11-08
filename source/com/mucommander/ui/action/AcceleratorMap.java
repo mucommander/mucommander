@@ -18,9 +18,8 @@
 
 package com.mucommander.ui.action;
 
-import java.util.HashMap;
-
 import javax.swing.KeyStroke;
+import java.util.HashMap;
 
 /**
  * Data structure that maps KeyStroke (accelerator) to MuAction id.
@@ -33,8 +32,8 @@ public class AcceleratorMap {
 	public final static int PRIMARY_ACCELERATOR = 1;
     public final static int ALTERNATIVE_ACCELERATOR = 2;
     
-    // Maps accelerator to ActionIdAndAcceleratorType instance.
-	private static HashMap map = new HashMap();
+    // Maps KeyStrokes to ActionIdAndAcceleratorType instance.
+	private static HashMap<KeyStroke, ActionIdAndAcceleratorType> map = new HashMap<KeyStroke, ActionIdAndAcceleratorType>();
     
 	/**
 	 * Register KeyStroke to MuAction as primary accelerator.
@@ -100,7 +99,7 @@ public class AcceleratorMap {
     }
     
     private ActionIdAndAcceleratorType get(KeyStroke ks) {
-    	return (ActionIdAndAcceleratorType) map.get(ks);
+    	return map.get(ks);
     }
     
     /**

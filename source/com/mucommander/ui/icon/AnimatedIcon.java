@@ -18,14 +18,19 @@
 
 package com.mucommander.ui.icon;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.CellRendererPane;
+import javax.swing.Icon;
+import javax.swing.SwingUtilities;
+import javax.swing.Timer;
+import java.awt.Component;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.AffineTransform;
 import java.lang.ref.WeakReference;
 import java.util.HashSet;
-import java.util.Iterator;
 
 /**
  * <code>javax.swing.Icon</code> implementation that manages animation.
@@ -49,7 +54,7 @@ public abstract class AnimatedIcon implements Icon {
     // - Instance fields -----------------------------------------------------------------
     // -----------------------------------------------------------------------------------
     /** All tracked components. */
-    private HashSet components = new HashSet();
+    private HashSet<TrackedComponent> components = new HashSet<TrackedComponent>();
     /** Timer used to take the animation from one frame to the next. */
     private Timer   timer;
     /** Index of the current frame. */
@@ -244,17 +249,15 @@ public abstract class AnimatedIcon implements Icon {
      * Forces the icon to repaint.
      */
     protected synchronized void repaint() {
-        Iterator iterator;
-
         // If the component list is empty, we can stop the timer.
         if(components.isEmpty())
             timer.stop();
 
         // Repaints all pending components.
         else {
-            iterator = components.iterator();
-            while(iterator.hasNext())
-                ((TrackedComponent)iterator.next()).repaint();
+            for(TrackedComponent comp : components)
+                comp.repaint();
+
             components.clear();
         }
     }
@@ -347,13 +350,13 @@ public abstract class AnimatedIcon implements Icon {
      */
     private static class AnimationUpdater implements ActionListener {
         /** Weak reference to the animation. */
-        private WeakReference icon;
+        private WeakReference<AnimatedIcon> icon;
 
         /**
          * Creates a new animation updater on the specified icon.
          * @param icon animation to update.
          */
-        public AnimationUpdater(AnimatedIcon icon) {this.icon = new WeakReference(icon);}
+        public AnimationUpdater(AnimatedIcon icon) {this.icon = new WeakReference<AnimatedIcon>(icon);}
 
         /**
          * Notifies the icon that it should update.
@@ -363,7 +366,7 @@ public abstract class AnimatedIcon implements Icon {
             AnimatedIcon i;
 
             // Makes sure the animation hasn't been garbage collected.
-            if((i = (AnimatedIcon)icon.get()) != null)
+            if((i = icon.get()) != null)
                 i.nextFrame();
         }
     }

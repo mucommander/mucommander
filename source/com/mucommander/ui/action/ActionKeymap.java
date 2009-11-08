@@ -24,7 +24,10 @@ import javax.swing.ActionMap;
 import javax.swing.InputMap;
 import javax.swing.JComponent;
 import javax.swing.KeyStroke;
-import java.util.*;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 
 /**
  * This class manages keyboard associations with {@link MuAction} ids.
@@ -33,10 +36,10 @@ import java.util.*;
  */
 public class ActionKeymap {
 
-    /** Maps action id onto Keystroke instances*/
-    private static HashMap customPrimaryActionKeymap = new HashMap();
-    /** Maps action id instances onto Keystroke instances*/
-    private static HashMap customAlternateActionKeymap = new HashMap();
+    /** Maps action id onto Keystroke instances */
+    private static HashMap<String, KeyStroke> customPrimaryActionKeymap = new HashMap<String, KeyStroke>();
+    /** Maps action id instances onto Keystroke instances */
+    private static HashMap<String, KeyStroke> customAlternateActionKeymap = new HashMap<String, KeyStroke>();
     /** Maps Keystroke instances onto action id */
     private static AcceleratorMap acceleratorMap = new AcceleratorMap();
 
@@ -50,11 +53,11 @@ public class ActionKeymap {
      * @param mainFrame - MainFrame instance to which all action shortcuts would be registered.
      */
     public static void registerActions(MainFrame mainFrame) {
-        Enumeration actionIds = ActionManager.getActionIds();
+        Enumeration<String> actionIds = ActionManager.getActionIds();
         String actionId;
         ActionDescriptor actionDescriptor;
         while(actionIds.hasMoreElements()) {
-            actionId = (String)actionIds.nextElement();
+            actionId = actionIds.nextElement();
             actionDescriptor = ActionProperties.getActionDescriptor(actionId);
 
             // Instantiate the action only if it is not parameterized: parameterized actions should only be instantiated
@@ -103,8 +106,8 @@ public class ActionKeymap {
     		unregisterAcceleratorFromAction(previousActionForAlternativeAccelerator, alternateAccelerator);
     	
     	// Remove action's previous accelerators (primary and alternate)
-    	acceleratorMap.remove((KeyStroke)customPrimaryActionKeymap.remove(actionId));
-    	acceleratorMap.remove((KeyStroke)customAlternateActionKeymap.remove(actionId));
+    	acceleratorMap.remove(customPrimaryActionKeymap.remove(actionId));
+    	acceleratorMap.remove(customAlternateActionKeymap.remove(actionId));
 
     	// Register new accelerators
     	registerActionAccelerators(actionId, accelerator, alternateAccelerator);
@@ -127,17 +130,17 @@ public class ActionKeymap {
      * @param primary - HashMap that maps action id to primary accelerator.
      * @param alternate - HashMap that maps action id to alternative accelerator.
      */
-    public static void registerActions(HashMap primary, HashMap alternate) {
-    	Iterator actionIdsIterator = primary.keySet().iterator();
-    	
+    public static void registerActions(HashMap<String, KeyStroke> primary, HashMap<String, KeyStroke> alternate) {
+    	Iterator<String> actionIdsIterator = primary.keySet().iterator();
+
     	while(actionIdsIterator.hasNext()) {
-    		String actionId = (String) actionIdsIterator.next();
-    		
+    		String actionId = actionIdsIterator.next();
+
     		// Add the action/keystroke mapping
     		ActionKeymap.registerActionAccelerators(
-    				actionId, 
-    				(KeyStroke) primary.get(actionId), 
-    				(KeyStroke) alternate.get(actionId));
+    				actionId,
+    				primary.get(actionId),
+    				alternate.get(actionId));
     	}
     }
 
@@ -182,7 +185,7 @@ public class ActionKeymap {
      */
     public static KeyStroke getAccelerator(String actionId) {
     	if (customPrimaryActionKeymap.containsKey(actionId))
-    		return (KeyStroke)customPrimaryActionKeymap.get(actionId);
+    		return customPrimaryActionKeymap.get(actionId);
         return ActionProperties.getDefaultAccelerator(actionId);
     }
 
@@ -194,7 +197,7 @@ public class ActionKeymap {
      */
     public static KeyStroke getAlternateAccelerator(String actionId) {
     	if (customAlternateActionKeymap.containsKey(actionId))
-    		return (KeyStroke)customAlternateActionKeymap.get(actionId);
+    		return customAlternateActionKeymap.get(actionId);
     	return ActionProperties.getDefaultAlternativeAccelerator(actionId);
     }
 
@@ -225,8 +228,8 @@ public class ActionKeymap {
      * 
      * @return Iterator of actions that their accelerators were customized.
      */
-    public static Iterator getCustomizedActions() {
-    	Set modifiedActions = new HashSet();
+    public static Iterator<String> getCustomizedActions() {
+    	HashSet<String> modifiedActions = new HashSet<String>();
     	modifiedActions.addAll(customPrimaryActionKeymap.keySet());
     	modifiedActions.addAll(customAlternateActionKeymap.keySet());
     	return modifiedActions.iterator();
@@ -316,9 +319,9 @@ public class ActionKeymap {
     	}
     	
     	// Update each MainFrame's action instance and input map
-    	Iterator actionInstancesIterator = ActionManager.getActionInstances(actionId).iterator();
+    	Iterator<MuAction> actionInstancesIterator = ActionManager.getActionInstances(actionId).iterator();
     	while (actionInstancesIterator.hasNext()) {
-    		MuAction action = (MuAction) actionInstancesIterator.next();
+    		MuAction action = actionInstancesIterator.next();
     		MainFrame mainFrame = action.getMainFrame();
 
     		// Remove action from MainFrame's action and input maps

@@ -20,12 +20,14 @@ package com.mucommander.ui.combobox;
 
 import com.mucommander.runtime.JavaVersions;
 
-import javax.swing.*;
+import javax.swing.ComboBoxModel;
+import javax.swing.JTextField;
 import javax.swing.plaf.basic.BasicComboBoxEditor;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Font;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.util.Iterator;
 import java.util.Vector;
 import java.util.WeakHashMap;
 
@@ -53,7 +55,7 @@ public class EditableComboBox extends SaneComboBox {
     private JTextField textField;
 
     /** Contains all registered EditableComboBoxListener instances, stored as weak references */
-    private WeakHashMap editableCBListeners = new WeakHashMap();
+    private WeakHashMap<EditableComboBoxListener, Object> listeners = new WeakHashMap<EditableComboBoxListener, Object>();
 
     /** Specifies whether the text field's contents is updated when an item is selected in the associated combo box */
     private boolean comboSelectionUpdatesTextField;
@@ -222,7 +224,7 @@ public class EditableComboBox extends SaneComboBox {
      */
     public void addEditableComboBoxListener(EditableComboBoxListener listener) {
         addComboBoxListener(listener);
-        editableCBListeners.put(listener, null);
+        listeners.put(listener, null);
     }
 
     /**
@@ -232,7 +234,7 @@ public class EditableComboBox extends SaneComboBox {
      */
     public void removeEditableComboBoxListener(EditableComboBoxListener listener) {
         removeComboBoxListener(listener);
-        editableCBListeners.remove(listener);
+        listeners.remove(listener);
     }
 
 
@@ -261,9 +263,8 @@ public class EditableComboBox extends SaneComboBox {
      */
     protected void fireComboFieldValidated() {
         // Iterate on all listeners
-        Iterator iterator = editableCBListeners.keySet().iterator();
-        while(iterator.hasNext())
-            ((EditableComboBoxListener)iterator.next()).textFieldValidated(this);
+        for(EditableComboBoxListener listener: listeners.keySet())
+            listener.textFieldValidated(this);
     }
 
 
@@ -275,9 +276,8 @@ public class EditableComboBox extends SaneComboBox {
      */
     protected void fireComboFieldCancelled() {
         // Iterate on all listeners
-        Iterator iterator = editableCBListeners.keySet().iterator();
-        while(iterator.hasNext())
-            ((EditableComboBoxListener)iterator.next()).textFieldCancelled(this);
+        for(EditableComboBoxListener listener: listeners.keySet())
+            listener.textFieldCancelled(this);
     }
 
 

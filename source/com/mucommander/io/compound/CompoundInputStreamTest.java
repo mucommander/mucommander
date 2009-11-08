@@ -62,8 +62,8 @@ public class CompoundInputStreamTest extends TestCase {
      *
      * @return a test InputStream iterator.
      */
-    private static Iterator getTestInputStreamIterator() {
-        Vector v = new Vector();
+    private static Iterator<ByteArrayInputStream> getTestInputStreamIterator() {
+        Vector<ByteArrayInputStream> v = new Vector<ByteArrayInputStream>();
 
         for (String testString : TEST_STRINGS) 
             v.add(new ByteArrayInputStream(testString.getBytes()));

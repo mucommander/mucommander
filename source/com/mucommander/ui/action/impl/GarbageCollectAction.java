@@ -24,9 +24,8 @@ import com.mucommander.ui.action.ActionFactory;
 import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.main.MainFrame;
 
-import java.util.Hashtable;
-
 import javax.swing.KeyStroke;
+import java.util.Hashtable;
 
 /**
  * This action invokes the garbage collector and is here for debugging purposes only.
@@ -35,7 +34,7 @@ import javax.swing.KeyStroke;
  */
 public class GarbageCollectAction extends MuAction {
 
-    public GarbageCollectAction(MainFrame mainFrame, Hashtable properties) {
+    public GarbageCollectAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -45,7 +44,7 @@ public class GarbageCollectAction extends MuAction {
     
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
 			return new GarbageCollectAction(mainFrame, properties);
 		}
     }
