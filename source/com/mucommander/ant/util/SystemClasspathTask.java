@@ -111,8 +111,8 @@ public class SystemClasspathTask extends Task {
         while(parser.hasMoreTokens()) {
             file = new File(parser.nextToken());
             if(file.exists()) {
-                for(int i = 0; i < names.length; i++) {
-                    if(names[i].equalsIgnoreCase(file.getName())) {
+                for (String name : names) {
+                    if (name.equalsIgnoreCase(file.getName())) {
                         getProject().setNewProperty(antProperty, file.getAbsolutePath());
                         return;
                     }

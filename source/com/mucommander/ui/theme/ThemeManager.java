@@ -32,7 +32,8 @@ import com.mucommander.io.StreamUtils;
 import com.mucommander.text.Translator;
 import com.mucommander.util.StringUtils;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Font;
 import java.io.*;
 import java.util.*;
 
@@ -165,8 +166,8 @@ public class ThemeManager {
         try {
             files = themeFolder.ls(new ExtensionFilenameFilter(".xml"));
             names = new Vector();
-            for(int i = 0; i < files.length; i++)
-                names.add(getThemeName(files[i]));
+            for (AbstractFile file : files)
+                names.add(getThemeName(file));
             return names.iterator();
         }
         catch(Exception e) {return new Vector().iterator();}

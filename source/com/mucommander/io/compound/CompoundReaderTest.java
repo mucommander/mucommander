@@ -67,8 +67,8 @@ public class CompoundReaderTest extends TestCase {
 
     static {
         StringBuffer sb = new StringBuffer();
-        for(int i=0; i<TEST_STRINGS.length; i++)
-            sb.append(TEST_STRINGS[i]);
+        for (String testString : TEST_STRINGS)
+            sb.append(testString);
 
         TEST_FLATTENED_STRINGS = sb.toString();
     }
@@ -82,8 +82,8 @@ public class CompoundReaderTest extends TestCase {
     private static Iterator getTestReaderIterator() {
         Vector v = new Vector();
 
-        for(int i=0; i<TEST_STRINGS.length; i++)
-            v.add(new StringReader(TEST_STRINGS[i]));
+        for (String testString : TEST_STRINGS)
+            v.add(new StringReader(testString));
 
         return v.iterator();
     }

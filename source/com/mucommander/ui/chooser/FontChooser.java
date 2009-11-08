@@ -24,7 +24,10 @@ import com.mucommander.ui.layout.YBoxPanel;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import java.awt.*;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.GraphicsEnvironment;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Iterator;
@@ -102,8 +105,8 @@ public class FontChooser extends YBoxPanel implements ActionListener {
 
         // Font sizes.
         sizes = new JComboBox();
-        for(int i = 0; i < FONT_SIZES.length; i++)
-            sizes.addItem(Integer.toString(FONT_SIZES[i]));
+        for (int fontSize : FONT_SIZES)
+            sizes.addItem(Integer.toString(fontSize));
         sizes.setSelectedItem(Integer.toString(selection.getSize()));
         sizes.addActionListener(this);
 

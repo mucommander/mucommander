@@ -475,8 +475,8 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
 			}
     	};
 
-        for(int i=0; i<ICON_SIZES.length; i++)
-            iconSizeCombo.addItem(ICON_SIZES[i]);
+        for (String iconSize : ICON_SIZES)
+            iconSizeCombo.addItem(iconSize);
 
         float scaleFactor = MuConfiguration.getVariable(confVar, defaultValue);
         int index = 0;
@@ -606,9 +606,9 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
         // Copies the content of lookAndFeels into buffer, skipping over the look and feel to uninstall.
         buffer      = new UIManager.LookAndFeelInfo[lookAndFeels.length - 1];
         bufferIndex = 0;
-        for(int i = 0; i < lookAndFeels.length; i++) {
-            if(!selection.getClassName().equals(lookAndFeels[i].getClassName())) {
-                buffer[bufferIndex] = lookAndFeels[i];
+        for (UIManager.LookAndFeelInfo lookAndFeel : lookAndFeels) {
+            if (!selection.getClassName().equals(lookAndFeel.getClassName())) {
+                buffer[bufferIndex] = lookAndFeel;
                 bufferIndex++;
             }
         }

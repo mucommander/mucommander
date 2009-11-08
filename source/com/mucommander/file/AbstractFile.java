@@ -24,8 +24,8 @@ import com.mucommander.file.filter.FilenameFilter;
 import com.mucommander.file.impl.ProxyFile;
 import com.mucommander.io.*;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.Icon;
+import java.awt.Dimension;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -1197,14 +1197,12 @@ public abstract class AbstractFile implements FileAttributes, PermissionTypes, P
                 throw new FileTransferException(FileTransferException.READING_SOURCE);
             }
 
-            AbstractFile child;
             AbstractFile destChild;
-            for(int i=0; i<children.length; i++) {
-                child = children[i];
+            for (AbstractFile child : children) {
                 try {
                     destChild = destFile.getDirectChild(child.getName());
                 }
-                catch(IOException e) {
+                catch (IOException e) {
                     throw new FileTransferException(FileTransferException.OPENING_DESTINATION);
                 }
 
@@ -1246,8 +1244,8 @@ public abstract class AbstractFile implements FileAttributes, PermissionTypes, P
     protected final void deleteRecursively(AbstractFile file) throws IOException {
         if(file.isDirectory() && !file.isSymlink()) {
             AbstractFile children[] = file.ls();
-            for(int i=0; i<children.length; i++)
-                deleteRecursively(children[i]);
+            for (AbstractFile child : children)
+                deleteRecursively(child);
         }
 
         file.delete();

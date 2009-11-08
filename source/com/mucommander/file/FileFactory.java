@@ -286,9 +286,9 @@ public class FileFactory {
         if(filename == null)
             return null;
 
-        for(int i = 0; i < archiveFormatProviders.length; i++) {
-            if(archiveFormatProviders[i].getFilenameFilter().accept(filename))
-                return archiveFormatProviders[i];
+        for (ArchiveFormatProvider provider : archiveFormatProviders) {
+            if (provider.getFilenameFilter().accept(filename))
+                return provider;
         }
         return null;
     }

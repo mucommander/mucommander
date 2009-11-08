@@ -68,11 +68,11 @@ public class XmlResourceTest extends TestCase {
      */
     private void testXMLFiles(AbstractFile folder) throws SAXException, IOException, ParserConfigurationException {
         AbstractFile children[] = folder.ls();
-        for(int i=0; i<children.length; i++) {
-            if(children[i].isBrowsable())
-                testXMLFiles(children[i]);
-            else if("xml".equals(children[i].getExtension()))
-                testXMLDocument(children[i]);
+        for (AbstractFile bhild : children) {
+            if (bhild.isBrowsable())
+                testXMLFiles(bhild);
+            else if ("xml".equals(bhild.getExtension()))
+                testXMLDocument(bhild);
         }
     }
 

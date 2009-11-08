@@ -144,8 +144,8 @@ public class BOM {
                 return BOMConstants.SUPPORTED_BOMS[i];
 
             aliases = BOMConstants.SUPPORTED_BOMS[i].getAliases();
-            for(int j=0; j<aliases.length; j++)
-                if(aliases[j].equalsIgnoreCase(encoding))
+            for (String alias : aliases)
+                if (alias.equalsIgnoreCase(encoding))
                     return BOMConstants.SUPPORTED_BOMS[i];
         }
 

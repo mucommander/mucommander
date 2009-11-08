@@ -156,9 +156,9 @@ public class DebugConsoleDialog extends FocusDialog implements ActionListener, I
         final LogRecord[] records = handler.getLogRecords();
         Formatter formatter = handler.getFormatter();
 
-        for(int i=0; i<records.length; i++) {
-            if(handler.isLoggable(records[i]))
-                listModel.addElement(new LogRecordListItem(records[i], formatter));
+        for (LogRecord record : records) {
+            if (handler.isLoggable(record))
+                listModel.addElement(new LogRecordListItem(record, formatter));
         }
 
         recordsList.setModel(listModel);        

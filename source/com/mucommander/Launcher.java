@@ -643,15 +643,15 @@ public class Launcher {
         // Remove default handlers
         Logger rootLogger = LogManager.getLogManager().getLogger("");
         Handler handlers[] = rootLogger.getHandlers();
-        for(int i=0; i<handlers.length; i++)
-            rootLogger.removeHandler(handlers[i]);
+        for (Handler handler : handlers)
+            rootLogger.removeHandler(handler);
 
         // and add ours
         handlers = new Handler[] { new ConsoleHandler(), new DebugConsoleHandler()};
         Formatter formatter = new SingleLineFormatter();
-        for(int i=0; i<handlers.length; i++) {
-            handlers[i].setFormatter(formatter);
-            rootLogger.addHandler(handlers[i]);
+        for (Handler handler : handlers) {
+            handler.setFormatter(formatter);
+            rootLogger.addHandler(handler);
         }
 
         // Set the log level to the value defined in the configuration
@@ -701,7 +701,7 @@ public class Launcher {
 
         Logger rootLogger = LogManager.getLogManager().getLogger("");
         Handler handlers[] = rootLogger.getHandlers();
-        for(int i=0; i<handlers.length; i++)
-            handlers[i].setLevel(level);
+        for (Handler handler : handlers)
+            handler.setLevel(level);
     }
 }

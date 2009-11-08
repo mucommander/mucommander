@@ -62,28 +62,26 @@ public class ProxyFileTest extends AbstractFileTestCase {
         // This array will contain all AbstractFile public methods, including the ones defined by parent classes
         // (java.lang.Object), and including static and final ones.
         Method abstractFileMethods[] = abstractFileClass.getMethods();
-        Method abstractFileMethod, proxyFileMethod;
+        Method proxyFileMethod;
 
-        for(int i=0; i< abstractFileMethods.length; i++) {
-            abstractFileMethod = abstractFileMethods[i];
-
+        for (Method abstractFileMethod : abstractFileMethods) {
             // Skip:
             // - methods that are not declared by AbstractFile (e.g. java.lang.Object methods)
             // - static methods
             // - final methods
-            if(!abstractFileMethod.getDeclaringClass().equals(abstractFileClass)
-                || (abstractFileMethod.getModifiers()&(Modifier.STATIC|Modifier.FINAL))!=0)
+            if (!abstractFileMethod.getDeclaringClass().equals(abstractFileClass)
+                    || (abstractFileMethod.getModifiers() & (Modifier.STATIC | Modifier.FINAL)) != 0)
                 continue;
 
             try {
                 proxyFileMethod = proxyFileClass.getMethod(abstractFileMethod.getName(), abstractFileMethod.getParameterTypes());
             }
-            catch(Exception e) {    // NoSuchMethodException, SecurityException
+            catch (Exception e) {    // NoSuchMethodException, SecurityException
                 proxyFileMethod = null;
             }
 
-            assertTrue(abstractFileMethod.getName()+" not overridden by "+proxyFileClass.getName(),
-                    proxyFileMethod!=null && (proxyFileMethod.getDeclaringClass().equals(proxyFileClass)));
+            assertTrue(abstractFileMethod.getName() + " not overridden by " + proxyFileClass.getName(),
+                    proxyFileMethod != null && (proxyFileMethod.getDeclaringClass().equals(proxyFileClass)));
         }
 
     }

@@ -47,8 +47,8 @@ class DebugProcessListener implements ProcessListener {
 
         // Rebuilds the command.
         buffer = new StringBuffer();
-        for(int i = 0; i < tokens.length; i++) {
-            buffer.append(tokens[i]);
+        for (String token : tokens) {
+            buffer.append(token);
             buffer.append(' ');
         }
 

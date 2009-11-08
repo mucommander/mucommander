@@ -62,24 +62,21 @@ public class SizeFormatTest extends TestCase {
         testDigitsShort("999", 999);
         testDigitsShort("1023", 1023);
 
-        long unit;
-        for(int i=0; i<UNITS.length; i++) {
-            unit = UNITS[i];
-
+        for (long unit : UNITS) {
             testDigitsShort("1", unit);
-            testDigitsShort("1", unit+1);
-            testDigitsShort("9", unit*9);
-            testDigitsShort("9", unit*10-1);
-            testDigitsShort("10", unit*10);
-            testDigitsShort("10", unit*10+1);
-            testDigitsShort("11", unit*11);
-            testDigitsShort("99", unit*99);
-            testDigitsShort("99", unit*100-1);
-            testDigitsShort("100", unit*100);
-            testDigitsShort("100", unit*100+1);
-            testDigitsShort("101", unit*101);
-            testDigitsShort("999", unit*999);
-            testDigitsShort("999", unit*1000-1);
+            testDigitsShort("1", unit + 1);
+            testDigitsShort("9", unit * 9);
+            testDigitsShort("9", unit * 10 - 1);
+            testDigitsShort("10", unit * 10);
+            testDigitsShort("10", unit * 10 + 1);
+            testDigitsShort("11", unit * 11);
+            testDigitsShort("99", unit * 99);
+            testDigitsShort("99", unit * 100 - 1);
+            testDigitsShort("100", unit * 100);
+            testDigitsShort("100", unit * 100 + 1);
+            testDigitsShort("101", unit * 101);
+            testDigitsShort("999", unit * 999);
+            testDigitsShort("999", unit * 1000 - 1);
         }
     }
 
@@ -101,24 +98,21 @@ public class SizeFormatTest extends TestCase {
         testDigitsMedium("999", 999);
         testDigitsMedium("1023", 1023);
 
-        long unit;
-        for(int i=0; i<UNITS.length; i++) {
-            unit = UNITS[i];
-
+        for (long unit : UNITS) {
             testDigitsMedium("1" + DECIMAL_SEPARATOR + "0", unit);
-            testDigitsMedium("1" + DECIMAL_SEPARATOR + "0", unit+1);
-            testDigitsMedium("9" + DECIMAL_SEPARATOR + "0", unit*9);
-            testDigitsMedium("9" + DECIMAL_SEPARATOR + "9", unit*10-1);
-            testDigitsMedium("10", unit*10);
-            testDigitsMedium("10", unit*10+1);
-            testDigitsMedium("11", unit*11);
-            testDigitsMedium("99", unit*99);
-            testDigitsMedium("99", unit*100-1);
-            testDigitsMedium("100", unit*100);
-            testDigitsMedium("100", unit*100+1);
-            testDigitsMedium("101", unit*101);
-            testDigitsMedium("999", unit*999);
-            testDigitsMedium("999", unit*1000-1);
+            testDigitsMedium("1" + DECIMAL_SEPARATOR + "0", unit + 1);
+            testDigitsMedium("9" + DECIMAL_SEPARATOR + "0", unit * 9);
+            testDigitsMedium("9" + DECIMAL_SEPARATOR + "9", unit * 10 - 1);
+            testDigitsMedium("10", unit * 10);
+            testDigitsMedium("10", unit * 10 + 1);
+            testDigitsMedium("11", unit * 11);
+            testDigitsMedium("99", unit * 99);
+            testDigitsMedium("99", unit * 100 - 1);
+            testDigitsMedium("100", unit * 100);
+            testDigitsMedium("100", unit * 100 + 1);
+            testDigitsMedium("101", unit * 101);
+            testDigitsMedium("999", unit * 999);
+            testDigitsMedium("999", unit * 1000 - 1);
         }
     }
 
@@ -140,24 +134,21 @@ public class SizeFormatTest extends TestCase {
         testDigitsFull(999);
         testDigitsFull(1023);
 
-        long unit;
-        for(int i=0; i<UNITS.length; i++) {
-            unit = UNITS[i];
-
+        for (long unit : UNITS) {
             testDigitsFull(unit);
-            testDigitsFull(unit+1);
-            testDigitsFull(unit*9);
-            testDigitsFull(unit*10-1);
-            testDigitsFull(unit*10);
-            testDigitsFull(unit*10+1);
-            testDigitsFull(unit*11);
-            testDigitsFull(unit*99);
-            testDigitsFull(unit*100-1);
-            testDigitsFull(unit*100);
-            testDigitsFull(unit*100+1);
-            testDigitsFull(unit*101);
-            testDigitsFull(unit*999);
-            testDigitsFull(unit*1000-1);
+            testDigitsFull(unit + 1);
+            testDigitsFull(unit * 9);
+            testDigitsFull(unit * 10 - 1);
+            testDigitsFull(unit * 10);
+            testDigitsFull(unit * 10 + 1);
+            testDigitsFull(unit * 11);
+            testDigitsFull(unit * 99);
+            testDigitsFull(unit * 100 - 1);
+            testDigitsFull(unit * 100);
+            testDigitsFull(unit * 100 + 1);
+            testDigitsFull(unit * 101);
+            testDigitsFull(unit * 999);
+            testDigitsFull(unit * 1000 - 1);
         }
     }
 

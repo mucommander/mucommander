@@ -122,8 +122,8 @@ public class LocalFileTest extends AbstractFileTestCase {
         assertNotNull(volumes);
         assertTrue(volumes.length>0);
 
-        for(int i=0; i<volumes.length; i++)
-            testVolume(volumes[i]);
+        for (AbstractFile volume : volumes)
+            testVolume(volume);
     }
 
     /**

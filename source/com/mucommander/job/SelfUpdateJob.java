@@ -133,8 +133,8 @@ public class SelfUpdateJob extends CopyJob {
     private void loadClassRecurse(AbstractFile file) throws Exception {
         if(file.isBrowsable()) {
             AbstractFile[] children = file.ls(directoryOrClassFileFilter);
-            for(int i=0; i<children.length; i++)
-                loadClassRecurse(children[i]);
+            for (AbstractFile child : children)
+                loadClassRecurse(child);
         }
         else {          // .class file
 

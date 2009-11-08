@@ -64,8 +64,8 @@ public class SizeTask extends Task {
         selectedFiles = scanner.getIncludedFiles();
         size          = 0 ;
 
-        for(int i = 0; i < selectedFiles.length; i++)
-            size += new File(files.getDir(getProject()), selectedFiles[i]).length();
+        for (String selectedFile : selectedFiles)
+            size += new File(files.getDir(getProject()), selectedFile).length();
 
         getProject().setProperty(propertyName, Integer.toString(size / 1024));
     }

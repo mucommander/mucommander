@@ -120,8 +120,8 @@ public class DirectoryCache {
             cache.remove(key);
             AbstractFile[] children = cachedDir.get();
             if (children != null) {
-                for (int i=0; i<children.length; i++) {
-                    removeWithChildren(children[i]);
+                for (AbstractFile child : children) {
+                    removeWithChildren(child);
                 }
             }
         }

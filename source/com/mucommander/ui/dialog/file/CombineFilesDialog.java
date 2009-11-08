@@ -85,16 +85,16 @@ public class CombineFilesDialog extends TransferDestinationDialog {
 		filter.addFileFilter(part1Filter);
 		try {
 			AbstractFile[] otherParts = parent.ls(filter);
-			for (int i = 0; i < otherParts.length; i++) {
-				String ext2 = otherParts[i].getExtension();
-				try {
-					int partIdx = Integer.parseInt(ext2);
-					if (partIdx > firstIndex)
-						files.add(otherParts[i]);
-				} catch (NumberFormatException e) {
-					// nothing
-				}
-			}
+            for (AbstractFile otherPart : otherParts) {
+                String ext2 = otherPart.getExtension();
+                try {
+                    int partIdx = Integer.parseInt(ext2);
+                    if (partIdx > firstIndex)
+                        files.add(otherPart);
+                } catch (NumberFormatException e) {
+                    // nothing
+                }
+            }
 		} catch (IOException e) {
             AppLogger.fine("Caught exception", e);
 		}

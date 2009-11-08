@@ -103,8 +103,8 @@ public class FileSet extends Vector {
         if(files==null)
             return;
 
-        for(int i=0; i<files.length; i++)
-            add(files[i]);
+        for (AbstractFile file : files)
+            add(file);
     }
 
     /**

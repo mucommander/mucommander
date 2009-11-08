@@ -28,7 +28,9 @@ import javax.swing.*;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.PlainDocument;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.FlowLayout;
 import java.awt.event.*;
 import java.io.IOException;
 
@@ -114,8 +116,8 @@ public class KeyboardShortcutChooser extends JPanel implements ItemListener, Com
 
         keyComboBox = new SaneComboBox();
         keyComboBox.addItem(new KeyChoice(0, noneString));
-        for(int k=0; k<KEY_CHOICES.length; k++)
-            addKeyChoice(KEY_CHOICES[k]);
+        for (int keyChoice : KEY_CHOICES)
+            addKeyChoice(keyChoice);
 
         flowPanel.add(keyComboBox);
 

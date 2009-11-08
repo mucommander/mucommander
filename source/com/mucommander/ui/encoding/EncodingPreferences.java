@@ -72,12 +72,10 @@ public class EncodingPreferences {
      */
     public static Vector getDefaultPreferredEncodings() {
         Vector encodingsV = new Vector();
-        String enc;
-        for(int i=0; i<DEFAULT_PREFERRED_ENCODINGS.length; i++) {
-            enc = DEFAULT_PREFERRED_ENCODINGS[i];
+        for (String encoding : DEFAULT_PREFERRED_ENCODINGS) {
             // Ensure that the encoding is supported before adding it
-            if(Charset.isSupported(enc))
-                encodingsV.add(enc);
+            if (Charset.isSupported(encoding))
+                encodingsV.add(encoding);
         }
 
         return encodingsV;

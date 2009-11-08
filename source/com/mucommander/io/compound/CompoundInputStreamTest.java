@@ -50,8 +50,8 @@ public class CompoundInputStreamTest extends TestCase {
     
     static {
         StringBuffer sb = new StringBuffer();
-        for(int i=0; i<TEST_STRINGS.length; i++)
-            sb.append(TEST_STRINGS[i]);
+        for (String testString : TEST_STRINGS)
+            sb.append(testString);
 
         TEST_FLATTENED_STRINGS = sb.toString();
     }
@@ -65,8 +65,8 @@ public class CompoundInputStreamTest extends TestCase {
     private static Iterator getTestInputStreamIterator() {
         Vector v = new Vector();
 
-        for(int i=0; i<TEST_STRINGS.length; i++)
-            v.add(new ByteArrayInputStream(TEST_STRINGS[i].getBytes()));
+        for (String testString : TEST_STRINGS) 
+            v.add(new ByteArrayInputStream(testString.getBytes()));
 
         return v.iterator();
     }

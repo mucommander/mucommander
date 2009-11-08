@@ -174,14 +174,14 @@ public class MoveJob extends AbstractCopyJob {
                 try {
                     AbstractFile subFiles[] = file.ls();
                     boolean isFolderEmpty = true;
-                    for(int i=0; i<subFiles.length; i++) {
+                    for (AbstractFile subFile : subFiles) {
                         // Return now if the job was interrupted, so that we do not attempt to delete this folder
-                        if(getState()==INTERRUPTED)
+                        if (getState() == INTERRUPTED)
                             return false;
 
                         // Notify job that we're starting to process this file (needed for recursive calls to processFile)
-                        nextFile(subFiles[i]);
-                        if(!processFile(subFiles[i], destFile))
+                        nextFile(subFile);
+                        if (!processFile(subFile, destFile))
                             isFolderEmpty = false;
                     }
 

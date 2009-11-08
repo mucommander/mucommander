@@ -491,8 +491,8 @@ public class LocalFile extends ProtocolFile {
                 mountPoint = StringUtils.replaceCompat(st.nextToken(), "\\040", " ");
                 fsType = st.nextToken();
                 knownFS = false;
-                for (int i = 0; i < KNOWN_UNIX_FS.length; i++) {
-                    if (KNOWN_UNIX_FS[i].equals(fsType)) {
+                for (String fs : KNOWN_UNIX_FS) {
+                    if (fs.equals(fsType)) {
                         // this is really known physical FS
                         knownFS = true;
                         break;

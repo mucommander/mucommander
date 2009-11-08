@@ -127,13 +127,13 @@ public class Base64Test extends TestCase {
 
         boolean exceptionCaught;
 
-        for(int i=0; i<invalidLengthStrings.length; i++) {
+        for (String invalidLengthString : invalidLengthStrings) {
             exceptionCaught = false;
 
             try {
-                Base64Decoder.decode(invalidLengthStrings[i]);
+                Base64Decoder.decode(invalidLengthString);
             }
-            catch(IOException e) {
+            catch (IOException e) {
                 exceptionCaught = true;
             }
 
@@ -156,10 +156,7 @@ public class Base64Test extends TestCase {
         };
 
         String sample = "The quick brown fox jumps over the lazy dog.";
-        Base64Table table;
-        for(int i=0; i<tables.length; i++) {
-            table = tables[i];
-
+        for(Base64Table table: tables) {
             // Ensure that the table passes Base64Table constructor's tests
             new Base64Table(table.getEncodingTable(), table.getPaddingChar());
 

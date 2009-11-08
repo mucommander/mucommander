@@ -311,8 +311,8 @@ public class ExtensionManager {
 
         // Adds all JAR files contained by the extensions folder to the classpath.
         files = getExtensionsFolder().ls(new ExtensionFilenameFilter(".jar"));
-        for(int i = 0; i < files.length; i++)
-            addToClassPath(files[i]);
+        for (AbstractFile file : files)
+            addToClassPath(file);
     }
 
     /**

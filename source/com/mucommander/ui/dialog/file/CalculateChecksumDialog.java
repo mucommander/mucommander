@@ -113,8 +113,8 @@ public class CalculateChecksumDialog extends JobDialog implements ActionListener
 
         // Add the sorted list of algorithms to a combo box to let the user choose one
         algorithmComboBox = new JComboBox();
-        for(int i=0; i<messageDigests.length; i++)
-            algorithmComboBox.addItem(messageDigests[i].getAlgorithm());
+        for (MessageDigest messageDigest : messageDigests) 
+            algorithmComboBox.addItem(messageDigest.getAlgorithm());
 
         // Select the last used algorithm (if any), or the default algorithm
         algorithmComboBox.setSelectedItem(lastUsedAlgorithm);

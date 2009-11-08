@@ -601,8 +601,8 @@ public abstract class FileJob implements Runnable {
     protected int showErrorDialog(String title, String message, String actionTexts[], int actionValues[]) {
         // Return SKIP_ACTION if 'skip all' has previously been selected and 'skip' is in the list of actions.
         if(autoSkipErrors) {
-            for(int i=0; i<actionValues.length; i++)
-                if(actionValues[i]==SKIP_ACTION)
+            for (int actionValue : actionValues)
+                if (actionValue == SKIP_ACTION)
                     return SKIP_ACTION;
         }
 

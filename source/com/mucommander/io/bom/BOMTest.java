@@ -59,11 +59,9 @@ public class BOMTest extends TestCase implements BOMConstants {
      */
     public void testBOMInputStream() throws IOException {
         BOMInputStream bomIn;
-        BOM bom;
         byte[] b;
 
-        for(int i=0; i<SUPPORTED_BOMS.length; i++) {
-            bom = SUPPORTED_BOMS[i];
+        for (BOM bom : SUPPORTED_BOMS) {
             bomIn = getBOMInputStream(bom.getSignature());
             assertEquals(bom, bomIn.getBOM());
             assertEOF(bomIn);
@@ -99,10 +97,10 @@ public class BOMTest extends TestCase implements BOMConstants {
      * Tests {@link BOM#getInstance(String)}.
      */
     public void testBOMResolution() {
-        for(int i=0; i<SUPPORTED_BOMS.length; i++) {
+        for (BOM bom : SUPPORTED_BOMS) {
             // Test case variations
-            assertEquals(SUPPORTED_BOMS[i], BOM.getInstance(SUPPORTED_BOMS[i].getEncoding().toLowerCase()));
-            assertEquals(SUPPORTED_BOMS[i], BOM.getInstance(SUPPORTED_BOMS[i].getEncoding().toUpperCase()));
+            assertEquals(bom, BOM.getInstance(bom.getEncoding().toLowerCase()));
+            assertEquals(bom, BOM.getInstance(bom.getEncoding().toUpperCase()));
         }
 
         // Test non-UTF encodings
@@ -129,15 +127,15 @@ public class BOMTest extends TestCase implements BOMConstants {
         BOMWriter bomWriter;
         BOMInputStream bomIn;
 
-        for(int i=0; i<SUPPORTED_BOMS.length; i++) {
+        for (BOM bom : SUPPORTED_BOMS) {
             baos = new ByteArrayOutputStream();
-            bomWriter = new BOMWriter(baos, SUPPORTED_BOMS[i].getEncoding());
+            bomWriter = new BOMWriter(baos, bom.getEncoding());
             bomWriter.write(testString);
             bomWriter.close();
 
             bomIn = getBOMInputStream(baos.toByteArray());
-            assertEquals(SUPPORTED_BOMS[i], bomIn.getBOM());
-            assertStreamEquals(testString.getBytes(SUPPORTED_BOMS[i].getEncoding()), bomIn);
+            assertEquals(bom, bomIn.getBOM());
+            assertStreamEquals(testString.getBytes(bom.getEncoding()), bomIn);
             assertEOF(bomIn);
         }
     }
@@ -157,9 +155,9 @@ public class BOMTest extends TestCase implements BOMConstants {
         assertEquals(-1, in.read());
     }
 
-    private void assertStreamEquals(byte b[], InputStream in) throws IOException {
-        for(int i=0; i<b.length; i++)
-            assertEquals(b[i], (byte)(in.read()&0xFF));
+    private void assertStreamEquals(byte bytes[], InputStream in) throws IOException {
+        for (byte b : bytes)
+            assertEquals(b, (byte) (in.read() & 0xFF));
 
         assertEOF(in);
     }

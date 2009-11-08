@@ -33,7 +33,9 @@ import com.mucommander.ui.layout.YBoxPanel;
 import com.mucommander.ui.main.MainFrame;
 
 import javax.swing.*;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -209,8 +211,8 @@ public class EmailFilesDialog extends JobDialog implements ActionListener, ItemL
     private void recurseOnFolder(AbstractFile file, FileSet flattenedFiles) throws IOException {
         if(file.isDirectory() && !file.isSymlink()) {
             AbstractFile children[] = file.ls();
-            for(int i=0; i<children.length; i++)
-                recurseOnFolder(children[i], flattenedFiles);
+            for (AbstractFile child : children)
+                recurseOnFolder(child, flattenedFiles);
         }
         else {
             flattenedFiles.add(file);

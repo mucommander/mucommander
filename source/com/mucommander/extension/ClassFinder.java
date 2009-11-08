@@ -86,19 +86,20 @@ public class ClassFinder {
         
         // Analyses all subdirectories and class files.
         files = currentFile.ls(filter);
-        for(int i = 0; i < files.length; i++) {
+        for (AbstractFile file : files) {
             // Explores subdirectories recursively.
-            if(files[i].isDirectory())
-                result.addAll(find(currentPackage + files[i].getName() + '.', files[i]));
+            if (file.isDirectory())
+                result.addAll(find(currentPackage + file.getName() + '.', file));
 
-            // Passes each class through the class filter.
-            // Errors are treated as 'this class is not wanted'.
+                // Passes each class through the class filter.
+                // Errors are treated as 'this class is not wanted'.
             else {
                 try {
-                    if(classFilter.accept(currentClass = Class.forName(currentPackage + files[i].getNameWithoutExtension(), false, loader)))
-                        result.add(currentClass);                    
+                    if (classFilter.accept(currentClass = Class.forName(currentPackage + file.getNameWithoutExtension(), false, loader)))
+                        result.add(currentClass);
                 }
-                catch(Throwable e) {}
+                catch (Throwable e) {
+                }
             }
         }
         return result;

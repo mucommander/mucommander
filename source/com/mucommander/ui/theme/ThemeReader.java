@@ -24,7 +24,9 @@ import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 import javax.xml.parsers.SAXParserFactory;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.GraphicsEnvironment;
 import java.io.InputStream;
 import java.util.StringTokenizer;
 
@@ -744,9 +746,9 @@ class ThemeReader extends DefaultHandler implements ThemeXmlConstants {
 
 	// Looks for the specified font.
 	availableFonts = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
-	for(int i = 0; i < availableFonts.length; i++)
-	    if(availableFonts[i].equalsIgnoreCase(font))
-		return true;
+    for (String availableFont : availableFonts)
+        if (availableFont.equalsIgnoreCase(font))
+            return true;
 
 	// Font doesn't exist on the system.
 	return false;
