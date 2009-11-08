@@ -99,7 +99,7 @@ public class LegacyLRUCache extends LRUCache {
                 continue;
             }
 
-            expirationDate = ((Long)expirationDateL).longValue();
+            expirationDate = (Long) expirationDateL;
             // Test if the item has an expiration date and check if has passed
             if(expirationDate<now) {
                 // Remove expired item
@@ -228,7 +228,7 @@ public class LegacyLRUCache extends LRUCache {
             if(expirationDateL==null)
                 continue;
 			
-            expirationDate = ((Long)expirationDateL).longValue();
+            expirationDate = (Long) expirationDateL;
             if(expirationDate<eldestExpirationDate)
                 throw new RuntimeException("cache corrupted: expiration date for key="+key+" older than eldestExpirationDate");
         }

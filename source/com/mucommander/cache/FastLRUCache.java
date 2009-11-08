@@ -113,7 +113,7 @@ public class FastLRUCache extends LRUCache {
             if(expirationDateL==null)
                 continue;
 
-            expirationDate = expirationDateL.longValue();
+            expirationDate = expirationDateL;
             // Test if the item has an expiration date and check if has passed
             if(expirationDate<now) {
                 // Remove expired item
@@ -152,7 +152,7 @@ public class FastLRUCache extends LRUCache {
         // performance reason, we can end with an expired cached value so we need
         // to check this
         Long expirationDateL = (Long)value[1];
-        if(expirationDateL!=null && System.currentTimeMillis()>expirationDateL.longValue()) {
+        if(expirationDateL!=null && System.currentTimeMillis()> expirationDateL) {
             // Value has expired, let's remove it
             if(UPDATE_CACHE_COUNTERS)
                 nbMisses++;	// Increase cache miss counter
@@ -224,7 +224,7 @@ public class FastLRUCache extends LRUCache {
             if(expirationDateL==null)
                 continue;
 			
-            expirationDate = expirationDateL.longValue();
+            expirationDate = expirationDateL;
             if(expirationDate<eldestExpirationDate)
                 throw new RuntimeException("cache corrupted: expiration date for key="+key+" older than eldestExpirationDate");
         }

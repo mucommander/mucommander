@@ -18,7 +18,7 @@
 
 package com.mucommander.ui.theme;
 
-import java.awt.*;
+import java.awt.Color;
 import java.util.Iterator;
 import java.util.Vector;
 
@@ -65,7 +65,7 @@ public abstract class DefaultColor {
 
         colors = linkedColors.iterator();
         while(colors.hasNext())
-            ThemeData.triggerColorEvent(((Integer)colors.next()).intValue(), color);
+            ThemeData.triggerColorEvent((Integer) colors.next(), color);
     }
 
     /**

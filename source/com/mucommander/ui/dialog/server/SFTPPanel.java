@@ -28,7 +28,7 @@ import com.mucommander.text.Translator;
 import com.mucommander.ui.main.MainFrame;
 
 import javax.swing.*;
-import java.awt.*;
+import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.MalformedURLException;
@@ -125,7 +125,7 @@ public class SFTPPanel extends ServerPanel {
         lastUsername = usernameField.getText();
         lastPassword = new String(passwordField.getPassword());
         lastInitialDir = initialDirField.getText();
-        lastPort = ((Integer)portSpinner.getValue()).intValue();
+        lastPort = (Integer) portSpinner.getValue();
     }
 
 

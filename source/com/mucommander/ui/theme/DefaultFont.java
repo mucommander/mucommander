@@ -18,7 +18,7 @@
 
 package com.mucommander.ui.theme;
 
-import java.awt.*;
+import java.awt.Font;
 import java.util.Iterator;
 import java.util.Vector;
 
@@ -76,7 +76,7 @@ public abstract class DefaultFont {
 
         fonts = linkedFonts.iterator();
         while(fonts.hasNext())
-            ThemeData.triggerFontEvent(((Integer)fonts.next()).intValue(), font);
+            ThemeData.triggerFontEvent((Integer) fonts.next(), font);
     }
 
 

@@ -157,9 +157,9 @@ public class CachedFile extends ProxyFile {
             fBA_HIDDEN.setAccessible(true);
 
             // Retrieve constant field values once for all
-            BA_EXISTS = ((Integer)fBA_EXISTS.get(null)).intValue();
-            BA_DIRECTORY = ((Integer)fBA_DIRECTORY.get(null)).intValue();
-            BA_HIDDEN = ((Integer)fBA_HIDDEN.get(null)).intValue();
+            BA_EXISTS = (Integer) fBA_EXISTS.get(null);
+            BA_DIRECTORY = (Integer) fBA_DIRECTORY.get(null);
+            BA_HIDDEN = (Integer) fBA_HIDDEN.get(null);
             fs = fFs.get(null);
 
             getFileAttributesAvailable = true;
@@ -209,7 +209,7 @@ public class CachedFile extends ProxyFile {
 
         if(file instanceof LocalFile) {
             try {
-                int ba = ((Integer)mGetBooleanAttributes.invoke(fs, new Object [] {file.getUnderlyingFileObject()})).intValue();
+                int ba = (Integer) mGetBooleanAttributes.invoke(fs, new Object[]{file.getUnderlyingFileObject()});
 
                 isDirectory = (ba & BA_DIRECTORY)!=0;
                 isDirectorySet = true;

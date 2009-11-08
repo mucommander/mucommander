@@ -153,7 +153,7 @@ public class IntegerChooser extends JPanel implements ChangeListener {
 
         // Updates the chooser's value.
         if(e.getSource() == spinner)
-            slider.setValue(((Integer)spinner.getValue()).intValue());
+            slider.setValue((Integer) spinner.getValue());
         else if(e.getSource() == slider)
             spinner.setValue(slider.getValue());
 

@@ -106,7 +106,7 @@ public class SizeChooser extends JPanel {
      * @return the current value expressed in bytes
      */
     public long getValue() {
-        return SizeFormat.getUnitBytes(unitComboBox.getSelectedIndex())*((Integer)valueSpinner.getValue()).intValue();
+        return SizeFormat.getUnitBytes(unitComboBox.getSelectedIndex())* (Integer) valueSpinner.getValue();
     }
 
 

@@ -648,7 +648,7 @@ public abstract class FileJob implements Runnable {
      */
     protected int waitForUserResponse(DialogResult dialog) {
         Object userInput = waitForUserResponseObject(dialog);
-        return ((Integer)userInput).intValue();
+        return (Integer) userInput;
     }
     
     protected Object waitForUserResponseObject(DialogResult dialog) {

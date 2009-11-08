@@ -25,7 +25,9 @@ import com.mucommander.file.impl.nfs.NFSFile;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.main.MainFrame;
 
-import javax.swing.*;
+import javax.swing.JComboBox;
+import javax.swing.JSpinner;
+import javax.swing.JTextField;
 import java.net.MalformedURLException;
 import java.text.ParseException;
 
@@ -91,7 +93,7 @@ public class NFSPanel extends ServerPanel {
         lastServer = serverField.getText();
         lastShare = shareField.getText();
 
-        lastPort = ((Integer)portSpinner.getValue()).intValue();
+        lastPort = (Integer) portSpinner.getValue();
 
         lastNfsVersion = (String)nfsVersionComboBox.getSelectedItem();
         lastNfsProtocol = (String)nfsProtocolComboBox.getSelectedItem();

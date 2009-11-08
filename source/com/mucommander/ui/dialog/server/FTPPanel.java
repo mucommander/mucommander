@@ -29,7 +29,10 @@ import com.mucommander.ui.encoding.EncodingListener;
 import com.mucommander.ui.encoding.EncodingSelectBox;
 import com.mucommander.ui.main.MainFrame;
 
-import javax.swing.*;
+import javax.swing.JCheckBox;
+import javax.swing.JPasswordField;
+import javax.swing.JSpinner;
+import javax.swing.JTextField;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.MalformedURLException;
@@ -134,7 +137,7 @@ public class FTPPanel extends ServerPanel implements ActionListener, EncodingLis
         }
 
         lastInitialDir = initialDirField.getText();
-        lastPort = ((Integer)portSpinner.getValue()).intValue();
+        lastPort = (Integer) portSpinner.getValue();
     }
 	
 	
