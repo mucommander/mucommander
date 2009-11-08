@@ -21,7 +21,6 @@ package com.mucommander.ui.event;
 import com.mucommander.file.FileURL;
 import com.mucommander.ui.main.FolderPanel;
 
-import java.util.Iterator;
 import java.util.WeakHashMap;
 
 /**
@@ -30,7 +29,7 @@ import java.util.WeakHashMap;
 public class LocationManager {
 
     /** Contains all registered location listeners, stored as weak references */
-    private WeakHashMap locationListeners = new WeakHashMap();
+    private WeakHashMap<LocationListener, ?> locationListeners = new WeakHashMap<LocationListener, Object>();
 
     /** The FolderPanel instance this LocationManager manages location events for */
     private FolderPanel folderPanel;
@@ -75,9 +74,8 @@ public class LocationManager {
      * @param folderURL url of the folder that will become the new location if the folder change is successful
      */
     public synchronized void fireLocationChanging(FileURL folderURL) {
-        Iterator iterator = locationListeners.keySet().iterator();
-        while(iterator.hasNext())
-            ((LocationListener)iterator.next()).locationChanging(new LocationEvent(folderPanel, folderURL));
+        for(LocationListener listener : locationListeners.keySet())
+            listener.locationChanging(new LocationEvent(folderPanel, folderURL));
     }
 
     /**
@@ -86,9 +84,8 @@ public class LocationManager {
      * @param folderURL url of the new current folder in the associated FolderPanel
      */
     public synchronized void fireLocationChanged(FileURL folderURL) {
-        Iterator iterator = locationListeners.keySet().iterator();
-        while(iterator.hasNext())
-            ((LocationListener)iterator.next()).locationChanged(new LocationEvent(folderPanel, folderURL));
+        for(LocationListener listener : locationListeners.keySet())
+            listener.locationChanged(new LocationEvent(folderPanel, folderURL));
     }
 
     /**
@@ -98,9 +95,8 @@ public class LocationManager {
      * @param folderURL url of the folder for which a failed attempt was made to make it the current folder
      */
     public synchronized void fireLocationCancelled(FileURL folderURL) {
-        Iterator iterator = locationListeners.keySet().iterator();
-        while(iterator.hasNext())
-            ((LocationListener)iterator.next()).locationCancelled(new LocationEvent(folderPanel, folderURL));
+        for(LocationListener listener : locationListeners.keySet())
+            listener.locationCancelled(new LocationEvent(folderPanel, folderURL));
     }
 
 
@@ -111,8 +107,7 @@ public class LocationManager {
      * @param folderURL url of the folder for which a failed attempt was made to make it the current folder
      */
     public synchronized void fireLocationFailed(FileURL folderURL) {
-        Iterator iterator = locationListeners.keySet().iterator();
-        while(iterator.hasNext())
-            ((LocationListener)iterator.next()).locationFailed(new LocationEvent(folderPanel, folderURL));
+        for(LocationListener listener : locationListeners.keySet())
+            listener.locationFailed(new LocationEvent(folderPanel, folderURL));
     }
 }

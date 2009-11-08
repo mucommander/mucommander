@@ -24,7 +24,10 @@ import com.mucommander.ui.main.MainFrame;
 
 import javax.swing.ImageIcon;
 import javax.swing.KeyStroke;
-import java.util.*;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Vector;
+import java.util.WeakHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -366,15 +369,12 @@ public class ActionManager {
         Vector<MuAction> actionInstances = new Vector<MuAction>();
 
         // Iterate on all MainFrame instances
-        Iterator<Hashtable<ActionParameters, ActionAndIdPair>> mainFrameActions = mainFrameActionsMap.values().iterator();
-        while(mainFrameActions.hasNext()) {
-            Iterator<ActionAndIdPair> actionAndIds = mainFrameActions.next().values().iterator();
+        for (Hashtable<ActionParameters, ActionAndIdPair> actionParametersActionAndIdPairHashtable : mainFrameActionsMap.values()) {
             // Iterate on all the MainFrame's actions and their ids pairs
-            while(actionAndIds.hasNext()) {
-                ActionAndIdPair pair = actionAndIds.next();
-                if(pair.getId().equals(muActionId)) {
+            for (ActionAndIdPair actionAndIdPair : actionParametersActionAndIdPairHashtable.values()) {
+                if (actionAndIdPair.getId().equals(muActionId)) {
                     // Found an action matching the specified class
-                    actionInstances.add(pair.getAction());
+                    actionInstances.add(actionAndIdPair.getAction());
                     // Jump to the next MainFrame
                     break;
                 }

@@ -73,13 +73,13 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 	private ShortcutsTableData data;
 
 	/** Comparator of actions according to their labels */
-	private static final Comparator ACTIONS_COMPARATOR = new Comparator() {
-		public int compare(Object o1, Object o2) {
-			String label1 = ActionProperties.getActionLabel((String) o1);
+	private static final Comparator<String> ACTIONS_COMPARATOR = new Comparator<String>() {
+		public int compare(String id1, String id2) {
+			String label1 = ActionProperties.getActionLabel(id1);
 			if (label1 == null)
 				return 1;
 			
-			String label2 = ActionProperties.getActionLabel((String) o2);
+			String label2 = ActionProperties.getActionLabel(id2);
 			if (label2 == null)
 				return -1;
 			
@@ -485,25 +485,23 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 		private final Integer alt_accelerator = 2;
 		private final Integer tooltips = 3;
 		
-		private List allActionIds;
-		private HashMap db;
+		private List<String> allActionIds;
+		private HashMap<String, HashMap<Integer, Object>> db;
 		
 		public ShortcutsTableData() {
 			allActionIds = Collections.list(ActionManager.getActionIds());
 			Collections.sort(allActionIds, ACTIONS_COMPARATOR);
 			
 			final int nbActions = allActionIds.size();
-			db = new HashMap(nbActions);
-			Iterator actionsIterator = allActionIds.iterator();
-			
+			db = new HashMap<String, HashMap<Integer, Object>>(nbActions);
+
 			int nbRows = allActionIds.size();
 			data = new Object[nbRows][NUM_OF_COLUMNS];
-			
-			for (int i=0; actionsIterator.hasNext(); ++i) {
-				String actionId = (String) actionsIterator.next();
+
+            for(String actionId : allActionIds) {
 				ActionDescriptor actionDescriptor = ActionProperties.getActionDescriptor(actionId);
 				
-				HashMap actionProperties = new HashMap();
+				HashMap<Integer, Object> actionProperties = new HashMap<Integer, Object>();
 				
 				ImageIcon actionIcon = actionDescriptor.getIcon();
 				if (actionIcon == null)
@@ -520,7 +518,7 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 		}
 		
 		public void filter(ActionFilter filter) {
-			List filteredActionIds = filter(allActionIds, filter);
+			List<String> filteredActionIds = filter(allActionIds, filter);
 
 			// Build the table data
 			int nbRows = filteredActionIds.size();
@@ -530,16 +528,16 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 			data = new Object[nbRows][NUM_OF_COLUMNS];
 			
 			for (int i = 0; i < nbRows; ++i) {
-				String actionId = (String) filteredActionIds.get(i);
+				String actionId = filteredActionIds.get(i);
 				actionIds[i] = actionId;
 				ActionDescriptor actionDescriptor = ActionProperties.getActionDescriptor(actionId);
 				
-				data[i][ACTION_DESCRIPTION_COLUMN_INDEX] = ((HashMap) db.get(actionId)).get(this.description);
+				data[i][ACTION_DESCRIPTION_COLUMN_INDEX] = db.get(actionId).get(this.description);
 				
-				KeyStroke accelerator = (KeyStroke) ((HashMap) db.get(actionId)).get(this.accelerator);
+				KeyStroke accelerator = (KeyStroke) db.get(actionId).get(this.accelerator);
 				setAccelerator(accelerator, i);
 				
-				KeyStroke alternativeAccelerator = (KeyStroke) ((HashMap) db.get(actionId)).get(this.alt_accelerator);
+				KeyStroke alternativeAccelerator = (KeyStroke) db.get(actionId).get(this.alt_accelerator);
 				setAlternativeAccelerator(alternativeAccelerator, i);
 				
 				descriptions[i] = actionDescriptor.getDescription();
@@ -557,84 +555,74 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 		
 		public String getCurrentTooltip() { return descriptions[getSelectedRow()]; }
 		
-		public String getActionId(int row) { return (String) actionIds[row]; }
+		public String getActionId(int row) { return actionIds[row]; }
 		
 		public boolean hasChanged() {
-			Iterator actionIdsIterator = db.keySet().iterator();
-			while (actionIdsIterator.hasNext()) {
-				String actionId = (String) actionIdsIterator.next();
-				HashMap actionProperties = (HashMap) db.get(actionId);
-				if (!equals(actionProperties.get(this.accelerator), ActionKeymap.getAccelerator(actionId)) ||
-						!equals(actionProperties.get(this.alt_accelerator), ActionKeymap.getAlternateAccelerator(actionId)))
-					return true;
-			}
+            for (String actionId : db.keySet()) {
+                HashMap<Integer, Object> actionProperties = db.get(actionId);
+                if (!equals(actionProperties.get(this.accelerator), ActionKeymap.getAccelerator(actionId)) ||
+                        !equals(actionProperties.get(this.alt_accelerator), ActionKeymap.getAlternateAccelerator(actionId)))
+                    return true;
+            }
 			return false;
 		}
 		
 		public void restoreDefaultAccelerators() {
-			Iterator actionIdsIterator = allActionIds.iterator();
-			while (actionIdsIterator.hasNext()) {
-				String actionId = (String) actionIdsIterator.next();
-				((HashMap) db.get(actionId)).put(this.accelerator, ActionProperties.getDefaultAccelerator(actionId));
-				((HashMap) db.get(actionId)).put(this.alt_accelerator, ActionProperties.getDefaultAlternativeAccelerator(actionId));
-			}
+            for (String actionId : allActionIds) {
+                (db.get(actionId)).put(this.accelerator, ActionProperties.getDefaultAccelerator(actionId));
+                (db.get(actionId)).put(this.alt_accelerator, ActionProperties.getDefaultAlternativeAccelerator(actionId));
+            }
 			
 			int nbRows = actionIds.length;
 			for (int i=0; i<nbRows; ++i) {
-				data[i][ACCELERATOR_COLUMN_INDEX] = ((HashMap) db.get(actionIds[i])).get(this.accelerator);
-				data[i][ALTERNATE_ACCELERATOR_COLUMN_INDEX] = ((HashMap) db.get(actionIds[i])).get(this.alt_accelerator);
+				data[i][ACCELERATOR_COLUMN_INDEX] = db.get(actionIds[i]).get(this.accelerator);
+				data[i][ALTERNATE_ACCELERATOR_COLUMN_INDEX] = db.get(actionIds[i]).get(this.alt_accelerator);
 			}
 			
 			((DefaultTableModel) getModel()).fireTableDataChanged();
 		}
 		
 		public void submitChanges() {
-			Iterator actionIdsIterator = db.keySet().iterator();
-			while (actionIdsIterator.hasNext()) {
-				String actionId = (String) actionIdsIterator.next();
-				HashMap actionProperties = (HashMap) db.get(actionId);
-				KeyStroke accelerator = (KeyStroke) actionProperties.get(this.accelerator);
-				KeyStroke alternateAccelerator = (KeyStroke) actionProperties.get(this.alt_accelerator);
-				
-				// If action's accelerators differ from its saved accelerators, register them. 
-				if (!equals(accelerator, ActionKeymap.getAccelerator(actionId)) ||
-						!equals(alternateAccelerator, ActionKeymap.getAlternateAccelerator(actionId)))
-					ActionKeymap.changeActionAccelerators(actionId, accelerator, alternateAccelerator);
-			}
+            for (String actionId : db.keySet()) {
+                HashMap<Integer, Object> actionProperties = db.get(actionId);
+                KeyStroke accelerator = (KeyStroke) actionProperties.get(this.accelerator);
+                KeyStroke alternateAccelerator = (KeyStroke) actionProperties.get(this.alt_accelerator);
+
+                // If action's accelerators differ from its saved accelerators, register them.
+                if (!equals(accelerator, ActionKeymap.getAccelerator(actionId)) ||
+                        !equals(alternateAccelerator, ActionKeymap.getAlternateAccelerator(actionId)))
+                    ActionKeymap.changeActionAccelerators(actionId, accelerator, alternateAccelerator);
+            }
 		}
 		
 		public String contains(KeyStroke accelerator) {
 			if (accelerator != null) {
-				Iterator actionIdsIterator = db.keySet().iterator();
-				while (actionIdsIterator.hasNext()) {
-					String actionId = (String) actionIdsIterator.next();
-					if (accelerator.equals(((HashMap) db.get(actionId)).get(this.accelerator)) ||
-							accelerator.equals(((HashMap) db.get(actionId)).get(this.alt_accelerator)))
-						return actionId;
-				}
+                for (String actionId : db.keySet()) {
+                    if (accelerator.equals(db.get(actionId).get(this.accelerator)) ||
+                            accelerator.equals(db.get(actionId).get(this.alt_accelerator)))
+                        return actionId;
+                }
 			}
 			return null;
 		}
 		
 		private void setAccelerator(KeyStroke accelerator, int row) {
 			data[row][ACCELERATOR_COLUMN_INDEX] = accelerator;
-			((HashMap) db.get(getActionId(row))).put(this.accelerator, accelerator);
+			db.get(getActionId(row)).put(this.accelerator, accelerator);
 		}
 		
 		private void setAlternativeAccelerator(KeyStroke altAccelerator, int row) {
 			data[row][ALTERNATE_ACCELERATOR_COLUMN_INDEX] = altAccelerator;
-			((HashMap) db.get(getActionId(row))).put(this.alt_accelerator, altAccelerator);
+			db.get(getActionId(row)).put(this.alt_accelerator, altAccelerator);
 		}
 		
-		private List filter(List actionIds, ActionFilter filter) {
-			List filteredActionsList = new LinkedList();
-			Iterator actionIdsIterator = actionIds.iterator();
-			while(actionIdsIterator.hasNext()) {
-				String actionId = (String) actionIdsIterator.next();
+		private List<String> filter(List<String> actionIds, ActionFilter filter) {
+			List<String> filteredActionsList = new LinkedList<String>();
+            for (String actionId : actionIds) {
                 // Discard actions that are parameterized, and those that are rejected by the filter
-				if (!ActionProperties.getActionDescriptor(actionId).isParameterized() && filter.accept(actionId))
-					filteredActionsList.add(actionId);
-			}
+                if (!ActionProperties.getActionDescriptor(actionId).isParameterized() && filter.accept(actionId))
+                    filteredActionsList.add(actionId);
+            }
 			return filteredActionsList;
 		}
 		

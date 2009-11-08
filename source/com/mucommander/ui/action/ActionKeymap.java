@@ -131,11 +131,7 @@ public class ActionKeymap {
      * @param alternate - HashMap that maps action id to alternative accelerator.
      */
     public static void registerActions(HashMap<String, KeyStroke> primary, HashMap<String, KeyStroke> alternate) {
-    	Iterator<String> actionIdsIterator = primary.keySet().iterator();
-
-    	while(actionIdsIterator.hasNext()) {
-    		String actionId = actionIdsIterator.next();
-
+    	for(String actionId : primary.keySet()) {
     		// Add the action/keystroke mapping
     		ActionKeymap.registerActionAccelerators(
     				actionId,
@@ -319,9 +315,7 @@ public class ActionKeymap {
     	}
     	
     	// Update each MainFrame's action instance and input map
-    	Iterator<MuAction> actionInstancesIterator = ActionManager.getActionInstances(actionId).iterator();
-    	while (actionInstancesIterator.hasNext()) {
-    		MuAction action = actionInstancesIterator.next();
+    	for(MuAction action : ActionManager.getActionInstances(actionId)) {
     		MainFrame mainFrame = action.getMainFrame();
 
     		// Remove action from MainFrame's action and input maps

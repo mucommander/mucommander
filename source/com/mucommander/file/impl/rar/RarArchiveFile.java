@@ -24,7 +24,6 @@ import com.mucommander.file.impl.rar.provider.de.innosystec.unrar.rarfile.FileHe
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Iterator;
 import java.util.Vector;
 
 
@@ -95,10 +94,9 @@ public class RarArchiveFile extends AbstractROArchiveFile {
     public synchronized ArchiveEntryIterator getEntryIterator() throws IOException {
         checkRarFile();
 
-        Vector entries = new Vector();
-        Iterator rarEntriesIterator = rarFile.getEntries().iterator();
-        while(rarEntriesIterator.hasNext())
-            entries.add(createArchiveEntry((FileHeader) rarEntriesIterator.next()));
+        Vector<ArchiveEntry> entries = new Vector<ArchiveEntry>();
+        for (Object o : rarFile.getEntries())
+            entries.add(createArchiveEntry((FileHeader)o));
 
         return new WrapperArchiveEntryIterator(entries.iterator());
     }

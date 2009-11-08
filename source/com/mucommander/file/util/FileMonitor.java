@@ -21,7 +21,6 @@ package com.mucommander.file.util;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileLogger;
 
-import java.util.Iterator;
 import java.util.WeakHashMap;
 
 /**
@@ -73,7 +72,7 @@ public class FileMonitor implements FileMonitorConstants, Runnable {
     private boolean isInitialized;
 
     /** Registered FileChangeListener instances, stored as weak references */
-    private WeakHashMap listeners = new WeakHashMap();
+    private WeakHashMap<FileChangeListener, ?> listeners = new WeakHashMap<FileChangeListener, Object>();
 
 
     /**
@@ -235,9 +234,8 @@ public class FileMonitor implements FileMonitorConstants, Runnable {
         FileLogger.finest("firing an event to registered listeners, changed attributes="+changedAttributes);
 
         // Iterate on all listeners
-        Iterator iterator = listeners.keySet().iterator();
-        while(iterator.hasNext())
-            ((FileChangeListener)iterator.next()).fileChanged(file, changedAttributes);
+        for(FileChangeListener listener : listeners.keySet())
+            listener.fileChanged(file, changedAttributes);
     }
 
     

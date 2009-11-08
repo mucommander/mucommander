@@ -56,7 +56,6 @@ import javax.swing.table.TableColumnModel;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.Enumeration;
-import java.util.Iterator;
 import java.util.WeakHashMap;
 
 
@@ -125,7 +124,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
     private QuickSearch quickSearch = new QuickSearch();
 
     /** TableSelectionListener instances registered to receive selection change events */
-    private WeakHashMap tableSelectionListeners = new WeakHashMap();
+    private WeakHashMap<TableSelectionListener, ?> tableSelectionListeners = new WeakHashMap<TableSelectionListener, Object>();
 
     /** True when this table is the current or last active table in the MainFrame */
     private boolean isActiveTable;
@@ -962,18 +961,16 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
      * Notifies all registered listeners that the currently selected file has changed on this FileTable.
      */
     public void fireSelectedFileChangedEvent() {
-        Iterator iterator = tableSelectionListeners.keySet().iterator();
-        while(iterator.hasNext())
-            ((TableSelectionListener)iterator.next()).selectedFileChanged(this);
+        for(TableSelectionListener listener : tableSelectionListeners.keySet())
+            listener.selectedFileChanged(this);
     }
 
     /**
      * Notifies all registered listeners that the currently marked files have changed on this FileTable.
      */
     public void fireMarkedFilesChangedEvent() {
-        Iterator iterator = tableSelectionListeners.keySet().iterator();
-        while(iterator.hasNext())
-            ((TableSelectionListener)iterator.next()).markedFilesChanged(this);
+        for(TableSelectionListener listener : tableSelectionListeners.keySet())
+            listener.markedFilesChanged(this);
     }
 
 

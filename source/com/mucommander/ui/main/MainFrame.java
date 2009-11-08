@@ -44,12 +44,14 @@ import com.mucommander.ui.main.table.SortInfo;
 import com.mucommander.ui.main.toolbar.ToolBar;
 import com.mucommander.ui.quicklist.QuickListFocusableComponent;
 
-import javax.swing.*;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JSplitPane;
+import javax.swing.WindowConstants;
 import javax.swing.table.TableColumnModel;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.util.Iterator;
 import java.util.Vector;
 import java.util.WeakHashMap;
 
@@ -90,7 +92,7 @@ public class MainFrame extends JFrame implements LocationListener {
     private boolean foregroundActive;
 
     /** Contains all registered ActivePanelListener instances, stored as weak references */
-    private WeakHashMap activePanelListeners = new WeakHashMap();
+    private WeakHashMap<ActivePanelListener, ?> activePanelListeners = new WeakHashMap<ActivePanelListener, Object>();
 
     /** Split pane orientation */
     private final static String SPLIT_ORIENTATION = MuConfiguration.SPLIT_ORIENTATION;
@@ -109,7 +111,7 @@ public class MainFrame extends JFrame implements LocationListener {
 
         // Use Java 1.6 's new Window#setIconImages(List<Image>) when available
         if(JavaVersions.JAVA_1_6.isCurrentOrHigher()) {
-            Vector icons = new Vector();
+            Vector<Image> icons = new Vector<Image>();
 
             // Start by adding a 16x16 image with 1-bit transparency, any OS should support that.
             icons.add(IconManager.getIcon("/icon16_8.png").getImage());
@@ -350,9 +352,8 @@ public class MainFrame extends JFrame implements LocationListener {
      * @param folderPanel the new active panel
      */
     private void fireActivePanelChanged(FolderPanel folderPanel) {
-        Iterator iterator = activePanelListeners.keySet().iterator();
-        while(iterator.hasNext())
-            ((ActivePanelListener)iterator.next()).activePanelChanged(folderPanel);
+        for(ActivePanelListener listener : activePanelListeners.keySet())
+            listener.activePanelChanged(folderPanel);
     }
 
 

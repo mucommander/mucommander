@@ -34,7 +34,6 @@ import com.mucommander.ui.main.table.FileTable;
 import com.mucommander.ui.notifier.AbstractNotifier;
 import com.mucommander.ui.notifier.NotificationTypes;
 
-import java.util.Iterator;
 import java.util.WeakHashMap;
 
 
@@ -132,7 +131,7 @@ public abstract class FileJob implements Runnable {
     private int jobState = NOT_STARTED;
 
     /** List of registered FileJobListener stored as weak references */
-    private WeakHashMap listeners = new WeakHashMap();
+    private WeakHashMap<FileJobListener, ?> listeners = new WeakHashMap<FileJobListener, Object>();
     
     /** Information about this job progress */
     private JobProgress jobProgress;
@@ -290,9 +289,8 @@ public abstract class FileJob implements Runnable {
         int oldState = this.jobState;
         this.jobState = jobState;
 
-        Iterator iterator = listeners.keySet().iterator();
-        while(iterator.hasNext())
-            ((FileJobListener)iterator.next()).jobStateChanged(this, oldState, jobState);
+        for(FileJobListener listener : listeners.keySet())
+            listener.jobStateChanged(this, oldState, jobState);
     }
 
 

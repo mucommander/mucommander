@@ -27,5 +27,5 @@ public interface ToolBarAttributesListener {
 	/**
      * This method is invoked when toolbar's actions have been modified.
      */
-    public void ToolBarActionsChanged();
+    public void toolBarActionsChanged();
 }

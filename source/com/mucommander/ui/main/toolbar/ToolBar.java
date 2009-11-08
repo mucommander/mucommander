@@ -18,19 +18,6 @@
 
 package com.mucommander.ui.main.toolbar;
 
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.Insets;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.util.Hashtable;
-
-import javax.swing.Action;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JPopupMenu;
-import javax.swing.JToolBar;
-
 import com.mucommander.conf.ConfigurationEvent;
 import com.mucommander.conf.ConfigurationListener;
 import com.mucommander.conf.impl.MuConfiguration;
@@ -50,6 +37,14 @@ import com.mucommander.ui.button.PopupButton;
 import com.mucommander.ui.button.RolloverButtonAdapter;
 import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.main.MainFrame;
+
+import javax.swing.*;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Insets;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.util.Hashtable;
 
 /**
  * This class is the icon toolbar attached to a MainFrame, triggering events when buttons are clicked.
@@ -271,7 +266,7 @@ public class ToolBar extends JToolBar implements ConfigurationListener, MouseLis
     // ToolBarAttributesListener methods //
     ///////////////////////////////////////
     
-	public void ToolBarActionsChanged() {
+	public void toolBarActionsChanged() {
 		removeAll();
 		addButtons(ToolBarAttributes.getActions());
 	}

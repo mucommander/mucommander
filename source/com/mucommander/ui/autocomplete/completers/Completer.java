@@ -24,7 +24,6 @@ import com.mucommander.ui.autocomplete.completers.services.CompletionService;
 
 import javax.swing.JList;
 import java.net.MalformedURLException;
-import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.Vector;
@@ -110,9 +109,8 @@ public abstract class Completer {
 	 */
 	protected Vector getPossibleCompletionsFromServices(String path) {
 		Vector result = new Vector();
-		Iterator iter = services.iterator();
-		while(iter.hasNext())
-			result.addAll(((CompletionService) iter.next()).getPossibleCompletions(path));
+        for (CompletionService service : services)
+            result.addAll(service.getPossibleCompletions(path));
 		return result;
 	}
 	
@@ -129,10 +127,9 @@ public abstract class Completer {
 	 */
 	protected String tryToCompleteFromServices(String selectedString) {
 		String location = null;
-		Iterator iter = services.iterator();
-		while(iter.hasNext())
-			if ((location = ((CompletionService) iter.next()).complete(selectedString)) != null)
-				break;
+        for (CompletionService service : services)
+            if ((location = (service).complete(selectedString)) != null)
+                break;
 		return location;
 	}
 }

@@ -1,26 +1,19 @@
 package com.mucommander.file.impl.sevenzip;
 
+import SevenZip.Archive.IInArchive;
+import SevenZip.Archive.SevenZip.Handler;
+import SevenZip.Archive.SevenZipEntry;
+import com.mucommander.file.*;
+import com.mucommander.io.FailSafePipedInputStream;
+
 import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PipedOutputStream;
-import java.util.Iterator;
 import java.util.Vector;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
-
-import SevenZip.Archive.IInArchive;
-import SevenZip.Archive.SevenZipEntry;
-import SevenZip.Archive.SevenZip.Handler;
-
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.AbstractROArchiveFile;
-import com.mucommander.file.ArchiveEntry;
-import com.mucommander.file.ArchiveEntryIterator;
-import com.mucommander.file.FileLogger;
-import com.mucommander.file.WrapperArchiveEntryIterator;
-import com.mucommander.io.FailSafePipedInputStream;
 
 public class SevenZipArchiveFile extends AbstractROArchiveFile {
 	
@@ -122,11 +115,10 @@ public class SevenZipArchiveFile extends AbstractROArchiveFile {
     	for(int i = 0; i < sevenZipFile.size() ; i++)
             result.add(sevenZipFile.getEntry(i));
     	
-    	Vector entries = new Vector();
-    	Iterator sevenZipEntriesIterator = result.iterator();
-        
-        while(sevenZipEntriesIterator.hasNext())
-            entries.add(createArchiveEntry((SevenZipEntry) sevenZipEntriesIterator.next()));
+    	Vector<ArchiveEntry> entries = new Vector<ArchiveEntry>();
+
+        for (Object aResult : result)
+            entries.add(createArchiveEntry((SevenZipEntry) aResult));
         
         return new WrapperArchiveEntryIterator(entries.iterator());
 	}

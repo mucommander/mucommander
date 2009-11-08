@@ -67,8 +67,8 @@ public class ZipOutputStream extends OutputStream implements ZipConstants {
     /** Buffer used by Deflater to deflate data */
     protected byte[] deflaterBuf;
 
-    /** List of ZipEntries written so far */
-    private Vector entries = new Vector();
+    /** List of zip entries written so far */
+    private Vector<ZipEntry> entries = new Vector<ZipEntry>();
 
     /** Count the bytes written to out */
     private long written = 0;
@@ -185,7 +185,7 @@ public class ZipOutputStream extends OutputStream implements ZipConstants {
         int nbEntries = entries.size();
         ZipEntry ze;
         for (int i=0; i <nbEntries; i++) {
-            ze =  (ZipEntry)entries.elementAt(i);
+            ze =  entries.elementAt(i);
             written += writeCentralFileHeader(ze, out, encoding, ze.getEntryInfo().headerOffset, !hasRandomAccess, zipBuffer);
         }
         long cdLength = written - cdOffset;

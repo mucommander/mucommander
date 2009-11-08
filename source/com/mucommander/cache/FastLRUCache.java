@@ -209,13 +209,11 @@ public class FastLRUCache extends LRUCache {
      * Tests this LRUCache for corruption and throws a RuntimeException if something is wrong.
      */
     protected void testCorruption() throws RuntimeException {
-        Object key;
         Object value[];
         long expirationDate;
         Long expirationDateL;
-        Iterator iterator = cacheMap.keySet().iterator();
-        while(iterator.hasNext()) {
-            key = iterator.next();
+
+        for(Object key : cacheMap.keySet()) {
             value = (Object[])cacheMap.get(key);
             if(value==null)
                 throw new RuntimeException("cache corrupted: value could not be found for key="+key);

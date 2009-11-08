@@ -27,7 +27,6 @@ import java.awt.Frame;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Iterator;
 import java.util.Vector;
 import java.util.WeakHashMap;
 
@@ -43,7 +42,7 @@ import java.util.WeakHashMap;
 public class EncodingMenu extends JMenu {
 
     /** Contains all registered encoding listeners, stored as weak references */
-    protected final WeakHashMap listeners = new WeakHashMap();
+    protected final WeakHashMap<EncodingListener, ?> listeners = new WeakHashMap<EncodingListener, Object>();
 
     /** the dialog/frame that owns this component */
     protected DialogOwner dialogOwner;
@@ -83,7 +82,7 @@ public class EncodingMenu extends JMenu {
      * that allows the list of preferred encodings to be customized.
      */
     protected void populateMenu() {
-        Vector encodings = EncodingPreferences.getPreferredEncodings();
+        Vector<String> encodings = EncodingPreferences.getPreferredEncodings();
 
         // Add the current encoding if it is not in the list of preferred encodings
         if(selectedEncoding!=null && !encodings.contains(selectedEncoding))
@@ -95,7 +94,7 @@ public class EncodingMenu extends JMenu {
         JCheckBoxMenuItem item;
         ButtonGroup group = new ButtonGroup();
         for(int i=0; i<nbEncodings; i++) {
-            enc = (String)encodings.elementAt(i);
+            enc = encodings.elementAt(i);
             item = new JCheckBoxMenuItem(enc);
 
             // Select the current encoding, if there is one
@@ -166,10 +165,8 @@ public class EncodingMenu extends JMenu {
 
     protected void fireEncodingListener(String oldEncoding, String newEncoding) {
         synchronized(listeners) {
-            // Iterate on all listeners
-            Iterator iterator = listeners.keySet().iterator();
-            while(iterator.hasNext())
-                ((EncodingListener)iterator.next()).encodingChanged(this, oldEncoding, newEncoding);
+            for (EncodingListener listener : listeners.keySet())
+                listener.encodingChanged(this, oldEncoding, newEncoding);
         }
 
     }

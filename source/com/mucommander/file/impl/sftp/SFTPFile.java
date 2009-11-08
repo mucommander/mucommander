@@ -31,7 +31,6 @@ import com.sshtools.j2ssh.sftp.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.Iterator;
 import java.util.List;
 
 
@@ -436,16 +435,15 @@ public class SFTPFile extends ProtocolFile {
             parentPath  += SEPARATOR;
 
         // Fill AbstractFile array and discard '.' and '..' files
-        Iterator iterator = files.iterator();
-        while(iterator.hasNext()) {
-            sftpFile = (SftpFile)iterator.next();
+        for (Object file : files) {
+            sftpFile = (SftpFile) file;
             filename = sftpFile.getFilename();
             // Discard '.' and '..' files, dunno why these are returned
-            if(filename.equals(".") || filename.equals(".."))
+            if (filename.equals(".") || filename.equals(".."))
                 continue;
 
-            childURL = (FileURL)fileURL.clone();
-            childURL.setPath(parentPath+filename);
+            childURL = (FileURL) fileURL.clone();
+            childURL.setPath(parentPath + filename);
 
             child = FileFactory.wrapArchive(new SFTPFile(childURL, new SFTPFileAttributes(childURL, sftpFile.getAttributes())));
             child.setParent(this);

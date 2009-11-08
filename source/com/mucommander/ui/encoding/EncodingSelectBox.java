@@ -22,11 +22,14 @@ import com.mucommander.runtime.OsFamilies;
 import com.mucommander.ui.combobox.SaneComboBox;
 import com.mucommander.ui.dialog.DialogOwner;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JButton;
+import javax.swing.JPanel;
+import java.awt.BorderLayout;
+import java.awt.Dialog;
+import java.awt.Frame;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Iterator;
 import java.util.Vector;
 import java.util.WeakHashMap;
 
@@ -46,7 +49,7 @@ public class EncodingSelectBox extends JPanel {
     protected JButton customizeButton;
 
     /** Contains all registered encoding listeners, stored as weak references */
-    protected final WeakHashMap listeners = new WeakHashMap();
+    protected final WeakHashMap<EncodingListener, ?> listeners = new WeakHashMap<EncodingListener, Object>();
 
     /** The encoding that is currently selected, may be null */
     protected String currentEncoding;
@@ -175,10 +178,8 @@ public class EncodingSelectBox extends JPanel {
 
     protected void fireEncodingListener(String oldEncoding, String newEncoding) {
         synchronized(listeners) {
-            // Iterate on all listeners
-            Iterator iterator = listeners.keySet().iterator();
-            while(iterator.hasNext())
-                ((EncodingListener)iterator.next()).encodingChanged(this, oldEncoding, newEncoding);
+            for(EncodingListener listener : listeners.keySet())
+                listener.encodingChanged(this, oldEncoding, newEncoding);
         }
 
     }
