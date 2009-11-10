@@ -28,7 +28,6 @@ import com.mucommander.file.util.PathTokenizer;
 import com.mucommander.file.util.PathUtils;
 import com.mucommander.runtime.JavaVersions;
 import com.mucommander.runtime.OsFamilies;
-import com.mucommander.util.Enumerator;
 
 import java.io.IOException;
 import java.util.Hashtable;
@@ -82,13 +81,13 @@ import java.util.Vector;
 public class FileFactory {
 
     /** All registered protocol providers. */
-    private static Hashtable protocolProviders = new Hashtable();
+    private static Hashtable<String, ProtocolProvider> protocolProviders = new Hashtable<String, ProtocolProvider>();
 
     /** Local file provider to avoid hashtable lookups (faster). */
     private static ProtocolProvider localFileProvider;
 
     /** Vector of registered ArchiveFormatMapping instances */
-    private static Vector archiveFormatProvidersV = new Vector();
+    private static Vector<ArchiveFormatProvider> archiveFormatProvidersV = new Vector<ArchiveFormatProvider>();
 
     /** Array of registered FileProtocolMapping instances, for quicker access */
     private static ArchiveFormatProvider[] archiveFormatProviders;
@@ -182,7 +181,7 @@ public class FileFactory {
         if(protocol.equals(FileProtocols.FILE))
             localFileProvider = provider;
 
-        return (ProtocolProvider)protocolProviders.put(protocol, provider);
+        return protocolProviders.put(protocol, provider);
     }
 
     /**
@@ -198,7 +197,7 @@ public class FileFactory {
         if(protocol.equals(FileProtocols.FILE))
             localFileProvider = null;
 
-        return (ProtocolProvider)protocolProviders.remove(protocol);
+        return protocolProviders.remove(protocol);
     }
 
     /**
@@ -209,7 +208,7 @@ public class FileFactory {
      * @return          the protocol provider registered to the specified protocol identifer, or <code>null</code> if none.
      */
     public static ProtocolProvider getProtocolProvider(String protocol) {
-        return (ProtocolProvider)protocolProviders.get(protocol.toLowerCase());
+        return protocolProviders.get(protocol.toLowerCase());
     }
 
     /**
@@ -231,8 +230,8 @@ public class FileFactory {
      *
      * @return an iterator on all known protocol names.
      */
-    public static Iterator protocols() {
-        return new Enumerator(protocolProviders.keys());
+    public static Iterator<String> protocols() {
+        return protocolProviders.keySet().iterator();
     }
 
     /**
@@ -298,7 +297,7 @@ public class FileFactory {
      *
      * @return an iterator on all known archive formats.
      */
-    public static Iterator archiveFormats() {
+    public static Iterator<ArchiveFormatProvider> archiveFormats() {
         return archiveFormatProvidersV.iterator();
     }
 

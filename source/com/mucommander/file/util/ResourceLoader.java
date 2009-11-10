@@ -151,12 +151,12 @@ public class ResourceLoader {
         try {
             // Iterate through all resources that match the given path, and return the one located inside the
             // given root package file.
-            Enumeration resourceEnum = classLoader.getResources(path);
+            Enumeration<URL> resourceEnum = classLoader.getResources(path);
             String rootPackagePath = rootPackageFile.getAbsolutePath();
             String resourcePath = rootPackageFile.getAbsolutePath(true)+nativePath;
             URL resourceURL;
             while(resourceEnum.hasMoreElements()) {
-                resourceURL = (URL)resourceEnum.nextElement();
+                resourceURL = resourceEnum.nextElement();
 
                 if("jar".equals(resourceURL.getProtocol())) {
                     if(getJarFilePath(resourceURL).equals(rootPackagePath))
@@ -344,7 +344,7 @@ public class ResourceLoader {
      * @param aClass the class for which to locate the root package.
      * @return an AbstractFile to the root package of the given <code>Class</code>
      */
-    public static AbstractFile getRootPackageAsFile(Class aClass) {
+    public static AbstractFile getRootPackageAsFile(Class<?> aClass) {
         ClassLoader classLoader = aClass.getClassLoader();
         if(classLoader==null)
             classLoader = getDefaultClassLoader();
@@ -382,7 +382,7 @@ public class ResourceLoader {
      * @param cclass the class for which to return a path
      * @return a path to the given package
      */
-    public static String getRelativeClassPath(Class cclass) {
+    public static String getRelativeClassPath(Class<?> cclass) {
         return cclass.getName().replace('.', '/')+".class";
     }
 

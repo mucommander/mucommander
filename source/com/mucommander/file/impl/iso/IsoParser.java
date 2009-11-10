@@ -45,8 +45,8 @@ import java.util.Vector;
  * @author Xavier Martin
  */
 class IsoParser {
-    public static Vector getEntries(byte[] buffer, RandomAccessInputStream rais, int sectSize, long sector_offset, long shiftOffset) throws Exception {
-        Vector entries = new Vector();
+    public static Vector<IsoArchiveEntry> getEntries(byte[] buffer, RandomAccessInputStream rais, int sectSize, long sector_offset, long shiftOffset) throws Exception {
+        Vector<IsoArchiveEntry> entries = new Vector<IsoArchiveEntry>();
 
         Calendar calendar = Calendar.getInstance();
         int start = 16;
@@ -94,7 +94,7 @@ class IsoParser {
      * @return the list of entries contained by the ISO file
      * @throws IOException if an I/O error occurs
      */
-    static Vector getEntries(AbstractFile file, RandomAccessInputStream rais) throws IOException {
+    static Vector<IsoArchiveEntry> getEntries(AbstractFile file, RandomAccessInputStream rais) throws IOException {
         byte[] buffer = BufferPool.getByteArray(IsoUtil.MODE1_2048);
 
         try {
@@ -144,7 +144,7 @@ class IsoParser {
         name.append((level == 0) ? new String(b, 0, len) : new String(b, 0, len, "UnicodeBigUnmarked"));
     }
 
-    public static todo parse_dir(todo todo_idr, String rootname, int extent, int len, RandomAccessInputStream rais, byte[] buffer, Vector entries, int sectSize, int level, long shiftOffset, long sector_offset, Calendar calendar) throws Exception {
+    public static todo parse_dir(todo todo_idr, String rootname, int extent, int len, RandomAccessInputStream rais, byte[] buffer, Vector<IsoArchiveEntry> entries, int sectSize, int level, long shiftOffset, long sector_offset, Calendar calendar) throws Exception {
         todo td;
         int i;
         isoDr idr;

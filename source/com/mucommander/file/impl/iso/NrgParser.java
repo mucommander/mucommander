@@ -30,7 +30,7 @@ import java.util.Vector;
  */
 class NrgParser extends IsoParser {
 
-    static Vector getEntries(byte[] buffer, AbstractFile file, RandomAccessInputStream rais) throws Exception {
+    static Vector<IsoArchiveEntry> getEntries(byte[] buffer, AbstractFile file, RandomAccessInputStream rais) throws Exception {
         int sectSize = IsoUtil.MODE1_2048;
 
         // sector shift : 0 most of the time
@@ -167,7 +167,7 @@ class NrgParser extends IsoParser {
 
             // fun : handle audio disc :)
             if (audioOnly) {
-                Vector entries = new Vector();
+                Vector<IsoArchiveEntry> entries = new Vector<IsoArchiveEntry>();
                 for (int k = 0; k < tracks; k++) {
                     entries.add(
                             new IsoArchiveEntry(

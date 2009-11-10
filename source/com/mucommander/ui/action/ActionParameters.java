@@ -48,7 +48,7 @@ public class ActionParameters {
     private String actionId;
 
     /** Initialization properties, null if there are no initialization properties */
-    private Hashtable properties;
+    private Hashtable<String,Object> properties;
 
 
     /**
@@ -69,7 +69,7 @@ public class ActionParameters {
      * @param actionId a MuAction id
      * @param initProperties a Hashtable containing the properties that will be used to instantiate the specified MuAction class
      */
-    public ActionParameters(String actionId, Hashtable initProperties) {
+    public ActionParameters(String actionId, Hashtable<String,Object> initProperties) {
         this.actionId = actionId;
         this.properties = initProperties;
     }
@@ -90,7 +90,7 @@ public class ActionParameters {
      * @return the list of properties that are to be used to instantiate the MuAction class, or <code>null</code> if
      * there are none
      */
-    public Hashtable getInitProperties() {
+    public Hashtable<String,Object> getInitProperties() {
         return properties;
     }
 

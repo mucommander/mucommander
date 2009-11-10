@@ -30,7 +30,7 @@ import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.main.MainFrame;
 
-import java.awt.*;
+import java.awt.Cursor;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.dnd.*;
 import java.awt.event.InputEvent;
@@ -253,7 +253,7 @@ public class FileDropTargetListener implements DropTargetListener {
         // - For any other file kind (archive, regular file...), current folder is changed to the file's parent folder and the file is selected
         // If more than one file is dropped, only the first one is used
         if(changeFolderOnlyMode || currentDropAction==DnDConstants.ACTION_LINK) {
-            AbstractFile file = droppedFiles.fileAt(0);
+            AbstractFile file = droppedFiles.elementAt(0);
 
             // If file is a directory, change current folder to that directory
             if(file.isDirectory())

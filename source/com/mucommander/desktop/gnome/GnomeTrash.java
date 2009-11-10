@@ -190,9 +190,9 @@ public class GnomeTrash extends QueuedTrash {
 
         try {
             // delete real files
-            filesToDelete.addFiles(TRASH_FILES_SUBFOLDER.ls());
+            filesToDelete.addAll(TRASH_FILES_SUBFOLDER.ls());
             // delete spec files
-            filesToDelete.addFiles(TRASH_INFO_SUBFOLDER.ls());
+            filesToDelete.addAll(TRASH_INFO_SUBFOLDER.ls());
         } catch (java.io.IOException ex) {
             AppLogger.fine("Failed to list files", ex);
             return false;
@@ -249,14 +249,14 @@ public class GnomeTrash extends QueuedTrash {
      * @param queuedFiles Collection of files to the trash
      * @return <code>true</code> if movement has been successful or <code>false</code> otherwise
      */
-    protected boolean moveToTrash(Vector queuedFiles) {
+    protected boolean moveToTrash(Vector<AbstractFile> queuedFiles) {
         int nbFiles = queuedFiles.size();
         String fileInfoContent;
         String trashFileName;
         boolean retVal = true;     // overall return value (if everything went OK or at least one file wasn't moved properly
         
         for(int i=0; i<nbFiles; i++) {
-            AbstractFile fileToDelete = (AbstractFile)queuedFiles.elementAt(i);
+            AbstractFile fileToDelete = queuedFiles.elementAt(i);
             // generate content of info file and new filename
             try {
                 fileInfoContent = getFileInfoContent(fileToDelete);

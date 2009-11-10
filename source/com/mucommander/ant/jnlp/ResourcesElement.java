@@ -26,34 +26,34 @@ import java.util.Vector;
  * @ant.type name="resources" category="webstart"
  */
 public class ResourcesElement {
-    private String os;
-    private String arch;
-    private String locale;
-    private Vector j2ses;
-    private Vector jars;
-    private Vector nativeLibs;
-    private Vector extensions;
-    private Vector properties;
-    private Vector packages;
+    private String                   os;
+    private String                   arch;
+    private String                   locale;
+    private Vector<J2seElement>      j2ses;
+    private Vector<JarElement>       jars;
+    private Vector<NativeLibElement> nativeLibs;
+    private Vector<ExtensionElement> extensions;
+    private Vector<PropertyElement>  properties;
+    private Vector<PackageElement>   packages;
 
     public ResourcesElement() {
-        j2ses      = new Vector();
-        jars       = new Vector();
-        nativeLibs = new Vector();
-        extensions = new Vector();
-        properties = new Vector();
-        packages   = new Vector();
+        j2ses      = new Vector<J2seElement>();
+        jars       = new Vector<JarElement>();
+        nativeLibs = new Vector<NativeLibElement>();
+        extensions = new Vector<ExtensionElement>();
+        properties = new Vector<PropertyElement>();
+        packages   = new Vector<PackageElement>();
     }
 
     public String getOs() {return os;}
     public String getArch() {return arch;}
     public String getLocale() {return locale;}
-    public Iterator j2ses() {return j2ses.iterator();}
-    public Iterator jars() {return jars.iterator();}
-    public Iterator nativeLibs() {return nativeLibs.iterator();}
-    public Iterator extensions() {return extensions.iterator();}
-    public Iterator properties() {return properties.iterator();}
-    public Iterator packages() {return packages.iterator();}
+    public Iterator<J2seElement> j2ses() {return j2ses.iterator();}
+    public Iterator<JarElement> jars() {return jars.iterator();}
+    public Iterator<NativeLibElement> nativeLibs() {return nativeLibs.iterator();}
+    public Iterator<ExtensionElement> extensions() {return extensions.iterator();}
+    public Iterator<PropertyElement> properties() {return properties.iterator();}
+    public Iterator<PackageElement> packages() {return packages.iterator();}
 
     public void setOs(String s) {os = s;}
     public void setArch(String s) {arch = s;}

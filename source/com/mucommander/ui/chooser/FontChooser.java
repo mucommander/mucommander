@@ -30,7 +30,6 @@ import java.awt.Font;
 import java.awt.GraphicsEnvironment;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Iterator;
 import java.util.WeakHashMap;
 
 /**
@@ -60,7 +59,7 @@ public class FontChooser extends YBoxPanel implements ActionListener {
     /** Currently selected font. */
     private Font        font;
     /** List of all registered state change listeners. */
-    private WeakHashMap listeners = new WeakHashMap();
+    private WeakHashMap<ChangeListener, ?> listeners = new WeakHashMap<ChangeListener, Object>();
 
 
     // - Initialisation ---------------------------------------------------------
@@ -175,7 +174,6 @@ public class FontChooser extends YBoxPanel implements ActionListener {
      * Called when the font description has been changed.
      */
     public void actionPerformed(ActionEvent e) {
-        Iterator    iterator;
         ChangeEvent event;
 
         font = createFont();
@@ -183,9 +181,8 @@ public class FontChooser extends YBoxPanel implements ActionListener {
 
         // Notifies listeners.
         event    = new ChangeEvent(this);
-        iterator = listeners.keySet().iterator();
-        while(iterator.hasNext())
-            ((ChangeListener)iterator.next()).stateChanged(event);
+        for(ChangeListener listener : listeners.keySet())
+            listener.stateChanged(event);
     }
 
 

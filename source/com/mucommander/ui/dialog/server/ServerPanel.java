@@ -23,12 +23,14 @@ import com.mucommander.file.FileURL;
 import com.mucommander.ui.layout.XAlignedComponentPanel;
 import com.mucommander.ui.main.MainFrame;
 
-import javax.swing.*;
+import javax.swing.JSpinner;
+import javax.swing.JTextField;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import java.awt.*;
+import java.awt.Insets;
 import java.net.MalformedURLException;
 
 
@@ -39,7 +41,7 @@ import java.net.MalformedURLException;
  *
  * @author Maxence Bernard
  */
-abstract class ServerPanel extends XAlignedComponentPanel {
+public abstract class ServerPanel extends XAlignedComponentPanel {
 
     protected ServerConnectDialog dialog;
     protected MainFrame mainFrame;

@@ -48,7 +48,7 @@ import com.mucommander.ui.viewer.ViewerFrame;
 import javax.swing.*;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
-import java.awt.*;
+import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Hashtable;
@@ -100,7 +100,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
     private JCheckBoxMenuItem splitVerticallyItem;
 
     /** Maps window menu items onto weakly-referenced frames */
-    private WeakHashMap windowMenuFrames;
+    private WeakHashMap<JMenuItem, Frame> windowMenuFrames;
 
 
     private final static String RECALL_WINDOW_ACTION_IDS[] = {
@@ -273,7 +273,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
         goMenu.add(new JSeparator());
         BonjourMenu bonjourMenu = new BonjourMenu() {
             public MuAction getMenuItemAction(BonjourService bs) {
-                return new OpenLocationAction(MainMenuBar.this.mainFrame, new Hashtable(), bs);
+                return new OpenLocationAction(MainMenuBar.this.mainFrame, new Hashtable<String, Object>(), bs);
             }
         };
         char mnemonic = menuItemMnemonicHelper.getMnemonic(bonjourMenu.getName());
@@ -376,10 +376,8 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
         if(mainFrame.getNoEventsMode())
             return;
 
-        Object source = e.getSource();
-
         // Bring the frame corresponding to the clicked menu item to the front
-        ((JFrame)windowMenuFrames.get(source)).toFront();
+        windowMenuFrames.get(e.getSource()).toFront();
     }
 
 
@@ -424,7 +422,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
             int nbFolders = volumes.length;
 
             for(int i=0; i<nbFolders; i++)
-                goMenu.add(new OpenLocationAction(mainFrame, new Hashtable(), volumes[i]));
+                goMenu.add(new OpenLocationAction(mainFrame, new Hashtable<String, Object>(), volumes[i]));
         }
         else if(source==bookmarksMenu) {
             // Remove any previous bookmarks menu items from menu
@@ -433,11 +431,11 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
                 bookmarksMenu.remove(bookmarksOffset);
 
             // Add bookmarks menu items
-            Vector bookmarks = BookmarkManager.getBookmarks();
+            Vector<Bookmark> bookmarks = BookmarkManager.getBookmarks();
             int nbBookmarks = bookmarks.size();
             if(nbBookmarks>0) {
                 for(int i=0; i<nbBookmarks; i++)
-                    MenuToolkit.addMenuItem(bookmarksMenu, new OpenLocationAction(mainFrame, new Hashtable(), (Bookmark)bookmarks.elementAt(i)), null);
+                    MenuToolkit.addMenuItem(bookmarksMenu, new OpenLocationAction(mainFrame, new Hashtable<String, Object>(), bookmarks.elementAt(i)), null);
             }
             else {
                 // Show 'No bookmark' as a disabled menu item instead showing nothing
@@ -461,16 +459,16 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
             // This WeakHashMap maps menu items to frame instances. It has to be a weakly referenced hash map
             // and not a regular hash map, since it will not (and cannot) be emptied when the menu has been deselected
             // and we really do not want this hash map to prevent the frames to be GCed 
-            windowMenuFrames = new WeakHashMap();
+            windowMenuFrames = new WeakHashMap<JMenuItem, Frame>();
             
             // Create a menu item for each of the MainFrame instances, that displays the MainFrame's path
             // and a keyboard accelerator to recall the frame (for the first 10 frames only).
-            java.util.Vector mainFrames = WindowManager.getMainFrames();
+            java.util.Vector<MainFrame> mainFrames = WindowManager.getMainFrames();
             MainFrame mainFrame;
             JCheckBoxMenuItem checkBoxMenuItem;
             int nbFrames = mainFrames.size();
             for(int i=0; i<nbFrames; i++) {
-                mainFrame = (MainFrame)mainFrames.elementAt(i);
+                mainFrame = mainFrames.elementAt(i);
                 checkBoxMenuItem = new JCheckBoxMenuItem();
 
                 // If frame number is less than 10, use the corresponding action class (accelerator will be displayed in the menu item)
@@ -480,7 +478,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
                 }
                 // Else use the generic RecallWindowAction
                 else {
-                    Hashtable actionProps = new Hashtable();
+                    Hashtable<String, Object> actionProps = new Hashtable<String, Object>();
                     // Specify the window number using the dedicated property
                     actionProps.put(RecallWindowAction.WINDOW_NUMBER_PROPERTY_KEY, ""+(i+1));
                     recallWindowAction = ActionManager.getActionInstance(new ActionParameters(RecallWindowAction.Descriptor.ACTION_ID, actionProps), this.mainFrame);
@@ -528,13 +526,13 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
             // Remove all previous theme items, create new ones for each available theme and select the current theme
             themesMenu.removeAll();
             ButtonGroup buttonGroup = new ButtonGroup();
-            Iterator themes = ThemeManager.availableThemes();
+            Iterator<Theme> themes = ThemeManager.availableThemes();
             Theme theme;
             JCheckBoxMenuItem item;
             themesMenu.add(new JMenuItem(new EditCurrentThemeAction()));
             themesMenu.add(new JSeparator());
             while(themes.hasNext()) {
-                theme = (Theme)themes.next();
+                theme = themes.next();
                 item = new JCheckBoxMenuItem(new ChangeCurrentThemeAction(theme));
                 buttonGroup.add(item);
                 if(ThemeManager.isCurrentTheme(theme))

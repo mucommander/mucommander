@@ -94,7 +94,7 @@ class SFTPConnectionHandler extends ConnectionHandler {
             // Retrieve a list of available authentication methods on the server.
             // Some SSH servers support the 'password' auth method (e.g. OpenSSH on Debian unstable), some don't
             // and only support the 'keyboard-interactive' method.
-            List authMethods = sshClient.getAvailableAuthMethods(credentials.getLogin());
+            List<String> authMethods = sshClient.getAvailableAuthMethods(credentials.getLogin());
             if(authMethods==null)   // this can happen
                 throw new IOException();
 

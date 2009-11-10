@@ -42,7 +42,7 @@ import java.util.Comparator;
  *
  * @author Maxence Bernard
  */
-public class FileComparator implements Comparator {
+public class FileComparator implements Comparator<AbstractFile> {
 
     /** Comparison criterion */
     private int criterion;
@@ -104,11 +104,8 @@ public class FileComparator implements Comparator {
     // Comparator implementation //
     ///////////////////////////////
     
-    public int compare(Object o1, Object o2) {
+    public int compare(AbstractFile f1, AbstractFile f2) {
         long diff;
-
-        AbstractFile f1 = (AbstractFile)o1;
-        AbstractFile f2 = (AbstractFile)o2;
 
         boolean is1Directory = f1.isDirectory();
         boolean is2Directory = f2.isDirectory();

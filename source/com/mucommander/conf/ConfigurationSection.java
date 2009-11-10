@@ -30,9 +30,9 @@ class ConfigurationSection {
     // - Instance fields -------------------------------------------------------
     // -------------------------------------------------------------------------
     /** Contains all the variables defined in the section. */
-    private Hashtable variables;
+    private Hashtable<String, String>               variables;
     /** Contains all the subsections defined the section. */
-    private Hashtable sections;
+    private Hashtable<String, ConfigurationSection> sections;
 
 
 
@@ -42,8 +42,8 @@ class ConfigurationSection {
      * Creates a new configuration section.
      */
     public ConfigurationSection() {
-        variables = new Hashtable();
-        sections  = new Hashtable();
+        variables = new Hashtable<String, String>();
+        sections  = new Hashtable<String, ConfigurationSection>();
     }
 
 
@@ -55,14 +55,14 @@ class ConfigurationSection {
      * @param name name of the variable to remove.
      * @return the value to which this variable was previously set, <code>null</code> if none.
      */
-    public String removeVariable(String name) {return (String)variables.remove(name);}
+    public String removeVariable(String name) {return variables.remove(name);}
 
     /**
      * Returns the value of the specified variable.
      * @param name name of the variable whose value should be returned.
      * @return the value of the specified variable, or <code>null</code> if it wasn't set.
      */
-    public String getVariable(String name) {return (String)variables.get(name);}
+    public String getVariable(String name) {return variables.get(name);}
 
     /**
      * Sets the specified variable to the specified value.
@@ -88,7 +88,7 @@ class ConfigurationSection {
 
         // Compares the variable's new and old values.
         String buffer;
-        buffer = (String)variables.put(name, value);
+        buffer = variables.put(name, value);
         return buffer == null || !buffer.equals(value);
     }
 
@@ -96,7 +96,7 @@ class ConfigurationSection {
      * Returns an enumeration on the names of the variables that are defined in the section.
      * @return an enumeration on the names of the variables that are defined in the section.
      */
-    public Enumeration variableNames() {return variables.keys();}
+    public Enumeration<String> variableNames() {return variables.keys();}
 
     /**
      * Returns <code>true</code> if the section contains any variable.
@@ -240,7 +240,7 @@ class ConfigurationSection {
      * @param  name name of the section to delete.
      * @return      the section that was deleted if any, <code>null</code> otherwise.
      */
-    public ConfigurationSection removeSection(String name) {return (ConfigurationSection)sections.remove(name);}
+    public ConfigurationSection removeSection(String name) {return sections.remove(name);}
 
     /**
      * Deletes the specified section.
@@ -250,15 +250,15 @@ class ConfigurationSection {
      * @param section section to remove.
      */
     public void removeSection(ConfigurationSection section) {
-        String      name;
-        Enumeration sectionNames;
+        String              name;
+        Enumeration<String> sectionNames;
 
         sectionNames = sectionNames();
 
         // Goes through each key / value pair and checks whether we've found the sectioon
         // we were looking for.
         while(sectionNames.hasMoreElements()) {
-            name = (String)sectionNames.nextElement();
+            name = sectionNames.nextElement();
 
             // If we have, remove it and break.
             if(getSection(name).equals(section)) {
@@ -273,13 +273,13 @@ class ConfigurationSection {
      * @param  name name of the section to retrieve.
      * @return      the requested section if found, <code>null</code> otherwise.
      */
-    public ConfigurationSection getSection(String name) {return (ConfigurationSection)sections.get(name);}
+    public ConfigurationSection getSection(String name) {return sections.get(name);}
 
     /**
      * Returns an enumeration on all of this section's subsections' names.
      * @return an enumeration on all of this section's subsections' names.
      */
-    public Enumeration sectionNames() {return sections.keys();}
+    public Enumeration<String> sectionNames() {return sections.keys();}
 
     /**
      * Returns <code>true</code> if this section has subsections.

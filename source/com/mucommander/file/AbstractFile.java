@@ -943,19 +943,18 @@ public abstract class AbstractFile implements FileAttributes, PermissionTypes, P
     }
 
     /**
-     * Returns the first ancestor of this file that is an instance of the given Class or of a subclass of the given
-     * Class, or <code>this</code> if this instance's class matches those criteria. Returns <code>null</code> if this
+     * Returns the first ancestor of this file that is an instance of the given Class or of a subclass of it,
+     * or <code>this</code> if this instance's class matches those criteria. Returns <code>null</code> if this
      * file has no such ancestor.
-     * Note that the specified must correspond to an <code>AbstractFile</code> subclass. Specifying any other Class will
-     * always yield to this method returning <code>null</code>. Also note that this method will always return
-     * <code>this</code> if <code>AbstractFile.class</code> is specified.
+     * <br>
+     * Note that this method will always return <code>this</code> if <code>AbstractFile.class</code> is specified.
      *
      * @param abstractFileClass a Class corresponding to an AbstractFile subclass
      * @return the first ancestor of this file that is an instance of the given Class or of a subclass of the given
      * Class, or <code>this</code> if this instance's class matches those criteria. Returns <code>null</code> if this
      * file has no such ancestor.
      */
-    public final AbstractFile getAncestor(Class abstractFileClass) {
+    public final AbstractFile getAncestor(Class<? extends AbstractFile> abstractFileClass) {
         AbstractFile ancestor = this;
         AbstractFile lastAncestor;
 
@@ -1006,7 +1005,7 @@ public abstract class AbstractFile implements FileAttributes, PermissionTypes, P
      * @return <code>true</code> if this file has an ancestor (immediate or not) that is an instance of the given Class
      * or of a subclass of the given Class.
      */
-    public final boolean hasAncestor(Class abstractFileClass) {
+    public final boolean hasAncestor(Class<? extends AbstractFile> abstractFileClass) {
         AbstractFile ancestor = this;
         AbstractFile lastAncestor;
 

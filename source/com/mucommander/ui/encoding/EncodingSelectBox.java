@@ -124,7 +124,7 @@ public class EncodingSelectBox extends JPanel {
      * @param selectEncoding the encoding that will be selected, <code>null</code> for the first one
      */
     protected void populateComboBox(String selectEncoding) {
-        Vector encodings = EncodingPreferences.getPreferredEncodings();
+        Vector<String> encodings = EncodingPreferences.getPreferredEncodings();
 
         // Ignore the specified encoding if it is not in the list of preferred encodings
         if(selectEncoding!=null && !encodings.contains(selectEncoding))

@@ -978,17 +978,17 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
     // - Layout management ---------------------------------------------------------------
     // -----------------------------------------------------------------------------------
     private void doAutoLayout(boolean respectSize) {
-        Enumeration columns;
-        TableColumn column;
-        TableColumn nameColumn;
-        int         columnIndex;
-        int         remainingWidth;
-        int         columnWidth;
-        int         rowCount;
-        FontMetrics fm;
-        String      val;
-        int         dirStringWidth;
-        int         stringWidth;
+        Enumeration<TableColumn> columns;
+        TableColumn              column;
+        TableColumn              nameColumn;
+        int                      columnIndex;
+        int                      remainingWidth;
+        int                      columnWidth;
+        int                      rowCount;
+        FontMetrics              fm;
+        String                   val;
+        int                      dirStringWidth;
+        int                      stringWidth;
 
         fm             = getFontMetrics(FileTableCellRenderer.getCellFont());
         dirStringWidth = fm.stringWidth(FileTableModel.DIRECTORY_SIZE_STRING);

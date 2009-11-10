@@ -320,7 +320,7 @@ public class TransferableFileSet implements Transferable {
             Vector fileList = new Vector(nbFiles);
 
             for(int i=0; i<nbFiles; i++) {
-                AbstractFile file = fileSet.fileAt(i);
+                AbstractFile file = fileSet.elementAt(i);
                 fileList.add(new File(file.getAbsolutePath()));
             }
             return fileList;
@@ -344,7 +344,7 @@ public class TransferableFileSet implements Transferable {
             StringBuffer sb = new StringBuffer();
             AbstractFile file;
             for(int i=0; i<nbFiles; i++) {
-                file = fileSet.fileAt(i);
+                file = fileSet.elementAt(i);
                 sb.append(stringFlavourTransfersFilename?file.getName():file.getAbsolutePath());
                 if(i!=nbFiles-1)
                     sb.append('\n');
@@ -357,7 +357,7 @@ public class TransferableFileSet implements Transferable {
             StringBuffer sb = new StringBuffer();
             AbstractFile file;
             for(int i=0; i<nbFiles; i++) {
-                file = fileSet.fileAt(i);
+                file = fileSet.elementAt(i);
                 String url = file.getURL().getScheme().equals(FileProtocols.FILE)
                     // Use java.io.File.toURI() for local files (e.g. file:/mnt/music), this is the format expected by
                     // Gnome/Nautilus.

@@ -33,16 +33,16 @@ public class SystemVariablesService implements CompletionService {
 	private String[] cachedKeyNames;
 	
 	public SystemVariablesService() {
-		Set keys = System.getenv().keySet();
+		Set<String> keys = System.getenv().keySet();
 		int nbKeys = keys.size();
 		cachedKeyNames = new String[nbKeys];
-		Iterator iter = keys.iterator();
+		Iterator<String> iter = keys.iterator();
 		for (int i=0; i<nbKeys; i++)
 			cachedKeyNames[i] = "$" + iter.next();
 		Arrays.sort(cachedKeyNames, String.CASE_INSENSITIVE_ORDER);		
 	}
 
-	public Vector getPossibleCompletions(String path) {				
+	public Vector<String> getPossibleCompletions(String path) {
 		return PrefixFilter.createPrefixFilter(path).filter(cachedKeyNames);
 	}
 

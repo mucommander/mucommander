@@ -23,7 +23,7 @@ import com.mucommander.command.CommandManager;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.main.MainFrame;
 
-import javax.swing.*;
+import javax.swing.JMenu;
 import java.util.Hashtable;
 import java.util.Iterator;
 
@@ -51,13 +51,13 @@ public class OpenWithMenu extends JMenu {
      * Refreshes the content of the menu.
      */
     private synchronized void populate() {
-        Iterator iterator = CommandManager.commands();
+        Iterator<Command> iterator = CommandManager.commands();
         Command  command;
 
         while(iterator.hasNext()) {
-            command = (Command)iterator.next();
+            command = iterator.next();
             if(command.getType() == Command.NORMAL_COMMAND)
-                add(new com.mucommander.ui.action.impl.CommandAction(mainFrame, new Hashtable(), command));
+                add(new com.mucommander.ui.action.impl.CommandAction(mainFrame, new Hashtable<String, Object>(), command));
         }
         if(getItemCount() == 0)
             setEnabled(false);

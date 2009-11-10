@@ -125,7 +125,7 @@ public class FileURL implements Cloneable {
     private String query;
 
     /** Properties, null if none have been set thus far */
-    private Hashtable properties;
+    private Hashtable<String, String> properties;
     /** Credentials (login and password parts), null if this URL has none */
     private Credentials credentials;
 
@@ -136,7 +136,7 @@ public class FileURL implements Cloneable {
     private final static SchemeHandler DEFAULT_HANDLER = new DefaultSchemeHandler();
 
     /** Maps schemes (String) onto SchemeHandler instances */
-    private final static Hashtable handlers = new Hashtable();
+    private final static Hashtable<String, SchemeHandler> handlers = new Hashtable<String, SchemeHandler>();
 
     /** String designating the localhost */
     public final static String LOCALHOST = "localhost";
@@ -298,7 +298,7 @@ public class FileURL implements Cloneable {
      * @return the handler registered for the specified scheme
      */
     public static SchemeHandler getRegisteredHandler(String scheme) {
-        return (SchemeHandler)handlers.get(scheme.toLowerCase());
+        return handlers.get(scheme.toLowerCase());
     }
 
     /**
@@ -610,7 +610,7 @@ public class FileURL implements Cloneable {
 
                 // Copy properties to parent (if any)
                 if(properties!=null)
-                    parentURL.properties = new Hashtable(properties);
+                    parentURL.properties = new Hashtable<String, String>(properties);
 
                 return parentURL;
             }
@@ -683,7 +683,7 @@ public class FileURL implements Cloneable {
      * @see #setProperty(String,String)
      */
     public String getProperty(String name) {
-        return properties==null?null:(String)properties.get(name);
+        return properties==null?null:properties.get(name);
     }
 	
     /**
@@ -697,7 +697,7 @@ public class FileURL implements Cloneable {
     public void setProperty(String name, String value) {
         // Create the property hashtable only when a property is set for the first time
         if(properties==null)
-            properties = new Hashtable();
+            properties = new Hashtable<String, String>();
 
         if(value==null)
             properties.remove(name);
@@ -713,15 +713,15 @@ public class FileURL implements Cloneable {
      *
      * @return an <code>Enumeration</code> of all property names this FileURL contains
      */
-    public Enumeration getPropertyNames() {
+    public Enumeration<String> getPropertyNames() {
         // Return an empty enumeration if the property hashtable is null
         if(properties==null) {
-            return new Enumeration() {
+            return new Enumeration<String>() {
                 public boolean hasMoreElements() {
                     return false;
                 }
 
-                public Object nextElement() {
+                public String nextElement() {
                     throw new NoSuchElementException();
                 }
             };
@@ -740,10 +740,10 @@ public class FileURL implements Cloneable {
         if(url.properties==null)
             return;
 
-        Enumeration propertyKeys = url.getPropertyNames();
+        Enumeration<String> propertyKeys = url.getPropertyNames();
         String key;
         while(propertyKeys.hasMoreElements()) {
-            key = (String)propertyKeys.nextElement();
+            key = propertyKeys.nextElement();
             setProperty(key, url.getProperty(key));
         }
     }
@@ -988,7 +988,7 @@ public class FileURL implements Cloneable {
 
         // Mutable fields
         if(properties!=null)    // Copy properties (if any)
-            clonedURL.properties = new Hashtable(properties);
+            clonedURL.properties = new Hashtable<String, String>(properties);
 
         // Caches
         clonedURL.hashCode = hashCode;

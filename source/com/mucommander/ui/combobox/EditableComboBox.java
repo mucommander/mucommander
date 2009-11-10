@@ -110,7 +110,7 @@ public class EditableComboBox extends SaneComboBox {
      * will be created and used.
      * @param items items used to populate the initial items list.
      */
-    public EditableComboBox(JTextField textField, Vector items) {
+    public EditableComboBox(JTextField textField, Vector<Object> items) {
         super(items);
         init(textField);
     }

@@ -56,8 +56,8 @@ public class ProxyFileTest extends AbstractFileTestCase {
      * <code>ProxyFile</code>.
      */
     public void testAllMethodsOverridden() {
-        Class proxyFileClass = ProxyFile.class;
-        Class abstractFileClass = AbstractFile.class;
+        Class<?> proxyFileClass = ProxyFile.class;
+        Class<?> abstractFileClass = AbstractFile.class;
 
         // This array will contain all AbstractFile public methods, including the ones defined by parent classes
         // (java.lang.Object), and including static and final ones.

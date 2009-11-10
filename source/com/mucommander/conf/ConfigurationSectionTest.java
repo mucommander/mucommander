@@ -57,8 +57,8 @@ public class ConfigurationSectionTest extends TestCase {
      * Tests the behaviour of the various variable related methods.
      */
     public void testVariables() {
-        Enumeration variables;
-        String      name;
+        Enumeration<String> variables;
+        String              name;
 
         assertFalse(section.hasVariables());
 
@@ -86,7 +86,7 @@ public class ConfigurationSectionTest extends TestCase {
 
         variables = section.variableNames();
         assertTrue(variables.hasMoreElements());
-        name = (String)variables.nextElement();
+        name = variables.nextElement();
         assertTrue(variables.hasMoreElements());
         if(name.equals(VARIABLE1))
             assertEquals(VARIABLE2, variables.nextElement());
@@ -105,8 +105,7 @@ public class ConfigurationSectionTest extends TestCase {
      */
     public void testSections() {
         ConfigurationSection subSection1;
-        ConfigurationSection subSection2;
-        Enumeration          sections;
+        Enumeration<String>  sections;
         String               name;
 
         assertFalse(section.hasSections());
@@ -122,16 +121,16 @@ public class ConfigurationSectionTest extends TestCase {
         section.removeSection(subSection1);
         assertFalse(section.hasSections());
 
-        assertNotNull(subSection1 = section.addSection(SECTION1));
+        assertNotNull(section.addSection(SECTION1));
         sections = section.sectionNames();
         assertTrue(sections.hasMoreElements());
         assertEquals(SECTION1, sections.nextElement());
         assertFalse(sections.hasMoreElements());
 
-        assertNotNull(subSection2 = section.addSection(SECTION2));
+        assertNotNull(section.addSection(SECTION2));
         sections = section.sectionNames();
         assertTrue(sections.hasMoreElements());
-        name = (String)sections.nextElement();
+        name = sections.nextElement();
         assertTrue(sections.hasMoreElements());
         if(name.equals(SECTION1))
             assertEquals(SECTION2, sections.nextElement());
@@ -145,7 +144,7 @@ public class ConfigurationSectionTest extends TestCase {
      * Tests value casting.
      */
     public void testCasting() {
-        Vector listValue;
+        Vector<String> listValue;
 
         // Tests integer casting.
         assertEquals(10, ConfigurationSection.getIntegerValue("10"));
@@ -179,7 +178,7 @@ public class ConfigurationSectionTest extends TestCase {
         assertEquals("false", ConfigurationSection.getValue(false));
 
         // Test list casting.
-        listValue = new Vector();
+        listValue = new Vector<String>();
         for(int i = 0; i < 7; i++)
             listValue.add(Integer.toString(i));
         assertEquals(listValue, ConfigurationSection.getListValue(ValueList.toString(listValue, ";"), ";"));

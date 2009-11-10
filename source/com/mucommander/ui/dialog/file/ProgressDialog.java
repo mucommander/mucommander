@@ -485,7 +485,7 @@ public class ProgressDialog extends FocusDialog implements ActionListener, ItemL
 
         private static final int STROKE_WIDTH = 1;
 
-        private Vector samples = new Vector(NB_SAMPLES_MAX);
+        private Vector<Long> samples = new Vector<Long>(NB_SAMPLES_MAX);
 
         private Stroke lineStroke = new BasicStroke(STROKE_WIDTH);
 
@@ -536,7 +536,7 @@ public class ProgressDialog extends FocusDialog implements ActionListener, ItemL
                 // Calculate the maximum bytes per second of all the samples to be displayed
                 long maxBps = 0;
                 for(int i=firstSample; i<firstSample+nbLines; i++) {
-                    long sample = (Long) samples.elementAt(i);
+                    long sample = samples.elementAt(i);
                     if(sample>maxBps)
                         maxBps = sample;
                 }

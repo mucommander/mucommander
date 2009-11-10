@@ -301,15 +301,15 @@ public class ActionManager {
             	return null;
             }
 
-            Hashtable properties = actionParameters.getInitProperties();
+            Hashtable<String,Object> properties = actionParameters.getInitProperties();
             // If no properties hashtable is specified in the action descriptor
             if(properties==null) {
-            	properties = new Hashtable();
+            	properties = new Hashtable<String,Object>();
             }
             // else clone the hashtable to ensure that it doesn't get modified by action instances.
             // Since cloning is an expensive operation, this is done only if the hashtable is not empty.
             else if(!properties.isEmpty()) {
-            	properties = (Hashtable)properties.clone();
+            	properties = (Hashtable<String,Object>)properties.clone();
             }
 
             // Instantiate the MuAction class

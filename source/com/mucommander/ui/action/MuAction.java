@@ -337,7 +337,7 @@ public abstract class MuAction extends AbstractAction {
      * @param action a MuAction class descriptor
      * @return the standard icon image corresponding to the specified MuAction class, <code>null</code> if none was found
      */
-    public static ImageIcon getStandardIcon(Class action) {
+    public static ImageIcon getStandardIcon(Class<? extends MuAction> action) {
         String iconPath;
 
         // Look for an icon image file with the /action/<classname>.png path and use it if it exists
@@ -354,7 +354,7 @@ public abstract class MuAction extends AbstractAction {
      * @param action a MuAction class descriptor
      * @return the standard path to the icon image corresponding to the specified MuAction class
      */
-    public static String getStandardIconPath(Class action) {
+    public static String getStandardIconPath(Class<? extends MuAction> action) {
         return IconManager.getIconSetFolder(IconManager.ACTION_ICON_SET) + action.getName() + ".png";
     }
 

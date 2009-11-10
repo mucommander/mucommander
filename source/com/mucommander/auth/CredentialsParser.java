@@ -45,7 +45,7 @@ class CredentialsParser extends DefaultHandler implements CredentialsConstants {
 
     // Variables used for XML parsing
     private FileURL url;
-    private Hashtable urlProperties;
+    private Hashtable<String, String> urlProperties;
     private String login;
     private String password;
     private StringBuffer characters;
@@ -111,7 +111,7 @@ class CredentialsParser extends DefaultHandler implements CredentialsConstants {
         // Property element (properties will be set when credentials element ends
         else if(qName.equals(ELEMENT_PROPERTY)) {
             if(urlProperties==null)
-                urlProperties = new Hashtable();
+                urlProperties = new Hashtable<String, String>();
             urlProperties.put(attributes.getValue(ATTRIBUTE_NAME), attributes.getValue(ATTRIBUTE_VALUE));
         }
         // Root element, the 'encryption' attribute specifies which encoding was used to encrypt passwords
@@ -130,11 +130,11 @@ class CredentialsParser extends DefaultHandler implements CredentialsConstants {
 
             // Copy properties into FileURL instance (if any)
             if(urlProperties!=null) {
-                Enumeration propertyKeys = urlProperties.keys();
+                Enumeration<String> propertyKeys = urlProperties.keys();
                 String key;
                 while(propertyKeys.hasMoreElements()) {
-                    key = (String)propertyKeys.nextElement();
-                    url.setProperty(key, (String)urlProperties.get(key));
+                    key = propertyKeys.nextElement();
+                    url.setProperty(key, urlProperties.get(key));
                 }
             }
 

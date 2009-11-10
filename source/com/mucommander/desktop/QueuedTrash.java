@@ -49,7 +49,7 @@ import java.util.Vector;
 public abstract class QueuedTrash extends AbstractTrash {
 
     /** Contains the files that are waiting to be moved to the trash */
-    private final static Vector queuedFiles = new Vector();
+    private final static Vector<AbstractFile> queuedFiles = new Vector<AbstractFile>();
 
     /** Use to synchronize access to the trash */
     protected final static Object moveToTrashLock = new Object();
@@ -68,7 +68,7 @@ public abstract class QueuedTrash extends AbstractTrash {
      * @param queuedFiles a Vector of AbstractFile to move to the trash
      * @return true if all files were moved successfully
      */
-    protected abstract boolean moveToTrash(Vector queuedFiles);
+    protected abstract boolean moveToTrash(Vector<AbstractFile> queuedFiles);
 
 
     //////////////////////////////////

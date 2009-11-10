@@ -18,25 +18,6 @@
 
 package com.mucommander.ui.dialog.file;
 
-import java.awt.BorderLayout;
-import java.awt.FlowLayout;
-import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import javax.swing.text.AttributeSet;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.Document;
-
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.PermissionAccesses;
 import com.mucommander.file.PermissionTypes;
@@ -49,6 +30,20 @@ import com.mucommander.ui.dialog.DialogToolkit;
 import com.mucommander.ui.layout.YBoxPanel;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.text.SizeConstrainedDocument;
+
+import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 
 /**
  * This dialog allows the user to change the permissions of the currently selected/marked file(s). The permissions can be
@@ -87,7 +82,7 @@ public class ChangePermissionsDialog extends JobDialog
         permCheckBoxes = new JCheckBox[5][5];
         JCheckBox permCheckBox;
 
-        AbstractFile firstFile = files.fileAt(0);
+        AbstractFile firstFile = files.elementAt(0);
         int permSetMask = firstFile.getChangeablePermissions().getIntValue();
         boolean canSetPermission = permSetMask!=0;
         int defaultPerms = firstFile.getPermissions().getIntValue();

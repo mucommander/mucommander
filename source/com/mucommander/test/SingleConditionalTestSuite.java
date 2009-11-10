@@ -19,6 +19,7 @@
 package com.mucommander.test;
 
 import com.mucommander.commons.CommonsLogger;
+import junit.framework.TestCase;
 
 /**
  * <code>SingleConditionalTestSuite</code> is a <code>ConditionalTestSuite</code> that operates on a single test case.
@@ -49,7 +50,5 @@ public abstract class SingleConditionalTestSuite extends ConditionalTestSuite {
      *
      * @return the TestCase class to be added to this test suite
      */
-    protected abstract Class getTestCaseClass();
-//    protected abstract Class<? extends TestCase> getTestCaseClass();      // For the day we start using Java 1.5 features
-
+    protected abstract Class<? extends TestCase> getTestCaseClass();
 }

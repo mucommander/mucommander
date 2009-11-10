@@ -55,8 +55,8 @@ public class EncodingPreferences {
      *
      * @return a user-defined list of preferred encodings.
      */
-    public static Vector getPreferredEncodings() {
-        Vector vector = MuConfiguration.getListVariable(MuConfiguration.PREFERRED_ENCODINGS, ",");
+    public static Vector<String> getPreferredEncodings() {
+        Vector<String> vector = MuConfiguration.getListVariable(MuConfiguration.PREFERRED_ENCODINGS, ",");
         if(vector==null) {
             vector = getDefaultPreferredEncodings();
             MuConfiguration.setVariable(MuConfiguration.PREFERRED_ENCODINGS, vector, ",");
@@ -70,8 +70,8 @@ public class EncodingPreferences {
      *
      * @return a default list of preferred encodings.
      */
-    public static Vector getDefaultPreferredEncodings() {
-        Vector encodingsV = new Vector();
+    public static Vector<String> getDefaultPreferredEncodings() {
+        Vector<String> encodingsV = new Vector<String>();
         for (String encoding : DEFAULT_PREFERRED_ENCODINGS) {
             // Ensure that the encoding is supported before adding it
             if (Charset.isSupported(encoding))
@@ -86,7 +86,7 @@ public class EncodingPreferences {
      *
      * @param encodings the user-defined list of preferred encodings
      */
-    public static void setPreferredEncodings(Vector encodings) {
+    public static void setPreferredEncodings(Vector<String> encodings) {
         MuConfiguration.setVariable(MuConfiguration.PREFERRED_ENCODINGS, encodings, ",");
     }
 }

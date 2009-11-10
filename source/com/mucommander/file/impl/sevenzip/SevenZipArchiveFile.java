@@ -110,7 +110,7 @@ public class SevenZipArchiveFile extends AbstractROArchiveFile {
 	public ArchiveEntryIterator getEntryIterator() throws IOException {
 		checkSevenZipFile();
 
-    	Vector result = new Vector();
+    	Vector<SevenZip.Archive.SevenZipEntry> result = new Vector<SevenZip.Archive.SevenZipEntry>();
     	
     	for(int i = 0; i < sevenZipFile.size() ; i++)
             result.add(sevenZipFile.getEntry(i));
@@ -118,7 +118,7 @@ public class SevenZipArchiveFile extends AbstractROArchiveFile {
     	Vector<ArchiveEntry> entries = new Vector<ArchiveEntry>();
 
         for (Object aResult : result)
-            entries.add(createArchiveEntry((SevenZipEntry) aResult));
+            entries.add(createArchiveEntry((SevenZipEntry)aResult));
         
         return new WrapperArchiveEntryIterator(entries.iterator());
 	}

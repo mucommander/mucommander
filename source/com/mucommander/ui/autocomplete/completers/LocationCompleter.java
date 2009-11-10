@@ -42,7 +42,7 @@ public class LocationCompleter extends Completer {
             registerService(ServiceFactory.getSystemVariablesService());
     }
 
-	protected Vector getUpdatedSuggestions(AutocompleterTextComponent component) {
+	protected Vector<String> getUpdatedSuggestions(AutocompleterTextComponent component) {
     	return getPossibleCompletionsFromServices(component.getText());
     }
  

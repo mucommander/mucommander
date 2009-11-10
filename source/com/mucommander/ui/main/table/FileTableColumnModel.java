@@ -18,7 +18,8 @@
 
 package com.mucommander.ui.main.table;
 
-import javax.swing.*;
+import javax.swing.DefaultListSelectionModel;
+import javax.swing.ListSelectionModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.TableColumnModelEvent;
 import javax.swing.event.TableColumnModelListener;
@@ -44,11 +45,11 @@ public class FileTableColumnModel implements TableColumnModel, PropertyChangeLis
     // - Instance fields -----------------------------------------------------------------
     // -----------------------------------------------------------------------------------
     /** All registered listeners. */
-    private WeakHashMap   listeners  = new WeakHashMap();
+    private WeakHashMap<TableColumnModelListener, ?> listeners  = new WeakHashMap<TableColumnModelListener, Object>();
     /** Cache for the table's total width. */
-    private int           widthCache = CACHE_OUT_OF_DATE;
+    private int                                      widthCache = CACHE_OUT_OF_DATE;
     /** All available columns. */
-    private Vector        columns    = new Vector(Columns.COLUMN_COUNT);
+    private Vector<TableColumn>                      columns    = new Vector<TableColumn>(Columns.COLUMN_COUNT);
     /** Enabled state of each column. */
     private boolean[]     enabled = new boolean[Columns.COLUMN_COUNT];
     /** Visibility state of each column. */
@@ -119,7 +120,7 @@ public class FileTableColumnModel implements TableColumnModel, PropertyChangeLis
 
         conf = new FileTableConfiguration();
         for(int i = 0; i < Columns.COLUMN_COUNT; i++) {
-            column = (TableColumn)columns.get(i);
+            column = columns.get(i);
             index  = column.getModelIndex();
 
             conf.setEnabled(index, enabled[index]);
@@ -212,7 +213,7 @@ public class FileTableColumnModel implements TableColumnModel, PropertyChangeLis
         // Looks for the visible column of index 'index'.
         visibleIndex = -1;
         for(int i = 0; i < visibility.length; i++) {
-            column = (TableColumn)columns.get(i);
+            column = columns.get(i);
             if(visibility[column.getModelIndex()])
                 if(++visibleIndex == index)
                     return i;
@@ -226,13 +227,13 @@ public class FileTableColumnModel implements TableColumnModel, PropertyChangeLis
      * @param  index index of the column in the model.
      * @return       the requested column.
      */
-    public synchronized TableColumn getColumn(int index) {return (TableColumn)columns.get(getInternalIndex(index));}
+    public synchronized TableColumn getColumn(int index) {return columns.get(getInternalIndex(index));}
 
-    public synchronized TableColumn getColumnFromId(int id) {return (TableColumn)columns.get(id);}
+    public synchronized TableColumn getColumnFromId(int id) {return columns.get(id);}
 
     public synchronized int getColumnPosition(int id) {
         for(int i = 0; i < visibility.length; i++)
-            if(((TableColumn)columns.get(i)).getModelIndex() == id)
+            if(columns.get(i).getModelIndex() == id)
                 return i;
         return -1;
     }
@@ -261,7 +262,7 @@ public class FileTableColumnModel implements TableColumnModel, PropertyChangeLis
         // Locates the internal index of the requested column
         // and removes that column
         index  = getInternalIndex(from);
-        column = (TableColumn)columns.get(index);
+        column = columns.get(index);
         columns.removeElementAt(index);
 
         // If the column needs to be moved at the end of the set,
@@ -317,12 +318,12 @@ public class FileTableColumnModel implements TableColumnModel, PropertyChangeLis
      * Computes the model's width.
      */
     private void computeWidthCache() {
-        Enumeration elements;
+        Enumeration<TableColumn> elements;
 
         elements = getColumns();
         widthCache = 0;
         while(elements.hasMoreElements())
-            widthCache += ((TableColumn)elements.nextElement()).getWidth();
+            widthCache += elements.nextElement().getWidth();
     }
 
     /**
@@ -379,11 +380,8 @@ public class FileTableColumnModel implements TableColumnModel, PropertyChangeLis
      * @param event event to propagate.
      */
     private void triggerColumnAdded(TableColumnModelEvent event) {
-        Iterator iterator;
-
-        iterator = listeners.keySet().iterator();
-        while(iterator.hasNext())
-            ((TableColumnModelListener)iterator.next()).columnAdded(event);
+        for(TableColumnModelListener listener: listeners.keySet())
+            listener.columnAdded(event);
     }
 
     /**
@@ -391,11 +389,8 @@ public class FileTableColumnModel implements TableColumnModel, PropertyChangeLis
      * @param event event to propagate.
      */
     private void triggerColumnMarginChanged(ChangeEvent event) {
-        Iterator iterator;
-
-        iterator = listeners.keySet().iterator();
-        while(iterator.hasNext())
-            ((TableColumnModelListener)iterator.next()).columnMarginChanged(event);
+        for(TableColumnModelListener listener: listeners.keySet())
+            listener.columnMarginChanged(event);
     }
 
     /**
@@ -403,11 +398,8 @@ public class FileTableColumnModel implements TableColumnModel, PropertyChangeLis
      * @param event event to propagate.
      */
     private void triggerColumnMoved(TableColumnModelEvent event) {
-        Iterator iterator;
-
-        iterator = listeners.keySet().iterator();
-        while(iterator.hasNext())
-            ((TableColumnModelListener)iterator.next()).columnMoved(event);
+        for(TableColumnModelListener listener: listeners.keySet())
+            listener.columnMoved(event);
     }
 
     /**
@@ -415,11 +407,8 @@ public class FileTableColumnModel implements TableColumnModel, PropertyChangeLis
      * @param event event to propagate.
      */
     private void triggerColumnRemoved(TableColumnModelEvent event) {
-        Iterator iterator;
-
-        iterator = listeners.keySet().iterator();
-        while(iterator.hasNext())
-            ((TableColumnModelListener)iterator.next()).columnRemoved(event);
+        for(TableColumnModelListener listener: listeners.keySet())
+            listener.columnRemoved(event);
     }
 
 
@@ -474,9 +463,13 @@ public class FileTableColumnModel implements TableColumnModel, PropertyChangeLis
      * Returns an enumeration on all visible columns.
      * @return an enumeration on all visible columns.
      */
-    public Enumeration getColumns() {return new ColumnEnumeration();}
+    public Enumeration<TableColumn> getColumns() {
+        return new ColumnEnumeration();
+    }
 
-    public Enumeration getAllColumns() {return columns.elements();}
+    public Enumeration<TableColumn> getAllColumns() {
+        return columns.elements();
+    }
 
     /**
      * Browses through the model's visible columns
@@ -486,7 +479,7 @@ public class FileTableColumnModel implements TableColumnModel, PropertyChangeLis
      * </p>
      * @author Nicolas Rinaudo
      */
-    private class ColumnEnumeration implements Enumeration {
+    private class ColumnEnumeration implements Enumeration<TableColumn> {
         // - Instance fields -------------------------------------------------------------
         // -------------------------------------------------------------------------------
         /** Index of the next available element in the enumeration. */
@@ -511,7 +504,7 @@ public class FileTableColumnModel implements TableColumnModel, PropertyChangeLis
             TableColumn column;
 
             for(nextIndex++; nextIndex < visibility.length; nextIndex++) {
-                column = (TableColumn)columns.get(nextIndex);
+                column = columns.get(nextIndex);
                 if(visibility[column.getModelIndex()])
                     break;
             }
@@ -532,14 +525,14 @@ public class FileTableColumnModel implements TableColumnModel, PropertyChangeLis
          * @return                        the next element in the enumeration.
          * @throws NoSuchElementException if there is no next element in the enumeration.
          */
-        public Object nextElement() {
+        public TableColumn nextElement() {
             // Makes sure we have at least one more element to return.
             if(!hasMoreElements())
                 throw new NoSuchElementException();
 
             // Retrieves the next element.
             TableColumn column;
-            column = (TableColumn)columns.get(nextIndex);
+            column = columns.get(nextIndex);
 
             // Looks for the next one.
             findNextElement();
@@ -560,7 +553,7 @@ public class FileTableColumnModel implements TableColumnModel, PropertyChangeLis
      * </p>
      * @author Nicolas Rinaudo
      */
-    private static class ColumnSorter implements Comparator {
+    private static class ColumnSorter implements Comparator<TableColumn> {
         // - Instance fields -------------------------------------------------------------
         // -------------------------------------------------------------------------------
         /** Defines the columns order. */
@@ -582,15 +575,15 @@ public class FileTableColumnModel implements TableColumnModel, PropertyChangeLis
         /**
          * Compares <code>o1</code> and <code>o2</code>.
          */
-        public int compare(Object o1, Object o2) {
+        public int compare(TableColumn tc1, TableColumn tc2) {
             int id1;    // Identifier of the first column.
             int id2;    // Identifier of the second column.
             int index1; // Index of the first column as defined in the configuration.
             int index2; // Index of the second column as defined in the configuration.
 
             // Retrieves the two columns' indexes and identifiers.
-            index1 = conf.getPosition(id1 = ((TableColumn)o1).getModelIndex());
-            index2 = conf.getPosition(id2 = ((TableColumn)o2).getModelIndex());
+            index1 = conf.getPosition(id1 = tc1.getModelIndex());
+            index2 = conf.getPosition(id2 = tc2.getModelIndex());
 
             // Sort by index, then by identifier.
             if(index1 < index2)

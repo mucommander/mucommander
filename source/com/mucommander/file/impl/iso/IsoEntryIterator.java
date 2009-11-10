@@ -18,6 +18,7 @@
 
 package com.mucommander.file.impl.iso;
 
+import com.mucommander.file.ArchiveEntry;
 import com.mucommander.file.WrapperArchiveEntryIterator;
 import com.mucommander.io.RandomAccessInputStream;
 
@@ -38,7 +39,7 @@ class IsoEntryIterator extends WrapperArchiveEntryIterator {
      */
     private RandomAccessInputStream rais;
 
-    public IsoEntryIterator(Iterator iterator, RandomAccessInputStream rais) {
+    public IsoEntryIterator(Iterator<? extends ArchiveEntry> iterator, RandomAccessInputStream rais) {
         super(iterator);
 
         this.rais = rais;

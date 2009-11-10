@@ -149,7 +149,7 @@ public abstract class FileFilter {
      */
     public void filter(FileSet files) {
         for(int i=0; i<files.size();) {
-            if(reject(files.fileAt(i)))
+            if(reject(files.elementAt(i)))
                 files.removeElementAt(i);
             else
                 i++;
@@ -182,7 +182,7 @@ public abstract class FileFilter {
     public boolean match(FileSet files) {
         int nbFiles = files.size();
         for(int i=0; i<nbFiles; i++)
-            if(!match(files.fileAt(i)))
+            if(!match(files.elementAt(i)))
                 return false;
 
         return true;
@@ -214,7 +214,7 @@ public abstract class FileFilter {
     public boolean accept(FileSet files) {
         int nbFiles = files.size();
         for(int i=0; i<nbFiles; i++)
-            if(!accept(files.fileAt(i)))
+            if(!accept(files.elementAt(i)))
                 return false;
 
         return true;
@@ -246,7 +246,7 @@ public abstract class FileFilter {
     public boolean reject(FileSet files) {
         int nbFiles = files.size();
         for(int i=0; i<nbFiles; i++)
-            if(!reject(files.fileAt(i)))
+            if(!reject(files.elementAt(i)))
                 return false;
 
         return true;

@@ -26,11 +26,11 @@ import java.util.NoSuchElementException;
  * Converts an <code>Enumeration</code> into an <code>Iterator</code>.
  * @author Nicolas Rinaudo
  */
-public class Enumerator implements Iterator {
+public class Enumerator<T> implements Iterator<T> {
     // - Instance variables ----------------------------------------------------
     // -------------------------------------------------------------------------
-    /** Enumeration wrapper by this <code>Enumerator</code>. */
-    private Enumeration enumeration;
+    /** Enumeration wrapped by this <code>Enumerator</code>. */
+    private Enumeration<T> enumeration;
 
 
 
@@ -40,7 +40,7 @@ public class Enumerator implements Iterator {
      * Creates a new enumerator from the specified enumeration.
      * @param e enumeration that needs to be treated as an iterator.
      */
-    public Enumerator(Enumeration e) {enumeration = e;}
+    public Enumerator(Enumeration<T> e) {enumeration = e;}
 
 
 
@@ -58,7 +58,7 @@ public class Enumerator implements Iterator {
      * @return                        the next element in the iteration.
      * @throws NoSuchElementException if there is no next element in the iteration.
      */
-    public Object next() throws NoSuchElementException {return enumeration.nextElement();}
+    public T next() throws NoSuchElementException {return enumeration.nextElement();}
 
     /**
      * Operation not supported.

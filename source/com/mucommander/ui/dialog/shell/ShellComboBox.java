@@ -28,7 +28,7 @@ import com.mucommander.ui.combobox.SaneComboBox;
 import com.mucommander.ui.theme.Theme;
 import com.mucommander.ui.theme.ThemeManager;
 
-import javax.swing.*;
+import javax.swing.JTextField;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 import java.util.Iterator;
@@ -98,7 +98,7 @@ public class ShellComboBox extends AutocompletedEditableCombobox implements Edit
      * Fills the combo box with the current shell history.
      */
     private void populateHistory() {
-        Iterator iterator;
+        Iterator<String> iterator;
         String   command;
 
         // Empties the content of the combo box
@@ -108,7 +108,7 @@ public class ShellComboBox extends AutocompletedEditableCombobox implements Edit
         iterator = ShellHistoryManager.getHistoryIterator();
         command  = null;
         while(iterator.hasNext())
-            insertItemAt((command = iterator.next().toString()), 0);
+            insertItemAt((command = iterator.next()), 0);
 
         // If the list is not empty, initialises the input field on the last command.
         if(command != null) {

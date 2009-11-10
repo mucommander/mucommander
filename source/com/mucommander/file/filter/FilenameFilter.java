@@ -160,7 +160,7 @@ public abstract class FilenameFilter extends FileFilter {
      * @return an array of accepted AbstractFile instances
      */
     public String[] filter(String filenames[]) {
-        Vector filteredFilenamesV = new Vector();
+        Vector<String> filteredFilenamesV = new Vector<String>();
         int nbFilenames = filenames.length;
         String filename;
         for(int i=0; i<nbFilenames; i++) {

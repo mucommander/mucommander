@@ -485,19 +485,19 @@ public class Configuration {
      * @throws ConfigurationException if any error occurs.
      */
     private synchronized void build(ConfigurationBuilder builder, ConfigurationSection root) throws ConfigurationException {
-        Enumeration          enumeration; // Enumeration on the section's variables, then subsections.
+        Enumeration<String>  enumeration; // Enumeration on the section's variables, then subsections.
         String               name;        // Name of the current variable, then section.
         ConfigurationSection section;     // Current section.
 
         // Explores the section's variables.
         enumeration = root.variableNames();
         while(enumeration.hasMoreElements())
-            builder.addVariable(name = (String)enumeration.nextElement(), root.getVariable(name));
+            builder.addVariable(name = enumeration.nextElement(), root.getVariable(name));
 
         // Explores the section's subsections.
         enumeration = root.sectionNames();
         while(enumeration.hasMoreElements()) {
-            name    = (String)enumeration.nextElement();
+            name    = enumeration.nextElement();
             section = root.getSection(name);
 
             // We only go through subsections if contain either variables or subsections of their own.

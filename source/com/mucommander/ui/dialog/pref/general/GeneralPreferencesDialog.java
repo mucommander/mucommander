@@ -40,7 +40,7 @@ public class GeneralPreferencesDialog extends PreferencesDialog {
     private static GeneralPreferencesDialog singleton;
     /** Stores the components in the dialog that were changed and their current value is different 
      *  then their saved value at MuConfiguration **/
-    private Set modifiedComponents;
+    private Set<PrefComponent> modifiedComponents;
 
 
     // - Dimensions -------------------------------------------------------------
@@ -98,7 +98,7 @@ public class GeneralPreferencesDialog extends PreferencesDialog {
      */
     private GeneralPreferencesDialog() {
         super(WindowManager.getCurrentMainFrame(), Translator.get("prefs_dialog.title"));
-        modifiedComponents = new LinkedHashSet();
+        modifiedComponents = new LinkedHashSet<PrefComponent>();
 
         // Adds the preference tabs.
         addPreferencesPanel(new GeneralPanel(this),    GENERAL_ICON);

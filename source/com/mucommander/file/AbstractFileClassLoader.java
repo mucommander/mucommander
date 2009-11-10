@@ -108,7 +108,7 @@ public class AbstractFileClassLoader extends ClassLoader {
         while(iterator.hasNext()) {
             try {
                 // If the requested resource could be found, returns it.
-                if((file = ((AbstractFile)iterator.next()).getChild(name)).exists())
+                if((file = iterator.next().getChild(name)).exists())
                     return file;
             }
             // Treats error as a simple 'resource not found' case and keeps looking for
@@ -207,12 +207,13 @@ public class AbstractFileClassLoader extends ClassLoader {
     // - Class loading ---------------------------------------------------------
     // -------------------------------------------------------------------------
     /**
-     * Loads the class defined by the specified name and path.
+     * Loads and returns the class defined by the specified name and path.
      * @param  name        name of the class to load.
      * @param  file        file containing the class' bytecode.
+     * @return the class defined by the specified name and path.
      * @throws IOException if an error occurs.
      */
-    private Class loadClass(String name, AbstractFile file) throws IOException {
+    private Class<?> loadClass(String name, AbstractFile file) throws IOException {
         byte[]      buffer; // Buffer for the class' bytecode.
         int         offset; // Current offset in buffer.
         InputStream in;     // Stream on the class' bytecode.
@@ -245,7 +246,7 @@ public class AbstractFileClassLoader extends ClassLoader {
      * @return                        the requested <code>Class</code> if found, <code>null</code> otherwise.
      * @throws ClassNotFoundException if the requested class was not found.
      */
-    protected Class findClass(String name) throws ClassNotFoundException {
+    protected Class<?> findClass(String name) throws ClassNotFoundException {
         AbstractFile file; // File containing the class' bytecode.
 
         // Tries to locate the specified class and, if found, load it.

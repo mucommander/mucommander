@@ -46,9 +46,8 @@ import java.util.Iterator;
  */
 public class IteratorCompoundReader extends CompoundReader {
 
-    // TODO: use generics when we require Java 1.5
     /** Iterator containing the readers to be concatenated */
-    private Iterator readerIterator;
+    private Iterator<? extends Reader> readerIterator;
 
     /**
      * Creates a new compound reader using the {@link Reader} instances contained by the given
@@ -59,7 +58,7 @@ public class IteratorCompoundReader extends CompoundReader {
      * @param merged <code>true</code> if the reader should be merged, acting as a single reader, or considered
      * as separate readers that have to be {@link #advanceReader() advanced manually}.
      */
-    public IteratorCompoundReader(Iterator readerIterator, boolean merged) {
+    public IteratorCompoundReader(Iterator<? extends Reader> readerIterator, boolean merged) {
         super(merged);
 
         this.readerIterator = readerIterator;
@@ -71,6 +70,6 @@ public class IteratorCompoundReader extends CompoundReader {
     ///////////////////////////////////
 
     public Reader getNextReader() {
-        return readerIterator.hasNext()?(Reader)readerIterator.next():null;
+        return readerIterator.hasNext()?readerIterator.next():null;
     }
 }

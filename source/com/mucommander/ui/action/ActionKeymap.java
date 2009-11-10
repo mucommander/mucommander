@@ -251,7 +251,7 @@ public class ActionKeymap {
     	if(accelerator != null) {
     		InputMap inputMap = comp.getInputMap(condition);
     		ActionMap actionMap = comp.getActionMap();
-    		Class muActionClass = action.getClass();
+    		Class<?> muActionClass = action.getClass();
     		inputMap.put(accelerator, muActionClass);
     		actionMap.put(muActionClass, action);
     	}
@@ -280,7 +280,7 @@ public class ActionKeymap {
     	if(accelerator != null) {
     		InputMap inputMap = comp.getInputMap(condition);
     		ActionMap actionMap = comp.getActionMap();
-    		Class muActionClass = action.getClass();
+    		Class<?> muActionClass = action.getClass();
     		inputMap.remove(accelerator);
     		actionMap.remove(muActionClass);
     	}

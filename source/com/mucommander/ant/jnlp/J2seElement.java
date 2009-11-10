@@ -26,19 +26,19 @@ import java.util.Vector;
  * @ant.type name="j2se" category="webstart"
  */
 public class J2seElement {
-    private String version;
-    private String href;
-    private int    initialHeap;
-    private int    maxHeap;
-    private Vector resources;
+    private String                   version;
+    private String                   href;
+    private int                      initialHeap;
+    private int                      maxHeap;
+    private Vector<ResourcesElement> resources;
 
-    public J2seElement() {resources = new Vector();}
+    public J2seElement() {resources = new Vector<ResourcesElement>();}
 
     public String getVersion() {return version;}
     public String getHref() {return href;}
     public int getInitialHeap() {return initialHeap;}
     public int getMaxHeap() {return maxHeap;}
-    public Iterator resources() {return resources.iterator();}
+    public Iterator<ResourcesElement> resources() {return resources.iterator();}
     public boolean hasResources() {return !resources.isEmpty();}
     public void setVersion(String s) {version = s;}
     public void setHref(String s) {href = s;}

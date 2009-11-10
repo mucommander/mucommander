@@ -171,7 +171,7 @@ public class OSXTrash extends QueuedTrash {
      * is more efficient to regroup files to be moved and execute only one AppleScript.
      * </ul>
      */
-    protected boolean moveToTrash(Vector queuedFiles) {
+    protected boolean moveToTrash(Vector<AbstractFile> queuedFiles) {
         String appleScript;
 
         // Simple script for AppleScript versions with Unicode support, i.e. that allows Unicode characters in the
@@ -180,7 +180,7 @@ public class OSXTrash extends QueuedTrash {
             int nbFiles = queuedFiles.size();
             appleScript = "tell application \"Finder\" to move {";
             for(int i=0; i<nbFiles; i++) {
-                appleScript += "posix file \""+((AbstractFile)queuedFiles.elementAt(i)).getAbsolutePath()+"\"";
+                appleScript += "posix file \""+queuedFiles.elementAt(i).getAbsolutePath()+"\"";
                 if(i<nbFiles-1)
                     appleScript += ", ";
             }
@@ -201,7 +201,7 @@ public class OSXTrash extends QueuedTrash {
                 tmpOut = new OutputStreamWriter(tmpFile.getOutputStream(false), "utf-8");
 
                 for(int i=0; i<nbFiles; i++) {
-                    tmpOut.write(((AbstractFile)queuedFiles.elementAt(i)).getAbsolutePath());
+                    tmpOut.write(queuedFiles.elementAt(i).getAbsolutePath());
                     if(i<nbFiles-1)
                         tmpOut.write("\n");
                 }

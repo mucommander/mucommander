@@ -18,24 +18,6 @@
 
 package com.mucommander.ui.dialog.file;
 
-import java.awt.BorderLayout;
-import java.awt.FlowLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.util.Date;
-
-import javax.swing.ButtonGroup;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.JSpinner;
-import javax.swing.SpinnerDateModel;
-
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.util.FileSet;
 import com.mucommander.job.ChangeFileAttributesJob;
@@ -46,6 +28,15 @@ import com.mucommander.ui.action.impl.ChangeDateAction;
 import com.mucommander.ui.dialog.DialogToolkit;
 import com.mucommander.ui.layout.YBoxPanel;
 import com.mucommander.ui.main.MainFrame;
+
+import javax.swing.*;
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.util.Date;
 
 /**
  * This dialog allows the user to change the date of the currently selected/marked file(s). By default, the date is now
@@ -75,7 +66,7 @@ public class ChangeDateDialog extends JobDialog implements ActionListener, ItemL
 
         ButtonGroup buttonGroup = new ButtonGroup();
 
-        AbstractFile destFile = files.size()==1?files.fileAt(0):files.getBaseFolder();
+        AbstractFile destFile = files.size()==1?files.elementAt(0):files.getBaseFolder();
         boolean canChangeDate = destFile.canChangeDate();
 
         JPanel tempPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));

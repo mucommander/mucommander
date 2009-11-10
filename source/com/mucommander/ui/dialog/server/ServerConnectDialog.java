@@ -37,7 +37,9 @@ import com.mucommander.ui.main.MainFrame;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
@@ -59,7 +61,7 @@ public class ServerConnectDialog extends FocusDialog implements ActionListener, 
     private ServerPanel currentServerPanel;
 
     private JTabbedPane tabbedPane;
-    private Vector serverPanels = new Vector();
+    private Vector<ServerPanel> serverPanels = new Vector<ServerPanel>();
 
     private JLabel urlLabel;
     private JCheckBox saveCredentialsCheckBox;
@@ -67,7 +69,7 @@ public class ServerConnectDialog extends FocusDialog implements ActionListener, 
     // Dialog's width has to be at least 320
     private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(480,0);	
 	
-    private static Class lastPanelClass = SMBPanel.class;
+    private static Class<? extends ServerPanel> lastPanelClass = SMBPanel.class;
 
 
     /**
@@ -87,7 +89,7 @@ public class ServerConnectDialog extends FocusDialog implements ActionListener, 
      * @param folderPanel the panel on which to change the current folder
      * @param selectPanelClass class of the ServerPanel to select
      */
-    public ServerConnectDialog(FolderPanel folderPanel, Class selectPanelClass) {
+    public ServerConnectDialog(FolderPanel folderPanel, Class<? extends ServerPanel> selectPanelClass) {
         super(folderPanel.getMainFrame(), ActionProperties.getActionLabel(ConnectToServerAction.Descriptor.ACTION_ID), folderPanel.getMainFrame());
         this.folderPanel = folderPanel;
         lastPanelClass = selectPanelClass;
@@ -140,7 +142,7 @@ public class ServerConnectDialog extends FocusDialog implements ActionListener, 
     }
 
 
-    public void addTab(String title, ServerPanel serverPanel, Class selectPanelClass) {
+    public void addTab(String title, ServerPanel serverPanel, Class<? extends ServerPanel> selectPanelClass) {
         JPanel northPanel = new JPanel(new BorderLayout());
         northPanel.add(serverPanel, BorderLayout.NORTH);
         tabbedPane.addTab(title, northPanel);
@@ -163,7 +165,7 @@ public class ServerConnectDialog extends FocusDialog implements ActionListener, 
     }
 
     private ServerPanel getCurrentServerPanel() {
-        return (ServerPanel)serverPanels.elementAt(tabbedPane.getSelectedIndex());
+        return serverPanels.elementAt(tabbedPane.getSelectedIndex());
     }
 	
 	

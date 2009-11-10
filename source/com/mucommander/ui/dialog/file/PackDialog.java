@@ -34,7 +34,10 @@ import com.mucommander.ui.main.table.FileTable;
 import com.mucommander.ui.text.FilePathField;
 
 import javax.swing.*;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -77,7 +80,7 @@ public class PackDialog extends JobDialog implements ActionListener, ItemListene
 
         // Retrieve available formats for single file or many file archives
         int nbFiles = files.size();
-        this.formats = Archiver.getFormats(nbFiles>1 || (nbFiles>0 && files.fileAt(0).isDirectory()));
+        this.formats = Archiver.getFormats(nbFiles>1 || (nbFiles>0 && files.elementAt(0).isDirectory()));
         int nbFormats = formats.length;
 
         int initialFormat = formats[0];		// this value will only be used if last format is not available
@@ -104,7 +107,7 @@ public class PackDialog extends JobDialog implements ActionListener, ItemListene
         // - if it only contains one file, uses that file's name.
         // - if it contains more than one file, uses the FileSet's parent folder's name.
         if(files.size() == 1)
-            fileName = files.fileAt(0).getNameWithoutExtension();
+            fileName = files.elementAt(0).getNameWithoutExtension();
         else if(files.getBaseFolder().getParent() != null)
             fileName = files.getBaseFolder().getName();
         else

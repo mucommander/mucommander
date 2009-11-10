@@ -117,7 +117,7 @@ public class WindowsTrash extends QueuedTrash {
     // QueuedTrash implementation //
     ////////////////////////////////
 
-    protected boolean moveToTrash(Vector queuedFiles) {
+    protected boolean moveToTrash(Vector<AbstractFile> queuedFiles) {
         if(!Shell32.isAvailable())
             return false;
 
@@ -131,7 +131,7 @@ public class WindowsTrash extends QueuedTrash {
         String[] paths = new String[nbFiles];
         for(int i=0; i<nbFiles; i++) {
             // Directories (and regular files) must not end with a trailing slash or the operation will fail.
-            paths[i] = ((AbstractFile)queuedFiles.elementAt(i)).getAbsolutePath(false);
+            paths[i] = queuedFiles.elementAt(i).getAbsolutePath(false);
         }
 
         // The encodePaths method takes care of encoding the paths in a special way.

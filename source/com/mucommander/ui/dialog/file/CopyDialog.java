@@ -77,7 +77,7 @@ public class CopyDialog extends AbstractCopyDialog {
             int nbFiles = files.size();
             Vector<ArchiveEntry> selectedEntries = new Vector<ArchiveEntry>();
             for(int i=0; i<nbFiles; i++) {
-                selectedEntries.add((ArchiveEntry)files.fileAt(i).getAncestor(ArchiveEntryFile.class).getUnderlyingFileObject());
+                selectedEntries.add((ArchiveEntry)files.elementAt(i).getAncestor(ArchiveEntryFile.class).getUnderlyingFileObject());
             }
 
             job = new UnpackJob(

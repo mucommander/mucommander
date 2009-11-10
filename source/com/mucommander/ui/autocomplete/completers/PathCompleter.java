@@ -35,7 +35,7 @@ public class PathCompleter extends Completer {
 		registerService(ServiceFactory.getAllFilesService());
     }
  
-	protected Vector getUpdatedSuggestions(AutocompleterTextComponent component) {
+	protected Vector<String> getUpdatedSuggestions(AutocompleterTextComponent component) {
     	return getPossibleCompletionsFromServices(component.getText());
     } 
  

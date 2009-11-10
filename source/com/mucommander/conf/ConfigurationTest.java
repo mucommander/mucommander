@@ -55,9 +55,9 @@ public class ConfigurationTest extends TestCase implements ConfigurationListener
     // - Instance fields -----------------------------------------------------------------
     // -----------------------------------------------------------------------------------
     /** The Configuration instance that is being tested. Intialized each time a test is performed */
-    private       Configuration conf;
+    private       Configuration             conf;
     /** Stack of configuration events. */
-    private       Stack         events;
+    private       Stack<ConfigurationEvent> events;
     /** Identifier of the current instance. */
     private final String        identifier = Long.toString(System.currentTimeMillis());
 
@@ -70,7 +70,7 @@ public class ConfigurationTest extends TestCase implements ConfigurationListener
      */
     protected void setUp() throws Exception {
         conf   = new Configuration();
-        events = new Stack();
+        events = new Stack<ConfigurationEvent>();
 
         Configuration.addConfigurationListener(this);
     }
@@ -88,7 +88,7 @@ public class ConfigurationTest extends TestCase implements ConfigurationListener
      * Returns the last received event.
      * @return the last received event.
      */
-    private ConfigurationEvent popEvent() {return (ConfigurationEvent)events.pop();}
+    private ConfigurationEvent popEvent() {return events.pop();}
 
     /**
      * Returns <code>true</code> if there are still some unhandled events in the stack.
@@ -337,14 +337,14 @@ public class ConfigurationTest extends TestCase implements ConfigurationListener
     private void testListVariables(String section) {
         String var1;   // First variable we're using for tests.
         String var2;   // Second variable we're using for tests.
-        Vector value1; // First value for that variable.
-        Vector value2; // Second value for that variable.
+        Vector<String> value1; // First value for that variable.
+        Vector<String> value2; // Second value for that variable.
 
         // Initialises test variables.
         var1   = section + "list1";
         var2   = section + "list2";
-        value1 = new Vector();
-        value2 = new Vector();
+        value1 = new Vector<String>();
+        value2 = new Vector<String>();
 
         for(int i = 0; i < 4; i++) {
             value1.add("val1-" + i);

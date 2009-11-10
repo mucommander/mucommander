@@ -26,17 +26,17 @@ import java.util.Vector;
  * @ant.type name="information" category="webstart"
  */
 public class InformationElement {
-    private String locale;
-    private String title;
-    private String vendor;
-    private String homepage;
-    private Vector descriptions;
-    private Vector icons;
-    private boolean offlineAllowed;
+    private String                     locale;
+    private String                     title;
+    private String                     vendor;
+    private String                     homepage;
+    private Vector<DescriptionElement> descriptions;
+    private Vector<IconElement>        icons;
+    private boolean                    offlineAllowed;
 
     public InformationElement() {
-        icons        = new Vector();
-        descriptions = new Vector();
+        icons        = new Vector<IconElement>();
+        descriptions = new Vector<DescriptionElement>();
     }
 
     public void setOffline(boolean b) {offlineAllowed = b;}
@@ -49,8 +49,8 @@ public class InformationElement {
     public String getLocale() {return locale;}
     public void setHomepage(String s) {homepage = s;}
     public String getHomepage() {return homepage;}
-    public Iterator descriptions() {return descriptions.iterator();}
-    public Iterator icons() {return icons.iterator();}
+    public Iterator<DescriptionElement> descriptions() {return descriptions.iterator();}
+    public Iterator<IconElement> icons() {return icons.iterator();}
 
     public DescriptionElement createDescription() {
         DescriptionElement buffer;

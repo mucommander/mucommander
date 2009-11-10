@@ -81,7 +81,7 @@ public class FolderChangeMonitor implements Runnable, WindowListener, LocationLi
     private static Thread monitorThread;
 
     /** FolderChangeMonitor instances */
-    private static Vector instances;
+    private static Vector<FolderChangeMonitor> instances;
 		
     /** Milliseconds period between checks to current folder's date */
     private static long checkPeriod;
@@ -96,7 +96,7 @@ public class FolderChangeMonitor implements Runnable, WindowListener, LocationLi
     private final static int TICK = 300;
 
     static {
-        instances = new Vector();
+        instances = new Vector<FolderChangeMonitor>();
 
         // Retrieve configuration values
         checkPeriod = MuConfiguration.getVariable(MuConfiguration.REFRESH_CHECK_PERIOD,
@@ -150,7 +150,7 @@ public class FolderChangeMonitor implements Runnable, WindowListener, LocationLi
             // Loop on instances
             nbInstances = instances.size();
             for(int i=0; i<nbInstances; i++) {
-                try { monitor = (FolderChangeMonitor)instances.elementAt(i); }
+                try { monitor = instances.elementAt(i); }
                 catch(Exception e) { continue; } // Exception may be raised when an instance is removed
 				
                 // Check for changes in current folder and refresh it only if :

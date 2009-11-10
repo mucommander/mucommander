@@ -41,10 +41,10 @@ import java.awt.event.KeyEvent;
  *
  * @author Maxence Bernard
  */
-public class DynamicList extends JList {
+public class DynamicList<E> extends JList {
 
     /** Items displayed in the JList */
-    private AlteredVector items;
+    private AlteredVector<E> items;
 
     /** Custom ListModel that handles modifications made to the AlteredVector */
     private DynamicListModel model;
@@ -178,7 +178,7 @@ public class DynamicList extends JList {
      *
      * @param items items to add to the list
      */
-    public DynamicList(AlteredVector items) {
+    public DynamicList(AlteredVector<E> items) {
         this.items = items;
 
         // Use a custom ListModel
@@ -205,7 +205,7 @@ public class DynamicList extends JList {
         ActionMap actionMap = getActionMap();
 
         // Map 'Delete' and 'Backspace' to RemoveAction
-        Class actionClass = removeAction.getClass();
+        Class<? extends Action> actionClass = removeAction.getClass();
         inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0), actionClass);
         inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_BACK_SPACE, 0), actionClass);
         actionMap.put(actionClass, removeAction);
@@ -231,7 +231,7 @@ public class DynamicList extends JList {
     /**
      * Returns the items displayed by this DynamicList.
      */
-    public AlteredVector getItems() {
+    public AlteredVector<E> getItems() {
         return items;
     }
 
@@ -306,7 +306,7 @@ public class DynamicList extends JList {
         }
 
         // Swap values in the Vector
-        Object tmp = items.elementAt(index);
+        E tmp = items.elementAt(index);
         items.setElementAt(items.elementAt(newIndex), index);
         items.setElementAt(tmp, newIndex);
 

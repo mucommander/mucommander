@@ -194,7 +194,7 @@ public class MarkExtensionAction extends MuAction {
     
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Hashtable properties) {
+		public MuAction createAction(MainFrame mainFrame, Hashtable<String, Object> properties) {
 			return new MarkExtensionAction(mainFrame, properties);
 		}
     }

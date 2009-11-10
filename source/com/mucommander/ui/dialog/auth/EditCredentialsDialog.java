@@ -18,19 +18,6 @@
 
 package com.mucommander.ui.dialog.auth;
 
-import java.awt.BorderLayout;
-import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import javax.swing.Box;
-import javax.swing.JButton;
-import javax.swing.JPasswordField;
-import javax.swing.JTextField;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-
 import com.mucommander.AppLogger;
 import com.mucommander.auth.Credentials;
 import com.mucommander.auth.CredentialsManager;
@@ -47,6 +34,18 @@ import com.mucommander.ui.list.DynamicList;
 import com.mucommander.ui.list.SortableListPanel;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.util.AlteredVector;
+
+import javax.swing.Box;
+import javax.swing.JButton;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import java.awt.BorderLayout;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 
 /**
@@ -67,7 +66,7 @@ public class EditCredentialsDialog extends FocusDialog implements ActionListener
     private JTextField loginField;
     private JPasswordField passwordField;
 
-    private AlteredVector credentials;
+    private AlteredVector<CredentialsMapping> credentials;
     private DynamicList credentialsList;
 
     private CredentialsMapping lastSelectedItem;

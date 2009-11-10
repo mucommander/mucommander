@@ -54,7 +54,7 @@ import java.util.Vector;
  *
  * @author Maxence Bernard
  */
-public class PathTokenizer implements Enumeration {
+public class PathTokenizer implements Enumeration<String> {
 
     /** Separator characters */
     private String separators;
@@ -99,7 +99,7 @@ public class PathTokenizer implements Enumeration {
 
         // Split the path into tokens
         StringTokenizer st = new StringTokenizer(path, separators, true);
-        Vector tokensV = new Vector();
+        Vector<String> tokensV = new Vector<String>();
         while(st.hasMoreTokens()) {
             tokensV.add(st.nextToken());
         }
@@ -110,7 +110,7 @@ public class PathTokenizer implements Enumeration {
 
         if(reverseOrder) {
             for(int i=0; i<nbTokens; i++)
-                tokens[i] = (String)tokensV.elementAt(nbTokens-i-1);
+                tokens[i] = tokensV.elementAt(nbTokens-i-1);
         }
         else {
             tokensV.toArray(tokens);
@@ -228,7 +228,7 @@ public class PathTokenizer implements Enumeration {
     /**
      * Enumeration implementation, returns the same value as {@link #nextFilename()}.
      */
-    public Object nextElement() throws NoSuchElementException {
+    public String nextElement() throws NoSuchElementException {
         return nextFilename();
     }
 }

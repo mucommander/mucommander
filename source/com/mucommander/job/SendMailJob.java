@@ -137,7 +137,7 @@ public class SendMailJob extends TransferFileJob {
         // address is provided
         readWriteLine("MAIL FROM: "+fromAddress);
 		
-        Vector recipients = new Vector();
+        Vector<String> recipients = new Vector<String>();
         recipientString = splitRecipientString(recipientString, recipients);
         int nbRecipients = recipients.size();
         for(int i=0; i<nbRecipients; i++)
@@ -163,7 +163,7 @@ public class SendMailJob extends TransferFileJob {
      *
      * @param recipientsStr String containing one or several recipients that need to be separated by ',' and/or ';' characters.
      */
-    private String splitRecipientString(String recipientsStr, Vector recipients) {
+    private String splitRecipientString(String recipientsStr, Vector<String> recipients) {
 
         // /!\ this piece of code is far from being bullet proof but I'm too lazy now to rewrite it
         StringBuffer newRecipientsSb = new StringBuffer();

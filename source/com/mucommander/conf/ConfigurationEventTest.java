@@ -30,21 +30,21 @@ public class ConfigurationEventTest extends TestCase {
     // - Test constants ------------------------------------------------------------------
     // -----------------------------------------------------------------------------------
     /** Name of the test variable. */
-    private static final String  VARIABLE_NAME = "variable";
+    private static final String         VARIABLE_NAME = "variable";
     /** Test string value. */
-    private static final String  STRING_VALUE  = "value";
+    private static final String         STRING_VALUE  = "value";
     /** Test list value. */
-    private static final Vector  LIST_VALUE    = new Vector();
+    private static final Vector<String> LIST_VALUE    = new Vector<String>();
     /** Test integer value. */
-    private static final int     INTEGER_VALUE = 10;
+    private static final int            INTEGER_VALUE = 10;
     /** Test long value. */
-    private static final long    LONG_VALUE    = 15;
+    private static final long           LONG_VALUE    = 15;
     /** Test float value. */
-    private static final float   FLOAT_VALUE   = (float)10.5;
+    private static final float          FLOAT_VALUE   = (float)10.5;
     /** Test double value. */
-    private static final double  DOUBLE_VALUE  = 15.5;
+    private static final double         DOUBLE_VALUE  = 15.5;
     /** Test boolean value. */
-    private static final boolean BOOLEAN_VALUE = true;
+    private static final boolean        BOOLEAN_VALUE = true;
 
 
 

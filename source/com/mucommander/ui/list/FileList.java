@@ -22,7 +22,8 @@ import com.mucommander.file.AbstractFile;
 import com.mucommander.file.util.FileSet;
 
 import javax.swing.*;
-import java.awt.*;
+import java.awt.Component;
+import java.awt.Font;
 
 /**
  * FileList is a <code>JList</code> that displays information about a list of files: each row displays a file's name
@@ -68,14 +69,14 @@ public class FileList extends JList {
         // Very important: allows the JList to operate in fixed cell height mode, which makes it substantially faster
         // to initialize when there is a large number of rows.
         if(nbFiles>0)
-            setPrototypeCellValue(files.fileAt(0));
+            setPrototypeCellValue(files.elementAt(0));
 
         if(preloadFileAttributes) {
             filenames = new String[nbFiles];
             icons = new Icon[nbFiles];
             AbstractFile file;
             for(int i=0; i<nbFiles; i++) {
-                file = files.fileAt(i);
+                file = files.elementAt(i);
                 filenames[i] = file.getName();
                 icons[i] = file.getIcon();
             }
@@ -90,7 +91,7 @@ public class FileList extends JList {
             }
 
             public Object getElementAt(int index) {
-                return files.fileAt(index);
+                return files.elementAt(index);
             }
         });
 

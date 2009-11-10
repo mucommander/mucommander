@@ -32,7 +32,7 @@ import java.util.StringTokenizer;
  *
  * @author Maxence Bernard
  */
-public class MimeTypes extends Hashtable {
+public class MimeTypes extends Hashtable<String, String> {
 
     private final static MimeTypes mimeTypes = new MimeTypes();
 
@@ -90,7 +90,7 @@ public class MimeTypes extends Hashtable {
         if(pos==-1)
             return null;
 
-        return (String)mimeTypes.get(name.substring(pos+1, name.length()).toLowerCase());        
+        return mimeTypes.get(name.substring(pos+1, name.length()).toLowerCase());
     }
     
 }

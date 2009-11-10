@@ -24,7 +24,7 @@ import com.mucommander.runtime.OsVersions;
 import com.mucommander.ui.action.impl.GoToDocumentationAction;
 import com.mucommander.ui.main.MainFrame;
 
-import javax.swing.*;
+import javax.swing.JButton;
 import javax.swing.border.EmptyBorder;
 import java.util.Hashtable;
 
@@ -57,7 +57,7 @@ public class HelpButton extends JButton {
      * @param helpTopic the help topic this button will open when clicked, <code>null</code> to open the base documentation URL
      */
     public HelpButton(MainFrame mainFrame, String helpTopic) {
-        Hashtable properties = new Hashtable();
+        Hashtable<String, Object> properties = new Hashtable<String, Object>();
 
         GoToDocumentationAction action = new GoToDocumentationAction(mainFrame, properties);
         setAction(action);

@@ -35,14 +35,14 @@ import java.util.Vector;
 public class MnemonicHelper {
 
     /** Current list of previously assigned mnemonics */
-    private Vector takenMnemonics;
+    private Vector<Character> takenMnemonics;
 	
 	
     /**
      * Creates a new blank MnemonicHelper.
      */
     public MnemonicHelper() {
-        takenMnemonics = new Vector();
+        takenMnemonics = new Vector<Character>();
     }
 	
 	

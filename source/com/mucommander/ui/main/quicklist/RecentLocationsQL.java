@@ -18,10 +18,6 @@
 
 package com.mucommander.ui.main.quicklist;
 
-import java.util.LinkedList;
-
-import javax.swing.Icon;
-
 import com.mucommander.file.AbstractFile;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionProperties;
@@ -30,6 +26,9 @@ import com.mucommander.ui.event.LocationEvent;
 import com.mucommander.ui.event.LocationListener;
 import com.mucommander.ui.quicklist.QuickListWithIcons;
 
+import javax.swing.Icon;
+import java.util.LinkedList;
+
 /**
  * This quick list shows recently accessed locations.
  * 
@@ -37,12 +36,12 @@ import com.mucommander.ui.quicklist.QuickListWithIcons;
  */
 public class RecentLocationsQL extends QuickListWithIcons implements LocationListener{
 	private static int MAX_ELEMENTS = 15;
-	private LinkedList linkedList;
+	private LinkedList<AbstractFile> linkedList;
 
 	public RecentLocationsQL() {
 		super(ActionProperties.getActionLabel(ShowRecentLocationsQLAction.Descriptor.ACTION_ID), Translator.get("recent_locations_quick_list.empty_message"));
 		
-		linkedList = new LinkedList();
+		linkedList = new LinkedList<AbstractFile>();
 	}
 
 	protected void acceptListItem(Object item) {
@@ -64,7 +63,7 @@ public class RecentLocationsQL extends QuickListWithIcons implements LocationLis
 	public void locationFailed(LocationEvent locationEvent) {}
 
 	public Object[] getData() {
-		LinkedList list = (LinkedList) linkedList.clone();
+		LinkedList<AbstractFile> list = (LinkedList<AbstractFile>)linkedList.clone();
 
 		if (!list.remove(folderPanel.getCurrentFolder()))
 			list.removeLast();

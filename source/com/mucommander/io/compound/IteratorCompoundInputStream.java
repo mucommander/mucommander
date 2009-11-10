@@ -28,9 +28,8 @@ import java.util.Iterator;
  */
 public class IteratorCompoundInputStream extends CompoundInputStream {
 
-    // TODO: use generics when we require Java 1.5
     /** Iterator containing the InputStreams to be concatenated */
-    private Iterator inputStreamIterator;
+    private Iterator<? extends InputStream> inputStreamIterator;
 
     /**
      * Creates a new compound input stream using the {@link InputStream} instances contained by the given
@@ -41,7 +40,7 @@ public class IteratorCompoundInputStream extends CompoundInputStream {
      * @param merged <code>true</code> if the streams should be merged, acting as a single stream, or considered
      * as separate streams that have to be {@link #advanceInputStream() advanced manually}.
      */
-    public IteratorCompoundInputStream(Iterator inputStreamIterator, boolean merged) {
+    public IteratorCompoundInputStream(Iterator<? extends InputStream> inputStreamIterator, boolean merged) {
         super(merged);
 
         this.inputStreamIterator = inputStreamIterator;
@@ -53,6 +52,6 @@ public class IteratorCompoundInputStream extends CompoundInputStream {
     ////////////////////////////////////////
 
     public InputStream getNextInputStream() {
-        return inputStreamIterator.hasNext()?(InputStream)inputStreamIterator.next():null;
+        return inputStreamIterator.hasNext()?inputStreamIterator.next():null;
     }
 }

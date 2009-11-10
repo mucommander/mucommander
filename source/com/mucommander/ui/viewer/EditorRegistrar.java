@@ -29,7 +29,8 @@ import com.mucommander.ui.dialog.QuestionDialog;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.WindowManager;
 
-import java.awt.*;
+import java.awt.Frame;
+import java.awt.Image;
 import java.util.Iterator;
 import java.util.Vector;
 
@@ -42,7 +43,7 @@ import java.util.Vector;
 public class EditorRegistrar {
 	
     /** List of registered file editors */ 
-    private final static Vector editorFactories = new Vector();
+    private final static Vector<EditorFactory> editorFactories = new Vector<EditorFactory>();
 
     static {
         registerFileEditor(new com.mucommander.ui.viewer.text.TextFactory());
@@ -91,12 +92,12 @@ public class EditorRegistrar {
      * @throws UserCancelledException if the user has been asked to confirm the operation and cancelled
      */
     public static FileEditor createFileEditor(AbstractFile file) throws UserCancelledException {
-        Iterator      iterator;
-        EditorFactory factory;
+        Iterator<EditorFactory> iterator;
+        EditorFactory           factory;
 
         iterator = editorFactories.iterator();
         while(iterator.hasNext()) {
-            factory = (EditorFactory)iterator.next();
+            factory = iterator.next();
 
             try {
                 if(factory.canEditFile(file))

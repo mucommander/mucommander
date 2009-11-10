@@ -190,7 +190,7 @@ public abstract class FileJob implements Runnable {
         // not really present a risk. 
         AbstractFile tempFile;
         for(int i=0; i<nbFiles; i++) {
-            tempFile = files.fileAt(i);
+            tempFile = files.elementAt(i);
             files.setElementAt((tempFile instanceof CachedFile)?tempFile:new CachedFile(tempFile, true), i);
         }
 
@@ -791,7 +791,7 @@ public abstract class FileJob implements Runnable {
 
         // Loop on all source files, checking that job has not been interrupted
         for(int i=0; i<nbFiles; i++) {
-            currentFile = files.fileAt(i);
+            currentFile = files.elementAt(i);
 
             // Change current file and advance file index
             currentFileIndex = i;

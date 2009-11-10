@@ -111,13 +111,13 @@ public class DesktopManager {
     // - Class fields ----------------------------------------------------
     // -------------------------------------------------------------------
     /** All available desktop operations. */
-    private static Hashtable[]    operations;
+    private static Hashtable<String, Vector<DesktopOperation>>[] operations;
     /** All known desktops. */
-    private static Vector         desktops;
+    private static Vector<DesktopAdapter>                        desktops;
     /** Current desktop. */
-    private static DesktopAdapter desktop;
+    private static DesktopAdapter                                desktop;
     /** Object used to create instances of {@link AbstractTrash}. */
-    private static TrashProvider  trashProvider;
+    private static TrashProvider                                 trashProvider;
 
 
 
@@ -136,7 +136,7 @@ public class DesktopManager {
     static {
         // - Adapters initialisation -------------------------------------
         // ---------------------------------------------------------------
-        desktops = new Vector();
+        desktops = new Vector<DesktopAdapter>();
 
         // The default desktop adapter must be registered first, as we only want to use
         // it if nothing else worked.
@@ -201,7 +201,7 @@ public class DesktopManager {
         // Browses desktop from the last registered to the first, to make sure that
         // custom desktop adapters are used before the default ones.
         for(int i = desktops.size() - 1; i >= 0; i--) {
-            current = (DesktopAdapter)desktops.elementAt(i);
+            current = desktops.elementAt(i);
             if(current.isAvailable()) {
                 desktop = current;
                 AppLogger.fine("Using desktop: " + desktop);
@@ -248,15 +248,15 @@ public class DesktopManager {
      * Registers the specified operation for the specified type and priority.
      */
     private static void innerRegisterOperation(String type, int priority, DesktopOperation operation) {
-        Vector container;
+        Vector<DesktopOperation> container;
 
         // Makes sure we have a container for operations of the specified priority.
         if(operations[priority] == null)
-            operations[priority] = new Hashtable();
+            operations[priority] = new Hashtable<String, Vector<DesktopOperation>>();
 
         // Makes sure we have a container for operations of the specified type.
-        if((container = (Vector)operations[priority].get(type)) == null)
-            operations[priority].put(type, container = new Vector());
+        if((container = operations[priority].get(type)) == null)
+            operations[priority].put(type, container = new Vector<DesktopOperation>());
 
         // Creates the requested entry.
         container.add(operation);
@@ -272,33 +272,33 @@ public class DesktopManager {
 
     // - Operation support -----------------------------------------------
     // -------------------------------------------------------------------
-    private static Vector getOperations(String type, int priority) {
+    private static Vector<DesktopOperation> getOperations(String type, int priority) {
         if(operations[priority] == null)
             return null;
 
-        return (Vector)operations[priority].get(type);
+        return operations[priority].get(type);
     }
 
     private static DesktopOperation getAvailableOperation(String type, int priority) {
-        DesktopOperation operation;
-        Vector           container;
+        DesktopOperation         operation;
+        Vector<DesktopOperation> container;
 
         // If the operation vector is null, no need to look further.
         if((container = getOperations(type, priority)) != null)
             for(int i = container.size() - 1; i >= 0; i--)
-                if((operation = (DesktopOperation)container.elementAt(i)).isAvailable())
+                if((operation = container.elementAt(i)).isAvailable())
                     return operation;
         return null;
     }
 
     private static DesktopOperation getSupportedOperation(String type, int priority, Object[] target) {
-        DesktopOperation operation;
-        Vector           container;
+        DesktopOperation         operation;
+        Vector<DesktopOperation> container;
 
         // If the operation vector is null, no need to look further.
         if((container = getOperations(type, priority)) != null)
             for(int i = container.size() - 1; i >= 0; i--)
-                if((operation = (DesktopOperation)container.elementAt(i)).canExecute(target))
+                if((operation = container.elementAt(i)).canExecute(target))
                     return operation;
         return null;
     }

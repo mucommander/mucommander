@@ -31,7 +31,7 @@ import java.util.Vector;
  */
 
 public class VolumesService implements CompletionService {
-	private Vector lastSuggestedCompletions = new Vector();
+	private Vector<String> lastSuggestedCompletions = new Vector<String>();
 	
 	public VolumesService() {}
 
@@ -41,7 +41,7 @@ public class VolumesService implements CompletionService {
      *
      * @return a sorted array of root folder names
      */
-	public Vector getPossibleCompletions(String path) {
+	public Vector<String> getPossibleCompletions(String path) {
 		lastSuggestedCompletions.clear();
 		int index = Math.max(path.lastIndexOf('\\'), path.lastIndexOf('/'));
 		if (index == -1) {
@@ -60,8 +60,8 @@ public class VolumesService implements CompletionService {
 		String result = null;
 		int nbLastReturnedCompletions = lastSuggestedCompletions.size();
 		for (int i=0; i < nbLastReturnedCompletions; i++)
-			if (((String)lastSuggestedCompletions.elementAt(i)).equalsIgnoreCase(selectedCompletion)) {
-				result = (String) lastSuggestedCompletions.elementAt(i);
+			if (lastSuggestedCompletions.elementAt(i).equalsIgnoreCase(selectedCompletion)) {
+				result = lastSuggestedCompletions.elementAt(i);
 				break;
 			}
 		

@@ -18,7 +18,6 @@
 
 package com.mucommander.process;
 
-import java.util.Iterator;
 import java.util.Vector;
 
 /**
@@ -29,7 +28,7 @@ public class ProcessListenerList implements ProcessListener {
     // - Instance fields -----------------------------------------------------
     // -----------------------------------------------------------------------
     /** All registered listeners. */
-    private Vector listeners;
+    private Vector<ProcessListener> listeners;
 
 
 
@@ -38,7 +37,7 @@ public class ProcessListenerList implements ProcessListener {
     /**
      * Creates a new process listener list.
      */
-    public ProcessListenerList() {listeners = new Vector();}
+    public ProcessListenerList() {listeners = new Vector<ProcessListener>();}
 
 
 
@@ -64,32 +63,23 @@ public class ProcessListenerList implements ProcessListener {
      * Propagates the <i>process died</i> event to all registered listeners.
      */
     public void processDied(int returnValue) {
-        Iterator iterator;
-
-        iterator = listeners.iterator();
-        while(iterator.hasNext())
-            ((ProcessListener)iterator.next()).processDied(returnValue);
+        for(ProcessListener listener : listeners)
+            listener.processDied(returnValue);
     }
 
     /**
      * Propagates the <i>process output</i> event to all registered listeners.
      */
     public void processOutput(byte[] buffer, int offset, int length) {
-        Iterator iterator;
-
-        iterator = listeners.iterator();
-        while(iterator.hasNext())
-            ((ProcessListener)iterator.next()).processOutput(buffer, offset, length);
+        for(ProcessListener listener : listeners)
+            listener.processOutput(buffer, offset, length);
     }
 
     /**
      * Propagates the <i>process output</i> event to all registered listeners.
      */
     public void processOutput(String output) {
-        Iterator iterator;
-
-        iterator = listeners.iterator();
-        while(iterator.hasNext())
-            ((ProcessListener)iterator.next()).processOutput(output);
+        for(ProcessListener listener : listeners)
+            listener.processOutput(output);
     }
 }

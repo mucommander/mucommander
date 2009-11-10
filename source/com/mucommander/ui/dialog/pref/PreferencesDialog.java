@@ -25,7 +25,10 @@ import com.mucommander.ui.dialog.pref.component.PrefComponent;
 import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.layout.XBoxPanel;
 
-import javax.swing.*;
+import javax.swing.JButton;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -40,15 +43,15 @@ public abstract class PreferencesDialog extends FocusDialog implements ActionLis
     // - Instance fields --------------------------------------------------------
     // --------------------------------------------------------------------------
     /** Displays the different panels. */
-    private JTabbedPane tabbedPane;
+    private JTabbedPane              tabbedPane;
     /** Stores the different panels. */
-    private Vector      prefPanels;
+    private Vector<PreferencesPanel> prefPanels;
     /** Apply button. */
-    private JButton     applyButton;
+    private JButton                  applyButton;
     /** OK button. */
-    private JButton     okButton;
+    private JButton                  okButton;
     /** Cancel button. */
-    private JButton     cancelButton;	
+    private JButton                  cancelButton;
 
 
 
@@ -87,7 +90,7 @@ public abstract class PreferencesDialog extends FocusDialog implements ActionLis
         JPanel    tempPanel;
 
         // Initializes the tabbed pane.
-        prefPanels = new Vector();
+        prefPanels = new Vector<PreferencesPanel>();
         tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 
         // Adds the tabbed pane.
@@ -172,7 +175,7 @@ public abstract class PreferencesDialog extends FocusDialog implements ActionLis
         // Ask pref panels to commit changes
         int nbPanels = prefPanels.size();
         for(int i = 0; i < nbPanels; i++)
-            ((PreferencesPanel)prefPanels.elementAt(i)).commit();
+            prefPanels.elementAt(i).commit();
         setCommitButtonsEnabled(false);
     }
 
@@ -188,7 +191,7 @@ public abstract class PreferencesDialog extends FocusDialog implements ActionLis
         // Ask pref panels to commit changes
         int nbPanels = prefPanels.size();
         for(int i = 0; i < nbPanels; i++)
-            if(!((PreferencesPanel)prefPanels.elementAt(i)).checkCommit())
+            if(!prefPanels.elementAt(i).checkCommit())
                 return false;
         return true;
     }

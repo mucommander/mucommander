@@ -673,7 +673,7 @@ public class MainFrame extends JFrame implements LocationListener {
     public void updateWindowTitle() {
         // Update window title
         String title = activeTable.getCurrentFolder().getAbsolutePath();
-        Vector mainFrames = WindowManager.getMainFrames();
+        Vector<MainFrame> mainFrames = WindowManager.getMainFrames();
         if(mainFrames.size()>1)
             title += " ["+(mainFrames.indexOf(this)+1)+"]";
         setTitle(title);

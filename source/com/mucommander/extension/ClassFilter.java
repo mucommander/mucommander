@@ -31,5 +31,5 @@ public interface ClassFilter {
      * @param  c class that must be evaluated.
      * @return   <code>true</code> if the specified class must be used, <code>false</code> otherwise.
      */
-    public boolean accept(Class c);
+    public boolean accept(Class<?> c);
 }

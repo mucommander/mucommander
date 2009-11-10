@@ -36,7 +36,7 @@ import java.util.Vector;
  * @author Arik Hadas
  */
 public class ParentFoldersQL extends QuickListWithIcons implements LocationListener {
-	protected Vector parents = new Vector();
+	protected Vector<AbstractFile> parents = new Vector<AbstractFile>();
 	protected boolean updated = true;
 		
 	public ParentFoldersQL(FolderPanel folderPanel) {
@@ -54,7 +54,7 @@ public class ParentFoldersQL extends QuickListWithIcons implements LocationListe
 	}
 	
 	protected void populateParentFolders(AbstractFile folder) {
-		parents = new Vector();
+		parents = new Vector<AbstractFile>();
 				
 		while((folder=folder.getParent())!=null)
             parents.add(folder);

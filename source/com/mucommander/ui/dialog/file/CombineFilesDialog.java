@@ -116,9 +116,9 @@ public class CombineFilesDialog extends TransferDestinationDialog {
     //////////////////////////////////////////////
 
     protected PathFieldContent computeInitialPath(FileSet files) {
-        String path = destFolder.getAbsolutePath(true) + files.fileAt(0).getNameWithoutExtension();
+        String path = destFolder.getAbsolutePath(true) + files.elementAt(0).getNameWithoutExtension();
         if (files.size() == 1) {
-        	searchParts(files.fileAt(0));
+        	searchParts(files.elementAt(0));
         }
 
         return new PathFieldContent(path);

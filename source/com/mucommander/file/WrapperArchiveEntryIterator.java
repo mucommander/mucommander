@@ -30,7 +30,7 @@ import java.util.Iterator;
 public class WrapperArchiveEntryIterator implements ArchiveEntryIterator {
 
     /** Wrapped iterator */
-    protected Iterator iterator;
+    protected Iterator<? extends ArchiveEntry> iterator;
 
     /**
      * Creates a new <code>WrapperArchiveEntryIterator</code> that iterates through the given
@@ -38,7 +38,7 @@ public class WrapperArchiveEntryIterator implements ArchiveEntryIterator {
      *
      * @param iterator the wrapped iterator
      */
-    public WrapperArchiveEntryIterator(Iterator iterator) {
+    public WrapperArchiveEntryIterator(Iterator<? extends ArchiveEntry> iterator) {
         this.iterator = iterator;
     }
 
@@ -51,7 +51,7 @@ public class WrapperArchiveEntryIterator implements ArchiveEntryIterator {
         if(!iterator.hasNext())
             return null;
         
-        return (ArchiveEntry)iterator.next();
+        return iterator.next();
     }
 
     /**

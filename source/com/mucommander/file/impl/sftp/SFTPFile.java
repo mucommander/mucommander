@@ -403,7 +403,7 @@ public class SFTPFile extends ProtocolFile {
     public AbstractFile[] ls() throws IOException {
         // Retrieve a ConnectionHandler and lock it
         SFTPConnectionHandler connHandler = (SFTPConnectionHandler)ConnectionPool.getConnectionHandler(connHandlerFactory, fileURL, true);
-        List files;
+        List<SftpFile> files;
         try {
             // Makes sure the connection is started, if not starts it
             connHandler.checkConnection();
@@ -427,7 +427,6 @@ public class SFTPFile extends ProtocolFile {
         AbstractFile children[] = new AbstractFile[nbFiles];
         AbstractFile child;
         FileURL childURL;
-        SftpFile sftpFile;
         String filename;
         int fileCount = 0;
         String parentPath = fileURL.getPath();
@@ -435,9 +434,8 @@ public class SFTPFile extends ProtocolFile {
             parentPath  += SEPARATOR;
 
         // Fill AbstractFile array and discard '.' and '..' files
-        for (Object file : files) {
-            sftpFile = (SftpFile) file;
-            filename = sftpFile.getFilename();
+        for (SftpFile file : files) {
+            filename = file.getFilename();
             // Discard '.' and '..' files, dunno why these are returned
             if (filename.equals(".") || filename.equals(".."))
                 continue;
@@ -445,7 +443,7 @@ public class SFTPFile extends ProtocolFile {
             childURL = (FileURL) fileURL.clone();
             childURL.setPath(parentPath + filename);
 
-            child = FileFactory.wrapArchive(new SFTPFile(childURL, new SFTPFileAttributes(childURL, sftpFile.getAttributes())));
+            child = FileFactory.wrapArchive(new SFTPFile(childURL, new SFTPFileAttributes(childURL, file.getAttributes())));
             child.setParent(this);
 
             children[fileCount++] = child;

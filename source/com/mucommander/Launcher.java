@@ -434,9 +434,9 @@ public class Launcher {
                 // Use reflection to create an OSXIntegration instance so that ClassLoader
                 // doesn't throw an NoClassDefFoundException under platforms other than Mac OS X
                 try {
-                    Class osxIntegrationClass = Class.forName("com.mucommander.ui.macosx.OSXIntegration");
-                    Constructor constructor   = osxIntegrationClass.getConstructor(new Class[]{});
-                    constructor.newInstance(new Object[]{});
+                    Class<?> osxIntegrationClass = Class.forName("com.mucommander.ui.macosx.OSXIntegration");
+                    Constructor<?> constructor   = osxIntegrationClass.getConstructor(new Class[]{});
+                    constructor.newInstance();
                 }
                 catch(Exception e) {
                     AppLogger.fine("Exception thrown while initializing Mac OS X integration", e);

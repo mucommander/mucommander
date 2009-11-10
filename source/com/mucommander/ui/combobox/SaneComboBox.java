@@ -58,7 +58,7 @@ public class SaneComboBox extends JComboBox {
         init();
     }
 
-    public SaneComboBox(Vector<?> items) {
+    public SaneComboBox(Vector<Object> items) {
         super(items);
         init();
     }

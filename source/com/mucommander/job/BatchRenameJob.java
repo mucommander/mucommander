@@ -31,9 +31,9 @@ import java.util.List;
  * @author Mariusz Jakubowski
  */
 public class BatchRenameJob extends MoveJob {
-    private List newNames;
+    private List<String> newNames;
 
-    public BatchRenameJob(ProgressDialog progressDialog, MainFrame mainFrame, FileSet files, List newNames) {
+    public BatchRenameJob(ProgressDialog progressDialog, MainFrame mainFrame, FileSet files, List<String> newNames) {
         super(progressDialog, mainFrame, files, files.getBaseFolder(), null, FileCollisionDialog.ASK_ACTION, true);
         this.newNames = newNames;
     }
@@ -44,7 +44,7 @@ public class BatchRenameJob extends MoveJob {
     ////////////////////////////
 
     protected boolean processFile(AbstractFile file, Object recurseParams) {
-        this.newName = (String) newNames.get(getCurrentFileIndex());
+        this.newName = newNames.get(getCurrentFileIndex());
         return super.processFile(file, recurseParams);
     }
 

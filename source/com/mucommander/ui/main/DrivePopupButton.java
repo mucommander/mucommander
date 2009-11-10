@@ -78,10 +78,10 @@ public class DrivePopupButton extends PopupButton implements LocationListener, B
     private static FileSystemView fileSystemView;
 
     /** Caches extended drive names, has a (non-null) value only under Windows */
-    private static Hashtable extendedNameCache;
+    private static Hashtable<AbstractFile, String> extendedNameCache;
     
     /** Caches drive icons */
-    private static Hashtable iconCache = new Hashtable();
+    private static Hashtable<AbstractFile, Icon> iconCache = new Hashtable<AbstractFile, Icon>();
     
 
     /** Filters out volumes from the list based on the exclude regexp defined in the configuration, null if the regexp
@@ -92,7 +92,7 @@ public class DrivePopupButton extends PopupButton implements LocationListener, B
     static {
         if(OsFamilies.WINDOWS.isCurrent()) {
             fileSystemView = FileSystemView.getFileSystemView();
-            extendedNameCache = new Hashtable();
+            extendedNameCache = new Hashtable<AbstractFile, String>();
         }
 
         try {
@@ -156,11 +156,11 @@ public class DrivePopupButton extends PopupButton implements LocationListener, B
 //        String newToolTip = null;
 
         // First tries to find a bookmark matching the specified folder
-        Vector bookmarks = BookmarkManager.getBookmarks();
+        Vector<Bookmark> bookmarks = BookmarkManager.getBookmarks();
         int nbBookmarks = bookmarks.size();
         Bookmark b;
         for(int i=0; i<nbBookmarks; i++) {
-            b = (Bookmark)bookmarks.elementAt(i);
+            b = bookmarks.elementAt(i);
             if(currentPath.equals(b.getLocation())) {
                 // Note: if several bookmarks match current folder, the first one will be used
                 newLabel = b.getName();
@@ -284,10 +284,10 @@ public class DrivePopupButton extends PopupButton implements LocationListener, B
         String volumeName;
 
         boolean useExtendedDriveNames = fileSystemView!=null;
-        ArrayList itemsV = new ArrayList();
+        ArrayList<JMenuItem> itemsV = new ArrayList<JMenuItem>();
 
         for(int i=0; i<nbVolumes; i++) {
-            action = new CustomOpenLocationAction(mainFrame, new Hashtable(), volumes[i]);
+            action = new CustomOpenLocationAction(mainFrame, new Hashtable<String, Object>(), volumes[i]);
             volumeName = volumes[i].getName();
 
             // If several volumes have the same filename, use the volume's path for the action's label instead of the
@@ -303,14 +303,14 @@ public class DrivePopupButton extends PopupButton implements LocationListener, B
             setMnemonic(item, mnemonicHelper);
 
             // Set icon from cache
-            Icon icon = (Icon) iconCache.get(volumes[i]);
+            Icon icon = iconCache.get(volumes[i]);
             if (icon!=null) {
                 item.setIcon(icon);
             }
 
             if(useExtendedDriveNames) {
                 // Use the last known value (if any) while we update it in a separate thread
-                String previousExtendedName = (String)extendedNameCache.get(volumes[i]);
+                String previousExtendedName = extendedNameCache.get(volumes[i]);
                 if(previousExtendedName!=null)
                     item.setText(previousExtendedName);
 
@@ -323,14 +323,14 @@ public class DrivePopupButton extends PopupButton implements LocationListener, B
         popupMenu.add(new JSeparator());
 
         // Add boookmarks
-        Vector bookmarks = BookmarkManager.getBookmarks();
+        Vector<Bookmark> bookmarks = BookmarkManager.getBookmarks();
         int nbBookmarks = bookmarks.size();
         Bookmark b;   
 
         if(nbBookmarks>0) {
             for(int i=0; i<nbBookmarks; i++) {
-                b = (Bookmark)bookmarks.elementAt(i);
-                item = popupMenu.add(new CustomOpenLocationAction(mainFrame, new Hashtable(), b));
+                b = bookmarks.elementAt(i);
+                item = popupMenu.add(new CustomOpenLocationAction(mainFrame, new Hashtable<String, Object>(), b));
                 setMnemonic(item, mnemonicHelper);
             }
         }
@@ -343,7 +343,7 @@ public class DrivePopupButton extends PopupButton implements LocationListener, B
 
         // Add 'Network shares' shortcut
         if(FileFactory.isRegisteredProtocol(FileProtocols.SMB)) {
-            action = new CustomOpenLocationAction(mainFrame, new Hashtable(), new Bookmark("Network shares", "smb:///"));
+            action = new CustomOpenLocationAction(mainFrame, new Hashtable<String, Object>(), new Bookmark("Network shares", "smb:///"));
             action.setIcon(IconManager.getIcon(IconManager.FILE_ICON_SET, CustomFileIconProvider.NETWORK_ICON_NAME));
             setMnemonic(popupMenu.add(action), mnemonicHelper);
         }
@@ -351,7 +351,7 @@ public class DrivePopupButton extends PopupButton implements LocationListener, B
         // Add Bonjour services menu
         setMnemonic(popupMenu.add(new BonjourMenu() {
             public MuAction getMenuItemAction(BonjourService bs) {
-                return new CustomOpenLocationAction(mainFrame, new Hashtable(), bs);
+                return new CustomOpenLocationAction(mainFrame, new Hashtable<String, Object>(), bs);
             }
         }) , mnemonicHelper);
         popupMenu.add(new JSeparator());
@@ -376,9 +376,9 @@ public class DrivePopupButton extends PopupButton implements LocationListener, B
     private class RefreshDriveNamesAndIcons extends Thread {
         
         private JPopupMenu popupMenu;
-        private ArrayList items;
+        private ArrayList<JMenuItem> items;
 
-        public RefreshDriveNamesAndIcons(JPopupMenu popupMenu, ArrayList items) {
+        public RefreshDriveNamesAndIcons(JPopupMenu popupMenu, ArrayList<JMenuItem> items) {
             super("RefreshDriveNamesAndIcons");
             this.popupMenu = popupMenu;
             this.items = items;
@@ -387,7 +387,7 @@ public class DrivePopupButton extends PopupButton implements LocationListener, B
         public void run() {
             final boolean useExtendedDriveNames = fileSystemView!=null;
             for(int i=0; i<items.size(); i++) {
-                final JMenuItem item = ((JMenuItem)items.get(i));
+                final JMenuItem item = items.get(i);
 
                 String extendedName = null;
                 if (useExtendedDriveNames) {
@@ -511,9 +511,9 @@ public class DrivePopupButton extends PopupButton implements LocationListener, B
      * protocol.
      */
     private class ServerConnectAction extends AbstractAction {
-        private Class serverPanelClass;
+        private Class<? extends ServerPanel> serverPanelClass;
 
-        private ServerConnectAction(String label, Class serverPanelClass) {
+        private ServerConnectAction(String label, Class<? extends ServerPanel> serverPanelClass) {
             super(label);
             this.serverPanelClass = serverPanelClass;
         }

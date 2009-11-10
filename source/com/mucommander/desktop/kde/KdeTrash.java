@@ -142,7 +142,7 @@ class KdeTrash extends QueuedTrash {
     // QueuedTrash implementation //
     ////////////////////////////////
 
-    protected boolean moveToTrash(Vector queuedFiles) {
+    protected boolean moveToTrash(Vector<AbstractFile> queuedFiles) {
         int nbFiles = queuedFiles.size();
         String tokens[] = new String[nbFiles+3];
 
@@ -150,7 +150,7 @@ class KdeTrash extends QueuedTrash {
         tokens[1] = "move";
 
         for(int i=0; i<nbFiles; i++) {
-            tokens[i+2] = ((AbstractFile)queuedFiles.elementAt(i)).getAbsolutePath();
+            tokens[i+2] = queuedFiles.elementAt(i).getAbsolutePath();
         }
 
         tokens[nbFiles+2] = "trash:/";

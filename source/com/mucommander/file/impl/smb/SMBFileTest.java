@@ -19,6 +19,7 @@
 package com.mucommander.file.impl.smb;
 
 import com.mucommander.test.SingleConditionalTestSuite;
+import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 /**
@@ -50,7 +51,8 @@ public class SMBFileTest extends SingleConditionalTestSuite {
         return "true".equals(System.getProperty(ENABLED_PROPERTY));
     }
 
-    protected Class getTestCaseClass() {
+    @Override
+    protected Class<? extends TestCase> getTestCaseClass() {
         return SMBFileTestCase.class;
     }
 }

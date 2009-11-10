@@ -27,7 +27,6 @@ import javax.swing.event.EventListenerList;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -53,7 +52,7 @@ public class JobProgressMonitor implements FileJobListener {
 	private EventListenerList listenerList = new EventListenerList();
 	
 	/** A list of monitored jobs. */
-	private List jobs = new ArrayList();
+	private List<FileJob> jobs = new ArrayList<FileJob>();
 
 	/** An instance of this class */
 	private static final JobProgressMonitor instance = new JobProgressMonitor();
@@ -69,7 +68,7 @@ public class JobProgressMonitor implements FileJobListener {
 	
 	/**
 	 * Returns the instance of JobProgressMonitor.
-	 * @return
+	 * @return the instance of JobProgressMonitor.
 	 */
 	public static JobProgressMonitor getInstance() {
 		return instance;
@@ -218,7 +217,7 @@ public class JobProgressMonitor implements FileJobListener {
 	 */
 	public JobProgress getJobProgres(int rowIndex) {
 		if (rowIndex < jobs.size()) {
-			FileJob job = (FileJob) jobs.get(rowIndex);
+			FileJob job = jobs.get(rowIndex);
 			return job.getJobProgress();
 		}
 		return null;
@@ -265,9 +264,8 @@ public class JobProgressMonitor implements FileJobListener {
 			}
 			
 			// for each job calculate new progress and notify listeners
-			for (Iterator i = jobs.iterator(); i.hasNext();) {
+			for(FileJob job : jobs) {
 				boolean updateFullUI;
-				FileJob job = (FileJob) i.next();
 				JobProgress jobProgress = job.getJobProgress();
 				updateFullUI = jobProgress.calcJobProgress(fullUpdate);
 				fireJobProgress(job, updateFullUI);

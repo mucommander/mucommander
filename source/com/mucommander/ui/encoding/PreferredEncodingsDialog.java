@@ -30,7 +30,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.nio.charset.Charset;
-import java.util.Iterator;
 import java.util.Vector;
 
 /**
@@ -44,7 +43,7 @@ import java.util.Vector;
 public class PreferredEncodingsDialog extends FocusDialog {
 
     /** Contains all the checkbox added to this dialog */
-    private Vector checkboxes;
+    private Vector<JCheckBox> checkboxes;
 
     /** Minimum dimensions of this dialog */
     private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(300,0);
@@ -94,13 +93,9 @@ public class PreferredEncodingsDialog extends FocusDialog {
 
         YBoxPanel yPanel = new YBoxPanel();
 
-        Iterator allEncodings = Charset.availableCharsets().keySet().iterator();
-        checkboxes = new Vector();
-        String enc;
+        checkboxes = new Vector<JCheckBox>();
         JCheckBox checkbox;
-
-        while(allEncodings.hasNext()) {
-            enc = (String)allEncodings.next();
+        for(String enc : Charset.availableCharsets().keySet()) {
             checkbox = new JCheckBox(enc);
             // Mac OS X: component size
             if(OsFamilies.MAC_OS_X.isCurrent())
@@ -139,10 +134,10 @@ public class PreferredEncodingsDialog extends FocusDialog {
             public void windowClosing(WindowEvent e) {
                 JCheckBox checkbox;
                 int nbCheckboxes = checkboxes.size();
-                Vector preferredEncodings = new Vector();
+                Vector<String> preferredEncodings = new Vector<String>();
 
                 for(int i=0; i<nbCheckboxes; i++) {
-                    checkbox = (JCheckBox)checkboxes.elementAt(i);
+                    checkbox = checkboxes.elementAt(i);
                     if(checkbox.isSelected())
                         preferredEncodings.add(checkbox.getText());
                 }
@@ -157,11 +152,11 @@ public class PreferredEncodingsDialog extends FocusDialog {
      *
      * @param selectedEncodings list of encodings to select
      */
-    protected void selectCheckboxes(Vector selectedEncodings) {
+    protected void selectCheckboxes(Vector<String> selectedEncodings) {
         JCheckBox checkbox;
         int nbCheckboxes = checkboxes.size();
         for(int i=0; i<nbCheckboxes; i++) {
-            checkbox = (JCheckBox)checkboxes.elementAt(i);
+            checkbox = checkboxes.elementAt(i);
             checkbox.setSelected(selectedEncodings.contains(checkbox.getText()));
         }
     }

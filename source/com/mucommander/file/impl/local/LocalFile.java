@@ -307,7 +307,7 @@ public class LocalFile extends ProtocolFile {
                     // respectively.
 
                     // Start by tokenizing the whole line
-                    Vector tokenV = new Vector();
+                    Vector<String> tokenV = new Vector<String>();
                     if(line!=null) {
                         StringTokenizer st = new StringTokenizer(line);
                         while(st.hasMoreTokens())
@@ -323,7 +323,7 @@ public class LocalFile extends ProtocolFile {
 
                     // Find the last token starting with '/'
                     int pos = nbTokens-1;
-                    while(!((String)tokenV.elementAt(pos)).startsWith("/")) {
+                    while(!tokenV.elementAt(pos).startsWith("/")) {
                         if(pos==0) {
                             // This shouldn't normally happen
                             FileLogger.warning("Failed to parse output of df -k "+absPath+" line="+line);
@@ -334,9 +334,9 @@ public class LocalFile extends ProtocolFile {
                     }
 
                     // '1-blocks' field (total space)
-                    dfInfo[0] = Long.parseLong((String)tokenV.elementAt(pos-4)) * 1024;
+                    dfInfo[0] = Long.parseLong(tokenV.elementAt(pos-4)) * 1024;
                     // 'Avail' field (free space)
-                    dfInfo[1] = Long.parseLong((String)tokenV.elementAt(pos-2)) * 1024;
+                    dfInfo[1] = Long.parseLong(tokenV.elementAt(pos-2)) * 1024;
                 }
 
 //                // Retrieves the total and free space information using the POSIX statvfs function
@@ -414,7 +414,7 @@ public class LocalFile extends ProtocolFile {
      * @return all local volumes
      */
     public static AbstractFile[] getVolumes() {
-        Vector volumesV = new Vector();
+        Vector<AbstractFile> volumesV = new Vector<AbstractFile>();
 
         // Add Mac OS X's /Volumes subfolders and not file roots ('/') since Volumes already contains a named link
         // (like 'Hard drive' or whatever silly name the user gave his primary hard disk) to /
@@ -451,7 +451,7 @@ public class LocalFile extends ProtocolFile {
      *
      * @param v the <code>Vector</code> to add root folders to
      */
-    private static void addJavaIoFileRoots(Vector v) {
+    private static void addJavaIoFileRoots(Vector<AbstractFile> v) {
         // Warning : No file operation should be performed on the resolved folders as under Win32, this would cause a
         // dialog to appear for removable drives such as A:\ if no disk is present.
         File fileRoots[] = File.listRoots();
@@ -470,7 +470,7 @@ public class LocalFile extends ProtocolFile {
      *
      * @param v the <code>Vector</code> to add mount points to
      */
-    private static void addMountEntries(Vector v) {
+    private static void addMountEntries(Vector<AbstractFile> v) {
         BufferedReader br;
 
         br = null;
@@ -524,7 +524,7 @@ public class LocalFile extends ProtocolFile {
      *
      * @param v the <code>Vector</code> to add the volumes to
      */
-    private static void addMacOSXVolumes(Vector v) {
+    private static void addMacOSXVolumes(Vector<AbstractFile> v) {
         // /Volumes not resolved for some reason, giving up
         AbstractFile volumesFolder = FileFactory.getFile("/Volumes");
         if(volumesFolder==null)

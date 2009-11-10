@@ -95,7 +95,7 @@ public class FolderPanel extends JPanel implements FocusListener, ThemeListener 
     private FoldersTreePanel foldersTreePanel;
     private JSplitPane treeSplitPane;
 	
-    private FolderHistory folderHistory = new FolderHistory(this);
+    private LocationHistory folderHistory = new LocationHistory(this);
     
     private FileDragSourceListener fileDragSourceListener;
 
@@ -292,12 +292,12 @@ public class FolderPanel extends JPanel implements FocusListener, ThemeListener 
      */
     private void disableCtrlFocusTraversalKeys(Component component) {
         // Remove Ctrl+Tab from forward focus traversal keys
-        HashSet keyStrokeSet = new HashSet();
+        HashSet<AWTKeyStroke> keyStrokeSet = new HashSet<AWTKeyStroke>();
         keyStrokeSet.add(AWTKeyStroke.getAWTKeyStroke(KeyEvent.VK_TAB, 0));
         component.setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, keyStrokeSet);
 
         // Remove Shift+Ctrl+Tab from backward focus traversal keys
-        keyStrokeSet = new HashSet();
+        keyStrokeSet = new HashSet<AWTKeyStroke>();
         keyStrokeSet.add(AWTKeyStroke.getAWTKeyStroke(KeyEvent.VK_TAB, java.awt.event.InputEvent.SHIFT_DOWN_MASK));
         component.setFocusTraversalKeys(KeyboardFocusManager.BACKWARD_TRAVERSAL_KEYS, keyStrokeSet);
     }
@@ -376,7 +376,7 @@ public class FolderPanel extends JPanel implements FocusListener, ThemeListener 
      *
      * @return the visited folders history, wrapped in a FolderHistory object
      */
-    public FolderHistory getFolderHistory() {
+    public LocationHistory getFolderHistory() {
         return this.folderHistory;
     }
 

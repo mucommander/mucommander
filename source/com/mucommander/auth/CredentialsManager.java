@@ -282,10 +282,10 @@ public class CredentialsManager implements VectorChangeListener {
         location.setCredentials(credentialsMapping.getCredentials());
 
         FileURL realm = credentialsMapping.getRealm();
-        Enumeration propertyKeys = realm.getPropertyNames();
+        Enumeration<String> propertyKeys = realm.getPropertyNames();
         String key;
         while(propertyKeys.hasMoreElements()) {
-            key = (String)propertyKeys.nextElement();
+            key = propertyKeys.nextElement();
 
             if(location.getProperty(key)==null)
                 location.setProperty(key, realm.getProperty(key));
@@ -431,7 +431,7 @@ public class CredentialsManager implements VectorChangeListener {
      * @param vector the <code>Vector</code> to replace/add the object to
      * @param o the object to replace/add
      */
-    private static void replaceVectorElement(Vector vector, Object o) {
+    private static void replaceVectorElement(Vector<CredentialsMapping> vector, CredentialsMapping o) {
         int index = vector.indexOf(o);
         if(index==-1)
             vector.add(o);

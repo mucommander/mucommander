@@ -26,7 +26,9 @@ import com.mucommander.ui.theme.Theme;
 import com.mucommander.ui.theme.ThemeManager;
 
 import javax.swing.*;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
+import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Iterator;
@@ -58,10 +60,10 @@ public class InitialSetupDialog extends FocusDialog implements ActionListener {
     private JPanel createThemePanel() {
 	JPanel    themePanel;    // Theme panel.
 	JPanel    tempPanel;     // Temporary panel used to hold the dialog's description.
-        Iterator  themes;        // All available themes.
-        Theme     theme;         // Currently analyzed theme.
-        int       index;         // Index of the currently analyzed theme.
-        int       selectedIndex; // Index of the current theme in the combo box.
+        Iterator<Theme> themes;        // All available themes.
+        Theme           theme;         // Currently analyzed theme.
+        int             index;         // Index of the currently analyzed theme.
+        int             selectedIndex; // Index of the current theme in the combo box.
 
 	// Initialises the theme panel.
 	themePanel = new YBoxPanel();
@@ -81,7 +83,7 @@ public class InitialSetupDialog extends FocusDialog implements ActionListener {
 
 	// Adds all themes to the combo box.
         while(themes.hasNext()) {
-            themeComboBox.addItem(theme = (Theme)themes.next());
+            themeComboBox.addItem(theme = themes.next());
             if(ThemeManager.isCurrentTheme(theme))
                 selectedIndex = index;
             index++;

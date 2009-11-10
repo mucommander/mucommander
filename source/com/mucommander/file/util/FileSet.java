@@ -30,7 +30,7 @@ import java.util.Vector;
  *
  * @author Maxence Bernard
  */
-public class FileSet extends Vector {
+public class FileSet extends Vector<AbstractFile> {
 
     /** The base/parent folder of the files this Vector contains */
     private AbstractFile baseFolder;
@@ -85,37 +85,15 @@ public class FileSet extends Vector {
 	
 
     /**
-     * Convenience method that returns the {@link AbstractFile} located at the specified position.
-     *
-     * @param i index of the file to retrieve
-     * @return the AbstractFile located at the specified position
-     */
-    public AbstractFile fileAt(int i) {
-        return (AbstractFile)super.elementAt(i);
-    }
-
-    /**
      * Adds all the files in the given array to this FileSet. Does nothing if the specified array is <code>null</code.
      *
      * @param files the files to add to this FileSet.
      */
-    public void addFiles(AbstractFile[] files) {
+    public void addAll(AbstractFile[] files) {
         if(files==null)
             return;
 
         for (AbstractFile file : files)
             add(file);
-    }
-
-    /**
-     * Returns the files contained by this set as an {@link AbstractFile} array.
-     *
-     * @return the files contained by this set as an {@link AbstractFile} array.
-     */
-    public AbstractFile[] toFileArray() {
-        AbstractFile[] files = new AbstractFile[size()];
-        toArray(files);
-
-        return files;
     }
 }

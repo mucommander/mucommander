@@ -52,15 +52,15 @@ public class ShellHistoryManager {
     // - Class fields ---------------------------------------------------------------
     // ------------------------------------------------------------------------------
     /** List of shell history registered listeners. */
-    private static WeakHashMap  listeners;
+    private static WeakHashMap<ShellHistoryListener, ?> listeners;
     /** Stores the shell history. */
-    private static String[]     history;
+    private static String[]                             history;
     /** Index of the first element of the history. */
-    private static int          historyStart;
+    private static int                                  historyStart;
     /** Index of the last element of the history. */
-    private static int          historyEnd;
+    private static int                                  historyEnd;
     /** Path to the history file. */
-    private static AbstractFile historyFile;
+    private static AbstractFile                         historyFile;
 
 
 
@@ -76,7 +76,7 @@ public class ShellHistoryManager {
      */
     static {
         history   = new String[MuConfiguration.getVariable(MuConfiguration.SHELL_HISTORY_SIZE, MuConfiguration.DEFAULT_SHELL_HISTORY_SIZE)];
-        listeners = new WeakHashMap();
+        listeners = new WeakHashMap<ShellHistoryListener, Object>();
     }
 
 
@@ -94,11 +94,8 @@ public class ShellHistoryManager {
      * @param command command that was added to the shell history.
      */
     private static void triggerEvent(String command) {
-        Iterator iterator;
-
-        iterator = listeners.keySet().iterator();
-        while(iterator.hasNext())
-            ((ShellHistoryListener)iterator.next()).historyChanged(command);
+        for(ShellHistoryListener listener : listeners.keySet())
+            listener.historyChanged(command);
     }
 
 
@@ -109,23 +106,20 @@ public class ShellHistoryManager {
      * Completely empties the shell history.
      */
     public static void clear() {
-        Iterator iterator; // Iterator on the history listeners.
-
         // Empties history.
         historyStart = 0;
         historyEnd   = 0;
 
         // Notifies listeners.
-        iterator = listeners.keySet().iterator();
-        while(iterator.hasNext())
-            ((ShellHistoryListener)iterator.next()).historyCleared();
+        for(ShellHistoryListener listener : listeners.keySet())
+            listener.historyCleared();
     }
 
     /**
      * Returns a <b>non thread-safe</b> iterator on the history.
      * @return an iterator on the history.
      */
-    public static Iterator getHistoryIterator() {return new HistoryIterator();}
+    public static Iterator<String> getHistoryIterator() {return new HistoryIterator();}
 
     /**
      * Adds the specified command to shell history.
@@ -277,7 +271,7 @@ public class ShellHistoryManager {
      * Iterator used to browse history.
      * @author Nicolas Rinaudo
      */
-    static class HistoryIterator implements Iterator {
+    static class HistoryIterator implements Iterator<String> {
         /** Index in the history. */
         private int index;
 
@@ -296,7 +290,7 @@ public class ShellHistoryManager {
          * Returns the next element in the history.
          * @return the next element in the history.
          */
-        public Object next() throws NoSuchElementException {
+        public String next() throws NoSuchElementException {
             String value;
 
             if(!hasNext())

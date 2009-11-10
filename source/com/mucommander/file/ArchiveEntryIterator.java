@@ -28,7 +28,7 @@ import java.io.IOException;
  *   <li>its methods are allowed to throw <code>IOException</code></li>
  *   <li>there is no <code>hasNext</code> method, because it wouldn't map very well onto certain formats that don't know
  * if there is a next entry until the current entry has been consumed.</li>
- *   <li>{@link #close()} needs to be called when the Iterator is not needed anymore, alowing implementations to release
+ *   <li>{@link #close()} needs to be called when the Iterator is not needed anymore, allowing implementations to release
  * any resources that they hold.</li>
  * </ul>
  *

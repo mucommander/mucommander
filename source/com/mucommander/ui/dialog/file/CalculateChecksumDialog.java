@@ -212,7 +212,7 @@ public class CalculateChecksumDialog extends JobDialog implements ActionListener
             return "SHA1SUMS";
 
         if(algorithm.equals("CRC32"))
-            return (files.size()==1?files.fileAt(0):files.getBaseFolder()).getName()+".sfv";
+            return (files.size()==1?files.elementAt(0):files.getBaseFolder()).getName()+".sfv";
 
         return StringUtils.replaceCompat(algorithm, "-", "")+"SUMS";
     }

@@ -107,8 +107,8 @@ public abstract class Completer {
 	 * @return Vector that contain all the possible completions
 	 * 			which were retured from the registered services.
 	 */
-	protected Vector getPossibleCompletionsFromServices(String path) {
-		Vector result = new Vector();
+	protected Vector<String> getPossibleCompletionsFromServices(String path) {
+		Vector<String> result = new Vector<String>();
         for (CompletionService service : services)
             result.addAll(service.getPossibleCompletions(path));
 		return result;

@@ -141,8 +141,8 @@ public class CachedFile extends ProxyFile {
 
         try {
             // Resolve FileSystem class, 'getBooleanAttributes' method and fields
-            Class cFile = File.class;
-            Class cFileSystem = Class.forName("java.io.FileSystem");
+            Class<?> cFile = File.class;
+            Class<?> cFileSystem = Class.forName("java.io.FileSystem");
             mGetBooleanAttributes = cFileSystem.getDeclaredMethod("getBooleanAttributes", new Class [] {cFile});
             Field fBA_EXISTS = cFileSystem.getDeclaredField("BA_EXISTS");
             Field fBA_DIRECTORY = cFileSystem.getDeclaredField("BA_DIRECTORY");

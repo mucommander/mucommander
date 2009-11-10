@@ -18,11 +18,6 @@
 
 package com.mucommander.ui.main.quicklist;
 
-import java.io.IOException;
-import java.util.LinkedList;
-
-import javax.swing.Icon;
-
 import com.mucommander.desktop.DesktopManager;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileProtocols;
@@ -36,6 +31,10 @@ import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.WindowManager;
 import com.mucommander.ui.quicklist.QuickListWithIcons;
 
+import javax.swing.Icon;
+import java.io.IOException;
+import java.util.LinkedList;
+
 /**
  * This quick list shows recently executed files.
  * 
@@ -43,7 +42,7 @@ import com.mucommander.ui.quicklist.QuickListWithIcons;
  */
 
 public class RecentExecutedFilesQL extends QuickListWithIcons {
-	public static LinkedList list = new LinkedList();
+	public static LinkedList<AbstractFile> list = new LinkedList<AbstractFile>();
 	private static final int MAX_NUM_OF_ELEMENTS = 10;
 
 	public RecentExecutedFilesQL() {

@@ -106,31 +106,31 @@ public class JnlpTask extends Task {
     // - Instance variables ----------------------------------------------
     // -------------------------------------------------------------------
     /** Where to store the JNLP file. */
-    private File                   output;
+    private File                       output;
     /** Version of the JNLP specifications used by the generated file. */
-    private String                 spec;
+    private String                     spec;
     /** Version of the bundle described by the output file. */
-    private String                 version;
+    private String                     version;
     /** Root URL for all relative URLs used in the JNLP file. */
-    private String                 codeBase;
+    private String                     codeBase;
     /** URL of the JNLP file. */
-    private String                 href;
+    private String                     href;
     /** Contains the bundle description. */
-    private Vector                informations;
+    private Vector<InformationElement> informations;
     /** Whether or not the bundle needs full permissions on the local machine. */
-    private boolean                allPermissions;
+    private boolean                    allPermissions;
     /** Whether or not the bundle needs the permissions defined for a J2EE client. */
-    private boolean                j2eePermissions;
+    private boolean                    j2eePermissions;
     /** resources defined for the bundle. */
-    private Vector                 resources;
+    private Vector<ResourcesElement>   resources;
     /** Whether or not the bundle is a component. */
-    private boolean                isComponent;
+    private boolean                    isComponent;
     /** Contains the description of application bundles. */
-    private ApplicationDescElement applicationDesc;
+    private ApplicationDescElement     applicationDesc;
     /** Contains the description of applet bundles. */
-    private AppletDescElement      appletDesc;
+    private AppletDescElement          appletDesc;
     /** Contains the description of installer bundles. */
-    private InstallerDescElement   installerDesc;
+    private InstallerDescElement       installerDesc;
 
 
 
@@ -140,8 +140,8 @@ public class JnlpTask extends Task {
      * Initialises the JNLP task.
      */
     public void init() {
-        resources       = new Vector();
-        informations    = new Vector();
+        resources       = new Vector<ResourcesElement>();
+        informations    = new Vector<InformationElement>();
         output          = null;
         spec            = DEFAULT_SPEC;
         version         = null;
@@ -298,7 +298,7 @@ public class JnlpTask extends Task {
 
     private static void writeInformation(XmlWriter out, InformationElement information) throws IOException {
         XmlAttributes attr;
-        Iterator      iterator;
+        Iterator<?>   iterator;
 
         attr = new XmlAttributes();
         if(information.getLocale() != null)
@@ -339,8 +339,8 @@ public class JnlpTask extends Task {
     }
 
     private static void writeJ2se(XmlWriter out, J2seElement j2se) throws BuildException, IOException {
-        XmlAttributes attr;
-        Iterator      iterator;
+        XmlAttributes              attr;
+        Iterator<ResourcesElement> iterator;
 
         if(j2se.getVersion() == null)
             throw new BuildException("Missing " + ATTR_VERSION + " attribute for " + ELEMENT_J2SE + " element.");
@@ -360,7 +360,7 @@ public class JnlpTask extends Task {
 
             iterator = j2se.resources();
             while(iterator.hasNext())
-                writeResources(out, (ResourcesElement)iterator.next());
+                writeResources(out, iterator.next());
 
             out.endElement(ELEMENT_J2SE);
         }
@@ -438,14 +438,14 @@ public class JnlpTask extends Task {
             attr.add(ATTR_VERSION, extension.getVersion());
 
         if(extension.hasDownloads()) {
-            Iterator iterator;
+            Iterator<ExtDownloadElement> iterator;
 
             out.startElement(ELEMENT_EXTENSION, attr);
             out.println();
 
             iterator = extension.downloads();
             while(iterator.hasNext())
-                writeExtensionDownload(out, (ExtDownloadElement)iterator.next());
+                writeExtensionDownload(out, iterator.next());
 
             out.endElement(ELEMENT_EXTENSION);
         }
@@ -487,7 +487,7 @@ public class JnlpTask extends Task {
 
     private static void writeResources(XmlWriter out, ResourcesElement resources) throws BuildException, IOException {
         XmlAttributes attr;
-        Iterator      iterator;
+        Iterator<?>   iterator;
 
         attr = new XmlAttributes();
         if(resources.getOs() != null)
@@ -534,14 +534,14 @@ public class JnlpTask extends Task {
         if(desc.getMain() != null)
             attr.add(ATTR_MAIN_CLASS, desc.getMain());
         if(desc.hasArguments()) {
-            Iterator iterator;
+            Iterator<ArgumentElement> iterator;
 
             out.startElement(ELEMENT_APPLICATION_DESC, attr);
             out.println();
             iterator = desc.arguments();
             while(iterator.hasNext()) {
                 out.startElement(ELEMENT_ARGUMENT);
-                out.writeCData(((ArgumentElement)iterator.next()).getText());
+                out.writeCData(iterator.next().getText());
                 out.endElement(ELEMENT_ARGUMENT);
             }
             out.endElement(ELEMENT_APPLICATION_DESC);
@@ -571,14 +571,14 @@ public class JnlpTask extends Task {
             attr.add(ATTR_DOCUMENT_BASE, desc.getDocumentBase());
 
         if(desc.hasParams()) {
-            Iterator iterator;
+            Iterator<PropertyElement> iterator;
 
             out.startElement(ELEMENT_APPLET_DESC, attr);
             out.println();
 
             iterator = desc.params();
             while(iterator.hasNext())
-                writeProperty(out, (PropertyElement)iterator.next(), ELEMENT_PARAM);
+                writeProperty(out, iterator.next(), ELEMENT_PARAM);
 
             out.endElement(ELEMENT_APPLET_DESC);
         }
@@ -597,7 +597,7 @@ public class JnlpTask extends Task {
 
     public void execute() throws BuildException {
         XmlWriter     out;
-        Iterator      iterator;
+        Iterator<?>   iterator;
 
         // Makes sure everything is properly initialised.
         if(informations.isEmpty())

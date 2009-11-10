@@ -81,7 +81,7 @@ public class PropertiesDialog extends FocusDialog implements Runnable, ActionLis
     public PropertiesDialog(MainFrame mainFrame, FileSet files) {
         super(mainFrame,
               files.size() > 1 ? ActionProperties.getActionLabel(ShowFilePropertiesAction.Descriptor.ACTION_ID) :
-              Translator.get("properties_dialog.file_properties", files.fileAt(0).getName()), mainFrame);
+              Translator.get("properties_dialog.file_properties", files.elementAt(0).getName()), mainFrame);
 
         this.job = new PropertiesJob(files, mainFrame);
 		
@@ -91,7 +91,7 @@ public class PropertiesDialog extends FocusDialog implements Runnable, ActionLis
 
         Icon icon;
         boolean isSingleFile = files.size()==1;
-        AbstractFile singleFile = isSingleFile?files.fileAt(0):null;
+        AbstractFile singleFile = isSingleFile?files.elementAt(0):null;
         if(isSingleFile) {
             icon = FileIcons.getFileIcon(singleFile, ICON_DIMENSION);
         }

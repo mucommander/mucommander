@@ -38,9 +38,9 @@ public interface CompletionService {
 	 * according to this service's criteria.
 	 * 
 	 * @param path - a path.
-	 * @return Vector of possible completions.
+	 * @return a Vector of possible completions.
 	 */
-	public Vector getPossibleCompletions(String path);
+	public Vector<String> getPossibleCompletions(String path);
 	
 	/**
 	 *  If the given completion match one of my suggested completions, return 

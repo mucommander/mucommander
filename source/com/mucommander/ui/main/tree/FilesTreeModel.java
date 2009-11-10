@@ -24,7 +24,8 @@ import com.mucommander.file.util.FileComparator;
 import com.mucommander.ui.icon.FileIcons;
 import com.mucommander.ui.icon.SpinningDial;
 
-import javax.swing.*;
+import javax.swing.Icon;
+import javax.swing.SwingUtilities;
 import javax.swing.event.EventListenerList;
 import javax.swing.event.TreeModelEvent;
 import javax.swing.event.TreeModelListener;
@@ -122,7 +123,7 @@ public class FilesTreeModel implements TreeModel, CachedDirectoryListener {
     public int getIndexOfChild(Object parent, Object child) {
         AbstractFile[] children = getChildren((AbstractFile) parent);
         if (children != null) {
-            return Arrays.binarySearch(children, child, sort);
+            return Arrays.binarySearch(children, (AbstractFile)child, sort);
         }
         return 0;
     }
@@ -275,7 +276,7 @@ public class FilesTreeModel implements TreeModel, CachedDirectoryListener {
      *         being cached.
      */
     public Icon getCurrentIcon(AbstractFile file) {
-        CachedDirectory cached = (CachedDirectory) cache.get(file);
+        CachedDirectory cached = cache.get(file);
         if (cached != null) {
             if (cached.isReadingChildren()) {
                 return spinningIcon;

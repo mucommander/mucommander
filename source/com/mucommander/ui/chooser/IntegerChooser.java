@@ -25,7 +25,6 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.BorderLayout;
-import java.util.Iterator;
 import java.util.WeakHashMap;
 
 /**
@@ -42,7 +41,7 @@ public class IntegerChooser extends JPanel implements ChangeListener {
     // - Instance variables --------------------------------------------------------------
     // -----------------------------------------------------------------------------------
     /** List of all registered state change listeners. */
-    private WeakHashMap listeners;
+    private WeakHashMap<ChangeListener, ?> listeners;
 
 
     // - Instance fields --------------------------------------------------------
@@ -66,7 +65,7 @@ public class IntegerChooser extends JPanel implements ChangeListener {
         super();
 
         // Initialises the listeners.
-        listeners = new WeakHashMap();
+        listeners = new WeakHashMap<ChangeListener, Object>();
 
         // Creates the components.
         slider  = new JSlider(JSlider.HORIZONTAL, min, max, initialValue);
@@ -148,7 +147,6 @@ public class IntegerChooser extends JPanel implements ChangeListener {
      * This method is public as an implementation side effect and should never be called directly.
      */
     public void stateChanged(ChangeEvent e) {
-        Iterator    iterator;
         ChangeEvent event;
 
         // Updates the chooser's value.
@@ -159,8 +157,7 @@ public class IntegerChooser extends JPanel implements ChangeListener {
 
         // Notifies listeners.
         event    = new ChangeEvent(this);
-        iterator = listeners.keySet().iterator();
-        while(iterator.hasNext())
-            ((ChangeListener)iterator.next()).stateChanged(event);
+        for(ChangeListener listener : listeners.keySet())
+            listener.stateChanged(event);
     }
 }

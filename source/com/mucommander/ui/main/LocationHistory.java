@@ -29,23 +29,23 @@ import java.util.Vector;
 
 
 /**
- * This class maintains a history of visited folders for a given panel, and provides methods to go back and go forward
- * in the folder history.
+ * This class maintains a history of visited locations for a given panel, and provides methods to go back and go forward
+ * in the history.
  *
- * <p>FolderHistory also keeps track of the last visited folder that can be saved and recalled next time the
- * application is started.
+ * <p>FolderHistory also keeps track of the last visited location so that it can be saved and recalled the next time the
+ * application is started.</p>
  *
- * <p>There is a limit to the number of folders the history can contain, set by {@link #HISTORY_CAPACITY}. 
+ * <p>There is a limit to the number of locations the history can contain, defined by {@link #HISTORY_CAPACITY}.</p>
  *
  * @author Maxence Bernard
  */
-public class FolderHistory {
+public class LocationHistory {
 
     /** Maximum number of elements the folder history can contain */
     private final static int HISTORY_CAPACITY = 100;
 
-    /** List of visited folders, ordered by recency */
-    private Vector history = new Vector(HISTORY_CAPACITY+1);
+    /** List of visited locations, ordered by last visit date */
+    private Vector<FileURL> history = new Vector<FileURL>(HISTORY_CAPACITY+1);
 
     /** Index of current folder in history */
     private int historyIndex = -1;
@@ -60,10 +60,10 @@ public class FolderHistory {
     /**
      * Creates a new FolderHistory instance which will keep track of visited folders in the given FolderPanel.
      */
-    public FolderHistory(FolderPanel folderPanel) {
+    public LocationHistory(FolderPanel folderPanel) {
         this.folderPanel = folderPanel;
     }
-    
+
 
     /**
      * Adds the specified folder to history. The folder won't be added if the previous folder is the same.
@@ -112,7 +112,7 @@ public class FolderHistory {
         if (historyIndex==0)
             return;
 		
-        folderPanel.tryChangeCurrentFolder((FileURL)history.elementAt(--historyIndex));
+        folderPanel.tryChangeCurrentFolder(history.elementAt(--historyIndex));
     }
 	
     /**
@@ -123,7 +123,7 @@ public class FolderHistory {
         if (historyIndex==history.size()-1)
             return;
 		
-        folderPanel.tryChangeCurrentFolder((FileURL)history.elementAt(++historyIndex));
+        folderPanel.tryChangeCurrentFolder(history.elementAt(++historyIndex));
     }
 
 
@@ -155,7 +155,7 @@ public class FolderHistory {
 
         int cur = 0;
         for(int i=historyIndex-1; i>=0; i--)
-            urls[cur++] = (FileURL)history.elementAt(i);
+            urls[cur++] = history.elementAt(i);
 
         return urls;
     }
@@ -174,7 +174,7 @@ public class FolderHistory {
 
         int cur = 0;
         for(int i=historyIndex+1; i<historySize; i++)
-            urls[cur++] = (FileURL)history.elementAt(i);
+            urls[cur++] = history.elementAt(i);
 
         return urls;
     }

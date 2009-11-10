@@ -526,9 +526,9 @@ public class HTTPFile extends ProtocolFile {
 
             br = new BufferedReader(ir);
 
-            Vector children = new Vector();
+            Vector<AbstractFile> children = new Vector<AbstractFile>();
             // List that contains children URL, a TreeSet for fast (log(n)) search operations
-            TreeSet childrenURL = new TreeSet();
+            TreeSet<String> childrenURL = new TreeSet<String>();
             HTTPFile child;
             URL childURL;
             FileURL childFileURL;

@@ -30,9 +30,9 @@ import java.util.Vector;
  */
 public class DictValue implements InfoElement {
     private static final String ELEMENT_DICT = "dict";
-    private Vector keys;
+    private Vector<NamedInfoElement> keys;
 
-    public DictValue() {keys = new Vector();}
+    public DictValue() {keys = new Vector<NamedInfoElement>();}
 
     public ArrayKey createArray() {
         ArrayKey value;
@@ -99,12 +99,12 @@ public class DictValue implements InfoElement {
     }
 
     DictKey getDict(String name) {
-        Iterator         iterator;
-        NamedInfoElement key;
+        Iterator<NamedInfoElement> iterator;
+        NamedInfoElement           key;
 
         iterator = keys.iterator();
         while(iterator.hasNext()) {
-            key = (NamedInfoElement)iterator.next();
+            key = iterator.next();
             if(key instanceof DictKey)
                 if(key.getName().equals(name))
                     return (DictKey)key;
@@ -113,7 +113,7 @@ public class DictValue implements InfoElement {
     }
 
     public void write(XmlWriter out) throws BuildException {
-        Iterator iterator;
+        Iterator<NamedInfoElement> iterator;
 
         try {
             out.startElement(ELEMENT_DICT);
@@ -121,7 +121,7 @@ public class DictValue implements InfoElement {
 
             iterator = keys.iterator();
             while(iterator.hasNext())
-                ((InfoElement)iterator.next()).write(out);
+                iterator.next().write(out);
 
             out.endElement(ELEMENT_DICT);
         }

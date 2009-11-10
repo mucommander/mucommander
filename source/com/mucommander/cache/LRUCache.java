@@ -54,7 +54,7 @@ import com.mucommander.runtime.JavaVersions;
  *
  * @author Maxence Bernard
  */
-public abstract class LRUCache {
+public abstract class LRUCache<K, V> {
 
     /** Cache capacity: maximum number of items this cache can contain */
     protected int capacity;
@@ -140,7 +140,7 @@ public abstract class LRUCache {
      * @return the cached value corresponding to the specified key, or <code>null</code> if a value could not
      * found or has expired
      */
-    public abstract Object get(Object key);
+    public abstract V get(Object key);
 	
     /**
      * Adds a new key/value pair to the cache and marks it as the most recently used.
@@ -156,13 +156,13 @@ public abstract class LRUCache {
      * @param timeToLive the time-to-live of the object in the cache in milliseconds, or -1 for no time-to-live,
      * the object will just be removed when it becomes the least recently used one.
      */
-    public abstract void add(Object key, Object value, long timeToLive);
+    public abstract void add(K key, V value, long timeToLive);
 
 
     /**
      * Convenience method, equivalent to add(key, value, -1).
      */
-    public synchronized void add(Object key, Object value) {
+    public synchronized void add(K key, V value) {
         add(key, value, -1);
     }
 	

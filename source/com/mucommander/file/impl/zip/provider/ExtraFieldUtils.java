@@ -38,10 +38,10 @@ public class ExtraFieldUtils {
     /**
      * Static registry of known extra fields.
      */
-    private static Hashtable implementations;
+    private static Hashtable<ZipShort, Class<? extends ZipExtraField>> implementations;
 
     static {
-        implementations = new Hashtable();
+        implementations = new Hashtable<ZipShort, Class<? extends ZipExtraField>>();
         register(AsiExtraField.class);
         register(JarMarker.class);
     }
@@ -53,9 +53,9 @@ public class ExtraFieldUtils {
      * the {@link ZipExtraField ZipExtraField interface}.</p>
      * @param c the class to register
      */
-    public static void register(Class c) {
+    public static void register(Class<? extends ZipExtraField> c) {
         try {
-            ZipExtraField ze = (ZipExtraField) c.newInstance();
+            ZipExtraField ze = c.newInstance();
             implementations.put(ze.getHeaderId(), c);
         } catch (ClassCastException cc) {
             throw new RuntimeException(c + " doesn\'t implement ZipExtraField");
@@ -76,9 +76,9 @@ public class ExtraFieldUtils {
      */
     public static ZipExtraField createExtraField(ZipShort headerId)
         throws InstantiationException, IllegalAccessException {
-        Class c = (Class) implementations.get(headerId);
+        Class<? extends ZipExtraField> c = implementations.get(headerId);
         if (c != null) {
-            return (ZipExtraField) c.newInstance();
+            return c.newInstance();
         }
         UnrecognizedExtraField u = new UnrecognizedExtraField();
         u.setHeaderId(headerId);
@@ -93,7 +93,7 @@ public class ExtraFieldUtils {
      * @throws ZipException on error
      */
     public static ZipExtraField[] parse(byte[] data) throws ZipException {
-        Vector v = new Vector();
+        Vector<ZipExtraField> v = new Vector<ZipExtraField>();
         int start = 0;
         while (start <= data.length - 4) {
             ZipShort headerId = new ZipShort(data, start);
