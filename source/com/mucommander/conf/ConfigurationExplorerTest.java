@@ -52,6 +52,7 @@ public class ConfigurationExplorerTest extends TestCase {
     /**
      * Fills the configuration instance with test values.
      */
+    @Override
     public void setUp() {
         StringBuffer buffer;
 

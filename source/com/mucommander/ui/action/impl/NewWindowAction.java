@@ -40,6 +40,7 @@ public class NewWindowAction extends MuAction {
         setPerformActionInSeparateThread(true);
     }
 
+    @Override
     public void performAction() {
         WindowManager.createNewMainFrame();
     }

@@ -18,21 +18,6 @@
 
 package com.mucommander.ui.dialog.pref.general;
 
-import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.io.File;
-
-import javax.swing.BorderFactory;
-import javax.swing.ButtonGroup;
-import javax.swing.JButton;
-import javax.swing.JFileChooser;
-import javax.swing.JLabel;
-
 import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.runtime.OsFamilies;
 import com.mucommander.text.Translator;
@@ -45,6 +30,11 @@ import com.mucommander.ui.dialog.pref.component.PrefTextField;
 import com.mucommander.ui.layout.XBoxPanel;
 import com.mucommander.ui.layout.YBoxPanel;
 import com.mucommander.ui.main.WindowManager;
+
+import javax.swing.*;
+import java.awt.BorderLayout;
+import java.awt.event.*;
+import java.io.File;
 
 
 /**
@@ -295,6 +285,7 @@ class FoldersPanel extends PreferencesPanel implements ItemListener, KeyListener
     // PreferencesPanel implementation //
     /////////////////////////////////////
 
+    @Override
     protected void commit() {
         MuConfiguration.setVariable(MuConfiguration.LEFT_STARTUP_FOLDER, leftLastFolderRadioButton.isSelected() ? MuConfiguration.STARTUP_FOLDER_LAST :
                 MuConfiguration.STARTUP_FOLDER_CUSTOM);

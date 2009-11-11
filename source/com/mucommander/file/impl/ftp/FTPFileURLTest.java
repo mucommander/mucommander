@@ -33,26 +33,32 @@ public class FTPFileURLTest extends FileURLTestCase {
     // FileURLTestCase implementation //
     ////////////////////////////////////
 
+    @Override
     protected String getScheme() {
         return "ftp";
     }
 
+    @Override
     protected int getDefaultPort() {
         return 21;
     }
 
+    @Override
     protected int getAuthenticationType() {
         return AuthenticationTypes.AUTHENTICATION_REQUIRED;
     }
 
+    @Override
     protected Credentials getGuestCredentials() {
         return new Credentials("anonymous", "someuser@mucommander.com");
     }
 
+    @Override
     protected String getPathSeparator() {
         return "/";
     }
 
+    @Override
     protected boolean isQueryParsed() {
         return false;
     }

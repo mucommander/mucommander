@@ -94,8 +94,10 @@ class ColorButton extends JPanel implements ActionListener, ColorChangeListener 
             addUpdatedPreviewComponent(previewComponent);
  
         button = new JButton() {
+                @Override
                 public Dimension getPreferredSize() {return new Dimension(70, 30);}
 
+                @Override
                 public void paint(Graphics g) {
                     int width  = getWidth();
                     int height = getHeight();

@@ -35,6 +35,7 @@ public class SplitHorizontallyAction extends MuAction {
         super(mainFrame, properties);
     }
 
+    @Override
     public void performAction() {
         mainFrame.setSplitPaneOrientation(false);
     }

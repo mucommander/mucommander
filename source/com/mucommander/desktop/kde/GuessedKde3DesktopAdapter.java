@@ -32,6 +32,7 @@ public class GuessedKde3DesktopAdapter extends Kde3DesktopAdapter {
         return "KDE 3 Desktop (guessed)";
     }
 
+    @Override
     public boolean isAvailable() {
         try {
             ProcessRunner.execute(BASE_COMMAND);

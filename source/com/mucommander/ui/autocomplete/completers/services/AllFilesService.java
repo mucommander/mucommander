@@ -30,7 +30,8 @@ import java.io.IOException;
 
 public class AllFilesService extends FilesService {
 
-	protected AbstractFile[] getFiles(AbstractFile directory) throws IOException {		                			
+	@Override
+    protected AbstractFile[] getFiles(AbstractFile directory) throws IOException {
 		return directory.ls();
 	}	
 }

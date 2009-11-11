@@ -85,6 +85,7 @@ public class DebugConsoleHandler extends Handler {
     // Handler implementation //
     ////////////////////////////
 
+    @Override
     public synchronized void publish(LogRecord record) {
         if(logRecords.size()== bufferSize)
             logRecords.removeFirst();
@@ -92,9 +93,11 @@ public class DebugConsoleHandler extends Handler {
         logRecords.add(record);
     }
 
+    @Override
     public synchronized void flush() {
     }
 
+    @Override
     public synchronized void close() throws SecurityException {
         logRecords.clear();
     }

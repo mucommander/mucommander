@@ -42,6 +42,7 @@ public class OpenTrashAction extends MuAction {
         setEnabled(trash!=null && trash.canOpen());
     }
 
+    @Override
     public void performAction() {
         DesktopManager.getTrash().open();
     }

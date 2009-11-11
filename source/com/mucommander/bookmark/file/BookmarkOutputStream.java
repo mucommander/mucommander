@@ -37,6 +37,7 @@ class BookmarkOutputStream extends ByteArrayOutputStream implements BookmarkBuil
      * Parses the content that has been written.
      * @throws IOException if an error occurs.
      */
+    @Override
     public void close() throws IOException {
         super.close();
 

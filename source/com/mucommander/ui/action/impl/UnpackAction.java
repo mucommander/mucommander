@@ -46,6 +46,7 @@ public class UnpackAction extends SelectedFilesAction implements InvokesDialog {
         setSelectedFileFilter(filter);
     }
 
+    @Override
     public void performAction() {
         FileSet files = mainFrame.getActiveTable().getSelectedFiles();
         if(files.size()>0)

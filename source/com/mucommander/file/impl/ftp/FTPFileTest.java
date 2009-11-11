@@ -47,6 +47,7 @@ public class FTPFileTest extends SingleConditionalTestSuite {
     // SingleConditionalTestSuite implementation //
     ///////////////////////////////////////////////
 
+    @Override
     protected boolean isEnabled() {
         return "true".equals(System.getProperty(ENABLED_PROPERTY));
     }

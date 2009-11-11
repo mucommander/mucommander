@@ -41,7 +41,8 @@ public class OtherTextComponentCompletion extends CompletionType {
     		super(delay);
     	}
 
-		void showAutocompletionPopup() {
+		@Override
+        void showAutocompletionPopup() {
 	        if (autocompletedtextComp.isShowing() && autocompletedtextComp.isEnabled() && updateListData(list)){
 					         
 	            list.setVisibleRowCount(Math.min(list.getModel().getSize() ,VISIBLE_ROW_COUNT));
@@ -75,7 +76,8 @@ public class OtherTextComponentCompletion extends CompletionType {
     	super(comp, completer);        
     	
         autocompletedtextComp.addKeyListener(new KeyAdapter() {
-        	public void keyPressed(KeyEvent keyEvent) {        		
+        	@Override
+            public void keyPressed(KeyEvent keyEvent) {
                 switch(keyEvent.getKeyCode()) {
                 case KeyEvent.VK_ENTER:
                 	boolean itemSelected = isItemSelectedAtPopupList();
@@ -153,7 +155,8 @@ public class OtherTextComponentCompletion extends CompletionType {
         });
     }
 	
-	protected void hideAutocompletionPopup() {
+	@Override
+    protected void hideAutocompletionPopup() {
 		synchronized (popup) {
 			if (popup.isVisible())
         		popup.setVisible(false);
@@ -161,7 +164,8 @@ public class OtherTextComponentCompletion extends CompletionType {
 		}
 	}
 	
-	protected void startNewShowingThread(int delay) {    	
+	@Override
+    protected void startNewShowingThread(int delay) {
     	(showingThread = new ShowingThreadImp(delay)).start();
     }
 }

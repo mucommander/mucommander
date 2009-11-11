@@ -49,6 +49,7 @@ public class ToggleStatusBarAction extends MuAction {
         setLabel(Translator.get(visible?Descriptor.ACTION_ID+".hide":Descriptor.ACTION_ID+".show"));
     }
 
+    @Override
     public void performAction() {
         StatusBar statusBar = mainFrame.getStatusBar();
         boolean visible = !statusBar.isVisible();
@@ -79,6 +80,7 @@ public class ToggleStatusBarAction extends MuAction {
 
 		public KeyStroke getDefaultKeyStroke() { return null; }
 
+        @Override
         public String getLabelKey() { return ACTION_ID+".show"; }
     }
 }

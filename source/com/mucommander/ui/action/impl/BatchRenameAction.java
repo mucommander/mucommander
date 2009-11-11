@@ -39,6 +39,7 @@ public class BatchRenameAction extends SelectedFilesAction implements InvokesDia
         super(mainFrame, properties);
     }
 
+    @Override
     public void performAction() {
         FileSet files = mainFrame.getActiveTable().getSelectedFiles();
 

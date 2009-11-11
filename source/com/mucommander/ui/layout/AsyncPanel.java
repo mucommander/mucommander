@@ -21,7 +21,9 @@ package com.mucommander.ui.layout;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.icon.SpinningDial;
 
-import javax.swing.*;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.AncestorEvent;
 import javax.swing.event.AncestorListener;
@@ -98,6 +100,7 @@ public abstract class AsyncPanel extends JPanel {
      */
     private void loadTargetComponent() {
         new Thread() {
+            @Override
             public void run() {
                 JComponent targetComponent = getTargetComponent();
 

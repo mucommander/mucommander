@@ -144,6 +144,7 @@ public class Theme extends ThemeData {
      * @param  font                  value for the specified font.
      * @throws IllegalStateException thrown if the theme is not the user one.
      */
+    @Override
     public boolean setFont(int id, Font font) {
         // Makes sure we're not trying to modify a non-user theme.
         if(type != USER_THEME)
@@ -168,6 +169,7 @@ public class Theme extends ThemeData {
      * @param  color                 value for the specified color.
      * @throws IllegalStateException thrown if the theme is not the user one.
      */
+    @Override
     public boolean setColor(int id, Color color) {
         // Makes sure we're not trying to modify a non-user theme.
         if(type != USER_THEME)

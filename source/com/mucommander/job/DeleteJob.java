@@ -107,6 +107,7 @@ public class DeleteJob extends FileJob {
      * 
      * @return <code>true</code> if the file has been completely deleted.
      */
+    @Override
     protected boolean processFile(AbstractFile file, Object recurseParams) {
         if(getState()==INTERRUPTED)
             return false;
@@ -169,6 +170,7 @@ public class DeleteJob extends FileJob {
     }
 
     // This job modifies baseFolder and subfolders
+    @Override
     protected boolean hasFolderChanged(AbstractFile folder) {
         return getBaseSourceFolder().isParentOf(folder);
     }
@@ -178,6 +180,7 @@ public class DeleteJob extends FileJob {
     // Overridden methods //
     ////////////////////////
 
+    @Override
     protected void jobStopped() {
         super.jobStopped();
 
@@ -185,6 +188,7 @@ public class DeleteJob extends FileJob {
             trash.waitForPendingOperations();
     }
 
+    @Override
     protected void jobCompleted() {
         super.jobCompleted();
 
@@ -213,6 +217,7 @@ public class DeleteJob extends FileJob {
         }
     }
 
+    @Override
     public String getStatusString() {
         if(isOptimizingArchive)
             return Translator.get("optimizing_archive", archiveToOptimize.getName());

@@ -74,6 +74,7 @@ public class ArchiveJob extends TransferFileJob {
     // TransferFileJob implementation //
     ////////////////////////////////////
 
+    @Override
     protected boolean processFile(AbstractFile file, Object recurseParams) {
         if(getState()==INTERRUPTED)
             return false;
@@ -136,6 +137,7 @@ public class ArchiveJob extends TransferFileJob {
         } while(true);
     }
 
+    @Override
     protected boolean hasFolderChanged(AbstractFile folder) {
         // This job modifies the folder where the archive is
         return folder.equalsCanonical(destFile.getParent());     // Note: parent may be null
@@ -149,6 +151,7 @@ public class ArchiveJob extends TransferFileJob {
     /**
      * Overriden method to initialize the archiver and handle the case where the destination file already exists.
      */
+    @Override
     protected void jobStarted() {
         super.jobStarted();
 
@@ -200,6 +203,7 @@ public class ArchiveJob extends TransferFileJob {
     /**
      * Overriden method to close the archiver.
      */
+    @Override
     public void jobStopped() {
 
         // TransferFileJob.jobStopped() closes the current InputStream, this will cause copyStream() to return
@@ -216,6 +220,7 @@ public class ArchiveJob extends TransferFileJob {
         }
     }
 
+    @Override
     public String getStatusString() {
         return Translator.get("pack_dialog.packing_file", getCurrentFilename());
     }

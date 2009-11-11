@@ -39,6 +39,7 @@ public class FileComparatorTest extends TestCase {
     private TestFile D;
     
     
+    @Override
     protected void setUp() throws Exception {
         super.setUp();
         A = new TestFile(FileFactory.getTemporaryFolder() + "A", false, 500, 1, null);

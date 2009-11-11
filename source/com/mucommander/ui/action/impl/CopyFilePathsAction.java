@@ -39,6 +39,7 @@ public class CopyFilePathsAction extends SelectedFilesAction {
         super(mainFrame, properties);
     }
 
+    @Override
     public void performAction() {
         FileSet selectedFiles = mainFrame.getActiveTable().getSelectedFiles();
 

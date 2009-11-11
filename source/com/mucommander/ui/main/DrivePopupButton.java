@@ -267,6 +267,7 @@ public class DrivePopupButton extends PopupButton implements LocationListener, B
     // PopupButton implementation //
     ////////////////////////////////
 
+    @Override
     public JPopupMenu getPopupMenu() {
         JPopupMenu popupMenu = new JPopupMenu();
 
@@ -349,6 +350,7 @@ public class DrivePopupButton extends PopupButton implements LocationListener, B
 
         // Add Bonjour services menu
         setMnemonic(popupMenu.add(new BonjourMenu() {
+            @Override
             public MuAction getMenuItemAction(BonjourService bs) {
                 return new CustomOpenLocationAction(mainFrame, new Hashtable<String, Object>(), bs);
             }
@@ -381,6 +383,7 @@ public class DrivePopupButton extends PopupButton implements LocationListener, B
             this.items = items;
         }
         
+        @Override
         public void run() {
             final boolean useExtendedDriveNames = fileSystemView!=null;
             for(int i=0; i<items.size(); i++) {
@@ -488,6 +491,7 @@ public class DrivePopupButton extends PopupButton implements LocationListener, B
     // Overridden methods //
     ////////////////////////
 
+    @Override
     public Dimension getPreferredSize() {
         // Limit button's maximum width to something reasonable and leave enough space for location field,
         // as bookmarks name can be as long as users want them to be.
@@ -543,6 +547,7 @@ public class DrivePopupButton extends PopupButton implements LocationListener, B
         // Overridden methods //
         ////////////////////////
 
+        @Override
         protected FolderPanel getFolderPanel() {
             return folderPanel;
         }

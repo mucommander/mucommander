@@ -114,6 +114,7 @@ public class Bookmark implements Cloneable {
     /**
      * Returns a clone of this bookmark.
      */
+    @Override
     public Object clone() throws CloneNotSupportedException {return super.clone();}
 
 

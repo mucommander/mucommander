@@ -195,6 +195,7 @@ public abstract class CompoundInputStream extends InputStream {
     /**
      * Delegates to {@link #read(byte[], int, int)} with a 1-byte buffer.
      */
+    @Override
     public int read() throws IOException {
         if(oneByteBuf==null)
             oneByteBuf = new byte[1];
@@ -207,6 +208,7 @@ public abstract class CompoundInputStream extends InputStream {
     /**
      * Delegates to {@link #read(byte[], int, int)} with a <code>0</code> offset and the whole buffer's length.
      */
+    @Override
     public int read(byte[] b) throws IOException {
         return read(b, 0, b.length);
     }
@@ -220,6 +222,7 @@ public abstract class CompoundInputStream extends InputStream {
      * with the end of the stream as a whole.</li>
      * </ul>
      */
+    @Override
     public int read(byte[] b, int off, int len) throws IOException {
         if(checkStream())
             return -1;
@@ -251,6 +254,7 @@ public abstract class CompoundInputStream extends InputStream {
      * with the end of the stream as a whole.</li>
      * </ul>
      */
+    @Override
     public long skip(long n) throws IOException {
         if(checkStream())
             return -1;
@@ -278,6 +282,7 @@ public abstract class CompoundInputStream extends InputStream {
      *
      * @throws IOException if the current stream could not be closed.  
      */
+    @Override
     public void close() throws IOException {
         try {
             if(currentIn!=null)
@@ -291,6 +296,7 @@ public abstract class CompoundInputStream extends InputStream {
     /**
      * Delegates to the current <code>InputStream</code>.
      */
+    @Override
     public int available() throws IOException {
         if(checkStream())
             return 0;
@@ -301,6 +307,7 @@ public abstract class CompoundInputStream extends InputStream {
     /**
      * Delegates to the current <code>InputStream</code>.
      */
+    @Override
     public void mark(int readlimit) {
         try {
             if(!checkStream())
@@ -314,6 +321,7 @@ public abstract class CompoundInputStream extends InputStream {
     /**
      * Delegates to the current <code>InputStream</code>.
      */
+    @Override
     public void reset() throws IOException {
         if(!checkStream())
             currentIn.reset();
@@ -322,6 +330,7 @@ public abstract class CompoundInputStream extends InputStream {
     /**
      * Delegates to the current <code>InputStream</code>.
      */
+    @Override
     public boolean markSupported() {
         try {
             return !checkStream() && currentIn.markSupported();

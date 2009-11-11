@@ -48,6 +48,7 @@ public class DownloadDialog extends TransferDestinationDialog {
     // TransferDestinationDialog implementation //
     //////////////////////////////////////////////
 
+    @Override
     protected PathFieldContent computeInitialPath(FileSet files) {
         AbstractFile file = (AbstractFile)files.elementAt(0);
 
@@ -57,6 +58,7 @@ public class DownloadDialog extends TransferDestinationDialog {
         return new PathFieldContent(unactiveFolder.getAbsolutePath(true)+file.getName());
     }
 
+    @Override
     protected TransferFileJob createTransferFileJob(ProgressDialog progressDialog, PathUtils.ResolvedDestination resolvedDest, int defaultFileExistsAction) {
         return new CopyJob(
                 progressDialog,
@@ -68,6 +70,7 @@ public class DownloadDialog extends TransferDestinationDialog {
                 defaultFileExistsAction);
     }
 
+    @Override
     protected String getProgressDialogTitle() {
         return Translator.get("download_dialog.downloading");
     }

@@ -18,12 +18,11 @@
 
 package com.mucommander.ui.table;
 
-import java.awt.Component;
-
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.UIManager;
 import javax.swing.table.TableCellRenderer;
+import java.awt.Component;
 
 /**
  * A TableCellRenderer which can be used to center the text in table's headers.
@@ -45,8 +44,12 @@ public class CenteredTableHeaderRenderer extends JLabel implements TableCellRend
     }
 
     // The following methods override the defaults for performance reasons
+    @Override
     public void validate() {}
+    @Override
     public void revalidate() {}
+    @Override
     protected void firePropertyChange(String propertyName, Object oldValue, Object newValue) {}
+    @Override
     public void firePropertyChange(String propertyName, boolean oldValue, boolean newValue) {}
 }

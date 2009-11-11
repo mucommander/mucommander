@@ -40,6 +40,7 @@ public abstract class SelectForwardAction extends MuAction {
     // MuAction implementation //
     /////////////////////////////
 
+    @Override
     public void performAction() {
         FileTable activeTable = mainFrame.getActiveTable();
 

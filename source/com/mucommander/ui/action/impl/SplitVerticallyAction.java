@@ -36,6 +36,7 @@ public class SplitVerticallyAction extends MuAction {
         super(mainFrame, properties);
     }
 
+    @Override
     public void performAction() {
         mainFrame.setSplitPaneOrientation(true);
     }

@@ -462,6 +462,7 @@ public class ZipFile implements ZipConstants {
             final byte[] deflaterBuf = BufferPool.getByteArray(DEFAULT_DEFLATER_BUFFER_SIZE);
             ZipEntryOutputStream zeos = new DeflatedOutputStream(raos, new Deflater(DEFAULT_DEFLATER_COMPRESSION, true), deflaterBuf) {
                 // Post-data file info and central directory get written when the stream is closed
+                @Override
                 public void close() throws IOException {
                     // Write data info in the local file header
                     ZipOutputStream.finalizeEntryData(entry, this, raos, false, zipBuffer);
@@ -1106,6 +1107,7 @@ public class ZipFile implements ZipConstants {
             loc = start;
         }
 
+        @Override
         public int read() throws IOException {
             if (remaining-- <= 0) {
                 if (addDummyByte) {
@@ -1120,6 +1122,7 @@ public class ZipFile implements ZipConstants {
             }
         }
 
+        @Override
         public int read(byte[] b, int off, int len) throws IOException {
             if (remaining <= 0) {
                 if (addDummyByte) {
@@ -1149,6 +1152,7 @@ public class ZipFile implements ZipConstants {
             return ret;
         }
 
+        @Override
         public void close() throws IOException {
             rais.close();
         }

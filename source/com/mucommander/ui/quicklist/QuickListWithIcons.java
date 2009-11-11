@@ -81,9 +81,11 @@ public abstract class QuickListWithIcons extends QuickListWithDataList {
 			waitingIcon.setAnimated(false);
 	}
 	
-	protected DataList getList() {
+	@Override
+    protected DataList getList() {
 		return new GenericPopupDataListWithIcons() {
-			public Icon getImageIconOfItem(Object item) {
+			@Override
+            public Icon getImageIconOfItem(Object item) {
 				return getImageIconOfItemImp(item);
 			}
 		};
@@ -119,7 +121,8 @@ public abstract class QuickListWithIcons extends QuickListWithDataList {
 		
 		if (!found)
 			new Thread() {
-				public void run() {
+				@Override
+                public void run() {
 					Icon icon = itemToIcon(item);
 					synchronized(itemToIconCacheMap) {
 						// If the item does not exist or is not accessible, show notAvailableIcon for it.

@@ -52,6 +52,7 @@ public class MoveDialog extends AbstractCopyDialog {
     // TransferDestinationDialog implementation //
     //////////////////////////////////////////////
 
+    @Override
     protected TransferFileJob createTransferFileJob(ProgressDialog progressDialog, PathUtils.ResolvedDestination resolvedDest, int defaultFileExistsAction) {
         return new MoveJob(
                 progressDialog,
@@ -63,6 +64,7 @@ public class MoveDialog extends AbstractCopyDialog {
                 false);
     }
 
+    @Override
     protected String getProgressDialogTitle() {
         return Translator.get("move_dialog.moving");
     }

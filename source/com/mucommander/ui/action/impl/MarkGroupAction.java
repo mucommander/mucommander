@@ -37,6 +37,7 @@ public class MarkGroupAction extends MuAction implements InvokesDialog {
         super(mainFrame, properties);
     }
 
+    @Override
     public void performAction() {
         new FileSelectionDialog(mainFrame, true).showDialog();
     }

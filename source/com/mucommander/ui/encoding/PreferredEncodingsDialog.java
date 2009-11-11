@@ -131,6 +131,7 @@ public class PreferredEncodingsDialog extends FocusDialog {
         setMaximumSize(MAXIMUM_DIALOG_DIMENSION);
 
         addWindowListener(new WindowAdapter() {
+            @Override
             public void windowClosing(WindowEvent e) {
                 JCheckBox checkbox;
                 int nbCheckboxes = checkboxes.size();

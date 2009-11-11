@@ -38,6 +38,7 @@ abstract class KdeDesktopAdapter extends DefaultDesktopAdapter {
     /** Key to the double-click interval value in the KDE configuration */
     private String DOUBLE_CLICK_CONFIG_KEY = "DoubleClickInterval";
 
+    @Override
     public void init(boolean install) throws DesktopInitialisationException {
         // Initialises trash management.
         DesktopManager.setTrashProvider(getTrashProvider());
@@ -78,6 +79,7 @@ abstract class KdeDesktopAdapter extends DefaultDesktopAdapter {
      * </p>
      * @return the <code>DoubleClickInterval</code> KDE configuration value.
      */
+    @Override
     public int getMultiClickInterval() {
         return multiClickInterval;
     }

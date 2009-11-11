@@ -18,10 +18,9 @@
  */
 package com.mucommander.file.impl.rar.provider.de.innosystec.unrar.rarfile;
 
+import com.mucommander.file.impl.rar.provider.de.innosystec.unrar.io.Raw;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
-import com.mucommander.file.impl.rar.provider.de.innosystec.unrar.io.Raw;
 
 public class SubBlockHeader extends BlockHeader {
 	private Log logger = LogFactory.getLog(getClass());
@@ -61,7 +60,8 @@ public class SubBlockHeader extends BlockHeader {
 		return SubBlockHeaderType.findSubblockHeaderType(subType);
 	}
 
-	public void print()
+	@Override
+    public void print()
 	{
 		super.print();
 		logger.info("subtype: "+getSubType());

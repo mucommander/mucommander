@@ -34,6 +34,7 @@ public class ShowDebugConsoleAction extends MuAction {
         super(mainFrame, properties);
     }
 
+    @Override
     public void performAction() {
         new DebugConsoleDialog(mainFrame).showDialog();
     }

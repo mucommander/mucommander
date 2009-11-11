@@ -226,6 +226,7 @@ public class FolderPanel extends JPanel implements FocusListener, ThemeListener 
 
         // Catch mouse events on the ScrollPane
         scrollPane.addMouseListener(new MouseAdapter() {
+            @Override
             public void mousePressed(MouseEvent e) {
                 // Left-click requests focus on the FileTable
                 if (DesktopManager.isLeftMouseButton(e)) {
@@ -928,6 +929,7 @@ public class FolderPanel extends JPanel implements FocusListener, ThemeListener 
         }
 
 
+        @Override
         public void start() {
             // Notify listeners that location is changing
             locationManager.fireLocationChanging(folder==null?folderURL:folder.getURL());
@@ -936,6 +938,7 @@ public class FolderPanel extends JPanel implements FocusListener, ThemeListener 
         }
 
 
+        @Override
         public void run() {
             AppLogger.finer("starting folder change...");
             boolean folderChangedSuccessfully = false;

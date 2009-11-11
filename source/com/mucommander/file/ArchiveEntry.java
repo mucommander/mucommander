@@ -134,6 +134,7 @@ public class ArchiveEntry extends SimpleFileAttributes {
      *
      * @return the file permissions of this entry
      */
+    @Override
     public FilePermissions getPermissions() {
         FilePermissions permissions = super.getPermissions();
         if(permissions==null)
@@ -147,6 +148,7 @@ public class ArchiveEntry extends SimpleFileAttributes {
      *
      * @param path new path to set
      */
+    @Override
     public void setPath(String path) {
         super.setPath(path);
 

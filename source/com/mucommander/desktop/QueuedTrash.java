@@ -83,6 +83,7 @@ public abstract class QueuedTrash extends AbstractTrash {
      * knowing if the file was successfully moved to the trash. So this method will return <code>true</code> if the
      * given file has been scheduled to be moved to the trash, but it may end up failing to be moved for whatever reason.
      */
+    @Override
     public boolean moveToTrash(AbstractFile file) {
         if(!canMoveToTrash(file))
             return false;
@@ -101,6 +102,7 @@ public abstract class QueuedTrash extends AbstractTrash {
         return true;
     }
 
+    @Override
     public void waitForPendingOperations() {
         synchronized(moveToTrashLock) {
             if(moveToTrashThread!=null) {
@@ -128,6 +130,7 @@ public abstract class QueuedTrash extends AbstractTrash {
      */
     private class MoveToTrashThread extends Thread {
 
+        @Override
         public void run() {
             // Loops until no files were added during the sleep period
             int queueSize;

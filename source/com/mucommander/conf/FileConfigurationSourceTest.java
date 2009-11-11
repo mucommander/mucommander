@@ -49,6 +49,7 @@ public class FileConfigurationSourceTest extends TestCase {
     /**
      * Creates a new temporary file with which to work.
      */
+    @Override
     public void setUp() throws IOException {
         file = File.createTempFile("conf", "test");
         file.deleteOnExit();

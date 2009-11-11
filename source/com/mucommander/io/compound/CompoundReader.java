@@ -195,6 +195,7 @@ public abstract class CompoundReader extends Reader {
     /**
      * Delegates to {@link #read(char[], int, int)} with a 1-char buffer.
      */
+    @Override
     public int read() throws IOException {
         if(oneCharBuf ==null)
             oneCharBuf = new char[1];
@@ -207,6 +208,7 @@ public abstract class CompoundReader extends Reader {
     /**
      * Delegates to {@link #read(char[], int, int)} with a <code>0</code> offset and the whole buffer's length.
      */
+    @Override
     public int read(char[] c) throws IOException {
         return read(c, 0, c.length);
     }
@@ -220,6 +222,7 @@ public abstract class CompoundReader extends Reader {
      * with the end of the reader as a whole.</li>
      * </ul>
      */
+    @Override
     public int read(char[] c, int off, int len) throws IOException {
         if(checkReader())
             return -1;
@@ -251,6 +254,7 @@ public abstract class CompoundReader extends Reader {
      * with the end of the reader as a whole.</li>
      * </ul>
      */
+    @Override
     public long skip(long n) throws IOException {
         if(checkReader())
             return -1;
@@ -278,6 +282,7 @@ public abstract class CompoundReader extends Reader {
      *
      * @throws IOException if the current reader could not be closed.
      */
+    @Override
     public void close() throws IOException {
         try {
             if(currentReader!=null)
@@ -291,6 +296,7 @@ public abstract class CompoundReader extends Reader {
     /**
      * Delegates to the current <code>Reader</code>.
      */
+    @Override
     public boolean ready() throws IOException {
         return !checkReader() && currentReader.ready();
     }
@@ -298,6 +304,7 @@ public abstract class CompoundReader extends Reader {
     /**
      * Delegates to the current <code>Reader</code>.
      */
+    @Override
     public void mark(int readlimit) throws IOException {
         if(!checkReader())
             currentReader.mark(readlimit);
@@ -306,6 +313,7 @@ public abstract class CompoundReader extends Reader {
     /**
      * Delegates to the current <code>Reader</code>.
      */
+    @Override
     public void reset() throws IOException {
         if(!checkReader())
             currentReader.reset();
@@ -314,6 +322,7 @@ public abstract class CompoundReader extends Reader {
     /**
      * Delegates to the current <code>Reader</code>.
      */
+    @Override
     public boolean markSupported() {
         try {
             return !checkReader() && currentReader.markSupported();

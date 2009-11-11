@@ -47,6 +47,7 @@ public class ConfigurationSectionTest extends TestCase {
 
     // - Initialisation --------------------------------------------------------
     // -------------------------------------------------------------------------
+    @Override
     public void setUp() {section = new ConfigurationSection();}
 
 

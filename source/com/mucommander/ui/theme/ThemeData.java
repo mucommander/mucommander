@@ -817,7 +817,9 @@ public class ThemeData {
 
         // - Default values registering --------------------------------------------------------------------------------
         // -------------------------------------------------------------------------------------------------------------
-        mapper = new ComponentMapper() {public JComponent getComponent() {return new JTextArea();}};
+        mapper = new ComponentMapper() {
+            @Override
+            public JComponent getComponent() {return new JTextArea();}};
         registerDefaultFont(DEFAULT_TEXT_AREA_FONT,new SystemDefaultFont("TextArea.font", mapper));
         registerDefaultColor(DEFAULT_TEXT_AREA_FOREGROUND,
                              new SystemDefaultColor(SystemDefaultColor.FOREGROUND, "TextArea.foreground", mapper));
@@ -829,7 +831,9 @@ public class ThemeData {
                              new SystemDefaultColor(SystemDefaultColor.SELECTION_BACKGROUND, "TextArea.selectionBackground", mapper));
 
         // Register TextField related default values.
-        mapper = new ComponentMapper() {public JComponent getComponent() {return new JTextField();}};
+        mapper = new ComponentMapper() {
+            @Override
+            public JComponent getComponent() {return new JTextField();}};
         registerDefaultFont(DEFAULT_TEXT_FIELD_FONT, new SystemDefaultFont("TextField.font", mapper));
         registerDefaultColor(DEFAULT_TEXT_FIELD_FOREGROUND,
                              new SystemDefaultColor(SystemDefaultColor.FOREGROUND, "TextField.foreground", mapper));
@@ -841,6 +845,7 @@ public class ThemeData {
                              new SystemDefaultColor(SystemDefaultColor.SELECTION_BACKGROUND, "TextField.selectionBackground", mapper));
         registerDefaultColor(DEFAULT_TEXT_FIELD_PROGRESS_BACKGROUND,
                              new SystemDefaultColor(SystemDefaultColor.SELECTION_BACKGROUND, "TextField.selectionBackground", mapper) {
+                                 @Override
                                  public Color getColor(ThemeData data) {
                                      Color color;
 
@@ -850,7 +855,9 @@ public class ThemeData {
                              });
 
         // Register Table related default values.
-        mapper = new ComponentMapper() {public JComponent getComponent() {return new JTable();}};
+        mapper = new ComponentMapper() {
+            @Override
+            public JComponent getComponent() {return new JTable();}};
         registerDefaultFont(DEFAULT_TABLE_FONT, new SystemDefaultFont("Table.font", mapper));
         registerDefaultColor(DEFAULT_TABLE_FOREGROUND,
                              new SystemDefaultColor(SystemDefaultColor.FOREGROUND, "Table.foreground", mapper));
@@ -862,19 +869,23 @@ public class ThemeData {
                              new SystemDefaultColor(SystemDefaultColor.SELECTION_BACKGROUND, "Table.selectionBackground", mapper));
         registerDefaultColor(DEFAULT_TABLE_UNMATCHED_FOREGROUND,
                              new SystemDefaultColor(SystemDefaultColor.FOREGROUND, "Table.foreground", mapper) {
+                                 @Override
                                  public Color getColor(ThemeData data) {
                                      return super.getColor(data).darker();
                                  }
                              });
         registerDefaultColor(DEFAULT_TABLE_UNMATCHED_BACKGROUND,
                              new SystemDefaultColor(SystemDefaultColor.BACKGROUND, "Table.background", mapper) {
+                                 @Override
                                  public Color getColor(ThemeData data) {
                                      return super.getColor(data).darker();
                                  }
                              });
 
         // Menu header related default values.
-        mapper = new ComponentMapper() {public JComponent getComponent() {return new JInternalFrame();}};
+        mapper = new ComponentMapper() {
+            @Override
+            public JComponent getComponent() {return new JInternalFrame();}};
         registerDefaultFont(DEFAULT_MENU_HEADER_FONT, new SystemDefaultFont("InternalFrame.font", mapper));
         registerDefaultColor(DEFAULT_MENU_HEADER_BACKGROUND,
                              new SystemDefaultColor(SystemDefaultColor.BACKGROUND, "InternalFrame.activeTitleBackground", mapper));
@@ -882,7 +893,9 @@ public class ThemeData {
                              new SystemDefaultColor(SystemDefaultColor.FOREGROUND, "InternalFrame.activeTitleForeground", mapper));
 
         // Label related default values.
-        mapper = new ComponentMapper() {public JComponent getComponent() {return new JLabel();}};
+        mapper = new ComponentMapper() {
+            @Override
+            public JComponent getComponent() {return new JLabel();}};
         registerDefaultFont(DEFAULT_LABEL_FONT, new SystemDefaultFont("Label.font", mapper));
 
         

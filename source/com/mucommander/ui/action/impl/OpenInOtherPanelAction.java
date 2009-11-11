@@ -48,6 +48,7 @@ public class OpenInOtherPanelAction extends SelectedFileAction {
     /**
      * This method is overridden to enable this action when the parent folder is selected.
      */
+    @Override
     protected boolean getFileTableCondition(FileTable fileTable) {
         AbstractFile selectedFile = fileTable.getSelectedFile(true, true);
 
@@ -57,6 +58,7 @@ public class OpenInOtherPanelAction extends SelectedFileAction {
     /**
      * Opens the currently selected file in the inactive folder panel.
      */
+    @Override
     public void performAction() {
         AbstractFile file;
 

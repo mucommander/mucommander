@@ -18,10 +18,9 @@
  */
 package com.mucommander.file.impl.rar.provider.de.innosystec.unrar.rarfile;
 
+import com.mucommander.file.impl.rar.provider.de.innosystec.unrar.io.Raw;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
-import com.mucommander.file.impl.rar.provider.de.innosystec.unrar.io.Raw;
 
 /**
  * The main header of an rar archive. holds information concerning the whole archive (solid, encrypted etc). 
@@ -97,7 +96,8 @@ public class MainHeader extends BaseBlock {
 		return (this.flags & BaseBlock.MHD_FIRSTVOLUME)!=0;
 	}
 	
-	public void print(){
+	@Override
+    public void print(){
 		super.print();
 		StringBuilder str=new StringBuilder();
 		str.append("posav: "+getPosAv());

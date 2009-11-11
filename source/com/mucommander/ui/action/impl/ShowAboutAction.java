@@ -36,6 +36,7 @@ public class ShowAboutAction extends MuAction {
         super(mainFrame, properties);
     }
 
+    @Override
     public void performAction() {
         new AboutDialog(mainFrame).showDialog();
     }

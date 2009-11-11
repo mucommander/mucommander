@@ -775,6 +775,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
         return (FileTableColumnModel)getColumnModel();
     }
 
+    @Override
     public void setColumnModel(TableColumnModel columnModel) {
         // super.setColumnModel() must be called BEFORE the methods below
         super.setColumnModel(columnModel);
@@ -1048,6 +1049,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
     /**
      * Overrides JTable's doLayout() method to use a custom column layout (if auto-column sizing is enabled).
      */
+    @Override
     public void doLayout() {
         if(!autoSizeColumnsEnabled) {
             if(getTableHeader().getResizingColumn() != null)
@@ -1083,6 +1085,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
     /**
      * Method overriden to return a custom TableCellRenderer.
      */
+    @Override
     public TableCellRenderer getCellRenderer(int row, int column) {
         return cellRenderer;
     }
@@ -1092,6 +1095,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
      * Method overriden to consume keyboard events when quick search is active or when a row is being editing
      * in order to prevent registered actions from being fired.
      */
+    @Override
     protected boolean processKeyBinding(KeyStroke ks, KeyEvent ke, int condition, boolean pressed) {
         if(quickSearch.isActive() || isEditing())
             return true;
@@ -1108,6 +1112,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
      * and fire a {@link com.mucommander.ui.event.TableSelectionListener#selectedFileChanged(FileTable)} event
      * to registered listeners. 
      */
+    @Override
     public void changeSelection(int rowIndex, int columnIndex, boolean toggle, boolean extend) {
         // For shift+click
         lastRow = currentRow;
@@ -1131,6 +1136,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
     }
 
 
+    @Override
     public Dimension getPreferredSize() {
         Container parentComp = getParent();
 
@@ -1148,6 +1154,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
     }
 
 
+    @Override
     public Dimension getPreferredScrollableViewportSize() {
         return getPreferredSize();
     }
@@ -1216,6 +1223,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
                     if (hasFocus() && System.currentTimeMillis() - focusGainedTime > 100) {
                         // Create a new thread and sleep long enough to ensure that this click was not the first of a double click
                         new Thread() {
+                            @Override
                             public void run() {
                                 try { sleep(800); }
                                 catch (InterruptedException e) {}
@@ -1473,6 +1481,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
                 new KeyAdapter() {
                     // Cancel editing when escape key pressed, this is unfortunately not DefaultCellEditor's
                     // default behavior
+                    @Override
                     public void keyPressed(KeyEvent e) {
                         int keyCode = e.getKeyCode();
                         if(keyCode == KeyEvent.VK_ESCAPE)

@@ -101,6 +101,7 @@ public class CombineFilesDialog extends TransferDestinationDialog {
 		setFiles(files);
 	}
 
+    @Override
     protected boolean isValidDestination(PathUtils.ResolvedDestination resolvedDest, String destPath) {
         // The path entered doesn't correspond to any existing folder
         if (resolvedDest==null) {
@@ -115,6 +116,7 @@ public class CombineFilesDialog extends TransferDestinationDialog {
     // TransferDestinationDialog implementation //
     //////////////////////////////////////////////
 
+    @Override
     protected PathFieldContent computeInitialPath(FileSet files) {
         String path = destFolder.getAbsolutePath(true) + files.elementAt(0).getNameWithoutExtension();
         if (files.size() == 1) {
@@ -124,11 +126,13 @@ public class CombineFilesDialog extends TransferDestinationDialog {
         return new PathFieldContent(path);
     }
 
+    @Override
     protected TransferFileJob createTransferFileJob(ProgressDialog progressDialog, ResolvedDestination resolvedDest, int defaultFileExistsAction) {
 		return new CombineFilesJob(progressDialog, mainFrame,
 		       files, resolvedDest.getDestinationFile(), defaultFileExistsAction);
 	}
 
+    @Override
     protected String getProgressDialogTitle() {
         return Translator.get("progress_dialog.processing_files");
     }

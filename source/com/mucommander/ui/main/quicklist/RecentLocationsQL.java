@@ -44,7 +44,8 @@ public class RecentLocationsQL extends QuickListWithIcons implements LocationLis
 		linkedList = new LinkedList<AbstractFile>();
 	}
 
-	protected void acceptListItem(Object item) {
+	@Override
+    protected void acceptListItem(Object item) {
 		folderPanel.tryChangeCurrentFolder((AbstractFile)item);
 	}
 
@@ -62,7 +63,8 @@ public class RecentLocationsQL extends QuickListWithIcons implements LocationLis
 
 	public void locationFailed(LocationEvent locationEvent) {}
 
-	public Object[] getData() {
+	@Override
+    public Object[] getData() {
 		LinkedList<AbstractFile> list = (LinkedList<AbstractFile>)linkedList.clone();
 
 		if (!list.remove(folderPanel.getCurrentFolder()))
@@ -71,7 +73,8 @@ public class RecentLocationsQL extends QuickListWithIcons implements LocationLis
 		return list.toArray();
 	}
 
-	protected Icon itemToIcon(Object item) {
+	@Override
+    protected Icon itemToIcon(Object item) {
 		return getIconOfFile((AbstractFile)item);
 	}
 }

@@ -70,6 +70,7 @@ class CompatURLConnection extends URLConnection {
      *
      * @throws IOException if an error occurred while instanciating the AbstractFile
      */
+    @Override
     public void connect() throws IOException {
         if(!connected) {
             file = FileFactory.getFile(url.toString(), true);
@@ -82,18 +83,21 @@ class CompatURLConnection extends URLConnection {
     // Overridden methods //
     ////////////////////////
 
+    @Override
     public InputStream getInputStream() throws IOException {
         checkConnected();
 
         return file.getInputStream();
     }
 
+    @Override
     public OutputStream getOutputStream() throws IOException {
         checkConnected();
 
         return file.getOutputStream(false);
     }
 
+    @Override
     public long getLastModified() {
         try {
             checkConnected();
@@ -105,10 +109,12 @@ class CompatURLConnection extends URLConnection {
         }
     }
 
+    @Override
     public long getDate() {
         return getLastModified();
     }
 
+    @Override
     public int getContentLength() {
         try {
             checkConnected();

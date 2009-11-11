@@ -80,6 +80,7 @@ public class SystemFileFilter extends FileFilter {
     // FileFilter implementation //
     ///////////////////////////////
 
+    @Override
     public boolean accept(AbstractFile file) {
         String path = file.getAbsolutePath(false);
 

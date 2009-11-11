@@ -211,6 +211,7 @@ public class PropertiesDialog extends FocusDialog implements Runnable, ActionLis
     // Overridden WindowListener methods // 
     ///////////////////////////////////////
 
+    @Override
     public void windowClosed(WindowEvent e) {
         super.windowClosed(e);
 		

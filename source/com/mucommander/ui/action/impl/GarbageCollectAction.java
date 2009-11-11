@@ -38,6 +38,7 @@ public class GarbageCollectAction extends MuAction {
         super(mainFrame, properties);
     }
 
+    @Override
     public void performAction() {
         System.gc();
     }

@@ -46,7 +46,8 @@ public class EmptyMessageMenuItem extends MenuItem {
 		setFont(ThemeManager.getCurrentFont(ThemeData.QUICK_LIST_ITEM_FONT));
 	}
 	
-	protected final void paintComponent(Graphics g) {
+	@Override
+    protected final void paintComponent(Graphics g) {
 		Graphics2D graphics = (Graphics2D) g;
 		
 		// paint the background of this item with lightGray color
@@ -59,7 +60,8 @@ public class EmptyMessageMenuItem extends MenuItem {
 		graphics.drawString(getText(), X_AXIS_OFFSET, (int) graphics.getFontMetrics().getLineMetrics(this.getText(), graphics).getHeight());
 	}
 
-	public void colorChanged(ColorChangedEvent event) {
+	@Override
+    public void colorChanged(ColorChangedEvent event) {
 		if (event.getColorId() == ThemeData.QUICK_LIST_ITEM_BACKGROUND_COLOR)
 			background = event.getColor();
 			
@@ -67,7 +69,8 @@ public class EmptyMessageMenuItem extends MenuItem {
 			foreground = event.getColor();
 	}
 	
-	public void fontChanged(FontChangedEvent event) {
+	@Override
+    public void fontChanged(FontChangedEvent event) {
 		setFont(ThemeManager.getCurrentFont(ThemeData.QUICK_LIST_ITEM_FONT));
 	}
 }

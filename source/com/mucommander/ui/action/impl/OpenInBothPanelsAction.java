@@ -75,6 +75,7 @@ public class OpenInBothPanelsAction extends SelectedFileAction {
     /**
      * This method is overridden to enable this action when the parent folder is selected. 
      */
+    @Override
     protected boolean getFileTableCondition(FileTable fileTable) {
         AbstractFile selectedFile = fileTable.getSelectedFile(true, true);
 
@@ -87,6 +88,7 @@ public class OpenInBothPanelsAction extends SelectedFileAction {
     /**
      * Opens the current selection and its inactive equivalent.
      */
+    @Override
     public void performAction() {
         Thread       openThread;
         AbstractFile selectedFile;

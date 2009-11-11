@@ -34,6 +34,7 @@ public abstract class SingleConditionalTestSuite extends ConditionalTestSuite {
     // ConditionalTestSuite methods //
     //////////////////////////////////
 
+    @Override
     protected void populateTestSuite() {
         CommonsLogger.fine("Adding "+getTestCaseClass().getName()+" to test suite");
         addTestSuite(getTestCaseClass());

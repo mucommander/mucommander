@@ -145,6 +145,7 @@ public final class Credentials {
      *
      * @return a cloned instance of these Credentials
      */
+    @Override
     public Object clone() {
         try {
             return super.clone();

@@ -37,6 +37,7 @@ public class EditCredentialsAction extends MuAction implements InvokesDialog {
         super(mainFrame, properties);
     }
 
+    @Override
     public void performAction() {
         new EditCredentialsDialog(mainFrame);
     }

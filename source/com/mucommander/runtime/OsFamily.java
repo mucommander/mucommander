@@ -162,6 +162,7 @@ public class OsFamily extends RuntimeProperty implements OsFamilies {
     // RuntimeProperty implementation //
     ////////////////////////////////////
 
+    @Override
     protected RuntimeProperty getCurrentValue() {
         return getCurrent();
     }

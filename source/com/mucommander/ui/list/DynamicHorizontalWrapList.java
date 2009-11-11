@@ -57,7 +57,8 @@ public class DynamicHorizontalWrapList<E> extends DynamicList<E> {
 		setLayoutOrientation(JList.HORIZONTAL_WRAP);
 	}
 
-	public void repaint() {
+	@Override
+    public void repaint() {
 		Container parent = getParent();
 		if (parent != null) {
 			Rectangle parentBounds = parent.getBounds();

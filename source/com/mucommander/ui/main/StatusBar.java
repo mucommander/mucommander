@@ -296,6 +296,7 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
             // Perform volume info retrieval in a separate thread as this method may be called
             // by the event thread and it can take a while, we want to return as soon as possible
             new Thread("StatusBar.updateVolumeInfo") {
+                @Override
                 public void run() {
                     // Free space on current volume, -1 if this information is not available 
                     long volumeFree;
@@ -380,6 +381,7 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
     /**
      * Overrides JComponent.setVisible(boolean) to start/stop volume info auto-update thread.
      */
+    @Override
     public void setVisible(boolean visible) {
         if(visible) {
             // Start auto-update thread
@@ -618,6 +620,7 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
         /**
          * Adds some empty space around the label.
          */
+        @Override
         public Dimension getPreferredSize() {
             Dimension d = super.getPreferredSize();
             return new Dimension(d.width+4, d.height+2);
@@ -628,6 +631,7 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
 //        }
 //
 
+        @Override
         public void paint(Graphics g) {
 
             // If free or total space is not available, this label will just be painted as a normal JLabel

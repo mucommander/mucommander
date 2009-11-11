@@ -21,7 +21,9 @@ package com.mucommander.ui.main;
 import com.mucommander.file.util.ResourceLoader;
 import com.mucommander.ui.dialog.DialogToolkit;
 
-import javax.swing.*;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import javax.swing.JWindow;
 import java.awt.*;
 
 
@@ -125,6 +127,7 @@ public class SplashScreen extends JWindow {
     /**
      * Overridden paint method.
      */
+    @Override
     public void paint(Graphics g) {
         super.paint(g);
 

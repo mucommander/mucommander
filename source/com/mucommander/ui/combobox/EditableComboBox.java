@@ -157,6 +157,7 @@ public class EditableComboBox extends SaneComboBox {
 
         // Use a custom editor that uses the text field
         setEditor(new BasicComboBoxEditor() {
+                @Override
                 public Component getEditorComponent() {
                     return EditableComboBox.this.textField;
                 }
@@ -174,6 +175,7 @@ public class EditableComboBox extends SaneComboBox {
         // can safely implement KeyListener without risking to override those methods by accident.
         this.textField.addKeyListener(new KeyAdapter() {
 
+            @Override
             public void keyPressed(KeyEvent keyEvent) {
                 int keyCode = keyEvent.getKeyCode();
 
@@ -242,6 +244,7 @@ public class EditableComboBox extends SaneComboBox {
      * Overrides {@link SaneComboBox#fireComboBoxSelectionChanged()} to set the text field's contents to the item that
      * has been selected, if {@link #setComboSelectionUpdatesTextField(boolean)} has been enabled.  
      */
+    @Override
     protected void fireComboBoxSelectionChanged() {
         if(comboSelectionUpdatesTextField) {
             // Replace the text field's contents by the selected item's string representation,
@@ -283,6 +286,7 @@ public class EditableComboBox extends SaneComboBox {
 
     // - Aspect managenement -------------------------------------------------------------
     // -----------------------------------------------------------------------------------
+    @Override
     public void setForeground(Color color) {
         if(renderer == null)
 	    super.setForeground(color);
@@ -292,6 +296,7 @@ public class EditableComboBox extends SaneComboBox {
         }
     }
 
+    @Override
     public void setBackground(Color color) {
         if(renderer == null)
 	    super.setBackground(color);
@@ -315,6 +320,7 @@ public class EditableComboBox extends SaneComboBox {
         }
     }
 
+    @Override
     public void setFont(Font font) {
         super.setFont(font);
         if(renderer != null) {

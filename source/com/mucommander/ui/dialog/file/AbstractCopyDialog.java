@@ -72,6 +72,7 @@ public abstract class AbstractCopyDialog extends TransferDestinationDialog {
     // TransferDestinationDialog partial implementation //
     //////////////////////////////////////////////////////
 
+    @Override
     protected PathFieldContent computeInitialPath(FileSet files) {
         String fieldText;     // Text to display in the destination field.
         int    startPosition; // Index of the first selected character in the destination field.

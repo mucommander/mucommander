@@ -44,7 +44,7 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
-import java.awt.*;
+import java.awt.BorderLayout;
 import java.awt.event.*;
 
 /**
@@ -130,10 +130,12 @@ public class FoldersTreePanel extends JPanel implements TreeSelectionListener,
         });
         popup.add(item);
         tree.addMouseListener(new MouseAdapter() {
+            @Override
             public void mousePressed(MouseEvent e) {
                 maybeShowPopup(e);
             }
 
+            @Override
             public void mouseReleased(MouseEvent e) {
                 maybeShowPopup(e);
             }
@@ -172,6 +174,7 @@ public class FoldersTreePanel extends JPanel implements TreeSelectionListener,
      * Adds or removes location change listeners depending on the tree
      * visibility.
      */
+    @Override
     public void setVisible(boolean flag) {
         super.setVisible(flag);
         if (flag) {
@@ -244,6 +247,7 @@ public class FoldersTreePanel extends JPanel implements TreeSelectionListener,
     /**
      * Changes focus to tree.
      */
+    @Override
     public void requestFocus() {
         tree.requestFocus();
     }
@@ -277,6 +281,7 @@ public class FoldersTreePanel extends JPanel implements TreeSelectionListener,
             setRepeats(false);
         }
 
+        @Override
         public void fireActionPerformed(ActionEvent ae) {
             if (!folderPanel.getCurrentFolder().equals(folder)) {
                 folderPanel.tryChangeCurrentFolder(folder);

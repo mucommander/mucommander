@@ -18,8 +18,12 @@
 
 package com.mucommander.ui.text;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JTextArea;
+import javax.swing.UIManager;
+import java.awt.Color;
+import java.awt.Container;
+import java.awt.Font;
+import java.awt.Window;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 
@@ -77,6 +81,7 @@ public class MultiLineLabel extends JTextArea {
 
         if(autoRepack) {
             addComponentListener(new ComponentAdapter() {
+                @Override
                 public void componentResized(ComponentEvent e) {
                     Container tla = getTopLevelAncestor();
                     if(tla instanceof Window)

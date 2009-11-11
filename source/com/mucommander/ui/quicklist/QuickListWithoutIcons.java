@@ -33,5 +33,6 @@ public abstract class QuickListWithoutIcons extends QuickListWithDataList {
 		super(header, emptyPopupHeader);
 	}
 	
-	protected DataList getList() { return new DataList(); }
+	@Override
+    protected DataList getList() { return new DataList(); }
 }

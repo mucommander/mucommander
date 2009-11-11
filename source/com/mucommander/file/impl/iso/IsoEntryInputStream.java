@@ -51,6 +51,7 @@ class IsoEntryInputStream extends InputStream {
     // InputStream implementation //
     ////////////////////////////////
 
+    @Override
     public int read() throws IOException {
         return rais.read();
     }
@@ -60,10 +61,12 @@ class IsoEntryInputStream extends InputStream {
     // Overridden methods //
     ////////////////////////
 
+    @Override
     public int read(byte b[]) throws IOException {
         return read(b, 0, b.length);
     }
 
+    @Override
     public int read(byte b[], int off, int len) throws IOException {
         int available = available();
         int toRead = len;
@@ -141,11 +144,13 @@ class IsoEntryInputStream extends InputStream {
         return pos - before;
     }
 
+    @Override
     public int available() throws IOException {
         int available = (int) (size - pos);
         return (available < 0) ? 0 : available;
     }
 
+    @Override
     public void close() throws IOException {
         rais.close();
     }

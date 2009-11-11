@@ -108,6 +108,7 @@ public class BoundedInputStream extends FilterInputStream {
     // Overridden methods //
     ////////////////////////
 
+    @Override
     public synchronized int read() throws IOException {
         if(getRemainingBytes()==0) {
             if(outOfBoundException==null)
@@ -122,10 +123,12 @@ public class BoundedInputStream extends FilterInputStream {
         return i;
     }
 
+    @Override
     public synchronized int read(byte b[]) throws IOException {
         return read(b, 0, b.length);
     }
 
+    @Override
     public synchronized int read(byte b[], int off, int len) throws IOException {
         int canRead = (int)Math.min(getRemainingBytes(), len);
         if(canRead==0) {
@@ -142,6 +145,7 @@ public class BoundedInputStream extends FilterInputStream {
         return nbRead;
     }
 
+    @Override
     public synchronized long skip(long n) throws IOException {
         int canSkip = (int)Math.min(getRemainingBytes(), n);
         if(canSkip==0) {
@@ -158,6 +162,7 @@ public class BoundedInputStream extends FilterInputStream {
         return nbSkipped;
     }
 
+    @Override
     public synchronized int available() throws IOException {
         return Math.min(in.available(), (int)getRemainingBytes());
     }
@@ -167,6 +172,7 @@ public class BoundedInputStream extends FilterInputStream {
      *
      * @return always returns <code>false</code>, even if the underlying stream supports it
      */
+    @Override
     public boolean markSupported() {
         // Todo: in theory we could support mark/reset
         return false;
@@ -175,6 +181,7 @@ public class BoundedInputStream extends FilterInputStream {
     /**
      * Implemented as a no-op: the call is *not* delegated to the underlying stream.
      */
+    @Override
     public synchronized void mark(int readlimit) {
         // Todo: in theory we could support mark/reset
         // No-op
@@ -183,6 +190,7 @@ public class BoundedInputStream extends FilterInputStream {
     /**
      * Always throws an <code>IOException</code>: the call is *not* delegated to the underlying stream.
      */
+    @Override
     public synchronized void reset() throws IOException {
         // Todo: in theory we could support mark/reset
         // No-op

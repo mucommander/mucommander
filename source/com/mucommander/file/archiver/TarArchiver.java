@@ -52,6 +52,7 @@ class TarArchiver extends Archiver {
     // Archiver implementation //
     /////////////////////////////
 
+    @Override
     public OutputStream createEntry(String entryPath, FileAttributes attributes) throws IOException {
         // Start by closing current entry
         if(!firstEntry)
@@ -83,6 +84,7 @@ class TarArchiver extends Archiver {
     }
 
 
+    @Override
     public void close() throws IOException {
         // Close current entry
         if(!firstEntry)

@@ -45,6 +45,7 @@ public class CompatURLStreamHandler extends URLStreamHandler {
     // URLStreamHandler implementation //
     /////////////////////////////////////
 
+    @Override
     protected URLConnection openConnection(URL url) throws IOException {
         return new CompatURLConnection(url, file);      // Note: file may be null
     }

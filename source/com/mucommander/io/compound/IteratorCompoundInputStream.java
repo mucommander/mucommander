@@ -51,6 +51,7 @@ public class IteratorCompoundInputStream extends CompoundInputStream {
     // CompoundInputStream implementation //
     ////////////////////////////////////////
 
+    @Override
     public InputStream getNextInputStream() {
         return inputStreamIterator.hasNext()?inputStreamIterator.next():null;
     }

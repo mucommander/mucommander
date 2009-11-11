@@ -51,6 +51,7 @@ public class VersionedXmlConfigurationReader extends XmlConfigurationReader {
     // Overridden methods //
     ////////////////////////
 
+    @Override
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
         super.startElement(uri, localName, qName, attributes);
 

@@ -246,6 +246,7 @@ public class ConnectionPool implements Runnable {
             this.connHandler = connHandler;
         }
 
+        @Override
         public void run() {
             // Try to close connection, only if it is connected
             if(connHandler.isConnected()) {
@@ -268,6 +269,7 @@ public class ConnectionPool implements Runnable {
             this.connHandler = connHandler;
         }
 
+        @Override
         public void run() {
             FileLogger.finer("keeping connection alive: "+connHandler);
 

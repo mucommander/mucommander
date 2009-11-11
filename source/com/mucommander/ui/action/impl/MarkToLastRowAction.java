@@ -41,6 +41,7 @@ public class MarkToLastRowAction extends MarkForwardAction {
         super(mainFrame, properties);
     }
 
+    @Override
     protected int getRowIncrement() {
         FileTable activeTable = mainFrame.getActiveTable();
 

@@ -32,7 +32,10 @@ import com.mucommander.ui.layout.AsyncPanel;
 import com.mucommander.ui.main.MainFrame;
 
 import javax.swing.*;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.Image;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -99,6 +102,7 @@ public class ViewerFrame extends JFrame implements ActionListener {
 
     private void initContentPane() {
         AsyncPanel asyncPanel = new AsyncPanel() {
+            @Override
             public JComponent getTargetComponent() {
                 try {
                     viewer = ViewerRegistrar.createFileViewer(file);
@@ -131,6 +135,7 @@ public class ViewerFrame extends JFrame implements ActionListener {
                 setTitle(viewer.getTitle());
 
                 JScrollPane scrollPane = new JScrollPane(viewer, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED) {
+                        @Override
                         public Insets getInsets() {
                             return new Insets(0, 0, 0, 0);
                         }
@@ -149,6 +154,7 @@ public class ViewerFrame extends JFrame implements ActionListener {
                 return scrollPane;
             }
 
+            @Override
             protected void updateLayout() {
                 super.updateLayout();
 
@@ -186,6 +192,7 @@ public class ViewerFrame extends JFrame implements ActionListener {
     // Overridden methods //
     ////////////////////////
 
+    @Override
     public void pack() {
         super.pack();
 

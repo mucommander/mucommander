@@ -62,6 +62,7 @@ public class CommandAction extends MuAction {
 
     // - Action code -----------------------------------------------------------
     // -------------------------------------------------------------------------
+    @Override
     public void performAction() {
         FileSet selectedFiles;
 

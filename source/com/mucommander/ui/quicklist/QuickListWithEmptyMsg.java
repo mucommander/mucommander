@@ -18,13 +18,12 @@
 
 package com.mucommander.ui.quicklist;
 
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-
-import javax.swing.SwingUtilities;
-
 import com.mucommander.ui.main.table.FileTable;
 import com.mucommander.ui.quicklist.item.EmptyMessageMenuItem;
+
+import javax.swing.SwingUtilities;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 /**
  * FileTablePopupWithEmptyMsg is a FileTablePopup which contains EmptyMessageItem.
@@ -44,7 +43,8 @@ class QuickListWithEmptyMsg extends QuickList implements QuickListFocusableCompo
 		addFocusListener(this);
 	}
 	
-	protected boolean prepareForShowing() {
+	@Override
+    protected boolean prepareForShowing() {
 		getFocus();
 		return true;
 	}

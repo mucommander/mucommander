@@ -126,6 +126,7 @@ public class ShellComboBox extends AutocompletedEditableCombobox implements Edit
     /**
      * Overrides this method to ignore events received when this component is disabled.
      */
+    @Override
     public void setEnabled(boolean enabled) {
         super.setEnabled(enabled);
 

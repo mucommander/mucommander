@@ -33,7 +33,8 @@ import com.mucommander.ui.text.FilePathField;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -158,6 +159,7 @@ public abstract class TransferDestinationDialog extends JobDialog implements Act
 
         // Interrupt any ongoing thread when the dialog has been closed, regardless of how it has been closed.
         addWindowListener(new WindowAdapter() {
+            @Override
             public void windowClosed(WindowEvent e) {
                 interruptOngoingThread();
             }
@@ -350,6 +352,7 @@ public abstract class TransferDestinationDialog extends JobDialog implements Act
         /** True if the thread has been interrupted */
         private boolean interrupted;
 
+        @Override
         public void run() {
             final PathFieldContent pathFieldContent = computeInitialPath(files);
 
@@ -388,6 +391,7 @@ public abstract class TransferDestinationDialog extends JobDialog implements Act
         /**
          * Overridden to trap interruptions ({@link #isInterrupted()} doesn't seem to be working as advertised).
          */
+        @Override
         public void interrupt() {
             super.interrupt();
             this.interrupted = true;
@@ -409,6 +413,7 @@ public abstract class TransferDestinationDialog extends JobDialog implements Act
         /** True if the thread has been interrupted */
         private boolean interrupted;
 
+        @Override
         public void run() {
             final String destPath = pathField.getText();
 
@@ -446,6 +451,7 @@ public abstract class TransferDestinationDialog extends JobDialog implements Act
         /**
          * Overridden to trap interruptions ({@link #isInterrupted()} doesn't seem to be working as advertised).
          */
+        @Override
         public void interrupt() {
             super.interrupt();
             this.interrupted = true;

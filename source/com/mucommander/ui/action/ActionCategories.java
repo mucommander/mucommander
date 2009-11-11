@@ -41,7 +41,8 @@ public class ActionCategories {
 			super("action_categories" + ".all");
 		}
 		
-		public boolean contains(String actionId) {
+		@Override
+        public boolean contains(String actionId) {
 			return true;
 		}
 	}

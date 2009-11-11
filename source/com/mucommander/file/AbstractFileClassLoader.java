@@ -125,6 +125,7 @@ public class AbstractFileClassLoader extends ClassLoader {
      * @param  name name of the resource to open.
      * @return      an input stream on the requested resource, <code>null</code> if not found.
      */
+    @Override
     public InputStream getResourceAsStream(String name) {
         AbstractFile file; // File representing the resource.
         InputStream  in;   // Input stream on the resource.
@@ -149,6 +150,7 @@ public class AbstractFileClassLoader extends ClassLoader {
      * @param  name name of the resource to locate.
      * @return      the URL of the requested resource if found, <code>null</code> otherwise.
      */
+    @Override
     protected URL findResource(String name) {
         AbstractFile file; // Path to the requested resource.
 
@@ -166,6 +168,7 @@ public class AbstractFileClassLoader extends ClassLoader {
      * @param  name of the resources to find.
      * @return      an enumeration containing the URLs of all the resources that match <code>name</code>.
      */
+    @Override
     protected Enumeration<URL> findResources(String name) {
         Iterator<AbstractFile> iterator;   // Iterator on all available JAR files.
         AbstractFile           file;       // AbstractFile describing each match.
@@ -191,6 +194,7 @@ public class AbstractFileClassLoader extends ClassLoader {
      * @param name name of the library to load.
      * @return the absolute path of the requested library if found, <code>null</code> otheriwse.
      */
+    @Override
     protected String findLibrary(String name) {
         AbstractFile file; // Path of the requested library.
 
@@ -246,6 +250,7 @@ public class AbstractFileClassLoader extends ClassLoader {
      * @return                        the requested <code>Class</code> if found, <code>null</code> otherwise.
      * @throws ClassNotFoundException if the requested class was not found.
      */
+    @Override
     protected Class<?> findClass(String name) throws ClassNotFoundException {
         AbstractFile file; // File containing the class' bytecode.
 

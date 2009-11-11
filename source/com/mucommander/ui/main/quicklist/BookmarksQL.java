@@ -47,15 +47,18 @@ public class BookmarksQL extends QuickListWithIcons implements BookmarkListener 
 		BookmarkManager.addBookmarkListener(this);
 	}
 
-	protected void acceptListItem(Object item) {
+	@Override
+    protected void acceptListItem(Object item) {
 		folderPanel.tryChangeCurrentFolder(((Bookmark)item).getLocation()); //change with text validate
 	}
 
-	protected Object[] getData() {
+	@Override
+    protected Object[] getData() {
 		return sortedBookmarks;
 	}
 	
-	protected Icon itemToIcon(Object item) {
+	@Override
+    protected Icon itemToIcon(Object item) {
 		return getIconOfFile(FileFactory.getFile(((Bookmark)item).getLocation()));
 	}
 

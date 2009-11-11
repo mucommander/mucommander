@@ -48,6 +48,7 @@ public class OpenURLInBrowserAction extends MuAction {
         setEnabled(DesktopManager.canBrowse());
     }
 
+    @Override
     public void performAction() {
         Object url = getValue(URL_PROPERTY_KEY);
 
@@ -79,6 +80,7 @@ public class OpenURLInBrowserAction extends MuAction {
 		
 		public KeyStroke getDefaultKeyStroke() { return null; }
 
+        @Override
         public boolean isParameterized() { return true; }
     }
 }

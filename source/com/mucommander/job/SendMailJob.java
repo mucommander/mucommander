@@ -248,6 +248,7 @@ public class SendMailJob extends TransferFileJob {
     // TransferFileJob implementation //
     ////////////////////////////////////
 
+    @Override
     protected boolean processFile(AbstractFile file, Object recurseParams) {
         if(getState()==INTERRUPTED)
             return false;
@@ -276,6 +277,7 @@ public class SendMailJob extends TransferFileJob {
         return true;
     }
 
+    @Override
     protected boolean hasFolderChanged(AbstractFile folder) {
         // This job does not modify anything
         return false;
@@ -290,6 +292,7 @@ public class SendMailJob extends TransferFileJob {
      * This method is called when this job starts, before the first call to {@link #processFile(AbstractFile,Object) processFile()} is made.
      * This method here does nothing but it can be overriden by subclasses to perform some first-time initializations.
      */
+    @Override
     protected void jobStarted() {
         super.jobStarted();
 
@@ -317,6 +320,7 @@ public class SendMailJob extends TransferFileJob {
     /**
      * Method overridden to close connection to the mail server.
      */
+    @Override
     protected void jobStopped() {
         super.jobStopped();
 
@@ -324,6 +328,7 @@ public class SendMailJob extends TransferFileJob {
         closeConnection();
     }
 
+    @Override
     public String getStatusString() {
         if(connectedToMailServer)
             return Translator.get("email.sending_file", getCurrentFilename());

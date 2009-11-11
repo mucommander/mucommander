@@ -56,6 +56,7 @@ public abstract class ServerPanel extends XAlignedComponentPanel {
     }
 	
 	
+    @Override
     public Insets getInsets() {
         return new Insets(8, 6, 8, 6);
     }

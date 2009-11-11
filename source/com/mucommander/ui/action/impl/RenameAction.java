@@ -39,6 +39,7 @@ public class RenameAction extends SelectedFileAction {
         super(mainFrame, properties);
     }
 
+    @Override
     public void performAction() {
         FileTable activeTable = mainFrame.getActiveTable();
         AbstractFile selectedFile = activeTable.getSelectedFile(false);

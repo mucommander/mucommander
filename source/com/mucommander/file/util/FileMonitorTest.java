@@ -145,6 +145,7 @@ public class FileMonitorTest extends TestCase implements FileMonitorConstants {
     /**
      * Called after each test, stops monitoring file changes.
      */
+    @Override
     protected void tearDown() {
         fileMonitor.stopMonitoring();
     }

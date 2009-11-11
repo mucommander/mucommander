@@ -295,28 +295,33 @@ public class HTTPFile extends ProtocolFile {
     // AbstractFile methods implementation //
     /////////////////////////////////////////
 	
+    @Override
     public long getDate() {
         checkResolveFile();
 
         return attributes.getDate();
     }
 
+    @Override
     public boolean canChangeDate() {
         // File is read-only, return false
         return false;
     }
 
+    @Override
     public boolean changeDate(long date) {
         // File is read-only, return false
         return false;
     }
 	
+    @Override
     public long getSize() {
         checkResolveFile();
 
         return attributes.getSize();	// Size == -1 if not known
     }
 	
+    @Override
     public AbstractFile getParent() {
         if(!parentValSet) {
             FileURL parentURL = fileURL.getParent();
@@ -337,11 +342,13 @@ public class HTTPFile extends ProtocolFile {
     }
 	
 
+    @Override
     public void setParent(AbstractFile parent) {
         this.parent = parent;
         this.parentValSet = true;
     }
 
+    @Override
     public boolean exists() {
         if(!fileResolved) {
             // Note: file will only be resolved once, even if the request failed
@@ -352,44 +359,54 @@ public class HTTPFile extends ProtocolFile {
         return attributes.exists();
     }
 
+    @Override
     public FilePermissions getPermissions() {
         return attributes.getPermissions();
     }
 
+    @Override
     public PermissionBits getChangeablePermissions() {
         return PermissionBits.EMPTY_PERMISSION_BITS;
     }
 
+    @Override
     public boolean changePermission(int access, int permission, boolean enabled) {
         return false;
     }
 
+    @Override
     public String getOwner() {
         return null;
     }
 
+    @Override
     public boolean canGetOwner() {
         return false;
     }
 
+    @Override
     public String getGroup() {
         return null;
     }
 
+    @Override
     public boolean canGetGroup() {
         return false;
     }
 
+    @Override
     public boolean isDirectory() {
         checkResolveFile();
 
         return attributes.isDirectory();
     }
 	
+    @Override
     public boolean isSymlink() {
         return false;
     }
 
+    @Override
     public InputStream getInputStream() throws IOException {
         HttpURLConnection conn = getHttpURLConnection(this.url);
 
@@ -405,22 +422,27 @@ public class HTTPFile extends ProtocolFile {
     /**
      * Not available, always throws an <code>IOException</code>.
      */
+    @Override
     public OutputStream getOutputStream(boolean append) throws IOException {
         throw new IOException();
     }
 
+    @Override
     public boolean hasRandomAccessInputStream() {
         return true;
     }
 
+    @Override
     public RandomAccessInputStream getRandomAccessInputStream() throws IOException {
         return new HTTPRandomAccessInputStream();
     }
 
+    @Override
     public boolean hasRandomAccessOutputStream() {
         return false;
     }
 
+    @Override
     public RandomAccessOutputStream getRandomAccessOutputStream() throws IOException {
         throw new IOException();
     }
@@ -428,6 +450,7 @@ public class HTTPFile extends ProtocolFile {
     /**
      * Not available, always throws an <code>IOException</code>.
      */
+    @Override
     public void delete() throws IOException {
         throw new IOException();
     }
@@ -435,6 +458,7 @@ public class HTTPFile extends ProtocolFile {
     /**
      * Not available, always throws an <code>IOException</code>.
      */
+    @Override
     public void mkdir() throws IOException {
         throw new IOException();
     }
@@ -442,6 +466,7 @@ public class HTTPFile extends ProtocolFile {
     /**
      * Not available, always returns <code>-1</code>.
      */
+    @Override
     public long getFreeSpace() {
         // This information is obviously not available over HTTP, return -1
         return -1;
@@ -450,6 +475,7 @@ public class HTTPFile extends ProtocolFile {
     /**
      * Not available, always returns <code>-1</code>.
      */
+    @Override
     public long getTotalSpace() {
         // This information is obviously not available over HTTP, return -1
         return -1;
@@ -458,10 +484,12 @@ public class HTTPFile extends ProtocolFile {
     /**
      * Returns a <code>java.net.URL</code> instance corresponding to this file.
      */
+    @Override
     public Object getUnderlyingFileObject() {
         return url;
     }
 
+    @Override
     public AbstractFile[] ls() throws IOException {
         // Implementation note: javax.swing.text.html.HTMLEditorKit isn't quite powerful enough to be used
 
@@ -632,18 +660,22 @@ public class HTTPFile extends ProtocolFile {
     // Overridden methods //
     ////////////////////////
 
+    @Override
     public String getAbsolutePath() {
         return attributes.getPath();
     }
 
+    @Override
     public String getCanonicalPath() {
         return url.toExternalForm();
     }
 
+    @Override
     public boolean isHidden() {
         return false;
     }
 
+    @Override
     public String getName() {
         try {return java.net.URLDecoder.decode(super.getName(), "utf-8");}
         catch(Exception e) {return super.getName();}
@@ -653,6 +685,7 @@ public class HTTPFile extends ProtocolFile {
      * Overrides AbstractFile's getInputStream(long) method to provide a more efficient implementation:
      * use the HTTP 1.1 header to start the transfer at the given offset.
      */
+    @Override
     public InputStream getInputStream(long offset) throws IOException {
         HttpURLConnection conn = getHttpURLConnection(this.url);
 
@@ -704,6 +737,7 @@ public class HTTPFile extends ProtocolFile {
         // BlockRandomInputStream implementation //
         ///////////////////////////////////////////
 
+        @Override
         protected int readBlock(long fileOffset, byte block[], int blockLen) throws IOException {
             HttpURLConnection conn = getHttpURLConnection(url);
 
@@ -739,6 +773,7 @@ public class HTTPFile extends ProtocolFile {
             return length;
         }
 
+        @Override
         public void close() throws IOException {
             // No-op, the underlying stream is already closed
         }

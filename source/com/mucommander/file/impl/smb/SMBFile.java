@@ -204,6 +204,7 @@ import java.net.MalformedURLException;
     // AbstractFile methods implementation //
     /////////////////////////////////////////
 
+    @Override
     public long getDate() {
         try {
             return file.lastModified();
@@ -213,10 +214,12 @@ import java.net.MalformedURLException;
         }
     }
 
+    @Override
     public boolean canChangeDate() {
         return true;
     }
 
+    @Override
     public boolean changeDate(long lastModified) {
         try {
             file.setLastModified(lastModified);
@@ -228,6 +231,7 @@ import java.net.MalformedURLException;
         }
     }
 
+    @Override
     public long getSize() {
         try {
             return file.length();
@@ -237,6 +241,7 @@ import java.net.MalformedURLException;
         }
     }
 
+    @Override
     public AbstractFile getParent() {
         if(!parentValSet) {
             FileURL parentURL = fileURL.getParent();
@@ -256,11 +261,13 @@ import java.net.MalformedURLException;
         return parent;
     }
 
+    @Override
     public void setParent(AbstractFile parent) {
         this.parent = parent;
         this.parentValSet = true;
     }
 
+    @Override
     public boolean exists() {
         // Unlike java.io.File, SmbFile.exists() can throw an SmbException
         try {
@@ -273,14 +280,17 @@ import java.net.MalformedURLException;
         }
     }
 
+    @Override
     public FilePermissions getPermissions() {
         return permissions;
     }
 
+    @Override
     public PermissionBits getChangeablePermissions() {
         return CHANGEABLE_PERMISSIONS;
     }
 
+    @Override
     public boolean changePermission(int access, int permission, boolean enabled) {
         if(access!=USER_ACCESS || permission!=WRITE_PERMISSION)
             return false;
@@ -301,6 +311,7 @@ import java.net.MalformedURLException;
     /**
      * Always returns <code>null</code>, this information is not available unfortunately.
      */
+    @Override
     public String getOwner() {
         return null;
     }
@@ -308,6 +319,7 @@ import java.net.MalformedURLException;
     /**
      * Always returns <code>false</code>, this information is not available unfortunately.
      */
+    @Override
     public boolean canGetOwner() {
         return false;
     }
@@ -315,6 +327,7 @@ import java.net.MalformedURLException;
     /**
      * Always returns <code>null</code>, this information is not available unfortunately.
      */
+    @Override
     public String getGroup() {
         return null;
     }
@@ -322,10 +335,12 @@ import java.net.MalformedURLException;
     /**
      * Always returns <code>false</code>, this information is not available unfortunately.
      */
+    @Override
     public boolean canGetGroup() {
         return false;
     }
 
+    @Override
     public boolean isDirectory() {
         try {
             return file.isDirectory();
@@ -335,23 +350,28 @@ import java.net.MalformedURLException;
         }
     }
 
+    @Override
     public boolean isSymlink() {
         // Symlinks are not supported by jCIFS (or maybe by CIFS/SMB?)
         return false;
     }
 
+    @Override
     public InputStream getInputStream() throws IOException {
         return new SmbFileInputStream(file);
     }
 
+    @Override
     public OutputStream getOutputStream(boolean append) throws IOException {
         return new SmbFileOutputStream(file, append);
     }
 
+    @Override
     public boolean hasRandomAccessInputStream() {
         return true;
     }
 
+    @Override
     public RandomAccessInputStream getRandomAccessInputStream() throws IOException {
         // This needs to be checked explicitely (SmbRandomAccessFile can be created even if the file does not exist)
         if(!exists())
@@ -362,22 +382,26 @@ import java.net.MalformedURLException;
         return new SMBRandomAccessInputStream(new SmbRandomAccessFile(file, "r"));
     }
 
+    @Override
     public boolean hasRandomAccessOutputStream() {
         return true;
     }
 
+    @Override
     public RandomAccessOutputStream getRandomAccessOutputStream() throws IOException {
 //        // Explicitely allow the file to be read/write/delete by another random access file while this one is open
 //        return new SMBRandomAccessOutputStream(new SmbRandomAccessFile(fileURL.toString(true), "rw", SmbFile.FILE_SHARE_READ | SmbFile.FILE_SHARE_WRITE | SmbFile.FILE_SHARE_DELETE));
         return new SMBRandomAccessOutputStream(new SmbRandomAccessFile(file, "rw"));
     }
 
+    @Override
     public void delete() throws IOException {
         file.delete();
         checkSmbFile(false);
     }
 
 
+    @Override
     public AbstractFile[] ls() throws IOException {
         try {
             SmbFile smbFiles[] = file.listFiles();
@@ -429,6 +453,7 @@ import java.net.MalformedURLException;
     }
 
 
+    @Override
     public void mkdir() throws IOException {
         // Ensure that the jcifs.smb.SmbFile's path ends with a '/' otherwise it will throw an exception
         checkSmbFile(true);
@@ -439,6 +464,7 @@ import java.net.MalformedURLException;
     }
 
 
+    @Override
     public long getFreeSpace() {
         try {
             return file.getDiskFreeSpace();
@@ -449,6 +475,7 @@ import java.net.MalformedURLException;
         }
     }
 
+    @Override
     public long getTotalSpace() {
         // No way to retrieve this information with jCIFS/SMB, return -1 (not available)
         return -1;
@@ -457,6 +484,7 @@ import java.net.MalformedURLException;
     /**
      * Returns a <code>jcifs.smb.SmbFile</code> instance corresponding to this file.
      */
+    @Override
     public Object getUnderlyingFileObject() {
         return file;
     }
@@ -466,6 +494,7 @@ import java.net.MalformedURLException;
     // Overridden methods //
     ////////////////////////
 
+    @Override
     public boolean isHidden() {
         try {
             return file.isHidden();
@@ -476,6 +505,7 @@ import java.net.MalformedURLException;
     }
 
 
+    @Override
     public boolean copyTo(AbstractFile destFile) throws FileTransferException {
         // File can only be copied by SMB if the destination is on an SMB share (but not necessarily on the same host)
         if(!destFile.getURL().getScheme().equals(FileProtocols.SMB)) {
@@ -517,6 +547,7 @@ import java.net.MalformedURLException;
      * Overrides {@link AbstractFile#moveTo(AbstractFile)} to support server-to-server move if the destination file
      * uses SMB.
      */
+    @Override
     public boolean moveTo(AbstractFile destFile) throws FileTransferException  {
         // File can only be moved directly if the destination if it is on an SMB share
         // (but not necessarily on the same host).
@@ -558,6 +589,7 @@ import java.net.MalformedURLException;
         }
     }
 
+    @Override
     public boolean equalsCanonical(Object f) {
         if(!(f instanceof SMBFile))
             return super.equalsCanonical(f);		// could be equal to an AbstractArchiveFile
@@ -583,14 +615,17 @@ import java.net.MalformedURLException;
             this.raf = raf;
         }
 
+        @Override
         public int read() throws IOException {
             return raf.read();
         }
 
+        @Override
         public int read(byte b[], int off, int len) throws IOException {
             return raf.read(b, off, len);
         }
 
+        @Override
         public void close() throws IOException {
             raf.close();
         }
@@ -619,18 +654,22 @@ import java.net.MalformedURLException;
             this.raf = raf;
         }
 
+        @Override
         public void write(int i) throws IOException {
             raf.write(i);
         }
 
+        @Override
         public void write(byte b[]) throws IOException {
             raf.write(b);
         }
 
+        @Override
         public void write(byte b[], int off, int len) throws IOException {
             raf.write(b, off, len);
         }
 
+        @Override
         public void close() throws IOException {
             raf.close();
         }
@@ -647,6 +686,7 @@ import java.net.MalformedURLException;
             raf.seek(offset);
         }
 
+        @Override
         public void setLength(long newLength) throws IOException {
             raf.setLength(newLength);
 

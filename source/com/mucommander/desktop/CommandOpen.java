@@ -44,12 +44,14 @@ class CommandOpen extends LocalFileOperation {
 
     // - Desktop operation implementation --------------------------------
     // -------------------------------------------------------------------
+    @Override
     public boolean isAvailable() {
         if(allowDefault)
             return true;
         return CommandManager.getCommandForAlias(CommandManager.FILE_OPENER_ALIAS) != null;
     }
 
+    @Override
     public boolean canExecute(AbstractFile file) {
         if(allowDefault)
             return true;
@@ -57,6 +59,7 @@ class CommandOpen extends LocalFileOperation {
         return CommandManager.getCommandForFile(file, false) != null;
     }
 
+    @Override
     public void execute(AbstractFile file) throws IOException {
         Command command;
 
@@ -72,5 +75,6 @@ class CommandOpen extends LocalFileOperation {
      * Returns the operation's name.
      * @return the operation's name.
      */
+    @Override
     public String getName() {return "open bridge";}
 }

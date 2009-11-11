@@ -71,6 +71,7 @@ public abstract class SortByAction extends MuAction implements ActivePanelListen
     // MuAction implementation //
     /////////////////////////////
 
+    @Override
     public void performAction() {
         mainFrame.getActiveTable().sortBy(columnIndex);
     }

@@ -38,7 +38,7 @@ import javax.swing.*;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
-import java.awt.*;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -145,6 +145,7 @@ class TextEditorImpl implements ThemeListener, ActionListener, EncodingListener 
             // 1/ not lock the event thread
             // 2/ have those beeps to end rather sooner than later
             new Thread() {
+                @Override
                 public void run() {
                     Toolkit.getDefaultToolkit().beep();
                 }

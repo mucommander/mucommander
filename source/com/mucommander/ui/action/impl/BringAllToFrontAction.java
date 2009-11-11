@@ -47,6 +47,7 @@ public class BringAllToFrontAction extends MuAction {
         super(mainFrame, properties);
     }
 
+    @Override
     public void performAction() {
         Vector<MainFrame> mainFrames = WindowManager.getMainFrames();
         MainFrame currentMainFrame = WindowManager.getCurrentMainFrame();

@@ -110,6 +110,7 @@ public abstract class BlockRandomInputStream extends RandomAccessInputStream {
     // RandomAccessInputStream implementation //
     ////////////////////////////////////////////
 
+    @Override
     public int read() throws IOException {
         if(eofReached())
             return -1;
@@ -124,6 +125,7 @@ public abstract class BlockRandomInputStream extends RandomAccessInputStream {
         return ret;
     }
 
+    @Override
     public int read(byte b[], int off, int len) throws IOException {
         if(len==0)
             return 0;

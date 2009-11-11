@@ -39,6 +39,7 @@ public class CompareFoldersAction extends MuAction {
         super(mainFrame, properties);
     }
 
+    @Override
     public void performAction() {
         FileTable leftTable = mainFrame.getLeftPanel().getFileTable();
         FileTable rightTable = mainFrame.getRightPanel().getFileTable();

@@ -56,6 +56,7 @@ public class ExtensionFilenameFilter extends FilenameFilter {
     // FilenameFilter implementation //
     ///////////////////////////////////
 
+    @Override
     public boolean accept(String filename) {
         int i;
         int nameLength; // Filename's length.

@@ -128,6 +128,7 @@ public class ArchiveEntryFile extends AbstractFile {
     // AbstractFile implementation //
     /////////////////////////////////
 
+    @Override
     public long getDate() {
         return entry.getDate();
     }
@@ -135,6 +136,7 @@ public class ArchiveEntryFile extends AbstractFile {
     /**
      * Returns <code>true</code> only if the archive file that contains this entry is writable.
      */
+    @Override
     public boolean canChangeDate() {
         return archiveFile.isWritable();
     }
@@ -142,6 +144,7 @@ public class ArchiveEntryFile extends AbstractFile {
     /**
      * Always returns <code>false</code> only if the archive file that contains this entry is not writable.
      */
+    @Override
     public boolean changeDate(long lastModified) {
         if(!(entry.exists() && archiveFile.isWritable()))
             return false;
@@ -156,35 +159,43 @@ public class ArchiveEntryFile extends AbstractFile {
         return success;
     }
 
+    @Override
     public long getSize() {
         return entry.getSize();
     }
 	
+    @Override
     public boolean isDirectory() {
         return entry.isDirectory();
     }
 
+    @Override
     public boolean isArchive() {
         // Archive entries files may be wrapped by archive files but they are not archive files per se
         return false;
     }
 
+    @Override
     public AbstractFile[] ls() throws IOException {
         return archiveFile.ls(this, null, null);
     }
 
+    @Override
     public AbstractFile[] ls(FilenameFilter filter) throws IOException {
         return archiveFile.ls(this, filter, null);
     }
 	
+    @Override
     public AbstractFile[] ls(FileFilter filter) throws IOException {
         return archiveFile.ls(this, null, filter);
     }
 
+    @Override
     public AbstractFile getParent() {
         return parent;
     }
 	
+    @Override
     public void setParent(AbstractFile parent) {
         this.parent = parent;	
     }
@@ -194,10 +205,12 @@ public class ArchiveEntryFile extends AbstractFile {
      *
      * @return true if this entry exists within the archive file
      */
+    @Override
     public boolean exists() {
         return entry.exists();
     }
 	
+    @Override
     public FilePermissions getPermissions() {
         // Return the entry's permissions
         return entry.getPermissions();
@@ -207,6 +220,7 @@ public class ArchiveEntryFile extends AbstractFile {
      * Returns {@link PermissionBits#FULL_PERMISSION_BITS} or {@link PermissionBits#EMPTY_PERMISSION_BITS}, depending
      * on whether the archive that contains this entry is writable or not.
      */
+    @Override
     public PermissionBits getChangeablePermissions() {
         // Todo: some writable archive implementations may not have full 'set' permissions support, or even no notion of permissions
         return archiveFile.isWritable()?PermissionBits.FULL_PERMISSION_BITS:PermissionBits.EMPTY_PERMISSION_BITS;
@@ -215,22 +229,27 @@ public class ArchiveEntryFile extends AbstractFile {
     /**
      * Always returns <code>false</code> only if the archive file that contains this entry is not writable.
      */
+    @Override
     public boolean changePermission(int access, int permission, boolean enabled) {
         return changePermissions(ByteUtils.setBit(getPermissions().getIntValue(), (permission << (access*3)), enabled));
     }
 
+    @Override
     public String getOwner() {
         return entry.getOwner();
     }
 
+    @Override
     public boolean canGetOwner() {
         return entry.getOwner()!=null;
     }
 
+    @Override
     public String getGroup() {
         return entry.getGroup();
     }
 
+    @Override
     public boolean canGetGroup() {
         return entry.getGroup()!=null;
     }
@@ -238,6 +257,7 @@ public class ArchiveEntryFile extends AbstractFile {
     /**
      * Always returns <code>false</code>.
      */
+    @Override
     public boolean isSymlink() {
         return false;
     }
@@ -255,6 +275,7 @@ public class ArchiveEntryFile extends AbstractFile {
      *
      * @throws IOException in any of the cases listed above.
      */
+    @Override
     public void delete() throws IOException {
         if(entry.exists() && archiveFile.isWritable()) {
             AbstractRWArchiveFile rwArchiveFile = (AbstractRWArchiveFile)archiveFile;
@@ -290,6 +311,7 @@ public class ArchiveEntryFile extends AbstractFile {
      * @throws IOException if the associated archive file is not writable, if this entry already exists in the archive,
      * or if an I/O error occurred
      */
+    @Override
     public void mkdir() throws IOException {
         if(!entry.exists() && archiveFile.isWritable()) {
             AbstractRWArchiveFile rwArchivefile = (AbstractRWArchiveFile)archiveFile;
@@ -311,6 +333,7 @@ public class ArchiveEntryFile extends AbstractFile {
     /**
      * Delegates to the archive file's {@link AbstractArchiveFile#getFreeSpace()} method.
      */
+    @Override
     public long getFreeSpace() {
         return archiveFile.getFreeSpace();
     }
@@ -318,6 +341,7 @@ public class ArchiveEntryFile extends AbstractFile {
     /**
      * Delegates to the archive file's {@link AbstractArchiveFile#getTotalSpace()} method.
      */
+    @Override
     public long getTotalSpace() {
         return archiveFile.getTotalSpace();
     }
@@ -326,6 +350,7 @@ public class ArchiveEntryFile extends AbstractFile {
      * Delegates to the archive file's {@link AbstractArchiveFile#getEntryInputStream(ArchiveEntry,ArchiveEntryIterator)}}
      * method.
      */
+    @Override
     public InputStream getInputStream() throws IOException {
         return archiveFile.getEntryInputStream(entry, null);
     }
@@ -343,6 +368,7 @@ public class ArchiveEntryFile extends AbstractFile {
      * @throws IOException if the associated archive file is not writable, if this entry already exists in the archive,
      * or if an I/O error occurred
      */
+    @Override
     public OutputStream getOutputStream(boolean append) throws IOException {
         if(archiveFile.isWritable()) {
             if(append)
@@ -360,6 +386,7 @@ public class ArchiveEntryFile extends AbstractFile {
             // Update the ArchiveEntry's size as data gets written to the OutputStream
             OutputStream out = new CounterOutputStream(((AbstractRWArchiveFile)archiveFile).addEntry(entry),
                     new ByteCounter() {
+                        @Override
                         public synchronized void add(long nbBytes) {
                             entry.setSize(entry.getSize()+nbBytes);
                             entry.setDate(System.currentTimeMillis());
@@ -376,6 +403,7 @@ public class ArchiveEntryFile extends AbstractFile {
     /**
      * Always returns <code>false</code>: random read access is not available for archive entries.
      */
+    @Override
     public boolean hasRandomAccessInputStream() {
         return false;
     }
@@ -383,6 +411,7 @@ public class ArchiveEntryFile extends AbstractFile {
     /**
      * Always throws an <code>IOException</code>: random read access is not available for archive entries.
      */
+    @Override
     public RandomAccessInputStream getRandomAccessInputStream() throws IOException {
         throw new IOException();
     }
@@ -390,6 +419,7 @@ public class ArchiveEntryFile extends AbstractFile {
     /**
      * Always returns <code>false</code>: random write access is not available for archive entries.
      */
+    @Override
     public boolean hasRandomAccessOutputStream() {
         return false;
     }
@@ -397,6 +427,7 @@ public class ArchiveEntryFile extends AbstractFile {
     /**
      * Always throws an <code>IOException</code>: random write access is not available for archive entries.
      */
+    @Override
     public RandomAccessOutputStream getRandomAccessOutputStream() throws IOException {
         throw new IOException();
     }
@@ -404,6 +435,7 @@ public class ArchiveEntryFile extends AbstractFile {
     /**
      * Returns the same ArchiveEntry instance as {@link #getEntry()}.
      */
+    @Override
     public Object getUnderlyingFileObject() {
         return entry;
     }
@@ -419,6 +451,7 @@ public class ArchiveEntryFile extends AbstractFile {
      *
      * @return the separator of the archive file that contains this entry
      */
+    @Override
     public String getSeparator() {
         return archiveFile.getSeparator();
     }
@@ -426,6 +459,7 @@ public class ArchiveEntryFile extends AbstractFile {
     /**
      * This method is overridden to use the archive file's absolute path as the base path of this entry file.
      */
+    @Override
     public String getAbsolutePath() {
         // Use the archive file's absolute path and append the entry's relative path to it
         return archiveFile.getAbsolutePath(true)+getRelativeEntryPath();
@@ -434,6 +468,7 @@ public class ArchiveEntryFile extends AbstractFile {
     /**
      * This method is overridden to use the archive file's canonical path as the base path of this entry file.
      */
+    @Override
     public String getCanonicalPath() {
         // Use the archive file's canonical path and append the entry's relative path to it
         return archiveFile.getCanonicalPath(true)+getRelativeEntryPath();
@@ -442,6 +477,7 @@ public class ArchiveEntryFile extends AbstractFile {
     /**
      * This method is overridden to return the archive's root folder.
      */
+    @Override
     public AbstractFile getRoot() {
         return archiveFile.getRoot();
     }
@@ -451,6 +487,7 @@ public class ArchiveEntryFile extends AbstractFile {
      *
      * @return <code>false</code>, always
      */
+    @Override
     public boolean isRoot() {
         return false;
     }
@@ -458,6 +495,7 @@ public class ArchiveEntryFile extends AbstractFile {
     /**
      * This method is overridden to return the archive's volume folder.
      */
+    @Override
     public AbstractFile getVolume() {
         return archiveFile.getVolume();
     }
@@ -465,6 +503,7 @@ public class ArchiveEntryFile extends AbstractFile {
     /**
      * Always returns <code>false</code> only if the archive file that contains this entry is not writable.
      */
+    @Override
     public boolean changePermissions(int permissions) {
         if(!(entry.exists() && archiveFile.isWritable()))
             return false;
@@ -480,6 +519,7 @@ public class ArchiveEntryFile extends AbstractFile {
         return success;
     }
 
+    @Override
     public int getMoveToHint(AbstractFile destFile) {
         if(archiveFile.isWritable())
             return SHOULD_NOT_HINT;

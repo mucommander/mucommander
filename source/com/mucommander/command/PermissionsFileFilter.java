@@ -42,6 +42,7 @@ public class PermissionsFileFilter extends FileFilter implements PermissionTypes
         this.filter     = filter;
     }
 
+    @Override
     public boolean accept(AbstractFile file) {
         if(permission== EXECUTE_PERMISSION && JavaVersions.JAVA_1_5.isCurrentOrLower())
             return true;

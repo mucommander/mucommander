@@ -37,6 +37,7 @@ public class SelectNextRowAction extends SelectForwardAction {
         super(mainFrame, properties);
     }
 
+    @Override
     protected int getRowIncrement() {
         return 1;
     }

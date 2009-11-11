@@ -37,6 +37,7 @@ public class RecallNextWindowAction extends MuAction {
         super(mainFrame, properties);
     }
 
+    @Override
     public void performAction() {
         WindowManager.switchToNextWindow();
     }

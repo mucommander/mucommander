@@ -728,6 +728,7 @@ public class FileTableModel extends AbstractTableModel {
         return Columns.COLUMN_COUNT; // icon, name, size, date, permissions, owner, group
     }
 
+    @Override
     public String getColumnName(int columnIndex) {
         return Columns.getColumnLabel(columnIndex);
     }
@@ -768,6 +769,7 @@ public class FileTableModel extends AbstractTableModel {
      * Returns <code>true</code> if name column has temporarily be made editable by FileTable
      * and given row doesn't correspond to parent file '..', <code>false</code> otherwise.
      */
+    @Override
     public boolean isCellEditable(int rowIndex, int columnIndex) {
         // Name column can temporarily be made editable by FileTable
         // but parent file '..' name should never be editable

@@ -351,6 +351,7 @@ public class ColorChooser extends YBoxPanel implements ChangeListener {
         /**
          * In case the dialog was cancelled, resets the color before closing it.
          */
+        @Override
         public void cancel() {
             chooser.reset(false);
             super.cancel();

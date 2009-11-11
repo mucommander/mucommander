@@ -18,10 +18,9 @@
  */
 package com.mucommander.file.impl.rar.provider.de.innosystec.unrar.rarfile;
 
+import com.mucommander.file.impl.rar.provider.de.innosystec.unrar.io.Raw;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
-import com.mucommander.file.impl.rar.provider.de.innosystec.unrar.io.Raw;
 
 /**
  * the header to recognize a file to be a rar archive
@@ -79,7 +78,8 @@ public class MarkHeader extends BaseBlock {
         return oldFormat;
     }
     
-	public void print(){
+	@Override
+    public void print(){
 		super.print();
 		logger.info("valid: "+isValid());
 	}

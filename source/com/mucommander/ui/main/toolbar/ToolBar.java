@@ -282,6 +282,7 @@ public class ToolBar extends JToolBar implements ConfigurationListener, MouseLis
             this.action = action;
         }
 
+        @Override
         public JPopupMenu getPopupMenu() {
             FileURL history[] = action instanceof GoBackAction?
                     mainFrame.getActivePanel().getFolderHistory().getBackFolders()

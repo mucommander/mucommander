@@ -45,7 +45,8 @@ public class HeaderMenuItem extends MenuItem {
 	   setFont(ThemeManager.getCurrentFont(ThemeData.QUICK_LIST_HEADER_FONT));
 	}
 		
-	protected final void paintComponent(Graphics g) {		
+	@Override
+    protected final void paintComponent(Graphics g) {
 		Graphics2D graphics = (Graphics2D) g;
 	
 		graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
@@ -91,7 +92,8 @@ public class HeaderMenuItem extends MenuItem {
 		repaint();
 	}
 	
-	public void colorChanged(ColorChangedEvent event) {
+	@Override
+    public void colorChanged(ColorChangedEvent event) {
 		if (event.getColorId() == ThemeData.QUICK_LIST_HEADER_BACKGROUND_COLOR)
 			background = event.getColor();
 
@@ -102,7 +104,8 @@ public class HeaderMenuItem extends MenuItem {
 			secondaryBackground = event.getColor();
 	}
 	
-	public void fontChanged(FontChangedEvent event) {
+	@Override
+    public void fontChanged(FontChangedEvent event) {
 		setFont(ThemeManager.getCurrentFont(ThemeData.QUICK_LIST_HEADER_FONT));
 	}
 }

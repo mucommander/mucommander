@@ -102,7 +102,8 @@ public class LocationTextField extends ProgressTextField implements LocationList
     private void enableAutoCompletion() {
     	new TextFieldCompletion(new AutocompleterTextComponent(this) {
 
-			public void OnEnterPressed(KeyEvent keyEvent) {
+			@Override
+            public void OnEnterPressed(KeyEvent keyEvent) {
 				if (textFieldValidated()) // if a malformed url was entered.
 					folderChangeCompleted(false);		        
 				
@@ -110,7 +111,8 @@ public class LocationTextField extends ProgressTextField implements LocationList
 				keyEvent.consume();
 			}
 
-			public void OnEscPressed(KeyEvent keyEvent) {
+			@Override
+            public void OnEscPressed(KeyEvent keyEvent) {
 				textFieldCancelled();
 			}
         }, CompleterFactory.getLocationCompleter());

@@ -41,6 +41,7 @@ public class SplitFileAction extends SelectedFilesAction implements InvokesDialo
         setSelectedFileFilter(new AttributeFileFilter(AttributeFileFilter.DIRECTORY, true));
     }
 
+    @Override
     public void performAction() {
         new SplitFileDialog(mainFrame,
                 mainFrame.getActiveTable().getSelectedFile(),

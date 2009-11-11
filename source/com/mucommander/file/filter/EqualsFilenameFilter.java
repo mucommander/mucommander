@@ -44,6 +44,7 @@ public class EqualsFilenameFilter extends FilenameFilter {
     // FilenameFilter implementation //
     ///////////////////////////////////
 
+    @Override
     public boolean accept(String filename) {
         if(isCaseSensitive())
             return filename.equals(s);

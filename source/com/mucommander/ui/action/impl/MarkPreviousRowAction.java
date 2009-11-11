@@ -36,6 +36,7 @@ public class MarkPreviousRowAction extends MarkBackwardAction {
         super(mainFrame, properties);
     }
 
+    @Override
     protected int getRowDecrement() {
         return 1;
     }

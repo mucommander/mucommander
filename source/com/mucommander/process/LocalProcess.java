@@ -70,6 +70,7 @@ class LocalProcess extends AbstractProcess {
      * Returns <code>true</code> if the current JRE version supports merged <code>java.lang.Process</code> streams.
      * @return <code>true</code> if the current JRE version supports merged <code>java.lang.Process</code> streams, <code>false</code> otherwise.
      */
+    @Override
     public boolean usesMergedStreams() {return JavaVersions.JAVA_1_5.isCurrentOrHigher();}
 
     /**
@@ -77,23 +78,27 @@ class LocalProcess extends AbstractProcess {
      * @return                      the process' exit code.
      * @throws InterruptedException if the thread was interrupted while waiting on the process to die.
      */
+    @Override
     public int waitFor() throws InterruptedException {return process.waitFor();}
 
     /**
      * Destroys the process.
      */
+    @Override
     protected void destroyProcess() {process.destroy();}
 
     /**
      * Returns the process' exit value.
      * @return the process' exit value.
      */
+    @Override
     public int exitValue() {return process.exitValue();}
 
     /**
      * Returns the process' output stream.
      * @return the process' output stream.
      */
+    @Override
     public OutputStream getOutputStream() {return process.getOutputStream();}
 
     /**
@@ -106,6 +111,7 @@ class LocalProcess extends AbstractProcess {
      * @return             the process' error stream.
      * @throws IOException if this process is using merged streams.
      */
+    @Override
     public InputStream getErrorStream()  throws IOException {
         if(usesMergedStreams()) {
             AppLogger.fine("Tried to access the error stream of a merged streams process.");
@@ -118,5 +124,6 @@ class LocalProcess extends AbstractProcess {
      * Returns the process' input stream.
      * @return the process' input stream.
      */
+    @Override
     public InputStream getInputStream() {return process.getInputStream();}
 }

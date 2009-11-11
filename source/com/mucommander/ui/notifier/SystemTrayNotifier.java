@@ -85,6 +85,7 @@ public class SystemTrayNotifier extends AbstractNotifier implements ActionListen
     // AbstractNotifier implementation //
     /////////////////////////////////////
 
+    @Override
     public boolean setEnabled(boolean enabled) {
         if(enabled) {
             // No need to bother if the current Java runtime version is not 1.6 or up, or if SystemTray is not available
@@ -151,10 +152,12 @@ public class SystemTrayNotifier extends AbstractNotifier implements ActionListen
         }
     }
 
+    @Override
     public boolean isEnabled() {
         return trayIcon!=null && isEnabled;
     }
 
+    @Override
     public boolean displayNotification(int notificationType, String title, String description) {
         AppLogger.finer("notificationType="+notificationType+" title="+title+" description="+description);
 
@@ -168,6 +171,7 @@ public class SystemTrayNotifier extends AbstractNotifier implements ActionListen
         return true;
     }
 
+    @Override
     public String getPrettyName() {
         return "System Tray";
     }
@@ -188,6 +192,7 @@ public class SystemTrayNotifier extends AbstractNotifier implements ActionListen
     // Overridden methods //
     ////////////////////////
 
+    @Override
     protected void finalize() throws Throwable {
         // This ensures that the system tray icon is removed when the application terminates.
         // Even though this is a bit of a shot in the dark, this may fix a problem reported under Linux where the

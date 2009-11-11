@@ -109,6 +109,7 @@ public class BoundedReader extends FilterReader {
     // Reader implementation //
     ///////////////////////////
 
+    @Override
     public synchronized int read(char[] cbuf, int off, int len) throws IOException {
         int canRead = (int)Math.min(getRemainingCharacters(), len);
         if(canRead==0) {
@@ -131,6 +132,7 @@ public class BoundedReader extends FilterReader {
     // Overridden methods //
     ////////////////////////
 
+    @Override
     public synchronized int read() throws IOException {
         if(getRemainingCharacters()==0) {
             if(outOfBoundException==null)
@@ -145,6 +147,7 @@ public class BoundedReader extends FilterReader {
         return i;
     }
 
+    @Override
     public synchronized long skip(long n) throws IOException {
         int canSkip = (int)Math.min(getRemainingCharacters(), n);
         if(canSkip==0) {
@@ -166,6 +169,7 @@ public class BoundedReader extends FilterReader {
      *
      * @return always returns <code>false</code>, even if the underlying reader supports it
      */
+    @Override
     public boolean markSupported() {
         // Todo: in theory we could support mark/reset
         return false;
@@ -174,6 +178,7 @@ public class BoundedReader extends FilterReader {
     /**
      * Implemented as a no-op: the call is *not* delegated to the underlying reader.
      */
+    @Override
     public synchronized void mark(int readlimit) {
         // Todo: in theory we could support mark/reset
         // No-op
@@ -182,6 +187,7 @@ public class BoundedReader extends FilterReader {
     /**
      * Always throws an <code>IOException</code>: the call is *not* delegated to the underlying reader.
      */
+    @Override
     public synchronized void reset() throws IOException {
         // Todo: in theory we could support mark/reset
         // No-op

@@ -36,6 +36,7 @@ public class RefreshAction extends MuAction {
         super(mainFrame, properties);
     }
 
+    @Override
     public void performAction() {
         // Refresh current folder in a separate thread
         mainFrame.getActivePanel().tryRefreshCurrentFolder();

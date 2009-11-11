@@ -68,7 +68,8 @@ public class SplitFileJob extends AbstractCopyJob {
 			this.size = size;
 		}
 		
-		public long getSize() {
+		@Override
+        public long getSize() {
 			return size;
 		}
 	}
@@ -112,7 +113,8 @@ public class SplitFileJob extends AbstractCopyJob {
 	}
 	
 	
-	protected void jobStarted() {
+	@Override
+    protected void jobStarted() {
 		super.jobStarted();
 		createInputStream();
 	}
@@ -147,6 +149,7 @@ public class SplitFileJob extends AbstractCopyJob {
 	}
 	
 
+    @Override
     protected boolean processFile(AbstractFile file, Object recurseParams) {
         if(getState()==INTERRUPTED)
             return false;
@@ -222,10 +225,12 @@ public class SplitFileJob extends AbstractCopyJob {
 
 
     // This job modifies baseDestFolder and its subfolders
+    @Override
     protected boolean hasFolderChanged(AbstractFile folder) {
         return baseDestFolder.isParentOf(folder);
     }
     
+    @Override
     protected void jobCompleted() {
     	// create checksum file
     	if (isIntegrityCheckEnabled()) {

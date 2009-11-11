@@ -407,6 +407,7 @@ public abstract class AbstractArchiveFile extends ProxyFile {
     // Partial AbstractFile implementation //
     /////////////////////////////////////////
 
+    @Override
     public boolean isArchive() {
         return exists() && !isDirectory();
     }
@@ -423,6 +424,7 @@ public abstract class AbstractArchiveFile extends ProxyFile {
      * @return the topmost entries contained by this archive
      * @throws IOException if the archive entries could not be listed
      */
+    @Override
     public AbstractFile[] ls() throws IOException {
         // Make sure the entries tree is created and up-to-date
         checkEntriesTree();
@@ -439,6 +441,7 @@ public abstract class AbstractArchiveFile extends ProxyFile {
      * @return the topmost entries contained by this archive
      * @throws IOException if the archive entries could not be listed
      */
+    @Override
     public AbstractFile[] ls(FilenameFilter filter) throws IOException {
         // Make sure the entries tree is created and up-to-date
         checkEntriesTree();
@@ -454,6 +457,7 @@ public abstract class AbstractArchiveFile extends ProxyFile {
      * @return the topmost entries contained by this archive
      * @throws IOException if the archive entries could not be listed
      */
+    @Override
     public AbstractFile[] ls(FileFilter filter) throws IOException {
         // Make sure the entries tree is created and up-to-date
         checkEntriesTree();
@@ -470,6 +474,7 @@ public abstract class AbstractArchiveFile extends ProxyFile {
      *
      * @return the proxied file's free space is this archive is writable, 0 otherwise.
      */
+    @Override
     public long getFreeSpace() {
         if(isWritable())
             return file.getFreeSpace();

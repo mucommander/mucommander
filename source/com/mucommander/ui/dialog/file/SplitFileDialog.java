@@ -134,7 +134,8 @@ public class SplitFileDialog extends JobDialog implements ActionListener {
 		cbSize.setComboSelectionUpdatesTextField(true);
 		cbSize.setSelectedIndex(1);
 		edtSize.addKeyListener(new KeyAdapter() {
-			public void keyReleased(KeyEvent e) {
+			@Override
+            public void keyReleased(KeyEvent e) {
 				updatePartsNumber();
 			}
 		});

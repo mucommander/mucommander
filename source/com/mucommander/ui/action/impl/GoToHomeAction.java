@@ -37,6 +37,7 @@ public class GoToHomeAction extends MuAction {
         super(mainFrame, properties);
     }
 
+    @Override
     public void performAction() {
         // Changes the current folder to make it the user home folder
         AbstractFile homeFolder = LocalFile.getUserHome();

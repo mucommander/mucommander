@@ -99,6 +99,7 @@ class KdeTrash extends QueuedTrash {
     /**
      * Implementation notes: returns <code>true</code> only for local files that are not archive entries.
      */
+    @Override
     public boolean canMoveToTrash(AbstractFile file) {
         return file.getTopAncestor() instanceof LocalFile;
     }
@@ -106,14 +107,17 @@ class KdeTrash extends QueuedTrash {
     /**
      * Implementation notes: always returns <code>true</code>.
      */
+    @Override
     public boolean canEmpty() {
         return true;
     }
 
+    @Override
     public boolean empty() {
         return executeAndWait(EMPTY_TRASH_COMMAND);
     }
 
+    @Override
     public boolean isTrashFile(AbstractFile file) {
         return (file.getTopAncestor() instanceof LocalFile)
             && (file.getAbsolutePath(true).indexOf("/.local/share/Trash/") != -1);
@@ -122,10 +126,12 @@ class KdeTrash extends QueuedTrash {
     /**
      * Implementation notes: always returns <code>-1</code> (information not available).
      */
+    @Override
     public int getItemCount() {
         return -1;
     }
 
+    @Override
     public void open() {
         executeAndWait(baseCommand+" exec trash:/");
     }
@@ -133,6 +139,7 @@ class KdeTrash extends QueuedTrash {
     /**
      * Implementation notes: always returns <code>true</code>.
      */
+    @Override
     public boolean canOpen() {
         return true;
     }
@@ -142,6 +149,7 @@ class KdeTrash extends QueuedTrash {
     // QueuedTrash implementation //
     ////////////////////////////////
 
+    @Override
     protected boolean moveToTrash(Vector<AbstractFile> queuedFiles) {
         int nbFiles = queuedFiles.size();
         String tokens[] = new String[nbFiles+3];

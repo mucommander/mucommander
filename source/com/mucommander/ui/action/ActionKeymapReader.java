@@ -148,6 +148,7 @@ class ActionKeymapReader extends ActionKeymapIO {
     // ContentHandler implementation //
     ///////////////////////////////////
 
+    @Override
     public void startDocument() {
     	AppLogger.finest(file.getAbsolutePath()+" parsing started");
     	
@@ -155,10 +156,12 @@ class ActionKeymapReader extends ActionKeymapIO {
     	alternateActionsReadKeymap = new HashMap<String, KeyStroke>();
     }
     
+    @Override
     public void endDocument() {
         AppLogger.finest(file.getAbsolutePath()+" parsing finished");
     }
     
+    @Override
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
     	if(qName.equals(ACTION_ELEMENT)) {
     		// Retrieve the action id

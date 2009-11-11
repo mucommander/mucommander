@@ -55,6 +55,7 @@ public class SMBFileTestCase extends AbstractFileTestCase {
     // AbstractFileTestCase implementation //
     /////////////////////////////////////////
 
+    @Override
     public AbstractFile getTemporaryFile() throws IOException {
         return tempFolder.getDirectChild(getPseudoUniqueFilename(SMBFileTestCase.class.getName()));
     }
@@ -67,6 +68,7 @@ public class SMBFileTestCase extends AbstractFileTestCase {
     /**
      * This test is temporarily disabled.
      */
+    @Override
     public void testPermissions() throws IOException, NoSuchAlgorithmException {
     }
 }

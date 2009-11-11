@@ -41,6 +41,7 @@ public abstract class ProtocolFile extends AbstractFile {
      *
      * @return <code>false</code>, always
      */
+    @Override
     public boolean isArchive() {
         return false;
     }

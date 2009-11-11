@@ -55,6 +55,7 @@ public abstract class ToggleColumnAction extends MuAction {
         setLabel(Translator.get(isColumnVisible()?"ToggleColumn.hide":"ToggleColumn.show", Columns.getColumnLabel(Columns.DATE)));
     }
 
+    @Override
     public void performAction() {
         mainFrame.getActiveTable().setColumnEnabled(columnIndex, !isColumnVisible());
     }
@@ -74,6 +75,7 @@ public abstract class ToggleColumnAction extends MuAction {
 
         public KeyStroke getDefaultKeyStroke() { return null; }
 
+        @Override
         public String getLabel() { return Translator.get("ToggleColumn.show", Columns.getColumnLabel(columnIndex)); }
     }
 }

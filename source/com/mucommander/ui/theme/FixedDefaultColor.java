@@ -18,7 +18,7 @@
 
 package com.mucommander.ui.theme;
 
-import java.awt.*;
+import java.awt.Color;
 
 /**
  * {@link DefaultColor} implementation that maps to a fixed value.
@@ -46,6 +46,7 @@ public class FixedDefaultColor extends DefaultColor {
 
     // - DefaultColor implementation -----------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
+    @Override
     public Color getColor(ThemeData data) {
         return color;
     }

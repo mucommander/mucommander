@@ -50,6 +50,7 @@ public class Bzip2ArchiveFile extends AbstractROArchiveFile {
     // AbstractArchiveFile implementation //
     ////////////////////////////////////////
 
+    @Override
     public ArchiveEntryIterator getEntryIterator() throws IOException {
         String extension = getExtension();
         String name = getName();
@@ -67,6 +68,7 @@ public class Bzip2ArchiveFile extends AbstractROArchiveFile {
         return new SingleArchiveEntryIterator(new ArchiveEntry("/"+name, false, getDate(), -1, true));
     }
 
+    @Override
     public InputStream getEntryInputStream(ArchiveEntry entry, ArchiveEntryIterator entryIterator) throws IOException {
         try {
             InputStream in = getInputStream();

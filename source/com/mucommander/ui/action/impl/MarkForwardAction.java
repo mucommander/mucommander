@@ -42,6 +42,7 @@ public abstract class MarkForwardAction extends MuAction {
     // MuAction implementation //
     /////////////////////////////
 
+    @Override
     public void performAction() {
         FileTable fileTable = mainFrame.getActiveTable();
 

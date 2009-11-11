@@ -41,6 +41,7 @@ public class SelectNextBlockAction extends SelectForwardAction {
         super(mainFrame, properties);
     }
 
+    @Override
     protected int getRowIncrement() {
         return BLOCK_SIZE;
     }

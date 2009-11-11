@@ -95,6 +95,7 @@ public class MultiOutputStream extends OutputStream {
      * as a whole.
      * </p>
      */
+    @Override
     public synchronized void write(int b) throws IOException {
         Enumeration<OutputStream> elements = streams.elements();
         while(elements.hasMoreElements())
@@ -108,6 +109,7 @@ public class MultiOutputStream extends OutputStream {
      * as a whole.
      * </p>
      */
+    @Override
     public synchronized void write(byte b[], int off, int len) throws IOException {
         Enumeration<OutputStream> elements = streams.elements();
         while(elements.hasMoreElements())
@@ -121,6 +123,7 @@ public class MultiOutputStream extends OutputStream {
      * as a whole.
      * </p>
      */
+    @Override
     public synchronized void write(byte b[]) throws IOException {
         Enumeration<OutputStream> elements = streams.elements();
         while(elements.hasMoreElements())
@@ -134,6 +137,7 @@ public class MultiOutputStream extends OutputStream {
      * as a whole.
      * </p>
      */
+    @Override
     public synchronized void flush() throws IOException {
         Enumeration<OutputStream> elements = streams.elements();
         while(elements.hasMoreElements())
@@ -147,6 +151,7 @@ public class MultiOutputStream extends OutputStream {
      * as a whole.
      * </p>
      */
+    @Override
     public void close() throws IOException {
         Enumeration<OutputStream> elements = streams.elements();
         while(elements.hasMoreElements())

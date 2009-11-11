@@ -39,6 +39,7 @@ public class MaximizeWindowAction extends MuAction {
         super(mainFrame, properties);
     }
 
+    @Override
     public void performAction() {
         mainFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
@@ -61,6 +62,7 @@ public class MaximizeWindowAction extends MuAction {
 
 		public KeyStroke getDefaultKeyStroke() { return null; }
 
+        @Override
         public String getLabel() {
             // Use a special label for Mac OS X, if it exists, use the standard action label otherwise
             String macLabelKey = ActionProperties.getActionLabelKey(ACTION_ID)+".mac_os_x";

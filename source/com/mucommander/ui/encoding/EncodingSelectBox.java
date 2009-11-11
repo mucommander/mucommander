@@ -189,6 +189,7 @@ public class EncodingSelectBox extends JPanel {
     // Overridden methods //
     ////////////////////////
 
+    @Override
     public void setEnabled(boolean enabled) {
         comboBox.setEnabled(enabled);
         customizeButton.setEnabled(enabled);

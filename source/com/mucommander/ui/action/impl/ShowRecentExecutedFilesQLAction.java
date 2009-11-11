@@ -38,7 +38,8 @@ public class ShowRecentExecutedFilesQLAction extends ShowQuickListAction {
 		super(mainFrame, properties);
 	}
 	
-	public void performAction() {
+	@Override
+    public void performAction() {
 		openQuickList(FolderPanel.RECENT_EXECUTED_FILES_QUICK_LIST_INDEX);
 	}
 	

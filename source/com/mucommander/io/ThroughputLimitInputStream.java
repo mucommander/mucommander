@@ -203,6 +203,7 @@ public class ThroughputLimitInputStream extends InputStream {
     // InputStream implementation //
     ////////////////////////////////
 
+    @Override
     public int read() throws IOException {
         // Wait until at least 1 byte is available if a limit is set
         if(bpsLimit>=0)
@@ -218,10 +219,12 @@ public class ThroughputLimitInputStream extends InputStream {
         return i;
     }
 
+    @Override
     public int read(byte[] bytes) throws IOException {
         return this.read(bytes, 0, bytes.length);
     }
 
+    @Override
     public int read(byte[] bytes, int off, int len) throws IOException {
         int nbRead;
 
@@ -239,6 +242,7 @@ public class ThroughputLimitInputStream extends InputStream {
         return nbRead;
     }
 
+    @Override
     public long skip(long l) throws IOException {
         long nbSkipped = in.skip(bpsLimit>=0?Math.min(getNbAllowedBytes(),l):l);
 
@@ -249,22 +253,27 @@ public class ThroughputLimitInputStream extends InputStream {
         return nbSkipped;
     }
 
+    @Override
     public int available() throws IOException {
         return in.available();
     }
 
+    @Override
     public void close() throws IOException {
         in.close();
     }
 
+    @Override
     public synchronized void mark(int i) {
         in.mark(i);
     }
 
+    @Override
     public synchronized void reset() throws IOException {
         in.reset();
     }            
 
+    @Override
     public boolean markSupported() {
         return in.markSupported();
     }

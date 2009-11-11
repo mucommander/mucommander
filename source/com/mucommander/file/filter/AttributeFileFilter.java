@@ -112,6 +112,7 @@ public class AttributeFileFilter extends FileFilter {
     // FileFilter implementation //
     ///////////////////////////////
 
+    @Override
     public boolean accept(AbstractFile file) {
         switch(attribute) {
             case DIRECTORY:

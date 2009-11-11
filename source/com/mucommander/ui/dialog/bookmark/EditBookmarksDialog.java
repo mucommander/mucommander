@@ -316,6 +316,7 @@ public class EditBookmarksDialog extends FocusDialog implements ActionListener, 
     /**
      * Overrides dispose() to write bookmarks to disk (if needed).
      */
+    @Override
     public void dispose() {
         super.dispose();
 

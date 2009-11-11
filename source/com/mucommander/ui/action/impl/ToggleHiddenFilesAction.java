@@ -47,6 +47,7 @@ public class ToggleHiddenFilesAction extends MuAction {
     /**
      * Toggles hidden files display on and off and requests for all file tables to be repainted.
      */
+    @Override
     public void performAction() {
         MuConfiguration.setVariable(MuConfiguration.SHOW_HIDDEN_FILES,
                                     !MuConfiguration.getVariable(MuConfiguration.SHOW_HIDDEN_FILES, MuConfiguration.DEFAULT_SHOW_HIDDEN_FILES));

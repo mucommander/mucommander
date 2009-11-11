@@ -672,6 +672,7 @@ public class BatchRenameDialog extends FocusDialog implements ActionListener,
             return null;
         }
         
+        @Override
         public void setValueAt(Object value, int rowIndex, int columnIndex) {
             switch (columnIndex) {
             case COL_CHANGED_NAME:
@@ -700,6 +701,7 @@ public class BatchRenameDialog extends FocusDialog implements ActionListener,
             }
         }
 
+        @Override
         public String getColumnName(int column) {
             switch (column) {
             case COL_ORIG_NAME:
@@ -712,6 +714,7 @@ public class BatchRenameDialog extends FocusDialog implements ActionListener,
             return "";
         }
 
+        @Override
         public Class<?> getColumnClass(int columnIndex) {
             if (columnIndex == COL_CHANGE_BLOCK) {
                 return Boolean.class;
@@ -720,6 +723,7 @@ public class BatchRenameDialog extends FocusDialog implements ActionListener,
             }
         }
 
+        @Override
         public boolean isCellEditable(int rowIndex, int columnIndex) {
             return columnIndex != COL_ORIG_NAME; 
         }
@@ -817,9 +821,11 @@ public class BatchRenameDialog extends FocusDialog implements ActionListener,
             super(token);
         }
 
+        @Override
         protected void parse() {
         }
 
+        @Override
         public String apply(AbstractFile file) {
             return token;
         }
@@ -851,6 +857,7 @@ public class BatchRenameDialog extends FocusDialog implements ActionListener,
             super(token);
         }
 
+        @Override
         protected void parse() {
             startIndex = getInt(0);
             char sep = getChar();
@@ -863,6 +870,7 @@ public class BatchRenameDialog extends FocusDialog implements ActionListener,
             }
         }
 
+        @Override
         public String apply(AbstractFile file) {
             // split name & extension
             String name;
@@ -931,6 +939,7 @@ public class BatchRenameDialog extends FocusDialog implements ActionListener,
             super(token);
         }
 
+        @Override
         public String apply(AbstractFile file) {
             // split name & extension
             String ext;
@@ -975,6 +984,7 @@ public class BatchRenameDialog extends FocusDialog implements ActionListener,
             this.digits = digits;
         }
 
+        @Override
         protected void parse() {
             start = getInt(start);
             if (getChar() == ',') {
@@ -989,6 +999,7 @@ public class BatchRenameDialog extends FocusDialog implements ActionListener,
             current = start;
         }
 
+        @Override
         public String apply(AbstractFile file) {
             String counter = numberFormat.format(current);
             current += step;
@@ -1008,6 +1019,7 @@ public class BatchRenameDialog extends FocusDialog implements ActionListener,
             super(token);
         }
 
+        @Override
         public String apply(AbstractFile file) {
             AbstractFile parent = file.getParent();
             if (parent != null)
@@ -1045,6 +1057,7 @@ public class BatchRenameDialog extends FocusDialog implements ActionListener,
             digits2.setGroupingUsed(false);
         }
 
+        @Override
         public String apply(AbstractFile file) {
             Calendar c = Calendar.getInstance();
             c.setTimeInMillis(file.getDate());
@@ -1074,6 +1087,7 @@ public class BatchRenameDialog extends FocusDialog implements ActionListener,
             return result.toString();
         }
 
+        @Override
         protected void parse() {
         }
 

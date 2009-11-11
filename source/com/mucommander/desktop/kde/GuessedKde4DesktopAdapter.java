@@ -50,6 +50,7 @@ public class GuessedKde4DesktopAdapter extends Kde4DesktopAdapter {
         return "KDE 4 Desktop (guessed)";
     }
 
+    @Override
     public boolean isAvailable() {
         try {
             ProcessRunner.execute(BASE_COMMAND);

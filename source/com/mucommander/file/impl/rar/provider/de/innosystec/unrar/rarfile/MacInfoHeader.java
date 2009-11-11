@@ -18,10 +18,9 @@
  */
 package com.mucommander.file.impl.rar.provider.de.innosystec.unrar.rarfile;
 
+import com.mucommander.file.impl.rar.provider.de.innosystec.unrar.io.Raw;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
-import com.mucommander.file.impl.rar.provider.de.innosystec.unrar.io.Raw;
 
 /**
  * Mac File attribute header
@@ -74,7 +73,8 @@ extends SubBlockHeader
 		this.fileType = fileType;
 	}
 	
-	public void print(){
+	@Override
+    public void print(){
 		super.print();
 		logger.info("filetype: "+fileType);
 		logger.info("creator :"+fileCreator);

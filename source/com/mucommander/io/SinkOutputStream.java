@@ -29,18 +29,21 @@ import java.io.OutputStream;
  */
 public class SinkOutputStream extends OutputStream {
 
+    @Override
     public void write(int i) throws IOException {
     }
 
     /**
      * Overridden for performance reasons.
      */
+    @Override
     public void write(byte[] bytes) throws IOException {
     }
 
     /**
      * Overridden for performance reasons.
      */
+    @Override
     public void write(byte[] bytes, int off, int len) throws IOException {
     }
 }

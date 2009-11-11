@@ -84,6 +84,7 @@ public abstract class AbstractFileTestCase extends TestCase {
      *
      * @throws IOException if an error occurred while creating test variables
      */
+    @Override
     protected void setUp() throws IOException {
         filesToDelete = new Vector<AbstractFile>();
 
@@ -101,6 +102,7 @@ public abstract class AbstractFileTestCase extends TestCase {
      *
      * @throws IOException if an error occurred while delete files registered with {@link #deleteWhenFinished(AbstractFile)}
      */
+    @Override
     protected void tearDown() throws IOException {
         Iterator<AbstractFile> iterator = filesToDelete.iterator();
 

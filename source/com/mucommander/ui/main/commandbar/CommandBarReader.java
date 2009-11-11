@@ -95,6 +95,7 @@ class CommandBarReader extends CommandBarIO {
     // ContentHandler methods //
     ////////////////////////////
 
+    @Override
     public void startDocument() {
         AppLogger.finest(file.getAbsolutePath()+" parsing started");
 
@@ -103,10 +104,12 @@ class CommandBarReader extends CommandBarIO {
         modifier = null;
     }
 
+    @Override
     public void endDocument() {
         AppLogger.finest(file.getAbsolutePath()+" parsing finished");
     }
 
+    @Override
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
         if(qName.equals(BUTTON_ELEMENT)) {
         	// Resolve action id

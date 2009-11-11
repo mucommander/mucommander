@@ -157,6 +157,7 @@ public class ZipArchiveFile extends AbstractRWArchiveFile {
     // AbstractROArchiveFile implementation //
     //////////////////////////////////////////
 
+    @Override
     public synchronized ArchiveEntryIterator getEntryIterator() throws IOException {
         // If the underlying AbstractFile has random read access, use our own ZipFile implementation to read entries
         if (file.hasRandomAccessInputStream()) {
@@ -187,6 +188,7 @@ public class ZipArchiveFile extends AbstractRWArchiveFile {
     }
 
 
+    @Override
     public synchronized InputStream getEntryInputStream(ArchiveEntry entry, ArchiveEntryIterator entryIterator) throws IOException {
         // If the underlying AbstractFile has random read access, use our own ZipFile implementation to read the entry
         if (file.hasRandomAccessInputStream()) {
@@ -211,6 +213,7 @@ public class ZipArchiveFile extends AbstractRWArchiveFile {
                     // The entry/zip stream is wrapped in a FilterInputStream where #close is implemented as a no-op:
                     // we don't want the ZipInputStream to be closed when the caller closes the entry's stream.
                     return new FilterInputStream(((JavaUtilZipEntryIterator)entryIterator).getZipInputStream()) {
+                        @Override
                         public void close() throws IOException {
                             // No-op
                         }
@@ -237,6 +240,7 @@ public class ZipArchiveFile extends AbstractRWArchiveFile {
     // AbstractRWArchiveFile implementation //
     //////////////////////////////////////////
 
+    @Override
     public synchronized OutputStream addEntry(final ArchiveEntry entry) throws IOException {
         checkZipFile();
 
@@ -259,6 +263,7 @@ public class ZipArchiveFile extends AbstractRWArchiveFile {
             entry.setEntryObject(zipEntry);
 
             return new FilteredOutputStream(zipFile.addEntry(zipEntry)) {
+                @Override
                 public void close() throws IOException {
                     super.close();
 
@@ -269,6 +274,7 @@ public class ZipArchiveFile extends AbstractRWArchiveFile {
         }
     }
 
+    @Override
     public synchronized void deleteEntry(ArchiveEntry entry) throws IOException {
         ZipEntry zipEntry = (com.mucommander.file.impl.zip.provider.ZipEntry)entry.getEntryObject();
 
@@ -296,6 +302,7 @@ public class ZipArchiveFile extends AbstractRWArchiveFile {
         removeFromEntriesTree(entry);
     }
 
+    @Override
     public void updateEntry(ArchiveEntry entry) throws IOException {
         ZipEntry zipEntry = (com.mucommander.file.impl.zip.provider.ZipEntry)entry.getEntryObject();
 
@@ -319,6 +326,7 @@ public class ZipArchiveFile extends AbstractRWArchiveFile {
         }
     }
 
+    @Override
     public synchronized void optimizeArchive() throws IOException {
         checkZipFile();
 
@@ -343,6 +351,7 @@ public class ZipArchiveFile extends AbstractRWArchiveFile {
      *
      * @return true only if the proxied archive file has random read and write access
      */
+    @Override
     public boolean isWritable() {
         return file.hasRandomAccessInputStream() && file.hasRandomAccessOutputStream();
     }
@@ -351,6 +360,7 @@ public class ZipArchiveFile extends AbstractRWArchiveFile {
     /**
      * Creates an empty, valid Zip file. The resulting file is 22 bytes long.
      */
+    @Override
     public void mkfile() throws IOException {
         if(exists())
             throw new IOException();

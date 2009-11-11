@@ -38,6 +38,7 @@ public class PackAction extends SelectedFilesAction implements InvokesDialog {
         super(mainFrame, properties);
     }
 
+    @Override
     public void performAction() {
         FileSet files = mainFrame.getActiveTable().getSelectedFiles();
         if(files.size()>0)

@@ -81,11 +81,13 @@ class BookmarkParser extends DefaultHandler implements BookmarkConstants {
     /*  ContentHandler methods  */
     /* ------------------------ */
 
+    @Override
     public void startDocument() throws SAXException {
         try {builder.startBookmarks();}
         catch(BookmarkException e) {throw new SAXException(e);}
     }
 
+    @Override
     public void endDocument() throws SAXException {
         try {builder.endBookmarks();}
         catch(BookmarkException e) {throw new SAXException(e);}
@@ -94,11 +96,13 @@ class BookmarkParser extends DefaultHandler implements BookmarkConstants {
     /**
      * Method called when some PCDATA has been found in an XML node.
      */
+    @Override
     public void characters(char[] ch, int start, int length) {characters.append(ch, start, length);}
 
     /**
      * Notifies the parser that a new XML node has been found.
      */
+    @Override
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
         characters.setLength(0);
 
@@ -115,6 +119,7 @@ class BookmarkParser extends DefaultHandler implements BookmarkConstants {
     /**
      * Notifies the parser that an XML node has been closed.
      */
+    @Override
     public void endElement(String uri, String localName, String qName) throws SAXException {
         if(qName.equals(ELEMENT_BOOKMARK)) {
             if(bookmarkName == null || bookmarkLocation == null) {

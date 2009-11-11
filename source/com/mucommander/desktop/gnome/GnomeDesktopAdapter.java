@@ -42,8 +42,10 @@ abstract class GnomeDesktopAdapter extends DefaultDesktopAdapter {
     /** Key to the double-click interval value in the GNOME configuration */
     private String DOUBLE_CLICK_CONFIG_KEY = "/desktop/gnome/peripherals/mouse/double_click";
 
+    @Override
     public abstract boolean isAvailable();
 
+    @Override
     public void init(boolean install) throws DesktopInitialisationException {
         // Initialises trash management.
         DesktopManager.setTrashProvider(new GnomeTrashProvider());
@@ -96,6 +98,7 @@ abstract class GnomeDesktopAdapter extends DefaultDesktopAdapter {
      * </p>
      * @return the <code>/desktop/gnome/peripherals/mouse/double_click</code> GNOME configuration value.
      */
+    @Override
     public int getMultiClickInterval() {
         return multiClickInterval;
     }

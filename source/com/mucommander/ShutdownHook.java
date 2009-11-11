@@ -66,6 +66,7 @@ public class ShutdownHook extends Thread {
     /**
      * Called by the VM when the program shuts down, this method writes the configuration.
      */
+    @Override
     public void run() {
         performShutdownTasks();
     }

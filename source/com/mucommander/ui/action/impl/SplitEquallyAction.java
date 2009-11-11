@@ -35,6 +35,7 @@ public class SplitEquallyAction extends MuAction {
         super(mainFrame, properties);
     }
 
+    @Override
     public void performAction() {
         mainFrame.getSplitPane().setSplitRatio(0.5f);
     }

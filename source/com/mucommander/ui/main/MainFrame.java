@@ -152,6 +152,7 @@ public class MainFrame extends JFrame implements LocationListener {
         // Sets the content pane.
         JPanel contentPane = new JPanel(new BorderLayout()) {
                 // Add an x=3,y=3 gap around content pane
+                @Override
                 public Insets getInsets() {
                     return new Insets(3, 3, 3, 3);
                 }
@@ -193,6 +194,7 @@ public class MainFrame extends JFrame implements LocationListener {
                 MainFrame.this.leftFolderPanel,
                 MainFrame.this.rightFolderPanel) {
                 // We don't want any extra space around split pane
+                @Override
                 public Insets getInsets() {
                     return new Insets(0, 0, 0, 0);
                 }
@@ -229,6 +231,7 @@ public class MainFrame extends JFrame implements LocationListener {
         // Perform CloseAction when the user asked the window to close
         setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         addWindowListener(new WindowAdapter() {
+            @Override
             public void windowClosing(WindowEvent e) {
                 ActionManager.performAction(CloseWindowAction.Descriptor.ACTION_ID, MainFrame.this);
             }
@@ -731,6 +734,7 @@ public class MainFrame extends JFrame implements LocationListener {
      * Overrides <code>java.awt.Window#dispose</code> to save last MainFrame's attributes in the preferences
      * before disposing this MainFrame.
      */
+    @Override
     public void dispose() {
         // Save last MainFrame's attributes (last folders, window position) in the preferences.
 
@@ -800,6 +804,7 @@ public class MainFrame extends JFrame implements LocationListener {
     /**
      * Overrides <code>java.awt.Window#toFront</code> to have the window return to a normal state if it is minimized.
      */
+    @Override
     public void toFront() {
         if((getExtendedState()&Frame.ICONIFIED)!=0)
             setExtendedState(Frame.NORMAL);
@@ -819,6 +824,7 @@ public class MainFrame extends JFrame implements LocationListener {
      */
     protected class CustomFocusTraversalPolicy extends FocusTraversalPolicy {
 
+        @Override
         public Component getComponentAfter(Container container, Component component) {
         	if (component instanceof QuickListFocusableComponent) {
         		return ((QuickListFocusableComponent) component).getInvokerFileTable();
@@ -836,19 +842,23 @@ public class MainFrame extends JFrame implements LocationListener {
                 return leftTable;
         }
 
+        @Override
         public Component getComponentBefore(Container container, Component component) {
             // Completly symetrical with getComponentAfter
             return getComponentAfter(container, component);
        }
 
+        @Override
         public Component getFirstComponent(Container container) {
             return leftTable;
         }
 
+        @Override
         public Component getLastComponent(Container container) {
             return rightTable;
         }
 
+        @Override
         public Component getDefaultComponent(Container container) {
             return getActiveTable();
         }

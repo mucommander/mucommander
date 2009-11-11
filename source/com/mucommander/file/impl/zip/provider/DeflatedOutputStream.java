@@ -88,10 +88,12 @@ public class DeflatedOutputStream extends ZipEntryOutputStream {
     // ZipEntryOutputStream implementation //
     /////////////////////////////////////////
 
+    @Override
     public int getTotalIn() {
         return deflater.getTotalIn();
     }
 
+    @Override
     public int getTotalOut() {
         return deflater.getTotalOut();
     }
@@ -109,6 +111,7 @@ public class DeflatedOutputStream extends ZipEntryOutputStream {
      * @param length the number of bytes to write
      * @throws java.io.IOException on error
      */
+    @Override
     public void write(byte[] b, int offset, int length) throws IOException {
         if (length > 0) {
             if (!deflater.finished()) {
@@ -127,6 +130,7 @@ public class DeflatedOutputStream extends ZipEntryOutputStream {
      *
      * @throws IOException
      */
+    @Override
     public void close() throws IOException {
         finishDeflate();
     }

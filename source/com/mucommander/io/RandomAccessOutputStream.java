@@ -50,6 +50,7 @@ public abstract class RandomAccessOutputStream extends OutputStream implements R
      * @param b the data to write
      * @throws IOException if an I/O error occurs
      */
+    @Override
     public abstract void write(byte b[]) throws IOException;
 
     /**
@@ -60,6 +61,7 @@ public abstract class RandomAccessOutputStream extends OutputStream implements R
      * @param len the number of bytes to write
      * @throws IOException if an I/O error occurs
      */
+    @Override
     public abstract void write(byte b[], int off, int len) throws IOException;
 
     /**
@@ -85,5 +87,6 @@ public abstract class RandomAccessOutputStream extends OutputStream implements R
      *
      * @throws IOException if an I/O error occurs.
      */
+    @Override
     public abstract void close() throws IOException;
 }

@@ -60,6 +60,7 @@ public abstract class AbstractProcess {
         // Using a separate thread allows muCommander to continue working properly even
         // when that occurs.
         new Thread() {
+            @Override
             public void run() {
                 // Closes the process' streams.
                 AppLogger.finer("Destroying process...");

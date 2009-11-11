@@ -58,6 +58,7 @@ abstract class AbstractViewerAction extends SelectedFileAction {
     /**
      * Edits the currently selected file.
      */
+    @Override
     public synchronized void performAction() {
         AbstractFile file;
         Command      customCommand;

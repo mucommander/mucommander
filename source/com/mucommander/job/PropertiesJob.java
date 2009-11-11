@@ -79,6 +79,7 @@ public class PropertiesJob extends FileJob {
      * Adds the given file to the total of files or folders and the total size,
      * and recurses if it is a folder.
      */
+    @Override
     protected boolean processFile(AbstractFile file, Object recurseParams) {
         // Stop if interrupted
         if(getState()==INTERRUPTED)
@@ -112,6 +113,7 @@ public class PropertiesJob extends FileJob {
     }
 
     // This job does not modify anything
+    @Override
     protected boolean hasFolderChanged(AbstractFile folder) {
         return false;
     }

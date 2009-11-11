@@ -39,6 +39,7 @@ public class QuitAction extends MuAction {
         super(mainFrame, properties);
     }
 
+    @Override
     public void performAction() {
         if(QuitDialog.confirmQuit())
             WindowManager.quit();

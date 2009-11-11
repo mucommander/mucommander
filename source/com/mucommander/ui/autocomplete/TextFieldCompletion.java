@@ -38,7 +38,8 @@ public class TextFieldCompletion extends CompletionType {
     		super(delay);
     	}
 
-		void showAutocompletionPopup() {
+		@Override
+        void showAutocompletionPopup() {
 	        if (autocompletedtextComp.isShowing() && autocompletedtextComp.isEnabled() && updateListData(list)){
 					            
 	            list.setVisibleRowCount(Math.min(list.getModel().getSize() ,VISIBLE_ROW_COUNT));
@@ -73,7 +74,8 @@ public class TextFieldCompletion extends CompletionType {
     	autocompletedtextComp.getDocument().addDocumentListener(documentListener);
 
         autocompletedtextComp.addKeyListener(new KeyAdapter() {
-        	public void keyPressed(KeyEvent keyEvent) {        		
+        	@Override
+            public void keyPressed(KeyEvent keyEvent) {
                 
                 switch (keyEvent.getKeyCode()) {
                 case KeyEvent.VK_ENTER:
@@ -154,10 +156,12 @@ public class TextFieldCompletion extends CompletionType {
         });
     }
             
-    protected void startNewShowingThread(int delay) {    	    	
+    @Override
+    protected void startNewShowingThread(int delay) {
     	(showingThread = new ShowingThreadImp(delay)).start();
     }
         
+    @Override
     protected void hideAutocompletionPopup() {
 		synchronized (popup) {
 			if (popup.isVisible())

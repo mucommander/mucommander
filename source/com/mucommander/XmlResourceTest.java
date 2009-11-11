@@ -97,16 +97,19 @@ public class XmlResourceTest extends TestCase {
      */
     private static class SAXErrorHandler extends DefaultHandler {
 
+        @Override
         public void warning(SAXParseException e) throws SAXException {
             printSAXError(e, "warning");
             throw e;
         }
 
+        @Override
         public void error(SAXParseException e) throws SAXException {
             printSAXError(e, "error");
             throw e;
         }
 
+        @Override
         public void fatalError(SAXParseException e) throws SAXException {
             printSAXError(e, "fatal error");
             throw e;

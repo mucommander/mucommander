@@ -81,6 +81,7 @@ public class Base64InputStream extends InputStream {
     // InputStream implementation //
     ////////////////////////////////
 
+    @Override
     public int read() throws IOException {
         // Read buffer empty: read and decode a new base64-encoded 4-byte group
         if(bytesLeft==0) {

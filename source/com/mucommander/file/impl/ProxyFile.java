@@ -84,106 +84,132 @@ public abstract class ProxyFile extends AbstractFile {
     // AbstractFile implementation //
     /////////////////////////////////
 
+    @Override
     public long getDate() {
         return file.getDate();
     }
 
+    @Override
     public boolean canChangeDate() {
         return file.canChangeDate();
     }
 
+    @Override
     public boolean changeDate(long lastModified) {
         return file.changeDate(lastModified);
     }
 
+    @Override
     public long getSize() {
         return file.getSize();
     }
 
+    @Override
     public AbstractFile getParent() {
         return file.getParent();
     }
 
+    @Override
     public void setParent(AbstractFile parent) {
         file.setParent(parent);
     }
 
+    @Override
     public boolean exists() {
         return file.exists();
     }
 
+    @Override
     public boolean changePermission(int access, int permission, boolean enabled) {
         return file.changePermission(access, permission, enabled);
     }
 
+    @Override
     public String getOwner() {
         return file.getOwner();
     }
 
+    @Override
     public boolean canGetOwner() {
         return file.canGetOwner();
     }
 
+    @Override
     public String getGroup() {
         return file.getGroup();
     }
 
+    @Override
     public boolean canGetGroup() {
         return file.canGetGroup();
     }
 
+    @Override
     public boolean isDirectory() {
         return file.isDirectory();
     }
 
+    @Override
     public boolean isSymlink() {
         return file.isSymlink();
     }
 
+    @Override
     public AbstractFile[] ls() throws IOException {
         return file.ls();
     }
 
+    @Override
     public void mkdir() throws IOException {
         file.mkdir();
     }
 
+    @Override
     public InputStream getInputStream() throws IOException {
         return file.getInputStream();
     }
 
+    @Override
     public OutputStream getOutputStream(boolean append) throws IOException {
         return file.getOutputStream(append);
     }
 
+    @Override
     public boolean hasRandomAccessInputStream() {
         return file.hasRandomAccessInputStream();
     }
 
+    @Override
     public RandomAccessInputStream getRandomAccessInputStream() throws IOException {
         return file.getRandomAccessInputStream();
     }
 
+    @Override
     public boolean hasRandomAccessOutputStream() {
         return file.hasRandomAccessOutputStream();
     }
 
+    @Override
     public RandomAccessOutputStream getRandomAccessOutputStream() throws IOException {
         return file.getRandomAccessOutputStream();
     }
 
+    @Override
     public void delete() throws IOException {
         file.delete();
     }
 
+    @Override
     public long getFreeSpace() {
         return file.getFreeSpace();
     }
 
+    @Override
     public long getTotalSpace() {
         return file.getTotalSpace();
     }
 
+    @Override
     public Object getUnderlyingFileObject() {
         return file.getUnderlyingFileObject();
     }
@@ -193,118 +219,147 @@ public abstract class ProxyFile extends AbstractFile {
     // Overridden AbstractFile methods //
     /////////////////////////////////////
 
+    @Override
     public FileURL getURL() {
         return file.getURL();
     }
 
+    @Override
     public URL getJavaNetURL() throws MalformedURLException {
         return file.getJavaNetURL();
     }
 
+    @Override
     public String getName() {
         return file.getName();
     }
 
+    @Override
     public String getExtension() {
         return file.getExtension();
     }
 
+    @Override
     public String getAbsolutePath() {
         return file.getAbsolutePath();
     }
 
+    @Override
     public String getCanonicalPath() {
         return file.getCanonicalPath();
     }
 
+    @Override
     public AbstractFile getCanonicalFile() {
         return file.getCanonicalFile();
     }
 
+    @Override
     public String getSeparator() {
         return file.getSeparator();
     }
 
+    @Override
     public boolean isArchive() {
         return file.isArchive();
     }
 
+    @Override
     public boolean isHidden() {
         return file.isHidden();
     }
 
+    @Override
     public FilePermissions getPermissions() {
         return file.getPermissions();
     }
 
+    @Override
     public boolean changePermissions(int permissions) {
         return file.changePermissions(permissions);
     }
 
+    @Override
     public PermissionBits getChangeablePermissions() {
         return file.getChangeablePermissions();
     }
 
+    @Override
     public String getPermissionsString() {
         return file.getPermissionsString();
     }
 
+    @Override
     public AbstractFile getRoot() {
         return file.getRoot();
     }
 
+    @Override
     public boolean isRoot() {
         return file.isRoot();
     }
 
+    @Override
     public AbstractFile getVolume() {
         return file.getVolume();
     }
 
+    @Override
     public InputStream getInputStream(long offset) throws IOException {
         return file.getInputStream(offset);
     }
 
+    @Override
     public void copyStream(InputStream in, boolean append) throws FileTransferException {
         file.copyStream(in, append);
     }
 
+    @Override
     public boolean copyTo(AbstractFile destFile) throws FileTransferException {
         return file.copyTo(destFile);
     }
 
+    @Override
     public int getCopyToHint(AbstractFile destFile) {
         return file.getCopyToHint(destFile);
     }
 
+    @Override
     public boolean moveTo(AbstractFile destFile) throws FileTransferException {
         return file.moveTo(destFile);
     }
 
+    @Override
     public int getMoveToHint(AbstractFile destFile) {
         return file.getMoveToHint(destFile);
     }
 
+    @Override
     public AbstractFile[] ls(FileFilter filter) throws IOException {
         return file.ls(filter);
     }
 
+    @Override
     public AbstractFile[] ls(FilenameFilter filter) throws IOException {
         return file.ls(filter);
     }
 
+    @Override
     public void mkfile() throws IOException {
         file.mkfile();
     }
 
+    @Override
     public void deleteRecursively() throws IOException {
         file.deleteRecursively();
     }
 
+    @Override
     public void importPermissions(AbstractFile sourceFile) {
         file.importPermissions(sourceFile);
     }
 
+    @Override
     public void importPermissions(AbstractFile sourceFile, FilePermissions defaultPermissions) {
         file.importPermissions(sourceFile, defaultPermissions);
     }
@@ -313,6 +368,7 @@ public abstract class ProxyFile extends AbstractFile {
         return file.equals(f);
     }
 
+    @Override
     public boolean equalsCanonical(Object f) {
         return file.equalsCanonical(f);
     }

@@ -52,10 +52,12 @@ public class InternalViewAction extends AbstractViewerAction {
 
     // - AbstractViewerAction implementation ---------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
+    @Override
     protected void performInternalAction(AbstractFile file) {
         ViewerRegistrar.createViewerFrame(mainFrame, file, getIcon().getImage());
     }
 
+    @Override
     protected Command getCustomCommand() {
         return null;
     }

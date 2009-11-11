@@ -144,6 +144,7 @@ public class SizeChooser extends JPanel {
     // Overridden methods //
     ////////////////////////
 
+    @Override
     public void setEnabled(boolean enabled) {
         valueSpinner.setEnabled(enabled);
         unitComboBox.setEnabled(enabled);

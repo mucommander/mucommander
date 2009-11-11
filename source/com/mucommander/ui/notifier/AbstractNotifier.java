@@ -23,8 +23,8 @@ import com.mucommander.runtime.JavaVersions;
 import com.mucommander.runtime.OsFamilies;
 import com.mucommander.ui.main.WindowManager;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.SwingUtilities;
+import java.awt.SystemTray;
 
 /**
  * AbstractNotifier is a generic representation of a system notifier. It also provides factory methods to
@@ -109,6 +109,7 @@ public abstract class AbstractNotifier implements NotificationTypes {
     public void displayBackgroundNotification(final int notificationType, final String title, final String description) {
         SwingUtilities.invokeLater(
             new Thread() {
+                @Override
                 public void run() {
                     if(WindowManager.getCurrentMainFrame().isAncestorOfActiveWindow()) {
                         AppLogger.fine("Ignoring notification, application is in foreground");

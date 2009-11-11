@@ -123,6 +123,7 @@ public class GeneralPreferencesDialog extends PreferencesDialog {
     /**
      * Commits the changes and writes the configuration file if necessary.
      */
+    @Override
     public void commit() {
         super.commit();
         try {
@@ -136,6 +137,7 @@ public class GeneralPreferencesDialog extends PreferencesDialog {
     /**
      * Releases the singleton.
      */
+    @Override
     public void dispose() {
         releaseSingleton(getSelectedPanelIndex());
         super.dispose();
@@ -175,6 +177,7 @@ public class GeneralPreferencesDialog extends PreferencesDialog {
         lastTabIndex = lastTab;
     }
 
+    @Override
     public void componentChanged(PrefComponent component) {
 		if (component.hasChanged())
 			modifiedComponents.add(component);
@@ -184,6 +187,7 @@ public class GeneralPreferencesDialog extends PreferencesDialog {
 		setCommitButtonsEnabled(modifiedComponents.size() != 0);
 	}
     
+    @Override
     protected void setCommitButtonsEnabled(boolean enable) {
     	super.setCommitButtonsEnabled(enable);
     	// if "commit buttons" are disabled that's mean that there is no change in any component

@@ -27,7 +27,9 @@ import com.mucommander.ui.theme.Theme;
 import com.mucommander.ui.theme.ThemeData;
 import com.mucommander.ui.theme.ThemeManager;
 
-import java.awt.*;
+import java.awt.Dialog;
+import java.awt.Dimension;
+import java.awt.Frame;
 
 /**
  * Main dialog for the theme editor.
@@ -91,6 +93,7 @@ public class ThemeEditorDialog extends PreferencesDialog {
         return wasThemeModified;
     }
 
+    @Override
     public boolean checkCommit() {
         super.checkCommit();
 
@@ -103,6 +106,7 @@ public class ThemeEditorDialog extends PreferencesDialog {
         return true;
     }
 
+    @Override
     public void commit() {
         super.commit();
 
@@ -140,6 +144,7 @@ public class ThemeEditorDialog extends PreferencesDialog {
         }
     }
     
+    @Override
     public void componentChanged(PrefComponent component) {
 		setCommitButtonsEnabled(!theme.isIdentical(data));
 	}

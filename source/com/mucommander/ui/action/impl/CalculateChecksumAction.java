@@ -39,6 +39,7 @@ public class CalculateChecksumAction extends SelectedFilesAction implements Invo
         super(mainFrame, properties);
     }
 
+    @Override
     public void performAction() {
         FileSet files = mainFrame.getActiveTable().getSelectedFiles();
 

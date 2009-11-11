@@ -33,11 +33,13 @@ public class ComboboxOptionsCompleter extends Completer {
 
 	public ComboboxOptionsCompleter() {	}
 
-	protected Vector<String> getUpdatedSuggestions(AutocompleterTextComponent component) {
+	@Override
+    protected Vector<String> getUpdatedSuggestions(AutocompleterTextComponent component) {
     	return PrefixFilter.createPrefixFilter(component.getText()).filter(component.getItemNames());
 	}
 	
-	public void updateTextComponent(final String selected, AutocompleterTextComponent comp) {
+	@Override
+    public void updateTextComponent(final String selected, AutocompleterTextComponent comp) {
 		comp.setText(selected);
 	}
 }

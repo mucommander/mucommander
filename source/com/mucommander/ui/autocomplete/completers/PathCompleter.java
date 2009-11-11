@@ -35,11 +35,13 @@ public class PathCompleter extends Completer {
 		registerService(ServiceFactory.getAllFilesService());
     }
  
-	protected Vector<String> getUpdatedSuggestions(AutocompleterTextComponent component) {
+	@Override
+    protected Vector<String> getUpdatedSuggestions(AutocompleterTextComponent component) {
     	return getPossibleCompletionsFromServices(component.getText());
     } 
  
-    public void updateTextComponent(final String selected, AutocompleterTextComponent comp){ 
+    @Override
+    public void updateTextComponent(final String selected, AutocompleterTextComponent comp){
         if(selected==null) 
             return;
                                  

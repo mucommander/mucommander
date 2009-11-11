@@ -18,11 +18,11 @@
 
 package com.mucommander.desktop;
 
+import com.mucommander.file.AbstractFile;
+
 import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
-
-import com.mucommander.file.AbstractFile;
 
 /**
  * @author Nicolas Rinaudo
@@ -67,8 +67,10 @@ class InternalOpen extends LocalFileOperation {
      * </p>
      * @return <code>true</code> if this operations is available, <code>false</code> otherwise.
      */
+    @Override
     public boolean isAvailable() {return getDesktop() != null && getDesktop().isSupported(Desktop.Action.OPEN);}
 
+    @Override
     public void execute(AbstractFile file) throws IOException {
         if(isAvailable())
             getDesktop().open(new File(file.getAbsolutePath()));
@@ -79,5 +81,6 @@ class InternalOpen extends LocalFileOperation {
      * Returns the action's label.
      * @return the action's label.
      */
+    @Override
     public String getName() {return "java.awt.Desktop open file";}
 }

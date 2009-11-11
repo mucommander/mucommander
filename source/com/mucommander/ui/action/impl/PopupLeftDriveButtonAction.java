@@ -37,6 +37,7 @@ public class PopupLeftDriveButtonAction extends MuAction {
         super(mainFrame, properties);
     }
 
+    @Override
     public void performAction() {
         mainFrame.getLeftPanel().getDriveButton().popupMenu();
     }

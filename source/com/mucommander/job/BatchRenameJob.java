@@ -43,6 +43,7 @@ public class BatchRenameJob extends MoveJob {
     // FileJob implementation //
     ////////////////////////////
 
+    @Override
     protected boolean processFile(AbstractFile file, Object recurseParams) {
         this.newName = newNames.get(getCurrentFileIndex());
         return super.processFile(file, recurseParams);

@@ -44,6 +44,7 @@ public class MarkAllAction extends MuAction {
         this(mainFrame, properties, true);
     }
 
+    @Override
     public void performAction() {
         FileTable fileTable = mainFrame.getActiveTable();
         FileTableModel tableModel = fileTable.getFileTableModel();

@@ -37,6 +37,7 @@ public class MkfileAction extends MuAction {
         super(mainFrame, properties);
     }
 
+    @Override
     public void performAction() {
         new MkdirDialog(mainFrame, true).showDialog();
     }

@@ -439,6 +439,7 @@ public class ProgressDialog extends FocusDialog implements ActionListener, ItemL
     // Overridden WindowListener methods // 
     ///////////////////////////////////////
 
+    @Override
     public void windowActivated(WindowEvent e) {
         // This method is called each time the dialog is activated
         super.windowActivated(e);
@@ -448,6 +449,7 @@ public class ProgressDialog extends FocusDialog implements ActionListener, ItemL
         }
     }
 
+    @Override
     public void windowClosed(WindowEvent e) {
         super.windowClosed(e);
         
@@ -508,6 +510,7 @@ public class ProgressDialog extends FocusDialog implements ActionListener, ItemL
         }
 
 
+        @Override
         public void paint(Graphics g) {
             Graphics2D g2d = (Graphics2D)g;
 

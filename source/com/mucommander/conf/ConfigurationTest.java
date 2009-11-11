@@ -68,6 +68,7 @@ public class ConfigurationTest extends TestCase implements ConfigurationListener
     /**
      * Creates a fresh {@link Configuration} instance each time a test is performed, and registers itself as a listener.
      */
+    @Override
     protected void setUp() throws Exception {
         conf   = new Configuration();
         events = new Stack<ConfigurationEvent>();

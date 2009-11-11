@@ -46,6 +46,7 @@ public class EndsFilenameFilter extends FilenameFilter {
     // FilenameFilter implementation //
     ///////////////////////////////////
 
+    @Override
     public boolean accept(String filename) {
         if(isCaseSensitive())
             return filename.endsWith(s);

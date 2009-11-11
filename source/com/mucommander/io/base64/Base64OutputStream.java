@@ -181,6 +181,7 @@ public class Base64OutputStream extends OutputStream {
     // OutputStream implementation //
     /////////////////////////////////
 
+    @Override
     public void write(int i) throws IOException {
         // We have a 3-byte group
         if(nbBytesWaiting==2) {
@@ -208,6 +209,7 @@ public class Base64OutputStream extends OutputStream {
     /**
      * Writes padding if necessary and closes the underlying stream.
      */
+    @Override
     public void close() throws IOException {
         writePadding();
         out.close();

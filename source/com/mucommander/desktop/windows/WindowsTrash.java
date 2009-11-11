@@ -48,6 +48,7 @@ public class WindowsTrash extends QueuedTrash {
     /**
      * Implementation notes: returns <code>true</code> only for local files that are not archive entries.
      */
+    @Override
     public boolean canMoveToTrash(AbstractFile file) {
         return file.getTopAncestor() instanceof LocalFile;
     }
@@ -55,10 +56,12 @@ public class WindowsTrash extends QueuedTrash {
     /**
      * Implementation notes: always returns <code>true</code>: {@link #empty()} is implemented.
      */
+    @Override
     public boolean canEmpty() {
         return true;
     }
 
+    @Override
     public boolean empty() {
         return Shell32.isAvailable() && Shell32.getInstance().SHEmptyRecycleBin(null, null, Shell32API.SHERB_NOCONFIRMATION) == 0;
     }
@@ -66,6 +69,7 @@ public class WindowsTrash extends QueuedTrash {
     /**
      * Implementation notes: always returns <code>false</code>.
      */
+    @Override
     public boolean isTrashFile(AbstractFile file) {
         // Quote from http://en.wikipedia.org/wiki/Recycle_Bin_(Windows):
         // "The actual location of the Recycle Bin varies depending on the operating system and filesystem. On the older
@@ -83,6 +87,7 @@ public class WindowsTrash extends QueuedTrash {
      * Implementation notes: returns the number of items for all Recycle Bins on all drives. This information is not
      * available on certain versions of Windows such as <i>Windows 2000</i>.
      */
+    @Override
     public int getItemCount() {
         if(!Shell32.isAvailable())
             return -1;
@@ -103,10 +108,12 @@ public class WindowsTrash extends QueuedTrash {
     /**
      * Implementation notes: always returns <code>true</code>: {@link #open()} is implemented.
      */
+    @Override
     public boolean canOpen() {
         return true;
     }
 
+    @Override
     public void open() {
         try {DesktopManager.openInFileManager(SpecialWindowsLocation.RECYCLE_BIN);}
         catch(IOException e) {/* TODO: report error. */}
@@ -117,6 +124,7 @@ public class WindowsTrash extends QueuedTrash {
     // QueuedTrash implementation //
     ////////////////////////////////
 
+    @Override
     protected boolean moveToTrash(Vector<AbstractFile> queuedFiles) {
         if(!Shell32.isAvailable())
             return false;

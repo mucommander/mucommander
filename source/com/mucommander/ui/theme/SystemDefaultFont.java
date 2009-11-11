@@ -18,8 +18,8 @@
 
 package com.mucommander.ui.theme;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.UIManager;
+import java.awt.Font;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
@@ -72,6 +72,7 @@ public class SystemDefaultFont extends DefaultFont implements PropertyChangeList
 
     // - DefaultFont implementation ------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
+    @Override
     public Font getFont(ThemeData data) {
         // If the font hasn't been identified yet...
         if(font == null)

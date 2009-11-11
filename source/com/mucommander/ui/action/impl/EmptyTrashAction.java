@@ -42,6 +42,7 @@ public class EmptyTrashAction extends MuAction {
         setEnabled(trash!=null && trash.canEmpty());
     }
 
+    @Override
     public void performAction() {
         DesktopManager.getTrash().empty();
     }

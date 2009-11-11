@@ -44,6 +44,7 @@ public class MarkSelectedFileAction extends MuAction {
     }
 
 
+    @Override
     public void performAction() {
         mainFrame.getActiveTable().markSelectedFile();
     }

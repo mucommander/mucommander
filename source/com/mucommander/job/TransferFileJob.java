@@ -511,6 +511,7 @@ public abstract class TransferFileJob extends FileJob {
     /**
      * Overrides {@link FileJob#jobStopped()} to stop any file processing by closing the source InputStream.
      */
+    @Override
     protected void jobStopped() {
         super.jobStopped();
 
@@ -528,6 +529,7 @@ public abstract class TransferFileJob extends FileJob {
      * Overrides {@link FileJob#jobPaused()} to pause any file processing
      * by having the source InputStream's read methods lock.
      */
+    @Override
     protected void jobPaused() {
         super.jobPaused();
 
@@ -542,6 +544,7 @@ public abstract class TransferFileJob extends FileJob {
      * Overrides {@link FileJob#jobResumed()} to resume any file processing by releasing
      * the lock on the source InputStream's read methods.
      */
+    @Override
     protected void jobResumed() {
         super.jobResumed();
 
@@ -557,6 +560,7 @@ public abstract class TransferFileJob extends FileJob {
      * Advances file index and resets current file's byte counters. This method should be called by subclasses
      * whenever the job starts processing a new file.
      */
+    @Override
     protected void nextFile(AbstractFile file) {
         totalByteCounter.add(currentFileByteCounter, true);
         totalSkippedByteCounter.add(currentFileSkippedByteCounter, true);
@@ -571,6 +575,7 @@ public abstract class TransferFileJob extends FileJob {
      * Method overridden to return a more accurate percentage of job processed so far by taking into account the current
      * file's percentage of completion.
      */
+    @Override
     public float getTotalPercentDone() {
         float nbFilesProcessed = getCurrentFileIndex();
         int nbFiles = getNbFiles();
@@ -590,6 +595,7 @@ public abstract class TransferFileJob extends FileJob {
      * This method is overridden to return a custom string "Checking integrity of CURRENT_FILE" when the current file
      * is being checked for integrity.
      */
+    @Override
     public String getStatusString() {
         if(isCheckingIntegrity())
             return Translator.get("progress_dialog.verifying_file", getCurrentFilename());

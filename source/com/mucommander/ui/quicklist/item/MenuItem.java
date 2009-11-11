@@ -18,15 +18,14 @@
 
 package com.mucommander.ui.quicklist.item;
 
-import java.awt.Dimension;
-import java.awt.Font;
-
-import javax.swing.JMenuItem;
-
 import com.mucommander.ui.theme.ColorChangedEvent;
 import com.mucommander.ui.theme.FontChangedEvent;
 import com.mucommander.ui.theme.ThemeListener;
 import com.mucommander.ui.theme.ThemeManager;
+
+import javax.swing.JMenuItem;
+import java.awt.Dimension;
+import java.awt.Font;
 
 /**
  * This abstract class represent menu item of QuickList.
@@ -48,7 +47,8 @@ abstract class MenuItem extends JMenuItem implements ThemeListener {
 		ThemeManager.addCurrentThemeListener(this);
 	}
 	
-	public void setFont(Font font) {
+	@Override
+    public void setFont(Font font) {
 		FONT = font;
 		dimension = new Dimension((int) Math.ceil(getFontMetrics(font).stringWidth(getText()) * 1.1), (int) (font.getSize() * 1.5));
 		setPreferredSize(dimension);
@@ -58,7 +58,8 @@ abstract class MenuItem extends JMenuItem implements ThemeListener {
 	/**
 	 * This function returns the item's dimension which is based on the item's font.
 	 */
-	public Dimension getPreferredSize() { return dimension; }
+	@Override
+    public Dimension getPreferredSize() { return dimension; }
 	
 	/////////////////////////////
 	/// ThemeListener methods ///

@@ -37,6 +37,7 @@ public class SwapFoldersAction extends MuAction {
         super(mainFrame, properties);
     }
 
+    @Override
     public void performAction() {
         mainFrame.swapFolders();
     }

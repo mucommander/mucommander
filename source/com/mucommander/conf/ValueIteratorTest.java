@@ -27,6 +27,7 @@ public class ValueIteratorTest extends ValueListTest {
      * Tests the {@link ValueIterator#nextValue()} method.
      * @param values test data.
      */
+    @Override
     protected void testStringValues(ValueList values) {
         ValueIterator iterator;
 
@@ -42,6 +43,7 @@ public class ValueIteratorTest extends ValueListTest {
      * Tests the {@link ValueIterator#nextIntegerValue()} method.
      * @param values test data.
      */
+    @Override
     protected void testIntegerValues(ValueList values) {
         ValueIterator iterator;
 
@@ -57,6 +59,7 @@ public class ValueIteratorTest extends ValueListTest {
      * Tests the {@link ValueIterator#nextLongValue()} method.
      * @param values test data.
      */
+    @Override
     protected void testLongValues(ValueList values) {
         ValueIterator iterator;
 
@@ -71,6 +74,7 @@ public class ValueIteratorTest extends ValueListTest {
      * Tests the {@link ValueIterator#nextFloatValue()} method.
      * @param values test data.
      */
+    @Override
     protected void testFloatValues(ValueList values) {
         ValueIterator iterator;
 
@@ -85,6 +89,7 @@ public class ValueIteratorTest extends ValueListTest {
      * Tests the {@link ValueIterator#nextDoubleValue()} method.
      * @param values test data.
      */
+    @Override
     protected void testDoubleValues(ValueList values) {
         ValueIterator iterator;
 
@@ -99,6 +104,7 @@ public class ValueIteratorTest extends ValueListTest {
      * Tests the {@link ValueIterator#nextBooleanValue()} method.
      * @param values test data.
      */
+    @Override
     protected void testBooleanValues(ValueList values) {
         ValueIterator iterator;
 
@@ -114,6 +120,7 @@ public class ValueIteratorTest extends ValueListTest {
      * @param values    test data.
      * @param separator separator to use when creating list values.
      */
+    @Override
     protected void testListValues(ValueList values, String separator) {
         ValueIterator iterator;
 

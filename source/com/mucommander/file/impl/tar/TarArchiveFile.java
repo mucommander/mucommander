@@ -102,11 +102,13 @@ public class TarArchiveFile extends AbstractROArchiveFile {
     // AbstractArchiveFile implementation //
     ////////////////////////////////////////
 
+    @Override
     public ArchiveEntryIterator getEntryIterator() throws IOException {
         return new TarEntryIterator(createTarStream(0));
     }
 
 
+    @Override
     public InputStream getEntryInputStream(ArchiveEntry entry, ArchiveEntryIterator entryIterator) throws IOException {
         if(entry.isDirectory())
             throw new IOException();
@@ -121,6 +123,7 @@ public class TarArchiveFile extends AbstractROArchiveFile {
                 // The entry/tar stream is wrapped in a FilterInputStream where #close is implemented as a no-op:
                 // we don't want the TarInputStream to be closed when the caller closes the entry's stream.
                 return new FilterInputStream(((TarEntryIterator)entryIterator).getTarInputStream()) {
+                    @Override
                     public void close() throws IOException {
                         // No-op
                     }

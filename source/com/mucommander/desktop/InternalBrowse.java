@@ -65,6 +65,7 @@ class InternalBrowse extends UrlOperation {
      * </p>
      * @return <code>true</code> if this operations is available, <code>false</code> otherwise.
      */
+    @Override
     public boolean isAvailable() {return getDesktop() != null && getDesktop().isSupported(Desktop.Action.BROWSE);}
 
     /**
@@ -72,6 +73,7 @@ class InternalBrowse extends UrlOperation {
      * @param  url         URL to browse.
      * @throws IOException if an error occured.
      */
+    @Override
     public void execute(URL url) throws IOException {
         // If java.awt.Desktop browsing is available, use it.
         if(isAvailable()) {
@@ -86,5 +88,6 @@ class InternalBrowse extends UrlOperation {
      * Returns the action's label.
      * @return the action's label.
      */
+    @Override
     public String getName() {return "java.awt.Desktop open URL";}
 }

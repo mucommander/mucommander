@@ -64,6 +64,7 @@ public class CopyDialog extends AbstractCopyDialog {
     // TransferDestinationDialog implementation //
     //////////////////////////////////////////////
 
+    @Override
     protected TransferFileJob createTransferFileJob(ProgressDialog progressDialog, PathUtils.ResolvedDestination resolvedDest, int defaultFileExistsAction) {
         AbstractFile baseFolder = files.getBaseFolder();
         AbstractArchiveFile parentArchiveFile = baseFolder.getParentArchive();
@@ -105,6 +106,7 @@ public class CopyDialog extends AbstractCopyDialog {
         return job;
     }
 
+    @Override
     protected String getProgressDialogTitle() {
         return Translator.get("copy_dialog.copying");
     }

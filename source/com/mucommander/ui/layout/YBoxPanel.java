@@ -19,8 +19,13 @@
 
 package com.mucommander.ui.layout;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JComponent;
+import javax.swing.JPanel;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Insets;
 
 
 /**
@@ -55,6 +60,7 @@ public class YBoxPanel extends JPanel {
     /**
      * Aligns the given component on the left and adds it to this panel.
      */
+    @Override
     public Component add(Component comp) {
         if(comp instanceof JComponent)
             ((JComponent)comp).setAlignmentX(LEFT_ALIGNMENT);
@@ -75,6 +81,7 @@ public class YBoxPanel extends JPanel {
      * Adds the given component to this panel, inserting the specified amount of horizontal
      * space before the component.
      */
+    @Override
     public Component add(Component component, int nbHorizSpace) {
         JPanel tempPanel = new XBoxPanel(nbHorizSpace);
         tempPanel.add(component);
@@ -93,6 +100,7 @@ public class YBoxPanel extends JPanel {
     /**
      * Returns this panel's insets.
      */
+    @Override
     public Insets getInsets() {
         return insets==null?super.getInsets():insets;
     }

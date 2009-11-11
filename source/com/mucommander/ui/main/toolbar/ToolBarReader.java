@@ -68,12 +68,15 @@ public class ToolBarReader extends ToolBarIO {
     // ContentHandler methods //
     ////////////////////////////
 
+    @Override
     public void startDocument() {
         actionIdsV = new Vector<String>();
     }
 
+    @Override
     public void endDocument() {}
 
+    @Override
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
         if(qName.equals(BUTTON_ELEMENT)) {
         	// Resolve action id

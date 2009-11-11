@@ -18,19 +18,6 @@
 
 package com.mucommander.ui.dialog.pref.theme;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.FlowLayout;
-import java.awt.Graphics;
-import java.awt.Insets;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-
-import javax.swing.BorderFactory;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTabbedPane;
-
 import com.mucommander.text.SizeFormat;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.border.MutableLineBorder;
@@ -40,6 +27,14 @@ import com.mucommander.ui.dialog.pref.PreferencesDialog;
 import com.mucommander.ui.layout.ProportionalGridPanel;
 import com.mucommander.ui.layout.YBoxPanel;
 import com.mucommander.ui.theme.ThemeData;
+
+import javax.swing.BorderFactory;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
+import java.awt.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 /**
  * @author Nicolas Rinaudo, Maxence Bernard
@@ -243,6 +238,7 @@ class StatusBarPanel extends ThemeEditorPanel implements PropertyChangeListener 
     /**
      * Ignored.
      */
+    @Override
     public void commit() {}
 
 
@@ -302,6 +298,7 @@ class StatusBarPanel extends ThemeEditorPanel implements PropertyChangeListener 
             repaint();
         }
 
+        @Override
         public void paint(Graphics g) {
             int width;
 

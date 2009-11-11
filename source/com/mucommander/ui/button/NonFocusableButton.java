@@ -20,7 +20,10 @@ package com.mucommander.ui.button;
 
 import com.mucommander.runtime.OsFamilies;
 
-import javax.swing.*;
+import javax.swing.Action;
+import javax.swing.Icon;
+import javax.swing.JButton;
+import javax.swing.UIManager;
 
 /**
  * NonFocusableButton is a JButton which is non focusable, i.e. that cannot hold keyboard focus.
@@ -65,10 +68,12 @@ public class NonFocusableButton extends JButton {
     // Overridden methods //
     ////////////////////////
 
+    @Override
     public boolean isFocusable() {
         return false;
     }
 
+    @Override
     public void updateUI() {
         super.updateUI();
 

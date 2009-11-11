@@ -38,6 +38,7 @@ public class LocalFileTest extends AbstractFileTestCase {
     // AbstractFileTestCase implementation //
     /////////////////////////////////////////
 
+    @Override
     public AbstractFile getTemporaryFile() throws IOException {
         return FileFactory.getTemporaryFile(getClass().getName(), false);
     }

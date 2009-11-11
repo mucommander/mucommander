@@ -90,6 +90,7 @@ public class SilenceableOutputStream extends FilterOutputStream {
     // Overridden methods //
     ////////////////////////
 
+    @Override
     public void write(int b) throws IOException {
         if(silenced)
             return;
@@ -97,6 +98,7 @@ public class SilenceableOutputStream extends FilterOutputStream {
         out.write(b);
     }
 
+    @Override
     public void write(byte[] b) throws IOException {
         if(silenced)
             return;
@@ -104,6 +106,7 @@ public class SilenceableOutputStream extends FilterOutputStream {
         out.write(b);
     }
 
+    @Override
     public void write(byte[] b, int off, int len) throws IOException {
         if(silenced)
             return;

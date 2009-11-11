@@ -18,12 +18,12 @@
 
 package com.mucommander.ui.dialog.file;
 
-import java.util.Calendar;
-
 import com.mucommander.file.FileFactory;
 import com.mucommander.file.impl.TestFile;
 import com.mucommander.ui.dialog.file.BatchRenameDialog.*;
 import junit.framework.TestCase;
+
+import java.util.Calendar;
 
 
 /**
@@ -38,6 +38,7 @@ public class BatchRenameTest extends TestCase {
     private TestFile _abcdef;
     private TestFile abcdef_ghi_jkl;
 
+    @Override
     protected void setUp() throws Exception {
         super.setUp();
         TestFile parent = new TestFile(FileFactory.getTemporaryFolder() + "parent", false, 0, 0, null);

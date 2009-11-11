@@ -66,6 +66,7 @@ class SFTPConnectionHandler extends ConnectionHandler {
     // ConnectionHandler implementation //
     //////////////////////////////////////
 
+    @Override
     public void startConnection() throws IOException {
         FileLogger.finer("starting connection to "+realm);
         try {
@@ -203,6 +204,7 @@ class SFTPConnectionHandler extends ConnectionHandler {
     }
 
 
+    @Override
     public synchronized boolean isConnected() {
         return sshClient!=null && sshClient.isConnected()
             && sftpClient!=null && !sftpClient.isClosed()
@@ -210,6 +212,7 @@ class SFTPConnectionHandler extends ConnectionHandler {
     }
 
 
+    @Override
     public synchronized void closeConnection() {
         if(sftpClient!=null) {
             try { sftpClient.quit(); }
@@ -226,6 +229,7 @@ class SFTPConnectionHandler extends ConnectionHandler {
     }
 
 
+    @Override
     public void keepAlive() {
         // No-op, keep alive is not available and shouldn't really be necessary, SSH servers such as OpenSSH usually
         // maintain connections open without limit.

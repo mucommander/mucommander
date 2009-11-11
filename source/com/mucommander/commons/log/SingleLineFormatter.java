@@ -57,6 +57,7 @@ public class SingleLineFormatter extends Formatter {
     // Formatter implementation //
     //////////////////////////////
 
+    @Override
     public String format(LogRecord record) {
         StringBuffer sb = new StringBuffer();
 

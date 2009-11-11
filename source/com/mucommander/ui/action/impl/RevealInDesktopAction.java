@@ -44,6 +44,7 @@ public class RevealInDesktopAction extends MuAction {
         setEnabled(DesktopManager.canOpenInFileManager());
     }
 
+    @Override
     public void performAction() {
         try {
             DesktopManager.openInFileManager(mainFrame.getActivePanel().getCurrentFolder());
@@ -71,6 +72,7 @@ public class RevealInDesktopAction extends MuAction {
 
 		public KeyStroke getDefaultKeyStroke() { return KeyStroke.getKeyStroke(KeyEvent.VK_L, KeyEvent.CTRL_DOWN_MASK); }
 
+        @Override
         public String getLabel() {
             return Translator.get(ActionProperties.getActionLabelKey(RevealInDesktopAction.Descriptor.ACTION_ID), DesktopManager.canOpenInFileManager()?DesktopManager.getFileManagerName():Translator.get("file_manager"));
         }

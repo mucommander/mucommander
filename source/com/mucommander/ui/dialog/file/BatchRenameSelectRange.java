@@ -22,11 +22,14 @@ import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.DialogToolkit;
 import com.mucommander.ui.dialog.FocusDialog;
 
-import javax.swing.*;
+import javax.swing.JButton;
+import javax.swing.JTextField;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.PlainDocument;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Container;
+import java.awt.Dialog;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -99,6 +102,7 @@ public class BatchRenameSelectRange extends FocusDialog implements ActionListene
             this.readOnly = readOnly;
         }
         
+        @Override
         public void insertString(int offs, String str, AttributeSet a)
                 throws BadLocationException {
             if (!readOnly) {
@@ -106,6 +110,7 @@ public class BatchRenameSelectRange extends FocusDialog implements ActionListene
             }
         }
 
+        @Override
         public void remove(int offs, int len)
                 throws BadLocationException {
             if (!readOnly) {

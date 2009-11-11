@@ -91,6 +91,7 @@ public class CalculateChecksumJob extends TransferFileJob {
     // TransferFileJob implementation //
     ////////////////////////////////////
 
+    @Override
     protected boolean processFile(AbstractFile file, Object recurseParams) {
         // Skip directories
         if(file.isDirectory()) {
@@ -185,6 +186,7 @@ public class CalculateChecksumJob extends TransferFileJob {
         } while(true);
     }
 
+    @Override
     protected boolean hasFolderChanged(AbstractFile folder) {
         // This job modifies the folder where the checksum file is
         return folder.equalsCanonical(checksumFile.getParent());     // Note: parent may be null
@@ -195,6 +197,7 @@ public class CalculateChecksumJob extends TransferFileJob {
     // Overridden methods //
     ////////////////////////
 
+    @Override
     protected void jobStarted() {
         super.jobStarted();
 
@@ -243,6 +246,7 @@ public class CalculateChecksumJob extends TransferFileJob {
         } while(true);
     }
 
+    @Override
     protected void jobCompleted() {
         super.jobCompleted();
 
@@ -250,6 +254,7 @@ public class CalculateChecksumJob extends TransferFileJob {
         ViewerRegistrar.createViewerFrame(getMainFrame(), checksumFile, IconManager.getImageIcon(checksumFile.getIcon()).getImage());
     }
 
+    @Override
     protected void jobStopped() {
         super.jobStopped();
         

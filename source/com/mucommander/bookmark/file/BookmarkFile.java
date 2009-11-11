@@ -91,6 +91,7 @@ public class BookmarkFile extends ProtocolFile {
      * Returns the underlying bookmark's name.
      * @return the underlying bookmark's name.
      */
+    @Override
     public String getName() {return bookmark.getName();}
 
     /**
@@ -98,6 +99,7 @@ public class BookmarkFile extends ProtocolFile {
      * @return             the wrapped file's descendants.
      * @throws IOException if an I/O error occurs.
      */
+    @Override
     public AbstractFile[] ls() throws IOException {return getUnderlyingFile().ls();}
 
     /**
@@ -106,6 +108,7 @@ public class BookmarkFile extends ProtocolFile {
      * @throws IOException if an IO error occurs.
      * @see                #setParent(AbstractFile)
      */
+    @Override
     public AbstractFile getParent() {
         try {
             return new BookmarkRoot();
@@ -119,18 +122,21 @@ public class BookmarkFile extends ProtocolFile {
      * Returns the result of the wrapped file's <code>getFreeSpace()</code> methods.
      * @return the result of the wrapped file's <code>getFreeSpace()</code> methods.
      */
+    @Override
     public long getFreeSpace() {return getUnderlyingFile().getFreeSpace();}
 
     /**
      * Returns the result of the wrapped file's <code>getTotalSpace()</code> methods.
      * @return the result of the wrapped file's <code>getTotalSpace()</code> methods.
      */
+    @Override
     public long getTotalSpace() {return getUnderlyingFile().getTotalSpace();}
 
     /**
      * Returns <code>false</code>.
      * @return <code>false</code>.
      */
+    @Override
     public boolean isDirectory() {return true;}
 
     /**
@@ -138,6 +144,7 @@ public class BookmarkFile extends ProtocolFile {
      * @param parent object to use as the wrapped file's parent.
      * @see          AbstractFile#getParent()
      */
+    @Override
     public void setParent(AbstractFile parent) {
         getUnderlyingFile().setParent(parent);}
 
@@ -148,8 +155,10 @@ public class BookmarkFile extends ProtocolFile {
      * </p>
      * @return <code>true</code> if the specified bookmark exists, <code>false</code> otherwise.
      */
+    @Override
     public boolean exists() {return BookmarkManager.getBookmark(bookmark.getName()) != null;}
 
+    @Override
     public void mkfile() {BookmarkManager.addBookmark(bookmark);}
 
     public boolean equals(Object o) {
@@ -168,6 +177,7 @@ public class BookmarkFile extends ProtocolFile {
         return false;
     }
 
+    @Override
     public String getCanonicalPath() {return bookmark.getLocation();}
 
 
@@ -184,6 +194,7 @@ public class BookmarkFile extends ProtocolFile {
      * @param  destination where the file will be moved to.
      * @return             {@link AbstractFile#MUST_HINT}.
      */
+    @Override
     public int getMoveToHint(AbstractFile destination) {
         if(destination.getAncestor() instanceof BookmarkFile)
             return MUST_HINT;
@@ -200,6 +211,7 @@ public class BookmarkFile extends ProtocolFile {
      * @return                       <code>true</code>.
      * @throws FileTransferException if the specified destination is not an instance of <code>BookmarkFile</code>.
      */
+    @Override
     public boolean moveTo(AbstractFile destination) throws FileTransferException {
         Bookmark oldBookmark;
         Bookmark newBookmark;
@@ -228,12 +240,14 @@ public class BookmarkFile extends ProtocolFile {
      * Deleting a bookmark means unregistering it from the {@link com.mucommander.bookmark.BookmarkManager}.
      * </p>
      */
+    @Override
     public void delete() {BookmarkManager.removeBookmark(bookmark);}
 
 
 
     // - Bookmark duplication --------------------------------------------------
     // -------------------------------------------------------------------------
+    @Override
     public int getCopyToHint(AbstractFile destination) {
         destination = destination.getAncestor();
         if(destination instanceof BookmarkFile)
@@ -251,6 +265,7 @@ public class BookmarkFile extends ProtocolFile {
      * @return                       <code>true</code>.
      * @throws FileTransferException if the specified destination is not an instance of <code>BookmarkFile</code>.
      */
+    @Override
     public boolean copyTo(AbstractFile destination) throws FileTransferException {
         // Makes sure we're working with a bookmark.
         destination = destination.getAncestor();
@@ -274,6 +289,7 @@ public class BookmarkFile extends ProtocolFile {
      * @return            this file's permissions.
      * @see               #changePermission(int,int,boolean)
      */
+    @Override
     public FilePermissions getPermissions() {return PERMISSIONS;}
 
     /**
@@ -288,11 +304,13 @@ public class BookmarkFile extends ProtocolFile {
      * @return            <code>false</code>.
      * @see               #getPermissions()
      */
+    @Override
     public boolean changePermission(int access, int permission, boolean enabled) {return false;}
 
 
     // - Import / export -------------------------------------------------------
     // -------------------------------------------------------------------------
+    @Override
     public InputStream getInputStream() throws IOException {
         BookmarkBuilder       builder;
         ByteArrayOutputStream stream;
@@ -322,6 +340,7 @@ public class BookmarkFile extends ProtocolFile {
         return new ByteArrayInputStream(stream.toByteArray());
     }
 
+    @Override
     public OutputStream getOutputStream(boolean append) throws IOException {return new BookmarkOutputStream();}
 
 
@@ -331,20 +350,36 @@ public class BookmarkFile extends ProtocolFile {
     // The following methods are not used by BookmarkFile. They will throw an exception or
     // return an 'operation non supported' / default value.
 
+    @Override
     public void mkdir() throws IOException {throw new IOException();}
+    @Override
     public long getDate() {return 0;}
+    @Override
     public boolean canChangeDate() {return false;}
+    @Override
     public PermissionBits getChangeablePermissions() {return PermissionBits.EMPTY_PERMISSION_BITS;}
+    @Override
     public boolean changeDate(long lastModified) {return false;}
+    @Override
     public long getSize() {return -1;}
+    @Override
     public boolean hasRandomAccessInputStream() {return false;}
+    @Override
     public RandomAccessInputStream getRandomAccessInputStream() throws IOException {throw new IOException();}
+    @Override
     public boolean hasRandomAccessOutputStream() {return false;}
+    @Override
     public RandomAccessOutputStream getRandomAccessOutputStream() throws IOException {throw new IOException();}
+    @Override
     public Object getUnderlyingFileObject() {return null;}
+    @Override
     public boolean isSymlink() {return false;}
+    @Override
     public String getOwner() {return null;}
+    @Override
     public boolean canGetOwner() {return false;}
+    @Override
     public String getGroup() {return null;}
+    @Override
     public boolean canGetGroup() {return false;}
 }

@@ -86,11 +86,13 @@ public class GrowlNotifier extends AbstractNotifier {
     // AbstractNotifier implementation //
     /////////////////////////////////////
 
+    @Override
     public String getPrettyName() {
         return "Growl";
     }
 
 
+    @Override
     public boolean setEnabled(boolean enabled) {
         if(enabled) {
             // No need to bother if the OS is not Mac OS X
@@ -136,10 +138,12 @@ public class GrowlNotifier extends AbstractNotifier {
         }
     }
 
+    @Override
     public boolean isEnabled() {
         return isEnabled;
     }
 
+    @Override
     public boolean displayNotification(int notificationType, String title, String description) {
         AppLogger.finer("notificationType="+notificationType+" title="+title+" description="+description);
 

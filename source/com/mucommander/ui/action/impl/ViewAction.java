@@ -46,6 +46,7 @@ public class ViewAction extends InternalViewAction {
 
     // - AbstractViewerAction implementation ---------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
+    @Override
     protected Command getCustomCommand() {
         return CommandManager.getCommandForAlias(CommandManager.VIEWER_ALIAS);
     }

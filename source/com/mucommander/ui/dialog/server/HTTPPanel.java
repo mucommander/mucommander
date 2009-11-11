@@ -25,7 +25,9 @@ import com.mucommander.file.FileURL;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.main.MainFrame;
 
-import javax.swing.*;
+import javax.swing.JLabel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
 import java.net.MalformedURLException;
 
 
@@ -82,6 +84,7 @@ public class HTTPPanel extends ServerPanel {
     // ServerPanel implementation //
     ////////////////////////////////
 	
+    @Override
     FileURL getServerURL() throws MalformedURLException {
         updateValues();
         
@@ -95,10 +98,12 @@ public class HTTPPanel extends ServerPanel {
         return fileURL;
     }
 	
+    @Override
     boolean usesCredentials() {
         return true;
     }
 
+    @Override
     public void dialogValidated() {
         updateValues();
     }

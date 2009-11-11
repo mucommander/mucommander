@@ -220,6 +220,7 @@ public class DebugConsoleDialog extends FocusDialog implements ActionListener, I
      */
     private class DebugListCellRenderer extends DefaultListCellRenderer {
 
+        @Override
         public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
             if(value==null)
                 return null;

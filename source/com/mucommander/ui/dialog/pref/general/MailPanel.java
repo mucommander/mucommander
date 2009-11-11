@@ -18,10 +18,6 @@
 
 package com.mucommander.ui.dialog.pref.general;
 
-import java.awt.BorderLayout;
-
-import javax.swing.BorderFactory;
-
 import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.pref.PreferencesDialog;
@@ -29,6 +25,9 @@ import com.mucommander.ui.dialog.pref.PreferencesPanel;
 import com.mucommander.ui.dialog.pref.component.PrefTextField;
 import com.mucommander.ui.layout.XAlignedComponentPanel;
 import com.mucommander.ui.layout.YBoxPanel;
+
+import javax.swing.BorderFactory;
+import java.awt.BorderLayout;
 
 /**
  * 'Mail' preferences panel.
@@ -106,6 +105,7 @@ class MailPanel extends PreferencesPanel {
     ///////////////////////
     // PrefPanel methods //
     ///////////////////////
+    @Override
     protected void commit() {
         MuConfiguration.setVariable(MuConfiguration.MAIL_SENDER_NAME, nameField.getText());
         MuConfiguration.setVariable(MuConfiguration.MAIL_SENDER_ADDRESS, emailField.getText());

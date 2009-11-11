@@ -46,18 +46,22 @@ public class TestFile extends DummyFile {
         this.parent = parent;
     }
     
+    @Override
     public boolean isDirectory() {
         return isDir;
     }
     
+    @Override
     public long getSize() {
         return size;
     }
  
+    @Override
     public long getDate() {
         return date;
     }
     
+    @Override
     public AbstractFile getParent() {
         return parent;
     }

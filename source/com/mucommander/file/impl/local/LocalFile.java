@@ -557,10 +557,12 @@ public class LocalFile extends ProtocolFile {
     /**
      * Returns a <code>java.io.File</code> instance corresponding to this file.
      */
+    @Override
     public Object getUnderlyingFileObject() {
         return file;
     }
 
+    @Override
     public boolean isSymlink() {
         // At the moment symlinks under Windows (aka NTFS junction points) are not supported because java.io.File
         // knows nothing about them and there is no way to discriminate them. So there is no need to waste time
@@ -580,14 +582,17 @@ public class LocalFile extends ProtocolFile {
         }
     }
 
+    @Override
     public long getDate() {
         return file.lastModified();
     }
 
+    @Override
     public boolean canChangeDate() {
         return true;
     }
 
+    @Override
     public boolean changeDate(long lastModified) {
         // java.io.File#setLastModified(long) throws an IllegalArgumentException if time is negative.
         // If specified time is negative, set it to 0 (01/01/1970).
@@ -597,10 +602,12 @@ public class LocalFile extends ProtocolFile {
         return file.setLastModified(lastModified);
     }
 		
+    @Override
     public long getSize() {
         return file.length();
     }
 	
+    @Override
     public AbstractFile getParent() {
         // Retrieve parent AbstractFile and cache it
         if (!parentValueSet) {
@@ -615,23 +622,28 @@ public class LocalFile extends ProtocolFile {
         return parent;
     }
 	
+    @Override
     public void setParent(AbstractFile parent) {
         this.parent = parent;
         this.parentValueSet = true;
     }
 		
+    @Override
     public boolean exists() {
         return file.exists();
     }
 	
+    @Override
     public FilePermissions getPermissions() {
         return permissions;
     }
 
+    @Override
     public PermissionBits getChangeablePermissions() {
         return CHANGEABLE_PERMISSIONS;
     }
 
+    @Override
     public boolean changePermission(int access, int permission, boolean enabled) {
         // Only the 'user' permissions under Java 1.6 are supported
         if(access!=USER_ACCESS || JavaVersions.JAVA_1_6.isCurrentLower())
@@ -650,6 +662,7 @@ public class LocalFile extends ProtocolFile {
     /**
      * Always returns <code>null</code>, this information is not available unfortunately.
      */
+    @Override
     public String getOwner() {
         return null;
     }
@@ -657,6 +670,7 @@ public class LocalFile extends ProtocolFile {
     /**
      * Always returns <code>false</code>, this information is not available unfortunately.
      */
+    @Override
     public boolean canGetOwner() {
         return false;
     }
@@ -664,6 +678,7 @@ public class LocalFile extends ProtocolFile {
     /**
      * Always returns <code>null</code>, this information is not available unfortunately.
      */
+    @Override
     public String getGroup() {
         return null;
     }
@@ -671,10 +686,12 @@ public class LocalFile extends ProtocolFile {
     /**
      * Always returns <code>false</code>, this information is not available unfortunately.
      */
+    @Override
     public boolean canGetGroup() {
         return false;
     }
 
+    @Override
     public boolean isDirectory() {
         // This test is not necessary anymore now that 'No disk' error dialogs are disabled entirely (using Kernel32
         // DLL's SetErrorMode function). Leaving this code commented for a while in case the problem comes back.
@@ -692,6 +709,7 @@ public class LocalFile extends ProtocolFile {
      * benefit from <code>InterruptibleChannel</code> and allow a thread waiting for an I/O to be gracefully interrupted
      * using <code>Thread#interrupt()</code>.
      */
+    @Override
     public InputStream getInputStream() throws IOException {
         return new LocalInputStream(new FileInputStream(file).getChannel());
     }
@@ -701,10 +719,12 @@ public class LocalFile extends ProtocolFile {
      * benefit from <code>InterruptibleChannel</code> and allow a thread waiting for an I/O to be gracefully interrupted
      * using <code>Thread#interrupt()</code>.
      */
+    @Override
     public OutputStream getOutputStream(boolean append) throws IOException {
         return new LocalOutputStream(new FileOutputStream(absPath, append).getChannel());
     }
 
+    @Override
     public boolean hasRandomAccessInputStream() {
         return true;
     }
@@ -714,10 +734,12 @@ public class LocalFile extends ProtocolFile {
      * benefit from <code>InterruptibleChannel</code> and allow a thread waiting for an I/O to be gracefully interrupted
      * using <code>Thread#interrupt()</code>.
      */
+    @Override
     public RandomAccessInputStream getRandomAccessInputStream() throws IOException {
         return new LocalRandomAccessInputStream(new RandomAccessFile(file, "r").getChannel());
     }
 
+    @Override
     public boolean hasRandomAccessOutputStream() {
         return true;
     }
@@ -727,10 +749,12 @@ public class LocalFile extends ProtocolFile {
      * benefit from <code>InterruptibleChannel</code> and allow a thread waiting for an I/O to be gracefully interrupted
      * using <code>Thread#interrupt()</code>.
      */
+    @Override
     public RandomAccessOutputStream getRandomAccessOutputStream() throws IOException {
         return new LocalRandomAccessOutputStream(new RandomAccessFile(file, "rw").getChannel());
     }
 
+    @Override
     public void delete() throws IOException {
         boolean ret = file.delete();
 		
@@ -739,16 +763,19 @@ public class LocalFile extends ProtocolFile {
     }
 
 
+    @Override
     public AbstractFile[] ls() throws IOException {
         return ls(null);
     }
 
+    @Override
     public void mkdir() throws IOException {
         if(!new File(absPath).mkdir())
             throw new IOException();
     }
 	
 
+    @Override
     public long getFreeSpace() {
         if(JavaVersions.JAVA_1_6.isCurrentOrHigher())
             return file.getUsableSpace();
@@ -756,6 +783,7 @@ public class LocalFile extends ProtocolFile {
         return getVolumeInfo()[1];
     }
 	
+    @Override
     public long getTotalSpace() {
         if(JavaVersions.JAVA_1_6.isCurrentOrHigher())
             return file.getTotalSpace();
@@ -768,6 +796,7 @@ public class LocalFile extends ProtocolFile {
     // Overridden methods //
     ////////////////////////
 
+    @Override
     public String getName() {
         // If this file has no parent, return:
         // - the drive's name under OSes with root drives such as Windows, e.g. "C:"
@@ -778,6 +807,7 @@ public class LocalFile extends ProtocolFile {
         return file.getName();
     }
 
+    @Override
     public String getAbsolutePath() {
         // Append separator for root folders (C:\ , /) and for directories
         if(parentFilePath ==null || (isDirectory() && !absPath.endsWith(SEPARATOR)))
@@ -787,6 +817,7 @@ public class LocalFile extends ProtocolFile {
     }
 
 
+    @Override
     public String getCanonicalPath() {
         // This test is not necessary anymore now that 'No disk' error dialogs are disabled entirely (using Kernel32
         // DLL's SetErrorMode function). Leaving this code commented for a while in case the problem comes back.
@@ -813,11 +844,13 @@ public class LocalFile extends ProtocolFile {
     }
 
 
+    @Override
     public String getSeparator() {
         return SEPARATOR;
     }
 
 
+    @Override
     public AbstractFile[] ls(FilenameFilter filenameFilter) throws IOException {
         String names[] = file.list();
 
@@ -853,6 +886,7 @@ public class LocalFile extends ProtocolFile {
      * Overrides {@link AbstractFile#moveTo(AbstractFile)} to move/rename the file directly if the destination file
      * is also a local file.
      */
+    @Override
     public boolean moveTo(AbstractFile destFile) throws FileTransferException  {
         // If destination file is not a LocalFile nor has a LocalFile ancestor (for instance an archive entry),
         // renaming won't work so use the default moveTo() implementation instead
@@ -904,6 +938,7 @@ public class LocalFile extends ProtocolFile {
     }
 
 
+    @Override
     public boolean isHidden() {
         return file.isHidden();
     }
@@ -912,6 +947,7 @@ public class LocalFile extends ProtocolFile {
      * Overridden to play nice with platforms that have root drives -- for those, the drive's root (e.g. <code>C:\</code>)
      * is returned instead of <code>/</code>.
      */
+    @Override
     public AbstractFile getRoot() {
         if(USES_ROOT_DRIVES) {
             Matcher matcher = driveRootPattern.matcher(getAbsolutePath(true));
@@ -933,6 +969,7 @@ public class LocalFile extends ProtocolFile {
      * Overridden to play nice with platforms that have root drives -- for those, <code>true</code> is returned if
      * this file's path matches the drive root's (e.g. <code>C:\</code>).
      */
+    @Override
     public boolean isRoot() {
         if(USES_ROOT_DRIVES)
             return driveRootPattern.matcher(getAbsolutePath()).matches();
@@ -944,6 +981,7 @@ public class LocalFile extends ProtocolFile {
      * Overridden to return the local volum on which this file is located. The returned volume is one of the volumes
      * returned by {@link #getVolumes()}.
      */
+    @Override
     public AbstractFile getVolume() {
         AbstractFile[] volumes = LocalFile.getVolumes();
 
@@ -983,6 +1021,7 @@ public class LocalFile extends ProtocolFile {
      * Overridden to return {@link #SHOULD_NOT_HINT} under Windows when the destination file is located on a different
      * drive from this file (e.g. C:\ and E:\).
      */
+    @Override
     public int getMoveToHint(AbstractFile destFile) {
         int moveHint = super.getMoveToHint(destFile);
         if(moveHint!=SHOULD_HINT && moveHint!=MUST_HINT)
@@ -1023,6 +1062,7 @@ public class LocalFile extends ProtocolFile {
             this.bb = BufferPool.getByteBuffer();
         }
 
+        @Override
         public int read() throws IOException {
             synchronized(bb) {
                 bb.position(0);
@@ -1036,6 +1076,7 @@ public class LocalFile extends ProtocolFile {
             }
         }
 
+        @Override
         public int read(byte b[], int off, int len) throws IOException {
             synchronized(bb) {
                 bb.position(0);
@@ -1052,6 +1093,7 @@ public class LocalFile extends ProtocolFile {
             }
         }
 
+        @Override
         public void close() throws IOException {
             BufferPool.releaseByteBuffer(bb);
             channel.close();
@@ -1122,6 +1164,7 @@ public class LocalFile extends ProtocolFile {
             this.bb = BufferPool.getByteBuffer();
         }
 
+        @Override
         public void write(int i) throws IOException {
             synchronized(bb) {
                 bb.position(0);
@@ -1134,10 +1177,12 @@ public class LocalFile extends ProtocolFile {
             }
         }
 
+        @Override
         public void write(byte b[]) throws IOException {
             write(b, 0, b.length);
         }
 
+        @Override
         public void write(byte b[], int off, int len) throws IOException {
             int nbToWrite;
             synchronized(bb) {
@@ -1158,6 +1203,7 @@ public class LocalFile extends ProtocolFile {
             }
         }
 
+        @Override
         public void setLength(long newLength) throws IOException {
             long currentLength = getLength();
 
@@ -1182,6 +1228,7 @@ public class LocalFile extends ProtocolFile {
 
         }
 
+        @Override
         public void close() throws IOException {
             BufferPool.releaseByteBuffer(bb);
             channel.close();
@@ -1246,6 +1293,7 @@ public class LocalFile extends ProtocolFile {
         /**
          * Overridden for peformance reasons.
          */
+        @Override
         public int getIntValue() {
             int userPerms = 0;
 

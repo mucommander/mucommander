@@ -29,6 +29,7 @@ public class BufferedConfigurationExplorerTest extends ConfigurationExplorerTest
      * Returns an instance of BufferedConfigurationExplorer.
      * @return an instance of BufferedConfigurationExplorer.
      */
+    @Override
     protected ConfigurationExplorer getExplorer() {return new BufferedConfigurationExplorer(conf.getRoot());}
 
     /**

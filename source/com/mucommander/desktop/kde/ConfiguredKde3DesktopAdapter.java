@@ -28,6 +28,7 @@ public class ConfiguredKde3DesktopAdapter extends Kde3DesktopAdapter {
 
     private static final String KDE_FULL_SESSION_VAR = "KDE_FULL_SESSION";
 
+    @Override
     protected String getConfiguredEnvVariable(String name) {
         return System.getenv(name);
     }
@@ -36,6 +37,7 @@ public class ConfiguredKde3DesktopAdapter extends Kde3DesktopAdapter {
         return "KDE 3 Desktop";
     }
 
+    @Override
     public boolean isAvailable() {
         String var = getConfiguredEnvVariable(KDE_FULL_SESSION_VAR);
         return var != null && !var.trim().equals("");

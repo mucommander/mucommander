@@ -236,6 +236,7 @@ public abstract class FilenameFilter extends FileFilter {
      * @return true if the file was accepted
      * @see #getOperateOnPath()
      */
+    @Override
     public boolean accept(AbstractFile file) {
         return accept(getOperateOnPath()?file.getAbsolutePath():file.getName());
     }

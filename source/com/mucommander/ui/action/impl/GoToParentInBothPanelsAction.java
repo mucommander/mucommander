@@ -64,6 +64,7 @@ public class GoToParentInBothPanelsAction extends GoToParentAction {
     /**
      * Opens both the active and inactive folder panel's parent directories.
      */
+    @Override
     public void performAction() {
         Thread       openThread;
         AbstractFile parent;

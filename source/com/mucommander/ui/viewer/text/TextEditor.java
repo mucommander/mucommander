@@ -24,7 +24,8 @@ import com.mucommander.ui.viewer.FileEditor;
 
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Insets;
 import java.io.IOException;
 import java.io.OutputStream;
 
@@ -50,6 +51,7 @@ class TextEditor extends FileEditor implements DocumentListener {
     // FileEditor implementation //
     ///////////////////////////////
 
+    @Override
     protected void saveAs(AbstractFile destFile) throws IOException {
         OutputStream out;
 
@@ -74,6 +76,7 @@ class TextEditor extends FileEditor implements DocumentListener {
         }
     }
 
+    @Override
     public void edit(AbstractFile file) throws IOException {
         textEditorImpl.startEditing(file, this);
 
@@ -104,10 +107,12 @@ class TextEditor extends FileEditor implements DocumentListener {
     // Overridden methods //
     ////////////////////////
 
+    @Override
     public Insets getInsets() {
         return new Insets(4, 3, 4, 3);
     }
 
+    @Override
     public void requestFocus() {
         textEditorImpl.requestFocus();
     }

@@ -19,7 +19,8 @@
 
 package com.mucommander.ui.main.table;
 
-import javax.swing.*;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
@@ -96,6 +97,7 @@ public class CellLabel extends JLabel {
      * 
      * @param c the new foreground's color for this label
      */
+    @Override
     public void setForeground(Color c) {
         if((c != null && !c.equals(lastForegroundColor)) || (lastForegroundColor != null && !lastForegroundColor.equals(c))) {
             super.setForeground(c); 
@@ -109,6 +111,7 @@ public class CellLabel extends JLabel {
      * 
      * @param c the new background's color for this label
      */
+    @Override
     public void setBackground(Color c) {
         if((c != null && !c.equals(lastBackgroundColor)) || (lastBackgroundColor != null && !lastBackgroundColor.equals(c))) {
             super.setBackground(c); 
@@ -148,6 +151,7 @@ public class CellLabel extends JLabel {
      * 
      * @param text the new text this label will display
      */
+    @Override
     public void setText(String text) {
         if((text!=null && !text.equals(lastText)) || (lastText!=null && !lastText.equals(text))) {
             super.setText(text);
@@ -176,6 +180,7 @@ public class CellLabel extends JLabel {
      * 
      * @param tooltip the new tooltip this label will display
      */
+    @Override
     public void setToolTipText(String tooltip) {
         if((tooltip!=null && !tooltip.equals(lastTooltip)) || (lastTooltip!=null && !lastTooltip.equals(tooltip))) {
             super.setToolTipText(tooltip);
@@ -191,6 +196,7 @@ public class CellLabel extends JLabel {
      * Paints the label.
      * @param g where to paint the label.
      */
+    @Override
     public void paint(Graphics g) {
         boolean doOutline;
 
@@ -244,6 +250,7 @@ public class CellLabel extends JLabel {
     /**
      * Overridden for performance reasons.
      */
+    @Override
     public boolean isOpaque() {
         // If we're not using a gradient background, the component's opaque
         // status is context dependant.
@@ -268,27 +275,32 @@ public class CellLabel extends JLabel {
     /**
      * Overridden for performance reasons.
      */
+    @Override
     public void validate() {}
 
     /**
      * Overridden for performance reasons.
      */
+    @Override
     public void revalidate() {}
 
     /**
      * Overridden for performance reasons.
      */
+    @Override
     public void repaint(long tm, int x, int y, int width, int height) {}
 
     /**
      * Overridden for performance reasons.
      */
+    @Override
     public void repaint(Rectangle r) { }
 
     /**
      * Overridden for performance reasons.
      */
-    protected void firePropertyChange(String propertyName, Object oldValue, Object newValue) {	
+    @Override
+    protected void firePropertyChange(String propertyName, Object oldValue, Object newValue) {
         // Strings get interned...
         if(propertyName.equals("text"))
             super.firePropertyChange(propertyName, oldValue, newValue);
@@ -297,5 +309,6 @@ public class CellLabel extends JLabel {
     /**
      * Overridden for performance reasons.
      */
+    @Override
     public void firePropertyChange(String propertyName, boolean oldValue, boolean newValue) { }
 }

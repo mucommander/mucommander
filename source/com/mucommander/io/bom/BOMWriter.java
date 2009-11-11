@@ -107,16 +107,19 @@ public class BOMWriter extends OutputStreamWriter {
     // Overridden methods //
     ////////////////////////
 
+    @Override
     public void write(int c) throws IOException {
         checkWriteBOM();
         super.write(c);
     }
 
+    @Override
     public void write(char[] cbuf, int off, int len) throws IOException {
         checkWriteBOM();
         super.write(cbuf, off, len);
     }
 
+    @Override
     public void write(String str, int off, int len) throws IOException {
         checkWriteBOM();
         super.write(str, off, len);

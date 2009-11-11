@@ -46,6 +46,7 @@ public class OpenNativelyAction extends MuAction {
         super(mainFrame, properties);
     }
 
+    @Override
     public void performAction() {
         AbstractFile selectedFile = mainFrame.getActiveTable().getSelectedFile(true, true);
 

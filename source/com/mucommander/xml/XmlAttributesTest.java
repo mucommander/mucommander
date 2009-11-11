@@ -52,6 +52,7 @@ public class XmlAttributesTest extends TestCase {
     /**
      * Initialises the test case.
      */
+    @Override
     public void setUp() {attributes = new XmlAttributes();}
 
 

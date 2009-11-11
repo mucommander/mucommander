@@ -25,7 +25,10 @@ import com.mucommander.ui.helper.FocusRequester;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import java.awt.*;
+import java.awt.Component;
+import java.awt.Dialog;
+import java.awt.Dimension;
+import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
@@ -137,6 +140,7 @@ public class FocusDialog extends JDialog implements WindowListener {
     /**
      * Sets a maximum width and height for this dialog.
      */
+    @Override
     public void setMaximumSize(Dimension dimension) {
         this.maximumDimension = dimension;
     }
@@ -144,6 +148,7 @@ public class FocusDialog extends JDialog implements WindowListener {
     /**
      * Sets a minium width and height for this dialog.
      */
+    @Override
     public void setMinimumSize(Dimension dimension) {
         this.minimumDimension = dimension;
     }
@@ -164,6 +169,7 @@ public class FocusDialog extends JDialog implements WindowListener {
     /**
      * Overrides Window.pack() to take into account minimum and maximum dialog size (if specified).
      */
+    @Override
     public void pack()  {
         super.pack();
         if(maximumDimension!=null)

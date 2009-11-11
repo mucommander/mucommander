@@ -59,6 +59,7 @@ public abstract class AbstractRWArchiveFile extends AbstractArchiveFile {
      *
      * @return true
      */
+    @Override
     public boolean isWritable() {
         return true;
     }

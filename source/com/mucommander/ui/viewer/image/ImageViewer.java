@@ -27,7 +27,9 @@ import com.mucommander.ui.theme.*;
 import com.mucommander.ui.viewer.FileViewer;
 import com.mucommander.ui.viewer.ViewerFrame;
 
-import javax.swing.*;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+import javax.swing.KeyStroke;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -166,6 +168,7 @@ class ImageViewer extends FileViewer implements ActionListener, ThemeListener {
     // FileViewer implementation //
     ///////////////////////////////
 
+    @Override
     public void view(AbstractFile file) throws IOException {
 
         ViewerFrame frame = getFrame();
@@ -191,6 +194,7 @@ class ImageViewer extends FileViewer implements ActionListener, ThemeListener {
     // Overridden methods //
     ////////////////////////
 
+    @Override
     public void paint(Graphics g) {
         int width = getWidth();
         int height = getHeight();
@@ -210,10 +214,12 @@ class ImageViewer extends FileViewer implements ActionListener, ThemeListener {
     // ActionListener implementation //
     ///////////////////////////////////
 
+    @Override
     public String getTitle() {
         return super.getTitle()+" - "+image.getWidth(null)+"x"+image.getHeight(null)+" - "+((int)(zoomFactor*100))+"%";
     }
 
+    @Override
     public synchronized Dimension getPreferredSize() {
         return new Dimension(scaledImage.getWidth(null), scaledImage.getHeight(null));
     }
@@ -250,6 +256,7 @@ class ImageViewer extends FileViewer implements ActionListener, ThemeListener {
     /**
      * Receives theme color changes notifications.
      */
+    @Override
     public void colorChanged(ColorChangedEvent event) {
         if(event.getColorId() == Theme.EDITOR_BACKGROUND_COLOR) {
             backgroundColor = event.getColor();
@@ -260,5 +267,6 @@ class ImageViewer extends FileViewer implements ActionListener, ThemeListener {
     /**
      * Not used, implemented as a no-op.
      */
+    @Override
     public void fontChanged(FontChangedEvent event) {}
 }

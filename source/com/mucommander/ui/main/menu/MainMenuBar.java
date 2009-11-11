@@ -272,6 +272,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
         // Add Bonjour services menu
         goMenu.add(new JSeparator());
         BonjourMenu bonjourMenu = new BonjourMenu() {
+            @Override
             public MuAction getMenuItemAction(BonjourService bs) {
                 return new OpenLocationAction(MainMenuBar.this.mainFrame, new Hashtable<String, Object>(), bs);
             }

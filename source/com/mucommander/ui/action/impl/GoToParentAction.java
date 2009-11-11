@@ -48,6 +48,7 @@ public class GoToParentAction extends GoToAction {
      * Enables or disables this action based on the currently active folder's
      * has a parent, this action will be enabled, if not it will be disabled.
      */
+    @Override
     protected void toggleEnabledState() {
         setEnabled(mainFrame.getActivePanel().getCurrentFolder().getParent()!=null);
     }
@@ -98,6 +99,7 @@ public class GoToParentAction extends GoToAction {
     /**
      * Goes to the current location's parent in the active panel.
      */
+    @Override
     public void performAction() {
         // Changes the current folder to make it the current folder's parent.
         // Does nothing if the current folder doesn't have a parent.

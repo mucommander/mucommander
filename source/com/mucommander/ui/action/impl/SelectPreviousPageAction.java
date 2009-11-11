@@ -37,6 +37,7 @@ public class SelectPreviousPageAction extends SelectBackwardAction {
         super(mainFrame, properties);
     }
 
+    @Override
     protected int getRowDecrement() {
         // Note: the page row increment varies with the file table's height
         return mainFrame.getActiveTable().getPageRowIncrement()+1;

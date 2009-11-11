@@ -39,6 +39,7 @@ public class InvertSelectionAction extends MuAction {
         super(mainFrame, properties);
     }
 
+    @Override
     public void performAction() {
         FileTable fileTable = mainFrame.getActiveTable();
         FileTableModel tableModel = fileTable.getFileTableModel();

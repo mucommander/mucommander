@@ -37,6 +37,7 @@ public class GoBackAction extends GoToAction {
     }
 
 
+    @Override
     public void performAction() {
         mainFrame.getActivePanel().getFolderHistory().goBack();
     }
@@ -46,6 +47,7 @@ public class GoBackAction extends GoToAction {
      * Enables or disables this action based on the history of the currently active FolderPanel: if there is a previous
      * folder in the history, this action will be enabled, if not it will be disabled.
      */
+    @Override
     protected void toggleEnabledState() {
         setEnabled(mainFrame.getActivePanel().getFolderHistory().hasBackFolder());
     }

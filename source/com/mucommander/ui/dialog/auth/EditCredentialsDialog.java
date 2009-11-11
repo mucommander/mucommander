@@ -207,6 +207,7 @@ public class EditCredentialsDialog extends FocusDialog implements ActionListener
     /**
      * Overrides dispose() to write credentials if needed (if at least one item has been changed).
      */
+    @Override
     public void dispose() {
         super.dispose();
 

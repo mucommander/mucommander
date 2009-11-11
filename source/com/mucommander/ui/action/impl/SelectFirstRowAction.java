@@ -36,6 +36,7 @@ public class SelectFirstRowAction extends MuAction {
         super(mainFrame, properties);
     }
 
+    @Override
     public void performAction() {
         mainFrame.getActiveTable().selectRow(0);
     }

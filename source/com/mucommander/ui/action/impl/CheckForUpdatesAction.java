@@ -36,6 +36,7 @@ public class CheckForUpdatesAction extends MuAction implements InvokesDialog {
         super(mainFrame, properties);
     }
 
+    @Override
     public void performAction() {
         new CheckVersionDialog(mainFrame, true);
     }

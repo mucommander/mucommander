@@ -47,6 +47,7 @@ public class EditAction extends InternalEditAction {
 
     // - AbstractViewerAction implementation ---------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
+    @Override
     protected Command getCustomCommand() {
         return CommandManager.getCommandForAlias(CommandManager.EDITOR_ALIAS);
     }

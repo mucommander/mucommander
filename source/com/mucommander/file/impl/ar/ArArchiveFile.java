@@ -47,10 +47,12 @@ public class ArArchiveFile extends AbstractROArchiveFile {
     // AbstractArchiveFile implementation //
     ////////////////////////////////////////
 
+    @Override
     public ArchiveEntryIterator getEntryIterator() throws IOException {
         return new ArArchiveEntryIterator(getInputStream());
     }
 
+    @Override
     public InputStream getEntryInputStream(ArchiveEntry entry, ArchiveEntryIterator entryIterator) throws IOException {
         InputStream in = getInputStream();
         ArchiveEntryIterator iterator = new ArArchiveEntryIterator(in);

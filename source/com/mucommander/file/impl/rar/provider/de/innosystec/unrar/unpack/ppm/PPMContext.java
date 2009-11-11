@@ -129,7 +129,8 @@ public class PPMContext extends Pointer
 		}
 	}
 
-	public void setAddress(int pos)
+	@Override
+    public void setAddress(int pos)
 	{
         super.setAddress(pos);
         oneState.setAddress(pos+2);

@@ -49,6 +49,7 @@ public class DummyFile extends AbstractFile {
     /**
      * Implementation notes: always returns <code>0</code>.
      */
+    @Override
     public long getDate() {
         return 0;
     }
@@ -56,6 +57,7 @@ public class DummyFile extends AbstractFile {
     /**
      * Implementation notes: always returns <code>false</code>.
      */
+    @Override
     public boolean canChangeDate() {
         return false;
     }
@@ -63,6 +65,7 @@ public class DummyFile extends AbstractFile {
     /**
      * Implementation notes: always returns <code>false</code>.
      */
+    @Override
     public boolean changeDate(long lastModified) {
         return false;
     }
@@ -70,6 +73,7 @@ public class DummyFile extends AbstractFile {
     /**
      * Implementation notes: always returns <code>-1</code>.
      */
+    @Override
     public long getSize() {
         return -1;
     }
@@ -77,6 +81,7 @@ public class DummyFile extends AbstractFile {
     /**
      * Implementation notes: always returns <code>null</code>.
      */
+    @Override
     public AbstractFile getParent() {
         return null;
     }
@@ -84,12 +89,14 @@ public class DummyFile extends AbstractFile {
     /**
      * Implementation notes: no-op, does nothing with the specified parent.
      */
+    @Override
     public void setParent(AbstractFile parent) {
     }
 
     /**
      * Implementation notes: always returns <code>false</code>.
      */
+    @Override
     public boolean exists() {
         return false;
     }
@@ -97,6 +104,7 @@ public class DummyFile extends AbstractFile {
     /**
      * Implementation notes: always returns {@link FilePermissions#EMPTY_FILE_PERMISSIONS}.
      */
+    @Override
     public FilePermissions getPermissions() {
         return FilePermissions.EMPTY_FILE_PERMISSIONS;
     }
@@ -105,6 +113,7 @@ public class DummyFile extends AbstractFile {
      * Implementation notes: returns {@link PermissionBits#EMPTY_PERMISSION_BITS}, none of the permission bits can be
      * changed.
      */
+    @Override
     public PermissionBits getChangeablePermissions() {
         return PermissionBits.EMPTY_PERMISSION_BITS;
     }
@@ -112,6 +121,7 @@ public class DummyFile extends AbstractFile {
     /**
      * Implementation notes: always returns <code>false</code>.
      */
+    @Override
     public boolean changePermission(int access, int permission, boolean enabled) {
         return false;
     }
@@ -119,6 +129,7 @@ public class DummyFile extends AbstractFile {
     /**
      * Implementation notes: always returns <code>null</code>.
      */
+    @Override
     public String getOwner() {
         return null;
     }
@@ -126,6 +137,7 @@ public class DummyFile extends AbstractFile {
     /**
      * Implementation notes: always returns <code>false</code>.
      */
+    @Override
     public boolean canGetOwner() {
         return false;
     }
@@ -133,6 +145,7 @@ public class DummyFile extends AbstractFile {
     /**
      * Implementation notes: always returns <code>null</code>.
      */
+    @Override
     public String getGroup() {
         return null;
     }
@@ -140,6 +153,7 @@ public class DummyFile extends AbstractFile {
     /**
      * Implementation notes: always returns <code>false</code>.
      */
+    @Override
     public boolean canGetGroup() {
         return false;
     }
@@ -147,6 +161,7 @@ public class DummyFile extends AbstractFile {
     /**
      * Implementation notes: always returns <code>false</code>.
      */
+    @Override
     public boolean isDirectory() {
         return false;
     }
@@ -154,6 +169,7 @@ public class DummyFile extends AbstractFile {
     /**
      * Implementation notes: always returns <code>false</code>.
      */
+    @Override
     public boolean isArchive() {
         return false;
     }
@@ -161,6 +177,7 @@ public class DummyFile extends AbstractFile {
     /**
      * Implementation notes: always returns <code>false</code>.
      */
+    @Override
     public boolean isSymlink() {
         return false;
     }
@@ -168,6 +185,7 @@ public class DummyFile extends AbstractFile {
     /**
      * Implementation notes: always throws an exception.
      */
+    @Override
     public AbstractFile[] ls() throws IOException {
         throw new IOException();
     }
@@ -175,6 +193,7 @@ public class DummyFile extends AbstractFile {
     /**
      * Implementation notes: always throws an exception.
      */
+    @Override
     public void mkdir() throws IOException {
         throw new IOException();
     }
@@ -182,6 +201,7 @@ public class DummyFile extends AbstractFile {
     /**
      * Implementation notes: always throws an exception.
      */
+    @Override
     public InputStream getInputStream() throws IOException {
         throw new IOException();
     }
@@ -189,6 +209,7 @@ public class DummyFile extends AbstractFile {
     /**
      * Implementation notes: always throws an exception.
      */
+    @Override
     public OutputStream getOutputStream(boolean append) throws IOException {
         throw new IOException();
     }
@@ -196,6 +217,7 @@ public class DummyFile extends AbstractFile {
     /**
      * Implementation notes: always returns <code>false</code>.
      */
+    @Override
     public boolean hasRandomAccessInputStream() {
         return false;
     }
@@ -203,6 +225,7 @@ public class DummyFile extends AbstractFile {
     /**
      * Implementation notes: always throws an exception.
      */
+    @Override
     public RandomAccessInputStream getRandomAccessInputStream() throws IOException {
         throw new IOException();
     }
@@ -210,6 +233,7 @@ public class DummyFile extends AbstractFile {
     /**
      * Implementation notes: always returns <code>false</code>.
      */
+    @Override
     public boolean hasRandomAccessOutputStream() {
         return false;
     }
@@ -217,6 +241,7 @@ public class DummyFile extends AbstractFile {
     /**
      * Implementation notes: always throws an exception.
      */
+    @Override
     public RandomAccessOutputStream getRandomAccessOutputStream() throws IOException {
         throw new IOException();
     }
@@ -224,6 +249,7 @@ public class DummyFile extends AbstractFile {
     /**
      * Implementation notes: always throws an exception.
      */
+    @Override
     public void delete() throws IOException {
         throw new IOException();
     }
@@ -231,6 +257,7 @@ public class DummyFile extends AbstractFile {
     /**
      * Implementation notes: always returns <code>-1</code>.
      */
+    @Override
     public long getFreeSpace() {
         return -1;
     }
@@ -238,6 +265,7 @@ public class DummyFile extends AbstractFile {
     /**
      * Implementation notes: always returns <code>-1</code>.
      */
+    @Override
     public long getTotalSpace() {
         return -1;
     }
@@ -245,6 +273,7 @@ public class DummyFile extends AbstractFile {
     /**
      * Implementation notes: always returns <code>null</code>.
      */
+    @Override
     public Object getUnderlyingFileObject() {
         return null;
     }

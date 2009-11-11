@@ -50,6 +50,7 @@ public class ConfiguredKde4DesktopAdapter extends Kde4DesktopAdapter {
         return "KDE 4 Desktop";
     }
 
+    @Override
     public boolean isAvailable() {
         String var = getConfiguredEnvVariable(KDE_SESSION_VERSION_VAR);
         return var!=null && !var.trim().equals("");

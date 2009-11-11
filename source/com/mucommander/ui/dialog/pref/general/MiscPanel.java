@@ -31,7 +31,8 @@ import com.mucommander.ui.layout.YBoxPanel;
 import com.mucommander.ui.notifier.AbstractNotifier;
 
 import javax.swing.*;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
@@ -229,6 +230,7 @@ class MiscPanel extends PreferencesPanel implements ItemListener {
     // PrefPanel implementation //
     //////////////////////////////
 
+    @Override
     protected void commit() {
         MuConfiguration.setVariable(MuConfiguration.CHECK_FOR_UPDATE, checkForUpdatesCheckBox.isSelected());
 

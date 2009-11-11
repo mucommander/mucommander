@@ -65,6 +65,7 @@ public class ConfigurationEventTest extends TestCase {
     /**
      * Initialises the test case.
      */
+    @Override
     public void setUp() {conf = new Configuration();}
 
 

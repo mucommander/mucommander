@@ -39,6 +39,7 @@ public class ChangeDateAction extends SelectedFilesAction implements InvokesDial
     }
 
 
+    @Override
     public void performAction() {
         FileSet files = mainFrame.getActiveTable().getSelectedFiles();
 

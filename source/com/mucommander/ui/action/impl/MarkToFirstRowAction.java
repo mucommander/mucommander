@@ -40,6 +40,7 @@ public class MarkToFirstRowAction extends MarkBackwardAction {
         super(mainFrame, properties);
     }
 
+    @Override
     protected int getRowDecrement() {
         return mainFrame.getActiveTable().getSelectedRow();
     }

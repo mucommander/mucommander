@@ -44,6 +44,7 @@ public class ZipArchiveFileTest extends AbstractFileTestCase {
     // AbstractFileTestCase implementation //
     /////////////////////////////////////////
     
+    @Override
     public AbstractFile getTemporaryFile() throws IOException {
         // use a incremental id to avoid collisions
         return tempZipFile.getDirectChild("entry"+(++entryNum));
@@ -57,6 +58,7 @@ public class ZipArchiveFileTest extends AbstractFileTestCase {
     /**
      * Overridden to create the archive file before each test.
      */
+    @Override
     protected void setUp() throws IOException {
         tempZipFile = (ZipArchiveFile)FileFactory.getTemporaryFile(ZipArchiveFileTest.class.getName()+".zip", false);
         tempZipFile.mkfile();
@@ -69,12 +71,14 @@ public class ZipArchiveFileTest extends AbstractFileTestCase {
     /**
      * Overridden to delete the archive file after each test.
      */
+    @Override
     protected void tearDown() throws IOException {
         super.tearDown();
 
         tempZipFile.delete();
     }
 
+    @Override
     public void testCanonicalPath() throws IOException, NoSuchAlgorithmException {
         // TODO
         // Test temporarily disabled because if fails. The failure seems to be caused by archive file caching:

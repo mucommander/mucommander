@@ -47,6 +47,7 @@ public class FocusPreviousAction extends MuAction {
         setHonourNoEventsMode(false);
     }
 
+    @Override
     public void performAction() {
         Component focusOwner = mainFrame.getFocusOwner();
 

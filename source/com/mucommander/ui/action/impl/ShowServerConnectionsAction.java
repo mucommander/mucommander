@@ -37,6 +37,7 @@ public class ShowServerConnectionsAction extends MuAction implements InvokesDial
         super(mainFrame, properties);
     }
 
+    @Override
     public void performAction() {
         new ShowServerConnectionsDialog(mainFrame);
     }

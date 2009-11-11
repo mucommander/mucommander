@@ -156,6 +156,7 @@ public class FileURL implements Cloneable {
         registerHandler(FileProtocols.NFS, new DefaultSchemeHandler(new DefaultSchemeParser(), 2049, "/", AuthenticationTypes.NO_AUTHENTICATION, null));
 
         registerHandler(FileProtocols.SMB, new DefaultSchemeHandler(new DefaultSchemeParser(), -1, "/", AuthenticationTypes.AUTHENTICATION_REQUIRED, new Credentials("GUEST", "")) {
+            @Override
             public FileURL getRealm(FileURL location) {
                 FileURL realm = new FileURL(this);
 
@@ -972,6 +973,7 @@ public class FileURL implements Cloneable {
      * Returns a clone of this FileURL. The returned instance can safely be modified without any impact on this FileURL
      * or any previously cloned URL.
      */
+    @Override
     public Object clone() {
         // Create a new FileURL return it, instead of using Object.clone() which is probably way slower;
         // most FileURL fields are immutable and as such reused in cloned instance

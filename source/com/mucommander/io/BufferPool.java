@@ -536,22 +536,27 @@ public class BufferPool {
      * This class is a {@link BufferFactory} implementation for byte array (<code>byte[]</code>) buffers.
      */
     public static class ByteArrayFactory extends BufferFactory {
+        @Override
         public Object newBuffer(int size) {
             return new byte[size];
         }
 
+        @Override
         public BufferContainer newBufferContainer(Object buffer) {
             return new BufferContainer(buffer) {
+                @Override
                 protected int getLength() {
                     return ((byte[])buffer).length;
                 }
 
+                @Override
                 protected int getSize() {
                     return getLength();
                 }
             };
         }
 
+        @Override
         public Class<?> getBufferClass() {
             return byte[].class;
         }
@@ -561,22 +566,27 @@ public class BufferPool {
      * This class is a {@link BufferFactory} implementation for char array (<code>char[]</code>) buffers.
      */
     public static class CharArrayFactory extends BufferFactory {
+        @Override
         public Object newBuffer(int size) {
             return new char[size];
         }
 
+        @Override
         public BufferContainer newBufferContainer(Object buffer) {
             return new BufferContainer(buffer) {
+                @Override
                 protected int getLength() {
                     return ((char[])buffer).length;
                 }
 
+                @Override
                 protected int getSize() {
                     return 2*getLength();
                 }
             };
         }
 
+        @Override
         public Class<?> getBufferClass() {
             return char[].class;
         }
@@ -589,24 +599,29 @@ public class BufferPool {
      * {@link #getBufferClass()}.
      */
     public static class ByteBufferFactory extends BufferFactory {
+        @Override
         public Object newBuffer(int size) {
             // Note: the returned instance is actually a java.nio.DirectByteBuffer, this is why it's important to
             // compare classes using Class#isAssignableFrom(Class)
             return ByteBuffer.allocateDirect(size);
         }
 
+        @Override
         public BufferContainer newBufferContainer(Object buffer) {
             return new BufferContainer(buffer) {
+                @Override
                 protected int getLength() {
                     return ((ByteBuffer)buffer).capacity();
                 }
 
+                @Override
                 protected int getSize() {
                     return getLength();
                 }
             };
         }
 
+        @Override
         public Class<?> getBufferClass() {
             return ByteBuffer.class;
         }
@@ -616,22 +631,27 @@ public class BufferPool {
      * This class is a {@link BufferFactory} implementation for <code>java.nio.CharBuffer</code> buffers.
      */
     public static class CharBufferFactory extends BufferFactory {
+        @Override
         public Object newBuffer(int size) {
             return CharBuffer.allocate(size);
         }
 
+        @Override
         public BufferContainer newBufferContainer(Object buffer) {
             return new BufferContainer(buffer) {
+                @Override
                 protected int getLength() {
                     return ((CharBuffer)buffer).capacity();
                 }
 
+                @Override
                 protected int getSize() {
                     return 2*getLength();
                 }
             };
         }
 
+        @Override
         public Class<?> getBufferClass() {
             return CharBuffer.class;
         }

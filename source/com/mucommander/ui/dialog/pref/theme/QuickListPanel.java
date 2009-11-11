@@ -34,7 +34,8 @@ import com.mucommander.ui.theme.ColorChangedEvent;
 import com.mucommander.ui.theme.ThemeData;
 
 import javax.swing.*;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 import java.awt.event.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -66,16 +67,19 @@ public class QuickListPanel extends ThemeEditorPanel implements PropertyChangeLi
 
     /** The list of items of the sample quick list */
     private DataList list = new GenericPopupDataListWithIcons(sampleData) {
-		public Icon getImageIconOfItem(Object item) {
+		@Override
+        public Icon getImageIconOfItem(Object item) {
 			return sampleIcon;
 		}
 		
-		public void colorChanged(ColorChangedEvent event) {
+		@Override
+        public void colorChanged(ColorChangedEvent event) {
 			super.colorChanged(event);
 			repaint();
 		}
 		
-		protected void addMouseListenerToList() {
+		@Override
+        protected void addMouseListenerToList() {
 	    	addMouseListener(new MouseListener() {
 				public void mouseClicked(MouseEvent e) {}
 				public void mouseReleased(MouseEvent e) {}
@@ -85,7 +89,8 @@ public class QuickListPanel extends ThemeEditorPanel implements PropertyChangeLi
 	        });
 	    }
 		
-		protected void addKeyListenerToList() {
+		@Override
+        protected void addKeyListenerToList() {
 			addKeyListener(new KeyListener() {
 
 				public void keyPressed(KeyEvent e) {			
@@ -317,5 +322,6 @@ public class QuickListPanel extends ThemeEditorPanel implements PropertyChangeLi
     /**
      * Ignored.
      */
+    @Override
     public void commit() {}
 }

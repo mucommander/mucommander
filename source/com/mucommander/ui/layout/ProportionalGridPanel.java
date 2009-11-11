@@ -18,8 +18,11 @@
 
 package com.mucommander.ui.layout;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JPanel;
+import java.awt.Component;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 
 /**
  * @author Maxence Bernard
@@ -50,6 +53,7 @@ public class ProportionalGridPanel extends JPanel {
     }
 
 
+    @Override
     public Component add(Component component) {
         add(component, gbc);
 

@@ -97,6 +97,7 @@ public class AssociationReader extends DefaultHandler implements AssociationsXml
     /**
      * This method is public as an implementation side effect and should not be called directly.
      */
+    @Override
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
         String buffer;
 
@@ -155,6 +156,7 @@ public class AssociationReader extends DefaultHandler implements AssociationsXml
     /**
      * This method is public as an implementation side effect, but should not be called directly.
      */
+    @Override
     public void endElement(String uri, String localName, String qName) throws SAXException {
         if(qName.equals(ELEMENT_ASSOCIATION) && isInAssociation) {
             try {builder.endAssociation();}

@@ -104,6 +104,7 @@ public class NFSPanel extends ServerPanel {
     // ServerPanel implementation //
     ////////////////////////////////
 
+    @Override
     FileURL getServerURL() throws MalformedURLException {
         updateValues();
 
@@ -121,10 +122,12 @@ public class NFSPanel extends ServerPanel {
         return url;
     }
 
+    @Override
     boolean usesCredentials() {
         return false;
     }
 
+    @Override
     public void dialogValidated() {
         // Commits the current spinner value in case it was being edited and 'enter' was pressed
         // (the spinner value would otherwise not be committed)

@@ -263,6 +263,7 @@ public class AboutDialog extends FocusDialog implements ActionListener {
 
         // Makes sure the panel's a bit roomier than the default configuration.
         mainPanel = new JPanel(new BorderLayout()) {
+                @Override
                 public Insets getInsets() {return new Insets(10, 10, 0, 10);}
             };
 

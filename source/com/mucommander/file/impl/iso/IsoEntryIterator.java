@@ -59,6 +59,7 @@ class IsoEntryIterator extends WrapperArchiveEntryIterator {
      *
      * @throws IOException if an I/O error occurs while closing the stream
      */
+    @Override
     public void close() throws IOException {
         rais.close();
     }

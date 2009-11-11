@@ -47,6 +47,7 @@ public class AndFileFilter extends ChainedFileFilter {
      * @param file the file to test against the registered filters
      * @return if the file was matched by all filters, false if one of them didn't 
      */
+    @Override
     public boolean accept(AbstractFile file) {
         int nbFilters = filters.size();
 

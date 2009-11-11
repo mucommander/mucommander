@@ -59,10 +59,12 @@ public class LstArchiveFile extends AbstractROArchiveFile {
     // AbstractArchiveFile implementation //
     ////////////////////////////////////////
 
+    @Override
     public ArchiveEntryIterator getEntryIterator() throws IOException {
         return new LstArchiveEntryIterator(getInputStream());
     }
 
+    @Override
     public InputStream getEntryInputStream(ArchiveEntry entry, ArchiveEntryIterator entryIterator) throws IOException {
         // Will throw an IOException if the file designated by the entry doesn't exist 
         return FileFactory.getFile(((LstArchiveEntry)entry).getBaseFolder()+entry.getPath(), true).getInputStream();

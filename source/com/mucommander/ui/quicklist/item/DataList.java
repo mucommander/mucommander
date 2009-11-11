@@ -18,24 +18,19 @@
 
 package com.mucommander.ui.quicklist.item;
 
+import com.mucommander.ui.main.table.FileTable;
+import com.mucommander.ui.quicklist.QuickListFocusableComponent;
+import com.mucommander.ui.quicklist.QuickListWithDataList;
+import com.mucommander.ui.theme.*;
+
+import javax.swing.JList;
+import javax.swing.SwingUtilities;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-
-import javax.swing.JList;
-import javax.swing.SwingUtilities;
-
-import com.mucommander.ui.main.table.FileTable;
-import com.mucommander.ui.quicklist.QuickListFocusableComponent;
-import com.mucommander.ui.quicklist.QuickListWithDataList;
-import com.mucommander.ui.theme.ColorChangedEvent;
-import com.mucommander.ui.theme.FontChangedEvent;
-import com.mucommander.ui.theme.ThemeData;
-import com.mucommander.ui.theme.ThemeListener;
-import com.mucommander.ui.theme.ThemeManager;
 
 /**
  * This class represent a data list for FileTablePopupWithDataList.
@@ -74,7 +69,8 @@ public class DataList extends JList implements QuickListFocusableComponent, Them
 	 * @return true if this list's popup should be shown, false if an TablePopupWithEmptyMsg
 	 * 	should be shown.
 	 */
-	public void setListData(Object[] data) {
+	@Override
+    public void setListData(Object[] data) {
 		super.setListData(data);
 	
 		int numOfRowsInList;
@@ -176,7 +172,8 @@ public class DataList extends JList implements QuickListFocusableComponent, Them
 			setSelectionForeground(ThemeManager.getCurrentColor(ThemeData.QUICK_LIST_SELECTED_ITEM_FOREGROUND_COLOR));
 	}
 	
-	public void setFont(Font font) {
+	@Override
+    public void setFont(Font font) {
 		super.setFont(font);
 		setFixedCellHeight((int) (getFontMetrics(getFont()).getHeight() * 1.5));
 	}

@@ -19,8 +19,9 @@
 
 package com.mucommander.ui.progress;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JTextField;
+import java.awt.Color;
+import java.awt.Graphics;
 
 
 /**
@@ -83,6 +84,7 @@ public class ProgressTextField extends JTextField {
     /**
      * Override JTextField's paint method to show progress information.
      */
+    @Override
     public void paint(Graphics g) {
         super.paint(g);
 

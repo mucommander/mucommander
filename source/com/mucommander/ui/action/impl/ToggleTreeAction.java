@@ -39,6 +39,7 @@ public class ToggleTreeAction extends MuAction {
         super(mainFrame, properties);
     }
 
+    @Override
     public void performAction() {
         FolderPanel folderPanel = mainFrame.getActiveTable().getFolderPanel();
         folderPanel.setTreeVisible(!folderPanel.isTreeVisible());

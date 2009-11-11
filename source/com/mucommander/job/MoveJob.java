@@ -75,6 +75,7 @@ public class MoveJob extends AbstractCopyJob {
      * 
      * @return <code>true</code> if the file has been moved completly (copied + deleted).
      */
+    @Override
     protected boolean processFile(AbstractFile file, Object recurseParams) {
         // Stop if interrupted
         if(getState()==INTERRUPTED)
@@ -255,6 +256,7 @@ public class MoveJob extends AbstractCopyJob {
     }
 
     // This job modifies baseDestFolder and its subfolders
+    @Override
     protected boolean hasFolderChanged(AbstractFile folder) {
         return (getBaseSourceFolder()!=null && getBaseSourceFolder().isParentOf(folder)) || baseDestFolder.isParentOf(folder);
     }
@@ -264,6 +266,7 @@ public class MoveJob extends AbstractCopyJob {
     // Overridden methods //
     ////////////////////////
 
+    @Override
     protected void jobCompleted() {
         super.jobCompleted();
 
@@ -288,6 +291,7 @@ public class MoveJob extends AbstractCopyJob {
         }
     }
 
+    @Override
     public String getStatusString() {
         if(isCheckingIntegrity())
             return super.getStatusString();

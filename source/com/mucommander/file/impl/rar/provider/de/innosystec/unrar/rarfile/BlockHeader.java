@@ -18,10 +18,9 @@
  */
 package com.mucommander.file.impl.rar.provider.de.innosystec.unrar.rarfile;
 
+import com.mucommander.file.impl.rar.provider.de.innosystec.unrar.io.Raw;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
-import com.mucommander.file.impl.rar.provider.de.innosystec.unrar.io.Raw;
 
 /**
  * Base class of headers that contain data
@@ -64,6 +63,7 @@ public class BlockHeader extends BaseBlock{
 		return packSize;
 	}
     
+    @Override
     public void print(){
     	super.print();
     	String s = "DataSize: "+getDataSize()+" packSize: "+getPackSize();

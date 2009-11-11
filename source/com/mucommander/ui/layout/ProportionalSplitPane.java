@@ -20,10 +20,13 @@ package com.mucommander.ui.layout;
 
 import com.mucommander.desktop.DesktopManager;
 
-import javax.swing.*;
+import javax.swing.InputMap;
+import javax.swing.JComponent;
+import javax.swing.JSplitPane;
 import javax.swing.plaf.basic.BasicSplitPaneDivider;
 import javax.swing.plaf.basic.BasicSplitPaneUI;
-import java.awt.*;
+import java.awt.Dimension;
+import java.awt.Window;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.MouseEvent;
@@ -150,6 +153,7 @@ public class ProportionalSplitPane extends JSplitPane implements ComponentListen
     // Overridden methods //
     ////////////////////////
 
+    @Override
     public void setOrientation(int orientation) {
         super.setOrientation(orientation);
         // Maintain the divider's proportional location

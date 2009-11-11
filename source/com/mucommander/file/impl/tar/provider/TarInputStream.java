@@ -128,6 +128,7 @@ public class TarInputStream extends InputStream {
      * Closes this stream. Calls the TarBuffer's close() method.
      * @throws IOException on error
      */
+    @Override
     public void close() throws IOException {
         if (!closed) {
             try {
@@ -164,6 +165,7 @@ public class TarInputStream extends InputStream {
      * @return The number of available bytes for the current entry.
      * @throws IOException for signature
      */
+    @Override
     public int available() throws IOException {
         if (entrySize - entryOffset > Integer.MAX_VALUE) {
             return Integer.MAX_VALUE;
@@ -176,6 +178,7 @@ public class TarInputStream extends InputStream {
      *
      * @return False.
      */
+    @Override
     public boolean markSupported() {
         return false;
     }
@@ -185,12 +188,14 @@ public class TarInputStream extends InputStream {
      *
      * @param markLimit The limit to mark.
      */
+    @Override
     public void mark(int markLimit) {
     }
 
     /**
      * Since we do not support marking just yet, we do nothing.
      */
+    @Override
     public void reset() {
     }
 
@@ -326,6 +331,7 @@ public class TarInputStream extends InputStream {
      * @return The byte read, or -1 at EOF.
      * @throws IOException on error
      */
+    @Override
     public int read() throws IOException {
         int num = read(oneBuf, 0, 1);
         return num == -1 ? -1 : ((int) oneBuf[0]) & BYTE_MASK;
@@ -346,6 +352,7 @@ public class TarInputStream extends InputStream {
      * @return The number of bytes read, or -1 at EOF.
      * @throws IOException on error
      */
+    @Override
     public int read(byte[] buf, int offset, int numToRead) throws IOException {
         int totalRead = 0;
 
@@ -398,6 +405,7 @@ public class TarInputStream extends InputStream {
      * @return the number actually skipped
      * @throws IOException on error
      */
+    @Override
     public long skip(long numToSkip) throws IOException {
         // Have we already reached the end of file/entry ?
         if (entryOffset >= entrySize) {

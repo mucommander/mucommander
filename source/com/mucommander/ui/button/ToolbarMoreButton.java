@@ -89,10 +89,12 @@ public class ToolbarMoreButton extends JToggleButton implements ActionListener {
     // paint border only when necessary
     addMouseListener(new MouseAdapter() {
 
+      @Override
       public void mouseExited(MouseEvent e) {
         setBorderPainted(false);
       }
 
+      @Override
       public void mouseEntered(MouseEvent e) {
         setBorderPainted(true);
       }
@@ -101,6 +103,7 @@ public class ToolbarMoreButton extends JToggleButton implements ActionListener {
     // hide & seek
     toolbar.addComponentListener(new ComponentAdapter() {
 
+      @Override
       public void componentResized(ComponentEvent e) {
         int nbToolbarComponents = toolbar.getComponentCount();
 

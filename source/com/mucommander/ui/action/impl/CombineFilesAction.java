@@ -40,6 +40,7 @@ public class CombineFilesAction extends SelectedFilesAction implements InvokesDi
         super(mainFrame, properties);
     }
 
+    @Override
     public void performAction() {
     	FileSet files = mainFrame.getActiveTable().getSelectedFiles();
 

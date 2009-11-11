@@ -41,6 +41,7 @@ public class SelectPreviousBlockAction extends SelectBackwardAction {
         super(mainFrame, properties);
     }
 
+    @Override
     protected int getRowDecrement() {
         return BLOCK_SIZE;
     }

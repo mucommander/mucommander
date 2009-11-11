@@ -36,6 +36,7 @@ public class ShowPreferencesAction extends MuAction implements InvokesDialog {
         super(mainFrame, properties);
     }
 
+    @Override
     public void performAction() {GeneralPreferencesDialog.getDialog().showDialog();}
     
     public static class Factory implements ActionFactory {

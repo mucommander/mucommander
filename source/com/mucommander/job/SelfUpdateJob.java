@@ -160,6 +160,7 @@ public class SelfUpdateJob extends CopyJob {
     // Overridden methods //
     ////////////////////////
 
+    @Override
     public String getStatusString() {
         if(loadingClasses) {
             return Translator.get("version_dialog.preparing_for_update");
@@ -168,6 +169,7 @@ public class SelfUpdateJob extends CopyJob {
         return super.getStatusString();
     }
 
+    @Override
     protected void jobStarted() {
         super.jobStarted();
 
@@ -185,6 +187,7 @@ public class SelfUpdateJob extends CopyJob {
         }
     }
 
+    @Override
     protected void jobCompleted() {
         try {
             AbstractFile parent;
@@ -246,6 +249,7 @@ public class SelfUpdateJob extends CopyJob {
         }
     }
 
+    @Override
     protected boolean processFile(AbstractFile file, Object recurseParams) {
         if(!super.processFile(file, recurseParams))
             return false;

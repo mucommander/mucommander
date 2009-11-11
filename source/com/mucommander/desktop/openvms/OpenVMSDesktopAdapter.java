@@ -31,6 +31,7 @@ import com.mucommander.runtime.OsFamilies;
  */
 public class OpenVMSDesktopAdapter extends DefaultDesktopAdapter {
 
+    @Override
     public boolean isAvailable() {
         return OsFamilies.OPENVMS.isCurrent();
     }

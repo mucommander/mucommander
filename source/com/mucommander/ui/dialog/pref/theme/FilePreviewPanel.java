@@ -18,22 +18,6 @@
 
 package com.mucommander.ui.dialog.pref.theme;
 
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.FontMetrics;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-
-import javax.swing.ImageIcon;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.ListSelectionModel;
-import javax.swing.SwingConstants;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.TableCellRenderer;
-
 import com.mucommander.text.Translator;
 import com.mucommander.ui.border.MutableLineBorder;
 import com.mucommander.ui.chooser.PreviewLabel;
@@ -43,6 +27,13 @@ import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.main.table.CellLabel;
 import com.mucommander.ui.theme.Theme;
 import com.mucommander.ui.theme.ThemeData;
+
+import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.TableCellRenderer;
+import java.awt.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 /**
  * @author Nicolas Rinaudo
@@ -119,6 +110,7 @@ class FilePreviewPanel extends JScrollPane implements PropertyChangeListener {
     /**
      * Resets the table's row height with the new font.
      */
+    @Override
     public void setFont(Font font) {
         if(table != null)
             table.setRowHeight(font);
@@ -169,6 +161,7 @@ class FilePreviewPanel extends JScrollPane implements PropertyChangeListener {
         /**
          * Resets column widths.
          */
+        @Override
         public void doLayout() {
             int width;
 
@@ -200,11 +193,13 @@ class FilePreviewPanel extends JScrollPane implements PropertyChangeListener {
         /**
          * Returns the table's preferred size.
          */
+        @Override
         public Dimension getPreferredSize() {return new Dimension(getIconWidth() + 2 * getLabelWidth(), getModel().getRowCount()*getRowHeight());}
 
         /**
          * Returns the table's preferred size.
          */
+        @Override
         public Dimension getPreferredScrollableViewportSize() {
             if(preferredSize == null)
                 preferredSize = getPreferredSize();
@@ -222,11 +217,13 @@ class FilePreviewPanel extends JScrollPane implements PropertyChangeListener {
         /**
          * Uses our preview cell renderer rather than the default one.
          */
+        @Override
         public TableCellRenderer getCellRenderer(int row, int column) {return cellRenderer;}
 
         /**
          * Cell are not editable.
          */
+        @Override
         public boolean isCellEditable(int row, int column) {return false;}
     }
 

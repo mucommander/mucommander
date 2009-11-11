@@ -621,6 +621,7 @@ public class ZipEntry implements Cloneable {
      * @return a cloned instance of this entry
      * @throws CloneNotSupportedException should never happen
      */
+    @Override
     public Object clone() throws CloneNotSupportedException {
         ZipEntry ze = (ZipEntry)super.clone();
 

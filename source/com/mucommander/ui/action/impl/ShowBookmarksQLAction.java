@@ -32,7 +32,8 @@ public class ShowBookmarksQLAction extends ShowQuickListAction {
 		super(mainFrame, properties);
 	}
 	
-	public void performAction() {
+	@Override
+    public void performAction() {
 		openQuickList(FolderPanel.BOOKMARKS_QUICK_LIST_INDEX);
 	}
 	

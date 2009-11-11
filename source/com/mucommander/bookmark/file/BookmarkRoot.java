@@ -54,6 +54,7 @@ class BookmarkRoot extends ProtocolFile implements BookmarkListener {
 
     // - AbstractFile methods --------------------------------------------------
     // -------------------------------------------------------------------------
+    @Override
     public AbstractFile[] ls() throws IOException {
         AbstractFile[] files;
         Object[]       buffer;
@@ -68,8 +69,10 @@ class BookmarkRoot extends ProtocolFile implements BookmarkListener {
         return files;
     }
 
+    @Override
     public String getName() {return "";}
 
+    @Override
     public boolean isDirectory() {return true;}
 
 
@@ -85,6 +88,7 @@ class BookmarkRoot extends ProtocolFile implements BookmarkListener {
      * Returns the date at which the bookmark list was last modified.
      * @return the date at which the bookmark list was last modified.
      */
+    @Override
     public long getDate() {return lastModified;}
 
 
@@ -94,29 +98,54 @@ class BookmarkRoot extends ProtocolFile implements BookmarkListener {
     // The following methods are not used by BookmarkFile. They will throw an exception,
     // return an 'operation non supported' value or return a default value.
 
+    @Override
     public AbstractFile getParent() {return null;}
+    @Override
     public void delete() throws IOException {throw new IOException();}
+    @Override
     public boolean canChangeDate() {return false;}
+    @Override
     public boolean changeDate(long lastModified) {return false;}
+    @Override
     public long getSize() {return -1;}
+    @Override
     public void setParent(AbstractFile parent) {}
+    @Override
     public boolean exists() {return true;}
+    @Override
     public FilePermissions getPermissions() {return BookmarkFile.PERMISSIONS;}
+    @Override
     public boolean changePermission(int access, int permission, boolean enabled) {return false;}
+    @Override
     public PermissionBits getChangeablePermissions() {return PermissionBits.EMPTY_PERMISSION_BITS;}
+    @Override
     public boolean isSymlink() {return false;}
+    @Override
     public void mkdir() throws IOException {throw new IOException();}
+    @Override
     public InputStream getInputStream() throws IOException {throw new IOException();}
+    @Override
     public OutputStream getOutputStream(boolean append) throws IOException {throw new IOException();}
+    @Override
     public boolean hasRandomAccessInputStream() {return false;}
+    @Override
     public RandomAccessInputStream getRandomAccessInputStream() throws IOException {throw new IOException();}
+    @Override
     public boolean hasRandomAccessOutputStream() {return false;}
+    @Override
     public RandomAccessOutputStream getRandomAccessOutputStream() throws IOException {throw new IOException();}
+    @Override
     public long getFreeSpace() {return -1;}
+    @Override
     public long getTotalSpace() {return -1;}
+    @Override
     public Object getUnderlyingFileObject() {return null;}
+    @Override
     public String getOwner() {return null;}
+    @Override
     public boolean canGetOwner() {return false;}
+    @Override
     public String getGroup() {return null;}
+    @Override
     public boolean canGetGroup() {return false;}
 }

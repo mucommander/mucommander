@@ -48,6 +48,7 @@ public class GzipArchiveFile extends AbstractROArchiveFile {
     // AbstractArchiveFile implementation //
     ////////////////////////////////////////
 
+    @Override
     public ArchiveEntryIterator getEntryIterator() throws IOException {
         String extension = getExtension();
         String name = getName();
@@ -66,6 +67,7 @@ public class GzipArchiveFile extends AbstractROArchiveFile {
     }
 
 
+    @Override
     public InputStream getEntryInputStream(ArchiveEntry entry, ArchiveEntryIterator entryIterator) throws IOException {
         return new GZIPInputStream(getInputStream());
     }

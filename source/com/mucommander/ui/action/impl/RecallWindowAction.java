@@ -66,6 +66,7 @@ public class RecallWindowAction extends MuAction {
             throw new IllegalArgumentException("windowNumber ("+windowNumber+")");
     }
 
+    @Override
     public void performAction() {
         Vector<MainFrame> mainFrames = WindowManager.getMainFrames();
 
@@ -112,10 +113,12 @@ public class RecallWindowAction extends MuAction {
             return KeyStroke.getKeyStroke(Character.forDigit(windowNumber==10 ? 0 : windowNumber, 10), KeyEvent.CTRL_DOWN_MASK);
         }
 
+        @Override
         public String getLabel() {
             return Translator.get(getLabelKey(), windowNumber==-1?"?":""+windowNumber);
         }
 
+        @Override
         public boolean isParameterized() {
             return windowNumber==-1;
         }

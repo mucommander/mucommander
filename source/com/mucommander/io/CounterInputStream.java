@@ -102,6 +102,7 @@ public class CounterInputStream extends InputStream {
     // InputStream implementation //
     ////////////////////////////////
 
+    @Override
     public int read() throws IOException {
         int i = in.read();
         if(i>0)
@@ -111,6 +112,7 @@ public class CounterInputStream extends InputStream {
     }
 
 
+    @Override
     public int read(byte b[]) throws IOException {
         int nbRead = in.read(b);
         if(nbRead>0)
@@ -119,6 +121,7 @@ public class CounterInputStream extends InputStream {
         return nbRead;
     }
 
+    @Override
     public int read(byte b[], int off, int len) throws IOException {
         int nbRead = in.read(b, off, len);
         if(nbRead>0)
@@ -127,6 +130,7 @@ public class CounterInputStream extends InputStream {
         return nbRead;
     }
 
+    @Override
     public long skip(long n) throws IOException {
         long nbSkipped = in.skip(n);
 
@@ -138,26 +142,31 @@ public class CounterInputStream extends InputStream {
     }
 
 
+    @Override
     public int available() throws IOException {
         return in.available();
     }
 
 
+    @Override
     public void close() throws IOException {
         in.close();
     }
 
 
+    @Override
     public void mark(int readLimit) {
         in.mark(readLimit);
     }
 
 
+    @Override
     public boolean markSupported() {
         return in.markSupported();
     }
 
 
+    @Override
     public void reset() throws IOException  {
         in.reset();
     }

@@ -38,7 +38,8 @@ public class ShowRecentLocationsQLAction extends ShowQuickListAction {
 		super(mainFrame, properties);
 	}
 	
-	public void performAction() {
+	@Override
+    public void performAction() {
 		openQuickList(FolderPanel.RECENT_ACCESSED_LOCATIONS_QUICK_LIST_INDEX);
 	}
 	

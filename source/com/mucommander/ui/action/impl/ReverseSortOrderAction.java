@@ -36,6 +36,7 @@ public class ReverseSortOrderAction extends MuAction {
         super(mainFrame, properties);
     }
 
+    @Override
     public void performAction() {
         mainFrame.getActiveTable().reverseSortOrder();
     }

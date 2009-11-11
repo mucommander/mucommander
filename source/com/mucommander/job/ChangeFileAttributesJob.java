@@ -57,6 +57,7 @@ public class ChangeFileAttributesJob extends FileJob {
     // FileJob implementation //
     ////////////////////////////
 
+    @Override
     protected boolean processFile(AbstractFile file, Object recurseParams) {
         // Stop if interrupted
         if(getState()==INTERRUPTED)
@@ -97,6 +98,7 @@ public class ChangeFileAttributesJob extends FileJob {
     }
 
     // This job modifies the FileSet's base folder and potentially its subfolders
+    @Override
     protected boolean hasFolderChanged(AbstractFile folder) {
         return files.getBaseFolder().isParentOf(folder);
     }

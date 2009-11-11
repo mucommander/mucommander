@@ -37,6 +37,7 @@ public class ExploreBookmarksAction extends MuAction {
         super(mainFrame, properties);
     }
 
+    @Override
     public void performAction() {
         mainFrame.getActivePanel().tryChangeCurrentFolder("bookmark://");
     }

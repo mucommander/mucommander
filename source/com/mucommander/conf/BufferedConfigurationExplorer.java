@@ -73,6 +73,7 @@ class BufferedConfigurationExplorer extends ConfigurationExplorer {
      * @param  create if <code>true</code> and <code>name</code> doesn't exist, it will be created.
      * @return        <code>true</code> if we could move to <code>name</code>, <code>false</code> otherwise.
      */
+    @Override
     public boolean moveTo(String name, boolean create) {
         if(super.moveTo(name, create)) {
             sections.push(getSection());

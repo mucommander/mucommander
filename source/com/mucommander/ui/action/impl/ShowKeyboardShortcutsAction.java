@@ -36,6 +36,7 @@ public class ShowKeyboardShortcutsAction extends MuAction {
         super(mainFrame, properties);
     }
 
+    @Override
     public void performAction() {
         new ShortcutsDialog(mainFrame).showDialog();
     }

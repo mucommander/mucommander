@@ -89,6 +89,7 @@ public class BufferedRandomOutputStream extends RandomAccessOutputStream {
      * @param b the byte to be written
      * @throws IOException if an I/O error occurs
      */
+    @Override
     public synchronized void write(int b) throws IOException {
         if (count >= buffer.length)
             flushBuffer();
@@ -102,6 +103,7 @@ public class BufferedRandomOutputStream extends RandomAccessOutputStream {
      * @param b the bytes to be written
      * @throws IOException if an I/O error occurs
      */
+    @Override
     public synchronized void write(byte b[]) throws IOException {
         write(b, 0, b.length);
     }
@@ -122,6 +124,7 @@ public class BufferedRandomOutputStream extends RandomAccessOutputStream {
      * @param len the number of bytes to write.
      * @throws IOException if an I/O error occurs.
      */
+    @Override
     public synchronized void write(byte b[], int off, int len) throws IOException {
         if (len >= buffer.length) {
             /* If the request length exceeds the size of the output buffer,
@@ -145,6 +148,7 @@ public class BufferedRandomOutputStream extends RandomAccessOutputStream {
      *
      * @throws IOException if an I/O error occurs.
      */
+    @Override
     public synchronized void flush() throws IOException {
         flushBuffer();
         raos.flush();
@@ -167,6 +171,7 @@ public class BufferedRandomOutputStream extends RandomAccessOutputStream {
         return Math.max(raos.getLength(), getOffset());
     }
 
+    @Override
     public synchronized void setLength(long newLength) throws IOException {
         // Flush before changing the file's length, otherwise the behavior of setLength() would be modified, especially
         // when truncating the file
@@ -183,6 +188,7 @@ public class BufferedRandomOutputStream extends RandomAccessOutputStream {
     /**
      * This method is overridden to release the internal buffer when this stream is closed.
      */
+    @Override
     public synchronized void close() throws IOException {
         if(buffer!=null) {      // buffer is null if close() was already called
             try {
@@ -204,6 +210,7 @@ public class BufferedRandomOutputStream extends RandomAccessOutputStream {
      * This method is overridden to release the internal buffer if {@link #close()} has not been called, to avoid any
      * memory leak.
      */
+    @Override
     protected void finalize() throws Throwable {
         // If this stream hasn't been closed, release the buffer before finalizing the object
         if(buffer!=null)

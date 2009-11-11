@@ -53,6 +53,7 @@ class ZipArchiver extends Archiver {
     /**
      * Overrides Archiver's no-op setComment method as Zip supports archive comment.
      */
+    @Override
     public void setComment(String comment) {
         zos.setComment(comment);
     } 
@@ -62,6 +63,7 @@ class ZipArchiver extends Archiver {
     // Archiver implementation //
     /////////////////////////////
 
+    @Override
     public OutputStream createEntry(String entryPath, FileAttributes attributes) throws IOException {
         // Start by closing current entry
         if(!firstEntry)
@@ -92,6 +94,7 @@ class ZipArchiver extends Archiver {
     }
 
 
+    @Override
     public void close() throws IOException {
         zos.close();
     }

@@ -128,6 +128,7 @@ public class JavaVersion extends ComparableRuntimeProperty implements JavaVersio
     // ComparableRuntimeProperty implementation //
     //////////////////////////////////////////////
 
+    @Override
     protected RuntimeProperty getCurrentValue() {
         return getCurrent();
     }

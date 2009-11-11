@@ -98,6 +98,7 @@ class CredentialsParser extends DefaultHandler implements CredentialsConstants {
     // ContentHandler implementation //
     ///////////////////////////////////
 
+    @Override
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
         characters.setLength(0);
 
@@ -121,6 +122,7 @@ class CredentialsParser extends DefaultHandler implements CredentialsConstants {
         }
     }
 
+    @Override
     public void endElement(String uri, String localName, String qName) throws SAXException {
         if(qName.equals(ELEMENT_CREDENTIALS)) {
             if(url ==null || login ==null || password ==null) {
@@ -160,6 +162,7 @@ class CredentialsParser extends DefaultHandler implements CredentialsConstants {
             password = characters.toString().trim();
     }
 
+    @Override
     public void characters(char[] ch, int offset, int length) {
         characters.append(ch, offset, length);
     }

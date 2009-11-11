@@ -37,7 +37,8 @@ public class FilteredFilesService extends FilesService {
 		this.fileFilter = fileFilter;
 	}
 
-	protected AbstractFile[] getFiles(AbstractFile directory) throws IOException {
+	@Override
+    protected AbstractFile[] getFiles(AbstractFile directory) throws IOException {
 		return fileFilter.filter(directory.ls());
 	}
 }

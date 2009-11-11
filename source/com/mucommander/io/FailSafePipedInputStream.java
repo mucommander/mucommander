@@ -93,6 +93,7 @@ public class FailSafePipedInputStream extends PipedInputStream {
     // Overridden methods //
     ////////////////////////
 
+    @Override
     public synchronized int read() throws IOException {
         int ret = super.read();
 
@@ -101,6 +102,7 @@ public class FailSafePipedInputStream extends PipedInputStream {
         return ret;
     }
 
+    @Override
     public synchronized int read(byte b[], int off, int len) throws IOException {
         int ret = super.read(b, off, len);
 
@@ -109,6 +111,7 @@ public class FailSafePipedInputStream extends PipedInputStream {
         return ret;
     }
 
+    @Override
     public synchronized int read(byte b[]) throws IOException {
         int ret = super.read(b);
 
@@ -118,6 +121,7 @@ public class FailSafePipedInputStream extends PipedInputStream {
     }
 
 
+    @Override
     public long skip(long n) throws IOException {
         long ret = super.skip(n);
 
@@ -126,6 +130,7 @@ public class FailSafePipedInputStream extends PipedInputStream {
         return ret;
     }
 
+    @Override
     public synchronized int available() throws IOException {
         int ret = super.available();
 
@@ -134,6 +139,7 @@ public class FailSafePipedInputStream extends PipedInputStream {
         return ret;
     }
 
+    @Override
     public void close() throws IOException {
         super.close();
 

@@ -49,7 +49,8 @@ public class RecentExecutedFilesQL extends QuickListWithIcons {
 		super(ActionProperties.getActionLabel(ShowRecentExecutedFilesQLAction.Descriptor.ACTION_ID), Translator.get("recent_executed_files_quick_list.empty_message"));
 	}
 	
-	protected void acceptListItem(Object item) {
+	@Override
+    protected void acceptListItem(Object item) {
 		AbstractFile file = (AbstractFile)item;
 		MainFrame mainFrame = WindowManager.getCurrentMainFrame();
 
@@ -72,11 +73,13 @@ public class RecentExecutedFilesQL extends QuickListWithIcons {
 		list.addFirst(file);
 	}
 
-	protected Object[] getData() {
+	@Override
+    protected Object[] getData() {
 		return list.toArray();
 	}
 
-	protected Icon itemToIcon(Object item) {
+	@Override
+    protected Icon itemToIcon(Object item) {
 		return getIconOfFile((AbstractFile)item);
 	}
 }

@@ -210,6 +210,7 @@ public class VersionChecker extends DefaultHandler {
     /**
      * Called when the XML document parsing has started.
      */
+    @Override
     public void startDocument() {
         latestVersion = "";
         downloadURL   = "";
@@ -220,6 +221,7 @@ public class VersionChecker extends DefaultHandler {
     /**
      * Notifies the parser of CDATA.
      */
+    @Override
     public void characters(char[] ch, int offset, int length) {
         if(state == STATE_VERSION)
             latestVersion += new String(ch, offset, length);
@@ -234,6 +236,7 @@ public class VersionChecker extends DefaultHandler {
     /**
      * Notifies the parser that a new tag is starting.
      */
+    @Override
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
         // Checks whether we know the tag and updates the current state.
         if(qName.equals(VERSION_ELEMENT))
@@ -251,11 +254,13 @@ public class VersionChecker extends DefaultHandler {
     /**
      * Notifies the parser that the current element is finished.
      */
+    @Override
     public void endElement(String uri, String localName, String qName) throws SAXException {state = STATE_UNKNOWN;}
 
     /**
      * Notifies the parser that XML parsing is finished.
      */
+    @Override
     public void endDocument() {
         // Make sure we're not keep meaningless whitecase characters in the data.
         latestVersion = latestVersion.toLowerCase().trim();

@@ -128,30 +128,35 @@ public class SaneComboBox extends JComboBox {
     ////////////////////////
 
 
+    @Override
     public void addItem(Object object) {
         ignoreActionEvent = true;
         super.addItem(object);
         ignoreActionEvent = false;
     }
 
+    @Override
     public void insertItemAt(Object object, int i) {
         ignoreActionEvent = true;
         super.insertItemAt(object, i);
         ignoreActionEvent = false;
     }
 
+    @Override
     public void removeItem(Object object) {
         ignoreActionEvent = true;
         super.removeItem(object);
         ignoreActionEvent = false;
     }
 
+    @Override
     public void removeItemAt(int i) {
         ignoreActionEvent = true;
         super.removeItemAt(i);
         ignoreActionEvent = false;
     }
 
+    @Override
     public void removeAllItems() {
         ignoreActionEvent = true;
         super.removeAllItems();

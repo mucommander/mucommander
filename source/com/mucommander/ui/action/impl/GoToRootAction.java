@@ -39,6 +39,7 @@ public class GoToRootAction extends GoToParentAction {
         super(mainFrame, properties);
     }
 
+    @Override
     public void performAction() {
         // Changes the current folder to make it the current folder's root folder.
         // Does nothing if the current folder already is the root.

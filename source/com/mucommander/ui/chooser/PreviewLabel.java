@@ -20,10 +20,13 @@ package com.mucommander.ui.chooser;
 
 import com.mucommander.text.Translator;
 
-import javax.swing.*;
+import javax.swing.JLabel;
 import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
@@ -95,14 +98,17 @@ public class PreviewLabel extends JLabel implements PropertyChangeListener, Clon
     // Overridden methods //
     ////////////////////////
 
+    @Override
     public void setForeground(Color color) {
         putClientProperty(FOREGROUND_COLOR_PROPERTY_NAME, color);
     }
 
+    @Override
     public void setBackground(Color color) {
         putClientProperty(BACKGROUND_COLOR_PROPERTY_NAME, color);
     }
 
+    @Override
     public Object clone() throws CloneNotSupportedException {
         PreviewLabel label;
 
@@ -115,6 +121,7 @@ public class PreviewLabel extends JLabel implements PropertyChangeListener, Clon
     /**
      * Paints the preview label.
      */
+    @Override
     public void paint(Graphics g) {
         int width = getWidth();
         int height = getHeight();
@@ -137,6 +144,7 @@ public class PreviewLabel extends JLabel implements PropertyChangeListener, Clon
             border.paintBorder(this, g, 0, 0, width, height);
     }
 
+    @Override
     public Dimension getPreferredSize() {
         Dimension dimension = super.getPreferredSize();
         dimension.setSize(dimension.getWidth()+8, dimension.getHeight()+6);

@@ -46,6 +46,7 @@ public class SizeConstrainedDocument extends javax.swing.text.PlainDocument {
     // PlainDocument implementation //
     //////////////////////////////////
 
+    @Override
     public void insertString(int offset, String str, javax.swing.text.AttributeSet attributeSet) throws javax.swing.text.BadLocationException {
         if (str != null && maxLen > 0 && this.getLength() + str.length() > maxLen)
             return;

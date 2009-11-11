@@ -79,7 +79,8 @@ public class SevenZipArchiveFile extends AbstractROArchiveFile {
     // AbstractROArchiveFile implementation //
     //////////////////////////////////////////
 
-	public InputStream getEntryInputStream(final ArchiveEntry entry, ArchiveEntryIterator entryIterator) throws IOException {
+	@Override
+    public InputStream getEntryInputStream(final ArchiveEntry entry, ArchiveEntryIterator entryIterator) throws IOException {
 		checkSevenZipFile();
 		
 		final FailSafePipedInputStream in = new FailSafePipedInputStream();
@@ -107,7 +108,8 @@ public class SevenZipArchiveFile extends AbstractROArchiveFile {
 		return in; 
 	}
 
-	public ArchiveEntryIterator getEntryIterator() throws IOException {
+	@Override
+    public ArchiveEntryIterator getEntryIterator() throws IOException {
 		checkSevenZipFile();
 
     	Vector<SevenZip.Archive.SevenZipEntry> result = new Vector<SevenZip.Archive.SevenZipEntry>();

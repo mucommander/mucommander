@@ -18,7 +18,7 @@
 
 package com.mucommander.ui.theme;
 
-import java.awt.*;
+import java.awt.Font;
 
 /**
  * {@link DefaultFont} implementation that maps to a fixed value.
@@ -45,6 +45,7 @@ public class FixedDefaultFont extends DefaultFont {
 
     // - DefaultFont implementation ------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
+    @Override
     public Font getFont(ThemeData data) {
         return font;
     }

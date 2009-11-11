@@ -115,6 +115,7 @@ public class ChangePermissionsDialog extends JobDialog
         octalPermTextField = new JTextField(3);
         // Constrains text field to 3 digits, from 0 to 7 (octal base)
         Document doc = new SizeConstrainedDocument(3) {
+            @Override
             public void insertString(int offset, String str, AttributeSet attributeSet) throws BadLocationException {
                 int strLen = str.length();
                 char c;

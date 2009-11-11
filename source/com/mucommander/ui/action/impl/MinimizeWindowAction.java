@@ -40,6 +40,7 @@ public class MinimizeWindowAction extends MuAction {
         super(mainFrame, properties);
     }
 
+    @Override
     public void performAction() {
         mainFrame.setExtendedState(JFrame.ICONIFIED);
     }
@@ -62,6 +63,7 @@ public class MinimizeWindowAction extends MuAction {
 
 		public KeyStroke getDefaultKeyStroke() { return KeyStroke.getKeyStroke(KeyEvent.VK_M, KeyEvent.META_DOWN_MASK); }
 
+        @Override
         public String getLabel() {
             // Use a special label for Mac OS X, if it exists, use the standard action label otherwise
             String macLabelKey = ActionProperties.getActionLabelKey(ACTION_ID)+".mac_os_x";

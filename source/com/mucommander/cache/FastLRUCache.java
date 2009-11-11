@@ -53,6 +53,7 @@ public class FastLRUCache<K, V> extends LRUCache<K,V> {
         super(capacity);
         this.cacheMap = new LinkedHashMap<K, Object[]>(16, 0.75f, true) {
                 // Override this method to automatically remove eldest entry before insertion when cache is full
+                @Override
                 protected final boolean removeEldestEntry(Map.Entry<K, Object[]> eldest) {
                     return cacheMap.size() > FastLRUCache.this.capacity;
                 }
@@ -127,6 +128,7 @@ public class FastLRUCache<K, V> extends LRUCache<K,V> {
     // LRUCache methods implementation //
     /////////////////////////////////////	
 
+    @Override
     public synchronized V get(K key) {
         // Look for expired items and purge them (if any)
         purgeExpiredItems();	
@@ -161,6 +163,7 @@ public class FastLRUCache<K, V> extends LRUCache<K,V> {
     }
 
 	
+    @Override
     public synchronized void add(K key, V value, long timeToLive) {
         // Look for expired items and purge them (if any)
         purgeExpiredItems();	
@@ -183,11 +186,13 @@ public class FastLRUCache<K, V> extends LRUCache<K,V> {
     }
 
 
+    @Override
     public synchronized int size() {
         return cacheMap.size();
     }
 
 	
+    @Override
     public synchronized void clearAll() {
         cacheMap.clear();
         eldestExpirationDate = Long.MAX_VALUE;
@@ -201,6 +206,7 @@ public class FastLRUCache<K, V> extends LRUCache<K,V> {
     /**
      * Tests this LRUCache for corruption and throws a RuntimeException if something is wrong.
      */
+    @Override
     protected void testCorruption() throws RuntimeException {
         Object value[];
         long expirationDate;

@@ -45,7 +45,8 @@ public class ParentFoldersQL extends QuickListWithIcons implements LocationListe
 		folderPanel.getLocationManager().addLocationListener(this);		
 	}
 	
-	protected void acceptListItem(Object item) {
+	@Override
+    protected void acceptListItem(Object item) {
 		folderPanel.tryChangeCurrentFolder((AbstractFile)item);
 	}
 	
@@ -66,14 +67,16 @@ public class ParentFoldersQL extends QuickListWithIcons implements LocationListe
 
 	public void locationFailed(LocationEvent locationEvent) {}	
 
-	public Object[] getData() {
+	@Override
+    public Object[] getData() {
 		if (!updated && (updated = true))
 			populateParentFolders(folderPanel.getCurrentFolder());
 		
 		return parents.toArray();
 	}
 
-	protected Icon itemToIcon(Object item) {
+	@Override
+    protected Icon itemToIcon(Object item) {
 		return getIconOfFile((AbstractFile)item);
 	}
 }

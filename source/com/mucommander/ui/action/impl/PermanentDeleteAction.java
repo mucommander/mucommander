@@ -41,6 +41,7 @@ public class PermanentDeleteAction extends SelectedFilesAction {
         super(mainFrame, properties);
     }
 
+    @Override
     public void performAction() {
         FileSet files = mainFrame.getActiveTable().getSelectedFiles();
         // Invoke confirmation dialog only if at least one file is selected/marked

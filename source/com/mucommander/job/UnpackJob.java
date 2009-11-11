@@ -94,6 +94,7 @@ public class UnpackJob extends AbstractCopyJob {
     // TransferFileJob implementation //
     ////////////////////////////////////
 
+    @Override
     protected void jobStarted() {
         super.jobStarted();
 
@@ -127,6 +128,7 @@ public class UnpackJob extends AbstractCopyJob {
      * @param recurseParams unused
      * @return <code>true</code> if the file has been processed successfully
      */
+    @Override
     protected boolean processFile(AbstractFile file, Object recurseParams) {
         // Stop if interrupted
         if(getState()==INTERRUPTED)
@@ -311,6 +313,7 @@ public class UnpackJob extends AbstractCopyJob {
     }
 
     // This job modifies the base destination folder and its subfolders
+    @Override
     protected boolean hasFolderChanged(AbstractFile folder) {
         return baseDestFolder.isParentOf(folder);
     }
@@ -320,6 +323,7 @@ public class UnpackJob extends AbstractCopyJob {
     // Overridden methods //
     ////////////////////////
 
+    @Override
     protected void jobCompleted() {
         super.jobCompleted();
 
@@ -334,6 +338,7 @@ public class UnpackJob extends AbstractCopyJob {
         }
     }
 
+    @Override
     public String getStatusString() {
         if(isCheckingIntegrity())
             return super.getStatusString();
@@ -363,6 +368,7 @@ public class UnpackJob extends AbstractCopyJob {
             this.iterator = iterator;
         }
 
+        @Override
         public InputStream getInputStream() throws IOException {
             return archiveFile.getEntryInputStream(entry, iterator);
         }

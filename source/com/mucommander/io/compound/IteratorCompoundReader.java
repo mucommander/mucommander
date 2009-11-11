@@ -69,6 +69,7 @@ public class IteratorCompoundReader extends CompoundReader {
     // CompoundReader implementation //
     ///////////////////////////////////
 
+    @Override
     public Reader getNextReader() {
         return readerIterator.hasNext()?readerIterator.next():null;
     }

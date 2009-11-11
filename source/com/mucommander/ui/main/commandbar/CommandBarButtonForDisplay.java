@@ -22,7 +22,7 @@ import com.mucommander.ui.action.ActionProperties;
 import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.main.MainFrame;
 
-import java.awt.*;
+import java.awt.Dimension;
 
 /**
  * CommandBarButton that used for display purpose only
@@ -44,7 +44,8 @@ public class CommandBarButtonForDisplay extends CommandBarButton {
 		setPreferredSize(PREFERRED_SIZE);
 	}
 	
-	public void setButtonAction(String actionId, MainFrame mainFrame) {
+	@Override
+    public void setButtonAction(String actionId, MainFrame mainFrame) {
         // Use the action's label as the button's label
         String label = ActionProperties.getActionLabel(actionId);
         setText(label);

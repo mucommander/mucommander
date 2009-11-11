@@ -144,7 +144,8 @@ public class ShortcutsPanel extends PreferencesPanel {
 			public void actionPerformed(ActionEvent e) {
 				final ActionCategory selectedActionCategory = (ActionCategory) combo.getSelectedItem();
 				shortcutsTable.updateModel(new ShortcutsTable.ActionFilter() {
-					public boolean accept(String actionId) {
+					@Override
+                    public boolean accept(String actionId) {
 						return selectedActionCategory.contains(actionId);
 					}
 				});
@@ -163,7 +164,8 @@ public class ShortcutsPanel extends PreferencesPanel {
     // PrefPanel methods //
     ///////////////////////
 	
-	protected void commit() {
+	@Override
+    protected void commit() {
 		shortcutsTable.commitChanges();
 		ActionKeymapIO.setModified();
 	}
@@ -209,7 +211,8 @@ public class ShortcutsPanel extends PreferencesPanel {
 				stopped = true;
 			}
 		
-			public void run() {
+			@Override
+            public void run() {
 				try {
 					Thread.sleep(MESSAGE_SHOWING_TIME);
 				} catch (InterruptedException e) {}

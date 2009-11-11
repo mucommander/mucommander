@@ -18,10 +18,9 @@
  */
 package com.mucommander.file.impl.rar.provider.de.innosystec.unrar.rarfile;
 
+import com.mucommander.file.impl.rar.provider.de.innosystec.unrar.io.Raw;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
-import com.mucommander.file.impl.rar.provider.de.innosystec.unrar.io.Raw;
 
 /**
  * extended archive CRC header
@@ -80,7 +79,8 @@ extends SubBlockHeader
 		return unpVer;
 	}
 	
-	public void print()
+	@Override
+    public void print()
 	{
 		super.print();
 		logger.info("unpSize: "+unpSize);

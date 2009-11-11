@@ -30,6 +30,7 @@ public class DSStoreFileFilter extends FilenameFilter {
     // FilenameFilter implementation //
     ///////////////////////////////////
 
+    @Override
     public boolean accept(String filename) {
         return !".DS_Store".equals(filename);
     }

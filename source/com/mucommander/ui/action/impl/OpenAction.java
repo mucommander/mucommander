@@ -105,6 +105,7 @@ public class OpenAction extends MuAction {
     /**
      * Opens the currently selected file in the active folder panel.
      */
+    @Override
     public void performAction() {
         AbstractFile file;
 

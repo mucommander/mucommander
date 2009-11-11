@@ -18,13 +18,12 @@
  */
 package com.mucommander.file.impl.rar.provider.de.innosystec.unrar.rarfile;
 
-import java.util.Calendar;
-import java.util.Date;
-
+import com.mucommander.file.impl.rar.provider.de.innosystec.unrar.io.Raw;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import com.mucommander.file.impl.rar.provider.de.innosystec.unrar.io.Raw;
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * DOCUMENT ME
@@ -200,7 +199,8 @@ public class FileHeader extends BlockHeader {
 		return i;
 	}
 
-	public void print(){
+	@Override
+    public void print(){
 		super.print();
 		StringBuilder str = new StringBuilder();
 		str.append("unpSize: "+getUnpSize());

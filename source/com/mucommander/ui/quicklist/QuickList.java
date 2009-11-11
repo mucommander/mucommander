@@ -78,17 +78,20 @@ public abstract class QuickList extends JPopupMenu implements FocusListener {
 		}
 	}
 	
-	public Component add(Component comp) {
+	@Override
+    public Component add(Component comp) {
 		items.add(comp);
 		return super.add(comp);
 	}
 	
-	public JMenuItem add(JMenuItem comp) {
+	@Override
+    public JMenuItem add(JMenuItem comp) {
 		items.add(comp);
 		return super.add(comp);
 	}
 	
-	public Dimension getPreferredSize() {
+	@Override
+    public Dimension getPreferredSize() {
 		double width = PADDING, height = PADDING;
 		int nbItems = items.size();
 		for (int i=0; i<nbItems; i++) {
@@ -115,11 +118,13 @@ public abstract class QuickList extends JPopupMenu implements FocusListener {
 			super(Color.gray);		
 		}
 		
-		public Insets getBorderInsets(Component c) {
+		@Override
+        public Insets getBorderInsets(Component c) {
 			return new Insets(1,1,1,1);
 		}
 		
-		public Insets getBorderInsets(Component c, Insets i) {
+		@Override
+        public Insets getBorderInsets(Component c, Insets i) {
 			return new Insets(1,1,1,1);
 		}
 	}	

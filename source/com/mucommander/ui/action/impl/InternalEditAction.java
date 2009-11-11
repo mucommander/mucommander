@@ -56,10 +56,12 @@ public class InternalEditAction extends AbstractViewerAction {
      * Opens the internal editor on the specified file.
      * @param file file to edit.
      */
+    @Override
     protected void performInternalAction(AbstractFile file) {
         EditorRegistrar.createEditorFrame(mainFrame, file, getIcon().getImage());
     }
 
+    @Override
     protected Command getCustomCommand() {
         return null;
     }

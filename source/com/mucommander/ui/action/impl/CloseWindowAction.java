@@ -40,6 +40,7 @@ public class CloseWindowAction extends MuAction {
         super(mainFrame, properties);
     }
 
+    @Override
     public void performAction() {
         // Closing the last window is equivalent to quitting the application: perform QuitAction in that case
         if(WindowManager.getMainFrames().size()==1)

@@ -205,11 +205,13 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 		(cancelEditingStateThread = new CancelEditingStateThread(cellEditor)).start();
 	}
 	
-	public TableCellRenderer getCellRenderer(int row, int column) {
+	@Override
+    public TableCellRenderer getCellRenderer(int row, int column) {
 		return cellRenderer;
 	}
 	
-	public void valueChanged(ListSelectionEvent e) {
+	@Override
+    public void valueChanged(ListSelectionEvent e) {
 		super.valueChanged(e);
 		// Selection might be changed, update tooltip
 		int selectetRow = getSelectedRow();
@@ -227,13 +229,15 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 	 * Override this method so that calls for SetModel function outside this class
 	 * won't get to setModel(KeymapTableModel model) function.
 	 */
-	public void setModel(TableModel model) {
+	@Override
+    public void setModel(TableModel model) {
 		super.setModel(model);
 	}
 	
 	public boolean hasChanged() { return data.hasChanged(); }
 	
-	public TableCellEditor getCellEditor(int row, int column) {
+	@Override
+    public TableCellEditor getCellEditor(int row, int column) {
 		return new KeyStrokeCellEditor(new RecordingKeyStrokeField((KeyStroke) getValueAt(row, column)));
 	}
 	
@@ -317,11 +321,13 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 			createCancelEditingStateThread(this);
 		}
 
-		public Component getTableCellEditorComponent(JTable table, Object value,
+		@Override
+        public Component getTableCellEditorComponent(JTable table, Object value,
                 boolean isSelected, int row, int col) {
             return rec;
         }
  
+        @Override
         public Object getCellEditorValue() {
         	return rec.getLastKeyStroke();
         }
@@ -339,7 +345,8 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 			stopped = true;
 		}
 		
-		public void run() {
+		@Override
+        public void run() {
         	try {
 				Thread.sleep(CELL_EDITING_STATE_PERIOD);
 			} catch (InterruptedException e) {}
@@ -359,7 +366,8 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 			this.tableData = data;
 		}
 
-		public boolean isCellEditable(int row, int column) {
+		@Override
+        public boolean isCellEditable(int row, int column) {
 			switch(column) {
 			case ACTION_DESCRIPTION_COLUMN_INDEX:
 				return false;
@@ -371,11 +379,13 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 			}
 		}
 		
-		public Object getValueAt(int row, int column) {
+		@Override
+        public Object getValueAt(int row, int column) {
 			return tableData.getTableData(row, column);
 		}
 
-		public void setValueAt(Object value, int row, int column) {
+		@Override
+        public void setValueAt(Object value, int row, int column) {
 			// if no keystroke was pressed
 			if (value == null)
 				return;
@@ -430,6 +440,7 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
         // Overridden methods //
         ////////////////////////
 
+        @Override
         protected void paintBorder(Graphics g) {
             paintDottedBorder(g, getWidth(), getHeight(), ThemeCache.backgroundColors[ThemeCache.ACTIVE][ThemeCache.NORMAL]);
         }
@@ -740,7 +751,8 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 	 */
 	private class DotBorderedCellLabel extends CellLabel {
 
-		protected void paintOutline(Graphics g) {
+		@Override
+        protected void paintOutline(Graphics g) {
             paintDottedBorder(g, getWidth(), getHeight(), outlineColor);
 		}
 	}

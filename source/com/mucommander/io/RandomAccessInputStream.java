@@ -100,6 +100,7 @@ public abstract class RandomAccessInputStream extends InputStream implements Ran
      * end of the stream when this method is called
      * @throws IOException if something went wrong
      */
+    @Override
     public long skip(long n) throws IOException {
         if(n<=0)
             return 0;
@@ -131,6 +132,7 @@ public abstract class RandomAccessInputStream extends InputStream implements Ran
      * @return the number of bytes that are available for reading.
      * @throws IOException if something went wrong
      */
+    @Override
     public int available() throws IOException {
         return (int)(getLength() - getOffset() - 1);
     }
@@ -142,6 +144,7 @@ public abstract class RandomAccessInputStream extends InputStream implements Ran
      *
      * @param readLimit this parameter has no effect and is simply ignored
      */
+    @Override
     public synchronized void mark(int readLimit) {
         try {
 			this.markOffset = getOffset();
@@ -155,6 +158,7 @@ public abstract class RandomAccessInputStream extends InputStream implements Ran
      *
      * @throws IOException if something went wrong
      */
+    @Override
     public synchronized void reset() throws IOException {
         seek(this.markOffset);
     }
@@ -162,6 +166,7 @@ public abstract class RandomAccessInputStream extends InputStream implements Ran
     /**
      * Always returns <code>true</code>: {@link #mark(int)} and {@link #reset()} methods are supported.
      */
+    @Override
     public boolean markSupported() {
         return true;
     }
@@ -182,6 +187,7 @@ public abstract class RandomAccessInputStream extends InputStream implements Ran
      * file has been reached.
      * @throws IOException if an I/O error occurs
      */
+    @Override
     public abstract int read(byte b[], int off, int len) throws IOException;
 
     /**
@@ -190,5 +196,6 @@ public abstract class RandomAccessInputStream extends InputStream implements Ran
      *
      * @throws IOException if an I/O error occurs.
      */
+    @Override
     public abstract void close() throws IOException;
 }

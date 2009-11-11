@@ -591,7 +591,8 @@ public final class Unpack extends Unpack20
 			}
 	}
 
-	protected void unpInitData(boolean solid)
+	@Override
+    protected void unpInitData(boolean solid)
 	{
 		if (!solid) {
 			tablesRead = false;

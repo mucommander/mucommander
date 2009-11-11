@@ -38,9 +38,11 @@ public class BasicAutocompleterTextComponent extends AutocompleterTextComponent 
     // AutocompleterTextComponent implementation //
     ///////////////////////////////////////////////
 
+    @Override
     public void OnEnterPressed(KeyEvent keyEvent) {
     }
 
+    @Override
     public void OnEscPressed(KeyEvent keyEvent) {
     }
 }

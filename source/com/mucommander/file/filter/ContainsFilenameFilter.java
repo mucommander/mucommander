@@ -45,6 +45,7 @@ public class ContainsFilenameFilter extends FilenameFilter {
     // FilenameFilter implementation //
     ///////////////////////////////////
 
+    @Override
     public boolean accept(String filename) {
         if(isCaseSensitive())
             return filename.indexOf(s)!=-1;

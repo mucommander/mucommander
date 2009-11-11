@@ -18,20 +18,6 @@
 
 package com.mucommander.ui.dialog.pref.theme;
 
-import java.awt.BorderLayout;
-import java.awt.FlowLayout;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-
-import javax.swing.BorderFactory;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTabbedPane;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
-
 import com.mucommander.RuntimeConstants;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.chooser.FontChooser;
@@ -41,6 +27,12 @@ import com.mucommander.ui.dialog.pref.PreferencesDialog;
 import com.mucommander.ui.layout.ProportionalGridPanel;
 import com.mucommander.ui.layout.YBoxPanel;
 import com.mucommander.ui.theme.ThemeData;
+
+import javax.swing.*;
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 /**
  * @author Nicolas Rinaudo, Maxence Bernard
@@ -182,5 +174,6 @@ class ShellPanel extends ThemeEditorPanel implements PropertyChangeListener {
 
     // - Modification management ---------------------------------------------------------
     // -----------------------------------------------------------------------------------
+    @Override
     public void commit() {}
 }

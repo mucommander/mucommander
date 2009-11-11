@@ -133,6 +133,7 @@ public class OpenLocationAction extends MuAction {
     // MuAction implementation //
     /////////////////////////////
 
+    @Override
     public void performAction() {
         FolderPanel folderPanel = getFolderPanel();
         if(url!=null) {

@@ -54,6 +54,7 @@ public class PasteClipboardFilesAction extends MuAction {
             new ClipboardNotifier(this);
     }
 
+    @Override
     public void performAction() {
         // Retrieve clipboard files
         FileSet clipboardFiles = ClipboardSupport.getClipboardFiles();

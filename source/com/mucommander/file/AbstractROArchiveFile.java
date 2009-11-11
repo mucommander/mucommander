@@ -55,6 +55,7 @@ public abstract class AbstractROArchiveFile extends AbstractArchiveFile {
      *
      * @return false
      */
+    @Override
     public final boolean isWritable() {
         return false;
     }

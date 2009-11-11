@@ -54,10 +54,12 @@ public class StoredOutputStream extends ZipEntryOutputStream {
     // ZipEntryOutputStream implementation //
     /////////////////////////////////////////
 
+    @Override
     public int getTotalIn() {
         return storedCount;
     }
 
+    @Override
     public int getTotalOut() {
         return storedCount;
     }
@@ -67,6 +69,7 @@ public class StoredOutputStream extends ZipEntryOutputStream {
     // OutputStream implementation //
     /////////////////////////////////
 
+    @Override
     public void write(byte[] b, int offset, int length) throws IOException {
         out.write(b, offset, length);
         storedCount += length;

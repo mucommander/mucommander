@@ -37,6 +37,7 @@ public class AddBookmarkAction extends MuAction implements InvokesDialog {
         super(mainFrame, properties);
     }
 
+    @Override
     public void performAction() {
         new AddBookmarkDialog(mainFrame);
     }

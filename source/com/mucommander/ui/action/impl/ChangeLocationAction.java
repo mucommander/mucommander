@@ -37,6 +37,7 @@ public class ChangeLocationAction extends MuAction {
         super(mainFrame, properties);
     }
 
+    @Override
     public void performAction() {
         mainFrame.getActivePanel().changeCurrentLocation();
     }

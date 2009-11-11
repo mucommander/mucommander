@@ -33,8 +33,10 @@ import java.net.URL;
 class CommandBrowse extends UrlOperation {
     // - Desktop operation implementation --------------------------------
     // -------------------------------------------------------------------
+    @Override
     public boolean isAvailable() {return CommandManager.getCommandForAlias(CommandManager.URL_OPENER_ALIAS) != null;}
 
+    @Override
     public void execute(URL url) throws IOException {
         Command      command;
         AbstractFile target;
@@ -50,5 +52,6 @@ class CommandBrowse extends UrlOperation {
      * Returns the operation's name.
      * @return the operation's name.
      */
+    @Override
     public String getName() {return "openURL bridge";}
 }

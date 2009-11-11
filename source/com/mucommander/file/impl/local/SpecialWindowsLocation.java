@@ -86,6 +86,7 @@ public class SpecialWindowsLocation extends DummyFile {
     /**
      * Implementation notes: returns the CLSID (Class identifier) passed to the constructor.
      */
+    @Override
     public String getName() {
         return clsid;
     }
@@ -93,6 +94,7 @@ public class SpecialWindowsLocation extends DummyFile {
     /**
      * Implementation notes: returns the CLSID (Class identifier) passed to the constructor.
      */
+    @Override
     public String getAbsolutePath() {
         return clsid;
     }
@@ -100,6 +102,7 @@ public class SpecialWindowsLocation extends DummyFile {
     /**
      * Implementation notes: always returns <code>true</code>.
      */
+    @Override
     public boolean isDirectory() {
         return true;
     }

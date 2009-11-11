@@ -85,6 +85,7 @@ class ShellHistoryReader extends DefaultHandler implements ShellHistoryConstants
     /**
      * Notifies the reader that CDATA has been encountered.
      */
+    @Override
     public void characters(char[] ch, int start, int length) {
         if(status == STATUS_COMMAND)
             command.append(ch, start, length);
@@ -93,6 +94,7 @@ class ShellHistoryReader extends DefaultHandler implements ShellHistoryConstants
     /**
      * Notifies the reader that a new XML element is starting.
      */
+    @Override
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
         // Root element declaration.
         if(qName.equals(ROOT_ELEMENT) && (status == STATUS_UNKNOWN)) {
@@ -108,6 +110,7 @@ class ShellHistoryReader extends DefaultHandler implements ShellHistoryConstants
     /**
      * Notifies the reader that the current element declaration is over.
      */
+    @Override
     public void endElement(String uri, String localName, String qName) throws SAXException {
         // Root element finished.
         if(qName.equals(ROOT_ELEMENT) && (status == STATUS_ROOT))

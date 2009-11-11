@@ -105,6 +105,7 @@ public class SortInfo implements Cloneable {
     // Overridden methods //
     ////////////////////////
 
+    @Override
     public Object clone() {
         try {
             return super.clone();

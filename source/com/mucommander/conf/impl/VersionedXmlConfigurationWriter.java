@@ -34,6 +34,7 @@ class VersionedXmlConfigurationWriter extends XmlConfigurationWriter {
     // Overridden methods //
     ////////////////////////
 
+    @Override
     public void startConfiguration() throws ConfigurationException {
         try {
             // Version the file.

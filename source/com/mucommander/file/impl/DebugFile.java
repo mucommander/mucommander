@@ -100,6 +100,7 @@ public class DebugFile extends ProxyFile {
     // Overridden methods (traced/slowed down methods) //
     /////////////////////////////////////////////////////
 
+    @Override
     public long getDate() {
         FileLogger.finest(getDebugString());
         lag();
@@ -107,6 +108,7 @@ public class DebugFile extends ProxyFile {
         return super.getDate();
     }
 
+    @Override
     public long getSize() {
         FileLogger.finest(getDebugString());
         lag();
@@ -114,6 +116,7 @@ public class DebugFile extends ProxyFile {
         return super.getSize();
     }
 
+    @Override
     public boolean exists() {
         FileLogger.finest(getDebugString());
         lag();
@@ -121,6 +124,7 @@ public class DebugFile extends ProxyFile {
         return super.exists();
     }
 
+    @Override
     public boolean isDirectory() {
         FileLogger.finest(getDebugString());
         lag();
@@ -128,6 +132,7 @@ public class DebugFile extends ProxyFile {
         return super.isDirectory();
     }
 
+    @Override
     public boolean isSymlink() {
         FileLogger.finest(getDebugString());
         lag();
@@ -135,6 +140,7 @@ public class DebugFile extends ProxyFile {
         return super.isSymlink();
     }
 
+    @Override
     public long getFreeSpace() {
         FileLogger.finest(getDebugString());
         lag();
@@ -142,6 +148,7 @@ public class DebugFile extends ProxyFile {
         return super.getFreeSpace();
     }
 
+    @Override
     public long getTotalSpace() {
         FileLogger.finest(getDebugString());
         lag();
@@ -149,6 +156,7 @@ public class DebugFile extends ProxyFile {
         return super.getTotalSpace();
     }
 
+    @Override
     public String getName() {
         FileLogger.finest(getDebugString());
         lag();
@@ -156,6 +164,7 @@ public class DebugFile extends ProxyFile {
         return super.getName();
     }
 
+    @Override
     public String getExtension() {
         FileLogger.finest(getDebugString());
         lag();
@@ -163,6 +172,7 @@ public class DebugFile extends ProxyFile {
         return super.getExtension();
     }
 
+    @Override
     public String getAbsolutePath() {
         FileLogger.finest(getDebugString());
         lag();
@@ -170,6 +180,7 @@ public class DebugFile extends ProxyFile {
         return super.getAbsolutePath();
     }
 
+    @Override
     public String getCanonicalPath() {
         FileLogger.finest(getDebugString());
         lag();
@@ -177,6 +188,7 @@ public class DebugFile extends ProxyFile {
         return super.getCanonicalPath();
     }
 
+    @Override
     public AbstractFile getCanonicalFile() {
         FileLogger.finest(getDebugString());
         lag();
@@ -184,6 +196,7 @@ public class DebugFile extends ProxyFile {
         return super.getCanonicalFile();
     }
 
+    @Override
     public boolean isArchive() {
         FileLogger.finest(getDebugString());
         lag();
@@ -191,6 +204,7 @@ public class DebugFile extends ProxyFile {
         return super.isArchive();
     }
 
+    @Override
     public boolean isHidden() {
         FileLogger.finest(getDebugString());
         lag();
@@ -198,6 +212,7 @@ public class DebugFile extends ProxyFile {
         return super.isHidden();
     }
 
+    @Override
     public FilePermissions getPermissions() {
         FileLogger.finest(getDebugString());
         lag();
@@ -205,6 +220,7 @@ public class DebugFile extends ProxyFile {
         return super.getPermissions();
     }
 
+    @Override
     public String getOwner() {
         FileLogger.finest(getDebugString());
         lag();
@@ -212,6 +228,7 @@ public class DebugFile extends ProxyFile {
         return super.getOwner();
     }
 
+    @Override
     public String getGroup() {
         FileLogger.finest(getDebugString());
         lag();
@@ -219,6 +236,7 @@ public class DebugFile extends ProxyFile {
         return super.getGroup();
     }
 
+    @Override
     public AbstractFile getRoot() {
         FileLogger.finest(getDebugString());
         lag();
@@ -226,6 +244,7 @@ public class DebugFile extends ProxyFile {
         return super.getRoot();
     }
 
+    @Override
     public boolean isRoot() {
         FileLogger.finest(getDebugString());
         lag();
@@ -233,6 +252,7 @@ public class DebugFile extends ProxyFile {
         return super.isRoot();
     }
 
+    @Override
     public boolean equalsCanonical(Object f) {
         FileLogger.finest(getDebugString());
         lag();
@@ -247,6 +267,7 @@ public class DebugFile extends ProxyFile {
         return super.toString();
     }
 
+    @Override
     public AbstractFile getParent() {
         FileLogger.finest(getDebugString());
         lag();

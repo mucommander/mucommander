@@ -660,6 +660,7 @@ public class ZipOutputStream extends OutputStream implements ZipConstants {
      * @param length the number of bytes to write
      * @throws IOException on error
      */
+    @Override
     public void write(byte[] b, int offset, int length) throws IOException {
         (zeos==null?out:zeos).write(b, offset, length);
     }
@@ -672,6 +673,7 @@ public class ZipOutputStream extends OutputStream implements ZipConstants {
      * @param b the byte array to write
      * @throws IOException on error
      */
+    @Override
     public void write(byte[] b) throws IOException {
         (zeos==null?out:zeos).write(b, 0, b.length);
     }
@@ -685,6 +687,7 @@ public class ZipOutputStream extends OutputStream implements ZipConstants {
      * @param b the byte to write
      * @throws IOException on error
      */
+    @Override
     public void write(int b) throws IOException {
         (zeos==null?out:zeos).write(b);
     }
@@ -694,6 +697,7 @@ public class ZipOutputStream extends OutputStream implements ZipConstants {
      *
      * @exception IOException  if an I/O error occurs.
      */
+    @Override
     public void close() throws IOException {
         finish();
 
@@ -710,6 +714,7 @@ public class ZipOutputStream extends OutputStream implements ZipConstants {
      *
      * @exception  IOException  if an I/O error occurs.
      */
+    @Override
     public void flush() throws IOException {
         out.flush();
     }

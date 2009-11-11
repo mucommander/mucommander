@@ -37,11 +37,13 @@ public class TypicalAutocompleterEditableCombobox extends AutocompleterTextCompo
 		this.editableCombobox = editableCombobox;		
 	}
 
-	public void OnEnterPressed(KeyEvent keyEvent) {
+	@Override
+    public void OnEnterPressed(KeyEvent keyEvent) {
 		editableCombobox.respondToEnterKeyPressing(keyEvent);
 	}
 
-	public void OnEscPressed(KeyEvent keyEvent) {
+	@Override
+    public void OnEscPressed(KeyEvent keyEvent) {
 		editableCombobox.respondToEscapeKeyPressing(keyEvent);
 	}
 }

@@ -26,6 +26,7 @@ import com.mucommander.process.ProcessRunner;
 public class GuessedGnomeDesktopAdapter extends GnomeDesktopAdapter {
     public String toString() {return "Gnome Desktop (guessed)";}
 
+    @Override
     public boolean isAvailable() {
         try {
             ProcessRunner.execute("gnome-open");

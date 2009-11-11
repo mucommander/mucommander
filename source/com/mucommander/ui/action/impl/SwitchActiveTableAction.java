@@ -38,6 +38,7 @@ public class SwitchActiveTableAction extends MuAction {
         super(mainFrame, properties);
     }
 
+    @Override
     public void performAction() {
         FileTable activeTable = mainFrame.getActiveTable();
         FileTable leftTable = mainFrame.getLeftPanel().getFileTable();

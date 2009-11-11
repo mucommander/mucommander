@@ -170,6 +170,7 @@ public class BOMInputStream extends InputStream implements BOMConstants {
     // InputStream implementation //
     ////////////////////////////////
 
+    @Override
     public int read() throws IOException {
         if(oneByteBuf==null)
             oneByteBuf = new byte[1];
@@ -179,10 +180,12 @@ public class BOMInputStream extends InputStream implements BOMConstants {
         return ret==-1?-1:oneByteBuf[0];
     }
 
+    @Override
     public int read(byte b[]) throws IOException {
         return read(b, 0, b.length);
     }
 
+    @Override
     public int read(byte b[], int off, int len) throws IOException {
         if(leadingBytes==null || leadingBytesOff>=leadingBytes.length)
             return in.read(b, off, len);
@@ -195,6 +198,7 @@ public class BOMInputStream extends InputStream implements BOMConstants {
         return nbBytes;
     }
 
+    @Override
     public void close() throws IOException {
         in.close();
     }

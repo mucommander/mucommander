@@ -52,6 +52,7 @@ public class FTPFileTestCase extends AbstractFileTestCase {
     // AbstractFileTestCase implementation //
     /////////////////////////////////////////
 
+    @Override
     public AbstractFile getTemporaryFile() throws IOException {
         return tempFolder.getDirectChild(getPseudoUniqueFilename(FTPFileTestCase.class.getName()));
     }

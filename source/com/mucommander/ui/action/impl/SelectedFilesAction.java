@@ -36,6 +36,7 @@ public abstract class SelectedFilesAction extends SelectedFileAction {
         super(mainFrame, properties);
     }
 
+    @Override
     protected boolean getFileTableCondition(FileTable fileTable) {
         return fileTable.getFileTableModel().getNbMarkedFiles()>0 || super.getFileTableCondition(fileTable);
     }

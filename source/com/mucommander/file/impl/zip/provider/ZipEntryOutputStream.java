@@ -94,6 +94,7 @@ public abstract class ZipEntryOutputStream extends OutputStream {
     // Partial OutputStream implementation //
     /////////////////////////////////////////
 
+    @Override
     public void write(int b) throws IOException {
         byte[] array = new byte[1];
         array[0] = (byte) (b & 0xff);
@@ -103,6 +104,7 @@ public abstract class ZipEntryOutputStream extends OutputStream {
     /**
      * Flushes the underlying <code>OutputStream</code>.
      */
+    @Override
     public void flush() throws IOException {
         out.flush();
     }

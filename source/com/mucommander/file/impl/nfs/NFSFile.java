@@ -153,6 +153,7 @@ public class NFSFile extends ProtocolFile {
     // AbstractFile methods implementation //
     /////////////////////////////////////////
 
+    @Override
     public long getDate() {
         return file.lastModified();
     }
@@ -160,6 +161,7 @@ public class NFSFile extends ProtocolFile {
     /**
      * Always returns <code>false</code> (date cannot be changed).
      */
+    @Override
     public boolean canChangeDate() {
         return false;
     }
@@ -167,15 +169,18 @@ public class NFSFile extends ProtocolFile {
     /**
      * Always returns <code>false</code> (date cannot be changed).
      */
+    @Override
     public boolean changeDate(long lastModified) {
         // XFile has no method for that purpose
         return false;
     }
 
+    @Override
     public long getSize() {
         return file.length();
     }
 
+    @Override
     public AbstractFile getParent() {
         // Retrieve parent AbstractFile and cache it
         if (!parentValueSet) {
@@ -188,24 +193,29 @@ public class NFSFile extends ProtocolFile {
         return parent;
     }
 
+    @Override
     public void setParent(AbstractFile parent) {
         this.parent = parent;
         this.parentValueSet = true;
     }
 
+    @Override
     public boolean exists() {
         return file.exists();
     }
 
+    @Override
     public FilePermissions getPermissions() {
         return permissions;
     }
 
+    @Override
     public PermissionBits getChangeablePermissions() {
         // no permission can be changed
         return PermissionBits.EMPTY_PERMISSION_BITS;
     }
 
+    @Override
     public boolean changePermission(int access, int permission, boolean enabled) {
         // XFile has no method for that unfortunately
         return false;
@@ -214,6 +224,7 @@ public class NFSFile extends ProtocolFile {
     /**
      * Always returns <code>null</code>, this information is not available unfortunately.
      */
+    @Override
     public String getOwner() {
         return null;
     }
@@ -221,6 +232,7 @@ public class NFSFile extends ProtocolFile {
     /**
      * Always returns <code>false</code>, this information is not available unfortunately.
      */
+    @Override
     public boolean canGetOwner() {
         return false;
     }
@@ -228,6 +240,7 @@ public class NFSFile extends ProtocolFile {
     /**
      * Always returns <code>null</code>, this information is not available unfortunately.
      */
+    @Override
     public String getGroup() {
         return null;
     }
@@ -235,10 +248,12 @@ public class NFSFile extends ProtocolFile {
     /**
      * Always returns <code>false</code>, this information is not available unfortunately.
      */
+    @Override
     public boolean canGetGroup() {
         return false;
     }
 
+    @Override
     public boolean isDirectory() {
         return file.isDirectory();
     }
@@ -246,24 +261,29 @@ public class NFSFile extends ProtocolFile {
     /**
      * Always returns <code>false</code> (symlinks are not detected).
      */
+    @Override
     public boolean isSymlink() {
         // Yanfs is unable to detect symlinks at this time
         return false;
     }
 
+    @Override
     public AbstractFile[] ls() throws IOException {
         return ls(null);
     }
 
+    @Override
     public void mkdir() throws IOException {
         if(!new XFile(absPath).mkdir())
             throw new IOException();
     }
 
+    @Override
     public InputStream getInputStream() throws IOException {
         return new XFileInputStream(file);
     }
 
+    @Override
     public OutputStream getOutputStream(boolean append) throws IOException {
         return new XFileOutputStream(absPath, append);
     }
@@ -273,10 +293,12 @@ public class NFSFile extends ProtocolFile {
      *
      * @return true
      */
+    @Override
     public boolean hasRandomAccessInputStream() {
         return true;
     }
 
+    @Override
     public RandomAccessInputStream getRandomAccessInputStream() throws IOException {
         return new NFSRandomAccessInputStream(new XRandomAccessFile(file, "r"));
     }
@@ -287,6 +309,7 @@ public class NFSFile extends ProtocolFile {
      *
      * @return false
      */
+    @Override
     public boolean hasRandomAccessOutputStream() {
         return false;
     }
@@ -299,10 +322,12 @@ public class NFSFile extends ProtocolFile {
      * @return a RandomAccessOutputStream that is not fully functional
      * @throws IOException if the file could not be opened for random write access
      */
+    @Override
     public RandomAccessOutputStream getRandomAccessOutputStream() throws IOException {
         return new NFSRandomAccessOutputStream(new XRandomAccessFile(file, "rw"));
     }
 
+    @Override
     public void delete() throws IOException {
         boolean ret = file.delete();
 
@@ -313,6 +338,7 @@ public class NFSFile extends ProtocolFile {
     /**
      * Always returns <code>-1</code> (not available)
      */
+    @Override
     public long getFreeSpace() {
         // XFile has no method to provide that information
         return -1;
@@ -321,6 +347,7 @@ public class NFSFile extends ProtocolFile {
     /**
      * Always returns <code>-1</code> (not available)
      */
+    @Override
     public long getTotalSpace() {
         // XFile has no method to provide that information
         return -1;
@@ -329,6 +356,7 @@ public class NFSFile extends ProtocolFile {
     /**
      * Returns a <code>com.sun.xfile.XFile</code> instance corresponding to this file.
      */
+    @Override
     public Object getUnderlyingFileObject() {
         return file;
     }
@@ -338,6 +366,7 @@ public class NFSFile extends ProtocolFile {
     // Overridden methods //
     ////////////////////////
 
+    @Override
     public AbstractFile[] ls(FilenameFilter filenameFilter) throws IOException {
         String names[] = file.list();
 
@@ -375,6 +404,7 @@ public class NFSFile extends ProtocolFile {
      * Overrides {@link AbstractFile#moveTo(AbstractFile)} to move/rename the file directly if the destination file
      * is also an NFSFile.
      */
+    @Override
     public boolean moveTo(AbstractFile destFile) throws FileTransferException {
         if(!destFile.getURL().getScheme().equals(FileProtocols.NFS)) {
             return super.moveTo(destFile);
@@ -407,14 +437,17 @@ public class NFSFile extends ProtocolFile {
             this.raf = raf;
         }
 
+        @Override
         public int read() throws IOException {
             return raf.read();
         }
 
+        @Override
         public int read(byte b[], int off, int len) throws IOException {
             return raf.read(b, off, len);
         }
 
+        @Override
         public void close() throws IOException {
             raf.close();
         }
@@ -446,18 +479,22 @@ public class NFSFile extends ProtocolFile {
             this.raf = raf;
         }
 
+        @Override
         public void write(int i) throws IOException {
             raf.write(i);
         }
 
+        @Override
         public void write(byte b[]) throws IOException {
             raf.write(b);
         }
 
+        @Override
         public void write(byte b[], int off, int len) throws IOException {
             raf.write(b, off, len);
         }
 
+        @Override
         public void close() throws IOException {
             raf.close();
         }
@@ -482,6 +519,7 @@ public class NFSFile extends ProtocolFile {
          * @param newLength the new file's length
          * @throws IOException If an I/O error occurred while trying to change the file's length
          */
+        @Override
         public void setLength(long newLength) throws IOException {
             // This operation is supported only if the new length is greater (or equal) than the current length
             long currentLength = getLength();

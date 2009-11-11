@@ -151,6 +151,7 @@ public class MarkExtensionAction extends MuAction {
             // match null extensions.
             if((ext = file.getExtension()) == null)
                 return new FilenameFilter() {
+                    @Override
                     public boolean accept(String name) {return AbstractFile.getExtension(name) == null;}
                 };
         }
@@ -167,6 +168,7 @@ public class MarkExtensionAction extends MuAction {
     /**
      * Marks all files whose extension matches the current selection.
      */
+    @Override
     public void performAction() {
         FileTable      fileTable;
         FileTableModel tableModel;

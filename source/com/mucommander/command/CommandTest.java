@@ -52,6 +52,7 @@ public class CommandTest extends TestCase {
     /**
      * Creates a batch of files used for testing.
      */
+    @Override
     public void setUp() {
         try {
             files = new AbstractFile[6];

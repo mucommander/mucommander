@@ -18,9 +18,10 @@
 
 package com.mucommander.ui.theme;
 
-import javax.swing.*;
+import javax.swing.JComponent;
+import javax.swing.UIManager;
 import javax.swing.text.JTextComponent;
-import java.awt.*;
+import java.awt.Color;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
@@ -157,6 +158,7 @@ public class SystemDefaultColor extends DefaultColor implements PropertyChangeLi
         }
     }
 
+    @Override
     public Color getColor(ThemeData data) {
         if(color == null) {
             if((color = UIManager.getColor(property)) == null)

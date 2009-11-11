@@ -37,6 +37,7 @@ public class PopupRightDriveButtonAction extends MuAction {
         super(mainFrame, properties);
     }
 
+    @Override
     public void performAction() {
         mainFrame.getRightPanel().getDriveButton().popupMenu();
     }

@@ -42,6 +42,7 @@ public class MarkNextBlockAction extends MarkForwardAction {
         super(mainFrame, properties);
     }
 
+    @Override
     protected int getRowIncrement() {
         return BLOCK_SIZE;
     }

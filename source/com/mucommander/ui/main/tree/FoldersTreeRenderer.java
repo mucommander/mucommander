@@ -21,9 +21,10 @@ package com.mucommander.ui.main.tree;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.ui.theme.ThemeCache;
 
-import javax.swing.*;
+import javax.swing.JTree;
 import javax.swing.tree.DefaultTreeCellRenderer;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Component;
 
 /**
  * A renderer for the directory tree. It renders model's items (which are
@@ -43,6 +44,7 @@ public class FoldersTreeRenderer extends DefaultTreeCellRenderer {
         this.model = (FilesTreeModel) tree.getModel();
     }
     
+    @Override
     public Color getBackgroundSelectionColor() {
     	if (tree!=null && tree.hasFocus()) {
             return ThemeCache.backgroundColors[ThemeCache.ACTIVE][ThemeCache.SELECTED];    		
@@ -51,6 +53,7 @@ public class FoldersTreeRenderer extends DefaultTreeCellRenderer {
     	}
     }
     
+    @Override
     public Color getBackgroundNonSelectionColor() {
     	if (tree!=null && tree.hasFocus()) {
     		return ThemeCache.backgroundColors[ThemeCache.ACTIVE][ThemeCache.NORMAL];
@@ -59,6 +62,7 @@ public class FoldersTreeRenderer extends DefaultTreeCellRenderer {
     	}
     }
     
+    @Override
     public Color getForeground() {
     	if (tree!=null && tree.hasFocus()) {
     		return selected ? ThemeCache.foregroundColors[ThemeCache.ACTIVE][ThemeCache.SELECTED][ThemeCache.FOLDER] : 
@@ -69,6 +73,7 @@ public class FoldersTreeRenderer extends DefaultTreeCellRenderer {
     	}
     }
 
+    @Override
     public Component getTreeCellRendererComponent(JTree tree, Object value,
             boolean sel, boolean expanded, boolean leaf, int row,
             boolean hasFocus) {

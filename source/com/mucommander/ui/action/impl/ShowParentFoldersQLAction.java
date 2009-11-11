@@ -38,7 +38,8 @@ public class ShowParentFoldersQLAction extends ShowQuickListAction {
 		super(mainFrame, properties);
 	}
 	
-	public void performAction() {
+	@Override
+    public void performAction() {
 		openQuickList(FolderPanel.PARENT_FOLDERS_QUICK_LIST_INDEX);
 	}
 	

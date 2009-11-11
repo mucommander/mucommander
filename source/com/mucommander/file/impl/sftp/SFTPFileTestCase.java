@@ -50,11 +50,13 @@ public class SFTPFileTestCase extends AbstractFileTestCase {
 
 
     // Method temporarily overridden to prevent the unit tests from failing
+    @Override
     public void testInputStream() throws IOException, NoSuchAlgorithmException {
         // Todo: fix the InputStream
     }
 
     // Method temporarily overridden to prevent the unit tests from failing
+    @Override
     public void testRandomAccessInputStream() throws IOException, NoSuchAlgorithmException {
         // Todo: fix the RandomAccessInputStream
     }
@@ -64,6 +66,7 @@ public class SFTPFileTestCase extends AbstractFileTestCase {
     // AbstractFileTestCase implementation //
     /////////////////////////////////////////
 
+    @Override
     public AbstractFile getTemporaryFile() throws IOException {
         return tempFolder.getDirectChild(getPseudoUniqueFilename(SFTPFileTestCase.class.getName()));
     }

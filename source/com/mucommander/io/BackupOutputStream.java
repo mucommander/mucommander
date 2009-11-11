@@ -124,6 +124,7 @@ public class BackupOutputStream extends OutputStream implements BackupConstants 
      * </p>
      * @throws IOException if an I/O error occurs.
      */
+    @Override
     public void flush() throws IOException {
         if(error)
             out.flush();
@@ -148,6 +149,7 @@ public class BackupOutputStream extends OutputStream implements BackupConstants 
      * @param  b           the data to be written.
      * @throws IOException if an I/O error occurs.
      */
+    @Override
     public void write(byte[] b) throws IOException {
         if(error)
             out.write(b);
@@ -174,6 +176,7 @@ public class BackupOutputStream extends OutputStream implements BackupConstants 
      * @param  len         the number of bytes to write.
      * @throws IOException if an I/O error occurs.
      */
+    @Override
     public void write(byte[] b, int off, int len) throws IOException {
         if(error)
             out.write(b, off, len);
@@ -198,6 +201,7 @@ public class BackupOutputStream extends OutputStream implements BackupConstants 
      * @param  b           the data to be written.
      * @throws IOException if an I/O error occurs.
      */
+    @Override
     public void write(int b) throws IOException {
         if(error)
             out.write(b);
@@ -234,6 +238,7 @@ public class BackupOutputStream extends OutputStream implements BackupConstants 
      * Finishes the backup operation.
      * @exception IOException thrown if any IO related error occurs.
      */
+    @Override
     public void close() throws IOException {close(!error);}
 
     /**

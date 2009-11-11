@@ -251,6 +251,7 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
 			}
         };
         lookAndFeelComboBox.setRenderer(new BasicComboBoxRenderer() {
+                @Override
                 public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
                     JLabel label;
 
@@ -368,6 +369,7 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
         lockIcon        = IconManager.getIcon(IconManager.PREFERENCES_ICON_SET, "lock.png");
         transparentIcon = new ImageIcon(new BufferedImage(lockIcon.getIconWidth(), lockIcon.getIconHeight(), BufferedImage.TYPE_INT_ARGB));
         themeComboBox.setRenderer(new BasicComboBoxRenderer() {
+                @Override
                 public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
                     JLabel label;
                     Theme  theme;
@@ -495,6 +497,7 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
     ///////////////////////
     // PrefPanel methods //
     ///////////////////////
+    @Override
     protected void commit() {
         // Look and Feel
         if(MuConfiguration.setVariable(MuConfiguration.LOOK_AND_FEEL, lookAndFeels[lookAndFeelComboBox.getSelectedIndex()].getClassName())) {
@@ -1078,6 +1081,7 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
         /**
          * Returns <code>true</code> if the specified file should be displayed in the chooser.
          */
+        @Override
         public boolean accept(java.io.File file) {
             String ext;
 
@@ -1092,6 +1096,7 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
             return false;
         }
 
+        @Override
         public String getDescription() {return description;}
     }
 }

@@ -120,12 +120,14 @@ public class AlteredVector<E> extends Vector<E> {
     // Overridden methods //
     ////////////////////////
 
+    @Override
     public void setElementAt(E o, int i) {
         super.setElementAt(o, i);
 
         fireElementChangedEvent(i);
     }
 
+    @Override
     public E set(int i, E o) {
         o = super.set(i, o);
 
@@ -134,24 +136,28 @@ public class AlteredVector<E> extends Vector<E> {
         return o;
     }
 
+    @Override
     public void insertElementAt(E o, int i) {
         super.insertElementAt(o, i);
 
         fireElementsAddedEvent(i, 1);
     }
 
+    @Override
     public void add(int i, E o) {
         insertElementAt(o, i);
 
         fireElementsAddedEvent(i, 1);
     }
 
+    @Override
     public void addElement(E o) {
         super.addElement(o);
 
         fireElementsAddedEvent(size()-1, 1);
     }
 
+    @Override
     public boolean add(E o) {
         addElement(o);
 
@@ -160,6 +166,7 @@ public class AlteredVector<E> extends Vector<E> {
         return true;
     }
 
+    @Override
     public boolean addAll(Collection<? extends E> collection) {
         int sizeBefore = size();
 
@@ -170,6 +177,7 @@ public class AlteredVector<E> extends Vector<E> {
         return b;
     }
 
+    @Override
     public boolean addAll(int i, Collection<? extends E> collection) {
         int sizeBefore = size();
 
@@ -180,12 +188,14 @@ public class AlteredVector<E> extends Vector<E> {
         return b;
     }
 
+    @Override
     public void removeElementAt(int i) {
         super.removeElementAt(i);
 
         fireElementsRemovedEvent(i, 1);
     }
 
+    @Override
     public E remove(int i) {
         E o = super.remove(i);
 
@@ -194,6 +204,7 @@ public class AlteredVector<E> extends Vector<E> {
         return o;
     }
 
+    @Override
     public boolean removeElement(Object o) {
         int index = indexOf(o);
 
@@ -205,10 +216,12 @@ public class AlteredVector<E> extends Vector<E> {
         return true;
     }
 
+    @Override
     public boolean remove(Object o) {
         return removeElement(o);
     }
 
+    @Override
     public void removeAllElements() {
         int sizeBefore = size();
 
@@ -217,6 +230,7 @@ public class AlteredVector<E> extends Vector<E> {
         fireElementsRemovedEvent(0, sizeBefore);
     }
 
+    @Override
     public void clear() {
         removeAllElements();
     }

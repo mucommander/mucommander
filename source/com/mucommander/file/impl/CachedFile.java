@@ -231,6 +231,7 @@ public class CachedFile extends ProxyFile {
     // Overridden methods to cache their return value //
     ////////////////////////////////////////////////////
 
+    @Override
     public long getSize() {
         if(!getSizeSet) {
             getSize = file.getSize();
@@ -240,6 +241,7 @@ public class CachedFile extends ProxyFile {
         return getSize;
     }
 
+    @Override
     public long getDate() {
         if(!getDateSet) {
             getDate = file.getDate();
@@ -249,6 +251,7 @@ public class CachedFile extends ProxyFile {
         return getDate;
     }
 
+    @Override
     public boolean isSymlink() {
         if(!isSymlinkSet) {
             isSymlink = file.isSymlink();
@@ -258,6 +261,7 @@ public class CachedFile extends ProxyFile {
         return isSymlink;
     }
 
+    @Override
     public boolean isDirectory() {
         if(!isDirectorySet && getFileAttributesAvailable && FileProtocols.FILE.equals(file.getURL().getScheme()))
             getFileAttributes(file);
@@ -271,6 +275,7 @@ public class CachedFile extends ProxyFile {
         return isDirectory;
     }
 
+    @Override
     public boolean isArchive() {
         if(!isArchiveSet) {
             isArchive = file.isArchive();
@@ -280,6 +285,7 @@ public class CachedFile extends ProxyFile {
         return isArchive;
     }
 
+    @Override
     public boolean isHidden() {
         if(!isHiddenSet && getFileAttributesAvailable && FileProtocols.FILE.equals(file.getURL().getScheme()))
             getFileAttributes(file);
@@ -293,6 +299,7 @@ public class CachedFile extends ProxyFile {
         return isHidden;
     }
 
+    @Override
     public String getAbsolutePath() {
         if(!getAbsolutePathSet) {
             getAbsolutePath = file.getAbsolutePath();
@@ -302,6 +309,7 @@ public class CachedFile extends ProxyFile {
         return getAbsolutePath;
     }
 
+    @Override
     public String getCanonicalPath() {
         if(!getCanonicalPathSet) {
             getCanonicalPath = file.getCanonicalPath();
@@ -311,6 +319,7 @@ public class CachedFile extends ProxyFile {
         return getCanonicalPath;
     }
 
+    @Override
     public String getExtension() {
         if(!getExtensionSet) {
             getExtension = file.getExtension();
@@ -320,6 +329,7 @@ public class CachedFile extends ProxyFile {
         return getExtension;
     }
 
+    @Override
     public String getName() {
         if(!getNameSet) {
             getName = file.getName();
@@ -329,6 +339,7 @@ public class CachedFile extends ProxyFile {
         return getName;
     }
 
+    @Override
     public long getFreeSpace() {
         if(!getFreeSpaceSet) {
             getFreeSpace = file.getFreeSpace();
@@ -338,6 +349,7 @@ public class CachedFile extends ProxyFile {
         return getFreeSpace;
     }
 
+    @Override
     public long getTotalSpace() {
         if(!getTotalSpaceSet) {
             getTotalSpace = file.getTotalSpace();
@@ -347,6 +359,7 @@ public class CachedFile extends ProxyFile {
         return getTotalSpace;
     }
 
+    @Override
     public boolean exists() {
         if(!existsSet && getFileAttributesAvailable && FileProtocols.FILE.equals(file.getURL().getScheme()))
             getFileAttributes(file);
@@ -360,6 +373,7 @@ public class CachedFile extends ProxyFile {
         return exists;
     }
 
+    @Override
     public FilePermissions getPermissions() {
         if(!getPermissionsSet) {
             getPermissions = file.getPermissions();
@@ -369,6 +383,7 @@ public class CachedFile extends ProxyFile {
         return getPermissions;
     }
 
+    @Override
     public String getPermissionsString() {
         if(!getPermissionsStringSet) {
             getPermissionsString = file.getPermissionsString();
@@ -378,6 +393,7 @@ public class CachedFile extends ProxyFile {
         return getPermissionsString;
     }
 
+    @Override
     public String getOwner() {
         if(!getOwnerSet) {
             getOwner = file.getOwner();
@@ -387,6 +403,7 @@ public class CachedFile extends ProxyFile {
         return getOwner;
     }
 
+    @Override
     public String getGroup() {
         if(!getGroupSet) {
             getGroup = file.getGroup();
@@ -396,6 +413,7 @@ public class CachedFile extends ProxyFile {
         return getGroup;
     }
 
+    @Override
     public boolean isRoot() {
         if(!isRootSet) {
             isRoot = file.isRoot();
@@ -406,6 +424,7 @@ public class CachedFile extends ProxyFile {
     }
 
 
+    @Override
     public AbstractFile getParent() {
         if(!getParentSet) {
             getParent = file.getParent();
@@ -418,6 +437,7 @@ public class CachedFile extends ProxyFile {
         return getParent;
     }
 
+    @Override
     public AbstractFile getRoot() {
         if(!getRootSet) {
             getRoot = file.getRoot();
@@ -431,6 +451,7 @@ public class CachedFile extends ProxyFile {
         return getRoot;
     }
 
+    @Override
     public AbstractFile getCanonicalFile() {
         if(!getCanonicalFileSet) {
             getCanonicalFile = file.getCanonicalFile();
@@ -455,6 +476,7 @@ public class CachedFile extends ProxyFile {
     // Overridden for recursion only (no caching) //
     ////////////////////////////////////////////////
 
+    @Override
     public AbstractFile[] ls() throws IOException {
         // Don't cache ls() result but create a CachedFile instance around each of the files if recursion is enabled
         AbstractFile files[] = file.ls();
@@ -465,6 +487,7 @@ public class CachedFile extends ProxyFile {
         return files;
     }
 
+    @Override
     public AbstractFile[] ls(FileFilter filter) throws IOException {
         // Don't cache ls() result but create a CachedFile instance around each of the files if recursion is enabled
         AbstractFile files[] = file.ls(filter);
@@ -475,6 +498,7 @@ public class CachedFile extends ProxyFile {
         return files;
     }
 
+    @Override
     public AbstractFile[] ls(FilenameFilter filter) throws IOException {
         // Don't cache ls() result but create a CachedFile instance around each of the files if recursion is enabled
         AbstractFile files[] = file.ls(filter);

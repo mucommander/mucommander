@@ -38,7 +38,8 @@ public class EditableComboboxCompletion extends CompletionType {
     		super(delay);
     	}
 
-		void showAutocompletionPopup() {
+		@Override
+        void showAutocompletionPopup() {
 	        if (autocompletedtextComp.isShowing() && autocompletedtextComp.isEnabled() && updateListData(list)){
 					            
 	            list.setVisibleRowCount(Math.min(list.getModel().getSize() ,VISIBLE_ROW_COUNT));
@@ -73,7 +74,8 @@ public class EditableComboboxCompletion extends CompletionType {
     	autocompletedtextComp.getDocument().addDocumentListener(documentListener);
     	
         autocompletedtextComp.addKeyListener(new KeyAdapter() {
-        	public void keyPressed(KeyEvent keyEvent) {        		
+        	@Override
+            public void keyPressed(KeyEvent keyEvent) {
                 switch(keyEvent.getKeyCode()) {
                 case KeyEvent.VK_ENTER:
                 	if (isItemSelectedAtPopupList()) {
@@ -156,14 +158,16 @@ public class EditableComboboxCompletion extends CompletionType {
         });
     }
 	
-	protected void hideAutocompletionPopup() {
+	@Override
+    protected void hideAutocompletionPopup() {
 		synchronized (popup) {
 			if (popup.isVisible())
         		popup.setVisible(false);
 		}
 	}
 	
-	protected void startNewShowingThread(int delay) {    			    	
+	@Override
+    protected void startNewShowingThread(int delay) {
     	(showingThread = new ShowingThreadImp(delay)).start();
 	}
 }

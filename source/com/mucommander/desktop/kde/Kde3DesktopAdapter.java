@@ -27,14 +27,17 @@ abstract class Kde3DesktopAdapter extends KdeDesktopAdapter {
 
     static String BASE_COMMAND = "kfmclient";
 
+    @Override
     protected String getFileManagerName() {
         return "Konqueror";
     }
 
+    @Override
     protected String getBaseCommand() {
         return BASE_COMMAND;
     }
 
+    @Override
     protected TrashProvider getTrashProvider() {
         return new Kde3TrashProvider();
     }

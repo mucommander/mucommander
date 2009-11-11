@@ -45,11 +45,13 @@ public class CombineFilesJob extends AbstractCopyJob {
         this.errorDialogTitle = Translator.get("combine_files_dialog.error_title");
 	}
 
+    @Override
     protected boolean hasFolderChanged(AbstractFile folder) {
         return baseDestFolder.isParentOf(folder);
 	}
 
-	protected boolean processFile(AbstractFile file, Object recurseParams) {
+	@Override
+    protected boolean processFile(AbstractFile file, Object recurseParams) {
         if (destFile == null) {
         	// executed only on first part
         	createDestFile(file);
@@ -120,12 +122,14 @@ public class CombineFilesJob extends AbstractCopyJob {
 		}
 	}
 
-	protected void jobStopped() {
+	@Override
+    protected void jobStopped() {
 		super.jobStopped();
 		closeOutputStream();
 	}
 	
-	protected void jobCompleted() {
+	@Override
+    protected void jobCompleted() {
 		super.jobCompleted();
 		closeOutputStream();
 		checkCRC();

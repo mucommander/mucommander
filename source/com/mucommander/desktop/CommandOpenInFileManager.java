@@ -29,8 +29,10 @@ import java.io.IOException;
  * @author Nicolas Rinaudo
  */
 class CommandOpenInFileManager extends LocalFileOperation {
+    @Override
     public boolean isAvailable() {return CommandManager.getCommandForAlias(CommandManager.FILE_MANAGER_ALIAS) != null;}
 
+    @Override
     public void execute(AbstractFile file) throws IOException {
         Command command;
 
@@ -40,6 +42,7 @@ class CommandOpenInFileManager extends LocalFileOperation {
         ProcessRunner.execute(command.getTokens(file), file);
     }
 
+    @Override
     public String getName() {
         Command command;
 

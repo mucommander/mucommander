@@ -45,6 +45,7 @@ public class GoToParentInOtherPanelAction extends GoToParentAction {
     /**
      * Opens the active panel's parent in the inactive panel.
      */
+    @Override
     public void performAction() {goToParent(mainFrame.getActivePanel(), mainFrame.getInactivePanel());}
     
     public static class Factory implements ActionFactory {

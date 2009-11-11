@@ -87,17 +87,20 @@ public class KeyboardShortcutChooser extends JPanel implements ItemListener, Com
         this.currentKeyStroke = keyStroke;
 
         textField = new JTextField(30) {
+            @Override
             protected boolean processKeyBinding(KeyStroke keyStroke, KeyEvent keyEvent, int i, boolean b) {
                 return true;
             }
         };
 
         textField.setDocument(new PlainDocument() {
+            @Override
             public void insertString(int i, String string, AttributeSet attributeSet) throws BadLocationException {
                 if(updatingTextField)
                     super.insertString(i, string, attributeSet);
             }
 
+            @Override
             public void remove(int i, int i1) throws BadLocationException {
                 if(updatingTextField)
                     super.remove(i, i1);

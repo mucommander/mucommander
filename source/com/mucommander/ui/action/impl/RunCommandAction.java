@@ -37,6 +37,7 @@ public class RunCommandAction extends MuAction implements InvokesDialog {
         super(mainFrame, properties);
     }
 
+    @Override
     public void performAction() {
         new RunDialog(mainFrame).showDialog();
     }

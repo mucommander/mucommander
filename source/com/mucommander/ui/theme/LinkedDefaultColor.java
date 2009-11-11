@@ -18,7 +18,7 @@
 
 package com.mucommander.ui.theme;
 
-import java.awt.*;
+import java.awt.Color;
 
 /**
  * {@link DefaultColor} implementation that maps to a value in the current theme.
@@ -53,6 +53,7 @@ public class LinkedDefaultColor extends DefaultColor implements ThemeListener {
 
     // - DefaultColor implementation -----------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
+    @Override
     public Color getColor(ThemeData data) {
         return data.getColor(colorId); 
     }

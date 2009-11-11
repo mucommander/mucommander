@@ -46,7 +46,8 @@ public class EditableHeader extends JTableHeader implements CellEditorListener {
 		recreateTableColumn(columnModel);
 	}
 
-	public void updateUI() {
+	@Override
+    public void updateUI() {
 		setUI(new EditableHeaderUI());
 		resizeAndRepaint();
 		invalidate();

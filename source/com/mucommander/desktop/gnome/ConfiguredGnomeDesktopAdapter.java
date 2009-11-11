@@ -26,6 +26,7 @@ public class ConfiguredGnomeDesktopAdapter extends GnomeDesktopAdapter {
 
     public String toString() {return "Gnome Desktop";}
 
+    @Override
     public boolean isAvailable() {
         String var = System.getenv(ENV_VAR);
 

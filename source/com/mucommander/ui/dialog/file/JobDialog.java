@@ -81,6 +81,7 @@ public abstract class JobDialog extends FocusDialog {
      */
     protected AsyncPanel createFileDetailsPanel() {
         return new AsyncPanel() {
+            @Override
             public JComponent getTargetComponent() {
                 FileList fileList = new FileList(files, true);
                 fileList.setVisibleRowCount(NB_FILE_DETAILS_ROWS);

@@ -32,6 +32,7 @@ class WindowsDesktopAdapter extends DefaultDesktopAdapter {
 
     public String toString() {return "Windows Desktop";}
 
+    @Override
     public void init(boolean install) throws DesktopInitialisationException {
         // The Windows trash requires access to the Shell32 DLL, register the provider only if the Shell32 DLL
         // is available on the current runtime environment.
@@ -39,6 +40,7 @@ class WindowsDesktopAdapter extends DefaultDesktopAdapter {
             DesktopManager.setTrashProvider(new WindowsTrashProvider());
     }
 
+    @Override
     public boolean isAvailable() {
         return OsFamily.getCurrent().equals(OsFamily.WINDOWS);
     }
@@ -51,6 +53,7 @@ class WindowsDesktopAdapter extends DefaultDesktopAdapter {
      * @return <code>true</code> for regular files (not directories) with an <code>exe</code> extension
      * (case-insensitive comparison).
      */
+    @Override
     public boolean isApplication(AbstractFile file) {
         String extension = file.getExtension();
 

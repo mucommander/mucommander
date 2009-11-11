@@ -18,17 +18,16 @@
 
 package com.mucommander.ui.dialog.pref.theme;
 
-import java.awt.BorderLayout;
-
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-
 import com.mucommander.text.Translator;
 import com.mucommander.ui.chooser.FontChooser;
 import com.mucommander.ui.chooser.PreviewLabel;
 import com.mucommander.ui.dialog.pref.PreferencesDialog;
 import com.mucommander.ui.layout.ProportionalGridPanel;
 import com.mucommander.ui.theme.ThemeData;
+
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import java.awt.BorderLayout;
 
 /**
  * @author Nicolas Rinaudo
@@ -158,5 +157,6 @@ class FilePanel extends ThemeEditorPanel {
 
     // - Misc. ---------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------
+    @Override
     public void commit() {}
 }

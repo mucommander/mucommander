@@ -39,8 +39,10 @@ public class OSXDesktopAdapter extends DefaultDesktopAdapter {
 
     public String toString() {return "MAC OS X Desktop";}
 
+    @Override
     public boolean isAvailable() {return OsFamily.getCurrent().equals(OsFamily.MAC_OS_X);}
 
+    @Override
     public void init(boolean install) throws DesktopInitialisationException {
         // Initialises trash management.
         DesktopManager.setTrashProvider(new OSXTrashProvider());
@@ -54,6 +56,7 @@ public class OSXDesktopAdapter extends DefaultDesktopAdapter {
         catch(CommandException e) {throw new DesktopInitialisationException(e);}
     }
 
+    @Override
     public boolean isLeftMouseButton(MouseEvent e) {
         int modifiers;
 
@@ -61,6 +64,7 @@ public class OSXDesktopAdapter extends DefaultDesktopAdapter {
         return (modifiers & MouseEvent.BUTTON1_MASK) != 0 && !e.isControlDown();
     }
 
+    @Override
     public boolean isRightMouseButton(MouseEvent e) {
         int modifiers;
 
@@ -74,6 +78,7 @@ public class OSXDesktopAdapter extends DefaultDesktopAdapter {
      * @param file the file to test
      * @return <code>true</code> for directories with an <code>app</code> extension (case-insensitive comparison).
      */
+    @Override
     public boolean isApplication(AbstractFile file) {
         String extension = file.getExtension();
 

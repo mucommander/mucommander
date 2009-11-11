@@ -100,6 +100,7 @@ public class OSXTrash extends QueuedTrash {
     /**
      * Implementation notes: returns <code>true</code> only for local files that are not archive entries.
      */
+    @Override
     public boolean canMoveToTrash(AbstractFile file) {
         return file.getTopAncestor() instanceof LocalFile;
     }
@@ -107,14 +108,17 @@ public class OSXTrash extends QueuedTrash {
     /**
      * Implementation notes: always returns <code>true</code>.
      */
+    @Override
     public boolean canEmpty() {
         return true;
     }
 
+    @Override
     public boolean empty() {
         return AppleScript.execute(EMPTY_TRASH_APPLESCRIPT, null);
     }
 
+    @Override
     public boolean isTrashFile(AbstractFile file) {
         return (file.getTopAncestor() instanceof LocalFile)
             && (file.getAbsolutePath(true).indexOf("/.Trash/") != -1);
@@ -124,6 +128,7 @@ public class OSXTrash extends QueuedTrash {
      * Implementation notes: this method is implemented and returns <code>-1</code> only if an error ocurred while
      * retrieving the trash item count.
      */
+    @Override
     public int getItemCount() {
         StringBuffer output = new StringBuffer();
         if(!AppleScript.execute(COUNT_TRASH_ITEMS_APPLESCRIPT, output))
@@ -138,6 +143,7 @@ public class OSXTrash extends QueuedTrash {
         }
     }
 
+    @Override
     public void open() {
         AppleScript.execute(REVEAL_TRASH_APPLESCRIPT, null);
     }
@@ -145,6 +151,7 @@ public class OSXTrash extends QueuedTrash {
     /**
      * Implementation notes: always returns <code>true</code>.
      */
+    @Override
     public boolean canOpen() {
         return true;
     }
@@ -171,6 +178,7 @@ public class OSXTrash extends QueuedTrash {
      * is more efficient to regroup files to be moved and execute only one AppleScript.
      * </ul>
      */
+    @Override
     protected boolean moveToTrash(Vector<AbstractFile> queuedFiles) {
         String appleScript;
 

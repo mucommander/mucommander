@@ -22,7 +22,8 @@ import com.mucommander.file.AbstractFile;
 import com.mucommander.ui.viewer.FileViewer;
 import com.mucommander.ui.viewer.ViewerFrame;
 
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Insets;
 import java.io.IOException;
 
 
@@ -47,6 +48,7 @@ class TextViewer extends FileViewer {
     // FileViewer implementation //
     ///////////////////////////////
 
+    @Override
     public void view(AbstractFile file) throws IOException {
         textEditorImpl.startEditing(file, null);
 
@@ -60,6 +62,7 @@ class TextViewer extends FileViewer {
     // Overridden methods //
     ////////////////////////
 
+    @Override
     public Insets getInsets() {
         return new Insets(4, 3, 4, 3);
     }

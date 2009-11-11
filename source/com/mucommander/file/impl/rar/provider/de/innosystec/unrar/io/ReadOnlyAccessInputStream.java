@@ -45,7 +45,8 @@ public class ReadOnlyAccessInputStream extends InputStream {
 		file.skip(curPos);
 	}
 
-	public int read() throws IOException {
+	@Override
+    public int read() throws IOException {
         if (curPos == endPos) {
             return -1;
         }
@@ -56,7 +57,8 @@ public class ReadOnlyAccessInputStream extends InputStream {
         }
 	}
 
-	public int read(byte[] b, int off, int len) throws IOException {
+	@Override
+    public int read(byte[] b, int off, int len) throws IOException {
         if (len == 0) {
             return 0;
         }
@@ -69,7 +71,8 @@ public class ReadOnlyAccessInputStream extends InputStream {
         return bytesRead;
 	}
 
-	public int read(byte[] b) throws IOException {
+	@Override
+    public int read(byte[] b) throws IOException {
         return read(b, 0, b.length);
 	}
 //

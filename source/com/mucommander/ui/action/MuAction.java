@@ -373,6 +373,7 @@ public abstract class MuAction extends AbstractAction {
         if(!(mainFrame.getNoEventsMode() && honourNoEventsMode())) {
             if(performActionInSeparateThread()) {
                 new Thread() {
+                    @Override
                     public void run() {
                         performAction();
                     }

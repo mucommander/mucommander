@@ -39,6 +39,7 @@ public class ChangePermissionsAction extends SelectedFilesAction implements Invo
     }
 
 
+    @Override
     public void performAction() {
         FileSet files = mainFrame.getActiveTable().getSelectedFiles();
 

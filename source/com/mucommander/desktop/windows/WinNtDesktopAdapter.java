@@ -35,8 +35,10 @@ public class WinNtDesktopAdapter extends WindowsDesktopAdapter {
 
     public String toString() {return "Windows NT+ Desktop";}
 
+    @Override
     public boolean isAvailable() {return super.isAvailable() && OsVersion.getCurrent().compareTo(OsVersion.WINDOWS_NT) >= 0;}
 
+    @Override
     public void init(boolean install) throws DesktopInitialisationException {
         super.init(install);
         try {
@@ -50,5 +52,6 @@ public class WinNtDesktopAdapter extends WindowsDesktopAdapter {
         catch(CommandException e) {throw new DesktopInitialisationException(e);}
     }
 
+    @Override
     public String getDefaultShell() {return "cmd /c";}
 }

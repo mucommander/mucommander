@@ -37,6 +37,7 @@ public class ToggleAutoSizeAction extends MuAction {
         super(mainFrame, properties);
     }
 
+    @Override
     public void performAction() {
         boolean enabled;
 

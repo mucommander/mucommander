@@ -102,6 +102,7 @@ public class CommandBarDialog extends CustomizeDialog {
 		super(mainFrame, ActionProperties.getActionLabel(CustomizeCommandBarAction.Descriptor.ACTION_ID));
 	}
 	
+    @Override
     protected void componentChanged() {
     	setCommitButtonsEnabled(areActionsChanged() || areAlternativeActionsChanged() || isModifierChanged());    		
     }
@@ -150,7 +151,8 @@ public class CommandBarDialog extends CustomizeDialog {
     	return !modifierField.getKeyStroke().equals(CommandBarAttributes.getModifier());
     }
 	
-	protected void commit() {
+	@Override
+    protected void commit() {
 		int nbNewActions = commandBarButtons.size();
 		String[] newActionIds = new String[nbNewActions];
 		for (int i=0; i<nbNewActions; ++i) {
@@ -169,7 +171,8 @@ public class CommandBarDialog extends CustomizeDialog {
 		CommandBarIO.setModified();
 	}
 
-	protected JPanel createCustomizationPanel() {
+	@Override
+    protected JPanel createCustomizationPanel() {
 		JPanel panel = new JPanel(new BorderLayout());
 		
 		commandBarAvailableButtons   = new AlteredVector<JButton>();
@@ -395,12 +398,14 @@ public class CommandBarDialog extends CustomizeDialog {
 		JPanel modifierPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		modifierField = new RecordingKeyStrokeTextField(MODIFIER_FIELD_MAX_LENGTH, CommandBarAttributes.getModifier()) {
 			
-			public void setText(String t) {
+			@Override
+            public void setText(String t) {
 				super.setText(t);
 				componentChanged();
 			}
 			
-			public void keyPressed(KeyEvent e) {
+			@Override
+            public void keyPressed(KeyEvent e) {
 				int pressedKeyCode = e.getKeyCode();
 				// Accept modifier keys only
 				if (pressedKeyCode == KeyEvent.VK_CONTROL || pressedKeyCode == KeyEvent.VK_ALT
@@ -557,7 +562,8 @@ public class CommandBarDialog extends CustomizeDialog {
 		
 		protected abstract int getListId();
 				
-		public boolean canImport(JComponent comp, DataFlavor[] transferFlavors) {
+		@Override
+        public boolean canImport(JComponent comp, DataFlavor[] transferFlavors) {
 			canImport = false;
 			int nbFlavors = transferFlavors.length;
 			for (int i=0; i<nbFlavors; ++i)
@@ -568,16 +574,19 @@ public class CommandBarDialog extends CustomizeDialog {
 			return canImport;
 		}
 		
-		protected Transferable createTransferable(JComponent component) {
+		@Override
+        protected Transferable createTransferable(JComponent component) {
 			if (component == null)
 				return null;
 			JList list = (JList) component;
 			return new TransferableListData(list.getSelectedIndex(), (JComponent) list.getSelectedValue(), getListId());
 		}
 		
-		public abstract boolean importData(JComponent comp, Transferable t);
+		@Override
+        public abstract boolean importData(JComponent comp, Transferable t);
 		
-		protected void exportDone(JComponent component, Transferable data, int action) {
+		@Override
+        protected void exportDone(JComponent component, Transferable data, int action) {
 			if (isImported)
 				componentChanged();	
 			
@@ -586,12 +595,14 @@ public class CommandBarDialog extends CustomizeDialog {
 			selectedCommandBarAlternateButtonIndex = -2;
 		}
 
-		public int getSourceActions(JComponent component) { return TransferHandler.MOVE; }
+		@Override
+        public int getSourceActions(JComponent component) { return TransferHandler.MOVE; }
 	}
 	
 	private class CommandBarActionsListTransferHandler extends ActionListTransferHandler {
 		
-		public boolean importData(JComponent comp, Transferable t) {
+		@Override
+        public boolean importData(JComponent comp, Transferable t) {
 			
 			try {
 				transferedButtonProperties = (DataIndexAndSource) t.getTransferData(new DataFlavor(DataFlavor.javaJVMLocalObjectMimeType +
@@ -619,12 +630,14 @@ public class CommandBarDialog extends CustomizeDialog {
 			return isImported = true;
 		}
 
-		protected int getListId() { return COMMAND_BAR_BUTTONS_LIST_ID; }
+		@Override
+        protected int getListId() { return COMMAND_BAR_BUTTONS_LIST_ID; }
 	}
 	
 	private class CommandBarAlternateActionsListTransferHandler extends ActionListTransferHandler {
 		
-		public boolean importData(JComponent comp, Transferable t) {
+		@Override
+        public boolean importData(JComponent comp, Transferable t) {
 			try {
 				transferedButtonProperties = (DataIndexAndSource) t.getTransferData(new DataFlavor(DataFlavor.javaJVMLocalObjectMimeType +
 						";class=\"" + DataIndexAndSource.class.getName() + "\""));
@@ -657,14 +670,16 @@ public class CommandBarDialog extends CustomizeDialog {
 			return isImported = true;
 		}
 
-		protected int getListId() {
+		@Override
+        protected int getListId() {
 			return COMMAND_BAR_ALTERNATIVE_BUTTONS_LIST_ID;
 		}
 	}
 	
 	private class AvailableActionsListTransferHandler extends ActionListTransferHandler {
 		
-		public boolean importData(JComponent comp, Transferable t) {
+		@Override
+        public boolean importData(JComponent comp, Transferable t) {
 			
 			try {
 				transferedButtonProperties = (DataIndexAndSource) t.getTransferData(new DataFlavor(DataFlavor.javaJVMLocalObjectMimeType +
@@ -708,7 +723,8 @@ public class CommandBarDialog extends CustomizeDialog {
 			return isImported;
 		}
 
-		protected int getListId() { return AVAILABLE_BUTTONS_LIST_ID; }
+		@Override
+        protected int getListId() { return AVAILABLE_BUTTONS_LIST_ID; }
 	}
 	
 	//////////////////////////

@@ -91,6 +91,7 @@ public class RarArchiveFile extends AbstractROArchiveFile {
     // AbstractROArchiveFile implementation //
     //////////////////////////////////////////
     
+    @Override
     public synchronized ArchiveEntryIterator getEntryIterator() throws IOException {
         checkRarFile();
 
@@ -101,6 +102,7 @@ public class RarArchiveFile extends AbstractROArchiveFile {
         return new WrapperArchiveEntryIterator(entries.iterator());
     }
 
+    @Override
     public synchronized InputStream getEntryInputStream(ArchiveEntry entry, ArchiveEntryIterator entryIterator) throws IOException {
 		checkRarFile();
 		

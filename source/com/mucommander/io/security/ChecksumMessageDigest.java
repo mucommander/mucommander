@@ -53,6 +53,7 @@ public class ChecksumMessageDigest extends MessageDigest {
     /**
      * This method delegates to the underlying <code>java.util.zip.Checksum</code> instance.
      */
+    @Override
     protected void engineReset() {
         checksum.reset();
     }
@@ -60,6 +61,7 @@ public class ChecksumMessageDigest extends MessageDigest {
     /**
      * This method delegates to the underlying <code>java.util.zip.Checksum</code> instance.
      */
+    @Override
     protected void engineUpdate(byte input) {
         checksum.update(input);
     }
@@ -67,6 +69,7 @@ public class ChecksumMessageDigest extends MessageDigest {
     /**
      * This method delegates to the underlying <code>java.util.zip.Checksum</code> instance.
      */
+    @Override
     protected void engineUpdate(byte[] input, int offset, int len) {
         checksum.update(input, offset, len);
     }
@@ -74,6 +77,7 @@ public class ChecksumMessageDigest extends MessageDigest {
     /**
      * This method delegates to the underlying <code>java.util.zip.Checksum</code> instance.
      */
+    @Override
     protected byte[] engineDigest() {
         long crcLong = checksum.getValue();
 
