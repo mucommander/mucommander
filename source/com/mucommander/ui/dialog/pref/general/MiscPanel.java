@@ -242,7 +242,7 @@ class MiscPanel extends PreferencesPanel implements ItemListener {
         boolean isAutoDetect = shellEncodingautoDetectCheckbox.isSelected();
         MuConfiguration.setVariable(MuConfiguration.AUTODETECT_SHELL_ENCODING, isAutoDetect);
         if(!isAutoDetect)
-            MuConfiguration.setVariable(MuConfiguration.SHELL_ENCODING, (String)shellEncodingSelectBox.getSelectedEncoding());
+            MuConfiguration.setVariable(MuConfiguration.SHELL_ENCODING, shellEncodingSelectBox.getSelectedEncoding());
 
         MuConfiguration.setVariable(MuConfiguration.CONFIRM_ON_QUIT, quitConfirmationCheckBox.isSelected());
         MuConfiguration.setVariable(MuConfiguration.SHOW_SPLASH_SCREEN, showSplashScreenCheckBox.isSelected());

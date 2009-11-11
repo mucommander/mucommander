@@ -52,7 +52,7 @@ public class AndFileFilter extends ChainedFileFilter {
         int nbFilters = filters.size();
 
         for(int i=0; i<nbFilters; i++)
-            if(!((FileFilter)filters.elementAt(i)).match(file))
+            if(!filters.elementAt(i).match(file))
                 return false;
         return true;
     }

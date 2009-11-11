@@ -122,7 +122,7 @@ public class ChangeDateDialog extends JobDialog implements ActionListener, ItemL
         }
 
         getRootPane().setDefaultButton(canChangeDate?okButton:cancelButton);
-        setInitialFocusComponent(canChangeDate?(JComponent)nowRadioButton:cancelButton);
+        setInitialFocusComponent(canChangeDate?nowRadioButton:cancelButton);
         setResizable(false);
     }
 

@@ -47,7 +47,7 @@ public class LocalCopyDialog extends CopyDialog {
 
     @Override
     protected PathFieldContent computeInitialPath(FileSet files) {
-        AbstractFile file = (AbstractFile)files.elementAt(0);
+        AbstractFile file = files.elementAt(0);
         return selectDestinationFilename(file, file.getName(), 0);
 
     }

@@ -206,7 +206,7 @@ public class Command {
      * @param  files   file from which to retrieve keyword substitution values.
      * @return         the specified command's tokens after replacing keywords by the corresponding values from the specified fileset.
      */
-    public static String[] getTokens(String command, FileSet files) {return getTokens(command, (AbstractFile[])(files.toArray(new AbstractFile[files.size()])));}
+    public static String[] getTokens(String command, FileSet files) {return getTokens(command, files.toArray(new AbstractFile[files.size()]));}
 
     /**
      * Returns the specified command's tokens after replacing keywords by the corresponding values from the specified files.

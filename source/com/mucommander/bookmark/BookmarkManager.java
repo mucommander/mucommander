@@ -272,7 +272,7 @@ public class BookmarkManager implements VectorChangeListener {
         int nbBookmarks = bookmarks.size();
         Bookmark b;
         for(int i=0; i<nbBookmarks; i++) {
-            b = (Bookmark)bookmarks.elementAt(i);
+            b = bookmarks.elementAt(i);
             if(b.getName().equalsIgnoreCase(name))
                 return b;
         }

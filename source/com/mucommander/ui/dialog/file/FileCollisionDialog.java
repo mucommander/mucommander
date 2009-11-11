@@ -157,7 +157,7 @@ public class FileCollisionDialog extends QuestionDialog {
 
         int choicesActions[] = new int[nbChoices];
         for(int i=0; i<nbChoices; i++)
-            choicesActions[i] = (Integer) choicesActionsV.elementAt(i);
+            choicesActions[i] = choicesActionsV.elementAt(i);
 
         // Init UI
 

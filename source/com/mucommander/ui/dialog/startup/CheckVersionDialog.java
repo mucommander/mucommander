@@ -176,8 +176,8 @@ public class CheckVersionDialog extends QuestionDialog implements Runnable {
         int actions[] = new int[nbChoices];
         String labels[] = new String[nbChoices];
         for(int i=0; i<nbChoices; i++) {
-            actions[i] = (Integer) actionsV.elementAt(i);
-            labels[i] = (String)labelsV.elementAt(i);
+            actions[i] = actionsV.elementAt(i);
+            labels[i] = labelsV.elementAt(i);
         }
 
         init(new InformationPane(message, null, Font.PLAIN, InformationPane.INFORMATION_ICON),

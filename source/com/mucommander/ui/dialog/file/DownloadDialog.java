@@ -50,7 +50,7 @@ public class DownloadDialog extends TransferDestinationDialog {
 
     @Override
     protected PathFieldContent computeInitialPath(FileSet files) {
-        AbstractFile file = (AbstractFile)files.elementAt(0);
+        AbstractFile file = files.elementAt(0);
 
         //		AbstractFile activeFolder = mainFrame.getActiveTable().getCurrentFolder();
         AbstractFile unactiveFolder = mainFrame.getInactiveTable().getCurrentFolder();

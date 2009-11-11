@@ -77,7 +77,7 @@ public class RecallWindowAction extends MuAction {
         }
 
         // Brings the MainFrame to front
-        ((MainFrame)mainFrames.elementAt(windowNumber-1)).toFront();
+        mainFrames.elementAt(windowNumber-1).toFront();
     }
 
     public static class Factory implements ActionFactory {

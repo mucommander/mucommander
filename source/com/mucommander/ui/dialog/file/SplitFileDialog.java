@@ -228,7 +228,7 @@ public class SplitFileDialog extends JobDialog implements ActionListener {
     private long getBytes() {
 		String strVal = edtSize.getText().trim();
 		if (MSG_AUTO.equals(strVal)) {
-			return (long) file.getSize();
+			return file.getSize();
 		}
 		String[] strArr = strVal.split(" ");
 		if (strArr.length < 1 || strArr.length > 2) {

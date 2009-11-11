@@ -997,7 +997,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
         nameColumn     = null;
 
         while(columns.hasMoreElements()) {
-            column = (TableColumn)columns.nextElement();
+            column = columns.nextElement();
             columnIndex = column.getModelIndex();
 
             if(columnIndex == Columns.NAME)
@@ -2029,7 +2029,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
                     int nbMarkedFiles = markedFiles.size();
                     int fileRow;
                     for(int i  =0; i < nbMarkedFiles; i++) {
-                        fileRow = tableModel.getFileRow((AbstractFile)markedFiles.elementAt(i));
+                        fileRow = tableModel.getFileRow(markedFiles.elementAt(i));
                         if(fileRow != -1)
                             tableModel.setRowMarked(fileRow, true);
                     }

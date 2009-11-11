@@ -137,7 +137,7 @@ public class EmailFilesDialog extends JobDialog implements ActionListener, ItemL
                 YBoxPanel tempPanel2 = new YBoxPanel();
                 AbstractFile file;
                 for(int i=0; i<nbFiles; i++) {
-                    file = (AbstractFile)flattenedFiles.elementAt(i);
+                    file = flattenedFiles.elementAt(i);
                     fileCheckboxes[i] = new JCheckBox(file.getName()
                                                       +" ("+ SizeFormat.format(file.getSize(), SizeFormat.DIGITS_MEDIUM| SizeFormat.UNIT_SHORT| SizeFormat.INCLUDE_SPACE| SizeFormat.ROUND_TO_KB)+")", true);
                     fileCheckboxes[i].addItemListener(this);
@@ -176,7 +176,7 @@ public class EmailFilesDialog extends JobDialog implements ActionListener, ItemL
         long fileSize;
         for(int i=0; i<nbFiles; i++) {
             if(fileCheckboxes[i].isSelected()) {
-                fileSize = ((AbstractFile)flattenedFiles.elementAt(i)).getSize();
+                fileSize = flattenedFiles.elementAt(i).getSize();
                 if(fileSize>0)
                     bytesTotal += fileSize;
                 nbSelected++;
@@ -200,7 +200,7 @@ public class EmailFilesDialog extends JobDialog implements ActionListener, ItemL
         int nbFiles = originalFiles.size();
         FileSet flattenedFiles = new FileSet(originalFiles.getBaseFolder());
         for(int i=0; i<nbFiles; i++)
-            recurseOnFolder((AbstractFile)originalFiles.elementAt(i), flattenedFiles);
+            recurseOnFolder(originalFiles.elementAt(i), flattenedFiles);
 
         return flattenedFiles;
     }

@@ -55,7 +55,7 @@ public class OrFileFilter extends ChainedFileFilter {
             return true;
 
         for(int i=0; i<nbFilters; i++)
-            if(((FileFilter)filters.elementAt(i)).match(file))
+            if((filters.elementAt(i)).match(file))
                 return true;
 
         return false;

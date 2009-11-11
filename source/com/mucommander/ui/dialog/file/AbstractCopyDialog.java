@@ -86,7 +86,7 @@ public abstract class AbstractCopyDialog extends TransferDestinationDialog {
         // and if the file is not a directory that already exists in destination
         // (otherwise folder would be copied into the destination folder)
         if(nbFiles==1) {
-            AbstractFile file = ((AbstractFile)files.elementAt(0));
+            AbstractFile file = files.elementAt(0);
             AbstractFile destFile;
 
             startPosition  = fieldText.length();

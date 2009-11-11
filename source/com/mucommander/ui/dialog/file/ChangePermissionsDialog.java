@@ -151,7 +151,7 @@ public class ChangePermissionsDialog extends JobDialog
 
         recurseDirCheckBox = new JCheckBox(Translator.get("recurse_directories"));
         // Disable check box if no permission bit can be set
-        recurseDirCheckBox.setEnabled(canSetPermission && (files.size()>1 || ((AbstractFile)files.elementAt(0)).isDirectory()));
+        recurseDirCheckBox.setEnabled(canSetPermission && (files.size()>1 || files.elementAt(0).isDirectory()));
         mainPanel.add(recurseDirCheckBox);
 
         // Create file details button and OK/cancel buttons and lay them out a single row
