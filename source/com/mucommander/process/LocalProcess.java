@@ -67,10 +67,10 @@ class LocalProcess extends AbstractProcess {
     // - Implementation --------------------------------------------------------
     // -------------------------------------------------------------------------
     /**
-     * Returns <code>true</code> if the VM supports merged <code>java.lang.Process</code> streams.
-     * @return <code>true</code> if the VM supports merged <code>java.lang.Process</code> streams, <code>false</code> otherwise.
+     * Returns <code>true</code> if the current JRE version supports merged <code>java.lang.Process</code> streams.
+     * @return <code>true</code> if the current JRE version supports merged <code>java.lang.Process</code> streams, <code>false</code> otherwise.
      */
-    public boolean usesMergedStreams() {return JavaVersions.JAVA_1_6.isCurrentOrHigher();}
+    public boolean usesMergedStreams() {return JavaVersions.JAVA_1_5.isCurrentOrHigher();}
 
     /**
      * Waits for the process to die.
