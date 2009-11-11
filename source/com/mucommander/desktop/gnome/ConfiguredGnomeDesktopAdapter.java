@@ -18,8 +18,6 @@
 
 package com.mucommander.desktop.gnome;
 
-import com.mucommander.runtime.JavaVersion;
-
 /**
  * @author Nicolas Rinaudo
  */
@@ -29,11 +27,7 @@ public class ConfiguredGnomeDesktopAdapter extends GnomeDesktopAdapter {
     public String toString() {return "Gnome Desktop";}
 
     public boolean isAvailable() {
-        String var;
-        if(JavaVersion.JAVA_1_4.isCurrentOrLower())
-            var = System.getProperty(ENV_VAR);
-        else
-            var = System.getenv(ENV_VAR);
+        String var = System.getenv(ENV_VAR);
 
         return var != null && !var.trim().equals("");
     }

@@ -21,7 +21,6 @@ package com.mucommander.file;
 import com.mucommander.file.filter.FileFilter;
 import com.mucommander.file.filter.FilenameFilter;
 import com.mucommander.io.*;
-import com.mucommander.util.StringUtils;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 import java.io.IOException;
@@ -104,7 +103,7 @@ public class ArchiveEntryFile extends AbstractFile {
         // not "/" (i.e. the entry path separator).
         String separator = getSeparator();
         if(!separator.equals("/"))
-            path = StringUtils.replaceCompat(path, "/", separator);
+            path = path.replace("/", separator);
 
         return path;
     }

@@ -26,7 +26,6 @@ import com.mucommander.desktop.DefaultDesktopAdapter;
 import com.mucommander.desktop.DesktopInitialisationException;
 import com.mucommander.desktop.DesktopManager;
 import com.mucommander.desktop.TrashProvider;
-import com.mucommander.runtime.JavaVersion;
 
 /**
  * @author Nicolas Rinaudo, Maxence Bernard
@@ -95,7 +94,7 @@ abstract class KdeDesktopAdapter extends DefaultDesktopAdapter {
      * @return the 'configured' value of the given environment variable, <code>null</code> if the variable has no value.
      */
     protected String getConfiguredEnvVariable(String name) {
-        return JavaVersion.JAVA_1_4.isCurrentOrLower()?System.getProperty(name):System.getenv(name);
+        return System.getenv(name);
     }
 
 

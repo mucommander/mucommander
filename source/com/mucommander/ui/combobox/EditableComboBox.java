@@ -180,7 +180,7 @@ public class EditableComboBox extends SaneComboBox {
                 // Combo popup menu is visible
                 if(isPopupVisible()) {
                     if(keyCode==KeyEvent.VK_ENTER) {
-                        // Under Java 1.5 or under, we need to explicitely hide the popup.
+                        // Under Java 1.5 or lower, we need to explicitely hide the popup.
                         if(JavaVersions.JAVA_1_5.isCurrentOrLower())
                             hidePopup();
                         // Note that since the event is not consumed, JComboBox will catch it and fire

@@ -31,7 +31,6 @@ import com.mucommander.ui.dialog.DialogToolkit;
 import com.mucommander.ui.layout.YBoxPanel;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.text.FilePathField;
-import com.mucommander.util.StringUtils;
 
 import javax.swing.*;
 import java.awt.BorderLayout;
@@ -214,7 +213,7 @@ public class CalculateChecksumDialog extends JobDialog implements ActionListener
         if(algorithm.equals("CRC32"))
             return (files.size()==1?files.elementAt(0):files.getBaseFolder()).getName()+".sfv";
 
-        return StringUtils.replaceCompat(algorithm, "-", "")+"SUMS";
+        return algorithm.replace("-", "")+"SUMS";
     }
 
 

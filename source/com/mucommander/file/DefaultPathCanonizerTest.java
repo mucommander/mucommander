@@ -18,7 +18,6 @@
 
 package com.mucommander.file;
 
-import com.mucommander.util.StringUtils;
 import junit.framework.TestCase;
 
 /**
@@ -31,7 +30,7 @@ public class DefaultPathCanonizerTest extends TestCase {
 
     private String getNormalizedPath(String path, String separator) {
         if(!separator.equals("/"))
-            path = StringUtils.replaceCompat(path, "/", separator);
+            path = path.replace("/", separator);
 
         return path;
     }

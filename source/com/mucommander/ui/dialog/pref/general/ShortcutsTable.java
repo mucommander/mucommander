@@ -19,7 +19,6 @@
 package com.mucommander.ui.dialog.pref.general;
 
 import com.mucommander.AppLogger;
-import com.mucommander.runtime.JavaVersions;
 import com.mucommander.runtime.OsFamilies;
 import com.mucommander.runtime.OsVersions;
 import com.mucommander.text.Translator;
@@ -167,7 +166,7 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
     }
 
     private static boolean usesTableHeaderRenderingProperties() {
-        return OsFamilies.MAC_OS_X.isCurrent() && OsVersions.MAC_OS_X_10_5.isCurrentOrHigher() && JavaVersions.JAVA_1_5.isCurrentOrHigher();
+        return OsFamilies.MAC_OS_X.isCurrent() && OsVersions.MAC_OS_X_10_5.isCurrentOrHigher();
     }
     
     /** 

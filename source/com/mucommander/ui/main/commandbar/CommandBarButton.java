@@ -18,13 +18,9 @@
 
 package com.mucommander.ui.main.commandbar;
 
-import java.awt.Dimension;
-import java.awt.Insets;
-
 import com.mucommander.conf.ConfigurationEvent;
 import com.mucommander.conf.ConfigurationListener;
 import com.mucommander.conf.impl.MuConfiguration;
-import com.mucommander.runtime.JavaVersions;
 import com.mucommander.runtime.OsFamilies;
 import com.mucommander.runtime.OsVersions;
 import com.mucommander.ui.action.ActionManager;
@@ -32,6 +28,9 @@ import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.button.NonFocusableButton;
 import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.main.MainFrame;
+
+import java.awt.Dimension;
+import java.awt.Insets;
 
 /**
  * Button that located in command-bar.
@@ -56,8 +55,8 @@ public class CommandBarButton extends NonFocusableButton implements Configuratio
 	
 	protected CommandBarButton(String actionId, MainFrame mainFrame) {
 		
-		// Use new JButton decorations introduced in Mac OS X 10.5 (Leopard) with Java 1.5 and up
-        if(OsFamilies.MAC_OS_X.isCurrent() && OsVersions.MAC_OS_X_10_5.isCurrentOrHigher() && JavaVersions.JAVA_1_5.isCurrentOrHigher()) {
+		// Use new JButton decorations introduced in Mac OS X 10.5 (Leopard)
+        if(OsFamilies.MAC_OS_X.isCurrent() && OsVersions.MAC_OS_X_10_5.isCurrentOrHigher()) {
             putClientProperty("JComponent.sizeVariant", "small");
             putClientProperty("JButton.buttonType", "textured");
         }

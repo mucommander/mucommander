@@ -35,7 +35,6 @@ import com.mucommander.ui.dialog.file.FileCollisionDialog;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.WindowManager;
-import com.mucommander.util.StringUtils;
 
 import java.io.IOException;
 
@@ -142,7 +141,7 @@ public class SelfUpdateJob extends CopyJob {
             // Strip off the JAR file's path and ".class" extension
             classname = classname.substring(destJar.getAbsolutePath(true).length(), classname.length()-6);
             // Replace separator characters by '.'
-            classname = StringUtils.replaceCompat(classname, destJar.getSeparator(), ".");
+            classname = classname.replace(destJar.getSeparator(), ".");
             // We now have a class name, e.g. "com.mucommander.Launcher"
 
             try {

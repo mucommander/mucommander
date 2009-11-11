@@ -18,7 +18,6 @@
 
 package com.mucommander.ui.autocomplete.completers;
 
-import com.mucommander.runtime.JavaVersions;
 import com.mucommander.ui.autocomplete.AutocompleterTextComponent;
 
 import java.util.Vector;
@@ -36,10 +35,7 @@ public class LocationCompleter extends Completer {
         registerService(ServiceFactory.getVolumesService());
         registerService(ServiceFactory.getBrowsableFilesService());
         registerService(ServiceFactory.getBookmarksService());
-
-        // Register this service only if running Java 1.5 or up as it uses the Java 1.5 API (requires java.lang.System#getenv())
-        if(JavaVersions.JAVA_1_5.isCurrentOrHigher())
-            registerService(ServiceFactory.getSystemVariablesService());
+        registerService(ServiceFactory.getSystemVariablesService());
     }
 
 	protected Vector<String> getUpdatedSuggestions(AutocompleterTextComponent component) {

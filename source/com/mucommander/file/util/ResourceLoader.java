@@ -23,7 +23,6 @@ import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
 import com.mucommander.file.FileLogger;
 import com.mucommander.file.impl.local.LocalFile;
-import com.mucommander.util.StringUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -146,7 +145,7 @@ public class ResourceLoader {
         if(separator.equals("/"))
             nativePath = path;
         else
-            nativePath = StringUtils.replaceCompat(path, "/", separator);
+            nativePath = path.replace("/", separator);
 
         try {
             // Iterate through all resources that match the given path, and return the one located inside the
@@ -463,7 +462,7 @@ public class ResourceLoader {
         // Use the local file separator
         String separator = LocalFile.SEPARATOR;
         if(!"/".equals(separator))
-            path = StringUtils.replaceCompat(path, "/", separator);
+            path = path.replace("/", separator);
 
         return path;
     }

@@ -26,7 +26,6 @@ import com.mucommander.ui.dialog.FocusDialog;
 import com.mucommander.ui.layout.YBoxPanel;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.table.FileTable;
-import com.mucommander.util.StringUtils;
 
 import javax.swing.*;
 import java.awt.BorderLayout;
@@ -177,7 +176,7 @@ public class FileSelectionDialog extends FocusDialog implements ActionListener {
             keywordString = selectionField.getText();
             if(comparison!=REGEXP) {
                 // Remove '*' characters
-                testString = StringUtils.replaceCompat(keywordString, "*", "");
+                testString = keywordString.replace("*", "");
             }
             else {
                 testString = keywordString;

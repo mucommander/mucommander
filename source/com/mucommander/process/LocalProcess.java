@@ -47,21 +47,13 @@ class LocalProcess extends AbstractProcess {
      * @throws IOException if the process could not be created.
      */
     public LocalProcess(String[] tokens, File dir) throws IOException {
-        // Java 1.5 and higher can merge stderr and stdout through ProcessBuilder.
-        // This is the preferred way of working with processes.
-        if(JavaVersions.JAVA_1_5.isCurrentOrHigher()) {
-            ProcessBuilder pb = new ProcessBuilder(tokens);
-            // Set the process' working directory
-            pb.directory(dir);
-            // Merge the process' stdout and stderr 
-            pb.redirectErrorStream(true);
+        ProcessBuilder pb = new ProcessBuilder(tokens);
+        // Set the process' working directory
+        pb.directory(dir);
+        // Merge the process' stdout and stderr
+        pb.redirectErrorStream(true);
 
-            process = pb.start();
-        }
-
-        // Java 1.4 or below, use Runtime.exec() which separates stdout and stderr (harder to manipulate)
-        else
-            process = Runtime.getRuntime().exec(tokens, null, dir);
+        process = pb.start();
 
         // Safeguard: makes sure that an exception is raised if the process could not be created.
         // This might not be strictly necessary, but the Runtime.exec documentation is not very precise

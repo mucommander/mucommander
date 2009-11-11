@@ -101,9 +101,7 @@ public class ServerConnectDialog extends FocusDialog implements ActionListener, 
 
         addTab("SMB", new SMBPanel(this, mainFrame), selectPanelClass);
         addTab("FTP", new FTPPanel(this, mainFrame), selectPanelClass);
-        // SFTP support is not compatible with all version of the Java runtime
-        if(com.mucommander.file.impl.sftp.SFTPProtocolProvider.isAvailable())
-            addTab("SFTP", new SFTPPanel(this, mainFrame), selectPanelClass);
+        addTab("SFTP", new SFTPPanel(this, mainFrame), selectPanelClass);
         addTab("HTTP", new HTTPPanel(this, mainFrame), selectPanelClass);
         addTab("NFS", new NFSPanel(this, mainFrame), selectPanelClass);
 

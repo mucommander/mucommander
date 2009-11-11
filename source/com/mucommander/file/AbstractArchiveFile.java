@@ -21,7 +21,6 @@ package com.mucommander.file;
 import com.mucommander.file.filter.FileFilter;
 import com.mucommander.file.filter.FilenameFilter;
 import com.mucommander.file.impl.ProxyFile;
-import com.mucommander.util.StringUtils;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 import java.io.IOException;
@@ -246,7 +245,7 @@ public abstract class AbstractArchiveFile extends ProxyFile {
         // the parent file's separator. For local files Under Windows, this allows entries' path to have '\' separators.
         String fileSeparator = getSeparator();
         if(!fileSeparator.equals("/"))
-            entryPath = StringUtils.replaceCompat(entryPath, "/", fileSeparator);
+            entryPath = entryPath.replace("/", fileSeparator);
 
         // Cache ArchiveEntryFile instances so that there is only one ArchiveEntryFile corresponding to the same entry
         // at any given time, to avoid attribute inconsistencies.

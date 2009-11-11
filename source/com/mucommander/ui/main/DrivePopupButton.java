@@ -34,7 +34,6 @@ import com.mucommander.file.FileURL;
 import com.mucommander.file.filter.FilenameFilter;
 import com.mucommander.file.filter.RegexpFilenameFilter;
 import com.mucommander.file.impl.local.LocalFile;
-import com.mucommander.runtime.JavaVersions;
 import com.mucommander.runtime.OsFamilies;
 import com.mucommander.runtime.OsVersions;
 import com.mucommander.text.Translator;
@@ -130,8 +129,8 @@ public class DrivePopupButton extends PopupButton implements LocationListener, B
         // Listen to configuration changes to update the button if the system file icons policy has changed
         MuConfiguration.addConfigurationListener(this);
 
-        // Use new JButton decorations introduced in Mac OS X 10.5 (Leopard) with Java 1.5 and up
-        if(OsFamilies.MAC_OS_X.isCurrent() && OsVersions.MAC_OS_X_10_5.isCurrentOrHigher() && JavaVersions.JAVA_1_5.isCurrentOrHigher()) {
+        // Use new JButton decorations introduced in Mac OS X 10.5 (Leopard)
+        if(OsFamilies.MAC_OS_X.isCurrent() && OsVersions.MAC_OS_X_10_5.isCurrentOrHigher()) {
             setMargin(new Insets(6,8,6,8));
             putClientProperty("JComponent.sizeVariant", "small");
             putClientProperty("JButton.buttonType", "textured");
@@ -359,9 +358,7 @@ public class DrivePopupButton extends PopupButton implements LocationListener, B
         // Add 'connect to server' shortcuts
         setMnemonic(popupMenu.add(new ServerConnectAction("SMB...", SMBPanel.class)), mnemonicHelper);
         setMnemonic(popupMenu.add(new ServerConnectAction("FTP...", FTPPanel.class)), mnemonicHelper);
-        // SFTP support is not compatible with all version of the Java runtime
-        if(com.mucommander.file.impl.sftp.SFTPProtocolProvider.isAvailable())
-            setMnemonic(popupMenu.add(new ServerConnectAction("SFTP...", SFTPPanel.class)), mnemonicHelper);
+        setMnemonic(popupMenu.add(new ServerConnectAction("SFTP...", SFTPPanel.class)), mnemonicHelper);
         setMnemonic(popupMenu.add(new ServerConnectAction("HTTP...", HTTPPanel.class)), mnemonicHelper);
         setMnemonic(popupMenu.add(new ServerConnectAction("NFS...", NFSPanel.class)), mnemonicHelper);
 

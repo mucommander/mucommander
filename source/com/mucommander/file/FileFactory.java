@@ -26,7 +26,6 @@ import com.mucommander.file.impl.local.LocalFile;
 import com.mucommander.file.util.FileCache;
 import com.mucommander.file.util.PathTokenizer;
 import com.mucommander.file.util.PathUtils;
-import com.mucommander.runtime.JavaVersions;
 import com.mucommander.runtime.OsFamilies;
 
 import java.io.IOException;
@@ -113,9 +112,7 @@ public class FileFactory {
         registerProtocol(FileProtocols.HTTPS, protocolProvider);
         registerProtocol(FileProtocols.FTP, new com.mucommander.file.impl.ftp.FTPProtocolProvider());
         registerProtocol(FileProtocols.NFS, new com.mucommander.file.impl.nfs.NFSProtocolProvider());
-        // SFTP support is not compatible with all version of the Java runtime
-        if(com.mucommander.file.impl.sftp.SFTPProtocolProvider.isAvailable())
-            registerProtocol(FileProtocols.SFTP, new com.mucommander.file.impl.sftp.SFTPProtocolProvider());
+        registerProtocol(FileProtocols.SFTP, new com.mucommander.file.impl.sftp.SFTPProtocolProvider());
 
 //        registerProtocol(FileProtocols.S3,        new com.mucommander.file.impl.s3.S3Provider());
 
@@ -128,10 +125,7 @@ public class FileFactory {
         registerArchiveFormat(new com.mucommander.file.impl.iso.IsoFormatProvider());
         registerArchiveFormat(new com.mucommander.file.impl.ar.ArFormatProvider());
         registerArchiveFormat(new com.mucommander.file.impl.lst.LstFormatProvider());
-
-        // Register this provider only if running Java 1.5 or up as it uses the Java 1.5 API
-        if(JavaVersions.JAVA_1_5.isCurrentOrHigher())
-            registerArchiveFormat(new com.mucommander.file.impl.rar.RarFormatProvider());
+        registerArchiveFormat(new com.mucommander.file.impl.rar.RarFormatProvider());
         
         registerArchiveFormat(new com.mucommander.file.impl.sevenzip.SevenZipFormatProvider());
 

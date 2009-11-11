@@ -25,7 +25,6 @@ import com.mucommander.file.util.Kernel32API;
 import com.mucommander.file.util.PathUtils;
 import com.mucommander.io.*;
 import com.mucommander.runtime.*;
-import com.mucommander.util.StringUtils;
 import com.sun.jna.ptr.LongByReference;
 
 import java.io.*;
@@ -488,7 +487,7 @@ public class LocalFile extends ProtocolFile {
                 // tokens are: device, mount_point, fs_type, attributes, fs_freq, fs_passno
                 st = new StringTokenizer(line);
                 st.nextToken();
-                mountPoint = StringUtils.replaceCompat(st.nextToken(), "\\040", " ");
+                mountPoint = st.nextToken().replace("\\040", " ");
                 fsType = st.nextToken();
                 knownFS = false;
                 for (String fs : KNOWN_UNIX_FS) {

@@ -18,7 +18,6 @@
 
 package com.mucommander.ui.button;
 
-import com.mucommander.runtime.JavaVersions;
 import com.mucommander.runtime.OsFamilies;
 import com.mucommander.runtime.OsVersions;
 import com.mucommander.ui.action.impl.GoToDocumentationAction;
@@ -73,9 +72,8 @@ public class HelpButton extends JButton {
         // Use the action's label as a tooltip
         setToolTipText(action.getLabel());
 
-        if(OsFamilies.MAC_OS_X.isCurrent() && OsVersions.MAC_OS_X_10_5.isCurrentOrHigher() && JavaVersions.JAVA_1_5.isCurrentOrHigher()) {
-            // If running Java 1.5 (and up) under Mac OS X 10.5 (and up), use the special client property
-            // to have a standard help button.
+        if(OsFamilies.MAC_OS_X.isCurrent() && OsVersions.MAC_OS_X_10_5.isCurrentOrHigher()) {
+            // If running Mac OS X 10.5 (and up), use the special client property to have a standard help button.
             putClientProperty("JButton.buttonType", "help");
 
             // Remove the action's icon
