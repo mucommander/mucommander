@@ -34,7 +34,6 @@ import javax.swing.event.TableModelListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Iterator;
 
 /**
  * 'Shortcuts' preferences panel.
@@ -135,11 +134,10 @@ public class ShortcutsPanel extends PreferencesPanel {
 		panel.setBorder(BorderFactory.createEmptyBorder());
 		panel.add(new JLabel(Translator.get("shortcuts_panel" + ".show") + ":"));
 		
-		Iterator actionCategoriesIterator = ActionProperties.getActionCategories().iterator();
 		final JComboBox combo = new JComboBox();
 		combo.addItem(ActionCategories.ALL);
-	    while (actionCategoriesIterator.hasNext())
-	      combo.addItem(actionCategoriesIterator.next());
+	    for(ActionCategory category : ActionProperties.getActionCategories())
+	      combo.addItem(category);
 	    
 	    combo.addActionListener(new ActionListener() {
 

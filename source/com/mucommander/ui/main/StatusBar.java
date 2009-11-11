@@ -19,6 +19,7 @@
 package com.mucommander.ui.main;
 
 import com.mucommander.AppLogger;
+import com.mucommander.cache.FastLRUCache;
 import com.mucommander.cache.LRUCache;
 import com.mucommander.conf.ConfigurationEvent;
 import com.mucommander.conf.ConfigurationListener;
@@ -41,7 +42,9 @@ import com.mucommander.ui.main.table.FileTableModel;
 import com.mucommander.ui.theme.*;
 
 import javax.swing.*;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.MouseEvent;
@@ -94,7 +97,7 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
 
     /** Caches volume info strings (free/total space) for a while, since this information is expensive to retrieve
      * (I/O bound). This map uses folders' volume path as its key. */
-    private static LRUCache volumeInfoCache = LRUCache.createInstance(VOLUME_INFO_CACHE_CAPACITY);
+    private static LRUCache<String, Long[]> volumeInfoCache = new FastLRUCache<String, Long[]>(VOLUME_INFO_CACHE_CAPACITY);
 	
     /** Icon that is displayed when folder is changing */
     public final static String WAITING_ICON = "waiting.png";
@@ -283,7 +286,7 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
         // Resolve the current folder's volume and use its path as a key for the volume info cache
         final String volumePath = currentFolder.getVolume().getAbsolutePath(true);
 
-        long cachedVolumeInfo[] = (long[])volumeInfoCache.get(volumePath);
+        Long cachedVolumeInfo[] = volumeInfoCache.get(volumePath);
         if(cachedVolumeInfo!=null) {
             AppLogger.finer("Cache hit!");
             volumeSpaceLabel.setVolumeSpace(cachedVolumeInfo[0], cachedVolumeInfo[1]);
@@ -315,7 +318,7 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
                     volumeSpaceLabel.setVolumeSpace(volumeTotal, volumeFree);
 
                     AppLogger.finer("Adding to cache");
-                    volumeInfoCache.add(volumePath, new long[]{volumeTotal, volumeFree}, VOLUME_INFO_TIME_TO_LIVE);
+                    volumeInfoCache.add(volumePath, new Long[]{volumeTotal, volumeFree}, VOLUME_INFO_TIME_TO_LIVE);
                 }
             }.start();
         }

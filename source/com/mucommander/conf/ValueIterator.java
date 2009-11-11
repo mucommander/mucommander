@@ -28,11 +28,11 @@ import java.util.NoSuchElementException;
  * </p>
  * @author Nicolas Rinaudo
  */
-public class ValueIterator implements Iterator {
+public class ValueIterator implements Iterator<String> {
     // - Instance fields -----------------------------------------------------------------
     // -----------------------------------------------------------------------------------
     /** Wrapped iterator. */
-    private Iterator iterator;
+    private Iterator<String> iterator;
 
 
 
@@ -42,7 +42,7 @@ public class ValueIterator implements Iterator {
      * Creates a new <code>ValueIterator</code> wrapping the specified <code>iterator</code>.
      * @param iterator iterator to wrap.
      */
-    ValueIterator(Iterator iterator) {this.iterator = iterator;}
+    ValueIterator(Iterator<String> iterator) {this.iterator = iterator;}
 
 
 
@@ -60,7 +60,7 @@ public class ValueIterator implements Iterator {
      * @return                        the next element in the iteration.
      * @throws NoSuchElementException if the iteration has no more elements.
      */
-    public Object next() {return iterator.next();}
+    public String next() {return iterator.next();}
 
     /**
      * Throws an <code>UnsupportedOperationException</code>.
@@ -76,7 +76,7 @@ public class ValueIterator implements Iterator {
      * @return                        the next value in the iterator as a string.
      * @throws NoSuchElementException if the iteration has no more elements.
      */
-    public String nextValue() {return iterator.next().toString();}
+    public String nextValue() {return iterator.next();}
 
     /**
      * Returns the next value in the iterator as a integer.

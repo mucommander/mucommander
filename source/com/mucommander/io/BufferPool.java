@@ -504,7 +504,7 @@ public class BufferPool {
          * @return true if the class returned by <code>#getBufferClass()</code> is equal or a superclass/superinterface
          * of the specified buffer class
          */
-        public boolean matchesBufferClass(Class bufferClass) {
+        public boolean matchesBufferClass(Class<?> bufferClass) {
             return getBufferClass().isAssignableFrom(bufferClass);
         }
 
@@ -529,7 +529,7 @@ public class BufferPool {
          *
          * @return the Class of buffer instances this factory creates
          */
-        public abstract Class getBufferClass();
+        public abstract Class<?> getBufferClass();
     }
 
     /**
@@ -552,7 +552,7 @@ public class BufferPool {
             };
         }
 
-        public Class getBufferClass() {
+        public Class<?> getBufferClass() {
             return byte[].class;
         }
     }
@@ -577,7 +577,7 @@ public class BufferPool {
             };
         }
 
-        public Class getBufferClass() {
+        public Class<?> getBufferClass() {
             return char[].class;
         }
     }
@@ -607,7 +607,7 @@ public class BufferPool {
             };
         }
 
-        public Class getBufferClass() {
+        public Class<?> getBufferClass() {
             return ByteBuffer.class;
         }
     }
@@ -632,7 +632,7 @@ public class BufferPool {
             };
         }
 
-        public Class getBufferClass() {
+        public Class<?> getBufferClass() {
             return CharBuffer.class;
         }
     }

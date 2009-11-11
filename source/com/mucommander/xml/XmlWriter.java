@@ -290,12 +290,12 @@ public class XmlWriter {
 
         // Writes attributes, if any.
         if(attributes != null) {
-            Iterator names;
-            String   attName;
+            Iterator<String> names;
+            String           attName;
 
             names = attributes.names();
             while(names.hasNext()) {
-                attName = (String)names.next();
+                attName = names.next();
                 out.print(' ');
                 out.print(attName);
                 out.print("=\"");

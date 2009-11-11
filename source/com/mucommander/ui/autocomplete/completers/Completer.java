@@ -53,7 +53,7 @@ public abstract class Completer {
 	 * @param component - an AutocompleterTextComponent.
 	 * @return Vector of suggestions for completion.
 	 */
-	protected abstract Vector getUpdatedSuggestions(AutocompleterTextComponent component);
+	protected abstract Vector<String> getUpdatedSuggestions(AutocompleterTextComponent component);
     
 	/**
 	 * update list model depending on the data in text component

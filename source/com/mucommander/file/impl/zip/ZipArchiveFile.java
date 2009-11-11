@@ -162,13 +162,13 @@ public class ZipArchiveFile extends AbstractRWArchiveFile {
         if (file.hasRandomAccessInputStream()) {
             checkZipFile();
 
-            final Iterator iterator = zipFile.getEntries();
+            final Iterator<ZipEntry> iterator = zipFile.getEntries();
 
             return new ArchiveEntryIterator() {
                 public ArchiveEntry nextEntry() throws IOException {
                     ZipEntry entry;
 
-                    if(!iterator.hasNext() || (entry = (ZipEntry)iterator.next())==null)
+                    if(!iterator.hasNext() || (entry = iterator.next())==null)
                         return null;
 
                     return createArchiveEntry(entry);

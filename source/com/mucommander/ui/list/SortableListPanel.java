@@ -22,8 +22,12 @@ import com.mucommander.text.Translator;
 import com.mucommander.ui.button.ArrowButton;
 import com.mucommander.util.AlteredVector;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JButton;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.GridLayout;
 
 /**
  * SortableListPanel is a JPanel which contains a scrollable {@link DynamicList} in the center and two buttons
@@ -32,9 +36,9 @@ import java.awt.*;
  *
  * @author Maxence Bernard
  */
-public class SortableListPanel extends JPanel {
+public class SortableListPanel<E> extends JPanel {
 
-    private DynamicList dynamicList;
+    private DynamicList<E> dynamicList;
 
 
     /**
@@ -42,10 +46,10 @@ public class SortableListPanel extends JPanel {
      *
      * @param items the items Vector used by DynamicList
      */
-    public SortableListPanel(AlteredVector items) {
+    public SortableListPanel(AlteredVector<E> items) {
         super(new BorderLayout());
 
-        this.dynamicList = new DynamicList(items);
+        this.dynamicList = new DynamicList<E>(items);
 
         // Allow vertical scrolling in bookmarks list
         add(new JScrollPane(dynamicList), BorderLayout.CENTER);
@@ -79,9 +83,11 @@ public class SortableListPanel extends JPanel {
 
     
     /**
-     * Returns the DynamicList used by this SortableListPanel.
+     * Returns the {@link DynamicList} used by this SortableListPanel.
+     *
+     * @return the {@link DynamicList} used by this SortableListPanel
      */
-    public DynamicList getDynamicList() {
+    public DynamicList<E> getDynamicList() {
         return dynamicList;
     }
 }

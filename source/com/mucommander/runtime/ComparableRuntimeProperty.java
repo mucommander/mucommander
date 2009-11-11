@@ -22,16 +22,16 @@ package com.mucommander.runtime;
  * ComparableRuntimeProperty is a runtime property for which the values have a natural order. This class provides
  * methods to compare instances, using an int value specified at creation time as the discriminator.
  *
- * <p>The subclass must ensure that no two instances have the same discriminator value. Based on this assumption,
+ * <p>Subclasses must ensure that no two instances have the same discriminator value. Based on this assumption,
  * if {@link #compareTo(Object)} returns <code>0</code>, then instances are equal according to the shallow equals
  * operator '=='.</p>
  *
  * @author Maxence Bernard
 */
-public abstract class ComparableRuntimeProperty extends RuntimeProperty implements Comparable {
+public abstract class ComparableRuntimeProperty extends RuntimeProperty implements Comparable<ComparableRuntimeProperty> {
 
     /** The descriminator set at creation time */
-    protected final Comparable discriminator;
+    protected final Integer discriminator;
 
     /**
      * Creates a new RuntimeProperty using the specified String representation and order discriminator.
@@ -39,7 +39,7 @@ public abstract class ComparableRuntimeProperty extends RuntimeProperty implemen
      * @param stringRepresentation a String representation of this property
      * @param discriminator the descriminator that serves to compare an instance with another against
      */
-    protected ComparableRuntimeProperty(String stringRepresentation, Comparable discriminator) {
+    protected ComparableRuntimeProperty(String stringRepresentation, Integer discriminator) {
         super(stringRepresentation);
 
         this.discriminator = discriminator;
@@ -90,10 +90,7 @@ public abstract class ComparableRuntimeProperty extends RuntimeProperty implemen
     // Comparable implementation //
     ///////////////////////////////
 
-    public int compareTo(Object o) {
-        if(!(o instanceof ComparableRuntimeProperty))
-            throw new IllegalArgumentException();
-
-        return discriminator.compareTo(((ComparableRuntimeProperty)o).discriminator);
+    public int compareTo(ComparableRuntimeProperty crp) {
+        return discriminator.compareTo(crp.discriminator);
     }
 }

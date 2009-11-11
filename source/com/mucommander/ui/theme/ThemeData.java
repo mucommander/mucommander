@@ -22,7 +22,6 @@ import javax.swing.*;
 import java.awt.Color;
 import java.awt.Font;
 import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.WeakHashMap;
 
 /**
@@ -719,20 +718,20 @@ public class ThemeData {
     // - Listeners -----------------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
     /** Listeners on the default font and colors. */
-    private static WeakHashMap listeners = new WeakHashMap();
+    private static WeakHashMap<ThemeListener, ?> listeners = new WeakHashMap<ThemeListener, Object>();
 
 
 
     // - Registered colors & fonts -------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
     /** All registered colors. */
-    private static final Hashtable COLORS;
+    private static final Hashtable<Integer, DefaultColor> COLORS;
     /** All registered default colors. */
-    private static final Hashtable DEFAULT_COLORS;
+    private static final Hashtable<String, DefaultColor>  DEFAULT_COLORS;
     /** All registered fonts. */
-    private static final Hashtable FONTS;
+    private static final Hashtable<Integer, DefaultFont>  FONTS;
     /** All registered default fonts. */
-    private static final Hashtable DEFAULT_FONTS;
+    private static final Hashtable<String, DefaultFont>   DEFAULT_FONTS;
 
 
 
@@ -760,7 +759,7 @@ public class ThemeData {
     public static void registerColor(int id, String defaultColor) {
         DefaultColor color;
 
-        if((color = ((DefaultColor)DEFAULT_COLORS.get(defaultColor))) == null)
+        if((color = DEFAULT_COLORS.get(defaultColor)) == null)
             throw new IllegalArgumentException("Not a registered default color: " + defaultColor);
         registerColor(id, color);
     }
@@ -768,7 +767,7 @@ public class ThemeData {
     public static void registerFont(int id, String defaultFont) {
         DefaultFont font;
 
-        if((font = ((DefaultFont)DEFAULT_FONTS.get(defaultFont))) == null)
+        if((font = DEFAULT_FONTS.get(defaultFont)) == null)
             throw new IllegalArgumentException("Not a registered default font: " + defaultFont);
         registerFont(id, font);
     }
@@ -809,10 +808,10 @@ public class ThemeData {
     static {
         ComponentMapper mapper;
 
-        COLORS         = new Hashtable();
-        DEFAULT_COLORS = new Hashtable();
-        FONTS          = new Hashtable();
-        DEFAULT_FONTS  = new Hashtable();
+        COLORS         = new Hashtable<Integer, DefaultColor>();
+        DEFAULT_COLORS = new Hashtable<String, DefaultColor>();
+        FONTS          = new Hashtable<Integer, DefaultFont>();
+        DEFAULT_FONTS  = new Hashtable<String, DefaultFont>();
 
 
 
@@ -1220,7 +1219,7 @@ public class ThemeData {
         // Makes sure id is a legal color identifier.
         checkColorIdentifier(id);
 
-        return ((DefaultColor)COLORS.get(Integer.valueOf(id))).getColor(data);
+        return COLORS.get(Integer.valueOf(id)).getColor(data);
     }
 
     /**
@@ -1237,7 +1236,7 @@ public class ThemeData {
     private static Font getDefaultFont(int id, ThemeData data) {
         checkFontIdentifier(id);
 
-        return((DefaultFont)FONTS.get(Integer.valueOf(id))).getFont(data);
+        return FONTS.get(Integer.valueOf(id)).getFont(data);
     }
 
 
@@ -1322,7 +1321,7 @@ public class ThemeData {
         // If fonts[id] is null and we're set to ignore defaults, both fonts are different.
         // If we're set to use defaults, we must compare font and the default value for id.
         if(fonts[id] == null)
-            return ignoreDefaults ? true : !getDefaultFont(id, this).equals(font);
+            return ignoreDefaults || !getDefaultFont(id, this).equals(font);
 
         // 'Standard' case: both fonts are set, compare them normally.
         return !font.equals(fonts[id]);
@@ -1415,16 +1414,14 @@ public class ThemeData {
      * @param font new value for the font that changed.
      */
     static void triggerFontEvent(int id, Font font) {
-        Iterator         iterator; // Used to iterate through the listeners.
         FontChangedEvent event;    // Event that will be dispatched.
 
         // Creates the event.
         event = new FontChangedEvent(null, id, font);
 
         // Dispatches it.
-        iterator = listeners.keySet().iterator();
-        while(iterator.hasNext())
-            ((ThemeListener)iterator.next()).fontChanged(event);
+        for(ThemeListener listener : listeners.keySet())
+            listener.fontChanged(event);
     }
 
     /**
@@ -1433,16 +1430,14 @@ public class ThemeData {
      * @param color new value for the color that changed.
      */
     static void triggerColorEvent(int id, Color color) {
-        Iterator          iterator; // Used to iterate through the listeners.
         ColorChangedEvent event;    // Event that will be dispatched.
 
         // Creates the event.
         event = new ColorChangedEvent(null, id, color);
 
         // Dispatches it.
-        iterator = listeners.keySet().iterator();
-        while(iterator.hasNext())
-            ((ThemeListener)iterator.next()).colorChanged(event);
+        for(ThemeListener listener : listeners.keySet())
+            listener.colorChanged(event);
     }
 
 

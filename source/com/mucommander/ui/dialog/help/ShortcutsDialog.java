@@ -19,26 +19,6 @@
 
 package com.mucommander.ui.dialog.help;
 
-import java.awt.BorderLayout;
-import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Enumeration;
-import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.Vector;
-
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTabbedPane;
-import javax.swing.KeyStroke;
-
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionKeymap;
@@ -50,6 +30,14 @@ import com.mucommander.ui.dialog.FocusDialog;
 import com.mucommander.ui.layout.XAlignedComponentPanel;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.text.KeyStrokeUtils;
+
+import javax.swing.*;
+import java.awt.BorderLayout;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.*;
 
 
 /**
@@ -64,7 +52,7 @@ public class ShortcutsDialog extends FocusDialog implements ActionListener {
     //////////////////////////
     
     private final static String QUICK_SEARCH_TITLE = "shortcuts_dialog.quick_search";
-    private final static Hashtable QUICK_SEARCH_SHORTCUTS = new Hashtable() {
+    private final static Hashtable<String, String> QUICK_SEARCH_SHORTCUTS = new Hashtable<String, String>() {
     	{
     		put("shortcuts_dialog.quick_search.start_search", "");
     		put("shortcuts_dialog.quick_search.jump_to_previous", "UP");
@@ -76,13 +64,13 @@ public class ShortcutsDialog extends FocusDialog implements ActionListener {
     };
     
     /** Comparator of actions according to their labels */
-	private static final Comparator ACTIONS_COMPARATOR = new Comparator() {
-		public int compare(Object o1, Object o2) {
-			String label1 = ActionProperties.getActionLabel((String) o1);
+	private static final Comparator<String> ACTIONS_COMPARATOR = new Comparator<String>() {
+		public int compare(String id1, String id2) {
+			String label1 = ActionProperties.getActionLabel(id1);
 			if (label1 == null)
 				return 1;
 			
-			String label2 = ActionProperties.getActionLabel((String) o2);
+			String label2 = ActionProperties.getActionLabel(id2);
 			if (label2 == null)
 				return -1;
 			
@@ -97,14 +85,14 @@ public class ShortcutsDialog extends FocusDialog implements ActionListener {
         JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 
         // Separate the actions according to their categories. 
-        Hashtable categoryToItsActionsWithShortcutsIdsMap = createCategoryToItsActionsWithShortcutsMap();
+        Hashtable<ActionCategory, LinkedList<String>> categoryToItsActionsWithShortcutsIdsMap = createCategoryToItsActionsWithShortcutsMap();
         
         //Create tab and panel for each category
-        Enumeration categories = categoryToItsActionsWithShortcutsIdsMap.keys();
+        Enumeration<ActionCategory> categories = categoryToItsActionsWithShortcutsIdsMap.keys();
         while (categories.hasMoreElements()) {
-        	ActionCategory category = (ActionCategory) categories.nextElement();
+        	ActionCategory category = categories.nextElement();
         	// Get the list of actions from the above category which have shortcuts assigned to them
-        	LinkedList categoryActionsWithShortcuts = (LinkedList) categoryToItsActionsWithShortcutsIdsMap.get(category);
+        	LinkedList<String> categoryActionsWithShortcuts = categoryToItsActionsWithShortcutsIdsMap.get(category);
         	Collections.sort(categoryActionsWithShortcuts, ACTIONS_COMPARATOR);
         	
         	// If there is at least one action in the category with shortcuts assigned to it, add tab for the category
@@ -129,31 +117,28 @@ public class ShortcutsDialog extends FocusDialog implements ActionListener {
         setMaximumSize(new Dimension(600, 360));
     }
 
-    private Hashtable createCategoryToItsActionsWithShortcutsMap() {
-    	// Get Iterator to all existing action categories
-        Iterator actionCategoriesIterator = ActionProperties.getActionCategories().iterator();
-
+        private Hashtable<ActionCategory, LinkedList<String>> createCategoryToItsActionsWithShortcutsMap() {
         // Hashtable that maps actions-category to LinkedList of actions (Ids) from the category that have shortcuts assigned to them
-        Hashtable categoryToItsActionsWithShortcutsIdsMap = new Hashtable();
+        Hashtable<ActionCategory, LinkedList<String>> categoryToItsActionsWithShortcutsIdsMap = new Hashtable<ActionCategory, LinkedList<String>>();
         
     	// Initialize empty LinkedList for each category
-        while (actionCategoriesIterator.hasNext())
-        	categoryToItsActionsWithShortcutsIdsMap.put(actionCategoriesIterator.next(), new LinkedList());
+            for(ActionCategory category : ActionProperties.getActionCategories())
+            	categoryToItsActionsWithShortcutsIdsMap.put(category, new LinkedList<String>());
         
         // Go over all action ids
-    	Enumeration actionIds = ActionManager.getActionIds();
+    	Enumeration<String> actionIds = ActionManager.getActionIds();
     	while (actionIds.hasMoreElements()) {
-    		String actionId = (String) actionIds.nextElement();
+    		String actionId = actionIds.nextElement();
     		ActionCategory category = ActionProperties.getActionCategory(actionId);
     		// If the action has category and there is a primary shortcut assigned to it, add its id to the list of the category
     		if (category != null && ActionKeymap.doesActionHaveShortcut(actionId))
-    			((LinkedList) categoryToItsActionsWithShortcutsIdsMap.get(category)).add(actionId);
+    			categoryToItsActionsWithShortcutsIdsMap.get(category).add(actionId);
     	}
     	
     	return categoryToItsActionsWithShortcutsIdsMap;
     }
 
-    private void addTopic(JTabbedPane tabbedPane, String titleKey, Iterator descriptionsIterator) {
+    private void addTopic(JTabbedPane tabbedPane, String titleKey, Iterator<String> descriptionsIterator) {
         XAlignedComponentPanel compPanel;
         JPanel northPanel;
         JScrollPane scrollPane;
@@ -174,7 +159,7 @@ public class ShortcutsDialog extends FocusDialog implements ActionListener {
         tabbedPane.addTab(titleKey, scrollPane);
     }
     
-    private void addTopic(JTabbedPane tabbedPane, String titleKey, Hashtable actionsToShortcutsMap) {
+    private void addTopic(JTabbedPane tabbedPane, String titleKey, Hashtable<String, String> actionsToShortcutsMap) {
         XAlignedComponentPanel compPanel;
         JPanel northPanel;
         JScrollPane scrollPane;
@@ -195,13 +180,13 @@ public class ShortcutsDialog extends FocusDialog implements ActionListener {
         tabbedPane.addTab(titleKey, scrollPane);
     }
 
-    private void addShortcutList(XAlignedComponentPanel compPanel, Iterator muActionIdsIterator) {
+    private void addShortcutList(XAlignedComponentPanel compPanel, Iterator<String> muActionIdsIterator) {
         // Add all actions shortcut and label (or tooltip if available)
         String actionId;
         KeyStroke shortcut;
         String shortcutsRep;
         while (muActionIdsIterator.hasNext()) {
-        	actionId =(String) muActionIdsIterator.next();
+        	actionId = muActionIdsIterator.next();
 
             shortcut = ActionKeymap.getAccelerator(actionId);
 
@@ -215,13 +200,12 @@ public class ShortcutsDialog extends FocusDialog implements ActionListener {
         }
     }
 
-    private void addShortcutList(XAlignedComponentPanel compPanel, Hashtable actionsToShortcutsMap) {
-    	Vector vec = new Vector(actionsToShortcutsMap.keySet());
+    private void addShortcutList(XAlignedComponentPanel compPanel, Hashtable<String, String> actionsToShortcutsMap) {
+    	Vector<String> vec = new Vector<String>(actionsToShortcutsMap.keySet());
     	Collections.sort(vec);
-        for(Enumeration actionsEnumeration = vec.elements(); actionsEnumeration.hasMoreElements();) {
-        	String action = (String) actionsEnumeration.nextElement();
-            compPanel.addRow((String) actionsToShortcutsMap.get(action), new JLabel(Translator.get(action)), 5);
-        }
+
+        for(String action : vec)
+            compPanel.addRow(actionsToShortcutsMap.get(action), new JLabel(Translator.get(action)), 5);
     }
 
     public void actionPerformed(ActionEvent e) {

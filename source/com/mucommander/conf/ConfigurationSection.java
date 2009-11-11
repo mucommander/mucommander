@@ -181,7 +181,7 @@ class ConfigurationSection {
      * @param  separator string to use as a separator.
      * @return           <code>value</code> as a string.
      */
-    public static String getValue(List value, String separator) {return ValueList.toString(value, separator);}
+    public static String getValue(List<String> value, String separator) {return ValueList.toString(value, separator);}
 
     /**
      * Casts the specified value into a string.

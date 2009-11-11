@@ -28,8 +28,8 @@ import com.mucommander.ui.dialog.QuestionDialog;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.WindowManager;
 
-import java.awt.*;
-import java.util.Iterator;
+import java.awt.Frame;
+import java.awt.Image;
 import java.util.Vector;
 
 /**
@@ -41,7 +41,7 @@ import java.util.Vector;
 public class ViewerRegistrar {
 	
     /** List of registered file viewers */ 
-    private final static Vector viewerFactories = new Vector();
+    private final static Vector<ViewerFactory> viewerFactories = new Vector<ViewerFactory>();
 
     static {
         registerFileViewer(new com.mucommander.ui.viewer.image.ImageFactory());
@@ -93,13 +93,7 @@ public class ViewerRegistrar {
      * @throws UserCancelledException if the user has been asked to confirm the operation and cancelled
      */
     public static FileViewer createFileViewer(AbstractFile file) throws UserCancelledException {
-        Iterator      iterator;
-        ViewerFactory factory;
-
-        iterator = viewerFactories.iterator();
-        while(iterator.hasNext()) {
-            factory = (ViewerFactory)iterator.next();
-
+        for(ViewerFactory factory : viewerFactories) {
             try {
                 if(factory.canViewFile(file))
                     return factory.createFileViewer();

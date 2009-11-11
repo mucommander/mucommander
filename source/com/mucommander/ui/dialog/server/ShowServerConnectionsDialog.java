@@ -18,22 +18,6 @@
 
 package com.mucommander.ui.dialog.server;
 
-import java.awt.BorderLayout;
-import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.Vector;
-
-import javax.swing.AbstractListModel;
-import javax.swing.Box;
-import javax.swing.JButton;
-import javax.swing.JList;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.ListSelectionModel;
-
 import com.mucommander.auth.Credentials;
 import com.mucommander.file.FileURL;
 import com.mucommander.file.connection.ConnectionHandler;
@@ -46,6 +30,15 @@ import com.mucommander.ui.helper.MnemonicHelper;
 import com.mucommander.ui.layout.XBoxPanel;
 import com.mucommander.ui.main.MainFrame;
 
+import javax.swing.*;
+import java.awt.BorderLayout;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Vector;
+
 /**
  * This dialog shows a list of server connections and allows the user to close/disconnect them.
  *
@@ -56,7 +49,7 @@ public class ShowServerConnectionsDialog extends FocusDialog implements ActionLi
     private MainFrame mainFrame;
 
     private JList connectionList;
-    private Vector connections;
+    private Vector<ConnectionHandler> connections;
 
     private JButton disconnectButton;
     private JButton goToButton;
@@ -86,7 +79,7 @@ public class ShowServerConnectionsDialog extends FocusDialog implements ActionLi
             }
 
             public Object getElementAt(int i) {
-                ConnectionHandler connHandler = ((ConnectionHandler)connections.elementAt(i));
+                ConnectionHandler connHandler = connections.elementAt(i);
 
                 // Show login (but not password) in the URL
                 // Note: realm returned by ConnectionHandler does not contain credentials
@@ -170,7 +163,7 @@ public class ShowServerConnectionsDialog extends FocusDialog implements ActionLi
             int selectedIndex = connectionList.getSelectedIndex();
 
             if(selectedIndex>=0 && selectedIndex<connections.size()) {
-                final ConnectionHandler connHandler = (ConnectionHandler)connections.elementAt(selectedIndex);
+                final ConnectionHandler connHandler = connections.elementAt(selectedIndex);
 
                 // Close connection in a separate thread as I/O can lock.
                 // Todo: Add a confirmation dialog if the connection is active as it will stop whatever the connection is currently doing
@@ -199,7 +192,7 @@ public class ShowServerConnectionsDialog extends FocusDialog implements ActionLi
 
             int selectedIndex = connectionList.getSelectedIndex();
             if(selectedIndex>=0 && selectedIndex<connections.size())
-                mainFrame.getActivePanel().tryChangeCurrentFolder(((ConnectionHandler)connections.elementAt(selectedIndex)).getRealm());
+                mainFrame.getActivePanel().tryChangeCurrentFolder(connections.elementAt(selectedIndex).getRealm());
         }
         // Dispose the dialog
         else if (source==closeButton)  {

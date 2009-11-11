@@ -36,9 +36,9 @@ public class XmlAttributes {
     // - Instance fields -------------------------------------------------
     // -------------------------------------------------------------------
     /** Contains the XML attributes. */
-    private Hashtable attributes;
+    private Hashtable<String, String> attributes;
     /** Contains the XML attribute names in the order they were added */
-    private LinkedList names;
+    private LinkedList<String> names;
     
 
     // - Initialization --------------------------------------------------
@@ -47,8 +47,8 @@ public class XmlAttributes {
      * Builds a new, empty XmlAttributes instance.
      */
     public XmlAttributes() {
-    	attributes = new Hashtable();
-    	names = new LinkedList();
+    	attributes = new Hashtable<String, String>();
+    	names = new LinkedList<String>();
     }
 
 
@@ -60,7 +60,7 @@ public class XmlAttributes {
      * @return the value associated with the specified attribute name if found,
      *         <code>null</code> otherwise.
      */
-    public String getValue(String name) {return (String)attributes.get(name);}
+    public String getValue(String name) {return attributes.get(name);}
 
     /**
      * Clears the list of all previously defined attributes.
@@ -78,5 +78,5 @@ public class XmlAttributes {
      * Returns an iterator on the attributes contained by this instance.
      * @return an iterator on the attributes contained by this instance.
      */
-    public Iterator names() {return names.iterator();}
+    public Iterator<String> names() {return names.iterator();}
 }

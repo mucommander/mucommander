@@ -38,10 +38,6 @@ public class JavaVersion extends ComparableRuntimeProperty implements JavaVersio
         super(stringRepresentation, intValue);
     }
 
-    protected JavaVersion(String stringRepresentation, Integer intValue) {
-        super(stringRepresentation, intValue);
-    }
-
 
     ////////////////////
     // Static methods //

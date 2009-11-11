@@ -611,7 +611,7 @@ public class Configuration {
      * @see              #getListVariable(String,String)
      * @see              #getVariable(String,List,String)
      */
-    public boolean setVariable(String name, List value, String separator) {return setVariable(name, ConfigurationSection.getValue(value, separator));}
+    public boolean setVariable(String name, List<String> value, String separator) {return setVariable(name, ConfigurationSection.getValue(value, separator));}
 
     /**
      * Sets the value of the specified variable.
@@ -945,7 +945,7 @@ public class Configuration {
      * @see                 #setVariable(String,List,String)
      * @see                 #getListVariable(String,String)
      */
-    public ValueList getVariable(String name, List defaultValue, String separator) {
+    public ValueList getVariable(String name, List<String> defaultValue, String separator) {
         return ConfigurationSection.getListValue(getVariable(name, ConfigurationSection.getValue(defaultValue, separator)), separator);
     }
 

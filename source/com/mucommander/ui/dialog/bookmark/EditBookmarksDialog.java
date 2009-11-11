@@ -72,7 +72,7 @@ public class EditBookmarksDialog extends FocusDialog implements ActionListener, 
     private JTextField locationField;
 
     private AlteredVector<Bookmark> bookmarks;
-    private DynamicList bookmarkList;
+    private DynamicList<Bookmark> bookmarkList;
 
     private int currentListIndex;
     private Bookmark currentBookmarkSave;
@@ -102,7 +102,7 @@ public class EditBookmarksDialog extends FocusDialog implements ActionListener, 
         BookmarkManager.setFireEvents(false);
 
         // Create the sortable bookmarks list panel
-        SortableListPanel listPanel = new SortableListPanel(bookmarks);
+        SortableListPanel<Bookmark> listPanel = new SortableListPanel<Bookmark>(bookmarks);
         this.bookmarkList = listPanel.getDynamicList();
 
         contentPane.add(listPanel, BorderLayout.CENTER);

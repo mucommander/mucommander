@@ -20,8 +20,8 @@ package com.mucommander.ui.theme;
 
 import com.mucommander.text.Translator;
 
-import java.awt.*;
-import java.util.Iterator;
+import java.awt.Color;
+import java.awt.Font;
 import java.util.WeakHashMap;
 
 /**
@@ -41,7 +41,7 @@ public class Theme extends ThemeData {
 
     // - Theme listeners -----------------------------------------------------------------
     // -----------------------------------------------------------------------------------
-    private static WeakHashMap listeners = new WeakHashMap();
+    private static WeakHashMap<ThemeListener, ?> listeners = new WeakHashMap<ThemeListener, Object>();
 
 
     
@@ -220,19 +220,13 @@ public class Theme extends ThemeData {
     private static void addThemeListener(ThemeListener listener) {listeners.put(listener, null);}
     private static void removeThemeListener(ThemeListener listener) {listeners.remove(listener);}
     private static void triggerFontEvent(FontChangedEvent event) {
-        Iterator iterator;
-
-        iterator = listeners.keySet().iterator();
-        while(iterator.hasNext())
-            ((ThemeListener)iterator.next()).fontChanged(event);
+        for(ThemeListener listener : listeners.keySet())
+            listener.fontChanged(event);
     }
 
     private static void triggerColorEvent(ColorChangedEvent event) {
-        Iterator iterator;
-
-        iterator = listeners.keySet().iterator();
-        while(iterator.hasNext())
-            ((ThemeListener)iterator.next()).colorChanged(event);
+        for(ThemeListener listener : listeners.keySet())
+            listener.colorChanged(event);
     }
 
     private class DefaultValuesListener implements ThemeListener {

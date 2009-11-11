@@ -736,7 +736,7 @@ public class MuConfiguration {
      * @see              #getListVariable(String,String)
      * @see              #getVariable(String,List,String)
      */
-    public static boolean setVariable(String name, List value, String separator) {return configuration.setVariable(name, value, separator);}
+    public static boolean setVariable(String name, List<String> value, String separator) {return configuration.setVariable(name, value, separator);}
 
 
 
@@ -1011,7 +1011,7 @@ public class MuConfiguration {
      * @see                 #setVariable(String,List,String)
      * @see                 #getListVariable(String,String)
      */
-    public static ValueList getVariable(String name, List defaultValue, String separator) {return configuration.getVariable(name, defaultValue, separator);}
+    public static ValueList getVariable(String name, List<String> defaultValue, String separator) {return configuration.getVariable(name, defaultValue, separator);}
 
 
     // - Configuration listening -----------------------------------------------

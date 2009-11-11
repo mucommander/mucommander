@@ -613,7 +613,7 @@ public class ThemeManager {
         return getAvailableCustomThemeName(name);
     }
 
-    private static boolean isNameAvailable(String name, Iterator names) {
+    private static boolean isNameAvailable(String name, Iterator<String> names) {
         while(names.hasNext())
             if(names.next().equals(name))
                 return false;

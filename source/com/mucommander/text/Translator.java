@@ -40,13 +40,13 @@ import java.util.*;
 public class Translator {
 
     /** Contains key/value pairs for the current language */
-    private static Hashtable dictionary;
+    private static Hashtable<String, String> dictionary;
 
     /** Contains key/value pairs for the default language, for entries that are not defined in the current language */
-    private static Hashtable defaultDictionary;
+    private static Hashtable<String, String> defaultDictionary;
     
     /** List of all available languages in the dictionary file */
-    private static Vector availableLanguages;
+    private static Vector<String> availableLanguages;
 
     /** Current language */
     private static String language;
@@ -73,7 +73,7 @@ public class Translator {
      *
      * @param availableLanguages list of available languages
      */
-    private static void setCurrentLanguage(Vector availableLanguages) {
+    private static void setCurrentLanguage(Vector<String> availableLanguages) {
         String lang = MuConfiguration.getVariable(MuConfiguration.LANGUAGE);
 
         if(lang==null) {
@@ -91,9 +91,9 @@ public class Translator {
         boolean containsLanguage = false;
         int nbAvailableLanguages = availableLanguages.size();
         for(int i=0; i<nbAvailableLanguages; i++) {
-            if(((String)availableLanguages.elementAt(i)).equalsIgnoreCase(lang)) {
+            if(availableLanguages.elementAt(i).equalsIgnoreCase(lang)) {
                 containsLanguage = true;
-                lang = ((String)availableLanguages.elementAt(i));   // Use the proper case variation
+                lang = availableLanguages.elementAt(i);   // Use the proper case variation
                 break;
             }
         }
@@ -132,9 +132,9 @@ public class Translator {
      * @throws IOException thrown if an IO error occurs.
      */
     public static void loadDictionaryFile(String filePath) throws IOException {
-        availableLanguages = new Vector();
-        dictionary         = new Hashtable();
-        defaultDictionary  = new Hashtable();
+        availableLanguages = new Vector<String>();
+        dictionary         = new Hashtable<String, String>();
+        defaultDictionary  = new Hashtable<String, String>();
 
         BufferedReader br = new BufferedReader(new BOMReader(ResourceLoader.getResourceAsStream(filePath)));
         String line;
@@ -221,7 +221,7 @@ public class Translator {
      * @return an array of language codes.
      */
     public static String[] getAvailableLanguages() {
-        String[] languages = (String[])availableLanguages.toArray(new String[availableLanguages.size()]);
+        String[] languages = availableLanguages.toArray(new String[availableLanguages.size()]);
         Arrays.sort(languages, String.CASE_INSENSITIVE_ORDER);
 
         return languages;
@@ -255,10 +255,10 @@ public class Translator {
      */
     public static String get(String key, String paramValues[]) {
         // Returns the localized text
-        String text = (String)dictionary.get(key.toLowerCase());
+        String text = dictionary.get(key.toLowerCase());
 
         if (text==null) {
-            text = (String)defaultDictionary.get(key.toLowerCase()); 
+            text = defaultDictionary.get(key.toLowerCase());
 
             if(text==null) {
                 AppLogger.fine("No value for "+key+", returning key");
@@ -505,7 +505,7 @@ public class Translator {
         String lang;
         String text;
         StringTokenizer st;
-        Hashtable newLanguageEntries = new Hashtable();
+        Hashtable<String, String> newLanguageEntries = new Hashtable<String, String>();
         while ((line = newLanguageFileReader.readLine())!=null) {
             try {
                 if (!line.trim().startsWith("#") && !line.trim().equals("")) {
@@ -538,7 +538,7 @@ public class Translator {
             boolean emptyLine = line.trim().startsWith("#") || line.trim().equals("");
             if (!keyProcessedForNewLanguage && (emptyLine || (currentKey!=null && !line.startsWith(currentKey+":")))) {
                 if(currentKey!=null) {
-                    String newLanguageValue = (String)newLanguageEntries.get(currentKey);
+                    String newLanguageValue = newLanguageEntries.get(currentKey);
                     if(newLanguageValue!=null) {
                         // Insert new language's entry in resulting file
                         AppLogger.info("New language entry for key="+currentKey+" value="+newLanguageValue);
@@ -566,7 +566,7 @@ public class Translator {
                     // Delimiter is now line break
                     String existingNewLanguageValue = st.nextToken("\n");
                     existingNewLanguageValue = existingNewLanguageValue.substring(1, existingNewLanguageValue.length());
-                    String newLanguageValue = (String)newLanguageEntries.get(currentKey);
+                    String newLanguageValue = newLanguageEntries.get(currentKey);
 
                     if(newLanguageValue!=null) {
                         if(!existingNewLanguageValue.equals(newLanguageValue))

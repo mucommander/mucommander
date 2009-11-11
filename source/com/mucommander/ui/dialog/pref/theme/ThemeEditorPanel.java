@@ -26,14 +26,9 @@ import com.mucommander.ui.dialog.pref.PreferencesPanel;
 import com.mucommander.ui.layout.ProportionalGridPanel;
 import com.mucommander.ui.theme.ThemeData;
 
-import javax.swing.BorderFactory;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
+import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-
 import java.awt.Color;
 import java.awt.Font;
 import java.util.Vector;
@@ -56,11 +51,11 @@ abstract class ThemeEditorPanel extends PreferencesPanel {
     /** Edited theme data. */
     protected ThemeData themeData;
     /** Holds references to listeners to prevent them from being garbage collected. */
-    private   Vector    listenerReferences = new Vector();
+    private   Vector<ChangeListener> listenerReferences = new Vector<ChangeListener>();
     /** Font used to display caption labels. */
-    private   Font      captionLabelFont;
+    private   Font                   captionLabelFont;
     /** Color used to display caption labels. */
-    private   Color     captionTextColor = new Color(48, 48, 48);
+    private   Color                  captionTextColor = new Color(48, 48, 48);
 
 
 

@@ -23,7 +23,8 @@ import com.mucommander.ui.autocomplete.EditableComboboxCompletion;
 import com.mucommander.ui.autocomplete.TypicalAutocompleterEditableCombobox;
 import com.mucommander.ui.autocomplete.completers.Completer;
 
-import javax.swing.*;
+import javax.swing.ComboBoxModel;
+import javax.swing.JTextField;
 import java.awt.event.KeyEvent;
 import java.util.Vector;
 
@@ -87,7 +88,7 @@ public class AutocompletedEditableCombobox extends EditableComboBox {
      * will be created and used.
      * @param items items used to populate the initial items list.
      */
-    public AutocompletedEditableCombobox(JTextField textField, Vector items, Completer completer) {
+    public AutocompletedEditableCombobox(JTextField textField, Vector<Object> items, Completer completer) {
         super(textField, items);
         enableAutoCompletion(completer);
     }

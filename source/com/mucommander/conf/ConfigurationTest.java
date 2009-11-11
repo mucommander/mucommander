@@ -200,7 +200,7 @@ public class ConfigurationTest extends TestCase implements ConfigurationListener
      * @param separator separator used to tokenise the value.
      * @param value     expected event value.
      */
-    private void assertEvent(ConfigurationEvent event, String name, String separator, Vector value) {
+    private void assertEvent(ConfigurationEvent event, String name, String separator, Vector<String> value) {
         assertEventName(event, name);
         assertEquals(event.getListValue(separator), value);
     }

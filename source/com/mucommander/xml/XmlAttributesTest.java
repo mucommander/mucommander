@@ -79,7 +79,7 @@ public class XmlAttributesTest extends TestCase {
      * Runs tests on the {@link XmlAttributes#names()} method.
      */
     public void testNames() {
-        Iterator names;
+        Iterator<String> names;
         String   buffer;
 
         // Makes sure the names method works on an empty set of attributes.
@@ -91,7 +91,7 @@ public class XmlAttributesTest extends TestCase {
         attributes.add(TEST_ATTRIBUTE_1, TEST_VALUE_1);
         names = attributes.names();
         assertTrue(names.hasNext());
-        assertEquals(TEST_ATTRIBUTE_1, buffer = (String)names.next());
+        assertEquals(TEST_ATTRIBUTE_1, buffer = names.next());
         assertEquals(TEST_VALUE_1, attributes.getValue(buffer));
         assertFalse(names.hasNext());
 
@@ -100,9 +100,9 @@ public class XmlAttributesTest extends TestCase {
         attributes.add(TEST_ATTRIBUTE_2, TEST_VALUE_2);
         names = attributes.names();
         assertTrue(names.hasNext());
-        checkAttribute((String)names.next());
+        checkAttribute(names.next());
         assertTrue(names.hasNext());
-        checkAttribute((String)names.next());
+        checkAttribute(names.next());
         assertFalse(names.hasNext());
 
         // Makes sure the iterator is read-only.

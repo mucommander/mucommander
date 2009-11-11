@@ -67,7 +67,7 @@ public class EditCredentialsDialog extends FocusDialog implements ActionListener
     private JPasswordField passwordField;
 
     private AlteredVector<CredentialsMapping> credentials;
-    private DynamicList credentialsList;
+    private DynamicList<CredentialsMapping> credentialsList;
 
     private CredentialsMapping lastSelectedItem;
 
@@ -90,7 +90,7 @@ public class EditCredentialsDialog extends FocusDialog implements ActionListener
         this.credentials = CredentialsManager.getPersistentCredentialMappings();
 
         // Create the sortable credentials list panel
-        SortableListPanel listPanel = new SortableListPanel(credentials);
+        SortableListPanel<CredentialsMapping> listPanel = new SortableListPanel<CredentialsMapping>(credentials);
         this.credentialsList = listPanel.getDynamicList();
         this.lastSelectedItem = (CredentialsMapping) credentialsList.getSelectedValue();
 

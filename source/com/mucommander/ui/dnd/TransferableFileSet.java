@@ -209,12 +209,12 @@ public class TransferableFileSet implements Transferable {
             }
             // File list DataFlavor
             else if(transferable.isDataFlavorSupported(DataFlavor.javaFileListFlavor)) {
-                List fileList = (List)transferable.getTransferData(DataFlavor.javaFileListFlavor);
+                List<File> fileList = (List<File>)transferable.getTransferData(DataFlavor.javaFileListFlavor);
 
                 int nbFiles = fileList.size();
                 files = new FileSet();
                 for(int i=0; i<nbFiles; i++) {
-                    file = FileFactory.getFile(((File)fileList.get(i)).getAbsolutePath());
+                    file = FileFactory.getFile(fileList.get(i).getAbsolutePath());
 
                     if(file!=null)
                         files.add(file);
@@ -273,7 +273,7 @@ public class TransferableFileSet implements Transferable {
     //////////////////////////
 
     public DataFlavor[] getTransferDataFlavors() {
-        Vector supportedDataFlavorsV = new Vector();
+        Vector<DataFlavor> supportedDataFlavorsV = new Vector<DataFlavor>();
 
         if(fileSetFlavorSupported)
             supportedDataFlavorsV.add(FILE_SET_DATA_FLAVOR);
@@ -317,7 +317,7 @@ public class TransferableFileSet implements Transferable {
         }
         // Return files stored in a java.util.Vector instance
         else if(dataFlavor.equals(DataFlavor.javaFileListFlavor) && javaFileListFlavorSupported) {
-            Vector fileList = new Vector(nbFiles);
+            Vector<File> fileList = new Vector<File>(nbFiles);
 
             for(int i=0; i<nbFiles; i++) {
                 AbstractFile file = fileSet.elementAt(i);

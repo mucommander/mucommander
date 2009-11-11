@@ -79,10 +79,10 @@ public class ZipFile implements ZipConstants {
     private RandomAccessOutputStream raos;
 
     /** Contains ZipEntry instances corresponding to the archive's entries, in the order they were found in the archive. */
-    private Vector entries = new Vector();
+    private Vector<ZipEntry> entries = new Vector<ZipEntry>();
 
     /** Maps entry paths to corresponding ZipEntry instances */
-    private Hashtable nameMap = new Hashtable();
+    private Hashtable<String, ZipEntry> nameMap = new Hashtable<String, ZipEntry>();
 
     /** Global zip file comment */
     private String comment;
@@ -223,7 +223,7 @@ public class ZipFile implements ZipConstants {
      *
      * @return Returns all entries as an <code>Iterator</code> of ZipEntry instances.
      */
-    public Iterator getEntries() {
+    public Iterator<ZipEntry> getEntries() {
         return entries.iterator();
     }
 
@@ -243,7 +243,7 @@ public class ZipFile implements ZipConstants {
      * @return the ZipEntry corresponding to the given name or <code>null</code> if not present.
      */
     public ZipEntry getEntry(String name) {
-        return (ZipEntry) nameMap.get(name);
+        return nameMap.get(name);
     }
 
     /**
@@ -337,7 +337,7 @@ public class ZipFile implements ZipConstants {
                 raos.seek(0);
             }
             else {
-                cdStartOffset = ((ZipEntry)entries.elementAt(0)).getEntryInfo().centralHeaderOffset;
+                cdStartOffset = entries.elementAt(0).getEntryInfo().centralHeaderOffset;
                 long shift;
 
                 if(entryIndex==nbEntries-1) {
@@ -346,7 +346,7 @@ public class ZipFile implements ZipConstants {
                     // entry) to where the entry's local header started.
 
                     // The entry before the deleted one, will become the last one
-                    ZipEntryInfo lastEntryInfo = ((ZipEntry)entries.elementAt(nbEntries-2)).getEntryInfo();
+                    ZipEntryInfo lastEntryInfo = entries.elementAt(nbEntries-2).getEntryInfo();
 
                     // Destination offset
                     long newCdStartOffset = entryInfo.headerOffset;
@@ -360,7 +360,7 @@ public class ZipFile implements ZipConstants {
                     // Update central directory header offsets
                     shift = cdStartOffset-newCdStartOffset;
                     for(int i=0; i<nbEntries-1; i++)
-                        ((ZipEntry)entries.elementAt(i)).getEntryInfo().centralHeaderOffset -= shift;
+                        entries.elementAt(i).getEntryInfo().centralHeaderOffset -= shift;
 
                     cdStartOffset = newCdStartOffset;
                     cdEndOffset = newCdStartOffset + cdLength;
@@ -385,9 +385,9 @@ public class ZipFile implements ZipConstants {
                     // - move the file headers that are located after the deleted entry to where the deleted entry's
                     // header was (this will remove the deleted entry's file header)
                     
-                    ZipEntryInfo lastEntryInfo = ((ZipEntry)entries.elementAt(nbEntries-1)).getEntryInfo();
+                    ZipEntryInfo lastEntryInfo = entries.elementAt(nbEntries-1).getEntryInfo();
 
-                    long startOffset = ((ZipEntry)entries.elementAt(entryIndex+1)).getEntryInfo().centralHeaderOffset;
+                    long startOffset = entries.elementAt(entryIndex+1).getEntryInfo().centralHeaderOffset;
                     cdEndOffset = lastEntryInfo.centralHeaderOffset + lastEntryInfo.centralHeaderLen;
 
                     StreamUtils.copyChunk(rais, raos, startOffset, entryInfo.centralHeaderOffset, cdEndOffset-startOffset);
@@ -396,7 +396,7 @@ public class ZipFile implements ZipConstants {
                     // offset has changed
                     shift = entryInfo.centralHeaderLen;
                     for(int i=entryIndex+1; i<nbEntries; i++)
-                        ((ZipEntry)entries.elementAt(i)).getEntryInfo().centralHeaderOffset -= shift;
+                        entries.elementAt(i).getEntryInfo().centralHeaderOffset -= shift;
 
                     cdEndOffset -= shift;
                 }
@@ -473,7 +473,7 @@ public class ZipFile implements ZipConstants {
                     long cdLength = 0;                  // Length of central directory
                     long cdOffset = raos.getOffset();   // Offset of central directory
                     for(int i=0; i<nbEntries; i++) {
-                        tempZe = (ZipEntry)entries.elementAt(i);
+                        tempZe = entries.elementAt(i);
                         tempEntryInfo = tempZe.getEntryInfo();
 
                         // Update offset to central header
@@ -593,7 +593,7 @@ public class ZipFile implements ZipConstants {
 
             // Special case for the first entry
 
-            currentEntry = (ZipEntry)entries.elementAt(0);
+            currentEntry = entries.elementAt(0);
             currentEntryInfo = currentEntry.getEntryInfo();
 
             // If data offset is -1 (not calculated yet), calculate it now
@@ -614,7 +614,7 @@ public class ZipFile implements ZipConstants {
             // Process all other entries
 
             for(int i=1; i<nbEntries; i++) {
-                currentEntry = (ZipEntry)entries.elementAt(i);
+                currentEntry = entries.elementAt(i);
                 currentEntryInfo = currentEntry.getEntryInfo();
 
                 // If data offset is -1 (not calculated yet), calculate it now
@@ -649,7 +649,7 @@ public class ZipFile implements ZipConstants {
                 ZipEntryInfo entryInfo;
 
                 for(int i=0; i<nbEntries; i++) {
-                    ze = (ZipEntry)entries.elementAt(i);
+                    ze = entries.elementAt(i);
                     entryInfo = ze.getEntryInfo();
 
                     // Update offset to central directory file header
@@ -895,7 +895,7 @@ public class ZipFile implements ZipConstants {
             ZipEntry entry;
             ZipEntryInfo entryInfo;
             for(int i=0; i<nbEntries; i++) {
-                entry = (ZipEntry)entries.elementAt(i);
+                entry = entries.elementAt(i);
                 entryInfo = entry.getEntryInfo();
 
                 // Skip those entries for which we know the encoding already

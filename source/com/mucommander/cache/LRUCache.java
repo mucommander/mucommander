@@ -20,7 +20,6 @@
 package com.mucommander.cache;
 
 import com.mucommander.commons.CommonsLogger;
-import com.mucommander.runtime.JavaVersions;
 
 
 /**
@@ -34,14 +33,6 @@ import com.mucommander.runtime.JavaVersions;
  * <p>This LRUCache provides an optional feature : the ability to assign a time-to-live for each or part of the
  * items added. When the time-to-live of an item expires, the item is automatically removed from the cache and won't
  * be returned by the {@link #get(Object) get()} method anymore.</p>
- *
- * <p>Two implementations are provided, for use with the following Java runtimes:
- * <ul>
- * <li>{@link com.mucommander.cache.FastLRUCache} for Java 1.4 and above
- * <li>{@link com.mucommander.cache.LegacyLRUCache} for Java 1.3
- * </ul>
- * Use the {@link #createInstance(int) createInstance()} method to retrieve an instance of the best implementation
- * for the current Java runtime.</p>
  *
  * <p><b>Implementation note:</b> checking for expired items can be an expensive operation so it doesn't have
  * to be done as soon as the item has expired, the expired items can live a bit longer in the cache if necessary.
@@ -106,22 +97,6 @@ public abstract class LRUCache<K, V> {
     }
 
 
-    /**
-     * Creates and returns a new LRUCache using the best implementation for the current
-     * Java runtime version: {@link com.mucommander.cache.FastLRUCache} for Java 1.4 and above, 
-     * {@link com.mucommander.cache.LegacyLRUCache} for Java 1.3.
-     *
-     * @param capacity the new LRUCache's capacity
-     * @return an instance of the best LRUCache implementation for the current Java runtime 
-     */
-    public static LRUCache createInstance(int capacity) {
-        if(JavaVersions.JAVA_1_4.isCurrentOrHigher())
-            return new FastLRUCache(capacity);
-        else
-            return new LegacyLRUCache(capacity);
-    }
-	
-	
     ///////////////////////
     // Absctract methods //
     ///////////////////////
@@ -140,7 +115,7 @@ public abstract class LRUCache<K, V> {
      * @return the cached value corresponding to the specified key, or <code>null</code> if a value could not
      * found or has expired
      */
-    public abstract V get(Object key);
+    public abstract V get(K key);
 	
     /**
      * Adds a new key/value pair to the cache and marks it as the most recently used.
@@ -195,7 +170,7 @@ public abstract class LRUCache<K, V> {
      * Test method : simple test case + stress/sanity test
      */
     public static void main(String args[]) {
-        LRUCache cache;
+        LRUCache<Integer, Integer> cache;
         /*
         // Simple test case
         cache = new FastLRUCache(3);
@@ -228,7 +203,7 @@ public abstract class LRUCache<K, V> {
 
         // Stress test to see if everything looks OK after a few thousand iterations
         int capacity = 1000;
-        cache = new FastLRUCache(capacity);
+        cache = new FastLRUCache<Integer, Integer>(capacity);
         java.util.Random random = new java.util.Random();
         for(int i=0; i<100000; i++) {
             // 50% chance to add a new element with a random value and expiration date (50% chance for no expiration date)

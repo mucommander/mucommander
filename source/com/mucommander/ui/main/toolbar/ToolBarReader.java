@@ -39,8 +39,8 @@ import java.util.Vector;
 public class ToolBarReader extends ToolBarIO {
 
     /** Temporarily used for XML parsing */
-    private Vector actionsV;
-    
+    private Vector<String> actionIdsV;
+
     /**
      * Starts parsing the XML description file.
      */
@@ -58,9 +58,9 @@ public class ToolBarReader extends ToolBarIO {
     }
     
     public String[] getActionsRead() {
-    	int nbActions = actionsV.size();
+    	int nbActions = actionIdsV.size();
     	String[] actionIds = new String[nbActions];
-        actionsV.toArray(actionIds);
+        actionIdsV.toArray(actionIds);
         return actionIds;
     }
 
@@ -69,7 +69,7 @@ public class ToolBarReader extends ToolBarIO {
     ////////////////////////////
 
     public void startDocument() {
-        actionsV = new Vector();
+        actionIdsV = new Vector<String>();
     }
 
     public void endDocument() {}
@@ -80,7 +80,7 @@ public class ToolBarReader extends ToolBarIO {
         	String actionIdAttribute = attributes.getValue(ACTION_ID_ATTRIBUTE);
         	if (actionIdAttribute != null) {
         		if (ActionManager.isActionExist(actionIdAttribute))
-        			actionsV.add(actionIdAttribute);
+        			actionIdsV.add(actionIdAttribute);
         		else
         			AppLogger.warning("Error in "+DEFAULT_TOOLBAR_FILE_NAME+": action id \"" + actionIdAttribute + "\" not found");
         	}
@@ -89,13 +89,13 @@ public class ToolBarReader extends ToolBarIO {
         		String actionClassAttribute = attributes.getValue(ACTION_ATTRIBUTE);
         		String actionId = ActionManager.extrapolateId(actionClassAttribute);
         		if (ActionManager.isActionExist(actionId))
-        			actionsV.add(actionId);
+        			actionIdsV.add(actionId);
         		else
         			AppLogger.warning("Error in "+DEFAULT_TOOLBAR_FILE_NAME+": action id for class " + actionClassAttribute + " was not found");
         	}
         }
         else if(qName.equals(SEPARATOR_ELEMENT)) {
-            actionsV.add(null);
+            actionIdsV.add(null);
         }
         else if (qName.equals(ROOT_ELEMENT)) {
         	// Note: early 0.8 beta3 nightly builds did not have version attribute, so the attribute may be null
