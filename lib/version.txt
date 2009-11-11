@@ -1,9 +1,7 @@
 include/ant-bzip2.jar	        -> from Ant 1.7.0 (compiled for Java 1.4)
 include/commons-collections.jar -> Commons-logging (custom-made JAR, empty stubs)
 include/commons-logging.jar     -> Commons-logging (custom-made JAR, empty stubs)
-include/commons-net.jar	        -> Commons-net 1.5.0 SVN updated on June 2nd, 2008
-                                   (with 'allow listing of hidden files' patch,
-                                   compiled for Java 1.4)
+include/commons-net-ftp.jar	    -> Commons-net FTP 2.0 (custom-made with a couple of patch)
 include/icu4j.jar               -> IBM ICU4J 3.8.1, JAR file trimmed to include
                                    only the CharsetDetector functionality
 include/j2ssh.jar	            -> J2SSH 0.2.9 (patched and compiled for Java 1.4)

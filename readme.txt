@@ -137,6 +137,7 @@ New features:
 Improvements:
 - A proper error message is displayed when muCommander is started in a
   headless environment.
+- Upgraded the commons-net FTP library to version 2.0.  
 
 Localization:
 -
