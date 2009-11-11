@@ -253,7 +253,7 @@ public class Translator {
      * @param paramValues array of parameters which will be used as values for variables.
      * @return the localized text String for the given key expressd in the current language
      */
-    public static String get(String key, String paramValues[]) {
+    public static String get(String key, String... paramValues) {
         // Returns the localized text
         String text = dictionary.get(key.toLowerCase());
 
@@ -291,58 +291,6 @@ public class Translator {
         }
 
         return text;
-    }
-
-
-    /**
-     * Convenience method, equivalent to <code>get(key, (String[])null)</code>.
-     *
-     * @param key key of the requested dictionary entry (case-insensitive)
-     * @return the localized text String for the given key expressd in the current language
-     */
-    public static String get(String key) {
-        return get(key, (String[])null);
-    }
-
-
-    /**
-     * Convenience method, equivalent to <code>get(key, new String[]{paramValue1})</code>)</code>.
-     *
-     * @param key key of the requested dictionary entry (case-insensitive)
-     * @param paramValue1 first parameter which will be used to replace %1 variables.
-     * @return the localized text String for the given key expressd in the current language
-     */
-    public static String get(String key, String paramValue1) {
-        return get(key, new String[] {paramValue1});
-    }
-
-
-    /**
-     * Convenience method, equivalent to <code>get(key, new String[]{paramValue1, paramValue2})</code>)</code>.
-     *
-     * @param key key of the requested dictionary entry (case-insensitive)
-     * @param paramValue1 first parameter which will be used to replace %1 variables.
-     * @param paramValue2 second parameter which will be used to replace %2 variables.
-     * @return the localized text String for the given key expressd in the current language
-     */
-    public static String get(String key, String paramValue1, String paramValue2) {
-        return get(key, new String[] {paramValue1, paramValue2});
-    }
-
-
-    /**
-     * Convenience method, equivalent to <code>get(key, new String[]{paramValue1, paramValue2, paramValue3})</code>)</code>.
-     *
-     * @param key key of the requested dictionary entry (case-insensitive)
-     * @param paramValue1 first parameter which will be used to replace %1 variables.
-     * @param paramValue2 second parameter which will be used to replace %2 variables.
-     * @param paramValue3 third parameter which will be used to replace %3 variables.
-     * @return the localized text String for the given key expressd in the current language
-     */
-    public static String get(String key, String paramValue1, String paramValue2, String paramValue3) {
-        return get(key, new String[] {
-                       paramValue1, paramValue2, paramValue3
-                   });
     }
 
 
