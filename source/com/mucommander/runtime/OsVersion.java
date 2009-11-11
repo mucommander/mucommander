@@ -124,14 +124,20 @@ public class OsVersion extends ComparableRuntimeProperty implements OsVersions {
             else if(osNameProp.equals("Windows Vista")) {
                 osVersion = WINDOWS_VISTA;
             }
+            else if(osNameProp.equals("Windows 7")) {
+                osVersion = WINDOWS_7;
+            }
             else {
                 // Newer version we don't know of yet, assume latest supported OS version
-                osVersion = WINDOWS_VISTA;
+                osVersion = WINDOWS_7;
             }
         }
         // Mac OS X versions
         else if(osFamily==OsFamilies.MAC_OS_X) {
-            if(osVersionProp.startsWith("10.5")) {
+            if(osVersionProp.startsWith("10.6")) {
+                osVersion = MAC_OS_X_10_6;
+            }
+            else if(osVersionProp.startsWith("10.5")) {
                 osVersion = MAC_OS_X_10_5;
             }
             else if(osVersionProp.startsWith("10.4")) {
@@ -151,7 +157,7 @@ public class OsVersion extends ComparableRuntimeProperty implements OsVersions {
             }
             else {
                 // Newer version we don't know of yet, assume latest supported OS version
-                osVersion = MAC_OS_X_10_5;
+                osVersion = MAC_OS_X_10_6;
             }
         }
         else {
