@@ -52,8 +52,10 @@ public class RarArchiveFile extends AbstractROArchiveFile {
      * and declare the Rar file as up-to-date.
      *
      * @throws IOException if an error occurred while reloading
+     * @throws UnsupportedFileOperationException if this operation is not supported by the underlying file protocol,
+     * or is not implemented.
      */
-    private void checkRarFile() throws IOException {
+    private void checkRarFile() throws IOException, UnsupportedFileOperationException {
         long currentDate = file.getDate();
         
         if (rarFile==null || currentDate != lastRarFileDate) {
@@ -92,7 +94,7 @@ public class RarArchiveFile extends AbstractROArchiveFile {
     //////////////////////////////////////////
     
     @Override
-    public synchronized ArchiveEntryIterator getEntryIterator() throws IOException {
+    public synchronized ArchiveEntryIterator getEntryIterator() throws IOException, UnsupportedFileOperationException {
         checkRarFile();
 
         Vector<ArchiveEntry> entries = new Vector<ArchiveEntry>();
@@ -103,7 +105,7 @@ public class RarArchiveFile extends AbstractROArchiveFile {
     }
 
     @Override
-    public synchronized InputStream getEntryInputStream(ArchiveEntry entry, ArchiveEntryIterator entryIterator) throws IOException {
+    public synchronized InputStream getEntryInputStream(ArchiveEntry entry, ArchiveEntryIterator entryIterator) throws IOException, UnsupportedFileOperationException {
 		checkRarFile();
 		
 		return rarFile.getEntryInputStream(entry.getPath().replace('/', '\\'));

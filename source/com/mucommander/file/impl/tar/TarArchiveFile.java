@@ -60,8 +60,10 @@ public class TarArchiveFile extends AbstractROArchiveFile {
      * <code>0</code> to start at the first entry.
      * @return a TarInputStream which can be used to read TAR entries
      * @throws IOException if an error occurred while create the stream
+     * @throws UnsupportedFileOperationException if this operation is not supported by the underlying file protocol,
+     * or is not implemented.
      */
-    private TarInputStream createTarStream(long entryOffset) throws IOException {
+    private TarInputStream createTarStream(long entryOffset) throws IOException, UnsupportedFileOperationException {
         InputStream in = file.getInputStream();
 
         String name = getName();
@@ -103,13 +105,13 @@ public class TarArchiveFile extends AbstractROArchiveFile {
     ////////////////////////////////////////
 
     @Override
-    public ArchiveEntryIterator getEntryIterator() throws IOException {
+    public ArchiveEntryIterator getEntryIterator() throws IOException, UnsupportedFileOperationException {
         return new TarEntryIterator(createTarStream(0));
     }
 
 
     @Override
-    public InputStream getEntryInputStream(ArchiveEntry entry, ArchiveEntryIterator entryIterator) throws IOException {
+    public InputStream getEntryInputStream(ArchiveEntry entry, ArchiveEntryIterator entryIterator) throws IOException, UnsupportedFileOperationException {
         if(entry.isDirectory())
             throw new IOException();
 

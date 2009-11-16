@@ -41,8 +41,10 @@ public class SevenZipArchiveFile extends AbstractROArchiveFile {
      * and declare the 7zip file as up-to-date.
      *
      * @throws IOException if an error occurred while reloading
+     * @throws UnsupportedFileOperationException if this operation is not supported by the underlying file protocol,
+     * or is not implemented.
      */
-    private void checkSevenZipFile() throws IOException {
+    private void checkSevenZipFile() throws IOException, UnsupportedFileOperationException {
         long currentDate = file.getDate();
         
         if (sevenZipFile==null || currentDate != lastSevenZipFileDate) {
@@ -64,7 +66,7 @@ public class SevenZipArchiveFile extends AbstractROArchiveFile {
     }
     
     /**
-     * Creates and return an {@link ArchiveEntry()} whose attributes are fetched from the given {@link com.mucommander.file.impl.sevenzip.provider.SevenZip.Archive.SevenZipEntry}
+     * Creates and return an {@link ArchiveEntry()} whose attributes are fetched from the given {@link SevenZipEntry}
      *
      * @param entry the object that serves to initialize the attributes of the returned ArchiveEntry
      * @return an ArchiveEntry whose attributes are fetched from the given SevenZipEntry
@@ -80,7 +82,7 @@ public class SevenZipArchiveFile extends AbstractROArchiveFile {
     //////////////////////////////////////////
 
 	@Override
-    public InputStream getEntryInputStream(final ArchiveEntry entry, ArchiveEntryIterator entryIterator) throws IOException {
+    public InputStream getEntryInputStream(final ArchiveEntry entry, ArchiveEntryIterator entryIterator) throws IOException, UnsupportedFileOperationException {
 		checkSevenZipFile();
 		
 		final FailSafePipedInputStream in = new FailSafePipedInputStream();
@@ -88,9 +90,7 @@ public class SevenZipArchiveFile extends AbstractROArchiveFile {
 
 		threadPool.execute(new Runnable() {
 			public void run() {
-		        BufferedOutputStream bufferStream = null;
-
-		        bufferStream = new BufferedOutputStream(out);
+		        BufferedOutputStream bufferStream = new BufferedOutputStream(out);
 		        try {
 					MuArchiveExtractCallback extractCallbackSpec = new MuArchiveExtractCallback(bufferStream, entry.getPath());
 			        extractCallbackSpec.Init(sevenZipFile);
@@ -109,7 +109,7 @@ public class SevenZipArchiveFile extends AbstractROArchiveFile {
 	}
 
 	@Override
-    public ArchiveEntryIterator getEntryIterator() throws IOException {
+    public ArchiveEntryIterator getEntryIterator() throws IOException, UnsupportedFileOperationException {
 		checkSevenZipFile();
 
     	Vector<SevenZip.Archive.SevenZipEntry> result = new Vector<SevenZip.Archive.SevenZipEntry>();

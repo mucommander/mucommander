@@ -18,10 +18,7 @@
 
 package com.mucommander.file.impl;
 
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.FileLogger;
-import com.mucommander.file.FilePermissions;
-import com.mucommander.file.FileProtocols;
+import com.mucommander.file.*;
 import com.mucommander.file.filter.FileFilter;
 import com.mucommander.file.filter.FilenameFilter;
 import com.mucommander.file.impl.local.LocalFile;
@@ -477,7 +474,7 @@ public class CachedFile extends ProxyFile {
     ////////////////////////////////////////////////
 
     @Override
-    public AbstractFile[] ls() throws IOException {
+    public AbstractFile[] ls() throws IOException, UnsupportedFileOperationException {
         // Don't cache ls() result but create a CachedFile instance around each of the files if recursion is enabled
         AbstractFile files[] = file.ls();
 
@@ -488,7 +485,7 @@ public class CachedFile extends ProxyFile {
     }
 
     @Override
-    public AbstractFile[] ls(FileFilter filter) throws IOException {
+    public AbstractFile[] ls(FileFilter filter) throws IOException, UnsupportedFileOperationException {
         // Don't cache ls() result but create a CachedFile instance around each of the files if recursion is enabled
         AbstractFile files[] = file.ls(filter);
 
@@ -499,7 +496,7 @@ public class CachedFile extends ProxyFile {
     }
 
     @Override
-    public AbstractFile[] ls(FilenameFilter filter) throws IOException {
+    public AbstractFile[] ls(FilenameFilter filter) throws IOException, UnsupportedFileOperationException {
         // Don't cache ls() result but create a CachedFile instance around each of the files if recursion is enabled
         AbstractFile files[] = file.ls(filter);
 

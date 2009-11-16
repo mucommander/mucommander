@@ -18,10 +18,7 @@
 
 package com.mucommander.file.impl;
 
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.FilePermissions;
-import com.mucommander.file.FileURL;
-import com.mucommander.file.PermissionBits;
+import com.mucommander.file.*;
 import com.mucommander.file.filter.FileFilter;
 import com.mucommander.file.filter.FilenameFilter;
 import com.mucommander.io.FileTransferException;
@@ -155,22 +152,22 @@ public abstract class ProxyFile extends AbstractFile {
     }
 
     @Override
-    public AbstractFile[] ls() throws IOException {
+    public AbstractFile[] ls() throws IOException, UnsupportedFileOperationException {
         return file.ls();
     }
 
     @Override
-    public void mkdir() throws IOException {
+    public void mkdir() throws IOException, UnsupportedFileOperationException {
         file.mkdir();
     }
 
     @Override
-    public InputStream getInputStream() throws IOException {
+    public InputStream getInputStream() throws IOException, UnsupportedFileOperationException {
         return file.getInputStream();
     }
 
     @Override
-    public OutputStream getOutputStream(boolean append) throws IOException {
+    public OutputStream getOutputStream(boolean append) throws IOException, UnsupportedFileOperationException {
         return file.getOutputStream(append);
     }
 
@@ -180,7 +177,7 @@ public abstract class ProxyFile extends AbstractFile {
     }
 
     @Override
-    public RandomAccessInputStream getRandomAccessInputStream() throws IOException {
+    public RandomAccessInputStream getRandomAccessInputStream() throws IOException, UnsupportedFileOperationException {
         return file.getRandomAccessInputStream();
     }
 
@@ -190,12 +187,12 @@ public abstract class ProxyFile extends AbstractFile {
     }
 
     @Override
-    public RandomAccessOutputStream getRandomAccessOutputStream() throws IOException {
+    public RandomAccessOutputStream getRandomAccessOutputStream() throws IOException, UnsupportedFileOperationException {
         return file.getRandomAccessOutputStream();
     }
 
     @Override
-    public void delete() throws IOException {
+    public void delete() throws IOException, UnsupportedFileOperationException {
         file.delete();
     }
 
@@ -305,7 +302,7 @@ public abstract class ProxyFile extends AbstractFile {
     }
 
     @Override
-    public InputStream getInputStream(long offset) throws IOException {
+    public InputStream getInputStream(long offset) throws IOException, UnsupportedFileOperationException {
         return file.getInputStream(offset);
     }
 
@@ -335,22 +332,22 @@ public abstract class ProxyFile extends AbstractFile {
     }
 
     @Override
-    public AbstractFile[] ls(FileFilter filter) throws IOException {
+    public AbstractFile[] ls(FileFilter filter) throws IOException, UnsupportedFileOperationException {
         return file.ls(filter);
     }
 
     @Override
-    public AbstractFile[] ls(FilenameFilter filter) throws IOException {
+    public AbstractFile[] ls(FilenameFilter filter) throws IOException, UnsupportedFileOperationException {
         return file.ls(filter);
     }
 
     @Override
-    public void mkfile() throws IOException {
+    public void mkfile() throws IOException, UnsupportedFileOperationException {
         file.mkfile();
     }
 
     @Override
-    public void deleteRecursively() throws IOException {
+    public void deleteRecursively() throws IOException, UnsupportedFileOperationException {
         file.deleteRecursively();
     }
 

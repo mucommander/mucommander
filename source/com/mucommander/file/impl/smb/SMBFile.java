@@ -373,11 +373,11 @@ import java.net.MalformedURLException;
 
     @Override
     public RandomAccessInputStream getRandomAccessInputStream() throws IOException {
-        // This needs to be checked explicitely (SmbRandomAccessFile can be created even if the file does not exist)
+        // This needs to be checked explicitly (SmbRandomAccessFile can be created even if the file does not exist)
         if(!exists())
             throw new IOException();
 
-//        // Explicitely allow the file to be read/write/delete by another random access file while this one is open
+//        // Explicitly allow the file to be read/write/delete by another random access file while this one is open
 //        return new SMBRandomAccessInputStream(new SmbRandomAccessFile(fileURL.toString(true), "r", SmbFile.FILE_SHARE_READ | SmbFile.FILE_SHARE_WRITE | SmbFile.FILE_SHARE_DELETE));
         return new SMBRandomAccessInputStream(new SmbRandomAccessFile(file, "r"));
     }
@@ -389,7 +389,7 @@ import java.net.MalformedURLException;
 
     @Override
     public RandomAccessOutputStream getRandomAccessOutputStream() throws IOException {
-//        // Explicitely allow the file to be read/write/delete by another random access file while this one is open
+//        // Explicitly allow the file to be read/write/delete by another random access file while this one is open
 //        return new SMBRandomAccessOutputStream(new SmbRandomAccessFile(fileURL.toString(true), "rw", SmbFile.FILE_SHARE_READ | SmbFile.FILE_SHARE_WRITE | SmbFile.FILE_SHARE_DELETE));
         return new SMBRandomAccessOutputStream(new SmbRandomAccessFile(file, "rw"));
     }
@@ -548,7 +548,7 @@ import java.net.MalformedURLException;
      * uses SMB.
      */
     @Override
-    public boolean moveTo(AbstractFile destFile) throws FileTransferException  {
+    public boolean moveTo(AbstractFile destFile) throws FileTransferException {
         // File can only be moved directly if the destination if it is on an SMB share
         // (but not necessarily on the same host).
         // Use the default moveTo() implementation if the destination file doesn't use the same scheme

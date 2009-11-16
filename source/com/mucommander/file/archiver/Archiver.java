@@ -21,6 +21,7 @@ package com.mucommander.file.archiver;
 
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileAttributes;
+import com.mucommander.file.UnsupportedFileOperationException;
 import com.mucommander.io.BufferedRandomOutputStream;
 import com.mucommander.io.RandomAccessOutputStream;
 import org.apache.tools.bzip2.CBZip2OutputStream;
@@ -228,8 +229,9 @@ public abstract class Archiver {
      * @return an Archiver for the specified format and that uses the given {@link AbstractFile} to write entries to ;
      * null if the specified format is not valid.
      * @throws IOException if the file cannot be opened for write, or if an error occurred while intializing the archiver
+     * @throws UnsupportedFileOperationException if the underlying filesystem does not support write operations
      */
-    public static Archiver getArchiver(AbstractFile file, int format) throws IOException {
+    public static Archiver getArchiver(AbstractFile file, int format) throws IOException, UnsupportedFileOperationException {
         OutputStream out = null;
 
         if(file.hasRandomAccessOutputStream()) {

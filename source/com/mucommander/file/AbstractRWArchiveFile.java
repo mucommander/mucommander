@@ -77,8 +77,10 @@ public abstract class AbstractRWArchiveFile extends AbstractArchiveFile {
      * @param entry the entry to add to the archive
      * @return an OutputStream to write the entry's contents if the entry is a regular file, null if the entry is a directory
      * @throws IOException if the entry already exists in the archive or if an I/O error occurs
+     * @throws UnsupportedFileOperationException if this operation is not supported by the underlying file protocol,
+     * or is not implemented.
      */
-    public abstract OutputStream addEntry(ArchiveEntry entry) throws IOException;
+    public abstract OutputStream addEntry(ArchiveEntry entry) throws IOException, UnsupportedFileOperationException;
 
     /**
      * Deletes the specified entry from the archive. Throws an <code>IOException</code> if the entry doesn't exist
@@ -86,8 +88,10 @@ public abstract class AbstractRWArchiveFile extends AbstractArchiveFile {
      *
      * @param entry the entry to delete from the archive
      * @throws IOException if the entry doesn't exist in the archive or if an I/O error occurs
+     * @throws UnsupportedFileOperationException if this operation is not supported by the underlying file protocol,
+     * or is not implemented.
      */
-    public abstract void deleteEntry(ArchiveEntry entry) throws IOException;
+    public abstract void deleteEntry(ArchiveEntry entry) throws IOException, UnsupportedFileOperationException;
 
     /**
      * Updates the specified entry in the archive with the attributes containted in the {@link ArchiveEntry} object.
@@ -97,8 +101,10 @@ public abstract class AbstractRWArchiveFile extends AbstractArchiveFile {
      *
      * @param entry the entry to update in the archive
      * @throws IOException if the entry doesn't exist in the archive or if an I/O error occurs
+     * @throws UnsupportedFileOperationException if this operation is not supported by the underlying file protocol,
+     * or is not implemented.
      */
-    public abstract void updateEntry(ArchiveEntry entry) throws IOException;
+    public abstract void updateEntry(ArchiveEntry entry) throws IOException, UnsupportedFileOperationException;
 
     /**
      * Processes the archive file to leave it in an optimal form. This method should be called after a writable archive
@@ -110,6 +116,8 @@ public abstract class AbstractRWArchiveFile extends AbstractArchiveFile {
      * of free space that are left when entries are deleted.</p>
      *
      * @throws IOException if an I/O error occurs
+     * @throws UnsupportedFileOperationException if this operation is not supported by the underlying file protocol,
+     * or is not implemented.
      */
-    public abstract void optimizeArchive() throws IOException;
+    public abstract void optimizeArchive() throws IOException, UnsupportedFileOperationException;
 }

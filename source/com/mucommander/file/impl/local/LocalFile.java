@@ -887,7 +887,7 @@ public class LocalFile extends ProtocolFile {
      * is also a local file.
      */
     @Override
-    public boolean moveTo(AbstractFile destFile) throws FileTransferException  {
+    public boolean moveTo(AbstractFile destFile) throws FileTransferException {
         // If destination file is not a LocalFile nor has a LocalFile ancestor (for instance an archive entry),
         // renaming won't work so use the default moveTo() implementation instead
         if(!destFile.getURL().getScheme().equals(FileProtocols.FILE)) {

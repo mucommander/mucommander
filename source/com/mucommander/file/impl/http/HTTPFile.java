@@ -420,11 +420,13 @@ public class HTTPFile extends ProtocolFile {
     }
 
     /**
-     * Not available, always throws an <code>IOException</code>.
+     * Always throws an {@link UnsupportedFileOperationException}: HTTP files are read-only.
+     *
+     * @throws UnsupportedFileOperationException always
      */
     @Override
-    public OutputStream getOutputStream(boolean append) throws IOException {
-        throw new IOException();
+    public OutputStream getOutputStream(boolean append) throws UnsupportedFileOperationException {
+        throw new UnsupportedFileOperationException();
     }
 
     @Override
@@ -442,25 +444,34 @@ public class HTTPFile extends ProtocolFile {
         return false;
     }
 
+    /**
+     * Always throws an {@link UnsupportedFileOperationException}: HTTP files are read-only.
+     *
+     * @throws UnsupportedFileOperationException always
+     */
     @Override
-    public RandomAccessOutputStream getRandomAccessOutputStream() throws IOException {
-        throw new IOException();
+    public RandomAccessOutputStream getRandomAccessOutputStream() throws UnsupportedFileOperationException {
+        throw new UnsupportedFileOperationException();
     }
 
     /**
-     * Not available, always throws an <code>IOException</code>.
+     * Always throws an {@link UnsupportedFileOperationException}: HTTP files are read-only.
+     *
+     * @throws UnsupportedFileOperationException always
      */
     @Override
-    public void delete() throws IOException {
-        throw new IOException();
+    public void delete() throws UnsupportedFileOperationException {
+        throw new UnsupportedFileOperationException();
     }
 
     /**
-     * Not available, always throws an <code>IOException</code>.
+     * Always throws an {@link UnsupportedFileOperationException}: HTTP files are read-only.
+     *
+     * @throws UnsupportedFileOperationException always
      */
     @Override
-    public void mkdir() throws IOException {
-        throw new IOException();
+    public void mkdir() throws UnsupportedFileOperationException {
+        throw new UnsupportedFileOperationException();
     }
 
     /**

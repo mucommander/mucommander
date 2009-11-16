@@ -176,17 +176,17 @@ public class ArchiveEntryFile extends AbstractFile {
     }
 
     @Override
-    public AbstractFile[] ls() throws IOException {
+    public AbstractFile[] ls() throws IOException, UnsupportedFileOperationException {
         return archiveFile.ls(this, null, null);
     }
 
     @Override
-    public AbstractFile[] ls(FilenameFilter filter) throws IOException {
+    public AbstractFile[] ls(FilenameFilter filter) throws IOException, UnsupportedFileOperationException {
         return archiveFile.ls(this, filter, null);
     }
 	
     @Override
-    public AbstractFile[] ls(FileFilter filter) throws IOException {
+    public AbstractFile[] ls(FileFilter filter) throws IOException, UnsupportedFileOperationException {
         return archiveFile.ls(this, null, filter);
     }
 
@@ -276,7 +276,7 @@ public class ArchiveEntryFile extends AbstractFile {
      * @throws IOException in any of the cases listed above.
      */
     @Override
-    public void delete() throws IOException {
+    public void delete() throws IOException, UnsupportedFileOperationException {
         if(entry.exists() && archiveFile.isWritable()) {
             AbstractRWArchiveFile rwArchiveFile = (AbstractRWArchiveFile)archiveFile;
 
@@ -312,7 +312,7 @@ public class ArchiveEntryFile extends AbstractFile {
      * or if an I/O error occurred
      */
     @Override
-    public void mkdir() throws IOException {
+    public void mkdir() throws IOException, UnsupportedFileOperationException {
         if(!entry.exists() && archiveFile.isWritable()) {
             AbstractRWArchiveFile rwArchivefile = (AbstractRWArchiveFile)archiveFile;
             // Update the ArchiveEntry
@@ -351,7 +351,7 @@ public class ArchiveEntryFile extends AbstractFile {
      * method.
      */
     @Override
-    public InputStream getInputStream() throws IOException {
+    public InputStream getInputStream() throws IOException, UnsupportedFileOperationException {
         return archiveFile.getEntryInputStream(entry, null);
     }
 
@@ -367,9 +367,10 @@ public class ArchiveEntryFile extends AbstractFile {
      *
      * @throws IOException if the associated archive file is not writable, if this entry already exists in the archive,
      * or if an I/O error occurred
+     * @throws UnsupportedFileOperationException if the associated archive file is not writable
      */
     @Override
-    public OutputStream getOutputStream(boolean append) throws IOException {
+    public OutputStream getOutputStream(boolean append) throws IOException, UnsupportedFileOperationException {
         if(archiveFile.isWritable()) {
             if(append)
                 throw new IOException("Can't append to an existing archive entry");
@@ -397,7 +398,7 @@ public class ArchiveEntryFile extends AbstractFile {
             return out;
         }
         else
-            throw new IOException();
+            throw new UnsupportedFileOperationException();
     }
 
     /**
@@ -409,11 +410,14 @@ public class ArchiveEntryFile extends AbstractFile {
     }
 
     /**
-     * Always throws an <code>IOException</code>: random read access is not available for archive entries.
+     * Always throws an {@link UnsupportedFileOperationException}: random read access is not available for archive
+     * entries.
+     *
+     * @throws UnsupportedFileOperationException always
      */
     @Override
-    public RandomAccessInputStream getRandomAccessInputStream() throws IOException {
-        throw new IOException();
+    public RandomAccessInputStream getRandomAccessInputStream() throws UnsupportedFileOperationException {
+        throw new UnsupportedFileOperationException();
     }
 
     /**
@@ -425,11 +429,14 @@ public class ArchiveEntryFile extends AbstractFile {
     }
 
     /**
-     * Always throws an <code>IOException</code>: random write access is not available for archive entries.
+     * Always throws an {@link UnsupportedFileOperationException}: random write access is not available for archive
+     * entries.
+     *
+     * @throws UnsupportedFileOperationException always
      */
     @Override
-    public RandomAccessOutputStream getRandomAccessOutputStream() throws IOException {
-        throw new IOException();
+    public RandomAccessOutputStream getRandomAccessOutputStream() throws UnsupportedFileOperationException {
+        throw new UnsupportedFileOperationException();
     }
 
     /**

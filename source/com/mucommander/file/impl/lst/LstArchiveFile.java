@@ -60,12 +60,12 @@ public class LstArchiveFile extends AbstractROArchiveFile {
     ////////////////////////////////////////
 
     @Override
-    public ArchiveEntryIterator getEntryIterator() throws IOException {
+    public ArchiveEntryIterator getEntryIterator() throws IOException, UnsupportedFileOperationException {
         return new LstArchiveEntryIterator(getInputStream());
     }
 
     @Override
-    public InputStream getEntryInputStream(ArchiveEntry entry, ArchiveEntryIterator entryIterator) throws IOException {
+    public InputStream getEntryInputStream(ArchiveEntry entry, ArchiveEntryIterator entryIterator) throws IOException, UnsupportedFileOperationException {
         // Will throw an IOException if the file designated by the entry doesn't exist 
         return FileFactory.getFile(((LstArchiveEntry)entry).getBaseFolder()+entry.getPath(), true).getInputStream();
     }

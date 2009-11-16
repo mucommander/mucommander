@@ -498,9 +498,14 @@ public class FTPFile extends ProtocolFile implements ConnectionHandlerFactory {
         return false;
     }
 
+    /**
+     * Always throws an {@link UnsupportedFileOperationException}: random read access is not available.
+     *
+     * @throws UnsupportedFileOperationException always
+     */
     @Override
-    public RandomAccessInputStream getRandomAccessInputStream() throws IOException {
-        throw new IOException();
+    public RandomAccessInputStream getRandomAccessInputStream() throws UnsupportedFileOperationException {
+        throw new UnsupportedFileOperationException();
     }
 
 //    public boolean hasRandomAccessInputStream() {
@@ -517,9 +522,14 @@ public class FTPFile extends ProtocolFile implements ConnectionHandlerFactory {
         return false;
     }
 
+    /**
+     * Always throws an {@link UnsupportedFileOperationException}: random write access is not available.
+     *
+     * @throws UnsupportedFileOperationException always
+     */
     @Override
-    public RandomAccessOutputStream getRandomAccessOutputStream() throws IOException {
-        throw new IOException();
+    public RandomAccessOutputStream getRandomAccessOutputStream() throws UnsupportedFileOperationException {
+        throw new UnsupportedFileOperationException();
     }
 
     @Override

@@ -380,7 +380,7 @@ public class SFTPFile extends ProtocolFile {
 
     /**
      * Returns <code>false</code>: {@link #getRandomAccessOutputStream()} is not implemented and throws an
-     * <code>IOException</code>.
+     * <code>UnsupportedFileOperationException</code>.
      *
      * @return false
      */
@@ -390,9 +390,12 @@ public class SFTPFile extends ProtocolFile {
         return false;
     }
 
+    /**
+     * Always throws an {@link UnsupportedFileOperationException}: random write access is not supported.
+     */
     @Override
-    public RandomAccessOutputStream getRandomAccessOutputStream() throws IOException {
-        throw new IOException();
+    public RandomAccessOutputStream getRandomAccessOutputStream() throws UnsupportedFileOperationException {
+        throw new UnsupportedFileOperationException();
     }
 
     @Override

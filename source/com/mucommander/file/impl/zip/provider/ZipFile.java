@@ -20,6 +20,7 @@ package com.mucommander.file.impl.zip.provider;
 
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileLogger;
+import com.mucommander.file.UnsupportedFileOperationException;
 import com.mucommander.io.*;
 
 import java.io.*;
@@ -104,11 +105,11 @@ public class ZipFile implements ZipConstants {
      * thrown.</p>
      *
      * @param f the archive file
-     * @throws IOException if a RandomAccessInputStream could not retrieved, or if an error occurred while reading the
-     * Zip file.
+     * @throws IOException if an error occurred while reading the Zip file.
      * @throws ZipException if this file is not a valid Zip file
+     * @throws UnsupportedFileOperationException if a required operation is not supported by the underlying file protocol.
      */
-    public ZipFile(AbstractFile f) throws IOException, ZipException {
+    public ZipFile(AbstractFile f) throws IOException, ZipException, UnsupportedFileOperationException {
         this.file = f;
 
         try {
@@ -125,8 +126,9 @@ public class ZipFile implements ZipConstants {
      * Opens the zip file for random read access.
      *
      * @throws IOException if an error occured while opening the zip file for random read access.
+     * @throws UnsupportedFileOperationException if a required operation is not supported by the underlying file protocol.
      */
-    private void openRead() throws IOException {
+    private void openRead() throws IOException, UnsupportedFileOperationException {
         if(rais!=null) {
             FileLogger.fine("Warning: an existing RandomAccessInputStream was found, closing it now");
             rais.close();
@@ -155,8 +157,9 @@ public class ZipFile implements ZipConstants {
      * Opens the zip file for random write access.
      *
      * @throws IOException if an error occured while opening the zip file for random read access.
+     * @throws UnsupportedFileOperationException if a required operation is not supported by the underlying file protocol.
      */
-    private void openWrite() throws IOException{
+    private void openWrite() throws IOException, UnsupportedFileOperationException {
         if(raos!=null) {
             FileLogger.fine("Warning: an existing RandomAccessOutputStream was found, closing it now");
             raos.close();
@@ -251,10 +254,11 @@ public class ZipFile implements ZipConstants {
      *
      * @param ze the entry to get the stream for.
      * @return a stream to read the entry from.
-     * @throws IOException if unable to create an input stream from the zipenty
+     * @throws IOException if unable to create an input stream from the zipentry
      * @throws ZipException if the zipentry has an unsupported compression method
+     * @throws UnsupportedFileOperationException if a required operation is not supported by the underlying file protocol.
      */
-    public InputStream getInputStream(ZipEntry ze) throws IOException, ZipException {
+    public InputStream getInputStream(ZipEntry ze) throws IOException, ZipException, UnsupportedFileOperationException {
 
         ZipEntryInfo entryInfo = ze.getEntryInfo();
         if (entryInfo == null)
@@ -270,8 +274,7 @@ public class ZipFile implements ZipConstants {
         this.rais = null;
         
         long start = entryInfo.dataOffset;
-        BoundedInputStream bis =
-            new BoundedInputStream(entryIn, start, ze.getCompressedSize());
+        BoundedInputStream bis = new BoundedInputStream(entryIn, start, ze.getCompressedSize());
         switch (ze.getMethod()) {
             case ZipConstants.STORED:
                 return bis;
@@ -302,10 +305,11 @@ public class ZipFile implements ZipConstants {
      * thrown.</p>
      *
      * @param ze the ZipEntry to delete
-     * @throws IOException if the underlying AbstractFile does not have random write access or if an I/O error occurred
+     * @throws IOException if an I/O error occurred
      * @throws ZipException if the specified ZipEntry cannot be found in this zip file
+     * @throws UnsupportedFileOperationException if a required operation is not supported by the underlying file protocol.
      */
-    public void deleteEntry(ZipEntry ze) throws IOException, ZipException {
+    public void deleteEntry(ZipEntry ze) throws IOException, ZipException, UnsupportedFileOperationException {
         openRead();
         openWrite();
 
@@ -432,9 +436,11 @@ public class ZipFile implements ZipConstants {
      *
      * @param entry the entry to add to this zip file
      * @return an OutputStream to write the contents of the entry
-     * @throws IOException if the underlying AbstractFile does not have random write access or if an I/O error occurred
+     * @throws IOException if an I/O error occurred
+     * @throws UnsupportedFileOperationException if a required operation is not supported by the underlying file protocol.
+     * or is not implemented.
      */
-    public OutputStream addEntry(final ZipEntry entry) throws IOException {
+    public OutputStream addEntry(final ZipEntry entry) throws IOException, UnsupportedFileOperationException {
         try {
             // Open the zip file for random read and write access
             openRead();
@@ -529,9 +535,10 @@ public class ZipFile implements ZipConstants {
      * thrown.</p>
      *
      * @param entry the entry to update
-     * @throws IOException if the underlying AbstractFile does not have random write access or if an I/O error occurred
+     * @throws IOException if an I/O error occurred
+     * @throws UnsupportedFileOperationException if a required operation is not supported by the underlying file protocol.
      */
-    public void updateEntry(ZipEntry entry) throws IOException {
+    public void updateEntry(ZipEntry entry) throws IOException, UnsupportedFileOperationException {
         try {
             // Open the zip file for write
             openWrite();
@@ -577,9 +584,10 @@ public class ZipFile implements ZipConstants {
      * <p>The underlying {@link AbstractFile} must have random write access. If not, an <code>IOException</code> will be
      * thrown.</p>
      *
-     * @throws IOException if the underlying AbstractFile does not have random write access or if an I/O error occurred
+     * @throws IOException if an I/O error occurred
+     * @throws UnsupportedFileOperationException if a required operation is not supported by the underlying file protocol.
      */
-    public void defragment() throws IOException {
+    public void defragment() throws IOException, UnsupportedFileOperationException {
         int nbEntries = entries.size();
         if(nbEntries==0)
             return;
@@ -685,7 +693,7 @@ public class ZipFile implements ZipConstants {
      * beginning of the filename field.
      *
      * @param entryInfo the ZipEntryInfo object in which to store the data offset
-     * @throws IOException if an unexcepted I/O error occurred
+     * @throws IOException if an unexpected I/O error occurred
      */
     private void calculateDataOffset(ZipEntryInfo entryInfo) throws IOException {
         // Skip the following fields:

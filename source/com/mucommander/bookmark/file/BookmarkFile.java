@@ -97,15 +97,18 @@ public class BookmarkFile extends ProtocolFile {
     /**
      * Returns the wrapped file's descendants.
      * @return             the wrapped file's descendants.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException                       if an I/O error occurs.
+     * @throws UnsupportedFileOperationException if this operation is not supported by the underlying file protocol,
+     * or is not implemented.
      */
     @Override
-    public AbstractFile[] ls() throws IOException {return getUnderlyingFile().ls();}
+    public AbstractFile[] ls() throws IOException, UnsupportedFileOperationException {
+        return getUnderlyingFile().ls();
+    }
 
     /**
      * Returns the wrapped file's parent.
      * @return             the wrapped file's parent.
-     * @throws IOException if an IO error occurs.
      * @see                #setParent(AbstractFile)
      */
     @Override

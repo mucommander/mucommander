@@ -21,7 +21,6 @@ package com.mucommander.file;
 import com.mucommander.io.RandomAccessInputStream;
 import com.mucommander.io.RandomAccessOutputStream;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
@@ -183,35 +182,43 @@ public class DummyFile extends AbstractFile {
     }
 
     /**
-     * Implementation notes: always throws an exception.
+     * Implementation notes: always throws an {@link UnsupportedFileOperationException}.
+     *
+     * @throws UnsupportedFileOperationException always
      */
     @Override
-    public AbstractFile[] ls() throws IOException {
-        throw new IOException();
+    public AbstractFile[] ls() throws UnsupportedFileOperationException {
+        throw new UnsupportedFileOperationException();
     }
 
     /**
-     * Implementation notes: always throws an exception.
+     * Implementation notes: always throws an {@link UnsupportedFileOperationException}.
+     *
+     * @throws UnsupportedFileOperationException always
      */
     @Override
-    public void mkdir() throws IOException {
-        throw new IOException();
+    public void mkdir() throws UnsupportedFileOperationException {
+        throw new UnsupportedFileOperationException();
     }
 
     /**
-     * Implementation notes: always throws an exception.
+     * Implementation notes: always throws an {@link UnsupportedFileOperationException}.
+     *
+     * @throws UnsupportedFileOperationException always
      */
     @Override
-    public InputStream getInputStream() throws IOException {
-        throw new IOException();
+    public InputStream getInputStream() throws UnsupportedFileOperationException {
+        throw new UnsupportedFileOperationException();
     }
 
     /**
-     * Implementation notes: always throws an exception.
+     * Implementation notes: always throws an {@link UnsupportedFileOperationException}.
+     *
+     * @throws UnsupportedFileOperationException always
      */
     @Override
-    public OutputStream getOutputStream(boolean append) throws IOException {
-        throw new IOException();
+    public OutputStream getOutputStream(boolean append) throws UnsupportedFileOperationException {
+        throw new UnsupportedFileOperationException();
     }
 
     /**
@@ -223,11 +230,13 @@ public class DummyFile extends AbstractFile {
     }
 
     /**
-     * Implementation notes: always throws an exception.
+     * Implementation notes: always throws an {@link UnsupportedFileOperationException}.
+     *
+     * @throws UnsupportedFileOperationException always
      */
     @Override
-    public RandomAccessInputStream getRandomAccessInputStream() throws IOException {
-        throw new IOException();
+    public RandomAccessInputStream getRandomAccessInputStream() throws UnsupportedFileOperationException {
+        throw new UnsupportedFileOperationException();
     }
 
     /**
@@ -239,19 +248,23 @@ public class DummyFile extends AbstractFile {
     }
 
     /**
-     * Implementation notes: always throws an exception.
+     * Implementation notes: always throws an {@link UnsupportedFileOperationException}.
+     *
+     * @throws UnsupportedFileOperationException always
      */
     @Override
-    public RandomAccessOutputStream getRandomAccessOutputStream() throws IOException {
-        throw new IOException();
+    public RandomAccessOutputStream getRandomAccessOutputStream() throws UnsupportedFileOperationException {
+        throw new UnsupportedFileOperationException();
     }
 
     /**
-     * Implementation notes: always throws an exception.
+     * Implementation notes: always throws an {@link UnsupportedFileOperationException}.
+     *
+     * @throws UnsupportedFileOperationException always
      */
     @Override
-    public void delete() throws IOException {
-        throw new IOException();
+    public void delete() throws UnsupportedFileOperationException {
+        throw new UnsupportedFileOperationException();
     }
 
     /**

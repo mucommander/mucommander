@@ -20,6 +20,7 @@ package com.mucommander.file.impl.rar.provider;
 
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileLogger;
+import com.mucommander.file.UnsupportedFileOperationException;
 import com.mucommander.file.impl.rar.provider.de.innosystec.unrar.Archive;
 import com.mucommander.file.impl.rar.provider.de.innosystec.unrar.exception.RarException;
 import com.mucommander.file.impl.rar.provider.de.innosystec.unrar.exception.RarExceptionType;
@@ -53,7 +54,7 @@ public class RarFile {
         }
     });
     
-    public RarFile(AbstractFile file) throws IOException {
+    public RarFile(AbstractFile file) throws IOException, UnsupportedFileOperationException {
     	this.file = file;
     	RarDebug.trace("RAR: creating rar archive for \"" + file.getAbsolutePath() +"\"");
     	InputStream fileIn = file.getInputStream();

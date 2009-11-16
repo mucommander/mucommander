@@ -3,6 +3,7 @@ package com.mucommander.file.impl.sevenzip;
 import SevenZip.IInStream;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileLogger;
+import com.mucommander.file.UnsupportedFileOperationException;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -15,7 +16,7 @@ public class MuRandomAccessFile  extends IInStream {
 	
 	private long position;
 	
-	public MuRandomAccessFile(AbstractFile file) {
+	public MuRandomAccessFile(AbstractFile file) throws UnsupportedFileOperationException {
 		super();
 		position = 0;
 		this.file = file;
@@ -30,9 +31,9 @@ public class MuRandomAccessFile  extends IInStream {
 	@Override
     public long Seek(long offset, int seekOrigin) throws IOException {
 		if (seekOrigin == STREAM_SEEK_SET) {
-            stream = file.getInputStream();
-            stream.skip(offset);
-            position = offset;
+                stream = file.getInputStream();
+                stream.skip(offset);
+                position = offset;
         }
         else if (seekOrigin == STREAM_SEEK_CUR) {
             stream.skip(offset);

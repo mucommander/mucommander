@@ -18,10 +18,7 @@
 
 package com.mucommander.file.impl.iso;
 
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.AbstractROArchiveFile;
-import com.mucommander.file.ArchiveEntry;
-import com.mucommander.file.ArchiveEntryIterator;
+import com.mucommander.file.*;
 import com.mucommander.io.FilterRandomAccessInputStream;
 import com.mucommander.io.RandomAccessInputStream;
 
@@ -45,14 +42,14 @@ public class IsoArchiveFile extends AbstractROArchiveFile {
     //////////////////////////////////////////
 
     @Override
-    public ArchiveEntryIterator getEntryIterator() throws IOException {
+    public ArchiveEntryIterator getEntryIterator() throws IOException, UnsupportedFileOperationException {
         RandomAccessInputStream rais = getRandomAccessInputStream();
 
         return new IsoEntryIterator(IsoParser.getEntries(this, rais).iterator(), rais);
     }
 
     @Override
-    public InputStream getEntryInputStream(ArchiveEntry entry, ArchiveEntryIterator entryIterator) throws IOException {
+    public InputStream getEntryInputStream(ArchiveEntry entry, ArchiveEntryIterator entryIterator) throws IOException, UnsupportedFileOperationException {
         // Cast the entry before creating the stream, in case it fails
         IsoArchiveEntry isoEntry = (IsoArchiveEntry) entry;
 
