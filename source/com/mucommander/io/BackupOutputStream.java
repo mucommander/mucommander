@@ -104,7 +104,7 @@ public class BackupOutputStream extends OutputStream implements BackupConstants 
      * @exception IOException thrown if any IO error occurs.
      */
     private BackupOutputStream(AbstractFile file, AbstractFile save) throws IOException {
-        out = save.getOutputStream(false);
+        out = save.getOutputStream();
         target = file;
         backup = save;
     }

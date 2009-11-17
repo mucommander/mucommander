@@ -588,18 +588,14 @@ public class LocalFile extends ProtocolFile {
     }
 
     @Override
-    public boolean canChangeDate() {
-        return true;
-    }
-
-    @Override
-    public boolean changeDate(long lastModified) {
+    public void changeDate(long lastModified) throws IOException {
         // java.io.File#setLastModified(long) throws an IllegalArgumentException if time is negative.
         // If specified time is negative, set it to 0 (01/01/1970).
         if(lastModified < 0)
             lastModified = 0;
 
-        return file.setLastModified(lastModified);
+        if(!file.setLastModified(lastModified))
+            throw new IOException();
     }
 		
     @Override
@@ -720,13 +716,18 @@ public class LocalFile extends ProtocolFile {
      * using <code>Thread#interrupt()</code>.
      */
     @Override
-    public OutputStream getOutputStream(boolean append) throws IOException {
-        return new LocalOutputStream(new FileOutputStream(absPath, append).getChannel());
+    public OutputStream getOutputStream() throws IOException {
+        return new LocalOutputStream(new FileOutputStream(absPath, false).getChannel());
     }
 
+    /**
+     * Implementation notes: the returned <code>InputStream</code> uses a NIO {@link FileChannel} under the hood to
+     * benefit from <code>InterruptibleChannel</code> and allow a thread waiting for an I/O to be gracefully interrupted
+     * using <code>Thread#interrupt()</code>.
+     */
     @Override
-    public boolean hasRandomAccessInputStream() {
-        return true;
+    public OutputStream getAppendOutputStream() throws IOException {
+        return new LocalOutputStream(new FileOutputStream(absPath, true).getChannel());
     }
 
     /**
@@ -737,11 +738,6 @@ public class LocalFile extends ProtocolFile {
     @Override
     public RandomAccessInputStream getRandomAccessInputStream() throws IOException {
         return new LocalRandomAccessInputStream(new RandomAccessFile(file, "r").getChannel());
-    }
-
-    @Override
-    public boolean hasRandomAccessOutputStream() {
-        return true;
     }
 
     /**

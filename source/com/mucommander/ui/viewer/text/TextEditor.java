@@ -18,7 +18,9 @@
 
 package com.mucommander.ui.viewer.text;
 
+import com.mucommander.AppLogger;
 import com.mucommander.file.AbstractFile;
+import com.mucommander.file.FileOperation;
 import com.mucommander.ui.viewer.EditorFrame;
 import com.mucommander.ui.viewer.FileEditor;
 
@@ -58,13 +60,21 @@ class TextEditor extends FileEditor implements DocumentListener {
         out = null;
 
         try {
-            out = destFile.getOutputStream(false);
+            out = destFile.getOutputStream();
             textEditorImpl.write(out);
 
             setSaveNeeded(false);
 
             // Change the parent folder's date to now, so that changes are picked up by folder auto-refresh (see ticket #258)
-            destFile.getParent().changeDate(System.currentTimeMillis());
+            if(destFile.isFileOperationSupported(FileOperation.CHANGE_DATE)) {
+                try {
+                    destFile.getParent().changeDate(System.currentTimeMillis());
+                }
+                catch (IOException e) {
+                    AppLogger.fine("failed to change the date of "+destFile, e);
+                    // Fail silently
+                }
+            }
         }
         finally {
             if(out != null) {

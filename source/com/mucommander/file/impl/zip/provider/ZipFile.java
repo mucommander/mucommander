@@ -107,7 +107,7 @@ public class ZipFile implements ZipConstants {
      * @param f the archive file
      * @throws IOException if an error occurred while reading the Zip file.
      * @throws ZipException if this file is not a valid Zip file
-     * @throws UnsupportedFileOperationException if a required operation is not supported by the underlying file protocol.
+     * @throws UnsupportedFileOperationException if a required operation is not supported by the underlying filesystem.
      */
     public ZipFile(AbstractFile f) throws IOException, ZipException, UnsupportedFileOperationException {
         this.file = f;
@@ -126,7 +126,7 @@ public class ZipFile implements ZipConstants {
      * Opens the zip file for random read access.
      *
      * @throws IOException if an error occured while opening the zip file for random read access.
-     * @throws UnsupportedFileOperationException if a required operation is not supported by the underlying file protocol.
+     * @throws UnsupportedFileOperationException if a required operation is not supported by the underlying filesystem.
      */
     private void openRead() throws IOException, UnsupportedFileOperationException {
         if(rais!=null) {
@@ -157,7 +157,7 @@ public class ZipFile implements ZipConstants {
      * Opens the zip file for random write access.
      *
      * @throws IOException if an error occured while opening the zip file for random read access.
-     * @throws UnsupportedFileOperationException if a required operation is not supported by the underlying file protocol.
+     * @throws UnsupportedFileOperationException if a required operation is not supported by the underlying filesystem.
      */
     private void openWrite() throws IOException, UnsupportedFileOperationException {
         if(raos!=null) {
@@ -256,7 +256,7 @@ public class ZipFile implements ZipConstants {
      * @return a stream to read the entry from.
      * @throws IOException if unable to create an input stream from the zipentry
      * @throws ZipException if the zipentry has an unsupported compression method
-     * @throws UnsupportedFileOperationException if a required operation is not supported by the underlying file protocol.
+     * @throws UnsupportedFileOperationException if a required operation is not supported by the underlying filesystem.
      */
     public InputStream getInputStream(ZipEntry ze) throws IOException, ZipException, UnsupportedFileOperationException {
 
@@ -307,7 +307,7 @@ public class ZipFile implements ZipConstants {
      * @param ze the ZipEntry to delete
      * @throws IOException if an I/O error occurred
      * @throws ZipException if the specified ZipEntry cannot be found in this zip file
-     * @throws UnsupportedFileOperationException if a required operation is not supported by the underlying file protocol.
+     * @throws UnsupportedFileOperationException if a required operation is not supported by the underlying filesystem.
      */
     public void deleteEntry(ZipEntry ze) throws IOException, ZipException, UnsupportedFileOperationException {
         openRead();
@@ -437,7 +437,7 @@ public class ZipFile implements ZipConstants {
      * @param entry the entry to add to this zip file
      * @return an OutputStream to write the contents of the entry
      * @throws IOException if an I/O error occurred
-     * @throws UnsupportedFileOperationException if a required operation is not supported by the underlying file protocol.
+     * @throws UnsupportedFileOperationException if a required operation is not supported by the underlying filesystem.
      * or is not implemented.
      */
     public OutputStream addEntry(final ZipEntry entry) throws IOException, UnsupportedFileOperationException {
@@ -536,7 +536,7 @@ public class ZipFile implements ZipConstants {
      *
      * @param entry the entry to update
      * @throws IOException if an I/O error occurred
-     * @throws UnsupportedFileOperationException if a required operation is not supported by the underlying file protocol.
+     * @throws UnsupportedFileOperationException if a required operation is not supported by the underlying filesystem.
      */
     public void updateEntry(ZipEntry entry) throws IOException, UnsupportedFileOperationException {
         try {
@@ -585,7 +585,7 @@ public class ZipFile implements ZipConstants {
      * thrown.</p>
      *
      * @throws IOException if an I/O error occurred
-     * @throws UnsupportedFileOperationException if a required operation is not supported by the underlying file protocol.
+     * @throws UnsupportedFileOperationException if a required operation is not supported by the underlying filesystem.
      */
     public void defragment() throws IOException, UnsupportedFileOperationException {
         int nbEntries = entries.size();

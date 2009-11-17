@@ -22,6 +22,7 @@ package com.mucommander.job;
 import com.mucommander.AppLogger;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
+import com.mucommander.file.FileOperation;
 import com.mucommander.file.util.FileSet;
 import com.mucommander.io.BufferPool;
 import com.mucommander.io.RandomAccessOutputStream;
@@ -123,13 +124,13 @@ public class MkdirJob extends FileJob {
                         OutputStream mkfileOut = null;
                         try {
                             // using RandomAccessOutputStream if we can have one
-                            if(file.hasRandomAccessOutputStream()) {
+                            if(file.isFileOperationSupported(FileOperation.RANDOM_WRITE_FILE)) {
                                 mkfileOut = file.getRandomAccessOutputStream();
                                 ((RandomAccessOutputStream)mkfileOut).setLength(allocateSpace);
                             }
                             // manually otherwise
                             else {
-                                mkfileOut = file.getOutputStream(false);
+                                mkfileOut = file.getOutputStream();
 
                                 // Use BufferPool to avoid excessive memory allocation and garbage collection
                                 byte buffer[] = BufferPool.getByteArray();

@@ -206,7 +206,7 @@ public class OSXTrash extends QueuedTrash {
                 // EOL characters. The file must NOT end with a trailing EOL.
                 int nbFiles = queuedFiles.size();
                 tmpFile = FileFactory.getTemporaryFile("trash_files.muco", false);
-                tmpOut = new OutputStreamWriter(tmpFile.getOutputStream(false), "utf-8");
+                tmpOut = new OutputStreamWriter(tmpFile.getOutputStream(), "utf-8");
 
                 for(int i=0; i<nbFiles; i++) {
                     tmpOut.write(queuedFiles.elementAt(i).getAbsolutePath());

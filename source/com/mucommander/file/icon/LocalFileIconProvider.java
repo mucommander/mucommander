@@ -22,8 +22,8 @@ import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
 import com.mucommander.file.impl.local.LocalFile;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.Icon;
+import java.awt.Dimension;
 import java.io.IOException;
 
 /**
@@ -59,7 +59,7 @@ public abstract class LocalFileIconProvider implements FileIconProvider {
                 tempFile.mkdir();
             // Create a regular file
             else
-                tempFile.getOutputStream(false).close();
+                tempFile.getOutputStream().close();
 
             return tempFile;
         }

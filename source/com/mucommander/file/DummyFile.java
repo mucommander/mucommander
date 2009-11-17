@@ -54,19 +54,14 @@ public class DummyFile extends AbstractFile {
     }
 
     /**
-     * Implementation notes: always returns <code>false</code>.
+     * Implementation notes: always throws {@link UnsupportedFileOperationException}.
+     *
+     * @throws UnsupportedFileOperationException always.
      */
     @Override
-    public boolean canChangeDate() {
-        return false;
-    }
-
-    /**
-     * Implementation notes: always returns <code>false</code>.
-     */
-    @Override
-    public boolean changeDate(long lastModified) {
-        return false;
+    @UnsupportedFileOperation
+    public void changeDate(long lastModified) throws UnsupportedFileOperationException {
+        throw new UnsupportedFileOperationException(FileOperation.CHANGE_DATE);
     }
 
     /**
@@ -187,8 +182,9 @@ public class DummyFile extends AbstractFile {
      * @throws UnsupportedFileOperationException always
      */
     @Override
+    @UnsupportedFileOperation
     public AbstractFile[] ls() throws UnsupportedFileOperationException {
-        throw new UnsupportedFileOperationException();
+        throw new UnsupportedFileOperationException(FileOperation.LIST_CHILDREN);
     }
 
     /**
@@ -197,8 +193,9 @@ public class DummyFile extends AbstractFile {
      * @throws UnsupportedFileOperationException always
      */
     @Override
+    @UnsupportedFileOperation
     public void mkdir() throws UnsupportedFileOperationException {
-        throw new UnsupportedFileOperationException();
+        throw new UnsupportedFileOperationException(FileOperation.CREATE_DIRECTORY);
     }
 
     /**
@@ -207,8 +204,9 @@ public class DummyFile extends AbstractFile {
      * @throws UnsupportedFileOperationException always
      */
     @Override
+    @UnsupportedFileOperation
     public InputStream getInputStream() throws UnsupportedFileOperationException {
-        throw new UnsupportedFileOperationException();
+        throw new UnsupportedFileOperationException(FileOperation.READ_FILE);
     }
 
     /**
@@ -217,16 +215,9 @@ public class DummyFile extends AbstractFile {
      * @throws UnsupportedFileOperationException always
      */
     @Override
-    public OutputStream getOutputStream(boolean append) throws UnsupportedFileOperationException {
-        throw new UnsupportedFileOperationException();
-    }
-
-    /**
-     * Implementation notes: always returns <code>false</code>.
-     */
-    @Override
-    public boolean hasRandomAccessInputStream() {
-        return false;
+    @UnsupportedFileOperation
+    public OutputStream getOutputStream() throws UnsupportedFileOperationException {
+        throw new UnsupportedFileOperationException(FileOperation.WRITE_FILE);
     }
 
     /**
@@ -235,16 +226,20 @@ public class DummyFile extends AbstractFile {
      * @throws UnsupportedFileOperationException always
      */
     @Override
+    @UnsupportedFileOperation
+    public OutputStream getAppendOutputStream() throws UnsupportedFileOperationException {
+        throw new UnsupportedFileOperationException(FileOperation.APPEND_FILE);
+    }
+
+    /**
+     * Implementation notes: always throws an {@link UnsupportedFileOperationException}.
+     *
+     * @throws UnsupportedFileOperationException always
+     */
+    @Override
+    @UnsupportedFileOperation
     public RandomAccessInputStream getRandomAccessInputStream() throws UnsupportedFileOperationException {
-        throw new UnsupportedFileOperationException();
-    }
-
-    /**
-     * Implementation notes: always returns <code>false</code>.
-     */
-    @Override
-    public boolean hasRandomAccessOutputStream() {
-        return false;
+        throw new UnsupportedFileOperationException(FileOperation.RANDOM_READ_FILE);
     }
 
     /**
@@ -253,8 +248,9 @@ public class DummyFile extends AbstractFile {
      * @throws UnsupportedFileOperationException always
      */
     @Override
+    @UnsupportedFileOperation
     public RandomAccessOutputStream getRandomAccessOutputStream() throws UnsupportedFileOperationException {
-        throw new UnsupportedFileOperationException();
+        throw new UnsupportedFileOperationException(FileOperation.RANDOM_WRITE_FILE);
     }
 
     /**
@@ -263,8 +259,9 @@ public class DummyFile extends AbstractFile {
      * @throws UnsupportedFileOperationException always
      */
     @Override
+    @UnsupportedFileOperation
     public void delete() throws UnsupportedFileOperationException {
-        throw new UnsupportedFileOperationException();
+        throw new UnsupportedFileOperationException(FileOperation.DELETE);
     }
 
     /**

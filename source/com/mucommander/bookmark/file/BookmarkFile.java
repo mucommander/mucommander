@@ -98,7 +98,7 @@ public class BookmarkFile extends ProtocolFile {
      * Returns the wrapped file's descendants.
      * @return             the wrapped file's descendants.
      * @throws IOException                       if an I/O error occurs.
-     * @throws UnsupportedFileOperationException if this operation is not supported by the underlying file protocol,
+     * @throws UnsupportedFileOperationException if this operation is not supported by the underlying filesystem,
      * or is not implemented.
      */
     @Override
@@ -344,35 +344,35 @@ public class BookmarkFile extends ProtocolFile {
     }
 
     @Override
-    public OutputStream getOutputStream(boolean append) throws IOException {return new BookmarkOutputStream();}
+    public OutputStream getOutputStream() throws IOException {return new BookmarkOutputStream();}
 
 
-
-    // - Unused methods --------------------------------------------------------
+// - Unused methods --------------------------------------------------------
     // -------------------------------------------------------------------------
     // The following methods are not used by BookmarkFile. They will throw an exception or
     // return an 'operation non supported' / default value.
 
     @Override
-    public void mkdir() throws IOException {throw new IOException();}
+    @UnsupportedFileOperation
+    public void mkdir() throws UnsupportedFileOperationException {throw new UnsupportedFileOperationException(FileOperation.CREATE_DIRECTORY);}
     @Override
     public long getDate() {return 0;}
     @Override
-    public boolean canChangeDate() {return false;}
-    @Override
     public PermissionBits getChangeablePermissions() {return PermissionBits.EMPTY_PERMISSION_BITS;}
     @Override
-    public boolean changeDate(long lastModified) {return false;}
+    @UnsupportedFileOperation
+    public void changeDate(long lastModified) throws UnsupportedFileOperationException {throw new UnsupportedFileOperationException(FileOperation.CHANGE_DATE);}
     @Override
     public long getSize() {return -1;}
     @Override
-    public boolean hasRandomAccessInputStream() {return false;}
+    @UnsupportedFileOperation
+    public RandomAccessInputStream getRandomAccessInputStream() throws UnsupportedFileOperationException {throw new UnsupportedFileOperationException(FileOperation.RANDOM_READ_FILE);}
     @Override
-    public RandomAccessInputStream getRandomAccessInputStream() throws IOException {throw new IOException();}
+    @UnsupportedFileOperation
+    public OutputStream getAppendOutputStream() throws UnsupportedFileOperationException {throw new UnsupportedFileOperationException(FileOperation.APPEND_FILE);}
     @Override
-    public boolean hasRandomAccessOutputStream() {return false;}
-    @Override
-    public RandomAccessOutputStream getRandomAccessOutputStream() throws IOException {throw new IOException();}
+    @UnsupportedFileOperation
+    public RandomAccessOutputStream getRandomAccessOutputStream() throws UnsupportedFileOperationException {throw new UnsupportedFileOperationException(FileOperation.RANDOM_WRITE_FILE);}
     @Override
     public Object getUnderlyingFileObject() {return null;}
     @Override

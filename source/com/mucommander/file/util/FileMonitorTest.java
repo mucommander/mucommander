@@ -56,14 +56,10 @@ public class FileMonitorTest extends TestCase implements FileMonitorConstants {
     public void testDateAttribute() throws IOException {
         setUp(DATE_ATTRIBUTE);
 
-        if(!file.changeDate(file.getDate()-2000))
-            throw new IOException();
-
+        file.changeDate(file.getDate()-2000);
         assertTrue(hasAttributeChanged(DATE_ATTRIBUTE));
 
-        if(!file.changeDate(file.getDate()+2000))
-            throw new IOException();
-
+        file.changeDate(file.getDate()+2000);
         assertTrue(hasAttributeChanged(DATE_ATTRIBUTE));
     }
 

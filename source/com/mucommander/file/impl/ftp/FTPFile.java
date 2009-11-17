@@ -288,41 +288,21 @@ public class FTPFile extends ProtocolFile implements ConnectionHandlerFactory {
     }
 
     /**
-     * Date can be changed only if the <i>'SITE UTIME'</i> FTP command is supported by the remote server.
-     * This method returns <code>false</code> if the <i>'SITE UTIME'</i> is not supported by the remote server, i.e. if
-     * the command was sent once and the server didn't understand it or replied that the command is not implemented. 
-     *
-     * @return false if the <i>'SITE UTIME'</i> is not supported by the remote server
-     */
-    @Override
-    public boolean canChangeDate() {
-        // Return false if we know the 'SITE UTIME' command is not supported by the server
-        try {
-            // Do not lock the connection handler, not needed.
-            return ((FTPConnectionHandler)ConnectionPool.getConnectionHandler(this, fileURL, false)).utimeCommandSupported;
-        }
-        catch(InterruptedIOException e) {
-            // Should not happen in practice
-            return false;
-        }
-    }
-
-    /**
      * Attempts to change this file's date using the <i>'SITE UTIME'</i> FTP command.
      * This command seems to be implemeted by modern FTP servers such as ProFTPd or PureFTP Server but since it is not
      * part of the basic FTP command set, it may as well not be supported by the remote server.
      */
     @Override
-    public boolean changeDate(long lastModified) {
+    public void changeDate(long lastModified) throws IOException, UnsupportedFileOperationException {
         // Note: FTPFile.setTimeStamp only changes the instance's date, but doesn't change it on the server-side.
         FTPConnectionHandler connHandler = null;
         try {
             // Retrieve a ConnectionHandler and lock it
             connHandler = (FTPConnectionHandler)ConnectionPool.getConnectionHandler(this, fileURL, true);
 
-            // Return false if we know the 'SITE UTIME' command is not supported by the server
+            // Throw UnsupportedFileOperationException if we know the 'SITE UTIME' command is not supported by the server
             if(!connHandler.utimeCommandSupported)
-                return false;
+                throw new UnsupportedFileOperationException(FileOperation.CHANGE_DATE);
 
             // Makes sure the connection is started, if not starts it
             connHandler.checkConnection();
@@ -349,16 +329,16 @@ public class FTPFile extends ProtocolFile implements ConnectionHandlerFactory {
                     FileLogger.fine("marking UTIME command as unsupported");
                     connHandler.utimeCommandSupported = false;
                 }
-            }
 
-            return success;
+                throw new IOException();
+            }
         }
         catch(IOException e) {
             // Checks if the IOException corresponds to a socket error and in that case, closes the connection
             if(connHandler!=null)
                 connHandler.checkSocketException(e);
 
-            return false;
+            throw e;
         }
         finally {
             // Release the lock on the ConnectionHandler
@@ -488,14 +468,13 @@ public class FTPFile extends ProtocolFile implements ConnectionHandlerFactory {
     }
 
     @Override
-    public OutputStream getOutputStream(boolean append) throws IOException {
-        return new FTPOutputStream(append);
+    public OutputStream getOutputStream() throws IOException {
+        return new FTPOutputStream(false);
     }
 
     @Override
-    public boolean hasRandomAccessInputStream() {
-        // No random access for FTP files unfortunately
-        return false;
+    public OutputStream getAppendOutputStream() throws IOException {
+        return new FTPOutputStream(true);
     }
 
     /**
@@ -504,23 +483,14 @@ public class FTPFile extends ProtocolFile implements ConnectionHandlerFactory {
      * @throws UnsupportedFileOperationException always
      */
     @Override
+    @UnsupportedFileOperation
     public RandomAccessInputStream getRandomAccessInputStream() throws UnsupportedFileOperationException {
-        throw new UnsupportedFileOperationException();
+        throw new UnsupportedFileOperationException(FileOperation.RANDOM_READ_FILE);
     }
 
-//    public boolean hasRandomAccessInputStream() {
-//        return true;
-//    }
-//
 //    public RandomAccessInputStream getRandomAccessInputStream() throws IOException {
 //        return new FTPRandomAccessInputStream();
 //    }
-
-    @Override
-    public boolean hasRandomAccessOutputStream() {
-        // No random access for FTP files unfortunately
-        return false;
-    }
 
     /**
      * Always throws an {@link UnsupportedFileOperationException}: random write access is not available.
@@ -528,8 +498,9 @@ public class FTPFile extends ProtocolFile implements ConnectionHandlerFactory {
      * @throws UnsupportedFileOperationException always
      */
     @Override
+    @UnsupportedFileOperation
     public RandomAccessOutputStream getRandomAccessOutputStream() throws UnsupportedFileOperationException {
-        throw new UnsupportedFileOperationException();
+        throw new UnsupportedFileOperationException(FileOperation.RANDOM_WRITE_FILE);
     }
 
     @Override

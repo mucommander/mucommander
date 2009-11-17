@@ -21,6 +21,7 @@ package com.mucommander.file.archiver;
 
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileAttributes;
+import com.mucommander.file.FileOperation;
 import com.mucommander.file.UnsupportedFileOperationException;
 import com.mucommander.io.BufferedRandomOutputStream;
 import com.mucommander.io.RandomAccessOutputStream;
@@ -234,7 +235,7 @@ public abstract class Archiver {
     public static Archiver getArchiver(AbstractFile file, int format) throws IOException, UnsupportedFileOperationException {
         OutputStream out = null;
 
-        if(file.hasRandomAccessOutputStream()) {
+        if(file.isFileOperationSupported(FileOperation.RANDOM_WRITE_FILE)) {
             try {
                 // Important: if the file exists, it has to be overwritten as AbstractFile#getRandomAccessOutputStream()
                 // does NOT overwrite the file. This fixes bug #30.
@@ -249,7 +250,7 @@ public abstract class Archiver {
         }
 
         if(out==null)
-            out = new BufferedOutputStream(file.getOutputStream(false));
+            out = new BufferedOutputStream(file.getOutputStream());
 
         return getArchiver(out, format);
     }

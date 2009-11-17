@@ -165,7 +165,7 @@ public class SplitFileJob extends AbstractCopyJob {
         
         OutputStream out = null;
         try {
-			out = destFile.getOutputStream(false);
+			out = destFile.getOutputStream();
 			
 			try {
 				long written = StreamUtils.copyStream(origFileStream, out, BufferPool.getDefaultBufferSize(), partSize);
@@ -246,7 +246,7 @@ public class SplitFileJob extends AbstractCopyJob {
 	                	sourceChecksum = ((ChecksumInputStream)origFileStream).getChecksumString();
 	            	}
 					AbstractFile crcFile = baseDestFolder.getDirectChild(crcFileName);
-					OutputStream crcStream = crcFile.getOutputStream(false);
+					OutputStream crcStream = crcFile.getOutputStream();
 					String line = sourceFile.getName() + " " + sourceChecksum;
 					crcStream.write(line.getBytes("utf-8"));
 					crcStream.close();

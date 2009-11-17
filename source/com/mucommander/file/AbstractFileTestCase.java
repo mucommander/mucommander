@@ -34,13 +34,11 @@ import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.reflect.Method;
 import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Iterator;
-import java.util.Locale;
-import java.util.Random;
-import java.util.Vector;
+import java.util.*;
 
 /**
  * A generic JUnit test case for the {@link AbstractFile} class. This class is abstract and must be extended by
@@ -142,10 +140,10 @@ public abstract class AbstractFileTestCase extends TestCase {
      * {@link AbstractFile#exists()}) and that its size (as returned by {@link AbstractFile#getSize()}) matches the
      * specified length argument.
      *
-     * <p>The <code>OutputStream</code> used for writing data is retrieved from {@link AbstractFile#getOutputStream(boolean)},
-     * passing the specified <code>append</code> argument. This method uses
-     * {@link #writeRandomData(java.io.OutputStream, long, int)} to write the file, see this method's documentation for
-     * more information about how the random data is generated and written.</p>
+     * <p>The <code>OutputStream</code> used for writing data is retrieved from {@link AbstractFile#getOutputStream()}
+     * or {@link AbstractFile#getAppendOutputStream()}, depending on the specified <code>append</code> argument.
+     * This method uses {@link #writeRandomData(java.io.OutputStream, long, int)} to write the file, see this method's
+     * documentation for more information about how the random data is generated and written.</p>
      *
      * @param file the file to write the data to
      * @param length the number of random bytes to fill the file with
@@ -158,7 +156,7 @@ public abstract class AbstractFileTestCase extends TestCase {
      * @throws NoSuchAlgorithmException should not happen
      */
     protected String writeRandomData(AbstractFile file, long length, int maxChunkSize, boolean append) throws IOException, NoSuchAlgorithmException {
-        ChecksumOutputStream md5Out = getMd5OutputStream(file.getOutputStream(append));
+        ChecksumOutputStream md5Out = getMd5OutputStream(append?file.getAppendOutputStream():file.getOutputStream());
         try {
             writeRandomData(md5Out, length, maxChunkSize);
 
@@ -457,7 +455,7 @@ public abstract class AbstractFileTestCase extends TestCase {
         assertEquals("00000001", tempFile.calculateChecksum("Adler32"));
         assertEquals("31d6cfe0d16ae931b73c59d7e0c089c0", tempFile.calculateChecksum("MD4"));
 
-        OutputStream tempOut = tempFile.getOutputStream(false);
+        OutputStream tempOut = tempFile.getOutputStream();
 
         // Verify the digests of a sample phrase
 
@@ -1044,8 +1042,8 @@ public abstract class AbstractFileTestCase extends TestCase {
     }
 
     /**
-     * Tests {@link AbstractFile#getDate()}, {@link AbstractFile#canChangeDate()} and {@link AbstractFile#changeDate(long)},
-     * no matter if dates can be changed or not.
+     * Tests {@link AbstractFile#getDate()} and {@link AbstractFile#changeDate(long)}, no matter if dates can be
+     * changed or not.
      *
      * @throws IOException should not happen
      * @throws NoSuchAlgorithmException should not happen
@@ -1060,16 +1058,25 @@ public abstract class AbstractFileTestCase extends TestCase {
 
         assertTrue(tempFile.getDate()>date);
 
-        if(tempFile.canChangeDate()) {
-            // Assert that changeDate succeeds (returns true)
-            assertTrue(tempFile.changeDate(date=(tempFile.getDate()-1000)));
+        if(tempFile.isFileOperationSupported(FileOperation.CHANGE_DATE)) {
+            // Assert that changeDate succeeds (does not throw an exception)
+            tempFile.changeDate(date=(tempFile.getDate()-1000));
 
             // Assert that the getDate returns the date that was set
             assertEquals(date, tempFile.getDate());
         }
         else {
-            // Assert that changeDate returns false if date cannot be changed
-            assertFalse(tempFile.changeDate(tempFile.getDate()-1000));
+            // Assert that changeDate throws an UnsupportedFileOperationException if date cannot be changed
+            Exception e = null;
+            try {
+                tempFile.changeDate(tempFile.getDate()-1000);
+            }
+            catch(IOException ex) {
+                e = ex;
+            }
+            assertNotNull(e);
+            assertTrue(e instanceof UnsupportedFileOperationException);
+            assertTrue(((UnsupportedFileOperationException)e).getFileOperation().equals(FileOperation.CHANGE_DATE));
         }
     }
 
@@ -1123,7 +1130,7 @@ public abstract class AbstractFileTestCase extends TestCase {
     }
 
     /**
-     * Tests {@link AbstractFile#hasRandomAccessInputStream()} and {@link AbstractFile#getRandomAccessInputStream()}.
+     * Tests {@link AbstractFile#getRandomAccessInputStream()}.
      *
      * @throws IOException should not happen
      * @throws NoSuchAlgorithmException should not happen
@@ -1131,7 +1138,7 @@ public abstract class AbstractFileTestCase extends TestCase {
     public void testRandomAccessInputStream() throws IOException, NoSuchAlgorithmException {
         boolean ioExceptionThrown;
 
-        if(tempFile.hasRandomAccessInputStream()) {
+        if(tempFile.isFileOperationSupported(FileOperation.RANDOM_READ_FILE)) {
             // Assert that getRandomAccessInputStream throws an IOException when the file does not exist
             ioExceptionThrown = false;
             try {
@@ -1204,7 +1211,7 @@ public abstract class AbstractFileTestCase extends TestCase {
 
 
     /**
-     * Tests {@link AbstractFile#getOutputStream(boolean)}.
+     * Tests {@link AbstractFile#getOutputStream()} and {@link AbstractFile#getAppendOutputStream()}.
      *
      * @throws IOException should not happen
      * @throws NoSuchAlgorithmException should not happen
@@ -1214,27 +1221,27 @@ public abstract class AbstractFileTestCase extends TestCase {
         // - getOutputStream does not throw an IOException
         // - returns a non-null value
         // - the file exists after
-        OutputStream out = tempFile.getOutputStream(false);
+        OutputStream out = tempFile.getOutputStream();
 
         assertNotNull(out);
         assertTrue(tempFile.exists());
 
         out.close();
 
-        // Assert that getOutputStream(false) overwrites the existing file contents (resets the file size to 0)
+        // Assert that getOutputStream() overwrites the existing file contents (resets the file size to 0)
         createFile(tempFile, 1);
-        out = tempFile.getOutputStream(false);
+        out = tempFile.getOutputStream();
         out.close();
 
         assertEquals(0, tempFile.getSize());
 
-        // Assert that getOutputStream(true) does not overwrite the existing file contents.
-        // Appending to the file may not be supported, catch IOException thrown by getOutputStream(true) and only those  
+        // Assert that getAppendOutputStream() does not overwrite the existing file contents.
+        // Appending to the file may not be supported, catch IOException thrown by getAppendOutputStream() and only those
         try {
             createFile(tempFile, 1);
 
             out = null;
-            out = tempFile.getOutputStream(true);
+            out = tempFile.getAppendOutputStream();
 
             out.write('a');
             out.close();
@@ -1243,14 +1250,14 @@ public abstract class AbstractFileTestCase extends TestCase {
         }
         catch(IOException e) {
             if(out!=null)
-                throw e;    // Exception was not thrown by getOutputStream(true), re-throw it
+                throw e;    // Exception was not thrown by getAppendOutputStream(), re-throw it
             else
                 System.out.println("testOutputStream(): looks like append is not supported, caught: "+e);
         }
 
 
         // Test the integrity of the OuputStream after writing a somewhat large amount of random data
-        ChecksumOutputStream md5Out = getMd5OutputStream(tempFile.getOutputStream(false));
+        ChecksumOutputStream md5Out = getMd5OutputStream(tempFile.getOutputStream());
         writeRandomData(md5Out, 100000, 1000);
         md5Out.close();
 
@@ -1258,13 +1265,13 @@ public abstract class AbstractFileTestCase extends TestCase {
     }
 
     /**
-     * Tests {@link AbstractFile#hasRandomAccessOutputStream()} and {@link AbstractFile#getRandomAccessOutputStream()}.
+     * Tests {@link AbstractFile#getRandomAccessOutputStream()}.
      *
      * @throws IOException should not happen
      * @throws NoSuchAlgorithmException should not happen
      */
     public void testRandomAccessOutputStream() throws IOException, NoSuchAlgorithmException {
-        if(tempFile.hasRandomAccessOutputStream()) {
+        if(tempFile.isFileOperationSupported(FileOperation.RANDOM_WRITE_FILE)) {
             // Assert that:
             // - getRandomAccessOutputStream does not throw an IOException
             // - returns a non-null value
@@ -1671,6 +1678,32 @@ public abstract class AbstractFileTestCase extends TestCase {
         new PathUtilsTest().testResolveDestination(folder);
     }
 
+    /**
+     * Tests the presence of {@link UnsupportedFileOperation} annotations in the method for all operations that
+     * are {@link #getSupportedOperations() supported}, and the absence for those that are not.
+     *
+     * @throws Exception should not happen
+     */
+    public void testSupportedFileOperations() throws Exception {
+        List<FileOperation> supportedOps = Arrays.asList(getSupportedOperations());
+
+        AbstractFile tempFile = getTemporaryFile();
+        Class<? extends AbstractFile> fileClass = tempFile.getClass();
+        for(FileOperation op: supportedOps) {
+            assertTrue(tempFile.isFileOperationSupported(op));
+            assertTrue(AbstractFile.isFileOperationSupported(op, fileClass));
+        }
+
+        Method m;
+        for(FileOperation op: FileOperation.values()) {
+            m = op.getCorrespondingMethod(fileClass);
+            assertEquals(
+                supportedOps.contains(op),
+                !fileClass.getMethod(m.getName(), m.getParameterTypes()).isAnnotationPresent(UnsupportedFileOperation.class)
+            );
+        }
+    }
+
 
     //////////////////////
     // Abstract methods //
@@ -1688,4 +1721,11 @@ public abstract class AbstractFileTestCase extends TestCase {
      * @throws IOException if an error occurred while creating a temporary file
      */
     public abstract AbstractFile getTemporaryFile() throws IOException;
+
+    /**
+     * Returns a list of all {@link FileOperation} supported by this file implementation.
+     *
+     * @return a list of all {@link FileOperation} supported by this file implementation.
+     */
+    public abstract FileOperation[] getSupportedOperations();
 }

@@ -18,15 +18,13 @@
 
 package com.mucommander.file.impl.zip;
 
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.AbstractFileTestCase;
-import com.mucommander.file.FileFactory;
+import com.mucommander.file.*;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 
 /**
- * An {@link com.mucommander.file.AbstractFileTestCase} implementation, which performs tests on {@link com.mucommander.file.ArchiveEntryFile}
+ * An {@link com.mucommander.file.AbstractFileTestCase} implementation, which performs tests on {@link AbstractArchiveEntryFile}
  * entries located inside a {@link ZipArchiveFile} residing in a temporary {@link com.mucommander.file.impl.local.LocalFile}.
  *
  * @author Maxence Bernard
@@ -48,6 +46,18 @@ public class ZipArchiveFileTest extends AbstractFileTestCase {
     public AbstractFile getTemporaryFile() throws IOException {
         // use a incremental id to avoid collisions
         return tempZipFile.getDirectChild("entry"+(++entryNum));
+    }
+
+    @Override
+    public FileOperation[] getSupportedOperations() {
+        return new FileOperation[] {
+            FileOperation.READ_FILE,
+            FileOperation.WRITE_FILE,
+            FileOperation.CREATE_DIRECTORY,
+            FileOperation.LIST_CHILDREN,
+            FileOperation.DELETE,
+            FileOperation.CHANGE_DATE
+        };
     }
 
 
@@ -100,14 +110,14 @@ public class ZipArchiveFileTest extends AbstractFileTestCase {
 //     */
 //    public void testZip32Limit() throws IOException, NoSuchAlgorithmException {
 //        // Assert a 4GB minus one byte entry can be properly compressed and uncompressed
-//        ChecksumOutputStream md5Out = getMd5OutputStream(tempFile.getOutputStream(false));
+//        ChecksumOutputStream md5Out = getMd5OutputStream(tempFile.getAppendOutputStream());
 //        StreamUtils.fillWithConstant(md5Out, (byte)0, MAX_ZIP32_ENTRY_SIZE);
 //        md5Out.close();
 //
 //        assertEquals(md5Out.getChecksum(), calculateMd5(tempFile));
 //
 //        // Assert that an IOException is thrown if more than 4GB is written to an entry
-//        OutputStream out = tempFile.getOutputStream(false);
+//        OutputStream out = tempFile.getOutputStream();
 //        boolean ioExceptionThrown = false;
 //        try {
 //            StreamUtils.fillWithConstant(out, (byte)0, MAX_ZIP32_ENTRY_SIZE+1);

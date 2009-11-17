@@ -94,7 +94,13 @@ public class ChangeFileAttributesJob extends FileJob {
             return file.changePermissions(permissions);
 
 //        if(date!=-1)
-        return file.changeDate(date);
+        try {
+            file.changeDate(date);
+            return false;
+        }
+        catch (IOException e) {
+            return false;
+        }
     }
 
     // This job modifies the FileSet's base folder and potentially its subfolders

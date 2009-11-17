@@ -60,7 +60,7 @@ public class TarArchiveFile extends AbstractROArchiveFile {
      * <code>0</code> to start at the first entry.
      * @return a TarInputStream which can be used to read TAR entries
      * @throws IOException if an error occurred while create the stream
-     * @throws UnsupportedFileOperationException if this operation is not supported by the underlying file protocol,
+     * @throws UnsupportedFileOperationException if this operation is not supported by the underlying filesystem,
      * or is not implemented.
      */
     private TarInputStream createTarStream(long entryOffset) throws IOException, UnsupportedFileOperationException {

@@ -19,6 +19,7 @@
 package com.mucommander.ui.viewer.text;
 
 import com.mucommander.file.AbstractFile;
+import com.mucommander.file.FileOperation;
 import com.mucommander.io.EncodingDetector;
 import com.mucommander.io.RandomAccessInputStream;
 import com.mucommander.io.bom.BOM;
@@ -176,7 +177,7 @@ class TextEditorImpl implements ThemeListener, ActionListener, EncodingListener 
         InputStream in = null;
 
         try {
-            if(file.hasRandomAccessInputStream()) {
+            if(file.isFileOperationSupported(FileOperation.RANDOM_READ_FILE)) {
                 try { in = file.getRandomAccessInputStream(); }
                 catch(IOException e) {
                     // In that case we simply get an InputStream

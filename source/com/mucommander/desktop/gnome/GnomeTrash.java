@@ -281,7 +281,7 @@ public class GnomeTrash extends QueuedTrash {
             try {
                 // create info file
                 infoFile = TRASH_INFO_SUBFOLDER.getChild(trashFileName + ".trashinfo");
-                infoWriter = new OutputStreamWriter(infoFile.getOutputStream(false));
+                infoWriter = new OutputStreamWriter(infoFile.getOutputStream());
                 infoWriter.write(fileInfoContent);
             } catch (IOException ex) {
                 retVal = false;

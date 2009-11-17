@@ -95,7 +95,7 @@ public class CombineFilesJob extends AbstractCopyJob {
         }
         
         try {
-    		out = destFile.getOutputStream(false);
+    		out = destFile.getOutputStream();
         } catch(IOException e) {
         	AppLogger.fine("Caught exception", e);
             showErrorDialog(errorDialogTitle,

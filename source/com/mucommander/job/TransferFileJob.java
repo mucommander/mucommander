@@ -22,6 +22,7 @@ package com.mucommander.job;
 import com.apple.eio.FileManager;
 import com.mucommander.AppLogger;
 import com.mucommander.file.AbstractFile;
+import com.mucommander.file.FileOperation;
 import com.mucommander.file.FilePermissions;
 import com.mucommander.file.impl.local.LocalFile;
 import com.mucommander.file.util.FileSet;
@@ -168,7 +169,15 @@ public abstract class TransferFileJob extends FileJob {
         }
 
         // Preserve source file's date
-        destFile.changeDate(sourceFile.getDate());
+        if(destFile.isFileOperationSupported(FileOperation.CHANGE_DATE)) {
+            try {
+                destFile.changeDate(sourceFile.getDate());
+            }
+            catch (IOException e) {
+                AppLogger.fine("failed to change the date of "+destFile, e);
+                // Fail silently
+            }
+        }
 
         // Preserve source file's permissions: preserve only the permissions bits that are supported by the source file
         // and use default permissions for the rest of them.

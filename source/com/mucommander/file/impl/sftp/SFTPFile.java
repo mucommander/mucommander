@@ -129,6 +129,67 @@ public class SFTPFile extends ProtocolFile {
         attributeCachingPeriod = period;
     }
 
+    private OutputStream getOutputStream(boolean append) throws IOException {
+        // Retrieve a ConnectionHandler and lock it
+        final SFTPConnectionHandler connHandler = (SFTPConnectionHandler)ConnectionPool.getConnectionHandler(connHandlerFactory, fileURL, true);
+        try {
+            // Makes sure the connection is started, if not starts it
+            connHandler.checkConnection();
+
+            SftpFile sftpFile;
+            if(exists()) {
+                sftpFile = connHandler.sftpSubsystem.openFile(absPath,
+                    append?SftpSubsystemClient.OPEN_WRITE|SftpSubsystemClient.OPEN_APPEND
+                    :SftpSubsystemClient.OPEN_WRITE|SftpSubsystemClient.OPEN_TRUNCATE);
+
+                // Update local attributes
+                if(!append)
+                    fileAttributes.setSize(0);
+            }
+            else {
+                // Set new file permissions to 644 octal (420 dec): "rw-r--r--"
+                // Note: by default, permissions for files freshly created is 0 (not readable/writable/executable by anyone)!
+                FileAttributes atts = new FileAttributes();
+                atts.setPermissions(new UnsignedInteger32(0644));
+                sftpFile = connHandler.sftpSubsystem.openFile(absPath, SftpSubsystemClient.OPEN_WRITE|SftpSubsystemClient.OPEN_CREATE, atts);
+
+                // Update local attributes
+                fileAttributes.setExists(true);
+                fileAttributes.setDate(System.currentTimeMillis());
+                fileAttributes.setSize(0);
+            }
+
+            return new CounterOutputStream(
+                // Custom SftpFileOutputStream constructor, not part of the official J2SSH API
+                new SftpFileOutputStream(sftpFile, append?getSize():0) {
+                    @Override
+                    public void close() throws IOException {
+                        // SftpFileOutputStream.close() closes the open SftpFile file handle
+                        super.close();
+
+                        // Release the lock on the ConnectionHandler
+                        connHandler.releaseLock();
+                    }
+                }
+                ,
+                new ByteCounter() {
+                    @Override
+                    public synchronized void add(long nbBytes) {
+                        fileAttributes.addToSize(nbBytes);
+                        fileAttributes.setDate(System.currentTimeMillis());
+                    }
+                }
+            );
+        }
+        catch(IOException e) {
+            // Release the lock on the ConnectionHandler if the OutputStream could not be created
+            connHandler.releaseLock();
+
+            // Re-throw IOException
+            throw e;
+        }
+    }
+
 
     /////////////////////////////////////////////
     // ConnectionHandlerFactory implementation //
@@ -163,12 +224,7 @@ public class SFTPFile extends ProtocolFile {
     }
 
     @Override
-    public boolean canChangeDate() {
-        return true;
-    }
-
-    @Override
-    public boolean changeDate(long lastModified) {
+    public void changeDate(long lastModified) throws IOException, UnsupportedFileOperationException {
         SFTPConnectionHandler connHandler = null;
         SftpFile sftpFile = null;
         try {
@@ -187,12 +243,6 @@ public class SFTPFile extends ProtocolFile {
             connHandler.sftpSubsystem.setAttributes(sftpFile, attributes);
             // Update local attribute copy
             fileAttributes.setDate(lastModified);
-
-            return true;
-        }
-        catch(IOException e) {
-            FileLogger.fine("Failed to change date", e);
-            return false;
         }
         finally {
             // Close SftpFile instance to release its handle
@@ -302,75 +352,13 @@ public class SFTPFile extends ProtocolFile {
     }
 
     @Override
-    public OutputStream getOutputStream(boolean append) throws IOException {
-        // Retrieve a ConnectionHandler and lock it
-        final SFTPConnectionHandler connHandler = (SFTPConnectionHandler)ConnectionPool.getConnectionHandler(connHandlerFactory, fileURL, true);
-        try {
-            // Makes sure the connection is started, if not starts it
-            connHandler.checkConnection();
-
-            SftpFile sftpFile;
-            if(exists()) {
-                sftpFile = connHandler.sftpSubsystem.openFile(absPath,
-                    append?SftpSubsystemClient.OPEN_WRITE|SftpSubsystemClient.OPEN_APPEND
-                    :SftpSubsystemClient.OPEN_WRITE|SftpSubsystemClient.OPEN_TRUNCATE);
-
-                // Update local attributes
-                if(!append)
-                    fileAttributes.setSize(0);
-            }
-            else {
-                // Set new file permissions to 644 octal (420 dec): "rw-r--r--"
-                // Note: by default, permissions for files freshly created is 0 (not readable/writable/executable by anyone)!
-                FileAttributes atts = new FileAttributes();
-                atts.setPermissions(new UnsignedInteger32(0644));
-                sftpFile = connHandler.sftpSubsystem.openFile(absPath, SftpSubsystemClient.OPEN_WRITE|SftpSubsystemClient.OPEN_CREATE, atts);
-
-                // Update local attributes
-                fileAttributes.setExists(true);
-                fileAttributes.setDate(System.currentTimeMillis());
-                fileAttributes.setSize(0);
-            }
-
-            return new CounterOutputStream(
-                // Custom SftpFileOutputStream constructor, not part of the official J2SSH API
-                new SftpFileOutputStream(sftpFile, append?getSize():0) {
-                    @Override
-                    public void close() throws IOException {
-                        // SftpFileOutputStream.close() closes the open SftpFile file handle
-                        super.close();
-
-                        // Release the lock on the ConnectionHandler
-                        connHandler.releaseLock();
-                    }
-                }
-                ,
-                new ByteCounter() {
-                    @Override
-                    public synchronized void add(long nbBytes) {
-                        fileAttributes.addToSize(nbBytes);
-                        fileAttributes.setDate(System.currentTimeMillis());
-                    }
-                }
-            );
-        }
-        catch(IOException e) {
-            // Release the lock on the ConnectionHandler if the OutputStream could not be created 
-            connHandler.releaseLock();
-
-            // Re-throw IOException
-            throw e;
-        }
+    public OutputStream getOutputStream() throws IOException {
+        return getOutputStream(false);
     }
 
-    /**
-     * Returns <code>true</code>: {@link #getRandomAccessInputStream()} is implemented.
-     *
-     * @return true
-     */
     @Override
-    public boolean hasRandomAccessInputStream() {
-        return true;
+    public OutputStream getAppendOutputStream() throws IOException {
+        return getOutputStream(true);
     }
 
     @Override
@@ -379,23 +367,12 @@ public class SFTPFile extends ProtocolFile {
     }
 
     /**
-     * Returns <code>false</code>: {@link #getRandomAccessOutputStream()} is not implemented and throws an
-     * <code>UnsupportedFileOperationException</code>.
-     *
-     * @return false
-     */
-    @Override
-    public boolean hasRandomAccessOutputStream() {
-        // No random access for SFTP files unfortunately
-        return false;
-    }
-
-    /**
      * Always throws an {@link UnsupportedFileOperationException}: random write access is not supported.
      */
     @Override
+    @UnsupportedFileOperation
     public RandomAccessOutputStream getRandomAccessOutputStream() throws UnsupportedFileOperationException {
-        throw new UnsupportedFileOperationException();
+        throw new UnsupportedFileOperationException(FileOperation.RANDOM_WRITE_FILE);
     }
 
     @Override

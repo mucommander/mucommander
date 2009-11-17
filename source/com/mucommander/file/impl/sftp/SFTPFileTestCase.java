@@ -21,6 +21,7 @@ package com.mucommander.file.impl.sftp;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.AbstractFileTestCase;
 import com.mucommander.file.FileFactory;
+import com.mucommander.file.FileOperation;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
@@ -48,6 +49,19 @@ public class SFTPFileTestCase extends AbstractFileTestCase {
         tempFolder = FileFactory.getFile(System.getProperty(TEMP_FOLDER_PROPERTY));
     }
 
+    @Override
+    public FileOperation[] getSupportedOperations() {
+        return new FileOperation[] {
+            FileOperation.READ_FILE,
+            FileOperation.RANDOM_READ_FILE,
+            FileOperation.WRITE_FILE,
+            FileOperation.APPEND_FILE,
+            FileOperation.CREATE_DIRECTORY,
+            FileOperation.LIST_CHILDREN,
+            FileOperation.DELETE,
+            FileOperation.CHANGE_DATE
+        };
+    }
 
     // Method temporarily overridden to prevent the unit tests from failing
     @Override

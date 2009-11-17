@@ -159,20 +159,15 @@ public class NFSFile extends ProtocolFile {
     }
 
     /**
-     * Always returns <code>false</code> (date cannot be changed).
+     * Implementation notes: always throws {@link UnsupportedFileOperationException}.
+     *
+     * @throws UnsupportedFileOperationException always.
      */
     @Override
-    public boolean canChangeDate() {
-        return false;
-    }
-
-    /**
-     * Always returns <code>false</code> (date cannot be changed).
-     */
-    @Override
-    public boolean changeDate(long lastModified) {
+    @UnsupportedFileOperation
+    public void changeDate(long lastModified) throws UnsupportedFileOperationException {
         // XFile has no method for that purpose
-        return false;
+        throw new UnsupportedFileOperationException(FileOperation.CHANGE_DATE);
     }
 
     @Override
@@ -284,34 +279,18 @@ public class NFSFile extends ProtocolFile {
     }
 
     @Override
-    public OutputStream getOutputStream(boolean append) throws IOException {
-        return new XFileOutputStream(absPath, append);
+    public OutputStream getOutputStream() throws IOException {
+        return new XFileOutputStream(absPath, false);
     }
 
-    /**
-     * Returns <code>true</code>: {@link #getRandomAccessInputStream()} is implemented.
-     *
-     * @return true
-     */
     @Override
-    public boolean hasRandomAccessInputStream() {
-        return true;
+    public OutputStream getAppendOutputStream() throws IOException {
+        return new XFileOutputStream(absPath, true);
     }
 
     @Override
     public RandomAccessInputStream getRandomAccessInputStream() throws IOException {
         return new NFSRandomAccessInputStream(new XRandomAccessFile(file, "r"));
-    }
-
-    /**
-     * Returns <code>false</code>: {@link #getRandomAccessOutputStream()} is implemented but the returned
-     * <code>RandomAccessOutputStream</code> is not fully functional.
-     *
-     * @return false
-     */
-    @Override
-    public boolean hasRandomAccessOutputStream() {
-        return false;
     }
 
     /**
@@ -323,6 +302,7 @@ public class NFSFile extends ProtocolFile {
      * @throws IOException if the file could not be opened for random write access
      */
     @Override
+    @UnsupportedFileOperation
     public RandomAccessOutputStream getRandomAccessOutputStream() throws IOException {
         return new NFSRandomAccessOutputStream(new XRandomAccessFile(file, "rw"));
     }

@@ -142,7 +142,7 @@ public class ZipArchiveFile extends AbstractRWArchiveFile {
      *
      * @param entry the entry to add to the entries tree
      * @throws IOException if an error occurred while adding the entry to the tree
-     * @throws UnsupportedFileOperationException if this operation is not supported by the underlying file protocol,
+     * @throws UnsupportedFileOperationException if this operation is not supported by the underlying filesystem,
      * or is not implemented.
      */
     private void finishAddEntry(ArchiveEntry entry) throws IOException, UnsupportedFileOperationException {
@@ -162,7 +162,7 @@ public class ZipArchiveFile extends AbstractRWArchiveFile {
     @Override
     public synchronized ArchiveEntryIterator getEntryIterator() throws IOException, UnsupportedFileOperationException {
         // If the underlying AbstractFile has random read access, use our own ZipFile implementation to read entries
-        if (file.hasRandomAccessInputStream()) {
+        if (file.isFileOperationSupported(FileOperation.RANDOM_READ_FILE)) {
             checkZipFile();
 
             final Iterator<ZipEntry> iterator = zipFile.getEntries();
@@ -193,7 +193,7 @@ public class ZipArchiveFile extends AbstractRWArchiveFile {
     @Override
     public synchronized InputStream getEntryInputStream(ArchiveEntry entry, ArchiveEntryIterator entryIterator) throws IOException, UnsupportedFileOperationException {
         // If the underlying AbstractFile has random read access, use our own ZipFile implementation to read the entry
-        if (file.hasRandomAccessInputStream()) {
+        if (file.isFileOperationSupported(FileOperation.RANDOM_READ_FILE)) {
             checkZipFile();
 
             ZipEntry zipEntry = (com.mucommander.file.impl.zip.provider.ZipEntry)entry.getEntryObject();
@@ -347,17 +347,16 @@ public class ZipArchiveFile extends AbstractRWArchiveFile {
 
     /**
      * Returns <code>true</code> only if the proxied archive file has random read and write access, as reported
-     * by {@link #hasRandomAccessInputStream()} and {@link #hasRandomAccessOutputStream()} respectively. If that is
-     * not the case, this archive has read-only access and behaves just like a
-     * {@link com.mucommander.file.AbstractROArchiveFile}.
+     * by {@link AbstractFile#isFileOperationSupported(FileOperation)}. If that is not the case, this archive has 
+     * read-only access and behaves just like a {@link com.mucommander.file.AbstractROArchiveFile}.
      *
      * @return true only if the proxied archive file has random read and write access
      */
     @Override
     public boolean isWritable() {
-        return file.hasRandomAccessInputStream() && file.hasRandomAccessOutputStream();
+        return file.isFileOperationSupported(FileOperation.RANDOM_READ_FILE)
+            && file.isFileOperationSupported(FileOperation.RANDOM_WRITE_FILE);
     }
-
 
     /**
      * Creates an empty, valid Zip file. The resulting file is 22 bytes long.
@@ -367,7 +366,7 @@ public class ZipArchiveFile extends AbstractRWArchiveFile {
         if(exists())
             throw new IOException();
 
-        OutputStream out = getOutputStream(false);
+        OutputStream out = getOutputStream();
         try {
             out.write(EMPTY_ZIP_BYTES);
         }

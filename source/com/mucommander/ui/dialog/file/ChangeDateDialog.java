@@ -19,6 +19,7 @@
 package com.mucommander.ui.dialog.file;
 
 import com.mucommander.file.AbstractFile;
+import com.mucommander.file.FileOperation;
 import com.mucommander.file.util.FileSet;
 import com.mucommander.job.ChangeFileAttributesJob;
 import com.mucommander.text.CustomDateFormat;
@@ -67,7 +68,7 @@ public class ChangeDateDialog extends JobDialog implements ActionListener, ItemL
         ButtonGroup buttonGroup = new ButtonGroup();
 
         AbstractFile destFile = files.size()==1?files.elementAt(0):files.getBaseFolder();
-        boolean canChangeDate = destFile.canChangeDate();
+        boolean canChangeDate = destFile.isFileOperationSupported(FileOperation.CHANGE_DATE);
 
         JPanel tempPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         nowRadioButton = new JRadioButton(Translator.get("change_date_dialog.now"));

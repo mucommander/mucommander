@@ -223,7 +223,7 @@ public class CalculateChecksumJob extends TransferFileJob {
         do {
             try {
                 // Tries to get an OutputStream on the destination file
-                this.checksumFileOut = checksumFile.getOutputStream(false);
+                this.checksumFileOut = checksumFile.getOutputStream();
 
                 break;
 

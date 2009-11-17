@@ -41,7 +41,7 @@ public class SevenZipArchiveFile extends AbstractROArchiveFile {
      * and declare the 7zip file as up-to-date.
      *
      * @throws IOException if an error occurred while reloading
-     * @throws UnsupportedFileOperationException if this operation is not supported by the underlying file protocol,
+     * @throws UnsupportedFileOperationException if this operation is not supported by the underlying filesystem,
      * or is not implemented.
      */
     private void checkSevenZipFile() throws IOException, UnsupportedFileOperationException {

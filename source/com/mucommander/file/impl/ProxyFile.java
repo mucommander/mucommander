@@ -28,6 +28,7 @@ import com.mucommander.io.RandomAccessOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -87,13 +88,8 @@ public abstract class ProxyFile extends AbstractFile {
     }
 
     @Override
-    public boolean canChangeDate() {
-        return file.canChangeDate();
-    }
-
-    @Override
-    public boolean changeDate(long lastModified) {
-        return file.changeDate(lastModified);
+    public void changeDate(long lastModified) throws IOException, UnsupportedFileOperationException {
+        file.changeDate(lastModified);
     }
 
     @Override
@@ -167,23 +163,18 @@ public abstract class ProxyFile extends AbstractFile {
     }
 
     @Override
-    public OutputStream getOutputStream(boolean append) throws IOException, UnsupportedFileOperationException {
-        return file.getOutputStream(append);
+    public OutputStream getOutputStream() throws IOException, UnsupportedFileOperationException {
+        return file.getOutputStream();
     }
 
     @Override
-    public boolean hasRandomAccessInputStream() {
-        return file.hasRandomAccessInputStream();
+    public OutputStream getAppendOutputStream() throws IOException, UnsupportedFileOperationException {
+        return file.getAppendOutputStream();
     }
 
     @Override
     public RandomAccessInputStream getRandomAccessInputStream() throws IOException, UnsupportedFileOperationException {
         return file.getRandomAccessInputStream();
-    }
-
-    @Override
-    public boolean hasRandomAccessOutputStream() {
-        return file.hasRandomAccessOutputStream();
     }
 
     @Override
@@ -215,6 +206,25 @@ public abstract class ProxyFile extends AbstractFile {
     /////////////////////////////////////
     // Overridden AbstractFile methods //
     /////////////////////////////////////
+
+    @Override
+    public final boolean isFileOperationSupported(FileOperation op) {
+        Class<? extends AbstractFile> thisClass = getClass();
+        Method opMethod = op.getCorrespondingMethod(thisClass);
+        // If the method corresponding to the file operation has been overridden by this class (a ProxyFile subclass),
+        // check the presence of the UnsupportedFileOperation annotation in this class.
+        try {
+            if(!thisClass.getMethod(opMethod.getName(), opMethod.getParameterTypes()).getDeclaringClass().equals(ProxyFile.class))
+                return AbstractFile.isFileOperationSupported(op, thisClass);
+        }
+        catch(Exception e) {
+            // Should never happen, unless AbstractFile method signatures have changed and FileOperation has not been updated
+            FileLogger.warning("Exception caught, this should not have happened", e);
+        }
+
+        // Otherwise, check for the presence of the UnsupportedFileOperation annotation in the wrapped AbstractFile.
+        return file.isFileOperationSupported(op);
+    }
 
     @Override
     public FileURL getURL() {

@@ -94,7 +94,7 @@ class CompatURLConnection extends URLConnection {
     public OutputStream getOutputStream() throws IOException {
         checkConnected();
 
-        return file.getOutputStream(false);
+        return file.getOutputStream();
     }
 
     @Override

@@ -630,7 +630,7 @@ public class FileFactory {
             AbstractFile archiveFile;
 
             // Do not use cache for archive entries
-            boolean useCache = !(file instanceof ArchiveEntryFile);
+            boolean useCache = !(file instanceof AbstractArchiveEntryFile);
 
             if(useCache) {
                 archiveFile = archiveFileCache.get(file.getURL());

@@ -54,8 +54,8 @@ import java.util.WeakHashMap;
  * This tree is recreated (<code>getEntryIterator()</code> is called again) only if the archive file has changed, i.e.
  * if its date has changed since the tree was created.</p>
  *
- * <p>Files returned by the <code>ls()</code> are {@link ArchiveEntryFile} instances which use an {@link ArchiveEntry}
- * object to retrieve the entry's attributes. In turn, these <code>ArchiveEntryFile</code> instances query the
+ * <p>Files returned by the <code>ls()</code> are {@link AbstractArchiveEntryFile} instances which use an {@link ArchiveEntry}
+ * object to retrieve the entry's attributes. In turn, these <code>AbstractArchiveEntryFile</code> instances query the
  * associated <code>AbstractArchiveFile</code> to list their content.
  * <br>From an implementation perspective, one only needs to deal with {@link ArchiveEntry} instances, all the nuts
  * and bolts are taken care of by this class.</p>
@@ -63,7 +63,7 @@ import java.util.WeakHashMap;
  * @see com.mucommander.file.FileFactory
  * @see com.mucommander.file.ArchiveFormatProvider
  * @see com.mucommander.file.ArchiveEntry
- * @see com.mucommander.file.ArchiveEntryFile
+ * @see AbstractArchiveEntryFile
  * @see com.mucommander.file.archiver.Archiver
  * @author Maxence Bernard
  */
@@ -76,9 +76,10 @@ public abstract class AbstractArchiveFile extends ProxyFile {
      * need to be reloaded */
     protected long entryTreeDate;
 
-    /** Caches ArchiveEntryFile instances so that there is only one ArchiveEntryFile corresponding to the same entry
-     * at any given time, to avoid attribute inconsistencies. The key is the corresponding ArchiveEntry. */
-    protected WeakHashMap<ArchiveEntry, ArchiveEntryFile> archiveEntryFiles;
+    /** Caches {@link AbstractArchiveEntryFile} instances so that there is only one AbstractArchiveEntryFile
+     * corresponding to the same entry at any given time, to avoid attribute inconsistencies. The key is the
+     * corresponding ArchiveEntry. */
+    protected WeakHashMap<ArchiveEntry, AbstractArchiveEntryFile> archiveEntryFiles;
 
     /**
      * Creates an AbstractArchiveFile on top of the given file.
@@ -90,17 +91,17 @@ public abstract class AbstractArchiveFile extends ProxyFile {
     }
 
     /**
-     * Creates the entries tree, used by {@link #ls(ArchiveEntryFile, com.mucommander.file.filter.FilenameFilter, com.mucommander.file.filter.FileFilter)}
+     * Creates the entries tree, used by {@link #ls(AbstractArchiveEntryFile , com.mucommander.file.filter.FilenameFilter, com.mucommander.file.filter.FileFilter)}
      * to quickly list the contents of an archive's subfolder.
      *
      * @throws IOException if an error occured while retrieving this archive's entries
-     * @throws UnsupportedFileOperationException if this operation is not supported by the underlying file protocol,
-     * or is not implemented.
+     * @throws UnsupportedFileOperationException if {@link FileOperation#READ_FILE} operations are not supported by the
+     * underlying file protocol.
      */
     protected void createEntriesTree() throws IOException, UnsupportedFileOperationException {
         // TODO: this method is not thread-safe and must be synchronized
         ArchiveEntryTree treeRoot = new ArchiveEntryTree();
-        archiveEntryFiles = new WeakHashMap<ArchiveEntry, ArchiveEntryFile>();
+        archiveEntryFiles = new WeakHashMap<ArchiveEntry, AbstractArchiveEntryFile>();
 
         long start = System.currentTimeMillis();
         ArchiveEntryIterator entries = getEntryIterator();
@@ -127,8 +128,8 @@ public abstract class AbstractArchiveFile extends ProxyFile {
      * If any of those 2 conditions isn't met, the entries tree is (re)created.
      *
      * @throws IOException if an error occurred while creating the tree
-     * @throws UnsupportedFileOperationException if this operation is not supported by the underlying file protocol,
-     * or is not implemented.
+     * @throws UnsupportedFileOperationException if {@link FileOperation#READ_FILE} operations are not supported by the
+     * underlying file protocol.
      */
     protected void checkEntriesTree() throws IOException, UnsupportedFileOperationException {
         if(this.entryTreeRoot==null || getDate()!=this.entryTreeDate)
@@ -151,8 +152,8 @@ public abstract class AbstractArchiveFile extends ProxyFile {
      *
      * @param entry the ArchiveEntry to add to the tree
      * @throws IOException if an error occurred while creating the entries tree
-     * @throws UnsupportedFileOperationException if this operation is not supported by the underlying file protocol,
-     * or is not implemented.
+     * @throws UnsupportedFileOperationException if {@link FileOperation#READ_FILE} operations are not supported by the
+     * underlying file protocol.
      */
     protected void addToEntriesTree(ArchiveEntry entry) throws IOException, UnsupportedFileOperationException {
         checkEntriesTree();
@@ -165,8 +166,8 @@ public abstract class AbstractArchiveFile extends ProxyFile {
      *
      * @param entry the ArchiveEntry to remove from the tree
      * @throws IOException if an error occurred while creating the entries tree
-     * @throws UnsupportedFileOperationException if this operation is not supported by the underlying file protocol,
-     * or is not implemented.
+     * @throws UnsupportedFileOperationException if {@link FileOperation#READ_FILE} operations are not supported by the
+     * underlying file protocol.
      */
     protected void removeFromEntriesTree(ArchiveEntry entry) throws IOException, UnsupportedFileOperationException {
         checkEntriesTree();
@@ -191,10 +192,10 @@ public abstract class AbstractArchiveFile extends ProxyFile {
     /**
      * Returns the contents of the specified folder entry.
      *
-     * @throws UnsupportedFileOperationException if this operation is not supported by the underlying file protocol,
-     * or is not implemented.
+     * @throws UnsupportedFileOperationException if {@link FileOperation#READ_FILE} operations are not supported by the
+     * underlying file protocol.
      */
-    protected AbstractFile[] ls(ArchiveEntryFile entryFile, FilenameFilter filenameFilter, FileFilter fileFilter) throws IOException, UnsupportedFileOperationException {
+    protected AbstractFile[] ls(AbstractArchiveEntryFile entryFile, FilenameFilter filenameFilter, FileFilter fileFilter) throws IOException, UnsupportedFileOperationException {
         // Make sure the entries tree is created and up-to-date
         checkEntriesTree();        
 
@@ -211,8 +212,8 @@ public abstract class AbstractArchiveFile extends ProxyFile {
     /**
      * Returns the contents (direct children) of the specified tree node.
      *
-     * @throws UnsupportedFileOperationException if this operation is not supported by the underlying file protocol,
-     * or is not implemented.
+     * @throws UnsupportedFileOperationException if {@link FileOperation#READ_FILE} operations are not supported by the
+     * underlying file protocol.
      */
     protected AbstractFile[] ls(DefaultMutableTreeNode treeNode, AbstractFile parentFile, FilenameFilter filenameFilter, FileFilter fileFilter) throws IOException, UnsupportedFileOperationException {
         AbstractFile files[];
@@ -261,20 +262,28 @@ public abstract class AbstractArchiveFile extends ProxyFile {
         if(!fileSeparator.equals("/"))
             entryPath = entryPath.replace("/", fileSeparator);
 
-        // Cache ArchiveEntryFile instances so that there is only one ArchiveEntryFile corresponding to the same entry
-        // at any given time, to avoid attribute inconsistencies.
+        // Cache AbstractArchiveEntryFile instances so that there is only one AbstractArchiveEntryFile corresponding to 
+        // the same entry at any given time, to avoid attribute inconsistencies.
 
-        ArchiveEntryFile entryFile = archiveEntryFiles.get(entry);
+        AbstractArchiveEntryFile entryFile = archiveEntryFiles.get(entry);
         if(entryFile==null) {
             FileURL archiveURL = getURL();
             FileURL entryURL = (FileURL)archiveURL.clone();
             entryURL.setPath(addTrailingSeparator(archiveURL.getPath()) + entryPath);
 
-            entryFile = new ArchiveEntryFile(
-              entryURL,
-              this,
-              entry
-            );
+            // Create an RO and RW entry file, depending on whether this archive file is RO or RW
+            entryFile = this instanceof AbstractRWArchiveFile
+                ?new RWArchiveEntryFile(
+                  entryURL,
+                  this,
+                  entry
+                )
+                :new ROArchiveEntryFile(
+                      entryURL,
+                      this,
+                      entry
+                );
+
             entryFile.setParent(parentFile);
 
             archiveEntryFiles.put(entry, entryFile);
@@ -289,6 +298,8 @@ public abstract class AbstractArchiveFile extends ProxyFile {
      * @param entry an entry contained by this archive
      * @return an AbstractFile that corresponds to the given entry
      * @throws IOException if neither the entry nor its parent exist within the archive
+     * @throws UnsupportedFileOperationException if {@link FileOperation#READ_FILE} operations are not supported by the
+     * underlying file protocol.
      */
     public AbstractFile getArchiveEntryFile(ArchiveEntry entry) throws IOException, UnsupportedFileOperationException {
         return getArchiveEntryFile(entry.getPath());
@@ -307,8 +318,8 @@ public abstract class AbstractArchiveFile extends ProxyFile {
      * @param entryPath path to an entry within this archive
      * @return an AbstractFile that corresponds to the given entry path
      * @throws IOException if neither the entry nor its parent exist within the archive
-     * @throws UnsupportedFileOperationException if this operation is not supported by the underlying file protocol,
-     * or is not implemented.
+     * @throws UnsupportedFileOperationException if {@link FileOperation#READ_FILE} operations are not supported by the
+     * underlying file protocol.
      */
     public AbstractFile getArchiveEntryFile(String entryPath) throws IOException, UnsupportedFileOperationException {
         // Make sure the entries tree is created and up-to-date
@@ -378,8 +389,8 @@ public abstract class AbstractArchiveFile extends ProxyFile {
      * @return an iterator of {@link ArchiveEntry} that iterates through all the entries of this archive
      * @throws IOException if an error occurred while reading the archive, either because the archive is corrupt or
      * because of an I/O error
-     * @throws UnsupportedFileOperationException if this operation is not supported by the underlying file protocol,
-     * or is not implemented.
+     * @throws UnsupportedFileOperationException if {@link FileOperation#READ_FILE} operations are not supported by the
+     * underlying file protocol.
      */
     public abstract ArchiveEntryIterator getEntryIterator() throws IOException, UnsupportedFileOperationException;
 
@@ -395,13 +406,13 @@ public abstract class AbstractArchiveFile extends ProxyFile {
      * @return an <code>InputStream</code> to read from the given archive entry
      * @throws IOException if an error occurred while reading the archive, either because the archive is corrupt or
      * because of an I/O error, or if the given entry wasn't found in the archive
-     * @throws UnsupportedFileOperationException if this operation is not supported by the underlying file protocol,
-     * or is not implemented.
+     * @throws UnsupportedFileOperationException if {@link FileOperation#READ_FILE} operations are not supported by the 
+     * underlying file protocol.
      */
     public abstract InputStream getEntryInputStream(ArchiveEntry entry, ArchiveEntryIterator entryIterator) throws IOException, UnsupportedFileOperationException;
 
     /**
-     * Returns <code>true</code> if this archive file is writable, i.e. is capable of adding and deleting entries to
+     * Returns <code>true</code> if this archive file is writable, i.e. is capable of adding and deleting entries from
      * the underlying archive file.
      *
      * <p>
@@ -414,10 +425,8 @@ public abstract class AbstractArchiveFile extends ProxyFile {
      * testing if it is an instance of <code>AbstractRWArchiveFile</code>.
      * </p>
      *
-     * @return true if this archive is writable, i.e. is capable of adding and deleting entries to
+     * @return <code>true</code> if this archive is writable, i.e. is capable of adding and deleting entries from
      * the underlying archive file.
-     *
-     * // TODO: generalize and move this method to AbstractFile
      */
     public abstract boolean isWritable();
 
@@ -438,12 +447,12 @@ public abstract class AbstractArchiveFile extends ProxyFile {
 
     /**
      * This method is overridden to list and return the topmost entries contained by this archive.
-     * The returned files are {@link ArchiveEntryFile} instances.
+     * The returned files are {@link AbstractArchiveEntryFile} instances.
      *
      * @return the topmost entries contained by this archive
      * @throws IOException if the archive entries could not be listed
-     * @throws UnsupportedFileOperationException if this operation is not supported by the underlying file protocol,
-     * or is not implemented.
+     * @throws UnsupportedFileOperationException if {@link FileOperation#READ_FILE} operations are not supported by the
+     * underlying file protocol.
      */
     @Override
     public AbstractFile[] ls() throws IOException, UnsupportedFileOperationException {
@@ -455,14 +464,14 @@ public abstract class AbstractArchiveFile extends ProxyFile {
 
     /**
      * This method is overridden to list and return the topmost entries contained by this archive, filtering out
-     * the ones that do not match the specified {@link FilenameFilter}. The returned files are {@link ArchiveEntryFile}
+     * the ones that do not match the specified {@link FilenameFilter}. The returned files are {@link AbstractArchiveEntryFile}
      * instances.
      *
      * @param filter the FilenameFilter to be used to filter files out from the list, may be <code>null</code>
      * @return the topmost entries contained by this archive
      * @throws IOException if the archive entries could not be listed
-     * @throws UnsupportedFileOperationException if this operation is not supported by the underlying file protocol,
-     * or is not implemented.
+     * @throws UnsupportedFileOperationException if {@link FileOperation#READ_FILE} operations are not supported by the
+     * underlying file protocol.
      */
     @Override
     public AbstractFile[] ls(FilenameFilter filter) throws IOException, UnsupportedFileOperationException {
@@ -474,13 +483,13 @@ public abstract class AbstractArchiveFile extends ProxyFile {
 
     /**
      * This method is overridden to list and return the topmost entries contained by this archive, filtering out
-     * the ones that do not match the specified {@link FileFilter}. The returned files are {@link ArchiveEntryFile} instances.
+     * the ones that do not match the specified {@link FileFilter}. The returned files are {@link AbstractArchiveEntryFile} instances.
      *
      * @param filter the FilenameFilter to be used to filter files out from the list, may be <code>null</code>
      * @return the topmost entries contained by this archive
      * @throws IOException if the archive entries could not be listed
-     * @throws UnsupportedFileOperationException if this operation is not supported by the underlying file protocol,
-     * or is not implemented.
+     * @throws UnsupportedFileOperationException if {@link FileOperation#READ_FILE} operations are not supported by the
+     * underlying file protocol.
      */
     @Override
     public AbstractFile[] ls(FileFilter filter) throws IOException, UnsupportedFileOperationException {
@@ -492,18 +501,4 @@ public abstract class AbstractArchiveFile extends ProxyFile {
 
     // Note: do not override #isDirectory() to always return true, as AbstractArchiveFile instances may be created when
     // the file does not exist yet, and then be mkdir(): in that case, the file will be a directory and not an archive.
-
-    /**
-     * Returns the proxied file's free space if this archive is writable (as reported by {@link #isWritable()},
-     * else returns <code>0</code>. 
-     *
-     * @return the proxied file's free space is this archive is writable, 0 otherwise.
-     */
-    @Override
-    public long getFreeSpace() {
-        if(isWritable())
-            return file.getFreeSpace();
-        else
-            return 0;
-    }
 }

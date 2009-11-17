@@ -21,6 +21,7 @@ package com.mucommander.file.impl.local;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.AbstractFileTestCase;
 import com.mucommander.file.FileFactory;
+import com.mucommander.file.FileOperation;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
@@ -41,6 +42,21 @@ public class LocalFileTest extends AbstractFileTestCase {
     @Override
     public AbstractFile getTemporaryFile() throws IOException {
         return FileFactory.getTemporaryFile(getClass().getName(), false);
+    }
+
+    @Override
+    public FileOperation[] getSupportedOperations() {
+        return new FileOperation[] {
+            FileOperation.READ_FILE,
+            FileOperation.RANDOM_READ_FILE,
+            FileOperation.WRITE_FILE,
+            FileOperation.APPEND_FILE,
+            FileOperation.RANDOM_WRITE_FILE,
+            FileOperation.CREATE_DIRECTORY,
+            FileOperation.LIST_CHILDREN,
+            FileOperation.DELETE,
+            FileOperation.CHANGE_DATE
+        };
     }
 
 

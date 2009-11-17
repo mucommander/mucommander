@@ -51,13 +51,13 @@ public abstract class AbstractRWArchiveFile extends AbstractArchiveFile {
     ////////////////////////////////////////
 
     /**
-     * Returns <code>true</code>: <code>AbstractRWArchiveFile</code> implementations are capable of adding or deleting
-     * entries. This method should be overridden if the implementation is capable of providing write access only under
-     * certain conditions, for example if it requires random access to the proxied archive file which may not
-     * always be available depending on the udnderlying file. If that is the case, this method should return
+     * Returns <code>true</code>: <code>AbstractRWArchiveFile</code> implementations are by definition capable of adding
+     * or deleting entries. This method should be overridden if the implementation is capable of providing write access
+     * only under certain conditions, for example if it requires random access to the proxied archive file which may not
+     * always be available depending on the underlying file. If that is the case, this method should return
      * <code>true</code> only when all conditions for providing write operations are met.
      *
-     * @return true
+     * @return <code>true</code>, always
      */
     @Override
     public boolean isWritable() {
@@ -77,8 +77,8 @@ public abstract class AbstractRWArchiveFile extends AbstractArchiveFile {
      * @param entry the entry to add to the archive
      * @return an OutputStream to write the entry's contents if the entry is a regular file, null if the entry is a directory
      * @throws IOException if the entry already exists in the archive or if an I/O error occurs
-     * @throws UnsupportedFileOperationException if this operation is not supported by the underlying file protocol,
-     * or is not implemented.
+     * @throws UnsupportedFileOperationException if {@link FileOperation#WRITE_FILE} operations are not supported by
+     * the underlying file protocol.
      */
     public abstract OutputStream addEntry(ArchiveEntry entry) throws IOException, UnsupportedFileOperationException;
 
@@ -88,8 +88,8 @@ public abstract class AbstractRWArchiveFile extends AbstractArchiveFile {
      *
      * @param entry the entry to delete from the archive
      * @throws IOException if the entry doesn't exist in the archive or if an I/O error occurs
-     * @throws UnsupportedFileOperationException if this operation is not supported by the underlying file protocol,
-     * or is not implemented.
+     * @throws UnsupportedFileOperationException if {@link FileOperation#WRITE_FILE} operations are not supported by
+     * the underlying file protocol.
      */
     public abstract void deleteEntry(ArchiveEntry entry) throws IOException, UnsupportedFileOperationException;
 
@@ -101,8 +101,8 @@ public abstract class AbstractRWArchiveFile extends AbstractArchiveFile {
      *
      * @param entry the entry to update in the archive
      * @throws IOException if the entry doesn't exist in the archive or if an I/O error occurs
-     * @throws UnsupportedFileOperationException if this operation is not supported by the underlying file protocol,
-     * or is not implemented.
+     * @throws UnsupportedFileOperationException if {@link FileOperation#WRITE_FILE} operations are not supported by
+     * the underlying file protocol.
      */
     public abstract void updateEntry(ArchiveEntry entry) throws IOException, UnsupportedFileOperationException;
 
@@ -116,8 +116,8 @@ public abstract class AbstractRWArchiveFile extends AbstractArchiveFile {
      * of free space that are left when entries are deleted.</p>
      *
      * @throws IOException if an I/O error occurs
-     * @throws UnsupportedFileOperationException if this operation is not supported by the underlying file protocol,
-     * or is not implemented.
+     * @throws UnsupportedFileOperationException if {@link FileOperation#WRITE_FILE} operations are not supported by 
+     * the underlying file protocol.
      */
     public abstract void optimizeArchive() throws IOException, UnsupportedFileOperationException;
 }

@@ -19,8 +19,8 @@
 package com.mucommander.ui.action.impl;
 
 import com.mucommander.desktop.DesktopManager;
+import com.mucommander.file.AbstractArchiveEntryFile;
 import com.mucommander.file.AbstractFile;
-import com.mucommander.file.ArchiveEntryFile;
 import com.mucommander.file.FileProtocols;
 import com.mucommander.job.TempExecJob;
 import com.mucommander.text.Translator;
@@ -55,7 +55,7 @@ public class OpenNativelyAction extends MuAction {
 
         // Copy file to a temporary local file and execute it with native file associations if
         // file is not on a local filesystem or file is an archive entry
-        if(!FileProtocols.FILE.equals(selectedFile.getURL().getScheme()) || selectedFile.hasAncestor(ArchiveEntryFile.class)) {
+        if(!FileProtocols.FILE.equals(selectedFile.getURL().getScheme()) || selectedFile.hasAncestor(AbstractArchiveEntryFile.class)) {
             ProgressDialog progressDialog = new ProgressDialog(mainFrame, Translator.get("copy_dialog.copying"));
             TempExecJob job = new TempExecJob(progressDialog, mainFrame, selectedFile);
             progressDialog.start(job);

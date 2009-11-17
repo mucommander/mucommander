@@ -19,8 +19,8 @@
 package com.mucommander.ui.main;
 
 import com.mucommander.conf.impl.MuConfiguration;
+import com.mucommander.file.AbstractArchiveEntryFile;
 import com.mucommander.file.AbstractFile;
-import com.mucommander.file.ArchiveEntryFile;
 import com.mucommander.file.FileProtocols;
 import com.mucommander.runtime.JavaVersions;
 import com.mucommander.runtime.OsFamilies;
@@ -689,7 +689,7 @@ public class MainFrame extends JFrame implements LocationListener {
             if(currentFolder.getURL().getScheme().equals(FileProtocols.FILE)) {
                 // If the current folder is an archive entry, display the archive file, this is the closest we can get
                 // with a java.io.File
-                if(currentFolder.hasAncestor(ArchiveEntryFile.class))
+                if(currentFolder.hasAncestor(AbstractArchiveEntryFile.class))
                     javaIoFile = currentFolder.getParentArchive().getUnderlyingFileObject();
                 else
                     javaIoFile = currentFolder.getUnderlyingFileObject();

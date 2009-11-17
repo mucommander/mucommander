@@ -215,20 +215,8 @@ import java.net.MalformedURLException;
     }
 
     @Override
-    public boolean canChangeDate() {
-        return true;
-    }
-
-    @Override
-    public boolean changeDate(long lastModified) {
-        try {
-            file.setLastModified(lastModified);
-            return true;
-        }
-        catch(SmbException e) {
-            FileLogger.fine("Exception caught while changing date, returning false", e);
-            return false;
-        }
+    public void changeDate(long lastModified) throws IOException, UnsupportedFileOperationException {
+        file.setLastModified(lastModified);
     }
 
     @Override
@@ -362,13 +350,13 @@ import java.net.MalformedURLException;
     }
 
     @Override
-    public OutputStream getOutputStream(boolean append) throws IOException {
-        return new SmbFileOutputStream(file, append);
+    public OutputStream getOutputStream() throws IOException {
+        return new SmbFileOutputStream(file, false);
     }
 
     @Override
-    public boolean hasRandomAccessInputStream() {
-        return true;
+    public OutputStream getAppendOutputStream() throws IOException {
+        return new SmbFileOutputStream(file, true);
     }
 
     @Override
@@ -380,11 +368,6 @@ import java.net.MalformedURLException;
 //        // Explicitly allow the file to be read/write/delete by another random access file while this one is open
 //        return new SMBRandomAccessInputStream(new SmbRandomAccessFile(fileURL.toString(true), "r", SmbFile.FILE_SHARE_READ | SmbFile.FILE_SHARE_WRITE | SmbFile.FILE_SHARE_DELETE));
         return new SMBRandomAccessInputStream(new SmbRandomAccessFile(file, "r"));
-    }
-
-    @Override
-    public boolean hasRandomAccessOutputStream() {
-        return true;
     }
 
     @Override

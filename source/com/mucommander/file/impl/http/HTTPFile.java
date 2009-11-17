@@ -302,16 +302,15 @@ public class HTTPFile extends ProtocolFile {
         return attributes.getDate();
     }
 
+    /**
+     * Implementation notes: always throws {@link UnsupportedFileOperationException}.
+     *
+     * @throws UnsupportedFileOperationException always.
+     */
     @Override
-    public boolean canChangeDate() {
-        // File is read-only, return false
-        return false;
-    }
-
-    @Override
-    public boolean changeDate(long date) {
-        // File is read-only, return false
-        return false;
+    @UnsupportedFileOperation
+    public void changeDate(long date) throws UnsupportedFileOperationException {
+        throw new UnsupportedFileOperationException(FileOperation.CHANGE_DATE);
     }
 	
     @Override
@@ -425,13 +424,20 @@ public class HTTPFile extends ProtocolFile {
      * @throws UnsupportedFileOperationException always
      */
     @Override
-    public OutputStream getOutputStream(boolean append) throws UnsupportedFileOperationException {
-        throw new UnsupportedFileOperationException();
+    @UnsupportedFileOperation
+    public OutputStream getOutputStream() throws UnsupportedFileOperationException {
+        throw new UnsupportedFileOperationException(FileOperation.WRITE_FILE);
     }
 
+    /**
+     * Always throws an {@link UnsupportedFileOperationException}: HTTP files are read-only.
+     *
+     * @throws UnsupportedFileOperationException always
+     */
     @Override
-    public boolean hasRandomAccessInputStream() {
-        return true;
+    @UnsupportedFileOperation
+    public OutputStream getAppendOutputStream() throws UnsupportedFileOperationException {
+        throw new UnsupportedFileOperationException(FileOperation.APPEND_FILE);
     }
 
     @Override
@@ -439,19 +445,15 @@ public class HTTPFile extends ProtocolFile {
         return new HTTPRandomAccessInputStream();
     }
 
-    @Override
-    public boolean hasRandomAccessOutputStream() {
-        return false;
-    }
-
     /**
      * Always throws an {@link UnsupportedFileOperationException}: HTTP files are read-only.
      *
      * @throws UnsupportedFileOperationException always
      */
     @Override
+    @UnsupportedFileOperation
     public RandomAccessOutputStream getRandomAccessOutputStream() throws UnsupportedFileOperationException {
-        throw new UnsupportedFileOperationException();
+        throw new UnsupportedFileOperationException(FileOperation.RANDOM_WRITE_FILE);
     }
 
     /**
@@ -460,8 +462,9 @@ public class HTTPFile extends ProtocolFile {
      * @throws UnsupportedFileOperationException always
      */
     @Override
+    @UnsupportedFileOperation
     public void delete() throws UnsupportedFileOperationException {
-        throw new UnsupportedFileOperationException();
+        throw new UnsupportedFileOperationException(FileOperation.DELETE);
     }
 
     /**
@@ -470,8 +473,9 @@ public class HTTPFile extends ProtocolFile {
      * @throws UnsupportedFileOperationException always
      */
     @Override
+    @UnsupportedFileOperation
     public void mkdir() throws UnsupportedFileOperationException {
-        throw new UnsupportedFileOperationException();
+        throw new UnsupportedFileOperationException(FileOperation.CREATE_DIRECTORY);
     }
 
     /**

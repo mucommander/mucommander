@@ -101,11 +101,11 @@ class BookmarkRoot extends ProtocolFile implements BookmarkListener {
     @Override
     public AbstractFile getParent() {return null;}
     @Override
-    public void delete() throws IOException {throw new IOException();}
+    @UnsupportedFileOperation
+    public void delete() throws UnsupportedFileOperationException {throw new UnsupportedFileOperationException(FileOperation.DELETE);}
     @Override
-    public boolean canChangeDate() {return false;}
-    @Override
-    public boolean changeDate(long lastModified) {return false;}
+    @UnsupportedFileOperation
+    public void changeDate(long lastModified) throws UnsupportedFileOperationException {throw new UnsupportedFileOperationException(FileOperation.CHANGE_DATE);}
     @Override
     public long getSize() {return -1;}
     @Override
@@ -121,19 +121,23 @@ class BookmarkRoot extends ProtocolFile implements BookmarkListener {
     @Override
     public boolean isSymlink() {return false;}
     @Override
-    public void mkdir() throws IOException {throw new IOException();}
+    @UnsupportedFileOperation
+    public void mkdir() throws UnsupportedFileOperationException {throw new UnsupportedFileOperationException(FileOperation.CREATE_DIRECTORY);}
     @Override
-    public InputStream getInputStream() throws IOException {throw new IOException();}
+    @UnsupportedFileOperation
+    public InputStream getInputStream() throws UnsupportedFileOperationException {throw new UnsupportedFileOperationException(FileOperation.READ_FILE);}
     @Override
-    public OutputStream getOutputStream(boolean append) throws IOException {throw new IOException();}
+    @UnsupportedFileOperation
+    public OutputStream getOutputStream() throws UnsupportedFileOperationException {throw new UnsupportedFileOperationException(FileOperation.WRITE_FILE);}
     @Override
-    public boolean hasRandomAccessInputStream() {return false;}
+    @UnsupportedFileOperation
+    public OutputStream getAppendOutputStream() throws UnsupportedFileOperationException {throw new UnsupportedFileOperationException(FileOperation.APPEND_FILE);}
     @Override
-    public RandomAccessInputStream getRandomAccessInputStream() throws IOException {throw new IOException();}
+    @UnsupportedFileOperation
+    public RandomAccessInputStream getRandomAccessInputStream() throws UnsupportedFileOperationException {throw new UnsupportedFileOperationException(FileOperation.RANDOM_READ_FILE);}
     @Override
-    public boolean hasRandomAccessOutputStream() {return false;}
-    @Override
-    public RandomAccessOutputStream getRandomAccessOutputStream() throws IOException {throw new IOException();}
+    @UnsupportedFileOperation
+    public RandomAccessOutputStream getRandomAccessOutputStream() throws UnsupportedFileOperationException {throw new UnsupportedFileOperationException(FileOperation.RANDOM_WRITE_FILE);}
     @Override
     public long getFreeSpace() {return -1;}
     @Override

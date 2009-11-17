@@ -52,7 +52,7 @@ public class RarArchiveFile extends AbstractROArchiveFile {
      * and declare the Rar file as up-to-date.
      *
      * @throws IOException if an error occurred while reloading
-     * @throws UnsupportedFileOperationException if this operation is not supported by the underlying file protocol,
+     * @throws UnsupportedFileOperationException if this operation is not supported by the underlying filesystem,
      * or is not implemented.
      */
     private void checkRarFile() throws IOException, UnsupportedFileOperationException {
