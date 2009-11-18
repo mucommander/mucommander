@@ -18,8 +18,13 @@
 
 package com.mucommander.ui.action.impl;
 
+import com.mucommander.file.FileOperation;
 import com.mucommander.ui.action.*;
 import com.mucommander.ui.dialog.file.MkdirDialog;
+import com.mucommander.ui.event.ActivePanelListener;
+import com.mucommander.ui.event.LocationEvent;
+import com.mucommander.ui.event.LocationListener;
+import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.main.MainFrame;
 
 import javax.swing.KeyStroke;
@@ -31,17 +36,60 @@ import java.util.Hashtable;
  *
  * @author Maxence Bernard
  */
-public class MkdirAction extends MuAction {
+public class MkdirAction extends MuAction implements ActivePanelListener, LocationListener {
 
     public MkdirAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
         super(mainFrame, properties);
+
+        // Listen to active table change events
+        mainFrame.addActivePanelListener(this);
+
+        // Listen to location change events
+        mainFrame.getLeftPanel().getLocationManager().addLocationListener(this);
+        mainFrame.getRightPanel().getLocationManager().addLocationListener(this);
+    }
+
+    private void toggleEnabledState() {
+        setEnabled(mainFrame.getActiveTable().getCurrentFolder().isFileOperationSupported(FileOperation.CREATE_DIRECTORY));
     }
 
     @Override
     public void performAction() {
         new MkdirDialog(mainFrame, false).showDialog();
     }
-    
+
+
+    /////////////////////////////////
+    // ActivePanelListener methods //
+    /////////////////////////////////
+
+    public void activePanelChanged(FolderPanel folderPanel) {
+        toggleEnabledState();
+    }
+
+
+    //////////////////////////////
+    // LocationListener methods //
+    //////////////////////////////
+
+    public void locationChanged(LocationEvent e) {
+        toggleEnabledState();
+    }
+
+    public void locationChanging(LocationEvent e) {
+    }
+
+    public void locationCancelled(LocationEvent e) {
+    }
+
+    public void locationFailed(LocationEvent e) {
+    }
+
+
+    ///////////////////
+    // Inner classes //
+    ///////////////////
+
     public static class Factory implements ActionFactory {
 
 		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {

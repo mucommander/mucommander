@@ -640,19 +640,21 @@ public class LocalFile extends ProtocolFile {
     }
 
     @Override
-    public boolean changePermission(int access, int permission, boolean enabled) {
+    public void changePermission(int access, int permission, boolean enabled) throws IOException {
         // Only the 'user' permissions under Java 1.6 are supported
         if(access!=USER_ACCESS || JavaVersions.JAVA_1_6.isCurrentLower())
-            return false;
+            throw new IOException();
 
+        boolean success = false;
         if(permission==READ_PERMISSION)
-            return file.setReadable(enabled);
+            success = file.setReadable(enabled);
         else if(permission==WRITE_PERMISSION)
-            return file.setWritable(enabled);
+            success = file.setWritable(enabled);
         else if(permission==EXECUTE_PERMISSION)
-            return file.setExecutable(enabled);
+            success = file.setExecutable(enabled);
 
-        return false;
+        if(!success)
+            throw new IOException();
     }
 
     /**

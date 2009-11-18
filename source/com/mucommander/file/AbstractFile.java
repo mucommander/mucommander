@@ -578,8 +578,7 @@ public abstract class AbstractFile implements FileAttributes, PermissionTypes, P
 
 
     /**
-     * Changes this file's permissions to the specified permissions int and returns <code>true</code> if
-     * the operation was successful, <code>false</code> if at least one of the file permissions could not be changed.
+     * Changes this file's permissions to the specified permissions int.
      * The permissions int should be constructed using the permission types and accesses defined in
      * {@link com.mucommander.file.PermissionTypes} and {@link com.mucommander.file.PermissionAccesses}.
      *
@@ -589,54 +588,24 @@ public abstract class AbstractFile implements FileAttributes, PermissionTypes, P
      * to change all permissions at once, this method should be overridden.</p>
      *
      * @param permissions new permissions for this file
-     * @return true if the operation was successful, false if at least one of the file permissions could not be changed
+     * @throws IOException if the permissions couldn't be changed, either because of insufficient permissions or because
+     * of an I/O error.
+     * @throws UnsupportedFileOperationException if this operation is not supported by the underlying filesystem,
+     * or is not implemented.
      */
-    public boolean changePermissions(int permissions) {
+    public void changePermissions(int permissions) throws IOException, UnsupportedFileOperationException {
         int bitShift = 0;
-        boolean success = true;
 
         PermissionBits mask = getChangeablePermissions();
         for(int a=OTHER_ACCESS; a<=USER_ACCESS; a++) {
             for(int p=EXECUTE_PERMISSION; p<=READ_PERMISSION; p=p<<1) {
                 if(mask.getBitValue(a, p))
-                    success = changePermission(a, p, (permissions & (1<<bitShift))!=0) && success;
+                    changePermission(a, p, (permissions & (1<<bitShift))!=0);
 
                 bitShift++;
             }
         }
-
-        return success;
     }
-
-
-    /**
-     * This method is a shorthand for {@link #importPermissions(AbstractFile, FilePermissions)} called with
-     * {@link FilePermissions#DEFAULT_DIRECTORY_PERMISSIONS} if this file is a directory or
-     * {@link FilePermissions#DEFAULT_FILE_PERMISSIONS} if this file is a regular file.
-     *
-     * @param sourceFile the file from which to import permissions
-     */
-    public void importPermissions(AbstractFile sourceFile) {
-        importPermissions(sourceFile,isDirectory()
-                ? FilePermissions.DEFAULT_DIRECTORY_PERMISSIONS
-                : FilePermissions.DEFAULT_FILE_PERMISSIONS);
-    }
-
-    /**
-     * Imports the given source file's permissions, overwriting this file's permissions. Only the bits that are
-     * supported by the source file (as reported by the permissions' mask) are preserved. Other bits are be
-     * set to those of the specified default permissions.
-     * See {@link SimpleFilePermissions#padPermissions(FilePermissions, FilePermissions)} for more information about
-     * permissions padding.
-     *
-     * @param sourceFile the file from which to import permissions
-     * @param defaultPermissions default permissions to use
-     * @see SimpleFilePermissions#padPermissions(FilePermissions, FilePermissions)
-     */
-    public void importPermissions(AbstractFile sourceFile, FilePermissions defaultPermissions) {
-        changePermissions(SimpleFilePermissions.padPermissions(sourceFile.getPermissions(), defaultPermissions).getIntValue());
-    }
-
 
     /**
      * Returns a string representation of this file's permissions.
@@ -1295,10 +1264,49 @@ public abstract class AbstractFile implements FileAttributes, PermissionTypes, P
      * Convenience method that calls {@link #changePermissions(int)} with the given permissions' int value.
      *
      * @param permissions new permissions for this file
-     * @return true if the operation was successful, false if at least one of the file permissions could not be changed
+     * @throws IOException if the permissions couldn't be changed, either because of insufficient permissions or because
+     * of an I/O error.
+     * @throws UnsupportedFileOperationException if this operation is not supported by the underlying filesystem,
+     * or is not implemented.
      */
-    public final boolean changePermissions(FilePermissions permissions) {
-        return changePermissions(permissions.getIntValue());
+    public final void changePermissions(FilePermissions permissions) throws IOException, UnsupportedFileOperationException {
+        changePermissions(permissions.getIntValue());
+    }
+
+    /**
+     * This method is a shorthand for {@link #importPermissions(AbstractFile, FilePermissions)} called with
+     * {@link FilePermissions#DEFAULT_DIRECTORY_PERMISSIONS} if this file is a directory or
+     * {@link FilePermissions#DEFAULT_FILE_PERMISSIONS} if this file is a regular file.
+     *
+     * @param sourceFile the file from which to import permissions
+     * @throws IOException if the permissions couldn't be changed, either because of insufficient permissions or because
+     * of an I/O error.
+     * @throws UnsupportedFileOperationException if this operation is not supported by the underlying filesystem,
+     * or is not implemented.
+     */
+    public final void importPermissions(AbstractFile sourceFile) throws IOException, UnsupportedFileOperationException {
+        importPermissions(sourceFile,isDirectory()
+                ? FilePermissions.DEFAULT_DIRECTORY_PERMISSIONS
+                : FilePermissions.DEFAULT_FILE_PERMISSIONS);
+    }
+
+    /**
+     * Imports the given source file's permissions, overwriting this file's permissions. Only the bits that are
+     * supported by the source file (as reported by the permissions' mask) are preserved. Other bits are be
+     * set to those of the specified default permissions.
+     * See {@link SimpleFilePermissions#padPermissions(FilePermissions, FilePermissions)} for more information about
+     * permissions padding.
+     *
+     * @param sourceFile the file from which to import permissions
+     * @param defaultPermissions default permissions to use
+     * @throws IOException if the permissions couldn't be changed, either because of insufficient permissions or because
+     * of an I/O error.
+     * @throws UnsupportedFileOperationException if this operation is not supported by the underlying filesystem,
+     * or is not implemented.
+     * @see SimpleFilePermissions#padPermissions(FilePermissions, FilePermissions)
+     */
+    public final void importPermissions(AbstractFile sourceFile, FilePermissions defaultPermissions) throws IOException, UnsupportedFileOperationException {
+        changePermissions(SimpleFilePermissions.padPermissions(sourceFile.getPermissions(), defaultPermissions).getIntValue());
     }
 
 
@@ -1518,16 +1526,18 @@ public abstract class AbstractFile implements FileAttributes, PermissionTypes, P
     public abstract PermissionBits getChangeablePermissions();
 
     /**
-     * Changes the specified permission bit. If the specified permission bit can't be changed
-     * (see {@link #getChangeablePermissions()}), this method has no effect and <code>false</code> is returned.
+     * Changes the specified permission bit.
      *
      * @param access see {@link PermissionTypes} for allowed values
      * @param permission see {@link PermissionAccesses} for allowed values
      * @param enabled true to enable the flag, false to disable it
-     * @return true if the permission flag was successfully set for the access type
+     * @throws IOException if the permission couldn't be changed, either because of insufficient permissions or because
+     * of an I/O error.
+     * @throws UnsupportedFileOperationException if this operation is not supported by the underlying filesystem,
+     * or is not implemented.
      * @see #getChangeablePermissions()
      */
-    public abstract boolean changePermission(int access, int permission, boolean enabled);
+    public abstract void changePermission(int access, int permission, boolean enabled) throws IOException, UnsupportedFileOperationException;
 
     /**
      * Returns information about the owner of this file. The kind of information that is returned is implementation-dependant.

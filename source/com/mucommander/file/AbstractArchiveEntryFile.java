@@ -186,12 +186,9 @@ public abstract class AbstractArchiveEntryFile extends AbstractFile {
         return entry.getPermissions();
     }
 
-    /**
-     * Always returns <code>false</code> only if the archive file that contains this entry is not writable.
-     */
     @Override
-    public boolean changePermission(int access, int permission, boolean enabled) {
-        return changePermissions(ByteUtils.setBit(getPermissions().getIntValue(), (permission << (access*3)), enabled));
+    public void changePermission(int access, int permission, boolean enabled) throws IOException, UnsupportedFileOperationException {
+        changePermissions(ByteUtils.setBit(getPermissions().getIntValue(), (permission << (access*3)), enabled));
     }
 
     @Override

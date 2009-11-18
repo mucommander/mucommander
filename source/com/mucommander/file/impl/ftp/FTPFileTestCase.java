@@ -67,7 +67,8 @@ public class FTPFileTestCase extends AbstractFileTestCase {
             FileOperation.CREATE_DIRECTORY,
             FileOperation.LIST_CHILDREN,
             FileOperation.DELETE,
-            FileOperation.CHANGE_DATE
+            FileOperation.CHANGE_DATE,
+            FileOperation.CHANGE_PERMISSION
         };
     }
 }

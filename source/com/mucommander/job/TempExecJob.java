@@ -28,6 +28,8 @@ import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.quicklist.RecentExecutedFilesQL;
 
+import java.io.IOException;
+
 /**
  * This job copies a file or a set of files to a temporary folder, makes the temporary file(s) read-only and
  * executes each of them with native file associations. The temporary files are deleted when the JVM terminates.
@@ -82,9 +84,15 @@ public class TempExecJob extends TempCopyJob {
         // Execute the file, only if it is one of the top-level files
         if(filesToExecute.indexOf(file)!=-1) {
             if(!currentDestFile.isDirectory()) {        // Do not change directories' permissions
-                // Make the temporary file read only
-                if(currentDestFile.getChangeablePermissions().getBitValue(PermissionAccesses.USER_ACCESS, PermissionTypes.WRITE_PERMISSION))
-                    currentDestFile.changePermission(PermissionAccesses.USER_ACCESS, PermissionTypes.WRITE_PERMISSION, false);
+                try {
+                    // Make the temporary file read only
+                    if(currentDestFile.getChangeablePermissions().getBitValue(PermissionAccesses.USER_ACCESS, PermissionTypes.WRITE_PERMISSION))
+                        currentDestFile.changePermission(PermissionAccesses.USER_ACCESS, PermissionTypes.WRITE_PERMISSION, false);
+                }
+                catch(IOException e) {
+                    AppLogger.fine("Caught exeception while changing permissions of "+currentDestFile, e);
+                    return false;
+                }
             }
 
             // Try to open the file.

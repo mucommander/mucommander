@@ -397,8 +397,8 @@ public class FTPFile extends ProtocolFile implements ConnectionHandlerFactory {
     }
 
     @Override
-    public boolean changePermission(int access, int permission, boolean enabled) {
-        return changePermissions(ByteUtils.setBit(permissions.getIntValue(), (permission << (access*3)), enabled));
+    public void changePermission(int access, int permission, boolean enabled) throws IOException, UnsupportedFileOperationException {
+        changePermissions(ByteUtils.setBit(permissions.getIntValue(), (permission << (access*3)), enabled));
     }
 
     /**
@@ -648,14 +648,17 @@ public class FTPFile extends ProtocolFile implements ConnectionHandlerFactory {
     // Overridden methods //
     ////////////////////////
 
+    /**
+     * Changes permissions using the SITE CHMOD FTP command.
+     *
+     * This command is optional but seems to be supported by modern FTP servers such as ProFTPd or PureFTP Server.
+     * But it may as well not be supported by the remote FTP server as it is not part of the basic FTP command set.
+     *
+     * Implementation note: FTPFile.setPermission only changes the instance's permissions, but doesn't change it on the
+     * server-side.
+     */
     @Override
-    public boolean changePermissions(int permissions) {
-        // Changes permissions using the SITE CHMOD FTP command.
-
-        // This command is optional but seems to be supported by modern FTP servers such as ProFTPd or PureFTP Server.
-        // But it may as well not be supported by the remote FTP server as it is not part of the basic FTP command set.
-
-        // Implementation note: FTPFile.setPermission only changes the instance's permissions, but doesn't change it on the server-side.
+    public void changePermissions(int permissions) throws IOException, UnsupportedFileOperationException {
         FTPConnectionHandler connHandler = null;
         try {
             // Retrieve a ConnectionHandler and lock it
@@ -663,7 +666,7 @@ public class FTPFile extends ProtocolFile implements ConnectionHandlerFactory {
 
             // Return if we know the CHMOD command is not supported by the server
             if(!connHandler.chmodCommandSupported)
-                return false;
+                throw new UnsupportedFileOperationException(FileOperation.CHANGE_PERMISSION);
 
             // Makes sure the connection is started, if not starts it
             connHandler.checkConnection();
@@ -684,16 +687,16 @@ public class FTPFile extends ProtocolFile implements ConnectionHandlerFactory {
                     FileLogger.fine("marking CHMOD command as unsupported");
                     connHandler.chmodCommandSupported = false;
                 }
-            }
 
-            return success;
+                throw new IOException();
+            }
         }
         catch(IOException e) {
             // Checks if the IOException corresponds to a socket error and in that case, closes the connection
             if(connHandler!=null)
                 connHandler.checkSocketException(e);
 
-            return false;
+            throw e;
         }
         finally {
             // Release the lock on the ConnectionHandler

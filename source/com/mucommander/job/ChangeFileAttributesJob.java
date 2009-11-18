@@ -90,13 +90,20 @@ public class ChangeFileAttributesJob extends FileJob {
             while(true);
         }
 
-        if(permissions!=-1)
-            return file.changePermissions(permissions);
+        if(permissions!=-1) {
+            try {
+                file.changePermissions(permissions);
+                return true;
+            }
+            catch(IOException e) {
+                return false;
+            }
+        }
 
 //        if(date!=-1)
         try {
             file.changeDate(date);
-            return false;
+            return true;
         }
         catch (IOException e) {
             return false;

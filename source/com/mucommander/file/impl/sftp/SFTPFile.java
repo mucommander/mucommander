@@ -314,8 +314,8 @@ public class SFTPFile extends ProtocolFile {
     }
 
     @Override
-    public boolean changePermission(int access, int permission, boolean enabled) {
-        return changePermissions(ByteUtils.setBit(getPermissions().getIntValue(), (permission << (access*3)), enabled));
+    public void changePermission(int access, int permission, boolean enabled) throws IOException {
+        changePermissions(ByteUtils.setBit(getPermissions().getIntValue(), (permission << (access*3)), enabled));
     }
 
     @Override
@@ -522,10 +522,10 @@ public class SFTPFile extends ProtocolFile {
 
 
     @Override
-    public boolean changePermissions(int permissions) {
+    public void changePermissions(int permissions) throws IOException {
+        // Retrieve a ConnectionHandler and lock it
         SFTPConnectionHandler connHandler = null;
         try {
-            // Retrieve a ConnectionHandler and lock it
             connHandler = (SFTPConnectionHandler)ConnectionPool.getConnectionHandler(connHandlerFactory, fileURL, true);
 
             // Makes sure the connection is started, if not starts it
@@ -534,12 +534,6 @@ public class SFTPFile extends ProtocolFile {
             connHandler.sftpSubsystem.changePermissions(absPath, permissions);
             // Update local attribute copy
             fileAttributes.setPermissions(new SimpleFilePermissions(permissions));
-
-            return true;
-        }
-        catch(IOException e) {
-            FileLogger.fine("Failed to change permissions", e);
-            return false;
         }
         finally {
             // Release the lock on the ConnectionHandler

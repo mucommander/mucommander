@@ -279,21 +279,14 @@ import java.net.MalformedURLException;
     }
 
     @Override
-    public boolean changePermission(int access, int permission, boolean enabled) {
+    public void changePermission(int access, int permission, boolean enabled) throws IOException {
         if(access!=USER_ACCESS || permission!=WRITE_PERMISSION)
-            return false;
+            throw new IOException();
 
-        try {
-            if(enabled)
-                file.setReadWrite();
-            else
-                file.setReadOnly();
-
-            return true;
-        }
-        catch(SmbException e) {
-            return false;
-        }
+        if(enabled)
+            file.setReadWrite();
+        else
+            file.setReadOnly();
     }
 
     /**

@@ -369,8 +369,9 @@ public class HTTPFile extends ProtocolFile {
     }
 
     @Override
-    public boolean changePermission(int access, int permission, boolean enabled) {
-        return false;
+    @UnsupportedFileOperation
+    public void changePermission(int access, int permission, boolean enabled) throws UnsupportedFileOperationException {
+        throw new UnsupportedFileOperationException(FileOperation.CHANGE_PERMISSION);
     }
 
     @Override

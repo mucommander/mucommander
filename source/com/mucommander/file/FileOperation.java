@@ -88,11 +88,12 @@ public enum FileOperation {
      *
      * @see {@link AbstractFile#changeDate(long)}.
      **/
-    CHANGE_DATE;
+    CHANGE_DATE,
 
-    // TODO
-//    CHANGE_PERMISSION
-
+    /**
+     * Represents a 'change permission' operation, as provided by {@link AbstractFile#changePermission(int, int, boolean)}.
+     */
+    CHANGE_PERMISSION;
 
     /**
      * Returns the {@link AbstractFile} method corresponding to this file operation.
@@ -126,6 +127,9 @@ public enum FileOperation {
 
                 case CHANGE_DATE:
                     return c.getMethod("changeDate", Long.TYPE);
+
+                case CHANGE_PERMISSION:
+                    return c.getMethod("changePermission", Integer.TYPE, Integer.TYPE, Boolean.TYPE);
 
                 case DELETE:
                     return c.getMethod("delete");

@@ -211,9 +211,10 @@ public class NFSFile extends ProtocolFile {
     }
 
     @Override
-    public boolean changePermission(int access, int permission, boolean enabled) {
+    @UnsupportedFileOperation
+    public void changePermission(int access, int permission, boolean enabled) throws UnsupportedFileOperationException {
         // XFile has no method for that unfortunately
-        return false;
+        throw new UnsupportedFileOperationException(FileOperation.CHANGE_PERMISSION);
     }
 
     /**

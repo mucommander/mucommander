@@ -116,8 +116,9 @@ public class DummyFile extends AbstractFile {
      * Implementation notes: always returns <code>false</code>.
      */
     @Override
-    public boolean changePermission(int access, int permission, boolean enabled) {
-        return false;
+    @UnsupportedFileOperation
+    public void changePermission(int access, int permission, boolean enabled) throws UnsupportedFileOperationException {
+        throw new UnsupportedFileOperationException(FileOperation.CHANGE_PERMISSION);
     }
 
     /**

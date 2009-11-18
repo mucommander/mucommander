@@ -113,8 +113,8 @@ public abstract class ProxyFile extends AbstractFile {
     }
 
     @Override
-    public boolean changePermission(int access, int permission, boolean enabled) {
-        return file.changePermission(access, permission, enabled);
+    public void changePermission(int access, int permission, boolean enabled) throws IOException, UnsupportedFileOperationException {
+        file.changePermission(access, permission, enabled);
     }
 
     @Override
@@ -282,8 +282,8 @@ public abstract class ProxyFile extends AbstractFile {
     }
 
     @Override
-    public boolean changePermissions(int permissions) {
-        return file.changePermissions(permissions);
+    public void changePermissions(int permissions) throws IOException, UnsupportedFileOperationException {
+        file.changePermissions(permissions);
     }
 
     @Override
@@ -359,16 +359,6 @@ public abstract class ProxyFile extends AbstractFile {
     @Override
     public void deleteRecursively() throws IOException, UnsupportedFileOperationException {
         file.deleteRecursively();
-    }
-
-    @Override
-    public void importPermissions(AbstractFile sourceFile) {
-        file.importPermissions(sourceFile);
-    }
-
-    @Override
-    public void importPermissions(AbstractFile sourceFile, FilePermissions defaultPermissions) {
-        file.importPermissions(sourceFile, defaultPermissions);
     }
 
     public boolean equals(Object f) {

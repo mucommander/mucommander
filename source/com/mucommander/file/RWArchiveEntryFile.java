@@ -198,9 +198,9 @@ public class RWArchiveEntryFile extends AbstractArchiveEntryFile {
     }
 
     @Override
-    public boolean changePermissions(int permissions) {
+    public void changePermissions(int permissions) throws IOException {
         if(!entry.exists())
-            return false;
+            throw new IOException();
 
         FilePermissions oldPermissions = entry.getPermissions();
         FilePermissions newPermissions = new SimpleFilePermissions(permissions, oldPermissions.getMask());
@@ -210,7 +210,8 @@ public class RWArchiveEntryFile extends AbstractArchiveEntryFile {
         if(!success)        // restore old permissions if attributes could not be updated
             entry.setPermissions(oldPermissions);
 
-        return success;
+        if(!success)
+            throw new IOException();
     }
 
     /**

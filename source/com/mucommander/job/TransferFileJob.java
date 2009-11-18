@@ -181,7 +181,13 @@ public abstract class TransferFileJob extends FileJob {
 
         // Preserve source file's permissions: preserve only the permissions bits that are supported by the source file
         // and use default permissions for the rest of them.
-        destFile.importPermissions(sourceFile, FilePermissions.DEFAULT_FILE_PERMISSIONS);  // use #importPermissions(AbstractFile, int) to avoid isDirectory test
+        try {
+            destFile.importPermissions(sourceFile, FilePermissions.DEFAULT_FILE_PERMISSIONS);  // use #importPermissions(AbstractFile, int) to avoid isDirectory test
+        }
+        catch(IOException e) {
+            AppLogger.fine("failed to import "+sourceFile+" permissions into "+destFile, e);
+            // Fail silently
+        }
 
         // Under Mac OS X only, preserving the file type and creator
         if(OsFamilies.MAC_OS_X.isCurrent()

@@ -296,19 +296,19 @@ public class BookmarkFile extends ProtocolFile {
     public FilePermissions getPermissions() {return PERMISSIONS;}
 
     /**
-     * Returns <code>false</code>.
-     * <p>
-     * Bookmarks always have all permissions, this is not changeable. Calls
-     * to this method will always be ignored.
-     * </p>
+     * Always throws an {@link UnsupportedFileOperationException} when called: bookmarks always have all permissions,
+     * this is not changeable.
+     *
      * @param  access     ignored.
      * @param  permission ignored.
      * @param  enabled    ignored.
-     * @return            <code>false</code>.
      * @see               #getPermissions()
      */
     @Override
-    public boolean changePermission(int access, int permission, boolean enabled) {return false;}
+    @UnsupportedFileOperation
+    public void changePermission(int access, int permission, boolean enabled) throws UnsupportedFileOperationException {
+        throw new UnsupportedFileOperationException(FileOperation.CHANGE_PERMISSION);
+    }
 
 
     // - Import / export -------------------------------------------------------

@@ -86,11 +86,12 @@ public class ROArchiveEntryFile extends AbstractArchiveEntryFile {
     }
 
     /**
-     * Always returns <code>false</code>.
+     * Always throws {@link UnsupportedFileOperationException} when called.
      */
     @Override
-    public boolean changePermissions(int permissions) {
-        return false;
+    @UnsupportedFileOperation
+    public void changePermissions(int permissions) throws UnsupportedFileOperationException {
+        throw new UnsupportedFileOperationException(FileOperation.CHANGE_PERMISSION);
     }
 
     /**

@@ -1021,8 +1021,8 @@ public abstract class AbstractFileTestCase extends TestCase {
 
                 if(canSetPermission) {
                     for(boolean enabled=true; ;) {
-                        assertTrue("changePermission("+a+", "+p+") failed", tempFile.changePermission(a, p, enabled));
-                        assertTrue("changePermissions("+(enabled?bitMask:(0777&~bitMask))+") failed", tempFile.changePermissions(enabled?bitMask:(0777&~bitMask)));
+                        tempFile.changePermission(a, p, enabled);
+                        tempFile.changePermissions(enabled?bitMask:(0777&~bitMask));
 
                         if(canGetPermission) {
                             assertTrue("permission bit ("+a+", "+p+") should be "+enabled, tempFile.getPermissions().getBitValue(a, p)==enabled);
