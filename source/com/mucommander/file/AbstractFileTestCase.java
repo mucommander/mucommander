@@ -1409,7 +1409,6 @@ public abstract class AbstractFileTestCase extends TestCase {
             long freeSpace = tempFile.getFreeSpace();
 
             assertTrue(freeSpace>=0);
-            assertEquals(freeSpace, tempFile.getVolume().getFreeSpace());
 
             // Note: it would be interesting to assert that allocating space to a file diminishes free space accordingly
             // but it is not possible to guarantee that free space is not altered by another process.
@@ -1427,7 +1426,6 @@ public abstract class AbstractFileTestCase extends TestCase {
             long totalSpace = tempFile.getTotalSpace();
 
             assertTrue(totalSpace>=0);
-            assertEquals(totalSpace, tempFile.getVolume().getTotalSpace());
         }
     }
 
