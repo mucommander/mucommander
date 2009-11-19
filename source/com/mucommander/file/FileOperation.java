@@ -93,7 +93,17 @@ public enum FileOperation {
     /**
      * Represents a 'change permission' operation, as provided by {@link AbstractFile#changePermission(int, int, boolean)}.
      */
-    CHANGE_PERMISSION;
+    CHANGE_PERMISSION,
+
+    /**
+     * Represents a 'get free space' operation, as provided by {@link AbstractFile#getFreeSpace()}.
+     */
+    GET_FREE_SPACE,
+
+    /**
+     * Represents a 'get total space' operation, as provided by {@link AbstractFile#getTotalSpace()}.
+     */
+    GET_TOTAL_SPACE;
 
     /**
      * Returns the {@link AbstractFile} method corresponding to this file operation.
@@ -133,6 +143,12 @@ public enum FileOperation {
 
                 case DELETE:
                     return c.getMethod("delete");
+
+                case GET_FREE_SPACE:
+                    return c.getMethod("getFreeSpace");
+
+                case GET_TOTAL_SPACE:
+                    return c.getMethod("getTotalSpace");
 
                 default:
                     // This should never be reached, unless method signatures have changed and this method hasn't been updated.

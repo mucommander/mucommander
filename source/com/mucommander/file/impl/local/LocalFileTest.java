@@ -56,7 +56,9 @@ public class LocalFileTest extends AbstractFileTestCase {
             FileOperation.LIST_CHILDREN,
             FileOperation.DELETE,
             FileOperation.CHANGE_DATE,
-            FileOperation.CHANGE_PERMISSION
+            FileOperation.CHANGE_PERMISSION,
+            FileOperation.GET_FREE_SPACE,
+            FileOperation.GET_TOTAL_SPACE
         };
     }
 
@@ -119,8 +121,10 @@ public class LocalFileTest extends AbstractFileTestCase {
      * Asserts that {@link com.mucommander.file.impl.local.LocalFile#getVolumeInfo()} returns the same values as
      * {@link com.mucommander.file.impl.local.LocalFile#getTotalSpace()}
      * and {@link com.mucommander.file.impl.local.LocalFile#getFreeSpace()}.
+     *
+     * @throws IOException should not happen
      */
-    public void testVolumeInfo() {
+    public void testVolumeInfo() throws IOException {
         long volumeInfo[] = ((LocalFile)tempFile).getVolumeInfo();
 
         assertNotNull(volumeInfo);

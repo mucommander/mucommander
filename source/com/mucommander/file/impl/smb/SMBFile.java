@@ -441,20 +441,20 @@ import java.net.MalformedURLException;
 
 
     @Override
-    public long getFreeSpace() {
-        try {
-            return file.getDiskFreeSpace();
-        }
-        catch(SmbException e) {
-            // Error occured, return -1 (not available)
-            return -1;
-        }
+    public long getFreeSpace() throws IOException {
+        return file.getDiskFreeSpace();
     }
 
+    /**
+     * Always returns throws {@link UnsupportedFileOperationException} when called.
+     *
+     * @throws UnsupportedFileOperationException, always
+     */
     @Override
-    public long getTotalSpace() {
-        // No way to retrieve this information with jCIFS/SMB, return -1 (not available)
-        return -1;
+    @UnsupportedFileOperation
+    public long getTotalSpace() throws UnsupportedFileOperationException {
+        // No way to retrieve this information with jCIFS
+        throw new UnsupportedFileOperationException(FileOperation.GET_TOTAL_SPACE);
     }
 
     /**

@@ -622,17 +622,26 @@ public class FTPFile extends ProtocolFile implements ConnectionHandlerFactory {
         }
     }
 
-
+    /**
+     * Always returns throws {@link UnsupportedFileOperationException} when called.
+     *
+     * @throws UnsupportedFileOperationException, always
+     */
     @Override
-    public long getFreeSpace() {
-        // No way to retrieve this information with J2SSH, return -1 (not available)
-        return -1;
+    @UnsupportedFileOperation
+    public long getFreeSpace() throws UnsupportedFileOperationException {
+        throw new UnsupportedFileOperationException(FileOperation.GET_FREE_SPACE);
     }
 
+    /**
+     * Always returns throws {@link UnsupportedFileOperationException} when called.
+     *
+     * @throws UnsupportedFileOperationException, always
+     */
     @Override
-    public long getTotalSpace() {
-        // No way to retrieve this information with J2SSH, return -1 (not available)
-        return -1;
+    @UnsupportedFileOperation
+    public long getTotalSpace() throws UnsupportedFileOperationException {
+        throw new UnsupportedFileOperationException(FileOperation.GET_TOTAL_SPACE);
     }
 
     /**

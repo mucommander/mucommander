@@ -1401,26 +1401,35 @@ public abstract class AbstractFileTestCase extends TestCase {
     /**
      * Tests {@link AbstractFile#getFreeSpace()} by asserting that the returned value is either <code>-1</code>
      * (not available), or a positive (potentially null) value.
+     *
+     * @throws IOException should not happen
      */
-    public void testFreeSpace() {
-        long freeSpace = tempFile.getFreeSpace();
+    public void testFreeSpace() throws IOException {
+        if(tempFile.isFileOperationSupported(FileOperation.GET_FREE_SPACE)) {
+            long freeSpace = tempFile.getFreeSpace();
 
-        assertTrue(freeSpace>=-1);
+            assertTrue(freeSpace>=0);
+            assertEquals(freeSpace, tempFile.getVolume().getFreeSpace());
 
-        // Note: it would be interesting to assert that allocating space to a file diminishes free space accordingly
-        // but it is not possible to guarantee that free space is not altered by another process.
+            // Note: it would be interesting to assert that allocating space to a file diminishes free space accordingly
+            // but it is not possible to guarantee that free space is not altered by another process.
+        }
     }
 
     /**
      * Tests {@link AbstractFile#getTotalSpace()} by asserting that the returned value is either <code>-1</code>
-     * (not available), or a positive (potentially null) value. 
+     * (not available), or a positive (potentially null) value.
+     *
+     * @throws IOException should not happen
      */
-    public void testTotalSpace() {
-        long totalSpace = tempFile.getFreeSpace();
+    public void testTotalSpace() throws IOException {
+        if(tempFile.isFileOperationSupported(FileOperation.GET_TOTAL_SPACE)) {
+            long totalSpace = tempFile.getTotalSpace();
 
-        assertTrue(totalSpace>=-1);
+            assertTrue(totalSpace>=0);
+            assertEquals(totalSpace, tempFile.getVolume().getTotalSpace());
+        }
     }
-
 
     /**
      * Tests {@link AbstractFile#getCopyToHint(AbstractFile)} and {@link AbstractFile#copyTo(AbstractFile)}.

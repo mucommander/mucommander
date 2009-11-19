@@ -480,23 +480,27 @@ public class HTTPFile extends ProtocolFile {
     }
 
     /**
-     * Not available, always returns <code>-1</code>.
+     * Always returns throws {@link UnsupportedFileOperationException} when called.
+     *
+     * @throws UnsupportedFileOperationException, always
      */
     @Override
-    public long getFreeSpace() {
-        // This information is obviously not available over HTTP, return -1
-        return -1;
+    @UnsupportedFileOperation
+    public long getFreeSpace() throws UnsupportedFileOperationException {
+        throw new UnsupportedFileOperationException(FileOperation.GET_FREE_SPACE);
     }
 
     /**
-     * Not available, always returns <code>-1</code>.
+     * Always returns throws {@link UnsupportedFileOperationException} when called.
+     *
+     * @throws UnsupportedFileOperationException, always
      */
     @Override
-    public long getTotalSpace() {
-        // This information is obviously not available over HTTP, return -1
-        return -1;
-    }	
-	
+    @UnsupportedFileOperation
+    public long getTotalSpace() throws UnsupportedFileOperationException {
+        throw new UnsupportedFileOperationException(FileOperation.GET_TOTAL_SPACE);
+    }
+
     /**
      * Returns a <code>java.net.URL</code> instance corresponding to this file.
      */

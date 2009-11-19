@@ -337,7 +337,7 @@ public class CachedFile extends ProxyFile {
     }
 
     @Override
-    public long getFreeSpace() {
+    public long getFreeSpace() throws IOException, UnsupportedFileOperationException {
         if(!getFreeSpaceSet) {
             getFreeSpace = file.getFreeSpace();
             getFreeSpaceSet = true;
@@ -347,7 +347,7 @@ public class CachedFile extends ProxyFile {
     }
 
     @Override
-    public long getTotalSpace() {
+    public long getTotalSpace() throws IOException, UnsupportedFileOperationException {
         if(!getTotalSpaceSet) {
             getTotalSpace = file.getTotalSpace();
             getTotalSpaceSet = true;

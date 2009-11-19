@@ -1751,15 +1751,21 @@ public abstract class AbstractFile implements FileAttributes, PermissionTypes, P
      *
      * @return the free space (in bytes) on the disk/volume where this file is, <code>-1</code> if this information is
      * not available.
+     * @throws IOException if an I/O error occurred
+     * @throws UnsupportedFileOperationException if this operation is not supported by the underlying filesystem,
+     * or is not implemented.
      */
-    public abstract long getFreeSpace();
+    public abstract long getFreeSpace() throws IOException, UnsupportedFileOperationException;
 
     /**
-     * Returns the total space (in bytes) of the disk/volume where this file is, -1 if this information is not available. 
+     * Returns the total space (in bytes) of the disk/volume where this file is.
      *
-     * @return the total space (in bytes) of the disk/volume where this file is, -1 if this information is not available
+     * @return the total space (in bytes) of the disk/volume where this file is
+     * @throws IOException if an I/O error occurred
+     * @throws UnsupportedFileOperationException if this operation is not supported by the underlying filesystem,
+     * or is not implemented.
      */
-    public abstract long getTotalSpace();
+    public abstract long getTotalSpace() throws IOException, UnsupportedFileOperationException;
 
     /**
      * Returns the file Object of the underlying API providing access to the filesystem. The returned Object may expose

@@ -188,12 +188,12 @@ public abstract class ProxyFile extends AbstractFile {
     }
 
     @Override
-    public long getFreeSpace() {
+    public long getFreeSpace() throws IOException, UnsupportedFileOperationException {
         return file.getFreeSpace();
     }
 
     @Override
-    public long getTotalSpace() {
+    public long getTotalSpace() throws IOException, UnsupportedFileOperationException {
         return file.getTotalSpace();
     }
 

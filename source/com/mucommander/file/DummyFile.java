@@ -266,19 +266,25 @@ public class DummyFile extends AbstractFile {
     }
 
     /**
-     * Implementation notes: always returns <code>-1</code>.
+     * Implementation notes: always returns throws {@link UnsupportedFileOperationException}.
+     *
+     * @throws UnsupportedFileOperationException, always
      */
     @Override
-    public long getFreeSpace() {
-        return -1;
+    @UnsupportedFileOperation
+    public long getFreeSpace() throws UnsupportedFileOperationException {
+        throw new UnsupportedFileOperationException(FileOperation.GET_FREE_SPACE);
     }
 
     /**
-     * Implementation notes: always returns <code>-1</code>.
+     * Implementation notes: always returns throws {@link UnsupportedFileOperationException}.
+     *
+     * @throws UnsupportedFileOperationException, always
      */
     @Override
-    public long getTotalSpace() {
-        return -1;
+    @UnsupportedFileOperation
+    public long getTotalSpace() throws UnsupportedFileOperationException {
+        throw new UnsupportedFileOperationException(FileOperation.GET_TOTAL_SPACE);
     }
 
     /**

@@ -317,21 +317,27 @@ public class NFSFile extends ProtocolFile {
     }
 
     /**
-     * Always returns <code>-1</code> (not available)
+     * Always returns throws {@link UnsupportedFileOperationException} when called.
+     *
+     * @throws UnsupportedFileOperationException, always
      */
     @Override
-    public long getFreeSpace() {
+    @UnsupportedFileOperation
+    public long getFreeSpace() throws UnsupportedFileOperationException {
         // XFile has no method to provide that information
-        return -1;
+        throw new UnsupportedFileOperationException(FileOperation.GET_FREE_SPACE);
     }
 
     /**
-     * Always returns <code>-1</code> (not available)
+     * Always returns throws {@link UnsupportedFileOperationException} when called.
+     *
+     * @throws UnsupportedFileOperationException, always
      */
     @Override
-    public long getTotalSpace() {
+    @UnsupportedFileOperation
+    public long getTotalSpace() throws UnsupportedFileOperationException {
         // XFile has no method to provide that information
-        return -1;
+        throw new UnsupportedFileOperationException(FileOperation.GET_TOTAL_SPACE);
     }
 
     /**

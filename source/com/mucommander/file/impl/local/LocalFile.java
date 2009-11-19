@@ -191,8 +191,9 @@ public class LocalFile extends ProtocolFile {
      * attributes at the same time.</p>
      *
      * @return a {totalSpace, freeSpace} long array, both values can be null if the information could not be retrieved
+     * @throws IOException if an I/O error occurred
      */
-    public long[] getVolumeInfo() {
+    public long[] getVolumeInfo() throws IOException {
         // Under Java 1.6 and up, use the (new) java.io.File methods
         if(JavaVersions.JAVA_1_6.isCurrentOrHigher()) {
             return new long[] {
@@ -210,8 +211,9 @@ public class LocalFile extends ProtocolFile {
      *
      * @return a {totalSpace, freeSpace} long array, both values can be <code>null</code> if the information could not
      * be retrieved.
+     * @throws IOException if an I/O error occurred
      */
-    protected long[] getNativeVolumeInfo() {
+    protected long[] getNativeVolumeInfo() throws IOException {
         BufferedReader br = null;
         String absPath = getAbsolutePath();
         long dfInfo[] = new long[]{-1, -1};
@@ -345,9 +347,6 @@ public class LocalFile extends ProtocolFile {
 //                    dfInfo[1] = struct.f_bfree * (long)struct.f_frsize;
 //                }
             }
-        }
-        catch(Throwable e) {	// JNA throws a java.lang.UnsatisfiedLinkError if the native can't be found
-            FileLogger.fine("Exception thrown while retrieving volume info", e);
         }
         finally {
             if(br!=null)
@@ -774,7 +773,7 @@ public class LocalFile extends ProtocolFile {
 	
 
     @Override
-    public long getFreeSpace() {
+    public long getFreeSpace() throws IOException {
         if(JavaVersions.JAVA_1_6.isCurrentOrHigher())
             return file.getUsableSpace();
 
@@ -782,7 +781,7 @@ public class LocalFile extends ProtocolFile {
     }
 	
     @Override
-    public long getTotalSpace() {
+    public long getTotalSpace() throws IOException {
         if(JavaVersions.JAVA_1_6.isCurrentOrHigher())
             return file.getTotalSpace();
 

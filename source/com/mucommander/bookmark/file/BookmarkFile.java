@@ -124,16 +124,22 @@ public class BookmarkFile extends ProtocolFile {
     /**
      * Returns the result of the wrapped file's <code>getFreeSpace()</code> methods.
      * @return the result of the wrapped file's <code>getFreeSpace()</code> methods.
+     * @throws IOException if an I/O error occurred
+     * @throws UnsupportedFileOperationException if this operation is not supported by the underlying filesystem,
+     * or is not implemented.
      */
     @Override
-    public long getFreeSpace() {return getUnderlyingFile().getFreeSpace();}
+    public long getFreeSpace() throws IOException, UnsupportedFileOperationException {return getUnderlyingFile().getFreeSpace();}
 
     /**
      * Returns the result of the wrapped file's <code>getTotalSpace()</code> methods.
      * @return the result of the wrapped file's <code>getTotalSpace()</code> methods.
+     * @throws IOException if an I/O error occurred
+     * @throws UnsupportedFileOperationException if this operation is not supported by the underlying filesystem,
+     * or is not implemented.
      */
     @Override
-    public long getTotalSpace() {return getUnderlyingFile().getTotalSpace();}
+    public long getTotalSpace() throws IOException, UnsupportedFileOperationException {return getUnderlyingFile().getTotalSpace();}
 
     /**
      * Returns <code>false</code>.

@@ -140,9 +140,11 @@ class BookmarkRoot extends ProtocolFile implements BookmarkListener {
     @UnsupportedFileOperation
     public RandomAccessOutputStream getRandomAccessOutputStream() throws UnsupportedFileOperationException {throw new UnsupportedFileOperationException(FileOperation.RANDOM_WRITE_FILE);}
     @Override
-    public long getFreeSpace() {return -1;}
+    @UnsupportedFileOperation
+    public long getFreeSpace() throws UnsupportedFileOperationException {throw new UnsupportedFileOperationException(FileOperation.GET_FREE_SPACE);}
     @Override
-    public long getTotalSpace() {return -1;}
+    @UnsupportedFileOperation
+    public long getTotalSpace() throws UnsupportedFileOperationException {throw new UnsupportedFileOperationException(FileOperation.GET_TOTAL_SPACE);}
     @Override
     public Object getUnderlyingFileObject() {return null;}
     @Override

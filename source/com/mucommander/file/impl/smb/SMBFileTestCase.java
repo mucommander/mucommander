@@ -73,7 +73,8 @@ public class SMBFileTestCase extends AbstractFileTestCase {
             FileOperation.LIST_CHILDREN,
             FileOperation.DELETE,
             FileOperation.CHANGE_DATE,
-            FileOperation.CHANGE_PERMISSION
+            FileOperation.CHANGE_PERMISSION,
+            FileOperation.GET_FREE_SPACE,
         };
     }
 

@@ -21,7 +21,9 @@ package com.mucommander.file.impl;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileLogger;
 import com.mucommander.file.FilePermissions;
+import com.mucommander.file.UnsupportedFileOperationException;
 
+import java.io.IOException;
 import java.util.Random;
 
 /**
@@ -141,7 +143,7 @@ public class DebugFile extends ProxyFile {
     }
 
     @Override
-    public long getFreeSpace() {
+    public long getFreeSpace() throws IOException, UnsupportedFileOperationException {
         FileLogger.finest(getDebugString());
         lag();
 
@@ -149,7 +151,7 @@ public class DebugFile extends ProxyFile {
     }
 
     @Override
-    public long getTotalSpace() {
+    public long getTotalSpace() throws IOException, UnsupportedFileOperationException {
         FileLogger.finest(getDebugString());
         lag();
 

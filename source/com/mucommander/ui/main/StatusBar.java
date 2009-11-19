@@ -50,6 +50,7 @@ import java.awt.event.ComponentListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 
 
 /**
@@ -306,14 +307,23 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
                     // Folder is a local file and Java version is 1.5: call getVolumeInfo() instead of
                     // separate calls to getFreeSpace() and getTotalSpace() as it is twice as fast.
                     if(currentFolder instanceof LocalFile && JavaVersions.JAVA_1_5.isCurrentOrLower()) {
-                        long volumeInfo[] = ((LocalFile)currentFolder).getVolumeInfo();
-                        volumeTotal = volumeInfo[0];
-                        volumeFree = volumeInfo[1];
+                        try {
+                            long volumeInfo[] = ((LocalFile)currentFolder).getVolumeInfo();
+                            volumeTotal = volumeInfo[0];
+                            volumeFree = volumeInfo[1];
+                        }
+                        catch(IOException e) {
+                            volumeTotal = -1;
+                            volumeFree = -1;
+                        }
                     }
                     // Java 1.6 and up or any other file type
                     else {
-                        volumeFree = currentFolder.getFreeSpace();
-                        volumeTotal = currentFolder.getTotalSpace();
+                        try { volumeFree = currentFolder.getFreeSpace(); }
+                        catch(IOException e) { volumeFree = -1; }
+
+                        try { volumeTotal = currentFolder.getTotalSpace(); }
+                        catch(IOException e) { volumeTotal = -1; }
                     }
 
                     volumeSpaceLabel.setVolumeSpace(volumeTotal, volumeFree);

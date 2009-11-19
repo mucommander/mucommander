@@ -221,17 +221,25 @@ public abstract class AbstractArchiveEntryFile extends AbstractFile {
 
     /**
      * Delegates to the archive file's {@link AbstractArchiveFile#getFreeSpace()} method.
+     *
+     * @throws IOException if an I/O error occurred
+     * @throws UnsupportedFileOperationException if the underlying archive file does not support
+     * {@link FileOperation#GET_FREE_SPACE} operations.
      */
     @Override
-    public long getFreeSpace() {
+    public long getFreeSpace() throws IOException, UnsupportedFileOperationException {
         return archiveFile.getFreeSpace();
     }
 
     /**
      * Delegates to the archive file's {@link AbstractArchiveFile#getTotalSpace()} method.
+     *
+     * @throws IOException if an I/O error occurred
+     * @throws UnsupportedFileOperationException if the underlying archive file does not support
+     * {@link FileOperation#GET_TOTAL_SPACE} operations.
      */
     @Override
-    public long getTotalSpace() {
+    public long getTotalSpace() throws IOException, UnsupportedFileOperationException {
         return archiveFile.getTotalSpace();
     }
 
