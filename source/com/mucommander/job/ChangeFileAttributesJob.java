@@ -18,7 +18,9 @@
 
 package com.mucommander.job;
 
+import com.mucommander.AppLogger;
 import com.mucommander.file.AbstractFile;
+import com.mucommander.file.FileOperation;
 import com.mucommander.file.util.FileSet;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.file.ProgressDialog;
@@ -91,6 +93,9 @@ public class ChangeFileAttributesJob extends FileJob {
         }
 
         if(permissions!=-1) {
+            if(!file.isFileOperationSupported(FileOperation.CHANGE_PERMISSION))
+                return false;
+
             try {
                 file.changePermissions(permissions);
                 return true;
@@ -101,11 +106,15 @@ public class ChangeFileAttributesJob extends FileJob {
         }
 
 //        if(date!=-1)
+        if(!file.isFileOperationSupported(FileOperation.CHANGE_DATE))
+            return false;
+
         try {
             file.changeDate(date);
             return true;
         }
         catch (IOException e) {
+            AppLogger.fine("failed to change the date of "+file, e);
             return false;
         }
     }

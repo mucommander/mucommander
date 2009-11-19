@@ -19,10 +19,7 @@
 package com.mucommander.job;
 
 import com.mucommander.AppLogger;
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.DummyFile;
-import com.mucommander.file.FilePermissions;
-import com.mucommander.file.FileURL;
+import com.mucommander.file.*;
 import com.mucommander.file.util.FileSet;
 import com.mucommander.io.BufferPool;
 import com.mucommander.io.ChecksumInputStream;
@@ -195,13 +192,30 @@ public class SplitFileJob extends AbstractCopyJob {
 			}
 			
 	        // Preserve source file's date
-	        destFile.changeDate(sourceFile.getDate());
+            if(destFile.isFileOperationSupported(FileOperation.CHANGE_DATE)) {
+                try {
+                    destFile.changeDate(sourceFile.getDate());
+                }
+                catch (IOException e) {
+                    AppLogger.fine("failed to change date of "+destFile, e);
+                    // Fail silently
+                }
+            }
 
-	        // Preserve source file's permissions: preserve only the permissions bits that are supported by the source file
-	        // and use default permissions for the rest of them.
-	        destFile.importPermissions(sourceFile, FilePermissions.DEFAULT_FILE_PERMISSIONS);  // use #importPermissions(AbstractFile, int) to avoid isDirectory test
-			
-		} catch (IOException e) {
+	        // Preserve source file's permissions: preserve only the permissions bits that are supported by the source
+            // file and use default permissions for the rest of them.
+            if(destFile.isFileOperationSupported(FileOperation.CHANGE_PERMISSION)) {
+                try {
+                    // use #importPermissions(AbstractFile, int) to avoid isDirectory test
+                    destFile.importPermissions(sourceFile, FilePermissions.DEFAULT_FILE_PERMISSIONS);
+                }
+                catch (IOException e) {
+                    AppLogger.fine("failed to import "+sourceFile+" permissions into "+destFile, e);
+                    // Fail silently
+                }
+            }
+		}
+        catch (IOException e) {
             AppLogger.fine("Caught exception", e);
 
             showErrorDialog(errorDialogTitle,

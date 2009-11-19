@@ -19,10 +19,8 @@
 
 package com.mucommander.job;
 
-import com.mucommander.file.AbstractArchiveFile;
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.AbstractRWArchiveFile;
-import com.mucommander.file.FileFactory;
+import com.mucommander.AppLogger;
+import com.mucommander.file.*;
 import com.mucommander.file.util.FileSet;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.file.ProgressDialog;
@@ -155,7 +153,15 @@ public class CopyJob extends AbstractCopyJob {
                     currentDestFile = destFile;
 
                     // Only when finished with folder, set destination folder's date to match the original folder one
-                    destFile.changeDate(file.getDate());
+                    if(destFile.isFileOperationSupported(FileOperation.CHANGE_DATE)) {
+                        try {
+                            destFile.changeDate(file.getDate());
+                        }
+                        catch (IOException e) {
+                            AppLogger.fine("failed to change the date of "+destFile, e);
+                            // Fail silently
+                        }
+                    }
 
                     return true;
                 }

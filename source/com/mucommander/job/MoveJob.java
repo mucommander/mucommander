@@ -20,10 +20,7 @@
 package com.mucommander.job;
 
 import com.mucommander.AppLogger;
-import com.mucommander.file.AbstractArchiveFile;
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.AbstractRWArchiveFile;
-import com.mucommander.file.FileFactory;
+import com.mucommander.file.*;
 import com.mucommander.file.util.FileSet;
 import com.mucommander.io.FileTransferException;
 import com.mucommander.text.Translator;
@@ -187,7 +184,15 @@ public class MoveJob extends AbstractCopyJob {
                     }
 
                     // Only when finished with folder, set destination folder's date to match the original folder one
-                    destFile.changeDate(file.getDate());
+                    if(destFile.isFileOperationSupported(FileOperation.CHANGE_DATE)) {
+                        try {
+                            destFile.changeDate(file.getDate());
+                        }
+                        catch (IOException e) {
+                            AppLogger.fine("failed to change the date of "+destFile, e);
+                            // Fail silently
+                        }
+                    }
 
                     // If one file failed to be moved, return false (failure) since this folder could not be moved totally
                     if(!isFolderEmpty)
