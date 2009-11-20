@@ -1399,8 +1399,7 @@ public abstract class AbstractFileTestCase extends TestCase {
     }
 
     /**
-     * Tests {@link AbstractFile#getFreeSpace()} by asserting that the returned value is either <code>-1</code>
-     * (not available), or a positive (potentially null) value.
+     * Tests {@link AbstractFile#getFreeSpace()}.
      *
      * @throws IOException should not happen
      */
@@ -1416,8 +1415,7 @@ public abstract class AbstractFileTestCase extends TestCase {
     }
 
     /**
-     * Tests {@link AbstractFile#getTotalSpace()} by asserting that the returned value is either <code>-1</code>
-     * (not available), or a positive (potentially null) value.
+     * Tests {@link AbstractFile#getTotalSpace()}.
      *
      * @throws IOException should not happen
      */
