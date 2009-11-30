@@ -55,6 +55,7 @@ public class LocalFileTest extends AbstractFileTestCase {
             FileOperation.CREATE_DIRECTORY,
             FileOperation.LIST_CHILDREN,
             FileOperation.DELETE,
+            FileOperation.RENAME,
             FileOperation.CHANGE_DATE,
             FileOperation.CHANGE_PERMISSION,
             FileOperation.GET_FREE_SPACE,
@@ -73,20 +74,20 @@ public class LocalFileTest extends AbstractFileTestCase {
      * @throws IOException should not normally happen
      * @throws NoSuchAlgorithmException should not happen
      */
-    public void testMoveToCaseVariation() throws IOException, NoSuchAlgorithmException {
+    public void testRenameToCaseVariation() throws IOException, NoSuchAlgorithmException {
         // First test with a regular file
         createFile(tempFile, 1);
         AbstractFile destFile = tempFile.getParent().getDirectChild(tempFile.getName().toUpperCase());
         deleteWhenFinished(destFile);
 
-        assertTrue(tempFile.moveTo(destFile));
+        tempFile.renameTo(destFile);
         assertFalse(destFile.isSymlink());          // Leave me
 
         // Repeat the test with a directory
         destFile.delete();
         tempFile.mkdir();
 
-        assertTrue(tempFile.moveTo(destFile));
+        tempFile.renameTo(destFile);
         assertFalse(destFile.isSymlink());          // Leave me
     }
 

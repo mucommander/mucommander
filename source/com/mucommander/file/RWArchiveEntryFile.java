@@ -213,12 +213,4 @@ public class RWArchiveEntryFile extends AbstractArchiveEntryFile {
         if(!success)
             throw new IOException();
     }
-
-    /**
-     * Always returns {@link #SHOULD_NOT_HINT}.
-     */
-    @Override
-    public int getMoveToHint(AbstractFile destFile) {
-        return SHOULD_NOT_HINT;
-    }
 }

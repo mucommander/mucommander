@@ -23,7 +23,10 @@ import com.mucommander.file.filter.FilenameFilter;
 import com.mucommander.file.util.Kernel32;
 import com.mucommander.file.util.Kernel32API;
 import com.mucommander.file.util.PathUtils;
-import com.mucommander.io.*;
+import com.mucommander.io.BufferPool;
+import com.mucommander.io.FilteredOutputStream;
+import com.mucommander.io.RandomAccessInputStream;
+import com.mucommander.io.RandomAccessOutputStream;
 import com.mucommander.runtime.*;
 import com.sun.jna.ptr.LongByReference;
 
@@ -771,6 +774,59 @@ public class LocalFile extends ProtocolFile {
             throw new IOException();
     }
 	
+    @Override
+    public void renameTo(AbstractFile destFile) throws IOException, UnsupportedFileOperationException {
+        // Throw an exception if the file cannot be renamed to the specified destination.
+        // Fail in some situations where java.io.File#renameTo() doesn't.
+        // Note that java.io.File#renameTo()'s implementation is system-dependant, so it's always a good idea to
+        // perform all those checks even if some are not necessary on this or that platform.
+        checkRenamePrerequisites(destFile, true, false);
+
+        // The behavior of java.io.File#renameTo() when the destination file already exists is not consistent
+        // across platforms:
+        // - Under UNIX, it succeeds and return true
+        // - Under Windows, it fails and return false
+        // This ticket goes in great details about the issue: http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4017593
+        //
+        // => Since this method is required to succeed when the destination file exists, the Windows platform needs
+        // special treatment.
+
+        destFile = destFile.getTopAncestor();
+        File destJavaIoFile = ((LocalFile)destFile).file;
+
+        if(IS_WINDOWS) {
+            // This check is necessary under Windows because java.io.File#renameTo(java.io.File) does not return false
+            // if the destination file is located on a different drive, contrary for example to Mac OS X where renameTo
+            // returns false in this case.
+            // Not doing this under Windows would mean files would get moved between drives with renameTo, which doesn't
+            // allow the transfer to be monitored.
+            // Note that Windows UNC paths are handled by checkRenamePrerequisites() when comparing hosts for equality.
+            if(!getRoot().equals(destFile.getRoot()))
+                throw new IOException();
+
+            // Windows 9x or Windows Me: Kernel32's MoveFileEx function is NOT available
+            if(OsVersions.WINDOWS_ME.isCurrentOrLower()) {
+                // The destination file is deleted before calling java.io.File#renameTo().
+                // Note that in this case, the atomicity of this method is not guaranteed anymore -- if
+                // java.io.File#renameTo() fails (for whatever reason), the destination file is deleted anyway.
+                if(destFile.exists())
+                    if(!destJavaIoFile.delete())
+                        throw new IOException();
+            }
+            // Windows NT: Kernel32's MoveFileEx can be used, if the Kernel32 DLL is available.
+            else if(Kernel32.isAvailable()) {
+                // Note: MoveFileEx is always used, even if the destination file does not exist, to avoid having to
+                // call #exists() on the destination file which has a cost.
+                if(!Kernel32.getInstance().MoveFileEx(absPath, destFile.getAbsolutePath(),
+                        Kernel32API.MOVEFILE_REPLACE_EXISTING|Kernel32API.MOVEFILE_WRITE_THROUGH))
+                    throw new IOException();
+            }
+            // else fall back to java.io.File#renameTo
+        }
+
+        if(!file.renameTo(destJavaIoFile))
+            throw new IOException();
+    }
 
     @Override
     public long getFreeSpace() throws IOException {
@@ -787,6 +843,19 @@ public class LocalFile extends ProtocolFile {
 
         return getVolumeInfo()[0];
     }	
+
+    // Unsupported file operations
+
+    /**
+     * Always throws {@link UnsupportedFileOperationException} when called.
+     *
+     * @throws UnsupportedFileOperationException, always
+     */
+    @Override
+    @UnsupportedFileOperation
+    public void copyRemotelyTo(AbstractFile destFile) throws UnsupportedFileOperationException {
+        throw new UnsupportedFileOperationException(FileOperation.COPY_REMOTELY);
+    }
 
 
     ////////////////////////
@@ -878,63 +947,6 @@ public class LocalFile extends ProtocolFile {
         return children;
     }
 
-
-    /**
-     * Overrides {@link AbstractFile#moveTo(AbstractFile)} to move/rename the file directly if the destination file
-     * is also a local file.
-     */
-    @Override
-    public boolean moveTo(AbstractFile destFile) throws FileTransferException {
-        // If destination file is not a LocalFile nor has a LocalFile ancestor (for instance an archive entry),
-        // renaming won't work so use the default moveTo() implementation instead
-        if(!destFile.getURL().getScheme().equals(FileProtocols.FILE)) {
-            return super.moveTo(destFile);
-        }
-
-        destFile = destFile.getTopAncestor();
-        if(!(destFile instanceof LocalFile)) {
-            return super.moveTo(destFile);
-        }
-
-        // Fail in some situations where java.io.File#renameTo() doesn't.
-        // Note that java.io.File#renameTo()'s implementation is system-dependant, so it's always a good idea to
-        // perform all those checks even if some are not necessary on this or that platform.
-        checkCopyPrerequisites(destFile, true);
-
-        // The behavior of java.io.File#renameTo() when the destination file already exists is not consistent
-        // accross platforms:
-        // - Under UNIX, it succeeds and return true
-        // - Under Windows, it fails and return false
-        // This Java bug goes in great details about this issue: http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4017593
-        //
-        // => Since this method is required to succeed when the destination file exists, the Windows platform needs
-        // special treatment.
-
-        File destJavaIoFile = ((LocalFile)destFile).file;
-
-        if(IS_WINDOWS) {
-            // Windows 9x or Windows Me: Kernel32's MoveFileEx function is NOT available
-            if(OsVersions.WINDOWS_ME.isCurrentOrLower()) {
-                // The destination file is deleted before calling java.io.File#renameTo().
-                // Note that in this case, the atomicity of this method is not guaranteed anymore -- if
-                // java.io.File#renameTo() fails (for whatever reason), the destination file is deleted anyway.
-                if(destFile.exists())
-                    destJavaIoFile.delete();
-            }
-            // Windows NT: Kernel32's MoveFileEx can be used, if the Kernel32 DLL is available.
-            else if(Kernel32.isAvailable()) {
-                // Note: MoveFileEx is always used, even if the destination file does not exist, to avoid having to
-                // call #exists() on the destination file which has a cost.
-                return  Kernel32.getInstance().MoveFileEx(absPath, destFile.getAbsolutePath(),
-                        Kernel32API.MOVEFILE_REPLACE_EXISTING|Kernel32API.MOVEFILE_WRITE_THROUGH);
-            }
-            // else fall back to java.io.File#renameTo
-        }
-
-        return file.renameTo(destJavaIoFile);
-    }
-
-
     @Override
     public boolean isHidden() {
         return file.isHidden();
@@ -1012,30 +1024,6 @@ public class LocalFile extends ProtocolFile {
 
         // If no volume matched this file (shouldn't normally happen), return the root folder
         return getRoot();
-    }
-
-    /**
-     * Overridden to return {@link #SHOULD_NOT_HINT} under Windows when the destination file is located on a different
-     * drive from this file (e.g. C:\ and E:\).
-     */
-    @Override
-    public int getMoveToHint(AbstractFile destFile) {
-        int moveHint = super.getMoveToHint(destFile);
-        if(moveHint!=SHOULD_HINT && moveHint!=MUST_HINT)
-            return moveHint;
-
-        // This check is necessary under Windows because java.io.File#renameTo(java.io.File) does not return false
-        // if the destination file is located on a different drive, contrary for example to Mac OS X where renameTo
-        // returns false in this case.
-        // Not doing this under Windows would mean files would get moved between drives with renameTo, which doesn't
-        // allow the transfer to be monitored.
-        // Note that Windows UNC paths are handled by the super method when comparing hosts for equality.  
-        if(IS_WINDOWS) {
-            if(!getRoot().equals(destFile.getRoot()))
-                return SHOULD_NOT_HINT;
-        }
-
-        return moveHint;
     }
 
 

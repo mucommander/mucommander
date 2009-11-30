@@ -59,11 +59,27 @@ public class ProxyFileTest extends AbstractFileTestCase {
             FileOperation.CREATE_DIRECTORY,
             FileOperation.LIST_CHILDREN,
             FileOperation.DELETE,
+            FileOperation.RENAME,
             FileOperation.CHANGE_DATE,
             FileOperation.CHANGE_PERMISSION,
             FileOperation.GET_FREE_SPACE,
             FileOperation.GET_TOTAL_SPACE
         };
+    }
+
+
+    ////////////////////////
+    // Overridden methods //
+    ////////////////////////
+
+    @Override
+    public void testUnsupportedFileOperationAnnotations() throws Exception {
+        // Do nothing
+    }
+
+    @Override
+    public void testSupportedFileOperations() throws Exception {
+        // Do nothing
     }
 
 

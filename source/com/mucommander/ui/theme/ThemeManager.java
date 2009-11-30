@@ -355,23 +355,20 @@ public class ThemeManager {
             file.delete();
     }
 
-    public static boolean renameCustomTheme(Theme theme, String name) throws IOException {
+    public static void renameCustomTheme(Theme theme, String name) throws IOException {
         if(theme.getType() != Theme.CUSTOM_THEME)
             throw new IllegalArgumentException("Cannot rename non-custom themes.");
 
         // Makes sure the operation is necessary.
         if(theme.getName().equals(name))
-            return true;
+            return;
 
         // Computes a legal new name and renames theme.
         name = getAvailableCustomThemeName(name);
-        if(getCustomThemesFolder().getChild(theme.getName() + ".xml").moveTo(getCustomThemesFolder().getChild(name + ".xml"))) {
-            theme.setName(name);
-            if(isCurrentTheme(theme))
-                setConfigurationTheme(theme);
-            return true;
-        }
-        return false;
+        getCustomThemesFolder().getChild(theme.getName() + ".xml").renameTo(getCustomThemesFolder().getChild(name + ".xml"));
+        theme.setName(name);
+        if(isCurrentTheme(theme))
+            setConfigurationTheme(theme);
     }
 
 

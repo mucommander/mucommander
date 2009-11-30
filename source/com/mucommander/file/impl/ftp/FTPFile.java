@@ -25,7 +25,10 @@ import com.mucommander.file.*;
 import com.mucommander.file.connection.ConnectionHandler;
 import com.mucommander.file.connection.ConnectionHandlerFactory;
 import com.mucommander.file.connection.ConnectionPool;
-import com.mucommander.io.*;
+import com.mucommander.io.ByteUtils;
+import com.mucommander.io.FilteredOutputStream;
+import com.mucommander.io.RandomAccessInputStream;
+import com.mucommander.io.RandomAccessOutputStream;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPConnectionClosedException;
 import org.apache.commons.net.ftp.FTPReply;
@@ -623,7 +626,7 @@ public class FTPFile extends ProtocolFile implements ConnectionHandlerFactory {
     }
 
     /**
-     * Always returns throws {@link UnsupportedFileOperationException} when called.
+     * Always throws {@link UnsupportedFileOperationException} when called.
      *
      * @throws UnsupportedFileOperationException, always
      */
@@ -634,7 +637,7 @@ public class FTPFile extends ProtocolFile implements ConnectionHandlerFactory {
     }
 
     /**
-     * Always returns throws {@link UnsupportedFileOperationException} when called.
+     * Always throws {@link UnsupportedFileOperationException} when called.
      *
      * @throws UnsupportedFileOperationException, always
      */
@@ -715,24 +718,24 @@ public class FTPFile extends ProtocolFile implements ConnectionHandlerFactory {
     }
 
     /**
-     * Overrides {@link AbstractFile#moveTo(AbstractFile)} to support server-to-server move if the destination file
-     * uses FTP and is located on the same host.
+     * Implementation notes: always throws an {@link UnsupportedFileOperationException}.
+     *
+     * @throws UnsupportedFileOperationException always
      */
     @Override
-    public boolean moveTo(AbstractFile destFile) throws FileTransferException {
-        // If destination file is an FTP file located on the same server, tell the server to rename the file.
-
-        // Use the default moveTo() implementation if the destination file doesn't use FTP
-        // or is not on the same host
-        if(!destFile.getURL().getScheme().equals(FileProtocols.FTP) || !destFile.getURL().getHost().equals(this.fileURL.getHost())) {
-            return super.moveTo(destFile);
-        }
-
-        // If destination file is not an FTPFile nor has a FTPFile ancestor (for instance an archive entry),
-        // server renaming won't work so use default moveTo() implementation instead
-        if(!(destFile.getTopAncestor() instanceof FTPFile)) {
-            return super.moveTo(destFile);
-        }
+    @UnsupportedFileOperation
+    public void copyRemotelyTo(AbstractFile destFile) throws UnsupportedFileOperationException {
+        throw new UnsupportedFileOperationException(FileOperation.COPY_REMOTELY);
+    }
+    
+    /**
+     * Implementation notes: server-to-server renaming will work if the destination file also uses the 'FTP' scheme
+     * and is located on the same host.
+     */
+    @Override
+    public void renameTo(AbstractFile destFile) throws IOException {
+        // Throw an exception if the file cannot be renamed to the specified destination
+        checkRenamePrerequisites(destFile, false, false);
 
         FTPConnectionHandler connHandler = null;
         try {
@@ -741,14 +744,15 @@ public class FTPFile extends ProtocolFile implements ConnectionHandlerFactory {
             // Makes sure the connection is started, if not starts it
             connHandler.checkConnection();
 
-            return connHandler.ftpClient.rename(absPath, destFile.getURL().getPath());
+            if(!connHandler.ftpClient.rename(absPath, destFile.getURL().getPath()))
+                throw new IOException();
         }
         catch(IOException e) {
             // Checks if the IOException corresponds to a socket error and in that case, closes the connection
             if(connHandler!=null)
                 connHandler.checkSocketException(e);
 
-            throw new FileTransferException(FileTransferException.UNKNOWN_REASON);    // Report that move failed
+            throw e;
         }
         finally {
             // Release the lock on the ConnectionHandler

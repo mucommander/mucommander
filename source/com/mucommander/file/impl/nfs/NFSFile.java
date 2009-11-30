@@ -20,7 +20,6 @@ package com.mucommander.file.impl.nfs;
 
 import com.mucommander.file.*;
 import com.mucommander.file.filter.FilenameFilter;
-import com.mucommander.io.FileTransferException;
 import com.mucommander.io.RandomAccessInputStream;
 import com.mucommander.io.RandomAccessOutputStream;
 import com.sun.xfile.XFile;
@@ -317,7 +316,43 @@ public class NFSFile extends ProtocolFile {
     }
 
     /**
-     * Always returns throws {@link UnsupportedFileOperationException} when called.
+     * Implementation notes: server-to-server renaming will work if the destination file also uses the 'NFS' scheme
+     * and is located on the same host.
+     */
+    @Override
+    public void renameTo(AbstractFile destFile) throws IOException {
+        // Throw an exception if the file cannot be renamed to the specified destination
+        checkRenamePrerequisites(destFile, true, false);
+
+        // Rename file
+        if(!file.renameTo(((NFSFile)destFile).file))
+            throw new IOException();
+    }
+
+    /**
+     * Returns a <code>com.sun.xfile.XFile</code> instance corresponding to this file.
+     */
+    @Override
+    public Object getUnderlyingFileObject() {
+        return file;
+    }
+
+
+    // Unsupported file operations
+
+    /**
+     * Always throws {@link UnsupportedFileOperationException} when called.
+     *
+     * @throws UnsupportedFileOperationException, always
+     */
+    @Override
+    @UnsupportedFileOperation
+    public void copyRemotelyTo(AbstractFile destFile) throws UnsupportedFileOperationException {
+        throw new UnsupportedFileOperationException(FileOperation.COPY_REMOTELY);
+    }
+
+    /**
+     * Always throws {@link UnsupportedFileOperationException} when called.
      *
      * @throws UnsupportedFileOperationException, always
      */
@@ -329,7 +364,7 @@ public class NFSFile extends ProtocolFile {
     }
 
     /**
-     * Always returns throws {@link UnsupportedFileOperationException} when called.
+     * Always throws {@link UnsupportedFileOperationException} when called.
      *
      * @throws UnsupportedFileOperationException, always
      */
@@ -338,14 +373,6 @@ public class NFSFile extends ProtocolFile {
     public long getTotalSpace() throws UnsupportedFileOperationException {
         // XFile has no method to provide that information
         throw new UnsupportedFileOperationException(FileOperation.GET_TOTAL_SPACE);
-    }
-
-    /**
-     * Returns a <code>com.sun.xfile.XFile</code> instance corresponding to this file.
-     */
-    @Override
-    public Object getUnderlyingFileObject() {
-        return file;
     }
 
 
@@ -384,28 +411,6 @@ public class NFSFile extends ProtocolFile {
         }
 
         return children;
-    }
-
-
-    /**
-     * Overrides {@link AbstractFile#moveTo(AbstractFile)} to move/rename the file directly if the destination file
-     * is also an NFSFile.
-     */
-    @Override
-    public boolean moveTo(AbstractFile destFile) throws FileTransferException {
-        if(!destFile.getURL().getScheme().equals(FileProtocols.NFS)) {
-            return super.moveTo(destFile);
-        }
-
-        // If destination file is not an NFSFile nor has an NFSFile ancestor (for instance an archive entry),
-        // server renaming won't work so use the default moveTo() implementation instead
-        destFile = destFile.getTopAncestor();
-        if(!(destFile instanceof NFSFile)) {
-            return super.moveTo(destFile);
-        }
-
-        // Move file
-        return file.renameTo(((NFSFile)destFile).file);
     }
 
 

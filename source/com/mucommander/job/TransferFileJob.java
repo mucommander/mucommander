@@ -114,15 +114,19 @@ public abstract class TransferFileJob extends FileJob {
         if(sourceFile.equalsCanonical(destFile))
             throw new FileTransferException(FileTransferException.SOURCE_AND_DESTINATION_IDENTICAL);
 
-        // Determine whether AbstractFile.copyTo() should be used to copy file or streams should be copied manually.
+        // Determine whether or not AbstractFile.copyRemotelyTo() should be used to copy the file.
         // Some file protocols do not provide a getOutputStream() method and require the use of copyTo(). Some other
         // may also offer server to server copy which is more efficient than stream copy.
-        int copyToHint = sourceFile.getCopyToHint(destFile);
 
-        // copyTo() should or must be used
         boolean copied = false;
-        if(copyToHint==AbstractFile.SHOULD_HINT || copyToHint==AbstractFile.MUST_HINT) {
-            copied = sourceFile.copyTo(destFile);
+        if(sourceFile.isFileOperationSupported(FileOperation.COPY_REMOTELY)) {
+            try {
+                sourceFile.copyRemotelyTo(destFile);
+                copied = true;
+            }
+            catch(IOException e) {
+                // The file will be copied manually
+            }
         }
 
         // If the file wasn't copied using copyTo(), or if copyTo() didn't work (return false)

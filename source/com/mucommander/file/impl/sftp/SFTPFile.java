@@ -366,15 +366,6 @@ public class SFTPFile extends ProtocolFile {
         return new SFTPRandomAccessInputStream();
     }
 
-    /**
-     * Always throws an {@link UnsupportedFileOperationException}: random write access is not supported.
-     */
-    @Override
-    @UnsupportedFileOperation
-    public RandomAccessOutputStream getRandomAccessOutputStream() throws UnsupportedFileOperationException {
-        throw new UnsupportedFileOperationException(FileOperation.RANDOM_WRITE_FILE);
-    }
-
     @Override
     public void delete() throws IOException {
         // Retrieve a ConnectionHandler and lock it
@@ -494,9 +485,79 @@ public class SFTPFile extends ProtocolFile {
         }
     }
 
+    /**
+     * Implementation notes: server-to-server renaming will work if the destination file also uses the 'SFTP' scheme
+     * and is located on the same host.
+     */
+    @Override
+    public void renameTo(AbstractFile destFile) throws IOException {
+        // Throw an exception if the file cannot be renamed to the specified destination.
+        // Fail in situations where SFTPFile#renameTo() does not, for instance when the source and destination are the same.
+        checkRenamePrerequisites(destFile, true, false);
+
+        // Retrieve a ConnectionHandler and lock it
+        SFTPConnectionHandler connHandler = null;
+        try {
+            connHandler = (SFTPConnectionHandler)ConnectionPool.getConnectionHandler(connHandlerFactory, fileURL, true);
+
+            // Makes sure the connection is started, if not starts it
+            connHandler.checkConnection();
+
+            // SftpClient#rename() throws an IOException if the destination exists (instead of overwriting the file)
+            if(destFile.exists())
+                destFile.delete();
+
+            // Will throw an IOException if the operation failed
+            connHandler.sftpClient.rename(absPath, destFile.getURL().getPath());
+
+            // Update destination file attributes by fetching them from the server
+            ((SFTPFileAttributes)destFile.getUnderlyingFileObject()).fetchAttributes();
+
+            // Update this file's attributes locally
+            fileAttributes.setExists(false);
+            fileAttributes.setDirectory(false);
+            fileAttributes.setSize(0);
+        }
+        finally {
+            // Release the lock on the ConnectionHandler
+            if(connHandler!=null)
+                connHandler.releaseLock();
+        }
+    }
 
     /**
-     * Always returns throws {@link UnsupportedFileOperationException} when called.
+     * Returns a {@link com.mucommander.file.impl.sftp.SFTPFile.SFTPFileAttributes} instance corresponding to this file.
+     */
+    @Override
+    public Object getUnderlyingFileObject() {
+        return fileAttributes;
+    }
+
+
+    // Unsupported file operations
+
+    /**
+     * Always throws an {@link UnsupportedFileOperationException}: random write access is not supported.
+     */
+    @Override
+    @UnsupportedFileOperation
+    public RandomAccessOutputStream getRandomAccessOutputStream() throws UnsupportedFileOperationException {
+        throw new UnsupportedFileOperationException(FileOperation.RANDOM_WRITE_FILE);
+    }
+
+    /**
+     * Always throws {@link UnsupportedFileOperationException} when called.
+     *
+     * @throws UnsupportedFileOperationException, always
+     */
+    @Override
+    @UnsupportedFileOperation
+    public void copyRemotelyTo(AbstractFile destFile) throws UnsupportedFileOperationException {
+        throw new UnsupportedFileOperationException(FileOperation.COPY_REMOTELY);
+    }
+
+    /**
+     * Always throws {@link UnsupportedFileOperationException} when called.
      *
      * @throws UnsupportedFileOperationException, always
      */
@@ -508,7 +569,7 @@ public class SFTPFile extends ProtocolFile {
     }
 
     /**
-     * Always returns throws {@link UnsupportedFileOperationException} when called.
+     * Always throws {@link UnsupportedFileOperationException} when called.
      *
      * @throws UnsupportedFileOperationException, always
      */
@@ -517,14 +578,6 @@ public class SFTPFile extends ProtocolFile {
     public long getTotalSpace() throws UnsupportedFileOperationException {
         // No way to retrieve this information with J2SSH
         throw new UnsupportedFileOperationException(FileOperation.GET_TOTAL_SPACE);
-    }
-
-    /**
-     * Returns a {@link com.mucommander.file.impl.sftp.SFTPFile.SFTPFileAttributes} instance corresponding to this file.
-     */
-    @Override
-    public Object getUnderlyingFileObject() {
-        return fileAttributes;
     }
 
 
@@ -553,70 +606,6 @@ public class SFTPFile extends ProtocolFile {
                 connHandler.releaseLock();
         }
     }
-
-    /**
-     * Overrides {@link AbstractFile#moveTo(AbstractFile)} to support server-to-server move if the destination file
-     * uses SFTP and is located on the same host.
-     */
-    @Override
-    public boolean moveTo(AbstractFile destFile) throws FileTransferException {
-
-        // Use the default moveTo() implementation if the destination file doesn't use the SFTP protocol
-        // or is not on the same host
-        if(!destFile.getURL().getScheme().equals(FileProtocols.SFTP) || !destFile.getURL().getHost().equals(this.fileURL.getHost())) {
-            return super.moveTo(destFile);
-        }
-
-        // If destination file is not an SFTPFile nor has an SFTPFile ancestor (for instance an archive entry),
-        // server renaming won't work so use default moveTo() implementation instead
-        if(!(destFile.getTopAncestor() instanceof SFTPFile)) {
-            return super.moveTo(destFile);
-        }
-
-        // Special tests to fail in situations where SmbFile#renameTo() does not, for instance:
-        // - when the source and destination are the same
-        checkCopyPrerequisites(destFile, true);
-
-        // If destination file is an SFTP file located on the same server, tell the server to rename the file.
-
-        SFTPConnectionHandler connHandler = null;
-        try {
-            // Retrieve a ConnectionHandler and lock it
-            connHandler = (SFTPConnectionHandler)ConnectionPool.getConnectionHandler(connHandlerFactory, fileURL, true);
-
-            // Makes sure the connection is started, if not starts it
-            connHandler.checkConnection();
-
-            // SftpClient#rename() throws an IOException if the destination exists (instead of overwriting the file)
-            if(destFile.exists())
-                destFile.delete();
-
-            // Will throw an IOException if the operation failed
-            connHandler.sftpClient.rename(absPath, destFile.getURL().getPath());
-
-            // Update destination file attributes by fetching them from the server
-            ((SFTPFileAttributes)destFile.getUnderlyingFileObject()).fetchAttributes();
-
-            // Update this file's attributes locally
-            fileAttributes.setExists(false);
-            fileAttributes.setDirectory(false);
-            fileAttributes.setSize(0);
-
-            return true;
-        }
-        catch(IOException e) {
-            FileLogger.fine("Failed to rename file "+absPath, e);
-
-            // Re-throw an exception
-            throw new FileTransferException(FileTransferException.UNKNOWN_REASON);
-        }
-        finally {
-            // Release the lock on the ConnectionHandler
-            if(connHandler!=null)
-                connHandler.releaseLock();
-        }
-    }
-
 
     @Override
     public InputStream getInputStream(long offset) throws IOException {

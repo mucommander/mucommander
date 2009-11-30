@@ -302,8 +302,8 @@ public class GnomeTrash extends QueuedTrash {
             }
             
             try {
-                // move original file
-                retVal &= fileToDelete.moveTo(TRASH_FILES_SUBFOLDER.getChild(trashFileName));
+                // rename original file
+                fileToDelete.renameTo(TRASH_FILES_SUBFOLDER.getChild(trashFileName));
             } catch (IOException ex) {
                 try {
                     // remove info file

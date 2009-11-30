@@ -52,15 +52,6 @@ public abstract class AbstractFile implements FileAttributes, PermissionTypes, P
     /** Default path separator */
     public final static String DEFAULT_SEPARATOR = "/";
 
-    /** Indicates {@link #copyTo(AbstractFile)}/{@link #moveTo(AbstractFile)} *should* be used to copy/move the file (e.g. more efficient) */
-    public final static int SHOULD_HINT = 0;
-    /** Indicates {@link #copyTo(AbstractFile)}/{@link #moveTo(AbstractFile)} *should not* be used to copy/move the file (default) */
-    public final static int SHOULD_NOT_HINT = 1;
-    /** Indicates {@link #copyTo(AbstractFile)}/{@link #moveTo(AbstractFile)} *must* be used to copy/move the file (e.g. no other way to do so) */
-    public final static int MUST_HINT = 2;
-    /** Indicates {@link #copyTo(AbstractFile)}/{@link #moveTo(AbstractFile)} *must not* be used to copy/move the file (e.g. not implemented) */
-    public final static int MUST_NOT_HINT = 3;
-
     /** Size of the read/write buffer */
     // Note: raising buffer size from 8192 to 65536 makes a huge difference in SFTP read transfer rates but beyond
     // 65536, no more gain (not sure why).
@@ -297,7 +288,7 @@ public abstract class AbstractFile implements FileAttributes, PermissionTypes, P
 
     /**
      * Returns an <code>InputStream</code> to read this file's contents, starting at the specified offset (in bytes).
-     * A <code>java.io.IOException</code> is thrown if the file doesn't exist. 
+     * A <code>java.io.IOException</code> is thrown if the file doesn't exist.
      *
      * <p>This method should be overridden whenever possible to provide a more efficient implementation as this
      * default implementation uses {@link java.io.InputStream#skip(long)} which, depending on the particular InputStream
@@ -305,8 +296,8 @@ public abstract class AbstractFile implements FileAttributes, PermissionTypes, P
      *
      * @param offset the offset in bytes from the beginning of the file, must be >0
      * @throws IOException if this file cannot be read or is a folder.
-     * @throws UnsupportedFileOperationException if this operation is not supported by the underlying filesystem,
-     * or is not implemented.
+     * @throws UnsupportedFileOperationException if this method relies on a file operation that is not supported
+     * or not implemented by the underlying filesystem.
      * @return an <code>InputStream</code> to read this file's contents, skipping the specified number of bytes
      */
     public InputStream getInputStream(long offset) throws IOException, UnsupportedFileOperationException {
@@ -363,163 +354,103 @@ public abstract class AbstractFile implements FileAttributes, PermissionTypes, P
      * Copies this file to a specified destination file, overwriting the destination if it exists. If this file is a
      * directory, any file or directory it contains will also be copied.
      *
-     * <p>This method returns <code>true</code> if the operation was successfully completed, <code>false</code> if the
-     * operation could not be performed because of unsatisfied conditions (not an error).
-     * A {@link FileTransferException} if the operation was attempted but failed for any of the following reasons:
+     * <p>This method throws an {@link IOException} if the operation failed, for any of the following reasons:
      * <ul>
      *  <li>this file and the destination file are the same</li>
-     *  <li>this file is a directory and a parent of the destination file (operation would otherwise loop indefinitely)</li>
-     *  <li>this file (or one if its child) could not be read</li>
-     *  <li>the destination file (or one of its child) could not be written</li>
+     *  <li>this file is a directory and a parent of the destination file (the operation would otherwise loop indefinitely)</li>
+     *  <li>this file (or one if its children) cannot be read</li>
+     *  <li>the destination file (or one of its children) can not be written</li>
      *  <li>an I/O error occurred</li>
      * </ul>
      * </p>
      *
-     * <p>This generic implementation will always attempt to copy files, thus either return <code>true</code> or
-     * throw an exception, but will never return <code>false</code>. Symbolic links are skipped when encountered:
-     * neither the link nor the linked file is copied. Also noteworthy is that no clean up is performed if an error
-     * occurs in the midst of a transfer: files that have been copied (even partially) are left in the destination.</p>
-     *
-     * <p>This method should be overridden by filesystems which are able to provide a more efficient implementation --
-     * in particular, network-based filesystems that can perform a server-to-server copy.</p>
+     * <p>If this file supports the {@link FileOperation#COPY_REMOTELY} file operation, an attempt to perform a
+     * {@link #copyRemotelyTo(AbstractFile) remote copy} of the file to the destination is made. If the operation isn't
+     * supported or wasn't successful, the file is copied manually, by transferring its contents to the destination 
+     * using {@link #copyRecursively(AbstractFile, AbstractFile)}.<br/>
+     * In that case, no clean up is performed if an error occurs in the midst of a transfer: files that have been copied
+     * (even partially) are left in the destination.<br/>
+     * It is also worth noting that symbolic links are not copied to the destination when encountered: neither the link
+     * nor the linked file is copied</p>
      *
      * @param destFile the destination file to copy this file to
-     * @return true if the operation could be successfully be completed, false if the operation could not be performed
-     * because of unsatisfied conditions (not an error)
-     * @throws FileTransferException in any of the cases listed above, use {@link FileTransferException#getReason()} to
-     * know the reason.
+     * @throws IOException in any of the error cases listed above
      */
-    public boolean copyTo(AbstractFile destFile) throws FileTransferException {
+    public final void copyTo(AbstractFile destFile) throws IOException {
+        // First, try to perform a remote copy of the file if the operation is supported
+        if(isFileOperationSupported(FileOperation.COPY_REMOTELY)) {
+            try {
+                copyRemotelyTo(destFile);
+                // Operation was a success, all done.
+                return;
+            }
+            catch(IOException e) {
+                // Fail silently
+            }
+        }
+
+        // Fall back to copying the file manually
+
         checkCopyPrerequisites(destFile, false);
 
         // Copy the file and its contents if the file is a directory
         copyRecursively(this, destFile);
-
-        return true;
     }
-
-    /**
-     * Returns a hint that indicates whether the {@link #copyTo(AbstractFile)} method should be used to
-     * copy this file to the specified destination file, rather than copying the file 'manually', using
-     * {@link #copyStream(InputStream, boolean)}, or {@link #getInputStream()} and {@link #getOutputStream()}.
-     *
-     * <p>Potential returned values are:
-     * <ul>
-     * <li>{@link #SHOULD_HINT} if copyTo() should be preferred (more efficient)
-     * <li>{@link #SHOULD_NOT_HINT} if the file should rather be copied using copyStream()
-     * <li>{@link #MUST_HINT} if the file can only be copied using copyTo(), that's the case when getOutputStream() or copyStream() is not implemented
-     * <li>{@link #MUST_NOT_HINT} if the file can only be copied using copyStream()
-     * </ul>
-     * </p>
-     *
-     * <p>This default implementation returns {@link #SHOULD_NOT_HINT} as some granularity is lost when using
-     *  <code>copyTo()</code> making it impossible to monitor progress when copying a file.
-     * This method should be overridden when <code>copyTo()</code> should be favored over <code>copyStream()</code>.</p>
-     *
-     * @param destFile the destination file that is considered being copied
-     * @return the hint int indicating whether the {@link #copyTo(AbstractFile)} method should be used
-     */
-    public int getCopyToHint(AbstractFile destFile) {
-        return SHOULD_NOT_HINT;
-    }
-
 
     /**
      * Moves this file to a specified destination file, overwriting the destination if it exists. If this file is a
      * directory, any file or directory it contains will also be moved.
      * After normal completion, this file will not exist anymore: {@link #exists()} will return <code>false</code>.
      *
-     * <p>This method returns <code>true</code> if the operation was successfully completed, <code>false</code> if the
-     * operation could not be performed because of unsatisfied conditions (not an error).
-     * A {@link FileTransferException} if the operation was attempted but failed for any of the following reasons:
+     * <p>This method throws an {@link IOException} if the operation failed, for any of the following reasons:
      * <ul>
      *  <li>this file and the destination file are the same</li>
-     *  <li>this file is a directory and a parent of the destination file (operation would otherwise loop indefinitely)</li>
-     *  <li>this file (or one if its child) could not be read</li>
-     *  <li>this file (or one of its child) could not be written</li>
-     *  <li>the destination file (or one of its children) could not be written</li>
+     *  <li>this file is a directory and a parent of the destination file (the operation would otherwise loop indefinitely)</li>
+     *  <li>this file (or one if its children) cannot be read</li>
+     *  <li>this file (or one of its children) cannot be written</li>
+     *  <li>the destination file (or one of its children) can not be written</li>
      *  <li>an I/O error occurred</li>
      * </ul>
      * </p>
      *
-     * <p>This generic implementation will always attempt to move files, thus either return <code>true</code> or
-     * throw an exception, but will never return <code>false</code>.
-     * Symbolic links are not moved to the destination when encountered: neither the link nor the linked file is moved,
-     * and the symlink file is deleted.</p>
-     *
-     * <p>This implementation first copies the file and it contents (if any) and then deletes it. Deletion occurs only
-     * after all files have been successfully copied. Also noteworthy is that no clean up is performed if an error
-     * occurs in the midst of a transfer: files that have been copied (even partially) are left in the destination.</p>
-     *
-     * <p>This method should be overridden by filesystems which are able to provide a more efficient implementation --
-     * in particular, network-based filesystems that can perform remote renaming.</p>
+     * <p>If this file supports the {@link FileOperation#RENAME} file operation, an attempt to
+     * {@link #renameTo(AbstractFile) rename} the file to the destination is made. If the operation isn't supported
+     * or wasn't successful, the file is moved manually, by transferring its contents to the destination using
+     * {@link #copyTo(AbstractFile)} and then deleting the source.<br/>
+     * In that case, deletion of the source occurs only after all files have been successfully transferred.
+     * No clean up is performed if an error occurs in the midst of a transfer: files that have been copied
+     * (even partially) are left in the destination.<br/>
+     * It is also worth noting that symbolic links are not moved to the destination when encountered: neither the link
+     * nor the linked file is moved, and the symlink file is deleted.</p>
      *
      * @param destFile the destination file to move this file to
-     * @return true if the operation could be successfully be completed, false if the operation could not be performed
-     * because of unsatisfied conditions (not an error)
-     * @throws FileTransferException in any of the cases listed above, use {@link FileTransferException#getReason()} to
-     * know the reason.
+     * @throws IOException in any of the error cases listed above
      */
-    public boolean moveTo(AbstractFile destFile) throws FileTransferException {
-        checkCopyPrerequisites(destFile, false);
+    public final void moveTo(AbstractFile destFile) throws IOException {
+        // First, try to rename the file if the operation is supported
+        if(isFileOperationSupported(FileOperation.RENAME)) {
+            try {
+                renameTo(destFile);
+                // Rename was a success, all done.
+                return;
+            }
+            catch(IOException e) {
+                // Fail silently
+            }
+        }
 
-        // Copy the file and its contents if the file is a directory
-        copyRecursively(this, destFile);
+        // Fall back to moving the file manually
 
-        // Note: the above code is the same as #copyTo(), but we don't want to avoid using #copyTo() so that both
-        // moveTo() and copyTo() can be overridden separately.
+        copyTo(destFile);
 
         // Delete the source file and its contents now that it has been copied OK.
         // Note that the file won't be deleted if copyTo() failed (threw an IOException)
         try {
             deleteRecursively();
-            return true;
         }
         catch(IOException e) {
             throw new FileTransferException(FileTransferException.DELETING_SOURCE);
         }
-    }
-
-
-    /**
-     * Returns a hint that indicates whether the {@link #moveTo(AbstractFile)} method should be used to
-     * move this file to the specified destination file, rather than moving the file using
-     * {@link #copyStream(InputStream, boolean)} or {@link #getInputStream()} and {@link #getOutputStream()}.
-     *
-     * <p>Potential returned values are:
-     * <ul>
-     * <li>{@link #SHOULD_HINT} if copyTo() should be preferred (more efficient)
-     * <li>{@link #SHOULD_NOT_HINT} if the file should rather be copied using copyStream()
-     * <li>{@link #MUST_HINT} if the file can only be copied using copyTo(), that's the case when getOutputStream() or copyStream() is not implemented
-     * <li>{@link #MUST_NOT_HINT} if the file can only be copied using copyStream()
-     * </ul>
-     * </p>
-     *
-     * <p>This default implementation returns {@link #SHOULD_HINT} if both this file and the specified destination file
-     * use the same protocol and are located on the same host, {@link #SHOULD_NOT_HINT} otherwise.
-     * This method should be overridden to return {@link #SHOULD_NOT_HINT} if the underlying filesystem doesn't not
-     * allow direct move/renaming without copying the contents of the source (this) file.</p>
-     *
-     * @param destFile the destination file that is considered being copied
-     * @return the hint int indicating whether the {@link #moveTo(AbstractFile)} method should be used
-     */
-    public int getMoveToHint(AbstractFile destFile) {
-        // Return SHOULD_NOT if schemes differ
-        if(!fileURL.getScheme().equals(destFile.fileURL.getScheme()))
-          return SHOULD_NOT_HINT;
-
-        // Are both fileURL's hosts equal ?
-        // This test is a bit complicated because each of the hosts can potentially be null (e.g. smb://)
-        String host = fileURL.getHost();
-        String destHost = destFile.fileURL.getHost();
-        boolean hostsEqual = host==null?(destHost==null||destHost.equals(host)):host.equals(destHost);
-
-        // Return SHOULD_NOT if hosts differ
-        if(!hostsEqual)
-            return SHOULD_NOT_HINT;
-
-        // Return SHOULD only if both files use the same AbstractFile class (not taking into account proxies).
-        return destFile.getTopAncestor().getClass().equals(getTopAncestor().getClass())?SHOULD_HINT:SHOULD_NOT_HINT;
     }
 
     /**
@@ -531,8 +462,8 @@ public abstract class AbstractFile implements FileAttributes, PermissionTypes, P
      * file with proper headers is 22-byte long.</p>
      *
      * @throws IOException if the file could not be created, either because it already exists or because of an I/O error
-     * @throws UnsupportedFileOperationException if this operation is not supported by the underlying filesystem,
-     * or is not implemented.
+     * @throws UnsupportedFileOperationException if this method relies on a file operation that is not supported
+     * or not implemented by the underlying filesystem.
      */
     public void mkfile() throws IOException, UnsupportedFileOperationException {
         if(exists())
@@ -550,8 +481,8 @@ public abstract class AbstractFile implements FileAttributes, PermissionTypes, P
      * @param filter the FileFilter to be used to filter files out from the list, may be <code>null</code>
      * @return the children files that this file contains
      * @throws IOException if this operation is not possible (file is not browsable) or if an error occurred.
-     * @throws UnsupportedFileOperationException if this operation is not supported by the underlying filesystem,
-     * or is not implemented.
+     * @throws UnsupportedFileOperationException if this method relies on a file operation that is not supported
+     * or not implemented by the underlying filesystem.
      */
     public AbstractFile[] ls(FileFilter filter) throws IOException, UnsupportedFileOperationException {
         return filter==null?ls():filter.filter(ls());
@@ -569,8 +500,8 @@ public abstract class AbstractFile implements FileAttributes, PermissionTypes, P
      * @param filter the FilenameFilter to be used to filter out files from the list, may be <code>null</code>
      * @return the children files that this file contains
      * @throws IOException if this operation is not possible (file is not browsable) or if an error occurred.
-     * @throws UnsupportedFileOperationException if this operation is not supported by the underlying filesystem,
-     * or is not implemented.
+     * @throws UnsupportedFileOperationException if this method relies on a file operation that is not supported
+     * or not implemented by the underlying filesystem.
      */
     public AbstractFile[] ls(FilenameFilter filter) throws IOException, UnsupportedFileOperationException {
         return filter==null?ls():filter.filter(ls());
@@ -590,8 +521,8 @@ public abstract class AbstractFile implements FileAttributes, PermissionTypes, P
      * @param permissions new permissions for this file
      * @throws IOException if the permissions couldn't be changed, either because of insufficient permissions or because
      * of an I/O error.
-     * @throws UnsupportedFileOperationException if this operation is not supported by the underlying filesystem,
-     * or is not implemented.
+     * @throws UnsupportedFileOperationException if this method relies on a file operation that is not supported
+     * or not implemented by the underlying filesystem.
      */
     public void changePermissions(int permissions) throws IOException, UnsupportedFileOperationException {
         int bitShift = 0;
@@ -672,8 +603,8 @@ public abstract class AbstractFile implements FileAttributes, PermissionTypes, P
      * Symbolic links to directories are simply deleted, without deleting the contents of the linked directory.
      *
      * @throws IOException if an error occurred while deleting a file or listing a directory's contents
-     * @throws UnsupportedFileOperationException if this operation is not supported by the underlying filesystem,
-     * or is not implemented.
+     * @throws UnsupportedFileOperationException if this method relies on a file operation that is not supported 
+     * or not implemented by the underlying filesystem.
      */
     public void deleteRecursively() throws IOException, UnsupportedFileOperationException {
         deleteRecursively(this);
@@ -845,8 +776,8 @@ public abstract class AbstractFile implements FileAttributes, PermissionTypes, P
      * @param name name of the directory to create
      * @throws IOException if the directory could not be created, either because the file already exists or for any
      * other reason.
-     * @throws UnsupportedFileOperationException if this operation is not supported by the underlying filesystem,
-     * or is not implemented.
+     * @throws UnsupportedFileOperationException if this method relies on a file operation that is not supported
+     * or not implemented by the underlying filesystem.
      */
     public final void mkdir(String name) throws IOException, UnsupportedFileOperationException {
         getChild(name).mkdir();
@@ -859,8 +790,8 @@ public abstract class AbstractFile implements FileAttributes, PermissionTypes, P
      * in this case, this method will not remove the parent directories it has created (if any).
      *
      * @throws IOException if this file already exists or if an I/O error occurred.
-     * @throws UnsupportedFileOperationException if this operation is not supported by the underlying filesystem,
-     * or is not implemented.
+     * @throws UnsupportedFileOperationException if this method relies on a file operation that is not supported
+     * or not implemented by the underlying filesystem.
      */
     public final void mkdirs() throws IOException, UnsupportedFileOperationException {
         AbstractFile parent;
@@ -878,8 +809,8 @@ public abstract class AbstractFile implements FileAttributes, PermissionTypes, P
      * @param name name of the file to create
      * @throws IOException if the file could not be created, either because the file already exists or for any
      * other reason.
-     * @throws UnsupportedFileOperationException if this operation is not supported by the underlying filesystem,
-     * or is not implemented.
+     * @throws UnsupportedFileOperationException if this method relies on a file operation that is not supported
+     * or not implemented by the underlying filesystem.
      */
     public final void mkfile(String name) throws IOException, UnsupportedFileOperationException {
         getChild(name).mkfile();
@@ -1063,8 +994,8 @@ public abstract class AbstractFile implements FileAttributes, PermissionTypes, P
      * @throws IOException if an I/O error occurred while calculating the checksum
      * @throws NoSuchAlgorithmException if the specified algorithm does not correspond to any MessageDigest registered
      * with the Java Cryptography Extension.
-     * @throws UnsupportedFileOperationException if this operation is not supported by the underlying filesystem,
-     * or is not implemented.
+     * @throws UnsupportedFileOperationException if this method relies on a file operation that is not supported
+     * or not implemented by the underlying filesystem.
      */
     public final String calculateChecksum(String algorithm) throws IOException, NoSuchAlgorithmException, UnsupportedFileOperationException {
         return calculateChecksum(MessageDigest.getInstance(algorithm));
@@ -1082,8 +1013,8 @@ public abstract class AbstractFile implements FileAttributes, PermissionTypes, P
      * @param messageDigest the MessageDigest to use for calculating the checksum
      * @return this file's checksum, as an hexadecimal string
      * @throws IOException if an I/O error occurred while calculating the checksum
-     * @throws UnsupportedFileOperationException if this operation is not supported by the underlying filesystem,
-     * or is not implemented.
+     * @throws UnsupportedFileOperationException if this method relies on a file operation that is not supported
+     * or not implemented by the underlying filesystem.
      */
     public final String calculateChecksum(MessageDigest messageDigest) throws IOException, UnsupportedFileOperationException {
         InputStream in = getInputStream();
@@ -1133,7 +1064,7 @@ public abstract class AbstractFile implements FileAttributes, PermissionTypes, P
 
     /**
      * Checks the prerequisites of a copy (or move) operation.
-     * Throws a {@link FileTransferException} in any of the following conditions are true, does nothing otherwise:
+     * Throws a {@link FileTransferException} if any of the following conditions are true, does nothing otherwise:
      * <ul>
      *   <li>this file does not exist</li>
      *   <li>this file and the destination file are the same, unless <code>allowCaseVariations</code> is <code>true</code>
@@ -1142,7 +1073,7 @@ public abstract class AbstractFile implements FileAttributes, PermissionTypes, P
      * </ul>
      *
      * @param destFile the destination file to copy this file to
-     * @param allowCaseVariations if true and the destination file is a case variation of source, no exception will be thrown
+     * @param allowCaseVariations prevents throwing an exception if both file names are a case variation of one another
      * @throws FileTransferException in any of the cases listed above, use {@link FileTransferException#getReason()} to
      * know the reason.
      */
@@ -1174,6 +1105,56 @@ public abstract class AbstractFile implements FileAttributes, PermissionTypes, P
             throw new FileTransferException(FileTransferException.FILE_NOT_FOUND);
     }
 
+    /**
+     * Checks the prerequisites of a {@link #copyRemotelyTo(AbstractFile)} operation.
+     * This method starts by verifying the following requirements and throws an <code>IOException</code> if one of them
+     * isn't met:
+     * <ul>
+     *   <li>both files' schemes are equal</li>
+     *   <li>both files' {@link #getTopAncestor() top ancestors} are equal</li>
+     *   <li>both files' hosts are equal, or <code>allowDifferentHosts</code> is <code>true</code></li>
+     * </ul>
+     * If all those requirements are met, {@link #checkCopyPrerequisites(AbstractFile, boolean)} is called with the
+     * destination file and <code>allowCaseVariations</code> flag to perform prerequisites verifications.
+     *
+     * @param destFile the destination file to copy this file to
+     * @param allowCaseVariations prevents throwing an exception if both file names are a case variation of one another
+     * @param allowDifferentHosts prevents throwing an exception if both files have the same host
+     * @throws FileTransferException in any of the cases listed above, use {@link FileTransferException#getReason()} to
+     * know the reason.
+     * @see #checkCopyPrerequisites(AbstractFile, boolean)
+     */
+    protected final void checkCopyRemotelyPrerequisites(AbstractFile destFile, boolean allowCaseVariations, boolean allowDifferentHosts) throws IOException, FileTransferException {
+        if(!fileURL.schemeEquals(fileURL)
+        || !destFile.getTopAncestor().getClass().equals(getTopAncestor().getClass())
+        || (!allowDifferentHosts && !destFile.getURL().hostEquals(fileURL)))
+            throw new IOException();
+
+        checkCopyPrerequisites(destFile, allowCaseVariations);
+    }
+
+    /**
+     * Checks the prerequisites of a {@link #renameTo(AbstractFile)} operation.
+     * This method starts by verifying the following requirements and throws an <code>IOException</code> if one of them
+     * isn't met:
+     * <ul>
+     *   <li>both files' schemes are equal</li>
+     *   <li>both files' {@link #getTopAncestor() top ancestors} are equal</li>
+     *   <li>both files' hosts are equal, or <code>allowDifferentHosts</code> is <code>true</code></li>
+     * </ul>
+     * If all those requirements are met, {@link #checkCopyPrerequisites(AbstractFile, boolean)} is called with the
+     * destination file and <code>allowCaseVariations</code> flag to perform further prerequisites verifications.
+     *
+     * @param destFile the destination file to copy this file to
+     * @param allowCaseVariations prevents throwing an exception if both file names are a case variation of one another
+     * @param allowDifferentHosts prevents throwing an exception if both files have the same host
+     * @throws FileTransferException in any of the cases listed above, use {@link FileTransferException#getReason()} to
+     * know the reason.
+     * @see #checkCopyPrerequisites(AbstractFile, boolean)
+     */
+    protected final void checkRenamePrerequisites(AbstractFile destFile, boolean allowCaseVariations, boolean allowDifferentHosts) throws IOException, FileTransferException {
+        checkCopyRemotelyPrerequisites(destFile, allowCaseVariations, allowDifferentHosts);
+    }
 
     /**
      * Copies the source file to the destination one and recurses on directory contents.
@@ -1247,8 +1228,8 @@ public abstract class AbstractFile implements FileAttributes, PermissionTypes, P
      *
      * @param file the file to delete
      * @throws IOException if an error occurred while deleting a file or listing a directory's contents
-     * @throws UnsupportedFileOperationException if this operation is not supported by the underlying filesystem,
-     * or is not implemented.
+     * @throws UnsupportedFileOperationException if this method relies on a file operation that is not supported
+     * or not implemented by the underlying filesystem.
      */
     protected final void deleteRecursively(AbstractFile file) throws IOException, UnsupportedFileOperationException {
         if(file.isDirectory() && !file.isSymlink()) {
@@ -1266,8 +1247,8 @@ public abstract class AbstractFile implements FileAttributes, PermissionTypes, P
      * @param permissions new permissions for this file
      * @throws IOException if the permissions couldn't be changed, either because of insufficient permissions or because
      * of an I/O error.
-     * @throws UnsupportedFileOperationException if this operation is not supported by the underlying filesystem,
-     * or is not implemented.
+     * @throws UnsupportedFileOperationException if this method relies on a file operation that is not supported
+     * or not implemented by the underlying filesystem.
      */
     public final void changePermissions(FilePermissions permissions) throws IOException, UnsupportedFileOperationException {
         changePermissions(permissions.getIntValue());
@@ -1281,8 +1262,8 @@ public abstract class AbstractFile implements FileAttributes, PermissionTypes, P
      * @param sourceFile the file from which to import permissions
      * @throws IOException if the permissions couldn't be changed, either because of insufficient permissions or because
      * of an I/O error.
-     * @throws UnsupportedFileOperationException if this operation is not supported by the underlying filesystem,
-     * or is not implemented.
+     * @throws UnsupportedFileOperationException if this method relies on a file operation that is not supported
+     * or not implemented by the underlying filesystem.
      */
     public final void importPermissions(AbstractFile sourceFile) throws IOException, UnsupportedFileOperationException {
         importPermissions(sourceFile,isDirectory()
@@ -1301,8 +1282,8 @@ public abstract class AbstractFile implements FileAttributes, PermissionTypes, P
      * @param defaultPermissions default permissions to use
      * @throws IOException if the permissions couldn't be changed, either because of insufficient permissions or because
      * of an I/O error.
-     * @throws UnsupportedFileOperationException if this operation is not supported by the underlying filesystem,
-     * or is not implemented.
+     * @throws UnsupportedFileOperationException if this method relies on a file operation that is not supported
+     * or not implemented by the underlying filesystem.
      * @see SimpleFilePermissions#padPermissions(FilePermissions, FilePermissions)
      */
     public final void importPermissions(AbstractFile sourceFile, FilePermissions defaultPermissions) throws IOException, UnsupportedFileOperationException {
@@ -1468,6 +1449,10 @@ public abstract class AbstractFile implements FileAttributes, PermissionTypes, P
      * Changes this file's last modified date to the specified one. Throws an <code>IOException</code> if the date
      * couldn't be changed, either because of insufficient permissions or because of an I/O error.
      *
+     * <p>This {@link FileOperation#CHANGE_DATE file operation} may or may not be supported by the underlying filesystem
+     * -- {@link #isFileOperationSupported(FileOperation)} can be called to find out if it is. If the operation isn't
+     * supported, a {@link UnsupportedFileOperation} will be thrown when this method is called.</p>
+     *
      * @param lastModified last modified date, in milliseconds since the epoch (00:00:00 GMT, January 1, 1970)
      * @throws IOException if the date couldn't be changed, either because of insufficient permissions or because of
      * an I/O error.
@@ -1527,6 +1512,10 @@ public abstract class AbstractFile implements FileAttributes, PermissionTypes, P
 
     /**
      * Changes the specified permission bit.
+     *
+     * <p>This {@link FileOperation#CHANGE_PERMISSION file operation} may or may not be supported by the underlying filesystem
+     * -- {@link #isFileOperationSupported(FileOperation)} can be called to find out if it is. If the operation isn't
+     * supported, a {@link UnsupportedFileOperation} will be thrown when this method is called.</p>
      *
      * @param access see {@link PermissionTypes} for allowed values
      * @param permission see {@link PermissionAccesses} for allowed values
@@ -1617,6 +1606,10 @@ public abstract class AbstractFile implements FileAttributes, PermissionTypes, P
      * 'browsable', i.e. {@link #isBrowsable()} must return <code>true</code>.
      * This method may return a zero-length array if it has no children but may never return <code>null</code>.
      *
+     * <p>This {@link FileOperation#LIST_CHILDREN file operation} may or may not be supported by the underlying filesystem
+     * -- {@link #isFileOperationSupported(FileOperation)} can be called to find out if it is. If the operation isn't
+     * supported, a {@link UnsupportedFileOperation} will be thrown when this method is called.</p>
+     *
      * @return the children files that this file contains
      * @throws IOException if this operation is not possible (file is not browsable) or if an error occurred.
      * @throws UnsupportedFileOperationException if this operation is not supported by the underlying filesystem,
@@ -1627,6 +1620,10 @@ public abstract class AbstractFile implements FileAttributes, PermissionTypes, P
     /**
      * Creates this file as a directory. This method will fail (throw an <code>IOException</code>) if this file
      * already exists.
+     *
+     * <p>This {@link FileOperation#CREATE_DIRECTORY file operation} may or may not be supported by the underlying filesystem
+     * -- {@link #isFileOperationSupported(FileOperation)} can be called to find out if it is. If the operation isn't
+     * supported, a {@link UnsupportedFileOperation} will be thrown when this method is called.</p>
      *
      * @throws IOException if the directory could not be created, either because this file already exists or for any
      * other reason.
@@ -1645,6 +1642,10 @@ public abstract class AbstractFile implements FileAttributes, PermissionTypes, P
      *  <li>an I/O error occurs</li>
      * </ul>
      * This method may never return <code>null</code>.
+     *
+     * <p>This {@link FileOperation#READ_FILE file operation} may or may not be supported by the underlying filesystem
+     * -- {@link #isFileOperationSupported(FileOperation)} can be called to find out if it is. If the operation isn't
+     * supported, a {@link UnsupportedFileOperation} will be thrown when this method is called.</p>
      *
      * @return an <code>InputStream</code> to read the contents of this file
      * @throws IOException in any of the cases listed above
@@ -1666,6 +1667,10 @@ public abstract class AbstractFile implements FileAttributes, PermissionTypes, P
      * </ul>
      * </p>
      *
+     * <p>This {@link FileOperation#WRITE_FILE file operation} may or may not be supported by the underlying filesystem
+     * -- {@link #isFileOperationSupported(FileOperation)} can be called to find out if it is. If the operation isn't
+     * supported, a {@link UnsupportedFileOperation} will be thrown when this method is called.</p>
+     *
      * @return an <code>OuputStream</code> to write the contents of this file
      * @throws IOException in any of the cases listed above
      * @throws UnsupportedFileOperationException if this operation is not supported by the underlying filesystem,
@@ -1686,6 +1691,10 @@ public abstract class AbstractFile implements FileAttributes, PermissionTypes, P
      * </ul>
      * </p>
      *
+     * <p>This {@link FileOperation#APPEND_FILE file operation} may or may not be supported by the underlying filesystem
+     * -- {@link #isFileOperationSupported(FileOperation)} can be called to find out if it is. If the operation isn't
+     * supported, a {@link UnsupportedFileOperation} will be thrown when this method is called.</p>
+     *
      * @return an <code>OuputStream</code> to write the contents of this file
      * @throws IOException in any of the cases listed above
      * @throws UnsupportedFileOperationException if this operation is not supported by the underlying filesystem,
@@ -1703,6 +1712,10 @@ public abstract class AbstractFile implements FileAttributes, PermissionTypes, P
      *  <li>an I/O error occurs</li>
      * </ul>
      * This method may never return <code>null</code>.
+     *
+     * <p>This {@link FileOperation#RANDOM_READ_FILE file operation} may or may not be supported by the underlying filesystem
+     * -- {@link #isFileOperationSupported(FileOperation)} can be called to find out if it is. If the operation isn't
+     * supported, a {@link UnsupportedFileOperation} will be thrown when this method is called.</p>
      *
      * @return a <code>RandomAccessInputStream</code> to read the contents of this file with random access
      * @throws IOException in any of the cases listed above
@@ -1722,6 +1735,10 @@ public abstract class AbstractFile implements FileAttributes, PermissionTypes, P
      * </ul>
      * This method may never return <code>null</code>.
      *
+     * <p>This {@link FileOperation#RANDOM_WRITE_FILE file operation} may or may not be supported by the underlying filesystem
+     * -- {@link #isFileOperationSupported(FileOperation)} can be called to find out if it is. If the operation isn't
+     * supported, a {@link UnsupportedFileOperation} will be thrown when this method is called.</p>
+     *
      * @return a <code>RandomAccessOutputStream</code> to write the contents of this file with random access
      * @throws IOException in any of the cases listed above
      * @throws UnsupportedFileOperationException if this operation is not supported by the underlying filesystem,
@@ -1739,15 +1756,80 @@ public abstract class AbstractFile implements FileAttributes, PermissionTypes, P
      *  <li>if an I/O error occurred</li>
      * </ul>
      *
+     * <p>This {@link FileOperation#DELETE file operation} may or may not be supported by the underlying filesystem
+     * -- {@link #isFileOperationSupported(FileOperation)} can be called to find out if it is. If the operation isn't
+     * supported, a {@link UnsupportedFileOperation} will be thrown when this method is called.</p>
+     *
      * @throws IOException if this file does not exist or could not be deleted
      * @throws UnsupportedFileOperationException if this operation is not supported by the underlying filesystem,
      * or is not implemented.
      */
     public abstract void delete() throws IOException, UnsupportedFileOperationException;
-	
+
+    /**
+     * Renames this file to a specified destination file, overwriting the destination if it exists. If this file is a
+     * directory, any file or directory it contains will also be moved.
+     * After normal completion, this file will not exist anymore: {@link #exists()} will return <code>false</code>.
+     *
+     * <p>This method throws an {@link IOException} if the operation failed, for any of the following reasons:
+     * <ul>
+     *  <li>this file and the destination file are the same</li>
+     *  <li>this file is a directory and a parent of the destination file (the operation would otherwise loop indefinitely)</li>
+     *  <li>this file cannot be read</li>
+     *  <li>this file cannot be written</li>
+     *  <li>the destination file can not be written</li>
+     *  <li>an I/O error occurred</li>
+     * </ul>
+     * </p>
+     *
+     * <p>This {@link FileOperation#RENAME file operation} may or may not be supported by the underlying filesystem
+     * -- {@link #isFileOperationSupported(FileOperation)} can be called to find out if it is. If the operation isn't
+     * supported, a {@link UnsupportedFileOperation} will be thrown when this method is called.</p>
+     *
+     * @param destFile file to rename this file to
+     * @throws IOException in any of the error cases listed above
+     * @throws UnsupportedFileOperationException if this operation is not supported by the underlying filesystem,
+     * or is not implemented.
+     */
+    public abstract void renameTo(AbstractFile destFile) throws IOException, UnsupportedFileOperationException;
+
+    /**
+     * Remotely copies this file to a specified destination file, overwriting the destination if it exists.
+     * If this file is a directory, any file or directory it contains will also be copied.
+     *
+     * <p>This method differs from {@link #copyTo(AbstractFile)} in that it performs a server-to-server copy of the
+     * file(s), without having the file's contents go through to the local process. This operation should only be
+     * implemented if it offers a performance advantage over a regular client-driven copy like
+     * {@link #copyTo(AbstractFile)}, or if {@link FileOperation#WRITE_FILE} is not supported (output streams cannot be
+     * retrieved) and thus a regular copy cannot succeed.</p>.
+     *
+     * <p>This method throws an {@link IOException} if the operation failed, for any of the following reasons:
+     * <ul>
+     *  <li>this file and the destination file are the same</li>
+     *  <li>this file is a directory and a parent of the destination file (the operation would otherwise loop indefinitely)</li>
+     *  <li>this file (or one if its children) cannot be read</li>
+     *  <li>the destination file (or one of its children) can not be written</li>
+     *  <li>an I/O error occurred</li>
+     * </ul>
+     * </p>
+     *
+     * <p>The behavior in the case of an error occurring in the midst of the transfer is unspecified: files that have
+     * been copied (even partially) may or may not be left in the destination.<p/>
+     *
+     * @param destFile the destination file to copy this file to
+     * @throws IOException in any of the error cases listed above
+     * @throws UnsupportedFileOperationException if this operation is not supported by the underlying filesystem,
+     * or is not implemented.
+     */
+    public abstract void copyRemotelyTo(AbstractFile destFile) throws IOException, UnsupportedFileOperationException;
+
     /**
      * Returns the free space (in bytes) on the disk/volume where this file is, <code>-1</code> if this information is
      * not available.
+     *
+     * <p>This {@link FileOperation#GET_FREE_SPACE file operation} may or may not be supported by the underlying filesystem
+     * -- {@link #isFileOperationSupported(FileOperation)} can be called to find out if it is. If the operation isn't
+     * supported, a {@link UnsupportedFileOperation} will be thrown when this method is called.</p>
      *
      * @return the free space (in bytes) on the disk/volume where this file is, <code>-1</code> if this information is
      * not available.
@@ -1759,6 +1841,10 @@ public abstract class AbstractFile implements FileAttributes, PermissionTypes, P
 
     /**
      * Returns the total space (in bytes) of the disk/volume where this file is.
+     *
+     * <p>This {@link FileOperation#GET_TOTAL_SPACE file operation} may or may not be supported by the underlying filesystem
+     * -- {@link #isFileOperationSupported(FileOperation)} can be called to find out if it is. If the operation isn't
+     * supported, a {@link UnsupportedFileOperation} will be thrown when this method is called.</p>
      *
      * @return the total space (in bytes) of the disk/volume where this file is
      * @throws IOException if an I/O error occurred

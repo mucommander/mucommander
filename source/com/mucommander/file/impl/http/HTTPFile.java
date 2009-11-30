@@ -469,6 +469,28 @@ public class HTTPFile extends ProtocolFile {
     }
 
     /**
+     * Always throws {@link UnsupportedFileOperationException} when called.
+     *
+     * @throws UnsupportedFileOperationException, always
+     */
+    @Override
+    @UnsupportedFileOperation
+    public void copyRemotelyTo(AbstractFile destFile) throws UnsupportedFileOperationException {
+        throw new UnsupportedFileOperationException(FileOperation.COPY_REMOTELY);
+    }
+
+    /**
+     * Always throws an {@link UnsupportedFileOperationException}: HTTP files are read-only.
+     *
+     * @throws UnsupportedFileOperationException always
+     */
+    @Override
+    @UnsupportedFileOperation
+    public void renameTo(AbstractFile destFile) throws UnsupportedFileOperationException {
+        throw new UnsupportedFileOperationException(FileOperation.RENAME);
+    }
+
+    /**
      * Always throws an {@link UnsupportedFileOperationException}: HTTP files are read-only.
      *
      * @throws UnsupportedFileOperationException always
@@ -480,7 +502,7 @@ public class HTTPFile extends ProtocolFile {
     }
 
     /**
-     * Always returns throws {@link UnsupportedFileOperationException} when called.
+     * Always throws {@link UnsupportedFileOperationException} when called.
      *
      * @throws UnsupportedFileOperationException, always
      */
@@ -491,7 +513,7 @@ public class HTTPFile extends ProtocolFile {
     }
 
     /**
-     * Always returns throws {@link UnsupportedFileOperationException} when called.
+     * Always throws {@link UnsupportedFileOperationException} when called.
      *
      * @throws UnsupportedFileOperationException, always
      */

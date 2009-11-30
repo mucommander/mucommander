@@ -105,6 +105,12 @@ class BookmarkRoot extends ProtocolFile implements BookmarkListener {
     public void delete() throws UnsupportedFileOperationException {throw new UnsupportedFileOperationException(FileOperation.DELETE);}
     @Override
     @UnsupportedFileOperation
+    public void copyRemotelyTo(AbstractFile destFile) throws UnsupportedFileOperationException {throw new UnsupportedFileOperationException(FileOperation.COPY_REMOTELY);}
+    @Override
+    @UnsupportedFileOperation
+    public void renameTo(AbstractFile destFile) throws UnsupportedFileOperationException {throw new UnsupportedFileOperationException(FileOperation.RENAME);}
+    @Override
+    @UnsupportedFileOperation
     public void changeDate(long lastModified) throws UnsupportedFileOperationException {throw new UnsupportedFileOperationException(FileOperation.CHANGE_DATE);}
     @Override
     public long getSize() {return -1;}

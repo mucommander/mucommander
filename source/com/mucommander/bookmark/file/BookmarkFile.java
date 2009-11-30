@@ -193,43 +193,27 @@ public class BookmarkFile extends ProtocolFile {
 
     // - Bookmark renaming -----------------------------------------------------
     // -------------------------------------------------------------------------
-    /**
-     * Returns {@link AbstractFile#MUST_HINT}.
-     * <p>
-     * If the specified file is a <code>BookmarkFile</code>, then we must use the custom
-     * {@link #moveTo(AbstractFile) moveTo} method. Otherwise, the point is moot as any
-     * other move operation will fail.
-     * </p>
-     * @param  destination where the file will be moved to.
-     * @return             {@link AbstractFile#MUST_HINT}.
-     */
-    @Override
-    public int getMoveToHint(AbstractFile destination) {
-        if(destination.getAncestor() instanceof BookmarkFile)
-            return MUST_HINT;
-        return MUST_NOT_HINT;
-    }
 
     /**
-     * Tries to move the bookmark to the specified destination.
-     * <p>
-     * If the specified destination is an instance of <code>BookmarkFile</code>,
-     * this will rename the bookmark. Otherwise, this method will fail.
-     * </p>
-     * @param  destination           where to move the bookmark to.
-     * @return                       <code>true</code>.
-     * @throws FileTransferException if the specified destination is not an instance of <code>BookmarkFile</code>.
+     * Attempts to rename the bookmark to the specified destination.
+     * The operation will only be carried out if the specified destination is a <code>BookmarkFile</code> or has an
+     * ancestor that is.
+     *
+     * @param  destination where to move the bookmark to.
+     * @throws IOException if the operation could not be carried out.
      */
     @Override
-    public boolean moveTo(AbstractFile destination) throws FileTransferException {
+    public void renameTo(AbstractFile destination) throws IOException {
+        checkRenamePrerequisites(destination, true, true);
+
         Bookmark oldBookmark;
         Bookmark newBookmark;
 
-        destination = destination.getAncestor();
+        destination = destination.getTopAncestor();
 
         // Makes sure we're working with a bookmark.
         if(!(destination instanceof BookmarkFile))
-            throw new FileTransferException(FileTransferException.OPENING_DESTINATION);
+            throw new IOException();
 
         // Creates the new bookmark and checks for conflicts.
         newBookmark = new Bookmark(destination.getName(), bookmark.getLocation());
@@ -239,8 +223,6 @@ public class BookmarkFile extends ProtocolFile {
         // Adds the new bookmark and deletes its 'old' version.
         BookmarkManager.addBookmark(newBookmark);
         BookmarkManager.removeBookmark(bookmark);
-
-        return true;
     }
 
     /**
@@ -256,13 +238,6 @@ public class BookmarkFile extends ProtocolFile {
 
     // - Bookmark duplication --------------------------------------------------
     // -------------------------------------------------------------------------
-    @Override
-    public int getCopyToHint(AbstractFile destination) {
-        destination = destination.getAncestor();
-        if(destination instanceof BookmarkFile)
-            return MUST_HINT;
-        return MUST_NOT_HINT;
-    }
 
     /**
      * Tries to copy the bookmark to the specified destination.
@@ -271,20 +246,17 @@ public class BookmarkFile extends ProtocolFile {
      * this will duplicate the bookmark. Otherwise, this method will fail.
      * </p>
      * @param  destination           where to copy the bookmark to.
-     * @return                       <code>true</code>.
      * @throws FileTransferException if the specified destination is not an instance of <code>BookmarkFile</code>.
      */
     @Override
-    public boolean copyTo(AbstractFile destination) throws FileTransferException {
+    public void copyRemotelyTo(AbstractFile destination) throws IOException {
         // Makes sure we're working with a bookmark.
-        destination = destination.getAncestor();
+        destination = destination.getTopAncestor();
         if(!(destination instanceof BookmarkFile))
-            throw new FileTransferException(FileTransferException.OPENING_DESTINATION);
+            throw new IOException();
 
         // Copies this bookmark to the specified destination.
         BookmarkManager.addBookmark(new Bookmark(destination.getName(), bookmark.getLocation()));
-
-        return true;
     }
 
 

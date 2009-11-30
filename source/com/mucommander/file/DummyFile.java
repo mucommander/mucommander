@@ -266,7 +266,29 @@ public class DummyFile extends AbstractFile {
     }
 
     /**
-     * Implementation notes: always returns throws {@link UnsupportedFileOperationException}.
+     * Implementation notes: always throws an {@link UnsupportedFileOperationException}.
+     *
+     * @throws UnsupportedFileOperationException always
+     */
+    @Override
+    @UnsupportedFileOperation
+    public void copyRemotelyTo(AbstractFile destFile) throws UnsupportedFileOperationException {
+        throw new UnsupportedFileOperationException(FileOperation.COPY_REMOTELY);
+    }
+
+    /**
+     * Implementation notes: always throws an {@link UnsupportedFileOperationException}.
+     *
+     * @throws UnsupportedFileOperationException always
+     */
+    @Override
+    @UnsupportedFileOperation
+    public void renameTo(AbstractFile destFile) throws UnsupportedFileOperationException {
+        throw new UnsupportedFileOperationException(FileOperation.RENAME);
+    }
+
+    /**
+     * Implementation notes: always throws {@link UnsupportedFileOperationException}.
      *
      * @throws UnsupportedFileOperationException, always
      */
@@ -277,7 +299,7 @@ public class DummyFile extends AbstractFile {
     }
 
     /**
-     * Implementation notes: always returns throws {@link UnsupportedFileOperationException}.
+     * Implementation notes: always throws {@link UnsupportedFileOperationException}.
      *
      * @throws UnsupportedFileOperationException, always
      */

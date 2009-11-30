@@ -423,6 +423,227 @@ public abstract class AbstractFileTestCase extends TestCase {
         }
     }
 
+    /**
+     * Copies the given source file to the destination one, using either {@link AbstractFile#copyRemotelyTo(AbstractFile)}
+     * or {@link AbstractFile#copyTo(AbstractFile)} depending on the parameter's value.
+     *
+     * @param sourceFile the source file to copy
+     * @param destFile the destination file to copy the source file to
+     * @param useRemoteCopy <code>true</code> to use {@link AbstractFile#copyRemotelyTo(AbstractFile)}, <code>false</code>
+     * to use {@link AbstractFile#copyTo(AbstractFile)}
+     * @throws IOException in case of an error
+     */
+    protected void copyTo(AbstractFile sourceFile, AbstractFile destFile, boolean useRemoteCopy) throws IOException {
+        if(useRemoteCopy)
+            sourceFile.copyRemotelyTo(destFile);
+        else
+            sourceFile.copyTo(destFile);
+    }
+
+    /**
+     * Tests either {@link AbstractFile#copyTo(AbstractFile)} or {@link AbstractFile#copyRemotelyTo(AbstractFile)}
+     * depending on the parameter's value.
+     *
+     * @param useRemoteCopy <code>true</code> to test {@link AbstractFile#copyRemotelyTo(AbstractFile)},
+     * <code>false</code> to test {@link AbstractFile#copyTo(AbstractFile)}
+     * @throws IOException should not happen
+     * @throws NoSuchAlgorithmException should not happen
+     */
+    protected void testCopyTo(boolean useRemoteCopy) throws IOException, NoSuchAlgorithmException {
+        createFile(tempFile, 100000);
+        AbstractFile destFile = getTemporaryFile();
+        deleteWhenFinished(destFile);       // this file will automatically be deleted if it exists when the test is over
+
+        // Abort test if copyRemotelyTo is tested and not supported
+        if(useRemoteCopy && !tempFile.isFileOperationSupported(FileOperation.COPY_REMOTELY)) {
+            System.out.println("copyRemotelyTo not supported, skipping test");
+            return;
+        }
+
+        // Try and copy the file and see if it worked
+        boolean success;
+        try {
+            copyTo(tempFile, destFile, useRemoteCopy);
+            success = true;
+        }
+        catch(IOException e) {
+            assertFalse(e instanceof UnsupportedFileOperationException);
+            success = false;
+        }
+
+        if(success) {     // If copyTo/copyRemotelyTo succeeded
+            // Assert that the checksum of source and destination match
+            assertContentsEquals(tempFile, destFile);
+
+            // At this point, we know that copyTo/copyRemotelyTo works (doesn't return false), at least for this destination file
+
+            // Assert that copyTo/copyRemotelyTo overwrites the destination file when it exists
+            createFile(tempFile, 100000);
+            copyTo(tempFile, destFile, useRemoteCopy);
+            assertContentsEquals(tempFile, destFile);
+
+            // Assert that copyTo/copyRemotelyTo fails when the source and destination files are the same
+            destFile.delete();
+            boolean exceptionThrown = false;
+            try { copyTo(tempFile, tempFile, useRemoteCopy); }
+            catch(FileTransferException e) { exceptionThrown = true; }
+
+            assertTrue(exceptionThrown);
+            assertFalse(destFile.exists());
+
+            // Assert that copyTo/copyRemotelyTo fails when the source file doesn't exist
+            tempFile.delete();
+            exceptionThrown = false;
+            try { copyTo(tempFile, destFile, useRemoteCopy); }
+            catch(FileTransferException e) { exceptionThrown = true; }
+
+            assertTrue(exceptionThrown);
+            assertFalse(destFile.exists());
+
+            // Assert that copyTo/copyRemotelyTo succeeds copying a directory
+            tempFile.mkdir();
+            copyTo(tempFile, destFile, useRemoteCopy);
+            assertTrue(destFile.exists());
+            assertTrue(destFile.isDirectory());
+
+            // Assert that copyTo/copyRemotelyTo fails when the source is a directory, and when the destination is a
+            // subfolder of the source
+            AbstractFile subFolder = tempFile.getDirectChild("subfolder");
+            exceptionThrown = false;
+            try { copyTo(tempFile, subFolder, useRemoteCopy); }
+            catch(FileTransferException e) { exceptionThrown = true; }
+
+            assertTrue(exceptionThrown);
+            assertFalse(subFolder.exists());
+
+            // Todo: test copyTo on a large, randomly-generated file tree
+        }
+        else {                              // copyTo failed gracefully
+            System.out.println("Warning: AbstractFile#copyTo(AbstractFile) did not succeed (returned false)");
+
+            // Assert that the destination file does not exist
+            assertFalse(destFile.exists());
+        }
+    }
+
+    /**
+     * Moves the given source file to the destination one, using either {@link AbstractFile#renameTo(AbstractFile)} or
+     * {@link AbstractFile#moveTo(AbstractFile)} depending on the parameter's value.
+     *
+     * @param sourceFile the source file to move/rename
+     * @param destFile the destination file to move/rename the source file to
+     * @param useRenameTo <code>true</code> to use {@link AbstractFile#renameTo(AbstractFile)}, <code>false</code> to
+     * use {@link AbstractFile#moveTo(AbstractFile)}
+     * @throws IOException in case of an error
+     */
+    protected void moveTo(AbstractFile sourceFile, AbstractFile destFile, boolean useRenameTo) throws IOException {
+        if(useRenameTo)
+            sourceFile.renameTo(destFile);
+        else
+            sourceFile.moveTo(destFile);
+    }
+
+    /**
+     * Tests either {@link AbstractFile#renameTo(AbstractFile)} or {@link AbstractFile#moveTo(AbstractFile)} depending
+     * on the parameter's value.
+     *
+     * @param useRenameTo <code>true</code> to test {@link AbstractFile#renameTo(AbstractFile)}, <code>false</code> to
+     * test {@link AbstractFile#moveTo(AbstractFile)}
+     * @throws IOException should not happen
+     * @throws NoSuchAlgorithmException should not happens
+     */
+    protected void testMoveTo(boolean useRenameTo) throws IOException, NoSuchAlgorithmException {
+        createFile(tempFile, 100000);
+        AbstractFile destFile = getTemporaryFile();
+        deleteWhenFinished(destFile);       // this file will automatically be deleted if it exists when the test is over
+
+        // Abort test if renameTo is tested and not supported
+        if(useRenameTo && !tempFile.isFileOperationSupported(FileOperation.RENAME)) {
+            System.out.println("renameTo not supported, skipping test");
+            return;
+        }
+
+        String sourceChecksum = calculateMd5(tempFile);
+
+        // Try and move/rename the file and see if it worked
+        boolean success;
+        try {
+            moveTo(tempFile, destFile, useRenameTo);
+            success = true;
+        }
+        catch(IOException e) {
+            assertFalse(e instanceof UnsupportedFileOperationException);
+            success = false;
+        }
+
+        if(success) {     // If moveTo/renameTo succeeded
+            // Assert that the source file is gone and the destination file exists
+            assertFalse(tempFile.exists());
+            assertTrue(destFile.exists());
+
+            // Assert that the checksum of source and destination match
+            assertEquals(sourceChecksum, calculateMd5(destFile));
+
+            // At this point, we know that moveTo/renameTo works, at least for this destination file
+
+            // Assert that the destination file is overwritten when it exists
+            createFile(tempFile, 100000);
+            sourceChecksum = calculateMd5(tempFile);
+            moveTo(tempFile, destFile, useRenameTo);
+
+            assertFalse(tempFile.exists());
+            assertTrue(destFile.exists());
+            assertEquals(sourceChecksum, calculateMd5(destFile));
+
+            // Assert that moveTo/renameTo fails when the source and destination files are the same
+            createFile(tempFile, 1);
+            destFile.delete();
+            boolean exceptionThrown = false;
+            try { moveTo(tempFile, tempFile, useRenameTo); }
+            catch(FileTransferException e) { exceptionThrown = true; }
+
+            assertTrue(exceptionThrown);
+            assertTrue(tempFile.exists());
+            assertFalse(destFile.exists());
+
+            // Assert that moveTo/renameTo fails when the source file doesn't exist
+            tempFile.delete();
+            exceptionThrown = false;
+            try { moveTo(tempFile, destFile, useRenameTo); }
+            catch(FileTransferException e) { exceptionThrown = true; }
+
+            assertTrue(exceptionThrown);
+            assertFalse(destFile.exists());
+
+            // Assert that moveTo/renameTo succeeds moving a directory
+            tempFile.mkdir();
+            moveTo(tempFile, destFile, useRenameTo);
+            assertFalse(tempFile.exists());
+            assertTrue(destFile.exists());
+            assertTrue(destFile.isDirectory());
+
+            // Assert that moveTo/renameTo fails when the source is a directory and a parent of the destination
+            tempFile.mkdir();
+            AbstractFile subFolder = tempFile.getDirectChild("subfolder");
+            exceptionThrown = false;
+            try { moveTo(tempFile, subFolder, useRenameTo); }
+            catch(FileTransferException e) { exceptionThrown = true; }
+
+            assertTrue(exceptionThrown);
+            assertTrue(tempFile.exists());
+            assertFalse(subFolder.exists());
+
+            // Todo: test moveTo/renameTo on a large, randomly-generated file tree
+        }
+        else {
+            // moveTo/renameTo failed, which is not considered as an error: this can happen under normal circumstances
+            System.out.println("Warning: AbstractFile#renameTo(AbstractFile) did not succeed");
+
+            // Assert that the destination file does not exist
+            assertFalse(destFile.exists());
+        }
+    }
+
 
     //////////////////
     // Test methods //
@@ -1428,175 +1649,44 @@ public abstract class AbstractFileTestCase extends TestCase {
     }
 
     /**
-     * Tests {@link AbstractFile#getCopyToHint(AbstractFile)} and {@link AbstractFile#copyTo(AbstractFile)}.
+     * Tests {@link AbstractFile#moveTo(AbstractFile)}.
+     *
+     * @throws IOException should not happen
+     * @throws NoSuchAlgorithmException should not happen
+     */
+    public void testMoveTo() throws IOException, NoSuchAlgorithmException {
+        testMoveTo(false);
+    }
+
+    /**
+     * Tests {@link AbstractFile#renameTo(AbstractFile)}.
+     *
+     * @throws IOException should not happen
+     * @throws NoSuchAlgorithmException should not happen
+     */
+    public void testRenameTo() throws IOException, NoSuchAlgorithmException {
+        testMoveTo(true);
+    }
+
+    /**
+     * Tests {@link AbstractFile#copyTo(AbstractFile)}.
      *
      * @throws IOException should not happen
      * @throws NoSuchAlgorithmException should not happen
      */
     public void testCopyTo() throws IOException, NoSuchAlgorithmException {
-        createFile(tempFile, 100000);
-        AbstractFile destFile = getTemporaryFile();
-        deleteWhenFinished(destFile);       // this file will automatically be deleted if it exists when the test is over
-
-        // Assert that getCopyToHint(AbstractFile) returns an allowed value (one of the hint constants)
-        int copyToHint = tempFile.getCopyToHint(destFile);
-        assertTrue(copyToHint>=AbstractFile.SHOULD_HINT && copyToHint<=AbstractFile.MUST_NOT_HINT);
-
-        // Abort test if copyTo must not be called
-        if(copyToHint==AbstractFile.MUST_NOT_HINT) {
-            System.out.println("#copyTo(AbstractFile) not supported, skipping test.");
-            return;
-        }
-
-       // Try and copy the file, copyTo is allowed to fail gracefully and return false
-        if(tempFile.copyTo(destFile)) {     // If copyTo succeeded
-            // Assert that the checksum of source and destination match
-            assertContentsEquals(tempFile, destFile);
-
-            // At this point, we know that copyTo works (doesn't return false), at least for this destination file
-
-            // Assert that copyTo overwrites the destination file when it exists
-            createFile(tempFile, 100000);
-            tempFile.copyTo(destFile);
-            assertContentsEquals(tempFile, destFile);
-
-            // Assert that copyTo fails when the source and destination files are the same
-            destFile.delete();
-            boolean exceptionThrown = false;
-            try { tempFile.copyTo(tempFile); }
-            catch(FileTransferException e) { exceptionThrown = true; }
-
-            assertTrue(exceptionThrown);
-            assertFalse(destFile.exists());
-
-            // Assert that copyTo fails when the source file doesn't exist
-            tempFile.delete();
-            exceptionThrown = false;
-            try { tempFile.copyTo(destFile); }
-            catch(FileTransferException e) { exceptionThrown = true; }
-
-            assertTrue(exceptionThrown);
-            assertFalse(destFile.exists());
-
-            // Assert that copyTo succeeds copying a directory
-            tempFile.mkdir();
-
-            assertTrue(tempFile.copyTo(destFile));
-            assertTrue(destFile.exists());
-            assertTrue(destFile.isDirectory());
-
-            // Assert that copyTo fails when the source is a directory, and when the destination is a subfolder of source
-            AbstractFile subFolder = tempFile.getDirectChild("subfolder");
-            exceptionThrown = false;
-            try { tempFile.copyTo(subFolder); }
-            catch(FileTransferException e) { exceptionThrown = true; }
-
-            assertTrue(exceptionThrown);
-            assertFalse(subFolder.exists());
-
-            // Todo: test copyTo on a large, randomly-generated file tree
-        }
-        else {                              // copyTo failed gracefully
-            System.out.println("Warning: AbstractFile#copyTo(AbstractFile) did not succeed (returned false)");
-
-            // Assert that the destination file does not exist
-            assertFalse(destFile.exists());
-        }
+        testCopyTo(false);
     }
-
 
     /**
-     * Tests {@link AbstractFile#getMoveToHint(AbstractFile)} and {@link AbstractFile#moveTo(AbstractFile)}.
+     * Tests {@link AbstractFile#copyRemotelyTo(AbstractFile)}.
      *
      * @throws IOException should not happen
-     * @throws NoSuchAlgorithmException should not happens
+     * @throws NoSuchAlgorithmException should not happen
      */
-    public void testMoveTo() throws IOException, NoSuchAlgorithmException {
-        createFile(tempFile, 100000);
-        AbstractFile destFile = getTemporaryFile();
-        deleteWhenFinished(destFile);       // this file will automatically be deleted if it exists when the test is over
-
-        // Assert that getMoveToHint(AbstractFile) returns an allowed value (one of the hint constants)
-        int moveToHint = tempFile.getMoveToHint(destFile);
-        assertTrue(moveToHint>=AbstractFile.SHOULD_HINT && moveToHint<=AbstractFile.MUST_NOT_HINT);
-
-        // Abort test if moveTo must not be called
-        if(moveToHint==AbstractFile.MUST_NOT_HINT) {
-            System.out.println("#moveTo(AbstractFile) not supported, skipping test.");
-            return;
-        }
-
-        String sourceChecksum = calculateMd5(tempFile);
-
-       // Try and move the file, moveTo is allowed to fail gracefully and return false
-        if(tempFile.moveTo(destFile)) {     // If moveTo succeeded
-            // Assert that the source file is gone and the destination file exists
-            assertFalse(tempFile.exists());
-            assertTrue(destFile.exists());
-
-            // Assert that the checksum of source and destination match
-            assertEquals(sourceChecksum, calculateMd5(destFile));
-
-            // At this point, we know that moveTo works (doesn't return false), at least for this destination file
-
-            // Assert that moveTo overwrites the destination file when it exists
-            createFile(tempFile, 100000);
-            sourceChecksum = calculateMd5(tempFile);
-            assertTrue(tempFile.moveTo(destFile));
-
-            assertFalse(tempFile.exists());
-            assertTrue(destFile.exists());
-            assertEquals(sourceChecksum, calculateMd5(destFile));
-
-            // Assert that moveTo fails when the source and destination files are the same
-            createFile(tempFile, 1);
-            destFile.delete();
-            boolean exceptionThrown = false;
-            try { tempFile.moveTo(tempFile); }
-            catch(FileTransferException e) { exceptionThrown = true; }
-
-            assertTrue(exceptionThrown);
-            assertTrue(tempFile.exists());
-            assertFalse(destFile.exists());
-
-            // Assert that moveTo fails when the source file doesn't exist
-            tempFile.delete();
-            exceptionThrown = false;
-            try { tempFile.moveTo(destFile); }
-            catch(FileTransferException e) { exceptionThrown = true; }
-
-            assertTrue(exceptionThrown);
-            assertFalse(destFile.exists());
-
-            // Assert that moveTo succeeds moving a directory
-            tempFile.mkdir();
-
-            assertTrue(tempFile.moveTo(destFile));
-            assertFalse(tempFile.exists());
-            assertTrue(destFile.exists());
-            assertTrue(destFile.isDirectory());
-
-            // Assert that moveTo fails when the source is a directory and a parent of the destination
-            tempFile.mkdir();
-            AbstractFile subFolder = tempFile.getDirectChild("subfolder");
-            exceptionThrown = false;
-            try { tempFile.moveTo(subFolder); }
-            catch(FileTransferException e) { exceptionThrown = true; }
-
-            assertTrue(exceptionThrown);
-            assertTrue(tempFile.exists());
-            assertFalse(subFolder.exists());
-
-            // Todo: test moveTo on a large, randomly-generated file tree
-        }
-        else {                              // moveTo failed gracefully
-            System.out.println("Warning: AbstractFile#moveTo(AbstractFile) did not succeed (returned false)");
-
-            // Assert that the destination file does not exist
-            assertFalse(destFile.exists());
-        }
+    public void testCopyRemotelyTo() throws IOException, NoSuchAlgorithmException {
+        testCopyTo(true);
     }
-
 
     /**
      * Tests {@link AbstractFile#getIcon()} and {@link AbstractFile#getIcon(java.awt.Dimension)}.
@@ -1684,8 +1774,28 @@ public abstract class AbstractFileTestCase extends TestCase {
     }
 
     /**
-     * Tests the presence of {@link UnsupportedFileOperation} annotations in the method for all operations that
-     * are {@link #getSupportedOperations() supported}, and the absence for those that are not.
+     * Tests the absence of {@link UnsupportedFileOperation} annotations in all methods corresponding to
+     * {@link #getSupportedOperations() supported operations}, and the absence thereof for unsupported operations.
+     *
+     * @throws Exception should not happen
+     */
+    public void testUnsupportedFileOperationAnnotations() throws Exception {
+        List<FileOperation> supportedOps = Arrays.asList(getSupportedOperations());
+
+        Class<? extends AbstractFile> fileClass = tempFile.getClass();
+        Method m;
+        for(FileOperation op: FileOperation.values()) {
+            m = op.getCorrespondingMethod(fileClass);
+            assertEquals(
+                supportedOps.contains(op),
+                !fileClass.getMethod(m.getName(), m.getParameterTypes()).isAnnotationPresent(UnsupportedFileOperation.class)
+            );
+        }
+    }
+
+    /**
+     * Ensures that the return value of {@link AbstractFile#isFileOperationSupported(FileOperation)} is consistent
+     * with {@link #getSupportedOperations() supported operations}.
      *
      * @throws Exception should not happen
      */
@@ -1694,18 +1804,10 @@ public abstract class AbstractFileTestCase extends TestCase {
 
         AbstractFile tempFile = getTemporaryFile();
         Class<? extends AbstractFile> fileClass = tempFile.getClass();
-        for(FileOperation op: supportedOps) {
-            assertTrue(tempFile.isFileOperationSupported(op));
-            assertTrue(AbstractFile.isFileOperationSupported(op, fileClass));
-        }
-
-        Method m;
         for(FileOperation op: FileOperation.values()) {
-            m = op.getCorrespondingMethod(fileClass);
-            assertEquals(
-                supportedOps.contains(op),
-                !fileClass.getMethod(m.getName(), m.getParameterTypes()).isAnnotationPresent(UnsupportedFileOperation.class)
-            );
+            boolean opSupported = supportedOps.contains(op);
+            assertEquals(opSupported, tempFile.isFileOperationSupported(op));
+            assertEquals(opSupported, AbstractFile.isFileOperationSupported(op, fileClass));
         }
     }
 

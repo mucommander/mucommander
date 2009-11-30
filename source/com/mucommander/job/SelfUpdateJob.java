@@ -256,7 +256,8 @@ public class SelfUpdateJob extends CopyJob {
 
         // Move the file from the temporary location to its final destination
         try {
-            return tempDestJar.moveTo(destJar);
+            tempDestJar.moveTo(destJar);
+            return true;
         }
         catch(IOException e) {
             return false;

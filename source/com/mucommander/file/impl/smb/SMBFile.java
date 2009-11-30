@@ -21,7 +21,6 @@ package com.mucommander.file.impl.smb;
 import com.mucommander.auth.AuthException;
 import com.mucommander.auth.Credentials;
 import com.mucommander.file.*;
-import com.mucommander.io.FileTransferException;
 import com.mucommander.io.RandomAccessInputStream;
 import com.mucommander.io.RandomAccessOutputStream;
 import jcifs.smb.*;
@@ -439,6 +438,50 @@ import java.net.MalformedURLException;
         file.mkdir();
     }
 
+    @Override
+    public void copyRemotelyTo(AbstractFile destFile) throws IOException {
+        // Throw an exception if the file cannot be renamed to the specified destination.
+        // This method fails in situations where SmbFile#copyTo() doesn't, for instance:
+        // - when the destination file exists (the destination is simply overwritten)
+        // - when the source file doesn't exist
+        checkCopyRemotelyPrerequisites(destFile, false, false);
+
+        // Reuse the destination SmbFile instance
+        SmbFile destSmbFile = ((SMBFile)destFile).file;
+
+        // Remotely copy the file
+        file.copyTo(destSmbFile);
+
+        // Ensure that the destination jcifs.smb.SmbFile's path is consistent with its new directory/non-directory state
+        ((SMBFile)destFile).checkSmbFile(file.isDirectory());
+    }
+
+    /**
+     * Implementation notes: server-to-server renaming will work if the destination file also uses the 'SMB' scheme.
+     * Hosts do not necessarily have to be the same for this operation to succeed.
+     */
+    @Override
+    public void renameTo(AbstractFile destFile) throws IOException {
+        // Throw an exception if the file cannot be renamed to the specified destination.
+        // This method fails in situations where SFTPFile#renameTo() doesn't, for instance:
+        // - when the source and destination are the same
+        // - when the source file doesn't exist
+        checkRenamePrerequisites(destFile, true, true);
+
+        // Attempt to move the file using jcifs.smb.SmbFile#renameTo.
+
+        boolean isDirectory = file.isDirectory();
+
+        // SmbFile#renameTo() throws an IOException if the destination exists (instead of overwriting the file)
+        if(destFile.exists())
+            destFile.delete();
+
+        // Rename the file
+        file.renameTo(((SMBFile)destFile).file);
+
+        // Ensure that the destination jcifs.smb.SmbFile's path is consistent with its new directory/non-directory state
+        ((SMBFile)destFile).checkSmbFile(isDirectory);
+    }
 
     @Override
     public long getFreeSpace() throws IOException {
@@ -446,7 +489,7 @@ import java.net.MalformedURLException;
     }
 
     /**
-     * Always returns throws {@link UnsupportedFileOperationException} when called.
+     * Always throws {@link UnsupportedFileOperationException} when called.
      *
      * @throws UnsupportedFileOperationException, always
      */
@@ -480,90 +523,6 @@ import java.net.MalformedURLException;
         }
     }
 
-
-    @Override
-    public boolean copyTo(AbstractFile destFile) throws FileTransferException {
-        // File can only be copied by SMB if the destination is on an SMB share (but not necessarily on the same host)
-        if(!destFile.getURL().getScheme().equals(FileProtocols.SMB)) {
-            return super.copyTo(destFile);
-        }
-
-        // If destination file is not an SMBFile nor has an SMBFile ancestor (for instance an archive entry),
-        // SmbFile.copyTo() won't work so use the default copyTo() implementation instead
-        destFile = destFile.getTopAncestor();
-        if(!(destFile instanceof SMBFile)) {
-            return super.copyTo(destFile);
-        }
-
-        // Reuse the destination SmbFile instance
-        SmbFile destSmbFile = ((SMBFile)destFile).file;
-
-        // Special tests to fail in situations where SmbFile#copyTo() does not, for instance:
-        // - when the destination file exists (the destination is simply overwritten)
-        // - when the source file doesn't exist
-        checkCopyPrerequisites(destFile, false);
-
-        // Everything cool, proceed with the copy
-        try {
-            // Copy the SMB file
-            file.copyTo(destSmbFile);
-
-            // Ensure that the destination jcifs.smb.SmbFile's path is consistent with its new directory/non-directory state
-            ((SMBFile)destFile).checkSmbFile(file.isDirectory());
-
-            return true;
-        }
-        catch(SmbException e) {
-            throw new FileTransferException(FileTransferException.UNKNOWN_REASON);
-        }
-    }
-
-
-    /**
-     * Overrides {@link AbstractFile#moveTo(AbstractFile)} to support server-to-server move if the destination file
-     * uses SMB.
-     */
-    @Override
-    public boolean moveTo(AbstractFile destFile) throws FileTransferException {
-        // File can only be moved directly if the destination if it is on an SMB share
-        // (but not necessarily on the same host).
-        // Use the default moveTo() implementation if the destination file doesn't use the same scheme
-        // or is not on the same host
-        if(!destFile.getURL().getScheme().equals(FileProtocols.SMB)) {
-            return super.moveTo(destFile);
-        }
-
-        // If destination file is not an SMBFile nor has an SMBFile ancestor (for instance an archive entry),
-        // SmbFile.renameTo() won't work, so use the default moveTo() implementation instead
-        destFile = destFile.getTopAncestor();
-        if(!(destFile instanceof SMBFile)) {
-            return super.moveTo(destFile);
-        }
-
-        // Special tests to fail in situations where SmbFile#renameTo() does not, for instance:
-        // - when the source and destination are the same
-        // - when the source file doesn't exist
-        checkCopyPrerequisites(destFile, true);
-
-        // Attempt to move the file using jcifs.smb.SmbFile#renameTo.
-        try {
-            boolean isDirectory = file.isDirectory();
-
-            // SmbFile#renameTo() throws an IOException if the destination exists (instead of overwriting the file)
-            if(destFile.exists())
-                destFile.delete();
-
-            file.renameTo(((SMBFile)destFile).file);
-
-            // Ensure that the destination jcifs.smb.SmbFile's path is consistent with its new directory/non-directory state
-            ((SMBFile)destFile).checkSmbFile(isDirectory);
-
-            return true;
-        }
-        catch(IOException e) {
-            throw new FileTransferException(FileTransferException.UNKNOWN_REASON);
-        }
-    }
 
     @Override
     public boolean equalsCanonical(Object f) {

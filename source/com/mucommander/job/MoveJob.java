@@ -22,7 +22,6 @@ package com.mucommander.job;
 import com.mucommander.AppLogger;
 import com.mucommander.file.*;
 import com.mucommander.file.util.FileSet;
-import com.mucommander.io.FileTransferException;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;
@@ -121,35 +120,31 @@ public class MoveJob extends AbstractCopyJob {
         if (destFile == null)
             return false;
 
-        // First, let's try to move/rename the file using AbstractFile#moveTo() if it is more efficient than moving
-        // the file manually. Do not attempt to rename the file if the destination must be appended.
-        if(!append) {
-            int moveToHint = file.getMoveToHint(destFile);
-            if(moveToHint==AbstractFile.SHOULD_HINT || moveToHint==AbstractFile.MUST_HINT) {
-                do {
-                    try {
-                        if(file.moveTo(destFile))
-                            return true;
-                        break;
-                    }
-                    catch(FileTransferException e) {
-                        int ret = showErrorDialog(errorDialogTitle, Translator.get("error_while_transferring", file.getAbsolutePath()));
-                        // Retry loops
-                        if(ret==RETRY_ACTION)
-                            continue;
-                        // Cancel, skip or close dialog returns false
-                        return false;
-                    }
-                }
-                while(true);
+        // Let's try to rename the file using AbstractFile#renameTo() whenever possible, as it is more efficient
+        // than moving the file manually.
+        //
+        // Do not attempt to rename the file in the following cases:
+        // - destination has to be appended
+        // - file schemes do not match (at the time of writing, no filesystem supports mixed scheme renaming)
+        // - if the 'rename' operation is not supported
+        // Note: we want to avoid calling AbstractFile#renameTo when we know it will fail, as it performs some costly
+        // I/O bound checks and ends up throwing an exception which also comes at a cost.
+        if(!append && file.getURL().schemeEquals(destFile.getURL()) && file.isFileOperationSupported(FileOperation.RENAME)) {
+            try {
+                file.renameTo(destFile);
+                return true;
+            }
+            catch(IOException e) {
+                // Fail silently: renameTo might fail under normal conditions, for instance for local files which are
+                // not located on the same volume.
+                AppLogger.fine("Failed to rename "+file+" into "+destFile+" (not necessarily an error)", e);
             }
         }
-        // That didn't work, let's copy the file to the destination and then delete the source file
+        // Rename couldn't be used or didn't succeed: move the file manually
 
-        // Move directory recursively
+        // Move the directory and all its children recursively, by copying files to the destination and then deleting them.
         if(file.isDirectory()) {
-
-            // creates the folder in the destination folder if it doesn't exist
+            // create the destination folder if it doesn't exist
             if(!(destFile.exists() && destFile.isDirectory())) {
                 do {		// Loop for retry
                     try {
@@ -230,11 +225,11 @@ public class MoveJob extends AbstractCopyJob {
                 }
             } while(true);
         }
-        // File is a regular file, move it
+        // File is a regular file, move it by copying it to the destination and then deleting it
         else  {
 
-            // if moveTo() returned false or if it wasn't possible to this method because of 'append',
-            // try the hard way by copying the file first, and then deleting the source file
+            // if renameTo() was not supported or failed, or if it wasn't possible because of 'append',
+            // try the hard way by copying the file first, and then deleting the source file.
             if(tryCopyFile(file, destFile, append, errorDialogTitle) && getState()!=INTERRUPTED) {
                 // Delete the source file
                 do {		// Loop for retry

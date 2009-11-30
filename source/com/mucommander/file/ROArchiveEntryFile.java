@@ -95,14 +95,6 @@ public class ROArchiveEntryFile extends AbstractArchiveEntryFile {
     }
 
     /**
-     * Always returns {@link #MUST_NOT_HINT}.
-     */
-    @Override
-    public int getMoveToHint(AbstractFile destFile) {
-        return MUST_NOT_HINT;
-    }
-
-    /**
      * Always returns <code>0</code>.
      */
     @Override

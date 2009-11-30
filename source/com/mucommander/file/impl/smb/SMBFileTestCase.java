@@ -72,6 +72,8 @@ public class SMBFileTestCase extends AbstractFileTestCase {
             FileOperation.CREATE_DIRECTORY,
             FileOperation.LIST_CHILDREN,
             FileOperation.DELETE,
+            FileOperation.COPY_REMOTELY,
+            FileOperation.RENAME,
             FileOperation.CHANGE_DATE,
             FileOperation.CHANGE_PERMISSION,
             FileOperation.GET_FREE_SPACE,

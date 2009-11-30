@@ -291,6 +291,30 @@ public abstract class AbstractArchiveEntryFile extends AbstractFile {
     }
 
     /**
+     * Always throws an {@link UnsupportedFileOperationException} when called.
+     *
+     * @throws UnsupportedFileOperationException always
+     */
+    @Override
+    @UnsupportedFileOperation
+    public void copyRemotelyTo(AbstractFile destFile) throws UnsupportedFileOperationException {
+        // TODO: we could consider adding remote copy support to RWArchiveEntryFile
+        throw new UnsupportedFileOperationException(FileOperation.COPY_REMOTELY);
+    }
+
+    /**
+     * Always throws an {@link UnsupportedFileOperationException} when called.
+     *
+     * @throws UnsupportedFileOperationException always
+     */
+    @Override
+    @UnsupportedFileOperation
+    public void renameTo(AbstractFile destFile) throws UnsupportedFileOperationException {
+        // TODO: we could consider adding renaming support to RWArchiveEntryFile
+        throw new UnsupportedFileOperationException(FileOperation.RENAME);
+    }
+
+    /**
      * Returns the same ArchiveEntry instance as {@link #getEntry()}.
      */
     @Override

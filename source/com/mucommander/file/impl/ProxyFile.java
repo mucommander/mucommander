@@ -188,6 +188,16 @@ public abstract class ProxyFile extends AbstractFile {
     }
 
     @Override
+    public void copyRemotelyTo(AbstractFile destFile) throws IOException, UnsupportedFileOperationException {
+        file.copyRemotelyTo(destFile);
+    }
+
+    @Override
+    public void renameTo(AbstractFile destFile) throws IOException, UnsupportedFileOperationException {
+        file.renameTo(destFile);
+    }
+
+    @Override
     public long getFreeSpace() throws IOException, UnsupportedFileOperationException {
         return file.getFreeSpace();
     }
@@ -319,26 +329,6 @@ public abstract class ProxyFile extends AbstractFile {
     @Override
     public void copyStream(InputStream in, boolean append) throws FileTransferException {
         file.copyStream(in, append);
-    }
-
-    @Override
-    public boolean copyTo(AbstractFile destFile) throws FileTransferException {
-        return file.copyTo(destFile);
-    }
-
-    @Override
-    public int getCopyToHint(AbstractFile destFile) {
-        return file.getCopyToHint(destFile);
-    }
-
-    @Override
-    public boolean moveTo(AbstractFile destFile) throws FileTransferException {
-        return file.moveTo(destFile);
-    }
-
-    @Override
-    public int getMoveToHint(AbstractFile destFile) {
-        return file.getMoveToHint(destFile);
     }
 
     @Override

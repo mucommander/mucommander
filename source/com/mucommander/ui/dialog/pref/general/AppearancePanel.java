@@ -838,15 +838,14 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
         if((dialog = new ThemeNameDialog(parent, theme.getName())).wasValidated()) {
             // If the rename operation was a success, makes sure the theme is located at its proper position.
             try {
-                if(ThemeManager.renameCustomTheme(theme, dialog.getText())) {
-                    themeComboBox.removeItem(theme);
-                    insertTheme(theme);
-                    return;
-                }
+                ThemeManager.renameCustomTheme(theme, dialog.getText());
+                themeComboBox.removeItem(theme);
+                insertTheme(theme);
             }
-            catch(Exception e) {}
-            // Otherwise, notifies the user.
-            InformationDialog.showErrorDialog(this, Translator.get("prefs_dialog.rename_failed", theme.getName()));
+            catch(Exception e) {
+                // Otherwise, notifies the user.
+                InformationDialog.showErrorDialog(this, Translator.get("prefs_dialog.rename_failed", theme.getName()));
+            }
         }
     }
 
