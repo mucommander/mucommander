@@ -22,6 +22,7 @@ import com.mucommander.file.AbstractFile;
 import com.mucommander.file.AbstractFileTest;
 import com.mucommander.file.FileFactory;
 import com.mucommander.file.FileOperation;
+import org.junit.BeforeClass;
 
 import java.io.IOException;
 
@@ -39,7 +40,7 @@ public class FTPFileTest extends AbstractFileTest {
     /** Name of the system property that controls whether the test suite is enabled or not */
     public final static String ENABLED_PROPERTY = "test_properties.ftp_test.enabled";
 
-    /** The base temporary folder */
+    /** Base temporary folder */
     private static AbstractFile tempFolder;
 
     static {
@@ -47,10 +48,13 @@ public class FTPFileTest extends AbstractFileTest {
         // Todo: use JUnit's DataPoint to test both cases (with and without caching) but it requires Java 1.5's
         // annotations which we don't use for java 1.4 backward compatibility.
 //        FTPFile.setAttributeCachingPeriod(5000);
-
-        tempFolder = FileFactory.getFile(System.getProperty(TEMP_FOLDER_PROPERTY));
     }
 
+    @BeforeClass
+    public static void setupTemporaryFolder() {
+        tempFolder = FileFactory.getFile(System.getProperty(TEMP_FOLDER_PROPERTY));
+    }
+    
 
     ////////////////////////////////////
     // ConditionalTest implementation //
