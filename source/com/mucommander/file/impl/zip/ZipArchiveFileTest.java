@@ -19,17 +19,19 @@
 package com.mucommander.file.impl.zip;
 
 import com.mucommander.file.*;
+import org.junit.After;
+import org.junit.Before;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 
 /**
- * An {@link com.mucommander.file.AbstractFileTestCase} implementation, which performs tests on {@link AbstractArchiveEntryFile}
+ * An {@link AbstractFileTest} implementation, which performs tests on {@link AbstractArchiveEntryFile}
  * entries located inside a {@link ZipArchiveFile} residing in a temporary {@link com.mucommander.file.impl.local.LocalFile}.
  *
  * @author Maxence Bernard
  */
-public class ZipArchiveFileTest extends AbstractFileTestCase {
+public class ZipArchiveFileTest extends AbstractFileTest {
 
     /** The archive file which contains the temporary entries */
     private static ZipArchiveFile tempZipFile;
@@ -37,6 +39,14 @@ public class ZipArchiveFileTest extends AbstractFileTestCase {
     /** id of the last temporary entry generated, to avoid collisions */
     private int entryNum;
 
+
+    ////////////////////////////////////
+    // ConditionalTest implementation //
+    ////////////////////////////////////
+
+    public boolean isEnabled() {
+        return true;
+    }
 
     /////////////////////////////////////////
     // AbstractFileTestCase implementation //
@@ -72,7 +82,8 @@ public class ZipArchiveFileTest extends AbstractFileTestCase {
      * Overridden to create the archive file before each test.
      */
     @Override
-    protected void setUp() throws IOException {
+    @Before
+    public void setUp() throws IOException {
         tempZipFile = (ZipArchiveFile)FileFactory.getTemporaryFile(ZipArchiveFileTest.class.getName()+".zip", false);
         tempZipFile.mkfile();
 
@@ -85,7 +96,8 @@ public class ZipArchiveFileTest extends AbstractFileTestCase {
      * Overridden to delete the archive file after each test.
      */
     @Override
-    protected void tearDown() throws IOException {
+    @After
+    public void tearDown() throws IOException {
         super.tearDown();
 
         tempZipFile.delete();

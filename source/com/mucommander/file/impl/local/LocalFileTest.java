@@ -19,21 +19,23 @@
 package com.mucommander.file.impl.local;
 
 import com.mucommander.file.AbstractFile;
-import com.mucommander.file.AbstractFileTestCase;
+import com.mucommander.file.AbstractFileTest;
 import com.mucommander.file.FileFactory;
 import com.mucommander.file.FileOperation;
+import org.junit.Test;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.regex.Matcher;
 
+import static org.junit.Assert.*;
+
 /**
- * An {@link com.mucommander.file.AbstractFileTestCase} implementation for {@link LocalFile}.
+ * An {@link AbstractFileTest} implementation for {@link LocalFile}.
  *
  * @author Maxence Bernard
  */
-public class LocalFileTest extends AbstractFileTestCase {
-
+public class LocalFileTest extends AbstractFileTest {
 
     /////////////////////////////////////////
     // AbstractFileTestCase implementation //
@@ -64,6 +66,15 @@ public class LocalFileTest extends AbstractFileTestCase {
     }
 
 
+    ////////////////////////////////////
+    // ConditionalTest implementation //
+    ////////////////////////////////////
+
+    public boolean isEnabled() {
+        return true;
+    }
+
+
     /////////////////////////////////////////
     // Additional LocalFile-specific tests //
     /////////////////////////////////////////
@@ -74,6 +85,7 @@ public class LocalFileTest extends AbstractFileTestCase {
      * @throws IOException should not normally happen
      * @throws NoSuchAlgorithmException should not happen
      */
+    @Test
     public void testRenameToCaseVariation() throws IOException, NoSuchAlgorithmException {
         // First test with a regular file
         createFile(tempFile, 1);
@@ -97,6 +109,7 @@ public class LocalFileTest extends AbstractFileTestCase {
      *
      * @throws IOException should not happen 
      */
+    @Test
     public void testUserHome() throws IOException {
         AbstractFile homeFolder = LocalFile.getUserHome();
         assertNotNull(homeFolder);
@@ -110,6 +123,7 @@ public class LocalFileTest extends AbstractFileTestCase {
     /**
      * Tests methods related to root drives (e.g. C:\).
      */
+    @Test
     public void testRootDriveMethods() {
         // The following test simply assert that the method doesn't produce an uncaught exception.
         LocalFile.hasRootDrives();
@@ -125,6 +139,7 @@ public class LocalFileTest extends AbstractFileTestCase {
      *
      * @throws IOException should not happen
      */
+    @Test
     public void testVolumeInfo() throws IOException {
         long volumeInfo[] = ((LocalFile)tempFile).getVolumeInfo();
 
@@ -139,6 +154,7 @@ public class LocalFileTest extends AbstractFileTestCase {
      *
      * @throws IOException should not happen
      */
+    @Test
     public void testVolumes() throws IOException {
         AbstractFile[] volumes = LocalFile.getVolumes();
 
@@ -152,6 +168,7 @@ public class LocalFileTest extends AbstractFileTestCase {
     /**
      * Tests the regex pattern
      */
+    @Test
     public void testDrivePattern() {
         Matcher matcher = LocalFile.driveRootPattern.matcher("C:\\");
         assertTrue(matcher.matches());

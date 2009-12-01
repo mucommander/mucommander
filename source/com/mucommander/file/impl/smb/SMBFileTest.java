@@ -18,42 +18,76 @@
 
 package com.mucommander.file.impl.smb;
 
-import com.mucommander.test.SingleConditionalTestSuite;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
+import com.mucommander.file.AbstractFile;
+import com.mucommander.file.AbstractFileTest;
+import com.mucommander.file.FileFactory;
+import com.mucommander.file.FileOperation;
+
+import java.io.IOException;
 
 /**
- * A {@link SingleConditionalTestSuite} that executes {@link com.mucommander.file.impl.smb.SMBFileTestCase} only if the
- * {@link #ENABLED_PROPERTY} system property is set to <code>"true"</code>.
+ * An {@link AbstractFileTest} implementation for {@link com.mucommander.file.impl.smb.SMBFile}.
+ * The SMB temporary folder where test files are created is defined by the {@link #TEMP_FOLDER_PROPERTY} system property.
  *
  * @author Maxence Bernard
  */
-public class SMBFileTest extends SingleConditionalTestSuite {
+public class SMBFileTest extends AbstractFileTest {
 
     /** Name of the system property that controls whether the test suite is enabled or not */
     public final static String ENABLED_PROPERTY = "test_properties.smb_test.enabled";
 
-    /**
-     * Allows JUnit's test runner to execute this test suite.
-     *
-     * @return an instance of this test suite
-     */
-    public static TestSuite suite() {
-        return new SMBFileTest();
+    /** The system property that holds the URI to the temporary SMB folder */
+    public final static String TEMP_FOLDER_PROPERTY = "test_properties.smb_test.temp_folder";
+
+    /** The base temporary folder */
+    private static AbstractFile tempFolder;
+
+    static {
+        // Configure jCIFS for maximum compatibility
+        SMBProtocolProvider.setLmCompatibility(0);
+        SMBProtocolProvider.setExtendedSecurity(false);
+
+        // Turn off attribute caching completely, otherwise tests will fail
+        SMBFile.setAttributeCachingPeriod(0);
+
+        tempFolder = FileFactory.getFile(System.getProperty(TEMP_FOLDER_PROPERTY));
     }
 
 
-    ///////////////////////////////////////////////
-    // SingleConditionalTestSuite implementation //
-    ///////////////////////////////////////////////
+    ////////////////////////////////////
+    // ConditionalTest implementation //
+    ////////////////////////////////////
 
-    @Override
-    protected boolean isEnabled() {
+    public boolean isEnabled() {
         return "true".equals(System.getProperty(ENABLED_PROPERTY));
     }
 
+
+    /////////////////////////////////////////
+    // AbstractFileTestCase implementation //
+    /////////////////////////////////////////
+
     @Override
-    protected Class<? extends TestCase> getTestCaseClass() {
-        return SMBFileTestCase.class;
+    public AbstractFile getTemporaryFile() throws IOException {
+        return tempFolder.getDirectChild(getPseudoUniqueFilename(SMBFileTest.class.getName()));
+    }
+
+    @Override
+    public FileOperation[] getSupportedOperations() {
+        return new FileOperation[] {
+            FileOperation.READ_FILE,
+            FileOperation.RANDOM_READ_FILE,
+            FileOperation.WRITE_FILE,
+            FileOperation.APPEND_FILE,
+            FileOperation.RANDOM_WRITE_FILE,
+            FileOperation.CREATE_DIRECTORY,
+            FileOperation.LIST_CHILDREN,
+            FileOperation.DELETE,
+            FileOperation.COPY_REMOTELY,
+            FileOperation.RENAME,
+            FileOperation.CHANGE_DATE,
+            FileOperation.CHANGE_PERMISSION,
+            FileOperation.GET_FREE_SPACE,
+        };
     }
 }

@@ -14,6 +14,6 @@ include/jna.jar                 -> JNA (Java Native Access) 3.2.2, with win32 DL
 include/yanfs.jar               -> Yanfs (formerly WebNFS), version unknown but
                                    probably the same as WebNFS 1.2
 include/J7Zip.jar				-> J7Zip 4.43 alpha2 (patched)
-noinclude/junit.jar             -> JUnit 4.4
+noinclude/junit.jar             -> JUnit 4.8
 noinclude/osx-eawt-stubs.jar    -> Stubs for Mac OS X's EAWT API
 noinclude/servlet-api.jar       -> Java Servlet API

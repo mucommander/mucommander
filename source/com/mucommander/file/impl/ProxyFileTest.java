@@ -19,21 +19,33 @@
 package com.mucommander.file.impl;
 
 import com.mucommander.file.AbstractFile;
-import com.mucommander.file.AbstractFileTestCase;
+import com.mucommander.file.AbstractFileTest;
 import com.mucommander.file.FileFactory;
 import com.mucommander.file.FileOperation;
+import org.junit.Test;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
+import static org.junit.Assert.assertTrue;
+
 /**
- * An {@link com.mucommander.file.AbstractFileTestCase} implementation for {@link ProxyFile}, with some additional 
+ * An {@link AbstractFileTest} implementation for {@link ProxyFile}, with some additional
  * test methods.
  *
  * @author Maxence Bernard
  */
-public class ProxyFileTest extends AbstractFileTestCase {
+public class ProxyFileTest extends AbstractFileTest {
+
+    ////////////////////////////////////
+    // ConditionalTest implementation //
+    ////////////////////////////////////
+
+    public boolean isEnabled() {
+        return true;
+    }
+
 
     /////////////////////////////////////////
     // AbstractFileTestCase implementation //
@@ -91,6 +103,7 @@ public class ProxyFileTest extends AbstractFileTestCase {
      * Asserts that all public, non-final and non-static <code>AbstractFile</code> methods are overridden by
      * <code>ProxyFile</code>.
      */
+    @Test
     public void testAllMethodsOverridden() {
         Class<?> proxyFileClass = ProxyFile.class;
         Class<?> abstractFileClass = AbstractFile.class;
