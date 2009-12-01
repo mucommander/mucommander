@@ -52,7 +52,7 @@ public class SFTPFileTest extends AbstractFileTest {
     }
 
     @BeforeClass
-    public void setupTemporaryFolder() {
+    public static void setupTemporaryFolder() {
         tempFolder = FileFactory.getFile(System.getProperty(TEMP_FOLDER_PROPERTY));
     }
 
