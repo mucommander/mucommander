@@ -34,6 +34,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Collections;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Vector;
@@ -199,7 +200,14 @@ public class CommandManager implements CommandBuilder {
      * @return an iterator on all registered commands.
      */
     public static Iterator<Command> commands() {
-        return commands.values().iterator();
+        Vector<Command> list;
+
+        // Sorts the list.
+        list = new Vector<Command>(commands.size());
+        list.addAll(commands.values());
+        Collections.sort(list);
+        
+        return list.iterator();
     }
 
     /**

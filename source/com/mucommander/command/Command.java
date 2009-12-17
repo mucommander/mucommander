@@ -71,9 +71,9 @@ import java.util.Vector;
  * @see    com.mucommander.process.ProcessRunner
  * @see    com.mucommander.process.AbstractProcess
  */
-public class Command {
-    // - Keywords --------------------------------------------------------------
-    // -------------------------------------------------------------------------
+public class Command implements Comparable<Command> {
+    // - Keywords ------------------------------------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------------
     /** Header of replacement keywords. */
     private static final char KEYWORD_HEADER                      = '$';
     /** Instances of this keyword will be replaced by the file's full path. */
@@ -91,8 +91,8 @@ public class Command {
 
 
 
-    // - Type definitions ------------------------------------------------------
-    // -------------------------------------------------------------------------
+    // - Type definitions ----------------------------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------------
     /** Describes <i>normal</i> commands. */
     public static final int NORMAL_COMMAND    = 0;
     /** Describes <i>system</i> commands. */
@@ -102,8 +102,8 @@ public class Command {
 
 
 
-    // - Instance variables ----------------------------------------------------
-    // -------------------------------------------------------------------------
+    // - Instance variables --------------------------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------------
     /** Command's alias. */
     private final String    alias;
     /** Original command. */
@@ -115,8 +115,8 @@ public class Command {
 
 
 
-    // - Initialisation --------------------------------------------------------
-    // -------------------------------------------------------------------------
+    // - Initialisation ------------------------------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------------
     /**
      * Creates a new command.
      * @param alias       alias of the command.
@@ -156,8 +156,8 @@ public class Command {
 
 
 
-    // - Token retrieval -------------------------------------------------------
-    // -------------------------------------------------------------------------
+    // - Token retrieval -----------------------------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------------
     /**
      * Returns this command's tokens without performing keyword substitution.
      * @return this command's tokens without performing keyword substitution.
@@ -365,8 +365,8 @@ public class Command {
 
 
 
-    // - Misc. -----------------------------------------------------------------
-    // -------------------------------------------------------------------------
+    // - Misc. ---------------------------------------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------------
     public int hashCode() {
         int hashCode;
 
@@ -386,6 +386,16 @@ public class Command {
         cmd = (Command)object;
         return command.equals(cmd.command) && alias.equals(cmd.alias) && type == cmd.type &&
                getDisplayName().equals(cmd.getDisplayName());
+    }
+
+    public int compareTo(Command command) {
+        int buffer;
+
+        if((buffer = getDisplayName().compareTo(command.getDisplayName())) != 0)
+            return buffer;
+        if((buffer = getAlias().compareTo(command.getAlias())) != 0)
+            return buffer;
+        return this.command.compareTo(command.command);
     }
 
     /**
