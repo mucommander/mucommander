@@ -225,14 +225,23 @@ public class BookmarkFile extends ProtocolFile {
         BookmarkManager.removeBookmark(bookmark);
     }
 
-    /**
-     * Deletes the bookmark.
-     * <p>
-     * Deleting a bookmark means unregistering it from the {@link com.mucommander.bookmark.BookmarkManager}.
-     * </p>
-     */
+    // TODO: bookmark deleting is currently disabled as a quick fix for #329    
+//    /**
+//     * Deletes the bookmark.
+//     * <p>
+//     * Deleting a bookmark means unregistering it from the {@link com.mucommander.bookmark.BookmarkManager}.
+//     * </p>
+//     */
+//    @Override
+//    public void delete() {
+//        BookmarkManager.removeBookmark(bookmark);
+//    }
+
     @Override
-    public void delete() {BookmarkManager.removeBookmark(bookmark);}
+    @UnsupportedFileOperation
+    public void delete() throws UnsupportedFileOperationException {
+        throw new UnsupportedFileOperationException(FileOperation.DELETE);
+    }
 
 
 
