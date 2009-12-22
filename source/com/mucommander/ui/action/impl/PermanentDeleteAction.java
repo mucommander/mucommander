@@ -18,10 +18,12 @@
 
 package com.mucommander.ui.action.impl;
 
+import com.mucommander.file.FileOperation;
 import com.mucommander.file.util.FileSet;
 import com.mucommander.ui.action.*;
 import com.mucommander.ui.dialog.file.DeleteDialog;
 import com.mucommander.ui.main.MainFrame;
+import com.mucommander.ui.main.table.FileTable;
 
 import javax.swing.KeyStroke;
 import java.awt.event.KeyEvent;
@@ -41,6 +43,12 @@ public class PermanentDeleteAction extends SelectedFilesAction {
         super(mainFrame, properties);
     }
 
+    @Override
+    protected boolean getFileTableCondition(FileTable fileTable) {
+        return fileTable.getCurrentFolder().isFileOperationSupported(FileOperation.DELETE)
+            && super.getFileTableCondition(fileTable);
+    }
+    
     @Override
     public void performAction() {
         FileSet files = mainFrame.getActiveTable().getSelectedFiles();
