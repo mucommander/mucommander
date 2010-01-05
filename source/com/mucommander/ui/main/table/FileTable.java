@@ -1183,7 +1183,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
         // interval, which for most people is too low. Therefore, we cannot rely on MouseEvent#getClickCount() and
         // MouseEvent#getMultiClickInterval() to always work properly and have to detect double-clicks using the
         // proper system multi-click interval returned by DefaultManager#getMultiClickInterval().
-        if ((System.currentTimeMillis() - doubleClickTime) < DOUBLE_CLICK_INTERVAL) {
+        if ((System.currentTimeMillis() - doubleClickTime) < DOUBLE_CLICK_INTERVAL && selectionChangedTimestamp < doubleClickTime) {
             if (doubleClickCounter == 1) {
                 doubleClickCounter = 2; // increase only once
                 e.consume(); // and make sure this event is not sent anywhere else
@@ -1425,9 +1425,13 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
      */
     public void configurationChanged(ConfigurationEvent event) {
         String var = event.getVariable();
-
-        if (var.equals(MuConfiguration.DISPLAY_COMPACT_FILE_SIZE) || var.equals(MuConfiguration.DATE_FORMAT) ||
-                 var.equals(MuConfiguration.DATE_SEPARATOR) || var.equals(MuConfiguration.TIME_FORMAT)) {
+        
+        if (var.equals(MuConfiguration.DISPLAY_COMPACT_FILE_SIZE)) {
+        	FileTableModel.setSizeFormat(event.getBooleanValue());
+        	tableModel.fillCellCache();
+        	resizeAndRepaint();
+        }
+        else if (var.equals(MuConfiguration.DATE_FORMAT) || var.equals(MuConfiguration.DATE_SEPARATOR) || var.equals(MuConfiguration.TIME_FORMAT)) {
             // Note: for the update to work properly, CustomDateFormat's configurationChanged() method has to be called
             // before FileTable's, so that CustomDateFormat gets notified of date format first.
             // Since listeners are stored by MuConfiguration in a hash map, order is pretty much random.

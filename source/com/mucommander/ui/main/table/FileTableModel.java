@@ -18,8 +18,10 @@
 
 package com.mucommander.ui.main.table;
 
-import com.mucommander.conf.ConfigurationEvent;
-import com.mucommander.conf.ConfigurationListener;
+import java.util.Date;
+
+import javax.swing.table.AbstractTableModel;
+
 import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.filter.FileFilter;
@@ -28,9 +30,6 @@ import com.mucommander.file.util.FileComparator;
 import com.mucommander.file.util.FileSet;
 import com.mucommander.text.CustomDateFormat;
 import com.mucommander.text.SizeFormat;
-
-import javax.swing.table.AbstractTableModel;
-import java.util.Date;
 
 
 /**
@@ -79,26 +78,11 @@ public class FileTableModel extends AbstractTableModel {
     /** String used as size information for directories */
     public final static String DIRECTORY_SIZE_STRING = "<DIR>";
 
-    /** Listens to configuration changes and updates static fields accordingly */
-    public final static ConfigurationListener CONFIGURATION_ADAPTER;
-
 
     static {
         // Initialize the size column format based on the configuration
         setSizeFormat(MuConfiguration.getVariable(MuConfiguration.DISPLAY_COMPACT_FILE_SIZE,
                                                   MuConfiguration.DEFAULT_DISPLAY_COMPACT_FILE_SIZE));
-
-        // Listens to configuration changes and updates static fields accordingly.
-        // Note: a reference to the listener must be kept to prevent it from being garbage-collected.
-        CONFIGURATION_ADAPTER = new ConfigurationListener() {
-            public synchronized void configurationChanged(ConfigurationEvent event) {
-                String var = event.getVariable();
-
-                if (var.equals(MuConfiguration.DISPLAY_COMPACT_FILE_SIZE))
-                    setSizeFormat(event.getBooleanValue());
-            }
-        };
-        MuConfiguration.addConfigurationListener(CONFIGURATION_ADAPTER);
     }
 
 
@@ -107,7 +91,7 @@ public class FileTableModel extends AbstractTableModel {
      *
      * @param compactSize true to use a compact size format, false for full size in bytes 
      */
-    private static void setSizeFormat(boolean compactSize) {
+    static void setSizeFormat(boolean compactSize) {
         if(compactSize)
             sizeFormat = SizeFormat.DIGITS_MEDIUM | SizeFormat.UNIT_SHORT | SizeFormat.ROUND_TO_KB;
         else
