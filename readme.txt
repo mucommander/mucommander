@@ -143,7 +143,8 @@ Localization:
 -
 
 Bug fixes:
--
+- "Round displayed file sizes" checkbox does sometimes not toggle correctly (ticket #328)
+- Single click on the file table treated as double click (ticket #321)
 
 Known issues:
 - Some translations are not up-to-date. Refer to
