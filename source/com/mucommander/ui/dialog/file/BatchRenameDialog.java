@@ -467,10 +467,8 @@ public class BatchRenameDialog extends FocusDialog implements ActionListener,
                         t = new CopyChar("[" + strToken + "]");
                         break;
                     }
-                    if (t != null) {
-                        t.parse();
-                        tokens.add(t);
-                    }
+                    t.parse();
+                    tokens.add(t);
                 }
                 i = tokenEnd;
             } else {
@@ -583,6 +581,10 @@ public class BatchRenameDialog extends FocusDialog implements ActionListener,
     private void insertPattern(String pattern) {
         int pos = edtFileNameMask.getSelectionStart();
         try {
+        	int selLen = edtFileNameMask.getSelectionEnd() - edtFileNameMask.getSelectionStart();
+        	if (selLen > 0) {
+        		edtFileNameMask.getDocument().remove(edtFileNameMask.getSelectionStart(), selLen);
+        	}
             edtFileNameMask.getDocument().insertString(pos, pattern, null);
         } catch (BadLocationException e) {
             AppLogger.fine("Caught exception", e);
@@ -743,9 +745,6 @@ public class BatchRenameDialog extends FocusDialog implements ActionListener,
         /** a string with a token */
         protected String token;
 
-        /** a type of the token (first char of the token string) */
-        protected char tokenType;
-
         /** a current position in the token */
         protected int pos = 1;
 
@@ -754,7 +753,6 @@ public class BatchRenameDialog extends FocusDialog implements ActionListener,
 
         public AbstractToken(String token) {
             this.token = token;
-            this.tokenType = token.charAt(0);
             this.len = token.length();
         }
 
