@@ -818,8 +818,14 @@ public class LocalFile extends ProtocolFile {
                 // Note: MoveFileEx is always used, even if the destination file does not exist, to avoid having to
                 // call #exists() on the destination file which has a cost.
                 if(!Kernel32.getInstance().MoveFileEx(absPath, destFile.getAbsolutePath(),
-                        Kernel32API.MOVEFILE_REPLACE_EXISTING|Kernel32API.MOVEFILE_WRITE_THROUGH))
-                    throw new IOException();
+                        Kernel32API.MOVEFILE_REPLACE_EXISTING|Kernel32API.MOVEFILE_WRITE_THROUGH)) {
+                	String errorMessage = Integer.toString(Kernel32.getInstance().GetLastError());
+                	// TODO: use Kernel32.FormatMessage
+                    throw new IOException("Rename using Kernel32 API failed: " + errorMessage);
+                } else {
+                	// move successful
+                	return;
+                }
             }
             // else fall back to java.io.File#renameTo
         }
