@@ -482,6 +482,7 @@ skip_all:AR:تخطي الكل
 skip_all:HU:Mindet kihagy
 skip_all:CS:Přeskočit vše
 skip_all:zh_CN:全部忽略
+skip_all:PL:Pomiń wszystkie
 # Translation missing (New!)
 
 
@@ -1040,6 +1041,7 @@ customize:SV:Anpassa
 customize:HU:Beállítás
 customize:CS:Přizpůsobit
 customize:zh_CN:自定义
+customize:PL:Dostosuj
 # Translation missing (New!)
 
 
@@ -1189,6 +1191,7 @@ preferred_encodings:SV:Förvald textkodning
 preferred_encodings:HU:Ajánlott kódolás
 preferred_encodings:CS:Předvolená kódování
 preferred_encodings:zh_CN:偏好的编码
+preferred_encodings:PL:Preferowane kodowanie
 # Translation missing (New!)
 
 
@@ -1759,6 +1762,7 @@ details:AR:تفاصيل
 details:HU:Részletek
 details:CS:Podrobnosti
 details:zh_CN:详细
+details:PL:Szczegóły
 # Translation missing (New!)
 
 
@@ -2311,6 +2315,7 @@ startup_error:AR:حدث خطأ منع من تشغيل muCommander.
 startup_error:HU:Váratlan hiba fordult elő a muCommander indulásakor.
 startup_error:CS:Vyskytla se chyba bránící spuštění aplikace muCommander.
 startup_error:zh_CN:一个错误阻止了 muCommander 的启动
+startup_error:PL:Błąd uniemożliwił uruchomienie muCommander'a.
 # Translation missing (New!)
 
 
@@ -2493,6 +2498,7 @@ action_categories.all:AR:الكل
 action_categories.all:HU:Összes
 action_categories.all:CS:Vše
 action_categories.all:zh_CN:全部
+action_categories.all:PL:Wszystkie
 # Translation missing (New!)
 
 
@@ -3019,6 +3025,7 @@ InternalView.label:AR:عرض (محلي)
 InternalView.label:HU:Megnéző (beépített)
 InternalView.label:CS:Zobrazit (interně)
 InternalView.label:zh_CN:查看 (内置)
+InternalView.label:PL:Podgląd (wewnętrzny)
 # Translation missing (New!)
 
 
@@ -3077,6 +3084,7 @@ InternalEdit.label:AR:تحرير (محلي)
 InternalEdit.label:HU:Szerkesztő (beépített)
 InternalEdit.label:CS:Upravit (interně)
 InternalEdit.label:zh_CN:编辑 (内置)
+InternalEdit.label:PL:Edycja (wewnętrzny)
 # Translation missing (New!)
 
 
@@ -4218,6 +4226,7 @@ MarkNextBlock.label:AR:تحديد كتلة واحدة للأسفل
 MarkNextBlock.label:HU:Egy blokk kijelölése lefelé
 MarkNextBlock.label:CS:Označit blok následujících 5 objektů
 MarkNextBlock.label:zh_CN:往下标记一个区块
+MarkNextBlock.label:PL:Zaznacz blok w dół
 # Translation missing (New!)
 
 
@@ -4249,6 +4258,7 @@ MarkPreviousBlock.label:AR:تحديد كتلة واحدة للأعلى
 MarkPreviousBlock.label:HU:Egy blokk kijelölése felfelé
 MarkPreviousBlock.label:CS:Označit blok předchozích 5 objektů
 MarkPreviousBlock.label:zh_CN:往上标记一个区块
+MarkPreviousBlock.label:PL:Zaznacz blok w górę
 # Translation missing (New!)
 
 
@@ -4280,6 +4290,7 @@ MarkNextRow.label:AR:تحديد صف واحد للأسفل
 MarkNextRow.label:HU:Egy sor kijelölése lefelé
 MarkNextRow.label:CS:Označit následující řádek
 MarkNextRow.label:zh_CN:往下标记一行
+MarkNextRow.label:PL:Zaznacz wiersz poniżej
 # Translation missing (New!)
 
 
@@ -4311,6 +4322,7 @@ MarkPreviousRow.label:AR:تحديد صف واحد للأعلى
 MarkPreviousRow.label:HU:Egy sor kijelölése felfelé
 MarkPreviousRow.label:CS:Označit předchozí řádek
 MarkPreviousRow.label:zh_CN:往上标记一行
+MarkPreviousRow.label:PL:Zaznacz wiersz powyżej
 # Translation missing (New!)
 
 
@@ -5086,6 +5098,7 @@ ToggleColumn.show:AR:إظهار عمود %1
 ToggleColumn.show:HU:%1 oszlop megjelenítése
 ToggleColumn.show:CS:Zobrazit sloupec %1
 ToggleColumn.show:zh_CN:显示 %1 列
+ToggleColumn.show:PL:Pokaż kolumnę %1
 # Translation missing (New!)
 
 
@@ -5118,6 +5131,7 @@ ToggleColumn.hide:AR:إخفاء عمود %1
 ToggleColumn.hide:HU:%1 oszlop elrejtése
 ToggleColumn.hide:CS:Skrýt sloupec %1
 ToggleColumn.hide:zh_CN:隐藏 %1 列
+ToggleColumn.hide:PL:Ukryj kolumnę %1
 # Translation missing (New!)
 
 
@@ -5243,6 +5257,7 @@ CustomizeCommandBar.label:NL:Commandobalk aanpassen
 CustomizeCommandBar.label:HU:Parancsszalag beállítása
 CustomizeCommandBar.label:CS:Přizpůsobit lištu příkazů
 CustomizeCommandBar.label:zh_CN:自定义命令条
+CustomizeCommandBar.label:PL:Dostosuj pasek komend
 # Translation missing (New!)
 
 
@@ -5540,6 +5555,7 @@ SelectNextBlock.label:AR:قفز كتلة واحدة للأسفل
 SelectNextBlock.label:HU:Ugrás egy blokkal lefelé
 SelectNextBlock.label:CS:Přejít o blok (5 objektů) níž
 SelectNextBlock.label:zh_CN:往下跳一区块
+SelectNextBlock.label:PL:Skocz blok w dół
 # Translation missing (New!)
 
 
@@ -5571,6 +5587,7 @@ SelectPreviousBlock.label:AR:قفز كتلة واحدة للأعلى
 SelectPreviousBlock.label:HU:Ugrás egy blokkal felfelé
 SelectPreviousBlock.label:CS:Přejít o blok (5 objektů) výš
 SelectPreviousBlock.label:zh_CN:往上跳一区块
+SelectPreviousBlock.label:PL:Skocz blok w dół
 # Translation missing (New!)
 
 
@@ -5602,6 +5619,7 @@ SelectNextPage.label:AR:قفز صفحة واحدة للأسفل
 SelectNextPage.label:HU:Ugrás a következő lapra
 SelectNextPage.label:CS:Přejít o stránku níž
 SelectNextPage.label:zh_CN:往下跳一页
+SelectNextPage.label:PL:Skocz stronę w dół
 # Translation missing (New!)
 
 
@@ -5633,6 +5651,7 @@ SelectPreviousPage.label:AR:قفز صفحة واحدة للأعلى
 SelectPreviousPage.label:HU:Ugrás az előző lapra
 SelectPreviousPage.label:CS:Přejít o stránku výš
 SelectPreviousPage.label:zh_CN:往上跳一页
+SelectPreviousPage.label:PL:Skocz stronę w górę
 # Translation missing (New!)
 
 
@@ -5664,6 +5683,7 @@ SelectNextRow.label:AR:قفز صف واحد للأسفل
 SelectNextRow.label:HU:Ugrás a következő sorra
 SelectNextRow.label:CS:Přejít o řádek níž
 SelectNextRow.label:zh_CN:往下跳一行
+SelectNextRow.label:PL:Skocz wiersz niżej
 # Translation missing (New!)
 
 
@@ -5695,6 +5715,7 @@ SelectPreviousRow.label:AR:قفز صف واحد للأعلى
 SelectPreviousRow.label:HU:Ugrás az előző sorra
 SelectPreviousRow.label:CS:Přejít o řádek výš
 SelectPreviousRow.label:zh_CN:往上跳一行
+SelectPreviousRow.label:PL:Skocz wiersz wyżej
 # Translation missing (New!)
 
 
@@ -6200,6 +6221,7 @@ SplitFile.tooltip:AR:تقسيم ملف إلى عدة أجزاء
 SplitFile.tooltip:HU:A fájl darabolása kisebb részekre
 SplitFile.tooltip:CS:Rozdělit soubor na více částí
 SplitFile.tooltip:zh_CN:将文件分割成多个
+SplitFile.tooltip:PL:Podziel plik na wiele części
 # Translation missing (New!)
 
 
@@ -6231,6 +6253,7 @@ CombineFiles.tooltip:AR:إعادة دمج أقسام ملف وتجميع الم�
 CombineFiles.tooltip:HU:Az eredeti fájl összeállítása a kisebb részekből
 CombineFiles.tooltip:CS:Sloučit části rozděleného souboru do původního souboru
 CombineFiles.tooltip:zh_CN:将分割的文件合并成原始文件
+CombineFiles.tooltip:PL:Scal części podzielonego pliku aby uzyskać oryginalny plik
 # Translation missing (New!)
 
 
@@ -6261,6 +6284,7 @@ ShowDebugConsole.label:AR:لوحة التنقيح
 ShowDebugConsole.label:HU:A konzol nyomkövetése
 ShowDebugConsole.label:CS:Ladící konzole
 ShowDebugConsole.label:zh_CN:Debug 控制台
+ShowDebugConsole.label:PL:Konsola debugowania
 # Translation missing (New!)
 
 
@@ -6292,6 +6316,7 @@ FocusPrevious.label:AR:التركيز على المكون السابق
 FocusPrevious.label:HU:Az előző összetevő kijelölése
 FocusPrevious.label:CS:Zaměřit fokus na předchozí komponentu
 FocusPrevious.label:zh_CN:将焦点移到前一个组件
+FocusPrevious.label:PL:Przenieś fokus do poprzedniego komponentu
 # Translation missing (New!)
 
 
@@ -6324,6 +6349,7 @@ FocusNext.label:AR:التركيز على المكون التالي
 FocusNext.label:HU:A következő összetevő kijelölése
 FocusNext.label:CS:Zaměřit fokus na následující komponentu
 FocusNext.label:zh_CN:将焦点移到下一个组件
+FocusNext.label:PL:Przenieś fokus do następnego komponentu
 # Translation missing (New!)
 
 
@@ -6722,6 +6748,7 @@ shortcuts_panel.title:AR:الاختصارات
 shortcuts_panel.title:HU:Gyorsbillentyűk
 shortcuts_panel.title:CS:Zkratky
 shortcuts_panel.title:zh_CN:快捷方式
+shortcuts_panel.title:PL:Skróty
 # Translation missing (New!)
 
 
@@ -6753,6 +6780,7 @@ shortcuts_panel.restore_defaults:AR:استعادة الافتراضيات
 shortcuts_panel.restore_defaults:HU:Alaphelyzet visszaállítása
 shortcuts_panel.restore_defaults:CS:Obnovit výchozí
 shortcuts_panel.restore_defaults:zh_CN:恢复默认值
+shortcuts_panel.restore_defaults:PL:Przywróć domyślne
 # Translation missing (New!)
 
 
@@ -6784,6 +6812,7 @@ shortcuts_panel.show:AR:إظهار
 shortcuts_panel.show:HU:Megjelenítés
 shortcuts_panel.show:CS:Zobrazit
 shortcuts_panel.show:zh_CN:显示
+shortcuts_panel.show:PL:Pokaż
 # Translation missing (New!)
 
 
@@ -6815,6 +6844,7 @@ shortcuts_panel.default_message:AR:اضغط إدخال أو مزدوجة بزر 
 shortcuts_panel.default_message:HU:Nyomja meg az Enter billentyűt vagy kattintson duplán a Gyorsbillentyűk módosításához.
 shortcuts_panel.default_message:CS:Stiskněte Enter na zkratce nebo poklepejte na zkratku, kterou chcete upravit
 shortcuts_panel.default_message:zh_CN:按下 Enter 或双击快捷方式来进行编辑
+shortcuts_panel.default_message:PL:Wciśnij Enter lub kliknij dwukrotnie na skrócie, który chcesz edytować
 # Translation missing (New!)
 
 
@@ -6846,6 +6876,7 @@ shortcuts_table.action_description:AR:وصف الحدث
 shortcuts_table.action_description:HU:A művelet leírása
 shortcuts_table.action_description:CS:Popis akce
 shortcuts_table.action_description:zh_CN:动作描述
+shortcuts_table.action_description:PL:Opis akcji
 # Translation missing (New!)
 
 
@@ -6877,6 +6908,7 @@ shortcuts_table.shortcut:AR:اختصار
 shortcuts_table.shortcut:HU:Gyorsbillentyű
 shortcuts_table.shortcut:CS:Zkratka
 shortcuts_table.shortcut:zh_CN:快捷方式
+shortcuts_table.shortcut:PL:Skrót
 # Translation missing (New!)
 
 
@@ -6908,6 +6940,7 @@ shortcuts_table.alternate_shortcut:AR:اختصار بديل
 shortcuts_table.alternate_shortcut:HU:Másodlagos Gyorsbillentyű
 shortcuts_table.alternate_shortcut:CS:Alternativní zkratka
 shortcuts_table.alternate_shortcut:zh_CN:替换快捷方式
+shortcuts_table.alternate_shortcut:PL:Alternatywny skrót
 # Translation missing (New!)
 
 
@@ -6939,6 +6972,7 @@ shortcuts_table.type_in_a_shortcut:AR:إدخال اختصار
 shortcuts_table.type_in_a_shortcut:HU:Gyorsbillentyű típusa
 shortcuts_table.type_in_a_shortcut:CS:Zadejte zkratku
 shortcuts_table.type_in_a_shortcut:zh_CN:在快捷方式输入
+shortcuts_table.type_in_a_shortcut:PL:Wprowadź skrót
 # Translation missing (New!)
 
 
@@ -6974,6 +7008,7 @@ command_bar_dialog.help:AR:اسحب الأزرار لتخصيص شريط الأ�
 command_bar_dialog.help:HU:A nyomógombok húzásával módosíthatja a Parancsszalagot.
 command_bar_dialog.help:CS:Přetáhněte vybraná tlačítka na náhled lišty
 command_bar_dialog.help:zh_CN:拖拽按钮来自定义命令条
+command_bar_dialog.help:PL:Przenieś przyciski aby dostosować pasek komend
 # Translation missing (New!)
 
 
@@ -7428,6 +7463,7 @@ destination_dialog.skip_errors:AR:تجاوز الأخطاء
 destination_dialog.skip_errors:HU:Hibák kihagyása
 destination_dialog.skip_errors:CS:Ignorovat chyby
 destination_dialog.skip_errors:zh_CN:忽略错误
+destination_dialog.skip_errors:PL:Pomiń błędy
 # Translation missing (New!)
 
 
@@ -8211,6 +8247,7 @@ delete_dialog.move_to_trash.failed:AR:ملف أو أكثر لا يمكن نقل�
 delete_dialog.move_to_trash.failed:HU:A fájl(oka)t nem lehet a Lomtárba dobni.
 delete_dialog.move_to_trash.failed:CS:Některý soubor nebylo možné přesunout do Koše.
 delete_dialog.move_to_trash.failed:zh_CN:一个或多个文件无法移动到回收站
+delete_dialog.move_to_trash.failed:PL:Jeden lub więcej plików nie może być przeniesionych do kosza.
 # Translation missing (New!)
 
 
@@ -8843,7 +8880,7 @@ split_file_dialog.generate_CRC:zh_CN:生成 CRC 文件
 
 
 
-
+# %1 will be replaced by a number of allowed parts
 split_file_dialog.max_parts:EN:Maximum allowed number of parts is %1
 split_file_dialog.max_parts:FR:Le nombre maximum de parties authorisé est de %1
 split_file_dialog.max_parts:PL:Maksymalna liczba części wynosi %1
@@ -9043,7 +9080,7 @@ combine_files_job.crc_read_error:zh_CN:读取 CRC 文件时发生错误
 
 combine_files_job.crc_check_failed:EN:CRC mismatch: expected %2, found %1
 combine_files_job.crc_check_failed:FR:Échec vérification CRC (%1 au lieu de %2).
-combine_files_job.crc_check_failed:PL:Pliki CRC nie zgadzają się %1 <> %2
+combine_files_job.crc_check_failed:PL:Pliki CRC nie zgadzają się (oczekiwano %2, jest %1)
 combine_files_job.crc_check_failed:NL:CRC past niet: verwacht %2, gevonden %1
 combine_files_job.crc_check_failed:AR:عدم تطابق CRC: الموجود %1، المتوقع %2
 combine_files_job.crc_check_failed:DA:CRC fejl: forventede %2 men fik %1
@@ -10038,6 +10075,7 @@ server_connect_dialog.domain:SV:Domän
 server_connect_dialog.domain:HU:Tartomány
 server_connect_dialog.domain:CS:Doména
 server_connect_dialog.domain:zh_CN:域
+server_connect_dialog.domain:PL:Domena
 # Translation missing (New!)
 
 
@@ -12414,6 +12452,7 @@ theme_editor.header:SV:Sidhuvud
 theme_editor.header:HU:Fejléc
 theme_editor.header:CS:Záhlaví
 theme_editor.header:zh_CN:标头
+theme_editor.header:PL:Nagłówek
 # Translation missing (New!)
 
 
@@ -12446,6 +12485,7 @@ theme_editor.item:SV:Lista
 theme_editor.item:HU:Elem
 theme_editor.item:CS:Položka
 theme_editor.item:zh_CN:项目
+theme_editor.item:PL:Pozycja
 # Translation missing (New!)
 
 
@@ -12481,6 +12521,7 @@ command_bar_customize_dialog.available_actions:NL:Beschikbare acties
 command_bar_customize_dialog.available_actions:HU:Lehetséges műveletek
 command_bar_customize_dialog.available_actions:CS:Dostupné akce
 command_bar_customize_dialog.available_actions:zh_CN:可供选择的动作
+command_bar_customize_dialog.available_actions:PL:Dostępne akcje
 # Translation missing (New!)
 
 
@@ -12512,6 +12553,7 @@ command_bar_customize_dialog.modifier:NL:Veranderen
 command_bar_customize_dialog.modifier:HU:Módosítók
 command_bar_customize_dialog.modifier:CS:Modifikátor
 command_bar_customize_dialog.modifier:zh_CN:修饰键
+command_bar_customize_dialog.modifier:PL:Modyfikator
 # Translation missing (New!)
 
 
@@ -14125,6 +14167,7 @@ debug_console_dialog.level:AR:مرحلة
 debug_console_dialog.level:HU:Szint
 debug_console_dialog.level:CS:Úroveň záznamu
 debug_console_dialog.level:zh_CN:等级
+debug_console_dialog.level:PL:Poziom
 # Translation missing (New!)
 
 
@@ -15486,6 +15529,7 @@ batch_rename_dialog.proceed_renaming:SK:%1 z %2 souborov bude premenovaných. Ch
 batch_rename_dialog.proceed_renaming:zh_CN:%1 个文件(全部 %2 个)将会被重命名. 确认执行?
 # Translation missing (ES, KO, RU)
 
+# some files in batch rename dialog have duplicate names
 batch_rename_dialog.duplicate_names:EN:Duplicate names!
 batch_rename_dialog.duplicate_names:FR:Doublons de noms!
 batch_rename_dialog.duplicate_names:PL:Wykryto zduplikowane nazwy!
@@ -15506,6 +15550,12 @@ batch_rename_dialog.duplicate_names:AR:أسماء متكررة!
 batch_rename_dialog.duplicate_names:SK:Rovnaký názov sa už vyskytuje!
 batch_rename_dialog.duplicate_names:zh_CN:重复的名称 !
 # Translation missing (ES, KO, RU)
+
+# some files in new name column have the same values as in old names column
+# e.g. 1->2, 2->3
+batch_rename_dialog.names_conflict:EN:Names conflict! Same values in old and new names.
+batch_rename_dialog.names_conflict:PL:Wykryto konflikt nazw! Wartości w kolumnie stara i nowa nazwa są takie same.
+# Translation missing (New!)
 
 
 ###############
