@@ -21,6 +21,7 @@ package com.mucommander.ui.dialog.file;
 import com.mucommander.AppLogger;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.util.FileSet;
+import com.mucommander.file.util.PathUtils;
 import com.mucommander.job.BatchRenameJob;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionProperties;
@@ -90,7 +91,10 @@ public class BatchRenameDialog extends FocusDialog implements ActionListener,
     
     /** files to rename */
     private FileSet files;
-    
+
+    /** a map of old file names used to check for name conflicts */
+    private HashMap<String, AbstractFile> oldNames = new HashMap<String, AbstractFile>();
+
     /** a list of generated names */
     private List<String> newNames = new ArrayList<String>();
 
@@ -99,8 +103,8 @@ public class BatchRenameDialog extends FocusDialog implements ActionListener,
     
     /** a list of parsed tokens */
     private List<AbstractToken> tokens = new ArrayList<AbstractToken>();
-    
-    
+
+
 
     /**
      * Creates a new batch-rename dialog.
@@ -111,11 +115,11 @@ public class BatchRenameDialog extends FocusDialog implements ActionListener,
         super(mainFrame, ActionProperties.getActionLabel(BatchRenameAction.Descriptor.ACTION_ID), null);
         this.mainFrame = mainFrame;
         this.files = files;
-        int nbFiles = files.size();
-        for (int i=0; i<nbFiles; i++) {
+        for (AbstractFile f : files) {        	
             this.blockNames.add(Boolean.FALSE);
             this.newNames.add("");
-        }
+        	oldNames.put(PathUtils.removeTrailingSeparator(f.getAbsolutePath()), f);			
+		}
         initialize();
         generateNewNames();
     }
@@ -345,22 +349,34 @@ public class BatchRenameDialog extends FocusDialog implements ActionListener,
      */
     private void checkForDuplicates() {
         boolean duplicates = false;
+        boolean oldNamesConflict = false;
         Set<String> names = new HashSet<String>();
         for (int i=0; i<newNames.size(); i++) {
-            String name = newNames.get(i);
+            String newName = newNames.get(i);
             AbstractFile file = files.get(i);
             AbstractFile parent = file.getParent();
             if (parent != null) {
-                name = parent.getAbsolutePath(true) + name;
+                newName = parent.getAbsolutePath(true) + newName;
             }
-            if (names.contains(name)) {
+            if (names.contains(newName)) {
                 duplicates = true;
                 break;
             }
-            names.add(name);
+            AbstractFile oldFile = oldNames.get(newName);
+            if (oldFile!=null && oldFile!=file) {
+            	oldNamesConflict = true;
+            	break;
+            }
+            names.add(newName);
         }            
-        lblDuplicates.setVisible(duplicates);
-        btnRename.setEnabled(!duplicates);      
+        if (duplicates) {
+        	lblDuplicates.setText(Translator.get("batch_rename_dialog.duplicate_names"));
+        }
+        if (oldNamesConflict) {
+        	lblDuplicates.setText(Translator.get("batch_rename_dialog.names_conflict"));
+        }
+        lblDuplicates.setVisible(duplicates || oldNamesConflict);
+        btnRename.setEnabled(!duplicates && !oldNamesConflict);
     }
     
     /**
@@ -674,6 +690,11 @@ public class BatchRenameDialog extends FocusDialog implements ActionListener,
             return null;
         }
         
+        /**
+         * Sets the value in the cell at columnIndex and rowIndex to aValue.
+         * Called when a user manually entered a new file name or blocked 
+         * a name from a rename pattern.
+         */
         @Override
         public void setValueAt(Object value, int rowIndex, int columnIndex) {
             switch (columnIndex) {
