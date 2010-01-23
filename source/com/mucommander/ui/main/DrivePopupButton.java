@@ -343,7 +343,7 @@ public class DrivePopupButton extends PopupButton implements LocationListener, B
 
         // Add 'Network shares' shortcut
         if(FileFactory.isRegisteredProtocol(FileProtocols.SMB)) {
-            action = new CustomOpenLocationAction(mainFrame, new Hashtable<String, Object>(), new Bookmark("Network shares", "smb:///"));
+            action = new CustomOpenLocationAction(mainFrame, new Hashtable<String, Object>(), new Bookmark(Translator.get("drive_popup.network_shares"), "smb:///"));
             action.setIcon(IconManager.getIcon(IconManager.FILE_ICON_SET, CustomFileIconProvider.NETWORK_ICON_NAME));
             setMnemonic(popupMenu.add(action), mnemonicHelper);
         }

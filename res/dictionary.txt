@@ -4373,7 +4373,7 @@ MarkPreviousPage.label:RU:Выделить файлы на предыдущей 
 MarkPreviousPage.label:SL:Označi datoteke od prejšnje strani
 MarkPreviousPage.label:CS:Označit po předchozí stránku
 MarkPreviousPage.label:ES:Marcar página arriba
-MarkPreviousPage.label:PL:aznacz strone wyżej (page up)
+MarkPreviousPage.label:PL:Zaznacz strone wyżej (page up)
 MarkPreviousPage.label:KO:페이지 위로 선택
 MarkPreviousPage.label:pt_BR:Marcar página acima
 MarkPreviousPage.label:NL:Markeer bestanden tot vorige pagina
@@ -6559,6 +6559,10 @@ bookmarks_menu.no_bookmark:SV:Det finns inga bokmärken
 bookmarks_menu.no_bookmark:DA:Ingen bogmærker
 bookmarks_menu.no_bookmark:UA:Закладок немає
 bookmarks_menu.no_bookmark:AR:لا توجد علامات
+
+drive_popup.network_shares:EN:Network shares
+drive_popup.network_shares:PL:Sieć
+# Translation missing (New!)
 
 # Title of the Quick lists menu
 quick_lists_menu:EN:Quick lists
