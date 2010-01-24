@@ -151,7 +151,7 @@ public class Base64Table {
      *
      * @return the ASCII character used for padding.
      */
-    byte getPaddingChar() {
+    public byte getPaddingChar() {
         return paddingChar;
     }
 }
