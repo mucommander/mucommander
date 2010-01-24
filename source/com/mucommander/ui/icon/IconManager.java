@@ -55,15 +55,17 @@ public class IconManager {
     /** Designates the language icon set */
     public final static int LANGUAGE_ICON_SET    = 6;
 
+    /** Base folder of all images */
+    public final static String BASE_IMAGE_FOLDER = "/images";
     /** Icon sets folders within the application's JAR file */
     private final static String ICON_SET_FOLDERS[] = {
-        "/file/",
-        "/action/",
-        "/status_bar/",
-        "/common/",
-        "/preferences/",
-        "/progress/",
-        "/language/"
+        BASE_IMAGE_FOLDER +"/file/",
+        BASE_IMAGE_FOLDER +"/action/",
+        BASE_IMAGE_FOLDER +"/status_bar/",
+        BASE_IMAGE_FOLDER +"/common/",
+        BASE_IMAGE_FOLDER +"/preferences/",
+        BASE_IMAGE_FOLDER +"/progress/",
+        BASE_IMAGE_FOLDER +"/language/"
     };
 
     /** Number of icon sets */

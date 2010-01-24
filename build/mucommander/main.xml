@@ -37,9 +37,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <target name="resources">
     <echo>Copying resources...</echo>
 
-    <!-- Copies the images.                                    -->
-    <copy todir="${classes.normal}" overwrite="true">
-      <fileset dir="${res.images}">
+    <!-- Copies images.                                        -->
+    <mkdir dir="${images.out}"/>
+    <copy todir="${images.out}" overwrite="true">
+      <fileset dir="${images.in}">
         <include name="**/*"/>
       </fileset>
     </copy>

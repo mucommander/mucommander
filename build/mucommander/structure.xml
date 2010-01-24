@@ -99,9 +99,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <property name="res.license"            location="license.txt"/>
   <!-- muCommander's dictionary file.                          -->
   <property name="res.dictionary"         location="${res}/dictionary.txt"/>
-  <!-- Where to look for the muCommander images.               -->
-  <property name="res.images"             location="${res}/images"/>
 
+
+  <!-- = Image properties ==================================== -->
+  <!-- ======================================================= -->
+  <!-- Directory containing images.                            -->
+  <property name="images.in"             location="${res}/images"/>
+  <!-- Where to copy images.                                   -->
+  <property name="images.out"             location="${classes.normal}/images"/>
 
 
   <!-- = Theme values ======================================== -->

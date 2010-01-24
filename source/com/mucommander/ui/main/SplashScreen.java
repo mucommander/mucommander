@@ -20,6 +20,7 @@ package com.mucommander.ui.main;
 
 import com.mucommander.file.util.ResourceLoader;
 import com.mucommander.ui.dialog.DialogToolkit;
+import com.mucommander.ui.icon.IconManager;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -48,7 +49,7 @@ public class SplashScreen extends JWindow {
     private Font customFont;
 
     /** Path to the splash screen logo image within the JAR file */
-    private final static String SPLASH_IMAGE_PATH = "/splash.png";
+    private final static String SPLASH_IMAGE_PATH = IconManager.BASE_IMAGE_FOLDER+"/splash.png";
 
     /** Name of the font used to display text on this splash screen */
     private final static String FONT_NAME = "Courier";
