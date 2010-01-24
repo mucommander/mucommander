@@ -29,10 +29,7 @@ import com.mucommander.file.util.PathUtils;
 import com.mucommander.runtime.OsFamilies;
 
 import java.io.IOException;
-import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.Random;
-import java.util.Vector;
+import java.util.*;
 
 /**
  * FileFactory is an abstract class that provides static methods to get a {@link AbstractFile} instance for
@@ -91,11 +88,11 @@ public class FileFactory {
     /** Array of registered FileProtocolMapping instances, for quicker access */
     private static ArchiveFormatProvider[] archiveFormatProviders;
 
-    /** Caches raw (as opposed to archives) file instances */
-    private final static FileCache rawFileCache = new FileCache();
+    /** Contains raw file (as opposed to archives) caches for each registered scheme */
+    private final static HashMap<String,FileCache> rawFileCacheMap = new HashMap<String,FileCache>();
 
-    /** Caches archive file instances */
-    private final static FileCache archiveFileCache = new FileCache();
+    /** Contains archive file caches for each registered archive format */
+    private final static HashMap<String,FileCache> archiveFileCacheMap = new HashMap<String,FileCache>();
 
     /** System temp directory */
     private final static AbstractFile TEMP_DIRECTORY;
@@ -107,13 +104,13 @@ public class FileFactory {
         // Register built-in file protocols.
         ProtocolProvider protocolProvider;
         registerProtocol(FileProtocols.FILE, new com.mucommander.file.impl.local.LocalFileProvider());
-        registerProtocol(FileProtocols.SMB,       new com.mucommander.file.impl.smb.SMBProtocolProvider());
+        registerProtocol(FileProtocols.SMB, new com.mucommander.file.impl.smb.SMBProtocolProvider());
         registerProtocol(FileProtocols.HTTP, protocolProvider = new com.mucommander.file.impl.http.HTTPProtocolProvider());
         registerProtocol(FileProtocols.HTTPS, protocolProvider);
         registerProtocol(FileProtocols.FTP, new com.mucommander.file.impl.ftp.FTPProtocolProvider());
         registerProtocol(FileProtocols.NFS, new com.mucommander.file.impl.nfs.NFSProtocolProvider());
         registerProtocol(FileProtocols.SFTP, new com.mucommander.file.impl.sftp.SFTPProtocolProvider());
-
+//        registerProtocol(FileProtocols.HDFS, new com.mucommander.file.impl.hadoop.HDFSFileProvider());
 //        registerProtocol(FileProtocols.S3,        new com.mucommander.file.impl.s3.S3Provider());
 
         // Register built-in archive file formats, order for TarArchiveFile and GzipArchiveFile/Bzip2ArchiveFile is important:
@@ -151,7 +148,7 @@ public class FileFactory {
      * unregistered.
      * </p>
      * <p>
-     * The <code>protocol</code> argument is expected to be the protocol identifier without trailing <code>://</code>.
+     * The <code>protocol</code> argument is expected to be the protocol identifier, without the trailing <code>://</code>.
      * For example, the identifier of the HTTP protocol would be <code>http</code>. This parameter's case is irrelevant,
      * as it will be stored in all lower-case.
      * </p>
@@ -170,6 +167,10 @@ public class FileFactory {
     public static ProtocolProvider registerProtocol(String protocol, ProtocolProvider provider) {
         protocol = protocol.toLowerCase();
 
+        // Create raw and archive file caches
+        rawFileCacheMap.put(protocol, new FileCache());
+        archiveFileCacheMap.put(protocol, new FileCache());
+
         // Special case for local file provider.
         // Note that the local file provider is also added to the provider hashtable.
         if(protocol.equals(FileProtocols.FILE))
@@ -186,6 +187,10 @@ public class FileFactory {
      */
     public static ProtocolProvider unregisterProtocol(String protocol) {
         protocol = protocol.toLowerCase();
+
+        // Remove raw and archive file caches
+        rawFileCacheMap.remove(protocol);
+        archiveFileCacheMap.remove(protocol);
 
         // Special case for local file provider
         if(protocol.equals(FileProtocols.FILE))
@@ -451,7 +456,7 @@ public class FileFactory {
         // Create last file if it hasn't been already (if the last filename was not an archive), same routine as above
         // except that it doesn't wrap the file into an archive file
         if(!lastFileResolved) {
-            String currentPath = pt.getCurrentPath();
+            String currentPath = PathUtils.removeTrailingSeparator(pt.getCurrentPath(), pathSeparator);
 
             if(currentFile==null || !(currentFile instanceof AbstractArchiveFile)) {
                 FileURL clonedURL = (FileURL)fileURL.clone();
@@ -470,25 +475,17 @@ public class FileFactory {
         return currentFile;
     }
 
-
     private static AbstractFile createRawFile(FileURL fileURL) throws IOException {
         String scheme = fileURL.getScheme().toLowerCase();
+        FileCache rawFileCache = rawFileCacheMap.get(scheme);
 
-        // Cache file instances only for certain protocols
-        boolean useFileCache = scheme.equals(FileProtocols.FILE)
-                || scheme.equals(FileProtocols.SMB)
-                || scheme.equals(FileProtocols.SFTP);
+        // Lookup the cache for an existing AbstractFile instance
+        // Note: FileURL#equals(Object) and #hashCode() take into account credentials and properties
+        // Note: the URL should always be free of a trailing separator
+        AbstractFile file = rawFileCache.get(fileURL);
 
-        AbstractFile file;
-
-        if(useFileCache) {
-            // Lookup the cache for an existing AbstractFile instance
-            // Note: FileURL#equals(Object) and #hashCode() take into account credentials and properties
-            file = rawFileCache.get(fileURL);
-
-            if(file!=null)
-                return file;
-        }
+        if(file!=null)
+            return file;
 
         // Special case for local files to avoid provider hashtable lookup and other unnecessary checks
         // (for performance reasons)
@@ -515,13 +512,12 @@ public class FileFactory {
             file = provider.getFile(fileURL);
         }
 
-        if(useFileCache) {
-            // Note: Creating an archive file on top of the file must be done after adding the file to the LRU cache,
-            // this could otherwise lead to weird behaviors, for example if a directory with the same filename
-            // of a former archive was created, the directory would be considered as an archive
-            rawFileCache.put(fileURL, file);
-            FileLogger.finest("Added to file cache: "+file);
-        }
+        // Note: Creating an archive file on top of the file must be done after adding the file to the LRU cache,
+        // this could otherwise lead to weird behaviors, for example if a directory with the same filename
+        // of a former archive was created, the directory would be considered as an archive
+        // Note: the URL should always be free of a trailing separator
+        rawFileCache.put(fileURL, file);
+        FileLogger.finest("Added to file cache: "+file);
 
         return file;
     }
@@ -630,9 +626,14 @@ public class FileFactory {
             AbstractFile archiveFile;
 
             // Do not use cache for archive entries
-            boolean useCache = !(file instanceof AbstractArchiveEntryFile);
+            FileCache archiveFileCache;
+            if(file instanceof AbstractArchiveEntryFile)
+                archiveFileCache = null;
+            else
+                archiveFileCache = archiveFileCacheMap.get(file.getURL().getScheme());
 
-            if(useCache) {
+
+            if(archiveFileCache!=null) {
                 archiveFile = archiveFileCache.get(file.getURL());
                 if(archiveFile!=null) {
 //                    FileLogger.finest("Found cached archive file for: "+file.getAbsolutePath());
@@ -645,7 +646,7 @@ public class FileFactory {
             ArchiveFormatProvider provider;
             if((provider = getArchiveFormatProvider(filename)) != null) {
                 archiveFile = provider.getFile(file);
-                if(useCache) {
+                if(archiveFileCache!=null) {
                     FileLogger.finest("Adding archive file to cache: "+file.getAbsolutePath());
                     archiveFileCache.put(file.getURL(), archiveFile);
                 }
