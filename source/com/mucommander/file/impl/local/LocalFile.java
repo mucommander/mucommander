@@ -74,6 +74,8 @@ public class LocalFile extends ProtocolFile {
 
     protected File file;
     private FilePermissions permissions;
+
+    /** Absolute file path, free of trailing separator */
     protected String absPath;
 
     /** Caches the parent folder, initially null until getParent() gets called */
@@ -154,22 +156,30 @@ public class LocalFile extends ProtocolFile {
             }
             else {
                 path = fileURL.getPath();
+
+                // Remove the leaading '/' for Windows-like paths
+                if(USES_ROOT_DRIVES)
+                    path = path.substring(1, path.length());
             }
 
+            // Create the java.io.File instance and throw an exception if the path is not absolute.
             file = new File(path);
-
-            // Throw an exception if the path is not absolute.
             if(!file.isAbsolute())
                 throw new IOException();
 
-            this.absPath = file.getAbsolutePath();
+            absPath = file.getAbsolutePath();
 
-            // remove the trailing separator if present
-            this.absPath = absPath.endsWith(SEPARATOR)?absPath.substring(0,absPath.length()-1):absPath;
+            // Remove the trailing separator if present
+            if(absPath.endsWith(SEPARATOR))
+                absPath = absPath.substring(0, absPath.length()-1);
         }
         // the java.io.File instance was created by ls(), no need to re-create it or call the costly File#getAbsolutePath()
         else {
             this.absPath = fileURL.getPath();
+
+            // Remove the leading '/' for Windows-like paths
+            if(USES_ROOT_DRIVES)
+                absPath = absPath.substring(1, absPath.length());
         }
 
         this.file = file;
@@ -793,7 +803,7 @@ public class LocalFile extends ProtocolFile {
 
     @Override
     public AbstractFile[] ls() throws IOException {
-        return ls(null);
+        return ls((FilenameFilter)null);
     }
 
     @Override
@@ -996,7 +1006,7 @@ public class LocalFile extends ProtocolFile {
     @Override
     public AbstractFile getRoot() {
         if(USES_ROOT_DRIVES) {
-            Matcher matcher = driveRootPattern.matcher(getAbsolutePath(true));
+            Matcher matcher = driveRootPattern.matcher(absPath+SEPARATOR);
 
             // Test if this file already is the root folder
             if(matcher.matches())
@@ -1018,7 +1028,7 @@ public class LocalFile extends ProtocolFile {
     @Override
     public boolean isRoot() {
         if(USES_ROOT_DRIVES)
-            return driveRootPattern.matcher(getAbsolutePath()).matches();
+            return driveRootPattern.matcher(absPath+SEPARATOR).matches();
 
         return super.isRoot();
     }
