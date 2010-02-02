@@ -33,6 +33,7 @@ import com.mucommander.file.impl.ftp.FTPProtocolProvider;
 import com.mucommander.file.impl.smb.SMBProtocolProvider;
 import com.mucommander.runtime.OsFamilies;
 import com.mucommander.shell.ShellHistoryManager;
+import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.dialog.InformationDialog;
 import com.mucommander.ui.dialog.debug.DebugConsoleHandler;
@@ -606,7 +607,7 @@ public class Launcher {
                 splashScreen.dispose();
 
             // Display an error dialog with a proper message and error details
-            InformationDialog.showErrorDialog(null, null, "startup_error", null, t);
+            InformationDialog.showErrorDialog(null, null, Translator.get("startup_error"), null, t);
 
             // Quit the application
             WindowManager.quit();
