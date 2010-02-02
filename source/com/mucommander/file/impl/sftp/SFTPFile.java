@@ -270,12 +270,8 @@ public class SFTPFile extends ProtocolFile {
         if(!parentValSet) {
             FileURL parentFileURL = this.fileURL.getParent();
             if(parentFileURL!=null) {
-                try {
-                    parent = new SFTPFile(parentFileURL);
-                }
-                catch(IOException e) {
-                    // No parent, that's all
-                }
+                parent = FileFactory.getFile(parentFileURL);
+                // Note: parent may be null if it can't be resolved
             }
 
             parentValSet = true;
@@ -422,7 +418,6 @@ public class SFTPFile extends ProtocolFile {
             return new AbstractFile[] {};
 
         AbstractFile children[] = new AbstractFile[nbFiles];
-        AbstractFile child;
         FileURL childURL;
         String filename;
         int fileCount = 0;
@@ -440,10 +435,7 @@ public class SFTPFile extends ProtocolFile {
             childURL = (FileURL) fileURL.clone();
             childURL.setPath(parentPath + filename);
 
-            child = FileFactory.wrapArchive(new SFTPFile(childURL, new SFTPFileAttributes(childURL, file.getAttributes())));
-            child.setParent(this);
-
-            children[fileCount++] = child;
+            children[fileCount++] = FileFactory.getFile(childURL, this, new SFTPFileAttributes(childURL, file.getAttributes()));
         }
 
         // Create new array of the exact file count
@@ -695,7 +687,7 @@ public class SFTPFile extends ProtocolFile {
      * <code>SyncedFileAttributes</code>, this class caches attributes for a  certain amount of time
      * ({@link SFTPFile#attributeCachingPeriod}) after which a fresh value is retrieved from the server.
      */
-    private static class SFTPFileAttributes extends SyncedFileAttributes {
+    static class SFTPFileAttributes extends SyncedFileAttributes {
 
         /** The URL pointing to the file whose attributes are cached by this class */
         private FileURL url;

@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.mucommander.file.impl.nfs;
+package com.mucommander.file.impl.local;
 
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileURL;
@@ -25,14 +25,16 @@ import com.mucommander.file.ProtocolProvider;
 import java.io.IOException;
 
 /**
- * This class is the provider for the NFS filesystem implemented by {@link com.mucommander.file.impl.nfs.NFSFile}.
+ * This class is the provider for the local filesystem implemented by {@link com.mucommander.file.impl.local.LocalFile}.
  *
- * @author Nicolas Rinaudo
- * @see com.mucommander.file.impl.nfs.NFSFile
+ * @author Maxence Bernard
+ * @see com.mucommander.file.impl.local.LocalFile
  */
-public class NFSProtocolProvider implements ProtocolProvider {
+public class LocalProtocolProvider implements ProtocolProvider {
 
     public AbstractFile getFile(FileURL url, Object... instantiationParams) throws IOException {
-        return new NFSFile(url);
+        return instantiationParams.length==0
+            ?new LocalFile(url)
+            :new LocalFile(url, (java.io.File)instantiationParams[0]);
     }
 }

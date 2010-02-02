@@ -23,6 +23,7 @@ import com.mucommander.auth.CredentialsManager;
 import com.mucommander.file.icon.FileIconProvider;
 import com.mucommander.file.icon.impl.SwingFileIconProvider;
 import com.mucommander.file.impl.local.LocalFile;
+import com.mucommander.file.impl.local.LocalProtocolProvider;
 import com.mucommander.file.util.FileCache;
 import com.mucommander.file.util.PathTokenizer;
 import com.mucommander.file.util.PathUtils;
@@ -103,14 +104,14 @@ public class FileFactory {
     static {
         // Register built-in file protocols.
         ProtocolProvider protocolProvider;
-        registerProtocol(FileProtocols.FILE, new com.mucommander.file.impl.local.LocalFileProvider());
+        registerProtocol(FileProtocols.FILE, new LocalProtocolProvider());
         registerProtocol(FileProtocols.SMB, new com.mucommander.file.impl.smb.SMBProtocolProvider());
         registerProtocol(FileProtocols.HTTP, protocolProvider = new com.mucommander.file.impl.http.HTTPProtocolProvider());
         registerProtocol(FileProtocols.HTTPS, protocolProvider);
         registerProtocol(FileProtocols.FTP, new com.mucommander.file.impl.ftp.FTPProtocolProvider());
         registerProtocol(FileProtocols.NFS, new com.mucommander.file.impl.nfs.NFSProtocolProvider());
         registerProtocol(FileProtocols.SFTP, new com.mucommander.file.impl.sftp.SFTPProtocolProvider());
-//        registerProtocol(FileProtocols.HDFS, new com.mucommander.file.impl.hadoop.HDFSFileProvider());
+//        registerProtocol(FileProtocols.HDFS, new HDFSProtocolProvider());
 //        registerProtocol(FileProtocols.S3,        new com.mucommander.file.impl.s3.S3Provider());
 
         // Register built-in archive file formats, order for TarArchiveFile and GzipArchiveFile/Bzip2ArchiveFile is important:
@@ -400,7 +401,7 @@ public class FileFactory {
      * @return an instance of {@link AbstractFile} for the given {@link FileURL}.
      * @throws java.io.IOException if something went wrong during file creation.
      */
-    public static AbstractFile getFile(FileURL fileURL, AbstractFile parent) throws IOException {
+    public static AbstractFile getFile(FileURL fileURL, AbstractFile parent, Object... instantiationParams) throws IOException {
         String filePath = fileURL.getPath();
         // For local paths under Windows (e.g. "/C:\temp"), remove the leading '/' character
         if(OsFamilies.WINDOWS.isCurrent() && FileProtocols.FILE.equals(fileURL.getScheme()))
@@ -432,7 +433,7 @@ public class FileFactory {
                     // Create a fresh FileURL with the current path
                     FileURL clonedURL = (FileURL)fileURL.clone();
                     clonedURL.setPath(currentPath);
-                    currentFile = wrapArchive(createRawFile(clonedURL));
+                    currentFile = wrapArchive(createRawFile(clonedURL, instantiationParams));
 
                     lastFileResolved = true;
                 }
@@ -456,12 +457,13 @@ public class FileFactory {
         // Create last file if it hasn't been already (if the last filename was not an archive), same routine as above
         // except that it doesn't wrap the file into an archive file
         if(!lastFileResolved) {
-            String currentPath = PathUtils.removeTrailingSeparator(pt.getCurrentPath(), pathSeparator);
+            // Note: DON'T strip out the trailing separator, as this would cause problems with root resources
+            String currentPath = pt.getCurrentPath();
 
             if(currentFile==null || !(currentFile instanceof AbstractArchiveFile)) {
                 FileURL clonedURL = (FileURL)fileURL.clone();
                 clonedURL.setPath(currentPath);
-                currentFile = createRawFile(clonedURL);
+                currentFile = createRawFile(clonedURL, instantiationParams);
             }
             else {          // currentFile is an AbstractArchiveFile
                 currentFile = ((AbstractArchiveFile)currentFile).getArchiveEntryFile(PathUtils.removeLeadingSeparator(currentPath.substring(currentFile.getURL().getPath().length(), currentPath.length()), pathSeparator));
@@ -475,13 +477,13 @@ public class FileFactory {
         return currentFile;
     }
 
-    private static AbstractFile createRawFile(FileURL fileURL) throws IOException {
+    private static AbstractFile createRawFile(FileURL fileURL, Object... instantiationParams) throws IOException {
         String scheme = fileURL.getScheme().toLowerCase();
         FileCache rawFileCache = rawFileCacheMap.get(scheme);
 
         // Lookup the cache for an existing AbstractFile instance
-        // Note: FileURL#equals(Object) and #hashCode() take into account credentials and properties
-        // Note: the URL should always be free of a trailing separator
+        // Note: FileURL#equals(Object) and #hashCode() take into account credentials and properties and are
+        // trailing slash insensitive (e.g. '/root' and '/root/' URLS are one and the same)
         AbstractFile file = rawFileCache.get(fileURL);
 
         if(file!=null)
@@ -493,7 +495,7 @@ public class FileFactory {
             if(localFileProvider == null)
                 throw new IOException("Unknown file protocol: " + scheme);
 
-            file = localFileProvider.getFile(fileURL);
+            file = localFileProvider.getFile(fileURL, instantiationParams);
 
             // Uncomment this line and comment the previous one to simulate a slow filesystem
             //file = new DebugFile(file, 0, 50);
@@ -509,7 +511,7 @@ public class FileFactory {
             ProtocolProvider provider = getProtocolProvider(scheme);
             if(provider == null)
                 throw new IOException("Unknown file protocol: " + scheme);
-            file = provider.getFile(fileURL);
+            file = provider.getFile(fileURL, instantiationParams);
         }
 
         // Note: Creating an archive file on top of the file must be done after adding the file to the LRU cache,

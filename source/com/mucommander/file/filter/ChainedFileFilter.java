@@ -33,15 +33,25 @@ import java.util.Vector;
  * @see OrFileFilter
  * @author Maxence Bernard
  */
-public abstract class ChainedFileFilter extends FileFilter {
+public abstract class ChainedFileFilter extends AbstractFileFilter {
 
     /** List of registered FileFilter */
     protected Vector<FileFilter> filters = new Vector<FileFilter>();
 
     /**
-     * Creates a new ChainedFileFilter that initially contains no {@link FileFilter}.
+     * Creates a new ChainedFileFilter containing no {@link FileFilter} initially and operating in non-inverted mode.
      */
     public ChainedFileFilter() {
+        this(false);
+    }
+
+    /**
+     * Creates a new ChainedFileFilter containing no {@link FileFilter} initially and operating in the specified mode.
+     *
+     * @param inverted if true, this filter will operate in inverted mode.
+     */
+    public ChainedFileFilter(boolean inverted) {
+        super(inverted);
     }
 
     /**
@@ -54,7 +64,7 @@ public abstract class ChainedFileFilter extends FileFilter {
     }
 
     /**
-     * Removes a {@link FileFilter} to the list of chained filters. Does nothing if the given <code>FileFilter</code>
+     * Removes a {@link FileFilter} from the list of chained filters. Does nothing if the given <code>FileFilter</code>
      * is not contained by this <code>ChainedFileFilter</code>.
      *
      * @param filter the FileFilter to remove

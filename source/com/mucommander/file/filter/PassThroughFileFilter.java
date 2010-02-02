@@ -26,12 +26,20 @@ import com.mucommander.file.AbstractFile;
  *
  * @author Maxence Bernard
  */
-public class PassThroughFileFilter extends FileFilter {
+public class PassThroughFileFilter extends AbstractFileFilter {
 
+    /**
+     * Creates a new <code>PassThroughFileFilter</code> operating in non-inverted mode.
+     */
     public PassThroughFileFilter() {
-        super();
+        this(false);
     }
 
+    /**
+     * Creates a new <code>PassThroughFileFilter</code> operating in the specified mode.
+     *
+     * @param inverted if true, this filter will operate in inverted mode.
+     */
     public PassThroughFileFilter(boolean inverted) {
         super(inverted);
     }
@@ -41,7 +49,6 @@ public class PassThroughFileFilter extends FileFilter {
     // FileFilter implementation //
     ///////////////////////////////
 
-    @Override
     public boolean accept(AbstractFile file) {
         return true;
     }

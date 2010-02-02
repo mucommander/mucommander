@@ -97,6 +97,7 @@ public class LocationHistory {
         //  - it is a directory on a local filesytem
         //  - it doesn't look like a removable media drive (cd/dvd/floppy), especially in order to prevent
         // Java from triggering that dreaded 'Drive not ready' popup.
+AppLogger.finest("folder="+folder+" root="+folder.getRoot());
         if(folderURL.getScheme().equals(FileProtocols.FILE) && folder.isDirectory() && (folder instanceof LocalFile) && !((LocalFile)folder.getRoot()).guessRemovableDrive()) {
             this.lastRecallableFolder = folder.getAbsolutePath();
             AppLogger.finest("lastRecallableFolder= "+lastRecallableFolder);

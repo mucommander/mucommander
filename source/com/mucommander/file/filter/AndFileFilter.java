@@ -28,9 +28,21 @@ import com.mucommander.file.AbstractFile;
 public class AndFileFilter extends ChainedFileFilter {
 
     /**
-     * Creates a new AndFileFilter that contains no {@link FileFilter} initially.
+     * Creates a new AndFileFilter containing no {@link FileFilter} initially and operating in non-inverted
+     * mode.
      */
     public AndFileFilter() {
+        this(false);
+    }
+
+    /**
+     * Creates a new AndFileFilter containing no {@link FileFilter} initially and operating in non-inverted
+     * mode.
+     *
+     * @param inverted if true, this filter will operate in inverted mode.
+     */
+    public AndFileFilter(boolean inverted) {
+        super(inverted);
     }
 
     
@@ -47,7 +59,6 @@ public class AndFileFilter extends ChainedFileFilter {
      * @param file the file to test against the registered filters
      * @return if the file was matched by all filters, false if one of them didn't 
      */
-    @Override
     public boolean accept(AbstractFile file) {
         int nbFilters = filters.size();
 

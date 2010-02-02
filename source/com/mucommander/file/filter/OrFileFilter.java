@@ -21,19 +21,30 @@ package com.mucommander.file.filter;
 import com.mucommander.file.AbstractFile;
 
 /**
- * OrFileFilter is a {@link ChainedFileFilter} that matches a file if one of its registered filters matches it.
+ * <code>OrFileFilter</code> is a {@link ChainedFileFilter} that matches a file if one of its registered filters 
+ * matches it.
  *
  * @author Maxence Bernard
  */
 public class OrFileFilter extends ChainedFileFilter {
 
     /**
-     * Creates a new AndFileFilter that contains no {@link FileFilter} initially.
+     * Creates a new AndFileFilter containing no {@link FileFilter} initially and operating in non-inverted mode.
      */
     public OrFileFilter() {
+        this(false);
     }
 
-    
+    /**
+     * Creates a new AndFileFilter containing no {@link FileFilter} initially and operating in non-inverted mode.
+     *
+     * @param inverted if true, this filter will operate in inverted mode.
+     */
+    public OrFileFilter(boolean inverted) {
+        super(inverted);
+    }
+
+
     ///////////////////////////////
     // FileFilter implementation //
     ///////////////////////////////
@@ -47,7 +58,6 @@ public class OrFileFilter extends ChainedFileFilter {
      * @param file the file to test against the registered filters
      * @return if the file was matched by one filter, false if none of them did
      */
-    @Override
     public boolean accept(AbstractFile file) {
         int nbFilters = filters.size();
 

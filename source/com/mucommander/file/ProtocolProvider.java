@@ -27,16 +27,19 @@ import java.io.IOException;
  * needs to be implemented and an instance registered with {@link FileFactory} and binded to a protocol identifier.
  * </p>
  *
- * @author Nicolas Rinaudo
+ * @author Nicolas Rinaudo, Maxence Bernard
  * @see FileFactory
  * @see AbstractFile
  */
 public interface ProtocolProvider {
     /**
      * Creates a new instance of <code>AbstractFile</code> that matches the specified URL.
-     * @param  url         URL to map as an <code>AbstractFile</code>.
-     * @return             a new instance of <code>AbstractFile</code> that matches the specified URL.
+     * @param url URL to map as an <code>AbstractFile</code>.
+     * @param instantiationParams file implementation-specific parameters used for instantiating the
+     * {@link AbstractFile} implementation. Those parameters are used when creating file instances within
+     * the AbstractFile implementation.
+     * @return a new instance of <code>AbstractFile</code> that matches the specified URL.
      * @throws IOException if an error occurs.
      */
-    public AbstractFile getFile(FileURL url) throws IOException;
+    public AbstractFile getFile(FileURL url, Object... instantiationParams) throws IOException;
 }

@@ -31,8 +31,8 @@ import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
 import com.mucommander.file.FileProtocols;
 import com.mucommander.file.FileURL;
-import com.mucommander.file.filter.FilenameFilter;
-import com.mucommander.file.filter.RegexpFilenameFilter;
+import com.mucommander.file.filter.PathFilter;
+import com.mucommander.file.filter.RegexpPathFilter;
 import com.mucommander.file.impl.local.LocalFile;
 import com.mucommander.runtime.OsFamilies;
 import com.mucommander.runtime.OsVersions;
@@ -85,7 +85,7 @@ public class DrivePopupButton extends PopupButton implements LocationListener, B
 
     /** Filters out volumes from the list based on the exclude regexp defined in the configuration, null if the regexp
      * is not defined. */
-    private static FilenameFilter volumeFilter;
+    private static PathFilter volumeFilter;
 
 
     static {
@@ -97,9 +97,8 @@ public class DrivePopupButton extends PopupButton implements LocationListener, B
         try {
             String excludeRegexp = MuConfiguration.getVariable(MuConfiguration.VOLUME_EXCLUDE_REGEXP);
             if(excludeRegexp!=null) {
-                volumeFilter = new RegexpFilenameFilter(excludeRegexp, true);
+                volumeFilter = new RegexpPathFilter(excludeRegexp, true);
                 volumeFilter.setInverted(true);
-                volumeFilter.setOperateOnPath(true);
             }
         }
         catch(PatternSyntaxException e) {

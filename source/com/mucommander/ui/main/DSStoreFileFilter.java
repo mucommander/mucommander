@@ -16,7 +16,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.mucommander.file.filter;
+package com.mucommander.ui.main;
+
+import com.mucommander.file.filter.AbstractFilenameFilter;
+import com.mucommander.file.filter.FilenameFilter;
 
 
 /**
@@ -24,13 +27,12 @@ package com.mucommander.file.filter;
  *
  * @author Maxence Bernard
  */
-public class DSStoreFileFilter extends FilenameFilter {
+public class DSStoreFileFilter extends AbstractFilenameFilter {
 
     ///////////////////////////////////
     // FilenameFilter implementation //
     ///////////////////////////////////
 
-    @Override
     public boolean accept(String filename) {
         return !".DS_Store".equals(filename);
     }

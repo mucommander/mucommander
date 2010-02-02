@@ -1,6 +1,6 @@
 /*
  * This file is part of muCommander, http://www.mucommander.com
- * Copyright (C) 2002-2009 Maxence Bernard
+ * Copyright (C) 2002-2010 Maxence Bernard
  *
  * muCommander is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,23 +16,23 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.mucommander.file.impl.nfs;
+package com.mucommander.file.filter;
 
 import com.mucommander.file.AbstractFile;
-import com.mucommander.file.FileURL;
-import com.mucommander.file.ProtocolProvider;
-
-import java.io.IOException;
 
 /**
- * This class is the provider for the NFS filesystem implemented by {@link com.mucommander.file.impl.nfs.NFSFile}.
+ * This interface specializes {@link CriterionValueGenerator} to have {@link #getCriterionValue(AbstractFile)} return
+ * the absolute path of the specified file.
  *
- * @author Nicolas Rinaudo
- * @see com.mucommander.file.impl.nfs.NFSFile
+ * @author Maxence Bernard
  */
-public class NFSProtocolProvider implements ProtocolProvider {
+public class PathGenerator implements CriterionValueGenerator<String> {
 
-    public AbstractFile getFile(FileURL url, Object... instantiationParams) throws IOException {
-        return new NFSFile(url);
+    ////////////////////////////////////////////
+    // CriterionValueGenerator implementation //
+    ////////////////////////////////////////////
+
+    public String getCriterionValue(AbstractFile file) {
+        return file.getPath();
     }
 }

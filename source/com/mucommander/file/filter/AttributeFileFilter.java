@@ -38,7 +38,7 @@ import com.mucommander.file.AbstractFile;
  *
  * @author Maxence Bernard
  */
-public class AttributeFileFilter extends FileFilter {
+public class AttributeFileFilter extends AbstractFileFilter {
 
     /** Tests if the file is a {@link com.mucommander.file.AbstractFile#isDirectory() directory}. */
     public static final int DIRECTORY = 0;
@@ -67,8 +67,8 @@ public class AttributeFileFilter extends FileFilter {
 
 
     /**
-     * Creates a new <code>AttributeFileFilter</code> that matches files which have the specified attribute set.
-     * This filter will operate in normal, non-inverted mode.
+     * Creates a new <code>AttributeFileFilter</code> matching files that have the specified attribute set and operating
+     * in non-inverted mode.
      *
      * @param attribute the attribute to test files against
      */
@@ -77,8 +77,8 @@ public class AttributeFileFilter extends FileFilter {
     }
 
     /**
-     * Creates a new <code>AttributeFileFilter</code> that matches files which have the specified attribute set.
-     * This filter operates in the specified mode.
+     * Creates a new <code>AttributeFileFilter</code> matching files that have the specified attribute set and operating
+     * in the specified mode.
      *
      * @param attribute the attribute to test files against
      * @param inverted if true, this filter will operate in inverted mode.
@@ -112,7 +112,6 @@ public class AttributeFileFilter extends FileFilter {
     // FileFilter implementation //
     ///////////////////////////////
 
-    @Override
     public boolean accept(AbstractFile file) {
         switch(attribute) {
             case DIRECTORY:

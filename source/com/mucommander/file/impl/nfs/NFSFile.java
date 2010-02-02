@@ -181,7 +181,9 @@ public class NFSFile extends ProtocolFile {
             FileURL parentURL = getURL().getParent();
             if(parentURL != null) {
                 parent = FileFactory.getFile(parentURL);
+                // Note: parent may be null if it can't be resolved
             }
+
             parentValueSet = true;
         }
         return parent;
@@ -392,7 +394,6 @@ public class NFSFile extends ProtocolFile {
 
         AbstractFile children[] = new AbstractFile[names.length];
         FileURL childURL;
-        NFSFile child;
         String baseURLPath = fileURL.getPath();
         if(!baseURLPath.endsWith("/"))
             baseURLPath += SEPARATOR;
@@ -403,11 +404,7 @@ public class NFSFile extends ProtocolFile {
             childURL.setPath(baseURLPath+names[i]);
 
             // Create the child NFSFile using this file as a parent
-            child = new NFSFile(childURL);
-            child.setParent(this);
-
-            // Wrap archives
-            children[i] = FileFactory.wrapArchive(child);
+            children[i] = FileFactory.getFile(childURL, this);
         }
 
         return children;

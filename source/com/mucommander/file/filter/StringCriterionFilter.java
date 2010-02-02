@@ -1,6 +1,6 @@
 /*
  * This file is part of muCommander, http://www.mucommander.com
- * Copyright (C) 2002-2009 Maxence Bernard
+ * Copyright (C) 2002-2010 Maxence Bernard
  *
  * muCommander is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,23 +16,24 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.mucommander.file.impl.local;
-
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.FileURL;
-import com.mucommander.file.ProtocolProvider;
-
-import java.io.IOException;
+package com.mucommander.file.filter;
 
 /**
- * This class is the provider for the local filesystem implemented by {@link com.mucommander.file.impl.local.LocalFile}.
- *
  * @author Maxence Bernard
- * @see com.mucommander.file.impl.local.LocalFile
  */
-public class LocalFileProvider implements ProtocolProvider {
+public interface StringCriterionFilter extends CriterionFilter<String> {
 
-    public AbstractFile getFile(FileURL url) throws IOException {
-        return new LocalFile(url);
-    }
+    /**
+     * Returns <code>true</code> if this <code>CriterionFilter</code> is case-sensitive.
+     *
+     * @return true if this <code>CriterionFilter</code> is case-sensitive.
+     */
+    boolean isCaseSensitive();
+
+    /**
+     * Specifies whether this <code>CriterionFilter</code> should be case-sensitive or not when comparing paths.
+     *
+     * @param caseSensitive if true, this CriterionFilter will be case-sensitive
+     */
+    void setCaseSensitive(boolean caseSensitive);
 }

@@ -37,9 +37,9 @@ import static org.junit.Assert.*;
  */
 public class LocalFileTest extends AbstractFileTest {
 
-    /////////////////////////////////////////
-    // AbstractFileTestCase implementation //
-    /////////////////////////////////////////
+    /////////////////////////////////////
+    // AbstractFileTest implementation //
+    /////////////////////////////////////
 
     @Override
     public AbstractFile getTemporaryFile() throws IOException {

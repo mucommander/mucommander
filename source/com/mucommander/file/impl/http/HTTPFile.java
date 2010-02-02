@@ -327,12 +327,7 @@ public class HTTPFile extends ProtocolFile {
             if(parentURL==null)
                 this.parent = null;
             else {
-                try {
-                    this.parent = new HTTPFile(parentURL);
-                }
-                catch(IOException e) {
-                    // No parent, that's all
-                }
+                this.parent = FileFactory.getFile(parentURL);
             }
             this.parentValSet = true;
         }
@@ -599,7 +594,6 @@ public class HTTPFile extends ProtocolFile {
             Vector<AbstractFile> children = new Vector<AbstractFile>();
             // List that contains children URL, a TreeSet for fast (log(n)) search operations
             TreeSet<String> childrenURL = new TreeSet<String>();
-            HTTPFile child;
             URL childURL;
             FileURL childFileURL;
             Credentials credentials = fileURL.getCredentials();
@@ -658,11 +652,8 @@ public class HTTPFile extends ProtocolFile {
                             // will be http://java.com .
                             // This is done to ensure that every children listed have this file as a parent.
                             tempChildURL.setPath(parentPath+filename);
-                            child = new HTTPFile(childFileURL, childURL, tempChildURL.toString());
 
-                            FileLogger.finest("childFileURL="+child.getURL()+" absPath="+child.getAbsolutePath()+" parent="+child.getParent());
-
-                            children.add(FileFactory.wrapArchive(child));
+                            children.add(FileFactory.getFile(childFileURL, this, childURL, tempChildURL.toString()));
                             childrenURL.add(link);
                         }
                         catch(IOException e) {

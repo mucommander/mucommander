@@ -21,6 +21,7 @@ package com.mucommander.file.impl.smb;
 import com.mucommander.auth.AuthException;
 import com.mucommander.auth.Credentials;
 import com.mucommander.file.*;
+import com.mucommander.file.filter.FilenameFilter;
 import com.mucommander.io.RandomAccessInputStream;
 import com.mucommander.io.RandomAccessOutputStream;
 import jcifs.smb.*;
@@ -233,12 +234,8 @@ import java.net.MalformedURLException;
         if(!parentValSet) {
             FileURL parentURL = fileURL.getParent();
             if(parentURL!=null) {
-                try {
-                    parent = new SMBFile(parentURL, null);
-                }
-                catch(IOException e) {
-                    // No parent, that's all
-                }
+                parent = FileFactory.getFile(parentURL);
+                // Note: parent may be null if it can't be resolved
             }
             // Note: do not make the special smb:// file a parent of smb://host/, this would cause parent unit tests to fail
 
@@ -375,58 +372,10 @@ import java.net.MalformedURLException;
         checkSmbFile(false);
     }
 
-
     @Override
     public AbstractFile[] ls() throws IOException {
-        try {
-            SmbFile smbFiles[] = file.listFiles();
-
-            if(smbFiles==null)
-                throw new IOException();
-
-            // Count the number of files to exclude: excluded files are those that are not file share/ not browsable
-            // (Printers, named pipes, comm ports)
-            int nbSmbFiles = smbFiles.length;
-            int nbSmbFilesToExclude = 0;
-            int smbFileType;
-            for(int i=0; i<nbSmbFiles; i++) {
-                smbFileType = smbFiles[i].getType();
-                if(smbFileType==SmbFile.TYPE_PRINTER || smbFileType==SmbFile.TYPE_NAMED_PIPE || smbFileType==SmbFile.TYPE_COMM)
-                    nbSmbFilesToExclude++;
-            }
-
-            // Create SMBFile by using SmbFile instance and sharing parent instance among children
-            AbstractFile children[] = new AbstractFile[nbSmbFiles-nbSmbFilesToExclude];
-            FileURL childURL;
-            SmbFile smbFile;
-            int currentIndex = 0;
-
-            for(int i=0; i<nbSmbFiles; i++) {
-                smbFile = smbFiles[i];
-                smbFileType = smbFile.getType();
-                if(smbFileType==SmbFile.TYPE_PRINTER || smbFileType==SmbFile.TYPE_NAMED_PIPE || smbFileType==SmbFile.TYPE_COMM)
-                    continue;
-                
-                // Note: properties and credentials are cloned for every children's url
-                childURL = (FileURL)fileURL.clone();
-                childURL.setHost(smbFile.getServer());
-                childURL.setPath(smbFile.getURL().getPath());
-
-                // Use SMBFile private constructor to recycle the SmbFile instance
-                children[currentIndex] = FileFactory.wrapArchive(new SMBFile(childURL, smbFile));
-                children[currentIndex].setParent(this);
-                currentIndex++;
-
-//                children[currentIndex++] = FileFactory.getFile(childURL, this);
-            }
-
-            return children;
-        }
-        catch(SmbAuthException e) {
-            throw new AuthException(fileURL, e.getMessage());
-        }
+        return ls(null);
     }
-
 
     @Override
     public void mkdir() throws IOException {
@@ -512,6 +461,53 @@ import java.net.MalformedURLException;
     ////////////////////////
     // Overridden methods //
     ////////////////////////
+
+    @Override
+    public AbstractFile[] ls(FilenameFilter filenameFilter) throws IOException {
+        try {
+            SmbFile smbFiles[] = file.listFiles(filenameFilter==null?null:new SMBFilenameFilter(filenameFilter));
+
+            if(smbFiles==null)
+                throw new IOException();
+
+            // Count the number of files to exclude: excluded files are those that are not file share/ not browsable
+            // (Printers, named pipes, comm ports)
+            int nbSmbFiles = smbFiles.length;
+            int nbSmbFilesToExclude = 0;
+            int smbFileType;
+            for(int i=0; i<nbSmbFiles; i++) {
+                smbFileType = smbFiles[i].getType();
+                if(smbFileType==SmbFile.TYPE_PRINTER || smbFileType==SmbFile.TYPE_NAMED_PIPE || smbFileType==SmbFile.TYPE_COMM)
+                    nbSmbFilesToExclude++;
+            }
+
+            // Create SMBFile by using SmbFile instance and sharing parent instance among children
+            AbstractFile children[] = new AbstractFile[nbSmbFiles-nbSmbFilesToExclude];
+            FileURL childURL;
+            SmbFile smbFile;
+            int currentIndex = 0;
+
+            for(int i=0; i<nbSmbFiles; i++) {
+                smbFile = smbFiles[i];
+                smbFileType = smbFile.getType();
+                if(smbFileType==SmbFile.TYPE_PRINTER || smbFileType==SmbFile.TYPE_NAMED_PIPE || smbFileType==SmbFile.TYPE_COMM)
+                    continue;
+
+                // Note: properties and credentials are cloned for every children's url
+                childURL = (FileURL)fileURL.clone();
+                childURL.setHost(smbFile.getServer());
+                childURL.setPath(smbFile.getURL().getPath());
+
+                // Use SMBFile private constructor to recycle the SmbFile instance
+                children[currentIndex++] = FileFactory.getFile(childURL, this, smbFile);
+            }
+
+            return children;
+        }
+        catch(SmbAuthException e) {
+            throw new AuthException(fileURL, e.getMessage());
+        }
+    }
 
     @Override
     public boolean isHidden() {
@@ -666,6 +662,28 @@ import java.net.MalformedURLException;
 
         public PermissionBits getMask() {
             return MASK;
+        }
+    }
+
+
+    /**
+     * Turns a {@link FilenameFilter} into a {@link jcifs.smb.SmbFilenameFilter}.
+     */
+    private static class SMBFilenameFilter implements jcifs.smb.SmbFilenameFilter {
+
+        private FilenameFilter filter;
+
+        private SMBFilenameFilter(FilenameFilter filter) {
+            this.filter = filter;
+        }
+
+
+        ////////////////////////////////////////////////
+        // jicfs.smb.SmbFilenameFilter implementation //
+        ////////////////////////////////////////////////
+
+        public boolean accept(SmbFile dir, String name) throws SmbException {
+            return filter.accept(name);
         }
     }
 }

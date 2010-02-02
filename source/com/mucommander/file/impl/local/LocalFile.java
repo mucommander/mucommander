@@ -74,12 +74,7 @@ public class LocalFile extends ProtocolFile {
 
     protected File file;
     private FilePermissions permissions;
-
-    protected String parentFilePath;
     protected String absPath;
-
-    /** True if this file has a Windows-style UNC path. Can be true only under Windows. */
-    private boolean isUNC;
 
     /** Caches the parent folder, initially null until getParent() gets called */
     protected AbstractFile parent;
@@ -135,42 +130,75 @@ public class LocalFile extends ProtocolFile {
             Kernel32.getInstance().SetErrorMode(Kernel32API.SEM_NOOPENFILEERRORBOX|Kernel32API.SEM_FAILCRITICALERRORS);
     }
 
-
     /**
-     * Creates a new instance of LocalFile. The given FileURL's scheme should be {@link FileProtocols#FILE}, and the
-     * host {@link FileURL#LOCALHOST}.  
+     * Creates a new instance of LocalFile and a corresponding {@link File} instance.
      */
     protected LocalFile(FileURL fileURL) throws IOException {
+        this(fileURL, null);
+    }
+
+    /**
+     * Creates a new instance of LocalFile, using the given {@link File} if not <code>null</code>, creating a new
+     * {@link File} instance otherwise.
+     */
+    protected LocalFile(FileURL fileURL, File file) throws IOException {
         super(fileURL);
 
-        String path = fileURL.getPath();
+        if(file==null) {
+            String path;
 
-        // If OS is Windows and hostname is not 'localhost', translate the path back into a Windows-style UNC path
-        // in the form \\hostname\share\path .
-        String hostname = fileURL.getHost();
-        if(IS_WINDOWS && !FileURL.LOCALHOST.equals(hostname)) {
-            path = "\\\\"+hostname+fileURL.getPath().replace('/', '\\');    // Replace leading / char by \
-            isUNC = true;
+            // If the URL denotes a Windows UNC file, translate the path back into a Windows-style UNC path in the form
+            // \\hostname\share\path .
+            if(isUncFile(fileURL)) {
+                path = "\\\\"+fileURL.getHost()+fileURL.getPath().replace('/', '\\');    // Replace leading / char by \
+            }
+            else {
+                path = fileURL.getPath();
+            }
+
+            file = new File(path);
+
+            // Throw an exception if the path is not absolute.
+            if(!file.isAbsolute())
+                throw new IOException();
+
+            this.absPath = file.getAbsolutePath();
+
+            // remove the trailing separator if present
+            this.absPath = absPath.endsWith(SEPARATOR)?absPath.substring(0,absPath.length()-1):absPath;
+        }
+        // the java.io.File instance was created by ls(), no need to re-create it or call the costly File#getAbsolutePath()
+        else {
+            this.absPath = fileURL.getPath();
         }
 
-        this.file = new File(path);
+        this.file = file;
         this.permissions = new LocalFilePermissions(file);
-
-        // Throw an exception is the file's path is not absolute.
-        if(!file.isAbsolute())
-            throw new IOException();
-
-        this.parentFilePath = file.getParent();
-        this.absPath = file.getAbsolutePath();
-
-        // removes trailing separator (if any)
-        this.absPath = absPath.endsWith(SEPARATOR)?absPath.substring(0,absPath.length()-1):absPath;
     }
 
 
     ////////////////////////////////
     // LocalFile-specific methods //
     ////////////////////////////////
+
+    /**
+     * Returns <code>true</code> if the specified {@link FileURL} denotes a Windows UNC file.
+     *
+     * @param fileURL the {@link FileURL} to test
+     * @return <code>true</code> if the specified {@link FileURL} denotes a Windows UNC file.
+     */
+    private static boolean isUncFile(FileURL fileURL) {
+        return IS_WINDOWS && !FileURL.LOCALHOST.equals(fileURL.getHost());
+    }
+
+    /**
+     * Returns <code>true</code> if this file's URL denotes a Windows UNC file.
+     *
+     * @return <code>true</code> if this file's URL denotes a Windows UNC file.
+     */
+    public boolean isUncFile() {
+        return isUncFile(fileURL);
+    }
 
     /**
      * Returns the user home folder. Most if not all OSes have one, but in the unlikely event that the OS doesn't have
@@ -607,9 +635,9 @@ public class LocalFile extends ProtocolFile {
 	
     @Override
     public AbstractFile getParent() {
-        // Retrieve parent AbstractFile and cache it
+        // Retrieve the parent AbstractFile instance and cache it
         if (!parentValueSet) {
-            if(parentFilePath !=null) {
+            if(!isRoot()) {
                 FileURL parentURL = getURL().getParent();
                 if(parentURL != null) {
                     parent = FileFactory.getFile(parentURL);
@@ -770,7 +798,7 @@ public class LocalFile extends ProtocolFile {
 
     @Override
     public void mkdir() throws IOException {
-        if(!new File(absPath).mkdir())
+        if(!file.mkdir())
             throw new IOException();
     }
 	
@@ -873,7 +901,7 @@ public class LocalFile extends ProtocolFile {
         // If this file has no parent, return:
         // - the drive's name under OSes with root drives such as Windows, e.g. "C:"
         // - "/" under Unix-based systems
-        if(parentFilePath==null)
+        if(isRoot())
             return hasRootDrives()?absPath:"/";
 
         return file.getName();
@@ -882,7 +910,7 @@ public class LocalFile extends ProtocolFile {
     @Override
     public String getAbsolutePath() {
         // Append separator for root folders (C:\ , /) and for directories
-        if(parentFilePath ==null || (isDirectory() && !absPath.endsWith(SEPARATOR)))
+        if(isRoot() || (isDirectory() && !absPath.endsWith(SEPARATOR)))
             return absPath+SEPARATOR;
 
         return absPath;
@@ -924,30 +952,33 @@ public class LocalFile extends ProtocolFile {
 
     @Override
     public AbstractFile[] ls(FilenameFilter filenameFilter) throws IOException {
-        String names[] = file.list();
+        File files[] = file.listFiles(filenameFilter==null?null:new LocalFilenameFilter(filenameFilter));
 
-        if(names==null)
+        if(files==null)
             throw new IOException();
 
-        if(filenameFilter!=null)
-            names = filenameFilter.filter(names);
-
-        AbstractFile children[] = new AbstractFile[names.length];
+        int nbFiles = files.length;
+        AbstractFile children[] = new AbstractFile[nbFiles];
         FileURL childURL;
+        File file;
 
-        for(int i=0; i<names.length; i++) {
+        boolean isUNC = isUncFile();
+
+        for(int i=0; i<nbFiles; i++) {
+            file = files[i];
+
             // Clone the FileURL of this file and set the child's path, this is more efficient than creating a new
             // FileURL instance from scratch.
             childURL = (FileURL)fileURL.clone();
 
             if(isUNC)   // Special case for UNC paths which include the hostname in it
-                childURL.setPath(addTrailingSeparator(fileURL.getPath())+names[i]);
+                childURL.setPath(addTrailingSeparator(fileURL.getPath())+file.getName());
             else
-                childURL.setPath(absPath+SEPARATOR+names[i]);
+                childURL.setPath(absPath+SEPARATOR+files[i].getName());
 
-            // Retrieves an AbstractFile (LocalFile or AbstractArchiveFile) instance potentially fetched from the
-            // LRU cache and reuse this file as parent
-            children[i] = FileFactory.getFile(childURL, this);
+            // Retrieves an AbstractFile (LocalFile or AbstractArchiveFile) instance that's potentially already in
+            // the cache, reuse this file as the file's parent, and the already-created java.io.File instance.
+            children[i] = FileFactory.getFile(childURL, this, files[i]);
         }
 
         return children;
@@ -1302,6 +1333,28 @@ public class LocalFile extends ProtocolFile {
 
         public PermissionBits getMask() {
             return MASK;
+        }
+    }
+
+
+    /**
+     * Turns a {@link FilenameFilter} into a {@link java.io.FilenameFilter}.
+     */
+    private static class LocalFilenameFilter implements java.io.FilenameFilter {
+
+        private FilenameFilter filter;
+
+        private LocalFilenameFilter(FilenameFilter filter) {
+            this.filter = filter;
+        }
+
+
+        ///////////////////////////////////////////
+        // java.io.FilenameFilter implementation //
+        ///////////////////////////////////////////
+
+        public boolean accept(File dir, String name) {
+            return filter.accept(name);
         }
     }
 }

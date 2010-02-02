@@ -75,7 +75,7 @@ public class CombineFilesDialog extends TransferDestinationDialog {
 			return;
 		}
 		String name = part1.getNameWithoutExtension();
-		FilenameFilter startsFilter = new StartsFilenameFilter(name, false);
+		FilenameFilter startsFilter = new StartsWithFilenameFilter(name, false);
 		AttributeFileFilter filesFilter = new AttributeFileFilter(AttributeFileFilter.FILE);
 		EqualsFilenameFilter part1Filter = new EqualsFilenameFilter(part1.getName(), false);
 		part1Filter.setInverted(true);

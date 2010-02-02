@@ -189,10 +189,10 @@ public class FileSelectionDialog extends FocusDialog implements ActionListener {
                     filter = new ContainsFilenameFilter(testString, caseSensitive);
                     break;
                 case STARTS_WITH:
-                    filter = new StartsFilenameFilter(testString, caseSensitive);
+                    filter = new StartsWithFilenameFilter(testString, caseSensitive);
                     break;
                 case ENDS_WIDTH:
-                    filter = new EndsFilenameFilter(testString, caseSensitive);
+                    filter = new EndsWithFilenameFilter(testString, caseSensitive);
                     break;
                 case IS:
                     filter = new EqualsFilenameFilter(testString, caseSensitive);

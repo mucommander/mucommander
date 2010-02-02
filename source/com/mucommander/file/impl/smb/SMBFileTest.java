@@ -67,9 +67,9 @@ public class SMBFileTest extends AbstractFileTest {
     }
 
 
-    /////////////////////////////////////////
-    // AbstractFileTestCase implementation //
-    /////////////////////////////////////////
+    /////////////////////////////////////
+    // AbstractFileTest implementation //
+    /////////////////////////////////////
 
     @Override
     public AbstractFile getTemporaryFile() throws IOException {

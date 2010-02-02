@@ -25,6 +25,7 @@ import com.mucommander.file.ProtocolProvider;
 
 import javax.net.ssl.*;
 import java.io.IOException;
+import java.net.URL;
 import java.security.SecureRandom;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
@@ -91,7 +92,9 @@ public class HTTPProtocolProvider implements ProtocolProvider {
        HttpsURLConnection.setDefaultHostnameVerifier(permissiveHostnameVerifier);
     }
     
-    public AbstractFile getFile(FileURL url) throws IOException {
-        return new HTTPFile(url);
+    public AbstractFile getFile(FileURL url, Object... instantiationParams) throws IOException {
+        return instantiationParams.length==0
+            ?new HTTPFile(url)
+            :new HTTPFile(url, (URL)instantiationParams[0], (String)instantiationParams[1]);
     }
 }

@@ -22,6 +22,7 @@ import com.mucommander.file.AbstractFile;
 import com.mucommander.file.AbstractFileTest;
 import com.mucommander.file.FileFactory;
 import com.mucommander.file.FileOperation;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -47,14 +48,14 @@ public class ProxyFileTest extends AbstractFileTest {
     }
 
 
-    /////////////////////////////////////////
-    // AbstractFileTestCase implementation //
-    /////////////////////////////////////////
+    /////////////////////////////////////
+    // AbstractFileTest implementation //
+    /////////////////////////////////////
 
     @Override
     public AbstractFile getTemporaryFile() throws IOException {
         // Returns a ProxyFile instance proxying a LocalFile ; the kind of proxied file should not matter as long as it
-        // passes AbstractFileTestCase.
+        // passes AbstractFileTest.
         return new ProxyFile(FileFactory.getTemporaryFile(getClass().getName(), false)) {
             // Note: a ProxyFile with no overridden method serves absolutely no purpose whatsoever
         };
@@ -84,17 +85,23 @@ public class ProxyFileTest extends AbstractFileTest {
     // Overridden methods //
     ////////////////////////
 
+    @Ignore
     @Override
     public void testUnsupportedFileOperationAnnotations() throws Exception {
-        // Do nothing
     }
 
+    @Ignore
     @Override
     public void testSupportedFileOperations() throws Exception {
-        // Do nothing
     }
 
+    @Ignore
+    @Override
+    public void testFileInstanceCaching() throws Exception {
+        // This test can't pass as ProxyFile instance are not cached, only the underlying protocol file.
+    }
 
+    
     /////////////////////////////
     // Additional test methods //
     /////////////////////////////

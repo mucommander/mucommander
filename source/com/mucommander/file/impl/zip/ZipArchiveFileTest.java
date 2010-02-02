@@ -48,10 +48,10 @@ public class ZipArchiveFileTest extends AbstractFileTest {
         return true;
     }
 
-    /////////////////////////////////////////
-    // AbstractFileTestCase implementation //
-    /////////////////////////////////////////
-    
+    /////////////////////////////////////
+    // AbstractFileTest implementation //
+    /////////////////////////////////////
+
     @Override
     public AbstractFile getTemporaryFile() throws IOException {
         // use a incremental id to avoid collisions

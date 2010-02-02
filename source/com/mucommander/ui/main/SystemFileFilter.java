@@ -16,9 +16,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.mucommander.file.filter;
+package com.mucommander.ui.main;
 
 import com.mucommander.file.AbstractFile;
+import com.mucommander.file.filter.AbstractFileFilter;
 
 /**
  * Filter used to filter out system files and folders that should not be displayed to inexperienced users.
@@ -28,7 +29,7 @@ import com.mucommander.file.AbstractFile;
  *
  * @author Maxence Bernard
  */
-public class SystemFileFilter extends FileFilter {
+public class SystemFileFilter extends AbstractFileFilter {
 
     /**
      * Top-level Mac OS X system folders hidden by Finder. For more info about those files:
@@ -80,7 +81,6 @@ public class SystemFileFilter extends FileFilter {
     // FileFilter implementation //
     ///////////////////////////////
 
-    @Override
     public boolean accept(AbstractFile file) {
         String path = file.getAbsolutePath(false);
 

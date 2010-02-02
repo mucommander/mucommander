@@ -19,6 +19,7 @@
 package com.mucommander.ui.action.impl;
 
 import com.mucommander.file.AbstractFile;
+import com.mucommander.file.filter.AbstractFilenameFilter;
 import com.mucommander.file.filter.ExtensionFilenameFilter;
 import com.mucommander.file.filter.FilenameFilter;
 import com.mucommander.ui.action.*;
@@ -150,8 +151,7 @@ public class MarkExtensionAction extends MuAction {
             // If the current file doesn't have an extension, return a filename filter that
             // match null extensions.
             if((ext = file.getExtension()) == null)
-                return new FilenameFilter() {
-                    @Override
+                return new AbstractFilenameFilter() {
                     public boolean accept(String name) {return AbstractFile.getExtension(name) == null;}
                 };
         }

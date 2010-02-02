@@ -365,7 +365,7 @@ public class FTPFile extends ProtocolFile implements ConnectionHandlerFactory {
             FileURL parentFileURL = this.fileURL.getParent();
             if(parentFileURL!=null) {
                 try {
-                    parent = new FTPFile(parentFileURL, createFTPFile(parentFileURL.getFilename(), true));
+                    parent = FileFactory.getFile(parentFileURL, null, createFTPFile(parentFileURL.getFilename(), true));
                 }
                 catch(IOException e) {
                     // No parent, that's all
@@ -581,8 +581,7 @@ public class FTPFile extends ProtocolFile implements ConnectionHandlerFactory {
             if(childName.equals(".") || childName.equals(".."))
                 continue;
 
-            child = FileFactory.wrapArchive(new FTPFile(childURL, files[i]));
-            child.setParent(this);
+            child = FileFactory.getFile(childURL, this, files[i]);
             children[fileCount++] = child;
         }
 

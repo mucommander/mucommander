@@ -86,10 +86,14 @@ public class ExtensionFilenameFilterTest extends TestCase {
     /**
      * Tests case-sensitive filtering.
      */
-    public void testCaseSensitive() {test(true);}
+    public void testCaseSensitive() {
+        test(true);
+    }
 
     /**
      * Tests case-insensitive filtering.
      */
-    public void testCaseInsensitive() {test(false);}
+    public void testCaseInsensitive() {
+        test(false);
+    }
 }

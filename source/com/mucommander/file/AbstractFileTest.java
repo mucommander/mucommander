@@ -2316,6 +2316,33 @@ public abstract class AbstractFileTest implements ConditionalTest {
         }
     }
 
+    /**
+     * Ensures that {@link AbstractFile} instance caching works as expected, that is the same instance is returned
+     * by <code>FileFactory#getFile</code> methods every time the same location is asked for.
+     *
+     * @throws Exception should not happen
+     */
+    @Test
+    public void testFileInstanceCaching() throws Exception {
+        AbstractFile file;
+        for(int i=0; i<100; i++) {
+            file = getTemporaryFile();
+            for(int j=0; j<10; j++) {
+                // Resolve by path
+                String pathT = file.addTrailingSeparator(file.getURL().toString(true, false));
+                String pathNT = file.removeTrailingSeparator(pathT);
+                assertTrue(FileFactory.getFile(pathT)==file);
+                assertTrue(FileFactory.getFile(pathNT)==file);
+
+                // Resolve by URL
+                assertTrue(FileFactory.getFile(file.getURL())==file);
+                assertTrue(FileFactory.getFile(FileURL.getFileURL(pathT))==file);
+                assertTrue(FileFactory.getFile(FileURL.getFileURL(pathNT))==file);
+            }
+        }
+
+    }
+
 
     //////////////////////
     // Abstract methods //

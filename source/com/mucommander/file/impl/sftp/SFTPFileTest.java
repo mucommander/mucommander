@@ -66,9 +66,9 @@ public class SFTPFileTest extends AbstractFileTest {
     }
 
 
-    /////////////////////////////////////////
-    // AbstractFileTestCase implementation //
-    /////////////////////////////////////////
+    /////////////////////////////////////
+    // AbstractFileTest implementation //
+    /////////////////////////////////////
 
     @Override
     public FileOperation[] getSupportedOperations() {
