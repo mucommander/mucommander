@@ -51,8 +51,8 @@ public class SystemTrayNotifier extends AbstractNotifier implements ActionListen
     /** Is this notifier enabled ? */
     private boolean isEnabled;
 
-    /** Path to the tray icon image */
-    private final static String TRAY_ICON_PATH = "/icon16_8.png";
+    /** Name of the tray icon image */
+    private final static String TRAY_ICON_NAME = "icon16_8.png";
 
     /** Width of the muCommander tray icon */
     private final static int TRAY_ICON_WIDTH = 16;
@@ -99,7 +99,7 @@ public class SystemTrayNotifier extends AbstractNotifier implements ActionListen
 
             SystemTray systemTray = SystemTray.getSystemTray();
 
-            Image iconImage = IconManager.getIcon(TRAY_ICON_PATH).getImage();
+            Image iconImage = IconManager.getIcon(IconManager.MUCOMMANDER_ICON_SET, TRAY_ICON_NAME).getImage();
             Dimension trayIconSize = systemTray.getTrayIconSize();
             // If the sytem tray icon size is larger than the icon size, center the icon as the default is to display
             // the icon in the top left corner which is plain ugly

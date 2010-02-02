@@ -269,7 +269,7 @@ public class AboutDialog extends FocusDialog implements ActionListener {
 
         tempPanel = new JPanel(new BorderLayout());
 
-        tempPanel.add(new JLabel(IconManager.getIcon("/icon128_24.png")), BorderLayout.NORTH);
+        tempPanel.add(new JLabel(IconManager.getIcon(IconManager.MUCOMMANDER_ICON_SET, "icon128_24.png")), BorderLayout.NORTH);
 
         flowPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         flowPanel.add(createBoldLabel(RuntimeConstants.APP_STRING));

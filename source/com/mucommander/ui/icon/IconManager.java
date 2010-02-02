@@ -54,9 +54,11 @@ public class IconManager {
     public final static int PROGRESS_ICON_SET    = 5;
     /** Designates the language icon set */
     public final static int LANGUAGE_ICON_SET    = 6;
+    /** Designates the mucommander icon set */
+    public final static int MUCOMMANDER_ICON_SET = 7;
 
     /** Base folder of all images */
-    public final static String BASE_IMAGE_FOLDER = "/images";
+    private final static String BASE_IMAGE_FOLDER = "/images";
     /** Icon sets folders within the application's JAR file */
     private final static String ICON_SET_FOLDERS[] = {
         BASE_IMAGE_FOLDER +"/file/",
@@ -65,16 +67,15 @@ public class IconManager {
         BASE_IMAGE_FOLDER +"/common/",
         BASE_IMAGE_FOLDER +"/preferences/",
         BASE_IMAGE_FOLDER +"/progress/",
-        BASE_IMAGE_FOLDER +"/language/"
+        BASE_IMAGE_FOLDER +"/language/",
+        BASE_IMAGE_FOLDER +"/mucommander/"
     };
 
-    /** Number of icon sets */
-    private final static int NB_ICON_SETS = 7;
 
     static {
         // Initialize caches for icon sets that need it.
         // Icons which are displayed once in a while like preferences icons don't need to be cached
-        caches = new Hashtable[NB_ICON_SETS];
+        caches = new Hashtable[ICON_SET_FOLDERS.length];
         caches[FILE_ICON_SET]       = new Hashtable<String, ImageIcon>();
         caches[ACTION_ICON_SET]     = new Hashtable<String, ImageIcon>();
         caches[STATUS_BAR_ICON_SET] = new Hashtable<String, ImageIcon>();
