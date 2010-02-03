@@ -15,14 +15,14 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
 
+
+/**
+ * SevenZipArchiveFile provides read access to archives in the 7zip format.
+ *
+ * @author Arik Hadas, Maxence Bernard
+ */
 public class SevenZipArchiveFile extends AbstractROArchiveFile {
-	
-	/** An interface to the seven-zip package */
-	private IInArchive sevenZipFile;
-	
-	/** The date at which the current IInArchive object was created */
-	private long lastSevenZipFileDate;
-	
+
 	private static final Executor threadPool = Executors.newSingleThreadExecutor(new ThreadFactory() {
         public Thread newThread(Runnable r) {
             Thread t = new Thread(r, "SevenZip extractor thread");
@@ -35,34 +35,13 @@ public class SevenZipArchiveFile extends AbstractROArchiveFile {
 		super(file);
 	}
 	
-	/**
-     * Checks if the underlying 7zip file is up-to-date, i.e. exists and has not changed without this archive file
-     * being aware of it. If one of those 2 conditions are not met, (re)load the RipFile instance (parse the entries)
-     * and declare the 7zip file as up-to-date.
-     *
-     * @throws IOException if an error occurred while reloading
-     * @throws UnsupportedFileOperationException if this operation is not supported by the underlying filesystem,
-     * or is not implemented.
-     */
-    private void checkSevenZipFile() throws IOException, UnsupportedFileOperationException {
-        long currentDate = file.getDate();
-        
-        if (sevenZipFile==null || currentDate != lastSevenZipFileDate) {
-        	MuRandomAccessFile istream = new MuRandomAccessFile(file);
-        	sevenZipFile = new Handler();
-        	if (sevenZipFile.Open( istream ) != 0)
-        		throw new IOException("ERROR: could not open 7zip archive: " + file.getAbsolutePath());
-        	
-            declareSevenZipFileUpToDate(currentDate);
-        }
-    }
-    
-    /**
-     * Declare the underlying 7zip file as up-to-date. Calling this method after the 7zip file has been
-     * modified prevents {@link #checkSevenZipFile()} from being reloaded.
-     */
-    private void declareSevenZipFileUpToDate(long currentFileDate) {
-        lastSevenZipFileDate = currentFileDate;
+    private IInArchive openSevenZipFile() throws IOException {
+        MuRandomAccessFile in = new MuRandomAccessFile(file);
+        IInArchive sevenZipFile = new Handler();
+        if (sevenZipFile.Open(in) != 0)
+            throw new IOException("Error while opening 7zip archive " + file.getAbsolutePath());
+
+        return sevenZipFile;
     }
     
     /**
@@ -72,10 +51,9 @@ public class SevenZipArchiveFile extends AbstractROArchiveFile {
      * @return an ArchiveEntry whose attributes are fetched from the given SevenZipEntry
      */
     private ArchiveEntry createArchiveEntry(SevenZipEntry entry) {
-		return new ArchiveEntry(
-				entry.getName(), entry.isDirectory(), entry.getTime(), entry.getSize(), true
-				);
+		return new ArchiveEntry(entry.getName(), entry.isDirectory(), entry.getTime(), entry.getSize(), true);
 	}
+
     
     //////////////////////////////////////////
     // AbstractROArchiveFile implementation //
@@ -83,25 +61,40 @@ public class SevenZipArchiveFile extends AbstractROArchiveFile {
 
 	@Override
     public InputStream getEntryInputStream(final ArchiveEntry entry, ArchiveEntryIterator entryIterator) throws IOException, UnsupportedFileOperationException {
-		checkSevenZipFile();
+		final IInArchive sevenZipFile = openSevenZipFile();
 		
 		final FailSafePipedInputStream in = new FailSafePipedInputStream();
 		final PipedOutputStream out = new PipedOutputStream(in);
 
 		threadPool.execute(new Runnable() {
 			public void run() {
-		        BufferedOutputStream bufferStream = new BufferedOutputStream(out);
+		        BufferedOutputStream bufferedOut = new BufferedOutputStream(out);
 		        try {
-					MuArchiveExtractCallback extractCallbackSpec = new MuArchiveExtractCallback(bufferStream, entry.getPath());
+					MuArchiveExtractCallback extractCallbackSpec = new MuArchiveExtractCallback(bufferedOut, entry.getPath());
 			        extractCallbackSpec.Init(sevenZipFile);
 			        sevenZipFile.Extract(null, -1, IInArchive.NExtract_NAskMode_kExtract , extractCallbackSpec);
 			        
-					bufferStream.flush();
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-                    FileLogger.finest(null, e);
+					bufferedOut.flush();
 				}
-		        
+                catch (Exception e) {
+                    FileLogger.fine("Error while retrieving 7zip entry "+entry.getName(), e);
+				}
+                finally {
+                    try { bufferedOut.close(); }
+                    catch(IOException e) {
+                        // Not much we can do about it
+                    }
+
+                    try { in.close(); }
+                    catch(IOException e) {
+                        // Not much we can do about it
+                    }
+
+                    try { sevenZipFile.close(); }
+                    catch(IOException e) {
+                        // Not much we can do about it
+                    }
+                }
 			}
 		});
 		
@@ -109,19 +102,22 @@ public class SevenZipArchiveFile extends AbstractROArchiveFile {
 	}
 
 	@Override
-    public ArchiveEntryIterator getEntryIterator() throws IOException, UnsupportedFileOperationException {
-		checkSevenZipFile();
+    public ArchiveEntryIterator getEntryIterator() throws IOException {
+		final IInArchive sevenZipFile = openSevenZipFile();
 
-    	Vector<SevenZip.Archive.SevenZipEntry> result = new Vector<SevenZip.Archive.SevenZipEntry>();
-    	
-    	for(int i = 0; i < sevenZipFile.size() ; i++)
-            result.add(sevenZipFile.getEntry(i));
-    	
-    	Vector<ArchiveEntry> entries = new Vector<ArchiveEntry>();
+        try {
+            int nbEntries = sevenZipFile.size();
+            Vector<ArchiveEntry> entries = new Vector<ArchiveEntry>();
+            for(int i = 0; i <nbEntries ; i++)
+                entries.add(createArchiveEntry(sevenZipFile.getEntry(i)));
 
-        for (Object aResult : result)
-            entries.add(createArchiveEntry((SevenZipEntry)aResult));
-        
-        return new WrapperArchiveEntryIterator(entries.iterator());
+            return new WrapperArchiveEntryIterator(entries.iterator());
+        }
+        finally {
+            try { sevenZipFile.close(); }
+            catch(IOException e) {
+                // Not much we can do about it
+            }
+        }
 	}
 }
