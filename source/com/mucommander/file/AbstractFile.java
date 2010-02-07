@@ -290,9 +290,14 @@ public abstract class AbstractFile implements FileAttributes, PermissionTypes, P
      * Returns an <code>InputStream</code> to read this file's contents, starting at the specified offset (in bytes).
      * A <code>java.io.IOException</code> is thrown if the file doesn't exist.
      *
-     * <p>This method should be overridden whenever possible to provide a more efficient implementation as this
-     * default implementation uses {@link java.io.InputStream#skip(long)} which, depending on the particular InputStream
-     * implementation may just read bytes and discards them, which is very slow.</p>
+     * <p>This implementation starts by checking whether the {@link FileOperation#RANDOM_READ_FILE} operation is
+     * supported or not.
+     * If it is, a {@link #getRandomAccessInputStream() random input stream} to this file is retrieved and used to seek
+     * to the specified offset. If it's not, a regular {@link #getInputStream() input stream} is retrieved, and
+     * {@link java.io.InputStream#skip(long)} is used to position the stream to the specified offset, which on most
+     * <code>InputStream</code> implementations is very slow as it causes the bytes to be read and discarded.
+     * For this reason, file implementations that do not provide random read access may want to override this method
+     * if a more efficient implementation can be provided.</p>
      *
      * @param offset the offset in bytes from the beginning of the file, must be >0
      * @throws IOException if this file cannot be read or is a folder.
@@ -301,8 +306,16 @@ public abstract class AbstractFile implements FileAttributes, PermissionTypes, P
      * @return an <code>InputStream</code> to read this file's contents, skipping the specified number of bytes
      */
     public InputStream getInputStream(long offset) throws IOException, UnsupportedFileOperationException {
+        // Use a random access input stream when available
+        if(isFileOperationSupported(FileOperation.RANDOM_READ_FILE)) {
+            RandomAccessInputStream rais = getRandomAccessInputStream();
+            rais.seek(offset);
+
+            return rais;
+        }
+
         InputStream in = getInputStream();
-		
+
         // Skip exactly the specified number of bytes
         StreamUtils.skipFully(in, offset);
 
