@@ -133,7 +133,6 @@ public class ChangePermissionsDialog extends JobDialog
         updateOctalPermTextField();
 
         if(canSetPermission) {
-            setInitialFocusComponent(octalPermTextField);
             doc.addDocumentListener(this);
         }
         // Disable text field if no permission bit can be set
