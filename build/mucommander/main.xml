@@ -297,6 +297,28 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
           <method name="*"/>
           <constructor name="*"/>
       </keep>
+      <!-- Hadoop HDFS                                       -->
+      <keep name="org.apache.hadoop.hdfs.DistributedFileSystem"/>
+      <keep name="org.apache.hadoop.net.StandardSocketFactory"/>
+      <keep name="org.apache.hadoop.hdfs.protocol.DatanodeInfo$AdminStates"/>
+      <!-- Apache Commons logging (Hadoop dependency)          -->
+      <keep name="org.apache.commons.logging.impl.LogFactoryImpl"/>
+      <keep name="org.apache.commons.logging.impl.SimpleLog">
+          <constructor/>
+      </keep>
+      <keep name="org.apache.commons.logging.Log"/>
+      <!-- Keep Enum methods so that they are still considered
+           as Enum at runtime (Hadoop dependency)              -->
+      <keepclassmembers extends="java.lang.Enum">
+        <method access="public static"
+              type="**[]"
+              name="values"
+              parameters="" />
+        <method access="public static"
+              type="**"
+              name="valueOf"
+              parameters="java.lang.String" />
+      </keepclassmembers>
     </proguard>
   </target>
 
@@ -472,7 +494,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <echo>Running test cases...</echo>
     <mkdir dir="${junit.reports}/raw"/>
     <mkdir dir="${junit.reports}/html"/>
-    <junit printsummary="yes" haltonfailure="yes">
+    <junit printsummary="yes" haltonfailure="false">
       <formatter type="plain"/>
       <formatter type="xml"/>
       <classpath>

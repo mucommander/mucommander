@@ -138,10 +138,9 @@ Improvements:
 - A proper error message is displayed when muCommander is started in a
   headless environment.
 - Upgraded the commons-net FTP library to version 2.0.
-- Optimized file attribute caching, yielding sizable memory and CPU savings
-  during directory listing and other file operations.
 - Actions relying on a file operation that is not supported by the current
   folder's filesystem are now disabled contextually.
+- Added support for Hadoop HDFS.
 
 Localization:
 -
@@ -149,7 +148,8 @@ Localization:
 Bug fixes:
 - "Round displayed file sizes" checkbox does sometimes not toggle correctly (ticket #328)
 - Single click on the file table treated as double click (ticket #321)
-- Fixed 'startup_error' message that wasn't properly localized. 
+- Fixed 'startup_error' message that wasn't properly localized.
+- Fixed 7zip files left open after being browsed (#334). 
 
 Known issues:
 - Some translations are not up-to-date. Refer to

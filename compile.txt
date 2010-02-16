@@ -9,7 +9,7 @@ libraries and tools are installed.
 
   Pre-requesites are:
 - JDK 1.6 or greater
-  Event though muCommander runs on Java 1.4 or later, it takes advantage of
+  Event though muCommander runs on Java 1.5 or later, it takes advantage of
   the 1.6 API and needs it in order to compile.
   This can be retrieved from http://java.sun.com/
 

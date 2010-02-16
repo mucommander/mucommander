@@ -22,7 +22,7 @@ package com.mucommander.file;
  * This interface extends <code>FileAttributes</code> to add attribute getters. Refer to {@link FileAttributes}'s
  * documentation for more information about attributes.
  *
- * <p>See the {@link SimpleFileAttributes} class for a mutable implementation of this interface.</p>
+ * <p>See the {@link SimpleFileAttributes} class for an implementation of this interface.</p>
  *
  * @author Maxence Bernard
  * @see SimpleFileAttributes

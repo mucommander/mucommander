@@ -486,13 +486,18 @@ public class FileFactory {
         String scheme = fileURL.getScheme().toLowerCase();
         FileCache rawFileCache = rawFileCacheMap.get(scheme);
 
-        // Lookup the cache for an existing AbstractFile instance
-        // Note: FileURL#equals(Object) and #hashCode() take into account credentials and properties and are
-        // trailing slash insensitive (e.g. '/root' and '/root/' URLS are one and the same)
-        AbstractFile file = rawFileCache.get(fileURL);
+        AbstractFile file;
+        // Lookup the cache for an existing AbstractFile instance, only if there are no instantiationParams.
+        // If there are instantiationParams (the file was created by the AbstractFile implementation directly, that is
+        // by ls()), any existing file in the cache must be replaced with a new, more up-to-date one.
+        if(instantiationParams.length==0) {
+            // Note: FileURL#equals(Object) and #hashCode() take into account credentials and properties and are
+            // trailing slash insensitive (e.g. '/root' and '/root/' URLS are one and the same)
+            file = rawFileCache.get(fileURL);
 
-        if(file!=null)
-            return file;
+            if(file!=null)
+                return file;
+        }
 
         // Special case for local files to avoid provider hashtable lookup and other unnecessary checks
         // (for performance reasons)
@@ -521,7 +526,7 @@ public class FileFactory {
 
         // Note: Creating an archive file on top of the file must be done after adding the file to the LRU cache,
         // this could otherwise lead to weird behaviors, for example if a directory with the same filename
-        // of a former archive was created, the directory would be considered as an archive
+        // of a former archive was created, the directory would be considered as an archive.
         // Note: the URL should always be free of a trailing separator
         rawFileCache.put(fileURL, file);
         FileLogger.finest("Added to file cache: "+file);
