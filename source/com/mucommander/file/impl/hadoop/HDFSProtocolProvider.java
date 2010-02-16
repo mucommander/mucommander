@@ -1,6 +1,6 @@
 /*
  * This file is part of muCommander, http://www.mucommander.com
- * Copyright (C) 2002-2008 Maxence Bernard
+ * Copyright (C) 2002-2009 Maxence Bernard
  *
  * muCommander is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,22 +16,24 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.mucommander.io;
+package com.mucommander.file.impl.hadoop;
+
+import com.mucommander.file.AbstractFile;
+import com.mucommander.file.FileURL;
+import com.mucommander.file.ProtocolProvider;
+import org.apache.hadoop.fs.FileStatus;
+import org.apache.hadoop.fs.FileSystem;
 
 import java.io.IOException;
 
 /**
- * This <code>IOException</code> can be used when attempting to read from a {@link BoundedInputStream} or
- * {@link BoundedReader} beyond the byte or character limit set.
- *
- * @see com.mucommander.io.BoundedInputStream
- * @see com.mucommander.io.BoundedOutputStream
- * @see com.mucommander.io.BoundedReader
  * @author Maxence Bernard
  */
-public class StreamOutOfBoundException extends IOException {
-    
-    public StreamOutOfBoundException(long limit) {
-        super("Attempt to read out of bounds, limit="+limit);
+public class HDFSProtocolProvider implements ProtocolProvider {
+
+    public AbstractFile getFile(FileURL url, Object... instantiationParams) throws IOException {
+        return instantiationParams.length==0
+            ?new HDFSFile(url)
+            :new HDFSFile(url, (FileSystem)instantiationParams[0], (FileStatus)instantiationParams[1]);
     }
 }

@@ -18,8 +18,6 @@
 
 package com.mucommander.io;
 
-import com.mucommander.commons.CommonsLogger;
-
 import java.io.*;
 
 /**
@@ -44,19 +42,8 @@ public class StreamUtils {
     }
 
     /**
-     * Copies the contents of the given <code>InputStream</code> to the specified </code>OutputStream</code>
-     * and throws a {@link FileTransferException} if something went wrong. This method does *NOT* close any of the
-     * given streams.
-     *
-     * <p>Read and write operations are buffered, using a buffer of the specified size (in bytes). For performance
-     * reasons, this buffer is provided by {@link BufferPool}. There is no need to provide a
-     * <code>BufferedInputStream</code>. A <code>BufferedOutputStream</code> also isn't necessary, unless this method
-     * is called repeatedly with the same <code>OutputStream</code> and with potentially small <code>InputStream</code>
-     * (smaller than the buffer's size): in this case, providing a <code>BufferedOutputStream</code> will further
-     * improve performance by grouping calls to the underlying <code>OutputStream</code> write method.</p>
-     *
-     * <p>Copy progress can optionally be monitored by supplying a {@link com.mucommander.io.CounterInputStream} and/or
-     * {@link com.mucommander.io.CounterOutputStream}.</p>
+     * This method is a shorthand for {@link #copyStream(java.io.InputStream, java.io.OutputStream, int, long)} called
+     * with a {@link Long#MAX_VALUE}.
      *
      * @param in the InputStream to read from
      * @param out the OutputStream to write to
@@ -65,47 +52,13 @@ public class StreamUtils {
      * @throws FileTransferException if something went wrong while reading from or writing to one of the provided streams
      */
     public static long copyStream(InputStream in, OutputStream out, int bufferSize) throws FileTransferException {
-        // Use BufferPool to reuse any available buffer of the same size
-        byte buffer[] = BufferPool.getByteArray(bufferSize);
-        try {
-            // Copies the InputStream's content to the OutputStream chunk by chunk
-            int nbRead;
-            long totalRead = 0;
-
-            while(true) {
-                try {
-                    nbRead = in.read(buffer, 0, buffer.length);
-                }
-                catch(IOException e) {
-                    throw new FileTransferException(FileTransferException.READING_SOURCE);
-                }
-
-                if(nbRead==-1)
-                    break;
-
-                try {
-                    out.write(buffer, 0, nbRead);
-                }
-                catch(IOException e) {
-                    throw new FileTransferException(FileTransferException.WRITING_DESTINATION);
-                }
-
-                totalRead += nbRead;
-            }
-
-            return totalRead;
-        }
-        finally {
-            // Make the buffer available for further use
-            BufferPool.releaseByteArray(buffer);
-        }
+        return copyStream(in, out, bufferSize, Long.MAX_VALUE);
     }
     
     /**
-     * Copies the <code>length</code> bytes from the given <code>InputStream</code> to the specified </code>OutputStream</code>
-     * and throws a {@link FileTransferException} if something went wrong. This method does *NOT* close any of the
-     * given streams.
-     * 
+     * Shorthand for {@link #copyStream(InputStream, OutputStream, byte[], long)} called with a buffer of the specified
+     * size retrieved from {@link BufferPool}.
+     *
      * @param in the InputStream to read from
      * @param out the OutputStream to write to
      * @param bufferSize size of the buffer to use, in bytes
@@ -117,42 +70,7 @@ public class StreamUtils {
         // Use BufferPool to reuse any available buffer of the same size
         byte buffer[] = BufferPool.getByteArray(bufferSize);
         try {
-            // Copies the InputStream's content to the OutputStream chunk by chunk
-            int nbRead;
-            long totalRead = 0;
-
-            while(length>0) {
-                try {
-                	if (in.markSupported()) {
-                		in.mark(buffer.length);
-                	}
-                    nbRead = in.read(buffer, 0, (int)Math.min(buffer.length, length));	// the result of min will be int
-                    length-=nbRead;
-                }
-                catch(IOException e) {
-                    throw new FileTransferException(FileTransferException.READING_SOURCE);
-                }
-
-                if(nbRead==-1)
-                    break;
-
-                try {
-                    out.write(buffer, 0, nbRead);
-                }
-                catch(IOException e) {
-                	try {
-						in.reset();
-					} catch (IOException e1) {
-						CommonsLogger.fine("Caught exception", e1);
-	                	throw new FileTransferException(FileTransferException.READING_SOURCE);
-					}
-                	throw new FileTransferException(FileTransferException.WRITING_DESTINATION, totalRead);
-                }
-
-                totalRead += nbRead;
-            }
-
-            return totalRead;
+            return copyStream(in, out, buffer, length);
         }
         finally {
             // Make the buffer available for further use
@@ -160,6 +78,56 @@ public class StreamUtils {
         }
     }
     
+    /**
+     * Copies up to <code>length</code> bytes from the given <code>InputStream</code> to the specified
+     * </code>OutputStream</code>, less if the end-of-file was reached before that. 
+     * This method does *NOT* close any of the given streams.
+     *
+     * <p>Read and write operations use the specified buffer, making the use of a <code>BufferedInputStream</code>
+     * unnecessary. A <code>BufferedOutputStream</code> also isn't necessary, unless this method
+     * is called repeatedly with the same <code>OutputStream</code> and with potentially small <code>InputStream</code>
+     * (smaller than the buffer's size): in this case, providing a <code>BufferedOutputStream</code> will further
+     * improve performance by grouping calls to the underlying <code>OutputStream</code> write method.</p>
+     *
+     * <p>Copy progress can optionally be monitored by supplying a {@link com.mucommander.io.CounterInputStream} and/or
+     * {@link com.mucommander.io.CounterOutputStream}.</p>
+     *
+     * @param in the InputStream to read from
+     * @param out the OutputStream to write to
+     * @param buffer buffer to use for copying
+     * @param length number of bytes to copy from InputStream
+     * @return the number of bytes that were copied
+     * @throws FileTransferException if something went wrong while reading from or writing to one of the provided streams
+     */
+    public static long copyStream(InputStream in, OutputStream out, byte[] buffer, long length) throws FileTransferException {
+        // Copies the InputStream's content to the OutputStream chunk by chunk
+        int nbRead;
+        long totalRead = 0;
+
+        while(length>0) {
+            try {
+                nbRead = in.read(buffer, 0, (int)Math.min(buffer.length, length));	// the result of min will be int
+            }
+            catch(IOException e) {
+                throw new FileTransferException(FileTransferException.READING_SOURCE);
+            }
+
+            if(nbRead==-1)
+                break;
+
+            try {
+                out.write(buffer, 0, nbRead);
+            }
+            catch(IOException e) {
+                throw new FileTransferException(FileTransferException.WRITING_DESTINATION, totalRead);
+            }
+
+            length -= nbRead;
+            totalRead += nbRead;
+        }
+
+        return totalRead;
+    }
 
     /**
      * This method is a shorthand for {@link #transcode(java.io.InputStream, String, java.io.OutputStream, String, int)}

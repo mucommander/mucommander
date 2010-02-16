@@ -257,7 +257,7 @@ class TextEditorImpl implements ThemeListener, ActionListener, EncodingListener 
             writer = new BOMWriter(out, bom);
 
         try {textArea.getUI().getEditorKit(textArea).write(new BufferedWriter(writer), document, 0, document.getLength());}
-        catch(BadLocationException e) {throw new IOException(e);}
+        catch(BadLocationException e) {throw new IOException(e.getMessage());}
     }
 
     void populateMenus(JFrame frame, JMenuBar menuBar) {

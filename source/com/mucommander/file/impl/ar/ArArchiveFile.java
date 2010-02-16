@@ -61,7 +61,7 @@ public class ArArchiveFile extends AbstractROArchiveFile {
         while((currentEntry = iterator.nextEntry())!=null) {
             if(currentEntry.getName().equals(entry.getName())) {
                 FileLogger.finest("found entry "+entry.getName());
-                return new BoundedInputStream(in, entry.getSize());
+                return new BoundedInputStream(in, entry.getSize(), false);
             }
         }
 

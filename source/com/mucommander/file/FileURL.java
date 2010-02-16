@@ -146,10 +146,11 @@ public class FileURL implements Cloneable {
         // Register custom handlers for known schemes
 
         registerHandler(FileProtocols.FILE, new DefaultSchemeHandler(new DefaultSchemeParser(new DefaultPathCanonizer(LocalFile.SEPARATOR, System.getProperty("user.home")), false), -1, System.getProperty("file.separator"), AuthenticationTypes.NO_AUTHENTICATION, null));
-        registerHandler(FileProtocols.FTP, new DefaultSchemeHandler(new DefaultSchemeParser(), 21, "/", AuthenticationTypes.AUTHENTICATION_REQUIRED, new Credentials("anonymous", "someuser@mucommander.com")));
+        registerHandler(FileProtocols.FTP, new DefaultSchemeHandler(new DefaultSchemeParser(), 21, "/", AuthenticationTypes.AUTHENTICATION_REQUIRED, new Credentials("anonymous", "anonymous_coward@mucommander.com")));
         registerHandler(FileProtocols.SFTP, new DefaultSchemeHandler(new DefaultSchemeParser(), 22, "/", AuthenticationTypes.AUTHENTICATION_REQUIRED, null));
+        registerHandler(FileProtocols.HDFS, new DefaultSchemeHandler(new DefaultSchemeParser(true), 8020, "/", AuthenticationTypes.AUTHENTICATION_OPTIONAL, null));
         registerHandler(FileProtocols.HTTP, new DefaultSchemeHandler(new DefaultSchemeParser(true), 80, "/", AuthenticationTypes.AUTHENTICATION_OPTIONAL, null));
-        registerHandler(FileProtocols.S3, new DefaultSchemeHandler(new DefaultSchemeParser(true), 80, "/", AuthenticationTypes.AUTHENTICATION_REQUIRED, null));
+        registerHandler(FileProtocols.S3, new DefaultSchemeHandler(new DefaultSchemeParser(true), 443, "/", AuthenticationTypes.AUTHENTICATION_REQUIRED, null));
         registerHandler(FileProtocols.WEBDAV, new DefaultSchemeHandler(new DefaultSchemeParser(true), 80, "/", AuthenticationTypes.AUTHENTICATION_REQUIRED, null));
         registerHandler(FileProtocols.HTTPS, new DefaultSchemeHandler(new DefaultSchemeParser(true), 443, "/", AuthenticationTypes.AUTHENTICATION_OPTIONAL, null));
         registerHandler(FileProtocols.WEBDAVS, new DefaultSchemeHandler(new DefaultSchemeParser(true), 443, "/", AuthenticationTypes.AUTHENTICATION_REQUIRED, null));
@@ -857,6 +858,7 @@ public class FileURL implements Cloneable {
      * @return <code>true</code> if the host part of this URL and the given URL are equal
      */
     public boolean hostEquals(FileURL url) {
+        // Note: StringUtils#equals is null-safe 
         return StringUtils.equals(this.host, url.host, false);
     }
 
@@ -1029,7 +1031,7 @@ public class FileURL implements Cloneable {
      * <p>
      * Credentials (login and password parts) are compared only if requested. The comparison for both the login and
      * password is case-sensitive.</br>
-     * Likewise, properties are compared only if requested: the comparison of all properties is case-sentive.
+     * Likewise, properties are compared only if requested: the comparison of all properties is case-sensitive.
      * </p>
      *
      * @param o object to compare against this FileURL instance

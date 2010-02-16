@@ -43,7 +43,7 @@ class BookmarkOutputStream extends ByteArrayOutputStream implements BookmarkBuil
 
         try {BookmarkManager.readBookmarks(new ByteArrayInputStream(toByteArray()), this);}
         catch(IOException e) {throw e;}
-        catch(Exception e) {throw new IOException(e);}
+        catch(Exception e) {throw new IOException(e.getMessage());}
     }
 
 

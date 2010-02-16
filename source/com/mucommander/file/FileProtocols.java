@@ -34,6 +34,9 @@ public interface FileProtocols {
     /** Protocol for files served by a web server using HTTP. */
     public final static String HTTP      = "http";
 
+    /** Protocol for files served by an HDFS (Hadoop distributed filesystem) cluster. */
+    public final static String HDFS      = "hdfs";
+
     /** Protocol for files served by a web server using HTTPS. */
     public final static String HTTPS     = "https";
 

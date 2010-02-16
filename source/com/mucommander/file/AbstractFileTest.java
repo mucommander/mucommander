@@ -170,15 +170,15 @@ public abstract class AbstractFileTest implements ConditionalTest {
         ChecksumOutputStream md5Out = getMd5OutputStream(append?file.getAppendOutputStream():file.getOutputStream());
         try {
             writeRandomData(md5Out, length, maxChunkSize);
-
-            assertTrue(file.exists());
-            assertEquals(length, file.getSize());
-
-            return md5Out.getChecksumString();
         }
         finally {
             md5Out.close();
         }
+
+        assertTrue(file.exists());
+        assertEquals(length, file.getSize());
+
+        return md5Out.getChecksumString();
     }
 
 
@@ -1773,6 +1773,10 @@ public abstract class AbstractFileTest implements ConditionalTest {
             file = parent;
         }
 
+        // Assert that the root file's parent URL is null: if that is not the case, the parent file should have been
+        // resolved.
+        assertTrue(file.getURL().getParent()==null);
+
         // A file that has no parent should be a root file
         assertTrue(file.isRoot());
     }
@@ -2325,9 +2329,9 @@ public abstract class AbstractFileTest implements ConditionalTest {
     @Test
     public void testFileInstanceCaching() throws Exception {
         AbstractFile file;
-        for(int i=0; i<100; i++) {
+        for(int i=0; i<10; i++) {
             file = getTemporaryFile();
-            for(int j=0; j<10; j++) {
+            for(int j=0; j<5; j++) {
                 // Resolve by path
                 String pathT = file.addTrailingSeparator(file.getURL().toString(true, false));
                 String pathNT = file.removeTrailingSeparator(pathT);

@@ -23,82 +23,60 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * An InputStream that has a set limit to the number of bytes that can be read from it before the EOF is reached.
- * The limit has no effect if it is set higher than the number of bytes remaining in the underlying stream.
+ * <code>BoundedInputStream</code> is an InputStream that has a set limit to the number of bytes that can be read or
+ * skipped from it. What happens when the limit is reached is controlled at creation time: <code>read</code> and
+ * <code>skip</code> methods can either throw a {@link StreamOutOfBoundException} or simply return <code>-1</code>.
+ *
+ * <p>The limit has no effect if it is set to a value that is higher than the number of bytes remaining in the
+ * underlying stream.</p>
  *
  * <p>This class is particularly useful for reading archives that are a concatenation of files, tarballs for instance.</p>
  *
  * @author Maxence Bernard
+ * @see BoundedReader
+ * @see BoundedOutputStream
  * @see StreamOutOfBoundException
  */
-public class BoundedInputStream extends FilterInputStream {
+public class BoundedInputStream extends FilterInputStream implements Bounded {
 
     protected long totalRead;
     protected long allowedBytes;
-    protected IOException outOfBoundException;
-
-    /**
-     * Equivalent to {@link #BoundedInputStream(java.io.InputStream, long, java.io.IOException)} called with a
-     * <code>null</code> <code>IOException</code>.
-     *
-     * @param in the stream to bind
-     * @param allowedBytes the total number of bytes this stream allows to be read or skipped, <code>-1</code> for no limitation
-     */
-    public BoundedInputStream(InputStream in, long allowedBytes) {
-        this(in, allowedBytes, null);
-    }
+    protected boolean throwStreamOutOfBoundException;
 
     /**
      * Creates a new <code>BoundedInputStream</code> over the specified stream, allowing a maximum of
      * <code>allowedBytes</code> to be read or skipped. If <code>allowedBytes</code> is equal to <code>-1</code>, this
      * stream is not bounded and acts as a normal stream.
-     * <p>
-     * The specified <code>IOException</code> will be thrown when an attempt to read or skip beyond that is made.
-     * If it is <code>null</code>, read and skip methods will return <code>-1</code> instead of throwing an
-     * <code>IOException</code>.
-     * </p>
      *
-     * @param in the stream to bind
-     * @param allowedBytes the total number of bytes this stream allows to be read or skipped, <code>-1</code> for no limitation
-     * @param streamOutOfBoundException the IOException to throw when an attempt to read or skip beyond <code>allowedBytes</code>
-     * is made, <code>null</code> to return -1 instead
-     * @see StreamOutOfBoundException
+     * <p>If the <code>throwStreamOutOfBoundException</code> parameter is <code>true</code>, <code>read</code> and
+     * <code>skip</code> methods will throw a {@link StreamOutOfBoundException} when an attempt to read or skip beyond
+     * that limit is made. If <code>false</code>, <code>-1</code> will be returned.</p>
+     *
+     * @param in the stream to be bounded
+     * @param allowedBytes the total number of bytes that are allowed to be read or skipped, <code>-1</code> for no limit
+     * @param throwStreamOutOfBoundException <code>true</code> to throw when an attempt to read or skip beyond the byte
+     * limit is made, <code>false</code> to simply return <code>-1</code>
      */
-    public BoundedInputStream(InputStream in, long allowedBytes, IOException streamOutOfBoundException) {
+    public BoundedInputStream(InputStream in, long allowedBytes, boolean throwStreamOutOfBoundException) {
         super(in);
 
         this.allowedBytes = allowedBytes;
-        this.outOfBoundException = streamOutOfBoundException;
+        this.throwStreamOutOfBoundException = throwStreamOutOfBoundException;
     }
 
 
-    /**
-     * Returns the total number of bytes that this stream allows to be read, <code>-1</code> is this stream is
-     * not bounded.
-     *
-     * @return the total number of bytes that this stream allows to be read, <code>-1</code> is this stream is
-     * not bounded
-     */
+    ////////////////////////////
+    // Bounded implementation //
+    ////////////////////////////
+
     public long getAllowedBytes() {
         return allowedBytes;
     }
 
-    /**
-     * Returns the total number of bytes that have been read or skipped thus far.
-     *
-     * @return the total number of bytes that have been read or skipped thus far
-     */
-    public long getReadCounter() {
+    public long getProcessedBytes() {
         return totalRead;
     }
 
-    /**
-     * Returns the remaining number of bytes that this stream allows to be read, {@link Long#MAX_VALUE} if this stream
-     * is not bounded.
-     *
-     * @return the remaining number of bytes that this stream allows to be read, {@link Long#MAX_VALUE} if this stream
-     * is not bounded.
-     */
     public long getRemainingBytes() {
         return allowedBytes<=-1?Long.MAX_VALUE:allowedBytes-totalRead;
     }
@@ -111,10 +89,10 @@ public class BoundedInputStream extends FilterInputStream {
     @Override
     public synchronized int read() throws IOException {
         if(getRemainingBytes()==0) {
-            if(outOfBoundException==null)
-                return -1;
+            if(throwStreamOutOfBoundException)
+                throw new StreamOutOfBoundException(allowedBytes);
 
-            throw outOfBoundException;
+            return -1;
         }
 
         int i = in.read();
@@ -132,10 +110,10 @@ public class BoundedInputStream extends FilterInputStream {
     public synchronized int read(byte b[], int off, int len) throws IOException {
         int canRead = (int)Math.min(getRemainingBytes(), len);
         if(canRead==0) {
-            if(outOfBoundException==null)
-                return -1;
+            if(throwStreamOutOfBoundException)
+                throw new StreamOutOfBoundException(allowedBytes);
 
-            throw outOfBoundException;
+            return -1;
         }
 
         int nbRead = in.read(b, off, canRead);
@@ -149,10 +127,10 @@ public class BoundedInputStream extends FilterInputStream {
     public synchronized long skip(long n) throws IOException {
         int canSkip = (int)Math.min(getRemainingBytes(), n);
         if(canSkip==0) {
-            if(outOfBoundException==null)
-                return -1;
+            if(throwStreamOutOfBoundException)
+                throw new StreamOutOfBoundException(allowedBytes);
 
-            throw outOfBoundException;
+            return -1;
         }
 
         long nbSkipped = in.skip(canSkip);
@@ -166,6 +144,8 @@ public class BoundedInputStream extends FilterInputStream {
     public synchronized int available() throws IOException {
         return Math.min(in.available(), (int)getRemainingBytes());
     }
+
+    // Methods not implemented
 
     /**
      * Always returns <code>false</code>, even if the underlying stream supports it.

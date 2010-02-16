@@ -62,7 +62,8 @@ import java.util.logging.Level;
  * @see PathCanonizer
  * @author Maxence Bernard
  */
-public class DefaultSchemeParser implements SchemeParser {
+public class
+        DefaultSchemeParser implements SchemeParser {
 
     /** True if query should be parsed and not considered as part of the path */
     protected boolean parseQuery;

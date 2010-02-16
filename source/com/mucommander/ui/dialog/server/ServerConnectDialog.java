@@ -21,6 +21,8 @@ package com.mucommander.ui.dialog.server;
 
 import com.mucommander.auth.Credentials;
 import com.mucommander.auth.CredentialsMapping;
+import com.mucommander.file.FileFactory;
+import com.mucommander.file.FileProtocols;
 import com.mucommander.file.FileURL;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionProperties;
@@ -69,7 +71,7 @@ public class ServerConnectDialog extends FocusDialog implements ActionListener, 
     // Dialog's width has to be at least 320
     private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(480,0);	
 	
-    private static Class<? extends ServerPanel> lastPanelClass = SMBPanel.class;
+    private static Class<? extends ServerPanel> lastPanelClass = FTPPanel.class;
 
 
     /**
@@ -99,11 +101,13 @@ public class ServerConnectDialog extends FocusDialog implements ActionListener, 
 		
         this.tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 
-        addTab("SMB", new SMBPanel(this, mainFrame), selectPanelClass);
-        addTab("FTP", new FTPPanel(this, mainFrame), selectPanelClass);
-        addTab("SFTP", new SFTPPanel(this, mainFrame), selectPanelClass);
-        addTab("HTTP", new HTTPPanel(this, mainFrame), selectPanelClass);
-        addTab("NFS", new NFSPanel(this, mainFrame), selectPanelClass);
+        addTab(FileProtocols.FTP, new FTPPanel(this, mainFrame), selectPanelClass);
+        addTab(FileProtocols.HDFS, new HDFSPanel(this, mainFrame), selectPanelClass);
+        addTab(FileProtocols.HTTP, new HTTPPanel(this, mainFrame), selectPanelClass);
+        addTab(FileProtocols.NFS, new NFSPanel(this, mainFrame), selectPanelClass);
+        addTab(FileProtocols.S3, new S3Panel(this, mainFrame), selectPanelClass);
+        addTab(FileProtocols.SFTP, new SFTPPanel(this, mainFrame), selectPanelClass);
+        addTab(FileProtocols.SMB, new SMBPanel(this, mainFrame), selectPanelClass);
 
         currentServerPanel = getCurrentServerPanel();
 
@@ -140,10 +144,13 @@ public class ServerConnectDialog extends FocusDialog implements ActionListener, 
     }
 
 
-    public void addTab(String title, ServerPanel serverPanel, Class<? extends ServerPanel> selectPanelClass) {
+    public void addTab(String protocol, ServerPanel serverPanel, Class<? extends ServerPanel> selectPanelClass) {
+        if(!FileFactory.isRegisteredProtocol(protocol))
+            return;
+
         JPanel northPanel = new JPanel(new BorderLayout());
         northPanel.add(serverPanel, BorderLayout.NORTH);
-        tabbedPane.addTab(title, northPanel);
+        tabbedPane.addTab(protocol.toUpperCase(), northPanel);
 
         if(selectPanelClass.equals(serverPanel.getClass()))
             tabbedPane.setSelectedComponent(northPanel);

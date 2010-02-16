@@ -27,6 +27,7 @@ import com.mucommander.file.impl.local.LocalProtocolProvider;
 import com.mucommander.file.util.FileCache;
 import com.mucommander.file.util.PathTokenizer;
 import com.mucommander.file.util.PathUtils;
+import com.mucommander.runtime.JavaVersions;
 import com.mucommander.runtime.OsFamilies;
 
 import java.io.IOException;
@@ -111,8 +112,12 @@ public class FileFactory {
         registerProtocol(FileProtocols.FTP, new com.mucommander.file.impl.ftp.FTPProtocolProvider());
         registerProtocol(FileProtocols.NFS, new com.mucommander.file.impl.nfs.NFSProtocolProvider());
         registerProtocol(FileProtocols.SFTP, new com.mucommander.file.impl.sftp.SFTPProtocolProvider());
-//        registerProtocol(FileProtocols.HDFS, new HDFSProtocolProvider());
-//        registerProtocol(FileProtocols.S3,        new com.mucommander.file.impl.s3.S3Provider());
+        if(JavaVersions.JAVA_1_6.isCurrentOrHigher()) {
+            // Hadoop requires Java 1.6
+            registerProtocol(FileProtocols.HDFS, new com.mucommander.file.impl.hadoop.HDFSProtocolProvider());
+//            registerProtocol(FileProtocols.S3, new com.mucommander.file.impl.hadoop.S3ProtocolProvider());
+        }
+//        registerProtocol(FileProtocols.S3, new com.mucommander.file.impl.s3.S3ProtocolProvider());
 
         // Register built-in archive file formats, order for TarArchiveFile and GzipArchiveFile/Bzip2ArchiveFile is important:
         // TarArchiveFile must match 'tar.gz'/'tar.bz2' files before GzipArchiveFile/Bzip2ArchiveFile does.

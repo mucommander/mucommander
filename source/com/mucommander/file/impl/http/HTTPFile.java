@@ -781,9 +781,8 @@ public class HTTPFile extends ProtocolFile {
             checkHTTPResponse(conn);
 
             // Read up to blockLen bytes
-            InputStream in = null;
+            InputStream in = conn.getInputStream();
             try {
-                in = conn.getInputStream();
                 int totalRead = 0;
                 int read;
                 while(totalRead<blockLen) {
@@ -797,8 +796,7 @@ public class HTTPFile extends ProtocolFile {
                 return totalRead;
             }
             finally {
-                if(in!=null)
-                    in.close();
+                in.close();
             }
         }
 

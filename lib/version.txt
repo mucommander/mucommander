@@ -1,13 +1,18 @@
 include/ant-bzip2.jar	        -> from Ant 1.7.0 (compiled for Java 1.4)
-include/commons-collections.jar -> Commons-logging (custom-made JAR, empty stubs)
-include/commons-logging.jar     -> Commons-logging (custom-made JAR, empty stubs)
-include/commons-net-ftp.jar	    -> Commons-net FTP 2.0 (custom-made with a patch)
+include/commons-codec.jar       -> Commons-Codec 1.3 (Jets3t, Hadoop dependency)
+include/commons-collections.jar -> Commons-Collections 3.2.1
+include/commons-httpclient.jar  -> Commons-HttpClient 3.1 (Jets3t dependency)
+include/commons-logging.jar
+include/commons-logging-api.jar -> Commons-Logging 1.1.1 (Jets3t, Hadoop dependency)
+include/commons-net-ftp.jar	    -> Commons-Net FTP 2.0 (custom-made with a patch)
+include/hadoop-core.jar         -> Hadoop 0.20.1 (trimmed to remove webapps and bin.tgz)
 include/icu4j.jar               -> IBM ICU4J 3.8.1, JAR file trimmed to include
                                    only the CharsetDetector functionality
 include/j2ssh.jar	            -> J2SSH 0.2.9 (patched and compiled for Java 1.4)
 include/jakarta-oro.jar	        -> Jakarta Oro 2.0.8
 include/jcifs.jar	            -> jCIFS 1.3.8 (patched and compiled for Java 1.4)
-include/jmdns.jar               -> jmdns 1.0 (with some sourceforge.net patches,
+include/jets3t.jar	            -> Jets3t 0.7.2
+include/jmdns.jar               -> Jmdns 1.0 (with some sourceforge.net patches,
                                    compiled for Java 1.4)
 include/jna.jar                 -> JNA (Java Native Access) 3.2.2, with win32 DLLs
                                    and examples classes.

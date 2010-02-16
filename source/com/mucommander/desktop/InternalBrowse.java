@@ -78,7 +78,7 @@ class InternalBrowse extends UrlOperation {
         // If java.awt.Desktop browsing is available, use it.
         if(isAvailable()) {
             try {getDesktop().browse(url.toURI());}
-            catch(URISyntaxException e) {throw new IOException(e);}
+            catch(URISyntaxException e) {throw new IOException(e.getMessage());}
         }
 
         throw new UnsupportedOperationException();
