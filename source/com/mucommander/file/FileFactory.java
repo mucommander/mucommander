@@ -407,9 +407,13 @@ public class FileFactory {
      * @throws java.io.IOException if something went wrong during file creation.
      */
     public static AbstractFile getFile(FileURL fileURL, AbstractFile parent, Object... instantiationParams) throws IOException {
+        String protocol = fileURL.getScheme();
+        if(!isRegisteredProtocol(protocol))
+            throw new IOException("Unsupported file protocol: "+protocol);
+
         String filePath = fileURL.getPath();
         // For local paths under Windows (e.g. "/C:\temp"), remove the leading '/' character
-        if(OsFamilies.WINDOWS.isCurrent() && FileProtocols.FILE.equals(fileURL.getScheme()))
+        if(OsFamilies.WINDOWS.isCurrent() && FileProtocols.FILE.equals(protocol))
             filePath = PathUtils.removeLeadingSeparator(filePath, "/");
 
         String pathSeparator = fileURL.getPathSeparator();
