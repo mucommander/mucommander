@@ -28,6 +28,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 /**
+ * <code>S3Root</code> represents the Amazon S3 root resource, also known as 'service'.
+ *
  * @author Maxence Bernard
  */
 public class S3Root extends S3File {

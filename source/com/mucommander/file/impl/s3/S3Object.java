@@ -32,6 +32,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 /**
+ * <code>S3Object</code> represents an Amazon S3 object.
+ *
  * @author Maxence Bernard
  */
 public class S3Object extends S3File {

@@ -34,6 +34,8 @@ import java.net.URLDecoder;
 import java.util.StringTokenizer;
 
 /**
+ * A file protocol provider for the Amazon S3 protocol.
+ *
  * @author Maxence Bernard
  */
 public class S3ProtocolProvider implements ProtocolProvider {

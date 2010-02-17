@@ -27,6 +27,9 @@ import org.junit.BeforeClass;
 import java.io.IOException;
 
 /**
+ * An {@link AbstractFileTest} implementation for the Amazon S3 file implementation.
+ * The S3 temporary folder where test files are created is defined by the {@link #TEMP_FOLDER_PROPERTY} system property.
+ *
  * @author Maxence Bernard
  */
 public class S3FileTest extends AbstractFileTest {

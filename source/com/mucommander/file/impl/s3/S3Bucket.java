@@ -29,6 +29,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 /**
+ * <code>S3Bucket</code> represents an Amazon S3 bucket.
+ *
  * @author Maxence Bernard
  */
 public class S3Bucket extends S3File {

@@ -32,6 +32,8 @@ import java.io.OutputStream;
 import java.util.Date;
 
 /**
+ * Super class of {@link S3Root}, {@link S3Bucket} and {@link S3Object}.
+ *
  * @author Maxence Bernard
  */
 public abstract class S3File extends ProtocolFile {
