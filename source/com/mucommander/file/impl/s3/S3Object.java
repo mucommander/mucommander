@@ -26,6 +26,7 @@ import com.mucommander.io.FilteredOutputStream;
 import com.mucommander.io.RandomAccessInputStream;
 import org.jets3t.service.S3Service;
 import org.jets3t.service.S3ServiceException;
+import org.jets3t.service.model.S3Owner;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -43,6 +44,10 @@ public class S3Object extends S3File {
 
     /** Maximum size of an S3 object (5GB) */
     private final static long MAX_OBJECT_SIZE = 5368709120l;
+
+    // TODO: add support for ACL ? (would cost an extra request per object)
+    /** Default permissions for S3 objects */
+    private final static FilePermissions DEFAULT_PERMISSIONS = new SimpleFilePermissions(384);   // rw-------
 
 
     protected S3Object(FileURL url, S3Service service, String bucketName) throws AuthException {
@@ -87,12 +92,12 @@ public class S3Object extends S3File {
 
     @Override
     public String getOwner() {
-        return null;
+        return atts.getOwner();
     }
 
     @Override
     public boolean canGetOwner() {
-        return false;
+        return true;
     }
 
     @Override
@@ -391,29 +396,30 @@ public class S3Object extends S3File {
         }
 
         private void setAttributes(org.jets3t.service.model.S3Object object) {
-            // TODO
-            setPermissions(new SimpleFilePermissions(PermissionBits.FULL_PERMISSION_INT));
-            setOwner(null);
-            setGroup(null);
-
             setDirectory(object.getKey().endsWith("/"));
-            setDate(object.getLastModifiedDate().getTime());
             setSize(object.getContentLength());
+            setDate(object.getLastModifiedDate().getTime());
+            setPermissions(DEFAULT_PERMISSIONS);
+            // Note: owner is null for common prefix objects
+            S3Owner owner = object.getOwner();
+            setOwner(owner==null?null:owner.getDisplayName());
         }
 
         private void fetchAttributes() throws AuthException {
             try {
                 setAttributes(service.getObjectDetails(bucketName, getObjectKey(), null, null, null, null));
+                // File exists on the server
                 setExists(true);
             }
             catch(S3ServiceException e) {
                 // File doesn't exist on the server
                 setExists(false);
+
                 setDirectory(false);
-                setDate(0);
                 setSize(0);
-                // TODO
-                setPermissions(new SimpleFilePermissions(PermissionBits.FULL_PERMISSION_INT));
+                setDate(0);
+                setPermissions(FilePermissions.EMPTY_FILE_PERMISSIONS);
+                setOwner(null);
 
                 int code = e.getResponseCode();
                 if(code==401 || code==403)

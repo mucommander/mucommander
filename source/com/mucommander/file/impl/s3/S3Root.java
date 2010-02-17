@@ -36,6 +36,9 @@ public class S3Root extends S3File {
 
     private SimpleFileAttributes atts;
 
+    /** Default permissions for the S3 root */
+    private final static FilePermissions DEFAULT_PERMISSIONS = new SimpleFilePermissions(448);   // rwx------
+
     protected S3Root(FileURL url, S3Service service) {
         super(url, service);
 
@@ -45,7 +48,7 @@ public class S3Root extends S3File {
         atts.setDate(0);
         atts.setSize(0);
         atts.setDirectory(true);
-        atts.setPermissions(new SimpleFilePermissions(FilePermissions.FULL_PERMISSION_INT));
+        atts.setPermissions(DEFAULT_PERMISSIONS);
         atts.setOwner(null);
         atts.setGroup(null);
     }

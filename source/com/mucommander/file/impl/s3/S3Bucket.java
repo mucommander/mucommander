@@ -38,6 +38,11 @@ public class S3Bucket extends S3File {
     private String bucketName;
     private S3BucketFileAttributes atts;
 
+    // TODO: add support for ACL ? (would cost an extra request per bucket)
+    /** Default permissions for S3 buckets */
+    private final static FilePermissions DEFAULT_PERMISSIONS = new SimpleFilePermissions(448);   // rwx------
+
+
     protected S3Bucket(FileURL url, S3Service service, String bucketName) throws AuthException {
         super(url, service);
 
@@ -178,23 +183,25 @@ public class S3Bucket extends S3File {
 
         private void setAttributes(org.jets3t.service.model.S3Bucket bucket) {
             setDirectory(true);
-            setSize(0);
-            setGroup(null);
-            setOwner(bucket.getOwner().getDisplayName());
             setDate(bucket.getCreationDate().getTime());
-            // TODO
-            setPermissions(new SimpleFilePermissions(PermissionBits.FULL_PERMISSION_INT));
+            setPermissions(DEFAULT_PERMISSIONS);
+            setOwner(bucket.getOwner().getDisplayName());
         }
 
         private void fetchAttributes() throws AuthException {
             try {
                 setAttributes(service.getBucket(bucketName));
+                // File exists on the server
                 setExists(true);
             }
             catch(S3ServiceException e) {
                 // File doesn't exist on the server
                 setExists(false);
+
+                setDirectory(false);
                 setDate(0);
+                setPermissions(FilePermissions.EMPTY_FILE_PERMISSIONS);
+                setOwner(null);
 
                 int code = e.getResponseCode();
                 if(code==401 || code==403)

@@ -79,12 +79,13 @@ public abstract class S3File extends ProtocolFile {
                 throw new IOException();
             }
 
-            AbstractFile[] children = new AbstractFile[objects.length+commonPrefixes.length-(prefix.equals("")?0:1)];
+            AbstractFile[] children = new AbstractFile[objects.length+commonPrefixes.length];
             FileURL childURL;
             int i=0;
             String objectKey;
 
             for(org.jets3t.service.model.S3Object object : objects) {
+                // Discard the object corresponding to the prefix itself
                 objectKey = object.getKey();
                 if(objectKey.equals(prefix))
                     continue;
@@ -102,10 +103,21 @@ public abstract class S3File extends ProtocolFile {
                 childURL.setPath(bucketName + "/" + commonPrefix);
 
                 directoryObject = new org.jets3t.service.model.S3Object(commonPrefix);
+                // Common prefixes are not objects per se, and therefore do not have a date, content-length nor owner.
                 directoryObject.setLastModifiedDate(new Date(System.currentTimeMillis()));
                 directoryObject.setContentLength(0);
                 children[i] = FileFactory.getFile(childURL, parent, service, directoryObject);
                 i++;
+            }
+
+            // Trim the array if an object was discarded.
+            // Note: Having to recreate an array sucks (puts pressure on the GC), but I haven't found a reliable way
+            // to know in advance whether the prefix will appear in the results or not.
+            if(i<children.length) {
+                AbstractFile[] childrenTrimmed = new AbstractFile[i];
+                System.arraycopy(children, 0, childrenTrimmed, 0, i);
+
+                return childrenTrimmed;
             }
 
             return children;
