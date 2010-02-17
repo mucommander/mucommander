@@ -46,8 +46,7 @@ public class DeleteAction extends SelectedFilesAction {
 
     @Override
     protected boolean getFileTableCondition(FileTable fileTable) {
-        return fileTable.getCurrentFolder().isFileOperationSupported(FileOperation.DELETE)
-            && super.getFileTableCondition(fileTable);
+        return super.getFileTableCondition(fileTable) && fileTable.getSelectedFile().isFileOperationSupported(FileOperation.DELETE);
     }
 
     @Override

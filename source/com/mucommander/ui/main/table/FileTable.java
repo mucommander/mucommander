@@ -800,20 +800,27 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
 
     /**
      * Returns <code>true</code> if the given column can be displayed given the current folder. Certain columns such as
-     * {@link Columns#OWNER} and {@link Columns#GROUP} can be displayed only if the current folder can supply this
-     * information for the files it contains.
+     * {@link Columns#OWNER} and {@link Columns#GROUP} can be displayed only if current folder's files are capable
+     * of supplying this information.
      * Note that the return value does not take into account the column's current enabled state.
      *
      * @param colNum column index, see {@link Columns} for allowed values
      * @return true if the given column can be displayed given the current folder
      */
     public boolean isColumnDisplayable(int colNum) {
+        // Check this against the children's file implementation whenever possible: certain file implementations may
+        // return different values for the current folder than for its children. For instance, this is the case for file
+        // protocols that have a special file implementation for the root folder (s3 is one).
+        AbstractFile file = getFileTableModel().getFileAt(0);
+        if(file==null)
+            file = getCurrentFolder();
+
         // The Owner and Group columns are displayable only if current folder has this information
         if(colNum==Columns.OWNER) {
-            return getCurrentFolder().canGetOwner();
+            return file.canGetOwner();
         }
         else if(colNum==Columns.GROUP) {
-            return getCurrentFolder().canGetGroup();
+            return file.canGetGroup();
         }
 
         return true;

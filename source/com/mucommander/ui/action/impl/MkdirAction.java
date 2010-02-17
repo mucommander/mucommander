@@ -18,6 +18,7 @@
 
 package com.mucommander.ui.action.impl;
 
+import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileOperation;
 import com.mucommander.ui.action.*;
 import com.mucommander.ui.dialog.file.MkdirDialog;
@@ -50,7 +51,12 @@ public class MkdirAction extends MuAction implements ActivePanelListener, Locati
     }
 
     private void toggleEnabledState() {
-        setEnabled(mainFrame.getActiveTable().getCurrentFolder().isFileOperationSupported(FileOperation.CREATE_DIRECTORY));
+        AbstractFile selectedFile = mainFrame.getActiveTable().getSelectedFile();
+        // If there is no selected file, do not rely on the action being supported by the current folder as this
+        // would be incorrect for some filesystems which do not support operations consistently across the
+        // filesystem (e.g. S3). In that case, err on the safe side and enable the action, even if the operation
+        // end up not being supported.
+        setEnabled(selectedFile==null || selectedFile.isFileOperationSupported(FileOperation.CREATE_DIRECTORY));
     }
 
     @Override

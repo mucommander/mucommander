@@ -18,10 +18,6 @@
 
 package com.mucommander.ui.main.table;
 
-import java.util.Date;
-
-import javax.swing.table.AbstractTableModel;
-
 import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.filter.FileFilter;
@@ -30,6 +26,9 @@ import com.mucommander.file.util.FileComparator;
 import com.mucommander.file.util.FileSet;
 import com.mucommander.text.CustomDateFormat;
 import com.mucommander.text.SizeFormat;
+
+import javax.swing.table.AbstractTableModel;
+import java.util.Date;
 
 
 /**
@@ -255,8 +254,6 @@ public class FileTableModel extends AbstractTableModel {
 		
         AbstractFile file;
         int fileIndex = 0;
-        boolean canGetOwner = currentFolder.canGetOwner();
-        boolean canGetGroup = currentFolder.canGetGroup();
 
         for(int i=parent==null?0:1; i<len; i++) {
             file = getCachedFileAtRow(i);
@@ -265,10 +262,8 @@ public class FileTableModel extends AbstractTableModel {
             cellValuesCache[cellIndex][Columns.SIZE-1] = file.isDirectory()?DIRECTORY_SIZE_STRING:SizeFormat.format(file.getSize(), sizeFormat);
             cellValuesCache[cellIndex][Columns.DATE-1] = CustomDateFormat.format(new Date(file.getDate()));
             cellValuesCache[cellIndex][Columns.PERMISSIONS-1] = file.getPermissionsString();
-            if(canGetOwner)
-                cellValuesCache[cellIndex][Columns.OWNER-1] = file.getOwner();
-            if(canGetGroup)
-                cellValuesCache[cellIndex][Columns.GROUP-1] = file.getGroup();
+            cellValuesCache[cellIndex][Columns.OWNER-1] = file.getOwner();
+            cellValuesCache[cellIndex][Columns.GROUP-1] = file.getGroup();
 
             fileIndex++;
         }
