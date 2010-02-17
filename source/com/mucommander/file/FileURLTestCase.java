@@ -426,7 +426,8 @@ public abstract class FileURLTestCase extends TestCase {
 
 
     /**
-     * Parses some borderline but valid URLs and ensures that they parse and the getters return the proper part values.
+     * Parses URLs, some borderline but that we consider nonetheless valid, and ensures that they parse without error
+     * and that getters return proper part values.
      *
      * @throws MalformedURLException should not happen
      */
@@ -444,6 +445,27 @@ public abstract class FileURLTestCase extends TestCase {
         getURL("login", "password", "host", -1, "/path@at/to@at", "query");
     }
 
+    /**
+     * Ensure that non URL-safe characters in login and password parts are properly handled, both when parsing
+     * and representing URLs as string.
+     *
+     * @throws MalformedURLException should not happen
+     */
+    public void testCredentialsURLEncoding() throws MalformedURLException {
+        FileURL url = getRootURL();
+
+        String urlDecodedString = ":@&=+$,/?t%#[]";
+        String urlEncodedString = "%3A%40%26%3D%2B%24%2C%2F%3Ft%25%23%5B%5D";
+
+        url.setCredentials(new Credentials(urlDecodedString, urlDecodedString));
+        String urlRep = url.getScheme()+"://"+urlEncodedString+":"+urlEncodedString+"@";
+        assertEquals(urlRep, url.toString(true, false));
+
+        url = FileURL.getFileURL(urlRep);
+        Credentials credentials = url.getCredentials();
+        assertEquals(credentials.getLogin(), urlDecodedString);
+        assertEquals(credentials.getPassword(), urlDecodedString);
+    }
 
     /**
      * Tests FileURL's getters and setters.

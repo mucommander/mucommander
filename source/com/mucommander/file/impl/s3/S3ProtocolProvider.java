@@ -30,7 +30,6 @@ import org.jets3t.service.impl.rest.httpclient.RestS3Service;
 import org.jets3t.service.security.AWSCredentials;
 
 import java.io.IOException;
-import java.net.URLDecoder;
 import java.util.StringTokenizer;
 
 /**
@@ -50,7 +49,7 @@ public class S3ProtocolProvider implements ProtocolProvider {
 
         if(instantiationParams.length==0) {
             try {
-                service = new RestS3Service(new AWSCredentials(credentials.getLogin(), URLDecoder.decode(credentials.getPassword(), "UTF-8")));
+                service = new RestS3Service(new AWSCredentials(credentials.getLogin(), credentials.getPassword()));
                 Jets3tProperties props = new Jets3tProperties();
                 props.setProperty("s3service.s3-endpoint", url.getHost());
             }

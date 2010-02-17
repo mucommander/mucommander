@@ -23,6 +23,7 @@ import com.mucommander.file.impl.local.LocalFile;
 import com.mucommander.runtime.OsFamilies;
 
 import java.net.MalformedURLException;
+import java.net.URLDecoder;
 import java.util.logging.Level;
 
 /**
@@ -62,8 +63,7 @@ import java.util.logging.Level;
  * @see PathCanonizer
  * @author Maxence Bernard
  */
-public class
-        DefaultSchemeParser implements SchemeParser {
+public class DefaultSchemeParser implements SchemeParser {
 
     /** True if query should be parsed and not considered as part of the path */
     protected boolean parseQuery;
@@ -239,18 +239,17 @@ public class
             String authority = url.substring(pos, hostEndPos);
             pos = 0;
 
-            // Parse login and password (if specified)
-            // Login/password may contain @ characters, so consider the last '@' occurrence (if any) as the host delimiter.
-            // Note that filenames may contain @ characters, but that's OK here since path is not contained in the String
+            // Parse login and password (if specified).
+            // They may contain non-URL safe characters that are decoded here, and re-encoded by FileURL#toString.
             int atPos = authority.lastIndexOf('@');
             int colonPos;
             // Filenames may contain @ chars, so atPos must be lower than next separator's position (if any)
             if(atPos!=-1 && (separatorPos==-1 || atPos<separatorPos)) {
                 colonPos = authority.indexOf(':');
-                String login = authority.substring(0, colonPos==-1?atPos:colonPos);
+                String login = URLDecoder.decode(authority.substring(0, colonPos==-1?atPos:colonPos), "UTF-8");
                 String password;
                 if(colonPos!=-1)
-                    password = authority.substring(colonPos+1, atPos);
+                    password = URLDecoder.decode(authority.substring(colonPos+1, atPos), "UTF-8");
                 else
                     password = null;
 

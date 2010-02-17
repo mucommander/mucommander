@@ -149,10 +149,19 @@ public class S3Object extends S3File {
     public void copyRemotelyTo(AbstractFile destFile) throws IOException {
         checkCopyRemotelyPrerequisites(destFile, true, false);
 
-        // TODO: check bucket location
-
         S3Object destObjectFile = (S3Object)destFile.getAncestor(S3Object.class);
+
         try {
+            // Let the COPY request fail if both objects are not located in the same region, saves 2 HEAD BUCKET requests.
+//            // Ensure that both objects' bucket are located in the same region (null means US standard)
+//            String sourceBucketLocation = service.getBucket(bucketName).getLocation();
+//            String destBucketLocation = destObjectFile.service.getBucket(destObjectFile.bucketName).getLocation();
+//            if((sourceBucketLocation==null && destBucketLocation!=null)
+//            || (sourceBucketLocation!=null && destBucketLocation==null)
+//            || !(sourceBucketLocation!=null && !sourceBucketLocation.equals(destBucketLocation))
+//            || !destBucketLocation.equals(destBucketLocation))
+//                throw new IOException();
+
             boolean isDirectory = isDirectory();
             org.jets3t.service.model.S3Object destObject = new org.jets3t.service.model.S3Object(destObjectFile.getObjectKey(isDirectory));
 
@@ -394,7 +403,7 @@ public class S3Object extends S3File {
 
         private void fetchAttributes() throws AuthException {
             try {
-                    setAttributes(service.getObjectDetails(bucketName, getObjectKey(), null, null, null, null));
+                setAttributes(service.getObjectDetails(bucketName, getObjectKey(), null, null, null, null));
                 setExists(true);
             }
             catch(S3ServiceException e) {
