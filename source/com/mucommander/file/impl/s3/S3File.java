@@ -54,9 +54,7 @@ public abstract class S3File extends ProtocolFile {
     }
 
     protected static IOException getIOException(S3ServiceException e, FileURL fileURL) throws IOException {
-        int code = e.getResponseCode();
-        if(code==401 || code==403)
-            return new AuthException(fileURL);
+        handleAuthException(e, fileURL);
 
         Throwable cause = e.getCause();
         if(cause instanceof IOException)
@@ -66,6 +64,12 @@ public abstract class S3File extends ProtocolFile {
             return new IOException(e);
 
         return new IOException(e.getMessage());
+    }
+
+    protected static void handleAuthException(S3ServiceException e, FileURL fileURL) throws AuthException {
+        int code = e.getResponseCode();
+        if(code==401 || code==403)
+            throw new AuthException(fileURL);
     }
     
     protected AbstractFile[] listObjects(String bucketName, String prefix, S3File parent) throws IOException {

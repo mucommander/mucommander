@@ -408,11 +408,11 @@ public class S3Object extends S3File {
         private void fetchAttributes() throws AuthException {
             try {
                 setAttributes(service.getObjectDetails(bucketName, getObjectKey(), null, null, null, null));
-                // File exists on the server
+                // Object does not exist on the server
                 setExists(true);
             }
             catch(S3ServiceException e) {
-                // File doesn't exist on the server
+                // Object does not exist on the server, or could not be retrieved
                 setExists(false);
 
                 setDirectory(false);
@@ -421,9 +421,7 @@ public class S3Object extends S3File {
                 setPermissions(FilePermissions.EMPTY_FILE_PERMISSIONS);
                 setOwner(null);
 
-                int code = e.getResponseCode();
-                if(code==401 || code==403)
-                    throw new AuthException(fileURL);
+                handleAuthException(e, fileURL);
             }
         }
 

@@ -189,13 +189,25 @@ public class S3Bucket extends S3File {
         }
 
         private void fetchAttributes() throws AuthException {
+            org.jets3t.service.model.S3Bucket bucket;
+            S3ServiceException e = null;
             try {
-                setAttributes(service.getBucket(bucketName));
-                // File exists on the server
-                setExists(true);
+                // Note: unlike getObjectDetails, getBucket returns null when the bucket does not exist
+                // (that is because the corresponding request is a GET on the root resource, not a HEAD on the bucket).
+                bucket = service.getBucket(bucketName);
             }
-            catch(S3ServiceException e) {
-                // File doesn't exist on the server
+            catch(S3ServiceException ex) {
+                e = ex;
+                bucket = null;
+            }
+
+            if(bucket!=null) {
+                // Bucket exists
+                setExists(true);
+                setAttributes(bucket);
+            }
+            else {
+                // Bucket doesn't exist on the server, or could not be retrieved
                 setExists(false);
 
                 setDirectory(false);
@@ -203,9 +215,8 @@ public class S3Bucket extends S3File {
                 setPermissions(FilePermissions.EMPTY_FILE_PERMISSIONS);
                 setOwner(null);
 
-                int code = e.getResponseCode();
-                if(code==401 || code==403)
-                    throw new AuthException(fileURL);
+                if(e!=null)
+                    handleAuthException(e, fileURL);
             }
         }
 
