@@ -72,7 +72,6 @@ public class S3FileTest extends AbstractFileTest {
         return new FileOperation[] {
             FileOperation.READ_FILE,
             FileOperation.RANDOM_READ_FILE,
-            FileOperation.WRITE_FILE,
             FileOperation.CREATE_DIRECTORY,
             FileOperation.LIST_CHILDREN,
             FileOperation.DELETE,

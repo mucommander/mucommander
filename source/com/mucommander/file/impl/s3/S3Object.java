@@ -22,8 +22,8 @@ import com.mucommander.auth.AuthException;
 import com.mucommander.file.*;
 import com.mucommander.io.BlockRandomInputStream;
 import com.mucommander.io.FileTransferException;
-import com.mucommander.io.FilteredOutputStream;
 import com.mucommander.io.RandomAccessInputStream;
+import com.mucommander.io.StreamUtils;
 import org.jets3t.service.S3Service;
 import org.jets3t.service.S3ServiceException;
 import org.jets3t.service.model.S3Owner;
@@ -191,6 +191,8 @@ public class S3Object extends S3File {
     @Override
     public InputStream getInputStream(long offset) throws IOException {
         try {
+            // Note: do *not* use S3ObjectRandomAccessInputStream if the object is to be read sequentially, as it would
+            // add unnecessary billing overhead since it reads the object chunk by chunk, each in a separate GET request.
             return service.getObject(bucketName, getObjectKey(false), null, null, null, null, offset==0?null:offset, null).getDataInputStream();
         }
         catch(S3ServiceException e) {
@@ -207,55 +209,62 @@ public class S3Object extends S3File {
     }
 
     @Override
-    public OutputStream getOutputStream() throws IOException {
-        final AbstractFile tempFile = FileFactory.getTemporaryFile(false);
-        final OutputStream tempOut = tempFile.getOutputStream();
+    @UnsupportedFileOperation
+    public OutputStream getOutputStream() throws UnsupportedFileOperationException {
+        throw new UnsupportedFileOperationException(FileOperation.WRITE_FILE);
 
-        // Update local attributes temporarily
-        atts.setExists(true);
-        atts.setSize(0);
-        atts.setDirectory(false);
+        // This stream is broken: close has no way to know if the transfer went through entirely. If it didn't
+        // (close was called before the end of the input stream), the partially copied file will still be transfered
+        // to S3, when it shouldn't.
 
-        // Return an OutputStream to a temporary file that will be copied to the S3 object when the stream is closed.
-        // The object's length has to be declared in the PUT request's headers and this is the only way to do so.
-        return new FilteredOutputStream(tempOut) {
-            @Override
-            public void close() throws IOException {
-                tempOut.close();
-
-                InputStream tempIn = tempFile.getInputStream();
-                try {
-                    long tempFileSize = tempFile.getSize();
-
-                    org.jets3t.service.model.S3Object object = new org.jets3t.service.model.S3Object(getObjectKey(false));
-                    object.setDataInputStream(tempIn);
-                    object.setContentLength(tempFileSize);
-
-                    // Transfer to S3 and update local file attributes
-                    atts.setAttributes(service.putObject(bucketName, object));
-                    atts.setExists(true);
-                    atts.updateExpirationDate();
-                }
-                catch(S3ServiceException e) {
-                    throw getIOException(e);
-                }
-                finally {
-                    try {
-                        tempIn.close();
-                    }
-                    catch(IOException e) {
-                        // Do not re-throw the exception to prevent exceptions caught in the catch block from being replaced
-                    }
-
-                    try {
-                        tempFile.delete();
-                    }
-                    catch(IOException e) {
-                        // Do not re-throw the exception to prevent exceptions caught in the catch block from being replaced
-                    }
-                }
-            }
-        };
+//        final AbstractFile tempFile = FileFactory.getTemporaryFile(false);
+//        final OutputStream tempOut = tempFile.getOutputStream();
+//
+//        // Update local attributes temporarily
+//        atts.setExists(true);
+//        atts.setSize(0);
+//        atts.setDirectory(false);
+//
+//        // Return an OutputStream to a temporary file that will be copied to the S3 object when the stream is closed.
+//        // The object's length has to be declared in the PUT request's headers and this is the only way to do so.
+//        return new FilteredOutputStream(tempOut) {
+//            @Override
+//            public void close() throws IOException {
+//                tempOut.close();
+//
+//                InputStream tempIn = tempFile.getInputStream();
+//                try {
+//                    long tempFileSize = tempFile.getSize();
+//
+//                    org.jets3t.service.model.S3Object object = new org.jets3t.service.model.S3Object(getObjectKey(false));
+//                    object.setDataInputStream(tempIn);
+//                    object.setContentLength(tempFileSize);
+//
+//                    // Transfer to S3 and update local file attributes
+//                    atts.setAttributes(service.putObject(bucketName, object));
+//                    atts.setExists(true);
+//                    atts.updateExpirationDate();
+//                }
+//                catch(S3ServiceException e) {
+//                    throw getIOException(e);
+//                }
+//                finally {
+//                    try {
+//                        tempIn.close();
+//                    }
+//                    catch(IOException e) {
+//                        // Do not re-throw the exception to prevent exceptions caught in the catch block from being replaced
+//                    }
+//
+//                    try {
+//                        tempFile.delete();
+//                    }
+//                    catch(IOException e) {
+//                        // Do not re-throw the exception to prevent exceptions caught in the catch block from being replaced
+//                    }
+//                }
+//            }
+//        };
     }
 
 
@@ -269,6 +278,9 @@ public class S3Object extends S3File {
 //            throw new UnsupportedFileOperationException(FileOperation.APPEND_FILE);
             throw new FileTransferException(FileTransferException.READING_SOURCE);
         }
+
+        // TODO: add source file size (optional) parameter to copyStream ?
+        // TODO: compute md5 ?
 
         // If the InputStream has random access, we can upload the object directly without having to go through
         // getOutputStream() since we know the object's length already.
@@ -299,9 +311,80 @@ public class S3Object extends S3File {
                 }
             }
         }
-        // Default to AbstractFile's implementation which calls getOutputStream()
         else {
-            super.copyStream(in, append);
+
+            // Copy the stream to a temporary file so that we can know the object's length, which has to be declared
+            // in the PUT request's headers (that is before the transfer is started).
+            final AbstractFile tempFile;
+            final OutputStream tempOut;
+            try {
+                tempFile = FileFactory.getTemporaryFile(false);
+                tempOut = tempFile.getOutputStream();
+            }
+            catch(IOException e) {
+                throw new FileTransferException(FileTransferException.OPENING_DESTINATION);
+            }
+
+            // Update local attributes temporarily
+            atts.setExists(true);
+            atts.setSize(0);
+            atts.setDirectory(false);
+
+            InputStream tempIn = null;
+            try {
+                // Copy the stream to the temporary file
+                try {
+                    StreamUtils.copyStream(in, tempOut, IO_BUFFER_SIZE);
+                }
+                finally {
+                    // Close the stream even if copyStream() threw an IOException
+                    try {
+                        tempOut.close();
+                    }
+                    catch(IOException e) {
+                        // Do not re-throw the exception to prevent swallowing the exception thrown in the try block
+                    }
+                }
+
+                long tempFileSize = tempFile.getSize();
+                try {
+                    tempIn = tempFile.getInputStream();
+                }
+                catch(IOException e) {
+                    throw new FileTransferException(FileTransferException.OPENING_SOURCE);
+                }
+
+                // Init S3 object
+                org.jets3t.service.model.S3Object object = new org.jets3t.service.model.S3Object(getObjectKey(false));
+                object.setDataInputStream(tempIn);
+                object.setContentLength(tempFileSize);
+
+                // Transfer to S3 and update local file attributes
+                atts.setAttributes(service.putObject(bucketName, object));
+                atts.setExists(true);
+                atts.updateExpirationDate();
+            }
+            catch(S3ServiceException e) {
+                throw new FileTransferException(FileTransferException.WRITING_DESTINATION);
+            }
+            finally {
+                if(tempIn!=null) {
+                    try {
+                        tempIn.close();
+                    }
+                    catch(IOException e) {
+                        // Do not re-throw the exception to prevent exceptions caught in the catch block from being replaced
+                    }
+                }
+
+                // Delete the temporary file, no matter what.
+                try {
+                    tempFile.delete();
+                }
+                catch(IOException e) {
+                    // Do not re-throw the exception to prevent exceptions caught in the catch block from being replaced
+                }
+            }
         }
     }
 
@@ -311,8 +394,10 @@ public class S3Object extends S3File {
 
     private class S3ObjectRandomAccessInputStream extends BlockRandomInputStream {
 
-        /** Amount of data returned  */
-        private final static int BLOCK_SIZE = 4096;
+        /** Amount of data returned by each 'GET Object' request */
+        // Note: A GET request on Amazon S3 costs the equivalent of 6KB of data transferred. Setting the block size too
+        // low will cause extra requests to be performed. Setting it too high will cause extra data to be transferred.
+        private final static int BLOCK_SIZE = 8192;
 
         /** Length of the S3 object */
         private long length;
