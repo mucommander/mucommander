@@ -51,12 +51,13 @@ public class MkdirAction extends MuAction implements ActivePanelListener, Locati
     }
 
     private void toggleEnabledState() {
-        AbstractFile selectedFile = mainFrame.getActiveTable().getSelectedFile();
-        // If there is no selected file, do not rely on the action being supported by the current folder as this
+        AbstractFile firstFile = mainFrame.getActiveTable().getFileTableModel().getFileAt(0);
+;
+        // If there is no file at all, do not rely on the action being supported by the current folder as this
         // would be incorrect for some filesystems which do not support operations consistently across the
         // filesystem (e.g. S3). In that case, err on the safe side and enable the action, even if the operation
         // end up not being supported.
-        setEnabled(selectedFile==null || selectedFile.isFileOperationSupported(FileOperation.CREATE_DIRECTORY));
+        setEnabled(firstFile==null || firstFile.isFileOperationSupported(FileOperation.CREATE_DIRECTORY));
     }
 
     @Override

@@ -19,11 +19,11 @@
 package com.mucommander.ui.action.impl;
 
 import com.mucommander.file.FileOperation;
+import com.mucommander.file.filter.FileOperationFilter;
 import com.mucommander.file.util.FileSet;
 import com.mucommander.ui.action.*;
 import com.mucommander.ui.dialog.file.DeleteDialog;
 import com.mucommander.ui.main.MainFrame;
-import com.mucommander.ui.main.table.FileTable;
 
 import javax.swing.KeyStroke;
 import java.awt.event.KeyEvent;
@@ -42,11 +42,7 @@ public class DeleteAction extends SelectedFilesAction {
 
     public DeleteAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
         super(mainFrame, properties);
-    }
-
-    @Override
-    protected boolean getFileTableCondition(FileTable fileTable) {
-        return super.getFileTableCondition(fileTable) && fileTable.getSelectedFile().isFileOperationSupported(FileOperation.DELETE);
+        setSelectedFileFilter(new FileOperationFilter(FileOperation.DELETE));
     }
 
     @Override

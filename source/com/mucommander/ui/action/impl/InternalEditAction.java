@@ -20,6 +20,9 @@ package com.mucommander.ui.action.impl;
 
 import com.mucommander.command.Command;
 import com.mucommander.file.AbstractFile;
+import com.mucommander.file.FileOperation;
+import com.mucommander.file.filter.AndFileFilter;
+import com.mucommander.file.filter.FileOperationFilter;
 import com.mucommander.ui.action.*;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.viewer.EditorRegistrar;
@@ -43,11 +46,16 @@ public class InternalEditAction extends AbstractViewerAction {
     public InternalEditAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
         super(mainFrame, properties);
 
+        // Edit requires being able to write the file (in addition to view requirements)
+        AndFileFilter andFilter = new AndFileFilter();
+        andFilter.addFileFilter(new FileOperationFilter(FileOperation.WRITE_FILE));
+        andFilter.addFileFilter(getSelectedFileFilter());
+        setSelectedFileFilter(andFilter);
+
         ImageIcon icon;
         if((icon = getStandardIcon(EditAction.class)) != null)
             setIcon(icon);
     }
-
 
 
     // - AbstractViewerAction implementation ---------------------------------------------------------------------------
@@ -65,7 +73,6 @@ public class InternalEditAction extends AbstractViewerAction {
     protected Command getCustomCommand() {
         return null;
     }
-
 
 
     // - Factory -------------------------------------------------------------------------------------------------------

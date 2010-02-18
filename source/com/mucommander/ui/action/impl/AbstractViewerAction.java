@@ -20,7 +20,10 @@ package com.mucommander.ui.action.impl;
 
 import com.mucommander.command.Command;
 import com.mucommander.file.AbstractFile;
+import com.mucommander.file.FileOperation;
+import com.mucommander.file.filter.AndFileFilter;
 import com.mucommander.file.filter.AttributeFileFilter;
+import com.mucommander.file.filter.FileOperationFilter;
 import com.mucommander.file.impl.local.LocalFile;
 import com.mucommander.job.TempOpenWithJob;
 import com.mucommander.process.ProcessRunner;
@@ -47,8 +50,11 @@ abstract class AbstractViewerAction extends SelectedFileAction {
     public AbstractViewerAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
         super(mainFrame, properties);
 
-        // Enable this action only when the currently selected file is not a directory.
-        setSelectedFileFilter(new AttributeFileFilter(AttributeFileFilter.DIRECTORY, true));
+        // Enable this action only if the currently selected file is not a directory and can be read.
+        AndFileFilter andFilter = new AndFileFilter();
+        andFilter.addFileFilter(new FileOperationFilter(FileOperation.READ_FILE));
+        andFilter.addFileFilter(new AttributeFileFilter(AttributeFileFilter.DIRECTORY, true));
+        setSelectedFileFilter(andFilter);
     }
 
 

@@ -41,6 +41,15 @@ public abstract class SelectedFileAction extends FileAction {
     }
 
     /**
+     * Returns the filter that restricts the enabled condition to selected files that match the specified filter.
+     *
+     * @return the filter that restricts the enabled condition to selected files that match the specified filter.
+     */
+    public FileFilter getSelectedFileFilter() {
+        return filter;
+    }
+
+    /**
      * Restricts the enabled condition to selected files that match the specified filter.
      *
      * @param filter FileFilter instance
