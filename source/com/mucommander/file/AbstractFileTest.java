@@ -19,10 +19,7 @@
 package com.mucommander.file;
 
 import com.mucommander.file.util.PathUtilsTest;
-import com.mucommander.io.ChecksumOutputStream;
-import com.mucommander.io.FileTransferException;
-import com.mucommander.io.RandomAccessInputStream;
-import com.mucommander.io.RandomAccessOutputStream;
+import com.mucommander.io.*;
 import com.mucommander.io.security.MuProvider;
 import com.mucommander.test.ConditionalTest;
 import com.mucommander.test.ConditionalTestRunner;
@@ -36,10 +33,7 @@ import org.junit.runner.RunWith;
 import javax.swing.Icon;
 import java.awt.Dimension;
 import java.awt.GraphicsEnvironment;
-import java.io.EOFException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.security.MessageDigest;
@@ -144,45 +138,6 @@ public abstract class AbstractFileTest implements ConditionalTest {
 
 
     /**
-     * Fills the given file with a total of <code>length</code> bytes of random data. The data is generated and written
-     * chunk by chunk, where each chunk has a random length comprised between 1 and <code>maxChunkSize</code> bytes.
-     * This method returns the md5 checksum of the data written to the file, allowing to later on test the integrity 
-     * of the file. Before returning, this method asserts that the file exists (as reported by
-     * {@link AbstractFile#exists()}) and that its size (as returned by {@link AbstractFile#getSize()}) matches the
-     * specified length argument.
-     *
-     * <p>The <code>OutputStream</code> used for writing data is retrieved from {@link AbstractFile#getOutputStream()}
-     * or {@link AbstractFile#getAppendOutputStream()}, depending on the specified <code>append</code> argument.
-     * This method uses {@link #writeRandomData(java.io.OutputStream, long, int)} to write the file, see this method's
-     * documentation for more information about how the random data is generated and written.</p>
-     *
-     * @param file the file to write the data to
-     * @param length the number of random bytes to fill the file with
-     * @param maxChunkSize maximum size of a data chunk written to the file. Size of chunks is comprised between 1 and
-     * this value (inclusive).
-     * @param append if true, data written to the OutputStream will be appended to the end of this file. If false,
-     * any existing data this file contains will be discarded and overwritten.
-     * @return the md5 checksum of the data written to the file
-     * @throws IOException if an error occurred while retrieving the file's OutputStream or writing to it
-     * @throws NoSuchAlgorithmException should not happen
-     */
-    protected String writeRandomData(AbstractFile file, long length, int maxChunkSize, boolean append) throws IOException, NoSuchAlgorithmException {
-        ChecksumOutputStream md5Out = getMd5OutputStream(append?file.getAppendOutputStream():file.getOutputStream());
-        try {
-            writeRandomData(md5Out, length, maxChunkSize);
-        }
-        finally {
-            md5Out.close();
-        }
-
-        assertTrue(file.exists());
-        assertEquals(length, file.getSize());
-
-        return md5Out.getChecksumString();
-    }
-
-
-    /**
      * Fills the given <code>OutputStream</code> with a total of <code>length</code> bytes of random data.
      * The data is generated and written chunk by chunk, where each chunk has a random length comprised between 1 and
      * <code>maxChunkSize</code> bytes.
@@ -227,9 +182,12 @@ public abstract class AbstractFileTest implements ConditionalTest {
 
 
     /**
-     * Creates a regular file and fills it with <code>length</code> random bytes. The file will be overwritten if it
-     * already exists. Before returning, this method asserts that the file exists and that its size by
-     * {@link AbstractFile#getSize()} matches the specified length argument. 
+     * Creates a regular file and fills it with <code>length</code> random bytes, overwriting the file if it exists,
+     * and returns the md5 checksum of the random data that was copied.
+     * <p>
+     * Before returning, this method asserts that the file {@link AbstractFile#exists() exists} and that its
+     * {@link AbstractFile#getSize() size} matches the specified length argument.
+     * </p>
      *
      * @param file the file to create or overwrite
      * @param length the number of random bytes to fill the file with
@@ -238,7 +196,13 @@ public abstract class AbstractFileTest implements ConditionalTest {
      * @throws NoSuchAlgorithmException should not happen
      */
     protected String createFile(AbstractFile file, long length) throws IOException, NoSuchAlgorithmException {
-        return writeRandomData(file, length, (int)Math.min(length, 1048576), false);
+        ChecksumInputStream md5In = new ChecksumInputStream(new BoundedInputStream(new RandomGeneratorInputStream(), length, false), MessageDigest.getInstance("md5"));
+        file.copyStream(md5In, false);
+
+        assertTrue(file.exists());
+        assertEquals(length, file.getSize());
+
+        return md5In.getChecksumString();
     }
 
     /**
@@ -308,7 +272,7 @@ public abstract class AbstractFileTest implements ConditionalTest {
      * @throws NoSuchAlgorithmException should not happen
      */
     protected String calculateMd5(InputStream in) throws IOException, NoSuchAlgorithmException {
-        return AbstractFile.calculateChecksum(in, MessageDigest.getInstance("MD5"));
+        return AbstractFile.calculateChecksum(in, MessageDigest.getInstance("md5"));
     }
 
     /**
@@ -1499,12 +1463,8 @@ public abstract class AbstractFileTest implements ConditionalTest {
         assertEquals("00000001", tempFile.calculateChecksum("Adler32"));
         assertEquals("31d6cfe0d16ae931b73c59d7e0c089c0", tempFile.calculateChecksum("MD4"));
 
-        OutputStream tempOut = tempFile.getOutputStream();
-
         // Verify the digests of a sample phrase
-
-        tempOut.write("The quick brown fox jumps over the lazy dog".getBytes());
-        tempOut.close();
+        tempFile.copyStream(new ByteArrayInputStream("The quick brown fox jumps over the lazy dog".getBytes()), false);
 
         assertEquals("03d85a0d629d2c442e987525319fc471", tempFile.calculateChecksum("MD2"));
         assertEquals("9e107d9d372bb6826bd81d3542a419d6", tempFile.calculateChecksum("MD5"));
@@ -1649,29 +1609,33 @@ public abstract class AbstractFileTest implements ConditionalTest {
 
         // Test data integrity of the InputStream returned by URL#openConnection()#getInputStream()
 
-        InputStream urlIn = url.openConnection().getInputStream();
-        assertNotNull(urlIn);
-        InputStream fileIn = tempFile.getInputStream();
+        if(tempFile.isFileOperationSupported(FileOperation.READ_FILE)) {
+            InputStream urlIn = url.openConnection().getInputStream();
+            assertNotNull(urlIn);
+            InputStream fileIn = tempFile.getInputStream();
 
-        assertInputStreamEquals(fileIn, urlIn);
+            assertInputStreamEquals(fileIn, urlIn);
 
-        urlIn.close();
-        fileIn.close();
+            urlIn.close();
+            fileIn.close();
+        }
 
         // Test data integrity of the OutputStream returned by URL#openStream()
 
-        tempFile.delete();
-        url = tempFile.getJavaNetURL();
-        assertNotNull(url);
+        if(tempFile.isFileOperationSupported(FileOperation.WRITE_FILE)) {
+            tempFile.delete();
+            url = tempFile.getJavaNetURL();
+            assertNotNull(url);
 
-        OutputStream urlOut = url.openConnection().getOutputStream();
-        assertNotNull(urlOut);
+            OutputStream urlOut = url.openConnection().getOutputStream();
+            assertNotNull(urlOut);
 
-        ChecksumOutputStream md5Out = getMd5OutputStream(urlOut);
-        writeRandomData(md5Out, 100000, 1000);
-        md5Out.close();
+            ChecksumOutputStream md5Out = getMd5OutputStream(urlOut);
+            writeRandomData(md5Out, 100000, 1000);
+            md5Out.close();
 
-        assertEquals(md5Out.getChecksumString(), calculateMd5(tempFile));
+            assertEquals(md5Out.getChecksumString(), calculateMd5(tempFile));
+        }
 
         // Test path resolution on a directory
 

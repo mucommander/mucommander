@@ -26,6 +26,7 @@ import com.mucommander.io.*;
 
 import javax.swing.Icon;
 import java.awt.Dimension;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -483,7 +484,10 @@ public abstract class AbstractFile implements FileAttributes, PermissionTypes, P
         if(exists())
             throw new IOException();
 
-        getOutputStream().close();
+        if(isFileOperationSupported(FileOperation.WRITE_FILE))
+            getOutputStream().close();
+        else
+            copyStream(new ByteArrayInputStream(new byte[]{}), false);
     }
 
 

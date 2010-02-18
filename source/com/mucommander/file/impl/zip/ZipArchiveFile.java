@@ -24,10 +24,7 @@ import com.mucommander.file.impl.zip.provider.ZipEntry;
 import com.mucommander.file.impl.zip.provider.ZipFile;
 import com.mucommander.io.FilteredOutputStream;
 
-import java.io.FilterInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.util.Iterator;
 import java.util.zip.ZipInputStream;
 
@@ -366,12 +363,6 @@ public class ZipArchiveFile extends AbstractRWArchiveFile {
         if(exists())
             throw new IOException();
 
-        OutputStream out = getOutputStream();
-        try {
-            out.write(EMPTY_ZIP_BYTES);
-        }
-        finally {
-            out.close();
-        }
+        copyStream(new ByteArrayInputStream(EMPTY_ZIP_BYTES), false);
     }
 }
