@@ -297,13 +297,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
           <method name="*"/>
           <constructor name="*"/>
       </keep>
-      <!-- Hadoop HDFS                                       -->
+      <!-- Hadoop HDFS                                         -->
       <keep name="org.apache.hadoop.hdfs.DistributedFileSystem"/>
       <keep name="org.apache.hadoop.net.StandardSocketFactory"/>
       <keep name="org.apache.hadoop.hdfs.protocol.DatanodeInfo$AdminStates"/>
-      <!-- Apache Commons logging (Hadoop dependency)          -->
+      <!-- Apache Commons logging (Hadoop + JetS3t dependency) -->
       <keep name="org.apache.commons.logging.impl.LogFactoryImpl"/>
-      <keep name="org.apache.commons.logging.impl.SimpleLog">
+      <keep name="org.apache.commons.logging.impl.Jdk14Logger">
           <constructor/>
       </keep>
       <keep name="org.apache.commons.logging.Log"/>
