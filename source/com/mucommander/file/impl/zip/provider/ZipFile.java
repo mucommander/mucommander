@@ -1028,7 +1028,7 @@ public class ZipFile implements ZipConstants {
             boolean signatureFound = false;
             int off = bufLen - MIN_EOCD_SIZE;
 
-            while (off>=MIN_EOCD_SIZE) {
+            while (off>=0) {
                 if (buf[off] == EOCD_SIG[0]) {
                     if (buf[off+1] == EOCD_SIG[1]) {
                         if (buf[off+2] == EOCD_SIG[2]) {
