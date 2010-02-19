@@ -132,6 +132,7 @@ What's new since v0.8.4 ?
 -------------------------
 
 New features:
+- Added support for Amazon S3.
 - Added support for the Hadoop HDFS filesystem.
 
 Improvements:
