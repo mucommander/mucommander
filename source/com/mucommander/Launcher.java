@@ -606,6 +606,8 @@ public class Launcher {
             if(splashScreen!=null)
                 splashScreen.dispose();
 
+            AppLogger.severe("Startup failed", t);
+            
             // Display an error dialog with a proper message and error details
             InformationDialog.showErrorDialog(null, null, Translator.get("startup_error"), null, t);
 
