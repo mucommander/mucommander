@@ -197,7 +197,7 @@ public abstract class AbstractFileTest implements ConditionalTest {
      */
     protected String createFile(AbstractFile file, long length) throws IOException, NoSuchAlgorithmException {
         ChecksumInputStream md5In = new ChecksumInputStream(new BoundedInputStream(new RandomGeneratorInputStream(), length, false), MessageDigest.getInstance("md5"));
-        file.copyStream(md5In, false);
+        file.copyStream(md5In, false, length);
 
         assertTrue(file.exists());
         assertEquals(length, file.getSize());
@@ -1464,7 +1464,7 @@ public abstract class AbstractFileTest implements ConditionalTest {
         assertEquals("31d6cfe0d16ae931b73c59d7e0c089c0", tempFile.calculateChecksum("MD4"));
 
         // Verify the digests of a sample phrase
-        tempFile.copyStream(new ByteArrayInputStream("The quick brown fox jumps over the lazy dog".getBytes()), false);
+        tempFile.copyStream(new ByteArrayInputStream("The quick brown fox jumps over the lazy dog".getBytes()), false, -1);
 
         assertEquals("03d85a0d629d2c442e987525319fc471", tempFile.calculateChecksum("MD2"));
         assertEquals("9e107d9d372bb6826bd81d3542a419d6", tempFile.calculateChecksum("MD5"));

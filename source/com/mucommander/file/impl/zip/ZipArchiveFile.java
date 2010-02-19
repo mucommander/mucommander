@@ -363,6 +363,6 @@ public class ZipArchiveFile extends AbstractRWArchiveFile {
         if(exists())
             throw new IOException();
 
-        copyStream(new ByteArrayInputStream(EMPTY_ZIP_BYTES), false);
+        copyStream(new ByteArrayInputStream(EMPTY_ZIP_BYTES), false, EMPTY_ZIP_BYTES.length);
     }
 }

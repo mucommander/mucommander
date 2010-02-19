@@ -307,27 +307,18 @@ public class S3Object extends S3File {
     ////////////////////////
 
     @Override
-    public void copyStream(InputStream in, boolean append) throws FileTransferException {
+    public void copyStream(InputStream in, boolean append, long length) throws FileTransferException {
         if(append) {
 //            throw new UnsupportedFileOperationException(FileOperation.APPEND_FILE);
             throw new FileTransferException(FileTransferException.READING_SOURCE);
         }
 
-        // TODO: add source file size (optional) parameter to copyStream ?
         // TODO: compute md5 ?
 
-        // If the InputStream has random access, we can upload the object directly without having to go through
-        // getOutputStream() since we know the object's length already.
-        if(in instanceof RandomAccessInputStream) {
-            long objectLength;
-            try {
-                objectLength = ((RandomAccessInputStream)in).getLength();
-            }
-            catch(IOException e) {
-                throw new FileTransferException(FileTransferException.READING_SOURCE);
-            }
-
-            putObject(in, objectLength);
+        // If the length is known, we can upload the object directly without having to go through the tedious process
+        // of copying the stream to a temporary file.
+        if(length>=0) {
+            putObject(in, length);
         }
         else {
             // Copy the stream to a temporary file so that we can know the object's length, which has to be declared

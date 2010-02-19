@@ -325,22 +325,32 @@ public abstract class AbstractFile implements FileAttributes, PermissionTypes, P
 	
 
     /**
-     * Copies the contents of the given <code>InputStream</code> to this file. The provided <code>InputStream</code>
-     * will *NOT* be closed by this method.
+     * Copies the contents of the given <code>InputStream</code> to this file, appending or overwriting the file
+     * if it exists. It is noteworthy that the provided <code>InputStream</code> will <b>not</b> be closed by this method.
      * 
      * <p>This method should be overridden by filesystems that do not offer a {@link #getOutputStream()}
-     * implementation, but that can take an <code>InputStream</code> and use it to write the file.</p>
+     * implementation, but that can take an <code>InputStream</code> and use it to write the file.
+     * For this reason, it is recommended to use this method to write a file, rather than copying streams manually using
+     * {@link #getOutputStream()}</p>
+     *
+     * <p>The <code>length</code> parameter is optional. Setting its value help certain protocols which need to know
+     * the length in advance. This is the case for instance for some HTTP-based protocols like Amazon S3, which require
+     * the <code>Content-Length</code> header to be set in the request. Callers should thus set the length if it is
+     * known.</p>
      *
      * <p>Read and write operations are buffered, with a buffer of {@link #IO_BUFFER_SIZE} bytes. For performance
-     * reasons, this buffer is provided by {@link BufferPool}. There is no need to provide a BufferedInputStream.</p>
+     * reasons, this buffer is provided by {@link BufferPool}. Thus, there is no need to surround the InputStream
+     * with a {@link java.io.BufferedInputStream}.</p>
      *
      * <p>Copy progress can optionally be monitored by supplying a {@link com.mucommander.io.CounterInputStream}.</p>
      *
      * @param in the InputStream to read from
-     * @param append if true, data written to the OutputStream will be appended to the end of this file. If false, any existing data will be overwritten.
+     * @param append if true, data written to the OutputStream will be appended to the end of this file. If false, any
+     * existing data will be overwritten.
+     * @param length length of the stream before EOF is reached, <code>-1</code> if unknown.
      * @throws FileTransferException if something went wrong while reading from the InputStream or writing to this file
      */
-    public void copyStream(InputStream in, boolean append) throws FileTransferException {
+    public void copyStream(InputStream in, boolean append, long length) throws FileTransferException {
         OutputStream out;
 
         try {
@@ -487,7 +497,7 @@ public abstract class AbstractFile implements FileAttributes, PermissionTypes, P
         if(isFileOperationSupported(FileOperation.WRITE_FILE))
             getOutputStream().close();
         else
-            copyStream(new ByteArrayInputStream(new byte[]{}), false);
+            copyStream(new ByteArrayInputStream(new byte[]{}), false, 0);
     }
 
 
@@ -1226,7 +1236,7 @@ public abstract class AbstractFile implements FileAttributes, PermissionTypes, P
             }
 
             try {
-                destFile.copyStream(in, false);
+                destFile.copyStream(in, false, sourceFile.getSize());
             }
             finally {
                 // Close stream even if copyStream() threw an IOException

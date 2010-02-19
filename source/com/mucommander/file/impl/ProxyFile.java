@@ -327,8 +327,8 @@ public abstract class ProxyFile extends AbstractFile {
     }
 
     @Override
-    public void copyStream(InputStream in, boolean append) throws FileTransferException {
-        file.copyStream(in, append);
+    public void copyStream(InputStream in, boolean append, long length) throws FileTransferException {
+        file.copyStream(in, append, length);
     }
 
     @Override

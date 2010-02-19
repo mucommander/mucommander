@@ -134,6 +134,8 @@ public abstract class TransferFileJob extends FileJob {
         if(!copied) {
             // Copy source file stream to destination file
             try {
+                long inLength = sourceFile.getSize();
+
                 // Try to open InputStream
                 try  {
                     long destFileSize = destFile.getSize();
@@ -141,7 +143,7 @@ public abstract class TransferFileJob extends FileJob {
                         in = sourceFile.getInputStream(destFileSize);
                         // Do not calculate checksum, as it needs to be calculated on the whole file
 
-                        setCurrentInputStream(in);
+                        inLength -= destFileSize;
                         // Increase current file ByteCounter by the number of bytes skipped
                         currentFileByteCounter.add(destFileSize);
                         // Increase skipped ByteCounter by the number of bytes skipped
@@ -151,9 +153,9 @@ public abstract class TransferFileJob extends FileJob {
                         in = sourceFile.getInputStream();
                         if(integrityCheckEnabled)
                             in = new ChecksumInputStream(in, MessageDigest.getInstance(CHECKSUM_VERIFICATION_ALGORITHM));
-
-                        setCurrentInputStream(in);
                     }
+
+                    setCurrentInputStream(in);
                 }
                 catch(Exception e) {
                     AppLogger.fine("IOException caught, throwing FileTransferException", e);
@@ -161,7 +163,7 @@ public abstract class TransferFileJob extends FileJob {
                 }
 
                 // Copy source stream to destination file
-                destFile.copyStream(tlin, append);
+                destFile.copyStream(tlin, append, inLength);
             }
             finally {
                 // This block will always be executed, even if an exception
