@@ -21,6 +21,10 @@ package com.mucommander.ui.main.table;
 import com.mucommander.AppLogger;
 import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.file.AbstractFile;
+import com.mucommander.file.FileProtocols;
+import com.mucommander.file.filter.AbstractFileFilter;
+import com.mucommander.file.filter.FileFilter;
+import com.mucommander.file.filter.OrFileFilter;
 import com.mucommander.ui.event.LocationEvent;
 import com.mucommander.ui.event.LocationListener;
 import com.mucommander.ui.main.FolderPanel;
@@ -82,6 +86,8 @@ public class FolderChangeMonitor implements Runnable, WindowListener, LocationLi
 
     /** FolderChangeMonitor instances */
     private static Vector<FolderChangeMonitor> instances;
+
+    private static OrFileFilter disableAutoRefreshFilter = new OrFileFilter();
 		
     /** Milliseconds period between checks to current folder's date */
     private static long checkPeriod;
@@ -103,9 +109,26 @@ public class FolderChangeMonitor implements Runnable, WindowListener, LocationLi
                                                        MuConfiguration.DEFAULT_REFRESH_CHECK_PERIOD);
         waitAfterRefresh = MuConfiguration.getVariable(MuConfiguration.WAIT_AFTER_REFRESH,
                                                             MuConfiguration.DEFAULT_WAIT_AFTER_REFRESH);
+
+        disableAutoRefreshFilter.addFileFilter(new AbstractFileFilter() {
+            public boolean accept(AbstractFile file) {
+                return file.getURL().getScheme().equals(FileProtocols.S3);
+            }
+        });
     }
 
-		
+
+    /**
+     * Adds the given {@link FileFilter} to the list of filters that match folders for which auto-refresh is disabled.
+     * One use case for disabling auto-refresh is for protocols that involve a cost ($$$) when looking for changes
+     * or refreshing the folder. This is the case for Amazon S3 for which auto-refresh is disabled by default.
+     *
+     * @param filter matches folders for which auto-refresh will be disabled
+     */
+    public static void addDisableAutoRefreshFilter(FileFilter filter) {
+        disableAutoRefreshFilter.addFileFilter(filter);
+    }
+
     public FolderChangeMonitor(FolderPanel folderPanel) {
 
         this.folderPanel = folderPanel;
@@ -209,41 +232,28 @@ public class FolderChangeMonitor implements Runnable, WindowListener, LocationLi
     private void updateFolderInfo(AbstractFile folder) {
         this.currentFolder = folder;
         this.currentFolderDate = currentFolder.getDate();
+
+        // Reset time average
+        totalCheckTime = 0;
+        nbSamples = 0;
     }
 	
 	
     /**
-     * Checks if current folder in file table hasn't changed and if not,
-     * checks if current folder's date has changed and if it has, asks
-     * file table to refresh.
+     * Checks if current file table's folder has changed and if it hasn't, checks if current folder's date has changed
+     * and if it has, refresh the file table.
      *
      * @return <code>true</code> if the folder was refreshed.
      */
     private synchronized boolean checkAndRefresh() {
-        if(paused)
+        if(paused || disableAutoRefreshFilter.match(currentFolder))
             return false;
-
-        AbstractFile folder;
-        long date;
-        long timeStamp;
-
-        // Has current folder changed ?
-        folder = folderPanel.getCurrentFolder();
-        if(!folder.equals(currentFolder)) {
-            currentFolder = folder;
-            currentFolderDate = currentFolder.getDate();
-            // Reset time average
-            totalCheckTime = 0;
-            nbSamples = 0;
-            // No need to go further
-            return false;
-        }
 
         // Update time average next loop
-        timeStamp = System.currentTimeMillis();
+        long timeStamp = System.currentTimeMillis();
 		
         // Check folder's date
-        date = currentFolder.getDate();
+        long date = currentFolder.getDate();
 
         totalCheckTime += System.currentTimeMillis()-timeStamp;
         nbSamples++;
