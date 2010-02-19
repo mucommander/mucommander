@@ -132,15 +132,16 @@ What's new since v0.8.4 ?
 -------------------------
 
 New features:
--
+- Added support for the Hadoop HDFS filesystem.
 
 Improvements:
 - A proper error message is displayed when muCommander is started in a
   headless environment.
-- Upgraded the commons-net FTP library to version 2.0.
+- Upgraded the commons-net FTP library to version 2.0 for improved
+  compatibility.
 - Actions relying on a file operation that is not supported by the current
   folder's filesystem are now disabled contextually.
-- Added support for Hadoop HDFS.
+- Optimized the opening of Zip files.
 
 Localization:
 -

@@ -1010,61 +1010,69 @@ public class ZipFile implements ZipConstants {
      * underlying file not being a Zip file
      */
     private void positionAtCentralDirectory() throws IOException, ZipException {
-        boolean found = false;
         long length = rais.getLength();
-        long off = length - MIN_EOCD_SIZE;
+        if(length<MIN_EOCD_SIZE)
+            throw new ZipException("Invalid Zip file (too small)");
 
-        // Minimum offset at which the EOCD signature can be located, based of the maximum comment length (65535)
-        long minSigOffset = length-MAX_EOCD_SIZE;
+        // Use a constant buffer size to always reuse the same instance
+        byte[] buf = BufferPool.getByteArray(MAX_EOCD_SIZE);
+        try {
+            // Actual buffer length
+            int bufLen = (int)Math.min(length, MAX_EOCD_SIZE);
 
-        if (off >= 0) {
-            int curr;
-            rais.seek(off);
+            // Read the maximum size the EOCD can take. Much more effective than seeking backwards like we used to do.
+            rais.seek(length-bufLen);
+            StreamUtils.readFully(rais, buf, 0, bufLen);
 
-            while (off>=0 && off>=minSigOffset && (curr=rais.read())!=-1) {
-                if (curr == EOCD_SIG[0]) {
-                    curr = rais.read();
-                    if (curr == EOCD_SIG[1]) {
-                        curr = rais.read();
-                        if (curr == EOCD_SIG[2]) {
-                            curr = rais.read();
-                            if (curr == EOCD_SIG[3]) {
-                                found = true;
+            // Look for the EOCD signature by starting at the end and moving backwards
+            boolean signatureFound = false;
+            int off = bufLen - MIN_EOCD_SIZE;
+
+            while (off>=MIN_EOCD_SIZE) {
+                if (buf[off] == EOCD_SIG[0]) {
+                    if (buf[off+1] == EOCD_SIG[1]) {
+                        if (buf[off+2] == EOCD_SIG[2]) {
+                            if (buf[off+3] == EOCD_SIG[3]) {
+                                signatureFound = true;
                                 break;
                             }
                         }
                     }
                 }
 
-                if(--off>0)     // Avoids negative seeks in case the sig is not found (would throw an IOException)
-                    rais.seek(off);
+                off--;
             }
+
+            if (!signatureFound) {
+                throw new ZipException("Invalid Zip stream (EOCD signature not found)");
+            }
+
+            // Parse the offset to the central directory start
+            off += CFD_LOCATOR_OFFSET;
+            byte[] cdStart = new byte[4];
+            System.arraycopy(buf, off, cdStart, 0, 4);
+            off += 4;
+
+            // Fetch the global zip file comment
+            byte[] commentLen = new byte[2];
+            System.arraycopy(buf, off, commentLen, 0, 2);
+            off += 2;
+
+            // Fetch the global zip file comment
+            byte commentBytes[] = new byte[ZipShort.getValue(commentLen)];
+            System.arraycopy(buf, off, commentBytes, 0, commentBytes.length);
+
+            // If no default encoding has been specified, try to guess the comment's encoding.
+            // Note that the Zip format doesn't provide any way of knowing the encoding, not even a bit to indicate UTF-8
+            // like bit 11 in GPBF.
+            comment = getString(commentBytes, defaultEncoding!=null?defaultEncoding:EncodingDetector.detectEncoding(commentBytes));
+
+            // Seek to the start of the central directory
+            rais.seek(ZipLong.getValue(cdStart));
         }
-
-        if (!found) {
-            throw new ZipException("Invalid Zip stream (EOCD signature not found)");
+        finally {
+            BufferPool.releaseByteArray(buf);
         }
-
-        // Parse the offset to the central directory start
-        rais.seek(off + CFD_LOCATOR_OFFSET);
-        byte[] cfdOffset = new byte[4];
-        rais.readFully(cfdOffset);
-
-        long cdStart = ZipLong.getValue(cfdOffset);
-
-        // Fetch the global zip file comment
-        byte[] commentLen = new byte[2];
-        rais.readFully(commentLen);
-        byte commentBytes[] = new byte[ZipShort.getValue(commentLen)];
-        rais.readFully(commentBytes);
-
-        // If no default encoding has been specified, try to guess the comment's encoding.
-        // Note that the Zip format doesn't provide any way of knowing the encoding, not even a bit to indicate UTF-8
-        // like bit 11 in GPBF.
-        comment = getString(commentBytes, defaultEncoding!=null?defaultEncoding:EncodingDetector.detectEncoding(commentBytes));
-
-        // Seek to the start of the central directory
-        rais.seek(cdStart);
     }
 
     /**
