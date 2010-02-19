@@ -17,7 +17,7 @@ to post your questions, suggestions or bug reports.
 Your feedback is important and always welcome!
 
 Official website: http://www.mucommander.com
-Copyright (C) 2002-2009 Maxence Bernard.
+Copyright (C) 2002-2010 Maxence Bernard.
 
 
 Requirements
@@ -45,22 +45,34 @@ muCommander uses the following great third party works :
 - the Ant library released under the Apache License.
  Ant can be found at http://ant.apache.org .
 
+- Apache Commons libraries released under the Apache License.
+ Apache Commons can be found at http://commons.apache.org .
+
+- Apache Hadoop released under the Apache License.
+ Apache Hadoop can be found at http://hadoop.apache.org .
+
+- the Furbelow library released under the GNU LGPL.
+ Furbelow can be found at http://sourceforge.net/projects/furbelow .
+
 - the ICU4J library released under the ICU License.
  the ICU project can be found at http://icu-project.org .
 
-- the J2SSH library released under the GNU LGPL license.
+- the J2SSH library released under the GNU LGPL.
  J2SSH can be found at http://www.sshtools.com .
 
-- the Jakarta Commons Net library released under the Apache License.
- Jarkata Commons Net can be found at http://jakarta.apache.org .
+- the J7Zip library released under the GNU LGPL.
+ J7Zip can be found at http://sourceforge.net/projects/p7zip/ .
 
-- the jCIFS library released under the GNU LGPL license.
+- the jCIFS library released under the GNU LGPL.
  jCIFS can be found at http://jcifs.samba.org .
 
-- the JmDNS library released under the GNU LGPL license.
+- the JetS3t library released under the Apache License.
+ JetS3t can be found at http://jets3t.s3.amazonaws.com/index.html .
+
+- the JmDNS library released under the GNU LGPL.
  JmDNS can be found at http://jmdns.sourceforge.net .
 
-- the JNA library released under the GNU LGPL license.
+- the JNA library released under the GNU LGPL.
  JmDNS can be found at http://jna.dev.java.net .
 
 - the JUnRar library released as Freeware.
@@ -71,9 +83,6 @@ muCommander uses the following great third party works :
 
 - Icons by Mark James released under the Creative Commons Attribution License.
  Mark James can be found at http://famfamfam.com .
-
-- the Furbelow library released under the GNU LGPL license.
-Furbelow can be found at http://sourceforge.net/projects/furbelow .
 
 
 Credits
