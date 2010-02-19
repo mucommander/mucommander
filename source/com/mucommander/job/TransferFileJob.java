@@ -1,6 +1,6 @@
 /*
  * This file is part of muCommander, http://www.mucommander.com
- * Copyright (C) 2002-2009 Maxence Bernard
+ * Copyright (C) 2002-2010 Maxence Bernard
  *
  * muCommander is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -115,7 +115,7 @@ public abstract class TransferFileJob extends FileJob {
             throw new FileTransferException(FileTransferException.SOURCE_AND_DESTINATION_IDENTICAL);
 
         // Determine whether or not AbstractFile.copyRemotelyTo() should be used to copy the file.
-        // Some file protocols do not provide a getOutputStream() method and require the use of copyTo(). Some other
+        // Some file protocols do not provide a getOutputStream() method and require the use of copyRemotelyTo(). Some other
         // may also offer server to server copy which is more efficient than stream copy.
 
         boolean copied = false;
@@ -129,7 +129,7 @@ public abstract class TransferFileJob extends FileJob {
             }
         }
 
-        // If the file wasn't copied using copyTo(), or if copyTo() didn't work (return false)
+        // If the file wasn't copied using copyRemotelyTo(), or if copyRemotelyTo() failed
         InputStream in = null;
         if(!copied) {
             // Copy source file stream to destination file
@@ -224,7 +224,7 @@ public abstract class TransferFileJob extends FileJob {
                 sourceChecksum = ((ChecksumInputStream)in).getChecksumString();
             }
             else {
-                // The file was copied using AbstractFile#copyTo(), or the transfer was resumed:
+                // The file was copied using AbstractFile#copyRemotelyTo(), or the transfer was resumed:
                 // we have to calculate the source file's checksum from scratch.
                 try {
                     sourceChecksum = calculateChecksum(sourceFile);

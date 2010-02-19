@@ -1,6 +1,6 @@
 /*
  * This file is part of muCommander, http://www.mucommander.com
- * Copyright (C) 2002-2009 Maxence Bernard
+ * Copyright (C) 2002-2010 Maxence Bernard
  *
  * muCommander is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,8 +18,8 @@
 
 package com.mucommander.ui.text;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JComponent;
+import java.awt.Font;
 
 /**
  * This class contains a set of helper methods that allow to easily change the font of a <code>JComponent</code>

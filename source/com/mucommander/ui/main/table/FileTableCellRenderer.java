@@ -1,7 +1,7 @@
 /*
 
  * This file is part of muCommander, http://www.mucommander.com
- * Copyright (C) 2002-2009 Maxence Bernard
+ * Copyright (C) 2002-2010 Maxence Bernard
  *
  * muCommander is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,9 +26,10 @@ import com.mucommander.ui.icon.FileIcons;
 import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.theme.*;
 
-import javax.swing.*;
+import javax.swing.JTable;
 import javax.swing.table.TableCellRenderer;
-import java.awt.*;
+import java.awt.Component;
+import java.awt.Font;
 
 
 /**

@@ -1,6 +1,6 @@
 /*
  * This file is part of muCommander, http://www.mucommander.com
- * Copyright (C) 2002-2009 Maxence Bernard
+ * Copyright (C) 2002-2010 Maxence Bernard
  *
  * muCommander is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,7 +18,7 @@
 
 package com.mucommander.ui.dialog.file;
 
-import javax.swing.*;
+import javax.swing.JTextField;
 
 /**
  * This class wraps a path, and start and end offsets for the portion of the text to be selected in a text field.

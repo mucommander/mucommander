@@ -1,6 +1,6 @@
 /*
  * This file is part of muCommander, http://www.mucommander.com
- * Copyright (C) 2002-2009 Maxence Bernard
+ * Copyright (C) 2002-2010 Maxence Bernard
  *
  * muCommander is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,21 +18,20 @@
 
 package com.mucommander.ui.main.commandbar;
 
+import com.mucommander.desktop.DesktopManager;
+import com.mucommander.ui.action.ActionManager;
+import com.mucommander.ui.main.MainFrame;
+
+import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+import javax.swing.KeyStroke;
+import javax.swing.SwingUtilities;
 import java.awt.GridLayout;
 import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-
-import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
-import javax.swing.KeyStroke;
-import javax.swing.SwingUtilities;
-
-import com.mucommander.desktop.DesktopManager;
-import com.mucommander.ui.action.ActionManager;
-import com.mucommander.ui.main.MainFrame;
 
 /**
  * CommandBar is the button bar that sits at the bottom of the main window and provides access to

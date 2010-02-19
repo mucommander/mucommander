@@ -1,6 +1,6 @@
 /*
  * This file is part of muCommander, http://www.mucommander.com
- * Copyright (C) 2002-2009 Maxence Bernard
+ * Copyright (C) 2002-2010 Maxence Bernard
  *
  * muCommander is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,7 +21,9 @@ package com.mucommander.ui.main;
 import com.mucommander.conf.ConfigurationEvent;
 import com.mucommander.conf.ConfigurationListener;
 import com.mucommander.conf.impl.MuConfiguration;
-import com.mucommander.file.filter.*;
+import com.mucommander.file.filter.AndFileFilter;
+import com.mucommander.file.filter.AttributeFileFilter;
+import com.mucommander.file.filter.FileFilter;
 import com.mucommander.ui.main.tree.FoldersTreePanel;
 
 /**

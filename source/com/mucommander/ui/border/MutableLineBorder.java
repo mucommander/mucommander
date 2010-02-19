@@ -1,6 +1,6 @@
 /*
  * This file is part of muCommander, http://www.mucommander.com
- * Copyright (C) 2002-2009 Maxence Bernard
+ * Copyright (C) 2002-2010 Maxence Bernard
  *
  * muCommander is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,7 +19,7 @@
 package com.mucommander.ui.border;
 
 import javax.swing.border.LineBorder;
-import java.awt.*;
+import java.awt.Color;
 
 /**
  * Implementation of <code>LineBorder</code> that allows applications to change the color after it's been instantiated.
