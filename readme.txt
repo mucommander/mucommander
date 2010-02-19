@@ -152,15 +152,20 @@ Improvements:
 - Actions relying on a file operation that is not supported by the current
   folder's filesystem are now disabled contextually.
 - Optimized the opening of Zip files.
+- Mac OS X: updated JavaApplicationStub and Info.plist to enable 64-bit
+  operation on x86_64 architecture.
 
 Localization:
 -
 
 Bug fixes:
-- "Round displayed file sizes" checkbox does sometimes not toggle correctly (ticket #328)
-- Single click on the file table treated as double click (ticket #321)
+- "Round displayed file sizes" checkbox does sometimes not toggle correctly
+  (ticket #328).
+- Single click on the file table treated as double click (ticket #321).
 - Fixed 'startup_error' message that wasn't properly localized.
-- Fixed 7zip files left open after being browsed (#334). 
+- Fixed 7zip files left open after being browsed (#334).
+- Mac OS X: raised the maximum memory that can be allocated to 128MB,
+  to cope with directories that contain more than 80K files (#332).
 
 Known issues:
 - Some translations are not up-to-date. Refer to

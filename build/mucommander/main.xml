@@ -877,12 +877,18 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
       <dict    name="Java">
         <string name="MainClass"                      value="${app.main}"/>
         <string name="JVMVersion"                     value="${app.jvm}+"/>
+        <array name="JVMArchs">
+            <string value="x86_64"/>
+            <string value="i386"/>
+            <string value="ppc"/>
+        </array>
+        <string name="VMOptions"                      value="-Xmx128m"/>
         <dict name="Properties">
           <string name="java.system.class.loader"     value="com.mucommander.file.AbstractFileClassLoader"/>
           <string name="com.apple.smallTabs"          value="true"/>
           <string name="com.apple.hwaccel"            value="true"/>
           <string name="apple.laf.useScreenMenuBar"   value="true"/>
-	  <string name="file.encoding"                value="UTF-8"/>
+    	  <string name="file.encoding"                value="UTF-8"/>
         </dict>
       </dict>
     </mkapp>
