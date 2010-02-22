@@ -326,6 +326,9 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
                         catch(IOException e) { volumeTotal = -1; }
                     }
 
+// For testing the free space indicator 
+//volumeFree = (long)(volumeTotal * Math.random());
+                    
                     volumeSpaceLabel.setVolumeSpace(volumeTotal, volumeFree);
 
                     AppLogger.finer("Adding to cache");
@@ -572,7 +575,7 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
         private Color criticalColor;
 
         private final static float SPACE_WARNING_THRESHOLD = 0.1f;
-        private final static float SPACE_CRITICAL_THRESHOLD = 0.01f;
+        private final static float SPACE_CRITICAL_THRESHOLD = 0.05f;
 
 
         private VolumeSpaceLabel() {
@@ -636,10 +639,21 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
             return new Dimension(d.width+4, d.height+2);
         }
 
-//        public Insets getInsets() {
-//            return new Insets(2, 0, 2, 0);
-//        }
-//
+        /**
+         * Returns an interpolated color value, located at percent between c1 and c2 in the RGB space.
+         *
+         * @param c1 first color
+         * @param c2 end color
+         * @param percent distance between c1 and c2, comprised between 0 and 1.
+         * @return an interpolated color value, located at percent between c1 and c2 in the RGB space.
+         */
+        private Color interpolateColor(Color c1, Color c2, float percent) {
+            return new Color(
+                    (int)(c1.getRed()+(c2.getRed()-c1.getRed())*percent),
+                    (int)(c1.getGreen()+(c2.getGreen()-c1.getGreen())*percent),
+                    (int)(c1.getBlue()+(c2.getBlue()-c1.getBlue())*percent)
+            );
+        }
 
         @Override
         public void paint(Graphics g) {
@@ -652,9 +666,18 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
                 // Paint amount of free volume space if both free and total space are available
                 float freeSpacePercentage = freeSpace/(float)totalSpace;
 
-                g.setColor(freeSpacePercentage<=SPACE_CRITICAL_THRESHOLD?criticalColor
-                           :freeSpacePercentage<=SPACE_WARNING_THRESHOLD?warningColor
-                           :okColor);
+                Color c;
+                if(freeSpacePercentage<=SPACE_CRITICAL_THRESHOLD) {
+                    c = criticalColor;
+                }
+                else if(freeSpacePercentage<=SPACE_WARNING_THRESHOLD) {
+                    c = interpolateColor(warningColor, criticalColor, (SPACE_WARNING_THRESHOLD-freeSpacePercentage)/SPACE_WARNING_THRESHOLD);
+                }
+                else {
+                    c = interpolateColor(okColor, warningColor, (1-freeSpacePercentage)/(1-SPACE_WARNING_THRESHOLD));
+                }
+
+                g.setColor(c);
 
                 int freeSpaceWidth = Math.max(Math.round(freeSpacePercentage*(float)(width-2)), 1);
                 g.fillRect(1, 1, freeSpaceWidth + 1, height - 2);
@@ -666,6 +689,44 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
 
             super.paint(g);
         }
+
+
+// Total/Free space reversed, doesn't look quite right
+
+//        @Override
+//        public void paint(Graphics g) {
+//            // If free or total space is not available, this label will just be painted as a normal JLabel
+//            if(freeSpace!=-1 && totalSpace!=-1) {
+//                int width = getWidth();
+//                int height = getHeight();
+//
+//                // Paint amount of free volume space if both free and total space are available
+//                float freeSpacePercentage = freeSpace/(float)totalSpace;
+//                float usedSpacePercentage = (totalSpace-freeSpace)/(float)totalSpace;
+//
+//                Color c;
+//                if(freeSpacePercentage<=SPACE_CRITICAL_THRESHOLD) {
+//                    c = interpolateColor(warningColor, criticalColor, (SPACE_CRITICAL_THRESHOLD-freeSpacePercentage)/SPACE_CRITICAL_THRESHOLD);
+//                }
+//                else if(freeSpacePercentage<=SPACE_WARNING_THRESHOLD) {
+//                    c = interpolateColor(okColor, warningColor, (SPACE_WARNING_THRESHOLD-freeSpacePercentage)/(SPACE_WARNING_THRESHOLD-SPACE_CRITICAL_THRESHOLD));
+//                }
+//                else {
+//                    c = okColor;
+//                }
+//
+//                g.setColor(c);
+//
+//                int usedSpaceWidth = Math.max(Math.round(usedSpacePercentage*(float)(width-2)), 1);
+//                g.fillRect(1, 1, usedSpaceWidth + 1, height - 2);
+//
+//                // Fill background
+//                g.setColor(backgroundColor);
+//                g.fillRect(usedSpaceWidth + 1, 1, width - usedSpaceWidth - 1, height - 2);
+//            }
+//
+//            super.paint(g);
+//        }
 
         public void fontChanged(FontChangedEvent event) {}
 

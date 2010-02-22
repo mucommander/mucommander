@@ -157,6 +157,8 @@ Improvements:
   operation on x86_64 architecture.
 - Improved the HTTP filesystem: better HTML/XHTML detection, follows links
   correctly.
+- Free space indicator now changes color gradually (#311) ; adjusted warning
+  threshold.
 
 Localization:
 -
