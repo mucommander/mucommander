@@ -706,13 +706,13 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
 //
 //                Color c;
 //                if(freeSpacePercentage<=SPACE_CRITICAL_THRESHOLD) {
-//                    c = interpolateColor(warningColor, criticalColor, (SPACE_CRITICAL_THRESHOLD-freeSpacePercentage)/SPACE_CRITICAL_THRESHOLD);
+//                    c = criticalColor;
 //                }
 //                else if(freeSpacePercentage<=SPACE_WARNING_THRESHOLD) {
-//                    c = interpolateColor(okColor, warningColor, (SPACE_WARNING_THRESHOLD-freeSpacePercentage)/(SPACE_WARNING_THRESHOLD-SPACE_CRITICAL_THRESHOLD));
+//                    c = interpolateColor(warningColor, criticalColor, (SPACE_WARNING_THRESHOLD-freeSpacePercentage)/SPACE_WARNING_THRESHOLD);
 //                }
 //                else {
-//                    c = okColor;
+//                    c = interpolateColor(okColor, warningColor, (1-freeSpacePercentage)/(1-SPACE_WARNING_THRESHOLD));
 //                }
 //
 //                g.setColor(c);
