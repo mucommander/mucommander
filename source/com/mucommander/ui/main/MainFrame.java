@@ -149,14 +149,8 @@ public class MainFrame extends JFrame implements LocationListener {
         // Enable window resize
         setResizable(true);
 
-        // Sets the content pane.
-        JPanel contentPane = new JPanel(new BorderLayout()) {
-                // Add an x=3,y=3 gap around content pane
-                @Override
-                public Insets getInsets() {
-                    return new Insets(3, 3, 3, 3);
-                }
-            };
+        // The toolbar should have no inset, this is why it is left out of the insetsPane
+        JPanel contentPane = new JPanel(new BorderLayout());
         setContentPane(contentPane);
 
         // Initialises the folder panels and file tables.
@@ -174,6 +168,17 @@ public class MainFrame extends JFrame implements LocationListener {
         this.toolbarPanel = ToolbarMoreButton.wrapToolBar(toolbar);
         this.toolbarPanel.setVisible(MuConfiguration.getVariable(MuConfiguration.TOOLBAR_VISIBLE, MuConfiguration.DEFAULT_TOOLBAR_VISIBLE));
         contentPane.add(toolbarPanel, BorderLayout.NORTH);
+
+        JPanel insetsPane = new JPanel(new BorderLayout()) {
+                // Add an x=3,y=3 gap around content pane
+                @Override
+                public Insets getInsets() {
+                    return new Insets(0, 3, 3, 3);      // No top inset 
+                }
+            };
+
+        // Below the toolbar there is the pane with insets
+        contentPane.add(insetsPane, BorderLayout.CENTER);
 
         // Lister to location change events to display the current folder in the window's title
         leftFolderPanel.getLocationManager().addLocationListener(this);
@@ -211,7 +216,7 @@ public class MainFrame extends JFrame implements LocationListener {
         splitPane.disableAccessibilityShortcuts();
 
         // Split pane will be given any extra space
-        contentPane.add(splitPane, BorderLayout.CENTER);
+        insetsPane.add(splitPane, BorderLayout.CENTER);
 
         // Add a 2-pixel gap between the file table and status bar
         YBoxPanel southPanel = new YBoxPanel();
@@ -226,7 +231,7 @@ public class MainFrame extends JFrame implements LocationListener {
         // Note: CommandBar.setVisible() has to be called no matter if CommandBar is visible or not, in order for it to be properly initialized
         this.commandBar.setVisible(MuConfiguration.getVariable(MuConfiguration.COMMAND_BAR_VISIBLE, MuConfiguration.DEFAULT_COMMAND_BAR_VISIBLE));
         southPanel.add(commandBar);
-        contentPane.add(southPanel, BorderLayout.SOUTH);
+        insetsPane.add(southPanel, BorderLayout.SOUTH);
 
         // Perform CloseAction when the user asked the window to close
         setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);

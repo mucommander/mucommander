@@ -159,6 +159,8 @@ Improvements:
   correctly.
 - Free space indicator now changes color gradually (#311) ; adjusted warning
   threshold.
+- Adjusted the layout of the main window to some screen estate around the
+  toolbar. Contributed by Radomír Černoch.
 
 Localization:
 -
