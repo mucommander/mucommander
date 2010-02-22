@@ -95,6 +95,6 @@ public class HTTPProtocolProvider implements ProtocolProvider {
     public AbstractFile getFile(FileURL url, Object... instantiationParams) throws IOException {
         return instantiationParams.length==0
             ?new HTTPFile(url)
-            :new HTTPFile(url, (URL)instantiationParams[0], (String)instantiationParams[1]);
+            :new HTTPFile(url, (URL)instantiationParams[0]);
     }
 }

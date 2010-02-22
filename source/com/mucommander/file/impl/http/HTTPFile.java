@@ -21,7 +21,6 @@ package com.mucommander.file.impl.http;
 import com.mucommander.auth.AuthException;
 import com.mucommander.auth.Credentials;
 import com.mucommander.file.*;
-import com.mucommander.file.util.PathTokenizer;
 import com.mucommander.io.BlockRandomInputStream;
 import com.mucommander.io.RandomAccessInputStream;
 import com.mucommander.io.RandomAccessOutputStream;
@@ -112,11 +111,11 @@ public class HTTPFile extends ProtocolFile {
 
     protected HTTPFile(FileURL fileURL) throws IOException {
         // TODO: optimize this
-        this(fileURL, new URL(fileURL.toString(false)), fileURL.toString(false));
+        this(fileURL, new URL(fileURL.toString(false)));
     }
 
 	
-    protected HTTPFile(FileURL fileURL, URL url, String absPath) throws IOException {
+    protected HTTPFile(FileURL fileURL, URL url) throws IOException {
         super(fileURL);
 
         String scheme = fileURL.getScheme().toLowerCase();
@@ -125,22 +124,16 @@ public class HTTPFile extends ProtocolFile {
 
         this.url = url;
 
-//        // Determine file name (URL-decoded)
-//        this.name = fileURL.getFilename(true);
-//        // Name may contain '/' or '\' characters once decoded, let's remove them
-//        if(name!=null) {
-//            name = name.replace('/', ' ');
-//            name = name.replace('\\', ' ');
-//        }
-
-        attributes = getDefaultAttributes(absPath);
+        attributes = getDefaultAttributes();
 
         String mimeType;
-        // Test if based on the URL, the file looks like an HTML file :
-        //  - URL contains no path after hostname (e.g. http://google.com)
-        //  - URL points to dynamic content (e.g. http://lulu.superblog.com?param=hola&val=...), even though dynamic scripts do not always return HTML/XHTML
-        //  - No filename with a known mime type can be extracted from the last part of the URL (e.g. NOT http://mucommander.com/download/mucommander-0_7.tgz)
-        if(fileURL.getPath().equals("/")  || fileURL.getQuery()!=null || ((mimeType=MimeTypes.getMimeType(this))==null || isParsableMimeType(mimeType))) {
+        String filename = fileURL.getFilename();
+        // Simple/fuzzy heuristic to avoid file resolution (HEAD) in cases where we have good reasons to believe that
+        // the URL denotes a HTML/XTHML document:
+        //  - URL's path has no filename (e.g. http://www.mucommander.com/) or path ends with '/' (e.g. http://www.mucommander.com/download/)
+        //  - URL has a query part (works most of the time, must not always)
+        //  - URL has an extension that registered with an HTML/XHTML mime type
+        if((filename==null || fileURL.getPath().endsWith("/") || fileURL.getQuery()!=null || ((mimeType=MimeTypes.getMimeType(this))!=null && isParsableMimeType(mimeType)))) {
             attributes.setDirectory(true);
             resolve = false;
         }
@@ -150,14 +143,14 @@ public class HTTPFile extends ProtocolFile {
     }
 
 
-    private SimpleFileAttributes getDefaultAttributes(String absPath) {
-        attributes = new SimpleFileAttributes();
-        attributes.setPath(absPath);
+    private static SimpleFileAttributes getDefaultAttributes() {
+        SimpleFileAttributes attributes = new SimpleFileAttributes();
         attributes.setDate(System.currentTimeMillis());
         attributes.setSize(-1); // Unknown
         attributes.setPermissions(PERMISSIONS);
         // exist = false
         // isDirectory = false
+        // path = null (unused)
 
         return attributes;
     }
@@ -629,31 +622,16 @@ public class HTTPFile extends ProtocolFile {
                             FileLogger.finest("creating child "+link+" context="+contextURL);
                             childURL = new URL(contextURL, link);
 
-                            // Extract the filename from the child URL
-                            PathTokenizer pt = new PathTokenizer(childURL.getPath(), "/", false);
-                            String filename = null;
-                            while(pt.hasMoreFilenames())
-                                filename = pt.nextFilename();
-
-                            // If filename is null (For example if path is '/'), use host instead
-                            if(filename==null)
-                                filename = url.getHost();
-
                             // Create the child FileURL instance
                             childFileURL = FileURL.getFileURL(childURL.toExternalForm());
                             // Keep the parent's credentials (HTTP basic authentication), only if the host is the same.
-                            // It would otherwise constitue a security issue.
+                            // It would otherwise be unsafe.
                             if(parentHost.equals(childFileURL.getHost()))
                                 childFileURL.setCredentials(credentials);
 
-                            // Important note: URL and absolute path may differ. If for instance,
-                            // http://mucommander.com contains a link to http://java.com, the child file's
-                            // absolute path will be http://mucommander.com/java.com whereas its URL (and canonical path)
-                            // will be http://java.com .
-                            // This is done to ensure that every children listed have this file as a parent.
-                            tempChildURL.setPath(parentPath+filename);
+                            // TODO: resolve file here instead of in the constructor, and multiplex requests just like a browser
 
-                            children.add(FileFactory.getFile(childFileURL, this, childURL, tempChildURL.toString()));
+                            children.add(FileFactory.getFile(childFileURL, this, childURL, childURL.toString()));
                             childrenURL.add(link);
                         }
                         catch(IOException e) {
@@ -692,16 +670,6 @@ public class HTTPFile extends ProtocolFile {
     ////////////////////////
     // Overridden methods //
     ////////////////////////
-
-    @Override
-    public String getAbsolutePath() {
-        return attributes.getPath();
-    }
-
-    @Override
-    public String getCanonicalPath() {
-        return url.toExternalForm();
-    }
 
     @Override
     public boolean isHidden() {

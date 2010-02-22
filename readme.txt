@@ -1,4 +1,5 @@
-           _____                           _        
+
+           _____                           _
  _____ _ _|     |___ _____ _____ ___ ___ _| |___ ___
 |     | | |   --| . |     |     | .'|   | . | -_|  _|
 |_|_|_|___|_____|___|_|_|_|_|_|_|__,|_|_|___|___|_| 
@@ -154,6 +155,8 @@ Improvements:
 - Optimized the opening of Zip files.
 - Mac OS X: updated JavaApplicationStub and Info.plist to enable 64-bit
   operation on x86_64 architecture.
+- Improved the HTTP filesystem: better HTML/XHTML detection, follows links
+  correctly.
 
 Localization:
 -
