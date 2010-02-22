@@ -19,6 +19,9 @@
 package com.mucommander.ui.action.impl;
 
 import com.mucommander.file.AbstractFile;
+import com.mucommander.file.FileOperation;
+import com.mucommander.file.filter.AndFileFilter;
+import com.mucommander.file.filter.FileOperationFilter;
 import com.mucommander.file.util.FileSet;
 import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
@@ -44,6 +47,11 @@ public class LocalCopyAction extends SelectedFileAction {
 
     public LocalCopyAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
         super(mainFrame, properties);
+
+        AndFileFilter andFilter = new AndFileFilter();
+        andFilter.addFileFilter(new FileOperationFilter(FileOperation.READ_FILE));
+        andFilter.addFileFilter(new FileOperationFilter(FileOperation.WRITE_FILE));
+        setSelectedFileFilter(andFilter);
     }
 
     @Override
