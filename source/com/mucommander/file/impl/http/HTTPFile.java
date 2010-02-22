@@ -631,7 +631,7 @@ public class HTTPFile extends ProtocolFile {
 
                             // TODO: resolve file here instead of in the constructor, and multiplex requests just like a browser
 
-                            children.add(FileFactory.getFile(childFileURL, this, childURL, childURL.toString()));
+                            children.add(FileFactory.getFile(childFileURL, null, childURL, childURL.toString()));
                             childrenURL.add(link);
                         }
                         catch(IOException e) {
