@@ -8195,7 +8195,7 @@ delete_dialog.move_to_trash.confirmation:AR:حذف الملف(ات) المحدد
 delete_dialog.move_to_trash.confirmation_details:EN:Files will be moved to the trash.
 delete_dialog.move_to_trash.confirmation_details:FR:Les fichiers seront déplacés dans la corbeille.
 delete_dialog.move_to_trash.confirmation_details:HU:A fájlok a lomtárba lesznek áthelyezve.
-delete_dialog.move_to_trash.confirmation_details:NL:Bestanden worden naar de prullenbnak verplaatst.
+delete_dialog.move_to_trash.confirmation_details:NL:Bestanden worden naar de prullenbak verplaatst.
 delete_dialog.move_to_trash.confirmation_details:zh_CN:文件将被移动到垃圾桶.
 delete_dialog.move_to_trash.confirmation_details:zh_TW:檔案將被移至資源回收桶
 delete_dialog.move_to_trash.confirmation_details:RO:Fișierele selectate vor fi aruncate la gunoi.
@@ -8612,7 +8612,7 @@ email.server_unavailable:RO:Nu pot contacta serverul de mail %1, verificați con
 email.server_unavailable:IT:Impossibile contattare mail server %1, verifica le tue preferenze di mail o prova piu' tardi.
 email.server_unavailable:KO:메일 서버에 연결할수 없습니다 %1, 메일 설정을 확인하거나 나중에 재시도 해주세요
 email.server_unavailable:pt_BR:Não foi possível contactar o servidor de email %1, verifique as configurações de email ou tente novamente mais tarde.
-email.server_unavailable:NL:Kan niet verbinden met server %1, kontroleer uw emailvoorkeuren of probeer het later nog eens
+email.server_unavailable:NL:Kan niet verbinden met server %1, kontroleer uw emailvoorkeuren of probeer het later nog eens.
 email.server_unavailable:SK:Nedá sa pripojiť na poštový server %1, skontrolujte nastavenie pošty, alebo akciu opakujte neskôr.
 email.server_unavailable:JA:メール サーバー %1 に連絡することができません、メールの環境設定をチェックするか後で再び試行します。
 email.server_unavailable:SV:Kunde inte kontakta mejlservern %1, kolla dina mejlinställningar eller försök igen senare.
@@ -12920,7 +12920,7 @@ prefs_dialog.check_for_updates_on_startup:RO:Caută versiuni mai recente la porn
 prefs_dialog.check_for_updates_on_startup:IT:Controlla aggiornamenti alla partenza
 prefs_dialog.check_for_updates_on_startup:KO:시작시에 최신버전 확인
 prefs_dialog.check_for_updates_on_startup:pt_BR:Verificar por atualizações quando iniciar
-prefs_dialog.check_for_updates_on_startup:NL:Kontoleer op updates bij het opstarten
+prefs_dialog.check_for_updates_on_startup:NL:Controleer op updates bij het opstarten
 prefs_dialog.check_for_updates_on_startup:SK:Hľadať aktualizácie pri spustení
 prefs_dialog.check_for_updates_on_startup:JA:起動時に更新をチェックする
 prefs_dialog.check_for_updates_on_startup:SV:Sök uppdateringar vid uppstart
@@ -14120,7 +14120,7 @@ prefs_dialog.enable_bonjour_discovery:ES:Activar servicios de descubrimiento de 
 prefs_dialog.enable_bonjour_discovery:PL:Uaktywnij Powitanie
 prefs_dialog.enable_bonjour_discovery:KO:Bonjour서비스 탐색을 켭니다
 prefs_dialog.enable_bonjour_discovery:pt_BR:Abilitar Bonjour service discovery
-prefs_dialog.enable_bonjour_discovery:NL:Schakel bonjour services discovery in
+prefs_dialog.enable_bonjour_discovery:NL:Schakel Bonjour services discovery in
 prefs_dialog.enable_bonjour_discovery:SK:Povoliť služby Bonjour discoveny
 prefs_dialog.enable_bonjour_discovery:HU:A Bonjour szolgáltatások felderítésének engedélyezése
 prefs_dialog.enable_bonjour_discovery:JA:Bonjour サービス ディスカバリを有効にする
