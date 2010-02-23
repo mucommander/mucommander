@@ -161,6 +161,7 @@ Improvements:
   free space warning threshold.
 - Adjusted the layout of the main window to some screen estate around the
   toolbar. Contributed by Radomír Černoch.
+- Lowered memory usage by caching file attributes only when they are in use.  
 
 Localization:
 -

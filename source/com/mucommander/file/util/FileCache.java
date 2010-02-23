@@ -26,8 +26,8 @@ import org.apache.commons.collections.map.ReferenceMap;
  * Any kind of Object may be used as the key, but a sensible choice is to use the 
  * {@link AbstractFile#getURL() file's URL}.
  *
- * <p>Files are stored as {@link java.lang.ref.SoftReference soft references} so they can be garbage collected
- * when the VM runs low on memory.</p>
+ * <p>Files are stored as {@link java.lang.ref.WeakReference weak references} so they can be garbage collected
+ * when they are no longer hard-referenced.</p>
  *
  * <p>The implementation uses the {@link ReferenceMap} class part of the <code>Apache Commons Collection</code> library.
  * All accesses to the underlying map is synchronized, making this cache thread-safe.</p>
@@ -37,7 +37,7 @@ import org.apache.commons.collections.map.ReferenceMap;
 public class FileCache {
 
     /** The actual hash map */
-    protected final ReferenceMap hashMap = new ReferenceMap(ReferenceMap.HARD, ReferenceMap.SOFT);
+    protected final ReferenceMap hashMap = new ReferenceMap(ReferenceMap.HARD, ReferenceMap.WEAK);
 
     /**
      * Creates a new file cache.
