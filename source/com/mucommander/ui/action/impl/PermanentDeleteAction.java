@@ -41,6 +41,7 @@ public class PermanentDeleteAction extends SelectedFilesAction {
 
     public PermanentDeleteAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
         super(mainFrame, properties);
+
         setSelectedFileFilter(new FileOperationFilter(FileOperation.DELETE));
     }
 

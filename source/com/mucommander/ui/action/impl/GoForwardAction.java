@@ -30,7 +30,7 @@ import java.util.Hashtable;
  *
  * @author Maxence Bernard
  */
-public class GoForwardAction extends GoToAction {
+public class GoForwardAction extends ParentFolderAction {
 
     public GoForwardAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
         super(mainFrame, properties);

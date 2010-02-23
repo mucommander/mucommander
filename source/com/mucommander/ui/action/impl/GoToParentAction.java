@@ -33,7 +33,7 @@ import java.util.Hashtable;
  *
  * @author Maxence Bernard, Nicolas Rinaudo
  */
-public class GoToParentAction extends GoToAction {
+public class GoToParentAction extends ParentFolderAction {
     /**
      * Creates a new <code>GoToParentAction</code> with the specified parameters.
      * @param mainFrame  frame to which the action is attached.

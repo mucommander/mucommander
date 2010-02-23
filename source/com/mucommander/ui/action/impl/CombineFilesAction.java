@@ -19,8 +19,10 @@
 package com.mucommander.ui.action.impl;
 
 import com.mucommander.file.AbstractFile;
+import com.mucommander.file.FileOperation;
 import com.mucommander.file.filter.AttributeFileFilter;
 import com.mucommander.file.filter.FileFilter;
+import com.mucommander.file.filter.FileOperationFilter;
 import com.mucommander.file.util.FileSet;
 import com.mucommander.ui.action.*;
 import com.mucommander.ui.dialog.file.CombineFilesDialog;
@@ -38,6 +40,8 @@ public class CombineFilesAction extends SelectedFilesAction implements InvokesDi
 	
     public CombineFilesAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
         super(mainFrame, properties);
+
+        setSelectedFileFilter(new FileOperationFilter(FileOperation.READ_FILE));
     }
 
     @Override

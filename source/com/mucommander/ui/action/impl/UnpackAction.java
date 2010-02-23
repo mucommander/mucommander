@@ -40,10 +40,10 @@ public class UnpackAction extends SelectedFilesAction implements InvokesDialog {
         super(mainFrame, properties);
 
         // Unpack job operates on archives and directories
-        OrFileFilter filter = new OrFileFilter();
-        filter.addFileFilter(new AttributeFileFilter(AttributeFileFilter.ARCHIVE));
-        filter.addFileFilter(new AttributeFileFilter(AttributeFileFilter.DIRECTORY));
-        setSelectedFileFilter(filter);
+        setSelectedFileFilter(new OrFileFilter(
+            new AttributeFileFilter(AttributeFileFilter.ARCHIVE),
+            new AttributeFileFilter(AttributeFileFilter.DIRECTORY)
+        ));
     }
 
     @Override

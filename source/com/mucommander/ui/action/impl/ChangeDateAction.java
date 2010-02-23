@@ -18,6 +18,8 @@
 
 package com.mucommander.ui.action.impl;
 
+import com.mucommander.file.FileOperation;
+import com.mucommander.file.filter.FileOperationFilter;
 import com.mucommander.file.util.FileSet;
 import com.mucommander.ui.action.*;
 import com.mucommander.ui.dialog.file.ChangeDateDialog;
@@ -36,6 +38,8 @@ public class ChangeDateAction extends SelectedFilesAction implements InvokesDial
 
     public ChangeDateAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
         super(mainFrame, properties);
+
+        setSelectedFileFilter(new FileOperationFilter(FileOperation.CHANGE_DATE));
     }
 
 

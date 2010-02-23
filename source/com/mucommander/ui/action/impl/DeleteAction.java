@@ -42,6 +42,7 @@ public class DeleteAction extends SelectedFilesAction {
 
     public DeleteAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
         super(mainFrame, properties);
+
         setSelectedFileFilter(new FileOperationFilter(FileOperation.DELETE));
     }
 

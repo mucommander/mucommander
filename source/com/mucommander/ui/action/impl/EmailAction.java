@@ -18,6 +18,8 @@
 
 package com.mucommander.ui.action.impl;
 
+import com.mucommander.file.FileOperation;
+import com.mucommander.file.filter.FileOperationFilter;
 import com.mucommander.file.util.FileSet;
 import com.mucommander.ui.action.*;
 import com.mucommander.ui.dialog.file.EmailFilesDialog;
@@ -36,6 +38,8 @@ public class EmailAction extends SelectedFilesAction implements InvokesDialog {
 
     public EmailAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
         super(mainFrame, properties);
+
+        setSelectedFileFilter(new FileOperationFilter(FileOperation.READ_FILE));
     }
 
     @Override

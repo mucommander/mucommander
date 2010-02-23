@@ -28,15 +28,15 @@ import com.mucommander.ui.main.MainFrame;
 import java.util.Hashtable;
 
 /**
- * This class is an abstract {@link MuAction} that monitors changes in the currently active panel's location and calls
- * {@link #toggleEnabledState()} every time the location has changed, and when the current panel has changed to update
- * enable or disable this action.
+ * This class is an abstract {@link MuAction} that operates on the current folder. It monitors changes in the active
+ * panel's location and calls {@link #toggleEnabledState()} when the location has changed, or when the active panel
+ * itself has changed, in order to enable or disable this action.
  *
  * @author Maxence Bernard, Nicolas Rinaudo
  */
-public abstract class GoToAction extends MuAction implements ActivePanelListener, LocationListener {
+public abstract class ParentFolderAction extends MuAction implements ActivePanelListener, LocationListener {
 
-    public GoToAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+    public ParentFolderAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
         super(mainFrame, properties);
 
         // Listen to active table change events

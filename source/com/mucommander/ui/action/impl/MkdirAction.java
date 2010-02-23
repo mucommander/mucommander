@@ -22,10 +22,6 @@ import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileOperation;
 import com.mucommander.ui.action.*;
 import com.mucommander.ui.dialog.file.MkdirDialog;
-import com.mucommander.ui.event.ActivePanelListener;
-import com.mucommander.ui.event.LocationEvent;
-import com.mucommander.ui.event.LocationListener;
-import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.main.MainFrame;
 
 import javax.swing.KeyStroke;
@@ -37,7 +33,7 @@ import java.util.Hashtable;
  *
  * @author Maxence Bernard
  */
-public class MkdirAction extends MuAction implements ActivePanelListener, LocationListener {
+public class MkdirAction extends ParentFolderAction {
 
     public MkdirAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
         super(mainFrame, properties);
@@ -50,9 +46,9 @@ public class MkdirAction extends MuAction implements ActivePanelListener, Locati
         mainFrame.getRightPanel().getLocationManager().addLocationListener(this);
     }
 
-    private void toggleEnabledState() {
+    protected void toggleEnabledState() {
         AbstractFile firstFile = mainFrame.getActiveTable().getFileTableModel().getFileAt(0);
-;
+
         // If there is no file at all, do not rely on the action being supported by the current folder as this
         // would be incorrect for some filesystems which do not support operations consistently across the
         // filesystem (e.g. S3). In that case, err on the safe side and enable the action, even if the operation
@@ -63,33 +59,6 @@ public class MkdirAction extends MuAction implements ActivePanelListener, Locati
     @Override
     public void performAction() {
         new MkdirDialog(mainFrame, false).showDialog();
-    }
-
-
-    /////////////////////////////////
-    // ActivePanelListener methods //
-    /////////////////////////////////
-
-    public void activePanelChanged(FolderPanel folderPanel) {
-        toggleEnabledState();
-    }
-
-
-    //////////////////////////////
-    // LocationListener methods //
-    //////////////////////////////
-
-    public void locationChanged(LocationEvent e) {
-        toggleEnabledState();
-    }
-
-    public void locationChanging(LocationEvent e) {
-    }
-
-    public void locationCancelled(LocationEvent e) {
-    }
-
-    public void locationFailed(LocationEvent e) {
     }
 
 

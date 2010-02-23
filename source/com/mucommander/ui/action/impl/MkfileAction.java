@@ -18,6 +18,8 @@
 
 package com.mucommander.ui.action.impl;
 
+import com.mucommander.file.AbstractFile;
+import com.mucommander.file.FileOperation;
 import com.mucommander.ui.action.*;
 import com.mucommander.ui.dialog.file.MkdirDialog;
 import com.mucommander.ui.main.MainFrame;
@@ -31,10 +33,20 @@ import java.util.Hashtable;
  *
  * @author Maxence Bernard
  */
-public class MkfileAction extends MuAction {
+public class MkfileAction extends ParentFolderAction {
 
     public MkfileAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
         super(mainFrame, properties);
+    }
+
+    protected void toggleEnabledState() {
+        AbstractFile firstFile = mainFrame.getActiveTable().getFileTableModel().getFileAt(0);
+
+        // If there is no file at all, do not rely on the action being supported by the current folder as this
+        // would be incorrect for some filesystems which do not support operations consistently across the
+        // filesystem (e.g. S3). In that case, err on the safe side and enable the action, even if the operation
+        // end up not being supported.
+        setEnabled(firstFile==null || firstFile.isFileOperationSupported(FileOperation.WRITE_FILE));
     }
 
     @Override

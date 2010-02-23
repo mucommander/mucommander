@@ -18,7 +18,10 @@
 
 package com.mucommander.ui.action.impl;
 
+import com.mucommander.file.FileOperation;
+import com.mucommander.file.filter.AndFileFilter;
 import com.mucommander.file.filter.AttributeFileFilter;
+import com.mucommander.file.filter.FileOperationFilter;
 import com.mucommander.ui.action.*;
 import com.mucommander.ui.dialog.file.SplitFileDialog;
 import com.mucommander.ui.main.MainFrame;
@@ -27,18 +30,19 @@ import javax.swing.KeyStroke;
 import java.util.Hashtable;
 
 /**
- * This action invokes the split file dialog which allows to
- * split the selected file.
+ * This action invokes the split file dialog which allows to split the selected file into several parts.
  *
  * @author Mariusz Jakubowski
  */
-public class SplitFileAction extends SelectedFilesAction implements InvokesDialog {
-
+public class SplitFileAction extends SelectedFileAction implements InvokesDialog {
 
     public SplitFileAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
         super(mainFrame, properties);
 
-        setSelectedFileFilter(new AttributeFileFilter(AttributeFileFilter.DIRECTORY, true));
+        setSelectedFileFilter(new AndFileFilter(
+            new AttributeFileFilter(AttributeFileFilter.DIRECTORY, true),
+            new FileOperationFilter(FileOperation.READ_FILE)
+        ));
     }
 
     @Override

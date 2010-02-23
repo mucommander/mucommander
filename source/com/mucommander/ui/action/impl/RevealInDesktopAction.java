@@ -20,6 +20,9 @@
 package com.mucommander.ui.action.impl;
 
 import com.mucommander.desktop.DesktopManager;
+import com.mucommander.file.AbstractArchiveEntryFile;
+import com.mucommander.file.AbstractFile;
+import com.mucommander.file.FileProtocols;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.*;
 import com.mucommander.ui.dialog.InformationDialog;
@@ -36,12 +39,21 @@ import java.util.Hashtable;
  *
  * @author Maxence Bernard
  */
-public class RevealInDesktopAction extends MuAction {
+public class RevealInDesktopAction extends ParentFolderAction {
 
     public RevealInDesktopAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
         super(mainFrame, properties);
 
         setEnabled(DesktopManager.canOpenInFileManager());
+    }
+
+    @Override
+    protected void toggleEnabledState() {
+        AbstractFile currentFolder = mainFrame.getActiveTable().getCurrentFolder();
+        setEnabled(currentFolder.getURL().getScheme().equals(FileProtocols.FILE)
+               && !currentFolder.isArchive()
+               && !currentFolder.hasAncestor(AbstractArchiveEntryFile.class)
+        );
     }
 
     @Override

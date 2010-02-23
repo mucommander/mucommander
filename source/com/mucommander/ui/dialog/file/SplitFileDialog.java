@@ -48,7 +48,7 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
 /**
- * Dialog used to split a file into parts.
+ * Dialog used to split a file into several parts.
  * 
  * @author Mariusz Jakubowski
  */

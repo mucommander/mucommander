@@ -22,6 +22,7 @@ import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileOperation;
 import com.mucommander.file.filter.AndFileFilter;
 import com.mucommander.file.filter.FileOperationFilter;
+import com.mucommander.file.filter.OrFileFilter;
 import com.mucommander.ui.action.*;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.table.FileTable;
@@ -41,9 +42,12 @@ public class RenameAction extends SelectedFileAction {
     public RenameAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
         super(mainFrame, properties);
 
-        setSelectedFileFilter(new AndFileFilter(
-            new FileOperationFilter(FileOperation.READ_FILE),
-            new FileOperationFilter(FileOperation.WRITE_FILE)
+        setSelectedFileFilter(new OrFileFilter(
+            new FileOperationFilter(FileOperation.RENAME),
+            new AndFileFilter(
+                new FileOperationFilter(FileOperation.READ_FILE),
+                new FileOperationFilter(FileOperation.WRITE_FILE)
+            )
         ));
     }
 

@@ -30,7 +30,7 @@ import java.util.Hashtable;
  *
  * @author Maxence Bernard
  */
-public class GoBackAction extends GoToAction {
+public class GoBackAction extends ParentFolderAction {
 
     public GoBackAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
         super(mainFrame, properties);

@@ -30,7 +30,7 @@ import java.util.Hashtable;
  * and that is enabled only when a file other than the parent folder file '..' is selected.
  *
  * <p>Optionally, a FileFilter can be specified using {@link #setSelectedFileFilter(com.mucommander.file.filter.FileFilter) setSelectedFileFilter}
- * to further restrict the enabled condition to files that match the filter.
+ * to further restrict the enabled condition to files that match the filter.</p>
  *
  * @author Maxence Bernard
  */

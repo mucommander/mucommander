@@ -28,6 +28,9 @@ import java.util.Hashtable;
  * when at least one file is marked, or when a file other than the parent folder file '..' is selected.
  * When none of those conditions is satisfied, this action is disabled.
  *
+ * <p>Optionally, a FileFilter can be specified using {@link #setSelectedFileFilter(com.mucommander.file.filter.FileFilter) setSelectedFileFilter}
+ * to further restrict the enabled condition to files that match the filter.</p>
+ *
  * @author Maxence Bernard
  */
 public abstract class SelectedFilesAction extends SelectedFileAction {

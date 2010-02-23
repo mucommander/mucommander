@@ -95,6 +95,15 @@ public class ROArchiveEntryFile extends AbstractArchiveEntryFile {
     }
 
     /**
+     * Always throws {@link UnsupportedFileOperationException} when called.
+     */
+    @Override
+    @UnsupportedFileOperation
+    public void changePermission(int access, int permission, boolean enabled) throws UnsupportedFileOperationException {
+        throw new UnsupportedFileOperationException(FileOperation.CHANGE_PERMISSION);
+    }
+
+    /**
      * Always returns <code>0</code>.
      */
     @Override
