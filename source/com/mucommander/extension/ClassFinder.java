@@ -60,9 +60,10 @@ public class ClassFinder {
      * Creates a new instance of <code>ClassFinder</code>.
      */
     public ClassFinder() {
-        filter = new OrFileFilter();
-        filter.addFileFilter(new ExtensionFilenameFilter(".class"));
-        filter.addFileFilter(new AttributeFileFilter(AttributeFileFilter.DIRECTORY));
+        filter = new OrFileFilter(
+            new ExtensionFilenameFilter(".class"),
+            new AttributeFileFilter(AttributeFileFilter.DIRECTORY)
+        );
     }
 
 

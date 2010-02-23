@@ -86,9 +86,10 @@ public class SelfUpdateJob extends CopyJob {
         this.tempDestJar = tempDestJar;
         this.classLoader = getClass().getClassLoader();
 
-        directoryOrClassFileFilter = new OrFileFilter();
-        directoryOrClassFileFilter.addFileFilter(new AttributeFileFilter(AttributeFileFilter.DIRECTORY));
-        directoryOrClassFileFilter.addFileFilter(new ExtensionFilenameFilter(".class"));
+        directoryOrClassFileFilter = new OrFileFilter(
+            new AttributeFileFilter(AttributeFileFilter.DIRECTORY),
+            new ExtensionFilenameFilter(".class")
+        );
     }
 
     private static AbstractFile getTempDestJar(AbstractFile destJar) {
