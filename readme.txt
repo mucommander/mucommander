@@ -54,7 +54,7 @@ Improvements:
   operation on x86_64 architecture.
 - Improved the HTTP filesystem: better HTML/XHTML detection, follows links
   correctly.
-- Free space indicator now changes color gradually (#311) ; adjusted
+- Free space indicator now changes color gradually (ticket #311) ; adjusted
   free space warning threshold.
 - Adjusted the layout of the main window to some screen estate around the
   toolbar. Contributed by Radomír Černoch.
@@ -69,10 +69,10 @@ Bug fixes:
   (ticket #328).
 - Single click on folder panel treated as double click (ticket #321).
 - Fixed 'startup_error' message that wasn't properly localized.
-- Fixed 7zip files left open after being browsed (#334).
+- Fixed 7zip files left open after being browsed (ticket #334).
 - Mac OS X: raised the maximum memory that can be allocated to 128MB,
-  to cope with directories that contain more than 80K files (#332).
-- Unsafe behavior when deleting a bookmark from the file panel (#329).
+  to cope with directories that contain more than 80K files (ticket #332).
+- Unsafe behavior when deleting a bookmark from the file panel (ticket #329).
 
 Known issues:
 - Some translations may not be up-to-date. Refer to
