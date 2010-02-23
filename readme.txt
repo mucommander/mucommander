@@ -5,19 +5,19 @@
 |_|_|_|___|_____|___|_|_|_|_|_|_|__,|_|_|___|___|_| 
 
 
-----------------------------
-muCommander v0.8.5 (nightly)
-----------------------------
+------------------
+muCommander v0.8.5
+------------------
 
 muCommander is a cross-platform file manager featuring a Norton Commander
 style interface and running on any operating system with Java support
 (Mac OS X, Windows, Linux, *BSD, Solaris...).
 
-Please use the muCommander forums (http://www.mucommander.com/forums)
-to post your questions, suggestions or bug reports.
-Your feedback is important and always welcome!
+Documentation can be found at http://trac.mucommander.com/ .
+Please visit the muCommander forums (http://www.mucommander.com/forums) to ask
+questions, suggest features or report a bug. Your feedback is always welcome!
 
-Official website: http://www.mucommander.com
+Official website: http://www.mucommander.com .
 Copyright (C) 2002-2010 Maxence Bernard.
 
 
@@ -30,9 +30,63 @@ Java 1.6 is recommended, you can download it at http://java.com.
 Mac OS X users: your favorite OS already comes with a Java runtime so you're
 good to go!
 
-If you're having problems launching muCommander, make sure the $JAVA_HOME
+If you're having problems launching muCommander, make sure the JAVA_HOME
 environment variable points to the directory where your Java runtime is
 installed.
+
+
+What's new since v0.8.4 ?
+-------------------------
+
+New features:
+- Added support for Amazon S3.
+- Added support for the Hadoop HDFS filesystem.
+
+Improvements:
+- A proper error message is displayed when muCommander is started in a
+  headless environment.
+- Upgraded the commons-net FTP library to version 2.0 for increased
+  server compatibility.
+- Actions relying on a file operation that is not supported by the current
+  folder's filesystem are now disabled contextually.
+- Optimized the opening speed of Zip files.
+- Mac OS X: updated JavaApplicationStub and Info.plist to enable 64-bit
+  operation on x86_64 architecture.
+- Improved the HTTP filesystem: better HTML/XHTML detection, follows links
+  correctly.
+- Free space indicator now changes color gradually (#311) ; adjusted
+  free space warning threshold.
+- Adjusted the layout of the main window to some screen estate around the
+  toolbar. Contributed by Radomír Černoch.
+- Lowered memory usage by caching file attributes only when they are in use.
+- Migrated the codebase to Java 1.5 ; Java 1.4 is no longer supported.
+
+Localization:
+- Dutch translation updated with a few corrections.
+
+Bug fixes:
+- "Round displayed file sizes" checkbox does not refresh the panel correctly
+  (ticket #328).
+- Single click on folder panel treated as double click (ticket #321).
+- Fixed 'startup_error' message that wasn't properly localized.
+- Fixed 7zip files left open after being browsed (#334).
+- Mac OS X: raised the maximum memory that can be allocated to 128MB,
+  to cope with directories that contain more than 80K files (#332).
+- Unsafe behavior when deleting a bookmark from the file panel (#329).
+
+Known issues:
+- Some translations may not be up-to-date. Refer to
+  http://trac.mucommander.com/wiki/Translations for more information.
+- Recycle Bin not working on Windows 64-bit (ticket #234).
+- Executable permissions on local files are not properly preserved
+  when running a unix-based OS with Java 1.5.
+- SMB support may not work properly on non multi-language JRE.
+- 'Copy files to clipboard' not working with some applications (files are not
+  pasted).
+- Mac OS X: some keyboard shortcuts may conflict with global system shortcuts.
+- Authentication issues when using several sets of credentials (login/password)
+  for the same server (see ticket #76).
+- Untrusted HTTPS connections are allowed without a warning.
 
 
 License
@@ -136,62 +190,6 @@ Special thanks:
 
 Many thanks to all of you who suggested new features, reported bugs, sent warm
 emails or generously donated to the project !
-
-
-What's new since v0.8.4 ?
--------------------------
-
-New features:
-- Added support for Amazon S3.
-- Added support for the Hadoop HDFS filesystem.
-
-Improvements:
-- A proper error message is displayed when muCommander is started in a
-  headless environment.
-- Upgraded the commons-net FTP library to version 2.0 for increased
-  server compatibility.
-- Actions relying on a file operation that is not supported by the current
-  folder's filesystem are now disabled contextually.
-- Optimized the opening speed of Zip files.
-- Mac OS X: updated JavaApplicationStub and Info.plist to enable 64-bit
-  operation on x86_64 architecture.
-- Improved the HTTP filesystem: better HTML/XHTML detection, follows links
-  correctly.
-- Free space indicator now changes color gradually (#311) ; adjusted
-  free space warning threshold.
-- Adjusted the layout of the main window to some screen estate around the
-  toolbar. Contributed by Radomír Černoch.
-- Lowered memory usage by caching file attributes only when they are in use.  
-
-Localization:
--
-
-Bug fixes:
-- "Round displayed file sizes" checkbox does not refresh the panel correctly
-  (ticket #328).
-- Single click on folder panel treated as double click (ticket #321).
-- Fixed 'startup_error' message that wasn't properly localized.
-- Fixed 7zip files left open after being browsed (#334).
-- Mac OS X: raised the maximum memory that can be allocated to 128MB,
-  to cope with directories that contain more than 80K files (#332).
-- Unsafe behavior when deleting a bookmark from the file panel (#329).  
-
-Known issues:
-- Some translations are not up-to-date. Refer to
-  http://trac.mucommander.com/wiki/Translations for more information.
-- Recycle Bin not working on Windows 64-bit (ticket #234).
-- Executable permissions are not preserved properly for local files prior to
-  Java 1.6.
-- SMB support may not work properly on non multi-language JRE.
-- 'Copy files to clipboard' not working with some applications (files are not
-  pasted).
-- Mac OS X: some keyboard shortcuts may conflict with global system shortcuts.
-- Mac OS X: text fields don't work correctly when using a fractionally-scaled
-  font (known Java bug,
-   http://lists.apple.com/archives/Java-dev/2005/May/msg00670.html).
-- Authentication issues when using several sets of credentials (login/password)
-  for the same server (see ticket #76).
-- Untrusted HTTPS connections are allowed without a warning.
 
 
 Command Line Interface
