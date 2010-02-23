@@ -9,9 +9,9 @@
 muCommander v0.8.5
 ------------------
 
-muCommander is a cross-platform file manager featuring a Norton Commander
-style interface and running on any operating system with Java support
-(Mac OS X, Windows, Linux, *BSD, Solaris...).
+muCommander is a lightweight, cross-platform file manager with a dual-pane
+interface. It runs on any operating system with Java support (Mac OS X,
+Windows, Linux, *BSD, Solaris...).
 
 Documentation can be found at http://trac.mucommander.com/ .
 Please visit the muCommander forums (http://www.mucommander.com/forums) to ask
