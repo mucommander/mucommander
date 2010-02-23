@@ -56,7 +56,7 @@ Improvements:
   correctly.
 - Free space indicator now changes color gradually (ticket #311) ; adjusted
   free space warning threshold.
-- Adjusted the layout of the main window to some screen estate around the
+- Adjusted the layout of the main window to save some screen estate around the
   toolbar. Contributed by Radomír Černoch.
 - Lowered memory usage by caching file attributes only when they are in use.
 - Migrated the codebase to Java 1.5 ; Java 1.4 is no longer supported.
