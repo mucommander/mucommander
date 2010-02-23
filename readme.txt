@@ -148,17 +148,17 @@ New features:
 Improvements:
 - A proper error message is displayed when muCommander is started in a
   headless environment.
-- Upgraded the commons-net FTP library to version 2.0 for improved
-  compatibility.
+- Upgraded the commons-net FTP library to version 2.0 for increased
+  server compatibility.
 - Actions relying on a file operation that is not supported by the current
   folder's filesystem are now disabled contextually.
-- Optimized the opening of Zip files.
+- Optimized the opening speed of Zip files.
 - Mac OS X: updated JavaApplicationStub and Info.plist to enable 64-bit
   operation on x86_64 architecture.
 - Improved the HTTP filesystem: better HTML/XHTML detection, follows links
   correctly.
-- Free space indicator now changes color gradually (#311) ; adjusted warning
-  threshold.
+- Free space indicator now changes color gradually (#311) ; adjusted
+  free space warning threshold.
 - Adjusted the layout of the main window to some screen estate around the
   toolbar. Contributed by Radomír Černoch.
 
@@ -166,9 +166,9 @@ Localization:
 -
 
 Bug fixes:
-- "Round displayed file sizes" checkbox does sometimes not toggle correctly
+- "Round displayed file sizes" checkbox does not refresh the panel correctly
   (ticket #328).
-- Single click on the file table treated as double click (ticket #321).
+- Single click on folder panel treated as double click (ticket #321).
 - Fixed 'startup_error' message that wasn't properly localized.
 - Fixed 7zip files left open after being browsed (#334).
 - Mac OS X: raised the maximum memory that can be allocated to 128MB,
