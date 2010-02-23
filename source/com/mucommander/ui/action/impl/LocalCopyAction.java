@@ -48,10 +48,10 @@ public class LocalCopyAction extends SelectedFileAction {
     public LocalCopyAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
         super(mainFrame, properties);
 
-        AndFileFilter andFilter = new AndFileFilter();
-        andFilter.addFileFilter(new FileOperationFilter(FileOperation.READ_FILE));
-        andFilter.addFileFilter(new FileOperationFilter(FileOperation.WRITE_FILE));
-        setSelectedFileFilter(andFilter);
+        setSelectedFileFilter(new AndFileFilter(
+            new FileOperationFilter(FileOperation.READ_FILE),
+            new FileOperationFilter(FileOperation.WRITE_FILE)
+        ));
     }
 
     @Override

@@ -28,22 +28,26 @@ import com.mucommander.file.AbstractFile;
 public class AndFileFilter extends ChainedFileFilter {
 
     /**
-     * Creates a new AndFileFilter containing no {@link FileFilter} initially and operating in non-inverted
-     * mode.
+     * Creates a new <code>AndFileFilter</code> operating in non-inverted mode and containing the specified filters,
+     * if any.
+     *
+     * @param filters filters to add to this chained filter.
      */
-    public AndFileFilter() {
-        this(false);
+    public AndFileFilter(FileFilter... filters) {
+        this(false, filters);
     }
 
     /**
-     * Creates a new AndFileFilter containing no {@link FileFilter} initially and operating in non-inverted
-     * mode.
+     * Creates a new <code>AndFileFilter</code> operating in the specified mode and containing the specified filters,
+     * if any.
      *
      * @param inverted if true, this filter will operate in inverted mode.
+     * @param filters filters to add to this chained filter.
      */
-    public AndFileFilter(boolean inverted) {
-        super(inverted);
+    public AndFileFilter(boolean inverted, FileFilter... filters) {
+        super(inverted, filters);
     }
+
 
     
     ///////////////////////////////

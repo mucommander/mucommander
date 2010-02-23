@@ -39,19 +39,27 @@ public abstract class ChainedFileFilter extends AbstractFileFilter {
     protected Vector<FileFilter> filters = new Vector<FileFilter>();
 
     /**
-     * Creates a new ChainedFileFilter containing no {@link FileFilter} initially and operating in non-inverted mode.
+     * Creates a new <code>ChainedFileFilter</code> operating in non-inverted mode and containing the specified filters,
+     * if any.
+     *
+     * @param filters filters to add to this chained filter.
      */
-    public ChainedFileFilter() {
-        this(false);
+    public ChainedFileFilter(FileFilter... filters) {
+        this(false, filters);
     }
 
     /**
-     * Creates a new ChainedFileFilter containing no {@link FileFilter} initially and operating in the specified mode.
+     * Creates a new <code>ChainedFileFilter</code> operating in the specified mode and containing the specified filters,
+     * if any.
      *
      * @param inverted if true, this filter will operate in inverted mode.
+     * @param filters filters to add to this chained filter.
      */
-    public ChainedFileFilter(boolean inverted) {
+    public ChainedFileFilter(boolean inverted, FileFilter... filters) {
         super(inverted);
+
+        for(FileFilter filter : filters)
+            addFileFilter(filter);
     }
 
     /**

@@ -214,10 +214,10 @@ public class FileSelectionDialog extends FocusDialog implements ActionListener {
 
             // If folders are excluded, add a regular file filter and chain it with an AndFileFilter
             if(!includeFolders) {
-                AndFileFilter andFilter = new AndFileFilter();
-                andFilter.addFileFilter(new AttributeFileFilter(AttributeFileFilter.FILE));
-                andFilter.addFileFilter(filter);
-                filter = andFilter;
+                filter = new AndFileFilter(
+                    new AttributeFileFilter(AttributeFileFilter.FILE),
+                    filter
+                );
             }
 
             // Mark/unmark the files using the filter

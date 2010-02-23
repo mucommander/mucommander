@@ -47,10 +47,10 @@ public class InternalEditAction extends AbstractViewerAction {
         super(mainFrame, properties);
 
         // Edit requires being able to write the file (in addition to view requirements)
-        AndFileFilter andFilter = new AndFileFilter();
-        andFilter.addFileFilter(new FileOperationFilter(FileOperation.WRITE_FILE));
-        andFilter.addFileFilter(getSelectedFileFilter());
-        setSelectedFileFilter(andFilter);
+        setSelectedFileFilter(new AndFileFilter(
+            new FileOperationFilter(FileOperation.WRITE_FILE),
+            getSelectedFileFilter()
+        ));
 
         ImageIcon icon;
         if((icon = getStandardIcon(EditAction.class)) != null)

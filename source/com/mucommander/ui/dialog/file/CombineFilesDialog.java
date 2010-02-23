@@ -20,7 +20,10 @@ package com.mucommander.ui.dialog.file;
 
 import com.mucommander.AppLogger;
 import com.mucommander.file.AbstractFile;
-import com.mucommander.file.filter.*;
+import com.mucommander.file.filter.AndFileFilter;
+import com.mucommander.file.filter.AttributeFileFilter;
+import com.mucommander.file.filter.EqualsFilenameFilter;
+import com.mucommander.file.filter.StartsWithFilenameFilter;
 import com.mucommander.file.util.FileSet;
 import com.mucommander.file.util.PathUtils;
 import com.mucommander.file.util.PathUtils.ResolvedDestination;
@@ -74,15 +77,13 @@ public class CombineFilesDialog extends TransferDestinationDialog {
 		} catch (NumberFormatException e) {
 			return;
 		}
-		String name = part1.getNameWithoutExtension();
-		FilenameFilter startsFilter = new StartsWithFilenameFilter(name, false);
-		AttributeFileFilter filesFilter = new AttributeFileFilter(AttributeFileFilter.FILE);
-		EqualsFilenameFilter part1Filter = new EqualsFilenameFilter(part1.getName(), false);
-		part1Filter.setInverted(true);
-		AndFileFilter filter = new AndFileFilter();
-		filter.addFileFilter(startsFilter);
-		filter.addFileFilter(filesFilter);
-		filter.addFileFilter(part1Filter);
+
+		AndFileFilter filter = new AndFileFilter(
+            new StartsWithFilenameFilter(part1.getNameWithoutExtension(), false),
+            new AttributeFileFilter(AttributeFileFilter.FILE),
+            new EqualsFilenameFilter(part1.getName(), false, true)
+        );
+
 		try {
 			AbstractFile[] otherParts = parent.ls(filter);
             for (AbstractFile otherPart : otherParts) {

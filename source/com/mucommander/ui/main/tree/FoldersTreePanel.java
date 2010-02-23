@@ -86,9 +86,10 @@ public class FoldersTreePanel extends JPanel implements TreeSelectionListener,
         setLayout(new BorderLayout());
 
         // Filters out the files that should not be displayed in the tree view
-        AndFileFilter treeFileFilter = new AndFileFilter();
-        treeFileFilter.addFileFilter(new AttributeFileFilter(AttributeFileFilter.DIRECTORY));
-        treeFileFilter.addFileFilter(new ConfigurableFolderFilter());
+        AndFileFilter treeFileFilter = new AndFileFilter(
+            new AttributeFileFilter(AttributeFileFilter.DIRECTORY),
+            new ConfigurableFolderFilter()
+        );
 
         FileComparator sort = new FileComparator(FileComparator.NAME_CRITERION, true, true);
         model = new FilesTreeModel(treeFileFilter, sort);
