@@ -22,35 +22,36 @@ import com.mucommander.file.AbstractFile;
 import org.apache.commons.collections.map.ReferenceMap;
 
 /**
- * This class provides a file cache, mapping <code>Object</code> keys onto {@link AbstractFile} instances.
- * Any kind of Object may be used as the key, but a sensible choice is to use the 
- * {@link AbstractFile#getURL() file's URL}.
+ * This class allows {@link AbstractFile} instances to be pooled, so that existing file instances can be reused,
+ * and to guarantee that only one instance of the same file may exist at any given time.
+ * File keys are mapped onto {@link AbstractFile} instances. Any kind of Object may be used as the key,
+ * but a sensible choice is to use the {@link AbstractFile#getURL() file's URL}.
  *
  * <p>Files are stored as {@link java.lang.ref.WeakReference weak references} so they can be garbage collected
  * when they are no longer hard-referenced.</p>
  *
- * <p>The implementation uses the {@link ReferenceMap} class part of the <code>Apache Commons Collection</code> library.
- * All accesses to the underlying map is synchronized, making this cache thread-safe.</p>
+ * <p>This class uses the {@link ReferenceMap} class part of the <code>Apache Commons Collection</code> library.
+ * All accesses to the underlying map is synchronized, making this class thread-safe.</p>
  *
  * @author Maxence Bernard
  */
-public class FileCache {
+public class FilePool {
 
     /** The actual hash map */
     protected final ReferenceMap hashMap = new ReferenceMap(ReferenceMap.HARD, ReferenceMap.WEAK);
 
     /**
-     * Creates a new file cache.
+     * Creates a new file pool.
      */
-    public FileCache() {
+    public FilePool() {
     }
 
     /**
-     * Adds a new key/file mapping to the cache. If a mapping with the same key exists, it is replaced and the previous
+     * Adds a new key/file mapping to the pool. If a mapping with the same key exists, it is replaced and the previous
      * value returned.
      *
-     * @param key the key that will later allow to retrieve the cached file
-     * @param value the file instance to cache
+     * @param key the key that will later allow to retrieve the pooled file instance
+     * @param value the file instance to add to the pool
      * @return returns the file instance previously mapped onto the given key, <code>null</code> if no
      * such mapping existed
      */
@@ -71,11 +72,11 @@ public class FileCache {
     }
 
     /**
-     * Returns <code>true</code> if this cache currently contains a key/file mapping where the given key is used as
+     * Returns <code>true</code> if this pool currently contains a key/file mapping where the given key is used as
      * the mapping's key.
      *
      * @param key key to lookup
-     * @return <code>true</code> if this cache currently contains a key/file mapping where the given key is used as
+     * @return <code>true</code> if this pool currently contains a key/file mapping where the given key is used as
      * the mapping's key.
      */
     public synchronized boolean containsKey(Object key) {
@@ -83,11 +84,11 @@ public class FileCache {
     }
 
     /**
-     * Returns <code>true</code> if this cache currently contains a key/file mapping where the given file is used as
+     * Returns <code>true</code> if this pool currently contains a key/file mapping where the given file is used as
      * the mapping's value.
      *
      * @param file file to lookup
-     * @return <code>true</code> if this cache currently contains a key/file mapping where the given file is used as
+     * @return <code>true</code> if this pool currently contains a key/file mapping where the given file is used as
      * the mapping's key.
      */
     public synchronized boolean containsValue(AbstractFile file) {
@@ -95,7 +96,7 @@ public class FileCache {
     }
 
     /**
-     * Removes all existing key/file mapping from this cache, leaving the cache in the same state as it was right after
+     * Removes all existing key/file mapping from this pool, leaving the pool in the same state as it was right after
      * its creation.
      */
     public synchronized void clear() {
@@ -103,9 +104,9 @@ public class FileCache {
     }
 
     /**
-     * Returns the number of key/file mapping this cache currently contains.
+     * Returns the number of key/file mapping this pool currently contains.
      *
-     * @return the number of key/file mapping this cache currently contains.
+     * @return the number of key/file mapping this pool currently contains.
      */
     public synchronized int size() {
         return hashMap.size();
