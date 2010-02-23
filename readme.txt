@@ -174,6 +174,7 @@ Bug fixes:
 - Fixed 7zip files left open after being browsed (#334).
 - Mac OS X: raised the maximum memory that can be allocated to 128MB,
   to cope with directories that contain more than 80K files (#332).
+- Unsafe behavior when deleting a bookmark from the file panel (#329).  
 
 Known issues:
 - Some translations are not up-to-date. Refer to

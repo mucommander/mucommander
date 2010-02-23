@@ -6561,6 +6561,7 @@ bookmarks_menu.no_bookmark:UA:Закладок немає
 bookmarks_menu.no_bookmark:AR:لا توجد علامات
 
 drive_popup.network_shares:EN:Network shares
+drive_popup.network_shares:FR:Partages réseau
 drive_popup.network_shares:PL:Sieć
 # Translation missing (New!)
 
