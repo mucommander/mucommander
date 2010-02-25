@@ -27,7 +27,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- constants, such as the current version number.          -->
 
   <!-- Version number of the application.                      -->
-  <property name="app.version"            value="0.8.5"/>
+  <property name="app.version"            value="0.8.6"/>
   <!-- Copyright line of the application.                      -->
   <!-- This should typically be 2002-<current-year>            -->
   <property name="app.copyright"          value="2002-2010"/>
