@@ -39,40 +39,17 @@ What's new since v0.8.4 ?
 -------------------------
 
 New features:
-- Added support for Amazon S3.
-- Added support for the Hadoop HDFS filesystem.
+- 
 
 Improvements:
-- A proper error message is displayed when muCommander is started in a
-  headless environment.
-- Upgraded the commons-net FTP library to version 2.0 for increased
-  server compatibility.
-- Actions relying on a file operation that is not supported by the current
-  folder's filesystem are now disabled contextually.
-- Optimized the opening speed of Zip files.
-- Mac OS X: updated JavaApplicationStub and Info.plist to enable 64-bit
-  operation on x86_64 architecture.
-- Improved the HTTP filesystem: better HTML/XHTML detection, follows links
-  correctly.
-- Free space indicator now changes color gradually (ticket #311) ; adjusted
-  free space warning threshold.
-- Adjusted the layout of the main window to save some screen estate around the
-  toolbar. Contributed by Radomír Černoch.
-- Lowered memory usage by caching file attributes only when they are in use.
-- Migrated the codebase to Java 1.5 ; Java 1.4 is no longer supported.
+- Implemented natural file ordering, as suggested by 'andraaspar' in the forums. All symbols now come before digits
+  (ticket #282).
 
 Localization:
-- Dutch translation updated with a few corrections.
+-
 
 Bug fixes:
-- "Round displayed file sizes" checkbox does not refresh the panel correctly
-  (ticket #328).
-- Single click on folder panel treated as double click (ticket #321).
-- Fixed 'startup_error' message that wasn't properly localized.
-- Fixed 7zip files left open after being browsed (ticket #334).
-- Mac OS X: raised the maximum memory that can be allocated to 128MB,
-  to cope with directories that contain more than 80K files (ticket #332).
-- Unsafe behavior when deleting a bookmark from the file panel (ticket #329).
+-
 
 Known issues:
 - Some translations may not be up-to-date. Refer to

@@ -21,6 +21,8 @@ package com.mucommander.file.util;
 import com.mucommander.file.AbstractFile;
 
 import java.util.Comparator;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 /**
@@ -67,6 +69,9 @@ public class FileComparator implements Comparator<AbstractFile> {
     public final static int GROUP_CRITERION = 6;
 
 
+    private final static Pattern NAME_STARTS_WITH_NUMBER_PATTERN = Pattern.compile("^\\d+");
+
+
     /**
      * Creates a new FileComparator using the specified comparison criterion, order (ascending or descending) and
      * directory handling rule.
@@ -81,22 +86,107 @@ public class FileComparator implements Comparator<AbstractFile> {
         this.directoriesFirst = directoriesFirst;
     }
 
-    private long compareStrings(String s1, String s2) {
-        long diff;
 
-        if(s1==null && s2!=null)	    // s1 is null, s2 isn't
-            diff = -1;
-        else if(s1!=null && s2==null)	// s2 is null, s1 isn't
-            diff = 1;
-        // At this point, either both strings are null, or none of them are
-        else {
-            if (s1==null)		        // Both strings are null
-                diff = 0;
-            else			            // Both strings are not null
-                diff = s1.compareToIgnoreCase(s2);
+    /**
+     * Returns a <code>value</code> for the given character. Using this function in a comparator will separator
+     * symbols for digits and letters and put in the following order:
+     * <ul>
+     *   <li>symbols first</li>
+     *   <li>digits second</li>
+     *   <li>letters third</li>
+     * </ul>
+     *
+     * <p>This character order was suggested in ticket #282.</p> 
+     *
+     * @param c character for which to return a value
+     * @return a <code>value</code> for the given character
+     */
+    private int getCharacterValue(int c) {
+        if(Character.isLetter(c))
+            c += 131070;
+        else if(Character.isDigit(c))
+            c += 65535;
+
+        return c;
+    }
+
+    /**
+     * Compare the specified strings, following the contract of {@link Comparator#compare(Object, Object)}.
+     *
+     * @param s1 first string to compare
+     * @param s2 second string to compare.
+     * @param ignoreCase <code>true</code> to perform a case-insensitive string comparison, <code>false</code> to take
+     * the case into account.
+     * @param nullProtection <code>true</code> if any of s1 or s2 can be <code>null</code>, <code>false</code>
+     * if strings cannot be <code>null</code>.
+     * @return a negative integer, zero, or a positive integer as the first argument is less than, equal to, or greater
+     * than the second.
+     */
+    private int compareStrings(String s1, String s2, boolean ignoreCase, boolean nullProtection) {
+        // Protect against null values, only if requested
+        if(nullProtection) {
+            if(s1==null && s2!=null)	    // s1 is null, s2 isn't
+                return -1;
+            else if(s1!=null && s2==null)	// s2 is null, s1 isn't
+                return 1;
+            // At this point, either both strings are null, or none of them are
+            else {
+                if (s1==null)		        // Both strings are null
+                    return 0;
+                // else: Both strings are not null, go on with the comparison
+            }
         }
 
-        return diff;
+        // Special treatment for strings that start with a number, so they are ordered by the number's value, e.g.:
+        // 1 < 1abc < 2 < 10, like Mac OS X Finder and Windows Explorer do.
+        
+        // This special order applies only if both strings start with a number. Otherwise, the general order applies.
+        Matcher m1 = NAME_STARTS_WITH_NUMBER_PATTERN.matcher(s1);
+        if(m1.find()) {
+            Matcher m2 = NAME_STARTS_WITH_NUMBER_PATTERN.matcher(s2);
+            if(m2.find()) {
+                String g1 = m1.group();
+                String g2 = m2.group();
+
+                int g1Len = g1.length();
+                int g2Len = g2.length();
+
+                if(g1Len==g2Len)
+                    return g1.charAt(g1Len-1) - g2.charAt(g2Len-1);
+
+                return g1Len - g2Len;
+            }
+        }
+
+        int n1 = s1.length();
+        int n2 = s2.length();
+
+        for (int i=0; i<n1 && i<n2; i++) {
+            int c1 = s1.charAt(i);
+            int c2 = s2.charAt(i);
+
+            if(ignoreCase) {
+                if (c1 != c2) {
+                    c1 = Character.toUpperCase(c1);
+                    c2 = Character.toUpperCase(c2);
+                    if (c1 != c2) {
+                        // Quote from String#regionsMatches:
+                        // "Unfortunately, conversion to uppercase does not work properly for the Georgian alphabet, which
+                        // has strange rules about case conversion. So we need to make one last check before exiting."
+                        c1 = Character.toLowerCase(c1);
+                        c2 = Character.toLowerCase(c2);
+
+                        if (c1 != c2)
+                            return getCharacterValue(c1) -  getCharacterValue(c2);
+                    }
+                }
+            }
+            else if (c1 != c2) {
+                return getCharacterValue(c1) -  getCharacterValue(c2);
+            }
+        }
+
+        return n1 - n2;
     }
 
 
@@ -134,28 +224,29 @@ public class FileComparator implements Comparator<AbstractFile> {
             diff = f1.getPermissions().getIntValue() - f2.getPermissions().getIntValue();
         }
         else if (criterion == EXTENSION_CRITERION) {
-            diff = compareStrings(f1.getExtension(), f2.getExtension());
+            diff = compareStrings(f1.getExtension(), f2.getExtension(), true, true);
         }
         else if (criterion == OWNER_CRITERION) {
-            diff = compareStrings(f1.getOwner(), f2.getOwner());
+            diff = compareStrings(f1.getOwner(), f2.getOwner(), true, true);
         }
         else if (criterion == GROUP_CRITERION) {
-            diff = compareStrings(f1.getGroup(), f2.getGroup());
+            diff = compareStrings(f1.getGroup(), f2.getGroup(), true, true);
         }
         else {      // criterion == NAME_CRITERION
-            diff = f1.getName().compareToIgnoreCase(f2.getName());
+            diff = compareStrings(f1.getName(), f2.getName(), true, false);
+
             if(diff==0) {
                 // This should never happen unless the current filesystem allows a directory to have
                 // several files with different case variations of the same name.
                 // AFAIK, no OS/filesystem allows this, but just to be safe.
 
                 // Case-sensitive name comparison
-                diff = f1.getName().compareTo(f2.getName());
+                diff = compareStrings(f1.getName(), f2.getName(), false, false);
             }
         }
 
         if(criterion!=NAME_CRITERION && diff==0)	// If both files have the same criterion's value, compare names
-            diff = f1.getName().compareToIgnoreCase(f2.getName());
+            diff = compareStrings(f1.getName(), f2.getName(), true, false);
 
         // Cast long value to int, without overflowing the int if the long value exceeds the min or max int value
         int intValue;
