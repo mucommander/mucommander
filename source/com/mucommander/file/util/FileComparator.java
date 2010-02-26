@@ -102,12 +102,32 @@ public class FileComparator implements Comparator<AbstractFile> {
      * @return a <code>value</code> for the given character
      */
     private int getCharacterValue(int c) {
+        // Note: max char value is 65535
         if(Character.isLetter(c))
-            c += 131070;
+            c += 131070;    // yields a value higher than any other symbol or digit
         else if(Character.isDigit(c))
-            c += 65535;
+            c += 65535;     // yields a value higher than any other symbol
 
+        // else we have a symbol
         return c;
+    }
+
+    /**
+     * Removes leading zeros ('0') from the given string (if it contains any), and returns the trimmed string.
+     *
+     * @param s the string from which to remove leading zeros
+     * @return a string without leading zeros
+     */
+    private String removeLeadingZeros(String s) {
+        int len = s.length();
+        int i=0;
+        while(i<len && s.charAt(i)=='0')
+            i++;
+
+        if(i>0)
+            return s.substring(i, len);
+
+        return s;
     }
 
     /**
@@ -145,16 +165,22 @@ public class FileComparator implements Comparator<AbstractFile> {
         if(m1.find()) {
             Matcher m2 = NAME_STARTS_WITH_NUMBER_PATTERN.matcher(s2);
             if(m2.find()) {
-                String g1 = m1.group();
-                String g2 = m2.group();
+                String g1 = removeLeadingZeros(m1.group());
+                String g2 = removeLeadingZeros(m2.group());
 
                 int g1Len = g1.length();
                 int g2Len = g2.length();
 
-                if(g1Len==g2Len)
-                    return g1.charAt(g1Len-1) - g2.charAt(g2Len-1);
+                if(g1Len!=g2Len)
+                    return g1Len - g2Len;
 
-                return g1Len - g2Len;
+                int c1, c2;
+                for (int i=0; i<g1Len && i<g2Len; i++) {
+                    c1 = g1.charAt(i);
+                    c2 = g2.charAt(i);
+                    if(c1 != c2)
+                        return c1 - c2;
+                }
             }
         }
 
