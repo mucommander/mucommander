@@ -187,11 +187,9 @@ public class FileTableCellRenderer implements TableCellRenderer, ThemeListener {
         // Extension/icon column: return ImageIcon instance
         if(columnId == Columns.EXTENSION) {
             // Set file icon (parent folder icon if '..' file)
-            label.setIcon(
-                                   row==0 && tableModel.hasParentFolder()?
-                                   IconManager.getIcon(IconManager.FILE_ICON_SET, CustomFileIconProvider.PARENT_FOLDER_ICON_NAME, FileIcons.getScaleFactor())
-                                   :FileIcons.getFileIcon(file)
-                                   );
+            label.setIcon(row==0 && tableModel.hasParentFolder()
+                    ?IconManager.getIcon(IconManager.FILE_ICON_SET, CustomFileIconProvider.PARENT_FOLDER_ICON_NAME, FileIcons.getScaleFactor())
+                    :FileIcons.getFileIcon(file));
         }
         // Any other column (name, date or size)
         else {
@@ -201,19 +199,35 @@ public class FileTableCellRenderer implements TableCellRenderer, ThemeListener {
             else
                 label.setForeground(ThemeCache.unmatchedForeground);
 
-            // If component's preferred width is bigger than column width then the component is not entirely
-            // visible so we set a tooltip text that will display the whole text when mouse is over the 
-            // component
-            if (table.getColumnModel().getColumn(column).getWidth() < label.getPreferredSize().getWidth())
+            // Set the label's text, before calculating it width
+            label.setText(text);
+
+            // If label's width is larger than the column width:
+            // - truncate the text from the center and equally to the left and right sides, adding an ellipsis ('...')
+            // where characters have been removed. This allows both the start and end of filename to be visible.
+            // - set a tooltip text that will display the whole text when mouse is over the label
+            if (table.getColumnModel().getColumn(column).getWidth() < label.getPreferredSize().getWidth()) {
+                String leftText = text.substring(0, text.length()/2);
+                String rightText = text.substring(text.length()/2, text.length());
+
+                while(table.getColumnModel().getColumn(column).getWidth() < label.getPreferredSize().getWidth()
+                   && leftText.length()>0 && rightText.length()>0) {    // Prevents against going out of bounds
+
+                    if(leftText.length()>rightText.length())
+                        leftText = leftText.substring(0, leftText.length()-1);
+                    else
+                        rightText = rightText.substring(1, rightText.length());
+
+                    label.setText(leftText+"..."+rightText);
+                }
+
+                // Set the toop
                 label.setToolTipText(text);
+            }
             // Have to set it to null otherwise the defaultRender sets the tooltip text to the last one
             // specified
             else
                 label.setToolTipText(null);
-
-
-            // Set label's text
-            label.setText(text); 
         }
 
         // Set background color depending on whether the row is selected or not, and whether the table has focus or not
