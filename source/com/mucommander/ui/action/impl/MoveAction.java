@@ -52,13 +52,8 @@ public class MoveAction extends SelectedFilesAction {
     }
 
     @Override
-    public void performAction() {
-        FileSet files = mainFrame.getActiveTable().getSelectedFiles();
-
-        // Display move dialog only if at least one file is selected/marked
-        if(files.size()>0) {
-            new MoveDialog(mainFrame, files).showDialog();
-        }
+    public void performAction(FileSet files) {
+        new MoveDialog(mainFrame, files).showDialog();
     }
     
     public static class Factory implements ActionFactory {

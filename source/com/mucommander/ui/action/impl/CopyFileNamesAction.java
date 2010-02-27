@@ -41,24 +41,20 @@ public class CopyFileNamesAction extends SelectedFilesAction {
     }
 
     @Override
-    public void performAction() {
-        FileSet selectedFiles = mainFrame.getActiveTable().getSelectedFiles();
+    public void performAction(FileSet files) {
+        // Create a TransferableFileSet and make DataFlavour.stringFlavor (text) the only DataFlavour supported
+        TransferableFileSet tfs = new TransferableFileSet(files);
 
-        if(selectedFiles.size()>0) {
-            // Create a TransferableFileSet and make DataFlavour.stringFlavor (text) the only DataFlavour supported
-            TransferableFileSet tfs = new TransferableFileSet(selectedFiles);
+        // Disable unwanted data flavors
+        tfs.setJavaFileListDataFlavorSupported(false);
+        tfs.setTextUriFlavorSupported(false);
+        // Note: not disabling this flavor would throw an exception because the flavor data is not serializable
+        tfs.setFileSetDataFlavorSupported(false);
 
-            // Disable unwanted data flavors
-            tfs.setJavaFileListDataFlavorSupported(false);
-            tfs.setTextUriFlavorSupported(false);
-            // Note: not disabling this flavor would throw an exception because the flavor data is not serializable
-            tfs.setFileSetDataFlavorSupported(false);
+        // Transfer filenames, not file paths
+        tfs.setStringDataFlavourTransfersFilename(true);
 
-            // Transfer filenames, not file paths
-            tfs.setStringDataFlavourTransfersFilename(true);
-
-            ClipboardSupport.setClipboardContents(tfs);
-        }
+        ClipboardSupport.setClipboardContents(tfs);
     }
     
     public static class Factory implements ActionFactory {

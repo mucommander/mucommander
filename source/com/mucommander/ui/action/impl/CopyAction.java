@@ -43,12 +43,8 @@ public class CopyAction extends SelectedFilesAction {
     }
 
     @Override
-    public void performAction() {
-        FileSet files = mainFrame.getActiveTable().getSelectedFiles();
-
-        // Display copy dialog only if at least one file is selected/marked
-        if(files.size()>0)
-            new CopyDialog(mainFrame, files).showDialog();
+    public void performAction(FileSet files) {
+        new CopyDialog(mainFrame, files).showDialog();
     }
     
     public static class Factory implements ActionFactory {

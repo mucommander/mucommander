@@ -43,10 +43,8 @@ public class EmailAction extends SelectedFilesAction implements InvokesDialog {
     }
 
     @Override
-    public void performAction() {
-        FileSet files = mainFrame.getActiveTable().getSelectedFiles();
-        if(files.size()>0)
-            new EmailFilesDialog(mainFrame, files).showDialog();
+    public void performAction(FileSet files) {
+        new EmailFilesDialog(mainFrame, files).showDialog();
     }
     
     public static class Factory implements ActionFactory {

@@ -39,10 +39,8 @@ public class ShowFilePropertiesAction extends SelectedFilesAction {
     }
 
     @Override
-    public void performAction() {
-        FileSet files = mainFrame.getActiveTable().getSelectedFiles();
-        if(files.size()>0)
-            new PropertiesDialog(mainFrame, files).showDialog();
+    public void performAction(FileSet files) {
+        new PropertiesDialog(mainFrame, files).showDialog();
     }
     
     public static class Factory implements ActionFactory {

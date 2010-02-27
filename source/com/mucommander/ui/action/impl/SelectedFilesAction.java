@@ -18,6 +18,7 @@
 
 package com.mucommander.ui.action.impl;
 
+import com.mucommander.file.util.FileSet;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.table.FileTable;
 
@@ -43,4 +44,29 @@ public abstract class SelectedFilesAction extends SelectedFileAction {
     protected boolean getFileTableCondition(FileTable fileTable) {
         return fileTable.getFileTableModel().getNbMarkedFiles()>0 || super.getFileTableCondition(fileTable);
     }
+
+
+    /////////////////////////////
+    // MuAction implementation //
+    /////////////////////////////
+
+    @Override
+    public final void performAction() {
+        FileSet files = mainFrame.getActiveTable().getSelectedFiles();
+        // Perform the action only if at least one file is selected/marked
+        if(files.size()>0)
+            performAction(files);
+    }
+
+
+    //////////////////////
+    // Abstract methods //
+    //////////////////////
+    
+    /**
+     * Performs the action on the files that were selected/marked by the user in the currently active table.
+     *
+     * @param files files that were selected/marked by the user in the currently active table
+     */
+    public abstract void performAction(FileSet files);
 }

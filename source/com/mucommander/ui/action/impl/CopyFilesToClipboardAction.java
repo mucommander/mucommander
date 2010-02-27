@@ -40,11 +40,8 @@ public class CopyFilesToClipboardAction extends SelectedFilesAction {
     }
 
     @Override
-    public void performAction() {
-        FileSet selectedFiles = mainFrame.getActiveTable().getSelectedFiles();
-
-        if(selectedFiles.size()>0)
-            ClipboardSupport.setClipboardFiles(selectedFiles);
+    public void performAction(FileSet files) {
+        ClipboardSupport.setClipboardFiles(files);
     }
     
     public static class Factory implements ActionFactory {

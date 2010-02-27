@@ -45,9 +45,7 @@ public class CombineFilesAction extends SelectedFilesAction implements InvokesDi
     }
 
     @Override
-    public void performAction() {
-    	FileSet files = mainFrame.getActiveTable().getSelectedFiles();
-
+    public void performAction(FileSet files) {
         // Filter out files that are not regular files
         FileFilter filter = new AttributeFileFilter(AttributeFileFilter.FILE);
         filter.filter(files);

@@ -43,10 +43,8 @@ public class PackAction extends SelectedFilesAction implements InvokesDialog {
     }
 
     @Override
-    public void performAction() {
-        FileSet files = mainFrame.getActiveTable().getSelectedFiles();
-        if(files.size()>0)
-            new PackDialog(mainFrame, files, false).showDialog();
+    public void performAction(FileSet files) {
+        new PackDialog(mainFrame, files, false).showDialog();
     }
     
     public static class Factory implements ActionFactory {

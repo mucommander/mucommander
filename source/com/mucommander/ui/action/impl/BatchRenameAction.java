@@ -52,13 +52,8 @@ public class BatchRenameAction extends SelectedFilesAction implements InvokesDia
     }
 
     @Override
-    public void performAction() {
-        FileSet files = mainFrame.getActiveTable().getSelectedFiles();
-
-        // Display copy dialog only if at least one file is selected/marked
-        if(files.size()>0)
-            new BatchRenameDialog(mainFrame, files).showDialog();
-
+    public void performAction(FileSet files) {
+        new BatchRenameDialog(mainFrame, files).showDialog();
     }
 
     public static class Factory implements ActionFactory {
