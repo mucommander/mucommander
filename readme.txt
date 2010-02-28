@@ -53,7 +53,8 @@ Localization:
 - Russian translation updated. Update contributed by Alexey Sirotov.
 
 Bug fixes:
--
+- Pack dialog now implements the same filename selection algorithm as other dialogs
+  (ticket #167).
 
 Known issues:
 - Some translations may not be up-to-date. Refer to
