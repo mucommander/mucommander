@@ -956,7 +956,8 @@ file_manager:AR:مدير الملفات
 file_manager:pt_BR:Gerenciador de arquivos
 file_manager:SK:Správca súborov
 file_manager:zh_CN:文件管理器
-# Translation missing (ES, KO, RU)
+file_manager:RU:Файловый менеджер
+# Translation missing (ES, KO)
 
 # Used as a button label, in the 'Mkdir' dialog for instance
 create:EN:Create
@@ -2323,6 +2324,7 @@ startup_error:HU:Váratlan hiba fordult elő a muCommander indulásakor.
 startup_error:CS:Vyskytla se chyba bránící spuštění aplikace muCommander.
 startup_error:zh_CN:一个错误阻止了 muCommander 的启动
 startup_error:PL:Błąd uniemożliwił uruchomienie muCommander'a.
+startup_error:RU:Предстартовая ошибка muCommander'а.
 # Translation missing (New!)
 
 
@@ -6601,6 +6603,7 @@ bookmarks_menu.no_bookmark:AR:لا توجد علامات
 drive_popup.network_shares:EN:Network shares
 drive_popup.network_shares:FR:Partages réseau
 drive_popup.network_shares:PL:Sieć
+drive_popup.network_shares:RU:Сетевой общий ресурс
 # Translation missing (New!)
 
 # Title of the Quick lists menu
@@ -10392,7 +10395,8 @@ server_connect_dialog.passphrase:UA:Ключова фраза
 server_connect_dialog.passphrase:AR:كلمة السر
 server_connect_dialog.passphrase:SK:Heslo
 server_connect_dialog.passphrase:zh_CN:密码
-# Translation missing (ES, KO, RU)
+server_connect_dialog.passphrase:RU:Ключевая фраза
+# Translation missing (ES, KO)
 
 
 ###############
@@ -15269,7 +15273,7 @@ batch_rename_dialog.search_for:UA:Шукати
 batch_rename_dialog.search_for:AR:بحث عن
 batch_rename_dialog.search_for:SK:Hľadaný výraz
 batch_rename_dialog.search_for:zh_CN:查找
-batch_rename_dialog.search_for:RU:Искать для
+batch_rename_dialog.search_for:RU:Искать
 # Translation missing (ES, KO)
 
 batch_rename_dialog.replace_with:EN:Replace with
