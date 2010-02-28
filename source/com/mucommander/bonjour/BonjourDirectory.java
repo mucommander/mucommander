@@ -79,7 +79,7 @@ public class BonjourDirectory implements ServiceListener {
         if(enabled && jmDNS==null) {
             // Start JmDNS
             try {
-                jmDNS = new JmDNS();
+                jmDNS = JmDNS.create();
 
                 // Listens to service events for known service types
                 int nbServices = KNOWN_SERVICE_TYPES.length;

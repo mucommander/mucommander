@@ -45,7 +45,8 @@ Improvements:
 - Implemented natural file ordering, as suggested by 'andraaspar' in the forums. All symbols now come before digits
   (ticket #282).
 - Improved the display of filenames when they are not entirely visible, by removing characters in the middle so that
-  both ends of the filename are visible.  
+  both ends of the filename are visible.
+- JmDNS library used for Bonjour support has been upgraded to version 3.1.    
 
 Localization:
 -
