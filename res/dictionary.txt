@@ -3374,8 +3374,6 @@ Delete.tooltip:SK:Zmazať označené súbory (do koša, ak je k dispozícii)
 Delete.tooltip:RU:Удаление выделенных файлов в корзину, если это возможно
 # The following entries need to be updated to indicate that the system trash is used when it is available
 Delete.tooltip:ES:Elimiar los ficheros marcados
-Delete.tooltip:RU:Удаление выделенных файлов в корзину, если это возможно
-Delete.tooltip:RO:Șterge fișierele selectate
 Delete.tooltip:KO:선택된 파일 삭제
 # Translation missing (ES, KO)
 
@@ -10467,7 +10465,7 @@ ftp_connect.nb_connection_retries:UA:Кількість спроб з'єднан
 ftp_connect.nb_connection_retries:AR:عدد إعادة محاولات الاتصال
 ftp_connect.nb_connection_retries:SK:Počet pokusov o pripojenie
 ftp_connect.nb_connection_retries:zh_CN:连接重试次数
-# Translation missing (ES, KO, RU)
+# Translation missing (ES, KO)
 
 ftp_connect.retry_delay:EN:Delay between retries (in seconds)
 ftp_connect.retry_delay:FR:Délai entre tentatives de connexion (en secondes)
@@ -10489,7 +10487,7 @@ ftp_connect.retry_delay:UA:Пауза між спробами (секунди)
 ftp_connect.retry_delay:AR:المدة بين محاولتي الاتصال (بالثواني)
 ftp_connect.retry_delay:SK:Pauza medzi pokusmi (v sekundách)
 ftp_connect.retry_delay:zh_CN:重试延迟时间(秒)
-# Translation missing (ES, KO, RU)
+# Translation missing (ES, KO)
 
 
 ################
