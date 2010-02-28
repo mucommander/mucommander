@@ -46,7 +46,8 @@ Improvements:
   (ticket #282).
 - Improved the display of filenames when they are not entirely visible, by removing characters in the middle so that
   both ends of the filename are visible.
-- JmDNS library used for Bonjour support has been upgraded to version 3.1.    
+- Upgraded the JmDNS library (used for Bonjour support) to version 3.1.
+- Upgraded the jCIFS library (used for SMB support) to version 1.3.14.
 
 Localization:
 -
