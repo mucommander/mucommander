@@ -60,6 +60,7 @@ import java.lang.reflect.InvocationTargetException;
 public abstract class TransferDestinationDialog extends JobDialog implements ActionListener, DocumentListener {
     protected String errorDialogTitle;
 
+    private YBoxPanel mainPanel;
     private FilePathField pathField;
     private SpinningDial spinningDial;
 
@@ -96,12 +97,12 @@ public abstract class TransferDestinationDialog extends JobDialog implements Act
     };
 	
 
-    public TransferDestinationDialog(MainFrame mainFrame, FileSet files, String title, String labelText, String okText, String errorDialogTitle) {
+    public TransferDestinationDialog(MainFrame mainFrame, FileSet files, String title, String labelText, String okText, String errorDialogTitle, boolean addTransferOptions) {
         super(mainFrame, title, files);
 
         this.errorDialogTitle = errorDialogTitle;
 
-        YBoxPanel mainPanel = new YBoxPanel();
+        mainPanel = new YBoxPanel();
         mainPanel.add(new JLabel(labelText+" :"));
 
         // Create a path field with auto-completion capabilities
@@ -119,22 +120,26 @@ public abstract class TransferDestinationDialog extends JobDialog implements Act
         // Path field will receive initial focus
         setInitialFocusComponent(pathField);		
 
-        // Combo box that allows the user to choose the default action when a file already exists in destination
-        mainPanel.add(new JLabel(Translator.get("destination_dialog.file_exists_action")+" :"));
-        fileExistsActionComboBox = new JComboBox();
-        fileExistsActionComboBox.addItem(Translator.get("ask"));
-        int nbChoices = DEFAULT_ACTIONS_TEXT.length;
-        for(int i=0; i<nbChoices; i++)
-            fileExistsActionComboBox.addItem(DEFAULT_ACTIONS_TEXT[i]);
-        mainPanel.add(fileExistsActionComboBox);
+        if(addTransferOptions) {
+            // Combo box that allows the user to choose the default action when a file already exists in destination
+            mainPanel.add(new JLabel(Translator.get("destination_dialog.file_exists_action")+" :"));
+            fileExistsActionComboBox = new JComboBox();
+            fileExistsActionComboBox.addItem(Translator.get("ask"));
+            int nbChoices = DEFAULT_ACTIONS_TEXT.length;
+            for(int i=0; i<nbChoices; i++)
+                fileExistsActionComboBox.addItem(DEFAULT_ACTIONS_TEXT[i]);
+            mainPanel.add(fileExistsActionComboBox);
 
-        skipErrorsCheckBox = new JCheckBox(Translator.get("destination_dialog.skip_errors"));
-        mainPanel.add(skipErrorsCheckBox);
+            skipErrorsCheckBox = new JCheckBox(Translator.get("destination_dialog.skip_errors"));
+            mainPanel.add(skipErrorsCheckBox);
 
-        verifyIntegrityCheckBox = new JCheckBox(Translator.get("destination_dialog.verify_integrity"));
-        mainPanel.add(verifyIntegrityCheckBox);
+            verifyIntegrityCheckBox = new JCheckBox(Translator.get("destination_dialog.verify_integrity"));
+            mainPanel.add(verifyIntegrityCheckBox);
 
-        mainPanel.addSpace(10);
+            mainPanel.addSpace(10);
+        }
+
+        getContentPane().add(mainPanel, BorderLayout.NORTH);
 
         // Create file details button and OK/cancel buttons and lay them out a single row
         JPanel fileDetailsPanel = createFileDetailsPanel();
@@ -144,12 +149,13 @@ public abstract class TransferDestinationDialog extends JobDialog implements Act
         okButton.setEnabled(false);
         JButton cancelButton = new JButton(Translator.get("cancel"));
 
-        mainPanel.add(createButtonsPanel(createFileDetailsButton(fileDetailsPanel),
+        YBoxPanel buttonsPanel = new YBoxPanel();
+        buttonsPanel.add(createButtonsPanel(createFileDetailsButton(fileDetailsPanel),
                 DialogToolkit.createOKCancelPanel(okButton, cancelButton, getRootPane(), this)));
-        mainPanel.add(fileDetailsPanel);
+        buttonsPanel.add(fileDetailsPanel);
 
-        getContentPane().add(mainPanel, BorderLayout.NORTH);
-		
+        getContentPane().add(buttonsPanel, BorderLayout.SOUTH);
+
         // Set minimum/maximum dimension
         setMinimumSize(MINIMUM_DIALOG_DIMENSION);
         setMaximumSize(MAXIMUM_DIALOG_DIMENSION);
@@ -157,16 +163,37 @@ public abstract class TransferDestinationDialog extends JobDialog implements Act
         // Dispose this dialog when the close window button is pressed
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
-        // Interrupt any ongoing thread when the dialog has been closed, regardless of how it has been closed.
         addWindowListener(new WindowAdapter() {
             @Override
+            public void windowOpened(WindowEvent e) {
+                // Spawn a new thread that retrieves the initial path (I/O-bound) and sets the path field accordingly
+                startThread(new InitialPathRetriever());
+            }
+
+            @Override
             public void windowClosed(WindowEvent e) {
+                // Interrupt any ongoing thread when the dialog has been closed, regardless of how it has been closed.
                 interruptOngoingThread();
             }
         });
+    }
 
-        // Spawn a new thread that retrieves the initial path (I/O-bound) and sets the path field accordingly
-        startThread(new InitialPathRetriever());
+    /**
+     * Returns the main panel that contains the path field.
+     *
+     * @return the main panel that contains the path field.
+     */
+    protected YBoxPanel getMainPanel() {
+        return mainPanel;
+    }
+
+    /**
+     * Returns the field where the destination path has to be entered.
+     *
+     * @return the field where the destination path has to be entered.
+     */
+    protected FilePathField getPathField() {
+        return pathField;
     }
 
     /**

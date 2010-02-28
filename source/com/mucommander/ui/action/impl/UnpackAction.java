@@ -48,7 +48,7 @@ public class UnpackAction extends SelectedFilesAction implements InvokesDialog {
 
     @Override
     public void performAction(FileSet files) {
-        new UnpackDialog(mainFrame, files, false).showDialog();
+        new UnpackDialog(mainFrame, files).showDialog();
     }
     
     public static class Factory implements ActionFactory {

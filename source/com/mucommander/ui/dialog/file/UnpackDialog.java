@@ -19,7 +19,6 @@
 
 package com.mucommander.ui.dialog.file;
 
-import com.mucommander.file.AbstractFile;
 import com.mucommander.file.util.FileSet;
 import com.mucommander.file.util.PathUtils;
 import com.mucommander.job.TransferFileJob;
@@ -37,23 +36,19 @@ import com.mucommander.ui.main.MainFrame;
  */
 public class UnpackDialog extends TransferDestinationDialog {
 
-    protected boolean isShiftDown;
-
     /**
      * Creates and displays a new UnpackDialog.
      *
      * @param mainFrame the main frame this dialog is attached to
      * @param files the set of files to unpack
-     * @param isShiftDown true if shift key was pressed when invoking this dialog
      */
-    public UnpackDialog(MainFrame mainFrame, FileSet files, boolean isShiftDown) {
+    public UnpackDialog(MainFrame mainFrame, FileSet files) {
         super(mainFrame, files,
         	  ActionProperties.getActionLabel(UnpackAction.Descriptor.ACTION_ID),
               Translator.get("unpack_dialog.destination"),
               Translator.get("unpack"),
-              Translator.get("unpack_dialog.error_title"));
-
-        this.isShiftDown = isShiftDown;
+              Translator.get("unpack_dialog.error_title"),
+              true);
     }
 
     
@@ -63,14 +58,7 @@ public class UnpackDialog extends TransferDestinationDialog {
 
     @Override
     protected PathFieldContent computeInitialPath(FileSet files) {
-        AbstractFile destFolder = mainFrame.getInactiveTable().getCurrentFolder();
-        String fieldText;
-        if(isShiftDown)
-            fieldText = ".";
-        else
-            fieldText = destFolder.getAbsolutePath(true);
-
-        return new PathFieldContent(fieldText);
+        return new PathFieldContent(mainFrame.getInactiveTable().getCurrentFolder().getAbsolutePath(true));
     }
 
     @Override

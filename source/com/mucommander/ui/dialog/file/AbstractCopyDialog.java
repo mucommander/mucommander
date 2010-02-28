@@ -32,7 +32,7 @@ import com.mucommander.ui.main.MainFrame;
 public abstract class AbstractCopyDialog extends TransferDestinationDialog {
 
     public AbstractCopyDialog(MainFrame mainFrame, FileSet files, String title, String labelText, String okText, String errorDialogTitle) {
-        super(mainFrame, files, title, labelText, okText, errorDialogTitle);
+        super(mainFrame, files, title, labelText, okText, errorDialogTitle, true);
     }
 
     /**

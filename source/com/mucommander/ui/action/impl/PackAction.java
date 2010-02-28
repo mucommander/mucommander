@@ -44,7 +44,7 @@ public class PackAction extends SelectedFilesAction implements InvokesDialog {
 
     @Override
     public void performAction(FileSet files) {
-        new PackDialog(mainFrame, files, false).showDialog();
+        new PackDialog(mainFrame, files).showDialog();
     }
     
     public static class Factory implements ActionFactory {

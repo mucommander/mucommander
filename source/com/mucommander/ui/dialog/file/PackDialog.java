@@ -19,27 +19,26 @@
 
 package com.mucommander.ui.dialog.file;
 
+import com.mucommander.desktop.DesktopManager;
+import com.mucommander.file.AbstractFile;
 import com.mucommander.file.archiver.Archiver;
 import com.mucommander.file.util.FileSet;
 import com.mucommander.file.util.PathUtils;
 import com.mucommander.job.ArchiveJob;
+import com.mucommander.job.TransferFileJob;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionProperties;
 import com.mucommander.ui.action.impl.PackAction;
-import com.mucommander.ui.dialog.DialogToolkit;
-import com.mucommander.ui.dialog.QuestionDialog;
 import com.mucommander.ui.layout.YBoxPanel;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.table.FileTable;
 import com.mucommander.ui.text.FilePathField;
 
-import javax.swing.*;
-import java.awt.BorderLayout;
-import java.awt.Container;
-import java.awt.Dimension;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextArea;
 import java.awt.FlowLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
@@ -50,33 +49,22 @@ import java.awt.event.ItemListener;
  *
  * @author Maxence Bernard
  */
-public class PackDialog extends JobDialog implements ActionListener, ItemListener {
+public class PackDialog extends TransferDestinationDialog implements ItemListener {
 
-    private JTextField filePathField;
-	
     private JComboBox formatsComboBox;
     private int formats[];
 	
     private JTextArea commentArea;
 
-    private JButton okButton;
-    private JButton cancelButton;
-
     /** Used to keep track of the last selected archive format. */
-    private int oldFormatIndex;
-
-    // Dialog's width has to be at least 240
-    private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(320,0);	
-
-    // Dialog's width has to be at most 320
-    private final static Dimension MAXIMUM_DIALOG_DIMENSION = new Dimension(400,10000);	
+    private int lastFormatIndex;
 
     /** Last archive format used (Zip initially), selected by default when this dialog is created */
     private static int lastFormat = Archiver.ZIP_FORMAT;
 
 
-    public PackDialog(MainFrame mainFrame, FileSet files, boolean isShiftDown) {
-        super(mainFrame, ActionProperties.getActionLabel(PackAction.Descriptor.ACTION_ID), files);
+    public PackDialog(MainFrame mainFrame, FileSet files) {
+        super(mainFrame, files, ActionProperties.getActionLabel(PackAction.Descriptor.ACTION_ID), Translator.get("pack_dialog_description"), Translator.get("pack"), Translator.get("pack_dialog.error_title"), false);
 
         // Retrieve available formats for single file or many file archives
         int nbFiles = files.size();
@@ -92,37 +80,8 @@ public class PackDialog extends JobDialog implements ActionListener, ItemListene
                 break;
             }
         }
-        oldFormatIndex = initialFormatIndex;
-		
-        Container contentPane = getContentPane();
-		
-        YBoxPanel mainPanel = new YBoxPanel(5);
-        JLabel label = new JLabel(Translator.get("pack_dialog_description")+" :");
-        mainPanel.add(label);
-
-        FileTable activeTable = mainFrame.getInactiveTable();
-        String initialPath = (isShiftDown?"":activeTable.getCurrentFolder().getAbsolutePath(true));
-        String fileName;
-        // Computes the archive's default name:
-        // - if it only contains one file, uses that file's name.
-        // - if it contains more than one file, uses the FileSet's parent folder's name.
-        if(files.size() == 1)
-            fileName = files.elementAt(0).getNameWithoutExtension();
-        else if(files.getBaseFolder().getParent() != null)
-            fileName = files.getBaseFolder().getName();
-        else
-            fileName = "";
-
-        // Create a path field with auto-completion capabilities
-        filePathField = new FilePathField(initialPath + fileName + "." + Archiver.getFormatExtension(initialFormat));
-
-        // Selects the file name.
-        filePathField.setSelectionStart(initialPath.length());
-        filePathField.setSelectionEnd(initialPath.length() + fileName.length());
-
-        mainPanel.add(filePathField);
-		
-        mainPanel.addSpace(10);
+        lastFormat = initialFormat;
+        lastFormatIndex = initialFormatIndex;
 
         // Archive formats combo box
 
@@ -132,84 +91,62 @@ public class PackDialog extends JobDialog implements ActionListener, ItemListene
         for(int i=0; i<nbFormats; i++)
             formatsComboBox.addItem(Archiver.getFormatName(formats[i]));
 
-        formatsComboBox.setSelectedIndex(initialFormatIndex);
+        formatsComboBox.setSelectedIndex(lastFormatIndex);
 		
         formatsComboBox.addItemListener(this);
         tempPanel.add(formatsComboBox);
-		
+
+        YBoxPanel mainPanel = getMainPanel();
         mainPanel.add(tempPanel);		
         mainPanel.addSpace(10);
 		
         // Comment area, enabled only if selected archive format has comment support
 		
-        label = new JLabel(Translator.get("comment"));
-        mainPanel.add(label);
+        mainPanel.add(new JLabel(Translator.get("comment")));
         commentArea = new JTextArea();
         commentArea.setRows(4);
         mainPanel.add(commentArea);
-
-        mainPanel.addSpace(10);
-
-        // Create file details button and OK/cancel buttons and lay them out a single row
-        JPanel fileDetailsPanel = createFileDetailsPanel();
-
-        okButton = new JButton(Translator.get("pack"));
-        cancelButton = new JButton(Translator.get("cancel"));
-
-        mainPanel.add(createButtonsPanel(createFileDetailsButton(fileDetailsPanel),
-                DialogToolkit.createOKCancelPanel(okButton, cancelButton, getRootPane(), this)));
-        mainPanel.add(fileDetailsPanel);
-        
-        // Text field will receive initial focus
-        setInitialFocusComponent(filePathField);		
-		
-        contentPane.add(mainPanel, BorderLayout.NORTH);
-
-        // Packs dialog
-        setMinimumSize(MINIMUM_DIALOG_DIMENSION);
-        setMaximumSize(MAXIMUM_DIALOG_DIMENSION);
     }
 	
-	
-    ////////////////////////////
-    // ActionListener methods //
-    ////////////////////////////
-	
-    public void actionPerformed(ActionEvent e) {
-        Object source = e.getSource();
-		
-        if (source==okButton)  {
-            // Start by disposing the dialog
-            dispose();
 
-            // Check that destination file can be resolved 
-            String filePath = filePathField.getText();
-            // TODO: move those I/O bound calls to job as they can lock the main thread
-            PathUtils.ResolvedDestination resolvedDest = PathUtils.resolveDestination(filePath, mainFrame.getActiveTable().getCurrentFolder());
-            if (resolvedDest==null || resolvedDest.getDestinationType()==PathUtils.ResolvedDestination.EXISTING_FOLDER) {
-                // Incorrect destination
-                QuestionDialog dialog = new QuestionDialog(mainFrame, Translator.get("pack_dialog.error_title"), Translator.get("invalid_path", filePath), mainFrame,
-                                                           new String[] {Translator.get("ok")},
-                                                           new int[]  {0},
-                                                           0);
-                dialog.getActionValue();
-                return;
-            }
+    //////////////////////////////////////////////
+    // TransferDestinationDialog implementation //
+    //////////////////////////////////////////////
 
-            // Start packing
-            ProgressDialog progressDialog = new ProgressDialog(mainFrame, Translator.get("pack_dialog.packing"));
-            int format = formats[formatsComboBox.getSelectedIndex()];
-
-            ArchiveJob archiveJob = new ArchiveJob(progressDialog, mainFrame, files, resolvedDest.getDestinationFile(), format, Archiver.formatSupportsComment(format)?commentArea.getText():null);
-            progressDialog.start(archiveJob);
-        
-            // Remember last format used, for next time this dialog is invoked
-            lastFormat = format;
+    @Override
+    protected PathFieldContent computeInitialPath(FileSet files) {
+        FileTable activeTable = mainFrame.getInactiveTable();
+        String initialPath = activeTable.getCurrentFolder().getAbsolutePath(true);
+        AbstractFile file;
+        String fileName;
+        // Computes the archive's default name:
+        // - if it only contains one file, uses that file's name.
+        // - if it contains more than one file, uses the FileSet's parent folder's name.
+        if(files.size() == 1) {
+            file = files.elementAt(0);
+            fileName = file.isDirectory() && !DesktopManager.isApplication(file)
+                    ?file.getName()
+                    :file.getNameWithoutExtension();
         }
-        else if (source==cancelButton)  {
-            // Simply dispose the dialog
-            dispose();			
+        else {
+            file = files.getBaseFolder();
+            fileName = file.isRoot()?"":DesktopManager.isApplication(file)?file.getNameWithoutExtension():file.getName();
         }
+
+        return new PathFieldContent(initialPath + fileName + "." + Archiver.getFormatExtension(lastFormat), initialPath.length(), initialPath.length() + fileName.length());
+    }
+
+    @Override
+    protected TransferFileJob createTransferFileJob(ProgressDialog progressDialog, PathUtils.ResolvedDestination resolvedDest, int defaultFileExistsAction) {
+        // Remember last format used, for next time this dialog is invoked
+        lastFormat = formats[formatsComboBox.getSelectedIndex()];
+
+        return new ArchiveJob(progressDialog, mainFrame, files, resolvedDest.getDestinationFile(), lastFormat, Archiver.formatSupportsComment(lastFormat)?commentArea.getText():null);
+    }
+
+    @Override
+    protected String getProgressDialogTitle() {
+        return Translator.get("pack_dialog.packing");
     }
 
 
@@ -220,37 +157,40 @@ public class PackDialog extends JobDialog implements ActionListener, ItemListene
     public void itemStateChanged(ItemEvent e) {
         int newFormatIndex;
 
+        FilePathField pathField = getPathField();
+
         // Updates the GUI if, and only if, the format selection has changed.
-        if(oldFormatIndex != (newFormatIndex = formatsComboBox.getSelectedIndex())) {
-            String fileName = filePathField.getText();  // Name of the destination archive file.
-            String oldFormatExtension = Archiver.getFormatExtension(formats[oldFormatIndex]);	// Old/current format's extension
+        if(lastFormatIndex != (newFormatIndex = formatsComboBox.getSelectedIndex())) {
+
+            String fileName = pathField.getText();  // Name of the destination archive file.
+            String oldFormatExtension = Archiver.getFormatExtension(formats[lastFormatIndex]);	// Old/current format's extension
             if(fileName.endsWith("." + oldFormatExtension)) {
                 int selectionStart;
                 int selectionEnd;
 
                 // Saves the old selection.
-                selectionStart = filePathField.getSelectionStart();
-                selectionEnd   = filePathField.getSelectionEnd();
+                selectionStart = pathField.getSelectionStart();
+                selectionEnd   = pathField.getSelectionEnd();
 
                 // Computes the new file name.
                 fileName = fileName.substring(0, fileName.length() - oldFormatExtension.length()) +
                     Archiver.getFormatExtension(formats[newFormatIndex]);
 
                 // Makes sure that the selection stays somewhat coherent.
-                if(selectionEnd == filePathField.getText().length())
+                if(selectionEnd == pathField.getText().length())
                     selectionEnd = fileName.length();
 
                 // Resets the file path field.
-                filePathField.setText(fileName);
-                filePathField.setSelectionStart(selectionStart);
-                filePathField.setSelectionEnd(selectionEnd);
+                pathField.setText(fileName);
+                pathField.setSelectionStart(selectionStart);
+                pathField.setSelectionEnd(selectionEnd);
             }
 
             commentArea.setEnabled(Archiver.formatSupportsComment(formats[formatsComboBox.getSelectedIndex()]));
-            oldFormatIndex = newFormatIndex;
+            lastFormatIndex = newFormatIndex;
         }
 
         // Transfer focus back to the text field 
-        filePathField.requestFocus();
+        pathField.requestFocus();
     }
 }

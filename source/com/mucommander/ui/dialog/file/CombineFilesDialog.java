@@ -56,7 +56,8 @@ public class CombineFilesDialog extends TransferDestinationDialog {
         		ActionProperties.getActionLabel(CombineFilesAction.Descriptor.ACTION_ID),
                 Translator.get("copy_dialog.destination"),
                 Translator.get("combine"),
-                Translator.get("combine_files_dialog.error_title"));
+                Translator.get("combine_files_dialog.error_title"),
+                true);
 
         this.destFolder = destFolder;
     }
