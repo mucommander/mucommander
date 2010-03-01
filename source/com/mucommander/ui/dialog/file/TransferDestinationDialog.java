@@ -59,6 +59,7 @@ import java.lang.reflect.InvocationTargetException;
  */
 public abstract class TransferDestinationDialog extends JobDialog implements ActionListener, DocumentListener {
     protected String errorDialogTitle;
+    private boolean enableTransferOptions;
 
     private YBoxPanel mainPanel;
     private FilePathField pathField;
@@ -95,12 +96,13 @@ public abstract class TransferDestinationDialog extends JobDialog implements Act
         FileCollisionDialog.RESUME_TEXT,
         FileCollisionDialog.RENAME_TEXT
     };
-	
 
-    public TransferDestinationDialog(MainFrame mainFrame, FileSet files, String title, String labelText, String okText, String errorDialogTitle, boolean addTransferOptions) {
+
+    public TransferDestinationDialog(MainFrame mainFrame, FileSet files, String title, String labelText, String okText, String errorDialogTitle, boolean enableTransferOptions) {
         super(mainFrame, title, files);
 
         this.errorDialogTitle = errorDialogTitle;
+        this.enableTransferOptions = enableTransferOptions;
 
         mainPanel = new YBoxPanel();
         mainPanel.add(new JLabel(labelText+" :"));
@@ -120,7 +122,7 @@ public abstract class TransferDestinationDialog extends JobDialog implements Act
         // Path field will receive initial focus
         setInitialFocusComponent(pathField);		
 
-        if(addTransferOptions) {
+        if(enableTransferOptions) {
             // Combo box that allows the user to choose the default action when a file already exists in destination
             mainPanel.add(new JLabel(Translator.get("destination_dialog.file_exists_action")+" :"));
             fileExistsActionComboBox = new JComboBox();
@@ -253,22 +255,35 @@ public abstract class TransferDestinationDialog extends JobDialog implements Act
      * @param resolvedDest the resolved destination
      */
     private void startJob(PathUtils.ResolvedDestination resolvedDest) {
-        // Retrieve default action when a file exists in destination, default choice
-        // (if not specified by the user) is 'Ask'
-        int defaultFileExistsAction = fileExistsActionComboBox.getSelectedIndex();
-        if(defaultFileExistsAction==0)
+        int defaultFileExistsAction;
+        boolean skipErrors;
+        boolean verifyIntegrity;
+        if(enableTransferOptions) {
+            // Retrieve default action when a file exists in destination, default choice
+            // (if not specified by the user) is 'Ask'
+            defaultFileExistsAction = fileExistsActionComboBox.getSelectedIndex();
+            if(defaultFileExistsAction==0)
+                defaultFileExistsAction = FileCollisionDialog.ASK_ACTION;
+            else
+                defaultFileExistsAction = DEFAULT_ACTIONS[defaultFileExistsAction-1];
+            // Note: we don't remember default action on purpose: we want the user to specify it each time,
+            // it would be too dangerous otherwise.
+
+            skipErrors = skipErrorsCheckBox.isSelected();
+            verifyIntegrity = verifyIntegrityCheckBox.isSelected();
+        }
+        else {
             defaultFileExistsAction = FileCollisionDialog.ASK_ACTION;
-        else
-            defaultFileExistsAction = DEFAULT_ACTIONS[defaultFileExistsAction-1];
-        // Note: we don't remember default action on purpose: we want the user to specify it each time,
-        // it would be too dangerous otherwise.
+            skipErrors = false;
+            verifyIntegrity = false;
+        }
 
         ProgressDialog progressDialog = new ProgressDialog(mainFrame, getProgressDialogTitle());
         TransferFileJob job = createTransferFileJob(progressDialog, resolvedDest, defaultFileExistsAction);
 
         if(job!=null) {
-            job.setAutoSkipErrors(skipErrorsCheckBox.isSelected());
-            job.setIntegrityCheckEnabled(verifyIntegrityCheckBox.isSelected());
+            job.setAutoSkipErrors(skipErrors);
+            job.setIntegrityCheckEnabled(verifyIntegrity);
             progressDialog.start(job);
         }
     }
