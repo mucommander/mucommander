@@ -72,7 +72,7 @@ public class GoToParentAction extends ParentFolderAction {
         AbstractFile parent;
 
         if((parent = sourcePanel.getCurrentFolder().getParent()) != null) {
-            destPanel.tryChangeCurrentFolder(parent);
+            destPanel.tryChangeCurrentFolder(parent, null, true);
             return true;
         }
         return false;
