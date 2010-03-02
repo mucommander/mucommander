@@ -48,6 +48,7 @@ Improvements:
   both ends of the filename are visible.
 - Upgraded the JmDNS library (used for Bonjour support) to version 3.1.
 - Upgraded the jCIFS library (used for SMB support) to version 1.3.14.
+- Current folder is now automatically changed to a workable folder when it is no longer available (ticket #333).
 
 Localization:
 - Russian translation updated. Update contributed by Alexey Sirotov.

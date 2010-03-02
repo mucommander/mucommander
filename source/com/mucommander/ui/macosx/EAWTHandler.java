@@ -82,7 +82,7 @@ class EAWTHandler implements ApplicationListener {
         if(file.isBrowsable())
             activePanel.tryChangeCurrentFolder(file);
         else
-            activePanel.tryChangeCurrentFolder(file.getParent(), file);
+            activePanel.tryChangeCurrentFolder(file.getParent(), file, false);
     }
 
     public void handlePrintFile(ApplicationEvent event) {

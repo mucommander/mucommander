@@ -259,11 +259,9 @@ public class FolderChangeMonitor implements Runnable, WindowListener, LocationLi
         nbSamples++;
 		
         // Has date changed ?
+        // Note that date will be 0 if the folder is no longer available, and thus yield a refresh: this is exactly
+        // what we want (the folder will be changed to a 'workable' folder).
         if(date!=currentFolderDate) {
-            // Checks if current folder still exists, could have become unavailable (returned date would be 0 i.e. different)
-            if(!currentFolder.exists())
-                return true;	// Folder could not be refreshed but still return true so we don't keep on trying
-			
             AppLogger.fine(this+" ("+currentFolder.getName()+") Detected changes in current folder, refreshing table!");
 			
             // Try and refresh current folder in a separate thread as to not lock monitor thread

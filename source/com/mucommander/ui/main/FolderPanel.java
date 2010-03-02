@@ -476,12 +476,17 @@ public class FolderPanel extends JPanel implements FocusListener, ThemeListener 
      */
     public ChangeFolderThread tryChangeCurrentFolder(AbstractFile folder) {
         /* TODO branch setBranchView(false); */
-        return tryChangeCurrentFolder(folder, null);
+        return tryChangeCurrentFolder(folder, null, false);
     }
 
     /**
      * Tries to change current folder to the new specified one, and selects the given file after the folder has been
      * changed. The user is notified by a dialog if the folder could not be changed.
+     *
+     * <p>If the current folder could not be changed to the requested folder and <code>findWorkableFolder</code> is
+     * <code>true</code>, the current folder will be changed to the first existing parent of the request folder if there
+     * is one, to the first existing local volume otherwise. In the unlikely event that no local volume is workable,
+     * the user will be notified that the folder could not be changed.</p>
      *
      * <p>This method spawns a separate thread that takes care of the actual folder change and returns it.
      * It does nothing and returns <code>null</code> if another folder change is already underway.</p>
@@ -494,7 +499,7 @@ public class FolderPanel extends JPanel implements FocusListener, ThemeListener 
      * @param selectThisFileAfter the file to be selected after the folder has been changed (if it exists in the folder), can be null in which case FileTable rules will be used to select current file
      * @return the thread that performs the actual folder change, null if another folder change is already underway  
      */
-    public ChangeFolderThread tryChangeCurrentFolder(AbstractFile folder, AbstractFile selectThisFileAfter) {
+    public ChangeFolderThread tryChangeCurrentFolder(AbstractFile folder, AbstractFile selectThisFileAfter, boolean findWorkableFolder) {
         AppLogger.finer("folder="+folder+" selectThisFileAfter="+selectThisFileAfter);
 
         synchronized(FOLDER_CHANGE_LOCK) {
@@ -506,7 +511,7 @@ public class FolderPanel extends JPanel implements FocusListener, ThemeListener 
                 return null;
             }
 
-            this.changeFolderThread = new ChangeFolderThread(folder);
+            this.changeFolderThread = new ChangeFolderThread(folder, findWorkableFolder);
             if(selectThisFileAfter!=null)
                 this.changeFolderThread.selectThisFileAfter(selectThisFileAfter);
             changeFolderThread.start();
@@ -595,38 +600,32 @@ public class FolderPanel extends JPanel implements FocusListener, ThemeListener 
     }
 
     /**
-     * Tries to refresh the current folder's contents and notifies the user in case of a problem.
-     *
-     * <p>This method spawns a separate thread that takes care of the actual folder change and returns it.
-     * It does nothing and returns <code>null</code> if another folder change is already underway.</p>
-     *
-     * <p>
-     * This method is <b>not</b> I/O-bound and returns immediately, without any chance of locking the calling thread.
-     * </p>
+     * Shorthand for {@link #tryRefreshCurrentFolder(AbstractFile)} called with no specific file (<code>null</code>)
+     * to select after the folder has been changed.
      *
      * @return the thread that performs the actual folder change, null if another folder change is already underway
      */
     public ChangeFolderThread tryRefreshCurrentFolder() {
-        foldersTreePanel.refreshFolder(currentFolder);
-        return tryChangeCurrentFolder(currentFolder, null);
+        return tryRefreshCurrentFolder(null);
     }
 
     /**
-     * Refreshes current folder's contents and notifies the user if the current folder could not be refreshed.
+     * Refreshes the current folder's contents. If the folder is no longer available, the folder will be changed to a
+     * 'workable' folder (see {@link #tryChangeCurrentFolder(AbstractFile, AbstractFile, boolean)}.
      *
      * <p>This method spawns a separate thread that takes care of the actual folder change and returns it.
      * It does nothing and returns <code>null</code> if another folder change is already underway.</p>
      *
-     * <p>
-     * This method is <b>not</b> I/O-bound and returns immediately, without any chance of locking the calling thread.
-     * </p>
+     * <p>This method is <b>not</b> I/O-bound and returns immediately, without any chance of locking the calling thread.</p>
      *
-     * @param selectThisFileAfter file to be selected after the folder has been refreshed (if it exists in the folder), can be null in which case FileTable rules will be used to select current file 
+     * @param selectThisFileAfter file to be selected after the folder has been refreshed (if it exists in the folder),
+     * can be null in which case FileTable rules will be used to select current file
      * @return the thread that performs the actual folder change, null if another folder change is already underway
+     * @see #tryChangeCurrentFolder(AbstractFile, AbstractFile, boolean)
      */
     public ChangeFolderThread tryRefreshCurrentFolder(AbstractFile selectThisFileAfter) {
         foldersTreePanel.refreshFolder(currentFolder);
-        return tryChangeCurrentFolder(currentFolder, selectThisFileAfter);
+        return tryChangeCurrentFolder(currentFolder, selectThisFileAfter, true);
     }
 		
     /**
@@ -797,6 +796,7 @@ public class FolderPanel extends JPanel implements FocusListener, ThemeListener 
     public class ChangeFolderThread extends Thread {
 
         private AbstractFile folder;
+        private boolean findWorkableFolder;
         private FileURL folderURL;
         private AbstractFile fileToSelect;
         private CredentialsMapping credentialsMapping;
@@ -818,10 +818,11 @@ public class FolderPanel extends JPanel implements FocusListener, ThemeListener 
         /* TODO branch private ArrayList childrenList; */
 
 
-        public ChangeFolderThread(AbstractFile folder) {
+        public ChangeFolderThread(AbstractFile folder, boolean findWorkableFolder) {
             // Ensure that we work on a raw file instance and not a cached one
             this.folder = (folder instanceof CachedFile)?((CachedFile)folder).getProxiedFile():folder;
             this.folderURL = folder.getURL();
+            this.findWorkableFolder = findWorkableFolder;
 
             setPriority(Thread.MAX_PRIORITY);
         }
@@ -848,6 +849,35 @@ public class FolderPanel extends JPanel implements FocusListener, ThemeListener 
          */
         public void setCredentialsMapping(CredentialsMapping credentialsMapping) {
             this.credentialsMapping = credentialsMapping;
+        }
+
+        /**
+         * Returns a 'workable' folder as a substitute for the given non-existing folder. This method will return the
+         * first existing parent if there is one, to the first existing local volume otherwise. In the unlikely event
+         * that no local volume exists, <code>null</code> will be returned.
+         *
+         * @param folder folder for which to find a workable folder
+         * @return a 'workable' folder for the given non-existing folder, <code>null</code> if there is none.
+         */
+        private AbstractFile getWorkableFolder(AbstractFile folder) {
+            // Look for an existing parent
+            AbstractFile newFolder = folder;
+            do {
+                newFolder = newFolder.getParent();
+                if(newFolder!=null && newFolder.exists())
+                    return newFolder;
+            }
+            while(newFolder!=null);
+
+            // Fall back to the first existing volume
+            AbstractFile[] localVolumes = LocalFile.getVolumes();
+            for(AbstractFile volume : localVolumes) {
+                if(volume.exists())
+                    return volume;
+            }
+
+            // No volume could be found, return null
+            return null;
         }
 
         /**
@@ -995,7 +1025,6 @@ public class FolderPanel extends JPanel implements FocusListener, ThemeListener 
 
                         // Thread was created using a FileURL
                         if(folder==null) {
-
                             AbstractFile file = FileFactory.getFile(folderURL, true);
 
                             synchronized(KILL_LOCK) {
@@ -1056,7 +1085,6 @@ public class FolderPanel extends JPanel implements FocusListener, ThemeListener 
                                     // Continue if BROWSE_ACTION
                                     // Set cursor to hourglass/wait
                                     mainFrame.setCursor(new Cursor(Cursor.WAIT_CURSOR));
-                                    //							noWaitDialog = false;
                                 }
                                 // else just continue and browse file's contents
                             }
@@ -1071,8 +1099,27 @@ public class FolderPanel extends JPanel implements FocusListener, ThemeListener 
                         }
                         // Thread was created using an AbstractFile instance, check file existence
                         else if(!folder.exists()) {
-                            showFolderDoesNotExistDialog();
-                            break;
+                            // Find a 'workable' folder if the requested folder doesn't exist anymore
+                            if(findWorkableFolder) {
+                                AbstractFile newFolder = getWorkableFolder(folder);
+                                if(newFolder.equals(folder)) {
+                                    // If we've already tried the returned folder, give up (avoids a potentially endless loop)
+                                    showFolderDoesNotExistDialog();
+                                    break;
+                                }
+
+                                // Try again with the new folder
+                                folder = newFolder;
+                                folderURL = folder.getURL();
+                                // Discard the file to select, if any
+                                fileToSelect = null;
+
+                                continue;
+                            }
+                            else {
+                                showFolderDoesNotExistDialog();
+                                break;
+                            }
                         }
 
                         // Checks if canonical should be followed. If that is the case, the file is invalidated
@@ -1124,7 +1171,6 @@ public class FolderPanel extends JPanel implements FocusListener, ThemeListener 
                         } */
                         AbstractFile children[] = folder.ls(configurableFolderFilter);
                         
-
                         synchronized(KILL_LOCK) {
                             if(killed) {
                                 AppLogger.fine("this thread has been killed, returning");
@@ -1191,6 +1237,24 @@ public class FolderPanel extends JPanel implements FocusListener, ThemeListener 
                             }
                         }
                         else {
+                            // Find a 'workable' folder if the requested folder doesn't exist anymore
+                            if(findWorkableFolder) {
+                                AbstractFile newFolder = getWorkableFolder(folder);
+                                if(newFolder.equals(folder)) {
+                                    // If we've already tried the returned folder, give up (avoids a potentially endless loop)
+                                    showFolderDoesNotExistDialog();
+                                    break;
+                                }
+
+                                // Try again with the new folder
+                                folder = newFolder;
+                                folderURL = folder.getURL();
+                                // Discard the file to select, if any
+                                fileToSelect = null;
+
+                                continue;
+                            }
+
                             showAccessErrorDialog(e);
                         }
 
