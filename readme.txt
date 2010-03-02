@@ -35,7 +35,7 @@ environment variable points to the directory where your Java runtime is
 installed.
 
 
-What's new since v0.8.4 ?
+What's new since v0.8.5 ?
 -------------------------
 
 New features:
@@ -46,16 +46,15 @@ Improvements:
   (ticket #282).
 - Improved the display of filenames when they are not entirely visible, by removing characters in the middle so that
   both ends of the filename are visible.
+- Current folder is now automatically changed to a workable folder when it is no longer available (ticket #333).
 - Upgraded the JmDNS library (used for Bonjour support) to version 3.1.
 - Upgraded the jCIFS library (used for SMB support) to version 1.3.14.
-- Current folder is now automatically changed to a workable folder when it is no longer available (ticket #333).
 
 Localization:
 - Russian translation updated. Update contributed by Alexey Sirotov.
 
 Bug fixes:
-- Pack dialog now implements the same filename selection algorithm as other dialogs
-  (ticket #167).
+- Pack dialog now implements the same filename selection algorithm as other dialogs (ticket #167).
 
 Known issues:
 - Some translations may not be up-to-date. Refer to
