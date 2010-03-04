@@ -57,7 +57,7 @@ public class FilesTreeModel implements TreeModel, CachedDirectoryListener {
     private int cachingNum = 0;
 
     /** icon used to show that a children of a directory are being cached */
-    SpinningDial spinningIcon = new SpinningDial(16, 16, false);
+    private SpinningDial spinningIcon = new SpinningDial(16, 16, false);
 
 
     public FilesTreeModel(FileFilter filter, FileComparator sort) {
@@ -159,27 +159,6 @@ public class FilesTreeModel implements TreeModel, CachedDirectoryListener {
         }
     }
 
-    /**
-     * Builds the parents of node up to and including the root node, where the
-     * original node is the last element in the returned array.
-     * @param aNode the TreeNode to get the path for
-     *
-    public TreePath getPathToRoot(AbstractFile aNode) {
-        if (aNode==null)
-            return null;
-        LinkedList path = new LinkedList();
-        path.addFirst(aNode);
-        while (!aNode.isRoot()) {
-            aNode = aNode.getParentSilently();
-            if (aNode == null)
-                break;
-            path.addFirst(aNode);
-        }
-        Object[] apath = path.toArray();
-        return new TreePath(apath);
-    }*/
-    
-    
     /**
      * Builds the parents of node up to and including the root node,
      * where the original node is the last element in the returned array.

@@ -54,8 +54,6 @@ import java.awt.event.ItemListener;
  */
 public class DeleteDialog extends JobDialog implements ItemListener, ActionListener {
 
-    private MainFrame mainFrame;
-
     /** Should files be moved to the trash or permanently erased */
     private boolean moveToTrash;
 

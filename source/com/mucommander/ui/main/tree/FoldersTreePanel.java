@@ -56,7 +56,8 @@ import java.awt.event.*;
  * 
  */
 public class FoldersTreePanel extends JPanel implements TreeSelectionListener, 
-							LocationListener, FocusListener, ThemeListener, TreeModelListener, ConfigurationListener {
+							LocationListener, FocusListener, ThemeListener, 
+							TreeModelListener, ConfigurationListener {
 
     /** Directory tree */
     private JTree tree;
