@@ -58,7 +58,7 @@ public class FileTableCellRenderer implements TableCellRenderer, ThemeListener {
     private FileTableModel tableModel;
 
     /** Custom JLabel that render specific column cells */
-    private CellLabel[] cellLabels = new CellLabel[Columns.COLUMN_COUNT];
+    private CellLabel[] cellLabels = new CellLabel[Column.values().length];
 
 
     public FileTableCellRenderer(FileTable table) {
@@ -66,20 +66,20 @@ public class FileTableCellRenderer implements TableCellRenderer, ThemeListener {
         this.tableModel = table.getFileTableModel();
 
         // Create a label for each column
-        for(int i=0; i<Columns.COLUMN_COUNT; i++)
-            this.cellLabels[i] = new CellLabel();
+        for(Column c : Column.values())
+            this.cellLabels[c.ordinal()] = new CellLabel();
 
         // Set labels' font.
         setCellLabelsFont(ThemeCache.tableFont);
 
         // Set labels' text alignment
-        cellLabels[Columns.EXTENSION].setHorizontalAlignment(CellLabel.CENTER);
-        cellLabels[Columns.NAME].setHorizontalAlignment(CellLabel.LEFT);
-        cellLabels[Columns.SIZE].setHorizontalAlignment(CellLabel.RIGHT);
-        cellLabels[Columns.DATE].setHorizontalAlignment(CellLabel.RIGHT);
-        cellLabels[Columns.PERMISSIONS].setHorizontalAlignment(CellLabel.LEFT);
-        cellLabels[Columns.OWNER].setHorizontalAlignment(CellLabel.LEFT);
-        cellLabels[Columns.GROUP].setHorizontalAlignment(CellLabel.LEFT);
+        cellLabels[Column.EXTENSION.ordinal()].setHorizontalAlignment(CellLabel.CENTER);
+        cellLabels[Column.NAME.ordinal()].setHorizontalAlignment(CellLabel.LEFT);
+        cellLabels[Column.SIZE.ordinal()].setHorizontalAlignment(CellLabel.RIGHT);
+        cellLabels[Column.DATE.ordinal()].setHorizontalAlignment(CellLabel.RIGHT);
+        cellLabels[Column.PERMISSIONS.ordinal()].setHorizontalAlignment(CellLabel.LEFT);
+        cellLabels[Column.OWNER.ordinal()].setHorizontalAlignment(CellLabel.LEFT);
+        cellLabels[Column.GROUP.ordinal()].setHorizontalAlignment(CellLabel.LEFT);
 
         // Listens to certain configuration variables
         ThemeCache.addThemeListener(this);
@@ -99,12 +99,12 @@ public class FileTableCellRenderer implements TableCellRenderer, ThemeListener {
      */
     private void setCellLabelsFont(Font newFont) {
         // Set custom font
-        for(int i=0; i<Columns.COLUMN_COUNT; i++) {
+        for(Column c : Column.values()) {
             // No need to set extension label's font as this label renders only icons and no text
-            if(i==Columns.EXTENSION)
+            if(c==Column.EXTENSION)
                 continue;
 
-            cellLabels[i].setFont(newFont);
+            cellLabels[c.ordinal()].setFont(newFont);
         }
     }
 
@@ -142,8 +142,8 @@ public class FileTableCellRenderer implements TableCellRenderer, ThemeListener {
         return ThemeCache.PLAIN_FILE;
     }
 
-    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-        int                   columnId;
+    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int rowIndex, int columnIndex) {
+        Column                column;
         int                   colorIndex;
         int                   focusedIndex;
         int                   selectedIndex;
@@ -155,13 +155,13 @@ public class FileTableCellRenderer implements TableCellRenderer, ThemeListener {
         // Need to check that row index is not out of bounds because when the folder
         // has just been changed, the JTable may try to repaint the old folder and
         // ask for a row index greater than the length if the old folder contained more files
-        if(row < 0 || row >= tableModel.getRowCount())
+        if(rowIndex < 0 || rowIndex >= tableModel.getRowCount())
             return null;
 
         // Sanity check.
-        file = tableModel.getCachedFileAtRow(row);
+        file = tableModel.getCachedFileAtRow(rowIndex);
         if(file==null) {
-            AppLogger.fine("tableModel.getCachedFileAtRow("+row+") RETURNED NULL !");
+            AppLogger.fine("tableModel.getCachedFileAtRow("+ rowIndex +") RETURNED NULL !");
             return null;
         }
 
@@ -170,7 +170,7 @@ public class FileTableCellRenderer implements TableCellRenderer, ThemeListener {
             matches = true;
         else {
             if(search.isActive())
-                matches = search.matches((row == 0 && tableModel.hasParentFolder()) ? ".." : tableModel.getFileAtRow(row).getName());
+                matches = search.matches((rowIndex == 0 && tableModel.hasParentFolder()) ? ".." : tableModel.getFileAtRow(rowIndex).getName());
             else
                 matches = true;
         }
@@ -179,15 +179,15 @@ public class FileTableCellRenderer implements TableCellRenderer, ThemeListener {
         // Selection only applies when the table is the active one
         selectedIndex =  (isSelected && ((FileTable)table).isActiveTable()) ? ThemeCache.SELECTED : ThemeCache.NORMAL;
         focusedIndex  = table.hasFocus() ? ThemeCache.ACTIVE : ThemeCache.INACTIVE;
-        colorIndex    = getColorIndex(row, file, tableModel);
+        colorIndex    = getColorIndex(rowIndex, file, tableModel);
 
-        columnId = table.convertColumnIndexToModel(column);
-        label = cellLabels[columnId];
+        column = Column.valueOf(table.convertColumnIndexToModel(columnIndex));
+        label = cellLabels[column.ordinal()];
 
         // Extension/icon column: return ImageIcon instance
-        if(columnId == Columns.EXTENSION) {
+        if(column == Column.EXTENSION) {
             // Set file icon (parent folder icon if '..' file)
-            label.setIcon(row==0 && tableModel.hasParentFolder()
+            label.setIcon(rowIndex ==0 && tableModel.hasParentFolder()
                     ?IconManager.getIcon(IconManager.FILE_ICON_SET, CustomFileIconProvider.PARENT_FOLDER_ICON_NAME, FileIcons.getScaleFactor())
                     :FileIcons.getFileIcon(file));
         }
@@ -206,11 +206,11 @@ public class FileTableCellRenderer implements TableCellRenderer, ThemeListener {
             // - truncate the text from the center and equally to the left and right sides, adding an ellipsis ('...')
             // where characters have been removed. This allows both the start and end of filename to be visible.
             // - set a tooltip text that will display the whole text when mouse is over the label
-            if (table.getColumnModel().getColumn(column).getWidth() < label.getPreferredSize().getWidth()) {
+            if (table.getColumnModel().getColumn(columnIndex).getWidth() < label.getPreferredSize().getWidth()) {
                 String leftText = text.substring(0, text.length()/2);
                 String rightText = text.substring(text.length()/2, text.length());
 
-                while(table.getColumnModel().getColumn(column).getWidth() < label.getPreferredSize().getWidth()
+                while(table.getColumnModel().getColumn(columnIndex).getWidth() < label.getPreferredSize().getWidth()
                    && leftText.length()>0 && rightText.length()>0) {    // Prevents against going out of bounds
 
                     if(leftText.length()>rightText.length())
@@ -237,7 +237,7 @@ public class FileTableCellRenderer implements TableCellRenderer, ThemeListener {
             if(table.hasFocus() && search.isActive())
                 label.setBackground(ThemeCache.backgroundColors[focusedIndex][ThemeCache.NORMAL]);
             else
-                label.setBackground(ThemeCache.backgroundColors[focusedIndex][(row % 2 == 0) ? ThemeCache.NORMAL : ThemeCache.ALTERNATE]);
+                label.setBackground(ThemeCache.backgroundColors[focusedIndex][(rowIndex % 2 == 0) ? ThemeCache.NORMAL : ThemeCache.ALTERNATE]);
         }
         else
             label.setBackground(ThemeCache.unmatchedBackground);

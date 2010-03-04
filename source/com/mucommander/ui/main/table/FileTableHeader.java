@@ -60,17 +60,17 @@ public class FileTableHeader extends JTableHeader implements MouseListener {
     //////////////////////////////////
 
     public void mouseClicked(MouseEvent e) {
-        int colNum = table.convertColumnIndexToModel(getColumnModel().getColumnIndexAtX(e.getX()));
+        Column col = Column.valueOf(table.convertColumnIndexToModel(getColumnModel().getColumnIndexAtX(e.getX())));
 
         table.requestFocus();
 
         // One of the table headers was left-clicked, sort the table by the clicked column's criterion
         if(DesktopManager.isLeftMouseButton(e)) {
             // If the table was already sorted by this criteria, reverse order
-            if (table.getSortInfo().getCriterion()==colNum)
+            if (table.getSortInfo().getCriterion()==col)
                 table.reverseSortOrder();
             else
-                table.sortBy(colNum);
+                table.sortBy(col);
         }
         // One of the table headers was right-clicked, popup a menu that offers to hide the column
         else if(DesktopManager.isRightMouseButton(e)) {
@@ -78,16 +78,16 @@ public class FileTableHeader extends JTableHeader implements MouseListener {
             MainFrame mainFrame = table.getFolderPanel().getMainFrame();
 
             JCheckBoxMenuItem checkboxMenuItem;
-            for(int i=0; i<Columns.COLUMN_COUNT; i++) {
-                if(i==Columns.NAME)
+            for(Column c : Column.values()) {
+                if(c==Column.NAME)
                     continue;
 
-                checkboxMenuItem = new JCheckBoxMenuItem(ActionManager.getActionInstance(Columns.getToggleColumnActionId(i), mainFrame));
+                checkboxMenuItem = new JCheckBoxMenuItem(ActionManager.getActionInstance(c.getToggleColumnActionId(), mainFrame));
 
-                checkboxMenuItem.setSelected(table.isColumnEnabled(i));
-                checkboxMenuItem.setEnabled(table.isColumnDisplayable(i));
+                checkboxMenuItem.setSelected(table.isColumnEnabled(c));
+                checkboxMenuItem.setEnabled(table.isColumnDisplayable(c));
                 // Override the action's label to a shorter one
-                checkboxMenuItem.setText(Columns.getColumnLabel(i));
+                checkboxMenuItem.setText(c.getLabel());
 
                 popupMenu.add(checkboxMenuItem);
             }

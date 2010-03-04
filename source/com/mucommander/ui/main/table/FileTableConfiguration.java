@@ -40,9 +40,10 @@ public class FileTableConfiguration {
      * Creates a new file table configuration.
      */
     public FileTableConfiguration() {
-        enabled = new boolean[Columns.COLUMN_COUNT];
-        width      = new int[Columns.COLUMN_COUNT];
-        order      = new int[Columns.COLUMN_COUNT];
+        int columnCount = Column.values().length;
+        enabled = new boolean[columnCount];
+        width      = new int[columnCount];
+        order      = new int[columnCount];
     }
 
 
@@ -54,17 +55,17 @@ public class FileTableConfiguration {
      * @param  column column whose enabled state should be returned.
      * @return        <code>true</code> if the specified column is enabled, <code>false</code> otherwise.
      */
-    public boolean isEnabled(int column) {return enabled[column];}
+    public boolean isEnabled(Column column) {return enabled[column.ordinal()];}
 
     /**
      * Sets the enabled state of the specified column.
      * <p>
-     * Note that the {@link Columns#NAME} column's enabled state is ignored as it will always be enabled.
+     * Note that the {@link Column#NAME} column's enabled state is ignored as it will always be enabled.
      * </p>
      * @param column column whose enabled state should be set.
      * @param flag   whether the column should be enabled.
      */
-    public void setEnabled(int column, boolean flag) {enabled[column] = flag;}
+    public void setEnabled(Column column, boolean flag) {enabled[column.ordinal()] = flag;}
 
 
 
@@ -75,18 +76,18 @@ public class FileTableConfiguration {
      * @param  column column whose width should be retrieved.
      * @return        the requested column's width.
      */
-    public int getWidth(int column) {return width[column];}
+    public int getWidth(Column column) {return width[column.ordinal()];}
 
     /**
      * Sets the specified column's width.
      * <p>
-     * Note that the {@link Columns#NAME} column's width will be ignored, as it depends on the frame's
+     * Note that the {@link Column#NAME} column's width will be ignored, as it depends on the frame's
      * initial dimensions.
      * </p>
      * @param column column whose width should be set.
      * @param value  column's initial width.
      */
-    public void setWidth(int column, int value) {width[column] = value;}
+    public void setWidth(Column column, int value) {width[column.ordinal()] = value;}
 
 
 
@@ -101,12 +102,12 @@ public class FileTableConfiguration {
      * @param  column column whose initial position will be returned.
      * @return        the desired initial position of the specified column.
      */
-    public int getPosition(int column) {return order[column];}
+    public int getPosition(Column column) {return order[column.ordinal()];}
 
     /**
      * Sets the specified column's initial position.
-     * @param column   identifier of the column whose position will be set.
+     * @param column   column whose position will be set.
      * @param position desired position for the specified column.
      */
-    public void setPosition(int column, int position) {order[column] = position;}
+    public void setPosition(Column column, int position) {order[column.ordinal()] = position;}
 }

@@ -37,7 +37,7 @@ import com.mucommander.ui.layout.ProportionalSplitPane;
 import com.mucommander.ui.layout.YBoxPanel;
 import com.mucommander.ui.main.commandbar.CommandBar;
 import com.mucommander.ui.main.menu.MainMenuBar;
-import com.mucommander.ui.main.table.Columns;
+import com.mucommander.ui.main.table.Column;
 import com.mucommander.ui.main.table.FileTable;
 import com.mucommander.ui.main.table.FileTableConfiguration;
 import com.mucommander.ui.main.table.SortInfo;
@@ -260,13 +260,13 @@ public class MainFrame extends JFrame implements LocationListener {
         conf = new FileTableConfiguration();
 
         // Loop on columns
-        for(int c=0; c<Columns.COLUMN_COUNT; c++) {
-            if(c!=Columns.NAME) {       // Skip the special name column (always visible, width automatically calculated)
+        for(Column c  : Column.values()) {
+            if(c!=Column.NAME) {       // Skip the special name column (always visible, width automatically calculated)
                 // Sets the column's initial visibility.
                 conf.setEnabled(c,
                     MuConfiguration.getVariable(
                             MuConfiguration.getShowColumnVariable(c, isLeft),
-                            MuConfiguration.getShowColumnDefault(c)
+                            c.showByDefault()
                     )
                 );
 
@@ -275,11 +275,9 @@ public class MainFrame extends JFrame implements LocationListener {
             }
 
             // Sets the column's initial order
-            conf.setPosition(c,
-                    MuConfiguration.getVariable(
-                            MuConfiguration.getColumnPositionVariable(c, isLeft),
-                            c
-                    )
+            conf.setPosition(c, MuConfiguration.getVariable(
+                                    MuConfiguration.getColumnPositionVariable(c, isLeft),
+                                    c.ordinal())
             );
         }
 
@@ -295,9 +293,9 @@ public class MainFrame extends JFrame implements LocationListener {
     public MainFrame(AbstractFile leftInitialFolder, AbstractFile rightInitialFolder) {
         init(new FolderPanel(this, leftInitialFolder, getFileTableConfiguration(true)), new FolderPanel(this, rightInitialFolder, getFileTableConfiguration(false)));
 
-        leftTable.sortBy(columnNameToIndex(MuConfiguration.getVariable(MuConfiguration.LEFT_SORT_BY, MuConfiguration.DEFAULT_SORT_BY)),
+        leftTable.sortBy(Column.valueOf(MuConfiguration.getVariable(MuConfiguration.LEFT_SORT_BY, MuConfiguration.DEFAULT_SORT_BY).toUpperCase()),
                       !MuConfiguration.getVariable(MuConfiguration.LEFT_SORT_ORDER, MuConfiguration.DEFAULT_SORT_ORDER).equals(MuConfiguration.SORT_ORDER_DESCENDING));
-        rightTable.sortBy(columnNameToIndex(MuConfiguration.getVariable(MuConfiguration.RIGHT_SORT_BY, MuConfiguration.DEFAULT_SORT_BY)),
+        rightTable.sortBy(Column.valueOf(MuConfiguration.getVariable(MuConfiguration.RIGHT_SORT_BY, MuConfiguration.DEFAULT_SORT_BY).toUpperCase()),
                       !MuConfiguration.getVariable(MuConfiguration.RIGHT_SORT_ORDER, MuConfiguration.DEFAULT_SORT_ORDER).equals(MuConfiguration.SORT_ORDER_DESCENDING));
     	leftFolderPanel.setTreeWidth(MuConfiguration.getVariable(MuConfiguration.LEFT_TREE_WIDTH, 150));
         if (MuConfiguration.getVariable(MuConfiguration.LEFT_TREE_VISIBLE, false)) {
@@ -309,21 +307,6 @@ public class MainFrame extends JFrame implements LocationListener {
         }
 
     }
-
-    /**
-     * Returns the index of the column designated by the given name.
-     *
-     * @param column the name of a column, see {@link com.mucommander.ui.main.table.Columns#getColumnName(int)} for possible values
-     * @return the index of the column, see {@link com.mucommander.ui.main.table.Columns} for possible values
-     */
-    private static int columnNameToIndex(String column) {
-        for(int c=0; c<Columns.COLUMN_COUNT; c++)
-            if(Columns.getColumnName(c).equals(column))
-                return c;
-
-        return columnNameToIndex(MuConfiguration.DEFAULT_SORT_BY);
-    }
-
 
     MainFrame cloneMainFrame() {
         MainFrame mainFrame;
@@ -763,8 +746,8 @@ public class MainFrame extends JFrame implements LocationListener {
         for(boolean isLeft=true; ; isLeft=false) {
             FileTable table = isLeft? leftTable : rightTable;
             // Loop on columns
-            for(int c=0; c<Columns.COLUMN_COUNT; c++) {
-                if(c!=Columns.NAME) {       // Skip the special name column (always enabled, width automatically calculated)
+            for(Column c : Column.values()) {
+                if(c!=Column.NAME) {       // Skip the special name column (always enabled, width automatically calculated)
                     MuConfiguration.setVariable(
                         MuConfiguration.getShowColumnVariable(c, isLeft),
                         table.isColumnEnabled(c)
@@ -787,9 +770,9 @@ public class MainFrame extends JFrame implements LocationListener {
         }
 
         // Saves left and right table sort order.
-        MuConfiguration.setVariable(MuConfiguration.LEFT_SORT_BY, Columns.getColumnName(leftTable.getSortInfo().getCriterion()));
+        MuConfiguration.setVariable(MuConfiguration.LEFT_SORT_BY, leftTable.getSortInfo().getCriterion().toString().toLowerCase());
         MuConfiguration.setVariable(MuConfiguration.LEFT_SORT_ORDER, leftTable.getSortInfo().getAscendingOrder() ? MuConfiguration.SORT_ORDER_ASCENDING : MuConfiguration.SORT_ORDER_DESCENDING);
-        MuConfiguration.setVariable(MuConfiguration.RIGHT_SORT_BY, Columns.getColumnName(rightTable.getSortInfo().getCriterion()));
+        MuConfiguration.setVariable(MuConfiguration.RIGHT_SORT_BY, rightTable.getSortInfo().getCriterion().toString().toLowerCase());
         MuConfiguration.setVariable(MuConfiguration.RIGHT_SORT_ORDER, rightTable.getSortInfo().getAscendingOrder() ? MuConfiguration.SORT_ORDER_ASCENDING : MuConfiguration.SORT_ORDER_DESCENDING);
 
         // Save split pane orientation

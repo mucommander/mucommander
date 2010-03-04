@@ -21,7 +21,7 @@ package com.mucommander.ui.action.impl;
 import com.mucommander.ui.action.ActionFactory;
 import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.main.MainFrame;
-import com.mucommander.ui.main.table.Columns;
+import com.mucommander.ui.main.table.Column;
 
 import java.util.Hashtable;
 
@@ -34,7 +34,7 @@ import java.util.Hashtable;
 public class ToggleSizeColumnAction extends ToggleColumnAction {
 
     public ToggleSizeColumnAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
-        super(mainFrame, properties, Columns.SIZE);
+        super(mainFrame, properties, Column.SIZE);
     }
     
     public static class Factory implements ActionFactory {
@@ -45,6 +45,6 @@ public class ToggleSizeColumnAction extends ToggleColumnAction {
     }
 
     public static class Descriptor extends ToggleColumnAction.Descriptor {
-        public Descriptor() { super(Columns.SIZE); }
+        public Descriptor() { super(Column.SIZE); }
     }
 }

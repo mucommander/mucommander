@@ -18,9 +18,10 @@
 
 package com.mucommander.ui.action.impl;
 
-import com.mucommander.ui.action.*;
+import com.mucommander.ui.action.ActionFactory;
+import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.main.MainFrame;
-import com.mucommander.ui.main.table.Columns;
+import com.mucommander.ui.main.table.Column;
 
 import javax.swing.KeyStroke;
 import java.awt.event.KeyEvent;
@@ -35,7 +36,7 @@ import java.util.Hashtable;
 public class SortByExtensionAction extends SortByAction {
 
     public SortByExtensionAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
-        super(mainFrame, properties, Columns.EXTENSION);
+        super(mainFrame, properties, Column.EXTENSION);
     }
     
     public static class Factory implements ActionFactory {
@@ -44,16 +45,11 @@ public class SortByExtensionAction extends SortByAction {
 			return new SortByExtensionAction(mainFrame, properties);
 		}
     }
-    
-    public static class Descriptor extends AbstractActionDescriptor {
-    	public static final String ACTION_ID = "SortByExtension";
-    	
-		public String getId() { return ACTION_ID; }
 
-		public ActionCategory getCategory() { return ActionCategories.VIEW; }
+    public static class Descriptor extends SortByAction.Descriptor {
 
-		public KeyStroke getDefaultAltKeyStroke() { return null; }
-
-		public KeyStroke getDefaultKeyStroke() { return KeyStroke.getKeyStroke(KeyEvent.VK_F3, KeyEvent.CTRL_DOWN_MASK); }
+        public Descriptor() {
+            super(Column.EXTENSION, KeyStroke.getKeyStroke(KeyEvent.VK_F3, KeyEvent.CTRL_DOWN_MASK));
+        }
     }
 }

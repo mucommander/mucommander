@@ -27,7 +27,7 @@ import com.mucommander.file.AbstractFile;
 import com.mucommander.runtime.JavaVersions;
 import com.mucommander.runtime.OsFamilies;
 import com.mucommander.ui.icon.FileIcons;
-import com.mucommander.ui.main.table.Columns;
+import com.mucommander.ui.main.table.Column;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -268,17 +268,6 @@ public class MuConfiguration {
     /** Default 'sort by' column for the file table. */
     public static final String  DEFAULT_SORT_BY                    = "name";
 
-    /** Default visibility for each of the FileTable columns. */
-    private final static boolean[] DEFAULT_SHOW_COLUMN = {
-        true,   // Extension
-        true,   // Name (not used, always visible)
-        true,   // Size
-        true,   // Date
-        true,   // Permissions
-        false,  // Owner
-        false   // Group
-    };
-
     /** Name of the root element's attribute that contains the version of muCommander used to write the configuration file. */
     static final String VERSION_ATTRIBUTE = "version";
 
@@ -298,58 +287,48 @@ public class MuConfiguration {
      * Returns the configuration section corresponding to the specified column in the left or right
      * {@link com.mucommander.ui.main.table.FileTable}.
      *
-     * @param columnIndex index of the column, see {@link com.mucommander.ui.main.table.Columns} for allowed values
+     * @param column column, see {@link com.mucommander.ui.main.table.Column} for possible values
      * @param left true for the left FileTable, false for the right one
      * @return the configuration section corresponding to the specified FileTable
      */
-    private static String getColumnSection(int columnIndex, boolean left) {
-        return getFileTableSection(left) + "." + Columns.getColumnName(columnIndex);
+    private static String getColumnSection(Column column, boolean left) {
+        return getFileTableSection(left) + "." + column.toString().toLowerCase();
     }
 
     /**
      * Returns the variable that controls the visibility of the specified column, in the left or right
      * {@link com.mucommander.ui.main.table.FileTable}.
      *
-     * @param columnIndex index of the column, see {@link com.mucommander.ui.main.table.Columns} for allowed values
+     * @param column column, see {@link com.mucommander.ui.main.table.Column} for possible values
      * @param left true for the left FileTable, false for the right one
      * @return the variable that controls the visibility of the specified column
      */
-    public static String getShowColumnVariable(int columnIndex, boolean left) {
-        return getColumnSection(columnIndex, left) + "." + SHOW_COLUMN;
-    }
-
-    /**
-     * Returns the default visibility of the specified column.
-     *
-     * @param columnIndex index of the column, see {@link com.mucommander.ui.main.table.Columns} for allowed values
-     * @return the default visibility of the specified column
-     */
-    public static boolean getShowColumnDefault(int columnIndex) {
-        return DEFAULT_SHOW_COLUMN[columnIndex];
+    public static String getShowColumnVariable(Column column, boolean left) {
+        return getColumnSection(column, left) + "." + SHOW_COLUMN;
     }
 
     /**
      * Returns the variable that holds the width of the specified column, in the left or right
      * {@link com.mucommander.ui.main.table.FileTable}.
      *
-     * @param columnIndex index of the column, see {@link com.mucommander.ui.main.table.Columns} for allowed values
+     * @param column column, see {@link com.mucommander.ui.main.table.Column} for possible values
      * @param left true for the left FileTable, false for the right one
      * @return the variable that holds the width of the specified column
      */
-    public static String getColumnWidthVariable(int columnIndex, boolean left) {
-        return getColumnSection(columnIndex, left) + "." + COLUMN_WIDTH;
+    public static String getColumnWidthVariable(Column column, boolean left) {
+        return getColumnSection(column, left) + "." + COLUMN_WIDTH;
     }
 
     /**
      * Returns the variable that holds the position of the specified column, in the left or right
      * {@link com.mucommander.ui.main.table.FileTable}.
      *
-     * @param columnIndex index of the column, see {@link com.mucommander.ui.main.table.Columns} for allowed values
+     * @param column column, see {@link com.mucommander.ui.main.table.Column} for possible values
      * @param left true for the left FileTable, false for the right one
      * @return the variable that holds the position of the specified column
      */
-    public static String getColumnPositionVariable(int columnIndex, boolean left) {
-        return getColumnSection(columnIndex, left) + "." + COLUMN_POSITION;
+    public static String getColumnPositionVariable(Column column, boolean left) {
+        return getColumnSection(column, left) + "." + COLUMN_POSITION;
     }
 
 

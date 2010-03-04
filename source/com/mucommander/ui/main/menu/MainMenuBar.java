@@ -38,7 +38,7 @@ import com.mucommander.ui.helper.MenuToolkit;
 import com.mucommander.ui.helper.MnemonicHelper;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.WindowManager;
-import com.mucommander.ui.main.table.Columns;
+import com.mucommander.ui.main.table.Column;
 import com.mucommander.ui.main.table.FileTable;
 import com.mucommander.ui.theme.Theme;
 import com.mucommander.ui.theme.ThemeManager;
@@ -75,9 +75,9 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
     // View menu
     private JMenu viewMenu;
     private JMenu themesMenu;
-    private JCheckBoxMenuItem[] sortByItems = new JCheckBoxMenuItem[Columns.COLUMN_COUNT];
+    private JCheckBoxMenuItem[] sortByItems = new JCheckBoxMenuItem[Column.values().length];
     private JMenu columnsMenu;
-    private JCheckBoxMenuItem[] toggleColumnItems = new JCheckBoxMenuItem[Columns.COLUMN_COUNT];
+    private JCheckBoxMenuItem[] toggleColumnItems = new JCheckBoxMenuItem[Column.values().length];
     private JCheckBoxMenuItem toggleToggleAutoSizeItem;
     private JCheckBoxMenuItem toggleShowFoldersFirstItem;
     private JCheckBoxMenuItem toggleShowHiddenFilesItem;
@@ -208,13 +208,9 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
 
         viewMenu.add(new JSeparator());
         ButtonGroup buttonGroup = new ButtonGroup();
-        buttonGroup.add(sortByItems[Columns.EXTENSION] = MenuToolkit.addCheckBoxMenuItem(viewMenu, ActionManager.getActionInstance(SortByExtensionAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper));
-        buttonGroup.add(sortByItems[Columns.NAME] = MenuToolkit.addCheckBoxMenuItem(viewMenu, ActionManager.getActionInstance(SortByNameAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper));
-        buttonGroup.add(sortByItems[Columns.SIZE] = MenuToolkit.addCheckBoxMenuItem(viewMenu, ActionManager.getActionInstance(SortBySizeAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper));
-        buttonGroup.add(sortByItems[Columns.DATE] = MenuToolkit.addCheckBoxMenuItem(viewMenu, ActionManager.getActionInstance(SortByDateAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper));
-        buttonGroup.add(sortByItems[Columns.PERMISSIONS] = MenuToolkit.addCheckBoxMenuItem(viewMenu, ActionManager.getActionInstance(SortByPermissionsAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper));
-        buttonGroup.add(sortByItems[Columns.OWNER] = MenuToolkit.addCheckBoxMenuItem(viewMenu, ActionManager.getActionInstance(SortByOwnerAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper));
-        buttonGroup.add(sortByItems[Columns.GROUP] = MenuToolkit.addCheckBoxMenuItem(viewMenu, ActionManager.getActionInstance(SortByGroupAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper));
+        for(Column c : Column.values())
+            buttonGroup.add(sortByItems[c.ordinal()] = MenuToolkit.addCheckBoxMenuItem(viewMenu, ActionManager.getActionInstance(c.getSortByColumnActionId(), mainFrame), menuItemMnemonicHelper));
+
         MenuToolkit.addMenuItem(viewMenu, ActionManager.getActionInstance(ReverseSortOrderAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
 
         viewMenu.add(new JSeparator());
@@ -222,11 +218,11 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
         // Toggle columns submenu
         columnsMenu = MenuToolkit.addMenu(Translator.get("view_menu.show_hide_columns"), null, this);
         menuItemMnemonicHelper2.clear();
-        for(int i=0; i<Columns.COLUMN_COUNT; i++) {
-            if(i==Columns.NAME)
+        for(Column c : Column.values()) {
+            if(c==Column.NAME)
                 continue;
 
-            toggleColumnItems[i] = MenuToolkit.addCheckBoxMenuItem(columnsMenu, ActionManager.getActionInstance(Columns.getToggleColumnActionId(i), mainFrame), menuItemMnemonicHelper2);
+            toggleColumnItems[c.ordinal()] = MenuToolkit.addCheckBoxMenuItem(columnsMenu, ActionManager.getActionInstance(c.getToggleColumnActionId(), mainFrame), menuItemMnemonicHelper2);
         }
         viewMenu.add(columnsMenu);
 
@@ -393,7 +389,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
             FileTable activeTable = mainFrame.getActiveTable();
 
             // Select the 'sort by' criterion currently in use in the active table
-            sortByItems[activeTable.getSortInfo().getCriterion()].setSelected(true);
+            sortByItems[activeTable.getSortInfo().getCriterion().ordinal()].setSelected(true);
 
             toggleShowFoldersFirstItem.setSelected(activeTable.getSortInfo().getFoldersFirst());
             toggleShowHiddenFilesItem.setSelected(MuConfiguration.getVariable(MuConfiguration.SHOW_HIDDEN_FILES, MuConfiguration.DEFAULT_SHOW_HIDDEN_FILES));
@@ -404,13 +400,15 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
         else if(source==columnsMenu) {
             // Update the selected and enabled state of each column menu item.
             FileTable activeTable = mainFrame.getActiveTable();
-            for(int i=0; i<Columns.COLUMN_COUNT; i++) {
-                if(i==Columns.NAME)     // Name column doesn't have a menu item as it cannot be disabled
+            for(Column c : Column.values()) {
+                if(c==Column.NAME)     // Name column doesn't have a menu item as it cannot be disabled
                     continue;
-                toggleColumnItems[i].setSelected(activeTable.isColumnEnabled(i));
-                toggleColumnItems[i].setEnabled(activeTable.isColumnDisplayable(i));
+
+                JCheckBoxMenuItem item = toggleColumnItems[c.ordinal()];
+                item.setSelected(activeTable.isColumnEnabled(c));
+                item.setEnabled(activeTable.isColumnDisplayable(c));
                 // Override the action's label to a shorter one
-                toggleColumnItems[i].setText(Columns.getColumnLabel(i));
+                item.setText(c.getLabel());
             }
         }
         else if(source==goMenu) {

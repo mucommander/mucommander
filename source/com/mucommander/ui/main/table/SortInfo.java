@@ -31,8 +31,8 @@ import com.mucommander.conf.impl.MuConfiguration;
  */
 public class SortInfo implements Cloneable {
 
-    /** Current sort criteria */
-    private int criterion = Columns.NAME;
+    /** Current sort criterion */
+    private Column criterion = Column.NAME;
 
     /** Ascending/descending order */
     private boolean ascendingOrder = true;
@@ -46,20 +46,20 @@ public class SortInfo implements Cloneable {
 
 
     /**
-     * Returns the column criterion currently used to sort the table.
+     * Returns the column used as a criterion to sort the table.
      *
-     * @return the current column criterion used to sort the table, see {@link Columns} for allowed values
+     * @return the column used as a criterion to sort the table.
      */
-    public int getCriterion() {
+    public Column getCriterion() {
         return criterion;
     }
 
     /**
-     * Sets the column criterion currently used to sort the table.
+     * Sets the column to be used as a criterion to sort the table.
      *
-     * @param criterion the current column criterion used to sort the table, see {@link Columns} for allowed values
+     * @param criterion the column to be used as a criterion to sort the table, see {@link com.mucommander.ui.main.table.Column} for possible values
      */
-    void setCriterion(int criterion) {
+    void setCriterion(Column criterion) {
         this.criterion = criterion;
     }
 

@@ -49,11 +49,11 @@ public class FileTableColumnModel implements TableColumnModel, PropertyChangeLis
     /** Cache for the table's total width. */
     private int                                      widthCache = CACHE_OUT_OF_DATE;
     /** All available columns. */
-    private Vector<TableColumn>                      columns    = new Vector<TableColumn>(Columns.COLUMN_COUNT);
+    private Vector<TableColumn>                      columns    = new Vector<TableColumn>(Column.values().length);
     /** Enabled state of each column. */
-    private boolean[]     enabled = new boolean[Columns.COLUMN_COUNT];
+    private boolean[]     enabled = new boolean[Column.values().length];
     /** Visibility state of each column. */
-    private boolean[]     visibility = new boolean[Columns.COLUMN_COUNT];
+    private boolean[]     visibility = new boolean[Column.values().length];
     /** Cache for the number of available columns. */
     private int           countCache;
     /** Whether the column sizes were set already. */
@@ -67,17 +67,20 @@ public class FileTableColumnModel implements TableColumnModel, PropertyChangeLis
      * Creates a new file table column model.
      */
     public FileTableColumnModel(FileTableConfiguration conf) {
-        TableColumn             column;         // Buffer for the current column.
+        TableColumn column;         // Buffer for the current column.
+        int columnIndex;
 
         // The name column is always visible, so we know that the column count is always
         // at least 1.
         countCache = 1;
 
         // Initialises the columns.
-        for(int i = 0; i < Columns.COLUMN_COUNT; i++) {
-            columns.add(column = new TableColumn(i));
+        for(Column c : Column.values()) {
+            columnIndex = c.ordinal();
+
+            columns.add(column = new TableColumn(columnIndex));
             column.setCellEditor(null);
-            column.setHeaderValue(Columns.getColumnLabel(i));
+            column.setHeaderValue(c.getLabel());
 
             // Mac OS X 10.5 (Leopard) and up uses JTableHeader properties to render sort indicators on table headers.
             // On other platforms, we use a custom table header renderer.
@@ -88,21 +91,21 @@ public class FileTableColumnModel implements TableColumnModel, PropertyChangeLis
             column.addPropertyChangeListener(this);
 
             // Sets the column's initial width.
-            if(conf.getWidth(i) != 0)
-                column.setWidth(conf.getWidth(i));
+            if(conf.getWidth(c) != 0)
+                column.setWidth(conf.getWidth(c));
 
             // Initialises the column's visibility and minimum width.
-            if(i == Columns.NAME) {
-                enabled[i] = true;
+            if(c == Column.NAME) {
+                enabled[columnIndex] = true;
             }
             else {
-                if((enabled[i] = conf.isEnabled(i)))
+                if((enabled[columnIndex] = conf.isEnabled(c)))
                     countCache++;
             }
-            column.setMinWidth(Columns.getMinimumColumnWidth(i));
+            column.setMinWidth(c.getMinimumColumnWidth());
 
             // Init visibility state to enabled state, FileTable will adjust the values for conditional columns later
-            visibility[i] = enabled[i]; 
+            visibility[columnIndex] = enabled[columnIndex];
         }
 
         // Sorts the columns.
@@ -116,16 +119,18 @@ public class FileTableColumnModel implements TableColumnModel, PropertyChangeLis
     public synchronized FileTableConfiguration getConfiguration() {
         FileTableConfiguration conf;
         TableColumn            column;
-        int                    index;
+        int                    modelCIndex;
+        Column                 modelC;
 
         conf = new FileTableConfiguration();
-        for(int i = 0; i < Columns.COLUMN_COUNT; i++) {
-            column = columns.get(i);
-            index  = column.getModelIndex();
+        for(Column c : Column.values()) {
+            column = columns.get(c.ordinal());
+            modelC = Column.valueOf(column.getModelIndex());
+            modelCIndex = modelC.ordinal();
 
-            conf.setEnabled(index, enabled[index]);
-            conf.setPosition(index, i);
-            conf.setWidth(index, column.getWidth());
+            conf.setEnabled(modelC, enabled[modelCIndex]);
+            conf.setPosition(modelC, c.ordinal());
+            conf.setWidth(modelC, column.getWidth());
         }
 
         return conf;
@@ -138,20 +143,20 @@ public class FileTableColumnModel implements TableColumnModel, PropertyChangeLis
 
     /**
      * Returns <code>true</code> if the specified column is enabled.
-     * @param  id      a column identifier, see {@link Columns} for allowed values.
+     * @param column column, see {@link com.mucommander.ui.main.table.Column} for possible values
      * @return true if the column is enabled, false if disabled.
      */
-    public synchronized boolean isColumnEnabled(int id) {
-        return enabled[id];
+    public synchronized boolean isColumnEnabled(Column column) {
+        return enabled[column.ordinal()];
     }
 
     /**
      * Sets the specified column's enabled state.
-     * @param id      a column identifier, see {@link Columns} for allowed values.
+     * @param column column, see {@link com.mucommander.ui.main.table.Column} for possible values
      * @param enabled true to enable the column, false to disable it.
      */
-    public synchronized void setColumnEnabled(int id, boolean enabled) {
-        this.enabled[id] = enabled;
+    public synchronized void setColumnEnabled(Column column, boolean enabled) {
+        this.enabled[column.ordinal()] = enabled;
     }
 
 
@@ -160,47 +165,48 @@ public class FileTableColumnModel implements TableColumnModel, PropertyChangeLis
 
     /**
      * Sets the specified column's visibility state.
-     * @param id      identifier of the column as defined in {@link Columns}.
+     * @param column column, see {@link com.mucommander.ui.main.table.Column} for possible values
      * @param visible whether the column should be visible or not.
      */
-    synchronized void setColumnVisible(int id, boolean visible) {
+    synchronized void setColumnVisible(Column column, boolean visible) {
         // Ignores calls that won't actually change anything.
-        if(visibility[id] != visible) {
-            visibility[id] = visible;
+        int columnVal = column.ordinal();
+        if(visibility[columnVal] != visible) {
+            visibility[columnVal] = visible;
             widthCache = CACHE_OUT_OF_DATE;
 
             // Adds the column.
             if(visible) {
                 countCache++;
-                triggerColumnAdded(new TableColumnModelEvent(this, id, id));
+                triggerColumnAdded(new TableColumnModelEvent(this, columnVal, columnVal));
             }
 
             // Removes the column.
             else {
                 countCache--;
-                triggerColumnRemoved(new TableColumnModelEvent(this, id, id));
+                triggerColumnRemoved(new TableColumnModelEvent(this, columnVal, columnVal));
             }
         }
     }
 
     /**
      * Returns <code>true</code> if the specified column is visible.
-     * @param  id identifier of the column as definied in {@link Columns}.
-     * @return    <code>true</code> if the specified column is visible, <code>false</code> otherwise.
+     * @param column column, see {@link com.mucommander.ui.main.table.Column} for possible values
+     * @return <code>true</code> if the specified column is visible, <code>false</code> otherwise.
      */
-    public synchronized boolean isColumnVisible(int id) {return visibility[id];}
+    public synchronized boolean isColumnVisible(Column column) {return visibility[column.ordinal()];}
 
     /**
      * Adds the specified column to the model.
      * @param column column to add to the model.
      */
-    public void addColumn(TableColumn column) {setColumnVisible(column.getModelIndex(), true);}
+    public void addColumn(TableColumn column) {setColumnVisible(Column.valueOf(column.getModelIndex()), true);}
 
     /**
      * Removes the specified column from the model.
      * @param column column to remove from the model.
      */
-    public void removeColumn(TableColumn column) {setColumnVisible(column.getModelIndex(), false);}
+    public void removeColumn(TableColumn column) {setColumnVisible(Column.valueOf(column.getModelIndex()), false);}
 
 
 
@@ -582,8 +588,8 @@ public class FileTableColumnModel implements TableColumnModel, PropertyChangeLis
             int index2; // Index of the second column as defined in the configuration.
 
             // Retrieves the two columns' indexes and identifiers.
-            index1 = conf.getPosition(id1 = tc1.getModelIndex());
-            index2 = conf.getPosition(id2 = tc2.getModelIndex());
+            index1 = conf.getPosition(Column.valueOf(id1 = tc1.getModelIndex()));
+            index2 = conf.getPosition(Column.valueOf(id2 = tc2.getModelIndex()));
 
             // Sort by index, then by identifier.
             if(index1 < index2)

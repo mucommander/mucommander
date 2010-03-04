@@ -166,7 +166,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
 
         // Initialises the table.
         cellRenderer     = new FileTableCellRenderer(this);
-        getColumnModel().getColumn(convertColumnIndexToView(Columns.NAME)).setCellEditor(filenameEditor = new FilenameEditor(new JTextField()));
+        getColumnModel().getColumn(convertColumnIndexToView(Column.NAME.ordinal())).setCellEditor(filenameEditor = new FilenameEditor(new JTextField()));
         getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         setTableHeader(new FileTableHeader(this));
         setShowGrid(false);
@@ -207,7 +207,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
 
             // Highlights the selected column
             tableHeader.putClientProperty("JTableHeader.selectedColumn", isActiveTable
-                    ? convertColumnIndexToView(sortInfo.getCriterion())
+                    ? convertColumnIndexToView(sortInfo.getCriterion().ordinal())
                     :null);
 
             // Displays an ascending/descending arrow
@@ -700,11 +700,11 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
      * order will be ignored if the corresponding column is not currently visible, but the 'folders first' value will
      * still be taken into account.
      *
-     * @param criterion the sort criterion, see {@link com.mucommander.ui.main.table.Columns} for allowed values
+     * @param criterion the sort criterion, see {@link com.mucommander.ui.main.table.Column} for possible values
      * @param ascending true for ascending order, false for descending order
      * @param foldersFirst if true, folders are displayed before regular files. If false, files are mixed with directories.
      */
-    public void sortBy(int criterion, boolean ascending, boolean foldersFirst) {
+    public void sortBy(Column criterion, boolean ascending, boolean foldersFirst) {
         // If we're not changing the current sort values, abort.
         if(criterion==sortInfo.getCriterion() && ascending==sortInfo.getAscendingOrder() && foldersFirst==sortInfo.getFoldersFirst())
             return;
@@ -730,7 +730,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
     }
 
     /**
-     * Calls {@link #sortBy(int, boolean, boolean)} with the sort information contained in the given {@link SortInfo}.
+     * Calls {@link #sortBy(Column, boolean, boolean)} with the sort information contained in the given {@link SortInfo}.
      *
      * @param sortInfo the information to use to sort this table.
      */
@@ -743,10 +743,10 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
      * Sorts this FileTable by the given sort criterion and order. The column corresponding to the specified criterion
      * has to be visible when this method is called. If it isn't, this method won't have any effect.
      *
-     * @param criterion the sort criterion, see {@link com.mucommander.ui.main.table.Columns} for allowed values
+     * @param criterion the sort criterion, see {@link com.mucommander.ui.main.table.Column} for possible values
      * @param ascending true for ascending order, false for descending order
      */
-    public void sortBy(int criterion, boolean ascending) {
+    public void sortBy(Column criterion, boolean ascending) {
         sortBy(criterion, ascending, sortInfo.getFoldersFirst());
     }
 
@@ -754,9 +754,9 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
      * Sorts this FileTable by the given sort criterion. If the criterion is already the current one, the sort order
      * (ascending or descending) will be reversed.
      *
-     * @param criterion the sort criterion, see {@link com.mucommander.ui.main.table.Columns} for allowed values
+     * @param criterion the sort criterion, see {@link com.mucommander.ui.main.table.Column} for possible values
      */
-    public void sortBy(int criterion) {
+    public void sortBy(Column criterion) {
         if (criterion==sortInfo.getCriterion()) {
             reverseSortOrder();
             return;
@@ -781,7 +781,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
         super.setColumnModel(columnModel);
 
         if(filenameEditor != null)
-            columnModel.getColumn(convertColumnIndexToView(Columns.NAME)).setCellEditor(filenameEditor);
+            columnModel.getColumn(convertColumnIndexToView(Column.NAME.ordinal())).setCellEditor(filenameEditor);
 
         // Mac OS X 10.5 (Leopard) and up uses JTableHeader properties to render sort indicators on table headers
         if(usesTableHeaderRenderingProperties())
@@ -791,23 +791,23 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
     /**
      * Returns <code>true</code> if the specified column is currently visible.
      *
-     * @param colNum column index, see {@link Columns} for allowed values
+     * @param column column, see {@link com.mucommander.ui.main.table.Column} for possible values
      * @return true if the specified column is currently visible
      */
-    public boolean isColumnVisible(int colNum) {
-        return getFileTableColumnModel().isColumnVisible(colNum);
+    public boolean isColumnVisible(Column column) {
+        return getFileTableColumnModel().isColumnVisible(column);
     }
 
     /**
      * Returns <code>true</code> if the given column can be displayed given the current folder. Certain columns such as
-     * {@link Columns#OWNER} and {@link Columns#GROUP} can be displayed only if current folder's files are capable
+     * {@link Column#OWNER} and {@link Column#GROUP} can be displayed only if current folder's files are capable
      * of supplying this information.
      * Note that the return value does not take into account the column's current enabled state.
      *
-     * @param colNum column index, see {@link Columns} for allowed values
+     * @param column column, see {@link com.mucommander.ui.main.table.Column} for possible values
      * @return true if the given column can be displayed given the current folder
      */
-    public boolean isColumnDisplayable(int colNum) {
+    public boolean isColumnDisplayable(Column column) {
         // Check this against the children's file implementation whenever possible: certain file implementations may
         // return different values for the current folder than for its children. For instance, this is the case for file
         // protocols that have a special file implementation for the root folder (s3 is one).
@@ -816,10 +816,10 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
             file = getCurrentFolder();
 
         // The Owner and Group columns are displayable only if current folder has this information
-        if(colNum==Columns.OWNER) {
+        if(column==Column.OWNER) {
             return file.canGetOwner();
         }
-        else if(colNum==Columns.GROUP) {
+        else if(column==Column.GROUP) {
             return file.canGetGroup();
         }
 
@@ -833,47 +833,47 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
     public void updateColumnsVisibility() {
         FileTableColumnModel columnModel = getFileTableColumnModel();
 
-        for(int c=0; c< Columns.COLUMN_COUNT; c++)
+        for(Column c : Column.values())
             columnModel.setColumnVisible(c, columnModel.isColumnEnabled(c) && isColumnDisplayable(c));
     }
 
     /**
      * Returns <code>true</code> if the specified column is enabled.
      *
-     * @param colNum column index, see {@link Columns} for allowed values
+     * @param column column, see {@link com.mucommander.ui.main.table.Column} for possible values
      * @return true if the specified column is enabled
      */
-    public boolean isColumnEnabled(int colNum) {
-        return getFileTableColumnModel().isColumnEnabled(colNum);
+    public boolean isColumnEnabled(Column column) {
+        return getFileTableColumnModel().isColumnEnabled(column);
     }
 
     /**
      * Enables/disables the specified column. Disabling a column will make it invisible. Enabling a column will make it
-     * visible only if the column can be displayed. See {@link #isColumnDisplayable(int)} for more information about
+     * visible only if the column can be displayed. See {@link #isColumnDisplayable(Column)} for more information about
      * this.
      *
      * <p>If the current sort criterion corresponds to the specified column and this
-     * column is disabled, the sort criterion will be reset to {@link Columns#NAME} to prevent the table from being
+     * column is disabled, the sort criterion will be reset to {@link Column#NAME} to prevent the table from being
      * sorted by an invisible column/criterion.</p>
      *
-     * @param colNum  identifier of the column which should be enabled or disabled, see {@link Columns} for allowed values
+     * @param column column, see {@link com.mucommander.ui.main.table.Column} for possible values
      * @param enabled true to enable the column, false to disable it.
      */
-    public void setColumnEnabled(int colNum, boolean enabled) {
+    public void setColumnEnabled(Column column, boolean enabled) {
         FileTableColumnModel columnModel = getFileTableColumnModel();
-        columnModel.setColumnEnabled(colNum, enabled);
+        columnModel.setColumnEnabled(column, enabled);
 
         // Update the visibility of the column
         updateColumnsVisibility();
 
         // The column may be the current 'sort by' criterion and may have become invisible.
         // If that is the case, change the criterion to NAME.
-        if(sortInfo.getCriterion()==colNum && !columnModel.isColumnVisible(colNum))
-            sortBy(Columns.NAME);
+        if(sortInfo.getCriterion()==column && !columnModel.isColumnVisible(column))
+            sortBy(Column.NAME);
     }
 
-    public int getColumnPosition(int colNum) {
-        return getFileTableColumnModel().getColumnPosition(colNum);
+    public int getColumnPosition(Column column) {
+        return getFileTableColumnModel().getColumnPosition(column.ordinal());
     }
 
     /**
@@ -910,7 +910,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
         // // Adjust row height to match filename editor's height
         // setRowHeight(row, (int)filenameEditor.filenameField.getPreferredSize().getHeight());
         // Starts editing clicked cell's name column
-        editCellAt(currentRow, convertColumnIndexToView(Columns.NAME));
+        editCellAt(currentRow, convertColumnIndexToView(Column.NAME.ordinal()));
         // Saves current/editing row in the filename editor and requests focus on the text field
         filenameEditor.notifyEditingRow(currentRow);
         // Disable editing
@@ -988,7 +988,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
         Enumeration<TableColumn> columns;
         TableColumn              column;
         TableColumn              nameColumn;
-        int                      columnIndex;
+        Column                   c;
         int                      remainingWidth;
         int                      columnWidth;
         int                      rowCount;
@@ -1005,12 +1005,12 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
 
         while(columns.hasMoreElements()) {
             column = columns.nextElement();
-            columnIndex = column.getModelIndex();
+            c = Column.valueOf(column.getModelIndex());
 
-            if(columnIndex == Columns.NAME)
+            if(c == Column.NAME)
                 nameColumn = column;
             else {
-                if(columnIndex == Columns.EXTENSION)
+                if(c == Column.EXTENSION)
                     columnWidth = (int)FileIcons.getIconDimension().getWidth();
                 else {
                     columnWidth = MIN_COLUMN_AUTO_WIDTH;
@@ -1019,7 +1019,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
                     for(int rowNum = 0; rowNum < rowCount; rowNum++) {
                         val = (String)getModel().getValueAt(rowNum, column.getModelIndex());
                         stringWidth = val==null?0
-                                :columnIndex==Columns.SIZE && val.equals(FileTableModel.DIRECTORY_SIZE_STRING)?dirStringWidth
+                                :c==Column.SIZE && val.equals(FileTableModel.DIRECTORY_SIZE_STRING)?dirStringWidth
                                 :fm.stringWidth(val);
 
                         columnWidth = Math.max(columnWidth, stringWidth);
@@ -1046,7 +1046,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
 
         if((width = getSize().width - getColumnModel().getTotalColumnWidth()) == 0)
             return;
-        nameColumn = getColumnModel().getColumn(convertColumnIndexToView(Columns.NAME));
+        nameColumn = getColumnModel().getColumn(convertColumnIndexToView(Column.NAME.ordinal()));
         if(nameColumn.getWidth() + width >= RESERVED_NAME_COLUMN_WIDTH)
             nameColumn.setWidth(nameColumn.getWidth() + width);
         else
@@ -1214,12 +1214,12 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
                 Point p = new Point(clickX, e.getY());
                 final int row = rowAtPoint(p);
                 final int viewColumn = columnAtPoint(p);
-                final int column = convertColumnIndexToModel(viewColumn);
+                final Column column = Column.valueOf(convertColumnIndexToModel(viewColumn));
                 // Test if the clicked row is current row, if column is name column, and if current row is not '..' file
-                if (row == currentRow && !isParentFolderSelected() && (column == Columns.NAME || column == Columns.DATE || column == Columns.PERMISSIONS)) {
+                if (row == currentRow && !isParentFolderSelected() && (column == Column.NAME || column == Column.DATE || column == Column.PERMISSIONS)) {
                     // Test if clicked point is inside the label and abort if not
                     FontMetrics fm = getFontMetrics(FileTableCellRenderer.getCellFont());
-                    int labelWidth = fm.stringWidth((String) tableModel.getValueAt(row, column));
+                    int labelWidth = fm.stringWidth((String) tableModel.getValueAt(row, column.ordinal()));
                     int columnX = (int) getTableHeader().getHeaderRect(viewColumn).getX();
                     if (clickX<columnX+CellLabel.CELL_BORDER_WIDTH || clickX>columnX+labelWidth+CellLabel.CELL_BORDER_WIDTH)
                         return;
@@ -1240,14 +1240,14 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
                                 // - current row changed
                                 // - isEditing() is true which could happen if multiple clicks were made
                                 if ((System.currentTimeMillis() - lastDoubleClickTimestamp) > 1000 && row == currentRow) {
-                                    if (column == Columns.NAME) {
+                                    if (column == Column.NAME) {
                                         if(!isEditing())
                                             editCurrentFilename();
                                     }
-                                    else if(column == Columns.DATE) {
+                                    else if(column == Column.DATE) {
                                         ActionManager.performAction(com.mucommander.ui.action.impl.ChangeDateAction.Descriptor.ACTION_ID, mainFrame);
                                     }
-                                    else if(column==Columns.PERMISSIONS) {
+                                    else if(column == Column.PERMISSIONS) {
                                         if(getSelectedFile().getChangeablePermissions().getIntValue()!=0)
                                             ActionManager.performAction(com.mucommander.ui.action.impl.ChangePermissionsAction.Descriptor.ACTION_ID, mainFrame);
                                     }
@@ -1970,8 +1970,8 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
         return getFileTableColumnModel().getConfiguration();
     }
 
-    public int getColumnWidth(int columnId) {
-        return getFileTableColumnModel().getColumnFromId(columnId).getWidth();
+    public int getColumnWidth(Column column) {
+        return getFileTableColumnModel().getColumnFromId(column.ordinal()).getWidth();
     }
 
     /**
@@ -2004,7 +2004,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
                 // The column corresponding to the current 'sort by' criterion may have become invisible.
                 // If that is the case, change the criterion to NAME. 
                 if(!columnModel.isColumnVisible(sortInfo.getCriterion())) {
-                    sortInfo.setCriterion(Columns.NAME);
+                    sortInfo.setCriterion(Column.NAME);
 
                     // Mac OS X 10.5 (Leopard) and up uses JTableHeader properties to render sort indicators on table headers
                     if(usesTableHeaderRenderingProperties()) {

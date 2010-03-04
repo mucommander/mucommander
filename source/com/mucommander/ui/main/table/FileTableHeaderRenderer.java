@@ -73,7 +73,7 @@ public class FileTableHeaderRenderer extends DefaultTableCellRenderer {
             }
 
             FileTable fileTable = (FileTable)table;
-            if(fileTable.getSortInfo().getCriterion()==fileTable.convertColumnIndexToModel(column)) {
+            if(fileTable.getSortInfo().getCriterion()==Column.valueOf(fileTable.convertColumnIndexToModel(column))) {
                 // This header is the currently selected one
                 label.setIcon(fileTable.getSortInfo().getAscendingOrder()? ASCENDING_ICON : DESCENDING_ICON);
             }

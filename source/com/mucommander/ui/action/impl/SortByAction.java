@@ -18,12 +18,17 @@
 
 package com.mucommander.ui.action.impl;
 
+import com.mucommander.ui.action.AbstractActionDescriptor;
+import com.mucommander.ui.action.ActionCategories;
+import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.event.ActivePanelListener;
 import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.main.MainFrame;
+import com.mucommander.ui.main.table.Column;
 import com.mucommander.ui.main.table.FileTable;
 
+import javax.swing.KeyStroke;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.TableColumnModelEvent;
@@ -42,13 +47,13 @@ import java.util.Hashtable;
  */
 public abstract class SortByAction extends MuAction implements ActivePanelListener, TableColumnModelListener {
 
-    /** Index of the FileTable column this action operates on */ 
-    protected int columnIndex;
+    /** FileTable column this action operates on */
+    protected Column column;
 
-    public SortByAction(MainFrame mainFrame, Hashtable<String,Object> properties, int columnIndex) {
+    public SortByAction(MainFrame mainFrame, Hashtable<String,Object> properties, Column column) {
         super(mainFrame, properties);
 
-        this.columnIndex = columnIndex;
+        this.column = column;
 
         mainFrame.addActivePanelListener(this);
         mainFrame.getLeftPanel().getFileTable().getColumnModel().addColumnModelListener(this);
@@ -63,7 +68,7 @@ public abstract class SortByAction extends MuAction implements ActivePanelListen
      * @param fileTable the FileTable this action currently operates on
      */
     private void updateState(FileTable fileTable) {
-        setEnabled(fileTable.isColumnVisible(columnIndex));
+        setEnabled(fileTable.isColumnVisible(column));
     }
 
 
@@ -73,7 +78,7 @@ public abstract class SortByAction extends MuAction implements ActivePanelListen
 
     @Override
     public void performAction() {
-        mainFrame.getActiveTable().sortBy(columnIndex);
+        mainFrame.getActiveTable().sortBy(column);
     }
 
 
@@ -93,13 +98,13 @@ public abstract class SortByAction extends MuAction implements ActivePanelListen
 
     public void columnAdded(TableColumnModelEvent event) {
         // Enable this action when the corresponding column has been made visible
-        if(event.getFromIndex()==columnIndex)
+        if(event.getFromIndex()==column.ordinal())
             setEnabled(true);
     }
 
     public void columnRemoved(TableColumnModelEvent event) {
         // Disable this action when the corresponding column has been made invisible
-        if(event.getFromIndex()==columnIndex)
+        if(event.getFromIndex()==column.ordinal())
             setEnabled(false);
     }
 
@@ -110,5 +115,29 @@ public abstract class SortByAction extends MuAction implements ActivePanelListen
     }
 
     public void columnSelectionChanged(ListSelectionEvent event) {
+    }
+
+
+    ///////////////////
+    // Inner classes //
+    ///////////////////
+
+    public static class Descriptor extends AbstractActionDescriptor {
+
+        private Column column;
+        private KeyStroke defaultKeyStroke;
+
+        public Descriptor(Column column, KeyStroke defaultKeyStroke) {
+            this.column = column;
+            this.defaultKeyStroke = defaultKeyStroke;
+        }
+
+        public String getId() { return column.getSortByColumnActionId(); }
+
+		public ActionCategory getCategory() { return ActionCategories.VIEW; }
+
+		public KeyStroke getDefaultAltKeyStroke() { return null; }
+
+		public KeyStroke getDefaultKeyStroke() { return defaultKeyStroke; }
     }
 }
