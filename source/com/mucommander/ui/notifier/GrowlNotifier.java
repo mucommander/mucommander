@@ -22,6 +22,8 @@ import com.mucommander.AppLogger;
 import com.mucommander.runtime.OsFamilies;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.macosx.AppleScript;
+
+import java.util.Hashtable;
 //import com.growl.Growl;
 
 /**
@@ -47,10 +49,7 @@ public class GrowlNotifier extends AbstractNotifier {
     private static boolean isRegistered;
 
     /** Dictionary keys for the different notification types */
-    private final static String NOTIFICATION_KEYS[] = {
-        "progress_dialog.job_finished",
-        "progress_dialog.job_error"
-    };
+    private final static Hashtable<NotificationType, String> NOTIFICATION_KEYS;
 
     /** Name of the application to be registered with Growl, as spelled in the .app */
     private final static String APP_NAME = "muCommander";
@@ -60,6 +59,12 @@ public class GrowlNotifier extends AbstractNotifier {
             "tell application \"System Events\"\n" +
                 "\tset isRunning to (count of (every process whose name is \"GrowlHelperApp\")) > 0\n" +
             "end tell";
+
+    static {
+        NOTIFICATION_KEYS = new Hashtable<NotificationType, String>();
+        NOTIFICATION_KEYS.put(NotificationType.JOB_COMPLETED, "progress_dialog.job_finished");
+        NOTIFICATION_KEYS.put(NotificationType.JOB_ERROR, "progress_dialog.job_error");
+    }
 
 
     GrowlNotifier() {
@@ -116,8 +121,8 @@ public class GrowlNotifier extends AbstractNotifier {
             // The list of notification types muCommander uses
             String notificationTypes =
                 "{"+
-                    "\""+Translator.get(NOTIFICATION_KEYS[NOTIFICATION_TYPE_JOB_COMPLETED])+"\","+
-                    "\""+Translator.get(NOTIFICATION_KEYS[NOTIFICATION_TYPE_JOB_ERROR])+"\""+
+                    "\""+Translator.get(NOTIFICATION_KEYS.get(NotificationType.JOB_COMPLETED))+"\","+
+                    "\""+Translator.get(NOTIFICATION_KEYS.get(NotificationType.JOB_ERROR))+"\""+
                 "}";
 
             // Register muCommander with Growl, declare the notifications types and enable all of them by default
@@ -144,7 +149,7 @@ public class GrowlNotifier extends AbstractNotifier {
     }
 
     @Override
-    public boolean displayNotification(int notificationType, String title, String description) {
+    public boolean displayNotification(NotificationType notificationType, String title, String description) {
         AppLogger.finer("notificationType="+notificationType+" title="+title+" description="+description);
 
         if(!isEnabled()) {
@@ -155,7 +160,7 @@ public class GrowlNotifier extends AbstractNotifier {
 
         boolean success = tellGrowl(
             "notify with"+
-            " name \""+Translator.get(NOTIFICATION_KEYS[notificationType])+"\""+
+            " name \""+Translator.get(NOTIFICATION_KEYS.get(notificationType))+"\""+
             " title \""+title+"\""+
             " description \""+description+"\""+
             " application name \""+APP_NAME+"\"");

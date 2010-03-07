@@ -29,7 +29,7 @@ import com.mucommander.ui.layout.InformationPane;
 import com.mucommander.ui.layout.XAlignedComponentPanel;
 import com.mucommander.ui.layout.YBoxPanel;
 import com.mucommander.ui.notifier.AbstractNotifier;
-import com.mucommander.ui.notifier.NotificationTypes;
+import com.mucommander.ui.notifier.NotificationType;
 import com.mucommander.ui.text.FileLabel;
 import com.mucommander.ui.text.FontUtils;
 
@@ -213,7 +213,7 @@ public class FileCollisionDialog extends QuestionDialog {
 
         // Send a system notification if a notifier is available and enabled
         if(AbstractNotifier.isAvailable() && AbstractNotifier.getNotifier().isEnabled())
-            AbstractNotifier.getNotifier().displayBackgroundNotification(NotificationTypes.NOTIFICATION_TYPE_JOB_ERROR, getTitle(), desc);
+            AbstractNotifier.getNotifier().displayBackgroundNotification(NotificationType.JOB_ERROR, getTitle(), desc);
     }
 
 

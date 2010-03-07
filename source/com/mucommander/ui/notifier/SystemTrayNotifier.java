@@ -33,6 +33,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
+import java.util.Hashtable;
 
 /**
  * SystemTrayNotifier implements a notifier that uses the System Tray to display notifications. When enabled, this
@@ -61,10 +62,14 @@ public class SystemTrayNotifier extends AbstractNotifier implements ActionListen
     private final static int TRAY_ICON_HEIGHT = 16;
 
     /** System tray message types for the different notification types */
-    private final static TrayIcon.MessageType MESSAGE_TYPES[] = {
-        TrayIcon.MessageType.INFO,
-        TrayIcon.MessageType.ERROR
-    };
+    private final static Hashtable<NotificationType, TrayIcon.MessageType> MESSAGE_TYPES;
+
+    static {
+        MESSAGE_TYPES = new Hashtable<NotificationType, TrayIcon.MessageType>();
+
+        MESSAGE_TYPES.put(NotificationType.JOB_COMPLETED, TrayIcon.MessageType.INFO);
+        MESSAGE_TYPES.put(NotificationType.JOB_ERROR, TrayIcon.MessageType.ERROR);
+    }
 
     SystemTrayNotifier() {
     }
@@ -158,7 +163,7 @@ public class SystemTrayNotifier extends AbstractNotifier implements ActionListen
     }
 
     @Override
-    public boolean displayNotification(int notificationType, String title, String description) {
+    public boolean displayNotification(NotificationType notificationType, String title, String description) {
         AppLogger.finer("notificationType="+notificationType+" title="+title+" description="+description);
 
         if(!isEnabled()) {
@@ -167,7 +172,7 @@ public class SystemTrayNotifier extends AbstractNotifier implements ActionListen
             return false;
         }
 
-        trayIcon.displayMessage(title, description, MESSAGE_TYPES[notificationType]);
+        trayIcon.displayMessage(title, description, MESSAGE_TYPES.get(notificationType));
         return true;
     }
 

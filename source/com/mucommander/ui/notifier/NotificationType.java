@@ -19,14 +19,15 @@
 package com.mucommander.ui.notifier;
 
 /**
+ * Defines the different kinds of notification.
+ *
  * @author Maxence Bernard
  */
-public interface NotificationTypes {
+public enum NotificationType {
 
-    /** 'Job completed' notification type, to notify that a job is finished */
-    public final static int NOTIFICATION_TYPE_JOB_COMPLETED = 0;
+    /** Used to indicate that a job has finished */
+    JOB_COMPLETED,
 
-    /** 'Job completed' notification type, to notify of an error in a job */
-    public final static int NOTIFICATION_TYPE_JOB_ERROR = 1;
-    
+    /** Used to indicate that a job has failed */
+    JOB_ERROR
 }

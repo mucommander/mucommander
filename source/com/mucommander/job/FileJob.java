@@ -32,7 +32,7 @@ import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.table.FileTable;
 import com.mucommander.ui.notifier.AbstractNotifier;
-import com.mucommander.ui.notifier.NotificationTypes;
+import com.mucommander.ui.notifier.NotificationType;
 
 import java.util.WeakHashMap;
 
@@ -540,7 +540,7 @@ public abstract class FileJob implements Runnable {
 
         // Send a system notification if a notifier is available and enabled
         if(AbstractNotifier.isAvailable() && AbstractNotifier.getNotifier().isEnabled())
-            AbstractNotifier.getNotifier().displayBackgroundNotification(NotificationTypes.NOTIFICATION_TYPE_JOB_COMPLETED,
+            AbstractNotifier.getNotifier().displayBackgroundNotification(NotificationType.JOB_COMPLETED,
                     getProgressDialog()==null?"":getProgressDialog().getTitle(),
                     Translator.get("progress_dialog.job_finished"));
     }
@@ -610,7 +610,7 @@ public abstract class FileJob implements Runnable {
 
         // Send a system notification if a notifier is available and enabled
         if(AbstractNotifier.isAvailable() && AbstractNotifier.getNotifier().isEnabled())
-            AbstractNotifier.getNotifier().displayBackgroundNotification(NotificationTypes.NOTIFICATION_TYPE_JOB_ERROR, title, message);
+            AbstractNotifier.getNotifier().displayBackgroundNotification(NotificationType.JOB_ERROR, title, message);
 
         QuestionDialog dialog;
         if(getProgressDialog()==null)

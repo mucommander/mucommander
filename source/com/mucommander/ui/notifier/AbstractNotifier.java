@@ -44,7 +44,7 @@ import java.awt.SystemTray;
  *
  * @author Maxence Bernard
  */
-public abstract class AbstractNotifier implements NotificationTypes {
+public abstract class AbstractNotifier {
 
     /** AbstractNotifier instance, null if none is available on the current platform */
     private static AbstractNotifier notifier;
@@ -99,14 +99,14 @@ public abstract class AbstractNotifier implements NotificationTypes {
      * Note that this method is executed in a separate thread after all pending Swing events have been processed,
      * to ensure in the event of a window being made inactive that the notification will not be triggered. This method
      * immediately return s(i.e. does not wait for pending events) and thus is not be able to return if the notification
-     * was displayed or not, unlike {@link #displayNotification(int, String, String)}.
+     * was displayed or not, unlike {@link #displayNotification(NotificationType, String, String)}.
      * </p>
      *
-     * @param notificationType one of the available notification types, see {@link NotificationTypes} for possible values
+     * @param notificationType one of the available notification types, see {@link NotificationType} for possible values
      * @param title the title of the notification to display
      * @param description the description of the notification to display
      */
-    public void displayBackgroundNotification(final int notificationType, final String title, final String description) {
+    public void displayBackgroundNotification(final NotificationType notificationType, final String title, final String description) {
         SwingUtilities.invokeLater(
             new Thread() {
                 @Override
@@ -146,7 +146,7 @@ public abstract class AbstractNotifier implements NotificationTypes {
 
     /**
      * Displays a notification with the specified type, title and description and returns <code>true</code> if the
-     * notification could be displayed. Unlike {@link #displayBackgroundNotification(int, String, String)}, the
+     * notification could be displayed. Unlike {@link #displayBackgroundNotification(NotificationType, String, String)}, the
      * notification will be attempted for display even if muCommander is currently in the foreground.
      *
      * <p>
@@ -157,12 +157,12 @@ public abstract class AbstractNotifier implements NotificationTypes {
      * </ul>
      * </p>
      *
-     * @param notificationType one of the available notification types, see {@link NotificationTypes} for possible values
+     * @param notificationType one of the available notification types, see {@link NotificationType} for possible values
      * @param title the title of the notification to display
      * @param description the description of the notification to display
      * @return true if the notification was properly sent, false otherwise
      */
-    public abstract boolean displayNotification(int notificationType, String title, String description);
+    public abstract boolean displayNotification(NotificationType notificationType, String title, String description);
 
     /**
      * Returns a pretty name for the underlying notification system that can be displayed to the end user.
