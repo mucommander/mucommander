@@ -23,14 +23,14 @@ package com.mucommander.auth;
  *
  * @author Maxence Bernard
  */
-public interface AuthenticationTypes {
+public enum AuthenticationType {
 
     /** Indicates that the file protocol does not use any kind of authentication. */
-    public final static int NO_AUTHENTICATION = 0;
+    NO_AUTHENTICATION,
 
     /** Indicates that the file protocol can use authentication but does not require it. */
-    public final static int AUTHENTICATION_OPTIONAL = 1;
+    AUTHENTICATION_OPTIONAL,
 
     /** Indicates that the file protocol requires authentication. */
-    public final static int AUTHENTICATION_REQUIRED = 2;
+    AUTHENTICATION_REQUIRED
 }

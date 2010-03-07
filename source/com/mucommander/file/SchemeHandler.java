@@ -18,7 +18,7 @@
 
 package com.mucommander.file;
 
-import com.mucommander.auth.AuthenticationTypes;
+import com.mucommander.auth.AuthenticationType;
 import com.mucommander.auth.Credentials;
 
 /**
@@ -93,11 +93,11 @@ public interface SchemeHandler {
 
     /**
      * Returns the type of authentication used by the scheme's file protocol. The returned value is one of the constants
-     * defined in {@link AuthenticationTypes}.
+     * defined in {@link AuthenticationType}.
      *
      * @return the type of authentication used by the scheme's file protocol
      */
-    public int getAuthenticationType();
+    public AuthenticationType getAuthenticationType();
 
     /**
      * Returns the scheme's path separator, which serves as a delimiter for path fragments. For most schemes, this is

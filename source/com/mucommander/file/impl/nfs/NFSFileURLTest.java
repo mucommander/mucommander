@@ -18,7 +18,7 @@
 
 package com.mucommander.file.impl.nfs;
 
-import com.mucommander.auth.AuthenticationTypes;
+import com.mucommander.auth.AuthenticationType;
 import com.mucommander.auth.Credentials;
 import com.mucommander.file.FileURLTestCase;
 
@@ -44,8 +44,8 @@ public class NFSFileURLTest extends FileURLTestCase {
     }
 
     @Override
-    protected int getAuthenticationType() {
-        return AuthenticationTypes.NO_AUTHENTICATION;
+    protected AuthenticationType getAuthenticationType() {
+        return AuthenticationType.NO_AUTHENTICATION;
     }
 
     @Override

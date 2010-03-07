@@ -18,7 +18,7 @@
 
 package com.mucommander.file;
 
-import com.mucommander.auth.AuthenticationTypes;
+import com.mucommander.auth.AuthenticationType;
 import com.mucommander.auth.Credentials;
 import junit.framework.TestCase;
 
@@ -302,24 +302,24 @@ public abstract class FileURLTestCase extends TestCase {
     /**
      * Ensures that the values returned by {@link FileURL#getAuthenticationType()} ()} and {@link SchemeHandler#getAuthenticationType()}
      * match the expected value returned by {@link #getAuthenticationType()}, and that the value is one of the constants
-     * defined in {@link AuthenticationTypes}.
-     * If the authentication type is {@link AuthenticationTypes#NO_AUTHENTICATION}, verifies that
+     * defined in {@link AuthenticationType}.
+     * If the authentication type is {@link AuthenticationType#NO_AUTHENTICATION}, verifies that
      * {@link #getGuestCredentials()} returns <code>null</code>.
      *
      * @throws MalformedURLException should not happen
      */
     public void testAuthenticationType() throws MalformedURLException {
         FileURL url = getRootURL();
-        int expectedAuthenticationType = getAuthenticationType();
+        AuthenticationType expectedAuthenticationType = getAuthenticationType();
 
         assertEquals(expectedAuthenticationType, url.getAuthenticationType());
         assertEquals(expectedAuthenticationType, url.getHandler().getAuthenticationType());
 
-        assertTrue(expectedAuthenticationType==AuthenticationTypes.NO_AUTHENTICATION
-                || expectedAuthenticationType==AuthenticationTypes.AUTHENTICATION_REQUIRED
-                || expectedAuthenticationType==AuthenticationTypes.AUTHENTICATION_OPTIONAL);
+        assertTrue(expectedAuthenticationType==AuthenticationType.NO_AUTHENTICATION
+                || expectedAuthenticationType==AuthenticationType.AUTHENTICATION_REQUIRED
+                || expectedAuthenticationType==AuthenticationType.AUTHENTICATION_OPTIONAL);
 
-        if(expectedAuthenticationType==AuthenticationTypes.NO_AUTHENTICATION)
+        if(expectedAuthenticationType== AuthenticationType.NO_AUTHENTICATION)
             assertNull(url.getGuestCredentials());
      }
 
@@ -718,7 +718,7 @@ public abstract class FileURLTestCase extends TestCase {
 
     protected abstract int getDefaultPort();
 
-    protected abstract int getAuthenticationType();
+    protected abstract AuthenticationType getAuthenticationType();
 
     protected abstract Credentials getGuestCredentials();
 

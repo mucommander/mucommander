@@ -20,7 +20,7 @@ package com.mucommander.ui.main;
 
 import com.mucommander.AppLogger;
 import com.mucommander.auth.AuthException;
-import com.mucommander.auth.AuthenticationTypes;
+import com.mucommander.auth.AuthenticationType;
 import com.mucommander.auth.CredentialsManager;
 import com.mucommander.auth.CredentialsMapping;
 import com.mucommander.conf.impl.MuConfiguration;
@@ -982,7 +982,7 @@ public class FolderPanel extends JPanel implements FocusListener, ThemeListener 
             // added to CredentialsManager)
             boolean guestCredentialsSelected = false;
 
-            int authenticationType = folderURL.getAuthenticationType();
+            AuthenticationType authenticationType = folderURL.getAuthenticationType();
             if(credentialsMapping!=null) {
                 newCredentialsMapping = credentialsMapping;
                 CredentialsManager.authenticate(folderURL, newCredentialsMapping);
@@ -991,8 +991,8 @@ public class FolderPanel extends JPanel implements FocusListener, ThemeListener 
             // optional and CredentialsManager has credentials for this location, popup the authentication dialog to
             // avoid waiting for an AuthException to be thrown.
             else if(!folderURL.containsCredentials() &&
-                    (  (authenticationType==AuthenticationTypes.AUTHENTICATION_REQUIRED)
-                    || (authenticationType==AuthenticationTypes.AUTHENTICATION_OPTIONAL && CredentialsManager.getMatchingCredentials(folderURL).length>0))) {
+                    (  (authenticationType==AuthenticationType.AUTHENTICATION_REQUIRED)
+                    || (authenticationType==AuthenticationType.AUTHENTICATION_OPTIONAL && CredentialsManager.getMatchingCredentials(folderURL).length>0))) {
                 AuthDialog authDialog = popAuthDialog(folderURL, false, null);
                 newCredentialsMapping = authDialog.getCredentialsMapping();
                 guestCredentialsSelected = authDialog.guestCredentialsSelected();

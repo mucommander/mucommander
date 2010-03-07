@@ -18,7 +18,7 @@
 
 package com.mucommander.file.impl.http;
 
-import com.mucommander.auth.AuthenticationTypes;
+import com.mucommander.auth.AuthenticationType;
 import com.mucommander.auth.Credentials;
 import com.mucommander.file.FileURLTestCase;
 
@@ -44,8 +44,8 @@ public class HTTPFileURLTest extends FileURLTestCase {
     }
 
     @Override
-    protected int getAuthenticationType() {
-        return AuthenticationTypes.AUTHENTICATION_OPTIONAL;
+    protected AuthenticationType getAuthenticationType() {
+        return AuthenticationType.AUTHENTICATION_OPTIONAL;
     }
 
     @Override

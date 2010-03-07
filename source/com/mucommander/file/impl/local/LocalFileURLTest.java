@@ -18,7 +18,7 @@
 
 package com.mucommander.file.impl.local;
 
-import com.mucommander.auth.AuthenticationTypes;
+import com.mucommander.auth.AuthenticationType;
 import com.mucommander.auth.Credentials;
 import com.mucommander.file.FileURL;
 import com.mucommander.file.FileURLTestCase;
@@ -153,8 +153,8 @@ public class LocalFileURLTest extends FileURLTestCase {
     }
 
     @Override
-    protected int getAuthenticationType() {
-        return AuthenticationTypes.NO_AUTHENTICATION;
+    protected AuthenticationType getAuthenticationType() {
+        return AuthenticationType.NO_AUTHENTICATION;
     }
 
     @Override

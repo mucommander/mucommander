@@ -18,7 +18,7 @@
 
 package com.mucommander.file.impl.s3;
 
-import com.mucommander.auth.AuthenticationTypes;
+import com.mucommander.auth.AuthenticationType;
 import com.mucommander.auth.Credentials;
 import com.mucommander.file.FileURLTestCase;
 
@@ -44,8 +44,8 @@ public class S3FileURLTest extends FileURLTestCase {
     }
 
     @Override
-    protected int getAuthenticationType() {
-        return AuthenticationTypes.AUTHENTICATION_REQUIRED;
+    protected AuthenticationType getAuthenticationType() {
+        return AuthenticationType.AUTHENTICATION_REQUIRED;
     }
 
     @Override
