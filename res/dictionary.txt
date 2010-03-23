@@ -2683,7 +2683,7 @@ action_categories.view:CS:Zobrazit
 action_categories.view:zh_TW:檢視
 action_categories.view:PL:Podgląd
 action_categories.view:HU:Megjelenítés
-action_categories.view:RU:Просмотр
+action_categories.view:RU:Вид
 action_categories.view:zh_CN:查看
 action_categories.view:SL:Pogled
 action_categories.view:RO:Vizualizare
@@ -2723,7 +2723,7 @@ action_categories.file_operations:UA:Файлові операції
 action_categories.file_operations:AR:عمليات الملفات
 action_categories.file_operations:BE:Файлавыя апэрацыі
 
-action_categories.windows:EN:Window
+action_categories.windows:EN:Windows
 action_categories.windows:FR:Fenêtres
 action_categories.windows:DE:Fenster
 action_categories.windows:ES:Ventanas
@@ -6754,7 +6754,7 @@ view_menu:CS:Zobrazit
 view_menu:zh_TW:檢視
 view_menu:PL:Podgląd
 view_menu:HU:Nézet
-view_menu:RU:Просмотр
+view_menu:RU:Вид
 view_menu:zh_CN:查看
 view_menu:SL:Pogled
 view_menu:RO:Vizualizare
