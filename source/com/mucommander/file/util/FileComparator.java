@@ -68,8 +68,8 @@ public class FileComparator implements Comparator<AbstractFile> {
     /** Criterion for group comparison. */
     public final static int GROUP_CRITERION = 6;
 
-
-    private final static Pattern NAME_STARTS_WITH_NUMBER_PATTERN = Pattern.compile("^\\d+");
+    /** Matches filenames that contain a number, like "01 - Do the Joy.mp3" */
+    private final static Pattern FILENAME_WITH_NUMBER_PATTERN = Pattern.compile("\\d+");
 
 
     /**
@@ -157,29 +157,36 @@ public class FileComparator implements Comparator<AbstractFile> {
             }
         }
 
-        // Special treatment for strings that start with a number, so they are ordered by the number's value, e.g.:
-        // 1 < 1abc < 2 < 10, like Mac OS X Finder and Windows Explorer do.
-        
-        // This special order applies only if both strings start with a number. Otherwise, the general order applies.
-        Matcher m1 = NAME_STARTS_WITH_NUMBER_PATTERN.matcher(s1);
+        // Special treatment for strings that contain a number, so they are ordered by the number's value, e.g.:
+        // 1 < 1a < 2 < 10, like Mac OS X Finder and Windows Explorer do.
+        //
+        // This special order applies only if both strings contain a number and have the same prefix. Otherwise, the general order applies.
+        Matcher m1 = FILENAME_WITH_NUMBER_PATTERN.matcher(s1);
         if(m1.find()) {
-            Matcher m2 = NAME_STARTS_WITH_NUMBER_PATTERN.matcher(s2);
+            Matcher m2 = FILENAME_WITH_NUMBER_PATTERN.matcher(s2);
             if(m2.find()) {
-                String g1 = removeLeadingZeros(m1.group());
-                String g2 = removeLeadingZeros(m2.group());
+                // So we got two filenames that both contain a number, check if they have the same prefix
+                int start1 = m1.start();
+                int start2 = m2.start();
 
-                int g1Len = g1.length();
-                int g2Len = g2.length();
+                // Note: compare prefixes only if start indexes match, faster that way
+                if(start1==start2 && (start1==0 || s1.substring(0, start1).equals(s2.substring(0, start2)))) {
+                    String g1 = removeLeadingZeros(m1.group());
+                    String g2 = removeLeadingZeros(m2.group());
 
-                if(g1Len!=g2Len)
-                    return g1Len - g2Len;
+                    int g1Len = g1.length();
+                    int g2Len = g2.length();
 
-                int c1, c2;
-                for (int i=0; i<g1Len && i<g2Len; i++) {
-                    c1 = g1.charAt(i);
-                    c2 = g2.charAt(i);
-                    if(c1 != c2)
-                        return c1 - c2;
+                    if(g1Len!=g2Len)
+                        return g1Len - g2Len;
+
+                    int c1, c2;
+                    for (int i=0; i<g1Len && i<g2Len; i++) {
+                        c1 = g1.charAt(i);
+                        c2 = g2.charAt(i);
+                        if(c1 != c2)
+                            return c1 - c2;
+                    }
                 }
             }
         }
