@@ -51,6 +51,7 @@ Improvements:
 - Upgraded the jCIFS library (used for SMB support) to version 1.3.14.
 
 Localization:
+- New: Belarusian translation, contributed by vboo.
 - Russian translation updated. Update contributed by Alexey Sirotov.
 
 Bug fixes:
@@ -59,7 +60,8 @@ Bug fixes:
 Known issues:
 - Some translations may not be up-to-date. Refer to
   http://trac.mucommander.com/wiki/Translations for more information.
-- Recycle Bin not working on Windows 64-bit (ticket #234).
+- Recycle Bin not working on Windows 64-bit with a 64-bit Java runtime (ticket #234). One way to work around this issue
+  is to use a 32-bit Java runtime.
 - Executable permissions on local files are not properly preserved
   when running a unix-based OS with Java 1.5.
 - SMB support may not work properly on non multi-language JRE.
