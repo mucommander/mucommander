@@ -60,8 +60,12 @@ Bug fixes:
 Known issues:
 - Some translations may not be up-to-date. Refer to
   http://trac.mucommander.com/wiki/Translations for more information.
-- Recycle Bin not working on Windows 64-bit with a 64-bit Java runtime (ticket #234). One way to work around this issue
-  is to use a 32-bit Java runtime.
+- Windows: Recycle Bin not working on Windows 64-bit with a 64-bit Java runtime
+  (ticket #234). One way to work around this issue is to use a 32-bit Java runtime.
+- Mac OS X: "Do you want the application "muCommander.app" to accept incoming
+  network connections?" dialog keeps popping up on startup even if the dialog
+  has been previously accepted (ticket #339). This dialog can be suppressed
+  by disabling 'Bonjour' support in the muCommander preferences.
 - Executable permissions on local files are not properly preserved
   when running a unix-based OS with Java 1.5.
 - SMB support may not work properly on non multi-language JRE.
