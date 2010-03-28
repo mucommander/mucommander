@@ -22,8 +22,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 /**
- * SinkOutputStream is an OutputStream which implements write() methods as no-ops, loosing data as it get written,
- * similarily to UNIX /dev/null.  
+ * SinkOutputStream is an OutputStream which implements all <code>write()</code> methods as no-ops, loosing data as
+ * it gets written, in a similar fashion to the <code>/dev/null</code> UNIX device.
  *
  * @author Maxence Bernard
  */

@@ -215,7 +215,7 @@ import java.net.MalformedURLException;
     }
 
     @Override
-    public void changeDate(long lastModified) throws IOException, UnsupportedFileOperationException {
+    public void changeDate(long lastModified) throws IOException {
         file.setLastModified(lastModified);
     }
 
