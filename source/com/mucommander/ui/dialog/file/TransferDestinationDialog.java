@@ -229,7 +229,7 @@ public abstract class TransferDestinationDialog extends JobDialog implements Act
 
     /**
      * This method checks that the given resolved destination is valid. This implementation returns <code>true</code>
-     * if the resolved destination is not <code>null</code> and, in case there is more than one if to process, if the
+     * if the resolved destination is not <code>null</code> and, in case there is more than one file to process, if the
      * destination is a folder that exists. This method can safely be overridden by subclasses to change the behavior.
      * <p>
      * Returning <code>true</code> will cause the job to go ahead and be started. Returning <code>false</code> will
@@ -457,8 +457,9 @@ public abstract class TransferDestinationDialog extends JobDialog implements Act
 
         @Override
         public void run() {
-            final String destPath = pathField.getText();
+            spinningDial.setAnimated(false);
 
+            final String destPath = pathField.getText();
             // Resolves destination folder (I/O bound)
             final PathUtils.ResolvedDestination resolvedDest = PathUtils.resolveDestination(destPath, mainFrame.getActiveTable().getCurrentFolder());
             // Resolves destination folder (I/O bound)

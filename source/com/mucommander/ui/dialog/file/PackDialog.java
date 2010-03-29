@@ -150,6 +150,20 @@ public class PackDialog extends TransferDestinationDialog implements ItemListene
     }
 
 
+    ////////////////////////
+    // Overridden methods //
+    ////////////////////////
+
+    @Override
+    protected boolean isValidDestination(PathUtils.ResolvedDestination resolvedDest, String destPath) {
+        if(resolvedDest==null)
+            return false;
+
+        int destType = resolvedDest.getDestinationType();
+        return destType==PathUtils.ResolvedDestination.NEW_FILE || destType==PathUtils.ResolvedDestination.EXISTING_FILE;
+    }
+
+
     //////////////////////////
     // ItemListener methods //
     //////////////////////////
