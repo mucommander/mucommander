@@ -18,13 +18,13 @@
 
 package com.mucommander.ui.viewer;
 
-import com.mucommander.file.AbstractFile;
-import com.mucommander.ui.theme.*;
+import java.io.IOException;
 
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
-import javax.swing.JPanel;
-import java.io.IOException;
+
+import com.mucommander.file.AbstractFile;
 
 
 /**
@@ -34,7 +34,7 @@ import java.io.IOException;
  *
  * @author Maxence Bernard
  */
-public abstract class FileEditor extends JPanel implements ThemeListener {
+public abstract class FileEditor {
 	
     /** EditorFrame instance that contains this editor (may be null). */
     private EditorFrame frame;
@@ -48,10 +48,7 @@ public abstract class FileEditor extends JPanel implements ThemeListener {
     /**
      * Creates a new FileEditor.
      */
-    public FileEditor() {
-        setBackground(ThemeManager.getCurrentColor(Theme.EDITOR_BACKGROUND_COLOR));
-        ThemeManager.addCurrentThemeListener(this);
-    }
+    public FileEditor() {}
 	
 
     /**
@@ -129,28 +126,6 @@ public abstract class FileEditor extends JPanel implements ThemeListener {
             frame.setSaveNeeded(saveNeeded);
     }
 
-
-    ///////////////////////////
-    // ThemeListener methods //
-    ///////////////////////////
-
-    /**
-     * Receives theme color changes notifications.
-     */
-    public void colorChanged(ColorChangedEvent event) {
-        if(event.getColorId() == Theme.EDITOR_BACKGROUND_COLOR)
-            setBackground(event.getColor());
-
-        repaint();
-    }
-
-    /**
-     * Not used, implemented as a no-op.
-     */
-    public void fontChanged(FontChangedEvent event) {
-    }
-
-
     //////////////////////
     // Abstract methods //
     //////////////////////
@@ -174,4 +149,10 @@ public abstract class FileEditor extends JPanel implements ThemeListener {
      * @throws IOException if an I/O error occurs.
      */
     protected abstract void saveAs(AbstractFile saveAsFile) throws IOException;
+    
+    /**
+     * TODO: comment
+     * @return
+     */
+    public abstract JComponent getViewedComponent();
 }

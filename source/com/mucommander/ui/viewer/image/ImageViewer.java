@@ -19,18 +19,13 @@
 
 package com.mucommander.ui.viewer.image;
 
-import com.mucommander.file.AbstractFile;
-import com.mucommander.text.Translator;
-import com.mucommander.ui.helper.MenuToolkit;
-import com.mucommander.ui.helper.MnemonicHelper;
-import com.mucommander.ui.theme.*;
-import com.mucommander.ui.viewer.FileViewer;
-import com.mucommander.ui.viewer.ViewerFrame;
-
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
-import javax.swing.KeyStroke;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.MediaTracker;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -38,16 +33,33 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+import javax.swing.JComponent;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+import javax.swing.JPanel;
+import javax.swing.KeyStroke;
+
+import com.mucommander.file.AbstractFile;
+import com.mucommander.text.Translator;
+import com.mucommander.ui.helper.MenuToolkit;
+import com.mucommander.ui.helper.MnemonicHelper;
+import com.mucommander.ui.theme.ColorChangedEvent;
+import com.mucommander.ui.theme.FontChangedEvent;
+import com.mucommander.ui.theme.Theme;
+import com.mucommander.ui.theme.ThemeListener;
+import com.mucommander.ui.theme.ThemeManager;
+import com.mucommander.ui.viewer.FileViewer;
+import com.mucommander.ui.viewer.ViewerFrame;
+
 
 /**
  * A simple image viewer, capable of displaying <code>PNG</code>, <code>GIF</code> and <code>JPEG</code> images. 
  *
- * @author Maxence Bernard
+ * @author Maxence Bernard, Arik Hadas
  */
-class ImageViewer extends FileViewer implements ActionListener, ThemeListener {
+class ImageViewer extends FileViewer implements ActionListener {
     private Image image;
     private Image scaledImage;
-    private Color backgroundColor;
     private double zoomFactor;
 	
     //	private JMenuItem prevImageItem;
@@ -55,9 +67,10 @@ class ImageViewer extends FileViewer implements ActionListener, ThemeListener {
     private JMenuItem zoomInItem;
     private JMenuItem zoomOutItem;
 	
+    private ImageViewerImpl imageViewerImpl;
+    
     public ImageViewer() {
-        backgroundColor = ThemeManager.getCurrentColor(Theme.EDITOR_BACKGROUND_COLOR);
-        ThemeManager.addCurrentThemeListener(this);
+    	imageViewerImpl = new ImageViewerImpl();
     }	
 
     private synchronized void loadImage(AbstractFile file) throws IOException {
@@ -76,7 +89,7 @@ class ImageViewer extends FileViewer implements ActionListener, ThemeListener {
         in.close();
 
         this.scaledImage = null;
-        this.image = getToolkit().createImage(imageBytes);
+        this.image = imageViewerImpl.getToolkit().createImage(imageBytes);
 
         waitForImage(image);
 
@@ -103,7 +116,7 @@ class ImageViewer extends FileViewer implements ActionListener, ThemeListener {
 	
     private void waitForImage(Image image) {
         //AppLogger.finest("Waiting for image to load "+image);
-        MediaTracker tracker = new MediaTracker(this);
+        MediaTracker tracker = new MediaTracker(imageViewerImpl);
         tracker.addImage(image, 0);
         try { tracker.waitForID(0); }
         catch(InterruptedException e) {}
@@ -128,7 +141,7 @@ class ImageViewer extends FileViewer implements ActionListener, ThemeListener {
 
         // Revalidate, pack and repaint should be called in this order
         frame.setTitle(this.getTitle());
-        revalidate();
+        imageViewerImpl.revalidate();
         frame.pack();
         frame.getContentPane().repaint();
     }
@@ -188,26 +201,11 @@ class ImageViewer extends FileViewer implements ActionListener, ThemeListener {
 
         loadImage(file);
     }
-	
-
-    ////////////////////////
-    // Overridden methods //
-    ////////////////////////
-
+    
     @Override
-    public void paint(Graphics g) {
-        int width = getWidth();
-        int height = getHeight();
-
-        g.setColor(backgroundColor);
-        g.fillRect(0, 0, width, height);
-
-        if(scaledImage!=null) {
-            int imageWidth = scaledImage.getWidth(null);
-            int imageHeight = scaledImage.getHeight(null);
-            g.drawImage(scaledImage, Math.max(0, (width-imageWidth)/2), Math.max(0, (height-imageHeight)/2), null);
-        }
-    }
+	public JComponent getViewedComponent() {
+		return imageViewerImpl;
+	}
 
 
     ///////////////////////////////////
@@ -217,11 +215,6 @@ class ImageViewer extends FileViewer implements ActionListener, ThemeListener {
     @Override
     public String getTitle() {
         return super.getTitle()+" - "+image.getWidth(null)+"x"+image.getHeight(null)+" - "+((int)(zoomFactor*100))+"%";
-    }
-
-    @Override
-    public synchronized Dimension getPreferredSize() {
-        return new Dimension(scaledImage.getWidth(null), scaledImage.getHeight(null));
     }
 
     public void actionPerformed(ActionEvent e) {
@@ -247,26 +240,59 @@ class ImageViewer extends FileViewer implements ActionListener, ThemeListener {
         checkZoom();
         //		}
     }
+    
+    private class ImageViewerImpl extends JPanel implements ThemeListener {
 
+    	private Color backgroundColor;
+    	
+    	ImageViewerImpl() {
+    		backgroundColor = ThemeManager.getCurrentColor(Theme.EDITOR_BACKGROUND_COLOR);
+            ThemeManager.addCurrentThemeListener(this);
+    	}
+    	
+    	////////////////////////
+        // Overridden methods //
+        ////////////////////////
 
-    //////////////////////////////////
-    // ThemeListener implementation //
-    //////////////////////////////////
+        @Override
+        public void paint(Graphics g) {
+            int width = getWidth();
+            int height = getHeight();
 
-    /**
-     * Receives theme color changes notifications.
-     */
-    @Override
-    public void colorChanged(ColorChangedEvent event) {
-        if(event.getColorId() == Theme.EDITOR_BACKGROUND_COLOR) {
-            backgroundColor = event.getColor();
-            repaint();
+            g.setColor(backgroundColor);
+            g.fillRect(0, 0, width, height);
+
+            if(scaledImage!=null) {
+                int imageWidth = scaledImage.getWidth(null);
+                int imageHeight = scaledImage.getHeight(null);
+                g.drawImage(scaledImage, Math.max(0, (width-imageWidth)/2), Math.max(0, (height-imageHeight)/2), null);
+            }
         }
-    }
+        
+        @Override
+        public synchronized Dimension getPreferredSize() {
+            return new Dimension(scaledImage.getWidth(null), scaledImage.getHeight(null));
+        }
+    	
+    	//////////////////////////////////
+        // ThemeListener implementation //
+        //////////////////////////////////
 
-    /**
-     * Not used, implemented as a no-op.
-     */
-    @Override
-    public void fontChanged(FontChangedEvent event) {}
+        /**
+         * Receives theme color changes notifications.
+         */
+        @Override
+        public void colorChanged(ColorChangedEvent event) {
+            if(event.getColorId() == Theme.EDITOR_BACKGROUND_COLOR) {
+                backgroundColor = event.getColor();
+                repaint();
+            }
+        }
+
+        /**
+         * Not used, implemented as a no-op.
+         */
+        @Override
+        public void fontChanged(FontChangedEvent event) {}
+    }
 }

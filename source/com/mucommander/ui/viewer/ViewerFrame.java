@@ -129,12 +129,12 @@ public class ViewerFrame extends JFrame implements ActionListener {
                         showGenericViewErrorDialog();
 
                     dispose();
-                    return viewer==null?new JPanel():viewer;
+                    return viewer==null?new JPanel():viewer.getViewedComponent();
                 }
 
                 setTitle(viewer.getTitle());
 
-                JScrollPane scrollPane = new JScrollPane(viewer, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED) {
+                JScrollPane scrollPane = new JScrollPane(viewer.getViewedComponent(), JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED) {
                         @Override
                         public Insets getInsets() {
                             return new Insets(0, 0, 0, 0);
@@ -159,7 +159,7 @@ public class ViewerFrame extends JFrame implements ActionListener {
                 super.updateLayout();
 
                 // Request focus on the viewer when it is visible
-                FocusRequester.requestFocus(viewer);
+                FocusRequester.requestFocus(viewer.getViewedComponent());
             }
         };
 

@@ -18,18 +18,18 @@
 
 package com.mucommander.ui.viewer.text;
 
+import java.io.IOException;
+import java.io.OutputStream;
+
+import javax.swing.JComponent;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+
 import com.mucommander.AppLogger;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileOperation;
 import com.mucommander.ui.viewer.EditorFrame;
 import com.mucommander.ui.viewer.FileEditor;
-
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import java.awt.BorderLayout;
-import java.awt.Insets;
-import java.io.IOException;
-import java.io.OutputStream;
 
 
 /**
@@ -43,9 +43,6 @@ class TextEditor extends FileEditor implements DocumentListener {
 
     public TextEditor() {
         textEditorImpl = new TextEditorImpl(true);
-
-        setLayout(new BorderLayout());
-        add(textEditorImpl.getTextArea(), BorderLayout.NORTH);
     }
 
 
@@ -94,6 +91,11 @@ class TextEditor extends FileEditor implements DocumentListener {
         if(frame!=null)
             textEditorImpl.populateMenus(frame, getMenuBar());
     }
+    
+    @Override
+	public JComponent getViewedComponent() {
+		return textEditorImpl.getTextArea();
+	}
 
 
     /////////////////////////////////////
@@ -110,20 +112,5 @@ class TextEditor extends FileEditor implements DocumentListener {
 
     public void removeUpdate(DocumentEvent e) {
         setSaveNeeded(true);
-    }
-
-
-    ////////////////////////
-    // Overridden methods //
-    ////////////////////////
-
-    @Override
-    public Insets getInsets() {
-        return new Insets(4, 3, 4, 3);
-    }
-
-    @Override
-    public void requestFocus() {
-        textEditorImpl.requestFocus();
     }
 }

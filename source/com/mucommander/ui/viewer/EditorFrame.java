@@ -19,6 +19,28 @@
 
 package com.mucommander.ui.viewer;
 
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.Image;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.io.IOException;
+
+import javax.swing.AbstractAction;
+import javax.swing.JComponent;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JSeparator;
+import javax.swing.KeyStroke;
+import javax.swing.WindowConstants;
+
 import com.mucommander.AppLogger;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
@@ -35,16 +57,6 @@ import com.mucommander.ui.helper.MenuToolkit;
 import com.mucommander.ui.helper.MnemonicHelper;
 import com.mucommander.ui.layout.AsyncPanel;
 import com.mucommander.ui.main.MainFrame;
-
-import javax.swing.*;
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.Image;
-import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.io.IOException;
 
 
 /**
@@ -146,12 +158,12 @@ public class EditorFrame extends JFrame implements ActionListener {
                         showGenericEditErrorDialog();
 
                     dispose();
-                    return editor==null?new JPanel():editor;
+                    return editor==null?new JPanel():editor.getViewedComponent();
                 }
 
                 setTitle(editor.getTitle());
 
-                JScrollPane scrollPane = new JScrollPane(editor, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED) {
+                JScrollPane scrollPane = new JScrollPane(editor.getViewedComponent(), JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED) {
                         @Override
                         public Insets getInsets() {
                             return new Insets(0, 0, 0, 0);
@@ -176,7 +188,7 @@ public class EditorFrame extends JFrame implements ActionListener {
                 super.updateLayout();
 
                 // Request focus on the viewer when it is visible
-                FocusRequester.requestFocus(editor);
+                FocusRequester.requestFocus(editor.getViewedComponent());
             }
         };
 

@@ -18,13 +18,13 @@
 
 package com.mucommander.ui.viewer.text;
 
+import java.io.IOException;
+
+import javax.swing.JComponent;
+
 import com.mucommander.file.AbstractFile;
 import com.mucommander.ui.viewer.FileViewer;
 import com.mucommander.ui.viewer.ViewerFrame;
-
-import java.awt.BorderLayout;
-import java.awt.Insets;
-import java.io.IOException;
 
 
 /**
@@ -38,9 +38,6 @@ class TextViewer extends FileViewer {
 
     public TextViewer() {
         textEditorImpl = new TextEditorImpl(false);
-
-        setLayout(new BorderLayout());
-        add(textEditorImpl.getTextArea(), BorderLayout.NORTH);
     }
 
 
@@ -56,14 +53,9 @@ class TextViewer extends FileViewer {
         if(frame!=null)
             textEditorImpl.populateMenus(frame, getMenuBar());
     }
-
-
-    ////////////////////////
-    // Overridden methods //
-    ////////////////////////
-
+    
     @Override
-    public Insets getInsets() {
-        return new Insets(4, 3, 4, 3);
-    }
+	public JComponent getViewedComponent() {
+		return textEditorImpl.getTextArea();
+	}
 }
