@@ -18,32 +18,40 @@
 
 package com.mucommander.ui.viewer;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.io.IOException;
 
 import javax.swing.JComponent;
-import javax.swing.JFrame;
+import javax.swing.JMenu;
 import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.KeyStroke;
 
 import com.mucommander.file.AbstractFile;
+import com.mucommander.text.Translator;
+import com.mucommander.ui.helper.MenuToolkit;
+import com.mucommander.ui.helper.MnemonicHelper;
 
 /**
  * An abstract class to be subclassed by file viewer implementations.
  *
  * <p><b>Warning:</b> the file viewer/editor API may soon receive a major overhaul.</p>
  *
- * @author Maxence Bernard
+ * @author Maxence Bernard, Arik Hadas
  */
-public abstract class FileViewer {
+public abstract class FileViewer implements ActionListener {
 	
     /** ViewerFrame instance that contains this viewer (may be null). */
     private ViewerFrame frame;
 
-    /** Menu bar that controls the viewer's frame */
-    private JMenuBar menuBar;
-	
     /** File currently being viewed. */
     private AbstractFile file;
 	
+    /** Close menu item */
+    private JMenuItem closeItem;
+    
     /**
      * Creates a new FileViewer.
      */
@@ -73,32 +81,12 @@ public abstract class FileViewer {
 
 
     /**
-     * Returns the menu bar that controls the viewer's frame. The menu bar should be retrieved using this method and
-     * not by calling {@link JFrame#getJMenuBar()}, which may return <code>null</code>.
-     *
-     * @return the menu bar that controls the viewer's frame.
-     */
-	public JMenuBar getMenuBar() {
-        return menuBar;
-    }
-
-    /**
-     * Sets the menu bar that controls the viewer's frame.
-     *
-     * @param menuBar the menu bar that controls the viewer's frame.
-     */
-    final void setMenuBar(JMenuBar menuBar) {
-        this.menuBar = menuBar;
-    }
-
-
-    /**
      * Returns a description of the file currently being viewed which will be used as a window title.
      * This method returns the file's name but it can be overridden to provide more information.
      * @return this dialog's title.
      */
     public String getTitle() {
-        return file.getName();
+        return file.getAbsolutePath();
     }
 	
 
@@ -119,6 +107,36 @@ public abstract class FileViewer {
     final void setCurrentFile(AbstractFile file) {
         this.file = file;
     }
+    
+    /**
+     * Returns the menu bar that controls the viewer's frame. The menu bar should be retrieved using this method and
+     * not by calling {@link JFrame#getJMenuBar()}, which may return <code>null</code>.
+     *
+     * @return the menu bar that controls the viewer's frame.
+     */
+    protected JMenuBar getMenuBar() {
+        JMenuBar menuBar = new JMenuBar();
+        MnemonicHelper menuMnemonicHelper = new MnemonicHelper();
+        MnemonicHelper menuItemMnemonicHelper = new MnemonicHelper();
+
+        // File menu
+        JMenu fileMenu = MenuToolkit.addMenu(Translator.get("file_viewer.file_menu"), menuMnemonicHelper, null);
+        closeItem = MenuToolkit.addMenuItem(fileMenu, Translator.get("file_viewer.close"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), this);
+        fileMenu.add(closeItem);
+        
+        menuBar.add(fileMenu);
+
+        return menuBar;
+    }
+    
+    ///////////////////////////////////
+    // ActionListener implementation //
+    ///////////////////////////////////
+
+    public void actionPerformed(ActionEvent e) {
+        if(e.getSource()==closeItem)
+            frame.dispose();
+    }
 
 
     //////////////////////
@@ -135,8 +153,9 @@ public abstract class FileViewer {
     public abstract void view(AbstractFile file) throws IOException;
     
     /**
-     * TODO: comment
-     * @return
+     * This method returns the JComponent in which the file is presented.
+     * 
+     * @return The UI component in which the file is presented.
      */
     public abstract JComponent getViewedComponent();
 }

@@ -19,6 +19,20 @@
  
 package com.mucommander.ui.viewer;
 
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.Image;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+
+import javax.swing.AbstractAction;
+import javax.swing.JComponent;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.KeyStroke;
+import javax.swing.WindowConstants;
+
 import com.mucommander.AppLogger;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.runtime.OsFamilies;
@@ -26,34 +40,21 @@ import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.DialogToolkit;
 import com.mucommander.ui.dialog.InformationDialog;
 import com.mucommander.ui.helper.FocusRequester;
-import com.mucommander.ui.helper.MenuToolkit;
-import com.mucommander.ui.helper.MnemonicHelper;
 import com.mucommander.ui.layout.AsyncPanel;
 import com.mucommander.ui.main.MainFrame;
-
-import javax.swing.*;
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.Image;
-import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
 
 
 /**
  * A specialized <code>JFrame</code> that displays a {@link FileViewer} for a given file.
  * The {@link FileViewer} instance is provided by {@link ViewerRegistrar}.
  *
- * @author Maxence Bernard
+ * @author Maxence Bernard, Arik Hadas
  */
-public class ViewerFrame extends JFrame implements ActionListener {
+class ViewerFrame extends FileFrame {
 	
     private MainFrame mainFrame;
     private AbstractFile file;
     private FileViewer viewer;
-
-    private JMenuItem closeItem;
 
     private final static Dimension MIN_DIMENSION = new Dimension(200, 150);
 	
@@ -81,25 +82,6 @@ public class ViewerFrame extends JFrame implements ActionListener {
         initContentPane();
     }
 
-    /**
-     * Creates a minimalist menu bar that allows to close the frame, and returns it.
-     *
-     * @return a minimalist menu bar that allows to close the frame
-     */
-    private JMenuBar createMenuBar() {
-        JMenuBar menuBar = new JMenuBar();
-        MnemonicHelper menuMnemonicHelper = new MnemonicHelper();
-        MnemonicHelper menuItemMnemonicHelper = new MnemonicHelper();
-
-        // File menu
-        JMenu menu = MenuToolkit.addMenu(Translator.get("file_viewer.file_menu"), menuMnemonicHelper, null);
-        closeItem = MenuToolkit.addMenuItem(menu, Translator.get("file_viewer.close"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), this);
-        menu.add(closeItem);
-        menuBar.add(menu);
-
-        return menuBar;
-    }
-
     private void initContentPane() {
         AsyncPanel asyncPanel = new AsyncPanel() {
             @Override
@@ -111,20 +93,15 @@ public class ViewerFrame extends JFrame implements ActionListener {
 
                     // Set the viewer's fields
                     viewer.setFrame(ViewerFrame.this);
-                    JMenuBar menuBar = createMenuBar();
-                    viewer.setMenuBar(menuBar);
                     viewer.setCurrentFile(file);
 
                     // Ask the viewer to view the file
                     viewer.view(file);
-
-                    // Set the menu bar, only when it has been fully populated (see ticket #243)
-                    ViewerFrame.this.setJMenuBar(menuBar);
                 }
                 catch(Exception e) {
                     AppLogger.fine("Exception caught", e);
 
-                    // May be a UserCancelledException if the user cancelled (refused to confirm the operation after a warning)
+                    // May be a UserCancelledException if the user canceled (refused to confirm the operation after a warning)
                     if(!(e instanceof UserCancelledException))
                         showGenericViewErrorDialog();
 
@@ -132,6 +109,7 @@ public class ViewerFrame extends JFrame implements ActionListener {
                     return viewer==null?new JPanel():viewer.getViewedComponent();
                 }
 
+                setJMenuBar(viewer.getMenuBar());
                 setTitle(viewer.getTitle());
 
                 JScrollPane scrollPane = new JScrollPane(viewer.getViewedComponent(), JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED) {
@@ -168,23 +146,13 @@ public class ViewerFrame extends JFrame implements ActionListener {
         contentPane.add(asyncPanel, BorderLayout.CENTER);
         setContentPane(contentPane);
 
-        // Sets panel to preferred size, without exceeding a maximum size and with a minumum size
+        // Sets panel to preferred size, without exceeding a maximum size and with a minimum size
         pack();
         setVisible(true);
     }
 
     public void showGenericViewErrorDialog() {
         InformationDialog.showErrorDialog(mainFrame, Translator.get("file_viewer.view_error_title"), Translator.get("file_viewer.view_error"));
-    }
-
-
-    ///////////////////////////////////
-    // ActionListener implementation //
-    ///////////////////////////////////
-
-    public void actionPerformed(ActionEvent e) {
-        if(e.getSource()==closeItem)
-            dispose();
     }
 
 

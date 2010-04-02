@@ -18,6 +18,10 @@
 
 package com.mucommander.ui.viewer;
 
+import java.awt.Frame;
+import java.awt.Image;
+import java.util.Vector;
+
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileProtocols;
 import com.mucommander.runtime.OsFamilies;
@@ -26,10 +30,6 @@ import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.QuestionDialog;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.WindowManager;
-
-import java.awt.Frame;
-import java.awt.Image;
-import java.util.Vector;
 
 /**
  * ViewerRegistrar maintains a list of registered file viewers and provides methods to dynamically register file viewers
@@ -66,7 +66,7 @@ public class ViewerRegistrar {
      * @param icon window's icon.
      * @return the created ViewerFrame
      */
-    public static ViewerFrame createViewerFrame(MainFrame mainFrame, AbstractFile file, Image icon) {
+    public static FileFrame createViewerFrame(MainFrame mainFrame, AbstractFile file, Image icon) {
         ViewerFrame frame = new ViewerFrame(mainFrame, file, icon);
 
         // Use new Window decorations introduced in Mac OS X 10.5 (Leopard)

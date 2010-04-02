@@ -18,13 +18,30 @@
 
 package com.mucommander.ui.viewer;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.io.IOException;
 
 import javax.swing.JComponent;
-import javax.swing.JFrame;
+import javax.swing.JFileChooser;
+import javax.swing.JMenu;
 import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JSeparator;
+import javax.swing.KeyStroke;
 
 import com.mucommander.file.AbstractFile;
+import com.mucommander.file.FileFactory;
+import com.mucommander.file.FileProtocols;
+import com.mucommander.job.FileCollisionChecker;
+import com.mucommander.text.Translator;
+import com.mucommander.ui.dialog.InformationDialog;
+import com.mucommander.ui.dialog.QuestionDialog;
+import com.mucommander.ui.dialog.file.FileCollisionDialog;
+import com.mucommander.ui.helper.MenuToolkit;
+import com.mucommander.ui.helper.MnemonicHelper;
 
 
 /**
@@ -32,19 +49,21 @@ import com.mucommander.file.AbstractFile;
  *
  * <p><b>Warning:</b> the file viewer/editor API may soon receive a major overhaul.</p>
  *
- * @author Maxence Bernard
+ * @author Maxence Bernard, Arik Hadas
  */
-public abstract class FileEditor {
+public abstract class FileEditor implements ActionListener {
 	
     /** EditorFrame instance that contains this editor (may be null). */
     private EditorFrame frame;
 
-    /** Menu bar that controls the editor's frame */
-    private JMenuBar menuBar;
-
     /** File currently being edited. */
     private AbstractFile file;
-
+    
+    /** Menu items */
+    private JMenuItem saveItem;
+    private JMenuItem saveAsItem;
+    private JMenuItem closeItem;
+    
     /**
      * Creates a new FileEditor.
      */
@@ -69,26 +88,6 @@ public abstract class FileEditor {
      */
     final void setFrame(EditorFrame frame) {
         this.frame = frame;
-    }
-
-
-    /**
-     * Returns the menu bar that controls the editor's frame. The menu bar should be retrieved using this method and
-     * not by calling {@link JFrame#getJMenuBar()}, which may return <code>null</code>.
-     *
-     * @return the menu bar that controls the editor's frame.
-     */
-	public JMenuBar getMenuBar() {
-        return menuBar;
-    }
-
-    /**
-     * Sets the menu bar that controls the editor's frame.
-     *
-     * @param menuBar the menu bar that controls the editor's frame.
-     */
-    final void setMenuBar(JMenuBar menuBar) {
-        this.menuBar = menuBar;
     }
 
 
@@ -125,6 +124,124 @@ public abstract class FileEditor {
         if(frame!=null)
             frame.setSaveNeeded(saveNeeded);
     }
+    
+    public void trySaveAs() {
+        JFileChooser fileChooser = new JFileChooser();
+		
+        // Sets selected file in JFileChooser to current file
+        if(file.getURL().getScheme().equals(FileProtocols.FILE))
+            fileChooser.setSelectedFile(new java.io.File(file.getAbsolutePath()));
+        fileChooser.setDialogType(JFileChooser.SAVE_DIALOG);
+        int ret = fileChooser.showSaveDialog(frame);
+		
+        if (ret==JFileChooser.APPROVE_OPTION) {
+            AbstractFile destFile;
+            try {
+                destFile = FileFactory.getFile(fileChooser.getSelectedFile().getAbsolutePath(), true);
+            }
+            catch(IOException e) {
+                InformationDialog.showErrorDialog(frame, Translator.get("write_error"), Translator.get("file_editor.cannot_write"));
+                return;
+            }
+
+            // Check for file collisions, i.e. if the file already exists in the destination
+            int collision = FileCollisionChecker.checkForCollision(null, destFile);
+            if(collision!=FileCollisionChecker.NO_COLLOSION) {
+                // File already exists in destination, ask the user what to do (cancel, overwrite,...) but
+                // do not offer the multiple files mode options such as 'skip' and 'apply to all'.
+                int action = new FileCollisionDialog(frame, frame/*mainFrame*/, collision, null, destFile, false, false).getActionValue();
+
+                // User chose to overwrite the file
+                if (action== FileCollisionDialog.OVERWRITE_ACTION) {
+                    // Do nothing, simply continue and file will be overwritten
+                }
+                // User chose to cancel or closed the dialog
+                else {
+                    return;
+                }
+            }
+
+            if (trySave(destFile)) {
+                this.file = destFile;
+                setCurrentFile(file);
+                frame.setTitle(getTitle());
+            }
+        }
+    }
+
+    // Returns false if an error occurred while saving the file.
+    public boolean trySave(AbstractFile destFile) {
+        try {
+            saveAs(destFile);
+            return true;
+        }
+        catch(IOException e) {
+            InformationDialog.showErrorDialog(frame, Translator.get("write_error"), Translator.get("file_editor.cannot_write"));
+            return false;
+        }
+    }
+
+    // Returns true if the file does not have any unsaved change or if the user refused to save the changes,
+    // false if the user canceled the dialog or the save failed.
+    public boolean askSave() {
+        if(!frame.isSaveNeeded())
+            return true;
+
+        QuestionDialog dialog = new QuestionDialog(frame, null, Translator.get("file_editor.save_warning"), frame,
+                                                   new String[] {Translator.get("save"), Translator.get("dont_save"), Translator.get("cancel")},
+                                                   new int[]  {JOptionPane.YES_OPTION, JOptionPane.NO_OPTION, JOptionPane.CANCEL_OPTION},
+                                                   0);
+        int ret = dialog.getActionValue();
+
+        if((ret==JOptionPane.YES_OPTION && trySave(file)) || ret==JOptionPane.NO_OPTION) {
+            setSaveNeeded(false);
+            return true;
+        }
+
+        return false;       // User canceled or the file couldn't be properly saved
+    }
+    
+    /**
+     * Returns the menu bar that controls the editor's frame. The menu bar should be retrieved using this method and
+     * not by calling {@link JFrame#getJMenuBar()}, which may return <code>null</code>.
+     *
+     * @return the menu bar that controls the editor's frame.
+     */
+    protected JMenuBar getMenuBar() {
+        JMenuBar menuBar = new JMenuBar();
+        MnemonicHelper menuMnemonicHelper = new MnemonicHelper();
+        MnemonicHelper menuItemMnemonicHelper = new MnemonicHelper();
+
+        // File menu
+        JMenu fileMenu = MenuToolkit.addMenu(Translator.get("file_editor.file_menu"), menuMnemonicHelper, null);
+        saveItem = MenuToolkit.addMenuItem(fileMenu, Translator.get("file_editor.save"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_MASK), this);
+        saveAsItem = MenuToolkit.addMenuItem(fileMenu, Translator.get("file_editor.save_as"), menuItemMnemonicHelper, null, this);
+        fileMenu.add(new JSeparator());
+        closeItem = MenuToolkit.addMenuItem(fileMenu, Translator.get("file_editor.close"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), this);
+		
+        menuBar.add(fileMenu);
+
+        return menuBar;
+    }
+    
+    ////////////////////////////
+    // ActionListener methods //
+    ////////////////////////////
+	
+    public void actionPerformed(ActionEvent e) {
+        Object source = e.getSource();
+		
+        // File menu
+        if (source==saveItem) {
+            trySave(file);
+        }		
+        else if (source==saveAsItem) {
+            trySaveAs();
+        }		
+        else if (source==closeItem) {
+            frame.dispose();
+        }			
+    }
 
     //////////////////////
     // Abstract methods //
@@ -151,8 +268,9 @@ public abstract class FileEditor {
     protected abstract void saveAs(AbstractFile saveAsFile) throws IOException;
     
     /**
-     * TODO: comment
-     * @return
+     * This method returns the JComponent in which the file is presented.
+     * 
+     * @return The UI component in which the file is presented.
      */
     public abstract JComponent getViewedComponent();
 }

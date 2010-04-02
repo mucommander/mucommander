@@ -35,6 +35,7 @@ import java.io.InputStream;
 
 import javax.swing.JComponent;
 import javax.swing.JMenu;
+import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
@@ -48,8 +49,8 @@ import com.mucommander.ui.theme.FontChangedEvent;
 import com.mucommander.ui.theme.Theme;
 import com.mucommander.ui.theme.ThemeListener;
 import com.mucommander.ui.theme.ThemeManager;
+import com.mucommander.ui.viewer.FileFrame;
 import com.mucommander.ui.viewer.FileViewer;
-import com.mucommander.ui.viewer.ViewerFrame;
 
 
 /**
@@ -62,6 +63,10 @@ class ImageViewer extends FileViewer implements ActionListener {
     private Image scaledImage;
     private double zoomFactor;
 	
+    /** Menu bar */
+    // Menus //
+    private JMenu controlsMenu;
+    // Items //
     //	private JMenuItem prevImageItem;
     //	private JMenuItem nextImageItem;
     private JMenuItem zoomInItem;
@@ -71,10 +76,29 @@ class ImageViewer extends FileViewer implements ActionListener {
     
     public ImageViewer() {
     	imageViewerImpl = new ImageViewerImpl();
-    }	
+    	
+    	// Create Go menu
+    	MnemonicHelper menuMnemonicHelper = new MnemonicHelper();
+    	controlsMenu = MenuToolkit.addMenu(Translator.get("image_viewer.controls_menu"), menuMnemonicHelper, null);
+    	
+        //		nextImageItem = MenuToolkit.addMenuItem(controlsMenu, Translator.get("image_viewer.next_image"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0), this);
+        //		prevImageItem = MenuToolkit.addMenuItem(controlsMenu, Translator.get("image_viewer.previous_image"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_BACK_SPACE, 0), this);
+        //		controlsMenu.add(new JSeparator());
+        zoomInItem = MenuToolkit.addMenuItem(controlsMenu, Translator.get("image_viewer.zoom_in"), menuMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_ADD, 0), this);
+        zoomOutItem = MenuToolkit.addMenuItem(controlsMenu, Translator.get("image_viewer.zoom_out"), menuMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_SUBTRACT, 0), this);
+    }
+    
+    @Override
+    public JMenuBar getMenuBar() {
+    	JMenuBar menuBar = super.getMenuBar();
+    	
+        menuBar.add(controlsMenu);
+    	
+    	return menuBar;
+    }
 
     private synchronized void loadImage(AbstractFile file) throws IOException {
-        ViewerFrame frame = getFrame();
+        FileFrame frame = getFrame();
         frame.setCursor(new Cursor(Cursor.WAIT_CURSOR));
 		
         int read;
@@ -126,7 +150,7 @@ class ImageViewer extends FileViewer implements ActionListener {
 	
 	
     private synchronized void zoom(double factor) {
-        ViewerFrame frame = getFrame();
+        FileFrame frame = getFrame();
 
         frame.setCursor(new Cursor(Cursor.WAIT_CURSOR));
 
@@ -137,7 +161,7 @@ class ImageViewer extends FileViewer implements ActionListener {
     }
 
     private void updateFrame() {
-        ViewerFrame frame = getFrame();
+    	FileFrame frame = getFrame();
 
         // Revalidate, pack and repaint should be called in this order
         frame.setTitle(this.getTitle());
@@ -183,22 +207,6 @@ class ImageViewer extends FileViewer implements ActionListener {
 
     @Override
     public void view(AbstractFile file) throws IOException {
-
-        ViewerFrame frame = getFrame();
-        if(frame!=null) {
-            MnemonicHelper menuMnemonicHelper = new MnemonicHelper();
-
-            // Create Go menu
-            JMenu controlsMenu = MenuToolkit.addMenu(Translator.get("image_viewer.controls_menu"), menuMnemonicHelper, null);
-            //		nextImageItem = MenuToolkit.addMenuItem(controlsMenu, Translator.get("image_viewer.next_image"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0), this);
-            //		prevImageItem = MenuToolkit.addMenuItem(controlsMenu, Translator.get("image_viewer.previous_image"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_BACK_SPACE, 0), this);
-            //		controlsMenu.add(new JSeparator());
-            zoomInItem = MenuToolkit.addMenuItem(controlsMenu, Translator.get("image_viewer.zoom_in"), menuMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_ADD, 0), this);
-            zoomOutItem = MenuToolkit.addMenuItem(controlsMenu, Translator.get("image_viewer.zoom_out"), menuMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_SUBTRACT, 0), this);
-
-            getMenuBar().add(controlsMenu);
-        }
-
         loadImage(file);
     }
     

@@ -19,6 +19,11 @@
 
 package com.mucommander.ui.viewer;
 
+import java.awt.Frame;
+import java.awt.Image;
+import java.util.Iterator;
+import java.util.Vector;
+
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileProtocols;
 import com.mucommander.runtime.OsFamilies;
@@ -27,11 +32,6 @@ import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.QuestionDialog;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.WindowManager;
-
-import java.awt.Frame;
-import java.awt.Image;
-import java.util.Iterator;
-import java.util.Vector;
 
 /**
  * EditorRegistrar maintains a list of registered file editors and provides methods to dynamically register file editors
@@ -65,7 +65,7 @@ public class EditorRegistrar {
      * @param icon editor frame's icon.
      * @return the created EditorFrame
      */
-    public static EditorFrame createEditorFrame(MainFrame mainFrame, AbstractFile file, Image icon) {
+    public static FileFrame createEditorFrame(MainFrame mainFrame, AbstractFile file, Image icon) {
         EditorFrame frame = new EditorFrame(mainFrame, file, icon);
 
         // Use new Window decorations introduced in Mac OS X 10.5 (Leopard)
