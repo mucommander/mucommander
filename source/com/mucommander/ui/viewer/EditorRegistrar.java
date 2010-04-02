@@ -88,9 +88,10 @@ public class EditorRegistrar {
      *
      * @param file the file that will be displayed by the returned FileEditor
      * @return the created FileEditor
-     * @throws UserCancelledException if the user has been asked to confirm the operation and cancelled
+     * @throws UserCancelledException if the user has been asked to confirm the operation and canceled
+     * 		   Exception if no suitable editor was found
      */
-    public static FileEditor createFileEditor(AbstractFile file) throws UserCancelledException {
+    public static FileEditor createFileEditor(AbstractFile file) throws UserCancelledException, Exception {
         Iterator<EditorFactory> iterator;
         EditorFactory           factory;
 
@@ -109,7 +110,7 @@ public class EditorRegistrar {
                                                            0);
 
                 int ret = dialog.getActionValue();
-                if(ret==1 || ret==-1)   // User cancelled the operation
+                if(ret==1 || ret==-1)   // User canceled the operation
                     throw new UserCancelledException();
 
                 // User confirmed the operation
@@ -117,6 +118,6 @@ public class EditorRegistrar {
             }
         }
 
-        return null;
+        throw new Exception("No suitable editor found");
     }
 }

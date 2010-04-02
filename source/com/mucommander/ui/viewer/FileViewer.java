@@ -24,6 +24,7 @@ import java.awt.event.KeyEvent;
 import java.io.IOException;
 
 import javax.swing.JComponent;
+import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -144,13 +145,13 @@ public abstract class FileViewer implements ActionListener {
     //////////////////////
 	
     /**
-     * This method is invoked when the specified file is about to be viewed.
+     * This method is invoked when the specified file is about to be opened.
      * This method should retrieve the file and do the necessary so that this component can be displayed.
      *
      * @param  file        the file that is about to be viewed.
      * @throws IOException if an I/O error occurs.
      */
-    public abstract void view(AbstractFile file) throws IOException;
+    public abstract void open(AbstractFile file) throws IOException;
     
     /**
      * This method returns the JComponent in which the file is presented.

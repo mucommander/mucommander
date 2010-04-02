@@ -175,7 +175,7 @@ class TextViewer extends FileViewer implements EncodingListener {
     ///////////////////////////////
 
     @Override
-    public void view(AbstractFile file) throws IOException {
+    public void open(AbstractFile file) throws IOException {
         startEditing(file, null);
     }
     

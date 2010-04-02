@@ -89,9 +89,10 @@ public class ViewerRegistrar {
      *
      * @param file the file that will be displayed by the returned FileViewer
      * @return the created FileViewer
-     * @throws UserCancelledException if the user has been asked to confirm the operation and cancelled
+     * @throws UserCancelledException if the user has been asked to confirm the operation and canceled
+     * 		   Exception if no suitable viewer was found
      */
-    public static FileViewer createFileViewer(AbstractFile file) throws UserCancelledException {
+    public static FileViewer createFileViewer(AbstractFile file) throws UserCancelledException, Exception {
         for(ViewerFactory factory : viewerFactories) {
             try {
                 if(factory.canViewFile(file))
@@ -105,13 +106,14 @@ public class ViewerRegistrar {
                                                            0);
 
                 int ret = dialog.getActionValue();
-                if(ret==1 || ret==-1)   // User cancelled the operation
+                if(ret==1 || ret==-1)   // User canceled the operation
                     throw new UserCancelledException();
 
                 // User confirmed the operation
                 return factory.createFileViewer();
             }
         }
-        return null;
+
+        throw new Exception("No suitable viewer found");
     }
 }

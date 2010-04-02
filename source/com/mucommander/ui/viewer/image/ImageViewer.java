@@ -206,7 +206,7 @@ class ImageViewer extends FileViewer implements ActionListener {
     ///////////////////////////////
 
     @Override
-    public void view(AbstractFile file) throws IOException {
+    public void open(AbstractFile file) throws IOException {
         loadImage(file);
     }
     
@@ -243,6 +243,10 @@ class ImageViewer extends FileViewer implements ActionListener {
             zoomFactor = zoomFactor/2;
             zoom(zoomFactor);
             updateFrame();
+        }
+        else {
+        	super.actionPerformed(e);
+        	return;
         }
 			
         checkZoom();

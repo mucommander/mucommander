@@ -31,13 +31,11 @@ import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.KeyStroke;
-import javax.swing.WindowConstants;
 
 import com.mucommander.AppLogger;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.runtime.OsFamilies;
 import com.mucommander.text.Translator;
-import com.mucommander.ui.dialog.DialogToolkit;
 import com.mucommander.ui.dialog.InformationDialog;
 import com.mucommander.ui.helper.FocusRequester;
 import com.mucommander.ui.layout.AsyncPanel;
@@ -52,14 +50,10 @@ import com.mucommander.ui.main.MainFrame;
  */
 class ViewerFrame extends FileFrame {
 	
-    private MainFrame mainFrame;
-    private AbstractFile file;
     private FileViewer viewer;
 
     private final static Dimension MIN_DIMENSION = new Dimension(200, 150);
 	
-    private final static String CUSTOM_DISPOSE_EVENT = "CUSTOM_DISPOSE_EVENT";
-
 	
     /**
      * Creates a new ViewerFrame to start viewing the given file.
@@ -68,42 +62,31 @@ class ViewerFrame extends FileFrame {
      * {@link ViewerRegistrar#createViewerFrame(MainFrame,AbstractFile,Image)}.
      */
     ViewerFrame(MainFrame mainFrame, AbstractFile file, Image icon) {
-        super();
+        super(mainFrame, icon);
 
-        setIconImage(icon);
-        this.mainFrame = mainFrame;
-        this.file = file;
-
-        // Call #dispose() on close (default is hide)
-        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-
-        setResizable(true);
-
-        initContentPane();
+        initContentPane(file);
     }
 
-    private void initContentPane() {
+    protected void initContentPane(final AbstractFile file) {
         AsyncPanel asyncPanel = new AsyncPanel() {
             @Override
             public JComponent getTargetComponent() {
                 try {
                     viewer = ViewerRegistrar.createFileViewer(file);
-                    if(viewer==null)
-                        throw new Exception("No suitable viewer found");
 
                     // Set the viewer's fields
                     viewer.setFrame(ViewerFrame.this);
                     viewer.setCurrentFile(file);
 
                     // Ask the viewer to view the file
-                    viewer.view(file);
+                    viewer.open(file);
                 }
                 catch(Exception e) {
                     AppLogger.fine("Exception caught", e);
 
                     // May be a UserCancelledException if the user canceled (refused to confirm the operation after a warning)
                     if(!(e instanceof UserCancelledException))
-                        showGenericViewErrorDialog();
+                        showGenericErrorDialog();
 
                     dispose();
                     return viewer==null?new JPanel():viewer.getViewedComponent();
@@ -151,22 +134,18 @@ class ViewerFrame extends FileFrame {
         setVisible(true);
     }
 
-    public void showGenericViewErrorDialog() {
-        InformationDialog.showErrorDialog(mainFrame, Translator.get("file_viewer.view_error_title"), Translator.get("file_viewer.view_error"));
-    }
-
-
+    
     ////////////////////////
     // Overridden methods //
     ////////////////////////
 
     @Override
-    public void pack() {
-        super.pack();
-
-        DialogToolkit.fitToScreen(this);
-        DialogToolkit.fitToMinDimension(this, MIN_DIMENSION);
-
-        DialogToolkit.centerOnWindow(this, mainFrame);
+    public Dimension getMinimumSize() {
+        return MIN_DIMENSION;
+    }
+    
+    @Override
+    protected void showGenericErrorDialog() {
+        InformationDialog.showErrorDialog(getMainFrame(), Translator.get("file_viewer.view_error_title"), Translator.get("file_viewer.view_error"));
     }
 }

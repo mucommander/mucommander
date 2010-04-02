@@ -51,7 +51,7 @@ import com.mucommander.ui.helper.MnemonicHelper;
  *
  * @author Maxence Bernard, Arik Hadas
  */
-public abstract class FileEditor implements ActionListener {
+public abstract class FileEditor extends FileViewer {
 	
     /** EditorFrame instance that contains this editor (may be null). */
     private EditorFrame frame;
@@ -64,22 +64,14 @@ public abstract class FileEditor implements ActionListener {
     private JMenuItem saveAsItem;
     private JMenuItem closeItem;
     
+    /** Serves to indicate if saving is needed before closing the window, value should only be modified using the setSaveNeeded() method */
+    private boolean saveNeeded;
+    
     /**
      * Creates a new FileEditor.
      */
     public FileEditor() {}
 	
-
-    /**
-     * Returns the frame which contains this editor.
-     * <p>
-     * This method may return <code>null</code> if the editor is not inside a EditorFrame.
-     * @return the frame which contains this editor.
-     * @see    #setFrame(EditorFrame)
-     */
-    public EditorFrame getFrame() {
-        return frame;
-    }
 
     /**
      * Sets the EditorFrame (separate window) that contains this FileEditor.
@@ -88,41 +80,14 @@ public abstract class FileEditor implements ActionListener {
      */
     final void setFrame(EditorFrame frame) {
         this.frame = frame;
+        super.setFrame(frame);
     }
 
-
-    /**
-     * Returns a description of the file currently being edited which will be used as a window title.
-     * This method returns the file's path but it can be overridden to provide more information.
-     * @return the editor's title.
-     */
-    public String getTitle() {
-        return file.getAbsolutePath();
-    }
-	
-
-    /**
-     * Returns the file that is being edited.
-     *
-     * @return the file that is being edited.
-     */
-    public AbstractFile getCurrentFile() {
-        return file;
-    }
-
-    /**
-     * Sets the file that is to be edited.
-     * This method will automatically be called after a file editor is created and should not be called directly.
-     * @param file file that is to be edited.
-     */
-    final void setCurrentFile(AbstractFile file) {
-        this.file = file;
-    }
-
-	
     protected void setSaveNeeded(boolean saveNeeded) {
-        if(frame!=null)
+    	if(frame!=null && this.saveNeeded!=saveNeeded) {
+            this.saveNeeded = saveNeeded;
             frame.setSaveNeeded(saveNeeded);
+    	}
     }
     
     public void trySaveAs() {
@@ -184,7 +149,7 @@ public abstract class FileEditor implements ActionListener {
     // Returns true if the file does not have any unsaved change or if the user refused to save the changes,
     // false if the user canceled the dialog or the save failed.
     public boolean askSave() {
-        if(!frame.isSaveNeeded())
+        if(!saveNeeded)
             return true;
 
         QuestionDialog dialog = new QuestionDialog(frame, null, Translator.get("file_editor.save_warning"), frame,
@@ -247,16 +212,6 @@ public abstract class FileEditor implements ActionListener {
     // Abstract methods //
     //////////////////////
 	
-    /**
-     * This method is invoked when the specified file is about to be edited.
-     * This method should retrieve the file and do whatever's necessary for this component can be displayed.
-     *
-     * @param file the file that is about to be edited.
-     * @throws IOException if an I/O error occurs.
-     */
-    public abstract void edit(AbstractFile file) throws IOException;
-
-
     /**
      * This method is invoked when the user asked to save current file to the specified file.
      * 

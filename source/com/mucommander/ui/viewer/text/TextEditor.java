@@ -233,7 +233,7 @@ class TextEditor extends FileEditor implements DocumentListener, EncodingListene
     }
 
     @Override
-    public void edit(AbstractFile file) throws IOException {
+    public void open(AbstractFile file) throws IOException {
         startEditing(file, this);
     }
     

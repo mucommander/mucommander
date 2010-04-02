@@ -31,13 +31,11 @@ import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.KeyStroke;
-import javax.swing.WindowConstants;
 
 import com.mucommander.AppLogger;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.runtime.OsFamilies;
 import com.mucommander.text.Translator;
-import com.mucommander.ui.dialog.DialogToolkit;
 import com.mucommander.ui.dialog.InformationDialog;
 import com.mucommander.ui.helper.FocusRequester;
 import com.mucommander.ui.layout.AsyncPanel;
@@ -50,20 +48,12 @@ import com.mucommander.ui.main.MainFrame;
  *
  * @author Maxence Bernard, Arik Hadas
  */
-class EditorFrame extends FileFrame {
+class EditorFrame extends ViewerFrame {
 
-    private MainFrame mainFrame;
-    private AbstractFile file;
     private FileEditor editor;
 	
-    /** Serves to indicate if saving is needed before closing the window, value should only be modified using the setSaveNeeded() method */
-    private boolean saveNeeded;
-		
     private final static Dimension MIN_DIMENSION = new Dimension(480, 360);
 
-    private final static String CUSTOM_DISPOSE_EVENT = "CUSTOM_DISPOSE_EVENT";
-
-	
     /**
      * Creates a new EditorFrame to start viewing the given file.
      *
@@ -71,42 +61,29 @@ class EditorFrame extends FileFrame {
      * {@link EditorRegistrar#createEditorFrame(MainFrame,AbstractFile,Image)}.
      */
     EditorFrame(MainFrame mainFrame, AbstractFile file, Image icon) {
-        super();
-
-        setIconImage(icon);
-        this.mainFrame = mainFrame;
-        this.file = file;
-		
-        // Call #dispose() on close (default is hide)
-        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-
-        setResizable(true);
-
-        initContentPane();
+        super(mainFrame, file, icon);
     }
 
-    private void initContentPane() {
+    protected void initContentPane(final AbstractFile file) {
         AsyncPanel asyncPanel = new AsyncPanel() {
             @Override
             public JComponent getTargetComponent() {
                 try {
                     editor = EditorRegistrar.createFileEditor(file);
-                    if(editor==null)
-                        throw new Exception("No suitable editor found");
 
                     // Set the editor's fields
                     editor.setFrame(EditorFrame.this);
                     editor.setCurrentFile(file);
 
                     // Ask the editor to edit the file
-                    editor.edit(file);
+                    editor.open(file);
                 }
                 catch(Exception e) {
                     AppLogger.fine("Exception caught", e);
 
                     // May be a UserCancelledException if the user canceled (refused to confirm the operation after a warning)
                     if(!(e instanceof UserCancelledException))
-                        showGenericEditErrorDialog();
+                        showGenericErrorDialog();
 
                     dispose();
                     return editor==null?new JPanel():editor.getViewedComponent();
@@ -116,20 +93,20 @@ class EditorFrame extends FileFrame {
                 setTitle(editor.getTitle());
 
                 JScrollPane scrollPane = new JScrollPane(editor.getViewedComponent(), JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED) {
-                        @Override
-                        public Insets getInsets() {
-                            return new Insets(0, 0, 0, 0);
-                        }
-                    };
+                	@Override
+                	public Insets getInsets() {
+                		return new Insets(0, 0, 0, 0);
+                	}
+                };
 
                 // Catch Apple+W keystrokes under Mac OS X to try and close the window
                 if(OsFamilies.MAC_OS_X.isCurrent()) {
-                    scrollPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_W, ActionEvent.META_MASK), CUSTOM_DISPOSE_EVENT);
-                    scrollPane.getActionMap().put(CUSTOM_DISPOSE_EVENT, new AbstractAction() {
-                            public void actionPerformed(ActionEvent e){
-                                dispose();
-                            }
-                        });
+                	scrollPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_W, ActionEvent.META_MASK), CUSTOM_DISPOSE_EVENT);
+                	scrollPane.getActionMap().put(CUSTOM_DISPOSE_EVENT, new AbstractAction() {
+                		public void actionPerformed(ActionEvent e){
+                			dispose();
+                		}
+                	});
                 }
 
                 return scrollPane;
@@ -154,22 +131,10 @@ class EditorFrame extends FileFrame {
         setVisible(true);
     }
 
-    public void showGenericEditErrorDialog() {
-        InformationDialog.showErrorDialog(mainFrame, Translator.get("file_editor.edit_error_title"), Translator.get("file_editor.edit_error"));
-    }
-
-
     public void setSaveNeeded(boolean saveNeeded) {
-        if(this.saveNeeded!=saveNeeded) {
-            this.saveNeeded = saveNeeded;
-            // Marks/unmarks the window as dirty under Mac OS X (symbolized by a dot in the window closing icon)
-            if(OsFamilies.MAC_OS_X.isCurrent())
-                this.getRootPane().putClientProperty("windowModified", saveNeeded?Boolean.TRUE:Boolean.FALSE);
-        }
-    }
-
-    public boolean isSaveNeeded() {
-    	return saveNeeded;
+    	// Marks/unmarks the window as dirty under Mac OS X (symbolized by a dot in the window closing icon)
+    	if(OsFamilies.MAC_OS_X.isCurrent())
+    		this.getRootPane().putClientProperty("windowModified", saveNeeded?Boolean.TRUE:Boolean.FALSE);
     }
 
     ////////////////////////
@@ -177,19 +142,18 @@ class EditorFrame extends FileFrame {
     ////////////////////////
 
     @Override
-    public void pack() {
-        super.pack();
-
-        DialogToolkit.fitToScreen(this);
-        DialogToolkit.fitToMinDimension(this, MIN_DIMENSION);
-
-        DialogToolkit.centerOnWindow(this, mainFrame);
+    public Dimension getMinimumSize() {
+        return MIN_DIMENSION;
     }
-
 
     @Override
     public void dispose() {
-        if(editor.askSave())   /// Returns true if the file does not have any unsaved change or if the user refused to save the changes
+        if(editor==null || editor.askSave())   /// Returns true if the file does not have any unsaved change or if the user refused to save the changes
             super.dispose();
+    }
+    
+    @Override
+    protected void showGenericErrorDialog() {
+        InformationDialog.showErrorDialog(getMainFrame(), Translator.get("file_editor.edit_error_title"), Translator.get("file_editor.edit_error"));
     }
 }
