@@ -21,7 +21,6 @@ package com.mucommander.ui.viewer;
 
 import java.awt.Frame;
 import java.awt.Image;
-import java.util.Iterator;
 import java.util.Vector;
 
 import com.mucommander.file.AbstractFile;
@@ -87,21 +86,19 @@ public class EditorRegistrar {
      * Creates and returns an appropriate FileEditor for the given file type.
      *
      * @param file the file that will be displayed by the returned FileEditor
+     * @param frame the frame in which the FileEditor is shown
      * @return the created FileEditor
      * @throws UserCancelledException if the user has been asked to confirm the operation and canceled
      * 		   Exception if no suitable editor was found
      */
-    public static FileEditor createFileEditor(AbstractFile file) throws UserCancelledException, Exception {
-        Iterator<EditorFactory> iterator;
-        EditorFactory           factory;
-
-        iterator = editorFactories.iterator();
-        while(iterator.hasNext()) {
-            factory = iterator.next();
-
+    public static FileEditor createFileEditor(AbstractFile file, EditorFrame frame) throws UserCancelledException, Exception {
+        FileEditor editor = null;
+    	for(EditorFactory factory : editorFactories) {
             try {
-                if(factory.canEditFile(file))
-                    return factory.createFileEditor();
+                if(factory.canEditFile(file)) {
+                    editor = factory.createFileEditor();
+                    break;
+                }
             }
             catch(WarnUserException e) {
                 QuestionDialog dialog = new QuestionDialog((Frame)null, Translator.get("warning"), Translator.get(e.getMessage()), null,
@@ -114,10 +111,15 @@ public class EditorRegistrar {
                     throw new UserCancelledException();
 
                 // User confirmed the operation
-                return factory.createFileEditor();
+                editor = factory.createFileEditor();
             }
         }
 
-        throw new Exception("No suitable editor found");
+    	if (editor == null)
+    		throw new Exception("No suitable editor found");
+    	
+    	editor.setFrame(frame);
+    	
+    	return editor;
     }
 }

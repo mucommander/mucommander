@@ -61,17 +61,23 @@ class TextViewer extends FileViewer implements EncodingListener {
     /** Menu items */
     // Menus //
     private JMenu editMenu;
+    private JMenu viewMenu;
     // Items //
     private JMenuItem copyItem;
     private JMenuItem selectAllItem;
     private JMenuItem findItem;
     private JMenuItem findNextItem;
     private JMenuItem findPreviousItem;
+    private JMenuItem wrapItem;
     
     private String encoding;
     
-    public TextViewer() {
-    	textEditorImpl = new TextEditorImpl(false);
+    TextViewer() {
+    	this(new TextEditorImpl(false));
+    }
+    
+    TextViewer(TextEditorImpl textEditorImpl) {
+    	this.textEditorImpl = textEditorImpl;
 
     	// Edit menu
     	editMenu = new JMenu(Translator.get("text_editor.edit"));
@@ -85,11 +91,14 @@ class TextViewer extends FileViewer implements EncodingListener {
     	findItem = MenuToolkit.addMenuItem(editMenu, Translator.get("text_viewer.find"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_F, KeyEvent.CTRL_DOWN_MASK), this);
     	findNextItem = MenuToolkit.addMenuItem(editMenu, Translator.get("text_viewer.find_next"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_F3, 0), this);
     	findPreviousItem = MenuToolkit.addMenuItem(editMenu, Translator.get("text_viewer.find_previous"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_F3, KeyEvent.SHIFT_DOWN_MASK), this);
+    	
+    	// View menu
+    	viewMenu = new JMenu(Translator.get("text_editor.view"));
+    	
+    	wrapItem = MenuToolkit.addCheckBoxMenuItem(viewMenu, Translator.get("text_viewer.wrap"), menuItemMnemonicHelper, null, this);
     }
     
     void startEditing(AbstractFile file, DocumentListener documentListener) throws IOException {
-//        this.file = file;
-
         // Auto-detect encoding
 
         // Get a RandomAccessInputStream on the file if possible, if not get a simple InputStream
@@ -155,7 +164,7 @@ class TextViewer extends FileViewer implements EncodingListener {
         if(documentListener!=null)
             textEditorImpl.addDocumentListener(documentListener);
     }
-
+    
     @Override
     public JMenuBar getMenuBar() {
     	JMenuBar menuBar = super.getMenuBar();
@@ -165,17 +174,22 @@ class TextViewer extends FileViewer implements EncodingListener {
         encodingMenu.addEncodingListener(this);
 
         menuBar.add(editMenu);
+        menuBar.add(viewMenu);
         menuBar.add(encodingMenu);
         
         return menuBar;
     }
 
+    String getEncoding() {
+    	return encoding;
+    }
+    
     ///////////////////////////////
     // FileViewer implementation //
     ///////////////////////////////
 
     @Override
-    public void open(AbstractFile file) throws IOException {
+    public void show(AbstractFile file) throws IOException {
         startEditing(file, null);
     }
     
@@ -201,6 +215,8 @@ class TextViewer extends FileViewer implements EncodingListener {
         	textEditorImpl.findNext();
         else if(source == findPreviousItem)
         	textEditorImpl.findPrevious();
+        else if(source == wrapItem)
+        	textEditorImpl.wrap(wrapItem.isSelected());
         else
         	super.actionPerformed(e);
     }

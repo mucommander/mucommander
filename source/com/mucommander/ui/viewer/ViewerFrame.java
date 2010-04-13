@@ -48,7 +48,7 @@ import com.mucommander.ui.main.MainFrame;
  *
  * @author Maxence Bernard, Arik Hadas
  */
-class ViewerFrame extends FileFrame {
+public class ViewerFrame extends FileFrame {
 	
     private FileViewer viewer;
 
@@ -72,11 +72,7 @@ class ViewerFrame extends FileFrame {
             @Override
             public JComponent getTargetComponent() {
                 try {
-                    viewer = ViewerRegistrar.createFileViewer(file);
-
-                    // Set the viewer's fields
-                    viewer.setFrame(ViewerFrame.this);
-                    viewer.setCurrentFile(file);
+                    viewer = ViewerRegistrar.createFileViewer(file, ViewerFrame.this);
 
                     // Ask the viewer to view the file
                     viewer.open(file);
@@ -93,8 +89,7 @@ class ViewerFrame extends FileFrame {
                 }
 
                 setJMenuBar(viewer.getMenuBar());
-                setTitle(viewer.getTitle());
-
+                
                 JScrollPane scrollPane = new JScrollPane(viewer.getViewedComponent(), JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED) {
                         @Override
                         public Insets getInsets() {

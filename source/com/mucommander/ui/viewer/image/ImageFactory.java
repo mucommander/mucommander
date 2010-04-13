@@ -37,6 +37,7 @@ public class ImageFactory implements ViewerFactory {
         filter.setCaseSensitive(false);
     }
 
+    @Override
     public boolean canViewFile(AbstractFile file) {
         // Do not allow directories
         if(file.isDirectory())
@@ -45,6 +46,7 @@ public class ImageFactory implements ViewerFactory {
         return filter.accept(file);
     }
 
+    @Override
     public FileViewer createFileViewer() {
         return new ImageViewer();
     }

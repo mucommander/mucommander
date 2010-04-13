@@ -23,7 +23,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
 
-import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -42,7 +41,7 @@ import com.mucommander.ui.helper.MnemonicHelper;
  *
  * @author Maxence Bernard, Arik Hadas
  */
-public abstract class FileViewer implements ActionListener {
+public abstract class FileViewer implements FilePresenter, ActionListener {
 	
     /** ViewerFrame instance that contains this viewer (may be null). */
     private ViewerFrame frame;
@@ -67,7 +66,7 @@ public abstract class FileViewer implements ActionListener {
      * @return the frame which contains this viewer.
      * @see    #setFrame(ViewerFrame)
      */
-    public ViewerFrame getFrame() {
+    protected ViewerFrame getFrame() {
         return frame;
     }
 
@@ -86,7 +85,7 @@ public abstract class FileViewer implements ActionListener {
      * This method returns the file's name but it can be overridden to provide more information.
      * @return this dialog's title.
      */
-    public String getTitle() {
+    protected String getTitle() {
         return file.getAbsolutePath();
     }
 	
@@ -96,17 +95,20 @@ public abstract class FileViewer implements ActionListener {
      *
      * @return the file that is being viewed.
      */
-    public AbstractFile getCurrentFile() {
+    protected AbstractFile getCurrentFile() {
         return file;
     }
 
     /**
      * Sets the file that is to be viewed.
      * This method will automatically be called after a file viewer is created and should not be called directly.
+     * 
      * @param file file that is to be viewed.
      */
-    final void setCurrentFile(AbstractFile file) {
+    protected final void setCurrentFile(AbstractFile file) {
         this.file = file;
+        // Update frame's title
+        getFrame().setTitle(getTitle());
     }
     
     /**
@@ -130,6 +132,16 @@ public abstract class FileViewer implements ActionListener {
         return menuBar;
     }
     
+    //////////////////////////////////
+    // FilePresenter implementation //
+    //////////////////////////////////
+    
+    @Override
+    public void open(AbstractFile file) throws IOException {
+    	show(file);
+    	setCurrentFile(file);
+    }
+    
     ///////////////////////////////////
     // ActionListener implementation //
     ///////////////////////////////////
@@ -151,12 +163,5 @@ public abstract class FileViewer implements ActionListener {
      * @param  file        the file that is about to be viewed.
      * @throws IOException if an I/O error occurs.
      */
-    public abstract void open(AbstractFile file) throws IOException;
-    
-    /**
-     * This method returns the JComponent in which the file is presented.
-     * 
-     * @return The UI component in which the file is presented.
-     */
-    public abstract JComponent getViewedComponent();
+    public abstract void show(AbstractFile file) throws IOException;
 }

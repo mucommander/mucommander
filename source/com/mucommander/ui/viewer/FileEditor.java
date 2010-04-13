@@ -19,12 +19,12 @@
 package com.mucommander.ui.viewer;
 
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
 
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -56,9 +56,6 @@ public abstract class FileEditor extends FileViewer {
     /** EditorFrame instance that contains this editor (may be null). */
     private EditorFrame frame;
 
-    /** File currently being edited. */
-    private AbstractFile file;
-    
     /** Menu items */
     private JMenuItem saveItem;
     private JMenuItem saveAsItem;
@@ -90,12 +87,12 @@ public abstract class FileEditor extends FileViewer {
     	}
     }
     
-    public void trySaveAs() {
+    private void trySaveAs() {
         JFileChooser fileChooser = new JFileChooser();
-		
+		AbstractFile currentFile = getCurrentFile();
         // Sets selected file in JFileChooser to current file
-        if(file.getURL().getScheme().equals(FileProtocols.FILE))
-            fileChooser.setSelectedFile(new java.io.File(file.getAbsolutePath()));
+        if(currentFile.getURL().getScheme().equals(FileProtocols.FILE))
+            fileChooser.setSelectedFile(new java.io.File(currentFile.getAbsolutePath()));
         fileChooser.setDialogType(JFileChooser.SAVE_DIALOG);
         int ret = fileChooser.showSaveDialog(frame);
 		
@@ -127,15 +124,13 @@ public abstract class FileEditor extends FileViewer {
             }
 
             if (trySave(destFile)) {
-                this.file = destFile;
-                setCurrentFile(file);
-                frame.setTitle(getTitle());
+                setCurrentFile(destFile);
             }
         }
     }
 
     // Returns false if an error occurred while saving the file.
-    public boolean trySave(AbstractFile destFile) {
+    private boolean trySave(AbstractFile destFile) {
         try {
             saveAs(destFile);
             return true;
@@ -158,7 +153,7 @@ public abstract class FileEditor extends FileViewer {
                                                    0);
         int ret = dialog.getActionValue();
 
-        if((ret==JOptionPane.YES_OPTION && trySave(file)) || ret==JOptionPane.NO_OPTION) {
+        if((ret==JOptionPane.YES_OPTION && trySave(getCurrentFile())) || ret==JOptionPane.NO_OPTION) {
             setSaveNeeded(false);
             return true;
         }
@@ -198,7 +193,7 @@ public abstract class FileEditor extends FileViewer {
 		
         // File menu
         if (source==saveItem) {
-            trySave(file);
+            trySave(getCurrentFile());
         }		
         else if (source==saveAsItem) {
             trySaveAs();

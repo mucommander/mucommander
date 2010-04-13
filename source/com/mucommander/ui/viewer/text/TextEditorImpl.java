@@ -78,6 +78,8 @@ class TextEditorImpl implements ThemeListener {
         textArea.setSelectedTextColor(ThemeManager.getCurrentColor(Theme.EDITOR_SELECTED_FOREGROUND_COLOR));
         textArea.setSelectionColor(ThemeManager.getCurrentColor(Theme.EDITOR_SELECTED_BACKGROUND_COLOR));
         textArea.setFont(ThemeManager.getCurrentFont(Theme.EDITOR_FONT));
+        
+        textArea.setWrapStyleWord(true);
     }
 
 
@@ -144,6 +146,10 @@ class TextEditorImpl implements ThemeListener {
     // Package-access methods //
     ////////////////////////////
 
+    void wrap(boolean isWrap) {
+    	textArea.setLineWrap(isWrap);
+    }
+    
     void copy() {
     	textArea.copy();
     }

@@ -20,15 +20,11 @@ package com.mucommander.ui.viewer.text;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.io.Reader;
 import java.io.Writer;
-import java.nio.charset.Charset;
 
 import javax.swing.JComponent;
 import javax.swing.JMenu;
@@ -41,8 +37,6 @@ import javax.swing.event.DocumentListener;
 import com.mucommander.AppLogger;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileOperation;
-import com.mucommander.io.EncodingDetector;
-import com.mucommander.io.RandomAccessInputStream;
 import com.mucommander.io.bom.BOM;
 import com.mucommander.io.bom.BOMInputStream;
 import com.mucommander.io.bom.BOMWriter;
@@ -63,11 +57,10 @@ import com.mucommander.ui.viewer.FileEditor;
  */
 class TextEditor extends FileEditor implements DocumentListener, EncodingListener {
 
-    private TextEditorImpl textEditorImpl;
-    
     /** Menu bar */
     // Menus //
     private JMenu editMenu;
+    private JMenu viewMenu;
     // Items //
     private JMenuItem copyItem;
     private JMenuItem cutItem;
@@ -76,12 +69,15 @@ class TextEditor extends FileEditor implements DocumentListener, EncodingListene
     private JMenuItem findItem;
     private JMenuItem findNextItem;
     private JMenuItem findPreviousItem;
+    private JMenuItem wrapItem;
 
     private BOM bom;
-    private String encoding;
+    
+    private TextEditorImpl textEditorImpl;
+    private TextViewer textViewerDelegate;
     
     public TextEditor() {
-        textEditorImpl = new TextEditorImpl(true);
+    	textViewerDelegate = new TextViewer(textEditorImpl = new TextEditorImpl(true));
 
         // Edit menu
         editMenu = new JMenu(Translator.get("text_editor.edit"));
@@ -98,83 +94,25 @@ class TextEditor extends FileEditor implements DocumentListener, EncodingListene
         findItem = MenuToolkit.addMenuItem(editMenu, Translator.get("text_viewer.find"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_F, KeyEvent.CTRL_DOWN_MASK), this);
         findNextItem = MenuToolkit.addMenuItem(editMenu, Translator.get("text_viewer.find_next"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_F3, 0), this);
         findPreviousItem = MenuToolkit.addMenuItem(editMenu, Translator.get("text_viewer.find_previous"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_F3, KeyEvent.SHIFT_DOWN_MASK), this);
+        
+        viewMenu = new JMenu(Translator.get("text_editor.view"));
+        wrapItem = MenuToolkit.addCheckBoxMenuItem(viewMenu, Translator.get("text_viewer.wrap"), menuItemMnemonicHelper, null, this);
     }
     
-    void startEditing(AbstractFile file, DocumentListener documentListener) throws IOException {
-      // Auto-detect encoding
-
-      // Get a RandomAccessInputStream on the file if possible, if not get a simple InputStream
-      InputStream in = null;
-
-      try {
-          if(file.isFileOperationSupported(FileOperation.RANDOM_READ_FILE)) {
-              try { in = file.getRandomAccessInputStream(); }
-              catch(IOException e) {
-                  // In that case we simply get an InputStream
-              }
-          }
-
-          if(in==null)
-              in = file.getInputStream();
-
-          String encoding = EncodingDetector.detectEncoding(in);
-          // If the encoding could not be detected or the detected encoding is not supported, default to UTF-8
-          if(encoding==null || !Charset.isSupported(encoding))
-              encoding = "UTF-8";
-
-          if(in instanceof RandomAccessInputStream) {
-              // Seek to the beginning of the file and reuse the stream
-              ((RandomAccessInputStream)in).seek(0);
-          }
-          else {
-              // TODO: it would be more efficient to use some sort of PushBackInputStream, though we can't use PushBackInputStream because we don't want to keep pushing back for the whole InputStream lifetime
-
-              // Close the InputStream and open a new one
-              // Note: we could use mark/reset if the InputStream supports it, but it is almost never implemented by
-              // InputStream subclasses and a broken by design anyway.
-              in.close();
-              in = file.getInputStream();
-          }
-
-          // Load the file into the text area
-          loadDocument(in, encoding, documentListener);
-      }
-      finally {
-    	  if(in != null) {
-    		  try {in.close();}
-    		  catch(IOException e) {
-    			  // Nothing to do here.
-    		  }
-    	  }
-      }
-    }
-
     void loadDocument(InputStream in, String encoding, DocumentListener documentListener) throws IOException {
-    	this.encoding = encoding;
-
-    	// If the encoding is UTF-something, wrap the stream in a BOMInputStream to filter out the byte-order mark
-    	// (see ticket #245)
+    	textViewerDelegate.loadDocument(in, encoding, documentListener);
+    	
     	if(encoding.toLowerCase().startsWith("utf")) {
-    		in = new BOMInputStream(in);
     		bom = ((BOMInputStream)in).getBOM();
     	}
-
-    	Reader isr = new BufferedReader(new InputStreamReader(in, encoding));
-
-    	textEditorImpl.read(isr);
-
-    	// Listen to document changes
-    	if(documentListener!=null)
-    		textEditorImpl.addDocumentListener(documentListener);
     }
     
-    void write(OutputStream out) throws IOException {
-        
+    private void write(OutputStream out) throws IOException {
         Writer writer;
 
         // If there was a BOM originally, preserve it when writing the file.
         if(bom==null)
-            writer = new OutputStreamWriter(out, encoding);
+            writer = new OutputStreamWriter(out, textViewerDelegate.getEncoding());
         else
             writer = new BOMWriter(out, bom);
 
@@ -186,10 +124,11 @@ class TextEditor extends FileEditor implements DocumentListener, EncodingListene
     	JMenuBar menuBar = super.getMenuBar();
 
     	// Encoding menu
-         EncodingMenu encodingMenu = new EncodingMenu(new DialogOwner(getFrame()), encoding);
+         EncodingMenu encodingMenu = new EncodingMenu(new DialogOwner(getFrame()), textViewerDelegate.getEncoding());
          encodingMenu.addEncodingListener(this);
 
          menuBar.add(editMenu);
+         menuBar.add(viewMenu);
          menuBar.add(encodingMenu);
          
     	return menuBar;
@@ -233,13 +172,13 @@ class TextEditor extends FileEditor implements DocumentListener, EncodingListene
     }
 
     @Override
-    public void open(AbstractFile file) throws IOException {
-        startEditing(file, this);
+    public void show(AbstractFile file) throws IOException {
+    	textViewerDelegate.startEditing(file, this);
     }
     
     @Override
 	public JComponent getViewedComponent() {
-		return textEditorImpl.getTextArea();
+		return textViewerDelegate.getViewedComponent();
 	}
 
 
@@ -280,6 +219,8 @@ class TextEditor extends FileEditor implements DocumentListener, EncodingListene
         	textEditorImpl.findNext();
         else if(source == findPreviousItem)
         	textEditorImpl.findPrevious();
+        else if(source == wrapItem)
+        	textEditorImpl.wrap(wrapItem.isSelected());
         else
         	super.actionPerformed(e);
     }

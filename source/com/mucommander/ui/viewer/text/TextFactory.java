@@ -33,22 +33,25 @@ import java.io.InputStream;
  */
 public class TextFactory implements ViewerFactory, EditorFactory {
 
+	@Override
     public boolean canViewFile(AbstractFile file) throws WarnUserException {
         return doGenericChecks(file);
     }
 
+	@Override
     public boolean canEditFile(AbstractFile file) throws WarnUserException {
         return doGenericChecks(file);
     }
 
+	@Override
     public FileViewer createFileViewer() {
         return new TextViewer();
     }
 
+	@Override
     public FileEditor createFileEditor() {
         return new TextEditor();
     }
-
 
     private boolean doGenericChecks(AbstractFile file) throws WarnUserException {
         // Do not allow directories
@@ -65,7 +68,7 @@ public class TextFactory implements ViewerFactory, EditorFactory {
         try {
             in = file.getInputStream();
             if(BinaryDetector.guessBinary(in))
-                throw new WarnUserException(Translator.get("text_viewer.binary_file_warning"));
+            	return false;
         }
         catch(IOException e) {
             // Not much too do

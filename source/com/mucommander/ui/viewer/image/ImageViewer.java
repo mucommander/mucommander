@@ -206,7 +206,7 @@ class ImageViewer extends FileViewer implements ActionListener {
     ///////////////////////////////
 
     @Override
-    public void open(AbstractFile file) throws IOException {
+    public void show(AbstractFile file) throws IOException {
         loadImage(file);
     }
     

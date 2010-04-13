@@ -30,7 +30,7 @@ public interface ViewerFactory {
     /**
      * Returns <code>true</code> if this factory can create a file viewer for the specified file.
      * <p>
-     * The FileEditor may base its decision stricly upon the file's name and its extension or may wish to read some of
+     * The FileEditor may base its decision strictly upon the file's name and its extension or may wish to read some of
      * the file and compare it to a magic number.
      * </p>
      * @param  file file for which a viewer must be created.
@@ -42,6 +42,7 @@ public interface ViewerFactory {
 
     /**
      * Returns a new instance of {@link FileViewer}.
+     * 
      * @return a new instance of {@link FileViewer}.
      */
     public FileViewer createFileViewer();

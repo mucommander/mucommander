@@ -48,7 +48,7 @@ import com.mucommander.ui.main.MainFrame;
  *
  * @author Maxence Bernard, Arik Hadas
  */
-class EditorFrame extends ViewerFrame {
+public class EditorFrame extends ViewerFrame {
 
     private FileEditor editor;
 	
@@ -69,11 +69,7 @@ class EditorFrame extends ViewerFrame {
             @Override
             public JComponent getTargetComponent() {
                 try {
-                    editor = EditorRegistrar.createFileEditor(file);
-
-                    // Set the editor's fields
-                    editor.setFrame(EditorFrame.this);
-                    editor.setCurrentFile(file);
+                    editor = EditorRegistrar.createFileEditor(file, EditorFrame.this);
 
                     // Ask the editor to edit the file
                     editor.open(file);
@@ -90,7 +86,6 @@ class EditorFrame extends ViewerFrame {
                 }
 
                 setJMenuBar(editor.getMenuBar());
-                setTitle(editor.getTitle());
 
                 JScrollPane scrollPane = new JScrollPane(editor.getViewedComponent(), JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED) {
                 	@Override
@@ -148,8 +143,8 @@ class EditorFrame extends ViewerFrame {
 
     @Override
     public void dispose() {
-        if(editor==null || editor.askSave())   /// Returns true if the file does not have any unsaved change or if the user refused to save the changes
-            super.dispose();
+    	if(editor==null || editor.askSave())   /// Returns true if the file does not have any unsaved change or if the user refused to save the changes
+    		super.dispose();
     }
     
     @Override

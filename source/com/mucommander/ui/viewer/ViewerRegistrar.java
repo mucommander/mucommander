@@ -35,7 +35,7 @@ import com.mucommander.ui.main.WindowManager;
  * ViewerRegistrar maintains a list of registered file viewers and provides methods to dynamically register file viewers
  * and create appropriate FileViewer (Panel) and ViewerFrame (Window) instances for a given AbstractFile.
  *
- * @author Maxence Bernard
+ * @author Maxence Bernard, Arik Hadas
  */
 public class ViewerRegistrar {
 	
@@ -43,8 +43,8 @@ public class ViewerRegistrar {
     private final static Vector<ViewerFactory> viewerFactories = new Vector<ViewerFactory>();
 
     static {
-        registerFileViewer(new com.mucommander.ui.viewer.image.ImageFactory());
         registerFileViewer(new com.mucommander.ui.viewer.text.TextFactory());
+        registerFileViewer(new com.mucommander.ui.viewer.image.ImageFactory());
     }
     
     
@@ -88,19 +88,25 @@ public class ViewerRegistrar {
      * Creates and returns an appropriate FileViewer for the given file type.
      *
      * @param file the file that will be displayed by the returned FileViewer
+     * @param frame the frame in which the FileViewer is shown
      * @return the created FileViewer
      * @throws UserCancelledException if the user has been asked to confirm the operation and canceled
      * 		   Exception if no suitable viewer was found
      */
-    public static FileViewer createFileViewer(AbstractFile file) throws UserCancelledException, Exception {
+    public static FileViewer createFileViewer(AbstractFile file, ViewerFrame frame) throws UserCancelledException, Exception {
+    	FileViewer viewer = null;
         for(ViewerFactory factory : viewerFactories) {
             try {
-                if(factory.canViewFile(file))
-                    return factory.createFileViewer();
+                if(factory.canViewFile(file)) {
+                    viewer = factory.createFileViewer();
+                    break;
+                }
             }
             catch(WarnUserException e) {
+            	// TODO: question the user how does he want to open the file (as image, text..)
                 // Todo: display a proper warning dialog with the appropriate icon
-                QuestionDialog dialog = new QuestionDialog((Frame)null, Translator.get("warning"), Translator.get(e.getMessage()), null,
+            	
+                QuestionDialog dialog = new QuestionDialog((Frame)null, Translator.get("warning"), Translator.get(e.getMessage()), frame,
                                                            new String[] {Translator.get("file_editor.open_anyway"), Translator.get("cancel")},
                                                            new int[]  {0, 1},
                                                            0);
@@ -110,10 +116,15 @@ public class ViewerRegistrar {
                     throw new UserCancelledException();
 
                 // User confirmed the operation
-                return factory.createFileViewer();
+                viewer = factory.createFileViewer();
             }
         }
 
-        throw new Exception("No suitable viewer found");
+        if (viewer == null)
+        	throw new Exception("No suitable viewer found");
+        
+        viewer.setFrame(frame);
+        
+        return viewer;
     }
 }
