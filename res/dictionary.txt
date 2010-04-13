@@ -11667,6 +11667,12 @@ text_viewer.find_previous:zh_CN:查找上一个
 text_viewer.find_previous:BE:Шукаць папярэдні
 # Translation missing (KO)
 
+text_viewer.view:EN:View
+# Translation missing (New!)
+
+text_viewer.wrap:EN:Word wrap
+# Translation missing (New!)
+
 text_viewer.binary_file_warning:EN:This appears to be a binary file
 text_viewer.binary_file_warning:FR:Ce fichier a l'air d'être un fichier binaire
 text_viewer.binary_file_warning:HU:Ez a fájl valószínűleg bináris fájl
@@ -11984,6 +11990,9 @@ text_editor.copy:EN:$[text_viewer.copy]
 
 text_editor.select_all:EN:$[text_viewer.select_all]
 
+text_editor.view:EN:$[text_viewer.view]
+
+text_editor.wrap:EN:$[text_viewer.wrap]
 
 ####################
 # Shortcuts dialog #

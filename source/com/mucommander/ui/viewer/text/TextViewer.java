@@ -80,12 +80,12 @@ class TextViewer extends FileViewer implements EncodingListener {
     	this.textEditorImpl = textEditorImpl;
 
     	// Edit menu
-    	editMenu = new JMenu(Translator.get("text_editor.edit"));
+    	editMenu = new JMenu(Translator.get("text_viewer.edit"));
     	MnemonicHelper menuItemMnemonicHelper = new MnemonicHelper();
 
-    	copyItem = MenuToolkit.addMenuItem(editMenu, Translator.get("text_editor.copy"), menuItemMnemonicHelper, null, this);
+    	copyItem = MenuToolkit.addMenuItem(editMenu, Translator.get("text_viewer.copy"), menuItemMnemonicHelper, null, this);
 
-    	selectAllItem = MenuToolkit.addMenuItem(editMenu, Translator.get("text_editor.select_all"), menuItemMnemonicHelper, null, this);
+    	selectAllItem = MenuToolkit.addMenuItem(editMenu, Translator.get("text_viewer.select_all"), menuItemMnemonicHelper, null, this);
     	editMenu.addSeparator();
 
     	findItem = MenuToolkit.addMenuItem(editMenu, Translator.get("text_viewer.find"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_F, KeyEvent.CTRL_DOWN_MASK), this);
@@ -93,7 +93,7 @@ class TextViewer extends FileViewer implements EncodingListener {
     	findPreviousItem = MenuToolkit.addMenuItem(editMenu, Translator.get("text_viewer.find_previous"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_F3, KeyEvent.SHIFT_DOWN_MASK), this);
     	
     	// View menu
-    	viewMenu = new JMenu(Translator.get("text_editor.view"));
+    	viewMenu = new JMenu(Translator.get("text_viewer.view"));
     	
     	wrapItem = MenuToolkit.addCheckBoxMenuItem(viewMenu, Translator.get("text_viewer.wrap"), menuItemMnemonicHelper, null, this);
     }
