@@ -18,6 +18,7 @@
 
 package com.mucommander.auth;
 
+import com.mucommander.commons.file.Credentials;
 import com.mucommander.commons.file.FileURL;
 
 /**

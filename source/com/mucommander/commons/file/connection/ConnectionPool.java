@@ -18,7 +18,7 @@
 
 package com.mucommander.commons.file.connection;
 
-import com.mucommander.auth.Credentials;
+import com.mucommander.commons.file.Credentials;
 import com.mucommander.commons.file.FileLogger;
 import com.mucommander.commons.file.FileURL;
 

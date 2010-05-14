@@ -18,8 +18,8 @@
 
 package com.mucommander.commons.file.impl.hadoop;
 
-import com.mucommander.auth.Credentials;
 import com.mucommander.commons.file.AuthException;
+import com.mucommander.commons.file.Credentials;
 import com.mucommander.commons.file.FileURL;
 import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.fs.FileSystem;

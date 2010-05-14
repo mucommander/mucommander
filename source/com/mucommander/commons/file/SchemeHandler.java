@@ -18,8 +18,6 @@
 
 package com.mucommander.commons.file;
 
-import com.mucommander.auth.Credentials;
-
 /**
  * <code>SchemeHandler</code> is an interface that allows {@link FileURL} to be specialized for a particular scheme.
  * It provides a number of scheme-specific features:

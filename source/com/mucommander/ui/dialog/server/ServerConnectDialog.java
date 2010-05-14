@@ -19,8 +19,8 @@
 
 package com.mucommander.ui.dialog.server;
 
-import com.mucommander.auth.Credentials;
 import com.mucommander.auth.CredentialsMapping;
+import com.mucommander.commons.file.Credentials;
 import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.file.FileProtocols;
 import com.mucommander.commons.file.FileURL;

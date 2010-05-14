@@ -19,10 +19,10 @@
 package com.mucommander.ui.dialog.auth;
 
 import com.mucommander.AppLogger;
-import com.mucommander.auth.Credentials;
 import com.mucommander.auth.CredentialsManager;
 import com.mucommander.auth.CredentialsMapping;
 import com.mucommander.commons.collections.AlteredVector;
+import com.mucommander.commons.file.Credentials;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionProperties;
 import com.mucommander.ui.action.impl.EditCredentialsAction;

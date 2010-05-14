@@ -18,7 +18,6 @@
 
 package com.mucommander.commons.file.impl.http;
 
-import com.mucommander.auth.Credentials;
 import com.mucommander.commons.file.*;
 import com.mucommander.commons.io.BlockRandomInputStream;
 import com.mucommander.commons.io.RandomAccessInputStream;

@@ -18,11 +18,7 @@
 
 package com.mucommander.commons.file.impl.hadoop;
 
-import com.mucommander.auth.Credentials;
-import com.mucommander.commons.file.FilePermissions;
-import com.mucommander.commons.file.FileURL;
-import com.mucommander.commons.file.PermissionBits;
-import com.mucommander.commons.file.SimpleFilePermissions;
+import com.mucommander.commons.file.*;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.fs.FileSystem;

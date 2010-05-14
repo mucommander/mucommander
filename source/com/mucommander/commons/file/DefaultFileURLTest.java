@@ -18,8 +18,6 @@
 
 package com.mucommander.commons.file;
 
-import com.mucommander.auth.Credentials;
-
 /**
  * A {@link FileURLTestCase} implementation for URLs with no specific handler, i.e. using the
  * {@link com.mucommander.commons.file.FileURL#getDefaultHandler() default URL handler}.

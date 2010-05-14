@@ -19,7 +19,6 @@
 
 package com.mucommander.commons.file;
 
-import com.mucommander.auth.Credentials;
 import com.mucommander.commons.file.compat.CompatURLStreamHandler;
 import com.mucommander.commons.file.impl.local.LocalFile;
 import com.mucommander.commons.file.util.PathUtils;

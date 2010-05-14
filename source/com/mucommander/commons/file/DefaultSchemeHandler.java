@@ -18,8 +18,6 @@
 
 package com.mucommander.commons.file;
 
-import com.mucommander.auth.Credentials;
-
 /**
  * This class provides a default {@link SchemeHandler} implementation. The no-arg constructor creates an
  * instance with default values that suit most schemes. This is how the default URL handler returned by

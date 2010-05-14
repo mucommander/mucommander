@@ -18,8 +18,8 @@
 
 package com.mucommander.commons.file.impl.local;
 
-import com.mucommander.auth.Credentials;
 import com.mucommander.commons.file.AuthenticationType;
+import com.mucommander.commons.file.Credentials;
 import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.file.FileURLTestCase;
 import com.mucommander.commons.runtime.OsFamilies;

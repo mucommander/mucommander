@@ -19,9 +19,9 @@
 package com.mucommander.bookmark;
 
 import com.mucommander.AppLogger;
-import com.mucommander.auth.Credentials;
 import com.mucommander.auth.CredentialsManager;
 import com.mucommander.auth.CredentialsMapping;
+import com.mucommander.commons.file.Credentials;
 import com.mucommander.commons.file.FileURL;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;

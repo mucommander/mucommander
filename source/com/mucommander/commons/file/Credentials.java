@@ -17,7 +17,7 @@
  */
 
 
-package com.mucommander.auth;
+package com.mucommander.commons.file;
 
 /**
  * This class is a container for a login and password pair, used to authenticate a location on a filesystem.

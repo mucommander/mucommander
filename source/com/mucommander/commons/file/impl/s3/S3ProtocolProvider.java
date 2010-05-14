@@ -18,11 +18,7 @@
 
 package com.mucommander.commons.file.impl.s3;
 
-import com.mucommander.auth.Credentials;
-import com.mucommander.commons.file.AbstractFile;
-import com.mucommander.commons.file.AuthException;
-import com.mucommander.commons.file.FileURL;
-import com.mucommander.commons.file.ProtocolProvider;
+import com.mucommander.commons.file.*;
 import org.apache.commons.logging.LogFactory;
 import org.apache.commons.logging.impl.Jdk14Logger;
 import org.jets3t.service.Jets3tProperties;

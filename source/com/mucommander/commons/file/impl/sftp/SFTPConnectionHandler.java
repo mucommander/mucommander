@@ -18,8 +18,8 @@
 
 package com.mucommander.commons.file.impl.sftp;
 
-import com.mucommander.auth.Credentials;
 import com.mucommander.commons.file.AuthException;
+import com.mucommander.commons.file.Credentials;
 import com.mucommander.commons.file.FileLogger;
 import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.file.connection.ConnectionHandler;

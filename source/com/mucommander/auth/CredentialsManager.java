@@ -23,6 +23,7 @@ import com.mucommander.PlatformManager;
 import com.mucommander.commons.collections.AlteredVector;
 import com.mucommander.commons.collections.VectorChangeListener;
 import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.Credentials;
 import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.file.util.Chmod;

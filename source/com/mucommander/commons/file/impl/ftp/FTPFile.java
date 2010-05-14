@@ -19,7 +19,6 @@
 
 package com.mucommander.commons.file.impl.ftp;
 
-import com.mucommander.auth.Credentials;
 import com.mucommander.commons.file.*;
 import com.mucommander.commons.file.connection.ConnectionHandler;
 import com.mucommander.commons.file.connection.ConnectionHandlerFactory;
