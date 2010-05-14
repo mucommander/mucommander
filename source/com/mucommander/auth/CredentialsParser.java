@@ -20,9 +20,9 @@ package com.mucommander.auth;
 
 import com.mucommander.AppLogger;
 import com.mucommander.bookmark.XORCipher;
-import com.mucommander.commons.io.BackupInputStream;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileURL;
+import com.mucommander.io.backup.BackupInputStream;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;

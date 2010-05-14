@@ -20,8 +20,6 @@ package com.mucommander.command;
 
 import com.mucommander.AppLogger;
 import com.mucommander.PlatformManager;
-import com.mucommander.commons.io.BackupInputStream;
-import com.mucommander.commons.io.BackupOutputStream;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
 import com.mucommander.file.PermissionTypes;
@@ -29,6 +27,8 @@ import com.mucommander.file.filter.AttributeFileFilter;
 import com.mucommander.file.filter.ChainedFileFilter;
 import com.mucommander.file.filter.FileFilter;
 import com.mucommander.file.filter.RegexpFilenameFilter;
+import com.mucommander.io.backup.BackupInputStream;
+import com.mucommander.io.backup.BackupOutputStream;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -484,7 +484,7 @@ public class CommandManager implements CommandBuilder {
     /**
      * Loads the custom associations XML File.
      * <p>
-     * The command files will be loaded as a <i>backed-up file</i> (see {@link com.mucommander.commons.io.BackupInputStream}).
+     * The command files will be loaded as a <i>backed-up file</i> (see {@link BackupInputStream}).
      * Its format is described {@link AssociationsXmlConstants here}.
      * </p>
      * @throws IOException if an IO error occurs.
@@ -523,7 +523,7 @@ public class CommandManager implements CommandBuilder {
      * since the last time it was saved.
      * </p>
      * <p>
-     * The association files will be saved as a <i>backed-up file</i> (see {@link com.mucommander.commons.io.BackupOutputStream}).
+     * The association files will be saved as a <i>backed-up file</i> (see {@link BackupOutputStream}).
      * Its format is described {@link AssociationsXmlConstants here}.
      * </p>
      * @throws IOException      if an I/O error occurs.
@@ -644,7 +644,7 @@ public class CommandManager implements CommandBuilder {
      * since the last time it was saved.
      * </p>
      * <p>
-     * The command files will be saved as a <i>backed-up file</i> (see {@link com.mucommander.commons.io.BackupOutputStream}).
+     * The command files will be saved as a <i>backed-up file</i> (see {@link BackupOutputStream}).
      * Its format is described {@link CommandsXmlConstants here}.
      * </p>
      * @throws IOException      if an I/O error occurs.
@@ -682,7 +682,7 @@ public class CommandManager implements CommandBuilder {
     /**
      * Loads the custom commands XML File.
      * <p>
-     * The command files will be loaded as a <i>backed-up file</i> (see {@link com.mucommander.commons.io.BackupInputStream}).
+     * The command files will be loaded as a <i>backed-up file</i> (see {@link BackupInputStream}).
      * Its format is described {@link CommandsXmlConstants here}.
      * </p>
      * @throws IOException if an I/O error occurs.

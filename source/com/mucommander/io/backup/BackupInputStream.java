@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.mucommander.commons.io;
+package com.mucommander.io.backup;
 
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
@@ -28,12 +28,12 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * Opens an input stream on a file that has been saved by {@link com.mucommander.commons.io.BackupOutputStream}.
+ * Opens an input stream on a file that has been saved by {@link BackupOutputStream}.
  * <p>
  * This class' role is to choose which of the original or backup file should be read in order to ensure
  * that the data is not corrupt.
  * </p>
- * @see com.mucommander.commons.io.BackupOutputStream
+ * @see BackupOutputStream
  * @author Nicolas Rinaudo
  */
 public class BackupInputStream extends FilterInputStream implements BackupConstants {

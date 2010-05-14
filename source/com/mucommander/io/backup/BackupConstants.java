@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.mucommander.commons.io;
+package com.mucommander.io.backup;
 
 /**
  * Defines various constants common to backup classes.

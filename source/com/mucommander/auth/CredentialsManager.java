@@ -20,11 +20,11 @@ package com.mucommander.auth;
 
 import com.mucommander.AppLogger;
 import com.mucommander.PlatformManager;
-import com.mucommander.commons.io.BackupOutputStream;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
 import com.mucommander.file.FileURL;
 import com.mucommander.file.util.Chmod;
+import com.mucommander.io.backup.BackupOutputStream;
 import com.mucommander.runtime.OsFamily;
 import com.mucommander.util.AlteredVector;
 import com.mucommander.util.VectorChangeListener;

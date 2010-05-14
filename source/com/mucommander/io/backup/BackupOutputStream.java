@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.mucommander.commons.io;
+package com.mucommander.io.backup;
 
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
@@ -49,7 +49,7 @@ import java.io.OutputStream;
  * </ul>
  * </p>
  * <p>
- * Files that have been saved by this class should be read with {@link com.mucommander.commons.io.BackupInputStream}
+ * Files that have been saved by this class should be read with {@link BackupInputStream}
  * in order to make sure that an uncorrupt version of them is loaded.
  * </p>
  * <p>
@@ -57,7 +57,7 @@ import java.io.OutputStream;
  * operation will not be performed when {@link #close()} is called. It's possible to force the backup operation by
  * using the {@link #close(boolean)} method.
  * </p>
- * @see    com.mucommander.commons.io.BackupInputStream
+ * @see    BackupInputStream
  * @author Nicolas Rinaudo
  */
 public class BackupOutputStream extends OutputStream implements BackupConstants {
